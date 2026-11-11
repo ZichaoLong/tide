@@ -34,6 +34,8 @@ def review(root):
                 base=Path(row['output']);config=read(Path(row['config']));train=read(base/'train/result.json');check=read(base/'check/result.json')
                 recovery=read(base/'recovery.json');val=read(base/'train/validation-final.json');projection=read(base/'train/projection.json')
                 manifest=read(base/'train/manifest.json');progress=read(base/'train/progress.json')
+                args=row.get('train_arguments',[])
+                declared_run=args[args.index('--run-id')+1] if '--run-id' in args else None
                 state=train.get('state','pending')
                 if not train and check.get('state')=='failed':state='failed_admission'
                 if not train and recovery.get('state')=='failed':state='failed_recovery'
@@ -50,7 +52,7 @@ def review(root):
                     config=str(Path(row['config']).relative_to(root)),config_sha256=digest(row['config']),
                     record=str((base/'train/result.json').relative_to(root)),
                     result_sha256=digest(base/'train/result.json') if train else None,
-                    run_id=manifest.get('run_id'),group=manifest.get('group',config['study_id']),
+                    run_id=manifest.get('run_id',declared_run),record_created=bool(train),group=manifest.get('group',config['study_id']),
                     lens=dict(status=projection.get('status','unchecked'),readback_matches=projection.get('readback_matches'),
                               destination_name=projection.get('destination_name'),destination_run_id=projection.get('destination_run_id'))))
     return dict(schema='tide-direct-v8-review-v1',observed_at=now(),jobs=jobs,cases=cases,

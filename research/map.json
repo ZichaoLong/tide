@@ -1118,9 +1118,72 @@
       "source": "RV7-SCALE",
       "status": "documented",
       "target": "L-A-ROUTE"
+    },
+    {
+      "detail": "14\u683cseed11\u53ca4\u683cseed22\uff1b\u4fdd\u7559\u5168\u90e8\u5206\u6570\u3001\u6570\u503c\u5931\u8d25\u3001\u6062\u590d\u548c\u914d\u65b9\u5305\u89e3\u91ca\u8fb9\u754c\u3002",
+      "id": "EV8-TF",
+      "kind": "produces",
+      "label": "\u6709\u9650\u6821\u51c6\u5ba1\u9605",
+      "source": "V8-TF",
+      "status": "documented",
+      "target": "RV8-TF"
+    },
+    {
+      "detail": "\u4e24\u6863\u8fd1\u53c2\u6570Transformer\uff1b\u4e0d\u58f0\u79f0\u5168\u5c40\u6700\u4f18\u3002",
+      "id": "EV8-CONTROL",
+      "kind": "informs",
+      "label": "\u7ecf\u8fc7\u6821\u51c6\u7684\u63a7\u5236",
+      "source": "RV8-TF",
+      "status": "documented",
+      "target": "V8-COVER"
+    },
+    {
+      "detail": "\u4ece\u96f6\u5b8c\u6574TIDE\u8def\u7ebf\u7684\u5019\u9009\u7814\u7a76\uff1b\u72ec\u7acb\u9759\u6001\u51fd\u6570\u5c1a\u672a\u8ba4\u8bc1\u516c\u5171continuation\u6216\u771f\u5b9e\u7a00\u758f\u6267\u884c\u3002",
+      "id": "EV8-A",
+      "kind": "precondition",
+      "label": "\u76f4\u63a5\u6570\u5b66\u6a21\u5757\u7b5b\u9009",
+      "source": "L-A-ROUTE",
+      "status": "documented",
+      "target": "V8-COVER"
+    },
+    {
+      "detail": "\u5b8c\u6210/\u5931\u8d25/\u4e25\u683c\u6570\u503c/\u673a\u5236/\u6062\u590d/\u5b66\u4e60\u5206\u522b\u8bb0\u5f55\uff0c\u4f5c\u4e1a\u5b8c\u6210\u4e0d\u81ea\u52a8\u586b\u7ed3\u679c\u3002",
+      "id": "EV8-COVER",
+      "kind": "produces",
+      "label": "\u5f85\u5b8c\u6574\u5ba1\u9605",
+      "source": "V8-COVER",
+      "status": "planned",
+      "target": "RV8-COVER"
+    },
+    {
+      "detail": "\u6700\u591a20\u9879\uff0c\u4ece\u5df2\u5b8c\u6210\u6709\u9650\u5019\u9009\u6309\u9884\u58f0\u660e\u6876\u9009\u53d6\uff1b\u65b0\u521d\u59cb\u5316\uff0c\u4e0d\u7ee7\u627fcheckpoint\u3002",
+      "id": "EV8-REPEAT",
+      "kind": "precondition",
+      "label": "\u8986\u76d6\u7ec8\u6001\u540e\u6709\u9650\u91cd\u590d",
+      "source": "V8-COVER",
+      "status": "planned",
+      "target": "V8-CONFIRM"
+    },
+    {
+      "detail": "\u4fdd\u7559\u9009\u62e9\u504f\u5dee\uff1b\u4e0d\u6253\u5f00test\uff0c\u4e0d\u5f00\u542f\u540e\u7eed\u89c4\u6a21\u6216\u771f\u5b9e\u7a00\u758f\u4e3b\u7ebf\u3002",
+      "id": "EV8-CONFIRM",
+      "kind": "produces",
+      "label": "\u7b49\u5f85\u7a33\u5b9a\u6027\u8bc1\u636e",
+      "source": "V8-CONFIRM",
+      "status": "planned",
+      "target": "RV8-CONFIRM"
+    },
+    {
+      "detail": "v7 fan-in\u7ebf\u7d22\u7528\u4e8e\u65b0\u89d2\u8272\u521d\u59cb\u5316\uff1b\u65b0\u6a21\u578b\u5305\u542b\u539fv7\u7701\u7565\u7684\u5c40\u90e8\u6570\u5b66\uff0c\u4e0d\u80fd\u7ee7\u627f\u5176\u8d28\u91cf\u7ed3\u8bba\u3002",
+      "id": "EV8-RECIPE",
+      "kind": "informs",
+      "label": "\u6761\u4ef6\u521d\u59cb\u5316\u7ebf\u7d22",
+      "source": "RV7-RECIPE",
+      "status": "documented",
+      "target": "V8-COVER"
     }
   ],
-  "height": 7510,
+  "height": 8110,
   "nodes": [
     {
       "budget": "\u539fv5\u53ca\u8865\u9f50\u5df2\u7ec8\u6001\uff0c\u7d2f\u8ba110.1672/24\u8ba1\u7b97worker\u5c0f\u65f6\uff1b17:16\u7ed3\u675f\uff0c\u65e9\u4e8e\u539f22:49:13\u622a\u6b62\u3002\u5386\u53f2v4\u72ec\u7acb\uff0c\u4e0d\u81ea\u52a8\u8ffd\u52a0\u3002",
@@ -1251,7 +1314,7 @@
       ],
       "status": "target",
       "summary": "\u81ea\u7136\u6587\u672c \u00b7 \u5168\u4f4d\u7f6e\u9884\u6d4b",
-      "title": "\u4ece\u96f6\u8bad\u7ec3\u5b8c\u6574 TIDE",
+      "title": "\u4ece\u96f6\u8bad\u7ec3\u5b8c\u6574TIDE",
       "track": "tide",
       "view_group": "current",
       "x": 325,
@@ -2143,7 +2206,7 @@
       "track": "tide",
       "view_group": "current",
       "x": 620,
-      "y": 2060
+      "y": 2660
     },
     {
       "budget": "\u65b0v4\u517112h/8NPUh\uff1bA7.5h\u3001B0.5h\uff1b\u6761\u4ef6scale\u6765\u81eaA\u4f59\u91cf\uff0c\u5177\u4f53\u89c1\u7814\u7a76\u8868\u3002",
@@ -2416,7 +2479,7 @@
       "track": "baseline",
       "view_group": "current",
       "x": 620,
-      "y": 2420
+      "y": 3020
     },
     {
       "budget": "\u65b0v4\u517112h/8NPUh\uff1bA7.5h\u3001B0.5h\uff1b\u6761\u4ef6scale\u6765\u81eaA\u4f59\u91cf\uff0c\u5177\u4f53\u89c1\u7814\u7a76\u8868\u3002",
@@ -2466,7 +2529,7 @@
       "track": "tide",
       "view_group": "current",
       "x": 620,
-      "y": 2600
+      "y": 3200
     },
     {
       "budget": "\u65b0v4\u517112h/8NPUh\uff1bA7.5h\u3001B0.5h\uff1b\u6761\u4ef6scale\u6765\u81eaA\u4f59\u91cf\uff0c\u5177\u4f53\u89c1\u7814\u7a76\u8868\u3002",
@@ -2520,7 +2583,7 @@
       "track": "shared",
       "view_group": "current",
       "x": 620,
-      "y": 2780
+      "y": 3380
     },
     {
       "budget": "\u5df2\u6388\u6743\u7684\u540c\u4e00\u4e2a12h/8NPU\u5c0f\u65f6\u6709\u754c\u5305\uff1b\u5f53\u524d\u72b6\u6001\u53ca\u5269\u4f59\u989d\u89c1STATUS\u3002",
@@ -2564,7 +2627,7 @@
       "unresolved": "\u5355seed\u548c\u5c0f\u6587\u6863\u96c6\u4e0d\u786e\u5b9a\u6027\u3001\u8bad\u7ec3\u4e0d\u8db3\u3001\u4efb\u52a1/\u53c2\u6570\u5206\u914d\u5f71\u54cd\u672a\u533a\u5206\uff1b\u5f53\u524d\u4f18\u52bf\u4e0d\u80fd\u5916\u63a8\u5145\u5206\u8bad\u7ec3\u7684\u666e\u901aLM\u3002",
       "view_group": "current",
       "x": 915,
-      "y": 2060
+      "y": 2660
     },
     {
       "budget": "\u5df2\u6388\u6743\u7684\u540c\u4e00\u4e2a12h/8NPU\u5c0f\u65f6\u6709\u754c\u5305\uff1b\u5f53\u524d\u72b6\u6001\u53ca\u5269\u4f59\u989d\u89c1STATUS\u3002",
@@ -2608,7 +2671,7 @@
       "unresolved": "32\u7ef4\u6295\u5f71\u74f6\u9888\u3001\u6709\u9650\u66dd\u5149/\u4f18\u5316\u53ca\u5c40\u90e8\u8868\u8fbe\u5dee\u5f02\u672a\u533a\u5206\uff1b\u539f\u56e0\u4e0d\u80fd\u5f52\u7ed3\u4e3ahidden\u65e0\u4fe1\u606f\uff0c\u6570\u503c\u5dee\u5f02\u4e5f\u672a\u8bc1\u660e\u53ea\u662f\u820d\u5165\u3002",
       "view_group": "current",
       "x": 915,
-      "y": 2420
+      "y": 3020
     },
     {
       "budget": "v4\u6761\u4ef6FC8\u22644h\u4e14\u6765\u81eaA\u603b7.5h\u4f59\u91cf",
@@ -2636,7 +2699,7 @@
       "track": "tide",
       "view_group": "current",
       "x": 915,
-      "y": 2600
+      "y": 3200
     },
     {
       "budget": "\u5df2\u6388\u6743\u7684\u540c\u4e00\u4e2a12h/8NPU\u5c0f\u65f6\u6709\u754c\u5305\uff1b\u5f53\u524d\u72b6\u6001\u53ca\u5269\u4f59\u989d\u89c1STATUS\u3002",
@@ -2680,7 +2743,7 @@
       "unresolved": "\u5e7f\u6cdb\u8bed\u8a00\u53ef\u7528\u6027\u3001\u79cd\u5b50\u7a33\u5065\u6027\u3001\u89c4\u6a21\u548c\u8de8\u533a\u57df\u5c40\u90e8\u6027\u5c1a\u672a\u786e\u5b9a\uff1b\u53c2\u6570\u5bb9\u91cf\u4e0e\u6df1\u5ea6\u53d8\u5316\u7684\u56e0\u679c\u56e0\u7d20\u672a\u533a\u5206\u3002",
       "view_group": "current",
       "x": 915,
-      "y": 2780
+      "y": 3380
     },
     {
       "budget": "\u901a\u8fc7\u5173\u8054\u7814\u7a76\u7533\u8bf7\u8d44\u6e90\uff0c\u76ee\u6807\u672c\u8eab\u4e0d\u662f\u72ec\u7acb\u4f5c\u4e1a\u3002",
@@ -2827,7 +2890,7 @@
       "track": "baseline",
       "view_group": "history",
       "x": 30,
-      "y": 4880
+      "y": 5480
     },
     {
       "budget": "\u56fa\u5b9a\u6765\u6e90\uff0c\u65e0\u65b0\u8ba1\u7b97\u6216\u4e0b\u8f7d\u3002",
@@ -2848,7 +2911,7 @@
       "track": "tide",
       "view_group": "history",
       "x": 30,
-      "y": 5120
+      "y": 5720
     },
     {
       "budget": "\u590d\u7528\u56fa\u5b9a\u5386\u53f2\u8bc1\u636e\uff1b\u5f53\u524d\u4e0d\u91cd\u65b0\u8fd0\u884c\u3002",
@@ -2869,7 +2932,7 @@
       "track": "shared",
       "view_group": "history",
       "x": 30,
-      "y": 5360
+      "y": 5960
     },
     {
       "budget": "CPU/NPU \u5c0f\u68c0\u67e5\u5404\u6709\u754c\uff1b\u672c\u7ec4\u603b\u6821\u51c6 \u226420 min\u3002",
@@ -2949,7 +3012,7 @@
       "track": "baseline",
       "view_group": "history",
       "x": 325,
-      "y": 4880
+      "y": 5480
     },
     {
       "budget": "\u5355\u79cd\u5b50\u5148\u5bfc \u226480 updates\uff1b\u6700\u591a\u4e00\u6b21\u9884\u5148\u58f0\u660e\u7684\u5c0f\u4efb\u52a1\u964d\u9636\u3002\u6b63\u5f0f \u2264400 updates\uff0c\u81f3\u591a\u79cd\u5b50 11/22/33\u3002",
@@ -3147,7 +3210,7 @@
       "track": "tide",
       "view_group": "history",
       "x": 325,
-      "y": 5120
+      "y": 5720
     },
     {
       "budget": "\u5fae\u578b\u68c0\u67e5\u6bcf\u9879 \u226410 min\uff1b\u5148\u6821\u51c6\u6b63\u786e\u6027\uff0c\u518d\u51b3\u5b9a CPU/NPU \u8bad\u7ec3\u4e0e\u6709\u9650\u6570\u503c\u63a2\u7d22\u3002",
@@ -3228,7 +3291,7 @@
       "track": "shared",
       "view_group": "history",
       "x": 325,
-      "y": 5360
+      "y": 5960
     },
     {
       "budget": "pilot-b \u961f\u5217\u7b49\u5f85 \u226415 min\uff0c\u670d\u52a1\u603b\u65f6\u9650 70 min\uff0c\u7ec4\u5185\u8ba1\u7b97 50 min\uff1b\u4e09\u5019\u9009\u5404 40 updates\u3002\u540e\u7eed\u91cd\u590d\u4ecd\u987b\u7814\u7a76\u8868\u4e2d\u7684\u5b66\u4e60\u4e0e\u68af\u5ea6\u95e8\u69db\u3002",
@@ -3298,7 +3361,7 @@
       "track": "baseline",
       "view_group": "history",
       "x": 620,
-      "y": 4880
+      "y": 5480
     },
     {
       "budget": "\u5355\u79cd\u5b50\u5148\u5bfc \u226480 updates\uff1b\u901a\u8fc7\u7b5b\u9009\u540e\u6210\u5bf9\u79cd\u5b50 11/22/33\uff0c\u6bcf\u914d\u7f6e \u2264400 updates\u3002",
@@ -3374,7 +3437,7 @@
       "track": "tide",
       "view_group": "history",
       "x": 620,
-      "y": 5120
+      "y": 5720
     },
     {
       "budget": "\u4e0d\u5360\u672c\u6279\u4f5c\u4e1a\u9884\u7b97\uff1b\u6ca1\u6709\u5df2\u63d0\u4ea4\u7684\u66ff\u6362\u4efb\u52a1\u3002",
@@ -3403,7 +3466,7 @@
       "track": "baseline",
       "view_group": "history",
       "x": 620,
-      "y": 5360
+      "y": 5960
     },
     {
       "budget": "\u540cB32/40updates/1280\u8bad\u7ec3\u4f8b\uff1b\u5168\u6d41\u7a0b\u7ea634.60/888.32/34.35\u79d2\uff0c\u4e09\u6a21\u578b\u5b9e\u9645\u5de5\u4f5c\u4e0d\u540c\uff1b\u975e\u7b49\u4ef7\u52a0\u901f\u6bd4\u3002",
@@ -3442,7 +3505,7 @@
       "unresolved": "\u5355seed\u4ec5\u591a\u7b54\u5bf97/128\u4f8b\uff1b\u4f18\u5316\u8def\u5f84\u3001clip\u5f52\u4e00\u5316\u53d8\u5316\u3001\u989d\u5916\u53c2\u6570\u548c\u91c7\u6837\u5dee\u5f02\u672a\u533a\u5206\u3002\u672a\u8bc4\u4f30\u9002\u914d\u540e\u7684\u539f\u8bed\u8a00\u80fd\u529b\u4fdd\u7559\u3002",
       "view_group": "history",
       "x": 915,
-      "y": 4880
+      "y": 5480
     },
     {
       "budget": "CPU32/B32\uff0c\u540480updates/2560\u4f8b\uff0cvalidation128\u3001\u672a\u7528test\uff1b\u603b\u8fdb\u7a0b1183.53/1141.50\u79d2\u3002",
@@ -3489,7 +3552,7 @@
       "unresolved": "\u8bad\u7ec3\u4e0d\u8db3\u3001\u53d1\u9001\u6b63\u5219\u5316\u4e0e\u5b66\u4e60\u5230\u7684\u652f\u6301\u5206\u5e03\u3001\u56fa\u5b9a\u7a00\u758f\u5bf9\u7167\u3001seed/\u91c7\u6837\u6ce2\u52a8\u5c1a\u672a\u533a\u5206\u3002\u5019\u9009/\u72b6\u6001\u5f00\u9500\u3001\u4e3b\u673a\u8c03\u5ea6\u548c\u6bcf\u6b65\u89c2\u6d4b\u7684\u65f6\u95f4\u8d21\u732e\u672a\u77e5\uff1b\u805a\u5408\u65e0\u6574\u533a\u505c\u5de5\u4e0d\u6392\u9664\u5355\u6837\u672c/\u8282\u70b9\u9965\u997f\u3002",
       "view_group": "history",
       "x": 915,
-      "y": 5120
+      "y": 5720
     },
     {
       "budget": "\u672c\u6279\u590d\u7528\u5171\u540c\u4efb\u52a1\u8bc4\u4f30\uff0c\u4e0d\u81ea\u52a8\u589e\u52a0\u65b0\u4efb\u52a1\u3001\u66ff\u6362\u6216\u5019\u9009\u7ec4\u5408\u3002",
@@ -3526,7 +3589,7 @@
       "track": "shared",
       "view_group": "history",
       "x": 915,
-      "y": 5360
+      "y": 5960
     },
     {
       "budget": "\u5404B32/400updates/12800\u8bad\u7ec3\u4f8b\uff1bCPU64\u5404\u7ea642min\uff0cvalidation256/test256\uff1b\u673a\u4f1a\u6c34\u5e7312.5%\u3002",
@@ -3569,7 +3632,7 @@
       "unresolved": "\u9996\u6279\u672a\u6d4b\u7684query\u4ea4\u6362\u4e0edelay4/8\u5df2\u7531TL-A1-MECH\u5355\u72ec\u8865\u67e5\uff1b\u4e00\u822c\u5e8f\u5217/\u5206\u5e03\u5916\u7ec4\u5408\u4ecd\u672a\u77e5\u3002\u4e09seed\u5171\u7528\u540c\u4e00test\uff0c\u4e0d\u5408\u5e76\u6210768\u4e2a\u72ec\u7acb\u6837\u672c\u3002",
       "view_group": "history",
       "x": 915,
-      "y": 5600
+      "y": 6200
     },
     {
       "budget": "CPU1\u7ebf\u7a0b/4GiB\uff0c\u51c6\u5907\u52a0\u8bc4\u4f30\u226430min\u3002",
@@ -3625,7 +3688,7 @@
       "track": "tide",
       "view_group": "history",
       "x": 30,
-      "y": 5840
+      "y": 6440
     },
     {
       "budget": "CPU1\u7ebf\u7a0b/4GiB\uff0c\u51c6\u5907\u52a0\u8bc4\u4f30\u226430min\u3002",
@@ -3664,7 +3727,7 @@
       "unresolved": "\u91cd\u590dfiller\u4e0b\u7684\u72b6\u6001\u8870\u51cf\u3001\u65f6\u95f4/\u4f4d\u7f6e\u5206\u5e03\u6539\u53d8\u53ca\u5176\u4ed6\u8ba1\u7b97\u56e0\u7d20\u5c1a\u672a\u533a\u5206\uff1b\u4e0d\u662f384\u4e2a\u72ec\u7acb\u6d4b\u8bd5\u6837\u672c\u3002",
       "view_group": "history",
       "x": 30,
-      "y": 6070
+      "y": 6670
     },
     {
       "budget": "CPU2\u7ebf\u7a0b/16GiB\uff0c\u4e24\u4f5c\u4e1a\u5e76\u884c\u22642h\u3002",
@@ -3741,7 +3804,7 @@
       "track": "tide",
       "view_group": "history",
       "x": 325,
-      "y": 5840
+      "y": 6440
     },
     {
       "budget": "CPU2\u7ebf\u7a0b/16GiB\uff0c\u4e24\u4f5c\u4e1a\u5e76\u884c\u22642h\u3002",
@@ -3780,7 +3843,7 @@
       "unresolved": "\u79cd\u5b50\u53d8\u5316\u3001\u56fa\u5b9a\u7a00\u758f\u3001\u5b66\u4e60\u5230\u7684\u652f\u6301\u4e0e\u6b63\u5219\u5316\u6548\u5e94\u5c1a\u672a\u533a\u5206\uff1bHB\u9010\u4f8btest\u914d\u5bf9\u7edf\u8ba1\u7f3a\u5931\u3002\u5de5\u4f5c\u51cf\u5c11\u4e0d\u7b49\u4e8e\u540c\u6bd4FLOPs\u6216\u786c\u4ef6\u52a0\u901f\u3002",
       "view_group": "history",
       "x": 325,
-      "y": 6070
+      "y": 6670
     },
     {
       "budget": "1NPU/CPU4\u7ebf\u7a0b/8GiB\uff0c\u603b\u226415min\uff0c\u6392\u961f\u22645min\u3002",
@@ -3829,7 +3892,7 @@
       "track": "shared",
       "view_group": "history",
       "x": 620,
-      "y": 5840
+      "y": 6440
     },
     {
       "budget": "1NPU/CPU4\u7ebf\u7a0b/8GiB\uff0c\u603b\u226415min\uff0c\u6392\u961f\u22645min\u3002",
@@ -3849,7 +3912,7 @@
       "track": "shared",
       "view_group": "history",
       "x": 620,
-      "y": 6070
+      "y": 6670
     },
     {
       "budget": "1NPU/CPU4\u7ebf\u7a0b/24GiB\uff0c\u603b\u22641h\uff0c\u6392\u961f\u226410min\u3002",
@@ -3898,7 +3961,7 @@
       "track": "baseline",
       "view_group": "history",
       "x": 915,
-      "y": 5840
+      "y": 6440
     },
     {
       "budget": "1NPU/CPU4\u7ebf\u7a0b/24GiB\uff0c\u603b\u22641h\uff0c\u6392\u961f\u226410min\u3002",
@@ -3918,7 +3981,7 @@
       "track": "baseline",
       "view_group": "history",
       "x": 915,
-      "y": 6070
+      "y": 6670
     },
     {
       "budget": "CPU4\u8bad\u7ec3\u7ebf\u7a0b/32GiB\u22643h\uff1b\u8bc4\u4f30CPU1\u7ebf\u7a0b/4GiB\u22641h\uff1b\u5171\u752812h\u622a\u6b62\u3002",
@@ -4013,7 +4076,7 @@
       "track": "tide",
       "view_group": "history",
       "x": 325,
-      "y": 6300
+      "y": 6900
     },
     {
       "budget": "CPU4\u8bad\u7ec3\u7ebf\u7a0b/32GiB\u22643h\uff1b\u8bc4\u4f30CPU1\u7ebf\u7a0b/4GiB\u22641h\uff1b\u5171\u752812h\u622a\u6b62\u3002",
@@ -4052,7 +4115,7 @@
       "unresolved": "\u56fa\u5b9a\u7a00\u758f\u4e0e\u5b66\u5230\u7684\u8def\u7531\u6548\u5e94\u672a\u533a\u5206\uff1b\u76f8\u540c\u6620\u5c04\u4e0a\u7684\u4e09seed\u4e0d\u80fd\u5f536144\u4e2a\u72ec\u7acb\u6837\u672c\uff1b\u975e\u72ec\u5360CPU\u8ba1\u65f6\u4e0d\u786e\u8ba4\u666e\u9002\u786c\u4ef6\u52a0\u901f\u3002",
       "view_group": "history",
       "x": 325,
-      "y": 6600
+      "y": 7200
     },
     {
       "budget": "1NPU/4CPU\u7ebf\u7a0b/24GiB\uff1b\u7b49\u5361\u22648h\uff0c\u51c6\u5165\u6062\u590d\u53ca\u5b66\u4e60\u22643h\uff0c\u5171\u752812h\u622a\u6b62\u3002",
@@ -4156,7 +4219,7 @@
       "track": "baseline",
       "view_group": "history",
       "x": 915,
-      "y": 6300
+      "y": 6900
     },
     {
       "budget": "1NPU/4CPU\u7ebf\u7a0b/24GiB\uff1b\u7b49\u5361\u22648h\uff0c\u51c6\u5165\u6062\u590d\u53ca\u5b66\u4e60\u22643h\uff0c\u5171\u752812h\u622a\u6b62\u3002",
@@ -4203,7 +4266,7 @@
       "unresolved": "\u5355seed\u4e14\u672a\u67e5\u770b\u72ec\u7acbtest\uff1b\u68af\u5ea6\u5c3a\u5ea6/\u5168\u5c40\u88c1\u526a\u3001\u4f18\u5316\u914d\u65b9\u3001\u7b26\u53f7\u7f16\u7801\u548c\u521d\u59cb\u5316\u6548\u5e94\u672a\u533a\u5206\uff0c\u4e0d\u80fd\u9501\u5b9a\u552f\u4e00\u539f\u56e0\u6216\u53cd\u8bc1\u6240\u6709\u63a5\u5165\u3002",
       "view_group": "history",
       "x": 915,
-      "y": 6600
+      "y": 7200
     },
     {
       "budget": "1NPU/4CPU\u7ebf\u7a0b/8GiB\uff1b\u7b49\u5361\u22648h\uff0c\u8ba1\u7b97\u4e0e\u6e05\u7406\u226415min\uff0c\u5171\u752812h\u622a\u6b62\u3002",
@@ -4250,7 +4313,7 @@
       "track": "shared",
       "view_group": "history",
       "x": 620,
-      "y": 6300
+      "y": 6900
     },
     {
       "budget": "1NPU/4CPU\u7ebf\u7a0b/8GiB\uff1b\u7b49\u5361\u22648h\uff0c\u8ba1\u7b97\u4e0e\u6e05\u7406\u226415min\uff0c\u5171\u752812h\u622a\u6b62\u3002",
@@ -4289,7 +4352,7 @@
       "unresolved": "\u4e3b\u7ebf\u7a0b\u6808\u542b\u7b49\u5f85\u548cGIL\u504f\u5dee\uff0cbackward\u5f15\u64ce\u7ea6\u4e09\u5206\u4e4b\u4e00\u6837\u672c\u4e0d\u80fd\u7b49\u540cCPU\u81ea\u8017\u65f6\u6216NPU kernel\u6bd4\u4f8b\u3002",
       "view_group": "history",
       "x": 620,
-      "y": 6600
+      "y": 7200
     },
     {
       "budget": "\u5168\u94fe\u5171\u540c1NPU/4CPU\u7ebf\u7a0b/24GiB\uff1b\u8bbe\u5907\u22642h\u3001\u542b\u6392\u961f\u226412h\u3001\u65b0\u589e\u22644GiB\u3002",
@@ -4339,7 +4402,7 @@
       "track": "baseline",
       "view_group": "history",
       "x": 30,
-      "y": 6900
+      "y": 7500
     },
     {
       "budget": "\u5171\u4eab\u7b2c\u56db\u6279\u22642h\u8bbe\u5907\u8ba1\u7b97\u3001\u226412h\u5899\u949f\uff1b\u65e0\u72ec\u7acb\u65b0\u589e\u9884\u7b97\u3002",
@@ -4383,7 +4446,7 @@
       "unresolved": "\u590d\u5236\u5931\u8bef\u6765\u81ea\u63d0\u793a/\u683c\u5f0f\u8fd8\u662f\u6a21\u578b\u80fd\u529b\u672a\u533a\u5206\uff1b\u4e00\u8bcd\u67e5\u8868\u4e0d\u80fd\u8986\u76d6\u5e7f\u6cdb\u8bed\u8a00\u80fd\u529b\u3002",
       "view_group": "history",
       "x": 30,
-      "y": 7200
+      "y": 7800
     },
     {
       "budget": "\u5168\u94fe\u5171\u540c1NPU/4CPU\u7ebf\u7a0b/24GiB\uff1b\u8bbe\u5907\u22642h\u3001\u542b\u6392\u961f\u226412h\u3001\u65b0\u589e\u22644GiB\u3002",
@@ -4433,7 +4496,7 @@
       "track": "baseline",
       "view_group": "history",
       "x": 325,
-      "y": 6900
+      "y": 7500
     },
     {
       "budget": "\u5171\u4eab\u7b2c\u56db\u6279\u22642h\u8bbe\u5907\u8ba1\u7b97\u3001\u226412h\u5899\u949f\uff1b\u65e0\u72ec\u7acb\u65b0\u589e\u9884\u7b97\u3002",
@@ -4477,7 +4540,7 @@
       "unresolved": "\u6295\u5f71\u521d\u59cb\u5316\u3001tanh\u3001\u4f18\u5316\u9884\u7b97\u4e0e\u7ed3\u6784\u5f71\u54cd\u672a\u533a\u5206\uff1b\u5168\u7ef4\u4e0ePCA\u8bfb\u51fa\u7684\u53c2\u6570\u5bb9\u91cf\u4e0d\u540c\u3002",
       "view_group": "history",
       "x": 325,
-      "y": 7200
+      "y": 7800
     },
     {
       "budget": "\u5168\u94fe\u5171\u540c1NPU/4CPU\u7ebf\u7a0b/24GiB\uff1b\u8bbe\u5907\u22642h\u3001\u542b\u6392\u961f\u226412h\u3001\u65b0\u589e\u22644GiB\u3002",
@@ -4625,7 +4688,7 @@
       "track": "baseline",
       "view_group": "history",
       "x": 620,
-      "y": 6900
+      "y": 7500
     },
     {
       "budget": "\u5171\u4eab\u7b2c\u56db\u6279\u22642h\u8bbe\u5907\u8ba1\u7b97\u3001\u226412h\u5899\u949f\uff1b\u65e0\u72ec\u7acb\u65b0\u589e\u9884\u7b97\u3002",
@@ -4669,7 +4732,7 @@
       "unresolved": "16\u7ef4\u6295\u5f71/\u975e\u7ebf\u6027/\u4f18\u5316\u914d\u65b9\u4e0e\u7ed3\u6784\u8d21\u732e\u672a\u533a\u5206\uff1b\u672a\u53d1\u5e03\u91cd\u7b97\u91cf\u672a\u77e5\uff1b\u65e0\u5b8c\u6574128\u6b65\u4e0d\u4e2d\u65ad\u53c2\u8003\u3002",
       "view_group": "history",
       "x": 620,
-      "y": 7200
+      "y": 7800
     },
     {
       "budget": "\u5168\u94fe\u5171\u540c1NPU/4CPU\u7ebf\u7a0b/24GiB\uff1b\u8bbe\u5907\u22642h\u3001\u542b\u6392\u961f\u226412h\u3001\u65b0\u589e\u22644GiB\u3002",
@@ -4836,7 +4899,7 @@
       "track": "baseline",
       "view_group": "history",
       "x": 915,
-      "y": 6900
+      "y": 7500
     },
     {
       "budget": "\u5171\u4eab\u7b2c\u56db\u6279\u22642h\u8bbe\u5907\u8ba1\u7b97\u3001\u226412h\u5899\u949f\uff1b\u65e0\u72ec\u7acb\u65b0\u589e\u9884\u7b97\u3002",
@@ -4880,7 +4943,7 @@
       "unresolved": "\u8f83\u5f31\u5e72\u9884\u4e0e\u57fa\u7ebf\u9c81\u68d2\u6027\u8d21\u732e\u672a\u533a\u5206\uff1b\u9884\u6d4b\u5fae\u5c0f\u589e\u76ca\u4e0d\u8db3\u4ee5\u8ba4\u5b9a\u63d0\u5347\uff1b\u672a\u8986\u76d6\u957f\u751f\u6210\u3001\u5e7f\u6cdb\u4efb\u52a1\u4e0e\u5176\u4ed6\u5c42\u3002",
       "view_group": "history",
       "x": 915,
-      "y": 7200
+      "y": 7800
     },
     {
       "budget": "v4\u72ec\u7acb\u9884\u7b978NPUh/12h\uff0c\u4e0d\u91cd\u7f6e\u65e7\u6279\u6210\u672c\uff1b\u89c1\u7814\u7a76\u8868\u3002",
@@ -4924,7 +4987,7 @@
       "unresolved": "\u77ed\u4e0a\u4e0b\u6587\u3001\u4f18\u5316\u5145\u5206\u7a0b\u5ea6\u3001\u5355seed\u548c\u6587\u6863\u8986\u76d6\u9650\u5236\uff1b512\u6b65\u957f\u671f\u72ec\u7acb\u6062\u590d\u672a\u67e5\u3002",
       "view_group": "current",
       "x": 915,
-      "y": 2960
+      "y": 3560
     },
     {
       "budget": "v4\u72ec\u7acb\u9884\u7b978NPUh/12h\uff0c\u4e0d\u91cd\u7f6e\u65e7\u6279\u6210\u672c\uff1b\u89c1\u7814\u7a76\u8868\u3002",
@@ -4968,7 +5031,7 @@
       "unresolved": "\u5165\u53e3\u7ef4\u6570\u3001\u5c40\u90e8\u53d8\u6362\u5f62\u5f0f\u3001\u5e8f\u5217\u72b6\u6001\u53ca\u4f18\u5316\u672a\u5b8c\u5168\u9694\u79bb\uff1b\u5355seed\u6587\u6863\u533a\u95f4\u4e0d\u8986\u76d6\u8bad\u7ec3\u968f\u673a\u6027\u3001\u9884\u8bad\u7ec3\u6c61\u67d3\u53ca\u5e7f\u6cdb\u8bed\u6599\u3002\u672a\u77e5\u6570\u503c\u539f\u56e0\u672a\u89e3\u9664\u3002",
       "view_group": "current",
       "x": 915,
-      "y": 3140
+      "y": 3740
     },
     {
       "budget": "v4\u72ec\u7acb\u9884\u7b978NPUh/12h\uff0c\u4e0d\u91cd\u7f6e\u65e7\u6279\u6210\u672c\uff1b\u89c1\u7814\u7a76\u8868\u3002",
@@ -5012,7 +5075,7 @@
       "unresolved": "\u4ece\u96f6\u4e0e\u9884\u8bad\u7ec3\u80cc\u666f\u4e0d\u53ef\u4e92\u76f8\u66ff\u4ee3\uff0c\u8054\u5408\u89c4\u6a21/\u957f\u4e0a\u4e0b\u6587\u53ca\u8de8seed\u7a33\u5065\u6027\u5c1a\u672a\u5efa\u7acb\u3002",
       "view_group": "current",
       "x": 915,
-      "y": 3320
+      "y": 3920
     },
     {
       "budget": "\u672c\u6279\u5171\u4eab\u539f24\u7d2f\u8ba1\u8ba1\u7b97worker\u5c0f\u65f6/22:49:13\u622a\u6b62\uff1b\u539fv5\u53ca\u8865\u9f50\u603b\u5b9e\u626310.1672\u5c0f\u65f6\uff0c\u5df2\u7ec8\u6001\uff0c\u5404\u9879\u660e\u7ec6\u89c1\u7ec8\u6001\u8bc1\u636e\u3002",
@@ -5134,7 +5197,7 @@
       "track": "tide",
       "view_group": "current",
       "x": 620,
-      "y": 3560
+      "y": 4160
     },
     {
       "budget": "\u6765\u81ea\u5bf9\u5e94\u7814\u7a76\uff0c\u4e0d\u8ffd\u52a0\u5b9e\u9a8c\u3002",
@@ -5214,7 +5277,7 @@
       "unresolved": "\u8bad\u7ec3\u5145\u5206\u5ea6\u3001\u4f18\u5316\u3001\u8bfb\u51fa/\u4fe1\u606f\u8def\u5f84\u4e0e\u7ed3\u6784\u672a\u5206\u79bb\uff1b\u5355seed\u6587\u6863\u533a\u95f4\u4e0d\u5305\u62ec\u79cd\u5b50\u6216\u603b\u4f53\u5916\u63a8\u4e0d\u786e\u5b9a\u6027\u3002",
       "view_group": "current",
       "x": 915,
-      "y": 3560
+      "y": 4160
     },
     {
       "budget": "\u672c\u6279\u5171\u4eab\u539f24\u7d2f\u8ba1\u8ba1\u7b97worker\u5c0f\u65f6/22:49:13\u622a\u6b62\uff1b\u539fv5\u53ca\u8865\u9f50\u603b\u5b9e\u626310.1672\u5c0f\u65f6\uff0c\u5df2\u7ec8\u6001\uff0c\u5404\u9879\u660e\u7ec6\u89c1\u7ec8\u6001\u8bc1\u636e\u3002",
@@ -5341,7 +5404,7 @@
       "track": "tide",
       "view_group": "current",
       "x": 620,
-      "y": 3740
+      "y": 4340
     },
     {
       "budget": "\u6765\u81ea\u5bf9\u5e94\u7814\u7a76\uff0c\u4e0d\u8ffd\u52a0\u5b9e\u9a8c\u3002",
@@ -5421,7 +5484,7 @@
       "unresolved": "\u53cc\u4fa7\u8d28\u91cf\u533a\u95f4\u542b0\uff0c\u4e5f\u4e0d\u80fd\u5224\u5df2\u786e\u8ba4\u9000\u5316\uff1b\u8bad\u7ec3\u5145\u5206\u5ea6\u3001\u4f18\u5316\u4e0e\u62d3\u6251\u672a\u5206\u79bb\uff0c\u957f\u671f\u72ec\u7acb\u6062\u590d\u672a\u67e5\u3002",
       "view_group": "current",
       "x": 915,
-      "y": 3740
+      "y": 4340
     },
     {
       "budget": "\u5171\u4eab\u622a\u6b62\u5317\u4eac\u65f6\u95f422:49\uff1b\u65b0\u627924\u7d2f\u8ba1\u8ba1\u7b97worker\u5c0f\u65f6\uff0cCPU\u66ff\u4ee3\u8ba1\u5165\u540c\u4e00\u4e0a\u9650\u3002",
@@ -5497,7 +5560,7 @@
       "track": "baseline",
       "view_group": "current",
       "x": 620,
-      "y": 3920
+      "y": 4520
     },
     {
       "budget": "\u6765\u81ea\u5bf9\u5e94\u7814\u7a76\uff0c\u4e0d\u8ffd\u52a0\u5b9e\u9a8c\u3002",
@@ -5549,7 +5612,7 @@
       "unresolved": "\u53c2\u6570\u5bb9\u91cf\u3001\u6df1\u5ea6\u3001\u72b6\u6001\u53ca\u4f18\u5316\u672a\u5206\u79bb\uff1b\u5355seed\u6587\u6863\u533a\u95f4\u4e0d\u8986\u76d6\u968f\u673a\u6027\u548c\u5e7f\u6cdb\u80fd\u529b\u3002\u6570\u503c\u539f\u56e0\u672a\u77e5\u3002",
       "view_group": "current",
       "x": 915,
-      "y": 3920
+      "y": 4520
     },
     {
       "budget": "\u672c\u6279\u5171\u4eab\u539f24\u7d2f\u8ba1\u8ba1\u7b97worker\u5c0f\u65f6/22:49:13\u622a\u6b62\uff1b\u539fv5\u53ca\u8865\u9f50\u603b\u5b9e\u626310.1672\u5c0f\u65f6\uff0c\u5df2\u7ec8\u6001\uff0c\u5404\u9879\u660e\u7ec6\u89c1\u7ec8\u6001\u8bc1\u636e\u3002",
@@ -5676,7 +5739,7 @@
       "track": "shared",
       "view_group": "current",
       "x": 620,
-      "y": 4100
+      "y": 4700
     },
     {
       "budget": "\u6765\u81ea\u5bf9\u5e94\u7814\u7a76\uff0c\u4e0d\u8ffd\u52a0\u5b9e\u9a8c\u3002",
@@ -5756,7 +5819,7 @@
       "unresolved": "\u7ed3\u6784\u3001\u5145\u5206\u8bad\u7ec3\u3001\u4f18\u5316\u548c\u53c2\u6570\u89c4\u6a21\u4ecd\u672a\u5206\u79bb\uff1b\u540cseed\u4e0e\u6587\u6863\u6837\u672c\u7684\u8fb9\u754c\u4fdd\u6301\u3002",
       "view_group": "current",
       "x": 915,
-      "y": 4100
+      "y": 4700
     },
     {
       "budget": "\u672c\u6279\u5171\u4eab\u539f24\u7d2f\u8ba1\u8ba1\u7b97worker\u5c0f\u65f6/22:49:13\u622a\u6b62\uff1b\u539fv5\u53ca\u8865\u9f50\u603b\u5b9e\u626310.1672\u5c0f\u65f6\uff0c\u5df2\u7ec8\u6001\uff0c\u5404\u9879\u660e\u7ec6\u89c1\u7ec8\u6001\u8bc1\u636e\u3002",
@@ -5852,7 +5915,7 @@
       "track": "tide",
       "view_group": "current",
       "x": 620,
-      "y": 4280
+      "y": 4880
     },
     {
       "budget": "\u6765\u81ea\u5bf9\u5e94\u7814\u7a76\uff0c\u4e0d\u8ffd\u52a0\u5b9e\u9a8c\u3002",
@@ -5912,7 +5975,7 @@
       "unresolved": "\u5355seed\u3001\u5c0f\u6570\u636e\u4e0e\u77ed\u4e0a\u4e0b\u6587\uff1b\u8bad\u7ec3\u5145\u5206\u5ea6\u3001\u4f18\u5316\u3001\u62d3\u6251\u3001\u53c2\u6570\u4e0eShannon/quad\u5206\u914d\u914d\u65b9\u672a\u5206\u79bb\u3002\u72ec\u7acb\u53c2\u8003\u56e0\u679c/\u672a\u6765VJP/\u65e9\u671f\u652f\u6301\u53ca\u79bb\u6563\u68c0\u67e5\u901a\u8fc7\uff0c\u4f46\u6709\u9650\u6570\u503c\u4e0eeager\u96f6\u5bb9\u5dee\u5dee\u5f02\u539f\u56e0\u672a\u5b8c\u5168\u5b9a\u4f4d\uff1b\u5b8c\u657464\u6b65\u72ec\u7acb\u6062\u590d\u672a\u67e5\u3002",
       "view_group": "current",
       "x": 915,
-      "y": 4280
+      "y": 4880
     },
     {
       "budget": "\u672c\u6b21639.774\u79d2\u542b\u5f00\u53d1\u68c0\u67e5\uff1bv5\u7d2f\u8ba1\u7ea66.5475/24\u8ba1\u7b97\u5c0f\u65f6\uff0c22:49\u622a\u6b62\u4e0d\u5ef6\u957f\u3002",
@@ -5961,7 +6024,7 @@
       "track": "shared",
       "view_group": "current",
       "x": 620,
-      "y": 4460
+      "y": 5060
     },
     {
       "budget": "\u9a8c\u6536\u4e24\u4f5c\u4e1a\u5df2\u7ec8\u6001\uff1b\u540e\u7eed\u8865\u9f50\u8d39\u7528\u5355\u5217\u7eb3\u5165\u539fv5\u603b\u9884\u7b97\u3002",
@@ -6009,7 +6072,7 @@
       "unresolved": "\u6709\u9650\u6570\u503c\u8d85\u5dee\u539f\u56e0\u672a\u5b8c\u5168\u5206\u89e3\uff1bNPU\u957f\u8bad\u7ec3\u3001B/Qwen\u5b8c\u6574\u8fc1\u79fb\u4e0e\u66f4\u957f\u5b66\u4e60\u672a\u68c0\u67e5\uff1b\u6781\u5f31\u603b\u91cf\u548c\u4e0d\u53ef\u8868\u793a\u4f34\u968f\u4ecd\u62d2\u7edd\u3002",
       "view_group": "current",
       "x": 915,
-      "y": 4460
+      "y": 5060
     },
     {
       "budget": "\u5171\u4eab48h/1536 CPU\u6838\u65f6/384 NPU\u5361\u65f6\uff1b\u5355\u7b5b\u90098h\uff0c\u5355\u89c4\u6a2136h\uff1b\u4e0d\u81ea\u52a8\u8ffd\u52a0\u5019\u9009\u6216\u76ee\u6807\u3002",
@@ -7950,7 +8013,7 @@
       "track": "tide",
       "view_group": "current",
       "x": 620,
-      "y": 100
+      "y": 700
     },
     {
       "budget": "\u5171\u4eab48h/1536 CPU\u6838\u65f6/384 NPU\u5361\u65f6\uff1b\u5355\u7b5b\u90098h\uff0c\u5355\u89c4\u6a2136h\uff1b\u4e0d\u81ea\u52a8\u8ffd\u52a0\u5019\u9009\u6216\u76ee\u6807\u3002",
@@ -8155,7 +8218,7 @@
       "track": "tide",
       "view_group": "current",
       "x": 620,
-      "y": 460
+      "y": 1060
     },
     {
       "budget": "\u5171\u4eab48h/1536 CPU\u6838\u65f6/384 NPU\u5361\u65f6\uff1b\u5355\u7b5b\u90098h\uff0c\u5355\u89c4\u6a2136h\uff1b\u4e0d\u81ea\u52a8\u8ffd\u52a0\u5019\u9009\u6216\u76ee\u6807\u3002",
@@ -8183,7 +8246,7 @@
       "track": "tide",
       "view_group": "current",
       "x": 915,
-      "y": 100
+      "y": 700
     },
     {
       "budget": "\u5171\u4eab48h/1536 CPU\u6838\u65f6/384 NPU\u5361\u65f6\uff1b\u5355\u7b5b\u90098h\uff0c\u5355\u89c4\u6a2136h\uff1b\u4e0d\u81ea\u52a8\u8ffd\u52a0\u5019\u9009\u6216\u76ee\u6807\u3002",
@@ -8211,7 +8274,7 @@
       "track": "tide",
       "view_group": "current",
       "x": 915,
-      "y": 460
+      "y": 1060
     },
     {
       "budget": "\u5171\u4eab48h/1536 CPU\u6838\u65f6/384 NPU\u5361\u65f6\uff1b\u5355\u7b5b\u90098h\uff0c\u5355\u89c4\u6a2136h\uff1b\u4e0d\u81ea\u52a8\u8ffd\u52a0\u5019\u9009\u6216\u76ee\u6807\u3002",
@@ -8240,7 +8303,7 @@
       "track": "tide",
       "view_group": "current",
       "x": 620,
-      "y": 820
+      "y": 1420
     },
     {
       "budget": "\u65b0\u589e\u22641 NPU\u5361\u65f6/3 CPU\u6838\u65f6/4GiB\uff1b\u5b9e\u9645\u670d\u52a10.36/0.81\u5c0f\u65f6\uff0c\u7ea62.42GiB\u3002",
@@ -8383,7 +8446,7 @@
       "track": "tide",
       "view_group": "current",
       "x": 620,
-      "y": 280
+      "y": 880
     },
     {
       "budget": "\u672c\u6b21\u5b9a\u4f4d\u7ec8\u6001\uff1b\u65e0\u65b0\u4f18\u5316/\u8bad\u7ec3\u4f5c\u4e1a\u81ea\u52a8\u542f\u52a8\u3002",
@@ -8426,7 +8489,7 @@
       "unresolved": "\u957fL128\u9010\u7b97\u5b50critical path\u3001\u5176\u4ed6\u8bed\u4e49\u65cf\u53caresident\uff1b\u4e25\u683c\u8f93\u51fa/\u68af\u5ea6\u5dee\u5f02\u672a\u5728\u672c\u5b9a\u4f4d\u91cd\u65b0\u8ba4\u8bc1\uff1b\u5c1a\u672a\u4ea4\u4ed8\u4fee\u6b63\u3002",
       "view_group": "current",
       "x": 915,
-      "y": 280
+      "y": 880
     },
     {
       "budget": "\u56db\u4e2aCPU1\u670d\u52a1\u7ea60.2395\u6838\u65f6\uff1b\u8bca\u65ad\u989d\u5ea6\u22641.75\u6838\u65f6\uff0c\u65e0NPU/\u65b0\u5b66\u4e60\u5019\u9009\u3002",
@@ -8493,7 +8556,7 @@
       "track": "tide",
       "view_group": "current",
       "x": 620,
-      "y": 640
+      "y": 1240
     },
     {
       "budget": "\u8865\u8bc1\u5df2\u7ec8\u6001\uff1b\u4fee\u590d\u4e0e\u540e\u7eed\u8bad\u7ec3\u672a\u542f\u52a8\u3002",
@@ -8540,7 +8603,7 @@
       "unresolved": "\u5c1a\u672a\u5b9e\u73b0\u4fee\u590d\uff1b\u5b8c\u6574HB\u4e0a\u6e38\u8d28\u91cf\u8d77\u6e90\u3001\u5176\u4ed6\u65cf\u771f\u5b9e\u68af\u5ea6\u5f71\u54cd\u4e0e\u8bbe\u5907/\u957f\u8f68\u8ff9\u8d44\u683c\u672a\u8bc1\uff1b\u4e0d\u80fd\u628a\u9759\u6001\u98ce\u9669\u5f53\u6210\u5b9e\u9645\u8bad\u7ec3\u5931\u8d25\u3002",
       "view_group": "current",
       "x": 915,
-      "y": 640
+      "y": 1240
     },
     {
       "budget": "25\u683c\u00d73\u6a21\u5f0f\u00d73\u6b63\u5f0f\u91cd\u590d\uff1bCPU\u7ea61.57\u6838\u65f6\u3001NPU\u7ea60.51\u5361\u65f6\uff08\u542b\u68af\u5ea6\u8865\u8bc1\u4fdd\u5b88\u6263\u8d26\uff09\u3002",
@@ -8771,7 +8834,7 @@
       "track": "tide",
       "view_group": "current",
       "x": 620,
-      "y": 1600
+      "y": 2200
     },
     {
       "budget": "25\u683c\u00d73\u6a21\u5f0f\u00d73\u6b63\u5f0f\u91cd\u590d\uff1bCPU\u7ea61.57\u6838\u65f6\u3001NPU\u7ea60.51\u5361\u65f6\uff08\u542b\u68af\u5ea6\u8865\u8bc1\u4fdd\u5b88\u6263\u8d26\uff09\u3002",
@@ -8814,7 +8877,7 @@
       "unresolved": "\u5dee\u989d\u4e2d\u5fc5\u8981\u6570\u5b66\u804c\u8d23\u4e0e\u53ef\u5220\u9664\u5b9e\u73b0\u5f00\u9500\u5c1a\u672a\u5206\u79bb\uff1b\u6ca1\u6709HB\u65b0\u57fa\u5ea7\u6027\u80fd\u3001\u7a33\u6001optimizer\u3001\u751f\u6210\u65f6\u5ef6\u6216\u8d28\u91cf\u8d44\u683c\u3002\u5171\u4eab\u8bbe\u5907/\u4e3b\u5b58\u4e89\u7528\u672a\u6392\u9664\u3002",
       "view_group": "current",
       "x": 915,
-      "y": 1600
+      "y": 2200
     },
     {
       "budget": "\u539fv6\u8bc1\u636e\u53ea\u8bfb\uff1bCPU1/16GiB/900\u79d2VJP\u8865\u8bc1\u5b9e\u9645\u7ea663\u79d2\u8ba1\u7b97\uff1b\u672a\u6253\u5f00test\u3002",
@@ -8917,7 +8980,7 @@
       "track": "tide",
       "view_group": "current",
       "x": 620,
-      "y": 1780
+      "y": 2380
     },
     {
       "budget": "\u672c\u6b21\u5ba1\u9605\u7ec8\u6001\uff1b\u65b0\u8bed\u8a00\u8bad\u7ec3\u5efa\u8bae\u5c1a\u672a\u63d0\u4ea4\u3002",
@@ -8968,7 +9031,7 @@
       "unresolved": "\u56fa\u5b9astd0.15\u3001\u7f3a\u6700\u7ec8\u5f52\u4e00\u5316\u3001\u5f3a\u65b9\u5411\u68af\u5ea6\u4e0e\u4e0d\u7a33\u5b9a\u76f8\u5173\uff0c\u4f46\u672a\u901a\u8fc7\u8bad\u7ec3\u5e72\u9884\u8bc1\u660e\u56e0\u679c\uff1b\u5206\u914d/\u6c47\u5408/\u68af\u5ea6\u5b9e\u73b0\u548c\u66dd\u5149\u4ecd\u672a\u5b8c\u5168\u533a\u5206\u3002",
       "view_group": "current",
       "x": 915,
-      "y": 1780
+      "y": 2380
     },
     {
       "budget": "\u5168\u6279\u5b9e\u964513.23\u5206\u949f\uff0c0.685 NPU\u5361\u65f6\uff1b\u542b\u5f00\u53d1\u9884\u75592.351 CPU\u6838\u65f6\u3002\u6700\u591a4\u5f20\u5171\u4eabNPU\u3002",
@@ -9115,7 +9178,7 @@
       "track": "tide",
       "view_group": "current",
       "x": 620,
-      "y": 1000
+      "y": 1600
     },
     {
       "budget": "12\u4e2a\u7b5b\u9009\u9636\u6bb5\u5b8c\u6210\uff0c\u4e0d\u4ee5\u9000\u51fa\u7801\u4ea7\u751f\u79d1\u5b66\u7ed3\u8bba\u3002",
@@ -9158,7 +9221,7 @@
       "unresolved": "\u66f4\u957f\u66dd\u5149\u3001LR/\u68af\u5ea6\u5c3a\u5ea6\u8026\u5408\u53ca\u539fTIDE\u5206\u914d\u8bed\u4e49\u7684\u5f71\u54cd\u672a\u533a\u5206\uff1b\u4e25\u683c\u6570\u503c\u6709\u9650\u5931\u8d25\u3002",
       "view_group": "current",
       "x": 915,
-      "y": 1000
+      "y": 1600
     },
     {
       "budget": "\u5168\u6279\u5b9e\u964513.23\u5206\u949f\uff0c0.685 NPU\u5361\u65f6\uff1b\u542b\u5f00\u53d1\u9884\u75592.351 CPU\u6838\u65f6\u3002\u6700\u591a4\u5f20\u5171\u4eabNPU\u3002",
@@ -9289,7 +9352,7 @@
       "track": "tide",
       "view_group": "current",
       "x": 620,
-      "y": 1180
+      "y": 1780
     },
     {
       "budget": "10\u67614M\u8f68\u8ff9\u5b8c\u6210\uff1b\u6761\u4ef6\u6b8b\u5dee0\u6761\u3002",
@@ -9340,7 +9403,7 @@
       "unresolved": "\u53c2\u6570\u91cf\u3001rank\u4e0e\u5206\u652f/\u6c47\u5408\u540c\u65f6\u6539\u53d8\uff1b\u957f\u7a0b\u5229\u7528\u3001\u5176\u4ed6\u6570\u636e/\u66f4\u5927\u89c4\u6a21\u3001TIDE\u8def\u7531\u548c\u5b9e\u9645\u7a00\u758f\u5747\u672a\u5224\u5b9a\u3002",
       "view_group": "current",
       "x": 915,
-      "y": 1180
+      "y": 1780
     },
     {
       "budget": "\u5b9e\u96450\u6761\u30010\u8bad\u7ec3\u6210\u672c\uff1b\u539f\u4e0a\u96502\u6761\u3002",
@@ -9365,7 +9428,7 @@
       "track": "tide",
       "view_group": "current",
       "x": 620,
-      "y": 1360
+      "y": 1960
     },
     {
       "budget": "\u540c\u4e00\u6709\u9650\u9884\u7b97\uff1b\u672a\u5f00\u542ftest\u3002",
@@ -9379,17 +9442,1700 @@
       "track": "tide",
       "view_group": "current",
       "x": 915,
-      "y": 1360
+      "y": 1960
+    },
+    {
+      "budget": "48h/240 NPU\u5361\u65f6/768 CPU\u6838\u65f6/128GiB\uff1b10\u5361\u72ec\u7acb\u5e76\u884c\uff1b\u4e0d\u81ea\u52a8\u6269\u5c55\u771f\u5b9e\u7a00\u758f\u6216\u89c4\u6a21\u3002",
+      "decision": "\u4e24\u6863\u91c7\u7528GPT2\u5f0f\u6df1\u5ea6\u6b8b\u5dee\u521d\u59cb\u5316\u4e0eLR0.001\uff1b\u641c\u7d22\u9884\u7b97\u53ca\u6240\u6709\u5206\u6570\u4fdd\u7559\u3002",
+      "id": "V8-TF",
+      "kind": "experiment",
+      "question": "\u5728\u5171\u540c\u81ea\u7136\u6587\u672cnext-token\u53e3\u5f84\u4e0b\uff0c\u54ea\u4e9b\u5c40\u90e8\u5019\u9009\u503c\u5f97\u4fdd\u7559\uff0c\u7ecf\u8fc7\u6821\u51c6\u7684Transformer\u5bf9\u7167\u8868\u73b0\u5982\u4f55\uff1f",
+      "references": [
+        {
+          "label": "\u56fa\u5b9a\u7814\u7a76\u8868",
+          "path": "docs/studies/direct-coverage-v8.md"
+        },
+        {
+          "label": "\u6e90\u7801\u3001\u4f5c\u4e1a\u3001Lens\u4e0e\u6062\u590d",
+          "path": "docs/studies/direct-v8-operations.md"
+        },
+        {
+          "label": "\u9010\u9879\u89c2\u6d4b",
+          "path": "docs/evidence/direct-v8-observations.json"
+        }
+      ],
+      "runs": [
+        {
+          "config": "configs/studies/language/direct-v8/tf-confirm/tf6-gpt2-lr0.001-s22.json",
+          "id": "tl-v8-tf-confirm-tf6-gpt2-lr0.001-s22",
+          "lens_record": "runs/v8-tf-confirm-tf6-gpt2-lr0.001-s22/train/projection.json",
+          "record": "runs/v8-tf-confirm-tf6-gpt2-lr0.001-s22/train/result.json",
+          "source_commit": "2702d91a826bdae54693d0e51ed13e406e0c0eca",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/tf-confirm/tf6-gpt2-lr0.0003-s22.json",
+          "id": "tl-v8-tf-confirm-tf6-gpt2-lr0.0003-s22",
+          "lens_record": "runs/v8-tf-confirm-tf6-gpt2-lr0.0003-s22/train/projection.json",
+          "record": "runs/v8-tf-confirm-tf6-gpt2-lr0.0003-s22/train/result.json",
+          "source_commit": "2702d91a826bdae54693d0e51ed13e406e0c0eca",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/tf-confirm/tf12-gpt2-lr0.001-s22.json",
+          "id": "tl-v8-tf-confirm-tf12-gpt2-lr0.001-s22",
+          "lens_record": "runs/v8-tf-confirm-tf12-gpt2-lr0.001-s22/train/projection.json",
+          "record": "runs/v8-tf-confirm-tf12-gpt2-lr0.001-s22/train/result.json",
+          "source_commit": "2702d91a826bdae54693d0e51ed13e406e0c0eca",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/tf-confirm/tf12-gpt2-lr0.0003-s22.json",
+          "id": "tl-v8-tf-confirm-tf12-gpt2-lr0.0003-s22",
+          "lens_record": "runs/v8-tf-confirm-tf12-gpt2-lr0.0003-s22/train/projection.json",
+          "record": "runs/v8-tf-confirm-tf12-gpt2-lr0.0003-s22/train/result.json",
+          "source_commit": "2702d91a826bdae54693d0e51ed13e406e0c0eca",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/tf6-gpt2-lr0.0003-s11.json",
+          "id": "tl-v8-tf-tf6-gpt2-lr0.0003-s11",
+          "lens_record": "runs/v8-tf-tf6-gpt2-lr0.0003-s11/train/projection.json",
+          "record": "runs/v8-tf-tf6-gpt2-lr0.0003-s11/train/result.json",
+          "source_commit": "2702d91a826bdae54693d0e51ed13e406e0c0eca",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/tf12-gpt2-lr0.001-s11.json",
+          "id": "tl-v8-tf-tf12-gpt2-lr0.001-s11",
+          "lens_record": "runs/v8-tf-tf12-gpt2-lr0.001-s11/train/projection.json",
+          "record": "runs/v8-tf-tf12-gpt2-lr0.001-s11/train/result.json",
+          "source_commit": "2702d91a826bdae54693d0e51ed13e406e0c0eca",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/tf6-gpt2-lr0.001-s11.json",
+          "id": "tl-v8-tf-tf6-gpt2-lr0.001-s11",
+          "lens_record": "runs/v8-tf-tf6-gpt2-lr0.001-s11/train/projection.json",
+          "record": "runs/v8-tf-tf6-gpt2-lr0.001-s11/train/result.json",
+          "source_commit": "2702d91a826bdae54693d0e51ed13e406e0c0eca",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/tf12-gpt2-lr0.003-s11.json",
+          "id": "tl-v8-tf-tf12-gpt2-lr0.003-s11",
+          "lens_record": "runs/v8-tf-tf12-gpt2-lr0.003-s11/train/projection.json",
+          "record": "runs/v8-tf-tf12-gpt2-lr0.003-s11/train/result.json",
+          "source_commit": "2702d91a826bdae54693d0e51ed13e406e0c0eca",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/tf6-gpt2-lr0.003-s11.json",
+          "id": "tl-v8-tf-tf6-gpt2-lr0.003-s11",
+          "lens_record": "runs/v8-tf-tf6-gpt2-lr0.003-s11/train/projection.json",
+          "record": "runs/v8-tf-tf6-gpt2-lr0.003-s11/train/result.json",
+          "source_commit": "2702d91a826bdae54693d0e51ed13e406e0c0eca",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/tf12-fan-in-depth-lr0.0003-s11.json",
+          "id": "tl-v8-tf-tf12-fan-in-depth-lr0.0003-s11",
+          "lens_record": "runs/v8-tf-tf12-fan-in-depth-lr0.0003-s11/train/projection.json",
+          "record": "runs/v8-tf-tf12-fan-in-depth-lr0.0003-s11/train/result.json",
+          "source_commit": "2702d91a826bdae54693d0e51ed13e406e0c0eca",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/tf6-fan-in-depth-lr0.0003-s11.json",
+          "id": "tl-v8-tf-tf6-fan-in-depth-lr0.0003-s11",
+          "lens_record": "runs/v8-tf-tf6-fan-in-depth-lr0.0003-s11/train/projection.json",
+          "record": "runs/v8-tf-tf6-fan-in-depth-lr0.0003-s11/train/result.json",
+          "source_commit": "2702d91a826bdae54693d0e51ed13e406e0c0eca",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/tf12-fan-in-depth-lr0.001-s11.json",
+          "id": "tl-v8-tf-tf12-fan-in-depth-lr0.001-s11",
+          "lens_record": "runs/v8-tf-tf12-fan-in-depth-lr0.001-s11/train/projection.json",
+          "record": "runs/v8-tf-tf12-fan-in-depth-lr0.001-s11/train/result.json",
+          "source_commit": "2702d91a826bdae54693d0e51ed13e406e0c0eca",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/tf6-fan-in-depth-lr0.001-s11.json",
+          "id": "tl-v8-tf-tf6-fan-in-depth-lr0.001-s11",
+          "lens_record": "runs/v8-tf-tf6-fan-in-depth-lr0.001-s11/train/projection.json",
+          "record": "runs/v8-tf-tf6-fan-in-depth-lr0.001-s11/train/result.json",
+          "source_commit": "2702d91a826bdae54693d0e51ed13e406e0c0eca",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/tf12-fan-in-depth-lr0.003-s11.json",
+          "id": "tl-v8-tf-tf12-fan-in-depth-lr0.003-s11",
+          "lens_record": "runs/v8-tf-tf12-fan-in-depth-lr0.003-s11/train/projection.json",
+          "record": "runs/v8-tf-tf12-fan-in-depth-lr0.003-s11/train/result.json",
+          "source_commit": "2702d91a826bdae54693d0e51ed13e406e0c0eca",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/tf6-fan-in-depth-lr0.003-s11.json",
+          "id": "tl-v8-tf-tf6-fan-in-depth-lr0.003-s11",
+          "lens_record": "runs/v8-tf-tf6-fan-in-depth-lr0.003-s11/train/projection.json",
+          "record": "runs/v8-tf-tf6-fan-in-depth-lr0.003-s11/train/result.json",
+          "source_commit": "2702d91a826bdae54693d0e51ed13e406e0c0eca",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/tf12-legacy-lr0.001-s11.json",
+          "id": "tl-v8-tf-tf12-legacy-lr0.001-s11",
+          "lens_record": "runs/v8-tf-tf12-legacy-lr0.001-s11/train/projection.json",
+          "record": "runs/v8-tf-tf12-legacy-lr0.001-s11/train/result.json",
+          "source_commit": "2702d91a826bdae54693d0e51ed13e406e0c0eca",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/tf6-legacy-lr0.001-s11.json",
+          "id": "tl-v8-tf-tf6-legacy-lr0.001-s11",
+          "lens_record": "runs/v8-tf-tf6-legacy-lr0.001-s11/train/projection.json",
+          "record": "runs/v8-tf-tf6-legacy-lr0.001-s11/train/result.json",
+          "source_commit": "2702d91a826bdae54693d0e51ed13e406e0c0eca",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/tf12-gpt2-lr0.0003-s11.json",
+          "id": "tl-v8-tf-tf12-gpt2-lr0.0003-s11",
+          "lens_record": "runs/v8-tf-tf12-gpt2-lr0.0003-s11/train/projection.json",
+          "record": "runs/v8-tf-tf12-gpt2-lr0.0003-s11/train/result.json",
+          "source_commit": "2702d91a826bdae54693d0e51ed13e406e0c0eca",
+          "status": "completed"
+        }
+      ],
+      "status": "completed",
+      "study_id": "TL-DIRECT-TF-v8",
+      "summary": "14\u683c1M\u7b5b\u9009\u4e0e4\u4e2aseed22\u590d\u6838\u5168\u90e8\u5b8c\u6210\u3002",
+      "title": "v8\uff1aTransformer\u914d\u65b9\u6821\u51c6",
+      "track": "tide",
+      "view_group": "current",
+      "x": 620,
+      "y": 100
+    },
+    {
+      "budget": "48h/240 NPU\u5361\u65f6/768 CPU\u6838\u65f6/128GiB\uff1b10\u5361\u72ec\u7acb\u5e76\u884c\uff1b\u4e0d\u81ea\u52a8\u6269\u5c55\u771f\u5b9e\u7a00\u758f\u6216\u89c4\u6a21\u3002",
+      "comparisons": "\u540c\u5f62\u65e7\u914d\u65b9\u3001\u4e24\u79cd\u521d\u59cb\u5316\u5305\u00d73\u4e2aLR\uff1b\u4e24\u6863\u6700\u4f18\u4e0e\u6b21\u4f18seed22\u3002",
+      "counterevidence": "12\u5c42\u4ecd\u672a\u6539\u55846\u5c42\uff1b\u53ea\u662f\u6709\u9650\u641c\u7d22\u548c1M\u66dd\u5149\uff0c\u4e0d\u80fd\u5f53\u6700\u4f18Transformer\u6216\u957f\u671f\u89c4\u6a21\u7ed3\u8bba\u3002",
+      "decision": "\u4e0e\u76f4\u63a5\u5c40\u90e8\u5019\u9009\u6bd4\u8f83\u65f6\u540c\u65f6\u5217\u53c2\u6570\u3001\u66dd\u5149\u3001\u66f4\u65b0\u548c\u641c\u7d22\u6210\u672c\u3002",
+      "id": "RV8-TF",
+      "kind": "result",
+      "question": "\u5728\u5171\u540c\u81ea\u7136\u6587\u672cnext-token\u53e3\u5f84\u4e0b\uff0c\u54ea\u4e9b\u5c40\u90e8\u5019\u9009\u503c\u5f97\u4fdd\u7559\uff0c\u7ecf\u8fc7\u6821\u51c6\u7684Transformer\u5bf9\u7167\u8868\u73b0\u5982\u4f55\uff1f",
+      "references": [
+        {
+          "label": "\u56fa\u5b9a\u7814\u7a76\u8868",
+          "path": "docs/studies/direct-coverage-v8.md"
+        },
+        {
+          "label": "\u6e90\u7801\u3001\u4f5c\u4e1a\u3001Lens\u4e0e\u6062\u590d",
+          "path": "docs/studies/direct-v8-operations.md"
+        },
+        {
+          "label": "\u9010\u9879\u89c2\u6d4b",
+          "path": "docs/evidence/direct-v8-observations.json"
+        }
+      ],
+      "scope": "d256\u30016/12 block\u3001B32/L128\u3001\u56fa\u5b9a1M\u6709\u6548\u76ee\u6807\u4e0e32,768 validation\uff1b14\u9879\u641c\u7d22+4\u9879\u590d\u6838\uff0ctest\u5bc6\u5c01\u3002",
+      "sources": [
+        {
+          "label": "\u4eba\u5de5\u5ba1\u9605Transformer\u7ed3\u679c",
+          "url": "https://github.com/ZichaoLong/tide/blob/cd85637/docs/studies/direct-v8-transformer-results.md"
+        }
+      ],
+      "status": "scoped",
+      "summary": "TF6/12\u53ccseed\u5747\u503cNLL\u4e3a5.787/5.834\uff1b\u4e25\u683c\u6570\u503c\u5931\u8d25\u4fdd\u7559\u3002",
+      "title": "\u8c03\u53c2\u540e\u63a7\u5236\u6539\u5584\uff0c\u4ecd\u96501M",
+      "track": "tide",
+      "transfer_conditions": "\u4ec5\u7528\u4f5c\u672c\u6279\u5171\u540c\u6570\u636e/\u66dd\u5149\u63a7\u5236\uff1b\u5176\u4ed6\u957f\u5ea6\u3001\u89c4\u6a21\u3001\u9884\u8bad\u7ec3\u80cc\u666f\u9700\u91cd\u65b0\u6821\u51c6\u3002",
+      "unresolved": "\u521d\u59cb\u5316\u3001optimizer\u548cdecay\u7684\u72ec\u7acb\u56e0\u679c\u4efd\u989d\u672a\u533a\u5206\uff1b\u4e25\u683cCPU/NPU\u6709\u9650\u8bef\u5dee\u539f\u56e0\u672a\u5b8c\u5168\u5b9a\u4f4d\u3002",
+      "view_group": "current",
+      "x": 915,
+      "y": 100
+    },
+    {
+      "budget": "48h/240 NPU\u5361\u65f6/768 CPU\u6838\u65f6/128GiB\uff1b10\u5361\u72ec\u7acb\u5e76\u884c\uff1b\u4e0d\u81ea\u52a8\u6269\u5c55\u771f\u5b9e\u7a00\u758f\u6216\u89c4\u6a21\u3002",
+      "decision": "\u6267\u884c\u5168\u90e8\u5177\u540d\u5019\u9009\uff0c\u4fdd\u7559\u5931\u8d25\uff1b\u7a20\u5bc6\u7269\u7406Full\u4e0e\u903b\u8f91\u652f\u6301\u5206\u5f00\u3002",
+      "id": "V8-COVER",
+      "kind": "experiment",
+      "question": "\u5728\u5171\u540c\u81ea\u7136\u6587\u672cnext-token\u53e3\u5f84\u4e0b\uff0c\u54ea\u4e9b\u5c40\u90e8\u5019\u9009\u503c\u5f97\u4fdd\u7559\uff0c\u7ecf\u8fc7\u6821\u51c6\u7684Transformer\u5bf9\u7167\u8868\u73b0\u5982\u4f55\uff1f",
+      "references": [
+        {
+          "label": "\u56fa\u5b9a\u7814\u7a76\u8868",
+          "path": "docs/studies/direct-coverage-v8.md"
+        },
+        {
+          "label": "\u6e90\u7801\u3001\u4f5c\u4e1a\u3001Lens\u4e0e\u6062\u590d",
+          "path": "docs/studies/direct-v8-operations.md"
+        },
+        {
+          "label": "\u9010\u9879\u89c2\u6d4b",
+          "path": "docs/evidence/direct-v8-observations.json"
+        }
+      ],
+      "runs": [
+        {
+          "config": "configs/studies/language/direct-v8/local/fc-anchor-s11.json",
+          "id": "tl-v8-anchor-fc-anchor-s11",
+          "lens_record": "runs/v8-anchor-fc-anchor-s11/train/projection.json",
+          "record": "runs/v8-anchor-fc-anchor-s11/train/result.json",
+          "source_commit": "778f9e967f670af5242dd232dcd60de62adb5c40",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/hb-anchor-s11.json",
+          "id": "tl-v8-anchor-hb-anchor-s11",
+          "lens_record": "runs/v8-anchor-hb-anchor-s11/train/projection.json",
+          "record": "runs/v8-anchor-hb-anchor-s11/train/result.json",
+          "source_commit": "778f9e967f670af5242dd232dcd60de62adb5c40",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/fc-mem-kv-sum-s11.json",
+          "id": "tl-v8-cover-fc-mem-kv-sum-s11",
+          "lens_record": "runs/v8-cover-fc-mem-kv-sum-s11/train/projection.json",
+          "record": "runs/v8-cover-fc-mem-kv-sum-s11/train/result.json",
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/fc-read-old-s11.json",
+          "id": "tl-v8-cover-fc-read-old-s11",
+          "lens_record": "runs/v8-cover-fc-read-old-s11/train/projection.json",
+          "record": "runs/v8-cover-fc-read-old-s11/train/result.json",
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/fc-gamma4-s11.json",
+          "id": "tl-v8-cover-fc-gamma4-s11",
+          "lens_record": "runs/v8-cover-fc-gamma4-s11/train/projection.json",
+          "record": "runs/v8-cover-fc-gamma4-s11/train/result.json",
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/fc-send-regional_total-ent1-s11.json",
+          "id": "tl-v8-cover-fc-send-regional_total-ent1-s11",
+          "lens_record": "runs/v8-cover-fc-send-regional_total-ent1-s11/train/projection.json",
+          "record": "runs/v8-cover-fc-send-regional_total-ent1-s11/train/result.json",
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/fc-send-constrained-ent1-s11.json",
+          "id": "tl-v8-cover-fc-send-constrained-ent1-s11",
+          "lens_record": "runs/v8-cover-fc-send-constrained-ent1-s11/train/projection.json",
+          "record": "runs/v8-cover-fc-send-constrained-ent1-s11/train/result.json",
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/fc-direct-received-s11.json",
+          "id": "tl-v8-cover-fc-direct-received-s11",
+          "lens_record": "runs/v8-cover-fc-direct-received-s11/train/projection.json",
+          "record": "runs/v8-cover-fc-direct-received-s11/train/result.json",
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/fc-source-adapted-s11.json",
+          "id": "tl-v8-cover-fc-source-adapted-s11",
+          "lens_record": "runs/v8-cover-fc-source-adapted-s11/train/projection.json",
+          "record": "runs/v8-cover-fc-source-adapted-s11/train/result.json",
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "running"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/fc-decay-slow-s11.json",
+          "id": "tl-v8-cover-fc-decay-slow-s11",
+          "lens_record": "runs/v8-cover-fc-decay-slow-s11/train/projection.json",
+          "record": "runs/v8-cover-fc-decay-slow-s11/train/result.json",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/fc-ssd-conv1-s11.json",
+          "id": "tl-v8-cover-fc-ssd-conv1-s11",
+          "lens_record": "runs/v8-cover-fc-ssd-conv1-s11/train/projection.json",
+          "record": "runs/v8-cover-fc-ssd-conv1-s11/train/result.json",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/hb-mem-kv-sum-s11.json",
+          "id": "tl-v8-cover-hb-mem-kv-sum-s11",
+          "lens_record": "runs/v8-cover-hb-mem-kv-sum-s11/train/projection.json",
+          "record": "runs/v8-cover-hb-mem-kv-sum-s11/train/result.json",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/hb-read-old-s11.json",
+          "id": "tl-v8-cover-hb-read-old-s11",
+          "lens_record": "runs/v8-cover-hb-read-old-s11/train/projection.json",
+          "record": "runs/v8-cover-hb-read-old-s11/train/result.json",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/hb-gamma4-s11.json",
+          "id": "tl-v8-cover-hb-gamma4-s11",
+          "lens_record": "runs/v8-cover-hb-gamma4-s11/train/projection.json",
+          "record": "runs/v8-cover-hb-gamma4-s11/train/result.json",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/hb-send-regional_total-ent1-s11.json",
+          "id": "tl-v8-cover-hb-send-regional_total-ent1-s11",
+          "lens_record": "runs/v8-cover-hb-send-regional_total-ent1-s11/train/projection.json",
+          "record": "runs/v8-cover-hb-send-regional_total-ent1-s11/train/result.json",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/hb-send-constrained-ent1-s11.json",
+          "id": "tl-v8-cover-hb-send-constrained-ent1-s11",
+          "lens_record": "runs/v8-cover-hb-send-constrained-ent1-s11/train/projection.json",
+          "record": "runs/v8-cover-hb-send-constrained-ent1-s11/train/result.json",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/hb-direct-received-s11.json",
+          "id": "tl-v8-cover-hb-direct-received-s11",
+          "lens_record": "runs/v8-cover-hb-direct-received-s11/train/projection.json",
+          "record": "runs/v8-cover-hb-direct-received-s11/train/result.json",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/hb-source-adapted-s11.json",
+          "id": "tl-v8-cover-hb-source-adapted-s11",
+          "lens_record": "runs/v8-cover-hb-source-adapted-s11/train/projection.json",
+          "record": "runs/v8-cover-hb-source-adapted-s11/train/result.json",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/hb-decay-slow-s11.json",
+          "id": "tl-v8-cover-hb-decay-slow-s11",
+          "lens_record": "runs/v8-cover-hb-decay-slow-s11/train/projection.json",
+          "record": "runs/v8-cover-hb-decay-slow-s11/train/result.json",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/hb-ssd-conv1-s11.json",
+          "id": "tl-v8-cover-hb-ssd-conv1-s11",
+          "lens_record": "runs/v8-cover-hb-ssd-conv1-s11/train/projection.json",
+          "record": "runs/v8-cover-hb-ssd-conv1-s11/train/result.json",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/fc-mem-affine-sum-s11.json",
+          "id": "tl-v8-cover-fc-mem-affine-sum-s11",
+          "lens_record": "runs/v8-cover-fc-mem-affine-sum-s11/train/projection.json",
+          "record": "runs/v8-cover-fc-mem-affine-sum-s11/train/result.json",
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/fc-local-match-s11.json",
+          "id": "tl-v8-cover-fc-local-match-s11",
+          "lens_record": "runs/v8-cover-fc-local-match-s11/train/projection.json",
+          "record": "runs/v8-cover-fc-local-match-s11/train/result.json",
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/fc-temperature1-s11.json",
+          "id": "tl-v8-cover-fc-temperature1-s11",
+          "lens_record": "runs/v8-cover-fc-temperature1-s11/train/projection.json",
+          "record": "runs/v8-cover-fc-temperature1-s11/train/result.json",
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/fc-send-regional_total-ent15-s11.json",
+          "id": "tl-v8-cover-fc-send-regional_total-ent15-s11",
+          "lens_record": "runs/v8-cover-fc-send-regional_total-ent15-s11/train/projection.json",
+          "record": "runs/v8-cover-fc-send-regional_total-ent15-s11/train/result.json",
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/fc-send-constrained-ent15-s11.json",
+          "id": "tl-v8-cover-fc-send-constrained-ent15-s11",
+          "lens_record": "runs/v8-cover-fc-send-constrained-ent15-s11/train/projection.json",
+          "record": "runs/v8-cover-fc-send-constrained-ent15-s11/train/result.json",
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/fc-unit-mu-s11.json",
+          "id": "tl-v8-cover-fc-unit-mu-s11",
+          "lens_record": "runs/v8-cover-fc-unit-mu-s11/train/projection.json",
+          "record": "runs/v8-cover-fc-unit-mu-s11/train/result.json",
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/fc-window16-s11.json",
+          "id": "tl-v8-cover-fc-window16-s11",
+          "lens_record": "runs/v8-cover-fc-window16-s11/train/projection.json",
+          "record": "runs/v8-cover-fc-window16-s11/train/result.json",
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "running"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/fc-rope-half-s11.json",
+          "id": "tl-v8-cover-fc-rope-half-s11",
+          "lens_record": "runs/v8-cover-fc-rope-half-s11/train/projection.json",
+          "record": "runs/v8-cover-fc-rope-half-s11/train/result.json",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/fc-ssd-conv8-s11.json",
+          "id": "tl-v8-cover-fc-ssd-conv8-s11",
+          "lens_record": "runs/v8-cover-fc-ssd-conv8-s11/train/projection.json",
+          "record": "runs/v8-cover-fc-ssd-conv8-s11/train/result.json",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/hb-mem-affine-sum-s11.json",
+          "id": "tl-v8-cover-hb-mem-affine-sum-s11",
+          "lens_record": "runs/v8-cover-hb-mem-affine-sum-s11/train/projection.json",
+          "record": "runs/v8-cover-hb-mem-affine-sum-s11/train/result.json",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/hb-local-match-s11.json",
+          "id": "tl-v8-cover-hb-local-match-s11",
+          "lens_record": "runs/v8-cover-hb-local-match-s11/train/projection.json",
+          "record": "runs/v8-cover-hb-local-match-s11/train/result.json",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/hb-temperature1-s11.json",
+          "id": "tl-v8-cover-hb-temperature1-s11",
+          "lens_record": "runs/v8-cover-hb-temperature1-s11/train/projection.json",
+          "record": "runs/v8-cover-hb-temperature1-s11/train/result.json",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/hb-send-regional_total-ent15-s11.json",
+          "id": "tl-v8-cover-hb-send-regional_total-ent15-s11",
+          "lens_record": "runs/v8-cover-hb-send-regional_total-ent15-s11/train/projection.json",
+          "record": "runs/v8-cover-hb-send-regional_total-ent15-s11/train/result.json",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/hb-send-constrained-ent15-s11.json",
+          "id": "tl-v8-cover-hb-send-constrained-ent15-s11",
+          "lens_record": "runs/v8-cover-hb-send-constrained-ent15-s11/train/projection.json",
+          "record": "runs/v8-cover-hb-send-constrained-ent15-s11/train/result.json",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/hb-unit-mu-s11.json",
+          "id": "tl-v8-cover-hb-unit-mu-s11",
+          "lens_record": "runs/v8-cover-hb-unit-mu-s11/train/projection.json",
+          "record": "runs/v8-cover-hb-unit-mu-s11/train/result.json",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/hb-window16-s11.json",
+          "id": "tl-v8-cover-hb-window16-s11",
+          "lens_record": "runs/v8-cover-hb-window16-s11/train/projection.json",
+          "record": "runs/v8-cover-hb-window16-s11/train/result.json",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/hb-rope-half-s11.json",
+          "id": "tl-v8-cover-hb-rope-half-s11",
+          "lens_record": "runs/v8-cover-hb-rope-half-s11/train/projection.json",
+          "record": "runs/v8-cover-hb-rope-half-s11/train/result.json",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/hb-ssd-conv8-s11.json",
+          "id": "tl-v8-cover-hb-ssd-conv8-s11",
+          "lens_record": "runs/v8-cover-hb-ssd-conv8-s11/train/projection.json",
+          "record": "runs/v8-cover-hb-ssd-conv8-s11/train/result.json",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/fc-mem-affine-state-s11.json",
+          "id": "tl-v8-cover-fc-mem-affine-state-s11",
+          "lens_record": "runs/v8-cover-fc-mem-affine-state-s11/train/projection.json",
+          "record": "runs/v8-cover-fc-mem-affine-state-s11/train/result.json",
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/fc-region-att-stats-s11.json",
+          "id": "tl-v8-cover-fc-region-att-stats-s11",
+          "lens_record": "runs/v8-cover-fc-region-att-stats-s11/train/projection.json",
+          "record": "runs/v8-cover-fc-region-att-stats-s11/train/result.json",
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/fc-score-width8-s11.json",
+          "id": "tl-v8-cover-fc-score-width8-s11",
+          "lens_record": "runs/v8-cover-fc-score-width8-s11/train/projection.json",
+          "record": "runs/v8-cover-fc-score-width8-s11/train/result.json",
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/fc-send-regional_total-ent2-s11.json",
+          "id": "tl-v8-cover-fc-send-regional_total-ent2-s11",
+          "lens_record": "runs/v8-cover-fc-send-regional_total-ent2-s11/train/projection.json",
+          "record": "runs/v8-cover-fc-send-regional_total-ent2-s11/train/result.json",
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/fc-send-constrained-ent2-s11.json",
+          "id": "tl-v8-cover-fc-send-constrained-ent2-s11",
+          "lens_record": "runs/v8-cover-fc-send-constrained-ent2-s11/train/projection.json",
+          "record": "runs/v8-cover-fc-send-constrained-ent2-s11/train/result.json",
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/fc-constrained-context-gain-s11.json",
+          "id": "tl-v8-cover-fc-constrained-context-gain-s11",
+          "lens_record": "runs/v8-cover-fc-constrained-context-gain-s11/train/projection.json",
+          "record": "runs/v8-cover-fc-constrained-context-gain-s11/train/result.json",
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/fc-window128-s11.json",
+          "id": "tl-v8-cover-fc-window128-s11",
+          "lens_record": "runs/v8-cover-fc-window128-s11/train/projection.json",
+          "record": "runs/v8-cover-fc-window128-s11/train/result.json",
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "running"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/fc-rope-full-s11.json",
+          "id": "tl-v8-cover-fc-rope-full-s11",
+          "lens_record": "runs/v8-cover-fc-rope-full-s11/train/projection.json",
+          "record": "runs/v8-cover-fc-rope-full-s11/train/result.json",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/fc-ssd-heads2-s11.json",
+          "id": "tl-v8-cover-fc-ssd-heads2-s11",
+          "lens_record": "runs/v8-cover-fc-ssd-heads2-s11/train/projection.json",
+          "record": "runs/v8-cover-fc-ssd-heads2-s11/train/result.json",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/hb-mem-affine-state-s11.json",
+          "id": "tl-v8-cover-hb-mem-affine-state-s11",
+          "lens_record": "runs/v8-cover-hb-mem-affine-state-s11/train/projection.json",
+          "record": "runs/v8-cover-hb-mem-affine-state-s11/train/result.json",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/hb-region-att-stats-s11.json",
+          "id": "tl-v8-cover-hb-region-att-stats-s11",
+          "lens_record": "runs/v8-cover-hb-region-att-stats-s11/train/projection.json",
+          "record": "runs/v8-cover-hb-region-att-stats-s11/train/result.json",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/hb-score-width8-s11.json",
+          "id": "tl-v8-cover-hb-score-width8-s11",
+          "lens_record": "runs/v8-cover-hb-score-width8-s11/train/projection.json",
+          "record": "runs/v8-cover-hb-score-width8-s11/train/result.json",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/hb-send-regional_total-ent2-s11.json",
+          "id": "tl-v8-cover-hb-send-regional_total-ent2-s11",
+          "lens_record": "runs/v8-cover-hb-send-regional_total-ent2-s11/train/projection.json",
+          "record": "runs/v8-cover-hb-send-regional_total-ent2-s11/train/result.json",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/hb-send-constrained-ent2-s11.json",
+          "id": "tl-v8-cover-hb-send-constrained-ent2-s11",
+          "lens_record": "runs/v8-cover-hb-send-constrained-ent2-s11/train/projection.json",
+          "record": "runs/v8-cover-hb-send-constrained-ent2-s11/train/result.json",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/hb-constrained-context-gain-s11.json",
+          "id": "tl-v8-cover-hb-constrained-context-gain-s11",
+          "lens_record": "runs/v8-cover-hb-constrained-context-gain-s11/train/projection.json",
+          "record": "runs/v8-cover-hb-constrained-context-gain-s11/train/result.json",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/hb-window128-s11.json",
+          "id": "tl-v8-cover-hb-window128-s11",
+          "lens_record": "runs/v8-cover-hb-window128-s11/train/projection.json",
+          "record": "runs/v8-cover-hb-window128-s11/train/result.json",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/hb-rope-full-s11.json",
+          "id": "tl-v8-cover-hb-rope-full-s11",
+          "lens_record": "runs/v8-cover-hb-rope-full-s11/train/projection.json",
+          "record": "runs/v8-cover-hb-rope-full-s11/train/result.json",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/hb-ssd-heads2-s11.json",
+          "id": "tl-v8-cover-hb-ssd-heads2-s11",
+          "lens_record": "runs/v8-cover-hb-ssd-heads2-s11/train/projection.json",
+          "record": "runs/v8-cover-hb-ssd-heads2-s11/train/result.json",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/fc-mem-delta-sum-s11.json",
+          "id": "tl-v8-cover-fc-mem-delta-sum-s11",
+          "lens_record": "runs/v8-cover-fc-mem-delta-sum-s11/train/projection.json",
+          "record": "runs/v8-cover-fc-mem-delta-sum-s11/train/result.json",
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/fc-region-att-content-s11.json",
+          "id": "tl-v8-cover-fc-region-att-content-s11",
+          "lens_record": "runs/v8-cover-fc-region-att-content-s11/train/projection.json",
+          "record": "runs/v8-cover-fc-region-att-content-s11/train/result.json",
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/fc-evidence-width8-s11.json",
+          "id": "tl-v8-cover-fc-evidence-width8-s11",
+          "lens_record": "runs/v8-cover-fc-evidence-width8-s11/train/projection.json",
+          "record": "runs/v8-cover-fc-evidence-width8-s11/train/result.json",
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/fc-send-regional_threshold-quad-s11.json",
+          "id": "tl-v8-cover-fc-send-regional_threshold-quad-s11",
+          "lens_record": "runs/v8-cover-fc-send-regional_threshold-quad-s11/train/projection.json",
+          "record": "runs/v8-cover-fc-send-regional_threshold-quad-s11/train/result.json",
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/fc-send-regional_total_zero-s11.json",
+          "id": "tl-v8-cover-fc-send-regional_total_zero-s11",
+          "lens_record": "runs/v8-cover-fc-send-regional_total_zero-s11/train/projection.json",
+          "record": "runs/v8-cover-fc-send-regional_total_zero-s11/train/result.json",
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/fc-constrained-learned-gain-s11.json",
+          "id": "tl-v8-cover-fc-constrained-learned-gain-s11",
+          "lens_record": "runs/v8-cover-fc-constrained-learned-gain-s11/train/projection.json",
+          "record": "runs/v8-cover-fc-constrained-learned-gain-s11/train/result.json",
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/fc-summary8-s11.json",
+          "id": "tl-v8-cover-fc-summary8-s11",
+          "lens_record": "runs/v8-cover-fc-summary8-s11/train/projection.json",
+          "record": "runs/v8-cover-fc-summary8-s11/train/result.json",
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "running"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/fc-rope-read-s11.json",
+          "id": "tl-v8-cover-fc-rope-read-s11",
+          "lens_record": "runs/v8-cover-fc-rope-read-s11/train/projection.json",
+          "record": "runs/v8-cover-fc-rope-read-s11/train/result.json",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/fc-ssd-mem-off-s11.json",
+          "id": "tl-v8-cover-fc-ssd-mem-off-s11",
+          "lens_record": "runs/v8-cover-fc-ssd-mem-off-s11/train/projection.json",
+          "record": "runs/v8-cover-fc-ssd-mem-off-s11/train/result.json",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/hb-mem-delta-sum-s11.json",
+          "id": "tl-v8-cover-hb-mem-delta-sum-s11",
+          "lens_record": "runs/v8-cover-hb-mem-delta-sum-s11/train/projection.json",
+          "record": "runs/v8-cover-hb-mem-delta-sum-s11/train/result.json",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/hb-region-att-content-s11.json",
+          "id": "tl-v8-cover-hb-region-att-content-s11",
+          "lens_record": "runs/v8-cover-hb-region-att-content-s11/train/projection.json",
+          "record": "runs/v8-cover-hb-region-att-content-s11/train/result.json",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/hb-evidence-width8-s11.json",
+          "id": "tl-v8-cover-hb-evidence-width8-s11",
+          "lens_record": "runs/v8-cover-hb-evidence-width8-s11/train/projection.json",
+          "record": "runs/v8-cover-hb-evidence-width8-s11/train/result.json",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/hb-send-regional_threshold-quad-s11.json",
+          "id": "tl-v8-cover-hb-send-regional_threshold-quad-s11",
+          "lens_record": "runs/v8-cover-hb-send-regional_threshold-quad-s11/train/projection.json",
+          "record": "runs/v8-cover-hb-send-regional_threshold-quad-s11/train/result.json",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/hb-send-regional_total_zero-s11.json",
+          "id": "tl-v8-cover-hb-send-regional_total_zero-s11",
+          "lens_record": "runs/v8-cover-hb-send-regional_total_zero-s11/train/projection.json",
+          "record": "runs/v8-cover-hb-send-regional_total_zero-s11/train/result.json",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/hb-constrained-learned-gain-s11.json",
+          "id": "tl-v8-cover-hb-constrained-learned-gain-s11",
+          "lens_record": "runs/v8-cover-hb-constrained-learned-gain-s11/train/projection.json",
+          "record": "runs/v8-cover-hb-constrained-learned-gain-s11/train/result.json",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/hb-summary8-s11.json",
+          "id": "tl-v8-cover-hb-summary8-s11",
+          "lens_record": "runs/v8-cover-hb-summary8-s11/train/projection.json",
+          "record": "runs/v8-cover-hb-summary8-s11/train/result.json",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/hb-rope-read-s11.json",
+          "id": "tl-v8-cover-hb-rope-read-s11",
+          "lens_record": "runs/v8-cover-hb-rope-read-s11/train/projection.json",
+          "record": "runs/v8-cover-hb-rope-read-s11/train/result.json",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/hb-ssd-mem-off-s11.json",
+          "id": "tl-v8-cover-hb-ssd-mem-off-s11",
+          "lens_record": "runs/v8-cover-hb-ssd-mem-off-s11/train/projection.json",
+          "record": "runs/v8-cover-hb-ssd-mem-off-s11/train/result.json",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/fc-mem-delta-state-s11.json",
+          "id": "tl-v8-cover-fc-mem-delta-state-s11",
+          "lens_record": "runs/v8-cover-fc-mem-delta-state-s11/train/projection.json",
+          "record": "runs/v8-cover-fc-mem-delta-state-s11/train/result.json",
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/fc-evidence-grouped-s11.json",
+          "id": "tl-v8-cover-fc-evidence-grouped-s11",
+          "lens_record": "runs/v8-cover-fc-evidence-grouped-s11/train/projection.json",
+          "record": "runs/v8-cover-fc-evidence-grouped-s11/train/result.json",
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/fc-match-width8-s11.json",
+          "id": "tl-v8-cover-fc-match-width8-s11",
+          "lens_record": "runs/v8-cover-fc-match-width8-s11/train/projection.json",
+          "record": "runs/v8-cover-fc-match-width8-s11/train/result.json",
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/fc-send-regional_threshold-bern-s11.json",
+          "id": "tl-v8-cover-fc-send-regional_threshold-bern-s11",
+          "lens_record": "runs/v8-cover-fc-send-regional_threshold-bern-s11/train/projection.json",
+          "record": "runs/v8-cover-fc-send-regional_threshold-bern-s11/train/result.json",
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/fc-send-regional_threshold_hard-s11.json",
+          "id": "tl-v8-cover-fc-send-regional_threshold_hard-s11",
+          "lens_record": "runs/v8-cover-fc-send-regional_threshold_hard-s11/train/projection.json",
+          "record": "runs/v8-cover-fc-send-regional_threshold_hard-s11/train/result.json",
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/fc-gain-att-received-s11.json",
+          "id": "tl-v8-cover-fc-gain-att-received-s11",
+          "lens_record": "runs/v8-cover-fc-gain-att-received-s11/train/projection.json",
+          "record": "runs/v8-cover-fc-gain-att-received-s11/train/result.json",
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/fc-adapter8-s11.json",
+          "id": "tl-v8-cover-fc-adapter8-s11",
+          "lens_record": "runs/v8-cover-fc-adapter8-s11/train/projection.json",
+          "record": "runs/v8-cover-fc-adapter8-s11/train/result.json",
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "running"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/fc-distance-slope-s11.json",
+          "id": "tl-v8-cover-fc-distance-slope-s11",
+          "lens_record": "runs/v8-cover-fc-distance-slope-s11/train/projection.json",
+          "record": "runs/v8-cover-fc-distance-slope-s11/train/result.json",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/fc-ssd-ffn-off-s11.json",
+          "id": "tl-v8-cover-fc-ssd-ffn-off-s11",
+          "lens_record": "runs/v8-cover-fc-ssd-ffn-off-s11/train/projection.json",
+          "record": "runs/v8-cover-fc-ssd-ffn-off-s11/train/result.json",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/hb-mem-delta-state-s11.json",
+          "id": "tl-v8-cover-hb-mem-delta-state-s11",
+          "lens_record": "runs/v8-cover-hb-mem-delta-state-s11/train/projection.json",
+          "record": "runs/v8-cover-hb-mem-delta-state-s11/train/result.json",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/hb-evidence-grouped-s11.json",
+          "id": "tl-v8-cover-hb-evidence-grouped-s11",
+          "lens_record": "runs/v8-cover-hb-evidence-grouped-s11/train/projection.json",
+          "record": "runs/v8-cover-hb-evidence-grouped-s11/train/result.json",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/hb-match-width8-s11.json",
+          "id": "tl-v8-cover-hb-match-width8-s11",
+          "lens_record": "runs/v8-cover-hb-match-width8-s11/train/projection.json",
+          "record": "runs/v8-cover-hb-match-width8-s11/train/result.json",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/hb-send-regional_threshold-bern-s11.json",
+          "id": "tl-v8-cover-hb-send-regional_threshold-bern-s11",
+          "lens_record": "runs/v8-cover-hb-send-regional_threshold-bern-s11/train/projection.json",
+          "record": "runs/v8-cover-hb-send-regional_threshold-bern-s11/train/result.json",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/hb-send-regional_threshold_hard-s11.json",
+          "id": "tl-v8-cover-hb-send-regional_threshold_hard-s11",
+          "lens_record": "runs/v8-cover-hb-send-regional_threshold_hard-s11/train/projection.json",
+          "record": "runs/v8-cover-hb-send-regional_threshold_hard-s11/train/result.json",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/hb-gain-att-received-s11.json",
+          "id": "tl-v8-cover-hb-gain-att-received-s11",
+          "lens_record": "runs/v8-cover-hb-gain-att-received-s11/train/projection.json",
+          "record": "runs/v8-cover-hb-gain-att-received-s11/train/result.json",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/hb-adapter8-s11.json",
+          "id": "tl-v8-cover-hb-adapter8-s11",
+          "lens_record": "runs/v8-cover-hb-adapter8-s11/train/projection.json",
+          "record": "runs/v8-cover-hb-adapter8-s11/train/result.json",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/hb-distance-slope-s11.json",
+          "id": "tl-v8-cover-hb-distance-slope-s11",
+          "lens_record": "runs/v8-cover-hb-distance-slope-s11/train/projection.json",
+          "record": "runs/v8-cover-hb-distance-slope-s11/train/result.json",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/hb-ssd-ffn-off-s11.json",
+          "id": "tl-v8-cover-hb-ssd-ffn-off-s11",
+          "lens_record": "runs/v8-cover-hb-ssd-ffn-off-s11/train/projection.json",
+          "record": "runs/v8-cover-hb-ssd-ffn-off-s11/train/result.json",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/fc-mem-gated_delta-sum-s11.json",
+          "id": "tl-v8-cover-fc-mem-gated_delta-sum-s11",
+          "lens_record": "runs/v8-cover-fc-mem-gated_delta-sum-s11/train/projection.json",
+          "record": "runs/v8-cover-fc-mem-gated_delta-sum-s11/train/result.json",
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/fc-match-att-grouped-s11.json",
+          "id": "tl-v8-cover-fc-match-att-grouped-s11",
+          "lens_record": "runs/v8-cover-fc-match-att-grouped-s11/train/projection.json",
+          "record": "runs/v8-cover-fc-match-att-grouped-s11/train/result.json",
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/fc-match-residual-off-s11.json",
+          "id": "tl-v8-cover-fc-match-residual-off-s11",
+          "lens_record": "runs/v8-cover-fc-match-residual-off-s11/train/projection.json",
+          "record": "runs/v8-cover-fc-match-residual-off-s11/train/result.json",
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/fc-send-regional_threshold-ent1-s11.json",
+          "id": "tl-v8-cover-fc-send-regional_threshold-ent1-s11",
+          "lens_record": "runs/v8-cover-fc-send-regional_threshold-ent1-s11/train/projection.json",
+          "record": "runs/v8-cover-fc-send-regional_threshold-ent1-s11/train/result.json",
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/fc-send-hard_selection-s11.json",
+          "id": "tl-v8-cover-fc-send-hard_selection-s11",
+          "lens_record": "runs/v8-cover-fc-send-hard_selection-s11/train/projection.json",
+          "record": "runs/v8-cover-fc-send-hard_selection-s11/train/result.json",
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/fc-gain-att-mu-s11.json",
+          "id": "tl-v8-cover-fc-gain-att-mu-s11",
+          "lens_record": "runs/v8-cover-fc-gain-att-mu-s11/train/projection.json",
+          "record": "runs/v8-cover-fc-gain-att-mu-s11/train/result.json",
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/fc-ffn2x-s11.json",
+          "id": "tl-v8-cover-fc-ffn2x-s11",
+          "lens_record": "runs/v8-cover-fc-ffn2x-s11/train/projection.json",
+          "record": "runs/v8-cover-fc-ffn2x-s11/train/result.json",
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "running"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/fc-gated_delta-conv1-s11.json",
+          "id": "tl-v8-cover-fc-gated_delta-conv1-s11",
+          "lens_record": "runs/v8-cover-fc-gated_delta-conv1-s11/train/projection.json",
+          "record": "runs/v8-cover-fc-gated_delta-conv1-s11/train/result.json",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/fc-ssd-groups2-s11.json",
+          "id": "tl-v8-cover-fc-ssd-groups2-s11",
+          "lens_record": "runs/v8-cover-fc-ssd-groups2-s11/train/projection.json",
+          "record": "runs/v8-cover-fc-ssd-groups2-s11/train/result.json",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/hb-mem-gated_delta-sum-s11.json",
+          "id": "tl-v8-cover-hb-mem-gated_delta-sum-s11",
+          "lens_record": "runs/v8-cover-hb-mem-gated_delta-sum-s11/train/projection.json",
+          "record": "runs/v8-cover-hb-mem-gated_delta-sum-s11/train/result.json",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/hb-match-att-grouped-s11.json",
+          "id": "tl-v8-cover-hb-match-att-grouped-s11",
+          "lens_record": "runs/v8-cover-hb-match-att-grouped-s11/train/projection.json",
+          "record": "runs/v8-cover-hb-match-att-grouped-s11/train/result.json",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/hb-match-residual-off-s11.json",
+          "id": "tl-v8-cover-hb-match-residual-off-s11",
+          "lens_record": "runs/v8-cover-hb-match-residual-off-s11/train/projection.json",
+          "record": "runs/v8-cover-hb-match-residual-off-s11/train/result.json",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/hb-send-regional_threshold-ent1-s11.json",
+          "id": "tl-v8-cover-hb-send-regional_threshold-ent1-s11",
+          "lens_record": "runs/v8-cover-hb-send-regional_threshold-ent1-s11/train/projection.json",
+          "record": "runs/v8-cover-hb-send-regional_threshold-ent1-s11/train/result.json",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/hb-send-hard_selection-s11.json",
+          "id": "tl-v8-cover-hb-send-hard_selection-s11",
+          "lens_record": "runs/v8-cover-hb-send-hard_selection-s11/train/projection.json",
+          "record": "runs/v8-cover-hb-send-hard_selection-s11/train/result.json",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/hb-gain-att-mu-s11.json",
+          "id": "tl-v8-cover-hb-gain-att-mu-s11",
+          "lens_record": "runs/v8-cover-hb-gain-att-mu-s11/train/projection.json",
+          "record": "runs/v8-cover-hb-gain-att-mu-s11/train/result.json",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/hb-ffn2x-s11.json",
+          "id": "tl-v8-cover-hb-ffn2x-s11",
+          "lens_record": "runs/v8-cover-hb-ffn2x-s11/train/projection.json",
+          "record": "runs/v8-cover-hb-ffn2x-s11/train/result.json",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/hb-gated_delta-conv1-s11.json",
+          "id": "tl-v8-cover-hb-gated_delta-conv1-s11",
+          "lens_record": "runs/v8-cover-hb-gated_delta-conv1-s11/train/projection.json",
+          "record": "runs/v8-cover-hb-gated_delta-conv1-s11/train/result.json",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/hb-ssd-groups2-s11.json",
+          "id": "tl-v8-cover-hb-ssd-groups2-s11",
+          "lens_record": "runs/v8-cover-hb-ssd-groups2-s11/train/projection.json",
+          "record": "runs/v8-cover-hb-ssd-groups2-s11/train/result.json",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/fc-mem-gated_delta-state-s11.json",
+          "id": "tl-v8-cover-fc-mem-gated_delta-state-s11",
+          "lens_record": "runs/v8-cover-fc-mem-gated_delta-state-s11/train/projection.json",
+          "record": "runs/v8-cover-fc-mem-gated_delta-state-s11/train/result.json",
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "failed"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/fc-fixed-total25-s11.json",
+          "id": "tl-v8-cover-fc-fixed-total25-s11",
+          "lens_record": "runs/v8-cover-fc-fixed-total25-s11/train/projection.json",
+          "record": "runs/v8-cover-fc-fixed-total25-s11/train/result.json",
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/fc-match-inner-off-s11.json",
+          "id": "tl-v8-cover-fc-match-inner-off-s11",
+          "lens_record": "runs/v8-cover-fc-match-inner-off-s11/train/projection.json",
+          "record": "runs/v8-cover-fc-match-inner-off-s11/train/result.json",
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/fc-send-regional_threshold-ent15-s11.json",
+          "id": "tl-v8-cover-fc-send-regional_threshold-ent15-s11",
+          "lens_record": "runs/v8-cover-fc-send-regional_threshold-ent15-s11/train/projection.json",
+          "record": "runs/v8-cover-fc-send-regional_threshold-ent15-s11/train/result.json",
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/fc-send-direct_attention-s11.json",
+          "id": "tl-v8-cover-fc-send-direct_attention-s11",
+          "lens_record": "runs/v8-cover-fc-send-direct_attention-s11/train/projection.json",
+          "record": "runs/v8-cover-fc-send-direct_attention-s11/train/result.json",
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/fc-threshold-fixed-s11.json",
+          "id": "tl-v8-cover-fc-threshold-fixed-s11",
+          "lens_record": "runs/v8-cover-fc-threshold-fixed-s11/train/projection.json",
+          "record": "runs/v8-cover-fc-threshold-fixed-s11/train/result.json",
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/fc-ffn8x-s11.json",
+          "id": "tl-v8-cover-fc-ffn8x-s11",
+          "lens_record": "runs/v8-cover-fc-ffn8x-s11/train/projection.json",
+          "record": "runs/v8-cover-fc-ffn8x-s11/train/result.json",
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "running"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/fc-gated_delta-conv8-s11.json",
+          "id": "tl-v8-cover-fc-gated_delta-conv8-s11",
+          "lens_record": "runs/v8-cover-fc-gated_delta-conv8-s11/train/projection.json",
+          "record": "runs/v8-cover-fc-gated_delta-conv8-s11/train/result.json",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/fc-budget-div1-s11.json",
+          "id": "tl-v8-cover-fc-budget-div1-s11",
+          "lens_record": "runs/v8-cover-fc-budget-div1-s11/train/projection.json",
+          "record": "runs/v8-cover-fc-budget-div1-s11/train/result.json",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/hb-mem-gated_delta-state-s11.json",
+          "id": "tl-v8-cover-hb-mem-gated_delta-state-s11",
+          "lens_record": "runs/v8-cover-hb-mem-gated_delta-state-s11/train/projection.json",
+          "record": "runs/v8-cover-hb-mem-gated_delta-state-s11/train/result.json",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/hb-fixed-total25-s11.json",
+          "id": "tl-v8-cover-hb-fixed-total25-s11",
+          "lens_record": "runs/v8-cover-hb-fixed-total25-s11/train/projection.json",
+          "record": "runs/v8-cover-hb-fixed-total25-s11/train/result.json",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/hb-match-inner-off-s11.json",
+          "id": "tl-v8-cover-hb-match-inner-off-s11",
+          "lens_record": "runs/v8-cover-hb-match-inner-off-s11/train/projection.json",
+          "record": "runs/v8-cover-hb-match-inner-off-s11/train/result.json",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/hb-send-regional_threshold-ent15-s11.json",
+          "id": "tl-v8-cover-hb-send-regional_threshold-ent15-s11",
+          "lens_record": "runs/v8-cover-hb-send-regional_threshold-ent15-s11/train/projection.json",
+          "record": "runs/v8-cover-hb-send-regional_threshold-ent15-s11/train/result.json",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/hb-send-direct_attention-s11.json",
+          "id": "tl-v8-cover-hb-send-direct_attention-s11",
+          "lens_record": "runs/v8-cover-hb-send-direct_attention-s11/train/projection.json",
+          "record": "runs/v8-cover-hb-send-direct_attention-s11/train/result.json",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/hb-threshold-fixed-s11.json",
+          "id": "tl-v8-cover-hb-threshold-fixed-s11",
+          "lens_record": "runs/v8-cover-hb-threshold-fixed-s11/train/projection.json",
+          "record": "runs/v8-cover-hb-threshold-fixed-s11/train/result.json",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/hb-ffn8x-s11.json",
+          "id": "tl-v8-cover-hb-ffn8x-s11",
+          "lens_record": "runs/v8-cover-hb-ffn8x-s11/train/projection.json",
+          "record": "runs/v8-cover-hb-ffn8x-s11/train/result.json",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/hb-gated_delta-conv8-s11.json",
+          "id": "tl-v8-cover-hb-gated_delta-conv8-s11",
+          "lens_record": "runs/v8-cover-hb-gated_delta-conv8-s11/train/projection.json",
+          "record": "runs/v8-cover-hb-gated_delta-conv8-s11/train/result.json",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/hb-budget-div1-s11.json",
+          "id": "tl-v8-cover-hb-budget-div1-s11",
+          "lens_record": "runs/v8-cover-hb-budget-div1-s11/train/projection.json",
+          "record": "runs/v8-cover-hb-budget-div1-s11/train/result.json",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/fc-mem-ssd-sum-s11.json",
+          "id": "tl-v8-cover-fc-mem-ssd-sum-s11",
+          "lens_record": "runs/v8-cover-fc-mem-ssd-sum-s11/train/projection.json",
+          "record": "runs/v8-cover-fc-mem-ssd-sum-s11/train/result.json",
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/fc-fixed-total50-s11.json",
+          "id": "tl-v8-cover-fc-fixed-total50-s11",
+          "lens_record": "runs/v8-cover-fc-fixed-total50-s11/train/projection.json",
+          "record": "runs/v8-cover-fc-fixed-total50-s11/train/result.json",
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/fc-att-local-off-s11.json",
+          "id": "tl-v8-cover-fc-att-local-off-s11",
+          "lens_record": "runs/v8-cover-fc-att-local-off-s11/train/projection.json",
+          "record": "runs/v8-cover-fc-att-local-off-s11/train/result.json",
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/fc-send-regional_threshold-ent2-s11.json",
+          "id": "tl-v8-cover-fc-send-regional_threshold-ent2-s11",
+          "lens_record": "runs/v8-cover-fc-send-regional_threshold-ent2-s11/train/projection.json",
+          "record": "runs/v8-cover-fc-send-regional_threshold-ent2-s11/train/result.json",
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/fc-send-unit_attention-s11.json",
+          "id": "tl-v8-cover-fc-send-unit_attention-s11",
+          "lens_record": "runs/v8-cover-fc-send-unit_attention-s11/train/projection.json",
+          "record": "runs/v8-cover-fc-send-unit_attention-s11/train/result.json",
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/fc-zero-fixed-s11.json",
+          "id": "tl-v8-cover-fc-zero-fixed-s11",
+          "lens_record": "runs/v8-cover-fc-zero-fixed-s11/train/projection.json",
+          "record": "runs/v8-cover-fc-zero-fixed-s11/train/result.json",
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/fc-full-memory-off-s11.json",
+          "id": "tl-v8-cover-fc-full-memory-off-s11",
+          "lens_record": "runs/v8-cover-fc-full-memory-off-s11/train/projection.json",
+          "record": "runs/v8-cover-fc-full-memory-off-s11/train/result.json",
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "running"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/fc-gated_delta-heads2-s11.json",
+          "id": "tl-v8-cover-fc-gated_delta-heads2-s11",
+          "lens_record": "runs/v8-cover-fc-gated_delta-heads2-s11/train/projection.json",
+          "record": "runs/v8-cover-fc-gated_delta-heads2-s11/train/result.json",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/fc-budget-div4-s11.json",
+          "id": "tl-v8-cover-fc-budget-div4-s11",
+          "lens_record": "runs/v8-cover-fc-budget-div4-s11/train/projection.json",
+          "record": "runs/v8-cover-fc-budget-div4-s11/train/result.json",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/hb-mem-ssd-sum-s11.json",
+          "id": "tl-v8-cover-hb-mem-ssd-sum-s11",
+          "lens_record": "runs/v8-cover-hb-mem-ssd-sum-s11/train/projection.json",
+          "record": "runs/v8-cover-hb-mem-ssd-sum-s11/train/result.json",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/hb-fixed-total50-s11.json",
+          "id": "tl-v8-cover-hb-fixed-total50-s11",
+          "lens_record": "runs/v8-cover-hb-fixed-total50-s11/train/projection.json",
+          "record": "runs/v8-cover-hb-fixed-total50-s11/train/result.json",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/hb-att-local-off-s11.json",
+          "id": "tl-v8-cover-hb-att-local-off-s11",
+          "lens_record": "runs/v8-cover-hb-att-local-off-s11/train/projection.json",
+          "record": "runs/v8-cover-hb-att-local-off-s11/train/result.json",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/hb-send-regional_threshold-ent2-s11.json",
+          "id": "tl-v8-cover-hb-send-regional_threshold-ent2-s11",
+          "lens_record": "runs/v8-cover-hb-send-regional_threshold-ent2-s11/train/projection.json",
+          "record": "runs/v8-cover-hb-send-regional_threshold-ent2-s11/train/result.json",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/hb-send-unit_attention-s11.json",
+          "id": "tl-v8-cover-hb-send-unit_attention-s11",
+          "lens_record": "runs/v8-cover-hb-send-unit_attention-s11/train/projection.json",
+          "record": "runs/v8-cover-hb-send-unit_attention-s11/train/result.json",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/hb-zero-fixed-s11.json",
+          "id": "tl-v8-cover-hb-zero-fixed-s11",
+          "lens_record": "runs/v8-cover-hb-zero-fixed-s11/train/projection.json",
+          "record": "runs/v8-cover-hb-zero-fixed-s11/train/result.json",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/hb-full-memory-off-s11.json",
+          "id": "tl-v8-cover-hb-full-memory-off-s11",
+          "lens_record": "runs/v8-cover-hb-full-memory-off-s11/train/projection.json",
+          "record": "runs/v8-cover-hb-full-memory-off-s11/train/result.json",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/hb-gated_delta-heads2-s11.json",
+          "id": "tl-v8-cover-hb-gated_delta-heads2-s11",
+          "lens_record": "runs/v8-cover-hb-gated_delta-heads2-s11/train/projection.json",
+          "record": "runs/v8-cover-hb-gated_delta-heads2-s11/train/result.json",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/hb-budget-div4-s11.json",
+          "id": "tl-v8-cover-hb-budget-div4-s11",
+          "lens_record": "runs/v8-cover-hb-budget-div4-s11/train/projection.json",
+          "record": "runs/v8-cover-hb-budget-div4-s11/train/result.json",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/fc-mem-ssd-state-s11.json",
+          "id": "tl-v8-cover-fc-mem-ssd-state-s11",
+          "lens_record": "runs/v8-cover-fc-mem-ssd-state-s11/train/projection.json",
+          "record": "runs/v8-cover-fc-mem-ssd-state-s11/train/result.json",
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/fc-fixed-total100-s11.json",
+          "id": "tl-v8-cover-fc-fixed-total100-s11",
+          "lens_record": "runs/v8-cover-fc-fixed-total100-s11/train/projection.json",
+          "record": "runs/v8-cover-fc-fixed-total100-s11/train/result.json",
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/fc-att-regional-off-s11.json",
+          "id": "tl-v8-cover-fc-att-regional-off-s11",
+          "lens_record": "runs/v8-cover-fc-att-regional-off-s11/train/projection.json",
+          "record": "runs/v8-cover-fc-att-regional-off-s11/train/result.json",
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/fc-send-constrained-quad-s11.json",
+          "id": "tl-v8-cover-fc-send-constrained-quad-s11",
+          "lens_record": "runs/v8-cover-fc-send-constrained-quad-s11/train/projection.json",
+          "record": "runs/v8-cover-fc-send-constrained-quad-s11/train/result.json",
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/fc-send-pooled_attention-s11.json",
+          "id": "tl-v8-cover-fc-send-pooled_attention-s11",
+          "lens_record": "runs/v8-cover-fc-send-pooled_attention-s11/train/projection.json",
+          "record": "runs/v8-cover-fc-send-pooled_attention-s11/train/result.json",
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/fc-source-node-s11.json",
+          "id": "tl-v8-cover-fc-source-node-s11",
+          "lens_record": "runs/v8-cover-fc-source-node-s11/train/projection.json",
+          "record": "runs/v8-cover-fc-source-node-s11/train/result.json",
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/fc-full-ffn-off-s11.json",
+          "id": "tl-v8-cover-fc-full-ffn-off-s11",
+          "lens_record": "runs/v8-cover-fc-full-ffn-off-s11/train/projection.json",
+          "record": "runs/v8-cover-fc-full-ffn-off-s11/train/result.json",
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "running"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/fc-gated_delta-mem-off-s11.json",
+          "id": "tl-v8-cover-fc-gated_delta-mem-off-s11",
+          "lens_record": "runs/v8-cover-fc-gated_delta-mem-off-s11/train/projection.json",
+          "record": "runs/v8-cover-fc-gated_delta-mem-off-s11/train/result.json",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/fc-textbook-kv-s11.json",
+          "id": "tl-v8-cover-fc-textbook-kv-s11",
+          "lens_record": "runs/v8-cover-fc-textbook-kv-s11/train/projection.json",
+          "record": "runs/v8-cover-fc-textbook-kv-s11/train/result.json",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/hb-mem-ssd-state-s11.json",
+          "id": "tl-v8-cover-hb-mem-ssd-state-s11",
+          "lens_record": "runs/v8-cover-hb-mem-ssd-state-s11/train/projection.json",
+          "record": "runs/v8-cover-hb-mem-ssd-state-s11/train/result.json",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/hb-fixed-total100-s11.json",
+          "id": "tl-v8-cover-hb-fixed-total100-s11",
+          "lens_record": "runs/v8-cover-hb-fixed-total100-s11/train/projection.json",
+          "record": "runs/v8-cover-hb-fixed-total100-s11/train/result.json",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/hb-att-regional-off-s11.json",
+          "id": "tl-v8-cover-hb-att-regional-off-s11",
+          "lens_record": "runs/v8-cover-hb-att-regional-off-s11/train/projection.json",
+          "record": "runs/v8-cover-hb-att-regional-off-s11/train/result.json",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/hb-send-constrained-quad-s11.json",
+          "id": "tl-v8-cover-hb-send-constrained-quad-s11",
+          "lens_record": "runs/v8-cover-hb-send-constrained-quad-s11/train/projection.json",
+          "record": "runs/v8-cover-hb-send-constrained-quad-s11/train/result.json",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/hb-send-pooled_attention-s11.json",
+          "id": "tl-v8-cover-hb-send-pooled_attention-s11",
+          "lens_record": "runs/v8-cover-hb-send-pooled_attention-s11/train/projection.json",
+          "record": "runs/v8-cover-hb-send-pooled_attention-s11/train/result.json",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/hb-source-node-s11.json",
+          "id": "tl-v8-cover-hb-source-node-s11",
+          "lens_record": "runs/v8-cover-hb-source-node-s11/train/projection.json",
+          "record": "runs/v8-cover-hb-source-node-s11/train/result.json",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/hb-full-ffn-off-s11.json",
+          "id": "tl-v8-cover-hb-full-ffn-off-s11",
+          "lens_record": "runs/v8-cover-hb-full-ffn-off-s11/train/projection.json",
+          "record": "runs/v8-cover-hb-full-ffn-off-s11/train/result.json",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/hb-gated_delta-mem-off-s11.json",
+          "id": "tl-v8-cover-hb-gated_delta-mem-off-s11",
+          "lens_record": "runs/v8-cover-hb-gated_delta-mem-off-s11/train/projection.json",
+          "record": "runs/v8-cover-hb-gated_delta-mem-off-s11/train/result.json",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/hb-textbook-kv-s11.json",
+          "id": "tl-v8-cover-hb-textbook-kv-s11",
+          "lens_record": "runs/v8-cover-hb-textbook-kv-s11/train/projection.json",
+          "record": "runs/v8-cover-hb-textbook-kv-s11/train/result.json",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/fc-read-zero-s11.json",
+          "id": "tl-v8-cover-fc-read-zero-s11",
+          "lens_record": "runs/v8-cover-fc-read-zero-s11/train/projection.json",
+          "record": "runs/v8-cover-fc-read-zero-s11/train/result.json",
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/fc-gamma1-s11.json",
+          "id": "tl-v8-cover-fc-gamma1-s11",
+          "lens_record": "runs/v8-cover-fc-gamma1-s11/train/projection.json",
+          "record": "runs/v8-cover-fc-gamma1-s11/train/result.json",
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/fc-send-regional_total-bern-s11.json",
+          "id": "tl-v8-cover-fc-send-regional_total-bern-s11",
+          "lens_record": "runs/v8-cover-fc-send-regional_total-bern-s11/train/projection.json",
+          "record": "runs/v8-cover-fc-send-regional_total-bern-s11/train/result.json",
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/fc-send-constrained-bern-s11.json",
+          "id": "tl-v8-cover-fc-send-constrained-bern-s11",
+          "lens_record": "runs/v8-cover-fc-send-constrained-bern-s11/train/projection.json",
+          "record": "runs/v8-cover-fc-send-constrained-bern-s11/train/result.json",
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/fc-send-proportional-s11.json",
+          "id": "tl-v8-cover-fc-send-proportional-s11",
+          "lens_record": "runs/v8-cover-fc-send-proportional-s11/train/projection.json",
+          "record": "runs/v8-cover-fc-send-proportional-s11/train/result.json",
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/fc-source-source-s11.json",
+          "id": "tl-v8-cover-fc-source-source-s11",
+          "lens_record": "runs/v8-cover-fc-source-source-s11/train/projection.json",
+          "record": "runs/v8-cover-fc-source-source-s11/train/result.json",
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/fc-heads2-s11.json",
+          "id": "tl-v8-cover-fc-heads2-s11",
+          "lens_record": "runs/v8-cover-fc-heads2-s11/train/projection.json",
+          "record": "runs/v8-cover-fc-heads2-s11/train/result.json",
+          "source_commit": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+          "status": "running"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/fc-gated_delta-ffn-off-s11.json",
+          "id": "tl-v8-cover-fc-gated_delta-ffn-off-s11",
+          "lens_record": "runs/v8-cover-fc-gated_delta-ffn-off-s11/train/projection.json",
+          "record": "runs/v8-cover-fc-gated_delta-ffn-off-s11/train/result.json",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/fc-textbook-mixed-s11.json",
+          "id": "tl-v8-cover-fc-textbook-mixed-s11",
+          "lens_record": "runs/v8-cover-fc-textbook-mixed-s11/train/projection.json",
+          "record": "runs/v8-cover-fc-textbook-mixed-s11/train/result.json",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/hb-read-zero-s11.json",
+          "id": "tl-v8-cover-hb-read-zero-s11",
+          "lens_record": "runs/v8-cover-hb-read-zero-s11/train/projection.json",
+          "record": "runs/v8-cover-hb-read-zero-s11/train/result.json",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/hb-gamma1-s11.json",
+          "id": "tl-v8-cover-hb-gamma1-s11",
+          "lens_record": "runs/v8-cover-hb-gamma1-s11/train/projection.json",
+          "record": "runs/v8-cover-hb-gamma1-s11/train/result.json",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/hb-send-regional_total-bern-s11.json",
+          "id": "tl-v8-cover-hb-send-regional_total-bern-s11",
+          "lens_record": "runs/v8-cover-hb-send-regional_total-bern-s11/train/projection.json",
+          "record": "runs/v8-cover-hb-send-regional_total-bern-s11/train/result.json",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/hb-send-constrained-bern-s11.json",
+          "id": "tl-v8-cover-hb-send-constrained-bern-s11",
+          "lens_record": "runs/v8-cover-hb-send-constrained-bern-s11/train/projection.json",
+          "record": "runs/v8-cover-hb-send-constrained-bern-s11/train/result.json",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/hb-send-proportional-s11.json",
+          "id": "tl-v8-cover-hb-send-proportional-s11",
+          "lens_record": "runs/v8-cover-hb-send-proportional-s11/train/projection.json",
+          "record": "runs/v8-cover-hb-send-proportional-s11/train/result.json",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/hb-source-source-s11.json",
+          "id": "tl-v8-cover-hb-source-source-s11",
+          "lens_record": "runs/v8-cover-hb-source-source-s11/train/projection.json",
+          "record": "runs/v8-cover-hb-source-source-s11/train/result.json",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/hb-heads2-s11.json",
+          "id": "tl-v8-cover-hb-heads2-s11",
+          "lens_record": "runs/v8-cover-hb-heads2-s11/train/projection.json",
+          "record": "runs/v8-cover-hb-heads2-s11/train/result.json",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/hb-gated_delta-ffn-off-s11.json",
+          "id": "tl-v8-cover-hb-gated_delta-ffn-off-s11",
+          "lens_record": "runs/v8-cover-hb-gated_delta-ffn-off-s11/train/projection.json",
+          "record": "runs/v8-cover-hb-gated_delta-ffn-off-s11/train/result.json",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/local/hb-textbook-mixed-s11.json",
+          "id": "tl-v8-cover-hb-textbook-mixed-s11",
+          "lens_record": "runs/v8-cover-hb-textbook-mixed-s11/train/projection.json",
+          "record": "runs/v8-cover-hb-textbook-mixed-s11/train/result.json",
+          "status": "queued"
+        },
+        {
+          "config": "configs/studies/language/direct-v8/repair/fc-mem-gated_delta-state-s11-r2.json",
+          "id": "tl-v8-repair-fc-mem-gated_delta-state-s11-r2",
+          "lens_record": "runs/v8-repair-fc-mem-gated_delta-state-s11-r2/train/projection.json",
+          "record": "runs/v8-repair-fc-mem-gated_delta-state-s11-r2/train/result.json",
+          "status": "queued"
+        }
+      ],
+      "status": "running",
+      "study_id": "TL-DIRECT-COVER-v8",
+      "summary": "182\u683c\u5df2\u63a5\u6536\uff0c\u53e61\u4e2a\u5177\u540d\u4fee\u6b63\u6392\u961f\uff1b\u89c2\u5bdf\u72b6\u6001 {'completed': 61, 'qualifying': 5, 'pending': 111, 'running': 5, 'failed': 1}",
+      "title": "v8\uff1a91\u5c40\u90e8\u5019\u9009\u00d7FC/HB",
+      "track": "tide",
+      "view_group": "current",
+      "x": 620,
+      "y": 280
+    },
+    {
+      "budget": "48h/240 NPU\u5361\u65f6/768 CPU\u6838\u65f6/128GiB\uff1b10\u5361\u72ec\u7acb\u5e76\u884c\uff1b\u4e0d\u81ea\u52a8\u6269\u5c55\u771f\u5b9e\u7a00\u758f\u6216\u89c4\u6a21\u3002",
+      "decision": "\u5148\u5ba1\u9605\u8986\u76d6\u8d28\u91cf\u3001\u673a\u5236\u4e0e\u5931\u8d25\uff0c\u518d\u9009\u62e9\u771f\u5b9e\u7a00\u758f\u548c\u89c4\u6a21\u4e3b\u7ebf\u3002",
+      "id": "RV8-COVER",
+      "kind": "result",
+      "question": "\u5728\u5171\u540c\u81ea\u7136\u6587\u672cnext-token\u53e3\u5f84\u4e0b\uff0c\u54ea\u4e9b\u5c40\u90e8\u5019\u9009\u503c\u5f97\u4fdd\u7559\uff0c\u7ecf\u8fc7\u6821\u51c6\u7684Transformer\u5bf9\u7167\u8868\u73b0\u5982\u4f55\uff1f",
+      "references": [
+        {
+          "label": "\u56fa\u5b9a\u7814\u7a76\u8868",
+          "path": "docs/studies/direct-coverage-v8.md"
+        },
+        {
+          "label": "\u6e90\u7801\u3001\u4f5c\u4e1a\u3001Lens\u4e0e\u6062\u590d",
+          "path": "docs/studies/direct-v8-operations.md"
+        },
+        {
+          "label": "\u9010\u9879\u89c2\u6d4b",
+          "path": "docs/evidence/direct-v8-observations.json"
+        }
+      ],
+      "status": "awaiting",
+      "summary": "\u4e24anchor\u5b8c\u62101M\uff1b\u5176\u4f59\u5019\u9009\u4ecd\u8fd0\u884c\uff0c\u4e0d\u80fd\u7528\u65e9\u671f\u540d\u6b21\u66ff\u4ee3\u5b8c\u6574\u5ba1\u9605\u3002",
+      "title": "\u5e7f\u8986\u76d6\u7ed3\u679c\u5f85\u5b8c\u6574\u5ba1\u9605",
+      "track": "tide",
+      "view_group": "current",
+      "x": 915,
+      "y": 280
+    },
+    {
+      "budget": "48h/240 NPU\u5361\u65f6/768 CPU\u6838\u65f6/128GiB\uff1b10\u5361\u72ec\u7acb\u5e76\u884c\uff1b\u4e0d\u81ea\u52a8\u6269\u5c55\u771f\u5b9e\u7a00\u758f\u6216\u89c4\u6a21\u3002",
+      "decision": "\u4ec5\u9884\u58f0\u660e\u6876\u5185\u91cd\u590d\uff1b\u6ca1\u6709\u81ea\u52a8\u89c4\u6a21\u6269\u5c55\u3002",
+      "id": "V8-CONFIRM",
+      "kind": "experiment",
+      "question": "\u5728\u5171\u540c\u81ea\u7136\u6587\u672cnext-token\u53e3\u5f84\u4e0b\uff0c\u54ea\u4e9b\u5c40\u90e8\u5019\u9009\u503c\u5f97\u4fdd\u7559\uff0c\u7ecf\u8fc7\u6821\u51c6\u7684Transformer\u5bf9\u7167\u8868\u73b0\u5982\u4f55\uff1f",
+      "references": [
+        {
+          "label": "\u56fa\u5b9a\u7814\u7a76\u8868",
+          "path": "docs/studies/direct-coverage-v8.md"
+        },
+        {
+          "label": "\u6e90\u7801\u3001\u4f5c\u4e1a\u3001Lens\u4e0e\u6062\u590d",
+          "path": "docs/studies/direct-v8-operations.md"
+        },
+        {
+          "label": "\u9010\u9879\u89c2\u6d4b",
+          "path": "docs/evidence/direct-v8-observations.json"
+        }
+      ],
+      "status": "queued",
+      "study_id": "TL-DIRECT-CONFIRM-v8",
+      "summary": "controller\u5df2\u542f\u52a8\u3001\u7b49\u5f85\u8986\u76d6\u7ec8\u6001\uff1b\u81f3\u591a20\u4e2a\u5c40\u90e8seed22\u3002",
+      "title": "v8\uff1a\u6709\u9650seed22\u590d\u6838",
+      "track": "tide",
+      "view_group": "current",
+      "x": 620,
+      "y": 460
+    },
+    {
+      "budget": "48h/240 NPU\u5361\u65f6/768 CPU\u6838\u65f6/128GiB\uff1b10\u5361\u72ec\u7acb\u5e76\u884c\uff1b\u4e0d\u81ea\u52a8\u6269\u5c55\u771f\u5b9e\u7a00\u758f\u6216\u89c4\u6a21\u3002",
+      "decision": "\u4e0d\u7531\u4f5c\u4e1a\u9000\u51fa\u7801\u751f\u6210\u7a33\u5b9a\u6027\u7ed3\u8bba\u3002",
+      "id": "RV8-CONFIRM",
+      "kind": "result",
+      "question": "\u5728\u5171\u540c\u81ea\u7136\u6587\u672cnext-token\u53e3\u5f84\u4e0b\uff0c\u54ea\u4e9b\u5c40\u90e8\u5019\u9009\u503c\u5f97\u4fdd\u7559\uff0c\u7ecf\u8fc7\u6821\u51c6\u7684Transformer\u5bf9\u7167\u8868\u73b0\u5982\u4f55\uff1f",
+      "references": [
+        {
+          "label": "\u56fa\u5b9a\u7814\u7a76\u8868",
+          "path": "docs/studies/direct-coverage-v8.md"
+        },
+        {
+          "label": "\u6e90\u7801\u3001\u4f5c\u4e1a\u3001Lens\u4e0e\u6062\u590d",
+          "path": "docs/studies/direct-v8-operations.md"
+        },
+        {
+          "label": "\u9010\u9879\u89c2\u6d4b",
+          "path": "docs/evidence/direct-v8-observations.json"
+        }
+      ],
+      "status": "awaiting",
+      "summary": "\u5c40\u90e8\u91cd\u590d\u5c1a\u672a\u5f00\u59cb\uff1bTransformer\u56db\u9879\u590d\u6838\u5df2\u5f52\u5165TF\u7ed3\u679c\u3002",
+      "title": "\u7b5b\u9009\u7a33\u5b9a\u6027\u5c1a\u5f85\u68c0\u67e5",
+      "track": "tide",
+      "view_group": "current",
+      "x": 915,
+      "y": 460
     }
   ],
-  "notice": "v6\u539f200\u914d\u7f6e\u7ec8\u6001\uff1b\u65b0\u589e25\u683c\u6210\u672c\u4e0e8\u4e2a\u53ea\u8bfbVJP\u5747\u5b8c\u6210\uff0c33\u4e2aLens\u6295\u5f71\u6838\u5bf9\u3002HB\u5f53\u524d\u6269\u5927\u914d\u65b9\u8d1f\u9762\uff0c\u5c1a\u975e\u67b6\u6784\u4e0a\u9650\uff1b\u539f\u5931\u8d25\u4fdd\u7559\uff0c\u540e\u7ee7\u8bad\u7ec3\u672a\u81ea\u52a8\u542f\u52a8\u3002",
+  "notice": "\u72b6\u6001\u4e3a\u89c2\u5bdf\u5feb\u7167\u3002\u9879\u76ee\u8bb0\u5f55\u4e3a\u6743\u5a01\uff1b\u4e25\u683c\u6570\u503c\u3001\u6267\u884c\u3001\u79bb\u6563\u673a\u5236\u3001\u6062\u590d\u4e0e\u5b66\u4e60\u5206\u5f00\uff0c\u7269\u7406Full\u4e0e\u903b\u8f91\u7a00\u758f\u5206\u5f00\u3002",
   "schema": "tide-research-map-prototype-v1",
-  "subtitle": "\u76f4\u63a5\u56fe\u53ccseed4M\u5bb9\u91cf\u6536\u76ca\u5df2\u5ba1\u9605\uff1b\u5b8c\u6574TIDE\u4e0e\u7a00\u758f\u8fc1\u79fb\u4ecd\u5f85\u6865\u63a5\uff0c\u9884\u8bad\u7ec3\u8def\u7ebf\u4fdd\u6301\u72ec\u7acb\u3002",
+  "subtitle": "\u5f53\u524d\uff1a\u76f4\u63a5\u5c40\u90e8\u5019\u9009\u5e7f\u8986\u76d6\uff0b\u5df2\u6821\u51c6Transformer\uff1b\u771f\u5b9e\u7a00\u758f/\u89c4\u6a21\u5f85\u8986\u76d6\u5ba1\u9605\uff0c\u9884\u8bad\u7ec3\u751f\u957f\u4fdd\u6301\u72ec\u7acb\u3002",
   "title": "TIDE \u7814\u7a76\u56fe",
-  "updated_at": "2026-11-11T08:59:03.781180+00:00",
+  "updated_at": "2026-11-11T10:15:09.463663+00:00",
   "view_groups": [
     {
-      "height": 4660,
+      "height": 5260,
       "id": "current",
       "label": "\u5f53\u524d\uff1a\u8bed\u8a00\u4e0e\u7ed3\u6784\u8054\u5408\u7814\u7a76",
       "y": 0
@@ -9398,7 +11144,7 @@
       "height": 2750,
       "id": "history",
       "label": "\u5386\u53f2\uff1a\u56db\u6279\u7814\u7a76\u4e0e\u9650\u5b9a\u8bc1\u636e",
-      "y": 4760
+      "y": 5360
     }
   ],
   "width": 1490

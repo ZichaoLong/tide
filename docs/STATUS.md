@@ -1,8 +1,37 @@
-# 当前交接：direct-v8 广覆盖准备与 Transformer 校准
+# 当前交接：direct-v8 广覆盖已在10张NPU执行
 
-2026-11-11 最新用户授权落实到 [v8研究表](studies/direct-coverage-v8.md)：182个局部候选格、14个Transformer配方筛选格，统一1M有效目标。真实稀疏/规模主线延后至覆盖审阅。
-当前已实现两种深度残差初始化与显式AdamW配方，独立因果/共享/更新检查通过；新Lens小记录verified/readback_matches。TF即将固定源码提交，局部数学模块尚在实现，不能标为已覆盖。48h/240NPUh/768CPU核时/128GiB边界已写入配置。
-启动观察账号168GiB/800GiB；无本项目活动旧任务。旧v7终态与数值失败如下保留。
+2026-11-11 18:15:09北京时间观察：[有界研究表](studies/direct-coverage-v8.md) · [查看/停止/恢复与Lens](studies/direct-v8-operations.md) · [实际逐配置状态](evidence/direct-v8-observations.json) · [研究图](../web/index.html)。
+
+已实现并提交91个具名局部配方×FC/HB=182格，d128/L128/global B32，各1,048,576有效目标。
+本次是独立直接数学模块，包含记忆/描述/分配；物理Full稠密计算后遮罩，不声称真实稀疏执行或公共continuation等价。
+两anchor已经完成，另外180格由10个后台worker顺序覆盖；另有一个具名修正排队。当前局部尝试状态（含r2）为{'completed': 61, 'qualifying': 5, 'pending': 111, 'running': 5, 'failed': 1}。
+所有活动训练/等待均在background.slice。研究地图保留结果awaiting，不凭退出码生成支持。
+
+Transformer 14格调参＋4格seed22复核均完成1M：[一页结论](studies/direct-v8-transformer-results.md)。
+选择GPT2式std0.02、sqrt(2·层数)残差输出缩放、LR0.001、AdamW(.9,.95)/矩阵decay0.1。
+TF6/12双seed平均NLL为5.7874/5.8340，seed11旧配方为6.1584/6.1940；改善是配方包效果，不是最优Transformer认证。
+FC/HB anchor的seed11最终NLL为5.3621/5.3854，均从约8.4下降；仍不能提前认定广覆盖优胜或普遍scaling。
+
+182格实际CPU小型前向/梯度/因果检查通过，8项独立数学检查通过；13个NPU/12个CPU成本case完成。
+HB40完整B32更新NPU约0.296秒、CPU1约9.83秒。B64吞吐更高，但本轮固定global B32保留短程更新与TF对照口径。
+首轮正式接入保留CPU/NPU严格1e-6/1e-5有限失败；因果、支持、共享optimizer、三步新进程恢复及学习各轴单列。
+
+已保留的失败：FC gated_delta/state训练出现分配可行性残差3.1233e-5>2e-5；其他任务继续。
+[有界排查](evidence/direct-v8-quad-refinement.json)发现大评分偏移的减法消减可造成同量级残差，
+活动集相对坐标求根在768个合成行上把最大残差降至约1.19e-7，原阈值不变，九项数学检查通过。
+原坏行未落盘，原因未完全确认；只对该候选排队一个r2新身份复跑，未改活动源码。
+
+TF源码2702d91；局部校准/anchor 778f9e9；180格覆盖及有限确认5db28ae；单项r2 cd85637。
+数学0770593、规划/安装74e7bbd、私有`.venv-positive-floor-v1`保持，未接入基座新优化。
+截止2026-11-13 17:43:58，240NPU卡时/768CPU核时/128GiB新增磁盘；启动账号168GiB/800GiB。
+监督v8-budget；覆盖v8-cover-w0..9；修正v8-repair-w0等待同一10卡资源槽。
+v8-confirmation-controller已等待覆盖终态，随后按预声明桶最多20个seed22，不自动打开真实稀疏或规模主线。
+
+Lens项目tide-learning-lab：TL-DIRECT-TF-v8、TL-DIRECT-COVER-v8、TL-DIRECT-CONFIRM-v8；
+新小记录verified/readback_matches，正式训练持续投影。前缀tl-v8-；私有入口和SSH方法仅本机`.local/LENS.md`。
+只读快览：`python scripts/review_direct_v8.py`。查看不需重跑；各运行的原始失败、checkpoint、配置、安装身份均保留。
+
+## 前一轮已完成的交接
 
 # 当前交接：direct-v7已完成，直接HB出现有限容量收益
 

@@ -9,6 +9,9 @@
 TF筛选/确认：2702d91，`.local/source-v8-tf`；局部公式检查、成本与两anchor：778f9e9，`.local/source-v8-cal`；
 其余180格及条件seed22：5db28ae，`.local/source-v8-main`。最后一个快照只新增正支持监视与有限重复调度，
 局部数学函数和角色初始化与anchor相同；各阶段仍按实际源码独立记录，不伪称同一source hash。
+一个具名quad残差修正复跑使用cd85637、`.local/source-v8-repair`，服务`v8-repair-w0`，
+run前缀`tl-v8-repair-`。它等待同一10卡槽位，以原seed/data/1M目标从头运行；不覆盖失败，不修改活动覆盖源码。
+原确认controller不自动用新版本结果替换原失败，r2结果需单独审阅。
 数学0770593；公开规划74e7bbd；实际安装锁见`dependencies/positive-floor-v1/`及各stage identity。
 直接训练只依赖Torch模块，没有调用基座执行器或采用基座工作树的新优化。
 
@@ -47,7 +50,7 @@ Lens保持原认证实例与访问策略，私有入口/SSH转发写在本机`.l
 | --- | --- | --- |
 | TL-DIRECT-TF-v8 | `tl-v8-tf-` | 14格Transformer配方校准 |
 | TL-DIRECT-CONFIRM-v8 | `tl-v8-tf-confirm-` | 4个Transformer seed22复核 |
-| TL-DIRECT-COVER-v8 | `tl-v8-anchor-`、`tl-v8-cover-` | FC/HB的182格局部候选 |
+| TL-DIRECT-COVER-v8 | `tl-v8-anchor-`、`tl-v8-cover-`、`tl-v8-repair-` | FC/HB的182格局部候选与单项r2 |
 | TL-DIRECT-COVER-v8 | `tl-v8-cal-` | 合成完整步成本，无质量结论 |
 | TL-DIRECT-CONFIRM-v8 | `tl-v8-confirm-` | 条件提交的至多20个局部seed22复核 |
 
