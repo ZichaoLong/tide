@@ -66,6 +66,10 @@ Small `--trace` cases additionally compare every candidate control/support.
 None/present gradients, finite numeric errors, integer/support mismatches and
 execution errors are recorded separately. The full-scale minimal-return check
 does not certify all intermediate roots, complete records, optimizer or restore.
+`--dtype float64 --initial-dtype float32` promotes the original FP32 task
+parameters rather than drawing another FP64 initialization. Diagnostic wrapper
+omissions report actual read/full/region invocation and row counts, so an unused
+patch is distinguishable from an observed implementation boundary.
 `test_fc_comparison_diagnostics.py` checks the numeric projection against the
 independent formula, SDPA derivatives and patch restoration after failure.
 

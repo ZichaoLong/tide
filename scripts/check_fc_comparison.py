@@ -12,7 +12,7 @@ from pathlib import Path
 import time
 from durable_records import write_json
 from benchmark_dense_query import task_source, geometry, DOWNSTREAM
-from fc_comparison_diagnostics import boundary_scope
+from fc_comparison_diagnostics import boundary_scope, boundary_calls
 
 
 def difference(actual, expected, *, atol, rtol):
@@ -54,6 +54,7 @@ def main():
     p.add_argument('--output-dir',type=Path,required=True)
     p.add_argument('--device',choices=('cpu','npu:0'),default='cpu')
     p.add_argument('--dtype',choices=('float32','float64'),default='float32')
+    p.add_argument('--initial-dtype',choices=('float32','float64'),help='initialize the original parameters in this dtype, then promote; default matches --dtype')
     p.add_argument('--fc-shape',choices=('fc4','fc16'),default='fc16')
     p.add_argument('--batch',type=int,default=2)
     p.add_argument('--length',type=int,default=8)
@@ -74,7 +75,7 @@ def main():
     from fc_tensor_baseline import run
     application.eager_runner=functools.partial(eager_runner,query_execution='auto',prefill_schedule='auto',trace=a.trace)
     config.update(device=a.device,threads=1)
-    config['core'].update(eager_implementation='python',dtype=a.dtype,
+    config['core'].update(eager_implementation='python',dtype=a.initial_dtype or a.dtype,
                          placement_preset='cpu' if a.device=='cpu' else 'mixed-c',native_library=a.native_library)
     config['training'].update(batch=a.batch,length=a.length)
     device=runtime(a.device,1,config['seed']);model=make_model(config,device).to(dtype=getattr(torch,a.dtype))
@@ -104,6 +105,7 @@ def main():
             logits=model.head(hidden)
             loss=torch.nn.functional.cross_entropy(logits.flatten(0,1),inputs['labels'].flatten())
             loss.backward()
+            calls=boundary_calls()
         def cpu(t):return None if t is None else t.detach().cpu().clone()
         values={'hidden':cpu(hidden),'logits':cpu(logits),'loss':cpu(loss)}
         values.update({f'state/{v}/{name}':cpu(t) for v,row in raw.items() for name,t in row.items()})
@@ -123,13 +125,13 @@ def main():
                     values[f'control/{b}/{v}/{pos}']=cpu(event['control'])
                     values[f'active/{b}/{v}/{pos}']=torch.tensor(event['active'],dtype=torch.bool)
         gradients={'features':cpu(features.grad)}|{name:cpu(p.grad) for name,p in model.named_parameters() if p.requires_grad}
-        return values,gradients,work
+        return values,gradients,work,calls
     try:
-        expected,expected_grad,work=evaluate('formula');record['variants']['formula']=dict(work=work)
+        expected,expected_grad,work,calls=evaluate('formula');record['variants']['formula']=dict(work=work)
         public=None
         for variant in a.variants:
-            begin=time.monotonic();values,gradients,work=evaluate(variant)
-            record['variants'][variant]=dict(work=work,diagnostic_seconds=time.monotonic()-begin)
+            begin=time.monotonic();values,gradients,work,calls=evaluate(variant)
+            record['variants'][variant]=dict(work=work,boundary_calls=calls,diagnostic_seconds=time.monotonic()-begin)
             record['comparisons'][variant+'-formula']=dict(values=difference(values,expected,atol=atol,rtol=rtol),
                 gradients=difference(gradients,expected_grad,atol=atol,rtol=rtol))
             if variant=='python':public=(values,gradients)

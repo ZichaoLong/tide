@@ -17,7 +17,7 @@ import sys
 import tarfile
 import time
 from durable_records import write_json
-from fc_comparison_diagnostics import BOUNDARIES, boundary_scope
+from fc_comparison_diagnostics import BOUNDARIES, boundary_scope, boundary_calls
 
 DOWNSTREAM = "0439efd2af31cf10b07ce9e6423b0195f7449968"
 CONFIG = "configs/studies/language/v6/scale-fc16-kv-quad.json"
@@ -221,6 +221,7 @@ def main():
                 norm = phase("clip", lambda: torch.nn.utils.clip_grad_norm_([p for p in model.parameters() if p.requires_grad], 1., error_if_nonfinite=True))
                 phase("optimizer", opt.step)
             row = dict(index=index, warmup=index == 0, phases_seconds=phases, phase_sum_seconds=sum(phases.values()),
+                diagnostic_boundary_calls=boundary_calls(),
                 phase_time_scope="synchronized stage intervals" if a.phase_fences == "phase" else
                     "host enqueue/calling-thread intervals; device work may cross phases; only complete_wall_seconds is synchronized",
                 tokens=a.batch*a.length, loss=None if loss is None else float(loss.detach()),

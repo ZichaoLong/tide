@@ -7,9 +7,15 @@ be compared. Never install these patches in a consumer or qualify general roots.
 from contextlib import contextmanager, ExitStack
 from functools import wraps
 from unittest.mock import patch
+from contextvars import ContextVar
 
 
 BOUNDARIES = ("public", "query-direct", "region-direct", "both-direct")
+_calls = ContextVar("fc_diagnostic_boundary_calls", default=None)
+
+
+def boundary_calls():
+    return dict(_calls.get() or {})
 
 
 @contextmanager
@@ -17,10 +23,15 @@ def boundary_scope(mode):
     if mode not in BOUNDARIES:
         raise ValueError("unknown diagnostic boundary")
     with ExitStack() as stack:
+        calls = {}
+        token = _calls.set(calls)
+        stack.callback(_calls.reset, token)
         if mode in {"query-direct", "both-direct"}:
             from tidegraph.weighted import query_vjp, read_batch, full_batch
 
             def direct(program, weights, requests, *, kind="read", slots=0, mode="hard", zeta=1.):
+                calls[kind+"_calls"] = calls.get(kind+"_calls", 0)+1
+                calls[kind+"_rows"] = calls.get(kind+"_rows", 0)+len(requests)
                 if kind == "read":
                     return read_batch.evaluate(program, weights, requests)
                 if kind == "full":
@@ -30,7 +41,11 @@ def boundary_scope(mode):
             stack.enter_context(patch.object(query_vjp, "evaluate", direct))
         if mode in {"region-direct", "both-direct"}:
             from tidegraph.weighted import region_vjp, region_batch
-            stack.enter_context(patch.object(region_vjp, "evaluate", region_batch.evaluate))
+            def direct_region(program, requests):
+                calls["region_calls"] = calls.get("region_calls", 0)+1
+                calls["region_rows"] = calls.get("region_rows", 0)+len(requests)
+                return region_batch.evaluate(program, requests)
+            stack.enter_context(patch.object(region_vjp, "evaluate", direct_region))
         yield
 
 

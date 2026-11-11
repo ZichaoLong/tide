@@ -4,7 +4,7 @@ from pathlib import Path
 import pytest
 import torch
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'scripts'))
-from fc_comparison_diagnostics import boundary_scope
+from fc_comparison_diagnostics import boundary_scope, boundary_calls
 from fc_tensor_baseline import run
 from tidegraph import Continuation, ExecutionPlacement
 from tidegraph.planning.recipes import prepare
@@ -34,6 +34,11 @@ def test_task_projection_and_scoped_restoration(dtype,boundary):
             [(pos*spec.stride+spec.rank(v),p) for p,v in enumerate(binding.graph.outputs)],x[b,pos],batch=b)
             for pos in range(3)]) for b in range(2)])
         gradients=torch.autograd.grad(actual.square().sum(),roots,allow_unused=True)
+        calls=boundary_calls()
+        if boundary in ('query-direct','both-direct'):
+            assert calls.get('read_rows',0)>0 and calls.get('full_rows',0)>0
+        if boundary in ('region-direct','both-direct'):
+            assert calls.get('region_rows',0)>0
     assert originals==(query_vjp.evaluate,region_vjp.evaluate)
     from tidegraph.compare import equivalent
     equivalent(actual,expected)
