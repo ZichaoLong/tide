@@ -27,6 +27,9 @@ FC16同尺寸成本与诊断入口见[阶段归因](fc16-cost-attribution.md)：
 `weighted_saved_tensors.h`负责typed tape在新反向program中的借用计费，组合预留在KV query/Full与Residual。
 修改同步[投影契约](resident-weighted-projection.md)、[预算契约](resident-storage-accounting.md)、
 projection/query/Full独立设备checks及完整flow/training资格；host张量列与device在线调度是不同路径。
+`cann_task_services.cpp`负责CANN服务父子树、通知和停止，`task_services_check.cpp`独立检验嵌套、
+兄弟、双根及重复窗口。`scripts/trace_resident_step.py`记录实际公共step的失败阶段；
+局部计费、任务队列和流数量不能混为一种资源。固定结果见[共享矩阵与服务资格](evidence/resident-shared-bank-20261112.md)。
 
 默认host prefill的区域SCC窗口分解：`window_plan.py`与`cpp/src/component_{plan,window}.cpp`。
 公共选项、实验身份和旧greedy复现规则见[调度契约](greedy-scheduler.md#default-component-windows)；

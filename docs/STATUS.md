@@ -1,58 +1,53 @@
-# 当前交接 — FP16张量窗口交付与resident迁移（2026-11-11）
+# 当前交接 — resident局部资格与原预算复验终态（2026-11-12）
 
-继续已授权[ROADMAP P1—P6](ROADMAP.md#当前计划批量张量贯穿与架构验证已授权实施)。
-数学固定0770593838a37c790a568226930567ed60f99b83，19快照再次通过。
-当前实现ce50a2a5；阶段提交5816a4c4（half列）、5959bbc3（默认实验/loss）、ce50a2a5（SDK入口），
-推送状态以git status为准。用户未跟踪TL-REQ-004/005交接文件原样保留，不提交。
+已执行[ROADMAP P1—P6](ROADMAP.md#当前计划批量张量贯穿与架构验证已授权实施)中的本次resident有限阶段。
+数学固定0770593838a37c790a568226930567ed60f99b83，19份快照再次通过离线核验。
+当前实现e12aec0c；3e926ede交付单bank矩阵/块伴随，72c1dc02和d068fbdf修正新增容量见证，
+c9775479交付实际公共step诊断。证据见[resident报告](evidence/resident-shared-bank-20261112.md)
+及其机器记录；推送状态以git status为准。P1—P6总体未全部完成。
 
-## 本阶段完成与证据
+## 本阶段结果
 
-[FP16与跨owner后继](evidence/column-half-20261111.md)分别固定源码、构建、运行和失败身份。
-五记忆与位置KV新列接受half载荷/显式FP32评分，Attention内部FP32、原始版本守卫及int64时钟保持。
-默认实验auto按实际窗口能力分派，half任务loss在乘法前提升FP32。
-CPU固定188 passed/6原数值xfail；扩大回归112 passed/2原xfail/2旧sum FP32严格失败，
-后两项在修改前796baafa同材料复现同值，原阈值和失败保持。
-CPU/NPU共八安装消费者独立三步master AdamW及新进程精确恢复通过。
-单NPU实际12项half五记忆/位置全根通过；同pytest3项CPU辅助单列。
-
-双NPU普通异步反向仍报EE1017/invalid event：首例前向通过，8独立安装进程和SDK首例亦失败。
-显式ASCEND_LAUNCH_BLOCKING=1的4全根/更新/raw恢复、2安装消费者与SDK FP32十五项通过，
-不作为普通异步修复。ce50a2a5补SDK half入口标志后，新SDK构建及CPU、单NPU普通异步、
-双NPU显式同步各16项half通过。没有新增half吞吐结论。
-此前FC整链成本、mixed和多owner报告从[证据索引](evidence/README.md)进入，保持原实现身份。
+- 同bank输入使用整块GEMM及参数转置，减少逐行矩阵复制和外积；组合预留与实际storage union分别检查。
+  固定CPU32通过/6未指定设备skip，实际设备补验独立根。原两次容量见证map/scalar形状失败保留。
+- e12aec0c让父服务递归停止直接子树。独立SDK六项全部通过：services、flow两dtype、window FP32、
+  training两dtype；安装后10项公共raw根及KV-FC/SSD-PDG三步训练/磁盘恢复通过。
+- 原预算SSD（B4/L16/d128，实际61位置）训练与精确下一窗通过，13.328988秒，4.57649位置/s；
+  该规模独立数值未验，没有从两次接近的成本声称提速。
+- 原预算FC16成功构造，但warmup仍EE1019/507002，未取得吞吐或恢复结论。
+  旧单次trace定位反向program构造提交失败；新运行只到公共warmup边界，不套用旧stream/task编号。
+  停止重复这个候选，不增加预算、不缩小输入、不静默启用blocking。
+- 完成21文件hash绑定审阅及证据/复现/性能经验导航。与既有审阅有重叠，自动2157文件清单不等于全仓已审。
 
 ## 作业与现场
 
-当前无活跃项目作业。gef-resident-shared-dev已passed：冻结dirty快照的CPU11项、
-独立SDK构建与空闲物理11上的projection/query/Full两dtype六项全部通过。
-单bank投影/块反向及组合预算已实现，新增同FC16局部尺寸的KV容量数值见证尚待固定资格。
-即将提交实现并在固定源码运行局部、完整flow/training/恢复相关检查；不从开发通过推定完整资格。
-旧half作业终态与失败身份见FP16报告，不改写。
-实际NPU为合法空闲准入物理7/11，逻辑npu:0/1，host144–159；未使用共享卡。
-共享NPU仍需当前明确授权，GPU延后。无磁盘阻塞，不清理参考仓库或公共环境。
+`gef-resident-stop-qualified.service`最终failed（仅代表FC16未通过，不覆盖内部各项独立通过）；
+MainPID=0、ControlGroup为空，当前没有本任务活跃作业或遗留后代。
+固定源码/构建/逐项结果：`artifacts/columns-20261111/resident-stop-qualified`；
+作业状态与日志：`artifacts/jobs/resident-stop-qualified/{status.json,task.log}`。
+总2700秒/640GiB；顺序jobs all（320）构建，设备host144–159、ATen2/interop1；
+空闲物理11映射npu:0，普通异步，未使用共享卡。最终运行约761秒。
+Python-owned与独立SDK分别构建；复用core保留原manifest且完整C++ hash匹配e12aec0c。
+原shared-qualified/client/final与phase-trace均保留failed身份，stop-dev为开发快照通过。
+磁盘配额约254GiB/软300GiB/硬800GiB，无存储阻塞；未清理参考仓库或公共环境。
 
-固定源码/构建在artifacts/columns-20261111：qualified-half(5816)、qualified-half-task(5959)、
-qualified-half-sdk(ce50)，half-dev1/build为Python-owned；half-sdk-build为独立SDK。
-原half-dev1构建复用已核验完整源码/binary hash；保留其原开发manifest，不回写身份。
-安装install-half-task，环境half-task-runtime.sh；项目私有env artifacts/additive-work/env，
-Torch2.12/TorchNPU2.12.post3/CANN9.2。SDK使用libtorch-npu/2.12.0-cann9.2.0，不混wheel库。
+## 接续边界与下一动作
 
-## 下一动作
-
-FP16阶段已随c8821f77正常推送。正在继续P5/P6：
-审阅resident的设备在线推进、局部工作区与反向journal，确定新张量列能接入的真实边界和独立反例。
-不把host整窗提交冒称resident，也不再盲目加旧容量预算。普通异步跨卡按ROADMAP的有界停止条件保留。
-已审具名清单与未审范围分别记录；当前P1—P6未全部完成。
+本次共享矩阵/计费方案采用，小型服务停止修正通过，但原FC16规模限制未解除。
+后继先从[预算与服务契约](resident-storage-accounting.md)、`cann_task_services.cpp`、
+`weighted_flow_adjoint.cpp`与区域/节点伴随提交处设计有界服务提交或数值阶段合批；
+在新独立嵌套/空窗/共享workspace/根与跨窗见证前，不重跑相同FC16或仅调高预算。
+新resident完整B×L张量贯穿、普通异步双NPU、全仓未审范围按ROADMAP继续保留。
+此前host张量窗口、区域/KV/五记忆、mixed、half及规模成本从[证据索引](evidence/README.md)按原身份进入；
+GPU真机继续延后，共享NPU须当前明确授权。不得把原失败或待验范围改为完成。
 
 ```sh
 python scripts/status.py
 python scripts/check_upstream.py
-TIDE_COLUMN_DEVICE=npu:0 python -m pytest -q tests/test_half_columns.py --dtype float32
-TIDE_COLUMN_PEERS=npu:0,npu:1 python -m pytest -q tests/test_column_payload_owners.py --dtype float32
-TIDE_COLUMN_PEER_DEVICE=npu:1 tidegraph-column-check --device=npu:0 --dtype=float16
+python scripts/review_inventory.py --revision e12aec0c --reviews docs/evidence/resident-shared-bank-20261112-reviews.json --output artifacts/NEW_REVIEW.json
 ```
 
-设备命令须先依法准入且在对应冻结源码/环境执行。普通异步与显式launch blocking用独立输出目录；
-详情及CPU/安装复现见本阶段报告，不依赖旧raw目录才能重建。
-长任务固定源码、background.slice、有限资源/时长；构建可用全部320 CPU，计时避开项目自身争用。
-历史source定位：python scripts/resolve_history_commit.py OLD_SHA。
+机器记录保存两个代表的完整configuration和展开局部绑定，干净checkout无需旧raw目录即可重建。
+重现命令与两种运行时构建见本阶段报告；已有源码资格不需原样重跑。
+用户未跟踪的`docs/tide-learning-lab-TL-REQ-004-handoff.md`与`TL-REQ-005-handoff.md`原样保留，不纳入本轮提交。
+历史source定位用`python scripts/resolve_history_commit.py OLD_SHA`。

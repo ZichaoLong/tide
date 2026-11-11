@@ -25,7 +25,8 @@
 | 配置身份、安装、计时分母、归档与失败复现 | [测量与证据](performance-lessons-evidence.md) |
 | 外部Transformer/MoE、真实模型入口及计时范围 | [外部模型对照](performance-lessons-external-models.md) |
 
-新近机制：[精度迁移与默认调用链](performance-lessons-numerics.md#精度迁移需要覆盖默认调用链)、
+新近机制：[单bank矩阵与服务任务容量](performance-lessons-state-devices.md#单bank矩阵与服务任务容量是两类问题)、
+[精度迁移与默认调用链](performance-lessons-numerics.md#精度迁移需要覆盖默认调用链)、
 [跨设备共享列伴随](performance-lessons-numerics.md#跨设备共享列的反向到达顺序)、
 [公共任务边界与卷积转置](performance-lessons-prefill.md#公共任务边界与卷积转置)、
 [区域列伴随与结构支持](performance-lessons-prefill.md#区域列伴随与结构支持)、

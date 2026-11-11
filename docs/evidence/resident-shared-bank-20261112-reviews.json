@@ -1,0 +1,175 @@
+{
+  "schema": "tide-implementation-review-v1",
+  "source": "e12aec0c8acb8553de0bc021dab8a1f59db92710",
+  "meaning": "Twenty-one actual whole-file reviews, overlapping earlier coverage; not a repository-wide audit or C++ symbol extraction claim.",
+  "files": [
+    {
+      "path": "tools/device_online/weighted_projection.cpp",
+      "sha256": "f080967ac3fa86848fe6ebbc29484c5e94fd737b5445ac11e5b144eefe19af39",
+      "symbols": "*",
+      "reviewer": "root",
+      "scope": "Single-bank forward and block parameter/input transpose; absent owner poison, structural roots, FP16 storage and local storage accounting.",
+      "evidence": "docs/evidence/resident-shared-bank-20261112.md"
+    },
+    {
+      "path": "tools/device_online/weighted_saved_tensors.h",
+      "sha256": "98f3669c42e5c1def0bffd7342c7a675eb00bb7b9971c9c1ef1f605dad6e0a13",
+      "symbols": "*",
+      "reviewer": "root",
+      "scope": "Enumerated borrowed projection/window/pool/rotary/residual/Read/Full storage before constructing reverse programs; enumeration does not reconstruct values.",
+      "evidence": "docs/evidence/resident-shared-bank-20261112.md"
+    },
+    {
+      "path": "tools/device_online/weighted_kv_query.cpp",
+      "sha256": "cf4e10502a4df047a1342b6cf01706dd537bde30d371d3946f67f4d831b71491",
+      "symbols": "*",
+      "reviewer": "root",
+      "scope": "Actual visible weighted history, one-bank projections, two channels, saved operands and combined guard.",
+      "evidence": "docs/evidence/resident-shared-bank-20261112.md"
+    },
+    {
+      "path": "tools/device_online/weighted_kv_query_vjp.cpp",
+      "sha256": "5b011813c79832c5bfe11cf86669f74c3b319a7226dccc747e794c01d0b5a692",
+      "symbols": "*",
+      "reviewer": "root",
+      "scope": "Four independent roots, structured masks, shared parameter transpose and raw field contributions.",
+      "evidence": "docs/evidence/resident-shared-bank-20261112.md"
+    },
+    {
+      "path": "tools/device_online/weighted_kv_full.cpp",
+      "sha256": "4113f8666cc538c76795dec760019407930de59efee320b1e02aa38eb8acd2ea",
+      "symbols": "*",
+      "reviewer": "root",
+      "scope": "Full candidate snapshot, selected owner, head projections/relative time, residual and union budget.",
+      "evidence": "docs/evidence/resident-shared-bank-20261112.md"
+    },
+    {
+      "path": "tools/device_online/weighted_kv_full_vjp.cpp",
+      "sha256": "1aeb33cbe95e17d71bf4b86d869f9c51569523e93da11ea95daec3defe9a6db8",
+      "symbols": "*",
+      "reviewer": "root",
+      "scope": "Full saved snapshot and all head/raw/input/parameter contributions, borrowed-versus-new storage.",
+      "evidence": "docs/evidence/resident-shared-bank-20261112.md"
+    },
+    {
+      "path": "tools/device_online/weighted_residual.cpp",
+      "sha256": "11bf8ab4aaa8d547432be57b606f00fd5123c15a57c678d19014f849c749efb0",
+      "symbols": "*",
+      "reviewer": "root",
+      "scope": "Residual/FFN forward and saved transpose; actual bank layout and total newly retained storage.",
+      "evidence": "docs/evidence/resident-shared-bank-20261112.md"
+    },
+    {
+      "path": "tools/device_online/ascendc/tide_weighted_projection_shared.cpp",
+      "sha256": "d332e732cabe6f9d8fc65d80ceba7a2494db7851d1059fa6d2d97dd83471ef4a",
+      "symbols": "*",
+      "reviewer": "root",
+      "scope": "Single-bank actual-use snapshot; zero versus disconnected roots, nonfinite and sticky errors; no per-row matrix clone.",
+      "evidence": "docs/evidence/resident-shared-bank-20261112.md"
+    },
+    {
+      "path": "tools/device_online/ascendc/tide_weighted_head_guard.cpp",
+      "sha256": "7b2714f680134f736d658bdffa7b361b8f35f133f6a35d651eedc891071788a3",
+      "symbols": "*",
+      "reviewer": "root",
+      "scope": "Row absence and root sanitation reused by shared projection.",
+      "evidence": "docs/evidence/resident-shared-bank-20261112.md"
+    },
+    {
+      "path": "tools/device_online/ascendc/tide_weighted_head_plan.cpp",
+      "sha256": "af2897d6e9541451bb7b2751c1337c912ff12de17078f6cd4a5ee031628fa590",
+      "symbols": "*",
+      "reviewer": "root",
+      "scope": "Owner domain and actual input sanitation independent of matrix storage layout.",
+      "evidence": "docs/evidence/resident-shared-bank-20261112.md"
+    },
+    {
+      "path": "tools/device_online/weighted_projection_check.cpp",
+      "sha256": "84806743b5b92d0085076f5849e39fc9ce73b137c631844b6c01f479291a422d",
+      "symbols": "*",
+      "reviewer": "root",
+      "scope": "Independent literal/autograd formula, changing original operands, none/zero and capacity refusal; actual storage witness.",
+      "evidence": "docs/evidence/resident-shared-bank-20261112.md"
+    },
+    {
+      "path": "tools/device_online/weighted_kv_query_check.cpp",
+      "sha256": "ebfeab457e8f9da032a402f47b9848555fcd67b53827562ee1da8ec293ea5375",
+      "symbols": "*",
+      "reviewer": "root",
+      "scope": "General Read roots, one/three banks, original int64 times and same-local-shape capacity formula; prior harness failures retained.",
+      "evidence": "docs/evidence/resident-shared-bank-20261112.md"
+    },
+    {
+      "path": "tools/device_online/cann_task_services.cpp",
+      "sha256": "70032a349b1d63e8c90a90f2afdfa9a2676b8f41a06024b964022ddd1221cc0a",
+      "symbols": "*",
+      "reviewer": "root",
+      "scope": "Static parent tree, serial request/done dependencies, recursive stop from idle head, workspace lifetime and repeat submissions.",
+      "evidence": "docs/evidence/resident-shared-bank-20261112.md"
+    },
+    {
+      "path": "tools/device_online/task_services_check.cpp",
+      "sha256": "c1a7e394050935fcc117a9949c34abd97d526be36217bde941ade3b99aa73302",
+      "symbols": "*",
+      "reviewer": "root",
+      "scope": "Independent recurrence with sibling, two roots, three nesting levels, empty/repeated windows and shared workspace.",
+      "evidence": "docs/evidence/resident-shared-bank-20261112.md"
+    },
+    {
+      "path": "tools/device_online/weighted_flow_local.cpp",
+      "sha256": "2cf1f79814e3d8f2c00d1807637a0196f62722d83773c881070235b6e49e3c29",
+      "symbols": "*",
+      "reviewer": "root",
+      "scope": "Per-node complete numerical services and region/Full boundaries; current resident batching does not imply eager BxL columns.",
+      "evidence": "docs/evidence/resident-shared-bank-20261112.md"
+    },
+    {
+      "path": "tools/device_online/weighted_flow_region.cpp",
+      "sha256": "c7b37300c10ec52ccdc0be233324170c0b266c6b5fbdffa2d0a44c847179c0cc",
+      "symbols": "*",
+      "reviewer": "root",
+      "scope": "All region members gathered before device selection, complete control scatter and physical state ownership.",
+      "evidence": "docs/evidence/resident-shared-bank-20261112.md"
+    },
+    {
+      "path": "tools/device_online/weighted_flow_budget.cpp",
+      "sha256": "23e8ed2822a02493fbe2fcc99a9c45f02e74f3a2b93841821e2eddf3801c6640",
+      "symbols": "*",
+      "reviewer": "root",
+      "scope": "Union of actual owner storage and unallocated journals; service/workspace diagnostic fields.",
+      "evidence": "docs/evidence/resident-shared-bank-20261112.md"
+    },
+    {
+      "path": "tools/device_online/weighted_storage_budget.h",
+      "sha256": "8ad11095c3b98e581f9e281aed23b29ebc9e5e5be7c71a09f7f6797c7b40d46b",
+      "symbols": "*",
+      "reviewer": "root",
+      "scope": "Borrowed set frozen before append; view deduplication and precise newly retained storage.",
+      "evidence": "docs/evidence/resident-shared-bank-20261112.md"
+    },
+    {
+      "path": "tests/test_resident_weighted_projection_shared.py",
+      "sha256": "df7df11a6876526d637975d18a28add0b1ad9b9f453dda9dd1e89ce1da260f58",
+      "symbols": "*",
+      "reviewer": "root",
+      "scope": "Generated semantic-kernel host checks; explicitly separate from actual vendor GEMM/VJP evidence.",
+      "evidence": "docs/evidence/resident-shared-bank-20261112.md"
+    },
+    {
+      "path": "tests/test_resident_weighted_storage_roots.py",
+      "sha256": "0d3cda97272b527d1c85e78e1c989ea846dd9181c33097f1895ac54d736b7608",
+      "symbols": "*",
+      "reviewer": "root",
+      "scope": "Public independently rooted raw fields against literal matrices and RMS Jacobian.",
+      "evidence": "docs/evidence/resident-shared-bank-20261112.md"
+    },
+    {
+      "path": "scripts/trace_resident_step.py",
+      "sha256": "b996c05727f7ffe86bee95f3b97160cbce24f67a57319c8f8a0518a57156d0c7",
+      "symbols": "*",
+      "reviewer": "root",
+      "scope": "Uses real installed public step, durable boundary events, runtime/resource admission and failures; does not time a replacement algorithm.",
+      "evidence": "docs/evidence/resident-shared-bank-20261112.md"
+    }
+  ]
+}

@@ -49,3 +49,5 @@ permute 和 batch_matmul；可选 bias 用 vendor add。没有输入值的主机
 CPU helper、实际NPU、CUDA构建与GPU真机分别记录；局部投影资格不自动扩展为五记忆或完整常驻图资格。
 
 FP32固定源码资格见[4a88a54运行证据](evidence/core5-resident-projection-20261027.md)。FP32/FP16组件扩展见[122202f固定资格](evidence/core5-resident-half-primitives-20261028.md)。
+单bank整块矩阵及实际存储见证的固定资格见[3e926ede后继](evidence/resident-shared-bank-20261112.md)；
+小图训练/恢复通过与原FC16任务队列失败同时保留，不由本组件推定全模型性能。
