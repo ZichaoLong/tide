@@ -1,5 +1,6 @@
 // Independent native streaming schedule vs B/L column composition and two updates.
 #include "weighted_graph_fixture.h"
+#include "portable_torch/runtime.hpp"
 #include "tide/weighted_sequence_columns.h"
 #include "tide/stream.h"
 #include "tide/parameters.h"
@@ -11,32 +12,40 @@ namespace {
 using namespace tide;
 namespace col=tide::weighted::columns;
 void require(bool ok,const char* message){if(!ok)throw std::runtime_error(message);}
-void close(const Tensor& a,const Tensor& b){
+void close_value(const Tensor& a,const Tensor& b,double rtol,double atol){
   require(a.defined()==b.defined(),"column gradient connection mismatch");
   if(!a.defined())return;
   require(a.sizes()==b.sizes()&&a.scalar_type()==b.scalar_type(),"column metadata mismatch");
-  require(a.is_floating_point()?at::allclose(a,b,1e-8,1e-10):at::equal(a,b),"column numerical mismatch");
+  require(a.is_floating_point()?at::allclose(a,b,rtol,atol):at::equal(a,b),"column numerical mismatch");
 }
-void check(const std::string& family,bool positional=false){
+void check(const std::string& family,bool positional=false,bool scoring=false,
+           at::Device device=at::kCPU,at::ScalarType dtype=at::kDouble,const std::string& preset="native"){
   at::set_num_threads(1);
-  auto g=weighted_check::graph("fc",family);auto m=weighted_check::model(g,family,at::kCPU,at::kDouble);
+  const bool fp32=scoring||dtype==at::kFloat;
+  auto close=[&](const Tensor& a,const Tensor& b){close_value(a,b,fp32?1e-5:1e-8,fp32?1e-6:1e-10);};
+  auto g=weighted_check::graph("fc",family);auto m=weighted_check::model(g,family,device,dtype);
   if(positional)for(auto& node:m.nodes){auto b=weighted::node_binding(node);auto c=std::get<weighted::KVConfig>(b.memory);
     c.full_frequencies={{.17}};c.distance_slopes={.03};c.position_scale=4.;
     weighted::configure_node(node,c,b.regional,b.sources,b.aggregate_alpha);}
-  SettleGraph spec(g,{1,2,3},"ports",4);Streaming scalar(g,m,Options{});
+  ExecutionPlacement placement;placement.preset=preset;placement.scoring_dtype=scoring?"float32":"payload";
+  SettleGraph spec(g,{1,2,3},"ports",4);Streaming scalar(g,place_model(g,m,placement),Options{});
   Continuation q;q.identity=g.identity;q.batch_size=2;
   std::map<Index,col::LocalState> left;
   auto owners=m.parameters().owners();std::vector<Tensor> parameters;
   for(const auto& p:owners)parameters.push_back(p.value);
   for(Index step=0;step<2;++step){
     const Index base=5*step;col::Layout layout{{0,2,4},{base,base+2,base+1,base+3}};
-    auto x=at::tensor({.4,.2,-.3, .7,.3,.1, .6,-.1,.5, .9,.4,-.2},at::kDouble).reshape({4,3}).set_requires_grad(true);
+    auto x=at::tensor({.4,.2,-.3, .7,.3,.1, .6,-.1,.5, .9,.4,-.2},at::kDouble).to(device,dtype).reshape({4,3}).set_requires_grad(true);
     col::Message input{{0,1,2,3},x.select(1,0),x.slice(1,1)};
     std::map<Index,col::Message> ports{{0,input},{1,input}};
     std::vector<External> xs;
     for(Index b=0;b<2;++b)for(Index j=0;j<2;++j)for(Index p=0;p<2;++p)
       xs.push_back({b,p,step*2+j,layout.times[b*2+j]*4+1,x[b*2+j]});
-    auto actual=col::settle(spec,m,layout,ports,left);
+    auto actual=col::settle(spec,m,layout,ports,left,Index{4}*1024*1024*1024,placement);
+    for(const auto& [v,n]:actual.nodes){
+      for(const auto& [field,t]:n.descriptors)require(t.device()==resolve_placement(placement,device).read,"column Read location mismatch");
+      require(n.controls.device()==device,"column control payload owner mismatch");
+    }
     auto expected=scalar.run(q,xs,(base+4)*4,(base+4)*4);
     std::vector<Tensor> aterms,eterms;
     for(const auto& out:expected.outputs){
@@ -71,6 +80,20 @@ void check(const std::string& family,bool positional=false){
   require(rejected,"malformed layout did not reject before indexing");
 }
 }
-int main(){try{check("kv");check("kv",true);for(const auto& f:{"affine","delta","gated_delta","ssd"})check(f);
-  std::cout<<"column standalone FP64: five memories, independent streaming, raw state, VJP, two SGD windows passed\n";return 0;}
+int main(int argc,char** argv){portable_torch::RuntimeSession runtime;try{
+  if(argc==1){check("kv");check("kv",true);for(const auto& f:{"affine","delta","gated_delta","ssd"})check(f);
+    check("kv",false,true);check("ssd",false,true);
+  }else{
+    auto args=portable_torch::parse_cli(argc,argv,true);
+    if(args.help){portable_torch::print_usage(std::cout,argv[0]);return 0;}
+    auto device=portable_torch::resolve_device(args);
+    require(args.dtype==at::kFloat||args.dtype==at::kDouble,"column gate requires FP32/FP64");
+    for(const auto& preset:{"mixed-a","mixed-b","mixed-c"})for(const auto& family:{"kv","affine","delta","gated_delta","ssd"}){
+      check(family,false,false,device,args.dtype,device.is_cpu()?"cpu":preset);
+      std::cout<<"column case passed: "<<family<<" "<<preset<<'\n';
+    }
+    portable_torch::synchronize(device);
+  }
+  runtime.close();
+  std::cout<<"column standalone: independent streaming, raw state, VJP, two SGD windows passed\n";return 0;}
   catch(const std::exception& e){std::cerr<<e.what()<<"\n";return 1;}}

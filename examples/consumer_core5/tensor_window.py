@@ -33,7 +33,8 @@ def create(args, *, reference=False):
     spec = replace(topology, graph=binding.graph)
     optimizer = torch.optim.AdamW(binding.model.parameters(), lr=.0001, foreach=False)
     execute = eager_runner(binding, "python" if reference else args.client,
-        ExecutionPlacement("cpu" if reference or args.device == "cpu" else "mixed-c", scoring_dtype=args.dtype),
+        ExecutionPlacement("cpu" if reference or args.device == "cpu" else args.placement,
+                           scoring_dtype=args.scoring_dtype or args.dtype),
         native_library=None if reference else args.native_library,
         query_execution="legacy" if reference else "auto", trace=False)
     return binding, spec, optimizer, execute
@@ -64,6 +65,10 @@ def main():
     p.add_argument("--dtype", choices=("float32", "float64"), default="float64")
     p.add_argument("--client", choices=("python", "native"), default="python")
     p.add_argument("--native-library")
+    p.add_argument("--placement", choices=("mixed-a", "mixed-b", "mixed-c"), default="mixed-c")
+    p.add_argument("--scoring-dtype", choices=("float32", "float64"))
+    p.add_argument("--deterministic-algorithms", action=argparse.BooleanOptionalAction, default=True,
+                   help="explicit test policy; does not change the library's global default")
     p.add_argument("--positions", action="store_true", help="exercise relative rotary/distance KV columns")
     p.add_argument("--family", choices=("kv", "affine", "delta", "gated_delta", "ssd"), default="kv")
     p.add_argument("--output-dir", type=Path, required=True)
@@ -76,10 +81,13 @@ def main():
     resolve_device(args.device)
     torch.set_num_threads(1 if args.device == "cpu" else 2)
     torch.set_num_interop_threads(1)
-    torch.use_deterministic_algorithms(True)
+    torch.use_deterministic_algorithms(args.deterministic_algorithms)
     out = args.output_dir.resolve();out.mkdir(parents=True, exist_ok=False)
     identity = dict(interface="tensor-window-v1", device=args.device, dtype=args.dtype, client=args.client,
-                    positions=args.positions, family=args.family)
+                    positions=args.positions, family=args.family,
+                    placement="cpu" if args.device == "cpu" else args.placement,
+                    scoring_dtype=args.scoring_dtype or args.dtype,
+                    deterministic_algorithms=args.deterministic_algorithms)
     record = dict(identity=identity, execution="running", strict_numerical="not_checked", recovery="not_checked")
     try:
         owner = create(args)
@@ -116,6 +124,11 @@ def main():
                 command += ["--native-library", args.native_library]
             if args.positions:
                 command += ["--positions"]
+            command += ["--placement", args.placement]
+            if args.scoring_dtype:
+                command += ["--scoring-dtype", args.scoring_dtype]
+            if not args.deterministic_algorithms:
+                command += ["--no-deterministic-algorithms"]
             for name, extra in (("whole", ["--steps", "3"]), ("prefix", ["--steps", "2"]),
                     ("resumed", ["--steps", "1", "--resume", str(out/"prefix/checkpoint.pt")])):
                 with (out/(name+".log")).open("w") as log:

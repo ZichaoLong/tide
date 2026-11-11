@@ -353,3 +353,7 @@ KV §2 的 Rot(p)ᵀRot(q)=Rot(q−p) 对应 `column_attention` 和 `test_column
 卷积的原始时间tap线性映射及其转置由`tap_gather` / `columns::gather_taps`实现，
 `test_tap_gather`以独立关联矩阵、方向导数、缺失槽和一阶/版本守卫验证；
 `check_column_repeatability.py`补实际设备重复VJP和新进程完整训练恢复，不代替公式正确性。
+
+张量窗口的临时放置由`column_placement` / `weighted_column_placement`实现：Read参数与实际查询bank、
+区域描述/控制/选择整列传输，原始状态和参数owner不迁移。对应原[放置契约](weighted-placement.md)，
+`test_column_placement`覆盖独立标量调度、不同评分dtype、共享/零根与发送支持；SDK独立设备入口另验收。

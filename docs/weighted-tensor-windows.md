@@ -65,9 +65,15 @@ Python 的区域 rank 顺序和 C++ 的独立 region-order 调度都由实际候
 | affine/delta/GDN/SSD | Python/C++：typed H/Z/W、正写入 scan、原始时间短卷积、异构组合 |
 | 区域 | Python/C++：现有十种发送及适用 quad/bern/ent，完整评分/evidence/key 列及声明一阶 VJP |
 | 状态/传输 | observe-all、adopt、严格正支持策略、unit transport；SrcClass 是参数分类，不去重原子 |
-| 设备 | FP32/FP64 单 payload 设备、相同评分 dtype 的 CPU/mixed-c 主机调度；实际设备资格单列 |
+| 设备 | FP32/FP64 单 payload 设备、CPU/mixed-a/b/c 主机调度与显式评分 dtype；实际设备资格单列 |
 
-正支持补值、FP16、split placement、多设备和 resident
+Read/control/selection按声明的位置接收整列临时视图，参数与raw状态所有者不变。
+KV Read sum只读取summary/weight bank，qry读取key/value/weight bank，Full不额外读取summary；
+跨设备只复制需要的Read参数和字段，不复制Full/更新矩阵，不构造B×L逐事件请求。
+选择结果整列回到payload；评分转payload若丢失正支持则明确拒绝。int64布局与时钟始终保持原类型。
+这不等于设备常驻推进。位置与评分精度写入实际窗口执行记录；旧记录API维持自己的实现与资格。
+
+正支持补值、FP16、多payload设备和 resident
 当前经能力后备处理。它们是新列迁移的未完成范围，不是从基座删除已有能力，也不代表
 P1—P6 总体完成。后续状态与待办只见 [ROADMAP](ROADMAP.md)。
 

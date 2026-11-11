@@ -43,8 +43,6 @@ SDK affine、normalization、源变换及query舍入的旧临时变体不作为�
 后续从上述完整诊断、[设备用例入口](../scripts/check_weighted_device.py)、相关独立测试及原证据进入；
 这是承接调查问题，不宣称旧临时脚本与现行入口逐值等价。
 
-## 小型实际分配行
-
 张量窗口卷积的重复索引反向与精确续接可用
 `python scripts/check_column_repeatability.py --device npu:0 --output-dir NEW`复验。
 完整配置先由`prefill_regression_config.py --case layer-chain --family ssd ...`生成，
@@ -52,6 +50,8 @@ SDK affine、normalization、源变换及query舍入的旧临时变体不作为�
 该检查保留普通gather的观察，不要求它必然失败；要求有序tap VJP逐位相等，且两个新进程
 从同一checkpoint恢复的输出、loss、raw状态、全部参数/梯度/optimizer逐位相等。
 全局deterministic开关不修改。计时与这些正确性检查分开。
+
+## 小型实际分配行
 
 两份JSON共不足6KiB，保留原FP32输入、控制、响应、乘子、时间/节点和拒绝阈值，
 [provenance](../tests/fixtures/allocation/provenance.json)记录生产源码的dirty事实及原文件hash。

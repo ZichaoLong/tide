@@ -70,6 +70,7 @@ add_library(tidegraph STATIC
   cpp/src/weighted_column_modules.cpp cpp/src/weighted_column_recurrent_state.cpp
   cpp/src/weighted_column_recurrent_math.cpp cpp/src/weighted_column_recurrent_query.cpp
   cpp/src/weighted_column_gather.cpp
+  cpp/src/weighted_column_placement.cpp
   cpp/src/weighted_sending_batch.cpp cpp/src/weighted_region_batch.cpp cpp/src/weighted_region_vjp.cpp
   cpp/src/weighted_placement_copy.cpp cpp/src/weighted_placement_read.cpp cpp/src/weighted_placement_region.cpp
   cpp/src/weighted_packed.cpp cpp/src/weighted_kv_packed.cpp cpp/src/weighted_kv_sequence_vjp.cpp cpp/src/weighted_recurrent_packed.cpp

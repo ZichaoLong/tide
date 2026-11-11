@@ -1,5 +1,6 @@
 // Settle §9–11: independent region-order host schedule with actual column support.
 #include "weighted_column_modules.h"
+#include "weighted_column_placement.h"
 #include "weighted_mean.h"
 #include "weighted_source.h"
 #include "finite_guard.h"
@@ -37,11 +38,15 @@ Received aggregate(const NodeWeights& w,const NodeBinding& binding,const std::ve
 }
 }
 Result settle(const SettleGraph& spec,const Model& model,const Layout& layout,const std::map<Index,Message>& ports,
-              const std::map<Index,LocalState>& left,Index max_workspace_bytes){
+              const std::map<Index,LocalState>& left,Index max_workspace_bytes,std::optional<ExecutionPlacement> requested){
   layout.validate();const auto& g=spec.graph();const auto& ref=model.nodes.at(0).bias;
   require(spec.binding()=="ports","column Settle requires ports binding");validate_transport(g,model);
   require(max_workspace_bytes>0,"column workspace budget must be positive");
   require(ref.scalar_type()==at::kFloat||ref.scalar_type()==at::kDouble,"column Settle requires FP32/FP64");
+  ExecutionPlacement defaults;defaults.selection="payload";
+  auto placement=resolve_placement(requested.value_or(defaults),ref.device());
+  require(placement.events.is_cpu(),"column Settle is host scheduled");
+  const auto scoring=read_dtype(placement,ref.scalar_type());
   const Index maxrank=*std::max_element(spec.ranks().begin(),spec.ranks().end());
   for(auto t:layout.times)require(t<=(std::numeric_limits<Index>::max()-maxrank)/spec.stride(),"column logical time overflow");
   for(const auto& [port,p]:ports){
@@ -62,7 +67,7 @@ Result settle(const SettleGraph& spec,const Model& model,const Layout& layout,co
     initial[v]=initial_columns(w,b.memory,layout.samples());
     result.states[v]=left.empty()?initial[v]:left.at(v);validate_columns(w,b.memory,result.states[v]);
     require(std::visit([](const auto& s){return s.last_times.size();},result.states[v])==static_cast<size_t>(layout.samples()),"column left sample count differs");binding.push_back(b);
-    auto bytes=workspace_bytes(b.memory,layout,result.states[v],ref.element_size());
+    auto bytes=workspace_bytes(b.memory,layout,result.states[v],std::max<int64_t>(ref.element_size(),c10::elementSize(scoring)));
     require(bytes<=max_workspace_bytes,"column local workspace exceeds budget");
   }
   std::vector<Index> order(g.regions.size());std::iota(order.begin(),order.end(),0);
@@ -79,7 +84,7 @@ Result settle(const SettleGraph& spec,const Model& model,const Layout& layout,co
       auto received=aggregate(w,b,sources);if(received.rows.empty())continue;
       auto times=layout.select(received.rows);for(auto& t:times.times)t=t*spec.stride()+spec.rank(v);
       auto window=prepare_columns(w,b.memory,times,received.mass,received.content,result.states[v]);
-      auto fields=read_columns(w,b,window,g.regions[region].read_mode,initial[v]);
+      auto fields=read_placed(w,b,window,g.regions[region].read_mode,initial[v],placement);
       result.states[v]=terminal_columns(window);
       result.nodes[v]={received.rows,std::move(window),std::move(fields),at::zeros_like(received.mass)};nodes.push_back(v);
       for(auto row:received.rows)candidates[row].push_back(v);
@@ -88,12 +93,12 @@ Result settle(const SettleGraph& spec,const Model& model,const Layout& layout,co
     for(const auto& [row,members]:candidates)groups[members].push_back(row);
     for(const auto& [members,rows]:groups){
       std::map<std::string,std::vector<Tensor>> fields;std::map<Index,Tensor> ids;
-      for(auto v:members){const auto& node=result.nodes.at(v);ids[v]=indices(positions(node.rows,rows),ref.device());
+      for(auto v:members){const auto& node=result.nodes.at(v);ids[v]=indices(positions(node.rows,rows),node.descriptors.at("w").device());
         for(const auto& [name,t]:node.descriptors)fields[name].push_back(t.index_select(0,ids.at(v)));}
       TensorFields packed;for(const auto& [name,values]:fields)packed[name]=at::stack(values,1);
-      auto n=indices(members,ref.device()).expand({static_cast<Index>(rows.size()),static_cast<Index>(members.size())});
-      auto values=region_columns(model.regions[region],packed,region_binding(model.regions[region]),n).controls.unbind(1);
-      for(size_t i=0;i<members.size();++i){auto v=members[i];result.nodes[v].controls=result.nodes[v].controls.index_copy(0,ids.at(v),values[i]);}
+      auto n=indices(members,packed.at("w").device()).expand({static_cast<Index>(rows.size()),static_cast<Index>(members.size())});
+      auto values=region_placed(model.regions[region],packed,region_binding(model.regions[region]),n,placement).controls.unbind(1);
+      for(size_t i=0;i<members.size();++i){auto v=members[i];result.nodes[v].controls=result.nodes[v].controls.index_copy(0,ids.at(v).to(ref.device()),control_payload(values[i],ref));}
       ++result.stats["region_column_calls"];
     }
     for(auto v:nodes){const auto& node=result.nodes.at(v);

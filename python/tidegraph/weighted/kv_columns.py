@@ -24,7 +24,7 @@ def supported(memory):
             and memory.base.dtype in {torch.float32, torch.float64})
 
 
-def _queries(window, bank, rows, *, before=False, horizon=0):
+def _queries(window, bank, rows, *, before=False, horizon=0, names=("keys", "values")):
     # Selection changes actual query rows, not the bank or its normalization.
     # The one bool/index transfer is host scheduling metadata, never a numerical
     # CPU prepass. No B×L differentiable views are created here.
@@ -44,7 +44,7 @@ def _queries(window, bank, rows, *, before=False, horizon=0):
         visible &= age < horizon
     visible &= qids[:, :, None] < len(rows)
     weight = torch.where(visible, gather_column(bank.weights, kids)[:, None], 0)
-    raw = {name: gather_column(getattr(bank, name), kids) for name in ("keys", "values", "summaries")}
+    raw = {name: gather_column(getattr(bank, name), kids) for name in names}
     return u, mass, raw, weight, age, reverse
 
 
@@ -66,7 +66,8 @@ def read_kv_columns(node, window, *, read_mode="+", initial=None):
         bank = window.bank
     if not len(window.layout.times):
         raise ValueError("Read column group must contain a real query")
-    u, mass, raw, weight, age, reverse = _queries(window, bank, torch.arange(len(window.layout.times)), before=read_mode == "-", horizon=c.window)
+    names = ("summaries",) if c.memory_read == "sum" else ("keys", "values")
+    u, mass, raw, weight, age, reverse = _queries(window, bank, torch.arange(len(window.layout.times)), before=read_mode == "-", horizon=c.window, names=names)
     short = weight*passive_decay(age.clamp_min(0), c.beta_short, u)
     totals = short.sum(-1), weight.sum(-1)
     if c.memory_read == "sum":

@@ -3,6 +3,7 @@
 // Host metadata is int64. Floating columns are read-only autograd-owned values.
 #include "tide/weighted_columns.h"
 #include "tide/settle.h"
+#include "tide/placement.h"
 
 namespace tide::weighted::columns {
 struct Layout {
@@ -78,6 +79,7 @@ TensorFields read(const NodeWeights&,const RecurrentConfig&,const RegionalConfig
 Message full(const NodeWeights&,const RecurrentConfig&,const RecurrentWindow&,const Tensor& controls);
 // Independent C++ region-order schedule; no Python or generic-engine callbacks.
 Result settle(const SettleGraph&,const Model&,const Layout&,const std::map<Index,Message>& ports,
-              const std::map<Index,LocalState>& left={},Index max_workspace_bytes=Index{4}*1024*1024*1024);
+              const std::map<Index,LocalState>& left={},Index max_workspace_bytes=Index{4}*1024*1024*1024,
+              std::optional<ExecutionPlacement> placement=std::nullopt);
 Tensor readout(const Result&,const Tensor& like);
 }

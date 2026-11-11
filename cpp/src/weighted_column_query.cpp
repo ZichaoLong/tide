@@ -12,7 +12,7 @@ Tensor rotate_columns(const Tensor& keys,const Tensor& displacement,const std::v
   return detail::rotate(keys.reshape({-1,keys.size(-1)}),displacement.flatten(),frequencies).reshape(keys.sizes());
 }
 Queries queries(const KVWindow& window,const Layout& layout,const TensorFields& bank,
-                const std::vector<Index>& rows,bool before,Index horizon){
+                const std::vector<Index>& rows,bool before,Index horizon,bool summary=false){
   auto selected=window.layout.select(rows);auto device=window.content.device();
   auto [qi,reverse]=padded(selected,device);auto [ki,unused]=padded(layout,device);
   auto ids=indices(rows,device);Queries q;
@@ -23,7 +23,8 @@ Queries queries(const KVWindow& window,const Layout& layout,const TensorFields& 
     &(qi.unsqueeze(2)<static_cast<Index>(rows.size()));
   if(horizon)visible=visible&(q.age<horizon);
   q.weights=at::where(visible,gather(bank.at("weights"),ki).unsqueeze(1),at::zeros({},q.u.options()));
-  for(const auto& name:{"keys","values","summaries"})q.raw[name]=gather(bank.at(name),ki);
+  if(summary)q.raw["summaries"]=gather(bank.at("summaries"),ki);
+  else for(const auto& name:{"keys","values"})q.raw[name]=gather(bank.at(name),ki);
   return q;
 }
 }
@@ -34,7 +35,7 @@ TensorFields read(const NodeWeights& w,const KVConfig& c,const RegionalConfig& r
   require(!window.layout.times.empty(),"Read columns require actual rows");
   std::vector<Index> rows(window.layout.times.size());std::iota(rows.begin(),rows.end(),0);
   auto q=queries(window,mode=="content"?initial.layout:window.bank_layout,
-                 mode=="content"?initial.fields:window.bank,rows,mode=="old",c.window);
+                 mode=="content"?initial.fields:window.bank,rows,mode=="old",c.window,c.memory_read=="sum");
   auto sw=q.weights*detail::passive_decay(q.age.clamp_min(0),c.beta_short,q.u);
   auto st=sw.sum(-1),lt=q.weights.sum(-1);Tensor shortv,longv;
   if(c.memory_read=="sum"){

@@ -10,7 +10,6 @@ import torch
 from .column_layout import SequenceLayout
 from .column_modules import module_for
 from .message_columns import MessageColumns, aggregate_columns, readout_columns
-from .regional_columns import region_columns
 
 
 @dataclass(frozen=True)
@@ -57,7 +56,7 @@ class SettleColumnPlan:
     returned. Legacy independent intermediate event-root requests continue to
     use the complete-record executor. This is not a resident queue.
     """
-    def __init__(self, binding, spec, *, implementation="python", native_library=None, max_workspace_bytes=4*1024**3):
+    def __init__(self, binding, spec, *, implementation="python", native_library=None, max_workspace_bytes=4*1024**3, placement=None):
         from .programs import Describe, RegionalTotal, WeightedAggregate, WeightedFull
         from ..next import AdoptNext
         if spec.binding != "ports" or binding.graph.identity != spec.graph.identity:
@@ -67,6 +66,12 @@ class SettleColumnPlan:
             raise ValueError("column workspace budget must be a positive int64 byte count")
         self.max_workspace_bytes = max_workspace_bytes
         self.binding, self.spec, self.graph = binding, spec, binding.graph
+        from ..placement import ExecutionPlacement, request, read_dtype
+        self.placement = request(placement) if placement is not None else ExecutionPlacement(selection="payload")
+        self.locations = self.placement.resolve(binding.model.nodes[0].bias.device)
+        if self.locations["events"].type != "cpu":
+            raise ValueError("column Settle is host scheduled")
+        self.read_dtypes = {v: read_dtype(spec.graph.nodes[v], n.bias.dtype, self.locations) for v, n in enumerate(binding.model.nodes)}
         g = self.graph
         self.regions = sorted(range(len(g.regions)), key=lambda r: (spec.ranks[r], r))
         self.inputs = {v: [p for p, node in enumerate(g.inputs) if node == v] for v in range(len(g.nodes))}
@@ -88,7 +93,7 @@ class SettleColumnPlan:
         self.native = None
         if implementation == "native":
             from .native_columns import NativeColumns
-            self.native = NativeColumns(binding, spec, native_library, max_workspace_bytes)
+            self.native = NativeColumns(binding, spec, native_library, max_workspace_bytes, self.placement)
 
     def import_state(self, continuation):
         from .column_checkpoint import import_state
@@ -144,7 +149,8 @@ class SettleColumnPlan:
             if len(state.last_times) != layout.samples or (payload.dtype, payload.device) != (ref.dtype, ref.device):
                 raise ValueError("column Settle left state sample/payload binding mismatch")
             from .column_capacity import check
-            check(model.nodes[v].kernel, state, layout, self.max_workspace_bytes, ref.element_size())
+            scalar_bytes = torch.empty((), dtype=self.read_dtypes[v]).element_size()
+            check(model.nodes[v].kernel, state, layout, self.max_workspace_bytes, max(ref.element_size(), scalar_bytes))
         messages, records = {}, {}
         empty = MessageColumns(torch.empty(0, dtype=torch.int64), ref.new_empty(0), ref.new_empty((0, len(ref)-1)))
         candidate_count = full_count = calls = 0
@@ -162,17 +168,19 @@ class SettleColumnPlan:
                 module = self.modules[v]
                 window = module.prepare(model.nodes[v].kernel, times, mass, u, states[v])
                 mode = self.binding.regions[r].read_mode
-                descriptors[v] = module.read(model.nodes[v], window, read_mode=mode, initial=initial[v])
+                from . import column_placement
+                descriptors[v] = column_placement.read(module, model.nodes[v], window, initial[v], mode,
+                    self.locations["read"], self.read_dtypes[v])
                 windows[v], rows_by_node[v], states[v] = window, rows, window.terminal
             controls = {v: ref.new_zeros(len(rows)) for v, rows in rows_by_node.items()}
             for members, rows in candidate_groups(rows_by_node):
-                ids = {v: torch.searchsorted(rows_by_node[v], rows).to(ref.device) for v in members}
+                ids = {v: torch.searchsorted(rows_by_node[v], rows).to(descriptors[v]["w"].device) for v in members}
                 fields = {name: torch.stack([descriptors[v][name].index_select(0, ids[v]) for v in members], 1)
                           for name in descriptors[members[0]]}
-                nodes = torch.tensor(members, dtype=torch.int64, device=ref.device).expand(len(rows), -1)
-                region = region_columns(model.regions[r], fields, nodes)
+                nodes = torch.tensor(members, dtype=torch.int64, device=fields["w"].device).expand(len(rows), -1)
+                region = column_placement.region(model.regions[r], fields, nodes, self.locations["control"], self.locations["selection"])
                 for v, control in zip(members, region.controls.unbind(1)):
-                    controls[v] = controls[v].index_copy(0, ids[v], control.to(ref.device))
+                    controls[v] = controls[v].index_copy(0, ids[v].to(ref.device), column_placement.controls(control, ref))
                 calls += 1
             for v, window in windows.items():
                 full = self.modules[v].full(model.nodes[v], window, controls[v])

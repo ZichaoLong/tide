@@ -42,10 +42,10 @@ def column_reason(binding, spec, implementation, placement, options):
         return "multiple payload devices"
     device = next(iter(devices))
     p = request(placement).resolve(device)
-    if p["events"].type != "cpu" or any(p[k] != device for k in ("read", "control", "selection")):
-        return "placement requires split computation"
+    if p["events"].type != "cpu":
+        return "placement requires device-resident scheduling"
     for v, n in enumerate(binding.model.nodes):
-        if n.bias.dtype not in {torch.float32, torch.float64} or read_dtype(spec.graph.nodes[v], n.bias.dtype, p) != n.bias.dtype:
+        if n.bias.dtype not in {torch.float32, torch.float64} or read_dtype(spec.graph.nodes[v], n.bias.dtype, p) not in {torch.float32, torch.float64}:
             return "payload/scoring dtype requires graph adapter"
         if (type(n.read_program) is not Describe or type(n.full_program) is not WeightedFull
                 or type(n.aggregate_program) is not WeightedAggregate or type(n.next_program) is not AdoptNext
@@ -115,7 +115,7 @@ class EagerExecutor:
         if key not in self.plans:
             reason = column_reason(binding, spec, self.implementation, self.placement, self.options)
             plan = None if reason else SettleColumnPlan(binding, spec, implementation=self.implementation,
-                native_library=self.library, max_workspace_bytes=max_workspace_bytes)
+                native_library=self.library, max_workspace_bytes=max_workspace_bytes, placement=self.placement)
             self.plans[key] = plan, reason
         plan, reason = self.plans[key]
         if plan is not None:
@@ -123,7 +123,8 @@ class EagerExecutor:
             next_state = plan.export_state(columns, stop_position=stop_position, previous=q)
             return WindowResult(layout, columns.outputs, next_state, columns.stats,
                 dict(interface="tensor-window-v1", schedule="settle-columns-v1", client=self.implementation,
-                     fallback_reason=None, roots="columns", max_workspace_bytes=max_workspace_bytes), columns=columns)
+                     fallback_reason=None, roots="columns", max_workspace_bytes=max_workspace_bytes,
+                     placement={k: str(v) for k, v in plan.locations.items()}), columns=columns)
         # The general engine is still the default for capabilities not yet
         # lowered to columns. These adapters run only on that declared branch.
         from .window_records import external, outputs

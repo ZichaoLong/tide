@@ -22,17 +22,22 @@ def state(value):
 
 
 class NativeColumns:
-    def __init__(self, binding, spec, library=None, max_workspace_bytes=4*1024**3):
+    def __init__(self, binding, spec, library=None, max_workspace_bytes=4*1024**3, placement=None):
         from ..native_loader import load_native
         from ..native_model import encode_model
         core = load_native(library, backend=binding.model.nodes[0].bias.device.type)
-        if not hasattr(core, "weighted_settle_columns"):
-            raise RuntimeError("rebuild native library for the tensor-column interface")
+        if getattr(core, "weighted_column_placement_version", 0) < 1:
+            raise RuntimeError("rebuild native library for the placed tensor-column interface")
         self.core = core
         graph, self.model = encode_model(core, binding.graph, binding.model)
         self.spec = core.SettleGraph(graph, spec.ranks, spec.binding, spec.stride)
         self.graph = binding.graph
         self.max_workspace_bytes = max_workspace_bytes
+        self.placement = None
+        if placement is not None:
+            self.placement = core.ExecutionPlacement()
+            for name, value in placement.to_dict().items():
+                setattr(self.placement, name, value)
 
     def run_ports(self, domain, ports, left):
         from .settle_columns import SettleColumnResult, NodeColumns
@@ -49,7 +54,7 @@ class NativeColumns:
                     s.inert, s.last_times.tolist(), s.observations.tolist(),
                     encode(s.cache_layout) if s.cache_layout is not None else c.ColumnLayout([], []), s.cache_values)
         values = {p: c.MessageColumns(m.rows.tolist(), m.strength, m.content) for p, m in ports.items()}
-        result = c.weighted_settle_columns(self.spec, self.model, encode(domain), values, old, self.max_workspace_bytes)
+        result = c.weighted_settle_columns(self.spec, self.model, encode(domain), values, old, self.max_workspace_bytes, self.placement)
         def message(m):
             return MessageColumns(torch.tensor(m.rows, dtype=torch.int64), m.strength, m.content)
         nodes = {}

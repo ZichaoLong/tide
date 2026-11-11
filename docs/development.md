@@ -31,6 +31,10 @@ python scripts/check_upstream.py
 新的 B×L 公共客户端见 [tensor-window-v1](weighted-tensor-windows.md)。安装当前包后可从任意 cwd
 运行 `python /path/to/examples/consumer_core5/tensor_window.py --client python --dtype float64 --output-dir NEW_DIR`，
 验证三步 AdamW、raw continuation 和新进程精确续接；`--positions` 同时检查 KV 旋转/距离项；
+`--placement mixed-a|mixed-b|mixed-c`指定Read/control/selection位置，`--scoring-dtype`指定评分精度。
+示例默认开启deterministic测试策略；检验生产默认重复性时显式加`--no-deterministic-algorithms`，
+该策略进入示例checkpoint身份，不修改基座默认。`tidegraph-column-check --device=npu:0 --dtype=float32`
+使用独立SDK实际检查五记忆×三放置，默认无参数仍运行CPU FP64及显式FP32评分。
 `--family affine|delta|gated_delta|ssd`检查四循环、适用卷积和对应raw恢复。native 增加
 `--client native --native-library /path/to/matching/build`；真实 NPU 在合法分配后选
 `--device npu:0 --dtype float32`。该小消费者的资格不能代替全部局部组合/规模。

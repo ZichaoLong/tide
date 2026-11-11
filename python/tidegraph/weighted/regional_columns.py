@@ -47,7 +47,7 @@ class RegionColumns:
                 if x is not None and x.requires_grad and bar is not None]
 
 
-def region_columns(program, fields, nodes=None):
+def region_columns(program, fields, nodes=None, *, selection=None):
     """Public column kernel; fields are R×N scalars or R×N×D descriptors.
 
     Different descriptor widths and candidate counts form separate real groups.
@@ -85,7 +85,7 @@ def region_columns(program, fields, nodes=None):
         shift = context if context is not None else received.new_full(received.shape, c.eta)
         low = (received if c.regional else mass).clamp_max(1)
         high = received.new_full(received.shape, c.k)
-    selection = getattr(program, "_selection_device", None)
+    selection = selection if selection is not None else getattr(program, "_selection_device", None)
     if selection is not None:
         from .placement_tensors import move
         recv, caps, scores, nodes, received, low, high, shift = (
