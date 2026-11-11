@@ -70,7 +70,7 @@ Python共享Aggregate只在参数/实际输入句柄相同时复用。`column_sh
 | affine/delta/GDN/SSD | Python/C++：typed H/Z/W、正写入 scan、原始时间短卷积、异构组合 |
 | 区域 | Python/C++：现有十种发送及适用 quad/bern/ent，完整评分/evidence/key 列及声明一阶 VJP |
 | 状态/传输 | observe-all、adopt、严格正支持策略、unit transport；SrcClass 是参数分类，不去重原子 |
-| 设备 | FP32/FP64 单 payload 设备、CPU/mixed-a/b/c 主机调度与显式评分 dtype；实际设备资格单列 |
+| 设备 | FP32/FP64 同dtype的节点payload owner、CPU/mixed-a/b/c 主机调度与显式评分 dtype；实际设备资格单列 |
 
 Read/control/selection按声明的位置接收整列临时视图，参数与raw状态所有者不变。
 KV Read sum只读取summary/weight bank，qry读取key/value/weight bank，Full不额外读取summary；
@@ -78,7 +78,14 @@ KV Read sum只读取summary/weight bank，qry读取key/value/weight bank，Full�
 选择结果整列回到payload；评分转payload若丢失正支持则明确拒绝。int64布局与时钟始终保持原类型。
 这不等于设备常驻推进。位置与评分精度写入实际窗口执行记录；旧记录API维持自己的实现与资格。
 
-正支持补值、FP16、多payload设备和 resident
+消息按目标节点owner整列传输，同一实际消息到相同owner的副本复用；逐边身份和重复参与不消失。
+Read按节点位置计算，完整描述先汇集区域参数owner对应的control设备，再执行完整区域分配，
+最终控制返回各payload owner。raw状态与参数仍属于原节点；既有共享参数共置约束保持。
+多owner实际记录包含逐节点/区域位置。输出可留在各自owner，`readout(like)`指定聚合投影设备，
+内置逐端口loss先在原owner计算再汇总，归约与optimizer边界不因物理放置改变。
+这是普通可求导copy，不宣称P2P、collective或设备常驻调度；异步与真机资格单列。
+
+正支持补值、FP16和 resident
 当前经能力后备处理。它们是新列迁移的未完成范围，不是从基座删除已有能力，也不代表
 P1—P6 总体完成。后续状态与待办只见 [ROADMAP](ROADMAP.md)。
 
@@ -137,6 +144,10 @@ native由完整循环公式与非空缓存容量测试覆盖。实际设备重�
 FP32 严格梯度超差保留为具名有界 witness，同材料提升 FP64 单列；不改通过阈值。
 
 `test_column_sharing`检查共享使用的独立公式、固定累加次序、None/零、原始版本与一阶边界。
+`test_column_payload_owners`使用独立标量调度检查同秩/重复边、区域共享与跨owner区域、状态/输入/参数
+VJP、AdamW及新owner精确恢复；默认CPU退化不作设备资格。
+实际双卡显式设置`TIDE_COLUMN_PEERS=npu:0,npu:1`；安装示例增加`--peer-device npu:1`检查新进程恢复。
+独立SDK在原设备CLI上设置`TIDE_COLUMN_PEER_DEVICE=npu:1`，按区域交替owner检查五记忆与三种混合放置。
 `scripts/check_column_adjoint_order.py --device npu:0 --client python --placement mixed-a --output-dir NEW`
 对同一前向图重复反向，区分累加差异与前向/恢复差异；`--include-columns`记录内部边界，
 `--autograd-threads serial`仅作有界诊断。它不替代安装消费者的新进程精确恢复。

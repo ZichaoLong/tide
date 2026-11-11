@@ -26,7 +26,7 @@ class NativeColumns:
         from ..native_loader import load_native
         from ..native_model import encode_model
         core = load_native(library, backend=binding.model.nodes[0].bias.device.type)
-        if getattr(core, "weighted_column_placement_version", 0) < 1:
+        if getattr(core, "weighted_column_placement_version", 0) < 2:
             raise RuntimeError("rebuild native library for the placed tensor-column interface")
         self.core = core
         graph, self.model = encode_model(core, binding.graph, binding.model)

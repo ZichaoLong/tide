@@ -24,12 +24,14 @@
 按目标owner复制整列物理消息并保留重复边和共享根。公共readout/loss需要跨输出owner整列归约。
 具名入口：weighted/{window_execution,settle_columns,message_columns,column_placement}.py，
 experiment/column_task.py及cpp/src/weighted_settle_columns.cpp。现有所有者约束与参数共享不能静默改写。
-先做独立小图/三步/精确恢复，再有限跨卡成本；不能仅删除单设备检查。当前尚未改这些多设备路径。
+先做独立小图/三步/精确恢复，再有限跨卡成本；不能仅删除单设备检查。多owner列实现开发完成：94 passed/9原数值xfail，两套新构建与SDK CPU通过。
+下一步提交实现，固定源码资格/安装，再两张空闲NPU独立调度、训练/新进程恢复及SDK五记忆。
 其后resident新列、旧异步/资源/容量边界与广泛源码审阅按ROADMAP有限推进；GPU仍延后。
 
 ## 现场、作业和复现
 
-本轮作业均已终态；python scripts/status.py。原column-placement-npu保持failed，后继成功单列。
+作业gef-column-owners-dev1已passed，dirty快照owners-dev1/source与两套build保持不动；
+日志artifacts/jobs/column-owners-dev1。本轮作业均已终态；python scripts/status.py。原column-placement-npu保持failed，后继成功单列。
 固定worktree：artifacts/columns-20261111/qualified-placement(540ccbd8)、qualified-shared(2ca00458)。
 两套placement-dev2/{build,build-sdk}源码/binary hash已核验，原开发manifest不改写。
 安装install-shared，环境shared-runtime.sh，私有env artifacts/additive-work/env；CANN9.2/Torch2.12。

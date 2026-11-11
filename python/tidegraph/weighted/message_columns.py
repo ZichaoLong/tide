@@ -17,12 +17,14 @@ class MessageColumns:
     strength: torch.Tensor
     content: torch.Tensor
 
-    def validate(self, domain, width, like):
+    def validate(self, domain, width, like, *, allow_remote=False):
         domain.select(self.rows)
         if self.content.shape != (len(self.rows), width) or self.strength.shape != (len(self.rows),):
             raise ValueError("message column dimensions differ from their binding")
         for x in (self.strength, self.content):
-            if (x.dtype, x.device) != (like.dtype, like.device) or not torch.isfinite(x).all():
+            device_ok = x.device == self.content.device and (x.device == like.device or
+                allow_remote and x.device.type in {"cpu", "cuda", "npu"})
+            if x.dtype != like.dtype or not device_ok or not torch.isfinite(x).all():
                 raise ValueError("message columns require finite matching payload tensors")
 
 
@@ -71,7 +73,10 @@ def readout_columns(outputs, domain, like):
     """§4.4 numerical projection; output existence remains in MessageColumns."""
     mass = like.new_zeros(len(domain.times))
     value = like.new_zeros((len(domain.times), like.shape[-1]))
+    from .column_transport import message
+    cache = {}
     for payload in outputs.values():
+        payload = message(payload, like, cache)
         rows = payload.rows.to(like.device)
         strength = payload.strength.clamp_min(0)
         mass = mass.index_add(0, rows, strength)

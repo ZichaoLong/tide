@@ -72,7 +72,8 @@ def loss(result, scale, *, training):
         if training:
             raise ValueError("task.objective: window produced no differentiable output")
         return torch.zeros(())
-    return torch.stack(terms).sum()
+    from ..weighted.placement_tensors import move
+    return torch.stack([move(t, terms[0].device) for t in terms]).sum()
 
 
 def output_records(result, spec):

@@ -37,14 +37,10 @@ def column_reason(binding, spec, implementation, placement, options):
         return "explicit scalar/streaming/greedy schedule"
     if options["workers"] != 1 or options["query_execution"] not in {"auto", "dense-v1"}:
         return "explicit worker or query algorithm"
-    devices = {n.bias.device for n in binding.model.nodes}
-    if len(devices) != 1:
-        return "multiple payload devices"
-    device = next(iter(devices))
-    p = request(placement).resolve(device)
-    if p["events"].type != "cpu":
-        return "placement requires device-resident scheduling"
     for v, n in enumerate(binding.model.nodes):
+        p = request(placement).resolve(n.bias.device)
+        if p["events"].type != "cpu":
+            return "placement requires device-resident scheduling"
         if n.bias.dtype not in {torch.float32, torch.float64} or read_dtype(spec.graph.nodes[v], n.bias.dtype, p) not in {torch.float32, torch.float64}:
             return "payload/scoring dtype requires graph adapter"
         if (type(n.read_program) is not Describe or type(n.full_program) is not WeightedFull
@@ -110,7 +106,7 @@ class EagerExecutor:
         if any(type(p) is not int or not 0 <= p < len(graph.inputs) for p in ports):
             raise ValueError("unknown physical input port")
         for payload in ports.values():
-            payload.validate(layout, binding.model.width-1, binding.model.nodes[0].bias)
+            payload.validate(layout, binding.model.width-1, binding.model.nodes[0].bias, allow_remote=True)
         key = (spec.ranks, spec.stride, max_workspace_bytes)
         if key not in self.plans:
             reason = column_reason(binding, spec, self.implementation, self.placement, self.options)
@@ -124,7 +120,7 @@ class EagerExecutor:
             return WindowResult(layout, columns.outputs, next_state, columns.stats,
                 dict(interface="tensor-window-v1", schedule="settle-columns-v1", client=self.implementation,
                      fallback_reason=None, roots="columns", max_workspace_bytes=max_workspace_bytes,
-                     placement={k: str(v) for k, v in plan.locations.items()}), columns=columns)
+                     placement=plan.placement_record()), columns=columns)
         # The general engine is still the default for capabilities not yet
         # lowered to columns. These adapters run only on that declared branch.
         from .window_records import external, outputs

@@ -12,6 +12,7 @@ import subprocess
 import sys
 import torch
 from tidegraph import Continuation, ExecutionPlacement
+from tidegraph.ownership import place_payloads
 from tidegraph.runtime import resolve_device
 from tidegraph.checkpoint import save, load
 from tidegraph.comparison import collect_comparison, equivalent
@@ -31,6 +32,9 @@ def create(args, *, reference=False):
                    regions=RegionalConfig(k=2), dtype=getattr(torch, args.dtype),
                    device="cpu" if reference else args.device)
     spec = replace(topology, graph=binding.graph)
+    if args.peer_device and not reference:
+        place_payloads(binding.graph, binding.model,
+                       [args.peer_device if n.region % 2 else args.device for n in binding.graph.nodes])
     optimizer = torch.optim.AdamW(binding.model.parameters(), lr=.0001, foreach=False)
     execute = eager_runner(binding, "python" if reference else args.client,
         ExecutionPlacement("cpu" if reference or args.device == "cpu" else args.placement,
@@ -65,6 +69,7 @@ def main():
     p.add_argument("--dtype", choices=("float32", "float64"), default="float64")
     p.add_argument("--client", choices=("python", "native"), default="python")
     p.add_argument("--native-library")
+    p.add_argument("--peer-device", help="second accelerator payload owner; regions alternate owners")
     p.add_argument("--placement", choices=("mixed-a", "mixed-b", "mixed-c"), default="mixed-c")
     p.add_argument("--scoring-dtype", choices=("float32", "float64"))
     p.add_argument("--deterministic-algorithms", action=argparse.BooleanOptionalAction, default=True,
@@ -79,6 +84,11 @@ def main():
     if args.positions and args.family != "kv":
         p.error("--positions applies to KV only")
     resolve_device(args.device)
+    if args.peer_device:
+        resolve_device(args.peer_device)
+        primary, peer = torch.device(args.device), torch.device(args.peer_device)
+        if primary.type == "cpu" or primary.type != peer.type or primary == peer:
+            p.error("peer requires a distinct accelerator of the same backend")
     torch.set_num_threads(1 if args.device == "cpu" else 2)
     torch.set_num_interop_threads(1)
     torch.use_deterministic_algorithms(args.deterministic_algorithms)
@@ -87,7 +97,7 @@ def main():
                     positions=args.positions, family=args.family,
                     placement="cpu" if args.device == "cpu" else args.placement,
                     scoring_dtype=args.scoring_dtype or args.dtype,
-                    deterministic_algorithms=args.deterministic_algorithms)
+                    deterministic_algorithms=args.deterministic_algorithms, peer_device=args.peer_device)
     record = dict(identity=identity, execution="running", strict_numerical="not_checked", recovery="not_checked")
     try:
         owner = create(args)
@@ -122,6 +132,8 @@ def main():
                        "--dtype", args.dtype, "--client", args.client, "--family", args.family]
             if args.native_library:
                 command += ["--native-library", args.native_library]
+            if args.peer_device:
+                command += ["--peer-device", args.peer_device]
             if args.positions:
                 command += ["--positions"]
             command += ["--placement", args.placement]

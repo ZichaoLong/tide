@@ -35,6 +35,10 @@ python scripts/check_upstream.py
 示例默认开启deterministic测试策略；检验生产默认重复性时显式加`--no-deterministic-algorithms`，
 该策略进入示例checkpoint身份，不修改基座默认。`tidegraph-column-check --device=npu:0 --dtype=float32`
 使用独立SDK实际检查五记忆×三放置，默认无参数仍运行CPU FP64及显式FP32评分。
+安装窗口的`--peer-device npu:1`按区域配置第二个payload owner，包含新进程精确恢复。
+双卡定向检查设置`TIDE_COLUMN_PEERS=npu:0,npu:1`运行`tests/test_column_payload_owners.py`；
+独立SDK使用`TIDE_COLUMN_PEER_DEVICE=npu:1`加原device/dtype CLI。
+必须先实际分配两张卡；单卡/CPU结果不作为多卡资格。
 `--family affine|delta|gated_delta|ssd`检查四循环、适用卷积和对应raw恢复。native 增加
 `--client native --native-library /path/to/matching/build`；真实 NPU 在合法分配后选
 `--device npu:0 --dtype float32`。该小消费者的资格不能代替全部局部组合/规模。

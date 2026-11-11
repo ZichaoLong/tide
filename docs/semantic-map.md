@@ -361,3 +361,8 @@ KV §2 的 Rot(p)ᵀRot(q)=Rot(q−p) 对应 `column_attention` 和 `test_column
 Architecture §2.2的实际输入/参数共享在Python整列Aggregate之后由`column_sharing.shared_uses`
 汇总所有使用者的伴随，不合并私有状态。`test_column_sharing`给出独立公式和有消去的次序反例；
 `check_column_adjoint_order.py`是设备累加重复性诊断，不能代替独立数学或checkpoint资格。
+
+Architecture物理逐边/端口消息与完整区域函数在多payload窗口中由`column_transport`、
+`weighted_settle_columns::transport`及每区域完整描述汇集实现；分配前不按设备拆分归一化域。
+输出投影由`readout_columns`迁到请求owner，内置任务仍对各物理端口分别平方后求和。
+独立`test_column_payload_owners`覆盖重复边、同秩、跨owner区域与原raw恢复；设备证据另列。
