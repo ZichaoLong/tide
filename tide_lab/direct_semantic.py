@@ -30,7 +30,7 @@ class Scalar(nn.Module):
 
 class Selector(nn.Module):
     def __init__(self,n,width,summary_width,spec):
-        super().__init__();self.s=spec;self.n=n
+        super().__init__();self.s=dict(spec);self.n=n;self.progress=0;self.last_unsaturated=None
         d=width;ds=summary_width;hidden=spec['hidden_width'];sel=selected(spec,'selection_width',hidden)
         reg=selected(spec,'region_control_width',hidden);flat=d+4*ds+3;self.sel=sel
         mode=spec['selection_mode'];self.regional=mode in ('regional_total','regional_total_zero','regional_threshold','regional_threshold_hard')
@@ -94,6 +94,13 @@ class Selector(nn.Module):
             query=self.query_out(F.silu(self.query_in(avg)))
             score=selected(s,'alpha_loc',1.)*score+selected(s,'alpha_sel',1.)*(key*query.unsqueeze(0)).sum(-1)/math.sqrt(self.sel)
         score=score.movedim(0,-1)
+        if s.get('content_independent_rotation'):
+            # Fixed support priority, never a content-dependent learned router.
+            # Rotation across positions/updates gives every node an opportunity.
+            position=torch.arange(score.shape[-2],device=score.device).reshape(1,-1,1)
+            node=torch.arange(self.n,device=score.device).reshape(1,1,-1)
+            phase=self.progress//s.get('rotation_tokens',16384)
+            score=(-(node-position-phase).remainder(self.n).to(score.dtype)*4).expand_as(score)
         if self.regional:
             recv=wr.sum(-1,keepdim=True);bottom=recv.clamp_max(1);top=total.clamp_max(s['k'])
             if s['region_control_mode']=='context':
@@ -127,12 +134,13 @@ class Selector(nn.Module):
                   (mode in ('regional_total','regional_threshold','constrained') and
                    (s['regularizer']=='bern' or (s['regularizer']=='ent' and s['ent_alpha']==1))))
         if positive:self.last_support_errors=((present.movedim(0,-1) if mode=='unit_attention' and s['allocation_base']=='uniform' else caps>0)&(c<=0)).sum()
+        self.last_unsaturated=((c>0)&(c<caps)).sum().detach()
         return c.movedim(-1,0),residual.amax()
 
 
 class Aggregation(nn.Module):
-    def __init__(self,n,d,hidden,mode,rank,connections,classes):
-        super().__init__();self.mode=mode;self.n=n;self.sources=connections
+    def __init__(self,n,d,hidden,mode,rank,connections,classes,reduction='broadcast'):
+        super().__init__();self.mode=mode;self.n=n;self.sources=connections;self.reduction=reduction
         count=len(classes);self.classes=classes
         if mode in ('region','adapted'):
             self.a=nn.Parameter(torch.randn(hidden,d)/math.sqrt(d));self.b=nn.Parameter(torch.randn(d,hidden)/math.sqrt(hidden))
@@ -165,6 +173,11 @@ class Aggregation(nn.Module):
                 hidden=torch.matmul(a[:,:,None,None],xn.unsqueeze(-1)).squeeze(-1)
                 hidden=F.silu(hidden+self.e[:,class_index,None,None,:])
                 f=torch.matmul(bb[:,:,None,None],hidden.unsqueeze(-1)).squeeze(-1)
+        if self.reduction=='matmul' and self.mode in ('region','source'):
+            received=(incidence@mass.reshape(n,-1)).reshape(self.n,b,l)
+            den=torch.where(received>0,received,torch.ones_like(received))
+            weighted=mass.unsqueeze(-1)*(z+alpha*f)
+            return (incidence@weighted.reshape(n,-1)).reshape(self.n,b,l,d)/den.unsqueeze(-1),received
         weight=mass.unsqueeze(0)*incidence[:,:,None,None]
         received=weight.sum(1);den=torch.where(received>0,received,torch.ones_like(received))
         fraction=weight/den.unsqueeze(1)
@@ -175,6 +188,7 @@ class Aggregation(nn.Module):
 class DirectSemanticLM(nn.Module):
     def __init__(self,plan,seed=11,vocab_size=4096):
         super().__init__();self.plan=plan;g=plan['graph'];d=plan['width'];self.width=d;self.last_metrics={}
+        self.light_regions=set(plan.get('light_regions',[]));self.progress=0
         self.members=[[v for v,j in enumerate(g['node_regions']) if j==region] for region in range(g['regions'])]
         self.order=sorted(range(g['regions']),key=lambda j:g['ranks'][j]);self.connections=[]
         self.memories=nn.ModuleList();self.selectors=nn.ModuleList();self.aggregators=nn.ModuleList()
@@ -202,12 +216,26 @@ class DirectSemanticLM(nn.Module):
                 for dst,src in pairs:incidence[dst,src]+=1
                 self.register_buffer('incidence_'+str(region),incidence)
                 self.connections.append(slots)
+                if region in self.light_regions:
+                    self.aggregators.append(nn.Identity());self.memories.append(nn.Identity());self.selectors.append(nn.Identity())
+                    continue
                 self.aggregators.append(Aggregation(len(nodes),d,plan['source_hidden_width'],plan['source_binding']['mode'],
-                    plan['source_binding'].get('rank'),slots,sorted({c for _,c in slots})))
+                    plan['source_binding'].get('rank'),slots,sorted({c for _,c in slots}),plan.get('aggregation_reduction','broadcast')))
                 self.memories.append(Memory(len(nodes),specs[0],plan['stride']))
                 self.selectors.append(Selector(len(nodes),d,specs[0]['summary_width'],plan['regions'][region]))
             self.head=nn.Linear(d,vocab_size);self.head.weight=self.embedding.weight;nn.init.zeros_(self.head.bias)
             self._initialize_roles(seed)
+
+    def set_progress(self,tokens):
+        self.progress=int(tokens)
+        for j,selector in enumerate(self.selectors):
+            if j in self.light_regions:continue
+            selector.progress=self.progress
+            original=self.plan['regions'][j];schedule=original.get('activity_schedule')
+            if schedule:
+                f=min(1.,max(0.,(tokens-schedule['warmup_tokens'])/max(1,schedule['end_tokens']-schedule['warmup_tokens'])))
+                selector.s['k']=schedule['start_k']+(original['k']-schedule['start_k'])*f
+                selector.s['allocation_temperature']=schedule['start_temperature']+(original['allocation_temperature']-schedule['start_temperature'])*f
 
     @torch.no_grad()
     def _initialize_roles(self,seed):
@@ -232,14 +260,23 @@ class DirectSemanticLM(nn.Module):
 
     def _forward(self,ids,floors):
         embedding=self.embedding(ids);b,l,d=embedding.shape;one=embedding.new_ones(b,l)
-        values={-1:embedding};mass={-1:one};counts=[];residuals=[];support_errors=[]
+        values={-1:embedding};mass={-1:one};counts=[];residuals=[];support_errors=[];unsaturated=[]
         for j in self.order:
             slots=self.connections[j];z=torch.stack([values[src] for src,_ in slots]);w=torch.stack([mass[src] for src,_ in slots])
-            u,r=self.aggregators[j](z,w,getattr(self,'incidence_'+str(j)),self.plan['alpha_agg'])
-            memory=self.memories[j](u,r,self.plan['regions'][j]['read_mode'])
-            c,error=self.selectors[j](r,memory)
-            support_errors.append(self.selectors[j].last_support_errors)
-            content=torch.where((c>0).unsqueeze(-1),memory['content'],torch.zeros_like(memory['content']))
+            incidence=getattr(self,'incidence_'+str(j))
+            if j in self.light_regions:
+                r=(incidence@w.reshape(len(slots),-1)).reshape(len(self.members[j]),b,l)
+                u=(incidence@(w.unsqueeze(-1)*z).reshape(len(slots),-1)).reshape(len(self.members[j]),b,l,d)
+                u=u/torch.where(r>0,r,torch.ones_like(r)).unsqueeze(-1)
+                c=r.clamp(0,1);content=u;error=r.new_zeros(())
+                support_errors.append(error);unsaturated.append(error)
+            else:
+                u,r=self.aggregators[j](z,w,incidence,self.plan['alpha_agg'])
+                memory=self.memories[j](u,r,self.plan['regions'][j]['read_mode'])
+                c,error=self.selectors[j](r,memory)
+                support_errors.append(self.selectors[j].last_support_errors)
+                unsaturated.append(self.selectors[j].last_unsaturated if self.selectors[j].last_unsaturated is not None else r.new_zeros(()))
+                content=torch.where((c>0).unsqueeze(-1),memory['content'],torch.zeros_like(memory['content']))
             for index,node in enumerate(self.members[j]):values[node]=content[index];mass[node]=c[index]
             counts.append(torch.stack(((r>0).sum(),(c>0).sum(),c.sum(),(c==0).sum())).detach())
             residuals.append(error.detach())
@@ -248,7 +285,7 @@ class DirectSemanticLM(nn.Module):
         # One aggregate observation transfer, not one synchronization per operator.
         floor_total=torch.stack(floors).sum() if floors else hidden.new_zeros(())
         support_error=torch.stack(support_errors).sum()
-        observed=torch.cat((torch.stack(counts).flatten(),torch.stack(residuals),floor_total.reshape(1),support_error.reshape(1))).detach().cpu().tolist()
+        observed=torch.cat((torch.stack(counts).flatten(),torch.stack(residuals),torch.stack(unsaturated),floor_total.reshape(1),support_error.reshape(1))).detach().cpu().tolist()
         nr=len(self.members);candidates=sum(observed[4*i] for i in range(nr));active=sum(observed[4*i+1] for i in range(nr))
         max_error=max(observed[4*nr:5*nr]);tol=1e-10 if hidden.dtype==torch.float64 else 2e-5
         if not math.isfinite(max_error) or max_error>tol:raise RuntimeError(f'allocation feasibility residual {max_error} > {tol}')
@@ -259,7 +296,20 @@ class DirectSemanticLM(nn.Module):
             'solver/max_feasibility_residual':max_error,'work/max_full_batch':len(self.members[0])*b*l}
         self.last_metrics['numerical/positive_floor_events']=observed[-2]
         self.last_metrics['discrete/positive_support_errors']=observed[-1]
-        for j in range(nr):
-            self.last_metrics[f'region/{j}/candidates']=observed[4*j]
-            self.last_metrics[f'region/{j}/full']=observed[4*j+1]
+        self.last_metrics['work/node_slots']=self.plan['graph']['nodes']*b*l
+        self.last_metrics['work/unsaturated']=sum(observed[5*nr:6*nr])
+        body_regions=self.plan.get('body_regions',nr)
+        body_c=sum(observed[4*i] for i,j in enumerate(self.order) if j<body_regions)
+        body_a=sum(observed[4*i+1] for i,j in enumerate(self.order) if j<body_regions)
+        body_n=sum(len(self.members[j]) for j in range(body_regions))*b*l
+        self.last_metrics.update({'work/body_candidates':body_c,'work/body_full':body_a,'work/body_node_slots':body_n,
+            'activity/receipt_fraction':candidates/(self.plan['graph']['nodes']*b*l),
+            'activity/full_all_fraction':active/(self.plan['graph']['nodes']*b*l),
+            'activity/body_full_all_fraction':body_a/body_n,'activity/body_receipt_fraction':body_c/body_n,
+            'work/boundary_full':active-body_a,'work/boundary_candidates':candidates-body_c,
+            'work/physical_light_rows':sum(len(self.members[j]) for j in self.light_regions)*b*l})
+        for i,j in enumerate(self.order):
+            self.last_metrics[f'region/{j}/candidates']=observed[4*i]
+            self.last_metrics[f'region/{j}/full']=observed[4*i+1]
+            self.last_metrics[f'region/{j}/unsaturated']=observed[5*nr+i]
         return self.head(hidden)

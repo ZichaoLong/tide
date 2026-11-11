@@ -6,7 +6,7 @@ from .records import digest
 
 
 class Corpus:
-    def __init__(self,path,length,*,verify=True,allow_test=False):
+    def __init__(self,path,length,*,verify=True,allow_test=False,max_train_documents=None):
         self.path=Path(path);self.lock=json.loads((self.path/'data-lock.json').read_text())
         if self.lock['schema']!='tide-language-corpus-v6':raise ValueError('wrong corpus schema')
         self.length=length;self.arrays={};self.blocks={};self.permutations={}
@@ -16,7 +16,8 @@ class Corpus:
             if verify and digest(file)!=info['sha256']:raise ValueError('data content hash changed')
             self.arrays[split]=np.memmap(file,mode='r',dtype=self.lock['dtype'])
             blocks=[];docs=[]
-            for di,d in enumerate(info['documents']):
+            documents=info['documents'][:max_train_documents] if split=='train' and max_train_documents is not None else info['documents']
+            for di,d in enumerate(documents):
                 for offset in range(0,d['tokens'],length):
                     blocks.append((d['offset']+offset,min(length,d['tokens']-offset),di,offset))
                 docs.append(d)

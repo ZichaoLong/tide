@@ -54,7 +54,7 @@ def optimizer_for(model,config):
 
 
 def learning_rate(config,tokens):
-    c=config['training'];warm=c['warmup_tokens'];total=c['target_tokens']
+    c=config['training'];warm=c['warmup_tokens'];total=c.get('lr_decay_tokens',c['target_tokens'])
     if tokens<warm:factor=max(1,tokens)/warm
     else:factor=c['lr_floor_fraction']+(1-c['lr_floor_fraction'])*.5*(1+math.cos(math.pi*min(1,(tokens-warm)/max(1,total-warm))))
     return c['lr']*factor
@@ -62,6 +62,7 @@ def learning_rate(config,tokens):
 
 def update(model,opt,batch,config,tokens,device):
     """Full device transfer is owned by caller; timing includes model/loss/VJP/AdamW."""
+    if hasattr(model,'set_progress'):model.set_progress(tokens)
     model.train();synchronize(device);start=time.monotonic()
     count=int((batch['labels']!=-100).sum())
     if count<=0:raise ValueError('empty logical update')
@@ -83,6 +84,7 @@ def logical_update(model,opt,batches,config,tokens,device):
     """Same independent-sample global batch; physical microbatches accumulate VJP."""
     count=sum(int((b['labels']!=-100).sum()) for b in batches)
     if count<=0:raise ValueError('empty logical batch')
+    if hasattr(model,'set_progress'):model.set_progress(tokens)
     model.train();synchronize(device);start=time.monotonic()
     lr=learning_rate(config,tokens+count)
     for group in opt.param_groups:group['lr']=lr
@@ -94,12 +96,17 @@ def logical_update(model,opt,batches,config,tokens,device):
         loss.backward();total+=float(loss.detach())
         for key,value in model.last_metrics.items():
             if '/max_' in key:work[key]=max(work.get(key,0),value)
-            elif key!='activity/full_fraction':work[key]=work.get(key,0)+value
+            elif not key.startswith('activity/') or key=='activity/send_strength':work[key]=work.get(key,0)+value
     norm=torch.nn.utils.clip_grad_norm_([p for p in model.parameters() if p.requires_grad],
                                       config['training']['clip_norm'],error_if_nonfinite=True)
     opt.step();synchronize(device)
     if work.get('work/candidates'):
         work['activity/full_fraction']=work['work/full']/work['work/candidates']
+    if work.get('work/node_slots'):
+        work['activity/receipt_fraction']=work['work/candidates']/work['work/node_slots']
+        work['activity/full_all_fraction']=work['work/full']/work['work/node_slots']
+        work['activity/body_full_all_fraction']=work['work/body_full']/work['work/body_node_slots']
+        work['activity/body_receipt_fraction']=work['work/body_candidates']/work['work/body_node_slots']
     return dict(loss=total,tokens=count,gradient_norm=float(norm),lr=lr,
         seconds=time.monotonic()-start,work=work,microbatches=len(batches))
 

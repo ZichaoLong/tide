@@ -79,7 +79,7 @@ def admission(model,c,device,out):
 
 
 def probe(a,c,model,opt,device,ident):
-    corpus=Corpus(a.data,3);progress=dict(step=0,tokens=0,cursor=0,probe=True)
+    corpus=Corpus(a.data,3,max_train_documents=8);progress=dict(step=0,tokens=0,cursor=0,probe=True)
     if a.resume:progress=restore(a.resume,model,opt,ident,device)
     if not progress.get('probe'):raise ValueError('probe cannot restore a training trajectory')
     losses=[]
@@ -122,11 +122,15 @@ def train(a,c,model,opt,device,ident,metrics,result):
     atomic_json(a.output/'result.json',result)
     def save(label='latest'):
         path=a.output/(label+'.pt')
-        if label=='latest' and path.exists():os.replace(path,a.output/'previous.pt')
-        tensor_save(path,checkpoint(model,opt,progress,ident,device))
+        if label=='latest' and path.exists() and t.get('keep_previous',True):os.replace(path,a.output/'previous.pt')
+        if label!='latest' and t.get('milestone_weights_only'):
+            tensor_save(path,dict(schema='tide-language-weights-v1',model=cpu_tree(model.state_dict()),
+                                 progress=copy.deepcopy(progress),identity=ident,resumable_optimizer=False))
+        else:tensor_save(path,checkpoint(model,opt,progress,ident,device))
         atomic_json(a.output/'checkpoint.json',dict(file=path.name,sha256=digest(path),progress=progress,at=now()))
     def validate(tag,limit):
         if hasattr(model,'encoder'):model.encoder.observe=False
+        if hasattr(model,'set_progress'):model.set_progress(progress['tokens'])
         val=evaluate(model,corpus,c,device,token_limit=limit,deadline=deadline-45)
         atomic_json(a.output/(tag+'.json'),dict(val,progress=copy.deepcopy(progress)))
         if val['nll'] is not None:
@@ -159,7 +163,11 @@ def train(a,c,model,opt,device,ident,metrics,result):
         values={'train/loss':row['loss'],'train/tokens':progress['tokens'],'train/lr':row['lr'],
             'train/gradient_norm':row['gradient_norm'],'train/step_seconds':row['seconds'],
             'train/tokens_per_second':row['tokens']/row['seconds'],**row['work'],**resources}
-        if progress['step']<=2 or progress['step']%t['log_every']==0:metrics.log(progress['step'],values)
+        if progress['step']<=2 or progress['step']%t['log_every']==0:
+            if hasattr(model,'selectors'):
+                grad=[p.grad.detach().square().sum() for p in model.selectors.parameters() if p.grad is not None]
+                values['gradient/router_l2']=float(torch.stack(grad).sum().sqrt()) if grad else 0.
+            metrics.log(progress['step'],values)
         atomic_json(a.output/'progress.json',dict(progress,updated_at=now(),last_update=values,
             training_seconds=training_seconds,elapsed_seconds=time.monotonic()-started))
         milestone=progress['tokens'] in t['milestones']
@@ -186,6 +194,12 @@ def train(a,c,model,opt,device,ident,metrics,result):
                 token_ids=generated.cpu().tolist(),seconds=time.monotonic()-inference_start,
                 method='greedy full-prefix recompute; execution/finite-output acceptance, not language-quality proof')
         atomic_json(a.output/'inference.json',inference)
+    if progress['tokens']==stop_target and t.get('discard_optimizer_on_completion'):
+        # Calibration prefixes are not parent trajectories. Retain their weights,
+        # metrics and identity, but no redundant Adam states or recovery promise.
+        if progress['tokens'] not in t['milestones']:save('final-weights')
+        for name in ('latest.pt','previous.pt'):
+            if (a.output/name).exists():(a.output/name).unlink()
     return dict(state='completed' if progress['tokens']==stop_target else 'budget_truncated',
         progress=progress,target_tokens=t['target_tokens'],stage_target_tokens=stop_target,training_seconds=training_seconds,
         initial_validation_nll=initial['nll'],final_validation_nll=final['nll'] if final else None,

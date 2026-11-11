@@ -1,0 +1,3572 @@
+{
+  "campaign": "direct-v9",
+  "candidate": {
+    "depth": 16,
+    "id": "send-direct_attention",
+    "region_width": 4,
+    "topology": "fc",
+    "tree": false,
+    "width": 128
+  },
+  "checks": {
+    "core_atol": 1e-06,
+    "core_rtol": 1e-05,
+    "finite_exploration": true
+  },
+  "comparison_scope": "Independent direct local formulas; dense physical Full with masks, experiment-owned inlet. Not foundation continuation certification.",
+  "core": {},
+  "device": "npu:0",
+  "direct": {
+    "plan": {
+      "aggregation_reduction": "matmul",
+      "alpha_agg": 1.0,
+      "classes": {
+        "edges": [
+          1,
+          1,
+          1,
+          1,
+          2,
+          2,
+          2,
+          2,
+          3,
+          3,
+          3,
+          3,
+          4,
+          4,
+          4,
+          4,
+          5,
+          5,
+          5,
+          5,
+          6,
+          6,
+          6,
+          6,
+          7,
+          7,
+          7,
+          7,
+          8,
+          8,
+          8,
+          8,
+          9,
+          9,
+          9,
+          9,
+          10,
+          10,
+          10,
+          10,
+          11,
+          11,
+          11,
+          11,
+          12,
+          12,
+          12,
+          12,
+          13,
+          13,
+          13,
+          13,
+          14,
+          14,
+          14,
+          14,
+          15,
+          15,
+          15,
+          15,
+          16,
+          16,
+          16,
+          16,
+          17,
+          17,
+          17,
+          17,
+          18,
+          18,
+          18,
+          18,
+          19,
+          19,
+          19,
+          19,
+          20,
+          20,
+          20,
+          20,
+          21,
+          21,
+          21,
+          21,
+          22,
+          22,
+          22,
+          22,
+          23,
+          23,
+          23,
+          23,
+          24,
+          24,
+          24,
+          24,
+          25,
+          25,
+          25,
+          25,
+          26,
+          26,
+          26,
+          26,
+          27,
+          27,
+          27,
+          27,
+          28,
+          28,
+          28,
+          28,
+          29,
+          29,
+          29,
+          29,
+          30,
+          30,
+          30,
+          30,
+          31,
+          31,
+          31,
+          31,
+          32,
+          32,
+          32,
+          32,
+          33,
+          33,
+          33,
+          33,
+          34,
+          34,
+          34,
+          34,
+          35,
+          35,
+          35,
+          35,
+          36,
+          36,
+          36,
+          36,
+          37,
+          37,
+          37,
+          37,
+          38,
+          38,
+          38,
+          38,
+          39,
+          39,
+          39,
+          39,
+          40,
+          40,
+          40,
+          40,
+          41,
+          41,
+          41,
+          41,
+          42,
+          42,
+          42,
+          42,
+          43,
+          43,
+          43,
+          43,
+          44,
+          44,
+          44,
+          44,
+          45,
+          45,
+          45,
+          45,
+          46,
+          46,
+          46,
+          46,
+          47,
+          47,
+          47,
+          47,
+          48,
+          48,
+          48,
+          48,
+          49,
+          49,
+          49,
+          49,
+          50,
+          50,
+          50,
+          50,
+          51,
+          51,
+          51,
+          51,
+          52,
+          52,
+          52,
+          52,
+          53,
+          53,
+          53,
+          53,
+          54,
+          54,
+          54,
+          54,
+          55,
+          55,
+          55,
+          55,
+          56,
+          56,
+          56,
+          56,
+          57,
+          57,
+          57,
+          57,
+          58,
+          58,
+          58,
+          58,
+          59,
+          59,
+          59,
+          59,
+          60,
+          60,
+          60,
+          60
+        ],
+        "inputs": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "graph": {
+        "counts": {
+          "body_edges": 240,
+          "body_nodes": 64,
+          "encoded_edges": 248,
+          "encoded_nodes": 66,
+          "longest_body_delay": 15,
+          "output_reachable_nodes": 64,
+          "reachable_nodes": 64
+        },
+        "edges": [
+          [
+            0,
+            4,
+            1
+          ],
+          [
+            0,
+            5,
+            1
+          ],
+          [
+            0,
+            6,
+            1
+          ],
+          [
+            0,
+            7,
+            1
+          ],
+          [
+            1,
+            4,
+            1
+          ],
+          [
+            1,
+            5,
+            1
+          ],
+          [
+            1,
+            6,
+            1
+          ],
+          [
+            1,
+            7,
+            1
+          ],
+          [
+            2,
+            4,
+            1
+          ],
+          [
+            2,
+            5,
+            1
+          ],
+          [
+            2,
+            6,
+            1
+          ],
+          [
+            2,
+            7,
+            1
+          ],
+          [
+            3,
+            4,
+            1
+          ],
+          [
+            3,
+            5,
+            1
+          ],
+          [
+            3,
+            6,
+            1
+          ],
+          [
+            3,
+            7,
+            1
+          ],
+          [
+            4,
+            8,
+            1
+          ],
+          [
+            4,
+            9,
+            1
+          ],
+          [
+            4,
+            10,
+            1
+          ],
+          [
+            4,
+            11,
+            1
+          ],
+          [
+            5,
+            8,
+            1
+          ],
+          [
+            5,
+            9,
+            1
+          ],
+          [
+            5,
+            10,
+            1
+          ],
+          [
+            5,
+            11,
+            1
+          ],
+          [
+            6,
+            8,
+            1
+          ],
+          [
+            6,
+            9,
+            1
+          ],
+          [
+            6,
+            10,
+            1
+          ],
+          [
+            6,
+            11,
+            1
+          ],
+          [
+            7,
+            8,
+            1
+          ],
+          [
+            7,
+            9,
+            1
+          ],
+          [
+            7,
+            10,
+            1
+          ],
+          [
+            7,
+            11,
+            1
+          ],
+          [
+            8,
+            12,
+            1
+          ],
+          [
+            8,
+            13,
+            1
+          ],
+          [
+            8,
+            14,
+            1
+          ],
+          [
+            8,
+            15,
+            1
+          ],
+          [
+            9,
+            12,
+            1
+          ],
+          [
+            9,
+            13,
+            1
+          ],
+          [
+            9,
+            14,
+            1
+          ],
+          [
+            9,
+            15,
+            1
+          ],
+          [
+            10,
+            12,
+            1
+          ],
+          [
+            10,
+            13,
+            1
+          ],
+          [
+            10,
+            14,
+            1
+          ],
+          [
+            10,
+            15,
+            1
+          ],
+          [
+            11,
+            12,
+            1
+          ],
+          [
+            11,
+            13,
+            1
+          ],
+          [
+            11,
+            14,
+            1
+          ],
+          [
+            11,
+            15,
+            1
+          ],
+          [
+            12,
+            16,
+            1
+          ],
+          [
+            12,
+            17,
+            1
+          ],
+          [
+            12,
+            18,
+            1
+          ],
+          [
+            12,
+            19,
+            1
+          ],
+          [
+            13,
+            16,
+            1
+          ],
+          [
+            13,
+            17,
+            1
+          ],
+          [
+            13,
+            18,
+            1
+          ],
+          [
+            13,
+            19,
+            1
+          ],
+          [
+            14,
+            16,
+            1
+          ],
+          [
+            14,
+            17,
+            1
+          ],
+          [
+            14,
+            18,
+            1
+          ],
+          [
+            14,
+            19,
+            1
+          ],
+          [
+            15,
+            16,
+            1
+          ],
+          [
+            15,
+            17,
+            1
+          ],
+          [
+            15,
+            18,
+            1
+          ],
+          [
+            15,
+            19,
+            1
+          ],
+          [
+            16,
+            20,
+            1
+          ],
+          [
+            16,
+            21,
+            1
+          ],
+          [
+            16,
+            22,
+            1
+          ],
+          [
+            16,
+            23,
+            1
+          ],
+          [
+            17,
+            20,
+            1
+          ],
+          [
+            17,
+            21,
+            1
+          ],
+          [
+            17,
+            22,
+            1
+          ],
+          [
+            17,
+            23,
+            1
+          ],
+          [
+            18,
+            20,
+            1
+          ],
+          [
+            18,
+            21,
+            1
+          ],
+          [
+            18,
+            22,
+            1
+          ],
+          [
+            18,
+            23,
+            1
+          ],
+          [
+            19,
+            20,
+            1
+          ],
+          [
+            19,
+            21,
+            1
+          ],
+          [
+            19,
+            22,
+            1
+          ],
+          [
+            19,
+            23,
+            1
+          ],
+          [
+            20,
+            24,
+            1
+          ],
+          [
+            20,
+            25,
+            1
+          ],
+          [
+            20,
+            26,
+            1
+          ],
+          [
+            20,
+            27,
+            1
+          ],
+          [
+            21,
+            24,
+            1
+          ],
+          [
+            21,
+            25,
+            1
+          ],
+          [
+            21,
+            26,
+            1
+          ],
+          [
+            21,
+            27,
+            1
+          ],
+          [
+            22,
+            24,
+            1
+          ],
+          [
+            22,
+            25,
+            1
+          ],
+          [
+            22,
+            26,
+            1
+          ],
+          [
+            22,
+            27,
+            1
+          ],
+          [
+            23,
+            24,
+            1
+          ],
+          [
+            23,
+            25,
+            1
+          ],
+          [
+            23,
+            26,
+            1
+          ],
+          [
+            23,
+            27,
+            1
+          ],
+          [
+            24,
+            28,
+            1
+          ],
+          [
+            24,
+            29,
+            1
+          ],
+          [
+            24,
+            30,
+            1
+          ],
+          [
+            24,
+            31,
+            1
+          ],
+          [
+            25,
+            28,
+            1
+          ],
+          [
+            25,
+            29,
+            1
+          ],
+          [
+            25,
+            30,
+            1
+          ],
+          [
+            25,
+            31,
+            1
+          ],
+          [
+            26,
+            28,
+            1
+          ],
+          [
+            26,
+            29,
+            1
+          ],
+          [
+            26,
+            30,
+            1
+          ],
+          [
+            26,
+            31,
+            1
+          ],
+          [
+            27,
+            28,
+            1
+          ],
+          [
+            27,
+            29,
+            1
+          ],
+          [
+            27,
+            30,
+            1
+          ],
+          [
+            27,
+            31,
+            1
+          ],
+          [
+            28,
+            32,
+            1
+          ],
+          [
+            28,
+            33,
+            1
+          ],
+          [
+            28,
+            34,
+            1
+          ],
+          [
+            28,
+            35,
+            1
+          ],
+          [
+            29,
+            32,
+            1
+          ],
+          [
+            29,
+            33,
+            1
+          ],
+          [
+            29,
+            34,
+            1
+          ],
+          [
+            29,
+            35,
+            1
+          ],
+          [
+            30,
+            32,
+            1
+          ],
+          [
+            30,
+            33,
+            1
+          ],
+          [
+            30,
+            34,
+            1
+          ],
+          [
+            30,
+            35,
+            1
+          ],
+          [
+            31,
+            32,
+            1
+          ],
+          [
+            31,
+            33,
+            1
+          ],
+          [
+            31,
+            34,
+            1
+          ],
+          [
+            31,
+            35,
+            1
+          ],
+          [
+            32,
+            36,
+            1
+          ],
+          [
+            32,
+            37,
+            1
+          ],
+          [
+            32,
+            38,
+            1
+          ],
+          [
+            32,
+            39,
+            1
+          ],
+          [
+            33,
+            36,
+            1
+          ],
+          [
+            33,
+            37,
+            1
+          ],
+          [
+            33,
+            38,
+            1
+          ],
+          [
+            33,
+            39,
+            1
+          ],
+          [
+            34,
+            36,
+            1
+          ],
+          [
+            34,
+            37,
+            1
+          ],
+          [
+            34,
+            38,
+            1
+          ],
+          [
+            34,
+            39,
+            1
+          ],
+          [
+            35,
+            36,
+            1
+          ],
+          [
+            35,
+            37,
+            1
+          ],
+          [
+            35,
+            38,
+            1
+          ],
+          [
+            35,
+            39,
+            1
+          ],
+          [
+            36,
+            40,
+            1
+          ],
+          [
+            36,
+            41,
+            1
+          ],
+          [
+            36,
+            42,
+            1
+          ],
+          [
+            36,
+            43,
+            1
+          ],
+          [
+            37,
+            40,
+            1
+          ],
+          [
+            37,
+            41,
+            1
+          ],
+          [
+            37,
+            42,
+            1
+          ],
+          [
+            37,
+            43,
+            1
+          ],
+          [
+            38,
+            40,
+            1
+          ],
+          [
+            38,
+            41,
+            1
+          ],
+          [
+            38,
+            42,
+            1
+          ],
+          [
+            38,
+            43,
+            1
+          ],
+          [
+            39,
+            40,
+            1
+          ],
+          [
+            39,
+            41,
+            1
+          ],
+          [
+            39,
+            42,
+            1
+          ],
+          [
+            39,
+            43,
+            1
+          ],
+          [
+            40,
+            44,
+            1
+          ],
+          [
+            40,
+            45,
+            1
+          ],
+          [
+            40,
+            46,
+            1
+          ],
+          [
+            40,
+            47,
+            1
+          ],
+          [
+            41,
+            44,
+            1
+          ],
+          [
+            41,
+            45,
+            1
+          ],
+          [
+            41,
+            46,
+            1
+          ],
+          [
+            41,
+            47,
+            1
+          ],
+          [
+            42,
+            44,
+            1
+          ],
+          [
+            42,
+            45,
+            1
+          ],
+          [
+            42,
+            46,
+            1
+          ],
+          [
+            42,
+            47,
+            1
+          ],
+          [
+            43,
+            44,
+            1
+          ],
+          [
+            43,
+            45,
+            1
+          ],
+          [
+            43,
+            46,
+            1
+          ],
+          [
+            43,
+            47,
+            1
+          ],
+          [
+            44,
+            48,
+            1
+          ],
+          [
+            44,
+            49,
+            1
+          ],
+          [
+            44,
+            50,
+            1
+          ],
+          [
+            44,
+            51,
+            1
+          ],
+          [
+            45,
+            48,
+            1
+          ],
+          [
+            45,
+            49,
+            1
+          ],
+          [
+            45,
+            50,
+            1
+          ],
+          [
+            45,
+            51,
+            1
+          ],
+          [
+            46,
+            48,
+            1
+          ],
+          [
+            46,
+            49,
+            1
+          ],
+          [
+            46,
+            50,
+            1
+          ],
+          [
+            46,
+            51,
+            1
+          ],
+          [
+            47,
+            48,
+            1
+          ],
+          [
+            47,
+            49,
+            1
+          ],
+          [
+            47,
+            50,
+            1
+          ],
+          [
+            47,
+            51,
+            1
+          ],
+          [
+            48,
+            52,
+            1
+          ],
+          [
+            48,
+            53,
+            1
+          ],
+          [
+            48,
+            54,
+            1
+          ],
+          [
+            48,
+            55,
+            1
+          ],
+          [
+            49,
+            52,
+            1
+          ],
+          [
+            49,
+            53,
+            1
+          ],
+          [
+            49,
+            54,
+            1
+          ],
+          [
+            49,
+            55,
+            1
+          ],
+          [
+            50,
+            52,
+            1
+          ],
+          [
+            50,
+            53,
+            1
+          ],
+          [
+            50,
+            54,
+            1
+          ],
+          [
+            50,
+            55,
+            1
+          ],
+          [
+            51,
+            52,
+            1
+          ],
+          [
+            51,
+            53,
+            1
+          ],
+          [
+            51,
+            54,
+            1
+          ],
+          [
+            51,
+            55,
+            1
+          ],
+          [
+            52,
+            56,
+            1
+          ],
+          [
+            52,
+            57,
+            1
+          ],
+          [
+            52,
+            58,
+            1
+          ],
+          [
+            52,
+            59,
+            1
+          ],
+          [
+            53,
+            56,
+            1
+          ],
+          [
+            53,
+            57,
+            1
+          ],
+          [
+            53,
+            58,
+            1
+          ],
+          [
+            53,
+            59,
+            1
+          ],
+          [
+            54,
+            56,
+            1
+          ],
+          [
+            54,
+            57,
+            1
+          ],
+          [
+            54,
+            58,
+            1
+          ],
+          [
+            54,
+            59,
+            1
+          ],
+          [
+            55,
+            56,
+            1
+          ],
+          [
+            55,
+            57,
+            1
+          ],
+          [
+            55,
+            58,
+            1
+          ],
+          [
+            55,
+            59,
+            1
+          ],
+          [
+            56,
+            60,
+            1
+          ],
+          [
+            56,
+            61,
+            1
+          ],
+          [
+            56,
+            62,
+            1
+          ],
+          [
+            56,
+            63,
+            1
+          ],
+          [
+            57,
+            60,
+            1
+          ],
+          [
+            57,
+            61,
+            1
+          ],
+          [
+            57,
+            62,
+            1
+          ],
+          [
+            57,
+            63,
+            1
+          ],
+          [
+            58,
+            60,
+            1
+          ],
+          [
+            58,
+            61,
+            1
+          ],
+          [
+            58,
+            62,
+            1
+          ],
+          [
+            58,
+            63,
+            1
+          ],
+          [
+            59,
+            60,
+            1
+          ],
+          [
+            59,
+            61,
+            1
+          ],
+          [
+            59,
+            62,
+            1
+          ],
+          [
+            59,
+            63,
+            1
+          ]
+        ],
+        "inputs": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "kind": "ranked-local",
+        "node_regions": [
+          0,
+          0,
+          0,
+          0,
+          1,
+          1,
+          1,
+          1,
+          2,
+          2,
+          2,
+          2,
+          3,
+          3,
+          3,
+          3,
+          4,
+          4,
+          4,
+          4,
+          5,
+          5,
+          5,
+          5,
+          6,
+          6,
+          6,
+          6,
+          7,
+          7,
+          7,
+          7,
+          8,
+          8,
+          8,
+          8,
+          9,
+          9,
+          9,
+          9,
+          10,
+          10,
+          10,
+          10,
+          11,
+          11,
+          11,
+          11,
+          12,
+          12,
+          12,
+          12,
+          13,
+          13,
+          13,
+          13,
+          14,
+          14,
+          14,
+          14,
+          15,
+          15,
+          15,
+          15
+        ],
+        "nodes": 64,
+        "outputs": [
+          60,
+          61,
+          62,
+          63
+        ],
+        "ranks": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16
+        ],
+        "regions": 16
+      },
+      "memories": [
+        {
+          "adapter_rank": 32,
+          "alpha_att": 1.0,
+          "alpha_ff": 1.0,
+          "beta_short": 0.03850817669777474,
+          "distance_slopes": [
+            0.0
+          ],
+          "epsilon": 1e-05,
+          "ffn_width": 512,
+          "full_frequencies": [
+            []
+          ],
+          "heads": 1,
+          "memory_read": "qry",
+          "position_origin": 1,
+          "position_scale": 18,
+          "read_frequencies": [],
+          "summary_width": 32,
+          "width": 128,
+          "window": 9216
+        },
+        {
+          "adapter_rank": 32,
+          "alpha_att": 1.0,
+          "alpha_ff": 1.0,
+          "beta_short": 0.03850817669777474,
+          "distance_slopes": [
+            0.0
+          ],
+          "epsilon": 1e-05,
+          "ffn_width": 512,
+          "full_frequencies": [
+            []
+          ],
+          "heads": 1,
+          "memory_read": "qry",
+          "position_origin": 1,
+          "position_scale": 18,
+          "read_frequencies": [],
+          "summary_width": 32,
+          "width": 128,
+          "window": 9216
+        },
+        {
+          "adapter_rank": 32,
+          "alpha_att": 1.0,
+          "alpha_ff": 1.0,
+          "beta_short": 0.03850817669777474,
+          "distance_slopes": [
+            0.0
+          ],
+          "epsilon": 1e-05,
+          "ffn_width": 512,
+          "full_frequencies": [
+            []
+          ],
+          "heads": 1,
+          "memory_read": "qry",
+          "position_origin": 1,
+          "position_scale": 18,
+          "read_frequencies": [],
+          "summary_width": 32,
+          "width": 128,
+          "window": 9216
+        },
+        {
+          "adapter_rank": 32,
+          "alpha_att": 1.0,
+          "alpha_ff": 1.0,
+          "beta_short": 0.03850817669777474,
+          "distance_slopes": [
+            0.0
+          ],
+          "epsilon": 1e-05,
+          "ffn_width": 512,
+          "full_frequencies": [
+            []
+          ],
+          "heads": 1,
+          "memory_read": "qry",
+          "position_origin": 1,
+          "position_scale": 18,
+          "read_frequencies": [],
+          "summary_width": 32,
+          "width": 128,
+          "window": 9216
+        },
+        {
+          "adapter_rank": 32,
+          "alpha_att": 1.0,
+          "alpha_ff": 1.0,
+          "beta_short": 0.03850817669777474,
+          "distance_slopes": [
+            0.0
+          ],
+          "epsilon": 1e-05,
+          "ffn_width": 512,
+          "full_frequencies": [
+            []
+          ],
+          "heads": 1,
+          "memory_read": "qry",
+          "position_origin": 2,
+          "position_scale": 18,
+          "read_frequencies": [],
+          "summary_width": 32,
+          "width": 128,
+          "window": 9216
+        },
+        {
+          "adapter_rank": 32,
+          "alpha_att": 1.0,
+          "alpha_ff": 1.0,
+          "beta_short": 0.03850817669777474,
+          "distance_slopes": [
+            0.0
+          ],
+          "epsilon": 1e-05,
+          "ffn_width": 512,
+          "full_frequencies": [
+            []
+          ],
+          "heads": 1,
+          "memory_read": "qry",
+          "position_origin": 2,
+          "position_scale": 18,
+          "read_frequencies": [],
+          "summary_width": 32,
+          "width": 128,
+          "window": 9216
+        },
+        {
+          "adapter_rank": 32,
+          "alpha_att": 1.0,
+          "alpha_ff": 1.0,
+          "beta_short": 0.03850817669777474,
+          "distance_slopes": [
+            0.0
+          ],
+          "epsilon": 1e-05,
+          "ffn_width": 512,
+          "full_frequencies": [
+            []
+          ],
+          "heads": 1,
+          "memory_read": "qry",
+          "position_origin": 2,
+          "position_scale": 18,
+          "read_frequencies": [],
+          "summary_width": 32,
+          "width": 128,
+          "window": 9216
+        },
+        {
+          "adapter_rank": 32,
+          "alpha_att": 1.0,
+          "alpha_ff": 1.0,
+          "beta_short": 0.03850817669777474,
+          "distance_slopes": [
+            0.0
+          ],
+          "epsilon": 1e-05,
+          "ffn_width": 512,
+          "full_frequencies": [
+            []
+          ],
+          "heads": 1,
+          "memory_read": "qry",
+          "position_origin": 2,
+          "position_scale": 18,
+          "read_frequencies": [],
+          "summary_width": 32,
+          "width": 128,
+          "window": 9216
+        },
+        {
+          "adapter_rank": 32,
+          "alpha_att": 1.0,
+          "alpha_ff": 1.0,
+          "beta_short": 0.03850817669777474,
+          "distance_slopes": [
+            0.0
+          ],
+          "epsilon": 1e-05,
+          "ffn_width": 512,
+          "full_frequencies": [
+            []
+          ],
+          "heads": 1,
+          "memory_read": "qry",
+          "position_origin": 3,
+          "position_scale": 18,
+          "read_frequencies": [],
+          "summary_width": 32,
+          "width": 128,
+          "window": 9216
+        },
+        {
+          "adapter_rank": 32,
+          "alpha_att": 1.0,
+          "alpha_ff": 1.0,
+          "beta_short": 0.03850817669777474,
+          "distance_slopes": [
+            0.0
+          ],
+          "epsilon": 1e-05,
+          "ffn_width": 512,
+          "full_frequencies": [
+            []
+          ],
+          "heads": 1,
+          "memory_read": "qry",
+          "position_origin": 3,
+          "position_scale": 18,
+          "read_frequencies": [],
+          "summary_width": 32,
+          "width": 128,
+          "window": 9216
+        },
+        {
+          "adapter_rank": 32,
+          "alpha_att": 1.0,
+          "alpha_ff": 1.0,
+          "beta_short": 0.03850817669777474,
+          "distance_slopes": [
+            0.0
+          ],
+          "epsilon": 1e-05,
+          "ffn_width": 512,
+          "full_frequencies": [
+            []
+          ],
+          "heads": 1,
+          "memory_read": "qry",
+          "position_origin": 3,
+          "position_scale": 18,
+          "read_frequencies": [],
+          "summary_width": 32,
+          "width": 128,
+          "window": 9216
+        },
+        {
+          "adapter_rank": 32,
+          "alpha_att": 1.0,
+          "alpha_ff": 1.0,
+          "beta_short": 0.03850817669777474,
+          "distance_slopes": [
+            0.0
+          ],
+          "epsilon": 1e-05,
+          "ffn_width": 512,
+          "full_frequencies": [
+            []
+          ],
+          "heads": 1,
+          "memory_read": "qry",
+          "position_origin": 3,
+          "position_scale": 18,
+          "read_frequencies": [],
+          "summary_width": 32,
+          "width": 128,
+          "window": 9216
+        },
+        {
+          "adapter_rank": 32,
+          "alpha_att": 1.0,
+          "alpha_ff": 1.0,
+          "beta_short": 0.03850817669777474,
+          "distance_slopes": [
+            0.0
+          ],
+          "epsilon": 1e-05,
+          "ffn_width": 512,
+          "full_frequencies": [
+            []
+          ],
+          "heads": 1,
+          "memory_read": "qry",
+          "position_origin": 4,
+          "position_scale": 18,
+          "read_frequencies": [],
+          "summary_width": 32,
+          "width": 128,
+          "window": 0
+        },
+        {
+          "adapter_rank": 32,
+          "alpha_att": 1.0,
+          "alpha_ff": 1.0,
+          "beta_short": 0.03850817669777474,
+          "distance_slopes": [
+            0.0
+          ],
+          "epsilon": 1e-05,
+          "ffn_width": 512,
+          "full_frequencies": [
+            []
+          ],
+          "heads": 1,
+          "memory_read": "qry",
+          "position_origin": 4,
+          "position_scale": 18,
+          "read_frequencies": [],
+          "summary_width": 32,
+          "width": 128,
+          "window": 0
+        },
+        {
+          "adapter_rank": 32,
+          "alpha_att": 1.0,
+          "alpha_ff": 1.0,
+          "beta_short": 0.03850817669777474,
+          "distance_slopes": [
+            0.0
+          ],
+          "epsilon": 1e-05,
+          "ffn_width": 512,
+          "full_frequencies": [
+            []
+          ],
+          "heads": 1,
+          "memory_read": "qry",
+          "position_origin": 4,
+          "position_scale": 18,
+          "read_frequencies": [],
+          "summary_width": 32,
+          "width": 128,
+          "window": 0
+        },
+        {
+          "adapter_rank": 32,
+          "alpha_att": 1.0,
+          "alpha_ff": 1.0,
+          "beta_short": 0.03850817669777474,
+          "distance_slopes": [
+            0.0
+          ],
+          "epsilon": 1e-05,
+          "ffn_width": 512,
+          "full_frequencies": [
+            []
+          ],
+          "heads": 1,
+          "memory_read": "qry",
+          "position_origin": 4,
+          "position_scale": 18,
+          "read_frequencies": [],
+          "summary_width": 32,
+          "width": 128,
+          "window": 0
+        },
+        {
+          "adapter_rank": 32,
+          "alpha_att": 1.0,
+          "alpha_ff": 1.0,
+          "beta_short": 0.03850817669777474,
+          "distance_slopes": [
+            0.0
+          ],
+          "epsilon": 1e-05,
+          "ffn_width": 512,
+          "full_frequencies": [
+            []
+          ],
+          "heads": 1,
+          "memory_read": "qry",
+          "position_origin": 5,
+          "position_scale": 18,
+          "read_frequencies": [],
+          "summary_width": 32,
+          "width": 128,
+          "window": 9216
+        },
+        {
+          "adapter_rank": 32,
+          "alpha_att": 1.0,
+          "alpha_ff": 1.0,
+          "beta_short": 0.03850817669777474,
+          "distance_slopes": [
+            0.0
+          ],
+          "epsilon": 1e-05,
+          "ffn_width": 512,
+          "full_frequencies": [
+            []
+          ],
+          "heads": 1,
+          "memory_read": "qry",
+          "position_origin": 5,
+          "position_scale": 18,
+          "read_frequencies": [],
+          "summary_width": 32,
+          "width": 128,
+          "window": 9216
+        },
+        {
+          "adapter_rank": 32,
+          "alpha_att": 1.0,
+          "alpha_ff": 1.0,
+          "beta_short": 0.03850817669777474,
+          "distance_slopes": [
+            0.0
+          ],
+          "epsilon": 1e-05,
+          "ffn_width": 512,
+          "full_frequencies": [
+            []
+          ],
+          "heads": 1,
+          "memory_read": "qry",
+          "position_origin": 5,
+          "position_scale": 18,
+          "read_frequencies": [],
+          "summary_width": 32,
+          "width": 128,
+          "window": 9216
+        },
+        {
+          "adapter_rank": 32,
+          "alpha_att": 1.0,
+          "alpha_ff": 1.0,
+          "beta_short": 0.03850817669777474,
+          "distance_slopes": [
+            0.0
+          ],
+          "epsilon": 1e-05,
+          "ffn_width": 512,
+          "full_frequencies": [
+            []
+          ],
+          "heads": 1,
+          "memory_read": "qry",
+          "position_origin": 5,
+          "position_scale": 18,
+          "read_frequencies": [],
+          "summary_width": 32,
+          "width": 128,
+          "window": 9216
+        },
+        {
+          "adapter_rank": 32,
+          "alpha_att": 1.0,
+          "alpha_ff": 1.0,
+          "beta_short": 0.03850817669777474,
+          "distance_slopes": [
+            0.0
+          ],
+          "epsilon": 1e-05,
+          "ffn_width": 512,
+          "full_frequencies": [
+            []
+          ],
+          "heads": 1,
+          "memory_read": "qry",
+          "position_origin": 6,
+          "position_scale": 18,
+          "read_frequencies": [],
+          "summary_width": 32,
+          "width": 128,
+          "window": 9216
+        },
+        {
+          "adapter_rank": 32,
+          "alpha_att": 1.0,
+          "alpha_ff": 1.0,
+          "beta_short": 0.03850817669777474,
+          "distance_slopes": [
+            0.0
+          ],
+          "epsilon": 1e-05,
+          "ffn_width": 512,
+          "full_frequencies": [
+            []
+          ],
+          "heads": 1,
+          "memory_read": "qry",
+          "position_origin": 6,
+          "position_scale": 18,
+          "read_frequencies": [],
+          "summary_width": 32,
+          "width": 128,
+          "window": 9216
+        },
+        {
+          "adapter_rank": 32,
+          "alpha_att": 1.0,
+          "alpha_ff": 1.0,
+          "beta_short": 0.03850817669777474,
+          "distance_slopes": [
+            0.0
+          ],
+          "epsilon": 1e-05,
+          "ffn_width": 512,
+          "full_frequencies": [
+            []
+          ],
+          "heads": 1,
+          "memory_read": "qry",
+          "position_origin": 6,
+          "position_scale": 18,
+          "read_frequencies": [],
+          "summary_width": 32,
+          "width": 128,
+          "window": 9216
+        },
+        {
+          "adapter_rank": 32,
+          "alpha_att": 1.0,
+          "alpha_ff": 1.0,
+          "beta_short": 0.03850817669777474,
+          "distance_slopes": [
+            0.0
+          ],
+          "epsilon": 1e-05,
+          "ffn_width": 512,
+          "full_frequencies": [
+            []
+          ],
+          "heads": 1,
+          "memory_read": "qry",
+          "position_origin": 6,
+          "position_scale": 18,
+          "read_frequencies": [],
+          "summary_width": 32,
+          "width": 128,
+          "window": 9216
+        },
+        {
+          "adapter_rank": 32,
+          "alpha_att": 1.0,
+          "alpha_ff": 1.0,
+          "beta_short": 0.03850817669777474,
+          "distance_slopes": [
+            0.0
+          ],
+          "epsilon": 1e-05,
+          "ffn_width": 512,
+          "full_frequencies": [
+            []
+          ],
+          "heads": 1,
+          "memory_read": "qry",
+          "position_origin": 7,
+          "position_scale": 18,
+          "read_frequencies": [],
+          "summary_width": 32,
+          "width": 128,
+          "window": 9216
+        },
+        {
+          "adapter_rank": 32,
+          "alpha_att": 1.0,
+          "alpha_ff": 1.0,
+          "beta_short": 0.03850817669777474,
+          "distance_slopes": [
+            0.0
+          ],
+          "epsilon": 1e-05,
+          "ffn_width": 512,
+          "full_frequencies": [
+            []
+          ],
+          "heads": 1,
+          "memory_read": "qry",
+          "position_origin": 7,
+          "position_scale": 18,
+          "read_frequencies": [],
+          "summary_width": 32,
+          "width": 128,
+          "window": 9216
+        },
+        {
+          "adapter_rank": 32,
+          "alpha_att": 1.0,
+          "alpha_ff": 1.0,
+          "beta_short": 0.03850817669777474,
+          "distance_slopes": [
+            0.0
+          ],
+          "epsilon": 1e-05,
+          "ffn_width": 512,
+          "full_frequencies": [
+            []
+          ],
+          "heads": 1,
+          "memory_read": "qry",
+          "position_origin": 7,
+          "position_scale": 18,
+          "read_frequencies": [],
+          "summary_width": 32,
+          "width": 128,
+          "window": 9216
+        },
+        {
+          "adapter_rank": 32,
+          "alpha_att": 1.0,
+          "alpha_ff": 1.0,
+          "beta_short": 0.03850817669777474,
+          "distance_slopes": [
+            0.0
+          ],
+          "epsilon": 1e-05,
+          "ffn_width": 512,
+          "full_frequencies": [
+            []
+          ],
+          "heads": 1,
+          "memory_read": "qry",
+          "position_origin": 7,
+          "position_scale": 18,
+          "read_frequencies": [],
+          "summary_width": 32,
+          "width": 128,
+          "window": 9216
+        },
+        {
+          "adapter_rank": 32,
+          "alpha_att": 1.0,
+          "alpha_ff": 1.0,
+          "beta_short": 0.03850817669777474,
+          "distance_slopes": [
+            0.0
+          ],
+          "epsilon": 1e-05,
+          "ffn_width": 512,
+          "full_frequencies": [
+            []
+          ],
+          "heads": 1,
+          "memory_read": "qry",
+          "position_origin": 8,
+          "position_scale": 18,
+          "read_frequencies": [],
+          "summary_width": 32,
+          "width": 128,
+          "window": 0
+        },
+        {
+          "adapter_rank": 32,
+          "alpha_att": 1.0,
+          "alpha_ff": 1.0,
+          "beta_short": 0.03850817669777474,
+          "distance_slopes": [
+            0.0
+          ],
+          "epsilon": 1e-05,
+          "ffn_width": 512,
+          "full_frequencies": [
+            []
+          ],
+          "heads": 1,
+          "memory_read": "qry",
+          "position_origin": 8,
+          "position_scale": 18,
+          "read_frequencies": [],
+          "summary_width": 32,
+          "width": 128,
+          "window": 0
+        },
+        {
+          "adapter_rank": 32,
+          "alpha_att": 1.0,
+          "alpha_ff": 1.0,
+          "beta_short": 0.03850817669777474,
+          "distance_slopes": [
+            0.0
+          ],
+          "epsilon": 1e-05,
+          "ffn_width": 512,
+          "full_frequencies": [
+            []
+          ],
+          "heads": 1,
+          "memory_read": "qry",
+          "position_origin": 8,
+          "position_scale": 18,
+          "read_frequencies": [],
+          "summary_width": 32,
+          "width": 128,
+          "window": 0
+        },
+        {
+          "adapter_rank": 32,
+          "alpha_att": 1.0,
+          "alpha_ff": 1.0,
+          "beta_short": 0.03850817669777474,
+          "distance_slopes": [
+            0.0
+          ],
+          "epsilon": 1e-05,
+          "ffn_width": 512,
+          "full_frequencies": [
+            []
+          ],
+          "heads": 1,
+          "memory_read": "qry",
+          "position_origin": 8,
+          "position_scale": 18,
+          "read_frequencies": [],
+          "summary_width": 32,
+          "width": 128,
+          "window": 0
+        },
+        {
+          "adapter_rank": 32,
+          "alpha_att": 1.0,
+          "alpha_ff": 1.0,
+          "beta_short": 0.03850817669777474,
+          "distance_slopes": [
+            0.0
+          ],
+          "epsilon": 1e-05,
+          "ffn_width": 512,
+          "full_frequencies": [
+            []
+          ],
+          "heads": 1,
+          "memory_read": "qry",
+          "position_origin": 9,
+          "position_scale": 18,
+          "read_frequencies": [],
+          "summary_width": 32,
+          "width": 128,
+          "window": 9216
+        },
+        {
+          "adapter_rank": 32,
+          "alpha_att": 1.0,
+          "alpha_ff": 1.0,
+          "beta_short": 0.03850817669777474,
+          "distance_slopes": [
+            0.0
+          ],
+          "epsilon": 1e-05,
+          "ffn_width": 512,
+          "full_frequencies": [
+            []
+          ],
+          "heads": 1,
+          "memory_read": "qry",
+          "position_origin": 9,
+          "position_scale": 18,
+          "read_frequencies": [],
+          "summary_width": 32,
+          "width": 128,
+          "window": 9216
+        },
+        {
+          "adapter_rank": 32,
+          "alpha_att": 1.0,
+          "alpha_ff": 1.0,
+          "beta_short": 0.03850817669777474,
+          "distance_slopes": [
+            0.0
+          ],
+          "epsilon": 1e-05,
+          "ffn_width": 512,
+          "full_frequencies": [
+            []
+          ],
+          "heads": 1,
+          "memory_read": "qry",
+          "position_origin": 9,
+          "position_scale": 18,
+          "read_frequencies": [],
+          "summary_width": 32,
+          "width": 128,
+          "window": 9216
+        },
+        {
+          "adapter_rank": 32,
+          "alpha_att": 1.0,
+          "alpha_ff": 1.0,
+          "beta_short": 0.03850817669777474,
+          "distance_slopes": [
+            0.0
+          ],
+          "epsilon": 1e-05,
+          "ffn_width": 512,
+          "full_frequencies": [
+            []
+          ],
+          "heads": 1,
+          "memory_read": "qry",
+          "position_origin": 9,
+          "position_scale": 18,
+          "read_frequencies": [],
+          "summary_width": 32,
+          "width": 128,
+          "window": 9216
+        },
+        {
+          "adapter_rank": 32,
+          "alpha_att": 1.0,
+          "alpha_ff": 1.0,
+          "beta_short": 0.03850817669777474,
+          "distance_slopes": [
+            0.0
+          ],
+          "epsilon": 1e-05,
+          "ffn_width": 512,
+          "full_frequencies": [
+            []
+          ],
+          "heads": 1,
+          "memory_read": "qry",
+          "position_origin": 10,
+          "position_scale": 18,
+          "read_frequencies": [],
+          "summary_width": 32,
+          "width": 128,
+          "window": 9216
+        },
+        {
+          "adapter_rank": 32,
+          "alpha_att": 1.0,
+          "alpha_ff": 1.0,
+          "beta_short": 0.03850817669777474,
+          "distance_slopes": [
+            0.0
+          ],
+          "epsilon": 1e-05,
+          "ffn_width": 512,
+          "full_frequencies": [
+            []
+          ],
+          "heads": 1,
+          "memory_read": "qry",
+          "position_origin": 10,
+          "position_scale": 18,
+          "read_frequencies": [],
+          "summary_width": 32,
+          "width": 128,
+          "window": 9216
+        },
+        {
+          "adapter_rank": 32,
+          "alpha_att": 1.0,
+          "alpha_ff": 1.0,
+          "beta_short": 0.03850817669777474,
+          "distance_slopes": [
+            0.0
+          ],
+          "epsilon": 1e-05,
+          "ffn_width": 512,
+          "full_frequencies": [
+            []
+          ],
+          "heads": 1,
+          "memory_read": "qry",
+          "position_origin": 10,
+          "position_scale": 18,
+          "read_frequencies": [],
+          "summary_width": 32,
+          "width": 128,
+          "window": 9216
+        },
+        {
+          "adapter_rank": 32,
+          "alpha_att": 1.0,
+          "alpha_ff": 1.0,
+          "beta_short": 0.03850817669777474,
+          "distance_slopes": [
+            0.0
+          ],
+          "epsilon": 1e-05,
+          "ffn_width": 512,
+          "full_frequencies": [
+            []
+          ],
+          "heads": 1,
+          "memory_read": "qry",
+          "position_origin": 10,
+          "position_scale": 18,
+          "read_frequencies": [],
+          "summary_width": 32,
+          "width": 128,
+          "window": 9216
+        },
+        {
+          "adapter_rank": 32,
+          "alpha_att": 1.0,
+          "alpha_ff": 1.0,
+          "beta_short": 0.03850817669777474,
+          "distance_slopes": [
+            0.0
+          ],
+          "epsilon": 1e-05,
+          "ffn_width": 512,
+          "full_frequencies": [
+            []
+          ],
+          "heads": 1,
+          "memory_read": "qry",
+          "position_origin": 11,
+          "position_scale": 18,
+          "read_frequencies": [],
+          "summary_width": 32,
+          "width": 128,
+          "window": 9216
+        },
+        {
+          "adapter_rank": 32,
+          "alpha_att": 1.0,
+          "alpha_ff": 1.0,
+          "beta_short": 0.03850817669777474,
+          "distance_slopes": [
+            0.0
+          ],
+          "epsilon": 1e-05,
+          "ffn_width": 512,
+          "full_frequencies": [
+            []
+          ],
+          "heads": 1,
+          "memory_read": "qry",
+          "position_origin": 11,
+          "position_scale": 18,
+          "read_frequencies": [],
+          "summary_width": 32,
+          "width": 128,
+          "window": 9216
+        },
+        {
+          "adapter_rank": 32,
+          "alpha_att": 1.0,
+          "alpha_ff": 1.0,
+          "beta_short": 0.03850817669777474,
+          "distance_slopes": [
+            0.0
+          ],
+          "epsilon": 1e-05,
+          "ffn_width": 512,
+          "full_frequencies": [
+            []
+          ],
+          "heads": 1,
+          "memory_read": "qry",
+          "position_origin": 11,
+          "position_scale": 18,
+          "read_frequencies": [],
+          "summary_width": 32,
+          "width": 128,
+          "window": 9216
+        },
+        {
+          "adapter_rank": 32,
+          "alpha_att": 1.0,
+          "alpha_ff": 1.0,
+          "beta_short": 0.03850817669777474,
+          "distance_slopes": [
+            0.0
+          ],
+          "epsilon": 1e-05,
+          "ffn_width": 512,
+          "full_frequencies": [
+            []
+          ],
+          "heads": 1,
+          "memory_read": "qry",
+          "position_origin": 11,
+          "position_scale": 18,
+          "read_frequencies": [],
+          "summary_width": 32,
+          "width": 128,
+          "window": 9216
+        },
+        {
+          "adapter_rank": 32,
+          "alpha_att": 1.0,
+          "alpha_ff": 1.0,
+          "beta_short": 0.03850817669777474,
+          "distance_slopes": [
+            0.0
+          ],
+          "epsilon": 1e-05,
+          "ffn_width": 512,
+          "full_frequencies": [
+            []
+          ],
+          "heads": 1,
+          "memory_read": "qry",
+          "position_origin": 12,
+          "position_scale": 18,
+          "read_frequencies": [],
+          "summary_width": 32,
+          "width": 128,
+          "window": 0
+        },
+        {
+          "adapter_rank": 32,
+          "alpha_att": 1.0,
+          "alpha_ff": 1.0,
+          "beta_short": 0.03850817669777474,
+          "distance_slopes": [
+            0.0
+          ],
+          "epsilon": 1e-05,
+          "ffn_width": 512,
+          "full_frequencies": [
+            []
+          ],
+          "heads": 1,
+          "memory_read": "qry",
+          "position_origin": 12,
+          "position_scale": 18,
+          "read_frequencies": [],
+          "summary_width": 32,
+          "width": 128,
+          "window": 0
+        },
+        {
+          "adapter_rank": 32,
+          "alpha_att": 1.0,
+          "alpha_ff": 1.0,
+          "beta_short": 0.03850817669777474,
+          "distance_slopes": [
+            0.0
+          ],
+          "epsilon": 1e-05,
+          "ffn_width": 512,
+          "full_frequencies": [
+            []
+          ],
+          "heads": 1,
+          "memory_read": "qry",
+          "position_origin": 12,
+          "position_scale": 18,
+          "read_frequencies": [],
+          "summary_width": 32,
+          "width": 128,
+          "window": 0
+        },
+        {
+          "adapter_rank": 32,
+          "alpha_att": 1.0,
+          "alpha_ff": 1.0,
+          "beta_short": 0.03850817669777474,
+          "distance_slopes": [
+            0.0
+          ],
+          "epsilon": 1e-05,
+          "ffn_width": 512,
+          "full_frequencies": [
+            []
+          ],
+          "heads": 1,
+          "memory_read": "qry",
+          "position_origin": 12,
+          "position_scale": 18,
+          "read_frequencies": [],
+          "summary_width": 32,
+          "width": 128,
+          "window": 0
+        },
+        {
+          "adapter_rank": 32,
+          "alpha_att": 1.0,
+          "alpha_ff": 1.0,
+          "beta_short": 0.03850817669777474,
+          "distance_slopes": [
+            0.0
+          ],
+          "epsilon": 1e-05,
+          "ffn_width": 512,
+          "full_frequencies": [
+            []
+          ],
+          "heads": 1,
+          "memory_read": "qry",
+          "position_origin": 13,
+          "position_scale": 18,
+          "read_frequencies": [],
+          "summary_width": 32,
+          "width": 128,
+          "window": 9216
+        },
+        {
+          "adapter_rank": 32,
+          "alpha_att": 1.0,
+          "alpha_ff": 1.0,
+          "beta_short": 0.03850817669777474,
+          "distance_slopes": [
+            0.0
+          ],
+          "epsilon": 1e-05,
+          "ffn_width": 512,
+          "full_frequencies": [
+            []
+          ],
+          "heads": 1,
+          "memory_read": "qry",
+          "position_origin": 13,
+          "position_scale": 18,
+          "read_frequencies": [],
+          "summary_width": 32,
+          "width": 128,
+          "window": 9216
+        },
+        {
+          "adapter_rank": 32,
+          "alpha_att": 1.0,
+          "alpha_ff": 1.0,
+          "beta_short": 0.03850817669777474,
+          "distance_slopes": [
+            0.0
+          ],
+          "epsilon": 1e-05,
+          "ffn_width": 512,
+          "full_frequencies": [
+            []
+          ],
+          "heads": 1,
+          "memory_read": "qry",
+          "position_origin": 13,
+          "position_scale": 18,
+          "read_frequencies": [],
+          "summary_width": 32,
+          "width": 128,
+          "window": 9216
+        },
+        {
+          "adapter_rank": 32,
+          "alpha_att": 1.0,
+          "alpha_ff": 1.0,
+          "beta_short": 0.03850817669777474,
+          "distance_slopes": [
+            0.0
+          ],
+          "epsilon": 1e-05,
+          "ffn_width": 512,
+          "full_frequencies": [
+            []
+          ],
+          "heads": 1,
+          "memory_read": "qry",
+          "position_origin": 13,
+          "position_scale": 18,
+          "read_frequencies": [],
+          "summary_width": 32,
+          "width": 128,
+          "window": 9216
+        },
+        {
+          "adapter_rank": 32,
+          "alpha_att": 1.0,
+          "alpha_ff": 1.0,
+          "beta_short": 0.03850817669777474,
+          "distance_slopes": [
+            0.0
+          ],
+          "epsilon": 1e-05,
+          "ffn_width": 512,
+          "full_frequencies": [
+            []
+          ],
+          "heads": 1,
+          "memory_read": "qry",
+          "position_origin": 14,
+          "position_scale": 18,
+          "read_frequencies": [],
+          "summary_width": 32,
+          "width": 128,
+          "window": 9216
+        },
+        {
+          "adapter_rank": 32,
+          "alpha_att": 1.0,
+          "alpha_ff": 1.0,
+          "beta_short": 0.03850817669777474,
+          "distance_slopes": [
+            0.0
+          ],
+          "epsilon": 1e-05,
+          "ffn_width": 512,
+          "full_frequencies": [
+            []
+          ],
+          "heads": 1,
+          "memory_read": "qry",
+          "position_origin": 14,
+          "position_scale": 18,
+          "read_frequencies": [],
+          "summary_width": 32,
+          "width": 128,
+          "window": 9216
+        },
+        {
+          "adapter_rank": 32,
+          "alpha_att": 1.0,
+          "alpha_ff": 1.0,
+          "beta_short": 0.03850817669777474,
+          "distance_slopes": [
+            0.0
+          ],
+          "epsilon": 1e-05,
+          "ffn_width": 512,
+          "full_frequencies": [
+            []
+          ],
+          "heads": 1,
+          "memory_read": "qry",
+          "position_origin": 14,
+          "position_scale": 18,
+          "read_frequencies": [],
+          "summary_width": 32,
+          "width": 128,
+          "window": 9216
+        },
+        {
+          "adapter_rank": 32,
+          "alpha_att": 1.0,
+          "alpha_ff": 1.0,
+          "beta_short": 0.03850817669777474,
+          "distance_slopes": [
+            0.0
+          ],
+          "epsilon": 1e-05,
+          "ffn_width": 512,
+          "full_frequencies": [
+            []
+          ],
+          "heads": 1,
+          "memory_read": "qry",
+          "position_origin": 14,
+          "position_scale": 18,
+          "read_frequencies": [],
+          "summary_width": 32,
+          "width": 128,
+          "window": 9216
+        },
+        {
+          "adapter_rank": 32,
+          "alpha_att": 1.0,
+          "alpha_ff": 1.0,
+          "beta_short": 0.03850817669777474,
+          "distance_slopes": [
+            0.0
+          ],
+          "epsilon": 1e-05,
+          "ffn_width": 512,
+          "full_frequencies": [
+            []
+          ],
+          "heads": 1,
+          "memory_read": "qry",
+          "position_origin": 15,
+          "position_scale": 18,
+          "read_frequencies": [],
+          "summary_width": 32,
+          "width": 128,
+          "window": 9216
+        },
+        {
+          "adapter_rank": 32,
+          "alpha_att": 1.0,
+          "alpha_ff": 1.0,
+          "beta_short": 0.03850817669777474,
+          "distance_slopes": [
+            0.0
+          ],
+          "epsilon": 1e-05,
+          "ffn_width": 512,
+          "full_frequencies": [
+            []
+          ],
+          "heads": 1,
+          "memory_read": "qry",
+          "position_origin": 15,
+          "position_scale": 18,
+          "read_frequencies": [],
+          "summary_width": 32,
+          "width": 128,
+          "window": 9216
+        },
+        {
+          "adapter_rank": 32,
+          "alpha_att": 1.0,
+          "alpha_ff": 1.0,
+          "beta_short": 0.03850817669777474,
+          "distance_slopes": [
+            0.0
+          ],
+          "epsilon": 1e-05,
+          "ffn_width": 512,
+          "full_frequencies": [
+            []
+          ],
+          "heads": 1,
+          "memory_read": "qry",
+          "position_origin": 15,
+          "position_scale": 18,
+          "read_frequencies": [],
+          "summary_width": 32,
+          "width": 128,
+          "window": 9216
+        },
+        {
+          "adapter_rank": 32,
+          "alpha_att": 1.0,
+          "alpha_ff": 1.0,
+          "beta_short": 0.03850817669777474,
+          "distance_slopes": [
+            0.0
+          ],
+          "epsilon": 1e-05,
+          "ffn_width": 512,
+          "full_frequencies": [
+            []
+          ],
+          "heads": 1,
+          "memory_read": "qry",
+          "position_origin": 15,
+          "position_scale": 18,
+          "read_frequencies": [],
+          "summary_width": 32,
+          "width": 128,
+          "window": 9216
+        },
+        {
+          "adapter_rank": 32,
+          "alpha_att": 1.0,
+          "alpha_ff": 1.0,
+          "beta_short": 0.03850817669777474,
+          "distance_slopes": [
+            0.0
+          ],
+          "epsilon": 1e-05,
+          "ffn_width": 512,
+          "full_frequencies": [
+            []
+          ],
+          "heads": 1,
+          "memory_read": "qry",
+          "position_origin": 16,
+          "position_scale": 18,
+          "read_frequencies": [],
+          "summary_width": 32,
+          "width": 128,
+          "window": 0
+        },
+        {
+          "adapter_rank": 32,
+          "alpha_att": 1.0,
+          "alpha_ff": 1.0,
+          "beta_short": 0.03850817669777474,
+          "distance_slopes": [
+            0.0
+          ],
+          "epsilon": 1e-05,
+          "ffn_width": 512,
+          "full_frequencies": [
+            []
+          ],
+          "heads": 1,
+          "memory_read": "qry",
+          "position_origin": 16,
+          "position_scale": 18,
+          "read_frequencies": [],
+          "summary_width": 32,
+          "width": 128,
+          "window": 0
+        },
+        {
+          "adapter_rank": 32,
+          "alpha_att": 1.0,
+          "alpha_ff": 1.0,
+          "beta_short": 0.03850817669777474,
+          "distance_slopes": [
+            0.0
+          ],
+          "epsilon": 1e-05,
+          "ffn_width": 512,
+          "full_frequencies": [
+            []
+          ],
+          "heads": 1,
+          "memory_read": "qry",
+          "position_origin": 16,
+          "position_scale": 18,
+          "read_frequencies": [],
+          "summary_width": 32,
+          "width": 128,
+          "window": 0
+        },
+        {
+          "adapter_rank": 32,
+          "alpha_att": 1.0,
+          "alpha_ff": 1.0,
+          "beta_short": 0.03850817669777474,
+          "distance_slopes": [
+            0.0
+          ],
+          "epsilon": 1e-05,
+          "ffn_width": 512,
+          "full_frequencies": [
+            []
+          ],
+          "heads": 1,
+          "memory_read": "qry",
+          "position_origin": 16,
+          "position_scale": 18,
+          "read_frequencies": [],
+          "summary_width": 32,
+          "width": 128,
+          "window": 0
+        }
+      ],
+      "parent_public_plan_sha256": "95921c80b2a16ca3a14bf94fbdb18f87cbf8532880bb6454eedde1f3cbb10df0",
+      "recipe": {
+        "requested": {
+          "branches": 2,
+          "depth": 16,
+          "family": "kv",
+          "history": 512,
+          "memory_overrides": {
+            "distance_slopes": [
+              0.0
+            ],
+            "full_frequencies": [
+              []
+            ],
+            "heads": 1,
+            "memory_read": "qry"
+          },
+          "offsets": [
+            0,
+            1
+          ],
+          "profile": "baseline",
+          "region_overrides": {},
+          "region_width": 4,
+          "selection": "direct_attention",
+          "source_mode": "region",
+          "sparse_denominator": 2,
+          "topology": "fc",
+          "width": 128
+        },
+        "scale": null,
+        "schema": "tide-core5-recipe-v1",
+        "sparse_budget": {
+          "effective_k": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          "note": "k is sending strength; actual support and Full counts require execution",
+          "requested_fraction": 0.5
+        }
+      },
+      "regions": [
+        {
+          "allocation_base": "mu",
+          "allocation_temperature": 1.0,
+          "alpha_loc": null,
+          "alpha_match": null,
+          "alpha_res": null,
+          "alpha_sel": null,
+          "ent_alpha": null,
+          "eta": null,
+          "fixed_gain": 2.0,
+          "gain_logit": null,
+          "gamma_max": 2.0,
+          "hidden_width": 32,
+          "k": null,
+          "local_score": "cat",
+          "query_weight": null,
+          "read_mode": "+",
+          "region_control_mode": null,
+          "region_control_width": null,
+          "region_evidence": null,
+          "region_key": null,
+          "region_score": "ind",
+          "regularizer": null,
+          "selection_mode": "direct_attention",
+          "selection_width": null,
+          "send_gain": "fixed",
+          "total_fraction": null
+        },
+        {
+          "allocation_base": "mu",
+          "allocation_temperature": 1.0,
+          "alpha_loc": null,
+          "alpha_match": null,
+          "alpha_res": null,
+          "alpha_sel": null,
+          "ent_alpha": null,
+          "eta": null,
+          "fixed_gain": 2.0,
+          "gain_logit": null,
+          "gamma_max": 2.0,
+          "hidden_width": 32,
+          "k": null,
+          "local_score": "cat",
+          "query_weight": null,
+          "read_mode": "+",
+          "region_control_mode": null,
+          "region_control_width": null,
+          "region_evidence": null,
+          "region_key": null,
+          "region_score": "ind",
+          "regularizer": null,
+          "selection_mode": "direct_attention",
+          "selection_width": null,
+          "send_gain": "fixed",
+          "total_fraction": null
+        },
+        {
+          "allocation_base": "mu",
+          "allocation_temperature": 1.0,
+          "alpha_loc": null,
+          "alpha_match": null,
+          "alpha_res": null,
+          "alpha_sel": null,
+          "ent_alpha": null,
+          "eta": null,
+          "fixed_gain": 2.0,
+          "gain_logit": null,
+          "gamma_max": 2.0,
+          "hidden_width": 32,
+          "k": null,
+          "local_score": "cat",
+          "query_weight": null,
+          "read_mode": "+",
+          "region_control_mode": null,
+          "region_control_width": null,
+          "region_evidence": null,
+          "region_key": null,
+          "region_score": "ind",
+          "regularizer": null,
+          "selection_mode": "direct_attention",
+          "selection_width": null,
+          "send_gain": "fixed",
+          "total_fraction": null
+        },
+        {
+          "allocation_base": "mu",
+          "allocation_temperature": 1.0,
+          "alpha_loc": null,
+          "alpha_match": null,
+          "alpha_res": null,
+          "alpha_sel": null,
+          "ent_alpha": null,
+          "eta": null,
+          "fixed_gain": 2.0,
+          "gain_logit": null,
+          "gamma_max": 2.0,
+          "hidden_width": 32,
+          "k": null,
+          "local_score": "cat",
+          "query_weight": null,
+          "read_mode": "+",
+          "region_control_mode": null,
+          "region_control_width": null,
+          "region_evidence": null,
+          "region_key": null,
+          "region_score": "ind",
+          "regularizer": null,
+          "selection_mode": "direct_attention",
+          "selection_width": null,
+          "send_gain": "fixed",
+          "total_fraction": null
+        },
+        {
+          "allocation_base": "mu",
+          "allocation_temperature": 1.0,
+          "alpha_loc": null,
+          "alpha_match": null,
+          "alpha_res": null,
+          "alpha_sel": null,
+          "ent_alpha": null,
+          "eta": null,
+          "fixed_gain": 2.0,
+          "gain_logit": null,
+          "gamma_max": 2.0,
+          "hidden_width": 32,
+          "k": null,
+          "local_score": "cat",
+          "query_weight": null,
+          "read_mode": "+",
+          "region_control_mode": null,
+          "region_control_width": null,
+          "region_evidence": null,
+          "region_key": null,
+          "region_score": "ind",
+          "regularizer": null,
+          "selection_mode": "direct_attention",
+          "selection_width": null,
+          "send_gain": "fixed",
+          "total_fraction": null
+        },
+        {
+          "allocation_base": "mu",
+          "allocation_temperature": 1.0,
+          "alpha_loc": null,
+          "alpha_match": null,
+          "alpha_res": null,
+          "alpha_sel": null,
+          "ent_alpha": null,
+          "eta": null,
+          "fixed_gain": 2.0,
+          "gain_logit": null,
+          "gamma_max": 2.0,
+          "hidden_width": 32,
+          "k": null,
+          "local_score": "cat",
+          "query_weight": null,
+          "read_mode": "+",
+          "region_control_mode": null,
+          "region_control_width": null,
+          "region_evidence": null,
+          "region_key": null,
+          "region_score": "ind",
+          "regularizer": null,
+          "selection_mode": "direct_attention",
+          "selection_width": null,
+          "send_gain": "fixed",
+          "total_fraction": null
+        },
+        {
+          "allocation_base": "mu",
+          "allocation_temperature": 1.0,
+          "alpha_loc": null,
+          "alpha_match": null,
+          "alpha_res": null,
+          "alpha_sel": null,
+          "ent_alpha": null,
+          "eta": null,
+          "fixed_gain": 2.0,
+          "gain_logit": null,
+          "gamma_max": 2.0,
+          "hidden_width": 32,
+          "k": null,
+          "local_score": "cat",
+          "query_weight": null,
+          "read_mode": "+",
+          "region_control_mode": null,
+          "region_control_width": null,
+          "region_evidence": null,
+          "region_key": null,
+          "region_score": "ind",
+          "regularizer": null,
+          "selection_mode": "direct_attention",
+          "selection_width": null,
+          "send_gain": "fixed",
+          "total_fraction": null
+        },
+        {
+          "allocation_base": "mu",
+          "allocation_temperature": 1.0,
+          "alpha_loc": null,
+          "alpha_match": null,
+          "alpha_res": null,
+          "alpha_sel": null,
+          "ent_alpha": null,
+          "eta": null,
+          "fixed_gain": 2.0,
+          "gain_logit": null,
+          "gamma_max": 2.0,
+          "hidden_width": 32,
+          "k": null,
+          "local_score": "cat",
+          "query_weight": null,
+          "read_mode": "+",
+          "region_control_mode": null,
+          "region_control_width": null,
+          "region_evidence": null,
+          "region_key": null,
+          "region_score": "ind",
+          "regularizer": null,
+          "selection_mode": "direct_attention",
+          "selection_width": null,
+          "send_gain": "fixed",
+          "total_fraction": null
+        },
+        {
+          "allocation_base": "mu",
+          "allocation_temperature": 1.0,
+          "alpha_loc": null,
+          "alpha_match": null,
+          "alpha_res": null,
+          "alpha_sel": null,
+          "ent_alpha": null,
+          "eta": null,
+          "fixed_gain": 2.0,
+          "gain_logit": null,
+          "gamma_max": 2.0,
+          "hidden_width": 32,
+          "k": null,
+          "local_score": "cat",
+          "query_weight": null,
+          "read_mode": "+",
+          "region_control_mode": null,
+          "region_control_width": null,
+          "region_evidence": null,
+          "region_key": null,
+          "region_score": "ind",
+          "regularizer": null,
+          "selection_mode": "direct_attention",
+          "selection_width": null,
+          "send_gain": "fixed",
+          "total_fraction": null
+        },
+        {
+          "allocation_base": "mu",
+          "allocation_temperature": 1.0,
+          "alpha_loc": null,
+          "alpha_match": null,
+          "alpha_res": null,
+          "alpha_sel": null,
+          "ent_alpha": null,
+          "eta": null,
+          "fixed_gain": 2.0,
+          "gain_logit": null,
+          "gamma_max": 2.0,
+          "hidden_width": 32,
+          "k": null,
+          "local_score": "cat",
+          "query_weight": null,
+          "read_mode": "+",
+          "region_control_mode": null,
+          "region_control_width": null,
+          "region_evidence": null,
+          "region_key": null,
+          "region_score": "ind",
+          "regularizer": null,
+          "selection_mode": "direct_attention",
+          "selection_width": null,
+          "send_gain": "fixed",
+          "total_fraction": null
+        },
+        {
+          "allocation_base": "mu",
+          "allocation_temperature": 1.0,
+          "alpha_loc": null,
+          "alpha_match": null,
+          "alpha_res": null,
+          "alpha_sel": null,
+          "ent_alpha": null,
+          "eta": null,
+          "fixed_gain": 2.0,
+          "gain_logit": null,
+          "gamma_max": 2.0,
+          "hidden_width": 32,
+          "k": null,
+          "local_score": "cat",
+          "query_weight": null,
+          "read_mode": "+",
+          "region_control_mode": null,
+          "region_control_width": null,
+          "region_evidence": null,
+          "region_key": null,
+          "region_score": "ind",
+          "regularizer": null,
+          "selection_mode": "direct_attention",
+          "selection_width": null,
+          "send_gain": "fixed",
+          "total_fraction": null
+        },
+        {
+          "allocation_base": "mu",
+          "allocation_temperature": 1.0,
+          "alpha_loc": null,
+          "alpha_match": null,
+          "alpha_res": null,
+          "alpha_sel": null,
+          "ent_alpha": null,
+          "eta": null,
+          "fixed_gain": 2.0,
+          "gain_logit": null,
+          "gamma_max": 2.0,
+          "hidden_width": 32,
+          "k": null,
+          "local_score": "cat",
+          "query_weight": null,
+          "read_mode": "+",
+          "region_control_mode": null,
+          "region_control_width": null,
+          "region_evidence": null,
+          "region_key": null,
+          "region_score": "ind",
+          "regularizer": null,
+          "selection_mode": "direct_attention",
+          "selection_width": null,
+          "send_gain": "fixed",
+          "total_fraction": null
+        },
+        {
+          "allocation_base": "mu",
+          "allocation_temperature": 1.0,
+          "alpha_loc": null,
+          "alpha_match": null,
+          "alpha_res": null,
+          "alpha_sel": null,
+          "ent_alpha": null,
+          "eta": null,
+          "fixed_gain": 2.0,
+          "gain_logit": null,
+          "gamma_max": 2.0,
+          "hidden_width": 32,
+          "k": null,
+          "local_score": "cat",
+          "query_weight": null,
+          "read_mode": "+",
+          "region_control_mode": null,
+          "region_control_width": null,
+          "region_evidence": null,
+          "region_key": null,
+          "region_score": "ind",
+          "regularizer": null,
+          "selection_mode": "direct_attention",
+          "selection_width": null,
+          "send_gain": "fixed",
+          "total_fraction": null
+        },
+        {
+          "allocation_base": "mu",
+          "allocation_temperature": 1.0,
+          "alpha_loc": null,
+          "alpha_match": null,
+          "alpha_res": null,
+          "alpha_sel": null,
+          "ent_alpha": null,
+          "eta": null,
+          "fixed_gain": 2.0,
+          "gain_logit": null,
+          "gamma_max": 2.0,
+          "hidden_width": 32,
+          "k": null,
+          "local_score": "cat",
+          "query_weight": null,
+          "read_mode": "+",
+          "region_control_mode": null,
+          "region_control_width": null,
+          "region_evidence": null,
+          "region_key": null,
+          "region_score": "ind",
+          "regularizer": null,
+          "selection_mode": "direct_attention",
+          "selection_width": null,
+          "send_gain": "fixed",
+          "total_fraction": null
+        },
+        {
+          "allocation_base": "mu",
+          "allocation_temperature": 1.0,
+          "alpha_loc": null,
+          "alpha_match": null,
+          "alpha_res": null,
+          "alpha_sel": null,
+          "ent_alpha": null,
+          "eta": null,
+          "fixed_gain": 2.0,
+          "gain_logit": null,
+          "gamma_max": 2.0,
+          "hidden_width": 32,
+          "k": null,
+          "local_score": "cat",
+          "query_weight": null,
+          "read_mode": "+",
+          "region_control_mode": null,
+          "region_control_width": null,
+          "region_evidence": null,
+          "region_key": null,
+          "region_score": "ind",
+          "regularizer": null,
+          "selection_mode": "direct_attention",
+          "selection_width": null,
+          "send_gain": "fixed",
+          "total_fraction": null
+        },
+        {
+          "allocation_base": "mu",
+          "allocation_temperature": 1.0,
+          "alpha_loc": null,
+          "alpha_match": null,
+          "alpha_res": null,
+          "alpha_sel": null,
+          "ent_alpha": null,
+          "eta": null,
+          "fixed_gain": 2.0,
+          "gain_logit": null,
+          "gamma_max": 2.0,
+          "hidden_width": 32,
+          "k": null,
+          "local_score": "cat",
+          "query_weight": null,
+          "read_mode": "+",
+          "region_control_mode": null,
+          "region_control_width": null,
+          "region_evidence": null,
+          "region_key": null,
+          "region_score": "ind",
+          "regularizer": null,
+          "selection_mode": "direct_attention",
+          "selection_width": null,
+          "send_gain": "fixed",
+          "total_fraction": null
+        }
+      ],
+      "sha256": "90df97b7e3aaf7be49490b2e8555a6598d1360af36f40f0b1258dfeeba3a7173",
+      "source_binding": {
+        "mode": "region",
+        "rank": null
+      },
+      "source_hidden_width": 32,
+      "stride": 18,
+      "upstream": "0770593838a37c790a568226930567ed60f99b83",
+      "width": 128
+    }
+  },
+  "dtype": "float32",
+  "evaluation": {
+    "inference_length": 16,
+    "test_policy": "sealed"
+  },
+  "id": "fc64-direct-s11",
+  "initialization": "role-keyed-fan-in-v1",
+  "kind": "direct_semantic",
+  "numerical_policy": {
+    "allocation_fp32_tolerance": 2e-05,
+    "positive_floor": "normal-tiny on eligible positive functions; original finite/discrete failures retained",
+    "strict_atol": 1e-06,
+    "strict_rtol": 1e-05
+  },
+  "planned_inventory": {
+    "lm_trainable": 18235360
+  },
+  "resources": {
+    "max_rss_gib": 48
+  },
+  "revisions": {
+    "foundation_metadata": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+    "mathematics": "0770593838a37c790a568226930567ed60f99b83"
+  },
+  "schema": "tide-direct-coverage-config-v1",
+  "seed": 11,
+  "stage_until_tokens": 16777216,
+  "study_id": "TL-SCALE-v9",
+  "threads": 2,
+  "training": {
+    "batch": 8,
+    "betas": [
+      0.9,
+      0.95
+    ],
+    "checkpoint_seconds": 1800,
+    "clip_norm": 1.0,
+    "decay_policy": "matrix_only",
+    "eps": 1e-08,
+    "eval_batch": 8,
+    "eval_tokens": 131072,
+    "global_batch": 64,
+    "initial_eval_tokens": 32768,
+    "keep_previous": false,
+    "length": 256,
+    "log_every": 16,
+    "lr": 0.001,
+    "lr_decay_tokens": 16777216,
+    "lr_floor_fraction": 0.1,
+    "milestone_weights_only": true,
+    "milestones": [
+      4194304,
+      16777216
+    ],
+    "target_tokens": 16777216,
+    "timeout_seconds": 165600,
+    "validation_every_tokens": 4194304,
+    "warmup_tokens": 1048576,
+    "weight_decay": 0.1
+  },
+  "transformer": null
+}

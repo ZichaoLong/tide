@@ -53,3 +53,5 @@ HB每个pooled/quad档在1e-3/3e-4有限校准；主线两种子使用同一获�
 
 结果由人工审阅形成支持/反证/未区分解释；自动程序只选择配置与记录执行。
 项目记录权威，Lens项目tide-learning-lab，私有入口仅.local/LENS.md。B预训练路线本批不新增训练。
+
+执行细节：R64 Bernoulli k2与q3匹配强度预算；q10/k10是活动阶梯中间点，不能声称同强度预算对照。条件延伸在原配置预留总target、沿用初始horizon之后的10%学习率floor，主轨迹以until限制曝光；不用改写活动输入来续训。具体查看、停止、恢复和Lens身份见[操作页](direct-v9-operations.md)。
