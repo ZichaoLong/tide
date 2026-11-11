@@ -144,7 +144,8 @@ def collect(root, jobs):
             'effective_interop_threads', 'precision', 'trainable_parameters', 'initial_parameters_sha256',
             'measured_parameters_sha256', 'profile', 'construction_seconds')} | dict(
                 device=config['device'], client=config['core']['eager_implementation'],
-                placement=config['core']['placement_preset'] if d['baseline'] == 'graph' else 'direct-device',
+                placement=config['core']['placement_preset'] if d['baseline'] in {'graph', 'columns', 'window'} else 'direct-device',
+                window_execution=d.get('effective_window_execution'),
                 batch=config['training']['batch'], length=config['training']['length'],
                 trace=d['trace_records'], affinity=d['affinity'], visibility=d['visibility'],
                 measurement=m | dict(work=work_summary(m['work']))))

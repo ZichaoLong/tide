@@ -1,0 +1,50 @@
+"""Tensor-preserving adapter for the independently scheduled LibTorch columns."""
+import torch
+from .column_layout import SequenceLayout
+from .kv_columns_state import KVStateColumns, KVWriteBank, KVWindowColumns
+from .message_columns import MessageColumns
+
+
+def layout(value):
+    return SequenceLayout(torch.tensor(value.offsets, dtype=torch.int64), torch.tensor(value.times, dtype=torch.int64))
+
+
+def state(value):
+    return KVStateColumns(layout(value.layout), **value.fields, inert=value.inert,
+        last_times=torch.tensor(value.last_times, dtype=torch.int64), observations=torch.tensor(value.observations, dtype=torch.int64))
+
+
+class NativeColumns:
+    def __init__(self, binding, spec, library=None, max_workspace_bytes=4*1024**3):
+        from ..native_loader import load_native
+        from ..native_model import encode_model
+        core = load_native(library, backend=binding.model.nodes[0].bias.device.type)
+        if not hasattr(core, "weighted_settle_columns"):
+            raise RuntimeError("rebuild native library for the tensor-column interface")
+        self.core = core
+        graph, self.model = encode_model(core, binding.graph, binding.model)
+        self.spec = core.SettleGraph(graph, spec.ranks, spec.binding, spec.stride)
+        self.graph = binding.graph
+        self.max_workspace_bytes = max_workspace_bytes
+
+    def run_ports(self, domain, ports, left):
+        from .settle_columns import SettleColumnResult, NodeColumns
+        c = self.core
+        encode = lambda l: c.ColumnLayout(l.offsets.tolist(), l.times.tolist())
+        old = {} if left is None else {v: c.KVColumnState(encode(s.layout),
+            {name: getattr(s, name) for name in ("keys", "values", "summaries", "weights")},
+            s.inert, s.last_times.tolist(), s.observations.tolist()) for v, s in left.items()}
+        values = {p: c.MessageColumns(m.rows.tolist(), m.strength, m.content) for p, m in ports.items()}
+        result = c.weighted_settle_columns(self.spec, self.model, encode(domain), values, old, self.max_workspace_bytes)
+        def message(m):
+            return MessageColumns(torch.tensor(m.rows, dtype=torch.int64), m.strength, m.content)
+        nodes = {}
+        states = {v: state(s) for v, s in result.states.items()}
+        for v, node in result.nodes.items():
+            w = node.window
+            window = KVWindowColumns(layout(w.layout), w.mass, w.content,
+                KVWriteBank(layout(w.bank_layout), **w.bank), states[v])
+            nodes[v] = NodeColumns(torch.tensor(node.rows, dtype=torch.int64), window, node.descriptors, node.controls)
+        return SettleColumnResult(self.graph, domain, states,
+            {p: message(m) for p, m in result.outputs.items()}, {e: message(m) for e, m in result.messages.items()},
+            nodes, result.stats, {p: x.rows for p, x in ports.items()})

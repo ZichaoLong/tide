@@ -1,8 +1,8 @@
 """KV §3–4: bank contractions and a bank-sized first-order transpose.
 
-q/k/v use [owner, head, query-or-history, channel]. Each query's visible
-positive entries must have the same first positive entry within its owner.
-Unlike independent snapshot Attention, K/V are actual shared gradient roots.
+q/k/v use [owner, head, query-or-history, channel]. K/V are actual shared
+gradient roots. A common bank anchor avoids query-sized copies; visibility may
+vary with causal time/expiry. Singleton queries have the exact zero logit VJP.
 """
 import math
 import torch
@@ -36,6 +36,7 @@ class _Attention(torch.autograd.Function):
         delta = torch.where(used[:, None, :, None], v, anchor) - anchor
         mean = p @ delta
         dl = p * (bar @ delta.transpose(-1, -2) - (bar * mean).sum(-1, keepdim=True))
+        dl = torch.where((weights > 0).sum(-1)[:, None, :, None] > 1, dl, 0)
         dq = dl @ k / math.sqrt(q.shape[-1]) if ctx.needs_input_grad[0] else None
         dk = dl.transpose(-1, -2) @ q / math.sqrt(q.shape[-1]) if ctx.needs_input_grad[1] else None
         dv = p.transpose(-1, -2) @ bar if ctx.needs_input_grad[2] else None

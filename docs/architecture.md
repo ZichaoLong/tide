@@ -49,6 +49,14 @@ Describe能力与记忆query策略独立报告，非strict数值策略仍按其�
 查询的ragged快照保留独立内部叶；query/region VJP按[只读发布契约](tensor-publication.md)
 暴露detach视图，消费者修改先clone；显式owned-copy工具与返回到host的独立存储契约另列。
 修改须同步`test_independent_copies`、query/region根及恢复；batch字段用unbind统一线性转置。
+新张量窗口接口见 [weighted-tensor-windows](weighted-tensor-windows.md)：公共
+`weighted.execution.eager_runner` 的 `run_positions/run_ports` 在能力许可时直接采用
+`settle_columns`；`window_execution` 负责公共身份/能力分派，`window_records` 只负责
+显式后备的记录装配。KV 与循环各有 typed 私有状态，消息/区域列连接两者。
+C++ `weighted_sequence_columns.h` 公开独立 KV 整链；`weighted_column_state/query` 与
+`weighted_settle_columns` 分别拥有局部数学和调度。修改同步该契约、column/window 测试、
+旧一般图回归和实际默认客户端，不把低层 Plan 成绩当默认入口成绩。
+
 隐藏KV查询块见[块接口契约](weighted-query-blocks.md)：`weighted/kv_block_*`与
 `weighted_kv_block_*`接收actual prepared bank、B×L列与原始时间，块伴随直接归还原始写入；
 `block_attention`避免五维VJP展开。trace/terminal/不适用布局保留原独立根路径。

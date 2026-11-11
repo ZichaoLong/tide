@@ -18,6 +18,7 @@
 | 正在调查的问题 | 详细观察 |
 | --- | --- |
 | GEMV/GEMM/BMM、计算共享、packing、元数据及完整返回 | [批量与数据搬运](performance-lessons-batching.md) |
+| typed 状态、KV/区域/消息列贯穿、默认 B×L 输入与 raw 恢复 | [跨模块张量交接](performance-lessons-prefill.md#从模块批量到跨模块张量交接) |
 | B×L窗口、KV前缀、查询/区域VJP、结果发布 | [prefill与KV布局](performance-lessons-prefill.md) |
 | 归一化、近零梯度、共享归约、独立公式与舍入 | [数值与梯度](performance-lessons-numerics.md) |
 | 缓存所有权、设备工作区、多卡、checkpoint与恢复 | [状态与设备](performance-lessons-state-devices.md) |

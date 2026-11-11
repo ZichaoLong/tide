@@ -28,6 +28,12 @@ python scripts/check_upstream.py
 默认接续只依赖Git源码/文档和声明的外部工具链；本地环境、预编译库和旧运行目录不保证存在。
 按下面的步骤重建，已知问题从[复现导航](reproduction.md)进入；[产物规则](artifact-retention.md)说明历史材料边界。
 
+新的 B×L 公共客户端见 [tensor-window-v1](weighted-tensor-windows.md)。安装当前包后可从任意 cwd
+运行 `python /path/to/examples/consumer_core5/tensor_window.py --client python --dtype float64 --output-dir NEW_DIR`，
+验证三步 AdamW、raw continuation 和新进程精确续接。native 增加
+`--client native --native-library /path/to/matching/build`；真实 NPU 在合法分配后选
+`--device npu:0 --dtype float32`。该小消费者的资格不能代替全部局部组合/规模。
+
 ## Python CPU 起步
 
 使用项目自己的 Python/Torch 环境。不要覆盖其他项目或公共厂商环境。

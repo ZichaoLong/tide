@@ -66,6 +66,7 @@ add_library(tidegraph STATIC
   cpp/src/weighted_kv_block_dispatch.cpp cpp/src/weighted_block_attention.cpp
   cpp/src/weighted_allocation_batch.cpp cpp/src/weighted_allocation_rows.cpp
   cpp/src/weighted_allocation_columns.cpp cpp/src/weighted_region_columns.cpp
+  cpp/src/weighted_column_state.cpp cpp/src/weighted_column_query.cpp cpp/src/weighted_settle_columns.cpp
   cpp/src/weighted_sending_batch.cpp cpp/src/weighted_region_batch.cpp cpp/src/weighted_region_vjp.cpp
   cpp/src/weighted_placement_copy.cpp cpp/src/weighted_placement_read.cpp cpp/src/weighted_placement_region.cpp
   cpp/src/weighted_packed.cpp cpp/src/weighted_kv_packed.cpp cpp/src/weighted_kv_sequence_vjp.cpp cpp/src/weighted_recurrent_packed.cpp
@@ -165,6 +166,9 @@ target_link_libraries(tidegraph-checkpoint-check PRIVATE tidegraph_runtime)
 add_executable(tidegraph-weighted-training-check cpp/test/weighted_graph_training.cpp
   cpp/test/weighted_graph_fixture.cpp cpp/test/native_graph_records.cpp cpp/bench/compare.cpp)
 target_link_libraries(tidegraph-weighted-training-check PRIVATE tidegraph_runtime)
+add_executable(tidegraph-column-check cpp/test/weighted_sequence_columns.cpp cpp/test/weighted_graph_fixture.cpp)
+target_link_libraries(tidegraph-column-check PRIVATE tidegraph_runtime)
+add_test(NAME weighted-columns COMMAND tidegraph-column-check)
 add_executable(tidegraph-streaming-bench cpp/bench/main.cpp cpp/bench/config.cpp
   cpp/bench/workload.cpp cpp/bench/compare.cpp)
 target_link_libraries(tidegraph-streaming-bench PRIVATE tidegraph_runtime)
@@ -175,7 +179,7 @@ endif()
 if(TIDE_PYTHON_BINDINGS)
   find_package(Python3 REQUIRED COMPONENTS Interpreter Development.Module)
   find_library(TORCH_PYTHON_LIBRARY torch_python PATHS "${TORCH_INSTALL_PREFIX}/lib" REQUIRED NO_DEFAULT_PATH)
-  Python3_add_library(_tide_native MODULE cpp/src/bindings.cpp cpp/src/bind_settle.cpp cpp/src/bind_metrics.cpp cpp/src/bind_full.cpp cpp/src/bind_aggregate.cpp cpp/src/bind_placement.cpp cpp/src/bind_weighted.cpp cpp/src/bind_weighted_batch.cpp)
+  Python3_add_library(_tide_native MODULE cpp/src/bindings.cpp cpp/src/bind_settle.cpp cpp/src/bind_metrics.cpp cpp/src/bind_full.cpp cpp/src/bind_aggregate.cpp cpp/src/bind_placement.cpp cpp/src/bind_weighted.cpp cpp/src/bind_weighted_batch.cpp cpp/src/bind_weighted_sequence_columns.cpp)
   target_link_libraries(_tide_native PRIVATE tidegraph ${TORCH_PYTHON_LIBRARY})
 endif()
 

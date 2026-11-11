@@ -47,7 +47,7 @@ def main():
     p.add_argument("--output-dir", type=Path, required=True)
     p.add_argument("--device", choices=("cpu", "npu:0"), required=True)
     p.add_argument("--client", choices=("python", "native"), default="native")
-    p.add_argument("--baseline", choices=("graph", "fc-tensor", "transformer-16", "transformer-4", "transformer-2"), default="graph")
+    p.add_argument("--baseline", choices=("graph", "window", "columns", "fc-tensor", "transformer-16", "transformer-4", "transformer-2"), default="graph")
     p.add_argument("--fc-shape", choices=("fc16", "fc4"), default="fc16",
                    help="fc16=4 regions x4 nodes; fc4=2x2 with the same local dimensions and strength ratio")
     p.add_argument("--phase-fences", choices=("phase", "step"), default="phase",
@@ -73,7 +73,7 @@ def main():
     p.add_argument("--warmup-state", choices=("reset", "continue"), default="reset",
                    help="reset restores initial weights/optimizer after warmup for controlled comparisons")
     a = p.parse_args()
-    if a.baseline == "graph" and a.client == "native" and not a.native_library:
+    if a.baseline in {"graph", "columns", "window"} and a.client == "native" and not a.native_library:
         p.error("native requires an explicit matching --native-library build directory")
     if a.profile == "stages" and (a.client != "native" or a.baseline != "graph"):
         p.error("native stage counters require --client native")
@@ -129,7 +129,7 @@ def main():
         full_sequence = a.mode != "inference"
         torch.set_grad_enabled(a.mode in {"training", "grad-forward", "backward"})
         core = None
-        if a.baseline == "graph" and a.client == "native":
+        if a.baseline in {"graph", "columns", "window"} and a.client == "native":
             core = load_native(a.native_library, backend=device.type)
             manifest = Path(a.native_library)/"build-manifest.json"
             record["native_build"] = json.loads(manifest.read_text())
@@ -140,6 +140,17 @@ def main():
         record["effective_interop_threads"] = torch.get_num_interop_threads()
         start = time.monotonic()
         model = make_model(config, device)
+        columns = None
+        if a.baseline == "columns":
+            from tidegraph.weighted.settle_columns import SettleColumnPlan
+            columns = SettleColumnPlan(model.encoder.binding, model.encoder.spec,
+                                       implementation=a.client, native_library=a.native_library)
+        if a.baseline == "window":
+            from tidegraph import ExecutionPlacement
+            columns = eager_runner(model.encoder.binding, a.client,
+                ExecutionPlacement(preset="cpu" if device.type == "cpu" else "mixed-c"),
+                native_library=a.native_library, query_execution=a.query_execution,
+                prefill_schedule=a.prefill_schedule, trace=False)
         if a.baseline.startswith("transformer-"):
             from fc_tensor_baseline import TransformerLayers
             with torch.random.fork_rng(devices=[]):
@@ -147,6 +158,8 @@ def main():
                 model.encoder = TransformerLayers(depth=int(a.baseline.split('-')[-1])).to(device)
         opt = optimizer_for(model, config)
         record["comparison_scope"] = ("Original graph task" if a.baseline == "graph" else
+            "Default eager tensor window including raw continuation export; ordinary column roots, selected by capabilities; host schedule" if a.baseline == "window" else
+            "Public column composition: same core-5 fields, raw terminal states and physical message support; column roots, not legacy independent event roots; host schedule" if a.baseline == "columns" else
             "Same core-5 parameters/input/head/loss; independent FC output/terminal-state projection, no complete trace or None-root equivalence" if a.baseline == "fc-tensor" else
             "Different function: serial pre-RMS/SDPA/SwiGLU Transformer, d128/head2/FFN512; same input/head/loss/optimizer, actual parameter count recorded")
         synchronize(device)
@@ -195,6 +208,14 @@ def main():
                                                           full_attention=a.formula_attention))
                 hidden = result["hidden"] if full_sequence else result["hidden"][:, -1]
                 work = result["stats"]
+            elif a.baseline in {"columns", "window"}:
+                result = phase("core_forward", lambda: columns.run(features) if a.baseline == "columns" else
+                               columns.run_positions(model.encoder.spec, features))
+                if a.baseline == "window":
+                    record["effective_window_execution"] = result.execution
+                value = phase("readout", lambda: result.readout(features))
+                hidden = value if full_sequence else value[:, -1]
+                work = result.stats
             else:
                 result = phase("core_forward", lambda: model.encoder(features))
                 hidden = result if full_sequence else result[:, -1]

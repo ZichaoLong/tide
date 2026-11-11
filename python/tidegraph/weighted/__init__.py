@@ -2,6 +2,13 @@
 from importlib import import_module
 
 _EXPORTS = {'Allocation': '.allocation',
+ 'eager_runner': '.execution',
+ 'WindowResult': '.window_execution',
+ 'SequenceLayout': '.column_layout',
+ 'MessageColumns': '.message_columns',
+ 'KVStateColumns': '.kv_columns_state',
+ 'RecurrentStateColumns': '.recurrent_column_state',
+ 'SettleColumnPlan': '.settle_columns',
  'allocate_quad': '.allocation',
  'allocate': '.entropy_allocation',
  'allocate_batch': '.allocation_rows',
@@ -34,6 +41,8 @@ _EXPORTS = {'Allocation': '.allocation',
  'WeightedResidentTraining': '.resident_training'}
 
 __all__ = ['Allocation',
+ 'eager_runner', 'WindowResult', 'SequenceLayout', 'MessageColumns',
+ 'KVStateColumns', 'RecurrentStateColumns', 'SettleColumnPlan',
  'allocate',
  'allocate_batch',
  'allocate_columns',

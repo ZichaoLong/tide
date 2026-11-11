@@ -124,6 +124,15 @@ storage and preserve gradients in ordinary grad mode. Input rejection is
 retryable; execution exceptions require restoring a prior snapshot into a new
 cursor. See `streaming-cursor.md` for ownership and recovery details.
 
+The public eager client also accepts [tensor windows](weighted-tensor-windows.md)
+(`tensor-window-v1`). Complete-position Settle windows carry B/L tensors, actual
+message support and typed raw state end to end. Capability dispatch selects
+column kernels or an identified graph-record adapter before execution; runtime
+errors do not trigger algorithm replacement. Ordinary column roots and the old
+independent intermediate event-root contract are separate observation APIs.
+Graph v13 and checkpoint v5 are unchanged; exact raw continuation comes from
+candidate results, never reference replay.
+
 ## Core-5 SettleGraph time code
 
 `SettleGraph(..., binding="ports", time_stride=D)` allows independent regions

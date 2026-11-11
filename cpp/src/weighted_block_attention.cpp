@@ -21,6 +21,7 @@ class Attention final:public torch::autograd::Node {
     auto delta=at::where(used.unsqueeze(1).unsqueeze(-1),v,anchor)-anchor;
     auto mean=at::matmul(p,delta);
     auto dl=p*(at::matmul(bar,delta.transpose(-1,-2))-(bar*mean).sum(-1,true));
+    dl=at::where((w>0).sum(-1).unsqueeze(1).unsqueeze(-1)>1,dl,at::zeros_like(dl));
     const double scale=std::sqrt(double(q.size(-1)));
     if(should_compute_output(0))result[0]=at::matmul(dl,k)/scale;
     if(should_compute_output(1))result[1]=at::matmul(dl.transpose(-1,-2),q)/scale;

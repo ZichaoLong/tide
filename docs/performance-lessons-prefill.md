@@ -3,6 +3,22 @@
 本页承接[历史经验索引](performance-lessons.md)。具体成本及资格必须引用固定提交的证据；
 当前活动只见STATUS，失败/停止与重启条件只见ROADMAP。
 
+## 从模块批量到跨模块张量交接
+
+[张量窗口契约](weighted-tensor-windows.md)把实际消息 rows/strength/content、Read 字段列、
+区域控制列和 typed 私有状态连成同一条路径。KV 单 bank 与循环 H/Z/W 不必同形；
+稳定的消息/区域边界使不同状态共用调度。按实际候选集合分组，不靠 dense FC 假设或
+数值零推断存在性。区域配置仍调用各自求解器/VJP，不统一成硬 Top-k。
+
+复用经验：调用入口也直接接收 B×L，避免输入先拆事件；只在参数/私有状态不同的节点轴
+分派，输出/恢复边界只解码 B×nodes 末态。原始时间先用 int64 求差，卷积按真实槽 gather。
+Attention 普通 bank transpose 和区域显式解映射 transpose 均沿列汇总；不在反向逐事件
+创建 leaf、nested grad 和整块清零。局部核可以用不同存储形状，而无需让下一模块重拼行。
+
+这个机制不自动优化 feedback、split placement、所有规模或所有内核。完整事件独立根与
+普通列根是不同观察接口；迁移需同时检查训练、实际 raw 恢复及默认客户端。开发成本只
+用于判断方案是否值得保留，正式速度仍引用固定源码资格与同材料三层对照。
+
 ## 从外层批到状态块和实际算子
 
 [FC4/FC16三层调查](evidence/fc-three-layer-comparison-20261111.md)固定相同模型、输入、初态、

@@ -333,3 +333,10 @@ KV §4的共享Full矩阵收缩进一步由`bank_attention`/`query::bank_attenti
 隐藏KV前缀的执行表示和因果VJP对应见[查询块](weighted-query-blocks.md)：固定KV §2–4 →
 `kv_block_state/math/query`及C++同层实现 → `test_block_attention`、`test_kv_block_query`，
 完整返回/训练/恢复资格仍按固定运行证据分别声明。
+
+带权张量窗口 `tensor-window-v1` 的定义域/值域、raw 状态、共享根、容量、观察范围和
+完整位置 cut 解码见 [逐定义对应](weighted-tensor-windows.md#定义实现验证)。
+`window_execution` 连接默认 eager 客户端；`settle_columns`/C++ `columns::settle`
+连接实际候选支持、区域全列与 Full/消息。`test_window_execution`、`test_column_training`
+及 standalone `weighted_sequence_columns.cpp` 验证分派、普通列根/共享梯度与 raw 恢复；
+旧任意 cut、完整独立事件根仍按记录接口单列验证。图 v13/checkpoint v5 不变。

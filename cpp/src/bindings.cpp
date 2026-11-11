@@ -23,6 +23,7 @@ void bind_settle(py::module_&);
 void bind_metrics(py::module_&);
 void bind_placement(py::module_&);
 void bind_weighted(py::module_&);
+void bind_weighted_sequence_columns(py::module_&);
 using namespace tide;
 namespace {
 int64_t checkpoint_limit(py::handle value) {
@@ -212,5 +213,6 @@ PYBIND11_MODULE(_tide_native, m) {
   bind_metrics(m);
   bind_placement(m);
   bind_weighted(m);
+  bind_weighted_sequence_columns(m);
 }
 #undef FIELD
