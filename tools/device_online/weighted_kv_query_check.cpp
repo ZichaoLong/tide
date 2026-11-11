@@ -9,7 +9,9 @@ namespace {
 using namespace tide;using namespace tide::device_online;
 constexpr int64_t R=6,C=4,clock=INT64_C(18014398509481987),last=INT64_MAX;
 void require(bool ok,const char* message){if(!ok)throw std::runtime_error(message);}
-void close(const Tensor& a,const Tensor& b){require(a.sizes()==b.sizes(),"KV qry result shape");if(!at::allclose(a.cpu(),b,2e-5,2e-6)){
+void close(const Tensor& a,const Tensor& b){if(a.sizes()!=b.sizes()){
+  std::cerr<<"actual "<<a.sizes()<<" expected "<<b.sizes()<<'\n';throw std::runtime_error("KV qry result shape");}
+  if(!at::allclose(a.cpu(),b,2e-5,2e-6)){
   std::cerr<<a.cpu()<<" versus "<<b<<'\n';throw std::runtime_error("KV qry numeric mismatch");}}
 Tensor values(at::IntArrayRef shape,float shift){int64_t n=1;for(auto x:shape)n*=x;return (at::arange(n,at::kFloat)*.13+shift).sin().reshape(shape)*.2;}
 Tensor& field(State& s,const std::string& name){return name=="value"?s.value:s.slots.at(name);}
@@ -115,7 +117,7 @@ void single_bank_capacity(at::Device device,at::ScalarType dtype){
   portable_torch::synchronize(device);p.run();require(!error.cpu().item<int>(),"single-bank KV capacity execution refused");
   auto dw=at::zeros({1,ds,d},at::kFloat);
   for(int64_t r=0;r<rows;++r){auto v=states[r].slots.at("values").to(at::kFloat).reshape({d});
-    for(int channel=0;channel<2;++channel){close(tape.memory[r][channel],v.slice(0,0,ds)*.25);close(tape.total[r][channel],at::tensor(.25,at::kFloat));}
+    for(int channel=0;channel<2;++channel){close(tape.memory[r][channel],v.slice(0,0,ds)*.25);close(tape.total[r][channel],at::scalar_tensor(.25,at::kFloat));}
     dw[0].add_(v.unsqueeze(0).expand({ds,d})*.25);
     auto value_bar=at::zeros({d},at::kFloat);value_bar.slice(0,0,ds).fill_(.25);
     close(g.raw[r].slice(0,layout.field("values").offset,layout.field("values").offset+d),value_bar);
