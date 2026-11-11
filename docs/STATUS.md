@@ -8,10 +8,13 @@
 用户已授权执行页首P1—P6计划。启动核对完成，固定数学快照通过；正在实施批量契约和区域/KV整链边界。
 P1/P2区域列接口及Python默认区域VJP已实现；新公式/方向导数检查33项、原区域独立根49项短检查通过。
 C++对应与默认适配开发构建已通过；列/区域/发布/observer两精度203项、一般图与训练恢复FP64 27项、
-standalone手算核通过。正在提交这一实现边界，再对固定提交记录资格；尚无新性能结论。
-KV新的ragged列/状态接口已开始编写，仍未测试和接入默认整链，不纳入区域阶段提交。
+standalone手算核通过。实现已提交`2d2f8de`，固定提交资格已通过（203+27及standalone）；CPU FC16完整训练单次5.2125秒（196.45输入位置/秒）；新NPU/整链资格尚无。
+KV新的ragged列/状态/Read/Full接口正在编写，尚未接入默认整链；初步FP64六个组合通过，
+FP32归一化证据的平方loss梯度严格超差正在定向审视。这些未提交文件不属于区域阶段资格。
 已确认原则见[持续契约](execution-flows.md#批量接口与模块替换)，实施顺序见
 [唯一计划](ROADMAP.md#当前计划批量张量贯穿与架构验证已授权实施)。
+
+区域固定证据及复现见[evidence/regional-columns-20261111.md](evidence/regional-columns-20261111.md)。
 
 ## 从这里接续
 
@@ -49,6 +52,12 @@ FC16 B8/L128/d128默认/直接FC完整训练CPU为5.835/1.390秒，NPU为10.928/
 一般PDG/HB及AdamW/保留窗/checkpoint FP64 27通过、standalone手算核通过；320 workers、384GiB、1800s。
 workspace在先前作业终止后复用`artifacts/columns-20261111/dev1/source`，每轮独立归档
 source.tar.gz/tree hash；记录`artifacts/jobs/columns-dev3/{status.json,task.log}`。
+固定资格`gef-columns-qualify`已passed，使用干净`artifacts/columns-20261111/qualified`（2d2f8de），
+按C++源码/二进制hash核验后复用dev3构建；1 ATen线程、32GiB、600s，
+记录`artifacts/jobs/columns-qualify/`的status/log及两份JUnit。
+有限测量`gef-columns-fc-cpu`已passed：同一2d2f8de、FC16/B8/L128、CPU1/native/minimal、一次完整训练计时；
+32GiB、600s，记录`artifacts/jobs/columns-fc-cpu/`及`artifacts/columns-20261111/fc16-cpu/`。
+计时期间无项目构建/重测试；正在编写的KV列不参与该测量。
 上轮原始记录`artifacts/kv-block-20261111/`与
 `artifacts/jobs/kvblock-*/status.json`只作原证据；命令/终态/日志见
 [evidence/kv-query-blocks-qualification-20261111.json](evidence/kv-query-blocks-qualification-20261111.json)。

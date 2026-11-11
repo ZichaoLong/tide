@@ -17,7 +17,7 @@
 KV保持性能主线；区域分配是同等重要的完整边界，覆盖描述/评分/证据、控制、各发送与求解/VJP，
 一直贯穿活动支持、Full、消息与下一阶段聚合。早期GDN/SSD小例用于检验接口，不转移FC主线。
 
-进行中：公共区域列/精确分配VJP及Python/C++默认区域adapter已实现，开发检查通过；
+进行中：公共区域列/精确分配VJP及Python/C++默认区域adapter已实现，固定CPU资格及一次FC16成本见[区域证据](evidence/regional-columns-20261111.md)；
 KV的ragged输入/状态bank契约正在实现。尚未打通默认FC整链，也没有新的NPU/性能资格。
 已实现的区域边界见[模块契约](weighted-region-batch.md)，后继仍按下表P1—P6推进。
 
