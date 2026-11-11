@@ -1,0 +1,14 @@
+{
+  "at": "2026-11-11T08:49:10.191264+00:00",
+  "correction": "Clear this evaluator cache before each seed, regression against a fresh Corpus owner; submit v7-count-controls-r2 with distinct Lens IDs and frozen source. Original artifacts and projections retained.",
+  "evidence": "Both original count results and all boundaries were exactly equal. Corpus.permutations is keyed by epoch; training creates a fresh Corpus per configuration, while this analytic script reused it across seeds.",
+  "failure": "Seed22 analytic control reused the seed11 epoch permutation cached in a shared Corpus object. Execution completed, but the claimed seed22 sample stream is invalid.",
+  "original_job": "v7-count-controls",
+  "preserved": [
+    "runs/v7-count-controls/seed11/result.json",
+    "runs/v7-count-controls/seed22/result.json"
+  ],
+  "schema": "tide-direct-count-control-correction-v1",
+  "scope": "Only the second analytic count control is affected; neural workers use independent processes/Corpus and are unchanged.",
+  "source": "bc58befd49bcaf2aa0ef13a075801d6277f394c8"
+}

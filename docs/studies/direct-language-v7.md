@@ -90,3 +90,7 @@ CPU8线程HB88 B16约2.157秒，HB40 B32约1.537秒；NPU HB40 B32约0.0458秒�
 无需optimizer，无validation调参，评价仍为相同32,768目标；CPU1、600秒、2GiB上限并计入本批预算。
 用途是识别常量/相邻token预测水平，不是新增神经架构筛选或完整上下文利用认证。
 Lens同TL-DIRECT-SCALE-v7，run `tl-v7-count-controls-s11/s22`。
+
+解析计数首次执行发现seed22复用了同一个Corpus内seed11的epoch缓存；执行完成不等于样本身份正确。
+[原失败与修正记录](../evidence/direct-v7-count-control-correction.json)保留，两种子以新作业
+`v7-count-controls-r2`、Lens `tl-v7-count-controls-r2-s11/s22`重新计算。各神经训练配置是独立进程/Corpus，不受此问题影响。

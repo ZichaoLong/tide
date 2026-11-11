@@ -12,10 +12,12 @@ from tide_lab.records import atomic_json,digest,now,Metrics,project_to_lens
 from tide_lab.train import source_identity,installed_identity
 
 
-def stream_counts(corpus,seed):
+def stream_counts(corpus,seed,milestones=(262144,1048576,4194304)):
     counts=np.zeros(4096,dtype=np.int64)
-    bigrams=np.zeros(4096*4096,dtype=np.int64)
-    cursor=tokens=0;milestones=[262144,1048576,4194304]
+    # Corpus is seed-local in training; this evaluator deliberately reuses it.
+    # Discard epoch-only cached permutations before changing the seed.
+    corpus.permutations.clear()
+    cursor=tokens=0
     # Accumulate at most 4M targets in a temporary ~32MiB packed index vector.
     pair_chunks=[];boundaries=[]
     while tokens<milestones[-1]:
@@ -57,7 +59,7 @@ def main(a):
     a.output.mkdir(parents=True,exist_ok=False);start=time.monotonic()
     corpus=Corpus(a.data,128);results=[]
     for seed in (11,22):
-        run_id=f'tl-v7-count-controls-s{seed}';directory=a.output/f'seed{seed}';directory.mkdir()
+        run_id=f'tl-v7-count-controls-r2-s{seed}';directory=a.output/f'seed{seed}';directory.mkdir()
         atomic_json(directory/'manifest.json',dict(schema='tide-lab-run-v1',project='tide-learning-lab',
             run_id=run_id,name=run_id,study_id='TL-DIRECT-SCALE-v7',group='TL-DIRECT-SCALE-v7',
             stage='analytic-count-control',created_at=now(),config=dict(seed=seed,length=128,global_batch=32,
