@@ -1,9 +1,38 @@
-# 当前交接：v9执行已授权，正在准备固定数据与接入
+# 当前交接：v9已后台启动，12个NPU worker正在有限学习筛选
 
-最新授权与有限执行表见[本批设计](studies/language-scale-activity-v9.md)。58条主轨迹、有限配方前缀，
-数据/容量/深度、低活跃、入口树并行；共同48h，无聚合NPU/CPU算时上限。
-旧批均终态，HEAD核对52feb159，无已有修改。229GiB账号用量，硬限800GiB。
-新作业身份与实际启动待接入检查后更新；不得把此准备状态写成已有学习结果。
+2026-11-11 21:50北京时间附近复核。[固定执行表](studies/language-scale-activity-v9.md) ·
+[操作/Lens/停止/恢复](studies/direct-v9-operations.md) · [实际观测](evidence/direct-v9-observations.json) ·
+[接入与batch校准](evidence/direct-v9-admission.json)。
+
+共同截止 **2026-11-13 21:36:26 +08:00**；无累计NPU/CPU算时上限，最多12个单卡worker。
+训练固定源码 **6e7bd49e**（`.local/source-v9-execution`），数据准备bd666d9a；数学0770593、安装74e7bbd。
+只修改工作树文档不影响活动源码。控制器`v9-controller`在background.slice，执行未来阶段已受同一截止约束。
+
+数据完成：128M=134,217,728有效目标池，25,440文档；原validation258,990/test294,476原字节保留；
+另有新confirmation262,144/135文档，尚未用于选择。test密封。
+数据锁SHA40b7c0ebb9650d11aa0c0080532c884e2ca3846db578155f3df7068b82191d2f，目录runs/v9-data-r3。
+原缺tokenizers解释器失败与直连超时分别保留在v9-data/v9-data-r2，r3复用既有数据环境并单次netpath重试。
+
+19项实际形状NPU完整更新校准全部完成，global batch64/L256；按内存和有效吞吐选micro：
+HB40/88/184为32/16/8，FC16/32/64为64/64/32，宽区域R32/R64为8/4，树对应8/4；TF各档64。
+完整样本与峰值在接入证据中；性能是探索性计时，不是跨后端数值等价认证。
+
+72个有限前缀已交12个worker：12 HB配方、36 TF配方、24活动终点校准。
+实际使用物理卡0、1、2、4、5、6、7、8、10、11、14、15（共享状态以queue-state为准）。
+首批12个HB配置接入通过，均保留CPU/NPU严格有限数值失败；首批12项三步新进程恢复全部通过，12项均已进入真实训练；长轨迹精确重放仍未检查。
+执行、数值、离散、恢复、学习、性能分列；目前不产生语言/规模结论。
+
+之后控制器在有限规则内自动冻结选定配置，执行58条主轨迹：30规模/容量/深度、20活动、8入口树。
+原入口复用活动组对照。主体参数约5–55M，主终点16M/64M；条件最多六条中档续至256M、
+六条同形状活动对照续至64M。未触发条件保持未检查，不改变问题或扩候选。
+
+Lens项目tide-learning-lab，小型记录已verified/readback_matches，四个组TL-CALIBRATION-v9、TL-SCALE-v9、
+TL-ACTIVITY-v9、TL-INLET-v9；私有入口仅.local/LENS.md。
+只读`python scripts/review_direct_v9.py`；训练日志在runs/v9-<phase>-<id>/train.log，
+停止全批`python scripts/job.py stop artifacts/jobs/v9-controller`，先停止后核对后代。
+不要修改活动配置/快照，恢复使用原latest.pt+原配置/检查/恢复证据与新输出。
+
+以下为历史对齐与终态记录，过时的“未授权/未提交”不限制当前明确授权的v9执行。
 
 # 当前交接：v9主体获基本同意；48h无聚合算时限，入口/出口边界对齐
 

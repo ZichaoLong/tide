@@ -10,7 +10,7 @@
 
 当前direct-v8的220次尝试已终态：194完整1M结果、26原失败，完成有限种子复核和Transformer调参。
 [广覆盖结果](docs/studies/direct-v8-results.md) · [HB结果变化为何不能归因于基座算错](docs/studies/hb-evidence-reconciliation.md) ·
-[下一批数据/容量/深度/活跃比例建议](docs/studies/language-scale-activity-v9-proposal.md)。主体方向获基本同意，统一48h墙钟、无NPU/CPU聚合算时上限，尚未提交。
+[下一批数据/容量/深度/活跃比例建议](docs/studies/language-scale-activity-v9-proposal.md)。v9已按[固定执行表](docs/studies/language-scale-activity-v9.md)启动：128M独立训练池、12卡有限筛选，随后58条规模/活动/入口树主轨迹；共同48h，无NPU/CPU聚合算时上限。
 [HB部分接收、记忆更新及10%/3%方案对齐](docs/studies/hb-low-activity-alignment.md)区分接收、选择和物理执行。
 [设计JSON](research/language-structure-plan.json)仍不可直接启动，实际历史配置在`configs/studies/language/`。
 

@@ -1,0 +1,1052 @@
+{
+  "batches": [
+    {
+      "cases": [
+        {
+          "batch": 2,
+          "median_seconds": 0.07273025438189507,
+          "peak_mib": 445.919921875,
+          "positions_per_second": 7039.711387665015,
+          "state": "completed"
+        },
+        {
+          "batch": 4,
+          "median_seconds": 0.0761503279209137,
+          "peak_mib": 770.2060546875,
+          "positions_per_second": 13447.085888631764,
+          "state": "completed"
+        },
+        {
+          "batch": 8,
+          "median_seconds": 0.09540380910038948,
+          "peak_mib": 1475.75341796875,
+          "positions_per_second": 21466.648127696604,
+          "state": "completed"
+        },
+        {
+          "batch": 16,
+          "median_seconds": 0.12609944120049477,
+          "peak_mib": 2796.53955078125,
+          "positions_per_second": 32482.300960299013,
+          "state": "completed"
+        },
+        {
+          "batch": 32,
+          "median_seconds": 0.1974843591451645,
+          "peak_mib": 5529.359375,
+          "positions_per_second": 41481.76612801179,
+          "state": "completed"
+        },
+        {
+          "batch": 64,
+          "median_seconds": 0.37279417365789413,
+          "peak_mib": 10989.0224609375,
+          "positions_per_second": 43949.18471830859,
+          "state": "completed"
+        }
+      ],
+      "config_id": "fc16-direct-s11",
+      "id": "v9-batch-direct-16-128-512",
+      "installation": {
+        "foundation_commit": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+        "foundation_lock_sha256": "ba5464d7e23fe6b8c7453a52bfc7b961f040c92d0b80786c18132e40d90308b7",
+        "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+        "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+        "tidegraph": "0.3.0",
+        "tidegraph_source_sha256": "cfe2168a2c87565a568fb8944429b6b38401f92cf24972fba59c47b7592a7847",
+        "torch": "2.12.0+cpu",
+        "torch_npu": "2.12.0.post3",
+        "transformers": null
+      },
+      "result": "runs/v9-batch-direct-16-128-512/result.json",
+      "selected_batch": 64,
+      "sha256": "4e326aaf8ffa2f3fcba9225ded4f3c6eb1588ffdf1ddb7d0d23a85edad39a010",
+      "source": "6e7bd49eb5e35c15445826cac3a9b6ddda75aff4",
+      "state": "completed"
+    },
+    {
+      "cases": [
+        {
+          "batch": 2,
+          "median_seconds": 0.8094771653413773,
+          "peak_mib": 4875.2080078125,
+          "positions_per_second": 632.5070328377657,
+          "state": "completed"
+        },
+        {
+          "batch": 4,
+          "median_seconds": 0.8526956848800182,
+          "peak_mib": 8702.4287109375,
+          "positions_per_second": 1200.897363687358,
+          "state": "completed"
+        },
+        {
+          "batch": 8,
+          "median_seconds": 1.0212829858064651,
+          "peak_mib": 16634.68115234375,
+          "positions_per_second": 2005.3207861705232,
+          "state": "completed"
+        }
+      ],
+      "config_id": "hb184-pool-s11",
+      "id": "v9-batch-direct-184-128-512",
+      "installation": {
+        "foundation_commit": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+        "foundation_lock_sha256": "ba5464d7e23fe6b8c7453a52bfc7b961f040c92d0b80786c18132e40d90308b7",
+        "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+        "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+        "tidegraph": "0.3.0",
+        "tidegraph_source_sha256": "cfe2168a2c87565a568fb8944429b6b38401f92cf24972fba59c47b7592a7847",
+        "torch": "2.12.0+cpu",
+        "torch_npu": "2.12.0.post3",
+        "transformers": null
+      },
+      "result": "runs/v9-batch-direct-184-128-512/result.json",
+      "selected_batch": 8,
+      "sha256": "21ffced1bd288bc55fbc0377277cb27c9fa7c38b43a07e133e7694f6cf9f07e7",
+      "source": "6e7bd49eb5e35c15445826cac3a9b6ddda75aff4",
+      "state": "completed"
+    },
+    {
+      "cases": [
+        {
+          "batch": 2,
+          "median_seconds": 0.13427605479955673,
+          "peak_mib": 861.03564453125,
+          "positions_per_second": 3813.0402383678775,
+          "state": "completed"
+        },
+        {
+          "batch": 4,
+          "median_seconds": 0.14869579672813416,
+          "peak_mib": 1507.2421875,
+          "positions_per_second": 6886.543012861459,
+          "state": "completed"
+        },
+        {
+          "batch": 8,
+          "median_seconds": 0.18468553945422173,
+          "peak_mib": 2884.6630859375,
+          "positions_per_second": 11089.119408331591,
+          "state": "completed"
+        },
+        {
+          "batch": 16,
+          "median_seconds": 0.2510388307273388,
+          "peak_mib": 5463.052734375,
+          "positions_per_second": 16316.200916537868,
+          "state": "completed"
+        },
+        {
+          "batch": 32,
+          "median_seconds": 0.39166367426514626,
+          "peak_mib": 10804.1533203125,
+          "positions_per_second": 20915.904482002654,
+          "state": "completed"
+        },
+        {
+          "batch": 64,
+          "median_seconds": 0.7496338412165642,
+          "peak_mib": 21481.369140625,
+          "positions_per_second": 21856.00369029601,
+          "state": "completed"
+        }
+      ],
+      "config_id": "fc32-direct-s11",
+      "id": "v9-batch-direct-32-128-512",
+      "installation": {
+        "foundation_commit": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+        "foundation_lock_sha256": "ba5464d7e23fe6b8c7453a52bfc7b961f040c92d0b80786c18132e40d90308b7",
+        "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+        "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+        "tidegraph": "0.3.0",
+        "tidegraph_source_sha256": "cfe2168a2c87565a568fb8944429b6b38401f92cf24972fba59c47b7592a7847",
+        "torch": "2.12.0+cpu",
+        "torch_npu": "2.12.0.post3",
+        "transformers": null
+      },
+      "result": "runs/v9-batch-direct-32-128-512/result.json",
+      "selected_batch": 64,
+      "sha256": "e983dd6d88050b163edce36d1b8fb445ebe12a53a60bd054c1672e5980e790e8",
+      "source": "6e7bd49eb5e35c15445826cac3a9b6ddda75aff4",
+      "state": "completed"
+    },
+    {
+      "cases": [
+        {
+          "batch": 2,
+          "median_seconds": 0.31646835803985596,
+          "peak_mib": 5537.83154296875,
+          "positions_per_second": 1617.8552673361387,
+          "state": "completed"
+        },
+        {
+          "batch": 4,
+          "median_seconds": 0.473830234259367,
+          "peak_mib": 10767.48046875,
+          "positions_per_second": 2161.1115668897546,
+          "state": "completed"
+        },
+        {
+          "batch": 8,
+          "median_seconds": 0.882829949259758,
+          "peak_mib": 21226.78173828125,
+          "positions_per_second": 2319.81255474763,
+          "state": "completed"
+        }
+      ],
+      "config_id": "r32-h2-pool-s11",
+      "id": "v9-batch-direct-320-64-256",
+      "installation": {
+        "foundation_commit": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+        "foundation_lock_sha256": "ba5464d7e23fe6b8c7453a52bfc7b961f040c92d0b80786c18132e40d90308b7",
+        "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+        "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+        "tidegraph": "0.3.0",
+        "tidegraph_source_sha256": "cfe2168a2c87565a568fb8944429b6b38401f92cf24972fba59c47b7592a7847",
+        "torch": "2.12.0+cpu",
+        "torch_npu": "2.12.0.post3",
+        "transformers": null
+      },
+      "result": "runs/v9-batch-direct-320-64-256/result.json",
+      "selected_batch": 8,
+      "sha256": "8fb4d710602a4e62d504021da98a3c71ba8bbc244fd7942229302a7ed358cae4",
+      "source": "6e7bd49eb5e35c15445826cac3a9b6ddda75aff4",
+      "state": "completed"
+    },
+    {
+      "cases": [
+        {
+          "batch": 2,
+          "median_seconds": 0.4610055722296238,
+          "peak_mib": 5879.5703125,
+          "positions_per_second": 1110.6156429384246,
+          "state": "completed"
+        },
+        {
+          "batch": 4,
+          "median_seconds": 0.6290344260632992,
+          "peak_mib": 11454.32421875,
+          "positions_per_second": 1627.8918252670574,
+          "state": "completed"
+        },
+        {
+          "batch": 8,
+          "median_seconds": 1.0294653251767159,
+          "peak_mib": 22545.89453125,
+          "positions_per_second": 1989.382206388005,
+          "state": "completed"
+        }
+      ],
+      "config_id": "tree-r32-h2-q10-s11",
+      "id": "v9-batch-direct-341-64-256",
+      "installation": {
+        "foundation_commit": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+        "foundation_lock_sha256": "ba5464d7e23fe6b8c7453a52bfc7b961f040c92d0b80786c18132e40d90308b7",
+        "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+        "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+        "tidegraph": "0.3.0",
+        "tidegraph_source_sha256": "cfe2168a2c87565a568fb8944429b6b38401f92cf24972fba59c47b7592a7847",
+        "torch": "2.12.0+cpu",
+        "torch_npu": "2.12.0.post3",
+        "transformers": null
+      },
+      "result": "runs/v9-batch-direct-341-64-256/result.json",
+      "selected_batch": 8,
+      "sha256": "218cda55821e14212d99bdc216caacaf984c727a535b37f868821e6c5b2c8f27",
+      "source": "6e7bd49eb5e35c15445826cac3a9b6ddda75aff4",
+      "state": "completed"
+    },
+    {
+      "cases": [
+        {
+          "batch": 2,
+          "median_seconds": 0.18663860484957695,
+          "peak_mib": 1081.17333984375,
+          "positions_per_second": 2743.2695417577247,
+          "state": "completed"
+        },
+        {
+          "batch": 4,
+          "median_seconds": 0.19320455938577652,
+          "peak_mib": 1906.9130859375,
+          "positions_per_second": 5300.081961085363,
+          "state": "completed"
+        },
+        {
+          "batch": 8,
+          "median_seconds": 0.23554449900984764,
+          "peak_mib": 3642.4296875,
+          "positions_per_second": 8694.74773815192,
+          "state": "completed"
+        },
+        {
+          "batch": 16,
+          "median_seconds": 0.3180917464196682,
+          "peak_mib": 6905.4267578125,
+          "positions_per_second": 12876.788052828071,
+          "state": "completed"
+        },
+        {
+          "batch": 32,
+          "median_seconds": 0.48609378561377525,
+          "peak_mib": 13659.28173828125,
+          "positions_per_second": 16852.714933716383,
+          "state": "completed"
+        }
+      ],
+      "config_id": "hb40-pool-s11",
+      "id": "v9-batch-direct-40-128-512",
+      "installation": {
+        "foundation_commit": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+        "foundation_lock_sha256": "ba5464d7e23fe6b8c7453a52bfc7b961f040c92d0b80786c18132e40d90308b7",
+        "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+        "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+        "tidegraph": "0.3.0",
+        "tidegraph_source_sha256": "cfe2168a2c87565a568fb8944429b6b38401f92cf24972fba59c47b7592a7847",
+        "torch": "2.12.0+cpu",
+        "torch_npu": "2.12.0.post3",
+        "transformers": null
+      },
+      "result": "runs/v9-batch-direct-40-128-512/result.json",
+      "selected_batch": 32,
+      "sha256": "bfdd1bfc304f6d61d7fbebcb9fd7a2f1125d0cf0eda6923ae21745883831f683",
+      "source": "6e7bd49eb5e35c15445826cac3a9b6ddda75aff4",
+      "state": "completed"
+    },
+    {
+      "cases": [
+        {
+          "batch": 2,
+          "median_seconds": 0.196971345692873,
+          "peak_mib": 1363.69873046875,
+          "positions_per_second": 2599.362857571855,
+          "state": "completed"
+        },
+        {
+          "batch": 4,
+          "median_seconds": 0.20393583551049232,
+          "peak_mib": 2440.5859375,
+          "positions_per_second": 5021.187166231587,
+          "state": "completed"
+        },
+        {
+          "batch": 8,
+          "median_seconds": 0.24604780226945877,
+          "peak_mib": 4450.84814453125,
+          "positions_per_second": 8323.585828078792,
+          "state": "completed"
+        },
+        {
+          "batch": 16,
+          "median_seconds": 0.34558531269431114,
+          "peak_mib": 8370.33740234375,
+          "positions_per_second": 11852.355553151454,
+          "state": "completed"
+        },
+        {
+          "batch": 32,
+          "median_seconds": 0.5303929299116135,
+          "peak_mib": 16427.21044921875,
+          "positions_per_second": 15445.153089361775,
+          "state": "completed"
+        }
+      ],
+      "config_id": "hb40-wide192-pool-s11",
+      "id": "v9-batch-direct-40-192-768",
+      "installation": {
+        "foundation_commit": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+        "foundation_lock_sha256": "ba5464d7e23fe6b8c7453a52bfc7b961f040c92d0b80786c18132e40d90308b7",
+        "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+        "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+        "tidegraph": "0.3.0",
+        "tidegraph_source_sha256": "cfe2168a2c87565a568fb8944429b6b38401f92cf24972fba59c47b7592a7847",
+        "torch": "2.12.0+cpu",
+        "torch_npu": "2.12.0.post3",
+        "transformers": null
+      },
+      "result": "runs/v9-batch-direct-40-192-768/result.json",
+      "selected_batch": 32,
+      "sha256": "acbde0d881992b02c79f91d2539f17b493050cff4d8223442a1558a6d4a56abb",
+      "source": "6e7bd49eb5e35c15445826cac3a9b6ddda75aff4",
+      "state": "completed"
+    },
+    {
+      "cases": [
+        {
+          "batch": 2,
+          "median_seconds": 0.1742696575820446,
+          "peak_mib": 1902.79541015625,
+          "positions_per_second": 2937.9755896918255,
+          "state": "completed"
+        },
+        {
+          "batch": 4,
+          "median_seconds": 0.20928657427430153,
+          "peak_mib": 3192.70556640625,
+          "positions_per_second": 4892.81265915268,
+          "state": "completed"
+        },
+        {
+          "batch": 8,
+          "median_seconds": 0.24497540295124054,
+          "peak_mib": 5752.4501953125,
+          "positions_per_second": 8360.022987318569,
+          "state": "completed"
+        },
+        {
+          "batch": 16,
+          "median_seconds": 0.35253799706697464,
+          "peak_mib": 10638.5830078125,
+          "positions_per_second": 11618.605750522398,
+          "state": "completed"
+        },
+        {
+          "batch": 32,
+          "median_seconds": 0.5482147000730038,
+          "peak_mib": 20660.443359375,
+          "positions_per_second": 14943.0505947927,
+          "state": "completed"
+        }
+      ],
+      "config_id": "hb40-wide256-pool-s11",
+      "id": "v9-batch-direct-40-256-1280",
+      "installation": {
+        "foundation_commit": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+        "foundation_lock_sha256": "ba5464d7e23fe6b8c7453a52bfc7b961f040c92d0b80786c18132e40d90308b7",
+        "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+        "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+        "tidegraph": "0.3.0",
+        "tidegraph_source_sha256": "cfe2168a2c87565a568fb8944429b6b38401f92cf24972fba59c47b7592a7847",
+        "torch": "2.12.0+cpu",
+        "torch_npu": "2.12.0.post3",
+        "transformers": null
+      },
+      "result": "runs/v9-batch-direct-40-256-1280/result.json",
+      "selected_batch": 32,
+      "sha256": "97973af5edee9b7ab9c1533260aaa7bedf1c0835b33d23c53ec8a1ba55210e76",
+      "source": "6e7bd49eb5e35c15445826cac3a9b6ddda75aff4",
+      "state": "completed"
+    },
+    {
+      "cases": [
+        {
+          "batch": 2,
+          "median_seconds": 0.3096107840538025,
+          "peak_mib": 1681.22314453125,
+          "positions_per_second": 1653.6891683689785,
+          "state": "completed"
+        },
+        {
+          "batch": 4,
+          "median_seconds": 0.3122176341712475,
+          "peak_mib": 2977.318359375,
+          "positions_per_second": 3279.763498042358,
+          "state": "completed"
+        },
+        {
+          "batch": 8,
+          "median_seconds": 0.3641041964292526,
+          "peak_mib": 5702.4736328125,
+          "positions_per_second": 5624.763515731512,
+          "state": "completed"
+        },
+        {
+          "batch": 16,
+          "median_seconds": 0.4853895828127861,
+          "peak_mib": 10801.0693359375,
+          "positions_per_second": 8438.582419227196,
+          "state": "completed"
+        },
+        {
+          "batch": 32,
+          "median_seconds": 0.7642902806401253,
+          "peak_mib": 21356.7333984375,
+          "positions_per_second": 10718.440633758753,
+          "state": "completed"
+        }
+      ],
+      "config_id": "fc64-direct-s11",
+      "id": "v9-batch-direct-64-128-512",
+      "installation": {
+        "foundation_commit": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+        "foundation_lock_sha256": "ba5464d7e23fe6b8c7453a52bfc7b961f040c92d0b80786c18132e40d90308b7",
+        "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+        "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+        "tidegraph": "0.3.0",
+        "tidegraph_source_sha256": "cfe2168a2c87565a568fb8944429b6b38401f92cf24972fba59c47b7592a7847",
+        "torch": "2.12.0+cpu",
+        "torch_npu": "2.12.0.post3",
+        "transformers": null
+      },
+      "result": "runs/v9-batch-direct-64-128-512/result.json",
+      "selected_batch": 32,
+      "sha256": "7be8eff69aafa83d4c10bef70aeba5f2d2d4664249ae078807f6a76283224a3d",
+      "source": "6e7bd49eb5e35c15445826cac3a9b6ddda75aff4",
+      "state": "completed"
+    },
+    {
+      "cases": [
+        {
+          "batch": 2,
+          "median_seconds": 0.4936857596039772,
+          "peak_mib": 11070.021484375,
+          "positions_per_second": 1037.0969590265559,
+          "state": "completed"
+        },
+        {
+          "batch": 4,
+          "median_seconds": 0.9061647765338421,
+          "peak_mib": 21526.99609375,
+          "positions_per_second": 1130.037302836784,
+          "state": "completed"
+        }
+      ],
+      "config_id": "r64-h2-pool-s11",
+      "id": "v9-batch-direct-640-64-256",
+      "installation": {
+        "foundation_commit": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+        "foundation_lock_sha256": "ba5464d7e23fe6b8c7453a52bfc7b961f040c92d0b80786c18132e40d90308b7",
+        "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+        "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+        "tidegraph": "0.3.0",
+        "tidegraph_source_sha256": "cfe2168a2c87565a568fb8944429b6b38401f92cf24972fba59c47b7592a7847",
+        "torch": "2.12.0+cpu",
+        "torch_npu": "2.12.0.post3",
+        "transformers": null
+      },
+      "result": "runs/v9-batch-direct-640-64-256/result.json",
+      "selected_batch": 4,
+      "sha256": "8dc732632b95779aef17c83e92bc4f66c7f13c1fbff7d2b18c8c0854535d176d",
+      "source": "6e7bd49eb5e35c15445826cac3a9b6ddda75aff4",
+      "state": "completed"
+    },
+    {
+      "cases": [
+        {
+          "batch": 2,
+          "median_seconds": 0.6604058817028999,
+          "peak_mib": 11517.4794921875,
+          "positions_per_second": 775.2807995588628,
+          "state": "completed"
+        },
+        {
+          "batch": 4,
+          "median_seconds": 1.0556503534317017,
+          "peak_mib": 22420.005859375,
+          "positions_per_second": 970.0181472692991,
+          "state": "completed"
+        }
+      ],
+      "config_id": "tree-r64-h2-q3-s11",
+      "id": "v9-batch-direct-661-64-256",
+      "installation": {
+        "foundation_commit": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+        "foundation_lock_sha256": "ba5464d7e23fe6b8c7453a52bfc7b961f040c92d0b80786c18132e40d90308b7",
+        "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+        "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+        "tidegraph": "0.3.0",
+        "tidegraph_source_sha256": "cfe2168a2c87565a568fb8944429b6b38401f92cf24972fba59c47b7592a7847",
+        "torch": "2.12.0+cpu",
+        "torch_npu": "2.12.0.post3",
+        "transformers": null
+      },
+      "result": "runs/v9-batch-direct-661-64-256/result.json",
+      "selected_batch": 4,
+      "sha256": "a8de8ac32712f8922e31e2016549edd25b6c3ab93a8219161871131b28ae7354",
+      "source": "6e7bd49eb5e35c15445826cac3a9b6ddda75aff4",
+      "state": "completed"
+    },
+    {
+      "cases": [
+        {
+          "batch": 2,
+          "median_seconds": 0.8324640281498432,
+          "peak_mib": 12312.49560546875,
+          "positions_per_second": 615.0415906113366,
+          "state": "completed"
+        },
+        {
+          "batch": 4,
+          "median_seconds": 1.1876559518277645,
+          "peak_mib": 23952.4267578125,
+          "positions_per_second": 862.2025582611672,
+          "state": "completed"
+        }
+      ],
+      "config_id": "r32-h3-q10-s11",
+      "id": "v9-batch-direct-704-64-256",
+      "installation": {
+        "foundation_commit": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+        "foundation_lock_sha256": "ba5464d7e23fe6b8c7453a52bfc7b961f040c92d0b80786c18132e40d90308b7",
+        "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+        "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+        "tidegraph": "0.3.0",
+        "tidegraph_source_sha256": "cfe2168a2c87565a568fb8944429b6b38401f92cf24972fba59c47b7592a7847",
+        "torch": "2.12.0+cpu",
+        "torch_npu": "2.12.0.post3",
+        "transformers": null
+      },
+      "result": "runs/v9-batch-direct-704-64-256/result.json",
+      "selected_batch": 4,
+      "sha256": "c9ae3e08574c34cce06c14d740c8dad8d30ff702431838e61e7d4e5bbf527a15",
+      "source": "6e7bd49eb5e35c15445826cac3a9b6ddda75aff4",
+      "state": "completed"
+    },
+    {
+      "cases": [
+        {
+          "batch": 2,
+          "median_seconds": 0.3807273171842098,
+          "peak_mib": 2336.58056640625,
+          "positions_per_second": 1344.794494355328,
+          "state": "completed"
+        },
+        {
+          "batch": 4,
+          "median_seconds": 0.4003896154463291,
+          "peak_mib": 4156.24609375,
+          "positions_per_second": 2557.508887583184,
+          "state": "completed"
+        },
+        {
+          "batch": 8,
+          "median_seconds": 0.490881010890007,
+          "peak_mib": 7940.5966796875,
+          "positions_per_second": 4172.090495590388,
+          "state": "completed"
+        },
+        {
+          "batch": 16,
+          "median_seconds": 0.680606059730053,
+          "peak_mib": 15054.85107421875,
+          "positions_per_second": 6018.165635528702,
+          "state": "completed"
+        }
+      ],
+      "config_id": "hb88-pool-s11",
+      "id": "v9-batch-direct-88-128-512",
+      "installation": {
+        "foundation_commit": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+        "foundation_lock_sha256": "ba5464d7e23fe6b8c7453a52bfc7b961f040c92d0b80786c18132e40d90308b7",
+        "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+        "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+        "tidegraph": "0.3.0",
+        "tidegraph_source_sha256": "cfe2168a2c87565a568fb8944429b6b38401f92cf24972fba59c47b7592a7847",
+        "torch": "2.12.0+cpu",
+        "torch_npu": "2.12.0.post3",
+        "transformers": null
+      },
+      "result": "runs/v9-batch-direct-88-128-512/result.json",
+      "selected_batch": 16,
+      "sha256": "4966ebdbadbcb648f89032bef1afe18e62999bece4811c1d37a5dd551d31e41d",
+      "source": "6e7bd49eb5e35c15445826cac3a9b6ddda75aff4",
+      "state": "completed"
+    },
+    {
+      "cases": [
+        {
+          "batch": 2,
+          "median_seconds": 0.02175036445260048,
+          "peak_mib": 172.06103515625,
+          "positions_per_second": 23539.835441184303,
+          "state": "completed"
+        },
+        {
+          "batch": 4,
+          "median_seconds": 0.020653292536735535,
+          "peak_mib": 243.37548828125,
+          "positions_per_second": 49580.47237159086,
+          "state": "completed"
+        },
+        {
+          "batch": 8,
+          "median_seconds": 0.021048136055469513,
+          "peak_mib": 431.10009765625,
+          "positions_per_second": 97300.7773516274,
+          "state": "completed"
+        },
+        {
+          "batch": 16,
+          "median_seconds": 0.024681158363819122,
+          "peak_mib": 793.095703125,
+          "positions_per_second": 165956.55437325235,
+          "state": "completed"
+        },
+        {
+          "batch": 32,
+          "median_seconds": 0.032878320664167404,
+          "peak_mib": 1500.32763671875,
+          "positions_per_second": 249161.14431988282,
+          "state": "completed"
+        },
+        {
+          "batch": 64,
+          "median_seconds": 0.05416474863886833,
+          "peak_mib": 2942.26416015625,
+          "positions_per_second": 302484.5570545661,
+          "state": "completed"
+        }
+      ],
+      "config_id": "tf-fc16-s11",
+      "id": "v9-batch-tf-240-6",
+      "installation": {
+        "foundation_commit": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+        "foundation_lock_sha256": "ba5464d7e23fe6b8c7453a52bfc7b961f040c92d0b80786c18132e40d90308b7",
+        "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+        "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+        "tidegraph": "0.3.0",
+        "tidegraph_source_sha256": "cfe2168a2c87565a568fb8944429b6b38401f92cf24972fba59c47b7592a7847",
+        "torch": "2.12.0+cpu",
+        "torch_npu": "2.12.0.post3",
+        "transformers": null
+      },
+      "result": "runs/v9-batch-tf-240-6/result.json",
+      "selected_batch": 64,
+      "sha256": "9afc24ca8d52d362669f49e3bd813a21592c36582ef00e6e2cc99c1e5f5350dc",
+      "source": "6e7bd49eb5e35c15445826cac3a9b6ddda75aff4",
+      "state": "completed"
+    },
+    {
+      "cases": [
+        {
+          "batch": 2,
+          "median_seconds": 0.021597590297460556,
+          "peak_mib": 243.52099609375,
+          "positions_per_second": 23706.34839110736,
+          "state": "completed"
+        },
+        {
+          "batch": 4,
+          "median_seconds": 0.020556263625621796,
+          "peak_mib": 337.69287109375,
+          "positions_per_second": 49814.50027346716,
+          "state": "completed"
+        },
+        {
+          "batch": 8,
+          "median_seconds": 0.025718819350004196,
+          "peak_mib": 549.7744140625,
+          "positions_per_second": 79630.4049625694,
+          "state": "completed"
+        },
+        {
+          "batch": 16,
+          "median_seconds": 0.030941639095544815,
+          "peak_mib": 997.07958984375,
+          "positions_per_second": 132378.24884945314,
+          "state": "completed"
+        },
+        {
+          "batch": 32,
+          "median_seconds": 0.038279544562101364,
+          "peak_mib": 1848.96142578125,
+          "positions_per_second": 214004.63599325274,
+          "state": "completed"
+        },
+        {
+          "batch": 64,
+          "median_seconds": 0.061236489564180374,
+          "peak_mib": 3591.67626953125,
+          "positions_per_second": 267552.8939788156,
+          "state": "completed"
+        }
+      ],
+      "config_id": "tf-fc32-s11",
+      "id": "v9-batch-tf-336-6",
+      "installation": {
+        "foundation_commit": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+        "foundation_lock_sha256": "ba5464d7e23fe6b8c7453a52bfc7b961f040c92d0b80786c18132e40d90308b7",
+        "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+        "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+        "tidegraph": "0.3.0",
+        "tidegraph_source_sha256": "cfe2168a2c87565a568fb8944429b6b38401f92cf24972fba59c47b7592a7847",
+        "torch": "2.12.0+cpu",
+        "torch_npu": "2.12.0.post3",
+        "transformers": null
+      },
+      "result": "runs/v9-batch-tf-336-6/result.json",
+      "selected_batch": 64,
+      "sha256": "0d75138c9faf184bbb749ab08b90726b7f927ee5103aacb72ec384e83e4ed9e4",
+      "source": "6e7bd49eb5e35c15445826cac3a9b6ddda75aff4",
+      "state": "completed"
+    },
+    {
+      "cases": [
+        {
+          "batch": 2,
+          "median_seconds": 0.022474709898233414,
+          "peak_mib": 283.8447265625,
+          "positions_per_second": 22781.16168432701,
+          "state": "completed"
+        },
+        {
+          "batch": 4,
+          "median_seconds": 0.023439370095729828,
+          "peak_mib": 391.26025390625,
+          "positions_per_second": 43687.180833692786,
+          "state": "completed"
+        },
+        {
+          "batch": 8,
+          "median_seconds": 0.02053540199995041,
+          "peak_mib": 619.0859375,
+          "positions_per_second": 99730.21224541627,
+          "state": "completed"
+        },
+        {
+          "batch": 16,
+          "median_seconds": 0.027447685599327087,
+          "peak_mib": 1084.263671875,
+          "positions_per_second": 149229.33976263626,
+          "state": "completed"
+        },
+        {
+          "batch": 32,
+          "median_seconds": 0.0321136973798275,
+          "peak_mib": 2023.85546875,
+          "positions_per_second": 255093.64129294798,
+          "state": "completed"
+        },
+        {
+          "batch": 64,
+          "median_seconds": 0.05075330287218094,
+          "peak_mib": 3904.23974609375,
+          "positions_per_second": 322816.4291349096,
+          "state": "completed"
+        }
+      ],
+      "config_id": "tf-hb40-s11",
+      "id": "v9-batch-tf-384-6",
+      "installation": {
+        "foundation_commit": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+        "foundation_lock_sha256": "ba5464d7e23fe6b8c7453a52bfc7b961f040c92d0b80786c18132e40d90308b7",
+        "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+        "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+        "tidegraph": "0.3.0",
+        "tidegraph_source_sha256": "cfe2168a2c87565a568fb8944429b6b38401f92cf24972fba59c47b7592a7847",
+        "torch": "2.12.0+cpu",
+        "torch_npu": "2.12.0.post3",
+        "transformers": null
+      },
+      "result": "runs/v9-batch-tf-384-6/result.json",
+      "selected_batch": 64,
+      "sha256": "eafabc6b5408fd8a6d87269b54b97c2e6ec6297fad9c34f4fc0b31e81d35518c",
+      "source": "6e7bd49eb5e35c15445826cac3a9b6ddda75aff4",
+      "state": "completed"
+    },
+    {
+      "cases": [
+        {
+          "batch": 2,
+          "median_seconds": 0.04068528115749359,
+          "peak_mib": 517.44921875,
+          "positions_per_second": 12584.403632803644,
+          "state": "completed"
+        },
+        {
+          "batch": 4,
+          "median_seconds": 0.03979092836380005,
+          "peak_mib": 724.0107421875,
+          "positions_per_second": 25734.5088970477,
+          "state": "completed"
+        },
+        {
+          "batch": 8,
+          "median_seconds": 0.047445300966501236,
+          "peak_mib": 1126.39208984375,
+          "positions_per_second": 43165.49707306085,
+          "state": "completed"
+        },
+        {
+          "batch": 16,
+          "median_seconds": 0.06163867935538292,
+          "peak_mib": 1975.38818359375,
+          "positions_per_second": 66451.78064870878,
+          "state": "completed"
+        },
+        {
+          "batch": 32,
+          "median_seconds": 0.08317356929183006,
+          "peak_mib": 3621.41943359375,
+          "positions_per_second": 98492.82734587032,
+          "state": "completed"
+        },
+        {
+          "batch": 64,
+          "median_seconds": 0.14479073882102966,
+          "peak_mib": 6950.45556640625,
+          "positions_per_second": 113156.40857563162,
+          "state": "completed"
+        }
+      ],
+      "config_id": "tf-hb88-s11",
+      "id": "v9-batch-tf-400-12",
+      "installation": {
+        "foundation_commit": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+        "foundation_lock_sha256": "ba5464d7e23fe6b8c7453a52bfc7b961f040c92d0b80786c18132e40d90308b7",
+        "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+        "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+        "tidegraph": "0.3.0",
+        "tidegraph_source_sha256": "cfe2168a2c87565a568fb8944429b6b38401f92cf24972fba59c47b7592a7847",
+        "torch": "2.12.0+cpu",
+        "torch_npu": "2.12.0.post3",
+        "transformers": null
+      },
+      "result": "runs/v9-batch-tf-400-12/result.json",
+      "selected_batch": 64,
+      "sha256": "18226308c084c1b04cab70e16fe125ea7d878bdc5cacce9bf1a5287f4a288403",
+      "source": "6e7bd49eb5e35c15445826cac3a9b6ddda75aff4",
+      "state": "completed"
+    },
+    {
+      "cases": [
+        {
+          "batch": 2,
+          "median_seconds": 0.025977998971939087,
+          "peak_mib": 387.345703125,
+          "positions_per_second": 19708.985305336726,
+          "state": "completed"
+        },
+        {
+          "batch": 4,
+          "median_seconds": 0.027531616389751434,
+          "peak_mib": 536.33984375,
+          "positions_per_second": 37193.60263864424,
+          "state": "completed"
+        },
+        {
+          "batch": 8,
+          "median_seconds": 0.02836480736732483,
+          "peak_mib": 844.96435546875,
+          "positions_per_second": 72202.14731157376,
+          "state": "completed"
+        },
+        {
+          "batch": 16,
+          "median_seconds": 0.03554327413439751,
+          "peak_mib": 1450.83642578125,
+          "positions_per_second": 115239.80555398631,
+          "state": "completed"
+        },
+        {
+          "batch": 32,
+          "median_seconds": 0.05109453573822975,
+          "peak_mib": 2689.86767578125,
+          "positions_per_second": 160330.2560956751,
+          "state": "completed"
+        },
+        {
+          "batch": 64,
+          "median_seconds": 0.08345656469464302,
+          "peak_mib": 5133.091796875,
+          "positions_per_second": 196317.69004567797,
+          "state": "completed"
+        }
+      ],
+      "config_id": "tf-fc64-s11",
+      "id": "v9-batch-tf-416-8",
+      "installation": {
+        "foundation_commit": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+        "foundation_lock_sha256": "ba5464d7e23fe6b8c7453a52bfc7b961f040c92d0b80786c18132e40d90308b7",
+        "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+        "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+        "tidegraph": "0.3.0",
+        "tidegraph_source_sha256": "cfe2168a2c87565a568fb8944429b6b38401f92cf24972fba59c47b7592a7847",
+        "torch": "2.12.0+cpu",
+        "torch_npu": "2.12.0.post3",
+        "transformers": null
+      },
+      "result": "runs/v9-batch-tf-416-8/result.json",
+      "selected_batch": 64,
+      "sha256": "b5976c122d6ddfd657fa61cb518ce386c7cecba5c785fa49a5b86d98c0a6b738",
+      "source": "6e7bd49eb5e35c15445826cac3a9b6ddda75aff4",
+      "state": "completed"
+    },
+    {
+      "cases": [
+        {
+          "batch": 2,
+          "median_seconds": 0.053435761481523514,
+          "peak_mib": 1014.65283203125,
+          "positions_per_second": 9581.59827435105,
+          "state": "completed"
+        },
+        {
+          "batch": 4,
+          "median_seconds": 0.05389087647199631,
+          "peak_mib": 1291.86669921875,
+          "positions_per_second": 19001.36102874683,
+          "state": "completed"
+        },
+        {
+          "batch": 8,
+          "median_seconds": 0.05396713688969612,
+          "peak_mib": 1939.1552734375,
+          "positions_per_second": 37949.02079363455,
+          "state": "completed"
+        },
+        {
+          "batch": 16,
+          "median_seconds": 0.06460343673825264,
+          "peak_mib": 3226.69287109375,
+          "positions_per_second": 63402.19974047756,
+          "state": "completed"
+        },
+        {
+          "batch": 32,
+          "median_seconds": 0.08950533345341682,
+          "peak_mib": 5794.779296875,
+          "positions_per_second": 91525.27211424265,
+          "state": "completed"
+        },
+        {
+          "batch": 64,
+          "median_seconds": 0.14871066808700562,
+          "peak_mib": 10936.96435546875,
+          "positions_per_second": 110173.66952056374,
+          "state": "completed"
+        }
+      ],
+      "config_id": "tf-hb184-s11",
+      "id": "v9-batch-tf-512-16",
+      "installation": {
+        "foundation_commit": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+        "foundation_lock_sha256": "ba5464d7e23fe6b8c7453a52bfc7b961f040c92d0b80786c18132e40d90308b7",
+        "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+        "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+        "tidegraph": "0.3.0",
+        "tidegraph_source_sha256": "cfe2168a2c87565a568fb8944429b6b38401f92cf24972fba59c47b7592a7847",
+        "torch": "2.12.0+cpu",
+        "torch_npu": "2.12.0.post3",
+        "transformers": null
+      },
+      "result": "runs/v9-batch-tf-512-16/result.json",
+      "selected_batch": 64,
+      "sha256": "d5ae629261cd2f250cd519a6629118e210c179ffe2b88cd3ce4b7a729e4797d8",
+      "source": "6e7bd49eb5e35c15445826cac3a9b6ddda75aff4",
+      "state": "completed"
+    }
+  ],
+  "lens_admission": {
+    "readback_matches": true,
+    "record": "runs/v9-recording-admission/projection.json",
+    "status": "verified"
+  },
+  "limits": [
+    "Synchronized NPU full-update synthetic cost; not equivalent-throughput qualification.",
+    "Strict CPU/NPU thresholds remain1e-6/1e-5; workload-specific numerical and recovery observations are independent.",
+    "No new language/scaling result inferred from calibration."
+  ],
+  "observed_at": "2026-11-11T13:48:15.513772+00:00",
+  "schema": "tide-direct-v9-admission-v1",
+  "source_commit": "6e7bd49eb5e35c15445826cac3a9b6ddda75aff4",
+  "tests": {
+    "campaign": 7,
+    "direct": 20,
+    "research_map": 14,
+    "review_io": 2,
+    "scope": "Independent formula/VJP, inlet reachability/body initialization/token-time/causality, corpus/accumulation/recovery helper and map boundaries. Per-config fresh-process checks remain in each workload.",
+    "state": "passed"
+  }
+}

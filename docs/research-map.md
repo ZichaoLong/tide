@@ -1,16 +1,18 @@
+当前执行依据为[v9有限执行表](studies/language-scale-activity-v9.md)，用户已授权启动。数据/容量/依赖深度、低活跃和入口树共同推进；允许稠密遮罩。执行状态见[STATUS](STATUS.md)，科学结论需独立审阅。以下历史的“未提交/待对齐”不再限制本批已授权工作。
+
 # 当前图：direct-v8覆盖与校准Transformer
 
-长期目标见[研究章程](RESEARCH_CHARTER.md)。图中新增v9数据/容量、活跃比例、配方与机制三个**planned**组，
-关联[有界建议表](studies/language-scale-activity-v9-proposal.md)和静态参数清单；没有新运行或科学支持。
+长期目标见[研究章程](RESEARCH_CHARTER.md)。图中v9有数据/容量、活跃比例、配方/机制及入口树四组，
+关联[已授权执行表](studies/language-scale-activity-v9.md)、实际配置/运行和校准；科学支持仍待审阅。
 稠密遮罩可继续作为主训练实现；逻辑活动、实际计算、硬件效率分列，真稀疏不是这些计划的统一前提。
-最新预算反馈为统一48h墙钟、无NPU卡时/CPU核时上限；主体方向获基本同意，活动细节正在对齐。
+最新预算反馈为统一48h墙钟、无NPU卡时/CPU核时上限；活动及入口树对齐已完成，12个NPU worker已启动有限筛选。
 [HB接收与更新说明](studies/hb-low-activity-alignment.md)及[小型机制证据](evidence/hb-activity-alignment.json)
-说明现有部分接收与三个比例，R32/R64低活跃配置仍是计划，CPU固定路由不升级成学习结果。
+说明现有部分接收与三个比例，R32/R64及入口树已有固定配置，实际状态按控制器/运行证据更新，CPU固定路由不升级成学习结果。
 
 研究图包含v8 Transformer校准、182格局部覆盖及有限seed22三个组；三组均已终态并作限定审阅，实际失败仍逐项标明。
 本批220次训练尝试中194完成、26原失败；19项局部复核18完成，1失败；单项数值修正r2完成。[终态交付](studies/direct-v8-results.md)列出解释边界与尚未提交的后继选项。
 统一tl-v8-运行ID关联配置、项目记录与Lens投影；[当前交接](STATUS.md)与[操作入口](studies/direct-v8-operations.md)提供实时只读检查方式。
-“从零训练完整TIDE”和“预训练模型生长”名称与关系保持明确；本轮不自动推进真实稀疏或规模，不把直接实现视为公共continuation认证。
+“从零训练完整TIDE”和“预训练模型生长”名称与关系保持明确；v9已授权推进规模/活动，不把直接实现视为公共continuation认证。
 
 历史补充（v6后台启动时）：200配置已接收，184个局部候选筛选与16条规模/设备轨迹并行。实际状态和Lens对应见[交接JSON](evidence/language-v6-handoff.json)，操作见[v6交接页](studies/language-coverage-scale-v6-running.md)。结果节点保持awaiting，执行完成不自动成为科学支持。旧v5、B预训练承接、严格失败与正支持验收的限定结论全部保留。
 
@@ -34,7 +36,7 @@ HB88的共同曝光恶化、FC32后恢复、d32候选反证和初始化/读出�
 
 当前重点是语言next-token接近可靠对照，并同时推进数据/容量/依赖深度、更低活跃比例与局部化。
 逻辑Full/消息活动、实际执行工作和当前硬件吞吐分别审阅；允许稠密遮罩承载前面的研究。
-顶部显示v8已审结果及v9未提交计划。下方保留v6数据/规模轨迹、A从零、B预训练局部承接与v5深度研究；当前优先级不改写历史结论。
+顶部显示v8已审结果及v9实际执行/待启动主轨迹。下方保留v6数据/规模轨迹、A从零、B预训练局部承接与v5深度研究；当前优先级不改写历史结论。
 
 新增`TL-EXEC-v6-PROFILE`和限定结果：14个诊断定位现有eager训练的逐行Read、KV动态索引及小张量反向开销。
 结果关联[报告](studies/language-execution-diagnosis-v6-results.md)、具体运行/Lens映射及TL-REQ-004；

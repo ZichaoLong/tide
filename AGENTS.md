@@ -99,8 +99,9 @@
   The latest user response basically accepts the v9 direction and a shared 48h wall
   deadline, and removes aggregate NPU-device-hour and CPU-core-hour caps. Record
   those costs, but do not stop on the superseded 200 NPUh/512 core-h or sub-budgets.
-  The user asks to align low-activity details before that dependent work; see
-  `docs/studies/hb-low-activity-alignment.md`. No v9 jobs have been submitted.
+  Low-activity and inlet-tree alignment is now accepted; see
+  `docs/studies/hb-low-activity-alignment.md` and the authorized execution table below.
+  V9 has a frozen durable controller and actual NPU calibration/training services.
   Report receipt/all-node slots, Full/candidates and Full/all-node slots separately;
   current HB already has partial receipt. Static inventories and small fixed-route
   checks are not trained scale/sparsity or physical compute-saving results.

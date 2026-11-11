@@ -1,0 +1,3823 @@
+{
+  "campaign": {
+    "batches": {
+      "direct-16-128-512": 64,
+      "direct-184-128-512": 8,
+      "direct-32-128-512": 64,
+      "direct-320-64-256": 8,
+      "direct-341-64-256": 8,
+      "direct-40-128-512": 32,
+      "direct-40-192-768": 32,
+      "direct-40-256-1280": 32,
+      "direct-64-128-512": 32,
+      "direct-640-64-256": 4,
+      "direct-661-64-256": 4,
+      "direct-704-64-256": 4,
+      "direct-88-128-512": 16,
+      "tf-240-6": 64,
+      "tf-336-6": 64,
+      "tf-384-6": 64,
+      "tf-400-12": 64,
+      "tf-416-8": 64,
+      "tf-512-16": 64
+    },
+    "deadline_epoch": 1794576986.382222,
+    "jobs": [
+      "v9-batch-direct-184-128-512",
+      "v9-batch-direct-40-128-512",
+      "v9-batch-direct-40-192-768",
+      "v9-batch-direct-40-256-1280",
+      "v9-batch-direct-88-128-512",
+      "v9-batch-direct-320-64-256",
+      "v9-batch-direct-640-64-256",
+      "v9-batch-direct-704-64-256",
+      "v9-batch-direct-341-64-256",
+      "v9-batch-direct-661-64-256",
+      "v9-batch-direct-16-128-512",
+      "v9-batch-direct-32-128-512",
+      "v9-batch-direct-64-128-512",
+      "v9-batch-tf-240-6",
+      "v9-batch-tf-336-6",
+      "v9-batch-tf-416-8",
+      "v9-batch-tf-512-16",
+      "v9-batch-tf-384-6",
+      "v9-batch-tf-400-12",
+      "v9-screen-w0",
+      "v9-screen-w1",
+      "v9-screen-w2",
+      "v9-screen-w3",
+      "v9-screen-w4",
+      "v9-screen-w5",
+      "v9-screen-w6",
+      "v9-screen-w7",
+      "v9-screen-w8",
+      "v9-screen-w9",
+      "v9-screen-w10",
+      "v9-screen-w11"
+    ],
+    "observed_jobs": [
+      {
+        "id": "v9-screen-w0",
+        "physical_id": 11,
+        "state": "running"
+      },
+      {
+        "id": "v9-screen-w1",
+        "physical_id": 7,
+        "state": "running"
+      },
+      {
+        "id": "v9-screen-w2",
+        "physical_id": 5,
+        "state": "running"
+      },
+      {
+        "id": "v9-screen-w3",
+        "physical_id": 15,
+        "state": "running"
+      },
+      {
+        "id": "v9-screen-w4",
+        "physical_id": 10,
+        "state": "running"
+      },
+      {
+        "id": "v9-screen-w5",
+        "physical_id": 6,
+        "state": "running"
+      },
+      {
+        "id": "v9-screen-w6",
+        "physical_id": 4,
+        "state": "running"
+      },
+      {
+        "id": "v9-screen-w7",
+        "physical_id": 14,
+        "state": "running"
+      },
+      {
+        "id": "v9-screen-w8",
+        "physical_id": 0,
+        "state": "running"
+      },
+      {
+        "id": "v9-screen-w9",
+        "physical_id": 8,
+        "state": "running"
+      },
+      {
+        "id": "v9-screen-w10",
+        "physical_id": 2,
+        "state": "running"
+      },
+      {
+        "id": "v9-screen-w11",
+        "physical_id": 1,
+        "state": "running"
+      }
+    ],
+    "phases": {
+      "screen": {
+        "cases": [
+          {
+            "config": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-hb184-pool-fan-lr0.0003-s11.json",
+            "id": "cal-hb184-pool-fan-lr0.0003-s11",
+            "max_rss_gib": 48,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-screen-cal-hb184-pool-fan-lr0.0003-s11",
+            "retire_probe_checkpoints": true,
+            "timeout_seconds": 171887.88739609718,
+            "train_arguments": [
+              "--until-tokens",
+              "4194304",
+              "--run-id",
+              "tl-v9-screen-cal-hb184-pool-fan-lr0.0003-s11",
+              "--recording-group",
+              "TL-CALIBRATION-v9"
+            ]
+          },
+          {
+            "config": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-hb184-pool-fan-lr0.001-s11.json",
+            "id": "cal-hb184-pool-fan-lr0.001-s11",
+            "max_rss_gib": 48,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-screen-cal-hb184-pool-fan-lr0.001-s11",
+            "retire_probe_checkpoints": true,
+            "timeout_seconds": 171887.8764154911,
+            "train_arguments": [
+              "--until-tokens",
+              "4194304",
+              "--run-id",
+              "tl-v9-screen-cal-hb184-pool-fan-lr0.001-s11",
+              "--recording-group",
+              "TL-CALIBRATION-v9"
+            ]
+          },
+          {
+            "config": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-hb184-quad-fan-lr0.0003-s11.json",
+            "id": "cal-hb184-quad-fan-lr0.0003-s11",
+            "max_rss_gib": 48,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-screen-cal-hb184-quad-fan-lr0.0003-s11",
+            "retire_probe_checkpoints": true,
+            "timeout_seconds": 171887.8657231331,
+            "train_arguments": [
+              "--until-tokens",
+              "4194304",
+              "--run-id",
+              "tl-v9-screen-cal-hb184-quad-fan-lr0.0003-s11",
+              "--recording-group",
+              "TL-CALIBRATION-v9"
+            ]
+          },
+          {
+            "config": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-hb184-quad-fan-lr0.001-s11.json",
+            "id": "cal-hb184-quad-fan-lr0.001-s11",
+            "max_rss_gib": 48,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-screen-cal-hb184-quad-fan-lr0.001-s11",
+            "retire_probe_checkpoints": true,
+            "timeout_seconds": 171887.85502243042,
+            "train_arguments": [
+              "--until-tokens",
+              "4194304",
+              "--run-id",
+              "tl-v9-screen-cal-hb184-quad-fan-lr0.001-s11",
+              "--recording-group",
+              "TL-CALIBRATION-v9"
+            ]
+          },
+          {
+            "config": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-hb40-pool-fan-lr0.0003-s11.json",
+            "id": "cal-hb40-pool-fan-lr0.0003-s11",
+            "max_rss_gib": 48,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-screen-cal-hb40-pool-fan-lr0.0003-s11",
+            "retire_probe_checkpoints": true,
+            "timeout_seconds": 171887.8510890007,
+            "train_arguments": [
+              "--until-tokens",
+              "4194304",
+              "--run-id",
+              "tl-v9-screen-cal-hb40-pool-fan-lr0.0003-s11",
+              "--recording-group",
+              "TL-CALIBRATION-v9"
+            ]
+          },
+          {
+            "config": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-hb40-pool-fan-lr0.001-s11.json",
+            "id": "cal-hb40-pool-fan-lr0.001-s11",
+            "max_rss_gib": 48,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-screen-cal-hb40-pool-fan-lr0.001-s11",
+            "retire_probe_checkpoints": true,
+            "timeout_seconds": 171887.84763097763,
+            "train_arguments": [
+              "--until-tokens",
+              "4194304",
+              "--run-id",
+              "tl-v9-screen-cal-hb40-pool-fan-lr0.001-s11",
+              "--recording-group",
+              "TL-CALIBRATION-v9"
+            ]
+          },
+          {
+            "config": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-hb40-quad-fan-lr0.0003-s11.json",
+            "id": "cal-hb40-quad-fan-lr0.0003-s11",
+            "max_rss_gib": 48,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-screen-cal-hb40-quad-fan-lr0.0003-s11",
+            "retire_probe_checkpoints": true,
+            "timeout_seconds": 171887.84421920776,
+            "train_arguments": [
+              "--until-tokens",
+              "4194304",
+              "--run-id",
+              "tl-v9-screen-cal-hb40-quad-fan-lr0.0003-s11",
+              "--recording-group",
+              "TL-CALIBRATION-v9"
+            ]
+          },
+          {
+            "config": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-hb40-quad-fan-lr0.001-s11.json",
+            "id": "cal-hb40-quad-fan-lr0.001-s11",
+            "max_rss_gib": 48,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-screen-cal-hb40-quad-fan-lr0.001-s11",
+            "retire_probe_checkpoints": true,
+            "timeout_seconds": 171887.84070324898,
+            "train_arguments": [
+              "--until-tokens",
+              "4194304",
+              "--run-id",
+              "tl-v9-screen-cal-hb40-quad-fan-lr0.001-s11",
+              "--recording-group",
+              "TL-CALIBRATION-v9"
+            ]
+          },
+          {
+            "config": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-hb88-pool-fan-lr0.0003-s11.json",
+            "id": "cal-hb88-pool-fan-lr0.0003-s11",
+            "max_rss_gib": 48,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-screen-cal-hb88-pool-fan-lr0.0003-s11",
+            "retire_probe_checkpoints": true,
+            "timeout_seconds": 171887.83443951607,
+            "train_arguments": [
+              "--until-tokens",
+              "4194304",
+              "--run-id",
+              "tl-v9-screen-cal-hb88-pool-fan-lr0.0003-s11",
+              "--recording-group",
+              "TL-CALIBRATION-v9"
+            ]
+          },
+          {
+            "config": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-hb88-pool-fan-lr0.001-s11.json",
+            "id": "cal-hb88-pool-fan-lr0.001-s11",
+            "max_rss_gib": 48,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-screen-cal-hb88-pool-fan-lr0.001-s11",
+            "retire_probe_checkpoints": true,
+            "timeout_seconds": 171887.82844758034,
+            "train_arguments": [
+              "--until-tokens",
+              "4194304",
+              "--run-id",
+              "tl-v9-screen-cal-hb88-pool-fan-lr0.001-s11",
+              "--recording-group",
+              "TL-CALIBRATION-v9"
+            ]
+          },
+          {
+            "config": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-hb88-quad-fan-lr0.0003-s11.json",
+            "id": "cal-hb88-quad-fan-lr0.0003-s11",
+            "max_rss_gib": 48,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-screen-cal-hb88-quad-fan-lr0.0003-s11",
+            "retire_probe_checkpoints": true,
+            "timeout_seconds": 171887.82236504555,
+            "train_arguments": [
+              "--until-tokens",
+              "4194304",
+              "--run-id",
+              "tl-v9-screen-cal-hb88-quad-fan-lr0.0003-s11",
+              "--recording-group",
+              "TL-CALIBRATION-v9"
+            ]
+          },
+          {
+            "config": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-hb88-quad-fan-lr0.001-s11.json",
+            "id": "cal-hb88-quad-fan-lr0.001-s11",
+            "max_rss_gib": 48,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-screen-cal-hb88-quad-fan-lr0.001-s11",
+            "retire_probe_checkpoints": true,
+            "timeout_seconds": 171887.81640911102,
+            "train_arguments": [
+              "--until-tokens",
+              "4194304",
+              "--run-id",
+              "tl-v9-screen-cal-hb88-quad-fan-lr0.001-s11",
+              "--recording-group",
+              "TL-CALIBRATION-v9"
+            ]
+          },
+          {
+            "config": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-r32-h2-q10-tau0.1-s11.json",
+            "id": "cal-r32-h2-q10-tau0.1-s11",
+            "max_rss_gib": 48,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-screen-cal-r32-h2-q10-tau0.1-s11",
+            "retire_probe_checkpoints": true,
+            "timeout_seconds": 171887.80153608322,
+            "train_arguments": [
+              "--until-tokens",
+              "262144",
+              "--run-id",
+              "tl-v9-screen-cal-r32-h2-q10-tau0.1-s11",
+              "--recording-group",
+              "TL-CALIBRATION-v9"
+            ]
+          },
+          {
+            "config": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-r32-h2-q10-tau0.25-s11.json",
+            "id": "cal-r32-h2-q10-tau0.25-s11",
+            "max_rss_gib": 48,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-screen-cal-r32-h2-q10-tau0.25-s11",
+            "retire_probe_checkpoints": true,
+            "timeout_seconds": 171887.7867076397,
+            "train_arguments": [
+              "--until-tokens",
+              "262144",
+              "--run-id",
+              "tl-v9-screen-cal-r32-h2-q10-tau0.25-s11",
+              "--recording-group",
+              "TL-CALIBRATION-v9"
+            ]
+          },
+          {
+            "config": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-r32-h2-q10-tau0.5-s11.json",
+            "id": "cal-r32-h2-q10-tau0.5-s11",
+            "max_rss_gib": 48,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-screen-cal-r32-h2-q10-tau0.5-s11",
+            "retire_probe_checkpoints": true,
+            "timeout_seconds": 171887.77165269852,
+            "train_arguments": [
+              "--until-tokens",
+              "262144",
+              "--run-id",
+              "tl-v9-screen-cal-r32-h2-q10-tau0.5-s11",
+              "--recording-group",
+              "TL-CALIBRATION-v9"
+            ]
+          },
+          {
+            "config": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-r32-h2-q10-tau1-s11.json",
+            "id": "cal-r32-h2-q10-tau1-s11",
+            "max_rss_gib": 48,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-screen-cal-r32-h2-q10-tau1-s11",
+            "retire_probe_checkpoints": true,
+            "timeout_seconds": 171887.75681591034,
+            "train_arguments": [
+              "--until-tokens",
+              "262144",
+              "--run-id",
+              "tl-v9-screen-cal-r32-h2-q10-tau1-s11",
+              "--recording-group",
+              "TL-CALIBRATION-v9"
+            ]
+          },
+          {
+            "config": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-r32-h3-q10-tau0.1-s11.json",
+            "id": "cal-r32-h3-q10-tau0.1-s11",
+            "max_rss_gib": 48,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-screen-cal-r32-h3-q10-tau0.1-s11",
+            "retire_probe_checkpoints": true,
+            "timeout_seconds": 171887.72583317757,
+            "train_arguments": [
+              "--until-tokens",
+              "262144",
+              "--run-id",
+              "tl-v9-screen-cal-r32-h3-q10-tau0.1-s11",
+              "--recording-group",
+              "TL-CALIBRATION-v9"
+            ]
+          },
+          {
+            "config": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-r32-h3-q10-tau0.25-s11.json",
+            "id": "cal-r32-h3-q10-tau0.25-s11",
+            "max_rss_gib": 48,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-screen-cal-r32-h3-q10-tau0.25-s11",
+            "retire_probe_checkpoints": true,
+            "timeout_seconds": 171887.6948518753,
+            "train_arguments": [
+              "--until-tokens",
+              "262144",
+              "--run-id",
+              "tl-v9-screen-cal-r32-h3-q10-tau0.25-s11",
+              "--recording-group",
+              "TL-CALIBRATION-v9"
+            ]
+          },
+          {
+            "config": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-r32-h3-q10-tau0.5-s11.json",
+            "id": "cal-r32-h3-q10-tau0.5-s11",
+            "max_rss_gib": 48,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-screen-cal-r32-h3-q10-tau0.5-s11",
+            "retire_probe_checkpoints": true,
+            "timeout_seconds": 171887.66405153275,
+            "train_arguments": [
+              "--until-tokens",
+              "262144",
+              "--run-id",
+              "tl-v9-screen-cal-r32-h3-q10-tau0.5-s11",
+              "--recording-group",
+              "TL-CALIBRATION-v9"
+            ]
+          },
+          {
+            "config": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-r32-h3-q10-tau1-s11.json",
+            "id": "cal-r32-h3-q10-tau1-s11",
+            "max_rss_gib": 48,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-screen-cal-r32-h3-q10-tau1-s11",
+            "retire_probe_checkpoints": true,
+            "timeout_seconds": 171887.6269080639,
+            "train_arguments": [
+              "--until-tokens",
+              "262144",
+              "--run-id",
+              "tl-v9-screen-cal-r32-h3-q10-tau1-s11",
+              "--recording-group",
+              "TL-CALIBRATION-v9"
+            ]
+          },
+          {
+            "config": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-r64-h2-q10-tau0.1-s11.json",
+            "id": "cal-r64-h2-q10-tau0.1-s11",
+            "max_rss_gib": 48,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-screen-cal-r64-h2-q10-tau0.1-s11",
+            "retire_probe_checkpoints": true,
+            "timeout_seconds": 171887.59747624397,
+            "train_arguments": [
+              "--until-tokens",
+              "262144",
+              "--run-id",
+              "tl-v9-screen-cal-r64-h2-q10-tau0.1-s11",
+              "--recording-group",
+              "TL-CALIBRATION-v9"
+            ]
+          },
+          {
+            "config": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-r64-h2-q10-tau0.25-s11.json",
+            "id": "cal-r64-h2-q10-tau0.25-s11",
+            "max_rss_gib": 48,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-screen-cal-r64-h2-q10-tau0.25-s11",
+            "retire_probe_checkpoints": true,
+            "timeout_seconds": 171887.56912779808,
+            "train_arguments": [
+              "--until-tokens",
+              "262144",
+              "--run-id",
+              "tl-v9-screen-cal-r64-h2-q10-tau0.25-s11",
+              "--recording-group",
+              "TL-CALIBRATION-v9"
+            ]
+          },
+          {
+            "config": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-r64-h2-q10-tau0.5-s11.json",
+            "id": "cal-r64-h2-q10-tau0.5-s11",
+            "max_rss_gib": 48,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-screen-cal-r64-h2-q10-tau0.5-s11",
+            "retire_probe_checkpoints": true,
+            "timeout_seconds": 171887.54044556618,
+            "train_arguments": [
+              "--until-tokens",
+              "262144",
+              "--run-id",
+              "tl-v9-screen-cal-r64-h2-q10-tau0.5-s11",
+              "--recording-group",
+              "TL-CALIBRATION-v9"
+            ]
+          },
+          {
+            "config": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-r64-h2-q10-tau1-s11.json",
+            "id": "cal-r64-h2-q10-tau1-s11",
+            "max_rss_gib": 48,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-screen-cal-r64-h2-q10-tau1-s11",
+            "retire_probe_checkpoints": true,
+            "timeout_seconds": 171887.512018919,
+            "train_arguments": [
+              "--until-tokens",
+              "262144",
+              "--run-id",
+              "tl-v9-screen-cal-r64-h2-q10-tau1-s11",
+              "--recording-group",
+              "TL-CALIBRATION-v9"
+            ]
+          },
+          {
+            "config": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-r64-h2-q3-tau0.1-s11.json",
+            "id": "cal-r64-h2-q3-tau0.1-s11",
+            "max_rss_gib": 48,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-screen-cal-r64-h2-q3-tau0.1-s11",
+            "retire_probe_checkpoints": true,
+            "timeout_seconds": 171887.4837191105,
+            "train_arguments": [
+              "--until-tokens",
+              "262144",
+              "--run-id",
+              "tl-v9-screen-cal-r64-h2-q3-tau0.1-s11",
+              "--recording-group",
+              "TL-CALIBRATION-v9"
+            ]
+          },
+          {
+            "config": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-r64-h2-q3-tau0.25-s11.json",
+            "id": "cal-r64-h2-q3-tau0.25-s11",
+            "max_rss_gib": 48,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-screen-cal-r64-h2-q3-tau0.25-s11",
+            "retire_probe_checkpoints": true,
+            "timeout_seconds": 171887.45550203323,
+            "train_arguments": [
+              "--until-tokens",
+              "262144",
+              "--run-id",
+              "tl-v9-screen-cal-r64-h2-q3-tau0.25-s11",
+              "--recording-group",
+              "TL-CALIBRATION-v9"
+            ]
+          },
+          {
+            "config": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-r64-h2-q3-tau0.5-s11.json",
+            "id": "cal-r64-h2-q3-tau0.5-s11",
+            "max_rss_gib": 48,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-screen-cal-r64-h2-q3-tau0.5-s11",
+            "retire_probe_checkpoints": true,
+            "timeout_seconds": 171887.42745566368,
+            "train_arguments": [
+              "--until-tokens",
+              "262144",
+              "--run-id",
+              "tl-v9-screen-cal-r64-h2-q3-tau0.5-s11",
+              "--recording-group",
+              "TL-CALIBRATION-v9"
+            ]
+          },
+          {
+            "config": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-r64-h2-q3-tau1-s11.json",
+            "id": "cal-r64-h2-q3-tau1-s11",
+            "max_rss_gib": 48,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-screen-cal-r64-h2-q3-tau1-s11",
+            "retire_probe_checkpoints": true,
+            "timeout_seconds": 171887.3991215229,
+            "train_arguments": [
+              "--until-tokens",
+              "262144",
+              "--run-id",
+              "tl-v9-screen-cal-r64-h2-q3-tau1-s11",
+              "--recording-group",
+              "TL-CALIBRATION-v9"
+            ]
+          },
+          {
+            "config": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-tf-fc16-fan_in_depth-lr0.0003-s11.json",
+            "id": "cal-tf-fc16-fan_in_depth-lr0.0003-s11",
+            "max_rss_gib": 48,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-screen-cal-tf-fc16-fan_in_depth-lr0.0003-s11",
+            "retire_probe_checkpoints": true,
+            "timeout_seconds": 171887.39766335487,
+            "train_arguments": [
+              "--until-tokens",
+              "4194304",
+              "--run-id",
+              "tl-v9-screen-cal-tf-fc16-fan_in_depth-lr0.0003-s11",
+              "--recording-group",
+              "TL-CALIBRATION-v9"
+            ]
+          },
+          {
+            "config": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-tf-fc16-fan_in_depth-lr0.001-s11.json",
+            "id": "cal-tf-fc16-fan_in_depth-lr0.001-s11",
+            "max_rss_gib": 48,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-screen-cal-tf-fc16-fan_in_depth-lr0.001-s11",
+            "retire_probe_checkpoints": true,
+            "timeout_seconds": 171887.3962612152,
+            "train_arguments": [
+              "--until-tokens",
+              "4194304",
+              "--run-id",
+              "tl-v9-screen-cal-tf-fc16-fan_in_depth-lr0.001-s11",
+              "--recording-group",
+              "TL-CALIBRATION-v9"
+            ]
+          },
+          {
+            "config": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-tf-fc16-fan_in_depth-lr0.003-s11.json",
+            "id": "cal-tf-fc16-fan_in_depth-lr0.003-s11",
+            "max_rss_gib": 48,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-screen-cal-tf-fc16-fan_in_depth-lr0.003-s11",
+            "retire_probe_checkpoints": true,
+            "timeout_seconds": 171887.3950560093,
+            "train_arguments": [
+              "--until-tokens",
+              "4194304",
+              "--run-id",
+              "tl-v9-screen-cal-tf-fc16-fan_in_depth-lr0.003-s11",
+              "--recording-group",
+              "TL-CALIBRATION-v9"
+            ]
+          },
+          {
+            "config": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-tf-fc16-gpt2-lr0.0003-s11.json",
+            "id": "cal-tf-fc16-gpt2-lr0.0003-s11",
+            "max_rss_gib": 48,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-screen-cal-tf-fc16-gpt2-lr0.0003-s11",
+            "retire_probe_checkpoints": true,
+            "timeout_seconds": 171887.39381694794,
+            "train_arguments": [
+              "--until-tokens",
+              "4194304",
+              "--run-id",
+              "tl-v9-screen-cal-tf-fc16-gpt2-lr0.0003-s11",
+              "--recording-group",
+              "TL-CALIBRATION-v9"
+            ]
+          },
+          {
+            "config": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-tf-fc16-gpt2-lr0.001-s11.json",
+            "id": "cal-tf-fc16-gpt2-lr0.001-s11",
+            "max_rss_gib": 48,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-screen-cal-tf-fc16-gpt2-lr0.001-s11",
+            "retire_probe_checkpoints": true,
+            "timeout_seconds": 171887.39238667488,
+            "train_arguments": [
+              "--until-tokens",
+              "4194304",
+              "--run-id",
+              "tl-v9-screen-cal-tf-fc16-gpt2-lr0.001-s11",
+              "--recording-group",
+              "TL-CALIBRATION-v9"
+            ]
+          },
+          {
+            "config": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-tf-fc16-gpt2-lr0.003-s11.json",
+            "id": "cal-tf-fc16-gpt2-lr0.003-s11",
+            "max_rss_gib": 48,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-screen-cal-tf-fc16-gpt2-lr0.003-s11",
+            "retire_probe_checkpoints": true,
+            "timeout_seconds": 171887.391197443,
+            "train_arguments": [
+              "--until-tokens",
+              "4194304",
+              "--run-id",
+              "tl-v9-screen-cal-tf-fc16-gpt2-lr0.003-s11",
+              "--recording-group",
+              "TL-CALIBRATION-v9"
+            ]
+          },
+          {
+            "config": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-tf-fc32-fan_in_depth-lr0.0003-s11.json",
+            "id": "cal-tf-fc32-fan_in_depth-lr0.0003-s11",
+            "max_rss_gib": 48,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-screen-cal-tf-fc32-fan_in_depth-lr0.0003-s11",
+            "retire_probe_checkpoints": true,
+            "timeout_seconds": 171887.38976359367,
+            "train_arguments": [
+              "--until-tokens",
+              "4194304",
+              "--run-id",
+              "tl-v9-screen-cal-tf-fc32-fan_in_depth-lr0.0003-s11",
+              "--recording-group",
+              "TL-CALIBRATION-v9"
+            ]
+          },
+          {
+            "config": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-tf-fc32-fan_in_depth-lr0.001-s11.json",
+            "id": "cal-tf-fc32-fan_in_depth-lr0.001-s11",
+            "max_rss_gib": 48,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-screen-cal-tf-fc32-fan_in_depth-lr0.001-s11",
+            "retire_probe_checkpoints": true,
+            "timeout_seconds": 171887.38848686218,
+            "train_arguments": [
+              "--until-tokens",
+              "4194304",
+              "--run-id",
+              "tl-v9-screen-cal-tf-fc32-fan_in_depth-lr0.001-s11",
+              "--recording-group",
+              "TL-CALIBRATION-v9"
+            ]
+          },
+          {
+            "config": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-tf-fc32-fan_in_depth-lr0.003-s11.json",
+            "id": "cal-tf-fc32-fan_in_depth-lr0.003-s11",
+            "max_rss_gib": 48,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-screen-cal-tf-fc32-fan_in_depth-lr0.003-s11",
+            "retire_probe_checkpoints": true,
+            "timeout_seconds": 171887.3873167038,
+            "train_arguments": [
+              "--until-tokens",
+              "4194304",
+              "--run-id",
+              "tl-v9-screen-cal-tf-fc32-fan_in_depth-lr0.003-s11",
+              "--recording-group",
+              "TL-CALIBRATION-v9"
+            ]
+          },
+          {
+            "config": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-tf-fc32-gpt2-lr0.0003-s11.json",
+            "id": "cal-tf-fc32-gpt2-lr0.0003-s11",
+            "max_rss_gib": 48,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-screen-cal-tf-fc32-gpt2-lr0.0003-s11",
+            "retire_probe_checkpoints": true,
+            "timeout_seconds": 171887.38607287407,
+            "train_arguments": [
+              "--until-tokens",
+              "4194304",
+              "--run-id",
+              "tl-v9-screen-cal-tf-fc32-gpt2-lr0.0003-s11",
+              "--recording-group",
+              "TL-CALIBRATION-v9"
+            ]
+          },
+          {
+            "config": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-tf-fc32-gpt2-lr0.001-s11.json",
+            "id": "cal-tf-fc32-gpt2-lr0.001-s11",
+            "max_rss_gib": 48,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-screen-cal-tf-fc32-gpt2-lr0.001-s11",
+            "retire_probe_checkpoints": true,
+            "timeout_seconds": 171887.38485956192,
+            "train_arguments": [
+              "--until-tokens",
+              "4194304",
+              "--run-id",
+              "tl-v9-screen-cal-tf-fc32-gpt2-lr0.001-s11",
+              "--recording-group",
+              "TL-CALIBRATION-v9"
+            ]
+          },
+          {
+            "config": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-tf-fc32-gpt2-lr0.003-s11.json",
+            "id": "cal-tf-fc32-gpt2-lr0.003-s11",
+            "max_rss_gib": 48,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-screen-cal-tf-fc32-gpt2-lr0.003-s11",
+            "retire_probe_checkpoints": true,
+            "timeout_seconds": 171887.38365530968,
+            "train_arguments": [
+              "--until-tokens",
+              "4194304",
+              "--run-id",
+              "tl-v9-screen-cal-tf-fc32-gpt2-lr0.003-s11",
+              "--recording-group",
+              "TL-CALIBRATION-v9"
+            ]
+          },
+          {
+            "config": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-tf-fc64-fan_in_depth-lr0.0003-s11.json",
+            "id": "cal-tf-fc64-fan_in_depth-lr0.0003-s11",
+            "max_rss_gib": 48,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-screen-cal-tf-fc64-fan_in_depth-lr0.0003-s11",
+            "retire_probe_checkpoints": true,
+            "timeout_seconds": 171887.3824005127,
+            "train_arguments": [
+              "--until-tokens",
+              "4194304",
+              "--run-id",
+              "tl-v9-screen-cal-tf-fc64-fan_in_depth-lr0.0003-s11",
+              "--recording-group",
+              "TL-CALIBRATION-v9"
+            ]
+          },
+          {
+            "config": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-tf-fc64-fan_in_depth-lr0.001-s11.json",
+            "id": "cal-tf-fc64-fan_in_depth-lr0.001-s11",
+            "max_rss_gib": 48,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-screen-cal-tf-fc64-fan_in_depth-lr0.001-s11",
+            "retire_probe_checkpoints": true,
+            "timeout_seconds": 171887.38112926483,
+            "train_arguments": [
+              "--until-tokens",
+              "4194304",
+              "--run-id",
+              "tl-v9-screen-cal-tf-fc64-fan_in_depth-lr0.001-s11",
+              "--recording-group",
+              "TL-CALIBRATION-v9"
+            ]
+          },
+          {
+            "config": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-tf-fc64-fan_in_depth-lr0.003-s11.json",
+            "id": "cal-tf-fc64-fan_in_depth-lr0.003-s11",
+            "max_rss_gib": 48,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-screen-cal-tf-fc64-fan_in_depth-lr0.003-s11",
+            "retire_probe_checkpoints": true,
+            "timeout_seconds": 171887.3798494339,
+            "train_arguments": [
+              "--until-tokens",
+              "4194304",
+              "--run-id",
+              "tl-v9-screen-cal-tf-fc64-fan_in_depth-lr0.003-s11",
+              "--recording-group",
+              "TL-CALIBRATION-v9"
+            ]
+          },
+          {
+            "config": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-tf-fc64-gpt2-lr0.0003-s11.json",
+            "id": "cal-tf-fc64-gpt2-lr0.0003-s11",
+            "max_rss_gib": 48,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-screen-cal-tf-fc64-gpt2-lr0.0003-s11",
+            "retire_probe_checkpoints": true,
+            "timeout_seconds": 171887.37867069244,
+            "train_arguments": [
+              "--until-tokens",
+              "4194304",
+              "--run-id",
+              "tl-v9-screen-cal-tf-fc64-gpt2-lr0.0003-s11",
+              "--recording-group",
+              "TL-CALIBRATION-v9"
+            ]
+          },
+          {
+            "config": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-tf-fc64-gpt2-lr0.001-s11.json",
+            "id": "cal-tf-fc64-gpt2-lr0.001-s11",
+            "max_rss_gib": 48,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-screen-cal-tf-fc64-gpt2-lr0.001-s11",
+            "retire_probe_checkpoints": true,
+            "timeout_seconds": 171887.37745428085,
+            "train_arguments": [
+              "--until-tokens",
+              "4194304",
+              "--run-id",
+              "tl-v9-screen-cal-tf-fc64-gpt2-lr0.001-s11",
+              "--recording-group",
+              "TL-CALIBRATION-v9"
+            ]
+          },
+          {
+            "config": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-tf-fc64-gpt2-lr0.003-s11.json",
+            "id": "cal-tf-fc64-gpt2-lr0.003-s11",
+            "max_rss_gib": 48,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-screen-cal-tf-fc64-gpt2-lr0.003-s11",
+            "retire_probe_checkpoints": true,
+            "timeout_seconds": 171887.37626838684,
+            "train_arguments": [
+              "--until-tokens",
+              "4194304",
+              "--run-id",
+              "tl-v9-screen-cal-tf-fc64-gpt2-lr0.003-s11",
+              "--recording-group",
+              "TL-CALIBRATION-v9"
+            ]
+          },
+          {
+            "config": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-tf-hb184-fan_in_depth-lr0.0003-s11.json",
+            "id": "cal-tf-hb184-fan_in_depth-lr0.0003-s11",
+            "max_rss_gib": 48,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-screen-cal-tf-hb184-fan_in_depth-lr0.0003-s11",
+            "retire_probe_checkpoints": true,
+            "timeout_seconds": 171887.37514948845,
+            "train_arguments": [
+              "--until-tokens",
+              "4194304",
+              "--run-id",
+              "tl-v9-screen-cal-tf-hb184-fan_in_depth-lr0.0003-s11",
+              "--recording-group",
+              "TL-CALIBRATION-v9"
+            ]
+          },
+          {
+            "config": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-tf-hb184-fan_in_depth-lr0.001-s11.json",
+            "id": "cal-tf-hb184-fan_in_depth-lr0.001-s11",
+            "max_rss_gib": 48,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-screen-cal-tf-hb184-fan_in_depth-lr0.001-s11",
+            "retire_probe_checkpoints": true,
+            "timeout_seconds": 171887.3739681244,
+            "train_arguments": [
+              "--until-tokens",
+              "4194304",
+              "--run-id",
+              "tl-v9-screen-cal-tf-hb184-fan_in_depth-lr0.001-s11",
+              "--recording-group",
+              "TL-CALIBRATION-v9"
+            ]
+          },
+          {
+            "config": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-tf-hb184-fan_in_depth-lr0.003-s11.json",
+            "id": "cal-tf-hb184-fan_in_depth-lr0.003-s11",
+            "max_rss_gib": 48,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-screen-cal-tf-hb184-fan_in_depth-lr0.003-s11",
+            "retire_probe_checkpoints": true,
+            "timeout_seconds": 171887.37280917168,
+            "train_arguments": [
+              "--until-tokens",
+              "4194304",
+              "--run-id",
+              "tl-v9-screen-cal-tf-hb184-fan_in_depth-lr0.003-s11",
+              "--recording-group",
+              "TL-CALIBRATION-v9"
+            ]
+          },
+          {
+            "config": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-tf-hb184-gpt2-lr0.0003-s11.json",
+            "id": "cal-tf-hb184-gpt2-lr0.0003-s11",
+            "max_rss_gib": 48,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-screen-cal-tf-hb184-gpt2-lr0.0003-s11",
+            "retire_probe_checkpoints": true,
+            "timeout_seconds": 171887.37161707878,
+            "train_arguments": [
+              "--until-tokens",
+              "4194304",
+              "--run-id",
+              "tl-v9-screen-cal-tf-hb184-gpt2-lr0.0003-s11",
+              "--recording-group",
+              "TL-CALIBRATION-v9"
+            ]
+          },
+          {
+            "config": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-tf-hb184-gpt2-lr0.001-s11.json",
+            "id": "cal-tf-hb184-gpt2-lr0.001-s11",
+            "max_rss_gib": 48,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-screen-cal-tf-hb184-gpt2-lr0.001-s11",
+            "retire_probe_checkpoints": true,
+            "timeout_seconds": 171887.37045788765,
+            "train_arguments": [
+              "--until-tokens",
+              "4194304",
+              "--run-id",
+              "tl-v9-screen-cal-tf-hb184-gpt2-lr0.001-s11",
+              "--recording-group",
+              "TL-CALIBRATION-v9"
+            ]
+          },
+          {
+            "config": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-tf-hb184-gpt2-lr0.003-s11.json",
+            "id": "cal-tf-hb184-gpt2-lr0.003-s11",
+            "max_rss_gib": 48,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-screen-cal-tf-hb184-gpt2-lr0.003-s11",
+            "retire_probe_checkpoints": true,
+            "timeout_seconds": 171887.36925506592,
+            "train_arguments": [
+              "--until-tokens",
+              "4194304",
+              "--run-id",
+              "tl-v9-screen-cal-tf-hb184-gpt2-lr0.003-s11",
+              "--recording-group",
+              "TL-CALIBRATION-v9"
+            ]
+          },
+          {
+            "config": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-tf-hb40-fan_in_depth-lr0.0003-s11.json",
+            "id": "cal-tf-hb40-fan_in_depth-lr0.0003-s11",
+            "max_rss_gib": 48,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-screen-cal-tf-hb40-fan_in_depth-lr0.0003-s11",
+            "retire_probe_checkpoints": true,
+            "timeout_seconds": 171887.3681025505,
+            "train_arguments": [
+              "--until-tokens",
+              "4194304",
+              "--run-id",
+              "tl-v9-screen-cal-tf-hb40-fan_in_depth-lr0.0003-s11",
+              "--recording-group",
+              "TL-CALIBRATION-v9"
+            ]
+          },
+          {
+            "config": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-tf-hb40-fan_in_depth-lr0.001-s11.json",
+            "id": "cal-tf-hb40-fan_in_depth-lr0.001-s11",
+            "max_rss_gib": 48,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-screen-cal-tf-hb40-fan_in_depth-lr0.001-s11",
+            "retire_probe_checkpoints": true,
+            "timeout_seconds": 171887.36695194244,
+            "train_arguments": [
+              "--until-tokens",
+              "4194304",
+              "--run-id",
+              "tl-v9-screen-cal-tf-hb40-fan_in_depth-lr0.001-s11",
+              "--recording-group",
+              "TL-CALIBRATION-v9"
+            ]
+          },
+          {
+            "config": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-tf-hb40-fan_in_depth-lr0.003-s11.json",
+            "id": "cal-tf-hb40-fan_in_depth-lr0.003-s11",
+            "max_rss_gib": 48,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-screen-cal-tf-hb40-fan_in_depth-lr0.003-s11",
+            "retire_probe_checkpoints": true,
+            "timeout_seconds": 171887.36559677124,
+            "train_arguments": [
+              "--until-tokens",
+              "4194304",
+              "--run-id",
+              "tl-v9-screen-cal-tf-hb40-fan_in_depth-lr0.003-s11",
+              "--recording-group",
+              "TL-CALIBRATION-v9"
+            ]
+          },
+          {
+            "config": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-tf-hb40-gpt2-lr0.0003-s11.json",
+            "id": "cal-tf-hb40-gpt2-lr0.0003-s11",
+            "max_rss_gib": 48,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-screen-cal-tf-hb40-gpt2-lr0.0003-s11",
+            "retire_probe_checkpoints": true,
+            "timeout_seconds": 171887.3643836975,
+            "train_arguments": [
+              "--until-tokens",
+              "4194304",
+              "--run-id",
+              "tl-v9-screen-cal-tf-hb40-gpt2-lr0.0003-s11",
+              "--recording-group",
+              "TL-CALIBRATION-v9"
+            ]
+          },
+          {
+            "config": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-tf-hb40-gpt2-lr0.001-s11.json",
+            "id": "cal-tf-hb40-gpt2-lr0.001-s11",
+            "max_rss_gib": 48,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-screen-cal-tf-hb40-gpt2-lr0.001-s11",
+            "retire_probe_checkpoints": true,
+            "timeout_seconds": 171887.36319804192,
+            "train_arguments": [
+              "--until-tokens",
+              "4194304",
+              "--run-id",
+              "tl-v9-screen-cal-tf-hb40-gpt2-lr0.001-s11",
+              "--recording-group",
+              "TL-CALIBRATION-v9"
+            ]
+          },
+          {
+            "config": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-tf-hb40-gpt2-lr0.003-s11.json",
+            "id": "cal-tf-hb40-gpt2-lr0.003-s11",
+            "max_rss_gib": 48,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-screen-cal-tf-hb40-gpt2-lr0.003-s11",
+            "retire_probe_checkpoints": true,
+            "timeout_seconds": 171887.3620326519,
+            "train_arguments": [
+              "--until-tokens",
+              "4194304",
+              "--run-id",
+              "tl-v9-screen-cal-tf-hb40-gpt2-lr0.003-s11",
+              "--recording-group",
+              "TL-CALIBRATION-v9"
+            ]
+          },
+          {
+            "config": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-tf-hb88-fan_in_depth-lr0.0003-s11.json",
+            "id": "cal-tf-hb88-fan_in_depth-lr0.0003-s11",
+            "max_rss_gib": 48,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-screen-cal-tf-hb88-fan_in_depth-lr0.0003-s11",
+            "retire_probe_checkpoints": true,
+            "timeout_seconds": 171887.3608546257,
+            "train_arguments": [
+              "--until-tokens",
+              "4194304",
+              "--run-id",
+              "tl-v9-screen-cal-tf-hb88-fan_in_depth-lr0.0003-s11",
+              "--recording-group",
+              "TL-CALIBRATION-v9"
+            ]
+          },
+          {
+            "config": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-tf-hb88-fan_in_depth-lr0.001-s11.json",
+            "id": "cal-tf-hb88-fan_in_depth-lr0.001-s11",
+            "max_rss_gib": 48,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-screen-cal-tf-hb88-fan_in_depth-lr0.001-s11",
+            "retire_probe_checkpoints": true,
+            "timeout_seconds": 171887.35966563225,
+            "train_arguments": [
+              "--until-tokens",
+              "4194304",
+              "--run-id",
+              "tl-v9-screen-cal-tf-hb88-fan_in_depth-lr0.001-s11",
+              "--recording-group",
+              "TL-CALIBRATION-v9"
+            ]
+          },
+          {
+            "config": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-tf-hb88-fan_in_depth-lr0.003-s11.json",
+            "id": "cal-tf-hb88-fan_in_depth-lr0.003-s11",
+            "max_rss_gib": 48,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-screen-cal-tf-hb88-fan_in_depth-lr0.003-s11",
+            "retire_probe_checkpoints": true,
+            "timeout_seconds": 171887.35844945908,
+            "train_arguments": [
+              "--until-tokens",
+              "4194304",
+              "--run-id",
+              "tl-v9-screen-cal-tf-hb88-fan_in_depth-lr0.003-s11",
+              "--recording-group",
+              "TL-CALIBRATION-v9"
+            ]
+          },
+          {
+            "config": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-tf-hb88-gpt2-lr0.0003-s11.json",
+            "id": "cal-tf-hb88-gpt2-lr0.0003-s11",
+            "max_rss_gib": 48,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-screen-cal-tf-hb88-gpt2-lr0.0003-s11",
+            "retire_probe_checkpoints": true,
+            "timeout_seconds": 171887.35730457306,
+            "train_arguments": [
+              "--until-tokens",
+              "4194304",
+              "--run-id",
+              "tl-v9-screen-cal-tf-hb88-gpt2-lr0.0003-s11",
+              "--recording-group",
+              "TL-CALIBRATION-v9"
+            ]
+          },
+          {
+            "config": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-tf-hb88-gpt2-lr0.001-s11.json",
+            "id": "cal-tf-hb88-gpt2-lr0.001-s11",
+            "max_rss_gib": 48,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-screen-cal-tf-hb88-gpt2-lr0.001-s11",
+            "retire_probe_checkpoints": true,
+            "timeout_seconds": 171887.35614466667,
+            "train_arguments": [
+              "--until-tokens",
+              "4194304",
+              "--run-id",
+              "tl-v9-screen-cal-tf-hb88-gpt2-lr0.001-s11",
+              "--recording-group",
+              "TL-CALIBRATION-v9"
+            ]
+          },
+          {
+            "config": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-tf-hb88-gpt2-lr0.003-s11.json",
+            "id": "cal-tf-hb88-gpt2-lr0.003-s11",
+            "max_rss_gib": 48,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-screen-cal-tf-hb88-gpt2-lr0.003-s11",
+            "retire_probe_checkpoints": true,
+            "timeout_seconds": 171887.35497927666,
+            "train_arguments": [
+              "--until-tokens",
+              "4194304",
+              "--run-id",
+              "tl-v9-screen-cal-tf-hb88-gpt2-lr0.003-s11",
+              "--recording-group",
+              "TL-CALIBRATION-v9"
+            ]
+          },
+          {
+            "config": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-tree-r32-h2-q10-tau0.1-s11.json",
+            "id": "cal-tree-r32-h2-q10-tau0.1-s11",
+            "max_rss_gib": 48,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-screen-cal-tree-r32-h2-q10-tau0.1-s11",
+            "retire_probe_checkpoints": true,
+            "timeout_seconds": 171887.33842658997,
+            "train_arguments": [
+              "--until-tokens",
+              "262144",
+              "--run-id",
+              "tl-v9-screen-cal-tree-r32-h2-q10-tau0.1-s11",
+              "--recording-group",
+              "TL-CALIBRATION-v9"
+            ]
+          },
+          {
+            "config": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-tree-r32-h2-q10-tau0.25-s11.json",
+            "id": "cal-tree-r32-h2-q10-tau0.25-s11",
+            "max_rss_gib": 48,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-screen-cal-tree-r32-h2-q10-tau0.25-s11",
+            "retire_probe_checkpoints": true,
+            "timeout_seconds": 171887.32221770287,
+            "train_arguments": [
+              "--until-tokens",
+              "262144",
+              "--run-id",
+              "tl-v9-screen-cal-tree-r32-h2-q10-tau0.25-s11",
+              "--recording-group",
+              "TL-CALIBRATION-v9"
+            ]
+          },
+          {
+            "config": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-tree-r32-h2-q10-tau0.5-s11.json",
+            "id": "cal-tree-r32-h2-q10-tau0.5-s11",
+            "max_rss_gib": 48,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-screen-cal-tree-r32-h2-q10-tau0.5-s11",
+            "retire_probe_checkpoints": true,
+            "timeout_seconds": 171887.30592417717,
+            "train_arguments": [
+              "--until-tokens",
+              "262144",
+              "--run-id",
+              "tl-v9-screen-cal-tree-r32-h2-q10-tau0.5-s11",
+              "--recording-group",
+              "TL-CALIBRATION-v9"
+            ]
+          },
+          {
+            "config": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-tree-r32-h2-q10-tau1-s11.json",
+            "id": "cal-tree-r32-h2-q10-tau1-s11",
+            "max_rss_gib": 48,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-screen-cal-tree-r32-h2-q10-tau1-s11",
+            "retire_probe_checkpoints": true,
+            "timeout_seconds": 171887.2892782688,
+            "train_arguments": [
+              "--until-tokens",
+              "262144",
+              "--run-id",
+              "tl-v9-screen-cal-tree-r32-h2-q10-tau1-s11",
+              "--recording-group",
+              "TL-CALIBRATION-v9"
+            ]
+          },
+          {
+            "config": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-tree-r64-h2-q3-tau0.1-s11.json",
+            "id": "cal-tree-r64-h2-q3-tau0.1-s11",
+            "max_rss_gib": 48,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-screen-cal-tree-r64-h2-q3-tau0.1-s11",
+            "retire_probe_checkpoints": true,
+            "timeout_seconds": 171887.25949954987,
+            "train_arguments": [
+              "--until-tokens",
+              "262144",
+              "--run-id",
+              "tl-v9-screen-cal-tree-r64-h2-q3-tau0.1-s11",
+              "--recording-group",
+              "TL-CALIBRATION-v9"
+            ]
+          },
+          {
+            "config": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-tree-r64-h2-q3-tau0.25-s11.json",
+            "id": "cal-tree-r64-h2-q3-tau0.25-s11",
+            "max_rss_gib": 48,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-screen-cal-tree-r64-h2-q3-tau0.25-s11",
+            "retire_probe_checkpoints": true,
+            "timeout_seconds": 171887.2264919281,
+            "train_arguments": [
+              "--until-tokens",
+              "262144",
+              "--run-id",
+              "tl-v9-screen-cal-tree-r64-h2-q3-tau0.25-s11",
+              "--recording-group",
+              "TL-CALIBRATION-v9"
+            ]
+          },
+          {
+            "config": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-tree-r64-h2-q3-tau0.5-s11.json",
+            "id": "cal-tree-r64-h2-q3-tau0.5-s11",
+            "max_rss_gib": 48,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-screen-cal-tree-r64-h2-q3-tau0.5-s11",
+            "retire_probe_checkpoints": true,
+            "timeout_seconds": 171887.19671201706,
+            "train_arguments": [
+              "--until-tokens",
+              "262144",
+              "--run-id",
+              "tl-v9-screen-cal-tree-r64-h2-q3-tau0.5-s11",
+              "--recording-group",
+              "TL-CALIBRATION-v9"
+            ]
+          },
+          {
+            "config": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-tree-r64-h2-q3-tau1-s11.json",
+            "id": "cal-tree-r64-h2-q3-tau1-s11",
+            "max_rss_gib": 48,
+            "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-screen-cal-tree-r64-h2-q3-tau1-s11",
+            "retire_probe_checkpoints": true,
+            "timeout_seconds": 171887.16685509682,
+            "train_arguments": [
+              "--until-tokens",
+              "262144",
+              "--run-id",
+              "tl-v9-screen-cal-tree-r64-h2-q3-tau1-s11",
+              "--recording-group",
+              "TL-CALIBRATION-v9"
+            ]
+          }
+        ],
+        "jobs": [
+          "v9-screen-w0",
+          "v9-screen-w1",
+          "v9-screen-w2",
+          "v9-screen-w3",
+          "v9-screen-w4",
+          "v9-screen-w5",
+          "v9-screen-w6",
+          "v9-screen-w7",
+          "v9-screen-w8",
+          "v9-screen-w9",
+          "v9-screen-w10",
+          "v9-screen-w11"
+        ],
+        "started_at": "2026-11-11T13:48:39.215410+00:00",
+        "state": "running"
+      }
+    },
+    "resources": {
+      "at": "2026-11-11T13:50:15.586607+00:00",
+      "hard_quota_headroom_gib": 563.6980285644531,
+      "new_disk_gib": 7.500556945800781
+    },
+    "schema": "tide-direct-v9-campaign-v1",
+    "scientific_review": "awaiting human review",
+    "source": "6e7bd49eb5e35c15445826cac3a9b6ddda75aff4",
+    "started_at": "2026-11-11T13:46:01.674992+00:00",
+    "state": "running"
+  },
+  "data": {
+    "data_lock_sha256": "40b7c0ebb9650d11aa0c0080532c884e2ca3846db578155f3df7068b82191d2f",
+    "finished_at": "2026-11-11T13:48:25.106587+00:00",
+    "schema": "tide-v9-data-preparation-v1",
+    "seconds": 533.0717520825565,
+    "splits": {
+      "confirmation": {
+        "documents": 135,
+        "tokens": 262144
+      },
+      "test": {
+        "documents": 157,
+        "tokens": 294476
+      },
+      "train": {
+        "documents": 25440,
+        "tokens": 134217728
+      },
+      "validation": {
+        "documents": 134,
+        "tokens": 258990
+      }
+    },
+    "started_at": "2026-11-11T13:39:32.033043+00:00",
+    "state": "completed"
+  },
+  "jobs": [
+    {
+      "config_inputs": [
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v9-execution/configs/studies/language/direct-v9/budget.json",
+          "sha256": "60e0accc7695af0bef9bbf01c7935e43ee2aa7a7f76ea366ef4021c24e22c286"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v9-execution/configs/studies/language/direct-v9/resource.json",
+          "sha256": "ce03c71edcf8be2ba08c5c1b85a4a6b3950ae2979be20c5fb1988b4a9a69e151"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v9-execution/configs/studies/language/direct-v9/table/main/fc16-direct-s11.json",
+          "sha256": "fc310bfef5c4c4967f8cd823019a3695d6ccb9b144e65c29347d33f73d104cdc"
+        }
+      ],
+      "id": "v9-batch-direct-16-128-512",
+      "log": "/mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v9-batch-direct-16-128-512/job.log",
+      "main_pid": "0",
+      "physical_id": 2,
+      "queue_status": "completed",
+      "source": "6e7bd49eb5e35c15445826cac3a9b6ddda75aff4",
+      "state": "completed",
+      "termination_verified": true,
+      "unit": "tide-lab-v9-batch-direct-16-128-512.service"
+    },
+    {
+      "config_inputs": [
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v9-execution/configs/studies/language/direct-v9/budget.json",
+          "sha256": "60e0accc7695af0bef9bbf01c7935e43ee2aa7a7f76ea366ef4021c24e22c286"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v9-execution/configs/studies/language/direct-v9/resource.json",
+          "sha256": "ce03c71edcf8be2ba08c5c1b85a4a6b3950ae2979be20c5fb1988b4a9a69e151"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v9-execution/configs/studies/language/direct-v9/table/main/hb184-pool-s11.json",
+          "sha256": "cf7b94cd3fe68f42e72b03953ceb7cb95d110a26634afe6b7247302773284e81"
+        }
+      ],
+      "id": "v9-batch-direct-184-128-512",
+      "log": "/mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v9-batch-direct-184-128-512/job.log",
+      "main_pid": "0",
+      "physical_id": 11,
+      "queue_status": "completed",
+      "source": "6e7bd49eb5e35c15445826cac3a9b6ddda75aff4",
+      "state": "completed",
+      "termination_verified": true,
+      "unit": "tide-lab-v9-batch-direct-184-128-512.service"
+    },
+    {
+      "config_inputs": [
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v9-execution/configs/studies/language/direct-v9/budget.json",
+          "sha256": "60e0accc7695af0bef9bbf01c7935e43ee2aa7a7f76ea366ef4021c24e22c286"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v9-execution/configs/studies/language/direct-v9/resource.json",
+          "sha256": "ce03c71edcf8be2ba08c5c1b85a4a6b3950ae2979be20c5fb1988b4a9a69e151"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v9-execution/configs/studies/language/direct-v9/table/main/fc32-direct-s11.json",
+          "sha256": "b7d9a8c91170c3b0af3a02d67bbdfd3898def7237a4369fdb7d61f3c4d445d88"
+        }
+      ],
+      "id": "v9-batch-direct-32-128-512",
+      "log": "/mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v9-batch-direct-32-128-512/job.log",
+      "main_pid": "0",
+      "physical_id": 9,
+      "queue_status": "completed",
+      "source": "6e7bd49eb5e35c15445826cac3a9b6ddda75aff4",
+      "state": "completed",
+      "termination_verified": true,
+      "unit": "tide-lab-v9-batch-direct-32-128-512.service"
+    },
+    {
+      "config_inputs": [
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v9-execution/configs/studies/language/direct-v9/budget.json",
+          "sha256": "60e0accc7695af0bef9bbf01c7935e43ee2aa7a7f76ea366ef4021c24e22c286"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v9-execution/configs/studies/language/direct-v9/resource.json",
+          "sha256": "ce03c71edcf8be2ba08c5c1b85a4a6b3950ae2979be20c5fb1988b4a9a69e151"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v9-execution/configs/studies/language/direct-v9/table/main/r32-h2-pool-s11.json",
+          "sha256": "ff4edf899b74a658decb663fb3550a8da52b1688271668d2415e3601e441924c"
+        }
+      ],
+      "id": "v9-batch-direct-320-64-256",
+      "log": "/mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v9-batch-direct-320-64-256/job.log",
+      "main_pid": "0",
+      "physical_id": 6,
+      "queue_status": "completed",
+      "source": "6e7bd49eb5e35c15445826cac3a9b6ddda75aff4",
+      "state": "completed",
+      "termination_verified": true,
+      "unit": "tide-lab-v9-batch-direct-320-64-256.service"
+    },
+    {
+      "config_inputs": [
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v9-execution/configs/studies/language/direct-v9/budget.json",
+          "sha256": "60e0accc7695af0bef9bbf01c7935e43ee2aa7a7f76ea366ef4021c24e22c286"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v9-execution/configs/studies/language/direct-v9/resource.json",
+          "sha256": "ce03c71edcf8be2ba08c5c1b85a4a6b3950ae2979be20c5fb1988b4a9a69e151"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v9-execution/configs/studies/language/direct-v9/table/main/tree-r32-h2-q10-s11.json",
+          "sha256": "6cb177c36fffac736f440628d74acab9fb9738d785a70b43b3f9e19d8a80effc"
+        }
+      ],
+      "id": "v9-batch-direct-341-64-256",
+      "log": "/mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v9-batch-direct-341-64-256/job.log",
+      "main_pid": "0",
+      "physical_id": 0,
+      "queue_status": "completed",
+      "source": "6e7bd49eb5e35c15445826cac3a9b6ddda75aff4",
+      "state": "completed",
+      "termination_verified": true,
+      "unit": "tide-lab-v9-batch-direct-341-64-256.service"
+    },
+    {
+      "config_inputs": [
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v9-execution/configs/studies/language/direct-v9/budget.json",
+          "sha256": "60e0accc7695af0bef9bbf01c7935e43ee2aa7a7f76ea366ef4021c24e22c286"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v9-execution/configs/studies/language/direct-v9/resource.json",
+          "sha256": "ce03c71edcf8be2ba08c5c1b85a4a6b3950ae2979be20c5fb1988b4a9a69e151"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v9-execution/configs/studies/language/direct-v9/table/main/hb40-pool-s11.json",
+          "sha256": "200cb3f4d68532263247bb2d5acde2b9e0dd86463930bf86ebee98dcc5533657"
+        }
+      ],
+      "id": "v9-batch-direct-40-128-512",
+      "log": "/mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v9-batch-direct-40-128-512/job.log",
+      "main_pid": "0",
+      "physical_id": 7,
+      "queue_status": "completed",
+      "source": "6e7bd49eb5e35c15445826cac3a9b6ddda75aff4",
+      "state": "completed",
+      "termination_verified": true,
+      "unit": "tide-lab-v9-batch-direct-40-128-512.service"
+    },
+    {
+      "config_inputs": [
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v9-execution/configs/studies/language/direct-v9/budget.json",
+          "sha256": "60e0accc7695af0bef9bbf01c7935e43ee2aa7a7f76ea366ef4021c24e22c286"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v9-execution/configs/studies/language/direct-v9/resource.json",
+          "sha256": "ce03c71edcf8be2ba08c5c1b85a4a6b3950ae2979be20c5fb1988b4a9a69e151"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v9-execution/configs/studies/language/direct-v9/table/main/hb40-wide192-pool-s11.json",
+          "sha256": "ce75ca185c5ef2a8e19b3acfe3b56a41f1a609dbf226bc6a3868f51f42e7f1cc"
+        }
+      ],
+      "id": "v9-batch-direct-40-192-768",
+      "log": "/mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v9-batch-direct-40-192-768/job.log",
+      "main_pid": "0",
+      "physical_id": 5,
+      "queue_status": "completed",
+      "source": "6e7bd49eb5e35c15445826cac3a9b6ddda75aff4",
+      "state": "completed",
+      "termination_verified": true,
+      "unit": "tide-lab-v9-batch-direct-40-192-768.service"
+    },
+    {
+      "config_inputs": [
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v9-execution/configs/studies/language/direct-v9/budget.json",
+          "sha256": "60e0accc7695af0bef9bbf01c7935e43ee2aa7a7f76ea366ef4021c24e22c286"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v9-execution/configs/studies/language/direct-v9/resource.json",
+          "sha256": "ce03c71edcf8be2ba08c5c1b85a4a6b3950ae2979be20c5fb1988b4a9a69e151"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v9-execution/configs/studies/language/direct-v9/table/main/hb40-wide256-pool-s11.json",
+          "sha256": "cfc38cc10ef4dba4e747419c5ae551cc2df2f14dd6877b7397a119562db8a28a"
+        }
+      ],
+      "id": "v9-batch-direct-40-256-1280",
+      "log": "/mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v9-batch-direct-40-256-1280/job.log",
+      "main_pid": "0",
+      "physical_id": 15,
+      "queue_status": "completed",
+      "source": "6e7bd49eb5e35c15445826cac3a9b6ddda75aff4",
+      "state": "completed",
+      "termination_verified": true,
+      "unit": "tide-lab-v9-batch-direct-40-256-1280.service"
+    },
+    {
+      "config_inputs": [
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v9-execution/configs/studies/language/direct-v9/budget.json",
+          "sha256": "60e0accc7695af0bef9bbf01c7935e43ee2aa7a7f76ea366ef4021c24e22c286"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v9-execution/configs/studies/language/direct-v9/resource.json",
+          "sha256": "ce03c71edcf8be2ba08c5c1b85a4a6b3950ae2979be20c5fb1988b4a9a69e151"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v9-execution/configs/studies/language/direct-v9/table/main/fc64-direct-s11.json",
+          "sha256": "fd9f9ae9961c8c230a8ba02da54bcd337c0f35f1796a8b9a3a17d31d98a8cb52"
+        }
+      ],
+      "id": "v9-batch-direct-64-128-512",
+      "log": "/mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v9-batch-direct-64-128-512/job.log",
+      "main_pid": "0",
+      "physical_id": 11,
+      "queue_status": "completed",
+      "source": "6e7bd49eb5e35c15445826cac3a9b6ddda75aff4",
+      "state": "completed",
+      "termination_verified": true,
+      "unit": "tide-lab-v9-batch-direct-64-128-512.service"
+    },
+    {
+      "config_inputs": [
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v9-execution/configs/studies/language/direct-v9/budget.json",
+          "sha256": "60e0accc7695af0bef9bbf01c7935e43ee2aa7a7f76ea366ef4021c24e22c286"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v9-execution/configs/studies/language/direct-v9/resource.json",
+          "sha256": "ce03c71edcf8be2ba08c5c1b85a4a6b3950ae2979be20c5fb1988b4a9a69e151"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v9-execution/configs/studies/language/direct-v9/table/main/r64-h2-pool-s11.json",
+          "sha256": "332a862c0ae22bd7fc8b53bc2b0f1f06279c61beec34eff2c7104363df648095"
+        }
+      ],
+      "id": "v9-batch-direct-640-64-256",
+      "log": "/mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v9-batch-direct-640-64-256/job.log",
+      "main_pid": "0",
+      "physical_id": 4,
+      "queue_status": "completed",
+      "source": "6e7bd49eb5e35c15445826cac3a9b6ddda75aff4",
+      "state": "completed",
+      "termination_verified": true,
+      "unit": "tide-lab-v9-batch-direct-640-64-256.service"
+    },
+    {
+      "config_inputs": [
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v9-execution/configs/studies/language/direct-v9/budget.json",
+          "sha256": "60e0accc7695af0bef9bbf01c7935e43ee2aa7a7f76ea366ef4021c24e22c286"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v9-execution/configs/studies/language/direct-v9/resource.json",
+          "sha256": "ce03c71edcf8be2ba08c5c1b85a4a6b3950ae2979be20c5fb1988b4a9a69e151"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v9-execution/configs/studies/language/direct-v9/table/main/tree-r64-h2-q3-s11.json",
+          "sha256": "6884041279b1f3b916f5295d876b284242ca49f94bf3a6da1da2bf5061eb8c5c"
+        }
+      ],
+      "id": "v9-batch-direct-661-64-256",
+      "log": "/mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v9-batch-direct-661-64-256/job.log",
+      "main_pid": "0",
+      "physical_id": 8,
+      "queue_status": "completed",
+      "source": "6e7bd49eb5e35c15445826cac3a9b6ddda75aff4",
+      "state": "completed",
+      "termination_verified": true,
+      "unit": "tide-lab-v9-batch-direct-661-64-256.service"
+    },
+    {
+      "config_inputs": [
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v9-execution/configs/studies/language/direct-v9/budget.json",
+          "sha256": "60e0accc7695af0bef9bbf01c7935e43ee2aa7a7f76ea366ef4021c24e22c286"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v9-execution/configs/studies/language/direct-v9/resource.json",
+          "sha256": "ce03c71edcf8be2ba08c5c1b85a4a6b3950ae2979be20c5fb1988b4a9a69e151"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v9-execution/configs/studies/language/direct-v9/table/main/r32-h3-q10-s11.json",
+          "sha256": "21b8b0870142e070c48e445e5913c00ef429d1cd20953fe890646ccec9bbc182"
+        }
+      ],
+      "id": "v9-batch-direct-704-64-256",
+      "log": "/mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v9-batch-direct-704-64-256/job.log",
+      "main_pid": "0",
+      "physical_id": 14,
+      "queue_status": "completed",
+      "source": "6e7bd49eb5e35c15445826cac3a9b6ddda75aff4",
+      "state": "completed",
+      "termination_verified": true,
+      "unit": "tide-lab-v9-batch-direct-704-64-256.service"
+    },
+    {
+      "config_inputs": [
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v9-execution/configs/studies/language/direct-v9/budget.json",
+          "sha256": "60e0accc7695af0bef9bbf01c7935e43ee2aa7a7f76ea366ef4021c24e22c286"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v9-execution/configs/studies/language/direct-v9/resource.json",
+          "sha256": "ce03c71edcf8be2ba08c5c1b85a4a6b3950ae2979be20c5fb1988b4a9a69e151"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v9-execution/configs/studies/language/direct-v9/table/main/hb88-pool-s11.json",
+          "sha256": "06fa7c0a68df9318d5ee3abde19916a734fbf0bb3648a374a5f5dfce3eba05a5"
+        }
+      ],
+      "id": "v9-batch-direct-88-128-512",
+      "log": "/mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v9-batch-direct-88-128-512/job.log",
+      "main_pid": "0",
+      "physical_id": 10,
+      "queue_status": "completed",
+      "source": "6e7bd49eb5e35c15445826cac3a9b6ddda75aff4",
+      "state": "completed",
+      "termination_verified": true,
+      "unit": "tide-lab-v9-batch-direct-88-128-512.service"
+    },
+    {
+      "config_inputs": [
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v9-execution/configs/studies/language/direct-v9/budget.json",
+          "sha256": "60e0accc7695af0bef9bbf01c7935e43ee2aa7a7f76ea366ef4021c24e22c286"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v9-execution/configs/studies/language/direct-v9/resource.json",
+          "sha256": "ce03c71edcf8be2ba08c5c1b85a4a6b3950ae2979be20c5fb1988b4a9a69e151"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v9-execution/configs/studies/language/direct-v9/table/main/tf-fc16-s11.json",
+          "sha256": "e748c374d48f16c7a451d551cb2ce217ebfb2cfbc04f3fe0d1cc93a0d7736b31"
+        }
+      ],
+      "id": "v9-batch-tf-240-6",
+      "log": "/mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v9-batch-tf-240-6/job.log",
+      "main_pid": "0",
+      "physical_id": 5,
+      "queue_status": "completed",
+      "source": "6e7bd49eb5e35c15445826cac3a9b6ddda75aff4",
+      "state": "completed",
+      "termination_verified": true,
+      "unit": "tide-lab-v9-batch-tf-240-6.service"
+    },
+    {
+      "config_inputs": [
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v9-execution/configs/studies/language/direct-v9/budget.json",
+          "sha256": "60e0accc7695af0bef9bbf01c7935e43ee2aa7a7f76ea366ef4021c24e22c286"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v9-execution/configs/studies/language/direct-v9/resource.json",
+          "sha256": "ce03c71edcf8be2ba08c5c1b85a4a6b3950ae2979be20c5fb1988b4a9a69e151"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v9-execution/configs/studies/language/direct-v9/table/main/tf-fc32-s11.json",
+          "sha256": "d5de227948c185952c9c56869a27b0eb1ea0b71981f2fcdf941c30b57123cd31"
+        }
+      ],
+      "id": "v9-batch-tf-336-6",
+      "log": "/mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v9-batch-tf-336-6/job.log",
+      "main_pid": "0",
+      "physical_id": 10,
+      "queue_status": "completed",
+      "source": "6e7bd49eb5e35c15445826cac3a9b6ddda75aff4",
+      "state": "completed",
+      "termination_verified": true,
+      "unit": "tide-lab-v9-batch-tf-336-6.service"
+    },
+    {
+      "config_inputs": [
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v9-execution/configs/studies/language/direct-v9/budget.json",
+          "sha256": "60e0accc7695af0bef9bbf01c7935e43ee2aa7a7f76ea366ef4021c24e22c286"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v9-execution/configs/studies/language/direct-v9/resource.json",
+          "sha256": "ce03c71edcf8be2ba08c5c1b85a4a6b3950ae2979be20c5fb1988b4a9a69e151"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v9-execution/configs/studies/language/direct-v9/table/main/tf-hb40-s11.json",
+          "sha256": "55bb76a50cb5150de6b0e4379d93072651c7cf677b0364197e28b9c370901c19"
+        }
+      ],
+      "id": "v9-batch-tf-384-6",
+      "log": "/mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v9-batch-tf-384-6/job.log",
+      "main_pid": "0",
+      "physical_id": 1,
+      "queue_status": "completed",
+      "source": "6e7bd49eb5e35c15445826cac3a9b6ddda75aff4",
+      "state": "completed",
+      "termination_verified": true,
+      "unit": "tide-lab-v9-batch-tf-384-6.service"
+    },
+    {
+      "config_inputs": [
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v9-execution/configs/studies/language/direct-v9/budget.json",
+          "sha256": "60e0accc7695af0bef9bbf01c7935e43ee2aa7a7f76ea366ef4021c24e22c286"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v9-execution/configs/studies/language/direct-v9/resource.json",
+          "sha256": "ce03c71edcf8be2ba08c5c1b85a4a6b3950ae2979be20c5fb1988b4a9a69e151"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v9-execution/configs/studies/language/direct-v9/table/main/tf-hb88-s11.json",
+          "sha256": "0b042ff293c4cd488449e953e021d5c6bc0a010024b53f4aaffd369da6c89780"
+        }
+      ],
+      "id": "v9-batch-tf-400-12",
+      "log": "/mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v9-batch-tf-400-12/job.log",
+      "main_pid": "0",
+      "physical_id": 3,
+      "queue_status": "completed",
+      "source": "6e7bd49eb5e35c15445826cac3a9b6ddda75aff4",
+      "state": "completed",
+      "termination_verified": true,
+      "unit": "tide-lab-v9-batch-tf-400-12.service"
+    },
+    {
+      "config_inputs": [
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v9-execution/configs/studies/language/direct-v9/budget.json",
+          "sha256": "60e0accc7695af0bef9bbf01c7935e43ee2aa7a7f76ea366ef4021c24e22c286"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v9-execution/configs/studies/language/direct-v9/resource.json",
+          "sha256": "ce03c71edcf8be2ba08c5c1b85a4a6b3950ae2979be20c5fb1988b4a9a69e151"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v9-execution/configs/studies/language/direct-v9/table/main/tf-fc64-s11.json",
+          "sha256": "ad92c6e0958eb1ddff32889ef5d6cbc94181155ca24a33e68c0ebbb0c8baa86e"
+        }
+      ],
+      "id": "v9-batch-tf-416-8",
+      "log": "/mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v9-batch-tf-416-8/job.log",
+      "main_pid": "0",
+      "physical_id": 2,
+      "queue_status": "completed",
+      "source": "6e7bd49eb5e35c15445826cac3a9b6ddda75aff4",
+      "state": "completed",
+      "termination_verified": true,
+      "unit": "tide-lab-v9-batch-tf-416-8.service"
+    },
+    {
+      "config_inputs": [
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v9-execution/configs/studies/language/direct-v9/budget.json",
+          "sha256": "60e0accc7695af0bef9bbf01c7935e43ee2aa7a7f76ea366ef4021c24e22c286"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v9-execution/configs/studies/language/direct-v9/resource.json",
+          "sha256": "ce03c71edcf8be2ba08c5c1b85a4a6b3950ae2979be20c5fb1988b4a9a69e151"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v9-execution/configs/studies/language/direct-v9/table/main/tf-hb184-s11.json",
+          "sha256": "9b4a740a79d9f489468631ffc361f416dfb170aa177a3eea7f5463c8301f7d9d"
+        }
+      ],
+      "id": "v9-batch-tf-512-16",
+      "log": "/mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v9-batch-tf-512-16/job.log",
+      "main_pid": "0",
+      "physical_id": 7,
+      "queue_status": "completed",
+      "source": "6e7bd49eb5e35c15445826cac3a9b6ddda75aff4",
+      "state": "completed",
+      "termination_verified": true,
+      "unit": "tide-lab-v9-batch-tf-512-16.service"
+    },
+    {
+      "config_inputs": [
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/configs/studies/language/direct-v9/budget.json",
+          "sha256": "60e0accc7695af0bef9bbf01c7935e43ee2aa7a7f76ea366ef4021c24e22c286"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/configs/studies/language/direct-v9/resource.json",
+          "sha256": "ce03c71edcf8be2ba08c5c1b85a4a6b3950ae2979be20c5fb1988b4a9a69e151"
+        }
+      ],
+      "id": "v9-controller",
+      "log": "/mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v9-controller/job.log",
+      "main_pid": "3778548",
+      "physical_id": null,
+      "queue_status": null,
+      "source": "6e7bd49eb5e35c15445826cac3a9b6ddda75aff4",
+      "state": "running",
+      "termination_verified": false,
+      "unit": "tide-lab-v9-controller.service"
+    },
+    {
+      "config_inputs": [
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/wikitext103-tree-v6.json",
+          "sha256": "e0b0438b155a53ce8b7c6877dab9f8af7b4a422c71a2e2a20ebc33fb8ba798f4"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v6-data-final/data-lock.json",
+          "sha256": "8977a3636b7111db3ace7b00849e12a0d18da700a9c40feb1dbcdf142b0aa0f6"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/lm-data-v1/tokens/tokenizer-a.json",
+          "sha256": "886c6b9c8e5d1d25839e957c915ac20382caa55ab986956da5ffdee0a79bba2d"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/lm-data-v1/documents/documents.jsonl",
+          "sha256": "368e9cc9c948ac676e03fcdc77f11e77aef7c5d569e74f23e1753d7ea857d7f2"
+        }
+      ],
+      "id": "v9-data",
+      "log": "/mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v9-data/job.log",
+      "main_pid": "0",
+      "physical_id": null,
+      "queue_status": null,
+      "source": "bd666d9a240cfce7a8c16da4b92f5530b273f951",
+      "state": "failed",
+      "termination_verified": true,
+      "unit": "tide-lab-v9-data.service"
+    },
+    {
+      "config_inputs": [
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/wikitext103-tree-v6.json",
+          "sha256": "e0b0438b155a53ce8b7c6877dab9f8af7b4a422c71a2e2a20ebc33fb8ba798f4"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v6-data-final/data-lock.json",
+          "sha256": "8977a3636b7111db3ace7b00849e12a0d18da700a9c40feb1dbcdf142b0aa0f6"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/lm-data-v1/tokens/tokenizer-a.json",
+          "sha256": "886c6b9c8e5d1d25839e957c915ac20382caa55ab986956da5ffdee0a79bba2d"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/lm-data-v1/documents/documents.jsonl",
+          "sha256": "368e9cc9c948ac676e03fcdc77f11e77aef7c5d569e74f23e1753d7ea857d7f2"
+        }
+      ],
+      "id": "v9-data-r2",
+      "log": "/mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v9-data-r2/job.log",
+      "main_pid": "0",
+      "physical_id": null,
+      "queue_status": null,
+      "source": "bd666d9a240cfce7a8c16da4b92f5530b273f951",
+      "state": "failed",
+      "termination_verified": true,
+      "unit": "tide-lab-v9-data-r2.service"
+    },
+    {
+      "config_inputs": [
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/wikitext103-tree-v6.json",
+          "sha256": "e0b0438b155a53ce8b7c6877dab9f8af7b4a422c71a2e2a20ebc33fb8ba798f4"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v6-data-final/data-lock.json",
+          "sha256": "8977a3636b7111db3ace7b00849e12a0d18da700a9c40feb1dbcdf142b0aa0f6"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/lm-data-v1/tokens/tokenizer-a.json",
+          "sha256": "886c6b9c8e5d1d25839e957c915ac20382caa55ab986956da5ffdee0a79bba2d"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/lm-data-v1/documents/documents.jsonl",
+          "sha256": "368e9cc9c948ac676e03fcdc77f11e77aef7c5d569e74f23e1753d7ea857d7f2"
+        }
+      ],
+      "id": "v9-data-r3",
+      "log": "/mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v9-data-r3/job.log",
+      "main_pid": "0",
+      "physical_id": null,
+      "queue_status": null,
+      "source": "bd666d9a240cfce7a8c16da4b92f5530b273f951",
+      "state": "completed",
+      "termination_verified": true,
+      "unit": "tide-lab-v9-data-r3.service"
+    },
+    {
+      "config_inputs": [
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v9-execution/configs/studies/language/direct-v9/budget.json",
+          "sha256": "60e0accc7695af0bef9bbf01c7935e43ee2aa7a7f76ea366ef4021c24e22c286"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v9-execution/configs/studies/language/direct-v9/resource.json",
+          "sha256": "ce03c71edcf8be2ba08c5c1b85a4a6b3950ae2979be20c5fb1988b4a9a69e151"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/w0.json",
+          "sha256": "fea6294232de2b1be1f8d330d56d8038e95a70e1a88f40a8889a86d6d404194b"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-data-r3/data-lock.json",
+          "sha256": "40b7c0ebb9650d11aa0c0080532c884e2ca3846db578155f3df7068b82191d2f"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-hb184-pool-fan-lr0.0003-s11.json",
+          "sha256": "f06fb020144d9e5ea832c859cbb4a69c609267b13ea9d4e70e00e5c541bbe832"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-r32-h2-q10-tau0.1-s11.json",
+          "sha256": "468622de037b586ee6033958b38b911d0232d1b6f671afab5a8a3845a417e054"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-r64-h2-q3-tau0.1-s11.json",
+          "sha256": "233aa375db40ca169b96e34b918f2615e6d2b485f4ebf31a6894ebadd818841f"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-tf-fc32-fan_in_depth-lr0.003-s11.json",
+          "sha256": "1b189270b6930ce8e843897b2992acb734b4d237d09748c93d795a862cc163ba"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-tf-hb184-fan_in_depth-lr0.003-s11.json",
+          "sha256": "3d3069e61c77ad0d0e27b693675d8706f9a17ff1c33fb94c3d7de1ab133ded59"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-tf-hb88-fan_in_depth-lr0.003-s11.json",
+          "sha256": "20fd05c71951ce24b9d2acfe474770df295803b0dd65b2907e17fe602dc7ce92"
+        }
+      ],
+      "id": "v9-screen-w0",
+      "log": "/mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v9-screen-w0/job.log",
+      "main_pid": "4069152",
+      "physical_id": 11,
+      "queue_status": "running",
+      "source": "6e7bd49eb5e35c15445826cac3a9b6ddda75aff4",
+      "state": "running",
+      "termination_verified": false,
+      "unit": "tide-lab-v9-screen-w0.service"
+    },
+    {
+      "config_inputs": [
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v9-execution/configs/studies/language/direct-v9/budget.json",
+          "sha256": "60e0accc7695af0bef9bbf01c7935e43ee2aa7a7f76ea366ef4021c24e22c286"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v9-execution/configs/studies/language/direct-v9/resource.json",
+          "sha256": "ce03c71edcf8be2ba08c5c1b85a4a6b3950ae2979be20c5fb1988b4a9a69e151"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/w1.json",
+          "sha256": "4c5cbcd882bda7cbcb283191e0fb981a8a1f9be023012e4414a37f908f6d588f"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-data-r3/data-lock.json",
+          "sha256": "40b7c0ebb9650d11aa0c0080532c884e2ca3846db578155f3df7068b82191d2f"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-hb184-pool-fan-lr0.001-s11.json",
+          "sha256": "9f1ce7cb10cfa3252f70c83ce0184481c24f4d40da3831ce2f66dff4178bba55"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-r32-h2-q10-tau0.25-s11.json",
+          "sha256": "f5b9f40cc789cc58c92f850b3044c9d60f1c48a4522a355031de6b7782428380"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-r64-h2-q3-tau0.25-s11.json",
+          "sha256": "a95dcd0d2e15e0a674bb0046ceb8287235a214a2866d0891a249330ca04f62a0"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-tf-fc32-gpt2-lr0.0003-s11.json",
+          "sha256": "196adb5bb7c06904782b03e0c8fd77adfe5e7dc64cdc05d35dd5d9263a89c2bf"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-tf-hb184-gpt2-lr0.0003-s11.json",
+          "sha256": "d79832856d15e118d4a895270e19f3630b303083176e2b09bffddad4d2a8860d"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-tf-hb88-gpt2-lr0.0003-s11.json",
+          "sha256": "68c4279a4de4d85b33280182b379be9657e43ac99c831cd0913dae6d2824e57e"
+        }
+      ],
+      "id": "v9-screen-w1",
+      "log": "/mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v9-screen-w1/job.log",
+      "main_pid": "4069231",
+      "physical_id": 7,
+      "queue_status": "running",
+      "source": "6e7bd49eb5e35c15445826cac3a9b6ddda75aff4",
+      "state": "running",
+      "termination_verified": false,
+      "unit": "tide-lab-v9-screen-w1.service"
+    },
+    {
+      "config_inputs": [
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v9-execution/configs/studies/language/direct-v9/budget.json",
+          "sha256": "60e0accc7695af0bef9bbf01c7935e43ee2aa7a7f76ea366ef4021c24e22c286"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v9-execution/configs/studies/language/direct-v9/resource.json",
+          "sha256": "ce03c71edcf8be2ba08c5c1b85a4a6b3950ae2979be20c5fb1988b4a9a69e151"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/w10.json",
+          "sha256": "95c0af7dc62d64b4fe176091620bf95dca2596beb1c9e62f6d5018f8b2257188"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-data-r3/data-lock.json",
+          "sha256": "40b7c0ebb9650d11aa0c0080532c884e2ca3846db578155f3df7068b82191d2f"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-hb88-quad-fan-lr0.0003-s11.json",
+          "sha256": "b9c14b54277641e23b4cf5c8156010466352c799ea61be916488de13d4381a58"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-r64-h2-q10-tau0.5-s11.json",
+          "sha256": "6b1a2f37add58d578d670dbea57045a828f9415ba09c903f0a6ac94dd94cf578"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-tf-fc32-fan_in_depth-lr0.0003-s11.json",
+          "sha256": "d1a57d2dc8c75bc0fa619ffcb702229d7e93dacc1332853625a6ecc807f3bca1"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-tf-hb184-fan_in_depth-lr0.0003-s11.json",
+          "sha256": "5ab180e58ac3b45671ac319e8489153d029896ed28e172743d0a422c1e2f6aca"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-tf-hb88-fan_in_depth-lr0.0003-s11.json",
+          "sha256": "d1fb182adc208e3252216a90a1ca6b6c57c554895408fc866158990d851e3152"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-tree-r64-h2-q3-tau0.5-s11.json",
+          "sha256": "c712b44adf0c9e933458bce2ba1b14a73ae8f86c099f6de633ed0e293dcea232"
+        }
+      ],
+      "id": "v9-screen-w10",
+      "log": "/mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v9-screen-w10/job.log",
+      "main_pid": "4075190",
+      "physical_id": 2,
+      "queue_status": "running",
+      "source": "6e7bd49eb5e35c15445826cac3a9b6ddda75aff4",
+      "state": "running",
+      "termination_verified": false,
+      "unit": "tide-lab-v9-screen-w10.service"
+    },
+    {
+      "config_inputs": [
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v9-execution/configs/studies/language/direct-v9/budget.json",
+          "sha256": "60e0accc7695af0bef9bbf01c7935e43ee2aa7a7f76ea366ef4021c24e22c286"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v9-execution/configs/studies/language/direct-v9/resource.json",
+          "sha256": "ce03c71edcf8be2ba08c5c1b85a4a6b3950ae2979be20c5fb1988b4a9a69e151"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/w11.json",
+          "sha256": "4eb37af1f6cb7ff2bbb5dbdd2d9c7ed5ff28805f8e2ce877d1901aa31f227fa4"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-data-r3/data-lock.json",
+          "sha256": "40b7c0ebb9650d11aa0c0080532c884e2ca3846db578155f3df7068b82191d2f"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-hb88-quad-fan-lr0.001-s11.json",
+          "sha256": "2eb8ccd759c873e2cba693134b923176f78127cc874793a71d539a9013bbb93b"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-r64-h2-q10-tau1-s11.json",
+          "sha256": "38f3d4a620530d435de598995b432ba943ea4b44d5339115d2829da9a1ddefa7"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-tf-fc32-fan_in_depth-lr0.001-s11.json",
+          "sha256": "d633747c7975b26418a16aba3db1a28fa13e74299d0b4f2032c22a513c8f7bab"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-tf-hb184-fan_in_depth-lr0.001-s11.json",
+          "sha256": "5d592766ee3ec749a87da7901687d68bf1cc4ba224df3a503a7999f5fa51f8dc"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-tf-hb88-fan_in_depth-lr0.001-s11.json",
+          "sha256": "d1f7995399fa540ddc0b950b7a7d6824e74a90a34a7b8c36e7144c8dcd5a5d72"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-tree-r64-h2-q3-tau1-s11.json",
+          "sha256": "ed7039c0087fff25daeb3995a5dd9b765f9698d0475476e066294852913e20f8"
+        }
+      ],
+      "id": "v9-screen-w11",
+      "log": "/mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v9-screen-w11/job.log",
+      "main_pid": "4075265",
+      "physical_id": 1,
+      "queue_status": "running",
+      "source": "6e7bd49eb5e35c15445826cac3a9b6ddda75aff4",
+      "state": "running",
+      "termination_verified": false,
+      "unit": "tide-lab-v9-screen-w11.service"
+    },
+    {
+      "config_inputs": [
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v9-execution/configs/studies/language/direct-v9/budget.json",
+          "sha256": "60e0accc7695af0bef9bbf01c7935e43ee2aa7a7f76ea366ef4021c24e22c286"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v9-execution/configs/studies/language/direct-v9/resource.json",
+          "sha256": "ce03c71edcf8be2ba08c5c1b85a4a6b3950ae2979be20c5fb1988b4a9a69e151"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/w2.json",
+          "sha256": "f1f29aa0d2f6896e13e1de6f0b88add4d5e7ae55b76ed9f32e2551631dd47272"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-data-r3/data-lock.json",
+          "sha256": "40b7c0ebb9650d11aa0c0080532c884e2ca3846db578155f3df7068b82191d2f"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-hb184-quad-fan-lr0.0003-s11.json",
+          "sha256": "c64ae64c26957911d5c1567143c3869986890e9479d39b22fb51353b43e506d8"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-r32-h2-q10-tau0.5-s11.json",
+          "sha256": "adf34249f89dd4935ef05d397ceff9a6ea7e18263fc8545da0cb42dbe9bee2b0"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-r64-h2-q3-tau0.5-s11.json",
+          "sha256": "e88ee43836b67edb2f1988fc5cfa405c29d142ecc9cf7b9cea94d25a44f96038"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-tf-fc32-gpt2-lr0.001-s11.json",
+          "sha256": "d8608c18248ec9289798e831e4ec043297b63d1d9f76ef39c316ea0900fcac9a"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-tf-hb184-gpt2-lr0.001-s11.json",
+          "sha256": "979334b585bd7361811a0a0c045483a545b69c7087e5dfd93e2eb29605c074bb"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-tf-hb88-gpt2-lr0.001-s11.json",
+          "sha256": "522a6750375778e600f7208f51463e7bdf622326689d7a4300278dc6ae5ca048"
+        }
+      ],
+      "id": "v9-screen-w2",
+      "log": "/mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v9-screen-w2/job.log",
+      "main_pid": "4070484",
+      "physical_id": 5,
+      "queue_status": "running",
+      "source": "6e7bd49eb5e35c15445826cac3a9b6ddda75aff4",
+      "state": "running",
+      "termination_verified": false,
+      "unit": "tide-lab-v9-screen-w2.service"
+    },
+    {
+      "config_inputs": [
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v9-execution/configs/studies/language/direct-v9/budget.json",
+          "sha256": "60e0accc7695af0bef9bbf01c7935e43ee2aa7a7f76ea366ef4021c24e22c286"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v9-execution/configs/studies/language/direct-v9/resource.json",
+          "sha256": "ce03c71edcf8be2ba08c5c1b85a4a6b3950ae2979be20c5fb1988b4a9a69e151"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/w3.json",
+          "sha256": "26e7a455123320d73755ceef501e9467c7b5e561c8b5a2e06a8e7f54a79aeba6"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-data-r3/data-lock.json",
+          "sha256": "40b7c0ebb9650d11aa0c0080532c884e2ca3846db578155f3df7068b82191d2f"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-hb184-quad-fan-lr0.001-s11.json",
+          "sha256": "72a10cfc17e58fcf7d1c47d0734bba661c185601b88f93de350105fc41bf41c5"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-r32-h2-q10-tau1-s11.json",
+          "sha256": "5f0c21b9d2f6cee85ad59989d3cebfc2fc6e15e9c85ea0862a14748fe206a6ce"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-r64-h2-q3-tau1-s11.json",
+          "sha256": "30bf7c0b55b896479a6ca354fd9b620dbe1350a556f0e277f628ee58b18a42a7"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-tf-fc32-gpt2-lr0.003-s11.json",
+          "sha256": "6abcb12fad3382152d544ca29cb02fdeec660b3e2741a43cb90fc78505e498b7"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-tf-hb184-gpt2-lr0.003-s11.json",
+          "sha256": "be3275a847ca72134cfb8ef81cb56bcfdc5198cf6fcc61fc01c2aa6a7f7cf428"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-tf-hb88-gpt2-lr0.003-s11.json",
+          "sha256": "72aa6835904ba844f1b48adf4d05107e8ce44b12ad917b2c6b3f966d59e88074"
+        }
+      ],
+      "id": "v9-screen-w3",
+      "log": "/mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v9-screen-w3/job.log",
+      "main_pid": "4071135",
+      "physical_id": 15,
+      "queue_status": "running",
+      "source": "6e7bd49eb5e35c15445826cac3a9b6ddda75aff4",
+      "state": "running",
+      "termination_verified": false,
+      "unit": "tide-lab-v9-screen-w3.service"
+    },
+    {
+      "config_inputs": [
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v9-execution/configs/studies/language/direct-v9/budget.json",
+          "sha256": "60e0accc7695af0bef9bbf01c7935e43ee2aa7a7f76ea366ef4021c24e22c286"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v9-execution/configs/studies/language/direct-v9/resource.json",
+          "sha256": "ce03c71edcf8be2ba08c5c1b85a4a6b3950ae2979be20c5fb1988b4a9a69e151"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/w4.json",
+          "sha256": "cd90110301d96c06c816dda5a16096889fa6c6756ea513a7ec593b00c709bbf7"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-data-r3/data-lock.json",
+          "sha256": "40b7c0ebb9650d11aa0c0080532c884e2ca3846db578155f3df7068b82191d2f"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-hb40-pool-fan-lr0.0003-s11.json",
+          "sha256": "8ff3d191fb2efab8de6aca135b738d16f988c70298c9e9d0955c6c0e0d5bcda1"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-r32-h3-q10-tau0.1-s11.json",
+          "sha256": "5e4198b1056b82f4e3c6a71d73812afedab0944479275f3bb9ec49778806fe6d"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-tf-fc16-fan_in_depth-lr0.0003-s11.json",
+          "sha256": "67c915306b5ffd543685424f9666c7df48da917601b397532d40210f0dc9b807"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-tf-fc64-fan_in_depth-lr0.0003-s11.json",
+          "sha256": "2c290bcd74e42112c2a21d44997fe2bbcf7baa1c0e2a283d2b17130cba16db2f"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-tf-hb40-fan_in_depth-lr0.0003-s11.json",
+          "sha256": "d2292019035ab6df13d9e1fc0c05d114dba893bf82a9bfbfac8fb094449187e5"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-tree-r32-h2-q10-tau0.1-s11.json",
+          "sha256": "8ce6e46ecdd06794ad26d7281f9bb648ce57af157c4c3fafb5d3a9429c15c62e"
+        }
+      ],
+      "id": "v9-screen-w4",
+      "log": "/mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v9-screen-w4/job.log",
+      "main_pid": "4071204",
+      "physical_id": 10,
+      "queue_status": "running",
+      "source": "6e7bd49eb5e35c15445826cac3a9b6ddda75aff4",
+      "state": "running",
+      "termination_verified": false,
+      "unit": "tide-lab-v9-screen-w4.service"
+    },
+    {
+      "config_inputs": [
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v9-execution/configs/studies/language/direct-v9/budget.json",
+          "sha256": "60e0accc7695af0bef9bbf01c7935e43ee2aa7a7f76ea366ef4021c24e22c286"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v9-execution/configs/studies/language/direct-v9/resource.json",
+          "sha256": "ce03c71edcf8be2ba08c5c1b85a4a6b3950ae2979be20c5fb1988b4a9a69e151"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/w5.json",
+          "sha256": "9f276c050862916c9af5029bbe242fac03f89fa46518ecea72bfcf8423246376"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-data-r3/data-lock.json",
+          "sha256": "40b7c0ebb9650d11aa0c0080532c884e2ca3846db578155f3df7068b82191d2f"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-hb40-pool-fan-lr0.001-s11.json",
+          "sha256": "e76bf27fb9fa018ba659240ba30ff7374b281f2a5439db06d677ade83e905d3d"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-r32-h3-q10-tau0.25-s11.json",
+          "sha256": "d2b4f5632521816a433f2255f0290b31fa2fdb70bcb527a59cf66673c68d619e"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-tf-fc16-fan_in_depth-lr0.001-s11.json",
+          "sha256": "9b72c7a7e2815a83eccb5041b3e64444b46d59a0aba0f5eec8d1db03c3ac36bd"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-tf-fc64-fan_in_depth-lr0.001-s11.json",
+          "sha256": "a37b64ca9a91a8a140a6b2ccfcc2701dd863df4ab09ab744bd9f4146169e0519"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-tf-hb40-fan_in_depth-lr0.001-s11.json",
+          "sha256": "9636952eb215e1e631bead5431d3d76f896edfdd8e886209d4d11d8b5949b2c2"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-tree-r32-h2-q10-tau0.25-s11.json",
+          "sha256": "ad66511dcd4912552d1a5260f8b77c257508a343a6f468036e496e7d92355d20"
+        }
+      ],
+      "id": "v9-screen-w5",
+      "log": "/mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v9-screen-w5/job.log",
+      "main_pid": "4071759",
+      "physical_id": 6,
+      "queue_status": "running",
+      "source": "6e7bd49eb5e35c15445826cac3a9b6ddda75aff4",
+      "state": "running",
+      "termination_verified": false,
+      "unit": "tide-lab-v9-screen-w5.service"
+    },
+    {
+      "config_inputs": [
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v9-execution/configs/studies/language/direct-v9/budget.json",
+          "sha256": "60e0accc7695af0bef9bbf01c7935e43ee2aa7a7f76ea366ef4021c24e22c286"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v9-execution/configs/studies/language/direct-v9/resource.json",
+          "sha256": "ce03c71edcf8be2ba08c5c1b85a4a6b3950ae2979be20c5fb1988b4a9a69e151"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/w6.json",
+          "sha256": "b141a22279f28e602088030730a3fc046327ec87de4dd8c5271c576dfe2a5986"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-data-r3/data-lock.json",
+          "sha256": "40b7c0ebb9650d11aa0c0080532c884e2ca3846db578155f3df7068b82191d2f"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-hb40-quad-fan-lr0.0003-s11.json",
+          "sha256": "d4fe1061a34c5e5ea4cd175caaad55faefa21ffa2e1b3f4d1ed35c9c35f65923"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-r32-h3-q10-tau0.5-s11.json",
+          "sha256": "5112693e3e5413b473165c6cd19bccf1d692583cf4d849795734515215e7a3f2"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-tf-fc16-fan_in_depth-lr0.003-s11.json",
+          "sha256": "9550d10127c5fd353f0c13bd2ec2a85d6588d92cfae13cd397865f47fa70382e"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-tf-fc64-fan_in_depth-lr0.003-s11.json",
+          "sha256": "d5c29ac6dd23c9bfc39283eb1038d3ea23d063365c0925075f47e2b4fb01bc93"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-tf-hb40-fan_in_depth-lr0.003-s11.json",
+          "sha256": "ea203efe9aba86a60034ee2140f0d5728fc70b9ec94b4ccbd2dea52f02e09922"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-tree-r32-h2-q10-tau0.5-s11.json",
+          "sha256": "620e96cb39732a264b3c4cabb2e62dcb434a8638a6181f1971dc463c9d84aad1"
+        }
+      ],
+      "id": "v9-screen-w6",
+      "log": "/mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v9-screen-w6/job.log",
+      "main_pid": "4073061",
+      "physical_id": 4,
+      "queue_status": "running",
+      "source": "6e7bd49eb5e35c15445826cac3a9b6ddda75aff4",
+      "state": "running",
+      "termination_verified": false,
+      "unit": "tide-lab-v9-screen-w6.service"
+    },
+    {
+      "config_inputs": [
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v9-execution/configs/studies/language/direct-v9/budget.json",
+          "sha256": "60e0accc7695af0bef9bbf01c7935e43ee2aa7a7f76ea366ef4021c24e22c286"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v9-execution/configs/studies/language/direct-v9/resource.json",
+          "sha256": "ce03c71edcf8be2ba08c5c1b85a4a6b3950ae2979be20c5fb1988b4a9a69e151"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/w7.json",
+          "sha256": "99fa57d4fc4c17d24fbad165907c493db360b2baac377049687bbc11c2e7284d"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-data-r3/data-lock.json",
+          "sha256": "40b7c0ebb9650d11aa0c0080532c884e2ca3846db578155f3df7068b82191d2f"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-hb40-quad-fan-lr0.001-s11.json",
+          "sha256": "5d75c7e1154195a0683c100e505df3ddf36d9b113e36f0fdcda8e63bdc7de091"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-r32-h3-q10-tau1-s11.json",
+          "sha256": "1a9fc9f9ba58b9ba0ab9d723be47f1efb3d85ffe46e5cc7c0a4f99087576e980"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-tf-fc16-gpt2-lr0.0003-s11.json",
+          "sha256": "ddef39aaabda05cc0e0d800b8dd56f116ec5a1fdf57b5910fefe61d457113fd3"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-tf-fc64-gpt2-lr0.0003-s11.json",
+          "sha256": "8229315c02dcfc4f494a0aa438844886e452cd9b6ae781a33606f05d68260f1a"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-tf-hb40-gpt2-lr0.0003-s11.json",
+          "sha256": "326f677d25cf8f1b63e01a521f9b63ff8595ab4c3f41973700f9cb873023c716"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-tree-r32-h2-q10-tau1-s11.json",
+          "sha256": "4df8989038b407c036a8695166e7773f617cc0670e3d7706d4c24e64a20045c8"
+        }
+      ],
+      "id": "v9-screen-w7",
+      "log": "/mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v9-screen-w7/job.log",
+      "main_pid": "4073149",
+      "physical_id": 14,
+      "queue_status": "running",
+      "source": "6e7bd49eb5e35c15445826cac3a9b6ddda75aff4",
+      "state": "running",
+      "termination_verified": false,
+      "unit": "tide-lab-v9-screen-w7.service"
+    },
+    {
+      "config_inputs": [
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v9-execution/configs/studies/language/direct-v9/budget.json",
+          "sha256": "60e0accc7695af0bef9bbf01c7935e43ee2aa7a7f76ea366ef4021c24e22c286"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v9-execution/configs/studies/language/direct-v9/resource.json",
+          "sha256": "ce03c71edcf8be2ba08c5c1b85a4a6b3950ae2979be20c5fb1988b4a9a69e151"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/w8.json",
+          "sha256": "85f5eee86dfd318381b1150f39ca4638fa213756b40ec89986112b3881b05b13"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-data-r3/data-lock.json",
+          "sha256": "40b7c0ebb9650d11aa0c0080532c884e2ca3846db578155f3df7068b82191d2f"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-hb88-pool-fan-lr0.0003-s11.json",
+          "sha256": "022a634fac94e61c5e52cce23976464e94ed3394455b7572459742b8f6911ff2"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-r64-h2-q10-tau0.1-s11.json",
+          "sha256": "833c4570e26a8bcf4cf39469a3f8c2ee7fb915ebbec5aeb0b6892dfe9e99df8a"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-tf-fc16-gpt2-lr0.001-s11.json",
+          "sha256": "190cb1fa8505d72093ce11cf8c9d7c87cd5084c9569dc2c5364c58e27d81ae9b"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-tf-fc64-gpt2-lr0.001-s11.json",
+          "sha256": "56c1e1a7b98893a87ca16f7aa297838c98e0585ef5127ecec11e11283042c284"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-tf-hb40-gpt2-lr0.001-s11.json",
+          "sha256": "f859e67c72daf3216f9e898b6ce1cd32c0f75b6d20d4637f10fcc43424491463"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-tree-r64-h2-q3-tau0.1-s11.json",
+          "sha256": "71e479e8e051671c3d6756cb4fbb0030fc9abde8c352fd29a80d3d6fa59c7e7b"
+        }
+      ],
+      "id": "v9-screen-w8",
+      "log": "/mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v9-screen-w8/job.log",
+      "main_pid": "4073242",
+      "physical_id": 0,
+      "queue_status": "running",
+      "source": "6e7bd49eb5e35c15445826cac3a9b6ddda75aff4",
+      "state": "running",
+      "termination_verified": false,
+      "unit": "tide-lab-v9-screen-w8.service"
+    },
+    {
+      "config_inputs": [
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v9-execution/configs/studies/language/direct-v9/budget.json",
+          "sha256": "60e0accc7695af0bef9bbf01c7935e43ee2aa7a7f76ea366ef4021c24e22c286"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v9-execution/configs/studies/language/direct-v9/resource.json",
+          "sha256": "ce03c71edcf8be2ba08c5c1b85a4a6b3950ae2979be20c5fb1988b4a9a69e151"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/w9.json",
+          "sha256": "c6d22dbe25610be07e394305d130f5742705714cdd33687a5846fdce9a6c1a57"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-data-r3/data-lock.json",
+          "sha256": "40b7c0ebb9650d11aa0c0080532c884e2ca3846db578155f3df7068b82191d2f"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-hb88-pool-fan-lr0.001-s11.json",
+          "sha256": "a592e5d28e225ae946a48451a286a6024a27248fbbe1ad089f466c8d42908718"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-r64-h2-q10-tau0.25-s11.json",
+          "sha256": "fad15eaccab84b503392c07eea3e93f398ff1c8d2f5caf9bcfd8975281e28300"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-tf-fc16-gpt2-lr0.003-s11.json",
+          "sha256": "8a43af08d1badba4ea3bc545ec37e62a6a7ecc803376eacfe0c06a3d3f79247d"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-tf-fc64-gpt2-lr0.003-s11.json",
+          "sha256": "ab2be58bd405751ea9d5642984d71283e5140ab5abe3b51139c1368e99e82f92"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-tf-hb40-gpt2-lr0.003-s11.json",
+          "sha256": "239c44bccde4f3b35ba2db335fb7e373c4c7467692329470fe2595db0bdd624f"
+        },
+        {
+          "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/screen/configs/cal-tree-r64-h2-q3-tau0.25-s11.json",
+          "sha256": "f496e66972343f0c681b4f88490e966c13c7584bfade8cc136cdeea772ab2b20"
+        }
+      ],
+      "id": "v9-screen-w9",
+      "log": "/mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v9-screen-w9/job.log",
+      "main_pid": "4074922",
+      "physical_id": 8,
+      "queue_status": "running",
+      "source": "6e7bd49eb5e35c15445826cac3a9b6ddda75aff4",
+      "state": "running",
+      "termination_verified": false,
+      "unit": "tide-lab-v9-screen-w9.service"
+    }
+  ],
+  "observed_at": "2026-11-11T13:50:49.738388+00:00",
+  "schema": "tide-direct-v9-observation-v1",
+  "scientific_review": "awaiting; execution/numerical/discrete/recovery/learning remain separate",
+  "training_stages": [
+    {
+      "axes": {
+        "discrete_semantics": "passed_static_unit_input_fixture; general_continuation_unchecked",
+        "execution": "running",
+        "learning": "running",
+        "mechanisms": "passed",
+        "recovery": "passed_same_stack_three_micro_updates; long_trajectory_replay_unchecked",
+        "strict_numerical": "see independent admission; finite exploration"
+      },
+      "error": null,
+      "execution": "running",
+      "final_validation_nll": null,
+      "id": "cal-hb184-pool-fan-lr0.0003-s11",
+      "last_metrics": {
+        "activity/body_full_all_fraction": 1.0,
+        "activity/body_receipt_fraction": 1.0,
+        "activity/full_all_fraction": 1.0,
+        "activity/full_fraction": 1.0,
+        "activity/receipt_fraction": 1.0,
+        "activity/send_strength": 753664.0,
+        "discrete/positive_support_errors": 0.0,
+        "gradient/router_l2": 0.07512308657169342,
+        "numerical/positive_floor_events": 71910253.0,
+        "region/0/candidates": 65536.0,
+        "region/0/full": 65536.0,
+        "region/0/unsaturated": 65536.0,
+        "region/1/candidates": 65536.0,
+        "region/1/full": 65536.0,
+        "region/1/unsaturated": 65536.0,
+        "region/10/candidates": 65536.0,
+        "region/10/full": 65536.0,
+        "region/10/unsaturated": 65536.0,
+        "region/11/candidates": 65536.0,
+        "region/11/full": 65536.0,
+        "region/11/unsaturated": 65536.0,
+        "region/12/candidates": 65536.0,
+        "region/12/full": 65536.0,
+        "region/12/unsaturated": 65536.0,
+        "region/13/candidates": 65536.0,
+        "region/13/full": 65536.0,
+        "region/13/unsaturated": 65526.0,
+        "region/14/candidates": 65536.0,
+        "region/14/full": 65536.0,
+        "region/14/unsaturated": 65533.0,
+        "region/15/candidates": 65536.0,
+        "region/15/full": 65536.0,
+        "region/15/unsaturated": 65536.0,
+        "region/16/candidates": 65536.0,
+        "region/16/full": 65536.0,
+        "region/16/unsaturated": 65536.0,
+        "region/17/candidates": 65536.0,
+        "region/17/full": 65536.0,
+        "region/17/unsaturated": 64954.0,
+        "region/18/candidates": 65536.0,
+        "region/18/full": 65536.0,
+        "region/18/unsaturated": 65536.0,
+        "region/19/candidates": 65536.0,
+        "region/19/full": 65536.0,
+        "region/19/unsaturated": 65536.0,
+        "region/2/candidates": 65536.0,
+        "region/2/full": 65536.0,
+        "region/2/unsaturated": 65499.0,
+        "region/20/candidates": 65536.0,
+        "region/20/full": 65536.0,
+        "region/20/unsaturated": 65535.0,
+        "region/21/candidates": 65536.0,
+        "region/21/full": 65536.0,
+        "region/21/unsaturated": 65530.0,
+        "region/22/candidates": 65536.0,
+        "region/22/full": 65536.0,
+        "region/22/unsaturated": 65535.0,
+        "region/23/candidates": 65536.0,
+        "region/23/full": 65536.0,
+        "region/23/unsaturated": 65505.0,
+        "region/24/candidates": 65536.0,
+        "region/24/full": 65536.0,
+        "region/24/unsaturated": 65536.0,
+        "region/25/candidates": 65536.0,
+        "region/25/full": 65536.0,
+        "region/25/unsaturated": 65480.0,
+        "region/26/candidates": 65536.0,
+        "region/26/full": 65536.0,
+        "region/26/unsaturated": 65535.0,
+        "region/27/candidates": 65536.0,
+        "region/27/full": 65536.0,
+        "region/27/unsaturated": 65531.0,
+        "region/28/candidates": 65536.0,
+        "region/28/full": 65536.0,
+        "region/28/unsaturated": 65520.0,
+        "region/29/candidates": 65536.0,
+        "region/29/full": 65536.0,
+        "region/29/unsaturated": 65534.0,
+        "region/3/candidates": 65536.0,
+        "region/3/full": 65536.0,
+        "region/3/unsaturated": 65536.0,
+        "region/30/candidates": 65536.0,
+        "region/30/full": 65536.0,
+        "region/30/unsaturated": 65513.0,
+        "region/31/candidates": 65536.0,
+        "region/31/full": 65536.0,
+        "region/31/unsaturated": 65536.0,
+        "region/32/candidates": 65536.0,
+        "region/32/full": 65536.0,
+        "region/32/unsaturated": 65536.0,
+        "region/33/candidates": 65536.0,
+        "region/33/full": 65536.0,
+        "region/33/unsaturated": 65536.0,
+        "region/34/candidates": 65536.0,
+        "region/34/full": 65536.0,
+        "region/34/unsaturated": 65536.0,
+        "region/35/candidates": 65536.0,
+        "region/35/full": 65536.0,
+        "region/35/unsaturated": 65536.0,
+        "region/36/candidates": 65536.0,
+        "region/36/full": 65536.0,
+        "region/36/unsaturated": 65536.0,
+        "region/37/candidates": 65536.0,
+        "region/37/full": 65536.0,
+        "region/37/unsaturated": 65536.0,
+        "region/38/candidates": 65536.0,
+        "region/38/full": 65536.0,
+        "region/38/unsaturated": 65536.0,
+        "region/39/candidates": 65536.0,
+        "region/39/full": 65536.0,
+        "region/39/unsaturated": 65536.0,
+        "region/4/candidates": 65536.0,
+        "region/4/full": 65536.0,
+        "region/4/unsaturated": 65528.0,
+        "region/40/candidates": 65536.0,
+        "region/40/full": 65536.0,
+        "region/40/unsaturated": 65536.0,
+        "region/41/candidates": 65536.0,
+        "region/41/full": 65536.0,
+        "region/41/unsaturated": 65536.0,
+        "region/42/candidates": 65536.0,
+        "region/42/full": 65536.0,
+        "region/42/unsaturated": 65536.0,
+        "region/43/candidates": 65536.0,
+        "region/43/full": 65536.0,
+        "region/43/unsaturated": 65536.0,
+        "region/44/candidates": 65536.0,
+        "region/44/full": 65536.0,
+        "region/44/unsaturated": 65536.0,
+        "region/45/candidates": 65536.0,
+        "region/45/full": 65536.0,
+        "region/45/unsaturated": 65536.0,
+        "region/5/candidates": 65536.0,
+        "region/5/full": 65536.0,
+        "region/5/unsaturated": 65513.0,
+        "region/6/candidates": 65536.0,
+        "region/6/full": 65536.0,
+        "region/6/unsaturated": 65536.0,
+        "region/7/candidates": 65536.0,
+        "region/7/full": 65536.0,
+        "region/7/unsaturated": 65536.0,
+        "region/8/candidates": 65536.0,
+        "region/8/full": 65536.0,
+        "region/8/unsaturated": 65536.0,
+        "region/9/candidates": 65536.0,
+        "region/9/full": 65536.0,
+        "region/9/unsaturated": 65529.0,
+        "resources/npu_allocated_mib": 948.43603515625,
+        "resources/npu_peak_allocated_mib": 16965.5439453125,
+        "resources/npu_reserved_mib": 18824.0,
+        "resources/peak_rss_mib": 2488.40234375,
+        "solver/max_feasibility_residual": 0,
+        "train/gradient_norm": 0.9100997447967529,
+        "train/loss": 8.341176211833954,
+        "train/lr": 9.01508331298828e-06,
+        "train/step_seconds": 8.203571774065495,
+        "train/tokens": 31510,
+        "train/tokens_per_second": 1950.4918638714228,
+        "work/body_candidates": 3014656.0,
+        "work/body_full": 3014656.0,
+        "work/body_node_slots": 3014656,
+        "work/boundary_candidates": 0.0,
+        "work/boundary_full": 0.0,
+        "work/candidates": 3014656.0,
+        "work/full": 3014656.0,
+        "work/max_full_batch": 8192,
+        "work/node_slots": 3014656,
+        "work/physical_full_rows": 3014656,
+        "work/physical_light_rows": 0,
+        "work/read_events": 3014656.0,
+        "work/state_updates": 3014656.0,
+        "work/unsaturated": 3013844.0
+      },
+      "lens_name": "tl-v9-screen-cal-hb184-pool-fan-lr0.0003-s11-projection-c8e89241486d",
+      "lens_readback_matches": null,
+      "lens_status": "recording",
+      "record": "runs/v9-screen-cal-hb184-pool-fan-lr0.0003-s11/train/result.json",
+      "result_sha256": "68910e413322cbfb7a4fa0c75c125831f8c85835c2f26e2b5009a0c1f3044351",
+      "run_id": "tl-v9-screen-cal-hb184-pool-fan-lr0.0003-s11",
+      "tokens": 31510
+    },
+    {
+      "axes": {
+        "discrete_semantics": "passed_static_unit_input_fixture; general_continuation_unchecked",
+        "execution": "running",
+        "learning": "running",
+        "mechanisms": "passed",
+        "recovery": "passed_same_stack_three_micro_updates; long_trajectory_replay_unchecked",
+        "strict_numerical": "see independent admission; finite exploration"
+      },
+      "error": null,
+      "execution": "running",
+      "final_validation_nll": null,
+      "id": "cal-hb184-pool-fan-lr0.001-s11",
+      "last_metrics": {
+        "activity/body_full_all_fraction": 1.0,
+        "activity/body_receipt_fraction": 1.0,
+        "activity/full_all_fraction": 1.0,
+        "activity/full_fraction": 1.0,
+        "activity/receipt_fraction": 1.0,
+        "activity/send_strength": 753664.0,
+        "discrete/positive_support_errors": 0.0,
+        "gradient/router_l2": 0.07777052372694016,
+        "numerical/positive_floor_events": 71424870.0,
+        "region/0/candidates": 65536.0,
+        "region/0/full": 65536.0,
+        "region/0/unsaturated": 65536.0,
+        "region/1/candidates": 65536.0,
+        "region/1/full": 65536.0,
+        "region/1/unsaturated": 65536.0,
+        "region/10/candidates": 65536.0,
+        "region/10/full": 65536.0,
+        "region/10/unsaturated": 65536.0,
+        "region/11/candidates": 65536.0,
+        "region/11/full": 65536.0,
+        "region/11/unsaturated": 65536.0,
+        "region/12/candidates": 65536.0,
+        "region/12/full": 65536.0,
+        "region/12/unsaturated": 65536.0,
+        "region/13/candidates": 65536.0,
+        "region/13/full": 65536.0,
+        "region/13/unsaturated": 65515.0,
+        "region/14/candidates": 65536.0,
+        "region/14/full": 65536.0,
+        "region/14/unsaturated": 65536.0,
+        "region/15/candidates": 65536.0,
+        "region/15/full": 65536.0,
+        "region/15/unsaturated": 65536.0,
+        "region/16/candidates": 65536.0,
+        "region/16/full": 65536.0,
+        "region/16/unsaturated": 65536.0,
+        "region/17/candidates": 65536.0,
+        "region/17/full": 65536.0,
+        "region/17/unsaturated": 64886.0,
+        "region/18/candidates": 65536.0,
+        "region/18/full": 65536.0,
+        "region/18/unsaturated": 65536.0,
+        "region/19/candidates": 65536.0,
+        "region/19/full": 65536.0,
+        "region/19/unsaturated": 65534.0,
+        "region/2/candidates": 65536.0,
+        "region/2/full": 65536.0,
+        "region/2/unsaturated": 65510.0,
+        "region/20/candidates": 65536.0,
+        "region/20/full": 65536.0,
+        "region/20/unsaturated": 65536.0,
+        "region/21/candidates": 65536.0,
+        "region/21/full": 65536.0,
+        "region/21/unsaturated": 65536.0,
+        "region/22/candidates": 65536.0,
+        "region/22/full": 65536.0,
+        "region/22/unsaturated": 65533.0,
+        "region/23/candidates": 65536.0,
+        "region/23/full": 65536.0,
+        "region/23/unsaturated": 65498.0,
+        "region/24/candidates": 65536.0,
+        "region/24/full": 65536.0,
+        "region/24/unsaturated": 65536.0,
+        "region/25/candidates": 65536.0,
+        "region/25/full": 65536.0,
+        "region/25/unsaturated": 65436.0,
+        "region/26/candidates": 65536.0,
+        "region/26/full": 65536.0,
+        "region/26/unsaturated": 65536.0,
+        "region/27/candidates": 65536.0,
+        "region/27/full": 65536.0,
+        "region/27/unsaturated": 65526.0,
+        "region/28/candidates": 65536.0,
+        "region/28/full": 65536.0,
+        "region/28/unsaturated": 65511.0,
+        "region/29/candidates": 65536.0,
+        "region/29/full": 65536.0,
+        "region/29/unsaturated": 65533.0,
+        "region/3/candidates": 65536.0,
+        "region/3/full": 65536.0,
+        "region/3/unsaturated": 65536.0,
+        "region/30/candidates": 65536.0,
+        "region/30/full": 65536.0,
+        "region/30/unsaturated": 65516.0,
+        "region/31/candidates": 65536.0,
+        "region/31/full": 65536.0,
+        "region/31/unsaturated": 65536.0,
+        "region/32/candidates": 65536.0,
+        "region/32/full": 65536.0,
+        "region/32/unsaturated": 65536.0,
+        "region/33/candidates": 65536.0,
+        "region/33/full": 65536.0,
+        "region/33/unsaturated": 65536.0,
+        "region/34/candidates": 65536.0,
+        "region/34/full": 65536.0,
+        "region/34/unsaturated": 65536.0,
+        "region/35/candidates": 65536.0,
+        "region/35/full": 65536.0,
+        "region/35/unsaturated": 65536.0,
+        "region/36/candidates": 65536.0,
+        "region/36/full": 65536.0,
+        "region/36/unsaturated": 65536.0,
+        "region/37/candidates": 65536.0,
+        "region/37/full": 65536.0,
+        "region/37/unsaturated": 65536.0,
+        "region/38/candidates": 65536.0,
+        "region/38/full": 65536.0,
+        "region/38/unsaturated": 65536.0,
+        "region/39/candidates": 65536.0,
+        "region/39/full": 65536.0,
+        "region/39/unsaturated": 65536.0,
+        "region/4/candidates": 65536.0,
+        "region/4/full": 65536.0,
+        "region/4/unsaturated": 65530.0,
+        "region/40/candidates": 65536.0,
+        "region/40/full": 65536.0,
+        "region/40/unsaturated": 65536.0,
+        "region/41/candidates": 65536.0,
+        "region/41/full": 65536.0,
+        "region/41/unsaturated": 65536.0,
+        "region/42/candidates": 65536.0,
+        "region/42/full": 65536.0,
+        "region/42/unsaturated": 65536.0,
+        "region/43/candidates": 65536.0,
+        "region/43/full": 65536.0,
+        "region/43/unsaturated": 65536.0,
+        "region/44/candidates": 65536.0,
+        "region/44/full": 65536.0,
+        "region/44/unsaturated": 65536.0,
+        "region/45/candidates": 65536.0,
+        "region/45/full": 65536.0,
+        "region/45/unsaturated": 65536.0,
+        "region/5/candidates": 65536.0,
+        "region/5/full": 65536.0,
+        "region/5/unsaturated": 65516.0,
+        "region/6/candidates": 65536.0,
+        "region/6/full": 65536.0,
+        "region/6/unsaturated": 65530.0,
+        "region/7/candidates": 65536.0,
+        "region/7/full": 65536.0,
+        "region/7/unsaturated": 65536.0,
+        "region/8/candidates": 65536.0,
+        "region/8/full": 65536.0,
+        "region/8/unsaturated": 65536.0,
+        "region/9/candidates": 65536.0,
+        "region/9/full": 65536.0,
+        "region/9/unsaturated": 65532.0,
+        "resources/npu_allocated_mib": 952.501953125,
+        "resources/npu_peak_allocated_mib": 16548.1953125,
+        "resources/npu_reserved_mib": 18360.0,
+        "resources/peak_rss_mib": 2487.5625,
+        "solver/max_feasibility_residual": 0,
+        "train/gradient_norm": 0.8970960378646851,
+        "train/loss": 8.344013154506683,
+        "train/lr": 1.4790534973144532e-05,
+        "train/step_seconds": 8.567606884986162,
+        "train/tokens": 15509,
+        "train/tokens_per_second": 1810.1904310266507,
+        "work/body_candidates": 3014656.0,
+        "work/body_full": 3014656.0,
+        "work/body_node_slots": 3014656,
+        "work/boundary_candidates": 0.0,
+        "work/boundary_full": 0.0,
+        "work/candidates": 3014656.0,
+        "work/full": 3014656.0,
+        "work/max_full_batch": 8192,
+        "work/node_slots": 3014656,
+        "work/physical_full_rows": 3014656,
+        "work/physical_light_rows": 0,
+        "work/read_events": 3014656.0,
+        "work/state_updates": 3014656.0,
+        "work/unsaturated": 3013722.0
+      },
+      "lens_name": "tl-v9-screen-cal-hb184-pool-fan-lr0.001-s11-projection-c0387ab3f007",
+      "lens_readback_matches": null,
+      "lens_status": "recording",
+      "record": "runs/v9-screen-cal-hb184-pool-fan-lr0.001-s11/train/result.json",
+      "result_sha256": "eb530d2b25318fa98a110678e651de2ba26a694e099ee903d0c5c9afa36c9634",
+      "run_id": "tl-v9-screen-cal-hb184-pool-fan-lr0.001-s11",
+      "tokens": 15509
+    },
+    {
+      "axes": {
+        "discrete_semantics": "passed_static_unit_input_fixture; general_continuation_unchecked",
+        "execution": "running",
+        "learning": "running",
+        "mechanisms": "passed",
+        "recovery": "passed_same_stack_three_micro_updates; long_trajectory_replay_unchecked",
+        "strict_numerical": "see independent admission; finite exploration"
+      },
+      "error": null,
+      "execution": "running",
+      "final_validation_nll": null,
+      "id": "cal-hb184-quad-fan-lr0.0003-s11",
+      "last_metrics": null,
+      "lens_name": "tl-v9-screen-cal-hb184-quad-fan-lr0.0003-s11-projection-548a969964b2",
+      "lens_readback_matches": null,
+      "lens_status": "recording",
+      "record": "runs/v9-screen-cal-hb184-quad-fan-lr0.0003-s11/train/result.json",
+      "result_sha256": "1f37646429542590aa4afb5b444f4b2392a69ec39178cbaec9f2a85d5ee5077c",
+      "run_id": "tl-v9-screen-cal-hb184-quad-fan-lr0.0003-s11",
+      "tokens": null
+    },
+    {
+      "axes": {
+        "discrete_semantics": "passed_static_unit_input_fixture; general_continuation_unchecked",
+        "execution": "running",
+        "learning": "running",
+        "mechanisms": "passed",
+        "recovery": "passed_same_stack_three_micro_updates; long_trajectory_replay_unchecked",
+        "strict_numerical": "see independent admission; finite exploration"
+      },
+      "error": null,
+      "execution": "running",
+      "final_validation_nll": null,
+      "id": "cal-hb184-quad-fan-lr0.001-s11",
+      "last_metrics": null,
+      "lens_name": "tl-v9-screen-cal-hb184-quad-fan-lr0.001-s11-projection-ee156089ca72",
+      "lens_readback_matches": null,
+      "lens_status": "recording",
+      "record": "runs/v9-screen-cal-hb184-quad-fan-lr0.001-s11/train/result.json",
+      "result_sha256": "9440a37efd2a56008f92a957b8319fe42134a9bc2fc15ce0fd40d40a5bec3c3d",
+      "run_id": "tl-v9-screen-cal-hb184-quad-fan-lr0.001-s11",
+      "tokens": null
+    },
+    {
+      "axes": {
+        "discrete_semantics": "passed_static_unit_input_fixture; general_continuation_unchecked",
+        "execution": "running",
+        "learning": "running",
+        "mechanisms": "passed",
+        "recovery": "passed_same_stack_three_micro_updates; long_trajectory_replay_unchecked",
+        "strict_numerical": "see independent admission; finite exploration"
+      },
+      "error": null,
+      "execution": "running",
+      "final_validation_nll": null,
+      "id": "cal-hb40-pool-fan-lr0.0003-s11",
+      "last_metrics": {
+        "activity/body_full_all_fraction": 1.0,
+        "activity/body_receipt_fraction": 1.0,
+        "activity/full_all_fraction": 1.0,
+        "activity/full_fraction": 1.0,
+        "activity/receipt_fraction": 1.0,
+        "activity/send_strength": 163840.0,
+        "discrete/positive_support_errors": 0.0,
+        "numerical/positive_floor_events": 15222645.0,
+        "region/0/candidates": 65536.0,
+        "region/0/full": 65536.0,
+        "region/0/unsaturated": 65536.0,
+        "region/1/candidates": 65536.0,
+        "region/1/full": 65536.0,
+        "region/1/unsaturated": 65445.0,
+        "region/2/candidates": 65536.0,
+        "region/2/full": 65536.0,
+        "region/2/unsaturated": 65135.0,
+        "region/3/candidates": 65536.0,
+        "region/3/full": 65536.0,
+        "region/3/unsaturated": 65536.0,
+        "region/4/candidates": 65536.0,
+        "region/4/full": 65536.0,
+        "region/4/unsaturated": 64896.0,
+        "region/5/candidates": 65536.0,
+        "region/5/full": 65536.0,
+        "region/5/unsaturated": 64980.0,
+        "region/6/candidates": 65536.0,
+        "region/6/full": 65536.0,
+        "region/6/unsaturated": 65503.0,
+        "region/7/candidates": 65536.0,
+        "region/7/full": 65536.0,
+        "region/7/unsaturated": 65536.0,
+        "region/8/candidates": 65536.0,
+        "region/8/full": 65536.0,
+        "region/8/unsaturated": 65536.0,
+        "region/9/candidates": 65536.0,
+        "region/9/full": 65536.0,
+        "region/9/unsaturated": 65536.0,
+        "resources/npu_allocated_mib": 210.49560546875,
+        "resources/npu_peak_allocated_mib": 13733.34326171875,
+        "resources/npu_reserved_mib": 14746.0,
+        "resources/peak_rss_mib": 2213.18359375,
+        "solver/max_feasibility_residual": 0,
+        "train/gradient_norm": 0.732488751411438,
+        "train/loss": 6.6712493896484375,
+        "train/lr": 0.0002738828659057617,
+        "train/step_seconds": 0.9503490924835205,
+        "train/tokens": 957290,
+        "train/tokens_per_second": 16810.66476135666,
+        "work/body_candidates": 655360.0,
+        "work/body_full": 655360.0,
+        "work/body_node_slots": 655360,
+        "work/boundary_candidates": 0.0,
+        "work/boundary_full": 0.0,
+        "work/candidates": 655360.0,
+        "work/full": 655360.0,
+        "work/max_full_batch": 32768,
+        "work/node_slots": 655360,
+        "work/physical_full_rows": 655360,
+        "work/physical_light_rows": 0,
+        "work/read_events": 655360.0,
+        "work/state_updates": 655360.0,
+        "work/unsaturated": 653639.0
+      },
+      "lens_name": "tl-v9-screen-cal-hb40-pool-fan-lr0.0003-s11-projection-837eac8dfd3d",
+      "lens_readback_matches": null,
+      "lens_status": "recording",
+      "record": "runs/v9-screen-cal-hb40-pool-fan-lr0.0003-s11/train/result.json",
+      "result_sha256": "6fe5ede28db38a8517dab1ea4cc62e1b0c6f8d833dd6755c69d9bf4e4239bb47",
+      "run_id": "tl-v9-screen-cal-hb40-pool-fan-lr0.0003-s11",
+      "tokens": 957290
+    },
+    {
+      "axes": {
+        "discrete_semantics": "passed_static_unit_input_fixture; general_continuation_unchecked",
+        "execution": "running",
+        "learning": "running",
+        "mechanisms": "passed",
+        "recovery": "passed_same_stack_three_micro_updates; long_trajectory_replay_unchecked",
+        "strict_numerical": "see independent admission; finite exploration"
+      },
+      "error": null,
+      "execution": "running",
+      "final_validation_nll": null,
+      "id": "cal-hb40-pool-fan-lr0.001-s11",
+      "last_metrics": {
+        "activity/body_full_all_fraction": 1.0,
+        "activity/body_receipt_fraction": 1.0,
+        "activity/full_all_fraction": 1.0,
+        "activity/full_fraction": 1.0,
+        "activity/receipt_fraction": 1.0,
+        "activity/send_strength": 163839.99951171875,
+        "discrete/positive_support_errors": 0.0,
+        "numerical/positive_floor_events": 15031078.0,
+        "region/0/candidates": 65536.0,
+        "region/0/full": 65536.0,
+        "region/0/unsaturated": 65536.0,
+        "region/1/candidates": 65536.0,
+        "region/1/full": 65536.0,
+        "region/1/unsaturated": 64080.0,
+        "region/2/candidates": 65536.0,
+        "region/2/full": 65536.0,
+        "region/2/unsaturated": 62887.0,
+        "region/3/candidates": 65536.0,
+        "region/3/full": 65536.0,
+        "region/3/unsaturated": 65212.0,
+        "region/4/candidates": 65536.0,
+        "region/4/full": 65536.0,
+        "region/4/unsaturated": 62044.0,
+        "region/5/candidates": 65536.0,
+        "region/5/full": 65536.0,
+        "region/5/unsaturated": 65164.0,
+        "region/6/candidates": 65536.0,
+        "region/6/full": 65536.0,
+        "region/6/unsaturated": 65323.0,
+        "region/7/candidates": 65536.0,
+        "region/7/full": 65536.0,
+        "region/7/unsaturated": 65513.0,
+        "region/8/candidates": 65536.0,
+        "region/8/full": 65536.0,
+        "region/8/unsaturated": 65511.0,
+        "region/9/candidates": 65536.0,
+        "region/9/full": 65536.0,
+        "region/9/unsaturated": 65536.0,
+        "resources/npu_allocated_mib": 210.49560546875,
+        "resources/npu_peak_allocated_mib": 13733.34326171875,
+        "resources/npu_reserved_mib": 14746.0,
+        "resources/peak_rss_mib": 2202.390625,
+        "solver/max_feasibility_residual": 0,
+        "train/gradient_norm": 0.7906332612037659,
+        "train/loss": 6.336871862411499,
+        "train/lr": 0.000821676254272461,
+        "train/step_seconds": 0.9585339836776257,
+        "train/tokens": 861590,
+        "train/tokens_per_second": 16279.02637330795,
+        "work/body_candidates": 655360.0,
+        "work/body_full": 655360.0,
+        "work/body_node_slots": 655360,
+        "work/boundary_candidates": 0.0,
+        "work/boundary_full": 0.0,
+        "work/candidates": 655360.0,
+        "work/full": 655360.0,
+        "work/max_full_batch": 32768,
+        "work/node_slots": 655360,
+        "work/physical_full_rows": 655360,
+        "work/physical_light_rows": 0,
+        "work/read_events": 655360.0,
+        "work/state_updates": 655360.0,
+        "work/unsaturated": 646806.0
+      },
+      "lens_name": "tl-v9-screen-cal-hb40-pool-fan-lr0.001-s11-projection-a035ce9a3778",
+      "lens_readback_matches": null,
+      "lens_status": "recording",
+      "record": "runs/v9-screen-cal-hb40-pool-fan-lr0.001-s11/train/result.json",
+      "result_sha256": "c17951c803311ea5ab1b1131e7e861a958b1c326639bdae27c68a67354ccc781",
+      "run_id": "tl-v9-screen-cal-hb40-pool-fan-lr0.001-s11",
+      "tokens": 861590
+    },
+    {
+      "axes": {
+        "discrete_semantics": "passed_static_unit_input_fixture; general_continuation_unchecked",
+        "execution": "running",
+        "learning": "running",
+        "mechanisms": "passed",
+        "recovery": "passed_same_stack_three_micro_updates; long_trajectory_replay_unchecked",
+        "strict_numerical": "see independent admission; finite exploration"
+      },
+      "error": null,
+      "execution": "running",
+      "final_validation_nll": null,
+      "id": "cal-hb40-quad-fan-lr0.0003-s11",
+      "last_metrics": {
+        "activity/body_full_all_fraction": 0.6692245483398438,
+        "activity/body_receipt_fraction": 0.9849655151367187,
+        "activity/full_all_fraction": 0.6692245483398438,
+        "activity/full_fraction": 0.6794395723051803,
+        "activity/receipt_fraction": 0.9849655151367187,
+        "activity/send_strength": 246087.2099609375,
+        "discrete/positive_support_errors": 0.0,
+        "numerical/positive_floor_events": 17824319.0,
+        "region/0/candidates": 65536.0,
+        "region/0/full": 57387.0,
+        "region/0/unsaturated": 54824.0,
+        "region/1/candidates": 65404.0,
+        "region/1/full": 55344.0,
+        "region/1/unsaturated": 49264.0,
+        "region/2/candidates": 65404.0,
+        "region/2/full": 46711.0,
+        "region/2/unsaturated": 35700.0,
+        "region/3/candidates": 64813.0,
+        "region/3/full": 51782.0,
+        "region/3/unsaturated": 39106.0,
+        "region/4/candidates": 64813.0,
+        "region/4/full": 34639.0,
+        "region/4/unsaturated": 20567.0,
+        "region/5/candidates": 61475.0,
+        "region/5/full": 35955.0,
+        "region/5/unsaturated": 20155.0,
+        "region/6/candidates": 61475.0,
+        "region/6/full": 41947.0,
+        "region/6/unsaturated": 28677.0,
+        "region/7/candidates": 65516.0,
+        "region/7/full": 35121.0,
+        "region/7/unsaturated": 29780.0,
+        "region/8/candidates": 65535.0,
+        "region/8/full": 39047.0,
+        "region/8/unsaturated": 22905.0,
+        "region/9/candidates": 65536.0,
+        "region/9/full": 40650.0,
+        "region/9/unsaturated": 37965.0,
+        "resources/npu_allocated_mib": 218.859375,
+        "resources/npu_peak_allocated_mib": 13886.29296875,
+        "resources/npu_reserved_mib": 14824.0,
+        "resources/peak_rss_mib": 2187.01171875,
+        "solver/max_feasibility_residual": 3.5762786865234375e-07,
+        "train/gradient_norm": 1.672676920890808,
+        "train/loss": 7.082975387573242,
+        "train/lr": 0.00018708000183105468,
+        "train/step_seconds": 1.091934658586979,
+        "train/tokens": 653892,
+        "train/tokens_per_second": 14829.641932013219,
+        "work/body_candidates": 645507.0,
+        "work/body_full": 438583.0,
+        "work/body_node_slots": 655360,
+        "work/boundary_candidates": 0.0,
+        "work/boundary_full": 0.0,
+        "work/candidates": 645507.0,
+        "work/full": 438583.0,
+        "work/max_full_batch": 32768,
+        "work/node_slots": 655360,
+        "work/physical_full_rows": 655360,
+        "work/physical_light_rows": 0,
+        "work/read_events": 645507.0,
+        "work/state_updates": 645507.0,
+        "work/unsaturated": 338943.0
+      },
+      "lens_name": "tl-v9-screen-cal-hb40-quad-fan-lr0.0003-s11-projection-4ab0e69d04d4",
+      "lens_readback_matches": null,
+      "lens_status": "recording",
+      "record": "runs/v9-screen-cal-hb40-quad-fan-lr0.0003-s11/train/result.json",
+      "result_sha256": "a3b3c6818ab0839a6da259390f971a4965a52b683cb6600a43a3eee5832daea8",
+      "run_id": "tl-v9-screen-cal-hb40-quad-fan-lr0.0003-s11",
+      "tokens": 653892
+    },
+    {
+      "axes": {
+        "discrete_semantics": "passed_static_unit_input_fixture; general_continuation_unchecked",
+        "execution": "running",
+        "learning": "running",
+        "mechanisms": "passed",
+        "recovery": "passed_same_stack_three_micro_updates; long_trajectory_replay_unchecked",
+        "strict_numerical": "see independent admission; finite exploration"
+      },
+      "error": null,
+      "execution": "running",
+      "final_validation_nll": null,
+      "id": "cal-hb40-quad-fan-lr0.001-s11",
+      "last_metrics": {
+        "activity/body_full_all_fraction": 0.6366683959960937,
+        "activity/body_receipt_fraction": 0.969488525390625,
+        "activity/full_all_fraction": 0.6366683959960937,
+        "activity/full_fraction": 0.6567054475859507,
+        "activity/receipt_fraction": 0.969488525390625,
+        "activity/send_strength": 265711.7998046875,
+        "discrete/positive_support_errors": 0.0,
+        "numerical/positive_floor_events": 17205249.0,
+        "region/0/candidates": 65536.0,
+        "region/0/full": 53038.0,
+        "region/0/unsaturated": 47420.0,
+        "region/1/candidates": 64410.0,
+        "region/1/full": 49049.0,
+        "region/1/unsaturated": 36071.0,
+        "region/2/candidates": 64410.0,
+        "region/2/full": 43990.0,
+        "region/2/unsaturated": 35639.0,
+        "region/3/candidates": 62969.0,
+        "region/3/full": 50517.0,
+        "region/3/unsaturated": 34087.0,
+        "region/4/candidates": 62969.0,
+        "region/4/full": 40699.0,
+        "region/4/unsaturated": 26786.0,
+        "region/5/candidates": 59316.0,
+        "region/5/full": 36686.0,
+        "region/5/unsaturated": 17386.0,
+        "region/6/candidates": 59316.0,
+        "region/6/full": 39875.0,
+        "region/6/unsaturated": 25111.0,
+        "region/7/candidates": 65387.0,
+        "region/7/full": 32828.0,
+        "region/7/unsaturated": 16727.0,
+        "region/8/candidates": 65524.0,
+        "region/8/full": 36891.0,
+        "region/8/unsaturated": 20550.0,
+        "region/9/candidates": 65527.0,
+        "region/9/full": 33674.0,
+        "region/9/unsaturated": 31365.0,
+        "resources/npu_allocated_mib": 218.859375,
+        "resources/npu_peak_allocated_mib": 13886.29296875,
+        "resources/npu_reserved_mib": 14824.0,
+        "resources/peak_rss_mib": 2189.47265625,
+        "solver/max_feasibility_residual": 3.5762786865234375e-07,
+        "train/gradient_norm": 0.8763720393180847,
+        "train/loss": 6.680365324020386,
+        "train/lr": 0.0006236000061035157,
+        "train/step_seconds": 1.0932304672896862,
+        "train/tokens": 653892,
+        "train/tokens_per_second": 14812.064321757645,
+        "work/body_candidates": 635364.0,
+        "work/body_full": 417247.0,
+        "work/body_node_slots": 655360,
+        "work/boundary_candidates": 0.0,
+        "work/boundary_full": 0.0,
+        "work/candidates": 635364.0,
+        "work/full": 417247.0,
+        "work/max_full_batch": 32768,
+        "work/node_slots": 655360,
+        "work/physical_full_rows": 655360,
+        "work/physical_light_rows": 0,
+        "work/read_events": 635364.0,
+        "work/state_updates": 635364.0,
+        "work/unsaturated": 291142.0
+      },
+      "lens_name": "tl-v9-screen-cal-hb40-quad-fan-lr0.001-s11-projection-74a73c51b42f",
+      "lens_readback_matches": null,
+      "lens_status": "recording",
+      "record": "runs/v9-screen-cal-hb40-quad-fan-lr0.001-s11/train/result.json",
+      "result_sha256": "d25cac53a5333fe1ed9856389633b0205e809bf1f97d9f5261363ff57694ae80",
+      "run_id": "tl-v9-screen-cal-hb40-quad-fan-lr0.001-s11",
+      "tokens": 653892
+    },
+    {
+      "axes": {
+        "discrete_semantics": "passed_static_unit_input_fixture; general_continuation_unchecked",
+        "execution": "running",
+        "learning": "running",
+        "mechanisms": "passed",
+        "recovery": "passed_same_stack_three_micro_updates; long_trajectory_replay_unchecked",
+        "strict_numerical": "see independent admission; finite exploration"
+      },
+      "error": null,
+      "execution": "running",
+      "final_validation_nll": null,
+      "id": "cal-hb88-pool-fan-lr0.0003-s11",
+      "last_metrics": {
+        "activity/body_full_all_fraction": 1.0,
+        "activity/body_receipt_fraction": 1.0,
+        "activity/full_all_fraction": 1.0,
+        "activity/full_fraction": 1.0,
+        "activity/receipt_fraction": 1.0,
+        "activity/send_strength": 360447.9997558594,
+        "discrete/positive_support_errors": 0.0,
+        "numerical/positive_floor_events": 33550613.0,
+        "region/0/candidates": 65536.0,
+        "region/0/full": 65536.0,
+        "region/0/unsaturated": 65536.0,
+        "region/1/candidates": 65536.0,
+        "region/1/full": 65536.0,
+        "region/1/unsaturated": 65536.0,
+        "region/10/candidates": 65536.0,
+        "region/10/full": 65536.0,
+        "region/10/unsaturated": 65536.0,
+        "region/11/candidates": 65536.0,
+        "region/11/full": 65536.0,
+        "region/11/unsaturated": 65536.0,
+        "region/12/candidates": 65536.0,
+        "region/12/full": 65536.0,
+        "region/12/unsaturated": 65536.0,
+        "region/13/candidates": 65536.0,
+        "region/13/full": 65536.0,
+        "region/13/unsaturated": 65533.0,
+        "region/14/candidates": 65536.0,
+        "region/14/full": 65536.0,
+        "region/14/unsaturated": 65534.0,
+        "region/15/candidates": 65536.0,
+        "region/15/full": 65536.0,
+        "region/15/unsaturated": 65536.0,
+        "region/16/candidates": 65536.0,
+        "region/16/full": 65536.0,
+        "region/16/unsaturated": 65536.0,
+        "region/17/candidates": 65536.0,
+        "region/17/full": 65536.0,
+        "region/17/unsaturated": 65536.0,
+        "region/18/candidates": 65536.0,
+        "region/18/full": 65536.0,
+        "region/18/unsaturated": 65536.0,
+        "region/19/candidates": 65536.0,
+        "region/19/full": 65536.0,
+        "region/19/unsaturated": 65536.0,
+        "region/2/candidates": 65536.0,
+        "region/2/full": 65536.0,
+        "region/2/unsaturated": 65528.0,
+        "region/20/candidates": 65536.0,
+        "region/20/full": 65536.0,
+        "region/20/unsaturated": 65536.0,
+        "region/21/candidates": 65536.0,
+        "region/21/full": 65536.0,
+        "region/21/unsaturated": 65536.0,
+        "region/3/candidates": 65536.0,
+        "region/3/full": 65536.0,
+        "region/3/unsaturated": 65536.0,
+        "region/4/candidates": 65536.0,
+        "region/4/full": 65536.0,
+        "region/4/unsaturated": 65515.0,
+        "region/5/candidates": 65536.0,
+        "region/5/full": 65536.0,
+        "region/5/unsaturated": 65501.0,
+        "region/6/candidates": 65536.0,
+        "region/6/full": 65536.0,
+        "region/6/unsaturated": 65530.0,
+        "region/7/candidates": 65536.0,
+        "region/7/full": 65536.0,
+        "region/7/unsaturated": 65536.0,
+        "region/8/candidates": 65536.0,
+        "region/8/full": 65536.0,
+        "region/8/unsaturated": 65536.0,
+        "region/9/candidates": 65536.0,
+        "region/9/full": 65536.0,
+        "region/9/unsaturated": 65531.0,
+        "resources/npu_allocated_mib": 456.55517578125,
+        "resources/npu_peak_allocated_mib": 15275.43603515625,
+        "resources/npu_reserved_mib": 17118.0,
+        "resources/peak_rss_mib": 2185.98828125,
+        "solver/max_feasibility_residual": 0,
+        "train/gradient_norm": 1.2506213188171387,
+        "train/loss": 8.109071969985962,
+        "train/lr": 6.845941543579101e-05,
+        "train/step_seconds": 2.582982823252678,
+        "train/tokens": 239283,
+        "train/tokens_per_second": 6259.429932886696,
+        "work/body_candidates": 1441792.0,
+        "work/body_full": 1441792.0,
+        "work/body_node_slots": 1441792,
+        "work/boundary_candidates": 0.0,
+        "work/boundary_full": 0.0,
+        "work/candidates": 1441792.0,
+        "work/full": 1441792.0,
+        "work/max_full_batch": 16384,
+        "work/node_slots": 1441792,
+        "work/physical_full_rows": 1441792,
+        "work/physical_light_rows": 0,
+        "work/read_events": 1441792.0,
+        "work/state_updates": 1441792.0,
+        "work/unsaturated": 1441712.0
+      },
+      "lens_name": "tl-v9-screen-cal-hb88-pool-fan-lr0.0003-s11-projection-3daf7c2d5972",
+      "lens_readback_matches": null,
+      "lens_status": "recording",
+      "record": "runs/v9-screen-cal-hb88-pool-fan-lr0.0003-s11/train/result.json",
+      "result_sha256": "489e3b428e8ef8f08682c8913315baf643c0c3403ef14cb1953168bd9e8ed870",
+      "run_id": "tl-v9-screen-cal-hb88-pool-fan-lr0.0003-s11",
+      "tokens": 239283
+    },
+    {
+      "axes": {
+        "discrete_semantics": "passed_static_unit_input_fixture; general_continuation_unchecked",
+        "execution": "running",
+        "learning": "running",
+        "mechanisms": "passed",
+        "recovery": "passed_same_stack_three_micro_updates; long_trajectory_replay_unchecked",
+        "strict_numerical": "see independent admission; finite exploration"
+      },
+      "error": null,
+      "execution": "running",
+      "final_validation_nll": null,
+      "id": "cal-hb88-pool-fan-lr0.001-s11",
+      "last_metrics": {
+        "activity/body_full_all_fraction": 1.0,
+        "activity/body_receipt_fraction": 1.0,
+        "activity/full_all_fraction": 1.0,
+        "activity/full_fraction": 1.0,
+        "activity/receipt_fraction": 1.0,
+        "activity/send_strength": 360447.9992675781,
+        "discrete/positive_support_errors": 0.0,
+        "numerical/positive_floor_events": 33130945.0,
+        "region/0/candidates": 65536.0,
+        "region/0/full": 65536.0,
+        "region/0/unsaturated": 65536.0,
+        "region/1/candidates": 65536.0,
+        "region/1/full": 65536.0,
+        "region/1/unsaturated": 65536.0,
+        "region/10/candidates": 65536.0,
+        "region/10/full": 65536.0,
+        "region/10/unsaturated": 65536.0,
+        "region/11/candidates": 65536.0,
+        "region/11/full": 65536.0,
+        "region/11/unsaturated": 65536.0,
+        "region/12/candidates": 65536.0,
+        "region/12/full": 65536.0,
+        "region/12/unsaturated": 65530.0,
+        "region/13/candidates": 65536.0,
+        "region/13/full": 65536.0,
+        "region/13/unsaturated": 65536.0,
+        "region/14/candidates": 65536.0,
+        "region/14/full": 65536.0,
+        "region/14/unsaturated": 65530.0,
+        "region/15/candidates": 65536.0,
+        "region/15/full": 65536.0,
+        "region/15/unsaturated": 65536.0,
+        "region/16/candidates": 65536.0,
+        "region/16/full": 65536.0,
+        "region/16/unsaturated": 65536.0,
+        "region/17/candidates": 65536.0,
+        "region/17/full": 65536.0,
+        "region/17/unsaturated": 65536.0,
+        "region/18/candidates": 65536.0,
+        "region/18/full": 65536.0,
+        "region/18/unsaturated": 65536.0,
+        "region/19/candidates": 65536.0,
+        "region/19/full": 65536.0,
+        "region/19/unsaturated": 65536.0,
+        "region/2/candidates": 65536.0,
+        "region/2/full": 65536.0,
+        "region/2/unsaturated": 65534.0,
+        "region/20/candidates": 65536.0,
+        "region/20/full": 65536.0,
+        "region/20/unsaturated": 65536.0,
+        "region/21/candidates": 65536.0,
+        "region/21/full": 65536.0,
+        "region/21/unsaturated": 65536.0,
+        "region/3/candidates": 65536.0,
+        "region/3/full": 65536.0,
+        "region/3/unsaturated": 65536.0,
+        "region/4/candidates": 65536.0,
+        "region/4/full": 65536.0,
+        "region/4/unsaturated": 65510.0,
+        "region/5/candidates": 65536.0,
+        "region/5/full": 65536.0,
+        "region/5/unsaturated": 65501.0,
+        "region/6/candidates": 65536.0,
+        "region/6/full": 65536.0,
+        "region/6/unsaturated": 65523.0,
+        "region/7/candidates": 65536.0,
+        "region/7/full": 65536.0,
+        "region/7/unsaturated": 65536.0,
+        "region/8/candidates": 65536.0,
+        "region/8/full": 65536.0,
+        "region/8/unsaturated": 65536.0,
+        "region/9/candidates": 65536.0,
+        "region/9/full": 65536.0,
+        "region/9/unsaturated": 65535.0,
+        "resources/npu_allocated_mib": 456.55517578125,
+        "resources/npu_peak_allocated_mib": 15275.43603515625,
+        "resources/npu_reserved_mib": 17118.0,
+        "resources/peak_rss_mib": 2171.80859375,
+        "solver/max_feasibility_residual": 0,
+        "train/gradient_norm": 1.8662678003311157,
+        "train/loss": 7.874652624130249,
+        "train/lr": 0.0001976451873779297,
+        "train/step_seconds": 2.6924326941370964,
+        "train/tokens": 207246,
+        "train/tokens_per_second": 5870.527435808641,
+        "work/body_candidates": 1441792.0,
+        "work/body_full": 1441792.0,
+        "work/body_node_slots": 1441792,
+        "work/boundary_candidates": 0.0,
+        "work/boundary_full": 0.0,
+        "work/candidates": 1441792.0,
+        "work/full": 1441792.0,
+        "work/max_full_batch": 16384,
+        "work/node_slots": 1441792,
+        "work/physical_full_rows": 1441792,
+        "work/physical_light_rows": 0,
+        "work/read_events": 1441792.0,
+        "work/state_updates": 1441792.0,
+        "work/unsaturated": 1441703.0
+      },
+      "lens_name": "tl-v9-screen-cal-hb88-pool-fan-lr0.001-s11-projection-f11b85440aec",
+      "lens_readback_matches": null,
+      "lens_status": "recording",
+      "record": "runs/v9-screen-cal-hb88-pool-fan-lr0.001-s11/train/result.json",
+      "result_sha256": "6a80d213d5792c339380cf2d39faa4c1f933127e8efc8605b92018868f78140d",
+      "run_id": "tl-v9-screen-cal-hb88-pool-fan-lr0.001-s11",
+      "tokens": 207246
+    },
+    {
+      "axes": {
+        "discrete_semantics": "passed_static_unit_input_fixture; general_continuation_unchecked",
+        "execution": "running",
+        "learning": "running",
+        "mechanisms": "passed",
+        "recovery": "passed_same_stack_three_micro_updates; long_trajectory_replay_unchecked",
+        "strict_numerical": "see independent admission; finite exploration"
+      },
+      "error": null,
+      "execution": "running",
+      "final_validation_nll": null,
+      "id": "cal-hb88-quad-fan-lr0.0003-s11",
+      "last_metrics": {
+        "activity/body_full_all_fraction": 0.7990472966974432,
+        "activity/body_receipt_fraction": 0.990266973322088,
+        "activity/full_all_fraction": 0.7990472966974432,
+        "activity/full_fraction": 0.806900884533034,
+        "activity/receipt_fraction": 0.990266973322088,
+        "activity/send_strength": 539175.7514648438,
+        "discrete/positive_support_errors": 0.0,
+        "numerical/positive_floor_events": 37084534.0,
+        "region/0/candidates": 65536.0,
+        "region/0/full": 56068.0,
+        "region/0/unsaturated": 53292.0,
+        "region/1/candidates": 65112.0,
+        "region/1/full": 55387.0,
+        "region/1/unsaturated": 49313.0,
+        "region/10/candidates": 65039.0,
+        "region/10/full": 55384.0,
+        "region/10/unsaturated": 49848.0,
+        "region/11/candidates": 64703.0,
+        "region/11/full": 56278.0,
+        "region/11/unsaturated": 51508.0,
+        "region/12/candidates": 64703.0,
+        "region/12/full": 56440.0,
+        "region/12/unsaturated": 51002.0,
+        "region/13/candidates": 63553.0,
+        "region/13/full": 53412.0,
+        "region/13/unsaturated": 46952.0,
+        "region/14/candidates": 63553.0,
+        "region/14/full": 43891.0,
+        "region/14/unsaturated": 37080.0,
+        "region/15/candidates": 65521.0,
+        "region/15/full": 50233.0,
+        "region/15/unsaturated": 45133.0,
+        "region/16/candidates": 65508.0,
+        "region/16/full": 54973.0,
+        "region/16/unsaturated": 52554.0,
+        "region/17/candidates": 65532.0,
+        "region/17/full": 48375.0,
+        "region/17/unsaturated": 44327.0,
+        "region/18/candidates": 65389.0,
+        "region/18/full": 58397.0,
+        "region/18/unsaturated": 56337.0,
+        "region/19/candidates": 65534.0,
+        "region/19/full": 51583.0,
+        "region/19/unsaturated": 46243.0,
+        "region/2/candidates": 65112.0,
+        "region/2/full": 52142.0,
+        "region/2/unsaturated": 46247.0,
+        "region/20/candidates": 65536.0,
+        "region/20/full": 42995.0,
+        "region/20/unsaturated": 34365.0,
+        "region/21/candidates": 65489.0,
+        "region/21/full": 45812.0,
+        "region/21/unsaturated": 40908.0,
+        "region/3/candidates": 64911.0,
+        "region/3/full": 56376.0,
+        "region/3/unsaturated": 50503.0,
+        "region/4/candidates": 64911.0,
+        "region/4/full": 49101.0,
+        "region/4/unsaturated": 40491.0,
+        "region/5/candidates": 63559.0,
+        "region/5/full": 55654.0,
+        "region/5/unsaturated": 45163.0,
+        "region/6/candidates": 63559.0,
+        "region/6/full": 52246.0,
+        "region/6/unsaturated": 46139.0,
+        "region/7/candidates": 64980.0,
+        "region/7/full": 54766.0,
+        "region/7/unsaturated": 49411.0,
+        "region/8/candidates": 64980.0,
+        "region/8/full": 56568.0,
+        "region/8/unsaturated": 53845.0,
+        "region/9/candidates": 65039.0,
+        "region/9/full": 45979.0,
+        "region/9/unsaturated": 38174.0,
+        "resources/npu_allocated_mib": 468.95263671875,
+        "resources/npu_peak_allocated_mib": 15413.6123046875,
+        "resources/npu_reserved_mib": 17256.0,
+        "resources/peak_rss_mib": 2184.73828125,
+        "solver/max_feasibility_residual": 3.5762786865234375e-07,
+        "train/gradient_norm": 0.9882336854934692,
+        "train/loss": 8.254796981811523,
+        "train/lr": 4.576177597045898e-05,
+        "train/step_seconds": 3.2523757480084896,
+        "train/tokens": 159949,
+        "train/tokens_per_second": 4978.207087515688,
+        "work/body_candidates": 1427759.0,
+        "work/body_full": 1152060.0,
+        "work/body_node_slots": 1441792,
+        "work/boundary_candidates": 0.0,
+        "work/boundary_full": 0.0,
+        "work/candidates": 1427759.0,
+        "work/full": 1152060.0,
+        "work/max_full_batch": 16384,
+        "work/node_slots": 1441792,
+        "work/physical_full_rows": 1441792,
+        "work/physical_light_rows": 0,
+        "work/read_events": 1427759.0,
+        "work/state_updates": 1427759.0,
+        "work/unsaturated": 1028835.0
+      },
+      "lens_name": "tl-v9-screen-cal-hb88-quad-fan-lr0.0003-s11-projection-89868f59af6b",
+      "lens_readback_matches": null,
+      "lens_status": "recording",
+      "record": "runs/v9-screen-cal-hb88-quad-fan-lr0.0003-s11/train/result.json",
+      "result_sha256": "76e144ba7bc1e0b3d91100d1f292e86b27a653b8e7c012e4c21608ed803d7720",
+      "run_id": "tl-v9-screen-cal-hb88-quad-fan-lr0.0003-s11",
+      "tokens": 159949
+    },
+    {
+      "axes": {
+        "discrete_semantics": "passed_static_unit_input_fixture; general_continuation_unchecked",
+        "execution": "running",
+        "learning": "running",
+        "mechanisms": "passed",
+        "recovery": "passed_same_stack_three_micro_updates; long_trajectory_replay_unchecked",
+        "strict_numerical": "see independent admission; finite exploration"
+      },
+      "error": null,
+      "execution": "running",
+      "final_validation_nll": null,
+      "id": "cal-hb88-quad-fan-lr0.001-s11",
+      "last_metrics": {
+        "activity/body_full_all_fraction": 0.7754135131835938,
+        "activity/body_receipt_fraction": 0.9901060624556108,
+        "activity/full_all_fraction": 0.7754135131835938,
+        "activity/full_fraction": 0.7831620697892229,
+        "activity/receipt_fraction": 0.9901060624556108,
+        "activity/send_strength": 540737.1821289062,
+        "discrete/positive_support_errors": 0.0,
+        "numerical/positive_floor_events": 36952267.0,
+        "region/0/candidates": 65536.0,
+        "region/0/full": 56312.0,
+        "region/0/unsaturated": 53711.0,
+        "region/1/candidates": 65146.0,
+        "region/1/full": 55584.0,
+        "region/1/unsaturated": 49540.0,
+        "region/10/candidates": 65141.0,
+        "region/10/full": 55136.0,
+        "region/10/unsaturated": 49069.0,
+        "region/11/candidates": 64230.0,
+        "region/11/full": 54861.0,
+        "region/11/unsaturated": 49589.0,
+        "region/12/candidates": 64230.0,
+        "region/12/full": 54917.0,
+        "region/12/unsaturated": 48437.0,
+        "region/13/candidates": 63703.0,
+        "region/13/full": 53895.0,
+        "region/13/unsaturated": 48405.0,
+        "region/14/candidates": 63703.0,
+        "region/14/full": 45181.0,
+        "region/14/unsaturated": 38706.0,
+        "region/15/candidates": 65528.0,
+        "region/15/full": 49823.0,
+        "region/15/unsaturated": 42514.0,
+        "region/16/candidates": 65524.0,
+        "region/16/full": 49791.0,
+        "region/16/unsaturated": 45900.0,
+        "region/17/candidates": 65512.0,
+        "region/17/full": 45675.0,
+        "region/17/unsaturated": 41773.0,
+        "region/18/candidates": 65273.0,
+        "region/18/full": 56052.0,
+        "region/18/unsaturated": 52041.0,
+        "region/19/candidates": 65536.0,
+        "region/19/full": 51037.0,
+        "region/19/unsaturated": 40863.0,
+        "region/2/candidates": 65146.0,
+        "region/2/full": 52496.0,
+        "region/2/unsaturated": 46705.0,
+        "region/20/candidates": 65536.0,
+        "region/20/full": 38746.0,
+        "region/20/unsaturated": 29658.0,
+        "region/21/candidates": 65304.0,
+        "region/21/full": 34404.0,
+        "region/21/unsaturated": 27509.0,
+        "region/3/candidates": 65090.0,
+        "region/3/full": 56639.0,
+        "region/3/unsaturated": 50179.0,
+        "region/4/candidates": 65090.0,
+        "region/4/full": 49144.0,
+        "region/4/unsaturated": 41371.0,
+        "region/5/candidates": 63640.0,
+        "region/5/full": 54372.0,
+        "region/5/unsaturated": 43095.0,
+        "region/6/candidates": 63640.0,
+        "region/6/full": 52956.0,
+        "region/6/unsaturated": 47173.0,
+        "region/7/candidates": 64939.0,
+        "region/7/full": 49938.0,
+        "region/7/unsaturated": 42676.0,
+        "region/8/candidates": 64939.0,
+        "region/8/full": 58257.0,
+        "region/8/unsaturated": 55308.0,
+        "region/9/candidates": 65141.0,
+        "region/9/full": 42769.0,
+        "region/9/unsaturated": 31834.0,
+        "resources/npu_allocated_mib": 468.95263671875,
+        "resources/npu_peak_allocated_mib": 15413.6123046875,
+        "resources/npu_reserved_mib": 17256.0,
+        "resources/peak_rss_mib": 2184.07421875,
+        "solver/max_feasibility_residual": 3.5762786865234375e-07,
+        "train/gradient_norm": 1.343022108078003,
+        "train/loss": 8.103886485099792,
+        "train/lr": 0.0001370983123779297,
+        "train/step_seconds": 3.3837315924465656,
+        "train/tokens": 143758,
+        "train/tokens_per_second": 4763.084647723728,
+        "work/body_candidates": 1427527.0,
+        "work/body_full": 1117985.0,
+        "work/body_node_slots": 1441792,
+        "work/boundary_candidates": 0.0,
+        "work/boundary_full": 0.0,
+        "work/candidates": 1427527.0,
+        "work/full": 1117985.0,
+        "work/max_full_batch": 16384,
+        "work/node_slots": 1441792,
+        "work/physical_full_rows": 1441792,
+        "work/physical_light_rows": 0,
+        "work/read_events": 1427527.0,
+        "work/state_updates": 1427527.0,
+        "work/unsaturated": 976056.0
+      },
+      "lens_name": "tl-v9-screen-cal-hb88-quad-fan-lr0.001-s11-projection-482695beda4e",
+      "lens_readback_matches": null,
+      "lens_status": "recording",
+      "record": "runs/v9-screen-cal-hb88-quad-fan-lr0.001-s11/train/result.json",
+      "result_sha256": "406906633cf1daeabad209a0225447cfe107e1dfa1aa9a1469cd248cdd7ec265",
+      "run_id": "tl-v9-screen-cal-hb88-quad-fan-lr0.001-s11",
+      "tokens": 143758
+    }
+  ]
+}
