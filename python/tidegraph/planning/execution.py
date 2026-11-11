@@ -26,12 +26,15 @@ class ExecutionSpec:
     finite_check_packing: str = "scalar"
     query_execution: str = "auto"
     prefill_schedule: str = "auto"
+    input_interface: str = "auto"
 
     def __post_init__(self):
         if self.client not in {"pytorch", "python-native", "libtorch"}:
             raise ValueError("unknown client")
         if self.schedule not in {"streaming", "prefill"}:
             raise ValueError("unknown schedule")
+        if self.input_interface not in {"auto", "records"}:
+            raise ValueError("input_interface must be auto or records")
         if self.prefill_schedule not in {"auto", "greedy", "window"}:
             raise ValueError("unknown prefill_schedule")
         if self.prefill_schedule != "auto" and (self.schedule != "prefill" or self.placement == "resident"):
@@ -103,6 +106,7 @@ class ExecutionSpec:
         """Decode omitted historical defaults without adopting newer policies."""
         requested = dict(record.get("requested", record))
         if "requested" in record:
+            requested.setdefault("input_interface", "records")
             requested.setdefault("query_execution", "legacy")
             host_prefill = (requested.get("schedule", "prefill") == "prefill"
                             and requested.get("placement", "native") != "resident")
@@ -111,6 +115,12 @@ class ExecutionSpec:
 
     def record(self):
         requested = asdict(self)
+        columns_policy = (self.input_interface == "auto" and self.return_mode != "complete"
+            and self.client != "libtorch" and self.placement != "resident" and self.schedule == "prefill"
+            and self.prefill_schedule != "greedy" and self.query_execution in {"auto", "dense-v1"}
+            and self.packing != "scalar" and self.workers == 1 and not self.peer_devices)
+        if not columns_policy:
+            requested.pop("input_interface")
         # Explicit greedy reproduces the pre-window execution identities.
         # Streaming/resident do not use the host prefill strategy at all.
         window_policy = self.schedule == "prefill" and self.placement != "resident" and self.prefill_schedule != "greedy"
@@ -131,6 +141,8 @@ class ExecutionSpec:
         selected_boundary = self.return_mode != "complete" and self.placement != "resident"
         if selected_boundary:
             effective["record_policy"] = "selected-boundary-v2; explicit task observations"
+        if columns_policy:
+            effective["input_policy"] = "tensor-window-v1; built-in output task and compatible Settle modules"
         if window_policy:
             effective["prefill_schedule"] = "window"
             effective["scheduler"] = "component-window"
@@ -142,7 +154,8 @@ class ExecutionSpec:
             effective["query_policy"] = "kv-block-v1+packed-v2+describe-batch-v2; independent capabilities, dtype/schedule fallback to legacy"
             if self.placement == "resident" or self.schedule == "streaming" or self.packing == "scalar" or self.workers != 1 or self.dtype == "float16" or self.peer_devices:
                 effective["query_execution"] = "legacy"
-        body = dict(schema="tide-weighted-execution-v4" if selected_boundary else
+        body = dict(schema="tide-weighted-execution-v5" if columns_policy else
+                    "tide-weighted-execution-v4" if selected_boundary else
                     "tide-weighted-execution-v3" if window_policy else
                     "tide-weighted-execution-v2" if extended else "tide-weighted-execution-v1",
                     requested=requested, effective=effective,

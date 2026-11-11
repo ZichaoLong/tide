@@ -31,9 +31,8 @@ def test_selected_boundary_preserves_task_training_raw_resume_and_work(client, f
             for field in ("candidate_updates", "full_calls", "messages", "outputs", "pending"):
                 assert complete.last_work[field] == boundary.last_work[field]
             assert boundary.last_work["candidate_updates"] > 0
-            if family == "kv":
-                assert boundary.last_work["actual_stats"]["joint_state_vjp_events"] > 0
-                assert complete.last_work["actual_stats"].get("joint_state_vjp_events", 0) == 0
+            assert boundary.last_work["effective_window_execution"]["schedule"] == "settle-columns-v1"
+            assert boundary.last_work["actual_stats"]["state_column_calls"] > 0
         boundary.save(tmp_path)
         restored = Eager(resolve(selected), checkpoint=tmp_path)
         try:
@@ -46,6 +45,7 @@ def test_selected_boundary_preserves_task_training_raw_resume_and_work(client, f
         # An explicit diagnostic request still supplies all intermediate roots.
         result, _ = boundary.step(3, return_mode="complete")
         assert result.trace and result.messages
+        assert boundary.manifest()["effective_input_interface"] == "records"
     finally:
         complete.close(); boundary.close()
 

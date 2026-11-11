@@ -53,6 +53,10 @@ tidegraph run NEW_CONFIG.json --site SITE.json --output-dir NEW_RUN
 再保留原始伴随/快照和参数partial。生成器分别为这些边界预留，实际数值tape/服务资源仍由运行时拒绝守卫验证。
 实际厂商workspace/service资源与设备余量仍须运行准入；改变窗口数/用途须重新预算，不能把该估计当作通用默认或免容量检查。
 默认返回outputs、独立数值not_checked；`--complete`才启用完整返回及explore比较。
+当前安装Python客户端的内置任务按能力采用[张量窗口](weighted-tensor-windows.md)，输入和loss
+都按列执行；`--input-interface records`用于同材料旧边界对照。检查结果的
+`effective_input_interface`和`effective_window_execution`，不是只看auto/prefill标签。
+standalone CLI、完整事件观察、一般图及未迁移放置保留各自实际路径。
 不同返回契约不直接计算加速比；先运行相关独立小门禁，真实大规模数值/恢复仍另列。
 单配置一次预热/一次计时，完整训练包括准备、packing、backward、finite及SGD/同步；
 checkpoint成本按既有CLI单列。配置身份、精确恢复和资源拒绝沿用公共设施。
@@ -83,7 +87,8 @@ python scripts/benchmark_dense_query.py --downstream-repo READ_ONLY_DOWNSTREAM \
 `minimal`通过公共工厂关闭内部trace，是另一种返回契约，可进入KV整序列VJP。
 固定下游的旧native适配器忽略其`run_features(trace=False)`请求，原记录实际仍完整；
 不能将新minimal耗时直接标成原完整返回的等价加速。公共CLI内置输出目标在outputs/metrics
-模式默认省去内部trace，任务扩展仍可读取完整trace；须按实际`joint_state_vjp_events`确认所测路径。
+模式默认省去内部trace，任务扩展仍可读取完整trace；记录路径按实际`joint_state_vjp_events`确认，
+张量窗口按`effective_window_execution`、`state_column_calls/region_column_calls`确认。
 原始参数hash与测量前hash相等才是reset流程；设备间/路径间实际Full数相等也不自动证明完整等价。
 出现非有限、非法配置、容量/通信/精确恢复错误停止；有限数值差异保留严格失败，不能写成等价加速。
 不设固定加速比门槛；回归比较检查工作量/计时范围/争用，超过预算则明确终态，不自动扩时重跑。

@@ -342,6 +342,9 @@ KV §4的共享Full矩阵收缩进一步由`bank_attention`/`query::bank_attenti
 KV §2 的 Rot(p)ᵀRot(q)=Rot(q−p) 对应 `column_attention` 和 `test_column_positions`，
 以 int64 求差保留超大时钟的小距离；Read/Full 频率及 raw 恢复分别验收。
 旧任意 cut、完整独立事件根仍按记录接口单列验证。图 v13/checkpoint v5 不变。
+实验内置任务经 `experiment/column_task.py`直接消费实际消息列；逐端口 `(cG)^2`属于
+任务投影，不是教材新定义。`test_experiment_columns`核对原输入逐位同一、重复物理端口
+贡献、独立标量训练及实际默认选择；`test_selected_boundary_execution`覆盖五族训练/恢复。
 
 有限五记忆在C++列接口由 `LocalState/LocalWindow` 分型；recurrent §1–4与固定时间卷积
 对应 `weighted_column_recurrent_state/math/query`，`test_native_recurrent_columns`覆盖两种Mem、

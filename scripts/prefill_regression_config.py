@@ -28,7 +28,7 @@ CASES = {
 
 def config(case, *, family="kv", samples=4, positions=16, device="cpu", client="python-native",
            placement=None, threads=1, mode="training", schedule="auto", complete=False,
-           dtype="float32", packing="packed", peer_device=(), workers=1):
+           dtype="float32", packing="packed", peer_device=(), workers=1, input_interface="auto"):
     recipe = dict(deepcopy(CASES[case]), family=family)
     if case == "query-fc":
         if family != "kv":
@@ -48,6 +48,7 @@ def config(case, *, family="kv", samples=4, positions=16, device="cpu", client="
         measurement=dict(mode=mode, steps=1, warmup=1, validation="explore" if complete else "none",
                          checkpoint_check=True, timeout_seconds=1800),
         resources=dict(max_materialize_bytes=128*1024**3, checkpoint_max_bytes=128*1024**3))
+    value["execution"]["input_interface"] = input_interface
     if placement == "resident":
         resident_reservations(value)
     return value
@@ -109,11 +110,21 @@ def matrix(**options):
         description="One process per explicit case, one warmup/measurement; actual numerical and resume status remain separate.")
 
 
+def column_matrix(**options):
+    """Finite current-default coverage; old schedules have separate identities."""
+    rows = [dict(name=f"{case}-{family}", config=config(case, **dict(options, family=family)))
+            for case, family in (("wide-fc", "kv"), ("many-hb", "kv"), ("many-lh", "kv"),
+                ("sum-fc", "kv"), ("layer-chain", "ssd"), ("layer-chain", "gated_delta"),
+                ("many-lh", "mixed"))]
+    return dict(schema="tide-experiment-matrix-v1", name="tensor-window-representatives-v1", cases=rows,
+        description="Actual public input/loss interface, selected host paths, one measured window and exact next-window restore; no scale numerical certification.")
+
+
 def main():
     p = argparse.ArgumentParser(description=__doc__)
     select = p.add_mutually_exclusive_group(required=True)
     select.add_argument("--case", choices=CASES)
-    select.add_argument("--suite", choices=("representative",))
+    select.add_argument("--suite", choices=("representative", "tensor-windows"))
     p.add_argument("--family", choices=("kv", "affine", "delta", "gated_delta", "ssd", "mixed"), default="kv")
     p.add_argument("--samples", type=int, default=4)
     p.add_argument("--positions", type=int, default=16)
@@ -124,6 +135,7 @@ def main():
     p.add_argument("--workers", type=int, default=1)
     p.add_argument("--dtype", choices=("float16", "float32", "float64"), default="float32")
     p.add_argument("--packing", choices=("auto", "packed", "scalar"), default="packed")
+    p.add_argument("--input-interface", choices=("auto", "records"), default="auto")
     p.add_argument("--peer-device", action="append", default=[], help="additional logical device, repeatable")
     p.add_argument("--mode", choices=("inference", "training"), default="training")
     p.add_argument("--schedule", choices=("auto", "greedy"), default="auto")
@@ -136,7 +148,7 @@ def main():
     if suite:
         from tidegraph.experiment.matrix import resolve_matrix
         args.pop("case")
-        value = matrix(**args)
+        value = (matrix if suite == "representative" else column_matrix)(**args)
         resolved = resolve_matrix(value)
     else:
         value = config(**args)

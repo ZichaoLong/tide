@@ -11,6 +11,9 @@ from .record_policy import needs_trace
 
 
 def work(result):
+    from .column_task import WindowResult, work as column_work
+    if isinstance(result, WindowResult):
+        return column_work(result)
     return dict(candidate_updates=result.stats.get("candidate_events", len(result.trace)),
                 full_calls=result.stats.get("selected_events", sum(e["active"] for e in result.trace)),
                 messages=result.stats.get("visited_edges", len(result.messages)),
@@ -33,12 +36,11 @@ class Eager:
         self.device = torch.device("cpu" if reference else spec["device"])
         self.devices = (self.device,) if reference else tuple(torch.device(x) for x in spec["peer_devices"] or (spec["device"],))
         binding, inputs, self.span = materialize(resolved["plan"], dtype=getattr(torch, spec["dtype"]),
-                max_bytes=resolved["resources"]["max_materialize_bytes"])
+                max_bytes=resolved["resources"]["max_materialize_bytes"], include_inputs=False)
         self.storage_reference = reference and spec["placement"] == "resident" and spec["dtype"] == "float16"
         if self.storage_reference:
             from ..qualification_weighted_precision import reference_model, widen
             binding = replace(binding, model=reference_model(binding.model))
-            inputs = widen(inputs)
         self.binding = binding
         from ..ownership import place_payloads
         owners = ["cpu"]*len(binding.graph.nodes) if reference else resolved["payload_placement"]["node_devices"]
@@ -67,6 +69,19 @@ class Eager:
             self.scheduler = implementation+"-"+("streaming" if spec["schedule"] == "streaming" else
                 "online-greedy" if spec.get("prefill_schedule", "greedy") == "greedy" else "component-window")
         self.execute = self._make_execute(self.trace_records)
+        self.record_scheduler = self.scheduler
+        from .column_task import ColumnInputs, reason
+        from ..planning.materialize import materialize_inputs
+        self.column_reason = reason(self)
+        self.column_inputs = None
+        if self.column_reason is None:
+            self.column_inputs = ColumnInputs(resolved["plan"], getattr(torch, spec["dtype"]))
+            self.scheduler = "settle-columns-v1"
+        else:
+            self.inputs = materialize_inputs(resolved["plan"], dtype=getattr(torch, spec["dtype"]))
+            if self.storage_reference:
+                self.inputs = widen(self.inputs)
+        self.last_input_interface = "tensor-window-v1" if self.column_inputs is not None else "records"
         self.state = Continuation(binding.graph.identity, resolved["plan"]["samples"])
         self.task, self.task_manifest = create(resolved["task"], resolved["plan"])
         from .task_module import bind, inventory, manifest, validate_optimizer
@@ -87,6 +102,16 @@ class Eager:
             self.restore(checkpoint)
 
     def forward(self, index, *, complete=False):
+        if self.column_inputs is not None and not complete:
+            layout, ports, self.last_inputs = self.column_inputs.window(index, self.device, training=self.training)
+            result = self.execute.run_ports(self.settle, layout, ports, state=self.state,
+                stop_position=(index+1)*self.resolved["plan"]["positions"])
+            self.last_input_interface, self.scheduler = "tensor-window-v1", result.execution["schedule"]
+            return result
+        self.last_input_interface, self.scheduler = "records", self.record_scheduler
+        if self.inputs is None:
+            from ..planning.materialize import materialize_inputs
+            self.inputs = materialize_inputs(self.resolved["plan"], dtype=getattr(torch, self.spec["dtype"]))
         inputs = self.task.inputs(self.inputs, index, training=self.training)
         self.last_inputs = inputs
         inputs = self.place_inputs(inputs)
@@ -146,12 +171,15 @@ class Eager:
         self.state = result.continuation.detach()
         self.last_work = work(result)
         from .locations import eager_locations
-        self.last_work["actual_record_locations"] = eager_locations(result)
+        from .column_task import WindowResult, output_records, locations
+        columns = isinstance(result, WindowResult)
+        self.last_work["actual_record_locations"] = locations(result) if columns else eager_locations(result)
         packing = "scalar" if self.reference else self.spec["return_packing"]
         if mode == "complete":
             actual = snapshot(result, packing=packing)
         elif mode == "outputs":
-            actual = dict(return_mode=mode, cut=self.state.cut, outputs=snapshot(result.outputs, packing=packing))
+            outputs = output_records(result, self.settle) if columns else snapshot(result.outputs, packing=packing)
+            actual = dict(return_mode=mode, cut=self.state.cut, outputs=outputs)
         elif mode == "metrics":
             actual = dict(return_mode=mode, cut=self.state.cut)
         else:
@@ -242,10 +270,13 @@ class Eager:
             region_devices=[str(region_reference(graph, model, r).device) for r in range(len(graph.regions))],
             return_mode=self.spec.get("return_mode", "complete"), return_packing=self.spec["return_packing"],
             internal_records="complete" if self.trace_records else "boundary-only; output-observing task",
-            input_boundary="fresh CPU task tensors, shared source roots, differentiable upload per window",
+            input_boundary="fresh CPU columns, shared source rows, differentiable block upload" if self.column_inputs is not None else
+                "fresh CPU task tensors, shared source roots, differentiable upload per window",
+            effective_input_interface=self.last_input_interface,
+            input_fallback_reason=self.column_reason or ("explicit complete observations" if self.last_input_interface == "records" else None),
             operator="aten", packing=self.spec["packing"], task=self.task_manifest, task_module=self.module_manifest,
             communication=self.spec.get("communication", "ordinary"), gradient_boundary="detach per optimizer window")
 
     def close(self):
         self._make_execute = self._complete_execute = None
-        self.execute = self.binding = self.inputs = self.state = self.optimizer = self.last_inputs = self.task = self.parameter_owner = None
+        self.execute = self.binding = self.inputs = self.state = self.optimizer = self.last_inputs = self.task = self.parameter_owner = self.column_inputs = None

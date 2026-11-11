@@ -59,5 +59,10 @@ SSD用`--family ssd`，纯PyTorch用`--implementation python`。NPU通过当前�
 下一轮优化可据此判断图开销、局部数值求值和装配各有多少余地；不能从小矩阵或低L
 直接外推大型模型、长序列、resident及多卡。
 
+当前成本入口默认 `--interface window`，通过公共 `run_positions` 贯穿B×L；
+`--interface records`显式重现逐事件输入边界。`--mode inference|grad-forward|training`
+区分无梯度、记录计算图但不反向和真实完整更新。结果记录实际窗口分派、线程/CPU池、
+阶段成本和输入位置吞吐；旧报告始终保留其原始接口/源码，不能改贴新默认。
+
 [固定检查与12个成本点](evidence/layer-chain-baseline-20261110.md)记录实际CPU/NPU结果、
 原失败和IEEE策略见证；默认图入口仍显著慢于该限定张量投影，不由此宣称目标已达成。

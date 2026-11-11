@@ -31,7 +31,7 @@ def load(path):
     return plan, config
 
 
-def materialize(plan, *, max_bytes, dtype=None):
+def materialize(plan, *, max_bytes, dtype=None, include_inputs=True):
     import torch
     dtype = torch.float32 if dtype is None else dtype
     if dtype not in (torch.float16, torch.float32, torch.float64):
@@ -45,7 +45,7 @@ def materialize(plan, *, max_bytes, dtype=None):
     if required > max_bytes:
         raise ValueError(f"materialization persistent tensors need at least {required} bytes, ceiling {max_bytes}; "
                          "this excludes initialization peak, optimizer, states and execution")
-    from tidegraph import Edge, External, Graph, Node, Region
+    from tidegraph import Edge, Graph, Node, Region
     from tidegraph.source_class import SourceClasses
     from tidegraph.weighted import KVConfig, RecurrentConfig, RegionalConfig, SourceBinding, bind
     # Full semantic config validation precedes learned tensor allocation.
@@ -79,13 +79,21 @@ def materialize(plan, *, max_bytes, dtype=None):
         groups.setdefault(id(x), set()).add(name)
     if {frozenset(g) for g in groups.values()} != {frozenset(o["aliases"]) for o in inv["owners"].values()}:
         raise ValueError("materialized parameter alias mismatch")
+    bound.model.to(dtype=dtype)
+    return bound, materialize_inputs(plan, dtype=dtype) if include_inputs else None, plan["span"]
+
+
+def materialize_inputs(plan, *, dtype):
+    """Legacy event input form, also used by independent complete observers."""
+    import torch
+    from tidegraph import External
+    from .hierarchy import input_origins
     from .input_pattern import coordinates
+    origins = input_origins(plan)
     xs, values = [], {}
     for sample, position, port, occurrence in coordinates(plan):
         key = sample, position
         if key not in values:
-            values[key] = torch.cat((torch.ones(1), .2*torch.sin(torch.arange(plan["width"])*.19+.3*position+.1*sample)))
+            values[key] = torch.cat((torch.ones(1), .2*torch.sin(torch.arange(plan["width"])*.19+.3*position+.1*sample))).to(dtype=dtype)
         xs.append(External(sample, port, occurrence, origins[port]+plan["stride"]*position, values[key]))
-    from .precision import promote
-    bound, xs = promote(bound, xs, dtype)
-    return bound, xs, plan["span"]
+    return xs

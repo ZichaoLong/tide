@@ -24,7 +24,9 @@ Python/C++ KV 整链、Python 四循环/卷积与异构组合、实际消息列�
 [9fa852c KV位置列](evidence/column-positions-20261111.md)的CPU/NPU安装训练与恢复亦通过。
 [native四循环/卷积typed列资格](evidence/recurrent-columns-20261111.md)已完成：CPU306通过/13原数值xfail，
 24个CPU/NPU安装消费者和standalone CPU实跑分别通过。
-split placement/resident、多设备和宽/多节点代表仍未完成，
+公共实验内置输出任务已接入同一张量输入/loss边界，execution-v5与旧record身份分开；
+定向开发检查通过，正在固定源码资格及宽/多节点代表成本。
+split placement/resident、多设备和宽/多节点代表的本阶段证据仍未完成，
 不把已有一般执行器功能当作这些新路径已经迁移或优化。
 
 原计划的三类未完成工作继续：实现/数值/异步/容量限制，LH及core-3经验的实际迁移，

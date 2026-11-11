@@ -42,6 +42,9 @@ class WeightedOutputTask:
 
     def loss(self, result, *, training):
         scale = self.config["objective"]["scale"]
+        from .column_task import WindowResult, loss
+        if isinstance(result, WindowResult):
+            return loss(result, scale, training=training)
         values = [x.float() if x.dtype == torch.float16 else x for *_, x in result.outputs]
         terms = [(x[0]*x[1:]).square().sum()*scale for x in values]
         if not terms:

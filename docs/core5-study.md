@@ -114,6 +114,7 @@ python scripts/benchmark_weighted.py --workload NEW_PLAN/workload.json \
 | 具名数值执行路径 | `ExecutionSpec.query_execution`及公共eager/native选择；[默认策略与显式路径](weighted-dense-query.md)、三个客户端实际选择、独立根/数值失败/完整恢复、[代表回归](prefill-regression.md)和性能经验 |
 | 调度/packing/局部优化 | 公共LocalProgram能力及独立调度；[packed](weighted-packed.md)、[区域批](weighted-region-batch.md)；独立根VJP、工作量与完整计时 |
 | 紧凑基线/公共批接口接入 | [加法/减法方法](../.agents/skills/optimize-tide-execution/references/additive-comparisons.md)、[架构中的调用边界](architecture.md)；投影/完整根分开，非零左态/共享/训练/恢复及实际默认调用检查，局部与组合成本分别保留正负经验 |
+| 实验输入/loss接口 | `experiment/column_task.py`、`eager.py`、`planning/execution.py`；[张量窗口](weighted-tensor-windows.md)、输入逐位一致/共享来源、逐端口目标、独立训练、新进程恢复及旧锁身份。观察CPU解码在反向之后，插件按其声明契约接入 |
 | 新设备/放置/dtype | ExecutionSpec、公共能力门禁、各client入口；构建、真机、训练/恢复证据分别记录 |
 | 实验准入/持久化 | `planning/capacity.py`、`experiment/admission.py`、`checkpoint_policy.py`；人类手册和矩阵静态预算同步。`test_training_host_capacity`保留实际恢复RSS下界，`test_experiment_storage`/`test_checkpoint_policy`核对tmpfs与发布代数；新预算不改写旧运行身份 |
 | 测试或测量 | 有限范围、固定源码、实际配置/材料身份、终态/失败和结果路径；[evidence](evidence/README.md)、[逐配置索引](evidence/core5-index.json)、[经验](performance-lessons.md)；JUnit提取实际检查，历史汇总不伪造拆分 |

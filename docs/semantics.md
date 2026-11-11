@@ -133,6 +133,13 @@ independent intermediate event-root contract are separate observation APIs.
 Graph v13 and checkpoint v5 are unchanged; exact raw continuation comes from
 candidate results, never reference replay.
 
+Installed experiments use execution-v5 to select the same window interface for
+compatible built-in output-only tasks. This software policy does not change the
+per-physical-port objective or graph/checkpoint versions. Input columns preserve
+the seeded material and shared source uses; CPU value observations decode after
+backward. Explicit records, complete observations, plugins and historical locks
+retain their declared boundary. See the tensor-window contract for migration.
+
 ## Core-5 SettleGraph time code
 
 `SettleGraph(..., binding="ports", time_stride=D)` allows independent regions

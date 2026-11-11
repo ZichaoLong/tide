@@ -32,6 +32,18 @@ next_window = execute.run_positions(spec, later_values, start_position=L,
 现有消费者若依赖完整 trace/中间独立根，可继续记录 API；不静默改变其损失函数。
 旧实验依赖锁保持原版本，升级由消费者明确选择。
 
+安装实验CLI的内置 `weighted-output-square` 任务也采用该边界：`return_mode=outputs|metrics`
+且默认 `input_interface=auto` 时，符合能力的Settle执行直接创建共享来源列，按物理端口
+gather进入 `run_ports`，loss按各输出端口分别求 `sum((cG)^2)*scale`。
+不会先汇总多个端口再平方，也不在反向之前把输出拆成事件。所需CPU输出记录在反向结束后
+从实际结果整列复制、无梯度解码；无逐行可求导copy。raw状态仍使用checkpoint v5精确恢复。
+`effective_input_interface`、`input_fallback_reason`及逐窗口 `effective_window_execution`记录实际选择。
+
+该新默认使用execution-v5身份；显式 `input_interface=records`可比较旧输入边界。
+历史锁中省略此策略时保留record路径。完整事件观察、插件任务、一般PDG/非对齐TimedDAG
+或当前不支持的放置/模块仍使用原接口；插件即便只读outputs，也未默认声明张量输入/loss。
+显式完整诊断仍返回原事件根。成本对照必须检查实际接口，不能只根据 `prefill` 名称推断。
+
 ## 能力分派与实际身份
 
 `weighted.execution.eager_runner` 返回 `EagerExecutor`。窗口方法按图/局部/放置能力

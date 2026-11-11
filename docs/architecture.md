@@ -59,6 +59,11 @@ C++ `weighted_sequence_columns.h` 公开 KV/recurrent typed状态与独立整链
 `weighted_settle_columns` 分别拥有局部数学和调度。相对位置的 logits/共享 value-bank
 transpose 在 `column_attention` / `weighted_column_attention`；位置元数据保持 int64。修改同步该契约、column/window 测试、
 旧一般图回归和实际默认客户端，不把低层 Plan 成绩当默认入口成绩。
+`experiment/column_task.py`拥有内置任务的共享来源列、逐物理端口loss和无梯度CPU输出解码；
+`experiment/eager.py`按观察/模块能力选择，`planning/execution.py`固定execution-v5身份，
+`planning/materialize.py`把参数构造与旧事件输入构造分离。修改同步
+`test_experiment_columns`、`test_selected_boundary_execution`、历史身份和CLI新进程恢复。
+插件/完整事件观察不自动改成列根；单纯调用新的局部核不证明上层消费者已迁移。
 
 隐藏KV查询块见[块接口契约](weighted-query-blocks.md)：`weighted/kv_block_*`与
 `weighted_kv_block_*`接收actual prepared bank、B×L列与原始时间，块伴随直接归还原始写入；
