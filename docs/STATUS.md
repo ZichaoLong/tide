@@ -1,3 +1,20 @@
+# 当前交接：长期目标已落库；v8终态，v9为未提交建议
+
+2026-11-11最新用户反馈已写入[研究章程](RESEARCH_CHARTER.md)，README/AGENTS要求重入阅读。
+核心目标是同模型语言next-token质量、数据/容量/深度扩展、低活跃与局部化；允许继续用更快的稠密遮罩，
+逻辑活动、实际计算和硬件吞吐分开，实际稀疏kernel不是后继质量研究门槛。
+
+[v8结果重审与下一批建议](studies/language-scale-activity-v9-proposal.md)：
+共同4M/16M/64M里程碑、中档三方最多256M成组延伸；HB40/88/184、FC16/32/64、浅宽与重新校准TF；
+活跃目标100/60/30/10/约3%，约1%仅条件探针。建议48h/200 NPU卡时/512 CPU核时/64GiB新增，尚未提交。
+本次没有训练、下载或设备分配；静态参数核算不是实际新规模结果，研究图中的v9三组均planned、结果awaiting。
+[HB三轮解释](studies/hb-evidence-reconciliation.md)明确：旧配方/曝光/性能确有问题，尚无证据把旧HB88劣化归因于基座算错；
+v7简化图容量收益不改写旧结果，v8还没有HB88/184训练。
+
+以下保留v8终态身份与原交接；后继优先级以新建议为准，历史批次和固定输入不变。
+
+## v8已完成的交接
+
 # 当前交接：direct-v8 广覆盖与有限复核已终态
 
 2026-11-11 19:24:47北京时间复核：[终态交付](studies/direct-v8-results.md) · [首轮结论](studies/direct-v8-coverage-results.md) · [种子复核](studies/direct-v8-confirmation-results.md) · [Transformer调参](studies/direct-v8-transformer-results.md)。

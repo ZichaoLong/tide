@@ -1,0 +1,746 @@
+{
+  "direct": [
+    {
+      "candidate": "send-direct_attention",
+      "max_source_slots": 4,
+      "nodes": 16,
+      "parameters": 4955056,
+      "plan_sha256": "84568eea94966412fcc6ef3adc247224467b60bc7964ecf504251d7072531f2b",
+      "rank_depth": 4,
+      "recipe": {
+        "branches": 2,
+        "depth": 4,
+        "family": "kv",
+        "history": 512,
+        "memory_overrides": {
+          "distance_slopes": [
+            0.0
+          ],
+          "full_frequencies": [
+            []
+          ],
+          "heads": 1,
+          "memory_read": "qry"
+        },
+        "offsets": [
+          0,
+          1
+        ],
+        "profile": "baseline",
+        "region_overrides": {},
+        "region_width": 4,
+        "selection": "direct_attention",
+        "source_mode": "region",
+        "sparse_denominator": 2,
+        "topology": "fc",
+        "width": 128
+      },
+      "regions": 4
+    },
+    {
+      "candidate": "temperature1",
+      "max_source_slots": 4,
+      "nodes": 16,
+      "parameters": 5092788,
+      "plan_sha256": "5d47c20bce8225ca256d484064879d12f1be7a7284bd64198adc47999a33957d",
+      "rank_depth": 4,
+      "recipe": {
+        "branches": 2,
+        "depth": 4,
+        "family": "kv",
+        "history": 512,
+        "memory_overrides": {
+          "distance_slopes": [
+            0.0
+          ],
+          "full_frequencies": [
+            []
+          ],
+          "heads": 1,
+          "memory_read": "qry"
+        },
+        "offsets": [
+          0,
+          1
+        ],
+        "profile": "baseline",
+        "region_overrides": {
+          "allocation_temperature": 1.0
+        },
+        "region_width": 4,
+        "regularizer": "quad",
+        "selection": "regional_total",
+        "source_mode": "region",
+        "sparse_denominator": 2,
+        "topology": "fc",
+        "width": 128
+      },
+      "regions": 4
+    },
+    {
+      "candidate": "send-direct_attention",
+      "max_source_slots": 4,
+      "nodes": 32,
+      "parameters": 9381824,
+      "plan_sha256": "4b76351f1844aa756e837786c603bbe7053dc0e0d267e36c5feba84a40a560e9",
+      "rank_depth": 8,
+      "recipe": {
+        "branches": 2,
+        "depth": 8,
+        "family": "kv",
+        "history": 512,
+        "memory_overrides": {
+          "distance_slopes": [
+            0.0
+          ],
+          "full_frequencies": [
+            []
+          ],
+          "heads": 1,
+          "memory_read": "qry"
+        },
+        "offsets": [
+          0,
+          1
+        ],
+        "profile": "baseline",
+        "region_overrides": {},
+        "region_width": 4,
+        "selection": "direct_attention",
+        "source_mode": "region",
+        "sparse_denominator": 2,
+        "topology": "fc",
+        "width": 128
+      },
+      "regions": 8
+    },
+    {
+      "candidate": "temperature1",
+      "max_source_slots": 4,
+      "nodes": 32,
+      "parameters": 9657288,
+      "plan_sha256": "4200901435b06d8022f56a6a3569fc3d266ddb9017ef375bf0aab6fe08251eca",
+      "rank_depth": 8,
+      "recipe": {
+        "branches": 2,
+        "depth": 8,
+        "family": "kv",
+        "history": 512,
+        "memory_overrides": {
+          "distance_slopes": [
+            0.0
+          ],
+          "full_frequencies": [
+            []
+          ],
+          "heads": 1,
+          "memory_read": "qry"
+        },
+        "offsets": [
+          0,
+          1
+        ],
+        "profile": "baseline",
+        "region_overrides": {
+          "allocation_temperature": 1.0
+        },
+        "region_width": 4,
+        "regularizer": "quad",
+        "selection": "regional_total",
+        "source_mode": "region",
+        "sparse_denominator": 2,
+        "topology": "fc",
+        "width": 128
+      },
+      "regions": 8
+    },
+    {
+      "candidate": "send-direct_attention",
+      "max_source_slots": 4,
+      "nodes": 64,
+      "parameters": 18235360,
+      "plan_sha256": "95921c80b2a16ca3a14bf94fbdb18f87cbf8532880bb6454eedde1f3cbb10df0",
+      "rank_depth": 16,
+      "recipe": {
+        "branches": 2,
+        "depth": 16,
+        "family": "kv",
+        "history": 512,
+        "memory_overrides": {
+          "distance_slopes": [
+            0.0
+          ],
+          "full_frequencies": [
+            []
+          ],
+          "heads": 1,
+          "memory_read": "qry"
+        },
+        "offsets": [
+          0,
+          1
+        ],
+        "profile": "baseline",
+        "region_overrides": {},
+        "region_width": 4,
+        "selection": "direct_attention",
+        "source_mode": "region",
+        "sparse_denominator": 2,
+        "topology": "fc",
+        "width": 128
+      },
+      "regions": 16
+    },
+    {
+      "candidate": "temperature1",
+      "max_source_slots": 4,
+      "nodes": 64,
+      "parameters": 18786288,
+      "plan_sha256": "4d4bbdfa252a39a647e6b7be1db61922a9a34c4b3a1e7cc01f5b67a0b999829f",
+      "rank_depth": 16,
+      "recipe": {
+        "branches": 2,
+        "depth": 16,
+        "family": "kv",
+        "history": 512,
+        "memory_overrides": {
+          "distance_slopes": [
+            0.0
+          ],
+          "full_frequencies": [
+            []
+          ],
+          "heads": 1,
+          "memory_read": "qry"
+        },
+        "offsets": [
+          0,
+          1
+        ],
+        "profile": "baseline",
+        "region_overrides": {
+          "allocation_temperature": 1.0
+        },
+        "region_width": 4,
+        "regularizer": "quad",
+        "selection": "regional_total",
+        "source_mode": "region",
+        "sparse_denominator": 2,
+        "topology": "fc",
+        "width": 128
+      },
+      "regions": 16
+    },
+    {
+      "candidate": "send-pooled_attention",
+      "max_source_slots": 8,
+      "nodes": 40,
+      "parameters": 11595592,
+      "plan_sha256": "2470209f1bbfbad6a35d572777cb58f03189c3d57a6329aaa4bcd79fdab72150",
+      "rank_depth": 5,
+      "recipe": {
+        "branches": 2,
+        "depth": 2,
+        "family": "kv",
+        "history": 512,
+        "memory_overrides": {
+          "distance_slopes": [
+            0.0
+          ],
+          "full_frequencies": [
+            []
+          ],
+          "heads": 1,
+          "memory_read": "qry"
+        },
+        "offsets": [
+          0,
+          1
+        ],
+        "profile": "baseline",
+        "region_overrides": {},
+        "region_width": 4,
+        "selection": "pooled_attention",
+        "source_mode": "region",
+        "sparse_denominator": 2,
+        "topology": "hb",
+        "width": 128
+      },
+      "regions": 10
+    },
+    {
+      "candidate": "temperature1",
+      "max_source_slots": 8,
+      "nodes": 40,
+      "parameters": 11939922,
+      "plan_sha256": "7698fbca01641fc053b567799b39335480c4af9249fbb46746075402f614d9fd",
+      "rank_depth": 5,
+      "recipe": {
+        "branches": 2,
+        "depth": 2,
+        "family": "kv",
+        "history": 512,
+        "memory_overrides": {
+          "distance_slopes": [
+            0.0
+          ],
+          "full_frequencies": [
+            []
+          ],
+          "heads": 1,
+          "memory_read": "qry"
+        },
+        "offsets": [
+          0,
+          1
+        ],
+        "profile": "baseline",
+        "region_overrides": {
+          "allocation_temperature": 1.0
+        },
+        "region_width": 4,
+        "regularizer": "quad",
+        "selection": "regional_total",
+        "source_mode": "region",
+        "sparse_denominator": 2,
+        "topology": "hb",
+        "width": 128
+      },
+      "regions": 10
+    },
+    {
+      "candidate": "send-pooled_attention",
+      "max_source_slots": 8,
+      "nodes": 88,
+      "parameters": 24876408,
+      "plan_sha256": "3a8c5f40e67d74949b78ba5b25b0c9c783d15cb6c292161fa5d446db8076df30",
+      "rank_depth": 7,
+      "recipe": {
+        "branches": 2,
+        "depth": 3,
+        "family": "kv",
+        "history": 512,
+        "memory_overrides": {
+          "distance_slopes": [
+            0.0
+          ],
+          "full_frequencies": [
+            []
+          ],
+          "heads": 1,
+          "memory_read": "qry"
+        },
+        "offsets": [
+          0,
+          1
+        ],
+        "profile": "baseline",
+        "region_overrides": {},
+        "region_width": 4,
+        "selection": "pooled_attention",
+        "source_mode": "region",
+        "sparse_denominator": 2,
+        "topology": "hb",
+        "width": 128
+      },
+      "regions": 22
+    },
+    {
+      "candidate": "temperature1",
+      "max_source_slots": 8,
+      "nodes": 88,
+      "parameters": 25633934,
+      "plan_sha256": "daadc4ad763f9a708ad21aac37344ed23b6b7b06a064e8c6302212538f418ceb",
+      "rank_depth": 7,
+      "recipe": {
+        "branches": 2,
+        "depth": 3,
+        "family": "kv",
+        "history": 512,
+        "memory_overrides": {
+          "distance_slopes": [
+            0.0
+          ],
+          "full_frequencies": [
+            []
+          ],
+          "heads": 1,
+          "memory_read": "qry"
+        },
+        "offsets": [
+          0,
+          1
+        ],
+        "profile": "baseline",
+        "region_overrides": {
+          "allocation_temperature": 1.0
+        },
+        "region_width": 4,
+        "regularizer": "quad",
+        "selection": "regional_total",
+        "source_mode": "region",
+        "sparse_denominator": 2,
+        "topology": "hb",
+        "width": 128
+      },
+      "regions": 22
+    },
+    {
+      "candidate": "send-pooled_attention",
+      "max_source_slots": 8,
+      "nodes": 184,
+      "parameters": 51438040,
+      "plan_sha256": "2dc88343c46dc3789f720f747c2bd0d59616f2451334bab050629efbb400a5d8",
+      "rank_depth": 9,
+      "recipe": {
+        "branches": 2,
+        "depth": 4,
+        "family": "kv",
+        "history": 512,
+        "memory_overrides": {
+          "distance_slopes": [
+            0.0
+          ],
+          "full_frequencies": [
+            []
+          ],
+          "heads": 1,
+          "memory_read": "qry"
+        },
+        "offsets": [
+          0,
+          1
+        ],
+        "profile": "baseline",
+        "region_overrides": {},
+        "region_width": 4,
+        "selection": "pooled_attention",
+        "source_mode": "region",
+        "sparse_denominator": 2,
+        "topology": "hb",
+        "width": 128
+      },
+      "regions": 46
+    },
+    {
+      "candidate": "temperature1",
+      "max_source_slots": 8,
+      "nodes": 184,
+      "parameters": 53021958,
+      "plan_sha256": "c265431a97841b195c54c8cf9d2438baad92107a94d070015244ac0ca7b50c2f",
+      "rank_depth": 9,
+      "recipe": {
+        "branches": 2,
+        "depth": 4,
+        "family": "kv",
+        "history": 512,
+        "memory_overrides": {
+          "distance_slopes": [
+            0.0
+          ],
+          "full_frequencies": [
+            []
+          ],
+          "heads": 1,
+          "memory_read": "qry"
+        },
+        "offsets": [
+          0,
+          1
+        ],
+        "profile": "baseline",
+        "region_overrides": {
+          "allocation_temperature": 1.0
+        },
+        "region_width": 4,
+        "regularizer": "quad",
+        "selection": "regional_total",
+        "source_mode": "region",
+        "sparse_denominator": 2,
+        "topology": "hb",
+        "width": 128
+      },
+      "regions": 46
+    },
+    {
+      "candidate": "send-pooled_attention",
+      "max_source_slots": 8,
+      "nodes": 40,
+      "parameters": 24432456,
+      "plan_sha256": "eed07fea16b5f3bb1a803739c451b88c7df7f8ecebb8978806be93de0441bb5e",
+      "rank_depth": 5,
+      "recipe": {
+        "branches": 2,
+        "depth": 2,
+        "family": "kv",
+        "history": 512,
+        "memory_overrides": {
+          "distance_slopes": [
+            0.0
+          ],
+          "full_frequencies": [
+            []
+          ],
+          "heads": 1,
+          "memory_read": "qry"
+        },
+        "offsets": [
+          0,
+          1
+        ],
+        "profile": "baseline",
+        "region_overrides": {},
+        "region_width": 4,
+        "selection": "pooled_attention",
+        "source_mode": "region",
+        "sparse_denominator": 2,
+        "topology": "hb",
+        "width": 192
+      },
+      "regions": 10
+    },
+    {
+      "candidate": "send-pooled_attention",
+      "max_source_slots": 8,
+      "nodes": 40,
+      "parameters": 49885000,
+      "plan_sha256": "26c176124cd4ec4124622f1bda34020b96111d9b963a96b1ec0960ccdf3cacfb",
+      "rank_depth": 5,
+      "recipe": {
+        "branches": 2,
+        "depth": 2,
+        "family": "kv",
+        "history": 512,
+        "memory_overrides": {
+          "distance_slopes": [
+            0.0
+          ],
+          "ffn_width": 1280,
+          "full_frequencies": [
+            []
+          ],
+          "heads": 1,
+          "memory_read": "qry"
+        },
+        "offsets": [
+          0,
+          1
+        ],
+        "profile": "baseline",
+        "region_overrides": {},
+        "region_width": 4,
+        "selection": "pooled_attention",
+        "source_mode": "region",
+        "sparse_denominator": 2,
+        "topology": "hb",
+        "width": 256
+      },
+      "regions": 10
+    },
+    {
+      "candidate": "temperature1",
+      "max_source_slots": 64,
+      "nodes": 320,
+      "parameters": 27375210,
+      "plan_sha256": "61a4bed8c1e9ed69070bff79b19c17d737f2fc5d08f6ad4e7a8b143cb2cda765",
+      "rank_depth": 5,
+      "recipe": {
+        "branches": 2,
+        "depth": 2,
+        "family": "kv",
+        "history": 512,
+        "memory_overrides": {
+          "distance_slopes": [
+            0.0
+          ],
+          "full_frequencies": [
+            []
+          ],
+          "heads": 1,
+          "memory_read": "qry"
+        },
+        "offsets": [
+          0,
+          1
+        ],
+        "profile": "baseline",
+        "region_overrides": {
+          "allocation_temperature": 1.0
+        },
+        "region_width": 32,
+        "regularizer": "quad",
+        "selection": "regional_total",
+        "source_mode": "region",
+        "sparse_denominator": 2,
+        "topology": "hb",
+        "width": 64
+      },
+      "regions": 10
+    },
+    {
+      "candidate": "temperature1",
+      "max_source_slots": 64,
+      "nodes": 704,
+      "parameters": 59907574,
+      "plan_sha256": "19a599006d64d8528098290d2da828e826e4c982d953b9ff1d3d3a9738a5623b",
+      "rank_depth": 7,
+      "recipe": {
+        "branches": 2,
+        "depth": 3,
+        "family": "kv",
+        "history": 512,
+        "memory_overrides": {
+          "distance_slopes": [
+            0.0
+          ],
+          "full_frequencies": [
+            []
+          ],
+          "heads": 1,
+          "memory_read": "qry"
+        },
+        "offsets": [
+          0,
+          1
+        ],
+        "profile": "baseline",
+        "region_overrides": {
+          "allocation_temperature": 1.0
+        },
+        "region_width": 32,
+        "regularizer": "quad",
+        "selection": "regional_total",
+        "source_mode": "region",
+        "sparse_denominator": 2,
+        "topology": "hb",
+        "width": 64
+      },
+      "regions": 22
+    },
+    {
+      "candidate": "temperature1",
+      "max_source_slots": 256,
+      "nodes": 1280,
+      "parameters": 41239082,
+      "plan_sha256": "99cbc9f3af32fa384176150c62cb2862856a9cebab56a2e9b7b2dcb88c41a953",
+      "rank_depth": 5,
+      "recipe": {
+        "branches": 2,
+        "depth": 2,
+        "family": "kv",
+        "history": 512,
+        "memory_overrides": {
+          "distance_slopes": [
+            0.0
+          ],
+          "full_frequencies": [
+            []
+          ],
+          "heads": 1,
+          "memory_read": "qry"
+        },
+        "offsets": [
+          0,
+          1
+        ],
+        "profile": "baseline",
+        "region_overrides": {
+          "allocation_temperature": 1.0
+        },
+        "region_width": 128,
+        "regularizer": "quad",
+        "selection": "regional_total",
+        "source_mode": "region",
+        "sparse_denominator": 2,
+        "topology": "hb",
+        "width": 32
+      },
+      "regions": 10
+    }
+  ],
+  "foundation_selection": {
+    "branch": "graph-execution-foundation",
+    "installation_status": "fixed_wheel_installed_and_scoped_acceptance",
+    "kind": "source-selection-only",
+    "mathematics_revision": "0770593838a37c790a568226930567ed60f99b83",
+    "note": "TL-REQ-003 positive-floor-v1\u4e0b\u6e38\u6709\u9650\u9a8c\u6536\u5b8c\u6210\uff1b\u65b0\u79c1\u6709\u73af\u5883\u548c\u8fd0\u884c\u8eab\u4efd\uff0c\u9ed8\u8ba4strict\u4fdd\u7559\u3002CPU\u771f\u5b9eHB16\u8fb9\u754c/FC16\u5e72\u9884\u53caCPU/NPU\u5c0f\u578b\u63a5\u5165\u901a\u8fc7\uff1b\u4e25\u683c\u6709\u9650\u8d85\u5dee\u4ecd\u5931\u8d25\uff0cB/Qwen\u5b8c\u6574\u6a21\u578b\u672a\u8fc1\u79fb\u3002\u65e785d161d\u5b89\u88c5/\u51bb\u7ed3\u8fd0\u884c\u4fdd\u7559\u3002\u89c1docs/studies/positive-support-acceptance-results.md\u3002",
+    "protocol": "tide-downstream-contract-v1",
+    "protocol_url": "https://github.com/ZichaoLong/tide/blob/74e7bbd62341d2ccd382194a2c52ad4fea033665/docs/downstream-contract.md",
+    "repository": "https://github.com/ZichaoLong/tide",
+    "revision": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+    "schema": "tide-learning-source-selection-v1"
+  },
+  "kind": "design_only",
+  "launchable": false,
+  "limits": [
+    "Parameter counts describe the current direct implementation, not an executed new scale point.",
+    "Rank depth counts regional Full stages, not Transformer blocks or equal FLOPs.",
+    "Wider regions change locality and source aggregation cost; no low-activity runtime measured.",
+    "Future architecture edits require a new inventory and frozen runtime configuration."
+  ],
+  "observed_at": "2026-11-11T12:08:22.277021+00:00",
+  "rejected_designs": [
+    {
+      "reason": "Installed public recipe rejects this content width; use legal width256 with FFN1280 for the large shallow-wide control.",
+      "width": 272
+    }
+  ],
+  "schema": "tide-scale-activity-static-proposal-v1",
+  "scope": "Public planning metadata and meta-device parameter shapes only; no forward/backward, training, allocation or runtime qualification.",
+  "source_base_commit": "594a0636defff803ace0757665b224d966042f27",
+  "source_sha256": {
+    "scripts/resolve_direct_v8.py": "ebbe222c7e5b893b02a80116966b20dedcc2dd82d3c3d7c27d2b35f30b252440",
+    "scripts/review_scale_activity_plan.py": "968d574964c5c1a4082760ce587c967551181a41a1b577a6a2472813bc53fd23",
+    "tide_lab/campaign_config.py": "f541af9dac16cf66971822746873575d5480b47dd893e00d035d378fed91870c",
+    "tide_lab/direct_semantic.py": "c13a515086dc4a3d8fac0d3bcbc6d7345d92a177d58afaf3139b55fdaadc5229",
+    "tide_lab/direct_semantic_memory.py": "42fd6ef1f167eefd7f49abcf219bbe3198817e2a23c8e8a6bc7ce9457fa056d5",
+    "tide_lab/direct_semantic_ops.py": "efda238af0eeb186322c1bc33eb37e597e8c4a14e108a3e65614e9317b83bce5",
+    "tide_lab/language.py": "52b4afb2ff8d12c13256c1e3108bd19e045b7f98b74f51a4cc898d50e5be2301"
+  },
+  "torch_version": "2.12.0+cpu",
+  "transformers": [
+    {
+      "ffn": 960,
+      "heads": 4,
+      "layers": 6,
+      "parameters": 5153536,
+      "width": 240
+    },
+    {
+      "ffn": 1344,
+      "heads": 4,
+      "layers": 6,
+      "parameters": 9535744,
+      "width": 336
+    },
+    {
+      "ffn": 1664,
+      "heads": 4,
+      "layers": 8,
+      "parameters": 18365504,
+      "width": 416
+    },
+    {
+      "ffn": 1536,
+      "heads": 4,
+      "layers": 6,
+      "parameters": 12224512,
+      "width": 384
+    },
+    {
+      "ffn": 1600,
+      "heads": 4,
+      "layers": 12,
+      "parameters": 24745696,
+      "width": 400
+    },
+    {
+      "ffn": 2048,
+      "heads": 4,
+      "layers": 16,
+      "parameters": 52540416,
+      "width": 512
+    }
+  ],
+  "vocabulary": 4096
+}

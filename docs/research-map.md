@@ -1,5 +1,9 @@
 # 当前图：direct-v8覆盖与校准Transformer
 
+长期目标见[研究章程](RESEARCH_CHARTER.md)。图中新增v9数据/容量、活跃比例、配方与机制三个**planned**组，
+关联[有界建议表](studies/language-scale-activity-v9-proposal.md)和静态参数清单；没有新运行或科学支持。
+稠密遮罩可继续作为主训练实现；逻辑活动、实际计算、硬件效率分列，真稀疏不是这些计划的统一前提。
+
 研究图包含v8 Transformer校准、182格局部覆盖及有限seed22三个组；三组均已终态并作限定审阅，实际失败仍逐项标明。
 本批220次训练尝试中194完成、26原失败；19项局部复核18完成，1失败；单项数值修正r2完成。[终态交付](studies/direct-v8-results.md)列出解释边界与尚未提交的后继选项。
 统一tl-v8-运行ID关联配置、项目记录与Lens投影；[当前交接](STATUS.md)与[操作入口](studies/direct-v8-operations.md)提供实时只读检查方式。
@@ -9,7 +13,7 @@
 
 # 研究图的读法
 
-本图表达知识与决策，Lens查看运行和指标；项目记录为权威。当前设计见[v8广覆盖表](studies/direct-coverage-v8.md)，实际交接见[STATUS](STATUS.md)。图不实时轮询作业或Lens。
+本图表达知识与决策，Lens查看运行和指标；项目记录为权威。已完成设计见[v8广覆盖表](studies/direct-coverage-v8.md)，下一批建议见[v9阶梯](studies/language-scale-activity-v9-proposal.md)，实际交接见[STATUS](STATUS.md)。图不实时轮询作业或Lens。
 
 2026-11-11：v6全部200配置已终态，图中更新执行状态，科学结果槽不随退出码自动升级。新增TL-POSITIVE-v6及限定结果：实际三项正支持失败分为可表示值提前归零与真实范围下溢；聚合、Describe cast和Bern VJP另有静默局部见证。详见[补证报告](studies/positive-path-audit-v6-results.md)。用户已对齐并提交[TL-REQ-005](requests/TL-REQ-005.md)，待基座交付及下游验收，尚未修复。
 
@@ -25,8 +29,9 @@ HB88的共同曝光恶化、FC32后恢复、d32候选反证和初始化/读出�
 
 ## 默认视图：同一模型上的联合目标
 
-当前重点是语言next-token接近可靠对照，并同时推进规模化、实际稀疏与局部化。实际Full/消息等稀疏与当前硬件吞吐分别审阅，后者不是前者成立的必要条件。
-顶部显示v8 Transformer配方校准、直接局部覆盖及有限种子复核。下方保留v6数据/规模轨迹、A从零、B预训练局部承接与v5深度研究；当前优先级不改写历史结论。
+当前重点是语言next-token接近可靠对照，并同时推进数据/容量/依赖深度、更低活跃比例与局部化。
+逻辑Full/消息活动、实际执行工作和当前硬件吞吐分别审阅；允许稠密遮罩承载前面的研究。
+顶部显示v8已审结果及v9未提交计划。下方保留v6数据/规模轨迹、A从零、B预训练局部承接与v5深度研究；当前优先级不改写历史结论。
 
 新增`TL-EXEC-v6-PROFILE`和限定结果：14个诊断定位现有eager训练的逐行Read、KV动态索引及小张量反向开销。
 结果关联[报告](studies/language-execution-diagnosis-v6-results.md)、具体运行/Lens映射及TL-REQ-004；

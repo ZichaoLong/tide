@@ -4,7 +4,14 @@
 实验对照、证据和资源决策。公共实现由固定版本的`graph-execution-foundation`提供。
 本分支使用独立文件树；不复制基座核心，也不把基座旧性能结果当作新模型效果。
 
-当前重点：同一模型的语言next-token质量与规模化、稀疏化、局部化。v6的200个配置已终态；已完成[HB学习原因审阅与直接实现成本对照](docs/studies/hb-cost-and-learning-20261111.md)，具体状态见STATUS。[设计JSON](research/language-structure-plan.json)仍不可直接启动，实际配置在`configs/studies/language/`。
+**核心目标：同一模型的自然语言next-token质量接近合理调参的对照，同时推进更多数据、更大容量、更深依赖、更低活跃比例和有界局部交互。**
+“可以学习”是起点；主要投入应走向联合目标的实质实验。稠密计算后遮罩若更快，可以继续用于训练；逻辑活跃比例、实际计算工作和硬件吞吐分别报告。
+长期目标、用户反馈及推进原则统一见[研究章程](docs/RESEARCH_CHARTER.md)，重新接续时先读此页。
+
+当前direct-v8的220次尝试已终态：194完整1M结果、26原失败，完成有限种子复核和Transformer调参。
+[广覆盖结果](docs/studies/direct-v8-results.md) · [HB结果变化为何不能归因于基座算错](docs/studies/hb-evidence-reconciliation.md) ·
+[下一批数据/容量/深度/活跃比例建议](docs/studies/language-scale-activity-v9-proposal.md)。下一批仅为建议，尚未提交。
+[设计JSON](research/language-structure-plan.json)仍不可直接启动，实际历史配置在`configs/studies/language/`。
 
 - [打开研究图](web/index.html)：离线HTML，默认当前联合主线，可切换历史证据；支持详情、搜索、分类、邻接聚焦和缩放。
 - [图的读法与维护](docs/research-map.md) / [原型验证](docs/verification.md)
@@ -26,7 +33,9 @@ python -m unittest discover -s tests -p test_research_map.py -v
 图的数据是`research/map.json`。实验/结果节点的状态由记录显式给出；
 “待运行”“待填结果”不会被呈现为通过。已有基座证据、独立接入检查和经审阅的先导结果分别限定范围；严格失败和未覆盖项一同保留。
 
-用户已授权分阶段实验、私有环境和普通推送；具体范围以当前研究表和STATUS为准。历史v3七候选的[终态报告](docs/studies/language-v3-results.md)保留小曝光结论；v6增加了数据、参数和结构规模，HB扩大在已测曝光内未显示收益，原因需进一步区分。旧准入失败、累计扣账及固定作业输入均保留。
+用户已授权分阶段实验、私有环境和普通推送；具体范围以当前研究表和STATUS为准。
+历史v6旧配方HB扩大未改善；v7简化直接图在双seed/4M出现HB40→88容量收益；v8补回局部语义后尚未复跑HB88。
+三轮函数、配方和曝光不同，不能合并为一次修复或普遍scaling结论。旧准入失败、累计扣账及固定作业输入均保留。
 
 可选的真实浏览器检查需要本机已有Firefox与支持实验WebSocket的Node20+，不会下载依赖：
 

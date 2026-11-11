@@ -1,8 +1,16 @@
 # Working on tide-learning-lab
 
 - This is the independent experiment branch of `ZichaoLong/tide`, not the foundation source tree.
-- Re-entry: `git status --short --branch`; read `docs/STATUS.md`, `docs/ROADMAP.md`,
+- Re-entry: `git status --short --branch`; read `docs/RESEARCH_CHARTER.md`, `docs/STATUS.md`, `docs/ROADMAP.md`,
   `docs/research-design.md`, `docs/research-map.md` and `dependencies/foundation-source.json`.
+- The durable objective and user preferences live in `docs/RESEARCH_CHARTER.md`:
+  natural-text next-token quality jointly with data/capacity/dependency-depth scaling,
+  lower activity and bounded locality on the same model. Learning admission and broad
+  screening are milestones, not the endpoint. Dense computation plus masks may remain
+  the main training implementation when faster; separately record logical activity,
+  physical work and achieved throughput. Real sparse execution is not a prerequisite
+  for further quality/scaling studies. Cover individual local candidates as a union;
+  calibrate Transformer controls at new scales and preserve scoped negative evidence.
 - The 2026-11-07 user instruction authorizes the first bounded CPU/NPU experiment batch,
   private environments, small public model/data acquisition, builds, checks, phased commits
   and ordinary pushes. On 2026-11-08 the user accepted the reviewed recommendations
@@ -86,7 +94,10 @@
   until coverage review. Preserve all historical frozen runs and strict failures.
   This batch is terminal: see `docs/studies/direct-v8-results.md`. All 220 training
   attempts and 40 services are terminal; 194 complete and 26 original failures remain.
-  The three successor packages are recommendations, not submitted jobs.
+  The latest user feedback is persisted in `docs/RESEARCH_CHARTER.md`; the replacement
+  next-batch recommendation is `docs/studies/language-scale-activity-v9-proposal.md`.
+  It is design-only, not submitted or launch-authorized by the documentation/status
+  request. Static parameter inventories are not executed scale or sparsity results.
 - Keep STATUS as the current handoff and ROADMAP as the backlog. Research design is not a job log.
 - Status/review code reads `runs/` and `artifacts/jobs/` without writing there. Use
   `scripts.review_io.write_review_json` for graph/evidence JSON writes; it validates
