@@ -29,7 +29,7 @@ HB40/88/184为32/16/8，FC16/32/64为64/64/32，宽区域R32/R64为8/4，树对�
 Lens项目tide-learning-lab，小型记录已verified/readback_matches，四个组TL-CALIBRATION-v9、TL-SCALE-v9、
 TL-ACTIVITY-v9、TL-INLET-v9；私有入口仅.local/LENS.md。
 只读`python scripts/review_direct_v9.py`；训练日志在runs/v9-<phase>-<id>/train.log，
-停止全批`python scripts/job.py stop artifacts/jobs/v9-controller`，先停止后核对后代。
+停止全批`systemctl --user stop 'tide-lab-v9-*.service'`，再只读核对各服务后代清空。
 不要修改活动配置/快照，恢复使用原latest.pt+原配置/检查/恢复证据与新输出。
 
 以下为历史对齐与终态记录，过时的“未授权/未提交”不限制当前明确授权的v9执行。

@@ -32,13 +32,14 @@ python scripts/job.py logs artifacts/jobs/v9-screen-w0 --follow
 controller日志报告提交/阶段，训练细节在`runs/v9-<phase>-<id>/train.log`及`train/progress.json`。
 共享卡只在进入worker时选择，实际物理卡记在job的queue-state.json；源码使用逻辑npu:0。
 
-停止controller会阻止新提交，并停止它已提交的所有v9子服务；不会停止其他项目：
+停止全批时一次性停止controller和所有v9服务；这些服务有各自的cgroup，不能仅依赖控制器在30秒停止宽限内逐个清理：
 
 ```bash
-python scripts/job.py stop artifacts/jobs/v9-controller
+systemctl --user stop 'tide-lab-v9-*.service'
+python scripts/review_direct_v9.py
 ```
 
-停止单个worker用同一命令替换目录；其中余下case会成为未启动。停止后检查MainPID=0及后代清空。
+停止单个worker用`python scripts/job.py stop artifacts/jobs/v9-screen-w0`等精确目录；其中余下case会成为未启动。停止后检查MainPID=0及后代清空。
 每个服务亦受共同截止限制；data独立服务另有2h限时。
 
 恢复必须用新job/output、原固定源码与原配置/data/环境，并传
