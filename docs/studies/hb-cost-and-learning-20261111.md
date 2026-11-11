@@ -54,3 +54,13 @@ Lens项目`tide-learning-lab`、组`TL-HB-COST-20261111`；run前缀`tl-hb-cost-
 原外层已终态，部分内层running保留原事实；不得在审阅时改写`runs/`。
 coverage的d32/L32/65536曝光与scale的d128/L128不能当作纯容量阶梯；单seed/多候选选择偏差保留。
 先形成真实表、梯度/曲线证据和可区分解释，再提出有界后继配方；不自动追加训练。
+
+## 有界梯度补证
+
+已有同验证块比较确认HB88从133K到262K继续恶化，且FC32也出现较大恶化/后恢复。
+为把后继建议落到可检验机制，在CPU8 suite终态后增加一个CPU1/16GiB/900秒的只读权重诊断，
+仍在上述6 CPU核时与96GiB aggregate RSS总预算内：FC16/FC32/HB40/HB88各取原始初始化及262K checkpoint，
+同B2/L16已见validation前缀，只做一次前向/VJP，无optimizer更新，无checkpoint改写。
+记录输入/hidden/logit RMS、loss、preclip参数梯度、input-feature与hidden方向梯度范数及主要梯度注册名。
+共享参数注册名不是某个节点的独占因果贡献；方向增益不是Jacobian谱范数，小前缀不是原L128质量复评。
+该补证不作修复或新学习效果声明；Lens组`TL-HB-LEARNING-20261111`，run前缀`tl-hb-grad-`。

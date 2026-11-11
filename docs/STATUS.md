@@ -7,7 +7,7 @@
 
 用户要求在本实验仓库实测非TIDE直接图，并讨论HB40/HB88训练问题。
 [研究表](studies/hb-cost-and-learning-20261111.md)与[固定配置](../configs/checks/hb-cost-20261111.json)已落地。
-当前准备提交三个有界CPU/NPU suite；实际启动/终态需读取后续作业记录，不能据本段当作已运行。
+源码b2e85cb的三个有界suite已提交：`hb-cost-20261111-cpu-main`、`hb-cost-20261111-cpu-eight`、`hb-cost-20261111-npu-main`；均核对background.slice，NPU物理卡1。CPU8子表已completed且无存活后代，其余继续运行。状态/日志：`python scripts/job.py status artifacts/jobs/<ID>` / `logs` / `stop`。新增CPU1只读权重梯度补证将在CPU8终态后运行，预算不变。
 本次复用已安装74e7bbd和原native构建；基座工作树有其他线程修改，保持只读，不接入新优化。
 直接图为普通Torch不同函数成本参照；缺少TIDE控制/完整记录等职责，不能把倍率叫严格等价加速。
 
