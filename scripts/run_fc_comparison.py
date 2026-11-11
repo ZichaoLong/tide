@@ -17,7 +17,7 @@ from durable_records import write_json
 
 def main():
     p=argparse.ArgumentParser(description=__doc__)
-    p.add_argument('--suite',choices=('main','threads','boundaries','profiles','axes','checks','blocks'),required=True)
+    p.add_argument('--suite',choices=('main','threads','boundaries','profiles','axes','checks','blocks','windows','window-profiles'),required=True)
     p.add_argument('--device',choices=('cpu','npu:0'),required=True)
     p.add_argument('--threads',type=int,required=True)
     p.add_argument('--native-library',type=Path,required=True)
@@ -45,21 +45,34 @@ def main():
         commands.append(row);write_json(out/'commands.json',commands);print(json.dumps(row),flush=True)
         if code==124:raise SystemExit(124)
 
-    def cost(shape,baseline,mode,*,client='native',boundary='public',b=8,length=128,profile='none',fences='step',attention='manual',query='auto'):
+    def cost(shape,baseline,mode,*,client='native',boundary='public',b=8,length=128,profile='none',fences='step',attention='manual',query='auto',census=False):
         name=f'{shape}-{baseline}-{client}-{boundary}-{mode}-b{b}l{length}-{fences}-{attention}-{profile}-{query}'
         args=['scripts/benchmark_dense_query.py','--downstream-repo',a.downstream_repo,
               '--device',a.device,'--threads',a.threads,'--fc-shape',shape,'--baseline',baseline,
-              '--client',client if baseline=='graph' else 'python','--mode',mode,'--trace-records','minimal',
+              '--client',client if baseline in ('graph','columns','window') else 'python','--mode',mode,'--trace-records','minimal',
               '--phase-fences',fences,'--diagnostic-boundary',boundary,'--formula-attention',attention,'--query-execution',query,
               '--batch',b,'--length',length,'--profile',profile,'--output-dir',out/name]
-        if baseline=='graph' and client=='native':args+=['--native-library',a.native_library]
+        if baseline in ('graph','columns','window') and client=='native':args+=['--native-library',a.native_library]
+        if census:args+=['--autograd-census']
         if profile in ('cpu','npu'):args+=['--profile-shapes']
         if profile=='npu':
             if a.profile_scratch is None:raise ValueError('NPU profiles require explicit scratch storage')
             args+=['--profile-output',a.profile_scratch/name]
         invoke(name,args)
 
-    if a.suite=='blocks':
+    if a.suite=='windows':
+        for shape,depth in (('fc4',4),('fc16',16)):
+            for mode in ('inference','grad-forward','training'):
+                for client in ('native','python'):
+                    cost(shape,'window',mode,client=client,b=a.batch,length=a.length)
+                for baseline in ('fc-tensor',f'transformer-{depth}'):
+                    cost(shape,baseline,mode,b=a.batch,length=a.length)
+        cost('fc16','columns','training',client='python',b=a.batch,length=a.length)
+    elif a.suite=='window-profiles':
+        for baseline,client in (('window','native'),('window','python'),('fc-tensor','python'),('transformer-16','python')):
+            cost('fc16',baseline,'training',client=client,b=2,length=32,census=True,
+                 profile='cpu' if a.device=='cpu' else 'npu')
+    elif a.suite=='blocks':
         for shape,depth in (('fc4',4),('fc16',16)):
             for mode in ('inference','grad-forward','training'):
                 for query in ('auto','packed-v2'):
