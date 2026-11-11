@@ -5,6 +5,19 @@
 当前待办与停止/重启决定只在[ROADMAP](ROADMAP.md)，下列历史决定不自动成为新任务限制。
 从[经验索引](performance-lessons.md)选择相关主题；新工作按[优化技能](../.agents/skills/optimize-tide-execution/SKILL.md)进行。
 
+## 并行、临时存储与真实算子归因
+
+[FC三层调查](evidence/fc-three-layer-comparison-20261111.md)在软配额剩约8GiB时复用现有环境/构建，
+将约1.3GiB临时固定源码和大型profile放项目独占shm；小型日志、配置、终态和审阅摘要持久保存。
+CPU/NPU在不同CPU池并行，存储没有成为瓶颈。软/硬配额、文件系统余量、tmpfs和主存可用量分别检查；
+tmpfs须共同计入RAM预算，不充当持久证据。真正限制必要写入/并行时明确报告，不静默缩小任务，
+不清理外部仓库或共享工具链；这种处理不规定所有任务都必须用shm或特定并发方式。
+
+同一调查分别记录自然完整区间、阶段同步及独立profile。自然计时的host phase不能当设备阶段时间；
+小profile只定位机制，不能按比例分摊大窗口全部差额。ATen嵌套调用、独立autograd节点、kernel和
+厂商Free时间各有含义。实际NPU导出中operator device-duration全零、存在停止RECORD警告，
+即使有最终同步和optimizer事件也必须保留这些观测限制。
+
 ## 模式缺口、实际位置和阶段差额
 
 [FC16/LH既有记录换算](evidence/performance-accounting-20261111.md)没有重跑性能：

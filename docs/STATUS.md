@@ -1,43 +1,44 @@
-# 当前交接 — FC默认路径、直接公式与Transformer比较（2026-11-11）
+# 当前交接 — FC4/FC16三层调查完成（2026-11-11）
 
-用户已授权本轮完整对比、诊断与架构调查；先收拢FC4/FC16，LH和广泛后继暂不扩大。
-起点`b504f34`，数学固定`0770593838a37c790a568226930567ed60f99b83`，离线核验通过。
-本轮可修改诊断设施并执行有限CPU/NPU实验，不把省略独立根的诊断变体当成生产实现。
+用户授权先完整比较默认Tide、直接FC与Transformer，查明增量工作及架构影响。
+本轮诊断、有限CPU/NPU实验及证据/导航检查已完成；没有修改生产计算路径。
+暂不扩大LH/GPU/多卡或启动生产架构重写，后续先汇报对齐。
+数学固定`0770593838a37c790a568226930567ed60f99b83`，19份core-5快照离线核验通过。
 
-## 当前动作
+## 当前结果与入口
 
-- 核对三层实际计算与接口职责；FC4为2区域×2节点，FC16为原4×4，均d128/H2/FFN512。
-- 补齐匹配的无梯度请求、含grad前向、完整训练；自然完整步计时与阶段同步诊断分列。
-- 比较实际算子/形状、Read/Full/区域/快照/私有VJP及必要状态职责；诊断变体有明确投影域。
-- 默认复用已固定e6f7bd5的Python/LibTorch构建（当前C++内容无差异），诊断源码另冻结。
-- CPU与NPU任务可在不同CPU亲和范围并行，构建不与重型计时重叠。只使用空闲NPU。
+- [完整报告及复现](evidence/fc-three-layer-comparison-20261111.md)、[可查询JSON](evidence/fc-three-layer-comparison-20261111.json)：103个成本记录、8组投影比较、12个独立profile；三类模式、计时/数值/硬件证据分列。
+- FC16/B8/L128/d128完整训练CPU1默认/直接/Transformer16为12.414/1.414/0.766秒；单NPU为16.525/0.745/0.0427秒。FC4结果同样显示明显默认路径差距。
+- 已定位快照布局、Read/Full私有图、逐快照伴随和汇总开销；单省根包装不能闭合差距。外层4阶段仍有822次layout；NPU小profile默认82351 kernels、直接16224、Transformer16为2298。
+- 四维SDPA的NPU Full仍走数学展开，未获得Transformer的融合路径；没有提升为默认实现。
+- 主设施固定16项检查通过，最终扩展组13项通过（有重叠）。完整FP32任务投影仍严格超差；同一FP32材料提升FP64后值/控制/支持/状态通过，梯度两字段各1坐标仍严格失败。原失败/阈值保留，无非有限。
+- 这是成本调查及指定投影检查，不增加all-root、多步optimizer、精确恢复、resident、规模学习或下游验收资格。现有限制/下一设计边界仅见[ROADMAP](ROADMAP.md)。
 
-当前只有诊断源码修改，没有live作业；启动前将补充固定提交、unit和精确命令。
-相关数值/模式检查后提交设施，再运行固定源码，最后独立提交证据与架构结论。
+## 固定源码与终态作业
 
-## 资源与停止边界
+| unit | 固定输入 | 状态、资源和记录 |
+| --- | --- | --- |
+| `gef-fccompare-cpu` | `15d391f367c450effd25996b264c223bb8b075db` | passed/0；CPU80–111，ATen1/另测32；128GiB/5400秒；`artifacts/jobs/fccompare-cpu/` |
+| `gef-fccompare-npu` | 同上 | passed/0；host0–7/ATen2，空闲physical11；128GiB/5400秒；`artifacts/jobs/fccompare-npu/` |
+| `gef-fccompare-triage` | `b0edf96a8b4d86d461f83329559b14cd604ab3e2` | passed/0；CPU160–167；128GiB/1200秒；`artifacts/jobs/fccompare-triage/` |
+| `gef-fccompare-sdpa` | `fd243f41417b3f2fd8b49156a577335de0588010` | passed/0；CPU80–111或NPU host0–7，空闲physical11；128GiB/1800秒；`artifacts/jobs/fccompare-sdpa/` |
 
-本次检查：账户292GiB/300GiB软配额、800GiB硬限；文件系统955GiB可用；
-/dev/shm约400GiB可用，主机可用内存约1.8TiB。现有环境/构建可复用，无需复制工具链。
-临时源码/大型profile可放项目独占shm目录，小型配置、日志、终态和审阅结果持久保存。
-若实际存储不足会限制必要构建或并行，应停止相关大写入并汇报，用户可清理非本仓库空间；
-不得静默缩减范围。共享NPU仍需当前授权，本轮未授权；不等待共享卡阻塞CPU调查。
-每一有限矩阵/诊断有时限；严格超差保留，有界分析，不无依据扩大或重复全部组合。
+四unit均inactive/MainPID0，无活跃任务，不恢复旧队列。外层passed不代表内部严格比较通过。
+复用`e6f7bd5`的`artifacts/additive-work/build-native`与`env`；C++至测量提交无差异，未重建。
+终态收集器固定`96500b0`，结果hash、吞吐算术、初始参数恢复和530条本地文件链接已核对。
+主launch/命令/结果在`artifacts/fc-comparison-20261111/`；大型临时profile与固定源码在
+`/dev/shm/zlong-gef-fc-20261111-15d391f/`。永久证据包含精确命令、配置、结果摘要与hash；
+重现从固定Git源码生成材料，不依赖这些旧目录。最终13项JUnit为`final-diagnostics-qualification.xml`。
+查看终态：`systemctl --user show gef-fccompare-cpu gef-fccompare-npu gef-fccompare-triage gef-fccompare-sdpa -p MainPID -p ActiveState -p Result`。
 
-## 交付与结果
+## 资源与接续
 
-- 仓库develop/optimize/maintain skills加入有限加法/减法、公共接口增量对照及采用/拒绝/延期方法；账户skills未修改。
-- FC/KV/SSD紧凑基线支持非零raw左态、共享、真实三步训练、跨窗与新进程投影checkpoint。
-- Python/C++默认packed Full采用适用的共享bank矩阵，保留独立快照VJP与通用后备。
-- resident首次借用只计真正owner新增存储；实际小额度、真实不足和Describe数值见证通过，未放宽总预算。
-- [固定资格](evidence/additive-interface-qualification-20261110.md)：CPU主组493通过/7xfail/4失败；其中两项SDK启动路径另以实际程序通过，两项既有Read-sum FP32严格超差保留。NPU配置37通过/1xfail/相同两项CPU辅助失败；默认实际调用CPU4/NPU2通过。三客户端小型训练/精确恢复、resident组件/小图分别列出，未认证新resident完整训练或吞吐。
-- [有限成本](evidence/additive-interface-performance-20261110.md)：局部/层链/FC共42个成本点、12个代表训练/精确下一窗、NPU约1B推理/精确下一窗、图和阶段独立诊断。FC16训练CPU1/NPU12.283/15.511秒，首token2.737/4.055秒；局部前向更快，NPU完整训练未改善。完整尺度独立数值/离散/学习仍未验。
-- 原严格失败、half原见证失败和公式census启动失败均保持；修复/补验不改写原作业状态。当前限制和重启条件仅由[ROADMAP](ROADMAP.md)维护。
+账户约292GiB/软300GiB/硬800GiB；收尾文件系统约900GiB可用，shm400GiB中使用约1.3GiB。
+CPU/NPU主实验在不同CPU池并行，无重型构建重叠，未用共享NPU；磁盘没有阻塞或降低并行。
+shm仅保存可重建临时材料，持久小证据已保留。若存储实质阻塞后继，及时汇报，不静默缩小范围。
+共享NPU仍须当前prompt授权；不修改公共环境或参考仓库。
 
-## 接续入口
-
-运行`git status --short --branch`、`python scripts/status.py`、`python scripts/check_upstream.py`。
-先看本页当前作业，再读[成本汇总](evidence/performance-accounting-20261111.md)、
-[成本契约](fc16-cost-attribution.md)、[架构](architecture.md)与[ROADMAP](ROADMAP.md)。
-上轮作业均已终态，日志保留在`artifacts/jobs/additive-*/`；不恢复旧队列。
-用户未跟踪的两份TL-REQ-003/004交接文档原样保留，不纳入提交。
+接续先运行`git status --short --branch`、`python scripts/status.py`、`python scripts/check_upstream.py`。
+阅读上述报告、[成本契约](fc16-cost-attribution.md)、[架构](architecture.md)、
+[经验入口](performance-lessons.md)与[ROADMAP](ROADMAP.md)。现有小型完整资格保持原提交身份。
+用户未跟踪的`docs/tide-learning-lab-TL-REQ-003-handoff.md`与`TL-REQ-004-handoff.md`原样保留，不纳入提交。

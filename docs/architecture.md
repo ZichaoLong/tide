@@ -8,6 +8,11 @@
 
 FC16同尺寸成本与诊断入口见[阶段归因](fc16-cost-attribution.md)：可选native线程排他计时、
 真实profiler范围与独立张量基线分列；修改时维护benchmark_dense_query及test_stage_profile。
+[FC4/FC16三层调查](evidence/fc-three-layer-comparison-20261111.md#把差额落到计算与接口)
+把快照layout、Read/Full私有图、bank Attention及sequence伴随连接到实际成本。
+当前前向bank共享不等于反向块汇总；下一接口设计依据在ROADMAP，本报告没有修改生产架构。
+修改诊断时同步`run_fc_comparison/check_fc_comparison/collect_fc_comparison`及
+`test_fc_comparison_diagnostics`，区分公共根、任务投影和不同函数比较。
 外层/私有autograd图的节点、实际执行和保存存储由[图统计](autograd-census.md)定位；
 不把图统计时间当吞吐，也不叠加Python/native重复计数。
 逐文件/函数审阅用[固定源码清单与实际覆盖](evidence/implementation-audit-20261110.md)；

@@ -76,6 +76,15 @@ patch is distinguishable from an observed implementation boundary.
 `test_fc_comparison_diagnostics.py` checks the numeric projection against the
 independent formula, SDPA derivatives and patch restoration after failure.
 
+The [FC4/FC16 three-layer investigation](evidence/fc-three-layer-comparison-20261111.md)
+records actual-scale CPU/NPU checks, same-FP32-material promotion, phase-fenced
+versus natural complete intervals, wrapper omissions and real SDPA dispatch.
+Full-scale FP32 strict failures remain; these costs are exploratory, not a
+strict-equivalence acceleration qualification. `collect_fc_comparison.py`
+collects the completed finite suite/job layout into reviewed evidence without
+rerunning any model. Source records and the downstream's historical dependency
+pin are separate identities; the actual job/build source governs the run.
+
 ## Independent matched-shape anchors
 
 `fc_tensor_baseline.py` has an independent region schedule and explicit batched
