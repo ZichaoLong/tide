@@ -1,0 +1,12 @@
+{
+  "schema": "tide-positive-path-replay-v1",
+  "id": "constrained-bern",
+  "original_source": ".local/source-v6-corrected",
+  "original_run": "runs/v6-cover-hb-send-constrained-bern",
+  "data": "runs/v6-data-final",
+  "checkpoint_sha256": "952e41c7985b9bc18923405b5e1d00c357a182fb08ca8248e6b7a92d920567da",
+  "max_updates": 16,
+  "timeout_seconds": 1800,
+  "max_rss_gib": 8,
+  "expected_error": "positive allocation batch support underflowed in requested dtype"
+}

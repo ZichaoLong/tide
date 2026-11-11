@@ -1,0 +1,12 @@
+{
+  "schema": "tide-positive-path-replay-v1",
+  "id": "direct-received",
+  "original_source": ".local/source-v6-launch",
+  "original_run": "runs/v6-cover-hb-direct-received",
+  "data": "runs/v6-data-final",
+  "checkpoint_sha256": "939f19461df526085ab5123442501f2166f0c75377865c2a396b97d9ce0511a5",
+  "max_updates": 16,
+  "timeout_seconds": 1800,
+  "max_rss_gib": 8,
+  "expected_error": "positive batched attention sending support underflowed"
+}

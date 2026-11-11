@@ -1,0 +1,17 @@
+{
+  "config": "cover-hb-direct-received",
+  "device": "cpu",
+  "dtype": "float32",
+  "foundation": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+  "native_observed_operator_calls": 55917,
+  "native_observer_output_equal": true,
+  "schema": "tide-positive-observer-check-v1",
+  "scope": "read-only observer smoke; no full-trajectory or semantic support claim",
+  "shape": [
+    1,
+    2
+  ],
+  "synthetic_positive_product_zero": 1,
+  "synthetic_sigmoid_zero": 1,
+  "threads": 1
+}
