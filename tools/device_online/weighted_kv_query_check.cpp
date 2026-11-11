@@ -94,7 +94,8 @@ void single_bank_capacity(at::Device device,at::ScalarType dtype){
   for(int64_t r=0;r<rows;++r){State s;s.last_time=r;s.observations=1;s.slots["times"]=at::tensor({r},at::kLong);
     for(const auto& part:layout.fields()){auto shape=part.shape;if(part.ragged)shape.insert(shape.begin(),1);
       auto v=at::zeros(shape,at::kFloat);if(part.name=="values")v=(at::arange(d,at::kFloat)*.01+.1*r).reshape(shape);
-      if(part.name=="weights")v.fill_(.25);field(s,part.name)=v.to(dtype);}
+      if(part.name=="weights")v.fill_(.25);
+      if(part.name=="value")s.value=v.to(dtype);else s.slots[part.name]=v.to(dtype);}
     states.push_back(s);
   }
   auto raw=copy_weighted_raw_state(encode_weighted_raw_state(layout,states),device);
