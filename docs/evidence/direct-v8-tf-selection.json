@@ -1,0 +1,165 @@
+{
+  "created_at": "2026-11-11T09:55:15.081532+00:00",
+  "schema": "tide-direct-v8-selection-review-v1",
+  "scope": "Predeclared held-out selection. Initial recipe calibration improves these 1M baselines; not final independent quality test or architectural superiority.",
+  "selection": [
+    {
+      "all_results": [
+        {
+          "config": "/mi/data2T/zlong/home/llm/tide-learning-lab/configs/studies/language/direct-v8/tf6-fan-in-depth-lr0.0003-s11.json",
+          "id": "tf6-fan-in-depth-lr0.0003-s11",
+          "lr": 0.0003,
+          "nll": 6.327767798677087,
+          "result": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v8-tf-tf6-fan-in-depth-lr0.0003-s11/train/result.json",
+          "sha256": "6fb1dca9bf5f1b153ae3a3ad1e67a97341bed3a8548b9134cc7515934ceae13f"
+        },
+        {
+          "config": "/mi/data2T/zlong/home/llm/tide-learning-lab/configs/studies/language/direct-v8/tf6-fan-in-depth-lr0.001-s11.json",
+          "id": "tf6-fan-in-depth-lr0.001-s11",
+          "lr": 0.001,
+          "nll": 6.072258260566741,
+          "result": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v8-tf-tf6-fan-in-depth-lr0.001-s11/train/result.json",
+          "sha256": "dd18ab7e8c82f3da07681081b493470451f1be8ef69522d45b605f6cb25a6648"
+        },
+        {
+          "config": "/mi/data2T/zlong/home/llm/tide-learning-lab/configs/studies/language/direct-v8/tf6-fan-in-depth-lr0.003-s11.json",
+          "id": "tf6-fan-in-depth-lr0.003-s11",
+          "lr": 0.003,
+          "nll": 6.106035043951124,
+          "result": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v8-tf-tf6-fan-in-depth-lr0.003-s11/train/result.json",
+          "sha256": "dba97ae37c34145dd40e6d22055b0ce7fba5e43e30fdbdc72eb2606e30bbc0f5"
+        },
+        {
+          "config": "/mi/data2T/zlong/home/llm/tide-learning-lab/configs/studies/language/direct-v8/tf6-gpt2-lr0.0003-s11.json",
+          "id": "tf6-gpt2-lr0.0003-s11",
+          "lr": 0.0003,
+          "nll": 6.051299680955708,
+          "result": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v8-tf-tf6-gpt2-lr0.0003-s11/train/result.json",
+          "sha256": "1bb846b767c2e64ef7624d9e2ca27543978231c174077001aeba84c178a68d27"
+        },
+        {
+          "config": "/mi/data2T/zlong/home/llm/tide-learning-lab/configs/studies/language/direct-v8/tf6-gpt2-lr0.001-s11.json",
+          "id": "tf6-gpt2-lr0.001-s11",
+          "lr": 0.001,
+          "nll": 5.73541125562042,
+          "result": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v8-tf-tf6-gpt2-lr0.001-s11/train/result.json",
+          "sha256": "e024cf42463cce0d1d21d0791dd201bc43b67c22cd97145d5e3acdd8fc122e98"
+        },
+        {
+          "config": "/mi/data2T/zlong/home/llm/tide-learning-lab/configs/studies/language/direct-v8/tf6-gpt2-lr0.003-s11.json",
+          "id": "tf6-gpt2-lr0.003-s11",
+          "lr": 0.003,
+          "nll": 6.1583784930408,
+          "result": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v8-tf-tf6-gpt2-lr0.003-s11/train/result.json",
+          "sha256": "34d100cfa73f02874b9db1c12ee555fbd9d1d46286a8454adbd8c5eab7619f07"
+        },
+        {
+          "config": "/mi/data2T/zlong/home/llm/tide-learning-lab/configs/studies/language/direct-v8/tf6-legacy-lr0.001-s11.json",
+          "id": "tf6-legacy-lr0.001-s11",
+          "lr": 0.001,
+          "nll": 6.158389420714229,
+          "result": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v8-tf-tf6-legacy-lr0.001-s11/train/result.json",
+          "sha256": "c1fa3dd59eede10bcdc6270fec97d7eaf10dabeae64e4a650441ef1387dfe1a4"
+        }
+      ],
+      "layers": 6,
+      "selected": [
+        {
+          "config": "/mi/data2T/zlong/home/llm/tide-learning-lab/configs/studies/language/direct-v8/tf6-gpt2-lr0.001-s11.json",
+          "id": "tf6-gpt2-lr0.001-s11",
+          "lr": 0.001,
+          "nll": 5.73541125562042,
+          "result": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v8-tf-tf6-gpt2-lr0.001-s11/train/result.json",
+          "sha256": "e024cf42463cce0d1d21d0791dd201bc43b67c22cd97145d5e3acdd8fc122e98"
+        },
+        {
+          "config": "/mi/data2T/zlong/home/llm/tide-learning-lab/configs/studies/language/direct-v8/tf6-gpt2-lr0.0003-s11.json",
+          "id": "tf6-gpt2-lr0.0003-s11",
+          "lr": 0.0003,
+          "nll": 6.051299680955708,
+          "result": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v8-tf-tf6-gpt2-lr0.0003-s11/train/result.json",
+          "sha256": "1bb846b767c2e64ef7624d9e2ca27543978231c174077001aeba84c178a68d27"
+        }
+      ]
+    },
+    {
+      "all_results": [
+        {
+          "config": "/mi/data2T/zlong/home/llm/tide-learning-lab/configs/studies/language/direct-v8/tf12-fan-in-depth-lr0.0003-s11.json",
+          "id": "tf12-fan-in-depth-lr0.0003-s11",
+          "lr": 0.0003,
+          "nll": 6.397005072329193,
+          "result": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v8-tf-tf12-fan-in-depth-lr0.0003-s11/train/result.json",
+          "sha256": "24100efde40a69ca7632888747f88eb8f07e29be68317f47fc0b9052a8a88007"
+        },
+        {
+          "config": "/mi/data2T/zlong/home/llm/tide-learning-lab/configs/studies/language/direct-v8/tf12-fan-in-depth-lr0.001-s11.json",
+          "id": "tf12-fan-in-depth-lr0.001-s11",
+          "lr": 0.001,
+          "nll": 6.1708435718901455,
+          "result": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v8-tf-tf12-fan-in-depth-lr0.001-s11/train/result.json",
+          "sha256": "efa95ab52bb674f3b0d9bea52caf27bc8a53a712a3fc062f7d9638fa4bb600d3"
+        },
+        {
+          "config": "/mi/data2T/zlong/home/llm/tide-learning-lab/configs/studies/language/direct-v8/tf12-fan-in-depth-lr0.003-s11.json",
+          "id": "tf12-fan-in-depth-lr0.003-s11",
+          "lr": 0.003,
+          "nll": 6.1547671696171165,
+          "result": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v8-tf-tf12-fan-in-depth-lr0.003-s11/train/result.json",
+          "sha256": "a74c978331dc6f8fc04c22d8b8a0b653db5724baaaae1e829f704bde0582058c"
+        },
+        {
+          "config": "/mi/data2T/zlong/home/llm/tide-learning-lab/configs/studies/language/direct-v8/tf12-gpt2-lr0.0003-s11.json",
+          "id": "tf12-gpt2-lr0.0003-s11",
+          "lr": 0.0003,
+          "nll": 6.10282210400328,
+          "result": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v8-tf-tf12-gpt2-lr0.0003-s11/train/result.json",
+          "sha256": "473582ab57dae415fa88344d9fbf51d0c7bad26ecfcb0cda9007c12627acb3a7"
+        },
+        {
+          "config": "/mi/data2T/zlong/home/llm/tide-learning-lab/configs/studies/language/direct-v8/tf12-gpt2-lr0.001-s11.json",
+          "id": "tf12-gpt2-lr0.001-s11",
+          "lr": 0.001,
+          "nll": 5.806382569950074,
+          "result": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v8-tf-tf12-gpt2-lr0.001-s11/train/result.json",
+          "sha256": "d7d0487b0a31b6c9326579db0206f2ed6abf1eb8ef6fcaae494c9e08c6d69884"
+        },
+        {
+          "config": "/mi/data2T/zlong/home/llm/tide-learning-lab/configs/studies/language/direct-v8/tf12-gpt2-lr0.003-s11.json",
+          "id": "tf12-gpt2-lr0.003-s11",
+          "lr": 0.003,
+          "nll": 6.183576814830303,
+          "result": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v8-tf-tf12-gpt2-lr0.003-s11/train/result.json",
+          "sha256": "03c7b9d27778d5b58c482e60bb9576f5dfaf7c3e6ad7fcd13f0cc583577d261a"
+        },
+        {
+          "config": "/mi/data2T/zlong/home/llm/tide-learning-lab/configs/studies/language/direct-v8/tf12-legacy-lr0.001-s11.json",
+          "id": "tf12-legacy-lr0.001-s11",
+          "lr": 0.001,
+          "nll": 6.193982177414,
+          "result": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v8-tf-tf12-legacy-lr0.001-s11/train/result.json",
+          "sha256": "d32019220b97f13e11114d8280c1ee317b6b2f4a2e4a7421561722454f3a4c6b"
+        }
+      ],
+      "layers": 12,
+      "selected": [
+        {
+          "config": "/mi/data2T/zlong/home/llm/tide-learning-lab/configs/studies/language/direct-v8/tf12-gpt2-lr0.001-s11.json",
+          "id": "tf12-gpt2-lr0.001-s11",
+          "lr": 0.001,
+          "nll": 5.806382569950074,
+          "result": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v8-tf-tf12-gpt2-lr0.001-s11/train/result.json",
+          "sha256": "d7d0487b0a31b6c9326579db0206f2ed6abf1eb8ef6fcaae494c9e08c6d69884"
+        },
+        {
+          "config": "/mi/data2T/zlong/home/llm/tide-learning-lab/configs/studies/language/direct-v8/tf12-gpt2-lr0.0003-s11.json",
+          "id": "tf12-gpt2-lr0.0003-s11",
+          "lr": 0.0003,
+          "nll": 6.10282210400328,
+          "result": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v8-tf-tf12-gpt2-lr0.0003-s11/train/result.json",
+          "sha256": "473582ab57dae415fa88344d9fbf51d0c7bad26ecfcb0cda9007c12627acb3a7"
+        }
+      ]
+    }
+  ]
+}

@@ -28,6 +28,9 @@ def make_model(config, device):
     elif config['kind']=='direct_graph':
         from .direct_graph_cost import DirectGraphLM
         model=DirectGraphLM(seed=config['seed'],**config['direct'])
+    elif config['kind']=='direct_semantic':
+        from .direct_semantic import DirectSemanticLM
+        model=DirectSemanticLM(seed=config['seed'],plan=config['direct']['plan'])
     else:raise ValueError('unsupported campaign model')
     model=model.to(device)
     inventory=trainable_inventory(model)

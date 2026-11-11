@@ -1,0 +1,979 @@
+{
+  "campaign": "direct-v8",
+  "candidate": {
+    "group": "memory_shape_position",
+    "id": "window128",
+    "recipe": {
+      "branches": 2,
+      "depth": 4,
+      "family": "kv",
+      "history": 512,
+      "memory_overrides": {
+        "distance_slopes": [
+          0.0
+        ],
+        "full_frequencies": [
+          []
+        ],
+        "heads": 1,
+        "memory_read": "qry",
+        "window": 128
+      },
+      "offsets": [
+        0,
+        1
+      ],
+      "profile": "baseline",
+      "region_overrides": {
+        "allocation_temperature": 0.25
+      },
+      "region_width": 4,
+      "regularizer": "quad",
+      "selection": "regional_total",
+      "source_mode": "region",
+      "sparse_denominator": 2,
+      "topology": "fc",
+      "width": 128
+    }
+  },
+  "checks": {
+    "core_atol": 1e-06,
+    "core_rtol": 1e-05,
+    "finite_exploration": true
+  },
+  "comparison_scope": "Independent direct static local-function screening; dense physical Full plus explicit support masks. Public continuation equivalence and real sparse execution unchecked.",
+  "core": {},
+  "device": "npu:0",
+  "direct": {
+    "plan": {
+      "alpha_agg": 1.0,
+      "classes": {
+        "edges": [
+          1,
+          1,
+          1,
+          1,
+          2,
+          2,
+          2,
+          2,
+          3,
+          3,
+          3,
+          3,
+          4,
+          4,
+          4,
+          4,
+          5,
+          5,
+          5,
+          5,
+          6,
+          6,
+          6,
+          6,
+          7,
+          7,
+          7,
+          7,
+          8,
+          8,
+          8,
+          8,
+          9,
+          9,
+          9,
+          9,
+          10,
+          10,
+          10,
+          10,
+          11,
+          11,
+          11,
+          11,
+          12,
+          12,
+          12,
+          12
+        ],
+        "inputs": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "graph": {
+        "counts": {
+          "body_edges": 48,
+          "body_nodes": 16,
+          "encoded_edges": 56,
+          "encoded_nodes": 18,
+          "longest_body_delay": 3,
+          "output_reachable_nodes": 16,
+          "reachable_nodes": 16
+        },
+        "edges": [
+          [
+            0,
+            4,
+            1
+          ],
+          [
+            0,
+            5,
+            1
+          ],
+          [
+            0,
+            6,
+            1
+          ],
+          [
+            0,
+            7,
+            1
+          ],
+          [
+            1,
+            4,
+            1
+          ],
+          [
+            1,
+            5,
+            1
+          ],
+          [
+            1,
+            6,
+            1
+          ],
+          [
+            1,
+            7,
+            1
+          ],
+          [
+            2,
+            4,
+            1
+          ],
+          [
+            2,
+            5,
+            1
+          ],
+          [
+            2,
+            6,
+            1
+          ],
+          [
+            2,
+            7,
+            1
+          ],
+          [
+            3,
+            4,
+            1
+          ],
+          [
+            3,
+            5,
+            1
+          ],
+          [
+            3,
+            6,
+            1
+          ],
+          [
+            3,
+            7,
+            1
+          ],
+          [
+            4,
+            8,
+            1
+          ],
+          [
+            4,
+            9,
+            1
+          ],
+          [
+            4,
+            10,
+            1
+          ],
+          [
+            4,
+            11,
+            1
+          ],
+          [
+            5,
+            8,
+            1
+          ],
+          [
+            5,
+            9,
+            1
+          ],
+          [
+            5,
+            10,
+            1
+          ],
+          [
+            5,
+            11,
+            1
+          ],
+          [
+            6,
+            8,
+            1
+          ],
+          [
+            6,
+            9,
+            1
+          ],
+          [
+            6,
+            10,
+            1
+          ],
+          [
+            6,
+            11,
+            1
+          ],
+          [
+            7,
+            8,
+            1
+          ],
+          [
+            7,
+            9,
+            1
+          ],
+          [
+            7,
+            10,
+            1
+          ],
+          [
+            7,
+            11,
+            1
+          ],
+          [
+            8,
+            12,
+            1
+          ],
+          [
+            8,
+            13,
+            1
+          ],
+          [
+            8,
+            14,
+            1
+          ],
+          [
+            8,
+            15,
+            1
+          ],
+          [
+            9,
+            12,
+            1
+          ],
+          [
+            9,
+            13,
+            1
+          ],
+          [
+            9,
+            14,
+            1
+          ],
+          [
+            9,
+            15,
+            1
+          ],
+          [
+            10,
+            12,
+            1
+          ],
+          [
+            10,
+            13,
+            1
+          ],
+          [
+            10,
+            14,
+            1
+          ],
+          [
+            10,
+            15,
+            1
+          ],
+          [
+            11,
+            12,
+            1
+          ],
+          [
+            11,
+            13,
+            1
+          ],
+          [
+            11,
+            14,
+            1
+          ],
+          [
+            11,
+            15,
+            1
+          ]
+        ],
+        "inputs": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "kind": "ranked-local",
+        "node_regions": [
+          0,
+          0,
+          0,
+          0,
+          1,
+          1,
+          1,
+          1,
+          2,
+          2,
+          2,
+          2,
+          3,
+          3,
+          3,
+          3
+        ],
+        "nodes": 16,
+        "outputs": [
+          12,
+          13,
+          14,
+          15
+        ],
+        "ranks": [
+          1,
+          2,
+          3,
+          4
+        ],
+        "regions": 4
+      },
+      "memories": [
+        {
+          "adapter_rank": 32,
+          "alpha_att": 1.0,
+          "alpha_ff": 1.0,
+          "beta_short": 0.11552453009332421,
+          "distance_slopes": [
+            0.0
+          ],
+          "epsilon": 1e-05,
+          "ffn_width": 512,
+          "full_frequencies": [
+            []
+          ],
+          "heads": 1,
+          "memory_read": "qry",
+          "position_origin": 1,
+          "position_scale": 6,
+          "read_frequencies": [],
+          "summary_width": 32,
+          "width": 128,
+          "window": 128
+        },
+        {
+          "adapter_rank": 32,
+          "alpha_att": 1.0,
+          "alpha_ff": 1.0,
+          "beta_short": 0.11552453009332421,
+          "distance_slopes": [
+            0.0
+          ],
+          "epsilon": 1e-05,
+          "ffn_width": 512,
+          "full_frequencies": [
+            []
+          ],
+          "heads": 1,
+          "memory_read": "qry",
+          "position_origin": 1,
+          "position_scale": 6,
+          "read_frequencies": [],
+          "summary_width": 32,
+          "width": 128,
+          "window": 128
+        },
+        {
+          "adapter_rank": 32,
+          "alpha_att": 1.0,
+          "alpha_ff": 1.0,
+          "beta_short": 0.11552453009332421,
+          "distance_slopes": [
+            0.0
+          ],
+          "epsilon": 1e-05,
+          "ffn_width": 512,
+          "full_frequencies": [
+            []
+          ],
+          "heads": 1,
+          "memory_read": "qry",
+          "position_origin": 1,
+          "position_scale": 6,
+          "read_frequencies": [],
+          "summary_width": 32,
+          "width": 128,
+          "window": 128
+        },
+        {
+          "adapter_rank": 32,
+          "alpha_att": 1.0,
+          "alpha_ff": 1.0,
+          "beta_short": 0.11552453009332421,
+          "distance_slopes": [
+            0.0
+          ],
+          "epsilon": 1e-05,
+          "ffn_width": 512,
+          "full_frequencies": [
+            []
+          ],
+          "heads": 1,
+          "memory_read": "qry",
+          "position_origin": 1,
+          "position_scale": 6,
+          "read_frequencies": [],
+          "summary_width": 32,
+          "width": 128,
+          "window": 128
+        },
+        {
+          "adapter_rank": 32,
+          "alpha_att": 1.0,
+          "alpha_ff": 1.0,
+          "beta_short": 0.11552453009332421,
+          "distance_slopes": [
+            0.0
+          ],
+          "epsilon": 1e-05,
+          "ffn_width": 512,
+          "full_frequencies": [
+            []
+          ],
+          "heads": 1,
+          "memory_read": "qry",
+          "position_origin": 2,
+          "position_scale": 6,
+          "read_frequencies": [],
+          "summary_width": 32,
+          "width": 128,
+          "window": 128
+        },
+        {
+          "adapter_rank": 32,
+          "alpha_att": 1.0,
+          "alpha_ff": 1.0,
+          "beta_short": 0.11552453009332421,
+          "distance_slopes": [
+            0.0
+          ],
+          "epsilon": 1e-05,
+          "ffn_width": 512,
+          "full_frequencies": [
+            []
+          ],
+          "heads": 1,
+          "memory_read": "qry",
+          "position_origin": 2,
+          "position_scale": 6,
+          "read_frequencies": [],
+          "summary_width": 32,
+          "width": 128,
+          "window": 128
+        },
+        {
+          "adapter_rank": 32,
+          "alpha_att": 1.0,
+          "alpha_ff": 1.0,
+          "beta_short": 0.11552453009332421,
+          "distance_slopes": [
+            0.0
+          ],
+          "epsilon": 1e-05,
+          "ffn_width": 512,
+          "full_frequencies": [
+            []
+          ],
+          "heads": 1,
+          "memory_read": "qry",
+          "position_origin": 2,
+          "position_scale": 6,
+          "read_frequencies": [],
+          "summary_width": 32,
+          "width": 128,
+          "window": 128
+        },
+        {
+          "adapter_rank": 32,
+          "alpha_att": 1.0,
+          "alpha_ff": 1.0,
+          "beta_short": 0.11552453009332421,
+          "distance_slopes": [
+            0.0
+          ],
+          "epsilon": 1e-05,
+          "ffn_width": 512,
+          "full_frequencies": [
+            []
+          ],
+          "heads": 1,
+          "memory_read": "qry",
+          "position_origin": 2,
+          "position_scale": 6,
+          "read_frequencies": [],
+          "summary_width": 32,
+          "width": 128,
+          "window": 128
+        },
+        {
+          "adapter_rank": 32,
+          "alpha_att": 1.0,
+          "alpha_ff": 1.0,
+          "beta_short": 0.11552453009332421,
+          "distance_slopes": [
+            0.0
+          ],
+          "epsilon": 1e-05,
+          "ffn_width": 512,
+          "full_frequencies": [
+            []
+          ],
+          "heads": 1,
+          "memory_read": "qry",
+          "position_origin": 3,
+          "position_scale": 6,
+          "read_frequencies": [],
+          "summary_width": 32,
+          "width": 128,
+          "window": 128
+        },
+        {
+          "adapter_rank": 32,
+          "alpha_att": 1.0,
+          "alpha_ff": 1.0,
+          "beta_short": 0.11552453009332421,
+          "distance_slopes": [
+            0.0
+          ],
+          "epsilon": 1e-05,
+          "ffn_width": 512,
+          "full_frequencies": [
+            []
+          ],
+          "heads": 1,
+          "memory_read": "qry",
+          "position_origin": 3,
+          "position_scale": 6,
+          "read_frequencies": [],
+          "summary_width": 32,
+          "width": 128,
+          "window": 128
+        },
+        {
+          "adapter_rank": 32,
+          "alpha_att": 1.0,
+          "alpha_ff": 1.0,
+          "beta_short": 0.11552453009332421,
+          "distance_slopes": [
+            0.0
+          ],
+          "epsilon": 1e-05,
+          "ffn_width": 512,
+          "full_frequencies": [
+            []
+          ],
+          "heads": 1,
+          "memory_read": "qry",
+          "position_origin": 3,
+          "position_scale": 6,
+          "read_frequencies": [],
+          "summary_width": 32,
+          "width": 128,
+          "window": 128
+        },
+        {
+          "adapter_rank": 32,
+          "alpha_att": 1.0,
+          "alpha_ff": 1.0,
+          "beta_short": 0.11552453009332421,
+          "distance_slopes": [
+            0.0
+          ],
+          "epsilon": 1e-05,
+          "ffn_width": 512,
+          "full_frequencies": [
+            []
+          ],
+          "heads": 1,
+          "memory_read": "qry",
+          "position_origin": 3,
+          "position_scale": 6,
+          "read_frequencies": [],
+          "summary_width": 32,
+          "width": 128,
+          "window": 128
+        },
+        {
+          "adapter_rank": 32,
+          "alpha_att": 1.0,
+          "alpha_ff": 1.0,
+          "beta_short": 0.11552453009332421,
+          "distance_slopes": [
+            0.0
+          ],
+          "epsilon": 1e-05,
+          "ffn_width": 512,
+          "full_frequencies": [
+            []
+          ],
+          "heads": 1,
+          "memory_read": "qry",
+          "position_origin": 4,
+          "position_scale": 6,
+          "read_frequencies": [],
+          "summary_width": 32,
+          "width": 128,
+          "window": 128
+        },
+        {
+          "adapter_rank": 32,
+          "alpha_att": 1.0,
+          "alpha_ff": 1.0,
+          "beta_short": 0.11552453009332421,
+          "distance_slopes": [
+            0.0
+          ],
+          "epsilon": 1e-05,
+          "ffn_width": 512,
+          "full_frequencies": [
+            []
+          ],
+          "heads": 1,
+          "memory_read": "qry",
+          "position_origin": 4,
+          "position_scale": 6,
+          "read_frequencies": [],
+          "summary_width": 32,
+          "width": 128,
+          "window": 128
+        },
+        {
+          "adapter_rank": 32,
+          "alpha_att": 1.0,
+          "alpha_ff": 1.0,
+          "beta_short": 0.11552453009332421,
+          "distance_slopes": [
+            0.0
+          ],
+          "epsilon": 1e-05,
+          "ffn_width": 512,
+          "full_frequencies": [
+            []
+          ],
+          "heads": 1,
+          "memory_read": "qry",
+          "position_origin": 4,
+          "position_scale": 6,
+          "read_frequencies": [],
+          "summary_width": 32,
+          "width": 128,
+          "window": 128
+        },
+        {
+          "adapter_rank": 32,
+          "alpha_att": 1.0,
+          "alpha_ff": 1.0,
+          "beta_short": 0.11552453009332421,
+          "distance_slopes": [
+            0.0
+          ],
+          "epsilon": 1e-05,
+          "ffn_width": 512,
+          "full_frequencies": [
+            []
+          ],
+          "heads": 1,
+          "memory_read": "qry",
+          "position_origin": 4,
+          "position_scale": 6,
+          "read_frequencies": [],
+          "summary_width": 32,
+          "width": 128,
+          "window": 128
+        }
+      ],
+      "recipe": {
+        "requested": {
+          "branches": 2,
+          "depth": 4,
+          "family": "kv",
+          "history": 512,
+          "memory_overrides": {
+            "distance_slopes": [
+              0.0
+            ],
+            "full_frequencies": [
+              []
+            ],
+            "heads": 1,
+            "memory_read": "qry",
+            "window": 128
+          },
+          "offsets": [
+            0,
+            1
+          ],
+          "profile": "baseline",
+          "region_overrides": {
+            "allocation_temperature": 0.25
+          },
+          "region_width": 4,
+          "regularizer": "quad",
+          "selection": "regional_total",
+          "source_mode": "region",
+          "sparse_denominator": 2,
+          "topology": "fc",
+          "width": 128
+        },
+        "scale": null,
+        "schema": "tide-core5-recipe-v1",
+        "sparse_budget": {
+          "effective_k": [
+            2,
+            2,
+            2,
+            2
+          ],
+          "note": "k is sending strength; actual support and Full counts require execution",
+          "requested_fraction": 0.5
+        }
+      },
+      "regions": [
+        {
+          "allocation_base": null,
+          "allocation_temperature": 0.25,
+          "alpha_loc": null,
+          "alpha_match": null,
+          "alpha_res": null,
+          "alpha_sel": null,
+          "ent_alpha": null,
+          "eta": null,
+          "fixed_gain": null,
+          "gain_logit": null,
+          "gamma_max": 2.0,
+          "hidden_width": 32,
+          "k": 2,
+          "local_score": "cat",
+          "query_weight": null,
+          "read_mode": "+",
+          "region_control_mode": "context",
+          "region_control_width": 32,
+          "region_evidence": "cat",
+          "region_key": null,
+          "region_score": "ind",
+          "regularizer": "quad",
+          "selection_mode": "regional_total",
+          "selection_width": null,
+          "send_gain": null,
+          "total_fraction": null
+        },
+        {
+          "allocation_base": null,
+          "allocation_temperature": 0.25,
+          "alpha_loc": null,
+          "alpha_match": null,
+          "alpha_res": null,
+          "alpha_sel": null,
+          "ent_alpha": null,
+          "eta": null,
+          "fixed_gain": null,
+          "gain_logit": null,
+          "gamma_max": 2.0,
+          "hidden_width": 32,
+          "k": 2,
+          "local_score": "cat",
+          "query_weight": null,
+          "read_mode": "+",
+          "region_control_mode": "context",
+          "region_control_width": 32,
+          "region_evidence": "cat",
+          "region_key": null,
+          "region_score": "ind",
+          "regularizer": "quad",
+          "selection_mode": "regional_total",
+          "selection_width": null,
+          "send_gain": null,
+          "total_fraction": null
+        },
+        {
+          "allocation_base": null,
+          "allocation_temperature": 0.25,
+          "alpha_loc": null,
+          "alpha_match": null,
+          "alpha_res": null,
+          "alpha_sel": null,
+          "ent_alpha": null,
+          "eta": null,
+          "fixed_gain": null,
+          "gain_logit": null,
+          "gamma_max": 2.0,
+          "hidden_width": 32,
+          "k": 2,
+          "local_score": "cat",
+          "query_weight": null,
+          "read_mode": "+",
+          "region_control_mode": "context",
+          "region_control_width": 32,
+          "region_evidence": "cat",
+          "region_key": null,
+          "region_score": "ind",
+          "regularizer": "quad",
+          "selection_mode": "regional_total",
+          "selection_width": null,
+          "send_gain": null,
+          "total_fraction": null
+        },
+        {
+          "allocation_base": null,
+          "allocation_temperature": 0.25,
+          "alpha_loc": null,
+          "alpha_match": null,
+          "alpha_res": null,
+          "alpha_sel": null,
+          "ent_alpha": null,
+          "eta": null,
+          "fixed_gain": null,
+          "gain_logit": null,
+          "gamma_max": 2.0,
+          "hidden_width": 32,
+          "k": 2,
+          "local_score": "cat",
+          "query_weight": null,
+          "read_mode": "+",
+          "region_control_mode": "context",
+          "region_control_width": 32,
+          "region_evidence": "cat",
+          "region_key": null,
+          "region_score": "ind",
+          "regularizer": "quad",
+          "selection_mode": "regional_total",
+          "selection_width": null,
+          "send_gain": null,
+          "total_fraction": null
+        }
+      ],
+      "sha256": "52229a9284c27b593147cbda4976c66bbf23c6dc45914b2e9552418327fe6609",
+      "source_binding": {
+        "mode": "region",
+        "rank": null
+      },
+      "source_hidden_width": 32,
+      "stride": 6,
+      "upstream": "0770593838a37c790a568226930567ed60f99b83",
+      "width": 128
+    }
+  },
+  "dtype": "float32",
+  "evaluation": {
+    "inference_length": 16,
+    "test_policy": "sealed"
+  },
+  "id": "fc-window128-s11",
+  "initialization": "role-keyed-fan-in-v1",
+  "kind": "direct_semantic",
+  "numerical_policy": {
+    "allocation": "optimal-map implicit VJP; active branch endpoints saturated; singleton upper set follows mu; zero support has zero Full-boundary VJP",
+    "name": "direct-v8-normal-tiny",
+    "positive_exp": "floor mathematically positive exponentials at dtype normal-tiny; zero derivative below floor; preserve mathematical zero masks",
+    "recurrence": "finite nilpotent innovation solve, checked against serial recurrence; effective states at every grid position, not canonical raw continuation",
+    "strict_equivalence": "not certified; independent numerical checks retained separately"
+  },
+  "resources": {
+    "max_rss_gib": 28
+  },
+  "revisions": {
+    "foundation_metadata": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+    "mathematics": "0770593838a37c790a568226930567ed60f99b83"
+  },
+  "schema": "tide-direct-coverage-config-v1",
+  "seed": 11,
+  "study_id": "TL-DIRECT-COVER-v8",
+  "threads": 2,
+  "training": {
+    "batch": 32,
+    "betas": [
+      0.9,
+      0.95
+    ],
+    "checkpoint_seconds": 1800,
+    "clip_norm": 1.0,
+    "decay_policy": "matrix_only",
+    "eps": 1e-08,
+    "eval_batch": 32,
+    "eval_tokens": 32768,
+    "global_batch": 32,
+    "initial_eval_tokens": 32768,
+    "length": 128,
+    "log_every": 16,
+    "lr": 0.001,
+    "lr_floor_fraction": 0.1,
+    "milestones": [
+      1048576
+    ],
+    "target_tokens": 1048576,
+    "timeout_seconds": 28800,
+    "validation_every_tokens": 262144,
+    "warmup_tokens": 65536,
+    "weight_decay": 0.1
+  },
+  "transformer": null
+}

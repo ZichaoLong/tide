@@ -63,12 +63,18 @@ def admission(model,c,device,out):
             changed=x.clone();changed[:,2]=(changed[:,2]+17)%4096
             checks['causal']=finite_delta(model(changed)[:,:2],model(x)[:,:2],0,0)
         if checks['causal']['state']!='passed':raise AssertionError('causal intervention failed')
+        if c['kind']=='direct_semantic':
+            work=model.last_metrics
+            if not 0<work['work/full']<=work['work/candidates']<=work['work/physical_full_rows']:
+                raise AssertionError('static fixture support/work invariants failed')
+            checks['direct_support']=dict(state='passed',work=work,
+                scope='Actual unit-input static FC/HB graph; physical Full rows include inactive rows. Independent formula/VJP suite is a separate source qualification. General continuation/absent-zero fibre equivalence unchecked.')
     atomic_json(out/'checks.json',checks)
     if checks['analytic_ce_vjp']['state']!='passed':raise AssertionError('CE VJP formula failed')
     return dict(checks=checks,admitted_for_finite_exploration=True,
         scope='actual topology/modules/width/backend, independent B2 L3; inactive routed regions recorded, not required to all fire',
         axes=dict(execution='passed',strict_numerical='see checks; original 1e-6/1e-5 and zero causal thresholds retained',
-            discrete_semantics='passed' if c['kind']=='tide' else ('static_dense_graph; no learned routing' if c['kind']=='direct_graph' else 'not_applicable'),mechanisms='passed',
+            discrete_semantics='passed' if c['kind']=='tide' else ('passed_static_unit_input_fixture; general_continuation_unchecked' if c['kind']=='direct_semantic' else 'static_dense_graph; no learned routing' if c['kind']=='direct_graph' else 'not_applicable'),mechanisms='passed',
             recovery='separate_fresh_process_probe_required',learning='unchecked'))
 
 

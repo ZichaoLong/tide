@@ -1,0 +1,9 @@
+{
+  "cases": [
+    "tf6-gpt2-lr0.001-s22",
+    "tf6-gpt2-lr0.0003-s22",
+    "tf12-gpt2-lr0.001-s22",
+    "tf12-gpt2-lr0.0003-s22"
+  ],
+  "schema": "tide-direct-v8-tf-confirm-table-v1"
+}
