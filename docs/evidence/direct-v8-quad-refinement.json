@@ -1,0 +1,40 @@
+{
+  "created_at": "2026-11-11T10:10:20.513750+00:00",
+  "independent_math_tests": 9,
+  "original_source": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+  "rows": [
+    {
+      "new_failed_rows": 0,
+      "new_max_abs_vs_fp64": 5.960464477539063e-08,
+      "new_max_residual": 1.1920928955078125e-07,
+      "offset": 100.0,
+      "old_failed_rows": 92,
+      "old_max_abs_vs_fp64": 3.057718276977539e-05,
+      "old_max_residual": 5.1140785217285156e-05,
+      "rows": 256
+    },
+    {
+      "new_failed_rows": 0,
+      "new_max_abs_vs_fp64": 8.940696716308594e-08,
+      "new_max_residual": 1.1920928955078125e-07,
+      "offset": 1000.0,
+      "old_failed_rows": 240,
+      "old_max_abs_vs_fp64": 0.00024366378784179688,
+      "old_max_residual": 0.000536799430847168,
+      "rows": 256
+    },
+    {
+      "new_failed_rows": 0,
+      "new_max_abs_vs_fp64": 1.1920928955078125e-07,
+      "new_max_residual": 1.1920928955078125e-07,
+      "offset": -1000.0,
+      "old_failed_rows": 239,
+      "old_max_abs_vs_fp64": 0.00024390220642089844,
+      "old_max_residual": 0.0004382133483886719,
+      "rows": 256
+    }
+  ],
+  "schema": "tide-direct-v8-quad-refinement-v1",
+  "scope": "Large representable FP32 score offset reproduces root cancellation; relative active-set refinement preserves the equation and original threshold. Actual failed training row was not checkpointed, so this is a demonstrated mechanism, not proof of its complete causal explanation. New trajectory must establish application behavior separately.",
+  "threshold": 2e-05
+}

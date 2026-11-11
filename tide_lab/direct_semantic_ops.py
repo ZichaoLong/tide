@@ -91,6 +91,20 @@ class _Allocation(torch.autograd.Function):
         c=torch.where(bound,response(t-lam,mu,tau,kind,alpha),base)
         full=(target>=total)&(total>0);empty=(target<=0)|(total<=0)
         c=torch.where(full,mu,torch.where(empty,torch.zeros_like(c),c))
+        if kind=='quad':
+            # A large common score offset makes t-lambda lose low bits even
+            # after the float32 root bracket has converged. Re-express the
+            # same affine active-set root relative to an interior score.
+            # The threshold is unchanged; this is not a post-hoc renormalization.
+            for _ in range(3):
+                active=(c>0)&(c<mu);count=active.sum(-1,keepdim=True)
+                origin=t.masked_fill(~active,float('-inf')).amax(-1,keepdim=True)
+                origin=torch.where(count>0,origin,torch.zeros_like(origin))
+                saturated=(c>=mu)&(mu>0)
+                free_target=target-(mu*saturated).sum(-1,keepdim=True)
+                relative=((torch.where(active,t-origin,torch.zeros_like(t))).sum(-1,keepdim=True)-tau*free_target)/count.clamp_min(1)
+                refined=response((t-origin)-relative,mu,tau,kind,alpha)
+                c=torch.where(bound&~full&~empty&(count>0),refined,c)
         inside=(c>0)&(c<mu)
         if kind=='bern':
             p=c/torch.where(mu>0,mu,torch.ones_like(mu));a=mu*p*(1-p)/tau;e=p

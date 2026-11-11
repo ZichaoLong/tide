@@ -57,6 +57,19 @@ class DirectMath(unittest.TestCase):
         torch.testing.assert_close(c,caps);c.sum().backward()
         torch.testing.assert_close(caps.grad,torch.ones_like(caps));torch.testing.assert_close(t.grad,torch.zeros_like(t))
 
+    def test_quad_large_offset_does_not_relax_feasibility(self):
+        torch.manual_seed(71)
+        # Reference uses exactly the same representable FP32 inputs, promoted
+        # before arithmetic, rather than an idealized unrounded input.
+        for offset in (100.,1000.,-1000.):
+            t=offset+torch.randn(256,4)*3
+            mu=torch.rand(256,4)*.8+.2
+            total=mu.sum(-1,keepdim=True)*.61
+            c,error=allocation(t,mu,total,total,.25,'quad')
+            reference,_=allocation(t.double(),mu.double(),total.double(),total.double(),.25,'quad')
+            self.assertLess(float(error.max()),2e-5)
+            torch.testing.assert_close(c.double(),reference,atol=1e-6,rtol=1e-5)
+
     def test_recurrence_forward_old_read_and_gradient(self):
         torch.manual_seed(23)
         for delta in (False,True):

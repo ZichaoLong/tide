@@ -36,7 +36,7 @@ def main(a):
             '--env',f'TIDE_LAB_VENV={root}/.venv-positive-floor-v1',
             '--env',f'TIDE_LAB_RESOURCE_POLICY={policy}','--device','npu' if device.startswith('npu') else 'cpu',
             '--threads','2','--memory-gib','32','--timeout',str(cap)]
-        if device.startswith('npu'):cmd+=['--queue-helper',str(source/'scripts/run_on_light_device.py'),'--wait-seconds',str(min(1800,cap-60))]
+        if device.startswith('npu'):cmd+=['--queue-helper',str(source/'scripts/run_on_light_device.py'),'--wait-seconds',str(min(a.wait_seconds,cap-60))]
         for path in [plan,a.data/'data-lock.json',budget,policy,*[Path(c['config']) for c in records]]:cmd+=['--input',str(path)]
         cmd+=['--','python','scripts/campaign_worker.py','--plan',str(plan),'--data',str(a.data.resolve()),
             '--output',str(root/'runs'/(job+'-worker')),'--recording-cli',a.lens_cli,'--deadline-epoch',str(deadline)]
@@ -53,4 +53,4 @@ if __name__=='__main__':
     p=argparse.ArgumentParser(description=__doc__)
     for key in ('root','source','catalog','data'):p.add_argument('--'+key,type=Path,required=True)
     for key in ('phase','group','lens-cli'):p.add_argument('--'+key,required=True)
-    p.add_argument('--workers',type=int,default=8);main(p.parse_args())
+    p.add_argument('--workers',type=int,default=8);p.add_argument('--wait-seconds',type=int,default=1800);main(p.parse_args())

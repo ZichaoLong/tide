@@ -25,7 +25,7 @@ def review(root):
     for path in sorted((root/'artifacts/jobs').glob('v8-*/job.json')):
         obs=inspect(path);record=read(path)
         jobs.append(dict(id=obs['job_id'],state=obs['state'].get('state'),terminated=obs['termination_verified_now'],
-            source_commit=record['source']['commit'],unit=record['unit'],slice=obs.get('systemd',{}).get('Slice'),
+            source_commit=record['source']['commit'],unit=record['unit'],slice=(obs.get('systemd') or {}).get('Slice'),
             device=record['device'],mapping=read(path.parent/'queue-state.json').get('physical_ids'),
             record=str(path.relative_to(root))))
     for submission in sorted((root/'runs').glob('v8-*-submission/submission.json')):
@@ -37,7 +37,7 @@ def review(root):
                 state=train.get('state','pending')
                 if not train and check.get('state')=='failed':state='failed_admission'
                 if not train and recovery.get('state')=='failed':state='failed_recovery'
-                if not train and check.get('state')=='completed' and not recovery:state='qualifying'
+                if not train and check.get('state') in ('running','completed') and recovery.get('state')!='failed':state='qualifying'
                 cases.append(dict(id=row['id'],job=job['job'],kind=config['kind'],seed=config['seed'],
                     family=config.get('candidate',{}).get('group'),state=state,
                     tokens=train.get('progress',progress).get('tokens',0),target=config['training']['target_tokens'],

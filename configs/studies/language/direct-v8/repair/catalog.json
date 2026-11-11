@@ -1,0 +1,7 @@
+{
+  "cases": [
+    "fc-mem-gated_delta-state-s11-r2"
+  ],
+  "maximum_new_cases": 1,
+  "schema": "tide-direct-v8-bounded-repair-v1"
+}
