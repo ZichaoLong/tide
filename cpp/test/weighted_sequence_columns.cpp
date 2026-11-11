@@ -98,7 +98,8 @@ int main(int argc,char** argv){portable_torch::RuntimeSession runtime;try{
     if(args.help){portable_torch::print_usage(std::cout,argv[0]);return 0;}
     auto device=portable_torch::resolve_device(args);
     std::optional<at::Device> peer;
-    if(auto selected=std::getenv("TIDE_COLUMN_PEER_DEVICE")){peer=at::Device(selected);
+    if(auto selected=std::getenv("TIDE_COLUMN_PEER_DEVICE")){auto peer_options=args;
+      peer_options.device_spec=selected;peer=portable_torch::resolve_device(peer_options);
       require(*peer!=device&&peer->type()==device.type(),"peer gate requires a distinct same-backend device");}
     require(args.dtype==at::kFloat||args.dtype==at::kDouble,"column gate requires FP32/FP64");
     for(const auto& preset:{"mixed-a","mixed-b","mixed-c"})for(const auto& family:{"kv","affine","delta","gated_delta","ssd"}){

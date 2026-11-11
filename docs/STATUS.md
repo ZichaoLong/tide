@@ -25,7 +25,12 @@
 具名入口：weighted/{window_execution,settle_columns,message_columns,column_placement}.py，
 experiment/column_task.py及cpp/src/weighted_settle_columns.cpp。现有所有者约束与参数共享不能静默改写。
 先做独立小图/三步/精确恢复，再有限跨卡成本；不能仅删除单设备检查。多owner列实现开发完成：94 passed/9原数值xfail，两套新构建与SDK CPU通过。
-下一步提交实现，固定源码资格/安装，再两张空闲NPU独立调度、训练/新进程恢复及SDK五记忆。
+实现796baafa已提交，qualified-owners固定只读；两套构建hash核验复用。
+gef-column-owners-qualify已passed，install-owners已安装。
+gef-column-owners-npu准入120秒后超时，exit3，无设备计算；当时无可同时锁定的两张空闲卡。
+即将以单空闲NPU补CPU/NPU两owner的4个独立检查（gef-column-owners-host-npu，等待60秒/运行240秒），
+单卡补验同样准入超时（exit3、未计算）。CPU FC16两客户端成本已完成，PyTorch/native为1.234671/1.225463秒。
+不占共享NPU；新的双卡能力及新默认NPU后继仍待设备验证。
 其后resident新列、旧异步/资源/容量边界与广泛源码审阅按ROADMAP有限推进；GPU仍延后。
 
 ## 现场、作业和复现
@@ -42,3 +47,6 @@ NPU物理11，诊断另用空闲7；正式NPU进程实际affinity144–159，CPU
 共享NPU仍须本次明确授权；正式计时避开重构建。当前无磁盘阻塞，不清理参考仓库或公共工具链。
 
 历史source定位：python scripts/resolve_history_commit.py OLD_SHA。正式成果从仓库证据与生成器复现，无需旧raw目录。
+
+SDK peer CLI补调用现有runtime resolver，避免仅解析设备字符串；开发快照owners-cli-dev保持不动。
+gef-column-owners-cli已构建/SDK CPU通过，jobs all；下一步固定CLI修正及证据，不属于真机peer资格。
