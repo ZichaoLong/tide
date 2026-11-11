@@ -1,0 +1,95 @@
+{
+  "schema": "tide-implementation-review-v1",
+  "source": "efc2776b7262dc82ada1508e396cb686a296fb3f",
+  "meaning": "Eleven actual file/boundary reviews only; overlap with previous manifests, not full repository review or device qualification.",
+  "files": [
+    {
+      "path": "python/tidegraph/weighted/column_transport.py",
+      "sha256": "92790f390a641ba85ced593c379e2db35d39ba57b2801887f81f518c68ca6265",
+      "symbols": "*",
+      "reviewer": "root",
+      "scope": "Actual message identity and destination copy cache, complete descriptor transfer, original roots.",
+      "evidence": "docs/evidence/column-owners-20261111.md"
+    },
+    {
+      "path": "python/tidegraph/weighted/message_columns.py",
+      "sha256": "90e32607ae0ad18558802957171fabfa60b017a3656ea7298a04c6d5aa80d7fb",
+      "symbols": "*",
+      "reviewer": "root",
+      "scope": "Remote input validation, physical existence and per-owner readout projection.",
+      "evidence": "docs/evidence/column-owners-20261111.md"
+    },
+    {
+      "path": "python/tidegraph/weighted/settle_columns.py",
+      "sha256": "4dfde0280f152cc2e8d5b175b1c746b75ff3ca27777b068afa2b785a24f50758",
+      "symbols": "*",
+      "reviewer": "root",
+      "scope": "Node/region placement, source copy before aggregate, complete regional groups, target-owned edge messages and raw owner checks.",
+      "evidence": "docs/evidence/column-owners-20261111.md"
+    },
+    {
+      "path": "python/tidegraph/weighted/window_execution.py",
+      "sha256": "7a490c3ec2cce56b81abd1a6e18f82fc88d9f17d9bf901c02589b404f59561a2",
+      "symbols": "*",
+      "reviewer": "root",
+      "scope": "Capability checks before compute, public remote input binding, owner placement records and general record fallback.",
+      "evidence": "docs/evidence/column-owners-20261111.md"
+    },
+    {
+      "path": "python/tidegraph/weighted/native_columns.py",
+      "sha256": "d697bfb8f3f47289d00e70568a886c7ccfd92771e1d5927189de50c7e31a106e",
+      "symbols": "*",
+      "reviewer": "root",
+      "scope": "Explicit binary capability version gate and unchanged typed encode/decode.",
+      "evidence": "docs/evidence/column-owners-20261111.md"
+    },
+    {
+      "path": "python/tidegraph/experiment/column_task.py",
+      "sha256": "755ca718510748fd413cee35f7427299d4605ae636a8f125366903b45c3fd6fc",
+      "symbols": "*",
+      "reviewer": "root",
+      "scope": "Per-port objective on owner, scalar sum across owners; existing input and detached output decoding.",
+      "evidence": "docs/evidence/column-owners-20261111.md"
+    },
+    {
+      "path": "cpp/src/weighted_settle_columns.cpp",
+      "sha256": "7a21c0bfa8e543174e4f03f8428a8e1496e7c2a6afe5d5cbdf36528eac821137",
+      "symbols": "*",
+      "reviewer": "root",
+      "scope": "Independent native owner-aware schedule and actual whole-column copy caching; manual C++ review, no AST coverage claim.",
+      "evidence": "docs/evidence/column-owners-20261111.md"
+    },
+    {
+      "path": "cpp/test/weighted_sequence_columns.cpp",
+      "sha256": "8351c11c7f48e115639764fe0624c4c8d812948cf3e6dc2a5af13d6c9dbfb7e7",
+      "symbols": "*",
+      "reviewer": "root",
+      "scope": "Independent streaming/raw/VJP/two-step checks; explicit peer owner resolution through runtime adapter.",
+      "evidence": "docs/evidence/column-owners-20261111.md"
+    },
+    {
+      "path": "examples/consumer_core5/tensor_window.py",
+      "sha256": "3e5d32a1fe10cb58cd2638d24e14fdac2ec4dcf7284f90b96efbbd90d864e803",
+      "symbols": "*",
+      "reviewer": "root",
+      "scope": "Construction-time region owner map before optimizer, explicit peer identity, child propagation, exact process resume.",
+      "evidence": "docs/evidence/column-owners-20261111.md"
+    },
+    {
+      "path": "python/tidegraph/ownership.py",
+      "sha256": "d8a7acd42cfecedb33af27e2bfaa67d084f96c591ee2a409672967fcdc543463",
+      "symbols": "*",
+      "reviewer": "root",
+      "scope": "Existing node alias co-location and canonical regional/port ownership constraints reused unchanged.",
+      "evidence": "docs/evidence/column-owners-20261111.md"
+    },
+    {
+      "path": "tests/test_column_payload_owners.py",
+      "sha256": "16e2510d795c6c03b278d9586e30d1660076c69f9c642c2923a98f5272715994",
+      "symbols": "*",
+      "reviewer": "root",
+      "scope": "Independent scalar values and all observed roots, same-rank/repeated-edge cases, spanning SSD region, literal readout, AdamW and raw owner restore.",
+      "evidence": "docs/evidence/column-owners-20261111.md"
+    }
+  ]
+}

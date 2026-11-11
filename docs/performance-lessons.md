@@ -179,3 +179,7 @@
 ## 联合KV准备的实际收益与剩余边界
 
 [详细观察](performance-lessons-batching.md#联合kv准备的实际收益与剩余边界)。
+
+## 张量窗口跨owner的语义边界
+
+[详细观察](performance-lessons-state-devices.md#张量窗口跨owner的语义边界)。

@@ -1,5 +1,7 @@
 # 历史验证与测量证据
 
+[多payload owner张量窗口（2026-11-11）](column-owners-20261111.md)：796baafa实现、efc2776b SDK入口；固定CPU243通过/13原数值xfail，独立SDK CPU通过。两次NPU准入超时均未计算；跨设备资格与性能仍待验。默认FC16两客户端CPU成本单列。
+
 [张量窗口混合放置与有序共享伴随（2026-11-11）](column-placement-20261111.md)：540ccbd8/2ca00458固定CPU、NPU安装训练/恢复及SDK15项；Python KV mixed-a原精确恢复失败由局部共享使用归并修复。9项混合成本与主PyTorch FC16成本单列。
 
 [公共实验张量输入/loss与有限代表（2026-11-11）](experiment-columns-20261111.md)：b993f38固定133项、8安装消费者；18个宽/多节点训练成本、24层链三模式、约1B/9B四推理点。原scalar loss检查器失败、NPU三个精确恢复失败与规模未验范围分列。

@@ -29,8 +29,12 @@ Python/C++ KV与四循环/卷积整链、异构组合、实际消息列及 raw �
 [卷积转置](evidence/column-tap-transpose-20261111.md)修复原NPU代表的精确恢复失败。
 [540ccbd8/2ca00458混合放置](evidence/column-placement-20261111.md)已固定验收CPU、NPU安装训练/恢复
 和SDK五记忆×三放置；Python共享Aggregate跨设备伴随的原恢复失败已局部修复。
-9个mixed成本点和PyTorch FC16新CPU/NPU成本已有证据。新列多payload设备/resident、FP16、
-旧异步/容量边界与完整源审阅仍待推进；不把旧一般执行器功能当作新路径已经迁移或优化。
+9个mixed成本点和PyTorch FC16新CPU/NPU成本已有证据。
+[796baafa/efc2776b多payload owner](evidence/column-owners-20261111.md)已实现完整区域汇集、
+整列消息传输和跨owner输出；固定CPU243通过/13原数值xfail，独立SDK CPU通过。
+两次NPU准入超时均未计算，新多owner值/VJP/恢复与新默认设备回归仍待验。
+新列resident、FP16、旧异步/容量边界与完整源审阅继续推进；
+不把旧一般执行器功能当作新路径已经迁移或优化。
 
 原计划的三类未完成工作继续：实现/数值/异步/容量限制，LH及core-3经验的实际迁移，
 可复用正确性/性能设施与架构导航。既有skills、独立基线、诊断收集器和KV块优化复用，不重做。

@@ -1,0 +1,1866 @@
+{
+  "schema": "tide-column-owners-evidence-v1",
+  "implementation": "796baafa3a0d580e6722cd28814bf23dafe60e8b",
+  "sdk_cli": "efc2776b7262dc82ada1508e396cb686a296fb3f",
+  "upstream": "0770593838a37c790a568226930567ed60f99b83",
+  "build_reuse": {
+    "implementation": "796baafa3a0d580e6722cd28814bf23dafe60e8b",
+    "cpp_source_sha256": "2a6d2d37325c95ac99d22421cc8ff981cda8545d86fd01f8c21aef6ced166132",
+    "builds": [
+      {
+        "build": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/owners-dev1/build",
+        "original_manifest": {
+          "source": "1e573753a8338caf8d996cb2a7afbf5d00dab9c5",
+          "cpp_source_sha256": "2a6d2d37325c95ac99d22421cc8ff981cda8545d86fd01f8c21aef6ced166132",
+          "torch": "2.12.0+cpu",
+          "distribution": {
+            "torch": "2.12.0+cpu",
+            "torch_dir": "/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/lib/python3.12/site-packages/torch/share/cmake/Torch",
+            "prefix": "/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/lib/python3.12/site-packages/torch/share/cmake",
+            "cuda": null,
+            "cxx11_abi": true,
+            "discovery": "python-torch"
+          },
+          "environment": {
+            "os": "Linux-5.10.0-182.0.0.95.r1941_123.hce2.aarch64-aarch64-with-glibc2.34",
+            "compiler": "c++ (GCC) 10.3.1",
+            "cxx_standard": 17,
+            "build_type": "Release",
+            "torch_prefix": "/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/lib/python3.12/site-packages/torch/share/cmake/Torch",
+            "cann_version": "9.2.0"
+          },
+          "build_jobs": 320,
+          "backend": "npu",
+          "npu_runtime": "python",
+          "torch_npu": "2.12.0.post3",
+          "cuda": null,
+          "architecture": "aarch64",
+          "python": "3.12.13",
+          "cxx11_abi": true,
+          "binary_sha256": {
+            "libtidegraph.a": "7b795232e8fc61d9694a7a631747dc9b54853ba402e837df1f7c85609f990c6f",
+            "libtidegraph_runtime.a": "965d4f26e87b1ee32bd5a4c6cc6238f4a20785d037982a37ebf876523bd3a4be",
+            "_tide_native.so": "dfb11f154c109aa64da36b57ac69d40a06ffbd0cd4eabeb35fb40a168219bdfa"
+          }
+        }
+      },
+      {
+        "build": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/owners-dev1/build-sdk",
+        "original_manifest": {
+          "source": "1e573753a8338caf8d996cb2a7afbf5d00dab9c5",
+          "cpp_source_sha256": "2a6d2d37325c95ac99d22421cc8ff981cda8545d86fd01f8c21aef6ced166132",
+          "torch": "2.12.0",
+          "distribution": {
+            "torch": "2.12.0",
+            "torch_dir": "/opt/software/libtorch/2.12.0-cpu-aarch64-abi1/share/cmake/Torch",
+            "prefix": "/opt/software/libtorch/2.12.0-cpu-aarch64-abi1",
+            "cxx11_abi": true,
+            "cuda": null,
+            "discovery": "standalone-prefix",
+            "distribution_sha256": {
+              "share/cmake/Torch/TorchConfig.cmake": "9846a61d981bc6c465ccfd604edb910e2ff37342310b80606c416697f9753d24",
+              "share/cmake/Torch/TorchConfigVersion.cmake": "6cc8fc1b03a7d604a57be1fc51491bfb4deb8c651506c415a41b5173b06344f3",
+              "lib/libtorch.so": "5d864dc3a979f6f8cf572e752caa583182324399c29a79b9143efe175f67d72e",
+              "lib/libtorch_cpu.so": "cb4931abca15245de366da71e361174afc9e411651d4c50046cfb7a2dac6c4f5",
+              "lib/libc10.so": "fa843366784bfce035e912360601c4ca098ce536b20f0c4a8ee50c3f00294e37"
+            }
+          },
+          "environment": {
+            "os": "Linux-5.10.0-182.0.0.95.r1941_123.hce2.aarch64-aarch64-with-glibc2.34",
+            "compiler": "c++ (GCC) 10.3.1",
+            "cxx_standard": 17,
+            "build_type": "Release",
+            "torch_prefix": "/opt/software/libtorch/2.12.0-cpu-aarch64-abi1/share/cmake/Torch",
+            "cann_version": "9.2.0",
+            "npu_sdk": {
+              "config": "/opt/software/libtorch-npu/2.12.0-cann9.2.0-aarch64-abi1/sdk/share/cmake/Torch_npu/Torch_npuConfig.cmake",
+              "config_sha256": "1711480e47f9dbb19ed01209f073e5526218efeb583cbbbc9ab101c373cc62dd",
+              "library_sha256": "9a851accc1f4c7063d7e3c3cf76186329c063000a00a4d48c45a30ca1e8e3c18"
+            }
+          },
+          "build_jobs": 320,
+          "backend": "npu",
+          "npu_runtime": "standalone",
+          "torch_npu": null,
+          "cuda": null,
+          "architecture": "aarch64",
+          "python": "3.9.9",
+          "cxx11_abi": true,
+          "binary_sha256": {
+            "libtidegraph.a": "95415d3579da46f446e573bd3b54c7c2531968519ce038b7fe663ae013617eed",
+            "libtidegraph_runtime.a": "063500b65a9687cd9652df2059dbb2430a07b61e3f297f97f13f96dd950bcaa1",
+            "tidegraph-smoke": "0685001ba1382b1903bc03f780caaecb104b846b0ce94fb097e3c5c619b8f531",
+            "tidegraph-kernel-check": "20d4f6ae6cbc5910c30b47187e448a9d6bd53ce2c4a5f184c03fa37c934dafee",
+            "tidegraph-full-check": "076027486fda229892ebabd29d466960122634c15cff060cf4611ad5cdb8db2f",
+            "tidegraph-aggregate-check": "60c9ac0b6d98ec4cee91f209c29814d3137642059d56d82451cb483fdd331408",
+            "tidegraph-optimizer-check": "0c881d740a51a1067ea507bb914aaeeb6359bedbc4b2cd35cd882032926bc602",
+            "tidegraph-checkpoint-check": "c6ab2db771239e900dfbcaebc0f90cb289cf8c94698dee8d661d7ca768fbdaa5",
+            "tidegraph-weighted-training-check": "6ae9190e22654c78b094720b3fb336cd3cf7245389acb24efa5e43f5c1021273",
+            "tidegraph-lh-scope-check": "746aedf44726838f1a9159a03747053ee5ec4d9de2e930ad3258aed8a2492e0d",
+            "tidegraph-streaming-bench": "e8a7c2e6436f59036cd1a70e497218c13836b2685e4b1d7abd9b1dba17a3de7a",
+            "tidegraph-scale-bench": "661b506b310ef2450981a537a25af409004c1752b94a680f27ddb646e417676c",
+            "tidegraph-profile-check": "27b5ca2d75e14baa28a0ea1b77414363aff4167cb82e32926132cc8fff9fe7e0",
+            "tidegraph-settle-check": "0fef1a9383371083ef4ce1efc7c927823fc7c73ee7b8d82c90d082abfd5c7ac9",
+            "tidegraph-greedy-check": "4bda0a7b696106f49160e1957de3de281d8604c0e52b71205c88ca6fd4c10afd",
+            "tidegraph-accelerator-check": "2565168f15fad14fef69e70d0837d58dbf2b78867c218cf8c4a9337898f82f6e",
+            "tidegraph-runtime-check": "cd6d5ea111da2de812c90d807b0d2836f854d47dd39c79746d6815fa1376f7ac",
+            "tidegraph-read-precision-check": "40244a14ff0b4fb080f17ac0fe1d20634921b8e2d367b4a7280d805ff9cdbc2e",
+            "tidegraph-placement-check": "af6ce30e30bf3f9d5683252adc10d9c41ebc5d118990ba9c472b6b2075f82692",
+            "tidegraph-payload-ownership-check": "c368f686dde2a59e2b7b003f97ba3f2b98825c5d904b4e14b6f6825a50772547",
+            "tidegraph-weighted-binding-module-check": "6fa66ef5bc9ce4e5d3f1017c22cafd669a35d2df04ef81f5219cea766cc8a944",
+            "tidegraph-column-check": "ff0ba4f357b894d3374a85c4feeaddfc24cfd220d3e661563d8fff197e137dda",
+            "libtidegraph-weighted-binding-module.so": "9c8868e2097973b249b80d263d16116c3792a8bd59ce9077d4140a151cf4f82d"
+          }
+        }
+      }
+    ]
+  },
+  "sdk_cli_reuse": {
+    "implementation": "efc2776b7262dc82ada1508e396cb686a296fb3f",
+    "cpp_source_sha256": "b0d8bde133aa312981ed2f4b11127753f74d0caee44c9ff9892f0dff3eead2cc",
+    "original_manifest": {
+      "source": "796baafa3a0d580e6722cd28814bf23dafe60e8b",
+      "cpp_source_sha256": "b0d8bde133aa312981ed2f4b11127753f74d0caee44c9ff9892f0dff3eead2cc",
+      "torch": "2.12.0",
+      "distribution": {
+        "torch": "2.12.0",
+        "torch_dir": "/opt/software/libtorch/2.12.0-cpu-aarch64-abi1/share/cmake/Torch",
+        "prefix": "/opt/software/libtorch/2.12.0-cpu-aarch64-abi1",
+        "cxx11_abi": true,
+        "cuda": null,
+        "discovery": "standalone-prefix",
+        "distribution_sha256": {
+          "share/cmake/Torch/TorchConfig.cmake": "9846a61d981bc6c465ccfd604edb910e2ff37342310b80606c416697f9753d24",
+          "share/cmake/Torch/TorchConfigVersion.cmake": "6cc8fc1b03a7d604a57be1fc51491bfb4deb8c651506c415a41b5173b06344f3",
+          "lib/libtorch.so": "5d864dc3a979f6f8cf572e752caa583182324399c29a79b9143efe175f67d72e",
+          "lib/libtorch_cpu.so": "cb4931abca15245de366da71e361174afc9e411651d4c50046cfb7a2dac6c4f5",
+          "lib/libc10.so": "fa843366784bfce035e912360601c4ca098ce536b20f0c4a8ee50c3f00294e37"
+        }
+      },
+      "environment": {
+        "os": "Linux-5.10.0-182.0.0.95.r1941_123.hce2.aarch64-aarch64-with-glibc2.34",
+        "compiler": "c++ (GCC) 10.3.1",
+        "cxx_standard": 17,
+        "build_type": "Release",
+        "torch_prefix": "/opt/software/libtorch/2.12.0-cpu-aarch64-abi1/share/cmake/Torch",
+        "cann_version": "9.2.0",
+        "npu_sdk": {
+          "config": "/opt/software/libtorch-npu/2.12.0-cann9.2.0-aarch64-abi1/sdk/share/cmake/Torch_npu/Torch_npuConfig.cmake",
+          "config_sha256": "1711480e47f9dbb19ed01209f073e5526218efeb583cbbbc9ab101c373cc62dd",
+          "library_sha256": "9a851accc1f4c7063d7e3c3cf76186329c063000a00a4d48c45a30ca1e8e3c18"
+        }
+      },
+      "build_jobs": 320,
+      "backend": "npu",
+      "npu_runtime": "standalone",
+      "torch_npu": null,
+      "cuda": null,
+      "architecture": "aarch64",
+      "python": "3.9.9",
+      "cxx11_abi": true,
+      "binary_sha256": {
+        "libtidegraph.a": "27c61a65e9539951a408f6f0261791a4d1e120f17de83135ecdd3b95ca63c501",
+        "libtidegraph_runtime.a": "02b8b543cbf92575cc32453721d038746ef608c15b2f5eb1648b2cc26d2ae13b",
+        "tidegraph-smoke": "0685001ba1382b1903bc03f780caaecb104b846b0ce94fb097e3c5c619b8f531",
+        "tidegraph-kernel-check": "20d4f6ae6cbc5910c30b47187e448a9d6bd53ce2c4a5f184c03fa37c934dafee",
+        "tidegraph-full-check": "076027486fda229892ebabd29d466960122634c15cff060cf4611ad5cdb8db2f",
+        "tidegraph-aggregate-check": "60c9ac0b6d98ec4cee91f209c29814d3137642059d56d82451cb483fdd331408",
+        "tidegraph-optimizer-check": "0c881d740a51a1067ea507bb914aaeeb6359bedbc4b2cd35cd882032926bc602",
+        "tidegraph-checkpoint-check": "c6ab2db771239e900dfbcaebc0f90cb289cf8c94698dee8d661d7ca768fbdaa5",
+        "tidegraph-weighted-training-check": "6ae9190e22654c78b094720b3fb336cd3cf7245389acb24efa5e43f5c1021273",
+        "tidegraph-lh-scope-check": "746aedf44726838f1a9159a03747053ee5ec4d9de2e930ad3258aed8a2492e0d",
+        "tidegraph-streaming-bench": "e8a7c2e6436f59036cd1a70e497218c13836b2685e4b1d7abd9b1dba17a3de7a",
+        "tidegraph-scale-bench": "661b506b310ef2450981a537a25af409004c1752b94a680f27ddb646e417676c",
+        "tidegraph-profile-check": "27b5ca2d75e14baa28a0ea1b77414363aff4167cb82e32926132cc8fff9fe7e0",
+        "tidegraph-settle-check": "0fef1a9383371083ef4ce1efc7c927823fc7c73ee7b8d82c90d082abfd5c7ac9",
+        "tidegraph-greedy-check": "4bda0a7b696106f49160e1957de3de281d8604c0e52b71205c88ca6fd4c10afd",
+        "tidegraph-accelerator-check": "2565168f15fad14fef69e70d0837d58dbf2b78867c218cf8c4a9337898f82f6e",
+        "tidegraph-runtime-check": "cd6d5ea111da2de812c90d807b0d2836f854d47dd39c79746d6815fa1376f7ac",
+        "tidegraph-read-precision-check": "40244a14ff0b4fb080f17ac0fe1d20634921b8e2d367b4a7280d805ff9cdbc2e",
+        "tidegraph-placement-check": "af6ce30e30bf3f9d5683252adc10d9c41ebc5d118990ba9c472b6b2075f82692",
+        "tidegraph-payload-ownership-check": "c368f686dde2a59e2b7b003f97ba3f2b98825c5d904b4e14b6f6825a50772547",
+        "tidegraph-weighted-binding-module-check": "6fa66ef5bc9ce4e5d3f1017c22cafd669a35d2df04ef81f5219cea766cc8a944",
+        "tidegraph-column-check": "52bc72c96fb1186587b9444e383aba80c81fd6aff396aedd7f96c6583ac01e96",
+        "libtidegraph-weighted-binding-module.so": "9c8868e2097973b249b80d263d16116c3792a8bd59ce9077d4140a151cf4f82d"
+      }
+    }
+  },
+  "cpu": {
+    "path": "artifacts/columns-20261111/owners-checks.xml",
+    "sha256": "8ab48f540d0ca22e60e6dda73fa7a034b32bc25c1310b0d50b6458771ffbdc58",
+    "suites": [
+      {
+        "name": "pytest",
+        "errors": "0",
+        "failures": "0",
+        "skipped": "13",
+        "tests": "256",
+        "time": "53.022",
+        "timestamp": "2026-11-11T21:56:54.915374+08:00",
+        "hostname": "liteserver-mi-dev-00001"
+      }
+    ]
+  },
+  "jobs": {
+    "column-owners-dev1": {
+      "command": [
+        "/bin/bash",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/owners-dev1/work.sh"
+      ],
+      "cwd": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/owners-dev1/source",
+      "state": "passed",
+      "source": "1e573753a8338caf8d996cb2a7afbf5d00dab9c5",
+      "dirty": "M cpp/src/bind_weighted_sequence_columns.cpp\n M cpp/src/weighted_settle_columns.cpp\n M cpp/test/weighted_sequence_columns.cpp\n M docs/STATUS.md\n M docs/weighted-tensor-windows.md\n M examples/consumer_core5/tensor_window.py\n M python/tidegraph/experiment/column_task.py\n M python/tidegraph/weighted/message_columns.py\n M python/tidegraph/weighted/native_columns.py\n M python/tidegraph/weighted/settle_columns.py\n M python/tidegraph/weighted/window_execution.py\n?? docs/tide-learning-lab-TL-REQ-004-handoff.md\n?? docs/tide-learning-lab-TL-REQ-005-handoff.md\n?? python/tidegraph/weighted/column_transport.py\n?? tests/test_column_payload_owners.py",
+      "started": "2026-11-11T13:52:31.691490+00:00",
+      "exit_code": 0,
+      "finished": "2026-11-11T13:54:23.766909+00:00"
+    },
+    "column-owners-qualify": {
+      "command": [
+        "/bin/bash",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/owners-qualify.sh"
+      ],
+      "cwd": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/qualified-owners",
+      "state": "passed",
+      "source": "796baafa3a0d580e6722cd28814bf23dafe60e8b",
+      "dirty": "",
+      "started": "2026-11-11T13:56:53.312522+00:00",
+      "exit_code": 0,
+      "finished": "2026-11-11T13:57:50.690449+00:00"
+    },
+    "column-owners-npu": {
+      "command": [
+        "/bin/bash",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/owners-npu.sh"
+      ],
+      "cwd": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/qualified-owners",
+      "state": "failed",
+      "source": "796baafa3a0d580e6722cd28814bf23dafe60e8b",
+      "dirty": "",
+      "started": "2026-11-11T13:59:55.322469+00:00",
+      "exit_code": 3,
+      "finished": "2026-11-11T14:01:56.525765+00:00"
+    },
+    "column-owners-host-npu": {
+      "command": [
+        "/bin/bash",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/owners-host-npu.sh"
+      ],
+      "cwd": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/qualified-owners",
+      "state": "failed",
+      "source": "796baafa3a0d580e6722cd28814bf23dafe60e8b",
+      "dirty": "",
+      "started": "2026-11-11T14:05:07.333899+00:00",
+      "exit_code": 3,
+      "finished": "2026-11-11T14:06:18.400069+00:00"
+    },
+    "column-owners-cpu-cost": {
+      "command": [
+        "/bin/bash",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/owners-cpu-cost.sh"
+      ],
+      "cwd": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/qualified-owners",
+      "state": "passed",
+      "source": "796baafa3a0d580e6722cd28814bf23dafe60e8b",
+      "dirty": "",
+      "started": "2026-11-11T14:05:07.340472+00:00",
+      "exit_code": 0,
+      "finished": "2026-11-11T14:05:18.854142+00:00"
+    },
+    "column-owners-cli": {
+      "command": [
+        "/bin/bash",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/owners-cli-build.sh"
+      ],
+      "cwd": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/owners-cli-dev",
+      "state": "passed",
+      "source": "796baafa3a0d580e6722cd28814bf23dafe60e8b",
+      "dirty": "M cpp/test/weighted_sequence_columns.cpp",
+      "started": "2026-11-11T14:07:14.093463+00:00",
+      "exit_code": 0,
+      "finished": "2026-11-11T14:07:46.166869+00:00"
+    },
+    "column-owners-cli-qualify": {
+      "command": [
+        "/bin/bash",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/owners-cli-qualify.sh"
+      ],
+      "cwd": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/qualified-owners-cli",
+      "state": "passed",
+      "source": "efc2776b7262dc82ada1508e396cb686a296fb3f",
+      "dirty": "",
+      "started": "2026-11-11T14:09:44.291741+00:00",
+      "exit_code": 0,
+      "finished": "2026-11-11T14:09:47.956649+00:00"
+    }
+  },
+  "queues": {
+    "owners-queue.json": {
+      "elapsed_seconds": 120.45536310225725,
+      "head_job_id": "gef-column-owners-npu",
+      "job_id": "gef-column-owners-npu",
+      "npu_count": 2,
+      "priority": 0,
+      "project": "graph-execution-foundation",
+      "queue_position": 1,
+      "reason": "insufficient_free_devices",
+      "schema_version": 1,
+      "status": "timed_out",
+      "timestamp": "2026-11-11T14:01:56.508444+00:00"
+    },
+    "owners-host-queue.json": {
+      "elapsed_seconds": 70.32838364318013,
+      "head_job_id": "gef-column-owners-host-npu",
+      "job_id": "gef-column-owners-host-npu",
+      "npu_count": 1,
+      "priority": 0,
+      "project": "graph-execution-foundation",
+      "queue_position": 1,
+      "reason": "insufficient_unlocked_devices",
+      "schema_version": 1,
+      "status": "timed_out",
+      "timestamp": "2026-11-11T14:06:18.384730+00:00"
+    }
+  },
+  "npu_scope": {
+    "execution": "not_run",
+    "reason": "admission timeout: no simultaneously free and unlocked devices; no shared-card authorization used",
+    "pending": [
+      "two accelerator payload owners; independent scalar/column values and VJPs",
+      "cross-owner regional SSD with complete allocation",
+      "default ordinary asynchronous backward completion",
+      "eight installed KV/SSD x Python/native x mixed-a/c three-step/fresh-process resumes",
+      "SDK five memories x three placements on two NPUs",
+      "finite multi-device timing"
+    ]
+  },
+  "cost": {
+    "python": {
+      "foundation_source": "796baafa3a0d580e6722cd28814bf23dafe60e8b",
+      "foundation_dirty": "",
+      "schema": "tide-dense-query-cost-v1",
+      "execution": "completed",
+      "strict_numerical": "not_checked",
+      "discrete": "not_independently_checked",
+      "recovery": "see separate consumer",
+      "learning": "not_a_learning_study",
+      "downstream": "0439efd2af31cf10b07ce9e6423b0195f7449968",
+      "downstream_archive_sha256": "430237f4ca7a8c0205644ff6952cd4823ace20160ee0ffc2a206b4064e9075ce",
+      "resolved": {
+        "campaign": "language-v6",
+        "checks": {
+          "core_atol": 1e-06,
+          "core_rtol": 1e-05,
+          "finite_exploration": true
+        },
+        "core": {
+          "max_materialize_bytes": 1073741824,
+          "recipe": {
+            "branches": 2,
+            "depth": 4,
+            "family": "kv",
+            "history": 512,
+            "memory_overrides": {
+              "memory_read": "qry"
+            },
+            "offsets": [
+              0,
+              1
+            ],
+            "profile": "baseline",
+            "region_overrides": {
+              "allocation_temperature": 0.25
+            },
+            "region_width": 4,
+            "regularizer": "quad",
+            "selection": "regional_total",
+            "source_mode": "region",
+            "sparse_denominator": 2,
+            "topology": "fc",
+            "width": 128
+          },
+          "width": 128,
+          "eager_implementation": "python",
+          "placement_preset": "cpu",
+          "native_library": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/owners-dev1/build"
+        },
+        "coverage_group": "scale",
+        "device": "cpu",
+        "dtype": "float32",
+        "evaluation": {
+          "inference_length": 16,
+          "test_policy": "sealed; separate frozen finalist review only"
+        },
+        "id": "scale-fc16-kv-quad",
+        "kind": "tide",
+        "line": "scale",
+        "planned_inventory": {
+          "core_trainable": 4564404,
+          "lm_trainable": 5092788,
+          "nodes": 16,
+          "regions": 4,
+          "resolved_memories": [
+            {
+              "adapter_rank": 32,
+              "alpha_att": 1.0,
+              "alpha_ff": 1.0,
+              "beta_short": 0.11552453009332421,
+              "distance_slopes": [
+                0.0,
+                0.0
+              ],
+              "epsilon": 1e-05,
+              "ffn_width": 512,
+              "full_frequencies": [
+                [],
+                []
+              ],
+              "heads": 2,
+              "memory_read": "qry",
+              "position_origin": 1,
+              "position_scale": 6,
+              "read_frequencies": [],
+              "summary_width": 32,
+              "width": 128,
+              "window": 3072
+            },
+            {
+              "adapter_rank": 32,
+              "alpha_att": 1.0,
+              "alpha_ff": 1.0,
+              "beta_short": 0.11552453009332421,
+              "distance_slopes": [
+                0.0,
+                0.0
+              ],
+              "epsilon": 1e-05,
+              "ffn_width": 512,
+              "full_frequencies": [
+                [],
+                []
+              ],
+              "heads": 2,
+              "memory_read": "qry",
+              "position_origin": 1,
+              "position_scale": 6,
+              "read_frequencies": [],
+              "summary_width": 32,
+              "width": 128,
+              "window": 3072
+            },
+            {
+              "adapter_rank": 32,
+              "alpha_att": 1.0,
+              "alpha_ff": 1.0,
+              "beta_short": 0.11552453009332421,
+              "distance_slopes": [
+                0.0,
+                0.0
+              ],
+              "epsilon": 1e-05,
+              "ffn_width": 512,
+              "full_frequencies": [
+                [],
+                []
+              ],
+              "heads": 2,
+              "memory_read": "qry",
+              "position_origin": 1,
+              "position_scale": 6,
+              "read_frequencies": [],
+              "summary_width": 32,
+              "width": 128,
+              "window": 3072
+            },
+            {
+              "adapter_rank": 32,
+              "alpha_att": 1.0,
+              "alpha_ff": 1.0,
+              "beta_short": 0.11552453009332421,
+              "distance_slopes": [
+                0.0,
+                0.0
+              ],
+              "epsilon": 1e-05,
+              "ffn_width": 512,
+              "full_frequencies": [
+                [],
+                []
+              ],
+              "heads": 2,
+              "memory_read": "qry",
+              "position_origin": 1,
+              "position_scale": 6,
+              "read_frequencies": [],
+              "summary_width": 32,
+              "width": 128,
+              "window": 3072
+            },
+            {
+              "adapter_rank": 32,
+              "alpha_att": 1.0,
+              "alpha_ff": 1.0,
+              "beta_short": 0.11552453009332421,
+              "distance_slopes": [
+                0.0,
+                0.0
+              ],
+              "epsilon": 1e-05,
+              "ffn_width": 512,
+              "full_frequencies": [
+                [],
+                []
+              ],
+              "heads": 2,
+              "memory_read": "qry",
+              "position_origin": 2,
+              "position_scale": 6,
+              "read_frequencies": [],
+              "summary_width": 32,
+              "width": 128,
+              "window": 3072
+            },
+            {
+              "adapter_rank": 32,
+              "alpha_att": 1.0,
+              "alpha_ff": 1.0,
+              "beta_short": 0.11552453009332421,
+              "distance_slopes": [
+                0.0,
+                0.0
+              ],
+              "epsilon": 1e-05,
+              "ffn_width": 512,
+              "full_frequencies": [
+                [],
+                []
+              ],
+              "heads": 2,
+              "memory_read": "qry",
+              "position_origin": 2,
+              "position_scale": 6,
+              "read_frequencies": [],
+              "summary_width": 32,
+              "width": 128,
+              "window": 3072
+            },
+            {
+              "adapter_rank": 32,
+              "alpha_att": 1.0,
+              "alpha_ff": 1.0,
+              "beta_short": 0.11552453009332421,
+              "distance_slopes": [
+                0.0,
+                0.0
+              ],
+              "epsilon": 1e-05,
+              "ffn_width": 512,
+              "full_frequencies": [
+                [],
+                []
+              ],
+              "heads": 2,
+              "memory_read": "qry",
+              "position_origin": 2,
+              "position_scale": 6,
+              "read_frequencies": [],
+              "summary_width": 32,
+              "width": 128,
+              "window": 3072
+            },
+            {
+              "adapter_rank": 32,
+              "alpha_att": 1.0,
+              "alpha_ff": 1.0,
+              "beta_short": 0.11552453009332421,
+              "distance_slopes": [
+                0.0,
+                0.0
+              ],
+              "epsilon": 1e-05,
+              "ffn_width": 512,
+              "full_frequencies": [
+                [],
+                []
+              ],
+              "heads": 2,
+              "memory_read": "qry",
+              "position_origin": 2,
+              "position_scale": 6,
+              "read_frequencies": [],
+              "summary_width": 32,
+              "width": 128,
+              "window": 3072
+            },
+            {
+              "adapter_rank": 32,
+              "alpha_att": 1.0,
+              "alpha_ff": 1.0,
+              "beta_short": 0.11552453009332421,
+              "distance_slopes": [
+                0.0,
+                0.0
+              ],
+              "epsilon": 1e-05,
+              "ffn_width": 512,
+              "full_frequencies": [
+                [],
+                []
+              ],
+              "heads": 2,
+              "memory_read": "qry",
+              "position_origin": 3,
+              "position_scale": 6,
+              "read_frequencies": [],
+              "summary_width": 32,
+              "width": 128,
+              "window": 3072
+            },
+            {
+              "adapter_rank": 32,
+              "alpha_att": 1.0,
+              "alpha_ff": 1.0,
+              "beta_short": 0.11552453009332421,
+              "distance_slopes": [
+                0.0,
+                0.0
+              ],
+              "epsilon": 1e-05,
+              "ffn_width": 512,
+              "full_frequencies": [
+                [],
+                []
+              ],
+              "heads": 2,
+              "memory_read": "qry",
+              "position_origin": 3,
+              "position_scale": 6,
+              "read_frequencies": [],
+              "summary_width": 32,
+              "width": 128,
+              "window": 3072
+            },
+            {
+              "adapter_rank": 32,
+              "alpha_att": 1.0,
+              "alpha_ff": 1.0,
+              "beta_short": 0.11552453009332421,
+              "distance_slopes": [
+                0.0,
+                0.0
+              ],
+              "epsilon": 1e-05,
+              "ffn_width": 512,
+              "full_frequencies": [
+                [],
+                []
+              ],
+              "heads": 2,
+              "memory_read": "qry",
+              "position_origin": 3,
+              "position_scale": 6,
+              "read_frequencies": [],
+              "summary_width": 32,
+              "width": 128,
+              "window": 3072
+            },
+            {
+              "adapter_rank": 32,
+              "alpha_att": 1.0,
+              "alpha_ff": 1.0,
+              "beta_short": 0.11552453009332421,
+              "distance_slopes": [
+                0.0,
+                0.0
+              ],
+              "epsilon": 1e-05,
+              "ffn_width": 512,
+              "full_frequencies": [
+                [],
+                []
+              ],
+              "heads": 2,
+              "memory_read": "qry",
+              "position_origin": 3,
+              "position_scale": 6,
+              "read_frequencies": [],
+              "summary_width": 32,
+              "width": 128,
+              "window": 3072
+            },
+            {
+              "adapter_rank": 32,
+              "alpha_att": 1.0,
+              "alpha_ff": 1.0,
+              "beta_short": 0.11552453009332421,
+              "distance_slopes": [
+                0.0,
+                0.0
+              ],
+              "epsilon": 1e-05,
+              "ffn_width": 512,
+              "full_frequencies": [
+                [],
+                []
+              ],
+              "heads": 2,
+              "memory_read": "qry",
+              "position_origin": 4,
+              "position_scale": 6,
+              "read_frequencies": [],
+              "summary_width": 32,
+              "width": 128,
+              "window": 0
+            },
+            {
+              "adapter_rank": 32,
+              "alpha_att": 1.0,
+              "alpha_ff": 1.0,
+              "beta_short": 0.11552453009332421,
+              "distance_slopes": [
+                0.0,
+                0.0
+              ],
+              "epsilon": 1e-05,
+              "ffn_width": 512,
+              "full_frequencies": [
+                [],
+                []
+              ],
+              "heads": 2,
+              "memory_read": "qry",
+              "position_origin": 4,
+              "position_scale": 6,
+              "read_frequencies": [],
+              "summary_width": 32,
+              "width": 128,
+              "window": 0
+            },
+            {
+              "adapter_rank": 32,
+              "alpha_att": 1.0,
+              "alpha_ff": 1.0,
+              "beta_short": 0.11552453009332421,
+              "distance_slopes": [
+                0.0,
+                0.0
+              ],
+              "epsilon": 1e-05,
+              "ffn_width": 512,
+              "full_frequencies": [
+                [],
+                []
+              ],
+              "heads": 2,
+              "memory_read": "qry",
+              "position_origin": 4,
+              "position_scale": 6,
+              "read_frequencies": [],
+              "summary_width": 32,
+              "width": 128,
+              "window": 0
+            },
+            {
+              "adapter_rank": 32,
+              "alpha_att": 1.0,
+              "alpha_ff": 1.0,
+              "beta_short": 0.11552453009332421,
+              "distance_slopes": [
+                0.0,
+                0.0
+              ],
+              "epsilon": 1e-05,
+              "ffn_width": 512,
+              "full_frequencies": [
+                [],
+                []
+              ],
+              "heads": 2,
+              "memory_read": "qry",
+              "position_origin": 4,
+              "position_scale": 6,
+              "read_frequencies": [],
+              "summary_width": 32,
+              "width": 128,
+              "window": 0
+            }
+          ],
+          "resolved_regions": [
+            {
+              "allocation_base": null,
+              "allocation_temperature": 0.25,
+              "alpha_loc": null,
+              "alpha_match": null,
+              "alpha_res": null,
+              "alpha_sel": null,
+              "ent_alpha": null,
+              "eta": null,
+              "fixed_gain": null,
+              "gain_logit": null,
+              "gamma_max": 2.0,
+              "hidden_width": 32,
+              "k": 2,
+              "local_score": "cat",
+              "query_weight": null,
+              "read_mode": "+",
+              "region_control_mode": "context",
+              "region_control_width": 32,
+              "region_evidence": "cat",
+              "region_key": null,
+              "region_score": "ind",
+              "regularizer": "quad",
+              "selection_mode": "regional_total",
+              "selection_width": null,
+              "send_gain": null,
+              "total_fraction": null
+            },
+            {
+              "allocation_base": null,
+              "allocation_temperature": 0.25,
+              "alpha_loc": null,
+              "alpha_match": null,
+              "alpha_res": null,
+              "alpha_sel": null,
+              "ent_alpha": null,
+              "eta": null,
+              "fixed_gain": null,
+              "gain_logit": null,
+              "gamma_max": 2.0,
+              "hidden_width": 32,
+              "k": 2,
+              "local_score": "cat",
+              "query_weight": null,
+              "read_mode": "+",
+              "region_control_mode": "context",
+              "region_control_width": 32,
+              "region_evidence": "cat",
+              "region_key": null,
+              "region_score": "ind",
+              "regularizer": "quad",
+              "selection_mode": "regional_total",
+              "selection_width": null,
+              "send_gain": null,
+              "total_fraction": null
+            },
+            {
+              "allocation_base": null,
+              "allocation_temperature": 0.25,
+              "alpha_loc": null,
+              "alpha_match": null,
+              "alpha_res": null,
+              "alpha_sel": null,
+              "ent_alpha": null,
+              "eta": null,
+              "fixed_gain": null,
+              "gain_logit": null,
+              "gamma_max": 2.0,
+              "hidden_width": 32,
+              "k": 2,
+              "local_score": "cat",
+              "query_weight": null,
+              "read_mode": "+",
+              "region_control_mode": "context",
+              "region_control_width": 32,
+              "region_evidence": "cat",
+              "region_key": null,
+              "region_score": "ind",
+              "regularizer": "quad",
+              "selection_mode": "regional_total",
+              "selection_width": null,
+              "send_gain": null,
+              "total_fraction": null
+            },
+            {
+              "allocation_base": null,
+              "allocation_temperature": 0.25,
+              "alpha_loc": null,
+              "alpha_match": null,
+              "alpha_res": null,
+              "alpha_sel": null,
+              "ent_alpha": null,
+              "eta": null,
+              "fixed_gain": null,
+              "gain_logit": null,
+              "gamma_max": 2.0,
+              "hidden_width": 32,
+              "k": 2,
+              "local_score": "cat",
+              "query_weight": null,
+              "read_mode": "+",
+              "region_control_mode": "context",
+              "region_control_width": 32,
+              "region_evidence": "cat",
+              "region_key": null,
+              "region_score": "ind",
+              "regularizer": "quad",
+              "selection_mode": "regional_total",
+              "selection_width": null,
+              "send_gain": null,
+              "total_fraction": null
+            }
+          ]
+        },
+        "resources": {
+          "max_rss_gib": 48
+        },
+        "revisions": {
+          "foundation": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+          "mathematics": "0770593838a37c790a568226930567ed60f99b83"
+        },
+        "schema": "tide-language-campaign-config-v1",
+        "seed": 11,
+        "study_id": "TL-SCALE-v6",
+        "threads": 1,
+        "training": {
+          "batch": 8,
+          "checkpoint_seconds": 600,
+          "clip_norm": 1.0,
+          "eps": 1e-06,
+          "eval_tokens": 32768,
+          "length": 128,
+          "log_every": 8,
+          "lr": 0.001,
+          "lr_floor_fraction": 0.1,
+          "milestones": [
+            262144,
+            1048576,
+            4194304
+          ],
+          "target_tokens": 4194304,
+          "timeout_seconds": 129600,
+          "validation_every_tokens": 131072,
+          "warmup_tokens": 65536,
+          "weight_decay": 0.01
+        },
+        "transformer": null
+      },
+      "query_execution": "auto",
+      "prefill_schedule": "auto",
+      "trace_records": "complete",
+      "baseline": "window",
+      "mode": "training",
+      "fc_shape": "fc16",
+      "phase_fences": "step",
+      "diagnostic_boundary": "public",
+      "formula_attention": "manual",
+      "boundary_scope": "Public obligations",
+      "requested_threads": 1,
+      "autograd_census_requested": false,
+      "installed_package": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/install-owners/tidegraph/__init__.py",
+      "visibility": null,
+      "affinity": [
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        95
+      ],
+      "phases": [
+        {
+          "index": 0,
+          "warmup": true,
+          "phases_seconds": {
+            "zero_grad": 0.0003677941858768463,
+            "embedding": 0.0002986714243888855,
+            "core_forward": 0.5152354314923286,
+            "readout": 0.0007905550301074982,
+            "head_loss": 0.01763659343123436,
+            "backward": 0.6220561154186726,
+            "clip": 0.005426321178674698,
+            "optimizer": 0.03917308896780014
+          },
+          "phase_sum_seconds": 1.2009845711290836,
+          "diagnostic_boundary_calls": {},
+          "phase_time_scope": "host enqueue/calling-thread intervals; device work may cross phases; only complete_wall_seconds is synchronized",
+          "tokens": 1024,
+          "loss": 10.95427417755127,
+          "gradient_norm": 4505.1650390625,
+          "work": {
+            "candidate_events": 16384,
+            "selected_events": 8363,
+            "visited_edges": 25072,
+            "region_column_calls": 4,
+            "state_column_calls": 16
+          },
+          "complete_wall_seconds": 1.2058676928281784,
+          "diagnostic_only": false,
+          "input_positions_per_second": 849.1810553431152,
+          "memory": {
+            "resources/peak_rss_mib": 1013.6796875
+          }
+        },
+        {
+          "index": 1,
+          "warmup": false,
+          "phases_seconds": {
+            "zero_grad": 0.000151950865983963,
+            "embedding": 0.00027378275990486145,
+            "core_forward": 0.5286383330821991,
+            "readout": 0.0010359734296798706,
+            "head_loss": 0.016786012798547745,
+            "backward": 0.6354556269943714,
+            "clip": 0.005300853401422501,
+            "optimizer": 0.04029102995991707
+          },
+          "phase_sum_seconds": 1.2279335632920265,
+          "diagnostic_boundary_calls": {},
+          "phase_time_scope": "host enqueue/calling-thread intervals; device work may cross phases; only complete_wall_seconds is synchronized",
+          "tokens": 1024,
+          "loss": 10.990694046020508,
+          "gradient_norm": 1363.223876953125,
+          "work": {
+            "candidate_events": 16384,
+            "selected_events": 8344,
+            "visited_edges": 25060,
+            "region_column_calls": 4,
+            "state_column_calls": 16
+          },
+          "complete_wall_seconds": 1.2346705794334412,
+          "diagnostic_only": false,
+          "input_positions_per_second": 829.3710217586034,
+          "memory": {
+            "resources/peak_rss_mib": 1013.6796875
+          }
+        }
+      ],
+      "profile": "none",
+      "warmup_state": "reset",
+      "scope": "One warmup, one measured step. Phase sum matches original diagnosis; complete_wall includes input creation/upload, finite check, cleanup and synchronization. Profile timing is separate.",
+      "precision": {
+        "requested": "vendor-default",
+        "effective": {
+          "float32_matmul_precision": "highest"
+        }
+      },
+      "effective_threads": 1,
+      "effective_interop_threads": 1,
+      "comparison_scope": "Default eager tensor window including raw continuation export; ordinary column roots, selected by capabilities; host schedule",
+      "construction_seconds": 0.20168134570121765,
+      "trainable_parameters": 5092788,
+      "initial_parameters_sha256": "7f41057f0196bc2b259902f8dadafc9c3f46d197e02de5ebbda9517a632f9a1a",
+      "effective_window_execution": {
+        "interface": "tensor-window-v1",
+        "schedule": "settle-columns-v1",
+        "client": "python",
+        "fallback_reason": null,
+        "roots": "columns",
+        "max_workspace_bytes": 4294967296,
+        "placement": {
+          "payload": "cpu",
+          "read": "cpu",
+          "control": "cpu",
+          "selection": "cpu",
+          "events": "cpu",
+          "scoring_dtype": "profile"
+        }
+      },
+      "measured_parameters_sha256": "7f41057f0196bc2b259902f8dadafc9c3f46d197e02de5ebbda9517a632f9a1a"
+    },
+    "native": {
+      "foundation_source": "796baafa3a0d580e6722cd28814bf23dafe60e8b",
+      "foundation_dirty": "",
+      "schema": "tide-dense-query-cost-v1",
+      "execution": "completed",
+      "strict_numerical": "not_checked",
+      "discrete": "not_independently_checked",
+      "recovery": "see separate consumer",
+      "learning": "not_a_learning_study",
+      "downstream": "0439efd2af31cf10b07ce9e6423b0195f7449968",
+      "downstream_archive_sha256": "430237f4ca7a8c0205644ff6952cd4823ace20160ee0ffc2a206b4064e9075ce",
+      "resolved": {
+        "campaign": "language-v6",
+        "checks": {
+          "core_atol": 1e-06,
+          "core_rtol": 1e-05,
+          "finite_exploration": true
+        },
+        "core": {
+          "max_materialize_bytes": 1073741824,
+          "recipe": {
+            "branches": 2,
+            "depth": 4,
+            "family": "kv",
+            "history": 512,
+            "memory_overrides": {
+              "memory_read": "qry"
+            },
+            "offsets": [
+              0,
+              1
+            ],
+            "profile": "baseline",
+            "region_overrides": {
+              "allocation_temperature": 0.25
+            },
+            "region_width": 4,
+            "regularizer": "quad",
+            "selection": "regional_total",
+            "source_mode": "region",
+            "sparse_denominator": 2,
+            "topology": "fc",
+            "width": 128
+          },
+          "width": 128,
+          "eager_implementation": "native",
+          "placement_preset": "cpu",
+          "native_library": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/owners-dev1/build"
+        },
+        "coverage_group": "scale",
+        "device": "cpu",
+        "dtype": "float32",
+        "evaluation": {
+          "inference_length": 16,
+          "test_policy": "sealed; separate frozen finalist review only"
+        },
+        "id": "scale-fc16-kv-quad",
+        "kind": "tide",
+        "line": "scale",
+        "planned_inventory": {
+          "core_trainable": 4564404,
+          "lm_trainable": 5092788,
+          "nodes": 16,
+          "regions": 4,
+          "resolved_memories": [
+            {
+              "adapter_rank": 32,
+              "alpha_att": 1.0,
+              "alpha_ff": 1.0,
+              "beta_short": 0.11552453009332421,
+              "distance_slopes": [
+                0.0,
+                0.0
+              ],
+              "epsilon": 1e-05,
+              "ffn_width": 512,
+              "full_frequencies": [
+                [],
+                []
+              ],
+              "heads": 2,
+              "memory_read": "qry",
+              "position_origin": 1,
+              "position_scale": 6,
+              "read_frequencies": [],
+              "summary_width": 32,
+              "width": 128,
+              "window": 3072
+            },
+            {
+              "adapter_rank": 32,
+              "alpha_att": 1.0,
+              "alpha_ff": 1.0,
+              "beta_short": 0.11552453009332421,
+              "distance_slopes": [
+                0.0,
+                0.0
+              ],
+              "epsilon": 1e-05,
+              "ffn_width": 512,
+              "full_frequencies": [
+                [],
+                []
+              ],
+              "heads": 2,
+              "memory_read": "qry",
+              "position_origin": 1,
+              "position_scale": 6,
+              "read_frequencies": [],
+              "summary_width": 32,
+              "width": 128,
+              "window": 3072
+            },
+            {
+              "adapter_rank": 32,
+              "alpha_att": 1.0,
+              "alpha_ff": 1.0,
+              "beta_short": 0.11552453009332421,
+              "distance_slopes": [
+                0.0,
+                0.0
+              ],
+              "epsilon": 1e-05,
+              "ffn_width": 512,
+              "full_frequencies": [
+                [],
+                []
+              ],
+              "heads": 2,
+              "memory_read": "qry",
+              "position_origin": 1,
+              "position_scale": 6,
+              "read_frequencies": [],
+              "summary_width": 32,
+              "width": 128,
+              "window": 3072
+            },
+            {
+              "adapter_rank": 32,
+              "alpha_att": 1.0,
+              "alpha_ff": 1.0,
+              "beta_short": 0.11552453009332421,
+              "distance_slopes": [
+                0.0,
+                0.0
+              ],
+              "epsilon": 1e-05,
+              "ffn_width": 512,
+              "full_frequencies": [
+                [],
+                []
+              ],
+              "heads": 2,
+              "memory_read": "qry",
+              "position_origin": 1,
+              "position_scale": 6,
+              "read_frequencies": [],
+              "summary_width": 32,
+              "width": 128,
+              "window": 3072
+            },
+            {
+              "adapter_rank": 32,
+              "alpha_att": 1.0,
+              "alpha_ff": 1.0,
+              "beta_short": 0.11552453009332421,
+              "distance_slopes": [
+                0.0,
+                0.0
+              ],
+              "epsilon": 1e-05,
+              "ffn_width": 512,
+              "full_frequencies": [
+                [],
+                []
+              ],
+              "heads": 2,
+              "memory_read": "qry",
+              "position_origin": 2,
+              "position_scale": 6,
+              "read_frequencies": [],
+              "summary_width": 32,
+              "width": 128,
+              "window": 3072
+            },
+            {
+              "adapter_rank": 32,
+              "alpha_att": 1.0,
+              "alpha_ff": 1.0,
+              "beta_short": 0.11552453009332421,
+              "distance_slopes": [
+                0.0,
+                0.0
+              ],
+              "epsilon": 1e-05,
+              "ffn_width": 512,
+              "full_frequencies": [
+                [],
+                []
+              ],
+              "heads": 2,
+              "memory_read": "qry",
+              "position_origin": 2,
+              "position_scale": 6,
+              "read_frequencies": [],
+              "summary_width": 32,
+              "width": 128,
+              "window": 3072
+            },
+            {
+              "adapter_rank": 32,
+              "alpha_att": 1.0,
+              "alpha_ff": 1.0,
+              "beta_short": 0.11552453009332421,
+              "distance_slopes": [
+                0.0,
+                0.0
+              ],
+              "epsilon": 1e-05,
+              "ffn_width": 512,
+              "full_frequencies": [
+                [],
+                []
+              ],
+              "heads": 2,
+              "memory_read": "qry",
+              "position_origin": 2,
+              "position_scale": 6,
+              "read_frequencies": [],
+              "summary_width": 32,
+              "width": 128,
+              "window": 3072
+            },
+            {
+              "adapter_rank": 32,
+              "alpha_att": 1.0,
+              "alpha_ff": 1.0,
+              "beta_short": 0.11552453009332421,
+              "distance_slopes": [
+                0.0,
+                0.0
+              ],
+              "epsilon": 1e-05,
+              "ffn_width": 512,
+              "full_frequencies": [
+                [],
+                []
+              ],
+              "heads": 2,
+              "memory_read": "qry",
+              "position_origin": 2,
+              "position_scale": 6,
+              "read_frequencies": [],
+              "summary_width": 32,
+              "width": 128,
+              "window": 3072
+            },
+            {
+              "adapter_rank": 32,
+              "alpha_att": 1.0,
+              "alpha_ff": 1.0,
+              "beta_short": 0.11552453009332421,
+              "distance_slopes": [
+                0.0,
+                0.0
+              ],
+              "epsilon": 1e-05,
+              "ffn_width": 512,
+              "full_frequencies": [
+                [],
+                []
+              ],
+              "heads": 2,
+              "memory_read": "qry",
+              "position_origin": 3,
+              "position_scale": 6,
+              "read_frequencies": [],
+              "summary_width": 32,
+              "width": 128,
+              "window": 3072
+            },
+            {
+              "adapter_rank": 32,
+              "alpha_att": 1.0,
+              "alpha_ff": 1.0,
+              "beta_short": 0.11552453009332421,
+              "distance_slopes": [
+                0.0,
+                0.0
+              ],
+              "epsilon": 1e-05,
+              "ffn_width": 512,
+              "full_frequencies": [
+                [],
+                []
+              ],
+              "heads": 2,
+              "memory_read": "qry",
+              "position_origin": 3,
+              "position_scale": 6,
+              "read_frequencies": [],
+              "summary_width": 32,
+              "width": 128,
+              "window": 3072
+            },
+            {
+              "adapter_rank": 32,
+              "alpha_att": 1.0,
+              "alpha_ff": 1.0,
+              "beta_short": 0.11552453009332421,
+              "distance_slopes": [
+                0.0,
+                0.0
+              ],
+              "epsilon": 1e-05,
+              "ffn_width": 512,
+              "full_frequencies": [
+                [],
+                []
+              ],
+              "heads": 2,
+              "memory_read": "qry",
+              "position_origin": 3,
+              "position_scale": 6,
+              "read_frequencies": [],
+              "summary_width": 32,
+              "width": 128,
+              "window": 3072
+            },
+            {
+              "adapter_rank": 32,
+              "alpha_att": 1.0,
+              "alpha_ff": 1.0,
+              "beta_short": 0.11552453009332421,
+              "distance_slopes": [
+                0.0,
+                0.0
+              ],
+              "epsilon": 1e-05,
+              "ffn_width": 512,
+              "full_frequencies": [
+                [],
+                []
+              ],
+              "heads": 2,
+              "memory_read": "qry",
+              "position_origin": 3,
+              "position_scale": 6,
+              "read_frequencies": [],
+              "summary_width": 32,
+              "width": 128,
+              "window": 3072
+            },
+            {
+              "adapter_rank": 32,
+              "alpha_att": 1.0,
+              "alpha_ff": 1.0,
+              "beta_short": 0.11552453009332421,
+              "distance_slopes": [
+                0.0,
+                0.0
+              ],
+              "epsilon": 1e-05,
+              "ffn_width": 512,
+              "full_frequencies": [
+                [],
+                []
+              ],
+              "heads": 2,
+              "memory_read": "qry",
+              "position_origin": 4,
+              "position_scale": 6,
+              "read_frequencies": [],
+              "summary_width": 32,
+              "width": 128,
+              "window": 0
+            },
+            {
+              "adapter_rank": 32,
+              "alpha_att": 1.0,
+              "alpha_ff": 1.0,
+              "beta_short": 0.11552453009332421,
+              "distance_slopes": [
+                0.0,
+                0.0
+              ],
+              "epsilon": 1e-05,
+              "ffn_width": 512,
+              "full_frequencies": [
+                [],
+                []
+              ],
+              "heads": 2,
+              "memory_read": "qry",
+              "position_origin": 4,
+              "position_scale": 6,
+              "read_frequencies": [],
+              "summary_width": 32,
+              "width": 128,
+              "window": 0
+            },
+            {
+              "adapter_rank": 32,
+              "alpha_att": 1.0,
+              "alpha_ff": 1.0,
+              "beta_short": 0.11552453009332421,
+              "distance_slopes": [
+                0.0,
+                0.0
+              ],
+              "epsilon": 1e-05,
+              "ffn_width": 512,
+              "full_frequencies": [
+                [],
+                []
+              ],
+              "heads": 2,
+              "memory_read": "qry",
+              "position_origin": 4,
+              "position_scale": 6,
+              "read_frequencies": [],
+              "summary_width": 32,
+              "width": 128,
+              "window": 0
+            },
+            {
+              "adapter_rank": 32,
+              "alpha_att": 1.0,
+              "alpha_ff": 1.0,
+              "beta_short": 0.11552453009332421,
+              "distance_slopes": [
+                0.0,
+                0.0
+              ],
+              "epsilon": 1e-05,
+              "ffn_width": 512,
+              "full_frequencies": [
+                [],
+                []
+              ],
+              "heads": 2,
+              "memory_read": "qry",
+              "position_origin": 4,
+              "position_scale": 6,
+              "read_frequencies": [],
+              "summary_width": 32,
+              "width": 128,
+              "window": 0
+            }
+          ],
+          "resolved_regions": [
+            {
+              "allocation_base": null,
+              "allocation_temperature": 0.25,
+              "alpha_loc": null,
+              "alpha_match": null,
+              "alpha_res": null,
+              "alpha_sel": null,
+              "ent_alpha": null,
+              "eta": null,
+              "fixed_gain": null,
+              "gain_logit": null,
+              "gamma_max": 2.0,
+              "hidden_width": 32,
+              "k": 2,
+              "local_score": "cat",
+              "query_weight": null,
+              "read_mode": "+",
+              "region_control_mode": "context",
+              "region_control_width": 32,
+              "region_evidence": "cat",
+              "region_key": null,
+              "region_score": "ind",
+              "regularizer": "quad",
+              "selection_mode": "regional_total",
+              "selection_width": null,
+              "send_gain": null,
+              "total_fraction": null
+            },
+            {
+              "allocation_base": null,
+              "allocation_temperature": 0.25,
+              "alpha_loc": null,
+              "alpha_match": null,
+              "alpha_res": null,
+              "alpha_sel": null,
+              "ent_alpha": null,
+              "eta": null,
+              "fixed_gain": null,
+              "gain_logit": null,
+              "gamma_max": 2.0,
+              "hidden_width": 32,
+              "k": 2,
+              "local_score": "cat",
+              "query_weight": null,
+              "read_mode": "+",
+              "region_control_mode": "context",
+              "region_control_width": 32,
+              "region_evidence": "cat",
+              "region_key": null,
+              "region_score": "ind",
+              "regularizer": "quad",
+              "selection_mode": "regional_total",
+              "selection_width": null,
+              "send_gain": null,
+              "total_fraction": null
+            },
+            {
+              "allocation_base": null,
+              "allocation_temperature": 0.25,
+              "alpha_loc": null,
+              "alpha_match": null,
+              "alpha_res": null,
+              "alpha_sel": null,
+              "ent_alpha": null,
+              "eta": null,
+              "fixed_gain": null,
+              "gain_logit": null,
+              "gamma_max": 2.0,
+              "hidden_width": 32,
+              "k": 2,
+              "local_score": "cat",
+              "query_weight": null,
+              "read_mode": "+",
+              "region_control_mode": "context",
+              "region_control_width": 32,
+              "region_evidence": "cat",
+              "region_key": null,
+              "region_score": "ind",
+              "regularizer": "quad",
+              "selection_mode": "regional_total",
+              "selection_width": null,
+              "send_gain": null,
+              "total_fraction": null
+            },
+            {
+              "allocation_base": null,
+              "allocation_temperature": 0.25,
+              "alpha_loc": null,
+              "alpha_match": null,
+              "alpha_res": null,
+              "alpha_sel": null,
+              "ent_alpha": null,
+              "eta": null,
+              "fixed_gain": null,
+              "gain_logit": null,
+              "gamma_max": 2.0,
+              "hidden_width": 32,
+              "k": 2,
+              "local_score": "cat",
+              "query_weight": null,
+              "read_mode": "+",
+              "region_control_mode": "context",
+              "region_control_width": 32,
+              "region_evidence": "cat",
+              "region_key": null,
+              "region_score": "ind",
+              "regularizer": "quad",
+              "selection_mode": "regional_total",
+              "selection_width": null,
+              "send_gain": null,
+              "total_fraction": null
+            }
+          ]
+        },
+        "resources": {
+          "max_rss_gib": 48
+        },
+        "revisions": {
+          "foundation": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+          "mathematics": "0770593838a37c790a568226930567ed60f99b83"
+        },
+        "schema": "tide-language-campaign-config-v1",
+        "seed": 11,
+        "study_id": "TL-SCALE-v6",
+        "threads": 1,
+        "training": {
+          "batch": 8,
+          "checkpoint_seconds": 600,
+          "clip_norm": 1.0,
+          "eps": 1e-06,
+          "eval_tokens": 32768,
+          "length": 128,
+          "log_every": 8,
+          "lr": 0.001,
+          "lr_floor_fraction": 0.1,
+          "milestones": [
+            262144,
+            1048576,
+            4194304
+          ],
+          "target_tokens": 4194304,
+          "timeout_seconds": 129600,
+          "validation_every_tokens": 131072,
+          "warmup_tokens": 65536,
+          "weight_decay": 0.01
+        },
+        "transformer": null
+      },
+      "query_execution": "auto",
+      "prefill_schedule": "auto",
+      "trace_records": "complete",
+      "baseline": "window",
+      "mode": "training",
+      "fc_shape": "fc16",
+      "phase_fences": "step",
+      "diagnostic_boundary": "public",
+      "formula_attention": "manual",
+      "boundary_scope": "Public obligations",
+      "requested_threads": 1,
+      "autograd_census_requested": false,
+      "installed_package": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/install-owners/tidegraph/__init__.py",
+      "visibility": null,
+      "affinity": [
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        95
+      ],
+      "phases": [
+        {
+          "index": 0,
+          "warmup": true,
+          "phases_seconds": {
+            "zero_grad": 0.00038056448101997375,
+            "embedding": 0.00025978684425354004,
+            "core_forward": 0.46921056509017944,
+            "readout": 0.0016292259097099304,
+            "head_loss": 0.01712828502058983,
+            "backward": 0.6504256874322891,
+            "clip": 0.005800388753414154,
+            "optimizer": 0.03801096975803375
+          },
+          "phase_sum_seconds": 1.1828454732894897,
+          "diagnostic_boundary_calls": {},
+          "phase_time_scope": "host enqueue/calling-thread intervals; device work may cross phases; only complete_wall_seconds is synchronized",
+          "tokens": 1024,
+          "loss": 10.954273223876953,
+          "gradient_norm": 4505.03173828125,
+          "work": {
+            "candidate_events": 16384,
+            "region_column_calls": 4,
+            "selected_events": 8363,
+            "state_column_calls": 16,
+            "visited_edges": 25072
+          },
+          "complete_wall_seconds": 1.1886557638645172,
+          "diagnostic_only": false,
+          "input_positions_per_second": 861.4773352638329,
+          "memory": {
+            "resources/peak_rss_mib": 1088.23828125
+          }
+        },
+        {
+          "index": 1,
+          "warmup": false,
+          "phases_seconds": {
+            "zero_grad": 0.0001592598855495453,
+            "embedding": 0.0002647116780281067,
+            "core_forward": 0.48630093038082123,
+            "readout": 0.0008833110332489014,
+            "head_loss": 0.017137177288532257,
+            "backward": 0.6690155863761902,
+            "clip": 0.005427703261375427,
+            "optimizer": 0.03942292183637619
+          },
+          "phase_sum_seconds": 1.2186116017401218,
+          "diagnostic_boundary_calls": {},
+          "phase_time_scope": "host enqueue/calling-thread intervals; device work may cross phases; only complete_wall_seconds is synchronized",
+          "tokens": 1024,
+          "loss": 10.990694046020508,
+          "gradient_norm": 1363.1295166015625,
+          "work": {
+            "candidate_events": 16384,
+            "region_column_calls": 4,
+            "selected_events": 8344,
+            "state_column_calls": 16,
+            "visited_edges": 25060
+          },
+          "complete_wall_seconds": 1.225463230162859,
+          "diagnostic_only": false,
+          "input_positions_per_second": 835.6023867512652,
+          "memory": {
+            "resources/peak_rss_mib": 1088.23828125
+          }
+        }
+      ],
+      "profile": "none",
+      "warmup_state": "reset",
+      "scope": "One warmup, one measured step. Phase sum matches original diagnosis; complete_wall includes input creation/upload, finite check, cleanup and synchronization. Profile timing is separate.",
+      "precision": {
+        "requested": "vendor-default",
+        "effective": {
+          "float32_matmul_precision": "highest"
+        }
+      },
+      "native_build": {
+        "source": "1e573753a8338caf8d996cb2a7afbf5d00dab9c5",
+        "cpp_source_sha256": "2a6d2d37325c95ac99d22421cc8ff981cda8545d86fd01f8c21aef6ced166132",
+        "torch": "2.12.0+cpu",
+        "distribution": {
+          "torch": "2.12.0+cpu",
+          "torch_dir": "/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/lib/python3.12/site-packages/torch/share/cmake/Torch",
+          "prefix": "/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/lib/python3.12/site-packages/torch/share/cmake",
+          "cuda": null,
+          "cxx11_abi": true,
+          "discovery": "python-torch"
+        },
+        "environment": {
+          "os": "Linux-5.10.0-182.0.0.95.r1941_123.hce2.aarch64-aarch64-with-glibc2.34",
+          "compiler": "c++ (GCC) 10.3.1",
+          "cxx_standard": 17,
+          "build_type": "Release",
+          "torch_prefix": "/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/lib/python3.12/site-packages/torch/share/cmake/Torch",
+          "cann_version": "9.2.0"
+        },
+        "build_jobs": 320,
+        "backend": "npu",
+        "npu_runtime": "python",
+        "torch_npu": "2.12.0.post3",
+        "cuda": null,
+        "architecture": "aarch64",
+        "python": "3.12.13",
+        "cxx11_abi": true,
+        "binary_sha256": {
+          "libtidegraph.a": "7b795232e8fc61d9694a7a631747dc9b54853ba402e837df1f7c85609f990c6f",
+          "libtidegraph_runtime.a": "965d4f26e87b1ee32bd5a4c6cc6238f4a20785d037982a37ebf876523bd3a4be",
+          "_tide_native.so": "dfb11f154c109aa64da36b57ac69d40a06ffbd0cd4eabeb35fb40a168219bdfa"
+        }
+      },
+      "effective_threads": 1,
+      "effective_interop_threads": 1,
+      "comparison_scope": "Default eager tensor window including raw continuation export; ordinary column roots, selected by capabilities; host schedule",
+      "construction_seconds": 0.3120091110467911,
+      "trainable_parameters": 5092788,
+      "initial_parameters_sha256": "7f41057f0196bc2b259902f8dadafc9c3f46d197e02de5ebbda9517a632f9a1a",
+      "effective_window_execution": {
+        "interface": "tensor-window-v1",
+        "schedule": "settle-columns-v1",
+        "client": "native",
+        "fallback_reason": null,
+        "roots": "columns",
+        "max_workspace_bytes": 4294967296,
+        "placement": {
+          "payload": "cpu",
+          "read": "cpu",
+          "control": "cpu",
+          "selection": "cpu",
+          "events": "cpu",
+          "scoring_dtype": "profile"
+        }
+      },
+      "measured_parameters_sha256": "7f41057f0196bc2b259902f8dadafc9c3f46d197e02de5ebbda9517a632f9a1a"
+    }
+  },
+  "resources": {
+    "build_jobs": 320,
+    "memory_limit": "640GiB",
+    "cpu_timing_affinity": [
+      80,
+      81,
+      82,
+      83,
+      84,
+      85,
+      86,
+      87,
+      88,
+      89,
+      90,
+      91,
+      92,
+      93,
+      94,
+      95
+    ],
+    "cpu_timing_threads": 1,
+    "other_project_overlap": "NPU admission only during timing; builds began after timing finished",
+    "quota_gib": {
+      "used": 234,
+      "soft": 300,
+      "hard": 800
+    }
+  }
+}
