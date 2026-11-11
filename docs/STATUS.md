@@ -23,9 +23,11 @@ CPU/NPU共八安装消费者独立三步master AdamW及新进程精确恢复通�
 
 ## 作业与现场
 
-当前无活跃项目作业。gef-column-half-sdk已passed；原gef-column-half-owners-npu、
-gef-column-half-owners-blocking、gef-column-half-task-qualify仍为failed，内层通过项单独归档。
-状态/日志在artifacts/jobs/；python scripts/status.py查看当前，--all-jobs审计历史。
+当前无活跃项目作业。gef-resident-shared-dev已passed：冻结dirty快照的CPU11项、
+独立SDK构建与空闲物理11上的projection/query/Full两dtype六项全部通过。
+单bank投影/块反向及组合预算已实现，新增同FC16局部尺寸的KV容量数值见证尚待固定资格。
+即将提交实现并在固定源码运行局部、完整flow/training/恢复相关检查；不从开发通过推定完整资格。
+旧half作业终态与失败身份见FP16报告，不改写。
 实际NPU为合法空闲准入物理7/11，逻辑npu:0/1，host144–159；未使用共享卡。
 共享NPU仍需当前明确授权，GPU延后。无磁盘阻塞，不清理参考仓库或公共环境。
 
@@ -37,7 +39,7 @@ Torch2.12/TorchNPU2.12.post3/CANN9.2。SDK使用libtorch-npu/2.12.0-cann9.2.0，
 
 ## 下一动作
 
-本阶段证据、ROADMAP/经验/复现导航整理后提交并正常推送当前授权分支，再继续P5/P6：
+FP16阶段已随c8821f77正常推送。正在继续P5/P6：
 审阅resident的设备在线推进、局部工作区与反向journal，确定新张量列能接入的真实边界和独立反例。
 不把host整窗提交冒称resident，也不再盲目加旧容量预算。普通异步跨卡按ROADMAP的有界停止条件保留。
 已审具名清单与未审范围分别记录；当前P1—P6未全部完成。

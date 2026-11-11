@@ -1,4 +1,5 @@
 #include "weighted_kv_query_internal.h"
+#include "weighted_storage_budget.h"
 #include "device_launch_tide_weighted_query_plan.h"
 namespace tide::device_online {
 using namespace kv_query_detail;
@@ -11,7 +12,8 @@ WeightedKVQueryTape append_weighted_kv_query(DeviceProgram& p,const weighted::KV
   const auto device=raw.floating.device();const auto rows=raw.floating.size(0),capacity=raw.integer.size(1)-4,d=c.width,ds=c.summary_width,banks=w.query.size(0);
   check(input,device,at::kFloat,{rows,d});check(owners,device,at::kLong,{rows});
   for(const auto& x:{w.query,w.key,w.value})check(x,device,at::kFloat,{banks,ds,d});
-  const auto coarse_rows=rows*(256.L*capacity*(static_cast<long double>(d)*ds+d+ds+1)+256);
+  const WeightedStorageIncrement storage(p,{raw.floating,raw.integer,time,input,owners,present,w.query,w.key,w.value,error});
+  const auto coarse_rows=reservation(rows,capacity,d,ds,banks);
   const auto half_widen=raw.floating.scalar_type()==at::kHalf?4.L*raw.floating.numel():0;
   std::ostringstream detail;detail<<"rows="<<rows<<" banks="<<banks<<" cache="<<capacity<<" input_width="<<d<<" summary_width="<<ds
     <<" coarse_row_reservation="<<std::fixed<<coarse_rows<<" half_raw_widen="<<half_widen;
@@ -31,6 +33,7 @@ WeightedKVQueryTape append_weighted_kv_query(DeviceProgram& p,const weighted::KV
   auto ids=at::tensor(duplicated,at::kLong).to(device);
   auto pool=append_weighted_pool(p,window.weights.reshape({2*rows,capacity}),repeat(p,value.output.reshape({rows,capacity,ds}),ids),
     repeat(p,logits,ids),repeat(p,window.lengths,ids),repeat(p,window.present,ids),error,available);
+  budget(storage.bytes(),available,"actual newly retained storage");
   return {window,query,key,value,rotary,pool,scale,pool.output.reshape({rows,2,ds}),pool.total.reshape({rows,2})};
 }
 }

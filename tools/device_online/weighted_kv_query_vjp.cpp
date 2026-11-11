@@ -1,4 +1,6 @@
 #include "weighted_kv_query_internal.h"
+#include "weighted_storage_budget.h"
+#include "weighted_saved_tensors.h"
 #include "device_launch_tide_weighted_query_roots.h"
 namespace tide::device_online {
 using namespace kv_query_detail;
@@ -9,7 +11,9 @@ WeightedKVQueryGradient append_weighted_kv_query_vjp(DeviceProgram& p,const Weig
   const auto device=t.memory.device();const auto rows=t.memory.size(0),ds=t.memory.size(2),capacity=t.window.layout.capacity(),d=t.window.layout.field("keys").width,banks=t.query.banks;
   check(memory_bar,device,at::kFloat,{rows,2,ds});check(total_bar,device,at::kFloat,{rows,2});check(roots,device,at::kBool,{rows,4});check(error,device,at::kInt,{1});
   check(t.scale,device,at::kFloat,{1});
-  budget(rows*(256.L*capacity*(static_cast<long double>(d)*ds+d+ds+1)+256)+banks*(32.L*d*ds+32),available);
+  auto borrowed=saved_tensors(t);borrowed.insert(borrowed.end(),{memory_bar,total_bar,roots,error});
+  const WeightedStorageIncrement storage(p,std::move(borrowed));
+  budget(reservation(rows,capacity,d,ds,banks)+banks*(32.L*d*ds+32),available);
   auto indices=at::tensor(std::vector<int64_t>{0,2,1,3},at::kLong).to(device),pool_roots=at::zeros_like(roots);p.index_select(roots,1,indices,pool_roots);
   auto pool=append_weighted_pool_vjp(p,t.pool,memory_bar.reshape({2*rows,ds}),total_bar.reshape({2*rows}),pool_roots.reshape({2*rows,2}),error,available);
   auto logits=at::zeros({rows,capacity},memory_bar.options()),scaled=at::zeros_like(logits),values=at::zeros({rows,capacity,ds},memory_bar.options());
@@ -26,6 +30,7 @@ WeightedKVQueryGradient append_weighted_kv_query_vjp(DeviceProgram& p,const Weig
   auto value=append_weighted_projection_vjp(p,t.value,values.reshape({rows*capacity,ds}),vroots,error,available);
   auto raw=append_weighted_kv_window_vjp(p,t.window,key.input.reshape({rows,capacity,d}),value.input.reshape({rows,capacity,d}),at::zeros_like(t.window.summaries),
     pool.weights.reshape({rows,2,capacity}),wroots,error,available);
+  budget(storage.bytes(),available,"actual newly retained reverse storage");
   return {raw.raw,raw.connected,query.input,query.row_connected,{query.parameters.matrix,key.parameters.matrix,value.parameters.matrix},query.owner_connected,key.owner_connected,value.owner_connected};
 }
 }

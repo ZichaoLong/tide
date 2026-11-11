@@ -17,7 +17,8 @@ WeightedKVFullTape append_weighted_kv_full(DeviceProgram& p,const weighted::KVCo
   check(input,device,at::kFloat,{rows,d});check(owners,device,at::kLong,{rows});check(active,device,at::kBool,{rows});check(w.query,device,at::kFloat,{banks,d,d});
   check(w.residual.out,device,at::kFloat,{banks,d,d});check(w.residual.gate,device,at::kFloat,{banks,c.ffn_width,d});
   check(w.residual.up,device,at::kFloat,{banks,c.ffn_width,d});check(w.residual.down,device,at::kFloat,{banks,d,c.ffn_width});
-  check(error,device,at::kInt,{1});budget(rows*(256.L*(capacity*(d+c.summary_width+heads+1.L)+static_cast<long double>(d)*d+3.L*d*c.ffn_width+d)+256)
+  check(error,device,at::kInt,{1});budget(256.L*((banks==1?1:rows)*(static_cast<long double>(d)*d+3.L*d*c.ffn_width)
+    +rows*(capacity*(d+c.summary_width+heads+1.L)+d+1))
     +(raw.floating.scalar_type()==at::kHalf?4.L*raw.floating.numel():0),available);
   for(auto slope:c.distance_slopes)if(!std::isfinite(float(slope)))throw std::invalid_argument("unrepresentable Full distance slope");
   auto window=append_weighted_kv_window(p,c,raw,time,active,error,available);

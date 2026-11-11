@@ -167,7 +167,8 @@ if(TIDE_DEVICE_KERNELS)
   add_library(tide-weighted-projection STATIC weighted_projection.cpp)
   set_target_properties(tide-weighted-projection PROPERTIES POSITION_INDEPENDENT_CODE ON)
   target_link_libraries(tide-weighted-projection PUBLIC tide-device-control tide_weighted_head_plan_kernel
-    tide_weighted_head_guard_kernel tide_weighted_head_reduce_kernel tide_weighted_allocation_status_kernel tide_weighted_projection_norm_kernel)
+    tide_weighted_head_guard_kernel tide_weighted_head_reduce_kernel tide_weighted_allocation_status_kernel tide_weighted_projection_norm_kernel
+    tide_weighted_projection_shared_kernel)
   add_library(tide-weighted-rotary STATIC weighted_rotary.cpp)
   set_target_properties(tide-weighted-rotary PROPERTIES POSITION_INDEPENDENT_CODE ON)
   target_link_libraries(tide-weighted-rotary PUBLIC tide-device-control tide_weighted_rotary_phase_kernel tide_weighted_rotary_apply_kernel

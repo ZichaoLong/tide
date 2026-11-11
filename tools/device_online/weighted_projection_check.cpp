@@ -1,4 +1,5 @@
 #include "weighted_projection.h"
+#include "weighted_storage_budget.h"
 #include "portable_torch/runtime.hpp"
 #include <torch/csrc/autograd/autograd.h>
 #include <ATen/Parallel.h>
@@ -14,7 +15,7 @@ Tensor values(at::IntArrayRef shape,float shift){int64_t n=1;for(auto x:shape)n*
 struct Formula {std::vector<Tensor> inputs,matrix,bias,output;};
 Formula reference(const Tensor& x,const Tensor& ids,const WeightedProjectionParameters& w,bool norm){
   at::AutoGradMode enabled(true);Formula ref;
-  for(int bank=0;bank<3;++bank){ref.matrix.push_back(w.matrix[bank].clone().set_requires_grad(true));
+  for(int bank=0;bank<w.matrix.size(0);++bank){ref.matrix.push_back(w.matrix[bank].clone().set_requires_grad(true));
     if(w.bias.defined())ref.bias.push_back(w.bias[bank].clone().set_requires_grad(true));}
   for(int row=0;row<6;++row){auto input=x[row].clone().set_requires_grad(true);ref.inputs.push_back(input);
     const auto bank=ids[row].item<int64_t>();if(bank<0){ref.output.push_back(at::zeros({4},at::kFloat));continue;}
@@ -27,34 +28,61 @@ void compare(const Formula& ref,const Tensor& ids,const Tensor& bar,const Tensor
   at::AutoGradMode enabled(true);std::vector<Tensor> roots,bars,leaves=ref.inputs;
   leaves.insert(leaves.end(),ref.matrix.begin(),ref.matrix.end());leaves.insert(leaves.end(),ref.bias.begin(),ref.bias.end());
   for(int row=0;row<6;++row){close(t.output[row],ref.output[row].to(t.output.scalar_type()));if(ids[row].item<int64_t>()>=0&&flags[row].item<bool>()){roots.push_back(ref.output[row]);bars.push_back(bar[row]);}}
-  const auto expected=torch::autograd::grad(roots,leaves,bars,true,false,true);auto input=g.input.cpu(),matrix=g.parameters.matrix.cpu(),row_flags=g.row_connected.cpu(),owner_flags=g.owner_connected.cpu();
+  std::vector<Tensor> expected(leaves.size());if(!roots.empty())expected=torch::autograd::grad(roots,leaves,bars,true,false,true);
+  auto input=g.input.cpu(),matrix=g.parameters.matrix.cpu(),row_flags=g.row_connected.cpu(),owner_flags=g.owner_connected.cpu();
   for(int row=0;row<6;++row){require(row_flags[row].item<bool>()==expected[row].defined(),"projection input None/zero differs");
     if(expected[row].defined())close(input[row],expected[row]);else require(input[row].eq(0).all().item<bool>(),"absent projection input gradient nonzero");}
-  for(int bank=0;bank<3;++bank){require(owner_flags[bank].item<bool>()==expected[6+bank].defined(),"projection matrix None/zero differs");
-    if(expected[6+bank].defined())close(matrix[bank],expected[6+bank]);
-    if(!ref.bias.empty()){require(owner_flags[bank].item<bool>()==expected[9+bank].defined(),"projection bias root differs");if(expected[9+bank].defined())close(g.parameters.bias[bank],expected[9+bank]);}}
+  for(int bank=0;bank<ref.matrix.size();++bank){require(owner_flags[bank].item<bool>()==expected[6+bank].defined(),"projection matrix None/zero differs");
+    if(expected[6+bank].defined())close(matrix[bank],expected[6+bank]);else require(matrix[bank].eq(0).all().item<bool>(),"absent projection matrix gradient nonzero");
+    if(!ref.bias.empty()){const auto& e=expected[6+ref.matrix.size()+bank];require(owner_flags[bank].item<bool>()==e.defined(),"projection bias root differs");if(e.defined())close(g.parameters.bias[bank],e);}}
   require(g.parameters.bias.defined()==!ref.bias.empty(),"projection fabricated bias role");
 }
-void check(at::Device device,bool norm,bool bias,at::ScalarType dtype){
+void check(at::Device device,bool norm,bool bias,at::ScalarType dtype,int banks){
   at::NoGradGuard no_grad;auto opt=at::TensorOptions().device(device).dtype(dtype);
   auto x=at::zeros({6,3},opt),owners=at::zeros({6},opt.dtype(at::kLong)),bar=at::zeros({6,4},opt.dtype(at::kFloat)),flags=at::zeros({6},opt.dtype(at::kBool));
-  auto error=at::zeros({1},opt.dtype(at::kInt));WeightedProjectionParameters w{at::zeros({3,4,3},opt),bias?at::zeros({3,4},opt):Tensor{}};
+  auto error=at::zeros({1},opt.dtype(at::kInt));WeightedProjectionParameters w{at::zeros({banks,4,3},opt),bias?at::zeros({banks,4},opt):Tensor{}};
   DeviceProgram p(device);p.limit_workspace(64*1024*1024);std::optional<double> epsilon=norm?std::optional<double>(.13):std::nullopt;
   auto t=append_weighted_projection(p,x,owners,w,epsilon,error);auto g=append_weighted_projection_vjp(p,t,bar,flags,error);p.finish();
-  for(int pass=0;pass<2;++pass){auto input=values({6,3},.1+pass*.1).to(dtype).to(at::kFloat);input[0].zero_();input[4].fill_(NAN);input[5].fill_(NAN);
+  require(t.matrix.size(0)==(banks==1?1:6),"projection must save one actual matrix per shared bank or selected row");
+  for(int pass=0;pass<(banks==1?3:2);++pass){auto input=values({6,3},.1+pass*.1).to(dtype).to(at::kFloat);input[0].zero_();input[4].fill_(NAN);input[5].fill_(NAN);
     auto ids=at::tensor(std::vector<int64_t>{0,1,pass?2:0,1,-1,-1},at::kLong),roots=at::tensor({1,1,pass,1,1,0},at::kInt).to(at::kBool);
     auto dy=values({6,4},.8);dy[3].zero_();dy[4].fill_(NAN);dy[5].fill_(NAN);
-    WeightedProjectionParameters weights{values({3,4,3},.3+pass*.1).to(dtype).to(at::kFloat),bias?values({3,4},.7).to(dtype).to(at::kFloat):Tensor{}};
+    if(banks==1)ids.clamp_max_(0);
+    WeightedProjectionParameters weights{values({banks,4,3},.3+pass*.1).to(dtype).to(at::kFloat),bias?values({banks,4},.7).to(dtype).to(at::kFloat):Tensor{}};
+    if(pass==2){input.fill_(NAN);ids.fill_(-1);weights.matrix.fill_(NAN);if(bias)weights.bias.fill_(NAN);dy.fill_(NAN);}
     auto ref=reference(input,ids,weights,norm);x.copy_(input);owners.copy_(ids);bar.copy_(dy);flags.copy_(roots);w.matrix.copy_(weights.matrix);if(bias)w.bias.copy_(weights.bias);
     portable_torch::synchronize(device);p.run();require(!error.cpu().item<int>(),"projection refused valid rows");compare(ref,ids,dy,roots,t,g);
-    if(pass){DeviceProgram reverse(device);auto saved=append_weighted_projection_vjp(reverse,t,bar,flags,error);reverse.finish();
+    if(pass==1){DeviceProgram reverse(device);auto saved=append_weighted_projection_vjp(reverse,t,bar,flags,error);reverse.finish();
       x.fill_(NAN);owners.fill_(-99);w.matrix.fill_(NAN);if(bias)w.bias.fill_(NAN);
       portable_torch::synchronize(device);reverse.run();require(!error.cpu().item<int>(),"projection saved reverse read changed inputs");compare(ref,ids,dy,roots,t,saved);reverse.close();}
   }
-  portable_torch::synchronize(device);p.run();require(error.cpu().item<int>()!=0,"projection accepted invalid owners/values");p.close();
+  owners.zero_();x.zero_();w.matrix.fill_(NAN);portable_torch::synchronize(device);p.run();
+  require(error.cpu().item<int>()!=0,"projection accepted a used nonfinite bank");error.zero_();
+  owners.fill_(-99);portable_torch::synchronize(device);p.run();require(error.cpu().item<int>()!=0,"projection accepted invalid owners/values");p.close();
   DeviceProgram refusal(device);bool rejected=false;
   try{append_weighted_projection(refusal,x,owners,w,epsilon,error,1);}catch(const std::invalid_argument&){rejected=true;}
   require(rejected,"projection scratch budget omitted");refusal.close();
+}
+void single_bank_capacity(at::Device device){
+  at::NoGradGuard ng;constexpr int64_t rows=64,width=32,limit=65536;
+  auto x=values({rows,width},.1).to(device),m=values({1,width,width},.3).to(device);
+  auto ids=at::zeros({rows},x.options().dtype(at::kLong)),error=at::zeros({1},ids.options().dtype(at::kInt));
+  auto bar=values({rows,width},.7).to(device),roots=at::ones({rows},ids.options().dtype(at::kBool));
+  DeviceProgram p(device);p.limit_workspace(64*1024*1024);
+  const WeightedStorageIncrement forward(p,{x,m,ids,error});
+  auto t=append_weighted_projection(p,x,ids,{m,{}},std::nullopt,error,limit);const auto forward_bytes=forward.bytes();
+  const WeightedStorageIncrement reverse(p,{t.input,t.rstd,t.owners,t.indices,t.matrix,t.bias,t.output,bar,roots,error});
+  auto g=append_weighted_projection_vjp(p,t,bar,roots,error,limit);const auto reverse_bytes=reverse.bytes();p.finish();
+  portable_torch::synchronize(device);p.run();require(!error.cpu().item<int>(),"single-bank capacity case refused");
+  close(t.output,at::mm(x.cpu(),m.cpu()[0].t()));close(g.input,at::mm(bar.cpu(),m.cpu()[0]));
+  close(g.parameters.matrix,at::mm(bar.cpu().t(),x.cpu()).unsqueeze(0));
+  require(forward_bytes<=limit&&reverse_bytes<=limit&&2*rows*width*width*4>limit,"single-bank storage witness failed");
+  require(g.row_connected.cpu().all().item<bool>()&&g.owner_connected.cpu().all().item<bool>(),"single-bank capacity roots differ");
+  std::cout<<"single-bank projection bytes: forward="<<forward_bytes<<" reverse="<<reverse_bytes<<" allowance="<<limit
+    <<" old_replicated_matrices="<<2*rows*width*width*4<<'\n';p.close();
+  DeviceProgram refusal(device);bool refused=false;
+  try{append_weighted_projection(refusal,x,ids,{m,{}},std::nullopt,error,forward_bytes-1);}catch(const std::invalid_argument&){refused=true;}
+  require(refused,"single-bank actual storage floor omitted");refusal.close();
 }
 void half_storage(at::Device device){
   at::NoGradGuard ng;auto opt=at::TensorOptions().device(device).dtype(at::kHalf);
@@ -79,7 +107,8 @@ int main(int argc,char** argv){portable_torch::RuntimeSession runtime;
   try{auto args=portable_torch::parse_cli(argc,argv,true);if(args.help){portable_torch::print_usage(std::cout,argv[0]);return 0;}
     if(args.device_spec=="auto"||(args.dtype!=at::kFloat&&args.dtype!=at::kHalf))throw std::invalid_argument("weighted projection requires explicit accelerator/FP32 or FP16");
     args.allow_npu_float16=true;auto device=portable_torch::resolve_device(args);at::set_num_threads(1);at::set_num_interop_threads(1);
-    for(bool norm:{false,true})for(bool bias:{false,true})check(device,norm,bias,args.dtype);
+    for(int banks:{1,3})for(bool norm:{false,true})for(bool bias:{false,true})check(device,norm,bias,args.dtype,banks);
+    single_bank_capacity(device);
     if(args.dtype==at::kHalf)half_storage(device);
-    std::cout<<"weighted-projection: passed configurations=4 replay_rows=48 shared_banks=3 all_vjps=true none_zero=true saved_versions=true adjoint_dtype=float32\n";return 0;
+    std::cout<<"weighted-projection: passed configurations=8 single_bank=true banks3=true all_vjps=true none_zero=true saved_versions=true adjoint_dtype=float32\n";return 0;
   }catch(const std::exception& error){std::cerr<<error.what()<<'\n';return 2;}}

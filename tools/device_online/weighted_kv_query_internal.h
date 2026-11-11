@@ -11,6 +11,12 @@ inline void check(const at::Tensor& x,at::Device device,at::ScalarType type,at::
 inline void budget(long double bytes,int64_t available,const std::string& detail={}){if(available<1||bytes>available){
   std::ostringstream message;message<<"resident KV qry tensor budget exceeded: required="<<std::fixed<<bytes<<" available="<<available;
   if(!detail.empty())message<<" "<<detail;throw std::invalid_argument(message.str());}}
+inline long double reservation(int64_t rows,int64_t capacity,int64_t d,int64_t ds,int64_t banks){
+  // Single-bank projections retain matrix/transpose once, not per cache row.
+  // Keep the conservative per-element factor for the remaining child tapes.
+  if(banks==1)return 256.L*(rows*(capacity*(d+ds+1.L)+1)+3.L*d*ds);
+  return rows*(256.L*capacity*(static_cast<long double>(d)*ds+d+ds+1)+256);
+}
 inline at::Tensor transpose(DeviceProgram& p,const at::Tensor& x){auto out=at::zeros({x.size(0),x.size(2),x.size(1)},x.options());p.permute(x,{0,2,1},out);return out;}
 inline at::Tensor repeat(DeviceProgram& p,const at::Tensor& x,const at::Tensor& ids){auto shape=x.sizes().vec();shape[0]=ids.numel();auto out=at::zeros(shape,x.options());p.index_select(x,0,ids,out);return out;}
 }

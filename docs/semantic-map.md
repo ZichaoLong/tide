@@ -66,6 +66,8 @@
 [常驻原始状态与缓存作用](resident-weighted-state.md)对应五记忆typed布局、精确解码、原始时间缓存和独立字段VJP。
 [常驻固定时间短卷积](resident-weighted-convolution.md)对应原始时间tap打包、vendor归约、私有cache/共享参数VJP和新旧快照组合。
 [常驻共享投影](resident-weighted-projection.md)对应可选N_d、vendor BMM、独立行根/共享参数VJP及保存版本。
+单bank改为整块矩阵与参数转置，`weighted_projection_check`及`test_resident_weighted_projection_shared`
+分别验证实际数值和mask语义；数学条目不要求逐行保存参数或逐行物化外积。
 
 [常驻KV接收更新](resident-weighted-kv-update.md)对应实际基座/低秩/摘要参数链、原始缓存和完整独立字段VJP。
 

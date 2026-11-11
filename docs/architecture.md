@@ -22,6 +22,12 @@ FC16同尺寸成本与诊断入口见[阶段归因](fc16-cost-attribution.md)：
 后继按层追踪[调度](evidence/scheduling-interface-audit-20261110.md)、[区域](evidence/region-batching-audit-20261110.md)
 和[循环/Describe](evidence/recurrent-interface-audit-20261110.md)的实际审阅；hash manifest不混算重叠覆盖。
 
+常驻单bank投影的整块GEMM/VJP在`tools/device_online/weighted_projection.cpp`，设备实际使用与有限性守卫
+在`ascendc/tide_weighted_projection_shared.cpp`；同源转换提供CUDA源码及CPU语义核检查。
+`weighted_saved_tensors.h`负责typed tape在新反向program中的借用计费，组合预留在KV query/Full与Residual。
+修改同步[投影契约](resident-weighted-projection.md)、[预算契约](resident-storage-accounting.md)、
+projection/query/Full独立设备checks及完整flow/training资格；host张量列与device在线调度是不同路径。
+
 默认host prefill的区域SCC窗口分解：`window_plan.py`与`cpp/src/component_{plan,window}.cpp`。
 公共选项、实验身份和旧greedy复现规则见[调度契约](greedy-scheduler.md#default-component-windows)；
 修改时同步ExecutionOptions/ExecutionSpec、Python/native/standalone分派及`test_component_window*`。

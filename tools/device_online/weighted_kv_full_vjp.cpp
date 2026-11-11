@@ -1,4 +1,6 @@
 #include "weighted_kv_full_internal.h"
+#include "weighted_storage_budget.h"
+#include "weighted_saved_tensors.h"
 #include "device_launch_tide_weighted_full_roots.h"
 namespace tide::device_online {
 using namespace kv_full_detail;
@@ -8,7 +10,10 @@ WeightedKVFullGradient append_weighted_kv_full_vjp(DeviceProgram& p,const Weight
     throw std::invalid_argument("invalid KV Full tape");
   const auto device=t.output.device();const auto rows=t.output.size(0),d=t.output.size(1),heads=int64_t(t.pool.size()),dh=d/heads,capacity=t.window.layout.capacity(),banks=t.query.banks;
   check(gradient,device,at::kFloat,{rows,d});check(roots,device,at::kBool,{rows});check(error,device,at::kInt,{1});
-  budget((rows+banks)*(256.L*(capacity*(d+dh+heads+1.L)+static_cast<long double>(d)*d+3.L*d*t.residual.hidden.size(1)+d)+256),available);
+  auto borrowed=saved_tensors(t);borrowed.insert(borrowed.end(),{gradient,roots,error});
+  const WeightedStorageIncrement storage(p,std::move(borrowed));
+  budget(256.L*((banks==1?1:rows+banks)*(static_cast<long double>(d)*d+3.L*d*t.residual.hidden.size(1))
+    +(rows+banks)*(capacity*(d+dh+heads+1.L)+d+1)),available);
   auto residual=append_weighted_residual_vjp(p,t.residual,gradient,roots,error,available);auto bars=split(p,residual.memory,heads);
   auto pool_roots=at::zeros({rows,2},roots.options()),qroots=at::zeros_like(roots),wroots=at::zeros({rows,5},roots.options());
   auto flags=at::zeros({heads,rows,3},roots.options());
@@ -33,6 +38,7 @@ WeightedKVFullGradient append_weighted_kv_full_vjp(DeviceProgram& p,const Weight
   auto query=append_weighted_projection_vjp(p,t.query,merge(p,query_bars).reshape({rows,d}),qroots,error,available);
   auto raw=append_weighted_kv_window_vjp(p,t.window,merge(p,key_bars),merge(p,value_bars),at::zeros_like(t.window.summaries),weight_bars,wroots,error,available);
   auto input=at::zeros_like(gradient);p.copy(input,residual.input);p.add(input,query.input);
+  budget(storage.bytes(),available);
   return {raw.raw,raw.connected,input,residual.connected,{query.parameters.matrix,residual.parameters},query.owner_connected,
     residual.out_connected,residual.gate_connected,residual.up_connected,residual.down_connected};
 }

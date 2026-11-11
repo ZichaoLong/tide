@@ -34,6 +34,12 @@ RowGraph的累计expression bytes与实际新增storage两项检查取逻辑OR�
 Recurrent外层的前向/反向组合守卫也使用同一增量含义，避免子模块修复后又被外层重复收费。
 这只解除已复现的首次借用边界，不把尚未确认的历史失败归为同一原因，也不降低保守KV query guard。
 
+后继单bank投影按[整块矩阵契约](resident-weighted-projection.md)保存参数一次；KV query、Full及
+Residual的构造预留因此将该矩阵项从行数乘积中分离，其他窗口/向量/元数据项仍保守计费。
+构造末尾另检查实际新增storage union，反向通过`weighted_saved_tensors.h`枚举既有typed tape的借用集合。
+该枚举只负责计费，不复制、恢复或重放数值。预留减少不改变owner总预算、journal预留或operator workspace，
+不得把源码公式的减少写成实测HBM或旧规模已通过。缺席行、共享根、保存值及真实容量不足分别验证。
+
 ## 服务与 workspace
 
 `TaskServices::statistics()` 输出 phases、实际独立 worker programs、最大构造嵌套
