@@ -3,6 +3,9 @@
 长期目标见[研究章程](RESEARCH_CHARTER.md)。图中新增v9数据/容量、活跃比例、配方与机制三个**planned**组，
 关联[有界建议表](studies/language-scale-activity-v9-proposal.md)和静态参数清单；没有新运行或科学支持。
 稠密遮罩可继续作为主训练实现；逻辑活动、实际计算、硬件效率分列，真稀疏不是这些计划的统一前提。
+最新预算反馈为统一48h墙钟、无NPU卡时/CPU核时上限；主体方向获基本同意，活动细节正在对齐。
+[HB接收与更新说明](studies/hb-low-activity-alignment.md)及[小型机制证据](evidence/hb-activity-alignment.json)
+说明现有部分接收与三个比例，R32/R64低活跃配置仍是计划，CPU固定路由不升级成学习结果。
 
 研究图包含v8 Transformer校准、182格局部覆盖及有限seed22三个组；三组均已终态并作限定审阅，实际失败仍逐项标明。
 本批220次训练尝试中194完成、26原失败；19项局部复核18完成，1失败；单项数值修正r2完成。[终态交付](studies/direct-v8-results.md)列出解释边界与尚未提交的后继选项。

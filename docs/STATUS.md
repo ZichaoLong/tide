@@ -1,4 +1,4 @@
-# 当前交接：长期目标已落库；v8终态，v9为未提交建议
+# 当前交接：v9主体获基本同意；48h无聚合算时限，低活跃细节对齐
 
 2026-11-11最新用户反馈已写入[研究章程](RESEARCH_CHARTER.md)，README/AGENTS要求重入阅读。
 核心目标是同模型语言next-token质量、数据/容量/深度扩展、低活跃与局部化；允许继续用更快的稠密遮罩，
@@ -6,8 +6,12 @@
 
 [v8结果重审与下一批建议](studies/language-scale-activity-v9-proposal.md)：
 共同4M/16M/64M里程碑、中档三方最多256M成组延伸；HB40/88/184、FC16/32/64、浅宽与重新校准TF；
-活跃目标100/60/30/10/约3%，约1%仅条件探针。建议48h/200 NPU卡时/512 CPU核时/64GiB新增，尚未提交。
-本次没有训练、下载或设备分配；静态参数核算不是实际新规模结果，研究图中的v9三组均planned、结果awaiting。
+用户接受48h总墙钟，取消NPU卡时和CPU核时上限；64GiB新增磁盘目标保留，当前尚未提交。
+[HB低活跃对齐](studies/hb-low-activity-alignment.md)纠正分母：Full/全图、接收/全图、Full/候选分列。
+当前HB已支持部分接收；v8 hard-selection分别约36.7%/75.0%/48.9%，物理Full仍100%。
+约10%建议R32、约3%建议R64保留约两个发送者及可能的评分梯度；都是待对齐配置，非学习结果。
+[本次证据](evidence/hb-activity-alignment.json)新增四个CPU固定路由、KV无接收/未发送记忆和quad局部VJP检查；没有新训练或NPU作业。
+本次没有训练、下载或设备分配；静态/小型机制核对不是新规模学习，研究图中的v9三组仍planned、结果awaiting。
 [HB三轮解释](studies/hb-evidence-reconciliation.md)明确：旧配方/曝光/性能确有问题，尚无证据把旧HB88劣化归因于基座算错；
 v7简化图容量收益不改写旧结果，v8还没有HB88/184训练。
 

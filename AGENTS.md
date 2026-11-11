@@ -96,8 +96,14 @@
   attempts and 40 services are terminal; 194 complete and 26 original failures remain.
   The latest user feedback is persisted in `docs/RESEARCH_CHARTER.md`; the replacement
   next-batch recommendation is `docs/studies/language-scale-activity-v9-proposal.md`.
-  It is design-only, not submitted or launch-authorized by the documentation/status
-  request. Static parameter inventories are not executed scale or sparsity results.
+  The latest user response basically accepts the v9 direction and a shared 48h wall
+  deadline, and removes aggregate NPU-device-hour and CPU-core-hour caps. Record
+  those costs, but do not stop on the superseded 200 NPUh/512 core-h or sub-budgets.
+  The user asks to align low-activity details before that dependent work; see
+  `docs/studies/hb-low-activity-alignment.md`. No v9 jobs have been submitted.
+  Report receipt/all-node slots, Full/candidates and Full/all-node slots separately;
+  current HB already has partial receipt. Static inventories and small fixed-route
+  checks are not trained scale/sparsity or physical compute-saving results.
 - Keep STATUS as the current handoff and ROADMAP as the backlog. Research design is not a job log.
 - Status/review code reads `runs/` and `artifacts/jobs/` without writing there. Use
   `scripts.review_io.write_review_json` for graph/evidence JSON writes; it validates
