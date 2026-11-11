@@ -132,7 +132,7 @@ std::vector<TensorFields> evaluate(const NodeWeights& w,const KVConfig& c,const 
     if(autograd_census::enabled()){autograd_census::graph(p.full?"private/query.block.full":"private/query.block.read",refs);
       autograd_census::saved(layout.inputs);autograd_census::saved(leaves);autograd_census::saved(refs);}
   }
-  profile.phase(op_profile::QueryPublish);at::NoGradGuard guard;std::vector<TensorFields> result(p.rows.size());
+  profile.phase(op_profile::QueryPublish);at::NoGradGuard no_grad;std::vector<TensorFields> result(p.rows.size());
   size_t f=0;
   for(const auto& [name,ref]:columns){auto rows=ref.unbind();
     for(size_t i=0;i<rows.size();++i){auto value=rows[i].detach();

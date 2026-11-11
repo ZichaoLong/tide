@@ -27,7 +27,7 @@ def boundary_scope(mode):
         token = _calls.set(calls)
         stack.callback(_calls.reset, token)
         if mode in {"query-direct", "both-direct"}:
-            from tidegraph.weighted import query_vjp, read_batch, full_batch
+            from tidegraph.weighted import query_vjp, read_batch, full_batch, kv_block_query
 
             def direct(program, weights, requests, *, kind="read", slots=0, mode="hard", zeta=1.):
                 calls[kind+"_calls"] = calls.get(kind+"_calls", 0)+1
@@ -38,7 +38,14 @@ def boundary_scope(mode):
                     return full_batch.evaluate(program, weights, requests, slots, mode, zeta)
                 raise ValueError("unknown query kind")
 
+            def direct_block(plan, *inputs):
+                calls['block_'+plan.kind+'_calls'] = calls.get('block_'+plan.kind+'_calls', 0)+1
+                calls['block_'+plan.kind+'_rows'] = calls.get('block_'+plan.kind+'_rows', 0)+len(plan.requests)
+                _, columns = kv_block_query.compute(plan, inputs, private=False)
+                return tuple(value for row in zip(*(t.unbind() for t in columns)) for value in row)
+
             stack.enter_context(patch.object(query_vjp, "evaluate", direct))
+            stack.enter_context(patch.object(kv_block_query._Query, "apply", direct_block))
         if mode in {"region-direct", "both-direct"}:
             from tidegraph.weighted import region_vjp, region_batch
             def direct_region(program, requests):

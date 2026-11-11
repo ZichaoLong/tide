@@ -37,6 +37,7 @@ def test_task_projection_and_scoped_restoration(dtype,boundary):
         calls=boundary_calls()
         if boundary in ('query-direct','both-direct'):
             assert calls.get('read_rows',0)>0 and calls.get('full_rows',0)>0
+            assert calls.get('block_read_rows',0)>0 and calls.get('block_full_rows',0)>0
         if boundary in ('region-direct','both-direct'):
             assert calls.get('region_rows',0)>0
     assert originals==(query_vjp.evaluate,region_vjp.evaluate)
@@ -49,11 +50,13 @@ def test_task_projection_and_scoped_restoration(dtype,boundary):
 
 
 def test_diagnostic_patches_restore_after_failure():
-    from tidegraph.weighted import query_vjp,region_vjp
+    from tidegraph.weighted import query_vjp,region_vjp,kv_block_query
+    block_original=kv_block_query._Query.apply
     originals=(query_vjp.evaluate,region_vjp.evaluate)
     with pytest.raises(RuntimeError):
         with boundary_scope('both-direct'):
             raise RuntimeError('diagnostic failed')
+    assert kv_block_query._Query.apply == block_original
     assert originals==(query_vjp.evaluate,region_vjp.evaluate)
 
 

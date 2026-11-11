@@ -44,7 +44,7 @@ std::optional<Plan> plan(const std::vector<Row>& rows,const KVConfig& c,bool ful
       if(valid)inverse[g[j]]=b*queries+j;}
     const auto& t=p.banks[b]->times;stamps.insert(stamps.end(),t.begin(),t.end());stamps.insert(stamps.end(),p.length-t.size(),0);
   }
-  at::NoGradGuard guard;auto opts=ref.options().dtype(at::kLong);const Index b=p.banks.size();
+  at::NoGradGuard no_grad;auto opts=ref.options().dtype(at::kLong);const Index b=p.banks.size();
   p.indices=at::tensor(ids,opts).reshape({b,queries});p.reverse=at::tensor(inverse,opts);
   auto end=at::tensor(ends,opts).reshape({b,queries}),time=at::tensor(times,opts).reshape({b,queries});
   auto stamp=at::tensor(stamps,opts).reshape({b,p.length});
