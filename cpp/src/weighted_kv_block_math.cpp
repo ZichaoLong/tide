@@ -1,4 +1,6 @@
 #include "weighted_kv_block.h"
+#include "tide/operator_profile.h"
+#include <ATen/record_function.h>
 #include "weighted_describe_heads.h"
 namespace tide::weighted::block {
 namespace {
@@ -25,6 +27,8 @@ Tensor project(const Tensor& x,const Tensor& matrix){return at::matmul(x,matrix.
 TensorFields compute(const NodeWeights& w,const KVConfig& c,const RegionalConfig& r,const Plan& p,
     const std::vector<TensorFields>& old,const Tensor& values,const Tensor& summaries,const Tensor& contents,
     const Tensor& payload,const Tensor& controls){
+  RECORD_FUNCTION("tide::stage::query_block_math", std::vector<c10::IValue>());
+  op_profile::Scope profile(op_profile::QueryMath);
   using detail::weight;
   auto raw=banks(p,old,values,summaries,contents);auto h=gather(payload,p.indices),mass=h.select(-1,0),u=h.slice(-1,1);
   auto writes=at::where(p.visible,raw.at("weights").unsqueeze(1),at::zeros({},h.options()));

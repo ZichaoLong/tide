@@ -1,5 +1,6 @@
 // Column leaves and block adjoints; outer roots retain original causal support.
 #include "weighted_kv_block.h"
+#include <ATen/record_function.h>
 #include "tide/autograd_census.h"
 #include "tide/operator_profile.h"
 #include <torch/csrc/autograd/autograd.h>
@@ -69,6 +70,7 @@ class Query final:public torch::autograd::Node {
   std::vector<torch::autograd::SavedVariable> originals,leaves,refs;
   std::vector<size_t> output_map;
   variable_list apply(variable_list&& bars)override{
+    RECORD_FUNCTION("tide::stage::query_block_backward", std::vector<c10::IValue>());
     op_profile::Scope profile(op_profile::QueryAdjoint);
     if(at::GradMode::is_enabled())throw std::invalid_argument("KV block query supports first-order VJP only");
     if(originals.empty())throw std::runtime_error("KV block graph released; use retain_graph");
@@ -89,6 +91,7 @@ class Query final:public torch::autograd::Node {
       for(size_t i=0;i<xs.size();++i)if(xs[i].requires_grad()){active.push_back(xs[i]);active_ids.push_back(i);}
       if(roots.empty()||active.empty())continue;
       variable_list grads;{
+        RECORD_FUNCTION("tide::stage::query_block_gradient", std::vector<c10::IValue>());
         op_profile::Scope gradient(op_profile::QueryGradient);
         grads=torch::autograd::grad(roots,active,cotangents,true,false,true);
       }
@@ -115,6 +118,7 @@ class Query final:public torch::autograd::Node {
 };
 }
 std::vector<TensorFields> evaluate(const NodeWeights& w,const KVConfig& c,const RegionalConfig& r,const Plan& p){
+  RECORD_FUNCTION("tide::stage::query_block_bind", std::vector<c10::IValue>());
   op_profile::Scope profile(op_profile::QueryBind);const bool grad=at::GradMode::is_enabled();Layout layout(w,p);
   variable_list leaves;TensorFields columns;
   if(grad){at::AutoGradMode enable(true);std::tie(leaves,columns)=numerical(w,c,r,p,layout,true);}

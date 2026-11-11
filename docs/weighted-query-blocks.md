@@ -93,3 +93,10 @@ execution identity and actual-dispatch counters. Use the [FC diagnosis entry](fc
 and the [performance skill](../.agents/skills/optimize-tide-execution/SKILL.md)
 for reusable three-layer comparisons. Current qualification and limitations belong
 in STATUS/ROADMAP, not inferred from this implementation description.
+
+Native profiling labels block layout/binding, math and backward/gradient separately;
+math remains in `query_math`, independently of root/column preparation in
+`query_bind`. These are exclusive host elapsed counters, not device durations.
+Full-scale uninstrumented timings and smaller ATen/kernel/private-graph profiles
+must keep their distinct identities. Do not attribute a moved numerical function
+to interface overhead merely because its new caller has a different name.

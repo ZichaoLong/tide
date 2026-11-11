@@ -98,3 +98,11 @@ result rather than deriving acceptance from an outer supervisor's exit status.
 
 Keep these original scopes and source identities. New stack/source measurements
 are new evidence, even when dimensions and benchmark names are unchanged.
+
+Repeatable local entry: [FC comparison commands and record adapters](../../../../docs/fc16-cost-attribution.md#repeating-the-investigation)
+provides explicit old/default/formula/different-function pairs without fixed job
+names. When moving a numerical boundary, keep profiler ranges aligned with the
+same duties (layout/bind, mathematics, publication and transpose); moved work must
+not masquerade as reduced math or increased interface overhead. New workload
+adapters preserve source/configuration/actual-work identity and failures; they do
+not confer independent correctness or complete-root qualification.

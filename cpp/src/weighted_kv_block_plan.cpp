@@ -1,10 +1,14 @@
 #include "weighted_kv_block.h"
+#include "tide/operator_profile.h"
+#include <ATen/record_function.h>
 #include <algorithm>
 #include <ATen/core/grad_mode.h>
 #include <set>
 
 namespace tide::weighted::block {
 std::optional<Plan> plan(const std::vector<Row>& rows,const KVConfig& c,bool full){
+  RECORD_FUNCTION("tide::stage::query_block_layout", std::vector<c10::IValue>());
+  op_profile::Scope profile(op_profile::QueryBind);
   if(rows.size()<2||!c.read_frequencies.empty())return {};
   for(const auto& f:c.full_frequencies)if(!f.empty())return {};
   for(auto s:c.distance_slopes)if(s!=0)return {};
