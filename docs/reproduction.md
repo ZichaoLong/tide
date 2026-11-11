@@ -165,3 +165,12 @@ FC4/FC16 三模式；`--suite window-profiles` 另测 B2/L32 的真实算子及 
 --consumer RESULT_JSON --junit CHECKS_XML --output NEW_JSON` 从显式目录收集，无需约定旧作业名。
 该入口保留每个子命令退出码、缺失结果、源码/安装/配置/参数身份、计数和独立数值状态，
 不以服务 passed 推导资格。Profile/census 的耗时不混入正式吞吐，CPU/NPU 图计数不可相加。
+
+
+FP16张量窗口与双owner的最新有限验收见[固定记录](evidence/column-half-20261111.md)。
+`test_half_columns`覆盖half/FP32 Attention独立公式、五记忆全字段和master恢复；
+`test_experiment_columns -k half`覆盖默认实验配置/loss/恢复。双owner使用
+`TIDE_COLUMN_PEERS=npu:0,npu:1`运行`test_column_payload_owners`；普通异步与
+`ASCEND_LAUNCH_BLOCKING=1`必须分开记录，后者不是运行时修复。
+SDK执行`tidegraph-column-check --device=npu:0 --dtype=float16`，peer显式设置
+`TIDE_COLUMN_PEER_DEVICE=npu:1`；源码/构建/设备与安装消费者资格分别见报告。

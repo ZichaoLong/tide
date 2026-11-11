@@ -32,8 +32,13 @@ Python/C++ KV与四循环/卷积整链、异构组合、实际消息列及 raw �
 9个mixed成本点和PyTorch FC16新CPU/NPU成本已有证据。
 [796baafa/efc2776b多payload owner](evidence/column-owners-20261111.md)已实现完整区域汇集、
 整列消息传输和跨owner输出；固定CPU243通过/13原数值xfail，独立SDK CPU通过。
-两次NPU准入超时均未计算，新多owner值/VJP/恢复与新默认设备回归仍待验。
-新列resident、FP16、旧异步/容量边界与完整源审阅继续推进；
+两次原NPU准入超时保持；后继5959bbc3已取得新真机结果，见[FP16与跨owner后继](evidence/column-half-20261111.md)。
+单NPU half五记忆/位置独立根、三步master与恢复，以及CPU/NPU八安装消费者通过；
+双owner普通异步仍在反向EE1017，显式launch blocking的独立全根/更新/恢复通过，二者不能互相替代。
+ce50a2a5独立SDK新构建的CPU、单NPU普通异步及双NPU显式同步各16项half通过；原SDK入口拒绝保留。
+实验配置已让half/peer的auto窗口按实际能力分派，half端口loss在乘法前提升FP32。
+旧record KV sum两项FP32 evidence梯度在796baafa和5959bbc3均差1.535518e-6，原严格失败保留。
+新列resident、旧异步/容量边界与完整源审阅继续推进；新half的具体客户端/设备范围见该报告，
 不把旧一般执行器功能当作新路径已经迁移或优化。
 
 原计划的三类未完成工作继续：实现/数值/异步/容量限制，LH及core-3经验的实际迁移，
@@ -214,7 +219,7 @@ resident边界、人类及下游流程均有实际结果、拒绝或有依据的
 | NPU运行时初始化顺序 | 固定资格暴露CPU autograd后才注册NPU触发device_ready_queues_断言；独立标量进程已确认late失败/early通过，独立NPU资格14项+eager6组通过 | 应用先resolve_device再首次autograd；已启动CPU引擎的晚注册路径保留限制，等待运行时修复。当前门禁分进程，不改数学实现 |
 | 下游native workers2跨进程恢复 | 本轮FC/KV FP32小型安装消费者独立两步通过，但连续三步与两步保存/新进程恢复一步的梯度、SGD槽逐值不等；关闭autograd多线程仍失败。示例显式workers1固定资格通过，见[证据](evidence/downstream-contract-20261030.md) | 原workers2失败保留；停止重复相同候选。须先定位并行构图/反向累加顺序的具体差异，再用原材料/独立根/跨进程恢复验证；本轮只交付协作规范和单worker示例 |
 | 本轮NPU blocking小训练恢复 | [多卡证据](evidence/core5-platform-multicard-20261031.md)：原FC8/d8三更新完成，换owner精确恢复阶段SIGSEGV/-11；ordinary/cpu_bridge同材料严格通过，不能互相替代。报告b3dc53c补监督状态，未修数值执行 | 保留配置与原结果，小checkpoint已按授权退役；一次有界faulthandler诊断未复现且完整检查通过，旧SIGSEGV仍未定位；不再重复相同试验，重启修复须有流/owner生命周期新依据及原完整训练/恢复检查 |
-| 默认异步双NPU eager VJP | CPU桥完整delta-pdg仍EE1017，未完成4更新/恢复；小桥接通过不足以认证。显式blocking是另一个配置 | 同环境同事件方案停止；重启须运行时修复或新的事件所有权方案，先反例再完整图/独立根/恢复 |
+| 默认异步双NPU eager VJP | CPU桥完整delta-pdg仍EE1017；5959bbc3新列路径亦在反向invalid event，8独立安装消费者及SDK首例失败。新列显式launch blocking的4全根/更新/raw恢复、2安装及SDK FP32通过；另配结果不解除普通异步 | 新列减少碎片未修复该事件生命周期边界；不继续相同copy方案、不静默开blocking。重启须运行时修复或新的事件所有权方案，先纯Torch/跨设备反例再完整图、共享根及恢复；[新证据](evidence/column-half-20261111.md) |
 | 单行私有VJP | Python/C++直接建图、轻量一阶/版本守卫已交付；固定2ada00b CPU517 passed/2原strict xfail。NPU相关开发已通过；[57308e7 NPU固定资格](evidence/core5-resident-boundary-20261029.md)通过，[有限完整对照](evidence/core5-boundary-performance-20261029.md)已终态，CPU未见收益 | 以实际端到端成本决定下一步；不从减少私有图数直接推断收益 |
 | 异形字段packing与小提交 | 按device/dtype合并真实字段、8MiB分组、按shape/offset恢复；int64独立，None/零/版本守卫保留。mixed-a/c完整核对通过、单次1.505→1.477/2.183→1.848s，allocator峰值不变；小算子/scalar仍显著 | 若小算子/提交仍主导，须据新profile提出具体边界；无真实可合并域不盲目扩大batch |
 | resident组合矩阵/窗口反向 | 因子KV与实际分段已交付并资格通过；[57308e7](evidence/core5-boundary-performance-20261029.md)及[b7e0a29](evidence/core5-compact-fibers-20261029.md)两次有限观察，局部槽压缩后medium构造1057ms、执行/等待700ms；构造成本仍显著 | 当前测量终态；下一候选为显式模板重绑。完整adjoint绑定journal/root/参数地址，须先独立验证绑定/版本/跨窗，不能按shape缓存旧对象 |

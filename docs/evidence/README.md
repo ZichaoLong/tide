@@ -1,5 +1,7 @@
 # 历史验证与测量证据
 
+[FP16张量窗口与跨owner后继（2026-11-11）](column-half-20261111.md)：5816a4c4精度实现、5959bbc3默认实验接入、ce50a2a5 SDK入口；CPU定向188通过/6原xfail，扩大回归112通过/2原xfail/2旧sum失败。单NPU五记忆half及CPU/NPU八安装消费者通过；双NPU普通异步EE1017保留，显式同步全根/安装/SDK另配通过，不作异步或吞吐资格。
+
 [多payload owner张量窗口（2026-11-11）](column-owners-20261111.md)：796baafa实现、efc2776b SDK入口；固定CPU243通过/13原数值xfail，独立SDK CPU通过。两次NPU准入超时均未计算；跨设备资格与性能仍待验。默认FC16两客户端CPU成本单列。
 
 [张量窗口混合放置与有序共享伴随（2026-11-11）](column-placement-20261111.md)：540ccbd8/2ca00458固定CPU、NPU安装训练/恢复及SDK15项；Python KV mixed-a原精确恢复失败由局部共享使用归并修复。9项混合成本与主PyTorch FC16成本单列。

@@ -1,0 +1,139 @@
+{
+  "schema": "tide-implementation-review-v1",
+  "source": "5959bbc3646a616622d8584d6126869320b03ac8",
+  "meaning": "Sixteen actual file or named-function reviews; overlapping prior coverage. No repository-wide completion claim.",
+  "files": [
+    {
+      "path": "python/tidegraph/weighted/block_attention.py",
+      "sha256": "915ff1e494d7e02e20841d5fc05ae2a9a78714552cbaab6c79fb35b54262c22d",
+      "symbols": "*",
+      "reviewer": "root",
+      "scope": "Original half roots, FP32 softmax/centered transpose, output casts, version/first-order guards.",
+      "evidence": "docs/evidence/column-half-20261111.md"
+    },
+    {
+      "path": "python/tidegraph/weighted/column_attention.py",
+      "sha256": "522e231d185aaa2565249789296df237a4c36aeaa16d14fe9acb560189c8a33c",
+      "symbols": "*",
+      "reviewer": "root",
+      "scope": "Mixed positional logits with half values: wider arithmetic, original roots and transpose dtypes.",
+      "evidence": "docs/evidence/column-half-20261111.md"
+    },
+    {
+      "path": "python/tidegraph/weighted/kv_columns.py",
+      "sha256": "b5b2153b8f3f6855225b7a00ee2d0c553580f9fd260b37dd7c226a9b58f4d522",
+      "symbols": "*",
+      "reviewer": "root",
+      "scope": "Half eligibility, Read placement versus Full payload, relative int64 positions and FP32 positional contractions.",
+      "evidence": "docs/evidence/column-half-20261111.md"
+    },
+    {
+      "path": "python/tidegraph/weighted/window_execution.py",
+      "sha256": "ad0b0612a1a0896e1ddc137c2b598cdcede420f77f7db990ee62c79f0d85c398",
+      "symbols": "*",
+      "reviewer": "root",
+      "scope": "Capability-only selection, explicit scoring rejection, column versus record observations and no runtime fallback.",
+      "evidence": "docs/evidence/column-half-20261111.md"
+    },
+    {
+      "path": "python/tidegraph/weighted/settle_columns.py",
+      "sha256": "e6acf4a43ebd46f7c9c8f2db64dd56d1c8ea944c6ced429ba4038537d1069657",
+      "symbols": [
+        "SettleColumnPlan.__init__"
+      ],
+      "reviewer": "root",
+      "scope": "Constructor ownership/scoring admission; run_ports payload dtype branch separately inspected, not a claim of all schedule functions reviewed.",
+      "evidence": "docs/evidence/column-half-20261111.md"
+    },
+    {
+      "path": "python/tidegraph/weighted/native_columns.py",
+      "sha256": "daf53ac0668de44616d377c65e8622d65d436f78762b0b890ff5eb4a0e760cce",
+      "symbols": "*",
+      "reviewer": "root",
+      "scope": "Native capability version 3 requires matching dtype implementation; typed state/root-preserving adapter.",
+      "evidence": "docs/evidence/column-half-20261111.md"
+    },
+    {
+      "path": "python/tidegraph/experiment/column_task.py",
+      "sha256": "40904ee13082514ce50dbd8f67507633cd8027dce49913d74665c2711a66a427",
+      "symbols": "*",
+      "reviewer": "root",
+      "scope": "Default column producer/consumer; half c and G cast before multiplication, per-port loss and detached result decoding.",
+      "evidence": "docs/evidence/column-half-20261111.md"
+    },
+    {
+      "path": "python/tidegraph/planning/execution.py",
+      "sha256": "3c771ef958ea6be6bb82afc8bf03604564c1b6d2a6a0901a70fbc5b0c76f7e8e",
+      "symbols": [
+        "ExecutionSpec.record"
+      ],
+      "reviewer": "root",
+      "scope": "Window eligibility and record-query fallback kept distinct; effective half/peer policy identity and historical explicit records.",
+      "evidence": "docs/evidence/column-half-20261111.md"
+    },
+    {
+      "path": "cpp/src/weighted_block_attention.cpp",
+      "sha256": "9e7b8d495fd8e832483fa42cf7e2c1c0aaf77891ffbc2950b0e1cd17504e9be8",
+      "symbols": "*",
+      "reviewer": "root",
+      "scope": "Original SavedVariable roots before FP32 working copies, correct head reductions and typed gradients.",
+      "evidence": "docs/evidence/column-half-20261111.md"
+    },
+    {
+      "path": "cpp/src/weighted_column_attention.cpp",
+      "sha256": "b3e8b386a02c62d994aed3414e6c113b33f7aa1abcdfae7d9a2cd6d2c477e813",
+      "symbols": "*",
+      "reviewer": "root",
+      "scope": "Positional value-bank half transpose and immutable original version guards.",
+      "evidence": "docs/evidence/column-half-20261111.md"
+    },
+    {
+      "path": "cpp/src/weighted_column_query.cpp",
+      "sha256": "73cc398d978ac7fe32dc0786bd3eadefa62aca805cea1dc5200f9e1452eb55ef",
+      "symbols": "*",
+      "reviewer": "root",
+      "scope": "Half relative position dot products, selected Full and shared bank contraction.",
+      "evidence": "docs/evidence/column-half-20261111.md"
+    },
+    {
+      "path": "cpp/src/bind_weighted_sequence_columns.cpp",
+      "sha256": "76096c2e9d856c75d748955fa41c19afb7d376f0395e7db8ea56807ecffcd311",
+      "symbols": "*",
+      "reviewer": "root",
+      "scope": "Typed direct bridge, independent native scheduling and binary capability identity.",
+      "evidence": "docs/evidence/column-half-20261111.md"
+    },
+    {
+      "path": "cpp/test/weighted_sequence_columns.cpp",
+      "sha256": "f2071e3c46dad7eb95e34583d7eae30974ecf3e6f9fa49e06efb67884f8721fd",
+      "symbols": "*",
+      "reviewer": "root",
+      "scope": "Standalone scalar scheduling, raw state, input/parameter VJP and SGD scope; half tolerance and explicit scoring.",
+      "evidence": "docs/evidence/column-half-20261111.md"
+    },
+    {
+      "path": "examples/consumer_core5/tensor_window.py",
+      "sha256": "e407cd869fcc7a5bdc52af7b3956081d852c650b4a1d3800a3d5e53bb8436608",
+      "symbols": "*",
+      "reviewer": "root",
+      "scope": "Installed FP32-master half AdamW, explicit scoring/loss-scale identity, independent reference and fresh-process restore.",
+      "evidence": "docs/evidence/column-half-20261111.md"
+    },
+    {
+      "path": "tests/test_half_columns.py",
+      "sha256": "9ecb3cc09f4d20ff2152798a240901a9eef9ebb33a509efa51acb1bc2cbbbfd0",
+      "symbols": "*",
+      "reviewer": "root",
+      "scope": "Literal overflow/nontrivial Attention VJP, int64 cut, independent five-family observations/masters and exact raw restart.",
+      "evidence": "docs/evidence/column-half-20261111.md"
+    },
+    {
+      "path": "tests/test_experiment_columns.py",
+      "sha256": "a175a51ff3ee7be4fd8e9c002f91185bd49ceff9a8c366f1bf5e7b7ef6d85e45",
+      "symbols": "*",
+      "reviewer": "root",
+      "scope": "Default task/auto dispatch, independent half SGD and fresh-owner restore; literal half loss overflow witness.",
+      "evidence": "docs/evidence/column-half-20261111.md"
+    }
+  ]
+}

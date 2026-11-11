@@ -1,0 +1,2513 @@
+{
+  "schema": "tide-column-half-evidence-v1",
+  "implementation": "5816a4c4d5d8ebcec1a22bd84a4069eb5011b97b",
+  "default_experiment_dispatch": "5959bbc3646a616622d8584d6126869320b03ac8",
+  "sdk_half_cli": "ce50a2a5b29b87b3dead824d1c377ed47deef010",
+  "upstream": "0770593838a37c790a568226930567ed60f99b83",
+  "build_reuse": {
+    "half-build-reuse.json": {
+      "path": "artifacts/columns-20261111/half-build-reuse.json",
+      "sha256": "af599a4b7a84454a6b9e0b71034dc77eb0ec0fef9e4df581d458d8fc2240003b",
+      "bytes": 6654,
+      "record": {
+        "source": "5816a4c4d5d8ebcec1a22bd84a4069eb5011b97b",
+        "cpp_source_sha256": "1cccd0f1fafec94ee197a4f20cadc82b7a1459584b5c4110c5ca2c4b90bfde74",
+        "builds": [
+          {
+            "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/half-dev1/build",
+            "manifest": {
+              "source": "df01a1263240c20b75ab5b474acd8ca4839922f0",
+              "cpp_source_sha256": "1cccd0f1fafec94ee197a4f20cadc82b7a1459584b5c4110c5ca2c4b90bfde74",
+              "torch": "2.12.0+cpu",
+              "distribution": {
+                "torch": "2.12.0+cpu",
+                "torch_dir": "/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/lib/python3.12/site-packages/torch/share/cmake/Torch",
+                "prefix": "/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/lib/python3.12/site-packages/torch/share/cmake",
+                "cuda": null,
+                "cxx11_abi": true,
+                "discovery": "python-torch"
+              },
+              "environment": {
+                "os": "Linux-5.10.0-182.0.0.95.r1941_123.hce2.aarch64-aarch64-with-glibc2.34",
+                "compiler": "c++ (GCC) 10.3.1",
+                "cxx_standard": 17,
+                "build_type": "Release",
+                "torch_prefix": "/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/lib/python3.12/site-packages/torch/share/cmake/Torch",
+                "cann_version": "9.2.0"
+              },
+              "build_jobs": 320,
+              "backend": "npu",
+              "npu_runtime": "python",
+              "torch_npu": "2.12.0.post3",
+              "cuda": null,
+              "architecture": "aarch64",
+              "python": "3.12.13",
+              "cxx11_abi": true,
+              "binary_sha256": {
+                "libtidegraph.a": "947a5a55bb6e836ceb958954586287c73a4b38c2c583c427dcd380e2fe5d7c5e",
+                "libtidegraph_runtime.a": "8093ef45e50643980c38549c0337b991de365f102e8c653c851656683cd1b74e",
+                "_tide_native.so": "30f15bef1917d722bd300bdea6ca126ec0c5b421fd01b847a3cc2043514f1ee8"
+              }
+            }
+          },
+          {
+            "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/half-dev1/build-sdk",
+            "manifest": {
+              "source": "df01a1263240c20b75ab5b474acd8ca4839922f0",
+              "cpp_source_sha256": "1cccd0f1fafec94ee197a4f20cadc82b7a1459584b5c4110c5ca2c4b90bfde74",
+              "torch": "2.12.0",
+              "distribution": {
+                "torch": "2.12.0",
+                "torch_dir": "/opt/software/libtorch/2.12.0-cpu-aarch64-abi1/share/cmake/Torch",
+                "prefix": "/opt/software/libtorch/2.12.0-cpu-aarch64-abi1",
+                "cxx11_abi": true,
+                "cuda": null,
+                "discovery": "standalone-prefix",
+                "distribution_sha256": {
+                  "share/cmake/Torch/TorchConfig.cmake": "9846a61d981bc6c465ccfd604edb910e2ff37342310b80606c416697f9753d24",
+                  "share/cmake/Torch/TorchConfigVersion.cmake": "6cc8fc1b03a7d604a57be1fc51491bfb4deb8c651506c415a41b5173b06344f3",
+                  "lib/libtorch.so": "5d864dc3a979f6f8cf572e752caa583182324399c29a79b9143efe175f67d72e",
+                  "lib/libtorch_cpu.so": "cb4931abca15245de366da71e361174afc9e411651d4c50046cfb7a2dac6c4f5",
+                  "lib/libc10.so": "fa843366784bfce035e912360601c4ca098ce536b20f0c4a8ee50c3f00294e37"
+                }
+              },
+              "environment": {
+                "os": "Linux-5.10.0-182.0.0.95.r1941_123.hce2.aarch64-aarch64-with-glibc2.34",
+                "compiler": "c++ (GCC) 10.3.1",
+                "cxx_standard": 17,
+                "build_type": "Release",
+                "torch_prefix": "/opt/software/libtorch/2.12.0-cpu-aarch64-abi1/share/cmake/Torch",
+                "cann_version": "9.2.0",
+                "npu_sdk": {
+                  "config": "/opt/software/libtorch-npu/2.12.0-cann9.2.0-aarch64-abi1/sdk/share/cmake/Torch_npu/Torch_npuConfig.cmake",
+                  "config_sha256": "1711480e47f9dbb19ed01209f073e5526218efeb583cbbbc9ab101c373cc62dd",
+                  "library_sha256": "9a851accc1f4c7063d7e3c3cf76186329c063000a00a4d48c45a30ca1e8e3c18"
+                }
+              },
+              "build_jobs": 320,
+              "backend": "npu",
+              "npu_runtime": "standalone",
+              "torch_npu": null,
+              "cuda": null,
+              "architecture": "aarch64",
+              "python": "3.9.9",
+              "cxx11_abi": true,
+              "binary_sha256": {
+                "libtidegraph.a": "80a4e6d4f5d83054270819323016184eb7d2f4707d5f66a38f4df4b8f696a8e2",
+                "libtidegraph_runtime.a": "f892e7cda555ad5b153680ba07ac5d66884163aa77ed3435921a5d0a2fda1158",
+                "tidegraph-smoke": "0685001ba1382b1903bc03f780caaecb104b846b0ce94fb097e3c5c619b8f531",
+                "tidegraph-kernel-check": "8635d1bdf388eb93bed0c24cccb983d28c5a5955d2f10753ce0e37b687f54a41",
+                "tidegraph-full-check": "076027486fda229892ebabd29d466960122634c15cff060cf4611ad5cdb8db2f",
+                "tidegraph-aggregate-check": "60c9ac0b6d98ec4cee91f209c29814d3137642059d56d82451cb483fdd331408",
+                "tidegraph-optimizer-check": "0c881d740a51a1067ea507bb914aaeeb6359bedbc4b2cd35cd882032926bc602",
+                "tidegraph-checkpoint-check": "c6ab2db771239e900dfbcaebc0f90cb289cf8c94698dee8d661d7ca768fbdaa5",
+                "tidegraph-weighted-training-check": "fb724ff4185c327d0cd45a3af9c13e8fad98f05a4d51d15fb7f82f82b91fdd5b",
+                "tidegraph-lh-scope-check": "746aedf44726838f1a9159a03747053ee5ec4d9de2e930ad3258aed8a2492e0d",
+                "tidegraph-streaming-bench": "e8a7c2e6436f59036cd1a70e497218c13836b2685e4b1d7abd9b1dba17a3de7a",
+                "tidegraph-scale-bench": "661b506b310ef2450981a537a25af409004c1752b94a680f27ddb646e417676c",
+                "tidegraph-profile-check": "27b5ca2d75e14baa28a0ea1b77414363aff4167cb82e32926132cc8fff9fe7e0",
+                "tidegraph-settle-check": "0fef1a9383371083ef4ce1efc7c927823fc7c73ee7b8d82c90d082abfd5c7ac9",
+                "tidegraph-greedy-check": "4bda0a7b696106f49160e1957de3de281d8604c0e52b71205c88ca6fd4c10afd",
+                "tidegraph-accelerator-check": "2565168f15fad14fef69e70d0837d58dbf2b78867c218cf8c4a9337898f82f6e",
+                "tidegraph-runtime-check": "cd6d5ea111da2de812c90d807b0d2836f854d47dd39c79746d6815fa1376f7ac",
+                "tidegraph-read-precision-check": "40244a14ff0b4fb080f17ac0fe1d20634921b8e2d367b4a7280d805ff9cdbc2e",
+                "tidegraph-placement-check": "59bced676c6c7eff6b8747df3fe89803dea0d1b3cfa1696447c7f0f41714f3a9",
+                "tidegraph-payload-ownership-check": "47f0df9314036008d0ddb541445e2fd922f652d0077c431bd1d773bc97f59ce3",
+                "tidegraph-weighted-binding-module-check": "f7a57363eb7f9298da6941e33154e481d6c9846668ae93bcd0b37d49f5c0bc2a",
+                "tidegraph-column-check": "529d903f27b2173bd580f700f27c33971acc35de6c3d9b8948c60effcb37062a",
+                "libtidegraph-weighted-binding-module.so": "6c4d8b616cb9c62439d525053c7b9d0438388f50bae3960c3a4978b50825bcfc"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "half-task-build-reuse.json": {
+      "path": "artifacts/columns-20261111/half-task-build-reuse.json",
+      "sha256": "6e0c213700ab3a50f5d29a660634bb2aa43c16f6fb938635187a07a5ee9c733e",
+      "bytes": 6654,
+      "record": {
+        "source": "5959bbc3646a616622d8584d6126869320b03ac8",
+        "cpp_source_sha256": "1cccd0f1fafec94ee197a4f20cadc82b7a1459584b5c4110c5ca2c4b90bfde74",
+        "builds": [
+          {
+            "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/half-dev1/build",
+            "manifest": {
+              "source": "df01a1263240c20b75ab5b474acd8ca4839922f0",
+              "cpp_source_sha256": "1cccd0f1fafec94ee197a4f20cadc82b7a1459584b5c4110c5ca2c4b90bfde74",
+              "torch": "2.12.0+cpu",
+              "distribution": {
+                "torch": "2.12.0+cpu",
+                "torch_dir": "/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/lib/python3.12/site-packages/torch/share/cmake/Torch",
+                "prefix": "/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/lib/python3.12/site-packages/torch/share/cmake",
+                "cuda": null,
+                "cxx11_abi": true,
+                "discovery": "python-torch"
+              },
+              "environment": {
+                "os": "Linux-5.10.0-182.0.0.95.r1941_123.hce2.aarch64-aarch64-with-glibc2.34",
+                "compiler": "c++ (GCC) 10.3.1",
+                "cxx_standard": 17,
+                "build_type": "Release",
+                "torch_prefix": "/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/lib/python3.12/site-packages/torch/share/cmake/Torch",
+                "cann_version": "9.2.0"
+              },
+              "build_jobs": 320,
+              "backend": "npu",
+              "npu_runtime": "python",
+              "torch_npu": "2.12.0.post3",
+              "cuda": null,
+              "architecture": "aarch64",
+              "python": "3.12.13",
+              "cxx11_abi": true,
+              "binary_sha256": {
+                "libtidegraph.a": "947a5a55bb6e836ceb958954586287c73a4b38c2c583c427dcd380e2fe5d7c5e",
+                "libtidegraph_runtime.a": "8093ef45e50643980c38549c0337b991de365f102e8c653c851656683cd1b74e",
+                "_tide_native.so": "30f15bef1917d722bd300bdea6ca126ec0c5b421fd01b847a3cc2043514f1ee8"
+              }
+            }
+          },
+          {
+            "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/half-dev1/build-sdk",
+            "manifest": {
+              "source": "df01a1263240c20b75ab5b474acd8ca4839922f0",
+              "cpp_source_sha256": "1cccd0f1fafec94ee197a4f20cadc82b7a1459584b5c4110c5ca2c4b90bfde74",
+              "torch": "2.12.0",
+              "distribution": {
+                "torch": "2.12.0",
+                "torch_dir": "/opt/software/libtorch/2.12.0-cpu-aarch64-abi1/share/cmake/Torch",
+                "prefix": "/opt/software/libtorch/2.12.0-cpu-aarch64-abi1",
+                "cxx11_abi": true,
+                "cuda": null,
+                "discovery": "standalone-prefix",
+                "distribution_sha256": {
+                  "share/cmake/Torch/TorchConfig.cmake": "9846a61d981bc6c465ccfd604edb910e2ff37342310b80606c416697f9753d24",
+                  "share/cmake/Torch/TorchConfigVersion.cmake": "6cc8fc1b03a7d604a57be1fc51491bfb4deb8c651506c415a41b5173b06344f3",
+                  "lib/libtorch.so": "5d864dc3a979f6f8cf572e752caa583182324399c29a79b9143efe175f67d72e",
+                  "lib/libtorch_cpu.so": "cb4931abca15245de366da71e361174afc9e411651d4c50046cfb7a2dac6c4f5",
+                  "lib/libc10.so": "fa843366784bfce035e912360601c4ca098ce536b20f0c4a8ee50c3f00294e37"
+                }
+              },
+              "environment": {
+                "os": "Linux-5.10.0-182.0.0.95.r1941_123.hce2.aarch64-aarch64-with-glibc2.34",
+                "compiler": "c++ (GCC) 10.3.1",
+                "cxx_standard": 17,
+                "build_type": "Release",
+                "torch_prefix": "/opt/software/libtorch/2.12.0-cpu-aarch64-abi1/share/cmake/Torch",
+                "cann_version": "9.2.0",
+                "npu_sdk": {
+                  "config": "/opt/software/libtorch-npu/2.12.0-cann9.2.0-aarch64-abi1/sdk/share/cmake/Torch_npu/Torch_npuConfig.cmake",
+                  "config_sha256": "1711480e47f9dbb19ed01209f073e5526218efeb583cbbbc9ab101c373cc62dd",
+                  "library_sha256": "9a851accc1f4c7063d7e3c3cf76186329c063000a00a4d48c45a30ca1e8e3c18"
+                }
+              },
+              "build_jobs": 320,
+              "backend": "npu",
+              "npu_runtime": "standalone",
+              "torch_npu": null,
+              "cuda": null,
+              "architecture": "aarch64",
+              "python": "3.9.9",
+              "cxx11_abi": true,
+              "binary_sha256": {
+                "libtidegraph.a": "80a4e6d4f5d83054270819323016184eb7d2f4707d5f66a38f4df4b8f696a8e2",
+                "libtidegraph_runtime.a": "f892e7cda555ad5b153680ba07ac5d66884163aa77ed3435921a5d0a2fda1158",
+                "tidegraph-smoke": "0685001ba1382b1903bc03f780caaecb104b846b0ce94fb097e3c5c619b8f531",
+                "tidegraph-kernel-check": "8635d1bdf388eb93bed0c24cccb983d28c5a5955d2f10753ce0e37b687f54a41",
+                "tidegraph-full-check": "076027486fda229892ebabd29d466960122634c15cff060cf4611ad5cdb8db2f",
+                "tidegraph-aggregate-check": "60c9ac0b6d98ec4cee91f209c29814d3137642059d56d82451cb483fdd331408",
+                "tidegraph-optimizer-check": "0c881d740a51a1067ea507bb914aaeeb6359bedbc4b2cd35cd882032926bc602",
+                "tidegraph-checkpoint-check": "c6ab2db771239e900dfbcaebc0f90cb289cf8c94698dee8d661d7ca768fbdaa5",
+                "tidegraph-weighted-training-check": "fb724ff4185c327d0cd45a3af9c13e8fad98f05a4d51d15fb7f82f82b91fdd5b",
+                "tidegraph-lh-scope-check": "746aedf44726838f1a9159a03747053ee5ec4d9de2e930ad3258aed8a2492e0d",
+                "tidegraph-streaming-bench": "e8a7c2e6436f59036cd1a70e497218c13836b2685e4b1d7abd9b1dba17a3de7a",
+                "tidegraph-scale-bench": "661b506b310ef2450981a537a25af409004c1752b94a680f27ddb646e417676c",
+                "tidegraph-profile-check": "27b5ca2d75e14baa28a0ea1b77414363aff4167cb82e32926132cc8fff9fe7e0",
+                "tidegraph-settle-check": "0fef1a9383371083ef4ce1efc7c927823fc7c73ee7b8d82c90d082abfd5c7ac9",
+                "tidegraph-greedy-check": "4bda0a7b696106f49160e1957de3de281d8604c0e52b71205c88ca6fd4c10afd",
+                "tidegraph-accelerator-check": "2565168f15fad14fef69e70d0837d58dbf2b78867c218cf8c4a9337898f82f6e",
+                "tidegraph-runtime-check": "cd6d5ea111da2de812c90d807b0d2836f854d47dd39c79746d6815fa1376f7ac",
+                "tidegraph-read-precision-check": "40244a14ff0b4fb080f17ac0fe1d20634921b8e2d367b4a7280d805ff9cdbc2e",
+                "tidegraph-placement-check": "59bced676c6c7eff6b8747df3fe89803dea0d1b3cfa1696447c7f0f41714f3a9",
+                "tidegraph-payload-ownership-check": "47f0df9314036008d0ddb541445e2fd922f652d0077c431bd1d773bc97f59ce3",
+                "tidegraph-weighted-binding-module-check": "f7a57363eb7f9298da6941e33154e481d6c9846668ae93bcd0b37d49f5c0bc2a",
+                "tidegraph-column-check": "529d903f27b2173bd580f700f27c33971acc35de6c3d9b8948c60effcb37062a",
+                "libtidegraph-weighted-binding-module.so": "6c4d8b616cb9c62439d525053c7b9d0438388f50bae3960c3a4978b50825bcfc"
+              }
+            }
+          }
+        ]
+      }
+    }
+  },
+  "standalone_sdk_build": {
+    "path": "artifacts/columns-20261111/half-sdk-build/build-manifest.json",
+    "sha256": "91808644b13011fd4c8a7e3536a9f37d1f8cfc418141a02f842349c5858324cc",
+    "bytes": 4167,
+    "record": {
+      "source": "ce50a2a5b29b87b3dead824d1c377ed47deef010",
+      "cpp_source_sha256": "b6098cd2fd9860c662af3fd0ff38d84a39b3e8276e1be4445c6060aa680b88f9",
+      "torch": "2.12.0",
+      "distribution": {
+        "torch": "2.12.0",
+        "torch_dir": "/opt/software/libtorch/2.12.0-cpu-aarch64-abi1/share/cmake/Torch",
+        "prefix": "/opt/software/libtorch/2.12.0-cpu-aarch64-abi1",
+        "cxx11_abi": true,
+        "cuda": null,
+        "discovery": "standalone-prefix",
+        "distribution_sha256": {
+          "share/cmake/Torch/TorchConfig.cmake": "9846a61d981bc6c465ccfd604edb910e2ff37342310b80606c416697f9753d24",
+          "share/cmake/Torch/TorchConfigVersion.cmake": "6cc8fc1b03a7d604a57be1fc51491bfb4deb8c651506c415a41b5173b06344f3",
+          "lib/libtorch.so": "5d864dc3a979f6f8cf572e752caa583182324399c29a79b9143efe175f67d72e",
+          "lib/libtorch_cpu.so": "cb4931abca15245de366da71e361174afc9e411651d4c50046cfb7a2dac6c4f5",
+          "lib/libc10.so": "fa843366784bfce035e912360601c4ca098ce536b20f0c4a8ee50c3f00294e37"
+        }
+      },
+      "environment": {
+        "os": "Linux-5.10.0-182.0.0.95.r1941_123.hce2.aarch64-aarch64-with-glibc2.34",
+        "compiler": "c++ (GCC) 10.3.1",
+        "cxx_standard": 17,
+        "build_type": "Release",
+        "torch_prefix": "/opt/software/libtorch/2.12.0-cpu-aarch64-abi1/share/cmake/Torch",
+        "cann_version": "9.2.0",
+        "npu_sdk": {
+          "config": "/opt/software/libtorch-npu/2.12.0-cann9.2.0-aarch64-abi1/sdk/share/cmake/Torch_npu/Torch_npuConfig.cmake",
+          "config_sha256": "1711480e47f9dbb19ed01209f073e5526218efeb583cbbbc9ab101c373cc62dd",
+          "library_sha256": "9a851accc1f4c7063d7e3c3cf76186329c063000a00a4d48c45a30ca1e8e3c18"
+        }
+      },
+      "build_jobs": 320,
+      "backend": "npu",
+      "npu_runtime": "standalone",
+      "torch_npu": null,
+      "cuda": null,
+      "architecture": "aarch64",
+      "python": "3.9.9",
+      "cxx11_abi": true,
+      "binary_sha256": {
+        "libtidegraph.a": "c5499d6eb2e87ca0af6705edb8b3e145edda07769e052d65977519c11c1a30e1",
+        "libtidegraph_runtime.a": "31917a171d1f8e49ed2240c5ff6b2679fe49978bea8b451ba7f8d79c51894dcd",
+        "tidegraph-smoke": "0685001ba1382b1903bc03f780caaecb104b846b0ce94fb097e3c5c619b8f531",
+        "tidegraph-kernel-check": "8635d1bdf388eb93bed0c24cccb983d28c5a5955d2f10753ce0e37b687f54a41",
+        "tidegraph-full-check": "076027486fda229892ebabd29d466960122634c15cff060cf4611ad5cdb8db2f",
+        "tidegraph-aggregate-check": "60c9ac0b6d98ec4cee91f209c29814d3137642059d56d82451cb483fdd331408",
+        "tidegraph-optimizer-check": "0c881d740a51a1067ea507bb914aaeeb6359bedbc4b2cd35cd882032926bc602",
+        "tidegraph-checkpoint-check": "c6ab2db771239e900dfbcaebc0f90cb289cf8c94698dee8d661d7ca768fbdaa5",
+        "tidegraph-weighted-training-check": "fb724ff4185c327d0cd45a3af9c13e8fad98f05a4d51d15fb7f82f82b91fdd5b",
+        "tidegraph-lh-scope-check": "746aedf44726838f1a9159a03747053ee5ec4d9de2e930ad3258aed8a2492e0d",
+        "tidegraph-streaming-bench": "e8a7c2e6436f59036cd1a70e497218c13836b2685e4b1d7abd9b1dba17a3de7a",
+        "tidegraph-scale-bench": "661b506b310ef2450981a537a25af409004c1752b94a680f27ddb646e417676c",
+        "tidegraph-profile-check": "27b5ca2d75e14baa28a0ea1b77414363aff4167cb82e32926132cc8fff9fe7e0",
+        "tidegraph-settle-check": "0fef1a9383371083ef4ce1efc7c927823fc7c73ee7b8d82c90d082abfd5c7ac9",
+        "tidegraph-greedy-check": "4bda0a7b696106f49160e1957de3de281d8604c0e52b71205c88ca6fd4c10afd",
+        "tidegraph-accelerator-check": "2565168f15fad14fef69e70d0837d58dbf2b78867c218cf8c4a9337898f82f6e",
+        "tidegraph-runtime-check": "cd6d5ea111da2de812c90d807b0d2836f854d47dd39c79746d6815fa1376f7ac",
+        "tidegraph-read-precision-check": "40244a14ff0b4fb080f17ac0fe1d20634921b8e2d367b4a7280d805ff9cdbc2e",
+        "tidegraph-placement-check": "59bced676c6c7eff6b8747df3fe89803dea0d1b3cfa1696447c7f0f41714f3a9",
+        "tidegraph-payload-ownership-check": "47f0df9314036008d0ddb541445e2fd922f652d0077c431bd1d773bc97f59ce3",
+        "tidegraph-weighted-binding-module-check": "f7a57363eb7f9298da6941e33154e481d6c9846668ae93bcd0b37d49f5c0bc2a",
+        "tidegraph-column-check": "f695184403dc660e86d6e28f9261ce30e2c0c8f3a9ba63320c7121fd74e87f61",
+        "libtidegraph-weighted-binding-module.so": "6c4d8b616cb9c62439d525053c7b9d0438388f50bae3960c3a4978b50825bcfc"
+      }
+    }
+  },
+  "jobs": [
+    {
+      "name": "column-half-dev1",
+      "status": {
+        "path": "artifacts/jobs/column-half-dev1/status.json",
+        "sha256": "900a7d36ca0813acdd4a63cb63a4e21fcd7abdbf670fe48f40057773c67a4bbf",
+        "bytes": 988,
+        "record": {
+          "command": [
+            "/bin/bash",
+            "../work.sh"
+          ],
+          "cwd": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/half-dev1/source",
+          "state": "passed",
+          "source": "df01a1263240c20b75ab5b474acd8ca4839922f0",
+          "dirty": "M cpp/src/bind_weighted_sequence_columns.cpp\n M cpp/src/weighted_block_attention.cpp\n M cpp/src/weighted_column_attention.cpp\n M cpp/src/weighted_column_query.cpp\n M cpp/src/weighted_settle_columns.cpp\n M cpp/test/weighted_sequence_columns.cpp\n M examples/consumer_core5/tensor_window.py\n M python/tidegraph/weighted/block_attention.py\n M python/tidegraph/weighted/column_attention.py\n M python/tidegraph/weighted/kv_columns.py\n M python/tidegraph/weighted/native_columns.py\n M python/tidegraph/weighted/settle_columns.py\n M python/tidegraph/weighted/window_execution.py\n?? tests/test_half_columns.py",
+          "started": "2026-11-11T14:29:31.902190+00:00",
+          "exit_code": 0,
+          "finished": "2026-11-11T14:31:34.545966+00:00"
+        }
+      },
+      "log": {
+        "path": "artifacts/jobs/column-half-dev1/task.log",
+        "sha256": "2ebba5161c68abaad0a9ae8447afb41ceebd7b079062706f54989bae47f721d5",
+        "bytes": 37035
+      }
+    },
+    {
+      "name": "column-half-qualify",
+      "status": {
+        "path": "artifacts/jobs/column-half-qualify/status.json",
+        "sha256": "7a3c029ab6557773a9ed8fb2c1ff9cc17fab82cfab31551854a6487877fa3eb2",
+        "bytes": 458,
+        "record": {
+          "command": [
+            "/bin/bash",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/half-qualify.sh"
+          ],
+          "cwd": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/qualified-half",
+          "state": "passed",
+          "source": "5816a4c4d5d8ebcec1a22bd84a4069eb5011b97b",
+          "dirty": "",
+          "started": "2026-11-11T14:34:15.031419+00:00",
+          "exit_code": 0,
+          "finished": "2026-11-11T14:36:03.616740+00:00"
+        }
+      },
+      "log": {
+        "path": "artifacts/jobs/column-half-qualify/task.log",
+        "sha256": "d1bb857495f87e8332ba1a8580310e20a38827d424b12c6d9b6603ad01a32f1f",
+        "bytes": 2291
+      }
+    },
+    {
+      "name": "column-half-task-qualify",
+      "status": {
+        "path": "artifacts/jobs/column-half-task-qualify/status.json",
+        "sha256": "87cd0310624f15398f898ada07e37acaa6c77dc12b6f90ff58a6272c9d7e2fae",
+        "bytes": 506,
+        "record": {
+          "command": [
+            "taskset",
+            "-c",
+            "80-95",
+            "/bin/bash",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/half-task-qualify.sh"
+          ],
+          "cwd": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/qualified-half-task",
+          "state": "failed",
+          "source": "5959bbc3646a616622d8584d6126869320b03ac8",
+          "dirty": "",
+          "started": "2026-11-11T14:41:52.742077+00:00",
+          "exit_code": 1,
+          "finished": "2026-11-11T14:42:53.554055+00:00"
+        }
+      },
+      "log": {
+        "path": "artifacts/jobs/column-half-task-qualify/task.log",
+        "sha256": "201fb7ca34cf19f8c1b3a2e6102cde9302034965c4a63727c82925f8fdfb4360",
+        "bytes": 10256
+      }
+    },
+    {
+      "name": "column-half-task-deliver",
+      "status": {
+        "path": "artifacts/jobs/column-half-task-deliver/status.json",
+        "sha256": "99f3cc5d5638872083d9edad8854399cd0b8e91e8b288c64bc5e63a5ea1e7bf7",
+        "bytes": 506,
+        "record": {
+          "command": [
+            "taskset",
+            "-c",
+            "80-95",
+            "/bin/bash",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/half-task-deliver.sh"
+          ],
+          "cwd": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/qualified-half-task",
+          "state": "passed",
+          "source": "5959bbc3646a616622d8584d6126869320b03ac8",
+          "dirty": "",
+          "started": "2026-11-11T14:44:58.357472+00:00",
+          "exit_code": 0,
+          "finished": "2026-11-11T14:45:13.680752+00:00"
+        }
+      },
+      "log": {
+        "path": "artifacts/jobs/column-half-task-deliver/task.log",
+        "sha256": "c235cd318addd378db5f0590dd9aeb9387a721d320ee991fbba3d824e2323808",
+        "bytes": 1372
+      }
+    },
+    {
+      "name": "column-half-owners-npu",
+      "status": {
+        "path": "artifacts/jobs/column-half-owners-npu/status.json",
+        "sha256": "3142abece34cac1c771999efcdc508ffdd461672c711e8a9f04ad573ad304148",
+        "bytes": 466,
+        "record": {
+          "command": [
+            "/bin/bash",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/half-owners-npu.sh"
+          ],
+          "cwd": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/qualified-half-task",
+          "state": "failed",
+          "source": "5959bbc3646a616622d8584d6126869320b03ac8",
+          "dirty": "",
+          "started": "2026-11-11T14:46:21.387995+00:00",
+          "exit_code": 1,
+          "finished": "2026-11-11T14:50:51.316512+00:00"
+        }
+      },
+      "log": {
+        "path": "artifacts/jobs/column-half-owners-npu/task.log",
+        "sha256": "fff84ebfc1cc2c33d92cc163d827c42b97db30aadfa532d9c1dd9b66fe48157c",
+        "bytes": 2870
+      }
+    },
+    {
+      "name": "column-half-owners-blocking",
+      "status": {
+        "path": "artifacts/jobs/column-half-owners-blocking/status.json",
+        "sha256": "4dd3a9227c2656753a4efa123045663078aaa7240663f6e53820e3b6844661bf",
+        "bytes": 471,
+        "record": {
+          "command": [
+            "/bin/bash",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/half-owners-blocking.sh"
+          ],
+          "cwd": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/qualified-half-task",
+          "state": "failed",
+          "source": "5959bbc3646a616622d8584d6126869320b03ac8",
+          "dirty": "",
+          "started": "2026-11-11T14:52:28.727231+00:00",
+          "exit_code": 1,
+          "finished": "2026-11-11T14:54:46.644192+00:00"
+        }
+      },
+      "log": {
+        "path": "artifacts/jobs/column-half-owners-blocking/task.log",
+        "sha256": "4fa0ed5885769bb956cec25845a256e62a395de65e2e6922f475f04d44c5f6e8",
+        "bytes": 1935
+      }
+    },
+    {
+      "name": "column-half-sdk",
+      "status": {
+        "path": "artifacts/jobs/column-half-sdk/status.json",
+        "sha256": "782bbdab6bd048f05d7c9f4b26fb92ab56ac406c5d8332d91b32bb3fc0c996f4",
+        "bytes": 463,
+        "record": {
+          "command": [
+            "/bin/bash",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/half-sdk-work.sh"
+          ],
+          "cwd": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/qualified-half-sdk",
+          "state": "passed",
+          "source": "ce50a2a5b29b87b3dead824d1c377ed47deef010",
+          "dirty": "",
+          "started": "2026-11-11T14:57:33.632857+00:00",
+          "exit_code": 0,
+          "finished": "2026-11-11T14:59:10.990640+00:00"
+        }
+      },
+      "log": {
+        "path": "artifacts/jobs/column-half-sdk/task.log",
+        "sha256": "b3ca084b58986bef9da2dff803664c346f559cf7b6c4d189a3f3eb8caaa0db17",
+        "bytes": 24709
+      }
+    }
+  ],
+  "junit": {
+    "half-dev1/checks.xml": {
+      "path": "artifacts/columns-20261111/half-dev1/checks.xml",
+      "sha256": "8697451ad15860b7c8d97674be11acf8ccb6099aacac3857be2afa2eee06a096",
+      "bytes": 11021,
+      "total": 77,
+      "passed": 77,
+      "failure": 0,
+      "error": 0,
+      "skipped": 0,
+      "nonpassing": []
+    },
+    "half-checks.xml": {
+      "path": "artifacts/columns-20261111/half-checks.xml",
+      "sha256": "3c116a3564d76a682cca4f261e3eb167e217a340bd72ceb8d273712ce3418f05",
+      "bytes": 28423,
+      "total": 194,
+      "passed": 188,
+      "failure": 0,
+      "error": 0,
+      "skipped": 6,
+      "nonpassing": [
+        {
+          "test": "tests.test_kv_columns::test_kv_column_snapshots_terminal_and_full_vjp[float32-0-sum-0]",
+          "status": "skipped",
+          "message": "column FP32 reduction witness; same material FP64 check is separate"
+        },
+        {
+          "test": "tests.test_kv_columns::test_kv_column_snapshots_terminal_and_full_vjp[float32---qry-7]",
+          "status": "skipped",
+          "message": "column FP32 reduction witness; same material FP64 check is separate"
+        },
+        {
+          "test": "tests.test_kv_columns::test_kv_column_snapshots_terminal_and_full_vjp[float32-+-sum-0]",
+          "status": "skipped",
+          "message": "column FP32 reduction witness; same material FP64 check is separate"
+        },
+        {
+          "test": "tests.test_kv_columns::test_kv_column_snapshots_terminal_and_full_vjp[float32-+-qry-0]",
+          "status": "skipped",
+          "message": "column FP32 reduction witness; same material FP64 check is separate"
+        },
+        {
+          "test": "tests.test_weighted_precision::test_half_payload_explicit_scoring_master_updates_and_resume[False-gated_delta]",
+          "status": "skipped",
+          "message": "Recorded strict half GDN AdamW witness: near-zero gradients yield different updates; docs/weighted-precision.md, core5-half-clocks-dev. Not a passing training case."
+        },
+        {
+          "test": "tests.test_weighted_precision::test_half_payload_explicit_scoring_master_updates_and_resume[True-gated_delta]",
+          "status": "skipped",
+          "message": "Recorded strict half GDN AdamW witness: near-zero gradients yield different updates; docs/weighted-precision.md, core5-half-clocks-dev. Not a passing training case."
+        }
+      ]
+    },
+    "half-task-checks.xml": {
+      "path": "artifacts/columns-20261111/half-task-checks.xml",
+      "sha256": "34589c78cb4a91bf0625e0d009a816b4e3fce60957d1a255c04beb9c45677636",
+      "bytes": 27471,
+      "total": 116,
+      "passed": 112,
+      "failure": 2,
+      "error": 0,
+      "skipped": 2,
+      "nonpassing": [
+        {
+          "test": "tests.test_weighted_query_layout::test_packed_snapshot_independent_fields[float32-read-python]",
+          "status": "skipped",
+          "message": "packed-v2 batched evidence strict numeric failure retained; local FP64 witness audited"
+        },
+        {
+          "test": "tests.test_weighted_query_layout::test_packed_snapshot_independent_fields[float32-read-native]",
+          "status": "skipped",
+          "message": "packed-v2 batched evidence strict numeric failure retained; local FP64 witness audited"
+        },
+        {
+          "test": "tests.test_weighted_query_layout::test_sum_memory_and_other_descriptors[float32-python]",
+          "status": "failure",
+          "message": "tidegraph.comparison.NumericMismatch: root[read_program.evidence.encoders.mem.out_bias]: Tensor-likes are not close!\n\nMismatched elements: 1 / 2 (50.0%)\nGreatest absolute difference: 1.5355180948972702e-06 at index (1,) (up to 1e-06 allowed)\nGreatest relative difference: 0.001017757342197001 at index (1,) (up to 1e-05 allowed)"
+        },
+        {
+          "test": "tests.test_weighted_query_layout::test_sum_memory_and_other_descriptors[float32-native]",
+          "status": "failure",
+          "message": "tidegraph.comparison.NumericMismatch: root[read_program.evidence.encoders.mem.out_bias]: Tensor-likes are not close!\n\nMismatched elements: 1 / 2 (50.0%)\nGreatest absolute difference: 1.5355180948972702e-06 at index (1,) (up to 1e-06 allowed)\nGreatest relative difference: 0.001017757342197001 at index (1,) (up to 1e-05 allowed)"
+        }
+      ]
+    },
+    "half-single-device.xml": {
+      "path": "artifacts/columns-20261111/half-single-device.xml",
+      "sha256": "74b3c768f80f2cbfe8f4c663ac2f7faacf384978f97b74bd6a35ac55f6eedd18",
+      "bytes": 2524,
+      "total": 15,
+      "passed": 15,
+      "failure": 0,
+      "error": 0,
+      "skipped": 0,
+      "nonpassing": []
+    },
+    "half-owners-peers.xml": {
+      "path": "artifacts/columns-20261111/half-owners-peers.xml",
+      "sha256": "2e002680779855f095c1d424556c2cff400c12c4409d0b95ce3381daf0a90575",
+      "bytes": 18241,
+      "total": 4,
+      "passed": 0,
+      "failure": 4,
+      "error": 0,
+      "skipped": 0,
+      "nonpassing": [
+        {
+          "test": "tests.test_column_payload_owners::test_complete_columns_independent_vjp_updates_and_raw_restore[kv-python]",
+          "status": "failure",
+          "message": "RuntimeError: The Inner error is reported as above. The process exits for this inner error, and the current working event is 0xfffec9136f28.\nSince the operator is called asynchronously, the stacktrace may be inaccurate. If you want to get the accurate stacktrace, please set the environment variable ASCEND_LAUNCH_BLOCKING=1.\nNote: ASCEND_LAUNCH_BLOCKING=1 will force ops to run in synchronous mode, resulting in performance degradation. Please unset ASCEND_LAUNCH_BLOCKING in time after debugging.\n[+4 more lines; full report in element text]"
+        },
+        {
+          "test": "tests.test_column_payload_owners::test_complete_columns_independent_vjp_updates_and_raw_restore[kv-native]",
+          "status": "failure",
+          "message": "ValueError: invalid KV inert state"
+        },
+        {
+          "test": "tests.test_column_payload_owners::test_complete_columns_independent_vjp_updates_and_raw_restore[ssd-python]",
+          "status": "failure",
+          "message": "ValueError: weighted payload transport must use fixed unit scales"
+        },
+        {
+          "test": "tests.test_column_payload_owners::test_complete_columns_independent_vjp_updates_and_raw_restore[ssd-native]",
+          "status": "failure",
+          "message": "ValueError: weighted payload transport must use fixed unit scales"
+        }
+      ]
+    },
+    "half-owners-blocking.xml": {
+      "path": "artifacts/columns-20261111/half-owners-blocking.xml",
+      "sha256": "5b79d4893bf4deff4e4296b0179776dc50a3daf5d2c901c199226e37db0f4026",
+      "bytes": 862,
+      "total": 4,
+      "passed": 4,
+      "failure": 0,
+      "error": 0,
+      "skipped": 0,
+      "nonpassing": []
+    }
+  },
+  "cpu_installed_consumers": {
+    "path": "artifacts/columns-20261111/half-consumer-results.json",
+    "sha256": "d00c0d33c7733d9661774304d62d89da8cc16eb267b8ff315f2c9814cb37124c",
+    "bytes": 13957,
+    "record": {
+      "source": "5959bbc3646a616622d8584d6126869320b03ac8",
+      "device": "cpu",
+      "cases": [
+        {
+          "name": "half-cpu-kv-native",
+          "command": [
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/additive-work/env/bin/python",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/qualified-half-task/examples/consumer_core5/tensor_window.py",
+            "--device",
+            "cpu",
+            "--dtype",
+            "float16",
+            "--scoring-dtype",
+            "float32",
+            "--loss-scale",
+            "16",
+            "--family",
+            "kv",
+            "--client",
+            "native",
+            "--no-deterministic-algorithms",
+            "--output-dir",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/half-cpu-kv-native",
+            "--positions",
+            "--native-library",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/half-dev1/build"
+          ],
+          "exit_code": 0,
+          "result": {
+            "identity": {
+              "interface": "tensor-window-v1",
+              "device": "cpu",
+              "dtype": "float16",
+              "client": "native",
+              "positions": true,
+              "family": "kv",
+              "placement": "cpu",
+              "scoring_dtype": "float32",
+              "deterministic_algorithms": false,
+              "peer_device": null,
+              "precision": "fp32-master-v1",
+              "loss_scale": 16.0,
+              "comparison_policy": "half-derived-fields-atol1e-3-rtol2e-2"
+            },
+            "execution": "completed",
+            "strict_numerical": "passed",
+            "recovery": "passed",
+            "effective_execution": {
+              "interface": "tensor-window-v1",
+              "schedule": "settle-columns-v1",
+              "client": "native",
+              "fallback_reason": null,
+              "roots": "columns",
+              "max_workspace_bytes": 4294967296,
+              "placement": {
+                "payload": "cpu",
+                "read": "cpu",
+                "control": "cpu",
+                "selection": "cpu",
+                "events": "cpu",
+                "scoring_dtype": "float32"
+              }
+            },
+            "comparisons": [
+              {
+                "schema": "tide-comparison-v1",
+                "finite": "passed",
+                "numeric": "passed",
+                "discrete": "passed",
+                "strict_passed": true,
+                "compared_leaves": {
+                  "numeric": 568,
+                  "discrete": 152
+                },
+                "mismatch_counts": {
+                  "numeric": 0,
+                  "discrete": 0
+                },
+                "differences": [],
+                "differences_truncated": false
+              },
+              {
+                "schema": "tide-comparison-v1",
+                "finite": "passed",
+                "numeric": "passed",
+                "discrete": "passed",
+                "strict_passed": true,
+                "compared_leaves": {
+                  "numeric": 568,
+                  "discrete": 152
+                },
+                "mismatch_counts": {
+                  "numeric": 0,
+                  "discrete": 0
+                },
+                "differences": [],
+                "differences_truncated": false
+              },
+              {
+                "schema": "tide-comparison-v1",
+                "finite": "passed",
+                "numeric": "passed",
+                "discrete": "passed",
+                "strict_passed": true,
+                "compared_leaves": {
+                  "numeric": 568,
+                  "discrete": 152
+                },
+                "mismatch_counts": {
+                  "numeric": 0,
+                  "discrete": 0
+                },
+                "differences": [],
+                "differences_truncated": false
+              }
+            ]
+          }
+        },
+        {
+          "name": "half-cpu-ssd-native",
+          "command": [
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/additive-work/env/bin/python",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/qualified-half-task/examples/consumer_core5/tensor_window.py",
+            "--device",
+            "cpu",
+            "--dtype",
+            "float16",
+            "--scoring-dtype",
+            "float32",
+            "--loss-scale",
+            "16",
+            "--family",
+            "ssd",
+            "--client",
+            "native",
+            "--no-deterministic-algorithms",
+            "--output-dir",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/half-cpu-ssd-native",
+            "--native-library",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/half-dev1/build"
+          ],
+          "exit_code": 0,
+          "result": {
+            "identity": {
+              "interface": "tensor-window-v1",
+              "device": "cpu",
+              "dtype": "float16",
+              "client": "native",
+              "positions": false,
+              "family": "ssd",
+              "placement": "cpu",
+              "scoring_dtype": "float32",
+              "deterministic_algorithms": false,
+              "peer_device": null,
+              "precision": "fp32-master-v1",
+              "loss_scale": 16.0,
+              "comparison_policy": "half-derived-fields-atol1e-3-rtol2e-2"
+            },
+            "execution": "completed",
+            "strict_numerical": "passed",
+            "recovery": "passed",
+            "effective_execution": {
+              "interface": "tensor-window-v1",
+              "schedule": "settle-columns-v1",
+              "client": "native",
+              "fallback_reason": null,
+              "roots": "columns",
+              "max_workspace_bytes": 4294967296,
+              "placement": {
+                "payload": "cpu",
+                "read": "cpu",
+                "control": "cpu",
+                "selection": "cpu",
+                "events": "cpu",
+                "scoring_dtype": "float32"
+              }
+            },
+            "comparisons": [
+              {
+                "schema": "tide-comparison-v1",
+                "finite": "passed",
+                "numeric": "passed",
+                "discrete": "passed",
+                "strict_passed": true,
+                "compared_leaves": {
+                  "numeric": 602,
+                  "discrete": 166
+                },
+                "mismatch_counts": {
+                  "numeric": 0,
+                  "discrete": 0
+                },
+                "differences": [],
+                "differences_truncated": false
+              },
+              {
+                "schema": "tide-comparison-v1",
+                "finite": "passed",
+                "numeric": "passed",
+                "discrete": "passed",
+                "strict_passed": true,
+                "compared_leaves": {
+                  "numeric": 602,
+                  "discrete": 166
+                },
+                "mismatch_counts": {
+                  "numeric": 0,
+                  "discrete": 0
+                },
+                "differences": [],
+                "differences_truncated": false
+              },
+              {
+                "schema": "tide-comparison-v1",
+                "finite": "passed",
+                "numeric": "passed",
+                "discrete": "passed",
+                "strict_passed": true,
+                "compared_leaves": {
+                  "numeric": 602,
+                  "discrete": 166
+                },
+                "mismatch_counts": {
+                  "numeric": 0,
+                  "discrete": 0
+                },
+                "differences": [],
+                "differences_truncated": false
+              }
+            ]
+          }
+        },
+        {
+          "name": "half-cpu-kv-python",
+          "command": [
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/additive-work/env/bin/python",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/qualified-half-task/examples/consumer_core5/tensor_window.py",
+            "--device",
+            "cpu",
+            "--dtype",
+            "float16",
+            "--scoring-dtype",
+            "float32",
+            "--loss-scale",
+            "16",
+            "--family",
+            "kv",
+            "--client",
+            "python",
+            "--no-deterministic-algorithms",
+            "--output-dir",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/half-cpu-kv-python",
+            "--positions"
+          ],
+          "exit_code": 0,
+          "result": {
+            "identity": {
+              "interface": "tensor-window-v1",
+              "device": "cpu",
+              "dtype": "float16",
+              "client": "python",
+              "positions": true,
+              "family": "kv",
+              "placement": "cpu",
+              "scoring_dtype": "float32",
+              "deterministic_algorithms": false,
+              "peer_device": null,
+              "precision": "fp32-master-v1",
+              "loss_scale": 16.0,
+              "comparison_policy": "half-derived-fields-atol1e-3-rtol2e-2"
+            },
+            "execution": "completed",
+            "strict_numerical": "passed",
+            "recovery": "passed",
+            "effective_execution": {
+              "interface": "tensor-window-v1",
+              "schedule": "settle-columns-v1",
+              "client": "python",
+              "fallback_reason": null,
+              "roots": "columns",
+              "max_workspace_bytes": 4294967296,
+              "placement": {
+                "payload": "cpu",
+                "read": "cpu",
+                "control": "cpu",
+                "selection": "cpu",
+                "events": "cpu",
+                "scoring_dtype": "float32"
+              }
+            },
+            "comparisons": [
+              {
+                "schema": "tide-comparison-v1",
+                "finite": "passed",
+                "numeric": "passed",
+                "discrete": "passed",
+                "strict_passed": true,
+                "compared_leaves": {
+                  "numeric": 568,
+                  "discrete": 152
+                },
+                "mismatch_counts": {
+                  "numeric": 0,
+                  "discrete": 0
+                },
+                "differences": [],
+                "differences_truncated": false
+              },
+              {
+                "schema": "tide-comparison-v1",
+                "finite": "passed",
+                "numeric": "passed",
+                "discrete": "passed",
+                "strict_passed": true,
+                "compared_leaves": {
+                  "numeric": 568,
+                  "discrete": 152
+                },
+                "mismatch_counts": {
+                  "numeric": 0,
+                  "discrete": 0
+                },
+                "differences": [],
+                "differences_truncated": false
+              },
+              {
+                "schema": "tide-comparison-v1",
+                "finite": "passed",
+                "numeric": "passed",
+                "discrete": "passed",
+                "strict_passed": true,
+                "compared_leaves": {
+                  "numeric": 568,
+                  "discrete": 152
+                },
+                "mismatch_counts": {
+                  "numeric": 0,
+                  "discrete": 0
+                },
+                "differences": [],
+                "differences_truncated": false
+              }
+            ]
+          }
+        },
+        {
+          "name": "half-cpu-ssd-python",
+          "command": [
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/additive-work/env/bin/python",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/qualified-half-task/examples/consumer_core5/tensor_window.py",
+            "--device",
+            "cpu",
+            "--dtype",
+            "float16",
+            "--scoring-dtype",
+            "float32",
+            "--loss-scale",
+            "16",
+            "--family",
+            "ssd",
+            "--client",
+            "python",
+            "--no-deterministic-algorithms",
+            "--output-dir",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/half-cpu-ssd-python"
+          ],
+          "exit_code": 0,
+          "result": {
+            "identity": {
+              "interface": "tensor-window-v1",
+              "device": "cpu",
+              "dtype": "float16",
+              "client": "python",
+              "positions": false,
+              "family": "ssd",
+              "placement": "cpu",
+              "scoring_dtype": "float32",
+              "deterministic_algorithms": false,
+              "peer_device": null,
+              "precision": "fp32-master-v1",
+              "loss_scale": 16.0,
+              "comparison_policy": "half-derived-fields-atol1e-3-rtol2e-2"
+            },
+            "execution": "completed",
+            "strict_numerical": "passed",
+            "recovery": "passed",
+            "effective_execution": {
+              "interface": "tensor-window-v1",
+              "schedule": "settle-columns-v1",
+              "client": "python",
+              "fallback_reason": null,
+              "roots": "columns",
+              "max_workspace_bytes": 4294967296,
+              "placement": {
+                "payload": "cpu",
+                "read": "cpu",
+                "control": "cpu",
+                "selection": "cpu",
+                "events": "cpu",
+                "scoring_dtype": "float32"
+              }
+            },
+            "comparisons": [
+              {
+                "schema": "tide-comparison-v1",
+                "finite": "passed",
+                "numeric": "passed",
+                "discrete": "passed",
+                "strict_passed": true,
+                "compared_leaves": {
+                  "numeric": 602,
+                  "discrete": 166
+                },
+                "mismatch_counts": {
+                  "numeric": 0,
+                  "discrete": 0
+                },
+                "differences": [],
+                "differences_truncated": false
+              },
+              {
+                "schema": "tide-comparison-v1",
+                "finite": "passed",
+                "numeric": "passed",
+                "discrete": "passed",
+                "strict_passed": true,
+                "compared_leaves": {
+                  "numeric": 602,
+                  "discrete": 166
+                },
+                "mismatch_counts": {
+                  "numeric": 0,
+                  "discrete": 0
+                },
+                "differences": [],
+                "differences_truncated": false
+              },
+              {
+                "schema": "tide-comparison-v1",
+                "finite": "passed",
+                "numeric": "passed",
+                "discrete": "passed",
+                "strict_passed": true,
+                "compared_leaves": {
+                  "numeric": 602,
+                  "discrete": 166
+                },
+                "mismatch_counts": {
+                  "numeric": 0,
+                  "discrete": 0
+                },
+                "differences": [],
+                "differences_truncated": false
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "ordinary_async_device_execution": {
+    "path": "artifacts/columns-20261111/half-owners-device-results.json",
+    "sha256": "8e081609d631c8034bcf81fd213b30d0e8ef2a0aeced0051ae08eac1b97ddf18",
+    "bytes": 34977,
+    "record": {
+      "source": "5959bbc3646a616622d8584d6126869320b03ac8",
+      "visibility": "7,11",
+      "affinity": [
+        144,
+        145,
+        146,
+        147,
+        148,
+        149,
+        150,
+        151,
+        152,
+        153,
+        154,
+        155,
+        156,
+        157,
+        158,
+        159
+      ],
+      "cases": [
+        {
+          "name": "half-owners-peers",
+          "command": [
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/additive-work/env/bin/python",
+            "-m",
+            "pytest",
+            "-q",
+            "-p",
+            "no:cacheprovider",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/qualified-half-task/tests/test_column_payload_owners.py",
+            "--dtype",
+            "float32",
+            "-o",
+            "faulthandler_timeout=45",
+            "--junitxml=/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/half-owners-peers.xml"
+          ],
+          "exit_code": 1,
+          "timed_out": false,
+          "result": {}
+        },
+        {
+          "name": "half-single-device",
+          "command": [
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/additive-work/env/bin/python",
+            "-m",
+            "pytest",
+            "-q",
+            "-p",
+            "no:cacheprovider",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/qualified-half-task/tests/test_half_columns.py",
+            "--dtype",
+            "float32",
+            "-o",
+            "faulthandler_timeout=45",
+            "--junitxml=/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/half-single-device.xml"
+          ],
+          "exit_code": 0,
+          "timed_out": false,
+          "result": {}
+        },
+        {
+          "name": "half-owners-fp32-kv-python-mixed-a",
+          "command": [
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/additive-work/env/bin/python",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/qualified-half-task/examples/consumer_core5/tensor_window.py",
+            "--device",
+            "npu:0",
+            "--peer-device",
+            "npu:1",
+            "--dtype",
+            "float32",
+            "--client",
+            "python",
+            "--family",
+            "kv",
+            "--placement",
+            "mixed-a",
+            "--no-deterministic-algorithms",
+            "--output-dir",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/half-owners-fp32-kv-python-mixed-a"
+          ],
+          "exit_code": 1,
+          "timed_out": false,
+          "result": {
+            "identity": {
+              "interface": "tensor-window-v1",
+              "device": "npu:0",
+              "dtype": "float32",
+              "client": "python",
+              "positions": false,
+              "family": "kv",
+              "placement": "mixed-a",
+              "scoring_dtype": "float32",
+              "deterministic_algorithms": false,
+              "peer_device": "npu:1"
+            },
+            "execution": "failed",
+            "strict_numerical": "not_checked",
+            "recovery": "not_checked",
+            "error": "RuntimeError('The Inner error is reported as above. The process exits for this inner error, and the current working event is 0xfffea03cdac8.\\nSince the operator is called asynchronously, the stacktrace may be inaccurate. If you want to get the accurate stacktrace, please set the environment variable ASCEND_LAUNCH_BLOCKING=1.\\nNote: ASCEND_LAUNCH_BLOCKING=1 will force ops to run in synchronous mode, resulting in performance degradation. Please unset ASCEND_LAUNCH_BLOCKING in time after debugging.\\n[ERROR] 2026-11-11-22:47:23 (PID:1833192, Device:1, RankID:-1) ERR00100 PTA call acl api failed.\\n[PID: 1833192] 2026-11-11-22:47:23.542.469 Invalid_Argument(EE1017): Object validation failed. Parameter event is invalid. Reason: 1. The event handle has been destroyed. 2. The handle type must be event.\\nTraceBack (most recent call last):\\n        rtStreamWaitEvent failed. Parameter handle is invalid. Reason: 1. The handle has been destroyed. 2. The handle type is not the expected one.\\n')"
+          }
+        },
+        {
+          "name": "half-owners-fp32-kv-python-mixed-c",
+          "command": [
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/additive-work/env/bin/python",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/qualified-half-task/examples/consumer_core5/tensor_window.py",
+            "--device",
+            "npu:0",
+            "--peer-device",
+            "npu:1",
+            "--dtype",
+            "float32",
+            "--client",
+            "python",
+            "--family",
+            "kv",
+            "--placement",
+            "mixed-c",
+            "--no-deterministic-algorithms",
+            "--output-dir",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/half-owners-fp32-kv-python-mixed-c"
+          ],
+          "exit_code": 1,
+          "timed_out": false,
+          "result": {
+            "identity": {
+              "interface": "tensor-window-v1",
+              "device": "npu:0",
+              "dtype": "float32",
+              "client": "python",
+              "positions": false,
+              "family": "kv",
+              "placement": "mixed-c",
+              "scoring_dtype": "float32",
+              "deterministic_algorithms": false,
+              "peer_device": "npu:1"
+            },
+            "execution": "failed",
+            "strict_numerical": "not_checked",
+            "recovery": "not_checked",
+            "error": "RuntimeError('The Inner error is reported as above. The process exits for this inner error, and the current working event is 0xfffeb82f18d8.\\nSince the operator is called asynchronously, the stacktrace may be inaccurate. If you want to get the accurate stacktrace, please set the environment variable ASCEND_LAUNCH_BLOCKING=1.\\nNote: ASCEND_LAUNCH_BLOCKING=1 will force ops to run in synchronous mode, resulting in performance degradation. Please unset ASCEND_LAUNCH_BLOCKING in time after debugging.\\n[ERROR] 2026-11-11-22:47:32 (PID:1848375, Device:1, RankID:-1) ERR00100 PTA call acl api failed.\\n[PID: 1848375] 2026-11-11-22:47:32.042.635 Invalid_Argument(EE1017): Object validation failed. Parameter event is invalid. Reason: 1. The event handle has been destroyed. 2. The handle type must be event.\\nTraceBack (most recent call last):\\n        rtStreamWaitEvent failed. Parameter handle is invalid. Reason: 1. The handle has been destroyed. 2. The handle type is not the expected one.\\n')"
+          }
+        },
+        {
+          "name": "half-npu-kv-python",
+          "command": [
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/additive-work/env/bin/python",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/qualified-half-task/examples/consumer_core5/tensor_window.py",
+            "--device",
+            "npu:0",
+            "--dtype",
+            "float16",
+            "--scoring-dtype",
+            "float32",
+            "--loss-scale",
+            "16",
+            "--client",
+            "python",
+            "--family",
+            "kv",
+            "--no-deterministic-algorithms",
+            "--output-dir",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/half-npu-kv-python",
+            "--positions"
+          ],
+          "exit_code": 0,
+          "timed_out": false,
+          "result": {
+            "identity": {
+              "interface": "tensor-window-v1",
+              "device": "npu:0",
+              "dtype": "float16",
+              "client": "python",
+              "positions": true,
+              "family": "kv",
+              "placement": "mixed-c",
+              "scoring_dtype": "float32",
+              "deterministic_algorithms": false,
+              "peer_device": null,
+              "precision": "fp32-master-v1",
+              "loss_scale": 16.0,
+              "comparison_policy": "half-derived-fields-atol1e-3-rtol2e-2"
+            },
+            "execution": "completed",
+            "strict_numerical": "passed",
+            "recovery": "passed",
+            "effective_execution": {
+              "interface": "tensor-window-v1",
+              "schedule": "settle-columns-v1",
+              "client": "python",
+              "fallback_reason": null,
+              "roots": "columns",
+              "max_workspace_bytes": 4294967296,
+              "placement": {
+                "payload": "npu:0",
+                "read": "npu:0",
+                "control": "npu:0",
+                "selection": "npu:0",
+                "events": "cpu",
+                "scoring_dtype": "float32"
+              }
+            },
+            "comparisons": [
+              {
+                "schema": "tide-comparison-v1",
+                "finite": "passed",
+                "numeric": "passed",
+                "discrete": "passed",
+                "strict_passed": true,
+                "compared_leaves": {
+                  "numeric": 568,
+                  "discrete": 152
+                },
+                "mismatch_counts": {
+                  "numeric": 0,
+                  "discrete": 0
+                },
+                "differences": [],
+                "differences_truncated": false
+              },
+              {
+                "schema": "tide-comparison-v1",
+                "finite": "passed",
+                "numeric": "passed",
+                "discrete": "passed",
+                "strict_passed": true,
+                "compared_leaves": {
+                  "numeric": 568,
+                  "discrete": 152
+                },
+                "mismatch_counts": {
+                  "numeric": 0,
+                  "discrete": 0
+                },
+                "differences": [],
+                "differences_truncated": false
+              },
+              {
+                "schema": "tide-comparison-v1",
+                "finite": "passed",
+                "numeric": "passed",
+                "discrete": "passed",
+                "strict_passed": true,
+                "compared_leaves": {
+                  "numeric": 568,
+                  "discrete": 152
+                },
+                "mismatch_counts": {
+                  "numeric": 0,
+                  "discrete": 0
+                },
+                "differences": [],
+                "differences_truncated": false
+              }
+            ]
+          }
+        },
+        {
+          "name": "half-owners-fp32-kv-native-mixed-a",
+          "command": [
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/additive-work/env/bin/python",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/qualified-half-task/examples/consumer_core5/tensor_window.py",
+            "--device",
+            "npu:0",
+            "--peer-device",
+            "npu:1",
+            "--dtype",
+            "float32",
+            "--client",
+            "native",
+            "--family",
+            "kv",
+            "--placement",
+            "mixed-a",
+            "--no-deterministic-algorithms",
+            "--output-dir",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/half-owners-fp32-kv-native-mixed-a",
+            "--native-library",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/half-dev1/build"
+          ],
+          "exit_code": 1,
+          "timed_out": false,
+          "result": {
+            "identity": {
+              "interface": "tensor-window-v1",
+              "device": "npu:0",
+              "dtype": "float32",
+              "client": "native",
+              "positions": false,
+              "family": "kv",
+              "placement": "mixed-a",
+              "scoring_dtype": "float32",
+              "deterministic_algorithms": false,
+              "peer_device": "npu:1"
+            },
+            "execution": "failed",
+            "strict_numerical": "not_checked",
+            "recovery": "not_checked",
+            "error": "RuntimeError('The Inner error is reported as above. The process exits for this inner error, and the current working event is 0xfffec43c3c98.\\nSince the operator is called asynchronously, the stacktrace may be inaccurate. If you want to get the accurate stacktrace, please set the environment variable ASCEND_LAUNCH_BLOCKING=1.\\nNote: ASCEND_LAUNCH_BLOCKING=1 will force ops to run in synchronous mode, resulting in performance degradation. Please unset ASCEND_LAUNCH_BLOCKING in time after debugging.\\n[ERROR] 2026-11-11-22:48:14 (PID:1926278, Device:1, RankID:-1) ERR00100 PTA call acl api failed.\\n[PID: 1926278] 2026-11-11-22:48:14.405.981 Invalid_Argument(EE1017): Object validation failed. Parameter event is invalid. Reason: 1. The event handle has been destroyed. 2. The handle type must be event.\\nTraceBack (most recent call last):\\n        rtStreamWaitEvent failed. Parameter handle is invalid. Reason: 1. The handle has been destroyed. 2. The handle type is not the expected one.\\n')"
+          }
+        },
+        {
+          "name": "half-owners-fp32-kv-native-mixed-c",
+          "command": [
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/additive-work/env/bin/python",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/qualified-half-task/examples/consumer_core5/tensor_window.py",
+            "--device",
+            "npu:0",
+            "--peer-device",
+            "npu:1",
+            "--dtype",
+            "float32",
+            "--client",
+            "native",
+            "--family",
+            "kv",
+            "--placement",
+            "mixed-c",
+            "--no-deterministic-algorithms",
+            "--output-dir",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/half-owners-fp32-kv-native-mixed-c",
+            "--native-library",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/half-dev1/build"
+          ],
+          "exit_code": 1,
+          "timed_out": false,
+          "result": {
+            "identity": {
+              "interface": "tensor-window-v1",
+              "device": "npu:0",
+              "dtype": "float32",
+              "client": "native",
+              "positions": false,
+              "family": "kv",
+              "placement": "mixed-c",
+              "scoring_dtype": "float32",
+              "deterministic_algorithms": false,
+              "peer_device": "npu:1"
+            },
+            "execution": "failed",
+            "strict_numerical": "not_checked",
+            "recovery": "not_checked",
+            "error": "RuntimeError('The Inner error is reported as above. The process exits for this inner error, and the current working event is 0xfffec02e29c8.\\nSince the operator is called asynchronously, the stacktrace may be inaccurate. If you want to get the accurate stacktrace, please set the environment variable ASCEND_LAUNCH_BLOCKING=1.\\nNote: ASCEND_LAUNCH_BLOCKING=1 will force ops to run in synchronous mode, resulting in performance degradation. Please unset ASCEND_LAUNCH_BLOCKING in time after debugging.\\n[ERROR] 2026-11-11-22:48:23 (PID:1942535, Device:1, RankID:-1) ERR00100 PTA call acl api failed.\\n[PID: 1942535] 2026-11-11-22:48:23.120.156 Invalid_Argument(EE1017): Object validation failed. Parameter event is invalid. Reason: 1. The event handle has been destroyed. 2. The handle type must be event.\\nTraceBack (most recent call last):\\n        rtStreamWaitEvent failed. Parameter handle is invalid. Reason: 1. The handle has been destroyed. 2. The handle type is not the expected one.\\n')"
+          }
+        },
+        {
+          "name": "half-npu-kv-native",
+          "command": [
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/additive-work/env/bin/python",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/qualified-half-task/examples/consumer_core5/tensor_window.py",
+            "--device",
+            "npu:0",
+            "--dtype",
+            "float16",
+            "--scoring-dtype",
+            "float32",
+            "--loss-scale",
+            "16",
+            "--client",
+            "native",
+            "--family",
+            "kv",
+            "--no-deterministic-algorithms",
+            "--output-dir",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/half-npu-kv-native",
+            "--native-library",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/half-dev1/build",
+            "--positions"
+          ],
+          "exit_code": 0,
+          "timed_out": false,
+          "result": {
+            "identity": {
+              "interface": "tensor-window-v1",
+              "device": "npu:0",
+              "dtype": "float16",
+              "client": "native",
+              "positions": true,
+              "family": "kv",
+              "placement": "mixed-c",
+              "scoring_dtype": "float32",
+              "deterministic_algorithms": false,
+              "peer_device": null,
+              "precision": "fp32-master-v1",
+              "loss_scale": 16.0,
+              "comparison_policy": "half-derived-fields-atol1e-3-rtol2e-2"
+            },
+            "execution": "completed",
+            "strict_numerical": "passed",
+            "recovery": "passed",
+            "effective_execution": {
+              "interface": "tensor-window-v1",
+              "schedule": "settle-columns-v1",
+              "client": "native",
+              "fallback_reason": null,
+              "roots": "columns",
+              "max_workspace_bytes": 4294967296,
+              "placement": {
+                "payload": "npu:0",
+                "read": "npu:0",
+                "control": "npu:0",
+                "selection": "npu:0",
+                "events": "cpu",
+                "scoring_dtype": "float32"
+              }
+            },
+            "comparisons": [
+              {
+                "schema": "tide-comparison-v1",
+                "finite": "passed",
+                "numeric": "passed",
+                "discrete": "passed",
+                "strict_passed": true,
+                "compared_leaves": {
+                  "numeric": 568,
+                  "discrete": 152
+                },
+                "mismatch_counts": {
+                  "numeric": 0,
+                  "discrete": 0
+                },
+                "differences": [],
+                "differences_truncated": false
+              },
+              {
+                "schema": "tide-comparison-v1",
+                "finite": "passed",
+                "numeric": "passed",
+                "discrete": "passed",
+                "strict_passed": true,
+                "compared_leaves": {
+                  "numeric": 568,
+                  "discrete": 152
+                },
+                "mismatch_counts": {
+                  "numeric": 0,
+                  "discrete": 0
+                },
+                "differences": [],
+                "differences_truncated": false
+              },
+              {
+                "schema": "tide-comparison-v1",
+                "finite": "passed",
+                "numeric": "passed",
+                "discrete": "passed",
+                "strict_passed": true,
+                "compared_leaves": {
+                  "numeric": 568,
+                  "discrete": 152
+                },
+                "mismatch_counts": {
+                  "numeric": 0,
+                  "discrete": 0
+                },
+                "differences": [],
+                "differences_truncated": false
+              }
+            ]
+          }
+        },
+        {
+          "name": "half-owners-fp32-ssd-python-mixed-a",
+          "command": [
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/additive-work/env/bin/python",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/qualified-half-task/examples/consumer_core5/tensor_window.py",
+            "--device",
+            "npu:0",
+            "--peer-device",
+            "npu:1",
+            "--dtype",
+            "float32",
+            "--client",
+            "python",
+            "--family",
+            "ssd",
+            "--placement",
+            "mixed-a",
+            "--no-deterministic-algorithms",
+            "--output-dir",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/half-owners-fp32-ssd-python-mixed-a"
+          ],
+          "exit_code": 1,
+          "timed_out": false,
+          "result": {
+            "identity": {
+              "interface": "tensor-window-v1",
+              "device": "npu:0",
+              "dtype": "float32",
+              "client": "python",
+              "positions": false,
+              "family": "ssd",
+              "placement": "mixed-a",
+              "scoring_dtype": "float32",
+              "deterministic_algorithms": false,
+              "peer_device": "npu:1"
+            },
+            "execution": "failed",
+            "strict_numerical": "not_checked",
+            "recovery": "not_checked",
+            "error": "RuntimeError('The Inner error is reported as above. The process exits for this inner error, and the current working event is 0xfffea0355d78.\\nSince the operator is called asynchronously, the stacktrace may be inaccurate. If you want to get the accurate stacktrace, please set the environment variable ASCEND_LAUNCH_BLOCKING=1.\\nNote: ASCEND_LAUNCH_BLOCKING=1 will force ops to run in synchronous mode, resulting in performance degradation. Please unset ASCEND_LAUNCH_BLOCKING in time after debugging.\\n[ERROR] 2026-11-11-22:49:05 (PID:2019437, Device:1, RankID:-1) ERR00100 PTA call acl api failed.\\n[PID: 2019437] 2026-11-11-22:49:05.598.527 Invalid_Argument(EE1017): Object validation failed. Parameter event is invalid. Reason: 1. The event handle has been destroyed. 2. The handle type must be event.\\nTraceBack (most recent call last):\\n        rtStreamWaitEvent failed. Parameter handle is invalid. Reason: 1. The handle has been destroyed. 2. The handle type is not the expected one.\\n')"
+          }
+        },
+        {
+          "name": "half-owners-fp32-ssd-python-mixed-c",
+          "command": [
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/additive-work/env/bin/python",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/qualified-half-task/examples/consumer_core5/tensor_window.py",
+            "--device",
+            "npu:0",
+            "--peer-device",
+            "npu:1",
+            "--dtype",
+            "float32",
+            "--client",
+            "python",
+            "--family",
+            "ssd",
+            "--placement",
+            "mixed-c",
+            "--no-deterministic-algorithms",
+            "--output-dir",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/half-owners-fp32-ssd-python-mixed-c"
+          ],
+          "exit_code": 1,
+          "timed_out": false,
+          "result": {
+            "identity": {
+              "interface": "tensor-window-v1",
+              "device": "npu:0",
+              "dtype": "float32",
+              "client": "python",
+              "positions": false,
+              "family": "ssd",
+              "placement": "mixed-c",
+              "scoring_dtype": "float32",
+              "deterministic_algorithms": false,
+              "peer_device": "npu:1"
+            },
+            "execution": "failed",
+            "strict_numerical": "not_checked",
+            "recovery": "not_checked",
+            "error": "RuntimeError('The Inner error is reported as above. The process exits for this inner error, and the current working event is 0xfffe8830e888.\\nSince the operator is called asynchronously, the stacktrace may be inaccurate. If you want to get the accurate stacktrace, please set the environment variable ASCEND_LAUNCH_BLOCKING=1.\\nNote: ASCEND_LAUNCH_BLOCKING=1 will force ops to run in synchronous mode, resulting in performance degradation. Please unset ASCEND_LAUNCH_BLOCKING in time after debugging.\\n[ERROR] 2026-11-11-22:49:14 (PID:2034807, Device:1, RankID:-1) ERR00100 PTA call acl api failed.\\n[PID: 2034807] 2026-11-11-22:49:14.582.519 Invalid_Argument(EE1017): Object validation failed. Parameter event is invalid. Reason: 1. The event handle has been destroyed. 2. The handle type must be event.\\nTraceBack (most recent call last):\\n        rtStreamWaitEvent failed. Parameter handle is invalid. Reason: 1. The handle has been destroyed. 2. The handle type is not the expected one.\\n')"
+          }
+        },
+        {
+          "name": "half-npu-ssd-python",
+          "command": [
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/additive-work/env/bin/python",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/qualified-half-task/examples/consumer_core5/tensor_window.py",
+            "--device",
+            "npu:0",
+            "--dtype",
+            "float16",
+            "--scoring-dtype",
+            "float32",
+            "--loss-scale",
+            "16",
+            "--client",
+            "python",
+            "--family",
+            "ssd",
+            "--no-deterministic-algorithms",
+            "--output-dir",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/half-npu-ssd-python"
+          ],
+          "exit_code": 0,
+          "timed_out": false,
+          "result": {
+            "identity": {
+              "interface": "tensor-window-v1",
+              "device": "npu:0",
+              "dtype": "float16",
+              "client": "python",
+              "positions": false,
+              "family": "ssd",
+              "placement": "mixed-c",
+              "scoring_dtype": "float32",
+              "deterministic_algorithms": false,
+              "peer_device": null,
+              "precision": "fp32-master-v1",
+              "loss_scale": 16.0,
+              "comparison_policy": "half-derived-fields-atol1e-3-rtol2e-2"
+            },
+            "execution": "completed",
+            "strict_numerical": "passed",
+            "recovery": "passed",
+            "effective_execution": {
+              "interface": "tensor-window-v1",
+              "schedule": "settle-columns-v1",
+              "client": "python",
+              "fallback_reason": null,
+              "roots": "columns",
+              "max_workspace_bytes": 4294967296,
+              "placement": {
+                "payload": "npu:0",
+                "read": "npu:0",
+                "control": "npu:0",
+                "selection": "npu:0",
+                "events": "cpu",
+                "scoring_dtype": "float32"
+              }
+            },
+            "comparisons": [
+              {
+                "schema": "tide-comparison-v1",
+                "finite": "passed",
+                "numeric": "passed",
+                "discrete": "passed",
+                "strict_passed": true,
+                "compared_leaves": {
+                  "numeric": 602,
+                  "discrete": 166
+                },
+                "mismatch_counts": {
+                  "numeric": 0,
+                  "discrete": 0
+                },
+                "differences": [],
+                "differences_truncated": false
+              },
+              {
+                "schema": "tide-comparison-v1",
+                "finite": "passed",
+                "numeric": "passed",
+                "discrete": "passed",
+                "strict_passed": true,
+                "compared_leaves": {
+                  "numeric": 602,
+                  "discrete": 166
+                },
+                "mismatch_counts": {
+                  "numeric": 0,
+                  "discrete": 0
+                },
+                "differences": [],
+                "differences_truncated": false
+              },
+              {
+                "schema": "tide-comparison-v1",
+                "finite": "passed",
+                "numeric": "passed",
+                "discrete": "passed",
+                "strict_passed": true,
+                "compared_leaves": {
+                  "numeric": 602,
+                  "discrete": 166
+                },
+                "mismatch_counts": {
+                  "numeric": 0,
+                  "discrete": 0
+                },
+                "differences": [],
+                "differences_truncated": false
+              }
+            ]
+          }
+        },
+        {
+          "name": "half-owners-fp32-ssd-native-mixed-a",
+          "command": [
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/additive-work/env/bin/python",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/qualified-half-task/examples/consumer_core5/tensor_window.py",
+            "--device",
+            "npu:0",
+            "--peer-device",
+            "npu:1",
+            "--dtype",
+            "float32",
+            "--client",
+            "native",
+            "--family",
+            "ssd",
+            "--placement",
+            "mixed-a",
+            "--no-deterministic-algorithms",
+            "--output-dir",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/half-owners-fp32-ssd-native-mixed-a",
+            "--native-library",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/half-dev1/build"
+          ],
+          "exit_code": 1,
+          "timed_out": false,
+          "result": {
+            "identity": {
+              "interface": "tensor-window-v1",
+              "device": "npu:0",
+              "dtype": "float32",
+              "client": "native",
+              "positions": false,
+              "family": "ssd",
+              "placement": "mixed-a",
+              "scoring_dtype": "float32",
+              "deterministic_algorithms": false,
+              "peer_device": "npu:1"
+            },
+            "execution": "failed",
+            "strict_numerical": "not_checked",
+            "recovery": "not_checked",
+            "error": "RuntimeError('The Inner error is reported as above. The process exits for this inner error, and the current working event is 0xfffea8339348.\\nSince the operator is called asynchronously, the stacktrace may be inaccurate. If you want to get the accurate stacktrace, please set the environment variable ASCEND_LAUNCH_BLOCKING=1.\\nNote: ASCEND_LAUNCH_BLOCKING=1 will force ops to run in synchronous mode, resulting in performance degradation. Please unset ASCEND_LAUNCH_BLOCKING in time after debugging.\\n[ERROR] 2026-11-11-22:49:59 (PID:2118361, Device:1, RankID:-1) ERR00100 PTA call acl api failed.\\n[PID: 2118361] 2026-11-11-22:49:59.400.907 Invalid_Argument(EE1017): Object validation failed. Parameter event is invalid. Reason: 1. The event handle has been destroyed. 2. The handle type must be event.\\nTraceBack (most recent call last):\\n        rtStreamWaitEvent failed. Parameter handle is invalid. Reason: 1. The handle has been destroyed. 2. The handle type is not the expected one.\\n')"
+          }
+        },
+        {
+          "name": "half-owners-fp32-ssd-native-mixed-c",
+          "command": [
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/additive-work/env/bin/python",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/qualified-half-task/examples/consumer_core5/tensor_window.py",
+            "--device",
+            "npu:0",
+            "--peer-device",
+            "npu:1",
+            "--dtype",
+            "float32",
+            "--client",
+            "native",
+            "--family",
+            "ssd",
+            "--placement",
+            "mixed-c",
+            "--no-deterministic-algorithms",
+            "--output-dir",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/half-owners-fp32-ssd-native-mixed-c",
+            "--native-library",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/half-dev1/build"
+          ],
+          "exit_code": 1,
+          "timed_out": false,
+          "result": {
+            "identity": {
+              "interface": "tensor-window-v1",
+              "device": "npu:0",
+              "dtype": "float32",
+              "client": "native",
+              "positions": false,
+              "family": "ssd",
+              "placement": "mixed-c",
+              "scoring_dtype": "float32",
+              "deterministic_algorithms": false,
+              "peer_device": "npu:1"
+            },
+            "execution": "failed",
+            "strict_numerical": "not_checked",
+            "recovery": "not_checked",
+            "error": "RuntimeError('The Inner error is reported as above. The process exits for this inner error, and the current working event is 0xfffe8c2fad28.\\nSince the operator is called asynchronously, the stacktrace may be inaccurate. If you want to get the accurate stacktrace, please set the environment variable ASCEND_LAUNCH_BLOCKING=1.\\nNote: ASCEND_LAUNCH_BLOCKING=1 will force ops to run in synchronous mode, resulting in performance degradation. Please unset ASCEND_LAUNCH_BLOCKING in time after debugging.\\n[ERROR] 2026-11-11-22:50:08 (PID:2133609, Device:1, RankID:-1) ERR00100 PTA call acl api failed.\\n[PID: 2133609] 2026-11-11-22:50:08.143.924 Invalid_Argument(EE1017): Object validation failed. Parameter event is invalid. Reason: 1. The event handle has been destroyed. 2. The handle type must be event.\\nTraceBack (most recent call last):\\n        rtStreamWaitEvent failed. Parameter handle is invalid. Reason: 1. The handle has been destroyed. 2. The handle type is not the expected one.\\n')"
+          }
+        },
+        {
+          "name": "half-npu-ssd-native",
+          "command": [
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/additive-work/env/bin/python",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/qualified-half-task/examples/consumer_core5/tensor_window.py",
+            "--device",
+            "npu:0",
+            "--dtype",
+            "float16",
+            "--scoring-dtype",
+            "float32",
+            "--loss-scale",
+            "16",
+            "--client",
+            "native",
+            "--family",
+            "ssd",
+            "--no-deterministic-algorithms",
+            "--output-dir",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/half-npu-ssd-native",
+            "--native-library",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/half-dev1/build"
+          ],
+          "exit_code": 0,
+          "timed_out": false,
+          "result": {
+            "identity": {
+              "interface": "tensor-window-v1",
+              "device": "npu:0",
+              "dtype": "float16",
+              "client": "native",
+              "positions": false,
+              "family": "ssd",
+              "placement": "mixed-c",
+              "scoring_dtype": "float32",
+              "deterministic_algorithms": false,
+              "peer_device": null,
+              "precision": "fp32-master-v1",
+              "loss_scale": 16.0,
+              "comparison_policy": "half-derived-fields-atol1e-3-rtol2e-2"
+            },
+            "execution": "completed",
+            "strict_numerical": "passed",
+            "recovery": "passed",
+            "effective_execution": {
+              "interface": "tensor-window-v1",
+              "schedule": "settle-columns-v1",
+              "client": "native",
+              "fallback_reason": null,
+              "roots": "columns",
+              "max_workspace_bytes": 4294967296,
+              "placement": {
+                "payload": "npu:0",
+                "read": "npu:0",
+                "control": "npu:0",
+                "selection": "npu:0",
+                "events": "cpu",
+                "scoring_dtype": "float32"
+              }
+            },
+            "comparisons": [
+              {
+                "schema": "tide-comparison-v1",
+                "finite": "passed",
+                "numeric": "passed",
+                "discrete": "passed",
+                "strict_passed": true,
+                "compared_leaves": {
+                  "numeric": 602,
+                  "discrete": 166
+                },
+                "mismatch_counts": {
+                  "numeric": 0,
+                  "discrete": 0
+                },
+                "differences": [],
+                "differences_truncated": false
+              },
+              {
+                "schema": "tide-comparison-v1",
+                "finite": "passed",
+                "numeric": "passed",
+                "discrete": "passed",
+                "strict_passed": true,
+                "compared_leaves": {
+                  "numeric": 602,
+                  "discrete": 166
+                },
+                "mismatch_counts": {
+                  "numeric": 0,
+                  "discrete": 0
+                },
+                "differences": [],
+                "differences_truncated": false
+              },
+              {
+                "schema": "tide-comparison-v1",
+                "finite": "passed",
+                "numeric": "passed",
+                "discrete": "passed",
+                "strict_passed": true,
+                "compared_leaves": {
+                  "numeric": 602,
+                  "discrete": 166
+                },
+                "mismatch_counts": {
+                  "numeric": 0,
+                  "discrete": 0
+                },
+                "differences": [],
+                "differences_truncated": false
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "explicit_launch_blocking_device_execution": {
+    "path": "artifacts/columns-20261111/half-owners-blocking-results.json",
+    "sha256": "bf3a53405abb00934d077352730f8692208cbfc476e0ec9cdb0751758e9d25ff",
+    "bytes": 10372,
+    "record": {
+      "source": "5959bbc3646a616622d8584d6126869320b03ac8",
+      "launch_blocking": "1",
+      "visibility": "7,11",
+      "affinity": [
+        144,
+        145,
+        146,
+        147,
+        148,
+        149,
+        150,
+        151,
+        152,
+        153,
+        154,
+        155,
+        156,
+        157,
+        158,
+        159
+      ],
+      "cases": [
+        {
+          "name": "half-blocking-kv-native",
+          "command": [
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/additive-work/env/bin/python",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/qualified-half-task/examples/consumer_core5/tensor_window.py",
+            "--device",
+            "npu:0",
+            "--peer-device",
+            "npu:1",
+            "--dtype",
+            "float32",
+            "--client",
+            "native",
+            "--family",
+            "kv",
+            "--placement",
+            "mixed-c",
+            "--no-deterministic-algorithms",
+            "--output-dir",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/half-blocking-kv-native",
+            "--native-library",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/half-dev1/build"
+          ],
+          "exit_code": 0,
+          "result": {
+            "identity": {
+              "interface": "tensor-window-v1",
+              "device": "npu:0",
+              "dtype": "float32",
+              "client": "native",
+              "positions": false,
+              "family": "kv",
+              "placement": "mixed-c",
+              "scoring_dtype": "float32",
+              "deterministic_algorithms": false,
+              "peer_device": "npu:1"
+            },
+            "execution": "completed",
+            "strict_numerical": "passed",
+            "recovery": "passed",
+            "effective_execution": {
+              "interface": "tensor-window-v1",
+              "schedule": "settle-columns-v1",
+              "client": "native",
+              "fallback_reason": null,
+              "roots": "columns",
+              "max_workspace_bytes": 4294967296,
+              "placement": {
+                "payload": "npu:0",
+                "read": "npu:0",
+                "control": "npu:0",
+                "selection": "npu:0",
+                "events": "cpu",
+                "scoring_dtype": "float32",
+                "scope": "first node summary; complete owner maps follow",
+                "nodes": {
+                  "0": {
+                    "payload": "npu:0",
+                    "read": "npu:0",
+                    "control": "npu:0",
+                    "selection": "npu:0",
+                    "events": "cpu",
+                    "scoring_dtype": "float32"
+                  },
+                  "1": {
+                    "payload": "npu:0",
+                    "read": "npu:0",
+                    "control": "npu:0",
+                    "selection": "npu:0",
+                    "events": "cpu",
+                    "scoring_dtype": "float32"
+                  },
+                  "2": {
+                    "payload": "npu:1",
+                    "read": "npu:1",
+                    "control": "npu:1",
+                    "selection": "npu:1",
+                    "events": "cpu",
+                    "scoring_dtype": "float32"
+                  },
+                  "3": {
+                    "payload": "npu:1",
+                    "read": "npu:1",
+                    "control": "npu:1",
+                    "selection": "npu:1",
+                    "events": "cpu",
+                    "scoring_dtype": "float32"
+                  }
+                },
+                "regions": {
+                  "0": {
+                    "payload": "npu:0",
+                    "read": "npu:0",
+                    "control": "npu:0",
+                    "selection": "npu:0",
+                    "events": "cpu",
+                    "scoring_dtype": "float32"
+                  },
+                  "1": {
+                    "payload": "npu:1",
+                    "read": "npu:1",
+                    "control": "npu:1",
+                    "selection": "npu:1",
+                    "events": "cpu",
+                    "scoring_dtype": "float32"
+                  }
+                }
+              }
+            },
+            "comparisons": [
+              {
+                "schema": "tide-comparison-v1",
+                "finite": "passed",
+                "numeric": "passed",
+                "discrete": "passed",
+                "strict_passed": true,
+                "compared_leaves": {
+                  "numeric": 483,
+                  "discrete": 162
+                },
+                "mismatch_counts": {
+                  "numeric": 0,
+                  "discrete": 0
+                },
+                "differences": [],
+                "differences_truncated": false
+              },
+              {
+                "schema": "tide-comparison-v1",
+                "finite": "passed",
+                "numeric": "passed",
+                "discrete": "passed",
+                "strict_passed": true,
+                "compared_leaves": {
+                  "numeric": 483,
+                  "discrete": 162
+                },
+                "mismatch_counts": {
+                  "numeric": 0,
+                  "discrete": 0
+                },
+                "differences": [],
+                "differences_truncated": false
+              },
+              {
+                "schema": "tide-comparison-v1",
+                "finite": "passed",
+                "numeric": "passed",
+                "discrete": "passed",
+                "strict_passed": true,
+                "compared_leaves": {
+                  "numeric": 483,
+                  "discrete": 162
+                },
+                "mismatch_counts": {
+                  "numeric": 0,
+                  "discrete": 0
+                },
+                "differences": [],
+                "differences_truncated": false
+              }
+            ]
+          }
+        },
+        {
+          "name": "half-blocking-ssd-python",
+          "command": [
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/additive-work/env/bin/python",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/qualified-half-task/examples/consumer_core5/tensor_window.py",
+            "--device",
+            "npu:0",
+            "--peer-device",
+            "npu:1",
+            "--dtype",
+            "float32",
+            "--client",
+            "python",
+            "--family",
+            "ssd",
+            "--placement",
+            "mixed-c",
+            "--no-deterministic-algorithms",
+            "--output-dir",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/half-blocking-ssd-python"
+          ],
+          "exit_code": 0,
+          "result": {
+            "identity": {
+              "interface": "tensor-window-v1",
+              "device": "npu:0",
+              "dtype": "float32",
+              "client": "python",
+              "positions": false,
+              "family": "ssd",
+              "placement": "mixed-c",
+              "scoring_dtype": "float32",
+              "deterministic_algorithms": false,
+              "peer_device": "npu:1"
+            },
+            "execution": "completed",
+            "strict_numerical": "passed",
+            "recovery": "passed",
+            "effective_execution": {
+              "interface": "tensor-window-v1",
+              "schedule": "settle-columns-v1",
+              "client": "python",
+              "fallback_reason": null,
+              "roots": "columns",
+              "max_workspace_bytes": 4294967296,
+              "placement": {
+                "payload": "npu:0",
+                "read": "npu:0",
+                "control": "npu:0",
+                "selection": "npu:0",
+                "events": "cpu",
+                "scoring_dtype": "float32",
+                "scope": "first node summary; complete owner maps follow",
+                "nodes": {
+                  "0": {
+                    "payload": "npu:0",
+                    "read": "npu:0",
+                    "control": "npu:0",
+                    "selection": "npu:0",
+                    "events": "cpu",
+                    "scoring_dtype": "float32"
+                  },
+                  "1": {
+                    "payload": "npu:0",
+                    "read": "npu:0",
+                    "control": "npu:0",
+                    "selection": "npu:0",
+                    "events": "cpu",
+                    "scoring_dtype": "float32"
+                  },
+                  "2": {
+                    "payload": "npu:1",
+                    "read": "npu:1",
+                    "control": "npu:1",
+                    "selection": "npu:1",
+                    "events": "cpu",
+                    "scoring_dtype": "float32"
+                  },
+                  "3": {
+                    "payload": "npu:1",
+                    "read": "npu:1",
+                    "control": "npu:1",
+                    "selection": "npu:1",
+                    "events": "cpu",
+                    "scoring_dtype": "float32"
+                  }
+                },
+                "regions": {
+                  "0": {
+                    "payload": "npu:0",
+                    "read": "npu:0",
+                    "control": "npu:0",
+                    "selection": "npu:0",
+                    "events": "cpu",
+                    "scoring_dtype": "float32"
+                  },
+                  "1": {
+                    "payload": "npu:1",
+                    "read": "npu:1",
+                    "control": "npu:1",
+                    "selection": "npu:1",
+                    "events": "cpu",
+                    "scoring_dtype": "float32"
+                  }
+                }
+              }
+            },
+            "comparisons": [
+              {
+                "schema": "tide-comparison-v1",
+                "finite": "passed",
+                "numeric": "passed",
+                "discrete": "passed",
+                "strict_passed": true,
+                "compared_leaves": {
+                  "numeric": 511,
+                  "discrete": 176
+                },
+                "mismatch_counts": {
+                  "numeric": 0,
+                  "discrete": 0
+                },
+                "differences": [],
+                "differences_truncated": false
+              },
+              {
+                "schema": "tide-comparison-v1",
+                "finite": "passed",
+                "numeric": "passed",
+                "discrete": "passed",
+                "strict_passed": true,
+                "compared_leaves": {
+                  "numeric": 511,
+                  "discrete": 176
+                },
+                "mismatch_counts": {
+                  "numeric": 0,
+                  "discrete": 0
+                },
+                "differences": [],
+                "differences_truncated": false
+              },
+              {
+                "schema": "tide-comparison-v1",
+                "finite": "passed",
+                "numeric": "passed",
+                "discrete": "passed",
+                "strict_passed": true,
+                "compared_leaves": {
+                  "numeric": 511,
+                  "discrete": 176
+                },
+                "mismatch_counts": {
+                  "numeric": 0,
+                  "discrete": 0
+                },
+                "differences": [],
+                "differences_truncated": false
+              }
+            ]
+          }
+        }
+      ],
+      "test_exit_code": 0
+    }
+  },
+  "queue_records": [
+    {
+      "path": "artifacts/columns-20261111/half-owners-queue.json",
+      "sha256": "afa8da445bb9bdb6d39de517304694988573a37cd458178c169941c25afaf8cc",
+      "bytes": 372,
+      "record": {
+        "elapsed_seconds": 269.22390235960484,
+        "job_id": "gef-column-half-owners-npu",
+        "logical_devices": [
+          "npu:0",
+          "npu:1"
+        ],
+        "npu_count": 2,
+        "physical_ids": [
+          7,
+          11
+        ],
+        "priority": 0,
+        "project": "graph-execution-foundation",
+        "return_code": 1,
+        "schema_version": 1,
+        "status": "failed",
+        "timestamp": "2026-11-11T14:50:51.300192+00:00"
+      }
+    },
+    {
+      "path": "artifacts/columns-20261111/half-owners-blocking-queue.json",
+      "sha256": "40232cb174fda60b3132cc44fcc9cbf87e99f33a7acdf7af93618f761f0acb82",
+      "bytes": 377,
+      "record": {
+        "elapsed_seconds": 137.19541424512863,
+        "job_id": "gef-column-half-owners-blocking",
+        "logical_devices": [
+          "npu:0",
+          "npu:1"
+        ],
+        "npu_count": 2,
+        "physical_ids": [
+          7,
+          11
+        ],
+        "priority": 0,
+        "project": "graph-execution-foundation",
+        "return_code": 1,
+        "schema_version": 1,
+        "status": "failed",
+        "timestamp": "2026-11-11T14:54:46.631699+00:00"
+      }
+    },
+    {
+      "path": "artifacts/columns-20261111/half-sdk-queue.json",
+      "sha256": "d23b182b92a58a89763888e4525ad48c5dca54203866fc1fcd9611d66c462871",
+      "bytes": 367,
+      "record": {
+        "elapsed_seconds": 58.74507137387991,
+        "job_id": "gef-column-half-sdk",
+        "logical_devices": [
+          "npu:0",
+          "npu:1"
+        ],
+        "npu_count": 2,
+        "physical_ids": [
+          7,
+          11
+        ],
+        "priority": 0,
+        "project": "graph-execution-foundation",
+        "return_code": 0,
+        "schema_version": 1,
+        "status": "completed",
+        "timestamp": "2026-11-11T14:59:10.977416+00:00"
+      }
+    }
+  ],
+  "sdk_half": {
+    "source": "ce50a2a5b29b87b3dead824d1c377ed47deef010",
+    "checks_per_configuration": 16,
+    "configurations": [
+      {
+        "device": "cpu",
+        "peer": null,
+        "launch_blocking": false,
+        "result": "passed",
+        "placement_note": "mixed presets collapse to CPU"
+      },
+      {
+        "device": "npu:0",
+        "peer": null,
+        "launch_blocking": false,
+        "result": "passed"
+      },
+      {
+        "device": "npu:0",
+        "peer": "npu:1",
+        "launch_blocking": true,
+        "result": "passed"
+      }
+    ],
+    "scope": "five memories x three placements plus positional KV; independent streaming outputs/raw/VJP, two SGD windows; not installed-client/master/new-process proof",
+    "launcher": {
+      "path": "artifacts/columns-20261111/half-sdk-work.sh",
+      "sha256": "71ac47b8f6d27dc2bcc34f2667122cef22eac8c0f4aea976379e79a928359ab9",
+      "bytes": 1078
+    },
+    "device_launcher": {
+      "path": "artifacts/columns-20261111/half-sdk-inner.sh",
+      "sha256": "7c7d3f58b7315b38194b4dbdae431b1e78e22630fd99351f0c6cc60ba4fded60",
+      "bytes": 443
+    }
+  },
+  "baseline_sum_failure": {
+    "source": "796baafa3a0d580e6722cd28814bf23dafe60e8b",
+    "log": {
+      "path": "artifacts/columns-20261111/half-baseline-sum-check.log",
+      "sha256": "3ad9f7a50291ccd77f32b123a67c433e071fba2d31cd60a19eb1912d44b5cc3e",
+      "bytes": 3667
+    },
+    "tests": "tests/test_weighted_query_layout.py::test_sum_memory_and_other_descriptors[float32-python/native]",
+    "gradient": "read_program.evidence.encoders.mem.out_bias[0]",
+    "absolute_difference": 1.5355180948972702e-06,
+    "atol": 1e-06,
+    "rtol": 1e-05,
+    "result": "failed with same value at both baseline and default_experiment_dispatch; tolerance unchanged; not classified solely from finite values"
+  },
+  "resources": {
+    "build_jobs": 320,
+    "cpu_install_affinity": "80-95",
+    "npu_host_affinity": "144-159",
+    "physical_npus": [
+      7,
+      11
+    ],
+    "logical_npus": [
+      "npu:0",
+      "npu:1"
+    ],
+    "shared_devices_used": false,
+    "pytest_intra_interop_threads": 1,
+    "npu_installed_intra_interop_threads": 2,
+    "sdk_intraop_threads": 1,
+    "sdk_interop_threads": "not explicitly set by gate",
+    "formal_timing": "not performed"
+  },
+  "qualification_policy": {
+    "floating_derived_from_half": {
+      "atol": 0.001,
+      "rtol": 0.02
+    },
+    "discrete_none_and_self_recovery": "exact",
+    "summary_counts": "overlapping suites and phases must not be summed into a full-matrix claim",
+    "ordinary_two_npu": "EE1017 invalid event during backward; same-process later cases may be contaminated; eight isolated installed processes also failed",
+    "blocking_two_npu": "separate explicit configuration, not an async repair",
+    "original_sdk_half_rejection": "allow_npu_float16 missing, before numerical work; original outer job remains failed"
+  },
+  "review_manifest": {
+    "path": "docs/evidence/column-half-20261111-reviews.json",
+    "sha256": "767c92f1a37ff33b11366c33f10122398752888f320aa712e012e7ed9746229c",
+    "bytes": 6497
+  },
+  "sdk_cli_review": {
+    "source": "ce50a2a5b29b87b3dead824d1c377ed47deef010",
+    "path": "cpp/test/weighted_sequence_columns.cpp",
+    "sha256": "38745127e9d295a45b7ff626062173deb1be4ca2678106cbdedbaf71fd1749dc",
+    "symbols": [
+      "main"
+    ],
+    "scope": "allow_npu_float16 set explicitly before resolve_device, then peer parser inherits options"
+  },
+  "remaining": [
+    "new tensor-column resident path",
+    "ordinary asynchronous two-NPU backward",
+    "full-repository source review",
+    "new half scale/performance qualification",
+    "CUDA device qualification deferred"
+  ]
+}

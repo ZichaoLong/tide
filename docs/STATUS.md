@@ -1,50 +1,56 @@
-# 当前交接 — 多owner张量窗口与后继迁移（2026-11-11）
+# 当前交接 — FP16张量窗口交付与resident迁移（2026-11-11）
 
 继续已授权[ROADMAP P1—P6](ROADMAP.md#当前计划批量张量贯穿与架构验证已授权实施)。
-数学固定0770593838a37c790a568226930567ed60f99b83，19快照通过。
-生产实现796baafa，SDK peer入口后继efc2776b；推送状态以git status为准。
-用户未跟踪的TL-REQ-004/005交接文件原样保留，不提交。
+数学固定0770593838a37c790a568226930567ed60f99b83，19快照再次通过。
+当前实现ce50a2a5；阶段提交5816a4c4（half列）、5959bbc3（默认实验/loss）、ce50a2a5（SDK入口），
+推送状态以git status为准。用户未跟踪TL-REQ-004/005交接文件原样保留，不提交。
 
-## 当前完成范围
+## 本阶段完成与证据
 
-- 五记忆/卷积、区域分配、消息及raw续接已接入Python/C++张量窗口；公共任务直接接收B×L，
-  相关资格与代表成本从[证据索引](evidence/README.md)进入。
-- [混合放置与共享伴随](evidence/column-placement-20261111.md)已验CPU、NPU安装和独立SDK。
-  Python KV mixed-a原精确恢复失败由有序共享伴随修复；原失败保留。
-- [多payload owner](evidence/column-owners-20261111.md)已实现：完整区域汇集、实际消息整列copy复用、
-  目标owner逐边返回、跨输出owner投影/loss。保留参数共享共置约束，普通copy不宣称resident/P2P。
-  固定CPU243 passed/13原数值xfail，SDK CPU通过；不同报告范围重叠，不相加。
-- 新默认FC16/B8/L128/FP32完整训练单次CPU1：PyTorch1.234671秒、native1.225463秒，
-  829.37/835.60输入位置每秒；两者16384候选/8344 Full/25060边消息。
-  不新增完整尺度独立数值、恢复或TTFT资格。
+[FP16与跨owner后继](evidence/column-half-20261111.md)分别固定源码、构建、运行和失败身份。
+五记忆与位置KV新列接受half载荷/显式FP32评分，Attention内部FP32、原始版本守卫及int64时钟保持。
+默认实验auto按实际窗口能力分派，half任务loss在乘法前提升FP32。
+CPU固定188 passed/6原数值xfail；扩大回归112 passed/2原xfail/2旧sum FP32严格失败，
+后两项在修改前796baafa同材料复现同值，原阈值和失败保持。
+CPU/NPU共八安装消费者独立三步master AdamW及新进程精确恢复通过。
+单NPU实际12项half五记忆/位置全根通过；同pytest3项CPU辅助单列。
 
-## 作业与设备边界
+双NPU普通异步反向仍报EE1017/invalid event：首例前向通过，8独立安装进程和SDK首例亦失败。
+显式ASCEND_LAUNCH_BLOCKING=1的4全根/更新/raw恢复、2安装消费者与SDK FP32十五项通过，
+不作为普通异步修复。ce50a2a5补SDK half入口标志后，新SDK构建及CPU、单NPU普通异步、
+双NPU显式同步各16项half通过。没有新增half吞吐结论。
+此前FC整链成本、mixed和多owner报告从[证据索引](evidence/README.md)进入，保持原实现身份。
 
-当前没有活跃作业。column-owners-npu等待120秒、column-owners-host-npu等待60秒后均准入超时exit3，
-没有进入模型计算；不把它们描述为数值/通信失败。原失败状态保持。
-SDK CLI固定资格column-owners-cli-qualify已passed；各状态/日志在artifacts/jobs/。
-用python scripts/status.py查看当前，--all-jobs审计历史。共享NPU仍须当前明确授权；GPU延后。
+## 作业与现场
 
-## 下一动作及复现
+当前无活跃项目作业。gef-column-half-sdk已passed；原gef-column-half-owners-npu、
+gef-column-half-owners-blocking、gef-column-half-task-qualify仍为failed，内层通过项单独归档。
+状态/日志在artifacts/jobs/；python scripts/status.py查看当前，--all-jobs审计历史。
+实际NPU为合法空闲准入物理7/11，逻辑npu:0/1，host144–159；未使用共享卡。
+共享NPU仍需当前明确授权，GPU延后。无磁盘阻塞，不清理参考仓库或公共环境。
 
-先完成本阶段证据提交/推送，再审查FP16新列迁移的真实算术边界；独立推进不需NPU的实现和CPU检查。
-设备状态变化时，使用use-local-ascend空闲卡准入新建有界作业，不恢复旧队列。
-待设备验证：双owner四项独立根/AdamW/恢复、八安装消费者、SDK五记忆×三放置、
-新默认单卡回归及普通异步反向完成。通过后才选择有限跨卡成本。
+固定源码/构建在artifacts/columns-20261111：qualified-half(5816)、qualified-half-task(5959)、
+qualified-half-sdk(ce50)，half-dev1/build为Python-owned；half-sdk-build为独立SDK。
+原half-dev1构建复用已核验完整源码/binary hash；保留其原开发manifest，不回写身份。
+安装install-half-task，环境half-task-runtime.sh；项目私有env artifacts/additive-work/env，
+Torch2.12/TorchNPU2.12.post3/CANN9.2。SDK使用libtorch-npu/2.12.0-cann9.2.0，不混wheel库。
+
+## 下一动作
+
+本阶段证据、ROADMAP/经验/复现导航整理后提交并正常推送当前授权分支，再继续P5/P6：
+审阅resident的设备在线推进、局部工作区与反向journal，确定新张量列能接入的真实边界和独立反例。
+不把host整窗提交冒称resident，也不再盲目加旧容量预算。普通异步跨卡按ROADMAP的有界停止条件保留。
+已审具名清单与未审范围分别记录；当前P1—P6未全部完成。
 
 ```sh
+python scripts/status.py
+python scripts/check_upstream.py
+TIDE_COLUMN_DEVICE=npu:0 python -m pytest -q tests/test_half_columns.py --dtype float32
 TIDE_COLUMN_PEERS=npu:0,npu:1 python -m pytest -q tests/test_column_payload_owners.py --dtype float32
-python examples/consumer_core5/tensor_window.py --device npu:0 --peer-device npu:1 --dtype float32 --client python --placement mixed-a --no-deterministic-algorithms --output-dir NEW
-TIDE_COLUMN_PEER_DEVICE=npu:1 tidegraph-column-check --device=npu:0 --dtype=float32
+TIDE_COLUMN_PEER_DEVICE=npu:1 tidegraph-column-check --device=npu:0 --dtype=float16
 ```
 
-现存固定源码/构建位于artifacts/columns-20261111：qualified-owners(796baafa)、
-qualified-owners-cli(efc2776b)、owners-dev1/build及owners-cli-build，源码/二进制hash核验已归档。
-安装install-owners、环境owners-runtime.sh，私有env artifacts/additive-work/env；Torch2.12/CANN9.2。
-SDK peer后继必须用owners-cli-build；旧owners-sdk.sh未更新，保留原作业身份，新作业另写launcher。
-恢复与测试均在匹配环境/冻结源码下执行，PYTHONPATH保留CANN环境路径。
-正式计时避开项目重构建，实际CPU affinity用taskset并记录；构建可用全部320 CPU。
-当前无磁盘阻塞，参考仓库和公共工具链不清理。
-
-resident新列迁移、旧异步/容量边界、FP16和广泛源码审阅仍未完成，唯一待办见ROADMAP。
-历史source定位：python scripts/resolve_history_commit.py OLD_SHA；正式复现不依赖旧raw目录。
+设备命令须先依法准入且在对应冻结源码/环境执行。普通异步与显式launch blocking用独立输出目录；
+详情及CPU/安装复现见本阶段报告，不依赖旧raw目录才能重建。
+长任务固定源码、background.slice、有限资源/时长；构建可用全部320 CPU，计时避开项目自身争用。
+历史source定位：python scripts/resolve_history_commit.py OLD_SHA。
