@@ -16,7 +16,7 @@ Tensor convolve(const NodeWeights& w,const RecurrentConfig& c,const Layout& quer
       auto found=std::lower_bound(first,last,t);
       ids.push_back(t>=0&&found!=last&&*found==t?found-cache.times.begin():cache.times.size());
     }
-  auto history=gather(values,indices(ids,raw.device()).reshape({raw.size(0),c.conv_size-1}));
+  auto history=gather_taps(values,ids,raw.size(0),c.conv_size-1);
   return result+(weights.slice(0,1)*history).sum(1);
 }
 }

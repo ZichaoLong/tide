@@ -18,6 +18,7 @@ inline Tensor gather(const Tensor& rows,const Tensor& ids) {
   shape.insert(shape.end(),rows.sizes().begin()+1,rows.sizes().end());
   return at::cat({rows,at::zeros(zero,rows.options())}).index_select(0,ids.flatten()).reshape(shape);
 }
+Tensor gather_taps(const Tensor& rows,const std::vector<Index>& ids,Index queries,Index taps);
 inline std::pair<Tensor,Tensor> padded(const Layout& layout,const at::Device& device) {
   Index width=1;
   for(Index b=0;b<layout.samples();++b)width=std::max(width,layout.offsets[b+1]-layout.offsets[b]);

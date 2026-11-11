@@ -2,7 +2,8 @@
 import math
 import torch
 from torch.nn import functional as F
-from .column_layout import SequenceLayout, gather_column
+from .column_layout import SequenceLayout
+from .tap_gather import tap_gather
 from .numeric_time import passive_decay
 from .tensors import norm
 from .normalization import epsilon_l2
@@ -39,7 +40,7 @@ def convolve(conv, queries, raw, bank_layout, bank):
         safe = torch.cat((stamps, stamps.new_tensor([-1])))
         present = (found < len(stamps)) & (safe[found] == taps) & (taps >= 0)
         ids.append(torch.where(present, found+oa, len(bank_layout.times)))
-    history = gather_column(bank, torch.cat(ids).to(bank.device))
+    history = tap_gather(bank, torch.cat(ids))
     return base+(conv.weight[1:]*history).sum(1)
 
 

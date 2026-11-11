@@ -45,6 +45,14 @@ SDK affine、normalization、源变换及query舍入的旧临时变体不作为�
 
 ## 小型实际分配行
 
+张量窗口卷积的重复索引反向与精确续接可用
+`python scripts/check_column_repeatability.py --device npu:0 --output-dir NEW`复验。
+完整配置先由`prefill_regression_config.py --case layer-chain --family ssd ...`生成，
+配置中绑定实际native库，再传`--config CONFIG --output-dir NEW`；GDN和many-lh/mixed同理。
+该检查保留普通gather的观察，不要求它必然失败；要求有序tap VJP逐位相等，且两个新进程
+从同一checkpoint恢复的输出、loss、raw状态、全部参数/梯度/optimizer逐位相等。
+全局deterministic开关不修改。计时与这些正确性检查分开。
+
 两份JSON共不足6KiB，保留原FP32输入、控制、响应、乘子、时间/节点和拒绝阈值，
 [provenance](../tests/fixtures/allocation/provenance.json)记录生产源码的dirty事实及原文件hash。
 它们是经过挑选的回归输入，不是完整模型快照。独立Decimal根据捕获的二进制浮点输入求解；

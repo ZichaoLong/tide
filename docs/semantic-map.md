@@ -350,3 +350,6 @@ KV §2 的 Rot(p)ᵀRot(q)=Rot(q−p) 对应 `column_attention` 和 `test_column
 对应 `weighted_column_recurrent_state/math/query`，`test_native_recurrent_columns`覆盖两种Mem、
 三Read快照、独立旧态根、共享参数、保留窗和原始时间槽；standalone同列接口与独立streaming
 对照。循环矩阵scan与KV bank不共用私有状态形状，区域/消息字段保持共同契约。
+卷积的原始时间tap线性映射及其转置由`tap_gather` / `columns::gather_taps`实现，
+`test_tap_gather`以独立关联矩阵、方向导数、缺失槽和一阶/版本守卫验证；
+`check_column_repeatability.py`补实际设备重复VJP和新进程完整训练恢复，不代替公式正确性。

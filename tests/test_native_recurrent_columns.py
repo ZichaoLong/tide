@@ -47,6 +47,23 @@ def test_ragged_scan_padding_is_counted_before_execution(implementation):
         SettleColumnPlan(binding, spec, implementation=implementation, max_workspace_bytes=20_000).run_ports(layout, {0: payload})
 
 
+@pytest.mark.parametrize("implementation", ["python", "native"])
+def test_convolution_transpose_of_old_cache_is_counted(implementation):
+    from tidegraph.weighted import SequenceLayout, MessageColumns
+    from tidegraph.weighted.column_capacity import check
+    memory = replace(config("ssd"), conv_size=17, conv_stride=1)
+    binding, spec = general(torch.float64, memory=memory)
+    plan = SettleColumnPlan(binding, spec, implementation=implementation)
+    domain = SequenceLayout(torch.tensor([0, 32]), torch.arange(32))
+    payload = MessageColumns(torch.arange(32), torch.ones(32, dtype=torch.float64), torch.ones(32, 4, dtype=torch.float64))
+    head = plan.run_ports(domain, {0: payload})
+    later = SequenceLayout(torch.tensor([0, 1]), torch.tensor([33]))
+    estimates = [check(binding.model.nodes[v].kernel, s, later, 1 << 30, 8) for v, s in head.states.items()]
+    budget = max(estimates)-1
+    with pytest.raises((MemoryError, ValueError, RuntimeError), match="workspace"):
+        SettleColumnPlan(binding, spec, implementation=implementation, max_workspace_bytes=budget).run_ports(later, {0: MessageColumns(torch.tensor([0]), payload.strength[:1], payload.content[:1])}, left=head.states)
+
+
 @pytest.mark.parametrize("family", ["affine", "delta", "gated_delta", "ssd"])
 def test_native_default_retained_windows_empty_samples_and_capacity(family):
     binding, spec = general(torch.float64, memory=config(family))

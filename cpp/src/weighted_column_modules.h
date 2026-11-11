@@ -9,5 +9,5 @@ LocalWindow prepare_columns(const NodeWeights&,const MemoryConfiguration&,const 
 TensorFields read_columns(const NodeWeights&,const NodeBinding&,const LocalWindow&,const std::string&,const LocalState&);
 Message full_columns(const NodeWeights&,const MemoryConfiguration&,const LocalWindow&,const Tensor&);
 LocalState terminal_columns(const LocalWindow&);
-long double workspace_elements(const MemoryConfiguration&,const Layout&,const LocalState&);
+long double workspace_bytes(const MemoryConfiguration&,const Layout&,const LocalState&,Index element_size);
 }

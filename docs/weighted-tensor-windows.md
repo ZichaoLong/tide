@@ -86,6 +86,9 @@ Read0 使用绑定初态；Read- 只看本次之前，Read+ 与 Full 看包含�
 `column_modules` 负责有限分派，调度不猜状态形状；C++消费者可用 `std::visit` 访问其实际类型。
 Python返回的KV/循环状态类保持分别命名。正写入序列用 scalar-affine 或 matrix-affine scan；
 卷积按原始时间槽查找，不用压紧后的事件编号代替时间。KV/GDN/SSD 可出现在同一图中。
+卷积tap的反向使用`tap_gather` / `columns::gather_taps`：同一lag内真实缓存行至多使用一次，
+不同lag的贡献先按缓存行收集，再沿lag归约，避免重复index的浮点原子累加。
+这是声明的一阶线性转置，保留原值版本守卫、None/零与缺失槽；不更改全局确定性开关。
 
 `WindowResult` 返回 output columns、实际 raw continuation、统计及执行身份；低层
 `SettleColumnPlan` 还暴露实际 node columns、逐边消息和 typed 状态。普通列根、参数、
@@ -106,6 +109,7 @@ ledger；不调用参考或重算。已有 checkpoint-v5 save/load 保留参数�
 
 每节点临时 workspace 默认 4GiB，按 live B/L/history/维度保守估算。超预算明确拒绝；
 循环scan按 B×最长样本长度计入填充，卷积bank/tap另计；仅按非空行数估算会低估ragged窗口。
+卷积估计包括旧缓存与新行的bank×lag反向暂存、host/device int64正向和逆向索引。
 该估计不代替全模型、保留 autograd、总 HBM 或多卡通信准入，也不限制累计逻辑时钟。
 输出、状态、bank 和控制做有界打包 finite 检查。显式非法 owner、时间、形状或端口拒绝。
 
@@ -117,6 +121,8 @@ ledger；不调用参考或重算。已有 checkpoint-v5 save/load 保留参数�
 分派、十种发送覆盖与代表评分/正则、容量和空样本；`test_column_training` 检查 AdamW、
 保留窗及 checkpoint。`tidegraph-column-check` 是真正 standalone C++ 消费者与独立调度对照。
 安装消费者的 `--positions` 覆盖带位置项的三步训练和新进程恢复；硬件范围见固定证据。
+`test_tap_gather`用独立关联矩阵和方向导数检查卷积转置、缺失槽、零梯度和版本/阶数边界；
+native由完整循环公式与非空缓存容量测试覆盖。实际设备重复反向/精确恢复须单独验收。
 FP32 严格梯度超差保留为具名有界 witness，同材料提升 FP64 单列；不改通过阈值。
 
 成本复用 `benchmark_dense_query.py --baseline window|columns|graph|fc-tensor|transformer-16`：

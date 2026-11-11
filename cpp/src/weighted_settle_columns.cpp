@@ -62,8 +62,8 @@ Result settle(const SettleGraph& spec,const Model& model,const Layout& layout,co
     initial[v]=initial_columns(w,b.memory,layout.samples());
     result.states[v]=left.empty()?initial[v]:left.at(v);validate_columns(w,b.memory,result.states[v]);
     require(std::visit([](const auto& s){return s.last_times.size();},result.states[v])==static_cast<size_t>(layout.samples()),"column left sample count differs");binding.push_back(b);
-    auto elements=workspace_elements(b.memory,layout,result.states[v]);
-    require(elements*ref.element_size()<=max_workspace_bytes,"column local workspace exceeds budget");
+    auto bytes=workspace_bytes(b.memory,layout,result.states[v],ref.element_size());
+    require(bytes<=max_workspace_bytes,"column local workspace exceeds budget");
   }
   std::vector<Index> order(g.regions.size());std::iota(order.begin(),order.end(),0);
   std::stable_sort(order.begin(),order.end(),[&](Index a,Index b){return spec.ranks()[a]<spec.ranks()[b];});

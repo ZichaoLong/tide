@@ -59,6 +59,9 @@ C++ `weighted_sequence_columns.h` 公开 KV/recurrent typed状态与独立整链
 `weighted_settle_columns` 分别拥有局部数学和调度。相对位置的 logits/共享 value-bank
 transpose 在 `column_attention` / `weighted_column_attention`；位置元数据保持 int64。修改同步该契约、column/window 测试、
 旧一般图回归和实际默认客户端，不把低层 Plan 成绩当默认入口成绩。
+卷积tap的有序一阶转置在`weighted/tap_gather.py` / `weighted_column_gather.cpp`，
+对应`test_tap_gather`的独立线性映射与`test_native_recurrent_columns`的完整循环检查。
+修改同时检查`column_capacity` / `workspace_bytes`与实际设备精确恢复。
 `experiment/column_task.py`拥有内置任务的共享来源列、逐物理端口loss和无梯度CPU输出解码；
 `experiment/eager.py`按观察/模块能力选择，`planning/execution.py`固定execution-v5身份，
 `planning/materialize.py`把参数构造与旧事件输入构造分离。修改同步
