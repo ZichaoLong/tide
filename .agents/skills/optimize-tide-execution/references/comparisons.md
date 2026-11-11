@@ -38,6 +38,32 @@ processed positions divided by the declared complete interval. Generated-token
 throughput needs actual generated tokens. TTFT requires an actual prompt-to-first
 returned-token measurement; training time divided by B or L does not provide it.
 
+## Report coverage and incremental cost
+
+When summarizing implementations, show which modes were actually measured at
+each source/configuration: no-grad request, grad-enabled forward and complete
+training. Leave missing cells explicit; another scale, historical revision or a
+training forward phase cannot supply a missing standalone measurement. This is
+a reporting discipline, not a requirement to run every mode or combination.
+
+Give elapsed seconds and the throughput numerator. For ragged graph inputs,
+count actual distinct sample/logical-position pairs represented by input; B×L
+may be only a capacity. Port messages, node updates and Full calls are work
+counters, not additional input tokens. Keep TTFT separate from throughput.
+
+For matched complete-update records, subtract corresponding forward/backward
+phases and show the remaining whole-interval delta. This localizes a measured
+gap without establishing its cause. A one-sided small profile cannot allocate
+the full-scale difference to regional allocation, scheduling or autograd.
+Map identified costs to module/interface symbols and distinguish required
+mathematics, representation choices, repeated implementation work and unresolved
+cost. Quantify only the increment actually isolated; otherwise name the next
+discriminating comparison. Compact formulas are attainable references, not
+proof of a minimum achievable time.
+
+The [FC16/LH accounting example](../../../../docs/evidence/performance-accounting-20261111.md)
+derives these distinctions from existing records without launching new runs.
+
 ## Resource and scale choices
 
 Use available CPU/memory/idle devices to finish useful work quickly, as specified

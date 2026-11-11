@@ -5,6 +5,15 @@
 当前待办与停止/重启决定只在[ROADMAP](ROADMAP.md)，下列历史决定不自动成为新任务限制。
 从[经验索引](performance-lessons.md)选择相关主题；新工作按[优化技能](../.agents/skills/optimize-tide-execution/SKILL.md)进行。
 
+## 模式缺口、实际位置和阶段差额
+
+[FC16/LH既有记录换算](evidence/performance-accounting-20261111.md)没有重跑性能：
+FC16密集输入为B×L=1024，LH的B4/P16不齐输入只有61个实际样本位置；端口消息不能重复计token。
+当前LH训练、历史1B/9B推理和原LH含grad前向来自不同源码/配置，不能拼成一个三模式对照。
+默认FC与直接公式的完整训练差额主要位于核心前向/反向，但两者都有区域分配；
+小图中某个阶段较慢不足以把完整差额归到该原因。报告对应阶段差额及剩余量，
+将单侧诊断、接口假设和因果上已隔离的增量分别标明，才能选择真正有区分力的下一项比较。
+
 ## 先核对解析后的执行配置
 
 [554f2f5有限代表](evidence/interface-heads-performance-20261110.md)的首版driver把site放在各case内，
