@@ -342,3 +342,8 @@ KV §4的共享Full矩阵收缩进一步由`bank_attention`/`query::bank_attenti
 KV §2 的 Rot(p)ᵀRot(q)=Rot(q−p) 对应 `column_attention` 和 `test_column_positions`，
 以 int64 求差保留超大时钟的小距离；Read/Full 频率及 raw 恢复分别验收。
 旧任意 cut、完整独立事件根仍按记录接口单列验证。图 v13/checkpoint v5 不变。
+
+有限五记忆在C++列接口由 `LocalState/LocalWindow` 分型；recurrent §1–4与固定时间卷积
+对应 `weighted_column_recurrent_state/math/query`，`test_native_recurrent_columns`覆盖两种Mem、
+三Read快照、独立旧态根、共享参数、保留窗和原始时间槽；standalone同列接口与独立streaming
+对照。循环矩阵scan与KV bank不共用私有状态形状，区域/消息字段保持共同契约。

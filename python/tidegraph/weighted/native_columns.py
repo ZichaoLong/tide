@@ -2,6 +2,7 @@
 import torch
 from .column_layout import SequenceLayout
 from .kv_columns_state import KVStateColumns, KVWriteBank, KVWindowColumns
+from .recurrent_column_state import RecurrentStateColumns, RecurrentWindowColumns
 from .message_columns import MessageColumns
 
 
@@ -10,6 +11,12 @@ def layout(value):
 
 
 def state(value):
+    if hasattr(value, "cache_layout"):
+        return RecurrentStateColumns(**value.fields, inert=value.inert,
+            last_times=torch.tensor(value.last_times, dtype=torch.int64),
+            observations=torch.tensor(value.observations, dtype=torch.int64),
+            cache_layout=layout(value.cache_layout) if value.cache_layout.offsets else None,
+            cache_values=value.cache_values)
     return KVStateColumns(layout(value.layout), **value.fields, inert=value.inert,
         last_times=torch.tensor(value.last_times, dtype=torch.int64), observations=torch.tensor(value.observations, dtype=torch.int64))
 
@@ -31,9 +38,16 @@ class NativeColumns:
         from .settle_columns import SettleColumnResult, NodeColumns
         c = self.core
         encode = lambda l: c.ColumnLayout(l.offsets.tolist(), l.times.tolist())
-        old = {} if left is None else {v: c.KVColumnState(encode(s.layout),
-            {name: getattr(s, name) for name in ("keys", "values", "summaries", "weights")},
-            s.inert, s.last_times.tolist(), s.observations.tolist()) for v, s in left.items()}
+        old = {}
+        for v, s in (left or {}).items():
+            if isinstance(s, KVStateColumns):
+                old[v] = c.KVColumnState(encode(s.layout),
+                    {name: getattr(s, name) for name in ("keys", "values", "summaries", "weights")},
+                    s.inert, s.last_times.tolist(), s.observations.tolist())
+            else:
+                old[v] = c.RecurrentColumnState({name: getattr(s, name) for name in ("H", "Z", "W")},
+                    s.inert, s.last_times.tolist(), s.observations.tolist(),
+                    encode(s.cache_layout) if s.cache_layout is not None else c.ColumnLayout([], []), s.cache_values)
         values = {p: c.MessageColumns(m.rows.tolist(), m.strength, m.content) for p, m in ports.items()}
         result = c.weighted_settle_columns(self.spec, self.model, encode(domain), values, old, self.max_workspace_bytes)
         def message(m):
@@ -42,8 +56,13 @@ class NativeColumns:
         states = {v: state(s) for v, s in result.states.items()}
         for v, node in result.nodes.items():
             w = node.window
-            window = KVWindowColumns(layout(w.layout), w.mass, w.content,
-                KVWriteBank(layout(w.bank_layout), **w.bank), states[v])
+            if isinstance(w, c.KVColumnWindow):
+                window = KVWindowColumns(layout(w.layout), w.mass, w.content,
+                    KVWriteBank(layout(w.bank_layout), **w.bank), states[v])
+            else:
+                window = RecurrentWindowColumns(layout(w.layout), w.mass, w.content,
+                    layout(w.write_layout), w.bank, torch.tensor(w.times, dtype=torch.int64),
+                    layout(w.cache_layout) if w.cache_layout.offsets else None, w.cache_values, states[v])
             nodes[v] = NodeColumns(torch.tensor(node.rows, dtype=torch.int64), window, node.descriptors, node.controls)
         return SettleColumnResult(self.graph, domain, states,
             {p: message(m) for p, m in result.outputs.items()}, {e: message(m) for e, m in result.messages.items()},

@@ -22,7 +22,8 @@ Python/C++ KV 整链、Python 四循环/卷积与异构组合、实际消息列�
 新增直接 B×L/一般 Settle 端口输入，按能力分派并声明后备；现有事件消费者须显式迁移。
 [01cde3b固定整链资格与FC成本](evidence/tensor-windows-20261111.md)已完成；
 [9fa852c KV位置列](evidence/column-positions-20261111.md)的CPU/NPU安装训练与恢复亦通过。
-native 循环、split placement/resident、多设备和宽/多节点代表仍未完成，
+native四循环/卷积typed列及异构组合已完成开发验证，正式资格接续运行。
+split placement/resident、多设备和宽/多节点代表仍未完成，
 不把已有一般执行器功能当作这些新路径已经迁移或优化。
 
 原计划的三类未完成工作继续：实现/数值/异步/容量限制，LH及core-3经验的实际迁移，

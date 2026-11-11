@@ -51,7 +51,7 @@ def candidate_groups(rows_by_node):
 
 
 class SettleColumnPlan:
-    """Host KV composition, selected by actual graph/module capabilities.
+    """Host weighted composition, selected by actual graph/module capabilities.
 
     Ordinary column roots, terminal raw states and per-edge/port messages are
     returned. Legacy independent intermediate event-root requests continue to

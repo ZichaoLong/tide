@@ -18,8 +18,11 @@ def check(memory, left, domain, limit, element_size):
         elements += rows*(4*c.width+c.summary_width)
     else:
         matrices = c.matrix_shape[0]
-        elements = 8*rows*matrices*(c.key_width*c.key_width+c.key_width*c.value_width)
-        elements += rows*(8*c.width+8*c.summary_width)
+        padded_rows = domain.samples*max(domain.offsets.diff().tolist(), default=0)
+        elements = 8*padded_rows*matrices*(c.key_width*c.key_width+c.key_width*c.value_width)
+        elements += padded_rows*(8*c.width+8*c.summary_width)
+        if not c.basic:
+            elements += 4*(len(left.cache_layout.times)+rows*(1+c.conv_size))*c.conv_width
     requested = elements*element_size
     if requested > limit:
         raise MemoryError(f"column local workspace estimate {requested} exceeds budget {limit}")

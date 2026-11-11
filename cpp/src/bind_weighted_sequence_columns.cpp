@@ -16,6 +16,19 @@ void bind_weighted_sequence_columns(py::module_& m){
     .def_readonly("layout",&KVWindow::layout).def_readonly("bank_layout",&KVWindow::bank_layout)
     .def_readonly("mass",&KVWindow::mass).def_readonly("content",&KVWindow::content)
     .def_readonly("bank",&KVWindow::bank).def_readonly("terminal",&KVWindow::terminal);
+  py::class_<RecurrentState>(m,"RecurrentColumnState")
+    .def(py::init([](TensorFields fields,Tensor inert,std::vector<Index> times,std::vector<Index> counts,
+                    Layout cache,std::optional<Tensor> values){
+      return RecurrentState{std::move(fields),inert,std::move(times),std::move(counts),std::move(cache),values.value_or(Tensor{})};}))
+    .def_readonly("fields",&RecurrentState::fields).def_readonly("inert",&RecurrentState::inert)
+    .def_readonly("last_times",&RecurrentState::last_times).def_readonly("observations",&RecurrentState::observations)
+    .def_readonly("cache_layout",&RecurrentState::cache_layout).def_readonly("cache_values",&RecurrentState::cache_values);
+  py::class_<RecurrentWindow>(m,"RecurrentColumnWindow")
+    .def_readonly("layout",&RecurrentWindow::layout).def_readonly("write_layout",&RecurrentWindow::write_layout)
+    .def_readonly("mass",&RecurrentWindow::mass).def_readonly("content",&RecurrentWindow::content)
+    .def_readonly("bank",&RecurrentWindow::bank).def_readonly("times",&RecurrentWindow::times)
+    .def_readonly("cache_layout",&RecurrentWindow::cache_layout).def_readonly("cache_values",&RecurrentWindow::cache_values)
+    .def_readonly("terminal",&RecurrentWindow::terminal);
   py::class_<Message>(m,"MessageColumns").def(py::init<std::vector<Index>,Tensor,Tensor>())
     .def_readonly("rows",&Message::rows).def_readonly("strength",&Message::strength).def_readonly("content",&Message::content);
   py::class_<NodeResult>(m,"NodeColumns").def_readonly("rows",&NodeResult::rows)

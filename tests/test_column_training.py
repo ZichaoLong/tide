@@ -47,7 +47,8 @@ def test_raw_checkpoint_and_retained_windows(tmp_path, implementation, positions
     equivalent(opt.state_dict(), oopt.state_dict(), atol=0, rtol=0)
 
 
-def test_heterogeneous_private_states_share_the_same_column_route():
+@pytest.mark.parametrize("implementation", ["python", "native"])
+def test_heterogeneous_private_states_share_the_same_column_route(implementation):
     from tidegraph.weighted import fully_connected
     dtype = torch.float64
     topology = fully_connected(2, 2)
@@ -55,7 +56,7 @@ def test_heterogeneous_private_states_share_the_same_column_route():
                 RecurrentConfig(memory_family="ssd", heads=2, conv_size=3), KVConfig(memory_read="qry"))
     binding = bind(topology.graph, memories=memories, regions=RegionalConfig(k=2), dtype=dtype)
     spec = replace(topology, graph=binding.graph)
-    plan = SettleColumnPlan(binding, spec)
+    plan = SettleColumnPlan(binding, spec, implementation=implementation)
     x = torch.linspace(-.3, .7, 24, dtype=dtype).reshape(2, 3, 4).requires_grad_()
     q = Continuation(binding.graph.identity, 2)
     actual = plan.run(x)

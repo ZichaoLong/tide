@@ -32,7 +32,6 @@ def column_reason(binding, spec, implementation, placement, options):
     from ..placement import request, read_dtype
     from ..next import AdoptNext
     from .column_modules import module_for
-    from .kv import KVMemory
     from .programs import Describe, RegionalTotal, WeightedAggregate, WeightedFull
     if options["streaming"] or options["packing"] == "scalar" or options["prefill_schedule"] == "greedy":
         return "explicit scalar/streaming/greedy schedule"
@@ -56,8 +55,6 @@ def column_reason(binding, spec, implementation, placement, options):
             module_for(n)
         except ValueError:
             return "local memory has no column kernel"
-        if implementation == "native" and type(n.kernel) is not KVMemory:
-            return "native recurrent column kernel pending"
     if any(type(r) is not RegionalTotal or r.config.support_policy != "strict" for r in binding.model.regions):
         return "regional numerical policy requires graph adapter"
     return None

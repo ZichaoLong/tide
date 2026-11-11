@@ -1,5 +1,5 @@
 // Settle §9–11: independent region-order host schedule with actual column support.
-#include "weighted_column_layout.h"
+#include "weighted_column_modules.h"
 #include "weighted_mean.h"
 #include "weighted_source.h"
 #include "finite_guard.h"
@@ -15,27 +15,29 @@ std::vector<Index> positions(const std::vector<Index>& domain,const std::vector<
 Received aggregate(const NodeWeights& w,const NodeBinding& binding,const std::vector<std::pair<const Message*,Index>>& sources){
   std::set<Index> present;for(const auto& [p,c]:sources)present.insert(p->rows.begin(),p->rows.end());
   Received out;out.rows={present.begin(),present.end()};std::vector<Tensor> masses,values;
-  const auto& c=std::get<KVConfig>(binding.memory);const auto n=static_cast<Index>(out.rows.size());
+  const auto width=std::visit([](const auto& c){return c.width;},binding.memory);
+  const auto epsilon=std::visit([](const auto& c){return c.epsilon;},binding.memory);
+  const auto n=static_cast<Index>(out.rows.size());
   for(const auto& [p,label]:sources){
     if(p->rows.empty())continue;auto z=p->content;
     if(binding.aggregate_alpha){
       auto prefix="aggregate_program.transforms."+std::to_string(label);
       auto [a,b]=detail::source_matrices(w,prefix);
-      z=z+binding.aggregate_alpha*project(at::silu(project(normalize(z,c.epsilon),a)+detail::weight(w,prefix+".embedding")),b);
+      z=z+binding.aggregate_alpha*project(at::silu(project(normalize(z,epsilon),a)+detail::weight(w,prefix+".embedding")),b);
     }
     auto ids=indices(positions(out.rows,p->rows),z.device());
     masses.push_back(at::zeros({n},z.options()).index_copy(0,ids,p->strength.clamp_min(0)));
-    values.push_back(at::zeros({n,c.width},z.options()).index_copy(0,ids,z));
+    values.push_back(at::zeros({n,width},z.options()).index_copy(0,ids,z));
   }
   if(out.rows.empty())return out;
   auto mass=at::stack(masses,1),value=at::stack(values,1);out.mass=mass.sum(1);
-  auto positive=(out.mass.detach()>0).nonzero().flatten();out.content=at::zeros({n,c.width},value.options());
+  auto positive=(out.mass.detach()>0).nonzero().flatten();out.content=at::zeros({n,width},value.options());
   if(positive.numel())out.content=out.content.index_copy(0,positive,weighted_mean(mass.index_select(0,positive),value.index_select(0,positive)));
   return out;
 }
 }
 Result settle(const SettleGraph& spec,const Model& model,const Layout& layout,const std::map<Index,Message>& ports,
-              const std::map<Index,KVState>& left,Index max_workspace_bytes){
+              const std::map<Index,LocalState>& left,Index max_workspace_bytes){
   layout.validate();const auto& g=spec.graph();const auto& ref=model.nodes.at(0).bias;
   require(spec.binding()=="ports","column Settle requires ports binding");validate_transport(g,model);
   require(max_workspace_bytes>0,"column workspace budget must be positive");
@@ -49,26 +51,18 @@ Result settle(const SettleGraph& spec,const Model& model,const Layout& layout,co
     for(const auto& x:{p.strength,p.content})require(x.device()==ref.device()&&x.scalar_type()==ref.scalar_type()
       &&at::isfinite(x).all().item<bool>(),"invalid message column metadata/value");
   }
-  Result result;result.layout=layout;std::vector<NodeBinding> binding;std::map<Index,KVState> initial;
+  Result result;result.layout=layout;std::vector<NodeBinding> binding;std::map<Index,LocalState> initial;
   for(const auto& name:{"candidate_events","selected_events","visited_edges","region_column_calls","state_column_calls"})result.stats[name]=0;
   require(left.empty()||left.size()==g.nodes.size(),"column left node domain differs");
   for(Index v=0;v<static_cast<Index>(g.nodes.size());++v){
     const auto& w=model.nodes.at(v);auto b=node_binding(w);
-    require(std::holds_alternative<KVConfig>(b.memory),"column Settle requires supported KV memory");
-    const auto& c=std::get<KVConfig>(b.memory);const auto r=g.nodes[v].region;
-    require(supported(c)&&!g.nodes[v].clear&&g.nodes[v].next_state=="adopt-v1"&&g.regions[r].observe_all&&w.bias.device()==ref.device()
+    std::visit([](const auto& c){c.validate();},b.memory);const auto r=g.nodes[v].region;
+    require(!g.nodes[v].clear&&g.nodes[v].next_state=="adopt-v1"&&g.regions[r].observe_all&&w.bias.device()==ref.device()
       &&w.bias.scalar_type()==ref.scalar_type()&&w.bias.numel()==ref.numel(),"unsupported column Settle binding");
-    std::vector<State> states(layout.samples(),w.kernel->initial(w));initial[v]=KVState::from_states(states);
-    result.states[v]=left.empty()?initial[v]:left.at(v);result.states[v].validate(w,c);
-    require(result.states[v].layout.samples()==layout.samples(),"column left sample count differs");binding.push_back(b);
-    Index queries=0,past=0;const auto& old=result.states[v].layout;
-    for(Index owner=0;owner<layout.samples();++owner){
-      queries=std::max(queries,layout.offsets[owner+1]-layout.offsets[owner]);
-      past=std::max(past,old.offsets[owner+1]-old.offsets[owner]);}
-    long double elements=static_cast<long double>(layout.samples())*queries*(static_cast<long double>(past)+queries)*(8+3*c.heads);
-    bool rotary=!c.read_frequencies.empty();for(const auto& f:c.full_frequencies)rotary|=!f.empty();
-    if(rotary)elements+=8*static_cast<long double>(layout.samples())*queries*(static_cast<long double>(past)+queries)*(c.width+c.summary_width);
-    elements+=static_cast<long double>(layout.times.size())*(4*c.width+c.summary_width);
+    initial[v]=initial_columns(w,b.memory,layout.samples());
+    result.states[v]=left.empty()?initial[v]:left.at(v);validate_columns(w,b.memory,result.states[v]);
+    require(std::visit([](const auto& s){return s.last_times.size();},result.states[v])==static_cast<size_t>(layout.samples()),"column left sample count differs");binding.push_back(b);
+    auto elements=workspace_elements(b.memory,layout,result.states[v]);
     require(elements*ref.element_size()<=max_workspace_bytes,"column local workspace exceeds budget");
   }
   std::vector<Index> order(g.regions.size());std::iota(order.begin(),order.end(),0);
@@ -84,10 +78,9 @@ Result settle(const SettleGraph& spec,const Model& model,const Layout& layout,co
         if(outgoing.count(g.edges[e].source))sources.emplace_back(&outgoing.at(g.edges[e].source),b.sources.edges[e]);}
       auto received=aggregate(w,b,sources);if(received.rows.empty())continue;
       auto times=layout.select(received.rows);for(auto& t:times.times)t=t*spec.stride()+spec.rank(v);
-      const auto& c=std::get<KVConfig>(b.memory);
-      auto window=prepare(w,c,times,received.mass,received.content,result.states[v]);
-      auto fields=read(w,c,b.regional,window,g.regions[region].read_mode,initial[v]);
-      result.states[v]=window.terminal;
+      auto window=prepare_columns(w,b.memory,times,received.mass,received.content,result.states[v]);
+      auto fields=read_columns(w,b,window,g.regions[region].read_mode,initial[v]);
+      result.states[v]=terminal_columns(window);
       result.nodes[v]={received.rows,std::move(window),std::move(fields),at::zeros_like(received.mass)};nodes.push_back(v);
       for(auto row:received.rows)candidates[row].push_back(v);
     }
@@ -104,7 +97,7 @@ Result settle(const SettleGraph& spec,const Model& model,const Layout& layout,co
       ++result.stats["region_column_calls"];
     }
     for(auto v:nodes){const auto& node=result.nodes.at(v);
-      auto value=full(model.nodes[v],std::get<KVConfig>(binding[v].memory),node.window,node.controls);
+      auto value=full_columns(model.nodes[v],binding[v].memory,node.window,node.controls);
       for(auto& row:value.rows)row=node.rows[row];outgoing[v]=value;
       result.stats["candidate_events"]+=node.rows.size();result.stats["selected_events"]+=value.rows.size();
       ++result.stats["state_column_calls"];
@@ -116,10 +109,12 @@ Result settle(const SettleGraph& spec,const Model& model,const Layout& layout,co
   for(Index p=0;p<static_cast<Index>(g.outputs.size());++p){const auto v=g.outputs[p];result.outputs[p]=outgoing.count(v)?outgoing.at(v):empty;}
   std::vector<Tensor> published;
   for(const auto& [v,n]:result.nodes){for(const auto& [name,t]:n.descriptors)published.push_back(t);
-    for(const auto& [name,t]:n.window.bank)published.push_back(t);
-    published.insert(published.end(),{n.controls,n.window.mass,n.window.content});}
+    std::visit([&](const auto& window){for(const auto& [name,t]:window.bank)published.push_back(t);
+      published.insert(published.end(),{window.mass,window.content});
+      if constexpr(std::is_same_v<std::decay_t<decltype(window)>,RecurrentWindow>)if(window.cache_values.defined())published.push_back(window.cache_values);
+    },n.window);published.push_back(n.controls);}
   for(const auto& [v,p]:outgoing)published.insert(published.end(),{p.strength,p.content});
-  for(const auto& [v,s]:result.states)for(const auto& [name,t]:s.fields)published.push_back(t);
+  for(const auto& [v,s]:result.states)std::visit([&](const auto& state){for(const auto& [name,t]:state.fields)published.push_back(t);},s);
   require(all_finite(published),"nonfinite column result");
   return result;
 }

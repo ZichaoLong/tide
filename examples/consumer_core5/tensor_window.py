@@ -15,7 +15,7 @@ from tidegraph import Continuation, ExecutionPlacement
 from tidegraph.runtime import resolve_device
 from tidegraph.checkpoint import save, load
 from tidegraph.comparison import collect_comparison, equivalent
-from tidegraph.weighted import fully_connected, bind, KVConfig, RegionalConfig, eager_runner
+from tidegraph.weighted import fully_connected, bind, KVConfig, RecurrentConfig, RegionalConfig, eager_runner
 from recording import snapshot, json_record, tensor_record
 
 
@@ -23,7 +23,11 @@ def create(args, *, reference=False):
     topology = fully_connected(2, 2)
     positions = dict(read_frequencies=(.17,), full_frequencies=((.11,), (.23,)),
                      distance_slopes=(.04, .03)) if args.positions else {}
-    binding = bind(topology.graph, memories=KVConfig(heads=2, memory_read="qry", window=15, epsilon=.3, **positions),
+    memory = KVConfig(heads=2, memory_read="qry", window=15, epsilon=.3, **positions)
+    if args.family != "kv":
+        memory = RecurrentConfig(memory_family=args.family, memory_read="state", epsilon=.3,
+            **(dict(heads=2, conv_size=3, conv_stride=3) if args.family in {"gated_delta", "ssd"} else {}))
+    binding = bind(topology.graph, memories=memory,
                    regions=RegionalConfig(k=2), dtype=getattr(torch, args.dtype),
                    device="cpu" if reference else args.device)
     spec = replace(topology, graph=binding.graph)
@@ -61,18 +65,21 @@ def main():
     p.add_argument("--client", choices=("python", "native"), default="python")
     p.add_argument("--native-library")
     p.add_argument("--positions", action="store_true", help="exercise relative rotary/distance KV columns")
+    p.add_argument("--family", choices=("kv", "affine", "delta", "gated_delta", "ssd"), default="kv")
     p.add_argument("--output-dir", type=Path, required=True)
     p.add_argument("--steps", type=int, default=3)
     p.add_argument("--resume", type=Path)
     p.add_argument("--child", action="store_true")
     args = p.parse_args()
+    if args.positions and args.family != "kv":
+        p.error("--positions applies to KV only")
     resolve_device(args.device)
     torch.set_num_threads(1 if args.device == "cpu" else 2)
     torch.set_num_interop_threads(1)
     torch.use_deterministic_algorithms(True)
     out = args.output_dir.resolve();out.mkdir(parents=True, exist_ok=False)
     identity = dict(interface="tensor-window-v1", device=args.device, dtype=args.dtype, client=args.client,
-                    positions=args.positions)
+                    positions=args.positions, family=args.family)
     record = dict(identity=identity, execution="running", strict_numerical="not_checked", recovery="not_checked")
     try:
         owner = create(args)
@@ -104,7 +111,7 @@ def main():
                       "passed" if all(r["strict_passed"] for r in reports) else "failed")
         if oracle is not None:
             command = [sys.executable, str(Path(__file__).resolve()), "--child", "--device", args.device,
-                       "--dtype", args.dtype, "--client", args.client]
+                       "--dtype", args.dtype, "--client", args.client, "--family", args.family]
             if args.native_library:
                 command += ["--native-library", args.native_library]
             if args.positions:

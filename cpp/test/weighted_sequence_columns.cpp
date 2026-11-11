@@ -17,15 +17,15 @@ void close(const Tensor& a,const Tensor& b){
   require(a.sizes()==b.sizes()&&a.scalar_type()==b.scalar_type(),"column metadata mismatch");
   require(a.is_floating_point()?at::allclose(a,b,1e-8,1e-10):at::equal(a,b),"column numerical mismatch");
 }
-void check(bool positional){
+void check(const std::string& family,bool positional=false){
   at::set_num_threads(1);
-  auto g=weighted_check::graph("fc","kv");auto m=weighted_check::model(g,"kv",at::kCPU,at::kDouble);
+  auto g=weighted_check::graph("fc",family);auto m=weighted_check::model(g,family,at::kCPU,at::kDouble);
   if(positional)for(auto& node:m.nodes){auto b=weighted::node_binding(node);auto c=std::get<weighted::KVConfig>(b.memory);
     c.full_frequencies={{.17}};c.distance_slopes={.03};c.position_scale=4.;
     weighted::configure_node(node,c,b.regional,b.sources,b.aggregate_alpha);}
   SettleGraph spec(g,{1,2,3},"ports",4);Streaming scalar(g,m,Options{});
   Continuation q;q.identity=g.identity;q.batch_size=2;
-  std::map<Index,col::KVState> left;
+  std::map<Index,col::LocalState> left;
   auto owners=m.parameters().owners();std::vector<Tensor> parameters;
   for(const auto& p:owners)parameters.push_back(p.value);
   for(Index step=0;step<2;++step){
@@ -47,7 +47,7 @@ void check(bool positional){
       Index j=found-p.rows.begin();auto value=at::cat({p.strength[j].reshape({1}),p.content[j]});
       close(value,out.value);aterms.push_back(value.square().sum());eterms.push_back(out.value.square().sum());
     }
-    for(const auto& [v,state]:actual.states){auto decoded=state.states();
+    for(const auto& [v,state]:actual.states){auto decoded=std::visit([](const auto& s){return s.states();},state);
       for(Index b=0;b<2;++b){const auto& a=decoded[b];const auto& e=expected.continuation.states.at({b,v});
         require(a.last_time==e.last_time&&a.observations==e.observations,"raw column clock mismatch");
         close(a.value,e.value);
@@ -60,7 +60,10 @@ void check(bool positional){
     auto ge=torch::autograd::grad({at::stack(eterms).sum()},roots,{},true,false,true);
     for(size_t j=0;j<ga.size();++j)close(ga[j],ge[j]);
     // Preserve exact actual raw state while parameters advance; no replay.
-    left=actual.states;for(auto& [v,s]:left){s.inert=s.inert.detach();for(auto& [n,t]:s.fields)t=t.detach();}
+    left=actual.states;for(auto& [v,s]:left)std::visit([](auto& state){state.inert=state.inert.detach();
+      for(auto& [n,t]:state.fields)t=t.detach();
+      if constexpr(std::is_same_v<std::decay_t<decltype(state)>,col::RecurrentState>)
+        if(state.cache_values.defined())state.cache_values=state.cache_values.detach();},s);
     q=expected.continuation;for(auto& [owner,s]:q.states){s.value=s.value.detach();for(auto& [n,t]:s.slots)t=t.detach();}
     at::NoGradGuard guard;for(size_t j=0;j<parameters.size();++j)if(ga[j].defined())parameters[j].add_(ga[j],-.0001);
   }
@@ -68,5 +71,6 @@ void check(bool positional){
   require(rejected,"malformed layout did not reject before indexing");
 }
 }
-int main(){try{check(false);check(true);std::cout<<"column standalone FP64: independent streaming, raw state, VJP, two SGD windows passed\n";return 0;}
+int main(){try{check("kv");check("kv",true);for(const auto& f:{"affine","delta","gated_delta","ssd"})check(f);
+  std::cout<<"column standalone FP64: five memories, independent streaming, raw state, VJP, two SGD windows passed\n";return 0;}
   catch(const std::exception& e){std::cerr<<e.what()<<"\n";return 1;}}

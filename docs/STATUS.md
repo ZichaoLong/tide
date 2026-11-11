@@ -24,7 +24,7 @@
 
 KV位置列 `9fa852c` 固定CPU与NPU资格均 passed；六安装客户端严格三步训练和新进程恢复通过。
 standalone新构建CPU检查通过。详情见[位置证据](evidence/column-positions-20261111.md)。
-FC正式记录见[整链证据](evidence/tensor-windows-20261111.md)。当前无活跃任务。
+FC正式记录见[整链证据](evidence/tensor-windows-20261111.md)。原有任务全部终态。
 
 native位置构建 `artifacts/columns-20261111/position-dev1/build`，独立SDK `build-sdk`；
 干净资格worktree `qualified-position`。原二进制/原失败保留。
@@ -40,3 +40,9 @@ native位置构建 `artifacts/columns-20261111/position-dev1/build`，独立SDK 
 
 长任务固定源码、background.slice、有限资源/时长。可用CPU/内存和空闲NPU可用；
 共享NPU须当前授权。当前无存储阻塞。实际未提交状态见git status，作业见scripts/status.py。
+
+native循环列开发 `column-recurrent-dev2` passed：76项定向检查及standalone五族、
+独立streaming/raw/VJP/两SGD窗口。原dev1测试异常类型遗漏与基础循环可选cache转换问题
+均已修正，原失败保留。新增的ragged填充容量与旧态独立列根检查另验。
+源码待提交，随后干净worktree验证CPU/NPU安装消费者四族训练与新进程恢复。
+构建 `artifacts/columns-20261111/recurrent-dev2/{build,build-sdk}`，当前无活跃任务。
