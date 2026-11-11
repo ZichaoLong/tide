@@ -3,10 +3,16 @@
 #include "tide/packing_work.h"
 namespace tide::weighted::block {
 namespace {
+const State* state_of(const ReadInput& q){return q.state;}
+const State* state_of(const FullInput& q){return q.comparison;}
 template<class Input,class Make> std::map<size_t,TensorFields> dispatch(const NodeWeights& w,const std::vector<Input>& requests,
     const KVConfig& c,const RegionalConfig& r,bool full,Make make){
   std::vector<size_t> ids;std::vector<Row> rows;
-  for(size_t i=0;i<requests.size();++i){auto row=make(requests[i]);if(view(&row.state)){ids.push_back(i);rows.push_back(std::move(row));}}
+  // A generic/short/positioned fallback must not copy every State map just
+  // to discover that it has no block provenance. Inspect the borrowed handle.
+  for(size_t i=0;i<requests.size();++i)if(view(state_of(requests[i]))){
+    ids.push_back(i);rows.push_back(make(requests[i]));
+  }
   auto p=plan(rows,c,full);if(!p)return {};
   auto values=evaluate(w,c,r,*p);std::map<size_t,TensorFields> result;
   for(size_t i=0;i<ids.size();++i)result[ids[i]]=std::move(values[i]);

@@ -54,9 +54,12 @@ def cpu_profile(path):
                 stage_operators_sha256=digest(stages) if stages.exists() else None)
 
 
-def npu_profile(path, record):
+def npu_profile(path, record, exports=None):
     summary = path / 'profile-summary.json'
-    exports = next(Path(record['profile_output']).glob('*/ASCEND_PROFILER_OUTPUT'), None)
+    if exports is None:
+        exports = next(Path(record['profile_output']).glob('*/ASCEND_PROFILER_OUTPUT'), None)
+    if not summary.exists() and exports is None:
+        raise FileNotFoundError('NPU profile exports or preserved profile-summary.json required')
     d = read(summary) if summary.exists() else summarize(
         exports)
     dispatch, scope = Counter(), Counter()

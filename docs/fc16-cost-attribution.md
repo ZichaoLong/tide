@@ -212,3 +212,30 @@ Keep the benchmark/profile/check commands and terminal job identities alongside
 the review. The [block contract](weighted-query-blocks.md) names its actual dispatch
 and private-graph counters; the complete return/gradient/restore tests remain
 separate from these cost tools.
+
+The same manifest can include `diagnostics`, independently of its cost pairs:
+
+```json
+[
+  {"name":"small-native-profile", "kind":"profile", "path":"small-native/result.json"},
+  {"name":"formula-check", "kind":"projection-check", "path":"check/result.json", "source":"FIXED_SHA"},
+  {"name":"root-tests", "kind":"junit", "path":"qualification.xml", "source":"FIXED_SHA"},
+  {"name":"measurement-job", "kind":"job", "path":"job/status.json"}
+]
+```
+
+`execution_diagnostics.py` reads existing stage counters, CPU ATen shapes, NPU
+exports and outer/private autograd census, preserving each record's own shape
+and implementation identity. `exports` can explicitly relocate an NPU
+`ASCEND_PROFILER_OUTPUT` directory; it does not relabel the measurement. Preserve
+the reviewed small JSON before retiring scratch exports. No model is rerun by
+this collection step. Failed tests, failed projection checks and terminal job
+success remain separate entries; a live job cannot enter a terminal review.
+
+Cost pairs report differences in actual work counts and corresponding synchronized
+phase durations. They do not subtract host-enqueue phases as device times. Equal
+work counts do not certify equal support; input throughput uses actual recorded
+positions, and TTFT uses its actual first-token interval when present. The
+complete cleanup interval is never substituted for TTFT. For other workloads,
+add a small explicit schema adapter, retain source/input/placement identities and
+declare the comparison role; the collector makes no numerical-equivalence claim.

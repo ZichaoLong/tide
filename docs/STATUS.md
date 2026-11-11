@@ -1,36 +1,39 @@
-# 当前交接 — KV bank／查询块／块伴随实施中（2026-11-11）
+# 当前交接 — KV 查询块资格与三层诊断收尾（2026-11-11）
 
-用户已授权在默认能力分派中实现状态bank—Read/Full块—块级伴随，并复测默认Tide／直接FC／Transformer；
-交付可重复用于后续拓扑/执行路径的诊断能力。本轮聚焦FC4/FC16，不扩展LH/GPU/多卡。
-数学固定0770593838a37c790a568226930567ed60f99b83，19份core-5快照启动核验通过。
+当前授权：默认 KV bank/Read/Full 块与块伴随、FC4/FC16 CPU/NPU 三层复测、可重复诊断设施。
+本轮聚焦 FC；LH/GPU/多卡不扩展。数学固定 `0770593838a37c790a568226930567ed60f99b83`，19 份快照核验通过。
 
-## 当前工作
+## 固定源码与已完成任务
 
-起点`e3452962b928d8cb82d73b1b08fd1ef69e41a119`；Python/native块接口与默认分派已实现。
-开发构建dev3与42项查询/selected-boundary测试通过；补充别名/冻结参数/执行身份定向26项通过。
-这些组有重叠，不累计为独立资格。可重复诊断入口新增blocks有限套件和显式配对成本收集器。
-现在提交实现，然后以该固定源码构建Python native NPU与standalone SDK并做正式有限资格/复测。
-末状态、显式trace、过期/位置或不匹配布局保留原有合法后备；不会合并公共独立根。
-然后固定实现提交，进行相关CPU/NPU正确性、训练/续接及三层成本比较，证据另行提交。
-首轮开发构建`gef-kvblock-build-dev`因两个新增文件的namespace/include遗漏失败，原日志保留。
-已修复，接续构建`gef-kvblock-build-dev2`通过；构建/相关测试已通过：`gef-kvblock-dev3`，冻结含工作修改的源码`/dev/shm/zlong-gef-block-dev-20261111`，
-快照身份`artifacts/kv-block-20261111/development-snapshot.json`。CPU构建（含native与standalone CPU），
-全部320可用CPU、512GiB/1800秒；日志/终态`artifacts/jobs/kvblock-dev3/`（首轮失败与dev2构建另保留）。
-三个开发unit均已终止，无活跃作业。这是开发构建，不是固定实现提交资格。旧fccompare四作业均为终态，原严格数值失败保持。
-Python局部及已有序列定向组48项通过；新增默认路径CPU FP64三种Read模式3项通过。
+实现 `5ff3ce2bfe72b4416814b750d5260f5c90038eca`；范围标记/诊断修正 `598b4fb5f487befe008f50afb1fe1e378504c417`。
+构建及主资格：`artifacts/kv-block-20261111/`，生命周期 `artifacts/jobs/kvblock-*/status.json`。
+CPU 三个定向组 370 通过/13 保留 xfail；一般组 173 通过/4 xfail/2 SDK 路径启动失败。
+真实 SDK 的 Settle FP32/FP64 补验通过（`kvblock-settle-supplement`），原失败保留。
+NPU 定向组 32 通过/1 xfail；Python/native 安装消费者三步及新进程恢复、SDK complete/outputs 恢复均通过。
+profile 构建 598b4fb 定向 12 项通过；第一轮宏变量重名编译失败保持原记录。
 
-## 接续与资源
+`gef-kvblock-measure-{cpu,npu}`、`gef-kvblock-threads` 均已终态 passed；不是严格数值通过。
+主计时 FC16 B8/L128/d128：auto/packed-v2/direct-FC 训练 CPU 5.835/11.601/1.390 秒，NPU 10.928/15.124/0.675 秒。
+块命中 Read16256/16384，Full8278/8344（CPU）；严格 FC16 FP32 投影失败仍在。
+小型 CPU FP64 FC4 独立公式值/梯度通过；NPU FP32 有限超差保持。
+主数据 `measure-cpu/`、`measure-npu-0/`、`measure-cpu32/`；后续审阅 profile、census 与资格证据。
 
-运行`git status --short --branch`、`python scripts/status.py`、`python scripts/check_upstream.py`。
-实现入口：`python/tidegraph/weighted/kv_block_{state,math,query}.py`、`block_attention.py`；
-集成入口：`packing.py`、`weighted/query_vjp.py`、`weighted/query_execution.py`及对应C++。
-独立根/续接检查沿用`test_kv_sequence_vjp`、`test_kv_prefix_roots`及新增块检查。
-前轮固定诊断见[evidence/fc-three-layer-comparison-20261111.md](evidence/fc-three-layer-comparison-20261111.md)。
+## 活动作业与下一步
 
-开发环境`artifacts/additive-work/env`，CANN9.2；旧native构建`artifacts/additive-work/build-native`
-只匹配旧生产源码；C++变更后须新固定源码构建。空闲CPU/内存/NPU授权保持；共享NPU需当前授权。
-长任务使用独立background.slice服务、固定输入、有限资源/时长、独立输出与持久记录。
-存储无已知阻塞；大写入前重新检查配额/磁盘/shm，若实质阻塞及时汇报。
+已完成 `gef-kvblock-triage`：固定 598b4fb，冻结 `/dev/shm/zlong-gef-block-26ab27d`，
+CPU80–111/ATen1、128GiB、600秒；`artifacts/kv-block-20261111/triage.sh` 是完整命令。
+将原 FP32 权重提升 FP64，保持 B8/L128 和 blocks 默认路径；Python/native 值/末状态和任务梯度均通过原严格阈值，梯度最大绝对差约1.8e-10。原FP32失败不改写。
+日志及终态 `artifacts/jobs/kvblock-triage/`；输出 `artifacts/kv-block-20261111/triage-promoted/`。
+查 `python scripts/status.py` 与 `systemctl --user show gef-kvblock-triage`；必要停止同名 unit。
 
-用户未跟踪文件`docs/tide-learning-lab-TL-REQ-004-handoff.md`、`docs/tide-learning-lab-TL-REQ-005-handoff.md`
-原样保留，不纳入本轮提交。TL-REQ-005未在本轮另行接纳，不混作已修复事项。
+native 后备预检小修与可重复诊断收集器准备提交；Python 诊断定向10项通过（包含3项配对/计时/失败隔离检查）。
+随后用该提交新固定源码构建native，并运行块/后备、选定返回、独立根与通用图定向；
+完成三层配对、profile、独立根/数值/恢复证据，更新 ROADMAP/契约/经验并提交推送。
+不把性能收益或作业终态改写成完整规模严格等价，也不把已定位开销说成已消除。
+
+资源：空闲 CPU/内存/NPU 可用，共享 NPU 未授权；重型构建和计时分开。
+账户153GiB/软300/硬800，文件系统约944GiB可用，shm约398GiB可用，没有存储阻塞。
+开发激活 `artifacts/kv-block-env.sh`；生产构建分别有固定身份，不能混用新源码与旧库。
+用户未跟踪 `docs/tide-learning-lab-TL-REQ-004-handoff.md`、`docs/tide-learning-lab-TL-REQ-005-handoff.md` 原样保留。
+
+Historical source IDs: python scripts/resolve_history_commit.py OLD_SHA; see docs/history-migration.md.

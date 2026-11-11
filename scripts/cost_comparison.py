@@ -23,6 +23,9 @@ def measured(rows):
 def dense(d):
     c = d['resolved']; row = measured(d['phases'])
     return dict(seconds=row['complete_wall_seconds'], batch=c['training']['batch'],
+        input_positions=row['tokens'], first_token_seconds=row.get('first_token_seconds'),
+        first_outputs=len(row['first_tokens']) if 'first_tokens' in row else None,
+        first_token_scope=row.get('ttft_scope'),
         length=c['training']['length'], mode=d['mode'], device=c['device'],
         threads=d['effective_threads'], dtype=c['core'].get('dtype', 'float32'),
         phases=row, work=row['work'], case=d['fc_shape'], client=c['core']['eager_implementation'],
@@ -30,12 +33,17 @@ def dense(d):
         scope=d['scope'], parameters=d['trainable_parameters'],
         source=d.get('foundation_source'), dirty=d.get('foundation_dirty'),
         precision=d['precision'], initial_parameters_sha256=d['initial_parameters_sha256'],
-        measured_parameters_sha256=d['measured_parameters_sha256'])
+        measured_parameters_sha256=d['measured_parameters_sha256'],
+        placement=c['core']['placement_preset'], schedule=d['prefill_schedule'],
+        observations=d['trace_records'], diagnostic_boundary=d['diagnostic_boundary'],
+        downstream=d['downstream'], downstream_archive_sha256=d['downstream_archive_sha256'],
+        resolved=c, affinity=d['affinity'], visibility=d['visibility'])
 
 
 def layer(d):
     c=d['config'];row=measured(d['observations'])
     return dict(seconds=row['seconds'],batch=c['batch'],length=c['length'],mode=c['mode'],
+        input_positions=c['batch']*c['length'],
         device=c['device'],threads=c['threads'],dtype=c['dtype'],phases=row['phases'],work=row['actual_work'],
         case=f"{c['family']}-chain-d{c['width']}-layers{c['depth']}-heads{c['heads']}",
         client=c['implementation'],baseline=c['implementation'],policy='auto',timing='phase',
@@ -63,10 +71,13 @@ def collect(manifest, directory):
         if d['execution']=='completed':
             row.update(adapter(d));seconds=row['seconds']
             if not math.isfinite(seconds) or seconds<=0:raise ValueError('invalid measured duration')
-            row['input_positions_per_second']=row['batch']*row['length']/seconds
-            if row['mode']=='inference':
-                row['first_return_seconds']=seconds
-                row['first_outputs_per_second']=row['batch']/seconds
+            row['input_positions_per_second']=row['input_positions']/seconds
+            if row.get('first_token_seconds') is not None:
+                # Complete cleanup/sync interval is not necessarily TTFT.
+                ttft=row['first_token_seconds']
+                if not math.isfinite(ttft) or ttft<=0:raise ValueError('invalid first-token duration')
+                if row.get('first_outputs') is not None:
+                    row['first_outputs_per_second']=row['first_outputs']/ttft
             # Throughput counts input positions, not every node/edge update.
         else:
             row['error']=d.get('error','incomplete execution')
@@ -83,14 +94,29 @@ def collect(manifest, directory):
             axes=('case','batch','length','mode','device','dtype','threads','timing')
             differences={k:[a[k],e[k]] for k in axes if a[k]!=e[k]}
             if differences:raise ValueError(f'incompatible measured axes: {differences}')
-            if relation=='same-function' and a['measured_parameters_sha256']!=e['measured_parameters_sha256']:
-                raise ValueError('same-function comparison requires identical starting parameters')
+            if relation in ('same-function','task-projection') and a['measured_parameters_sha256']!=e['measured_parameters_sha256']:
+                raise ValueError('same-function/task-projection comparison requires identical starting parameters')
             pair.update(state='cost_observed',seconds_delta=a['seconds']-e['seconds'],
                         candidate_over_reference=a['seconds']/e['seconds'],
                         equivalence='not_inferred_from_costs')
+            work=('candidate_events','selected_events','visited_edges','block_positions')
+            pair['work_count_differences']={k:[a['work'].get(k),e['work'].get(k)]
+                for k in work if a['work'].get(k)!=e['work'].get(k)}
+            pair['work_count_scope']='Equal counts do not establish event/support identity.'
+            ap=a['phases'].get('phases_seconds',a['phases'])
+            ep=e['phases'].get('phases_seconds',e['phases'])
+            if a['timing']=='phase' and e['timing']=='phase':
+                phases={k:ap[k]-ep[k] for k in ap.keys() & ep.keys()
+                        if isinstance(ap[k],(int,float)) and isinstance(ep[k],(int,float))}
+                pair['phase_seconds_delta']=phases
+                pair['unpaired_seconds_delta']=pair['seconds_delta']-sum(phases.values())
+            else:
+                pair['phase_delta_scope']='No device-phase subtraction from host-enqueue intervals.'
         pairs.append(pair)
+    from execution_diagnostics import attachments
     return dict(schema='tide-cost-review-v1',question=manifest['question'],records=list(result.values()),
                 comparisons=pairs,collector_sha256=digest(__file__),
+                diagnostics=attachments(manifest.get('diagnostics',[]),directory),
                 scope='Explicit finite comparisons. Timing, numerical, independent roots, hardware and recovery remain separate facts.')
 
 
