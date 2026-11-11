@@ -25,7 +25,8 @@
 | 配置身份、安装、计时分母、归档与失败复现 | [测量与证据](performance-lessons-evidence.md) |
 | 外部Transformer/MoE、真实模型入口及计时范围 | [外部模型对照](performance-lessons-external-models.md) |
 
-新近机制：[公共任务边界与卷积转置](performance-lessons-prefill.md#公共任务边界与卷积转置)、
+新近机制：[跨设备共享列伴随](performance-lessons-numerics.md#跨设备共享列的反向到达顺序)、
+[公共任务边界与卷积转置](performance-lessons-prefill.md#公共任务边界与卷积转置)、
 [区域列伴随与结构支持](performance-lessons-prefill.md#区域列伴随与结构支持)、
 [隐藏前缀bank与块伴随](performance-lessons-prefill.md#隐藏前缀bank与块伴随)、
 [外层批、状态块与实际算子](performance-lessons-prefill.md#从外层批到状态块和实际算子)、

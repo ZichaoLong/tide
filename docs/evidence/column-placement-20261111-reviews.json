@@ -1,0 +1,71 @@
+{
+  "schema": "tide-implementation-review-v1",
+  "source": "2ca0045828dd920effb0551a2dd079693e6cb74c",
+  "meaning": "Eight manually reviewed files/boundaries only; not whole repository, hardware or performance qualification.",
+  "files": [
+    {
+      "path": "python/tidegraph/weighted/column_placement.py",
+      "sha256": "9d763c57529fb2efd803cc4e9d202e8face5fded95e36046985e1e3262cffe6b",
+      "symbols": "*",
+      "reviewer": "root",
+      "scope": "Temporary Read parameters and actually consumed state fields; control/selection transfers, dtype and positive support.",
+      "evidence": "docs/evidence/column-placement-20261111.md"
+    },
+    {
+      "path": "python/tidegraph/weighted/column_sharing.py",
+      "sha256": "5a013cbb5d378a80c0a25e5f4ad3183a094e175f4a84def1289aec1c9a3f14c0",
+      "symbols": "*",
+      "reviewer": "root",
+      "scope": "All actual shared uses, ordered first-order adjoints, readonly views, None/zero and version guards.",
+      "evidence": "docs/evidence/column-placement-20261111.md"
+    },
+    {
+      "path": "python/tidegraph/weighted/settle_columns.py",
+      "sha256": "54f2e77697fd78d276638cd8b31e84da944b15a81229f5fc2dd34df3f22e79ed",
+      "symbols": "*",
+      "reviewer": "root",
+      "scope": "Independent region-order schedule, actual supports, aggregate identity cache, stable use slots, raw state and publication.",
+      "evidence": "docs/evidence/column-placement-20261111.md"
+    },
+    {
+      "path": "python/tidegraph/weighted/window_execution.py",
+      "sha256": "8b33284cdb4508b1661bc52dfa4555963dbc662fa695651a3c09f057965e15db",
+      "symbols": "*",
+      "reviewer": "root",
+      "scope": "Capability dispatch, placement identity, explicit records fallback and actual checkpoint conversion.",
+      "evidence": "docs/evidence/column-placement-20261111.md"
+    },
+    {
+      "path": "python/tidegraph/weighted/message_columns.py",
+      "sha256": "6fe9b86dbd4edb511e02d877ca34d9cc07876a55bb1193199f932af49f490f44",
+      "symbols": "*",
+      "reviewer": "root",
+      "scope": "Physical message existence, shared aggregation identity, zero branches and complete readout.",
+      "evidence": "docs/evidence/column-placement-20261111.md"
+    },
+    {
+      "path": "cpp/src/weighted_column_placement.cpp",
+      "sha256": "8edcf28f064d89264258b2768d292212de03565bd9d3677529711d0da9b91f4b",
+      "symbols": "*",
+      "reviewer": "root",
+      "scope": "Read-only temporary weights/state, field selection and scoring support rejection; manually reviewed, no C++ AST coverage claim.",
+      "evidence": "docs/evidence/column-placement-20261111.md"
+    },
+    {
+      "path": "cpp/src/weighted_settle_columns.cpp",
+      "sha256": "570dab640b2899eee6102110999b705d62d89560c5c78c566f73e6c3c1b29a97",
+      "symbols": "*",
+      "reviewer": "root",
+      "scope": "Independent native host schedule, typed state, regional placement, per-edge/port columns and complete finite checks; manually reviewed.",
+      "evidence": "docs/evidence/column-placement-20261111.md"
+    },
+    {
+      "path": "scripts/check_column_adjoint_order.py",
+      "sha256": "339d0c58d12721664eb970f7f1927633ff2cd2650d01cae0ade7d1ebb7bfb4cd",
+      "symbols": "*",
+      "reviewer": "root",
+      "scope": "One retained forward graph, independent VJP repetitions, explicit diagnostic thread policy, exact observations.",
+      "evidence": "docs/evidence/column-placement-20261111.md"
+    }
+  ]
+}

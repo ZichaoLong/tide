@@ -1,5 +1,7 @@
 # 历史验证与测量证据
 
+[张量窗口混合放置与有序共享伴随（2026-11-11）](column-placement-20261111.md)：540ccbd8/2ca00458固定CPU、NPU安装训练/恢复及SDK15项；Python KV mixed-a原精确恢复失败由局部共享使用归并修复。9项混合成本与主PyTorch FC16成本单列。
+
 [公共实验张量输入/loss与有限代表（2026-11-11）](experiment-columns-20261111.md)：b993f38固定133项、8安装消费者；18个宽/多节点训练成本、24层链三模式、约1B/9B四推理点。原scalar loss检查器失败、NPU三个精确恢复失败与规模未验范围分列。
 
 [卷积有序转置与精确恢复（2026-11-11）](column-tap-transpose-20261111.md)：8c72ca94固定74项、独立SDK；无全局deterministic的六个NPU组合各两个新进程精确恢复通过，四个安装消费者另列原deterministic=true测试策略。

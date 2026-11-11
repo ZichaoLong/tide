@@ -18,16 +18,19 @@ KV保持性能主线；区域分配是同等重要的完整边界，覆盖描述
 一直贯穿活动支持、Full、消息与下一阶段聚合。早期GDN/SSD小例用于检验接口，不转移FC主线。
 
 进行中：区域列实现及固定证据保持；[张量窗口接口](weighted-tensor-windows.md) 已形成
-Python/C++ KV 整链、Python 四循环/卷积与异构组合、实际消息列及 raw 恢复。默认 eager
+Python/C++ KV与四循环/卷积整链、异构组合、实际消息列及 raw 恢复。默认 eager
 新增直接 B×L/一般 Settle 端口输入，按能力分派并声明后备；现有事件消费者须显式迁移。
 [01cde3b固定整链资格与FC成本](evidence/tensor-windows-20261111.md)已完成；
 [9fa852c KV位置列](evidence/column-positions-20261111.md)的CPU/NPU安装训练与恢复亦通过。
 [native四循环/卷积typed列资格](evidence/recurrent-columns-20261111.md)已完成：CPU306通过/13原数值xfail，
 24个CPU/NPU安装消费者和standalone CPU实跑分别通过。
 公共实验内置输出任务已接入同一张量输入/loss边界，execution-v5与旧record身份分开；
-定向开发检查通过，正在固定源码资格及宽/多节点代表成本。
-split placement/resident、多设备和宽/多节点代表的本阶段证据仍未完成，
-不把已有一般执行器功能当作这些新路径已经迁移或优化。
+[b993f38固定资格及宽/多节点、1B/9B有限成本](evidence/experiment-columns-20261111.md)已完成；
+[卷积转置](evidence/column-tap-transpose-20261111.md)修复原NPU代表的精确恢复失败。
+[540ccbd8/2ca00458混合放置](evidence/column-placement-20261111.md)已固定验收CPU、NPU安装训练/恢复
+和SDK五记忆×三放置；Python共享Aggregate跨设备伴随的原恢复失败已局部修复。
+9个mixed成本点和PyTorch FC16新CPU/NPU成本已有证据。新列多payload设备/resident、FP16、
+旧异步/容量边界与完整源审阅仍待推进；不把旧一般执行器功能当作新路径已经迁移或优化。
 
 原计划的三类未完成工作继续：实现/数值/异步/容量限制，LH及core-3经验的实际迁移，
 可复用正确性/性能设施与架构导航。既有skills、独立基线、诊断收集器和KV块优化复用，不重做。
