@@ -118,7 +118,7 @@ class ExecutionSpec:
         columns_policy = (self.input_interface == "auto" and self.return_mode != "complete"
             and self.client != "libtorch" and self.placement != "resident" and self.schedule == "prefill"
             and self.prefill_schedule != "greedy" and self.query_execution in {"auto", "dense-v1"}
-            and self.packing != "scalar" and self.workers == 1 and not self.peer_devices)
+            and self.packing != "scalar" and self.workers == 1)
         if not columns_policy:
             requested.pop("input_interface")
         # Explicit greedy reproduces the pre-window execution identities.
@@ -152,7 +152,10 @@ class ExecutionSpec:
             effective["operator"] = "aten+device-control"
         if self.query_execution == "auto":
             effective["query_policy"] = "kv-block-v1+packed-v2+describe-batch-v2; independent capabilities, dtype/schedule fallback to legacy"
-            if self.placement == "resident" or self.schedule == "streaming" or self.packing == "scalar" or self.workers != 1 or self.dtype == "float16" or self.peer_devices:
+            # A record-query fallback is not a capability decision for the
+            # tensor-window interface. Its local kernels resolve independently.
+            if not columns_policy and (self.placement == "resident" or self.schedule == "streaming"
+                    or self.packing == "scalar" or self.workers != 1 or self.dtype == "float16" or self.peer_devices):
                 effective["query_execution"] = "legacy"
         body = dict(schema="tide-weighted-execution-v5" if columns_policy else
                     "tide-weighted-execution-v4" if selected_boundary else

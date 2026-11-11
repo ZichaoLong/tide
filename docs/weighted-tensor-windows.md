@@ -35,11 +35,16 @@ next_window = execute.run_positions(spec, later_values, start_position=L,
 安装实验CLI的内置 `weighted-output-square` 任务也采用该边界：`return_mode=outputs|metrics`
 且默认 `input_interface=auto` 时，符合能力的Settle执行直接创建共享来源列，按物理端口
 gather进入 `run_ports`，loss按各输出端口分别求 `sum((cG)^2)*scale`。
-不会先汇总多个端口再平方，也不在反向之前把输出拆成事件。所需CPU输出记录在反向结束后
+不会先汇总多个端口再平方，也不在反向之前把输出拆成事件。
+FP16内置loss与旧记录任务一致，在相乘之前将c和G提升至FP32，再平方归约，
+满足FP32-master优化器契约，避免先在half溢出后才cast。所需CPU输出记录在反向结束后
 从实际结果整列复制、无梯度解码；无逐行可求导copy。raw状态仍使用checkpoint v5精确恢复。
 `effective_input_interface`、`input_fallback_reason`及逐窗口 `effective_window_execution`记录实际选择。
 
 该新默认使用execution-v5身份；显式 `input_interface=records`可比较旧输入边界。
+半精度及多payload owner的新请求也保留auto窗口策略，由实际模块决定能力；
+不能把旧record查询算法的legacy后备提前当作窗口能力。其生效配置/fingerprint与旧记录不同，
+旧record锁仍按原接口复现；安装源码/二进制身份不同不能冒称同栈精确恢复。
 历史锁中省略此策略时保留record路径。完整事件观察、插件任务、一般PDG/非对齐TimedDAG
 或当前不支持的放置/模块仍使用原接口；插件即便只读outputs，也未默认声明张量输入/loss。
 显式完整诊断仍返回原事件根。成本对照必须检查实际接口，不能只根据 `prefill` 名称推断。

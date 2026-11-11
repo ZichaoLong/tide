@@ -76,6 +76,8 @@ Python/C++列调度按节点/区域分别解析位置。readout及内置loss可�
 `experiment/eager.py`按观察/模块能力选择，`planning/execution.py`固定execution-v5身份，
 `planning/materialize.py`把参数构造与旧事件输入构造分离。修改同步
 `test_experiment_columns`、`test_selected_boundary_execution`、历史身份和CLI新进程恢复。
+`planning/execution`区分窗口能力与record-query后备；half/peer的auto窗口不得提前变成显式legacy。
+内置half端口loss在乘法前提升FP32，独立公式与master SGD/恢复用例检查实际默认入口。
 插件/完整事件观察不自动改成列根；单纯调用新的局部核不证明上层消费者已迁移。
 
 隐藏KV查询块见[块接口契约](weighted-query-blocks.md)：`weighted/kv_block_*`与

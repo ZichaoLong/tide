@@ -66,8 +66,11 @@ class ColumnInputs:
 
 def loss(result, scale, *, training):
     # Sum each port's own (cG)^2, not a square of an aggregated readout.
-    terms = [(m.strength[:, None]*m.content).square().sum()*scale
-             for m in result.outputs.values() if len(m.rows)]
+    # Match the record task: promote half operands before the product/square,
+    # not after an overflowing or rounded half reduction.
+    fields = [(m.strength.float(), m.content.float()) if m.content.dtype == torch.float16
+              else (m.strength, m.content) for m in result.outputs.values() if len(m.rows)]
+    terms = [(strength[:, None]*content).square().sum()*scale for strength, content in fields]
     if not terms:
         if training:
             raise ValueError("task.objective: window produced no differentiable output")

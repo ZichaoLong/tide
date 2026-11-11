@@ -110,6 +110,50 @@ def test_per_port_square_does_not_square_a_combined_readout():
         torch.testing.assert_close(u, v)
 
 
+def test_half_port_loss_promotes_before_product_and_square():
+    from types import SimpleNamespace
+    from tidegraph.weighted.message_columns import MessageColumns
+    c = torch.tensor([2.], dtype=torch.float16, requires_grad=True)
+    x = torch.tensor([[300., -200.]], dtype=torch.float16, requires_grad=True)
+    m = MessageColumns(torch.tensor([0]), c, x)
+    value = loss(SimpleNamespace(outputs={0:m, 1:m}), .0001, training=True)
+    assert value.dtype == torch.float32
+    # Two physical ports, each (2*300)^2+(2*-200)^2; half would overflow.
+    torch.testing.assert_close(value, torch.tensor(104.))
+    dc, dx = torch.autograd.grad(value, (c,x))
+    torch.testing.assert_close(dc, torch.tensor([104.], dtype=torch.float16))
+    torch.testing.assert_close(dx, torch.tensor([[.48,-.32]], dtype=torch.float16))
+
+
+@pytest.mark.parametrize("family", ["kv", "ssd"])
+@pytest.mark.parametrize("client", ["pytorch", "python-native"])
+def test_half_default_task_independent_master_training_and_exact_next_window(family, client, tmp_path):
+    from test_weighted_precision import half_close
+    value = selected(family, client)
+    value["execution"].update(dtype="float16", scoring_dtype="float32")
+    resolved = resolve(value)
+    left, right = Eager(resolved, reference=True), Eager(resolved)
+    resumed = None
+    try:
+        assert right.manifest()["effective_input_interface"] == "tensor-window-v1"
+        for i in range(2):
+            a, x = left.step(i); b, y = right.step(i)
+            half_close(a,b)
+            assert x == pytest.approx(y, rel=2e-2, abs=1e-3)
+            half_close(left.decoded_state(), right.decoded_state())
+            half_close(left.training_state(), right.training_state())
+        right.save(tmp_path)
+        resumed = Eager(resolved, checkpoint=tmp_path)
+        a, x = right.step(2); b, y = resumed.step(2)
+        assert x == y
+        equivalent(a,b,atol=0,rtol=0)
+        equivalent(right.decoded_state(),resumed.decoded_state(),atol=0,rtol=0)
+        equivalent(right.training_state(),resumed.training_state(),atol=0,rtol=0)
+    finally:
+        left.close(); right.close()
+        if resumed is not None: resumed.close()
+
+
 def test_policy_has_new_identity_and_old_frozen_records_stay_records():
     now = ExecutionSpec(return_mode="outputs").record()
     old = ExecutionSpec(return_mode="outputs", input_interface="records").record()
@@ -121,6 +165,19 @@ def test_policy_has_new_identity_and_old_frozen_records_stay_records():
     assert ExecutionSpec.from_record(now).record() == now
     with pytest.raises(ValueError, match="input_interface"):
         ExecutionSpec(input_interface="invented")
+
+
+@pytest.mark.parametrize("extra", [dict(dtype="float16"),
+    dict(device="npu:0",peer_devices=("npu:0","npu:1"))])
+def test_column_policy_preserves_auto_for_half_and_multiple_owners(extra):
+    chosen = ExecutionSpec(return_mode="outputs", **extra).record()
+    assert chosen["schema"] == "tide-weighted-execution-v5"
+    assert chosen["effective"]["input_interface"] == "auto"
+    assert chosen["effective"]["query_execution"] == "auto"
+    old = ExecutionSpec(return_mode="outputs", input_interface="records", **extra).record()
+    assert old["effective"]["query_execution"] == "legacy"
+    assert ExecutionSpec.from_record(old).record() == old
+    assert old["execution_id"] != chosen["execution_id"]
 
 
 @pytest.mark.parametrize("change", ["records", "greedy", "complete", "feedback", "non-aligned"])
