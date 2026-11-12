@@ -33,6 +33,7 @@ def review(root):
             lens_readback_matches=projection.get('readback_matches')))
     return dict(schema='tide-direct-v9-observation-v1',observed_at=now(),
         campaign=read(root/'runs/v9-campaign/state.json'),jobs=jobs,training_stages=stages,
+        recovery_campaigns=[read(p) for p in sorted((root/'runs').glob('v9-recovery-*/state.json'))],
         scientific_review='awaiting; execution/numerical/discrete/recovery/learning remain separate',
         data=read(root/'runs/v9-data-r3/state.json'))
 
@@ -42,5 +43,6 @@ if __name__=='__main__':
     p.add_argument('--write',type=Path);a=p.parse_args();r=review(a.root)
     if a.write:write_review_json(a.write,r)
     print(json.dumps(dict(observed_at=r['observed_at'],campaign=r['campaign'].get('state'),data=r['data'],
+        recoveries=[{k:c.get(k) for k in ('state','controller_source','training_source','deadline_epoch','error')} for c in r['recovery_campaigns']],
         jobs=[{k:j[k] for k in ('id','state','physical_id','queue_status','termination_verified')} for j in r['jobs']],
         stages=[{k:s[k] for k in ('id','execution','tokens','final_validation_nll','error')} for s in r['training_stages']]),ensure_ascii=False,indent=2))

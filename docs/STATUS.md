@@ -1,18 +1,29 @@
-# 当前交接：v9主46完成；配额软告警误判导致4项中断，原批恢复准备中
+# 当前交接：v9主50完成/8运行；软配额误判已修正并恢复
 
-2026-11-12下午检查：原控制器15:19因quota返回1失败，四个worker受连带停止；
-主58条46完成、4中断、8未启动，筛选72及batch校准19完成。所有原服务/后代已退出。
-[故障与恢复](studies/direct-v9-recovery-20261112.md) · [15:43现场](evidence/direct-v9-status-20261112-pm.json)。
+2026-11-12 15:54北京时间附近：[下午汇报](studies/direct-v9-progress-20261112-pm.md) ·
+[逐轨迹/配置/恢复谱系](evidence/direct-v9-progress-20261112-pm.json) · [故障与恢复](studies/direct-v9-recovery-20261112.md)。
 
-用量约300GiB，刚超过软配额但处6天宽限，800GiB硬配额尚余约500GiB；本批约42GiB。
-这是查询处理错误，未触及原磁盘或时限边界。监控已修正并通过定向回归；
-将用新控制器身份恢复4条原checkpoint、首启8条原表候选，保持原训练源码6e7bd49e、
-配置/数据/optimizer和11月13日21:36:26截止。尚待提交及真实启动核对。
+19项batch校准、72项筛选完成；主58条50完成、8运行、0未启动。规模30条收齐，活动16完成/4运行，入口4完成/4运行。
+原控制器15:19因quota软告警返回1失败，停止4条训练。账号约300GiB仍在6天宽限，硬余量约499GiB，
+本批约44.4GiB。修正监控后，15:50新控制器与12worker实际启动；4条恢复越过原checkpoint，4条首启TF已完成。
+原控制器failed及四条budget_truncated保留，这是调度故障，不是学习失败或原预算耗尽。
 
-HB88 pooled/quad及HB184 quad已完成64M；R64 quad入口树、R32 Bern入口树完成16M。
-质量、活动、新运行与Lens的完整中期汇报将在恢复实际启动后补齐；confirmation/test尚未开启。
-AICore/AIVector/AICPU分析已交接[TL-REQ-006](requests/TL-REQ-006.md)，基座代码与训练源未改动。
-原CPU/NPU严格有限失败保持；外部中断的budget_truncated字段不解释为学习失败。
+新controller 1809009a，实际训练仍6e7bd49e；数学0770593、安装74e7bbd和配置/data/optimizer保持。
+活动物理卡1/11为R32h3 quad恢复，7/15为R64 Bern恢复，4/14为R32 quad入口，8/2为R64 Bern入口。
+均在background.slice；共同截止仍11月13日21:36:26，约余29h40m。条件延伸尚未启动，控制器按原条件推进。
+
+64M双seed：HB pooled40/88/184 NLL3.4179/3.2596/3.1433；quad3.4767/3.3518/3.2240，
+对应TF2.9978/2.9027/2.9457。浅宽50M HB3.0112仍好于深HB，但TF领先。FC16M匹配TF已齐，均优于当前FC。
+R64 q3入口树16M NLL4.8274、原入口4.7907；主体接收9.54%对16.48%，主体Full3.95%对3.34%，
+含边界全图Full5.22%。减少接收已成立，质量收益未见；仍物理稠密遮罩，独立confirmation/test未开。
+
+原严格数值失败及阈值保持，实际恢复推进不等于长轨迹独立精确重放。四条旧中断Lens已另存收尾证据，
+旧projection记录保留；新run前缀tl-v9-recover-main-，组名及私有入口不变。
+AICore/AIVector/AICPU分析已交接[TL-REQ-006](requests/TL-REQ-006.md)，基座与训练代码未接入新优化。
+
+只读：`python scripts/review_v9_progress.py`，`python scripts/job.py status artifacts/jobs/v9-recovery-controller`。
+旧`review_direct_v9.py`会同时显示原failed控制器与新recovery状态；不能只看原campaign字段。
+停止：`systemctl --user stop 'tide-lab-v9-*.service'`，随后核对后代。不得修改两套活动固定源码或配置。
 
 # 2026-11-11启动时交接（历史）
 

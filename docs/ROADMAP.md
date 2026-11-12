@@ -1,3 +1,5 @@
+当前v9于11月12日修正软配额告警误判并恢复同批，主50完成/8运行；后继仍按原有限条件和原截止推进。见[下午审阅](studies/direct-v9-progress-20261112-pm.md)。
+
 后继性能待办（2026-11-12）：对固定v9负载作短程kernel trace，分辨AICPU索引/反向、AIVector/归约、GEMM形状、遥测同步和optimizer；参见[中期证据](studies/direct-v9-interim-20261112.md)及已按用户授权交接基座的[TL-REQ-006](requests/TL-REQ-006.md)，待回复/交付和下游验收。另改进新批逐case动态领取，减少固定worker分片的尾部空闲；当前活动清单保持冻结。这些是后继定位事项，不是已证明热点或本次新增作业。
 
 当前执行依据为[v9有限执行表](studies/language-scale-activity-v9.md)，用户已授权启动。数据/容量/依赖深度、低活跃和入口树共同推进；允许稠密遮罩。执行状态见[STATUS](STATUS.md)，科学结论需独立审阅。以下历史的“未提交/待对齐”不再限制本批已授权工作。

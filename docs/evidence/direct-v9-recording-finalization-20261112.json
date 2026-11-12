@@ -1,0 +1,35 @@
+{
+  "observed_at": "2026-11-12T07:56:34.960900+00:00",
+  "records": [
+    {
+      "case_id": "r32-h3-q10-s11",
+      "destination_name": "tl-v9-main-r32-h3-q10-s11-projection-3b3a4a2260e9",
+      "readback_matches": true,
+      "receipt_sha256": "c11ccb43fd0526c03e1c921c04c57e5c8f7055a9707ad8a250615902fc613ced",
+      "status": "verified"
+    },
+    {
+      "case_id": "r32-h3-q10-s22",
+      "destination_name": "tl-v9-main-r32-h3-q10-s22-projection-c0d7a1c3a4a3",
+      "readback_matches": true,
+      "receipt_sha256": "5a3d4a7dd7da1b81a8ee06cd7f2e658cd12222de56cc946860f6b412d00472e8",
+      "status": "verified"
+    },
+    {
+      "case_id": "r64-h2-bern-s11",
+      "destination_name": "tl-v9-main-r64-h2-bern-s11-projection-4b7c53c925a9",
+      "readback_matches": true,
+      "receipt_sha256": "a395e3beb1381723aff1838fd8b7be12cf2f7a2082b87b1aa5d234bc0cf52701",
+      "status": "verified"
+    },
+    {
+      "case_id": "r64-h2-bern-s22",
+      "destination_name": "tl-v9-main-r64-h2-bern-s22-projection-07ca381abb38",
+      "readback_matches": true,
+      "receipt_sha256": "0a5603ecb0f839ec989bd1dc09727d979b6a88c5afebf374c3d7706e6e50985b",
+      "status": "verified"
+    }
+  ],
+  "schema": "tide-v9-recording-finalization-review-v1",
+  "scope": "Replay original completed JSONL into the existing authorized Lens instance; original interrupted runs and their old projection reports remain untouched. Private full receipts stay in .local/v9-recording-finalization-20261112."
+}

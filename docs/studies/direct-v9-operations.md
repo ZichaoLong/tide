@@ -1,5 +1,10 @@
 # v9操作与运行身份
 
+2026-11-12故障恢复补充：原controller保留failed（quota软告警误判），新`v9-recovery-controller`继续同批。
+`python scripts/review_v9_progress.py`按明确恢复谱系统计58条主轨迹；新run前缀`tl-v9-recover-main-`，
+条件延伸为`tl-v9-recover-extend-`，原study组不变。源码、预算及原失败见[恢复记录](direct-v9-recovery-20261112.md)。
+四条旧中断Lens已通过独立收尾收据核对，旧projection文件未改写；见[收尾证据](../evidence/direct-v9-recording-finalization-20261112.json)。
+
 本批表：[语言规模、活动、入口树](language-scale-activity-v9.md)。共同48h起止见
 `configs/studies/language/direct-v9/budget.json`；无累计算时上限，最多12个单卡worker。
 每个作业的`artifacts/jobs/v9-*/job.json`固定源码commit、输入SHA、环境和内存/时限。
