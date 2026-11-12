@@ -3,7 +3,9 @@
 #include "weighted_column_modules.h"
 namespace tide::weighted::columns {
 struct SourceRequest {Tensor content;std::vector<Tensor> parameters;double alpha,epsilon;};
+struct SourceBlocks {std::vector<Tensor> values;std::vector<Index> owners;};
 std::vector<Tensor> source_parameters(const NodeWeights&,Index label);
+SourceBlocks source_blocks(const std::vector<SourceRequest>&,Index max_workspace_bytes);
 std::vector<Tensor> source_columns(const std::vector<SourceRequest>&,Index max_workspace_bytes);
 // Exact numerical aliases receive stable use-order adjoints, including zeros.
 std::vector<Tensor> ordered_uses(const Tensor&,size_t count);

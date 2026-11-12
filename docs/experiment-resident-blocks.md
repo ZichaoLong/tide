@@ -45,6 +45,9 @@ role padding、数值 tape、allocator 和设备任务资源仍需实际 owner �
 输入一次交接 `positions[B,L]`、`payload[B,L,P,d+1]` 和独立 `present[B,L,P]`。
 最后位置在样例间一致；稀疏、错列和提前结束的端口使用缺席位，发生次数仍按每物理端口连续编号。
 使用与独立标量参考相同的 seeded FP32 输入材料；重复边/端口不会因为共享数值而合并身份。
+吞吐分母 `input_positions` 是存在至少一个物理输入的实际样本/位置数；
+`input_atoms` 计物理输入条数，`allocated_input_positions` 单列 B×L 矩形容量。
+计数在生成输入元数据时确定，不在每个训练步读取设备存在性。
 
 内置 loss 是逐物理输出的 `scale × Σ ‖cG‖²`，从 `output.strength/content` 两个字段直接求值，
 其显式 cotangent 为 `2 scale c ‖G‖²` 和 `2 scale c² G`。存在性掩码和连接零根分开保留。
@@ -79,4 +82,6 @@ CPU 输入与解码检查验证适配边界、独立公式及调用顺序，不�
 固定提交的安装 `tidegraph check` 仍需独立完整前向、参数根、训练和精确下一窗；
 公共设备组件、standalone 消费者、实验默认路径和 FC16 尺度分别记录证据。
 对应[a3c固定资格](evidence/resident-block-public-20261112.md)已有两种Memory的独立full检查、
-公共新进程及standalone训练archive实测；FC16/LH176容量拒绝没有有效规模吞吐或恢复结论。
+公共新进程及standalone训练archive实测；原FC16/LH176容量拒绝保留其失败身份。
+后继042ea369在原配置/原预算完成训练窗与换owner下一窗精确恢复；
+规模独立数学尚未检查，不能据此宣称严格等价吞吐。见[服务组合资格](evidence/resident-services-20261112.md)。

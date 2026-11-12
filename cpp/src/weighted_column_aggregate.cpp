@@ -45,10 +45,10 @@ std::vector<Received> aggregate_columns_many(const std::vector<AggregateRequest>
         slots.back().push_back(transforms.size());transforms.push_back({p->content,parameters,r.binding->aggregate_alpha,std::get<1>(k)});}}
     uses[found->second].push_back(i);
   }
-  auto transformed=source_columns(transforms,budget);std::vector<Received> result(requests.size());std::vector<AggregateTensorRequest> entries;
+  auto transformed=source_blocks(transforms,budget);std::vector<Received> result(requests.size());std::vector<AggregateTensorRequest> entries;
   for(size_t j=0;j<unique.size();++j){AggregateTensorRequest entry;std::set<Index> present;size_t k=0;
     for(const auto& [p,label]:requests[unique[j]].sources)if(!p->rows.empty()){
-      present.insert(p->rows.begin(),p->rows.end());entry.sources.push_back(p);entry.values.push_back(transformed[slots[j][k++]]);}
+      present.insert(p->rows.begin(),p->rows.end());entry.sources.push_back(p);entry.values.push_back(transformed.values[transformed.owners[slots[j][k++]]]);}
     entry.rows={present.begin(),present.end()};entries.push_back(std::move(entry));}
   auto assembled=aggregate_tensor_many(entries,budget,assemble);
   for(size_t j=0;j<unique.size();++j){auto value=std::move(assembled[j]);

@@ -34,13 +34,14 @@ def _restore(metadata, tensors):
 class _Grouped(torch.autograd.Function):
     @staticmethod
     def forward(ctx, template, packing, names, weights, placement, *inputs):
-        from .column_placement import region
+        from .column_placement import RegionParameterViews
         ctx.set_materialize_grads(False)
         ctx.packing, ctx.names, ctx.weights = packing, names, weights
         ctx.originals = len(inputs)
         parameters = [t.detach().requires_grad_(t.requires_grad) for t in inputs[:weights]]
         it = iter(parameters)
         program = rebind(template, lambda _: next(it))
+        placed = RegionParameterViews(program, placement[0])
         sources = {v: {} for v in packing.domains}
         for (v, name), tensor in zip(names, inputs[weights:]):
             sources[v][name] = tensor
@@ -50,7 +51,7 @@ class _Grouped(torch.autograd.Function):
             fields = {n: t.detach().requires_grad_(any(sources[v][n].requires_grad for v in group.participants))
                       for n, t in packed.fields.items()}
             with torch.enable_grad():
-                column = region(program, fields, packed.nodes, *placement)
+                column = placed(fields, packed.nodes, placement[1])
             register_private_graph("regional-groups", [column.controls])
             metadata, tape = _save(column)
             groups.append((tuple(fields), len(saved), metadata, column.dependencies()))
@@ -129,17 +130,17 @@ def region_groups(program, packing, fields, *, control, selection):
     separate record contract. No padded candidate or reference trace is used.
     Inference skips the retained private graph and custom backward boundary.
     """
-    from .column_placement import region
+    from .column_placement import RegionParameterViews
     if not packing.groups:
         return {}
     if (not torch.is_grad_enabled()
             or all(len(g.participants) == g.candidates for g in packing.groups)
             or not any(t.requires_grad for t in [*program.parameters(), *program.buffers(),
                        *(t for v in packing.domains for t in fields[v].values())])):
-        values = []
+        values, placed = [], RegionParameterViews(program, control)
         for group in packing.groups:
             p = group.pack(fields)
-            values.append(region(program, p.fields, p.nodes, control, selection).controls)
+            values.append(placed(p.fields, p.nodes, selection).controls)
         return packing.unpack(values)
     parameters = []
     def capture(value):

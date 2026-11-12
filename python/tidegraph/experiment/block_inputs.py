@@ -11,6 +11,8 @@ class BlockInputs:
         self.present = torch.zeros((batch, length, ports), dtype=torch.bool)
         for b, t, p, _ in coordinates(plan):
             self.present[b, t, p] = True
+        self.input_positions = int(self.present.any(-1).sum())
+        self.input_atoms = int(self.present.sum())
         phase = torch.arange(width)*.19
         # Same seeded material as materialize_inputs/ColumnInputs. Values repeat
         # across windows; only original logical positions and occurrences move.

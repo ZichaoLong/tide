@@ -70,27 +70,54 @@ Aggregate 分支处理，不引入源 transform 依赖。只声明一阶，保�
 
 ## 区域窗口的物理来源张量
 
-`aggregate_tensor.assemble_many`与独立C++ `weighted_aggregate_tensor`将同device/dtype/宽度的
-实际接收节点组成`[receiver,row,source,*field]`。来源变换先按完整参数槽和输入身份复用；
-各物理边/端口仍占一个source槽，源类别不去重原子。没有消息的槽只是内部padding，不构成候选；
-零强度的实际消息仍在其接收行域。按新的最大行数/来源数重新计算padding字节界，
-half、单一接收组和超出额外packing预算的组沿声明的已有单节点路径计算。
+默认列路径在来源变换后直接交接 `SourceBlocks`：唯一计算结果及 int64 的物理使用→所有者映射。
+Python `aggregate_layout.SourceIncidence`、独立 C++ `weighted_aggregate_layout`
+再以实际 strength/value Tensor 身份及完整行域建立来源 bank。相同值、SrcClass、底层
+data pointer 或仅相同参数均不许可合并；同一个数值所有者的重复边仍以整数重数参与。
+此处共享计算与存储，不改变私有状态或消息存在性。
 
-数值前向一次归约出总质量及内容均值；无梯度映射区负责ragged gather，外层不产生逐源
-IndexCopy/Stack反向链。独立输出质量/内容根使用中心化一阶公式，零总量内容无连接，
-显式零cotangent仍是连接，单来源的均值质量导数为连接零。全部原始版本受守卫。
-每个实际物理原子行只有一个packed位置，转置使用逆映射gather，无需对浮点伴随atomic scatter。
-不同原始参数/输入不因数值相等合并；真实重复输入由原始根接收全部使用者贡献。
+记接收者数为 G、唯一来源所有者数为 S、组内实际行域并集长度为 R。
+int64 关联矩阵 `C[G,S]` 保存物理重数；来源质量和内容只打包为 `m[S,R]`、
+`z[S,R,D]`，缺失行以独立映射标记。质量取正部之后，前向计算
 
-普通列根保持独立接收节点/字段，不把这一内部布局当作逐事件记录解码。
-checkpoint仍来自实际状态；本边界不改变图/checkpoint版本或区域分配函数。
-独立字面公式、方向导数、ragged/重复边、零总量、None/零、冻结、版本与预算检查见
-[`tests/test_aggregate_tensor.py`](../tests/test_aggregate_tensor.py)及独立C++
-[`weighted_aggregate_tensor.cpp`](../cpp/test/weighted_aggregate_tensor.cpp)
-（`tidegraph-aggregate-tensor-check` / CTest `weighted-aggregate-tensor`）；
-整链继续使用一般端口/非空初态及训练恢复检查。
-此处改变求和布局可能产生有限舍入，既有严格阈值不修改，设备执行和精确恢复单独验收。
+`M = C @ m`，`U = (C @ flatten(m*z)) / M`，
 
-`packing/bucket/aggregate_tensor`记录实际进入张量均值边界的组和接收节点数；
-精确相同接收绑定先复用，重复物理原子不从source轴删除。均值没有私有重放图，
-来源MLP和原始列/参数所有者仍有各自的反向边；该局部变化不宣称整个Aggregate只发射一个算子。
+其中零总量的内容为常量零；每个接收者只发布其真实行域。总量、内容各自保持独立根。
+不再复制或保存 `[receiver,row,physical-source,D]` 内容，也不先为每条物理使用创建
+Tensor 视图再把它们拼回来。来源 MLP 的真实唯一所有者仍各有自己的输入/参数根。
+
+转置沿同一来源 bank 和关联布局进行。内容伴随为
+`bar_z = m * Cᵀ @ (bar_U/M)`；质量输出的伴随为 `Cᵀ @ bar_M`。
+均值的质量项逐接收者以 `C[g,s] dot(bar_U[g], z[s]-U[g])/M[g]` 累加，
+每次仅保留一个 `[S,R,D]` 中心化临时块；不沿 B×L 循环，也不改用两个大商分别求导后相减。
+这种实现选择保留原中心化数值稳定性，反向仍有按接收者的阶段循环，不能据此宣称整个归约
+只有两次算子调用。某真实行只有一个来源所有者时（含该所有者的重复别名），其均值对质量
+严格不变，返回连接零；判定使用实际行存在性，不能把零质量的不同来源删掉。
+
+零总量内容无连接，显式零 cotangent 仍连接。未观察接收者不向无关来源制造零根；
+原始版本均受守卫，只声明一阶 VJP。浮点转置不使用冲突 atomic scatter：
+来源内容伴随用矩阵收缩，原始行恢复用唯一逆映射 gather。
+不同预算组之间仅在真正的组边界发布稳定顺序的共享使用根；组内按 int64 重数直接归并。
+半精度、单一接收者和超出额外 packing 预算的请求沿已有公式后备；不会截断原子或静默换 dtype。
+
+预算按唯一来源数、公共行域、输出、一个中心化临时块、伴随及 int64 索引/关联矩阵重新计算。
+ragged 并集可能比单接收者行域大，因此预算切分随真实表示改变；连续存储本身不是合批证据。
+当前预算规划对每个pending前缀重建来源布局：第g次扫描此前全部物理来源/行域，并构造
+g×S_g关联元数据；总主机工作为这些前缀成本之和，来源/行域扫描可达G²量级。
+S_g随g增长时，重复构造稠密关联还会放大成本。LH176每区域8节点限制了本代表的G，
+但更宽区域仍合法，不能据此声称宽组规划已优化。后继可缓存每条来源的身份/行域，
+增量计算准入尺寸，仅在最终组确定时构造一次关联；此次存储改造不将该待办冒充已实现。
+`packing/bucket/aggregate_tensor` 记录实际计算组和接收者数；
+`aggregate_source_bank` 记录该组实际唯一来源数，不把重数减少算作消息消失。
+矩阵求和和别名重数求值会改变浮点结合顺序，既有严格阈值不修改；有限差异、设备执行与
+精确恢复仍独立验收。此边界不更改图/checkpoint版本，checkpoint 解码仍来自实际状态。
+
+独立检查：
+[`test_aggregate_tensor`](../tests/test_aggregate_tensor.py)逐原子公式、ragged/重复边、
+None/零、冻结、原始版本和方向差分；
+[`test_aggregate_source_bank`](../tests/test_aggregate_source_bank.py)唯一 bank 实际保存形状、
+不同逻辑行域/相等独立根、来源投影、预算切分及大公共偏移的质量不变性。
+后者对敏感质量根使用精确存储输入值上的 FP64 字面商公式作为独立 oracle，不改变候选 dtype。
+独立 C++ [检查](../cpp/test/weighted_aggregate_tensor.cpp)
+（`tidegraph-aggregate-tensor-check` / CTest `weighted-aggregate-tensor`）
+分别验证来源所有权、int64 关联、完整字段和根。一般端口/非空初态、训练与恢复继续独立检查。

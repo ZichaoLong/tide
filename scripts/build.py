@@ -81,6 +81,7 @@ manifest = {"source": revision(root), "cpp_source_sha256": before, "torch": dist
                                         target / "tidegraph-weighted-binding-module-check", target / "tidegraph-column-check",
                                         target / "tidegraph-kv-tensor-check", target / "tidegraph-kv-tensor-prepare-check",
                                         target / "tidegraph-read-transport-check", target / "tidegraph-aggregate-tensor-check",
+                                        target / "tidegraph-region-transport-check",
                                         target / "tidegraph-column-checkpoint-check",
                                         target / "libtidegraph-weighted-binding-module.so") if p.is_file()}}
 write_json(target / "build-manifest.json", manifest)

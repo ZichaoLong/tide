@@ -33,6 +33,9 @@ class ColumnVjp final:public torch::autograd::Node {
     if(at::GradMode::is_enabled())throw std::invalid_argument("allocation columns support first-order exact-map VJP only");
     if(saved.empty())throw std::runtime_error("allocation column graph released; use retain_graph");
     variable_list x;for(auto& v:saved)x.push_back(v.unpack());
+    // A multi-output regional publication may leave this entire group unused.
+    // Check originals above, then preserve absent cotangents as absent roots.
+    if(!bars[0].defined())return variable_list(6);
     AllocationColumns a{x[6],x[7],x[8],x[9],x[10],x[11],{},kind,kind+"-exact-map-v1",alpha};
     std::copy_n(x.begin(),6,a.inputs.begin());
     auto result=allocation_columns_vjp(a,bars[0]);

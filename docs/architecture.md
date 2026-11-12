@@ -150,11 +150,14 @@ transpose 在 `column_attention` / `weighted_column_attention`；位置元数据
 `column_placement` / `weighted_column_placement`拥有Read/control/selection临时列视图，
 按消费者选择实际参数/字段，复用已有显式copy/VJP和通信策略。私有raw状态留在payload owner。
 `test_column_placement`检查独立标量放置、共享根、None/零、评分dtype和正支持cast拒绝。
-`aggregate_tensor` / `weighted_aggregate_tensor`拥有接收节点×行×物理来源的无梯度映射、
-一次均值与中心化转置；容量按整组padding计算。修改同步`test_aggregate_tensor`与独立C++检查，
+`aggregate_layout` / `weighted_aggregate_layout`拥有唯一source-owner×行的bank布局和
+接收者×来源的int64物理重数；`aggregate_tensor` / `weighted_aggregate_tensor`沿同一bank
+完成关联均值与中心化转置，不保存接收者展开的内容。容量包括公共行域与有界中心化暂存。
+修改同步`test_aggregate_tensor`、`test_aggregate_source_bank`与独立C++检查，
 再检查一般端口/共享/root/训练恢复；它不重新调用来源变换或参考调度。
 `column_aggregate` / `weighted_column_aggregate`收集每区域的有序物理来源，按实际Tensor根、
-行域和完整参数槽复用；`column_sources` / `weighted_column_sources`拥有相容分组和字节预算，
+行域和完整参数槽复用；`column_sources` / `weighted_column_sources`拥有相容分组、字节预算及
+`SourceBlocks`唯一计算所有者/物理使用索引；独立使用Tensor仅在显式投影边界发布，
 `weighted_column_source_ops`及Python `_Sources`拥有整MLP的显式多输出VJP。
 修改同步[来源契约](weighted-source-binding.md)、`test_column_sources/test_column_source_schedule`、
 standalone `check_source_groups`，以及相关混合owner训练/恢复。缓存不跨区域/窗口保存。

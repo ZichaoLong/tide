@@ -1,5 +1,6 @@
 #pragma once
-// Architecture §2: each source slot is a physical atom, irrespective of SrcClass.
+// Architecture §2: physical atoms map to source owners; multiplicity is int64
+// incidence. Equal values/classes never establish shared numerical identity.
 #include "weighted_column_sources.h"
 #include <functional>
 namespace tide::weighted::columns {

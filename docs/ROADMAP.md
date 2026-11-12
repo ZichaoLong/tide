@@ -1,249 +1,66 @@
 # 当前路线图与验收范围
 
-本页源码定位使用清理后的提交号；历史实测身份仍在原报告中，见[迁移与映射](history-migration.md)。
-
-数学固定`0770593838a37c790a568226930567ed60f99b83`的core-5与带权局部定义。
-[STATUS](STATUS.md)是唯一当前交接；[execution-flows](execution-flows.md)是持续契约。
-2026-10-31新阶段正式覆盖CPU/NPU/GPU有限矩阵、同模型多卡放置与人类CLI。允许有限浮点超差候选在显式探索模式继续成本观察；原严格失败/阈值保持。下表旧“停止扩大”指严格资格结论，不阻止本轮已授权的探索观察；非有限、非法配置、通信、求解器与容量错误仍失败。
-原始大文件的在线保留按[产物规则](artifact-retention.md)；退役后复查旧失败须重新生成材料。
-问题到代码、输入和证据的入口集中于[复现导航](reproduction.md)；下表仍是唯一状态与停止/重启条件。
-任务终态、相关资格通过和限制解除是不同结论。完成记录由Git与[证据索引](evidence/README.md)保存。
+数学固定 `0770593838a37c790a568226930567ed60f99b83` 的 core-5 和带权局部定义。
+[STATUS](STATUS.md)是唯一当前交接与作业表；本页只保留总体待办、当前判断和未解除限制。
+已完成阶段的配置、源码与测量在[证据索引](evidence/README.md)，不再复制历次会话汇报。
+历史实测保留原提交身份，定位见[迁移映射](history-migration.md)；复现从[reproduction](reproduction.md)进入。
 
 ## 当前计划：批量张量贯穿与架构验证（已授权实施）
 
-用户已确认[批量接口与模块替换](execution-flows.md#批量接口与模块替换)的总体约束，允许整体重写。
-2026-11-12继续授权完成P1—P6：先建立LH直接公式→公共张量接口→默认执行器同材料对照，
-把[TL-REQ-006固定请求](https://github.com/ZichaoLong/tide/blob/dc943cc7ce773e3dac4d62736ab524953573decb/docs/requests/TL-REQ-006.md)的HB/入口树真实负载并入有限诊断，
-再推进相容节点/区域张量贯穿；resident作为独立新执行器重写并逐层验收。
-已有实现按能力复用，旧接口不是架构约束；一般图、独立根、训练和精确续接仍是交付能力。
-最新授权明确允许整体移除旧源码后重写；当前选定边界是整组KV Read/Describe/Full张量计算，
-及resident按owner/角色分组矩阵。先落实真实数值数据流，旧columns/block只作为可替换的已有候选。
-下游固定6e7bd49e独立直接实现的计数器不作为当前基座回归；四代表短trace和无插桩计时
-分别记录更新子区间/完整步/作业成本，不恢复原学习轨迹。正式请求固定dc943cc7，报告89959587。
-节点/区域早期计时固定`a95b8987`；来源列后继成本为`00bb5ac2`，resident公共接入资格为`a3c4f62d`。
-各项资格按固定报告实际源码身份引用，静态审阅与设备测量不互相替代。
-KV保持性能主线；区域分配是同等重要的完整边界，覆盖描述/评分/证据、控制、各发送与求解/VJP，
-一直贯穿活动支持、Full、消息与下一阶段聚合。早期GDN/SSD小例用于检验接口，不转移FC主线。
+固定数学是锚点，代表性能测试牵引取舍，公共实验基座是定位。用户允许整体重写、
+替换旧接口并迁移消费者；旧源码、mixed-a/b/c名称和分层均不构成架构约束。
+[执行契约](execution-flows.md#批量接口与模块替换)保留一般图、可替换局部模块、
+完整观察/独立根、训练、精确续接与可解码状态；不要求每个数学函数对应一次调用或独立Tensor。
+CPU、主机混合与设备常驻分开验收；GPU按当前授权延后。
 
-进行中：区域列实现及固定证据保持；[张量窗口接口](weighted-tensor-windows.md) 已形成
-Python/C++ KV与四循环/卷积整链、异构组合、实际消息列及 raw 恢复。默认 eager
-新增直接 B×L/一般 Settle 端口输入，按能力分派并声明后备；现有事件消费者须显式迁移。
-[01cde3b固定整链资格与FC成本](evidence/tensor-windows-20261111.md)已完成；
-[9fa852c KV位置列](evidence/column-positions-20261111.md)的CPU/NPU安装训练与恢复亦通过。
-[native四循环/卷积typed列资格](evidence/recurrent-columns-20261111.md)已完成：CPU306通过/13原数值xfail，
-24个CPU/NPU安装消费者和standalone CPU实跑分别通过。
-公共实验内置输出任务已接入同一张量输入/loss边界；execution-v6引入列策略，execution-v7新增resident静态选择，旧record身份分开，旧v5需显式迁移；
-[b993f38固定资格及宽/多节点、1B/9B有限成本](evidence/experiment-columns-20261111.md)已完成；
-[卷积转置](evidence/column-tap-transpose-20261111.md)修复原NPU代表的精确恢复失败。
-[540ccbd8/2ca00458混合放置](evidence/column-placement-20261111.md)已固定验收CPU、NPU安装训练/恢复
-和SDK五记忆×三放置；Python共享Aggregate跨设备伴随的原恢复失败已局部修复。
-9个mixed成本点和PyTorch FC16新CPU/NPU成本已有证据。
-[796baafa/efc2776b多payload owner](evidence/column-owners-20261111.md)已实现完整区域汇集、
-整列消息传输和跨owner输出；固定CPU243通过/13原数值xfail，独立SDK CPU通过。
-两次原NPU准入超时保持；后继5959bbc3已取得新真机结果，见[FP16与跨owner后继](evidence/column-half-20261111.md)。
-单NPU half五记忆/位置独立根、三步master与恢复，以及CPU/NPU八安装消费者通过；
-双owner默认主机队列仍在反向EE1017；显式launch blocking原资格保持。后继TASK_QUEUE_ENABLE=1/PER_STREAM_QUEUE=1的非阻塞列整链已通过，见[55a资格](evidence/query-lifecycle-20261112.md)，不能改写默认队列失败。
-ce50a2a5独立SDK新构建的CPU、单NPU普通异步及双NPU显式同步各16项half通过；原SDK入口拒绝保留。
-实验配置已让half/peer的auto窗口按实际能力分派，half端口loss在乘法前提升FP32。
-旧record KV sum两项FP32 evidence梯度在796baafa和5959bbc3均差1.535518e-6，原严格失败保留。
-[resident共享矩阵与服务资格](evidence/resident-shared-bank-20261112.md)已完成有限实施：
-3e926ede单bank投影/块伴随解除原局部复制与保守矩阵预留，小型独立公式/全图/训练/恢复通过；
-e12aec0c父子服务停止的6项SDK和10项安装检查通过。原预算SSD训练/精确恢复通过，
-FC16仍在warmup报EE1019/507002，无吞吐或恢复结论；原失败和新增见证错误分别保留。
-同候选停止重复。后继独立block owner已完成[公共接入与小图资格](evidence/resident-block-public-20261112.md)：
-KV sum/qry、单NPU FP32、B×L输入/根、完整Model与schema2 archive；Python-owned、SDK、
-公共实验及新进程恢复分别通过。原预算FC16在qry保守预留拒绝，LH176在optimizer/8的layout子预算拒绝，
-均没有有效规模吞吐/恢复。后继需角色分组矩阵、共享历史及对应真实容量模型；不只增加预算或改守卫常数。
-普通异步按主机队列配置分列，全仓未审范围保持。旧一般执行器功能不能冒充新路径已迁移。
-新增hash绑定21文件审阅与早前有重叠；自动2157文件清单不等于全仓已审。
-
-[节点/区域后继](evidence/node-region-batching-20261112.md)已采用prepare_many、真实候选数分组和
-有界unit检查，并补LH176独立公式/实际列尺度检查。跨节点Read/Full、Describe和有界共同原点RoPE已在55a/fb83后继实现，
-[独立根及LH生命周期](evidence/query-lifecycle-20261112.md)已补；fb83相关CPU281通过/9原xfail、
-Python-owned与SDK新构建通过；[42点LH/FC/1B成本](evidence/rope-performance-20261112.md)、
-[安装/异步资格](evidence/rope-qualification-20261112.md)及[静态循环审阅](evidence/lh-static-structure-20261112.md)已审阅。
-00bb5ac2来源变换合批与完整参数槽精确复用的[22点成本/四安装生命周期](evidence/source-columns-performance-20261112.md)已完成；
-LH176默认native训练CPU1/NPU-host2为2.3187/5.1350秒，直接公式0.7568/0.6238秒，主要差距仍在公共列层。
-[静态数据流审阅](evidence/lh-block-static-20261112.md)区分columns的精确Q/K尺寸分组/逐节点小操作与
-resident逐行矩阵、逐帧raw、重复历史投影和单block串行循环；resident owner/bank GEMM及主机KV整组数值边界已开始实施；固定源码资格与规模结果未取得，不能关闭P5。
-55f8c631独立直接公式修复完整有序参数角色识别，22项CPU开发检查通过，无低秩旧LH材料不受影响。
-[REQ006机制调查](evidence/req006-diagnostics-20261112.md)与
-[常量重载/初态配对](evidence/req006-floor-20261112.md)分开保留严格失败、算子成本及下游职责；
-尚未做四代表生产替换或下游验收。共享许可按当前对话复用，不变成新会话的默认准入。
-
-[6011d599整组KV固定资格与44点成本](evidence/tensor-kernels-20261112.md)已取得：
-8安装生命周期通过；FC16默认native NPU训练0.3636秒，LH176仍有公共层差距。
-CPU4个旧指标断言失败与9原数值xfail保留；resident9组件通过，完整消息块录入EE1019。
-[1f0e6e43后继固定资格](evidence/region-tensor-20261112.md)：C++整组写入、共享Read传输和区域均值已验，
-CPU304通过/9原xfail、12安装训练/恢复与SDK五记忆×三放置通过。38点成本中FC16/LH176默认native NPU训练
-.2856/2.8407秒；LH直接.6121秒，剩余差距未闭合。38文件静态审阅确认来源payload仍按接收者复制，
-KV阶段仍发布节点字段后重装配。下一主机边界是source-owner/region-window typed上下文，不继续把旧均值/写入图当根因。
-resident9局部及实际optimizer通过，但原消息组合仍录入EE1019：14投影、140容量body，失败前929条vendor操作。
-依赖flow/owner/规模未运行；本候选停止重测，后继删除容量树、使用单一tile计算体并检查跨tile dW；
-更大flow的有界program组合和共享历史/逐帧raw仍是独立未完成边界，不以局部通过替代。
-
-原计划的三类未完成工作继续：实现/数值/异步/容量限制，LH及core-3经验的实际迁移，
-可复用正确性/性能设施与架构导航。既有skills、独立基线、诊断收集器和KV块优化复用，不重做。
-已知的批量输出拆行→区域重组→反向行回填是源码审阅发现；既有profile支持其结构成本，
-不把观察算作新实现或各项剩余耗时的完整因果归因。
-具名入口为[查询块](../cpp/src/weighted_kv_block_vjp.cpp)、[区域VJP](../cpp/src/weighted_region_vjp.cpp)、
-[行列装配](../cpp/src/weighted_private_rows.h)和[消息交付](../cpp/src/delivery.cpp)；其余调用关系见[架构导航](architecture.md)。
-
-| 阶段 | 工作与继承的未完成项 | 交付/判断依据 |
+| 阶段 | 已有基础 | 仍须完成与验收依据 |
 | --- | --- | --- |
-| P1 具体契约与审阅 | 沿Aggregate→记忆/Describe→区域→Full→路由/输出及反向审阅生产者/消费者；定义张量列、ragged布局、参数/状态所有权、观察根、容量和异步寿命。KV与至少一个GDN/SSD小例及混合区域检验私有状态不同。区域字段/算法按实际语义分组，不强行统一形状/求解器。补现有仓库skills的具体模式和检查项 | 可实施的输入输出/VJP/解码契约、迁移清单、独立反例和需改符号；不再要求新计算迁就旧逐事件接口 |
-| P2 加法对照与紧凑实现 | FC/Transformer与KV/SSD基线保持；LH已补三层三模式及176节点raw/支持/任务VJP。55a已补非空左态七观察族、176节点三AdamW及CPU/NPU两个安装客户端新进程精确恢复；数值投影与完整连接资格分列，不能互相替代。区域张量公式/VJP锚点与Attention算子能力分别维护 | 同材料、同观察/计时范围的直接公式→公共块接口→小组合成本；LH CPU FP64数值投影通过，CPU/NPU FP32有限超差和36个None/零连接差异按声明范围保留；Transformer不作等价oracle |
-| P3 默认FC整链贯穿 | 以KV为首要候选，区域描述/控制/求解/VJP同步改造；消息及支持以批量数据进入下游，消除边界的强制拆行重拼。配置/能力按块分派，检查与optimizer纳入完整路径；保留一般图合法推进与声明观察能力，必要时迁移API/codec | FC4/FC16的CPU与NPU mixed-c三模式、阶段差额、图/算子/内存、训练与恢复；小型PDG反馈、非对齐TimedDAG、一般Settle端口、重复边/共享/None零等定向检查；Python/native与standalone实际接入。FC为第一个整链汇报点，不以局部提速代替架构验收 |
-| P4 有限候选与组合扩展 | 将当前五记忆/固定时间短卷积，以及评分/证据/key、十种发送与适用正则接入新块契约。区域的总量/阈值/受约束求解、Attention份额、比例、硬选择和小数零温发送分别保留实际支持与声明反向；优先打通功能，重性能按实测排序 | 每个候选有可用实现，合法组合可配置；逐项及有判别力的小组合覆盖，无需穷举。不同私有形状不逼迫逐行返回，不同分配语义不偷换同一Top-k；KV位置/过期/sum等域与循环序列VJP分别记录 |
-| P5 代表规模与执行路径 | 00bb来源列22点成本与四安装生命周期已固定，LH主要公共层差距未闭合。resident公共Model、独立根、sum/qry、三步optimizer/跨窗/新进程和实验默认接入已验；FC16/LH176均容量拒绝。下一边界：columns相容尺寸分桶及小算术合批，resident角色分组GEMM、共享initial/write bank、快照索引与块伴随；精确容量模型跟随实际表示 | [a3c资格及拒绝公式](evidence/resident-block-public-20261112.md)与[静态形状/循环](evidence/lh-block-static-20261112.md)分别记录。不得只放宽守卫或把接口接通当尺度通过；旧FC16 EE1019、默认双卡EE1017、half/循环记忆/多设备新block与GPU待验保持。显式per-stream一般图六格四步恢复已通过；共享成本不外推9B或其他放置 |
-| P6 治理、交付与持续复用 | 语义/架构/复现/能力导航已连接最新公共接入、22点成本及静态审阅；skill同时包含加法、减法和展开循环/形状/复制/伴随分析。55a实际24源码及本轮hash绑定43文件不累计重复覆盖；补接口更换、实际路径/配置身份和恢复演练 | 固定实现先提交，资格及证据独立记录；新线程可从Git重建输入，不依赖旧raw。当前交接只在STATUS、剩余工作只在本页；全仓未审及后继架构改造仍未完成 |
+| P1 契约与审阅 | [张量窗口](weighted-tensor-windows.md)、typed KV/循环状态、区域列、真实消息/独立根及迁移契约已在公共入口使用；[固定边界审阅](evidence/p1p6-boundary-review-20261112.md)、[静态循环/形状审阅](evidence/lh-block-static-20261112.md)与后继hash记录分列 | 沿Aggregate→状态/Read/Describe→区域→Full→消息及伴随确认真正贯穿；全仓逐文件/逐函数审阅未完成。inventory不是审阅，重叠文件不累计覆盖 |
+| P2 加法对照 | FC/数学不等价Transformer、KV/SSD与LH已有独立公式→公共张量接口→默认执行器三层；三模式、完整返回投影和独立梯度根分别记录 | 后继以同材料复测被修改的边界，解释主要差距。LH FP64数值投影通过不等于完整根资格；原FP32有限超差及36个None/零差异保留。直接公式不是绝对性能上限 |
+| P3 默认FC整链 | Python/native及standalone公共B×L窗口、区域分配、消息、输出任务/训练/raw恢复已接通；[最近固定资格与成本](evidence/region-tensor-20261112.md) | 继续移除来源payload按接收者复制、KV阶段字段发布再重装配及实际跨设备重复。保留小型反馈PDG、非对齐TimedDAG、一般Settle端口、重复边/共享/None零；FC单点不代替全域验收 |
+| P4 有限模块候选 | 五记忆/原始时间短卷积、十种发送与适用评分/evidence/key/正则已接入主机张量列；[循环资格](evidence/recurrent-columns-20261111.md)、[half资格](evidence/column-half-20261111.md)、[放置资格](evidence/column-placement-20261111.md)分列 | 保持逐候选与有判别力的小组合，不穷举。正支持补值策略仍经记录后备；新resident块的half/循环记忆/多owner尚未接齐。旧一般执行器能力不能冒称新块实现 |
+| P5 规模与执行路径 | 主机LH176/FC/1B/9B有有限成本；新resident独立Model、KV sum/qry、小图三步/跨窗/新进程恢复已有[a3c资格](evidence/resident-block-public-20261112.md) | LH公共层差距仍明显，优先source-owner/region-window上下文。resident固定tile已越过原消息录入拒绝，完整flow后继有界program组合待真机；原预算FC16/LH176及共享历史/raw布局仍须闭环。多卡/普通异步和GPU按下表独立处理 |
+| P6 治理与交付 | 配置/代码/数学/测试/证据/复现已有导航；skills保留加法、减法、静态循环/形状/复制/伴随分析 | 随每次边界重写更新符号/契约、固定资格、安装消费与精确恢复。清理陈旧交接叙述，保留可直接重建的输入与命令；不以文档链接检查宣布全仓治理完成 |
+
+### 下一实现边界
+
+- **主机来源与区域窗口**：[1f0e6e43审阅](evidence/region-tensor-20261112.md)确认整组KV写入和中心化Aggregate VJP已经落实，不能继续把旧逐源图当根因。下一表示保留唯一实际来源块与物理incidence，再连接区域/Full；参数共享、计算共享和私有状态分别处理。mixed预设只在配置入口展开，实际设备边界才传输；区域参数视图和操作数别名应在调用级复用。
+- **resident程序资源**：41c42759用设备bank/tile游标复用一个矩阵体，替代容量树；CPU与消息/选择/序列真机已过，完整flow录入反向仍507002。042ea369把区域前后向交给设备通知调用的有界program；其构建、真机、训练/恢复与原预算规模逐层验收，不从开发检查外推。独立FP64投影oracle保留原阈值，旧FP32参考自身累加超差单列。
+- **resident历史布局**：当前每帧old/proposal raw和Read历史重投影仍在。需要共享initial/write bank、快照索引及块伴随，保留三种Read、独立raw根、过期/原始int64时间与精确checkpoint；不是只放宽容量守卫。
+- **循环候选与广泛审阅**：SSD层链仍有默认/公式差距；按实际调用与有状态锚点继续审阅，不把KV优化自动当循环模块已优化。全仓未审范围由固定清单/hash记录，审阅发现机会不要求无限实施。
 
 ### 测量、阶段边界与有限停止
 
-- 小检查优先独立公式/调度、字段与共享梯度、非空左态及精确下一窗。布局变更检查外层/私有图、连接边、反向执行和保存存储，不能仅计一个Function或一次外层调用。
-- FC主尺度沿用B8/L128/d128/H2/FFN512及原配置；小型profile/反例单列，不按比例外推。无梯度推理、含grad前向、完整训练分开；TTFT实际测量，吞吐按真实输入位置换算。完整成本含准备、路由、packing、反向、optimizer及同步。
-- 配对尽量固定同一设备、参数、输入、执行/精度与CPU池；若不同必须显式标记。小耗时测量可有限重复，大规模仅在阶段边界或新证据下执行；不恢复旧实验矩阵。
-- 各阶段记录与紧凑基线的增量和明确保留/替换理由；未解释的主要差距仍属未完成。有限调查没有闭合时交付具体证据、候选和下一边界，不无限重复同一局部优化，也不凭局部收益宣布总体完成。
-- 原FP32严格失败及旧异步/容量失败保持身份；舍入按有界首差/高精度诊断继续独立工作，非有限、控制/依赖错误、求解/通信和精确恢复失败分别处理。
-- 可用CPU/内存和空闲NPU按实际收益并行分配；共享NPU须当前授权。正式计时避免项目自身争用；大写入前查容量，可用有界shm暂存，存储确实阻塞则及时汇报。长任务固定源码、独立background.slice和有限预算。
-- 本表是已授权计划；设计原则和进行中的实现不等于全部能力已完成。实际任务状态、下一个动作和活跃作业只见STATUS。
-
-## 已完成：KV块接口与重复诊断
-
-[实现及固定证据](evidence/kv-query-blocks-20261111.md)：5ff3ce2交付隐藏KV前缀bank、
-Read/Full查询块与块级伴随，Python/native默认能力分派；公开末状态、独立根和一般后备保持。
-598b4fb计时/范围标记；206bc9b后备借用预检、重复诊断配对与profile/JUnit/终态附件。
-CPU/NPU小图独立根、三客户端多步训练/新进程恢复与实际设备构建分列通过，原启动失败保留。
-同轮FC16默认/packed-v2训练CPU5.835/11.601秒、NPU10.928/15.124秒；直接FC仍1.390/0.675秒。
-99.2%的Read/Full实际命中块，B2/L32含私有图节点18909→10163；性能差距尚未闭合。
-原FC16 FP32任务投影严格失败保留；同FP32材料提升FP64后值/末状态及任务梯度通过。
-这不代替完整尺度全部根、多步optimizer、支持轨迹、下游学习验收或其他设备/规模资格。
-
-该有限实施已结束；后继由页首P1—P6计划整合，区域列VJP只是整条批量接口的一部分。
-NPU区域求解范围约0.178秒，region nested-grad约2.108秒，不把剩余差距笼统归给优化求解器。
-这些是原实现的主机范围计时，非新实现结果或精确设备归因。当前任务状态仅在STATUS。
-
-### 前置三层调查已完成
-
-2026-11-11授权调查的[固定结果](evidence/fc-three-layer-comparison-20261111.md)已补齐FC4/FC16三模式、
-对应阶段差额、私有根省略、CPU/NPU实际算子及同材料数值诊断。默认/直接FC16训练成本比CPU8.78、
-NPU22.18；去掉包装仅部分改善，主要待设计边界为状态bank—Read/Full块—块伴随汇总。
-直接FC自身仍有按B循环、小投影及算子能力成本；4D SDPA未获得NPU融合Attention。
-完整FP32任务投影严格失败，同材料FP64值/控制/支持/终态通过、两梯度字段各1坐标仍严格失败；
-该有界数值诊断不扩大为任意模型安全结论，也不阻塞后续独立设计。未新增完整训练轨迹资格。
-该前置调查未改生产计算或采用省略根变体；其后的查询块实施已见上节，新推进顺序以页首计划为准。
-CPU/NPU并行、复用环境和有界shm解决了本轮存储安排，没有发生磁盘阻塞。终态及接续仅见STATUS。
-
-## 上轮有限实施：已完成
-
-
-加法基线→公共批量接口→默认调度的本轮实现/资格/有限成本已完成，见
-[固定资格](evidence/additive-interface-qualification-20261110.md)与
-[三层成本](evidence/additive-interface-performance-20261110.md)。数学和通用后备不变。
-采用FC/KV/SSD非零raw左态/共享/训练/恢复投影基线、默认KV Full共享bank矩阵，
-修复resident首次借用局部计费。原严格数值失败和原启动/见证失败保留，成功补验独立记录。
-CPU/NPU/三客户端小型训练与恢复、12个代表训练/精确下一窗及NPU约1B推理/精确下一窗
-分别有证据；不把投影基线、完整记录、独立根或规模成本混作一种资格。
-
-FC16完整训练CPU1/NPU为12.283/15.511秒，首token2.737/4.055秒；NPU完整训练未改善。
-局部前向收益、独立快照反向负结果和默认入口与直接公式的明显差距均保留。
-本轮有限问题已有结果，不继续重复同候选或自动扩大硬件/组合矩阵。按用户要求先汇报对齐。
-
-| 后继项 | 当前边界与重新实施依据 |
-| --- | --- |
-| Read/Full块内伴随及接口 | 已按顶部5ff3ce2/598b4fb证据采用隐藏bank块伴随；公开末态和trace后备保留。query仍有列/根装配成本，原适用域不自动扩至位置/过期/FP16。下一具名边界是区域/消息/发布列贯穿，按新的独立局部见证与全链成本决定，不原样重复同候选 |
-| 循环序列VJP/卷积与状态装配 | SSD层链仍有明显默认/公式差距。采用显式原始时间的有状态锚点；后继按实际profile选择边界，保留Full/Read快照、None/零与精确恢复 |
-| resident单bank投影和原规模资源问题 | 单bank整块GEMM/VJP、组合预留及独立存储见证已在3e926ede通过；e12aec0c服务停止小图通过，原SSD训练/恢复通过，但FC16仍EE1019。局部矩阵方案采用，父子停止不能称为规模修复；有界提交/服务复用或阶段合批须先有新独立见证，不重复同候选或加预算 |
-| 新基线设备资格与完整规模正确性 | 本轮FC16完整任务投影已检查，FP32严格失败与FP64两字段残差保持；CPU完整控制支持/int64一致，NPU同计数不认证逐事件支持。原非零左态/投影恢复与设备小图资格保持原范围。完整尺度的all-root、多步optimizer/精确恢复/学习及其他代表尺度未新增，后继按接口变化选择定向检查 |
-| 部署/吞吐后继 | 本轮没有新9B、多卡、mixed-a/b或resident吞吐；GPU继续延后。沿用历史证据原身份，有影响这些路径的新方案或实际下游请求才选有限重验 |
-| 广泛源码审阅 | 既有具名审阅及e12aec0c的21文件后继覆盖不等于全仓逐函数已审完；使用固定清单和hash绑定记录真实覆盖，重叠不累计，C++未提取符号不计逐函数自动覆盖，不因列出机会强制无限实施 |
-
-## 本轮已交付
-
-1. 已交付构建资源入口（2ccae1a）：默认全部可用CPU，可选half/正整数；测试资源与性能线程独立声明。
-2. 公共planning与配置默认展开、模型/工作负载/执行/测量身份、公共eager分派已实现并定向检查；固定CPU资格1709b13/336通过。保持旧材料可复现。
-3. core-5 FC/HB/LH启发拓扑、自然维度与约1B/8B/16B生成器、有限目录/运行/查询已交付；[固定设施资格](evidence/core5-study-clients-20261029.md)与[自然规模测量](evidence/core5-natural-study-20261029.md)分列。
-4. 三客户端精度/线程/packing/peer、standalone mixed和resident实际梯度/SGD/master/磁盘恢复已验；372 CPU365，878a5a4相关CPU43、CPU6/NPU8消费者、Python NPU3配置。旧24个recipe完整训练包含于前述检查，不重复累计；其中FC单层/混合退化范围已在原报告更正。
-5. 25个有限配置中7项完整通过：两种中型FC×三个CPU FP64客户端及LH约1.051B CPU FP64。区域批B4实际生效，另有独立NPU profile；FP32/资源失败不作吞吐，8B/16B仅静态计划。
-6. [导航与修改维护映射](core5-study.md)、可直接查询仓库审阅证据的入口已交付；LH/core-3与本轮经验集中于[performance-lessons](performance-lessons.md)。
-7. [显式native checkpoint预算](evidence/core5-checkpoint-budget-20261029.md)已交付并相关资格通过：默认4GiB保留，5.25GB实际文件保存/加载成功；该1B后续窗口非有限梯度另列，未通过完整续接。
-
-8. [实际覆盖与导航修正](evidence/core5-coverage-correction-20261030.md)：f456160相关73项通过，含26个真实配置×PyTorch/native的52项CPU FP64训练/恢复；自动配置事实与逐配置正确性/性能索引已交付，旧性能和设备边界不变。
-
-9. [多实验仓库协作与安装消费者](evidence/downstream-contract-20261030.md)：e17f9ea交付依赖锁、请求/交付/验收及AGENTS模板；4项单元、8组CPU安装/独立训练/新进程精确恢复、4项CLI拒绝通过。下游自行验收再升级；workers2原失败另列。
-
-10. [CANN9.2日常入口迁移](evidence/cann92-project-migration-20261106.md)：版本隔离venv、基线身份拒绝、独立SDK前缀构建及安装入口完成；9df0ecf真实构建，60e1975补同配置新进程恢复。三客户端CPU/NPU小型完整推理/声明训练/恢复通过，独立综合根失败保留如下；不重跑历史性能或公开权重。
-
-11. [TL-REQ-003正支持数值模式](evidence/positive-support-tl-req-003-20261109.md)：2c11695实现，2502fa4/b4879ff补测与资格脚本；显式Shannon最小次正规数存储、稳定Aggregate/KV及未补值响应VJP，CPU/NPU有限整链通过。默认身份/严格拒绝保持，下游学习验收与后端扩展另列。
-
-12. [TL-REQ-004显式密集查询](evidence/dense-query-tl-req-004-20261110.md)：75a5027实现/新构建/安装，26ca1b6诊断；CPU25通过/2保留数值xfail，NPU13实际设备及2辅助通过，四个安装消费者独立三步/新进程精确恢复通过。原FC16/B8/L128完整步CPU62.84→45.16秒、NPU252.92→183.55秒；实际Full/消息及梯度范数不同，只作有限成本观察，不认证原语言训练等价或下游验收。
-
-13. [默认prefill固定资格与受控成本](evidence/prefill-default-20261110.md)：默认能力分派、原始KV槽gather、跨时间区域批及分层回归入口已交付；CPU/NPU安装与standalone训练/恢复分列。原FC16耗时下降37.35%/57.09%，剩余碎片化、显存取舍和原任务未独立验收均保持事实边界。
-
-阶段提交后继续。旧边界的停止条件仍有效；有新方案和证据才重启。CUDA新任务不继承旧CPU/NPU失败或通过。
-不以不支持声明代替约定功能，不把小规模通过称为全部平台/尺度通过。
+- 小检查以独立公式/调度、共享梯度、非空左态和精确下一窗为主。布局变更观察外层与私有图、连接、反向及存储，不能只数一个Function。
+- FC主成本尺度为B8/L128/d128/H2/FFN512；resident原拒绝见证另为B4/L16，二者不混称。LH176/宽FC/HB、sum/qry、循环、约1B/9B按被修改路径选择；不扫描笛卡尔积。
+- 无梯度推理、含grad前向、完整训练分开。TTFT实测，吞吐按真实输入位置；训练含准备、路由、packing、反向、clip/optimizer、通信和同步。记录候选/Full/消息的实际工作。
+- 同材料尽量固定设备、参数、输入、线程/精度/观察范围；不同处明确列出。profile与无插桩成本独立；小测有限重复，大测按阶段边界执行。
+- 主要差距未解释就保持未完成；已知边界用新表示/算法/独立见证推进，不无限重复同一局部优化，也不以无新依据的完整重跑代替诊断。
+- 有限舍入超差只阻止相应严格等价声明，有界首差/高精度诊断后继续独立工作和授权探索。非有限、依赖/控制、求解、通信、容量与精确恢复失败不能被容差或explore接纳。
+- 已有有效证据按原身份复用。长任务固定源码、background.slice、有限资源/时限；全部CPU/内存及合法分配NPU按收益使用，正式计时避开本项目重型构建争用。共享许可只在当前对话有效。
 
 ## 已有公共能力与入口
 
-| 范围 | 契约和证据入口 |
+| 范围 | 定义、实现、测试与证据入口 |
 | --- | --- |
-| PDG反馈、非对齐TimedDAG、一般SettleGraph，同秩区域/独立端口/原样嵌入 | [总对应](semantic-map.md)、[Settle](settle-embedding.md)、[结构化表示](structured-records.md) |
-| 五记忆、原始时间短卷积、十种发送、适用的评分/证据/key、来源分类与共享 | [KV](weighted-kv-sharing.md)、[循环](weighted-recurrent.md)、[分配](weighted-allocation.md)、[发送](weighted-sending.md)、[评分](weighted-scoring.md)、[来源](weighted-source-binding.md) |
-| 在线streaming/prefill、实际矩阵批与独立VJP根 | [packing](weighted-packed.md)、[区域批](weighted-region-batch.md)、[计算共享](weighted-compute-sharing.md)、[8d97020资格](evidence/core5-independent-projection-20261029.md) |
-| CPU、混合、常驻FP32/FP16、单/双NPU训练和精确续接 | [能力矩阵](execution-capabilities.md)、[常驻训练](resident-weighted-training.md)、[节点训练](evidence/core5-weighted-node-training-20261028.md) |
-| 参数清单、core-3参数量匹配拓扑/同材料、有限完整训练计时和诊断 | [工作负载](weighted-workloads.md)、[精度](weighted-precision.md)、[历史经验](performance-lessons.md) |
+| PDG、非对齐TimedDAG、一般SettleGraph及端口/嵌入 | [总对应](semantic-map.md)、[Settle](settle-embedding.md)、[结构表示](structured-records.md) |
+| 五记忆、短卷积、来源分类/共享、评分和发送 | [KV](weighted-kv-sharing.md)、[循环](weighted-recurrent.md)、[分配](weighted-allocation.md)、[发送](weighted-sending.md)、[评分](weighted-scoring.md)、[来源](weighted-source-binding.md) |
+| streaming/prefill、模块批、VJP与执行资格 | [张量窗口](weighted-tensor-windows.md)、[区域批](weighted-region-batch.md)、[执行能力](execution-capabilities.md)、[常驻训练](resident-weighted-training.md) |
+| FC/HB/LH自然维度、1B/8B/16B生成器和有限目录 | [研究入口](core5-study.md)、[参数/拓扑清单](weighted-workloads.md)、[代表回归](prefill-regression.md) |
+| 三层成本、性能经验和独立比较 | [证据索引](evidence/README.md)、[经验](performance-lessons.md)、[复现](reproduction.md) |
+| 干净安装、CANN9.2/Python/SDK、下游协作 | [开发](development.md)、[协作契约](downstream-contract.md)、[维护映射](core5-study.md#修改时同步维护什么) |
 
-上述入口说明已实现能力和限定资格，不构成所有配置/拓扑/尺度/平台的笛卡尔资格。
-下游拥有数据、任务头、loss设计、训练配方和效果搜索；基座验证机制与数学对应。
-
-本轮GPU有限推理的结果与六项处置见[规模推理报告](evidence/core5-cuda-inference-20261031.md)；三客户端、显式精度、单卡mixed/resident各自有实际范围。旧训练停止条件不自动否定独立推理资格，也不因推理通过而解除。
-
-[三平台首组固定矩阵](evidence/core5-platform-baseline-20261031.md)已完成98项正式流程和4项独立观察，含三平台B128/B512及A/B/C；43项严格通过、其余保留原数值失败。大参数、多卡、resident容量与人类完整演练继续如下，不能由首组外推。
+上述入口不构成所有组合/规模/平台的笛卡尔资格。下游拥有数据、任务头、loss、配方和模型效果搜索。
 
 ## 当前待办与重启条件
 
-- **接口、性能与架构统一实施（历史阶段完成；新阶段见页首计划）**：仓库开发/性能/维护skills、分主题历史经验与固定源码审阅工具已交付。独立公式、无梯度/构图/反向/完整训练、Transformer与LH/core-3对照各自保持验证范围。接口服务性能、通用性、清晰和替换能力，历史兼容可显式迁移。[1528df8固定资格](evidence/interface-snapshot-bank-20261110.md)交付实际共享KV bank与独立snapshot伴随、公共边界和census；CPU301通过/3保留xfail，NPU配置流程72通过/1保留xfail，三客户端小训练/精确恢复分列。FC16训练CPU1/NPU14.628/20.634秒；完整尺度数值未验，不宣称NPU普遍加速。
-
-  [调度](evidence/scheduling-interface-audit-20261110.md)、[区域](evidence/region-batching-audit-20261110.md)、[循环/Describe](evidence/recurrent-interface-audit-20261110.md)完成具名范围审阅，范围有重叠且未覆盖全仓库。[47704c9固定资格](evidence/interface-batch-publication-20261110.md)落实实时在途容量、只读发布/字段unbind、区域消冗、五记忆Describe能力和公共返回传输去重；CPU/NPU、三客户端训练/精确恢复分列。4项FP32 affine首evidence根原严格超差保留，同材料FP64通过，其余训练/恢复通过；不放宽全局容差。FC16 CPU1/NPU训练12.447/17.212秒，NPU TTFT反升5.098秒。
-
-  [554f2f5固定资格](evidence/interface-heads-qualification-20261110.md)完成通用Describe列、循环Read/Full按用途裁剪及常驻预算/服务诊断。CPU490通过/14保留xfail；NPU配置80通过/2xfail/1原观察器失败，ebfe075修正后设备单例通过。Python/native安装消费者与两种SDK组合的三步训练/新进程恢复通过；常驻FP32/FP16各21个小图组合通过，不增加resident训练资格。实际新增8868字节小见证仍被32768字节局部余额拒绝，因为首次借用已有bank被计入局部增长；确认边界但未修改守卫，不外推全部旧规模拒绝。
-
-  [有限成本与图统计](evidence/interface-heads-performance-20261110.md)完成宽FC、176节点HB/LH、KV sum、SSD与三客户端共14个CPU/NPU训练/精确下一窗；独立数值仍not_checked。FC16训练CPU1/NPU12.614/15.497秒、TTFT3.083/3.960秒；新层链与外层/私有图统计仍显示内部开销。原matrix启动配置失败与仅补未执行项分列，全部作业已终态。没有重测1B/9B、多卡、mixed-a/b或resident吞吐，旧证据保留原提交。
-
-  后继[e6f7bd5资格](evidence/additive-interface-qualification-20261110.md)已修首次借用计费，采用默认Full共享bank矩阵并扩充有状态加法基线；57439d7仅修正half拒绝见证。[三层有限成本](evidence/additive-interface-performance-20261110.md)保留NPU FC16未改善的负结果、较大私有图与循环层链差距。single-bank常驻投影和其余后继按本页顶部的有限重启条件推进；全仓未审范围仍保留。全部可用CPU/内存与空闲NPU可用，共享NPU须当前对话明确授权。
-
-- **TL-REQ-004 联合prefill、部署代表与下游接入**：默认auto按图/模块能力使用静态分量窗口，循环分量继续在线greedy闭包；无参考轨迹预跑，也不按FC/HB/LH名称决定路径。[分量窗口](evidence/component-window-20261110.md)、[联合KV准备](evidence/joint-kv-preparation-20261110.md)、[整序列VJP](evidence/kv-sequence-vjp-20261110.md)、[query根与选定返回边界](evidence/query-root-boundary-20261110.md)已分别交付和验收。完整trace保持中间State因果根；outputs/metrics公共任务使用实际最小边界，恢复不能偷偷换成traced算法。f15c4a5按owner一次装配及3d88b0b局部合批已完成[固定CPU/NPU/SDK资格](evidence/prefill-local-batches-20261110.md)。
-
-  [有限代表矩阵](evidence/prefill-representatives-20261110.md)已完成CPU16/NPU18项运行与精确续接：宽FC、176节点HB/LH、sum/qry、SSD/GDN层链、三客户端及mixed-a/b/c，B4/P16/FP32。大尺度独立数值均not_checked，小门禁另列；auto/greedy差异有限，小规模NPU仍慢于CPU，不能声称统一默认已经消除全部碎片化。常驻CANN9.2新构建后6项小图独立推理/训练/恢复通过，整序列常驻与规模性能尚未认证。[部署后继](evidence/prefill-deployment-20261110.md)已补FP16、异构LH、CPU线程、1.051B/9.314B与双NPU有限成本/恢复。默认异步FC16反向挂起后取消；显式blocking通过不解除。resident修正预算后仍在KV qry/local-row工作区构造拒绝，无性能或恢复结论。
-
-  原FC16/B8/L128/d128固定下游0439efd：a553/fb的完整返回CPU29.788/NPU55.482秒，最小返回CPU22.068/NPU31.822秒，完整步各自单次计量；不同返回契约不混算加速比，设备间实际Full/消息不同。原任务完整数值/离散/学习与下游升级仍未认证。原dense-v1与GDN/HB数值xfail保留；有限同材料FP64见证仅解释其指定差异。新舍入超差有界诊断后继续探索，非有限、通信、容量、求解及精确恢复错误另列处理。
-
-  **算子级目标与剩余边界**：在依赖已知、容量允许的B×L块内，主要算子提交由节点/区域/计算阶段决定；真实反馈/历史/选择依赖允许拆块，不能承诺任意L固定kernel数。KV私有写投影12288→96、基座批已生效；反向根装配/检查继续按profile推进。重复前缀快照的读投影、循环模块逐状态VJP、主机索引/返回装配和resident每sample/region单时间轮次仍有余地。保留None/零、int64、独立根、共享全部贡献和精确恢复；不删检查或用零mask改变活动集合。先具体边界的独立反例和资格，再有限成本，不无限重复同候选。
-
-  cat evidence共享投影、Read有限值守卫和分配分支元数据合批已完成：CPU281通过/4数值xfail，NPU目标流程68通过（含CPU辅助），安装消费者/SDK训练及新进程恢复分列通过。原FC16同minimal成本CPU18.640/NPU22.903秒。packed-v2的指定CPU FP32 evidence根约1.044e-6严格超差保留；不放宽原容差，不把有限误差自动归因为舍入。[层链门禁](evidence/layer-chain-baseline-20261110.md)已修跨设备比较错误；同材料FP64定位到SSD张量基线的vendor默认conv HF32策略，显式IEEE后原阈值7/7通过，原失败保留。resident三轮不同预算拒绝分别记录；下一步须分解数值工作区和服务生命周期，不继续统一加预算。
-
-  [同公式层链基线](evidence/layer-chain-baseline-20261110.md)已完成CPU13项、IEEE NPU7项独立小型检查及12个完整训练成本点。B4/L32/d128的KV native CPU/NPU为0.512/0.934秒，限定张量公式为0.029/0.022秒；SSD native为0.894/2.853秒，张量公式为0.044/0.032秒。省去辅助字段的投影不认证完整图连接或标准Transformer/Mamba；默认入口离直接公式仍有明显差距，后续优先块内状态表示/反向装配与实际小算子提交，不能仅更换最外层调度。
-
-  485a3e2已修复选定输出推理的过时全图trace预算，46项固定安装检查通过；原1B/B32 NPU从115.34GB静态拒绝越过准入，完整窗33.965秒，CPU32线程12.262秒，活动约22.2%。大尺度独立数值not_checked，原CPU计时中断、后继恢复通过但汇总脚本报错分列；NPU B32精确下一窗通过，含恢复peak allocated/reserved约6.07/6.40GB。容量预留是估算，其他图/训练/插件/常驻保守后备不解除。现有external-lm不能代替此验收。后继用全部可用CPU及有余量NPU尽快得结果；构建与重型计时隔开，资源、作业和精确下一命令只见STATUS。GPU按授权延后，下游尚未验收或升级依赖。
-
-- **TL-REQ-003 下游接入与表示域后继**：[显式最小正值模式已交付](evidence/positive-support-tl-req-003-20261109.md)，保留cat/ind及默认strict；CPU/NPU局部、完整两区域根/AdamW/恢复通过。下游原HB16学习验收未运行，须在新私有安装显式升级；跨模式旧checkpoint不能直接冒称精确恢复。多个尾部比例、不可表示公开伴随和弱总量仍有边界；只有实际小型见证证明本模式不够时，再设计log/缩放载荷或更大范围。native/standalone/resident、FP16、多设备、其他记忆尚未实现本策略；CUDA待真机，不以本次CPU/NPU通过外推。原严格失败及CPU资格误选native的8项加载失败保持原记录。
-
-- **用户自行启动的双NPU B512容量探索入口**：显式observe仅放行设备静态估算，保留预算/余量/实际free和全部运行失败；默认strict及旧配置身份不变。单配置队列复用空闲卡锁、时限、日志、停止和结果入口。公开B512配置保持原模型/数学/输入/精度，整流程上限另设7200秒。实现59e9aca、固定安装设施135项通过（[证据](evidence/llm-capacity-entry-20261105.md)）；实际B512容量仍未测，当前未替用户启动。后续只审阅用户提交的这一次结果，不盲目OOM搜索、不把原严格数值失败改写。
-
-- **Dense/MoE选择性后继已终态，数值/容量边界保留**：[15项审阅](evidence/llm-isolation-terminal-20261105.md)记录13项推理成本完成、1项四NPU独立检查数值/token失败、1项双NPU B512静态容量拒绝；无中断或未提交项，当前不需重启。实现694eb60/固定设施125项资格与模型资格分列。Qwen MoE下载完整，真实NPU输出已隔离，延迟提交成功；旧下载/cwd/超时失败不改写。小检查的100组logits/KV超原容差、生成2/8 token不同，重启修复须先定位首差；13个成本点独立数值/离散/恢复均not_checked。B512需56.719GiB而当前保留余量后54.737GiB；先校准KV/激活/workspace及reserved，再考虑显式小prefill或更多设备，不减少逻辑B或安全余量、不原样盲重试。四NPU B128 reserved仍约60.9GiB，不能按allocated外推B512。vLLM/TP/EP须另建匹配A3 NNAL的软件环境，不修改公共基线。完整原配置由`lm retry-matrix --round isolation`重建；新实验先明确配置和预算，不重复已完成曲线与原严格失败。
-
-2026-10-31的有限授权范围已收尾：三平台B128/B512、A/B/C、FC/HB/LH约1B、多卡容量/训练、
-resident边界、人类及下游流程均有实际结果、拒绝或有依据的停止记录。九份可查询归档204条run，
-包含失败/诊断，不称全通过；原189项配置目录与目录外后继的审阅记录分别保留，原始运行材料按授权退役。
-[八卡共享后继](evidence/core5-platform-eight-followup-20261031.md)已终态：同模型1B推理和新loss训练
-执行/离散/精确续接通过、独立FP32超差；小训练严格通过。原三项八卡排队超时不改写。
-
-- 下一次数值/运行时修复须按下表具体方案重启：NPU B512 exact-next、任意独立根事件/崩溃、原loss非有限及各平台严格超差仍未解除。停止重复相同候选，探索模式不能吞掉这些非数值错误。
-- 六项packing均已重审并有[具体决定](performance-lessons.md#本轮三平台六项打包处置)。后续跨输入同base矩阵批、resident服务资源或反向模板须先给新profile/可验证方案，不自动展开全部融合工程。
-- 用户计算优先，未开始的NPU大tmpfs对照及38.406B周期保存后继取消，不作完成门槛；38.406B已运行的有限窗与未验完整恢复分别保留。不默认扩盘、重启GPU或恢复大文件任务。800GiB硬配额与tmpfs联合主存准入持续有效。
-- 7×T4站点和迁移步骤已交付；driver/runtime/Toolkit/LibTorch、sm75算子、互联、训练/恢复仍待真机。当前没有新的GPU作业或gpu3090依赖。
-
-- 远端dirty-dev源码包及两份早期开发patch已移到仓库外保全，按用户要求稍后分析；位置与hash见[清理记录](evidence/artifact-cleanup-tracked-only-20261031.md)。不自动合并或运行。
+- **TL-REQ-004/006下游**：基座默认窗口和有限代表交付不等于原语言任务/学习验收或下游升级。
+  [REQ006固定请求](https://github.com/ZichaoLong/tide/blob/dc943cc7ce773e3dac4d62736ab524953573decb/docs/requests/TL-REQ-006.md)
+  的HB88/HB184/入口树/Transformer诊断、[常量重载与初态](evidence/req006-floor-20261112.md)已分别记录；尚未做四代表生产替换/下游验收。不得以6e7bd49e旧直接实现的计数作为当前基座回归。
+- **TL-REQ-003**：[正支持模式](evidence/positive-support-tl-req-003-20261109.md)有限CPU/NPU检查已过，原HB16学习验收未运行。native/standalone/resident、half、多设备、其他记忆尚未实现该策略；弱总量/尾部比例/不可表示伴随保留边界。新表示须以实际独立见证为依据，不能静默补值或跨模式恢复。
+- **其他已终态工作**：外部Dense/MoE有限矩阵[保持原数值/容量结果](evidence/llm-isolation-terminal-20261105.md)，用户B512容量入口[仅设施已验](evidence/llm-capacity-entry-20261105.md)，未替用户启动。vLLM/TP/EP需单独匹配环境；不自动恢复已取消的38.406B/大tmpfs/旧队列。
+- **GPU与外部材料**：GPU待验不阻塞本机实现；7×T4迁移指南不等于sm75真机资格。远端dirty-dev源码包/早期patch按[清理记录](evidence/artifact-cleanup-tracked-only-20261031.md)在仓库外保全，不自动合并或运行。
+- **当前数值、异步、容量边界**：如下逐项保留原失败和停止/重启条件。原始材料退役后按跟踪生成器重新产生新见证，不冒称复验原字节；历史限制不变成后继架构约束。
 
 ## 逐项推进与停止条件
 

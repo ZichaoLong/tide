@@ -54,7 +54,13 @@ alpha、epsilon 分组。一次批量归一化、SiLU 和两次 shared GEMM/priv
 SrcClass相同或去重后的`Module.parameters()`列表代替。后者可能遗漏低秩槽的不同别名排列。
 整Aggregate复用还要求有序物理来源的strength/content根和int64行域相同；来源出现次数
 保留在键中，每条边/端口仍贡献自己的质量。两种缓存都只存活于一次区域调用，不跨窗保存。
-共享输出通过稳定使用顺序的只读视图归并伴随，避免跨owner的到达次序选择累加顺序。
+`source_blocks`返回`SourceBlocks(values, owners)`：values仅包含唯一计算所有者，
+owners为每次物理使用的int64索引。默认Aggregate直接消费来源所有者和
+[关联布局](weighted-aggregate-batch.md#区域窗口的物理来源张量)，不先发布逐使用Tensor再重拼。
+`source_columns`及Python `SourceBlocks.independent_uses`是需要独立使用根时的显式投影；
+它们仍通过稳定使用顺序的只读视图归并伴随。预算切分只在真实数值组边界添加同类转置，
+避免跨owner的到达次序选择累加顺序。共享来源块不意味着可合并不同物理原子的数学贡献。
+`test_aggregate_source_bank`同时检查来源所有者、显式投影和全部使用者梯度。
 
 `max_workspace_bytes`约束附加批量暂存与伴随组的保守估算，不是模型/整窗保留图的总内存预算。
 相容组按预算切开，单列超出附加打包预算时使用原独立公式，不截断输入或静默更换dtype。

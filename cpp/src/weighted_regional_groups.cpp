@@ -98,9 +98,9 @@ std::map<Index,Tensor> region_groups(const RegionWeights& original,const Regiona
   for(const auto& [node,domain]:packing.domains)for(const auto& [name,value]:fields.at(node))needs_grad|=value.requires_grad();
   for(const auto& group:packing.groups)same_members&=group.participants.size()==static_cast<size_t>(group.candidates);
   if(!at::GradMode::is_enabled()||!needs_grad||same_members){
-    std::vector<Tensor> values;
+    std::vector<Tensor> values;RegionParameterViews placed(original,placement.control);
     for(const auto& group:packing.groups){auto p=group.pack(fields);
-      values.push_back(region_placed(original,p.fields,config,p.nodes,placement).controls);}
+      values.push_back(placed.evaluate(p.fields,config,p.nodes,placement.selection).controls);}
     return packing.unpack(values);
   }
   RECORD_FUNCTION("tide::stage::region_group_bind",std::vector<c10::IValue>());
@@ -119,6 +119,7 @@ std::map<Index,Tensor> region_groups(const RegionWeights& original,const Regiona
   node->set_next_edges(torch::autograd::collect_next_edges(inputs));
   for(const auto& value:inputs)node->originals.emplace_back(value,false);
   std::vector<Tensor> controls;std::set<Index> enabled;
+  RegionParameterViews placed(weights,placement.control);
   for(const auto& group:packing.groups){
     PackedRegionalColumns packed;{at::NoGradGuard guard;packed=group.pack(fields);}
     GroupTape tape;TensorFields leaves;
@@ -127,7 +128,7 @@ std::map<Index,Tensor> region_groups(const RegionWeights& original,const Regiona
       auto leaf=value.detach().set_requires_grad(required);leaves[name]=leaf;
       tape.names.push_back(name);tape.leaves.emplace_back(leaf,false);
     }
-    RegionColumns result;{at::AutoGradMode enable(true);result=region_placed(weights,leaves,config,packed.nodes,placement);}
+    RegionColumns result;{at::AutoGradMode enable(true);result=placed.evaluate(leaves,config,packed.nodes,placement.selection);}
     tape.mode=result.mode;tape.dependencies=region_column_dependencies(result);
     std::vector<Tensor> saved{result.controls};
     if(result.allocation){const auto& a=*result.allocation;tape.allocation=true;tape.regularizer=a.regularizer;tape.alpha=a.alpha;

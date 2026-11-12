@@ -1,6 +1,7 @@
 // Architecture §2: literal physical atoms, distinct roots and regional batching.
 #include "weighted_graph_fixture.h"
 #include "../src/weighted_column_sources.h"
+#include "../src/weighted_aggregate_layout.h"
 #include "tide/packing_work.h"
 #include <ATen/Parallel.h>
 #include <ATen/core/grad_mode.h>
@@ -104,7 +105,7 @@ void guards(){
 void budget_and_direction(){
   auto f=fixture(at::kDouble);work::packing::reset(true);auto bounded=col::aggregate_columns_many(f.requests,24000);
   auto counts=work::packing::metrics();work::packing::reset(false);
-  require(counts.at("packing/bucket/aggregate_tensor/calls")==2&&counts.at("packing/bucket/aggregate_tensor/rows")==5,"group padding budget was additive");
+  require(counts.at("packing/bucket/aggregate_tensor/calls")==1&&counts.at("packing/bucket/aggregate_tensor/rows")==4,"unique source/common-row budget was not enforced");
   f.messages[3].strength.set_requires_grad(false);f.messages[3].content.set_requires_grad(false);
   auto output=col::aggregate_columns_many(f.requests,Index{1}<<24);
   require(!output[1].mass.requires_grad()&&!output[1].content.requires_grad(),"frozen receiver gained roots");
@@ -116,7 +117,25 @@ void budget_and_direction(){
     samples.push_back(col::aggregate_columns_many(f.requests,Index{1}<<24)[0].content.square().sum());}}
   close((gradients[0]*md).sum()+(gradients[1]*vd).sum(),(samples[0]-samples[1])/(2*step),"smooth directional derivative");
 }
+void source_owners(){
+  auto f=fixture(at::kDouble,.25);std::vector<col::SourceRequest> requests;std::vector<std::vector<size_t>> uses;
+  for(const auto& r:f.requests){std::vector<size_t> slots;for(const auto& [p,label]:r.sources)if(!p->rows.empty()){
+    slots.push_back(requests.size());requests.push_back({p->content,col::source_parameters(*r.weights,label),.25,.1});}uses.push_back(std::move(slots));}
+  auto owners=col::source_blocks(requests,Index{1}<<24);
+  require(owners.values.size()==6&&owners.owners.size()==13,"source blocks published physical-use owners");
+  std::vector<col::AggregateTensorRequest> entries;
+  for(size_t i=0;i<f.requests.size();++i){col::AggregateTensorRequest r;size_t j=0;std::set<Index> rows;
+    for(const auto& [p,label]:f.requests[i].sources)if(!p->rows.empty()){
+      r.sources.push_back(p);r.values.push_back(owners.values[owners.owners[uses[i][j++]]]);rows.insert(p->rows.begin(),p->rows.end());}
+    if(!rows.empty()){r.rows={rows.begin(),rows.end()};entries.push_back(std::move(r));}}
+  std::vector<const col::AggregateTensorRequest*> pointers;for(const auto& r:entries)pointers.push_back(&r);
+  auto plan=col::aggregate_source_layout(pointers);
+  require(plan.groups==6&&plan.sources==6&&plan.rows==8&&plan.originals.size()==12,"incidence incorrectly merged independent source roots");
+  require(plan.incidence[0][0]==2&&plan.incidence[0][1]==1&&plan.incidence[3]==plan.incidence[0],"physical repeated uses lost multiplicity");
+  plan.materialize();require(plan.index.sizes()==at::IntArrayRef({6,8})&&plan.counts.sizes()==at::IntArrayRef({6,6})
+    &&plan.counts.scalar_type()==at::kLong&&plan.inverse.scalar_type()==at::kLong,"source-owner row map differs");
 }
-int main(){try{at::set_num_threads(1);for(auto dtype:{at::kDouble,at::kFloat}){check(dtype);check(dtype,.25);}check(at::kHalf);guards();budget_and_direction();
+}
+int main(){try{at::set_num_threads(1);for(auto dtype:{at::kDouble,at::kFloat}){check(dtype);check(dtype,.25);}check(at::kHalf);guards();budget_and_direction();source_owners();
   std::cout<<"Aggregate tensor CPU: literal atoms, ragged rows/sources, exact aliases, roots, centered VJP and directional derivative passed\n";return 0;
 }catch(const std::exception& e){std::cerr<<e.what()<<'\n';return 1;}}

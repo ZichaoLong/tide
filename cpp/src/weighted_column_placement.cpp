@@ -70,18 +70,27 @@ std::vector<TensorFields> read_placed_many(const std::vector<PlacedReadRequest>&
     at::Device(static_cast<c10::DeviceType>(std::get<0>(key)),std::get<1>(key)),static_cast<at::ScalarType>(std::get<2>(key)));
   return read_columns_many(queries,budget);
 }
+const RegionWeights& RegionParameterViews::parameters(at::ScalarType dtype){
+  if(auto found=views_.find(dtype);found!=views_.end())return *found->second;
+  bool copy=false;for(const auto& [name,t]:original_.extra)
+    copy|=t.device()!=control_||(t.is_floating_point()&&t.scalar_type()!=dtype);
+  const RegionWeights* view=&original_;
+  if(copy){auto& weights=owned_.emplace(dtype,original_).first->second;std::vector<Tensor*> handles;
+    for(auto& [name,t]:weights.extra)handles.push_back(&t);
+    placement_tensors(handles,control_,dtype);view=&weights;}
+  views_[dtype]=view;return *view;
+}
+RegionColumns RegionParameterViews::evaluate(const TensorFields& descriptors,const RegionalConfig& config,
+                                              const Tensor& nodes,at::Device selection){
+  const auto& ref=descriptors.at("w");const auto& weights=parameters(ref.scalar_type());
+  if(ref.device()==control_)return region_columns(weights,descriptors,config,nodes,selection);
+  auto fields=descriptors;std::vector<Tensor*> handles;for(auto& [name,t]:fields)handles.push_back(&t);
+  placement_tensors(handles,control_,ref.scalar_type());
+  return region_columns(weights,fields,config,nodes.defined()?nodes.to(control_):nodes,selection);
+}
 RegionColumns region_placed(const RegionWeights& original,const TensorFields& descriptors,const RegionalConfig& config,
                             const Tensor& nodes,const ResolvedPlacement& placement){
-  const auto& ref=descriptors.at("w");
-  bool copy=ref.device()!=placement.control;
-  for(const auto& [name,t]:original.extra)copy|=t.device()!=placement.control||t.scalar_type()!=ref.scalar_type();
-  if(!copy)return region_columns(original,descriptors,config,nodes,placement.selection);
-  auto weights=original;auto fields=descriptors;
-  const auto dtype=fields.at("w").scalar_type();std::vector<Tensor*> handles;
-  for(auto& [name,t]:weights.extra)handles.push_back(&t);
-  for(auto& [name,t]:fields)handles.push_back(&t);
-  placement_tensors(handles,placement.control,dtype);
-  return region_columns(weights,fields,config,nodes.to(placement.control),placement.selection);
+  return RegionParameterViews(original,placement.control).evaluate(descriptors,config,nodes,placement.selection);
 }
 Tensor control_payload(const Tensor& value,const Tensor& like){
   auto result=placement_copy(value,like.device(),like.scalar_type());

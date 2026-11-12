@@ -5,6 +5,7 @@ every physical atom still participates in aggregation. Packing is outside the
 autograd graph, with original versions and unused output support retained.
 """
 import math
+from dataclasses import dataclass
 import torch
 from .packing_observation import bucket
 from .column_sharing import ordered_uses
@@ -93,8 +94,29 @@ class _Sources(torch.autograd.Function):
         return None, None, None, *result
 
 
-def source_columns(requests, *, max_workspace_bytes):
-    """(content, ordered A/B/e/factors, alpha, epsilon) → one tensor per use.
+@dataclass(frozen=True)
+class SourceBlocks:
+    """Unique numerical owners and exact physical-use → owner indices.
+
+    Aggregate borrows owners directly. Independent use roots are an explicit
+    projection for clients which observe them, not the numerical handoff.
+    """
+    values: tuple
+    owners: tuple
+
+    def independent_uses(self):
+        result = [None]*len(self.owners)
+        groups = [[] for _ in self.values]
+        for i, owner in enumerate(self.owners):
+            groups[owner].append(i)
+        for value, uses in zip(self.values, groups):
+            for i, use in zip(uses, ordered_uses(value, len(uses))):
+                result[i] = use
+        return result
+
+
+def source_blocks(requests, *, max_workspace_bytes):
+    """(content, ordered A/B/e/factors, alpha, epsilon) → unique owners.
 
     Group equal actual shapes/dtype/device/scalars; independent shapes use other
     groups. The byte ceiling bounds additional batch packing and adjoints. A
@@ -151,10 +173,15 @@ def source_columns(requests, *, max_workspace_bytes):
             else:
                 pending.append(key); used += size
         flush()
-    for key, (_, indices) in unique.items():
-        values = ordered_uses(result[key], len(indices))
+    values = tuple(result[key] for key in unique)
+    for owner, (key, (_, indices)) in enumerate(unique.items()):
         if len(indices) > 1:
             bucket("source_exact_reuse", result[key].shape[0], len(indices))
-        for i, value in zip(indices, values):
-            uses[i] = value
-    return uses
+        for i in indices:
+            uses[i] = owner
+    return SourceBlocks(values, tuple(uses))
+
+
+def source_columns(requests, *, max_workspace_bytes):
+    """Explicit independently rooted projection of the source-owner block."""
+    return source_blocks(requests, max_workspace_bytes=max_workspace_bytes).independent_uses()

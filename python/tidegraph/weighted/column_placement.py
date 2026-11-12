@@ -93,16 +93,38 @@ def read_many(requests, *, max_workspace_bytes):
     return evaluate({key: prepared[key] for key in requests}, max_workspace_bytes=max_workspace_bytes)
 
 
+class RegionParameterViews:
+    """One regional call owns each real parameter conversion, across N groups.
+
+    The view lives inside the call's autograd lifetime. It is never reused after
+    an optimizer update, and distinct equal-valued parameters remain distinct.
+    """
+    def __init__(self, program, control):
+        self.program, self.control, self.views = program, torch.device(control), {}
+        self.tensors = [*program.parameters(), *program.buffers()]
+
+    def parameters(self, dtype):
+        if dtype not in self.views:
+            if all(p.device == self.control and (not p.is_floating_point() or p.dtype == dtype)
+                   for p in self.tensors):
+                view = self.program
+            else:
+                view = rebind(self.program, mapper(self.tensors, self.control, dtype))
+            self.views[dtype] = view
+        return self.views[dtype]
+
+    def __call__(self, fields, nodes, selection):
+        from .regional_columns import region_columns
+        program = self.parameters(fields["score"].dtype)
+        if fields["score"].device != self.control:
+            mapped = mapper(fields.values(), self.control, fields["score"].dtype)
+            fields = {n: mapped(t) for n, t in fields.items()}
+            nodes = None if nodes is None else nodes.to(self.control)
+        return region_columns(program, fields, nodes, selection=selection)
+
+
 def region(program, fields, nodes, control, selection):
-    from .regional_columns import region_columns
-    ref = fields["score"]
-    tensors = [*program.parameters(), *program.buffers()]
-    if control != ref.device or any(p.device != control or p.dtype != ref.dtype for p in tensors):
-        mapped = mapper([*tensors, *fields.values()], control, ref.dtype)
-        program = rebind(program, mapped)
-        fields = {n: mapped(t) for n, t in fields.items()}
-        nodes = nodes.to(control)
-    return region_columns(program, fields, nodes, selection=selection)
+    return RegionParameterViews(program, control)(fields, nodes, selection)
 
 
 def controls(value, like):

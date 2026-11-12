@@ -1,45 +1,44 @@
-# 当前交接 — 区域张量资格与resident固定tile后继（2026-11-12）
+# 当前交接 — 来源共享与 resident 程序组合（2026-11-12）
 
-固定数学0770593838a37c790a568226930567ed60f99b83，19快照通过。
-分支graph-execution-foundation；用户授权整体重写、阶段提交/非强推及本对话共享NPU。
-mixed-a/b/c是可简化放置预设，不是架构层；GPU延后。三份用户TL-REQ-004/005/006 handoff只读不提交。
+数学固定0770593838a37c790a568226930567ed60f99b83，19个快照通过。
+分支graph-execution-foundation；允许整体重写、阶段提交/非强推，本对话共享NPU；GPU延后。
+mixed-a/b/c仅是可迁移放置预设，不约束软件层级。三份用户TL-REQ-004/005/006 handoff只读、不提交。
+P1—P6仍有未完成范围，见[ROADMAP](ROADMAP.md)。
 
-## 已固定与复现
+## 最新固定结果
 
-实现1f0e6e43已推送；[固定资格/38点成本/静态审阅](evidence/region-tensor-20261112.md)。
-Python/C++区域均值显式块VJP、C++整组KV写入、跨节点Read保留共享传输；两套core/resident构建通过。
-CPU304通过/9原数值xfail，六SDK CTests，12安装流程三AdamW/新进程raw精确恢复通过。
-独立SDK NPU五记忆×三混合放置列检查通过。resident9局部与optimizer32轨迹/256更新通过；
-完整消息组合仍录入EE1019。一次trace证实14投影/140容量body，失败前929vendor op，末task2043。
-未运行依赖完整flow/owner/规模；原失败不改写。317安装Python文件与固定源码一致。
-FC16默认native CPU1/NPU-host2完整训练1.1854/.2856秒；LH176为1.3900/2.8407秒，直接.7796/.6121秒。
-IndexCopyBackward2066→8，含native私图23333→18140，但来源payload复制/阶段重装配仍有明显差距。
-38文件静态审阅定位下一主机边界为source-owner/region-window typed上下文，见ROADMAP。
+- 1f0e6e43主机[资格/38点成本/静态审阅](evidence/region-tensor-20261112.md)已推送。
+  FC16 B8/L128默认native训练CPU1/NPU-host2为1.1854/.2856秒；LH176 B4/L16为1.3900/2.8407秒，直接.7796/.6121秒。
+- 41c42759删除resident bank容量树；消息/选择/序列通过，flow反向录入507002原失败保留。
+- 042ea369以设备通知调用每区域有界program，统一服务/控制器存储并集与workspace。
+  两套resident构建、SDK21进程、Python-owned4进程的组件/整链/训练/新进程恢复通过。
+  原预算FC16 B4/L16/d128训练3.944763638秒；LH176 B4/L16/d64训练22.591799125秒。
+  两者新owner下一窗精确恢复通过，规模数学not_checked、throughput_qualified=false。
+  原raw误记矩形64输入位置，实际staggered输入61；主树修复统计，不改原raw。
+- 7fd1dd10修复CPU模拟kernel worker上下文泄漏；固定39项通过。042原29通过/9失败保留。
+  投影193行独立FP64 oracle通过原阈值；旧逐行FP32参考自身有1项超差，不改生产tile。
 
-## 当前未提交后继与下一动作
+042/7fd的所有resident-services-*作业均已终态，没有仍在运行的规模任务。
+详细材料artifacts/resident-services-20261112；作业artifacts/jobs/resident-services-*。
+固定source /dev/shm/gef-resident-services-20261112/source；两套resident-{native,sdk}在同根。
+core复用1f的/dev/shm/gef-region-tensor-20261112/core-{native,sdk}并核验hash；Python安装317文件匹配042。
+SDK首次等待构建前置120秒超时，未用设备；后继sdk-ready单独记录通过。
 
-本后继已删除resident bank容量树，使用设备bank+tile游标复用单一数值体；保留single-bank快路、
-稳定跨tile dW、结构连接位与实际storage计费。后继文件由resident_rewrite支线修改，主代理统一审阅/提交。
-新padding界须明确为P<A+G*T，不继续冒称旧小于2倍界。完整消息用例原样复验；
-若该候选仍录入失败，停止相同候选，再设计有界program组合，不加预算或缩小原输入。
-开发26项CPU独立公式和3个C++ TU语法通过；初次缺生成头的语法命令失败保留。
-新增193行×3bank×32宽+bias实际设备见证，仍128KiB预算。当前没有后继设备/性能资格。P1—P6未全部完成，剩余范围只在ROADMAP。
+## 当前集成和下一动作
 
-下一动作：固定本实现提交，在/dev/shm/gef-resident-tile-20261112/source创建只读工作树，
-以CPU0–159/160–319、各512GiB/2400秒、background.slice独立重建两套resident。
-复用1f0e6e43 core时构建入口强制核对源码hash及全部二进制hash，不更新其原资格身份；
-启动器artifacts/resident-tile-20261112/*-build.sh。随后projection→messages→optimizer/session→
-安装训练/新进程恢复→原规模逐层推进。
-现有qualification.py/resident-scale.py及原配置在artifacts/region-tensor-20261112/可作启动模板；
-新作业必须新路径、固定新源码，不修改已固定输入。主机未变则不重复本轮38点计时。
+主树未提交：source-owner/incidence Aggregate、区域参数视图及实际发送操作数传输去重、resident计数修复。
+开发检查96项Python通过；15项native因未指定新构建未运行，不能称C++失败或通过；正式新构建后补验。
+扩展Python检查98通过/3原xfail/2新FP32严格超差；同材料FP64全根通过，None/零连接与完整观察一致。
+原阈值不变、原失败保留，开发诊断artifacts/source-bank-development-20261112/numerical-diagnostic.json。
+lh_direct收尾source-bank；req006_diagnostics整理042/7fd证据；resident_rewrite实现预算预准入及资源统计。
+主代理审阅/集成/提交及统一资源调度。源码可与已冻结job并行修改，不修改作业输入。
 
-## 作业与资源
+下一步：完成短检查并固定host实现，建立两套新core及安装包；定向CPU/真实NPU、独立SDK、
+安装三步/新进程恢复；LH176三层三模式与FC16有限对照。host C++已变化，不沿用1f二进制作为新资格。
+resident新预算/统计有自身后继资格；共享历史/raw布局与程序构造成本继续推进，不能宣称P5完成。
+将042/7fd及两原规模结果整理为仓库独立可复现证据，再推送已授权分支。
 
-1f0e6e43所有11个服务已终态；构建/CPU/安装/测量/profile及独立组件通过，resident-sdk和trace失败。
-无活跃持久作业。状态/日志artifacts/jobs/region-tensor-*；记录和计划artifacts/region-tensor-20261112/。
-固定源码和构建/dev/shm/gef-region-tensor-20261112/{source,core-native,core-sdk,resident-native,resident-sdk,install}。
-不要混用Python-owned与SDK。运行环境ascend/dev-workspace-9.2.0和独立libtorch-npu/2.12.0-cann9.2.0。
-构建初始AllowedCPUs未生效，已纠正并记录；后继用taskset真实继承CPU池并核对/proc，不能只看请求属性。
-全部可用CPU/内存与合法分配NPU可用，避免项目重型构建与计时争用。主盘约825GiB、shm约280GiB余量；
-用户319GiB/软300/硬800GiB且仍6日宽限，无磁盘阻塞。不得删除活跃输入或参考仓库。
+资源：主盘819GiB、tmpfs279GiB余量；账户325GiB/软300/硬800GiB，6日宽限；暂无磁盘阻塞。
+两工具链分别ascend/dev-workspace-9.2.0与独立libtorch-npu/2.12.0-cann9.2.0；不混库。
 重新进入：git status --short --branch；python scripts/status.py；python scripts/check_upstream.py。
+历史提交：python scripts/resolve_history_commit.py OLD_SHA，见[迁移](history-migration.md)。

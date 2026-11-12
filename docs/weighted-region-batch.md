@@ -64,6 +64,14 @@ Python区域VJP复用数值层已计算的active集合；发布只读view不再�
 十二类评分/发送组合；同一配置中的KV及四类循环节点使用各自Describe构成异构区域。
 现有独立根、保留窗/AdamW/checkpoint和一般PDG/HB测试继续检查默认调用。
 
+区域的候选数分组共享调用级参数视图，实际跨device/dtype只转换一次；selection边界
+按所选函数的操作数字段合批并保留真实别名，不逐字段重复复制low/high同一总量。
+这只改变[区域放置的数据路径](weighted-placement.md)，不拆分完整候选、改变分配函数
+或将不同节点的描述根合并。原始版本、高阶拒绝及None/连接零的检查仍适用。
+C++列分配的autograd节点在整个分组未收到cotangent时，检查保存版本后返回全部undefined；
+不能将未使用分组当作形状错误或补成零梯度。独立节点输出根与多候选数组合的闭式quad
+见证包含这一边界。
+
 | 定义 | Python 符号 | 独立 C++ 符号 | 验证入口 |
 | --- | --- | --- | --- |
 | Alloc quad/bern/ent | allocation_batch.solve / allocation_rows.allocate_batch | weighted::batch::solve / weighted::allocate_batch | test_weighted_allocation_batch、既有面枚举/Decimal 解 |

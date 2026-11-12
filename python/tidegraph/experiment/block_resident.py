@@ -64,7 +64,8 @@ class BlockResident:
             window, inputs = self.advance(index)
             loss, bars = output_loss(window.fields, self.task.config["objective"]["scale"], training=self.training)
             finite_tensors((loss, bars))
-            self.last_work = block_records.work(window)
+            self.last_work = block_records.work(window, input_positions=self.inputs.input_positions,
+                                                input_atoms=self.inputs.input_atoms)
             values = block_records.window_snapshot(window, complete=mode == "complete") if mode != "metrics" else None
             if self.training:
                 if self.last_work["outputs"] == 0:

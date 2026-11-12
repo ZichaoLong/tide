@@ -13,6 +13,19 @@ from .config import TOTAL, ATTENTION, HARD
 from .sending_batch import attention, proportional, sorted_send
 
 
+def _placed(selection, *values):
+    """Move just the chosen sending function's operands, preserving aliases."""
+    if selection is None:
+        return values
+    from .placement_tensors import mapper
+    selection = torch.device(selection)
+    present = [t for t in values if t is not None]
+    if all(t.device == selection for t in present):
+        return values
+    mapped = mapper(present, selection, present[0].dtype)
+    return tuple(None if t is None else mapped(t) for t in values)
+
+
 @dataclass(frozen=True)
 class RegionColumns:
     controls: torch.Tensor
@@ -86,21 +99,22 @@ def region_columns(program, fields, nodes=None, *, selection=None):
         low = (received if c.regional else mass).clamp_max(1)
         high = received.new_full(received.shape, c.k)
     selection = selection if selection is not None else getattr(program, "_selection_device", None)
-    if selection is not None:
-        from .placement_tensors import move
-        recv, caps, scores, nodes, received, low, high, shift = (
-            move(t, selection) for t in (recv, caps, scores, nodes, received, low, high, shift))
     allocation = None
     if mode == "regional_total_zero":
+        scores, caps, nodes, low = _placed(selection, scores, caps, nodes, low)
         values = sorted_send(scores, caps, nodes, target=low)
     elif mode in ATTENTION:
+        scores, caps, recv = _placed(selection, scores, caps, recv)
         values = attention(scores, caps, recv, mode, c.allocation_base,
-                           received.new_full(received.shape, c.allocation_temperature))
+                           scores.new_full((len(scores),), c.allocation_temperature))
     elif mode == "proportional":
+        caps, = _placed(selection, caps)
         values = proportional(caps, c.k)
     elif mode in HARD:
+        scores, caps, nodes, shift = _placed(selection, scores, caps, nodes, shift)
         values = sorted_send(scores-shift[:, None], caps, nodes, k=c.k)
     else:
+        scores, caps, low, high, shift = _placed(selection, scores, caps, low, high, shift)
         allocation = allocate_columns(scores, caps, low, high, c.allocation_temperature,
             regularizer=c.regularizer, ent_alpha=c.ent_alpha, score_shift=shift, support_policy=c.support_policy)
         values = allocation.controls

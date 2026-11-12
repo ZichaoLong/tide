@@ -72,6 +72,7 @@ add_library(tidegraph STATIC
   cpp/src/weighted_column_query_ops.cpp cpp/src/weighted_column_positions.cpp cpp/src/weighted_column_checkpoint.cpp
   cpp/src/weighted_column_source_ops.cpp cpp/src/weighted_column_sources.cpp cpp/src/weighted_column_aggregate.cpp
   cpp/src/weighted_aggregate_tensor.cpp
+  cpp/src/weighted_aggregate_layout.cpp
   cpp/src/weighted_column_read_groups.cpp cpp/src/weighted_column_full_groups.cpp
   cpp/src/weighted_kv_tensor.cpp cpp/src/weighted_kv_tensor_layout.cpp
   cpp/src/weighted_kv_tensor_positions.cpp
@@ -196,6 +197,10 @@ add_test(NAME weighted-read-transport COMMAND tidegraph-read-transport-check)
 add_executable(tidegraph-aggregate-tensor-check cpp/test/weighted_aggregate_tensor.cpp cpp/test/weighted_graph_fixture.cpp)
 target_link_libraries(tidegraph-aggregate-tensor-check PRIVATE tidegraph_runtime)
 add_test(NAME weighted-aggregate-tensor COMMAND tidegraph-aggregate-tensor-check)
+add_executable(tidegraph-region-transport-check cpp/test/weighted_region_transport.cpp cpp/test/weighted_graph_fixture.cpp)
+target_include_directories(tidegraph-region-transport-check PRIVATE cpp/src)
+target_link_libraries(tidegraph-region-transport-check PRIVATE tidegraph_runtime)
+add_test(NAME weighted-region-transport COMMAND tidegraph-region-transport-check)
 add_executable(tidegraph-column-checkpoint-check cpp/test/weighted_column_checkpoint.cpp cpp/test/weighted_graph_fixture.cpp)
 target_link_libraries(tidegraph-column-checkpoint-check PRIVATE tidegraph_runtime)
 add_test(NAME weighted-column-checkpoint COMMAND tidegraph-column-checkpoint-check)

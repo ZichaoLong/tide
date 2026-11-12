@@ -40,15 +40,24 @@ RegionColumns region_columns(const RegionWeights& w,const TensorFields& fields,c
     shift=context.defined()?context:at::full_like(received,*c.eta);
     low=(c.regional()?received:mass).clamp_max(1);high=at::full_like(received,*c.k);
   }
-  if(selection)for(auto* t:{&recv,&caps,&scores,&nodes,&received,&low,&high,&shift})
-    if(t->defined())*t=placement_copy(*t,*selection,t->scalar_type());
+  // One alias-preserving transfer of the selected function's actual operands.
+  // In particular regional_total binds low and high to the same Tensor.
+  auto place=[&](std::initializer_list<Tensor*> handles){
+    if(selection&&*selection!=scores.device())
+      placement_tensors(std::vector<Tensor*>(handles),*selection,scores.scalar_type());};
   RegionColumns out;out.mode=c.selection_mode;
-  if(c.selection_mode=="regional_total_zero")out.controls=batch::sorted_send(scores,caps,nodes,low);
-  else if(c.attention())out.controls=batch::attention(scores,caps,recv,c.selection_mode,*c.allocation_base,
-                                                     at::full_like(received,*c.allocation_temperature));
-  else if(c.selection_mode=="proportional")out.controls=batch::proportional(caps,*c.k);
-  else if(c.hard())out.controls=batch::sorted_send(scores-shift.unsqueeze(1),caps,nodes,at::zeros_like(received),*c.k);
-  else{
+  if(c.selection_mode=="regional_total_zero"){
+    place({&scores,&caps,&nodes,&low});out.controls=batch::sorted_send(scores,caps,nodes,low);
+  }else if(c.attention()){
+    place({&scores,&caps,&recv});out.controls=batch::attention(scores,caps,recv,c.selection_mode,*c.allocation_base,
+      at::full({scores.size(0)},*c.allocation_temperature,scores.options()));
+  }else if(c.selection_mode=="proportional"){
+    place({&caps});out.controls=batch::proportional(caps,*c.k);
+  }else if(c.hard()){
+    place({&scores,&caps,&nodes,&shift});out.controls=batch::sorted_send(scores-shift.unsqueeze(1),caps,nodes,
+      at::zeros({scores.size(0)},scores.options()),*c.k);
+  }else{
+    place({&scores,&caps,&low,&high,&shift});
     out.allocation=allocate_columns(scores,caps,low,high,at::full({},*c.allocation_temperature,scores.options()),
                                     *c.regularizer,c.ent_alpha,shift);
     out.controls=out.allocation->controls;

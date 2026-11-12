@@ -43,7 +43,7 @@ std::vector<Tensor> source_parameters(const NodeWeights& w,Index label){
   if(w.extra.count(prefix+"a_left"))for(const auto* name:{"a_left","a_right","b_left","b_right"})result.push_back(detail::weight(w,prefix+name));
   return result;
 }
-std::vector<Tensor> source_columns(const std::vector<SourceRequest>& requests,Index budget){
+SourceBlocks source_blocks(const std::vector<SourceRequest>& requests,Index budget){
   detail::require(budget>0,"source column workspace must be positive");
   std::map<Key,size_t> lookup;std::vector<SourceRequest> unique;std::vector<std::vector<size_t>> uses,groups;
   for(size_t i=0;i<requests.size();++i){const auto& r=requests[i];
@@ -51,7 +51,7 @@ std::vector<Tensor> source_columns(const std::vector<SourceRequest>& requests,In
       &&std::isfinite(r.alpha)&&std::isfinite(r.epsilon)&&r.epsilon>0,"invalid source column content/scalars");
     auto k=key(r);auto [found,inserted]=lookup.emplace(k,unique.size());
     if(inserted){unique.push_back(requests[i]);uses.emplace_back();}uses[found->second].push_back(i);}
-  std::vector<Tensor> computed(unique.size()),result(requests.size());
+  std::vector<Tensor> computed(unique.size());std::vector<Index> owners(requests.size());
   for(size_t i=0;i<unique.size();++i){const auto& r=unique[i];if(!r.alpha){computed[i]=r.content;continue;}validate(r);
     bool found=false;for(auto& g:groups)if(compatible(unique[g.front()],r)){g.push_back(i);found=true;break;}
     if(!found)groups.push_back({i});}
@@ -61,9 +61,17 @@ std::vector<Tensor> source_columns(const std::vector<SourceRequest>& requests,In
     for(auto i:group){auto size=bytes(unique[i]);if(!pending.empty()&&used+size>budget)flush();
       if(size>budget)computed[i]=fallback(unique[i]);else{pending.push_back(i);used+=size;}}
     flush();}
-  for(size_t i=0;i<unique.size();++i){auto values=ordered_uses(computed[i],uses[i].size());
+  for(size_t i=0;i<unique.size();++i){
     if(uses[i].size()>1)work::packing::bucket("source_exact_reuse",computed[i].size(0),uses[i].size());
-    for(size_t j=0;j<uses[i].size();++j)result[uses[i][j]]=values[j];}
+    for(auto use:uses[i])owners[use]=i;}
+  return {std::move(computed),std::move(owners)};
+}
+std::vector<Tensor> source_columns(const std::vector<SourceRequest>& requests,Index budget){
+  auto blocks=source_blocks(requests,budget);std::vector<Tensor> result(requests.size());
+  std::vector<std::vector<size_t>> groups(blocks.values.size());for(size_t i=0;i<blocks.owners.size();++i)groups[blocks.owners[i]].push_back(i);
+  for(size_t owner=0;owner<blocks.values.size();++owner){const auto& uses=groups[owner];
+    auto values=ordered_uses(blocks.values[owner],uses.size());
+    for(size_t i=0;i<uses.size();++i)result[uses[i]]=values[i];}
   return result;
 }
 }

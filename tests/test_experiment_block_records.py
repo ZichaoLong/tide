@@ -131,12 +131,18 @@ def test_tensor_input_material_and_complete_candidate_decode_across_two_windows(
             equivalent(sorted(external, key=key), sorted(want, key=key), atol=0, rtol=0)
             expected = run(spec.graph, model, state, external, (index+1)*plan["span"], sealed_until=(index+1)*plan["span"])
             window = actual_fields(spec, tensor, expected)
-            stats = block_records.work(window)
+            stats = block_records.work(window, input_positions=inputs.input_positions,
+                                       input_atoms=inputs.input_atoms)
             saved = block_records.window_snapshot(window, complete=True)
             actual = block_records.complete(saved, spec, tensor, expected.continuation.detach(), stats["actual_stats"])
             equivalent(actual, expected, atol=0, rtol=0)
             assert stats["candidate_updates"] == len(expected.trace)
             assert stats["messages"] == len(expected.messages)
+            # Throughput counts logical sample/positions with an actual input,
+            # not padding in the rectangular resident allocation or port copies.
+            assert stats["input_positions"] == len({(e.batch, e.time//spec.stride) for e in external})
+            assert stats["actual_stats"]["input_atoms"] == len(external)
+            assert stats["actual_stats"]["allocated_input_positions"] == plan["samples"]*plan["positions"]
             # Missing candidates cannot be filled by a reference recurrence.
             name = next(n for n in saved["fields"] if n.endswith(".received"))
             saved["fields"][name]["present"].zero_()

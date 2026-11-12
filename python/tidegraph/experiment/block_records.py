@@ -20,7 +20,7 @@ def window_snapshot(window, *, complete):
     return snapshot(dict(fields=fields, metadata=metadata), packing="packed")
 
 
-def work(window):
+def work(window, *, input_positions, input_atoms):
     region = sorted(name[:-len("received")] for name in window.fields if name.endswith(".received"))
     candidates = sum(window.fields[p+"received"].present.sum() for p in region)
     fulls = sum(window.fields[p+"message.strength"].present.sum() for p in region)
@@ -30,10 +30,12 @@ def work(window):
     candidates, fulls, received, edge, output = map(int, values)
     stats = dict(candidate_events=candidates, selected_events=fulls, visited_edges=edge,
                  received_atoms=received, resident_regions=len(region),
+                 input_atoms=input_atoms,
+                 allocated_input_positions=window.metadata["positions"].numel(),
                  allocated_candidate_rows=sum(window.fields[p+"received"].values.shape[0] for p in region),
                  allocated_message_rows=sum(window.fields[p+"message.strength"].values.numel() for p in region))
     return dict(candidate_updates=candidates, full_calls=fulls, messages=edge, outputs=output,
-                pending=0, actual_stats=stats, input_positions=window.metadata["positions"].numel(),
+                pending=0, actual_stats=stats, input_positions=input_positions,
                 effective_window_execution=dict(schedule="settle-block-v2", input="B×L×P",
                     readiness="device", selection="device", progression="device"))
 

@@ -410,9 +410,11 @@ columns的独立三步任务loss/work对照只认证该投影，不把旧事件�
 
 Architecture §2.2在`column_sources` / `weighted_column_source_ops`通过整来源列MLP和显式块转置
 实现；`column_aggregate` / `weighted_column_aggregate`按完整参数槽/实际输入复用，保留重复物理原子。
-相容接收窗口的物理均值由`aggregate_tensor` / `weighted_aggregate_tensor`一次计算，
-定义域/中心化VJP/独立列根与padding边界见[Aggregate契约](weighted-aggregate-batch.md#区域窗口的物理来源张量)，
-`test_aggregate_tensor`逐原子公式/方向差分独立验证。
+相容接收窗口由`aggregate_layout` / `weighted_aggregate_layout`建立唯一来源bank及int64物理重数，
+`aggregate_tensor` / `weighted_aggregate_tensor`沿同一bank完成关联均值与中心化转置；
+定义域/独立列根/预算边界见[Aggregate契约](weighted-aggregate-batch.md#区域窗口的物理来源张量)。
+`test_aggregate_tensor`逐原子公式/方向差分，`test_aggregate_source_bank`所有者/实际保存形状、
+独立高精度梯度、行域及预算切分分别验证。
 `test_column_sources`给出字面公式、低秩别名排列、None零、原始版本和预算反例；
 `test_column_source_schedule`核验非空左态、异宽类别、重复边与独立调度的全根。
 Python/C++整列共享由`column_sharing.shared_uses` / `ordered_uses`汇总所有使用者的伴随，

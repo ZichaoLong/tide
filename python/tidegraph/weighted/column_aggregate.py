@@ -5,7 +5,7 @@ share only when ordered payload roots, row domains and parameter slots coincide.
 Caches are regional-call local; no value, parameter or version crosses windows.
 """
 import torch
-from .column_sources import parameters, source_columns
+from .column_sources import parameters, source_blocks
 from .column_sharing import shared_uses
 from .mean import weighted_mean
 from .packing_observation import bucket
@@ -62,9 +62,9 @@ def aggregate_columns_many(requests, *, max_workspace_bytes=4*1024**3):
             indices.append(len(transform_requests))
             transform_requests.append((p.content, weights, program.alpha, program.epsilon))
         unique[key] = sources, indices
-    transformed = source_columns(transform_requests, max_workspace_bytes=max_workspace_bytes)
+    transformed = source_blocks(transform_requests, max_workspace_bytes=max_workspace_bytes)
     from .aggregate_tensor import assemble_many
-    entries = [(sources, [transformed[i] for i in ids]) for sources, ids in unique.values()]
+    entries = [(sources, [transformed.values[transformed.owners[i]] for i in ids]) for sources, ids in unique.values()]
     computed = dict(zip(unique, assemble_many(entries, max_workspace_bytes, assemble)))
     received = {i: computed.get(key) for i, key in enumerate(keys)}
     if len(computed) < sum(key is not None for key in keys):

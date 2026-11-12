@@ -32,11 +32,27 @@ CPU FP32/FP64是参考构建域；FP16的显式评分/算术和master边界见
 [allocation](weighted-allocation.md) 与 [sending](weighted-sending.md)。
 改变精度可能改变近似平票/分支；资格继续严格检查路由，不放宽整数/消息存在性。
 
-相同形状、来源 dtype/device 的参数/状态/内容按最多 8 MiB 的行组 stack、cast/copy、unbind，
-单个超预算 Tensor 作为不可分割的一行。实际别名只转移一次；独立同值根不合并。
+来源 dtype/device 和目标 dtype 相同的参数/状态/内容按最多 8 MiB 的组展平拼接、cast/copy、
+再恢复原字段视图；不同字段形状不要求相同。单个超预算 Tensor 作为不可分割的一项。
+实际别名只转移一次；独立同值根不合并。
 原始 Tensor 版本与每个输出根的 None/连接零由独立 copy VJP 保存；反向只打包实际使用的行。
 Read/Region 随后使用已有真正数值 batch 和独立字段/候选 VJP。所有工作计入完整执行成本，
 本实现未声称跨所有不同形状使用一次传输或一个厂商 kernel。
+
+主机张量列的`column_placement.RegionParameterViews`与独立C++同名helper以一次区域调用
+为寿命，按实际control设备/描述dtype只转换一次参数，供不同候选数的全部分组复用。
+私有VJP先建立独立原始参数叶，再建立这一共享视图；各组反向仍汇总全部贡献。
+无梯度、普通autograd与独立节点根路径都使用同一放置边界；不跨optimizer更新缓存旧参数。
+字段已经在control位置时直接借用，未改变原始参数和raw状态owner。
+
+`regional_columns` / `weighted_region_columns`只传送所选发送函数真正消费的操作数；
+整数节点ID仅属于排序发送，Attention温度直接在目标设备构造。所有实际字段一次按
+Tensor身份去重，`regional_total`中同一总量的low/high保留同一个转换结果和原始梯度根。
+同device/dtype直接使用原Tensor，mixed预设与配置身份保持原含义。
+[`test_region_column_transport`](../tests/test_region_column_transport.py)检查实际参数转换次数、
+十二种代表配置的操作数字节数、别名/独立根/None/零与版本；其中selection搬运为明确的CPU模拟，
+不能代替加速器资格。独立C++ [`weighted_region_transport`](../cpp/test/weighted_region_transport.cpp)
+以真实CPU cast、图节点统计和闭式quad公式检查跨分组复用；跨设备及完整训练恢复另验。
 
 | 数学/边界 | 实现 | 独立检查 |
 | --- | --- | --- |
