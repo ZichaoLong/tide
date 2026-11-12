@@ -37,18 +37,6 @@ class SettleColumnResult:
         return value.reshape(*self.dense_shape, -1) if self.dense_shape else value
 
 
-def candidate_groups(rows_by_node):
-    """Group only structural metadata, not Tensor rows or float computations."""
-    candidates = {}
-    for node, rows in rows_by_node.items():
-        for row in rows.tolist():
-            candidates.setdefault(row, []).append(node)
-    groups = {}
-    for row in sorted(candidates):
-        groups.setdefault(tuple(candidates[row]), []).append(row)
-    return [(members, torch.tensor(rows, dtype=torch.int64)) for members, rows in groups.items()]
-
-
 class SettleColumnPlan:
     """Host weighted composition, selected by actual graph/module capabilities.
 
@@ -201,22 +189,15 @@ class SettleColumnPlan:
                 descriptors[v] = column_placement.read(module, model.nodes[v], window, initial[v], mode,
                     self.node_locations[v]["read"], self.read_dtypes[v])
                 windows[v], states[v] = window, window.terminal
-            controls = {v: model.nodes[v].bias.new_zeros(len(rows)) for v, rows in rows_by_node.items()}
             placement = self.region_locations[r]
             regional_fields = {v: column_transport.fields(d, placement["control"]) for v, d in descriptors.items()}
-            for members, rows in candidate_groups(rows_by_node):
-                ids = {v: None if torch.equal(rows_by_node[v], rows) else
-                       torch.searchsorted(rows_by_node[v], rows).to(regional_fields[v]["w"].device) for v in members}
-                fields = {name: torch.stack([regional_fields[v][name] if ids[v] is None else
-                          regional_fields[v][name].index_select(0, ids[v]) for v in members], 1)
-                          for name in regional_fields[members[0]]}
-                nodes = torch.tensor(members, dtype=torch.int64, device=fields["w"].device).expand(len(rows), -1)
-                region = column_placement.region(model.regions[r], fields, nodes, placement["control"], placement["selection"])
-                for v, control in zip(members, region.controls.unbind(1)):
-                    ref = model.nodes[v].bias
-                    value = column_placement.controls(control, ref)
-                    controls[v] = value if ids[v] is None else controls[v].index_copy(0, ids[v].to(ref.device), value)
-                calls += 1
+            from .regional_packing import RegionalPacking
+            from .regional_groups import region_groups
+            packing = RegionalPacking(rows_by_node)
+            grouped = region_groups(model.regions[r], packing, regional_fields,
+                                    control=placement["control"], selection=placement["selection"])
+            controls = {v: column_placement.controls(value, model.nodes[v].bias) for v, value in grouped.items()}
+            calls += len(packing.groups)
             for v, window in windows.items():
                 full = self.modules[v].full(model.nodes[v], window, controls[v])
                 rows = rows_by_node[v]

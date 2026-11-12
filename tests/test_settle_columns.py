@@ -142,3 +142,26 @@ def test_dense_fc_against_independent_direct_formula(dtype):
     gradients = [vjp(x.square().sum(), roots) for x in (actual.readout(values), direct["hidden"])]
     gradients = [{n: torch.zeros_like(roots[n]) if x is None else x for n, x in row.items()} for row in gradients]
     equivalent(*gradients)
+
+
+@pytest.mark.parametrize("implementation", ["python", "native"])
+def test_default_region_count_uses_real_cardinality_not_member_tuple(implementation):
+    # Four different pairs at four positions, all in one region. Arbitrary
+    # member subsets must not force four numerical calls or fabricated ranks.
+    g = Graph(tuple(Node(0) for _ in range(4)), (), (Region(2),), tuple(range(4)), tuple(range(4)))
+    b = bind(g, memories=KVConfig(width=2, summary_width=2, heads=1, ffn_width=4),
+             regions=RegionalConfig(k=2), alpha_agg=.2, dtype=torch.float64)
+    spec = SettleGraph(b.graph, (1,), binding="ports", time_stride=3)
+    layout = SequenceLayout(torch.tensor([0, 4]), torch.tensor([0, 2, 5, 8]))
+    ports = {v: MessageColumns(torch.tensor(rows), torch.tensor([.4, .7], dtype=torch.float64, requires_grad=True),
+        torch.tensor([[.2+.01*v, -.3], [-.1, .6-.02*v]], dtype=torch.float64, requires_grad=True))
+        for v, rows in enumerate(([0, 1], [0, 2], [1, 3], [2, 3]))}
+    actual = SettleColumnPlan(b, spec, implementation=implementation).run_ports(layout, ports)
+    assert actual.stats["region_column_calls"] == 1
+    expected = reference(b.graph, b.model, Continuation(b.graph.identity, 1),
+                         external(spec, layout, ports), 30, sealed_until=30)
+    pairs = observations(actual, expected, spec)
+    equivalent(*pairs)
+    roots = {n: p for n, p in b.model.named_parameters() if p.requires_grad} | {f"{v}.{name}": getattr(p, name)
+              for v, p in ports.items() for name in ("strength", "content")}
+    equivalent(vjp(objective(pairs[0]), roots), vjp(objective(pairs[1]), roots))

@@ -4,6 +4,7 @@
 #include "tide/allocation_failure.h"
 #include "tide/allocation_observation.h"
 #include "weighted_sending_batch.h"
+#include "weighted_regional_groups.h"
 #include <torch/csrc/utils/pybind.h>
 #include <pybind11/stl.h>
 namespace py=pybind11;
@@ -39,6 +40,22 @@ void bind_weighted_batch(py::module_& m){
   },py::call_guard<py::gil_scoped_release>());
   m.def("weighted_region_columns",[](const RegionWeights& w,const TensorFields& fields,std::optional<Tensor> nodes){
     return region_columns(w,fields,region_binding(w),nodes.value_or(Tensor{})).controls;
+  },py::call_guard<py::gil_scoped_release>());
+  m.def("weighted_region_groups",[](const RegionWeights& w,const std::map<Index,std::vector<Index>>& rows,
+      const columns::RegionalFields& fields,std::optional<ExecutionPlacement> request){
+    columns::RegionalPacking packing(rows);
+    if(packing.groups.empty())return std::map<Index,Tensor>{};
+    auto placement=resolve_placement(request.value_or(ExecutionPlacement{}),fields.begin()->second.at("w").device());
+    return columns::region_groups(w,region_binding(w),packing,fields,placement);
+  },py::arg("weights"),py::arg("rows"),py::arg("fields"),py::arg("placement")=std::nullopt,
+     py::call_guard<py::gil_scoped_release>());
+  m.def("weighted_regional_packing",[](const std::map<Index,std::vector<Index>>& rows,const columns::RegionalFields& fields){
+    columns::RegionalPacking packing(rows);std::vector<std::vector<Index>> domains;
+    std::vector<Tensor> nodes,controls;std::vector<TensorFields> blocks;
+    for(const auto& group:packing.groups){auto p=group.pack(fields);domains.push_back(group.rows);
+      nodes.push_back(p.nodes);controls.push_back(p.fields.at("w"));blocks.push_back(std::move(p.fields));}
+    auto unpacked=packing.unpack(controls,fields.empty()?Tensor{}:fields.begin()->second.at("w"));
+    return std::make_tuple(domains,nodes,blocks,unpacked);
   },py::call_guard<py::gil_scoped_release>());
   m.def("weighted_proportional_batch",&batch::proportional,py::call_guard<py::gil_scoped_release>());
   m.def("weighted_sorted_batch",&batch::sorted_send,py::call_guard<py::gil_scoped_release>());

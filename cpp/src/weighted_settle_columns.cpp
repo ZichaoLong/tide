@@ -1,6 +1,7 @@
 // Settle §9–11: independent region-order host schedule with actual column support.
 #include "weighted_column_modules.h"
 #include "weighted_column_placement.h"
+#include "weighted_regional_groups.h"
 #include "weighted_placement.h"
 #include "weighted_mean.h"
 #include "weighted_source.h"
@@ -96,7 +97,7 @@ Result settle(const SettleGraph& spec,const Model& model,const Layout& layout,co
     empty[v]={{},at::empty({0},w.bias.options()),at::empty({0,w.bias.numel()-1},w.bias.options())};}
   for(auto region:order){
     const auto& placement=region_locations[region];
-    std::map<Index,std::vector<Index>> candidates;std::vector<Index> nodes;
+    std::map<Index,std::vector<Index>> rows_by_node;std::vector<Index> nodes;
     std::vector<LocalPrepareRequest> preparations;std::map<Index,Received> received_by_node;
     for(Index k=g.region_index.offsets[region];k<g.region_index.offsets[region+1];++k){
       const auto v=g.region_index.edges[k];const auto& w=model.nodes[v];const auto& b=binding[v];
@@ -116,27 +117,16 @@ Result settle(const SettleGraph& spec,const Model& model,const Layout& layout,co
       auto fields=read_placed(w,b,window,g.regions[region].read_mode,initial[v],node_locations[v]);
       result.states[v]=terminal_columns(window);
       result.nodes[v]={received.rows,std::move(window),std::move(fields),at::zeros_like(received.mass)};
-      for(auto row:received.rows)candidates[row].push_back(v);
+      rows_by_node[v]=received.rows;
     }
-    std::map<std::vector<Index>,std::vector<Index>> groups;
-    for(const auto& [row,members]:candidates)groups[members].push_back(row);
     std::map<Index,TensorFields> regional_fields;
     for(auto v:nodes){auto fields=result.nodes.at(v).descriptors;std::vector<Tensor*> handles;
       for(auto& [name,t]:fields)handles.push_back(&t);
       placement_tensors(handles,placement.control,fields.at("w").scalar_type());regional_fields.emplace(v,std::move(fields));}
-    for(const auto& [members,rows]:groups){
-      std::map<std::string,std::vector<Tensor>> fields;std::map<Index,Tensor> ids;
-      for(auto v:members){const auto& node=result.nodes.at(v);
-        if(node.rows!=rows)ids[v]=indices(positions(node.rows,rows),regional_fields.at(v).at("w").device());
-        for(const auto& [name,t]:regional_fields.at(v))fields[name].push_back(ids.count(v)?t.index_select(0,ids.at(v)):t);}
-      TensorFields packed;for(const auto& [name,values]:fields)packed[name]=at::stack(values,1);
-      auto n=indices(members,packed.at("w").device()).expand({static_cast<Index>(rows.size()),static_cast<Index>(members.size())});
-      auto values=region_placed(model.regions[region],packed,region_binding(model.regions[region]),n,placement).controls.unbind(1);
-      for(size_t i=0;i<members.size();++i){auto v=members[i];const auto& like=model.nodes[v].bias;
-        auto value=control_payload(values[i],like);
-        result.nodes[v].controls=ids.count(v)?result.nodes[v].controls.index_copy(0,ids.at(v).to(like.device()),value):value;}
-      ++result.stats["region_column_calls"];
-    }
+    RegionalPacking packing(rows_by_node);
+    auto controls=region_groups(model.regions[region],region_binding(model.regions[region]),packing,regional_fields,placement);
+    for(const auto& [v,value]:controls)result.nodes[v].controls=control_payload(value,model.nodes[v].bias);
+    result.stats["region_column_calls"]+=packing.groups.size();
     for(auto v:nodes){const auto& node=result.nodes.at(v);
       auto value=full_columns(model.nodes[v],binding[v].memory,node.window,node.controls);
       for(auto& row:value.rows)row=node.rows[row];outgoing[v]=value;
