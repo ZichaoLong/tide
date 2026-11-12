@@ -31,7 +31,7 @@ Index common_cut(const Tensor& last,Index stride){
 BlockResidentSession::Impl::Impl(SettleGraph g,Model m,const Continuation& q,at::Device device,
     ResidentOptimizerKind k,std::vector<OptimizerGroup> gs,BlockResidentLimits l,const BlockCheckpoint* checkpoint)
     :graph(std::move(g)),model(configure_boundary_model(graph,std::move(m))),binding(lower_block_settle_model(graph,model,q,l.cache,l.forward_bytes)),
-     session(training_detail::session_id()),batch(q.batch_size),cut(q.cut),kind(k),groups(std::move(gs)){
+     session(training_detail::session_id()),batch(q.batch_size),cut(q.cut),kind(k),groups(std::move(gs)),limits(l){
   if(at::GradMode::is_enabled()||(k!=ResidentOptimizerKind::sgd&&k!=ResidentOptimizerKind::adamw))
     throw std::invalid_argument("block resident requires no-grad and an explicit optimizer kind");
   std::optional<BlockSettleCheckpoint> saved;

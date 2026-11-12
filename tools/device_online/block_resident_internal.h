@@ -12,6 +12,7 @@ struct BlockResidentSession::Impl {
   uint64_t session;Index batch,cut,generation=0;
   ResidentOptimizerKind kind;
   std::vector<OptimizerGroup> groups;
+  BlockResidentLimits limits;
   std::vector<Window> windows;
   bool failed=false,closed=false;
   Impl(SettleGraph,Model,const Continuation&,at::Device,ResidentOptimizerKind,

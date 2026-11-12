@@ -15,6 +15,9 @@
 独立执行身份为 `settle-block-v2`，不更改通用checkpoint v5，也不把有效状态投影当精确解码。
 真实Settle证书和适用KV绑定决定公共默认分派；数值/容量失败不回退。
 源码、构建、小图训练/恢复和原预算规模资格分别记录。
+其 `kv-bank-views-v1` [观察接口](resident-block-session.md#public-model-and-python-entry)
+以shape和int64快照索引声明old/proposal字段，显式observe从实际bank解码；独立根无需先解码。
+这只迁移物化接口，不改数学、block checkpoint schema 2或通用checkpoint v5。
 
 [Weighted保留窗口](resident-weighted-retained.md)描述实际journal快照、版本检查与跨切面VJP连接；其公共生命周期由[训练owner](resident-weighted-training.md)组合并独立验收。
 

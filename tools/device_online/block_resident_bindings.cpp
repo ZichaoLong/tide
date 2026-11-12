@@ -10,7 +10,7 @@ void bind_block_resident(py::module_& m){
     FIELD(BlockResidentLimits,cache) FIELD(BlockResidentLimits,forward_bytes) FIELD(BlockResidentLimits,backward_bytes)
     FIELD(BlockResidentLimits,optimizer_bytes) FIELD(BlockResidentLimits,total_bytes) FIELD(BlockResidentLimits,workspace_bytes)
     FIELD(BlockResidentLimits,windows) FIELD(BlockResidentLimits,timeout_ms);
-  py::class_<BlockField>(m,"BlockField") VIEW(BlockField,values) VIEW(BlockField,present) VIEW(BlockField,valid);
+  py::class_<BlockField>(m,"BlockField") VIEW(BlockField,values) VIEW(BlockField,present) VIEW(BlockField,valid) VIEW(BlockField,shape);
   py::class_<BlockRoot>(m,"BlockRoot").def(py::init<>()) FIELD(BlockRoot,values) FIELD(BlockRoot,connected);
   py::class_<BlockWindow>(m,"BlockWindow") VIEW(BlockWindow,token) VIEW(BlockWindow,fields) VIEW(BlockWindow,metadata);
   py::class_<BlockRoots>(m,"BlockRoots").def(py::init<>()) FIELD(BlockRoots,token) FIELD(BlockRoots,fields);
@@ -26,6 +26,7 @@ void bind_block_resident(py::module_& m){
     .def(py::init<SettleGraph,Model,const Continuation&,at::Device,ResidentOptimizerKind,std::vector<OptimizerGroup>,BlockResidentLimits>(),py::call_guard<py::gil_scoped_release>())
     .def(py::init<SettleGraph,Model,const Continuation&,const BlockCheckpoint&,at::Device,BlockResidentLimits>(),py::call_guard<py::gil_scoped_release>())
     .def("advance",&BlockResidentSession::advance,py::call_guard<py::gil_scoped_release>())
+    .def("observe",&BlockResidentSession::observe,py::call_guard<py::gil_scoped_release>())
     .def("backward",&BlockResidentSession::backward,py::call_guard<py::gil_scoped_release>())
     .def("step",&BlockResidentSession::step,py::call_guard<py::gil_scoped_release>())
     .def("detach",&BlockResidentSession::detach,py::call_guard<py::gil_scoped_release>())

@@ -251,11 +251,23 @@ if(TIDE_DEVICE_KERNELS)
   set_target_properties(tide-weighted-kv-update PROPERTIES POSITION_INDEPENDENT_CODE ON)
   target_link_libraries(tide-weighted-kv-update PUBLIC tide-weighted-projection tide-weighted-raw
     tide_weighted_source_guard_kernel tide_weighted_kv_prepare_kernel tide_weighted_kv_roots_kernel tide_weighted_kv_merge_kernel)
+  add_library(tide-block-kv-bank STATIC block_kv_bank.cpp block_kv_bank_vjp.cpp
+    block_kv_read_plan.cpp block_kv_pool.cpp block_kv_match.cpp
+    block_kv_memory.cpp block_kv_memory_vjp.cpp block_kv_full.cpp)
+  set_target_properties(tide-block-kv-bank PROPERTIES POSITION_INDEPENDENT_CODE ON)
+  target_link_libraries(tide-block-kv-bank PUBLIC tide-weighted-kv-update
+    tide-weighted-kv-query tide-weighted-kv-full
+    tide_block_kv_bank_plan_kernel tide_block_kv_bank_decode_kernel
+    tide_block_kv_bank_numerical_vjp_kernel tide_block_kv_bank_snapshot_vjp_kernel
+    tide_block_kv_read_plan_kernel tide_block_kv_read_roots_kernel tide_block_kv_read_weight_vjp_kernel
+    tide_block_kv_pool_prepare_kernel tide_block_kv_pool_scale_kernel tide_block_kv_pool_roots_kernel
+    tide_block_kv_pool_finish_kernel tide_block_kv_pool_center_kernel
+    tide_block_kv_match_kernel tide_block_kv_match_phase_kernel)
   add_library(tide-block-read-selection STATIC
     block_read_selection.cpp block_read_selection_vjp.cpp)
   set_target_properties(tide-block-read-selection PROPERTIES POSITION_INDEPENDENT_CODE ON)
   target_link_libraries(tide-block-read-selection PUBLIC
-    tide-block-dispatch tide-weighted-kv-query tide-weighted-describe tide-weighted-region tide::tidegraph
+    tide-block-dispatch tide-block-kv-bank tide-weighted-kv-query tide-weighted-describe tide-weighted-region tide::tidegraph
     tide_block_selection_plan_kernel tide_block_selection_roots_kernel
     tide_block_selection_flags_kernel tide_block_node_gate_kernel)
   add_library(tide-block-kv-messages STATIC
@@ -282,7 +294,7 @@ if(TIDE_DEVICE_KERNELS)
   set_target_properties(tide-block-settle-session PROPERTIES POSITION_INDEPENDENT_CODE ON)
   target_link_libraries(tide-block-settle-session PUBLIC tide-block-settle-flow tide-device-optimizer
     tide_block_flow_boundary_kernel)
-  add_library(tide-block-resident SHARED block_resident_owner.cpp block_resident_checkpoint.cpp
+  add_library(tide-block-resident SHARED block_resident_owner.cpp block_resident_checkpoint.cpp block_resident_observe.cpp
     block_settle_model.cpp block_settle_observations.cpp)
   target_link_libraries(tide-block-resident PRIVATE tide-block-settle-session tide-weighted-flow)
   target_link_libraries(tide-block-resident PUBLIC tide::tidegraph)

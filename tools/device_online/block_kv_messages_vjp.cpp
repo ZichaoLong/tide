@@ -36,7 +36,10 @@ BlockKVMessageGradient append_block_kv_messages_vjp(DeviceProgram& p,const Block
   auto binding=t.columns->reverse(p,bound,error,remaining());
   const auto c=binding.rows.at(t.strength_index),g=binding.rows.at(t.content_index);
   auto read=append_block_read_selection_vjp(p,t.selection,c.value.reshape({frames,nodes}),c.connected.reshape({frames,nodes}),error,remaining(),roots.read);
-  auto full=append_weighted_kv_full_vjp(p,t.full,g.value,g.connected,error,remaining());
+  std::optional<BlockKVBankAdjoint> full_bank;
+  auto full=[&](){if(t.bank_full){auto value=append_block_kv_full_vjp(p,*t.bank_full,g.value,g.connected,error,remaining());
+      full_bank=std::move(value.bank);return std::move(value.rows);}
+    return append_weighted_kv_full_vjp(p,t.full,g.value,g.connected,error,remaining());}();
   WeightedRowAdjoint content{at::zeros_like(read.content).reshape({rows,d}),at::zeros_like(read.content_connected).reshape({rows})};
   p.zero(content.value);p.zero(content.connected);const auto owners=t.selection.owners;
   for(const auto& source:std::vector<WeightedRowAdjoint>{{read.content.reshape({rows,d}),read.content_connected.reshape({rows})},
@@ -46,6 +49,6 @@ BlockKVMessageGradient append_block_kv_messages_vjp(DeviceProgram& p,const Block
       "block Read/Full common content adjoint");},{owners,source.value,source.connected,content.value,content.connected,error});
   }
   content.value=content.value.reshape({frames,nodes,d});content.connected=content.connected.reshape({frames,nodes});
-  admit(storage.bytes(),budget);return {std::move(read),std::move(full),std::move(content)};
+  admit(storage.bytes(),budget);return {std::move(read),std::move(full),std::move(content),std::move(full_bank)};
 }
 }

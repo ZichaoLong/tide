@@ -224,6 +224,10 @@ actual presence和int64时钟伴随返回；role→canonical owner映射汇总�
 `block_resident_*`映射真实Model、独立根、raw状态解码与输入账本。原始来源低秩因子、
 异宽source bank padding及别名由Model检查和独立Streaming公共消费者核对，
 字面公式、独立调度、archive恢复和真机验收各自保留范围。
+[KV唯一bank与快照视图](resident-kv-bank.md)将KV§1.3/§3/§4的原始时间、Read0/−/+、
+Full proposal及独立raw根对应到`block_kv_bank/read_plan/memory/full`及块VJP。
+`test_resident_kv_bank/pool/read`独立公式和`block_settle_flow_check`实际全根分别核对局部与组合；
+`block_resident_observe`从实际bank解码，安装消费者核对raw值及独立proposal根。
 [a3c公共资格](evidence/resident-block-public-20261112.md)连接sum/qry字面Mem/total根、
 完整flow根、Model独立Streaming、实验完整解码及新进程archive检查；规模容量失败另列。
 [042ea369服务资格](evidence/resident-services-20261112.md)补完整flow/原预算规模执行及恢复；

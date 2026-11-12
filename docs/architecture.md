@@ -33,6 +33,10 @@ execution-v7、新 owner 的容量与历史 general 身份分开，实际设备�
 修改须同步设备检查注册、独立公式/容量测试。`block_settle_flow`接Aggregate/Upd与物理路由，
 `block_settle_session`接跨窗/optimizer/raw archive，`block_resident_*`接真实Model和公共接口；
 `block_settle_model`与`block_settle_observations`分别维护参数/状态lowering和批量字段/根。
+默认局部消费者的[唯一KV bank](resident-kv-bank.md)由`block_kv_bank/read_plan/memory/full`
+及对应VJP贯穿；`block_kv_match/pool`保持共享values和实际B×L查询。
+`block_resident_observe`是显式raw物化边界，修改须同步独立bank/pool/read公式、完整flow根、
+公共观察消费者与精确恢复，不能用有效状态投影代替实际raw解码。
 公共默认能力分派在`weighted/resident_blocks.py`与`resident_training.py`，修改须同步
 `test_resident_block_public_dispatch`及Model、public standalone消费者；代码、build、真机和规模资格分列。
 

@@ -47,8 +47,11 @@ the actual forward journal and accumulates each physical use and canonical share
 parameter. Independent root masks distinguish unused and connected-zero values.
 The derivative is first order; current payload/adjoint arithmetic is FP32.
 
-The raw sequence tape currently materializes per-frame state snapshots. Explicit
-byte budgets reject excess storage; this is not a shared-prefix-bank memory claim.
+The default local sequence uses the [shared KV bank](resident-kv-bank.md):
+per-frame snapshots retain indices and exact integer metadata, while numerical
+Read/Full consume the bank directly. Explicit raw observation decodes requested
+prefixes; final raw state remains available for continuation. Byte budgets reject
+excess bank, index, adjoint and observation storage.
 Owner publication, optimizer, retained windows, checkpoint and public automatic
 lowering are separate layers, with qualification recorded separately.
 

@@ -181,7 +181,15 @@ It publishes `output.strength/content`, `edge.strength/content` and
 `total.short/total.long/Describe.NAME/old.FIELD/proposal.FIELD/final.FIELD`.
 Separate presence/valid masks and actual raw int64 metadata accompany the fields.
 Each retained token accepts independent named roots with matching tensor shapes.
-Returned storage is borrowed and version-guarded, including derived validity and
+The `kv-bank-views-v1` observation layout exposes `shape/present/valid` for every
+field. `old.FIELD` and `proposal.FIELD` have undefined C++ values (`None` in
+Python) until explicitly requested with `observe(token, names)` /
+`session.observe(window, fields=None)`. The call returns actual decoded fields;
+it does not mutate `window.fields` or rerun a reference recurrence. Roots validate
+against the schema and do not require this decode. Outputs and final checkpoint
+state remain directly available. Complete Python event records request all
+observations; outputs/metrics avoid this expansion. See [shared KV bank](resident-kv-bank.md).
+Returned core storage is borrowed and version-guarded, including derived validity and
 presence masks; callers clone before mutation. Default optimizer groups contain
 only the original model's trainable canonical owners.
 
@@ -200,6 +208,7 @@ backward, optimizer, total, workspace and retained-window limits; unknown keys
 are rejected. The mathematical graph identity and eager checkpoint v5 remain.
 
 Source navigation: `block_resident_owner.cpp` owns public lifecycle,
+`block_resident_observe.cpp` owns explicit retained-window raw materialization,
 `block_resident_checkpoint.cpp` owns public/raw conversion,
 `block_settle_observations.cpp` owns named observations/roots, and
 `block_resident_bindings.cpp` plus `python/tidegraph/weighted/resident_blocks.py`
@@ -221,7 +230,7 @@ are separate. Model checks exercise both read functions without synthetic owners
 The named observation fields and schema-2 archive stay unchanged; `memory_read`
 already participates in identity, so sum and qry checkpoints are not interchangeable.
 General PDG lowering, other local-memory families, cross-device ownership,
-shared-prefix storage and FC16 scale/performance require their own implementation
+and FC16 scale/performance require their own implementation
 and evidence. Public source, build, actual device consumer and default experiment
 routing are separate delivery facts; none follows from the v1 internal owner.
 

@@ -66,7 +66,8 @@ class BlockResident:
             finite_tensors((loss, bars))
             self.last_work = block_records.work(window, input_positions=self.inputs.input_positions,
                                                 input_atoms=self.inputs.input_atoms)
-            values = block_records.window_snapshot(window, complete=mode == "complete") if mode != "metrics" else None
+            observed = self.owner.observe(window) if mode == "complete" else None
+            values = block_records.window_snapshot(window, complete=mode == "complete", observed=observed) if mode != "metrics" else None
             if self.training:
                 if self.last_work["outputs"] == 0:
                     raise ValueError("task.objective: window produced no differentiable output")

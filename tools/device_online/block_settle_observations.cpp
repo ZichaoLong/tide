@@ -4,11 +4,11 @@ namespace tide::device_online {
 namespace {
 std::string region_name(size_t r){return "region."+std::to_string(r)+".";}
 void raw_fields(BlockWindow& out,const std::string& prefix,const WeightedRawLayout& layout,const WeightedRawState& raw,const at::Tensor& present){
-  const auto rows=raw.floating.size(0),capacity=layout.capacity();const auto valid=at::arange(capacity,raw.integer.options()).unsqueeze(0)<raw.integer.select(1,2).unsqueeze(1);
+  const auto rows=raw.integer.size(0),capacity=layout.capacity();const auto valid=at::arange(capacity,raw.integer.options()).unsqueeze(0)<raw.integer.select(1,2).unsqueeze(1);
   out.metadata[prefix+"integer"]=raw.integer;
   for(const auto& f:layout.fields()){auto shape=f.shape;if(f.ragged)shape.insert(shape.begin(),capacity);shape.insert(shape.begin(),rows);
     const auto width=f.width*(f.ragged?capacity:1);
-    out.fields[prefix+f.name]={raw.floating.narrow(1,f.offset,width).reshape(shape),present,f.ragged?valid:at::Tensor{}};}
+    out.fields[prefix+f.name]={raw.floating.defined()?raw.floating.narrow(1,f.offset,width).reshape(shape):at::Tensor{},present,f.ragged?valid:at::Tensor{},shape};}
 }
 }
 BlockWindow block_settle_observations(const BlockSettleWindow& w,ResidentToken token){
@@ -36,14 +36,15 @@ BlockWindow block_settle_observations(const BlockSettleWindow& w,ResidentToken t
     raw_fields(out,p+"old.",x.sequence.layout,x.sequence.old,candidates);raw_fields(out,p+"proposal.",x.sequence.layout,x.sequence.proposal,candidates);
     raw_fields(out,p+"final.",x.sequence.layout,x.sequence.final,w.boundary.node_present.index_select(1,stage.nodes).reshape({-1}));
   }
+  for(auto& [name,field]:out.fields)if(field.shape.empty()&&field.values.defined())field.shape=field.values.sizes().vec();
   return out;
 }
 BlockSettleFlowRoots block_settle_roots(const BlockWindow& view,const BlockRoots& given,const BlockSettleFlowTape& t){
   if(given.token.session!=view.token.session||given.token.index!=view.token.index||given.token.generation!=view.token.generation)
     throw std::invalid_argument("block root names a different owner/window/generation");
   for(const auto& [name,r]:given.fields){const auto found=view.fields.find(name);if(found==view.fields.end())throw std::invalid_argument("unknown block observation root: "+name);
-    const auto& f=found->second;if(!r.values.defined()||!r.connected.defined()||r.values.device()!=f.values.device()||r.connected.device()!=f.present.device()||
-        r.values.scalar_type()!=at::kFloat||r.connected.scalar_type()!=at::kBool||r.values.sizes()!=f.values.sizes()||r.connected.sizes()!=f.present.sizes()||r.values.requires_grad()||r.connected.requires_grad())
+    const auto& f=found->second;if(!r.values.defined()||!r.connected.defined()||r.values.device()!=f.present.device()||r.connected.device()!=f.present.device()||
+        r.values.scalar_type()!=at::kFloat||r.connected.scalar_type()!=at::kBool||r.values.sizes()!=at::IntArrayRef(f.shape)||r.connected.sizes()!=f.present.sizes()||r.values.requires_grad()||r.connected.requires_grad())
       throw std::invalid_argument("block observation root layout differs: "+name);}
   auto root=[&](const std::string& name){const auto found=given.fields.find(name);if(found==given.fields.end())return WeightedRowAdjoint{};
     const auto& r=found->second;return WeightedRowAdjoint{r.values.contiguous(),at::logical_and(r.connected,view.fields.at(name).present).contiguous()};};
@@ -51,7 +52,7 @@ BlockSettleFlowRoots block_settle_roots(const BlockWindow& view,const BlockRoots
   for(size_t r=0;r<t.regions.size();++r){const auto& x=*t.regions[r].local;const auto p=region_name(r);BlockKVLocalRoots a;
     a.received=root(p+"received");a.messages.controls=root(p+"controls");a.messages.full=root(p+"Full");
     a.messages.message_strength=root(p+"message.strength");a.messages.message_content=root(p+"message.content");
-    const auto rows=x.sequence.old.floating.size(0),ds=x.sequence.config.summary_width;
+    const auto rows=x.sequence.batch*x.sequence.length*x.sequence.nodes,ds=x.sequence.config.summary_width;
     auto channels=[&](const std::string& prefix,bool memory){
       WeightedRowAdjoint result;for(int channel=0;channel<2;++channel){const auto bar=root(p+prefix+(channel?"long":"short"));if(!bar.value.defined())continue;
         if(!result.value.defined()){result.value=at::zeros(memory?std::vector<int64_t>{rows,2,ds}:std::vector<int64_t>{rows,2},bar.value.options());result.connected=at::zeros({rows,2},bar.connected.options());}
@@ -60,9 +61,9 @@ BlockSettleFlowRoots block_settle_roots(const BlockWindow& view,const BlockRoots
     for(const auto& [name,value]:x.messages.selection.describe.fields){auto bar=root(p+"Describe."+name);if(bar.value.defined())a.messages.read.describe[name]=bar;}
     auto raw=[&](const std::string& prefix,const WeightedRawState& state){WeightedRowAdjoint result;int field=0;
       for(const auto& f:x.sequence.layout.fields()){const auto bar=root(p+prefix+f.name);if(bar.value.defined()){
-          if(!result.value.defined()){result.value=at::zeros_like(state.floating);result.connected=at::zeros({state.floating.size(0),int64_t(x.sequence.layout.fields().size())},bar.connected.options());}
+          if(!result.value.defined()){result.value=at::zeros({state.integer.size(0),x.sequence.layout.floating_width()},bar.value.options());result.connected=at::zeros({state.integer.size(0),int64_t(x.sequence.layout.fields().size())},bar.connected.options());}
           const auto width=f.width*(f.ragged?x.sequence.layout.capacity():1);
-          result.value.narrow(1,f.offset,width).copy_(bar.value.reshape({state.floating.size(0),width}));result.connected.select(1,field).copy_(bar.connected);}++field;}return result;};
+          result.value.narrow(1,f.offset,width).copy_(bar.value.reshape({state.integer.size(0),width}));result.connected.select(1,field).copy_(bar.connected);}++field;}return result;};
     auto old=raw("old.",x.sequence.old),proposal=raw("proposal.",x.sequence.proposal),final=raw("final.",x.sequence.final);
     a.raw={old.value,old.connected,proposal.value,proposal.connected,final.value,final.connected};out.regions.push_back(std::move(a));}
   return out;

@@ -101,6 +101,10 @@ python dense_query.py --device npu:0 --client native --native-library MATCHING_N
 
 ## Resident张量块的安装消费者
 
+`kv-bank-views-v1`中old/proposal字段默认只声明shape/present/valid；需要数值时调用
+`session.observe(window)`。示例使用独立Python trace核验实际raw解码，并把proposal
+keys/values作为额外独立根参与三步AdamW及新进程恢复。原始字段没有数值时也可按shape构造根。
+
 [`block_resident.py`](block_resident.py)消费安装后的`WeightedResidentTraining`公共入口，
 传入真实ports `SettleGraph`证书，并断言实际返回`WeightedBlockResidentTraining`。
 当前适用域、完整字段根、只读寿命和schema-2 archive见[公共块owner](../../docs/resident-block-session.md#public-model-and-python-entry)。

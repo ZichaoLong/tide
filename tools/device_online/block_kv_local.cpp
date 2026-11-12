@@ -30,20 +30,17 @@ BlockKVLocalTape append_block_kv_local(DeviceProgram& p,const SettleBlockPlan& p
     input.source_owners.reshape({rows,a}),source,alpha,kv.epsilon,error,remaining());
   auto present=at::zeros({b,l,n},input.lengths.options().dtype(at::kBool));
   p.less(at::zeros_like(input.lengths),input.lengths,present);
-  auto sequence=append_block_kv_sequence(p,kv,input.initial,aggregate.output,input.times,input.node_owners,present,parameters.update,error,remaining());
-  WeightedRawState read=mode=="+"?sequence.proposal:sequence.old;auto indices=at::zeros({rows},input.times.options());
+  auto sequence=append_block_kv_bank_sequence(p,kv,input.initial,aggregate.output,input.times,input.node_owners,present,parameters.update,error,remaining());
+  auto snapshot=block_kv_snapshot(sequence,mode=="+");auto indices=at::Tensor{};
   if(mode=="0"){
     validate_weighted_raw_buffers(sequence.layout,input.bound_initial);
     check(input.bound_initial.floating,error,at::kFloat,{b*n,sequence.layout.floating_width()});
     check(input.bound_initial.integer,error,at::kLong,{b*n,sequence.layout.integer_width()});
-    std::vector<int64_t> ids;for(int64_t sample=0;sample<b;++sample)for(int64_t step=0;step<l;++step)
-      for(int64_t node=0;node<n;++node)ids.push_back(sample*n+node);
-    indices=at::tensor(ids,at::kLong).to(error.device());
-    read={at::zeros_like(sequence.old.floating),at::zeros_like(sequence.old.integer)};
-    p.index_select(input.bound_initial.floating,0,indices,read.floating);p.index_select(input.bound_initial.integer,0,indices,read.integer);
+    snapshot=append_block_kv_bound_bank(p,kv,input.bound_initial,b,l,n,error,remaining());
   }
+  WeightedRawState read{{},snapshot.integer};
   auto mass=columns(p,aggregate.output,0,1).reshape({b*l,n}),content=columns(p,aggregate.output,1,d).reshape({b*l,n,d});
-  BlockKVMessageInput x{{read,mass,content,present.reshape({b*l,n}),input.times.reshape({b*l,n}),input.node_owners.reshape({b*l,n})},sequence.proposal,{}};
+  BlockKVMessageInput x{{read,mass,content,present.reshape({b*l,n}),input.times.reshape({b*l,n}),input.node_owners.reshape({b*l,n}),snapshot},sequence.proposal,{},block_kv_snapshot(sequence,true)};
   auto messages=append_block_kv_messages(p,plan,kv,region,x,parameters.message,error,remaining(),projection);
   auto received=std::make_shared<WeightedRowGraph>(p,messages.selection.owners,parameters.update.base.size(0),error,remaining(),std::vector<at::Tensor>{aggregate.output});
   const auto h=received->input(aggregate.output),r=received->slice(h,0,1),u=received->slice(h,1,d);

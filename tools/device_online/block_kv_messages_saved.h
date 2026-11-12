@@ -5,6 +5,7 @@
 namespace tide::device_online::block_message_detail {
 inline std::vector<at::Tensor> saved(const BlockKVMessageTape& t){
   auto out=saved_tensors(t.full);
+  if(t.bank_full){auto a=block_kv_full_tensors(*t.bank_full);out.insert(out.end(),a.begin(),a.end());}
   std::visit([&](const auto& memory){append_saved_tensors(out,memory);},t.selection.memory_tape());
   auto a=t.selection.describe.graph->saved_tensors(),b=t.columns->saved_tensors();
   out.insert(out.end(),a.begin(),a.end());out.insert(out.end(),b.begin(),b.end());

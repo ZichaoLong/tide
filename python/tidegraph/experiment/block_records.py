@@ -12,9 +12,14 @@ from ..history import History
 from .returns import snapshot
 
 
-def window_snapshot(window, *, complete):
+def window_snapshot(window, *, complete, observed=None):
+    source = window.fields if observed is None else observed
+    if complete and set(source) != set(window.fields):
+        raise ValueError("complete block records require every declared observation field")
+    if complete and any(f.values is None for f in source.values()):
+        raise ValueError("complete block records require owner.observe(window) for deferred raw fields")
     fields = {name: dict(values=f.values, present=f.present, valid=f.valid)
-              for name, f in window.fields.items() if complete or name.startswith("output.")}
+              for name, f in source.items() if complete or name.startswith("output.")}
     metadata = {name: x for name, x in window.metadata.items()
                 if complete or name in {"positions", "output.times"}}
     return snapshot(dict(fields=fields, metadata=metadata), packing="packed")

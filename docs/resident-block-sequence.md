@@ -4,6 +4,10 @@ This component implements the pinned core-5 KV reception/update over explicit
 `[B,L,N]` logical coordinates. It extends [resident block execution](resident-block-execution.md);
 mathematics and raw checkpoint identities remain those of [semantics](semantics.md).
 
+This dense-snapshot component remains an explicit comparison/isolated API.
+The default graph local path now uses [entry banks and snapshot views](resident-kv-bank.md)
+through `append_block_kv_bank_sequence`, including bank-based Read/Full and reverse.
+
 `append_block_kv_sequence` projects each actual positive reception once, then a
 device prefix scan preserves raw initial, old, proposal and final banks. Window
 expiry uses the original int64 write/query times. A missing or zero-mass write

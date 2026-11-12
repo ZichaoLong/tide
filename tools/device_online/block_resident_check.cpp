@@ -73,6 +73,11 @@ void check(at::Device device,const std::string& path,bool restore,bool query){
       for(const auto& y:reference_windows.back().outputs){values.push_back(y.value);cotangents.push_back(at::tensor({.07f,.13f,.13f}));}
       if(restore&&step==0)continue;
       const auto actual=session->advance(x.positions,x.payload,x.present);output(actual,x,reference_windows.back(),consumer.graph);bars.push_back(root(actual));
+      if(step==0&&w==0){const auto& field=actual.fields.at("region.0.old.keys");
+        require(!field.values.defined()&&!field.shape.empty(),"default public window expanded old KV raw values");
+        const auto raw=session->observe(actual.token,{"region.0.old.keys","region.0.proposal.keys"});
+        require(raw.at("region.0.old.keys").values.sizes()==at::IntArrayRef(field.shape),"explicit raw observation shape differs");
+        require(at::equal(raw.at("region.0.old.keys").present,field.present),"explicit raw observation changed presence");}
       resources(*session,w+1,regions,false);
       if(resumed)restored_bars.push_back(root(resumed->advance(x.positions,x.payload,x.present)));
     }

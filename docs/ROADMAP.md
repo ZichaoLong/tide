@@ -29,7 +29,7 @@ CPU、主机混合与设备常驻分开验收；GPU按当前授权延后。
 
 - **主机来源与区域窗口**：[1f0e6e43审阅](evidence/region-tensor-20261112.md)确认整组KV写入和中心化Aggregate VJP已经落实，不能继续把旧逐源图当根因。72e1d22c及9ae62d0d已保留唯一实际来源块与物理incidence/增量预算；c6afc20c已连接Read→区域的字段owner。剩余prepare/raw-bank→Read/Full及typed continuation；参数共享、计算共享和私有状态分别处理。mixed预设只在配置入口展开，实际设备边界才传输；区域参数视图和操作数别名应在调用级复用。
 - **resident程序资源**：[042ea369](evidence/resident-services-20261112.md)将区域前后向交给设备通知调用的有界program，已越过41c完整flow反向507002与原预算两规模失败。08a349ce补已知存储/workspace预准入与真实程序/流/通知计数，[两套构建/设备资格](evidence/resident-resources-20261112.md)已通过；部分提交故障、整体等待期限和更大资源规模仍独立处理。独立FP64投影oracle通过原阈值；旧FP32参考自身累加超差和CPU harness顺序污染保留。
-- **resident历史布局**：当前每帧old/proposal raw和Read历史重投影仍在。需要共享initial/write bank、快照索引及块伴随，保留三种Read、独立raw根、过期/原始int64时间与精确checkpoint；不是只放宽容量守卫。
+- **resident历史布局**：[唯一initial/write bank、快照索引及块伴随](resident-kv-bank.md)已接默认局部路径，保留三种Read、独立raw根、过期/原始int64时间与实际checkpoint。当前待固定构建与完整设备资格；局部CPU通过不能代替整链。此后是否继续规模/性能由本轮汇报后的对齐决定。
 - **循环候选与广泛审阅**：SSD层链仍有默认/公式差距；按实际调用与有状态锚点继续审阅，不把KV优化自动当循环模块已优化。全仓未审范围由固定清单/hash记录，审阅发现机会不要求无限实施。
 
 ### 测量、阶段边界与有限停止

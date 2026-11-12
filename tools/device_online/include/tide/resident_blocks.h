@@ -11,7 +11,9 @@ struct BlockResidentLimits {
   int64_t optimizer_bytes=128LL<<20,total_bytes=3LL<<30,workspace_bytes=512LL<<20,windows=4;
   int32_t timeout_ms=30000;
 };
-struct BlockField {Tensor values,present,valid;};
+// Prefix raw fields have an explicit shape but undefined values until observe.
+// All roots are accepted by schema without materializing their forward values.
+struct BlockField {Tensor values,present,valid;std::vector<int64_t> shape;};
 struct BlockRoot {Tensor values,connected;};
 struct BlockWindow {
   ResidentToken token;
@@ -46,6 +48,7 @@ class BlockResidentSession {
   BlockResidentSession(SettleGraph,Model,const Continuation&,const BlockCheckpoint&,at::Device,BlockResidentLimits={});
   ~BlockResidentSession();
   BlockWindow advance(const Tensor& int64_positions,const Tensor& payload,const Tensor& present);
+  std::map<std::string,BlockField> observe(ResidentToken,const std::vector<std::string>& names);
   BlockGradients backward(const std::vector<BlockRoots>&);
   void step();
   void detach();

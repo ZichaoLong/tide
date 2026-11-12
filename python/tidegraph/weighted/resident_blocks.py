@@ -138,14 +138,24 @@ class WeightedBlockResidentTraining:
                 raise ValueError("unknown block root field: " + name)
             field = window.fields[name]
             values, flags = supplied if isinstance(supplied, tuple) else (supplied, field.present)
-            for value, expected, dtype in ((values, field.values, torch.float32), (flags, field.present, torch.bool)):
-                if (not isinstance(value, torch.Tensor) or value.shape != expected.shape
-                        or value.device != expected.device or value.dtype != dtype or value.requires_grad):
+            for value, shape, dtype in ((values, tuple(field.shape), torch.float32), (flags, field.present.shape, torch.bool)):
+                if (not isinstance(value, torch.Tensor) or value.shape != shape
+                        or value.device != field.present.device or value.dtype != dtype or value.requires_grad):
                     raise ValueError("block cotangent shape/device/dtype/gradient differs: " + name)
             root = self.module.BlockRoot(); root.values, root.connected = values.contiguous(), flags.contiguous()
             result[name] = root
         out.fields = result
         return out
+
+    def observe(self, window, fields=None):
+        """Decode requested actual raw prefixes; normal execution keeps bank views.
+
+        Prefix fields in ``window.fields`` expose ``shape/present/valid`` and
+        have ``values is None``. They may receive roots without this call.
+        Omit fields to explicitly materialize all fields of this window.
+        """
+        self._check()
+        return dict(self.owner.observe(window.token, list(window.fields if fields is None else fields)))
 
     def backward(self, roots):
         self._check(); return self.owner.backward(list(roots))
@@ -173,6 +183,7 @@ class WeightedBlockResidentTraining:
     def manifest(self):
         self._check()
         return dict(execution="resident", scheduler="settle-block-v2", graph_certificate="SettleGraph/ports",
+                    observation_layout="kv-bank-views-v1", kv_storage="unique-initial-write-bank",
                     device=str(self.device), payload_dtype="float32", adjoint_dtype="float32", metadata_dtype="int64",
                     initial_state="actual raw", requested_limits=self.requested_limits, effective_limits=self.effective_limits,
                     initialization=self.initialization, requested_optimizer=self.requested_optimizer,

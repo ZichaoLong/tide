@@ -100,7 +100,13 @@ BlockReadSelectionGradient append_block_read_selection_vjp(DeviceProgram& p,cons
     out.content=input.value.reshape({t.frames,t.nodes,-1});
     out.content_connected=input.connected.reshape({t.frames,t.nodes});
   }else{
-    auto query=append_weighted_kv_query_vjp(p,std::get<WeightedKVQueryTape>(t.memory_tape()),memory.reshape({rows,2,ds}),total,memory_roots,error,remaining());
+    auto query=[&](){
+      if(const auto* bank=std::get_if<BlockKVMemoryTape>(&t.memory_tape())){
+        auto g=append_block_kv_memory_vjp(p,*bank,memory.reshape({rows,2,ds}),total,memory_roots,error,remaining());out.bank=std::move(g.bank);
+        return WeightedKVQueryGradient{{},{},g.input,g.input_connected,g.parameters,g.query_connected,g.key_connected,g.value_connected};
+      }
+      return append_weighted_kv_query_vjp(p,std::get<WeightedKVQueryTape>(t.memory_tape()),memory.reshape({rows,2,ds}),total,memory_roots,error,remaining());
+    }();
     auto content=at::zeros_like(query.input),connected=at::zeros_like(query.input_connected);
     p.copy(content,query.input);p.add(content,input.value);
     const auto dflags=input.connected;

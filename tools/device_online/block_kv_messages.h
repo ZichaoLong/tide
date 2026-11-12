@@ -3,6 +3,7 @@
 // snapshots; messages carry (c,G), while cG is only a numerical projection.
 #include "block_read_selection.h"
 #include "weighted_kv_full.h"
+#include "block_kv_full.h"
 #include "weighted_parameter_vjp.h"
 
 namespace tide::device_online {
@@ -10,6 +11,7 @@ struct BlockKVMessageInput {
   BlockReadSelectionInput read;
   WeightedRawState proposal; // Actual Upd result, never reconstructed from Read.
   at::Tensor full_owners; // Optional [R,N]; undefined reuses read.node_owners.
+  std::optional<BlockKVSnapshot> proposal_bank;
 };
 struct BlockKVMessageParameters {
   BlockReadSelectionParameters read;
@@ -26,6 +28,7 @@ struct BlockKVMessageTape {
   size_t strength_index,content_index;
   std::optional<size_t> projection_index;
   BlockMessageColumns messages;
+  std::optional<BlockKVFullTape> bank_full;
 };
 // Each connected mask is bool [R,N]. Scalar bars are [R,N], vector bars
 // [R,N,d]. Undefined value AND mask means no root. An unused bar may be NaN.
@@ -37,6 +40,7 @@ struct BlockKVMessageGradient {
   BlockReadSelectionGradient read;
   WeightedKVFullGradient full; // proposal raw gradient is full.raw.
   WeightedRowAdjoint content; // Actual common input: read.content + full.input.
+  std::optional<BlockKVBankAdjoint> full_bank;
 };
 BlockKVMessageTape append_block_kv_messages(DeviceProgram&,const SettleBlockPlan&,
   const weighted::KVConfig&,const weighted::RegionalConfig&,const BlockKVMessageInput&,

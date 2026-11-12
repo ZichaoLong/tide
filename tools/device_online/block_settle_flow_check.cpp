@@ -87,6 +87,11 @@ void check(at::Device device,const std::string& mode){
   at::NoGradGuard no_grad;Fixture f;for(auto& b:f.bindings)b.read_mode=mode;const auto ref=formula(f);const auto x=device_input(f,device);const auto bindings=device_bindings(f,device);
   DeviceProgram program(device);program.limit_workspace(1<<29);TaskServices services(program,device,1<<29);
   auto tape=append_block_settle_flow(program,services,f.graph,bindings,x,1<<29);
+  // Full raw observations are explicit test roots/observations, not a default
+  // numerical handoff between the bank's Upd, Memory and Full stages.
+  for(auto& stage:tape.regions){auto& sequence=stage.local->sequence;
+    sequence.old=append_block_kv_bank_decode(program,block_kv_snapshot(sequence,false),tape.dispatcher->error(),1<<29);
+    sequence.proposal=append_block_kv_bank_decode(program,block_kv_snapshot(sequence,true),tape.dispatcher->error(),1<<29);}
   auto root=roots(tape,device);auto gradient=append_block_settle_flow_vjp(program,services,f.graph,tape,root,1<<29);
   auto parameters=append_block_settle_parameter_vjp(program,gradient,f.registry,f.roles,tape.dispatcher->error(),1<<27);
   services.append_stop();services.finish();program.finish();

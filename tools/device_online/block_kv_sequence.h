@@ -5,6 +5,7 @@
 #include "weighted_row_graph.h"
 
 namespace tide::device_online {
+struct BlockKVBank;
 struct BlockKVSequenceTape {
   weighted::KVConfig config;
   int64_t batch=0,length=0,nodes=0;
@@ -12,6 +13,7 @@ struct BlockKVSequenceTape {
   WeightedKVUpdateTape writes; // One independently projected positive write per row.
   WeightedRawState old,proposal,final;
   at::Tensor fields,mapping,initial_integer;
+  std::shared_ptr<BlockKVBank> bank; // New block path; old/proposal floating buffers are absent.
 };
 struct BlockKVSequenceRoots {
   at::Tensor old,old_connected,proposal,proposal_connected,final,final_connected;

@@ -191,3 +191,23 @@ def test_zero_mass_is_a_present_candidate_and_keeps_exact_old_cache():
                     previous = state.states[event["batch"], event["node"]]
                     equivalent(event["proposal_slots"], previous.slots, atol=0, rtol=0)
             state = expected.continuation.detach()
+
+
+def test_complete_snapshot_requires_actual_deferred_observations():
+    mask = torch.ones(2, dtype=torch.bool)
+    strength = SimpleNamespace(values=torch.ones(2), present=mask, valid=None)
+    raw = SimpleNamespace(values=None, present=mask, valid=torch.ones(2, 3, dtype=torch.bool))
+    window = SimpleNamespace(fields={"output.strength": strength, "region.0.old.keys": raw},
+                             metadata={"positions": torch.arange(2), "output.times": torch.arange(2)})
+    projected = block_records.window_snapshot(window, complete=False)
+    assert set(projected["fields"]) == {"output.strength"}
+    with pytest.raises(ValueError, match="owner.observe"):
+        block_records.window_snapshot(window, complete=True)
+    with pytest.raises(ValueError, match="every declared"):
+        block_records.window_snapshot(window, complete=True, observed={"output.strength": strength})
+    actual = torch.arange(12, dtype=torch.float32).reshape(2, 3, 2)
+    decoded = SimpleNamespace(values=actual, present=raw.present, valid=raw.valid)
+    observed = {**window.fields, "region.0.old.keys": decoded}
+    complete = block_records.window_snapshot(window, complete=True, observed=observed)
+    assert torch.equal(complete["fields"]["region.0.old.keys"]["values"], actual)
+    assert window.fields["region.0.old.keys"].values is None

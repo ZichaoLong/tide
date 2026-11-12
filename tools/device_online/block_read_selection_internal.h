@@ -27,6 +27,7 @@ inline std::vector<at::Tensor> borrowed(const BlockReadSelectionInput& x,const B
     w.query.query,w.query.key,w.query.value,error,w.region.context_owners,w.region.query_owners};
   for(const auto& [_,t]:w.describe)out.push_back(t);
   for(const auto& h:{w.region.context,w.region.query})for(const auto& t:{h.matrix,h.hidden_bias,h.projection,h.bias})out.push_back(t);
+  if(x.bank){auto a=block_kv_bank_tensors(*x.bank->bank);out.insert(out.end(),a.begin(),a.end());out.insert(out.end(),{x.bank->mapping,x.bank->integer});}
   return out;
 }
 }

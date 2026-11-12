@@ -35,11 +35,12 @@ BlockReadSelectionTape append_block_read_selection(DeviceProgram& p,const Settle
   check(x.present,error,at::kBool,{frames,nodes});check(x.mass,error,at::kFloat,{frames,nodes});
   check(x.content,error,at::kFloat,{frames,nodes,kv.width});check(x.times,error,at::kLong,{frames,nodes});
   check(x.node_owners,error,at::kLong,{frames,nodes});check(error,error,at::kInt,{1});
-  if(rr>std::numeric_limits<int64_t>::max()/members||!x.read.floating.defined()||x.read.floating.dim()!=2||
+  if(rr>std::numeric_limits<int64_t>::max()/members)throw std::invalid_argument("block region slots overflow");
+  if(!x.bank&&(!x.read.floating.defined()||x.read.floating.dim()!=2||
      !x.read.integer.defined()||x.read.integer.dim()!=2||x.read.integer.size(1)<=4||
-     x.read.floating.size(0)!=rows||x.read.integer.size(0)!=rows)
+     x.read.floating.size(0)!=rows||x.read.integer.size(0)!=rows))
     throw std::invalid_argument("block raw snapshot row count differs or region slots overflow");
-  if(x.read.floating.device()!=error.device()||x.read.integer.device()!=error.device())
+  if(!x.bank&&(x.read.floating.device()!=error.device()||x.read.integer.device()!=error.device()))
     throw std::invalid_argument("block raw snapshot device differs");
   const int64_t e=config.regional()?*config.region_control_width:1,q=config.region_score=="att"?*config.selection_width:1;
   const WeightedStorageIncrement storage(p,borrowed(x,weights,error));
@@ -56,7 +57,8 @@ BlockReadSelectionTape append_block_read_selection(DeviceProgram& p,const Settle
     ptr(x.present),ptr(x.times),ptr(x.node_owners),ptr(offsets),ptr(membership),ptr(t.owners),ptr(t.present),ptr(t.node_times),
     ptr(t.order),ptr(t.inverse),ptr(t.ids),ptr(t.times),ptr(t.lengths),ptr(t.node_region_row),ptr(error),frames,nodes,regions,members),
     "resident complete block candidate plan");},{x.present,x.times,x.node_owners,offsets,membership,t.owners,t.present,t.node_times,t.order,t.inverse,t.ids,t.times,t.lengths,t.node_region_row,error});
-  if(kv.memory_read=="sum")t.memory=append_weighted_kv_sum(p,kv,x.read,t.node_times,t.present,error,remaining());
+  if(x.bank)t.memory=append_block_kv_memory(p,kv,*x.bank,t.node_times,x.content.reshape({rows,kv.width}),t.owners,t.present,weights.query,error,remaining());
+  else if(kv.memory_read=="sum")t.memory=append_weighted_kv_sum(p,kv,x.read,t.node_times,t.present,error,remaining());
   else t.memory=append_weighted_kv_query(p,kv,x.read,t.node_times,x.content.reshape({rows,kv.width}),t.owners,t.present,weights.query,error,remaining());
   auto memory=t.memory_values().reshape({rows,2*kv.summary_width});
   WeightedDescribeInput d{x.mass.reshape({rows}),x.content.reshape({rows,kv.width}),columns(p,memory,0,kv.summary_width),

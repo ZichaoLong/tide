@@ -12,6 +12,7 @@ from tidegraph.compare import equivalent
 from tidegraph.reference import run as reference
 from tidegraph.weighted import (KVConfig, RegionalConfig, SourceBinding, bind_layered,
                                fully_connected, WeightedResidentTraining, WeightedBlockResidentTraining)
+from block_observations import reference_prefixes, prefix_loss, check_prefixes
 
 
 def fixture(memory_read="qry"):
@@ -93,6 +94,8 @@ def main():
         stop = (step+1)*3*spec.stride
         result = reference(oracle.graph, oracle.model, q, inputs, stop, sealed_until=stop)
         loss = sum(x[0]*.07+x[1:].sum()*.13 for *_, x in result.outputs)
+        prefixes = reference_prefixes(result, q, oracle.model)
+        loss = loss+prefix_loss(prefixes)
         expected = torch.autograd.grad(loss, [*parameters, *leaves], allow_unused=True)
         if not (args.restore_check and step == 0):
             with torch.no_grad():
@@ -108,8 +111,9 @@ def main():
                             if key in expected_output:
                                 torch.testing.assert_close(mass.values[row, p].cpu(), expected_output[key][0], rtol=8e-5, atol=8e-6)
                                 torch.testing.assert_close(content.values[row, p].cpu(), expected_output[key][1:], rtol=8e-5, atol=8e-6)
+                raw_roots = check_prefixes(session, window, spec, prefixes)
                 roots = session.cotangents(window, {"output.strength": torch.full_like(mass.values, .07),
-                    "output.content": torch.full_like(content.values, .13)})
+                    "output.content": torch.full_like(content.values, .13), **raw_roots})
                 actual = session.backward([roots])
                 expected_by_id = {id(p): g for p, g in zip(parameters, expected, strict=False)}
                 for j, aliases in enumerate(actual.parameters.aliases):
@@ -149,6 +153,7 @@ def main():
         session.close()
     print(dict(state="passed", default="settle-block-v2", source=str(tidegraph.__file__),
                memory_read=args.memory_read, independent_python_schedule=True,
+               explicit_raw_observation=True, independent_proposal_roots=True,
                adamw_steps=3, fresh_process=args.restore_check))
 
 

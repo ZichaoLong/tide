@@ -54,6 +54,7 @@ planning/默认列/checkpoint接口；逐物理端口输入、三次真实AdamW�
 传入 `--device npu:0 --native-library CORE --resident-library BLOCK_BUILD
 --checkpoint-path NEW.pt --memory-read qry`；新进程加 `--restore-check`，sum 另用新的 checkpoint。
 它使用独立安装包，对照 Python 标量日程，检查三步 AdamW、非齐端口和精确恢复。
+`block_observations.py`随示例一同保留，检查显式raw观察及独立proposal keys/values根。
 公共实验 `tidegraph check CONFIG --scope full --output-dir NEW` 的默认分派及完整值解码
 见[resident实验契约](experiment-resident-blocks.md)；SDK输出任务与完整观察的资格范围分列。
 

@@ -2,11 +2,15 @@
 
 本边界采用固定 [0770593](upstream.json) 的带权共同架构 §3、§4.2 与 KV §3–4，
 接续 [resident 块调度与 Read-selection](resident-block-execution.md)。它是内部数值组合，
-不是已接入默认入口的完整图执行器；构建、设备执行和性能资格须分别记录。
+由[实际图owner](resident-block-session.md)组合接入默认入口；本组件自身不是完整图执行器，
+构建、设备执行和性能资格须分别记录。
 
 ## 输入、输出与快照
 
 [`BlockKVMessageInput`](../tools/device_online/block_kv_messages.h) 明确包含两个 typed raw operand：
+
+默认局部路径通过可选 `read.snapshot` / `proposal_snapshot` 传入[实际bank视图](resident-kv-bank.md)，
+Read/Full直接消费共享bank并返回其伴随；下面的dense raw输入仍供独立组件调用与对照。
 
 - `read.read` 是真实绑定的 Read^0、Read^- 或 Read^+ 快照，进入 KV sum/qry Memory 与 Describe。
 - `proposal` 是本次 Upd 产生、供 Full 读取的状态。它可以有不同 cache capacity，不能由
@@ -19,7 +23,7 @@
 
 `append_block_kv_messages` 顺序组合 Read/Describe、完整区域 SelStep、selected KV Full 和
 消息列绑定。Whole-window 张量直接交接，没有逐事件 Tensor 输出。它复用既有 vendor 批量
-算子与有界元数据算子，没有新增专用设备 kernel，也没有按实际 B×L 轨迹建立服务树。
+算子与有界元数据算子；bank路径有独立快照/可见性与块伴随kernel，不按实际 B×L 轨迹建立服务树。
 
 返回 `BlockMessageColumns` 的 `strength` 是 c，`content` 是未缩放 G，`present` 是实际活动支持，
 `times` 是原始逻辑时钟。零 G 仍可是一条存在的消息。缺席行的浮点占位为零，解释必须同时读取

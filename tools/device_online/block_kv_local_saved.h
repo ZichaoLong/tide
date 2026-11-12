@@ -7,6 +7,7 @@ inline std::vector<at::Tensor> saved(const BlockKVSequenceTape& t){
   std::vector<at::Tensor> out{t.old.floating,t.old.integer,t.proposal.floating,t.proposal.integer,t.final.floating,t.final.integer,
     t.fields,t.mapping,t.initial_integer,r.result.floating,r.result.integer,r.old_integer,r.proposal,r.fields,r.mapping,r.receive,r.written,
     w.saved_rows.base,w.saved_rows.left,w.saved_rows.right,w.saved_rows.summary,w.owners,w.kv_indices,w.summary_indices};
+  if(t.bank){auto a=block_kv_bank_tensors(*t.bank);out.insert(out.end(),a.begin(),a.end());}
   for(const auto* p:{&w.kv,&w.summary,&w.adapter_low,&w.adapter_up})append_saved_tensors(out,*p);return out;
 }
 inline std::vector<at::Tensor> saved(const BlockKVLocalTape& t){

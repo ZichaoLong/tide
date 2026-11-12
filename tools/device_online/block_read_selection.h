@@ -1,6 +1,7 @@
 #pragma once
 #include "weighted_kv_query.h"
 #include "weighted_kv_sum.h"
+#include "block_kv_memory.h"
 #include "weighted_describe.h"
 #include "weighted_region.h"
 #include "settle_block_plan.h"
@@ -17,6 +18,7 @@ namespace tide::device_online {
 struct BlockReadSelectionInput {
   WeightedRawState read;
   at::Tensor mass,content,present,times,node_owners;
+  std::optional<BlockKVSnapshot> bank;
 };
 struct BlockReadSelectionParameters {
   WeightedKVQueryParameters query; // Undefined in sum mode; no synthetic owners.
@@ -24,7 +26,7 @@ struct BlockReadSelectionParameters {
   WeightedRegionParameters region;
 };
 struct BlockReadSelectionTape {
-  using Memory=std::variant<WeightedKVSumTape,WeightedKVQueryTape>;
+  using Memory=std::variant<WeightedKVSumTape,WeightedKVQueryTape,BlockKVMemoryTape>;
   int64_t frames=0,nodes=0,regions=0,members=0;
   at::Tensor owners,present,node_times,order,inverse,ids,times,lengths,node_region_row;
   std::optional<Memory> memory;
@@ -47,6 +49,7 @@ struct BlockReadSelectionGradient {
   at::Tensor query_connected,key_connected,value_connected;
   std::map<std::string,WeightedRowAdjoint> describe;
   std::optional<WeightedHeadGradient> region_context,region_query;
+  std::optional<BlockKVBankAdjoint> bank;
 };
 // Independent observations, distinct from controls. Memory/total bars flatten
 // B,L,N and use a separate bool per short/long channel; descriptions use one
