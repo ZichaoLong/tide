@@ -1,0 +1,588 @@
+{
+  "schema": "tide-resident-resource-qualification-v1",
+  "source": "08a349ce",
+  "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+  "scope": "known storage admission and actual explicit resource inventory; no new performance measurement",
+  "builds": {
+    "native": {
+      "schema": "tide-device-control-build-v1",
+      "source": "08a349ceb561d7c70c0d9213859543cc1682bfc5",
+      "dirty": "",
+      "component_sha256": "1ce4334dd9bdb4a98d1d6a430f581d411e35e95ccc2391d0109750aa883c4b28",
+      "core": {
+        "source": "72e1d22c5071da604b43079d96e90b960f919799",
+        "cpp_source_sha256": "d34a19cc196846500f8417b4b35847397840c802bc36a305706c5e53cb373b01",
+        "torch": "2.12.0+cpu",
+        "distribution": {
+          "torch": "2.12.0+cpu",
+          "torch_dir": "/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/lib/python3.12/site-packages/torch/share/cmake/Torch",
+          "prefix": "/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/lib/python3.12/site-packages/torch/share/cmake",
+          "cuda": null,
+          "cxx11_abi": true,
+          "discovery": "python-torch"
+        },
+        "environment": {
+          "os": "Linux-5.10.0-182.0.0.95.r1941_123.hce2.aarch64-aarch64-with-glibc2.34",
+          "compiler": "c++ (GCC) 10.3.1",
+          "cxx_standard": 17,
+          "build_type": "Release",
+          "torch_prefix": "/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/lib/python3.12/site-packages/torch/share/cmake/Torch",
+          "cann_version": "9.2.0"
+        },
+        "build_jobs": 160,
+        "backend": "npu",
+        "npu_runtime": "python",
+        "torch_npu": "2.12.0.post3",
+        "cuda": null,
+        "architecture": "aarch64",
+        "python": "3.12.13",
+        "cxx11_abi": true,
+        "binary_sha256": {
+          "libtidegraph.a": "2cdcec6a7daf3dba2478cad45cfa739daa31af1de9e8946e2c32a48094f97391",
+          "libtidegraph_runtime.a": "77acb773213662bff6e0ef79496f6b5649a06b2786b5d51fb8dde775bcbdd4bf",
+          "_tide_native.so": "a94ebe1b4cca8b89a5caaeaf99e4289b6da85d8bb39c04212f4fa98cc292547a"
+        }
+      },
+      "build_jobs": 160,
+      "backend": "npu",
+      "runtime": "python",
+      "npu_runtime": "python",
+      "cuda_architectures": null,
+      "ascendc_soc": "Ascend910_9392",
+      "binary_sha256": {
+        "_tide_weighted_resident.so": "6253941d739daddde924aeb5acd23b590016dade18c6d7be9e835229e2a7036e",
+        "libtide-weighted-flow.so": "6b7bfcb9384bca8928d91249fc85067d6c7f8b91e638288a2af1997d4062c56f",
+        "libtide-weighted-training.so": "ca0a07066df95c6df278ae3414322a0f6a02edc950008c5db293ff1a5dc0916c",
+        "libtide-block-resident.so": "977c35c9fcd6939a4b9977647441f0e9a4d608fa0f2d629a161d8cdba11e5f7e"
+      },
+      "loader_sha256": {
+        "_tide_weighted_resident.so": "717d4b2e3380e67069801028b469cb588326381177cfe96e8f45c459239d1144",
+        "libtide-weighted-flow.so": "f25e87db8dcc50e71938f4b278bec7aaf028f064f8d730a784d555a867b0e82d",
+        "libtide-weighted-training.so": "07d8a391ab72bc971b0ec57e3a5314d775abe46a044c5ed0ad6c9faf77263801",
+        "libtide-block-resident.so": "bfdea04c0639df611c8faf5cd32008fa835bd42c4bb941fbf3f4cacc79b46c7a"
+      },
+      "requested_checks": null,
+      "python_component": "weighted",
+      "scope": "build/loader/help only; device control check required separately"
+    },
+    "sdk": {
+      "schema": "tide-device-control-build-v1",
+      "source": "08a349ceb561d7c70c0d9213859543cc1682bfc5",
+      "dirty": "",
+      "component_sha256": "1ce4334dd9bdb4a98d1d6a430f581d411e35e95ccc2391d0109750aa883c4b28",
+      "core": {
+        "source": "72e1d22c5071da604b43079d96e90b960f919799",
+        "cpp_source_sha256": "d34a19cc196846500f8417b4b35847397840c802bc36a305706c5e53cb373b01",
+        "torch": "2.12.0",
+        "distribution": {
+          "torch": "2.12.0",
+          "torch_dir": "/opt/software/libtorch/2.12.0-cpu-aarch64-abi1/share/cmake/Torch",
+          "prefix": "/opt/software/libtorch/2.12.0-cpu-aarch64-abi1",
+          "cxx11_abi": true,
+          "cuda": null,
+          "discovery": "standalone-prefix",
+          "distribution_sha256": {
+            "share/cmake/Torch/TorchConfig.cmake": "9846a61d981bc6c465ccfd604edb910e2ff37342310b80606c416697f9753d24",
+            "share/cmake/Torch/TorchConfigVersion.cmake": "6cc8fc1b03a7d604a57be1fc51491bfb4deb8c651506c415a41b5173b06344f3",
+            "lib/libtorch.so": "5d864dc3a979f6f8cf572e752caa583182324399c29a79b9143efe175f67d72e",
+            "lib/libtorch_cpu.so": "cb4931abca15245de366da71e361174afc9e411651d4c50046cfb7a2dac6c4f5",
+            "lib/libc10.so": "fa843366784bfce035e912360601c4ca098ce536b20f0c4a8ee50c3f00294e37"
+          }
+        },
+        "environment": {
+          "os": "Linux-5.10.0-182.0.0.95.r1941_123.hce2.aarch64-aarch64-with-glibc2.34",
+          "compiler": "c++ (GCC) 10.3.1",
+          "cxx_standard": 17,
+          "build_type": "Release",
+          "torch_prefix": "/opt/software/libtorch/2.12.0-cpu-aarch64-abi1/share/cmake/Torch",
+          "cann_version": "9.2.0",
+          "npu_sdk": {
+            "config": "/opt/software/libtorch-npu/2.12.0-cann9.2.0-aarch64-abi1/sdk/share/cmake/Torch_npu/Torch_npuConfig.cmake",
+            "config_sha256": "1711480e47f9dbb19ed01209f073e5526218efeb583cbbbc9ab101c373cc62dd",
+            "library_sha256": "9a851accc1f4c7063d7e3c3cf76186329c063000a00a4d48c45a30ca1e8e3c18"
+          }
+        },
+        "build_jobs": 160,
+        "backend": "npu",
+        "npu_runtime": "standalone",
+        "torch_npu": null,
+        "cuda": null,
+        "architecture": "aarch64",
+        "python": "3.12.13",
+        "cxx11_abi": true,
+        "binary_sha256": {
+          "libtidegraph.a": "a4f3130672e34c97f35047c06927d230dc0f89b0232dc0a17c62addc297ce588",
+          "libtidegraph_runtime.a": "f62ff565661f3df08a0309cd452e65fe0694c12c3b4f6ba82558b130d93ef8f6",
+          "tidegraph-smoke": "094983d37825421cfb9cc4a05e943f2ebedef4a52f75ef110051928a82842530",
+          "tidegraph-kernel-check": "5655247cc936455f5bc9a00942125b718169e42bce451c41db0e0862bce26337",
+          "tidegraph-full-check": "54a705ac69ec49eb36f6c4f82178ec540cb25b1cf9c340ffd0ad68de4f51f008",
+          "tidegraph-aggregate-check": "c6c0e0468fab79b43980d7dbf64a4a3752ad5efa86a4f994bf3ab38dbe454d00",
+          "tidegraph-optimizer-check": "0c881d740a51a1067ea507bb914aaeeb6359bedbc4b2cd35cd882032926bc602",
+          "tidegraph-checkpoint-check": "c6ab2db771239e900dfbcaebc0f90cb289cf8c94698dee8d661d7ca768fbdaa5",
+          "tidegraph-weighted-training-check": "ceae3cec5dc3ff75339688c91501601e30310240b8e746ca5f9a7fe470bf5dda",
+          "tidegraph-lh-scope-check": "746aedf44726838f1a9159a03747053ee5ec4d9de2e930ad3258aed8a2492e0d",
+          "tidegraph-streaming-bench": "0c11194d5d5cb1c14b98db6ce0ae3259fdee7ee31c4c141ec9e83843c32ae6f2",
+          "tidegraph-scale-bench": "56e28a035c4cd254b2e111b8593c99800efacca1acfd69514c186bf5797f6bc1",
+          "tidegraph-profile-check": "27b5ca2d75e14baa28a0ea1b77414363aff4167cb82e32926132cc8fff9fe7e0",
+          "tidegraph-settle-check": "2508210bc77d7204a535ac81c4c522c8a9358939365c218ed0dfa77af8c982e9",
+          "tidegraph-greedy-check": "bf7dda97d2a18491d75f19ad834457027e1fcb5d91bbd10db649456090b95ba7",
+          "tidegraph-accelerator-check": "c438a87cdc8abea319f61bb74ea0b1d6c8b93140eea5b1322cabb0a4820483c5",
+          "tidegraph-runtime-check": "cd6d5ea111da2de812c90d807b0d2836f854d47dd39c79746d6815fa1376f7ac",
+          "tidegraph-read-precision-check": "a874c29d03dcdf1ed94981fd3763549cbe39b2d07c05dbad48c19a51889ad5b2",
+          "tidegraph-placement-check": "1a87a02b492ca5019e66b5deac1c67b13b8ceffb8d89b15f692534b28118b155",
+          "tidegraph-payload-ownership-check": "692bb31306dcc38791aff6fffb0abd5cf71c065785db9d8de08b7a3c820750db",
+          "tidegraph-weighted-binding-module-check": "81377ed071beeae3944713b0b6f96cbe6248ce7b238bc401f8fc36b51e885c8c",
+          "tidegraph-column-check": "06157004fd83bfd3250599fc3bbd289adfd1323216e50b3676ad2a52a477be1d",
+          "tidegraph-kv-tensor-check": "c58831990041482b82f68e9649e0112dc4db5c9792e2d476d0c474860f726b20",
+          "tidegraph-kv-tensor-prepare-check": "0dfd67e1d155e148322808bb1fc697c00a421d9b657bcb1075b8153e96687f76",
+          "tidegraph-read-transport-check": "458c214d878585b7ec50217111c6d358fdca3c4b1cfc1eb76d05a5ff4275def7",
+          "tidegraph-aggregate-tensor-check": "1275891a206a35d22350a2a859abd977bde7e23291ecb524a4430310b64d836e",
+          "tidegraph-region-transport-check": "d58409ca7cb15f1aafaa7f18f85b7e59e464c2f8255e3ac6a8c6a4abc37e8527",
+          "tidegraph-column-checkpoint-check": "08dda673028a1c352afad62a0f56ba75338fc43cce6f0c06912d56ba0cfa8939",
+          "libtidegraph-weighted-binding-module.so": "7ca92f4cfac0d999ea476e8dfa9b2618f0ad14d942b96da2f902c7fc89a3cdb7"
+        }
+      },
+      "build_jobs": 160,
+      "backend": "npu",
+      "runtime": "standalone",
+      "npu_runtime": "standalone",
+      "cuda_architectures": null,
+      "ascendc_soc": "Ascend910_9392",
+      "binary_sha256": {
+        "tide-device-services-check": "424da348092976f0a74dcab4592aa0421b5d66d01716313f31c5ec65a798b5f3",
+        "tide-block-resident-check": "ff1f079e0ed01e703825ca9b3f1992b84440110e9680363c9b2d01b09cb9cc95",
+        "tide-block-settle-session-check": "6f13e80029e007f6b26434c370339fef1aadaa1a9c350c3844e527431c8dc46a",
+        "libtide-weighted-flow.so": "82c6d65e4e20211d18bc84a38b1cecdaf339ca8039cf2dccc3cf044572ef5726",
+        "libtide-block-resident.so": "e279c94059d1a62e0955735be2dab146241e8892a03dffcbd676dc1700b30aa7"
+      },
+      "loader_sha256": {
+        "tide-device-services-check": "b3777c650a0bbd516bd70f3774cf31d13b79bdefe0fb25312d27f11d7519d0a3",
+        "tide-block-resident-check": "b21ad0ac7c3840d70419590c3959cb2b045bae0175b1a9bf21dd3cd1363f173f",
+        "tide-block-settle-session-check": "3dcb51fe69c128db07f94461ad1d64b2c361aa9a3b9323e27571a2f4f0a9bf61",
+        "libtide-weighted-flow.so": "10d24a94567c5bd0de7870751453bfa530f979d45f00b118f8aba7c620474819",
+        "libtide-block-resident.so": "95b0b6290f30a5098730520682b4a9e7caf139ae3ca584933eea7b3c346f1bc1"
+      },
+      "requested_checks": [
+        "services",
+        "resident-block-public",
+        "resident-block-settle-session"
+      ],
+      "python_component": null,
+      "scope": "build/loader/help only; device control check required separately"
+    }
+  },
+  "jobs": {
+    "build-native": {
+      "command": [
+        "/bin/bash",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/resident-resources-20261112/native-build.sh"
+      ],
+      "cwd": "/dev/shm/gef-resident-resources-20261112/source",
+      "state": "passed",
+      "source": "08a349ceb561d7c70c0d9213859543cc1682bfc5",
+      "dirty": "",
+      "started": "2026-11-12T11:26:44.452242+00:00",
+      "exit_code": 0,
+      "finished": "2026-11-12T11:29:59.649089+00:00"
+    },
+    "build-sdk": {
+      "command": [
+        "/bin/bash",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/resident-resources-20261112/sdk-build.sh"
+      ],
+      "cwd": "/dev/shm/gef-resident-resources-20261112/source",
+      "state": "passed",
+      "source": "08a349ceb561d7c70c0d9213859543cc1682bfc5",
+      "dirty": "",
+      "started": "2026-11-12T11:26:44.456275+00:00",
+      "exit_code": 0,
+      "finished": "2026-11-12T11:29:54.748276+00:00"
+    },
+    "cpu-directed": {
+      "command": [
+        "/bin/bash",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/resident-resources-20261112/cpu-directed.sh"
+      ],
+      "cwd": "/dev/shm/gef-resident-resources-20261112/source",
+      "state": "passed",
+      "source": "08a349ceb561d7c70c0d9213859543cc1682bfc5",
+      "dirty": "",
+      "started": "2026-11-12T11:28:31.404062+00:00",
+      "exit_code": 0,
+      "finished": "2026-11-12T11:28:35.108275+00:00"
+    },
+    "resident-native": {
+      "command": [
+        "/bin/bash",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/resident-resources-20261112/resident-native.sh"
+      ],
+      "cwd": "/dev/shm/gef-resident-resources-20261112/source",
+      "state": "passed",
+      "source": "08a349ceb561d7c70c0d9213859543cc1682bfc5",
+      "dirty": "",
+      "started": "2026-11-12T11:30:23.982876+00:00",
+      "exit_code": 0,
+      "finished": "2026-11-12T11:31:13.149571+00:00"
+    },
+    "resident-sdk": {
+      "command": [
+        "/bin/bash",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/resident-resources-20261112/resident-sdk.sh"
+      ],
+      "cwd": "/dev/shm/gef-resident-resources-20261112/source",
+      "state": "passed",
+      "source": "08a349ceb561d7c70c0d9213859543cc1682bfc5",
+      "dirty": "",
+      "started": "2026-11-12T11:30:24.029336+00:00",
+      "exit_code": 0,
+      "finished": "2026-11-12T11:31:20.036071+00:00"
+    }
+  },
+  "devices": {
+    "native": {
+      "processes": [
+        {
+          "name": "public-qry",
+          "command": [
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/additive-work/env/bin/python",
+            "/dev/shm/gef-resident-resources-20261112/source/examples/consumer_core5/block_resident.py",
+            "--device",
+            "npu:0",
+            "--memory-read",
+            "qry",
+            "--native-library",
+            "/dev/shm/gef-source-bank-20261112/core-native",
+            "--resident-library",
+            "/dev/shm/gef-resident-resources-20261112/resident-native",
+            "--checkpoint-path",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/resident-resources-20261112/resident-native/qry.pt"
+          ],
+          "exit_code": 0,
+          "started": 1794483038.4122603,
+          "finished": 1794483047.990643,
+          "cwd": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/resident-resources-20261112/resident-native",
+          "device_visibility": "11",
+          "output": "[W1112 19:30:42.856841671 NPUCachingAllocator.cpp:203] Warning: The current CANN and Soc versions require processing for 32 padding size, with memory allocation. (function operator())\n{'state': 'passed', 'default': 'settle-block-v2', 'source': '/dev/shm/gef-resident-resources-20261112/install/tidegraph/__init__.py', 'memory_read': 'qry', 'independent_python_schedule': True, 'adamw_steps': 3, 'fresh_process': False}\n"
+        },
+        {
+          "name": "restore-qry",
+          "command": [
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/additive-work/env/bin/python",
+            "/dev/shm/gef-resident-resources-20261112/source/examples/consumer_core5/block_resident.py",
+            "--device",
+            "npu:0",
+            "--memory-read",
+            "qry",
+            "--native-library",
+            "/dev/shm/gef-source-bank-20261112/core-native",
+            "--resident-library",
+            "/dev/shm/gef-resident-resources-20261112/resident-native",
+            "--checkpoint-path",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/resident-resources-20261112/resident-native/qry.pt",
+            "--restore-check"
+          ],
+          "exit_code": 0,
+          "started": 1794483047.993515,
+          "finished": 1794483056.7704818,
+          "cwd": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/resident-resources-20261112/resident-native",
+          "device_visibility": "11",
+          "output": "[W1112 19:30:51.527374469 NPUCachingAllocator.cpp:203] Warning: The current CANN and Soc versions require processing for 32 padding size, with memory allocation. (function operator())\n{'state': 'passed', 'default': 'settle-block-v2', 'source': '/dev/shm/gef-resident-resources-20261112/install/tidegraph/__init__.py', 'memory_read': 'qry', 'independent_python_schedule': True, 'adamw_steps': 3, 'fresh_process': True}\n"
+        },
+        {
+          "name": "public-sum",
+          "command": [
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/additive-work/env/bin/python",
+            "/dev/shm/gef-resident-resources-20261112/source/examples/consumer_core5/block_resident.py",
+            "--device",
+            "npu:0",
+            "--memory-read",
+            "sum",
+            "--native-library",
+            "/dev/shm/gef-source-bank-20261112/core-native",
+            "--resident-library",
+            "/dev/shm/gef-resident-resources-20261112/resident-native",
+            "--checkpoint-path",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/resident-resources-20261112/resident-native/sum.pt"
+          ],
+          "exit_code": 0,
+          "started": 1794483056.7734282,
+          "finished": 1794483065.5018473,
+          "cwd": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/resident-resources-20261112/resident-native",
+          "device_visibility": "11",
+          "output": "[W1112 19:31:00.223290006 NPUCachingAllocator.cpp:203] Warning: The current CANN and Soc versions require processing for 32 padding size, with memory allocation. (function operator())\n{'state': 'passed', 'default': 'settle-block-v2', 'source': '/dev/shm/gef-resident-resources-20261112/install/tidegraph/__init__.py', 'memory_read': 'sum', 'independent_python_schedule': True, 'adamw_steps': 3, 'fresh_process': False}\n"
+        },
+        {
+          "name": "restore-sum",
+          "command": [
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/additive-work/env/bin/python",
+            "/dev/shm/gef-resident-resources-20261112/source/examples/consumer_core5/block_resident.py",
+            "--device",
+            "npu:0",
+            "--memory-read",
+            "sum",
+            "--native-library",
+            "/dev/shm/gef-source-bank-20261112/core-native",
+            "--resident-library",
+            "/dev/shm/gef-resident-resources-20261112/resident-native",
+            "--checkpoint-path",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/resident-resources-20261112/resident-native/sum.pt",
+            "--restore-check"
+          ],
+          "exit_code": 0,
+          "started": 1794483065.5046728,
+          "finished": 1794483073.1283174,
+          "cwd": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/resident-resources-20261112/resident-native",
+          "device_visibility": "11",
+          "output": "[W1112 19:31:09.018724582 NPUCachingAllocator.cpp:203] Warning: The current CANN and Soc versions require processing for 32 padding size, with memory allocation. (function operator())\n{'state': 'passed', 'default': 'settle-block-v2', 'source': '/dev/shm/gef-resident-resources-20261112/install/tidegraph/__init__.py', 'memory_read': 'sum', 'independent_python_schedule': True, 'adamw_steps': 3, 'fresh_process': True}\n"
+        }
+      ],
+      "admission": {
+        "elapsed_seconds": 48.46558498963714,
+        "job_id": "resident-resources-resident-native",
+        "logical_device": "npu:0",
+        "logical_devices": [
+          "npu:0"
+        ],
+        "npu_count": 1,
+        "physical_id": 11,
+        "physical_ids": [
+          11
+        ],
+        "priority": 0,
+        "project": "graph-execution-foundation",
+        "return_code": 0,
+        "schema_version": 1,
+        "status": "completed",
+        "timestamp": "2026-11-12T11:31:13.138695+00:00"
+      }
+    },
+    "sdk": {
+      "processes": [
+        {
+          "name": "device-services",
+          "command": [
+            "/dev/shm/gef-resident-resources-20261112/resident-sdk/tide-device-services-check",
+            "--device=npu:0",
+            "--dtype=float32"
+          ],
+          "exit_code": 0,
+          "started": 1794483045.2951086,
+          "finished": 1794483048.41277,
+          "cwd": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/resident-resources-20261112/resident-sdk",
+          "device_visibility": "5",
+          "output": "[W1112 19:30:46.166567925 NPUCachingAllocator.cpp:203] Warning: The current CANN and Soc versions require processing for 32 padding size, with memory allocation. (function operator())\ntask-services: passed repeated_windows=true empty_window=true nested_levels=3 root_services=2 sibling_services=true shared_workspace_bytes=16777472 programs=6 streams=12 notifications=10 boundary_events=0\n"
+        },
+        {
+          "name": "block-settle-session",
+          "command": [
+            "/dev/shm/gef-resident-resources-20261112/resident-sdk/tide-block-settle-session-check",
+            "--device=npu:0",
+            "--dtype=float32"
+          ],
+          "exit_code": 0,
+          "started": 1794483048.4151895,
+          "finished": 1794483054.6937635,
+          "cwd": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/resident-resources-20261112/resident-sdk",
+          "device_visibility": "5",
+          "output": "[W1112 19:30:49.438552717 NPUCachingAllocator.cpp:203] Warning: The current CANN and Soc versions require processing for 32 padding size, with memory allocation. (function operator())\nblock-session-storage: passed optimizer=11020 tensors=21874 exact_constructor=true below_limit_refusal=true input_refusal_unchanged=true\nblock-settle-session: passed two_window_bptt=true independent_formula_vjp=true AdamW_steps=3 exact_raw_checkpoint=true fresh_owner=true fresh_process=0\n"
+        },
+        {
+          "name": "public-qry",
+          "command": [
+            "/dev/shm/gef-resident-resources-20261112/resident-sdk/tide-block-resident-check",
+            "--device=npu:0",
+            "--dtype=float32",
+            "--memory-read",
+            "qry",
+            "--checkpoint-path",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/resident-resources-20261112/resident-sdk/qry.pt"
+          ],
+          "exit_code": 0,
+          "started": 1794483054.6963835,
+          "finished": 1794483062.0753083,
+          "cwd": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/resident-resources-20261112/resident-sdk",
+          "device_visibility": "5",
+          "output": "[W1112 19:30:56.798051041 NPUCachingAllocator.cpp:203] Warning: The current CANN and Soc versions require processing for 32 padding size, with memory allocation. (function operator())\nblock-resident-public: passed memory_read=qry actual_Model=true source_factors=true source_hidden_rank_padding=true independent_streaming=true AdamW_steps=3 windows=2 raw_continuation=true fresh_process=0\n"
+        },
+        {
+          "name": "restore-qry",
+          "command": [
+            "/dev/shm/gef-resident-resources-20261112/resident-sdk/tide-block-resident-check",
+            "--device=npu:0",
+            "--dtype=float32",
+            "--memory-read",
+            "qry",
+            "--checkpoint-path",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/resident-resources-20261112/resident-sdk/qry.pt",
+            "--restore-check"
+          ],
+          "exit_code": 0,
+          "started": 1794483062.0855567,
+          "finished": 1794483067.358279,
+          "cwd": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/resident-resources-20261112/resident-sdk",
+          "device_visibility": "5",
+          "output": "[W1112 19:31:03.178517668 NPUCachingAllocator.cpp:203] Warning: The current CANN and Soc versions require processing for 32 padding size, with memory allocation. (function operator())\nblock-resident-public: passed memory_read=qry actual_Model=true source_factors=true source_hidden_rank_padding=true independent_streaming=true AdamW_steps=3 windows=2 raw_continuation=true fresh_process=1\n"
+        },
+        {
+          "name": "public-sum",
+          "command": [
+            "/dev/shm/gef-resident-resources-20261112/resident-sdk/tide-block-resident-check",
+            "--device=npu:0",
+            "--dtype=float32",
+            "--memory-read",
+            "sum",
+            "--checkpoint-path",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/resident-resources-20261112/resident-sdk/sum.pt"
+          ],
+          "exit_code": 0,
+          "started": 1794483067.3604937,
+          "finished": 1794483073.7377746,
+          "cwd": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/resident-resources-20261112/resident-sdk",
+          "device_visibility": "5",
+          "output": "[W1112 19:31:08.454104120 NPUCachingAllocator.cpp:203] Warning: The current CANN and Soc versions require processing for 32 padding size, with memory allocation. (function operator())\nblock-resident-public: passed memory_read=sum actual_Model=true source_factors=true source_hidden_rank_padding=true independent_streaming=true AdamW_steps=3 windows=2 raw_continuation=true fresh_process=0\n"
+        },
+        {
+          "name": "restore-sum",
+          "command": [
+            "/dev/shm/gef-resident-resources-20261112/resident-sdk/tide-block-resident-check",
+            "--device=npu:0",
+            "--dtype=float32",
+            "--memory-read",
+            "sum",
+            "--checkpoint-path",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/resident-resources-20261112/resident-sdk/sum.pt",
+            "--restore-check"
+          ],
+          "exit_code": 0,
+          "started": 1794483073.7408779,
+          "finished": 1794483080.0154345,
+          "cwd": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/resident-resources-20261112/resident-sdk",
+          "device_visibility": "5",
+          "output": "[W1112 19:31:15.832922538 NPUCachingAllocator.cpp:203] Warning: The current CANN and Soc versions require processing for 32 padding size, with memory allocation. (function operator())\nblock-resident-public: passed memory_read=sum actual_Model=true source_factors=true source_hidden_rank_padding=true independent_streaming=true AdamW_steps=3 windows=2 raw_continuation=true fresh_process=1\n"
+        }
+      ],
+      "admission": {
+        "elapsed_seconds": 55.3198556676507,
+        "job_id": "resident-resources-resident-sdk",
+        "logical_device": "npu:0",
+        "logical_devices": [
+          "npu:0"
+        ],
+        "npu_count": 1,
+        "physical_id": 5,
+        "physical_ids": [
+          5
+        ],
+        "priority": 0,
+        "project": "graph-execution-foundation",
+        "return_code": 0,
+        "schema_version": 1,
+        "status": "completed",
+        "timestamp": "2026-11-12T11:31:20.025830+00:00"
+      }
+    }
+  },
+  "scripts": {
+    "launch.py": {
+      "sha256": "45bab79f6bf7b58aa5b32e5e84a6293c786ed6ffa02503448de1698362bc15da",
+      "text": "from pathlib import Path\nimport subprocess,sys,json\nbase=Path(__file__).resolve().parent;root=base.parent.parent;source='/dev/shm/gef-resident-resources-20261112/source'\nkind,cpus,timeout=sys.argv[1:];name='resident-resources-'+kind\ncommand=['systemd-run','--user','--unit='+name,'--service-type=exec','--slice=background.slice','--working-directory='+source,'--property=KillMode=control-group','--property=RuntimeMaxSec='+timeout,'--property=TimeoutStopSec=30','--property=Nice=10','--property=CPUAffinity='+cpus.replace('-', ' - '),'--property=MemoryMax=256G','/usr/bin/taskset','-c',cpus,'/usr/bin/python3',source+'/scripts/job.py','--output-dir',str(root/'artifacts/jobs'/name),'--','/bin/bash',str(base/(kind+'.sh'))]\n# taskset supplies the actual inherited process mask; AllowedCPUs alone did not on this host.\ncommand=[arg for arg in command if not arg.startswith('--property=CPUAffinity=')]\nsubprocess.run(command,check=True)\nsubprocess.run(['systemctl','--user','show',name,'-p','MainPID','-p','Slice','-p','ControlGroup','-p','ActiveState'],check=True)\n"
+    },
+    "qualification.py": {
+      "sha256": "670ff31cede199471161efee7b9e0074821c88f8731eaa007909f798d2ca8417",
+      "text": "import os,sys,time,subprocess\nfrom pathlib import Path\nfrom durable_records import write_json\nbase=Path('/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/resident-resources-20261112')\nbuild=Path('/dev/shm/gef-resident-resources-20261112');src=build/'source'\nkind=sys.argv[1];out=base/kind;out.mkdir(exist_ok=False);rows=[]\ndef run(name,command,timeout=300,env=None):\n start=time.time();command=list(map(str,command))\n with (out/(name+'.log')).open('x') as log:\n  try:code=subprocess.run(command,cwd=out,env=env,stdout=log,stderr=subprocess.STDOUT,timeout=timeout).returncode\n  except subprocess.TimeoutExpired:code=124\n rows.append(dict(name=name,command=command,exit_code=code,started=start,finished=time.time(),cwd=str(out),device_visibility=os.environ.get('ASCEND_RT_VISIBLE_DEVICES')))\n write_json(out/'processes.json',rows);print(name,code,flush=True);return code\nif kind=='resident-sdk':\n for target in ('device-services','block-settle-session'):\n  if run(target,[build/'resident-sdk'/('tide-'+target+'-check'),'--device=npu:0','--dtype=float32']):sys.exit(1)\n\n for read in ('qry','sum'):\n  args=[build/'resident-sdk/tide-block-resident-check','--device=npu:0','--dtype=float32','--memory-read',read,'--checkpoint-path',out/(read+'.pt')]\n  if run('public-'+read,args) or run('restore-'+read,args+['--restore-check']):sys.exit(1)\nelif kind=='resident-native':\n for read in ('qry','sum'):\n  args=[sys.executable,src/'examples/consumer_core5/block_resident.py','--device','npu:0','--memory-read',read,'--native-library',Path('/dev/shm/gef-source-bank-20261112/core-native'),'--resident-library',build/'resident-native','--checkpoint-path',out/(read+'.pt')]\n  if run('public-'+read,args) or run('restore-'+read,args+['--restore-check']):sys.exit(1)\nsys.exit(int(any(r['exit_code'] for r in rows)))\n"
+    },
+    "cpu-directed.sh": {
+      "sha256": "de20a62d4bbd7189ec7a4828a327551971ed7617077e58847e50a30dffbd8442",
+      "text": "#!/bin/bash\nset -euo pipefail\nsource /usr/share/Modules/init/bash\nmodule purge\nmodule load ascend/dev-workspace-9.2.0\nsource /mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/additive-work/env/bin/activate\nexport PYTHONDONTWRITEBYTECODE=1 TORCH_DEVICE_BACKEND_AUTOLOAD=0 OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1\nexport PYTHONPATH=\"$PWD/python:$PWD/tests:$PWD/scripts:${PYTHONPATH:-}\"\npython -m pytest -q tests/test_resident_block_resources.py tests/test_resident_block_public_dispatch.py tests/test_resident_optimizer_storage.py --junitxml=/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/resident-resources-20261112/cpu-directed.xml\n"
+    },
+    "native-build.sh": {
+      "sha256": "e27b1be436ba4556086b9f3020f040420b22446c87f2aab2e70d4424f4106222",
+      "text": "#!/bin/bash\nset -euo pipefail\nsource /usr/share/Modules/init/bash\nmodule purge\nexport PYTHONDONTWRITEBYTECODE=1 TORCH_DEVICE_BACKEND_AUTOLOAD=0 OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1\nmodule load ascend/dev-workspace-9.2.0\nsource /mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/additive-work/env/bin/activate\nexport PYTHONPATH=\"$PWD/python:$PWD/tests:$PWD/scripts:${PYTHONPATH:-}\"\npython scripts/build_device_control.py --core-build /dev/shm/gef-source-bank-20261112/core-native --build-dir /dev/shm/gef-resident-resources-20261112/resident-native --ascendc-soc Ascend910_9392 --python-component weighted --jobs all\npython -m pip wheel --no-build-isolation --no-deps . -w /dev/shm/gef-resident-resources-20261112/wheels\npython -m pip install --no-deps --target /dev/shm/gef-resident-resources-20261112/install /dev/shm/gef-resident-resources-20261112/wheels/*.whl\n"
+    },
+    "sdk-build.sh": {
+      "sha256": "fe8262c19344e15652e51c54adc277c6f2d388c6ed9889a9f49f100f034198d9",
+      "text": "#!/bin/bash\nset -euo pipefail\nsource /usr/share/Modules/init/bash\nmodule purge\nexport PYTHONDONTWRITEBYTECODE=1 TORCH_DEVICE_BACKEND_AUTOLOAD=0 OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1\nmodule load libtorch-npu/2.12.0-cann9.2.0\nexport PATH=/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/bin:$PATH\npython3 scripts/build_device_control.py --core-build /dev/shm/gef-source-bank-20261112/core-sdk --build-dir /dev/shm/gef-resident-resources-20261112/resident-sdk --ascendc-soc Ascend910_9392 --jobs all --checks services resident-block-public resident-block-settle-session\n"
+    },
+    "resident-sdk.sh": {
+      "sha256": "89b4afb9c99651422dbcb4ae95a80bacade0abcf0258e979e41afe9a35635973",
+      "text": "#!/bin/bash\nset -euo pipefail\nsource /usr/share/Modules/init/bash\nmodule purge\nmodule load libtorch-npu/2.12.0-cann9.2.0\nexport PATH=/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/bin:$PATH\nexport TORCH_DEVICE_BACKEND_AUTOLOAD=0 PYTHONDONTWRITEBYTECODE=1 OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1\nexport PYTHONPATH=\"/dev/shm/gef-resident-resources-20261112/install:/dev/shm/gef-resident-resources-20261112/source/scripts:${PYTHONPATH:-}\"\nexec python /mi/data2T/zlong/home/.agents/skills/use-local-ascend/scripts/run_on_free_npu.py --job-id resident-resources-resident-sdk --project graph-execution-foundation --priority 0 --npu-count 1 --candidate-ids 0,5,6,10,11 --max-hbm-mib 4096 --max-wait-seconds 180 --state-file /mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/resident-resources-20261112/queue-resident-sdk.json -- python /mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/resident-resources-20261112/qualification.py resident-sdk\n"
+    },
+    "resident-native.sh": {
+      "sha256": "fe388cf5ca2b4b95d653f6818b9311d4c4f02892e326e9368a8f8ab7b8599c63",
+      "text": "#!/bin/bash\nset -euo pipefail\nsource /usr/share/Modules/init/bash\nmodule purge\nmodule load ascend/dev-workspace-9.2.0\nsource /mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/additive-work/env/bin/activate\nexport TORCH_DEVICE_BACKEND_AUTOLOAD=0 PYTHONDONTWRITEBYTECODE=1 OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1\nexport PYTHONPATH=\"/dev/shm/gef-resident-resources-20261112/install:/dev/shm/gef-resident-resources-20261112/source/scripts:${PYTHONPATH:-}\"\nexec python /mi/data2T/zlong/home/.agents/skills/use-local-ascend/scripts/run_on_free_npu.py --job-id resident-resources-resident-native --project graph-execution-foundation --priority 0 --npu-count 1 --candidate-ids 0,5,6,10,11 --max-hbm-mib 4096 --max-wait-seconds 180 --state-file /mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/resident-resources-20261112/queue-resident-native.json -- python /mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/resident-resources-20261112/qualification.py resident-native\n"
+    }
+  },
+  "cpu": {
+    "name": "pytest",
+    "errors": "0",
+    "failures": "0",
+    "skipped": "0",
+    "tests": "8",
+    "time": "1.745",
+    "timestamp": "2026-11-12T19:28:32.985408+08:00",
+    "hostname": "liteserver-mi-dev-00001"
+  },
+  "build_launch": [
+    {
+      "unit": "resident-resources-build-native",
+      "command": [
+        "systemd-run",
+        "--user",
+        "--unit=resident-resources-build-native",
+        "--service-type=exec",
+        "--slice=background.slice",
+        "--working-directory=/dev/shm/gef-resident-resources-20261112/source",
+        "--property=KillMode=control-group",
+        "--property=RuntimeMaxSec=2400",
+        "--property=TimeoutStopSec=30",
+        "--property=Nice=10",
+        "--property=MemoryMax=512G",
+        "/usr/bin/taskset",
+        "-c",
+        "0-159",
+        "/usr/bin/python3",
+        "/dev/shm/gef-resident-resources-20261112/source/scripts/job.py",
+        "--output-dir",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/jobs/resident-resources-build-native",
+        "--",
+        "/bin/bash",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/resident-resources-20261112/native-build.sh"
+      ],
+      "observed": "MainPID=1440665\nSlice=background.slice\nControlGroup=/user.slice/user-1003.slice/user@1003.service/background.slice/resident-resources-build-native.service\nActiveState=active\n"
+    },
+    {
+      "unit": "resident-resources-build-sdk",
+      "command": [
+        "systemd-run",
+        "--user",
+        "--unit=resident-resources-build-sdk",
+        "--service-type=exec",
+        "--slice=background.slice",
+        "--working-directory=/dev/shm/gef-resident-resources-20261112/source",
+        "--property=KillMode=control-group",
+        "--property=RuntimeMaxSec=2400",
+        "--property=TimeoutStopSec=30",
+        "--property=Nice=10",
+        "--property=MemoryMax=512G",
+        "/usr/bin/taskset",
+        "-c",
+        "160-319",
+        "/usr/bin/python3",
+        "/dev/shm/gef-resident-resources-20261112/source/scripts/job.py",
+        "--output-dir",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/jobs/resident-resources-build-sdk",
+        "--",
+        "/bin/bash",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/resident-resources-20261112/sdk-build.sh"
+      ],
+      "observed": "MainPID=1440668\nSlice=background.slice\nControlGroup=/user.slice/user-1003.slice/user@1003.service/background.slice/resident-resources-build-sdk.service\nActiveState=active\n"
+    }
+  ],
+  "scope_limits": [
+    "CUDA program TU source only: no CUDA toolkit/build/device qualification",
+    "Reports current explicit held handles, not vendor-internal/peak quantities",
+    "No default hardware program/stream quota introduced",
+    "Partial-submit failure and total timeout protocol are not changed",
+    "No new scale or throughput result; use original 042ea369 identity for original-budget measurements"
+  ]
+}

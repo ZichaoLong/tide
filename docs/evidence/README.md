@@ -1,5 +1,15 @@
 # 历史验证与测量证据
 
+[来源共享与32点成本（2026-11-12）](source-bank-20261112.md)：72e1d22c两构建、325 CPU通过/7原xfail/2保留FP32严格失败；
+SDK CPU/NPU及12安装恢复通过。LH默认native训练CPU/NPU1.4058/2.9022秒，未见主要差距缩小；
+独立三层CPU profile/census与静态数据流审阅分列，外图小不能推断私有工作少。
+
+[增量来源容量规划（2026-11-12）](source-planning-20261112.md)：9ae62d0d两构建、75 CPU/7 SDK CPU及NPU安装恢复通过；
+不重复构造逐前缀incidence，保留原预算/顺序；没有新增吞吐。
+
+[resident资源准入与实际inventory（2026-11-12）](resident-resources-20261112.md)：08a349ce两构建、8 CPU、6 SDK/4 native设备进程通过；
+录入前预算已知storage/workspace，检查实际资源与step后释放；CUDA只有源码，无性能或更大规模推断。
+
 [Resident有界服务与原预算规模（2026-11-12）](resident-services-20261112.md)：042ea369两构建、SDK21/native4进程通过；
 7fd1dd10修复CPU模拟上下文后39项通过，原失败保留。FC16 B4/L16与LH176原预算完整训练/精确恢复通过，
 成本3.9448/22.5918秒、实际61输入位置；规模数学未检查，不称严格等价吞吐。

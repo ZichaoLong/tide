@@ -1,5 +1,10 @@
 # 从 Git 复现问题与维护失败经验
 
+来源共享与后继规划从[72e1d22c成本/三层profile](evidence/source-bank-20261112.md)及
+[9ae62d0d增量资格](evidence/source-planning-20261112.md)进入；完整计划、命令、构建身份和原失败在对应JSON。
+resident预算/实际程序资源从[08a349ce资格](evidence/resident-resources-20261112.md)进入。
+
+
 Resident原预算后继见[042ea369完整重建记录](evidence/resident-services-20261112.md)，
 包括固定配置/生成器、两套构建、SDK/native进程与CPU模拟上下文修复。原失败身份保留。
 
