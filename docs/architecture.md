@@ -6,6 +6,13 @@
 
 ## 分层
 
+LH/HB同材料三层对照由[独立张量基线](lh-tensor-baseline.md)连接
+`lh_tensor_baseline/math/state`、`benchmark_lh_tensor`与`test_lh_tensor_baseline`；
+直接候选的dense Full/数值投影与公共selected Full/完整continuation职责分别记录。
+[REQ-006诊断](req006-diagnostics.md)由`diagnose_req006`和`req006_material/runtime/profile`负责，
+固定下游源码/压缩配置，无插桩更新/完整步、trace和计算图统计分别执行。
+修改同步`test_req006_diagnostics`；下游显式Attention TF不是FC融合SDPA对照。
+
 FC16同尺寸成本与诊断入口见[阶段归因](fc16-cost-attribution.md)：可选native线程排他计时、
 真实profiler范围与独立张量基线分列；修改时维护benchmark_dense_query及test_stage_profile。
 [FC4/FC16三层调查](evidence/fc-three-layer-comparison-20261111.md#把差额落到计算与接口)

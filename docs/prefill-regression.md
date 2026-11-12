@@ -32,6 +32,12 @@ B32推理的事件预留与实际trace生命周期由test_selected_boundary_capa
 
 ## 可运行目录
 
+LH新增[直接→公共列→默认入口](lh-tensor-baseline.md)的同材料三模式对照。
+`benchmark_lh_tensor.py`记录展开plan、参数/输入hash、实际Full工作与精确职责差异；
+小型数学资格和原尺度成本分别验收，不由直接实现较紧凑推断其已经最优。
+[REQ-006](req006-diagnostics.md)四代表提供HB/入口树及显式Attention TF的固定直接负载；
+测量与profile/census分进程，沿用原更新/clip/AdamW，不以设备利用率充当耗时归因。
+
 同时增大独立batch与sequence的代表配置使用已有安装CLI；生成器只产生配置，不另设执行器：
 
 ```sh

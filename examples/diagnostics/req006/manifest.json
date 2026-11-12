@@ -1,0 +1,44 @@
+{
+  "schema": "tide-req006-configurations-v1",
+  "source_commit": "6e7bd49eb5e35c15445826cac3a9b6ddda75aff4",
+  "request_commit": "dc943cc7ce773e3dac4d62736ab524953573decb",
+  "report_commit": "8995958728167eee7a4bcc2139f5e1794cbf82ab",
+  "configurations": {
+    "hb88-pool-s11": {
+      "file": "hb88-pool-s11.json.gz",
+      "sha256": "6fc3510d80832b48423a6cf9faadfe19823fb9195de171e7641a592f1347acfc",
+      "original_path": "runs/v9-campaign/main/configs/hb88-pool-s11.json",
+      "original_bytes": 93245,
+      "parameters": 24876408,
+      "microbatch": 16,
+      "global_batch": 64
+    },
+    "hb184-quad-s11": {
+      "file": "hb184-quad-s11.json.gz",
+      "sha256": "56c4ec457969637ff4db7d40e1f1bf31caa2800d95118c1cd602717e0f21f96b",
+      "original_path": "runs/v9-campaign/main/configs/hb184-quad-s11.json",
+      "original_bytes": 191715,
+      "parameters": 53021958,
+      "microbatch": 8,
+      "global_batch": 64
+    },
+    "tree-r64-h2-q3-s11": {
+      "file": "tree-r64-h2-q3-s11.json.gz",
+      "sha256": "9881f742e37315ec5063febf2b5b03e5ba1aeee8b430c9e9ef52c611aaec0913",
+      "original_path": "runs/v9-campaign/main/configs/tree-r64-h2-q3-s11.json",
+      "original_bytes": 541217,
+      "parameters": 51621168,
+      "microbatch": 4,
+      "global_batch": 64
+    },
+    "tf-hb184-s11": {
+      "file": "tf-hb184-s11.json.gz",
+      "sha256": "3388b93dfe5b3b0f9b0cc34472e287a9cecc173caccb224ec82415668a53001f",
+      "original_path": "runs/v9-campaign/main/configs/tf-hb184-s11.json",
+      "original_bytes": 2017,
+      "parameters": 52540416,
+      "microbatch": 64,
+      "global_batch": 64
+    }
+  }
+}

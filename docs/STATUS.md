@@ -6,7 +6,8 @@
 
 ## 当前实施
 
-- LH独立直接张量基线、REQ-006可重复诊断设施与resident新执行器边界分开开发；主代理统一接口、集成、提交和资源调度。
+- LH独立直接张量基线和REQ-006可重复诊断已完成26项短CPU开发检查，正式固定源码测量待启动。
+  resident新执行器边界与公共KV节点组分开开发；主代理统一接口、集成、提交和资源调度。
 - 默认公共链继续以B×L张量交接，调查相容节点/区域成组、索引与块伴随；能力分派不按用例名称。
 - REQ-006的下游源码/环境/作业保持只读，实际代码6e7bd49e、请求dc943cc7、报告89959587。
   基座交付与下游验收独立。HB88 pooled/HB184 quad/R64树/TF是首轮有限代表，不重跑学习轨迹。
@@ -15,7 +16,14 @@
 
 ## 作业与资源
 
-当前没有本轮长作业。旧gef-resident-stop-qualified.service已终态failed、无后代；
+`gef-rewrite-aligned.service`已passed（99通过/9原数值xfail），MainPID=0且ControlGroup空；，固定129bbbdc，源码`/dev/shm/gef-rewrite-20261112/aligned-source`，
+build同级aligned-build；独立background.slice、jobs all/768GiB/3600秒。
+命令`artifacts/rewrite-20261112/aligned-work.sh`；作业记录`artifacts/jobs/rewrite-aligned/{status.json,task.log}`，
+CPU资格输出`artifacts/rewrite-20261112/aligned-cpu.xml`。此作业不做正式性能计时。
+即将启动`gef-rewrite-aligned-device.service`，同固定源码/构建，CPU144–159/256GiB/2400秒；
+单空闲NPU队列准入，half独立检查、6个安装训练/新进程恢复与FC16 CPU/NPU各一次完整步。
+启动脚本`artifacts/rewrite-20261112/aligned-device-work.sh`，记录`artifacts/jobs/rewrite-aligned-device/`。
+旧gef-resident-stop-qualified.service已终态failed、无后代；
 其内部SDK/安装小检查与SSD训练/恢复通过分别见[原报告](evidence/resident-shared-bank-20261112.md)。
 已有FC、五记忆、mixed/half等证据保持原源码/范围，不从本轮设计推断完成。
 资源初查：主存可用约1.7TiB，shm可用约308GiB；配额275GiB/软300GiB/硬800GiB。
