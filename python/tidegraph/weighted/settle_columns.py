@@ -199,14 +199,17 @@ class SettleColumnPlan:
             placement = self.region_locations[r]
             regional_fields = {v: column_transport.fields(d, placement["control"]) for v, d in descriptors.items()}
             for members, rows in candidate_groups(rows_by_node):
-                ids = {v: torch.searchsorted(rows_by_node[v], rows).to(regional_fields[v]["w"].device) for v in members}
-                fields = {name: torch.stack([regional_fields[v][name].index_select(0, ids[v]) for v in members], 1)
+                ids = {v: None if torch.equal(rows_by_node[v], rows) else
+                       torch.searchsorted(rows_by_node[v], rows).to(regional_fields[v]["w"].device) for v in members}
+                fields = {name: torch.stack([regional_fields[v][name] if ids[v] is None else
+                          regional_fields[v][name].index_select(0, ids[v]) for v in members], 1)
                           for name in regional_fields[members[0]]}
                 nodes = torch.tensor(members, dtype=torch.int64, device=fields["w"].device).expand(len(rows), -1)
                 region = column_placement.region(model.regions[r], fields, nodes, placement["control"], placement["selection"])
                 for v, control in zip(members, region.controls.unbind(1)):
                     ref = model.nodes[v].bias
-                    controls[v] = controls[v].index_copy(0, ids[v].to(ref.device), column_placement.controls(control, ref))
+                    value = column_placement.controls(control, ref)
+                    controls[v] = value if ids[v] is None else controls[v].index_copy(0, ids[v].to(ref.device), value)
                 calls += 1
             for v, window in windows.items():
                 full = self.modules[v].full(model.nodes[v], window, controls[v])

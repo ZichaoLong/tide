@@ -37,14 +37,19 @@ Received aggregate(const NodeWeights& w,const NodeBinding& binding,const std::ve
       auto [a,b]=detail::source_matrices(w,prefix);
       z=z+binding.aggregate_alpha*project(at::silu(project(normalize(z,epsilon),a)+detail::weight(w,prefix+".embedding")),b);
     }
-    auto ids=indices(positions(out.rows,p->rows),z.device());
-    masses.push_back(at::zeros({n},z.options()).index_copy(0,ids,p->strength.clamp_min(0)));
-    values.push_back(at::zeros({n,width},z.options()).index_copy(0,ids,z));
+    if(p->rows==out.rows){
+      masses.push_back(p->strength.clamp_min(0));values.push_back(z);
+    }else{
+      auto ids=indices(positions(out.rows,p->rows),z.device());
+      masses.push_back(at::zeros({n},z.options()).index_copy(0,ids,p->strength.clamp_min(0)));
+      values.push_back(at::zeros({n,width},z.options()).index_copy(0,ids,z));
+    }
   }
   if(out.rows.empty())return out;
   auto mass=at::stack(masses,1),value=at::stack(values,1);out.mass=mass.sum(1);
   auto positive=(out.mass.detach()>0).nonzero().flatten();out.content=at::zeros({n,width},value.options());
-  if(positive.numel())out.content=out.content.index_copy(0,positive,weighted_mean(mass.index_select(0,positive),value.index_select(0,positive)));
+  if(positive.numel()==n)out.content=weighted_mean(mass,value);
+  else if(positive.numel())out.content=out.content.index_copy(0,positive,weighted_mean(mass.index_select(0,positive),value.index_select(0,positive)));
   return out;
 }
 }
@@ -114,13 +119,15 @@ Result settle(const SettleGraph& spec,const Model& model,const Layout& layout,co
       placement_tensors(handles,placement.control,fields.at("w").scalar_type());regional_fields.emplace(v,std::move(fields));}
     for(const auto& [members,rows]:groups){
       std::map<std::string,std::vector<Tensor>> fields;std::map<Index,Tensor> ids;
-      for(auto v:members){const auto& node=result.nodes.at(v);ids[v]=indices(positions(node.rows,rows),regional_fields.at(v).at("w").device());
-        for(const auto& [name,t]:regional_fields.at(v))fields[name].push_back(t.index_select(0,ids.at(v)));}
+      for(auto v:members){const auto& node=result.nodes.at(v);
+        if(node.rows!=rows)ids[v]=indices(positions(node.rows,rows),regional_fields.at(v).at("w").device());
+        for(const auto& [name,t]:regional_fields.at(v))fields[name].push_back(ids.count(v)?t.index_select(0,ids.at(v)):t);}
       TensorFields packed;for(const auto& [name,values]:fields)packed[name]=at::stack(values,1);
       auto n=indices(members,packed.at("w").device()).expand({static_cast<Index>(rows.size()),static_cast<Index>(members.size())});
       auto values=region_placed(model.regions[region],packed,region_binding(model.regions[region]),n,placement).controls.unbind(1);
       for(size_t i=0;i<members.size();++i){auto v=members[i];const auto& like=model.nodes[v].bias;
-        result.nodes[v].controls=result.nodes[v].controls.index_copy(0,ids.at(v).to(like.device()),control_payload(values[i],like));}
+        auto value=control_payload(values[i],like);
+        result.nodes[v].controls=ids.count(v)?result.nodes[v].controls.index_copy(0,ids.at(v).to(like.device()),value):value;}
       ++result.stats["region_column_calls"];
     }
     for(auto v:nodes){const auto& node=result.nodes.at(v);

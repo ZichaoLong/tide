@@ -42,7 +42,9 @@ def aggregate_columns(program, sources, *, cache=None):
         for p, c in sources))
     if cache is not None and signature in cache:
         return cache[signature]
-    rows = torch.cat([p.rows for p, _ in sources]).unique(sorted=True)
+    first = sources[0][0].rows
+    aligned = all(torch.equal(p.rows, first) for p, _ in sources[1:])
+    rows = first if aligned else torch.cat([p.rows for p, _ in sources]).unique(sorted=True)
     masses, values = [], []
     for payload, label in sources:
         z = payload.content
@@ -50,15 +52,23 @@ def aggregate_columns(program, sources, *, cache=None):
             transform = program.transforms[str(label)]
             a, b = transform.matrices()
             z = z+program.alpha*(F.silu(norm(z, program.epsilon)@a.t()+transform.embedding)@b.t())
-        ids = torch.searchsorted(rows, payload.rows).to(z.device)
-        masses.append(z.new_zeros(len(rows)).index_copy(0, ids, payload.strength.clamp_min(0)))
-        values.append(z.new_zeros((len(rows), z.shape[-1])).index_copy(0, ids, z))
+        # An already aligned column is the actual operand, not a scatter into
+        # an identical zero-filled row domain. Atom multiplicity stays intact.
+        if aligned or torch.equal(payload.rows, rows):
+            masses.append(payload.strength.clamp_min(0))
+            values.append(z)
+        else:
+            ids = torch.searchsorted(rows, payload.rows).to(z.device)
+            masses.append(z.new_zeros(len(rows)).index_copy(0, ids, payload.strength.clamp_min(0)))
+            values.append(z.new_zeros((len(rows), z.shape[-1])).index_copy(0, ids, z))
     mass, value = torch.stack(masses, 1), torch.stack(values, 1)
     total = mass.sum(1)
     # Group the positive and zero branches once. A zero fiber must not create
     # an autograd dependency on its content or source-transform parameters.
     positive = (total.detach() > 0).nonzero().flatten()
-    if len(positive):
+    if len(positive) == len(rows):
+        u = weighted_mean(mass, value)
+    elif len(positive):
         u = weighted_mean(mass.index_select(0, positive), value.index_select(0, positive))
         u = value.new_zeros((len(rows), value.shape[-1])).index_copy(0, positive, u)
     else:
