@@ -1,5 +1,8 @@
 # LH/HB 的独立张量对照
 
+[固定三层结果](evidence/lh-three-layer-20261112.md)记录首轮176节点CPU/NPU三模式，
+其数值/工作量/恢复与后继优化范围分别声明。
+
 数学固定 `0770593838a37c790a568226930567ed60f99b83`。
 [直接实现](../scripts/lh_tensor_baseline.py)按静态区域顺序执行，
 [数值公式](../scripts/lh_tensor_math.py)与[原始状态](../scripts/lh_tensor_state.py)
