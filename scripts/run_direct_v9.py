@@ -14,6 +14,7 @@ sys.path.insert(0,str(Path(__file__).resolve().parents[1]))
 from scripts.job import inspect
 from tide_lab.records import atomic_json,digest,now
 from tide_lab.supervisor import TERMINAL
+from tide_lab.quota import account_quota
 
 M=2**20
 
@@ -50,12 +51,8 @@ class Campaign:
         paths=[p for base in ('runs','artifacts/jobs') for p in (self.root/base).glob('v9-*')]
         sizes=subprocess.check_output(['du','-s','-B1',*[str(p) for p in paths]],text=True)
         used=sum(int(s.split()[0]) for s in sizes.splitlines())/2**30
-        quota=subprocess.check_output(['quota','-w'],text=True)
-        # quota default block units are KiB. Preserve raw observation privately.
-        rows=[s.split() for s in quota.splitlines() if '/dev/' in s]
-        if not rows:raise RuntimeError('cannot verify account quota')
-        q=rows[0];headroom=(int(q[3])-int(q[1].rstrip('*')))/2**20
-        self.state['resources']=dict(at=now(),new_disk_gib=used,hard_quota_headroom_gib=headroom)
+        quota=account_quota();headroom=quota['hard_quota_headroom_gib']
+        self.state['resources']=dict(at=now(),new_disk_gib=used,hard_quota_headroom_gib=headroom,quota=quota)
         self.publish()
         if used>self.budget['max_new_disk_gib'] or headroom<200:
             raise RuntimeError('v9 disk/headroom bound reached')
