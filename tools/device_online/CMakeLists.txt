@@ -293,7 +293,7 @@ if(TIDE_DEVICE_KERNELS)
     target_link_libraries(tide-block-resident-check PRIVATE tide-block-resident tide-device-optimizer)
     add_executable(tide-block-settle-model-check block_settle_model_check.cpp weighted_flow_fixture.cpp)
     target_compile_options(tide-block-settle-model-check PRIVATE -fPIC)
-    target_link_libraries(tide-block-settle-model-check PRIVATE tide-block-resident)
+    target_link_libraries(tide-block-settle-model-check PRIVATE tide-block-resident tide-weighted-raw)
     add_executable(tide-block-settle-flow-check block_settle_flow_check.cpp
       block_settle_fixture.cpp block_settle_formula.cpp block_selection_fixture.cpp block_kv_message_fixture.cpp)
     target_compile_options(tide-block-settle-flow-check PRIVATE -fPIC)
