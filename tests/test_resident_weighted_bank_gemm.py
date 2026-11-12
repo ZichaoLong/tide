@@ -18,14 +18,14 @@ def library(tmp_path_factory):
     generated = directory/"generated"
     subprocess.run([sys.executable, str(device/"cuda/generate_kernels.py"), "--source", str(device/"ascendc"),
                     "--output", str(generated), "--backend", "cpu"], check=True)
-    names = ("plan", "rows", "snapshot")
+    names = ("plan", "rows", "snapshot", "next")
     path = directory/"bank.so"
     subprocess.run(["g++", "-std=c++17", "-shared", "-fPIC", "-O2", "-ffp-contract=off",
                     "-I"+str(device/"cuda"), "-I"+str(device/"ascendc"),
                     "-I"+str(Path(torch.__file__).parent/"include"),
                     *(str(generated/f"tide_weighted_bank_{n}.cpp") for n in names), "-o", str(path)], check=True)
     lib = ctypes.CDLL(str(path))
-    for name, pointers, integers in zip(names, (9, 5, 6), (3, 5, 5)):
+    for name, pointers, integers in zip(names, (9, 6, 6, 4), (3, 4, 5, 2)):
         f = getattr(lib, "tide_cuda_launch_tide_weighted_bank_"+name)
         f.argtypes = [ctypes.c_uint32, ctypes.c_void_p]+[ctypes.c_void_p]*pointers+[ctypes.c_int64]*integers
     binary = directory/"layout-check"
@@ -53,18 +53,26 @@ def plan(lib, owners, banks, roots=None):
     return dict(perm=permutation, offsets=offsets, buckets=buckets, connected=connected, used=used, error=error)
 
 
-def groups(p, rows):
+def groups(lib, p, rows):
     capacities = [1]
     while capacities[-1] < rows:
         capacities.append(min(rows, capacities[-1]*2))
-    for owner, bucket in enumerate(p["buckets"].tolist()):
-        if bucket:
-            yield owner, capacities[bucket-1]
+    cursor = torch.full((1,), -99, dtype=torch.int64)
+    branch = torch.full((1,), -99, dtype=torch.int32)
+    args = (p["buckets"], cursor, branch, p["error"])
+    launch(lib, "next", args, len(p["buckets"]), True)
+    for _ in range(len(p["buckets"])+1):
+        launch(lib, "next", args, len(p["buckets"]), False)
+        assert p["error"].item() == 0
+        if not branch.item(): return
+        yield cursor.item(), capacities[branch.item()-1]
+    raise AssertionError("device bank loop failed to terminate")
 
 
 def transfer(lib, p, source, destination, bank, cap, *, scatter=False, code=20):
-    launch(lib, "rows", (p["perm"], p["offsets"], source, destination, p["error"]),
-           bank, cap, source.shape[-1], scatter, code, blocks=4)
+    cursor = torch.tensor([bank], dtype=torch.int64)
+    launch(lib, "rows", (p["perm"], p["offsets"], cursor, source, destination, p["error"]),
+           cap, source.shape[-1], scatter, code, blocks=4)
 
 
 def snapshot(lib, p, matrix, bias=None):
@@ -82,7 +90,7 @@ def forward(lib, x, owners, matrix, bias=None, epsilon=None):
     rstd = (clean.square().mean(-1, keepdim=True)+epsilon).rsqrt() if epsilon else torch.ones(len(x), 1)
     normalized = clean*rstd
     output = torch.zeros(len(x), w.shape[1])
-    for owner, cap in groups(p, len(x)):
+    for owner, cap in groups(lib, p, len(x)):
         packed = torch.empty(cap, x.shape[1]); transfer(lib, p, normalized, packed, owner, cap)
         y = packed@w[owner].T
         if b.numel(): y = y+b[owner]
@@ -95,7 +103,7 @@ def backward(lib, tape, bar, roots):
     x, owners, w, b, rstd, epsilon = tape
     p = plan(lib, owners, len(w), roots)
     dx, dw, db = torch.zeros_like(x), torch.zeros_like(w), torch.zeros_like(b)
-    for owner, cap in groups(p, len(x)):
+    for owner, cap in groups(lib, p, len(x)):
         px, pg = torch.empty(cap, x.shape[1]), torch.empty(cap, bar.shape[1])
         transfer(lib, p, x, px, owner, cap, code=23); transfer(lib, p, bar, pg, owner, cap, code=23)
         dw[owner] = pg.T@px
@@ -174,13 +182,32 @@ def test_stable_partition_buckets_and_capacity_refusal(library, rows):
     owners = torch.arange(rows).remainder(4)-1; p = plan(library, owners, 4)
     expected = [r for owner in range(4) for r, value in enumerate(owners.tolist()) if value == owner]
     assert p["error"].item() == 0 and p["perm"][:len(expected)].tolist() == expected
-    for owner, cap in groups(p, rows):
+    for owner, cap in groups(library, p, rows):
         count = int((owners == owner).sum()); assert count <= cap < 2*count
     bad = owners.clone(); bad[0] = 4; rejected = plan(library, bad, 4)
     assert rejected["error"].item() == 2 and not rejected["buckets"].any()
     full = plan(library, torch.zeros(3, dtype=torch.int64), 1)
     transfer(library, full, torch.ones(3, 2), torch.empty(2, 2), 0, 2)
     assert full["error"].item() == 2
+
+
+def test_device_bank_cursor_replay_invalid_and_sticky_error(library):
+    buckets = torch.tensor([0, 3, 0, 1, 2], dtype=torch.int32)
+    cursor = torch.full((1,), -99, dtype=torch.int64)
+    branch = torch.ones(1, dtype=torch.int32); error = torch.zeros(1, dtype=torch.int32)
+    for _ in range(2):
+        launch(library, "next", (buckets, cursor, branch, error), 5, True)
+        actual = []
+        for _ in range(4):
+            launch(library, "next", (buckets, cursor, branch, error), 5, False)
+            actual.append((cursor.item(), branch.item()))
+        assert actual == [(1, 3), (3, 1), (4, 2), (5, 0)] and not error.item()
+    cursor.fill_(-2)
+    launch(library, "next", (buckets, cursor, branch, error), 5, False)
+    assert error.item() == 2 and branch.item() == 0
+    cursor.zero_(); error.fill_(23); branch.fill_(99)
+    launch(library, "next", (buckets, cursor, branch, error), 5, False)
+    assert error.item() == 23 and branch.item() == 0 and cursor.item() == 0
 
 
 def test_used_nonfinite_snapshot_and_sticky_failure(library):

@@ -67,3 +67,30 @@ Aggregate 分支处理，不引入源 transform 依赖。只声明一阶，保�
 在旧表达下的 FP32 质量根严格失败已保留；没有改变输入、dtype、前向公式或容差。
 `test_weighted_mean` 用单原子不变性和独立标量方向差分检查，既有 literal mean Jacobian
 与共享/独立根测试继续适用。此数值改进不保证任意浮点条件数下的位级一致。
+
+## 区域窗口的物理来源张量
+
+`aggregate_tensor.assemble_many`与独立C++ `weighted_aggregate_tensor`将同device/dtype/宽度的
+实际接收节点组成`[receiver,row,source,*field]`。来源变换先按完整参数槽和输入身份复用；
+各物理边/端口仍占一个source槽，源类别不去重原子。没有消息的槽只是内部padding，不构成候选；
+零强度的实际消息仍在其接收行域。按新的最大行数/来源数重新计算padding字节界，
+half、单一接收组和超出额外packing预算的组沿声明的已有单节点路径计算。
+
+数值前向一次归约出总质量及内容均值；无梯度映射区负责ragged gather，外层不产生逐源
+IndexCopy/Stack反向链。独立输出质量/内容根使用中心化一阶公式，零总量内容无连接，
+显式零cotangent仍是连接，单来源的均值质量导数为连接零。全部原始版本受守卫。
+每个实际物理原子行只有一个packed位置，转置使用逆映射gather，无需对浮点伴随atomic scatter。
+不同原始参数/输入不因数值相等合并；真实重复输入由原始根接收全部使用者贡献。
+
+普通列根保持独立接收节点/字段，不把这一内部布局当作逐事件记录解码。
+checkpoint仍来自实际状态；本边界不改变图/checkpoint版本或区域分配函数。
+独立字面公式、方向导数、ragged/重复边、零总量、None/零、冻结、版本与预算检查见
+[`tests/test_aggregate_tensor.py`](../tests/test_aggregate_tensor.py)及独立C++
+[`weighted_aggregate_tensor.cpp`](../cpp/test/weighted_aggregate_tensor.cpp)
+（`tidegraph-aggregate-tensor-check` / CTest `weighted-aggregate-tensor`）；
+整链继续使用一般端口/非空初态及训练恢复检查。
+此处改变求和布局可能产生有限舍入，既有严格阈值不修改，设备执行和精确恢复单独验收。
+
+`packing/bucket/aggregate_tensor`记录实际进入张量均值边界的组和接收节点数；
+精确相同接收绑定先复用，重复物理原子不从source轴删除。均值没有私有重放图，
+来源MLP和原始列/参数所有者仍有各自的反向边；该局部变化不宣称整个Aggregate只发射一个算子。

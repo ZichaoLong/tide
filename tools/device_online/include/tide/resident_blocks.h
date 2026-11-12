@@ -5,6 +5,8 @@
 #include "tide/resident_training.h"
 namespace tide::device_online {
 struct BlockResidentLimits {
+  // Whole-call forward/reverse tensor increments, actual optimizer+step
+  // inventory, and unique live tensors+workspaces (no fixed child fractions).
   int64_t cache=64,forward_bytes=512LL<<20,backward_bytes=1024LL<<20;
   int64_t optimizer_bytes=128LL<<20,total_bytes=3LL<<30,workspace_bytes=512LL<<20,windows=4;
   int32_t timeout_ms=30000;

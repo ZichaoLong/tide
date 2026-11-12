@@ -15,9 +15,8 @@ def read_parameter(name, config):
             and (name in {"kernel.projection", "kernel.delta_bias"} or name.startswith("kernel.conv.")))
 
 
-def _read_view(node, window, initial, mode, device, dtype):
-    if (window.content.device, window.content.dtype) == (device, dtype):
-        return node, window, initial
+def _read_inputs(node, window, initial, mode):
+    """Collect borrowed roles before any copy; shared roots keep their identity."""
     c = node.kernel.config
     parameters = [p for n, p in node.named_parameters(remove_duplicate=False) if read_parameter(n, c)]
     parameters += [p for n, p in node.named_buffers(remove_duplicate=False) if read_parameter(n, c)]
@@ -30,19 +29,27 @@ def _read_view(node, window, initial, mode, device, dtype):
             source = initial
         else:
             source = window.bank
-        values += [getattr(source, n) for n in names]
+        fields = {name: getattr(source, name) for name in names}
+        values += list(fields.values())
     else:
         source = initial if mode == "0" else window
         fields = {n: getattr(initial, n) for n in ("H", "Z", "W")} if mode == "0" else window.bank
         values += list(fields.values())
         if source.cache_values is not None:
             values.append(source.cache_values)
-    mapped = mapper(values, device, dtype)
+    return values, parameters, source, fields
+
+
+def _read_view(node, window, initial, mode, device, dtype, *, mapped=None, inputs=None):
+    if (window.content.device, window.content.dtype) == (device, dtype):
+        return node, window, initial
+    values, parameters, source, fields = inputs if inputs is not None else _read_inputs(node, window, initial, mode)
+    mapped = mapper(values, device, dtype) if mapped is None else mapped
     ids = {id(x) for x in parameters}
     view = rebind(node, lambda t: mapped(t) if id(t) in ids else t)
     query = replace(window, mass=mapped(window.mass), content=mapped(window.content))
-    if isinstance(c, KVConfig):
-        copied = replace(source, **{n: mapped(getattr(source, n)) for n in names})
+    if isinstance(node.kernel.config, KVConfig):
+        copied = replace(source, **{name: mapped(value) for name, value in fields.items()})
         if mode == "0":
             initial = copied
         else:
@@ -62,12 +69,28 @@ def read(module, node, window, initial, mode, device, dtype):
 
 
 def read_many(requests, *, max_workspace_bytes):
+    """Copy each real root once per destination, then preserve node/block roles.
+
+    Request-local copies would turn shared parameter owners into unrelated
+    temporary tensors, forcing matrix stacking and duplicate transfers. Input
+    order remains stable and different destination/dtype groups stay separate.
+    """
     from .column_modules import read_many as evaluate
-    prepared = {}
+    prepared, groups = {}, {}
     for key, (module, node, window, initial, mode, device, dtype) in requests.items():
-        node, window, initial = _read_view(node, window, initial, mode, device, dtype)
-        prepared[key] = module, node, window, mode, initial
-    return evaluate(prepared, max_workspace_bytes=max_workspace_bytes)
+        if (window.content.device, window.content.dtype) == (device, dtype):
+            prepared[key] = module, node, window, mode, initial
+        else:
+            inputs = _read_inputs(node, window, initial, mode)
+            groups.setdefault((device, dtype), []).append((key, inputs))
+    for (device, dtype), members in groups.items():
+        mapped = mapper([t for _, inputs in members for t in inputs[0]], device, dtype)
+        for key, inputs in members:
+            module, node, window, initial, mode, _, _ = requests[key]
+            node, window, initial = _read_view(node, window, initial, mode, device, dtype,
+                                               mapped=mapped, inputs=inputs)
+            prepared[key] = module, node, window, mode, initial
+    return evaluate({key: prepared[key] for key in requests}, max_workspace_bytes=max_workspace_bytes)
 
 
 def region(program, fields, nodes, control, selection):

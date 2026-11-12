@@ -77,10 +77,12 @@ def test_default_schedule_calls_real_groups_and_matches_scalar(case, implementat
     with observe_work(implementation) as work:
         actual = plan.run(x)
     metrics = work["metrics"]
-    assert metrics["packing/bucket/kv_read_nodes/rows"] == 6
-    assert metrics["packing/bucket/kv_read_nodes/calls"] == 2
+    # Observe the actual compact numerical groups in both implementations;
+    # legacy dispatch buckets do not certify the new kernel was executed.
+    assert metrics["packing/bucket/kv_tensor_read/rows"] == 6
+    assert metrics["packing/bucket/kv_tensor_read/calls"] == 2
     assert (metrics.get("packing/projection/tensor_block_bmm/calls", 0)
-            +metrics.get("packing/projection/private_bmm/calls", 0)) > 0
+            +metrics.get("packing/projection/kv_tensor/calls", 0)) > 0
     expected = reference(binding.graph, binding.model, Continuation(binding.graph.identity, 2),
                          layered_inputs(spec, x), 3*spec.stride, sealed_until=3*spec.stride)
     a, e = observations(actual, expected, spec)

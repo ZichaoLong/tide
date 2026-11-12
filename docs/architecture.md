@@ -150,6 +150,9 @@ transpose 在 `column_attention` / `weighted_column_attention`；位置元数据
 `column_placement` / `weighted_column_placement`拥有Read/control/selection临时列视图，
 按消费者选择实际参数/字段，复用已有显式copy/VJP和通信策略。私有raw状态留在payload owner。
 `test_column_placement`检查独立标量放置、共享根、None/零、评分dtype和正支持cast拒绝。
+`aggregate_tensor` / `weighted_aggregate_tensor`拥有接收节点×行×物理来源的无梯度映射、
+一次均值与中心化转置；容量按整组padding计算。修改同步`test_aggregate_tensor`与独立C++检查，
+再检查一般端口/共享/root/训练恢复；它不重新调用来源变换或参考调度。
 `column_aggregate` / `weighted_column_aggregate`收集每区域的有序物理来源，按实际Tensor根、
 行域和完整参数槽复用；`column_sources` / `weighted_column_sources`拥有相容分组和字节预算，
 `weighted_column_source_ops`及Python `_Sources`拥有整MLP的显式多输出VJP。

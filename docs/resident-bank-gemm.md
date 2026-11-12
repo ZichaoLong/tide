@@ -20,6 +20,9 @@ KV Upd 的求值表示变化，不改变图、局部函数、指定一阶VJP或c
 构造时列出有限行容量`1,2,4,…,R`，最后一个容量为实际R；运行时每个非空bank根据设备count
 选择最小容纳桶。每个多bank组的数值行数小于两倍实际行数，空组跳过；单bank继续使用一整块GEMM，
 其缺席行由mask清零，不套用上述填充比例。组间复用同一scratch，支路间也复用存储。
+设备int64游标按顺序选择下一非空bank，同一套容量分支供所有bank循环使用。
+当前bank通过设备index_select进入单bank矩阵/bias scratch；反向矩阵结果通过index_copy回写，
+矩阵复制粒度是bank而不是每个输入行。
 主要数值计算使用vendor GEMM/BMM、permute、bias add或sum，设备核只承担计划、复制、有限性和连接。
 
 每组前向为`Y_b=X_b W_b^T+b_b`。独立根先排除不存在行，转置为
@@ -40,8 +43,11 @@ KV更新、Aggregate及region调用者同步采用bank字节界；residual及KV 
 也按实际bank计费，不能继续按已删除的逐行矩阵复制拒绝容量。
 vendor workspace仍由DeviceProgram独立限制，不混入上述张量字节界。
 
-动态组的所有支路在构造时预先登记，实际分支由设备选择；静态控制图有O(B log R)个备选组，
-一次执行每个非空bank只运行一个。这不是host捕获实际路线，也不宣称静态图体积或设备提交成本最优。
+动态组的容量支路在构造时只登记一次，实际bank及分支均由设备选择；静态数值body为O(log R)，
+一次执行每个非空bank只运行一个。这不是host捕获实际路线，也不宣称设备提交成本最优。
+6011d599为每bank登记一套容量body，形成O(B log R)静态控制图；其完整消息块在CANN录入阶段
+触发EE1019/507002（stream task buffer full），即使各局部组件设备数值检查通过。
+共享body消除该复制，但新的完整组合设备资格与规模任务资源仍需单独验收，不能以字节预算证明通过。
 ragged行复制由一个设备worker负责，避免奇数行宽跨worker共享cache line；参数bank快照按连续对齐块
 分给worker。异步读者、互斥分支、共享scratch和保存反向均由DeviceProgram寿命覆盖。
 
@@ -53,6 +59,7 @@ ragged行复制由一个设备worker负责，避免奇数行宽跨worker共享ca
 - `tests/test_resident_weighted_bank_gemm.py`编译实际计划/复制/快照语义核的CPU适配，配CPU矩阵算子，
   与逐行FP64公式/autograd比较投影、两层head及KV低秩/summary转置；覆盖真实共享叶贡献、
   相等值不同bank、独立根/零根/缺席poison、动态稳定分组、全空组、保存版本和容量拒绝。
+  新增游标重复重放、跳过空bank、终止、非法游标及sticky error；它不模拟CANN任务池容量。
 - `tide-weighted-bank-layout-check`是注册的CPU CTest，独立核对形状/溢出拒绝、桶界、
   64行×3bank×32宽在128KiB张量预算内的结构界；它不执行候选设备程序。
 - `weighted_projection_check.cpp`在实际设备执行单/多bank、FP32/FP16、RMS/bias、完整VJP、

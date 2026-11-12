@@ -2,6 +2,7 @@
 #include "block_parameter_views.h"
 #include <ATen/core/grad_mode.h>
 #include <c10/core/impl/VirtualGuardImpl.h>
+#include <algorithm>
 #include <limits>
 namespace tide::device_online {
 using namespace block_session_detail;
@@ -58,10 +59,11 @@ BlockSettleSession::Impl::Impl(SettleGraph g,std::vector<BlockSettleKVBinding> b
   if(initial_positions.defined()){
     if(!initial_positions.device().is_cpu()||initial_positions.scalar_type()!=at::kLong||initial_positions.sizes()!=positions.sizes()||initial_positions.lt(-1).any().item<bool>())
       throw std::invalid_argument("initial block sample cut differs");positions=initial_positions.detach().clone();}
-  layout=block_session_detail::parameter_layout(registry,d,l.optimizer_bytes/8);optimizer=std::make_unique<DeviceOptimizer>(layout,kind,std::move(groups),l.optimizer_bytes);
+  layout=block_session_detail::parameter_layout(registry);
+  optimizer=std::make_unique<DeviceOptimizer>(layout,d,kind,std::move(groups),std::min(l.optimizer_bytes,l.total_bytes));
   if(saved){if(!saved->last_positions.defined()||!saved->last_positions.device().is_cpu()||saved->last_positions.scalar_type()!=at::kLong||
       saved->last_positions.sizes()!=positions.sizes()||saved->last_positions.lt(-1).any().item<bool>())throw std::invalid_argument("invalid block checkpoint sample cut");
-    if(saved->slots.values.sizes()!=layout.values.sizes())throw std::invalid_argument("block checkpoint canonical extent differs");
+    if(saved->slots.values.sizes()!=optimizer->values().sizes())throw std::invalid_argument("block checkpoint canonical extent differs");
     for(size_t j=0;j<layout.owners.size();++j)if(!at::equal(saved->slots.values.narrow(0,layout.offsets[j],layout.owners[j].value.numel()).reshape(layout.owners[j].value.sizes()),layout.owners[j].value))
       throw std::invalid_argument("block checkpoint named/master values disagree");
     optimizer->restore(saved->slots);positions=saved->last_positions.clone();}
@@ -74,25 +76,15 @@ BlockSettleSession::Impl::Impl(SettleGraph g,std::vector<BlockSettleKVBinding> b
       if(initial[r].integer.narrow(0,b*count,count).select(1,0).ge(cut).any().item<bool>())throw std::invalid_argument("block checkpoint raw state outside cut");}
     for(int64_t port=0;port<ports;++port){const auto time=metadata.input_times[b][port].item<int64_t>();
       if(time>=cut||(time>=0&&time%graph.stride()!=graph.rank(graph.graph().inputs[port])))throw std::invalid_argument("block checkpoint input ledger outside cut/time code");}}
+  budget();
 }
 void BlockSettleSession::Impl::check()const{
   if(at::GradMode::is_enabled()||closed||failed)throw std::logic_error("resident block owner closed/failed or grad enabled");
   validate(originals);validate(gradient_versions);for(const auto& w:windows)validate(w.versions);
 }
 void BlockSettleSession::Impl::run(DeviceProgram& p,const at::Tensor& error){
-  p.finish();c10::impl::VirtualGuardImpl(device.type()).synchronizeDevice(device.index());p.run(limits.timeout_ms);
+  c10::impl::VirtualGuardImpl(device.type()).synchronizeDevice(device.index());p.run(limits.timeout_ms);
   const auto code=error.cpu().item<int>();if(code)throw std::runtime_error("resident block owner refused, device code="+std::to_string(code));
-}
-void BlockSettleSession::Impl::budget(const DeviceProgram& current)const{
-  std::vector<const DeviceProgram*> programs;for(const auto& w:windows)programs.push_back(w.program.get());if(reverse)programs.push_back(reverse.get());
-  std::vector<at::Tensor> owned{layout.values,layout.connected,optimizer->values(),optimizer->first(),optimizer->second(),optimizer->maximum(),optimizer->steps(),optimizer->corrections()};
-  owned.insert(owned.end(),{boundary.node_present,boundary.region_times,boundary.input_counts,boundary.input_times});
-  for(const auto& b:bindings)for(const auto& [name,x]:block_kv_local_parameters(b.parameters))owned.push_back(x);
-  for(const auto& group:{state,bound})for(const auto& s:group){owned.push_back(s.floating);owned.push_back(s.integer);}
-  // Optimizer owns private metadata and proposal slots as well as these visible
-  // fields. Reserve its admitted complete partition, conservatively charging
-  // visible optimizer tensors again instead of omitting hidden storage.
-  if(current.retained_tensor_bytes(owned,programs)>limits.total_bytes-limits.optimizer_bytes)throw std::invalid_argument("resident block total retained tensor budget exceeded before execution");
 }
 void BlockSettleSession::Impl::discard(){
   for(auto& w:windows)w.program->close();windows.clear();if(reverse){reverse->close();reverse.reset();}gradient={};gradient_versions.clear();ready=false;
@@ -110,10 +102,16 @@ BlockSettleWindow BlockSettleSession::advance(const at::Tensor& positions,const 
     throw std::invalid_argument("block positions require int64 B,L");
   const auto host=positions.detach().cpu();if(host.lt(0).any().item<bool>()||host.select(1,0).le(s.positions).any().item<bool>()||
       (host.size(1)>1&&host.slice(1,1).le(host.slice(1,0,-1)).any().item<bool>()))throw std::invalid_argument("block windows must advance original sample positions");
+  if(!payload.defined()||!present.defined())throw std::invalid_argument("block window requires payload and presence tensors");
+  const auto input_bytes=resident_bytes_add(positions.nbytes(),resident_bytes_add(payload.nbytes(),present.nbytes()));
+  require_resident_bytes(input_bytes,s.limits.forward_bytes,"forward input tensor");
+  const auto live=s.storage();require_resident_bytes(resident_bytes_add(resident_bytes_add(live.tensors,live.workspaces),input_bytes),s.limits.total_bytes,"total before input copy");
   BlockSettleFlowInput input{positions.detach().to(s.device).clone(),payload.detach().to(s.device).clone(),present.detach().to(s.device).clone(),s.state,s.bound};
   auto program=std::make_unique<DeviceProgram>(s.device);program->limit_workspace(s.limits.workspace_bytes);
+  const auto before=s.storage().tensors;
   auto tape=std::make_shared<BlockSettleFlowTape>(append_block_settle_flow(*program,s.graph,s.bindings,input,s.limits.forward_bytes));
-  auto boundary=append_block_settle_boundary(*program,s.graph,*tape,input.present,s.boundary,s.limits.forward_bytes);s.budget(*program);
+  auto boundary=append_block_settle_boundary(*program,s.graph,*tape,input.present,s.boundary,s.limits.forward_bytes);
+  s.finish_and_admit(*program,before,s.limits.forward_bytes,"forward tensor");
   try{s.run(*program,tape->dispatcher->error());}catch(...){s.failed=true;throw;}
   BlockSettleWindow view{s.next_token++,s.generation,tape,boundary};Impl::Window saved{view,std::move(program),{}};
   for(const auto& x:tensors(*tape))remember(saved.versions,x);

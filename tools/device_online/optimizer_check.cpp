@@ -173,7 +173,14 @@ void memory_calibration(at::Device device,DeviceOptimizerKind kind,bool extra) {
   portable_torch::synchronize(device);
   auto baseline=tide::device_online::allocator::getDeviceStats(device.index()).allocated_bytes[0].current;
   tide::device_online::allocator::resetPeakStats(device.index());
-  DeviceOptimizer optimizer(gradient,kind,{group},budget);
+  // The session's metadata-only constructor must allocate exactly the actual
+  // masters/slots/metadata, without a placeholder gradient bank.
+  DeviceOptimizer optimizer(OptimizerParameterLayout{gradient.owners,gradient.offsets,n},device,kind,{group},budget);
+  require(optimizer.tensor_bytes()==optimizer.storage_plan().bytes,"optimizer actual storage differs from static inventory");
+  bool insufficient=false;
+  try{DeviceOptimizer rejected(OptimizerParameterLayout{gradient.owners,gradient.offsets,n},device,kind,{group},optimizer.tensor_bytes()-1);}
+  catch(const std::invalid_argument&){insufficient=true;}
+  require(insufficient,"optimizer accepted less than actual persistent storage");
   auto error=at::zeros({1},f.dtype(at::kInt));DeviceProgram p(device);
   p.limit_workspace(1024*1024);optimizer.append_step(p,gradient,error);p.finish();
   std::unique_ptr<NamedOptimizer> reference;
@@ -203,7 +210,8 @@ void memory_calibration(at::Device device,DeviceOptimizerKind kind,bool extra) {
   const auto peak=tide::device_online::allocator::getDeviceStats(device.index()).allocated_bytes[0].peak-baseline;
   require(peak<=budget,"optimizer retained parameter-sized proposals");
   std::cout<<"optimizer-memory: {\"elements\":"<<n<<",\"kind\":"<<int(kind)<<",\"extra_slot\":"<<extra
-    <<",\"budget\":"<<budget<<",\"peak_allocated_delta\":"<<peak<<",\"program_workspace_bytes\":"<<p.workspace_bytes()<<"}\n";
+    <<",\"budget\":"<<budget<<",\"retained_tensor_bytes\":"<<optimizer.tensor_bytes()
+    <<",\"peak_allocated_delta\":"<<peak<<",\"program_workspace_bytes\":"<<p.workspace_bytes()<<"}\n";
   p.close();
 }
 

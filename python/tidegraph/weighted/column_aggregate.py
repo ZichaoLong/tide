@@ -63,7 +63,9 @@ def aggregate_columns_many(requests, *, max_workspace_bytes=4*1024**3):
             transform_requests.append((p.content, weights, program.alpha, program.epsilon))
         unique[key] = sources, indices
     transformed = source_columns(transform_requests, max_workspace_bytes=max_workspace_bytes)
-    computed = {key: assemble(sources, [transformed[i] for i in ids]) for key, (sources, ids) in unique.items()}
+    from .aggregate_tensor import assemble_many
+    entries = [(sources, [transformed[i] for i in ids]) for sources, ids in unique.values()]
+    computed = dict(zip(unique, assemble_many(entries, max_workspace_bytes, assemble)))
     received = {i: computed.get(key) for i, key in enumerate(keys)}
     if len(computed) < sum(key is not None for key in keys):
         bucket("aggregate_exact_reuse", len(computed), sum(key is not None for key in keys))

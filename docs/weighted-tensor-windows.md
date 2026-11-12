@@ -150,8 +150,9 @@ Read与Full使用各自频率，位置不能由接收序号代替。位置logits
 显式一阶transpose；旋转的临时张量另计workspace。
 Read0 使用绑定初态；Read- 只看本次之前，Read+ 与 Full 看包含本次 proposal 的快照。
 
-KV `prepare_kv_columns_many` / C++ `columns::prepare_many` 可按相容节点的实际正写入行数、
-维度、dtype/device分组。每组以4个块矩阵算子计算base、低秩两因子和summary，原始输入/参数
+KV `prepare_kv_columns_many` / C++ `columns::prepare_many` 的FP32/FP64按维度、epsilon、dtype/device分组，
+不同实际正写入数共享 `[G,1,R_max,d]` 数值块；half保留同写入数的原路径。
+每组以4个块矩阵算子计算base、低秩两因子和summary，归一化及相加也保持组张量，原始输入/参数
 仍是独立梯度根；全部使用者累加到共享参数，未使用组输出不制造连接零。每节点的
 int64时钟、零写入保留、bank及terminal装配分别处理，Read/Full的快照不改变。
 `column_modules.prepare_many`负责有限模块分派；其他记忆继续使用各自的准备算法。
@@ -217,8 +218,9 @@ ledger；不调用参考或重算。已有 checkpoint-v5 save/load 保留参数�
 卷积估计包括旧缓存与新行的bank×lag反向暂存、host/device int64正向和逆向索引。
 该估计不代替全模型、保留 autograd、总 HBM 或多卡通信准入，也不限制累计逻辑时钟。
 跨节点KV准备另用同一上限约束额外块packing/伴随：四个线性阶段各计两份矩阵、三份输入、
-两份输出，并计归一化/相加和整数索引；half按至少FP32字节保守估算。按实际维度累加到预算
-前分组；只有一个节点时使用原无矩阵stack的路径。此预算不改变既有每节点容量拒绝，
+两份输出，并计归一化/相加和整数索引；half按至少FP32字节保守估算。每次加入节点按全组最大
+正写入数重算padding；C++另计原始接收行域的还原索引和伴随。超预算前分组；只有一个节点时
+使用原无矩阵stack的路径。此预算不改变既有每节点容量拒绝，
 也不将参数共享或连续存储直接视为省去了所有临时复制。
 跨节点Read/Full的额外预算包括各参数角色的packing、保存操作数、伴随、padded query/bank、
 Attention/相对位置暂存及int64索引；同一Tensor出现在不同角色时分别计费。

@@ -45,10 +45,56 @@ owners before the optimizer boundary.
 every actual role and advances the parameter generation. Detached state survives;
 old tapes are consumed. `detach()` preserves state while discarding outstanding
 tapes and gradients. A checkpoint requires a detached complete window boundary.
-The construction, backward and optimizer partitions and a complete retained-tensor
-bound are explicit. The optimizer partition is conservatively reserved as well
-as its visible fields; workspace has its own bound. Retained-window capacity is
-simultaneous storage capacity, not cumulative logical-time capacity.
+The construction, backward and optimizer partitions and total retained storage
+are explicit; their actual accounting is described below. Retained-window
+capacity is simultaneous storage capacity, not cumulative logical-time capacity.
+
+## Storage admission
+
+The canonical layout contains names, alias identities, offsets and element count
+only. It no longer allocates an unused FP32 parameter-sized zero bank or applies
+an arbitrary `optimizer_bytes / 8` child limit. `DeviceOptimizer` allocates its
+actual master, algorithm-dependent slots, live/next counters and corrections,
+owner/group/tile tables and finite-error cache lines. Its exact tensor inventory
+is checked before allocation and against the actual retained storages afterwards.
+
+- `forward_bytes` bounds new retained tensor storage of one whole `advance`,
+  including copied input tensors and complete-cut metadata. Existing owner state
+  and earlier windows are borrowed and counted once in the total.
+- `backward_bytes` bounds new retained storage of the complete multi-window
+  reverse, canonical gradient and fixed-initial adjoints, including its retained
+  roots. It is not a separate full allowance for every reverse subcall.
+- `optimizer_bytes` bounds the persistent optimizer inventory plus the current
+  step's newly retained publication/control tensors. The gradient already belongs
+  to the reverse. Publication reuses the master and actual role banks.
+- `total_bytes` bounds the union of the owner's live tensor storages, all retained
+  programs and the current program, plus every live program's vendor workspace
+  high-water mark. The union uses StorageImpl identity: views and borrowed optimizer
+  slots count once; distinct equal-valued tensors count separately. No whole unused
+  partition is subtracted from the total. Each program also enforces `workspace_bytes`.
+
+All hidden optimizer tensors and region owner-coordinate tensors participate in
+the total. Admission is repeated after control-program finalization, which may
+create additional CUDA branch tables, and before numerical execution. Constructor
+storage is checked before returning an owner. Input-copy lower bounds reject before
+allocating a new window. A capacity refusal before execution does not change state.
+`storage_usage()` reports actual owner tensor/workspace/optimizer bytes from host
+shape/ownership metadata; it does not read device routing or numerical state.
+
+These bounds concern storage retained by the internal session. CPU model copies,
+checkpoint codec temporaries, allocator rounding, runtime-internal resources and
+client-held copies/derived observation masks are separate. They are not an HBM
+peak guarantee. In particular, adequate byte budgets do not certify CANN task-buffer
+capacity. Old fixed evidence keeps its original refusal; changing the allocation
+model does not itself certify LH176/full-model admission or performance.
+
+`optimizer-storage-cpu` independently enumerates algorithm slots, empty sentinels,
+storage aliases, overflow and exact-limit refusal. Its LH176 element/owner witness
+uses a worst-case tile bound, without constructing or executing a model. The device
+optimizer checker verifies the exact inventory against real tensors; the session
+checker verifies exact initial limits, below-limit refusal and unchanged state on
+an input-capacity rejection. Device build, actual execution and complete training
+remain separate qualification facts.
 
 ## Checkpoint identity and exactness
 
@@ -76,7 +122,8 @@ an existing checkpoint intact.
 
 ## Navigation and checks
 
-- Owner and guards: `tools/device_online/block_settle_session{,_layout}.cpp`.
+- Owner and guards: `tools/device_online/block_settle_session{,_layout}.cpp`;
+  allocation/retained-workspace accounting: `block_settle_session_budget.cpp`.
 - Cross-window raw transpose, canonical reduction and optimizer publication:
   `block_settle_session_training.cpp`.
 - Exact archive: `block_settle_checkpoint.cpp`.

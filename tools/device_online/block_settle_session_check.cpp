@@ -103,6 +103,26 @@ std::unique_ptr<BlockSettleSession> session(const Fixture& f,at::Device device,c
   return std::make_unique<BlockSettleSession>(f.graph,f.bindings,f.registry,f.roles,f.input.initial,f.input.bound_initial,device,
     DeviceOptimizerKind::adamw,std::vector<tide::OptimizerGroup>{group},limits,saved);
 }
+void storage_refusals(at::Device device){
+  at::NoGradGuard no_grad;const auto f=fixture();tide::OptimizerGroup group;
+  for(const auto& p:f.registry.owners())group.parameters.push_back(p.canonical);
+  auto make=[&](BlockSettleLimits limits){return std::make_unique<BlockSettleSession>(f.graph,f.bindings,f.registry,f.roles,
+    f.input.initial,f.input.bound_initial,device,DeviceOptimizerKind::adamw,std::vector<tide::OptimizerGroup>{group},limits);};
+  auto high=make({});const auto use=high->storage_usage();
+  require(use.optimizer_bytes>0&&use.tensor_bytes>use.optimizer_bytes&&use.workspace_bytes==0,"block constructor inventory differs");
+  high->close();
+  auto refuses=[&](auto&& fn){bool caught=false;try{fn();}catch(const std::invalid_argument&){caught=true;}
+    require(caught,"block storage limit failed to reject");};
+  BlockSettleLimits limits;limits.optimizer_bytes=use.optimizer_bytes-1;refuses([&]{make(limits);});
+  limits.optimizer_bytes=use.optimizer_bytes;limits.total_bytes=use.tensor_bytes-1;refuses([&]{make(limits);});
+  limits.total_bytes=use.tensor_bytes;auto exact_owner=make(limits);
+  require(exact_owner->storage_usage().tensor_bytes==use.tensor_bytes,"block exact initial inventory includes a hidden layout copy");
+  const auto before=exact_owner->checkpoint();
+  refuses([&]{exact_owner->advance(f.input.positions,f.input.payload,f.input.present);});
+  exact(before,exact_owner->checkpoint());exact_owner->close();
+  std::cout<<"block-session-storage: passed optimizer="<<use.optimizer_bytes<<" tensors="<<use.tensor_bytes
+    <<" exact_constructor=true below_limit_refusal=true input_refusal_unchanged=true\n";
+}
 void check(at::Device device,const std::string& checkpoint_path,bool restore_only){
   at::NoGradGuard no_grad;auto f=fixture();const auto original=f; // Tensor registry cloned below: consumer originals stay immutable.
   tide::OptimizerGroup group;group.lr=.003;group.weight_decay=.02;group.eps=.1;
@@ -148,7 +168,7 @@ int main(int argc,char** argv){portable_torch::RuntimeSession runtime;
     const bool temporary=path.empty();if(temporary)path="/tmp/tide-block-session-"+std::to_string(::getpid())+".pt";
     const auto options=portable_torch::parse_cli(args.size(),args.data(),true);if(options.help){portable_torch::print_usage(std::cout,argv[0]);return 0;}
     if(options.device_spec=="auto"||options.dtype!=at::kFloat)throw std::invalid_argument("block session check requires explicit accelerator FP32");
-    const auto device=portable_torch::resolve_device(options);at::set_num_threads(1);at::set_num_interop_threads(1);check(device,path,read);
+    const auto device=portable_torch::resolve_device(options);at::set_num_threads(1);at::set_num_interop_threads(1);storage_refusals(device);check(device,path,read);
     if(temporary){std::filesystem::remove(path);std::filesystem::remove(path+".expected");}
     std::cout<<"block-settle-session: passed two_window_bptt=true independent_formula_vjp=true AdamW_steps=3 "
       <<"exact_raw_checkpoint=true fresh_owner=true fresh_process="<<read<<'\n';return 0;

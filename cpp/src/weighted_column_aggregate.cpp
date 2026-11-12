@@ -1,6 +1,7 @@
 // Architecture §2: exact regional caches preserve physical atom multiplicity.
 #include "weighted_column_sources.h"
 #include "weighted_mean.h"
+#include "weighted_aggregate_tensor.h"
 #include "tide/packing_work.h"
 #include <set>
 #include <cstdint>
@@ -17,12 +18,10 @@ Key key(const AggregateRequest& r){
   }
   return {r.binding->aggregate_alpha,std::visit([](const auto& c){return c.epsilon;},r.binding->memory),ids};
 }
-Received assemble(const AggregateRequest& r,const std::vector<size_t>& slots,const std::vector<Tensor>& transformed){
-  std::set<Index> present;for(const auto& [p,c]:r.sources)present.insert(p->rows.begin(),p->rows.end());
-  Received out;out.rows={present.begin(),present.end()};if(out.rows.empty())return out;
-  const auto n=static_cast<Index>(out.rows.size());std::vector<Tensor> masses,values;size_t i=0;
-  for(const auto& [p,label]:r.sources){
-    if(p->rows.empty())continue;auto z=transformed[slots[i++]];
+Received assemble(const AggregateTensorRequest& r){
+  Received out;out.rows=r.rows;if(out.rows.empty())return out;
+  const auto n=static_cast<Index>(out.rows.size());std::vector<Tensor> masses,values;
+  for(size_t i=0;i<r.sources.size();++i){const auto* p=r.sources[i];auto z=r.values[i];
     if(p->rows==out.rows){masses.push_back(p->strength.clamp_min(0));values.push_back(z);}
     else{std::vector<Index> positions;for(auto row:p->rows)positions.push_back(std::lower_bound(out.rows.begin(),out.rows.end(),row)-out.rows.begin());
       auto ids=indices(positions,z.device());masses.push_back(at::zeros({n},z.options()).index_copy(0,ids,p->strength.clamp_min(0)));
@@ -46,8 +45,13 @@ std::vector<Received> aggregate_columns_many(const std::vector<AggregateRequest>
         slots.back().push_back(transforms.size());transforms.push_back({p->content,parameters,r.binding->aggregate_alpha,std::get<1>(k)});}}
     uses[found->second].push_back(i);
   }
-  auto transformed=source_columns(transforms,budget);std::vector<Received> result(requests.size());
-  for(size_t j=0;j<unique.size();++j){auto value=assemble(requests[unique[j]],slots[j],transformed);
+  auto transformed=source_columns(transforms,budget);std::vector<Received> result(requests.size());std::vector<AggregateTensorRequest> entries;
+  for(size_t j=0;j<unique.size();++j){AggregateTensorRequest entry;std::set<Index> present;size_t k=0;
+    for(const auto& [p,label]:requests[unique[j]].sources)if(!p->rows.empty()){
+      present.insert(p->rows.begin(),p->rows.end());entry.sources.push_back(p);entry.values.push_back(transformed[slots[j][k++]]);}
+    entry.rows={present.begin(),present.end()};entries.push_back(std::move(entry));}
+  auto assembled=aggregate_tensor_many(entries,budget,assemble);
+  for(size_t j=0;j<unique.size();++j){auto value=std::move(assembled[j]);
     if(value.rows.empty())continue;
     auto masses=ordered_uses(value.mass,uses[j].size()),contents=ordered_uses(value.content,uses[j].size());
     if(uses[j].size()>1)work::packing::bucket("aggregate_exact_reuse",1,uses[j].size());

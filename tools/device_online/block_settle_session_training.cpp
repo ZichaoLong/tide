@@ -26,7 +26,8 @@ void carry(DeviceProgram& p,const BlockKVSequenceTape& previous,const BlockKVSeq
 BlockSettleAdjoints BlockSettleSession::backward(const std::vector<BlockSettleFlowRoots>& inputs){
   auto& s=*impl_;s.check();if(s.ready||s.windows.empty()||inputs.size()!=s.windows.size())throw std::logic_error("block backward needs all retained windows exactly once");
   auto program=std::make_unique<DeviceProgram>(s.device);program->limit_workspace(s.limits.workspace_bytes);
-  BlockSettleAdjoints out;out.windows.resize(inputs.size());auto error=at::zeros({1},s.layout.values.options().dtype(at::kInt));program->zero(error);
+  const auto before=s.storage().tensors;
+  BlockSettleAdjoints out;out.windows.resize(inputs.size());auto error=at::zeros({1},s.optimizer->values().options().dtype(at::kInt));program->zero(error);
   for(int64_t w=int64_t(inputs.size())-1;w>=0;--w){auto roots=inputs[w];const auto& t=*s.windows[w].view.tape;
     if(roots.regions.empty())roots.regions.resize(t.regions.size());
     if(roots.regions.size()!=t.regions.size())throw std::invalid_argument("block retained root region count differs");
@@ -58,8 +59,8 @@ BlockSettleAdjoints BlockSettleSession::backward(const std::vector<BlockSettleFl
   }
   // Keep the optimizer's complete canonical layout. Unused owners have an
   // explicit false bit, which preserves None and prevents decay/step changes.
-  auto absent=at::zeros({1},s.layout.connected.options());
-  for(const auto& owner:s.layout.owners)if(!used.count(owner.canonical))parts.push_back({owner.canonical,at::zeros(owner.value.sizes(),s.layout.values.options()),absent});
+  auto absent=at::zeros({1},s.optimizer->values().options().dtype(at::kBool));
+  for(const auto& owner:s.layout.owners)if(!used.count(owner.canonical))parts.push_back({owner.canonical,at::zeros(owner.value.sizes(),s.optimizer->values().options()),absent});
   out.parameters=append_weighted_parameter_vjp(*program,s.registry,parts,error,s.limits.backward_bytes);
   if(out.parameters.offsets!=s.layout.offsets)throw std::logic_error("block canonical reduction changed complete layout");
   for(size_t r=0;r<s.bindings.size();++r){const auto& t=s.windows.front().view.tape->regions[r].local->sequence;
@@ -72,7 +73,8 @@ BlockSettleAdjoints BlockSettleSession::backward(const std::vector<BlockSettleFl
         "fixed Read0 initial binding accumulates every retained window");},{fields,metadata,mapping,value,flags,result.value,result.connected,error});}
     out.bound_initial.push_back(std::move(result));
   }
-  s.budget(*program);try{s.run(*program,error);}catch(...){s.failed=true;throw;}
+  s.finish_and_admit(*program,before,s.limits.backward_bytes,"backward tensor");
+  try{s.run(*program,error);}catch(...){s.failed=true;throw;}
   s.gradient=out.parameters;s.reverse=std::move(program);s.ready=true;
   for(const auto& x:{s.gradient.values,s.gradient.connected})block_session_detail::remember(s.gradient_versions,x);
   return out;
@@ -87,11 +89,13 @@ void BlockSettleSession::Impl::publish(DeviceProgram& p,const at::Tensor& error)
 }
 void BlockSettleSession::step(){
   auto& s=*impl_;s.check();if(!s.ready||s.generation==std::numeric_limits<int64_t>::max())throw std::logic_error("block optimizer needs unconsumed gradient generation");
-  DeviceProgram program(s.device);program.limit_workspace(s.limits.workspace_bytes);auto error=at::zeros({1},s.gradient.values.options().dtype(at::kInt));
+  DeviceProgram program(s.device);program.limit_workspace(s.limits.workspace_bytes);const auto before=s.storage().tensors;
+  auto error=at::zeros({1},s.gradient.values.options().dtype(at::kInt));
   s.optimizer->append_step(program,s.gradient,error);
   auto zero=at::zeros_like(error),ok=at::zeros_like(error,error.options().dtype(at::kBool)),branch=at::zeros_like(error);
   const auto publish=program.label(),finish=program.label();program.equal(error,zero,ok);program.cast_index(ok,branch);program.branch(branch,{finish,publish});
-  program.mark(publish);s.publish(program,error);program.mark(finish);s.budget(program);
+  program.mark(publish);s.publish(program,error);program.mark(finish);
+  s.finish_and_admit(program,before,s.limits.optimizer_bytes,"optimizer step tensor",s.optimizer->tensor_bytes());
   try{s.run(program,error);}catch(...){s.failed=true;throw;}program.close();s.discard();++s.generation;
 }
 BlockSettleCheckpoint BlockSettleSession::checkpoint()const{

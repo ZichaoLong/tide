@@ -13,8 +13,9 @@ void append_weighted_bank_snapshot(DeviceProgram&,const at::Tensor& connected,
   const at::Tensor& matrix,const at::Tensor& bias,const at::Tensor& saved_matrix,
   const at::Tensor& saved_bias,const at::Tensor& error,int64_t error_code=20);
 // Shapes are static; each nonempty actual bank chooses its smallest bounded
-// row bucket on device. Shared scratch is reused across mutually exclusive
-// branches and banks. Each original row is scattered exactly once.
+// row bucket on device. One device bank cursor revisits the same capacity
+// branches, so recorded numerical bodies are O(log R), not O(B log R).
+// Shared scratch is reused; each original row is scattered exactly once.
 void append_weighted_bank_gemm(DeviceProgram&,const WeightedBankPlan&,
   const at::Tensor& input,const at::Tensor& matrix,const at::Tensor& bias,
   const at::Tensor& output,const at::Tensor& error);

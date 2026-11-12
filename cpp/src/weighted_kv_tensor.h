@@ -3,6 +3,7 @@
 // Layout/timestamps remain int64; the numerical graph does not own scheduling.
 #include "weighted_column_layout.h"
 #include <set>
+#include <functional>
 
 namespace tide::weighted::columns::tensor {
 struct Coordinates {
@@ -43,6 +44,13 @@ std::vector<std::string> parameters(const Request&);
 Packed pack(const std::vector<Request>&,bool differentiable);
 TensorFields formula(const Request&,const Packed&);
 std::vector<TensorFields> evaluate(const std::vector<Request>&);
+std::vector<TensorFields> evaluate(Packed,const std::function<TensorFields(const Packed&)>&,const char* label);
+struct WriteRequest {
+  const NodeWeights* owner;
+  Tensor mass,content;
+  const std::vector<Index>* rows;
+};
+std::vector<TensorFields> prepare(const std::vector<WriteRequest>&,double epsilon);
 void read_groups(const std::vector<KVReadRequest>&,const std::vector<size_t>&,Index,std::vector<TensorFields>&);
 void full_groups(const std::vector<KVFullRequest>&,const std::vector<size_t>&,Index,std::vector<Message>&);
 }

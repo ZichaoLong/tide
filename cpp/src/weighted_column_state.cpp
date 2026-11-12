@@ -1,6 +1,7 @@
 // KV §1.2: raw ragged banks and terminal retention, independently of queries.
 #include "weighted_column_layout.h"
 #include "weighted_row_linear.h"
+#include "weighted_kv_tensor.h"
 #include <numeric>
 namespace tide::weighted::columns {
 using detail::require;using detail::weight;
@@ -66,7 +67,7 @@ bool supported(const KVConfig& c){
 namespace {
 struct Preparation {Tensor ids;std::vector<Index> writes;};
 Preparation prepare_inputs(const NodeWeights& w,const KVConfig& c,const Layout& layout,const Tensor& mass,const Tensor& u,const KVState& left){
-  layout.validate();left.validate(w,c);const Index n=layout.times.size();
+  c.validate();layout.validate();left.validate(w,c);const Index n=layout.times.size();
   require(layout.samples()==left.layout.samples()&&u.sizes()==at::IntArrayRef({n,c.width})&&mass.sizes()==at::IntArrayRef({n}),"KV window dimensions differ");
   require(u.device()==w.bias.device()&&u.scalar_type()==w.bias.scalar_type()&&mass.device()==u.device()&&mass.scalar_type()==u.scalar_type()
     &&at::isfinite(u).all().item<bool>()&&at::isfinite(mass).all().item<bool>()&&!(mass<0).any().item<bool>(),"invalid KV window payload");
@@ -123,7 +124,7 @@ KVWindow prepare(const NodeWeights& w,const KVConfig& c,const Layout& layout,con
 }
 std::vector<KVWindow> prepare_many(const std::vector<KVPrepareRequest>& requests,Index max_workspace_bytes){
   require(max_workspace_bytes>0,"KV preparation group budget must be positive");
-  using Key=std::tuple<int,int,int,Index,Index,Index,Index>;
+  using Key=std::tuple<int,int,int,Index,Index,Index,Index,double>;
   std::map<Key,std::vector<size_t>> groups;
   std::vector<Preparation> prepared;std::vector<KVWindow> result(requests.size());prepared.reserve(requests.size());
   for(size_t i=0;i<requests.size();++i){const auto& q=requests[i];
@@ -132,11 +133,21 @@ std::vector<KVWindow> prepare_many(const std::vector<KVPrepareRequest>& requests
     const auto rows=static_cast<Index>(prepared.back().writes.size());
     if(!rows){result[i]=assemble(q.config,q.layout,q.mass,q.content,q.left,prepared.back(),{});continue;}
     const auto device=q.content.device();const auto& c=q.config;
-    groups[{int(device.type()),device.index(),int(q.content.scalar_type()),rows,c.width,c.adapter_rank,c.summary_width}].push_back(i);
+    const bool compact=q.content.scalar_type()==at::kFloat||q.content.scalar_type()==at::kDouble;
+    groups[{int(device.type()),device.index(),int(q.content.scalar_type()),compact?0:rows,c.width,c.adapter_rank,c.summary_width,c.epsilon}].push_back(i);
   }
   auto execute=[&](const std::vector<size_t>& ids){
     if(ids.size()==1){const auto i=ids.front();const auto& q=requests[i];
       result[i]=assemble(q.config,q.layout,q.mass,q.content,q.left,prepared[i],projected(*q.weights,q.config,q.mass,q.content,prepared[i]));return;}
+    const auto dtype=requests[ids[0]].content.scalar_type();
+    if(dtype==at::kFloat||dtype==at::kDouble){
+      std::vector<tensor::WriteRequest> rows;
+      for(auto i:ids){const auto& q=requests[i];rows.push_back({q.weights,q.mass,q.content,&prepared[i].writes});}
+      auto fresh=tensor::prepare(rows,requests[ids[0]].config.epsilon);
+      for(size_t j=0;j<ids.size();++j){const auto i=ids[j];const auto& q=requests[i];
+        result[i]=assemble(q.config,q.layout,q.mass,q.content,q.left,prepared[i],fresh[j]);}
+      return;
+    }
     std::vector<Tensor> xs,base,adapter_v,adapter_u,summary;
     for(auto i:ids){const auto& q=requests[i];const auto& w=*q.weights;
       xs.push_back(normalize(q.content.index_select(0,prepared[i].ids),q.config.epsilon));
@@ -150,10 +161,13 @@ std::vector<KVWindow> prepare_many(const std::vector<KVPrepareRequest>& requests
                          {"weights",q.mass.index_select(0,prepared[i].ids).clamp_max(1)}};
       result[i]=assemble(q.config,q.layout,q.mass,q.content,q.left,prepared[i],fresh);}
   };
-  for(const auto& [key,ids]:groups){std::vector<size_t> batch;long double used=0;
-    for(auto i:ids){const auto& q=requests[i];auto cost=group_bytes(q.config,prepared[i].writes.size(),q.content.element_size());
-      if(!batch.empty()&&used+cost>max_workspace_bytes){execute(batch);batch.clear();used=0;}
-      batch.push_back(i);used+=cost;
+  for(const auto& [key,ids]:groups){std::vector<size_t> batch;Index longest=0;long double originals=0;
+    for(auto i:ids){const auto& q=requests[i];const auto candidate=std::max(longest,static_cast<Index>(prepared[i].writes.size()));
+      const auto count=batch.size()+1;const auto source_rows=originals+q.layout.times.size();
+      auto cost=count*group_bytes(q.config,candidate,q.content.element_size())
+        +source_rows*(8+2*(q.config.width+1)*std::max<Index>(4,q.content.element_size()));
+      if(!batch.empty()&&cost>max_workspace_bytes){execute(batch);batch.clear();longest=0;originals=0;}
+      batch.push_back(i);longest=std::max(longest,static_cast<Index>(prepared[i].writes.size()));originals+=q.layout.times.size();
     }
     if(!batch.empty())execute(batch);
   }

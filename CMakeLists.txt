@@ -71,9 +71,11 @@ add_library(tidegraph STATIC
   cpp/src/weighted_column_state.cpp cpp/src/weighted_column_query.cpp cpp/src/weighted_column_attention.cpp cpp/src/weighted_settle_columns.cpp
   cpp/src/weighted_column_query_ops.cpp cpp/src/weighted_column_positions.cpp cpp/src/weighted_column_checkpoint.cpp
   cpp/src/weighted_column_source_ops.cpp cpp/src/weighted_column_sources.cpp cpp/src/weighted_column_aggregate.cpp
+  cpp/src/weighted_aggregate_tensor.cpp
   cpp/src/weighted_column_read_groups.cpp cpp/src/weighted_column_full_groups.cpp
   cpp/src/weighted_kv_tensor.cpp cpp/src/weighted_kv_tensor_layout.cpp
   cpp/src/weighted_kv_tensor_positions.cpp
+  cpp/src/weighted_kv_tensor_prepare.cpp
   cpp/src/weighted_kv_tensor_math.cpp cpp/src/weighted_kv_tensor_vjp.cpp
   cpp/src/weighted_column_modules.cpp cpp/src/weighted_column_recurrent_state.cpp
   cpp/src/weighted_column_recurrent_math.cpp cpp/src/weighted_column_recurrent_query.cpp
@@ -184,6 +186,16 @@ add_test(NAME weighted-columns COMMAND tidegraph-column-check)
 add_executable(tidegraph-kv-tensor-check cpp/test/weighted_kv_tensor.cpp cpp/test/weighted_graph_fixture.cpp)
 target_link_libraries(tidegraph-kv-tensor-check PRIVATE tidegraph_runtime)
 add_test(NAME weighted-kv-tensor COMMAND tidegraph-kv-tensor-check)
+add_executable(tidegraph-kv-tensor-prepare-check cpp/test/weighted_kv_tensor_prepare.cpp cpp/test/weighted_graph_fixture.cpp)
+target_link_libraries(tidegraph-kv-tensor-prepare-check PRIVATE tidegraph_runtime)
+add_test(NAME weighted-kv-tensor-prepare COMMAND tidegraph-kv-tensor-prepare-check)
+add_executable(tidegraph-read-transport-check cpp/test/weighted_read_transport.cpp cpp/test/weighted_graph_fixture.cpp)
+target_include_directories(tidegraph-read-transport-check PRIVATE cpp/src)
+target_link_libraries(tidegraph-read-transport-check PRIVATE tidegraph_runtime)
+add_test(NAME weighted-read-transport COMMAND tidegraph-read-transport-check)
+add_executable(tidegraph-aggregate-tensor-check cpp/test/weighted_aggregate_tensor.cpp cpp/test/weighted_graph_fixture.cpp)
+target_link_libraries(tidegraph-aggregate-tensor-check PRIVATE tidegraph_runtime)
+add_test(NAME weighted-aggregate-tensor COMMAND tidegraph-aggregate-tensor-check)
 add_executable(tidegraph-column-checkpoint-check cpp/test/weighted_column_checkpoint.cpp cpp/test/weighted_graph_fixture.cpp)
 target_link_libraries(tidegraph-column-checkpoint-check PRIVATE tidegraph_runtime)
 add_test(NAME weighted-column-checkpoint COMMAND tidegraph-column-checkpoint-check)

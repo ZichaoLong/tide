@@ -19,10 +19,8 @@ at::ScalarType read_dtype(const ResolvedPlacement& p,at::ScalarType payload){
   return dtype;
 }
 namespace {
-void place_read(NodeWeights& weights,const NodeBinding& binding,LocalWindow& query,
-                const std::string& mode,LocalState& old,const ResolvedPlacement& placement){
-  const auto dtype=read_dtype(placement,weights.bias.scalar_type());
-  if(weights.bias.device()==placement.read&&weights.bias.scalar_type()==dtype)return;
+std::vector<Tensor*> read_handles(NodeWeights& weights,const NodeBinding& binding,LocalWindow& query,
+                                  const std::string& mode,LocalState& old){
   std::vector<Tensor*> handles;
   for(auto& [name,t]:weights.extra)if(read_parameter(name,binding.memory))handles.push_back(&t);
   std::visit([&](auto& q){
@@ -41,7 +39,13 @@ void place_read(NodeWeights& weights,const NodeBinding& binding,LocalWindow& que
     for(auto& [name,t]:s.fields)handles.push_back(&t);
     if constexpr(std::is_same_v<std::decay_t<decltype(s)>,RecurrentState>)handles.push_back(&s.cache_values);
   },old);
-  placement_tensors(handles,placement.read,dtype);
+  return handles;
+}
+void place_read(NodeWeights& weights,const NodeBinding& binding,LocalWindow& query,
+                const std::string& mode,LocalState& old,const ResolvedPlacement& placement){
+  const auto dtype=read_dtype(placement,weights.bias.scalar_type());
+  if(weights.bias.device()==placement.read&&weights.bias.scalar_type()==dtype)return;
+  placement_tensors(read_handles(weights,binding,query,mode,old),placement.read,dtype);
 }
 }
 TensorFields read_placed(const NodeWeights& original,const NodeBinding& binding,const LocalWindow& window,
@@ -53,8 +57,17 @@ TensorFields read_placed(const NodeWeights& original,const NodeBinding& binding,
 std::vector<TensorFields> read_placed_many(const std::vector<PlacedReadRequest>& requests,Index budget){
   std::vector<NodeWeights> weights;std::vector<LocalReadRequest> queries;weights.reserve(requests.size());queries.reserve(requests.size());
   for(const auto& r:requests){detail::require(r.query.weights,"placed Read requires parameter owner");
-    weights.push_back(*r.query.weights);queries.push_back(r.query);auto& q=queries.back();q.weights=&weights.back();
-    place_read(weights.back(),q.binding,q.window,q.mode,q.initial,r.placement);}
+    weights.push_back(*r.query.weights);queries.push_back(r.query);queries.back().weights=&weights.back();}
+  // One alias-preserving transport per destination; request-local copies would
+  // destroy shared matrix identity before the tensor numerical boundary.
+  using Key=std::tuple<int,int,int>;std::map<Key,std::vector<Tensor*>> groups;
+  for(size_t i=0;i<requests.size();++i){const auto& p=requests[i].placement;auto& w=weights[i];auto& q=queries[i];
+    const auto dtype=read_dtype(p,w.bias.scalar_type());
+    if(w.bias.device()==p.read&&w.bias.scalar_type()==dtype)continue;
+    auto handles=read_handles(w,q.binding,q.window,q.mode,q.initial);
+    auto& group=groups[{int(p.read.type()),p.read.index(),int(dtype)}];group.insert(group.end(),handles.begin(),handles.end());}
+  for(const auto& [key,handles]:groups)placement_tensors(handles,
+    at::Device(static_cast<c10::DeviceType>(std::get<0>(key)),std::get<1>(key)),static_cast<at::ScalarType>(std::get<2>(key)));
   return read_columns_many(queries,budget);
 }
 RegionColumns region_placed(const RegionWeights& original,const TensorFields& descriptors,const RegionalConfig& config,

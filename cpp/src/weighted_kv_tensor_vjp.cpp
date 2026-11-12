@@ -46,7 +46,9 @@ class Boundary final:public Node {
         for(size_t r=0;r<packed.roles.size();++r)if(uses[f][r])connected[r][g]=true;
       }
       if(pieces.empty())continue;
-      auto bar=at::zeros_like(fields[f]);bar.flatten(0,2).index_copy_(0,at::cat(indices),at::cat(pieces));
+      // Fields may be slices of one KV projection. A contiguous adjoint makes
+      // flatten a view; preserving an arbitrary field stride could copy here.
+      auto bar=at::zeros(fields[f].sizes(),fields[f].options());bar.flatten(0,2).index_copy_(0,at::cat(indices),at::cat(pieces));
       active_fields.push_back(fields[f]);active_bars.push_back(bar);
     }
     if(active_fields.empty())return result;
@@ -76,12 +78,12 @@ class Boundary final:public Node {
   std::string name()const override{return "tide::weighted::KVTensorBoundaryVjp";}
 };
 }
-std::vector<TensorFields> evaluate(const std::vector<Request>& requests){
+std::vector<TensorFields> evaluate(Packed packed,const std::function<TensorFields(const Packed&)>& compute,const char* label){
   const bool enabled=at::GradMode::is_enabled();at::NoGradGuard guard;
-  auto packed=pack(requests,false);bool grad=false;variable_list originals;
+  bool grad=false;variable_list originals;
   for(auto& role:packed.roles)for(const auto& t:role.originals){originals.push_back(t);grad|=enabled&&t.requires_grad();}
   if(grad)for(auto& role:packed.roles)role.value.set_requires_grad(true);
-  TensorFields values;{at::AutoGradMode graph(grad);values=formula(requests[0],packed);}
+  TensorFields values;{at::AutoGradMode graph(grad);values=compute(packed);}
   variable_list fields;std::vector<std::string> names;
   for(const auto& [name,value]:values){names.push_back(name);fields.push_back(value);}
   std::shared_ptr<Boundary> node;
@@ -89,16 +91,16 @@ std::vector<TensorFields> evaluate(const std::vector<Request>& requests){
     node->set_next_edges(torch::autograd::collect_next_edges(originals));
     for(const auto& value:originals)node->originals.emplace_back(value,false);
     if(autograd_census::enabled()){
-      autograd_census::graph(requests[0].full?"private/kv.tensor.full":"private/kv.tensor.read",fields);
+      autograd_census::graph(label,fields);
       autograd_census::saved(originals);autograd_census::saved(fields);
       for(const auto& role:packed.roles)autograd_census::saved({role.value,role.restore});
       autograd_census::saved({packed.age,packed.visible,packed.query_position,packed.key_position});
       autograd_census::saved(packed.publish);
     }
   }
-  std::vector<TensorFields> out(requests.size());
+  std::vector<TensorFields> out(packed.nodes);
   for(size_t f=0;f<fields.size();++f){auto flat=fields[f].flatten(0,2);
-    for(size_t g=0;g<requests.size();++g){auto value=flat.index_select(0,packed.publish[g]);bool used=false;
+    for(size_t g=0;g<out.size();++g){auto value=flat.index_select(0,packed.publish[g]);bool used=false;
       if(grad)for(size_t r=0;r<packed.roles.size();++r)used|=node->uses[f][r]&&packed.roles[r].originals[g].requires_grad();
       if(used){node->outputs.emplace_back(g,f);torch::autograd::set_history(value,node);}
       out[g][names[f]]=std::move(value);
@@ -106,5 +108,9 @@ std::vector<TensorFields> evaluate(const std::vector<Request>& requests){
   }
   if(node){for(auto& role:packed.roles)role.originals.clear();node->packed=std::move(packed);}
   return out;
+}
+std::vector<TensorFields> evaluate(const std::vector<Request>& requests){
+  return evaluate(pack(requests,false),[&](const Packed& p){return formula(requests[0],p);},
+    requests[0].full?"private/kv.tensor.full":"private/kv.tensor.read");
 }
 }

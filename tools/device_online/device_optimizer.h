@@ -1,16 +1,26 @@
 #pragma once
 #include "parameter_vjp.h"
+#include "optimizer_storage.h"
 #include "tide/optimizer.h"
 #include "tide/resident_training.h"
 
 namespace tide::device_online {
 enum class DeviceOptimizerKind {sgd,adamw};
+struct OptimizerParameterLayout {
+  std::vector<ParameterOwner> owners;
+  std::vector<int64_t> offsets;
+  int64_t elements=1;
+};
 // Internal FP32 master update for FP32/FP16 payload owners. State and decisions
 // remain on device; a finite-check failure commits no parameter or slot. This
 // does not itself publish parameters into a forward owner's frozen banks.
 class DeviceOptimizer {
  public:
   DeviceOptimizer(const ParameterVjp&,DeviceOptimizerKind,std::vector<OptimizerGroup>,int64_t tensor_budget_bytes);
+  // A canonical identity needs no placeholder gradient allocation. Actual
+  // gradient values/connection bits are supplied only when a step is appended.
+  DeviceOptimizer(const OptimizerParameterLayout&,at::Device,DeviceOptimizerKind,
+    std::vector<OptimizerGroup>,int64_t tensor_budget_bytes);
   void append_step(DeviceProgram&,const ParameterVjp&,const at::Tensor& error);
   // Distributed composition: evaluate proposals on all owners, reach a common
   // device error decision, then append every commit. No master/slot changes
@@ -26,11 +36,15 @@ class DeviceOptimizer {
   const at::Tensor& steps() const {return steps_;}
   const at::Tensor& corrections() const {return corrections_;}
   const std::vector<OptimizerGroup>& groups() const {return groups_;}
+  std::vector<at::Tensor> tensors()const;
+  int64_t tensor_bytes()const;
+  const OptimizerStoragePlan& storage_plan()const{return storage_;}
   ResidentOptimizerState snapshot() const;
   void restore(const ResidentOptimizerState&); // Validate all CPU fields before device writes.
  private:
   void append_phase(DeviceProgram&,const ParameterVjp&,const at::Tensor&,bool commit);
-  ParameterVjp identity_;
+  OptimizerParameterLayout identity_;
+  OptimizerStoragePlan storage_{};
   std::vector<OptimizerGroup> groups_;
   DeviceOptimizerKind kind_;
   int64_t tasks_,count_;

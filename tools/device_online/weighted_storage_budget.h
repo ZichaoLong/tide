@@ -1,6 +1,12 @@
 #pragma once
 #include "device_program.h"
+#include "resident_storage_budget.h"
 namespace tide::device_online {
+inline int64_t weighted_storage_bytes(const std::vector<at::Tensor>& tensors){
+  ResidentStorageBytes ledger;
+  for(const auto& x:tensors)if(x.defined())ledger.add(x.storage().unsafeGetStorageImpl(),x.storage().nbytes());
+  return ledger.bytes();
+}
 // Local allowance measures newly retained storage. Arguments belong to the
 // caller's owner budget even on their first use in this particular program.
 // Freeze the borrowed set before construction: adding local temporaries later

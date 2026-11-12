@@ -14,6 +14,7 @@ int main(){try{
   rejects([]{weighted_bank_capacities(0);});rejects([]{weighted_bank_shape(1,0,2,3);});
   rejects([]{weighted_bank_shape(1,2,3,0);});rejects([]{weighted_bank_shape(INT64_MAX,2,3,4);});
   rejects([]{weighted_bank_shape(1,INT64_MAX,2,4);});rejects([]{weighted_bank_shape(1,2,3,INT64_MAX);});
+  require(weighted_bank_control_bytes(128,2)==weighted_bank_control_bytes(128,1024),"capacity bodies replicated per bank");
   constexpr int64_t rows=64,width=32,banks=3,limit=131072;
   const auto f=weighted_projection_forward_bytes(rows,width,width,banks),b=weighted_projection_reverse_bytes(rows,width,width,banks,true);
   require(f<limit&&b<limit&&2.L*rows*width*width*4>limit,"multi-bank capacity distinction lost");

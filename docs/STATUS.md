@@ -17,27 +17,25 @@ resident9组件真机通过；block-kv-messages录入时EE1019（stream task buf
 厂商摘录已固化到证据JSON，不将新库编译或局部通过冒充完整训练/规模通过。
 33文件静态审阅及四条独立profile与计时分列；模块边界和接收节点装配仍有明显成本。
 
-## 当前未提交实施与下一动作
+## 当前实施与下一动作
 
-1. C++正写入整组数值边界：不同R/B、真实共享角色、独立根，27节点私图开发见证；
-   新prepare及旧Read/Full、完整columns两步SGD开发通过。
-2. Python/C++跨节点Read按目标device/dtype统一映射，保留真正共享参数身份；
-   Python25定向/集成和C++9配置/2版本守卫开发通过。C++新测试需注册CMake/build manifest。
-3. Python区域均值：一次receiver×row×physical-source装配/中心化VJP，14独立公式测试通过；
-   相关集成64通过/5原xfail，测试自身singleton cotangent误断言已修正；C++对应待集成。
-4. resident移除全参数layout占位与optimizer/8；实际13类槽/元数据、发布和live workspace计费。
-   bank游标在设备复用容量分支，静态B×logR缩为logR，仍按实际最小桶执行。20项CPU/9TU语法通过；
-   EE1019修正与实际容量边界尚无新设备资格。raw逐帧快照/重复历史仍未重写。
+本后继实现包含C++整组正写入、跨节点Read按目标统一传输、Python/C++区域物理来源均值张量/VJP，
+以及resident metadata-only optimizer、实际13类存储计费和设备bank循环体复用。
+Python46项相关开发检查通过；C++prepare/Read/Full/columns和独立Aggregate开发见证另有记录。
+Aggregate以receiver×row×physical-source交接，一次组装和中心化反向；重复边、None/零、独立根保留。
+混合放置仍是可简化预设，不要求数值边界固定拆成软件层。
 
-下一动作：统一审阅这些未提交源码/契约、补新C++目标与短相关开发检查，提交新实现。
-以新提交独立工作树/构建，不修改6011d599固定输入；按projection→messages→optimizer/session
-逐层验收resident，组件失败即停依赖路径。主机CPU/NPU安装/恢复及LH与FC有限回归独立推进。
-相关开发记录在artifacts/resident-bank-dev/及artifacts/tensor-rewrite-20261112/。
-P1—P6尚未全部完成，剩余范围与停止/重开条件只在ROADMAP。
+下一动作：提交本实现，以该固定提交建立/dev/shm/gef-region-tensor-20261112/source，
+独立构建core-native/core-sdk及resident-native/resident-sdk，然后跑定向CPU与安装消费者。
+resident验收顺序projection→block-kv-messages→optimizer→其余组件/完整owner；
+组件失败停止依赖路径，主机资格/有限FC与LH回归独立继续。尚无本后继真机结论。
+原失败仍保留；P1—P6未全部完成，剩余范围和重开条件只在ROADMAP。
+新运行计划与启动器：artifacts/region-tensor-20261112/launch-plan.json及*-build.sh、qualification.py。
 
 ## 作业与资源
 
-本轮6011d599所有服务已终态，无活跃构建/测试/测量。
+6011d599所有服务已终态；新资格尚未启动。新构建分别CPU0–159/160–319、各512GiB/2400秒，
+通过scripts/job.py与background.slice启动；新记录artifacts/jobs/region-tensor-*。
 固定源码/构建：/dev/shm/gef-tensor-rewrite-20261112/{source,core-native,core-sdk,resident-native,resident-sdk,install}。
 持久状态和日志：artifacts/jobs/tensor-rewrite-*；原启动cwd缺失的两次失败也保留。
 完整矩阵/命令/队列准入：artifacts/tensor-rewrite-20261112/；已审关键结果进入Git证据。

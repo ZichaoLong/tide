@@ -1,6 +1,6 @@
 # KV 数值块：一次打包、整组计算、独立发布
 
-固定数学见[KV §3–4](upstream/tide-core-5/local-semantics/weighted-message/kv-memory-learning-note.md)和
+固定数学见[KV §1.2、§3–4](upstream/tide-core-5/local-semantics/weighted-message/kv-memory-learning-note.md)和
 [描述/区域分配](weighted-scoring.md)；采用版本由[semantics](semantics.md)固定。
 本页定义数值接口，不要求图执行器采用某个历史名称、放置分层或事件对象。
 公共窗口仍见[张量窗口](weighted-tensor-windows.md)。
@@ -45,7 +45,10 @@ sum的空张量归约、Full空记忆的out连接零、零alpha分支均保留�
 
 Python入口 `kv_columns_state`/`kv_column_groups`按能力调用 `kv_tensor_prepare`/`kv_tensor_groups`；`kv_tensor_layout`负责布局和角色，
 `kv_tensor_formula/tensor_describe`负责数学，`tensor_kernel`负责一次打包/发布及一阶反向。
-独立C++入口的同一职责由`weighted_kv_tensor`、`_layout/_positions`、`_math`、`_vjp`承担，
+独立C++入口的同一职责由`weighted_kv_tensor`、`_prepare/_layout/_positions`、`_math`、`_vjp`承担，
+`weighted_tensor_algebra`复用共享矩阵/G×矩阵投影，准备和查询共用带字段根支持的数值边界。
+C++ [写入分派及raw装配](../cpp/src/weighted_column_state.cpp)调用
+[写入公式](../cpp/src/weighted_kv_tensor_prepare.cpp)，反向由[公共边界](../cpp/src/weighted_kv_tensor_vjp.cpp)承接。
 不依赖Python调度或Python私有图。两种客户端分别构建和验收，不能相互替代资格。
 不调用独立基线或逐节点数值helper补写输出。原单节点/half/域外位置路径是明确能力分支，
 执行失败、容量错误或非有限值不触发静默后备。
@@ -54,8 +57,15 @@ Python入口 `kv_columns_state`/`kv_column_groups`按能力调用 `kv_tensor_pre
 - `test_kv_tensor_batches`：不同Q/K同组、真实padding预算、独立标量快照及完整列根。
 - `test_column_query_dispatch`：有限Describe候选逐字段根、一般默认入口和空记忆连接。
 - `test_settle_columns/test_column_positions`：独立调度、端口/消息/raw、原时间及精确续接。
+- C++ [weighted_kv_tensor_prepare](../cpp/test/weighted_kv_tensor_prepare.cpp)：不同正写入数及样本数、独立合成低秩矩阵公式、
+  bank/terminal独立根、角色alias、零写入原状态、超过2^54的时钟及静默续接；
+  `weighted_sequence_columns`检验两步SGD与整链原状态。
+  独立目标为`tidegraph-kv-tensor-prepare-check`，CTest名称为`weighted-kv-tensor-prepare`。
 
 私图注册到现有 `autograd_census`，诊断入口 `profile_lh_tensor.py --census`，与旧外层图统计分列。
-`packing/bucket/kv_tensor_read`、`kv_tensor_full`记录实际数值组；投影区分整组BMM和真实共享GEMM。
+`packing/bucket/kv_tensor_writes`、`kv_tensor_read`、`kv_tensor_full`记录实际数值组；
+投影区分整组BMM和真实共享GEMM。默认入口的诊断测试检查新数值组，不能由旧dispatch计数冒充。
+准备的前向仍按节点验证输入、确定正写入及装配raw bank/末态；这些工作尚未被数值块融合。
+因此四个组投影与不随G/R增长的私图是局部机制证据，不能直接推算整链吞吐。
 调用次数、私图节点数、字节和完整耗时是不同证据。构建、真机、规模性能及新进程恢复需要
 固定源码资格；当前未完成事项只保存在[ROADMAP](ROADMAP.md)。

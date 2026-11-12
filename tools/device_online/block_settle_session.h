@@ -4,6 +4,8 @@
 #include "device_optimizer.h"
 namespace tide::device_online {
 struct BlockSettleLimits {
+  // Per-call new retained forward/reverse tensors; optimizer persistent+step
+  // tensors; total unique live tensors plus all retained program workspaces.
   int64_t forward_bytes=512LL<<20,backward_bytes=512LL<<20,optimizer_bytes=128LL<<20;
   int64_t total_bytes=2LL<<30,workspace_bytes=512LL<<20,windows=4;
   int32_t timeout_ms=30000;
@@ -30,6 +32,7 @@ struct BlockSettleAdjoints {
   ParameterVjp parameters;
   std::vector<WeightedRowAdjoint> bound_initial; // Sum all uses of each fixed Read0 binding.
 };
+struct BlockSettleStorageUsage {int64_t tensor_bytes,workspace_bytes,optimizer_bytes;};
 // New owner for the block executor; never wraps the earlier TaskServices flow.
 // Caller canonical registry defines aliases; concrete bank rows do not become
 // parameter identities. Boundary calls are synchronous, inner windows resident.
@@ -48,6 +51,7 @@ class BlockSettleSession {
   void step();
   void detach();
   BlockSettleCheckpoint checkpoint()const;
+  BlockSettleStorageUsage storage_usage()const; // Host metadata; no numerical device read.
   void close();
  private:
   struct Impl;std::unique_ptr<Impl> impl_;

@@ -99,6 +99,9 @@ enable_testing()
 add_executable(tide-weighted-bank-layout-check weighted_bank_layout_check.cpp)
 target_compile_features(tide-weighted-bank-layout-check PRIVATE cxx_std_17)
 add_test(NAME weighted-bank-layout-cpu COMMAND tide-weighted-bank-layout-check)
+add_executable(tide-optimizer-storage-check optimizer_storage_check.cpp)
+target_compile_features(tide-optimizer-storage-check PRIVATE cxx_std_17)
+add_test(NAME optimizer-storage-cpu COMMAND tide-optimizer-storage-check)
 if(TIDE_DEVICE_RUNTIME STREQUAL "standalone")
   add_test(NAME device-peer-help COMMAND tide-device-peer-check --help)
   add_test(NAME device-sequence-help COMMAND tide-device-sequence-check --help)
@@ -178,7 +181,7 @@ if(TIDE_DEVICE_KERNELS)
   set_target_properties(tide-weighted-projection PROPERTIES POSITION_INDEPENDENT_CODE ON)
   target_link_libraries(tide-weighted-projection PUBLIC tide-device-control tide_weighted_head_plan_kernel
     tide_weighted_head_guard_kernel tide_weighted_allocation_status_kernel tide_weighted_projection_norm_kernel
-    tide_weighted_projection_shared_kernel tide_weighted_bank_plan_kernel tide_weighted_bank_rows_kernel tide_weighted_bank_snapshot_kernel)
+    tide_weighted_projection_shared_kernel tide_weighted_bank_plan_kernel tide_weighted_bank_rows_kernel tide_weighted_bank_snapshot_kernel tide_weighted_bank_next_kernel)
   add_library(tide-weighted-rotary STATIC weighted_rotary.cpp)
   set_target_properties(tide-weighted-rotary PROPERTIES POSITION_INDEPENDENT_CODE ON)
   target_link_libraries(tide-weighted-rotary PUBLIC tide-device-control tide_weighted_rotary_phase_kernel tide_weighted_rotary_apply_kernel
@@ -274,7 +277,7 @@ if(TIDE_DEVICE_KERNELS)
     tide_block_flow_fibers_kernel tide_block_flow_publish_kernel
     tide_block_flow_reverse_ports_kernel tide_block_flow_reverse_gather_kernel
     tide_block_flow_reverse_fibers_kernel tide_block_flow_reverse_choose_kernel)
-  add_library(tide-block-settle-session STATIC block_settle_session.cpp block_settle_session_layout.cpp
+  add_library(tide-block-settle-session STATIC block_settle_session.cpp block_settle_session_layout.cpp block_settle_session_budget.cpp
     block_settle_session_training.cpp block_settle_checkpoint.cpp block_settle_boundary.cpp)
   set_target_properties(tide-block-settle-session PROPERTIES POSITION_INDEPENDENT_CODE ON)
   target_link_libraries(tide-block-settle-session PUBLIC tide-block-settle-flow tide-device-optimizer

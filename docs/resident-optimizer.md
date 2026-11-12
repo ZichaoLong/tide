@@ -48,6 +48,18 @@ separate cache-line storage. Empty registries have bounded dummy arguments and
 produce no update. Construction rejects invalid groups, dtype, shape, identity
 or budget before recording updates.
 
+`OptimizerParameterLayout` is a tensor-free canonical descriptor for owners that
+do not yet have a gradient. The legacy `ParameterVjp` constructor validates the
+same identities and delegates to it. Neither constructor retains a placeholder
+gradient bank. `optimizer_storage.h` enumerates exact FP32 master/slot, int64
+counter/table and bool-independent finite-status storage by algorithm, owner,
+group and tile count; checked int64 arithmetic rejects overflowing layouts.
+`tensors()` includes private next-counters/corrections and tile errors as well as
+public slots, so enclosing owners can count actual StorageImpl unions instead of
+reserving a duplicate optimizer partition. Numerical formulas, finite transaction
+and checkpoint slots are unchanged. See [block owner admission](resident-block-session.md#storage-admission)
+for the complete forward/reverse/step/total lifecycle and its independent checks.
+
 FP16 owners initialize FP32 masters from their quantized payload values. Each
 participating proposal also checks the actual round-to-nearest FP16 conversion
 before any live parameter, slot or counter commit. A finite FP32 value can still

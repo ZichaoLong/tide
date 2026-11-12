@@ -15,14 +15,12 @@ std::vector<at::Tensor> tensors(const BlockSettleFlowTape& t){
   for(const auto& r:t.regions){auto saved=block_local_detail::saved(*r.local);out.insert(out.end(),saved.begin(),saved.end());
     out.insert(out.end(),{r.nodes,r.atoms,r.atom_counts,r.physical_atoms,r.source_mapping});}return out;
 }
-ParameterVjp parameter_layout(const ParameterRegistry& registry,at::Device device,int64_t budget){
-  ParameterVjp out;out.owners=registry.owners();int64_t count=0;
+OptimizerParameterLayout parameter_layout(const ParameterRegistry& registry){
+  OptimizerParameterLayout out;out.owners=registry.owners();int64_t count=0;
   for(const auto& p:out.owners){if(!p.value.device().is_cpu()||p.value.scalar_type()!=at::kFloat||p.value.numel()<1||
       p.value.numel()>std::numeric_limits<int64_t>::max()-count)throw std::invalid_argument("block canonical registry requires finite CPU FP32 owners");
     out.offsets.push_back(count);count+=p.value.numel();}
-  const auto size=std::max<int64_t>(1,count),owners=std::max<int64_t>(1,out.owners.size());
-  if(4.L*size+owners>budget)throw std::invalid_argument("block canonical parameter layout exceeds budget");
-  out.values=at::zeros({size},at::TensorOptions().device(device).dtype(at::kFloat));out.connected=at::zeros({owners},out.values.options().dtype(at::kBool));return out;
+  out.elements=std::max<int64_t>(1,count);return out;
 }
 namespace {
 template<class T> void emit(std::ostream& o,const T& x){o<<x<<' ';}

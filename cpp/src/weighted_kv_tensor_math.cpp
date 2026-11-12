@@ -1,25 +1,14 @@
 // Fixed 0770593 KV §3–4 and allocation §3: group tensors are the numerical unit.
 #include "weighted_kv_tensor.h"
 #include "weighted_column_queries.h"
+#include "weighted_tensor_algebra.h"
 #include "tide/packing_work.h"
 #include <cmath>
 
 namespace tide::weighted::columns::tensor {
 namespace {
-struct Math {
-  const Packed& p;
-  const Tensor& at(const std::string& name)const{return p.values.at(name);}
-  Tensor bias(const std::string& name)const{
-    auto x=at(name);if(p.shared.count(name))return x;
-    auto shape=x.sizes().vec();shape.insert(shape.begin()+1,2,1);return x.reshape(shape);
-  }
-  Tensor project(const Tensor& x,const std::string& name)const{
-    const auto& w=at(name);const bool shared=p.shared.count(name);
-    work::packing::projection(shared?"kv_tensor_shared":"kv_tensor",x.numel()/x.size(-1));
-    if(shared)return at::matmul(x,w.t());
-    auto shape=x.sizes().vec();shape.back()=w.size(1);
-    return at::bmm(x.reshape({p.nodes,-1,x.size(-1)}),w.transpose(1,2)).reshape(shape);
-  }
+struct Math:Algebra {
+  using Algebra::Algebra;
   Tensor head(const std::string& name,const Tensor& x)const{
     auto h=at::silu(project(x,name+".matrix")+bias(name+".hidden_bias"));
     return bias(name+".bias")+(h*bias(name+".vector")).sum(-1);

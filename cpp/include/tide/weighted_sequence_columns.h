@@ -77,8 +77,9 @@ bool supported(const KVConfig&);
 Tensor logit_attention(const Tensor& logits,const Tensor& values,const Tensor& weights);
 KVWindow prepare(const NodeWeights&,const KVConfig&,const Layout&,const Tensor& mass,
                  const Tensor& content,const KVState&);
-// Equal actual write shapes may share four block GEMMs; private states/roots
-// remain distinct. The byte ceiling bounds extra block packing/adjoints.
+// FP32/FP64 positive writes share one padded node×row numerical boundary even
+// with unequal write counts; raw states and field roots remain independent.
+// The byte ceiling bounds group padding/adjoints; singleton/half keep their path.
 std::vector<KVWindow> prepare_many(const std::vector<KVPrepareRequest>&,Index max_workspace_bytes);
 TensorFields read(const NodeWeights&,const KVConfig&,const RegionalConfig&,const KVWindow&,
                   const std::string& mode,const KVState& initial);
