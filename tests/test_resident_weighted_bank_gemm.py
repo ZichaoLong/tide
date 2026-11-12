@@ -25,7 +25,7 @@ def library(tmp_path_factory):
                     "-I"+str(Path(torch.__file__).parent/"include"),
                     *(str(generated/f"tide_weighted_bank_{n}.cpp") for n in names), "-o", str(path)], check=True)
     lib = ctypes.CDLL(str(path))
-    for name, pointers, integers in zip(names, (9, 6, 6, 4), (3, 4, 5, 2)):
+    for name, pointers, integers in zip(names, (8, 6, 6, 4), (3, 6, 5, 4)):
         f = getattr(lib, "tide_cuda_launch_tide_weighted_bank_"+name)
         f.argtypes = [ctypes.c_uint32, ctypes.c_void_p]+[ctypes.c_void_p]*pointers+[ctypes.c_int64]*integers
     binary = directory/"layout-check"
@@ -45,34 +45,32 @@ def plan(lib, owners, banks, roots=None):
     permutation = torch.full_like(owners, -99)
     offsets = torch.full((banks+1,), -99, dtype=torch.int64)
     cursors = torch.zeros(banks, dtype=torch.int64)
-    buckets = torch.full((banks,), 99, dtype=torch.int32)
     connected = torch.ones(n, dtype=torch.bool)
     used = torch.ones(banks, dtype=torch.bool)
     error = torch.zeros(1, dtype=torch.int32)
-    launch(lib, "plan", (owners, roots_arg, permutation, offsets, cursors, buckets, connected, used, error), n, banks, roots is not None)
-    return dict(perm=permutation, offsets=offsets, buckets=buckets, connected=connected, used=used, error=error)
+    launch(lib, "plan", (owners, roots_arg, permutation, offsets, cursors, connected, used, error), n, banks, roots is not None)
+    return dict(perm=permutation, offsets=offsets, connected=connected, used=used, error=error)
 
 
 def groups(lib, p, rows):
-    capacities = [1]
-    while capacities[-1] < rows:
-        capacities.append(min(rows, capacities[-1]*2))
-    cursor = torch.full((1,), -99, dtype=torch.int64)
+    tile = min(rows, 64)
+    cursor = torch.full((2,), -99, dtype=torch.int64)
     branch = torch.full((1,), -99, dtype=torch.int32)
-    args = (p["buckets"], cursor, branch, p["error"])
-    launch(lib, "next", args, len(p["buckets"]), True)
-    for _ in range(len(p["buckets"])+1):
-        launch(lib, "next", args, len(p["buckets"]), False)
+    args = (p["offsets"], cursor, branch, p["error"])
+    launch(lib, "next", args, rows, len(p["used"]), tile, True)
+    for _ in range(rows+1):
+        launch(lib, "next", args, rows, len(p["used"]), tile, False)
         assert p["error"].item() == 0
         if not branch.item(): return
-        yield cursor.item(), capacities[branch.item()-1]
-    raise AssertionError("device bank loop failed to terminate")
+        assert branch.item() == 1
+        yield cursor[0].item(), cursor[1].item(), tile
+    raise AssertionError("device bank/tile loop failed to terminate")
 
 
-def transfer(lib, p, source, destination, bank, cap, *, scatter=False, code=20):
-    cursor = torch.tensor([bank], dtype=torch.int64)
+def transfer(lib, p, source, destination, bank, cap, *, start=0, scatter=False, code=20):
+    cursor = torch.tensor([bank, start], dtype=torch.int64)
     launch(lib, "rows", (p["perm"], p["offsets"], cursor, source, destination, p["error"]),
-           cap, source.shape[-1], scatter, code, blocks=4)
+           p["perm"].numel(), len(p["used"]), cap, source.shape[-1], scatter, code, blocks=4)
 
 
 def snapshot(lib, p, matrix, bias=None):
@@ -90,11 +88,11 @@ def forward(lib, x, owners, matrix, bias=None, epsilon=None):
     rstd = (clean.square().mean(-1, keepdim=True)+epsilon).rsqrt() if epsilon else torch.ones(len(x), 1)
     normalized = clean*rstd
     output = torch.zeros(len(x), w.shape[1])
-    for owner, cap in groups(lib, p, len(x)):
-        packed = torch.empty(cap, x.shape[1]); transfer(lib, p, normalized, packed, owner, cap)
+    for owner, start, cap in groups(lib, p, len(x)):
+        packed = torch.empty(cap, x.shape[1]); transfer(lib, p, normalized, packed, owner, cap, start=start)
         y = packed@w[owner].T
         if b.numel(): y = y+b[owner]
-        transfer(lib, p, y, output, owner, cap, scatter=True)
+        transfer(lib, p, y, output, owner, cap, start=start, scatter=True)
     assert p["error"].item() == 0
     return output, (normalized, owners.clone(), w, b, rstd, epsilon)
 
@@ -103,12 +101,12 @@ def backward(lib, tape, bar, roots):
     x, owners, w, b, rstd, epsilon = tape
     p = plan(lib, owners, len(w), roots)
     dx, dw, db = torch.zeros_like(x), torch.zeros_like(w), torch.zeros_like(b)
-    for owner, cap in groups(lib, p, len(x)):
+    for owner, start, cap in groups(lib, p, len(x)):
         px, pg = torch.empty(cap, x.shape[1]), torch.empty(cap, bar.shape[1])
-        transfer(lib, p, x, px, owner, cap, code=23); transfer(lib, p, bar, pg, owner, cap, code=23)
-        dw[owner] = pg.T@px
-        if b.numel(): db[owner] = pg.sum(0)
-        transfer(lib, p, pg@w[owner], dx, owner, cap, scatter=True, code=23)
+        transfer(lib, p, x, px, owner, cap, start=start, code=23); transfer(lib, p, bar, pg, owner, cap, start=start, code=23)
+        dw[owner] += pg.T@px
+        if b.numel(): db[owner] += pg.sum(0)
+        transfer(lib, p, pg@w[owner], dx, owner, cap, start=start, scatter=True, code=23)
     if epsilon: dx = rstd*(dx-x*(dx*x).mean(-1, keepdim=True))
     assert p["error"].item() == 0
     return dx, dw, db, p
@@ -177,37 +175,57 @@ def test_empty_groups_and_disconnected_poison(library):
     assert dx.eq(0).all() and dw.eq(0).all() and not p["used"].any()
 
 
-@pytest.mark.parametrize("rows", [1, 3, 6, 17, 64])
-def test_stable_partition_buckets_and_capacity_refusal(library, rows):
+@pytest.mark.parametrize("rows", [1, 3, 6, 17, 64, 65, 129, 257])
+def test_stable_partition_tiles_and_capacity_refusal(library, rows):
     owners = torch.arange(rows).remainder(4)-1; p = plan(library, owners, 4)
     expected = [r for owner in range(4) for r, value in enumerate(owners.tolist()) if value == owner]
     assert p["error"].item() == 0 and p["perm"][:len(expected)].tolist() == expected
-    for owner, cap in groups(library, p, rows):
-        count = int((owners == owner).sum()); assert count <= cap < 2*count
+    tiles = list(groups(library, p, rows)); capacity = min(rows, 64)
+    expected_tiles = [(b, start, capacity) for b in range(4) for start in range(0, int((owners == b).sum()), capacity)]
+    assert tiles == expected_tiles
+    assert sum(t[2] for t in tiles) <= len(expected)+int(p["used"].sum())*(capacity-1)
     bad = owners.clone(); bad[0] = 4; rejected = plan(library, bad, 4)
-    assert rejected["error"].item() == 2 and not rejected["buckets"].any()
+    assert rejected["error"].item() == 2 and not rejected["used"].any()
     full = plan(library, torch.zeros(3, dtype=torch.int64), 1)
-    transfer(library, full, torch.ones(3, 2), torch.empty(2, 2), 0, 2)
+    transfer(library, full, torch.ones(3, 2), torch.empty(2, 2), 0, 2, start=4)
     assert full["error"].item() == 2
 
 
 def test_device_bank_cursor_replay_invalid_and_sticky_error(library):
-    buckets = torch.tensor([0, 3, 0, 1, 2], dtype=torch.int32)
-    cursor = torch.full((1,), -99, dtype=torch.int64)
+    offsets = torch.tensor([0, 0, 129, 129, 130, 195], dtype=torch.int64)
+    cursor = torch.full((2,), -99, dtype=torch.int64)
     branch = torch.ones(1, dtype=torch.int32); error = torch.zeros(1, dtype=torch.int32)
+    args = (offsets, cursor, branch, error)
     for _ in range(2):
-        launch(library, "next", (buckets, cursor, branch, error), 5, True)
+        launch(library, "next", args, 195, 5, 64, True)
         actual = []
-        for _ in range(4):
-            launch(library, "next", (buckets, cursor, branch, error), 5, False)
-            actual.append((cursor.item(), branch.item()))
-        assert actual == [(1, 3), (3, 1), (4, 2), (5, 0)] and not error.item()
+        for _ in range(8):
+            launch(library, "next", args, 195, 5, 64, False)
+            actual.append((*cursor.tolist(), branch.item()))
+        assert actual == [(1, 0, 1), (1, 64, 1), (1, 128, 1), (3, 0, 1), (4, 0, 1), (4, 64, 1), (5, 0, 0), (5, 0, 0)]
+        assert not error.item()
     cursor.fill_(-2)
-    launch(library, "next", (buckets, cursor, branch, error), 5, False)
+    launch(library, "next", args, 195, 5, 64, False)
     assert error.item() == 2 and branch.item() == 0
     cursor.zero_(); error.fill_(23); branch.fill_(99)
-    launch(library, "next", (buckets, cursor, branch, error), 5, False)
-    assert error.item() == 23 and branch.item() == 0 and cursor.item() == 0
+    launch(library, "next", args, 195, 5, 64, False)
+    assert error.item() == 23 and branch.item() == 0 and cursor.tolist() == [0, 0]
+
+
+def test_tile_cursor_keeps_int64_counts_and_rejects_bad_offsets(library):
+    base = 1 << 54
+    offsets = torch.tensor([0, base+65], dtype=torch.int64)
+    cursor = torch.tensor([0, base], dtype=torch.int64)
+    branch = torch.zeros(1, dtype=torch.int32); error = torch.zeros_like(branch)
+    args = (offsets, cursor, branch, error)
+    launch(library, "next", args, base+65, 1, 64, False)
+    assert cursor.tolist() == [0, base+64] and branch.item() == 1 and not error.item()
+    launch(library, "next", args, base+65, 1, 64, False)
+    assert cursor.tolist() == [1, 0] and branch.item() == 0 and not error.item()
+    for broken in ([0, -1], [0, 130], [-(1 << 63), 129]):
+        offsets.copy_(torch.tensor(broken)); cursor.copy_(torch.tensor([-1, 0])); error.zero_()
+        launch(library, "next", args, 129, 1, 64, False)
+        assert error.item() == 2 and branch.item() == 0
 
 
 def test_used_nonfinite_snapshot_and_sticky_failure(library):
@@ -218,6 +236,54 @@ def test_used_nonfinite_snapshot_and_sticky_failure(library):
     out = torch.full((2, 3), 17.)
     transfer(library, p, torch.ones(2, 3), out, 0, 1)
     assert out.eq(17).all() and p["error"].item() == 20
+
+
+@pytest.mark.parametrize("bias,epsilon", [(False, None), (True, .13)])
+def test_multiple_tiles_odd_tails_independent_roots_and_saved_banks(library, bias, epsilon):
+    gen = torch.Generator().manual_seed(81)
+    owners = torch.tensor([2]*129+[0]*65+[4]*3+[-1]*17+[3]*70)
+    owners = owners[torch.randperm(len(owners), generator=gen)]
+    x = torch.randn(len(owners), 7, generator=gen)*.2
+    w = torch.randn(6, 5, 7, generator=gen)*.2; w[2].copy_(w[0])
+    b = torch.randn(6, 5, generator=gen)*.2 if bias else None
+    roots = owners != 3; bar = torch.randn(len(owners), 5, generator=gen)
+    bar[owners == 4] = 0  # Present, connected-zero bank; not an empty group.
+    bar[(owners < 0) | ~roots] = float("nan"); x[owners < 0] = float("nan")
+    w[[1, 5]] = float("nan")
+    if b is not None: b[[1, 5]] = float("nan")
+    expected, grads = formula(x, owners, w, b, roots, bar, epsilon)
+    y, tape = forward(library, x, owners, w, b, epsilon)
+    x.fill_(float("nan")); w.fill_(float("nan")); owners.fill_(-99)
+    if b is not None: b.fill_(float("nan"))
+    first = backward(library, tape, bar, roots); second = backward(library, tape, bar, roots)
+    for actual, ref in zip((y, *first[:3]), (expected, *grads)):
+        torch.testing.assert_close(actual.double(), ref, atol=2e-6, rtol=1e-5)
+    for a, b in zip(first[:3], second[:3]): assert torch.equal(a, b)
+    assert first[3]["used"].tolist() == [True, False, True, False, True, False]
+    assert first[1][4].eq(0).all() and first[3]["connected"][tape[1] == 4].all()
+    tiles = list(groups(library, first[3], len(tape[1])))
+    assert [(b, start) for b, start, _ in tiles] == [(0, 0), (0, 64), (2, 0), (2, 64), (2, 128), (4, 0)]
+
+
+def test_tile_tail_does_not_read_or_publish_padding_and_guards_later_tiles(library):
+    p = plan(library, torch.zeros(129, dtype=torch.int64), 2)
+    source = torch.arange(129*3, dtype=torch.float32).reshape(129, 3)
+    packed = torch.full((64, 3), float("nan"))
+    transfer(library, p, source, packed, 0, 64, start=128)
+    assert torch.equal(packed[0], source[-1]) and packed[1:].eq(0).all()
+    packed[1:] = float("nan"); out = torch.full_like(source, 19)
+    transfer(library, p, packed, out, 0, 64, start=128, scatter=True)
+    assert not p["error"].item() and out[:-1].eq(19).all() and torch.equal(out[-1], source[-1])
+    source[70, 1] = float("nan")
+    transfer(library, p, source, packed, 0, 64, start=64, code=23)
+    assert p["error"].item() == 23
+    for bank, start in [(0, 129), (0, 1), (1, 0), (2, 0), (-1, 0)]:
+        p["error"].zero_(); packed.fill_(19)
+        transfer(library, p, source, packed, bank, 64, start=start)
+        assert p["error"].item() == 2 and packed.eq(19).all()
+    p["error"].zero_(); p["offsets"][1] = 130
+    transfer(library, p, source, packed, 0, 64)
+    assert p["error"].item() == 2
 
 
 def test_two_affine_head_transpose_and_tied_parameter_roles(library):

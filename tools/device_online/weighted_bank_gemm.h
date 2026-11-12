@@ -3,7 +3,7 @@
 #include "weighted_bank_layout.h"
 namespace tide::device_online {
 struct WeightedBankPlan {
-  at::Tensor permutation,offsets,buckets,row_connected,owner_connected;
+  at::Tensor permutation,offsets,row_connected,owner_connected;
   int64_t rows=0,banks=0;
 };
 // Stable O(R+B) device partition; roots are inspected only for a reverse plan.
@@ -12,10 +12,10 @@ WeightedBankPlan append_weighted_bank_plan(DeviceProgram&,const at::Tensor& owne
 void append_weighted_bank_snapshot(DeviceProgram&,const at::Tensor& connected,
   const at::Tensor& matrix,const at::Tensor& bias,const at::Tensor& saved_matrix,
   const at::Tensor& saved_bias,const at::Tensor& error,int64_t error_code=20);
-// Shapes are static; each nonempty actual bank chooses its smallest bounded
-// row bucket on device. One device bank cursor revisits the same capacity
-// branches, so recorded numerical bodies are O(log R), not O(B log R).
-// Shared scratch is reused; each original row is scattered exactly once.
+// A device (bank,row-offset) cursor reuses one fixed-capacity tile body.
+// With A actual rows and G nonempty banks, padded work P <= A+G*(T-1),
+// T=min(R,64); empty banks are skipped. The static numerical body is O(1).
+// Each row is scattered once; per-bank VJPs sum tiles in stable row order.
 void append_weighted_bank_gemm(DeviceProgram&,const WeightedBankPlan&,
   const at::Tensor& input,const at::Tensor& matrix,const at::Tensor& bias,
   const at::Tensor& output,const at::Tensor& error);

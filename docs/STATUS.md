@@ -18,15 +18,18 @@ IndexCopyBackward2066→8，含native私图23333→18140，但来源payload复�
 
 ## 当前未提交后继与下一动作
 
-正在删除resident bank容量树，使用设备bank+tile游标复用单一数值体；保留single-bank快路、
+本后继已删除resident bank容量树，使用设备bank+tile游标复用单一数值体；保留single-bank快路、
 稳定跨tile dW、结构连接位与实际storage计费。后继文件由resident_rewrite支线修改，主代理统一审阅/提交。
 新padding界须明确为P<A+G*T，不继续冒称旧小于2倍界。完整消息用例原样复验；
 若该候选仍录入失败，停止相同候选，再设计有界program组合，不加预算或缩小原输入。
-当前没有该后继的构建/设备/性能资格。P1—P6未全部完成，剩余范围只在ROADMAP。
+开发26项CPU独立公式和3个C++ TU语法通过；初次缺生成头的语法命令失败保留。
+新增193行×3bank×32宽+bias实际设备见证，仍128KiB预算。当前没有后继设备/性能资格。P1—P6未全部完成，剩余范围只在ROADMAP。
 
-下一命令：git diff --check；运行tests/test_resident_weighted_bank_gemm.py及相关开发检查；
-提交稳定后继，在新的/dev/shm工作树重建两套resident（复用core须显式核对build manifest源码身份，
-否则重建），按projection→messages→optimizer/session→安装训练/新进程恢复→原规模逐层推进。
+下一动作：固定本实现提交，在/dev/shm/gef-resident-tile-20261112/source创建只读工作树，
+以CPU0–159/160–319、各512GiB/2400秒、background.slice独立重建两套resident。
+复用1f0e6e43 core时构建入口强制核对源码hash及全部二进制hash，不更新其原资格身份；
+启动器artifacts/resident-tile-20261112/*-build.sh。随后projection→messages→optimizer/session→
+安装训练/新进程恢复→原规模逐层推进。
 现有qualification.py/resident-scale.py及原配置在artifacts/region-tensor-20261112/可作启动模板；
 新作业必须新路径、固定新源码，不修改已固定输入。主机未变则不重复本轮38点计时。
 

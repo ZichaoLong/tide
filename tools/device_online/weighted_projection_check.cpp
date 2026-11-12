@@ -84,27 +84,30 @@ void single_bank_capacity(at::Device device){
   try{append_weighted_projection(refusal,x,ids,{m,{}},std::nullopt,error,forward_bytes-1);}catch(const std::invalid_argument&){refused=true;}
   require(refused,"single-bank actual storage floor omitted");refusal.close();
 }
-void multiple_bank_capacity(at::Device device){
-  at::NoGradGuard ng;constexpr int64_t rows=64,width=32,banks=3,limit=131072;
+void multiple_bank_capacity(at::Device device,int64_t rows,bool bias){
+  at::NoGradGuard ng;constexpr int64_t width=32,banks=3,limit=131072;
   auto x=values({rows,width},.13).to(device),m=values({banks,width,width},.37).to(device);
+  auto bv=bias?values({banks,width},.23).to(device):Tensor{};
   auto ids=at::remainder(at::arange(rows,at::kLong),banks).to(device),error=at::zeros({1},ids.options().dtype(at::kInt));
   auto bar=values({rows,width},.71).to(device),roots=at::ones({rows},ids.options().dtype(at::kBool));
   DeviceProgram p(device);p.limit_workspace(64*1024*1024);
-  const WeightedStorageIncrement f(p,{x,m,ids,error});
-  auto t=append_weighted_projection(p,x,ids,{m,{}},std::nullopt,error,limit);const auto forward=f.bytes();
+  const WeightedStorageIncrement f(p,{x,m,bv,ids,error});
+  auto t=append_weighted_projection(p,x,ids,{m,bv},std::nullopt,error,limit);const auto forward=f.bytes();
   const WeightedStorageIncrement b(p,{t.input,t.rstd,t.owners,t.indices,t.matrix,t.bias,t.output,bar,roots,error});
   auto g=append_weighted_projection_vjp(p,t,bar,roots,error,limit);const auto reverse=b.bytes();p.finish();
   portable_torch::synchronize(device);p.run();require(!error.cpu().item<int>(),"multi-bank capacity case refused");
   auto xx=x.cpu(),mm=m.cpu(),gg=bar.cpu(),ii=ids.cpu();
   auto yy=at::zeros_like(xx),dx=at::zeros_like(xx),dw=at::zeros_like(mm);
+  auto bb=bias?bv.cpu():Tensor{},db=at::zeros({banks,width},at::kFloat);
   // Independent per-row formula; the candidate never materializes these outers.
   for(int64_t row=0;row<rows;++row){const auto owner=ii[row].item<int64_t>();
     yy[row].copy_(at::mv(mm[owner],xx[row]));dx[row].copy_(at::mv(mm[owner].t(),gg[row]));
-    dw[owner].add_(at::outer(gg[row],xx[row]));}
+    dw[owner].add_(at::outer(gg[row],xx[row]));if(bias){yy[row].add_(bb[owner]);db[owner].add_(gg[row]);}}
   close(t.output,yy);close(g.input,dx);close(g.parameters.matrix,dw);
+  if(bias)close(g.parameters.bias,db);
   require(t.matrix.size(0)==banks&&forward<=limit&&reverse<=limit,"multi-bank storage did not retain bank granularity");
   require(g.row_connected.cpu().all().item<bool>()&&g.owner_connected.cpu().all().item<bool>(),"multi-bank connections differ");
-  std::cout<<"multi-bank projection bytes: forward="<<forward<<" reverse="<<reverse<<" allowance="<<limit
+  std::cout<<"multi-bank projection bytes: rows="<<rows<<" bias="<<bias<<" forward="<<forward<<" reverse="<<reverse<<" allowance="<<limit
     <<" old_replicated_matrices="<<2*rows*width*width*4<<'\n';p.close();
 }
 void half_storage(at::Device device){
@@ -131,7 +134,7 @@ int main(int argc,char** argv){portable_torch::RuntimeSession runtime;
     if(args.device_spec=="auto"||(args.dtype!=at::kFloat&&args.dtype!=at::kHalf))throw std::invalid_argument("weighted projection requires explicit accelerator/FP32 or FP16");
     args.allow_npu_float16=true;auto device=portable_torch::resolve_device(args);at::set_num_threads(1);at::set_num_interop_threads(1);
     for(int banks:{1,3})for(bool norm:{false,true})for(bool bias:{false,true})check(device,norm,bias,args.dtype,banks);
-    single_bank_capacity(device);multiple_bank_capacity(device);
+    single_bank_capacity(device);multiple_bank_capacity(device,64,false);multiple_bank_capacity(device,193,true);
     if(args.dtype==at::kHalf)half_storage(device);
     std::cout<<"weighted-projection: passed configurations=8 single_bank=true banks3=true all_vjps=true none_zero=true saved_versions=true adjoint_dtype=float32\n";return 0;
   }catch(const std::exception& error){std::cerr<<error.what()<<'\n';return 2;}}
