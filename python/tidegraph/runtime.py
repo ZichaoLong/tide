@@ -5,6 +5,7 @@ only place that imports TorchNPU or selects a logical accelerator index.
 """
 from __future__ import annotations
 
+import os
 import platform
 from typing import Any
 
@@ -125,12 +126,15 @@ def manifest(device: torch.device, reason: str, dtype: torch.dtype) -> dict[str,
         "torch_git": torch.version.git_version,
         "python": platform.python_version(),
         "cxx11_abi": torch.compiled_with_cxx11_abi(),
+        # Process options are read by the vendor at initialization. These are
+        # launch requests, not proof of effective defaults or asynchronous safety.
+        "runtime_queue_environment": {name: os.environ.get(name) for name in
+            ("TASK_QUEUE_ENABLE", "PER_STREAM_QUEUE", "ASCEND_LAUNCH_BLOCKING")},
     }
     if device.type == "npu":
         npu = _load_npu()
         record.update(torch_npu=getattr(__import__("torch_npu"), "__version__", "unknown"),
                       logical_device_count=npu.device_count(), device_name=npu.get_device_name(device))
-        import os
         record["cann_version"] = os.environ.get("ASCEND_CANN_VERSION", "unknown")
         record["matmul_allow_hf32"] = getattr(getattr(npu, "matmul", None), "allow_hf32", None)
     elif device.type == "cuda":

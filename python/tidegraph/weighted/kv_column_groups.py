@@ -3,16 +3,16 @@
 The node axis joins B only inside independent block operators. Query visibility
 still comes from each bank's int64 logical times and the actual Read snapshot.
 """
-import math
 import torch
 from torch.nn import functional as F
 from .kv_columns import _queries, supported, read_kv_columns, full_kv_columns, FullColumns
 from .kv_columns_state import KVWriteBank
 from .column_query_ops import linear, contract
 from .dense_describe_groups import columns as describe
-from .numeric_time import passive_decay, time_values
-from .tensors import norm, rotate_relative
+from .numeric_time import passive_decay
+from .tensors import norm
 from .packing_observation import bucket
+from .column_position_ops import PositionQuery, position_logits_many
 
 
 def _shape(layout):
@@ -102,18 +102,13 @@ def read_kv_columns_many(requests, *, max_workspace_bytes):
                 query = linear([norm(us[i], c.epsilon) for i in selected], [nodes[i].kernel.read_q for i in selected])
                 keys = linear([raws[i]["keys"] for i in selected], [nodes[i].kernel.read_k for i in selected])
                 vals = linear([raws[i]["values"] for i in selected], [nodes[i].kernel.read_v for i in selected])
-                operands, kind = [], "attention"
-                for i, q, k, v in zip(selected, query, keys, vals):
-                    if c.read_frequencies:
-                        displacement = -time_values(ages[i], us[i])/c.position_scale
-                        rotated = rotate_relative(k[:, None].expand(-1, us[i].shape[1], -1, -1), displacement, c.read_frequencies)
-                        q = q[:, :, None]
-                        if q.dtype == torch.float16:
-                            q, rotated = q.float(), rotated.float()
-                        operands.append(((q*rotated).sum(-1)[:, None]/math.sqrt(c.summary_width), v[:, None]))
-                        kind = "logits"
-                    else:
-                        operands.append((q[:, None], k[:, None], v[:, None]))
+                if c.read_frequencies:
+                    logits = position_logits_many([PositionQuery(q[:, None], k[:, None], ages[i],
+                        requests[ids[i]][1].layout, banks[ids[i]].layout, (c.read_frequencies,), c.position_scale)
+                        for i, q, k in zip(selected, query, keys)])
+                    operands, kind = [(l, v[:, None]) for l, v in zip(logits, vals)], "logits"
+                else:
+                    operands, kind = [(q[:, None], k[:, None], v[:, None]) for q, k, v in zip(query, keys, vals)], "attention"
                 sr = contract(kind, [(*x, short[i]) for i, x in zip(selected, operands)])
                 lr = contract(kind, [(*x, weights[i]) for i, x in zip(selected, operands)])
                 for i, s, l in zip(selected, sr, lr):
@@ -154,23 +149,20 @@ def full_kv_columns_many(requests, *, max_workspace_bytes):
         chosen = [i for i, yes in enumerate(active) if yes]
         if chosen:
             projected = linear([norm(us[i], c.epsilon) for i in chosen], [modules[i].query for i in chosen])
-            operands, kind = [], "attention"
+            operands, positions, kind = [], [], "attention"
             for i, query in zip(chosen, projected):
                 b, length, _ = us[i].shape
                 q = query.reshape(b, length, c.heads, -1).transpose(1, 2)
                 k, v = (raws[i][name].reshape(b, -1, c.heads, c.width//c.heads).transpose(1, 2) for name in ("keys", "values"))
                 if any(c.full_frequencies) or any(c.distance_slopes):
-                    displacement = -time_values(ages[i], us[i])/c.position_scale
-                    logits = []
-                    for h in range(c.heads):
-                        key = rotate_relative(k[:, h, None].expand(-1, length, -1, -1), displacement, c.full_frequencies[h])
-                        head = q[:, h, :, None]
-                        if head.dtype == torch.float16:
-                            head, key = head.float(), key.float()
-                        logits.append((head*key).sum(-1)/math.sqrt(c.width//c.heads)+c.distance_slopes[h]*displacement)
-                    operands.append((torch.stack(logits, 1), v, weights[i])); kind = "logits"
+                    index = ids[i]; window = requests[index][1]
+                    positions.append(PositionQuery(q, k, ages[i], window.layout.select(selected[index]),
+                        window.bank.layout, c.full_frequencies, c.position_scale, c.distance_slopes))
+                    operands.append((v, weights[i])); kind = "logits"
                 else:
                     operands.append((q, k, v, weights[i]))
+            if positions:
+                operands = [(l, *row) for l, row in zip(position_logits_many(positions), operands)]
             for i, value in zip(chosen, contract(kind, operands)):
                 mixed[i] = value.transpose(1, 2).reshape_as(us[i])
         out = linear([m*w.sum(-1).clamp_max(1)[..., None] for m, w in zip(mixed, weights)], [m.out for m in modules])

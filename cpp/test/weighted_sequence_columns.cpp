@@ -129,7 +129,9 @@ void check(const std::string& family,bool positional=false,bool scoring=false,
   auto close=[&](const Tensor& a,const Tensor& b){close_value(a,b,half?2e-2:fp32?1e-5:1e-8,half?1e-3:fp32?1e-6:1e-10);};
   auto g=weighted_check::graph("fc",family);auto m=weighted_check::model(g,family,device,dtype);
   if(positional)for(auto& node:m.nodes){auto b=weighted::node_binding(node);auto c=std::get<weighted::KVConfig>(b.memory);
-    c.full_frequencies={{.17}};c.distance_slopes={.03};c.position_scale=4.;
+    c.memory_read="qry";c.read_frequencies={.13};c.full_frequencies={{.17}};c.distance_slopes={.03};c.position_scale=4.;
+    for(const auto* name:{"kernel.read_q","kernel.read_k","kernel.read_v"})
+      node.extra[name]=node.extra.at("kernel.summary").detach().clone().set_requires_grad(true);
     weighted::configure_node(node,c,b.regional,b.sources,b.aggregate_alpha);}
   if(peer){std::vector<at::Device> owners;
     for(const auto& n:g.nodes)owners.push_back(n.region%2?*peer:device);

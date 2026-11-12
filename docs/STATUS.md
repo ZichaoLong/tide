@@ -1,55 +1,39 @@
-# 当前交接 — 继续完成 P1—P6（2026-11-12）
+# 当前交接 — 完成 P1—P6（2026-11-12）
 
-用户已要求继续并完成[ROADMAP P1—P6](ROADMAP.md#当前计划批量张量贯穿与架构验证已授权实施)。
-当前已提交/推送基线2bca34fd；数学固定0770593838a37c790a568226930567ed60f99b83，19份快照起步核验通过。
-可整体重写，允许常规构建/测试、分阶段提交推送授权分支；不在阶段提交后等待重复授权。
-三个用户TL-REQ-004/005/006 handoff保持只读且不纳入提交；下游与参考仓库不修改。
+当前授权：持续完成[ROADMAP P1—P6](ROADMAP.md#当前计划批量张量贯穿与架构验证已授权实施)，允许重写、阶段提交并推送当前分支，GPU真机延后。
+数学固定0770593838a37c790a568226930567ed60f99b83；19份快照再次通过。
+共享NPU的当前对话持续授权涵盖正确性、profile与性能；每次重新采集身份/资源，经双采样和组锁准入，标明共享条件。
+三个用户TL-REQ-004/005/006 handoff只读、不提交；下游、参考仓库与公共环境不改。
 
-## 正在实施
+## 当前实现与下一动作
 
-- 跨节点KV Read/Full：lh_direct负责Python/C++相容组、独立多输出VJP和默认列调度接入。
-  沿真实bank/配置/设备/预算成组；不能以普通stack抹掉未使用根，原始int64位置保持。
-- resident_rewrite负责实际Aggregate/Upd、数值阶段与设备choose/commit的完整组合，
-  然后逐边路由、跨窗tape、训练owner/optimizer/checkpoint；组件资格不代替整链。
-- req006_diagnostics审查P1/P2/P3/P4/P6并补standalone公共实验的新列接入与精确恢复；
-  当前standalone实验仍走旧事件Eager是已定位的实际缺口，不能用SDK组件check代替。
-- 主代理集成、资源与资格；补LH非空初态及各输出族独立VJP、代表规模多步训练/新进程恢复。
-  未提交开发修改分属上述边界，避免冲突编辑；公共构建注册由主代理协调。
+已提交bb27e4b0（LH非空左态/独立根）、4e3e4bdb（计划图AdamW/新进程恢复）、55a3074a（跨节点KV查询/Describe合批及standalone列owner）、a09735f1（resident KV sequence）。
+当前HEAD a09735f1；本批尚未推送，远端基线2bca34fd。
 
-## 活动作业
+- 主代理固定共同整数原点RoPE、execution-v6显式迁移、SDK检查与队列请求记录；相关Python CPU检查67通过，native须新构建。之后独立Python-owned/SDK构建和定向资格，再测LH三层/三模式及FC防退化。
+- resident_rewrite继续session/owner、跨窗训练和恢复；稳定local/flow/独立公式已待主代理冻结设备验证。完整flow采用设备choose/commit及实际journal反向；组件不代替整图或FC16规模。
+- 导航修复与24文件/3文档段落审阅已经完成，789个本地链接/锚点检查通过；尚待统一提交，未宣称全仓逐函数审阅完成。
 
-已提交bb27e4b0（非空LH初态/独立输出族）和4e3e4bdb（计划图AdamW/新进程恢复消费者）；
-两个冻结开发检查分别21项与3项通过，原终态留在artifacts/jobs/p1p6-{lh-check-dev-01,planned-dev-01}。
+## 终态与精确范围
 
-两个冻结开发构建已结束（4e3加56文件overlay；清单在artifacts/p1p6-20261112/core-dev-01-overlay.json）：
-Python-owned新库构建并31项定向检查通过；SDK构建在新测试的构造参数/类型名处失败，未执行数值资格。
-该两处已修复并完成语法检查，旧failed记录保持。两unit已MainPID=0、空cgroup。
-随后跨节点查询/Describe/放置/Settle/位置短检查89通过、9项原数值xfail；standalone相关20项Python通过。
-这些都是开发检查，不代替固定提交后的两客户端资格。
+固定源码工作树：/dev/shm/gef-p1p6-20261112/core-55a3074a（tracked只读）。
+构建：core-55-native、core-55-sdk、core-55-benchmark/client（同父目录）。
 
-正在固定跨节点KV Read/Full/Describe合批与standalone列owner/默认实验入口；
-下一动作是从新提交建独立Python-owned/SDK库，执行CPU相关完整检查与新进程续接。
-resident sequence已稳定，local/整图设备调度继续开发；主代理单独冻结登记，不将组件当整链。
-共享NPU准入前重新采样，普通异步跨卡将只做新的PER_STREAM_QUEUE/TASK_QUEUE_ENABLE有限诊断。
+- gef-p1p6-core-55-native：passed；CPU254 passed/9原xfail；wheel和独立安装完成。
+- gef-p1p6-core-55-sdk：failed；core/query/owner已通过，benchmark因JSON include缺失失败。后继gef-p1p6-benchmark-55显式include构建和3个CTest通过，旧失败保留。
+- gef-p1p6-lifecycle-55-cpu：passed；standalone五记忆三步/新进程5项，LH176七独立输出族FP64数值投影，安装Python/native三AdamW和精确恢复。None/zero连接差异仍按原投影范围保留。
+- gef-p1p6-lifecycle-55-npu：failed；两族FP32严格数值投影有限超差，离散/结构通过；安装Python/native三AdamW及新进程精确恢复均passed。外层failed不重标。
+- gef-p1p6-peer-55：failed；普通队列EE1017保持；PER_STREAM_QUEUE=1与TASK_QUEUE_ENABLE=0各stock12轮VJP通过，全部未设launch blocking。
+- gef-p1p6-peer-full-55：passed；TASK_QUEUE_ENABLE=1/PER_STREAM_QUEUE=1，双NPU Python/native×KV/SSD独立根/训练/恢复4项，4安装客户端及SDK五记忆×三放置15项通过。只认证已测配置，普通队列失败独立保持。
+- gef-p1p6-sequence-a097及-device：passed；固定a097，B2/L3/N2、非空raw/独立VJP/saved reverse。不是resident整图/owner/optimizer资格。
 
-源码与开发结果：artifacts/p1p6-20261112/；终态与log：artifacts/jobs/p1p6-*/。
-正式资格的新job/unit/source在启动前更新本节。公共工具链不改；构建期不做正式性能计时。
+作业终态/log：artifacts/jobs/p1p6-*/；计划/矩阵/逐项报告：artifacts/p1p6-20261112/。
+接续先运行 `python scripts/status.py`，检查后继任务实际终态。当前以上作业均已终止；新的构建命令/预算在提交前后更新本页。
 
-## 已有结果与资源
+## 资源、证据与继续条件
 
-上轮[节点/区域合批](evidence/node-region-batching-20261112.md)、
-[REQ006诊断](evidence/req006-diagnostics-20261112.md)、
-[常量表示/初态配对](evidence/req006-floor-20261112.md)、
-[resident组件](evidence/resident-blocks-20261112.md)保持各自源码/失败身份。
-原FP32超差、旧resident FC16 EE1019/507002及普通异步跨NPU EE1017仍在ROADMAP中，不能被新组件覆盖。
-CPU/GPU源码、构建、真机和性能分列，GPU延后不阻塞本机其他工作。
+大构建继续有界shm，持久记录在磁盘；最近quota293GiB/软300/硬800，无grace，shm305GiB空闲。没有存储阻塞；不清理用户/参考数据。
+构建可用全部可用CPU/内存；以CPUAffinity协调独立任务，性能计时避开自身重构建。无NPU锁/等待许可阻塞，准入仍需实际采样。
 
-当前对话后续共享NPU已获持续授权，包括正确性、profile和正式性能；不逐作业再询问，
-不将该授权延伸到新会话。实际使用须重新记录PID/start/UID、映射与资源余量，结果标共享条件。
-遵循已更新优化skill/执行契约。构建可用全部可用CPU和内存；性能计时协调自身争用，
-显式CPUAffinity/taskset并核对actual，不凭AllowedCPUs请求推断隔离。
-起步quota约287GiB/软300/硬800GiB，无grace；shm约305GiB空闲，主机可用内存约1.7TiB。
-大构建继续用有界shm，durable记录在磁盘；没有磁盘阻塞，不清理用户/参考数据。
-
-接续先检查上述新开发检查，审阅各实现后固定提交，重建所需Python-owned/standalone库并执行相关资格。
-STATUS是唯一当前交接，剩余范围/停止重启条件仍只在ROADMAP；原记录不改写。
+55a整链证据草稿artifacts/p1p6-20261112/query-lifecycle-evidence-draft.json待纳入NPU终态并审阅发布。
+已有各轮证据保持原源码/失败身份。剩余限制与有限停止条件只在ROADMAP；每项实现固定后执行相关资格，证据独立提交，阶段提交后继续。

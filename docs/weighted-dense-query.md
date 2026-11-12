@@ -150,7 +150,13 @@ SDK通用头的小材料使用[SSD/match/attention/grouped recipe](../tests/fixt
 或[KV/context gain recipe](../tests/fixtures/describe-kv-context-gain.json)：
 `prepare_core5_study.py --recipe RECIPE --samples 2 --positions 2 --output-dir NEW_PLAN`，
 随后按上节导出与验收；另测`--return-mode outputs`以核验真实最小返回路径。
-`test_query_sdk_capability.py`校验真实memory域和默认选择；纯循环要求实际batched state事件，
-KV另要求隐藏sequence VJP事件，不能用KV专用计数拒绝合法循环候选。
+`test_query_sdk_capability.py`校验真实memory域和默认选择。`complete`及显式
+`--input-interface records --return-mode outputs`保持旧record身份与Describe/query检查；
+后者的纯循环要求实际batched state事件，KV另要求隐藏sequence VJP事件。
+默认`--return-mode outputs`在相容Settle上采用`tensor-window-v1`，检查真实列身份、
+候选/Full/区域工作量，并在计时之后单独运行同材料的scalar Streaming三步训练，对照
+每步输出任务loss与工作量；不伪造旧事件VJP计数，也不把任务投影当完整根资格。
+列接口的完整raw、独立输入/参数根、保留窗口、optimizer及新进程恢复见
+`cpp/test/weighted_column_checkpoint.cpp`及[张量窗口契约](weighted-tensor-windows.md)。
 修改默认策略时同步Python `planning/execution.py`、SDK `tools/weighted_benchmark/cli.cpp`及
 `run_check.cpp`的身份/旧策略拒绝检查，不以checkpoint能解码推断跨策略精确恢复。

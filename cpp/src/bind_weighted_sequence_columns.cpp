@@ -41,4 +41,5 @@ void bind_weighted_sequence_columns(py::module_& m){
   m.def("weighted_settle_columns",&settle,py::arg("spec"),py::arg("model"),py::arg("layout"),py::arg("ports"),
         py::arg("left"),py::arg("max_workspace_bytes"),py::arg("placement")=std::nullopt,py::call_guard<py::gil_scoped_release>());
   m.attr("weighted_column_placement_version")=3;
+  m.attr("weighted_column_position_policy")=tide::weighted::columns::kv_position_policy;
 }

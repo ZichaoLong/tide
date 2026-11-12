@@ -123,6 +123,11 @@ int main(int argc,char** argv) {
 #endif
     };
     report["phase"]="construction";write(output/"result.json",report);begin=tide_bench::Clock::now();
+    Json queue_environment=Json::object();
+    for(const auto* name:{"TASK_QUEUE_ENABLE","PER_STREAM_QUEUE","ASCEND_LAUNCH_BLOCKING"}){
+      const auto* value=std::getenv(name);queue_environment[name]=value?Json(value):Json(nullptr);
+    }
+    report["runtime_queue_environment"]=queue_environment;
     auto owner=make_owner();Index first=0;
     if(const auto* eager=dynamic_cast<const Eager*>(owner.get())){
       report["effective_execution"]=eager->execution();report["scheduler"]=report["effective_execution"].at("schedule");

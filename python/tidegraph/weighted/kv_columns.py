@@ -4,16 +4,16 @@ Position-free banks use the existing bank-sized Attention transpose.
 No scalar Read/Full callback, event record or reference recurrence is invoked.
 """
 from dataclasses import dataclass
-import math
 import torch
 from torch.nn import functional as F
 from .column_layout import SequenceLayout, gather_column
 from .kv_columns_state import KVWriteBank
 from .dense_describe import columns as describe
 from .block_attention import attention
-from .tensors import norm, rotate_relative
-from .numeric_time import passive_decay, time_values
+from .tensors import norm
+from .numeric_time import passive_decay
 from .column_attention import logit_attention
+from .column_position_ops import PositionQuery, position_logits
 
 
 def supported(memory):
@@ -76,12 +76,8 @@ def read_kv_columns(node, window, *, read_mode="+", initial=None):
         q = (norm(u, c.epsilon)@memory.read_q.t())[:, None]
         k, v = (raw["keys"]@memory.read_k.t())[:, None], (raw["values"]@memory.read_v.t())[:, None]
         if c.read_frequencies:
-            displacement = -time_values(age, u)/c.position_scale
-            rotated = rotate_relative(k[:, 0, None].expand(-1, u.shape[1], -1, -1), displacement, c.read_frequencies)
-            query = q[:, 0, :, None]
-            if q.dtype == torch.float16:
-                query, rotated = query.float(), rotated.float()
-            logits = (query*rotated).sum(-1)[:, None]/math.sqrt(c.summary_width)
+            logits = position_logits(PositionQuery(q, k, age, window.layout, bank.layout,
+                (c.read_frequencies,), c.position_scale))
             reads = (logit_attention(logits, v, w) for w in (short, weight))
         else:
             reads = (attention(q, k, v, w) for w in (short, weight))
@@ -118,16 +114,9 @@ def full_kv_columns(node, window, controls):
         q = (norm(u, c.epsilon)@module.query.t()).reshape(b, length, c.heads, -1).transpose(1, 2)
         k, v = (raw[name].reshape(b, -1, c.heads, c.width//c.heads).transpose(1, 2) for name in ("keys", "values"))
         if any(c.full_frequencies) or any(c.distance_slopes):
-            displacement = -time_values(age, u)/c.position_scale
-            logits = []
-            for h in range(c.heads):
-                key = rotate_relative(k[:, h, None].expand(-1, length, -1, -1), displacement, c.full_frequencies[h])
-                query = q[:, h, :, None]
-                if q.dtype == torch.float16:
-                    query, key = query.float(), key.float()
-                logits.append((query*key).sum(-1)/math.sqrt(c.width//c.heads)
-                              +c.distance_slopes[h]*displacement)
-            mixed = logit_attention(torch.stack(logits, 1), v, weight)
+            logits = position_logits(PositionQuery(q, k, age, window.layout.select(rows), window.bank.layout,
+                c.full_frequencies, c.position_scale, c.distance_slopes))
+            mixed = logit_attention(logits, v, weight)
         else:
             mixed = attention(q, k, v, weight)
         mixed = mixed.transpose(1, 2).reshape(b, length, c.width)

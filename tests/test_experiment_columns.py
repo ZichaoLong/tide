@@ -158,7 +158,8 @@ def test_half_default_task_independent_master_training_and_exact_next_window(fam
 def test_policy_has_new_identity_and_old_frozen_records_stay_records(client):
     now = ExecutionSpec(client=client,return_mode="outputs").record()
     old = ExecutionSpec(client=client,return_mode="outputs", input_interface="records").record()
-    assert now["schema"] == "tide-weighted-execution-v5"
+    assert now["schema"] == "tide-weighted-execution-v6"
+    assert now["effective"]["position_policy"] == "bounded-common-origin-v1"
     assert now["execution_id"] != old["execution_id"]
     assert "input_interface" not in old["requested"]
     assert ExecutionSpec.from_record(old).input_interface == "records"
@@ -172,13 +173,32 @@ def test_policy_has_new_identity_and_old_frozen_records_stay_records(client):
     dict(device="npu:0",peer_devices=("npu:0","npu:1"))])
 def test_column_policy_preserves_auto_for_half_and_multiple_owners(extra):
     chosen = ExecutionSpec(return_mode="outputs", **extra).record()
-    assert chosen["schema"] == "tide-weighted-execution-v5"
+    assert chosen["schema"] == "tide-weighted-execution-v6"
     assert chosen["effective"]["input_interface"] == "auto"
     assert chosen["effective"]["query_execution"] == "auto"
     old = ExecutionSpec(return_mode="outputs", input_interface="records", **extra).record()
     assert old["effective"]["query_execution"] == "legacy"
     assert ExecutionSpec.from_record(old).record() == old
     assert old["execution_id"] != chosen["execution_id"]
+
+
+def test_old_column_policy_requires_explicit_migration_before_allocation(tmp_path):
+    from copy import deepcopy
+    from tidegraph.experiment.standalone import run
+    current = ExecutionSpec(return_mode="outputs").record()
+    old = deepcopy(current)
+    old["schema"] = "tide-weighted-execution-v5"
+    old["effective"].pop("position_policy")
+    for create in (lambda: ExecutionSpec.from_record(old), lambda: Eager({"execution": old}),
+                   lambda: run({"execution": old}, tmp_path/"must-not-exist")):
+        with pytest.raises(ValueError, match="original fixed source.*requested configuration"):
+            create()
+    assert not (tmp_path/"must-not-exist").exists()
+    assert ExecutionSpec.from_record(old["requested"]).record() == current
+    broken = deepcopy(current)
+    broken["effective"]["position_policy"] = "unknown"
+    with pytest.raises(ValueError, match="position_policy identity"):
+        ExecutionSpec.from_record(broken)
 
 
 @pytest.mark.parametrize("change", ["records", "greedy", "complete", "feedback", "non-aligned"])

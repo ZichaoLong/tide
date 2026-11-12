@@ -9,6 +9,7 @@ import torch
 from ..records import Continuation
 from .column_layout import SequenceLayout
 from .message_columns import MessageColumns, readout_columns
+from .column_position_ops import POSITION_POLICY
 
 
 @dataclass(frozen=True)
@@ -122,7 +123,7 @@ class EagerExecutor:
             return WindowResult(layout, columns.outputs, next_state, columns.stats,
                 dict(interface="tensor-window-v1", schedule="settle-columns-v1", client=self.implementation,
                      fallback_reason=None, roots="columns", max_workspace_bytes=max_workspace_bytes,
-                     placement=plan.placement_record()), columns=columns)
+                     position_policy=POSITION_POLICY, placement=plan.placement_record()), columns=columns)
         # The general engine is still the default for capabilities not yet
         # lowered to columns. These adapters run only on that declared branch.
         from .window_records import external, outputs

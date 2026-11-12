@@ -1,4 +1,5 @@
 #include "cli.h"
+#include "tide/weighted_sequence_columns.h"
 #include <cmath>
 #include <iostream>
 #include <sstream>
@@ -43,8 +44,10 @@ Json Request::checkpoint_identity(const Json& fixture) const {
   }
   if(input_interface=="auto"&&implementation!="resident"&&schedule=="prefill"&&prefill_schedule!="greedy"&&
      return_mode!="complete"&&trace_records!="complete"&&packing!="scalar"&&workers==1&&
-     (query_execution=="auto"||query_execution=="dense-v1"))
+     (query_execution=="auto"||query_execution=="dense-v1")){
     identity["input_policy"]="tensor-window-v1; compatible Settle modules, explicit graph fallback";
+    identity["position_policy"]=tide::weighted::columns::kv_position_policy;
+  }
   return identity;
 }
 void apply_resident_limits(Json& target,const Json& values,bool training,bool prefill) {

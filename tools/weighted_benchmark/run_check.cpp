@@ -58,8 +58,12 @@ int main() {
     const auto identity=request.checkpoint_identity(fixture);
     require(identity.at("input_policy")=="tensor-window-v1; compatible Settle modules, explicit graph fallback",
             "tensor window identity missing");
+    require(identity.at("position_policy")=="bounded-common-origin-v1","column position policy missing");
     auto records=request;records.input_interface="records";
     require(!records.checkpoint_identity(fixture).contains("input_policy"),"explicit records silently adopt column policy");
+    require(!records.checkpoint_identity(fixture).contains("position_policy"),"explicit records silently adopt new position algorithm");
+    auto complete=request;complete.return_mode="complete";
+    require(!complete.checkpoint_identity(fixture).contains("position_policy"),"complete records changed historical position identity");
     require(identity.at("record_policy")=="selected-boundary-v1","selected-return policy identity missing");
     auto historical=request;historical.trace_records="complete";
     require(!historical.checkpoint_identity(fixture).contains("record_policy"),"historical trace identity changed");
@@ -71,6 +75,7 @@ int main() {
     require(restore_run_checkpoint(root/"checkpoint",owner,identity,1000)==3&&owner.value==30,"external resume cut/index mismatch");
     rejects([&]{auto other=identity;other["fixture_sha256"]="two";checkpoint_manifest(root/"checkpoint",other);});
     rejects([&]{auto other=identity;other["query_policy"]="kv-packed-v2+describe-batch-v1";checkpoint_manifest(root/"checkpoint",other);});
+    rejects([&]{auto other=identity;other.erase("position_policy");checkpoint_manifest(root/"checkpoint",other);});
     auto old=request;old.query_execution="legacy";
     require(!old.checkpoint_identity(fixture).contains("query_execution"),"legacy checkpoint identity changed");
     rejects([&]{checkpoint_manifest(root/"checkpoint",old.checkpoint_identity(fixture));});

@@ -23,6 +23,8 @@ def work(result):
 
 class Eager:
     def __init__(self, resolved, *, reference=False, checkpoint=None):
+        from ..column_policy import validate_column_position_record
+        validate_column_position_record(resolved["execution"])
         from ..planning.materialize import materialize
         spec = resolved["execution"]["effective"]
         self.resolved, self.spec, self.reference = resolved, spec, reference

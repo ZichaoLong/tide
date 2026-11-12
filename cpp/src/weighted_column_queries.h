@@ -5,4 +5,13 @@ struct QueryInputs {Tensor u,mass,weights,age,reverse;TensorFields raw;};
 Tensor rotate_queries(const Tensor&,const Tensor&,const std::vector<double>&);
 QueryInputs query_inputs(const KVWindow&,const Layout&,const TensorFields&,const std::vector<Index>&,
                          bool before,Index horizon,bool summary=false);
+struct PositionQuery {
+  Tensor query,key,age;
+  Layout query_layout,bank_layout;
+  std::vector<std::vector<double>> frequencies;
+  double scale;
+  std::vector<double> slopes;
+};
+std::vector<Tensor> position_logits_many(const std::vector<PositionQuery>&);
+Tensor position_logits(const PositionQuery&);
 }

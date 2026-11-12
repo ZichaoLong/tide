@@ -9,6 +9,8 @@ from .records import now, read_json, write_json
 
 
 def run(resolved, output, *, resume=None, validation_override=None, check_roots=False):
+    from ..column_policy import validate_column_position_record
+    validate_column_position_record(resolved["execution"])
     from .identity import capture, verify
     from .site import launch_environment
     from .export import material

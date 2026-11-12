@@ -32,12 +32,15 @@ std::vector<TensorFields> evaluate(const std::vector<KVReadRequest>& requests,co
         wq.push_back(weight(*owners[i],"kernel.read_q"));wk.push_back(weight(*owners[i],"kernel.read_k"));wv.push_back(weight(*owners[i],"kernel.read_v"));}
       auto queries=project_nodes(us,wq),keys=project_nodes(ks,wk),values=project_nodes(vs,wv);
       std::vector<std::vector<Tensor>> sr,lr;auto kind=c.read_frequencies.empty()?Contraction::attention:Contraction::logits;
+      std::vector<Tensor> logits;
+      if(!c.read_frequencies.empty()){std::vector<PositionQuery> positions;
+        for(size_t n=0;n<selected.size();++n){auto i=selected[n];const auto& r=requests[ids[i]];
+          positions.push_back({queries[n].unsqueeze(1),keys[n].unsqueeze(1),qs[i].age,r.window.layout,
+                               bank_layout(r),{c.read_frequencies},c.position_scale,{}});}
+        logits=position_logits_many(positions);}
       for(size_t n=0;n<selected.size();++n){auto i=selected[n];auto q=queries[n],k=keys[n],v=values[n];std::vector<Tensor> operands;
         if(!c.read_frequencies.empty()){
-          auto displacement=-detail::time_values(qs[i].age,qs[i].u)/c.position_scale;
-          auto rotated=rotate_queries(k.unsqueeze(1).expand({-1,qs[i].u.size(1),-1,-1}),displacement,c.read_frequencies);
-          q=q.unsqueeze(2);if(q.scalar_type()==at::kHalf){q=q.to(at::kFloat);rotated=rotated.to(at::kFloat);}
-          operands={(q*rotated).sum(-1).unsqueeze(1)/std::sqrt(double(c.summary_width)),v.unsqueeze(1)};
+          operands={logits[n],v.unsqueeze(1)};
         }else operands={q.unsqueeze(1),k.unsqueeze(1),v.unsqueeze(1)};
         auto a=operands,b=operands;a.push_back(sw[i]);b.push_back(qs[i].weights);sr.push_back(std::move(a));lr.push_back(std::move(b));
       }

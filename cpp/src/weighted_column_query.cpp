@@ -43,11 +43,8 @@ TensorFields read(const NodeWeights& w,const KVConfig& c,const RegionalConfig& r
     auto k=project(q.raw.at("keys"),weight(w,"kernel.read_k")).unsqueeze(1);
     auto v=project(q.raw.at("values"),weight(w,"kernel.read_v")).unsqueeze(1);
     if(!c.read_frequencies.empty()){
-      auto displacement=-detail::time_values(q.age,q.u)/c.position_scale;
-      auto keys=rotate_queries(k.select(1,0).unsqueeze(1).expand({-1,q.u.size(1),-1,-1}),displacement,c.read_frequencies);
-      auto head=query.select(1,0).unsqueeze(2);
-      if(head.scalar_type()==at::kHalf){head=head.to(at::kFloat);keys=keys.to(at::kFloat);}
-      auto logits=(head*keys).sum(-1).unsqueeze(1)/std::sqrt(double(c.summary_width));
+      auto logits=position_logits({query,k,q.age,window.layout,mode=="content"?initial.layout:window.bank_layout,
+                                   {c.read_frequencies},c.position_scale,{}});
       shortv=logit_attention(logits,v,sw).select(1,0)*st.clamp_max(1).unsqueeze(-1);
       longv=logit_attention(logits,v,q.weights).select(1,0)*lt.clamp_max(1).unsqueeze(-1);
     }else{
@@ -81,17 +78,10 @@ Message full(const NodeWeights& w,const KVConfig& c,const KVWindow& window,const
     bool positional=false;for(const auto& f:c.full_frequencies)positional|=!f.empty();
     for(auto slope:c.distance_slopes)positional|=slope!=0;
     if(positional){
-      auto displacement=-detail::time_values(q.age,q.u)/c.position_scale;std::vector<Tensor> logits;
-      const std::vector<double> empty;
-      for(Index h=0;h<c.heads;++h){
-        auto key=rotate_queries(k.select(1,h).unsqueeze(1).expand({-1,length,-1,-1}),displacement,
-                               c.full_frequencies.empty()?empty:c.full_frequencies[h]);
-        auto head=query.select(1,h).unsqueeze(2);
-        if(head.scalar_type()==at::kHalf){head=head.to(at::kFloat);key=key.to(at::kFloat);}
-        auto l=(head*key).sum(-1)/std::sqrt(double(dh));
-        if(!c.distance_slopes.empty())l=l+c.distance_slopes[h]*displacement;logits.push_back(l);
-      }
-      mixed=logit_attention(at::stack(logits,1),v,q.weights);
+      auto frequencies=c.full_frequencies;if(frequencies.empty())frequencies.resize(c.heads);
+      auto logits=position_logits({query,k,q.age,window.layout.select(rows),window.bank_layout,
+                                    frequencies,c.position_scale,c.distance_slopes});
+      mixed=logit_attention(logits,v,q.weights);
     }else mixed=block::attention(query,k,v,q.weights);
     mixed=mixed.transpose(1,2).reshape({b,length,c.width});
   }else mixed=at::zeros_like(q.u);

@@ -13,19 +13,19 @@ std::vector<Tensor> evaluate(const std::vector<KVFullRequest>& requests,const st
   auto chosen=groups::active(qs);
   if(!chosen.empty()){
     std::vector<Tensor> inputs,matrices;for(auto i:chosen){inputs.push_back(normalize(qs[i].u,c.epsilon));matrices.push_back(weight(*owners[i],prefix+"query"));}
-    auto projected=project_nodes(inputs,matrices);std::vector<std::vector<Tensor>> operands;
+    auto projected=project_nodes(inputs,matrices);std::vector<std::vector<Tensor>> operands;std::vector<PositionQuery> positions;
     bool positional=false;for(const auto& f:c.full_frequencies)positional|=!f.empty();for(auto s:c.distance_slopes)positional|=s!=0;
     for(size_t n=0;n<chosen.size();++n){auto i=chosen[n];const auto& query=qs[i];const auto b=query.u.size(0),length=query.u.size(1),dh=c.width/c.heads;
       auto q=projected[n].reshape({b,length,c.heads,dh}).transpose(1,2);
       auto k=query.raw.at("keys").reshape({b,-1,c.heads,dh}).transpose(1,2),v=query.raw.at("values").reshape({b,-1,c.heads,dh}).transpose(1,2);
-      if(positional){auto displacement=-detail::time_values(query.age,query.u)/c.position_scale;std::vector<Tensor> logits;
-        const std::vector<double> empty;
-        for(Index h=0;h<c.heads;++h){auto key=rotate_queries(k.select(1,h).unsqueeze(1).expand({-1,length,-1,-1}),displacement,c.full_frequencies.empty()?empty:c.full_frequencies[h]);
-          auto head=q.select(1,h).unsqueeze(2);if(head.scalar_type()==at::kHalf){head=head.to(at::kFloat);key=key.to(at::kFloat);}
-          auto value=(head*key).sum(-1)/std::sqrt(double(dh));if(!c.distance_slopes.empty())value=value+c.distance_slopes[h]*displacement;logits.push_back(value);}
-        operands.push_back({at::stack(logits,1),v,query.weights});
+      if(positional){const auto& r=requests[ids[i]];auto frequencies=c.full_frequencies;if(frequencies.empty())frequencies.resize(c.heads);
+        positions.push_back({q,k,query.age,r.window.layout.select(selected[ids[i]].rows),r.window.bank_layout,
+                             frequencies,c.position_scale,c.distance_slopes});
+        operands.push_back({v,query.weights});
       }else operands.push_back({q,k,v,query.weights});
     }
+    if(positional){auto logits=position_logits_many(positions);
+      for(size_t n=0;n<operands.size();++n)operands[n].insert(operands[n].begin(),logits[n]);}
     auto values=contract_nodes(positional?Contraction::logits:Contraction::attention,operands);
     for(size_t n=0;n<chosen.size();++n)mixed[chosen[n]]=values[n].transpose(1,2).reshape(qs[chosen[n]].u.sizes());
   }

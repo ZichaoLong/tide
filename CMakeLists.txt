@@ -69,7 +69,7 @@ add_library(tidegraph STATIC
   cpp/src/weighted_allocation_columns.cpp cpp/src/weighted_region_columns.cpp
   cpp/src/weighted_regional_packing.cpp cpp/src/weighted_regional_groups.cpp
   cpp/src/weighted_column_state.cpp cpp/src/weighted_column_query.cpp cpp/src/weighted_column_attention.cpp cpp/src/weighted_settle_columns.cpp
-  cpp/src/weighted_column_query_ops.cpp cpp/src/weighted_column_checkpoint.cpp
+  cpp/src/weighted_column_query_ops.cpp cpp/src/weighted_column_positions.cpp cpp/src/weighted_column_checkpoint.cpp
   cpp/src/weighted_column_read_groups.cpp cpp/src/weighted_column_full_groups.cpp
   cpp/src/weighted_column_modules.cpp cpp/src/weighted_column_recurrent_state.cpp
   cpp/src/weighted_column_recurrent_math.cpp cpp/src/weighted_column_recurrent_query.cpp

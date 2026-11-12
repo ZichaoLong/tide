@@ -133,10 +133,12 @@ TrainingState Eager::training_state()const{
 }
 Continuation Eager::checkpoint()const{return detached(state);}
 Json Eager::execution()const{
-  return {{"interface",column_engine?"tensor-window-v1":"records"},
+  Json result={{"interface",column_engine?"tensor-window-v1":"records"},
     {"schedule",column_engine?"settle-columns-v1":prefill?(options.component_window?"component-window":"online-greedy"):"streaming"},
     {"roots",column_engine?"columns":"records"},{"fallback_reason",column_engine?Json(nullptr):Json(column_fallback)},
     {"input_preparation",column_engine?"static fixture columns; per-window column clone/transfer":"per-window external records"}};
+  if(column_engine)result["position_policy"]=weighted::columns::kv_position_policy;
+  return result;
 }
 void Eager::save(const std::filesystem::path& p,int64_t limit)const{GraphCheckpoint::save(p,data.graph,data.model,state,optimizer.get(),limit);}
 void Eager::restore(const std::filesystem::path& p,int64_t limit){

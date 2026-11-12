@@ -41,10 +41,14 @@ FP16内置loss与旧记录任务一致，在相乘之前将c和G提升至FP32，
 从实际结果整列复制、无梯度解码；无逐行可求导copy。raw状态仍使用checkpoint v5精确恢复。
 `effective_input_interface`、`input_fallback_reason`及逐窗口 `effective_window_execution`记录实际选择。
 
-该新默认使用execution-v5身份；显式 `input_interface=records`可比较旧输入边界。
+当前默认使用execution-v6身份及`position_policy=bounded-common-origin-v1`；
+显式 `input_interface=records`可比较旧输入边界。
 半精度及多payload owner的新请求也保留auto窗口策略，由实际模块决定能力；
 不能把旧record查询算法的legacy后备提前当作窗口能力。其生效配置/fingerprint与旧记录不同，
 旧record锁仍按原接口复现；安装源码/二进制身份不同不能冒称同栈精确恢复。
+旧execution-v5列锁在规划解析或客户端分配资源前明确拒绝静默升级：用原固定源码复现，
+或明确调用`ExecutionSpec.from_record(old["requested"]).record()`生成v6，再建立新依赖锁与验收。
+这只迁移执行算法身份，不更改数学、图v13或raw checkpoint v5；新旧算法不承诺逐位续接。
 历史锁中省略此策略时保留record路径。完整事件观察、插件任务、一般PDG/非对齐TimedDAG
 或当前不支持的放置/模块仍使用原接口；插件即便只读outputs，也未默认声明张量输入/loss。
 显式完整诊断仍返回原事件根。成本对照必须检查实际接口，不能只根据 `prefill` 名称推断。
@@ -137,9 +141,9 @@ P1—P6 总体完成。后续状态与待办只见 [ROADMAP](ROADMAP.md)。
 KV raw 状态是 keys/values R×d、summaries R×d_summary、weights R，加 int64 entry times、
 B 个 last_time/observations 和惯性 value。查询 bank 可包含在本窗末态已过期的条目；
 terminal raw retention 与当前 Read 有效视图分开。零接收保留旧 raw 状态和时钟。
-旋转以 int64 写入/查询时间之差除 position_scale 求相对坐标，position_origin 抵消；
-Read 与 Full 使用各自频率。距离项为非负 age 的负偏置，位置不能由接收序号代替。
-位置 logits 使用单个共享 value bank 和显式一阶 transpose；旋转的临时张量另计 workspace。
+可见性和距离项先以int64求原始写入/查询时间之差；position_origin在匹配中抵消。
+Read与Full使用各自频率，位置不能由接收序号代替。位置logits使用单个共享value bank和
+显式一阶transpose；旋转的临时张量另计workspace。
 Read0 使用绑定初态；Read- 只看本次之前，Read+ 与 Full 看包含本次 proposal 的快照。
 
 KV `prepare_kv_columns_many` / C++ `columns::prepare_many` 可按相容节点的实际正写入行数、
@@ -157,8 +161,21 @@ KV `read_kv_columns_many/full_kv_columns_many` / C++ `columns::read_many/full_ma
 Attention/加权sum的node×B轴在无梯度packing中连接，多输出一阶边界只汇总实际被使用的
 节点伴随；未使用输出保持None，显式零伴随保持连接，真实参数alias汇总全部使用者贡献。
 全部原始输入的版本仍受检查，冻结节点输出不因其他节点求导而获得梯度身份。
-位置项沿原始int64 age计算；当前仍有每节点B×Q×K×D的相对旋转暂存，不能把节点合批
-称为已消除query倍位置展开，也不据此宣称融合或端到端提速。
+位置策略在下述有限域内消除B×Q×K×D旋转暂存；节点合批及暂存减少本身不代表
+融合、总体容量准入改善或端到端提速。
+
+`bounded-common-origin-v1`对每个样本取真实query/bank最早整数时间为共同原点，
+先int64相减，再分别旋转Q与K并做矩阵乘，利用KV §2的`Rot(p)ᵀRot(q)=Rot(q−p)`。
+重基准只是求值表示，未改固定Pos函数或未旋转raw key。FP32/FP64的整数跨度须分别不超过
+2^24/2^53；设相应epsilon为e，最大绝对相位P还须满足`8eP ≤ sqrt(e)`。
+后者是两个分离相位在转换/除法/乘法中的舍入误差代理，不能保证输出误差或路由相同。
+阈值只由dtype、真实时间、频率和scale决定，与拓扑名称、用例和测试结果无关。
+越界保持原相对key展开；FP16保持原相对旋转/half舍入。仅有距离项时直接矩阵乘加原age偏置。
+原始age仍独立决定可见性、过期与距离；极大绝对时钟而小跨度可安全进入重基准域。
+旋转使用带原值/坐标版本守卫的一阶边界，伴随为反向角旋转；多节点收缩仍保留独立None/零。
+observer的`kv_rope_rebased`、`kv_rope_content_distance`及
+`kv_rope_relative_{half,integer_span,phase_span}`记录实际路径，不捕获运行异常来选择后备。
+保守workspace仍覆盖后备暂存；跨算法或不同物理切分不承诺浮点逐位相同，实际恢复须使用同一执行身份。
 
 循环状态是 B×matrices×value_width×key_width 的 H、B×2×summary_width 的 Z、B×2 的 W，
 以及适用的卷积缓存和 int64 时间。C++ `LocalState/LocalWindow` 采用 KV/recurrent 类型分支，
@@ -214,6 +231,9 @@ observer的`packing/bucket/kv_{read,full}_nodes`记录实际节点组，
 其中`check_query_groups`比较组查询与原单列的逐字段根、预算切分和真实alias；完整图对照仍由
 该程序的独立Streaming日程检查，组/单列对照本身不作为独立数学公式证明。
 `test_column_positions` 检查相对旋转/距离、超大时钟、literal softmax 与方向导数；
+`test_column_position_ops`以独立逐坐标相对公式检查重基准/有限域后备、FP32/FP64字段VJP、
+真实alias、None/零及原值版本；绝对时间先转float的反例解释共同整数原点。
+保存张量形状检查只证明无query倍旋转展开，默认Python/native独立标量日程另验完整结果/梯度。
 `test_recurrent_columns` 检查四循环的快照、卷积和扫描；`test_native_recurrent_columns`
 检查native四族两种读取/三快照、非空独立状态列根、保留窗和ragged容量；`test_settle_columns` 用独立
 标量调度检查一般端口/同秩/重复边/共享/字段/消息/末态；`test_window_execution` 检查默认

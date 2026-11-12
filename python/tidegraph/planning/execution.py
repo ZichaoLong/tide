@@ -3,6 +3,7 @@ from dataclasses import asdict, dataclass
 import re
 from .legacy_topology import integer
 from .model import fingerprint
+from ..column_policy import POSITION_POLICY as COLUMN_POSITION_POLICY, validate_column_position_record
 
 
 @dataclass(frozen=True)
@@ -104,6 +105,7 @@ class ExecutionSpec:
     @classmethod
     def from_record(cls, record):
         """Decode omitted historical defaults without adopting newer policies."""
+        validate_column_position_record(record)
         requested = dict(record.get("requested", record))
         if "requested" in record:
             requested.setdefault("input_interface", "records")
@@ -143,6 +145,7 @@ class ExecutionSpec:
             effective["record_policy"] = "selected-boundary-v2; explicit task observations"
         if columns_policy:
             effective["input_policy"] = "tensor-window-v1; built-in output task and compatible Settle modules"
+            effective["position_policy"] = COLUMN_POSITION_POLICY
         if window_policy:
             effective["prefill_schedule"] = "window"
             effective["scheduler"] = "component-window"
@@ -157,7 +160,7 @@ class ExecutionSpec:
             if not columns_policy and (self.placement == "resident" or self.schedule == "streaming"
                     or self.packing == "scalar" or self.workers != 1 or self.dtype == "float16" or self.peer_devices):
                 effective["query_execution"] = "legacy"
-        body = dict(schema="tide-weighted-execution-v5" if columns_policy else
+        body = dict(schema="tide-weighted-execution-v6" if columns_policy else
                     "tide-weighted-execution-v4" if selected_boundary else
                     "tide-weighted-execution-v3" if window_policy else
                     "tide-weighted-execution-v2" if extended else "tide-weighted-execution-v1",

@@ -133,12 +133,17 @@ independent intermediate event-root contract are separate observation APIs.
 Graph v13 and checkpoint v5 are unchanged; exact raw continuation comes from
 candidate results, never reference replay.
 
-Installed experiments use execution-v5 to select the same window interface for
+Installed experiments use execution-v6 to select the same window interface for
 compatible built-in output-only tasks. This software policy does not change the
 per-physical-port objective or graph/checkpoint versions. Input columns preserve
 the seeded material and shared source uses; CPU value observations decode after
 backward. Explicit records, complete observations, plugins and historical locks
 retain their declared boundary. See the tensor-window contract for migration.
+The column position policy is `bounded-common-origin-v1`: compatible FP32/FP64
+time domains rotate rebased Q/K banks separately; other domains retain literal
+relative rotation. Visibility remains an int64 calculation. Former execution-v5
+column locks require their original source or an explicit new execution record;
+rebuilding an identity does not certify bitwise cross-algorithm continuation.
 
 ## Core-5 SettleGraph time code
 

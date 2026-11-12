@@ -33,13 +33,15 @@ def test_actual_default_columns_three_sgd_and_new_process_resume(tmp_path, famil
     executable = os.environ.get("TIDE_WEIGHTED_BENCHMARK")
     if not executable:
         pytest.skip("standalone qualification supplies TIDE_WEIGHTED_BENCHMARK")
+    device = os.environ.get("TIDE_STANDALONE_COLUMN_DEVICE", "cpu")
+    dtype = os.environ.get("TIDE_STANDALONE_COLUMN_DTYPE", "float64" if device == "cpu" else "float32")
     from tidegraph.experiment.records import write_json
     plan, _ = make_plan(topology("fc",depth=2,region_width=2),family=family,
                         width=4,samples=2,positions=3)
     write_json(tmp_path/"plan.json",plan)
     execute(sys.executable,ROOT/"scripts/export_weighted_benchmark.py","--native-library",os.environ["TIDE_BUILD_DIR"],
             "--workload",tmp_path/"plan.json","--binary","--output",tmp_path/"fixture.json")
-    common=[executable,"--fixture",tmp_path/"fixture.json","--device","cpu","--dtype","float64",
+    common=[executable,"--fixture",tmp_path/"fixture.json","--device",device,"--dtype",dtype,"--scoring-dtype",dtype,
             "--mode","training","--warmup","0","--threads","1","--return-mode","outputs","--validation","none"]
     def run(name,*args):
         execute(*common,"--output-dir",tmp_path/name,*args)
@@ -59,7 +61,8 @@ def test_actual_default_columns_three_sgd_and_new_process_resume(tmp_path, famil
     reference=run("reference","--steps","3","--input-interface","records","--schedule","streaming","--packing","scalar")
     assert reference["effective_execution"]["interface"] == "records"
     for actual,expected in zip(whole["metrics"],reference["metrics"],strict=True):
-        assert actual["loss"] == pytest.approx(expected["loss"],rel=1e-8,abs=1e-10)
+        assert actual["loss"] == pytest.approx(expected["loss"],rel=1e-8 if dtype == "float64" else 1e-5,
+                                                   abs=1e-10 if dtype == "float64" else 1e-6)
         for key in ("candidate_updates","full_calls","messages","outputs","pending"):
             assert actual[key] == expected[key]
     # Full record/root diagnostics retain their own interface despite auto.

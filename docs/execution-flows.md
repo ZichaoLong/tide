@@ -188,3 +188,8 @@ profiling 与正式吞吐进程分开；单次或共享负载观测不宣称统�
 2026-10-12 用户批准旧实验默认不复核，必要记录及可清理边界见
 [artifact-retention](artifact-retention.md)。保留当前问题的最小复现和未保存修改，
 旧失败不因归档而改为成功。工具链和只读参考仓库不属于实验产物清理对象。
+
+Python运行manifest与standalone benchmark的`runtime_queue_environment`只记录
+`TASK_QUEUE_ENABLE`、`PER_STREAM_QUEUE`、`ASCEND_LAUNCH_BLOCKING`的进程启动请求；
+未设置为null，不推断厂商默认或自动修改全局环境。队列配置必须在设备初始化前由启动器显式选择。
+某队列配置下的异步全链资格不能改写另一配置的失败，关闭主机任务队列也不等于逐算子设备同步。

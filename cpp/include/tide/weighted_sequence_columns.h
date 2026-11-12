@@ -6,6 +6,7 @@
 #include "tide/placement.h"
 
 namespace tide::weighted::columns {
+inline constexpr const char* kv_position_policy="bounded-common-origin-v1";
 struct Layout {
   std::vector<Index> offsets, times;
   Index samples() const { return static_cast<Index>(offsets.size())-1; }

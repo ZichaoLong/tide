@@ -28,6 +28,9 @@ class NativeColumns:
         core = load_native(library, backend=binding.model.nodes[0].bias.device.type)
         if getattr(core, "weighted_column_placement_version", 0) < 3:
             raise RuntimeError("rebuild native library for the placed tensor-column interface")
+        from .column_position_ops import POSITION_POLICY
+        if getattr(core, "weighted_column_position_policy", None) != POSITION_POLICY:
+            raise RuntimeError("rebuild native library for the bounded-common-origin column position policy")
         self.core = core
         graph, self.model = encode_model(core, binding.graph, binding.model)
         self.spec = core.SettleGraph(graph, spec.ranks, spec.binding, spec.stride)
