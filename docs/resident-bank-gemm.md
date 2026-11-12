@@ -78,6 +78,11 @@ ragged行复制由一个设备worker负责，避免奇数行宽跨worker共享ca
   新增同128KiB预算的193行、有bias见证，65/64/64分组覆盖跨tile dW/db和奇数尾部。
   新增用例的源码存在不等于新设备资格通过。
   原`weighted_head_check`、`weighted_kv_update_check`实际调用同一生产边界。
+- 容量见证以实际FP32输入的独立逐行FP64公式核对，不把逐行FP32累加当作精确oracle。
+  41c42759原NPU检查在193行的db比较失败；同材料CPU调查发现64行bank的旧FP32参考
+  自身对精确和超过原容限。原失败保留，新检查仍用`atol=1e-6,rtol=1e-5`，分别报告
+  candidate/旧参考对FP64的误差及精确首差。`test_resident_weighted_bank_oracle.py`用
+  独立`math.fsum`核对原材料及取消相消贡献的反例；实际NPU误差仍须新资格确认。
 
 CPU语义核/公式检查、C++语法、NPU/CUDA构建、真实设备数值、完整图训练/恢复与性能分别记录。
 本契约和CPU检查不自动认证DeviceProgram的设备分支、CANN/设备队列、原预算FC16或其他规模成本。

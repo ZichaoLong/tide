@@ -38,7 +38,7 @@ void publish(DeviceProgram& p,int64_t command,const at::Tensor& nodes,const at::
     {nodes,strength,content,present,times,out.payload,out.present,out.times,error});
 }
 }
-BlockSettleFlowTape append_block_settle_flow(DeviceProgram& p,const SettleGraph& spec,
+BlockSettleFlowTape append_block_settle_flow(DeviceProgram& p,TaskServices& services,const SettleGraph& spec,
     const std::vector<BlockSettleKVBinding>& bindings,const BlockSettleFlowInput& input,int64_t budget){
   using namespace block_selection_detail;const auto& g=spec.graph();const int64_t regions=g.regions.size(),nodes=g.nodes.size(),ports=g.inputs.size();
   if(spec.binding()!="ports"||!g.origins.empty()||!g.source_domain||regions<1||nodes<1||bindings.size()!=size_t(regions)||
@@ -72,10 +72,11 @@ BlockSettleFlowTape append_block_settle_flow(DeviceProgram& p,const SettleGraph&
     borrowed.insert(borrowed.end(),{input.bound_initial[r].floating,input.bound_initial[r].integer,w.source.a,w.source.b,w.source.embedding,
       w.update.base,w.update.left,w.update.right,w.update.summary,w.message.full.query,w.message.full.residual.out,w.message.full.residual.gate,w.message.full.residual.up,w.message.full.residual.down});}
   for(const auto& b:bindings)if(b.parameters.source_factors){const auto& f=*b.parameters.source_factors;borrowed.insert(borrowed.end(),{f.a_left,f.a_right,f.b_left,f.b_right});}
-  const WeightedStorageIncrement storage(p,std::move(borrowed));
+  const auto initial_bytes=p.retained_tensor_bytes(borrowed,services.programs());
+  auto storage_bytes=[&](){return p.retained_tensor_bytes(borrowed,services.programs())-initial_bytes;};
   // Register the dispatcher once before subsequent admission. Counting its
   // explicit bytes as well as retained program storage would charge it twice.
-  q->append_reset(p);auto remaining=[&](){admit(storage.bytes(),budget);return budget-storage.bytes();};
+  q->append_reset(p);auto remaining=[&](){admit(storage_bytes(),budget);return budget-storage_bytes();};
   admit(frames*(nodes+g.edges.size()+g.outputs.size())*(4.L*width+9),remaining());
   out.nodes=allocate(frames,nodes,width,input.payload);out.edges=allocate(frames,g.edges.size(),width,input.payload);out.outputs=allocate(frames,g.outputs.size(),width,input.payload);
   out.positions=at::zeros_like(input.positions);p.copy(out.positions,input.positions);
@@ -98,8 +99,10 @@ BlockSettleFlowTape append_block_settle_flow(DeviceProgram& p,const SettleGraph&
       {stage.atoms,stage.atom_counts,stage.physical_atoms,bank,positions,input.payload,input.present,global.payload,global.present,
         local.payload,local.lengths,local.source_owners,local.node_owners,local.times,stage.source_mapping,error});
     auto local_plan=make_settle_block_plan(std::vector<int64_t>(count,0),{0},{},{},0,1,1,remaining());
-    stage.local=std::make_shared<BlockKVLocalTape>(append_block_kv_local(p,local_plan,bindings[r].memory,bindings[r].regional,
+    auto& numerical=services.begin();
+    stage.local=std::make_shared<BlockKVLocalTape>(append_block_kv_local(numerical,local_plan,bindings[r].memory,bindings[r].regional,
       bindings[r].read_mode,bindings[r].aggregate_alpha,local,bindings[r].parameters,error,remaining()));
+    services.end(numerical);
     const auto& message=stage.local->messages.messages;
     publish(p,0,stage.nodes,message.strength,message.content,message.present,message.times,
       {out.nodes.payload,q->emitted(),out.nodes.times},error,frames,count,nodes,width);
@@ -113,6 +116,6 @@ BlockSettleFlowTape append_block_settle_flow(DeviceProgram& p,const SettleGraph&
     publish(p,2,s,ds,out.nodes.payload,out.nodes.present,out.nodes.times,target,error,frames,source.size(),nodes,width);};
   std::vector<int64_t> sources,delays;for(const auto& edge:g.edges){sources.push_back(edge.source);delays.push_back(edge.delay);}
   ports_out(sources,delays,out.edges);ports_out(g.outputs,std::vector<int64_t>(g.outputs.size(),0),out.outputs);
-  admit(storage.bytes(),budget);return out;
+  admit(storage_bytes(),budget);return out;
 }
 }

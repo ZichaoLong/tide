@@ -82,12 +82,15 @@ void BlockSettleSession::Impl::check()const{
   if(at::GradMode::is_enabled()||closed||failed)throw std::logic_error("resident block owner closed/failed or grad enabled");
   validate(originals);validate(gradient_versions);for(const auto& w:windows)validate(w.versions);
 }
-void BlockSettleSession::Impl::run(DeviceProgram& p,const at::Tensor& error){
-  c10::impl::VirtualGuardImpl(device.type()).synchronizeDevice(device.index());p.run(limits.timeout_ms);
+void BlockSettleSession::Impl::run(DeviceProgram& p,const at::Tensor& error,TaskServices* services){
+  c10::impl::VirtualGuardImpl(device.type()).synchronizeDevice(device.index());
+  if(services)services->submit();p.run(limits.timeout_ms);if(services)services->wait(limits.timeout_ms);
   const auto code=error.cpu().item<int>();if(code)throw std::runtime_error("resident block owner refused, device code="+std::to_string(code));
 }
 void BlockSettleSession::Impl::discard(){
-  for(auto& w:windows)w.program->close();windows.clear();if(reverse){reverse->close();reverse.reset();}gradient={};gradient_versions.clear();ready=false;
+  for(auto& w:windows){w.services->close();w.program->close();}windows.clear();
+  if(reverse_services){reverse_services->close();reverse_services.reset();}
+  if(reverse){reverse->close();reverse.reset();}gradient={};gradient_versions.clear();ready=false;
 }
 BlockSettleSession::BlockSettleSession(SettleGraph g,std::vector<BlockSettleKVBinding> b,const ParameterRegistry& p,
     std::vector<BlockKVParameterRoles> names,std::vector<WeightedRawState> state,std::vector<WeightedRawState> bound,
@@ -108,12 +111,13 @@ BlockSettleWindow BlockSettleSession::advance(const at::Tensor& positions,const 
   const auto live=s.storage();require_resident_bytes(resident_bytes_add(resident_bytes_add(live.tensors,live.workspaces),input_bytes),s.limits.total_bytes,"total before input copy");
   BlockSettleFlowInput input{positions.detach().to(s.device).clone(),payload.detach().to(s.device).clone(),present.detach().to(s.device).clone(),s.state,s.bound};
   auto program=std::make_unique<DeviceProgram>(s.device);program->limit_workspace(s.limits.workspace_bytes);
+  auto services=std::make_unique<TaskServices>(*program,s.device,s.limits.workspace_bytes);
   const auto before=s.storage().tensors;
-  auto tape=std::make_shared<BlockSettleFlowTape>(append_block_settle_flow(*program,s.graph,s.bindings,input,s.limits.forward_bytes));
+  auto tape=std::make_shared<BlockSettleFlowTape>(append_block_settle_flow(*program,*services,s.graph,s.bindings,input,s.limits.forward_bytes));
   auto boundary=append_block_settle_boundary(*program,s.graph,*tape,input.present,s.boundary,s.limits.forward_bytes);
-  s.finish_and_admit(*program,before,s.limits.forward_bytes,"forward tensor");
-  try{s.run(*program,tape->dispatcher->error());}catch(...){s.failed=true;throw;}
-  BlockSettleWindow view{s.next_token++,s.generation,tape,boundary};Impl::Window saved{view,std::move(program),{}};
+  s.finish_and_admit(*program,before,s.limits.forward_bytes,"forward tensor",0,services.get());
+  try{s.run(*program,tape->dispatcher->error(),services.get());}catch(...){s.failed=true;throw;}
+  BlockSettleWindow view{s.next_token++,s.generation,tape,boundary};Impl::Window saved{view,std::move(program),std::move(services),{}};
   for(const auto& x:tensors(*tape))remember(saved.versions,x);
   for(const auto& x:{boundary.node_present,boundary.region_times,boundary.input_counts,boundary.input_times})remember(saved.versions,x);
   for(size_t r=0;r<s.state.size();++r)s.state[r]=tape->regions[r].local->sequence.final;

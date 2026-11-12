@@ -3,13 +3,27 @@
 #include "portable_torch/runtime.hpp"
 #include <torch/csrc/autograd/autograd.h>
 #include <ATen/Parallel.h>
+#include <iomanip>
 #include <iostream>
 namespace {
 using namespace tide::device_online;using at::Tensor;
 void require(bool ok,const char* message){if(!ok)throw std::runtime_error(message);}
-void close(const Tensor& a,const Tensor& b){
+void difference(const char* label,const Tensor& a,const Tensor& b){
+  const auto x=a.cpu().to(at::kDouble),y=b.cpu().to(at::kDouble);
+  const auto error=(x-y).abs(),limit=y.abs()*1e-5+1e-6;
+  const auto bad=at::isclose(x,y,1e-5,1e-6).logical_not(),indices=bad.reshape({-1}).nonzero();
+  std::cerr<<std::setprecision(17)<<"projection-difference label="<<label<<" shape="<<x.sizes()
+    <<" atol=1e-6 rtol=1e-5 failed="<<bad.sum().item<int64_t>()
+    <<" max_abs="<<error.max().item<double>()<<" max_tolerance_ratio="<<(error/limit).max().item<double>();
+  if(indices.numel()){const auto first=indices[0][0].item<int64_t>();
+    std::cerr<<" first_flat="<<first<<" actual="<<x.reshape({-1})[first].item<double>()
+      <<" expected="<<y.reshape({-1})[first].item<double>()<<" abs_error="<<error.reshape({-1})[first].item<double>()
+      <<" tolerance="<<limit.reshape({-1})[first].item<double>();}
+  std::cerr<<'\n';
+}
+void close(const Tensor& a,const Tensor& b,const char* label="projection"){
   require(a.sizes()==b.sizes()&&a.scalar_type()==b.scalar_type(),"projection comparison layout");
-  if(!at::allclose(a.cpu(),b,1e-5,1e-6)){std::cerr<<a.cpu()<<" versus "<<b<<'\n';throw std::runtime_error("weighted projection numeric difference");}
+  if(!at::allclose(a.cpu(),b,1e-5,1e-6)){difference(label,a,b);throw std::runtime_error("weighted projection numeric difference");}
 }
 Tensor values(at::IntArrayRef shape,float shift){int64_t n=1;for(auto x:shape)n*=x;return (at::arange(n,at::kFloat)*.13+shift).sin().reshape(shape)*.2;}
 struct Formula {std::vector<Tensor> inputs,matrix,bias,output;};
@@ -96,15 +110,24 @@ void multiple_bank_capacity(at::Device device,int64_t rows,bool bias){
   const WeightedStorageIncrement b(p,{t.input,t.rstd,t.owners,t.indices,t.matrix,t.bias,t.output,bar,roots,error});
   auto g=append_weighted_projection_vjp(p,t,bar,roots,error,limit);const auto reverse=b.bytes();p.finish();
   portable_torch::synchronize(device);p.run();require(!error.cpu().item<int>(),"multi-bank capacity case refused");
-  auto xx=x.cpu(),mm=m.cpu(),gg=bar.cpu(),ii=ids.cpu();
+  // Sum the actual FP32 input values in independent FP64 row formulas. A
+  // sequential FP32 oracle can itself exceed this check's unchanged tolerance
+  // under cancellation, even for a bank which fits exactly one 64-row tile.
+  auto gg32=bar.cpu();auto xx=x.cpu().to(at::kDouble),mm=m.cpu().to(at::kDouble),gg=gg32.to(at::kDouble),ii=ids.cpu();
   auto yy=at::zeros_like(xx),dx=at::zeros_like(xx),dw=at::zeros_like(mm);
-  auto bb=bias?bv.cpu():Tensor{},db=at::zeros({banks,width},at::kFloat);
+  auto bb=bias?bv.cpu().to(at::kDouble):Tensor{},db=at::zeros({banks,width},at::kDouble);
+  auto legacy_db=at::zeros({banks,width},at::kFloat);
   // Independent per-row formula; the candidate never materializes these outers.
   for(int64_t row=0;row<rows;++row){const auto owner=ii[row].item<int64_t>();
     yy[row].copy_(at::mv(mm[owner],xx[row]));dx[row].copy_(at::mv(mm[owner].t(),gg[row]));
-    dw[owner].add_(at::outer(gg[row],xx[row]));if(bias){yy[row].add_(bb[owner]);db[owner].add_(gg[row]);}}
-  close(t.output,yy);close(g.input,dx);close(g.parameters.matrix,dw);
-  if(bias)close(g.parameters.bias,db);
+    dw[owner].add_(at::outer(gg[row],xx[row]));if(bias){yy[row].add_(bb[owner]);db[owner].add_(gg[row]);legacy_db[owner].add_(gg32[row]);}}
+  close(t.output.cpu().to(at::kDouble),yy,"multi-bank.output-vs-fp64");
+  close(g.input.cpu().to(at::kDouble),dx,"multi-bank.dX-vs-fp64");
+  close(g.parameters.matrix.cpu().to(at::kDouble),dw,"multi-bank.dW-vs-fp64");
+  if(bias){difference("multi-bank.db-candidate-vs-fp64",g.parameters.bias,db);
+    difference("multi-bank.db-legacy-fp32-vs-fp64",legacy_db,db);
+    difference("multi-bank.db-candidate-vs-legacy-fp32",g.parameters.bias,legacy_db);
+    close(g.parameters.bias.cpu().to(at::kDouble),db,"multi-bank.db-vs-fp64");}
   require(t.matrix.size(0)==banks&&forward<=limit&&reverse<=limit,"multi-bank storage did not retain bank granularity");
   require(g.row_connected.cpu().all().item<bool>()&&g.owner_connected.cpu().all().item<bool>(),"multi-bank connections differ");
   std::cout<<"multi-bank projection bytes: rows="<<rows<<" bias="<<bias<<" forward="<<forward<<" reverse="<<reverse<<" allowance="<<limit

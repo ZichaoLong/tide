@@ -1,5 +1,6 @@
 #pragma once
 #include "block_kv_local.h"
+#include "task_services.h"
 namespace tide::device_online {
 // Explicit concrete block bindings. Parameter classification never deduplicates
 // physical atoms; input/edge mappings contain one owner per physical identity.
@@ -31,10 +32,11 @@ struct BlockSettleFlowTape {
 };
 // One device choose/commit loop. A task is a whole complete-region B x L block,
 // including its empty-fiber state identity. Numerical activity stays per node
-// and position. No TaskServices, actual-trajectory host prepass or token loop.
+// and position. The coordinator calls bounded whole-region numerical programs
+// through device notifications; no actual-trajectory host prepass or token loop.
 // First concrete lowerer: aligned Settle ports, homogeneous KV shape per region.
 // Returned final states are staging. The caller publishes only after success.
-BlockSettleFlowTape append_block_settle_flow(DeviceProgram&,const SettleGraph&,
+BlockSettleFlowTape append_block_settle_flow(DeviceProgram&,TaskServices&,const SettleGraph&,
   const std::vector<BlockSettleKVBinding>&,const BlockSettleFlowInput&,
   int64_t tensor_budget);
 }

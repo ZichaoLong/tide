@@ -11,7 +11,12 @@ OptimizerParameterLayout parameter_layout(const ParameterRegistry&);
 std::vector<at::Tensor> tensors(const BlockSettleFlowTape&);
 }
 struct BlockSettleSession::Impl {
-  struct Window {BlockSettleWindow view;std::unique_ptr<DeviceProgram> program;std::vector<block_session_detail::Version> versions;};
+  struct Window {
+    BlockSettleWindow view;
+    std::unique_ptr<DeviceProgram> program;
+    std::unique_ptr<TaskServices> services;
+    std::vector<block_session_detail::Version> versions;
+  };
   SettleGraph graph;std::vector<BlockSettleKVBinding> bindings;ParameterRegistry registry;
   std::vector<BlockKVParameterRoles> roles;at::Device device;BlockSettleLimits limits;
   DeviceOptimizerKind kind;std::unique_ptr<DeviceOptimizer> optimizer;
@@ -20,17 +25,18 @@ struct BlockSettleSession::Impl {
   at::Tensor positions;std::string fingerprint;int64_t generation=0,next_token=0;
   bool failed=false,ready=false,closed=false;
   std::vector<Window> windows;std::unique_ptr<DeviceProgram> reverse;
+  std::unique_ptr<TaskServices> reverse_services;
   std::vector<block_session_detail::Version> originals,gradient_versions;
   Impl(SettleGraph,std::vector<BlockSettleKVBinding>,const ParameterRegistry&,
     std::vector<BlockKVParameterRoles>,std::vector<WeightedRawState>,std::vector<WeightedRawState>,
     at::Device,DeviceOptimizerKind,std::vector<OptimizerGroup>,BlockSettleLimits,const BlockSettleCheckpoint*,const BlockSettleBoundary*,const at::Tensor&);
   void check()const;
-  void run(DeviceProgram&,const at::Tensor&);
-  void finish_and_admit(DeviceProgram&,int64_t before,int64_t partition_limit,const char* partition,int64_t persistent=0)const;
+  void run(DeviceProgram&,const at::Tensor&,TaskServices* = nullptr);
+  void finish_and_admit(DeviceProgram&,int64_t before,int64_t partition_limit,const char* partition,int64_t persistent=0,TaskServices* = nullptr)const;
   void publish(DeviceProgram&,const at::Tensor& error);
   void discard();
   struct Storage {int64_t tensors,workspaces;};
-  Storage storage(const DeviceProgram* current=nullptr)const;
-  void budget(const DeviceProgram* current=nullptr)const;
+  Storage storage(const DeviceProgram* current=nullptr,const TaskServices* services=nullptr)const;
+  void budget(const DeviceProgram* current=nullptr,const TaskServices* services=nullptr)const;
 };
 }

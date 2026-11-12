@@ -6,7 +6,7 @@
 #include "device_launch_tide_block_flow_reverse_fibers.h"
 #include "device_launch_tide_block_flow_reverse_choose.h"
 namespace tide::device_online {
-BlockSettleFlowGradient append_block_settle_flow_vjp(DeviceProgram& p,const SettleGraph& spec,
+BlockSettleFlowGradient append_block_settle_flow_vjp(DeviceProgram& p,TaskServices& services,const SettleGraph& spec,
     const BlockSettleFlowTape& t,const BlockSettleFlowRoots& roots,int64_t budget){
   using namespace block_selection_detail;const auto& graph=spec.graph();
   const int64_t frames=t.positions.numel(),nodes=graph.nodes.size(),regions=graph.regions.size(),width=t.nodes.payload.size(2),ports=graph.inputs.size();
@@ -24,7 +24,9 @@ BlockSettleFlowGradient append_block_settle_flow_vjp(DeviceProgram& p,const Sett
     for(const auto* x:{&r.messages.read.memory,&r.messages.read.total}){borrowed.push_back(x->value);borrowed.push_back(x->connected);}
     for(const auto& [name,x]:r.messages.read.describe){borrowed.push_back(x.value);borrowed.push_back(x.connected);}
     for(const auto& x:{r.raw.old,r.raw.old_connected,r.raw.proposal,r.raw.proposal_connected,r.raw.final,r.raw.final_connected})borrowed.push_back(x);}
-  const WeightedStorageIncrement storage(p,std::move(borrowed));auto remaining=[&](){admit(storage.bytes(),budget);return budget-storage.bytes();};
+  const auto initial_bytes=p.retained_tensor_bytes(borrowed,services.programs());
+  auto storage_bytes=[&](){return p.retained_tensor_bytes(borrowed,services.programs())-initial_bytes;};
+  auto remaining=[&](){admit(storage_bytes(),budget);return budget-storage_bytes();};
   admit(frames*(nodes*(4.L*width+2)+ports*(4.L*width+1))+20,remaining());
   auto message=at::zeros_like(t.nodes.payload),message_roots=at::zeros({frames,nodes,2},t.nodes.present.options());
   BlockSettleFlowGradient out{at::zeros({frames,ports,width},message.options()),at::zeros({frames,ports},t.nodes.present.options()),{}};
@@ -63,7 +65,9 @@ BlockSettleFlowGradient append_block_settle_flow_vjp(DeviceProgram& p,const Sett
       ptr(ids),ptr(active),ptr(message),ptr(message_roots),ptr(direct_mass.value),ptr(direct_mass.connected),ptr(direct_content.value),ptr(direct_content.connected),
       ptr(mb.value),ptr(mb.connected),ptr(cb.value),ptr(cb.connected),ptr(error),frames,count,nodes,width),"downstream and independent source-message roots");},
       {ids,active,message,message_roots,direct_mass.value,direct_mass.connected,direct_content.value,direct_content.connected,mb.value,mb.connected,cb.value,cb.connected,error});
-    auto gradient=append_block_kv_local_vjp(p,local,bound,error,remaining());
+    auto& numerical=services.begin();
+    auto gradient=append_block_kv_local_vjp(numerical,local,bound,error,remaining());
+    services.end(numerical);
     const auto mapping=stage.source_mapping,lengths=local.aggregate.lengths,values=gradient.aggregate.payload,flags=gradient.aggregate.connected;
     const auto inputs=out.inputs,input_roots=out.input_connected;
     p.kernel([=](void* stream){check_device_launch(TIDE_LAUNCH_KERNEL(tide_block_flow_reverse_fibers)(1,stream,
@@ -72,6 +76,6 @@ BlockSettleFlowGradient append_block_settle_flow_vjp(DeviceProgram& p,const Sett
       {mapping,lengths,values,flags,inputs,input_roots,message,message_roots,error});
     p.branch(zero,{head});out.regions.push_back(std::move(gradient));
   }
-  p.mark(finish);admit(storage.bytes(),budget);return out;
+  p.mark(finish);admit(storage_bytes(),budget);return out;
 }
 }

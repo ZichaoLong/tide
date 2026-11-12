@@ -68,10 +68,13 @@ is checked before allocation and against the actual retained storages afterwards
   step's newly retained publication/control tensors. The gradient already belongs
   to the reverse. Publication reuses the master and actual role banks.
 - `total_bytes` bounds the union of the owner's live tensor storages, all retained
-  programs and the current program, plus every live program's vendor workspace
-  high-water mark. The union uses StorageImpl identity: views and borrowed optimizer
+  programs and the current program, plus every retained program group's vendor
+  workspace high-water mark. Each forward/reverse coordinator and its device-called
+  regional programs share one arena because notification handshakes serialize all
+  numerical users. Different retained windows still own different arenas.
+  The union uses StorageImpl identity: views and borrowed optimizer
   slots count once; distinct equal-valued tensors count separately. No whole unused
-  partition is subtracted from the total. Each program also enforces `workspace_bytes`.
+  partition is subtracted from the total. Each group also enforces `workspace_bytes`.
 
 All hidden optimizer tensors and region owner-coordinate tensors participate in
 the total. Admission is repeated after control-program finalization, which may

@@ -85,13 +85,16 @@ void compare(const Fixture& f,const Formula& ref,const BlockSettleFlowTape& t,co
 }
 void check(at::Device device,const std::string& mode){
   at::NoGradGuard no_grad;Fixture f;for(auto& b:f.bindings)b.read_mode=mode;const auto ref=formula(f);const auto x=device_input(f,device);const auto bindings=device_bindings(f,device);
-  DeviceProgram program(device);program.limit_workspace(1<<29);auto tape=append_block_settle_flow(program,f.graph,bindings,x,1<<29);
-  auto root=roots(tape,device);auto gradient=append_block_settle_flow_vjp(program,f.graph,tape,root,1<<29);
-  auto parameters=append_block_settle_parameter_vjp(program,gradient,f.registry,f.roles,tape.dispatcher->error(),1<<27);program.finish();
-  for(int kind=mode=="+"?0:8;kind<10;++kind){select(root,kind);tape.dispatcher->epoch().fill_(kind+1);portable_torch::synchronize(device);program.run();
+  DeviceProgram program(device);program.limit_workspace(1<<29);TaskServices services(program,device,1<<29);
+  auto tape=append_block_settle_flow(program,services,f.graph,bindings,x,1<<29);
+  auto root=roots(tape,device);auto gradient=append_block_settle_flow_vjp(program,services,f.graph,tape,root,1<<29);
+  auto parameters=append_block_settle_parameter_vjp(program,gradient,f.registry,f.roles,tape.dispatcher->error(),1<<27);
+  services.append_stop();services.finish();program.finish();
+  for(int kind=mode=="+"?0:8;kind<10;++kind){select(root,kind);tape.dispatcher->epoch().fill_(kind+1);portable_torch::synchronize(device);
+    services.submit();program.run();services.wait(10000);
     require(!tape.dispatcher->error().cpu().item<int>(),"block graph refused, code="+std::to_string(tape.dispatcher->error().cpu().item<int>()));
     try{compare(f,ref,tape,gradient,parameters,root);}catch(...){std::cerr<<"read="<<mode<<" roots="<<kind<<'\n';throw;}}
-  program.close();
+  services.close();program.close();
 }
 void rejected_bindings(at::Device device){
   at::NoGradGuard no_grad;
@@ -102,8 +105,8 @@ void rejected_bindings(at::Device device){
     [](auto& g){g.nodes[0].emit_period=2;}, [](auto& g){g.nodes[0].emit_phases={0};},
     [](auto& g){g.nodes[0].state_clock={2,0,1};}, [](auto& g){g.regions[0].observe_all=false;}};
   for(const auto& change:changes){auto graph=f.graph.graph();change(graph);bool rejected=false;
-    try{tide::SettleGraph spec(graph,f.graph.ranks(),"ports",f.graph.stride());DeviceProgram p(device);
-      append_block_settle_flow(p,spec,b,x,1<<29);
+    try{tide::SettleGraph spec(graph,f.graph.ranks(),"ports",f.graph.stride());DeviceProgram p(device);TaskServices services(p,device,1<<29);
+      append_block_settle_flow(p,services,spec,b,x,1<<29);
     }catch(const std::invalid_argument&){rejected=true;}
     require(rejected,"concrete block accepted incompatible state/emission/observation binding");}
 }

@@ -14,6 +14,6 @@ struct BlockSettleFlowGradient {
 };
 // Reverse consumes the actual forward journal. Future descendants and repeated
 // physical edges contribute to the same source message once per actual use.
-BlockSettleFlowGradient append_block_settle_flow_vjp(DeviceProgram&,const SettleGraph&,
+BlockSettleFlowGradient append_block_settle_flow_vjp(DeviceProgram&,TaskServices&,const SettleGraph&,
   const BlockSettleFlowTape&,const BlockSettleFlowRoots&,int64_t tensor_budget);
 }

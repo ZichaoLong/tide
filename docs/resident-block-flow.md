@@ -21,7 +21,20 @@ original int64 `[B,L]`. Per-region raw initial and bound Read0 state are separat
 Physical atoms retain edge/port identity even if parameter classes coincide.
 Each device-chosen task evaluates a complete region across B×L, including missing
 fibers; empty fibers keep private state. Device choose/commit drives the next
-region. No host-selected real trajectory or nested TaskServices tree is consumed.
+region. The coordinator records one call per region to a bounded numerical
+program. CANN request/completion notifications keep these calls device-controlled;
+CUDA uses the same phases in its conditional graph. Forward and reverse have
+separate regional programs, while the reverse coordinator still consumes the
+actual forward journal. No host-selected real trajectory or per-token dispatch
+is consumed. `TaskServices` supplies only program lifetime and ordered calls,
+not another graph schedule or the earlier WeightedFlow journal.
+
+The caller owns `DeviceProgram` and `TaskServices`: append graph/roots, append
+the service stops, finish workers before the coordinator, submit workers before
+the coordinator, then wait for both before publishing or reuse. Tensor budgets
+count unique storage across all participating programs. A notification-serialized
+group shares one maximum vendor workspace; independent retained windows own
+separate arenas. Device execution failure retains the normal quarantine policy.
 
 Outputs contain actual node, physical-edge and output-port payload, presence and
 int64 time columns. Saved local tapes expose Aggregate, both Mem channels,

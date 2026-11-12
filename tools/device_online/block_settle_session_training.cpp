@@ -26,6 +26,7 @@ void carry(DeviceProgram& p,const BlockKVSequenceTape& previous,const BlockKVSeq
 BlockSettleAdjoints BlockSettleSession::backward(const std::vector<BlockSettleFlowRoots>& inputs){
   auto& s=*impl_;s.check();if(s.ready||s.windows.empty()||inputs.size()!=s.windows.size())throw std::logic_error("block backward needs all retained windows exactly once");
   auto program=std::make_unique<DeviceProgram>(s.device);program->limit_workspace(s.limits.workspace_bytes);
+  auto services=std::make_unique<TaskServices>(*program,s.device,s.limits.workspace_bytes);
   const auto before=s.storage().tensors;
   BlockSettleAdjoints out;out.windows.resize(inputs.size());auto error=at::zeros({1},s.optimizer->values().options().dtype(at::kInt));program->zero(error);
   for(int64_t w=int64_t(inputs.size())-1;w>=0;--w){auto roots=inputs[w];const auto& t=*s.windows[w].view.tape;
@@ -34,7 +35,7 @@ BlockSettleAdjoints BlockSettleSession::backward(const std::vector<BlockSettleFl
     program->add(t.dispatcher->error(),error);
     if(w+1<int64_t(inputs.size()))for(size_t r=0;r<t.regions.size();++r)
       carry(*program,t.regions[r].local->sequence,out.windows[w+1].regions[r].sequence,roots.regions[r].raw,t.dispatcher->error());
-    out.windows[w]=append_block_settle_flow_vjp(*program,s.graph,t,roots,s.limits.backward_bytes);
+    out.windows[w]=append_block_settle_flow_vjp(*program,*services,s.graph,t,roots,s.limits.backward_bytes);
     program->copy(error,t.dispatcher->error());
   }
   std::vector<WeightedParameterPartial> parts;std::set<std::string> used;
@@ -73,9 +74,9 @@ BlockSettleAdjoints BlockSettleSession::backward(const std::vector<BlockSettleFl
         "fixed Read0 initial binding accumulates every retained window");},{fields,metadata,mapping,value,flags,result.value,result.connected,error});}
     out.bound_initial.push_back(std::move(result));
   }
-  s.finish_and_admit(*program,before,s.limits.backward_bytes,"backward tensor");
-  try{s.run(*program,error);}catch(...){s.failed=true;throw;}
-  s.gradient=out.parameters;s.reverse=std::move(program);s.ready=true;
+  s.finish_and_admit(*program,before,s.limits.backward_bytes,"backward tensor",0,services.get());
+  try{s.run(*program,error,services.get());}catch(...){s.failed=true;throw;}
+  s.gradient=out.parameters;s.reverse=std::move(program);s.reverse_services=std::move(services);s.ready=true;
   for(const auto& x:{s.gradient.values,s.gradient.connected})block_session_detail::remember(s.gradient_versions,x);
   return out;
 }

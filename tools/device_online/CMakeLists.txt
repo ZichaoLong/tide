@@ -273,7 +273,7 @@ if(TIDE_DEVICE_KERNELS)
     tide-weighted-aggregate tide-weighted-source tide_block_raw_roots_kernel)
   add_library(tide-block-settle-flow STATIC block_settle_flow.cpp block_settle_flow_vjp.cpp block_settle_parameters.cpp)
   set_target_properties(tide-block-settle-flow PROPERTIES POSITION_INDEPENDENT_CODE ON)
-  target_link_libraries(tide-block-settle-flow PUBLIC tide-block-kv-local tide-block-dispatch
+  target_link_libraries(tide-block-settle-flow PUBLIC tide-block-kv-local tide-block-dispatch tide-device-services
     tide_block_flow_fibers_kernel tide_block_flow_publish_kernel
     tide_block_flow_reverse_ports_kernel tide_block_flow_reverse_gather_kernel
     tide_block_flow_reverse_fibers_kernel tide_block_flow_reverse_choose_kernel)
