@@ -123,3 +123,10 @@
   commit coherent work on tide-learning-lab, and never force-push.
 
 - The latest explicit approval authorizes executing `docs/studies/language-scale-activity-v9.md`, including the inlet-tree/original-inlet comparison. One shared 48h wall deadline, no aggregate NPU/CPU time caps, 64GiB new disk target and >=200GiB hard-quota headroom. Freeze new inputs, calibrate useful batches and Transformer recipes, submit independent durable work directly. This supersedes v9 design-only/no-submission notes, not historical failures.
+
+- The 2026-11-12 user approval authorizes expanded historical checkpoint retirement in
+  `docs/studies/checkpoint-retirement-20261112.md`. Preserve all v9 and non-completed
+  trajectories, named scientific controls/negative witnesses, records and public models.
+  Completed v6-v8 screening weights outside the named retention set and 14 old GEF
+  benchmark states may be retired by the fixed manifest. Historical recovery records
+  do not promise availability of retired bytes; consult the retirement receipt first.
