@@ -33,9 +33,10 @@ def settle(dtype, mode, implementation):
         "hard_selection": {"nodes.0.kernel.base": 1.4e-5, "nodes.3.full_program.content.out": 3e-6},
         "proportional": {"nodes.0.kernel.summary": 1.6e-5, "nodes.3.full_program.content.out": 2e-6}
                         if implementation == "python" else {}}
-    if implementation == "python":
+    if implementation in {"python", "native"}:
         # Source-column GEMM/explicit block transpose: same-material FP64 and
-        # zero VJPs pass; source-columns-dev-strict retains the new FP32 errors.
+        # zero VJPs pass. The bounded native first-difference audit is in
+        # docs/evidence/source-columns-rounding-20261112.md; raw failures stay.
         # These classify strict failures and never change passing tolerances.
         for name in ("regional_total", "regional_threshold"):
             fields[name]["nodes.0.kernel.base"] = 1e-5

@@ -10,7 +10,8 @@
 当前起点为FC两层、区域宽2、内容宽8、baseline KV、region共享、B2/P2。可用`--recipe`换成公共recipe合法配置，
 并先在小规模验收。本例的16MiB静态材料预算及1..8步上限是示例资源边界，不是基座模型能力上限。
 它提供CPU PyTorch/Python-native、FP32/FP64、streaming/prefill和scalar/packed显式配置，拒绝不适用组合。
-NPU/CUDA、resident和standalone使用基座对应入口及独立验收；本目录不宣称覆盖这些消费者。
+前述`train.py/check.py/dependency.py`只声明这个CPU起步范围；后文的密集查询、张量窗口和
+resident消费者分别声明自己的设备/API与资格，不能互相继承。standalone沿对应公共C++入口验收。
 [固定源码检查报告](../../docs/evidence/downstream-contract-20261030.md)给出8组实际通过配置、拒绝检查及原失败；上游交付后仍须做本实验自己的验收。
 
 ## 固定安装及锁
@@ -96,3 +97,28 @@ python dense_query.py --device npu:0 --client native --native-library MATCHING_N
 `--dtype float16 --scoring-dtype float32 --loss-scale 16`，使用FP32-master AdamW；
 参数、raw状态与消息保持half，评分及loss为FP32。示例记录请求/实际路径、独立三步检查及
 新进程精确恢复，半精度派生字段的比较策略同时进入身份。该示例不自动认证其他图/配置/设备。
+
+
+## Resident张量块的安装消费者
+
+[`block_resident.py`](block_resident.py)消费安装后的`WeightedResidentTraining`公共入口，
+传入真实ports `SettleGraph`证书，并断言实际返回`WeightedBlockResidentTraining`。
+当前适用域、完整字段根、只读寿命和schema-2 archive见[公共块owner](../../docs/resident-block-session.md#public-model-and-python-entry)。
+同名训练入口传普通Graph时仍使用[通用记录owner](../../docs/resident-weighted-training.md)；
+两者的advance输入、字段布局、step返回和checkpoint格式不同，消费者应显式迁移。
+
+先从同一固定提交安装wheel、匹配核心库和weighted resident插件；按[开发入口](../../docs/development.md)
+建立实际后端构建。以下是两个独立进程，使用新的checkpoint路径；长资格按仓库执行契约运行：
+
+```sh
+python block_resident.py --device npu:0 --native-library MATCHING_NPU_CORE \
+  --resident-library MATCHING_RESIDENT_BUILD --checkpoint-path NEW_CHECKPOINT
+python block_resident.py --device npu:0 --native-library MATCHING_NPU_CORE \
+  --resident-library MATCHING_RESIDENT_BUILD --checkpoint-path NEW_CHECKPOINT --restore-check
+```
+
+消费者用独立Python时间主序参考检查端口presence、(c,G)、输入/共享参数梯度、
+三步AdamW和实际raw Continuation；第二进程载入第一步后切面并精确比较最终checkpoint。
+本小例含零质量、缺失端口、非零来源低秩因子及位置配置。它不是全部中间字段独立根、
+任意模块/设备/规模或FC16性能的证明；这些由[组件与公共资格](../../docs/resident-block-session.md#navigation-and-checks)
+分别验收。脚本存在和命令可构造不等于设备通过，实际固定结果从[证据索引](../../docs/evidence/README.md)查阅。

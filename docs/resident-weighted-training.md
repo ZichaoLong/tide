@@ -7,6 +7,24 @@
 固定数学入口为[共同局部架构](upstream/tide-core-5/local-semantics/weighted-message/architecture-learning-note.md)
 及[PDG有限切面](upstream/tide-core-5/positive-delay-graph-finite-cut-learning-note.md)。
 
+本页以下描述通用记录owner。新的[Settle张量块owner](resident-block-session.md#public-model-and-python-entry)
+使用独立C++ `BlockResidentSession` / Python `WeightedBlockResidentTraining`，不继承本页历史资格。
+`WeightedResidentTraining`传入普通`Graph`时保持本页接口；传入显式ports `SettleGraph`且满足
+`block_resident_capability`时选择块owner，静态不适用时保留通用owner。已选owner的容量/数值错误
+直接失败，不重试另一执行器。只凭同名构造器不能推断输入、返回或恢复格式相同。
+
+| 调用边界 | 本页通用记录owner | Settle块owner |
+| --- | --- | --- |
+| 窗口输入 | `advance(inputs, stop=..., sealed_until=...)` | `advance(positions, payload, present)`，分别为int64 `[B,L]`、FP32 `[B,L,P,d+1]`、bool `[B,L,P]` |
+| 端口根 | `fields["outputs"]`保存(c,G) | `fields["output.strength"]` / `fields["output.content"]`分开；完整根名见块契约 |
+| optimizer返回 | `step()`返回`applied/refusal_code` | `step()`成功无返回值，失败抛出错误 |
+| 完整观察 | `result()`及按需`outputs()/metrics()` | 直接消费批量`fields/metadata`；不提供本页事件Result接口 |
+| checkpoint | 下述Python dictionary/通用resident archive | 独立schema-2 LibTorch archive，不能混用旧格式 |
+
+需要新块接口时可显式构造`WeightedBlockResidentTraining`并检查适用域；保持既有记录消费者时
+传普通Graph。新接入和新进程恢复的可运行示例见[`block_resident.py`](../examples/consumer_core5/README.md#resident张量块的安装消费者)。
+实验配置自动选择和standalone benchmark是否接入仍按各自实现/固定资格记录，不由这里的类分派推导。
+
 公共入口声明在`include/tide/resident_weighted_training.h`。FP32/FP16 owner拥有参数generation、
 连续保留窗口、显式一阶backward、SGD/AdamW更新及完整切面导出。loss、任务头和数据游标由调用者拥有。
 前向窗口内的就绪、选择和推进仍由设备引擎决定；窗口边界的根打包不是参考预跑。

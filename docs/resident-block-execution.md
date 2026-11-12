@@ -1,8 +1,10 @@
 # Resident 张量块执行器边界
 
-数学固定为 [core-5 0770593](upstream.json)。本页描述新的独立调度原语和后续接入契约，
-不把旧 [WeightedFlow](resident-weighted-flow.md) 的功能资格继承为新执行器资格。
-当前实际运行证据由 STATUS 和证据报告维护；CPU 语义源检查、设备构建、设备执行分别记录。
+数学固定为 [core-5 0770593](upstream.json)。本页负责独立调度原语与局部数值边界；
+完整 Aggregate→KV→区域→消息组合见[完整图块](resident-block-flow.md)，
+Model、Continuation、独立字段根、optimizer与checkpoint见[公共块owner](resident-block-session.md)。
+旧 [WeightedFlow](resident-weighted-flow.md) 的资格不继承为新执行器资格。
+当前实际运行证据由 STATUS 和证据报告维护；源码、CPU语义源检查、构建、真机和规模分别记录。
 
 ## 为什么重新划分执行边界
 
@@ -20,7 +22,10 @@
 `tools/device_online/block_dispatch.h::BlockDispatcher` 接一张有限窗口的**潜在任务 DAG**。
 它独立实现就绪闭包与选择，不调用旧 DeviceReady、TaskServices 或 CPU 真实轨迹。
 潜在任务由结构与模块依赖确定，包含最后可能缺席的任务；不是实际执行序列。
-当前是内部可组合原语，尚未接入公共 resident/default 分派，也没有完整 checkpoint 解码器。
+`append_block_settle_flow`已用它驱动完整区域的B×L数值阶段，`BlockResidentSession`另行
+实现公共Model绑定、raw Continuation和schema-2 checkpoint。原语自身不负责这些解码或训练职责。
+公共Python owner按显式Settle证书及局部能力分派；实验CLI/standalone消费者的实际接入和资格
+仍须分别记录，不能从一个组件或公共类存在推断所有默认入口已经迁移。
 
 | 字段 | 含义 |
 | --- | --- |
@@ -67,9 +72,10 @@ reset 先检查全部描述和严格递增 generation，再发布新窗口状态
 调度内核的捕获数量不随实际任务数增长，但完整数值能力组仍需单独核算厂商任务/流额度；
 本原语没有自动解除旧 FC16 的 task-buffer 失败。
 
-## 接入公共张量数值阶段的下一步
+## 数值阶段与完整owner的分层
 
-已新增两个可组合边界，仍未构成完整 WeightedFlow 替代：
+以下两个局部边界供完整组合调用；通用WeightedFlow仍承担其声明域，
+[完整图块](resident-block-flow.md)与[公共owner](resident-block-session.md)承担新的Settle张量路径：
 
 - `settle_block_plan.h::make_settle_block_plan` 和 `lower_settle_blocks` 从显式 ports Settle
   结构建立 `Local → complete Region → per-node Gate → Full → downstream Local` 潜在任务。
@@ -90,33 +96,28 @@ Gate 反例包含同区域内无活动节点与有活动节点，区域总活动
 组合的 `append_block_read_selection_vjp` 接受各个 control 的独立根位与 cotangent，
 先汇集完整区域反向，再经 Describe 和 KV Query 返回 raw、mass、content 与各参数角色梯度。
 结构连接位独立于数值零；absent 根忽略未使用的 NaN。保存的 region、Describe、Query tapes
-支持独立 reverse 程序，不重读后来被覆盖的原输入/参数。这里还没有把中间 Mem/描述字段
-作为组合的额外公开反向根；这些字段用于前向比较，完整图 owner 要另接所需独立观察根。
-同参数 bank 的贡献由局部批量算子汇总；不同角色间的实际 Tensor alias 仍需外层 canonical 汇总。
+支持独立 reverse 程序，不重读后来被覆盖的原输入/参数。`BlockReadObservations`另接
+两通道Mem/total与具名Describe独立根；公共owner通过`block_settle_observations`发布这些根，
+与control根分开。局部批量算子汇总同参数bank贡献，外层canonical布局汇总跨角色真实别名。
 
 当前数值组合使用同一 KV 配置与区域配置；参数 bank 通过 owner 显式绑定。
 查询支持原始时间窗口、位置和 FP32/FP16 raw，由既有局部能力决定，但本轮新增组合检查只覆盖
 FP32 raw、qry/cat/ind/context/cat/quad。其 raw 输入暂按帧提供快照，尚未采用共享 KV 前缀 bank；
 这会复制历史存储，不能据整块外形宣称已经取得完整 prefill 性能。其他记忆/异构组需独立接入。
 
-后续完整 owner 还缺少以下实际接口与验收：
+当前实现按职责连接如下，资格应沿各层独立检查读取：
 
-Read-selection之后已增加[独立proposal Full与消息数值组合](resident-block-kv-messages.md)，
-保留独立根与跨角色参数汇总；其作用仍限于实际输入快照的数值组合，以下owner职责尚待完成。
+| 职责 | 实际入口 | 交付边界 |
+| --- | --- | --- |
+| 物理纤维、Aggregate/Upd、Read快照、区域选择与逐边/端口消息 | `append_block_settle_flow`、`append_block_kv_local` | 设备choose/commit选择完整区域，实际presence不由CPU轨迹提供；独立全图检查见[flow](resident-block-flow.md) |
+| Full与消息的独立根 | [消息组合](resident-block-kv-messages.md)、`block_settle_observations` | 原始(c,G)、显式cG、Mem/Describe/control及old/proposal/final根分别绑定 |
+| canonical共享参数、保留窗和optimizer | `BlockSettleSession` | 消费实际tape/journal，汇总全部物理使用者，None与连接零分开；session检查和公共Model检查不互相替代 |
+| Model、完整位置cut、输入账本与磁盘恢复 | `BlockResidentSession`、`WeightedBlockResidentTraining` | 从候选raw缓冲解码Continuation；schema-2显式迁移，使用[独立安装消费者](../examples/consumer_core5/README.md#resident张量块的安装消费者) |
 
-1. 从实际端口/逐边消息列完成 Aggregate/Upd，生成 typed Read 快照或共享 KV 前缀 bank，
-   并把上述数值阶段接入 device choose/commit 循环。当前静态计划与 Read-selection 是独立可组合件，
-   未运行完整 Settle 图。外部输入用实际存在性 seed，加入状态、控制和 absence 依赖；
-   完整记录须与独立标量调度比较。
-2. 每能力组绑定当前 [张量窗口](weighted-tensor-windows.md) 的布局、参数 bank 与 typed raw
-   状态。设备 selection 直接进入 gather/批量矩阵/分段算子，保留 B×L 与相容节点/区域分组；
-   共享参数的多使用者贡献统一汇总，不能借分组改变参数身份或私有状态。
-3. 将 Python/LibTorch 块内公式降到 DeviceProgram 的批量 vendor 算子与必要内核。
-   现有 host 张量接口不是可直接捕获的 resident 程序；其 Python 分支、动态分配和回读须显式消除。
-   每能力组的程序任务数也要有界，必要时拆固定数值阶段，避免重新制造每节点服务树。
-4. 反向消费实际 journal 与 tape，逆依赖组织块级伴随；使用独立结构连接位区分 None/零，
-   按共享参数身份归约。末态、逐边/端口和独立根不能由前向输出投影替代。随后分别接
-   optimizer、跨窗保留、精确 checkpoint 和普通异步跨卡，逐层独立验收。
+公共新owner当前是明确的Settle/KV适用域，详见[接口范围](resident-block-session.md#public-model-and-python-entry)。
+其他记忆、一般PDG动态lowerer、跨设备owner、共享KV前缀存储及规模优化不能从旧general路径
+继承为新块实现。已实现的源码与尚待完成的设备/规模资格分开，当前待办只维护在ROADMAP；
+本页不复制阶段任务列表。原FC16 task-buffer失败须由新架构的原预算实测单独判定。
 
 ## 可运行的检查与证明边界
 
