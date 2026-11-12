@@ -94,6 +94,7 @@ void check(at::Device device,const std::string& mode){
   program.close();
 }
 void rejected_bindings(at::Device device){
+  at::NoGradGuard no_grad;
   Fixture f;auto x=device_input(f,device);auto b=device_bindings(f,device);
   const std::vector<std::function<void(tide::Graph&)>> changes{
     [](auto& g){g.nodes[0].clear=true;}, [](auto& g){g.nodes[0].identity=true;},

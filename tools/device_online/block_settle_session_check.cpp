@@ -60,7 +60,10 @@ void update(Fixture& f,const Formula& ref,const std::vector<Tensor>& gradients,A
     const auto m=state.first[name]/float(1-std::pow(group.beta1,step)),v=state.second[name]/float(1-std::pow(group.beta2,step));
     value.copy_(float(1-group.lr*group.weight_decay)*value-float(group.lr)*m/(v.sqrt()+float(group.eps)));
   }
-  f.states=ref.final;for(size_t r=0;r<2;++r)f.input.initial[r]=encode_weighted_raw_state(WeightedRawLayout(f.bindings[r].memory,16),f.states[r]);
+  f.states=ref.final;
+  for(auto& region:f.states)for(auto& state:region){state.value=state.value.detach();
+    for(auto& [name,x]:state.slots)x=x.detach();}
+  for(size_t r=0;r<2;++r)f.input.initial[r]=encode_weighted_raw_state(WeightedRawLayout(f.bindings[r].memory,16),f.states[r]);
 }
 void compare_checkpoint(const BlockSettleCheckpoint& actual,const Fixture& f,const Adam& state,const ParameterVjp& layout){
   for(size_t i=0;i<layout.owners.size();++i){const auto& p=layout.owners[i];close(actual.parameters.at(p.canonical),f.registry.value(p.canonical),"AdamW parameter");
