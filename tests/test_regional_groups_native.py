@@ -11,7 +11,12 @@ def execute(program, packing, fields):
     weights = core.RegionWeights()
     weights.extra = dict(program.named_parameters(remove_duplicate=False))
     core.configure_weighted_region(weights, region_config(core, program.config))
-    return core.weighted_region_groups(weights, packing.domains, fields)
+    # Match the literal formula's device. The standalone native default keeps
+    # selection on CPU; callers, including the Settle plan, bind placement.
+    placement = core.ExecutionPlacement()
+    placement.control = "payload"
+    placement.selection = "payload"
+    return core.weighted_region_groups(weights, packing.domains, fields, placement)
 
 
 @pytest.mark.parametrize("case", range(12))
