@@ -1,5 +1,8 @@
 # 历史验证与测量证据
 
+[Read/Describe→区域字段owner（2026-11-12）](read-region-owner-20261112.md)：c6afc20c两构建、245 CPU通过/7原xfail/2原严格失败，
+SDK7CPU/15NPU及12安装训练恢复通过；20点成本中LH默认NPU训练2.4718秒、直接.6219秒，主要差距仍在。
+
 [来源共享与32点成本（2026-11-12）](source-bank-20261112.md)：72e1d22c两构建、325 CPU通过/7原xfail/2保留FP32严格失败；
 SDK CPU/NPU及12安装恢复通过。LH默认native训练CPU/NPU1.4058/2.9022秒，未见主要差距缩小；
 独立三层CPU profile/census与静态数据流审阅分列，外图小不能推断私有工作少。

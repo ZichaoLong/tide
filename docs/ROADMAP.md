@@ -17,15 +17,18 @@ CPU、主机混合与设备常驻分开验收；GPU按当前授权延后。
 | --- | --- | --- |
 | P1 契约与审阅 | [张量窗口](weighted-tensor-windows.md)、typed KV/循环状态、区域列、真实消息/独立根及迁移契约已在公共入口使用；[固定边界审阅](evidence/p1p6-boundary-review-20261112.md)、[静态循环/形状审阅](evidence/lh-block-static-20261112.md)与后继hash记录分列 | 沿Aggregate→状态/Read/Describe→区域→Full→消息及伴随确认真正贯穿；全仓逐文件/逐函数审阅未完成。inventory不是审阅，重叠文件不累计覆盖 |
 | P2 加法对照 | FC/数学不等价Transformer、KV/SSD与LH已有独立公式→公共张量接口→默认执行器三层；三模式、完整返回投影和独立梯度根分别记录 | 后继以同材料复测被修改的边界，解释主要差距。LH FP64数值投影通过不等于完整根资格；原FP32有限超差及36个None/零差异保留。直接公式不是绝对性能上限 |
-| P3 默认FC整链 | Python/native及standalone公共B×L窗口、区域分配、消息、输出任务/训练/raw恢复已接通；[最近固定资格与成本](evidence/region-tensor-20261112.md) | 继续移除来源payload按接收者复制、KV阶段字段发布再重装配及实际跨设备重复。保留小型反馈PDG、非对齐TimedDAG、一般Settle端口、重复边/共享/None零；FC单点不代替全域验收 |
+| P3 默认FC整链 | Python/native及standalone公共B×L窗口、区域分配、消息、输出任务/训练/raw恢复已接通；[最近固定资格与成本](evidence/region-tensor-20261112.md) | 来源bank/incidence与Read→区域字段owner已分别交付；[c6afc20c资格/20点成本](evidence/read-region-owner-20261112.md)保留有限数值失败。继续处理prepare/raw-bank→Read/Full、typed continuation与真实跨设备块传输。保留小型反馈PDG、非对齐TimedDAG、一般Settle端口、重复边/共享/None零；FC单点不代替全域验收 |
 | P4 有限模块候选 | 五记忆/原始时间短卷积、十种发送与适用评分/evidence/key/正则已接入主机张量列；[循环资格](evidence/recurrent-columns-20261111.md)、[half资格](evidence/column-half-20261111.md)、[放置资格](evidence/column-placement-20261111.md)分列 | 保持逐候选与有判别力的小组合，不穷举。正支持补值策略仍经记录后备；新resident块的half/循环记忆/多owner尚未接齐。旧一般执行器能力不能冒称新块实现 |
 | P5 规模与执行路径 | 主机LH176/FC/1B/9B有有限成本；新resident独立Model、KV sum/qry、小图三步/跨窗/新进程恢复已有[a3c资格](evidence/resident-block-public-20261112.md) | LH公共层差距仍明显，优先source-owner/region-window上下文。[有界program组合](evidence/resident-services-20261112.md)已通过完整flow、小图新进程恢复及原预算FC16/LH176执行/换owner恢复；规模独立数学未检查、成本仍高，共享历史/raw布局仍须闭环。多卡/普通异步和GPU按下表独立处理 |
 | P6 治理与交付 | 配置/代码/数学/测试/证据/复现已有导航；skills保留加法、减法、静态循环/形状/复制/伴随分析 | 随每次边界重写更新符号/契约、固定资格、安装消费与精确恢复。清理陈旧交接叙述，保留可直接重建的输入与命令；不以文档链接检查宣布全仓治理完成 |
 
+本轮在主机字段owner与resident KV存储的当前边界完成必要验证后停下汇报、重新对齐；
+下文是总体剩余方向，不授权重入时自动展开下一轮。已确认原则不作为每次压缩后的新任务。
+
 ### 下一实现边界
 
-- **主机来源与区域窗口**：[1f0e6e43审阅](evidence/region-tensor-20261112.md)确认整组KV写入和中心化Aggregate VJP已经落实，不能继续把旧逐源图当根因。下一表示保留唯一实际来源块与物理incidence，再连接区域/Full；参数共享、计算共享和私有状态分别处理。mixed预设只在配置入口展开，实际设备边界才传输；区域参数视图和操作数别名应在调用级复用。
-- **resident程序资源**：[042ea369](evidence/resident-services-20261112.md)将区域前后向交给设备通知调用的有界program，已越过41c完整flow反向507002与原预算两规模失败。08a349ce补已知存储/workspace预准入与真实程序/流/通知计数，资格另验；部分提交故障、整体等待期限和更大资源规模仍独立处理。独立FP64投影oracle通过原阈值；旧FP32参考自身累加超差和CPU harness顺序污染保留。
+- **主机来源与区域窗口**：[1f0e6e43审阅](evidence/region-tensor-20261112.md)确认整组KV写入和中心化Aggregate VJP已经落实，不能继续把旧逐源图当根因。72e1d22c及9ae62d0d已保留唯一实际来源块与物理incidence/增量预算；c6afc20c已连接Read→区域的字段owner。剩余prepare/raw-bank→Read/Full及typed continuation；参数共享、计算共享和私有状态分别处理。mixed预设只在配置入口展开，实际设备边界才传输；区域参数视图和操作数别名应在调用级复用。
+- **resident程序资源**：[042ea369](evidence/resident-services-20261112.md)将区域前后向交给设备通知调用的有界program，已越过41c完整flow反向507002与原预算两规模失败。08a349ce补已知存储/workspace预准入与真实程序/流/通知计数，[两套构建/设备资格](evidence/resident-resources-20261112.md)已通过；部分提交故障、整体等待期限和更大资源规模仍独立处理。独立FP64投影oracle通过原阈值；旧FP32参考自身累加超差和CPU harness顺序污染保留。
 - **resident历史布局**：当前每帧old/proposal raw和Read历史重投影仍在。需要共享initial/write bank、快照索引及块伴随，保留三种Read、独立raw根、过期/原始int64时间与精确checkpoint；不是只放宽容量守卫。
 - **循环候选与广泛审阅**：SSD层链仍有默认/公式差距；按实际调用与有状态锚点继续审阅，不把KV优化自动当循环模块已优化。全仓未审范围由固定清单/hash记录，审阅发现机会不要求无限实施。
 

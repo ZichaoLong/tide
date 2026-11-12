@@ -1,5 +1,8 @@
 # 从 Git 复现问题与维护失败经验
 
+Read/Describe实际owner交接从[c6afc20c资格与20点成本](evidence/read-region-owner-20261112.md)进入，
+独立根/空列stride检查在`test_column_blocks`及SDK `weighted-kv-tensor`。
+
 来源共享与后继规划从[72e1d22c成本/三层profile](evidence/source-bank-20261112.md)及
 [9ae62d0d增量资格](evidence/source-planning-20261112.md)进入；完整计划、命令、构建身份和原失败在对应JSON。
 resident预算/实际程序资源从[08a349ce资格](evidence/resident-resources-20261112.md)进入。

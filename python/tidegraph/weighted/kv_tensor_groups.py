@@ -1,7 +1,8 @@
 """KV node blocks chosen by capabilities and actual padded storage costs.
 
-Only boundary input/output tensors are split by node. Query normalization,
-history projections, scores, attention, heads and residuals run on whole blocks.
+Public node roots borrow one actual-row owner per returned field. Query
+normalization, history projections, scores, attention and residuals stay batched;
+the regional consumer can retain the same field storage across its boundary.
 """
 import torch
 from .kv_tensor_layout import Query, metadata, roles, shape
