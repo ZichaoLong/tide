@@ -48,6 +48,12 @@ def generate(source, output, backend):
             wrapper += '  if(!blocks)return 1;\n'
             if backend == "cpu":
                 text = '#define TIDE_KERNEL_CPU\n' + text
+                # Inline thread-local adapter state can be shared by separate
+                # test DSOs. Restore the caller's launch context on normal and
+                # exceptional exits; raw semantic-source probes must not inherit
+                # the exhausted worker counter of a previous multiblock launch.
+                wrapper += ('  struct Context {uint32_t worker=tide_cuda::worker,workers=tide_cuda::workers;'
+                            '~Context(){tide_cuda::worker=worker;tide_cuda::workers=workers;}} context;\n')
                 wrapper += f'  tide_cuda::workers=blocks;for(tide_cuda::worker=0;tide_cuda::worker<blocks;++tide_cuda::worker){symbol}({",".join(casts)});return 0;\n}}\n'
             else:
                 wrapper += f'  {symbol}<<<blocks,1,tide_cuda::scratch_bytes,static_cast<cudaStream_t>(stream)>>>({",".join(casts)});return int(cudaGetLastError());\n}}\n'
