@@ -39,6 +39,13 @@ python scripts/check_upstream.py
 双卡定向检查设置`TIDE_COLUMN_PEERS=npu:0,npu:1`运行`tests/test_column_payload_owners.py`；
 独立SDK使用`TIDE_COLUMN_PEER_DEVICE=npu:1`加原device/dtype CLI。
 必须先实际分配两张卡；单卡/CPU结果不作为多卡资格。
+
+更大或异构的已展开配置用 `examples/consumer_core5/planned_windows.py --plan PLAN.json
+--client python --device cpu --dtype float64 --output-dir NEW_DIR`。它只调用安装后的公共
+planning/默认列/checkpoint接口；逐物理端口输入、三次真实AdamW与raw续接，再由独立whole/prefix/resumed
+进程逐值比较末次输出、梯度（含None）、参数、全部optimizer槽及continuation。
+`--client native --native-library BUILD`选择实际LibTorch，设备/线程/确定性策略显式记录。
+材料与workspace有独立字节预算；这是训练恢复资格，不是数学oracle或吞吐计时。
 `--family affine|delta|gated_delta|ssd`检查四循环、适用卷积和对应raw恢复。native 增加
 `--client native --native-library /path/to/matching/build`；真实 NPU 在合法分配后选
 `--device npu:0 --dtype float32`。该小消费者的资格不能代替全部局部组合/规模。

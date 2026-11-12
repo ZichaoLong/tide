@@ -98,5 +98,11 @@ python scripts/check_lh_tensor.py --case many-lh --device cpu --dtype float64 --
 材料、workspace、节点行/Attention元素及比较捕获分别有预算；退出0为严格数值投影通过，
 1为保留有限数值失败，2为结构/离散/非有限/执行/容量失败。该检查不测吞吐。
 
+规模恢复与上述数学对照分开：将同一个公开展开plan交给
+[planned_windows消费者](../examples/consumer_core5/planned_windows.py)，以默认Python/native
+列路径执行三次AdamW、跨窗口raw续接及独立新进程恢复；完整比较None梯度、参数和槽，
+不把直接公式的None-as-zero投影代入optimizer。其定向检查在
+[test_planned_window_consumer](../tests/test_planned_window_consumer.py)，实际规模与设备须另记录。
+
 修改公式同时维护适用域、独立检查和本契约；改变runner则维护计时/职责/参数身份。
 固定运行证据从[证据索引](evidence/README.md)进入；当前完成范围与待办只维护在STATUS/ROADMAP。
