@@ -78,5 +78,6 @@ Index BlockResidentSession::cut()const{impl_->check();return impl_->cut;}
 Index BlockResidentSession::generation()const{impl_->check();return impl_->generation;}
 ResidentOptimizerKind BlockResidentSession::optimizer_kind()const{impl_->check();return impl_->kind;}
 std::vector<OptimizerGroup> BlockResidentSession::optimizer_groups()const{impl_->check();return impl_->groups;}
+std::map<std::string,int64_t> BlockResidentSession::resource_usage()const{impl_->check();return impl_->owner->resource_usage();}
 void BlockResidentSession::close(){if(!impl_||impl_->closed)return;impl_->owner->close();impl_->windows.clear();impl_->closed=true;}
 }

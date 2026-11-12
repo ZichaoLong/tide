@@ -77,12 +77,29 @@ is checked before allocation and against the actual retained storages afterwards
   partition is subtracted from the total. Each group also enforces `workspace_bytes`.
 
 All hidden optimizer tensors and region owner-coordinate tensors participate in
-the total. Admission is repeated after control-program finalization, which may
-create additional CUDA branch tables, and before numerical execution. Constructor
+the total. After appending service stops, admission checks the known tensor union
+and planned group workspace before CANN service arena allocation/control recording.
+Admission is repeated after control-program finalization, which may create
+additional CUDA branch tables, and before numerical execution. Constructor
 storage is checked before returning an owner. Input-copy lower bounds reject before
 allocating a new window. A capacity refusal before execution does not change state.
 `storage_usage()` reports actual owner tensor/workspace/optimizer bytes from host
 shape/ownership metadata; it does not read device routing or numerical state.
+
+`resource_usage()` is available on both the internal and installed public owner;
+Python also includes its current snapshot in `manifest()["resource_usage"]`.
+It reports `tensor_bytes`, `workspace_bytes`, `optimizer_bytes`, `retained_windows`,
+`coordinator_programs`, `worker_programs`, total `programs`, `streams`,
+`notifications`, `boundary_events`, `service_phases` and `maximum_service_nesting`.
+Programs are retained `DeviceProgram` owners, not vendor task/kernel counts.
+Streams/events/notifications count explicit currently held handles. CANN has
+separate worker programs and request/completion notifications; CUDA phases stay
+in the coordinator graph, with zero worker programs/notifications and separately
+counted CUDA boundary events. Workspace sums one shared arena per retained group.
+These host metadata queries do not synchronize or inspect numerical device values.
+They describe the current boundary, not peak resources during an optimizer call;
+the same exclusions as the byte budget apply. No inferred hardware resource limit
+is imposed by this inventory.
 
 These bounds concern storage retained by the internal session. CPU model copies,
 checkpoint codec temporaries, allocator rounding, runtime-internal resources and
@@ -98,6 +115,10 @@ optimizer checker verifies the exact inventory against real tensors; the session
 checker verifies exact initial limits, below-limit refusal and unchanged state on
 an input-capacity rejection. Device build, actual execution and complete training
 remain separate qualification facts.
+`tests/test_resident_block_resources.py` exercises pre-recording refusal (including
+stop storage and planned workspace), post-lowering refusal and the metadata adapter
+without a device. `task_services_check.cpp` and `block_resident_check.cpp` check
+actual resource counts through repeated calls, retained windows, reverse and release.
 
 ## Checkpoint identity and exactness
 

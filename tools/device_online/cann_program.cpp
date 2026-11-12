@@ -395,6 +395,10 @@ void DeviceProgram::close() {
 int64_t DeviceProgram::workspace_bytes() const {
   return impl_->workspace_used;
 }
+DeviceProgramResources DeviceProgram::resources() const {
+  const auto& p=*impl_;
+  return {p.closed?0:1,int64_t(p.stream!=nullptr)+int64_t(p.launch!=nullptr),0};
+}
 void DeviceProgram::limit_workspace(int64_t bytes) {
   auto& p=*impl_;p.building();
   if(bytes<0||p.workspace_used)throw std::invalid_argument("set workspace budget before numerical operations");

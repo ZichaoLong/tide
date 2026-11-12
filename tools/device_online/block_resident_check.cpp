@@ -40,6 +40,21 @@ std::unique_ptr<BlockResidentSession> owner(const Fixture& f,at::Device device,c
   if(c)return std::make_unique<BlockResidentSession>(f.graph,f.model,f.initial,*c,device,l);
   return std::make_unique<BlockResidentSession>(f.graph,f.model,f.initial,device,ResidentOptimizerKind::adamw,std::vector<OptimizerGroup>{group},l);
 }
+void resources(const BlockResidentSession& session,Index windows,Index regions,bool reverse){
+  const auto use=session.resource_usage();const auto coordinators=windows+Index(reverse),phases=windows*regions*(reverse?2:1);
+  require(use.at("tensor_bytes")>use.at("optimizer_bytes")&&use.at("optimizer_bytes")>0,"public live tensor inventory differs");
+  require(use.at("retained_windows")==windows&&use.at("coordinator_programs")==coordinators&&use.at("service_phases")==phases,
+    "public retained program/window inventory differs");
+  require(use.at("maximum_service_nesting")==Index(windows>0),"public service nesting differs");
+#if TIDE_RESIDENT_CUDA
+  require(use.at("worker_programs")==0&&use.at("programs")==coordinators&&use.at("streams")==coordinators&&
+    use.at("notifications")==0&&use.at("boundary_events")==2*coordinators,"public CUDA resource counts differ");
+#else
+  require(use.at("worker_programs")==phases&&use.at("programs")==coordinators+phases&&use.at("streams")==2*(coordinators+phases)&&
+    use.at("notifications")==2*phases&&use.at("boundary_events")==0,"public CANN resource counts differ");
+#endif
+  if(!windows)require(use.at("workspace_bytes")==0,"detached public owner retained a program arena");
+}
 void check(at::Device device,const std::string& path,bool restore,bool query){
   at::NoGradGuard guard;auto consumer=fixture(query);std::vector<training_detail::Version> unused;
   auto reference=training_detail::freeze_model(consumer.model,at::kCPU,unused);auto q=training_detail::freeze_continuation(consumer.initial);
@@ -47,6 +62,7 @@ void check(at::Device device,const std::string& path,bool restore,bool query){
   for(const auto& p:parameters.owners())group.parameters.push_back(p.canonical);AdamW optimizer(parameters,{group});
   std::optional<BlockCheckpoint> saved;if(restore)saved=load_block_checkpoint(path);
   auto session=owner(consumer,device,group,saved?&*saved:nullptr);std::unique_ptr<BlockResidentSession> resumed;
+  const auto regions=Index(consumer.graph.graph().regions.size());resources(*session,0,regions,false);
   for(int step=0;step<3;++step){std::vector<Input> inputs;std::vector<Result> reference_windows;std::vector<BlockRoots> bars;
     std::vector<BlockRoots> restored_bars;std::vector<Tensor> leaves,values,cotangents;const auto owners=parameters.owners();
     for(const auto& p:owners)leaves.push_back(p.value);
@@ -57,10 +73,12 @@ void check(at::Device device,const std::string& path,bool restore,bool query){
       for(const auto& y:reference_windows.back().outputs){values.push_back(y.value);cotangents.push_back(at::tensor({.07f,.13f,.13f}));}
       if(restore&&step==0)continue;
       const auto actual=session->advance(x.positions,x.payload,x.present);output(actual,x,reference_windows.back(),consumer.graph);bars.push_back(root(actual));
+      resources(*session,w+1,regions,false);
       if(resumed)restored_bars.push_back(root(resumed->advance(x.positions,x.payload,x.present)));
     }
     std::vector<Tensor> expected;{at::AutoGradMode yes(true);expected=torch::autograd::grad(values,leaves,cotangents,false,false,true);}
     if(!(restore&&step==0)){const auto actual=session->backward(bars);std::map<std::string,size_t> names;
+      resources(*session,2,regions,true);
       for(size_t j=0;j<actual.parameters.names.size();++j)names[actual.parameters.names[j]]=j;
       for(size_t j=0;j<owners.size();++j){const auto index=names.at(owners[j].canonical);
         require(actual.parameters.connected[index].cpu().item<bool>()==expected[j].defined(),"public canonical None/zero differs "+owners[j].canonical);
@@ -68,7 +86,8 @@ void check(at::Device device,const std::string& path,bool restore,bool query){
       size_t k=owners.size();for(size_t w=0;w<inputs.size();++w)for(auto row:inputs[w].rows){
         const auto flags=actual.inputs[w].connected.reshape({-1});const auto gradients=actual.inputs[w].values.reshape({B*L*P,3});
         require(flags[row].cpu().item<bool>()==expected[k].defined(),"public input None/zero differs");if(expected[k].defined())close(gradients[row],expected[k],"input");++k;}
-      session->step();if(resumed){resumed->backward(restored_bars);resumed->step();exact(session->checkpoint(),resumed->checkpoint());}
+      session->step();resources(*session,0,regions,false);
+      if(resumed){resumed->backward(restored_bars);resumed->step();exact(session->checkpoint(),resumed->checkpoint());}
     }
     for(size_t j=0;j<owners.size();++j)owners[j].value.mutable_grad()=expected[j];optimizer.step();optimizer.zero_grad();q=training_detail::freeze_continuation(q);
     if(restore&&step==0)continue;

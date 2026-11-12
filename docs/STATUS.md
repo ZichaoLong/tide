@@ -26,7 +26,7 @@ SDK首次等待构建前置120秒超时，未用设备；后继sdk-ready单独�
 
 ## 当前集成和下一动作
 
-主树未提交：source-owner/incidence Aggregate、区域参数视图及实际发送操作数传输去重、resident计数修复。
+72e1d22c已固定：source-owner/incidence Aggregate、区域参数视图及实际发送操作数传输去重、resident计数修复。
 开发检查96项Python通过；15项native因未指定新构建未运行，不能称C++失败或通过；正式新构建后补验。
 扩展Python检查98通过/3原xfail/2新FP32严格超差；同材料FP64全根通过，None/零连接与完整观察一致。
 原阈值不变、原失败保留，开发诊断artifacts/source-bank-development-20261112/numerical-diagnostic.json。
@@ -42,3 +42,13 @@ resident新预算/统计有自身后继资格；共享历史/raw布局与程序�
 两工具链分别ascend/dev-workspace-9.2.0与独立libtorch-npu/2.12.0-cann9.2.0；不混库。
 重新进入：git status --short --branch；python scripts/status.py；python scripts/check_upstream.py。
 历史提交：python scripts/resolve_history_commit.py OLD_SHA，见[迁移](history-migration.md)。
+
+新两套core构建：source-bank-build-{native,sdk}.service，固定/dev/shm/gef-source-bank-20261112/source (72e1d22c)。
+CPU0–159/160–319，各512GiB、2400秒；artifacts/source-bank-20261112/{native,sdk}-build.sh，
+记录artifacts/jobs/source-bank-build-*；构建未完成前不开始依赖资格或计时。
+
+72e1d22c native构建/独立wheel安装已通过；SDK构建仍在运行。开始固定cpu-directed、host-cpu、host-npu资格，
+分别CPU0–7/8–15/16–19，各256GiB、900/1500/1800秒；NPU最多准入180秒，原始过程记录同artifacts/source-bank-20261112。
+
+resident后继已实现已知存储/workspace预准入和当前程序/流/通知计数；开发8CPU/8C++ TU语法通过，
+主代理已审阅，固定后补构建与设备资源释放/训练恢复检查；CUDA program仅源码、无toolkit或真机资格。

@@ -92,6 +92,14 @@ void TaskServices::close(){
   for(auto& x:impl_->services){x->request->close();x->done->close();}impl_->services.clear();
 }
 int64_t TaskServices::workspace_bytes()const{int64_t total=impl_->coordinator.workspace_bytes();for(const auto& x:impl_->services)total=std::max(total,x->program->workspace_bytes());return total;}
-TaskServiceStatistics TaskServices::statistics()const{return {impl_->phases,static_cast<int64_t>(impl_->services.size()),impl_->maximum_nesting,workspace_bytes()};}
+TaskServiceStatistics TaskServices::statistics()const{
+  const auto& s=*impl_;TaskServiceStatistics out{s.phases,0,s.maximum_nesting,workspace_bytes()};
+  for(const auto* p:programs()){
+    const auto used=p->resources();out.programs+=used.programs;out.streams+=used.streams;out.boundary_events+=used.boundary_events;
+    if(p!=&s.coordinator)out.worker_programs+=used.programs;
+  }
+  for(const auto& x:s.services)out.notifications+=int64_t(x->request->handle!=nullptr)+int64_t(x->done->handle!=nullptr);
+  return out;
+}
 std::vector<const DeviceProgram*> TaskServices::programs()const{std::vector<const DeviceProgram*> p{&impl_->coordinator};for(const auto& x:impl_->services)p.push_back(x->program.get());return p;}
 }

@@ -35,7 +35,7 @@ struct BlockSettleSession::Impl {
   void finish_and_admit(DeviceProgram&,int64_t before,int64_t partition_limit,const char* partition,int64_t persistent=0,TaskServices* = nullptr)const;
   void publish(DeviceProgram&,const at::Tensor& error);
   void discard();
-  struct Storage {int64_t tensors,workspaces;};
+  struct Storage {int64_t tensors=0,workspaces=0,coordinators=0;TaskServiceStatistics services;};
   Storage storage(const DeviceProgram* current=nullptr,const TaskServices* services=nullptr)const;
   void budget(const DeviceProgram* current=nullptr,const TaskServices* services=nullptr)const;
 };

@@ -32,6 +32,7 @@ void bind_block_resident(py::module_& m){
     .def("checkpoint",&BlockResidentSession::checkpoint,py::call_guard<py::gil_scoped_release>())
     .def("continuation",&BlockResidentSession::continuation,py::call_guard<py::gil_scoped_release>())
     .def("optimizer_kind",&BlockResidentSession::optimizer_kind).def("optimizer_groups",&BlockResidentSession::optimizer_groups)
+    .def("resource_usage",&BlockResidentSession::resource_usage)
     .def_property_readonly("cut",&BlockResidentSession::cut).def_property_readonly("generation",&BlockResidentSession::generation)
     .def("close",&BlockResidentSession::close,py::call_guard<py::gil_scoped_release>());
   m.def("save_block_checkpoint",&save_block_checkpoint,py::arg("checkpoint"),py::arg("path"),py::arg("max_bytes")=int64_t{1}<<32,py::call_guard<py::gil_scoped_release>());

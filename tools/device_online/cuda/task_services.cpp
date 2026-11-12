@@ -17,6 +17,9 @@ void TaskServices::submit(){}
 void TaskServices::wait(int32_t){}
 void TaskServices::close(){}
 int64_t TaskServices::workspace_bytes()const{return impl_->program.workspace_bytes();}
-TaskServiceStatistics TaskServices::statistics()const{return {impl_->phases,0,impl_->maximum_nesting,workspace_bytes()};}
+TaskServiceStatistics TaskServices::statistics()const{
+  const auto used=impl_->program.resources();
+  return {impl_->phases,0,impl_->maximum_nesting,workspace_bytes(),used.programs,used.streams,0,used.boundary_events};
+}
 std::vector<const DeviceProgram*> TaskServices::programs()const{return {&impl_->program};}
 }

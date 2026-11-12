@@ -7,6 +7,9 @@
 
 namespace tide::device_online {
 struct CannApi;
+// Explicit resources currently owned by this program, not runtime-internal
+// graph/task counts. CUDA boundary events are not CANN notifications.
+struct DeviceProgramResources {int64_t programs=0,streams=0,boundary_events=0;};
 // Device control component, shared by independent CUDA and CANN backends.
 // Owns graph/stream/label/workspace lifetimes. Operations use bounded buffers;
 // no per-event host decisions, autograd or hidden CPU execution.
@@ -72,6 +75,7 @@ class DeviceProgram {
   // workspace allocation. A refusal poisons construction, never executes a prefix.
   void limit_workspace(int64_t bytes);
   int64_t workspace_bytes() const;
+  DeviceProgramResources resources() const; // Host ownership metadata only.
   int64_t retained_tensor_bytes(const std::vector<at::Tensor>& additional={}) const; // Unique tensor storage, excluding vendor internals.
   // Count unique storage across cooperating programs and boundary-only owners.
   int64_t retained_tensor_bytes(const std::vector<at::Tensor>& additional,

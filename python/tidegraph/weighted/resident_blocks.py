@@ -166,6 +166,10 @@ class WeightedBlockResidentTraining:
         self._check(); integers("block archive budget", max_bytes)
         self.module.save_block_checkpoint(self.owner.checkpoint(), str(path), max_bytes)
 
+    def resource_usage(self):
+        """Current internal owner storage and explicit resources; not peak HBM."""
+        self._check(); return dict(self.owner.resource_usage())
+
     def manifest(self):
         self._check()
         return dict(execution="resident", scheduler="settle-block-v2", graph_certificate="SettleGraph/ports",
@@ -173,7 +177,7 @@ class WeightedBlockResidentTraining:
                     initial_state="actual raw", requested_limits=self.requested_limits, effective_limits=self.effective_limits,
                     initialization=self.initialization, requested_optimizer=self.requested_optimizer,
                     requested_groups=deepcopy(self.requested_groups), effective_groups=[{n: getattr(g, n) for n in GROUP_FIELDS} for g in self.owner.optimizer_groups()],
-                    build=self.build_record)
+                    resource_usage=self.resource_usage(), build=self.build_record)
 
     def close(self):
         self.owner.close()

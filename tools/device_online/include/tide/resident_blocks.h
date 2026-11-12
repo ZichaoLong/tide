@@ -55,6 +55,7 @@ class BlockResidentSession {
   Index generation()const;
   ResidentOptimizerKind optimizer_kind()const;
   std::vector<OptimizerGroup> optimizer_groups()const;
+  std::map<std::string,int64_t> resource_usage()const; // Internal live owner inventory, no device synchronization.
   void close();
  private:
   struct Impl;std::unique_ptr<Impl> impl_;

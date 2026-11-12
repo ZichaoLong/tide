@@ -151,6 +151,10 @@ void DeviceProgram::limit_workspace(int64_t bytes) {
   p.workspace_limit=bytes;
 }
 int64_t DeviceProgram::workspace_bytes() const{return impl_->workspace.defined()?impl_->workspace.nbytes():0;}
+DeviceProgramResources DeviceProgram::resources() const {
+  const auto& p=*impl_;
+  return {p.closed?0:1,int64_t(p.stream!=nullptr),int64_t(p.input_ready!=nullptr)+int64_t(p.complete!=nullptr)};
+}
 int64_t DeviceProgram::retained_tensor_bytes(const std::vector<at::Tensor>& additional) const {return retained_tensor_bytes(additional,{});}
 int64_t DeviceProgram::retained_tensor_bytes(const std::vector<at::Tensor>& additional,const std::vector<const DeviceProgram*>& programs) const {
   std::unordered_set<const c10::StorageImpl*> seen;int64_t bytes=0;

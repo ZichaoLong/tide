@@ -35,6 +35,10 @@ the coordinator, then wait for both before publishing or reuse. Tensor budgets
 count unique storage across all participating programs. A notification-serialized
 group shares one maximum vendor workspace; independent retained windows own
 separate arenas. Device execution failure retains the normal quarantine policy.
+`TaskServices::statistics()` distinguishes retained program owners, explicit
+streams, CANN notifications and CUDA boundary events; CUDA does not create worker
+programs for these phases. The [session inventory](resident-block-session.md#storage-admission)
+aggregates the actual retained groups and checks planned storage before recording.
 
 Outputs contain actual node, physical-edge and output-port payload, presence and
 int64 time columns. Saved local tapes expose Aggregate, both Mem channels,

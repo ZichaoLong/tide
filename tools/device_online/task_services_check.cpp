@@ -31,11 +31,13 @@ int main(int argc,char** argv){portable_torch::RuntimeSession runtime;
     if(stats.phases!=5||stats.maximum_nesting!=3||stats.shared_workspace_bytes!=workspace)
       throw std::runtime_error("service phase/workspace diagnostics differ from constructed nesting");
 #if !TIDE_RESIDENT_CUDA
-    if(stats.worker_programs!=5)throw std::runtime_error("CANN worker program count differs");
+    if(stats.worker_programs!=5||stats.programs!=6||stats.streams!=12||stats.notifications!=10||stats.boundary_events!=0)
+      throw std::runtime_error("CANN service resource inventory differs");
     int64_t summed=0;for(const auto* p:services.programs())summed+=p->workspace_bytes();
     if(!(workspace>0&&summed>workspace))throw std::runtime_error("services did not exercise shared workspace");
 #else
-    if(stats.worker_programs!=0||services.programs().size()!=1)throw std::runtime_error("CUDA phases unexpectedly created workers");
+    if(stats.worker_programs!=0||stats.programs!=1||stats.streams!=1||stats.notifications!=0||stats.boundary_events!=2||services.programs().size()!=1)
+      throw std::runtime_error("CUDA service resource inventory differs");
 #endif
     services.finish();coordinator.finish();
     for(int loops:{3,0,5}){
@@ -46,6 +48,10 @@ int main(int argc,char** argv){portable_torch::RuntimeSession runtime;
         expected=expected/at::sqrt(expected.square().mean(1,true)+.4);}
       if(count.item<int64_t>()!=loops||!at::allclose(x.cpu(),expected,2e-5,2e-6))throw std::runtime_error("service cycle/window differs from independent recurrence");
     }
-    coordinator.close();services.close();std::cout<<"task-services: passed repeated_windows=true empty_window=true nested_levels=3 root_services=2 sibling_services=true shared_workspace_bytes="<<workspace<<'\n';return 0;
+    coordinator.close();services.close();const auto closed=services.statistics();
+    if(closed.programs||closed.streams||closed.notifications||closed.boundary_events||closed.shared_workspace_bytes)
+      throw std::runtime_error("closed service group retained explicit resources");
+    std::cout<<"task-services: passed repeated_windows=true empty_window=true nested_levels=3 root_services=2 sibling_services=true shared_workspace_bytes="<<workspace
+      <<" programs="<<stats.programs<<" streams="<<stats.streams<<" notifications="<<stats.notifications<<" boundary_events="<<stats.boundary_events<<'\n';return 0;
   }catch(const std::exception& e){std::cerr<<e.what()<<'\n';return 2;}
 }

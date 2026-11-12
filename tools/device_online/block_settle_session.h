@@ -52,6 +52,7 @@ class BlockSettleSession {
   void detach();
   BlockSettleCheckpoint checkpoint()const;
   BlockSettleStorageUsage storage_usage()const; // Host metadata; no numerical device read.
+  std::map<std::string,int64_t> resource_usage()const; // Current live owners; not peak HBM/runtime internals.
   void close();
  private:
   struct Impl;std::unique_ptr<Impl> impl_;
