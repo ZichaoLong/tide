@@ -12,6 +12,8 @@ BlockKVMessageGradient append_block_kv_messages_vjp(DeviceProgram& p,const Block
   auto borrowed=block_message_detail::saved(t);borrowed.push_back(error);
   for(const auto* r:{&roots.controls,&roots.full,&roots.message_strength,&roots.message_content,&roots.projection}){
     borrowed.push_back(r->value);borrowed.push_back(r->connected);}
+  for(const auto* r:{&roots.read.memory,&roots.read.total}){borrowed.push_back(r->value);borrowed.push_back(r->connected);}
+  for(const auto& [name,r]:roots.read.describe){borrowed.push_back(r.value);borrowed.push_back(r.connected);}
   const WeightedStorageIncrement storage(p,std::move(borrowed));
   auto remaining=[&](){const auto bytes=storage.bytes();admit(bytes,budget);return budget-bytes;};
   std::vector<WeightedRowRoot> bound;
@@ -33,7 +35,7 @@ BlockKVMessageGradient append_block_kv_messages_vjp(DeviceProgram& p,const Block
   }
   auto binding=t.columns->reverse(p,bound,error,remaining());
   const auto c=binding.rows.at(t.strength_index),g=binding.rows.at(t.content_index);
-  auto read=append_block_read_selection_vjp(p,t.selection,c.value.reshape({frames,nodes}),c.connected.reshape({frames,nodes}),error,remaining());
+  auto read=append_block_read_selection_vjp(p,t.selection,c.value.reshape({frames,nodes}),c.connected.reshape({frames,nodes}),error,remaining(),roots.read);
   auto full=append_weighted_kv_full_vjp(p,t.full,g.value,g.connected,error,remaining());
   WeightedRowAdjoint content{at::zeros_like(read.content).reshape({rows,d}),at::zeros_like(read.content_connected).reshape({rows})};
   p.zero(content.value);p.zero(content.connected);const auto owners=t.selection.owners;

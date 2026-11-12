@@ -2,6 +2,7 @@
 #include "weighted_saved_tensors.h"
 #include "device_launch_tide_block_selection_roots.h"
 #include "device_launch_tide_block_selection_flags.h"
+#include "device_launch_tide_weighted_row_accumulate.h"
 
 namespace tide::device_online {
 using namespace block_selection_detail;
@@ -19,7 +20,7 @@ std::vector<at::Tensor> region_saved(const WeightedRegionTape& t){
 }
 }
 BlockReadSelectionGradient append_block_read_selection_vjp(DeviceProgram& p,const BlockReadSelectionTape& t,
-    const at::Tensor& gradient,const at::Tensor& roots,const at::Tensor& error,int64_t budget){
+    const at::Tensor& gradient,const at::Tensor& roots,const at::Tensor& error,int64_t budget,const BlockReadObservations& observations){
   if(!t.describe.graph||t.frames<1||t.nodes<1||t.regions<1||t.members<1)
     throw std::invalid_argument("missing block read-selection tape");
   const auto rows=t.frames*t.nodes,rr=t.frames*t.regions,members=t.members;
@@ -30,6 +31,8 @@ BlockReadSelectionGradient append_block_read_selection_vjp(DeviceProgram& p,cons
   for(const auto& x:{t.owners,t.present,t.node_times,t.order,t.inverse,t.ids,t.times,t.lengths,t.node_region_row,
     t.controls,t.active,gradient,roots,error,t.region.fields.received,t.region.fields.caps,t.region.fields.score,
     t.region.fields.evidence,t.region.fields.current,t.region.fields.key})borrowed.push_back(x);
+  for(const auto* x:{&observations.memory,&observations.total}){borrowed.push_back(x->value);borrowed.push_back(x->connected);}
+  for(const auto& [name,x]:observations.describe){borrowed.push_back(x.value);borrowed.push_back(x.connected);}
   const WeightedStorageIncrement storage(p,std::move(borrowed));
   auto remaining=[&](){admit(storage.bytes(),budget);return budget-storage.bytes();};
   admit(4.L*rr*members+rr+rows*6,budget);
@@ -50,11 +53,38 @@ BlockReadSelectionGradient append_block_read_selection_vjp(DeviceProgram& p,cons
     auto bar=gather(p,fields[j].reshape({rr*members,-1}),t.inverse);
     describe_roots[names[j]]={bar,columns(p,node_flags,j,1).reshape({rows})};
   }
+  auto merge=[&](WeightedRowAdjoint left,const WeightedRowAdjoint& right,int64_t width){
+    if(right.value.defined()!=right.connected.defined())throw std::invalid_argument("observation requires value and independent flags");
+    if(!right.value.defined())return left;
+    check(right.value,error,at::kFloat,{rows,width});check(right.connected,error,at::kBool,{rows});
+    auto flags=at::zeros_like(right.connected);p.logical_and(right.connected,t.present,flags);
+    const auto owners=t.owners;
+    p.kernel([=](void* stream){check_device_launch(TIDE_LAUNCH_KERNEL(tide_weighted_row_accumulate)(1,stream,
+      ptr(owners),ptr(right.value),ptr(flags),ptr(left.value),ptr(left.connected),ptr(error),rows,width),
+      "independent Read observation root");},{owners,right.value,flags,left.value,left.connected,error});
+    return left;
+  };
+  for(const auto& [name,root]:observations.describe){
+    if(!t.describe.fields.count(name))throw std::invalid_argument("inapplicable Describe observation: "+name);
+    const auto width=t.describe.fields.at(name).size(1);
+    if(!describe_roots.count(name)){describe_roots[name]={at::zeros({rows,width},gradient.options()),at::zeros({rows},roots.options())};
+      p.zero(describe_roots[name].value);p.zero(describe_roots[name].connected);}
+    describe_roots[name]=merge(describe_roots.at(name),root,width);
+  }
   auto described=append_weighted_describe_vjp(p,t.describe,describe_roots,error,remaining());
   const auto ds=t.query.memory.size(2);auto memory=at::zeros({rows,2*ds},gradient.options()),total=at::zeros({rows,2},gradient.options());
   auto query_roots=at::zeros({rows,4},roots.options());
   for(int64_t channel=0;channel<2;++channel){
-    const auto mem=described.inputs.at(channel?"long_memory":"short_memory"),mass=described.inputs.at(channel?"long_total":"short_total");
+    auto mem=described.inputs.at(channel?"long_memory":"short_memory"),mass=described.inputs.at(channel?"long_total":"short_total");
+    auto channel_root=[&](const WeightedRowAdjoint& root,int64_t width,bool vector){
+      if(root.value.defined()!=root.connected.defined())throw std::invalid_argument("Mem root requires value and channel flags");
+      if(!root.value.defined())return WeightedRowAdjoint{};
+      if(vector)check(root.value,error,at::kFloat,{rows,2,width});else check(root.value,error,at::kFloat,{rows,2});
+      check(root.connected,error,at::kBool,{rows,2});
+      return WeightedRowAdjoint{columns(p,root.value.reshape({rows,2*width}),channel*width,width),columns(p,root.connected,channel,1).reshape({rows})};
+    };
+    mem=merge(mem,channel_root(observations.memory,ds,true),ds);
+    mass=merge(mass,channel_root(observations.total,1,false),1);
     put(p,memory,channel*ds,mem.value);put(p,total,channel,mass.value);
     put(p,query_roots,channel,mem.connected.reshape({rows,1}));put(p,query_roots,2+channel,mass.connected.reshape({rows,1}));
   }

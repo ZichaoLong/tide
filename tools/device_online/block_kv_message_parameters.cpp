@@ -1,8 +1,7 @@
 #include "block_kv_messages.h"
 
 namespace tide::device_online {
-ParameterVjp append_block_kv_message_parameter_vjp(DeviceProgram& p,const BlockKVMessageGradient& g,
-    const ParameterRegistry& registry,const BlockKVParameterRoles& names,const at::Tensor& error,int64_t budget){
+std::map<std::string,WeightedRowAdjoint> block_kv_message_parameter_roots(const BlockKVMessageGradient& g){
   std::map<std::string,WeightedRowAdjoint> roles{
     {"read.query",{g.read.query.query,g.read.query_connected}},{"read.key",{g.read.query.key,g.read.key_connected}},
     {"read.value",{g.read.query.value,g.read.value_connected}},
@@ -18,6 +17,11 @@ ParameterVjp append_block_kv_message_parameter_vjp(DeviceProgram& p,const BlockK
     roles[prefix+"projection"]={h->parameters.projection,h->owner_connected};
     roles[prefix+"bias"]={h->parameters.bias,h->owner_connected};};
   head("region.context.",g.read.region_context);head("region.query.",g.read.region_query);
+  return roles;
+}
+ParameterVjp append_block_kv_message_parameter_vjp(DeviceProgram& p,const BlockKVMessageGradient& g,
+    const ParameterRegistry& registry,const BlockKVParameterRoles& names,const at::Tensor& error,int64_t budget){
+  const auto roles=block_kv_message_parameter_roots(g);
   std::vector<WeightedParameterPartial> partials;
   for(const auto& [role,mapping]:names){
     const auto found=roles.find(role);if(found==roles.end())throw std::invalid_argument("inapplicable KV message parameter role: "+role);

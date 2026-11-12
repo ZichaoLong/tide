@@ -31,6 +31,7 @@ struct BlockKVMessageTape {
 // [R,N,d]. Undefined value AND mask means no root. An unused bar may be NaN.
 struct BlockKVMessageRoots {
   WeightedRowAdjoint controls,full,message_strength,message_content,projection;
+  BlockReadObservations read;
 };
 struct BlockKVMessageGradient {
   BlockReadSelectionGradient read;
@@ -50,6 +51,7 @@ BlockKVMessageGradient append_block_kv_messages_vjp(DeviceProgram&,const BlockKV
 // selected role needs one name per bank. Repeated names/aliases accumulate.
 // Identity comes from the registry, never equality of independently packed data.
 using BlockKVParameterRoles=std::map<std::string,std::vector<std::string>>;
+std::map<std::string,WeightedRowAdjoint> block_kv_message_parameter_roots(const BlockKVMessageGradient&);
 ParameterVjp append_block_kv_message_parameter_vjp(DeviceProgram&,const BlockKVMessageGradient&,
   const ParameterRegistry&,const BlockKVParameterRoles&,const at::Tensor& error,int64_t tensor_budget);
 }

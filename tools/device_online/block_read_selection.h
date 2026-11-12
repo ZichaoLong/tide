@@ -36,11 +36,19 @@ struct BlockReadSelectionGradient {
   std::map<std::string,WeightedRowAdjoint> describe;
   std::optional<WeightedHeadGradient> region_context,region_query;
 };
+// Independent observations, distinct from controls. Memory/total bars flatten
+// B,L,N and use a separate bool per short/long channel; descriptions use one
+// bool per row. An absent row is not a mathematical observation.
+struct BlockReadObservations {
+  WeightedRowAdjoint memory,total; // [R*N,2,ds]/[R*N,2], flags [R*N,2].
+  std::map<std::string,WeightedRowAdjoint> describe;
+};
 BlockReadSelectionTape append_block_read_selection(DeviceProgram&,const SettleBlockPlan&,
   const weighted::KVConfig&,const weighted::RegionalConfig&,const BlockReadSelectionInput&,
   const BlockReadSelectionParameters&,const at::Tensor& error,int64_t tensor_budget);
 BlockReadSelectionGradient append_block_read_selection_vjp(DeviceProgram&,const BlockReadSelectionTape&,
-  const at::Tensor& controls_bar,const at::Tensor& roots,const at::Tensor& error,int64_t tensor_budget);
+  const at::Tensor& controls_bar,const at::Tensor& roots,const at::Tensor& error,int64_t tensor_budget,
+  const BlockReadObservations& = {});
 SettleBlockPlan lower_settle_blocks(const SettleGraph&,int64_t first_position,
   int64_t batch_capacity,int64_t tensor_bytes);
 void append_block_node_gate(DeviceProgram&,const BlockDispatcher&,const at::Tensor& node_active);
