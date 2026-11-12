@@ -85,6 +85,11 @@ Describe能力与记忆query策略独立报告，非strict数值策略仍按其�
 `settle_columns`；`window_execution` 负责公共身份/能力分派，`window_records` 只负责
 显式后备的记录装配。KV 与循环各有 typed 私有状态，消息/区域列连接两者。
 C++ `weighted_sequence_columns.h` 公开 KV/recurrent typed状态与独立整链；
+`weighted_column_checkpoint.h/.cpp`公开 `WindowExecutor`，在完整位置cut上验证/import/export
+真实raw continuation、history与逐物理端口ledger。`tidegraph-column-checkpoint-check`连接
+独立Streaming、三步SGD与exec新进程精确恢复；`tools/weighted_benchmark/eager_columns`
+把它接入standalone默认入口，整列task loss及反向后CPU解码与完整记录诊断分开。
+修改同时维护CLI/规划执行身份、`weighted-run-check`和`test_experiment_columns`的旧锁保持检查。
 `weighted_column_modules` 负责私有状态分派，`weighted_column_recurrent_state/math/query`
 分别负责raw编解码/scan、系数与原始时间卷积、Read/Full。`weighted_column_state/query` 与
 `weighted_settle_columns` 分别拥有局部数学和调度。相对位置的 logits/共享 value-bank
@@ -98,6 +103,14 @@ transpose 在 `column_attention` / `weighted_column_attention`；位置元数据
 `row_linear.linear_blocks` / `weighted_row_linear`提供整块矩阵与一阶转置，
 相同参数身份用共享GEMM，独立矩阵用BMM；`test_linear_blocks`、`test_kv_column_groups`
 及SDK `weighted_sequence_columns`核对独立根、共享贡献、版本、零写与raw状态。
+`column_modules.read_many/full_many`与C++同名分派把默认调度的KV查询接入
+`kv_column_groups` / `weighted_column_read_groups/weighted_column_full_groups`；
+完整配置、实际query/bank形状和额外workspace决定分组，不按拓扑名称选择。
+`column_query_ops` / `weighted_column_query_ops`负责node×B收缩与独立多输出一阶边界，
+`dense_describe_groups` / `weighted_describe_groups`负责各Describe头的分阶段投影。
+原始相对位置仍由单节点query工具按int64 age求值；更换位置算法须重新检查超大时钟。
+修改同步`test_column_query_groups/dispatch`、SDK `check_query_groups`、默认调度和放置测试，
+尤其区分普通独立列根与旧事件Content适配器的connected-zero。
 `weighted/regional_packing`与C++ `weighted_regional_packing`拥有候选数量分组的int64关联布局，
 `regional_groups` / `weighted_regional_groups`组合完整区域数学、原始版本守卫及块反向。
 改变这些边界须同步`test_regional_packing`、`test_regional_groups`、一般Settle独立调度与恢复。

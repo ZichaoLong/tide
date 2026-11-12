@@ -116,7 +116,7 @@ class ExecutionSpec:
     def record(self):
         requested = asdict(self)
         columns_policy = (self.input_interface == "auto" and self.return_mode != "complete"
-            and self.client != "libtorch" and self.placement != "resident" and self.schedule == "prefill"
+            and self.placement != "resident" and self.schedule == "prefill"
             and self.prefill_schedule != "greedy" and self.query_execution in {"auto", "dense-v1"}
             and self.packing != "scalar" and self.workers == 1)
         if not columns_policy:

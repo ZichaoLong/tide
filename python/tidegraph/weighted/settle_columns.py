@@ -180,15 +180,17 @@ class SettleColumnPlan:
                 module = self.modules[v]
                 preparations[v] = (module, model.nodes[v].kernel, times, mass, u, states[v])
                 rows_by_node[v] = rows
-            from .column_modules import prepare_many
+            from .column_modules import prepare_many, full_many
+            from . import column_placement
             prepared = prepare_many(preparations, max_workspace_bytes=self.max_workspace_bytes)
+            read_requests = {}
             for v, window in prepared.items():
                 module = self.modules[v]
                 mode = self.binding.regions[r].read_mode
-                from . import column_placement
-                descriptors[v] = column_placement.read(module, model.nodes[v], window, initial[v], mode,
-                    self.node_locations[v]["read"], self.read_dtypes[v])
+                read_requests[v] = (module, model.nodes[v], window, initial[v], mode,
+                                   self.node_locations[v]["read"], self.read_dtypes[v])
                 windows[v], states[v] = window, window.terminal
+            descriptors = column_placement.read_many(read_requests, max_workspace_bytes=self.max_workspace_bytes)
             placement = self.region_locations[r]
             regional_fields = {v: column_transport.fields(d, placement["control"]) for v, d in descriptors.items()}
             from .regional_packing import RegionalPacking
@@ -198,8 +200,10 @@ class SettleColumnPlan:
                                     control=placement["control"], selection=placement["selection"])
             controls = {v: column_placement.controls(value, model.nodes[v].bias) for v, value in grouped.items()}
             calls += len(packing.groups)
+            fulls = full_many({v: (self.modules[v], model.nodes[v], window, controls[v])
+                              for v, window in windows.items()}, max_workspace_bytes=self.max_workspace_bytes)
             for v, window in windows.items():
-                full = self.modules[v].full(model.nodes[v], window, controls[v])
+                full = fulls[v]
                 rows = rows_by_node[v]
                 messages[v] = MessageColumns(rows[full.rows], full.strength, full.content)
                 records[v] = NodeColumns(rows, window, descriptors[v], controls[v])

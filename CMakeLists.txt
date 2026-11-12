@@ -59,6 +59,7 @@ add_library(tidegraph STATIC
   cpp/src/weighted_query_recurrent.cpp
   cpp/src/weighted_describe_batch.cpp
   cpp/src/weighted_describe_heads.cpp
+  cpp/src/weighted_describe_groups.cpp
   cpp/src/weighted_full_batch.cpp
   cpp/src/weighted_query_vjp.cpp
   cpp/src/weighted_kv_block_state.cpp cpp/src/weighted_kv_block_plan.cpp
@@ -68,6 +69,8 @@ add_library(tidegraph STATIC
   cpp/src/weighted_allocation_columns.cpp cpp/src/weighted_region_columns.cpp
   cpp/src/weighted_regional_packing.cpp cpp/src/weighted_regional_groups.cpp
   cpp/src/weighted_column_state.cpp cpp/src/weighted_column_query.cpp cpp/src/weighted_column_attention.cpp cpp/src/weighted_settle_columns.cpp
+  cpp/src/weighted_column_query_ops.cpp cpp/src/weighted_column_checkpoint.cpp
+  cpp/src/weighted_column_read_groups.cpp cpp/src/weighted_column_full_groups.cpp
   cpp/src/weighted_column_modules.cpp cpp/src/weighted_column_recurrent_state.cpp
   cpp/src/weighted_column_recurrent_math.cpp cpp/src/weighted_column_recurrent_query.cpp
   cpp/src/weighted_column_gather.cpp
@@ -174,6 +177,9 @@ target_link_libraries(tidegraph-weighted-training-check PRIVATE tidegraph_runtim
 add_executable(tidegraph-column-check cpp/test/weighted_sequence_columns.cpp cpp/test/weighted_graph_fixture.cpp)
 target_link_libraries(tidegraph-column-check PRIVATE tidegraph_runtime)
 add_test(NAME weighted-columns COMMAND tidegraph-column-check)
+add_executable(tidegraph-column-checkpoint-check cpp/test/weighted_column_checkpoint.cpp cpp/test/weighted_graph_fixture.cpp)
+target_link_libraries(tidegraph-column-checkpoint-check PRIVATE tidegraph_runtime)
+add_test(NAME weighted-column-checkpoint COMMAND tidegraph-column-checkpoint-check)
 add_executable(tidegraph-streaming-bench cpp/bench/main.cpp cpp/bench/config.cpp
   cpp/bench/workload.cpp cpp/bench/compare.cpp)
 target_link_libraries(tidegraph-streaming-bench PRIVATE tidegraph_runtime)

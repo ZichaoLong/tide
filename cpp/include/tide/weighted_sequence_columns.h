@@ -82,6 +82,24 @@ std::vector<KVWindow> prepare_many(const std::vector<KVPrepareRequest>&,Index ma
 TensorFields read(const NodeWeights&,const KVConfig&,const RegionalConfig&,const KVWindow&,
                   const std::string& mode,const KVState& initial);
 Message full(const NodeWeights&,const KVConfig&,const KVWindow&,const Tensor& controls);
+struct KVReadRequest {
+  const NodeWeights* weights;
+  KVConfig config;
+  RegionalConfig regional;
+  KVWindow window;
+  std::string mode;
+  KVState initial;
+};
+struct KVFullRequest {
+  const NodeWeights* weights;
+  KVConfig config;
+  KVWindow window;
+  Tensor controls;
+};
+// Compatible actual query/bank shapes share block operators, with independent
+// node outputs/roots and a byte bound on additional packing and adjoints.
+std::vector<TensorFields> read_many(const std::vector<KVReadRequest>&,Index max_workspace_bytes);
+std::vector<Message> full_many(const std::vector<KVFullRequest>&,Index max_workspace_bytes);
 RecurrentWindow prepare(const NodeWeights&,const RecurrentConfig&,const Layout&,const Tensor& mass,
                         const Tensor& content,const RecurrentState&);
 TensorFields read(const NodeWeights&,const RecurrentConfig&,const RegionalConfig&,const RecurrentWindow&,

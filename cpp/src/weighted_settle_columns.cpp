@@ -111,14 +111,17 @@ Result settle(const SettleGraph& spec,const Model& model,const Layout& layout,co
       nodes.push_back(v);received_by_node.emplace(v,std::move(received));
     }
     auto prepared=prepare_columns_many(preparations,max_workspace_bytes);
+    std::vector<PlacedReadRequest> reads;
     for(size_t index=0;index<nodes.size();++index){
       const auto v=nodes[index];const auto& w=model.nodes[v];const auto& b=binding[v];const auto& received=received_by_node.at(v);
       auto window=std::move(prepared[index]);
-      auto fields=read_placed(w,b,window,g.regions[region].read_mode,initial[v],node_locations[v]);
       result.states[v]=terminal_columns(window);
-      result.nodes[v]={received.rows,std::move(window),std::move(fields),at::zeros_like(received.mass)};
+      result.nodes[v]={received.rows,std::move(window),{},at::zeros_like(received.mass)};
+      reads.push_back({{&w,b,result.nodes[v].window,g.regions[region].read_mode,initial[v]},node_locations[v]});
       rows_by_node[v]=received.rows;
     }
+    auto descriptors=read_placed_many(reads,max_workspace_bytes);
+    for(size_t i=0;i<nodes.size();++i)result.nodes[nodes[i]].descriptors=std::move(descriptors[i]);
     std::map<Index,TensorFields> regional_fields;
     for(auto v:nodes){auto fields=result.nodes.at(v).descriptors;std::vector<Tensor*> handles;
       for(auto& [name,t]:fields)handles.push_back(&t);
@@ -127,8 +130,11 @@ Result settle(const SettleGraph& spec,const Model& model,const Layout& layout,co
     auto controls=region_groups(model.regions[region],region_binding(model.regions[region]),packing,regional_fields,placement);
     for(const auto& [v,value]:controls)result.nodes[v].controls=control_payload(value,model.nodes[v].bias);
     result.stats["region_column_calls"]+=packing.groups.size();
-    for(auto v:nodes){const auto& node=result.nodes.at(v);
-      auto value=full_columns(model.nodes[v],binding[v].memory,node.window,node.controls);
+    std::vector<LocalFullRequest> fulls;for(auto v:nodes){const auto& node=result.nodes.at(v);
+      fulls.push_back({&model.nodes[v],binding[v].memory,node.window,node.controls});}
+    auto values=full_columns_many(fulls,max_workspace_bytes);
+    for(size_t i=0;i<nodes.size();++i){auto v=nodes[i];const auto& node=result.nodes.at(v);
+      auto value=std::move(values[i]);
       for(auto& row:value.rows)row=node.rows[row];outgoing[v]=value;
       result.stats["candidate_events"]+=node.rows.size();result.stats["selected_events"]+=value.rows.size();
       ++result.stats["state_column_calls"];

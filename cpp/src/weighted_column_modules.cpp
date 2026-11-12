@@ -41,6 +41,24 @@ Message full_columns(const NodeWeights& w,const MemoryConfiguration& config,cons
   return std::visit([&](const auto& c){using C=std::decay_t<decltype(c)>;
     return full(w,c,std::get<WindowFor<C>>(window),controls);},config);
 }
+std::vector<TensorFields> read_columns_many(const std::vector<LocalReadRequest>& requests,Index budget){
+  std::vector<TensorFields> out(requests.size());std::vector<KVReadRequest> kv;std::vector<size_t> owners;
+  for(size_t i=0;i<requests.size();++i){const auto& r=requests[i];detail::require(r.weights,"column Read requires parameter owner");
+    if(std::holds_alternative<KVConfig>(r.binding.memory)){
+      kv.push_back({r.weights,std::get<KVConfig>(r.binding.memory),r.binding.regional,std::get<KVWindow>(r.window),r.mode,std::get<KVState>(r.initial)});owners.push_back(i);
+    }else out[i]=read_columns(*r.weights,r.binding,r.window,r.mode,r.initial);}
+  if(!kv.empty()){auto values=read_many(kv,budget);for(size_t k=0;k<owners.size();++k)out[owners[k]]=std::move(values[k]);}
+  return out;
+}
+std::vector<Message> full_columns_many(const std::vector<LocalFullRequest>& requests,Index budget){
+  std::vector<Message> out(requests.size());std::vector<KVFullRequest> kv;std::vector<size_t> owners;
+  for(size_t i=0;i<requests.size();++i){const auto& r=requests[i];detail::require(r.weights,"column Full requires parameter owner");
+    if(std::holds_alternative<KVConfig>(r.config)){
+      kv.push_back({r.weights,std::get<KVConfig>(r.config),std::get<KVWindow>(r.window),r.controls});owners.push_back(i);
+    }else out[i]=full_columns(*r.weights,r.config,r.window,r.controls);}
+  if(!kv.empty()){auto values=full_many(kv,budget);for(size_t k=0;k<owners.size();++k)out[owners[k]]=std::move(values[k]);}
+  return out;
+}
 LocalState terminal_columns(const LocalWindow& window){return std::visit([](const auto& w)->LocalState{return w.terminal;},window);}
 long double workspace_bytes(const MemoryConfiguration& config,const Layout& domain,const LocalState& state,Index element_size){
   return std::visit([&](const auto& c)->long double{using C=std::decay_t<decltype(c)>;

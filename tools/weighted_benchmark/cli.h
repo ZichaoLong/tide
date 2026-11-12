@@ -6,7 +6,8 @@ struct Request {
   std::filesystem::path input,output,limits,resume;
   std::string device,implementation="native",mode="training",schedule="prefill",precision="float32",
     placement="native",scoring,packing="auto",return_packing="scalar",validation="strict",
-    return_mode="complete",communication="ordinary",query_execution="auto",prefill_schedule="auto",trace_records="auto";
+    return_mode="complete",communication="ordinary",query_execution="auto",prefill_schedule="auto",trace_records="auto",
+    input_interface="auto";
   Index steps=3,warmup=1,threads=1,interop=1,workers=1;
   int64_t checkpoint_bytes=kDefaultCheckpointMaxBytes;
   bool checkpoint=false,observe_work=false,check_roots=false,help=false;

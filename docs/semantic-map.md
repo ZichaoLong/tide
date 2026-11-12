@@ -356,6 +356,17 @@ KV §4的共享Full矩阵收缩进一步由`bank_attention`/`query::bank_attenti
 KV §2 的 Rot(p)ᵀRot(q)=Rot(q−p) 对应 `column_attention` 和 `test_column_positions`，
 以 int64 求差保留超大时钟的小距离；Read/Full 频率及 raw 恢复分别验收。
 旧任意 cut、完整独立事件根仍按记录接口单列验证。图 v13/checkpoint v5 不变。
+KV §3–4的相容节点Read/Full组对应`kv_column_groups`与C++ `columns::read_many/full_many`；
+区域Describe §3的完整有限字段对应`dense_describe_groups` / `query::describe_nodes`。
+定义域、快照、私有bank、普通列根和预算见[张量窗口状态契约](weighted-tensor-windows.md#状态梯度根和寿命)。
+`test_column_query_groups`用独立收缩公式/标量记忆日程验证值及VJP，
+`test_column_query_dispatch`用独立字段公式与真实Python/native默认调用验证分派；
+SDK `check_query_groups`另检组/单列根与原始int64位置，不能代替完整独立Streaming验证。
+C++ `weighted_column_checkpoint::validate_owner/import_state/export_state`（namespace `weighted::columns`）
+对应Settle完整位置边界、加权raw状态及真实端口计数；`WindowExecutor::run_ports`仅组合独立列调度与实际解码。
+`cpp/test/weighted_column_checkpoint.cpp`以独立Streaming检查稀疏/零端口、同秩、超大int64、
+完整raw/history/ledger、参数/输入梯度、三步SGD及新进程精确恢复。SDK组件、默认standalone入口、
+各设备实际运行分别记录，不由公共头文件或构建通过推断设备资格。
 实验内置任务经 `experiment/column_task.py`直接消费实际消息列；逐端口 `(cG)^2`属于
 任务投影，不是教材新定义。`test_experiment_columns`核对原输入逐位同一、重复物理端口
 贡献、独立标量训练及实际默认选择；`test_selected_boundary_execution`覆盖五族训练/恢复。

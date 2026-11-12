@@ -1,21 +1,19 @@
 // KV §3–4, architecture §3: complete B/L query tensors and selected Full.
-#include "weighted_column_layout.h"
+#include "weighted_column_queries.h"
 #include "weighted_describe_heads.h"
 #include "weighted_kv_block.h"
 #include <numeric>
 namespace tide::weighted::columns {
 using detail::require;using detail::weight;
-namespace {
-struct Queries {Tensor u,mass,weights,age,reverse;TensorFields raw;};
-Tensor rotate_columns(const Tensor& keys,const Tensor& displacement,const std::vector<double>& frequencies){
+Tensor rotate_queries(const Tensor& keys,const Tensor& displacement,const std::vector<double>& frequencies){
   if(frequencies.empty())return keys;
   return detail::rotate(keys.reshape({-1,keys.size(-1)}),displacement.flatten(),frequencies).reshape(keys.sizes());
 }
-Queries queries(const KVWindow& window,const Layout& layout,const TensorFields& bank,
-                const std::vector<Index>& rows,bool before,Index horizon,bool summary=false){
+QueryInputs query_inputs(const KVWindow& window,const Layout& layout,const TensorFields& bank,
+                const std::vector<Index>& rows,bool before,Index horizon,bool summary){
   auto selected=window.layout.select(rows);auto device=window.content.device();
   auto [qi,reverse]=padded(selected,device);auto [ki,unused]=padded(layout,device);
-  auto ids=indices(rows,device);Queries q;
+  auto ids=indices(rows,device);QueryInputs q;
   q.u=gather(window.content.index_select(0,ids),qi);q.mass=gather(window.mass.index_select(0,ids),qi);q.reverse=reverse;
   auto times=gather(indices(selected.times,device),qi),stamps=gather(indices(layout.times,device),ki);
   q.age=times.unsqueeze(2)-stamps.unsqueeze(1);
@@ -27,14 +25,13 @@ Queries queries(const KVWindow& window,const Layout& layout,const TensorFields& 
   else for(const auto& name:{"keys","values"})q.raw[name]=gather(bank.at(name),ki);
   return q;
 }
-}
 TensorFields read(const NodeWeights& w,const KVConfig& c,const RegionalConfig& r,const KVWindow& window,
                   const std::string& mode,const KVState& initial){
   require(supported(c),"unsupported KV column memory");
   require(mode=="content"||mode=="old"||mode=="proposal","invalid KV column Read snapshot");
   require(!window.layout.times.empty(),"Read columns require actual rows");
   std::vector<Index> rows(window.layout.times.size());std::iota(rows.begin(),rows.end(),0);
-  auto q=queries(window,mode=="content"?initial.layout:window.bank_layout,
+  auto q=query_inputs(window,mode=="content"?initial.layout:window.bank_layout,
                  mode=="content"?initial.fields:window.bank,rows,mode=="old",c.window,c.memory_read=="sum");
   auto sw=q.weights*detail::passive_decay(q.age.clamp_min(0),c.beta_short,q.u);
   auto st=sw.sum(-1),lt=q.weights.sum(-1);Tensor shortv,longv;
@@ -47,7 +44,7 @@ TensorFields read(const NodeWeights& w,const KVConfig& c,const RegionalConfig& r
     auto v=project(q.raw.at("values"),weight(w,"kernel.read_v")).unsqueeze(1);
     if(!c.read_frequencies.empty()){
       auto displacement=-detail::time_values(q.age,q.u)/c.position_scale;
-      auto keys=rotate_columns(k.select(1,0).unsqueeze(1).expand({-1,q.u.size(1),-1,-1}),displacement,c.read_frequencies);
+      auto keys=rotate_queries(k.select(1,0).unsqueeze(1).expand({-1,q.u.size(1),-1,-1}),displacement,c.read_frequencies);
       auto head=query.select(1,0).unsqueeze(2);
       if(head.scalar_type()==at::kHalf){head=head.to(at::kFloat);keys=keys.to(at::kFloat);}
       auto logits=(head*keys).sum(-1).unsqueeze(1)/std::sqrt(double(c.summary_width));
@@ -74,7 +71,7 @@ Message full(const NodeWeights& w,const KVConfig& c,const KVWindow& window,const
   auto ids=(controls.detach()>0).nonzero().flatten();auto rows=host_ids(ids);
   Message out{rows,controls.index_select(0,ids),at::empty({0,c.width},window.content.options())};
   if(rows.empty())return out;
-  auto q=queries(window,window.bank_layout,window.bank,rows,false,c.window);
+  auto q=query_inputs(window,window.bank_layout,window.bank,rows,false,c.window);
   const std::string p="full_program.content.";const Index b=q.u.size(0),length=q.u.size(1),dh=c.width/c.heads;
   Tensor mixed;
   if((q.weights>0).any().item<bool>()){
@@ -87,7 +84,7 @@ Message full(const NodeWeights& w,const KVConfig& c,const KVWindow& window,const
       auto displacement=-detail::time_values(q.age,q.u)/c.position_scale;std::vector<Tensor> logits;
       const std::vector<double> empty;
       for(Index h=0;h<c.heads;++h){
-        auto key=rotate_columns(k.select(1,h).unsqueeze(1).expand({-1,length,-1,-1}),displacement,
+        auto key=rotate_queries(k.select(1,h).unsqueeze(1).expand({-1,length,-1,-1}),displacement,
                                c.full_frequencies.empty()?empty:c.full_frequencies[h]);
         auto head=query.select(1,h).unsqueeze(2);
         if(head.scalar_type()==at::kHalf){head=head.to(at::kFloat);key=key.to(at::kFloat);}

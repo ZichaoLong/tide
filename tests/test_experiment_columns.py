@@ -154,9 +154,10 @@ def test_half_default_task_independent_master_training_and_exact_next_window(fam
         if resumed is not None: resumed.close()
 
 
-def test_policy_has_new_identity_and_old_frozen_records_stay_records():
-    now = ExecutionSpec(return_mode="outputs").record()
-    old = ExecutionSpec(return_mode="outputs", input_interface="records").record()
+@pytest.mark.parametrize("client", ["pytorch", "python-native", "libtorch"])
+def test_policy_has_new_identity_and_old_frozen_records_stay_records(client):
+    now = ExecutionSpec(client=client,return_mode="outputs").record()
+    old = ExecutionSpec(client=client,return_mode="outputs", input_interface="records").record()
     assert now["schema"] == "tide-weighted-execution-v5"
     assert now["execution_id"] != old["execution_id"]
     assert "input_interface" not in old["requested"]

@@ -4,6 +4,7 @@
 #include "tide/placement.h"
 #include "root_values.h"
 #include "tide/greedy.h"
+#include "eager_columns.h"
 namespace weighted_benchmark {
 // Native eager CPU/accelerator owner. Placement precedes optimizer creation;
 // detached live state remains on its owners, returned observations are on CPU.
@@ -14,6 +15,8 @@ class Eager : public Resident {
   std::string return_mode;double loss_scale;
   std::map<std::string,Index> query_counts;
   std::unique_ptr<Greedy> prefill_engine;
+  std::unique_ptr<EagerColumns> column_engine;
+  std::string column_fallback;
   std::vector<External> placed_inputs(std::vector<External>,std::map<std::string,Tensor>* leaves=nullptr)const;
   Result forward(const Continuation&,const std::vector<External>&,Index stop)const;
  public:
@@ -25,6 +28,7 @@ class Eager : public Resident {
   RootDiagnostic diagnostic(bool split)const;
   std::map<std::string,Tensor> parameters()const;
   TrainingState training_state()const;
+  Json execution()const;
   Continuation checkpoint()const;
   Index cut()const override{return state.cut;}
   void save(const std::filesystem::path&,int64_t max_file_bytes)const;

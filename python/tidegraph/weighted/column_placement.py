@@ -15,9 +15,9 @@ def read_parameter(name, config):
             and (name in {"kernel.projection", "kernel.delta_bias"} or name.startswith("kernel.conv.")))
 
 
-def read(module, node, window, initial, mode, device, dtype):
+def _read_view(node, window, initial, mode, device, dtype):
     if (window.content.device, window.content.dtype) == (device, dtype):
-        return module.read(node, window, read_mode=mode, initial=initial)
+        return node, window, initial
     c = node.kernel.config
     parameters = [p for n, p in node.named_parameters(remove_duplicate=False) if read_parameter(n, c)]
     parameters += [p for n, p in node.named_buffers(remove_duplicate=False) if read_parameter(n, c)]
@@ -53,7 +53,21 @@ def read(module, node, window, initial, mode, device, dtype):
             initial = replace(initial, **{n: mapped(t) for n, t in fields.items()}, cache_values=cache)
         else:
             query = replace(query, bank={n: mapped(t) for n, t in fields.items()}, cache_values=cache)
-    return module.read(view, query, read_mode=mode, initial=initial)
+    return view, query, initial
+
+
+def read(module, node, window, initial, mode, device, dtype):
+    node, window, initial = _read_view(node, window, initial, mode, device, dtype)
+    return module.read(node, window, read_mode=mode, initial=initial)
+
+
+def read_many(requests, *, max_workspace_bytes):
+    from .column_modules import read_many as evaluate
+    prepared = {}
+    for key, (module, node, window, initial, mode, device, dtype) in requests.items():
+        node, window, initial = _read_view(node, window, initial, mode, device, dtype)
+        prepared[key] = module, node, window, mode, initial
+    return evaluate(prepared, max_workspace_bytes=max_workspace_bytes)
 
 
 def region(program, fields, nodes, control, selection):

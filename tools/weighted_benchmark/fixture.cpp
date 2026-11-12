@@ -5,6 +5,8 @@
 namespace weighted_benchmark {
 namespace {
 weighted::RegionalConfig regional(const Json& x){
+  if(x.value("support_policy",std::string("strict"))!="strict")
+    throw std::invalid_argument("standalone weighted fixture supports strict support_policy only; positive-floor-v1 is Python eager");
   weighted::RegionalConfig c(x.at("selection_mode").get<std::string>());
 #define FIELD(name) c.name=x.at(#name).get<decltype(c.name)>()
   FIELD(hidden_width);FIELD(gamma_max);FIELD(local_score);FIELD(region_score);

@@ -44,6 +44,7 @@ int main(int argc,char** argv) {
     data["__query_execution"]=r.query_execution;
     data["__prefill_schedule"]=r.prefill_schedule;
     data["__trace_records"]=r.trace_records;
+    data["__input_interface"]=r.input_interface;
     if(r.check_roots)validate_root_budget(data);
     const auto fixture_seconds=tide_bench::seconds(fixture_start);
     const auto identity=r.checkpoint_identity(data);
@@ -84,6 +85,7 @@ int main(int argc,char** argv) {
       {"communication_counter_scope","instrumented explicit tensor copies; tensor endpoint bytes, not PCIe traffic or proof of P2P; resident internal decode/protocol traffic is separate"},
       {"return_packing",r.return_packing},{"return_mode",r.return_mode},{"trace_records",r.trace_records},
       {"task",r.task()},{"query_execution",r.query_execution},
+      {"input_interface",r.input_interface},
       {"prefill_schedule",r.prefill_schedule},{"scheduler",r.implementation=="resident"?"device":
         r.schedule=="streaming"?"streaming":r.prefill_schedule=="greedy"?"online-greedy":"component-window"},
       {"validation_mode",r.validation},{"exploratory_enabled",r.validation=="explore"},{"exploratory_accepted",false},
@@ -122,6 +124,9 @@ int main(int argc,char** argv) {
     };
     report["phase"]="construction";write(output/"result.json",report);begin=tide_bench::Clock::now();
     auto owner=make_owner();Index first=0;
+    if(const auto* eager=dynamic_cast<const Eager*>(owner.get())){
+      report["effective_execution"]=eager->execution();report["scheduler"]=report["effective_execution"].at("schedule");
+    }
     if(!r.resume.empty())first=restore_run_checkpoint(r.resume,*owner,identity,r.checkpoint_bytes);
     const auto span=data.at("span").get<Index>();
     if(windows+2>std::numeric_limits<Index>::max()/span||first>std::numeric_limits<Index>::max()/span-windows-2)

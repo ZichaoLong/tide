@@ -11,11 +11,11 @@ from tidegraph.weighted.column_layout import SequenceLayout
 from tidegraph.weighted.column_modules import module_for
 
 
-@pytest.mark.parametrize("family", ["affine", "delta", "gated_delta", "ssd"])
+@pytest.mark.parametrize("family,groups", [("affine",1), ("delta",1), ("gated_delta",1), ("ssd",1), ("ssd",2)])
 @pytest.mark.parametrize("read_mode", ["0", "-", "+"])
-def test_matrix_column_snapshots_raw_convolution_and_vjp(family, read_mode):
+def test_matrix_column_snapshots_raw_convolution_and_vjp(family, groups, read_mode):
     dtype = torch.float64
-    extra = {} if family in {"affine", "delta"} else dict(heads=2, conv_size=3, conv_stride=2)
+    extra = {} if family in {"affine", "delta"} else dict(heads=2, groups=groups, conv_size=3, conv_stride=2)
     binding = bind(Graph((Node(0),), (), (Region(1),), (0,), (0,)),
                    memories=RecurrentConfig(memory_family=family, memory_read="state", **extra),
                    regions=RegionalConfig(read_mode=read_mode), dtype=dtype)

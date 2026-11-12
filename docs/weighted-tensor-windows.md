@@ -49,6 +49,28 @@ FP16内置loss与旧记录任务一致，在相乘之前将c和G提升至FP32，
 或当前不支持的放置/模块仍使用原接口；插件即便只读outputs，也未默认声明张量输入/loss。
 显式完整诊断仍返回原事件根。成本对照必须检查实际接口，不能只根据 `prefill` 名称推断。
 
+独立 LibTorch 客户端也采用同一默认选择，`--input-interface auto|records`写入执行和
+checkpoint身份。其 `effective_execution`记录实际interface/schedule/root与后备原因；
+静态fixture的真实rank/stride决定Settle能力，不按拓扑名称分派。构造时一次装配输入列，
+窗口内按列clone/transfer，loss贯穿整列，返回CPU输出在反向后无梯度解码；metrics不生成事件输出。
+完整trace、显式记录/streaming/greedy/scalar及不符合Settle时间编码的图保留独立通用执行。
+旧锁未声明input策略时，Python启动器显式传`records`，不把旧实验升级到新算法。
+
+公共C++入口见 `tide/weighted_column_checkpoint.h`：
+
+```cpp
+namespace col = tide::weighted::columns;
+col::WindowExecutor execute(spec, model, workspace_bytes, placement);
+auto result = execute.run_ports(continuation, layout, ports, stop_position);
+// result.columns: actual typed outputs/messages/state; result.continuation: exact raw cursor.
+```
+
+该owner不依赖Python，也不调用通用执行器作递归补写；只接收完整位置cut、无pending的ports绑定。
+`GraphCheckpoint::save/load`直接保存其continuation、参数alias与optimizer，现有checkpoint版本不变。
+任意cut或完整事件根仍选原公共记录执行器；窗口不能借由有效状态投影替代raw解码。
+`tidegraph-column-checkpoint-check`对照独立Streaming的稀疏端口、零质量、同秩HB、
+超大int64时间及六种记忆组合的三步SGD，并exec新进程验证raw状态、参数、optimizer和下一步精确恢复。
+
 ## 能力分派与实际身份
 
 `weighted.execution.eager_runner` 返回 `EagerExecutor`。窗口方法按图/局部/放置能力
@@ -126,6 +148,18 @@ KV `prepare_kv_columns_many` / C++ `columns::prepare_many` 可按相容节点的
 int64时钟、零写入保留、bank及terminal装配分别处理，Read/Full的快照不改变。
 `column_modules.prepare_many`负责有限模块分派；其他记忆继续使用各自的准备算法。
 
+KV `read_kv_columns_many/full_kv_columns_many` / C++ `columns::read_many/full_many`
+继续按完整局部配置、实际device/dtype、B及填充后的query/bank长度分组；Read另按区域描述配置
+和Read0/-/+分组。默认列调度在准备后调用Read组、在完整区域分配后调用Full组，
+先解析实际放置再分组；循环模块仍使用各自的整列实现。Full仅收集正控制行，
+消息保留独立的`(c,G)`，不会在局部内容中提前乘c。私有bank、支持和int64时间不合并。
+组内投影使用已有`linear_blocks`：整组参数同一时使用共享GEMM，否则使用私有矩阵BMM。
+Attention/加权sum的node×B轴在无梯度packing中连接，多输出一阶边界只汇总实际被使用的
+节点伴随；未使用输出保持None，显式零伴随保持连接，真实参数alias汇总全部使用者贡献。
+全部原始输入的版本仍受检查，冻结节点输出不因其他节点求导而获得梯度身份。
+位置项沿原始int64 age计算；当前仍有每节点B×Q×K×D的相对旋转暂存，不能把节点合批
+称为已消除query倍位置展开，也不据此宣称融合或端到端提速。
+
 循环状态是 B×matrices×value_width×key_width 的 H、B×2×summary_width 的 Z、B×2 的 W，
 以及适用的卷积缓存和 int64 时间。C++ `LocalState/LocalWindow` 采用 KV/recurrent 类型分支，
 `column_modules` 负责有限分派，调度不猜状态形状；C++消费者可用 `std::visit` 访问其实际类型。
@@ -160,13 +194,25 @@ ledger；不调用参考或重算。已有 checkpoint-v5 save/load 保留参数�
 两份输出，并计归一化/相加和整数索引；half按至少FP32字节保守估算。按实际维度累加到预算
 前分组；只有一个节点时使用原无矩阵stack的路径。此预算不改变既有每节点容量拒绝，
 也不将参数共享或连续存储直接视为省去了所有临时复制。
+跨节点Read/Full的额外预算包括各参数角色的packing、保存操作数、伴随、padded query/bank、
+Attention/相对位置暂存及int64索引；同一Tensor出现在不同角色时分别计费。
+沿稳定请求顺序在预算前切组，单节点继续使用原单列路径；这不是对总模型存储的准入。
+observer的`packing/bucket/kv_{read,full}_nodes`记录实际节点组，
+`column_{matmul,attention,logits}_nodes`记录真实合批收缩；投影的shared GEMM/private BMM另列。
+`state_column_calls`仍是节点调用数量，不能直接用它推断矩阵算子提交数。
 输出、状态、bank 和控制做有界打包 finite 检查。显式非法 owner、时间、形状或端口拒绝。
 
 `test_kv_columns` 独立逐行公式检查快照、raw 过期、>2**54 时间及梯度；
 `test_kv_column_groups` 检查相容/异形/零写入分组、预算切分、共享参数、独立None/零和版本；
+`test_column_query_groups`用字面Attention/sum公式和独立标量记忆日程检查组收缩、三Read快照、
+非空初态、原始位置、Full支持及参数alias；`test_column_query_dispatch`覆盖有限Describe字段、
+真实默认Python/native分派、空bank、冻结输出和高阶拒绝。逐字段根参照直接消费独立mass/content的
+公式，避免把旧Content拼接适配器引入的零梯度连接误认为列接口必须具有的依赖。
 `test_regional_packing`用字面关联映射检查实际成员及线性转置；`test_regional_groups`用独立逐帧
 区域公式检查十种发送/评分组合、不同成员、caps与一般分支、共享参数和None/零，禁止以数值零猜依赖。
 独立SDK `weighted_sequence_columns`另检查实际C++分组、原始状态与未使用块的梯度连接。
+其中`check_query_groups`比较组查询与原单列的逐字段根、预算切分和真实alias；完整图对照仍由
+该程序的独立Streaming日程检查，组/单列对照本身不作为独立数学公式证明。
 `test_column_positions` 检查相对旋转/距离、超大时钟、literal softmax 与方向导数；
 `test_recurrent_columns` 检查四循环的快照、卷积和扫描；`test_native_recurrent_columns`
 检查native四族两种读取/三快照、非空独立状态列根、保留窗和ragged容量；`test_settle_columns` 用独立

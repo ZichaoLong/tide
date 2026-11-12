@@ -16,6 +16,21 @@ struct LocalPrepareRequest {
 std::vector<LocalWindow> prepare_columns_many(const std::vector<LocalPrepareRequest>&,Index max_workspace_bytes);
 TensorFields read_columns(const NodeWeights&,const NodeBinding&,const LocalWindow&,const std::string&,const LocalState&);
 Message full_columns(const NodeWeights&,const MemoryConfiguration&,const LocalWindow&,const Tensor&);
+struct LocalReadRequest {
+  const NodeWeights* weights;
+  NodeBinding binding;
+  LocalWindow window;
+  std::string mode;
+  LocalState initial;
+};
+struct LocalFullRequest {
+  const NodeWeights* weights;
+  MemoryConfiguration config;
+  LocalWindow window;
+  Tensor controls;
+};
+std::vector<TensorFields> read_columns_many(const std::vector<LocalReadRequest>&,Index max_workspace_bytes);
+std::vector<Message> full_columns_many(const std::vector<LocalFullRequest>&,Index max_workspace_bytes);
 LocalState terminal_columns(const LocalWindow&);
 long double workspace_bytes(const MemoryConfiguration&,const Layout&,const LocalState&,Index element_size);
 }

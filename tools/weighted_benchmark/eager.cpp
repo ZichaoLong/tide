@@ -59,7 +59,8 @@ Eager::Eager(const Json& j,bool train,bool batch,bool scalar,at::ScalarType dtyp
   group.lr=task.value("lr",.001);group.momentum=task.value("momentum",.3);group.weight_decay=task.value("weight_decay",.01);
   if(training)optimizer=std::make_unique<SGD>(registry,std::vector<OptimizerGroup>{group},OptimizerPrecision{dtype==at::kHalf&&!storage,1.});
   if(training&&storage)for(const auto& p:registry.owners())storage_masters[p.canonical]=p.value.detach().clone();
-  if(prefill)prefill_engine=std::make_unique<Greedy>(data.graph,placed,options);
+  column_engine=column_owner(j,data,prefill,scalar,options,placement,return_mode,column_fallback);
+  if(prefill&&!column_engine)prefill_engine=std::make_unique<Greedy>(data.graph,placed,options);
 }
 std::vector<External> Eager::placed_inputs(std::vector<External> xs,std::map<std::string,Tensor>* leaves)const{
   std::map<std::pair<const void*,std::string>,Tensor> copies;
@@ -74,7 +75,7 @@ std::vector<External> Eager::placed_inputs(std::vector<External> xs,std::map<std
   return xs;
 }
 Result Eager::forward(const Continuation& q,const std::vector<External>& xs,Index stop)const{
-  auto result=prefill?prefill_engine->run(q,xs,stop,stop)
+  auto result=prefill?(prefill_engine?prefill_engine->run(q,xs,stop,stop):Greedy(data.graph,placed,options).run(q,xs,stop,stop))
                      :Streaming(data.graph,placed,options).run(q,xs,stop,stop);
   for(const auto& [name,count]:query_counts)result.stats[name]=count;
   result.stats["recorded_trace"]=options.trace;
@@ -83,8 +84,11 @@ Result Eager::forward(const Continuation& q,const std::vector<External>& xs,Inde
 Step Eager::step(Index index){
   if(index<0||index!=state.cut/data.span||state.cut%data.span)throw std::invalid_argument("window index disagrees with live continuation cut");
   at::AutoGradMode grad(training);if(optimizer)optimizer->zero_grad();
-  auto r=forward(state,placed_inputs(inputs(data,index)),(index+1)*data.span);
-  auto value=!training&&return_mode=="metrics"?at::zeros({}):loss(r,!training,loss_scale);
+  std::optional<weighted::columns::WindowResult> window;Result r;
+  if(column_engine)window=column_engine->run(state,index,training);
+  else r=forward(state,placed_inputs(inputs(data,index)),(index+1)*data.span);
+  auto value=!training&&return_mode=="metrics"?at::zeros({}):
+    window?column_loss(window->columns,!training,loss_scale):loss(r,!training,loss_scale);
   if(training){optimizer->backward(value);bool connected=false;std::map<std::string,Tensor> gradients;
     for(const auto& p:registry.owners())if(p.value.grad().defined()){
       connected=true;gradients[p.canonical]=p.value.grad();}
@@ -99,11 +103,13 @@ Step Eager::step(Index index){
     }else optimizer->step();}
   const auto numeric=value.cpu().item<double>();
   if(!std::isfinite(numeric))throw tide_bench::ComparisonFailure({tide_bench::DifferenceKind::nonfinite,"loss","nonfinite objective"});
-  state=detach_live(r.continuation);
+  state=detach_live(window?window->continuation:r.continuation);
   Json observation;
-  if(return_mode!="complete")observation=work(r);
-  auto output=projected(r,return_mode,return_packed);
-  tide_bench::check_finite(return_mode=="complete"?output:r);
+  if(return_mode!="complete")observation=window?column_work(*window):work(r);
+  auto output=window?column_projected(column_engine->spec(),*window,return_mode):projected(r,return_mode,return_packed);
+  // Column kernels check all actually computed fields before publication.
+  // Selected CPU output copies get their own check; metrics has no row decode.
+  tide_bench::check_finite(window||return_mode=="complete"?output:r);
   if(training){std::map<std::string,Tensor> fields;for(const auto& p:registry.owners())fields["parameter."+p.canonical]=p.value;
     for(const auto& [name,s]:optimizer->state())fields["momentum."+name]=s.momentum_buffer;
     for(const auto& [name,x]:optimizer->masters())fields["master."+name]=x;
@@ -126,6 +132,16 @@ TrainingState Eager::training_state()const{
   return out;
 }
 Continuation Eager::checkpoint()const{return detached(state);}
+Json Eager::execution()const{
+  return {{"interface",column_engine?"tensor-window-v1":"records"},
+    {"schedule",column_engine?"settle-columns-v1":prefill?(options.component_window?"component-window":"online-greedy"):"streaming"},
+    {"roots",column_engine?"columns":"records"},{"fallback_reason",column_engine?Json(nullptr):Json(column_fallback)},
+    {"input_preparation",column_engine?"static fixture columns; per-window column clone/transfer":"per-window external records"}};
+}
 void Eager::save(const std::filesystem::path& p,int64_t limit)const{GraphCheckpoint::save(p,data.graph,data.model,state,optimizer.get(),limit);}
-void Eager::restore(const std::filesystem::path& p,int64_t limit){state=GraphCheckpoint::load(p,data.graph,data.model,optimizer.get(),limit);}
+void Eager::restore(const std::filesystem::path& p,int64_t limit){
+  auto next=GraphCheckpoint::load(p,data.graph,data.model,optimizer.get(),limit);
+  if(column_engine)weighted::columns::validate_owner(column_engine->spec(),data.model,next,data.samples);
+  state=std::move(next);
+}
 }

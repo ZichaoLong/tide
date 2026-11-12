@@ -60,6 +60,67 @@ void check_prepare_groups(at::Device device=at::kCPU,at::ScalarType dtype=at::kD
   require(silent.terminal.layout.times==next.left.layout.times&&silent.terminal.fields.at("keys").is_same(next.left.fields.at("keys")),
           "silent grouped window expired raw history");
 }
+void check_query_groups(at::Device device=at::kCPU,at::ScalarType dtype=at::kDouble){
+  at::set_num_threads(1);
+  for(bool positional:{false,true}){
+    auto g=weighted_check::graph("fc","kv");auto m=weighted_check::model(g,"kv",device,dtype);
+    for(auto& w:m.nodes){auto b=weighted::node_binding(w);auto c=std::get<weighted::KVConfig>(b.memory);
+      c.memory_read="qry";c.window=17;
+      if(positional){c.read_frequencies={.13};c.full_frequencies={{.17}};c.distance_slopes={.03};c.position_scale=4.;}
+      for(const auto* name:{"kernel.read_q","kernel.read_k"})
+        w.extra[name]=w.extra.at("kernel.summary").detach().clone().set_requires_grad(true);
+      w.extra["kernel.read_v"]=w.extra.at("kernel.read_k");
+      w.extra["kernel.summary"]=m.nodes[0].extra.at("kernel.summary");
+      w.extra["full_program.content.query"]=m.nodes[0].extra.at("full_program.content.query");
+      weighted::configure_node(w,c,b.regional,b.sources,b.aggregate_alpha);
+    }
+    std::vector<Tensor> roots;for(const auto& p:m.parameters().owners())roots.push_back(p.value);
+    const Index base=Index{1}<<54;const col::Layout layout{{0,2,4},{base+10,base+13,base+11,base+22}};
+    std::vector<col::KVReadRequest> reads;std::vector<col::KVFullRequest> fulls;std::vector<size_t> contents;
+    for(Index i=0;i<5;++i){const auto& w=m.nodes[i];const auto binding=weighted::node_binding(w);
+      const auto c=std::get<weighted::KVConfig>(binding.memory);std::vector<State> old;
+      for(Index b=0;b<2;++b){auto s=w.kernel->initial(w);s.last_time=base+b+1;s.observations=1;
+        s.slots["times"]=at::tensor(std::vector<Index>{s.last_time},at::kLong).to(device);
+        for(const auto* name:{"keys","values","summaries","weights"}){
+          auto shape=std::string(name)=="weights"?std::vector<Index>{1}:std::vector<Index>{1,2};
+          auto value=at::full(shape,.2+.03*i+.01*b,w.bias.options()).set_requires_grad(true);
+          s.slots[name]=value;roots.push_back(value);
+        }
+        old.push_back(std::move(s));
+      }
+      auto mass=at::tensor({.3,0.,.6,.2},at::kDouble).to(device,dtype).set_requires_grad(true);
+      auto x=(at::arange(8,at::kDouble)*.03+.1+.02*i).reshape({4,2}).to(device,dtype).set_requires_grad(true);
+      roots.push_back(mass);contents.push_back(roots.size());roots.push_back(x);
+      auto left=col::KVState::from_states(old);auto window=col::prepare(w,c,layout,mass,x,left);
+      reads.push_back({&w,c,binding.regional,window,"proposal",left});
+      auto controls=at::tensor({.2,0.,.4,.3},at::kDouble).to(device,dtype);
+      if(i==3)controls=at::zeros_like(controls);
+      controls.set_requires_grad(true);roots.push_back(controls);fulls.push_back({&w,c,window,controls});
+    }
+    const double rtol=dtype==at::kHalf?2e-2:dtype==at::kFloat?1e-5:1e-8;
+    const double atol=dtype==at::kHalf?1e-3:dtype==at::kFloat?1e-6:1e-10;
+    auto close=[&](const Tensor& a,const Tensor& b){close_value(a,b,rtol,atol);};
+    auto vjp=[&](const Tensor& a,const Tensor& b){for(double factor:{1.,0.}){
+      auto ga=torch::autograd::grad({factor*a.sum()},roots,{},true,false,true);
+      auto gb=torch::autograd::grad({factor*b.sum()},roots,{},true,false,true);
+      for(size_t j=0;j<roots.size();++j)close(ga[j],gb[j]);
+      require(!ga[contents[2]].defined(),"unused grouped query content acquired a zero gradient");
+    }};
+    for(const auto* mode:{"content","old","proposal"}){
+      for(auto& request:reads)request.mode=mode;
+      auto actual=col::read_many(reads,Index{4}*1024*1024),single=col::read_many(reads,1);
+      for(size_t i=0;i<reads.size();++i)for(const auto& [name,value]:actual[i])close(value,single[i].at(name));
+      for(const auto& [name,value]:actual[0])if(value.requires_grad())vjp(value,single[0].at(name));
+      vjp(actual[0].at("score")+actual[1].at("score"),single[0].at("score")+single[1].at("score"));
+    }
+    auto actual=col::full_many(fulls,Index{4}*1024*1024),single=col::full_many(fulls,1);
+    for(size_t i=0;i<fulls.size();++i){require(actual[i].rows==single[i].rows,"grouped Full support changed");
+      close(actual[i].strength,single[i].strength);close(actual[i].content,single[i].content);}
+    require(actual[3].rows.empty(),"inactive Full was evaluated");
+    vjp(actual[0].content,single[0].content);vjp(actual[0].strength,single[0].strength);
+    vjp(actual[0].content+actual[1].content,single[0].content+single[1].content);
+  }
+}
 void check(const std::string& family,bool positional=false,bool scoring=false,
            at::Device device=at::kCPU,at::ScalarType dtype=at::kDouble,const std::string& preset="native",
            std::optional<at::Device> peer=std::nullopt){
@@ -131,7 +192,7 @@ void check(const std::string& family,bool positional=false,bool scoring=false,
 }
 }
 int main(int argc,char** argv){portable_torch::RuntimeSession runtime;try{
-  if(argc==1){check_prepare_groups();check("kv");check("kv",true);for(const auto& f:{"affine","delta","gated_delta","ssd"})check(f);
+  if(argc==1){check_prepare_groups();check_query_groups();check("kv");check("kv",true);for(const auto& f:{"affine","delta","gated_delta","ssd"})check(f);
     check("kv",false,true);check("ssd",false,true);
   }else{
     auto args=portable_torch::parse_cli(argc,argv,true);
@@ -139,6 +200,7 @@ int main(int argc,char** argv){portable_torch::RuntimeSession runtime;try{
     args.allow_npu_float16=true;
     auto device=portable_torch::resolve_device(args);
     check_prepare_groups(device,args.dtype);
+    check_query_groups(device,args.dtype);
     std::optional<at::Device> peer;
     if(auto selected=std::getenv("TIDE_COLUMN_PEER_DEVICE")){auto peer_options=args;
       peer_options.device_spec=selected;peer=portable_torch::resolve_device(peer_options);

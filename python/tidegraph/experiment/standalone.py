@@ -67,6 +67,7 @@ def run(resolved, output, *, resume=None, validation_override=None, check_roots=
             "--placement", "native" if e["placement"] in {"resident", "cpu"} else e["placement"],
             "--packing", e["packing"], "--return-packing", e["return_packing"], "--return-mode", e.get("return_mode", "complete"),
             "--query-execution", e.get("query_execution", "legacy"),
+            "--input-interface", e.get("input_interface", "records"),
             "--trace-records", "auto" if "record_policy" in e else "complete",
             "--prefill-schedule", e.get("prefill_schedule", "auto" if e["schedule"] == "streaming" or e["placement"] == "resident" else "greedy"),
             "--validation", policy, "--threads", str(e["intraop_threads"]), "--interop-threads", str(e["interop_threads"]),
@@ -114,7 +115,7 @@ def run(resolved, output, *, resume=None, validation_override=None, check_roots=
             record["error"] = dict(type="StandaloneError", message=child["error"], details=child.get("comparison_failure"))
         for key in ("validation", "checkpoint", "metrics", "warmup", "memory", "effective", "timing_summary",
                     "construction_seconds", "runtime", "execution_status", "strict_passed", "independent_roots",
-                    "independent_roots_seconds", "throughput_sample", "throughput_qualified", "kind"):
+                    "independent_roots_seconds", "throughput_sample", "throughput_qualified", "kind", "effective_execution"):
             if key in child:
                 record[key] = child[key]
         record["state"] = "failed" if code else child.get("state", "completed")

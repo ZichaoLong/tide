@@ -36,11 +36,13 @@ int main() {
     rejects([&]{auto a=base;a.insert(a.end(),{"--check-roots","--validation","none"});parse(a);});
     auto selected=base;selected.insert(selected.end(),{"--validation","none","--return-mode","metrics","--threads","3","--communication","cpu_bridge","--warmup","0","--steps","9"});
     request=parse(selected);require(request.threads==3&&request.return_mode=="metrics"&&request.warmup==0&&request.steps==9,"public run options lost");
+    require(request.input_interface=="auto","default tensor input policy missing");
     auto recovered=selected;recovered.insert(recovered.end(),{"--checkpoint-check","true"});
     require(parse(recovered).checkpoint,"selected-return exact raw resume was rejected");
     rejects([&]{auto a=base;a.insert(a.end(),{"--return-mode","outputs"});parse(a);});
     rejects([&]{auto a=base;a.insert(a.end(),{"--steps","2garbage"});parse(a);});
     rejects([&]{auto a=base;a.insert(a.end(),{"--loss-scale","nan"});parse(a);});
+    rejects([&]{auto a=base;a.insert(a.end(),{"--input-interface","invented"});parse(a);});
     rejects([&]{auto a=base;a.insert(a.end(),{"--node-devices","cuda:0,"});parse(a);});
     Json limits={{"queue",64},{"prefill",true},{"retained_bytes",100}};
     apply_resident_limits(limits,{{"queue",128},{"prefill",true}},false,true);
@@ -54,6 +56,10 @@ int main() {
     CheckpointOwner owner;
     const Json fixture={{"fixture_sha256","one"},{"span",10}};
     const auto identity=request.checkpoint_identity(fixture);
+    require(identity.at("input_policy")=="tensor-window-v1; compatible Settle modules, explicit graph fallback",
+            "tensor window identity missing");
+    auto records=request;records.input_interface="records";
+    require(!records.checkpoint_identity(fixture).contains("input_policy"),"explicit records silently adopt column policy");
     require(identity.at("record_policy")=="selected-boundary-v1","selected-return policy identity missing");
     auto historical=request;historical.trace_records="complete";
     require(!historical.checkpoint_identity(fixture).contains("record_policy"),"historical trace identity changed");
@@ -68,6 +74,7 @@ int main() {
     auto old=request;old.query_execution="legacy";
     require(!old.checkpoint_identity(fixture).contains("query_execution"),"legacy checkpoint identity changed");
     rejects([&]{checkpoint_manifest(root/"checkpoint",old.checkpoint_identity(fixture));});
+    rejects([&]{checkpoint_manifest(root/"checkpoint",records.checkpoint_identity(fixture));});
     rejects([&]{checkpoint_manifest(root/"checkpoint",greedy.checkpoint_identity(fixture));});
     auto other=request;other.query_execution="packed-v2";
     rejects([&]{checkpoint_manifest(root/"checkpoint",other.checkpoint_identity(fixture));});

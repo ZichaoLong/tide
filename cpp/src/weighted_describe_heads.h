@@ -5,4 +5,6 @@
 namespace tide::weighted::query {
 TensorFields describe_columns(const NodeWeights&,const RegionalConfig&,
     const Tensor& mass,const Tensor& features,const detail::Groups&,double epsilon);
+std::vector<TensorFields> describe_nodes(const std::vector<const NodeWeights*>&,const RegionalConfig&,
+    const std::vector<Tensor>& mass,const std::vector<Tensor>& features,const std::vector<detail::Groups>&,double epsilon);
 }
