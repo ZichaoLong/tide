@@ -157,6 +157,11 @@ int64时钟、零写入保留、bank及terminal装配分别处理，Read/Full的
 `column_modules.prepare_many`负责有限模块分派；其他记忆继续使用各自的准备算法。
 
 KV `read_kv_columns_many/full_kv_columns_many` / C++ `columns::read_many/full_many`
+的FP32/FP64主机数值块改造见[一次打包的KV数值块](kv-tensor-kernels.md)。
+相容的Q/K可以不同，按全组实际padding预算分组；局部归一化、历史投影、Describe和Full
+保持节点/B/时间轴，仅在边界发布独立字段根。以下原分组实现仍服务于未进入新数值块的能力域：
+
+旧节点组实现
 继续按完整局部配置、实际device/dtype、B及填充后的query/bank长度分组；Read另按区域描述配置
 和Read0/-/+分组。默认列调度在准备后调用Read组、在完整区域分配后调用Full组，
 先解析实际放置再分组；循环模块仍使用各自的整列实现。Full仅收集正控制行，

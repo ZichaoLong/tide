@@ -16,6 +16,8 @@
 把[TL-REQ-006固定请求](https://github.com/ZichaoLong/tide/blob/dc943cc7ce773e3dac4d62736ab524953573decb/docs/requests/TL-REQ-006.md)的HB/入口树真实负载并入有限诊断，
 再推进相容节点/区域张量贯穿；resident作为独立新执行器重写并逐层验收。
 已有实现按能力复用，旧接口不是架构约束；一般图、独立根、训练和精确续接仍是交付能力。
+最新授权明确允许整体移除旧源码后重写；当前选定边界是整组KV Read/Describe/Full张量计算，
+及resident按owner/角色分组矩阵。先落实真实数值数据流，旧columns/block只作为可替换的已有候选。
 下游固定6e7bd49e独立直接实现的计数器不作为当前基座回归；四代表短trace和无插桩计时
 分别记录更新子区间/完整步/作业成本，不恢复原学习轨迹。正式请求固定dc943cc7，报告89959587。
 节点/区域早期计时固定`a95b8987`；来源列后继成本为`00bb5ac2`，resident公共接入资格为`a3c4f62d`。
@@ -63,7 +65,7 @@ Python-owned与SDK新构建通过；[42点LH/FC/1B成本](evidence/rope-performa
 00bb5ac2来源变换合批与完整参数槽精确复用的[22点成本/四安装生命周期](evidence/source-columns-performance-20261112.md)已完成；
 LH176默认native训练CPU1/NPU-host2为2.3187/5.1350秒，直接公式0.7568/0.6238秒，主要差距仍在公共列层。
 [静态数据流审阅](evidence/lh-block-static-20261112.md)区分columns的精确Q/K尺寸分组/逐节点小操作与
-resident逐行矩阵、逐帧raw、重复历史投影和单block串行循环；这些替代尚未实现，不能关闭P5。
+resident逐行矩阵、逐帧raw、重复历史投影和单block串行循环；resident owner/bank GEMM及主机KV整组数值边界已开始实施；固定源码资格与规模结果未取得，不能关闭P5。
 55f8c631独立直接公式修复完整有序参数角色识别，22项CPU开发检查通过，无低秩旧LH材料不受影响。
 [REQ006机制调查](evidence/req006-diagnostics-20261112.md)与
 [常量重载/初态配对](evidence/req006-floor-20261112.md)分开保留严格失败、算子成本及下游职责；

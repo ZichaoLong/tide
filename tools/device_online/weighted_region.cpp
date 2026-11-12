@@ -16,7 +16,8 @@ WeightedRegionTape append_weighted_region(DeviceProgram& p,const WeightedRegionF
   // Owned fields, immutable coordinates, all intermediate/result buffers,
   // downstream primitive tape and both actual head tapes. Vendor arena is separate.
   const long double own=s.rows*(s.width*(4.L*(5+s.e+2.L*s.q)+9)+4.L*(s.e+3.L*s.q+16)+65);
-  admit(own+(s.context?head_bytes(s.rows,s.e+2,s.h,1):0)+(s.attention?head_bytes(s.rows,s.q,s.q,s.q):0)
+  admit(own+(s.context?weighted_head_forward_bytes(s.rows,s.e+2,s.h,1,weights.context.matrix.size(0)):0)
+    +(s.attention?weighted_head_forward_bytes(s.rows,s.q,s.q,s.q,weights.query.matrix.size(0)):0)
     +s.rows*((s.allocated?16.L:20.L)*s.width+32),budget);
   WeightedRegionTape t;t.config=c;t.fields=zeros(s,f.received.options());
   p.copy(t.fields.received,f.received);p.copy(t.fields.caps,f.caps);p.copy(t.fields.score,f.score);

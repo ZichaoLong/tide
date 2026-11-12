@@ -1,11 +1,12 @@
 #pragma once
 // 0770593 allocation §3/S.1: ScalarHead and Query's two affine maps + SiLU.
 #include "device_program.h"
+#include "weighted_bank_layout.h"
 namespace tide::device_online {
 struct WeightedHeadParameters {at::Tensor matrix,hidden_bias,projection,bias;};
 struct WeightedHeadTape {
   at::Tensor input,owners,indices,preactivation,hidden,output;
-  WeightedHeadParameters rows;
+  WeightedHeadParameters rows; // Actual [parameter_owners,...] snapshots, not row copies.
   int64_t parameter_owners;
 };
 struct WeightedHeadGradient {

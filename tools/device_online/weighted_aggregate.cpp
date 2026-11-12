@@ -14,7 +14,7 @@ WeightedAggregateTape append_weighted_aggregate(DeviceProgram& p,const at::Tenso
     banks=weights.a.size(0);hidden=weights.a.size(1);
     check(weights.a,{banks,hidden,s.d},at::kFloat,device);check(weights.b,{banks,s.d,hidden},at::kFloat,device);
     check(weights.embedding,{banks,hidden},at::kFloat,device);
-    head=s.rows*s.width*(4.L*(3.L*s.d+4.L*hidden*s.d+3.L*hidden)+20)+4.L*banks*s.d;
+    head=weighted_head_forward_bytes(s.rows*s.width,s.d,hidden,s.d,banks)+4.L*banks*s.d;
   }
   admit(s.rows*(s.width*(4.L*(5.L*s.d+2)+8)+4.L*(s.d+1)+16)+head,budget);
   auto options=payload.options();WeightedAggregateTape t;t.alpha=alpha;t.epsilon=epsilon;

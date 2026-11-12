@@ -12,7 +12,7 @@ WeightedKVFullGradient append_weighted_kv_full_vjp(DeviceProgram& p,const Weight
   check(gradient,device,at::kFloat,{rows,d});check(roots,device,at::kBool,{rows});check(error,device,at::kInt,{1});
   auto borrowed=saved_tensors(t);borrowed.insert(borrowed.end(),{gradient,roots,error});
   const WeightedStorageIncrement storage(p,std::move(borrowed));
-  budget(256.L*((banks==1?1:rows+banks)*(static_cast<long double>(d)*d+3.L*d*t.residual.hidden.size(1))
+  budget(256.L*(banks*(static_cast<long double>(d)*d+3.L*d*t.residual.hidden.size(1))
     +(rows+banks)*(capacity*(d+dh+heads+1.L)+d+1)),available);
   auto residual=append_weighted_residual_vjp(p,t.residual,gradient,roots,error,available);auto bars=split(p,residual.memory,heads);
   auto pool_roots=at::zeros({rows,2},roots.options()),qroots=at::zeros_like(roots),wroots=at::zeros({rows,5},roots.options());

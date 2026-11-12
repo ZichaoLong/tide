@@ -1,10 +1,11 @@
 #pragma once
 #include "device_program.h"
+#include "weighted_bank_layout.h"
 #include <optional>
 namespace tide::device_online {
 struct WeightedProjectionParameters {at::Tensor matrix,bias;}; // bias undefined means no bias role.
 struct WeightedProjectionTape {
-  // One saved matrix/bias when banks==1; otherwise one selected copy per row.
+  // One saved matrix/bias per actual parameter bank, independent of row count.
   // These are immutable forward snapshots, never borrowed live parameters.
   at::Tensor input,rstd,owners,indices,matrix,bias,output;
   int64_t banks=0;bool normalized=false,has_bias=false;
@@ -18,8 +19,9 @@ struct WeightedProjectionGradient {
 // Input/parameters/output use one explicit FP32/FP16 storage dtype. Arithmetic,
 // saved values and adjoints are FP32; FP16 output rounds once after bias. Casts
 // declare identity VJP. Finite FP32 results overflowing FP16 storage are refused.
-// A single parameter bank uses one block GEMM and its block transpose. Row
-// presence/root masks still decide parameter use and None versus connected zero.
+// Single bank uses one block GEMM; multiple banks use a stable device owner
+// partition and bounded row buckets. The VJP reduces by GEMM, never row outer
+// products. Presence/root masks retain None versus connected zero.
 WeightedProjectionTape append_weighted_projection(DeviceProgram&,const at::Tensor& input,
   const at::Tensor& owners,const WeightedProjectionParameters&,std::optional<double> epsilon,
   const at::Tensor& error,int64_t budget=256*1024*1024);

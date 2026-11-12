@@ -97,8 +97,10 @@ struct KVFullRequest {
   KVWindow window;
   Tensor controls;
 };
-// Compatible actual query/bank shapes share block operators, with independent
-// node outputs/roots and a byte bound on additional packing and adjoints.
+// Compatible configuration/device/dtype and sample domains use tensor blocks
+// with variable padded Q/K, independent field roots and bounded first-order VJP.
+// Admission accounts for the group's maximum padding; half and position spans
+// outside the bounded common-origin domain retain their declared query path.
 std::vector<TensorFields> read_many(const std::vector<KVReadRequest>&,Index max_workspace_bytes);
 std::vector<Message> full_many(const std::vector<KVFullRequest>&,Index max_workspace_bytes);
 RecurrentWindow prepare(const NodeWeights&,const RecurrentConfig&,const Layout&,const Tensor& mass,

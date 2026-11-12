@@ -1,5 +1,6 @@
 // KV §4: selected queries only, private banks and unweighted G message contents.
 #include "weighted_column_groups.h"
+#include "weighted_kv_tensor.h"
 #include "tide/packing_work.h"
 namespace tide::weighted::columns {
 using detail::require;using detail::weight;
@@ -42,13 +43,14 @@ std::vector<Tensor> evaluate(const std::vector<KVFullRequest>& requests,const st
 }
 }
 std::vector<Message> full_many(const std::vector<KVFullRequest>& requests,Index max_workspace_bytes){
-  std::vector<Message> out(requests.size());std::vector<size_t> ids;std::vector<Layout> queries(requests.size());
+  std::vector<Message> out(requests.size());std::vector<size_t> ids,tensors;std::vector<Layout> queries(requests.size());
   for(size_t i=0;i<requests.size();++i){const auto& r=requests[i];const auto& w=r.window;const auto& control=r.controls;
     require(r.weights&&supported(r.config),"unsupported KV Full group or parameter owner");
     require(control.sizes()==w.mass.sizes()&&control.device()==w.mass.device()&&control.scalar_type()==w.mass.scalar_type()
       &&at::isfinite(control).all().item<bool>()&&!(control<0).any().item<bool>(),"invalid KV column controls");
     auto index=(control.detach()>0).nonzero().flatten();out[i]={host_ids(index),control.index_select(0,index),at::empty({0,r.config.width},w.content.options())};
-    if(!out[i].rows.empty()){ids.push_back(i);queries[i]=w.layout.select(out[i].rows);}}
+    if(!out[i].rows.empty()){(tensor::eligible(r.config,r.window.content)?tensors:ids).push_back(i);queries[i]=w.layout.select(out[i].rows);}}
+  tensor::full_groups(requests,tensors,max_workspace_bytes,out);
   auto same=[&](size_t a,size_t b){const auto& x=requests[a];const auto& y=requests[b];
     return same_configuration(x.config,y.config)&&groups::same_payload(x.window.content,y.window.content)
       &&groups::shape(queries[a])==groups::shape(queries[b])&&groups::shape(x.window.bank_layout)==groups::shape(y.window.bank_layout);};

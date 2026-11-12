@@ -1,6 +1,7 @@
 // KV §3: actual snapshot banks, node×B Attention and staged Describe.
 #include "weighted_column_groups.h"
 #include "weighted_describe_heads.h"
+#include "weighted_kv_tensor.h"
 #include "tide/packing_work.h"
 #include <numeric>
 namespace tide::weighted::columns {
@@ -61,13 +62,14 @@ std::vector<TensorFields> evaluate(const std::vector<KVReadRequest>& requests,co
 }
 }
 std::vector<TensorFields> read_many(const std::vector<KVReadRequest>& requests,Index max_workspace_bytes){
-  std::vector<size_t> ids;std::vector<TensorFields> out(requests.size());
+  std::vector<size_t> ids,tensors;std::vector<TensorFields> out(requests.size());
   for(size_t i=0;i<requests.size();++i){const auto& r=requests[i];require(r.weights,"KV Read requires a live parameter owner");
     require(supported(r.config),"unsupported KV Read group");
     require(r.mode=="content"||r.mode=="old"||r.mode=="proposal","invalid KV column Read snapshot");
     require(!r.window.layout.times.empty(),"Read columns require actual rows");
     if(r.mode=="content")require(r.initial.layout.samples()==r.window.layout.samples(),"Read0 initial sample domain mismatch");
-    ids.push_back(i);}
+    (tensor::eligible(r.config,r.window.content)?tensors:ids).push_back(i);}
+  tensor::read_groups(requests,tensors,max_workspace_bytes,out);
   auto same=[&](size_t a,size_t b){const auto& x=requests[a];const auto& y=requests[b];
     return same_configuration(x.config,y.config)&&same_configuration(x.regional,y.regional)&&x.mode==y.mode&&
       groups::same_payload(x.window.content,y.window.content)&&groups::shape(x.window.layout)==groups::shape(y.window.layout)

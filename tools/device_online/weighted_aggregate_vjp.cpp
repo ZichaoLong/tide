@@ -12,8 +12,7 @@ WeightedAggregateGradient append_weighted_aggregate_vjp(DeviceProgram& p,const W
   if(t.source.has_value()!=(t.alpha>0))throw std::invalid_argument("resident Aggregate tape/config mismatch");
   long double head=0;
   if(t.source){const auto h=t.source->hidden.size(1),banks=t.source->parameter_owners;
-    const long double bank=2.L*h*s.d+h+s.d;
-    head=4.L*(s.rows*s.width*(bank+h+s.d)+banks*bank)+s.rows*s.width*5.L+banks*5.L;}
+    head=weighted_head_reverse_bytes(s.rows*s.width,s.d,h,s.d,banks);}
   admit(s.rows*(s.width*(4.L*(2.L*s.d+1)+2)+4)+head,budget);
   auto options=gradient.options();WeightedAggregateGradient g;
   g.payload=at::zeros_like(t.payload);g.connected=at::zeros({s.rows,s.width},roots.options());

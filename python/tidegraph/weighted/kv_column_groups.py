@@ -76,11 +76,21 @@ def read_kv_columns_many(requests, *, max_workspace_bytes):
         key = (node.kernel.config, node.read_program.config, mode, window.content.dtype,
                window.content.device, _shape(window.layout), _shape(bank.layout))
         entries.append((i, key, query_group_bytes(node, window.layout, bank.layout, window.content.element_size())))
-    for ids in _groups(entries, max_workspace_bytes):
+    from . import kv_tensor_groups as tensor
+    queries = tensor.read_queries(requests, banks)
+    planned = tensor.plan(queries, "read", max_workspace_bytes, entries, _groups)
+    # Validate even an empty request and before considering compact groups.
+    if type(max_workspace_bytes) is not int or not 0 < max_workspace_bytes < 2**63:
+        raise ValueError("KV query group budget must be a positive int64 byte count")
+    for ids, compact in planned:
         bucket("kv_read_nodes", _shape(requests[ids[0]][1].layout)[1], len(ids))
         if len(ids) == 1:
             i = ids[0]; n, w, m, s = requests[i]
             result[i] = read_kv_columns(n, w, read_mode=m, initial=s)
+            continue
+        if compact:
+            for i, field in zip(ids, tensor.evaluate([queries[i] for i in ids], "read")):
+                result[i] = field
             continue
         nodes = [requests[i][0] for i in ids]; c = nodes[0].kernel.config
         names = ("summaries",) if c.memory_read == "sum" else ("keys", "values")
@@ -136,10 +146,24 @@ def full_kv_columns_many(requests, *, max_workspace_bytes):
         layout = window.layout.select(rows)
         key = (node.kernel.config, window.content.dtype, window.content.device, _shape(layout), _shape(window.bank.layout))
         entries.append((i, key, query_group_bytes(node, layout, window.bank.layout, window.content.element_size())))
-    for ids in _groups(entries, max_workspace_bytes):
+    from . import kv_tensor_groups as tensor
+    present_ids = list(selected)
+    queries = [tensor.Query(requests[i][0], requests[i][1], requests[i][1].bank, selected[i]) for i in present_ids]
+    compact_entries = [(j, key, cost) for j, (_, key, cost) in enumerate(entries)]
+    planned = (([present_ids[j] for j in ids], compact) for ids, compact in
+               tensor.plan(queries, "full", max_workspace_bytes, compact_entries, _groups))
+    if type(max_workspace_bytes) is not int or not 0 < max_workspace_bytes < 2**63:
+        raise ValueError("KV query group budget must be a positive int64 byte count")
+    query_map = dict(zip(present_ids, queries))
+    for ids, compact in planned:
         bucket("kv_full_nodes", _shape(requests[ids[0]][1].layout.select(selected[ids[0]]))[1], len(ids))
         if len(ids) == 1:
             i = ids[0]; result[i] = full_kv_columns(*requests[i]); continue
+        if compact:
+            for i, field in zip(ids, tensor.evaluate([query_map[i] for i in ids], "full")):
+                original = result[i]
+                result[i] = FullColumns(original.rows, original.strength, field["content"])
+            continue
         nodes = [requests[i][0] for i in ids]; c = nodes[0].kernel.config
         modules = [n.full_program.content for n in nodes]
         queries = [_queries(requests[i][1], requests[i][1].bank, selected[i], horizon=c.window) for i in ids]

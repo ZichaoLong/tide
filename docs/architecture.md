@@ -6,6 +6,15 @@
 
 ## 分层
 
+[KV整组数值边界](kv-tensor-kernels.md)将布局/角色(`kv_tensor_layout`)、整组公式
+(`kv_tensor_formula/tensor_describe`)和一次打包/独立根反向(`tensor_kernel`)分离。
+相容节点的N/B/Q/K保持张量轴，不在每个局部算子之间拆节点再重拼；现有窗口入口按能力使用。
+修改同步`test_tensor_kernel`、`test_kv_tensor_batches`、逐字段Describe及一般端口/恢复检查。
+完整事件根与普通列根的观察契约分别验收；放置预设不强制规定内部软件层级。
+独立C++实现为`weighted_kv_tensor`及其`_layout/_positions/_math/_vjp`职责文件。
+[resident bank GEMM](resident-bank-gemm.md)则以设备实际owner稳定分组，保存bank矩阵和块级伴随；
+这消除了投影/head/Upd的逐事件矩阵，尚不等于共享历史或整条resident重写完成。
+
 [新的resident块边界](resident-block-execution.md)把潜在任务DAG、设备choose/commit、
 KV Read/Describe和完整区域数值分开：`tools/device_online/block_dispatch*`、`settle_block_plan.h`
 和`block_read_selection*`分别拥有调度、静态lowering和数值/VJP；`block_selection_formula.cpp`

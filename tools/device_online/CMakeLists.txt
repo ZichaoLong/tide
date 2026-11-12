@@ -96,6 +96,9 @@ if(TIDE_DEVICE_RUNTIME STREQUAL "standalone")
   target_link_libraries(tide-packed-queue-check PRIVATE tide-packed-queue)
 endif()
 enable_testing()
+add_executable(tide-weighted-bank-layout-check weighted_bank_layout_check.cpp)
+target_compile_features(tide-weighted-bank-layout-check PRIVATE cxx_std_17)
+add_test(NAME weighted-bank-layout-cpu COMMAND tide-weighted-bank-layout-check)
 if(TIDE_DEVICE_RUNTIME STREQUAL "standalone")
   add_test(NAME device-peer-help COMMAND tide-device-peer-check --help)
   add_test(NAME device-sequence-help COMMAND tide-device-sequence-check --help)
@@ -142,8 +145,7 @@ if(TIDE_DEVICE_KERNELS)
     tide_weighted_sending_vjp_kernel tide_weighted_allocation_status_kernel)
   add_library(tide-weighted-head STATIC weighted_head.cpp)
   set_target_properties(tide-weighted-head PROPERTIES POSITION_INDEPENDENT_CODE ON)
-  target_link_libraries(tide-weighted-head PUBLIC tide-device-control tide_weighted_head_plan_kernel
-    tide_weighted_head_guard_kernel tide_weighted_head_reduce_kernel tide_weighted_allocation_status_kernel)
+  target_link_libraries(tide-weighted-head PUBLIC tide-weighted-projection)
   add_library(tide-weighted-region STATIC weighted_region.cpp weighted_region_vjp.cpp)
   set_target_properties(tide-weighted-region PROPERTIES POSITION_INDEPENDENT_CODE ON)
   target_link_libraries(tide-weighted-region PUBLIC tide-weighted-head tide-weighted-allocation tide-weighted-sending
@@ -172,11 +174,11 @@ if(TIDE_DEVICE_KERNELS)
   set_target_properties(tide-weighted-convolution PROPERTIES POSITION_INDEPENDENT_CODE ON)
   target_link_libraries(tide-weighted-convolution PUBLIC tide-weighted-raw
     tide_weighted_conv_plan_kernel tide_weighted_conv_guard_kernel tide_weighted_conv_reverse_kernel)
-  add_library(tide-weighted-projection STATIC weighted_projection.cpp)
+  add_library(tide-weighted-projection STATIC weighted_projection.cpp weighted_bank_gemm.cpp)
   set_target_properties(tide-weighted-projection PROPERTIES POSITION_INDEPENDENT_CODE ON)
   target_link_libraries(tide-weighted-projection PUBLIC tide-device-control tide_weighted_head_plan_kernel
-    tide_weighted_head_guard_kernel tide_weighted_head_reduce_kernel tide_weighted_allocation_status_kernel tide_weighted_projection_norm_kernel
-    tide_weighted_projection_shared_kernel)
+    tide_weighted_head_guard_kernel tide_weighted_allocation_status_kernel tide_weighted_projection_norm_kernel
+    tide_weighted_projection_shared_kernel tide_weighted_bank_plan_kernel tide_weighted_bank_rows_kernel tide_weighted_bank_snapshot_kernel)
   add_library(tide-weighted-rotary STATIC weighted_rotary.cpp)
   set_target_properties(tide-weighted-rotary PROPERTIES POSITION_INDEPENDENT_CODE ON)
   target_link_libraries(tide-weighted-rotary PUBLIC tide-device-control tide_weighted_rotary_phase_kernel tide_weighted_rotary_apply_kernel

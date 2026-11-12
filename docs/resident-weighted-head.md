@@ -12,15 +12,15 @@ int64 `owners[rows]`。`-1`标记不存在行，其输入可为NaN；其余ID在
 不同语义角色的参数别名由外层参数owner绑定；本组件返回四个独立角色的偏导，
 外层须再汇总被显式绑定到同一叶的角色贡献。
 
-设备先检查owner、构造安全索引与有效输入，vendor index_select真正聚集参数行，
-batch_matmul/SiLU/SiLUBackward完成矩阵与激活计算。没有用自定义标量循环实现矩阵乘。
+设备先检查owner与有效输入，按[实际bank分组](resident-bank-gemm.md)组织两次投影；
+GEMM/BMM/SiLU/SiLUBackward完成矩阵与激活计算，没有按R复制权重或用自定义标量循环实现矩阵乘。
 DeviceProgram需要连续storage，权重转置用设备permute显式实现，两份临时布局计入scratch预算。
 CUDA采用对应cuBLAS/设备算子入口。KEEP_DTYPE不允许隐式HF32/FP16替换FP32。
 缺席行在算子前清空，真实零输入仍保留；无主机逐行分支或读取实际owner。
 
-tape拥有实际输入、owner、聚集参数、preactivation和hidden；后向不再读取可变参数bank。
+tape拥有实际输入、owner、参数bank快照、preactivation和hidden；后向不再读取可变参数bank。
 `append_weighted_head_vjp` 接收每行独立cotangent/存在标志，以批量矩阵乘求偏导，
-再按设备owner稳定汇总所有使用者，返回input梯度、四个bank梯度及row/owner bool连接。
+按设备owner分组的`G^T X`直接汇总所有使用者，返回input梯度、四个bank梯度及row/owner bool连接。
 零cotangent仍连接；未被任何根使用的bank不连接。数值零不能作为root存在性替代。
 本组件只声明显式一阶VJP；宿主loss根、optimizer和retained图生命周期由
 [公共训练owner](resident-weighted-training.md)组合，本组件本身不提供宿主autograd适配。
@@ -34,7 +34,7 @@ tape下一次调用覆盖前须由训练owner保留；存原始来源的引用�
 | --- | --- |
 | ScalarHead / Query | `weighted_head.cpp`，vendor batched affine/SiLU |
 | owner与存在性 | `tide_weighted_head_plan/guard.cpp`；CPU源码检查大int64/非法ID/poison缺席行/None与零 |
-| 共享参数完整VJP | `tide_weighted_head_reduce.cpp`；手工使用者求和、未用bank和溢出拒绝 |
+| 共享参数完整VJP | `weighted_bank_gemm.cpp`；实际bank GEMM转置，独立逐行公式/真实别名贡献、未用bank和溢出拒绝 |
 | 实际数值和版本 | `weighted_head_check.cpp`；逐行独立ATen公式/autograd，ScalarHead/Query两种形状、同program owner重放、原bank改写后从实际tape反向、失败不提交/容量 |
 
 CPU元数据适配不能证明厂商算子或GPU执行。目标检查为

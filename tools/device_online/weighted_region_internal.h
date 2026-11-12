@@ -43,9 +43,6 @@ struct Shape {
     if((allocated||c.attention())&&tau<=0)throw std::invalid_argument("resident temperature underflowed in FP32");
   }
 };
-inline long double head_bytes(int64_t rows,int64_t in,int64_t hidden,int64_t out){
-  return rows*(4.L*(in+2.L*hidden*in+2.L*out*hidden+3.L*hidden+2.L*out)+20);
-}
 inline void head_shape(const WeightedHeadParameters& w,int64_t rows,int64_t in,int64_t hidden,int64_t out,
                        const at::Tensor& owners,at::Device device){
   if(!w.matrix.defined()||w.matrix.dim()!=3||w.matrix.size(0)<1)throw std::invalid_argument("missing resident region parameter bank");

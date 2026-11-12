@@ -199,6 +199,12 @@ Settle `ports` 在任意逻辑 cut 原样保留状态和 pending；`broadcast_su
 
 ## 批量计算、反向与设备实现
 
+KV §3–4及分配§3的[整组数值边界](kv-tensor-kernels.md)由
+`kv_tensor_layout/kv_tensor_formula/tensor_describe/tensor_kernel`维护布局、数学与角色VJP。
+`test_kv_tensor_batches`核对不同Q/K、三个Read快照、选择后的Full及真实padding预算；
+`test_tensor_kernel`以独立标量/映射矩阵检查alias、None/零、冻结、版本和私图粒度。
+这允许每个数学作用通过实际字段解码对应，不要求逐作用Tensor或逐节点算子调用。
+
 新[resident块契约](resident-block-execution.md)映射Settle完成依赖/实际发送存在性到
 `BlockDispatcher`与静态潜在DAG；KV §3、架构Describe及分配SelStep到
 `append_block_read_selection`/VJP。元数据独立递归DAG与数值独立公式各自验证，

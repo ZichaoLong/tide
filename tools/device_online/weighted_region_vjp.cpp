@@ -5,8 +5,7 @@ namespace tide::device_online {
 namespace {
 long double head_reverse_bytes(const WeightedHeadTape& t){
   const auto r=t.input.size(0),i=t.input.size(1),h=t.hidden.size(1),o=t.output.size(1),banks=t.parameter_owners;
-  const long double size=static_cast<long double>(h)*i+h+static_cast<long double>(o)*h+o;
-  return 4.L*(r*(size+h+i)+banks*size)+r*5.L+banks*5.L;
+  return weighted_head_reverse_bytes(r,i,h,o,banks);
 }
 }
 WeightedRegionGradient append_weighted_region_vjp(DeviceProgram& p,const WeightedRegionTape& t,

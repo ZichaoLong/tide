@@ -7,7 +7,7 @@ struct WeightedKVUpdateTape {
   weighted::KVConfig config;
   WeightedRawUpdateTape raw;
   WeightedProjectionTape kv,summary,adapter_low,adapter_up;
-  WeightedKVParameters saved_rows;
+  WeightedKVParameters saved_rows; // Aliases of actual bank snapshots in the four projections.
   at::Tensor owners,kv_indices,summary_indices;
   int64_t banks=0;
 };

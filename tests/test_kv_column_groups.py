@@ -52,10 +52,10 @@ def test_grouped_raw_state_and_none_connected_zero_roots(dtype):
     cases, rows, roots = requests(dtype)
     with observe() as counts:
         grouped = prepare_kv_columns_many(rows, max_workspace_bytes=2**27)
-    # Only the three compatible positive-write operands take the four block maps.
+    # Four positive-write nodes share four maps despite unequal write counts.
     metrics = counts.metrics()
-    assert metrics["packing/projection/private_bmm/calls"] == 4
-    assert metrics["packing/projection/private_bmm/rows/3/calls"] == 4
+    assert metrics["packing/projection/tensor_block_bmm/calls"] == 4
+    assert metrics["packing/projection/tensor_block_bmm/rows/4/calls"] == 4
     assert grouped[3].terminal is rows[3][-1]
     separate = [prepare_kv_columns(*row) for row in rows]
     for i, (a, b) in enumerate(zip(grouped, separate)):
@@ -80,11 +80,11 @@ def test_actual_byte_budget_splits_group_before_packing(dtype, limit):
     with observe() as counts:
         actual = prepare_kv_columns_many(rows, max_workspace_bytes=budget)
     keys = counts.metrics()
-    calls = keys.get("packing/projection/private_bmm/calls", 0)+keys.get("packing/projection/shared_block_mm/calls", 0)
+    calls = keys.get("packing/projection/tensor_block_bmm/calls", 0)+keys.get("packing/projection/shared_block_mm/calls", 0)
     assert calls == (0 if limit == "single" else 4)
     if limit == "pair":
         assert keys["packing/projection/shared_block_mm/rows/2/calls"] == 2
-        assert keys["packing/projection/private_bmm/rows/2/calls"] == 2
+        assert keys["packing/projection/tensor_block_bmm/rows/2/calls"] == 2
     for window, request in zip(actual, rows):
         equivalent(window.terminal.states(), prepare_kv_columns(*request).terminal.states())
 

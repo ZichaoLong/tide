@@ -28,6 +28,11 @@ Read/Full snapshot distinction. Reuse projections only for the same parameter
 version and input identity; equal values do not establish shared gradient roots.
 Private node state remains private even when parameters or computation are shared.
 
+Placement presets are measurement conveniences, not compulsory software layers.
+Keep compact numerical blocks intact unless an actual device boundary requires
+transport. Version a costly preset migration and record requested/effective
+placement instead of preserving historical splits inside every calculation.
+
 Distinguish persistent state, retained differentiable state, readonly input,
 scratch storage and exported snapshots. Define parameter-publication and window
 lifetime rules. Reusing scratch requires completion of all readers, including

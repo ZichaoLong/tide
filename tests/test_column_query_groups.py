@@ -116,7 +116,7 @@ def test_grouped_queries_against_independent_scalar_snapshots(read, mode, positi
         actual = read_kv_columns_many(reads, max_workspace_bytes=2**28)
         fresh = full_kv_columns_many(fulls, max_workspace_bytes=2**28)
     metrics = counts.metrics()
-    assert metrics["packing/projection/private_bmm/calls"] > 0
+    assert metrics["packing/projection/tensor_block_bmm/calls"] > 0
     assert metrics["packing/projection/shared_block_mm/calls"] > 0
     expected, e_full = scalar(cases, fulls, mode)
     equivalent(actual, expected); equivalent([x.content for x in fresh], e_full)
@@ -142,7 +142,7 @@ def test_query_byte_budget_keeps_private_shapes_and_empty_full(budget_kind):
     with observe() as counts:
         got = read_kv_columns_many(reads, max_workspace_bytes=budget)
     equivalent(got, [read_kv_columns(n, w, read_mode=m, initial=s) for n, w, m, s in reads])
-    assert (counts.metrics().get("packing/projection/private_bmm/calls", 0) == 0) == (budget_kind == "single")
+    assert (counts.metrics().get("packing/projection/tensor_block_bmm/calls", 0) == 0) == (budget_kind == "single")
     n, w, control = fulls[-1]
     fulls[-1] = n, w, torch.zeros_like(control, requires_grad=True)
     got = full_kv_columns_many(fulls, max_workspace_bytes=budget)

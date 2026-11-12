@@ -202,7 +202,9 @@ def prepare_kv_columns_many(requests, *, max_workspace_bytes):
             result[i] = _assemble(*request, positive, writes, None)
             continue
         c = memory.config
-        key = (content.device, content.dtype, len(writes), c.width, c.adapter_rank, c.summary_width)
+        compact = content.dtype in {torch.float32, torch.float64}
+        key = (content.device, content.dtype, None if compact else len(writes),
+               c.width, c.adapter_rank, c.summary_width, c.epsilon)
         groups.setdefault(key, []).append(i)
 
     def execute(ids):
@@ -212,6 +214,11 @@ def prepare_kv_columns_many(requests, *, max_workspace_bytes):
             positive, rows = prepared[i]
             fresh = _project_writes(memory, mass, content, rows)
             result[i] = _assemble(*requests[i], positive, rows, fresh)
+            return
+        if requests[ids[0]][3].dtype in {torch.float32, torch.float64}:
+            from .kv_tensor_prepare import prepare
+            for i, fresh in zip(ids, prepare(requests, prepared, ids)):
+                result[i] = _assemble(*requests[i], *prepared[i], fresh)
             return
         memories = [requests[i][0] for i in ids]
         writes = [prepared[i][1].to(requests[i][3].device) for i in ids]
@@ -227,12 +234,14 @@ def prepare_kv_columns_many(requests, *, max_workspace_bytes):
             result[i] = _assemble(*requests[i], *prepared[i], fresh)
 
     for ids in groups.values():
-        batch, used = [], 0
+        batch = []
         for i in ids:
-            cost = preparation_group_bytes(requests[i][0], len(prepared[i][1]), requests[i][3].element_size())
-            if batch and used+cost > max_workspace_bytes:
-                execute(batch); batch, used = [], 0
-            batch.append(i); used += cost
+            candidate = [*batch, i]
+            width = max(len(prepared[j][1]) for j in candidate)
+            cost = sum(preparation_group_bytes(requests[j][0], width, requests[j][3].element_size()) for j in candidate)
+            if batch and cost > max_workspace_bytes:
+                execute(batch); batch = []
+            batch.append(i)
         if batch:
             execute(batch)
     return result

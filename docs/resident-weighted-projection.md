@@ -17,7 +17,7 @@ tape保存FP32实际运算值，反向根及所有返回伴随为FP32，Cast声�
 有限FP32结果若在写入FP16时溢出，则通过设备共享错误决定拒绝；次正规数保留和舍入下溢
 分别核验，数值零不删除行/参数的连接。新增拓宽与结果检查缓冲计入scratch budget。
 
-输入计划和根守卫复用已声明的 head 元数据组件。数值使用 vendor RMSNorm、index_select、
+输入计划和根守卫复用已声明的 head 元数据组件。数值使用 vendor RMSNorm、
 permute 和 batch_matmul；可选 bias 用 vendor add。没有输入值的主机预跑或逐行主机决策。
 无 bias 时没有该参数角色，不能用固定零 bias 伪造可训练参数。
 
@@ -25,11 +25,12 @@ permute 和 batch_matmul；可选 bias 用 vendor add。没有输入值的主机
 不会按R复制矩阵。设备owners仍逐行决定实际使用；全缺席时未使用的非有限参数不参与计算。
 反向为 `barX=barY W`、`barW=barYᵀ X`、`barb=sum_rows(barY)`，先按独立根守卫barY，
 再做vendor矩阵乘法/归约。owner连接位是结构OR，不用梯度非零判定。保存的矩阵仍是副本，
-原参数/输入修改不影响独立反向。B>1保留按实际owner选择参数行的路径，不隐式合并不同参数。
+原参数/输入修改不影响独立反向。B>1采用[实际bank分组GEMM](resident-bank-gemm.md)，
+参数快照仍为[B,o,d]，设备划分实际owner并选择有界行桶，不隐式合并不同参数。
 此变更允许矩阵归约次序变化，原数值阈值与精确恢复要求保持；真实资格单列。
 
-`append_weighted_projection_vjp` 使用保存的实际归一化输入/rstd/参数行，以 vendor BMM
-计算输入与参数梯度；多bank生成逐使用者矩阵梯度后归约，单bank直接采用上述整块转置。输入 RMS 使用
+`append_weighted_projection_vjp` 使用保存的实际归一化输入/rstd/参数bank，以 vendor GEMM/BMM
+计算每bank整块输入与参数梯度；单/多bank均不生成逐使用者矩阵外积。输入 RMS 使用
 `rstd*(bar−normal*mean(bar*normal))` 的普通一阶收缩；关闭 RMS 时为线性输入 VJP。
 每行 bool root 独立于数值零；没有参与目标的 bank 保持 None，连接零保留连接。
 保存版本不依赖原输入或参数后续内容。不声明高阶；tape 由 owner 保持不变。
@@ -44,6 +45,7 @@ permute 和 batch_matmul；可选 bias 用 vendor add。没有输入值的主机
 | 线性投影与共享使用 | `weighted_projection_check.cpp` 在实际量化输入上用独立FP32 ATen/autograd；有/无bias、有/无RMS，动态owner/输入，所有输入/参数VJP；FP16前向仅在最终存储舍入 |
 | 保存版本/连接 | 同check一个/三个bank、None/零、全缺席poison、修改原输入/参数后的独立反向、容量拒绝 |
 | 单bank设备mask与存储 | `test_resident_weighted_projection_shared.py`检查语义核源的实际使用、None/连接零、非有限和sticky error；实际设备check另验64×32投影及独立ATen公式、存储界与拒绝 |
+| 多bank分组/转置与容量 | `test_resident_weighted_bank_gemm.py`的实际语义核+独立FP64公式、别名/空组；`weighted-bank-layout-cpu`与实际设备check的64×3bank×32宽存储见证，资格各自分列 |
 
 入口 `verify_device_control.py --checks weighted-projection --device npu:0`。
 CPU helper、实际NPU、CUDA构建与GPU真机分别记录；局部投影资格不自动扩展为五记忆或完整常驻图资格。

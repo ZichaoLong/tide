@@ -16,7 +16,9 @@ WeightedKVUpdateTape append_weighted_kv_update(DeviceProgram& p,const weighted::
   check(w.base,device,at::kFloat,{banks,2*d,d});check(w.left,device,at::kFloat,{banks,2*d,rank});
   check(w.right,device,at::kFloat,{banks,rank,d});check(w.summary,device,at::kFloat,{banks,ds,d});
   // Conservative complete composition bound, including child tapes/guards.
-  const long double base=rows*(20.L*l.floating_width()+32.L*l.integer_width()+100.L*(d*static_cast<long double>(d)+rank*static_cast<long double>(d)+ds*static_cast<long double>(d))+64.L*(d+ds)+400)+64.L*(d+ds);
+  const long double base=rows*(20.L*l.floating_width()+32.L*l.integer_width()+64.L*(d+ds)+400)+64.L*(d+ds)
+    +weighted_projection_forward_bytes(rows,d,2*d,banks)+weighted_projection_forward_bytes(rows,d,rank,banks)
+    +weighted_projection_forward_bytes(rows,rank,2*d,banks)+weighted_projection_forward_bytes(rows,d,ds,banks);
   if(old.floating.scalar_type()==at::kHalf){
     const long double extra=rows*(16.L*l.floating_width()+24.L*l.integer_width()+16.L*std::max<int64_t>(1,l.capacity())+32)+64.L*l.fields().size();
     budget(base+extra,available);auto values=at::empty(old.floating.sizes(),old.floating.options().dtype(at::kFloat));p.cast(old.floating,values);
@@ -29,16 +31,15 @@ WeightedKVUpdateTape append_weighted_kv_update(DeviceProgram& p,const weighted::
   p.kernel([=](void* stream){check_device_launch(TIDE_LAUNCH_KERNEL(tide_weighted_kv_prepare)(1,stream,
     ptr(h),ptr(owners),ptr(present),ptr(u),ptr(mass),ptr(ids),ptr(indices),ptr(row_ids),ptr(positive),ptr(error),rows,d,banks),
     "KV positive reception and input plan");},{h,owners,present,u,mass,ids,indices,row_ids,positive,error});
-  WeightedKVParameters saved{gather(p,w.base,indices,positive,error),gather(p,w.left,indices,positive,error),
-    gather(p,w.right,indices,positive,error),gather(p,w.summary,indices,positive,error)};
   // KV §1.2: B*N(u) + U*(V*N(u)). Keep both adapter factors; never form U*V.
   // Each projection retains its actual operands for the independent VJP.
-  auto kv=append_weighted_projection(p,u,row_ids,{saved.base,{}},c.epsilon,error,available);
-  auto low=append_weighted_projection(p,u,row_ids,{saved.right,{}},c.epsilon,error,available);
-  auto up=append_weighted_projection(p,low.output,row_ids,{saved.left,{}},std::nullopt,error,available);
+  auto kv=append_weighted_projection(p,u,ids,{w.base,{}},c.epsilon,error,available);
+  auto low=append_weighted_projection(p,u,ids,{w.right,{}},c.epsilon,error,available);
+  auto up=append_weighted_projection(p,low.output,ids,{w.left,{}},std::nullopt,error,available);
   auto combined=at::zeros_like(kv.output);p.copy(combined,kv.output);p.add(combined,up.output);
   combined=guard(p,combined,positive,error);
-  auto summary=append_weighted_projection(p,u,row_ids,{saved.summary,{}},c.epsilon,error,available);
+  auto summary=append_weighted_projection(p,u,ids,{w.summary,{}},c.epsilon,error,available);
+  WeightedKVParameters saved{kv.matrix,up.matrix,low.matrix,summary.matrix};
   std::vector<int64_t> kv_columns,summary_columns;
   for(const std::string name:{"keys","values"})for(int64_t j=0;j<d;++j)kv_columns.push_back(l.field(name).offset+j);
   for(int64_t j=0;j<ds;++j)summary_columns.push_back(l.field("summaries").offset+j);

@@ -31,7 +31,10 @@ def settle(dtype, mode, implementation):
         # promoted to FP64, full discrete observations and zero VJP still pass.
         # The original atol/rtol stay in Checks; this remains a strict xfail.
         "hard_selection": {"nodes.0.kernel.base": 1.4e-5, "nodes.3.full_program.content.out": 3e-6},
-        "proportional": {"nodes.0.kernel.summary": 1.6e-5, "nodes.3.full_program.content.out": 2e-6}
+        # Tensor-block regrouping retains a strict FP32 out-weight failure at
+        # 2.8611e-6. Same FP32 inputs promoted to FP64 and zero roots pass;
+        # this is a bounded failure classification, not a passing tolerance.
+        "proportional": {"nodes.0.kernel.summary": 1.6e-5, "nodes.3.full_program.content.out": 3e-6}
                         if implementation == "python" else {}}
     if implementation in {"python", "native"}:
         # Source-column GEMM/explicit block transpose: same-material FP64 and

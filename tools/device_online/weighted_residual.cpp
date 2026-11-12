@@ -33,7 +33,7 @@ WeightedResidualTape append_weighted_residual(DeviceProgram& p,const at::Tensor&
   check(input,device,at::kFloat,{rows,d});check(memory,device,at::kFloat,{rows,dm});check(owners,device,at::kLong,{rows});check(error,device,at::kInt,{1});
   check(w.out,device,at::kFloat,{banks,d,dm});check(w.gate,device,at::kFloat,{banks,df,d});check(w.up,device,at::kFloat,{banks,df,d});check(w.down,device,at::kFloat,{banks,d,df});
   const WeightedStorageIncrement storage(p,{input,memory,owners,w.out,w.gate,w.up,w.down,error});
-  budget(64.L*((banks==1?1:rows)*(d*static_cast<long double>(dm)+3.L*d*df)+rows*(d+df+1.L)),available);
+  budget(64.L*(banks*(d*static_cast<long double>(dm)+3.L*d*df)+rows*(d+df+1.L)),available);
   auto out=append_weighted_projection(p,memory,owners,{w.out,{}},std::nullopt,error,available);
   auto clean=at::zeros_like(input),indices=at::zeros_like(owners),errors=at::zeros_like(owners,owners.options().dtype(at::kInt));
   p.kernel([=](void* stream){check_device_launch(TIDE_LAUNCH_KERNEL(tide_weighted_head_plan)(1,stream,
@@ -61,7 +61,7 @@ WeightedResidualGradient append_weighted_residual_vjp(DeviceProgram& p,const Wei
   check(t.memory_scale,device,at::kFloat,{1});check(t.ffn_scale,device,at::kFloat,{1});
   auto borrowed=saved_tensors(t);borrowed.insert(borrowed.end(),{gradient,roots,error});
   const WeightedStorageIncrement storage(p,std::move(borrowed));
-  budget(64.L*((banks==1?1:rows+banks)*(d*static_cast<long double>(dm)+3.L*d*df)+(rows+banks)*(d+df+1.L)),available);
+  budget(64.L*(banks*(d*static_cast<long double>(dm)+3.L*d*df)+(rows+banks)*(d+df+1.L)),available);
   auto clean=at::zeros_like(gradient),flags=at::zeros_like(roots),down_bar=at::zeros_like(gradient);
   guard(p,t.out.owners,gradient,roots,clean,flags,error,true);p.multiply(clean,t.ffn_scale,down_bar);
   auto down=append_weighted_projection_vjp(p,t.down,down_bar,flags,error,available);

@@ -56,8 +56,13 @@ FP16 raw更新已有[eb231a1固定资格](evidence/core5-resident-half-kv-update
 共享参数仍按所有实际行归约，独立K/V/summary与None根、原始时间、half最终store守卫不变。
 适配器前向及VJP中原有O(d²r)的稠密组合工作变为O(dr)，base的O(d²)仍在；
 更多小projection提交也计入成本，因此不从乘法量减少直接推断加速。
-现有保守预算继续生效，不凭估算收益扩大准入；实际retained buffers、完整窗口/训练与
+前向/反向预算按实际bank与行缓冲更新；实际retained buffers、完整窗口/训练与
 checkpoint、单/双设备和两dtype由对应固定源码资格验收，旧报告不认证此增量。
 
 上述resident增量与实际消费者的[57308e7固定资格](evidence/core5-resident-boundary-20261029.md)
 分别记录SDK、Python-owned、原失败和初始化边界；CUDA新构建/真机仍待验。
+
+后继[实际bank分组](resident-bank-gemm.md)把正接收owner直接传给四个投影，
+`saved_rows`字段现为投影真实bank快照的别名，不再包含R份矩阵；VJP直接返回bank梯度，
+删除逐行矩阵外积及二次归约。返回的canonical角色、独立KV/summary连接、raw状态和低秩公式不变。
+旧固定报告不认证此后继的设备构建、分支执行或规模成本。
