@@ -106,3 +106,15 @@ python scripts/check_lh_tensor.py --case many-lh --device cpu --dtype float64 --
 
 修改公式同时维护适用域、独立检查和本契约；改变runner则维护计时/职责/参数身份。
 固定运行证据从[证据索引](evidence/README.md)进入；当前完成范围与待办只维护在STATUS/ROADMAP。
+
+## 重复算子与 autograd 诊断
+
+`profile_lh_tensor.py --plan PLAN.json --level direct --client python --device cpu
+--profile cpu --census --output-dir NEW_DIR` 使用与 `benchmark_lh_tensor.py` 相同的
+参数/端口材料、目标和重置warmup。公共接口选择 `--level public`，默认入口选择
+`--level default`；native须给 `--client native --native-library MATCHING_BUILD`。
+
+CPU profile按实际shape记录算子数量/主机成本，`--census`记录返回根及已插桩私有图，
+Python/native重叠计数不能相加。NPU选 `--profile npu --device npu:0 --trace-dir NEW_SCRATCH`，
+由合法资源准入启动；厂商trace与审阅后的摘要分开保留。诊断包含forward/反向/finite检查，
+不包含optimizer，不产生吞吐结论，也不代替独立数学或精确恢复。
