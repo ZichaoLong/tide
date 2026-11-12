@@ -1,5 +1,9 @@
 # 历史验证与测量证据
 
+[Resident KV bank贯穿（2026-11-12）](resident-kv-owner-20261112.md)：0c974ccd两构建、56 CPU、
+11 SDK/4安装native进程通过；共享历史接Mem/Full/块伴随，显式raw观察/独立根、三步与新进程恢复通过。
+无新吞吐或规模结论，完整设备图expiry、half/其他记忆/多卡与CUDA资格分列。
+
 [Read/Describe→区域字段owner（2026-11-12）](read-region-owner-20261112.md)：c6afc20c两构建、245 CPU通过/7原xfail/2原严格失败，
 SDK7CPU/15NPU及12安装训练恢复通过；20点成本中LH默认NPU训练2.4718秒、直接.6219秒，主要差距仍在。
 

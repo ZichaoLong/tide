@@ -9,6 +9,9 @@ or FC16 qualifications to the new path.
 The [fixed a3c report](evidence/resident-block-public-20261112.md) records the
 Python-owned and standalone SDK small-NPU sum/qry training and fresh-process
 restore checks, alongside separate FC16/LH176 scale capacity refusals.
+The later [KV bank qualification](evidence/resident-kv-owner-20261112.md) separately
+checks the default shared-history implementation, explicit raw observations and
+independent roots; it adds no scale or throughput claim.
 
 ## Boundary and lifecycle
 

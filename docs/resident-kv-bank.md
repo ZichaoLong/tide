@@ -76,6 +76,7 @@ owners as new bank implementations.
   roots. `test_resident_kv_observations.py` checks roots without decoding;
   `test_experiment_block_records.py` rejects incomplete observation material.
 
-Build, device execution, full-graph training and performance evidence are recorded
-separately in the [evidence index](evidence/README.md). A shared bank and fewer
+[0c974ccd fixed qualification](evidence/resident-kv-owner-20261112.md) records two builds,
+56 CPU checks, actual NPU graph roots, training and fresh-process restoration.
+Build, device execution, full-graph training and performance evidence remain separate. A shared bank and fewer
 copies alone do not establish wall-time improvement or complete P1–P6 delivery.

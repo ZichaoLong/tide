@@ -1,5 +1,9 @@
 # 从 Git 复现问题与维护失败经验
 
+Resident默认KV bank从[0c974ccd固定资格](evidence/resident-kv-owner-20261112.md)进入；
+`test_resident_kv_bank/pool/read`独立局部公式、SDK完整flow根及安装`block_resident.py`
+显式raw观察/训练/新进程恢复分工。实际完整命令和构建身份在对应JSON。
+
 Read/Describe实际owner交接从[c6afc20c资格与20点成本](evidence/read-region-owner-20261112.md)进入，
 独立根/空列stride检查在`test_column_blocks`及SDK `weighted-kv-tensor`。
 

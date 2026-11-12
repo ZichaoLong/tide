@@ -25,7 +25,7 @@
 | 配置身份、安装、计时分母、归档与失败复现 | [测量与证据](performance-lessons-evidence.md) |
 | 外部Transformer/MoE、真实模型入口及计时范围 | [外部模型对照](performance-lessons-external-models.md) |
 
-新近机制：[连续存储与独立根](performance-lessons-prefill.md#连续存储借用与独立梯度根)、[外层图与跨阶段实际工作](performance-lessons-prefill.md#外层图缩小与跨阶段实际工作)、[设备调用组合与资源生命周期](performance-lessons-state-devices.md#设备调用组合与资源生命周期)、
+新近机制：[共享历史与显式观察](performance-lessons-prefill.md#共享历史与显式观察边界)、[连续存储与独立根](performance-lessons-prefill.md#连续存储借用与独立梯度根)、[外层图与跨阶段实际工作](performance-lessons-prefill.md#外层图缩小与跨阶段实际工作)、[设备调用组合与资源生命周期](performance-lessons-state-devices.md#设备调用组合与资源生命周期)、
 [独立求和参考自身精度](performance-lessons-numerics.md#独立求和也要核对参考自身精度)、
 [矩形容量与实际吞吐分母](performance-lessons-evidence.md#矩形容量与实际吞吐分母)、
 [区域均值与真实共享传输](performance-lessons-batching.md#区域均值与传输必须保留真实共享身份)、

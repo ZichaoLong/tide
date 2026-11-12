@@ -22,14 +22,14 @@ CPU、主机混合与设备常驻分开验收；GPU按当前授权延后。
 | P5 规模与执行路径 | 主机LH176/FC/1B/9B有有限成本；新resident独立Model、KV sum/qry、小图三步/跨窗/新进程恢复已有[a3c资格](evidence/resident-block-public-20261112.md) | LH公共层差距仍明显，优先source-owner/region-window上下文。[有界program组合](evidence/resident-services-20261112.md)已通过完整flow、小图新进程恢复及原预算FC16/LH176执行/换owner恢复；规模独立数学未检查、成本仍高，共享历史/raw布局仍须闭环。多卡/普通异步和GPU按下表独立处理 |
 | P6 治理与交付 | 配置/代码/数学/测试/证据/复现已有导航；skills保留加法、减法、静态循环/形状/复制/伴随分析 | 随每次边界重写更新符号/契约、固定资格、安装消费与精确恢复。清理陈旧交接叙述，保留可直接重建的输入与命令；不以文档链接检查宣布全仓治理完成 |
 
-本轮在主机字段owner与resident KV存储的当前边界完成必要验证后停下汇报、重新对齐；
+本轮已完成主机字段owner与resident KV存储的当前边界及必要验证，现停下汇报、等待重新对齐；
 下文是总体剩余方向，不授权重入时自动展开下一轮。已确认原则不作为每次压缩后的新任务。
 
 ### 下一实现边界
 
 - **主机来源与区域窗口**：[1f0e6e43审阅](evidence/region-tensor-20261112.md)确认整组KV写入和中心化Aggregate VJP已经落实，不能继续把旧逐源图当根因。72e1d22c及9ae62d0d已保留唯一实际来源块与物理incidence/增量预算；c6afc20c已连接Read→区域的字段owner。剩余prepare/raw-bank→Read/Full及typed continuation；参数共享、计算共享和私有状态分别处理。mixed预设只在配置入口展开，实际设备边界才传输；区域参数视图和操作数别名应在调用级复用。
 - **resident程序资源**：[042ea369](evidence/resident-services-20261112.md)将区域前后向交给设备通知调用的有界program，已越过41c完整flow反向507002与原预算两规模失败。08a349ce补已知存储/workspace预准入与真实程序/流/通知计数，[两套构建/设备资格](evidence/resident-resources-20261112.md)已通过；部分提交故障、整体等待期限和更大资源规模仍独立处理。独立FP64投影oracle通过原阈值；旧FP32参考自身累加超差和CPU harness顺序污染保留。
-- **resident历史布局**：[唯一initial/write bank、快照索引及块伴随](resident-kv-bank.md)已接默认局部路径，保留三种Read、独立raw根、过期/原始int64时间与实际checkpoint。当前待固定构建与完整设备资格；局部CPU通过不能代替整链。此后是否继续规模/性能由本轮汇报后的对齐决定。
+- **resident历史布局**：[唯一initial/write bank、快照索引及块伴随](resident-kv-bank.md)已接默认局部路径，保留三种Read、独立raw根、过期/原始int64时间与实际checkpoint。[0c974ccd资格](evidence/resident-kv-owner-20261112.md)：56 CPU、两构建、SDK11/native4设备进程通过；小图全根、三步、精确新进程恢复已验。有限窗口expiry目前为CPU局部证据，整链设备扩展和新布局尺度/性能尚待；此后工作由本轮汇报后的对齐决定。
 - **循环候选与广泛审阅**：SSD层链仍有默认/公式差距；按实际调用与有状态锚点继续审阅，不把KV优化自动当循环模块已优化。全仓未审范围由固定清单/hash记录，审阅发现机会不要求无限实施。
 
 ### 测量、阶段边界与有限停止

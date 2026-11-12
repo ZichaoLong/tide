@@ -1,56 +1,61 @@
-# 当前交接 — 相邻张量阶段与 resident KV bank（2026-11-12）
+# 当前交接 — 本轮收尾，等待重新对齐（2026-11-12）
 
-数学固定 `0770593838a37c790a568226930567ed60f99b83`，19 份快照通过。
-授权分支 `graph-execution-foundation`；允许整体重写、分阶段提交与非强推；本对话共享 NPU 已授权，GPU 延后。
-**本轮完成正在进行的两条边界重写及必要验证后，停下向用户汇报、重新对齐。不要自动展开下一轮。**
-这是最新任务边界；P1—P6总体未完成，见 [ROADMAP](ROADMAP.md)。
+数学固定 `0770593838a37c790a568226930567ed60f99b83`，19份快照通过。
+授权分支 `graph-execution-foundation`。**用户要求本轮之后停下汇报，重新对齐并获授权后再继续。**
+本轮两条边界及必要验证已结束；不要自动启动下一轮优化、规模扫描或剩余P1—P6。
+当前总体待办在[ROADMAP](ROADMAP.md)，本页是唯一当前交接。
 
-## 已确认原则，不是每次重入的新任务
+## 已确认原则，不重新立项
 
-固定数学、公共基座与代表性能是锚点；旧源码/接口可替换，历史兼容不构成性能或架构约束。
-mixed-a/b/c 仅为可迁移的性能对照预设，不强迫核心分层；重入时遵守，不重复启动同一调查。
-三份用户 `docs/tide-learning-lab-TL-REQ-004/005/006-handoff.md` 只读、不提交。
+固定core-5全局/局部数学、公共基座和代表性能是锚点。旧源码和接口可整体重写；
+mixed-a/b/c只是可迁移的对照预设，不强迫架构分层。重入时遵守，不重复调查或执行同一原则。
+保留一般图、局部替换、完整观察/独立根、训练和精确恢复。子代理/工具并行按收益选择，
+主代理统一集成和资源调度。全CPU/可用内存可使用；本对话共享NPU已有授权，不能继承为新会话默认。GPU延后。
 
-## 最近固定结果
+## 本轮交付与证据
 
-- **c6afc20c** 主机Read/Describe→区域字段owner：[资格与20点成本](evidence/read-region-owner-20261112.md)。
-  两套新core构建、SDK7CPU/15NPU组合、12个CPU/NPU安装三AdamW/新进程恢复通过；
-  CPU245 passed / 7原xfail / 2原FP32严格失败，原坐标及差8.8512897e-6保持，阈值不改。
-  LH176 B4/L16/d64默认native训练CPU1/NPU-host2为1.419332/2.471804秒，直接.749660/.621882秒；
-  FC16 B8/L128/d128默认native训练CPU/NPU为1.156975/.301235秒。主要差距未闭合，不继续同一局部优化循环。
-- `72e1d22c`来源共享与`9ae62d0d`增量规划：[原成本/独立profile](evidence/source-bank-20261112.md)、
-  [后继定向资格](evidence/source-planning-20261112.md)已归档；外图与私有图计数不得相加。
-- `08a349ce` resident资源预准入/inventory：[两套构建与设备资格](evidence/resident-resources-20261112.md)通过，无新性能。
-- `042ea369`有界program组合及`7fd1dd10`CPU harness修复见[固定报告](evidence/resident-services-20261112.md)。
-  原预算FC16 B4/L16/d128与LH176 B4/L16/d64完整训练3.9448/22.5918秒、实际61输入位置；
-  新owner下一窗精确恢复通过，规模数学not_checked，非严格等价吞吐。
+- **c6afc20c主机Read/Describe→区域字段owner**：真实连续存储借用和块伴随已交付，
+  [固定资格与20点成本](evidence/read-region-owner-20261112.md)。两套core构建、SDK7CPU/15NPU组合、
+  12安装三AdamW/新进程恢复通过；CPU245 passed / 7原xfail / 2原FP32严格失败。
+  原失败坐标及差8.8512897e-6保持，阈值未改。LH176 B4/L16/d64默认native完整训练CPU1/NPU-host2
+  为1.419332/2.471804秒，直接.749660/.621882秒；FC16 B8/L128/d128默认native为1.156975/.301235秒。
+  这是主机调度数值在NPU的结果，不是resident。主要LH差距仍在，不追加同一局部的无限优化。
+- **0c974ccd resident唯一KV bank→Mem/Full→块伴随**：默认局部链已贯穿，
+  [固定资格](evidence/resident-kv-owner-20261112.md)记录56 CPU、两套独立构建、11 SDK及4安装native设备进程全部通过。
+  Read0/−/+、独立raw根、小图三步AdamW、两窗BPTT、实际raw解码和新进程精确恢复分别核对。
+  `kv-bank-views-v1`：old/proposal默认有shape/present/valid，显式observe从真实bank解码，
+  cotangents不要求先物化；完整Python记录和安装消费者已迁移。block checkpoint仍schema2。
+  **新resident布局没有新吞吐或规模测量**；半精度、其他记忆、多owner、CUDA构建/真机未扩。
+- 来源共享/规划与resident资源此前记录仍有效：
+  [72e1d22c](evidence/source-bank-20261112.md)、[9ae62d0d](evidence/source-planning-20261112.md)、
+  [08a349ce](evidence/resident-resources-20261112.md)。不重新执行已终态矩阵来恢复上下文。
 
-## 当前改动与本轮剩余
+## 尚未完成，等待下一轮对齐
 
-主机边界已完成固定资格与有限成本。resident的唯一initial/write bank、old/proposal索引、
-Mem/Full及块伴随已接入默认局部消费者；公共old/proposal字段按shape提供独立根，
-显式observe从实际bank解码。契约与安装消费者同步迁移，见[bank](resident-kv-bank.md)。
-开发CPU独立bank/pool/read/root检查29项、公共实验/资源定向26项通过；正式固定构建与设备资格尚待执行。
-不以开发检查冒称resident整链通过。本轮不扩新记忆/多卡/规模或主机raw-bank下一阶段。
-完成下列有限资格、证据及提交推送后，停下汇报并等待用户重新对齐授权。
+P1—P6总体未完成。主机prepare/raw-bank→Read/Full和typed continuation仍有相邻交接工作；
+LH直接/公共/默认的主要成本差距尚未闭合。新resident保留查询×条目表和部分标量位置/元数据核，
+大尺度、有限window expiry完整设备图、更多模块/多卡及性能须独立验收；CPU局部expiry不能代替这些资格。
+全仓逐文件/逐函数审阅未完成。详细限制、停止/重启条件只在ROADMAP维护。
+本轮经验已归入[性能经验](performance-lessons-prefill.md#共享历史与显式观察边界)，
+源码/数学/测试/实际命令从[bank契约](resident-kv-bank.md)和[复现导航](reproduction.md)进入。
 
-## 作业和资源
+## 作业、源码和工作区
 
-`read-region-owner-*`两构建、CPU定向、SDK设备、两个安装资格和两个成本任务均已终态。
-CPU定向原状态failed/exit1保留，其余passed。暂无在途长任务；即将启动本轮两套resident固定构建。
-记录`artifacts/jobs/read-region-owner-*`与`artifacts/read-region-owner-20261112`；
-固定source/core/install在`/dev/shm/gef-read-region-owner-20261112`，不修改旧作业输入。
-两工具链`ascend/dev-workspace-9.2.0`与`libtorch-npu/2.12.0-cann9.2.0`独立；私有Python环境`artifacts/additive-work/env`。
-可用全部CPU/内存及合法准入NPU；正式计时与重构建错开。当前主盘余807GiB、tmpfs276GiB；账户337GiB/软300/硬800GiB、6日宽限，无本轮写入阻塞。
+无在途长任务；所有`resident-kv-owner-*`作业均passed/exit0，unit inactive、MainPID0。
+两构建CPU0–159/160–319、各512GiB/2400秒；NPU资格物理11(native)/5(SDK)，idle准入，逻辑npu:0。
+固定resident源码`0c974ccd4921999e6b7f6292888bfcb3478a33e1`在
+`/dev/shm/gef-resident-kv-owner-20261112/source`，对应resident-native/resident-sdk/install/wheels同根；
+复用c6 core前逐一核对cpp源码及二进制SHA。两套公开工具链独立，无公共环境修改。
+记录`artifacts/jobs/resident-kv-owner-*`与`artifacts/resident-kv-owner-20261112`；
+必要命令、结果、SHA已复制到仓库证据，不依赖旧运行目录才能复现。
 
-重入：`git status --short --branch`；`python scripts/status.py`；`python scripts/check_upstream.py`。
-历史提交：`python scripts/resolve_history_commit.py OLD_SHA`，见[迁移](history-migration.md)。
+用户的三份未跟踪`docs/tide-learning-lab-TL-REQ-004/005/006-handoff.md`仍只读、不提交。
+除此之外无待集成的源码草稿。开发中的CPU harness签名/arena和W=1分支见证修正已保留于证据，
+不能把开发/语法检查混成固定设备结果。磁盘未阻塞：最近主盘余807GiB、tmpfs276GiB，
+账户337GiB/软300/硬800GiB、6日宽限；下一大写入前重查。
 
-本轮新材料：`artifacts/resident-kv-owner-20261112/plan.json`及launch/qualification脚本。
-固定checkout目标`/dev/shm/gef-resident-kv-owner-20261112/source`；构建目标resident-native/resident-sdk；
-复用c6两套core前由构建器逐一核对cpp源码SHA及二进制SHA。
-构建分别CPU0–159/160–319、512GiB、2400秒，background.slice；其后独立CPU门禁及NPU小型组件/全根/三步/新进程恢复。
-下一命令（固定提交和worktree后）：
-`python artifacts/resident-kv-owner-20261112/launch.py native-build 0-159 2400`；
-`python artifacts/resident-kv-owner-20261112/launch.py sdk-build 160-319 2400`。
-单元/日志：`resident-kv-owner-*` / `artifacts/jobs/resident-kv-owner-*/{status.json,task.log}`。
+## 下一动作
+
+向用户汇报并等待对齐/授权，不自动运行任何待办。重入只核验：
+`git status --short --branch`；`python scripts/status.py`；`python scripts/check_upstream.py`。
+历史提交按`python scripts/resolve_history_commit.py OLD_SHA`定位，见[迁移说明](history-migration.md)。

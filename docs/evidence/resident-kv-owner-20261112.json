@@ -1,0 +1,1141 @@
+{
+  "schema": "tide-reviewed-resident-bank-qualification-v1",
+  "source": "0c974ccd4921999e6b7f6292888bfcb3478a33e1",
+  "upstream": "0770593838a37c790a568226930567ed60f99b83",
+  "scope": "directed immutable resident KV bank qualification; no performance or scale measurement",
+  "plan": {
+    "scope": "resident KV bank integration; no scale or throughput claim",
+    "source": "0c974ccd4921999e6b7f6292888bfcb3478a33e1",
+    "builds": [
+      "Python-owned NPU plugin",
+      "standalone LibTorch NPU selected checks"
+    ],
+    "core_reuse": "/dev/shm/gef-read-region-owner-20261112/core-{native,sdk}; build script verifies exact cpp hash and binary SHA",
+    "resources": {
+      "build_native_cpu": "0-159",
+      "build_sdk_cpu": "160-319",
+      "memory_max_per_build": "512G",
+      "build_timeout_seconds": 2400
+    },
+    "user_boundary": "finish this round and stop for alignment"
+  },
+  "jobs": {
+    "native-build": {
+      "status": {
+        "command": [
+          "/bin/bash",
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/resident-kv-owner-20261112/native-build.sh"
+        ],
+        "cwd": "/dev/shm/gef-resident-kv-owner-20261112/source",
+        "state": "passed",
+        "source": "0c974ccd4921999e6b7f6292888bfcb3478a33e1",
+        "dirty": "",
+        "started": "2026-11-12T12:21:24.688730+00:00",
+        "exit_code": 0,
+        "finished": "2026-11-12T12:24:23.024508+00:00"
+      },
+      "systemd": "MainPID=0\nResult=success\nExecMainStatus=0\nSlice=\nControlGroup=\nCPUUsageNSec=[not set]\nMemoryMax=infinity\nId=resident-kv-owner-native-build.service\nActiveState=inactive\nSubState=dead\n",
+      "launcher": "#!/bin/bash\nset -euo pipefail\nsource /usr/share/Modules/init/bash\nmodule purge\nexport PYTHONDONTWRITEBYTECODE=1 TORCH_DEVICE_BACKEND_AUTOLOAD=0 OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1\nmodule load ascend/dev-workspace-9.2.0\nsource /mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/additive-work/env/bin/activate\nexport PYTHONPATH=\"$PWD/python:$PWD/tests:$PWD/scripts:${PYTHONPATH:-}\"\npython scripts/build_device_control.py --core-build /dev/shm/gef-read-region-owner-20261112/core-native --build-dir /dev/shm/gef-resident-kv-owner-20261112/resident-native --ascendc-soc Ascend910_9392 --python-component weighted --jobs all\npython -m pip wheel --no-build-isolation --no-deps . -w /dev/shm/gef-resident-kv-owner-20261112/wheels\npython -m pip install --no-deps --target /dev/shm/gef-resident-kv-owner-20261112/install /dev/shm/gef-resident-kv-owner-20261112/wheels/*.whl\n",
+      "build": {
+        "schema": "tide-device-control-build-v1",
+        "source": "0c974ccd4921999e6b7f6292888bfcb3478a33e1",
+        "dirty": "",
+        "component_sha256": "0725180a5e1b18b06982e1bd4e2ba0f86a3daa279f57bee6b3f522c5e8796160",
+        "core": {
+          "source": "c6afc20c194245fbdf829ef5589d3645c7848b07",
+          "cpp_source_sha256": "545eae0790da8dee3422151eb691c8fb6203dfee3c9130029aa00c079d7d9668",
+          "torch": "2.12.0+cpu",
+          "distribution": {
+            "torch": "2.12.0+cpu",
+            "torch_dir": "/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/lib/python3.12/site-packages/torch/share/cmake/Torch",
+            "prefix": "/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/lib/python3.12/site-packages/torch/share/cmake",
+            "cuda": null,
+            "cxx11_abi": true,
+            "discovery": "python-torch"
+          },
+          "environment": {
+            "os": "Linux-5.10.0-182.0.0.95.r1941_123.hce2.aarch64-aarch64-with-glibc2.34",
+            "compiler": "c++ (GCC) 10.3.1",
+            "cxx_standard": 17,
+            "build_type": "Release",
+            "torch_prefix": "/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/lib/python3.12/site-packages/torch/share/cmake/Torch",
+            "cann_version": "9.2.0"
+          },
+          "build_jobs": 160,
+          "backend": "npu",
+          "npu_runtime": "python",
+          "torch_npu": "2.12.0.post3",
+          "cuda": null,
+          "architecture": "aarch64",
+          "python": "3.12.13",
+          "cxx11_abi": true,
+          "binary_sha256": {
+            "libtidegraph.a": "3de22f83a6204cc479aaaebd7204ac45d132180057d3d482fc6549ad65e1de7a",
+            "libtidegraph_runtime.a": "90cb073d29a76b697fed7344f226320d260f68464bda6d5731605f8ecd71df05",
+            "_tide_native.so": "5b0b221b7e75a2d677b822e97097ca2410050124d4bf56c8d964524fb3ccc659"
+          }
+        },
+        "build_jobs": 160,
+        "backend": "npu",
+        "runtime": "python",
+        "npu_runtime": "python",
+        "cuda_architectures": null,
+        "ascendc_soc": "Ascend910_9392",
+        "binary_sha256": {
+          "_tide_weighted_resident.so": "e9f29bd3617536800cd90d468d46b54332f60cee9da39ca0f509a37c75098a10",
+          "libtide-weighted-flow.so": "6b7bfcb9384bca8928d91249fc85067d6c7f8b91e638288a2af1997d4062c56f",
+          "libtide-weighted-training.so": "fab583022a9c4274c1c571716f8c961147fe8b227cbb046d8cb2e1ee37b65862",
+          "libtide-block-resident.so": "4c1e4c6f3f73ad58a59c71fff74a5dcd0e5ca4527728b3d5261f0c4401a4f937"
+        },
+        "loader_sha256": {
+          "_tide_weighted_resident.so": "b1ff252587003194594f3d34228d2e7210260854fb63c3d29e4caaa8edd6dd62",
+          "libtide-weighted-flow.so": "005427b0139add40b704e62c095ba2cd4f04c13e594ff6a19d6e14c1fcc2d121",
+          "libtide-weighted-training.so": "d1f4a188e808c2e868021def9f29abbc8ef7fa81ae51d3d54fdf3bc094cebbca",
+          "libtide-block-resident.so": "b44bcebfee10ded81de323e0d5eea8e4c3f23b9fa5fa606b46314ad936e0c7de"
+        },
+        "requested_checks": null,
+        "python_component": "weighted",
+        "scope": "build/loader/help only; device control check required separately"
+      }
+    },
+    "sdk-build": {
+      "status": {
+        "command": [
+          "/bin/bash",
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/resident-kv-owner-20261112/sdk-build.sh"
+        ],
+        "cwd": "/dev/shm/gef-resident-kv-owner-20261112/source",
+        "state": "passed",
+        "source": "0c974ccd4921999e6b7f6292888bfcb3478a33e1",
+        "dirty": "",
+        "started": "2026-11-12T12:21:24.773969+00:00",
+        "exit_code": 0,
+        "finished": "2026-11-12T12:24:34.902449+00:00"
+      },
+      "systemd": "MainPID=0\nResult=success\nExecMainStatus=0\nSlice=\nControlGroup=\nCPUUsageNSec=[not set]\nMemoryMax=infinity\nId=resident-kv-owner-sdk-build.service\nActiveState=inactive\nSubState=dead\n",
+      "launcher": "#!/bin/bash\nset -euo pipefail\nsource /usr/share/Modules/init/bash\nmodule purge\nexport PYTHONDONTWRITEBYTECODE=1 TORCH_DEVICE_BACKEND_AUTOLOAD=0 OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1\nmodule load libtorch-npu/2.12.0-cann9.2.0\nexport PATH=/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/bin:$PATH\npython3 scripts/build_device_control.py --core-build /dev/shm/gef-read-region-owner-20261112/core-sdk --build-dir /dev/shm/gef-resident-kv-owner-20261112/resident-sdk --ascendc-soc Ascend910_9392 --jobs all --checks services resident-block-selection resident-block-kv-messages resident-block-kv-sequence resident-block-settle-flow resident-block-settle-session resident-block-public resident-block-model\n",
+      "build": {
+        "schema": "tide-device-control-build-v1",
+        "source": "0c974ccd4921999e6b7f6292888bfcb3478a33e1",
+        "dirty": "",
+        "component_sha256": "0725180a5e1b18b06982e1bd4e2ba0f86a3daa279f57bee6b3f522c5e8796160",
+        "core": {
+          "source": "c6afc20c194245fbdf829ef5589d3645c7848b07",
+          "cpp_source_sha256": "545eae0790da8dee3422151eb691c8fb6203dfee3c9130029aa00c079d7d9668",
+          "torch": "2.12.0",
+          "distribution": {
+            "torch": "2.12.0",
+            "torch_dir": "/opt/software/libtorch/2.12.0-cpu-aarch64-abi1/share/cmake/Torch",
+            "prefix": "/opt/software/libtorch/2.12.0-cpu-aarch64-abi1",
+            "cxx11_abi": true,
+            "cuda": null,
+            "discovery": "standalone-prefix",
+            "distribution_sha256": {
+              "share/cmake/Torch/TorchConfig.cmake": "9846a61d981bc6c465ccfd604edb910e2ff37342310b80606c416697f9753d24",
+              "share/cmake/Torch/TorchConfigVersion.cmake": "6cc8fc1b03a7d604a57be1fc51491bfb4deb8c651506c415a41b5173b06344f3",
+              "lib/libtorch.so": "5d864dc3a979f6f8cf572e752caa583182324399c29a79b9143efe175f67d72e",
+              "lib/libtorch_cpu.so": "cb4931abca15245de366da71e361174afc9e411651d4c50046cfb7a2dac6c4f5",
+              "lib/libc10.so": "fa843366784bfce035e912360601c4ca098ce536b20f0c4a8ee50c3f00294e37"
+            }
+          },
+          "environment": {
+            "os": "Linux-5.10.0-182.0.0.95.r1941_123.hce2.aarch64-aarch64-with-glibc2.34",
+            "compiler": "c++ (GCC) 10.3.1",
+            "cxx_standard": 17,
+            "build_type": "Release",
+            "torch_prefix": "/opt/software/libtorch/2.12.0-cpu-aarch64-abi1/share/cmake/Torch",
+            "cann_version": "9.2.0",
+            "npu_sdk": {
+              "config": "/opt/software/libtorch-npu/2.12.0-cann9.2.0-aarch64-abi1/sdk/share/cmake/Torch_npu/Torch_npuConfig.cmake",
+              "config_sha256": "1711480e47f9dbb19ed01209f073e5526218efeb583cbbbc9ab101c373cc62dd",
+              "library_sha256": "9a851accc1f4c7063d7e3c3cf76186329c063000a00a4d48c45a30ca1e8e3c18"
+            }
+          },
+          "build_jobs": 160,
+          "backend": "npu",
+          "npu_runtime": "standalone",
+          "torch_npu": null,
+          "cuda": null,
+          "architecture": "aarch64",
+          "python": "3.12.13",
+          "cxx11_abi": true,
+          "binary_sha256": {
+            "libtidegraph.a": "983f99ac25249ee4b5ca73ca116684f6d7830096c4a7a4667d59efde83773d6a",
+            "libtidegraph_runtime.a": "154f53a6792cdbaca0a9d519340fd178d75c0b8b7b7e2c2c3a833e5065a82476",
+            "tidegraph-smoke": "094983d37825421cfb9cc4a05e943f2ebedef4a52f75ef110051928a82842530",
+            "tidegraph-kernel-check": "5655247cc936455f5bc9a00942125b718169e42bce451c41db0e0862bce26337",
+            "tidegraph-full-check": "54a705ac69ec49eb36f6c4f82178ec540cb25b1cf9c340ffd0ad68de4f51f008",
+            "tidegraph-aggregate-check": "c6c0e0468fab79b43980d7dbf64a4a3752ad5efa86a4f994bf3ab38dbe454d00",
+            "tidegraph-optimizer-check": "0c881d740a51a1067ea507bb914aaeeb6359bedbc4b2cd35cd882032926bc602",
+            "tidegraph-checkpoint-check": "c6ab2db771239e900dfbcaebc0f90cb289cf8c94698dee8d661d7ca768fbdaa5",
+            "tidegraph-weighted-training-check": "ceae3cec5dc3ff75339688c91501601e30310240b8e746ca5f9a7fe470bf5dda",
+            "tidegraph-lh-scope-check": "746aedf44726838f1a9159a03747053ee5ec4d9de2e930ad3258aed8a2492e0d",
+            "tidegraph-streaming-bench": "0c11194d5d5cb1c14b98db6ce0ae3259fdee7ee31c4c141ec9e83843c32ae6f2",
+            "tidegraph-scale-bench": "56e28a035c4cd254b2e111b8593c99800efacca1acfd69514c186bf5797f6bc1",
+            "tidegraph-profile-check": "27b5ca2d75e14baa28a0ea1b77414363aff4167cb82e32926132cc8fff9fe7e0",
+            "tidegraph-settle-check": "2508210bc77d7204a535ac81c4c522c8a9358939365c218ed0dfa77af8c982e9",
+            "tidegraph-greedy-check": "bf7dda97d2a18491d75f19ad834457027e1fcb5d91bbd10db649456090b95ba7",
+            "tidegraph-accelerator-check": "c438a87cdc8abea319f61bb74ea0b1d6c8b93140eea5b1322cabb0a4820483c5",
+            "tidegraph-runtime-check": "cd6d5ea111da2de812c90d807b0d2836f854d47dd39c79746d6815fa1376f7ac",
+            "tidegraph-read-precision-check": "a874c29d03dcdf1ed94981fd3763549cbe39b2d07c05dbad48c19a51889ad5b2",
+            "tidegraph-placement-check": "1a87a02b492ca5019e66b5deac1c67b13b8ceffb8d89b15f692534b28118b155",
+            "tidegraph-payload-ownership-check": "692bb31306dcc38791aff6fffb0abd5cf71c065785db9d8de08b7a3c820750db",
+            "tidegraph-weighted-binding-module-check": "81377ed071beeae3944713b0b6f96cbe6248ce7b238bc401f8fc36b51e885c8c",
+            "tidegraph-column-check": "34066289185dae93a829aafaa192e42977a482daf566675b073fbee192fdb303",
+            "tidegraph-kv-tensor-check": "650bd242c5884526fda3caba112a766f7822eecf00adecd1b1ba87ac6ff9d4a0",
+            "tidegraph-kv-tensor-prepare-check": "3e9bd59c07d9a81944c43eeef956f8bdeeb5a96473a06dc00f475225013bdc33",
+            "tidegraph-read-transport-check": "ec9cc9b822ef298dccf3786858f3107cbd949b10bd2dcd8e0cf8fdb0ae6fb60f",
+            "tidegraph-aggregate-tensor-check": "a834c2175a111b17e8d9c2c7b8ff54a83ac94ebf0fa5b7cbf6c145450696e1e1",
+            "tidegraph-region-transport-check": "419e28a9eaaee3a1ed25ec1769dd55a00da482cdf96fb1204ec722a37bd57f71",
+            "tidegraph-column-checkpoint-check": "2b76ce9a25d18da3131af190dea7fb2dfa3a790704ecbeec650734cc56043d87",
+            "libtidegraph-weighted-binding-module.so": "7ca92f4cfac0d999ea476e8dfa9b2618f0ad14d942b96da2f902c7fc89a3cdb7"
+          }
+        },
+        "build_jobs": 160,
+        "backend": "npu",
+        "runtime": "standalone",
+        "npu_runtime": "standalone",
+        "cuda_architectures": null,
+        "ascendc_soc": "Ascend910_9392",
+        "binary_sha256": {
+          "tide-device-services-check": "424da348092976f0a74dcab4592aa0421b5d66d01716313f31c5ec65a798b5f3",
+          "tide-block-read-selection-check": "6c1d27bb1056fa8fc7872d803329082d3693b738f1619887d8e097945a6f77c6",
+          "tide-block-kv-messages-check": "99f9850d3c760c565dc16917831e3ee7c56e897d5468124a1105858c7a47b96a",
+          "tide-block-kv-sequence-check": "6fdf141af1cccf3cc0f9bae6a7ba238dc0a5bfb2c7a63d5e8fea45f0f4fbb143",
+          "tide-block-settle-flow-check": "6a623767ce53d4fb48e8058cc00564a511ca160ae8e79fb9f48ccaa79e46fbdd",
+          "tide-block-settle-session-check": "930d606613e2d1e8fedda1cadece9cda113a47ed215b81c4e90ba3e91bab12bb",
+          "tide-block-resident-check": "93f0f01793e2a03ec278fed22f2fcdc2c10e295294e2ddb26baacf862d3e4b74",
+          "tide-block-settle-model-check": "e59ac85fc593c9c52510c36792be552a9d2f6c593d076154455fdb39e1c218d5",
+          "libtide-weighted-flow.so": "82c6d65e4e20211d18bc84a38b1cecdaf339ca8039cf2dccc3cf044572ef5726",
+          "libtide-block-resident.so": "e1e5bf9dca926f7d7e68d50a3954f013a4a55def57cee711fd7cfdf9191a8f2e"
+        },
+        "loader_sha256": {
+          "tide-device-services-check": "8b7b65633cf2965f3964a972cb2494fa2823d2b97d32df945c9b7ae14a4d0f36",
+          "tide-block-read-selection-check": "3278df0af51362c8c0ac0ea6a10a01ba0daf24dd990c8e5004e362862bf604a2",
+          "tide-block-kv-messages-check": "984febdb410af876a10761de6c9761d27c0302c5b5cf383eb8c79e8b9bc1955c",
+          "tide-block-kv-sequence-check": "da1c4ade13e0b8582ad1138447437393553ad7d98f07755e2d7de7b6d0e200f0",
+          "tide-block-settle-flow-check": "d11f7c187ad1125d4f952a067ecd50aaceb5f2671c0466f1d3f80f5d99db6bda",
+          "tide-block-settle-session-check": "3652068fa5580f6fd78d3a887fa048f1ac73fcbe484a08d37e735e694905aef2",
+          "tide-block-resident-check": "93970ac42fd546e7842d9ecf7ea9b7ec53bf0f619b6d90d0feffd4747251e998",
+          "tide-block-settle-model-check": "5656de713ec62a0b36619d21875443bded9cdd3ede78665aad6510a77ac8f604",
+          "libtide-weighted-flow.so": "1def06ec0df88fdcb870234b6c47fab5da99f50ba767926055fa8cbb5b475162",
+          "libtide-block-resident.so": "66dde38f9a3e918b1e43684f68620c7b3035b00e865008a706462db8ad5caed4"
+        },
+        "requested_checks": [
+          "services",
+          "resident-block-selection",
+          "resident-block-kv-messages",
+          "resident-block-kv-sequence",
+          "resident-block-settle-flow",
+          "resident-block-settle-session",
+          "resident-block-public",
+          "resident-block-model"
+        ],
+        "python_component": null,
+        "scope": "build/loader/help only; device control check required separately"
+      }
+    },
+    "cpu-directed": {
+      "status": {
+        "command": [
+          "/bin/bash",
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/resident-kv-owner-20261112/cpu-directed.sh"
+        ],
+        "cwd": "/dev/shm/gef-resident-kv-owner-20261112/source",
+        "state": "passed",
+        "source": "0c974ccd4921999e6b7f6292888bfcb3478a33e1",
+        "dirty": "",
+        "started": "2026-11-12T12:22:34.414148+00:00",
+        "exit_code": 0,
+        "finished": "2026-11-12T12:22:45.623872+00:00"
+      },
+      "systemd": "MainPID=0\nResult=success\nExecMainStatus=0\nSlice=\nControlGroup=\nCPUUsageNSec=[not set]\nMemoryMax=infinity\nId=resident-kv-owner-cpu-directed.service\nActiveState=inactive\nSubState=dead\n",
+      "launcher": "#!/bin/bash\nset -euo pipefail\nsource /usr/share/Modules/init/bash\nmodule purge\nmodule load ascend/dev-workspace-9.2.0\nsource /mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/additive-work/env/bin/activate\nexport PYTHONDONTWRITEBYTECODE=1 TORCH_DEVICE_BACKEND_AUTOLOAD=0 OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1\nexport PYTHONPATH=\"$PWD/python:$PWD/tests:$PWD/scripts:${PYTHONPATH:-}\"\npython -m pytest -q tests/test_resident_block_resources.py tests/test_resident_block_public_dispatch.py tests/test_resident_optimizer_storage.py tests/test_resident_kv_bank.py tests/test_resident_kv_pool.py tests/test_resident_kv_read.py tests/test_resident_kv_observations.py tests/test_experiment_block_records.py tests/test_experiment_resident_blocks.py --junitxml=/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/resident-kv-owner-20261112/cpu-directed.xml\n",
+      "log": "Loading ascend/dev-workspace-9.2.0\n  Loading requirement: cann/9.2.0\n........................................................                 [100%]\n56 passed in 8.80s\n"
+    },
+    "resident-native": {
+      "status": {
+        "command": [
+          "/bin/bash",
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/resident-kv-owner-20261112/resident-native.sh"
+        ],
+        "cwd": "/dev/shm/gef-resident-kv-owner-20261112/source",
+        "state": "passed",
+        "source": "0c974ccd4921999e6b7f6292888bfcb3478a33e1",
+        "dirty": "",
+        "started": "2026-11-12T12:25:09.304427+00:00",
+        "exit_code": 0,
+        "finished": "2026-11-12T12:25:52.410350+00:00"
+      },
+      "systemd": "MainPID=0\nResult=success\nExecMainStatus=0\nSlice=\nControlGroup=\nCPUUsageNSec=[not set]\nMemoryMax=infinity\nId=resident-kv-owner-resident-native.service\nActiveState=inactive\nSubState=dead\n",
+      "launcher": "#!/bin/bash\nset -euo pipefail\nsource /usr/share/Modules/init/bash\nmodule purge\nmodule load ascend/dev-workspace-9.2.0\nsource /mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/additive-work/env/bin/activate\nexport TORCH_DEVICE_BACKEND_AUTOLOAD=0 PYTHONDONTWRITEBYTECODE=1 OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1\nexport PYTHONPATH=\"/dev/shm/gef-resident-kv-owner-20261112/install:/dev/shm/gef-resident-kv-owner-20261112/source/scripts:${PYTHONPATH:-}\"\nexec python /mi/data2T/zlong/home/.agents/skills/use-local-ascend/scripts/run_on_free_npu.py --job-id resident-kv-owner-resident-native --project graph-execution-foundation --priority 0 --npu-count 1 --candidate-ids 0,5,6,10,11 --max-hbm-mib 4096 --max-wait-seconds 180 --state-file /mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/resident-kv-owner-20261112/queue-resident-native.json -- python /mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/resident-kv-owner-20261112/qualification.py resident-native\n",
+      "log": "Loading ascend/dev-workspace-9.2.0\n  Loading requirement: cann/9.2.0\n{\"elapsed_seconds\": 6.452865358442068, \"event\": \"ascend_queue\", \"job_id\": \"resident-kv-owner-resident-native\", \"logical_device\": \"npu:0\", \"logical_devices\": [\"npu:0\"], \"npu_count\": 1, \"physical_id\": 11, \"physical_ids\": [11], \"priority\": 0, \"project\": \"graph-execution-foundation\", \"schema_version\": 1, \"status\": \"running\", \"timestamp\": \"2026-11-12T12:25:16.438919+00:00\"}\npublic-qry 0\nrestore-qry 0\npublic-sum 0\nrestore-sum 0\n{\"elapsed_seconds\": 42.41393081471324, \"event\": \"ascend_queue\", \"job_id\": \"resident-kv-owner-resident-native\", \"logical_device\": \"npu:0\", \"logical_devices\": [\"npu:0\"], \"npu_count\": 1, \"physical_id\": 11, \"physical_ids\": [11], \"priority\": 0, \"project\": \"graph-execution-foundation\", \"return_code\": 0, \"schema_version\": 1, \"status\": \"completed\", \"timestamp\": \"2026-11-12T12:25:52.399992+00:00\"}\n"
+    },
+    "resident-sdk": {
+      "status": {
+        "command": [
+          "/bin/bash",
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/resident-kv-owner-20261112/resident-sdk.sh"
+        ],
+        "cwd": "/dev/shm/gef-resident-kv-owner-20261112/source",
+        "state": "passed",
+        "source": "0c974ccd4921999e6b7f6292888bfcb3478a33e1",
+        "dirty": "",
+        "started": "2026-11-12T12:25:09.382000+00:00",
+        "exit_code": 0,
+        "finished": "2026-11-12T12:26:22.063616+00:00"
+      },
+      "systemd": "MainPID=0\nResult=success\nExecMainStatus=0\nSlice=\nControlGroup=\nCPUUsageNSec=[not set]\nMemoryMax=infinity\nId=resident-kv-owner-resident-sdk.service\nActiveState=inactive\nSubState=dead\n",
+      "launcher": "#!/bin/bash\nset -euo pipefail\nsource /usr/share/Modules/init/bash\nmodule purge\nmodule load libtorch-npu/2.12.0-cann9.2.0\nexport PATH=/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/bin:$PATH\nexport TORCH_DEVICE_BACKEND_AUTOLOAD=0 PYTHONDONTWRITEBYTECODE=1 OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1\nexport PYTHONPATH=\"/dev/shm/gef-resident-kv-owner-20261112/install:/dev/shm/gef-resident-kv-owner-20261112/source/scripts:${PYTHONPATH:-}\"\nexec python /mi/data2T/zlong/home/.agents/skills/use-local-ascend/scripts/run_on_free_npu.py --job-id resident-kv-owner-resident-sdk --project graph-execution-foundation --priority 0 --npu-count 1 --candidate-ids 0,5,6,10,11 --max-hbm-mib 4096 --max-wait-seconds 180 --state-file /mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/resident-kv-owner-20261112/queue-resident-sdk.json -- python /mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/resident-kv-owner-20261112/qualification.py resident-sdk\n",
+      "log": "Loading libtorch-npu/2.12.0-cann9.2.0\n  Loading requirement: cann/9.2.0\n{\"elapsed_seconds\": 13.787933889776468, \"event\": \"ascend_queue\", \"job_id\": \"resident-kv-owner-resident-sdk\", \"logical_device\": \"npu:0\", \"logical_devices\": [\"npu:0\"], \"npu_count\": 1, \"physical_id\": 5, \"physical_ids\": [5], \"priority\": 0, \"project\": \"graph-execution-foundation\", \"schema_version\": 1, \"status\": \"running\", \"timestamp\": \"2026-11-12T12:25:23.852124+00:00\"}\ndevice-services 0\nblock-read-selection 0\nblock-kv-messages 0\nblock-kv-sequence 0\nblock-settle-flow 0\nblock-settle-model 0\nblock-settle-session 0\npublic-qry 0\nrestore-qry 0\npublic-sum 0\nrestore-sum 0\n{\"elapsed_seconds\": 71.98907577991486, \"event\": \"ascend_queue\", \"job_id\": \"resident-kv-owner-resident-sdk\", \"logical_device\": \"npu:0\", \"logical_devices\": [\"npu:0\"], \"npu_count\": 1, \"physical_id\": 5, \"physical_ids\": [5], \"priority\": 0, \"project\": \"graph-execution-foundation\", \"return_code\": 0, \"schema_version\": 1, \"status\": \"completed\", \"timestamp\": \"2026-11-12T12:26:22.053273+00:00\"}\n"
+    }
+  },
+  "launch_script": "from pathlib import Path\nimport subprocess,sys,json\nbase=Path(__file__).resolve().parent;root=base.parent.parent;source='/dev/shm/gef-resident-kv-owner-20261112/source'\nkind,cpus,timeout=sys.argv[1:];name='resident-kv-owner-'+kind\ncommand=['systemd-run','--user','--unit='+name,'--service-type=exec','--slice=background.slice','--working-directory='+source,'--property=KillMode=control-group','--property=RuntimeMaxSec='+timeout,'--property=TimeoutStopSec=30','--property=Nice=10','--property=CPUAffinity='+cpus.replace('-', ' - '),'--property=MemoryMax=512G','/usr/bin/taskset','-c',cpus,'/usr/bin/python3',source+'/scripts/job.py','--output-dir',str(root/'artifacts/jobs'/name),'--','/bin/bash',str(base/(kind+'.sh'))]\n# taskset supplies the actual inherited process mask; AllowedCPUs alone did not on this host.\ncommand=[arg for arg in command if not arg.startswith('--property=CPUAffinity=')]\nsubprocess.run(command,check=True)\nsubprocess.run(['systemctl','--user','show',name,'-p','MainPID','-p','Slice','-p','ControlGroup','-p','ActiveState'],check=True)\n",
+  "qualification_driver": "import os,sys,time,subprocess\nfrom pathlib import Path\nfrom durable_records import write_json\nbase=Path('/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/resident-kv-owner-20261112')\nbuild=Path('/dev/shm/gef-resident-kv-owner-20261112');src=build/'source'\nkind=sys.argv[1];out=base/kind;out.mkdir(exist_ok=False);rows=[]\ndef run(name,command,timeout=300,env=None):\n start=time.time();command=list(map(str,command))\n with (out/(name+'.log')).open('x') as log:\n  try:code=subprocess.run(command,cwd=out,env=env,stdout=log,stderr=subprocess.STDOUT,timeout=timeout).returncode\n  except subprocess.TimeoutExpired:code=124\n rows.append(dict(name=name,command=command,exit_code=code,started=start,finished=time.time(),cwd=str(out),device_visibility=os.environ.get('ASCEND_RT_VISIBLE_DEVICES')))\n write_json(out/'processes.json',rows);print(name,code,flush=True);return code\nif kind=='resident-sdk':\n for target in ('device-services','block-read-selection','block-kv-messages','block-kv-sequence','block-settle-flow','block-settle-model','block-settle-session'):\n  if run(target,[build/'resident-sdk'/('tide-'+target+'-check'),'--device=npu:0','--dtype=float32']):sys.exit(1)\n\n for read in ('qry','sum'):\n  args=[build/'resident-sdk/tide-block-resident-check','--device=npu:0','--dtype=float32','--memory-read',read,'--checkpoint-path',out/(read+'.pt')]\n  if run('public-'+read,args) or run('restore-'+read,args+['--restore-check']):sys.exit(1)\nelif kind=='resident-native':\n for read in ('qry','sum'):\n  args=[sys.executable,src/'examples/consumer_core5/block_resident.py','--device','npu:0','--memory-read',read,'--native-library',Path('/dev/shm/gef-read-region-owner-20261112/core-native'),'--resident-library',build/'resident-native','--checkpoint-path',out/(read+'.pt')]\n  if run('public-'+read,args) or run('restore-'+read,args+['--restore-check']):sys.exit(1)\nsys.exit(int(any(r['exit_code'] for r in rows)))\n",
+  "processes": {
+    "resident-native": [
+      {
+        "name": "public-qry",
+        "command": [
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/additive-work/env/bin/python",
+          "/dev/shm/gef-resident-kv-owner-20261112/source/examples/consumer_core5/block_resident.py",
+          "--device",
+          "npu:0",
+          "--memory-read",
+          "qry",
+          "--native-library",
+          "/dev/shm/gef-read-region-owner-20261112/core-native",
+          "--resident-library",
+          "/dev/shm/gef-resident-kv-owner-20261112/resident-native",
+          "--checkpoint-path",
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/resident-kv-owner-20261112/resident-native/qry.pt"
+        ],
+        "exit_code": 0,
+        "started": 1794486316.4759605,
+        "finished": 1794486326.1036313,
+        "cwd": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/resident-kv-owner-20261112/resident-native",
+        "device_visibility": "11",
+        "log": "[W1112 20:25:20.939331978 NPUCachingAllocator.cpp:203] Warning: The current CANN and Soc versions require processing for 32 padding size, with memory allocation. (function operator())\n{'state': 'passed', 'default': 'settle-block-v2', 'source': '/dev/shm/gef-resident-kv-owner-20261112/install/tidegraph/__init__.py', 'memory_read': 'qry', 'independent_python_schedule': True, 'explicit_raw_observation': True, 'independent_proposal_roots': True, 'adamw_steps': 3, 'fresh_process': False}\n"
+      },
+      {
+        "name": "restore-qry",
+        "command": [
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/additive-work/env/bin/python",
+          "/dev/shm/gef-resident-kv-owner-20261112/source/examples/consumer_core5/block_resident.py",
+          "--device",
+          "npu:0",
+          "--memory-read",
+          "qry",
+          "--native-library",
+          "/dev/shm/gef-read-region-owner-20261112/core-native",
+          "--resident-library",
+          "/dev/shm/gef-resident-kv-owner-20261112/resident-native",
+          "--checkpoint-path",
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/resident-kv-owner-20261112/resident-native/qry.pt",
+          "--restore-check"
+        ],
+        "exit_code": 0,
+        "started": 1794486326.1069484,
+        "finished": 1794486334.8831363,
+        "cwd": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/resident-kv-owner-20261112/resident-native",
+        "device_visibility": "11",
+        "log": "[W1112 20:25:29.617283672 NPUCachingAllocator.cpp:203] Warning: The current CANN and Soc versions require processing for 32 padding size, with memory allocation. (function operator())\n{'state': 'passed', 'default': 'settle-block-v2', 'source': '/dev/shm/gef-resident-kv-owner-20261112/install/tidegraph/__init__.py', 'memory_read': 'qry', 'independent_python_schedule': True, 'explicit_raw_observation': True, 'independent_proposal_roots': True, 'adamw_steps': 3, 'fresh_process': True}\n"
+      },
+      {
+        "name": "public-sum",
+        "command": [
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/additive-work/env/bin/python",
+          "/dev/shm/gef-resident-kv-owner-20261112/source/examples/consumer_core5/block_resident.py",
+          "--device",
+          "npu:0",
+          "--memory-read",
+          "sum",
+          "--native-library",
+          "/dev/shm/gef-read-region-owner-20261112/core-native",
+          "--resident-library",
+          "/dev/shm/gef-resident-kv-owner-20261112/resident-native",
+          "--checkpoint-path",
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/resident-kv-owner-20261112/resident-native/sum.pt"
+        ],
+        "exit_code": 0,
+        "started": 1794486334.8859193,
+        "finished": 1794486343.660933,
+        "cwd": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/resident-kv-owner-20261112/resident-native",
+        "device_visibility": "11",
+        "log": "[W1112 20:25:38.348837811 NPUCachingAllocator.cpp:203] Warning: The current CANN and Soc versions require processing for 32 padding size, with memory allocation. (function operator())\n{'state': 'passed', 'default': 'settle-block-v2', 'source': '/dev/shm/gef-resident-kv-owner-20261112/install/tidegraph/__init__.py', 'memory_read': 'sum', 'independent_python_schedule': True, 'explicit_raw_observation': True, 'independent_proposal_roots': True, 'adamw_steps': 3, 'fresh_process': False}\n"
+      },
+      {
+        "name": "restore-sum",
+        "command": [
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/additive-work/env/bin/python",
+          "/dev/shm/gef-resident-kv-owner-20261112/source/examples/consumer_core5/block_resident.py",
+          "--device",
+          "npu:0",
+          "--memory-read",
+          "sum",
+          "--native-library",
+          "/dev/shm/gef-read-region-owner-20261112/core-native",
+          "--resident-library",
+          "/dev/shm/gef-resident-kv-owner-20261112/resident-native",
+          "--checkpoint-path",
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/resident-kv-owner-20261112/resident-native/sum.pt",
+          "--restore-check"
+        ],
+        "exit_code": 0,
+        "started": 1794486343.663873,
+        "finished": 1794486352.3894851,
+        "cwd": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/resident-kv-owner-20261112/resident-native",
+        "device_visibility": "11",
+        "log": "[W1112 20:25:47.118324942 NPUCachingAllocator.cpp:203] Warning: The current CANN and Soc versions require processing for 32 padding size, with memory allocation. (function operator())\n{'state': 'passed', 'default': 'settle-block-v2', 'source': '/dev/shm/gef-resident-kv-owner-20261112/install/tidegraph/__init__.py', 'memory_read': 'sum', 'independent_python_schedule': True, 'explicit_raw_observation': True, 'independent_proposal_roots': True, 'adamw_steps': 3, 'fresh_process': True}\n"
+      }
+    ],
+    "resident-sdk": [
+      {
+        "name": "device-services",
+        "command": [
+          "/dev/shm/gef-resident-kv-owner-20261112/resident-sdk/tide-device-services-check",
+          "--device=npu:0",
+          "--dtype=float32"
+        ],
+        "exit_code": 0,
+        "started": 1794486323.88882,
+        "finished": 1794486328.007603,
+        "cwd": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/resident-kv-owner-20261112/resident-sdk",
+        "device_visibility": "5",
+        "log": "[W1112 20:25:25.773168296 NPUCachingAllocator.cpp:203] Warning: The current CANN and Soc versions require processing for 32 padding size, with memory allocation. (function operator())\ntask-services: passed repeated_windows=true empty_window=true nested_levels=3 root_services=2 sibling_services=true shared_workspace_bytes=16777472 programs=6 streams=12 notifications=10 boundary_events=0\n"
+      },
+      {
+        "name": "block-read-selection",
+        "command": [
+          "/dev/shm/gef-resident-kv-owner-20261112/resident-sdk/tide-block-read-selection-check",
+          "--device=npu:0",
+          "--dtype=float32"
+        ],
+        "exit_code": 0,
+        "started": 1794486328.0103989,
+        "finished": 1794486333.2883174,
+        "cwd": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/resident-kv-owner-20261112/resident-sdk",
+        "device_visibility": "5",
+        "log": "[W1112 20:25:29.021199104 NPUCachingAllocator.cpp:203] Warning: The current CANN and Soc versions require processing for 32 padding size, with memory allocation. (function operator())\nblock-read-selection: passed memory_read=qry frames=4 nodes=3 complete_regions=2 roots=3+Mem/total shared_banks=2 independent_formula_vjp=true saved_versions=true full_executor=false three_replay_seconds=0.0121294\nblock-read-selection: passed memory_read=sum frames=4 nodes=3 complete_regions=2 roots=3+Mem/total shared_banks=2 independent_formula_vjp=true saved_versions=true full_executor=false three_replay_seconds=0.00899655\n"
+      },
+      {
+        "name": "block-kv-messages",
+        "command": [
+          "/dev/shm/gef-resident-kv-owner-20261112/resident-sdk/tide-block-kv-messages-check",
+          "--device=npu:0",
+          "--dtype=float32"
+        ],
+        "exit_code": 0,
+        "started": 1794486333.291657,
+        "finished": 1794486338.5122263,
+        "cwd": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/resident-kv-owner-20261112/resident-sdk",
+        "device_visibility": "5",
+        "log": "[W1112 20:25:34.301901389 NPUCachingAllocator.cpp:203] Warning: The current CANN and Soc versions require processing for 32 padding size, with memory allocation. (function operator())\nblock-kv-messages: passed separate_read_proposal=true roots=7 shared_roles=true message_pair_unscaled=true explicit_cG=true default_no_projection=true undefined_roots=true owner_bindings=2 trainable_subset=true refusal_checks=10 int64_times=true saved_reverse=true full_executor=false\n"
+      },
+      {
+        "name": "block-kv-sequence",
+        "command": [
+          "/dev/shm/gef-resident-kv-owner-20261112/resident-sdk/tide-block-kv-sequence-check",
+          "--device=npu:0",
+          "--dtype=float32"
+        ],
+        "exit_code": 0,
+        "started": 1794486338.5154684,
+        "finished": 1794486342.7396734,
+        "cwd": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/resident-kv-owner-20261112/resident-sdk",
+        "device_visibility": "5",
+        "log": "[W1112 20:25:39.530270546 NPUCachingAllocator.cpp:203] Warning: The current CANN and Soc versions require processing for 32 padding size, with memory allocation. (function operator())\nblock-kv-sequence: passed B=2 L=3 N=2 actual_update=true independent_formula_vjp=true int64=true two_axis_isolation=true saved_reverse=true full_executor=false\n"
+      },
+      {
+        "name": "block-settle-flow",
+        "command": [
+          "/dev/shm/gef-resident-kv-owner-20261112/resident-sdk/tide-block-settle-flow-check",
+          "--device=npu:0",
+          "--dtype=float32"
+        ],
+        "exit_code": 0,
+        "started": 1794486342.7426167,
+        "finished": 1794486348.0141995,
+        "cwd": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/resident-kv-owner-20261112/resident-sdk",
+        "device_visibility": "5",
+        "log": "[W1112 20:25:44.732913992 NPUCachingAllocator.cpp:203] Warning: The current CANN and Soc versions require processing for 32 padding size, with memory allocation. (function operator())\nblock-settle-flow: passed actual_full_graph=true independent_scalar_formula=true roots=10 read_snapshots=3 B=2 L=2 duplicate_edges=true duplicate_ports=true shared_parameters=true exact_int64=true\n"
+      },
+      {
+        "name": "block-settle-model",
+        "command": [
+          "/dev/shm/gef-resident-kv-owner-20261112/resident-sdk/tide-block-settle-model-check",
+          "--device=npu:0",
+          "--dtype=float32"
+        ],
+        "exit_code": 0,
+        "started": 1794486348.0167294,
+        "finished": 1794486349.332114,
+        "cwd": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/resident-kv-owner-20261112/resident-sdk",
+        "device_visibility": "5",
+        "log": "block-settle-model: passed memory_read=qry,sum original_parameters=true source_factors=true heterogeneous_hidden_rank=true raw_import=true\n"
+      },
+      {
+        "name": "block-settle-session",
+        "command": [
+          "/dev/shm/gef-resident-kv-owner-20261112/resident-sdk/tide-block-settle-session-check",
+          "--device=npu:0",
+          "--dtype=float32"
+        ],
+        "exit_code": 0,
+        "started": 1794486349.3349872,
+        "finished": 1794486356.6153338,
+        "cwd": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/resident-kv-owner-20261112/resident-sdk",
+        "device_visibility": "5",
+        "log": "[W1112 20:25:50.354159517 NPUCachingAllocator.cpp:203] Warning: The current CANN and Soc versions require processing for 32 padding size, with memory allocation. (function operator())\nblock-session-storage: passed optimizer=11020 tensors=21874 exact_constructor=true below_limit_refusal=true input_refusal_unchanged=true\nblock-settle-session: passed two_window_bptt=true independent_formula_vjp=true AdamW_steps=3 exact_raw_checkpoint=true fresh_owner=true fresh_process=0\n"
+      },
+      {
+        "name": "public-qry",
+        "command": [
+          "/dev/shm/gef-resident-kv-owner-20261112/resident-sdk/tide-block-resident-check",
+          "--device=npu:0",
+          "--dtype=float32",
+          "--memory-read",
+          "qry",
+          "--checkpoint-path",
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/resident-kv-owner-20261112/resident-sdk/qry.pt"
+        ],
+        "exit_code": 0,
+        "started": 1794486356.6183906,
+        "finished": 1794486364.0043895,
+        "cwd": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/resident-kv-owner-20261112/resident-sdk",
+        "device_visibility": "5",
+        "log": "[W1112 20:25:57.701956235 NPUCachingAllocator.cpp:203] Warning: The current CANN and Soc versions require processing for 32 padding size, with memory allocation. (function operator())\nblock-resident-public: passed memory_read=qry actual_Model=true source_factors=true source_hidden_rank_padding=true independent_streaming=true AdamW_steps=3 windows=2 raw_continuation=true fresh_process=0\n"
+      },
+      {
+        "name": "restore-qry",
+        "command": [
+          "/dev/shm/gef-resident-kv-owner-20261112/resident-sdk/tide-block-resident-check",
+          "--device=npu:0",
+          "--dtype=float32",
+          "--memory-read",
+          "qry",
+          "--checkpoint-path",
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/resident-kv-owner-20261112/resident-sdk/qry.pt",
+          "--restore-check"
+        ],
+        "exit_code": 0,
+        "started": 1794486364.0080655,
+        "finished": 1794486370.335665,
+        "cwd": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/resident-kv-owner-20261112/resident-sdk",
+        "device_visibility": "5",
+        "log": "[W1112 20:26:05.100833908 NPUCachingAllocator.cpp:203] Warning: The current CANN and Soc versions require processing for 32 padding size, with memory allocation. (function operator())\nblock-resident-public: passed memory_read=qry actual_Model=true source_factors=true source_hidden_rank_padding=true independent_streaming=true AdamW_steps=3 windows=2 raw_continuation=true fresh_process=1\n"
+      },
+      {
+        "name": "public-sum",
+        "command": [
+          "/dev/shm/gef-resident-kv-owner-20261112/resident-sdk/tide-block-resident-check",
+          "--device=npu:0",
+          "--dtype=float32",
+          "--memory-read",
+          "sum",
+          "--checkpoint-path",
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/resident-kv-owner-20261112/resident-sdk/sum.pt"
+        ],
+        "exit_code": 0,
+        "started": 1794486370.338815,
+        "finished": 1794486376.662893,
+        "cwd": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/resident-kv-owner-20261112/resident-sdk",
+        "device_visibility": "5",
+        "log": "[W1112 20:26:11.400536381 NPUCachingAllocator.cpp:203] Warning: The current CANN and Soc versions require processing for 32 padding size, with memory allocation. (function operator())\nblock-resident-public: passed memory_read=sum actual_Model=true source_factors=true source_hidden_rank_padding=true independent_streaming=true AdamW_steps=3 windows=2 raw_continuation=true fresh_process=0\n"
+      },
+      {
+        "name": "restore-sum",
+        "command": [
+          "/dev/shm/gef-resident-kv-owner-20261112/resident-sdk/tide-block-resident-check",
+          "--device=npu:0",
+          "--dtype=float32",
+          "--memory-read",
+          "sum",
+          "--checkpoint-path",
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/resident-kv-owner-20261112/resident-sdk/sum.pt",
+          "--restore-check"
+        ],
+        "exit_code": 0,
+        "started": 1794486376.6658244,
+        "finished": 1794486382.042547,
+        "cwd": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/resident-kv-owner-20261112/resident-sdk",
+        "device_visibility": "5",
+        "log": "[W1112 20:26:18.745602106 NPUCachingAllocator.cpp:203] Warning: The current CANN and Soc versions require processing for 32 padding size, with memory allocation. (function operator())\nblock-resident-public: passed memory_read=sum actual_Model=true source_factors=true source_hidden_rank_padding=true independent_streaming=true AdamW_steps=3 windows=2 raw_continuation=true fresh_process=1\n"
+      }
+    ]
+  },
+  "admission": {
+    "resident-native": {
+      "elapsed_seconds": 42.41393081471324,
+      "job_id": "resident-kv-owner-resident-native",
+      "logical_device": "npu:0",
+      "logical_devices": [
+        "npu:0"
+      ],
+      "npu_count": 1,
+      "physical_id": 11,
+      "physical_ids": [
+        11
+      ],
+      "priority": 0,
+      "project": "graph-execution-foundation",
+      "return_code": 0,
+      "schema_version": 1,
+      "status": "completed",
+      "timestamp": "2026-11-12T12:25:52.399992+00:00"
+    },
+    "resident-sdk": {
+      "elapsed_seconds": 71.98907577991486,
+      "job_id": "resident-kv-owner-resident-sdk",
+      "logical_device": "npu:0",
+      "logical_devices": [
+        "npu:0"
+      ],
+      "npu_count": 1,
+      "physical_id": 5,
+      "physical_ids": [
+        5
+      ],
+      "priority": 0,
+      "project": "graph-execution-foundation",
+      "return_code": 0,
+      "schema_version": 1,
+      "status": "completed",
+      "timestamp": "2026-11-12T12:26:22.053273+00:00"
+    }
+  },
+  "cpu": {
+    "summary": {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "0",
+      "skipped": "0",
+      "tests": "56",
+      "time": "8.806",
+      "timestamp": "2026-11-12T20:22:36.181076+08:00",
+      "hostname": "liteserver-mi-dev-00001"
+    },
+    "cases": [
+      {
+        "classname": "tests.test_resident_block_resources",
+        "name": "test_planned_budget_refuses_before_arena_and_recording",
+        "time": "0.479"
+      },
+      {
+        "classname": "tests.test_resident_block_resources",
+        "name": "test_public_manifest_reads_current_resource_inventory",
+        "time": "0.000"
+      },
+      {
+        "classname": "tests.test_resident_block_public_dispatch",
+        "name": "test_default_requires_certificate_and_dispatches_by_capability[qry]",
+        "time": "0.095"
+      },
+      {
+        "classname": "tests.test_resident_block_public_dispatch",
+        "name": "test_default_requires_certificate_and_dispatches_by_capability[sum]",
+        "time": "0.008"
+      },
+      {
+        "classname": "tests.test_resident_block_public_dispatch",
+        "name": "test_incompatible_local_or_physical_schedule_stays_general",
+        "time": "0.015"
+      },
+      {
+        "classname": "tests.test_resident_block_public_dispatch",
+        "name": "test_memory_function_can_differ_between_complete_regions",
+        "time": "0.014"
+      },
+      {
+        "classname": "tests.test_resident_block_public_dispatch",
+        "name": "test_default_never_falls_back_after_selected_owner_failure",
+        "time": "0.008"
+      },
+      {
+        "classname": "tests.test_resident_optimizer_storage",
+        "name": "test_optimizer_storage_inventory_aliases_and_refusal",
+        "time": "0.724"
+      },
+      {
+        "classname": "tests.test_resident_kv_bank",
+        "name": "test_bank_views_decode_all_three_raw_snapshots",
+        "time": "0.931"
+      },
+      {
+        "classname": "tests.test_resident_kv_bank",
+        "name": "test_no_writes_preserve_opaque_raw_padding",
+        "time": "0.479"
+      },
+      {
+        "classname": "tests.test_resident_kv_bank",
+        "name": "test_bound_read_zero_bank_has_no_projected_writes",
+        "time": "0.006"
+      },
+      {
+        "classname": "tests.test_resident_kv_bank",
+        "name": "test_shared_bank_raw_transpose_and_causal_evicted_roots[old]",
+        "time": "0.022"
+      },
+      {
+        "classname": "tests.test_resident_kv_bank",
+        "name": "test_shared_bank_raw_transpose_and_causal_evicted_roots[proposal]",
+        "time": "0.021"
+      },
+      {
+        "classname": "tests.test_resident_kv_bank",
+        "name": "test_shared_bank_raw_transpose_and_causal_evicted_roots[final]",
+        "time": "0.020"
+      },
+      {
+        "classname": "tests.test_resident_kv_bank",
+        "name": "test_shared_bank_raw_transpose_and_causal_evicted_roots[all]",
+        "time": "0.025"
+      },
+      {
+        "classname": "tests.test_resident_kv_bank",
+        "name": "test_shared_bank_raw_transpose_and_causal_evicted_roots[none]",
+        "time": "0.019"
+      },
+      {
+        "classname": "tests.test_resident_kv_bank",
+        "name": "test_shared_bank_raw_transpose_and_causal_evicted_roots[zero]",
+        "time": "0.024"
+      },
+      {
+        "classname": "tests.test_resident_kv_bank",
+        "name": "test_unique_bank_numerical_transpose_is_owner_separated",
+        "time": "0.018"
+      },
+      {
+        "classname": "tests.test_resident_kv_bank",
+        "name": "test_bank_rejects_real_state_faults[capacity-79]",
+        "time": "0.006"
+      },
+      {
+        "classname": "tests.test_resident_kv_bank",
+        "name": "test_bank_rejects_real_state_faults[clock-78]",
+        "time": "0.006"
+      },
+      {
+        "classname": "tests.test_resident_kv_bank",
+        "name": "test_bank_rejects_real_state_faults[overflow-78]",
+        "time": "0.006"
+      },
+      {
+        "classname": "tests.test_resident_kv_bank",
+        "name": "test_bank_rejects_real_state_faults[raw-78]",
+        "time": "0.006"
+      },
+      {
+        "classname": "tests.test_resident_kv_pool",
+        "name": "test_shared_pool_formula_and_independent_roots[0.0-False]",
+        "time": "0.813"
+      },
+      {
+        "classname": "tests.test_resident_kv_pool",
+        "name": "test_shared_pool_formula_and_independent_roots[0.0-True]",
+        "time": "0.006"
+      },
+      {
+        "classname": "tests.test_resident_kv_pool",
+        "name": "test_shared_pool_formula_and_independent_roots[262144-False]",
+        "time": "0.005"
+      },
+      {
+        "classname": "tests.test_resident_kv_pool",
+        "name": "test_shared_pool_formula_and_independent_roots[262144-True]",
+        "time": "0.006"
+      },
+      {
+        "classname": "tests.test_resident_kv_read",
+        "name": "test_bank_read_actual_membership_and_projection_use[old]",
+        "time": "1.815"
+      },
+      {
+        "classname": "tests.test_resident_kv_read",
+        "name": "test_bank_read_actual_membership_and_projection_use[proposal]",
+        "time": "0.019"
+      },
+      {
+        "classname": "tests.test_resident_kv_read",
+        "name": "test_bank_read_actual_membership_and_projection_use[bound]",
+        "time": "0.011"
+      },
+      {
+        "classname": "tests.test_resident_kv_read",
+        "name": "test_bank_roots_and_passive_weight_transpose[0-2]",
+        "time": "0.008"
+      },
+      {
+        "classname": "tests.test_resident_kv_read",
+        "name": "test_bank_roots_and_passive_weight_transpose[1-2]",
+        "time": "0.008"
+      },
+      {
+        "classname": "tests.test_resident_kv_read",
+        "name": "test_bank_roots_and_passive_weight_transpose[2-3]",
+        "time": "0.008"
+      },
+      {
+        "classname": "tests.test_resident_kv_read",
+        "name": "test_relative_match_forward_and_transpose_without_key_expansion[0]",
+        "time": "0.005"
+      },
+      {
+        "classname": "tests.test_resident_kv_read",
+        "name": "test_relative_match_forward_and_transpose_without_key_expansion[1]",
+        "time": "0.007"
+      },
+      {
+        "classname": "tests.test_resident_kv_read",
+        "name": "test_relative_match_forward_and_transpose_without_key_expansion[2]",
+        "time": "0.009"
+      },
+      {
+        "classname": "tests.test_resident_kv_observations",
+        "name": "test_raw_root_needs_no_prefix_value_or_decode",
+        "time": "0.001"
+      },
+      {
+        "classname": "tests.test_resident_kv_observations",
+        "name": "test_raw_observation_is_named_and_explicit",
+        "time": "0.000"
+      },
+      {
+        "classname": "tests.test_experiment_block_records",
+        "name": "test_tensor_input_material_and_complete_candidate_decode_across_two_windows[None]",
+        "time": "0.470"
+      },
+      {
+        "classname": "tests.test_experiment_block_records",
+        "name": "test_tensor_input_material_and_complete_candidate_decode_across_two_windows[staggered-v1]",
+        "time": "0.380"
+      },
+      {
+        "classname": "tests.test_experiment_block_records",
+        "name": "test_consumer_field_loss_and_connected_zero_cotangents[0.0]",
+        "time": "0.002"
+      },
+      {
+        "classname": "tests.test_experiment_block_records",
+        "name": "test_consumer_field_loss_and_connected_zero_cotangents[0.17]",
+        "time": "0.002"
+      },
+      {
+        "classname": "tests.test_experiment_block_records",
+        "name": "test_zero_mass_is_a_present_candidate_and_keeps_exact_old_cache",
+        "time": "0.400"
+      },
+      {
+        "classname": "tests.test_experiment_block_records",
+        "name": "test_complete_snapshot_requires_actual_deferred_observations",
+        "time": "0.001"
+      },
+      {
+        "classname": "tests.test_experiment_resident_blocks",
+        "name": "test_default_block_identity_and_capacities_are_allocation_free",
+        "time": "0.164"
+      },
+      {
+        "classname": "tests.test_experiment_resident_blocks",
+        "name": "test_auto_fallback_is_static_and_explicit_block_refuses[execution0-model0-task0-SettleGraph]",
+        "time": "0.038"
+      },
+      {
+        "classname": "tests.test_experiment_resident_blocks",
+        "name": "test_auto_fallback_is_static_and_explicit_block_refuses[execution1-model1-task1-prefill]",
+        "time": "0.038"
+      },
+      {
+        "classname": "tests.test_experiment_resident_blocks",
+        "name": "test_auto_fallback_is_static_and_explicit_block_refuses[execution2-model2-task2-FP32]",
+        "time": "0.038"
+      },
+      {
+        "classname": "tests.test_experiment_resident_blocks",
+        "name": "test_auto_fallback_is_static_and_explicit_block_refuses[execution3-model3-task3-one device]",
+        "time": "0.036"
+      },
+      {
+        "classname": "tests.test_experiment_resident_blocks",
+        "name": "test_auto_fallback_is_static_and_explicit_block_refuses[execution4-model4-task4-standalone block requires outputs/metrics]",
+        "time": "0.036"
+      },
+      {
+        "classname": "tests.test_experiment_resident_blocks",
+        "name": "test_auto_fallback_is_static_and_explicit_block_refuses[execution5-model5-task5-KV sum/query]",
+        "time": "0.036"
+      },
+      {
+        "classname": "tests.test_experiment_resident_blocks",
+        "name": "test_auto_fallback_is_static_and_explicit_block_refuses[execution6-model6-task6-plugin]",
+        "time": "0.036"
+      },
+      {
+        "classname": "tests.test_experiment_resident_blocks",
+        "name": "test_old_limit_semantics_are_never_swallowed",
+        "time": "0.048"
+      },
+      {
+        "classname": "tests.test_experiment_resident_blocks",
+        "name": "test_explicit_capacities_and_historical_records_keep_separate_identity",
+        "time": "0.022"
+      },
+      {
+        "classname": "tests.test_experiment_resident_blocks",
+        "name": "test_frozen_resolved_record_and_selected_runtime_failure_do_not_dispatch_again",
+        "time": "0.041"
+      },
+      {
+        "classname": "tests.test_experiment_resident_blocks",
+        "name": "test_standalone_selected_returns_receive_only_block_capacity_keys[sum]",
+        "time": "0.054"
+      },
+      {
+        "classname": "tests.test_experiment_resident_blocks",
+        "name": "test_standalone_selected_returns_receive_only_block_capacity_keys[qry]",
+        "time": "0.053"
+      }
+    ]
+  },
+  "wheel": [
+    {
+      "name": "tidegraph-0.3.0-py3-none-any.whl",
+      "sha256": "6761413f44e5834c81c2f4927c5c36d784e596ee22aa9a361affb810b37b0b3f",
+      "bytes": 581359
+    }
+  ],
+  "navigation": {
+    "source": "0c974ccd4921999e6b7f6292888bfcb3478a33e1",
+    "links_checked": 579,
+    "missing": []
+  },
+  "development_only": {
+    "scope": "mutable-tree development only; ready for parent immutable qualification",
+    "recorded": "2026-11-12T12:20:19.767021+00:00",
+    "base_head": "5379dd0a095bd87a8199e936b0ec87032f6dd18e",
+    "new_cpp": [
+      "tools/device_online/block_kv_bank.cpp",
+      "tools/device_online/block_kv_bank_vjp.cpp",
+      "tools/device_online/block_kv_pool.cpp",
+      "tools/device_online/block_kv_read_plan.cpp",
+      "tools/device_online/block_kv_match.cpp",
+      "tools/device_online/block_kv_memory.cpp",
+      "tools/device_online/block_kv_memory_vjp.cpp",
+      "tools/device_online/block_kv_full.cpp",
+      "tools/device_online/block_resident_observe.cpp"
+    ],
+    "new_kernels": [
+      "tools/device_online/ascendc/tide_block_kv_bank_plan.cpp",
+      "tools/device_online/ascendc/tide_block_kv_bank_decode.cpp",
+      "tools/device_online/ascendc/tide_block_kv_bank_numerical_vjp.cpp",
+      "tools/device_online/ascendc/tide_block_kv_bank_snapshot_vjp.cpp",
+      "tools/device_online/ascendc/tide_block_kv_pool_prepare.cpp",
+      "tools/device_online/ascendc/tide_block_kv_pool_center.cpp",
+      "tools/device_online/ascendc/tide_block_kv_pool_scale.cpp",
+      "tools/device_online/ascendc/tide_block_kv_pool_roots.cpp",
+      "tools/device_online/ascendc/tide_block_kv_pool_finish.cpp",
+      "tools/device_online/ascendc/tide_block_kv_read_plan.cpp",
+      "tools/device_online/ascendc/tide_block_kv_read_roots.cpp",
+      "tools/device_online/ascendc/tide_block_kv_read_weight_vjp.cpp",
+      "tools/device_online/ascendc/tide_block_kv_match_phase.cpp",
+      "tools/device_online/ascendc/tide_block_kv_match.cpp"
+    ],
+    "syntax": {
+      "status": "passed",
+      "translation_units": 21,
+      "results": [
+        {
+          "file": "tools/device_online/block_kv_bank.cpp",
+          "sha256": "3aae3685a5535ca635c7c40e81afad00aa8fc048bab94b1fb7030377ebd275d5",
+          "seconds": 7.508563946932554,
+          "exit_code": 0,
+          "output": ""
+        },
+        {
+          "file": "tools/device_online/block_kv_pool.cpp",
+          "sha256": "b2225db7e633aa13a2e4104d00c361b55216816cdb7c04497a8eb34efefcc1c5",
+          "seconds": 7.003249257802963,
+          "exit_code": 0,
+          "output": ""
+        },
+        {
+          "file": "tools/device_online/block_kv_read_plan.cpp",
+          "sha256": "d443ef34a5bfb6bfd02b7b3c7cdd8302a76d8026ff71e378ac8b2cd8359c4734",
+          "seconds": 7.40444877743721,
+          "exit_code": 0,
+          "output": ""
+        },
+        {
+          "file": "tools/device_online/block_kv_match.cpp",
+          "sha256": "14831bdc815ffc0e4d3ceb45c5119f853da184001e7f7c7894d67e107215526c",
+          "seconds": 7.232791870832443,
+          "exit_code": 0,
+          "output": ""
+        },
+        {
+          "file": "tools/device_online/block_kv_memory.cpp",
+          "sha256": "8d92c153be5ea1aad72f1f68ff674ced45d38b3cad6b912bfd7ab7d418866b1c",
+          "seconds": 7.400468669831753,
+          "exit_code": 0,
+          "output": ""
+        },
+        {
+          "file": "tools/device_online/block_kv_memory_vjp.cpp",
+          "sha256": "849c4e90529ae52f382009a86a205c4bb03991ade275d89fd37e6a15b1527191",
+          "seconds": 7.454801645129919,
+          "exit_code": 0,
+          "output": ""
+        },
+        {
+          "file": "tools/device_online/block_kv_full.cpp",
+          "sha256": "4275065ef6e472a114d07e110bcaf6bd420be08faa54bb7f9d004b94d268f96f",
+          "seconds": 7.493487525731325,
+          "exit_code": 0,
+          "output": ""
+        },
+        {
+          "file": "tools/device_online/block_kv_bank_vjp.cpp",
+          "sha256": "cdcbf0c91746cdb98cb7763916a156550b5c7ce0dae1c83eca5d47511705ae99",
+          "seconds": 7.467927992343903,
+          "exit_code": 0,
+          "output": ""
+        },
+        {
+          "file": "tools/device_online/block_read_selection.cpp",
+          "sha256": "72702ee243f74e998197714eb73cc8bb5ca2b6bc6bd2b7918460712ea64d0e06",
+          "seconds": 8.00498615577817,
+          "exit_code": 0,
+          "output": ""
+        },
+        {
+          "file": "tools/device_online/block_read_selection_vjp.cpp",
+          "sha256": "878191df1d0a02238776965bf37d3ebac3173286c3aecb8209a0c3097bac8185",
+          "seconds": 7.894205905497074,
+          "exit_code": 0,
+          "output": ""
+        },
+        {
+          "file": "tools/device_online/block_kv_messages.cpp",
+          "sha256": "038174fb7a67594486db70dfff86eb1ab5d6902cdd34c0ce68cd5c1ea930e5f0",
+          "seconds": 7.96995847299695,
+          "exit_code": 0,
+          "output": ""
+        },
+        {
+          "file": "tools/device_online/block_kv_messages_vjp.cpp",
+          "sha256": "d2c8b1c0ac00d2afe9f9ea318d3fb40a548bfab0d330b9903256c7360f60246f",
+          "seconds": 7.9471442475914955,
+          "exit_code": 0,
+          "output": ""
+        },
+        {
+          "file": "tools/device_online/block_kv_local.cpp",
+          "sha256": "238d9757f47cb9934862349fadda2c8038b48c8d976954437fcd9e9a007b6ad4",
+          "seconds": 7.9996376149356365,
+          "exit_code": 0,
+          "output": ""
+        },
+        {
+          "file": "tools/device_online/block_kv_local_vjp.cpp",
+          "sha256": "2a5106611ea148181a83d3c7d532bd5d0a674acde28af2144e422fdab869c4dc",
+          "seconds": 7.949806090444326,
+          "exit_code": 0,
+          "output": ""
+        },
+        {
+          "file": "tools/device_online/block_resident_owner.cpp",
+          "sha256": "e305dbb91beab8db50d32f07517a5ea5b6fa77c92c4b963cd0dd05a765ee943b",
+          "seconds": 8.667948674410582,
+          "exit_code": 0,
+          "output": ""
+        },
+        {
+          "file": "tools/device_online/block_resident_observe.cpp",
+          "sha256": "452637e7293c5b18ec8e6bf791454c67596cc33f48a71021267d4ca37a357005",
+          "seconds": 7.946694687008858,
+          "exit_code": 0,
+          "output": ""
+        },
+        {
+          "file": "tools/device_online/block_settle_observations.cpp",
+          "sha256": "2db022e3c96f354257b1a5e44c6cb781677657c4644740900d2382cb0930b8c1",
+          "seconds": 8.058801583945751,
+          "exit_code": 0,
+          "output": ""
+        },
+        {
+          "file": "tools/device_online/block_settle_flow_check.cpp",
+          "sha256": "3a256b7780b031fd4c5ce51cff239982fee0f0fbcacc25afa1d0c8de6a9e118b",
+          "seconds": 15.424618497490883,
+          "exit_code": 0,
+          "output": ""
+        },
+        {
+          "file": "tools/device_online/block_resident_bindings.cpp",
+          "sha256": "872dcb523fddf27bd29dd3e6a82780db47056ca45ececec035e18269a2f6620f",
+          "seconds": 10.476435743272305,
+          "exit_code": 0,
+          "output": ""
+        },
+        {
+          "file": "tools/device_online/block_settle_session_layout.cpp",
+          "sha256": "a687e62f120a538867db9422361fbe9ed2f5dac136c385a02d9bc715e86722ce",
+          "seconds": 7.7127313278615475,
+          "exit_code": 0,
+          "output": ""
+        },
+        {
+          "file": "tools/device_online/block_resident_check.cpp",
+          "sha256": "0bbd1b5441fe2661884510d5747ab29e0f9aba2b3cb17dab54165eba208083cb",
+          "seconds": 15.419494576752186,
+          "exit_code": 0,
+          "output": ""
+        }
+      ],
+      "limitations": "generated matching launch declarations; not a link/build or accelerator execution"
+    },
+    "cpu": {
+      "status": "passed",
+      "passed": 41,
+      "seconds": 5.64,
+      "tests": [
+        "tests/test_resident_kv_bank.py",
+        "tests/test_resident_kv_read.py",
+        "tests/test_resident_kv_pool.py",
+        "tests/test_resident_kv_observations.py",
+        "tests/test_resident_block_sequence.py"
+      ],
+      "command": "env TORCH_DEVICE_BACKEND_AUTOLOAD=0 OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 PYTHONPATH=python taskset -c 244-247 /opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/bin/python -m pytest -q tests/test_resident_kv_bank.py tests/test_resident_kv_read.py tests/test_resident_kv_pool.py tests/test_resident_kv_observations.py tests/test_resident_block_sequence.py"
+    },
+    "fixes_during_development": [
+      "ctypes harness initially declared incorrect pool argument counts; corrected to actual launcher signatures",
+      "FP64 oracle W=1 witness initially used .2+.3+.5, which differs across FP32/FP64 at the branch; changed witness to exactly representable .25+.25+.5 without altering algorithm/tolerance",
+      "CPU raw read launcher initially ran without adapter arena initialization and segfaulted on a later call; harness now resets arena/worker before raw invocations, matching generated production adapter entry"
+    ],
+    "default_chain": "BlockKVLocal -> unique bank sequence -> bank Mem/Full -> bank numerical/causal-root transpose -> one write VJP; default old/proposal floating raw absent",
+    "observation": "kv-bank-views-v1: shape/present/valid and metadata default; explicit owner.observe decodes actual candidate; independent raw roots need no decode; runtime observe failure poisons public owner; pre-execution capacity/construction refusal preserves state",
+    "remaining": [
+      "parent CANN/Python and standalone SDK builds, actual NPU numerical/training/restore qualification",
+      "dense O*L*(C+L) score/incidence tables remain; long L with small horizon has no bounded key-union tiling yet",
+      "relative-position/metadata/weight-reduction kernels are scalar semantic kernels, no vector performance claim",
+      "new flow literal-formula fixture uses nonempty unbounded-window qry states; empty/finite-window/fully-evicted cases independently checked on CPU, not yet new whole-chain device qualification",
+      "FP32, KV sum/qry, one device; no new half/recurrent/multi-device scope",
+      "no CUDA build or hardware execution and no new performance numbers"
+    ],
+    "test_hashes": {
+      "tests/test_resident_kv_bank.py": "9bdf412af1692e4a7e73b01e3e4f6e0c6d307a5b0873a8668c78451705b8be5d",
+      "tests/test_resident_kv_read.py": "79e3f62c42e3745f461f72b6e97da60929ff31434e9e1a585bcdd75f693dfef4",
+      "tests/test_resident_kv_pool.py": "b5efb8735aef40e5e7a9b46844f715fcf381abfedaf2acc56fbfc74138b53689",
+      "tests/test_resident_kv_observations.py": "1132316868a2ecb5f3ed93cfd480aa8c4ede13422e7ce29e625cf9cdee398fd4",
+      "tests/test_resident_block_sequence.py": "b3fbb06f4306598dd8b48fcc75caaf358b7abbb06e46acb4609a92d5605b2b93"
+    }
+  },
+  "limitations": [
+    "New bank: FP32 KV sum/qry, single-device aligned supported Settle domain only",
+    "Finite-window expiry/empty/fully-evicted cases have CPU component witnesses; not new complete-graph device qualification",
+    "Dense query-entry score/incidence tables and scalar position/metadata/weight kernels remain",
+    "No scale, throughput, TTFT, CUDA build/device, half, recurrent or multi-owner claim",
+    "Previously recorded host FP32 strict failures remain unchanged; not rerun or relabeled"
+  ]
+}
