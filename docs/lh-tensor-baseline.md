@@ -75,5 +75,20 @@ python scripts/benchmark_lh_tensor.py --level default --case many-lh --mode trai
 python -m pytest -q tests/test_lh_tensor_baseline.py --dtype both
 ```
 
+尺度检查使用独立的[检查入口](../scripts/check_lh_tensor.py)，不会从参考轨迹生成候选输入。
+[解码与比较](../scripts/lh_tensor_check.py)读取候选实际返回的控制、候选/Full支持、全部raw
+终态字段及int64时钟、逐端口cG，再比较一个输出+raw任务对输入和共享参数的数值VJP。
+完整记录根、非空左态、optimizer和恢复不属于此命令的资格范围；None/连接零差异另列。
+形状、离散/非有限失败与有限数值超差分开，原严格阈值不改。小型入口检查见
+[test_lh_tensor_check](../tests/test_lh_tensor_check.py)。
+
+```sh
+python scripts/check_lh_tensor.py --case many-lh --device cpu --dtype float64 --client native --native-library BUILD --output-dir NEW_CHECK
+```
+
+默认B4/L16/d64、176节点，`--level both`检查public/default；NPU改为显式设备和FP32。
+材料、workspace、节点行/Attention元素及比较捕获分别有预算；退出0为严格数值投影通过，
+1为保留有限数值失败，2为结构/离散/非有限/执行/容量失败。该检查不测吞吐。
+
 修改公式同时维护适用域、独立检查和本契约；改变runner则维护计时/职责/参数身份。
 固定运行证据从[证据索引](evidence/README.md)进入；当前完成范围与待办只维护在STATUS/ROADMAP。

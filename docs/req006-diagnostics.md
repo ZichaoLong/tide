@@ -61,6 +61,42 @@ optimizer 槽也复制，避免 step counter 污染基准初态。输入在 CPU 
 `--prime-updates 1`：先在同一固定进度做一次真实合成更新，再冻结其权重/槽/RNG，后续
 warmup和计时均从该初态恢复。prime数量进入材料身份，不作为原训练checkpoint或学习证据。
 
+需要跨进程配对 measure/profile/census 时，可导出并复用**同一份 prime 后初态**。
+只使用相同 seed 和 prime 次数不能保证两个设备进程更新后的权重逐位相同。
+`--initial-state-out`保存模型参数/缓冲、完整 optimizer 槽和 CPU/设备 RNG；
+`--initial-state-in`先校验材料，再恢复并核对完整状态 hash，**不会重新执行 prime**。
+载入时仍提供原来的 `--prime-updates`，它声明保存材料的来源，并非要求再次更新。
+
+```sh
+python scripts/diagnose_req006.py \
+  --downstream-repo /path/to/tide-learning-lab \
+  --case hb88-pool-s11 --progress-tokens 0 --prime-updates 1 \
+  --device cpu --threads 32 --mode training --action measure \
+  --initial-state-out artifacts/req006-paired-initial.pt \
+  --output-dir artifacts/req006-paired-measure
+
+for action in profile census; do
+  python scripts/diagnose_req006.py \
+    --downstream-repo /path/to/tide-learning-lab \
+    --case hb88-pool-s11 --progress-tokens 0 --prime-updates 1 \
+    --device cpu --threads 32 --mode training --action "$action" \
+    --initial-state-in artifacts/req006-paired-initial.pt \
+    --output-dir "artifacts/req006-paired-$action"
+done
+```
+
+两个参数互斥。校验绑定完整有效配置、实际输入字节及形状、输入/模型 seed、进度、dtype、
+prime 次数、固定下游源码及关键数值运行时（包括实际线程、精度设置及设备类型/型号）。
+action、mode、物理卡号和输出目录可不同；CPU/NPU 或线程数不同则不能声称此种精确配对。
+`result.json`记录文件/材料/权重 hash、生产源码、载入方向及 `executed_prime_updates`。
+同一初态不保证后续非确定设备计算逐位相同，最终模型/optimizer hash仍独立记录。
+
+artifact 使用 `weights_only=True`载入，身份和内部内容 hash在恢复 live owner 前检查。
+保存先写同目录 staging并 fsync，再原子发布且**不覆盖已有文件或符号链接**；并发发布者
+已占用目标时拒绝。本地文件保存的实际字节受磁盘余量影响；开始前检查空间，失败清理 staging。
+目录 fsync若在发布后失败，完整新文件可能已存在，命令仍失败，不能据文件存在推断成功。
+初态 I/O/hash不进入步骤计时；此文件不是下游训练checkpoint，也不认证基座 continuation。
+
 默认一次 warmup、一次测量；`--iterations`可显式增加独立初态重复。profile/census
 每进程只跑一次受观察步骤，分别启动新进程、新输出目录；插桩结果不报告吞吐。
 
@@ -90,8 +126,11 @@ CPU trace允许没有设备 kernel；请求加速器但未记录真实 kernel �
 bmm、自定义分配VJP和可选 matmul 聚合；节点/区域间 select/stack、参数高级索引、
 28轮 FP32 求根与3轮 quad 校正、观测及 optimizer 是待测边界，不能直接写成已证实热点。
 
-脚本职责分为[材料身份](../scripts/req006_material.py)、[执行与恢复](../scripts/req006_runtime.py)、
+脚本职责分为[材料身份](../scripts/req006_material.py)、[初态配对](../scripts/req006_initial.py)、
+[执行与恢复](../scripts/req006_runtime.py)、
 [插桩与trace汇总](../scripts/req006_profile.py)。
 [定向检查](../tests/test_req006_diagnostics.py)覆盖固定 Git 字节、配置hash、带槽恢复、
 分批归一化/计时分母和设备/主机计数区分。它们不替代实际四代表性能、严格数值或下游验收。
+[初态配对检查](../tests/test_req006_initial_state.py)覆盖含随机输入/Dropout的精确下一次
+AdamW更新、身份/内容拒绝、加载字节预算和失败/并发写入不覆盖已有材料。
 新证据由基座[证据索引](evidence/README.md)导航，当前待办仍只维护在 ROADMAP。

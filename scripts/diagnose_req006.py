@@ -3,8 +3,9 @@
 
 Use separate processes/output directories for measure, profile and census.
 This executes a frozen downstream implementation, not the foundation executor.
-It uses deterministic synthetic tokens and freshly initialized weights; progress
-is explicit. It does not replay a historical learning trajectory or certify
+It uses deterministic synthetic tokens and explicit initialized/primed material;
+optional initial-state artifacts pair actions exactly. Progress is explicit.
+It does not replay a historical learning trajectory or certify
 foundation continuation. Run long cases through the bounded project job service.
 """
 import argparse
@@ -43,7 +44,10 @@ def arguments():
     parser.add_argument("--length", type=int)
     parser.add_argument("--warmup", type=int, default=1)
     parser.add_argument("--prime-updates", type=int, default=0,
-                        help="real synthetic updates before freezing initial model/AdamW slots; distinct from warmup")
+                        help="prime origin of the initial model/AdamW slots; loaded artifacts skip recomputation")
+    initial = parser.add_mutually_exclusive_group()
+    initial.add_argument("--initial-state-out", type=Path, help="publish new post-prime model/optimizer/RNG artifact; never overwrite")
+    initial.add_argument("--initial-state-in", type=Path, help="reuse an artifact with the same config/input/progress/prime identity")
     parser.add_argument("--iterations", type=int, default=1)
     parser.add_argument("--max-parameter-bytes", type=int, default=2**31)
     parser.add_argument("--max-trace-bytes", type=int, default=8*2**30)
@@ -101,6 +105,7 @@ def main():
         import torch
         from tidegraph.runtime import resolve_device, manifest
         from req006_runtime import capture, restore, run_once, reset_memory_peak, memory
+        from req006_initial import initial_identity, save_initial, load_initial
         torch.set_num_threads(args.threads)
         torch.set_num_interop_threads(1)
         device, reason = resolve_device(args.device)
@@ -133,11 +138,31 @@ def main():
         optimizer = runtime.optimizer_for(model, config)
         material = synthetic_inputs(config["training"].get("global_batch", config["training"]["batch"]),
                                     config["training"]["length"], args.input_seed)
-        for _ in range(args.prime_updates):
-            run_once(runtime, model, optimizer, material, config, device,
-                     mode="training", progress=args.progress_tokens)
-        optimizer.zero_grad(set_to_none=True)
-        initial = capture(model, optimizer, device)
+        numeric_runtime = dict(record["runtime"], threads=record["threads"],
+                               float32_matmul_precision=torch.get_float32_matmul_precision(),
+                               deterministic_algorithms=torch.are_deterministic_algorithms_enabled())
+        identity = initial_identity(config, material, progress=args.progress_tokens, input_seed=args.input_seed,
+                                    prime_updates=args.prime_updates, runtime=numeric_runtime,
+                                    downstream=record["downstream_source"])
+        record["initial_state_identity"] = identity
+        if args.initial_state_in:
+            initial, artifact = load_initial(args.initial_state_in, identity,
+                                            max_bytes=4*args.max_parameter_bytes+64*2**20)
+            restore(initial, model, optimizer, device)
+            if tensor_digest(capture(model, optimizer, device)) != artifact["initial_state_sha256"]:
+                raise AssertionError("loaded initial model/optimizer/RNG does not restore exactly")
+            record["initial_state_artifact"] = dict(direction="in", **artifact)
+        else:
+            if args.initial_state_out and (args.initial_state_out.exists() or args.initial_state_out.is_symlink()):
+                raise FileExistsError("initial-state output already exists: "+str(args.initial_state_out))
+            for _ in range(args.prime_updates):
+                run_once(runtime, model, optimizer, material, config, device,
+                         mode="training", progress=args.progress_tokens)
+            optimizer.zero_grad(set_to_none=True)
+            initial = capture(model, optimizer, device)
+            if args.initial_state_out:
+                record["initial_state_artifact"] = dict(direction="out", **save_initial(args.initial_state_out,
+                    initial, identity, producer=dict(source=source, dirty=dirty)))
         record["material"] = dict(input_sha256=tensor_digest(material), initial_state_sha256=tensor_digest(initial),
             weights_sha256=tensor_digest(initial["model"]), input_shape=list(material["input_ids"].shape),
             effective_targets=int((material["labels"] != -100).sum()), input_seed=args.input_seed,
@@ -146,7 +171,9 @@ def main():
             weights="frozen constructor/role-keyed seed plus explicit synthetic prime updates; no historical checkpoint",
             optimizer_initialization=("fresh empty slots; first-update state creation is timed" if not args.prime_updates
                                       else "slots and weights from real synthetic updates at the same fixed progress"),
-            prime_updates=args.prime_updates, inputs="synthetic next-token IDs [4,4096)")
+            prime_updates=args.prime_updates, executed_prime_updates=0 if args.initial_state_in else args.prime_updates,
+            initialization="shared initial-state artifact" if args.initial_state_in else "constructor plus requested prime updates",
+            inputs="synthetic next-token IDs [4,4096)")
         record["comparison_scope"] = ("Experiment-specific core-5 direct formulas; dense physical Full then mask; "
             "static aligned regions only, no general foundation roots/continuation" if config["kind"] == "direct_semantic"
             else "Different-function frozen SmallTransformer: explicit QK^T, softmax and AV; "
