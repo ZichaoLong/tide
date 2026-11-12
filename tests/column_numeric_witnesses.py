@@ -27,7 +27,10 @@ def settle(dtype, mode, implementation):
         "regional_threshold": {"3.content": 2.4e-5},
         "regional_total_zero": {"nodes.2.read_program.evidence_weight": 3.2e-5,
                                 "nodes.2.aggregate_program.transforms.0.embedding": 2.6e-6},
-        "hard_selection": {"nodes.0.kernel.base": 1.4e-5, "nodes.3.full_program.content.out": 2.3e-6},
+        # Node-group GEMM changes the FP32 reduction order. Same FP32 material
+        # promoted to FP64, full discrete observations and zero VJP still pass.
+        # The original atol/rtol stay in Checks; this remains a strict xfail.
+        "hard_selection": {"nodes.0.kernel.base": 1.4e-5, "nodes.3.full_program.content.out": 3e-6},
         "proportional": {"nodes.0.kernel.summary": 1.6e-5, "nodes.3.full_program.content.out": 2e-6}
                         if implementation == "python" else {}}
     return {f"gradient[{n}]": limit for n, limit in fields.get(mode, {}).items()}

@@ -5,6 +5,7 @@
 #include "tide/stream.h"
 #include "tide/parameters.h"
 #include "tide/ownership.h"
+#include "tide/kernel.h"
 #include <cstdlib>
 #include <torch/csrc/autograd/autograd.h>
 #include <ATen/Parallel.h>
@@ -19,6 +20,45 @@ void close_value(const Tensor& a,const Tensor& b,double rtol,double atol){
   if(!a.defined())return;
   require(a.sizes()==b.sizes()&&a.scalar_type()==b.scalar_type(),"column metadata mismatch");
   require(a.is_floating_point()?at::allclose(a,b,rtol,atol):at::equal(a,b),"column numerical mismatch");
+}
+void check_prepare_groups(at::Device device=at::kCPU,at::ScalarType dtype=at::kDouble){
+  auto g=weighted_check::graph("fc","kv");auto m=weighted_check::model(g,"kv",device,dtype);
+  const Index base=Index{1}<<54;
+  col::Layout layout{{0,2,4},{base+10,base+13,base+19,base+22}};
+  std::vector<col::KVPrepareRequest> requests;
+  std::vector<Tensor> roots;for(const auto& owner:m.parameters().owners())roots.push_back(owner.value);
+  const auto parameter_count=roots.size();
+  for(Index i=0;i<5;++i){const auto& w=m.nodes[i];auto c=std::get<weighted::KVConfig>(weighted::node_binding(w).memory);
+    auto mass=at::tensor({.3,0.,.6,.2},at::kDouble).to(device,dtype);
+    if(i==3)mass=at::zeros_like(mass);else if(i==4)mass=mass+.1;
+    mass.set_requires_grad(true);
+    auto x=(at::arange(8,at::kDouble)*.03+.1+.02*i).reshape({4,2}).to(device,dtype).set_requires_grad(true);
+    auto left=col::KVState::from_states({w.kernel->initial(w),w.kernel->initial(w)});
+    requests.push_back({&w,c,layout,mass,x,left});roots.insert(roots.end(),{mass,x});
+  }
+  auto grouped=col::prepare_many(requests,Index{4}*1024*1024),single=col::prepare_many(requests,1);
+  const double rtol=dtype==at::kHalf?2e-2:dtype==at::kFloat?1e-5:1e-8;
+  const double atol=dtype==at::kHalf?1e-3:dtype==at::kFloat?1e-6:1e-10;
+  for(size_t i=0;i<requests.size();++i){
+    require(grouped[i].bank_layout.times==single[i].bank_layout.times,"group KV bank clocks changed");
+    require(grouped[i].terminal.last_times==single[i].terminal.last_times&&
+            grouped[i].terminal.observations==single[i].terminal.observations,"group KV raw metadata changed");
+    for(const auto& [name,t]:grouped[i].bank)close_value(t,single[i].bank.at(name),rtol,atol);
+    for(const auto& [name,t]:grouped[i].terminal.fields)close_value(t,single[i].terminal.fields.at(name),rtol,atol);
+  }
+  require(grouped[3].terminal.fields.at("keys").is_same(requests[3].left.fields.at("keys")),"zero-write group changed raw state");
+  for(double factor:{1.,0.}){
+    auto a=factor*(grouped[0].bank.at("keys").square().sum()+grouped[1].bank.at("values").square().sum());
+    auto b=factor*(single[0].bank.at("keys").square().sum()+single[1].bank.at("values").square().sum());
+    auto ga=torch::autograd::grad({a},roots,{},true,false,true),gb=torch::autograd::grad({b},roots,{},true,false,true);
+    for(size_t i=0;i<roots.size();++i)close_value(ga[i],gb[i],rtol,atol);
+    require(!ga[parameter_count+5].defined(),"unused grouped content acquired a connected-zero gradient");
+  }
+  auto next=requests[0];next.left=grouped[0].terminal;next.layout={{0,1,2},{base+100,base+100}};
+  next.mass=at::zeros({2},next.mass.options());next.content=next.content.slice(0,0,2);
+  auto silent=col::prepare_many({next},Index{4}*1024*1024).front();
+  require(silent.terminal.layout.times==next.left.layout.times&&silent.terminal.fields.at("keys").is_same(next.left.fields.at("keys")),
+          "silent grouped window expired raw history");
 }
 void check(const std::string& family,bool positional=false,bool scoring=false,
            at::Device device=at::kCPU,at::ScalarType dtype=at::kDouble,const std::string& preset="native",
@@ -91,13 +131,14 @@ void check(const std::string& family,bool positional=false,bool scoring=false,
 }
 }
 int main(int argc,char** argv){portable_torch::RuntimeSession runtime;try{
-  if(argc==1){check("kv");check("kv",true);for(const auto& f:{"affine","delta","gated_delta","ssd"})check(f);
+  if(argc==1){check_prepare_groups();check("kv");check("kv",true);for(const auto& f:{"affine","delta","gated_delta","ssd"})check(f);
     check("kv",false,true);check("ssd",false,true);
   }else{
     auto args=portable_torch::parse_cli(argc,argv,true);
     if(args.help){portable_torch::print_usage(std::cout,argv[0]);return 0;}
     args.allow_npu_float16=true;
     auto device=portable_torch::resolve_device(args);
+    check_prepare_groups(device,args.dtype);
     std::optional<at::Device> peer;
     if(auto selected=std::getenv("TIDE_COLUMN_PEER_DEVICE")){auto peer_options=args;
       peer_options.device_spec=selected;peer=portable_torch::resolve_device(peer_options);

@@ -182,6 +182,7 @@ class SettleColumnPlan:
                 sources = [(column_transport.message(p, ref, transport_cache), c) for p, c in sources]
                 received_by_node[v] = aggregate_columns(model.nodes[v].aggregate_program, sources, cache=cache)
             from .column_sharing import shared_uses
+            preparations = {}
             for v, received in shared_uses(received_by_node).items():
                 if received is None:
                     continue
@@ -189,12 +190,17 @@ class SettleColumnPlan:
                 positions = layout.select(rows)
                 times = SequenceLayout(positions.offsets, positions.times*self.spec.stride+self.spec.rank(v))
                 module = self.modules[v]
-                window = module.prepare(model.nodes[v].kernel, times, mass, u, states[v])
+                preparations[v] = (module, model.nodes[v].kernel, times, mass, u, states[v])
+                rows_by_node[v] = rows
+            from .column_modules import prepare_many
+            prepared = prepare_many(preparations, max_workspace_bytes=self.max_workspace_bytes)
+            for v, window in prepared.items():
+                module = self.modules[v]
                 mode = self.binding.regions[r].read_mode
                 from . import column_placement
                 descriptors[v] = column_placement.read(module, model.nodes[v], window, initial[v], mode,
                     self.node_locations[v]["read"], self.read_dtypes[v])
-                windows[v], rows_by_node[v], states[v] = window, rows, window.terminal
+                windows[v], states[v] = window, window.terminal
             controls = {v: model.nodes[v].bias.new_zeros(len(rows)) for v, rows in rows_by_node.items()}
             placement = self.region_locations[r]
             regional_fields = {v: column_transport.fields(d, placement["control"]) for v, d in descriptors.items()}

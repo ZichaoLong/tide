@@ -27,6 +27,13 @@ struct KVWindow {
   TensorFields bank;
   KVState terminal;
 };
+struct KVPrepareRequest {
+  const NodeWeights* weights;
+  KVConfig config;
+  Layout layout;
+  Tensor mass,content;
+  KVState left;
+};
 struct RecurrentState {
   TensorFields fields; // H: B,M,dv,dk; Z: B,2,ds; W: B,2.
   Tensor inert;
@@ -69,6 +76,9 @@ bool supported(const KVConfig&);
 Tensor logit_attention(const Tensor& logits,const Tensor& values,const Tensor& weights);
 KVWindow prepare(const NodeWeights&,const KVConfig&,const Layout&,const Tensor& mass,
                  const Tensor& content,const KVState&);
+// Equal actual write shapes may share four block GEMMs; private states/roots
+// remain distinct. The byte ceiling bounds extra block packing/adjoints.
+std::vector<KVWindow> prepare_many(const std::vector<KVPrepareRequest>&,Index max_workspace_bytes);
 TensorFields read(const NodeWeights&,const KVConfig&,const RegionalConfig&,const KVWindow&,
                   const std::string& mode,const KVState& initial);
 Message full(const NodeWeights&,const KVConfig&,const KVWindow&,const Tensor& controls);

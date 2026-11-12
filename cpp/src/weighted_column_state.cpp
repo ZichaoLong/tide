@@ -1,5 +1,6 @@
 // KV §1.2: raw ragged banks and terminal retention, independently of queries.
 #include "weighted_column_layout.h"
+#include "weighted_row_linear.h"
 #include <numeric>
 namespace tide::weighted::columns {
 using detail::require;using detail::weight;
@@ -62,20 +63,22 @@ void KVState::validate(const NodeWeights& w,const KVConfig& c)const {
 bool supported(const KVConfig& c){
   c.validate();return true;
 }
-KVWindow prepare(const NodeWeights& w,const KVConfig& c,const Layout& layout,const Tensor& mass,const Tensor& u,const KVState& left){
+namespace {
+struct Preparation {Tensor ids;std::vector<Index> writes;};
+Preparation prepare_inputs(const NodeWeights& w,const KVConfig& c,const Layout& layout,const Tensor& mass,const Tensor& u,const KVState& left){
   layout.validate();left.validate(w,c);const Index n=layout.times.size();
   require(layout.samples()==left.layout.samples()&&u.sizes()==at::IntArrayRef({n,c.width})&&mass.sizes()==at::IntArrayRef({n}),"KV window dimensions differ");
   require(u.device()==w.bias.device()&&u.scalar_type()==w.bias.scalar_type()&&mass.device()==u.device()&&mass.scalar_type()==u.scalar_type()
     &&at::isfinite(u).all().item<bool>()&&at::isfinite(mass).all().item<bool>()&&!(mass<0).any().item<bool>(),"invalid KV window payload");
   for(Index b=0;b<layout.samples();++b)if(layout.offsets[b]<layout.offsets[b+1])
     require(layout.times[layout.offsets[b]]>left.last_times[b],"KV column window must advance logical time");
-  KVWindow out{layout,left.layout,mass,u,left.fields,left};
   auto ids=(mass.detach()>0).nonzero().flatten();auto writes=host_ids(ids);
-  if(writes.empty())return out;
-  auto x=normalize(u.index_select(0,ids),c.epsilon);
-  auto kv=project(x,weight(w,"kernel.base"))+project(project(x,weight(w,"kernel.adapter_v")),weight(w,"kernel.adapter_u"));
-  auto split=kv.chunk(2,-1);
-  TensorFields fresh{{"keys",split[0]},{"values",split[1]},{"summaries",project(x,weight(w,"kernel.summary"))},{"weights",mass.index_select(0,ids).clamp_max(1)}};
+  return {ids,std::move(writes)};
+}
+KVWindow assemble(const KVConfig& c,const Layout& layout,const Tensor& mass,const Tensor& u,
+                  const KVState& left,const Preparation& preparation,const TensorFields& fresh){
+  KVWindow out{layout,left.layout,mass,u,left.fields,left};
+  const auto& writes=preparation.writes;if(writes.empty())return out;
   Layout bank;bank.offsets={0};std::vector<Index> perm;size_t next=0;
   for(Index b=0;b<layout.samples();++b){
     for(Index j=left.layout.offsets[b];j<left.layout.offsets[b+1];++j){perm.push_back(j);bank.times.push_back(left.layout.times[j]);}
@@ -98,5 +101,62 @@ KVWindow prepare(const NodeWeights& w,const KVConfig& c,const Layout& layout,con
     for(const auto& [name,t]:out.bank)out.terminal.fields[name]=t.index_select(0,ids);
   }
   return out;
+}
+TensorFields projected(const NodeWeights& w,const KVConfig& c,const Tensor& mass,const Tensor& u,const Preparation& p){
+  if(p.writes.empty())return {};
+  auto x=normalize(u.index_select(0,p.ids),c.epsilon);
+  auto kv=project(x,weight(w,"kernel.base"))+project(project(x,weight(w,"kernel.adapter_v")),weight(w,"kernel.adapter_u"));
+  auto split=kv.chunk(2,-1);
+  return {{"keys",split[0]},{"values",split[1]},{"summaries",project(x,weight(w,"kernel.summary"))},
+          {"weights",mass.index_select(0,p.ids).clamp_max(1)}};
+}
+long double group_bytes(const KVConfig& c,Index rows,Index element_size){
+  // Sum four block scopes: two weight copies, three inputs, two outputs,
+  // plus gathered/normalized content and the KV sum. No R-wise outer products.
+  long double d=c.width,a=c.adapter_rank,s=c.summary_width;
+  return (2*(2*d*d+3*d*a+d*s)+rows*(25*d+5*a+2*s))*std::max<Index>(element_size,4)+16.L*rows;
+}
+}
+KVWindow prepare(const NodeWeights& w,const KVConfig& c,const Layout& layout,const Tensor& mass,const Tensor& u,const KVState& left){
+  auto p=prepare_inputs(w,c,layout,mass,u,left);
+  return assemble(c,layout,mass,u,left,p,projected(w,c,mass,u,p));
+}
+std::vector<KVWindow> prepare_many(const std::vector<KVPrepareRequest>& requests,Index max_workspace_bytes){
+  require(max_workspace_bytes>0,"KV preparation group budget must be positive");
+  using Key=std::tuple<int,int,int,Index,Index,Index,Index>;
+  std::map<Key,std::vector<size_t>> groups;
+  std::vector<Preparation> prepared;std::vector<KVWindow> result(requests.size());prepared.reserve(requests.size());
+  for(size_t i=0;i<requests.size();++i){const auto& q=requests[i];
+    require(q.weights!=nullptr,"KV preparation requires a live parameter owner");
+    prepared.push_back(prepare_inputs(*q.weights,q.config,q.layout,q.mass,q.content,q.left));
+    const auto rows=static_cast<Index>(prepared.back().writes.size());
+    if(!rows){result[i]=assemble(q.config,q.layout,q.mass,q.content,q.left,prepared.back(),{});continue;}
+    const auto device=q.content.device();const auto& c=q.config;
+    groups[{int(device.type()),device.index(),int(q.content.scalar_type()),rows,c.width,c.adapter_rank,c.summary_width}].push_back(i);
+  }
+  auto execute=[&](const std::vector<size_t>& ids){
+    if(ids.size()==1){const auto i=ids.front();const auto& q=requests[i];
+      result[i]=assemble(q.config,q.layout,q.mass,q.content,q.left,prepared[i],projected(*q.weights,q.config,q.mass,q.content,prepared[i]));return;}
+    std::vector<Tensor> xs,base,adapter_v,adapter_u,summary;
+    for(auto i:ids){const auto& q=requests[i];const auto& w=*q.weights;
+      xs.push_back(normalize(q.content.index_select(0,prepared[i].ids),q.config.epsilon));
+      base.push_back(weight(w,"kernel.base"));adapter_v.push_back(weight(w,"kernel.adapter_v"));
+      adapter_u.push_back(weight(w,"kernel.adapter_u"));summary.push_back(weight(w,"kernel.summary"));}
+    auto bases=linear_blocks(xs,base),low=linear_blocks(xs,adapter_v);
+    auto updates=linear_blocks(low,adapter_u),summaries=linear_blocks(xs,summary);
+    for(size_t j=0;j<ids.size();++j){const auto i=ids[j];const auto& q=requests[i];
+      auto split=(bases[j]+updates[j]).chunk(2,-1);
+      TensorFields fresh{{"keys",split[0]},{"values",split[1]},{"summaries",summaries[j]},
+                         {"weights",q.mass.index_select(0,prepared[i].ids).clamp_max(1)}};
+      result[i]=assemble(q.config,q.layout,q.mass,q.content,q.left,prepared[i],fresh);}
+  };
+  for(const auto& [key,ids]:groups){std::vector<size_t> batch;long double used=0;
+    for(auto i:ids){const auto& q=requests[i];auto cost=group_bytes(q.config,prepared[i].writes.size(),q.content.element_size());
+      if(!batch.empty()&&used+cost>max_workspace_bytes){execute(batch);batch.clear();used=0;}
+      batch.push_back(i);used+=cost;
+    }
+    if(!batch.empty())execute(batch);
+  }
+  return result;
 }
 }

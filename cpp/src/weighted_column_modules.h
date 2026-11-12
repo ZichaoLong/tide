@@ -6,6 +6,14 @@ namespace tide::weighted::columns {
 LocalState initial_columns(const NodeWeights&,const MemoryConfiguration&,Index samples);
 void validate_columns(const NodeWeights&,const MemoryConfiguration&,const LocalState&);
 LocalWindow prepare_columns(const NodeWeights&,const MemoryConfiguration&,const Layout&,const Tensor&,const Tensor&,const LocalState&);
+struct LocalPrepareRequest {
+  const NodeWeights* weights;
+  MemoryConfiguration config;
+  Layout layout;
+  Tensor mass,content;
+  LocalState left;
+};
+std::vector<LocalWindow> prepare_columns_many(const std::vector<LocalPrepareRequest>&,Index max_workspace_bytes);
 TensorFields read_columns(const NodeWeights&,const NodeBinding&,const LocalWindow&,const std::string&,const LocalState&);
 Message full_columns(const NodeWeights&,const MemoryConfiguration&,const LocalWindow&,const Tensor&);
 LocalState terminal_columns(const LocalWindow&);

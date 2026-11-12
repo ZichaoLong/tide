@@ -78,6 +78,11 @@ transpose 在 `column_attention` / `weighted_column_attention`；位置元数据
 `message_columns`与`weighted_settle_columns`的聚合/区域交接复用已对齐行域；
 `test_column_assembly`核对物理重边、同类独立根、全零断开及非对齐纤维，
 完整默认路径仍由`test_settle_columns`与安装窗口验收。
+跨节点KV准备由`column_modules.prepare_many` / `prepare_columns_many`分派，
+`kv_columns_state.prepare_kv_columns_many` / `columns::prepare_many`按实际写入尺寸和预算成组。
+`row_linear.linear_blocks` / `weighted_row_linear`提供整块矩阵与一阶转置，
+相同参数身份用共享GEMM，独立矩阵用BMM；`test_linear_blocks`、`test_kv_column_groups`
+及SDK `weighted_sequence_columns`核对独立根、共享贡献、版本、零写与raw状态。
 卷积tap的有序一阶转置在`weighted/tap_gather.py` / `weighted_column_gather.cpp`，
 对应`test_tap_gather`的独立线性映射与`test_native_recurrent_columns`的完整循环检查。
 修改同时检查`column_capacity` / `workspace_bytes`与实际设备精确恢复。

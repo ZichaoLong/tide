@@ -1,45 +1,43 @@
-# 当前交接 — LH三层对照、REQ-006诊断与resident重写（2026-11-12）
+# 当前交接 — LH张量分组、REQ-006诊断与resident重写（2026-11-12）
 
 用户已授权继续完成[ROADMAP P1—P6](ROADMAP.md#当前计划批量张量贯穿与架构验证已授权实施)。
-本轮起点a8a4ee028a5d79696d49bc47242a29c4c39aee4d；固定数学0770593838a37c790a568226930567ed60f99b83。
-已复核工作区、旧作业终态及REQ-006固定请求/源码。19份教材快照通过；无本轮性能或资格结论。
+本轮起点a8a4ee028a5d79696d49bc47242a29c4c39aee4d；HEAD 2927ba40；固定数学0770593838a37c790a568226930567ed60f99b83。
+19份教材快照再次通过；本分支3个新提交尚未推送。下游及参考仓库只读。
 
-## 当前实施
+## 已终态作业
 
-- LH独立直接张量基线和REQ-006可重复诊断已完成26项短CPU开发检查，正式固定源码测量待启动。
-  resident新执行器边界与公共KV节点组分开开发；主代理统一接口、集成、提交和资源调度。
-- 默认公共链继续以B×L张量交接，调查相容节点/区域成组、索引与块伴随；能力分派不按用例名称。
-- REQ-006的下游源码/环境/作业保持只读，实际代码6e7bd49e、请求dc943cc7、报告89959587。
-  基座交付与下游验收独立。HB88 pooled/HB184 quad/R64树/TF是首轮有限代表，不重跑学习轨迹。
-- resident旧FC16原预算warmup仍EE1019/507002，双NPU普通异步反向EE1017仍失败。
-  不重复旧候选、加预算或用blocking替代。新架构设备在线就绪/选择/合批/推进单独验收。
+- 129bbbdc的gef-rewrite-aligned：native CPU定向99通过/9原数值xfail；gef-rewrite-aligned-device：half 15通过、6个安装训练/新进程恢复通过，FC16 CPU/NPU完整步已测。两unit均MainPID=0、cgroup空。报告待整理。
+- c83a2820的gef-rewrite-lh-cpu/npu均passed，三层三模式和CPU32补充已完成；代表176节点/d64/B4/L16、实际61输入位置。NPU训练直接0.6075s、公共native7.1231s、默认native7.4958s。直接dense Full与候选selected Full工作量不同，不能把差额全归包装。
+- 同源码gef-rewrite-req006-a/b均failed；四项measure通过，四项profile已导出trace，但CANN字符串时间戳使旧分析器失败。原失败保留，不重复设备profile。所有以上unit已检查无后代。
+- 原始结果及矩阵：artifacts/rewrite-20261112/；持久状态/日志：artifacts/jobs/rewrite-*/。
 
-## 作业与资源
+## 当前动作与活跃作业
 
-`gef-rewrite-aligned.service`已passed（99通过/9原数值xfail），MainPID=0且ControlGroup空；，固定129bbbdc，源码`/dev/shm/gef-rewrite-20261112/aligned-source`，
-build同级aligned-build；独立background.slice、jobs all/768GiB/3600秒。
-命令`artifacts/rewrite-20261112/aligned-work.sh`；作业记录`artifacts/jobs/rewrite-aligned/{status.json,task.log}`，
-CPU资格输出`artifacts/rewrite-20261112/aligned-cpu.xml`。此作业不做正式性能计时。
-即将启动`gef-rewrite-aligned-device.service`，同固定源码/构建，CPU144–159/256GiB/2400秒；
-单空闲NPU队列准入，half独立检查、6个安装训练/新进程恢复与FC16 CPU/NPU各一次完整步。
-启动脚本`artifacts/rewrite-20261112/aligned-device-work.sh`，记录`artifacts/jobs/rewrite-aligned-device/`。
-旧gef-resident-stop-qualified.service已终态failed、无后代；
-其内部SDK/安装小检查与SSD训练/恢复通过分别见[原报告](evidence/resident-shared-bank-20261112.md)。
-已有FC、五记忆、mixed/half等证据保持原源码/范围，不从本轮设计推断完成。
-资源初查：主存可用约1.7TiB，shm可用约308GiB；配额275GiB/软300GiB/硬800GiB。
-构建/测试可使用全部可用CPU/内存及空闲NPU；正式计时避开自身争用，共享NPU须当前明确授权。
-长任务启动前固定源码、记录实际环境/CPU池/设备映射和有限预算，使用background.slice。
+2927ba40已修正时间戳类型并提供离线CLI，11项短测试通过。
+即将启动gef-rewrite-trace-recovery：固定源码/dev/shm/gef-rewrite-20261112/parser-source，
+仅离线读取4个既有trace，生成各profile目录下summary-recovered-2927ba40.json。
+脚本artifacts/rewrite-20261112/trace-recovery-work.sh；记录artifacts/jobs/rewrite-trace-recovery/；
+background.slice，CPU224–231、64GiB、600秒，不用设备、不改原failed状态。
 
-## 下一动作与未提交修改
+主代理集成linear_blocks及KV prepare_many（开发Python定向通过，native待新构建）。
+区域布局正改为按真实候选数量分组，保留每行成员、稳定平票及结构梯度支持；不以padding替换候选集。
+resident独立设备块调度原语已完成CPU独立检查，实际数值接入、设备构建/VJP/optimizer/续接仍待完成。
+三项工作分边界开发，主代理统一审查、提交与资源调度。正式计时已结束，可安排新构建。
 
-继续实现独立基线及诊断、公共张量边界和resident独立见证；先定向检查，再固定提交资格。
-已完成聚合/区域对齐行域的恒等装配消除，短CPU开发检查20通过、5项原数值xfail；
-native构建/固定源码资格待执行，不把开发检查扩大为设备结论。用户新增TL-REQ-004/005/006三份handoff保持原样，不替用户修改或纳入提交。
+## 下一步与未提交
+
+核验离线分析的实际kernel/形状/同步分布，记录原失败和恢复分析；整理129/c83固定证据。
+完成节点组/区域组集成定向测试，固定新提交，再做native/SDK新构建、独立根/恢复和FC/LH有限回归。
+resident独立验收，不把旧服务小图通过当新执行器完整交付；普通异步跨NPU反向EE1017保持失败。
+用户新增TL-REQ-004/005/006三份handoff保持原样，不纳入提交。
+配额284GiB/软300GiB/硬800GiB，主存可用约1.7TiB，shm308GiB；构建源码/build优先有界shm，持久记录留磁盘。
+共享NPU未获本轮授权，仅使用通过准入的空闲卡；正式计时避免本任务构建竞争。
 
 ```sh
 python scripts/status.py
-python scripts/check_upstream.py
+systemctl --user show gef-rewrite-trace-recovery.service -p ActiveState -p MainPID -p ControlGroup
+cat artifacts/jobs/rewrite-trace-recovery/status.json
 git diff --stat
 ```
 
-当前状态只在本页，待办/停机条件只在ROADMAP；实现、严格数值、离散语义、恢复与性能分别报告。
+当前状态只在本页，待办/停止与重启条件只在ROADMAP。实现、严格数值、恢复和性能分别报告。

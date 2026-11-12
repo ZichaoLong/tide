@@ -19,6 +19,19 @@ LocalWindow prepare_columns(const NodeWeights& w,const MemoryConfiguration& conf
   return std::visit([&](const auto& c)->LocalWindow{using C=std::decay_t<decltype(c)>;
     return prepare(w,c,layout,mass,u,std::get<StateFor<C>>(state));},config);
 }
+std::vector<LocalWindow> prepare_columns_many(const std::vector<LocalPrepareRequest>& requests,Index max_workspace_bytes){
+  std::vector<LocalWindow> result(requests.size());std::vector<KVPrepareRequest> kv;std::vector<size_t> owners;
+  for(size_t i=0;i<requests.size();++i){const auto& q=requests[i];
+    detail::require(q.weights!=nullptr,"column preparation requires a live parameter owner");
+    if(std::holds_alternative<KVConfig>(q.config)){
+      detail::require(std::holds_alternative<KVState>(q.left),"KV preparation requires its typed raw state");
+      kv.push_back({q.weights,std::get<KVConfig>(q.config),q.layout,q.mass,q.content,std::get<KVState>(q.left)});owners.push_back(i);
+    }else result[i]=prepare_columns(*q.weights,q.config,q.layout,q.mass,q.content,q.left);
+  }
+  if(!kv.empty()){auto windows=prepare_many(kv,max_workspace_bytes);
+    for(size_t i=0;i<owners.size();++i)result[owners[i]]=std::move(windows[i]);}
+  return result;
+}
 TensorFields read_columns(const NodeWeights& w,const NodeBinding& b,const LocalWindow& window,
                           const std::string& mode,const LocalState& initial){
   return std::visit([&](const auto& c){using C=std::decay_t<decltype(c)>;

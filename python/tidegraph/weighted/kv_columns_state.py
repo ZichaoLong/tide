@@ -94,12 +94,8 @@ class KVWindowColumns:
     terminal: KVStateColumns
 
 
-def prepare_kv_columns(memory, layout, mass, content, left):
-    """Append actual positive writes in one projection group across B and L.
-
-    Every proposal write participates, independently of subsequent selection.
-    Query visibility and exact raw terminal retention remain separate operations.
-    """
+def _prepare_inputs(memory, layout, mass, content, left):
+    """Validate raw state/clocks before any grouped floating preparation."""
     c = memory.config
     left.validate(c)
     if layout.samples != left.layout.samples or content.shape != (len(layout.times), c.width) or mass.shape != content.shape[:1]:
@@ -113,13 +109,14 @@ def prepare_kv_columns(memory, layout, mass, content, left):
         if z > a and layout.times[a] <= left.last_times[b]:
             raise ValueError("KV column windows must advance the raw logical clock")
     write_rows = positive.nonzero().flatten()
+    return positive, write_rows
+
+
+def _assemble(memory, layout, mass, content, left, positive, write_rows, fresh):
+    """Arrange actual writes and retain raw state; no projection or replay."""
+    c = memory.config
     if not len(write_rows):
         return KVWindowColumns(layout, mass, content, KVWriteBank.from_state(left), left)
-    writes = write_rows.to(content.device)
-    normalized = norm(content.index_select(0, writes), c.epsilon)
-    kv = normalized@memory.base.t()+(normalized@memory.adapter_v.t())@memory.adapter_u.t()
-    key, value = kv.chunk(2, -1)
-    fresh = dict(keys=key, values=value, summaries=normalized@memory.summary.t(), weights=mass[writes].clamp_max(1))
     permutation, offsets, times = [], [0], []
     lasts, counts = left.last_times.tolist(), left.observations.tolist()
     fresh_offset, old_count = 0, len(left.layout.times)
@@ -154,6 +151,91 @@ def prepare_kv_columns(memory, layout, mass, content, left):
         terminal = KVStateColumns(SequenceLayout(torch.tensor(offsets, dtype=torch.int64), bank.layout.times[ids]),
             **trimmed, inert=left.inert, last_times=terminal.last_times, observations=terminal.observations)
     return KVWindowColumns(layout, mass, content, bank, terminal)
+
+
+def prepare_kv_columns(memory, layout, mass, content, left):
+    """Append actual positive writes across B/L, retaining exact raw metadata."""
+    positive, write_rows = _prepare_inputs(memory, layout, mass, content, left)
+    fresh = _project_writes(memory, mass, content, write_rows)
+    return _assemble(memory, layout, mass, content, left, positive, write_rows, fresh)
+
+
+def _project_writes(memory, mass, content, write_rows):
+    if not len(write_rows):
+        return None
+    writes = write_rows.to(content.device)
+    normalized = norm(content.index_select(0, writes), memory.config.epsilon)
+    kv = normalized@memory.base.t()+(normalized@memory.adapter_v.t())@memory.adapter_u.t()
+    key, value = kv.chunk(2, -1)
+    return dict(keys=key, values=value, summaries=normalized@memory.summary.t(), weights=mass[writes].clamp_max(1))
+
+
+def preparation_group_bytes(memory, rows, element_size):
+    """Conservative packing/adjoint storage for four simultaneous block maps.
+
+    Each linear scope reserves two matrix copies, three input copies, two
+    outputs; normalized/gathered content and the KV sum are counted separately.
+    Public per-node state/query budgets continue to apply outside this scope.
+    """
+    c = memory.config
+    weights = 2*c.width*c.width+3*c.width*c.adapter_rank+c.width*c.summary_width
+    values = rows*(25*c.width+5*c.adapter_rank+2*c.summary_width)
+    return (2*weights+values)*max(element_size, 4)+16*rows
+
+
+def prepare_kv_columns_many(requests, *, max_workspace_bytes):
+    """Node groups of actual equal-sized write columns, independent raw states.
+
+    Requests are (memory, layout, mass, content, left). Grouping follows shape,
+    dtype and device, never node name or a predicted activity trace. The byte
+    ceiling limits block packing; a singleton uses the original unstacked path.
+    """
+    from .row_linear import linear_blocks
+    if type(max_workspace_bytes) is not int or not 0 < max_workspace_bytes < 2**63:
+        raise ValueError("KV preparation group budget must be a positive int64 byte count")
+    prepared, groups, result = [], {}, [None]*len(requests)
+    for i, request in enumerate(requests):
+        memory, layout, mass, content, left = request
+        positive, writes = _prepare_inputs(*request)
+        prepared.append((positive, writes))
+        if not len(writes):
+            result[i] = _assemble(*request, positive, writes, None)
+            continue
+        c = memory.config
+        key = (content.device, content.dtype, len(writes), c.width, c.adapter_rank, c.summary_width)
+        groups.setdefault(key, []).append(i)
+
+    def execute(ids):
+        if len(ids) == 1:
+            i = ids[0]
+            memory, layout, mass, content, left = requests[i]
+            positive, rows = prepared[i]
+            fresh = _project_writes(memory, mass, content, rows)
+            result[i] = _assemble(*requests[i], positive, rows, fresh)
+            return
+        memories = [requests[i][0] for i in ids]
+        writes = [prepared[i][1].to(requests[i][3].device) for i in ids]
+        normalized = [norm(requests[i][3].index_select(0, index), memory.config.epsilon)
+                      for i, index, memory in zip(ids, writes, memories)]
+        bases = linear_blocks(normalized, [m.base for m in memories])
+        low_rank = linear_blocks(normalized, [m.adapter_v for m in memories])
+        updates = linear_blocks(low_rank, [m.adapter_u for m in memories])
+        summaries = linear_blocks(normalized, [m.summary for m in memories])
+        for i, index, base, update, summary in zip(ids, writes, bases, updates, summaries):
+            key, value = (base+update).chunk(2, -1)
+            fresh = dict(keys=key, values=value, summaries=summary, weights=requests[i][2][index].clamp_max(1))
+            result[i] = _assemble(*requests[i], *prepared[i], fresh)
+
+    for ids in groups.values():
+        batch, used = [], 0
+        for i in ids:
+            cost = preparation_group_bytes(requests[i][0], len(prepared[i][1]), requests[i][3].element_size())
+            if batch and used+cost > max_workspace_bytes:
+                execute(batch); batch, used = [], 0
+            batch.append(i); used += cost
+        if batch:
+            execute(batch)
+    return result
 
 
 def c_window_exceeded(window, counts):

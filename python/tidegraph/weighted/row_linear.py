@@ -12,9 +12,14 @@ class _Rows(torch.autograd.Function):
     def forward(ctx, *inputs):
         ctx.set_materialize_grads(False)
         xs, ws = inputs[::2], inputs[1::2]
-        x, w = torch.stack(xs), torch.stack(ws)
-        observation.projection("private_bmm", len(xs))
-        values = torch.bmm(w, x.unsqueeze(-1)).squeeze(-1)
+        ctx.blocks = xs[0].ndim == 2
+        ctx.shared = ctx.blocks and all(t is ws[0] for t in ws)
+        x, w = torch.stack(xs), ws[0] if ctx.shared else torch.stack(ws)
+        observation.projection("shared_block_mm" if ctx.shared else "private_bmm", len(xs))
+        if ctx.blocks:
+            values = x@w.t() if ctx.shared else torch.bmm(x, w.transpose(1, 2))
+        else:
+            values = torch.bmm(w, x.unsqueeze(-1)).squeeze(-1)
         outputs = tuple(values.unbind())
         ctx.count = len(inputs)
         ctx.save_for_backward(*inputs, x, w)
@@ -32,8 +37,12 @@ class _Rows(torch.autograd.Function):
         ids = [i for i, bar in enumerate(bars) if bar is not None]
         if ids:
             g = torch.stack([bars[i] for i in ids])
-            dx = torch.bmm(w[ids].transpose(1, 2), g.unsqueeze(-1)).squeeze(-1)
-            dw = g.unsqueeze(-1)*x[ids].unsqueeze(1)
+            if ctx.blocks:
+                dx = g@w if ctx.shared else torch.bmm(g, w[ids])
+                dw = torch.bmm(g.transpose(1, 2), x[ids])
+            else:
+                dx = torch.bmm(w[ids].transpose(1, 2), g.unsqueeze(-1)).squeeze(-1)
+                dw = g.unsqueeze(-1)*x[ids].unsqueeze(1)
             for k, i in enumerate(ids):
                 result[2*i], result[2*i+1] = dx[k], dw[k]
         return tuple(result)
@@ -52,4 +61,27 @@ def linear_rows(xs, weights):
         if (x.shape != x0.shape or w.shape != w0.shape or
                 any((t.dtype, t.device) != (x0.dtype, x0.device) for t in (x, w))):
             raise ValueError("independent linear row metadata mismatch")
+    return list(_Rows.apply(*[t for row in zip(xs, weights) for t in row]))
+
+
+def linear_blocks(xs, weights):
+    """y[i]=xs[i]@weights[i].T with a whole R×D tensor per node.
+
+    Equal shapes are an operator capability, not shared state or parameters.
+    Exact weight aliases use one GEMM; other matrices use BMM. The one custom
+    first-order boundary preserves independent output support and input versions,
+    and forms weight adjoints as block products, never one outer product per row.
+    Callers group/budget actual R and private parameter shapes before invoking.
+    """
+    if len(xs) != len(weights):
+        raise ValueError("independent linear block count mismatch")
+    if not xs:
+        return []
+    x0, w0 = xs[0], weights[0]
+    if x0.ndim != 2 or w0.ndim != 2 or w0.shape[1] != x0.shape[1] or min(*x0.shape, w0.shape[0]) < 1:
+        raise ValueError("independent linear block shape mismatch")
+    for x, w in zip(xs, weights):
+        if (x.shape != x0.shape or w.shape != w0.shape or
+                any((t.dtype, t.device) != (x0.dtype, x0.device) for t in (x, w))):
+            raise ValueError("independent linear block metadata mismatch")
     return list(_Rows.apply(*[t for row in zip(xs, weights) for t in row]))

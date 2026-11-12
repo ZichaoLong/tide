@@ -97,6 +97,7 @@ Result settle(const SettleGraph& spec,const Model& model,const Layout& layout,co
   for(auto region:order){
     const auto& placement=region_locations[region];
     std::map<Index,std::vector<Index>> candidates;std::vector<Index> nodes;
+    std::vector<LocalPrepareRequest> preparations;std::map<Index,Received> received_by_node;
     for(Index k=g.region_index.offsets[region];k<g.region_index.offsets[region+1];++k){
       const auto v=g.region_index.edges[k];const auto& w=model.nodes[v];const auto& b=binding[v];
       std::vector<std::pair<const Message*,Index>> sources;
@@ -105,10 +106,16 @@ Result settle(const SettleGraph& spec,const Model& model,const Layout& layout,co
         if(outgoing.count(g.edges[e].source))sources.emplace_back(&transport(outgoing.at(g.edges[e].source),w.bias,copies),b.sources.edges[e]);}
       auto received=aggregate(w,b,sources);if(received.rows.empty())continue;
       auto times=layout.select(received.rows);for(auto& t:times.times)t=t*spec.stride()+spec.rank(v);
-      auto window=prepare_columns(w,b.memory,times,received.mass,received.content,result.states[v]);
+      preparations.push_back({&w,b.memory,std::move(times),received.mass,received.content,result.states[v]});
+      nodes.push_back(v);received_by_node.emplace(v,std::move(received));
+    }
+    auto prepared=prepare_columns_many(preparations,max_workspace_bytes);
+    for(size_t index=0;index<nodes.size();++index){
+      const auto v=nodes[index];const auto& w=model.nodes[v];const auto& b=binding[v];const auto& received=received_by_node.at(v);
+      auto window=std::move(prepared[index]);
       auto fields=read_placed(w,b,window,g.regions[region].read_mode,initial[v],node_locations[v]);
       result.states[v]=terminal_columns(window);
-      result.nodes[v]={received.rows,std::move(window),std::move(fields),at::zeros_like(received.mass)};nodes.push_back(v);
+      result.nodes[v]={received.rows,std::move(window),std::move(fields),at::zeros_like(received.mass)};
       for(auto row:received.rows)candidates[row].push_back(v);
     }
     std::map<std::vector<Index>,std::vector<Index>> groups;

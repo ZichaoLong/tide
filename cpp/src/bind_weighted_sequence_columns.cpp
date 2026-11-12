@@ -1,11 +1,13 @@
 // Tensor-preserving client adapter; C++ owns the whole schedule and local math.
 #include "tide/weighted_sequence_columns.h"
+#include "weighted_row_linear.h"
 #include <torch/csrc/utils/pybind.h>
 #include <pybind11/stl.h>
 namespace py=pybind11;
 void bind_weighted_sequence_columns(py::module_& m){
   using namespace tide;using namespace tide::weighted::columns;
   using Result=tide::weighted::columns::Result;
+  m.def("weighted_linear_blocks",&tide::weighted::linear_blocks);
   py::class_<Layout>(m,"ColumnLayout").def(py::init<std::vector<Index>,std::vector<Index>>())
     .def_readonly("offsets",&Layout::offsets).def_readonly("times",&Layout::times);
   py::class_<KVState>(m,"KVColumnState").def(py::init<Layout,TensorFields,Tensor,std::vector<Index>,std::vector<Index>>())
