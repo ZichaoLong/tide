@@ -18,7 +18,8 @@
 已有实现按能力复用，旧接口不是架构约束；一般图、独立根、训练和精确续接仍是交付能力。
 下游固定6e7bd49e独立直接实现的计数器不作为当前基座回归；四代表短trace和无插桩计时
 分别记录更新子区间/完整步/作业成本，不恢复原学习轨迹。正式请求固定dc943cc7，报告89959587。
-本轮节点/区域计时固定`a95b8987`，诊断与resident组件后继至`7d5e05c3`；各项资格仍按固定报告的实际源码身份引用。
+节点/区域早期计时固定`a95b8987`；来源列后继成本为`00bb5ac2`，resident公共接入资格为`a3c4f62d`。
+各项资格按固定报告实际源码身份引用，静态审阅与设备测量不互相替代。
 KV保持性能主线；区域分配是同等重要的完整边界，覆盖描述/评分/证据、控制、各发送与求解/VJP，
 一直贯穿活动支持、Full、消息与下一阶段聚合。早期GDN/SSD小例用于检验接口，不转移FC主线。
 
@@ -29,7 +30,7 @@ Python/C++ KV与四循环/卷积整链、异构组合、实际消息列及 raw �
 [9fa852c KV位置列](evidence/column-positions-20261111.md)的CPU/NPU安装训练与恢复亦通过。
 [native四循环/卷积typed列资格](evidence/recurrent-columns-20261111.md)已完成：CPU306通过/13原数值xfail，
 24个CPU/NPU安装消费者和standalone CPU实跑分别通过。
-公共实验内置输出任务已接入同一张量输入/loss边界；当前列策略execution-v6与旧record身份分开，旧v5需显式迁移；
+公共实验内置输出任务已接入同一张量输入/loss边界；execution-v6引入列策略，execution-v7新增resident静态选择，旧record身份分开，旧v5需显式迁移；
 [b993f38固定资格及宽/多节点、1B/9B有限成本](evidence/experiment-columns-20261111.md)已完成；
 [卷积转置](evidence/column-tap-transpose-20261111.md)修复原NPU代表的精确恢复失败。
 [540ccbd8/2ca00458混合放置](evidence/column-placement-20261111.md)已固定验收CPU、NPU安装训练/恢复
@@ -47,17 +48,23 @@ ce50a2a5独立SDK新构建的CPU、单NPU普通异步及双NPU显式同步各16�
 3e926ede单bank投影/块伴随解除原局部复制与保守矩阵预留，小型独立公式/全图/训练/恢复通过；
 e12aec0c父子服务停止的6项SDK和10项安装检查通过。原预算SSD训练/精确恢复通过，
 FC16仍在warmup报EE1019/507002，无吞吐或恢复结论；原失败和新增见证错误分别保留。
-同候选停止重复。后继resident需有界服务提交/数值阶段合批的新设计，保持设备在线决定和独立根；
-新列完整B×L resident公开接入及尺度验证仍在实施；普通异步按主机队列配置分列，全仓未审范围保持。旧一般执行器功能不能冒充新路径已迁移。
+同候选停止重复。后继独立block owner已完成[公共接入与小图资格](evidence/resident-block-public-20261112.md)：
+KV sum/qry、单NPU FP32、B×L输入/根、完整Model与schema2 archive；Python-owned、SDK、
+公共实验及新进程恢复分别通过。原预算FC16在qry保守预留拒绝，LH176在optimizer/8的layout子预算拒绝，
+均没有有效规模吞吐/恢复。后继需角色分组矩阵、共享历史及对应真实容量模型；不只增加预算或改守卫常数。
+普通异步按主机队列配置分列，全仓未审范围保持。旧一般执行器功能不能冒充新路径已迁移。
 新增hash绑定21文件审阅与早前有重叠；自动2157文件清单不等于全仓已审。
 
 [节点/区域后继](evidence/node-region-batching-20261112.md)已采用prepare_many、真实候选数分组和
 有界unit检查，并补LH176独立公式/实际列尺度检查。跨节点Read/Full、Describe和有界共同原点RoPE已在55a/fb83后继实现，
 [独立根及LH生命周期](evidence/query-lifecycle-20261112.md)已补；fb83相关CPU281通过/9原xfail、
-两ABI新构建通过；[42点LH/FC/1B成本](evidence/rope-performance-20261112.md)、
+Python-owned与SDK新构建通过；[42点LH/FC/1B成本](evidence/rope-performance-20261112.md)、
 [安装/异步资格](evidence/rope-qualification-20261112.md)及[静态循环审阅](evidence/lh-static-structure-20261112.md)已审阅。
-00bb5ac2已实现来源变换合批与完整参数槽精确复用，新native/设备/成本资格继续，
-不能按外层调度已改造或局部合批已完成便关闭P5。
+00bb5ac2来源变换合批与完整参数槽精确复用的[22点成本/四安装生命周期](evidence/source-columns-performance-20261112.md)已完成；
+LH176默认native训练CPU1/NPU-host2为2.3187/5.1350秒，直接公式0.7568/0.6238秒，主要差距仍在公共列层。
+[静态数据流审阅](evidence/lh-block-static-20261112.md)区分columns的精确Q/K尺寸分组/逐节点小操作与
+resident逐行矩阵、逐帧raw、重复历史投影和单block串行循环；这些替代尚未实现，不能关闭P5。
+55f8c631独立直接公式修复完整有序参数角色识别，22项CPU开发检查通过，无低秩旧LH材料不受影响。
 [REQ006机制调查](evidence/req006-diagnostics-20261112.md)与
 [常量重载/初态配对](evidence/req006-floor-20261112.md)分开保留严格失败、算子成本及下游职责；
 尚未做四代表生产替换或下游验收。共享许可按当前对话复用，不变成新会话的默认准入。
@@ -75,8 +82,8 @@ FC16仍在warmup报EE1019/507002，无吞吐或恢复结论；原失败和新增
 | P2 加法对照与紧凑实现 | FC/Transformer与KV/SSD基线保持；LH已补三层三模式及176节点raw/支持/任务VJP。55a已补非空左态七观察族、176节点三AdamW及CPU/NPU两个安装客户端新进程精确恢复；数值投影与完整连接资格分列，不能互相替代。区域张量公式/VJP锚点与Attention算子能力分别维护 | 同材料、同观察/计时范围的直接公式→公共块接口→小组合成本；LH CPU FP64数值投影通过，CPU/NPU FP32有限超差和36个None/零连接差异按声明范围保留；Transformer不作等价oracle |
 | P3 默认FC整链贯穿 | 以KV为首要候选，区域描述/控制/求解/VJP同步改造；消息及支持以批量数据进入下游，消除边界的强制拆行重拼。配置/能力按块分派，检查与optimizer纳入完整路径；保留一般图合法推进与声明观察能力，必要时迁移API/codec | FC4/FC16的CPU与NPU mixed-c三模式、阶段差额、图/算子/内存、训练与恢复；小型PDG反馈、非对齐TimedDAG、一般Settle端口、重复边/共享/None零等定向检查；Python/native与standalone实际接入。FC为第一个整链汇报点，不以局部提速代替架构验收 |
 | P4 有限候选与组合扩展 | 将当前五记忆/固定时间短卷积，以及评分/证据/key、十种发送与适用正则接入新块契约。区域的总量/阈值/受约束求解、Attention份额、比例、硬选择和小数零温发送分别保留实际支持与声明反向；优先打通功能，重性能按实测排序 | 每个候选有可用实现，合法组合可配置；逐项及有判别力的小组合覆盖，无需穷举。不同私有形状不逼迫逐行返回，不同分配语义不偷换同一Top-k；KV位置/过期/sum等域与循环序列VJP分别记录 |
-| P5 代表规模与执行路径 | LH相容节点read_many/full_many及共同原点RoPE已有三层/三模式、FC16、CPU32与1B有限成本；42点结论按报告范围。00bb5ac2来源变换合批及精确复用继续新资格。resident已写完整区域device循环、Aggregate/Upd/逐边路由、raw session与canonical optimizer；须完成整图独立根、跨窗/新进程、公开Model/Continuation接入及原预算FC16；逐帧raw快照尚非共享前缀bank | [resident块证据](evidence/resident-blocks-20261112.md)不解除旧FC16 EE1019；不再原样重跑旧服务树或仅增预算。先完整小图独立根/跨窗，再原预算规模；默认队列EE1017与GPU待验独立保留；显式per-stream列资格与一般PDG/TimedDAG六格四AdamW/恢复已通过。当前LH/FC成本是有限共享观察，不外推9B或不同放置 |
-| P6 治理、交付与持续复用 | 贯穿各阶段维护语义对应/架构/复现/性能经验；[55a边界审阅](evidence/p1p6-boundary-review-20261112.md)已按hash记录24实际源码/测试及3段文档，已审与未审分列。完善安装客户端、替换局部模块、实际配置/路径可见性、诊断和恢复演练，提供消费者迁移说明 | 固定实现先提交，相关资格和性能证据随后独立记录；新线程和下游无需会话/旧raw目录即可导航复现。旧实验锁和证据不改写；全仓未审不冒充完成 |
+| P5 代表规模与执行路径 | 00bb来源列22点成本与四安装生命周期已固定，LH主要公共层差距未闭合。resident公共Model、独立根、sum/qry、三步optimizer/跨窗/新进程和实验默认接入已验；FC16/LH176均容量拒绝。下一边界：columns相容尺寸分桶及小算术合批，resident角色分组GEMM、共享initial/write bank、快照索引与块伴随；精确容量模型跟随实际表示 | [a3c资格及拒绝公式](evidence/resident-block-public-20261112.md)与[静态形状/循环](evidence/lh-block-static-20261112.md)分别记录。不得只放宽守卫或把接口接通当尺度通过；旧FC16 EE1019、默认双卡EE1017、half/循环记忆/多设备新block与GPU待验保持。显式per-stream一般图六格四步恢复已通过；共享成本不外推9B或其他放置 |
+| P6 治理、交付与持续复用 | 语义/架构/复现/能力导航已连接最新公共接入、22点成本及静态审阅；skill同时包含加法、减法和展开循环/形状/复制/伴随分析。55a实际24源码及本轮hash绑定43文件不累计重复覆盖；补接口更换、实际路径/配置身份和恢复演练 | 固定实现先提交，资格及证据独立记录；新线程可从Git重建输入，不依赖旧raw。当前交接只在STATUS、剩余工作只在本页；全仓未审及后继架构改造仍未完成 |
 
 ### 测量、阶段边界与有限停止
 

@@ -1,5 +1,18 @@
 # 历史验证与测量证据
 
+[Resident公共块训练与规模边界（2026-11-12）](resident-block-public-20261112.md)：固定a3c，
+KV sum/qry公共Model及实验默认接入；CPU70、两套runtime构建、native6/SDK9设备进程及
+standalone两项训练/新进程archive检查通过。原SDK头路径失败与后继通过分列；FC16查询预留和
+LH176 canonical layout子预算拒绝均无有效吞吐，不能解除旧FC16 EE1019。
+
+[来源列22点成本与LH生命周期（2026-11-12）](source-columns-performance-20261112.md)：固定00bb，
+默认native LH176训练CPU1/NPU-host2为2.3187/5.1350秒，直接公式0.7568/0.6238秒；
+四安装客户端三AdamW/新进程恢复通过。共享成本、严格数值资格与恢复分列，保留原计划元数据瑕疵。
+
+[LH列与resident静态数据流（2026-11-12）](lh-block-static-20261112.md)：43个实际文件hash绑定a3c，
+比较投影/伴随矩阵形状、ragged分组、历史重投影、逐帧raw与kernel内部循环。
+公开B×L不等于内部紧凑；无新测量。另记55f8直接基线有序参数槽修复与22项CPU开发检查。
+
 [来源列FP32有界诊断（2026-11-12）](source-columns-rounding-20261112.md)：固定00bb的三个native严格失败，
 99个逐位提升的参数/input根、首个Aggregate数值差异与FP64收敛；原失败及原容差保留。
 

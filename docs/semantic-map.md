@@ -215,6 +215,8 @@ actual presence和int64时钟伴随返回；role→canonical owner映射汇总�
 `block_resident_*`映射真实Model、独立根、raw状态解码与输入账本。原始来源低秩因子、
 异宽source bank padding及别名由Model检查和独立Streaming公共消费者核对，
 字面公式、独立调度、archive恢复和真机验收各自保留范围。
+[a3c公共资格](evidence/resident-block-public-20261112.md)连接sum/qry字面Mem/total根、
+完整flow根、Model独立Streaming、实验完整解码及新进程archive检查；规模容量失败另列。
 
 - [区域列边界](weighted-region-batch.md)：Alloc/SelStep的R×N完整描述、score/evidence/
   control/support与精确解映射VJP由`allocation_columns`、`regional_columns`和C++

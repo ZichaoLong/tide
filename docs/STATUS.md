@@ -1,53 +1,59 @@
-# 当前交接 — P1—P6继续实施（2026-11-12）
+# 当前交接 — P1—P6阶段汇报点（2026-11-12）
 
-固定数学0770593838a37c790a568226930567ed60f99b83，19份快照通过；当前授权可重写、提交并推送，GPU真机延后。
-共享NPU的当前对话持续授权包括性能；每次仍有新PID/start/UID、资源、双采样及组锁。公共/参考环境不改。
-用户TL-REQ-004/005/006三份未跟踪handoff只读、不提交。阶段提交后继续，未解除项不冒称完成。
+固定数学 `0770593838a37c790a568226930567ed60f99b83`，19份快照核验通过。
+工作分支graph-execution-foundation；最近实现 `55f8c631`，resident资格固定 `a3c4f62d`。
+本次文档提交固定下列证据；实际HEAD与推送状态以 `git status --short --branch` 为准。
+用户授权重写、提交/非强推及当前对话共享NPU；GPU后继延后。
+用户TL-REQ-004/005/006三份未跟踪handoff只读，不提交。参考仓库未改。
 
-## 源码与下一动作
+## 下一动作
 
-HEAD838fc30c；远端仍51e93e74。已提交：00bb来源MLP/精确共享及公共resident v2，38ade静态/42点证据，
-397bf SDK Model检查显式raw链接，205f公共owner默认Next配置，d00f异宽source梯度的设备gather，838fc数值见证/导航。
-所有后继固定构建均保持数值核心00bb，不混用fb83二进制。新公共resident仍不宣称全部规模通过。
-
-本轮待集成源码已稳定：KV sum typed Memory tape/专属VJP、独立Mem/total根；
-实验execution-v7的B×L输入/loss、实际完整记录与schema2 archive；standalone BlockCandidate、
-请求/生效身份及恢复、outputs/metrics。主代理32项接口检查与公共CLI语法通过；
-各开发CPU/逐TU检查保留原日志，不当作真机资格。三份用户handoff保持未跟踪。
-
-下一动作：提交本轮实现并冻结`/dev/shm/gef-p1p6-20261112/resident-v3-source`；
-两个background.slice构建服务`gef-p1p6-resident-v3-{native,sdk}-build`各CPU160核/512GiB/2400秒，
-复用同C++ hash的00bb核心；SDK补独立standalone包。随后qry/sum独立根、public三AdamW/跨窗/新进程、
-实验默认三SGD与精确恢复，再原预算FC16有限测量。脚本在`artifacts/p1p6-20261112/resident-v3-*-build.sh`。
-静态审阅明确剩余成本：columns精确Q/K尺寸分组；resident多bank逐输入行复制参数、Read重复历史投影、
-单block逐帧raw快照及重复结构根扫描。它们不是core-5所需，不因公共接口已接入而关闭P5。
-新block多设备/其他记忆/half尚未迁移，旧general功能单列。
+已集成[22点成本/生命周期](evidence/source-columns-performance-20261112.md)、
+[43文件静态审阅](evidence/lh-block-static-20261112.md)和[resident公共资格/规模拒绝](evidence/resident-block-public-20261112.md)。
+语义、能力、复现导航与性能经验同步；当前在用户允许的阶段汇报点，P1—P6未全部完成。
+继续时先按下文命令核对状态，随后从ROADMAP P5选择具体表示边界：owner/角色分组投影和共享历史bank，
+同时审视columns的Q/K尺寸分桶与逐节点小操作。先定义forward/VJP/观察物化及字节模型，再做有限实现和相关检查。
+用户要求静态算法/循环/张量形状/复制/伴随审阅与运行观测并重；LH主要差距未闭合时可在下一停点汇报。
+不以小图通过或公共接口接入宣称P1—P6完成，不继续无依据增加预算或重复同一规模失败。
 
 ## 已固定结果
 
-[fb83资格](evidence/rope-qualification-20261112.md)：CPU281通过/9原xfail、两ABI、SDK NPU五记忆×三放置、八安装三AdamW/新进程；非空LH176 NPU严格数值失败及None/零投影边界保留。
-[42点成本](evidence/rope-performance-20261112.md)与[f475诊断](evidence/lh-static-structure-20261112.md)已审阅入库，不重跑。
-显式per-stream队列的一般图六格/四步恢复通过，普通队列EE1017保持；GPU真机仍待验。
+- `00bb5ac2`来源MLP按输入及完整参数槽合批/精确复用；CPU/NPU 22成本点、四安装LH176生命周期已完成。
+  当前mixed-c默认LH176训练CPU1 2.3187s/NPU-host2 5.1350s，直接公式0.7568/0.6238s；主要差额在公共列层。
+  同FP32材料首Aggregate差1.92e-9，提升FP64全根最大1.71e-13，原严格失败和None/零边界保留。
+- `4248bde1`实现KV sum typed tape/独立Mem-total根，Model及experiment execution-v7默认接入，实际完整解码及schema2 archive；
+  `a3c4f62d`加入standalone真实训练/新进程资格入口。冻结源码 `/dev/shm/gef-p1p6-20261112/resident-v3-source`。
+- 固定a3c：Python-owned/SDK resident均构建成功，复用hash相同的00bb C++ core。CPU70通过，SDK Model检查通过。
+  原SDK外层因benchmark缺JSON头failed；显式已有JSON头后新benchmark构建及4 CTest通过，原失败不改写。
+  native设备6进程、SDK9进程、standalone sum/qry两项通过，含三步optimizer、实际raw、新进程精确恢复。
+  d00f异宽source反向device index_select已有公共消费者真机覆盖。本轮真机范围是新block单NPU FP32、KV sum/qry相容Settle域。
+- `55f8c631`独立LH基线改用完整有序参数角色，修复去重root列表误合并低秩槽；CPU开发22通过。
+  不改变无低秩LH176旧材料，不当作新性能测量或a3c设备资格。
 
-00bb新source：Python开发81 passed/5数值xfail；新native核心构建通过，初始CPU104 passed/6 xfailed/3 failed。
-[有界诊断](evidence/source-columns-rounding-20261112.md)已确认固定见证：首Aggregate差1.92e-9，逐位同材料FP64全根最大1.71e-13；具名xfail分类不改严格阈值，原failed保留。
-SDK核心CPU/五记忆三放置NPU通过；22点来源成本CPU/NPU均终态passed，报告尚待整理。LH差距仍明显，不以小收益结束根因解释。
+## 规模与架构边界
 
-resident：00bb Python-owned构建通过但首安装构造缺Next失败；205f修复后独立安装三AdamW与fresh-process通过。
-397bf SDK构建及CPU Model检查通过；设备flow/session及跨窗恢复通过；public异宽source反向在非连续view的设备copy处失败。
-两次有界gdb：第一次捕获厂商内部JSON异常，不用于该根因；第二次准确指向BlockSettleSession::backward/copy。
-d00f已改为执行时device index_select，尚待新构建实测。不得把上层作业passed或qry小图覆盖当异宽/sum/规模资格。
+固定a3c各一次，原FC16 B4/L16/d128预算及LH176 B4/L16/d64边界试验均failed，无有效训练/吞吐/恢复。
+FC16构造成功，warmup qry保守预留13,670,416,384字节大于可用6,120,144,499；该值不是实测峰值。
+LH176在optimizer子分区的canonical layout守卫拒绝：optimizer_bytes/8=50,331,648，
+FP32 layout+owner位需59,625,113字节；这是子预算拒绝，不是设备OOM。旧FC16 EE1019未由更早拒绝解除。
+静态审阅确认columns主要矩阵已分组，仍按实际Q/K尺寸分裂及逐节点小操作；resident多bank按行复制矩阵，
+逐帧复制raw、重复投影历史，单工作block按B/N/L执行及反向重复结构根扫描。
+后继具体边界为owner/角色分组投影、共享initial/write bank与快照索引/块伴随，以及对应精确容量模型。
+不能靠仅换外层调用或放松预算声称实现这些替代。P5及未迁移多卡/half/其他记忆仍未完成，详见ROADMAP。
 
-## 活跃作业、位置与资源
+## 作业与资源
 
-已终态通过 `gef-p1p6-source-v2-lifecycle-{cpu,npu}`：固定00bb独立安装LH176，CPU64–95/NPU主机56–63，
-各256GiB/1800秒，NPU空闲0/5/6/10经队列准入；两个客户端三AdamW/新进程均完成，NPU终态08:17:33 UTC；待固定报告整理。计划及逐格结果在
-`artifacts/p1p6-20261112/source-v2-lifecycle-*`，持久终态/log在`artifacts/jobs/p1p6-source-v2-lifecycle-*/`。
-先运行 `python scripts/status.py`；历史失败用`--all-jobs`。查看/停止：`systemctl --user show UNIT` / `systemctl --user stop UNIT`，核对完整cgroup。
+当前无活跃构建/测试/实验。所有 `gef-p1p6-resident-v3-*` 已终态；保留的failed服务MainPID=0且ControlGroup为空。
+作业记录 `artifacts/jobs/p1p6-resident-v3-*/`：native-build/benchmark-build/native-qualification/
+sdk-qualification/standalone-qualification passed；sdk-build及scale failed。
+输入/launch/逐项日志在 `artifacts/p1p6-20261112/resident-v3-*`；native设备5、SDK10、standalone/scale5。
+两套队列设置均unset launch-blocking/TASK_QUEUE_ENABLE/PER_STREAM_QUEUE；不继承双卡普通异步资格。
+构建各CPU160核/512GiB/2400秒，资格各独立CPU池/256GiB/1800秒，规模每点600秒；未盲目重试。
+冻结core、native/sdk resident及安装在 `/dev/shm/gef-p1p6-20261112/`；正式复现须按development重建，不依赖这些目录。
+磁盘约841GiB、shm约292GiB可用，没有存储阻塞、没有清理用户或参考数据。
 
-source-v2-performance的22点已完成，CPU0–31/主机32–39、共享物理9，一次预热一次测量；没有与自身重构建重叠。
-原始材料/计划/结果/launcher在 `artifacts/p1p6-20261112/`，不把无插桩计时与profile混用。
-冻结源码/构建在 `/dev/shm/gef-p1p6-20261112/`：core-source-v2、core-source-v2-native/sdk/install，
-resident-v2-linkfix（397bf）与resident-v2-sdk-linkfix，resident-v2-boundary-fix（205f）与resident-v2-native-fixed。
-v3两个构建已准备待提交后启动；以jobs终态为准。后继仍使用background.slice、固定输入、有限预算；不编辑运行中源码。
-quota307GiB/软300/硬800，仍有6天grace；shm约295GiB可用，无存储阻塞，不清理用户/参考数据。
+重新接续：`git status --short --branch`、`python scripts/status.py`、`python scripts/check_upstream.py`；
+历史失败查 `python scripts/status.py --all-jobs`。三份用户handoff保持未跟踪，不属于本次交付。
+后继源码导航：`rg -n "banks|index_select|bmm" tools/device_online/weighted_projection.cpp`、
+`rg -n "for|old|proposal" tools/device_online/ascendc/block_kv_sequence_math.h`；
+新源码的独立公式、跨窗及客户端检查从上面的资格报告进入，不重跑原失败队列。

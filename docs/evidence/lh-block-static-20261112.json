@@ -1,0 +1,835 @@
+{
+  "schema": "tide-static-dataflow-evidence-v1",
+  "source_head": "838fc30c82061831846b559d2af9fa11e1ae6dfa",
+  "source_is_worktree": true,
+  "upstream_revision": "0770593838a37c790a568226930567ed60f99b83",
+  "scope": "StaticKV direct formula / source-v2 public columns / block resident v2: ragged Read/Full grouping, parameter-bank shapes and raw snapshots.",
+  "not_evidence_of": [
+    "runtime measurement",
+    "hardware qualification",
+    "implemented optimization",
+    "whole-repository audit"
+  ],
+  "notation": {
+    "N": "nodes in one compatible region",
+    "B": "samples",
+    "L": "positions in the sealed window",
+    "R": "B*L*N allocated resident node rows",
+    "C": "resident raw cache capacity",
+    "T": "initial bank columns plus current-window columns in dense direct formula",
+    "Q_i": "maximum actual query count across B samples for node i; padded to at least 1",
+    "K_i": "maximum actual bank count across B samples for node i; padded to at least 1",
+    "G": "number of nodes in one public compatible group",
+    "I,O": "projection input/output widths",
+    "d,ds,df": "content, summary, FFN widths",
+    "F_C": "d+1+C*(2*d+ds+1)",
+    "I_C": "4+C",
+    "P": "one parameter role matrix element count; unrelated to number of ports"
+  },
+  "paths": {
+    "direct": {
+      "schedule": "StaticKV.__call__: one region loop; _sources topology/edge loops occur in construction. _aggregate loops only predecessor-region source blocks during forward.",
+      "projection": "project: X[N,B*L,I] with W[N,O,I], or one shared GEMM if every weight object is identical. Source axis S replaces N for source MLP. No B*L replication of W.",
+      "partial_aliases": "All-shared detection only. Other partial aliases remain stacked once per node/source slot.",
+      "raw": "append holds one [N,B,T,...] bank with validity/timestamps; read/full share it. No full raw prefix per query. Terminal filters actual validity/last-positive-write expiry. Explicit decode loops region/node/sample only at boundary.",
+      "read": "Q[N,B,L,ds], K/V[N,B,T,ds], score[N,B,L,T]. QK shared across short/long channels. Sum uses summaries only.",
+      "full": "Q/K/V shaped [N,B,H,L-or-T,d/H]; all allocated N*B*L rows execute, then support mask. Heads share matmul batch, but rotations still loop H.",
+      "nominal_forward_matmul_calls_per_region": {
+        "update": 4,
+        "read_sum_including_current_summary": 3,
+        "read_qry_including_current_summary": 7,
+        "full": 7
+      },
+      "call_count_conditions": "Matrix calls, not all ATen operators or hardware kernels. Excludes Describe heads, source adaptation, allocation, normalization, packing and decoding.",
+      "semantic_scope": "Declared output/raw numerical projection only. Dense masked Full does not by itself certify production None/zero roots or complete intermediate event observations."
+    },
+    "public_columns_source_v2": {
+      "preparation_groups": "Key includes actual total positive write rows, d/rank/ds, dtype/device; 4 matrix calls per nonempty group. Per-node validation, normalization and raw assembly remain.",
+      "read_groups": "Key: KV config, regional config, Read mode, dtype/device, (B,Q_i), (B,K_i); split again by workspace budget. This does not require identical full ragged distributions.",
+      "full_groups": "Only positive-control rows. Key: KV config, dtype/device, selected (B,Q_i), bank (B,K_i), then workspace. Different selected maxima or history lengths split groups; singletons use node implementation.",
+      "group_count": "G_read/G_full are sums of actual key-equivalence classes after budget splitting, not fixed 90/159 constants. Per region 0..N nonempty Full groups and 1..N nonempty Read groups, depending on actual requests.",
+      "host_work": "Per-node control nonzero/host row IDs, positive-memory flag host transfer, padded indices, normalization/stats/features and node/field output reverse index. Numerical matrices do not loop each token.",
+      "projection": "linear_blocks packs X[G,B*Q,I], W[G,O,I], performs BMM; all-identical aliases use one matrix. VJP dW = Gbar^T X contracts B*Q and returns [G,O,I], not [G*B*Q,O,I].",
+      "raw": "Actual positive writes form one per-node ragged bank. _queries/query_inputs pads needed fields to [B,K_i,width] and forms weights/ages [B,Q_i,K_i], not raw [B,Q_i,K_i,width]. Read and Full each gather the bank again; cross-node contraction packing adds copies.",
+      "read_calls": "Sum: 2 contractions plus current summary = 3/group. Qry with no frequency and nonempty memory: 3 projections + short(QK,PV) + long(QK,PV) + current summary = 8/group. QK is repeated for short/long. Common-origin positional path shares QK, nominally 7/group. Literal relative fallback does pairwise elementwise rotations/dot instead, so not the same call expression.",
+      "full_calls": "Nominal 7/group with positive memory and ordinary/common-origin contraction, 4/group when no memory: Q + QK + PV + out/gate/up/down. Head dimension batches inside contractions; per-head rotary work remains.",
+      "source_v2": "Exact regional-call-local identity is actual content Tensor identity plus complete ordered parameter slots, alpha, epsilon. After reuse, shape/budget-compatible requests use 2 source MLP matmuls/group, plus 2 factor matmuls for adapted sources. Old 2*A physical-source count is no longer current.",
+      "tradeoff": "Exact-size grouping is current engineering policy. Padding/bucketing broader groups is possible with support-aware VJP and original int64 visibility; it exchanges extra arithmetic for fewer submissions."
+    },
+    "block_resident_v2": {
+      "schedule": "Block B*L region programs keep host submission stages bounded, but local helper implementations retain legacy row-oriented layouts. Low outer call count is not a proof of efficient arithmetic/storage.",
+      "lowering": "block_settle_model assigns node_owners=n and stacks one local role bank per region node; true canonical parameter aliases are preserved for final gradient ownership, but not compressed into a single execution bank.",
+      "projection_multi_bank": "weighted_projection banks>1 gathers W to [R,O,I], materializes transpose [R,I,O], then BMM [R,1,I]@[R,I,O]. Parameter VJP builds [R,O,I] outer products then reduces owners. Saved matrix+transpose alone use 8*R*O*I FP32 bytes, versus 8*N*O*I for node blocks; ratio B*L.",
+      "projection_single_bank": "banks==1 has actual full-block GEMM/VJP and matrix_rows=1. This does not cover most node-private banks and is bypassed by Update pre-gather when R>1.",
+      "update": "weighted_kv_update pre-gathers base/left/right/summary to [R,...], passes row_ids and saved rows into four projections. Even one original bank becomes R projection banks. VJP first reduces row-owned projection outputs, then original parameter owners. Repeated normalization of u is requested for base/right/summary.",
+      "heads": "weighted_head always gathers both MLP matrices/biases to each row, even original banks==1; forward 2 per-row BMMs, backward 2 per-row outer products plus owner reduction. Applies to Describe score/match heads and region context/query heads.",
+      "raw_storage": "old and proposal each [R,F_C]/[R,I_C]; final [B*N,F_C]/[B*N,I_C]; mapping [2,R,C], plus copied initial integer state and one-entry write tape. Major forward storage is 8*R*F_C + 16*R*I_C + 16*R*C FP32/int64 bytes before final/writes/windows.",
+      "raw_execution": "Sequence wrapper uses only GetBlockIdx()==0 and host launches one block. Math loops B -> N -> L; copies complete old/proposal capacity, updates mappings, rematerializes ragged fields. VJP likewise one block; for each connected snapshot field scans all prior writes, worst O(B*N*L^2*field_count) structural work, plus numerical raw adjoint traffic.",
+      "read0": "block_kv_local copies bound initial [B*N,...] to [B*L*N,...] by index_select; binding initial is correct, full per-frame copy is representation cost.",
+      "window": "weighted_kv_window always materializes keys/values/summaries [R,C,width] plus two weight/decay channels, ages and mapping. Sum only consumes summaries; qry/Full do not consume summary values; these unused field copies are current helper interface costs.",
+      "read_qry": "Q input [R,d]; K/V input [R*C,d], hence multi-bank matrices [R*C,ds,d] and transposes. Same history entries are projected again for each querying frame. Short/long duplicate values/logits/lengths/present to 2R then one pooled BMM. Nominal 5 Mem matmul calls (Q,K,V,QK,batched PV), plus Describe current-summary projection; fewer calls than direct does not mean less arithmetic or memory.",
+      "read_sum": "One batched short/long pool matmul after duplicating summaries to [2R,C,ds]. No query parameters, but full raw/window field layout remains.",
+      "full": "Q/out/gate/up/down each use row projection; heads loop in C++ for rotary/QK/pool. Nominal 5+2H matrix calls per regional block, versus 7 when H is batched. Allocated R*C work remains even when mask suppresses semantic activity.",
+      "necessary": [
+        "Original int64 visibility, timestamps and last-write expiry",
+        "Distinct Read0/old/proposal/Full observations",
+        "Actual exact terminal raw state and checkpoint decoding",
+        "Independent nonzero/connected-zero/disconnected roots and parameter aliases",
+        "Device-side dynamic support/selection and online advancement"
+      ],
+      "not_mathematically_required": [
+        "Float raw cache copied for every frame",
+        "History K/V projected anew for every query",
+        "Weight matrices copied per input row and per-row parameter outer products",
+        "Serial single-block execution across independent B/N owners",
+        "Repeated scans of the same prefix solely to mark structural root connectivity"
+      ],
+      "candidate_boundary_not_implemented": "Shared initial+write banks with per-query int64 visibility/prefix mappings; node/parameter-role grouped GEMM and block VJP; batch H; field-selective window decoding; lazy complete observation materialization. Must preserve selected-row semantics, zero/None, versions and exact continuation."
+    }
+  },
+  "old_report_corrections_and_scope": [
+    "docs/evidence/lh-static-structure-20261112.md is correctly fixed to fb83. Its 2*A and maximum 2132 source-MLP calls must not be reused as current source-v2 facts.",
+    "Read90/Full159/region94 are one historical runtime observation, not static constants. 394 is compiled direct source slots, not a minimum; 387 assumes additional initial input sharing not implemented.",
+    "EagerExecutor.run_ports first requires a matching Settle certificate. General PDG is available through __call__ record_run; it is not a PDG input silently accepted by run_ports.",
+    "Direct StaticKV._sources still keys on tuple(id(p) for p in transform.parameters()), which deduplicates aliases. Ordered factor slots can differ with an identical deduplicated list. Source-v2 already uses ordered slots and tests/test_column_sources.py 176-187 demonstrates this class of counterexample. No-factor LH176 material is unaffected; do not claim broad direct-anchor alias coverage.",
+    "Resident block outer scheduling must not be described as complete inner B*L tensorization. Matrix replication, repeated raw prefix materialization and serial device loops remain concrete boundaries."
+  ],
+  "reviewed_files": [
+    {
+      "path": "scripts/lh_tensor_baseline.py",
+      "sha256": "5a25810bd0142e83f019e3a330832f53354a095603aa310c27643563a7e86017",
+      "reviewed_line_ranges": [
+        [
+          62,
+          124
+        ],
+        [
+          126,
+          173
+        ]
+      ],
+      "matching_committed_revisions": [
+        "838fc30c82061831846b559d2af9fa11e1ae6dfa",
+        "4248bde12ea835ed9833a5ba7f4b3a7161fd9bf9",
+        "a3c4f62dcc3fce9bbf43e5a8f4ce5578c561efc4"
+      ]
+    },
+    {
+      "path": "scripts/lh_tensor_math.py",
+      "sha256": "e569dbf127538c32e064f7f7d6ab906fc94ad2537894b88783de9dd249190198",
+      "reviewed_line_ranges": [
+        [
+          16,
+          22
+        ],
+        [
+          56,
+          95
+        ],
+        [
+          174,
+          198
+        ]
+      ],
+      "matching_committed_revisions": [
+        "838fc30c82061831846b559d2af9fa11e1ae6dfa",
+        "4248bde12ea835ed9833a5ba7f4b3a7161fd9bf9",
+        "a3c4f62dcc3fce9bbf43e5a8f4ce5578c561efc4"
+      ]
+    },
+    {
+      "path": "scripts/lh_tensor_state.py",
+      "sha256": "b7f10e710c7337f3dfff6a01d4c6d77cd1581e0d5a3eba4c3b8b92846e12bd64",
+      "reviewed_line_ranges": [
+        [
+          49,
+          88
+        ]
+      ],
+      "matching_committed_revisions": [
+        "838fc30c82061831846b559d2af9fa11e1ae6dfa",
+        "4248bde12ea835ed9833a5ba7f4b3a7161fd9bf9",
+        "a3c4f62dcc3fce9bbf43e5a8f4ce5578c561efc4"
+      ]
+    },
+    {
+      "path": "python/tidegraph/weighted/kv_column_groups.py",
+      "sha256": "7c3bd169cd9a1ef91c279083747f39ad171c7792f8cb0499670e1a008b9d6df8",
+      "reviewed_line_ranges": [
+        [
+          18,
+          53
+        ],
+        [
+          56,
+          118
+        ],
+        [
+          122,
+          175
+        ]
+      ],
+      "matching_committed_revisions": [
+        "838fc30c82061831846b559d2af9fa11e1ae6dfa",
+        "4248bde12ea835ed9833a5ba7f4b3a7161fd9bf9",
+        "a3c4f62dcc3fce9bbf43e5a8f4ce5578c561efc4"
+      ]
+    },
+    {
+      "path": "python/tidegraph/weighted/kv_columns.py",
+      "sha256": "6b2d9de797b922fc63570ca7dc873dae3de6dbf2f2147865f4bfbdf6bd129e4a",
+      "reviewed_line_ranges": [
+        [
+          27,
+          48
+        ],
+        [
+          51,
+          74
+        ]
+      ],
+      "matching_committed_revisions": [
+        "838fc30c82061831846b559d2af9fa11e1ae6dfa",
+        "4248bde12ea835ed9833a5ba7f4b3a7161fd9bf9",
+        "a3c4f62dcc3fce9bbf43e5a8f4ce5578c561efc4"
+      ]
+    },
+    {
+      "path": "python/tidegraph/weighted/kv_columns_state.py",
+      "sha256": "5c092665d86197cc0fdaffff65a77958288c5bc121bbe7d05aec5a980eba7d39",
+      "reviewed_line_ranges": [
+        [
+          97,
+          170
+        ],
+        [
+          186,
+          238
+        ]
+      ],
+      "matching_committed_revisions": [
+        "838fc30c82061831846b559d2af9fa11e1ae6dfa",
+        "4248bde12ea835ed9833a5ba7f4b3a7161fd9bf9",
+        "a3c4f62dcc3fce9bbf43e5a8f4ce5578c561efc4"
+      ]
+    },
+    {
+      "path": "python/tidegraph/weighted/row_linear.py",
+      "sha256": "6b99b53527db2c5f3299030dbf139889fed8f2868a171d99de1ea8e1eafafccb",
+      "reviewed_line_ranges": [
+        [
+          10,
+          87
+        ]
+      ],
+      "matching_committed_revisions": [
+        "838fc30c82061831846b559d2af9fa11e1ae6dfa",
+        "4248bde12ea835ed9833a5ba7f4b3a7161fd9bf9",
+        "a3c4f62dcc3fce9bbf43e5a8f4ce5578c561efc4"
+      ]
+    },
+    {
+      "path": "python/tidegraph/weighted/column_query_ops.py",
+      "sha256": "f4efb43580fec3a3499d2c81b4e3d39d80e815c5ab296cfd6333718be2731095",
+      "reviewed_line_ranges": [
+        [
+          13,
+          107
+        ]
+      ],
+      "matching_committed_revisions": [
+        "838fc30c82061831846b559d2af9fa11e1ae6dfa",
+        "4248bde12ea835ed9833a5ba7f4b3a7161fd9bf9",
+        "a3c4f62dcc3fce9bbf43e5a8f4ce5578c561efc4"
+      ]
+    },
+    {
+      "path": "python/tidegraph/weighted/column_position_ops.py",
+      "sha256": "589f838e0b251073e8785f6477c948030285774baadd179cee7292bfb12a654c",
+      "reviewed_line_ranges": [
+        [
+          29,
+          136
+        ]
+      ],
+      "matching_committed_revisions": [
+        "838fc30c82061831846b559d2af9fa11e1ae6dfa",
+        "4248bde12ea835ed9833a5ba7f4b3a7161fd9bf9",
+        "a3c4f62dcc3fce9bbf43e5a8f4ce5578c561efc4"
+      ]
+    },
+    {
+      "path": "python/tidegraph/weighted/column_sources.py",
+      "sha256": "4997c7a7d5fa71c45d7e63a5e012aad79097b8ec724b41990d7bb1ea6b9b07b9",
+      "reviewed_line_ranges": [
+        [
+          13,
+          59
+        ],
+        [
+          105,
+          160
+        ]
+      ],
+      "matching_committed_revisions": [
+        "838fc30c82061831846b559d2af9fa11e1ae6dfa",
+        "4248bde12ea835ed9833a5ba7f4b3a7161fd9bf9",
+        "a3c4f62dcc3fce9bbf43e5a8f4ce5578c561efc4"
+      ]
+    },
+    {
+      "path": "python/tidegraph/weighted/source_binding.py",
+      "sha256": "7475e49fd0053ae13f8f87d457db7918368a890fba51ceb15e659da4ddadd91f",
+      "reviewed_line_ranges": [
+        [
+          38,
+          60
+        ]
+      ],
+      "matching_committed_revisions": [
+        "838fc30c82061831846b559d2af9fa11e1ae6dfa",
+        "4248bde12ea835ed9833a5ba7f4b3a7161fd9bf9",
+        "a3c4f62dcc3fce9bbf43e5a8f4ce5578c561efc4"
+      ]
+    },
+    {
+      "path": "python/tidegraph/weighted/window_execution.py",
+      "sha256": "d643c9263d97b083bf604c816802ac58672c5d0a061a67241f4a77df112c3b14",
+      "reviewed_line_ranges": [
+        [
+          62,
+          135
+        ]
+      ],
+      "matching_committed_revisions": [
+        "838fc30c82061831846b559d2af9fa11e1ae6dfa",
+        "4248bde12ea835ed9833a5ba7f4b3a7161fd9bf9",
+        "a3c4f62dcc3fce9bbf43e5a8f4ce5578c561efc4"
+      ]
+    },
+    {
+      "path": "cpp/src/weighted_column_groups.h",
+      "sha256": "547d3a6f3c849ed858cabeb86c5ae6921bd70c65e26051f64af3a874afd423c4",
+      "reviewed_line_ranges": [
+        [
+          1,
+          33
+        ]
+      ],
+      "matching_committed_revisions": [
+        "838fc30c82061831846b559d2af9fa11e1ae6dfa",
+        "4248bde12ea835ed9833a5ba7f4b3a7161fd9bf9",
+        "a3c4f62dcc3fce9bbf43e5a8f4ce5578c561efc4"
+      ]
+    },
+    {
+      "path": "cpp/src/weighted_column_read_groups.cpp",
+      "sha256": "8dad0a61f6f91623ee3f01359838d7b4b41688e038c019ebd83247511c46c4af",
+      "reviewed_line_ranges": [
+        [
+          9,
+          81
+        ]
+      ],
+      "matching_committed_revisions": [
+        "838fc30c82061831846b559d2af9fa11e1ae6dfa",
+        "4248bde12ea835ed9833a5ba7f4b3a7161fd9bf9",
+        "a3c4f62dcc3fce9bbf43e5a8f4ce5578c561efc4"
+      ]
+    },
+    {
+      "path": "cpp/src/weighted_column_full_groups.cpp",
+      "sha256": "9334992acc4b73528adf796d15d8f7030196fd965884116489a446af1e75f0ee",
+      "reviewed_line_ranges": [
+        [
+          7,
+          61
+        ]
+      ],
+      "matching_committed_revisions": [
+        "838fc30c82061831846b559d2af9fa11e1ae6dfa",
+        "4248bde12ea835ed9833a5ba7f4b3a7161fd9bf9",
+        "a3c4f62dcc3fce9bbf43e5a8f4ce5578c561efc4"
+      ]
+    },
+    {
+      "path": "cpp/src/weighted_column_query.cpp",
+      "sha256": "2dc9b16af463cba07f4680da115db5503b9283a2bd1b3585960dfc91c1fd81e7",
+      "reviewed_line_ranges": [
+        [
+          12,
+          92
+        ]
+      ],
+      "matching_committed_revisions": [
+        "838fc30c82061831846b559d2af9fa11e1ae6dfa",
+        "4248bde12ea835ed9833a5ba7f4b3a7161fd9bf9",
+        "a3c4f62dcc3fce9bbf43e5a8f4ce5578c561efc4"
+      ]
+    },
+    {
+      "path": "cpp/src/weighted_column_query_ops.cpp",
+      "sha256": "096a0a78be9687a4206fc336bfc16f32cf45f2ced2c520f3310cc6371a10f41d",
+      "reviewed_line_ranges": [
+        [
+          13,
+          103
+        ]
+      ],
+      "matching_committed_revisions": [
+        "838fc30c82061831846b559d2af9fa11e1ae6dfa",
+        "4248bde12ea835ed9833a5ba7f4b3a7161fd9bf9",
+        "a3c4f62dcc3fce9bbf43e5a8f4ce5578c561efc4"
+      ]
+    },
+    {
+      "path": "cpp/src/weighted_row_linear.cpp",
+      "sha256": "6fd8f922d93a4b39f594940725f0b1f52d40d50976fd3812a2a750a22777f8ee",
+      "reviewed_line_ranges": [
+        [
+          10,
+          77
+        ]
+      ],
+      "matching_committed_revisions": [
+        "838fc30c82061831846b559d2af9fa11e1ae6dfa",
+        "4248bde12ea835ed9833a5ba7f4b3a7161fd9bf9",
+        "a3c4f62dcc3fce9bbf43e5a8f4ce5578c561efc4"
+      ]
+    },
+    {
+      "path": "cpp/src/weighted_column_positions.cpp",
+      "sha256": "1966e1a3064e65adcce4921e72bb8a4ba7c8da204c9f22043b2eaecf5a078575",
+      "reviewed_line_ranges": [
+        [
+          12,
+          107
+        ]
+      ],
+      "matching_committed_revisions": [
+        "838fc30c82061831846b559d2af9fa11e1ae6dfa",
+        "4248bde12ea835ed9833a5ba7f4b3a7161fd9bf9",
+        "a3c4f62dcc3fce9bbf43e5a8f4ce5578c561efc4"
+      ]
+    },
+    {
+      "path": "cpp/src/weighted_column_sources.cpp",
+      "sha256": "f49d212dc234fa224e8d0178b68fffcc00935913bbaa3ddebdcb24878fa2953a",
+      "reviewed_line_ranges": [
+        [
+          8,
+          67
+        ]
+      ],
+      "matching_committed_revisions": [
+        "838fc30c82061831846b559d2af9fa11e1ae6dfa",
+        "4248bde12ea835ed9833a5ba7f4b3a7161fd9bf9",
+        "a3c4f62dcc3fce9bbf43e5a8f4ce5578c561efc4"
+      ]
+    },
+    {
+      "path": "tools/device_online/block_settle_model.cpp",
+      "sha256": "5f550a9288724388ad6e7f55069c9a041519cb34ee3d9513e3c1b2b596669a2f",
+      "reviewed_line_ranges": [
+        [
+          29,
+          93
+        ]
+      ],
+      "matching_committed_revisions": [
+        "4248bde12ea835ed9833a5ba7f4b3a7161fd9bf9",
+        "a3c4f62dcc3fce9bbf43e5a8f4ce5578c561efc4"
+      ]
+    },
+    {
+      "path": "tools/device_online/block_kv_local.cpp",
+      "sha256": "5c9639edcd16283654c4b1b9664fbd8c1d2d88fe791bf72fb72f259db9b3ed71",
+      "reviewed_line_ranges": [
+        [
+          13,
+          51
+        ]
+      ],
+      "matching_committed_revisions": [
+        "838fc30c82061831846b559d2af9fa11e1ae6dfa",
+        "4248bde12ea835ed9833a5ba7f4b3a7161fd9bf9",
+        "a3c4f62dcc3fce9bbf43e5a8f4ce5578c561efc4"
+      ]
+    },
+    {
+      "path": "tools/device_online/block_read_selection.cpp",
+      "sha256": "9d5295b742406d21173f8517779fc1c85d247ea69977b9478aaae6d6389c3cf0",
+      "reviewed_line_ranges": [
+        [
+          15,
+          77
+        ]
+      ],
+      "matching_committed_revisions": [
+        "4248bde12ea835ed9833a5ba7f4b3a7161fd9bf9",
+        "a3c4f62dcc3fce9bbf43e5a8f4ce5578c561efc4"
+      ]
+    },
+    {
+      "path": "tools/device_online/block_kv_sequence.cpp",
+      "sha256": "f4eaa3441609f352c5b9e7dacd5e2fa0872e96dfda91407983e0e087fc9784dd",
+      "reviewed_line_ranges": [
+        [
+          15,
+          58
+        ]
+      ],
+      "matching_committed_revisions": [
+        "838fc30c82061831846b559d2af9fa11e1ae6dfa",
+        "4248bde12ea835ed9833a5ba7f4b3a7161fd9bf9",
+        "a3c4f62dcc3fce9bbf43e5a8f4ce5578c561efc4"
+      ]
+    },
+    {
+      "path": "tools/device_online/block_kv_sequence_vjp.cpp",
+      "sha256": "8a673d29a02c02e998c7b1b0340918a74bf5b1aeff805178fd07ac170b1c4204",
+      "reviewed_line_ranges": [
+        [
+          13,
+          36
+        ]
+      ],
+      "matching_committed_revisions": [
+        "838fc30c82061831846b559d2af9fa11e1ae6dfa",
+        "4248bde12ea835ed9833a5ba7f4b3a7161fd9bf9",
+        "a3c4f62dcc3fce9bbf43e5a8f4ce5578c561efc4"
+      ]
+    },
+    {
+      "path": "tools/device_online/ascendc/block_kv_sequence_math.h",
+      "sha256": "454fce10ad922ed35700d2d71822c8175a1c7f31f3af2e9dfd6c2f99c97d4b5e",
+      "reviewed_line_ranges": [
+        [
+          6,
+          110
+        ]
+      ],
+      "matching_committed_revisions": [
+        "838fc30c82061831846b559d2af9fa11e1ae6dfa",
+        "4248bde12ea835ed9833a5ba7f4b3a7161fd9bf9",
+        "a3c4f62dcc3fce9bbf43e5a8f4ce5578c561efc4"
+      ]
+    },
+    {
+      "path": "tools/device_online/ascendc/tide_block_kv_sequence.cpp",
+      "sha256": "d0fc2171af78d89534507745a07ebea3e19ea787c23cafbe9cff79a15645a8a8",
+      "reviewed_line_ranges": [
+        [
+          1,
+          14
+        ]
+      ],
+      "matching_committed_revisions": [
+        "838fc30c82061831846b559d2af9fa11e1ae6dfa",
+        "4248bde12ea835ed9833a5ba7f4b3a7161fd9bf9",
+        "a3c4f62dcc3fce9bbf43e5a8f4ce5578c561efc4"
+      ]
+    },
+    {
+      "path": "tools/device_online/ascendc/tide_block_kv_sequence_reverse.cpp",
+      "sha256": "0664c627bd709d0efe4e740c6d01271371b0e499f5b6ba4d3063a08ee225e2f0",
+      "reviewed_line_ranges": [
+        [
+          1,
+          17
+        ]
+      ],
+      "matching_committed_revisions": [
+        "838fc30c82061831846b559d2af9fa11e1ae6dfa",
+        "4248bde12ea835ed9833a5ba7f4b3a7161fd9bf9",
+        "a3c4f62dcc3fce9bbf43e5a8f4ce5578c561efc4"
+      ]
+    },
+    {
+      "path": "tools/device_online/weighted_projection.cpp",
+      "sha256": "f080967ac3fa86848fe6ebbc29484c5e94fd737b5445ac11e5b144eefe19af39",
+      "reviewed_line_ranges": [
+        [
+          47,
+          130
+        ]
+      ],
+      "matching_committed_revisions": [
+        "838fc30c82061831846b559d2af9fa11e1ae6dfa",
+        "4248bde12ea835ed9833a5ba7f4b3a7161fd9bf9",
+        "a3c4f62dcc3fce9bbf43e5a8f4ce5578c561efc4"
+      ]
+    },
+    {
+      "path": "tools/device_online/weighted_kv_update.cpp",
+      "sha256": "2c91439e98f08e1024939de70d715d682fe586c0d4fd593bbb254dfeea8a8679",
+      "reviewed_line_ranges": [
+        [
+          5,
+          48
+        ]
+      ],
+      "matching_committed_revisions": [
+        "838fc30c82061831846b559d2af9fa11e1ae6dfa",
+        "4248bde12ea835ed9833a5ba7f4b3a7161fd9bf9",
+        "a3c4f62dcc3fce9bbf43e5a8f4ce5578c561efc4"
+      ]
+    },
+    {
+      "path": "tools/device_online/weighted_kv_update_internal.h",
+      "sha256": "3f419a1702ebd59003b04cc071f2c744a5ebf87a5b5a3ae6b2d5f35bb72e6b94",
+      "reviewed_line_ranges": [
+        [
+          25,
+          40
+        ]
+      ],
+      "matching_committed_revisions": [
+        "838fc30c82061831846b559d2af9fa11e1ae6dfa",
+        "4248bde12ea835ed9833a5ba7f4b3a7161fd9bf9",
+        "a3c4f62dcc3fce9bbf43e5a8f4ce5578c561efc4"
+      ]
+    },
+    {
+      "path": "tools/device_online/weighted_kv_update_vjp.cpp",
+      "sha256": "e1d634479efd4146fddd19042e53672880367b43436b2b6c12d5f4447b4a7813",
+      "reviewed_line_ranges": [
+        [
+          6,
+          37
+        ]
+      ],
+      "matching_committed_revisions": [
+        "838fc30c82061831846b559d2af9fa11e1ae6dfa",
+        "4248bde12ea835ed9833a5ba7f4b3a7161fd9bf9",
+        "a3c4f62dcc3fce9bbf43e5a8f4ce5578c561efc4"
+      ]
+    },
+    {
+      "path": "tools/device_online/weighted_head.cpp",
+      "sha256": "ea1c1a8a58a97a64d2868592124ca498016778566009062f6f7a3e8941587dff",
+      "reviewed_line_ranges": [
+        [
+          38,
+          100
+        ]
+      ],
+      "matching_committed_revisions": [
+        "838fc30c82061831846b559d2af9fa11e1ae6dfa",
+        "4248bde12ea835ed9833a5ba7f4b3a7161fd9bf9",
+        "a3c4f62dcc3fce9bbf43e5a8f4ce5578c561efc4"
+      ]
+    },
+    {
+      "path": "tools/device_online/weighted_kv_query.cpp",
+      "sha256": "cf4e10502a4df047a1342b6cf01706dd537bde30d371d3946f67f4d831b71491",
+      "reviewed_line_ranges": [
+        [
+          6,
+          37
+        ]
+      ],
+      "matching_committed_revisions": [
+        "838fc30c82061831846b559d2af9fa11e1ae6dfa",
+        "4248bde12ea835ed9833a5ba7f4b3a7161fd9bf9",
+        "a3c4f62dcc3fce9bbf43e5a8f4ce5578c561efc4"
+      ]
+    },
+    {
+      "path": "tools/device_online/weighted_kv_full.cpp",
+      "sha256": "4113f8666cc538c76795dec760019407930de59efee320b1e02aa38eb8acd2ea",
+      "reviewed_line_ranges": [
+        [
+          8,
+          49
+        ]
+      ],
+      "matching_committed_revisions": [
+        "838fc30c82061831846b559d2af9fa11e1ae6dfa",
+        "4248bde12ea835ed9833a5ba7f4b3a7161fd9bf9",
+        "a3c4f62dcc3fce9bbf43e5a8f4ce5578c561efc4"
+      ]
+    },
+    {
+      "path": "tools/device_online/weighted_kv_sum.cpp",
+      "sha256": "4251d62db2a19af09ab27a6321abdc8b17276ecdf0d2ada5c15a4364f3aff43a",
+      "reviewed_line_ranges": [
+        [
+          12,
+          41
+        ]
+      ],
+      "matching_committed_revisions": [
+        "838fc30c82061831846b559d2af9fa11e1ae6dfa",
+        "4248bde12ea835ed9833a5ba7f4b3a7161fd9bf9",
+        "a3c4f62dcc3fce9bbf43e5a8f4ce5578c561efc4"
+      ]
+    },
+    {
+      "path": "tools/device_online/weighted_kv_window.cpp",
+      "sha256": "c3ebe73d121c1e1bb7c8e2fefa656a6647a572b5844ed7a156d0fa3105b4b02f",
+      "reviewed_line_ranges": [
+        [
+          14,
+          52
+        ]
+      ],
+      "matching_committed_revisions": [
+        "838fc30c82061831846b559d2af9fa11e1ae6dfa",
+        "4248bde12ea835ed9833a5ba7f4b3a7161fd9bf9",
+        "a3c4f62dcc3fce9bbf43e5a8f4ce5578c561efc4"
+      ]
+    },
+    {
+      "path": "tools/device_online/weighted_raw_state.cpp",
+      "sha256": "149ad4cbf097d6ea85b8b27b91dda5c5ef13eefe424eedb5f3f2e308f9988b3f",
+      "reviewed_line_ranges": [
+        [
+          21,
+          37
+        ]
+      ],
+      "matching_committed_revisions": [
+        "838fc30c82061831846b559d2af9fa11e1ae6dfa",
+        "4248bde12ea835ed9833a5ba7f4b3a7161fd9bf9",
+        "a3c4f62dcc3fce9bbf43e5a8f4ce5578c561efc4"
+      ]
+    },
+    {
+      "path": "tools/device_online/weighted_describe.cpp",
+      "sha256": "9eae3fe9aee777047e22d2127f1a46904d29b2ef85ce058e2974aa6fae008e94",
+      "reviewed_line_ranges": [
+        [
+          5,
+          66
+        ]
+      ],
+      "matching_committed_revisions": [
+        "838fc30c82061831846b559d2af9fa11e1ae6dfa",
+        "4248bde12ea835ed9833a5ba7f4b3a7161fd9bf9",
+        "a3c4f62dcc3fce9bbf43e5a8f4ce5578c561efc4"
+      ]
+    },
+    {
+      "path": "tools/device_online/weighted_residual.cpp",
+      "sha256": "11bf8ab4aaa8d547432be57b606f00fd5123c15a57c678d19014f849c749efb0",
+      "reviewed_line_ranges": [
+        [
+          23,
+          78
+        ]
+      ],
+      "matching_committed_revisions": [
+        "838fc30c82061831846b559d2af9fa11e1ae6dfa",
+        "4248bde12ea835ed9833a5ba7f4b3a7161fd9bf9",
+        "a3c4f62dcc3fce9bbf43e5a8f4ce5578c561efc4"
+      ]
+    },
+    {
+      "path": "tools/device_online/weighted_pool.cpp",
+      "sha256": "273fbd5988228f196155e4e13962a662dd2110588b756cf5eb8fb80cb48ad86d",
+      "reviewed_line_ranges": [
+        [
+          30,
+          70
+        ]
+      ],
+      "matching_committed_revisions": [
+        "838fc30c82061831846b559d2af9fa11e1ae6dfa",
+        "4248bde12ea835ed9833a5ba7f4b3a7161fd9bf9",
+        "a3c4f62dcc3fce9bbf43e5a8f4ce5578c561efc4"
+      ]
+    },
+    {
+      "path": "tests/test_column_sources.py",
+      "sha256": "53131f86d5cb2b7c0b4995439c45c382678b8f731bbe8c4b688ae1151b97871b",
+      "reviewed_line_ranges": [
+        [
+          176,
+          187
+        ]
+      ],
+      "matching_committed_revisions": [
+        "838fc30c82061831846b559d2af9fa11e1ae6dfa",
+        "4248bde12ea835ed9833a5ba7f4b3a7161fd9bf9",
+        "a3c4f62dcc3fce9bbf43e5a8f4ce5578c561efc4"
+      ]
+    },
+    {
+      "path": "docs/evidence/lh-static-structure-20261112.md",
+      "sha256": "b7938214fdecc6b91bafd03fa4dd8e65908f46115a815b7a5184182590a91d37",
+      "reviewed_line_ranges": [
+        [
+          1,
+          100
+        ]
+      ],
+      "matching_committed_revisions": [
+        "838fc30c82061831846b559d2af9fa11e1ae6dfa",
+        "4248bde12ea835ed9833a5ba7f4b3a7161fd9bf9",
+        "a3c4f62dcc3fce9bbf43e5a8f4ce5578c561efc4"
+      ]
+    }
+  ],
+  "measurements_this_review": [],
+  "original_review_artifact": {
+    "path": "artifacts/resident-block-dev/static-review.json",
+    "sha256": "3a37020e9b86bcfeefa2aa49b21ec3274ba826b7c2046f513121a3bb005f23b8"
+  },
+  "original_review_mutations": [
+    "This ignored machine-readable static review only; no source, tests, STATUS, ROADMAP, commits or pushes."
+  ],
+  "mutations": [
+    "Direct anchor source cache key and its independent tests; this reviewed report pair. No production kernel, STATUS, ROADMAP, commit, push or new performance measurement."
+  ],
+  "publication_base": "a3c4f62dcc3fce9bbf43e5a8f4ce5578c561efc4",
+  "followup_source_cache_fix": {
+    "status": "Committed as 55f8c631 after the recorded CPU development checks; no new immutable qualification or performance measurement",
+    "scope": "Complete ordered source parameter slots replace deduplicated Module.parameters() identities in the independent direct anchor only.",
+    "counterexample": "Base roles (A,B,E), factor roles (A,A,B,B) versus (B,A,A,B) have the same deduplicated root list. Equal A/B numeric values hide the wrong sharing in forward values, while independently rooted parameter VJPs differ.",
+    "files": [
+      {
+        "path": "scripts/lh_tensor_baseline.py",
+        "sha256": "6dcd7c881fe6881955bb9a48b752e52c8673bff7e8031b0a18bca22457546740"
+      },
+      {
+        "path": "tests/test_lh_source_slots.py",
+        "sha256": "e978e731d842de2212b9037d4ab721b0aef572bbbdf9a06aa9ec7b040bfc0efe"
+      }
+    ],
+    "old_no_factor_lh176_material_affected": false,
+    "implementation": "55f8c63162bb3416adfd9d21fbfe53915273c0d8"
+  },
+  "development_checks": [
+    {
+      "command": "OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 PYTHONPATH=python artifacts/additive-work/env/bin/python -m pytest -q tests/test_lh_source_slots.py tests/test_lh_tensor_baseline.py --dtype both --junitxml=artifacts/resident-block-dev/lh-source-slots-dev.xml",
+      "scope": "CPU FP64/FP32, 6 new source-slot cases plus 16 existing direct anchor checks",
+      "tests": 22,
+      "passed": 22,
+      "failed": 0,
+      "skipped": 0,
+      "pytest_reported_seconds": 8.68,
+      "junit": "artifacts/resident-block-dev/lh-source-slots-dev.xml",
+      "junit_sha256": "b1be2e20069cad8c61d1f2dd7820cd49b3edd876e8373d6cc086d8a20401226e",
+      "is_performance_measurement": false
+    }
+  ],
+  "formula_layers": [
+    "Number of region/group/function submissions; actual ragged/domain and capacity splitting.",
+    "Inside each submission: matrix dimensions, parameter replication, shared history bank, owner/head parallel axes, saved storage and adjoint reductions."
+  ],
+  "report": "docs/evidence/lh-block-static-20261112.md",
+  "direct_forward_static_count": {
+    "profile": "LH176 textbook, no source low-rank factors; unchanged by 55f8c631 cache-role fix",
+    "unit": "source forward matrix contraction call, including batched contraction",
+    "formula": "7*29+7*25+8*21",
+    "total": 546,
+    "excludes": [
+      "elementwise operations",
+      "packing",
+      "backward",
+      "device kernel count"
+    ],
+    "column_total": "data-dependent shape/support/workspace groups; not one fixed constant"
+  }
+}

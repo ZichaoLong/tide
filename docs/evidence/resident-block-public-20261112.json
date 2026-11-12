@@ -1,0 +1,4295 @@
+{
+  "schema": "tide-resident-block-public-qualification-v1",
+  "implementation": "a3c4f62dcc3fce9bbf43e5a8f4ce5578c561efc4",
+  "upstream": "0770593838a37c790a568226930567ed60f99b83",
+  "scope": "Fixed-source small single-NPU FP32 KV sum/qry qualification and two finite scale refusals; no valid scale throughput.",
+  "builds": {
+    "python_owned": {
+      "schema": "tide-device-control-build-v1",
+      "source": "a3c4f62dcc3fce9bbf43e5a8f4ce5578c561efc4",
+      "dirty": "",
+      "component_sha256": "86fcf8f75c5041e89f80dc5caa9ac924748713364d15bb33163083193b4a7369",
+      "build_jobs": 160,
+      "backend": "npu",
+      "runtime": "python",
+      "npu_runtime": "python",
+      "cuda_architectures": null,
+      "ascendc_soc": "Ascend910_9392",
+      "binary_sha256": {
+        "_tide_weighted_resident.so": "6a9c8f14659351f3d8698c0a710b9f3cbd6d93ed28ef4cecf3a7733bc1d7c029",
+        "libtide-weighted-flow.so": "682fca82dc3f31ffd2fa7ebddbeea0d53a85d93bbbd545aa279bc561d52201fb",
+        "libtide-weighted-training.so": "98ba70806e1d0f2d1a079636908395320c2172d93f384717c51639039f77431b",
+        "libtide-block-resident.so": "8ed03c0d40a09bbf839e3cdc21a3bfb05ce882555761a8939e61c335955412fb"
+      },
+      "loader_sha256": {
+        "_tide_weighted_resident.so": "e2f6fcbdeae3062624bf68902c9acaae96d936a7d6b468efcb666aa163c8287e",
+        "libtide-weighted-flow.so": "18484afbe22b0a56da6180e28175eee5458f73e0310db4433ce302e140fbd34b",
+        "libtide-weighted-training.so": "b429f7d2f288a0690d207c79018f9a28842f3ab42399d9b834d043ff4ad9a5f1",
+        "libtide-block-resident.so": "b580abd7d49be51dc287f113c30aae9384d756567397145ce854f982ad1196d0"
+      },
+      "requested_checks": null,
+      "python_component": "weighted",
+      "scope": "build/loader/help only; device control check required separately",
+      "core": {
+        "source": "00bb5ac2dec61e215966f523063786682caa40c1",
+        "cpp_source_sha256": "0d01ac0ca73870abf99a31a1b004ad953a33f5e36fbf2e914d6713c96b88ad61",
+        "backend": "npu",
+        "npu_runtime": "python",
+        "cxx11_abi": true,
+        "binary_sha256": {
+          "libtidegraph.a": "fcff57e48d2ecfb6c14085d766e11a39ab4769e12d14d2004a28377d32e8e745",
+          "libtidegraph_runtime.a": "4c340f84cfbaf5e17b111a094f44ab179ce895666c34c1917c0a703add273f1a",
+          "_tide_native.so": "891f2ce77344b9c84d67052e3e0098a493cff2138ce9fa07a520e196f9c400a2"
+        }
+      },
+      "identity": {
+        "path": "/dev/shm/gef-p1p6-20261112/resident-v3-native/control-build.json",
+        "sha256": "b709df0d75765a0ad0da7c4eb8c73b130316fa9f724a72f3cd65e01abe5fa64a",
+        "bytes": 2885
+      }
+    },
+    "standalone": {
+      "schema": "tide-device-control-build-v1",
+      "source": "a3c4f62dcc3fce9bbf43e5a8f4ce5578c561efc4",
+      "dirty": "",
+      "component_sha256": "86fcf8f75c5041e89f80dc5caa9ac924748713364d15bb33163083193b4a7369",
+      "build_jobs": 160,
+      "backend": "npu",
+      "runtime": "standalone",
+      "npu_runtime": "standalone",
+      "cuda_architectures": null,
+      "ascendc_soc": "Ascend910_9392",
+      "binary_sha256": {
+        "tide-block-settle-model-check": "cd0c1d8ca34e90c844f7a6bb1b0f6fc418af24f94532a37f60c121ec7a3570d7",
+        "tide-block-resident-check": "04f6c0e85a7bf7490f2355ffb47415118211e55251cb7f5e336305d9ae367763",
+        "tide-block-read-selection-check": "24b07a85562053fe0d4a5ab6bc6e83c51a6f75c19ed1f61846a8c55322e9e061",
+        "tide-block-kv-messages-check": "88c60f79cf7be59d26cb42b037bb29b1f8e4ce758d993239651755783fb0cc1d",
+        "tide-block-kv-sequence-check": "62365369c0477b54e5ca9714220f736e6788f894d83d02af4bfee180cde80440",
+        "tide-block-settle-flow-check": "0f21ceaac91826ebb4f38bbb4973b3457c6b3a6d68b3547fcf92f46789fe79d0",
+        "tide-block-settle-session-check": "f6d6351103234b41d0dd670db717ad736b5a18f5535b19cbf885a0669119b236",
+        "tide-weighted-training-check": "e7c177ead5e997867128737a4b6734ea77e0f0e80619df1dbe4ebf6de8cbbc47",
+        "libtide-weighted-flow.so": "807946bb1856db0164fcc8b805043dc13f3f7ba26482b422fcd3de333abb7cae",
+        "libtide-weighted-training.so": "62f8c5310c1a5bed0a05f9f1700fe2781d3d2738c8007382e741a728e1a948d4",
+        "libtide-block-resident.so": "1a9434f2d504b35e80425126266342b42418eb5b11523c5fb78cf39d053e2735"
+      },
+      "loader_sha256": {
+        "tide-block-settle-model-check": "a30fd40d186c2142673fefa1492c86de2c8131fc90293699bbe0f736b962a8e3",
+        "tide-block-resident-check": "f955514fb3f44edf18b197f1978be6ce08ac29283bf7fa7a8cbbaedb92bb19e3",
+        "tide-block-read-selection-check": "1a629116138643f1c620db6b654ca502668186b644521cf2188c8480fd545471",
+        "tide-block-kv-messages-check": "64afd0baacfb4d88a4c8bebb203f9af803e1c58bd8a008c767fc4bb0a29e14cf",
+        "tide-block-kv-sequence-check": "d8721af9376c85b59b7f2a9be0aea52487af271fc7ea5fa7facf4ec9fd1bd8a1",
+        "tide-block-settle-flow-check": "61b39a1365f88a29f17a31f49ab64d629be9c7e47f0481e4dc1e105e544efbc7",
+        "tide-block-settle-session-check": "4f1e38663be62949b7f3054c1068545a0c74e743fc451538704b698447362799",
+        "tide-weighted-training-check": "60ff419112d86440f637f2edb8ec1a1bd8389d8fefd6a9d14ed5ee8efe4c3c9b",
+        "libtide-weighted-flow.so": "1f0e35c41d8bd5251a45b6362253c7d3ad67b2a19e87b3372a48569f6baadcd2",
+        "libtide-weighted-training.so": "dbcd0638dd2365cc303af5597a2b2bb89324a5dd53ffccce9f36653309943124",
+        "libtide-block-resident.so": "05242a798b1118eabe9da4b8abcd3c075552a3ff90541eb4a37c0d3c97565edd"
+      },
+      "requested_checks": [
+        "resident-block-model",
+        "resident-block-public",
+        "resident-block-selection",
+        "resident-block-kv-messages",
+        "resident-block-kv-sequence",
+        "resident-block-settle-flow",
+        "resident-block-settle-session",
+        "weighted-training"
+      ],
+      "python_component": null,
+      "scope": "build/loader/help only; device control check required separately",
+      "core": {
+        "source": "00bb5ac2dec61e215966f523063786682caa40c1",
+        "cpp_source_sha256": "0d01ac0ca73870abf99a31a1b004ad953a33f5e36fbf2e914d6713c96b88ad61",
+        "backend": "npu",
+        "npu_runtime": "standalone",
+        "cxx11_abi": true,
+        "binary_sha256": {
+          "libtidegraph.a": "d798839bdc889719a9df236cfad08bf8dbe1aadc89c931c5c3e09a89837c4f26",
+          "libtidegraph_runtime.a": "dd74ff44884b4ed47a4afe56deb8375468953f44f8afe8127487e40e30a3a424",
+          "tidegraph-smoke": "094983d37825421cfb9cc4a05e943f2ebedef4a52f75ef110051928a82842530",
+          "tidegraph-kernel-check": "61624c7e03e7d3e64f98e7141f1a862be20b8168dd32d54dce5adc9816ebcb79",
+          "tidegraph-full-check": "54a705ac69ec49eb36f6c4f82178ec540cb25b1cf9c340ffd0ad68de4f51f008",
+          "tidegraph-aggregate-check": "c6c0e0468fab79b43980d7dbf64a4a3752ad5efa86a4f994bf3ab38dbe454d00",
+          "tidegraph-optimizer-check": "0c881d740a51a1067ea507bb914aaeeb6359bedbc4b2cd35cd882032926bc602",
+          "tidegraph-checkpoint-check": "c6ab2db771239e900dfbcaebc0f90cb289cf8c94698dee8d661d7ca768fbdaa5",
+          "tidegraph-weighted-training-check": "d6e6cda8d6f87897030ac702d520c4150098fc1b9fe63880b2587227b5ff873d",
+          "tidegraph-lh-scope-check": "746aedf44726838f1a9159a03747053ee5ec4d9de2e930ad3258aed8a2492e0d",
+          "tidegraph-streaming-bench": "0c11194d5d5cb1c14b98db6ce0ae3259fdee7ee31c4c141ec9e83843c32ae6f2",
+          "tidegraph-scale-bench": "56e28a035c4cd254b2e111b8593c99800efacca1acfd69514c186bf5797f6bc1",
+          "tidegraph-profile-check": "27b5ca2d75e14baa28a0ea1b77414363aff4167cb82e32926132cc8fff9fe7e0",
+          "tidegraph-settle-check": "2508210bc77d7204a535ac81c4c522c8a9358939365c218ed0dfa77af8c982e9",
+          "tidegraph-greedy-check": "bf7dda97d2a18491d75f19ad834457027e1fcb5d91bbd10db649456090b95ba7",
+          "tidegraph-accelerator-check": "c438a87cdc8abea319f61bb74ea0b1d6c8b93140eea5b1322cabb0a4820483c5",
+          "tidegraph-runtime-check": "cd6d5ea111da2de812c90d807b0d2836f854d47dd39c79746d6815fa1376f7ac",
+          "tidegraph-read-precision-check": "a874c29d03dcdf1ed94981fd3763549cbe39b2d07c05dbad48c19a51889ad5b2",
+          "tidegraph-placement-check": "32fecedf4d4e78809d634618f0cfb8c7ad63e063c9d3d9f3b5785826fd644623",
+          "tidegraph-payload-ownership-check": "aec04bcdd1456e41b4e5b372b3739ef0fc4251c32597db9be811571dd9b40fa9",
+          "tidegraph-weighted-binding-module-check": "7e8393e30b8c3b4c3b304b6f7a8bae62bf0728f6add99c6fe8c180c2268044df",
+          "tidegraph-column-check": "298967b7e6223dee8a937f50e8c8f098cd647c7070ccb73857607e04e617abe1",
+          "libtidegraph-weighted-binding-module.so": "1704543694f6dff5313a07121479e323c3a57e2375799191953cb88e264cf231"
+        }
+      },
+      "identity": {
+        "path": "/dev/shm/gef-p1p6-20261112/resident-v3-sdk/control-build.json",
+        "sha256": "a629da95b88b939fd335dc7a769760f0102f57bf74614fdd1ad0dddcae21c6ec",
+        "bytes": 7402
+      }
+    },
+    "benchmark": {
+      "schema": "tide-weighted-benchmark-build-v1",
+      "state": "passed",
+      "source": "a3c4f62dcc3fce9bbf43e5a8f4ce5578c561efc4",
+      "dirty": "",
+      "json_headers": {
+        "provider": "explicit include directory",
+        "version": "3.11.2",
+        "header_count": 44,
+        "sha256": "bd976a412fde243decb465a94d498bcc254bb5ad79be63a8f201ec9ba298ff34"
+      },
+      "scope": "standalone build/loader/help only; numerical execution separately required",
+      "binary_sha256": "27f58c5dac696e74fcc8a5cdfefa1ce2e50c3d1b9c2bebdc5e2c775c8c5fe694",
+      "loader_sha256": "158448e4a11b8738327596b2a0361bd32a062fc3020ebf00095cb5824a87a7bd",
+      "help_sha256": "8836fc2190dd9e58e08133d553af1f1b043c1f9794158cea756c23a327fd36df",
+      "comparison_check_binary_sha256": "f43acf55701c4b1392b5da9de729162e17df2b101c7f92232f18f9ab1e1cf8c8",
+      "run_check_binary_sha256": "1ca611c31a64a802484a4753229bbeccf69f83021f5aa83d28407b6cd036a5da",
+      "roots_check_binary_sha256": "83536edd4ac4fb5337aaa09893579408acd24f9c5367fbbf1885679cd5b269c7",
+      "block_adapter_check_binary_sha256": "412c85af21c7e77ecf37b7afd61853ae6bffa336c3cf0e7cea0ca1e805885338",
+      "return_check_binary_sha256": "5645a8b512032deedff533bafd34da00f498669a8b89afbe9305935626d58a70",
+      "core": {
+        "source": "00bb5ac2dec61e215966f523063786682caa40c1",
+        "cpp_source_sha256": "0d01ac0ca73870abf99a31a1b004ad953a33f5e36fbf2e914d6713c96b88ad61",
+        "backend": "npu",
+        "npu_runtime": "standalone",
+        "cxx11_abi": true,
+        "binary_sha256": {
+          "libtidegraph.a": "d798839bdc889719a9df236cfad08bf8dbe1aadc89c931c5c3e09a89837c4f26",
+          "libtidegraph_runtime.a": "dd74ff44884b4ed47a4afe56deb8375468953f44f8afe8127487e40e30a3a424",
+          "tidegraph-smoke": "094983d37825421cfb9cc4a05e943f2ebedef4a52f75ef110051928a82842530",
+          "tidegraph-kernel-check": "61624c7e03e7d3e64f98e7141f1a862be20b8168dd32d54dce5adc9816ebcb79",
+          "tidegraph-full-check": "54a705ac69ec49eb36f6c4f82178ec540cb25b1cf9c340ffd0ad68de4f51f008",
+          "tidegraph-aggregate-check": "c6c0e0468fab79b43980d7dbf64a4a3752ad5efa86a4f994bf3ab38dbe454d00",
+          "tidegraph-optimizer-check": "0c881d740a51a1067ea507bb914aaeeb6359bedbc4b2cd35cd882032926bc602",
+          "tidegraph-checkpoint-check": "c6ab2db771239e900dfbcaebc0f90cb289cf8c94698dee8d661d7ca768fbdaa5",
+          "tidegraph-weighted-training-check": "d6e6cda8d6f87897030ac702d520c4150098fc1b9fe63880b2587227b5ff873d",
+          "tidegraph-lh-scope-check": "746aedf44726838f1a9159a03747053ee5ec4d9de2e930ad3258aed8a2492e0d",
+          "tidegraph-streaming-bench": "0c11194d5d5cb1c14b98db6ce0ae3259fdee7ee31c4c141ec9e83843c32ae6f2",
+          "tidegraph-scale-bench": "56e28a035c4cd254b2e111b8593c99800efacca1acfd69514c186bf5797f6bc1",
+          "tidegraph-profile-check": "27b5ca2d75e14baa28a0ea1b77414363aff4167cb82e32926132cc8fff9fe7e0",
+          "tidegraph-settle-check": "2508210bc77d7204a535ac81c4c522c8a9358939365c218ed0dfa77af8c982e9",
+          "tidegraph-greedy-check": "bf7dda97d2a18491d75f19ad834457027e1fcb5d91bbd10db649456090b95ba7",
+          "tidegraph-accelerator-check": "c438a87cdc8abea319f61bb74ea0b1d6c8b93140eea5b1322cabb0a4820483c5",
+          "tidegraph-runtime-check": "cd6d5ea111da2de812c90d807b0d2836f854d47dd39c79746d6815fa1376f7ac",
+          "tidegraph-read-precision-check": "a874c29d03dcdf1ed94981fd3763549cbe39b2d07c05dbad48c19a51889ad5b2",
+          "tidegraph-placement-check": "32fecedf4d4e78809d634618f0cfb8c7ad63e063c9d3d9f3b5785826fd644623",
+          "tidegraph-payload-ownership-check": "aec04bcdd1456e41b4e5b372b3739ef0fc4251c32597db9be811571dd9b40fa9",
+          "tidegraph-weighted-binding-module-check": "7e8393e30b8c3b4c3b304b6f7a8bae62bf0728f6add99c6fe8c180c2268044df",
+          "tidegraph-column-check": "298967b7e6223dee8a937f50e8c8f098cd647c7070ccb73857607e04e617abe1",
+          "libtidegraph-weighted-binding-module.so": "1704543694f6dff5313a07121479e323c3a57e2375799191953cb88e264cf231"
+        }
+      },
+      "identity": {
+        "path": "/dev/shm/gef-p1p6-20261112/resident-v3-benchmark/result.json",
+        "sha256": "5797400e8326bba879395b8ec951058202973d3c9ead69cc20daa7ea9586f8b2",
+        "bytes": 20448
+      }
+    }
+  },
+  "jobs": [
+    {
+      "identity": {
+        "path": "artifacts/jobs/p1p6-resident-v3-benchmark-build/status.json",
+        "sha256": "051029290f21bdadd9f229d97df047f87e2f176d92fe0875fe9cb53f802e8c50",
+        "bytes": 421
+      },
+      "record": {
+        "command": [
+          "/bin/bash",
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/p1p6-20261112/resident-v3-benchmark-build.sh"
+        ],
+        "cwd": "/dev/shm/gef-p1p6-20261112/resident-v3-source",
+        "state": "passed",
+        "source": "a3c4f62dcc3fce9bbf43e5a8f4ce5578c561efc4",
+        "dirty": "",
+        "started": "2026-11-12T08:33:34.184754+00:00",
+        "exit_code": 0,
+        "finished": "2026-11-12T08:34:04.444520+00:00"
+      },
+      "log": {
+        "path": "artifacts/jobs/p1p6-resident-v3-benchmark-build/task.log",
+        "sha256": "d38662ae23fa9a9e61bc6668bbc807cbb1bf011f6ebb37b7f70553fc1bf9eccb",
+        "bytes": 16629
+      }
+    },
+    {
+      "identity": {
+        "path": "artifacts/jobs/p1p6-resident-v3-native-build/status.json",
+        "sha256": "ac902806fdd72aa1f56ebd7b14298d6f835e4aeaf7354e3164de3198c1fcbb9d",
+        "bytes": 418
+      },
+      "record": {
+        "command": [
+          "/bin/bash",
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/p1p6-20261112/resident-v3-native-build.sh"
+        ],
+        "cwd": "/dev/shm/gef-p1p6-20261112/resident-v3-source",
+        "state": "passed",
+        "source": "a3c4f62dcc3fce9bbf43e5a8f4ce5578c561efc4",
+        "dirty": "",
+        "started": "2026-11-12T08:28:00.388792+00:00",
+        "exit_code": 0,
+        "finished": "2026-11-12T08:31:00.102244+00:00"
+      },
+      "log": {
+        "path": "artifacts/jobs/p1p6-resident-v3-native-build/task.log",
+        "sha256": "2a99b02796e8f7dae430be7a2b6b3d40e9690b01671db107ed214d0e9d8fef2f",
+        "bytes": 1087758
+      }
+    },
+    {
+      "identity": {
+        "path": "artifacts/jobs/p1p6-resident-v3-native-qualification/status.json",
+        "sha256": "24a7ca5f2c84da6d0e2c96986df7f12891e2f9b20f182a4a029600b098c612cc",
+        "bytes": 426
+      },
+      "record": {
+        "command": [
+          "/bin/bash",
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/p1p6-20261112/resident-v3-native-qualification.sh"
+        ],
+        "cwd": "/dev/shm/gef-p1p6-20261112/resident-v3-source",
+        "state": "passed",
+        "source": "a3c4f62dcc3fce9bbf43e5a8f4ce5578c561efc4",
+        "dirty": "",
+        "started": "2026-11-12T08:33:34.145518+00:00",
+        "exit_code": 0,
+        "finished": "2026-11-12T08:34:40.197950+00:00"
+      },
+      "log": {
+        "path": "artifacts/jobs/p1p6-resident-v3-native-qualification/task.log",
+        "sha256": "41d73864b45db84d80939c572661f27b83e21dede807c9024122c40b75fe6430",
+        "bytes": 947
+      }
+    },
+    {
+      "identity": {
+        "path": "artifacts/jobs/p1p6-resident-v3-scale/status.json",
+        "sha256": "88e6165c1b3607871257297de5fa65d717365ee4f50270dd8cba93ab73894e83",
+        "bytes": 411
+      },
+      "record": {
+        "command": [
+          "/bin/bash",
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/p1p6-20261112/resident-v3-scale.sh"
+        ],
+        "cwd": "/dev/shm/gef-p1p6-20261112/resident-v3-source",
+        "state": "failed",
+        "source": "a3c4f62dcc3fce9bbf43e5a8f4ce5578c561efc4",
+        "dirty": "",
+        "started": "2026-11-12T08:36:21.581779+00:00",
+        "exit_code": 1,
+        "finished": "2026-11-12T08:37:49.490741+00:00"
+      },
+      "log": {
+        "path": "artifacts/jobs/p1p6-resident-v3-scale/task.log",
+        "sha256": "559427c771b7ce51628e9482ab168988e0e6af499b3b6880addf6b77d291f1e9",
+        "bytes": 827
+      }
+    },
+    {
+      "identity": {
+        "path": "artifacts/jobs/p1p6-resident-v3-sdk-build/status.json",
+        "sha256": "fa13502f2ee3af8f2e34a3c511305b6445377473d86650e49eda493ff005b7f7",
+        "bytes": 415
+      },
+      "record": {
+        "command": [
+          "/bin/bash",
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/p1p6-20261112/resident-v3-sdk-build.sh"
+        ],
+        "cwd": "/dev/shm/gef-p1p6-20261112/resident-v3-source",
+        "state": "failed",
+        "source": "a3c4f62dcc3fce9bbf43e5a8f4ce5578c561efc4",
+        "dirty": "",
+        "started": "2026-11-12T08:28:00.409847+00:00",
+        "exit_code": 1,
+        "finished": "2026-11-12T08:30:54.343898+00:00"
+      },
+      "log": {
+        "path": "artifacts/jobs/p1p6-resident-v3-sdk-build/task.log",
+        "sha256": "135ba1cf318dfbc23a015a45bdc93b9d3f6b2792dd46b589383d35e666ac6fcb",
+        "bytes": 1085865
+      }
+    },
+    {
+      "identity": {
+        "path": "artifacts/jobs/p1p6-resident-v3-sdk-qualification/status.json",
+        "sha256": "277ddbbb2344660b64ec0fab93ebede8adae14693ff401abcae712538bad8890",
+        "bytes": 423
+      },
+      "record": {
+        "command": [
+          "/bin/bash",
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/p1p6-20261112/resident-v3-sdk-qualification.sh"
+        ],
+        "cwd": "/dev/shm/gef-p1p6-20261112/resident-v3-source",
+        "state": "passed",
+        "source": "a3c4f62dcc3fce9bbf43e5a8f4ce5578c561efc4",
+        "dirty": "",
+        "started": "2026-11-12T08:33:34.161324+00:00",
+        "exit_code": 0,
+        "finished": "2026-11-12T08:34:40.026213+00:00"
+      },
+      "log": {
+        "path": "artifacts/jobs/p1p6-resident-v3-sdk-qualification/task.log",
+        "sha256": "2ee789f3c5da67a8eea5287534f1d057d6a6ebcf4c054fd647153fe25ef9dbd2",
+        "bytes": 991
+      }
+    },
+    {
+      "identity": {
+        "path": "artifacts/jobs/p1p6-resident-v3-standalone-qualification/status.json",
+        "sha256": "85f25155fe13a974a5e3b3259a405b708af1a973f4e96a9709437f10489a633b",
+        "bytes": 430
+      },
+      "record": {
+        "command": [
+          "/bin/bash",
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/p1p6-20261112/resident-v3-standalone-qualification.sh"
+        ],
+        "cwd": "/dev/shm/gef-p1p6-20261112/resident-v3-source",
+        "state": "passed",
+        "source": "a3c4f62dcc3fce9bbf43e5a8f4ce5578c561efc4",
+        "dirty": "",
+        "started": "2026-11-12T08:35:04.931667+00:00",
+        "exit_code": 0,
+        "finished": "2026-11-12T08:36:11.892012+00:00"
+      },
+      "log": {
+        "path": "artifacts/jobs/p1p6-resident-v3-standalone-qualification/task.log",
+        "sha256": "59bd2d39e197ee020f3a0da4f87e822ad0c29d1e7ad345c90826ac3ae445ffd8",
+        "bytes": 1751
+      }
+    }
+  ],
+  "launches": [
+    {
+      "identity": {
+        "path": "artifacts/p1p6-20261112/resident-v3-benchmark-build-launch.json",
+        "sha256": "83434831d6a51fb0c32387d98a7591807a05b8e06c555270bf1774742a83a6c1",
+        "bytes": 840
+      },
+      "record": {
+        "source": "a3c4f62dcc3fce9bbf43e5a8f4ce5578c561efc4",
+        "command": [
+          "systemd-run",
+          "--user",
+          "--unit=gef-p1p6-resident-v3-benchmark-build",
+          "--service-type=exec",
+          "--slice=background.slice",
+          "--working-directory=/dev/shm/gef-p1p6-20261112/resident-v3-source",
+          "--property=KillMode=control-group",
+          "--property=RuntimeMaxSec=1800",
+          "--property=TimeoutStopSec=30",
+          "--property=CPUAffinity=64-319",
+          "--property=MemoryMax=256G",
+          "/usr/bin/python3",
+          "/dev/shm/gef-p1p6-20261112/resident-v3-source/scripts/job.py",
+          "--output-dir",
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/jobs/p1p6-resident-v3-benchmark-build",
+          "--",
+          "/bin/bash",
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/p1p6-20261112/resident-v3-benchmark-build.sh"
+        ]
+      }
+    },
+    {
+      "identity": {
+        "path": "artifacts/p1p6-20261112/resident-v3-native-build-launch.json",
+        "sha256": "c07ff6b6e8b342432bf8ce5c544b5df86206cdc771b2114c4d55850ce2fca1df",
+        "bytes": 830
+      },
+      "record": {
+        "source": "a3c4f62dcc3fce9bbf43e5a8f4ce5578c561efc4",
+        "command": [
+          "systemd-run",
+          "--user",
+          "--unit=gef-p1p6-resident-v3-native-build",
+          "--service-type=exec",
+          "--slice=background.slice",
+          "--working-directory=/dev/shm/gef-p1p6-20261112/resident-v3-source",
+          "--property=KillMode=control-group",
+          "--property=RuntimeMaxSec=2400",
+          "--property=TimeoutStopSec=30",
+          "--property=CPUAffinity=0-159",
+          "--property=MemoryMax=512G",
+          "/usr/bin/python3",
+          "/dev/shm/gef-p1p6-20261112/resident-v3-source/scripts/job.py",
+          "--output-dir",
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/jobs/p1p6-resident-v3-native-build",
+          "--",
+          "/bin/bash",
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/p1p6-20261112/resident-v3-native-build.sh"
+        ]
+      }
+    },
+    {
+      "identity": {
+        "path": "artifacts/p1p6-20261112/resident-v3-native-qualification-launch.json",
+        "sha256": "17d858f152579b89f8353f317d71ac4765b529c1f40c8530e7cd78687e5dd76f",
+        "bytes": 853
+      },
+      "record": {
+        "source": "a3c4f62dcc3fce9bbf43e5a8f4ce5578c561efc4",
+        "command": [
+          "systemd-run",
+          "--user",
+          "--unit=gef-p1p6-resident-v3-native-qualification",
+          "--service-type=exec",
+          "--slice=background.slice",
+          "--working-directory=/dev/shm/gef-p1p6-20261112/resident-v3-source",
+          "--property=KillMode=control-group",
+          "--property=RuntimeMaxSec=1800",
+          "--property=TimeoutStopSec=30",
+          "--property=CPUAffinity=0-15",
+          "--property=MemoryMax=256G",
+          "/usr/bin/python3",
+          "/dev/shm/gef-p1p6-20261112/resident-v3-source/scripts/job.py",
+          "--output-dir",
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/jobs/p1p6-resident-v3-native-qualification",
+          "--",
+          "/bin/bash",
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/p1p6-20261112/resident-v3-native-qualification.sh"
+        ]
+      }
+    },
+    {
+      "identity": {
+        "path": "artifacts/p1p6-20261112/resident-v3-scale-launch.json",
+        "sha256": "89e8b7b5b2f25ec00c0ee84ebe885ff0f28a3243ff8391a155046ee7d0bf59b4",
+        "bytes": 809
+      },
+      "record": {
+        "source": "a3c4f62dcc3fce9bbf43e5a8f4ce5578c561efc4",
+        "command": [
+          "systemd-run",
+          "--user",
+          "--unit=gef-p1p6-resident-v3-scale",
+          "--service-type=exec",
+          "--slice=background.slice",
+          "--working-directory=/dev/shm/gef-p1p6-20261112/resident-v3-source",
+          "--property=KillMode=control-group",
+          "--property=RuntimeMaxSec=1800",
+          "--property=TimeoutStopSec=30",
+          "--property=CPUAffinity=48-63",
+          "--property=MemoryMax=256G",
+          "/usr/bin/python3",
+          "/dev/shm/gef-p1p6-20261112/resident-v3-source/scripts/job.py",
+          "--output-dir",
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/jobs/p1p6-resident-v3-scale",
+          "--",
+          "/bin/bash",
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/p1p6-20261112/resident-v3-scale.sh"
+        ]
+      }
+    },
+    {
+      "identity": {
+        "path": "artifacts/p1p6-20261112/resident-v3-sdk-build-launch.json",
+        "sha256": "a3a26c430c99308cba8560d968a28c6465a7c4f1bea343ea052cc17d915c2474",
+        "bytes": 823
+      },
+      "record": {
+        "source": "a3c4f62dcc3fce9bbf43e5a8f4ce5578c561efc4",
+        "command": [
+          "systemd-run",
+          "--user",
+          "--unit=gef-p1p6-resident-v3-sdk-build",
+          "--service-type=exec",
+          "--slice=background.slice",
+          "--working-directory=/dev/shm/gef-p1p6-20261112/resident-v3-source",
+          "--property=KillMode=control-group",
+          "--property=RuntimeMaxSec=2400",
+          "--property=TimeoutStopSec=30",
+          "--property=CPUAffinity=160-319",
+          "--property=MemoryMax=512G",
+          "/usr/bin/python3",
+          "/dev/shm/gef-p1p6-20261112/resident-v3-source/scripts/job.py",
+          "--output-dir",
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/jobs/p1p6-resident-v3-sdk-build",
+          "--",
+          "/bin/bash",
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/p1p6-20261112/resident-v3-sdk-build.sh"
+        ]
+      }
+    },
+    {
+      "identity": {
+        "path": "artifacts/p1p6-20261112/resident-v3-sdk-qualification-launch.json",
+        "sha256": "bc7025bc23e5a81eb4aee11bf7e69b1ec2fa2b59984317f2370f3ac49fac7242",
+        "bytes": 845
+      },
+      "record": {
+        "source": "a3c4f62dcc3fce9bbf43e5a8f4ce5578c561efc4",
+        "command": [
+          "systemd-run",
+          "--user",
+          "--unit=gef-p1p6-resident-v3-sdk-qualification",
+          "--service-type=exec",
+          "--slice=background.slice",
+          "--working-directory=/dev/shm/gef-p1p6-20261112/resident-v3-source",
+          "--property=KillMode=control-group",
+          "--property=RuntimeMaxSec=1800",
+          "--property=TimeoutStopSec=30",
+          "--property=CPUAffinity=16-31",
+          "--property=MemoryMax=256G",
+          "/usr/bin/python3",
+          "/dev/shm/gef-p1p6-20261112/resident-v3-source/scripts/job.py",
+          "--output-dir",
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/jobs/p1p6-resident-v3-sdk-qualification",
+          "--",
+          "/bin/bash",
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/p1p6-20261112/resident-v3-sdk-qualification.sh"
+        ]
+      }
+    },
+    {
+      "identity": {
+        "path": "artifacts/p1p6-20261112/resident-v3-standalone-qualification-launch.json",
+        "sha256": "c8f099c6aae2166881f2b7641426e8aa001fee0e70199ea3394b0ec4adba28c8",
+        "bytes": 866
+      },
+      "record": {
+        "source": "a3c4f62dcc3fce9bbf43e5a8f4ce5578c561efc4",
+        "command": [
+          "systemd-run",
+          "--user",
+          "--unit=gef-p1p6-resident-v3-standalone-qualification",
+          "--service-type=exec",
+          "--slice=background.slice",
+          "--working-directory=/dev/shm/gef-p1p6-20261112/resident-v3-source",
+          "--property=KillMode=control-group",
+          "--property=RuntimeMaxSec=1800",
+          "--property=TimeoutStopSec=30",
+          "--property=CPUAffinity=32-47",
+          "--property=MemoryMax=256G",
+          "/usr/bin/python3",
+          "/dev/shm/gef-p1p6-20261112/resident-v3-source/scripts/job.py",
+          "--output-dir",
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/jobs/p1p6-resident-v3-standalone-qualification",
+          "--",
+          "/bin/bash",
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/p1p6-20261112/resident-v3-standalone-qualification.sh"
+        ]
+      }
+    }
+  ],
+  "scripts": [
+    {
+      "identity": {
+        "path": "artifacts/p1p6-20261112/resident-v3-benchmark-build.sh",
+        "sha256": "cbb02441e74e2c3460db32ec7b36efbeae9ce4db693e79f47f1e371a8f7a0ae7",
+        "bytes": 790
+      },
+      "text": "#!/bin/bash\nset -euo pipefail\nsource /usr/share/Modules/init/bash\nmodule purge\nexport PYTHONDONTWRITEBYTECODE=1 TORCH_DEVICE_BACKEND_AUTOLOAD=0\nexport OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1\nmodule load libtorch-npu/2.12.0-cann9.2.0\nexport PATH=/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/bin:$PATH\npython3 scripts/build_weighted_benchmark.py --core-build /dev/shm/gef-p1p6-20261112/core-source-v2-sdk --resident-build /dev/shm/gef-p1p6-20261112/resident-v3-sdk --json-include /mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/prefill-default/qualified/json-include --output-dir /dev/shm/gef-p1p6-20261112/resident-v3-benchmark --jobs all\nctest --test-dir /dev/shm/gef-p1p6-20261112/resident-v3-benchmark/client --output-on-failure\n"
+    },
+    {
+      "identity": {
+        "path": "artifacts/p1p6-20261112/resident-v3-native-build.sh",
+        "sha256": "29c4de07f77a3d7e54e9cbb96c54326b4e11a036bfbc34fabb9c4e56681e1eb2",
+        "bytes": 1421
+      },
+      "text": "#!/bin/bash\nset -euo pipefail\nsource /usr/share/Modules/init/bash\nmodule purge\nexport PYTHONDONTWRITEBYTECODE=1 TORCH_DEVICE_BACKEND_AUTOLOAD=0\nexport OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1\nmodule load ascend/dev-workspace-9.2.0\nsource /mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/additive-work/env/bin/activate\nexport PYTHONPATH=\"$PWD/python:$PWD/tests:$PWD/scripts:${PYTHONPATH:-}\"\nexport TIDE_BUILD_DIR=/dev/shm/gef-p1p6-20261112/core-source-v2-native\npython -m pip wheel --no-build-isolation --no-deps . -w /dev/shm/gef-p1p6-20261112/resident-v3-wheels\npython -m pip install --no-deps --target /dev/shm/gef-p1p6-20261112/resident-v3-install /dev/shm/gef-p1p6-20261112/resident-v3-wheels/*.whl\npython -m pytest -q tests/test_experiment_resident_blocks.py tests/test_experiment_block_adapter.py tests/test_experiment_block_records.py tests/test_experiment_block_checkpoint.py tests/test_resident_block_public_dispatch.py tests/test_resident_block_dispatch.py tests/test_resident_block_selection.py tests/test_resident_block_sequence.py tests/test_resident_block_flow_layout.py --junitxml=/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/p1p6-20261112/resident-v3-cpu.xml\npython scripts/build_device_control.py --core-build \"$TIDE_BUILD_DIR\" --build-dir /dev/shm/gef-p1p6-20261112/resident-v3-native --ascendc-soc Ascend910_9392 --python-component weighted --jobs all\n"
+    },
+    {
+      "identity": {
+        "path": "artifacts/p1p6-20261112/resident-v3-native-qualification.sh",
+        "sha256": "6c3a3f405c75e7b90a75a972134893f28845343118006e2bbb147a75c56b1a6c",
+        "bytes": 994
+      },
+      "text": "#!/bin/bash\nset -euo pipefail\nsource /usr/share/Modules/init/bash\nmodule purge\nexport PYTHONDONTWRITEBYTECODE=1 TORCH_DEVICE_BACKEND_AUTOLOAD=0 OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1\nunset ASCEND_LAUNCH_BLOCKING TASK_QUEUE_ENABLE PER_STREAM_QUEUE\nmodule load ascend/dev-workspace-9.2.0\nsource /mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/additive-work/env/bin/activate\nexport PYTHONPATH=/dev/shm/gef-p1p6-20261112/resident-v3-install:${PYTHONPATH:-}\npython /mi/data2T/zlong/home/.agents/skills/use-local-ascend/scripts/run_on_free_npu.py --job-id gef-p1p6-resident-v3-native-qualification --project graph-execution-foundation --priority 0 --npu-count 1 --candidate-ids 0,5,6,10 --max-hbm-mib 4096 --max-wait-seconds 180 --state-file /mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/p1p6-20261112/resident-v3-native-queue.json -- python /mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/p1p6-20261112/resident-v3-native-device.py\n"
+    },
+    {
+      "identity": {
+        "path": "artifacts/p1p6-20261112/resident-v3-scale.sh",
+        "sha256": "15cbf179378c3b0a3ce04adbd14b9b333eab082dfc5c7d59069271518a507fc6",
+        "bytes": 970
+      },
+      "text": "#!/bin/bash\nset -euo pipefail\nsource /usr/share/Modules/init/bash\nmodule purge\nexport PYTHONDONTWRITEBYTECODE=1 TORCH_DEVICE_BACKEND_AUTOLOAD=0 OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1\nunset ASCEND_LAUNCH_BLOCKING TASK_QUEUE_ENABLE PER_STREAM_QUEUE\nmodule load ascend/dev-workspace-9.2.0\nsource /mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/additive-work/env/bin/activate\nexport PYTHONPATH=/dev/shm/gef-p1p6-20261112/resident-v3-install:${PYTHONPATH:-}\npython /mi/data2T/zlong/home/.agents/skills/use-local-ascend/scripts/run_on_free_npu.py --job-id gef-p1p6-resident-v3-scale --project graph-execution-foundation --priority 0 --npu-count 1 --candidate-ids 0,5,6,10 --max-hbm-mib 4096 --max-wait-seconds 180 --state-file /mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/p1p6-20261112/resident-v3-scale-queue.json -- python /mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/p1p6-20261112/resident-v3-scale.py\n"
+    },
+    {
+      "identity": {
+        "path": "artifacts/p1p6-20261112/resident-v3-sdk-build.sh",
+        "sha256": "4deefd0b00f0d08f9d61d7aedfb658b01faad6f8625485a3899a95ad7930702d",
+        "bytes": 1146
+      },
+      "text": "#!/bin/bash\nset -euo pipefail\nsource /usr/share/Modules/init/bash\nmodule purge\nexport PYTHONDONTWRITEBYTECODE=1 TORCH_DEVICE_BACKEND_AUTOLOAD=0\nexport OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1\nmodule load libtorch-npu/2.12.0-cann9.2.0\nexport PATH=/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/bin:$PATH\npython3 scripts/build_device_control.py --core-build /dev/shm/gef-p1p6-20261112/core-source-v2-sdk --build-dir /dev/shm/gef-p1p6-20261112/resident-v3-sdk --ascendc-soc Ascend910_9392 --jobs all --checks resident-block-model resident-block-public resident-block-selection resident-block-kv-messages resident-block-kv-sequence resident-block-settle-flow resident-block-settle-session weighted-training\n/dev/shm/gef-p1p6-20261112/resident-v3-sdk/tide-block-settle-model-check\npython3 scripts/build_weighted_benchmark.py --core-build /dev/shm/gef-p1p6-20261112/core-source-v2-sdk --resident-build /dev/shm/gef-p1p6-20261112/resident-v3-sdk --output-dir /dev/shm/gef-p1p6-20261112/resident-v3-benchmark --jobs all\nctest --test-dir /dev/shm/gef-p1p6-20261112/resident-v3-benchmark/client --output-on-failure\n"
+    },
+    {
+      "identity": {
+        "path": "artifacts/p1p6-20261112/resident-v3-sdk-qualification.sh",
+        "sha256": "3d8c889e63e1af4da462b3fdd8ed01d56cf47354419550fcab056b2286be8427",
+        "bytes": 979
+      },
+      "text": "#!/bin/bash\nset -euo pipefail\nsource /usr/share/Modules/init/bash\nmodule purge\nexport PYTHONDONTWRITEBYTECODE=1 TORCH_DEVICE_BACKEND_AUTOLOAD=0 OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1\nunset ASCEND_LAUNCH_BLOCKING TASK_QUEUE_ENABLE PER_STREAM_QUEUE\nmodule load libtorch-npu/2.12.0-cann9.2.0\nexport PATH=/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/bin:$PATH\nexport PYTHONPATH=/dev/shm/gef-p1p6-20261112/resident-v3-install:${PYTHONPATH:-}\npython /mi/data2T/zlong/home/.agents/skills/use-local-ascend/scripts/run_on_free_npu.py --job-id gef-p1p6-resident-v3-sdk-qualification --project graph-execution-foundation --priority 0 --npu-count 1 --candidate-ids 0,5,6,10 --max-hbm-mib 4096 --max-wait-seconds 180 --state-file /mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/p1p6-20261112/resident-v3-sdk-queue.json -- python /mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/p1p6-20261112/resident-v3-sdk-device.py\n"
+    },
+    {
+      "identity": {
+        "path": "artifacts/p1p6-20261112/resident-v3-sdk-wrapper.sh",
+        "sha256": "dc371618783ac6c0a352adba1008f62448f2823e7f3bd1bd5d019e0417236e04",
+        "bytes": 206
+      },
+      "text": "#!/bin/bash\nset -euo pipefail\nsource /usr/share/Modules/init/bash\nmodule purge\nmodule load libtorch-npu/2.12.0-cann9.2.0\nexec /dev/shm/gef-p1p6-20261112/resident-v3-benchmark/client/weighted-benchmark \"$@\"\n"
+    },
+    {
+      "identity": {
+        "path": "artifacts/p1p6-20261112/resident-v3-standalone-qualification.sh",
+        "sha256": "89051842e3062ce82d1926012be1e295747066fc70afa98923ac5cb8eaa34eee",
+        "bytes": 1481
+      },
+      "text": "#!/bin/bash\nset -euo pipefail\nsource /usr/share/Modules/init/bash\nmodule purge\nexport PYTHONDONTWRITEBYTECODE=1 TORCH_DEVICE_BACKEND_AUTOLOAD=0 OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1\nunset ASCEND_LAUNCH_BLOCKING TASK_QUEUE_ENABLE PER_STREAM_QUEUE\nmodule load ascend/dev-workspace-9.2.0\nsource /mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/additive-work/env/bin/activate\nexport PYTHONPATH=/dev/shm/gef-p1p6-20261112/resident-v3-install:${PYTHONPATH:-}\nexport TIDE_WEIGHTED_BENCHMARK=/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/p1p6-20261112/resident-v3-sdk-wrapper.sh\nexport TIDE_BUILD_DIR=/dev/shm/gef-p1p6-20261112/core-source-v2-native\nexport TIDE_STANDALONE_BLOCK_DEVICE=npu:0\npython /mi/data2T/zlong/home/.agents/skills/use-local-ascend/scripts/run_on_free_npu.py --job-id gef-p1p6-resident-v3-standalone-qualification --project graph-execution-foundation --priority 0 --npu-count 1 --candidate-ids 0,5,6,10 --max-hbm-mib 4096 --max-wait-seconds 180 --state-file /mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/p1p6-20261112/resident-v3-standalone-queue.json -- python -m pytest -q /dev/shm/gef-p1p6-20261112/resident-v3-source/tests/test_standalone_resident_blocks.py --junitxml=/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/p1p6-20261112/resident-v3-standalone-device.xml --basetemp=/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/p1p6-20261112/resident-v3-standalone-tmp\n"
+    }
+  ],
+  "cpu": {
+    "identity": {
+      "path": "artifacts/p1p6-20261112/resident-v3-cpu.xml",
+      "sha256": "f0960dcdb38723b8666d121b8a9d0fc6f5bef3af5d5330c8e4602a5ecdcd9d1c",
+      "bytes": 10466
+    },
+    "suites": [
+      {
+        "name": "pytest",
+        "errors": "0",
+        "failures": "0",
+        "skipped": "0",
+        "tests": "70",
+        "time": "8.637",
+        "timestamp": "2026-11-12T16:28:04.031388+08:00",
+        "hostname": "liteserver-mi-dev-00001"
+      }
+    ],
+    "cases": [
+      {
+        "classname": "tests.test_experiment_resident_blocks",
+        "name": "test_default_block_identity_and_capacities_are_allocation_free",
+        "time": "0.161"
+      },
+      {
+        "classname": "tests.test_experiment_resident_blocks",
+        "name": "test_auto_fallback_is_static_and_explicit_block_refuses[execution0-model0-task0-SettleGraph]",
+        "time": "0.035"
+      },
+      {
+        "classname": "tests.test_experiment_resident_blocks",
+        "name": "test_auto_fallback_is_static_and_explicit_block_refuses[execution1-model1-task1-prefill]",
+        "time": "0.095"
+      },
+      {
+        "classname": "tests.test_experiment_resident_blocks",
+        "name": "test_auto_fallback_is_static_and_explicit_block_refuses[execution2-model2-task2-FP32]",
+        "time": "0.034"
+      },
+      {
+        "classname": "tests.test_experiment_resident_blocks",
+        "name": "test_auto_fallback_is_static_and_explicit_block_refuses[execution3-model3-task3-one device]",
+        "time": "0.034"
+      },
+      {
+        "classname": "tests.test_experiment_resident_blocks",
+        "name": "test_auto_fallback_is_static_and_explicit_block_refuses[execution4-model4-task4-standalone block requires outputs/metrics]",
+        "time": "0.034"
+      },
+      {
+        "classname": "tests.test_experiment_resident_blocks",
+        "name": "test_auto_fallback_is_static_and_explicit_block_refuses[execution5-model5-task5-KV sum/query]",
+        "time": "0.034"
+      },
+      {
+        "classname": "tests.test_experiment_resident_blocks",
+        "name": "test_auto_fallback_is_static_and_explicit_block_refuses[execution6-model6-task6-plugin]",
+        "time": "0.034"
+      },
+      {
+        "classname": "tests.test_experiment_resident_blocks",
+        "name": "test_old_limit_semantics_are_never_swallowed",
+        "time": "0.046"
+      },
+      {
+        "classname": "tests.test_experiment_resident_blocks",
+        "name": "test_explicit_capacities_and_historical_records_keep_separate_identity",
+        "time": "0.021"
+      },
+      {
+        "classname": "tests.test_experiment_resident_blocks",
+        "name": "test_frozen_resolved_record_and_selected_runtime_failure_do_not_dispatch_again",
+        "time": "0.032"
+      },
+      {
+        "classname": "tests.test_experiment_resident_blocks",
+        "name": "test_standalone_selected_returns_receive_only_block_capacity_keys[sum]",
+        "time": "0.053"
+      },
+      {
+        "classname": "tests.test_experiment_resident_blocks",
+        "name": "test_standalone_selected_returns_receive_only_block_capacity_keys[qry]",
+        "time": "0.050"
+      },
+      {
+        "classname": "tests.test_experiment_block_adapter",
+        "name": "test_adapter_uses_field_loss_and_detaches_before_complete_decode[complete-False]",
+        "time": "0.253"
+      },
+      {
+        "classname": "tests.test_experiment_block_adapter",
+        "name": "test_adapter_uses_field_loss_and_detaches_before_complete_decode[complete-True]",
+        "time": "0.159"
+      },
+      {
+        "classname": "tests.test_experiment_block_adapter",
+        "name": "test_adapter_uses_field_loss_and_detaches_before_complete_decode[outputs-False]",
+        "time": "0.110"
+      },
+      {
+        "classname": "tests.test_experiment_block_adapter",
+        "name": "test_adapter_uses_field_loss_and_detaches_before_complete_decode[outputs-True]",
+        "time": "0.110"
+      },
+      {
+        "classname": "tests.test_experiment_block_adapter",
+        "name": "test_adapter_uses_field_loss_and_detaches_before_complete_decode[metrics-False]",
+        "time": "0.108"
+      },
+      {
+        "classname": "tests.test_experiment_block_adapter",
+        "name": "test_adapter_uses_field_loss_and_detaches_before_complete_decode[metrics-True]",
+        "time": "0.108"
+      },
+      {
+        "classname": "tests.test_experiment_block_records",
+        "name": "test_tensor_input_material_and_complete_candidate_decode_across_two_windows[None]",
+        "time": "0.432"
+      },
+      {
+        "classname": "tests.test_experiment_block_records",
+        "name": "test_tensor_input_material_and_complete_candidate_decode_across_two_windows[staggered-v1]",
+        "time": "0.287"
+      },
+      {
+        "classname": "tests.test_experiment_block_records",
+        "name": "test_consumer_field_loss_and_connected_zero_cotangents[0.0]",
+        "time": "0.427"
+      },
+      {
+        "classname": "tests.test_experiment_block_records",
+        "name": "test_consumer_field_loss_and_connected_zero_cotangents[0.17]",
+        "time": "0.002"
+      },
+      {
+        "classname": "tests.test_experiment_block_records",
+        "name": "test_zero_mass_is_a_present_candidate_and_keeps_exact_old_cache",
+        "time": "0.415"
+      },
+      {
+        "classname": "tests.test_experiment_block_checkpoint",
+        "name": "test_every_checkpoint_field_is_copied_and_inert_owners_do_not_shift_sgd_slots[0.0]",
+        "time": "0.407"
+      },
+      {
+        "classname": "tests.test_experiment_block_checkpoint",
+        "name": "test_every_checkpoint_field_is_copied_and_inert_owners_do_not_shift_sgd_slots[0.2]",
+        "time": "0.003"
+      },
+      {
+        "classname": "tests.test_experiment_block_checkpoint",
+        "name": "test_slot_extent_and_undeclared_gradient_cannot_be_hidden",
+        "time": "0.002"
+      },
+      {
+        "classname": "tests.test_resident_block_public_dispatch",
+        "name": "test_default_requires_certificate_and_dispatches_by_capability[qry]",
+        "time": "0.010"
+      },
+      {
+        "classname": "tests.test_resident_block_public_dispatch",
+        "name": "test_default_requires_certificate_and_dispatches_by_capability[sum]",
+        "time": "0.008"
+      },
+      {
+        "classname": "tests.test_resident_block_public_dispatch",
+        "name": "test_incompatible_local_or_physical_schedule_stays_general",
+        "time": "0.014"
+      },
+      {
+        "classname": "tests.test_resident_block_public_dispatch",
+        "name": "test_memory_function_can_differ_between_complete_regions",
+        "time": "0.014"
+      },
+      {
+        "classname": "tests.test_resident_block_public_dispatch",
+        "name": "test_default_never_falls_back_after_selected_owner_failure",
+        "time": "0.007"
+      },
+      {
+        "classname": "tests.test_resident_block_dispatch",
+        "name": "test_online_absence_duplicate_edges_and_independent_regions[1]",
+        "time": "0.696"
+      },
+      {
+        "classname": "tests.test_resident_block_dispatch",
+        "name": "test_online_absence_duplicate_edges_and_independent_regions[2]",
+        "time": "0.001"
+      },
+      {
+        "classname": "tests.test_resident_block_dispatch",
+        "name": "test_online_absence_duplicate_edges_and_independent_regions[8]",
+        "time": "0.001"
+      },
+      {
+        "classname": "tests.test_resident_block_dispatch",
+        "name": "test_batch_and_time_axes_int64_feedback_and_reusable_window",
+        "time": "0.018"
+      },
+      {
+        "classname": "tests.test_resident_block_dispatch",
+        "name": "test_zero_payload_presence_is_not_absence_and_guard_only_dependency",
+        "time": "0.001"
+      },
+      {
+        "classname": "tests.test_resident_block_dispatch",
+        "name": "test_unconditional_barrier_closes_missing_inputs",
+        "time": "0.001"
+      },
+      {
+        "classname": "tests.test_resident_block_dispatch",
+        "name": "test_journal_capacity_and_numerical_failure_publish_no_prefix",
+        "time": "0.001"
+      },
+      {
+        "classname": "tests.test_resident_block_dispatch",
+        "name": "test_late_and_duplicate_completion_rejected",
+        "time": "0.001"
+      },
+      {
+        "classname": "tests.test_resident_block_dispatch",
+        "name": "test_cycle_and_invalid_descriptor_refused",
+        "time": "0.001"
+      },
+      {
+        "classname": "tests.test_resident_block_dispatch",
+        "name": "test_empty_reused_window_excludes_old_journal_rows",
+        "time": "0.001"
+      },
+      {
+        "classname": "tests.test_resident_block_dispatch",
+        "name": "test_independent_formula_on_permuted_dags",
+        "time": "0.036"
+      },
+      {
+        "classname": "tests.test_resident_block_selection",
+        "name": "test_complete_frames_and_independent_members",
+        "time": "0.693"
+      },
+      {
+        "classname": "tests.test_resident_block_selection",
+        "name": "test_region_time_mismatch_and_invalid_owners_fail",
+        "time": "0.001"
+      },
+      {
+        "classname": "tests.test_resident_block_selection",
+        "name": "test_control_roots_ignore_absence_but_preserve_connected_zero",
+        "time": "0.001"
+      },
+      {
+        "classname": "tests.test_resident_block_selection",
+        "name": "test_per_target_gate_does_not_broadcast_region_activity",
+        "time": "0.001"
+      },
+      {
+        "classname": "tests.test_resident_block_selection",
+        "name": "test_node_gate_rejects_wrong_numerical_phase",
+        "time": "0.001"
+      },
+      {
+        "classname": "tests.test_resident_block_selection",
+        "name": "test_metadata_lowering_preserves_physical_edges",
+        "time": "0.639"
+      },
+      {
+        "classname": "tests.test_resident_block_sequence",
+        "name": "test_sequence_actual_snapshots_and_two_axis_isolation",
+        "time": "0.814"
+      },
+      {
+        "classname": "tests.test_resident_block_sequence",
+        "name": "test_prefix_transpose_independent_field_roots[old]",
+        "time": "0.022"
+      },
+      {
+        "classname": "tests.test_resident_block_sequence",
+        "name": "test_prefix_transpose_independent_field_roots[proposal]",
+        "time": "0.021"
+      },
+      {
+        "classname": "tests.test_resident_block_sequence",
+        "name": "test_prefix_transpose_independent_field_roots[final]",
+        "time": "0.020"
+      },
+      {
+        "classname": "tests.test_resident_block_sequence",
+        "name": "test_prefix_transpose_independent_field_roots[all]",
+        "time": "0.023"
+      },
+      {
+        "classname": "tests.test_resident_block_sequence",
+        "name": "test_prefix_transpose_independent_field_roots[none]",
+        "time": "0.018"
+      },
+      {
+        "classname": "tests.test_resident_block_sequence",
+        "name": "test_prefix_transpose_independent_field_roots[zero]",
+        "time": "0.022"
+      },
+      {
+        "classname": "tests.test_resident_block_sequence",
+        "name": "test_sequence_capacity_clock_count_and_raw_refusals[capacity-76]",
+        "time": "0.006"
+      },
+      {
+        "classname": "tests.test_resident_block_sequence",
+        "name": "test_sequence_capacity_clock_count_and_raw_refusals[clock-75]",
+        "time": "0.006"
+      },
+      {
+        "classname": "tests.test_resident_block_sequence",
+        "name": "test_sequence_capacity_clock_count_and_raw_refusals[overflow-75]",
+        "time": "0.006"
+      },
+      {
+        "classname": "tests.test_resident_block_sequence",
+        "name": "test_sequence_capacity_clock_count_and_raw_refusals[raw-75]",
+        "time": "0.006"
+      },
+      {
+        "classname": "tests.test_resident_block_sequence",
+        "name": "test_sequence_retains_raw_when_no_writes",
+        "time": "0.006"
+      },
+      {
+        "classname": "tests.test_resident_block_flow_layout",
+        "name": "test_physical_fibers_keep_same_class_duplicates_and_zero_G",
+        "time": "0.829"
+      },
+      {
+        "classname": "tests.test_resident_block_flow_layout",
+        "name": "test_nonincreasing_sequence_positions_refused",
+        "time": "0.001"
+      },
+      {
+        "classname": "tests.test_resident_block_flow_layout",
+        "name": "test_physical_ports_and_guarded_publication",
+        "time": "0.001"
+      },
+      {
+        "classname": "tests.test_resident_block_flow_layout",
+        "name": "test_raw_roots_fold_batch_time_and_preserve_connected_zero",
+        "time": "0.001"
+      },
+      {
+        "classname": "tests.test_resident_block_flow_layout",
+        "name": "test_duplicate_ports_have_independent_strength_and_content_roots",
+        "time": "0.001"
+      },
+      {
+        "classname": "tests.test_resident_block_flow_layout",
+        "name": "test_actual_fiber_transpose_sums_each_physical_use",
+        "time": "0.001"
+      },
+      {
+        "classname": "tests.test_resident_block_flow_layout",
+        "name": "test_reverse_uses_actual_forward_journal_and_refuses_incomplete",
+        "time": "0.001"
+      },
+      {
+        "classname": "tests.test_resident_block_flow_layout",
+        "name": "test_reverse_gather_combines_direct_and_downstream_without_false_roots",
+        "time": "0.001"
+      },
+      {
+        "classname": "tests.test_resident_block_flow_layout",
+        "name": "test_complete_cut_metadata_uses_actual_candidates_and_physical_input_counts",
+        "time": "0.001"
+      }
+    ]
+  },
+  "standalone_pytest": {
+    "identity": {
+      "path": "artifacts/p1p6-20261112/resident-v3-standalone-device.xml",
+      "sha256": "a581ddaed108614b7437d3f2d33093e92bd77f537abb4696c00436c11d4556f3",
+      "bytes": 540
+    },
+    "suites": [
+      {
+        "name": "pytest",
+        "errors": "0",
+        "failures": "0",
+        "skipped": "0",
+        "tests": "2",
+        "time": "57.946",
+        "timestamp": "2026-11-12T16:35:13.559949+08:00",
+        "hostname": "liteserver-mi-dev-00001"
+      }
+    ],
+    "cases": [
+      {
+        "classname": "tests.test_standalone_resident_blocks",
+        "name": "test_standalone_block_task_and_fresh_process_resume[sum]",
+        "time": "28.355"
+      },
+      {
+        "classname": "tests.test_standalone_resident_blocks",
+        "name": "test_standalone_block_task_and_fresh_process_resume[qry]",
+        "time": "29.437"
+      }
+    ]
+  },
+  "device_processes": {
+    "native": {
+      "identity": {
+        "path": "artifacts/p1p6-20261112/resident-v3-native-qualification/processes.json",
+        "sha256": "bbdd62cd5740b204093493e5a31cb5cbeb59fb3a92128ce4afec154af6fafbde",
+        "bytes": 4205
+      },
+      "processes": [
+        {
+          "name": "public-qry",
+          "command": [
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/additive-work/env/bin/python",
+            "/dev/shm/gef-p1p6-20261112/resident-v3-source/examples/consumer_core5/block_resident.py",
+            "--device",
+            "npu:0",
+            "--memory-read",
+            "qry",
+            "--native-library",
+            "/dev/shm/gef-p1p6-20261112/core-source-v2-native",
+            "--resident-library",
+            "/dev/shm/gef-p1p6-20261112/resident-v3-native",
+            "--checkpoint-path",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/p1p6-20261112/resident-v3-native-qualification/qry.pt"
+          ],
+          "exit_code": 0,
+          "started": 1794472422.0564754,
+          "finished": 1794472430.8312778,
+          "log": {
+            "path": "artifacts/p1p6-20261112/resident-v3-native-qualification/public-qry.log",
+            "sha256": "2535e2167a0d6aeb82305926968ab440431895d26375714fa2623dea39a5c92c",
+            "bytes": 417
+          },
+          "summary": [
+            "{'state': 'passed', 'default': 'settle-block-v2', 'source': '/dev/shm/gef-p1p6-20261112/resident-v3-install/tidegraph/__init__.py', 'memory_read': 'qry', 'independent_python_schedule': True, 'adamw_steps': 3, 'fresh_process': False}"
+          ]
+        },
+        {
+          "name": "public-qry-restore",
+          "command": [
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/additive-work/env/bin/python",
+            "/dev/shm/gef-p1p6-20261112/resident-v3-source/examples/consumer_core5/block_resident.py",
+            "--device",
+            "npu:0",
+            "--memory-read",
+            "qry",
+            "--native-library",
+            "/dev/shm/gef-p1p6-20261112/core-source-v2-native",
+            "--resident-library",
+            "/dev/shm/gef-p1p6-20261112/resident-v3-native",
+            "--checkpoint-path",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/p1p6-20261112/resident-v3-native-qualification/qry.pt",
+            "--restore-check"
+          ],
+          "exit_code": 0,
+          "started": 1794472430.8355072,
+          "finished": 1794472439.6604645,
+          "log": {
+            "path": "artifacts/p1p6-20261112/resident-v3-native-qualification/public-qry-restore.log",
+            "sha256": "2c372fe732d60c1555bc7a11461b828cacdedde2775ad39cb1bba7694b1e1a43",
+            "bytes": 416
+          },
+          "summary": [
+            "{'state': 'passed', 'default': 'settle-block-v2', 'source': '/dev/shm/gef-p1p6-20261112/resident-v3-install/tidegraph/__init__.py', 'memory_read': 'qry', 'independent_python_schedule': True, 'adamw_steps': 3, 'fresh_process': True}"
+          ]
+        },
+        {
+          "name": "experiment-qry",
+          "command": [
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/additive-work/env/bin/python",
+            "-m",
+            "tidegraph",
+            "check",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/p1p6-20261112/resident-v3-small-qry.json",
+            "--scope",
+            "full",
+            "--output-dir",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/p1p6-20261112/resident-v3-native-qualification/experiment-qry"
+          ],
+          "exit_code": 0,
+          "started": 1794472439.6633558,
+          "finished": 1794472451.141528,
+          "log": {
+            "path": "artifacts/p1p6-20261112/resident-v3-native-qualification/experiment-qry.log",
+            "sha256": "73fbedb1d5deaf10c335c78ede414fd1870f1d06f30a5c68992120ea974b7655",
+            "bytes": 1295
+          },
+          "summary": [
+            "  \"state\": \"passed\",",
+            "      \"state\": \"passed\",",
+            "      \"state\": \"passed\",",
+            "      \"state\": \"passed\","
+          ]
+        },
+        {
+          "name": "public-sum",
+          "command": [
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/additive-work/env/bin/python",
+            "/dev/shm/gef-p1p6-20261112/resident-v3-source/examples/consumer_core5/block_resident.py",
+            "--device",
+            "npu:0",
+            "--memory-read",
+            "sum",
+            "--native-library",
+            "/dev/shm/gef-p1p6-20261112/core-source-v2-native",
+            "--resident-library",
+            "/dev/shm/gef-p1p6-20261112/resident-v3-native",
+            "--checkpoint-path",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/p1p6-20261112/resident-v3-native-qualification/sum.pt"
+          ],
+          "exit_code": 0,
+          "started": 1794472451.1440125,
+          "finished": 1794472459.9184117,
+          "log": {
+            "path": "artifacts/p1p6-20261112/resident-v3-native-qualification/public-sum.log",
+            "sha256": "64f40c6fc25f944bbe3f6dc9e4caf02194036208ac33949cf3d1810a4d923a3d",
+            "bytes": 417
+          },
+          "summary": [
+            "{'state': 'passed', 'default': 'settle-block-v2', 'source': '/dev/shm/gef-p1p6-20261112/resident-v3-install/tidegraph/__init__.py', 'memory_read': 'sum', 'independent_python_schedule': True, 'adamw_steps': 3, 'fresh_process': False}"
+          ]
+        },
+        {
+          "name": "public-sum-restore",
+          "command": [
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/additive-work/env/bin/python",
+            "/dev/shm/gef-p1p6-20261112/resident-v3-source/examples/consumer_core5/block_resident.py",
+            "--device",
+            "npu:0",
+            "--memory-read",
+            "sum",
+            "--native-library",
+            "/dev/shm/gef-p1p6-20261112/core-source-v2-native",
+            "--resident-library",
+            "/dev/shm/gef-p1p6-20261112/resident-v3-native",
+            "--checkpoint-path",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/p1p6-20261112/resident-v3-native-qualification/sum.pt",
+            "--restore-check"
+          ],
+          "exit_code": 0,
+          "started": 1794472459.9224284,
+          "finished": 1794472468.6969628,
+          "log": {
+            "path": "artifacts/p1p6-20261112/resident-v3-native-qualification/public-sum-restore.log",
+            "sha256": "2c8bc605bbed87a3dc114233eee2a611be2de69d983ace2a26fe26431234a4f1",
+            "bytes": 416
+          },
+          "summary": [
+            "{'state': 'passed', 'default': 'settle-block-v2', 'source': '/dev/shm/gef-p1p6-20261112/resident-v3-install/tidegraph/__init__.py', 'memory_read': 'sum', 'independent_python_schedule': True, 'adamw_steps': 3, 'fresh_process': True}"
+          ]
+        },
+        {
+          "name": "experiment-sum",
+          "command": [
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/additive-work/env/bin/python",
+            "-m",
+            "tidegraph",
+            "check",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/p1p6-20261112/resident-v3-small-sum.json",
+            "--scope",
+            "full",
+            "--output-dir",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/p1p6-20261112/resident-v3-native-qualification/experiment-sum"
+          ],
+          "exit_code": 0,
+          "started": 1794472468.7000117,
+          "finished": 1794472480.177939,
+          "log": {
+            "path": "artifacts/p1p6-20261112/resident-v3-native-qualification/experiment-sum.log",
+            "sha256": "930535c2f5473efabcbdae0abaf39cf1df097cf40e0b5bcb94dce78bb1485e1e",
+            "bytes": 1295
+          },
+          "summary": [
+            "  \"state\": \"passed\",",
+            "      \"state\": \"passed\",",
+            "      \"state\": \"passed\",",
+            "      \"state\": \"passed\","
+          ]
+        }
+      ]
+    },
+    "sdk": {
+      "identity": {
+        "path": "artifacts/p1p6-20261112/resident-v3-sdk-qualification/processes.json",
+        "sha256": "144cf3559df83ea7e1d130d62a4e92b013cbaa80889ae2f6437283bd73264e49",
+        "bytes": 3315
+      },
+      "processes": [
+        {
+          "name": "read-selection",
+          "command": [
+            "/dev/shm/gef-p1p6-20261112/resident-v3-sdk/tide-block-read-selection-check",
+            "--device=npu:0",
+            "--dtype=float32"
+          ],
+          "exit_code": 0,
+          "started": 1794472429.2270412,
+          "finished": 1794472433.4464107,
+          "log": {
+            "path": "artifacts/p1p6-20261112/resident-v3-sdk-qualification/read-selection.log",
+            "sha256": "ac50c7ebeae904e3ea17650b845d9dedc06b0e08f9b454dfa79bda173de5e00b",
+            "bytes": 614
+          },
+          "summary": [
+            "block-read-selection: passed memory_read=qry frames=4 nodes=3 complete_regions=2 roots=3+Mem/total shared_banks=2 independent_formula_vjp=true saved_versions=true full_executor=false three_replay_seconds=0.00927188",
+            "block-read-selection: passed memory_read=sum frames=4 nodes=3 complete_regions=2 roots=3+Mem/total shared_banks=2 independent_formula_vjp=true saved_versions=true full_executor=false three_replay_seconds=0.00609173"
+          ]
+        },
+        {
+          "name": "kv-messages",
+          "command": [
+            "/dev/shm/gef-p1p6-20261112/resident-v3-sdk/tide-block-kv-messages-check",
+            "--device=npu:0",
+            "--dtype=float32"
+          ],
+          "exit_code": 0,
+          "started": 1794472433.4495559,
+          "finished": 1794472438.6699805,
+          "log": {
+            "path": "artifacts/p1p6-20261112/resident-v3-sdk-qualification/kv-messages.log",
+            "sha256": "b5a6f200d762273a4299c4ed2ce99faac90d77934cd8ca01fbc670b64d42ec0b",
+            "bytes": 469
+          },
+          "summary": [
+            "block-kv-messages: passed separate_read_proposal=true roots=7 shared_roles=true message_pair_unscaled=true explicit_cG=true default_no_projection=true undefined_roots=true owner_bindings=2 trainable_subset=true refusal_checks=10 int64_times=true saved_reverse=true full_executor=false"
+          ]
+        },
+        {
+          "name": "kv-sequence",
+          "command": [
+            "/dev/shm/gef-p1p6-20261112/resident-v3-sdk/tide-block-kv-sequence-check",
+            "--device=npu:0",
+            "--dtype=float32"
+          ],
+          "exit_code": 0,
+          "started": 1794472438.6774056,
+          "finished": 1794472442.9466538,
+          "log": {
+            "path": "artifacts/p1p6-20261112/resident-v3-sdk-qualification/kv-sequence.log",
+            "sha256": "5f720b908b2be8ec62ae1aef47953ac3e2085edc4c34bac2e4459e89ef9866f9",
+            "bytes": 344
+          },
+          "summary": [
+            "block-kv-sequence: passed B=2 L=3 N=2 actual_update=true independent_formula_vjp=true int64=true two_axis_isolation=true saved_reverse=true full_executor=false"
+          ]
+        },
+        {
+          "name": "settle-flow",
+          "command": [
+            "/dev/shm/gef-p1p6-20261112/resident-v3-sdk/tide-block-settle-flow-check",
+            "--device=npu:0",
+            "--dtype=float32"
+          ],
+          "exit_code": 0,
+          "started": 1794472442.949354,
+          "finished": 1794472448.2197368,
+          "log": {
+            "path": "artifacts/p1p6-20261112/resident-v3-sdk-qualification/settle-flow.log",
+            "sha256": "becebd4b44d754d7733c523fa980206f6ab94b5b9130e7b3d63a9c82e6d9abd3",
+            "bytes": 381
+          },
+          "summary": [
+            "block-settle-flow: passed actual_full_graph=true independent_scalar_formula=true roots=10 read_snapshots=3 B=2 L=2 duplicate_edges=true duplicate_ports=true shared_parameters=true exact_int64=true"
+          ]
+        },
+        {
+          "name": "settle-session",
+          "command": [
+            "/dev/shm/gef-p1p6-20261112/resident-v3-sdk/tide-block-settle-session-check",
+            "--device=npu:0",
+            "--dtype=float32"
+          ],
+          "exit_code": 0,
+          "started": 1794472448.2223852,
+          "finished": 1794472454.494316,
+          "log": {
+            "path": "artifacts/p1p6-20261112/resident-v3-sdk-qualification/settle-session.log",
+            "sha256": "855ca5d0310f946b1481ff18fc4450a834fd32d1b816428a1a72f375fb95d6ff",
+            "bytes": 336
+          },
+          "summary": [
+            "block-settle-session: passed two_window_bptt=true independent_formula_vjp=true AdamW_steps=3 exact_raw_checkpoint=true fresh_owner=true fresh_process=0"
+          ]
+        },
+        {
+          "name": "public-qry",
+          "command": [
+            "/dev/shm/gef-p1p6-20261112/resident-v3-sdk/tide-block-resident-check",
+            "--device=npu:0",
+            "--dtype=float32",
+            "--memory-read",
+            "qry",
+            "--checkpoint-path",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/p1p6-20261112/resident-v3-sdk-qualification/qry.pt"
+          ],
+          "exit_code": 0,
+          "started": 1794472454.497064,
+          "finished": 1794472461.8703506,
+          "log": {
+            "path": "artifacts/p1p6-20261112/resident-v3-sdk-qualification/public-qry.log",
+            "sha256": "1ee174431d59a63311017f516b5ffa57e53b26dd370568691f5a8895f6197fa8",
+            "bytes": 389
+          },
+          "summary": [
+            "block-resident-public: passed memory_read=qry actual_Model=true source_factors=true source_hidden_rank_padding=true independent_streaming=true AdamW_steps=3 windows=2 raw_continuation=true fresh_process=0"
+          ]
+        },
+        {
+          "name": "public-qry-restore",
+          "command": [
+            "/dev/shm/gef-p1p6-20261112/resident-v3-sdk/tide-block-resident-check",
+            "--device=npu:0",
+            "--dtype=float32",
+            "--memory-read",
+            "qry",
+            "--checkpoint-path",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/p1p6-20261112/resident-v3-sdk-qualification/qry.pt",
+            "--restore-check"
+          ],
+          "exit_code": 0,
+          "started": 1794472461.8732014,
+          "finished": 1794472467.2438884,
+          "log": {
+            "path": "artifacts/p1p6-20261112/resident-v3-sdk-qualification/public-qry-restore.log",
+            "sha256": "bf876b5395129f0912f6f6651c1bb9c8bb199d9764ea61f706ed1c43482a89f5",
+            "bytes": 389
+          },
+          "summary": [
+            "block-resident-public: passed memory_read=qry actual_Model=true source_factors=true source_hidden_rank_padding=true independent_streaming=true AdamW_steps=3 windows=2 raw_continuation=true fresh_process=1"
+          ]
+        },
+        {
+          "name": "public-sum",
+          "command": [
+            "/dev/shm/gef-p1p6-20261112/resident-v3-sdk/tide-block-resident-check",
+            "--device=npu:0",
+            "--dtype=float32",
+            "--memory-read",
+            "sum",
+            "--checkpoint-path",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/p1p6-20261112/resident-v3-sdk-qualification/sum.pt"
+          ],
+          "exit_code": 0,
+          "started": 1794472467.2468126,
+          "finished": 1794472473.568735,
+          "log": {
+            "path": "artifacts/p1p6-20261112/resident-v3-sdk-qualification/public-sum.log",
+            "sha256": "80f485c8b9f3d7869c11741e7557c8a7c44ba4356581748c94c4b9fe7c29135f",
+            "bytes": 389
+          },
+          "summary": [
+            "block-resident-public: passed memory_read=sum actual_Model=true source_factors=true source_hidden_rank_padding=true independent_streaming=true AdamW_steps=3 windows=2 raw_continuation=true fresh_process=0"
+          ]
+        },
+        {
+          "name": "public-sum-restore",
+          "command": [
+            "/dev/shm/gef-p1p6-20261112/resident-v3-sdk/tide-block-resident-check",
+            "--device=npu:0",
+            "--dtype=float32",
+            "--memory-read",
+            "sum",
+            "--checkpoint-path",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/p1p6-20261112/resident-v3-sdk-qualification/sum.pt",
+            "--restore-check"
+          ],
+          "exit_code": 0,
+          "started": 1794472473.571224,
+          "finished": 1794472479.9430106,
+          "log": {
+            "path": "artifacts/p1p6-20261112/resident-v3-sdk-qualification/public-sum-restore.log",
+            "sha256": "0f49d042598fe90ba56350232f0fe568ca20146eb67525a66a9ee7afc11b1120",
+            "bytes": 389
+          },
+          "summary": [
+            "block-resident-public: passed memory_read=sum actual_Model=true source_factors=true source_hidden_rank_padding=true independent_streaming=true AdamW_steps=3 windows=2 raw_continuation=true fresh_process=1"
+          ]
+        }
+      ]
+    }
+  },
+  "experiment_checks": {
+    "qry": {
+      "identity": {
+        "path": "artifacts/p1p6-20261112/resident-v3-native-qualification/experiment-qry/result.json",
+        "sha256": "b0ec448233e303511c48812afa6457f7d7c1acfffd3154e17403d29c68ee95a8",
+        "bytes": 1111
+      },
+      "record": {
+        "schema": "tide-base-check-v1",
+        "state": "passed",
+        "started": "2026-11-12T08:34:01.045572+00:00",
+        "scope": "full",
+        "config_id": "b6410c7d202ded0725b9e6977146ef3a83deea08e54dc3fd72872b1f3788ad74",
+        "checks": [
+          {
+            "name": "complete-independent-inference-and-exact-resume",
+            "state": "passed",
+            "result": "inference/result.json"
+          },
+          {
+            "name": "independent-roots",
+            "state": "passed",
+            "roots": [
+              "output",
+              "connected-zero"
+            ],
+            "scope": "independent public resident parameter VJP; full raw-field matrix remains separately qualified"
+          },
+          {
+            "name": "complete-independent-training-and-exact-resume",
+            "state": "passed",
+            "result": "training/result.json"
+          }
+        ],
+        "coverage": "selected finite configuration only; not every module/topology/device/dtype or complete repository qualification",
+        "untested": [
+          "all-configuration backend matrix",
+          "higher-order gradients",
+          "multi-card resident without hardware capability"
+        ],
+        "phase": "complete",
+        "finished": "2026-11-12T08:34:08.681590+00:00"
+      },
+      "phases": {
+        "inference": {
+          "identity": {
+            "path": "artifacts/p1p6-20261112/resident-v3-native-qualification/experiment-qry/inference/result.json",
+            "sha256": "671022b6f5857cca41a89d11a35e54a83e36bb319fd7e51659b27d7ef5e7e9a9",
+            "bytes": 195824
+          },
+          "state": "passed",
+          "validation": {
+            "finite": "passed",
+            "numeric": "passed",
+            "discrete": "passed",
+            "strict_passed": true,
+            "reports": [
+              {
+                "schema": "tide-comparison-v1",
+                "finite": "passed",
+                "numeric": "passed",
+                "discrete": "passed",
+                "strict_passed": true,
+                "compared_leaves": {
+                  "numeric": 541,
+                  "discrete": 491
+                },
+                "mismatch_counts": {
+                  "numeric": 0,
+                  "discrete": 0
+                },
+                "differences": [],
+                "differences_truncated": false
+              },
+              {
+                "schema": "tide-comparison-v1",
+                "finite": "passed",
+                "numeric": "passed",
+                "discrete": "passed",
+                "strict_passed": true,
+                "compared_leaves": {
+                  "numeric": 1,
+                  "discrete": 0
+                },
+                "mismatch_counts": {
+                  "numeric": 0,
+                  "discrete": 0
+                },
+                "differences": [],
+                "differences_truncated": false
+              },
+              {
+                "schema": "tide-comparison-v1",
+                "finite": "passed",
+                "numeric": "passed",
+                "discrete": "passed",
+                "strict_passed": true,
+                "compared_leaves": {
+                  "numeric": 541,
+                  "discrete": 491
+                },
+                "mismatch_counts": {
+                  "numeric": 0,
+                  "discrete": 0
+                },
+                "differences": [],
+                "differences_truncated": false
+              },
+              {
+                "schema": "tide-comparison-v1",
+                "finite": "passed",
+                "numeric": "passed",
+                "discrete": "passed",
+                "strict_passed": true,
+                "compared_leaves": {
+                  "numeric": 1,
+                  "discrete": 0
+                },
+                "mismatch_counts": {
+                  "numeric": 0,
+                  "discrete": 0
+                },
+                "differences": [],
+                "differences_truncated": false
+              }
+            ],
+            "complete": "checked",
+            "reference": "independent Python scalar CPU schedule; seeded prefix replay",
+            "policy": "strict",
+            "outcome": "passed"
+          },
+          "checkpoint": {
+            "state": "passed",
+            "next_window": 2,
+            "bytes": 107692,
+            "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/p1p6-20261112/resident-v3-native-qualification/experiment-qry/inference/checkpoints/window-000002",
+            "exact_resume": true,
+            "cost": {
+              "schema": "tide-checkpoint-cost-v1",
+              "spans": {
+                "resume.snapshot_saved_values": {
+                  "seconds": 0.007482022047042847,
+                  "calls": 1,
+                  "failed_calls": 0
+                },
+                "resume.original_next_window": {
+                  "seconds": 0.09213409572839737,
+                  "calls": 1,
+                  "failed_calls": 0
+                },
+                "resume.snapshot_next_parameters": {
+                  "seconds": 0.011176269501447678,
+                  "calls": 1,
+                  "failed_calls": 0
+                },
+                "resume.close_original": {
+                  "seconds": 0.00035918503999710083,
+                  "calls": 1,
+                  "failed_calls": 0
+                },
+                "resume.construct_and_load": {
+                  "seconds": 0.07159025594592094,
+                  "calls": 1,
+                  "failed_calls": 0
+                },
+                "resume.compare_decoded_values": {
+                  "seconds": 0.01625806838274002,
+                  "calls": 1,
+                  "failed_calls": 0
+                },
+                "resume.restored_next_window": {
+                  "seconds": 0.0907103531062603,
+                  "calls": 1,
+                  "failed_calls": 0
+                },
+                "resume.compare_next_window": {
+                  "seconds": 0.03982778266072273,
+                  "calls": 1,
+                  "failed_calls": 0
+                },
+                "resume.compare_next_parameters_optimizer": {
+                  "seconds": 0.007472474128007889,
+                  "calls": 1,
+                  "failed_calls": 0
+                }
+              },
+              "scope": "inclusive wall-time spans; nested spans must not be summed; no extra device synchronization",
+              "total_seconds": 0.33875665813684464
+            },
+            "resume_check": {
+              "state": "passed",
+              "exact": true,
+              "next_window": 2,
+              "scope": "serial new owner: full decoded raw state before/after the actual selected next window; returned records, loss, parameters, gradients, optimizer and task"
+            },
+            "check_seconds": 0.3387726917862892
+          },
+          "package": {
+            "package": "tidegraph",
+            "version": "0.3.0",
+            "path": "/dev/shm/gef-p1p6-20261112/resident-v3-install/tidegraph",
+            "installed_files_sha256": "c1724e3b345129321b6b3a922589626deac4b5ad875cfca8625aa651e34ab2ae",
+            "content_scope": "recursive package files and relative names; __pycache__ and .pyc/.pyo excluded",
+            "source_provenance": "installation content; Git/wheel provenance requires an explicit dependency lock"
+          },
+          "effective": {
+            "execution": "resident",
+            "scheduler": "settle-block-v2",
+            "graph_certificate": "SettleGraph/ports",
+            "device": "npu:0",
+            "payload_dtype": "float32",
+            "adjoint_dtype": "float32",
+            "metadata_dtype": "int64",
+            "initial_state": "actual raw",
+            "requested_limits": {},
+            "effective_limits": {
+              "cache": 9,
+              "forward_bytes": 536870912,
+              "backward_bytes": 1073741824,
+              "optimizer_bytes": 134217728,
+              "total_bytes": 3221225472,
+              "workspace_bytes": 536870912,
+              "windows": 4,
+              "timeout_ms": 30000
+            },
+            "initialization": "fresh",
+            "requested_optimizer": "sgd",
+            "requested_groups": [
+              {
+                "lr": 0.001,
+                "momentum": 0.3,
+                "weight_decay": 0.01,
+                "parameter_names_count": 85,
+                "parameter_names_sha256": "1c3b2c1657d78403e43a7b1bc5f2cbd1b50ac2b19a1f9dae7093254aa303829b"
+              }
+            ],
+            "effective_groups": [
+              {
+                "lr": 0.001,
+                "weight_decay": 0.01,
+                "momentum": 0.3,
+                "dampening": 0.0,
+                "beta1": 0.9,
+                "beta2": 0.999,
+                "eps": 1e-08,
+                "nesterov": false,
+                "amsgrad": false,
+                "maximize": false,
+                "parameter_names_count": 85,
+                "parameter_names_sha256": "1c3b2c1657d78403e43a7b1bc5f2cbd1b50ac2b19a1f9dae7093254aa303829b"
+              }
+            ],
+            "build": {
+              "schema": "tide-device-control-build-v1",
+              "source": "a3c4f62dcc3fce9bbf43e5a8f4ce5578c561efc4",
+              "dirty": "",
+              "component_sha256": "86fcf8f75c5041e89f80dc5caa9ac924748713364d15bb33163083193b4a7369",
+              "core": {
+                "source": "00bb5ac2dec61e215966f523063786682caa40c1",
+                "cpp_source_sha256": "0d01ac0ca73870abf99a31a1b004ad953a33f5e36fbf2e914d6713c96b88ad61",
+                "torch": "2.12.0+cpu",
+                "distribution": {
+                  "torch": "2.12.0+cpu",
+                  "torch_dir": "/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/lib/python3.12/site-packages/torch/share/cmake/Torch",
+                  "prefix": "/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/lib/python3.12/site-packages/torch/share/cmake",
+                  "cuda": null,
+                  "cxx11_abi": true,
+                  "discovery": "python-torch"
+                },
+                "environment": {
+                  "os": "Linux-5.10.0-182.0.0.95.r1941_123.hce2.aarch64-aarch64-with-glibc2.34",
+                  "compiler": "c++ (GCC) 10.3.1",
+                  "cxx_standard": 17,
+                  "build_type": "Release",
+                  "torch_prefix": "/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/lib/python3.12/site-packages/torch/share/cmake/Torch",
+                  "cann_version": "9.2.0"
+                },
+                "build_jobs": 160,
+                "backend": "npu",
+                "npu_runtime": "python",
+                "torch_npu": "2.12.0.post3",
+                "cuda": null,
+                "architecture": "aarch64",
+                "python": "3.12.13",
+                "cxx11_abi": true,
+                "binary_sha256": {
+                  "libtidegraph.a": "fcff57e48d2ecfb6c14085d766e11a39ab4769e12d14d2004a28377d32e8e745",
+                  "libtidegraph_runtime.a": "4c340f84cfbaf5e17b111a094f44ab179ce895666c34c1917c0a703add273f1a",
+                  "_tide_native.so": "891f2ce77344b9c84d67052e3e0098a493cff2138ce9fa07a520e196f9c400a2"
+                }
+              },
+              "build_jobs": 160,
+              "backend": "npu",
+              "runtime": "python",
+              "npu_runtime": "python",
+              "cuda_architectures": null,
+              "ascendc_soc": "Ascend910_9392",
+              "binary_sha256": {
+                "_tide_weighted_resident.so": "6a9c8f14659351f3d8698c0a710b9f3cbd6d93ed28ef4cecf3a7733bc1d7c029",
+                "libtide-weighted-flow.so": "682fca82dc3f31ffd2fa7ebddbeea0d53a85d93bbbd545aa279bc561d52201fb",
+                "libtide-weighted-training.so": "98ba70806e1d0f2d1a079636908395320c2172d93f384717c51639039f77431b",
+                "libtide-block-resident.so": "8ed03c0d40a09bbf839e3cdc21a3bfb05ce882555761a8939e61c335955412fb"
+              },
+              "loader_sha256": {
+                "_tide_weighted_resident.so": "e2f6fcbdeae3062624bf68902c9acaae96d936a7d6b468efcb666aa163c8287e",
+                "libtide-weighted-flow.so": "18484afbe22b0a56da6180e28175eee5458f73e0310db4433ce302e140fbd34b",
+                "libtide-weighted-training.so": "b429f7d2f288a0690d207c79018f9a28842f3ab42399d9b834d043ff4ad9a5f1",
+                "libtide-block-resident.so": "b580abd7d49be51dc287f113c30aae9384d756567397145ce854f982ad1196d0"
+              },
+              "requested_checks": null,
+              "python_component": "weighted",
+              "scope": "build/loader/help only; device control check required separately"
+            },
+            "client": "python-native",
+            "task": {
+              "kind": "built-in",
+              "objective": {
+                "kind": "weighted-output-square",
+                "scale": 0.001
+              },
+              "optimizer": {
+                "kind": "sgd",
+                "lr": 0.001,
+                "momentum": 0.3,
+                "weight_decay": 0.01
+              }
+            },
+            "return_mode": "complete",
+            "input_interface": "resident-block-B\u00d7L\u00d7P-v2",
+            "resident_dispatch": {
+              "schema": "tide-experiment-resident-selection-v1",
+              "requested": "auto",
+              "effective": "block-v2",
+              "reason": "compatible complete B\u00d7L Settle ports",
+              "capacity_field": "resident_block_limits",
+              "requested_limits": {},
+              "effective_limits": {
+                "cache": 9,
+                "forward_bytes": 536870912,
+                "backward_bytes": 1073741824,
+                "optimizer_bytes": 134217728,
+                "total_bytes": 3221225472,
+                "workspace_bytes": 536870912,
+                "windows": 4,
+                "timeout_ms": 30000
+              }
+            },
+            "last_backward_statistics": null
+          },
+          "steps": 2
+        },
+        "training": {
+          "identity": {
+            "path": "artifacts/p1p6-20261112/resident-v3-native-qualification/experiment-qry/training/result.json",
+            "sha256": "464569ab1bcdb324fcccbbc9aa4d6c3cbf6842d233ebe2c3034c504483c7f2b8",
+            "bytes": 202504
+          },
+          "state": "passed",
+          "validation": {
+            "finite": "passed",
+            "numeric": "passed",
+            "discrete": "passed",
+            "strict_passed": true,
+            "reports": [
+              {
+                "schema": "tide-comparison-v1",
+                "finite": "passed",
+                "numeric": "passed",
+                "discrete": "passed",
+                "strict_passed": true,
+                "compared_leaves": {
+                  "numeric": 541,
+                  "discrete": 491
+                },
+                "mismatch_counts": {
+                  "numeric": 0,
+                  "discrete": 0
+                },
+                "differences": [],
+                "differences_truncated": false
+              },
+              {
+                "schema": "tide-comparison-v1",
+                "finite": "passed",
+                "numeric": "passed",
+                "discrete": "passed",
+                "strict_passed": true,
+                "compared_leaves": {
+                  "numeric": 1,
+                  "discrete": 0
+                },
+                "mismatch_counts": {
+                  "numeric": 0,
+                  "discrete": 0
+                },
+                "differences": [],
+                "differences_truncated": false
+              },
+              {
+                "schema": "tide-comparison-v1",
+                "finite": "passed",
+                "numeric": "passed",
+                "discrete": "passed",
+                "strict_passed": true,
+                "compared_leaves": {
+                  "numeric": 541,
+                  "discrete": 491
+                },
+                "mismatch_counts": {
+                  "numeric": 0,
+                  "discrete": 0
+                },
+                "differences": [],
+                "differences_truncated": false
+              },
+              {
+                "schema": "tide-comparison-v1",
+                "finite": "passed",
+                "numeric": "passed",
+                "discrete": "passed",
+                "strict_passed": true,
+                "compared_leaves": {
+                  "numeric": 1,
+                  "discrete": 0
+                },
+                "mismatch_counts": {
+                  "numeric": 0,
+                  "discrete": 0
+                },
+                "differences": [],
+                "differences_truncated": false
+              },
+              {
+                "schema": "tide-comparison-v1",
+                "finite": "passed",
+                "numeric": "passed",
+                "discrete": "passed",
+                "strict_passed": true,
+                "compared_leaves": {
+                  "numeric": 541,
+                  "discrete": 491
+                },
+                "mismatch_counts": {
+                  "numeric": 0,
+                  "discrete": 0
+                },
+                "differences": [],
+                "differences_truncated": false
+              },
+              {
+                "schema": "tide-comparison-v1",
+                "finite": "passed",
+                "numeric": "passed",
+                "discrete": "passed",
+                "strict_passed": true,
+                "compared_leaves": {
+                  "numeric": 1,
+                  "discrete": 0
+                },
+                "mismatch_counts": {
+                  "numeric": 0,
+                  "discrete": 0
+                },
+                "differences": [],
+                "differences_truncated": false
+              },
+              {
+                "schema": "tide-comparison-v1",
+                "finite": "passed",
+                "numeric": "passed",
+                "discrete": "passed",
+                "strict_passed": true,
+                "compared_leaves": {
+                  "numeric": 97,
+                  "discrete": 0
+                },
+                "mismatch_counts": {
+                  "numeric": 0,
+                  "discrete": 0
+                },
+                "differences": [],
+                "differences_truncated": false
+              },
+              {
+                "schema": "tide-comparison-v1",
+                "finite": "passed",
+                "numeric": "passed",
+                "discrete": "passed",
+                "strict_passed": true,
+                "compared_leaves": {
+                  "numeric": 173,
+                  "discrete": 212
+                },
+                "mismatch_counts": {
+                  "numeric": 0,
+                  "discrete": 0
+                },
+                "differences": [],
+                "differences_truncated": false
+              }
+            ],
+            "complete": "checked",
+            "reference": "independent Python scalar CPU schedule; seeded prefix replay",
+            "policy": "strict",
+            "outcome": "passed"
+          },
+          "checkpoint": {
+            "state": "passed",
+            "next_window": 3,
+            "bytes": 110764,
+            "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/p1p6-20261112/resident-v3-native-qualification/experiment-qry/training/checkpoints/window-000003",
+            "exact_resume": true,
+            "cost": {
+              "schema": "tide-checkpoint-cost-v1",
+              "spans": {
+                "resume.snapshot_saved_values": {
+                  "seconds": 0.008070964366197586,
+                  "calls": 1,
+                  "failed_calls": 0
+                },
+                "resume.original_next_window": {
+                  "seconds": 0.16852323710918427,
+                  "calls": 1,
+                  "failed_calls": 0
+                },
+                "resume.snapshot_next_parameters": {
+                  "seconds": 0.02734503149986267,
+                  "calls": 1,
+                  "failed_calls": 0
+                },
+                "resume.close_original": {
+                  "seconds": 0.0004737861454486847,
+                  "calls": 1,
+                  "failed_calls": 0
+                },
+                "resume.construct_and_load": {
+                  "seconds": 0.06180933862924576,
+                  "calls": 1,
+                  "failed_calls": 0
+                },
+                "resume.compare_decoded_values": {
+                  "seconds": 0.017621759325265884,
+                  "calls": 1,
+                  "failed_calls": 0
+                },
+                "resume.restored_next_window": {
+                  "seconds": 0.16648390889167786,
+                  "calls": 1,
+                  "failed_calls": 0
+                },
+                "resume.compare_next_window": {
+                  "seconds": 0.040382951498031616,
+                  "calls": 1,
+                  "failed_calls": 0
+                },
+                "resume.compare_next_parameters_optimizer": {
+                  "seconds": 0.02998577430844307,
+                  "calls": 1,
+                  "failed_calls": 0
+                }
+              },
+              "scope": "inclusive wall-time spans; nested spans must not be summed; no extra device synchronization",
+              "total_seconds": 0.5223380103707314
+            },
+            "resume_check": {
+              "state": "passed",
+              "exact": true,
+              "next_window": 3,
+              "scope": "serial new owner: full decoded raw state before/after the actual selected next window; returned records, loss, parameters, gradients, optimizer and task"
+            },
+            "check_seconds": 0.5223558880388737
+          },
+          "package": {
+            "package": "tidegraph",
+            "version": "0.3.0",
+            "path": "/dev/shm/gef-p1p6-20261112/resident-v3-install/tidegraph",
+            "installed_files_sha256": "c1724e3b345129321b6b3a922589626deac4b5ad875cfca8625aa651e34ab2ae",
+            "content_scope": "recursive package files and relative names; __pycache__ and .pyc/.pyo excluded",
+            "source_provenance": "installation content; Git/wheel provenance requires an explicit dependency lock"
+          },
+          "effective": {
+            "execution": "resident",
+            "scheduler": "settle-block-v2",
+            "graph_certificate": "SettleGraph/ports",
+            "device": "npu:0",
+            "payload_dtype": "float32",
+            "adjoint_dtype": "float32",
+            "metadata_dtype": "int64",
+            "initial_state": "actual raw",
+            "requested_limits": {},
+            "effective_limits": {
+              "cache": 12,
+              "forward_bytes": 536870912,
+              "backward_bytes": 1073741824,
+              "optimizer_bytes": 134217728,
+              "total_bytes": 3221225472,
+              "workspace_bytes": 536870912,
+              "windows": 4,
+              "timeout_ms": 30000
+            },
+            "initialization": "fresh",
+            "requested_optimizer": "sgd",
+            "requested_groups": [
+              {
+                "lr": 0.001,
+                "momentum": 0.3,
+                "weight_decay": 0.01,
+                "parameter_names_count": 85,
+                "parameter_names_sha256": "1c3b2c1657d78403e43a7b1bc5f2cbd1b50ac2b19a1f9dae7093254aa303829b"
+              }
+            ],
+            "effective_groups": [
+              {
+                "lr": 0.001,
+                "weight_decay": 0.01,
+                "momentum": 0.3,
+                "dampening": 0.0,
+                "beta1": 0.9,
+                "beta2": 0.999,
+                "eps": 1e-08,
+                "nesterov": false,
+                "amsgrad": false,
+                "maximize": false,
+                "parameter_names_count": 85,
+                "parameter_names_sha256": "1c3b2c1657d78403e43a7b1bc5f2cbd1b50ac2b19a1f9dae7093254aa303829b"
+              }
+            ],
+            "build": {
+              "schema": "tide-device-control-build-v1",
+              "source": "a3c4f62dcc3fce9bbf43e5a8f4ce5578c561efc4",
+              "dirty": "",
+              "component_sha256": "86fcf8f75c5041e89f80dc5caa9ac924748713364d15bb33163083193b4a7369",
+              "core": {
+                "source": "00bb5ac2dec61e215966f523063786682caa40c1",
+                "cpp_source_sha256": "0d01ac0ca73870abf99a31a1b004ad953a33f5e36fbf2e914d6713c96b88ad61",
+                "torch": "2.12.0+cpu",
+                "distribution": {
+                  "torch": "2.12.0+cpu",
+                  "torch_dir": "/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/lib/python3.12/site-packages/torch/share/cmake/Torch",
+                  "prefix": "/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/lib/python3.12/site-packages/torch/share/cmake",
+                  "cuda": null,
+                  "cxx11_abi": true,
+                  "discovery": "python-torch"
+                },
+                "environment": {
+                  "os": "Linux-5.10.0-182.0.0.95.r1941_123.hce2.aarch64-aarch64-with-glibc2.34",
+                  "compiler": "c++ (GCC) 10.3.1",
+                  "cxx_standard": 17,
+                  "build_type": "Release",
+                  "torch_prefix": "/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/lib/python3.12/site-packages/torch/share/cmake/Torch",
+                  "cann_version": "9.2.0"
+                },
+                "build_jobs": 160,
+                "backend": "npu",
+                "npu_runtime": "python",
+                "torch_npu": "2.12.0.post3",
+                "cuda": null,
+                "architecture": "aarch64",
+                "python": "3.12.13",
+                "cxx11_abi": true,
+                "binary_sha256": {
+                  "libtidegraph.a": "fcff57e48d2ecfb6c14085d766e11a39ab4769e12d14d2004a28377d32e8e745",
+                  "libtidegraph_runtime.a": "4c340f84cfbaf5e17b111a094f44ab179ce895666c34c1917c0a703add273f1a",
+                  "_tide_native.so": "891f2ce77344b9c84d67052e3e0098a493cff2138ce9fa07a520e196f9c400a2"
+                }
+              },
+              "build_jobs": 160,
+              "backend": "npu",
+              "runtime": "python",
+              "npu_runtime": "python",
+              "cuda_architectures": null,
+              "ascendc_soc": "Ascend910_9392",
+              "binary_sha256": {
+                "_tide_weighted_resident.so": "6a9c8f14659351f3d8698c0a710b9f3cbd6d93ed28ef4cecf3a7733bc1d7c029",
+                "libtide-weighted-flow.so": "682fca82dc3f31ffd2fa7ebddbeea0d53a85d93bbbd545aa279bc561d52201fb",
+                "libtide-weighted-training.so": "98ba70806e1d0f2d1a079636908395320c2172d93f384717c51639039f77431b",
+                "libtide-block-resident.so": "8ed03c0d40a09bbf839e3cdc21a3bfb05ce882555761a8939e61c335955412fb"
+              },
+              "loader_sha256": {
+                "_tide_weighted_resident.so": "e2f6fcbdeae3062624bf68902c9acaae96d936a7d6b468efcb666aa163c8287e",
+                "libtide-weighted-flow.so": "18484afbe22b0a56da6180e28175eee5458f73e0310db4433ce302e140fbd34b",
+                "libtide-weighted-training.so": "b429f7d2f288a0690d207c79018f9a28842f3ab42399d9b834d043ff4ad9a5f1",
+                "libtide-block-resident.so": "b580abd7d49be51dc287f113c30aae9384d756567397145ce854f982ad1196d0"
+              },
+              "requested_checks": null,
+              "python_component": "weighted",
+              "scope": "build/loader/help only; device control check required separately"
+            },
+            "client": "python-native",
+            "task": {
+              "kind": "built-in",
+              "objective": {
+                "kind": "weighted-output-square",
+                "scale": 0.001
+              },
+              "optimizer": {
+                "kind": "sgd",
+                "lr": 0.001,
+                "momentum": 0.3,
+                "weight_decay": 0.01
+              }
+            },
+            "return_mode": "complete",
+            "input_interface": "resident-block-B\u00d7L\u00d7P-v2",
+            "resident_dispatch": {
+              "schema": "tide-experiment-resident-selection-v1",
+              "requested": "auto",
+              "effective": "block-v2",
+              "reason": "compatible complete B\u00d7L Settle ports",
+              "capacity_field": "resident_block_limits",
+              "requested_limits": {},
+              "effective_limits": {
+                "cache": 12,
+                "forward_bytes": 536870912,
+                "backward_bytes": 1073741824,
+                "optimizer_bytes": 134217728,
+                "total_bytes": 3221225472,
+                "workspace_bytes": 536870912,
+                "windows": 4,
+                "timeout_ms": 30000
+              }
+            },
+            "last_backward_statistics": {
+              "parameter_owners": 113,
+              "retained_windows": 1,
+              "scope": "public block field VJP; no old event counters"
+            }
+          },
+          "steps": 3
+        }
+      }
+    },
+    "sum": {
+      "identity": {
+        "path": "artifacts/p1p6-20261112/resident-v3-native-qualification/experiment-sum/result.json",
+        "sha256": "e4d90b48d450c9a5aa17419766f8fddc601f78fec139de11dd5febc70ce56d5d",
+        "bytes": 1111
+      },
+      "record": {
+        "schema": "tide-base-check-v1",
+        "state": "passed",
+        "started": "2026-11-12T08:34:30.086012+00:00",
+        "scope": "full",
+        "config_id": "5e4e8ced5923e6bac3f57547daded6a769555153c8a94c952b8579a95ad2d601",
+        "checks": [
+          {
+            "name": "complete-independent-inference-and-exact-resume",
+            "state": "passed",
+            "result": "inference/result.json"
+          },
+          {
+            "name": "independent-roots",
+            "state": "passed",
+            "roots": [
+              "output",
+              "connected-zero"
+            ],
+            "scope": "independent public resident parameter VJP; full raw-field matrix remains separately qualified"
+          },
+          {
+            "name": "complete-independent-training-and-exact-resume",
+            "state": "passed",
+            "result": "training/result.json"
+          }
+        ],
+        "coverage": "selected finite configuration only; not every module/topology/device/dtype or complete repository qualification",
+        "untested": [
+          "all-configuration backend matrix",
+          "higher-order gradients",
+          "multi-card resident without hardware capability"
+        ],
+        "phase": "complete",
+        "finished": "2026-11-12T08:34:37.397573+00:00"
+      },
+      "phases": {
+        "inference": {
+          "identity": {
+            "path": "artifacts/p1p6-20261112/resident-v3-native-qualification/experiment-sum/inference/result.json",
+            "sha256": "2ed49fc17377cf9e4cd7ddeffbf36d8d9f54c8d77ff251d95d2ad09c9c5b17ed",
+            "bytes": 186849
+          },
+          "state": "passed",
+          "validation": {
+            "finite": "passed",
+            "numeric": "passed",
+            "discrete": "passed",
+            "strict_passed": true,
+            "reports": [
+              {
+                "schema": "tide-comparison-v1",
+                "finite": "passed",
+                "numeric": "passed",
+                "discrete": "passed",
+                "strict_passed": true,
+                "compared_leaves": {
+                  "numeric": 541,
+                  "discrete": 491
+                },
+                "mismatch_counts": {
+                  "numeric": 0,
+                  "discrete": 0
+                },
+                "differences": [],
+                "differences_truncated": false
+              },
+              {
+                "schema": "tide-comparison-v1",
+                "finite": "passed",
+                "numeric": "passed",
+                "discrete": "passed",
+                "strict_passed": true,
+                "compared_leaves": {
+                  "numeric": 1,
+                  "discrete": 0
+                },
+                "mismatch_counts": {
+                  "numeric": 0,
+                  "discrete": 0
+                },
+                "differences": [],
+                "differences_truncated": false
+              },
+              {
+                "schema": "tide-comparison-v1",
+                "finite": "passed",
+                "numeric": "passed",
+                "discrete": "passed",
+                "strict_passed": true,
+                "compared_leaves": {
+                  "numeric": 541,
+                  "discrete": 491
+                },
+                "mismatch_counts": {
+                  "numeric": 0,
+                  "discrete": 0
+                },
+                "differences": [],
+                "differences_truncated": false
+              },
+              {
+                "schema": "tide-comparison-v1",
+                "finite": "passed",
+                "numeric": "passed",
+                "discrete": "passed",
+                "strict_passed": true,
+                "compared_leaves": {
+                  "numeric": 1,
+                  "discrete": 0
+                },
+                "mismatch_counts": {
+                  "numeric": 0,
+                  "discrete": 0
+                },
+                "differences": [],
+                "differences_truncated": false
+              }
+            ],
+            "complete": "checked",
+            "reference": "independent Python scalar CPU schedule; seeded prefix replay",
+            "policy": "strict",
+            "outcome": "passed"
+          },
+          "checkpoint": {
+            "state": "passed",
+            "next_window": 2,
+            "bytes": 99208,
+            "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/p1p6-20261112/resident-v3-native-qualification/experiment-sum/inference/checkpoints/window-000002",
+            "exact_resume": true,
+            "cost": {
+              "schema": "tide-checkpoint-cost-v1",
+              "spans": {
+                "resume.snapshot_saved_values": {
+                  "seconds": 0.007160786539316177,
+                  "calls": 1,
+                  "failed_calls": 0
+                },
+                "resume.original_next_window": {
+                  "seconds": 0.08387498930096626,
+                  "calls": 1,
+                  "failed_calls": 0
+                },
+                "resume.snapshot_next_parameters": {
+                  "seconds": 0.010532882064580917,
+                  "calls": 1,
+                  "failed_calls": 0
+                },
+                "resume.close_original": {
+                  "seconds": 0.00033216550946235657,
+                  "calls": 1,
+                  "failed_calls": 0
+                },
+                "resume.construct_and_load": {
+                  "seconds": 0.06689333915710449,
+                  "calls": 1,
+                  "failed_calls": 0
+                },
+                "resume.compare_decoded_values": {
+                  "seconds": 0.015404239296913147,
+                  "calls": 1,
+                  "failed_calls": 0
+                },
+                "resume.restored_next_window": {
+                  "seconds": 0.08750811591744423,
+                  "calls": 1,
+                  "failed_calls": 0
+                },
+                "resume.compare_next_window": {
+                  "seconds": 0.040342073887586594,
+                  "calls": 1,
+                  "failed_calls": 0
+                },
+                "resume.compare_next_parameters_optimizer": {
+                  "seconds": 0.00766473263502121,
+                  "calls": 1,
+                  "failed_calls": 0
+                }
+              },
+              "scope": "inclusive wall-time spans; nested spans must not be summed; no extra device synchronization",
+              "total_seconds": 0.32151535525918007
+            },
+            "resume_check": {
+              "state": "passed",
+              "exact": true,
+              "next_window": 2,
+              "scope": "serial new owner: full decoded raw state before/after the actual selected next window; returned records, loss, parameters, gradients, optimizer and task"
+            },
+            "check_seconds": 0.3215334229171276
+          },
+          "package": {
+            "package": "tidegraph",
+            "version": "0.3.0",
+            "path": "/dev/shm/gef-p1p6-20261112/resident-v3-install/tidegraph",
+            "installed_files_sha256": "c1724e3b345129321b6b3a922589626deac4b5ad875cfca8625aa651e34ab2ae",
+            "content_scope": "recursive package files and relative names; __pycache__ and .pyc/.pyo excluded",
+            "source_provenance": "installation content; Git/wheel provenance requires an explicit dependency lock"
+          },
+          "effective": {
+            "execution": "resident",
+            "scheduler": "settle-block-v2",
+            "graph_certificate": "SettleGraph/ports",
+            "device": "npu:0",
+            "payload_dtype": "float32",
+            "adjoint_dtype": "float32",
+            "metadata_dtype": "int64",
+            "initial_state": "actual raw",
+            "requested_limits": {},
+            "effective_limits": {
+              "cache": 9,
+              "forward_bytes": 536870912,
+              "backward_bytes": 1073741824,
+              "optimizer_bytes": 134217728,
+              "total_bytes": 3221225472,
+              "workspace_bytes": 536870912,
+              "windows": 4,
+              "timeout_ms": 30000
+            },
+            "initialization": "fresh",
+            "requested_optimizer": "sgd",
+            "requested_groups": [
+              {
+                "lr": 0.001,
+                "momentum": 0.3,
+                "weight_decay": 0.01,
+                "parameter_names_count": 73,
+                "parameter_names_sha256": "8169db0307f31b7b17684cac22ecdbe6f76d65f5b75eb2e624da1e63c9bb80cb"
+              }
+            ],
+            "effective_groups": [
+              {
+                "lr": 0.001,
+                "weight_decay": 0.01,
+                "momentum": 0.3,
+                "dampening": 0.0,
+                "beta1": 0.9,
+                "beta2": 0.999,
+                "eps": 1e-08,
+                "nesterov": false,
+                "amsgrad": false,
+                "maximize": false,
+                "parameter_names_count": 73,
+                "parameter_names_sha256": "8169db0307f31b7b17684cac22ecdbe6f76d65f5b75eb2e624da1e63c9bb80cb"
+              }
+            ],
+            "build": {
+              "schema": "tide-device-control-build-v1",
+              "source": "a3c4f62dcc3fce9bbf43e5a8f4ce5578c561efc4",
+              "dirty": "",
+              "component_sha256": "86fcf8f75c5041e89f80dc5caa9ac924748713364d15bb33163083193b4a7369",
+              "core": {
+                "source": "00bb5ac2dec61e215966f523063786682caa40c1",
+                "cpp_source_sha256": "0d01ac0ca73870abf99a31a1b004ad953a33f5e36fbf2e914d6713c96b88ad61",
+                "torch": "2.12.0+cpu",
+                "distribution": {
+                  "torch": "2.12.0+cpu",
+                  "torch_dir": "/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/lib/python3.12/site-packages/torch/share/cmake/Torch",
+                  "prefix": "/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/lib/python3.12/site-packages/torch/share/cmake",
+                  "cuda": null,
+                  "cxx11_abi": true,
+                  "discovery": "python-torch"
+                },
+                "environment": {
+                  "os": "Linux-5.10.0-182.0.0.95.r1941_123.hce2.aarch64-aarch64-with-glibc2.34",
+                  "compiler": "c++ (GCC) 10.3.1",
+                  "cxx_standard": 17,
+                  "build_type": "Release",
+                  "torch_prefix": "/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/lib/python3.12/site-packages/torch/share/cmake/Torch",
+                  "cann_version": "9.2.0"
+                },
+                "build_jobs": 160,
+                "backend": "npu",
+                "npu_runtime": "python",
+                "torch_npu": "2.12.0.post3",
+                "cuda": null,
+                "architecture": "aarch64",
+                "python": "3.12.13",
+                "cxx11_abi": true,
+                "binary_sha256": {
+                  "libtidegraph.a": "fcff57e48d2ecfb6c14085d766e11a39ab4769e12d14d2004a28377d32e8e745",
+                  "libtidegraph_runtime.a": "4c340f84cfbaf5e17b111a094f44ab179ce895666c34c1917c0a703add273f1a",
+                  "_tide_native.so": "891f2ce77344b9c84d67052e3e0098a493cff2138ce9fa07a520e196f9c400a2"
+                }
+              },
+              "build_jobs": 160,
+              "backend": "npu",
+              "runtime": "python",
+              "npu_runtime": "python",
+              "cuda_architectures": null,
+              "ascendc_soc": "Ascend910_9392",
+              "binary_sha256": {
+                "_tide_weighted_resident.so": "6a9c8f14659351f3d8698c0a710b9f3cbd6d93ed28ef4cecf3a7733bc1d7c029",
+                "libtide-weighted-flow.so": "682fca82dc3f31ffd2fa7ebddbeea0d53a85d93bbbd545aa279bc561d52201fb",
+                "libtide-weighted-training.so": "98ba70806e1d0f2d1a079636908395320c2172d93f384717c51639039f77431b",
+                "libtide-block-resident.so": "8ed03c0d40a09bbf839e3cdc21a3bfb05ce882555761a8939e61c335955412fb"
+              },
+              "loader_sha256": {
+                "_tide_weighted_resident.so": "e2f6fcbdeae3062624bf68902c9acaae96d936a7d6b468efcb666aa163c8287e",
+                "libtide-weighted-flow.so": "18484afbe22b0a56da6180e28175eee5458f73e0310db4433ce302e140fbd34b",
+                "libtide-weighted-training.so": "b429f7d2f288a0690d207c79018f9a28842f3ab42399d9b834d043ff4ad9a5f1",
+                "libtide-block-resident.so": "b580abd7d49be51dc287f113c30aae9384d756567397145ce854f982ad1196d0"
+              },
+              "requested_checks": null,
+              "python_component": "weighted",
+              "scope": "build/loader/help only; device control check required separately"
+            },
+            "client": "python-native",
+            "task": {
+              "kind": "built-in",
+              "objective": {
+                "kind": "weighted-output-square",
+                "scale": 0.001
+              },
+              "optimizer": {
+                "kind": "sgd",
+                "lr": 0.001,
+                "momentum": 0.3,
+                "weight_decay": 0.01
+              }
+            },
+            "return_mode": "complete",
+            "input_interface": "resident-block-B\u00d7L\u00d7P-v2",
+            "resident_dispatch": {
+              "schema": "tide-experiment-resident-selection-v1",
+              "requested": "auto",
+              "effective": "block-v2",
+              "reason": "compatible complete B\u00d7L Settle ports",
+              "capacity_field": "resident_block_limits",
+              "requested_limits": {},
+              "effective_limits": {
+                "cache": 9,
+                "forward_bytes": 536870912,
+                "backward_bytes": 1073741824,
+                "optimizer_bytes": 134217728,
+                "total_bytes": 3221225472,
+                "workspace_bytes": 536870912,
+                "windows": 4,
+                "timeout_ms": 30000
+              }
+            },
+            "last_backward_statistics": null
+          },
+          "steps": 2
+        },
+        "training": {
+          "identity": {
+            "path": "artifacts/p1p6-20261112/resident-v3-native-qualification/experiment-sum/training/result.json",
+            "sha256": "65e6a040e53a9b138ab99ea585abb012a2c06f8c6f7eca2e647a311d30b8006d",
+            "bytes": 193524
+          },
+          "state": "passed",
+          "validation": {
+            "finite": "passed",
+            "numeric": "passed",
+            "discrete": "passed",
+            "strict_passed": true,
+            "reports": [
+              {
+                "schema": "tide-comparison-v1",
+                "finite": "passed",
+                "numeric": "passed",
+                "discrete": "passed",
+                "strict_passed": true,
+                "compared_leaves": {
+                  "numeric": 541,
+                  "discrete": 491
+                },
+                "mismatch_counts": {
+                  "numeric": 0,
+                  "discrete": 0
+                },
+                "differences": [],
+                "differences_truncated": false
+              },
+              {
+                "schema": "tide-comparison-v1",
+                "finite": "passed",
+                "numeric": "passed",
+                "discrete": "passed",
+                "strict_passed": true,
+                "compared_leaves": {
+                  "numeric": 1,
+                  "discrete": 0
+                },
+                "mismatch_counts": {
+                  "numeric": 0,
+                  "discrete": 0
+                },
+                "differences": [],
+                "differences_truncated": false
+              },
+              {
+                "schema": "tide-comparison-v1",
+                "finite": "passed",
+                "numeric": "passed",
+                "discrete": "passed",
+                "strict_passed": true,
+                "compared_leaves": {
+                  "numeric": 541,
+                  "discrete": 491
+                },
+                "mismatch_counts": {
+                  "numeric": 0,
+                  "discrete": 0
+                },
+                "differences": [],
+                "differences_truncated": false
+              },
+              {
+                "schema": "tide-comparison-v1",
+                "finite": "passed",
+                "numeric": "passed",
+                "discrete": "passed",
+                "strict_passed": true,
+                "compared_leaves": {
+                  "numeric": 1,
+                  "discrete": 0
+                },
+                "mismatch_counts": {
+                  "numeric": 0,
+                  "discrete": 0
+                },
+                "differences": [],
+                "differences_truncated": false
+              },
+              {
+                "schema": "tide-comparison-v1",
+                "finite": "passed",
+                "numeric": "passed",
+                "discrete": "passed",
+                "strict_passed": true,
+                "compared_leaves": {
+                  "numeric": 541,
+                  "discrete": 491
+                },
+                "mismatch_counts": {
+                  "numeric": 0,
+                  "discrete": 0
+                },
+                "differences": [],
+                "differences_truncated": false
+              },
+              {
+                "schema": "tide-comparison-v1",
+                "finite": "passed",
+                "numeric": "passed",
+                "discrete": "passed",
+                "strict_passed": true,
+                "compared_leaves": {
+                  "numeric": 1,
+                  "discrete": 0
+                },
+                "mismatch_counts": {
+                  "numeric": 0,
+                  "discrete": 0
+                },
+                "differences": [],
+                "differences_truncated": false
+              },
+              {
+                "schema": "tide-comparison-v1",
+                "finite": "passed",
+                "numeric": "passed",
+                "discrete": "passed",
+                "strict_passed": true,
+                "compared_leaves": {
+                  "numeric": 85,
+                  "discrete": 0
+                },
+                "mismatch_counts": {
+                  "numeric": 0,
+                  "discrete": 0
+                },
+                "differences": [],
+                "differences_truncated": false
+              },
+              {
+                "schema": "tide-comparison-v1",
+                "finite": "passed",
+                "numeric": "passed",
+                "discrete": "passed",
+                "strict_passed": true,
+                "compared_leaves": {
+                  "numeric": 149,
+                  "discrete": 188
+                },
+                "mismatch_counts": {
+                  "numeric": 0,
+                  "discrete": 0
+                },
+                "differences": [],
+                "differences_truncated": false
+              }
+            ],
+            "complete": "checked",
+            "reference": "independent Python scalar CPU schedule; seeded prefix replay",
+            "policy": "strict",
+            "outcome": "passed"
+          },
+          "checkpoint": {
+            "state": "passed",
+            "next_window": 3,
+            "bytes": 102280,
+            "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/p1p6-20261112/resident-v3-native-qualification/experiment-sum/training/checkpoints/window-000003",
+            "exact_resume": true,
+            "cost": {
+              "schema": "tide-checkpoint-cost-v1",
+              "spans": {
+                "resume.snapshot_saved_values": {
+                  "seconds": 0.007030624896287918,
+                  "calls": 1,
+                  "failed_calls": 0
+                },
+                "resume.original_next_window": {
+                  "seconds": 0.15018096193671227,
+                  "calls": 1,
+                  "failed_calls": 0
+                },
+                "resume.snapshot_next_parameters": {
+                  "seconds": 0.024274803698062897,
+                  "calls": 1,
+                  "failed_calls": 0
+                },
+                "resume.close_original": {
+                  "seconds": 0.0004587620496749878,
+                  "calls": 1,
+                  "failed_calls": 0
+                },
+                "resume.construct_and_load": {
+                  "seconds": 0.06086234375834465,
+                  "calls": 1,
+                  "failed_calls": 0
+                },
+                "resume.compare_decoded_values": {
+                  "seconds": 0.015322346240282059,
+                  "calls": 1,
+                  "failed_calls": 0
+                },
+                "resume.restored_next_window": {
+                  "seconds": 0.14901332929730415,
+                  "calls": 1,
+                  "failed_calls": 0
+                },
+                "resume.compare_next_window": {
+                  "seconds": 0.0397968515753746,
+                  "calls": 1,
+                  "failed_calls": 0
+                },
+                "resume.compare_next_parameters_optimizer": {
+                  "seconds": 0.02631700411438942,
+                  "calls": 1,
+                  "failed_calls": 0
+                }
+              },
+              "scope": "inclusive wall-time spans; nested spans must not be summed; no extra device synchronization",
+              "total_seconds": 0.47476063668727875
+            },
+            "resume_check": {
+              "state": "passed",
+              "exact": true,
+              "next_window": 3,
+              "scope": "serial new owner: full decoded raw state before/after the actual selected next window; returned records, loss, parameters, gradients, optimizer and task"
+            },
+            "check_seconds": 0.4747780039906502
+          },
+          "package": {
+            "package": "tidegraph",
+            "version": "0.3.0",
+            "path": "/dev/shm/gef-p1p6-20261112/resident-v3-install/tidegraph",
+            "installed_files_sha256": "c1724e3b345129321b6b3a922589626deac4b5ad875cfca8625aa651e34ab2ae",
+            "content_scope": "recursive package files and relative names; __pycache__ and .pyc/.pyo excluded",
+            "source_provenance": "installation content; Git/wheel provenance requires an explicit dependency lock"
+          },
+          "effective": {
+            "execution": "resident",
+            "scheduler": "settle-block-v2",
+            "graph_certificate": "SettleGraph/ports",
+            "device": "npu:0",
+            "payload_dtype": "float32",
+            "adjoint_dtype": "float32",
+            "metadata_dtype": "int64",
+            "initial_state": "actual raw",
+            "requested_limits": {},
+            "effective_limits": {
+              "cache": 12,
+              "forward_bytes": 536870912,
+              "backward_bytes": 1073741824,
+              "optimizer_bytes": 134217728,
+              "total_bytes": 3221225472,
+              "workspace_bytes": 536870912,
+              "windows": 4,
+              "timeout_ms": 30000
+            },
+            "initialization": "fresh",
+            "requested_optimizer": "sgd",
+            "requested_groups": [
+              {
+                "lr": 0.001,
+                "momentum": 0.3,
+                "weight_decay": 0.01,
+                "parameter_names_count": 73,
+                "parameter_names_sha256": "8169db0307f31b7b17684cac22ecdbe6f76d65f5b75eb2e624da1e63c9bb80cb"
+              }
+            ],
+            "effective_groups": [
+              {
+                "lr": 0.001,
+                "weight_decay": 0.01,
+                "momentum": 0.3,
+                "dampening": 0.0,
+                "beta1": 0.9,
+                "beta2": 0.999,
+                "eps": 1e-08,
+                "nesterov": false,
+                "amsgrad": false,
+                "maximize": false,
+                "parameter_names_count": 73,
+                "parameter_names_sha256": "8169db0307f31b7b17684cac22ecdbe6f76d65f5b75eb2e624da1e63c9bb80cb"
+              }
+            ],
+            "build": {
+              "schema": "tide-device-control-build-v1",
+              "source": "a3c4f62dcc3fce9bbf43e5a8f4ce5578c561efc4",
+              "dirty": "",
+              "component_sha256": "86fcf8f75c5041e89f80dc5caa9ac924748713364d15bb33163083193b4a7369",
+              "core": {
+                "source": "00bb5ac2dec61e215966f523063786682caa40c1",
+                "cpp_source_sha256": "0d01ac0ca73870abf99a31a1b004ad953a33f5e36fbf2e914d6713c96b88ad61",
+                "torch": "2.12.0+cpu",
+                "distribution": {
+                  "torch": "2.12.0+cpu",
+                  "torch_dir": "/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/lib/python3.12/site-packages/torch/share/cmake/Torch",
+                  "prefix": "/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/lib/python3.12/site-packages/torch/share/cmake",
+                  "cuda": null,
+                  "cxx11_abi": true,
+                  "discovery": "python-torch"
+                },
+                "environment": {
+                  "os": "Linux-5.10.0-182.0.0.95.r1941_123.hce2.aarch64-aarch64-with-glibc2.34",
+                  "compiler": "c++ (GCC) 10.3.1",
+                  "cxx_standard": 17,
+                  "build_type": "Release",
+                  "torch_prefix": "/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/lib/python3.12/site-packages/torch/share/cmake/Torch",
+                  "cann_version": "9.2.0"
+                },
+                "build_jobs": 160,
+                "backend": "npu",
+                "npu_runtime": "python",
+                "torch_npu": "2.12.0.post3",
+                "cuda": null,
+                "architecture": "aarch64",
+                "python": "3.12.13",
+                "cxx11_abi": true,
+                "binary_sha256": {
+                  "libtidegraph.a": "fcff57e48d2ecfb6c14085d766e11a39ab4769e12d14d2004a28377d32e8e745",
+                  "libtidegraph_runtime.a": "4c340f84cfbaf5e17b111a094f44ab179ce895666c34c1917c0a703add273f1a",
+                  "_tide_native.so": "891f2ce77344b9c84d67052e3e0098a493cff2138ce9fa07a520e196f9c400a2"
+                }
+              },
+              "build_jobs": 160,
+              "backend": "npu",
+              "runtime": "python",
+              "npu_runtime": "python",
+              "cuda_architectures": null,
+              "ascendc_soc": "Ascend910_9392",
+              "binary_sha256": {
+                "_tide_weighted_resident.so": "6a9c8f14659351f3d8698c0a710b9f3cbd6d93ed28ef4cecf3a7733bc1d7c029",
+                "libtide-weighted-flow.so": "682fca82dc3f31ffd2fa7ebddbeea0d53a85d93bbbd545aa279bc561d52201fb",
+                "libtide-weighted-training.so": "98ba70806e1d0f2d1a079636908395320c2172d93f384717c51639039f77431b",
+                "libtide-block-resident.so": "8ed03c0d40a09bbf839e3cdc21a3bfb05ce882555761a8939e61c335955412fb"
+              },
+              "loader_sha256": {
+                "_tide_weighted_resident.so": "e2f6fcbdeae3062624bf68902c9acaae96d936a7d6b468efcb666aa163c8287e",
+                "libtide-weighted-flow.so": "18484afbe22b0a56da6180e28175eee5458f73e0310db4433ce302e140fbd34b",
+                "libtide-weighted-training.so": "b429f7d2f288a0690d207c79018f9a28842f3ab42399d9b834d043ff4ad9a5f1",
+                "libtide-block-resident.so": "b580abd7d49be51dc287f113c30aae9384d756567397145ce854f982ad1196d0"
+              },
+              "requested_checks": null,
+              "python_component": "weighted",
+              "scope": "build/loader/help only; device control check required separately"
+            },
+            "client": "python-native",
+            "task": {
+              "kind": "built-in",
+              "objective": {
+                "kind": "weighted-output-square",
+                "scale": 0.001
+              },
+              "optimizer": {
+                "kind": "sgd",
+                "lr": 0.001,
+                "momentum": 0.3,
+                "weight_decay": 0.01
+              }
+            },
+            "return_mode": "complete",
+            "input_interface": "resident-block-B\u00d7L\u00d7P-v2",
+            "resident_dispatch": {
+              "schema": "tide-experiment-resident-selection-v1",
+              "requested": "auto",
+              "effective": "block-v2",
+              "reason": "compatible complete B\u00d7L Settle ports",
+              "capacity_field": "resident_block_limits",
+              "requested_limits": {},
+              "effective_limits": {
+                "cache": 12,
+                "forward_bytes": 536870912,
+                "backward_bytes": 1073741824,
+                "optimizer_bytes": 134217728,
+                "total_bytes": 3221225472,
+                "workspace_bytes": 536870912,
+                "windows": 4,
+                "timeout_ms": 30000
+              }
+            },
+            "last_backward_statistics": {
+              "parameter_owners": 101,
+              "retained_windows": 1,
+              "scope": "public block field VJP; no old event counters"
+            }
+          },
+          "steps": 3
+        }
+      }
+    }
+  },
+  "standalone_results": [
+    {
+      "identity": {
+        "path": "artifacts/p1p6-20261112/resident-v3-standalone-tmp/test_standalone_block_task_and0/metrics/result.json",
+        "sha256": "0e7eba23bf3d397f25aadf10f6696b3c1f4fc6cf1a680dd2743a34840b22229b",
+        "bytes": 12237
+      },
+      "record": {
+        "state": "completed",
+        "mode": "inference",
+        "dtype": "float32",
+        "device": "npu:0",
+        "start_window": 0,
+        "exact_resume": {
+          "state": "not_checked"
+        },
+        "scheduler": "settle-block-v2",
+        "effective_execution": {
+          "backward": "none",
+          "capacity_field": "resident_block_limits",
+          "checkpoint_codec": "block-schema-2",
+          "effective": "block-v2",
+          "effective_limits": {
+            "backward_bytes": 1073741824,
+            "cache": 64,
+            "forward_bytes": 536870912,
+            "optimizer_bytes": 134217728,
+            "timeout_ms": 30000,
+            "total_bytes": 3221225472,
+            "windows": 4,
+            "workspace_bytes": 536870912
+          },
+          "inference_scope": "public block session advance/detach; manual tape and optimizer storage are retained",
+          "interface": "tensor-window-v1",
+          "optimizer_storage_constructed": true,
+          "progression": "device",
+          "readiness": "device",
+          "reason": "compatible complete B\u00d7L Settle ports",
+          "requested": "auto",
+          "requested_limits": {},
+          "schedule": "settle-block-v2",
+          "schema": "tide-standalone-resident-selection-v1",
+          "selection": "device",
+          "task_loss_computed": true,
+          "training": false
+        },
+        "task_loss_computed": true,
+        "independent_complete_records_checked": false
+      }
+    },
+    {
+      "identity": {
+        "path": "artifacts/p1p6-20261112/resident-v3-standalone-tmp/test_standalone_block_task_and0/outputs/result.json",
+        "sha256": "0d65d62c4e825c01bb9af579bb9b0ea4172626b07d20be453ea0ee69cae87c26",
+        "bytes": 12237
+      },
+      "record": {
+        "state": "completed",
+        "mode": "inference",
+        "dtype": "float32",
+        "device": "npu:0",
+        "start_window": 0,
+        "exact_resume": {
+          "state": "not_checked"
+        },
+        "scheduler": "settle-block-v2",
+        "effective_execution": {
+          "backward": "none",
+          "capacity_field": "resident_block_limits",
+          "checkpoint_codec": "block-schema-2",
+          "effective": "block-v2",
+          "effective_limits": {
+            "backward_bytes": 1073741824,
+            "cache": 64,
+            "forward_bytes": 536870912,
+            "optimizer_bytes": 134217728,
+            "timeout_ms": 30000,
+            "total_bytes": 3221225472,
+            "windows": 4,
+            "workspace_bytes": 536870912
+          },
+          "inference_scope": "public block session advance/detach; manual tape and optimizer storage are retained",
+          "interface": "tensor-window-v1",
+          "optimizer_storage_constructed": true,
+          "progression": "device",
+          "readiness": "device",
+          "reason": "compatible complete B\u00d7L Settle ports",
+          "requested": "auto",
+          "requested_limits": {},
+          "schedule": "settle-block-v2",
+          "schema": "tide-standalone-resident-selection-v1",
+          "selection": "device",
+          "task_loss_computed": true,
+          "training": false
+        },
+        "task_loss_computed": true,
+        "independent_complete_records_checked": false
+      }
+    },
+    {
+      "identity": {
+        "path": "artifacts/p1p6-20261112/resident-v3-standalone-tmp/test_standalone_block_task_and0/prefix/result.json",
+        "sha256": "f4c82c9aa8789bf9fb346132047b76e3cae220d9c1d8fbb3345da3f335eac657",
+        "bytes": 12285
+      },
+      "record": {
+        "state": "completed",
+        "mode": "training",
+        "dtype": "float32",
+        "device": "npu:0",
+        "start_window": 0,
+        "exact_resume": {
+          "state": "not_checked"
+        },
+        "scheduler": "settle-block-v2",
+        "effective_execution": {
+          "backward": "explicit first-order block VJP",
+          "capacity_field": "resident_block_limits",
+          "checkpoint_codec": "block-schema-2",
+          "effective": "block-v2",
+          "effective_limits": {
+            "backward_bytes": 1073741824,
+            "cache": 64,
+            "forward_bytes": 536870912,
+            "optimizer_bytes": 134217728,
+            "timeout_ms": 30000,
+            "total_bytes": 3221225472,
+            "windows": 4,
+            "workspace_bytes": 536870912
+          },
+          "inference_scope": "public block session advance/detach; manual tape and optimizer storage are retained",
+          "interface": "tensor-window-v1",
+          "optimizer_storage_constructed": true,
+          "progression": "device",
+          "readiness": "device",
+          "reason": "compatible complete B\u00d7L Settle ports",
+          "requested": "auto",
+          "requested_limits": {},
+          "schedule": "settle-block-v2",
+          "schema": "tide-standalone-resident-selection-v1",
+          "selection": "device",
+          "task_loss_computed": true,
+          "training": true
+        },
+        "task_loss_computed": true,
+        "independent_complete_records_checked": false
+      }
+    },
+    {
+      "identity": {
+        "path": "artifacts/p1p6-20261112/resident-v3-standalone-tmp/test_standalone_block_task_and0/resumed/result.json",
+        "sha256": "d1ac688fe0ddc3b8c83ea7d6879f05dc7d3d91eb901c7e2d67a54a09894a8b4a",
+        "bytes": 15254
+      },
+      "record": {
+        "state": "completed",
+        "mode": "training",
+        "dtype": "float32",
+        "device": "npu:0",
+        "start_window": 1,
+        "exact_resume": {
+          "checkpoint": "checkpoint",
+          "exact": true,
+          "next_window": 3,
+          "scope": "raw decode before/after selected next-window, returned records, loss, parameters, gradients, SGD/master; serial new owner",
+          "state": "passed"
+        },
+        "scheduler": "settle-block-v2",
+        "effective_execution": {
+          "backward": "explicit first-order block VJP",
+          "capacity_field": "resident_block_limits",
+          "checkpoint_codec": "block-schema-2",
+          "effective": "block-v2",
+          "effective_limits": {
+            "backward_bytes": 1073741824,
+            "cache": 64,
+            "forward_bytes": 536870912,
+            "optimizer_bytes": 134217728,
+            "timeout_ms": 30000,
+            "total_bytes": 3221225472,
+            "windows": 4,
+            "workspace_bytes": 536870912
+          },
+          "inference_scope": "public block session advance/detach; manual tape and optimizer storage are retained",
+          "interface": "tensor-window-v1",
+          "optimizer_storage_constructed": true,
+          "progression": "device",
+          "readiness": "device",
+          "reason": "compatible complete B\u00d7L Settle ports",
+          "requested": "auto",
+          "requested_limits": {},
+          "schedule": "settle-block-v2",
+          "schema": "tide-standalone-resident-selection-v1",
+          "selection": "device",
+          "task_loss_computed": true,
+          "training": true
+        },
+        "task_loss_computed": true,
+        "independent_complete_records_checked": false
+      }
+    },
+    {
+      "identity": {
+        "path": "artifacts/p1p6-20261112/resident-v3-standalone-tmp/test_standalone_block_task_and0/whole/result.json",
+        "sha256": "5d9cab19ceec6d03bc274ed5c680dcd34594a5794729e05f8a0c8cda48be6bd3",
+        "bytes": 17098
+      },
+      "record": {
+        "state": "completed",
+        "mode": "training",
+        "dtype": "float32",
+        "device": "npu:0",
+        "start_window": 0,
+        "exact_resume": {
+          "checkpoint": "checkpoint",
+          "exact": true,
+          "next_window": 3,
+          "scope": "raw decode before/after selected next-window, returned records, loss, parameters, gradients, SGD/master; serial new owner",
+          "state": "passed"
+        },
+        "scheduler": "settle-block-v2",
+        "effective_execution": {
+          "backward": "explicit first-order block VJP",
+          "capacity_field": "resident_block_limits",
+          "checkpoint_codec": "block-schema-2",
+          "effective": "block-v2",
+          "effective_limits": {
+            "backward_bytes": 1073741824,
+            "cache": 64,
+            "forward_bytes": 536870912,
+            "optimizer_bytes": 134217728,
+            "timeout_ms": 30000,
+            "total_bytes": 3221225472,
+            "windows": 4,
+            "workspace_bytes": 536870912
+          },
+          "inference_scope": "public block session advance/detach; manual tape and optimizer storage are retained",
+          "interface": "tensor-window-v1",
+          "optimizer_storage_constructed": true,
+          "progression": "device",
+          "readiness": "device",
+          "reason": "compatible complete B\u00d7L Settle ports",
+          "requested": "auto",
+          "requested_limits": {},
+          "schedule": "settle-block-v2",
+          "schema": "tide-standalone-resident-selection-v1",
+          "selection": "device",
+          "task_loss_computed": true,
+          "training": true
+        },
+        "task_loss_computed": true,
+        "independent_complete_records_checked": false
+      }
+    },
+    {
+      "identity": {
+        "path": "artifacts/p1p6-20261112/resident-v3-standalone-tmp/test_standalone_block_task_and1/metrics/result.json",
+        "sha256": "4458069dc03706017a19abce9b2f68c698ca14126a67b1b37cdd1f5fecca0763",
+        "bytes": 12239
+      },
+      "record": {
+        "state": "completed",
+        "mode": "inference",
+        "dtype": "float32",
+        "device": "npu:0",
+        "start_window": 0,
+        "exact_resume": {
+          "state": "not_checked"
+        },
+        "scheduler": "settle-block-v2",
+        "effective_execution": {
+          "backward": "none",
+          "capacity_field": "resident_block_limits",
+          "checkpoint_codec": "block-schema-2",
+          "effective": "block-v2",
+          "effective_limits": {
+            "backward_bytes": 1073741824,
+            "cache": 64,
+            "forward_bytes": 536870912,
+            "optimizer_bytes": 134217728,
+            "timeout_ms": 30000,
+            "total_bytes": 3221225472,
+            "windows": 4,
+            "workspace_bytes": 536870912
+          },
+          "inference_scope": "public block session advance/detach; manual tape and optimizer storage are retained",
+          "interface": "tensor-window-v1",
+          "optimizer_storage_constructed": true,
+          "progression": "device",
+          "readiness": "device",
+          "reason": "compatible complete B\u00d7L Settle ports",
+          "requested": "auto",
+          "requested_limits": {},
+          "schedule": "settle-block-v2",
+          "schema": "tide-standalone-resident-selection-v1",
+          "selection": "device",
+          "task_loss_computed": true,
+          "training": false
+        },
+        "task_loss_computed": true,
+        "independent_complete_records_checked": false
+      }
+    },
+    {
+      "identity": {
+        "path": "artifacts/p1p6-20261112/resident-v3-standalone-tmp/test_standalone_block_task_and1/outputs/result.json",
+        "sha256": "71ebb1ea0517610f056c49f454344bd4b1c29f3f6baf5d830cb90615eb85c74b",
+        "bytes": 12239
+      },
+      "record": {
+        "state": "completed",
+        "mode": "inference",
+        "dtype": "float32",
+        "device": "npu:0",
+        "start_window": 0,
+        "exact_resume": {
+          "state": "not_checked"
+        },
+        "scheduler": "settle-block-v2",
+        "effective_execution": {
+          "backward": "none",
+          "capacity_field": "resident_block_limits",
+          "checkpoint_codec": "block-schema-2",
+          "effective": "block-v2",
+          "effective_limits": {
+            "backward_bytes": 1073741824,
+            "cache": 64,
+            "forward_bytes": 536870912,
+            "optimizer_bytes": 134217728,
+            "timeout_ms": 30000,
+            "total_bytes": 3221225472,
+            "windows": 4,
+            "workspace_bytes": 536870912
+          },
+          "inference_scope": "public block session advance/detach; manual tape and optimizer storage are retained",
+          "interface": "tensor-window-v1",
+          "optimizer_storage_constructed": true,
+          "progression": "device",
+          "readiness": "device",
+          "reason": "compatible complete B\u00d7L Settle ports",
+          "requested": "auto",
+          "requested_limits": {},
+          "schedule": "settle-block-v2",
+          "schema": "tide-standalone-resident-selection-v1",
+          "selection": "device",
+          "task_loss_computed": true,
+          "training": false
+        },
+        "task_loss_computed": true,
+        "independent_complete_records_checked": false
+      }
+    },
+    {
+      "identity": {
+        "path": "artifacts/p1p6-20261112/resident-v3-standalone-tmp/test_standalone_block_task_and1/prefix/result.json",
+        "sha256": "996762e6931f8d57799863650c8bc95efc446ab42a8b171c78ddddfa90999967",
+        "bytes": 12288
+      },
+      "record": {
+        "state": "completed",
+        "mode": "training",
+        "dtype": "float32",
+        "device": "npu:0",
+        "start_window": 0,
+        "exact_resume": {
+          "state": "not_checked"
+        },
+        "scheduler": "settle-block-v2",
+        "effective_execution": {
+          "backward": "explicit first-order block VJP",
+          "capacity_field": "resident_block_limits",
+          "checkpoint_codec": "block-schema-2",
+          "effective": "block-v2",
+          "effective_limits": {
+            "backward_bytes": 1073741824,
+            "cache": 64,
+            "forward_bytes": 536870912,
+            "optimizer_bytes": 134217728,
+            "timeout_ms": 30000,
+            "total_bytes": 3221225472,
+            "windows": 4,
+            "workspace_bytes": 536870912
+          },
+          "inference_scope": "public block session advance/detach; manual tape and optimizer storage are retained",
+          "interface": "tensor-window-v1",
+          "optimizer_storage_constructed": true,
+          "progression": "device",
+          "readiness": "device",
+          "reason": "compatible complete B\u00d7L Settle ports",
+          "requested": "auto",
+          "requested_limits": {},
+          "schedule": "settle-block-v2",
+          "schema": "tide-standalone-resident-selection-v1",
+          "selection": "device",
+          "task_loss_computed": true,
+          "training": true
+        },
+        "task_loss_computed": true,
+        "independent_complete_records_checked": false
+      }
+    },
+    {
+      "identity": {
+        "path": "artifacts/p1p6-20261112/resident-v3-standalone-tmp/test_standalone_block_task_and1/resumed/result.json",
+        "sha256": "57bb58f78f488ce7f72b34b2cb0636c92bfbd046277029faf57ef888d64a7c1e",
+        "bytes": 15263
+      },
+      "record": {
+        "state": "completed",
+        "mode": "training",
+        "dtype": "float32",
+        "device": "npu:0",
+        "start_window": 1,
+        "exact_resume": {
+          "checkpoint": "checkpoint",
+          "exact": true,
+          "next_window": 3,
+          "scope": "raw decode before/after selected next-window, returned records, loss, parameters, gradients, SGD/master; serial new owner",
+          "state": "passed"
+        },
+        "scheduler": "settle-block-v2",
+        "effective_execution": {
+          "backward": "explicit first-order block VJP",
+          "capacity_field": "resident_block_limits",
+          "checkpoint_codec": "block-schema-2",
+          "effective": "block-v2",
+          "effective_limits": {
+            "backward_bytes": 1073741824,
+            "cache": 64,
+            "forward_bytes": 536870912,
+            "optimizer_bytes": 134217728,
+            "timeout_ms": 30000,
+            "total_bytes": 3221225472,
+            "windows": 4,
+            "workspace_bytes": 536870912
+          },
+          "inference_scope": "public block session advance/detach; manual tape and optimizer storage are retained",
+          "interface": "tensor-window-v1",
+          "optimizer_storage_constructed": true,
+          "progression": "device",
+          "readiness": "device",
+          "reason": "compatible complete B\u00d7L Settle ports",
+          "requested": "auto",
+          "requested_limits": {},
+          "schedule": "settle-block-v2",
+          "schema": "tide-standalone-resident-selection-v1",
+          "selection": "device",
+          "task_loss_computed": true,
+          "training": true
+        },
+        "task_loss_computed": true,
+        "independent_complete_records_checked": false
+      }
+    },
+    {
+      "identity": {
+        "path": "artifacts/p1p6-20261112/resident-v3-standalone-tmp/test_standalone_block_task_and1/whole/result.json",
+        "sha256": "3087c7533fbe33ba9b8fcdaf40fc8fcd80eff191d5210336e6d74a456fb1a702",
+        "bytes": 17102
+      },
+      "record": {
+        "state": "completed",
+        "mode": "training",
+        "dtype": "float32",
+        "device": "npu:0",
+        "start_window": 0,
+        "exact_resume": {
+          "checkpoint": "checkpoint",
+          "exact": true,
+          "next_window": 3,
+          "scope": "raw decode before/after selected next-window, returned records, loss, parameters, gradients, SGD/master; serial new owner",
+          "state": "passed"
+        },
+        "scheduler": "settle-block-v2",
+        "effective_execution": {
+          "backward": "explicit first-order block VJP",
+          "capacity_field": "resident_block_limits",
+          "checkpoint_codec": "block-schema-2",
+          "effective": "block-v2",
+          "effective_limits": {
+            "backward_bytes": 1073741824,
+            "cache": 64,
+            "forward_bytes": 536870912,
+            "optimizer_bytes": 134217728,
+            "timeout_ms": 30000,
+            "total_bytes": 3221225472,
+            "windows": 4,
+            "workspace_bytes": 536870912
+          },
+          "inference_scope": "public block session advance/detach; manual tape and optimizer storage are retained",
+          "interface": "tensor-window-v1",
+          "optimizer_storage_constructed": true,
+          "progression": "device",
+          "readiness": "device",
+          "reason": "compatible complete B\u00d7L Settle ports",
+          "requested": "auto",
+          "requested_limits": {},
+          "schedule": "settle-block-v2",
+          "schema": "tide-standalone-resident-selection-v1",
+          "selection": "device",
+          "task_loss_computed": true,
+          "training": true
+        },
+        "task_loss_computed": true,
+        "independent_complete_records_checked": false
+      }
+    }
+  ],
+  "scale": [
+    {
+      "case": "fc16",
+      "identity": {
+        "path": "artifacts/p1p6-20261112/resident-v3-scale/fc16/result.json",
+        "sha256": "cd34132b8e5376cb9edf82b32de7aac01f1a9b53f1e19f9192dc7fe404a601df",
+        "bytes": 504281
+      },
+      "config_identity": {
+        "path": "artifacts/p1p6-20261112/resident-v3-fc16-config.json",
+        "sha256": "b97c98c8a10a3b62de7ee08083d667d816554d40a39edf262151e8077406edfd",
+        "bytes": 1892
+      },
+      "configuration": {
+        "schema": "tide-experiment-v1",
+        "name": "prefill-query-fc-kv",
+        "description": "Finite regression observation. Small independent gates qualify mechanisms; this actual scale has separate numerical/continuation evidence.",
+        "model": {
+          "recipe": {
+            "topology": "fc",
+            "width": 128,
+            "region_width": 4,
+            "depth": 4,
+            "family": "kv",
+            "memory_overrides": {
+              "memory_read": "qry"
+            }
+          }
+        },
+        "task": {
+          "samples": 4,
+          "positions": 16,
+          "seed": 7,
+          "input_pattern": "staggered-v1",
+          "objective": {
+            "kind": "weighted-output-square",
+            "scale": 1e-06
+          }
+        },
+        "execution": {
+          "family": "auto",
+          "client": "python-native",
+          "device": "npu:0",
+          "placement": "resident",
+          "dtype": "float32",
+          "scoring_dtype": "float32",
+          "schedule": "prefill",
+          "prefill_schedule": "auto",
+          "packing": "packed",
+          "return_packing": "scalar",
+          "return_mode": "outputs",
+          "peer_devices": [],
+          "query_execution": "auto",
+          "workers": 1,
+          "intraop_threads": 2,
+          "interop_threads": 1,
+          "resident_executor": "auto"
+        },
+        "measurement": {
+          "mode": "training",
+          "steps": 1,
+          "warmup": 1,
+          "validation": "none",
+          "checkpoint_check": true,
+          "timeout_seconds": 600,
+          "checkpoint_interval": 2
+        },
+        "resources": {
+          "max_materialize_bytes": 137438953472,
+          "checkpoint_max_bytes": 137438953472,
+          "resident_block_limits": {
+            "cache": 49,
+            "forward_bytes": 6375342080,
+            "backward_bytes": 11744051200,
+            "optimizer_bytes": 402653184,
+            "total_bytes": 18522046464,
+            "windows": 1,
+            "timeout_ms": 30000,
+            "workspace_bytes": 536870912
+          }
+        },
+        "site": {
+          "paths": {
+            "native_library": "/dev/shm/gef-p1p6-20261112/core-source-v2-native",
+            "resident_library": "/dev/shm/gef-p1p6-20261112/resident-v3-native"
+          }
+        }
+      },
+      "result": {
+        "state": "failed",
+        "execution_status": "failed",
+        "started": "2026-11-12T08:36:29.259730+00:00",
+        "finished": "2026-11-12T08:36:33.797028+00:00",
+        "phase": "warmup",
+        "error": {
+          "type": "ValueError",
+          "message": "resident KV qry tensor budget exceeded: required=13670416384.000000 available=6120144499 rows=256 banks=4 cache=49 input_width=128 summary_width=32 coarse_row_reservation=13670416384.000000 half_raw_widen=0.000000"
+        },
+        "construction_seconds": 0.9515938796103001,
+        "memory": {
+          "schema": "tide-weighted-memory-v1",
+          "phases": [
+            {
+              "phase": "runtime_ready",
+              "process_lifetime_peak_rss_bytes": 1717338112,
+              "host_memory": {
+                "available_bytes": 1863280320512,
+                "system_shmem_bytes": 127109238784,
+                "scope": "available host memory capped by cgroup v2 remaining; shmem is already included in cgroup usage"
+              },
+              "device": "npu:0",
+              "allocated_bytes": 0,
+              "reserved_bytes": 0,
+              "peak_allocated_bytes": 0,
+              "peak_reserved_bytes": 0,
+              "devices": [
+                {
+                  "device": "npu:0",
+                  "allocated_bytes": 0,
+                  "reserved_bytes": 0,
+                  "peak_allocated_bytes": 0,
+                  "peak_reserved_bytes": 0
+                }
+              ]
+            },
+            {
+              "phase": "constructed",
+              "process_lifetime_peak_rss_bytes": 2022244352,
+              "host_memory": {
+                "available_bytes": 1863124656128,
+                "system_shmem_bytes": 127109238784,
+                "scope": "available host memory capped by cgroup v2 remaining; shmem is already included in cgroup usage"
+              },
+              "device": "npu:0",
+              "allocated_bytes": 88811520,
+              "reserved_bytes": 102760448,
+              "peak_allocated_bytes": 88811520,
+              "peak_reserved_bytes": 102760448,
+              "devices": [
+                {
+                  "device": "npu:0",
+                  "allocated_bytes": 88811520,
+                  "reserved_bytes": 102760448,
+                  "peak_allocated_bytes": 88811520,
+                  "peak_reserved_bytes": 102760448
+                }
+              ]
+            }
+          ],
+          "scope": "process allocator only; excludes untracked vendor/driver memory; RSS is process-lifetime peak",
+          "sampling": "outside step timers; peaks reset after runtime_ready, construction and warmup"
+        },
+        "effective": {
+          "execution": "resident",
+          "scheduler": "settle-block-v2",
+          "graph_certificate": "SettleGraph/ports",
+          "device": "npu:0",
+          "payload_dtype": "float32",
+          "adjoint_dtype": "float32",
+          "metadata_dtype": "int64",
+          "initial_state": "actual raw",
+          "requested_limits": {
+            "cache": 49,
+            "forward_bytes": 6375342080,
+            "backward_bytes": 11744051200,
+            "optimizer_bytes": 402653184,
+            "total_bytes": 18522046464,
+            "windows": 1,
+            "timeout_ms": 30000,
+            "workspace_bytes": 536870912
+          },
+          "effective_limits": {
+            "cache": 49,
+            "forward_bytes": 6375342080,
+            "backward_bytes": 11744051200,
+            "optimizer_bytes": 402653184,
+            "total_bytes": 18522046464,
+            "workspace_bytes": 536870912,
+            "windows": 1,
+            "timeout_ms": 30000
+          },
+          "initialization": "fresh",
+          "requested_optimizer": "sgd",
+          "requested_groups": [
+            {
+              "lr": 0.001,
+              "momentum": 0.3,
+              "weight_decay": 0.01,
+              "parameter_names_count": 313,
+              "parameter_names_sha256": "0049295989ad5676be78aeaf6c1c8fa6a18cc7d6bc19055afd9ffef85f827903"
+            }
+          ],
+          "effective_groups": [
+            {
+              "lr": 0.001,
+              "weight_decay": 0.01,
+              "momentum": 0.3,
+              "dampening": 0.0,
+              "beta1": 0.9,
+              "beta2": 0.999,
+              "eps": 1e-08,
+              "nesterov": false,
+              "amsgrad": false,
+              "maximize": false,
+              "parameter_names_count": 313,
+              "parameter_names_sha256": "0049295989ad5676be78aeaf6c1c8fa6a18cc7d6bc19055afd9ffef85f827903"
+            }
+          ],
+          "build": {
+            "schema": "tide-device-control-build-v1",
+            "source": "a3c4f62dcc3fce9bbf43e5a8f4ce5578c561efc4",
+            "dirty": "",
+            "component_sha256": "86fcf8f75c5041e89f80dc5caa9ac924748713364d15bb33163083193b4a7369",
+            "core": {
+              "source": "00bb5ac2dec61e215966f523063786682caa40c1",
+              "cpp_source_sha256": "0d01ac0ca73870abf99a31a1b004ad953a33f5e36fbf2e914d6713c96b88ad61",
+              "torch": "2.12.0+cpu",
+              "distribution": {
+                "torch": "2.12.0+cpu",
+                "torch_dir": "/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/lib/python3.12/site-packages/torch/share/cmake/Torch",
+                "prefix": "/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/lib/python3.12/site-packages/torch/share/cmake",
+                "cuda": null,
+                "cxx11_abi": true,
+                "discovery": "python-torch"
+              },
+              "environment": {
+                "os": "Linux-5.10.0-182.0.0.95.r1941_123.hce2.aarch64-aarch64-with-glibc2.34",
+                "compiler": "c++ (GCC) 10.3.1",
+                "cxx_standard": 17,
+                "build_type": "Release",
+                "torch_prefix": "/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/lib/python3.12/site-packages/torch/share/cmake/Torch",
+                "cann_version": "9.2.0"
+              },
+              "build_jobs": 160,
+              "backend": "npu",
+              "npu_runtime": "python",
+              "torch_npu": "2.12.0.post3",
+              "cuda": null,
+              "architecture": "aarch64",
+              "python": "3.12.13",
+              "cxx11_abi": true,
+              "binary_sha256": {
+                "libtidegraph.a": "fcff57e48d2ecfb6c14085d766e11a39ab4769e12d14d2004a28377d32e8e745",
+                "libtidegraph_runtime.a": "4c340f84cfbaf5e17b111a094f44ab179ce895666c34c1917c0a703add273f1a",
+                "_tide_native.so": "891f2ce77344b9c84d67052e3e0098a493cff2138ce9fa07a520e196f9c400a2"
+              }
+            },
+            "build_jobs": 160,
+            "backend": "npu",
+            "runtime": "python",
+            "npu_runtime": "python",
+            "cuda_architectures": null,
+            "ascendc_soc": "Ascend910_9392",
+            "binary_sha256": {
+              "_tide_weighted_resident.so": "6a9c8f14659351f3d8698c0a710b9f3cbd6d93ed28ef4cecf3a7733bc1d7c029",
+              "libtide-weighted-flow.so": "682fca82dc3f31ffd2fa7ebddbeea0d53a85d93bbbd545aa279bc561d52201fb",
+              "libtide-weighted-training.so": "98ba70806e1d0f2d1a079636908395320c2172d93f384717c51639039f77431b",
+              "libtide-block-resident.so": "8ed03c0d40a09bbf839e3cdc21a3bfb05ce882555761a8939e61c335955412fb"
+            },
+            "loader_sha256": {
+              "_tide_weighted_resident.so": "e2f6fcbdeae3062624bf68902c9acaae96d936a7d6b468efcb666aa163c8287e",
+              "libtide-weighted-flow.so": "18484afbe22b0a56da6180e28175eee5458f73e0310db4433ce302e140fbd34b",
+              "libtide-weighted-training.so": "b429f7d2f288a0690d207c79018f9a28842f3ab42399d9b834d043ff4ad9a5f1",
+              "libtide-block-resident.so": "b580abd7d49be51dc287f113c30aae9384d756567397145ce854f982ad1196d0"
+            },
+            "requested_checks": null,
+            "python_component": "weighted",
+            "scope": "build/loader/help only; device control check required separately"
+          },
+          "client": "python-native",
+          "task": {
+            "kind": "built-in",
+            "objective": {
+              "kind": "weighted-output-square",
+              "scale": 1e-06
+            },
+            "optimizer": {
+              "kind": "sgd",
+              "lr": 0.001,
+              "momentum": 0.3,
+              "weight_decay": 0.01
+            }
+          },
+          "return_mode": "outputs",
+          "input_interface": "resident-block-B\u00d7L\u00d7P-v2",
+          "resident_dispatch": {
+            "schema": "tide-experiment-resident-selection-v1",
+            "requested": "auto",
+            "effective": "block-v2",
+            "reason": "compatible complete B\u00d7L Settle ports",
+            "capacity_field": "resident_block_limits",
+            "requested_limits": {
+              "cache": 49,
+              "forward_bytes": 6375342080,
+              "backward_bytes": 11744051200,
+              "optimizer_bytes": 402653184,
+              "total_bytes": 18522046464,
+              "windows": 1,
+              "timeout_ms": 30000,
+              "workspace_bytes": 536870912
+            },
+            "effective_limits": {
+              "cache": 49,
+              "forward_bytes": 6375342080,
+              "backward_bytes": 11744051200,
+              "optimizer_bytes": 402653184,
+              "total_bytes": 18522046464,
+              "workspace_bytes": 536870912,
+              "windows": 1,
+              "timeout_ms": 30000
+            }
+          },
+          "last_backward_statistics": null
+        },
+        "validation": {
+          "policy": "none",
+          "numeric": "not_checked",
+          "discrete": "not_checked",
+          "complete": "not_checked",
+          "outcome": "not_checked",
+          "strict_passed": false
+        },
+        "checkpoint": {
+          "state": "not_checked"
+        },
+        "throughput_qualified": false,
+        "throughput_sample": true,
+        "metrics": [],
+        "model_id": "928e6fd6338da79e445b4307cd508f2b772db43ba951c84e48b39b35152026d1",
+        "workload_id": "c243113a0b0292dede0cdb5e998898b5042098b96d4cc6d9f57e02fd00bb4f10",
+        "execution_id": "58730f6499032b38a7c63afec15004a130f2313bb7241b2a9043b8d4f360c296",
+        "config_id": "cc8f17bc2f1327523a446253f903ff680e55284d70637ee8e10026bd182ea07e",
+        "runtime": {
+          "resolved_device": "npu:0",
+          "backend": "npu",
+          "logical_device_index": 0,
+          "resolution_reason": "explicit:npu",
+          "dtype": "float32",
+          "host_architecture": "aarch64",
+          "torch": "2.12.0+cpu",
+          "torch_git": "7661cd9c6b841b62b7f411aa52ec51f05457263b",
+          "python": "3.12.13",
+          "cxx11_abi": true,
+          "runtime_queue_environment": {
+            "TASK_QUEUE_ENABLE": null,
+            "PER_STREAM_QUEUE": null,
+            "ASCEND_LAUNCH_BLOCKING": null
+          },
+          "torch_npu": "2.12.0.post3",
+          "logical_device_count": 1,
+          "device_name": "Ascend910_9392",
+          "cann_version": "9.2.0",
+          "matmul_allow_hf32": false,
+          "precision_policy": {
+            "matmul_allow_hf32": false,
+            "conv_allow_hf32": false
+          },
+          "actual_threads": {
+            "intraop": 2,
+            "interop": 1,
+            "workers": 1
+          }
+        }
+      },
+      "material": {
+        "width": 128,
+        "samples": 4,
+        "positions": 16,
+        "seed": 7,
+        "stride": 6,
+        "span": 96,
+        "input_pattern": "staggered-v1",
+        "sha256": "c243113a0b0292dede0cdb5e998898b5042098b96d4cc6d9f57e02fd00bb4f10",
+        "model_id": "928e6fd6338da79e445b4307cd508f2b772db43ba951c84e48b39b35152026d1"
+      },
+      "inventory": {
+        "totals": {
+          "trainable": 4564404,
+          "frozen": 104,
+          "role_elements": 5352188,
+          "unique": 4564508
+        },
+        "owners": 417,
+        "sha256": "445e3dcad94bcdef8a239a5429f7b541a22a9b5fd023f7927488849b4359cb7a"
+      },
+      "refusal_analysis": {
+        "kind": "conservative_forward_reservation",
+        "formula": "R*(256*C*(d*ds+d+ds+1)+256), banks>1",
+        "R": 256,
+        "C": 49,
+        "d": 128,
+        "ds": 32,
+        "banks": 4,
+        "required_bytes": 13670416384,
+        "available_bytes": 6120144499,
+        "not_a_measured_peak": true,
+        "first_refusal": "warmup before valid timing"
+      }
+    },
+    {
+      "case": "lh176",
+      "identity": {
+        "path": "artifacts/p1p6-20261112/resident-v3-scale/lh176/result.json",
+        "sha256": "733bb0c7cc1d4a0f376077c7c00a0c86d67845777890630c54cc231745a0eab5",
+        "bytes": 6118592
+      },
+      "config_identity": {
+        "path": "artifacts/p1p6-20261112/resident-v3-lh176-config.json",
+        "sha256": "28046f0a7daa341e427d3a7f4aa563cee65f793dd904318e453ea08cf1268dc5",
+        "bytes": 331295
+      },
+      "configuration": {
+        "schema": "tide-experiment-v1",
+        "name": "LH176-textbook-block-boundary",
+        "description": "Finite block resident boundary; same 00bb LH176 topology and parameters, continuing measured windows; not reset harness timing.",
+        "task": {
+          "samples": 4,
+          "positions": 16,
+          "seed": 7,
+          "input_pattern": "staggered-v1",
+          "objective": {
+            "kind": "weighted-output-square",
+            "scale": 1e-06
+          }
+        },
+        "execution": {
+          "family": "auto",
+          "client": "python-native",
+          "device": "npu:0",
+          "placement": "resident",
+          "dtype": "float32",
+          "scoring_dtype": "float32",
+          "schedule": "prefill",
+          "prefill_schedule": "auto",
+          "packing": "packed",
+          "return_packing": "scalar",
+          "return_mode": "outputs",
+          "peer_devices": [],
+          "query_execution": "auto",
+          "workers": 1,
+          "intraop_threads": 2,
+          "interop_threads": 1,
+          "resident_executor": "auto"
+        },
+        "measurement": {
+          "mode": "training",
+          "steps": 1,
+          "warmup": 0,
+          "validation": "none",
+          "checkpoint_check": true,
+          "timeout_seconds": 600,
+          "checkpoint_interval": 1
+        },
+        "resources": {
+          "max_materialize_bytes": 137438953472,
+          "checkpoint_max_bytes": 137438953472,
+          "resident_block_limits": {
+            "cache": 49,
+            "forward_bytes": 6375342080,
+            "backward_bytes": 11744051200,
+            "optimizer_bytes": 402653184,
+            "total_bytes": 18522046464,
+            "windows": 1,
+            "timeout_ms": 30000,
+            "workspace_bytes": 536870912
+          }
+        },
+        "site": {
+          "paths": {
+            "native_library": "/dev/shm/gef-p1p6-20261112/core-source-v2-native",
+            "resident_library": "/dev/shm/gef-p1p6-20261112/resident-v3-native"
+          }
+        },
+        "model_definition_reproduction": {
+          "module": "prefill_regression_config.CASES and tidegraph.planning.recipes.prepare",
+          "call": "plan, _ = prepare(dict(CASES['many-lh'], family='kv'), samples=4, positions=16, seed=7, input_pattern='staggered-v1')",
+          "keys": [
+            "graph",
+            "memories",
+            "regions",
+            "classes",
+            "source_binding",
+            "source_hidden_width",
+            "alpha_agg"
+          ],
+          "note": "Assign config.model.definition from these keys of the regenerated plan; the re-resolved plan has recipe=None.",
+          "definition_sha256": "6de707d9304585c659b10a6fd185a756bee735a3a74c07a8c16f1a2cdcf2ee67"
+        }
+      },
+      "result": {
+        "state": "failed",
+        "execution_status": "failed",
+        "started": "2026-11-12T08:37:39.178046+00:00",
+        "finished": "2026-11-12T08:37:46.584600+00:00",
+        "phase": "construction",
+        "error": {
+          "type": "ValueError",
+          "message": "block canonical parameter layout exceeds budget"
+        },
+        "memory": {
+          "schema": "tide-weighted-memory-v1",
+          "phases": [
+            {
+              "phase": "runtime_ready",
+              "process_lifetime_peak_rss_bytes": 1749893120,
+              "host_memory": {
+                "available_bytes": 1863350714368,
+                "system_shmem_bytes": 127109255168,
+                "scope": "available host memory capped by cgroup v2 remaining; shmem is already included in cgroup usage"
+              },
+              "device": "npu:0",
+              "allocated_bytes": 0,
+              "reserved_bytes": 0,
+              "peak_allocated_bytes": 0,
+              "peak_reserved_bytes": 0,
+              "devices": [
+                {
+                  "device": "npu:0",
+                  "allocated_bytes": 0,
+                  "reserved_bytes": 0,
+                  "peak_allocated_bytes": 0,
+                  "peak_reserved_bytes": 0
+                }
+              ]
+            }
+          ],
+          "scope": "process allocator only; excludes untracked vendor/driver memory; RSS is process-lifetime peak",
+          "sampling": "outside step timers; peaks reset after runtime_ready, construction and warmup"
+        },
+        "validation": {
+          "policy": "none",
+          "numeric": "not_checked",
+          "discrete": "not_checked",
+          "complete": "not_checked",
+          "outcome": "not_checked",
+          "strict_passed": false
+        },
+        "checkpoint": {
+          "state": "not_checked"
+        },
+        "throughput_qualified": false,
+        "throughput_sample": true,
+        "metrics": [],
+        "model_id": "ccc8d791c65369826d6b1d6274b5e7a2c7424d8fea296dd96b42c60df6274876",
+        "workload_id": "1d3a454b87770ecfcf96e612ef53125ef8698052262057bfb52113d9b2afb19d",
+        "execution_id": "923b51944407bedca22e514b4ccd5cd6753baeba9a6e6039ddfb2ec05106e4f9",
+        "config_id": "be963d67a9c844373a607855dc97d8200a8608b9abc536c29a15ebd6eed8a728",
+        "runtime": {
+          "resolved_device": "npu:0",
+          "backend": "npu",
+          "logical_device_index": 0,
+          "resolution_reason": "explicit:npu",
+          "dtype": "float32",
+          "host_architecture": "aarch64",
+          "torch": "2.12.0+cpu",
+          "torch_git": "7661cd9c6b841b62b7f411aa52ec51f05457263b",
+          "python": "3.12.13",
+          "cxx11_abi": true,
+          "runtime_queue_environment": {
+            "TASK_QUEUE_ENABLE": null,
+            "PER_STREAM_QUEUE": null,
+            "ASCEND_LAUNCH_BLOCKING": null
+          },
+          "torch_npu": "2.12.0.post3",
+          "logical_device_count": 1,
+          "device_name": "Ascend910_9392",
+          "cann_version": "9.2.0",
+          "matmul_allow_hf32": false,
+          "precision_policy": {
+            "matmul_allow_hf32": false,
+            "conv_allow_hf32": false
+          },
+          "actual_threads": {
+            "intraop": 2,
+            "interop": 1,
+            "workers": 1
+          }
+        }
+      },
+      "material": {
+        "width": 64,
+        "samples": 4,
+        "positions": 16,
+        "seed": 7,
+        "stride": 9,
+        "span": 144,
+        "input_pattern": "staggered-v1",
+        "sha256": "1d3a454b87770ecfcf96e612ef53125ef8698052262057bfb52113d9b2afb19d",
+        "model_id": "ccc8d791c65369826d6b1d6274b5e7a2c7424d8fea296dd96b42c60df6274876"
+      },
+      "inventory": {
+        "totals": {
+          "trainable": 14902694,
+          "frozen": 2132,
+          "role_elements": 20464346,
+          "unique": 14904826
+        },
+        "owners": 5809,
+        "sha256": "e0803aeba2156e4b4089967ac38abf4b58750d0058a2452e09f4b64d83d5d55b"
+      },
+      "refusal_analysis": {
+        "kind": "canonical_layout_partition",
+        "formula": "4*unique_elements+owners > optimizer_bytes//8",
+        "unique_elements": 14904826,
+        "owners": 5809,
+        "required_bytes": 59625113,
+        "available_bytes": 50331648,
+        "optimizer_partition_bytes": 402653184,
+        "device_optimizer_reached": false,
+        "device_oom": false
+      }
+    }
+  ],
+  "queues": {
+    "native": {
+      "identity": {
+        "path": "artifacts/p1p6-20261112/resident-v3-native-queue.json",
+        "sha256": "c7204ed322beb0d66e773a3c5cc11a827239292bd2e68febcb0bda4b6a1d04df",
+        "bytes": 417
+      },
+      "record": {
+        "elapsed_seconds": 65.29646427556872,
+        "job_id": "gef-p1p6-resident-v3-native-qualification",
+        "logical_device": "npu:0",
+        "logical_devices": [
+          "npu:0"
+        ],
+        "npu_count": 1,
+        "physical_id": 5,
+        "physical_ids": [
+          5
+        ],
+        "priority": 0,
+        "project": "graph-execution-foundation",
+        "return_code": 0,
+        "schema_version": 1,
+        "status": "completed",
+        "timestamp": "2026-11-12T08:34:40.187217+00:00"
+      }
+    },
+    "sdk": {
+      "identity": {
+        "path": "artifacts/p1p6-20261112/resident-v3-sdk-queue.json",
+        "sha256": "40508669f7d9637ea3a01eaa61f01ef40fe6ce9418bc543636743676cf57f144",
+        "bytes": 416
+      },
+      "record": {
+        "elapsed_seconds": 65.10043674334884,
+        "job_id": "gef-p1p6-resident-v3-sdk-qualification",
+        "logical_device": "npu:0",
+        "logical_devices": [
+          "npu:0"
+        ],
+        "npu_count": 1,
+        "physical_id": 10,
+        "physical_ids": [
+          10
+        ],
+        "priority": 0,
+        "project": "graph-execution-foundation",
+        "return_code": 0,
+        "schema_version": 1,
+        "status": "completed",
+        "timestamp": "2026-11-12T08:34:40.015190+00:00"
+      }
+    },
+    "standalone": {
+      "identity": {
+        "path": "artifacts/p1p6-20261112/resident-v3-standalone-queue.json",
+        "sha256": "8131edbcba943bdb5c89923b35b97cf064c3a7b76b73e2f9f2a5d16692e12558",
+        "bytes": 421
+      },
+      "record": {
+        "elapsed_seconds": 66.25162759795785,
+        "job_id": "gef-p1p6-resident-v3-standalone-qualification",
+        "logical_device": "npu:0",
+        "logical_devices": [
+          "npu:0"
+        ],
+        "npu_count": 1,
+        "physical_id": 5,
+        "physical_ids": [
+          5
+        ],
+        "priority": 0,
+        "project": "graph-execution-foundation",
+        "return_code": 0,
+        "schema_version": 1,
+        "status": "completed",
+        "timestamp": "2026-11-12T08:36:11.880991+00:00"
+      }
+    },
+    "scale": {
+      "identity": {
+        "path": "artifacts/p1p6-20261112/resident-v3-scale-queue.json",
+        "sha256": "b950b1f19e88a6b27a25912b89dcd2db88026f6659cac815e0a31a2744e5bec5",
+        "bytes": 399
+      },
+      "record": {
+        "elapsed_seconds": 87.20199010148644,
+        "job_id": "gef-p1p6-resident-v3-scale",
+        "logical_device": "npu:0",
+        "logical_devices": [
+          "npu:0"
+        ],
+        "npu_count": 1,
+        "physical_id": 5,
+        "physical_ids": [
+          5
+        ],
+        "priority": 0,
+        "project": "graph-execution-foundation",
+        "return_code": 1,
+        "schema_version": 1,
+        "status": "failed",
+        "timestamp": "2026-11-12T08:37:49.479804+00:00"
+      }
+    }
+  },
+  "small_configurations": {
+    "qry": {
+      "schema": "tide-experiment-v1",
+      "model": {
+        "recipe": {
+          "topology": "fc",
+          "depth": 2,
+          "region_width": 2,
+          "width": 4,
+          "history": 16,
+          "memory_overrides": {
+            "memory_read": "qry",
+            "epsilon": 0.3
+          }
+        }
+      },
+      "task": {
+        "samples": 2,
+        "positions": 3,
+        "input_pattern": "staggered-v1"
+      },
+      "execution": {
+        "client": "python-native",
+        "device": "npu:0",
+        "placement": "resident",
+        "intraop_threads": 1,
+        "interop_threads": 1
+      },
+      "site": {
+        "paths": {
+          "native_library": "/dev/shm/gef-p1p6-20261112/core-source-v2-native",
+          "resident_library": "/dev/shm/gef-p1p6-20261112/resident-v3-native"
+        }
+      },
+      "measurement": {
+        "mode": "training",
+        "steps": 3,
+        "warmup": 0,
+        "validation": "strict",
+        "checkpoint_check": true
+      }
+    },
+    "sum": {
+      "schema": "tide-experiment-v1",
+      "model": {
+        "recipe": {
+          "topology": "fc",
+          "depth": 2,
+          "region_width": 2,
+          "width": 4,
+          "history": 16,
+          "memory_overrides": {
+            "memory_read": "sum",
+            "epsilon": 0.3
+          }
+        }
+      },
+      "task": {
+        "samples": 2,
+        "positions": 3,
+        "input_pattern": "staggered-v1"
+      },
+      "execution": {
+        "client": "python-native",
+        "device": "npu:0",
+        "placement": "resident",
+        "intraop_threads": 1,
+        "interop_threads": 1
+      },
+      "site": {
+        "paths": {
+          "native_library": "/dev/shm/gef-p1p6-20261112/core-source-v2-native",
+          "resident_library": "/dev/shm/gef-p1p6-20261112/resident-v3-native"
+        }
+      },
+      "measurement": {
+        "mode": "training",
+        "steps": 3,
+        "warmup": 0,
+        "validation": "strict",
+        "checkpoint_check": true
+      }
+    }
+  },
+  "scale_plan": {
+    "identity": {
+      "path": "artifacts/p1p6-20261112/resident-v3-scale-plan.json",
+      "sha256": "4f7a094f32a4b70735711cd309c1d5279c850b508d256e954d4aab4954f71346",
+      "bytes": 1462
+    },
+    "record": {
+      "schema": "tide-block-boundary-plan-v1",
+      "source": "a3c4f62dcc3fce9bbf43e5a8f4ce5578c561efc4",
+      "question": "Can the rewritten block owner complete original FC16 training and precise continuation within the original total reservation, and can its sum/qry bindings carry LH176?",
+      "cases": [
+        {
+          "name": "fc16",
+          "config": "resident-v3-fc16-config.json",
+          "base": "docs/evidence/resident-shared-bank-20261112.json representatives[0]",
+          "budget_mapping": "forward=tensor+retained; backward/optimizer/cache/total unchanged; new owner has no queue/stages",
+          "timing": "one warmup and one measured continued training step; checkpoint outside"
+        },
+        {
+          "name": "lh176",
+          "config": "resident-v3-lh176-config.json",
+          "workload": "5539e0fdb716b75d1003b8d200f7c3f68cafde515503d01a62ab2b3b1c8025d7",
+          "timing": "one cold training window, no warmup; scope/resource observation, not reset benchmark"
+        }
+      ],
+      "resources": {
+        "cpu_pool": "48-63",
+        "intraop": 2,
+        "interop": 1,
+        "memory_gib": 256,
+        "service_seconds": 1800,
+        "per_process_seconds": 600,
+        "npu_count": 1
+      },
+      "stop": "one attempt per case; preserve finite mismatch or capacity/communication failure; no blind budget increase, shape reduction, launch blocking or tolerance relaxation",
+      "preconditions": "both builds and applicable small real-device lifecycle passed; no project heavy work on the same measurement device"
+    }
+  },
+  "static_capacity_sources": [
+    {
+      "path": "tools/device_online/block_settle_session.cpp",
+      "source": "a3c4f62dcc3fce9bbf43e5a8f4ce5578c561efc4",
+      "sha256": "170f94babcc944e65d56a6217e4e82366ca91a1ad8b890e29afa0651399b3f8e"
+    },
+    {
+      "path": "tools/device_online/block_settle_session_layout.cpp",
+      "source": "a3c4f62dcc3fce9bbf43e5a8f4ce5578c561efc4",
+      "sha256": "6ef69a3bbdaedd802d2533f1e28e841bae2efa0322aa7f01ff946626a354294c"
+    },
+    {
+      "path": "tools/device_online/weighted_kv_query_internal.h",
+      "source": "a3c4f62dcc3fce9bbf43e5a8f4ce5578c561efc4",
+      "sha256": "1938d4d6c77f28a6c3c69539e4891e734dbeb02d9d4263dc0c56329df4eb5ce6"
+    },
+    {
+      "path": "tools/device_online/device_optimizer.cpp",
+      "source": "a3c4f62dcc3fce9bbf43e5a8f4ce5578c561efc4",
+      "sha256": "501adb7278a72193bdfca0dbbe2e0c63940f8eee59dfe7896c8854423539bbc9"
+    }
+  ],
+  "caveats": [
+    "CPU checks and device processes count different units; no aggregate test count.",
+    "The first SDK outer build failed after component construction succeeded; subsequent benchmark build is a separate passed job.",
+    "Both runtime owners use aarch64 ABI1; this is not a two-ABI test.",
+    "Native and SDK public consumers check fresh processes. Experiment check uses a serial new owner. Standalone whole/prefix/resumed are separate processes.",
+    "The two failed scale points do not close the previous FC16 EE1019; they fail earlier.",
+    "No recurrent-memory/half/multi-device/GPU block qualification; legacy general capabilities remain distinct.",
+    "The 55f8c631 direct-baseline source-role fix was not in the a3c device build."
+  ],
+  "source_and_check_navigation": [
+    "examples/consumer_core5/block_resident.py",
+    "tools/device_online/block_resident_check.cpp",
+    "tools/device_online/block_selection_check.cpp",
+    "tools/device_online/block_settle_flow_check.cpp",
+    "tools/device_online/block_settle_session_check.cpp",
+    "tests/test_standalone_resident_blocks.py",
+    "docs/experiment-resident-blocks.md",
+    "docs/development.md"
+  ],
+  "reproduction_development_check": {
+    "runtime": "Python3.12 pure planning, no Torch or device execution",
+    "scope": "regenerated LH176 definition exactly equals the original fixed input; original site preserved for identity comparison",
+    "resolved_config_id": "be963d67a9c844373a607855dc97d8200a8608b9abc536c29a15ebd6eed8a728",
+    "original_workload_sha256": "5539e0fdb716b75d1003b8d200f7c3f68cafde515503d01a62ab2b3b1c8025d7",
+    "prior_launcher": "System default Python3.9 rejected Python>=3.10 union annotations before planning; retried using published Python3.12."
+  }
+}

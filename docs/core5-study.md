@@ -43,10 +43,10 @@ topology、profile、实际family、client、device、placement、dtype、kind�
 | 要比较的范围 | 固定证据与限制 |
 | --- | --- |
 | FC4/FC16：直接公式、公共列、默认入口，三种模式 | [张量窗口整链](evidence/tensor-windows-20261111.md)、[对齐消息/区域](evidence/aligned-columns-20261112.md)；对应源码的小型独立资格与完整尺度成本分列，Transformer仅作不等价计算参照 |
-| LH/HB：直接公式→公共接口→默认入口 | [LH三层成本](evidence/lh-three-layer-20261112.md)、[节点/区域后继](evidence/node-region-batching-20261112.md)、[非空七根族与安装恢复](evidence/query-lifecycle-20261112.md)；成本、数值投影/连接差异和精确生命周期分别记录 |
+| LH/HB：直接公式→公共接口→默认入口 | [来源列22点后继](evidence/source-columns-performance-20261112.md)、[当前静态数据流](evidence/lh-block-static-20261112.md)、[非空七根族](evidence/query-lifecycle-20261112.md)；三模式、CPU/NPU成本与安装恢复分列，当前LH主要差距仍在公共列计算层 |
 | 宽FC、多节点HB/LH、约1B/9B | [公共实验代表](evidence/experiment-columns-20261111.md)；三客户端设置、训练/推理及容量/恢复失败各有身份，不能外推未测的8B/16B或大规模训练 |
 | mixed-a/b/c、多payload owner、FP16 | [混合放置](evidence/column-placement-20261111.md)、[多owner](evidence/column-owners-20261111.md)、[half后继](evidence/column-half-20261111.md)；host推进与resident不同，显式同步和普通异步分别资格 |
-| resident与GPU | [resident当前边界](resident-block-execution.md)、[能力与历史GPU证据](execution-capabilities.md)；组件、完整owner、训练/恢复、规模和新源码真机证据不互相替代 |
+| resident与GPU | [resident公共接入/真机/规模拒绝](evidence/resident-block-public-20261112.md)、[能力与历史GPU证据](execution-capabilities.md)；新block单NPU FP32 sum/qry小型训练恢复通过，规模容量失败单列，不继承旧general或GPU资格 |
 
 后继固定结果从[证据索引](evidence/README.md)定位；表内报告保留原实现提交与环境，不因
 默认路径更新改写。旧[自然规模25配置](evidence/core5-natural-study-20261029.md)、

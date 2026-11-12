@@ -139,8 +139,11 @@ independent intermediate event-root contract are separate observation APIs.
 Graph v13 and checkpoint v5 are unchanged; exact raw continuation comes from
 candidate results, never reference replay.
 
-Installed experiments use execution-v6 to select the same window interface for
-compatible built-in output-only tasks. This software policy does not change the
+Installed experiments introduced the same window interface in execution-v6 for
+compatible built-in output-only tasks. Execution-v7 also records static
+`auto|general|block-v2` resident selection and its capacity schema; see
+[experiment resident blocks](experiment-resident-blocks.md). Frozen historical
+records retain their declared selection. This software policy does not change the
 per-physical-port objective or graph/checkpoint versions. Input columns preserve
 the seeded material and shared source uses; CPU value observations decode after
 backward. Explicit records, complete observations, plugins and historical locks

@@ -78,3 +78,5 @@ checkpoint 使用原子 LibTorch schema-2 archive；Python checkpoint 字典观�
 CPU 输入与解码检查验证适配边界、独立公式及调用顺序，不能冒充真实 resident 算子资格。
 固定提交的安装 `tidegraph check` 仍需独立完整前向、参数根、训练和精确下一窗；
 公共设备组件、standalone 消费者、实验默认路径和 FC16 尺度分别记录证据。
+对应[a3c固定资格](evidence/resident-block-public-20261112.md)已有两种Memory的独立full检查、
+公共新进程及standalone训练archive实测；FC16/LH176容量拒绝没有有效规模吞吐或恢复结论。

@@ -6,6 +6,9 @@ AdamW/SGD and exact raw checkpoints. It is a new owner, not a wrapper around the
 older `WeightedFlow` or its `TaskServices` journal. Implementation and device
 qualification remain separate; this contract does not transfer earlier owner
 or FC16 qualifications to the new path.
+The [fixed a3c report](evidence/resident-block-public-20261112.md) records the
+Python-owned and standalone SDK small-NPU sum/qry training and fresh-process
+restore checks, alongside separate FC16/LH176 scale capacity refusals.
 
 ## Boundary and lifecycle
 
