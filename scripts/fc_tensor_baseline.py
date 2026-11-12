@@ -124,44 +124,50 @@ def prepare(node, u, mass, times, left=None):
 
 
 def full(node, prepared, controls, *, attention="manual"):
-    """Selected queries contract with one K/V bank per sample, never Q copies.
+    """KV textbook §4/§6: selected queries across B and time share B K/V banks.
 
-    This compact anchor has B host groups, not B*L Full calls. It is not a
-    claim of optimal submission count; the production batch interface is tested
-    independently. Query count can differ between samples without padding Full.
+    Only the Attention contractions pad to the largest selected query count.
+    Query/output/FFN projections use actual selected rows; historical K/V is
+    never gathered once per query. There is no host loop over samples or time.
     """
     u, raw, mask = prepared
     key, value, writes = raw["keys"], raw["values"], raw["weights"]
     c, module = node.kernel.config, node.full_program.content
     batch, length, dim = u.shape
     active = controls.detach() > 0
-    rows = []
-    for b in range(batch):
-        t = active[b].nonzero().flatten()
-        if not len(t):
-            rows.append(torch.zeros_like(u[b]))
-            continue
-        q = (normalize(u[b, t], c.epsilon)@module.query.t()).reshape(-1, c.heads, dim//c.heads).transpose(0, 1)
-        k, v = (z[b].reshape(-1, c.heads, dim//c.heads).transpose(0, 1) for z in (key, value))
-        weights = writes[b][None]*mask[t]
-        safe = torch.where(weights > 0, weights, 1)
-        if attention in {"sdpa", "sdpa4d"}:
-            bias = safe.log()[None].masked_fill(weights[None] <= 0, -torch.inf)
-            mixed = (F.scaled_dot_product_attention(q[None], k[None], v[None], attn_mask=bias[None])[0]
-                     if attention == "sdpa4d" else F.scaled_dot_product_attention(q, k, v, attn_mask=bias))
-        elif attention == "manual":
-            logits = q@k.transpose(-1, -2)/math.sqrt(dim//c.heads)
-            logits = (logits+safe.log()[None]).masked_fill(weights[None] <= 0, -torch.inf)
-            mixed = logits.softmax(-1)@v
-        else:
-            raise ValueError("unknown FC formula Attention operator")
-        read = mixed.transpose(0, 1).reshape(-1, dim)
-        read = read*weights.sum(-1).clamp_max(1)[:, None]
-        x = u[b, t]+c.alpha_att*(read@module.out.t())
-        normal = normalize(x, c.epsilon)
-        x = x+c.alpha_ff*((F.silu(normal@module.gate.t())*(normal@module.up.t()))@module.down.t())
-        rows.append(u.new_zeros((length, dim)).index_copy(0, t, x))
-    return torch.stack(rows), active
+    selected = active.nonzero()
+    if not len(selected):
+        return torch.zeros_like(u), active
+    sample, time = selected.unbind(-1)
+    queries = int(active.sum(-1).max())
+    ordinal = active.cumsum(-1, dtype=torch.int64)-1
+    slots = sample*queries+ordinal[sample, time]
+    positions = sample*length+time
+    current = u.reshape(-1, dim).index_select(0, positions)
+    projected = normalize(current, c.epsilon)@module.query.t()
+    q = u.new_zeros((batch*queries, dim)).index_copy(0, slots, projected)
+    q = q.reshape(batch, queries, c.heads, dim//c.heads).transpose(1, 2)
+    k, v = (z.reshape(batch, -1, c.heads, dim//c.heads).transpose(1, 2) for z in (key, value))
+    query_times = time.new_zeros(batch*queries).index_copy(0, slots, time)
+    visible = mask.index_select(0, query_times).reshape(batch, queries, -1)
+    weights = writes[:, None, :]*visible
+    safe = torch.where(weights > 0, weights, 1)
+    bias = safe.log()[:, None].masked_fill(weights[:, None] <= 0, -torch.inf)
+    # The FC domain writes a positive entry at every position, including time 0.
+    # Padding therefore has a finite softmax; its outputs are discarded below.
+    if attention in {"sdpa", "sdpa4d"}:
+        mixed = F.scaled_dot_product_attention(q, k, v, attn_mask=bias)
+    elif attention == "manual":
+        logits = q@k.transpose(-1, -2)/math.sqrt(dim//c.heads)
+        mixed = (logits+bias).softmax(-1)@v
+    else:
+        raise ValueError("unknown FC formula Attention operator")
+    read = mixed.transpose(1, 2).reshape(batch*queries, dim)
+    read = (read*weights.sum(-1).clamp_max(1).reshape(-1, 1)).index_select(0, slots)
+    x = current+c.alpha_att*(read@module.out.t())
+    normal = normalize(x, c.epsilon)
+    x = x+c.alpha_ff*((F.silu(normal@module.gate.t())*(normal@module.up.t()))@module.down.t())
+    return u.new_zeros((batch*length, dim)).index_copy(0, positions, x).reshape_as(u), active
 
 
 def run(binding, spec, x, *, start=0, left=None, full_attention="manual"):

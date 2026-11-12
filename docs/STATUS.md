@@ -1,61 +1,38 @@
-# 当前交接 — 本轮收尾，等待重新对齐（2026-11-12）
+# 当前交接 — 直接FC的Full跨样本批量化（2026-11-12）
 
-数学固定 `0770593838a37c790a568226930567ed60f99b83`，19份快照通过。
-授权分支 `graph-execution-foundation`。**用户要求本轮之后停下汇报，重新对齐并获授权后再继续。**
-本轮两条边界及必要验证已结束；不要自动启动下一轮优化、规模扫描或剩余P1—P6。
-当前总体待办在[ROADMAP](ROADMAP.md)，本页是唯一当前交接。
+数学固定 `0770593838a37c790a568226930567ed60f99b83`；授权分支 `graph-execution-foundation`。
+用户本轮只授权立即改造直接FC的B循环并给出CPU/NPU吞吐；其余重写/删除/skills治理继续只读对齐。
+旧实现、旧测试都可在后续重写中移除，唯一数学锚点是固定上游；本轮不执行该整体清退。
 
-## 已确认原则，不重新立项
+## 本轮范围与当前结果
 
-固定core-5全局/局部数学、公共基座和代表性能是锚点。旧源码和接口可整体重写；
-mixed-a/b/c只是可迁移的对照预设，不强迫架构分层。重入时遵守，不重复调查或执行同一原则。
-保留一般图、局部替换、完整观察/独立根、训练和精确恢复。子代理/工具并行按收益选择，
-主代理统一集成和资源调度。全CPU/可用内存可使用；本对话共享NPU已有授权，不能继承为新会话默认。GPU延后。
+`scripts/fc_tensor_baseline.py::full` 将选中查询跨B打包成 `[B,H,Qmax,Dh]`，
+共享每样本KV；Q、输出与FFN投影只计算实际选中行，Attention补齐到批内最大查询数。
+Full中不再有B/L主机循环。独立逐查询指数商公式覆盖不齐/空/单行/全活动、各输入VJP；
+开发CPU共31 passed，包括非空状态、跨窗、三步SGD及新进程恢复；这还不是固定设备资格。
 
-## 本轮交付与证据
+待实施提交固定后，用前版本 `bb23a9fa` 与新版本运行同一FC16任务，B8/L128/d128、FP32。
+新旧直接公式各三模式，数学不等价Transformer16三模式，另一个新SDPA训练点。
+每点独立进程，一次reset warmup/一次完整测量；CPU1线程、NPU host2，正式成本不含profile。
+新旧代码独立冻结，资源预算每服务8核/128GiB/1800秒，单点240秒。
+脚本 `benchmark_fc_batch_pair.py` 保存逐点命令、原始结果、退出码和源码身份。
 
-- **c6afc20c主机Read/Describe→区域字段owner**：真实连续存储借用和块伴随已交付，
-  [固定资格与20点成本](evidence/read-region-owner-20261112.md)。两套core构建、SDK7CPU/15NPU组合、
-  12安装三AdamW/新进程恢复通过；CPU245 passed / 7原xfail / 2原FP32严格失败。
-  原失败坐标及差8.8512897e-6保持，阈值未改。LH176 B4/L16/d64默认native完整训练CPU1/NPU-host2
-  为1.419332/2.471804秒，直接.749660/.621882秒；FC16 B8/L128/d128默认native为1.156975/.301235秒。
-  这是主机调度数值在NPU的结果，不是resident。主要LH差距仍在，不追加同一局部的无限优化。
-- **0c974ccd resident唯一KV bank→Mem/Full→块伴随**：默认局部链已贯穿，
-  [固定资格](evidence/resident-kv-owner-20261112.md)记录56 CPU、两套独立构建、11 SDK及4安装native设备进程全部通过。
-  Read0/−/+、独立raw根、小图三步AdamW、两窗BPTT、实际raw解码和新进程精确恢复分别核对。
-  `kv-bank-views-v1`：old/proposal默认有shape/present/valid，显式observe从真实bank解码，
-  cotangents不要求先物化；完整Python记录和安装消费者已迁移。block checkpoint仍schema2。
-  **新resident布局没有新吞吐或规模测量**；半精度、其他记忆、多owner、CUDA构建/真机未扩。
-- 来源共享/规划与resident资源此前记录仍有效：
-  [72e1d22c](evidence/source-bank-20261112.md)、[9ae62d0d](evidence/source-planning-20261112.md)、
-  [08a349ce](evidence/resident-resources-20261112.md)。不重新执行已终态矩阵来恢复上下文。
+## 作业与资源
 
-## 尚未完成，等待下一轮对齐
+当前尚未提交后台作业；开发短检查已经结束，无在途任务。
+计划任务目录 `artifacts/fc-batch-full-20261112`，作业 `artifacts/jobs/fc-batch-full-{cpu,npu}`，
+unit `gef-fc-batch-full-{cpu,npu}`；冻结源码计划位于 `/dev/shm/gef-fc-batch-full-20261112/{before,after}`。
+复用项目私有 `artifacts/additive-work/env` 与公共CANN9.2.0模块；本轮无需C++构建。
+全CPU/内存及本对话共享NPU授权有效，优先空闲卡，记录实际准入与外部争用。
+存储已检查：主盘876GiB、shm273GiB可用，账户269GiB/软300/硬800GiB；不受磁盘阻塞。
 
-P1—P6总体未完成。主机prepare/raw-bank→Read/Full和typed continuation仍有相邻交接工作；
-LH直接/公共/默认的主要成本差距尚未闭合。新resident保留查询×条目表和部分标量位置/元数据核，
-大尺度、有限window expiry完整设备图、更多模块/多卡及性能须独立验收；CPU局部expiry不能代替这些资格。
-全仓逐文件/逐函数审阅未完成。详细限制、停止/重启条件只在ROADMAP维护。
-本轮经验已归入[性能经验](performance-lessons-prefill.md#共享历史与显式观察边界)，
-源码/数学/测试/实际命令从[bank契约](resident-kv-bank.md)和[复现导航](reproduction.md)进入。
+## 其他状态与下一动作
 
-## 作业、源码和工作区
+上轮主机字段owner与resident KV bank的资格分别见
+[evidence/read-region-owner-20261112.md](evidence/read-region-owner-20261112.md)及
+[evidence/resident-kv-owner-20261112.md](evidence/resident-kv-owner-20261112.md)。
+新resident尚无新性能；LH差距及原数值/异步限制不因本次FC修改解除，待办仍见ROADMAP。
+三份用户未跟踪REQ-004/005/006交接文档保持原样，不提交。
 
-无在途长任务；所有`resident-kv-owner-*`作业均passed/exit0，unit inactive、MainPID0。
-两构建CPU0–159/160–319、各512GiB/2400秒；NPU资格物理11(native)/5(SDK)，idle准入，逻辑npu:0。
-固定resident源码`0c974ccd4921999e6b7f6292888bfcb3478a33e1`在
-`/dev/shm/gef-resident-kv-owner-20261112/source`，对应resident-native/resident-sdk/install/wheels同根；
-复用c6 core前逐一核对cpp源码及二进制SHA。两套公开工具链独立，无公共环境修改。
-记录`artifacts/jobs/resident-kv-owner-*`与`artifacts/resident-kv-owner-20261112`；
-必要命令、结果、SHA已复制到仓库证据，不依赖旧运行目录才能复现。
-
-用户的三份未跟踪`docs/tide-learning-lab-TL-REQ-004/005/006-handoff.md`仍只读、不提交。
-除此之外无待集成的源码草稿。开发中的CPU harness签名/arena和W=1分支见证修正已保留于证据，
-不能把开发/语法检查混成固定设备结果。磁盘未阻塞：最近主盘余807GiB、tmpfs276GiB，
-账户337GiB/软300/硬800GiB、6日宽限；下一大写入前重查。
-
-## 下一动作
-
-向用户汇报并等待对齐/授权，不自动运行任何待办。重入只核验：
-`git status --short --branch`；`python scripts/status.py`；`python scripts/check_upstream.py`。
-历史提交按`python scripts/resolve_history_commit.py OLD_SHA`定位，见[迁移说明](history-migration.md)。
+下一动作：提交本次实现，冻结前后源码；启动CPU/NPU固定检查及有限成本，审阅终态后
+单独提交证据并汇报。其余仅汇总用户对张量贯穿、可删除旧测试和直接样板性能要求的反馈。
