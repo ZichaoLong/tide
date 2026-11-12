@@ -101,6 +101,9 @@ FP32 raw、qry/cat/ind/context/cat/quad。其 raw 输入暂按帧提供快照，
 
 后续完整 owner 还缺少以下实际接口与验收：
 
+Read-selection之后已增加[独立proposal Full与消息数值组合](resident-block-kv-messages.md)，
+保留独立根与跨角色参数汇总；其作用仍限于实际输入快照的数值组合，以下owner职责尚待完成。
+
 1. 从实际端口/逐边消息列完成 Aggregate/Upd，生成 typed Read 快照或共享 KV 前缀 bank，
    并把上述数值阶段接入 device choose/commit 循环。当前静态计划与 Read-selection 是独立可组合件，
    未运行完整 Settle 图。外部输入用实际存在性 seed，加入状态、控制和 absence 依赖；

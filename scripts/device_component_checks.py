@@ -3,6 +3,7 @@
 CHECKS = {
     "resident-block": ("tide-block-dispatch-check", ("float32",)),
     "resident-block-selection": ("tide-block-read-selection-check", ("float32",)),
+    "resident-block-kv-messages": ("tide-block-kv-messages-check", ("float32",)),
     "weighted-node-replicas": ("tide-weighted-peer-check", ("float32", "float16")),
     "weighted-node-training": ("tide-weighted-node-training-check", ("float32", "float16")),
     "weighted-node-window": ("tide-weighted-node-window-check", ("float32",)),
@@ -103,6 +104,7 @@ CONSTRUCTION_CHECKS = {
 MARKERS = {
     "resident-block": "resident-block: passed",
     "resident-block-selection": "block-read-selection: passed",
+    "resident-block-kv-messages": "block-kv-messages: passed",
     "services": "task-services: passed",
     "weighted-budget-construction": "weighted-budget: borrowed_owner_charged_once=true real_shortfall_refused=true undeclared_borrow_charged=true",
     "weighted-parameters": "weighted-parameters: passed",
@@ -168,6 +170,7 @@ MARKERS = {
 KERNELS = {"master-publication": "tide_parameter_publish", "precision-flow": "tide_ready_pack", "attention-payload": "tide_attention_softmax", "aggregate-payload": "tide_aggregate_apply", "state-read": "tide_vector_state", "packed-lh": "tide_full_plan", "retained": "tide_window_bridge", "training-step": "tide_optimizer", "optimizer": "tide_optimizer", "parameter-vjp": "tide_parameter_vjp", "closure": "tide_closure", "transaction": "tide_queue_propose",
            "resident-block": "tide_block_dispatch",
            "resident-block-selection": "tide_block_selection_plan",
+           "resident-block-kv-messages": "tide_weighted_full_plan",
            "broadcast": "tide_broadcast_route", "ready": "tide_ready_pack", "selector": "tide_frame_select",
            "content": "tide_vector_sum", "window": "tide_vector_sum", "full": "tide_full_plan", "sum": "tide_vector_sum",
            "add": "tide_vector_state", "state-vjp": "tide_state_vjp", "full-vjp": "tide_full_vjp", "reverse-links": "tide_reverse_links", "graph-vjp": "tide_graph_reverse", "clock": "tide_vector_state", "norm32": "tide_vector_read",

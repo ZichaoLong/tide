@@ -253,11 +253,21 @@ if(TIDE_DEVICE_KERNELS)
     tide-block-dispatch tide-weighted-kv-query tide-weighted-describe tide-weighted-region tide::tidegraph
     tide_block_selection_plan_kernel tide_block_selection_roots_kernel
     tide_block_selection_flags_kernel tide_block_node_gate_kernel)
+  add_library(tide-block-kv-messages STATIC
+    block_kv_messages.cpp block_kv_messages_vjp.cpp block_kv_message_parameters.cpp)
+  set_target_properties(tide-block-kv-messages PROPERTIES POSITION_INDEPENDENT_CODE ON)
+  target_link_libraries(tide-block-kv-messages PUBLIC
+    tide-block-read-selection tide-weighted-kv-full tide-weighted-parameters tide-weighted-row)
   if(TIDE_DEVICE_RUNTIME STREQUAL "standalone")
     add_executable(tide-block-read-selection-check
       block_read_selection_check.cpp block_selection_fixture.cpp block_selection_formula.cpp)
     target_compile_options(tide-block-read-selection-check PRIVATE -fPIC)
     target_link_libraries(tide-block-read-selection-check PRIVATE tide-block-read-selection)
+    add_executable(tide-block-kv-messages-check
+      block_kv_messages_check.cpp block_kv_message_fixture.cpp block_kv_message_formula.cpp
+      block_selection_fixture.cpp block_selection_formula.cpp)
+    target_compile_options(tide-block-kv-messages-check PRIVATE -fPIC)
+    target_link_libraries(tide-block-kv-messages-check PRIVATE tide-block-kv-messages)
     add_executable(tide-weighted-rotary-check weighted_rotary_check.cpp)
     target_compile_options(tide-weighted-rotary-check PRIVATE -fPIC)
     target_link_libraries(tide-weighted-rotary-check PRIVATE tide-weighted-rotary tide::tidegraph)

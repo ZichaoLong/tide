@@ -11,6 +11,10 @@ KV Read/Describe和完整区域数值分开：`tools/device_online/block_dispatc
 和`block_read_selection*`分别拥有调度、静态lowering和数值/VJP；`block_selection_formula.cpp`
 为独立公式锚点。修改同步CPU metadata检查、`device_component_checks`及对应设备check。
 这些是新执行器组合件，未成为公共完整图owner；旧resident资格不能自动继承。
+[KV消息组合](resident-block-kv-messages.md)由`block_kv_messages`/VJP连接独立Read与proposal
+快照、区域控制、Full及未缩放(c,G)；`block_kv_message_parameters`按实际owner汇总跨角色alias。
+`block_kv_message_formula`独立锚定数学，`block_kv_messages_check`核对独立根、默认分支和拒绝。
+修改须同步设备检查注册、独立公式/容量测试；它尚无Aggregate/Upd、路由或公共训练owner。
 
 LH/HB同材料三层对照由[独立张量基线](lh-tensor-baseline.md)连接
 `lh_tensor_baseline/math/state`、`benchmark_lh_tensor`与`test_lh_tensor_baseline`；

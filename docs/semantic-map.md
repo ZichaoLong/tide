@@ -203,6 +203,10 @@ Settle `ports` 在任意逻辑 cut 原样保留状态和 pending；`broadcast_su
 `BlockDispatcher`与静态潜在DAG；KV §3、架构Describe及分配SelStep到
 `append_block_read_selection`/VJP。元数据独立递归DAG与数值独立公式各自验证，
 不把局部块和静态lowering当作完整图、训练或checkpoint交付。
+[Read/Full消息组合](resident-block-kv-messages.md)把架构§3/§4.2与KV§3–4对应到
+`append_block_kv_messages`及其VJP：Read快照/proposal快照分别输入，(c,G)与显式cG分开，
+actual presence和int64时钟伴随返回；role→canonical owner映射汇总真实参数共享。
+独立C++公式/根与拒绝检查在`block_kv_message_formula`/`block_kv_messages_check`，设备资格另列。
 
 - [区域列边界](weighted-region-batch.md)：Alloc/SelStep的R×N完整描述、score/evidence/
   control/support与精确解映射VJP由`allocation_columns`、`regional_columns`和C++
