@@ -1,0 +1,2812 @@
+{
+  "schema": "tide-fc-batch-full-evidence-v1",
+  "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+  "implementation": "cc6ccbf7948362686ba27166aedf48ce17af1841",
+  "before": "bb23a9fae7aa3b02e59344d9f798f89f4e551214",
+  "scope": "Direct PyTorch FC anchor Full only; independent CPU/NPU small tests and finite paired costs, no default-runtime or full-scale strict equivalence claim",
+  "environment": {
+    "module": "ascend/dev-workspace-9.2.0",
+    "torch": "2.12.0+cpu",
+    "torch_npu": "2.12.0.post3",
+    "cann": "9.2.0",
+    "python": "artifacts/additive-work/env/bin/python",
+    "cpu_architecture": "aarch64",
+    "host_logical_cpus": 320,
+    "blas_environment": {
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1"
+    }
+  },
+  "resources": {
+    "slice": "background.slice",
+    "per_service_memory_max_gib": 128,
+    "per_service_runtime_max_seconds": 1800,
+    "per_point_timeout_seconds": 240,
+    "cpu_affinity": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "npu_host_affinity": [
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15
+    ],
+    "npu_physical": 0,
+    "npu_logical": "npu:0",
+    "admission": "idle device, two observations; other cards/host shared with external jobs; no exclusive peak claim",
+    "source_clean_after_jobs": true
+  },
+  "workload_script": "#!/bin/bash\nset -euo pipefail\nsrc=/dev/shm/gef-fc-batch-full-20261112/after\nroot=/mi/data2T/zlong/home/llm/graph-execution-foundation\nout=\"$root/artifacts/fc-batch-full-20261112\"\nsource \"$src/scripts/local_ascend.sh\"\ntide_load_ascend\npy=\"$root/artifacts/additive-work/env/bin/python\"\nexport PYTHONPATH=\"$src/python:$src/scripts\"\nexport OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1\nexport TIDE_FC_DEVICE=\"$1\"\ncd \"$out\"\nif [ \"$1\" = cpu ]; then\n  \"$py\" -m pytest -q -p no:cacheprovider \"$src/tests/test_fc_full_batch.py\" \"$src/tests/test_fc_tensor_baseline.py\" \"$src/tests/test_tensor_baseline_continuation.py\" -k 'fc or finite_interval' --dtype both --junitxml=\"$out/cpu.xml\"\n  threads=1\n  label=cpu\nelse\n  \"$py\" -m pytest -q -p no:cacheprovider \"$src/tests/test_fc_full_batch.py\" \"$src/tests/test_fc_tensor_baseline.py\" -k 'selected_batch or formula_outputs' --dtype float32 --junitxml=\"$out/npu.xml\"\n  threads=2\n  label=npu\nfi\n\"$py\" \"$src/scripts/benchmark_fc_batch_pair.py\" --before /dev/shm/gef-fc-batch-full-20261112/before --after \"$src\" --downstream-repo /mi/data2T/zlong/home/llm/tide-learning-lab --device \"$1\" --threads \"$threads\" --sdpa-training --output-dir \"$out/$label\"\n",
+  "tests": {
+    "cpu": {
+      "junit": "artifacts/fc-batch-full-20261112/cpu.xml",
+      "summary": {
+        "name": "pytest",
+        "errors": "0",
+        "failures": "0",
+        "skipped": "0",
+        "tests": "31",
+        "time": "12.264",
+        "timestamp": "2026-11-12T23:11:55.860003+08:00",
+        "hostname": "liteserver-mi-dev-00001"
+      },
+      "case_names": [
+        "tests.test_fc_full_batch::test_selected_batch_values_and_all_input_vjps[float64-manual-uneven]",
+        "tests.test_fc_full_batch::test_selected_batch_values_and_all_input_vjps[float64-manual-one]",
+        "tests.test_fc_full_batch::test_selected_batch_values_and_all_input_vjps[float64-manual-all]",
+        "tests.test_fc_full_batch::test_selected_batch_values_and_all_input_vjps[float64-manual-empty]",
+        "tests.test_fc_full_batch::test_selected_batch_values_and_all_input_vjps[float64-sdpa4d-uneven]",
+        "tests.test_fc_full_batch::test_selected_batch_values_and_all_input_vjps[float64-sdpa4d-one]",
+        "tests.test_fc_full_batch::test_selected_batch_values_and_all_input_vjps[float64-sdpa4d-all]",
+        "tests.test_fc_full_batch::test_selected_batch_values_and_all_input_vjps[float64-sdpa4d-empty]",
+        "tests.test_fc_full_batch::test_selected_batch_values_and_all_input_vjps[float32-manual-uneven]",
+        "tests.test_fc_full_batch::test_selected_batch_values_and_all_input_vjps[float32-manual-one]",
+        "tests.test_fc_full_batch::test_selected_batch_values_and_all_input_vjps[float32-manual-all]",
+        "tests.test_fc_full_batch::test_selected_batch_values_and_all_input_vjps[float32-manual-empty]",
+        "tests.test_fc_full_batch::test_selected_batch_values_and_all_input_vjps[float32-sdpa4d-uneven]",
+        "tests.test_fc_full_batch::test_selected_batch_values_and_all_input_vjps[float32-sdpa4d-one]",
+        "tests.test_fc_full_batch::test_selected_batch_values_and_all_input_vjps[float32-sdpa4d-all]",
+        "tests.test_fc_full_batch::test_selected_batch_values_and_all_input_vjps[float32-sdpa4d-empty]",
+        "tests.test_fc_tensor_baseline::test_finite_interval_solution_and_implicit_direction[float64]",
+        "tests.test_fc_tensor_baseline::test_finite_interval_solution_and_implicit_direction[float32]",
+        "tests.test_fc_tensor_baseline::test_fc_formula_outputs_controls_terminal_state_and_numeric_gradients[float64]",
+        "tests.test_fc_tensor_baseline::test_fc_formula_outputs_controls_terminal_state_and_numeric_gradients[float32]",
+        "tests.test_fc_tensor_baseline::test_fc_formula_rejects_unsupported_domain",
+        "tests.test_tensor_baseline_continuation::test_three_sgd_steps_against_independent_scalar_schedule[float64-fc]",
+        "tests.test_tensor_baseline_continuation::test_three_sgd_steps_against_independent_scalar_schedule[float32-fc]",
+        "tests.test_tensor_baseline_continuation::test_nonzero_raw_left_shared_parameters_and_independent_roots[float64-fc]",
+        "tests.test_tensor_baseline_continuation::test_nonzero_raw_left_shared_parameters_and_independent_roots[float32-fc]",
+        "tests.test_tensor_baseline_continuation::test_cross_window_retained_graph_and_original_time[float64-fc]",
+        "tests.test_tensor_baseline_continuation::test_cross_window_retained_graph_and_original_time[float32-fc]",
+        "tests.test_tensor_baseline_continuation::test_three_optimizer_steps_and_exact_projection_checkpoint[float64-fc]",
+        "tests.test_tensor_baseline_continuation::test_three_optimizer_steps_and_exact_projection_checkpoint[float32-fc]",
+        "tests.test_tensor_baseline_continuation::test_left_metadata_and_start_rejected[float64-fc]",
+        "tests.test_tensor_baseline_continuation::test_left_metadata_and_start_rejected[float32-fc]"
+      ]
+    },
+    "npu": {
+      "junit": "artifacts/fc-batch-full-20261112/npu.xml",
+      "summary": {
+        "name": "pytest",
+        "errors": "0",
+        "failures": "0",
+        "skipped": "0",
+        "tests": "9",
+        "time": "3.897",
+        "timestamp": "2026-11-12T23:12:03.402264+08:00",
+        "hostname": "liteserver-mi-dev-00001"
+      },
+      "case_names": [
+        "tests.test_fc_full_batch::test_selected_batch_values_and_all_input_vjps[float32-manual-uneven]",
+        "tests.test_fc_full_batch::test_selected_batch_values_and_all_input_vjps[float32-manual-one]",
+        "tests.test_fc_full_batch::test_selected_batch_values_and_all_input_vjps[float32-manual-all]",
+        "tests.test_fc_full_batch::test_selected_batch_values_and_all_input_vjps[float32-manual-empty]",
+        "tests.test_fc_full_batch::test_selected_batch_values_and_all_input_vjps[float32-sdpa4d-uneven]",
+        "tests.test_fc_full_batch::test_selected_batch_values_and_all_input_vjps[float32-sdpa4d-one]",
+        "tests.test_fc_full_batch::test_selected_batch_values_and_all_input_vjps[float32-sdpa4d-all]",
+        "tests.test_fc_full_batch::test_selected_batch_values_and_all_input_vjps[float32-sdpa4d-empty]",
+        "tests.test_fc_tensor_baseline::test_fc_formula_outputs_controls_terminal_state_and_numeric_gradients[float32]"
+      ]
+    }
+  },
+  "jobs": {
+    "cpu": {
+      "unit": "gef-fc-batch-full-cpu.service",
+      "status": {
+        "command": [
+          "/bin/bash",
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/fc-batch-full-20261112/run.sh",
+          "cpu"
+        ],
+        "cwd": "/dev/shm/gef-fc-batch-full-20261112/after",
+        "state": "passed",
+        "source": "cc6ccbf7948362686ba27166aedf48ce17af1841",
+        "dirty": "",
+        "started": "2026-11-12T15:11:54.351857+00:00",
+        "exit_code": 0,
+        "finished": "2026-11-12T15:12:52.531793+00:00"
+      },
+      "observed_systemd": {
+        "ActiveState": "inactive",
+        "SubState": "dead",
+        "MainPID": 0,
+        "ControlGroup": "",
+        "Result": "success",
+        "ExecMainStatus": 0
+      }
+    },
+    "npu": {
+      "unit": "gef-fc-batch-full-npu.service",
+      "status": {
+        "command": [
+          "/usr/bin/python3",
+          "/mi/data2T/zlong/home/.agents/skills/use-local-ascend/scripts/run_on_free_npu.py",
+          "--job-id",
+          "gef-fc-batch-full-npu-20261112",
+          "--project",
+          "graph-execution-foundation",
+          "--priority",
+          "0",
+          "--npu-count",
+          "1",
+          "--candidate-ids",
+          "10,0",
+          "--max-wait-seconds",
+          "120",
+          "--state-file",
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/fc-batch-full-20261112/queue.json",
+          "--",
+          "/bin/bash",
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/fc-batch-full-20261112/run.sh",
+          "npu:0"
+        ],
+        "cwd": "/dev/shm/gef-fc-batch-full-20261112/after",
+        "state": "passed",
+        "source": "cc6ccbf7948362686ba27166aedf48ce17af1841",
+        "dirty": "",
+        "started": "2026-11-12T15:11:54.352166+00:00",
+        "exit_code": 0,
+        "finished": "2026-11-12T15:13:30.733646+00:00"
+      },
+      "observed_systemd": {
+        "ActiveState": "inactive",
+        "SubState": "dead",
+        "MainPID": 0,
+        "ControlGroup": "",
+        "Result": "success",
+        "ExecMainStatus": 0
+      }
+    }
+  },
+  "cases": [
+    {
+      "device": "cpu",
+      "label": "before-inference-manual-r0",
+      "command": [
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/additive-work/env/bin/python",
+        "/dev/shm/gef-fc-batch-full-20261112/before/scripts/benchmark_dense_query.py",
+        "--downstream-repo",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab",
+        "--baseline",
+        "fc-tensor",
+        "--client",
+        "python",
+        "--device",
+        "cpu",
+        "--mode",
+        "inference",
+        "--batch",
+        "8",
+        "--length",
+        "128",
+        "--phase-fences",
+        "step",
+        "--threads",
+        "1",
+        "--formula-attention",
+        "manual",
+        "--output-dir",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/fc-batch-full-20261112/cpu/before-inference-manual-r0"
+      ],
+      "exit_code": 0,
+      "identity": {
+        "foundation_source": "bb23a9fae7aa3b02e59344d9f798f89f4e551214",
+        "downstream": "0439efd2af31cf10b07ce9e6423b0195f7449968",
+        "downstream_archive_sha256": "430237f4ca7a8c0205644ff6952cd4823ace20160ee0ffc2a206b4064e9075ce",
+        "initial_parameters_sha256": "7f41057f0196bc2b259902f8dadafc9c3f46d197e02de5ebbda9517a632f9a1a",
+        "measured_parameters_sha256": "7f41057f0196bc2b259902f8dadafc9c3f46d197e02de5ebbda9517a632f9a1a",
+        "trainable_parameters": 5092788,
+        "comparison_scope": "Same core-5 parameters/input/head/loss; independent FC output/terminal-state projection, no complete trace or None-root equivalence",
+        "strict_numerical": "not_checked",
+        "discrete": "not_independently_checked",
+        "recovery": "see separate consumer",
+        "learning": "not_a_learning_study",
+        "baseline": "fc-tensor",
+        "mode": "inference",
+        "formula_attention": "manual",
+        "phase_fences": "step",
+        "precision": {
+          "requested": "vendor-default",
+          "effective": {
+            "float32_matmul_precision": "highest"
+          }
+        },
+        "effective_threads": 1,
+        "effective_interop_threads": 1,
+        "affinity": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "visibility": null
+      },
+      "measured": {
+        "index": 1,
+        "warmup": false,
+        "phases_seconds": {
+          "embedding": 0.00017901510000228882,
+          "core_forward": 0.4120861552655697,
+          "head": 0.0005120113492012024,
+          "first_token": 0.0001855790615081787
+        },
+        "phase_sum_seconds": 0.41296276077628136,
+        "diagnostic_boundary_calls": {},
+        "phase_time_scope": "host enqueue/calling-thread intervals; device work may cross phases; only complete_wall_seconds is synchronized",
+        "tokens": 1024,
+        "loss": null,
+        "gradient_norm": null,
+        "work": {
+          "candidate_events": 16384,
+          "selected_events": 8344,
+          "visited_edges": 25060
+        },
+        "first_tokens": [
+          1213,
+          1909,
+          1905,
+          1636,
+          2041,
+          463,
+          3263,
+          3907
+        ],
+        "ttft_scope": "Warm loaded local batch; input creation/upload, prompt prefill, last-position head, greedy first-token selection, finite check, host return; no queue, tokenizer or subsequent decode",
+        "first_token_seconds": 0.4140576720237732,
+        "complete_wall_seconds": 0.41414403170347214,
+        "diagnostic_only": false,
+        "input_positions_per_second": 2472.5697380885736,
+        "memory": {
+          "resources/peak_rss_mib": 453.75390625
+        }
+      }
+    },
+    {
+      "device": "cpu",
+      "label": "after-inference-manual-r0",
+      "command": [
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/additive-work/env/bin/python",
+        "/dev/shm/gef-fc-batch-full-20261112/after/scripts/benchmark_dense_query.py",
+        "--downstream-repo",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab",
+        "--baseline",
+        "fc-tensor",
+        "--client",
+        "python",
+        "--device",
+        "cpu",
+        "--mode",
+        "inference",
+        "--batch",
+        "8",
+        "--length",
+        "128",
+        "--phase-fences",
+        "step",
+        "--threads",
+        "1",
+        "--formula-attention",
+        "manual",
+        "--output-dir",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/fc-batch-full-20261112/cpu/after-inference-manual-r0"
+      ],
+      "exit_code": 0,
+      "identity": {
+        "foundation_source": "cc6ccbf7948362686ba27166aedf48ce17af1841",
+        "downstream": "0439efd2af31cf10b07ce9e6423b0195f7449968",
+        "downstream_archive_sha256": "430237f4ca7a8c0205644ff6952cd4823ace20160ee0ffc2a206b4064e9075ce",
+        "initial_parameters_sha256": "7f41057f0196bc2b259902f8dadafc9c3f46d197e02de5ebbda9517a632f9a1a",
+        "measured_parameters_sha256": "7f41057f0196bc2b259902f8dadafc9c3f46d197e02de5ebbda9517a632f9a1a",
+        "trainable_parameters": 5092788,
+        "comparison_scope": "Same core-5 parameters/input/head/loss; independent FC output/terminal-state projection, no complete trace or None-root equivalence",
+        "strict_numerical": "not_checked",
+        "discrete": "not_independently_checked",
+        "recovery": "see separate consumer",
+        "learning": "not_a_learning_study",
+        "baseline": "fc-tensor",
+        "mode": "inference",
+        "formula_attention": "manual",
+        "phase_fences": "step",
+        "precision": {
+          "requested": "vendor-default",
+          "effective": {
+            "float32_matmul_precision": "highest"
+          }
+        },
+        "effective_threads": 1,
+        "effective_interop_threads": 1,
+        "affinity": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "visibility": null
+      },
+      "measured": {
+        "index": 1,
+        "warmup": false,
+        "phases_seconds": {
+          "embedding": 0.0001900903880596161,
+          "core_forward": 0.2889935150742531,
+          "head": 0.0005727969110012054,
+          "first_token": 0.00018335506319999695
+        },
+        "phase_sum_seconds": 0.2899397574365139,
+        "diagnostic_boundary_calls": {},
+        "phase_time_scope": "host enqueue/calling-thread intervals; device work may cross phases; only complete_wall_seconds is synchronized",
+        "tokens": 1024,
+        "loss": null,
+        "gradient_norm": null,
+        "work": {
+          "candidate_events": 16384,
+          "selected_events": 8344,
+          "visited_edges": 25060
+        },
+        "first_tokens": [
+          1213,
+          1909,
+          1905,
+          1636,
+          2041,
+          463,
+          3263,
+          3907
+        ],
+        "ttft_scope": "Warm loaded local batch; input creation/upload, prompt prefill, last-position head, greedy first-token selection, finite check, host return; no queue, tokenizer or subsequent decode",
+        "first_token_seconds": 0.2910824567079544,
+        "complete_wall_seconds": 0.2911808155477047,
+        "diagnostic_only": false,
+        "input_positions_per_second": 3516.715200051482,
+        "memory": {
+          "resources/peak_rss_mib": 452.46875
+        }
+      }
+    },
+    {
+      "device": "cpu",
+      "label": "transformer-inference-manual-r0",
+      "command": [
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/additive-work/env/bin/python",
+        "/dev/shm/gef-fc-batch-full-20261112/after/scripts/benchmark_dense_query.py",
+        "--downstream-repo",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab",
+        "--baseline",
+        "transformer-16",
+        "--client",
+        "python",
+        "--device",
+        "cpu",
+        "--mode",
+        "inference",
+        "--batch",
+        "8",
+        "--length",
+        "128",
+        "--phase-fences",
+        "step",
+        "--threads",
+        "1",
+        "--formula-attention",
+        "manual",
+        "--output-dir",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/fc-batch-full-20261112/cpu/transformer-inference-manual-r0"
+      ],
+      "exit_code": 0,
+      "identity": {
+        "foundation_source": "cc6ccbf7948362686ba27166aedf48ce17af1841",
+        "downstream": "0439efd2af31cf10b07ce9e6423b0195f7449968",
+        "downstream_archive_sha256": "430237f4ca7a8c0205644ff6952cd4823ace20160ee0ffc2a206b4064e9075ce",
+        "initial_parameters_sha256": "5d2db4a0153b7489401b03f1c7cbe0800eba5ded57168e6bccbbf76a646a8a1c",
+        "measured_parameters_sha256": "5d2db4a0153b7489401b03f1c7cbe0800eba5ded57168e6bccbbf76a646a8a1c",
+        "trainable_parameters": 4722688,
+        "comparison_scope": "Different function: serial pre-RMS/SDPA/SwiGLU Transformer, d128/head2/FFN512; same input/head/loss/optimizer, actual parameter count recorded",
+        "strict_numerical": "not_checked",
+        "discrete": "not_independently_checked",
+        "recovery": "see separate consumer",
+        "learning": "not_a_learning_study",
+        "baseline": "transformer-16",
+        "mode": "inference",
+        "formula_attention": "manual",
+        "phase_fences": "step",
+        "precision": {
+          "requested": "vendor-default",
+          "effective": {
+            "float32_matmul_precision": "highest"
+          }
+        },
+        "effective_threads": 1,
+        "effective_interop_threads": 1,
+        "affinity": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "visibility": null
+      },
+      "measured": {
+        "index": 1,
+        "warmup": false,
+        "phases_seconds": {
+          "embedding": 0.00019516050815582275,
+          "core_forward": 0.1657082960009575,
+          "head": 0.0004909448325634003,
+          "first_token": 0.00018435344099998474
+        },
+        "phase_sum_seconds": 0.1665787547826767,
+        "diagnostic_boundary_calls": {},
+        "phase_time_scope": "host enqueue/calling-thread intervals; device work may cross phases; only complete_wall_seconds is synchronized",
+        "tokens": 1024,
+        "loss": null,
+        "gradient_norm": null,
+        "work": {
+          "block_positions": 16384
+        },
+        "first_tokens": [
+          3078,
+          1180,
+          618,
+          765,
+          2901,
+          2110,
+          1661,
+          3962
+        ],
+        "ttft_scope": "Warm loaded local batch; input creation/upload, prompt prefill, last-position head, greedy first-token selection, finite check, host return; no queue, tokenizer or subsequent decode",
+        "first_token_seconds": 0.16730249673128128,
+        "complete_wall_seconds": 0.16731825470924377,
+        "diagnostic_only": false,
+        "input_positions_per_second": 6120.073400116738,
+        "memory": {
+          "resources/peak_rss_mib": 379.56640625
+        }
+      }
+    },
+    {
+      "device": "cpu",
+      "label": "before-grad-forward-manual-r0",
+      "command": [
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/additive-work/env/bin/python",
+        "/dev/shm/gef-fc-batch-full-20261112/before/scripts/benchmark_dense_query.py",
+        "--downstream-repo",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab",
+        "--baseline",
+        "fc-tensor",
+        "--client",
+        "python",
+        "--device",
+        "cpu",
+        "--mode",
+        "grad-forward",
+        "--batch",
+        "8",
+        "--length",
+        "128",
+        "--phase-fences",
+        "step",
+        "--threads",
+        "1",
+        "--formula-attention",
+        "manual",
+        "--output-dir",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/fc-batch-full-20261112/cpu/before-grad-forward-manual-r0"
+      ],
+      "exit_code": 0,
+      "identity": {
+        "foundation_source": "bb23a9fae7aa3b02e59344d9f798f89f4e551214",
+        "downstream": "0439efd2af31cf10b07ce9e6423b0195f7449968",
+        "downstream_archive_sha256": "430237f4ca7a8c0205644ff6952cd4823ace20160ee0ffc2a206b4064e9075ce",
+        "initial_parameters_sha256": "7f41057f0196bc2b259902f8dadafc9c3f46d197e02de5ebbda9517a632f9a1a",
+        "measured_parameters_sha256": "7f41057f0196bc2b259902f8dadafc9c3f46d197e02de5ebbda9517a632f9a1a",
+        "trainable_parameters": 5092788,
+        "comparison_scope": "Same core-5 parameters/input/head/loss; independent FC output/terminal-state projection, no complete trace or None-root equivalence",
+        "strict_numerical": "not_checked",
+        "discrete": "not_independently_checked",
+        "recovery": "see separate consumer",
+        "learning": "not_a_learning_study",
+        "baseline": "fc-tensor",
+        "mode": "grad-forward",
+        "formula_attention": "manual",
+        "phase_fences": "step",
+        "precision": {
+          "requested": "vendor-default",
+          "effective": {
+            "float32_matmul_precision": "highest"
+          }
+        },
+        "effective_threads": 1,
+        "effective_interop_threads": 1,
+        "affinity": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "visibility": null
+      },
+      "measured": {
+        "index": 1,
+        "warmup": false,
+        "phases_seconds": {
+          "embedding": 0.00018921121954917908,
+          "core_forward": 0.4464978724718094,
+          "head_loss": 0.023255784064531326
+        },
+        "phase_sum_seconds": 0.4699428677558899,
+        "diagnostic_boundary_calls": {},
+        "phase_time_scope": "host enqueue/calling-thread intervals; device work may cross phases; only complete_wall_seconds is synchronized",
+        "tokens": 1024,
+        "loss": 10.990694999694824,
+        "gradient_norm": null,
+        "work": {
+          "candidate_events": 16384,
+          "selected_events": 8344,
+          "visited_edges": 25060
+        },
+        "complete_wall_seconds": 0.4797152616083622,
+        "diagnostic_only": false,
+        "input_positions_per_second": 2134.5995884450094,
+        "memory": {
+          "resources/peak_rss_mib": 923.828125
+        }
+      }
+    },
+    {
+      "device": "cpu",
+      "label": "after-grad-forward-manual-r0",
+      "command": [
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/additive-work/env/bin/python",
+        "/dev/shm/gef-fc-batch-full-20261112/after/scripts/benchmark_dense_query.py",
+        "--downstream-repo",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab",
+        "--baseline",
+        "fc-tensor",
+        "--client",
+        "python",
+        "--device",
+        "cpu",
+        "--mode",
+        "grad-forward",
+        "--batch",
+        "8",
+        "--length",
+        "128",
+        "--phase-fences",
+        "step",
+        "--threads",
+        "1",
+        "--formula-attention",
+        "manual",
+        "--output-dir",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/fc-batch-full-20261112/cpu/after-grad-forward-manual-r0"
+      ],
+      "exit_code": 0,
+      "identity": {
+        "foundation_source": "cc6ccbf7948362686ba27166aedf48ce17af1841",
+        "downstream": "0439efd2af31cf10b07ce9e6423b0195f7449968",
+        "downstream_archive_sha256": "430237f4ca7a8c0205644ff6952cd4823ace20160ee0ffc2a206b4064e9075ce",
+        "initial_parameters_sha256": "7f41057f0196bc2b259902f8dadafc9c3f46d197e02de5ebbda9517a632f9a1a",
+        "measured_parameters_sha256": "7f41057f0196bc2b259902f8dadafc9c3f46d197e02de5ebbda9517a632f9a1a",
+        "trainable_parameters": 5092788,
+        "comparison_scope": "Same core-5 parameters/input/head/loss; independent FC output/terminal-state projection, no complete trace or None-root equivalence",
+        "strict_numerical": "not_checked",
+        "discrete": "not_independently_checked",
+        "recovery": "see separate consumer",
+        "learning": "not_a_learning_study",
+        "baseline": "fc-tensor",
+        "mode": "grad-forward",
+        "formula_attention": "manual",
+        "phase_fences": "step",
+        "precision": {
+          "requested": "vendor-default",
+          "effective": {
+            "float32_matmul_precision": "highest"
+          }
+        },
+        "effective_threads": 1,
+        "effective_interop_threads": 1,
+        "affinity": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "visibility": null
+      },
+      "measured": {
+        "index": 1,
+        "warmup": false,
+        "phases_seconds": {
+          "embedding": 0.0001924261450767517,
+          "core_forward": 0.31373894214630127,
+          "head_loss": 0.023358773440122604
+        },
+        "phase_sum_seconds": 0.3372901417315006,
+        "diagnostic_boundary_calls": {},
+        "phase_time_scope": "host enqueue/calling-thread intervals; device work may cross phases; only complete_wall_seconds is synchronized",
+        "tokens": 1024,
+        "loss": 10.990694999694824,
+        "gradient_norm": null,
+        "work": {
+          "candidate_events": 16384,
+          "selected_events": 8344,
+          "visited_edges": 25060
+        },
+        "complete_wall_seconds": 0.34299518913030624,
+        "diagnostic_only": false,
+        "input_positions_per_second": 2985.464614231004,
+        "memory": {
+          "resources/peak_rss_mib": 963.53125
+        }
+      }
+    },
+    {
+      "device": "cpu",
+      "label": "transformer-grad-forward-manual-r0",
+      "command": [
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/additive-work/env/bin/python",
+        "/dev/shm/gef-fc-batch-full-20261112/after/scripts/benchmark_dense_query.py",
+        "--downstream-repo",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab",
+        "--baseline",
+        "transformer-16",
+        "--client",
+        "python",
+        "--device",
+        "cpu",
+        "--mode",
+        "grad-forward",
+        "--batch",
+        "8",
+        "--length",
+        "128",
+        "--phase-fences",
+        "step",
+        "--threads",
+        "1",
+        "--formula-attention",
+        "manual",
+        "--output-dir",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/fc-batch-full-20261112/cpu/transformer-grad-forward-manual-r0"
+      ],
+      "exit_code": 0,
+      "identity": {
+        "foundation_source": "cc6ccbf7948362686ba27166aedf48ce17af1841",
+        "downstream": "0439efd2af31cf10b07ce9e6423b0195f7449968",
+        "downstream_archive_sha256": "430237f4ca7a8c0205644ff6952cd4823ace20160ee0ffc2a206b4064e9075ce",
+        "initial_parameters_sha256": "5d2db4a0153b7489401b03f1c7cbe0800eba5ded57168e6bccbbf76a646a8a1c",
+        "measured_parameters_sha256": "5d2db4a0153b7489401b03f1c7cbe0800eba5ded57168e6bccbbf76a646a8a1c",
+        "trainable_parameters": 4722688,
+        "comparison_scope": "Different function: serial pre-RMS/SDPA/SwiGLU Transformer, d128/head2/FFN512; same input/head/loss/optimizer, actual parameter count recorded",
+        "strict_numerical": "not_checked",
+        "discrete": "not_independently_checked",
+        "recovery": "see separate consumer",
+        "learning": "not_a_learning_study",
+        "baseline": "transformer-16",
+        "mode": "grad-forward",
+        "formula_attention": "manual",
+        "phase_fences": "step",
+        "precision": {
+          "requested": "vendor-default",
+          "effective": {
+            "float32_matmul_precision": "highest"
+          }
+        },
+        "effective_threads": 1,
+        "effective_interop_threads": 1,
+        "affinity": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "visibility": null
+      },
+      "measured": {
+        "index": 1,
+        "warmup": false,
+        "phases_seconds": {
+          "embedding": 0.00023633241653442383,
+          "core_forward": 0.16985681280493736,
+          "head_loss": 0.023097913712263107
+        },
+        "phase_sum_seconds": 0.1931910589337349,
+        "diagnostic_boundary_calls": {},
+        "phase_time_scope": "host enqueue/calling-thread intervals; device work may cross phases; only complete_wall_seconds is synchronized",
+        "tokens": 1024,
+        "loss": 8.35606861114502,
+        "gradient_norm": null,
+        "work": {
+          "block_positions": 16384
+        },
+        "complete_wall_seconds": 0.1952798254787922,
+        "diagnostic_only": false,
+        "input_positions_per_second": 5243.757246757723,
+        "memory": {
+          "resources/peak_rss_mib": 680.10546875
+        }
+      }
+    },
+    {
+      "device": "cpu",
+      "label": "before-training-manual-r0",
+      "command": [
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/additive-work/env/bin/python",
+        "/dev/shm/gef-fc-batch-full-20261112/before/scripts/benchmark_dense_query.py",
+        "--downstream-repo",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab",
+        "--baseline",
+        "fc-tensor",
+        "--client",
+        "python",
+        "--device",
+        "cpu",
+        "--mode",
+        "training",
+        "--batch",
+        "8",
+        "--length",
+        "128",
+        "--phase-fences",
+        "step",
+        "--threads",
+        "1",
+        "--formula-attention",
+        "manual",
+        "--output-dir",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/fc-batch-full-20261112/cpu/before-training-manual-r0"
+      ],
+      "exit_code": 0,
+      "identity": {
+        "foundation_source": "bb23a9fae7aa3b02e59344d9f798f89f4e551214",
+        "downstream": "0439efd2af31cf10b07ce9e6423b0195f7449968",
+        "downstream_archive_sha256": "430237f4ca7a8c0205644ff6952cd4823ace20160ee0ffc2a206b4064e9075ce",
+        "initial_parameters_sha256": "7f41057f0196bc2b259902f8dadafc9c3f46d197e02de5ebbda9517a632f9a1a",
+        "measured_parameters_sha256": "7f41057f0196bc2b259902f8dadafc9c3f46d197e02de5ebbda9517a632f9a1a",
+        "trainable_parameters": 5092788,
+        "comparison_scope": "Same core-5 parameters/input/head/loss; independent FC output/terminal-state projection, no complete trace or None-root equivalence",
+        "strict_numerical": "not_checked",
+        "discrete": "not_independently_checked",
+        "recovery": "see separate consumer",
+        "learning": "not_a_learning_study",
+        "baseline": "fc-tensor",
+        "mode": "training",
+        "formula_attention": "manual",
+        "phase_fences": "step",
+        "precision": {
+          "requested": "vendor-default",
+          "effective": {
+            "float32_matmul_precision": "highest"
+          }
+        },
+        "effective_threads": 1,
+        "effective_interop_threads": 1,
+        "affinity": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "visibility": null
+      },
+      "measured": {
+        "index": 1,
+        "warmup": false,
+        "phases_seconds": {
+          "zero_grad": 0.00015396997332572937,
+          "embedding": 0.00015617907047271729,
+          "core_forward": 0.48980994895100594,
+          "head_loss": 0.024019479751586914,
+          "backward": 0.7975483946502209,
+          "clip": 0.005741383880376816,
+          "optimizer": 0.037275779992341995
+        },
+        "phase_sum_seconds": 1.354705136269331,
+        "diagnostic_boundary_calls": {},
+        "phase_time_scope": "host enqueue/calling-thread intervals; device work may cross phases; only complete_wall_seconds is synchronized",
+        "tokens": 1024,
+        "loss": 10.990694999694824,
+        "gradient_norm": 1362.921630859375,
+        "work": {
+          "candidate_events": 16384,
+          "selected_events": 8344,
+          "visited_edges": 25060
+        },
+        "complete_wall_seconds": 1.3645754158496857,
+        "diagnostic_only": false,
+        "input_positions_per_second": 750.4165677515023,
+        "memory": {
+          "resources/peak_rss_mib": 953.39453125
+        }
+      }
+    },
+    {
+      "device": "cpu",
+      "label": "after-training-manual-r0",
+      "command": [
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/additive-work/env/bin/python",
+        "/dev/shm/gef-fc-batch-full-20261112/after/scripts/benchmark_dense_query.py",
+        "--downstream-repo",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab",
+        "--baseline",
+        "fc-tensor",
+        "--client",
+        "python",
+        "--device",
+        "cpu",
+        "--mode",
+        "training",
+        "--batch",
+        "8",
+        "--length",
+        "128",
+        "--phase-fences",
+        "step",
+        "--threads",
+        "1",
+        "--formula-attention",
+        "manual",
+        "--output-dir",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/fc-batch-full-20261112/cpu/after-training-manual-r0"
+      ],
+      "exit_code": 0,
+      "identity": {
+        "foundation_source": "cc6ccbf7948362686ba27166aedf48ce17af1841",
+        "downstream": "0439efd2af31cf10b07ce9e6423b0195f7449968",
+        "downstream_archive_sha256": "430237f4ca7a8c0205644ff6952cd4823ace20160ee0ffc2a206b4064e9075ce",
+        "initial_parameters_sha256": "7f41057f0196bc2b259902f8dadafc9c3f46d197e02de5ebbda9517a632f9a1a",
+        "measured_parameters_sha256": "7f41057f0196bc2b259902f8dadafc9c3f46d197e02de5ebbda9517a632f9a1a",
+        "trainable_parameters": 5092788,
+        "comparison_scope": "Same core-5 parameters/input/head/loss; independent FC output/terminal-state projection, no complete trace or None-root equivalence",
+        "strict_numerical": "not_checked",
+        "discrete": "not_independently_checked",
+        "recovery": "see separate consumer",
+        "learning": "not_a_learning_study",
+        "baseline": "fc-tensor",
+        "mode": "training",
+        "formula_attention": "manual",
+        "phase_fences": "step",
+        "precision": {
+          "requested": "vendor-default",
+          "effective": {
+            "float32_matmul_precision": "highest"
+          }
+        },
+        "effective_threads": 1,
+        "effective_interop_threads": 1,
+        "affinity": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "visibility": null
+      },
+      "measured": {
+        "index": 1,
+        "warmup": false,
+        "phases_seconds": {
+          "zero_grad": 0.00014567747712135315,
+          "embedding": 0.0001556500792503357,
+          "core_forward": 0.36224885657429695,
+          "head_loss": 0.023895248770713806,
+          "backward": 0.6040663383901119,
+          "clip": 0.005403771996498108,
+          "optimizer": 0.03807202726602554
+        },
+        "phase_sum_seconds": 1.033987570554018,
+        "diagnostic_boundary_calls": {},
+        "phase_time_scope": "host enqueue/calling-thread intervals; device work may cross phases; only complete_wall_seconds is synchronized",
+        "tokens": 1024,
+        "loss": 10.990694999694824,
+        "gradient_norm": 1362.921875,
+        "work": {
+          "candidate_events": 16384,
+          "selected_events": 8344,
+          "visited_edges": 25060
+        },
+        "complete_wall_seconds": 1.0444016084074974,
+        "diagnostic_only": false,
+        "input_positions_per_second": 980.465743978884,
+        "memory": {
+          "resources/peak_rss_mib": 987.54296875
+        }
+      }
+    },
+    {
+      "device": "cpu",
+      "label": "transformer-training-manual-r0",
+      "command": [
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/additive-work/env/bin/python",
+        "/dev/shm/gef-fc-batch-full-20261112/after/scripts/benchmark_dense_query.py",
+        "--downstream-repo",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab",
+        "--baseline",
+        "transformer-16",
+        "--client",
+        "python",
+        "--device",
+        "cpu",
+        "--mode",
+        "training",
+        "--batch",
+        "8",
+        "--length",
+        "128",
+        "--phase-fences",
+        "step",
+        "--threads",
+        "1",
+        "--formula-attention",
+        "manual",
+        "--output-dir",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/fc-batch-full-20261112/cpu/transformer-training-manual-r0"
+      ],
+      "exit_code": 0,
+      "identity": {
+        "foundation_source": "cc6ccbf7948362686ba27166aedf48ce17af1841",
+        "downstream": "0439efd2af31cf10b07ce9e6423b0195f7449968",
+        "downstream_archive_sha256": "430237f4ca7a8c0205644ff6952cd4823ace20160ee0ffc2a206b4064e9075ce",
+        "initial_parameters_sha256": "5d2db4a0153b7489401b03f1c7cbe0800eba5ded57168e6bccbbf76a646a8a1c",
+        "measured_parameters_sha256": "5d2db4a0153b7489401b03f1c7cbe0800eba5ded57168e6bccbbf76a646a8a1c",
+        "trainable_parameters": 4722688,
+        "comparison_scope": "Different function: serial pre-RMS/SDPA/SwiGLU Transformer, d128/head2/FFN512; same input/head/loss/optimizer, actual parameter count recorded",
+        "strict_numerical": "not_checked",
+        "discrete": "not_independently_checked",
+        "recovery": "see separate consumer",
+        "learning": "not_a_learning_study",
+        "baseline": "transformer-16",
+        "mode": "training",
+        "formula_attention": "manual",
+        "phase_fences": "step",
+        "precision": {
+          "requested": "vendor-default",
+          "effective": {
+            "float32_matmul_precision": "highest"
+          }
+        },
+        "effective_threads": 1,
+        "effective_interop_threads": 1,
+        "affinity": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "visibility": null
+      },
+      "measured": {
+        "index": 1,
+        "warmup": false,
+        "phases_seconds": {
+          "zero_grad": 0.00010406970977783203,
+          "embedding": 0.0001654215157032013,
+          "core_forward": 0.18071690946817398,
+          "head_loss": 0.0231579951941967,
+          "backward": 0.5183691121637821,
+          "clip": 0.0029156766831874847,
+          "optimizer": 0.019932720810174942
+        },
+        "phase_sum_seconds": 0.7453619055449963,
+        "diagnostic_boundary_calls": {},
+        "phase_time_scope": "host enqueue/calling-thread intervals; device work may cross phases; only complete_wall_seconds is synchronized",
+        "tokens": 1024,
+        "loss": 8.35606861114502,
+        "gradient_norm": 1.05587899684906,
+        "work": {
+          "block_positions": 16384
+        },
+        "complete_wall_seconds": 0.7464521788060665,
+        "diagnostic_only": false,
+        "input_positions_per_second": 1371.82264192445,
+        "memory": {
+          "resources/peak_rss_mib": 707.25390625
+        }
+      }
+    },
+    {
+      "device": "cpu",
+      "label": "after-training-sdpa4d-r0",
+      "command": [
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/additive-work/env/bin/python",
+        "/dev/shm/gef-fc-batch-full-20261112/after/scripts/benchmark_dense_query.py",
+        "--downstream-repo",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab",
+        "--baseline",
+        "fc-tensor",
+        "--client",
+        "python",
+        "--device",
+        "cpu",
+        "--mode",
+        "training",
+        "--batch",
+        "8",
+        "--length",
+        "128",
+        "--phase-fences",
+        "step",
+        "--threads",
+        "1",
+        "--formula-attention",
+        "sdpa4d",
+        "--output-dir",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/fc-batch-full-20261112/cpu/after-training-sdpa4d-r0"
+      ],
+      "exit_code": 0,
+      "identity": {
+        "foundation_source": "cc6ccbf7948362686ba27166aedf48ce17af1841",
+        "downstream": "0439efd2af31cf10b07ce9e6423b0195f7449968",
+        "downstream_archive_sha256": "430237f4ca7a8c0205644ff6952cd4823ace20160ee0ffc2a206b4064e9075ce",
+        "initial_parameters_sha256": "7f41057f0196bc2b259902f8dadafc9c3f46d197e02de5ebbda9517a632f9a1a",
+        "measured_parameters_sha256": "7f41057f0196bc2b259902f8dadafc9c3f46d197e02de5ebbda9517a632f9a1a",
+        "trainable_parameters": 5092788,
+        "comparison_scope": "Same core-5 parameters/input/head/loss; independent FC output/terminal-state projection, no complete trace or None-root equivalence",
+        "strict_numerical": "not_checked",
+        "discrete": "not_independently_checked",
+        "recovery": "see separate consumer",
+        "learning": "not_a_learning_study",
+        "baseline": "fc-tensor",
+        "mode": "training",
+        "formula_attention": "sdpa4d",
+        "phase_fences": "step",
+        "precision": {
+          "requested": "vendor-default",
+          "effective": {
+            "float32_matmul_precision": "highest"
+          }
+        },
+        "effective_threads": 1,
+        "effective_interop_threads": 1,
+        "affinity": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "visibility": null
+      },
+      "measured": {
+        "index": 1,
+        "warmup": false,
+        "phases_seconds": {
+          "zero_grad": 0.00016282126307487488,
+          "embedding": 0.00019317492842674255,
+          "core_forward": 0.3580026440322399,
+          "head_loss": 0.023892302066087723,
+          "backward": 0.6077682599425316,
+          "clip": 0.005222387611865997,
+          "optimizer": 0.040400028228759766
+        },
+        "phase_sum_seconds": 1.0356416180729866,
+        "diagnostic_boundary_calls": {},
+        "phase_time_scope": "host enqueue/calling-thread intervals; device work may cross phases; only complete_wall_seconds is synchronized",
+        "tokens": 1024,
+        "loss": 10.990692138671875,
+        "gradient_norm": 1363.039794921875,
+        "work": {
+          "candidate_events": 16384,
+          "selected_events": 8344,
+          "visited_edges": 25060
+        },
+        "complete_wall_seconds": 1.043578814715147,
+        "diagnostic_only": false,
+        "input_positions_per_second": 981.2387771397111,
+        "memory": {
+          "resources/peak_rss_mib": 980.0
+        }
+      }
+    },
+    {
+      "device": "npu",
+      "label": "before-inference-manual-r0",
+      "command": [
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/additive-work/env/bin/python",
+        "/dev/shm/gef-fc-batch-full-20261112/before/scripts/benchmark_dense_query.py",
+        "--downstream-repo",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab",
+        "--baseline",
+        "fc-tensor",
+        "--client",
+        "python",
+        "--device",
+        "npu:0",
+        "--mode",
+        "inference",
+        "--batch",
+        "8",
+        "--length",
+        "128",
+        "--phase-fences",
+        "step",
+        "--threads",
+        "2",
+        "--formula-attention",
+        "manual",
+        "--output-dir",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/fc-batch-full-20261112/npu/before-inference-manual-r0"
+      ],
+      "exit_code": 0,
+      "identity": {
+        "foundation_source": "bb23a9fae7aa3b02e59344d9f798f89f4e551214",
+        "downstream": "0439efd2af31cf10b07ce9e6423b0195f7449968",
+        "downstream_archive_sha256": "430237f4ca7a8c0205644ff6952cd4823ace20160ee0ffc2a206b4064e9075ce",
+        "initial_parameters_sha256": "7f41057f0196bc2b259902f8dadafc9c3f46d197e02de5ebbda9517a632f9a1a",
+        "measured_parameters_sha256": "7f41057f0196bc2b259902f8dadafc9c3f46d197e02de5ebbda9517a632f9a1a",
+        "trainable_parameters": 5092788,
+        "comparison_scope": "Same core-5 parameters/input/head/loss; independent FC output/terminal-state projection, no complete trace or None-root equivalence",
+        "strict_numerical": "not_checked",
+        "discrete": "not_independently_checked",
+        "recovery": "see separate consumer",
+        "learning": "not_a_learning_study",
+        "baseline": "fc-tensor",
+        "mode": "inference",
+        "formula_attention": "manual",
+        "phase_fences": "step",
+        "precision": {
+          "requested": "vendor-default",
+          "effective": {
+            "matmul_allow_hf32": false,
+            "conv_allow_hf32": true
+          }
+        },
+        "effective_threads": 2,
+        "effective_interop_threads": 1,
+        "affinity": [
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15
+        ],
+        "visibility": "0"
+      },
+      "measured": {
+        "index": 1,
+        "warmup": false,
+        "phases_seconds": {
+          "embedding": 0.0001247003674507141,
+          "core_forward": 0.24057898670434952,
+          "head": 9.493902325630188e-05,
+          "first_token": 5.638599395751953e-05
+        },
+        "phase_sum_seconds": 0.24085501208901405,
+        "diagnostic_boundary_calls": {},
+        "phase_time_scope": "host enqueue/calling-thread intervals; device work may cross phases; only complete_wall_seconds is synchronized",
+        "tokens": 1024,
+        "loss": null,
+        "gradient_norm": null,
+        "work": {
+          "candidate_events": 16384,
+          "selected_events": 8345,
+          "visited_edges": 25064
+        },
+        "first_tokens": [
+          1213,
+          1909,
+          1905,
+          1636,
+          2041,
+          463,
+          3263,
+          3907
+        ],
+        "ttft_scope": "Warm loaded local batch; input creation/upload, prompt prefill, last-position head, greedy first-token selection, finite check, host return; no queue, tokenizer or subsequent decode",
+        "first_token_seconds": 0.2420710176229477,
+        "complete_wall_seconds": 0.24228694289922714,
+        "diagnostic_only": false,
+        "input_positions_per_second": 4226.39366259991,
+        "memory": {
+          "resources/peak_rss_mib": 1925.015625,
+          "resources/npu_allocated_mib": 20.68115234375,
+          "resources/npu_reserved_mib": 108.0,
+          "resources/npu_peak_allocated_mib": 83.1142578125
+        }
+      }
+    },
+    {
+      "device": "npu",
+      "label": "after-inference-manual-r0",
+      "command": [
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/additive-work/env/bin/python",
+        "/dev/shm/gef-fc-batch-full-20261112/after/scripts/benchmark_dense_query.py",
+        "--downstream-repo",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab",
+        "--baseline",
+        "fc-tensor",
+        "--client",
+        "python",
+        "--device",
+        "npu:0",
+        "--mode",
+        "inference",
+        "--batch",
+        "8",
+        "--length",
+        "128",
+        "--phase-fences",
+        "step",
+        "--threads",
+        "2",
+        "--formula-attention",
+        "manual",
+        "--output-dir",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/fc-batch-full-20261112/npu/after-inference-manual-r0"
+      ],
+      "exit_code": 0,
+      "identity": {
+        "foundation_source": "cc6ccbf7948362686ba27166aedf48ce17af1841",
+        "downstream": "0439efd2af31cf10b07ce9e6423b0195f7449968",
+        "downstream_archive_sha256": "430237f4ca7a8c0205644ff6952cd4823ace20160ee0ffc2a206b4064e9075ce",
+        "initial_parameters_sha256": "7f41057f0196bc2b259902f8dadafc9c3f46d197e02de5ebbda9517a632f9a1a",
+        "measured_parameters_sha256": "7f41057f0196bc2b259902f8dadafc9c3f46d197e02de5ebbda9517a632f9a1a",
+        "trainable_parameters": 5092788,
+        "comparison_scope": "Same core-5 parameters/input/head/loss; independent FC output/terminal-state projection, no complete trace or None-root equivalence",
+        "strict_numerical": "not_checked",
+        "discrete": "not_independently_checked",
+        "recovery": "see separate consumer",
+        "learning": "not_a_learning_study",
+        "baseline": "fc-tensor",
+        "mode": "inference",
+        "formula_attention": "manual",
+        "phase_fences": "step",
+        "precision": {
+          "requested": "vendor-default",
+          "effective": {
+            "matmul_allow_hf32": false,
+            "conv_allow_hf32": true
+          }
+        },
+        "effective_threads": 2,
+        "effective_interop_threads": 1,
+        "affinity": [
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15
+        ],
+        "visibility": "0"
+      },
+      "measured": {
+        "index": 1,
+        "warmup": false,
+        "phases_seconds": {
+          "embedding": 0.0001274198293685913,
+          "core_forward": 0.11304610222578049,
+          "head": 0.00010105222463607788,
+          "first_token": 5.745887756347656e-05
+        },
+        "phase_sum_seconds": 0.11333203315734863,
+        "diagnostic_boundary_calls": {},
+        "phase_time_scope": "host enqueue/calling-thread intervals; device work may cross phases; only complete_wall_seconds is synchronized",
+        "tokens": 1024,
+        "loss": null,
+        "gradient_norm": null,
+        "work": {
+          "candidate_events": 16384,
+          "selected_events": 8345,
+          "visited_edges": 25064
+        },
+        "first_tokens": [
+          1213,
+          1909,
+          1905,
+          1636,
+          2041,
+          463,
+          3263,
+          3907
+        ],
+        "ttft_scope": "Warm loaded local batch; input creation/upload, prompt prefill, last-position head, greedy first-token selection, finite check, host return; no queue, tokenizer or subsequent decode",
+        "first_token_seconds": 0.11452872678637505,
+        "complete_wall_seconds": 0.11474136635661125,
+        "diagnostic_only": false,
+        "input_positions_per_second": 8924.418738551987,
+        "memory": {
+          "resources/peak_rss_mib": 1934.20703125,
+          "resources/npu_allocated_mib": 20.68115234375,
+          "resources/npu_reserved_mib": 110.0,
+          "resources/npu_peak_allocated_mib": 83.1142578125
+        }
+      }
+    },
+    {
+      "device": "npu",
+      "label": "transformer-inference-manual-r0",
+      "command": [
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/additive-work/env/bin/python",
+        "/dev/shm/gef-fc-batch-full-20261112/after/scripts/benchmark_dense_query.py",
+        "--downstream-repo",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab",
+        "--baseline",
+        "transformer-16",
+        "--client",
+        "python",
+        "--device",
+        "npu:0",
+        "--mode",
+        "inference",
+        "--batch",
+        "8",
+        "--length",
+        "128",
+        "--phase-fences",
+        "step",
+        "--threads",
+        "2",
+        "--formula-attention",
+        "manual",
+        "--output-dir",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/fc-batch-full-20261112/npu/transformer-inference-manual-r0"
+      ],
+      "exit_code": 0,
+      "identity": {
+        "foundation_source": "cc6ccbf7948362686ba27166aedf48ce17af1841",
+        "downstream": "0439efd2af31cf10b07ce9e6423b0195f7449968",
+        "downstream_archive_sha256": "430237f4ca7a8c0205644ff6952cd4823ace20160ee0ffc2a206b4064e9075ce",
+        "initial_parameters_sha256": "5d2db4a0153b7489401b03f1c7cbe0800eba5ded57168e6bccbbf76a646a8a1c",
+        "measured_parameters_sha256": "5d2db4a0153b7489401b03f1c7cbe0800eba5ded57168e6bccbbf76a646a8a1c",
+        "trainable_parameters": 4722688,
+        "comparison_scope": "Different function: serial pre-RMS/SDPA/SwiGLU Transformer, d128/head2/FFN512; same input/head/loss/optimizer, actual parameter count recorded",
+        "strict_numerical": "not_checked",
+        "discrete": "not_independently_checked",
+        "recovery": "see separate consumer",
+        "learning": "not_a_learning_study",
+        "baseline": "transformer-16",
+        "mode": "inference",
+        "formula_attention": "manual",
+        "phase_fences": "step",
+        "precision": {
+          "requested": "vendor-default",
+          "effective": {
+            "matmul_allow_hf32": false,
+            "conv_allow_hf32": true
+          }
+        },
+        "effective_threads": 2,
+        "effective_interop_threads": 1,
+        "affinity": [
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15
+        ],
+        "visibility": "0"
+      },
+      "measured": {
+        "index": 1,
+        "warmup": false,
+        "phases_seconds": {
+          "embedding": 0.00014524906873703003,
+          "core_forward": 0.008124176412820816,
+          "head": 7.341429591178894e-05,
+          "first_token": 6.026029586791992e-05
+        },
+        "phase_sum_seconds": 0.008403100073337555,
+        "diagnostic_boundary_calls": {},
+        "phase_time_scope": "host enqueue/calling-thread intervals; device work may cross phases; only complete_wall_seconds is synchronized",
+        "tokens": 1024,
+        "loss": null,
+        "gradient_norm": null,
+        "work": {
+          "block_positions": 16384
+        },
+        "first_tokens": [
+          3078,
+          1180,
+          618,
+          765,
+          2901,
+          2110,
+          1661,
+          3962
+        ],
+        "ttft_scope": "Warm loaded local batch; input creation/upload, prompt prefill, last-position head, greedy first-token selection, finite check, host return; no queue, tokenizer or subsequent decode",
+        "first_token_seconds": 0.009213119745254517,
+        "complete_wall_seconds": 0.009275373071432114,
+        "diagnostic_only": false,
+        "input_positions_per_second": 110399.87201742764,
+        "memory": {
+          "resources/peak_rss_mib": 1877.65234375,
+          "resources/npu_allocated_mib": 18.0556640625,
+          "resources/npu_reserved_mib": 114.0,
+          "resources/npu_peak_allocated_mib": 51.23193359375
+        }
+      }
+    },
+    {
+      "device": "npu",
+      "label": "before-grad-forward-manual-r0",
+      "command": [
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/additive-work/env/bin/python",
+        "/dev/shm/gef-fc-batch-full-20261112/before/scripts/benchmark_dense_query.py",
+        "--downstream-repo",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab",
+        "--baseline",
+        "fc-tensor",
+        "--client",
+        "python",
+        "--device",
+        "npu:0",
+        "--mode",
+        "grad-forward",
+        "--batch",
+        "8",
+        "--length",
+        "128",
+        "--phase-fences",
+        "step",
+        "--threads",
+        "2",
+        "--formula-attention",
+        "manual",
+        "--output-dir",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/fc-batch-full-20261112/npu/before-grad-forward-manual-r0"
+      ],
+      "exit_code": 0,
+      "identity": {
+        "foundation_source": "bb23a9fae7aa3b02e59344d9f798f89f4e551214",
+        "downstream": "0439efd2af31cf10b07ce9e6423b0195f7449968",
+        "downstream_archive_sha256": "430237f4ca7a8c0205644ff6952cd4823ace20160ee0ffc2a206b4064e9075ce",
+        "initial_parameters_sha256": "7f41057f0196bc2b259902f8dadafc9c3f46d197e02de5ebbda9517a632f9a1a",
+        "measured_parameters_sha256": "7f41057f0196bc2b259902f8dadafc9c3f46d197e02de5ebbda9517a632f9a1a",
+        "trainable_parameters": 5092788,
+        "comparison_scope": "Same core-5 parameters/input/head/loss; independent FC output/terminal-state projection, no complete trace or None-root equivalence",
+        "strict_numerical": "not_checked",
+        "discrete": "not_independently_checked",
+        "recovery": "see separate consumer",
+        "learning": "not_a_learning_study",
+        "baseline": "fc-tensor",
+        "mode": "grad-forward",
+        "formula_attention": "manual",
+        "phase_fences": "step",
+        "precision": {
+          "requested": "vendor-default",
+          "effective": {
+            "matmul_allow_hf32": false,
+            "conv_allow_hf32": true
+          }
+        },
+        "effective_threads": 2,
+        "effective_interop_threads": 1,
+        "affinity": [
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15
+        ],
+        "visibility": "0"
+      },
+      "measured": {
+        "index": 1,
+        "warmup": false,
+        "phases_seconds": {
+          "embedding": 0.00013647973537445068,
+          "core_forward": 0.2694467417895794,
+          "head_loss": 0.00020531192421913147
+        },
+        "phase_sum_seconds": 0.269788533449173,
+        "diagnostic_boundary_calls": {},
+        "phase_time_scope": "host enqueue/calling-thread intervals; device work may cross phases; only complete_wall_seconds is synchronized",
+        "tokens": 1024,
+        "loss": 10.990673065185547,
+        "gradient_norm": null,
+        "work": {
+          "candidate_events": 16384,
+          "selected_events": 8345,
+          "visited_edges": 25064
+        },
+        "complete_wall_seconds": 0.28090373054146767,
+        "diagnostic_only": false,
+        "input_positions_per_second": 3645.3770052328823,
+        "memory": {
+          "resources/peak_rss_mib": 1936.53125,
+          "resources/npu_allocated_mib": 20.68115234375,
+          "resources/npu_reserved_mib": 444.0,
+          "resources/npu_peak_allocated_mib": 402.9423828125
+        }
+      }
+    },
+    {
+      "device": "npu",
+      "label": "after-grad-forward-manual-r0",
+      "command": [
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/additive-work/env/bin/python",
+        "/dev/shm/gef-fc-batch-full-20261112/after/scripts/benchmark_dense_query.py",
+        "--downstream-repo",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab",
+        "--baseline",
+        "fc-tensor",
+        "--client",
+        "python",
+        "--device",
+        "npu:0",
+        "--mode",
+        "grad-forward",
+        "--batch",
+        "8",
+        "--length",
+        "128",
+        "--phase-fences",
+        "step",
+        "--threads",
+        "2",
+        "--formula-attention",
+        "manual",
+        "--output-dir",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/fc-batch-full-20261112/npu/after-grad-forward-manual-r0"
+      ],
+      "exit_code": 0,
+      "identity": {
+        "foundation_source": "cc6ccbf7948362686ba27166aedf48ce17af1841",
+        "downstream": "0439efd2af31cf10b07ce9e6423b0195f7449968",
+        "downstream_archive_sha256": "430237f4ca7a8c0205644ff6952cd4823ace20160ee0ffc2a206b4064e9075ce",
+        "initial_parameters_sha256": "7f41057f0196bc2b259902f8dadafc9c3f46d197e02de5ebbda9517a632f9a1a",
+        "measured_parameters_sha256": "7f41057f0196bc2b259902f8dadafc9c3f46d197e02de5ebbda9517a632f9a1a",
+        "trainable_parameters": 5092788,
+        "comparison_scope": "Same core-5 parameters/input/head/loss; independent FC output/terminal-state projection, no complete trace or None-root equivalence",
+        "strict_numerical": "not_checked",
+        "discrete": "not_independently_checked",
+        "recovery": "see separate consumer",
+        "learning": "not_a_learning_study",
+        "baseline": "fc-tensor",
+        "mode": "grad-forward",
+        "formula_attention": "manual",
+        "phase_fences": "step",
+        "precision": {
+          "requested": "vendor-default",
+          "effective": {
+            "matmul_allow_hf32": false,
+            "conv_allow_hf32": true
+          }
+        },
+        "effective_threads": 2,
+        "effective_interop_threads": 1,
+        "affinity": [
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15
+        ],
+        "visibility": "0"
+      },
+      "measured": {
+        "index": 1,
+        "warmup": false,
+        "phases_seconds": {
+          "embedding": 0.00013050436973571777,
+          "core_forward": 0.12037710472941399,
+          "head_loss": 0.00020024552941322327
+        },
+        "phase_sum_seconds": 0.12070785462856293,
+        "diagnostic_boundary_calls": {},
+        "phase_time_scope": "host enqueue/calling-thread intervals; device work may cross phases; only complete_wall_seconds is synchronized",
+        "tokens": 1024,
+        "loss": 10.990676879882812,
+        "gradient_norm": null,
+        "work": {
+          "candidate_events": 16384,
+          "selected_events": 8345,
+          "visited_edges": 25064
+        },
+        "complete_wall_seconds": 0.12561676278710365,
+        "diagnostic_only": false,
+        "input_positions_per_second": 8151.77829200617,
+        "memory": {
+          "resources/peak_rss_mib": 1938.85546875,
+          "resources/npu_allocated_mib": 20.68115234375,
+          "resources/npu_reserved_mib": 450.0,
+          "resources/npu_peak_allocated_mib": 405.91455078125
+        }
+      }
+    },
+    {
+      "device": "npu",
+      "label": "transformer-grad-forward-manual-r0",
+      "command": [
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/additive-work/env/bin/python",
+        "/dev/shm/gef-fc-batch-full-20261112/after/scripts/benchmark_dense_query.py",
+        "--downstream-repo",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab",
+        "--baseline",
+        "transformer-16",
+        "--client",
+        "python",
+        "--device",
+        "npu:0",
+        "--mode",
+        "grad-forward",
+        "--batch",
+        "8",
+        "--length",
+        "128",
+        "--phase-fences",
+        "step",
+        "--threads",
+        "2",
+        "--formula-attention",
+        "manual",
+        "--output-dir",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/fc-batch-full-20261112/npu/transformer-grad-forward-manual-r0"
+      ],
+      "exit_code": 0,
+      "identity": {
+        "foundation_source": "cc6ccbf7948362686ba27166aedf48ce17af1841",
+        "downstream": "0439efd2af31cf10b07ce9e6423b0195f7449968",
+        "downstream_archive_sha256": "430237f4ca7a8c0205644ff6952cd4823ace20160ee0ffc2a206b4064e9075ce",
+        "initial_parameters_sha256": "5d2db4a0153b7489401b03f1c7cbe0800eba5ded57168e6bccbbf76a646a8a1c",
+        "measured_parameters_sha256": "5d2db4a0153b7489401b03f1c7cbe0800eba5ded57168e6bccbbf76a646a8a1c",
+        "trainable_parameters": 4722688,
+        "comparison_scope": "Different function: serial pre-RMS/SDPA/SwiGLU Transformer, d128/head2/FFN512; same input/head/loss/optimizer, actual parameter count recorded",
+        "strict_numerical": "not_checked",
+        "discrete": "not_independently_checked",
+        "recovery": "see separate consumer",
+        "learning": "not_a_learning_study",
+        "baseline": "transformer-16",
+        "mode": "grad-forward",
+        "formula_attention": "manual",
+        "phase_fences": "step",
+        "precision": {
+          "requested": "vendor-default",
+          "effective": {
+            "matmul_allow_hf32": false,
+            "conv_allow_hf32": true
+          }
+        },
+        "effective_threads": 2,
+        "effective_interop_threads": 1,
+        "affinity": [
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15
+        ],
+        "visibility": "0"
+      },
+      "measured": {
+        "index": 1,
+        "warmup": false,
+        "phases_seconds": {
+          "embedding": 0.00012877210974693298,
+          "core_forward": 0.008604604750871658,
+          "head_loss": 0.00018287822604179382
+        },
+        "phase_sum_seconds": 0.008916255086660385,
+        "diagnostic_boundary_calls": {},
+        "phase_time_scope": "host enqueue/calling-thread intervals; device work may cross phases; only complete_wall_seconds is synchronized",
+        "tokens": 1024,
+        "loss": 8.356067657470703,
+        "gradient_norm": null,
+        "work": {
+          "block_positions": 16384
+        },
+        "complete_wall_seconds": 0.01045125350356102,
+        "diagnostic_only": false,
+        "input_positions_per_second": 97978.67783525641,
+        "memory": {
+          "resources/peak_rss_mib": 1867.76171875,
+          "resources/npu_allocated_mib": 18.0556640625,
+          "resources/npu_reserved_mib": 428.0,
+          "resources/npu_peak_allocated_mib": 340.78466796875
+        }
+      }
+    },
+    {
+      "device": "npu",
+      "label": "before-training-manual-r0",
+      "command": [
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/additive-work/env/bin/python",
+        "/dev/shm/gef-fc-batch-full-20261112/before/scripts/benchmark_dense_query.py",
+        "--downstream-repo",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab",
+        "--baseline",
+        "fc-tensor",
+        "--client",
+        "python",
+        "--device",
+        "npu:0",
+        "--mode",
+        "training",
+        "--batch",
+        "8",
+        "--length",
+        "128",
+        "--phase-fences",
+        "step",
+        "--threads",
+        "2",
+        "--formula-attention",
+        "manual",
+        "--output-dir",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/fc-batch-full-20261112/npu/before-training-manual-r0"
+      ],
+      "exit_code": 0,
+      "identity": {
+        "foundation_source": "bb23a9fae7aa3b02e59344d9f798f89f4e551214",
+        "downstream": "0439efd2af31cf10b07ce9e6423b0195f7449968",
+        "downstream_archive_sha256": "430237f4ca7a8c0205644ff6952cd4823ace20160ee0ffc2a206b4064e9075ce",
+        "initial_parameters_sha256": "7f41057f0196bc2b259902f8dadafc9c3f46d197e02de5ebbda9517a632f9a1a",
+        "measured_parameters_sha256": "7f41057f0196bc2b259902f8dadafc9c3f46d197e02de5ebbda9517a632f9a1a",
+        "trainable_parameters": 5092788,
+        "comparison_scope": "Same core-5 parameters/input/head/loss; independent FC output/terminal-state projection, no complete trace or None-root equivalence",
+        "strict_numerical": "not_checked",
+        "discrete": "not_independently_checked",
+        "recovery": "see separate consumer",
+        "learning": "not_a_learning_study",
+        "baseline": "fc-tensor",
+        "mode": "training",
+        "formula_attention": "manual",
+        "phase_fences": "step",
+        "precision": {
+          "requested": "vendor-default",
+          "effective": {
+            "matmul_allow_hf32": false,
+            "conv_allow_hf32": true
+          }
+        },
+        "effective_threads": 2,
+        "effective_interop_threads": 1,
+        "affinity": [
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15
+        ],
+        "visibility": "0"
+      },
+      "measured": {
+        "index": 1,
+        "warmup": false,
+        "phases_seconds": {
+          "zero_grad": 0.00014245882630348206,
+          "embedding": 8.529424667358398e-05,
+          "core_forward": 0.2682330496609211,
+          "head_loss": 0.00020619481801986694,
+          "backward": 0.3407398834824562,
+          "clip": 0.007068037986755371,
+          "optimizer": 0.051268961280584335
+        },
+        "phase_sum_seconds": 0.6677438803017139,
+        "diagnostic_boundary_calls": {},
+        "phase_time_scope": "host enqueue/calling-thread intervals; device work may cross phases; only complete_wall_seconds is synchronized",
+        "tokens": 1024,
+        "loss": 10.990673065185547,
+        "gradient_norm": 1360.044921875,
+        "work": {
+          "candidate_events": 16384,
+          "selected_events": 8345,
+          "visited_edges": 25064
+        },
+        "complete_wall_seconds": 0.6736079230904579,
+        "diagnostic_only": false,
+        "input_positions_per_second": 1520.172143020486,
+        "memory": {
+          "resources/peak_rss_mib": 2009.13671875,
+          "resources/npu_allocated_mib": 79.361328125,
+          "resources/npu_reserved_mib": 444.0,
+          "resources/npu_peak_allocated_mib": 402.9423828125
+        }
+      }
+    },
+    {
+      "device": "npu",
+      "label": "after-training-manual-r0",
+      "command": [
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/additive-work/env/bin/python",
+        "/dev/shm/gef-fc-batch-full-20261112/after/scripts/benchmark_dense_query.py",
+        "--downstream-repo",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab",
+        "--baseline",
+        "fc-tensor",
+        "--client",
+        "python",
+        "--device",
+        "npu:0",
+        "--mode",
+        "training",
+        "--batch",
+        "8",
+        "--length",
+        "128",
+        "--phase-fences",
+        "step",
+        "--threads",
+        "2",
+        "--formula-attention",
+        "manual",
+        "--output-dir",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/fc-batch-full-20261112/npu/after-training-manual-r0"
+      ],
+      "exit_code": 0,
+      "identity": {
+        "foundation_source": "cc6ccbf7948362686ba27166aedf48ce17af1841",
+        "downstream": "0439efd2af31cf10b07ce9e6423b0195f7449968",
+        "downstream_archive_sha256": "430237f4ca7a8c0205644ff6952cd4823ace20160ee0ffc2a206b4064e9075ce",
+        "initial_parameters_sha256": "7f41057f0196bc2b259902f8dadafc9c3f46d197e02de5ebbda9517a632f9a1a",
+        "measured_parameters_sha256": "7f41057f0196bc2b259902f8dadafc9c3f46d197e02de5ebbda9517a632f9a1a",
+        "trainable_parameters": 5092788,
+        "comparison_scope": "Same core-5 parameters/input/head/loss; independent FC output/terminal-state projection, no complete trace or None-root equivalence",
+        "strict_numerical": "not_checked",
+        "discrete": "not_independently_checked",
+        "recovery": "see separate consumer",
+        "learning": "not_a_learning_study",
+        "baseline": "fc-tensor",
+        "mode": "training",
+        "formula_attention": "manual",
+        "phase_fences": "step",
+        "precision": {
+          "requested": "vendor-default",
+          "effective": {
+            "matmul_allow_hf32": false,
+            "conv_allow_hf32": true
+          }
+        },
+        "effective_threads": 2,
+        "effective_interop_threads": 1,
+        "affinity": [
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15
+        ],
+        "visibility": "0"
+      },
+      "measured": {
+        "index": 1,
+        "warmup": false,
+        "phases_seconds": {
+          "zero_grad": 0.00014854222536087036,
+          "embedding": 8.847936987876892e-05,
+          "core_forward": 0.12215346097946167,
+          "head_loss": 0.00019235163927078247,
+          "backward": 0.10638609901070595,
+          "clip": 0.00597560778260231,
+          "optimizer": 0.05312269553542137
+        },
+        "phase_sum_seconds": 0.2880672365427017,
+        "diagnostic_boundary_calls": {},
+        "phase_time_scope": "host enqueue/calling-thread intervals; device work may cross phases; only complete_wall_seconds is synchronized",
+        "tokens": 1024,
+        "loss": 10.990676879882812,
+        "gradient_norm": 1360.3856201171875,
+        "work": {
+          "candidate_events": 16384,
+          "selected_events": 8345,
+          "visited_edges": 25064
+        },
+        "complete_wall_seconds": 0.29127687588334084,
+        "diagnostic_only": false,
+        "input_positions_per_second": 3515.5554209188986,
+        "memory": {
+          "resources/peak_rss_mib": 2004.37109375,
+          "resources/npu_allocated_mib": 79.361328125,
+          "resources/npu_reserved_mib": 450.0,
+          "resources/npu_peak_allocated_mib": 405.91455078125
+        }
+      }
+    },
+    {
+      "device": "npu",
+      "label": "transformer-training-manual-r0",
+      "command": [
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/additive-work/env/bin/python",
+        "/dev/shm/gef-fc-batch-full-20261112/after/scripts/benchmark_dense_query.py",
+        "--downstream-repo",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab",
+        "--baseline",
+        "transformer-16",
+        "--client",
+        "python",
+        "--device",
+        "npu:0",
+        "--mode",
+        "training",
+        "--batch",
+        "8",
+        "--length",
+        "128",
+        "--phase-fences",
+        "step",
+        "--threads",
+        "2",
+        "--formula-attention",
+        "manual",
+        "--output-dir",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/fc-batch-full-20261112/npu/transformer-training-manual-r0"
+      ],
+      "exit_code": 0,
+      "identity": {
+        "foundation_source": "cc6ccbf7948362686ba27166aedf48ce17af1841",
+        "downstream": "0439efd2af31cf10b07ce9e6423b0195f7449968",
+        "downstream_archive_sha256": "430237f4ca7a8c0205644ff6952cd4823ace20160ee0ffc2a206b4064e9075ce",
+        "initial_parameters_sha256": "5d2db4a0153b7489401b03f1c7cbe0800eba5ded57168e6bccbbf76a646a8a1c",
+        "measured_parameters_sha256": "5d2db4a0153b7489401b03f1c7cbe0800eba5ded57168e6bccbbf76a646a8a1c",
+        "trainable_parameters": 4722688,
+        "comparison_scope": "Different function: serial pre-RMS/SDPA/SwiGLU Transformer, d128/head2/FFN512; same input/head/loss/optimizer, actual parameter count recorded",
+        "strict_numerical": "not_checked",
+        "discrete": "not_independently_checked",
+        "recovery": "see separate consumer",
+        "learning": "not_a_learning_study",
+        "baseline": "transformer-16",
+        "mode": "training",
+        "formula_attention": "manual",
+        "phase_fences": "step",
+        "precision": {
+          "requested": "vendor-default",
+          "effective": {
+            "matmul_allow_hf32": false,
+            "conv_allow_hf32": true
+          }
+        },
+        "effective_threads": 2,
+        "effective_interop_threads": 1,
+        "affinity": [
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15
+        ],
+        "visibility": "0"
+      },
+      "measured": {
+        "index": 1,
+        "warmup": false,
+        "phases_seconds": {
+          "zero_grad": 9.541213512420654e-05,
+          "embedding": 9.604915976524353e-05,
+          "core_forward": 0.009130388498306274,
+          "head_loss": 0.00017405301332473755,
+          "backward": 0.015971887856721878,
+          "clip": 0.0018848627805709839,
+          "optimizer": 0.01342901960015297
+        },
+        "phase_sum_seconds": 0.04078167304396629,
+        "diagnostic_boundary_calls": {},
+        "phase_time_scope": "host enqueue/calling-thread intervals; device work may cross phases; only complete_wall_seconds is synchronized",
+        "tokens": 1024,
+        "loss": 8.356067657470703,
+        "gradient_norm": 1.0558913946151733,
+        "work": {
+          "block_positions": 16384
+        },
+        "complete_wall_seconds": 0.042086172848939896,
+        "diagnostic_only": false,
+        "input_positions_per_second": 24331.031564106535,
+        "memory": {
+          "resources/peak_rss_mib": 1949.234375,
+          "resources/npu_allocated_mib": 72.22265625,
+          "resources/npu_reserved_mib": 452.0,
+          "resources/npu_peak_allocated_mib": 342.6083984375
+        }
+      }
+    },
+    {
+      "device": "npu",
+      "label": "after-training-sdpa4d-r0",
+      "command": [
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/additive-work/env/bin/python",
+        "/dev/shm/gef-fc-batch-full-20261112/after/scripts/benchmark_dense_query.py",
+        "--downstream-repo",
+        "/mi/data2T/zlong/home/llm/tide-learning-lab",
+        "--baseline",
+        "fc-tensor",
+        "--client",
+        "python",
+        "--device",
+        "npu:0",
+        "--mode",
+        "training",
+        "--batch",
+        "8",
+        "--length",
+        "128",
+        "--phase-fences",
+        "step",
+        "--threads",
+        "2",
+        "--formula-attention",
+        "sdpa4d",
+        "--output-dir",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/fc-batch-full-20261112/npu/after-training-sdpa4d-r0"
+      ],
+      "exit_code": 0,
+      "identity": {
+        "foundation_source": "cc6ccbf7948362686ba27166aedf48ce17af1841",
+        "downstream": "0439efd2af31cf10b07ce9e6423b0195f7449968",
+        "downstream_archive_sha256": "430237f4ca7a8c0205644ff6952cd4823ace20160ee0ffc2a206b4064e9075ce",
+        "initial_parameters_sha256": "7f41057f0196bc2b259902f8dadafc9c3f46d197e02de5ebbda9517a632f9a1a",
+        "measured_parameters_sha256": "7f41057f0196bc2b259902f8dadafc9c3f46d197e02de5ebbda9517a632f9a1a",
+        "trainable_parameters": 5092788,
+        "comparison_scope": "Same core-5 parameters/input/head/loss; independent FC output/terminal-state projection, no complete trace or None-root equivalence",
+        "strict_numerical": "not_checked",
+        "discrete": "not_independently_checked",
+        "recovery": "see separate consumer",
+        "learning": "not_a_learning_study",
+        "baseline": "fc-tensor",
+        "mode": "training",
+        "formula_attention": "sdpa4d",
+        "phase_fences": "step",
+        "precision": {
+          "requested": "vendor-default",
+          "effective": {
+            "matmul_allow_hf32": false,
+            "conv_allow_hf32": true
+          }
+        },
+        "effective_threads": 2,
+        "effective_interop_threads": 1,
+        "affinity": [
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15
+        ],
+        "visibility": "0"
+      },
+      "measured": {
+        "index": 1,
+        "warmup": false,
+        "phases_seconds": {
+          "zero_grad": 0.0001525580883026123,
+          "embedding": 9.475275874137878e-05,
+          "core_forward": 0.1397879533469677,
+          "head_loss": 0.00020547956228256226,
+          "backward": 0.10249971970915794,
+          "clip": 0.005828935652971268,
+          "optimizer": 0.05173015967011452
+        },
+        "phase_sum_seconds": 0.300299558788538,
+        "diagnostic_boundary_calls": {},
+        "phase_time_scope": "host enqueue/calling-thread intervals; device work may cross phases; only complete_wall_seconds is synchronized",
+        "tokens": 1024,
+        "loss": 10.990678787231445,
+        "gradient_norm": 1360.773681640625,
+        "work": {
+          "candidate_events": 16384,
+          "selected_events": 8345,
+          "visited_edges": 25064
+        },
+        "complete_wall_seconds": 0.3033101037144661,
+        "diagnostic_only": false,
+        "input_positions_per_second": 3376.0827201588577,
+        "memory": {
+          "resources/peak_rss_mib": 2007.078125,
+          "resources/npu_allocated_mib": 79.4560546875,
+          "resources/npu_reserved_mib": 458.0,
+          "resources/npu_peak_allocated_mib": 410.96142578125
+        }
+      }
+    }
+  ],
+  "artifacts": {
+    "artifacts/fc-batch-full-20261112/cpu/matrix.json": "805a1e4e64677abdeaab252d833924ea9cea2e090082f5216785f9080e26d553",
+    "artifacts/fc-batch-full-20261112/npu/matrix.json": "0d8ba383e89a701e202027a3392d22b4125fc12a47d24305e65d85c3542bae4c"
+  },
+  "limits": [
+    "Full-scale benchmark strict_numerical remains not_checked; small local/scalar checks are separate.",
+    "Input tensor byte hash was not collected; fixed task archive/recipe/seeds and parameter bytes are recorded.",
+    "Per-phase times are host enqueue/calling-thread intervals, not isolated NPU kernel times.",
+    "One warmup/reset and one measured interval per point; no repeatability or peak-throughput claim.",
+    "All-inactive Full outputs stay disconnected; independent complete public graph roots are outside the direct anchor contract.",
+    "Attention pads to Qmax; dynamic nonzero/count and per-node/source work remain.",
+    "CPU and NPU selected counts differ by one; before/after counts agree within each device."
+  ],
+  "resolved_fc": {
+    "campaign": "language-v6",
+    "checks": {
+      "core_atol": 1e-06,
+      "core_rtol": 1e-05,
+      "finite_exploration": true
+    },
+    "core": {
+      "max_materialize_bytes": 1073741824,
+      "recipe": {
+        "branches": 2,
+        "depth": 4,
+        "family": "kv",
+        "history": 512,
+        "memory_overrides": {
+          "memory_read": "qry"
+        },
+        "offsets": [
+          0,
+          1
+        ],
+        "profile": "baseline",
+        "region_overrides": {
+          "allocation_temperature": 0.25
+        },
+        "region_width": 4,
+        "regularizer": "quad",
+        "selection": "regional_total",
+        "source_mode": "region",
+        "sparse_denominator": 2,
+        "topology": "fc",
+        "width": 128
+      },
+      "width": 128,
+      "eager_implementation": "python",
+      "placement_preset": "cpu"
+    },
+    "coverage_group": "scale",
+    "device": "cpu",
+    "dtype": "float32",
+    "evaluation": {
+      "inference_length": 16,
+      "test_policy": "sealed; separate frozen finalist review only"
+    },
+    "id": "scale-fc16-kv-quad",
+    "kind": "tide",
+    "line": "scale",
+    "planned_inventory": {
+      "core_trainable": 4564404,
+      "lm_trainable": 5092788,
+      "nodes": 16,
+      "regions": 4,
+      "resolved_memories": [
+        {
+          "adapter_rank": 32,
+          "alpha_att": 1.0,
+          "alpha_ff": 1.0,
+          "beta_short": 0.11552453009332421,
+          "distance_slopes": [
+            0.0,
+            0.0
+          ],
+          "epsilon": 1e-05,
+          "ffn_width": 512,
+          "full_frequencies": [
+            [],
+            []
+          ],
+          "heads": 2,
+          "memory_read": "qry",
+          "position_origin": 1,
+          "position_scale": 6,
+          "read_frequencies": [],
+          "summary_width": 32,
+          "width": 128,
+          "window": 3072
+        },
+        {
+          "adapter_rank": 32,
+          "alpha_att": 1.0,
+          "alpha_ff": 1.0,
+          "beta_short": 0.11552453009332421,
+          "distance_slopes": [
+            0.0,
+            0.0
+          ],
+          "epsilon": 1e-05,
+          "ffn_width": 512,
+          "full_frequencies": [
+            [],
+            []
+          ],
+          "heads": 2,
+          "memory_read": "qry",
+          "position_origin": 1,
+          "position_scale": 6,
+          "read_frequencies": [],
+          "summary_width": 32,
+          "width": 128,
+          "window": 3072
+        },
+        {
+          "adapter_rank": 32,
+          "alpha_att": 1.0,
+          "alpha_ff": 1.0,
+          "beta_short": 0.11552453009332421,
+          "distance_slopes": [
+            0.0,
+            0.0
+          ],
+          "epsilon": 1e-05,
+          "ffn_width": 512,
+          "full_frequencies": [
+            [],
+            []
+          ],
+          "heads": 2,
+          "memory_read": "qry",
+          "position_origin": 1,
+          "position_scale": 6,
+          "read_frequencies": [],
+          "summary_width": 32,
+          "width": 128,
+          "window": 3072
+        },
+        {
+          "adapter_rank": 32,
+          "alpha_att": 1.0,
+          "alpha_ff": 1.0,
+          "beta_short": 0.11552453009332421,
+          "distance_slopes": [
+            0.0,
+            0.0
+          ],
+          "epsilon": 1e-05,
+          "ffn_width": 512,
+          "full_frequencies": [
+            [],
+            []
+          ],
+          "heads": 2,
+          "memory_read": "qry",
+          "position_origin": 1,
+          "position_scale": 6,
+          "read_frequencies": [],
+          "summary_width": 32,
+          "width": 128,
+          "window": 3072
+        },
+        {
+          "adapter_rank": 32,
+          "alpha_att": 1.0,
+          "alpha_ff": 1.0,
+          "beta_short": 0.11552453009332421,
+          "distance_slopes": [
+            0.0,
+            0.0
+          ],
+          "epsilon": 1e-05,
+          "ffn_width": 512,
+          "full_frequencies": [
+            [],
+            []
+          ],
+          "heads": 2,
+          "memory_read": "qry",
+          "position_origin": 2,
+          "position_scale": 6,
+          "read_frequencies": [],
+          "summary_width": 32,
+          "width": 128,
+          "window": 3072
+        },
+        {
+          "adapter_rank": 32,
+          "alpha_att": 1.0,
+          "alpha_ff": 1.0,
+          "beta_short": 0.11552453009332421,
+          "distance_slopes": [
+            0.0,
+            0.0
+          ],
+          "epsilon": 1e-05,
+          "ffn_width": 512,
+          "full_frequencies": [
+            [],
+            []
+          ],
+          "heads": 2,
+          "memory_read": "qry",
+          "position_origin": 2,
+          "position_scale": 6,
+          "read_frequencies": [],
+          "summary_width": 32,
+          "width": 128,
+          "window": 3072
+        },
+        {
+          "adapter_rank": 32,
+          "alpha_att": 1.0,
+          "alpha_ff": 1.0,
+          "beta_short": 0.11552453009332421,
+          "distance_slopes": [
+            0.0,
+            0.0
+          ],
+          "epsilon": 1e-05,
+          "ffn_width": 512,
+          "full_frequencies": [
+            [],
+            []
+          ],
+          "heads": 2,
+          "memory_read": "qry",
+          "position_origin": 2,
+          "position_scale": 6,
+          "read_frequencies": [],
+          "summary_width": 32,
+          "width": 128,
+          "window": 3072
+        },
+        {
+          "adapter_rank": 32,
+          "alpha_att": 1.0,
+          "alpha_ff": 1.0,
+          "beta_short": 0.11552453009332421,
+          "distance_slopes": [
+            0.0,
+            0.0
+          ],
+          "epsilon": 1e-05,
+          "ffn_width": 512,
+          "full_frequencies": [
+            [],
+            []
+          ],
+          "heads": 2,
+          "memory_read": "qry",
+          "position_origin": 2,
+          "position_scale": 6,
+          "read_frequencies": [],
+          "summary_width": 32,
+          "width": 128,
+          "window": 3072
+        },
+        {
+          "adapter_rank": 32,
+          "alpha_att": 1.0,
+          "alpha_ff": 1.0,
+          "beta_short": 0.11552453009332421,
+          "distance_slopes": [
+            0.0,
+            0.0
+          ],
+          "epsilon": 1e-05,
+          "ffn_width": 512,
+          "full_frequencies": [
+            [],
+            []
+          ],
+          "heads": 2,
+          "memory_read": "qry",
+          "position_origin": 3,
+          "position_scale": 6,
+          "read_frequencies": [],
+          "summary_width": 32,
+          "width": 128,
+          "window": 3072
+        },
+        {
+          "adapter_rank": 32,
+          "alpha_att": 1.0,
+          "alpha_ff": 1.0,
+          "beta_short": 0.11552453009332421,
+          "distance_slopes": [
+            0.0,
+            0.0
+          ],
+          "epsilon": 1e-05,
+          "ffn_width": 512,
+          "full_frequencies": [
+            [],
+            []
+          ],
+          "heads": 2,
+          "memory_read": "qry",
+          "position_origin": 3,
+          "position_scale": 6,
+          "read_frequencies": [],
+          "summary_width": 32,
+          "width": 128,
+          "window": 3072
+        },
+        {
+          "adapter_rank": 32,
+          "alpha_att": 1.0,
+          "alpha_ff": 1.0,
+          "beta_short": 0.11552453009332421,
+          "distance_slopes": [
+            0.0,
+            0.0
+          ],
+          "epsilon": 1e-05,
+          "ffn_width": 512,
+          "full_frequencies": [
+            [],
+            []
+          ],
+          "heads": 2,
+          "memory_read": "qry",
+          "position_origin": 3,
+          "position_scale": 6,
+          "read_frequencies": [],
+          "summary_width": 32,
+          "width": 128,
+          "window": 3072
+        },
+        {
+          "adapter_rank": 32,
+          "alpha_att": 1.0,
+          "alpha_ff": 1.0,
+          "beta_short": 0.11552453009332421,
+          "distance_slopes": [
+            0.0,
+            0.0
+          ],
+          "epsilon": 1e-05,
+          "ffn_width": 512,
+          "full_frequencies": [
+            [],
+            []
+          ],
+          "heads": 2,
+          "memory_read": "qry",
+          "position_origin": 3,
+          "position_scale": 6,
+          "read_frequencies": [],
+          "summary_width": 32,
+          "width": 128,
+          "window": 3072
+        },
+        {
+          "adapter_rank": 32,
+          "alpha_att": 1.0,
+          "alpha_ff": 1.0,
+          "beta_short": 0.11552453009332421,
+          "distance_slopes": [
+            0.0,
+            0.0
+          ],
+          "epsilon": 1e-05,
+          "ffn_width": 512,
+          "full_frequencies": [
+            [],
+            []
+          ],
+          "heads": 2,
+          "memory_read": "qry",
+          "position_origin": 4,
+          "position_scale": 6,
+          "read_frequencies": [],
+          "summary_width": 32,
+          "width": 128,
+          "window": 0
+        },
+        {
+          "adapter_rank": 32,
+          "alpha_att": 1.0,
+          "alpha_ff": 1.0,
+          "beta_short": 0.11552453009332421,
+          "distance_slopes": [
+            0.0,
+            0.0
+          ],
+          "epsilon": 1e-05,
+          "ffn_width": 512,
+          "full_frequencies": [
+            [],
+            []
+          ],
+          "heads": 2,
+          "memory_read": "qry",
+          "position_origin": 4,
+          "position_scale": 6,
+          "read_frequencies": [],
+          "summary_width": 32,
+          "width": 128,
+          "window": 0
+        },
+        {
+          "adapter_rank": 32,
+          "alpha_att": 1.0,
+          "alpha_ff": 1.0,
+          "beta_short": 0.11552453009332421,
+          "distance_slopes": [
+            0.0,
+            0.0
+          ],
+          "epsilon": 1e-05,
+          "ffn_width": 512,
+          "full_frequencies": [
+            [],
+            []
+          ],
+          "heads": 2,
+          "memory_read": "qry",
+          "position_origin": 4,
+          "position_scale": 6,
+          "read_frequencies": [],
+          "summary_width": 32,
+          "width": 128,
+          "window": 0
+        },
+        {
+          "adapter_rank": 32,
+          "alpha_att": 1.0,
+          "alpha_ff": 1.0,
+          "beta_short": 0.11552453009332421,
+          "distance_slopes": [
+            0.0,
+            0.0
+          ],
+          "epsilon": 1e-05,
+          "ffn_width": 512,
+          "full_frequencies": [
+            [],
+            []
+          ],
+          "heads": 2,
+          "memory_read": "qry",
+          "position_origin": 4,
+          "position_scale": 6,
+          "read_frequencies": [],
+          "summary_width": 32,
+          "width": 128,
+          "window": 0
+        }
+      ],
+      "resolved_regions": [
+        {
+          "allocation_base": null,
+          "allocation_temperature": 0.25,
+          "alpha_loc": null,
+          "alpha_match": null,
+          "alpha_res": null,
+          "alpha_sel": null,
+          "ent_alpha": null,
+          "eta": null,
+          "fixed_gain": null,
+          "gain_logit": null,
+          "gamma_max": 2.0,
+          "hidden_width": 32,
+          "k": 2,
+          "local_score": "cat",
+          "query_weight": null,
+          "read_mode": "+",
+          "region_control_mode": "context",
+          "region_control_width": 32,
+          "region_evidence": "cat",
+          "region_key": null,
+          "region_score": "ind",
+          "regularizer": "quad",
+          "selection_mode": "regional_total",
+          "selection_width": null,
+          "send_gain": null,
+          "total_fraction": null
+        },
+        {
+          "allocation_base": null,
+          "allocation_temperature": 0.25,
+          "alpha_loc": null,
+          "alpha_match": null,
+          "alpha_res": null,
+          "alpha_sel": null,
+          "ent_alpha": null,
+          "eta": null,
+          "fixed_gain": null,
+          "gain_logit": null,
+          "gamma_max": 2.0,
+          "hidden_width": 32,
+          "k": 2,
+          "local_score": "cat",
+          "query_weight": null,
+          "read_mode": "+",
+          "region_control_mode": "context",
+          "region_control_width": 32,
+          "region_evidence": "cat",
+          "region_key": null,
+          "region_score": "ind",
+          "regularizer": "quad",
+          "selection_mode": "regional_total",
+          "selection_width": null,
+          "send_gain": null,
+          "total_fraction": null
+        },
+        {
+          "allocation_base": null,
+          "allocation_temperature": 0.25,
+          "alpha_loc": null,
+          "alpha_match": null,
+          "alpha_res": null,
+          "alpha_sel": null,
+          "ent_alpha": null,
+          "eta": null,
+          "fixed_gain": null,
+          "gain_logit": null,
+          "gamma_max": 2.0,
+          "hidden_width": 32,
+          "k": 2,
+          "local_score": "cat",
+          "query_weight": null,
+          "read_mode": "+",
+          "region_control_mode": "context",
+          "region_control_width": 32,
+          "region_evidence": "cat",
+          "region_key": null,
+          "region_score": "ind",
+          "regularizer": "quad",
+          "selection_mode": "regional_total",
+          "selection_width": null,
+          "send_gain": null,
+          "total_fraction": null
+        },
+        {
+          "allocation_base": null,
+          "allocation_temperature": 0.25,
+          "alpha_loc": null,
+          "alpha_match": null,
+          "alpha_res": null,
+          "alpha_sel": null,
+          "ent_alpha": null,
+          "eta": null,
+          "fixed_gain": null,
+          "gain_logit": null,
+          "gamma_max": 2.0,
+          "hidden_width": 32,
+          "k": 2,
+          "local_score": "cat",
+          "query_weight": null,
+          "read_mode": "+",
+          "region_control_mode": "context",
+          "region_control_width": 32,
+          "region_evidence": "cat",
+          "region_key": null,
+          "region_score": "ind",
+          "regularizer": "quad",
+          "selection_mode": "regional_total",
+          "selection_width": null,
+          "send_gain": null,
+          "total_fraction": null
+        }
+      ]
+    },
+    "resources": {
+      "max_rss_gib": 48
+    },
+    "revisions": {
+      "foundation": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+      "mathematics": "0770593838a37c790a568226930567ed60f99b83"
+    },
+    "schema": "tide-language-campaign-config-v1",
+    "seed": 11,
+    "study_id": "TL-SCALE-v6",
+    "threads": 1,
+    "training": {
+      "batch": 8,
+      "checkpoint_seconds": 600,
+      "clip_norm": 1.0,
+      "eps": 1e-06,
+      "eval_tokens": 32768,
+      "length": 128,
+      "log_every": 8,
+      "lr": 0.001,
+      "lr_floor_fraction": 0.1,
+      "milestones": [
+        262144,
+        1048576,
+        4194304
+      ],
+      "target_tokens": 4194304,
+      "timeout_seconds": 129600,
+      "validation_every_tokens": 131072,
+      "warmup_tokens": 65536,
+      "weight_decay": 0.01
+    },
+    "transformer": null
+  },
+  "queue": {
+    "elapsed_seconds": 95.741654869169,
+    "job_id": "gef-fc-batch-full-npu-20261112",
+    "logical_device": "npu:0",
+    "logical_devices": [
+      "npu:0"
+    ],
+    "npu_count": 1,
+    "physical_id": 0,
+    "physical_ids": [
+      0
+    ],
+    "priority": 0,
+    "project": "graph-execution-foundation",
+    "return_code": 0,
+    "schema_version": 1,
+    "status": "completed",
+    "timestamp": "2026-11-12T15:13:30.725323+00:00"
+  }
+}

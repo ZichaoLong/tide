@@ -1,5 +1,9 @@
 # 历史验证与测量证据
 
+[直接FC跨B的Full（2026-11-12）](fc-batch-full-20261112.md)：cc6ccbf7，CPU31/NPU9项通过；
+同FC16 B8/L128三模式，完整训练CPU1.365→1.044秒、NPU.674→.291秒。
+保留20点及Transformer对照、有限FP32差异；只改直接样板，不代表默认基座或规模严格资格。
+
 [Resident KV bank贯穿（2026-11-12）](resident-kv-owner-20261112.md)：0c974ccd两构建、56 CPU、
 11 SDK/4安装native进程通过；共享历史接Mem/Full/块伴随，显式raw观察/独立根、三步与新进程恢复通过。
 无新吞吐或规模结论，完整设备图expiry、half/其他记忆/多卡与CUDA资格分列。

@@ -108,11 +108,13 @@ cross-window backward and a fresh-process raw-state/model/optimizer restore.
 That checkpoint is for this output/state projection, not a substitute for the
 public graph checkpoint's full metadata, history and pending messages.
 
-Full now groups selected queries by sample, with a head-batched Q×K contraction
-against one K/V bank per sample. It no longer expands the whole history for each
-selected query. No Full computation is performed for inactive queries. Host
-groups still scale with B, and attention weights with selected-query count times
-history length; this is a compact independent anchor, not an optimal-kernel claim.
+Full packs selected queries across samples into `[B,H,Qmax,Dh]` and contracts
+against one K/V bank per sample. Query/output/FFN projections use only selected
+rows; attention pads to the maximum selected count. It neither expands history
+per query nor dispatches Full in a Python B/L loop. Dynamic shape extraction,
+padding and node/source loops remain; this is not an optimal-kernel claim.
+The [B-loop removal comparison](evidence/fc-batch-full-20261112.md) records
+independent literal Full VJPs, stateful CPU checks and CPU/NPU three-mode costs.
 Read and Full consume the same raw KV bank but retain their separate formulas.
 The [stateful qualification](evidence/additive-interface-qualification-20261110.md)
 separates this projection from public complete-root and restore checks; the

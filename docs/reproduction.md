@@ -1,5 +1,9 @@
 # 从 Git 复现问题与维护失败经验
 
+直接FC的B循环改造从[cc6ccbf7资格与20点成本](evidence/fc-batch-full-20261112.md)进入；
+`benchmark_fc_batch_pair.py`接两个干净固定版本，复用相同下游任务跑三模式与Transformer。
+`test_fc_full_batch`提供独立逐查询指数商及全部Full输入根，旧运行目录不是复现输入。
+
 Resident默认KV bank从[0c974ccd固定资格](evidence/resident-kv-owner-20261112.md)进入；
 `test_resident_kv_bank/pool/read`独立局部公式、SDK完整flow根及安装`block_resident.py`
 显式raw观察/训练/新进程恢复分工。实际完整命令和构建身份在对应JSON。
