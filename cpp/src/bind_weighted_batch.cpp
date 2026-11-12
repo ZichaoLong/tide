@@ -5,11 +5,15 @@
 #include "tide/allocation_observation.h"
 #include "weighted_sending_batch.h"
 #include "weighted_regional_groups.h"
+#include "weighted_unit_transport.h"
 #include <torch/csrc/utils/pybind.h>
 #include <pybind11/stl.h>
 namespace py=pybind11;
 void bind_weighted_batch(py::module_& m){
   using namespace tide;using namespace tide::weighted;
+  m.def("weighted_validate_unit_scales",&validate_unit_scales,
+        py::arg("scales"),py::arg("budget")=8*1024*1024,py::arg("fixed")=true,
+        py::call_guard<py::gil_scoped_release>());
   py::register_exception_translator([](std::exception_ptr pointer){
     try{if(pointer)std::rethrow_exception(pointer);}
     catch(const AllocationFailure& e){

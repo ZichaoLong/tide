@@ -6,6 +6,7 @@
 #include <cstdint>
 #include "weighted_kv_sequence_vjp.h"
 #include "weighted_kv_block.h"
+#include "weighted_unit_transport.h"
 
 namespace tide::weighted {
 std::vector<std::string> MemoryKernel::content_autograd_keys(const ContentViews& views) const {
@@ -204,14 +205,13 @@ std::optional<KVConfig> kv_configuration(const StateKernel& kernel){
 void validate_transport(const Graph& g,const Model& m){
   std::vector<bool> weighted;
   for(const auto& w:m.nodes)weighted.push_back(dynamic_cast<const MemoryKernel*>(w.kernel.get())!=nullptr);
-  auto unit=[](const Tensor& scale){
-    require(!scale.requires_grad()&&at::equal(scale,at::ones_like(scale)),"weighted payload transport requires fixed unit scales");
-  };
-  for(size_t p=0;p<g.inputs.size();++p)if(weighted[g.inputs[p]])unit(m.input_scale[p]);
-  for(size_t p=0;p<g.outputs.size();++p)if(weighted[g.outputs[p]])unit(m.output_scale[p]);
+  std::vector<Tensor> scales;
+  for(size_t p=0;p<g.inputs.size();++p)if(weighted[g.inputs[p]])scales.push_back(m.input_scale[p]);
+  for(size_t p=0;p<g.outputs.size();++p)if(weighted[g.outputs[p]])scales.push_back(m.output_scale[p]);
   for(size_t e=0;e<g.edges.size();++e){
-    if(weighted[g.edges[e].source])unit(m.edge_scale[e]);
-    if(weighted[g.edges[e].target])unit(m.agg_scale[e]);
+    if(weighted[g.edges[e].source])scales.push_back(m.edge_scale[e]);
+    if(weighted[g.edges[e].target])scales.push_back(m.agg_scale[e]);
   }
+  validate_unit_scales(scales);
 }
 }  // namespace tide::weighted

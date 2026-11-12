@@ -13,6 +13,7 @@ from .ssd import SSDContent, SSDMemory
 from .programs import Describe, RegionalTotal, WeightedAggregate, WeightedFull
 from .tensors import parameter
 from .source_binding import SourceBinding, SourceFactory, aggregate_profile, normalize_widths, source_width
+from .transport_validation import validate_unit_scales
 
 
 MEMORY_TYPES = {"kv": (KVMemory, KVContent), "affine": (BasicMemory, BasicContent),
@@ -41,9 +42,8 @@ class WeightedModel(Model):
     def validate_binding(self, graph):
         if graph.identity != self.graph_identity:
             raise ValueError("weighted graph/model binding mismatch")
-        for name in ("input_scale", "agg_scale", "edge_scale", "output_scale"):
-            if any(p.requires_grad or not torch.equal(p,torch.ones_like(p)) for p in getattr(self,name)):
-                raise ValueError("weighted payload transport must use fixed unit scales")
+        validate_unit_scales(p for name in ("input_scale", "agg_scale", "edge_scale", "output_scale")
+                             for p in getattr(self, name))
         policy = "positive-floor-v1" if any(r.config.support_policy != "strict" for r in self.regions) else "strict"
         if policy != "strict" and (len({n.bias.device for n in self.nodes}) != 1
                                    or any(n.bias.dtype not in {torch.float32,torch.float64} for n in self.nodes)):
@@ -71,10 +71,9 @@ class WeightedModel(Model):
             raise ValueError("weighted region configuration changed without a new graph binding")
 
     def validate_checkpoint_weights(self, actual):
-        for name, value in actual.items():
-            if name.split(".")[0] in {"input_scale","agg_scale","edge_scale","output_scale"}:
-                if not torch.equal(value,torch.ones_like(value)):
-                    raise ValueError("checkpoint changes weighted payload unit transport")
+        validate_unit_scales((value for name, value in actual.items()
+                              if name.split(".")[0] in {"input_scale", "agg_scale", "edge_scale", "output_scale"}),
+                             fixed=False, message="checkpoint changes weighted payload unit transport")
 
 
 @dataclass(frozen=True)

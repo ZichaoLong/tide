@@ -92,6 +92,9 @@ transpose 在 `column_attention` / `weighted_column_attention`；位置元数据
 `weighted/regional_packing`与C++ `weighted_regional_packing`拥有候选数量分组的int64关联布局，
 `regional_groups` / `weighted_regional_groups`组合完整区域数学、原始版本守卫及块反向。
 改变这些边界须同步`test_regional_packing`、`test_regional_groups`、一般Settle独立调度与恢复。
+固定单位传输的数值检查由`weighted/transport_validation.py` / `weighted_unit_transport.h`
+按device/dtype及临时字节预算合批；每次读取全部实际值，未使用跨窗缓存或省略版本检查。
+修改同步`test_unit_transport_validation`、模型绑定/checkpoint拒绝与默认执行器检查。
 卷积tap的有序一阶转置在`weighted/tap_gather.py` / `weighted_column_gather.cpp`，
 对应`test_tap_gather`的独立线性映射与`test_native_recurrent_columns`的完整循环检查。
 修改同时检查`column_capacity` / `workspace_bytes`与实际设备精确恢复。
