@@ -124,7 +124,8 @@ def test_complete_interval_denominator_and_forward_duties(mode):
         assert all(p.grad is None for p in model.parameters())
 
 
-def test_trace_keeps_interface_counts_device_events_and_scopes_distinct(tmp_path):
+@pytest.mark.parametrize("string_times", [False, True])
+def test_trace_keeps_interface_counts_device_events_and_scopes_distinct(tmp_path, string_times):
     def event(name, ts, dur, **extra):
         return dict(ph="X", pid=1, tid=2, name=name, ts=ts, dur=dur, **extra)
     events = [event("req006::model", 0, 100), event("req006::node_linear", 10, 10),
@@ -132,6 +133,11 @@ def test_trace_keeps_interface_counts_device_events_and_scopes_distinct(tmp_path
               event("aten::stack", 30, 2), event("aten::_local_scalar_dense", 40, 5),
               dict(ph="M", name="process_name", pid=9, args={"name": "Ascend Hardware"}),
               dict(ph="X", pid=9, tid=0, name="Index", ts=13, dur=7, args={"Task Type": "KERNEL_AICPU"})]
+    if string_times:
+        for entry in events:
+            for key in ("ts", "dur"):
+                if key in entry:
+                    entry[key] = str(entry[key])
     path = tmp_path/"trace.json"
     path.write_text(json.dumps(dict(traceEvents=events)))
     result = summarize_trace(path)

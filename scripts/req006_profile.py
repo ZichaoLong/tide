@@ -70,7 +70,10 @@ def summarize_trace(path):
     path = Path(path)
     document = json.loads(path.read_text())
     events = document if isinstance(document, list) else document["traceEvents"]
-    complete = [e for e in events if e.get("ph") == "X" and "ts" in e]
+    # CANN exports decimal timestamps as JSON strings; Kineto uses numbers.
+    # Normalize working records only, preserving the raw trace and its hash.
+    complete = [dict(e, ts=float(e["ts"]), dur=float(e.get("dur", 0)))
+                for e in events if e.get("ph") == "X" and "ts" in e]
     hardware = {e["pid"] for e in events if e.get("name") == "process_name"
                 and e.get("args", {}).get("name") == "Ascend Hardware"}
     ranges, by_thread = defaultdict(list), defaultdict(list)
@@ -145,3 +148,23 @@ def profile_call(call, device, output):
         result = call()
     recording.export_chrome_trace(str(output))
     return result
+
+
+if __name__ == "__main__":
+    # Offline recovery of an exported trace never restarts the measured job or
+    # overwrites its failure status. The new parser/source identity is explicit.
+    import argparse
+    import hashlib
+    from durable_records import write_json
+    from source_identity import source_state
+    parser = argparse.ArgumentParser(description="Summarize an existing REQ-006 trace without running a model")
+    parser.add_argument("trace", type=Path)
+    parser.add_argument("--output", type=Path, required=True)
+    args = parser.parse_args()
+    if args.output.exists():
+        parser.error("output already exists; preserve prior analysis")
+    source, dirty = source_state(Path(__file__).resolve().parents[1])
+    result = summarize_trace(args.trace)
+    result.update(analysis_source=source, analysis_dirty=dirty, trace_path=str(args.trace.resolve()),
+                  trace_sha256=hashlib.sha256(args.trace.read_bytes()).hexdigest())
+    write_json(args.output, result)
