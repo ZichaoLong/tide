@@ -186,3 +186,6 @@ ascendc_library(tide_weighted_recurrent_reverse_kernel STATIC tide_weighted_recu
 ascendc_library(tide_weighted_reverse_route_kernel STATIC tide_weighted_reverse_route.cpp)
 
 ascendc_library(tide_weighted_peer_equal_kernel STATIC tide_weighted_peer_equal.cpp)
+
+ascendc_library(tide_block_kv_sequence_kernel STATIC tide_block_kv_sequence.cpp)
+ascendc_library(tide_block_kv_sequence_reverse_kernel STATIC tide_block_kv_sequence_reverse.cpp)

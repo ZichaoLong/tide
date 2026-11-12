@@ -258,7 +258,14 @@ if(TIDE_DEVICE_KERNELS)
   set_target_properties(tide-block-kv-messages PROPERTIES POSITION_INDEPENDENT_CODE ON)
   target_link_libraries(tide-block-kv-messages PUBLIC
     tide-block-read-selection tide-weighted-kv-full tide-weighted-parameters tide-weighted-row)
+  add_library(tide-block-kv-sequence STATIC block_kv_sequence.cpp block_kv_sequence_vjp.cpp)
+  set_target_properties(tide-block-kv-sequence PROPERTIES POSITION_INDEPENDENT_CODE ON)
+  target_link_libraries(tide-block-kv-sequence PUBLIC tide-weighted-kv-update
+    tide_block_kv_sequence_kernel tide_block_kv_sequence_reverse_kernel)
   if(TIDE_DEVICE_RUNTIME STREQUAL "standalone")
+    add_executable(tide-block-kv-sequence-check block_kv_sequence_check.cpp)
+    target_compile_options(tide-block-kv-sequence-check PRIVATE -fPIC)
+    target_link_libraries(tide-block-kv-sequence-check PRIVATE tide-block-kv-sequence)
     add_executable(tide-block-read-selection-check
       block_read_selection_check.cpp block_selection_fixture.cpp block_selection_formula.cpp)
     target_compile_options(tide-block-read-selection-check PRIVATE -fPIC)
