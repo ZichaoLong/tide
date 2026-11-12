@@ -4,7 +4,7 @@ namespace tide::device_online::block_flow_check {
 at::Tensor values(at::IntArrayRef shape,float shift){return block_selection_check::values(shape,shift);}
 namespace {
 SettleGraph graph(){Graph g;g.nodes={{0},{0},{1}};g.regions={{2},{1}};
-  g.edges={{0,2,1},{1,2,1},{0,2,1}};g.inputs={0,1,1};g.outputs={2,2};g.compile();return SettleGraph(g,{0,1},"ports",2);}
+  g.edges={{0,2,1},{1,2,1},{0,2,1}};g.inputs={0,1,1};g.outputs={2,2};g.compile();return SettleGraph(g,{1,2},"ports",3);}
 }
 Fixture::Fixture():graph(block_flow_check::graph()){
   block_message_check::Fixture seed;bindings.resize(2);roles.resize(2);states.resize(2);bound.resize(2);
@@ -27,7 +27,7 @@ Fixture::Fixture():graph(block_flow_check::graph()){
       const auto name="r"+std::to_string(r)+"."+role+"."+std::to_string(i);registry.add(name,canonical.at(key));roles[r][role].push_back(name);
     }
     WeightedRawLayout layout(b.memory,Capacity);const auto count=int64_t(b.node_owners.size());
-    for(int64_t row=0;row<Batch*count;++row){State s;const auto first=input.positions[row/count][0].item<int64_t>()*2+r;
+    for(int64_t row=0;row<Batch*count;++row){State s;const auto first=input.positions[row/count][0].item<int64_t>()*graph.stride()+graph.ranks()[r];
       s.last_time=first-1;s.observations=2;s.value=at::zeros({3},at::kFloat);s.slots["times"]=at::tensor({first-4,first-1},at::kLong);
       for(const auto& field:layout.fields())if(field.name!="value"){
         auto shape=field.shape;shape.insert(shape.begin(),2);s.slots[field.name]=values(shape,.3+row*.03+r*.05);

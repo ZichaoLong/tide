@@ -272,11 +272,20 @@ if(TIDE_DEVICE_KERNELS)
     tide_block_flow_fibers_kernel tide_block_flow_publish_kernel
     tide_block_flow_reverse_ports_kernel tide_block_flow_reverse_gather_kernel
     tide_block_flow_reverse_fibers_kernel tide_block_flow_reverse_choose_kernel)
+  add_library(tide-block-settle-session STATIC block_settle_session.cpp block_settle_session_layout.cpp
+    block_settle_session_training.cpp block_settle_checkpoint.cpp)
+  set_target_properties(tide-block-settle-session PROPERTIES POSITION_INDEPENDENT_CODE ON)
+  target_link_libraries(tide-block-settle-session PUBLIC tide-block-settle-flow tide-device-optimizer)
   if(TIDE_DEVICE_RUNTIME STREQUAL "standalone")
     add_executable(tide-block-settle-flow-check block_settle_flow_check.cpp
       block_settle_fixture.cpp block_settle_formula.cpp block_selection_fixture.cpp block_kv_message_fixture.cpp)
     target_compile_options(tide-block-settle-flow-check PRIVATE -fPIC)
     target_link_libraries(tide-block-settle-flow-check PRIVATE tide-block-settle-flow)
+    add_executable(tide-block-settle-session-check block_settle_session_check.cpp
+      block_settle_formula.cpp block_settle_fixture.cpp block_selection_formula.cpp
+      block_selection_fixture.cpp block_kv_message_fixture.cpp)
+    target_compile_options(tide-block-settle-session-check PRIVATE -fPIC)
+    target_link_libraries(tide-block-settle-session-check PRIVATE tide-block-settle-session)
     add_executable(tide-block-kv-sequence-check block_kv_sequence_check.cpp)
     target_compile_options(tide-block-kv-sequence-check PRIVATE -fPIC)
     target_link_libraries(tide-block-kv-sequence-check PRIVATE tide-block-kv-sequence)

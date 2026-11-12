@@ -24,9 +24,12 @@ struct Formula {
   std::vector<std::vector<at::Tensor>> received,memory,total,controls,full;
   std::vector<at::Tensor> messages;
   at::Tensor present,times;
+  std::vector<std::vector<State>> bound;
+  Fields canonical;
+  int64_t windows=1;
 };
 at::Tensor values(at::IntArrayRef,float shift);
-Formula formula(const Fixture&);
+Formula formula(const Fixture&,const Formula* previous=nullptr);
 std::vector<BlockSettleKVBinding> device_bindings(const Fixture&,at::Device);
 BlockSettleFlowInput device_input(const Fixture&,at::Device);
 }

@@ -60,17 +60,19 @@ Tensor full(const State& s,const Tensor& h,int64_t time,const Fields& p,const we
   return x+c.alpha_ff*at::mv(p.at("full.down"),gate*gate.sigmoid()*up);
 }
 }
-Formula formula(const Fixture& f){
+Formula formula(const Fixture& f,const Formula* previous){
   at::AutoGradMode enabled(true);Formula o;o.old.resize(2);o.proposal.resize(2);o.final.resize(2);o.describe.resize(2);
   o.received.resize(2);o.memory.resize(2);o.total.resize(2);o.controls.resize(2);o.full.resize(2);
   o.messages.assign(Frames*Nodes,at::zeros({3},at::kFloat));o.present=at::zeros({Frames,Nodes},at::kBool);o.times=at::zeros({Frames,Nodes},at::kLong);
+  if(previous){o.leaves=previous->leaves;o.labels=previous->labels;o.windows=previous->windows+1;}
   auto leaf=[&](Tensor x,Label label){x=x.detach().clone().set_requires_grad(true);o.leaves.push_back(x);o.labels.push_back(label);return x;};
-  std::vector<Tensor> external;for(int64_t row=0;row<Frames*3;++row)external.push_back(leaf(f.input.payload.reshape({Frames*3,3})[row],{"input","",0,row}));
-  std::map<std::string,Tensor> canonical;for(const auto& owner:f.registry.owners())canonical[owner.canonical]=leaf(owner.value,{"parameter",owner.canonical});
-  std::vector<std::vector<Fields>> params(2);std::vector<std::vector<State>> states=f.states,bound=f.bound;
+  std::vector<Tensor> external;for(int64_t row=0;row<Frames*3;++row)external.push_back(leaf(f.input.payload.reshape({Frames*3,3})[row],{"input","",o.windows-1,row}));
+  std::map<std::string,Tensor> canonical;if(previous)canonical=previous->canonical;
+  else for(const auto& owner:f.registry.owners())canonical[owner.canonical]=leaf(owner.value,{"parameter",owner.canonical});
+  std::vector<std::vector<Fields>> params(2);auto states=previous?previous->final:f.states,bound=previous?previous->bound:f.bound;
   for(int64_t r=0;r<2;++r){params[r].resize(2);for(const auto& [role,names]:f.roles[r])for(size_t bank=0;bank<names.size();++bank)
       params[r][bank][role]=canonical.at(f.registry.canonical_name(names[bank]));
-    for(int set=0;set<2;++set)for(size_t row=0;row<states[r].size();++row){auto& s=(set?bound:states)[r][row];
+    if(!previous)for(int set=0;set<2;++set)for(size_t row=0;row<states[r].size();++row){auto& s=(set?bound:states)[r][row];
       s.value=leaf(s.value,{set?"bound":"initial","value",r,int64_t(row)});
       for(auto& [name,x]:s.slots)if(name!="times")x=leaf(x,{set?"bound":"initial",name,r,int64_t(row)});}
   }
@@ -96,7 +98,7 @@ Formula formula(const Fixture& f){
             auto transformed=z+binding.aggregate_alpha*at::mv(p.at("source.b"),hidden*hidden.sigmoid());terms.push_back(mass[k]*transformed);}
           u=at::stack(terms).sum(0)/total;}
         h=at::cat({total.reshape({1}),u});}
-      o.received[r].push_back(h);o.old[r].push_back(states[r][owner]);const auto time=f.input.positions.reshape({Frames})[frame].item<int64_t>()*2+r;
+      o.received[r].push_back(h);o.old[r].push_back(states[r][owner]);const auto time=f.input.positions.reshape({Frames})[frame].item<int64_t>()*f.graph.stride()+f.graph.ranks()[r];
       const auto bank=binding.node_owners[n];if(!atoms.empty())states[r][owner]=update(states[r][owner],h,time,params[r][bank],c);
       o.proposal[r].push_back(states[r][owner]);Tensor memory=at::zeros({2,2},at::kFloat),total=at::zeros({2},at::kFloat);
       Fields desc{{"w",at::zeros({1},at::kFloat)},{"mu",at::zeros({1},at::kFloat)},{"score",at::zeros({1},at::kFloat)},{"evidence",at::zeros({2},at::kFloat)}};
@@ -114,6 +116,6 @@ Formula formula(const Fixture& f){
       if(control.item<float>()>0){auto result=full(o.proposal[r][row],o.received[r][row],o.times[frame][node].item<int64_t>(),params[r][binding.node_owners[n]],c);
         o.full[r][row]=result;o.messages[frame*Nodes+node]=at::cat({control.reshape({1}),result});o.present[frame][node]=true;}}
   }
-  o.final=std::move(states);return o;
+  o.final=std::move(states);o.bound=std::move(bound);o.canonical=std::move(canonical);return o;
 }
 }
