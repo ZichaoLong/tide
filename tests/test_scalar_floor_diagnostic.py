@@ -8,7 +8,7 @@ import torch
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]/"scripts"))
 from diagnose_scalar_floor import (boundary_material, bound_argument, bound_value,
-                                   evaluate, independent_formula, represented_bound)
+                                   evaluate, independent_formula, represented_bound, require_formula)
 
 
 @pytest.mark.parametrize("name", ["zero", "tiny", "log-tiny"])
@@ -67,6 +67,17 @@ def test_scalar_representation_is_explicit_and_preserves_the_original_request():
         assert torch.equal(result[0], expected[0]) and torch.equal(result[1], expected[1])
     with pytest.raises(ValueError, match="representation"):
         represented_bound(value, torch.float32, "implicit")
+
+
+def test_finite_observation_retains_failure_and_never_allows_nonfinite():
+    check = dict(finite=True, value_equal=True, gradient_equal=False)
+    with pytest.raises(AssertionError, match="formula mismatch"):
+        require_formula((check,))
+    assert require_formula((check,), observe_finite=True) is False
+    assert require_formula((dict(check, gradient_equal=True),)) is True
+    for observe in (False, True):
+        with pytest.raises(FloatingPointError, match="nonfinite"):
+            require_formula((dict(check, finite=False),), observe)
 
 
 @pytest.mark.parametrize("variant", ["scalar", "tensor"])

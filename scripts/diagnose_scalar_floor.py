@@ -97,6 +97,16 @@ def compare(result, expected):
                 signed_zero_mismatches=int(((y == 0) & (ey == 0) & (torch.signbit(y) != torch.signbit(ey))).sum()))
 
 
+def require_formula(checks, observe_finite=False):
+    """A diagnostic may observe finite differences, never erase their failure."""
+    if not all(c["finite"] for c in checks):
+        raise FloatingPointError("nonfinite independent formula result")
+    passed = all(c["value_equal"] and c["gradient_equal"] is not False for c in checks)
+    if not passed and not observe_finite:
+        raise AssertionError("independent formula mismatch; see recorded values/VJPs")
+    return passed
+
+
 def boundary_checks(device, dtype, value):
     """Small independent checks for both overloads, outside all measured regions."""
     import torch
@@ -122,6 +132,8 @@ def arguments():
     p.add_argument("--variant", choices=("scalar", "tensor"), default="scalar")
     p.add_argument("--bound-representation", choices=("requested", "dtype"), default="requested",
                    help="keep the requested Python float, or explicitly round it to input dtype before either overload")
+    p.add_argument("--observe-finite-mismatch", action="store_true",
+                   help="retain strict failure and exit 1, but collect finite operator timing/profile for diagnosis")
     p.add_argument("--shape", default="4,16,256,256", help="actual tensor shape, comma separated positive dimensions")
     p.add_argument("--mode", choices=("forward", "backward"), default="backward")
     p.add_argument("--action", choices=("check", "measure", "profile"), default="check")
@@ -178,10 +190,8 @@ def main():
         checks = boundary_checks(device, dtype, value)
         record["boundary_checks"] = checks
         relevant = checks["variants"].values() if a.action == "check" else (checks["variants"][a.variant],)
-        passed = all(v["finite"] and v["value_equal"] and v["gradient_equal"] for v in relevant)
-        # Preserve differences rather than silently widening a dtype/bound contract.
-        if not passed:
-            raise AssertionError("independent boundary formula mismatch; see recorded values/VJPs")
+        passed = require_formula(tuple(relevant), a.observe_finite_mismatch)
+        record["strict_formula_passed"] = passed
         if a.action != "check":
             count = math.prod(a.shape)
             if 2*count*torch.empty((), dtype=dtype).element_size() > a.max_input_bytes:
@@ -226,18 +236,20 @@ def main():
                 observation["formula_check"] = compare(result, expected)
                 observation["output_sha256"] = tensor_digest(result)
                 record["observations"].append(observation)
-                if not observation["formula_check"]["value_equal"] or observation["formula_check"]["gradient_equal"] is False:
-                    raise AssertionError("actual-shape formula mismatch")
+                passed = require_formula((observation["formula_check"],), a.observe_finite_mismatch) and passed
+                record["strict_formula_passed"] = passed
                 del result
             if device.type != "cpu":
                 record["allocator_peak_bytes"] = getattr(torch, device.type).max_memory_allocated(device)
-        record["state"] = "passed"
+        record.update(execution="completed", state="passed" if passed else "failed",
+                      failure_kind=None if passed else "finite_numeric")
     except BaseException as error:
         record.update(state="failed", error=repr(error))
         raise
     finally:
         write_json(output/"result.json", record)
+    return 0 if record["state"] == "passed" else 1
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())
