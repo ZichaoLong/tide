@@ -1,10 +1,14 @@
 #include "block_resident_internal.h"
 #include "training_parameters.h"
 #include "tide/weighted_column_checkpoint.h"
+#include "tide/kernel.h"
 #include <ATen/core/grad_mode.h>
 #include <limits>
 namespace tide::device_online {
 namespace {
+Model configure_boundary_model(const SettleGraph& graph,Model model){
+  configure_model(graph.graph(),model);return model;
+}
 BlockSettleBoundary metadata(const SettleGraph& g,const Continuation& q){
   BlockSettleBoundary out{at::zeros({q.batch_size,int64_t(g.graph().nodes.size())},at::kBool),
     at::full({q.batch_size,int64_t(g.graph().regions.size())},-1,at::kLong),
@@ -26,7 +30,7 @@ Index common_cut(const Tensor& last,Index stride){
 }
 BlockResidentSession::Impl::Impl(SettleGraph g,Model m,const Continuation& q,at::Device device,
     ResidentOptimizerKind k,std::vector<OptimizerGroup> gs,BlockResidentLimits l,const BlockCheckpoint* checkpoint)
-    :graph(std::move(g)),model(std::move(m)),binding(lower_block_settle_model(graph,model,q,l.cache,l.forward_bytes)),
+    :graph(std::move(g)),model(configure_boundary_model(graph,std::move(m))),binding(lower_block_settle_model(graph,model,q,l.cache,l.forward_bytes)),
      session(training_detail::session_id()),batch(q.batch_size),cut(q.cut),kind(k),groups(std::move(gs)){
   if(at::GradMode::is_enabled()||(k!=ResidentOptimizerKind::sgd&&k!=ResidentOptimizerKind::adamw))
     throw std::invalid_argument("block resident requires no-grad and an explicit optimizer kind");
