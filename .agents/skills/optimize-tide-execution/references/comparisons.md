@@ -72,6 +72,21 @@ BLAS, scheduler pools, affinity/NUMA and device mapping. Small-test thread count
 are not performance caps. Shared NPU use follows the current prompt's explicit
 scope; historical shared measurements do not grant new access.
 
+Explicit sharing authorization may cover subsequent work in the same
+conversation. Keep its stated scope in STATUS and reuse it without asking for
+each job; a new conversation needs its own authorization. Sharing may include
+correctness checks, profiling and performance measurements. Do not wait for an
+exclusive device merely to obtain timing when authorized shared execution can
+answer the current question.
+
+Use the site's validated sharing adapter with observed process/start identities,
+bounded admission and memory headroom. Record co-tenants, physical/logical mapping,
+CPU pools, utilization/memory samples and known contention with each result.
+Label timing as a shared-resource observation; avoid claiming exclusive peak
+performance or attributing an unpaired timing delta entirely to the code change.
+Prefer the same card and close-in-time pairs when useful, and repeat a small
+measurement only when contention uncertainty would change the decision.
+
 Use small/moderate cases for frequent attribution and relevant numerical checks.
 Use large representative cases at stage boundaries or where they can change a
 decision. Reuse valid prior measurements. A slower local case or finite numerical

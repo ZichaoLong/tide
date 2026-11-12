@@ -1,0 +1,720 @@
+{
+  "schema": "tide-resident-block-components-evidence-v1",
+  "upstream": "0770593838a37c790a568226930567ed60f99b83",
+  "result_scope": "17 CPU metadata checks and three standalone NPU FP32 component checks; not a complete resident graph or throughput qualification",
+  "implementation": {
+    "dispatch_and_read_selection": "a50420bd9b84144c3887d6571eab68de50ba3dde",
+    "dispatch_pic_fix": "a4b71bfce2ccff7ee40991b7ef87bbb811ef8fb6",
+    "full_and_messages": "bbea0c09aff2307cbde3a4887b6eca38a250059d"
+  },
+  "qualification_sources": {
+    "dispatch_and_selection": "a95b8987af6f823366a25dcbfdeae225c986e184",
+    "messages": "7d5e05c3dbc962a43dc76136aa1bedf6aafba3e7",
+    "messages_reused_core": "a95b8987af6f823366a25dcbfdeae225c986e184"
+  },
+  "source_sha256": {
+    "a95_dispatch_and_selection": {
+      "tools/device_online/block_dispatch.h": "e283167a18c1f156db31809a296ed79e65c3f7d03f854d726baedc5790bbe1a5",
+      "tools/device_online/block_dispatch.cpp": "22f7570def062f00a0c4c0e666fb74c8fa345107d01b07827a6c0271e6df4590",
+      "tools/device_online/block_task_plan.h": "9810b2807423addfadaeac8b81b7120c705076791d30298f12becaf1f7b8c4cd",
+      "tools/device_online/settle_block_plan.h": "6e2d289c90299b50c7983e9f96c655b6e425733cf51ae0413cd4db5ba4fd1878",
+      "tools/device_online/block_dispatch_check.cpp": "048395e2aa787cae39c7208f0fac55b4bc41396398088e4b4941a58dbaaeb471",
+      "tools/device_online/block_read_selection.h": "146ad67edc4653c59fa1f8c024ed4be0075a7dcad6884e1182f874e85cbfc938",
+      "tools/device_online/block_read_selection.cpp": "fc595c7eaf3e4babab180d40248d420a8c6ceebf1e02d5405826654e758ebf7c",
+      "tools/device_online/block_read_selection_internal.h": "c5e0d124ad6ef91ddfd2f535b284d0f1e4a6f5b78e928bfe39cf1ae91e26276a",
+      "tools/device_online/block_read_selection_vjp.cpp": "54e80b66b67226fb7ee88c0cb78f6ae8ce20af7a8a2970d99cb72f30d38f34eb",
+      "tools/device_online/block_selection_formula.h": "4e7acca59787206565877815d84a2fdbf4f9e080bd865ebeec1a67974428937b",
+      "tools/device_online/block_selection_formula.cpp": "5e6238122fb325992b5fac1a3b2eb7d1369953374629dfc5da4ef5415682432a",
+      "tools/device_online/block_selection_fixture.cpp": "7a1d0d39f3988a7cddfc164b51b9f6528affb2e6435bae5e61eda864c456cb90",
+      "tools/device_online/block_read_selection_check.cpp": "00e9e90496f2a9a48ab189ccc42e29a043e7d6ef32f1634f39bfa0bd3c059fe1",
+      "tools/device_online/ascendc/block_dispatch_math.h": "882c0e0a7794f6730107b561f58f52a8755c0ed8aee9c559bed01c53ea08c3ae",
+      "tools/device_online/ascendc/block_read_selection_math.h": "098bc0a2bd3062e666cf232632721a9eaa405f92a47a33c3e7ed96eb35db0240",
+      "tests/test_resident_block_dispatch.py": "ec7887e11d69d41b7165ba589a849478cbda4a4227ec0b12517164f17fc57595",
+      "tests/test_resident_block_selection.py": "01bec300485749e27b5636f9b0d8c1dfc1f03a4f4dd93cc01d2d5e9460bd2367"
+    },
+    "7d5_messages": {
+      "tools/device_online/block_kv_messages.h": "f51a73646841fdf87da69c79fa9123f5e0211c0137d77dbef0f95c808cdd61dc",
+      "tools/device_online/block_kv_messages.cpp": "47014936314f65ad22a9396f800e173d9dfae23454cefec41f8fdf554ce4dc10",
+      "tools/device_online/block_kv_messages_vjp.cpp": "8f884e56dca492c63b6c0d36a091ea2f08afaab6829ab9cfb04db149af98ae52",
+      "tools/device_online/block_kv_messages_saved.h": "d9abe2c86f8f351936d34bf2f5536c0220f85662ec494817f79ded4bfd5a13a8",
+      "tools/device_online/block_kv_message_parameters.cpp": "09ec404281b36fc557a040923b21ccc036101e6d8690effdf172469ffa061603",
+      "tools/device_online/block_kv_message_formula.h": "a631ea99afeafef14b595bd812dc6f836b6fe07eedfda73109da5dec183e9d4e",
+      "tools/device_online/block_kv_message_formula.cpp": "a0e3a9c4b9411642659eaed1df3e8dd0d1dd00f98a467dc18ceb4c0ea74c3a16",
+      "tools/device_online/block_kv_message_fixture.cpp": "d848c1f5a989f81d324d10c36e59b839c03e5a2af2df451f20b1c727ed994fb8",
+      "tools/device_online/block_kv_messages_check.cpp": "166c0d2616adbddf3b36df3167c6cfbc072a980bede66cfa49a76bef97fd8a35"
+    }
+  },
+  "builds": {
+    "original_failure": {
+      "job": {
+        "path": "artifacts/jobs/rewrite-block-build/status.json",
+        "sha256": "45a955e03d0a6d6d4cf114520018bbce8d1c0227e58a9cc766b0d23ecd0c2de4",
+        "bytes": 410,
+        "record": {
+          "command": [
+            "/bin/bash",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/rewrite-20261112/block-build-work.sh"
+          ],
+          "cwd": "/dev/shm/gef-rewrite-20261112/block-source",
+          "state": "failed",
+          "source": "d69025e4da952f8630afff6c671d63444fb38af1",
+          "dirty": "",
+          "started": "2026-11-12T04:00:45.863433+00:00",
+          "exit_code": 1,
+          "finished": "2026-11-12T04:02:19.336309+00:00"
+        }
+      },
+      "log": {
+        "path": "artifacts/jobs/rewrite-block-build/task.log",
+        "sha256": "f9f7b5141819cfba37269ff0536d4253bcee19ef0b467f7d014ded4118c745e5",
+        "bytes": 609817
+      },
+      "error_excerpt": [
+        "/usr/bin/ld: CMakeFiles/tide-block-dispatch-check.dir/block_dispatch_check.cpp.o: relocation R_AARCH64_ADR_PREL_PG_HI21 against symbol `_ZNSt13runtime_errorD1Ev@@GLIBCXX_3.4' which may bind externally can not be used when making a shared object; recompile with -fPIC",
+        "/usr/bin/ld: CMakeFiles/tide-block-dispatch-check.dir/block_dispatch_check.cpp.o(.text+0x30): unresolvable R_AARCH64_ADR_PREL_PG_HI21 relocation against symbol `_ZNSt13runtime_errorD1Ev@@GLIBCXX_3.4'",
+        "/usr/bin/ld: final link failed: bad value",
+        "collect2: error: ld returned 1 exit status"
+      ],
+      "failed_target": "tide-block-dispatch-check",
+      "stage": "standalone executable link after core and kernels compiled; not a numerical failure",
+      "repair": "explicit -fPIC on check target in a4b71bfc; original job remains failed"
+    },
+    "a95_sdk_and_device": {
+      "job": {
+        "path": "artifacts/jobs/rewrite-batched-sdk/status.json",
+        "sha256": "1936a3a080876b4f0c1f992836406f8db4e4ba6800909f0ba6ebe4ab8ad9704a",
+        "bytes": 412,
+        "record": {
+          "command": [
+            "/bin/bash",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/rewrite-20261112/batched-sdk-work.sh"
+          ],
+          "cwd": "/dev/shm/gef-rewrite-20261112/batched-source",
+          "state": "passed",
+          "source": "a95b8987af6f823366a25dcbfdeae225c986e184",
+          "dirty": "",
+          "started": "2026-11-12T04:05:11.131678+00:00",
+          "exit_code": 0,
+          "finished": "2026-11-12T04:07:36.478324+00:00"
+        }
+      },
+      "script": {
+        "path": "artifacts/rewrite-20261112/batched-sdk-work.sh",
+        "sha256": "b76719bdf4b774b60c05c591d8ee92d77e2bc0a6b4ab625335eb8a67a0bd9e22",
+        "bytes": 789
+      },
+      "device_component_build": {
+        "schema": "tide-device-control-build-v1",
+        "source": "a95b8987af6f823366a25dcbfdeae225c986e184",
+        "dirty": "",
+        "component_sha256": "25e09f32daabcdb094fc898cfa0bc514aae223b8e07482a5eb3918550f0924ba",
+        "build_jobs": 160,
+        "backend": "npu",
+        "runtime": "standalone",
+        "npu_runtime": "standalone",
+        "cuda_architectures": null,
+        "ascendc_soc": "Ascend910_9392",
+        "binary_sha256": {
+          "tide-block-dispatch-check": "cf80a84d5050d096697b3787842f7e3109b7256712a4480082ec2a9441def0ef",
+          "tide-block-read-selection-check": "305428b5836718a161a1552efcdb5e6c91ad4b926bde92e018135aaee0fb4b3e"
+        },
+        "loader_sha256": {
+          "tide-block-dispatch-check": "a8a8d4a6ff4b2f9e517654d5be1e30d9ed302a9377b00d9151b3314183183221",
+          "tide-block-read-selection-check": "e060879843fe65fe68868dd271a010b27d1fe6e05c40133550b79876b96ae049"
+        },
+        "requested_checks": [
+          "resident-block",
+          "resident-block-selection"
+        ],
+        "python_component": null,
+        "scope": "build/loader/help only; device control check required separately"
+      },
+      "core": {
+        "source": "a95b8987af6f823366a25dcbfdeae225c986e184",
+        "cpp_source_sha256": "f4596708e67ba24ba1d844452cb551593e8a46db25e641f3ce8c02304dc0130b",
+        "torch": "2.12.0",
+        "distribution": {
+          "torch": "2.12.0",
+          "torch_dir": "/opt/software/libtorch/2.12.0-cpu-aarch64-abi1/share/cmake/Torch",
+          "prefix": "/opt/software/libtorch/2.12.0-cpu-aarch64-abi1",
+          "cxx11_abi": true,
+          "cuda": null,
+          "discovery": "standalone-prefix",
+          "distribution_sha256": {
+            "share/cmake/Torch/TorchConfig.cmake": "9846a61d981bc6c465ccfd604edb910e2ff37342310b80606c416697f9753d24",
+            "share/cmake/Torch/TorchConfigVersion.cmake": "6cc8fc1b03a7d604a57be1fc51491bfb4deb8c651506c415a41b5173b06344f3",
+            "lib/libtorch.so": "5d864dc3a979f6f8cf572e752caa583182324399c29a79b9143efe175f67d72e",
+            "lib/libtorch_cpu.so": "cb4931abca15245de366da71e361174afc9e411651d4c50046cfb7a2dac6c4f5",
+            "lib/libc10.so": "fa843366784bfce035e912360601c4ca098ce536b20f0c4a8ee50c3f00294e37"
+          }
+        },
+        "environment": {
+          "os": "Linux-5.10.0-182.0.0.95.r1941_123.hce2.aarch64-aarch64-with-glibc2.34",
+          "compiler": "c++ (GCC) 10.3.1",
+          "cxx_standard": 17,
+          "build_type": "Release",
+          "torch_prefix": "/opt/software/libtorch/2.12.0-cpu-aarch64-abi1/share/cmake/Torch",
+          "cann_version": "9.2.0",
+          "npu_sdk": {
+            "config": "/opt/software/libtorch-npu/2.12.0-cann9.2.0-aarch64-abi1/sdk/share/cmake/Torch_npu/Torch_npuConfig.cmake",
+            "config_sha256": "1711480e47f9dbb19ed01209f073e5526218efeb583cbbbc9ab101c373cc62dd",
+            "library_sha256": "9a851accc1f4c7063d7e3c3cf76186329c063000a00a4d48c45a30ca1e8e3c18"
+          }
+        },
+        "build_jobs": 160,
+        "backend": "npu",
+        "npu_runtime": "standalone",
+        "torch_npu": null,
+        "cuda": null,
+        "architecture": "aarch64",
+        "python": "3.12.13",
+        "cxx11_abi": true,
+        "binary_sha256": {
+          "libtidegraph.a": "f0b2ab655e46ea10f085383bd72f09d0d561e044f4f8a592778a9d425cb42a0d",
+          "libtidegraph_runtime.a": "9f18306e8f042f25679569332412213a15ca152bb05a7894baf6f865c7ffb290",
+          "tidegraph-smoke": "094983d37825421cfb9cc4a05e943f2ebedef4a52f75ef110051928a82842530",
+          "tidegraph-kernel-check": "61624c7e03e7d3e64f98e7141f1a862be20b8168dd32d54dce5adc9816ebcb79",
+          "tidegraph-full-check": "54a705ac69ec49eb36f6c4f82178ec540cb25b1cf9c340ffd0ad68de4f51f008",
+          "tidegraph-aggregate-check": "c6c0e0468fab79b43980d7dbf64a4a3752ad5efa86a4f994bf3ab38dbe454d00",
+          "tidegraph-optimizer-check": "0c881d740a51a1067ea507bb914aaeeb6359bedbc4b2cd35cd882032926bc602",
+          "tidegraph-checkpoint-check": "c6ab2db771239e900dfbcaebc0f90cb289cf8c94698dee8d661d7ca768fbdaa5",
+          "tidegraph-weighted-training-check": "d6e6cda8d6f87897030ac702d520c4150098fc1b9fe63880b2587227b5ff873d",
+          "tidegraph-lh-scope-check": "746aedf44726838f1a9159a03747053ee5ec4d9de2e930ad3258aed8a2492e0d",
+          "tidegraph-streaming-bench": "0c11194d5d5cb1c14b98db6ce0ae3259fdee7ee31c4c141ec9e83843c32ae6f2",
+          "tidegraph-scale-bench": "56e28a035c4cd254b2e111b8593c99800efacca1acfd69514c186bf5797f6bc1",
+          "tidegraph-profile-check": "27b5ca2d75e14baa28a0ea1b77414363aff4167cb82e32926132cc8fff9fe7e0",
+          "tidegraph-settle-check": "2508210bc77d7204a535ac81c4c522c8a9358939365c218ed0dfa77af8c982e9",
+          "tidegraph-greedy-check": "bf7dda97d2a18491d75f19ad834457027e1fcb5d91bbd10db649456090b95ba7",
+          "tidegraph-accelerator-check": "c438a87cdc8abea319f61bb74ea0b1d6c8b93140eea5b1322cabb0a4820483c5",
+          "tidegraph-runtime-check": "cd6d5ea111da2de812c90d807b0d2836f854d47dd39c79746d6815fa1376f7ac",
+          "tidegraph-read-precision-check": "a874c29d03dcdf1ed94981fd3763549cbe39b2d07c05dbad48c19a51889ad5b2",
+          "tidegraph-placement-check": "32fecedf4d4e78809d634618f0cfb8c7ad63e063c9d3d9f3b5785826fd644623",
+          "tidegraph-payload-ownership-check": "aec04bcdd1456e41b4e5b372b3739ef0fc4251c32597db9be811571dd9b40fa9",
+          "tidegraph-weighted-binding-module-check": "7e8393e30b8c3b4c3b304b6f7a8bae62bf0728f6add99c6fe8c180c2268044df",
+          "tidegraph-column-check": "b95817d72572a2b06a735e8035afc2297d6c6dc95f2e14648b58c9c6dede5b4a",
+          "libtidegraph-weighted-binding-module.so": "1704543694f6dff5313a07121479e323c3a57e2375799191953cb88e264cf231"
+        }
+      },
+      "scope": "fresh standalone SDK/CANN build, loader closure; device results separately recorded"
+    },
+    "7d5_messages": {
+      "job": {
+        "path": "artifacts/jobs/rewrite-messages-7d5/status.json",
+        "sha256": "aa02d288f987ffceb218b8632d31712d5fb5917243b2c52cd8918bcc426b7a30",
+        "bytes": 418,
+        "record": {
+          "command": [
+            "/bin/bash",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/rewrite-20261112/messages-7d5-work.sh"
+          ],
+          "cwd": "/dev/shm/gef-rewrite-20261112/messages-7d5-source",
+          "state": "passed",
+          "source": "7d5e05c3dbc962a43dc76136aa1bedf6aafba3e7",
+          "dirty": "",
+          "started": "2026-11-12T04:27:17.752363+00:00",
+          "exit_code": 0,
+          "finished": "2026-11-12T04:29:21.756334+00:00"
+        }
+      },
+      "script": {
+        "path": "artifacts/rewrite-20261112/messages-7d5-work.sh",
+        "sha256": "0f0c295e7dd109d35cf817a54d0bda6601e7f2711a5c7de2b6c2682088c3d205",
+        "bytes": 1549
+      },
+      "device_component_build": {
+        "schema": "tide-device-control-build-v1",
+        "source": "7d5e05c3dbc962a43dc76136aa1bedf6aafba3e7",
+        "dirty": "",
+        "component_sha256": "84a609f6798281a02bcea9f661a178ef4a1736cdfa4989bb06baad875b8b0b1b",
+        "build_jobs": 320,
+        "backend": "npu",
+        "runtime": "standalone",
+        "npu_runtime": "standalone",
+        "cuda_architectures": null,
+        "ascendc_soc": "Ascend910_9392",
+        "binary_sha256": {
+          "tide-block-kv-messages-check": "dfb977ad454a9178d52f9f91f55ea9ebd4d8320446e7ca447386d750c0fa6c86"
+        },
+        "loader_sha256": {
+          "tide-block-kv-messages-check": "e10d63c47eb12cf1418ef43e035627432d5ebc80ce48bf76c8d36b44d768d3b6"
+        },
+        "requested_checks": [
+          "resident-block-kv-messages"
+        ],
+        "python_component": null,
+        "scope": "build/loader/help only; device control check required separately"
+      },
+      "core_reuse": {
+        "source": "a95b8987af6f823366a25dcbfdeae225c986e184",
+        "cpp_source_sha256": "f4596708e67ba24ba1d844452cb551593e8a46db25e641f3ce8c02304dc0130b",
+        "same_hash_at_component_source": true,
+        "admission": "build_device_control verifies current core-source hash and every listed binary hash before use"
+      },
+      "resources": {
+        "cpus": "0-319",
+        "memory_max_bytes": 274877906944,
+        "runtime_max_seconds": 1800,
+        "build_jobs": 320
+      },
+      "scope": "new CANN component/loader build with byte-verified existing a95 standalone core; not a new 7d5 core build"
+    }
+  },
+  "cpu_metadata": {
+    "job": {
+      "path": "artifacts/jobs/rewrite-batched-native/status.json",
+      "sha256": "320112e0eb3cd22e177e99d4321c9fe86e1bcb269e2c35deeab49efc3a86bf8f",
+      "bytes": 415,
+      "record": {
+        "command": [
+          "/bin/bash",
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/rewrite-20261112/batched-native-work.sh"
+        ],
+        "cwd": "/dev/shm/gef-rewrite-20261112/batched-source",
+        "state": "passed",
+        "source": "a95b8987af6f823366a25dcbfdeae225c986e184",
+        "dirty": "",
+        "started": "2026-11-12T04:05:11.112442+00:00",
+        "exit_code": 0,
+        "finished": "2026-11-12T04:07:12.541409+00:00"
+      }
+    },
+    "junit": {
+      "path": "artifacts/rewrite-20261112/batched-cpu.xml",
+      "sha256": "8654c3e8b54b3e4a723582e8a6d3f68df45bee61107b1a07f786b7d86586c7bb",
+      "bytes": 21842
+    },
+    "source": "a95b8987af6f823366a25dcbfdeae225c986e184",
+    "resident_checks_passed": 17,
+    "whole_job_suite_passed": 150,
+    "counts_are_not_additive": true,
+    "cases": [
+      {
+        "class": "tests.test_resident_block_dispatch",
+        "name": "test_online_absence_duplicate_edges_and_independent_regions[1]",
+        "state": "passed"
+      },
+      {
+        "class": "tests.test_resident_block_dispatch",
+        "name": "test_online_absence_duplicate_edges_and_independent_regions[2]",
+        "state": "passed"
+      },
+      {
+        "class": "tests.test_resident_block_dispatch",
+        "name": "test_online_absence_duplicate_edges_and_independent_regions[8]",
+        "state": "passed"
+      },
+      {
+        "class": "tests.test_resident_block_dispatch",
+        "name": "test_batch_and_time_axes_int64_feedback_and_reusable_window",
+        "state": "passed"
+      },
+      {
+        "class": "tests.test_resident_block_dispatch",
+        "name": "test_zero_payload_presence_is_not_absence_and_guard_only_dependency",
+        "state": "passed"
+      },
+      {
+        "class": "tests.test_resident_block_dispatch",
+        "name": "test_unconditional_barrier_closes_missing_inputs",
+        "state": "passed"
+      },
+      {
+        "class": "tests.test_resident_block_dispatch",
+        "name": "test_journal_capacity_and_numerical_failure_publish_no_prefix",
+        "state": "passed"
+      },
+      {
+        "class": "tests.test_resident_block_dispatch",
+        "name": "test_late_and_duplicate_completion_rejected",
+        "state": "passed"
+      },
+      {
+        "class": "tests.test_resident_block_dispatch",
+        "name": "test_cycle_and_invalid_descriptor_refused",
+        "state": "passed"
+      },
+      {
+        "class": "tests.test_resident_block_dispatch",
+        "name": "test_empty_reused_window_excludes_old_journal_rows",
+        "state": "passed"
+      },
+      {
+        "class": "tests.test_resident_block_dispatch",
+        "name": "test_independent_formula_on_permuted_dags",
+        "state": "passed"
+      },
+      {
+        "class": "tests.test_resident_block_selection",
+        "name": "test_complete_frames_and_independent_members",
+        "state": "passed"
+      },
+      {
+        "class": "tests.test_resident_block_selection",
+        "name": "test_region_time_mismatch_and_invalid_owners_fail",
+        "state": "passed"
+      },
+      {
+        "class": "tests.test_resident_block_selection",
+        "name": "test_control_roots_ignore_absence_but_preserve_connected_zero",
+        "state": "passed"
+      },
+      {
+        "class": "tests.test_resident_block_selection",
+        "name": "test_per_target_gate_does_not_broadcast_region_activity",
+        "state": "passed"
+      },
+      {
+        "class": "tests.test_resident_block_selection",
+        "name": "test_node_gate_rejects_wrong_numerical_phase",
+        "state": "passed"
+      },
+      {
+        "class": "tests.test_resident_block_selection",
+        "name": "test_metadata_lowering_preserves_physical_edges",
+        "state": "passed"
+      }
+    ],
+    "independence": "candidate CPU compilation of the device metadata semantics versus independent recursive DAG evaluation; lowerer/gate/root layout checks do not execute resident KV numerics"
+  },
+  "device_gates": {
+    "dispatch_selection": {
+      "path": "artifacts/rewrite-20261112/batched-shared-resident/result.json",
+      "sha256": "c5f4aaea0ba0f181691e3bc4d01be63fcdc79c6aa76ac28c379827f1fd13a243",
+      "bytes": 7048,
+      "schema": "tide-device-components-gate-v1",
+      "source": "a95b8987af6f823366a25dcbfdeae225c986e184",
+      "dirty": "",
+      "state": "passed",
+      "device": "npu:0",
+      "cases": [
+        {
+          "check": "resident-block",
+          "dtype": "float32",
+          "command": [
+            "/dev/shm/gef-rewrite-20261112/batched-device/tide-block-dispatch-check",
+            "--device=npu:0",
+            "--dtype=float32"
+          ],
+          "state": "passed",
+          "exit_code": 0,
+          "evidence_kind": "component",
+          "scope": "selected component contract at this source; not complete graph or throughput qualification",
+          "log": "resident-block-float32.log",
+          "log_sha256": "e2cc2526d5b5c002cda3413ce1bf8326eb28b9c6f5974b9caeb7cbd21c414e69",
+          "stdout": "[W1112 12:19:11.856965769 NPUCachingAllocator.cpp:203] Warning: The current CANN and Soc versions require processing for 32 padding size, with memory allocation. (function operator())\nresident-block: passed device_ready=true device_presence=true batched_vendor=true exact_int64=true host_loop=false scope=metadata_and_numerical_stage_boundary\n"
+        },
+        {
+          "check": "resident-block-selection",
+          "dtype": "float32",
+          "command": [
+            "/dev/shm/gef-rewrite-20261112/batched-device/tide-block-read-selection-check",
+            "--device=npu:0",
+            "--dtype=float32"
+          ],
+          "state": "passed",
+          "exit_code": 0,
+          "evidence_kind": "component",
+          "scope": "selected component contract at this source; not complete graph or throughput qualification",
+          "log": "resident-block-selection-float32.log",
+          "log_sha256": "14442ee09b37a17650426b1b2c1cf028393b23a957716138529b71ad65f2da0c",
+          "stdout": "[W1112 12:19:16.816151124 NPUCachingAllocator.cpp:203] Warning: The current CANN and Soc versions require processing for 32 padding size, with memory allocation. (function operator())\nblock-read-selection: passed frames=4 nodes=3 complete_regions=2 roots=3 shared_banks=2 independent_formula_vjp=true saved_versions=true full_executor=false three_replay_seconds=0.0102373\n"
+        }
+      ],
+      "scope": "selected components and declared resident profiles/dtypes; construction-only cases retain their explicit scope; not complete module/dtype/multi-device matrix or throughput qualification",
+      "physical_device": 1,
+      "sharing": "authorized shared device; not exclusive timing"
+    },
+    "messages": {
+      "path": "artifacts/rewrite-20261112/messages-7d5-shared-resident/result.json",
+      "sha256": "a094f3dc0297d9926a703b97f449c0207df5dd39cb0b2321f0491510d6f41f46",
+      "bytes": 6264,
+      "schema": "tide-device-components-gate-v1",
+      "source": "7d5e05c3dbc962a43dc76136aa1bedf6aafba3e7",
+      "dirty": "",
+      "state": "passed",
+      "device": "npu:0",
+      "cases": [
+        {
+          "check": "resident-block-kv-messages",
+          "dtype": "float32",
+          "command": [
+            "/dev/shm/gef-rewrite-20261112/messages-7d5-device/tide-block-kv-messages-check",
+            "--device=npu:0",
+            "--dtype=float32"
+          ],
+          "state": "passed",
+          "exit_code": 0,
+          "evidence_kind": "component",
+          "scope": "selected component contract at this source; not complete graph or throughput qualification",
+          "log": "resident-block-kv-messages-float32.log",
+          "log_sha256": "796da05f958e9654e321630a01962cd92e78a94f24bc987e3a445afb7079642d",
+          "stdout": "[W1112 12:29:14.526260331 NPUCachingAllocator.cpp:203] Warning: The current CANN and Soc versions require processing for 32 padding size, with memory allocation. (function operator())\nblock-kv-messages: passed separate_read_proposal=true roots=7 shared_roles=true message_pair_unscaled=true explicit_cG=true default_no_projection=true undefined_roots=true owner_bindings=2 trainable_subset=true refusal_checks=10 int64_times=true saved_reverse=true full_executor=false\n"
+        }
+      ],
+      "scope": "selected components and declared resident profiles/dtypes; construction-only cases retain their explicit scope; not complete module/dtype/multi-device matrix or throughput qualification",
+      "physical_device": 9,
+      "sharing": "authorized shared device; not exclusive timing"
+    }
+  },
+  "containing_job": {
+    "dispatch_selection": {
+      "job": {
+        "path": "artifacts/jobs/rewrite-shared-qual/status.json",
+        "sha256": "46d03d1cf481aa88c94caffef0018eb9702b333de8f5e2f07d62300e62b65e2f",
+        "bytes": 414,
+        "record": {
+          "command": [
+            "/bin/bash",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/rewrite-20261112/shared-qual-launch.sh"
+          ],
+          "cwd": "/dev/shm/gef-rewrite-20261112/batched-source",
+          "state": "failed",
+          "source": "a95b8987af6f823366a25dcbfdeae225c986e184",
+          "dirty": "",
+          "started": "2026-11-12T04:14:57.603249+00:00",
+          "exit_code": 1,
+          "finished": "2026-11-12T04:19:23.030422+00:00"
+        }
+      },
+      "state": "failed",
+      "reason": "unrelated regional test placement mismatches and scalar-floor diagnostics; resident component results remain individually passed"
+    },
+    "messages": {
+      "state": "passed",
+      "terminal_observed": {
+        "MainPID": 0,
+        "ControlGroup": "",
+        "ActiveState": "inactive",
+        "Result": "success"
+      }
+    }
+  },
+  "device_placement": {
+    "execution": "standalone LibTorch/C++ DeviceProgram",
+    "host_aten_threads": 1,
+    "host_interop_threads": 1,
+    "dtype": "float32",
+    "logical_device": "npu:0",
+    "backend": "npu",
+    "runtime_owner": "standalone",
+    "cann": "9.2.0",
+    "ascendc_soc": "Ascend910_9392",
+    "libtorch": "2.12.0",
+    "architecture": "aarch64",
+    "abi": 1,
+    "cuda_build": "not run",
+    "gpu_hardware": "not run"
+  },
+  "shared_allocation": {
+    "first_queue": {
+      "path": "artifacts/rewrite-20261112/shared-qual-queue.json",
+      "sha256": "85d44f0d4e29d4dfb964e39c32adce76a09d70f75e4e31dd4660c764fe071773",
+      "bytes": 397,
+      "record": {
+        "elapsed_seconds": 262.38009360432625,
+        "job_id": "gef-rewrite-shared-qual",
+        "logical_device": "npu:0",
+        "logical_devices": [
+          "npu:0"
+        ],
+        "npu_count": 1,
+        "physical_id": 1,
+        "physical_ids": [
+          1
+        ],
+        "priority": 0,
+        "project": "graph-execution-foundation",
+        "return_code": 1,
+        "schema_version": 1,
+        "status": "failed",
+        "timestamp": "2026-11-12T04:19:20.661949+00:00"
+      }
+    },
+    "message_queue": {
+      "path": "artifacts/rewrite-20261112/messages-7d5-shared-queue.json",
+      "sha256": "5f670eee8257a152c6ad90f48e0dd394c2b8f88db56011965e4db5b1389a2916",
+      "bytes": 401,
+      "record": {
+        "elapsed_seconds": 12.849304381757975,
+        "job_id": "gef-rewrite-messages-7d5",
+        "logical_device": "npu:0",
+        "logical_devices": [
+          "npu:0"
+        ],
+        "npu_count": 1,
+        "physical_id": 9,
+        "physical_ids": [
+          9
+        ],
+        "priority": 0,
+        "project": "graph-execution-foundation",
+        "return_code": 0,
+        "schema_version": 1,
+        "status": "completed",
+        "timestamp": "2026-11-12T04:29:19.351606+00:00"
+      }
+    },
+    "first_audit": {
+      "path": "artifacts/rewrite-20261112/shared-qual-audit.jsonl",
+      "sha256": "aa17ac6a982bb5ab3e4e90c99aeb3480173f3ae497d4921c41e24c21b54874bf",
+      "bytes": 14218
+    },
+    "message_audit": {
+      "path": "artifacts/rewrite-20261112/messages-7d5-shared-audit.jsonl",
+      "sha256": "687797ca75463e7211c5d06eb92d479760f2cd98032f955a335123af7fcf7c01",
+      "bytes": 8671
+    },
+    "qualification_only": true
+  },
+  "fixtures": {
+    "dispatch": {
+      "execution": "single device program submission; device chooses ready groups, runs vendor BMM, derives actual numerical presence and commits",
+      "oracle": "independent recursive C++ DAG evaluation; no candidate trajectory as input",
+      "coverage": [
+        "absence closure",
+        "stable group packing",
+        "duplicate edges",
+        "zero-valued present message",
+        "int64 clocks",
+        "empty/reused windows",
+        "stale/duplicate completion",
+        "capacity and numerical refusal without partial commit"
+      ],
+      "domain": "finite potential DAG; not a general dynamic PDG lowerer"
+    },
+    "read_selection": {
+      "frames": 4,
+      "nodes": 3,
+      "regions": 2,
+      "region_membership": [
+        0,
+        0,
+        1
+      ],
+      "region_ranks": [
+        0,
+        0
+      ],
+      "banks": 2,
+      "cache": 2,
+      "width": 2,
+      "summary_width": 2,
+      "hidden_width": 3,
+      "memory_family": "kv",
+      "memory_read": "qry",
+      "local_score": "cat",
+      "region_score": "ind",
+      "selection_mode": "regional_total",
+      "region_control_mode": "context",
+      "region_evidence": "cat",
+      "regularizer": "quad",
+      "k": 1,
+      "gamma_max": 2,
+      "allocation_temperature": 0.8,
+      "epsilon": 0.13,
+      "beta_short": 0.2,
+      "read_frequencies": [
+        0.7
+      ],
+      "position_scale": 3,
+      "base_time": 18014398509482001,
+      "frame_time_stride": 3,
+      "raw_snapshot_binding": "independently supplied actual Read operand; no automatic Upd or Read-mode selection",
+      "root_modes": 3,
+      "numeric_tolerance": {
+        "rtol": 3e-05,
+        "atol": 3e-06
+      },
+      "exact_checks": [
+        "active",
+        "history presence",
+        "int64 history times",
+        "None versus connected-zero"
+      ],
+      "oracle": "literal weighted KV Attention, Describe/ScalarHead and two-candidate closed-form quad allocation, differentiated independently of candidate VJP",
+      "saved_reverse": "original floating/integer/content/parameter input buffers overwritten after forward",
+      "diagnostic_three_replay_seconds": 0.0102373,
+      "timing_scope": "tiny component diagnostic, not model throughput, TTFT or complete training"
+    },
+    "messages": {
+      "inherits_fixture": "read_selection",
+      "read_cache": 2,
+      "proposal_cache": 3,
+      "full_heads": 1,
+      "ffn_width": 8,
+      "full_frequencies": [
+        [
+          0.23
+        ]
+      ],
+      "distance_slopes": [
+        0.07
+      ],
+      "alpha_att": 0.3,
+      "alpha_ff": 0.4,
+      "state_scope": "four independently supplied Read/proposal frames; can be indexed B2/L2 but no cross-sequence state isolation or Upd/scan qualification",
+      "five_independent_root_families": [
+        "candidate controls",
+        "selected Full G",
+        "message c",
+        "message G",
+        "explicit numerical cG"
+      ],
+      "root_modes": 7,
+      "separately_undefined_all_roots": true,
+      "refusal_checks": 10,
+      "owner_bindings": [
+        "explicit Full owners different from Read",
+        "omitted Full owners default to Read"
+      ],
+      "sharing": [
+        "Read.query and Full.query alias",
+        "Full.gate and Full.up alias",
+        "Full.out equal values with distinct identity"
+      ],
+      "canonical_trainable_subset": "all Read.query/Full.query uses of selected physical owners",
+      "numeric_tolerance": {
+        "rtol": 4e-05,
+        "atol": 4e-06
+      },
+      "exact_checks": [
+        "message present",
+        "message int64 times",
+        "None versus connected-zero"
+      ],
+      "oracle": "independent proposal Attention, rotary/distance, residual and SwiGLU on actual supplied proposal; Read oracle retained; no candidate tape or reference state synthesis",
+      "message_pair": "(c,G) with G unscaled; cG only when explicitly requested",
+      "saved_reverse": true,
+      "actual_upd_executed": false,
+      "physical_edge_or_port_routing_executed": false
+    }
+  },
+  "scope_exclusions": [
+    "complete default/public graph owner",
+    "Aggregate/Upd/Next integration with choose/commit",
+    "general dynamic PDG or arbitrary non-aligned port lowerer",
+    "full physical edge/port routing and all intermediate observation roots",
+    "cross-sequence state isolation or sequence state scan",
+    "optimizer and exact checkpoint lifecycle",
+    "ordinary asynchronous cross-NPU execution",
+    "multicard execution",
+    "shared KV prefix state bank",
+    "FP16 combination qualification",
+    "large-scale or FC16 throughput",
+    "CUDA build or GPU hardware qualification"
+  ],
+  "old_failures_unchanged": {
+    "resident_fc16": "EE1019 / stream task buffer full / 507002 at original TaskServices FC16 warmup/backward construction; this new component gate does not clear it",
+    "evidence": "docs/evidence/resident-shared-bank-20261112.md"
+  },
+  "reproduction": {
+    "contracts": [
+      "docs/resident-block-execution.md",
+      "docs/resident-block-kv-messages.md"
+    ],
+    "cpu": "python -m pytest -q tests/test_resident_block_dispatch.py tests/test_resident_block_selection.py",
+    "build": "python scripts/build_device_control.py --core-build SDK_CORE --build-dir NEW_DEVICE_BUILD --ascendc-soc Ascend910_9392 --jobs all --checks resident-block resident-block-selection resident-block-kv-messages",
+    "device": "python scripts/verify_device_control.py --build-dir NEW_DEVICE_BUILD --output-dir NEW_RESULTS --device npu:0 --checks resident-block resident-block-selection resident-block-kv-messages",
+    "conditions": "fixed 7d5 source or a reviewed successor, compatible core hash, independent bounded background.slice job, current authorized device admission; historical component identities stay separate"
+  }
+}

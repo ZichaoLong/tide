@@ -40,6 +40,9 @@ or interface, not to extend the same optimization loop indefinitely.
 Read [comparisons and attribution](references/comparisons.md) when planning a
 diagnostic or performance claim. Reuse existing observations with their original
 identity; generate new evidence only for the current question.
+Authorized shared-device timing is valid evidence when its contention and scope
+are recorded; follow the resource guidance in that reference rather than waiting
+for exclusivity or repeatedly requesting already granted conversation-wide access.
 
 Read [interfaces, state and autograd](references/interfaces-and-autograd.md)
 when changing batching, caches or backward. A low outer call count does not

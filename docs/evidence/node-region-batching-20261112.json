@@ -1,0 +1,1191 @@
+{
+  "schema": "tide-node-region-batching-evidence-v1",
+  "date": "2026-11-12",
+  "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+  "implementation": "a95b8987af6f823366a25dcbfdeae225c986e184",
+  "implementation_chain": [
+    "78fc90b470e1b67f3827988bb7117f98d84a35c5",
+    "96cb570a637398007451e7e146e036a841492ef2",
+    "a95b8987af6f823366a25dcbfdeae225c986e184"
+  ],
+  "harness_production_diff": "No cpp/python/CMakeLists.txt/cmake changes from a95b8987 through 3f99eb22; checker/test followups retain distinct source identities.",
+  "builds": {
+    "native": {
+      "source": "a95b8987af6f823366a25dcbfdeae225c986e184",
+      "cpp_source_sha256": "f4596708e67ba24ba1d844452cb551593e8a46db25e641f3ce8c02304dc0130b",
+      "torch": "2.12.0+cpu",
+      "build_jobs": 160,
+      "backend": "npu",
+      "npu_runtime": "python",
+      "torch_npu": "2.12.0.post3",
+      "architecture": "aarch64",
+      "python": "3.12.13",
+      "cxx11_abi": true,
+      "binary_sha256": {
+        "libtidegraph.a": "4b040669ae6ac34823afe2a2e3e6d54292c121692f1ca14b0b25cb1d99a46e77",
+        "libtidegraph_runtime.a": "8372701fb7fcff7e7861329d0f75ce661ff4588129bf6b3893e217046baa46dc",
+        "_tide_native.so": "b4ba06c78809ce84db098f0efa4f7fba9cde186125da02788e187d9d0d175086"
+      },
+      "environment": {
+        "compiler": "c++ (GCC) 10.3.1",
+        "cxx_standard": 17,
+        "build_type": "Release",
+        "cann_version": "9.2.0"
+      },
+      "manifest_sha256": "6f56da0b7cf38c9c51ba74617d947d812ae3eb2c7a95f6b783be04cb281a79c6"
+    },
+    "sdk": {
+      "source": "a95b8987af6f823366a25dcbfdeae225c986e184",
+      "cpp_source_sha256": "f4596708e67ba24ba1d844452cb551593e8a46db25e641f3ce8c02304dc0130b",
+      "torch": "2.12.0",
+      "build_jobs": 160,
+      "backend": "npu",
+      "npu_runtime": "standalone",
+      "torch_npu": null,
+      "architecture": "aarch64",
+      "python": "3.12.13",
+      "cxx11_abi": true,
+      "binary_sha256": {
+        "libtidegraph.a": "f0b2ab655e46ea10f085383bd72f09d0d561e044f4f8a592778a9d425cb42a0d",
+        "libtidegraph_runtime.a": "9f18306e8f042f25679569332412213a15ca152bb05a7894baf6f865c7ffb290",
+        "tidegraph-smoke": "094983d37825421cfb9cc4a05e943f2ebedef4a52f75ef110051928a82842530",
+        "tidegraph-kernel-check": "61624c7e03e7d3e64f98e7141f1a862be20b8168dd32d54dce5adc9816ebcb79",
+        "tidegraph-full-check": "54a705ac69ec49eb36f6c4f82178ec540cb25b1cf9c340ffd0ad68de4f51f008",
+        "tidegraph-aggregate-check": "c6c0e0468fab79b43980d7dbf64a4a3752ad5efa86a4f994bf3ab38dbe454d00",
+        "tidegraph-optimizer-check": "0c881d740a51a1067ea507bb914aaeeb6359bedbc4b2cd35cd882032926bc602",
+        "tidegraph-checkpoint-check": "c6ab2db771239e900dfbcaebc0f90cb289cf8c94698dee8d661d7ca768fbdaa5",
+        "tidegraph-weighted-training-check": "d6e6cda8d6f87897030ac702d520c4150098fc1b9fe63880b2587227b5ff873d",
+        "tidegraph-lh-scope-check": "746aedf44726838f1a9159a03747053ee5ec4d9de2e930ad3258aed8a2492e0d",
+        "tidegraph-streaming-bench": "0c11194d5d5cb1c14b98db6ce0ae3259fdee7ee31c4c141ec9e83843c32ae6f2",
+        "tidegraph-scale-bench": "56e28a035c4cd254b2e111b8593c99800efacca1acfd69514c186bf5797f6bc1",
+        "tidegraph-profile-check": "27b5ca2d75e14baa28a0ea1b77414363aff4167cb82e32926132cc8fff9fe7e0",
+        "tidegraph-settle-check": "2508210bc77d7204a535ac81c4c522c8a9358939365c218ed0dfa77af8c982e9",
+        "tidegraph-greedy-check": "bf7dda97d2a18491d75f19ad834457027e1fcb5d91bbd10db649456090b95ba7",
+        "tidegraph-accelerator-check": "c438a87cdc8abea319f61bb74ea0b1d6c8b93140eea5b1322cabb0a4820483c5",
+        "tidegraph-runtime-check": "cd6d5ea111da2de812c90d807b0d2836f854d47dd39c79746d6815fa1376f7ac",
+        "tidegraph-read-precision-check": "a874c29d03dcdf1ed94981fd3763549cbe39b2d07c05dbad48c19a51889ad5b2",
+        "tidegraph-placement-check": "32fecedf4d4e78809d634618f0cfb8c7ad63e063c9d3d9f3b5785826fd644623",
+        "tidegraph-payload-ownership-check": "aec04bcdd1456e41b4e5b372b3739ef0fc4251c32597db9be811571dd9b40fa9",
+        "tidegraph-weighted-binding-module-check": "7e8393e30b8c3b4c3b304b6f7a8bae62bf0728f6add99c6fe8c180c2268044df",
+        "tidegraph-column-check": "b95817d72572a2b06a735e8035afc2297d6c6dc95f2e14648b58c9c6dede5b4a",
+        "libtidegraph-weighted-binding-module.so": "1704543694f6dff5313a07121479e323c3a57e2375799191953cb88e264cf231"
+      },
+      "environment": {
+        "compiler": "c++ (GCC) 10.3.1",
+        "cxx_standard": 17,
+        "build_type": "Release",
+        "cann_version": "9.2.0"
+      },
+      "manifest_sha256": "73a9985fa5e728d5435e351726fa61b5c8e230b36e801967d4ec9080696272a8"
+    }
+  },
+  "materials": {
+    "lh176": {
+      "workload_sha256": "5539e0fdb716b75d1003b8d200f7c3f68cafde515503d01a62ab2b3b1c8025d7",
+      "initial_parameters_sha256": "939fbb108327068ae9c9230e5f70d926c9e4bc4af7a55f6932667d6d553aa57f",
+      "input_values_and_support_sha256": "6fb027600264ffb28fbd08cf4daeb3d76495690f636d6ad50ea31bdc4f8022fc",
+      "reset_snapshot_bytes": 62730984,
+      "trainable_parameters": 14902694,
+      "frozen_parameters": 2132
+    },
+    "fc16": {
+      "downstream": "0439efd2af31cf10b07ce9e6423b0195f7449968",
+      "downstream_archive_sha256": "430237f4ca7a8c0205644ff6952cd4823ace20160ee0ffc2a206b4064e9075ce",
+      "initial_parameters_sha256": "7f41057f0196bc2b259902f8dadafc9c3f46d197e02de5ebbda9517a632f9a1a",
+      "measured_parameters_sha256": "7f41057f0196bc2b259902f8dadafc9c3f46d197e02de5ebbda9517a632f9a1a",
+      "core_parameters": 4564404,
+      "lm_parameters": 5092788
+    }
+  },
+  "resources": {
+    "cpu_cost": {
+      "requested_pool": "0-31",
+      "actual_affinity": "0-31",
+      "aten_threads": 1,
+      "interop_threads": 1
+    },
+    "npu_cost": {
+      "requested_cpu_pool": "0-31",
+      "actual_cpu_affinity": "0-319",
+      "aten_threads": 2,
+      "interop_threads": 1,
+      "physical_npu": 9,
+      "ownership": "authorized shared",
+      "requested_memory_gib": 64,
+      "timeout_seconds": 900
+    },
+    "shared_qual": {
+      "requested_cpu_pool": "64-127",
+      "requested_memory_gib": 128,
+      "timeout_seconds": 900,
+      "physical_npu": 1
+    },
+    "caveat": "Heavy project builds finished before costs. Light tests/external host/device contention not excluded. systemd AllowedCPUs requests did not establish process affinity for shared NPU jobs; do not infer disjoint CPU execution."
+  },
+  "shared_admission": {
+    "shared-cost": {
+      "physical_npu": 9,
+      "logical_npu": "npu:0",
+      "queue_status": "completed",
+      "queue_return_code": 0,
+      "audit_sha256": "4d2550df41677226421fb86ae52464834b6a92f1a543ce7d73b8b1b314acfc18",
+      "policy_sha256": "c6cd896e18f9ca76f44db3fd519c4694d0dc205f615b0aea74258e168ded3326",
+      "selected_device_admission_snapshots": [
+        {
+          "unix": 1794456928.9197402,
+          "health": "OK",
+          "aicore_percent": 0,
+          "hbm_used_mib": 5653,
+          "hbm_total_mib": 65536,
+          "process_ids": [
+            1711169
+          ]
+        },
+        {
+          "unix": 1794456933.8482356,
+          "health": "OK",
+          "aicore_percent": 0,
+          "hbm_used_mib": 5653,
+          "hbm_total_mib": 65536,
+          "process_ids": [
+            1711169
+          ]
+        }
+      ]
+    },
+    "shared-qual": {
+      "physical_npu": 1,
+      "logical_npu": "npu:0",
+      "queue_status": "failed",
+      "queue_return_code": 1,
+      "audit_sha256": "aa17ac6a982bb5ab3e4e90c99aeb3480173f3ae497d4921c41e24c21b54874bf",
+      "policy_sha256": "da18cad33c602ace3f4f11e0bd8efcd7c819be5e3a8e711065a82c7ea118a16f",
+      "selected_device_admission_snapshots": [
+        {
+          "unix": 1794456900.074723,
+          "health": "OK",
+          "aicore_percent": 1,
+          "hbm_used_mib": 5654,
+          "hbm_total_mib": 65536,
+          "process_ids": [
+            3989175
+          ]
+        },
+        {
+          "unix": 1794456904.9464192,
+          "health": "OK",
+          "aicore_percent": 23,
+          "hbm_used_mib": 5654,
+          "hbm_total_mib": 65536,
+          "process_ids": [
+            3989175
+          ]
+        },
+        {
+          "unix": 1794456921.8633423,
+          "health": "OK",
+          "aicore_percent": 0,
+          "hbm_used_mib": 5654,
+          "hbm_total_mib": 65536,
+          "process_ids": [
+            3989175
+          ]
+        },
+        {
+          "unix": 1794456926.7049835,
+          "health": "OK",
+          "aicore_percent": 3,
+          "hbm_used_mib": 5654,
+          "hbm_total_mib": 65536,
+          "process_ids": [
+            3989175
+          ]
+        }
+      ]
+    }
+  },
+  "qualification": [
+    {
+      "file": "region-cpu.xml",
+      "source": "96cb570a637398007451e7e146e036a841492ef2",
+      "sha256": "1695a71e54c879cf54e1e84ffac84aacf718e2c2c6314b0d40c4544fa450bf9f",
+      "passed": 178,
+      "failed": 0,
+      "skipped": 9,
+      "error": 0,
+      "modules": {
+        "regional_packing": {
+          "passed": 16
+        },
+        "regional_groups": {
+          "passed": 26
+        },
+        "regional_groups_native": {
+          "passed": 28
+        },
+        "linear_blocks": {
+          "passed": 16
+        },
+        "kv_column_groups": {
+          "passed": 10
+        },
+        "settle_columns": {
+          "passed": 25,
+          "skipped": 9
+        },
+        "window_execution": {
+          "passed": 18
+        },
+        "column_sharing": {
+          "passed": 3
+        },
+        "column_assembly": {
+          "passed": 8
+        },
+        "column_placement": {
+          "passed": 24
+        },
+        "column_payload_owners": {
+          "passed": 4
+        }
+      },
+      "failure_names": [],
+      "xfail_names": [
+        "test_general_ports_messages_states_and_gradients[float32-regional_total-python]",
+        "test_general_ports_messages_states_and_gradients[float32-regional_total-native]",
+        "test_general_ports_messages_states_and_gradients[float32-regional_total_zero-python]",
+        "test_general_ports_messages_states_and_gradients[float32-regional_total_zero-native]",
+        "test_general_ports_messages_states_and_gradients[float32-proportional-python]",
+        "test_general_ports_messages_states_and_gradients[float32-regional_threshold-python]",
+        "test_general_ports_messages_states_and_gradients[float32-regional_threshold-native]",
+        "test_general_ports_messages_states_and_gradients[float32-hard_selection-python]",
+        "test_general_ports_messages_states_and_gradients[float32-hard_selection-native]"
+      ],
+      "xfail_reason": [
+        "column FP32 reduction witness; same material FP64 check is separate"
+      ]
+    },
+    {
+      "file": "batched-cpu.xml",
+      "source": "a95b8987af6f823366a25dcbfdeae225c986e184",
+      "sha256": "8654c3e8b54b3e4a723582e8a6d3f68df45bee61107b1a07f786b7d86586c7bb",
+      "passed": 150,
+      "failed": 0,
+      "skipped": 0,
+      "error": 0,
+      "modules": {
+        "unit_transport_validation": {
+          "passed": 38
+        },
+        "weighted_source_binding": {
+          "passed": 22
+        },
+        "regional_groups_native": {
+          "passed": 28
+        },
+        "column_training": {
+          "passed": 6
+        },
+        "window_execution": {
+          "passed": 18
+        },
+        "resident_block_dispatch": {
+          "passed": 11
+        },
+        "resident_block_selection": {
+          "passed": 6
+        },
+        "scalar_floor_diagnostic": {
+          "passed": 21
+        }
+      },
+      "failure_names": []
+    },
+    {
+      "file": "batched-npu.xml",
+      "source": "a95b8987af6f823366a25dcbfdeae225c986e184",
+      "sha256": "8e44a6371aeac6c2918cbfc6176ee8ff77e35a3ffd22499b083362b941507aa4",
+      "passed": 59,
+      "failed": 12,
+      "skipped": 0,
+      "error": 0,
+      "modules": {
+        "linear_blocks": {
+          "passed": 8
+        },
+        "regional_groups": {
+          "passed": 14
+        },
+        "regional_groups_native": {
+          "failed": 12,
+          "passed": 3
+        },
+        "unit_transport_validation": {
+          "passed": 19
+        },
+        "half_columns": {
+          "passed": 15
+        }
+      },
+      "failure_names": [
+        "test_native_all_sending_scoring_and_disjoint_roots[float32-0]",
+        "test_native_all_sending_scoring_and_disjoint_roots[float32-1]",
+        "test_native_all_sending_scoring_and_disjoint_roots[float32-2]",
+        "test_native_all_sending_scoring_and_disjoint_roots[float32-3]",
+        "test_native_all_sending_scoring_and_disjoint_roots[float32-4]",
+        "test_native_all_sending_scoring_and_disjoint_roots[float32-5]",
+        "test_native_all_sending_scoring_and_disjoint_roots[float32-6]",
+        "test_native_all_sending_scoring_and_disjoint_roots[float32-7]",
+        "test_native_all_sending_scoring_and_disjoint_roots[float32-8]",
+        "test_native_all_sending_scoring_and_disjoint_roots[float32-9]",
+        "test_native_all_sending_scoring_and_disjoint_roots[float32-10]",
+        "test_native_all_sending_scoring_and_disjoint_roots[float32-11]"
+      ],
+      "failure_summary": "12 native regional cases: StructureMismatch root[0] tensor device mismatch; test-only payload-placement correction checked separately at3f99."
+    },
+    {
+      "file": "regional-placement-npu.xml",
+      "source": "3f99eb22e520f87bd5cbe378b0b0c6a9f774e8f9",
+      "sha256": "eb6fbf7806bc04aaf56b88a2f8359a0efae310d20559e48a5944a78f0a7de896",
+      "passed": 15,
+      "failed": 0,
+      "skipped": 0,
+      "error": 0,
+      "modules": {
+        "regional_groups_native": {
+          "passed": 15
+        }
+      },
+      "failure_names": [],
+      "device_scope": "12 NPU FP32 cases and3 CPU helper cases; production code unchanged."
+    }
+  ],
+  "installed_consumer_columns": [
+    "tag",
+    "identity",
+    "strict_numerical",
+    "fresh_process_recovery",
+    "result_sha256"
+  ],
+  "installed_consumers": [
+    [
+      "batched-installed-python-kv",
+      {
+        "interface": "tensor-window-v1",
+        "device": "cpu",
+        "dtype": "float64",
+        "client": "python",
+        "positions": false,
+        "family": "kv",
+        "placement": "cpu",
+        "scoring_dtype": "float64",
+        "deterministic_algorithms": true,
+        "peer_device": null
+      },
+      "passed",
+      "passed",
+      "5d51d625afa36974e243085af32b6beb6c98703a84054d7026e97e0850e34a78"
+    ],
+    [
+      "batched-installed-python-ssd",
+      {
+        "interface": "tensor-window-v1",
+        "device": "cpu",
+        "dtype": "float64",
+        "client": "python",
+        "positions": false,
+        "family": "ssd",
+        "placement": "cpu",
+        "scoring_dtype": "float64",
+        "deterministic_algorithms": true,
+        "peer_device": null
+      },
+      "passed",
+      "passed",
+      "e87a1212e437918814e6f44a8867e456f3c05893ea30fa2e2ff243e3b3c5b127"
+    ],
+    [
+      "batched-installed-native-kv",
+      {
+        "interface": "tensor-window-v1",
+        "device": "cpu",
+        "dtype": "float64",
+        "client": "native",
+        "positions": false,
+        "family": "kv",
+        "placement": "cpu",
+        "scoring_dtype": "float64",
+        "deterministic_algorithms": true,
+        "peer_device": null
+      },
+      "passed",
+      "passed",
+      "0ebfb1e376397eb985a39c530398365fd79e6e17fc3b4dadc0a732ab7167f7de"
+    ],
+    [
+      "batched-installed-native-ssd",
+      {
+        "interface": "tensor-window-v1",
+        "device": "cpu",
+        "dtype": "float64",
+        "client": "native",
+        "positions": false,
+        "family": "ssd",
+        "placement": "cpu",
+        "scoring_dtype": "float64",
+        "deterministic_algorithms": true,
+        "peer_device": null
+      },
+      "passed",
+      "passed",
+      "1c226c5441ffa687e5f6e7f5f339f3b81e7bfe46742d358e8a33536292dd059c"
+    ],
+    [
+      "batched-shared-installed-python-kv",
+      {
+        "interface": "tensor-window-v1",
+        "device": "npu:0",
+        "dtype": "float32",
+        "client": "python",
+        "positions": false,
+        "family": "kv",
+        "placement": "mixed-c",
+        "scoring_dtype": "float32",
+        "deterministic_algorithms": true,
+        "peer_device": null
+      },
+      "passed",
+      "passed",
+      "6db9080dcb4ddf13ea93e8dbf407d636a1d7a06eb2405ef1800e13e615899e66"
+    ],
+    [
+      "batched-shared-installed-python-ssd",
+      {
+        "interface": "tensor-window-v1",
+        "device": "npu:0",
+        "dtype": "float32",
+        "client": "python",
+        "positions": false,
+        "family": "ssd",
+        "placement": "mixed-c",
+        "scoring_dtype": "float32",
+        "deterministic_algorithms": true,
+        "peer_device": null
+      },
+      "passed",
+      "passed",
+      "ae4bde7a99e0fc2987cf59bcb1a60c0c2245633b30869e89749da757d5a894c9"
+    ],
+    [
+      "batched-shared-installed-native-kv",
+      {
+        "interface": "tensor-window-v1",
+        "device": "npu:0",
+        "dtype": "float32",
+        "client": "native",
+        "positions": false,
+        "family": "kv",
+        "placement": "mixed-c",
+        "scoring_dtype": "float32",
+        "deterministic_algorithms": true,
+        "peer_device": null
+      },
+      "passed",
+      "passed",
+      "3ab37fb49a137b055b2406d239c4d4bb79ddd0446debec3b6cb9051ce62ee33f"
+    ],
+    [
+      "batched-shared-installed-native-ssd",
+      {
+        "interface": "tensor-window-v1",
+        "device": "npu:0",
+        "dtype": "float32",
+        "client": "native",
+        "positions": false,
+        "family": "ssd",
+        "placement": "mixed-c",
+        "scoring_dtype": "float32",
+        "deterministic_algorithms": true,
+        "peer_device": null
+      },
+      "passed",
+      "passed",
+      "bf44ca61ce569c302bcd302874d6013514182c1e9b2e86c912753028356b165e"
+    ]
+  ],
+  "lh_scale_checks": [
+    {
+      "tag": "lh-check-f681-cpu-float64",
+      "sha256": "c0c605e8293ea2b6d3077162ebb30fcd638b11b37710bb5ff984889db9e1dc45",
+      "source": "f681ef63472e686fa6ffffca41de507bbf0d1ca5",
+      "device": "cpu",
+      "dtype": "float64",
+      "actual_cpu_affinity": "0-319",
+      "exit_code": 0,
+      "qualification": "passed",
+      "tolerance": {
+        "atol": 1e-10,
+        "rtol": 1e-08
+      },
+      "initial_parameters_sha256": "20f75a37c73c8a77b8e3bc910ffa0125643472b6a39dd2d4b88efe587e249c1c",
+      "input_values_and_support_sha256": "f93c157bc5acd50b54db9b63218c4f6947cfd93403385d97f5b2a11ee3346ede",
+      "comparisons": {
+        "public-direct": {
+          "strict_numerical_projection_passed": true,
+          "hard_failure": false,
+          "numeric_mismatch_leaves": {
+            "controls": 0,
+            "candidates": 0,
+            "active": 0,
+            "raw": 0,
+            "outputs": 0,
+            "task": 0,
+            "gradients": 0
+          },
+          "discrete_mismatch_leaves": 0,
+          "gradient_connection_differences": 36
+        },
+        "default-direct": {
+          "strict_numerical_projection_passed": true,
+          "hard_failure": false,
+          "numeric_mismatch_leaves": {
+            "controls": 0,
+            "candidates": 0,
+            "active": 0,
+            "raw": 0,
+            "outputs": 0,
+            "task": 0,
+            "gradients": 0
+          },
+          "discrete_mismatch_leaves": 0,
+          "gradient_connection_differences": 36
+        }
+      }
+    },
+    {
+      "tag": "lh-check-f681-cpu-float32",
+      "sha256": "4659695cc064947beb3f72058e771ea054de1e392607c0e8b8d15ae44a5770e1",
+      "source": "f681ef63472e686fa6ffffca41de507bbf0d1ca5",
+      "device": "cpu",
+      "dtype": "float32",
+      "actual_cpu_affinity": "0-319",
+      "exit_code": 1,
+      "qualification": "finite_numerical_failure",
+      "tolerance": {
+        "atol": 1e-06,
+        "rtol": 1e-05
+      },
+      "initial_parameters_sha256": "939fbb108327068ae9c9230e5f70d926c9e4bc4af7a55f6932667d6d553aa57f",
+      "input_values_and_support_sha256": "6fb027600264ffb28fbd08cf4daeb3d76495690f636d6ad50ea31bdc4f8022fc",
+      "comparisons": {
+        "public-direct": {
+          "strict_numerical_projection_passed": false,
+          "hard_failure": false,
+          "numeric_mismatch_leaves": {
+            "controls": 143,
+            "candidates": 0,
+            "active": 0,
+            "raw": 2256,
+            "outputs": 8,
+            "task": 0,
+            "gradients": 2406
+          },
+          "discrete_mismatch_leaves": 0,
+          "gradient_connection_differences": 36
+        },
+        "default-direct": {
+          "strict_numerical_projection_passed": false,
+          "hard_failure": false,
+          "numeric_mismatch_leaves": {
+            "controls": 143,
+            "candidates": 0,
+            "active": 0,
+            "raw": 2256,
+            "outputs": 8,
+            "task": 0,
+            "gradients": 2406
+          },
+          "discrete_mismatch_leaves": 0,
+          "gradient_connection_differences": 36
+        }
+      }
+    },
+    {
+      "tag": "lh-check-3f99-shared-npu",
+      "sha256": "551ea064666088abf1ba43a79a8bb9ae61cdf887481052e42da97ed6094c0cdd",
+      "source": "3f99eb22e520f87bd5cbe378b0b0c6a9f774e8f9",
+      "device": "npu:0",
+      "dtype": "float32",
+      "actual_cpu_affinity": "0-319",
+      "exit_code": 1,
+      "qualification": "finite_numerical_failure",
+      "tolerance": {
+        "atol": 1e-06,
+        "rtol": 1e-05
+      },
+      "initial_parameters_sha256": "939fbb108327068ae9c9230e5f70d926c9e4bc4af7a55f6932667d6d553aa57f",
+      "input_values_and_support_sha256": "6fb027600264ffb28fbd08cf4daeb3d76495690f636d6ad50ea31bdc4f8022fc",
+      "comparisons": {
+        "public-direct": {
+          "strict_numerical_projection_passed": false,
+          "hard_failure": false,
+          "numeric_mismatch_leaves": {
+            "controls": 126,
+            "candidates": 0,
+            "active": 0,
+            "raw": 2075,
+            "outputs": 8,
+            "task": 0,
+            "gradients": 2308
+          },
+          "discrete_mismatch_leaves": 0,
+          "gradient_connection_differences": 36
+        },
+        "default-direct": {
+          "strict_numerical_projection_passed": false,
+          "hard_failure": false,
+          "numeric_mismatch_leaves": {
+            "controls": 126,
+            "candidates": 0,
+            "active": 0,
+            "raw": 2075,
+            "outputs": 8,
+            "task": 0,
+            "gradients": 2308
+          },
+          "discrete_mismatch_leaves": 0,
+          "gradient_connection_differences": 36
+        }
+      }
+    }
+  ],
+  "measurement_columns": [
+    "tag",
+    "case",
+    "device",
+    "layer",
+    "client",
+    "mode",
+    "complete_seconds",
+    "input_positions_per_second",
+    "first_token_seconds_or_null",
+    "actual_cpu_affinity",
+    "result_sha256"
+  ],
+  "measurements": [
+    [
+      "batched-lh-cpu-direct-python-inference",
+      "lh176",
+      "cpu",
+      "direct",
+      "python",
+      "inference",
+      0.2076556235551834,
+      293.7555889681435,
+      null,
+      "0-31",
+      "78bbff181c08483205ce35ffd9249931cd3287c7d802bbb0a181813dbc973674"
+    ],
+    [
+      "batched-lh-cpu-public-native-inference",
+      "lh176",
+      "cpu",
+      "public",
+      "native",
+      "inference",
+      0.9039678275585175,
+      67.48027766071269,
+      null,
+      "0-31",
+      "9f61a994c78167520a0f2bc19d64f1c70b7e3733d6c1968693df4bbc97cee51a"
+    ],
+    [
+      "batched-lh-cpu-default-native-inference",
+      "lh176",
+      "cpu",
+      "default",
+      "native",
+      "inference",
+      1.0045573487877846,
+      60.723262911380495,
+      null,
+      "0-31",
+      "0629698c55e0e4eb1be3cbc8335d6d3ea06f0a559db499417670d1b604433a68"
+    ],
+    [
+      "batched-lh-cpu-direct-python-grad-forward",
+      "lh176",
+      "cpu",
+      "direct",
+      "python",
+      "grad-forward",
+      0.23881197348237038,
+      255.43107872898656,
+      null,
+      "0-31",
+      "5a4de025fbcfe720f70f9bfcd1046da89b5f569b5af1c1825ff3f579cd2dfcf7"
+    ],
+    [
+      "batched-lh-cpu-public-native-grad-forward",
+      "lh176",
+      "cpu",
+      "public",
+      "native",
+      "grad-forward",
+      1.072226695716381,
+      56.89095435107069,
+      null,
+      "0-31",
+      "f237872ac79a2f097813a194be5eb8b7a8925eaf5cbb4979d564a35c7bdc774a"
+    ],
+    [
+      "batched-lh-cpu-default-native-grad-forward",
+      "lh176",
+      "cpu",
+      "default",
+      "native",
+      "grad-forward",
+      1.1566069573163986,
+      52.7404747257741,
+      null,
+      "0-31",
+      "be50984bd9328152cb4e4fb959e222da81116a86eb9faa9e4a934b692ee73ff9"
+    ],
+    [
+      "batched-lh-cpu-direct-python-training",
+      "lh176",
+      "cpu",
+      "direct",
+      "python",
+      "training",
+      0.8493393920361996,
+      71.8205237764365,
+      null,
+      "0-31",
+      "3c7238d417cc94af1e03790697a24a1b4b26a3b8355b5a5c768177c1ea7022a2"
+    ],
+    [
+      "batched-lh-cpu-public-native-training",
+      "lh176",
+      "cpu",
+      "public",
+      "native",
+      "training",
+      2.3622514493763447,
+      25.822822551809438,
+      null,
+      "0-31",
+      "0fee438dbef2645da0a6899eac143b6f910b5aa3efff3b092b1cc7227a882a74"
+    ],
+    [
+      "batched-lh-cpu-default-native-training",
+      "lh176",
+      "cpu",
+      "default",
+      "native",
+      "training",
+      2.451212104409933,
+      24.885647345758436,
+      null,
+      "0-31",
+      "c1d690618611b4e415e636db6958e60432a9c139612ca2bf665113717ef282b4"
+    ],
+    [
+      "batched-lh-cpu-default-python-training",
+      "lh176",
+      "cpu",
+      "default",
+      "python",
+      "training",
+      3.8583390042185783,
+      15.809911968156413,
+      null,
+      "0-31",
+      "572eecc4df14a33192f15df833cde2c745c0421dc20430de122ca9e0b1cded52"
+    ],
+    [
+      "batched-fc16-cpu-native-inference",
+      "fc16",
+      "cpu",
+      "default",
+      "native",
+      "inference",
+      0.44032325968146324,
+      2325.564179236813,
+      0.4395177736878395,
+      "0-31",
+      "99ab6a3cbd638e3590fc2b38abd14be26bc9c770faede8b899aa6a2f959aa77b"
+    ],
+    [
+      "batched-fc16-cpu-native-grad-forward",
+      "fc16",
+      "cpu",
+      "default",
+      "native",
+      "grad-forward",
+      0.4970087483525276,
+      2060.3259065244424,
+      null,
+      "0-31",
+      "89e1353f7c44fd68d091d398f4697830f358fedcbbfa30966456ffef7e32b243"
+    ],
+    [
+      "batched-fc16-cpu-native-training",
+      "fc16",
+      "cpu",
+      "default",
+      "native",
+      "training",
+      1.278176087886095,
+      801.141571732528,
+      null,
+      "0-31",
+      "93780b0fbdaf3660160a2bf69007bc131534adcb665123259f2e0501eacbc4c5"
+    ],
+    [
+      "batched-lh-shared-npu-direct-python-inference",
+      "lh176",
+      "npu",
+      "direct",
+      "python",
+      "inference",
+      0.19373783841729164,
+      314.85847317348606,
+      null,
+      "0-319",
+      "9157f384535ed6a000e4196ceeedb945d245626f746a888ceeaee09e36d6fb54"
+    ],
+    [
+      "batched-lh-shared-npu-public-native-inference",
+      "lh176",
+      "npu",
+      "public",
+      "native",
+      "inference",
+      2.0558666475117207,
+      29.67118517819733,
+      null,
+      "0-319",
+      "f65fa0060d470bc33e9ccdce7f2a82d301ddb14a4538ceb584aa622de2ca70d3"
+    ],
+    [
+      "batched-lh-shared-npu-default-native-inference",
+      "lh176",
+      "npu",
+      "default",
+      "native",
+      "inference",
+      2.699729349464178,
+      22.59485752233157,
+      null,
+      "0-319",
+      "302b2b89fcb69c3818c5011731f699ee39e8039d92e2e28dd342d9c3c68ada82"
+    ],
+    [
+      "batched-lh-shared-npu-direct-python-grad-forward",
+      "lh176",
+      "npu",
+      "direct",
+      "python",
+      "grad-forward",
+      0.20428163930773735,
+      298.60735505508336,
+      null,
+      "0-319",
+      "b2cf74135d5b9a36b55629354855e2757828662a31337ec927317e66183b4ddb"
+    ],
+    [
+      "batched-lh-shared-npu-public-native-grad-forward",
+      "lh176",
+      "npu",
+      "public",
+      "native",
+      "grad-forward",
+      2.303506772965193,
+      26.481363422030512,
+      null,
+      "0-319",
+      "6512faa58f7160d76e9edb3c62a83977f05a03a9359cd33c118d88eabe78ca2c"
+    ],
+    [
+      "batched-lh-shared-npu-default-native-grad-forward",
+      "lh176",
+      "npu",
+      "default",
+      "native",
+      "grad-forward",
+      2.5141469091176987,
+      24.26270309773068,
+      null,
+      "0-319",
+      "a19cf5b91f23cef01d59468b7193eb01e7b0a0eea96c84a43f9607834ae8c683"
+    ],
+    [
+      "batched-lh-shared-npu-direct-python-training",
+      "lh176",
+      "npu",
+      "direct",
+      "python",
+      "training",
+      0.6611013077199459,
+      92.27027580747226,
+      null,
+      "0-319",
+      "60870b8fffee379afe370881b9f8457118153ec6771883dbeffb5cf8c0daf297"
+    ],
+    [
+      "batched-lh-shared-npu-public-native-training",
+      "lh176",
+      "npu",
+      "public",
+      "native",
+      "training",
+      4.976049363613129,
+      12.2587208330481,
+      null,
+      "0-319",
+      "05aaaa3ab9fd80e6a2a398da5c0808caaaf137f5ce9fc410a985ac151a51528c"
+    ],
+    [
+      "batched-lh-shared-npu-default-native-training",
+      "lh176",
+      "npu",
+      "default",
+      "native",
+      "training",
+      5.010665077716112,
+      12.17403259924212,
+      null,
+      "0-319",
+      "26f33caafba537fe830f9843e34364003534dac2b3f15893350adf98fd0fb899"
+    ],
+    [
+      "batched-lh-shared-npu-default-python-training",
+      "lh176",
+      "npu",
+      "default",
+      "python",
+      "training",
+      7.193994682282209,
+      8.479294563594044,
+      null,
+      "0-319",
+      "1d5ca2472c7cdf52c414c84e153dc27e987dc116b622f0a8d9356511537b5f2e"
+    ],
+    [
+      "batched-fc16-shared-npu-native-inference",
+      "fc16",
+      "npu",
+      "default",
+      "native",
+      "inference",
+      0.23923401534557343,
+      4280.327772456741,
+      0.23840134218335152,
+      "0-319",
+      "442af1cee23d30e839c8502ec46313d615e007455cb4af7a9abc84c8f073ff25"
+    ],
+    [
+      "batched-fc16-shared-npu-native-grad-forward",
+      "fc16",
+      "npu",
+      "default",
+      "native",
+      "grad-forward",
+      0.25967516750097275,
+      3943.388233286358,
+      null,
+      "0-319",
+      "3596f5cd2daeb663caf9162f9cbe65a276dda92290f1ce07fec27a7cb87f6107"
+    ],
+    [
+      "batched-fc16-shared-npu-native-training",
+      "fc16",
+      "npu",
+      "default",
+      "native",
+      "training",
+      0.6617381647229195,
+      1547.4398403918044,
+      null,
+      "0-319",
+      "c599f714a18293957c6946928423bb3689fa3b44a52bca7d75fd0a6d11d32392"
+    ]
+  ],
+  "comparison_old_source": "c83a2820149e69c3a0571dc61765836173bfaea1",
+  "old_training_columns": [
+    "tag",
+    "old_seconds",
+    "old_positions_per_second",
+    "new_seconds",
+    "observed_seconds_reduction_percent",
+    "old_actual_cpu_affinity"
+  ],
+  "old_training": [
+    [
+      "lh-cpu-direct-python-training-t1",
+      0.8797108121216297,
+      69.34096882688544,
+      0.8493393920361996,
+      3.452432284216478,
+      "0-63"
+    ],
+    [
+      "lh-cpu-public-native-training-t1",
+      2.963963907212019,
+      20.580547506524187,
+      2.3622514493763447,
+      20.300937415991026,
+      "0-63"
+    ],
+    [
+      "lh-cpu-default-native-training-t1",
+      3.062757935374975,
+      19.916689887714465,
+      2.451212104409933,
+      19.967161749926877,
+      "0-63"
+    ],
+    [
+      "lh-cpu-default-python-training-t1",
+      4.478691454976797,
+      13.620049653613842,
+      3.8583390042185783,
+      13.851198659127828,
+      "0-63"
+    ],
+    [
+      "lh-npu-direct-python-training-t2",
+      0.6075489781796932,
+      100.40342785657387,
+      0.6611013077199459,
+      -8.814487632043,
+      "144-159"
+    ],
+    [
+      "lh-npu-public-native-training-t2",
+      7.123100772500038,
+      8.563686229949328,
+      4.976049363613129,
+      30.142089484062506,
+      "144-159"
+    ],
+    [
+      "lh-npu-default-native-training-t2",
+      7.495768159627914,
+      8.137925120009049,
+      5.010665077716112,
+      33.15341441983928,
+      "144-159"
+    ],
+    [
+      "lh-npu-default-python-training-t2",
+      8.972462482750416,
+      6.798579555754362,
+      7.193994682282209,
+      19.821401358738644,
+      "144-159"
+    ]
+  ],
+  "actual_work": {
+    "lh176": {
+      "input_positions": 61,
+      "candidate_events": 8368,
+      "selected_events": 2572,
+      "visited_edges": 15340,
+      "direct_physical_full_rows": 11264,
+      "public_default_physical_full_rows": 2572,
+      "public_default_state_column_calls": 176,
+      "public_default_region_column_calls_old": 307,
+      "public_default_region_column_calls_new": 94
+    },
+    "fc16": {
+      "input_positions": 1024,
+      "candidate_events": 16384,
+      "region_column_calls": 4,
+      "state_column_calls": 16,
+      "cpu": {
+        "selected_events": 8344,
+        "visited_edges": 25060
+      },
+      "npu": {
+        "selected_events": 8345,
+        "visited_edges": 25064
+      }
+    }
+  },
+  "jobs": [
+    {
+      "unit": "gef-rewrite-regions",
+      "state": "passed",
+      "source": "96cb570a637398007451e7e146e036a841492ef2",
+      "started": "2026-11-12T03:57:44.915070+00:00",
+      "finished": "2026-11-12T03:59:06.178839+00:00",
+      "exit_code": 0
+    },
+    {
+      "unit": "gef-rewrite-batched-native",
+      "state": "passed",
+      "source": "a95b8987af6f823366a25dcbfdeae225c986e184",
+      "started": "2026-11-12T04:05:11.112442+00:00",
+      "finished": "2026-11-12T04:07:12.541409+00:00",
+      "exit_code": 0
+    },
+    {
+      "unit": "gef-rewrite-batched-sdk",
+      "state": "passed",
+      "source": "a95b8987af6f823366a25dcbfdeae225c986e184",
+      "started": "2026-11-12T04:05:11.131678+00:00",
+      "finished": "2026-11-12T04:07:36.478324+00:00",
+      "exit_code": 0
+    },
+    {
+      "unit": "gef-rewrite-batched-cost",
+      "state": "passed",
+      "source": "a95b8987af6f823366a25dcbfdeae225c986e184",
+      "started": "2026-11-12T04:08:26.756467+00:00",
+      "finished": "2026-11-12T04:10:00.844817+00:00",
+      "exit_code": 0
+    },
+    {
+      "unit": "gef-rewrite-shared-cost",
+      "state": "passed",
+      "source": "a95b8987af6f823366a25dcbfdeae225c986e184",
+      "started": "2026-11-12T04:14:57.652098+00:00",
+      "finished": "2026-11-12T04:19:13.229425+00:00",
+      "exit_code": 0
+    },
+    {
+      "unit": "gef-rewrite-shared-qual",
+      "state": "failed",
+      "source": "a95b8987af6f823366a25dcbfdeae225c986e184",
+      "started": "2026-11-12T04:14:57.603249+00:00",
+      "finished": "2026-11-12T04:19:23.030422+00:00",
+      "exit_code": 1
+    },
+    {
+      "unit": "gef-rewrite-diagnostic-f681-cpu",
+      "state": "failed",
+      "source": "f681ef63472e686fa6ffffca41de507bbf0d1ca5",
+      "started": "2026-11-12T04:18:03.054067+00:00",
+      "finished": "2026-11-12T04:18:51.509148+00:00",
+      "exit_code": 1
+    },
+    {
+      "unit": "gef-rewrite-diagnostic-3f99-npu",
+      "state": "failed",
+      "source": "3f99eb22e520f87bd5cbe378b0b0c6a9f774e8f9",
+      "started": "2026-11-12T04:22:11.959693+00:00",
+      "finished": "2026-11-12T04:23:41.738597+00:00",
+      "exit_code": 1
+    }
+  ],
+  "scope": {
+    "lh_strict": "CPU FP64 task numerical projection passed; CPU/NPU FP32 finite strict failure;36 None/zero connection differences in each variant remain outside projection equivalence. No optimizer/resume at176-node scale.",
+    "performance": "26 independent one-warmup/one-measured cost points; no statistical nonregression, isolated causal attribution, original LH equivalence, billion-parameter, standalone timing, resident, multi-card or CUDA conclusion.",
+    "measurements": "Use LH observations[].seconds or FC phases[].complete_wall_seconds non-warmup entry; never matrix process wall_seconds or phase sums.",
+    "resident": "Component builds/loaders and finite device checks separate from complete resident executor qualification.",
+    "floor": "Original shared-qual scalar floor measure/profile exit1; tensor exit0. Boundary/constant followup evidence belongs to companion REQ006 report."
+  },
+  "raw_result_root": "artifacts/rewrite-20261112"
+}

@@ -160,6 +160,17 @@ NPU1B/B512原下一窗逐值失败的有界入口为`scripts/diagnose_experiment
 
 ## 可重用的三层对照收集
 
+HB/LH沿[独立张量基线](lh-tensor-baseline.md)及`benchmark_lh_tensor.py`重建直接/公共/默认层，
+保留真实候选、selected与dense Full工作量。下游REQ-006沿[固定材料诊断](req006-diagnostics.md)
+进入四份压缩配置、固定Git源码及`diagnose_req006.py`，无需旧学习目录。
+[四代表证据](evidence/req006-diagnostics-20261112.md)的clamp反向热点可单独用
+`diagnose_scalar_floor.py`复验Scalar/Tensor阈值；measure/profile分进程，不修改下游生产函数。
+`check_lh_tensor.py`独立检查实际列/端口/raw和任务VJP；FP32失败、FP64后继及None/零连接差异
+见[本轮节点/区域证据](evidence/node-region-batching-20261112.md)。
+REQ006跨进程配对用`--initial-state-out/in`复用实际模型、optimizer槽和RNG；小型固定配置位于
+`tests/fixtures/req006-tiny-transformer.json`。原Scalar失败和显式dtype常量的成功分别见
+[算子/初态证据](evidence/req006-floor-20261112.md)，不以同seed推定配对。
+
 `run_fc_comparison.py --suite windows` 测默认窗口 Python/native、直接 FC 和 Transformer 的
 FC4/FC16 三模式；`--suite window-profiles` 另测 B2/L32 的真实算子及 autograd census。
 用 `collect_fc_suites.py --suite RUN_DIR [--suite MORE] --job STATUS_JSON

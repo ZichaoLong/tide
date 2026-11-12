@@ -18,6 +18,28 @@ tmpfs须共同计入RAM预算，不充当持久证据。真正限制必要写入
 厂商Free时间各有含义。实际NPU导出中operator device-duration全零、存在停止RECORD警告，
 即使有最终同步和optimizer事件也必须保留这些观测限制。
 
+## 从设备利用率追到实际反向算子
+
+[REQ-006四代表](evidence/req006-diagnostics-20261112.md)中，HB88已使用节点×B×L的bmm，
+但704个AICPU kernel全部可沿device flow → `aten::ge` → `ClampMinBackward0` →
+前向sequence number追到浮点`clamp_min`。同名GreaterEqual的其他实例运行在AIVEC；
+不能仅按kernel名称或整数时间猜测设备归属，也不能将AICPU当成host fallback。
+设备区间累计、区间并集、主机inclusive范围与无插桩完整步分别记录，不把累计秒数当作可省wall-time。
+
+可复用处理是先复核具体Scalar/Tensor重载和反向生成的算子，再用独立公式/VJP、相等边界、
+非有限分类及同shape算子诊断判别替代方案。`diagnose_scalar_floor.py`固定常量构造在计时外，
+比较同dtype/device的Tensor阈值；不能换用相等处导数为1/2的`maximum`，也不能顺便更改floor数值策略。
+局部CPU等价不证明NPU避开慢核，原下游冻结实现与其独立验收仍分别维护。
+
+[后继常量实测](evidence/req006-floor-20261112.md)中，原Python float Scalar约5.972ms且有2个AICPU，
+显式FP32表示的Scalar/Tensor约0.263/0.298ms且无AICPU。但原float阈值与FP32阈值不同，
+相同前向值在边界仍可产生不同VJP；这既不是“Scalar必慢”，也不是可无条件采用的等价替换。
+原有限失败保留退出1并另采成本，非有限仍拒绝；共享单点不外推整模型收益。
+
+同一报告的measure/profile虽同seed与输入，独立prime后的权重hash却不同。跨进程配对应比较
+实际初态，包括optimizer槽和RNG；需要严格同材料时保存并复用固定初态，不能凭seed推断。
+原trace成功导出但解析失败的作业保持failed，离线恢复解析单独记录，不补写未记录的步骤或恢复资格。
+
 ## 模式缺口、实际位置和阶段差额
 
 [FC16/LH既有记录换算](evidence/performance-accounting-20261111.md)没有重跑性能：

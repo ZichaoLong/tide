@@ -3,6 +3,25 @@
 本页承接[历史经验索引](performance-lessons.md)。具体成本及资格必须引用固定提交的证据；
 当前活动只见STATUS，失败/停止与重启条件只见ROADMAP。
 
+## 相容节点、实际成员与固定值检查
+
+[节点/区域合批](evidence/node-region-batching-20261112.md)把KV prepare的同形投影交给
+`linear_blocks`：实际参数alias用共享GEMM，独立矩阵用BMM，各输出独立根和版本仍保留。
+区域组按真实候选数量成组，int64成员表携带不同的节点关联；按完整成员名单分组会在稀疏端口
+下过度拆块。零容量填充不是此边界的假候选，原分配分支、None/零和稳定次序仍要独立核对。
+同一LH176材料的region调用307→94，完整CPU训练3.063→2.451秒、NPU7.496→5.011秒；
+后者设备/争用/CPU亲和性不同，观察差额不全归因于实现。
+
+固定值也不能逐标量反复同步。unit transport按device/dtype和显式字节预算，一次检查整组
+实际值；无跨窗缓存，不省略requires_grad、末块非法值和变化后重查。2,132个相容标量一次
+`aten::equal`只证明这一调用边界，不能直接作为kernel或完整步收益。
+
+这轮prepare合批没有覆盖Read/Full和所有来源变换。列已贯穿B×L之后，节点轴还可按实际
+私有bank/配置分组；普通stack→attention→unbind会使未使用节点出现连接零，替换时需要
+多输出VJP与独立结构连接。RoPE按查询展开key的`[B,Q,K,D]`也是独立待审边界，双边旋转
+必须先解决原始int64时间与数值域，不能直接转绝对时钟或以恒等式替代设备验证。
+这些是已定位的后续机会，未计作已实现收益。Full物理行与实际活动行不同的两层不能只比参数量。
+
 ## 从模块批量到跨模块张量交接
 
 [张量窗口契约](weighted-tensor-windows.md)把实际消息 rows/strength/content、Read 字段列、

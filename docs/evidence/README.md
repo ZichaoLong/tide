@@ -1,5 +1,25 @@
 # 历史验证与测量证据
 
+[节点/区域合批及LH尺度对照（2026-11-12）](node-region-batching-20261112.md)：a95的26个CPU/共享NPU
+成本点、定向资格与8组安装训练恢复；LH176区域调用307→94，默认训练CPU2.451/NPU5.011秒。
+f681/3f99独立公式检查中FP64数值投影通过，FP32有限严格失败、None/零连接差异及原放置测试失败保留。
+
+[REQ006常量重载与跨进程初态（2026-11-12）](req006-floor-20261112.md)：显式常量表示、独立边界VJP、
+真实AICPU/AIVEC和有限算子成本；原Scalar失败保留，不作整模型收益或无条件等价替换。
+三进程模型/AdamW/RNG初态与最终更新hash一致的小型资格，不代替原四代表重新配对。
+
+[resident块组件资格（2026-11-12）](resident-blocks-20261112.md)：独立设备choose/commit、
+Read-selection及后继KV Full/messages分别有CANN构建与真机证据；保留原链接失败。
+不认证完整图owner、跨窗训练、checkpoint或多卡，不解除旧FC16 task-buffer失败。
+
+[本轮hash绑定审阅范围](rewrite-followup-reviews-20261112.json)记录实际审阅的诊断/共享准入与
+新消息组件，和上述证据相互定位；不累计重复覆盖，不称全仓逐函数审阅完成。
+
+[REQ-006四代表与算子归因（2026-11-12）](req006-diagnostics-20261112.md)：c83a2820无插桩完整步及
+2927ba40离线trace恢复；HB88/HB184/入口树/Transformer成本、实际矩阵/发送工作分列。
+HB88全部704个AICPU核定位到clamp_min浮点标量反向；原profile失败与跨进程prime初态不一致保留，
+不作为当前基座回归或可节省完整步秒数。后继Scalar/Tensor算子对照另验收。
+
 [LH/HB同材料三层成本（2026-11-12）](lh-three-layer-20261112.md)：c83a2820的176节点CPU12/NPU10点。
 直接公式/公共native/默认native训练CPU0.880/2.964/3.063秒、NPU0.608/7.123/7.496秒；
 相同材料与实际候选数核对，dense Full和selected Full工作量及完整观察职责分列，不做原LH等价速度比。

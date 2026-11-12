@@ -41,6 +41,8 @@ FC16同尺寸成本与诊断入口见[阶段归因](fc16-cost-attribution.md)：
 自动清单不代表已审阅，相关工具为`scripts/review_inventory.py`/`review_symbols.py`。
 后继按层追踪[调度](evidence/scheduling-interface-audit-20261110.md)、[区域](evidence/region-batching-audit-20261110.md)
 和[循环/Describe](evidence/recurrent-interface-audit-20261110.md)的实际审阅；hash manifest不混算重叠覆盖。
+[本轮诊断/消息组件审阅](evidence/rewrite-followup-reviews-20261112.json)绑定7d5e05c3实际文件hash；
+范围限定于列出的文件与职责，C++自动函数提取和全仓剩余审阅未完成。
 
 常驻单bank投影的整块GEMM/VJP在`tools/device_online/weighted_projection.cpp`，设备实际使用与有限性守卫
 在`ascendc/tide_weighted_projection_shared.cpp`；同源转换提供CUDA源码及CPU语义核检查。

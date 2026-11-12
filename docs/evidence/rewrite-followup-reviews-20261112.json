@@ -1,0 +1,119 @@
+{
+  "schema": "tide-implementation-review-v1",
+  "source": "7d5e05c3dbc962a43dc76136aa1bedf6aafba3e7",
+  "meaning": "Scoped manual source/contract review, with fixed hashes. Not automatic whole-repository coverage or a replacement for runtime/independent evidence. C++ function extraction was not performed in this round; prior manifests may overlap.",
+  "files": [
+    {
+      "path": "scripts/check_lh_tensor.py",
+      "sha256": "b64ab22efceea8d763d8d5fc44c503faaf4575ee51e91671df150c4fcc8f3672",
+      "symbols": "*",
+      "reviewer": "root; req006_diagnostics implementation review",
+      "evidence": "docs/evidence/node-region-batching-20261112.md",
+      "scope": "Actual candidate-only raw decoding, independent schedule/formulas, unchanged parameter material, complete shape/discrete/nonfinite classification, numeric task projection and separate None/zero report; bounded capture and no performance claims."
+    },
+    {
+      "path": "scripts/lh_tensor_check.py",
+      "sha256": "73300d1c86efb7a3ad938a7e290b20118c8ce930cf745be752d1b9c94b438148",
+      "symbols": "*",
+      "reviewer": "root; req006_diagnostics implementation review",
+      "evidence": "docs/evidence/node-region-batching-20261112.md",
+      "scope": "Actual candidate-only raw decoding, independent schedule/formulas, unchanged parameter material, complete shape/discrete/nonfinite classification, numeric task projection and separate None/zero report; bounded capture and no performance claims."
+    },
+    {
+      "path": "scripts/req006_initial.py",
+      "sha256": "a58984cc916859a2335835076d767cb839752059a3853756c3f4b5f76a429045",
+      "symbols": "*",
+      "reviewer": "root; lh_direct initial-state review",
+      "evidence": "docs/evidence/req006-floor-20261112.md",
+      "scope": "Initial identity, atomic no-overwrite publication, optimizer/RNG pairing and fixed tiny fixture; scalar representation, independent threshold VJP, finite diagnostic observation retains strict failure and nonfinite refusal."
+    },
+    {
+      "path": "scripts/diagnose_scalar_floor.py",
+      "sha256": "b7a1f976fec7757de8fdfe333cae084f7b11f89ec448445255ad1a6815ef79bd",
+      "symbols": "*",
+      "reviewer": "root; lh_direct initial-state review",
+      "evidence": "docs/evidence/req006-floor-20261112.md",
+      "scope": "Initial identity, atomic no-overwrite publication, optimizer/RNG pairing and fixed tiny fixture; scalar representation, independent threshold VJP, finite diagnostic observation retains strict failure and nonfinite refusal."
+    },
+    {
+      "path": "scripts/run_shared_npu.py",
+      "sha256": "0afb04b43808685cdea30fd590cd6180c8f9f6610aad01d118e6f35e012e2092",
+      "symbols": "*",
+      "reviewer": "root",
+      "evidence": "docs/evidence/node-region-batching-20261112.md",
+      "scope": "Authorization policy, PID/start/UID, expiration/headroom, two-sample scheduler and locks preserved, observations versus performance exclusivity. Reused unchanged adapter; not a new scheduler implementation."
+    },
+    {
+      "path": "tools/device_online/block_kv_message_fixture.cpp",
+      "sha256": "d848c1f5a989f81d324d10c36e59b839c03e5a2af2df451f20b1c727ed994fb8",
+      "symbols": "*",
+      "reviewer": "lh_direct independent review; resident_rewrite implementation; root integration",
+      "evidence": "docs/evidence/resident-blocks-20261112.md",
+      "scope": "Separate Read/proposal snapshots, unscaled c/G and explicit cG, independent control/message roots, saved reverse, aliases and all selected-owner roles, default branch, exact clock and bounded rejection. R4 snapshot numerical composition, no complete graph owner or optimizer/checkpoint claim."
+    },
+    {
+      "path": "tools/device_online/block_kv_message_formula.cpp",
+      "sha256": "a0e3a9c4b9411642659eaed1df3e8dd0d1dd00f98a467dc18ceb4c0ea74c3a16",
+      "symbols": "*",
+      "reviewer": "lh_direct independent review; resident_rewrite implementation; root integration",
+      "evidence": "docs/evidence/resident-blocks-20261112.md",
+      "scope": "Separate Read/proposal snapshots, unscaled c/G and explicit cG, independent control/message roots, saved reverse, aliases and all selected-owner roles, default branch, exact clock and bounded rejection. R4 snapshot numerical composition, no complete graph owner or optimizer/checkpoint claim."
+    },
+    {
+      "path": "tools/device_online/block_kv_message_formula.h",
+      "sha256": "a631ea99afeafef14b595bd812dc6f836b6fe07eedfda73109da5dec183e9d4e",
+      "symbols": "*",
+      "reviewer": "lh_direct independent review; resident_rewrite implementation; root integration",
+      "evidence": "docs/evidence/resident-blocks-20261112.md",
+      "scope": "Separate Read/proposal snapshots, unscaled c/G and explicit cG, independent control/message roots, saved reverse, aliases and all selected-owner roles, default branch, exact clock and bounded rejection. R4 snapshot numerical composition, no complete graph owner or optimizer/checkpoint claim."
+    },
+    {
+      "path": "tools/device_online/block_kv_message_parameters.cpp",
+      "sha256": "09ec404281b36fc557a040923b21ccc036101e6d8690effdf172469ffa061603",
+      "symbols": "*",
+      "reviewer": "lh_direct independent review; resident_rewrite implementation; root integration",
+      "evidence": "docs/evidence/resident-blocks-20261112.md",
+      "scope": "Separate Read/proposal snapshots, unscaled c/G and explicit cG, independent control/message roots, saved reverse, aliases and all selected-owner roles, default branch, exact clock and bounded rejection. R4 snapshot numerical composition, no complete graph owner or optimizer/checkpoint claim."
+    },
+    {
+      "path": "tools/device_online/block_kv_messages.cpp",
+      "sha256": "47014936314f65ad22a9396f800e173d9dfae23454cefec41f8fdf554ce4dc10",
+      "symbols": "*",
+      "reviewer": "lh_direct independent review; resident_rewrite implementation; root integration",
+      "evidence": "docs/evidence/resident-blocks-20261112.md",
+      "scope": "Separate Read/proposal snapshots, unscaled c/G and explicit cG, independent control/message roots, saved reverse, aliases and all selected-owner roles, default branch, exact clock and bounded rejection. R4 snapshot numerical composition, no complete graph owner or optimizer/checkpoint claim."
+    },
+    {
+      "path": "tools/device_online/block_kv_messages.h",
+      "sha256": "f51a73646841fdf87da69c79fa9123f5e0211c0137d77dbef0f95c808cdd61dc",
+      "symbols": "*",
+      "reviewer": "lh_direct independent review; resident_rewrite implementation; root integration",
+      "evidence": "docs/evidence/resident-blocks-20261112.md",
+      "scope": "Separate Read/proposal snapshots, unscaled c/G and explicit cG, independent control/message roots, saved reverse, aliases and all selected-owner roles, default branch, exact clock and bounded rejection. R4 snapshot numerical composition, no complete graph owner or optimizer/checkpoint claim."
+    },
+    {
+      "path": "tools/device_online/block_kv_messages_check.cpp",
+      "sha256": "166c0d2616adbddf3b36df3167c6cfbc072a980bede66cfa49a76bef97fd8a35",
+      "symbols": "*",
+      "reviewer": "lh_direct independent review; resident_rewrite implementation; root integration",
+      "evidence": "docs/evidence/resident-blocks-20261112.md",
+      "scope": "Separate Read/proposal snapshots, unscaled c/G and explicit cG, independent control/message roots, saved reverse, aliases and all selected-owner roles, default branch, exact clock and bounded rejection. R4 snapshot numerical composition, no complete graph owner or optimizer/checkpoint claim."
+    },
+    {
+      "path": "tools/device_online/block_kv_messages_saved.h",
+      "sha256": "d9abe2c86f8f351936d34bf2f5536c0220f85662ec494817f79ded4bfd5a13a8",
+      "symbols": "*",
+      "reviewer": "lh_direct independent review; resident_rewrite implementation; root integration",
+      "evidence": "docs/evidence/resident-blocks-20261112.md",
+      "scope": "Separate Read/proposal snapshots, unscaled c/G and explicit cG, independent control/message roots, saved reverse, aliases and all selected-owner roles, default branch, exact clock and bounded rejection. R4 snapshot numerical composition, no complete graph owner or optimizer/checkpoint claim."
+    },
+    {
+      "path": "tools/device_online/block_kv_messages_vjp.cpp",
+      "sha256": "8f884e56dca492c63b6c0d36a091ea2f08afaab6829ab9cfb04db149af98ae52",
+      "symbols": "*",
+      "reviewer": "lh_direct independent review; resident_rewrite implementation; root integration",
+      "evidence": "docs/evidence/resident-blocks-20261112.md",
+      "scope": "Separate Read/proposal snapshots, unscaled c/G and explicit cG, independent control/message roots, saved reverse, aliases and all selected-owner roles, default branch, exact clock and bounded rejection. R4 snapshot numerical composition, no complete graph owner or optimizer/checkpoint claim."
+    }
+  ]
+}

@@ -1,0 +1,2011 @@
+{
+  "schema": "tide-req006-reviewed-evidence-v1",
+  "diagnostic_source": "c83a2820149e69c3a0571dc61765836173bfaea1",
+  "trace_analysis_source": "2927ba401c71dc8abd44da2a6518a7f48984d41c",
+  "downstream_source": "6e7bd49eb5e35c15445826cac3a9b6ddda75aff4",
+  "request_source": "dc943cc7ce773e3dac4d62736ab524953573decb",
+  "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+  "cases": {
+    "hb88-pool-s11": {
+      "configuration": {
+        "kind": "direct_semantic",
+        "configuration_sha256": "6fc3510d80832b48423a6cf9faadfe19823fb9195de171e7641a592f1347acfc",
+        "seed": 11,
+        "dtype": "float32",
+        "training": {
+          "batch": 16,
+          "global_batch": 64,
+          "length": 256,
+          "lr": 0.001,
+          "betas": [
+            0.9,
+            0.95
+          ],
+          "eps": 1e-08,
+          "clip_norm": 1.0,
+          "weight_decay": 0.1,
+          "decay_policy": "matrix_only",
+          "warmup_tokens": 1048576
+        },
+        "transformer": null,
+        "overrides": {},
+        "plan_sha256": "5ca1c73935c66e2b754f59b4accd2925e1f111da49abaf67c52e9153763e3e06",
+        "graph": {
+          "nodes": 88,
+          "regions": 22,
+          "counts": {
+            "body_edges": 224,
+            "body_nodes": 88,
+            "encoded_edges": 232,
+            "encoded_nodes": 90,
+            "longest_body_delay": 6,
+            "output_reachable_nodes": 88,
+            "reachable_nodes": 88
+          }
+        },
+        "edges": 224,
+        "input_ports": 4,
+        "output_ports": 4,
+        "rank_region_counts": {
+          "1": 1,
+          "2": 2,
+          "3": 4,
+          "4": 8,
+          "5": 4,
+          "6": 2,
+          "7": 1
+        },
+        "body_regions": 22,
+        "light_regions": [],
+        "stride": 9,
+        "source_binding": {
+          "mode": "region",
+          "rank": null
+        },
+        "source_hidden_width": 32,
+        "aggregation_reduction": "matmul",
+        "memories_groups": [
+          {
+            "count": 56,
+            "configuration": {
+              "adapter_rank": 32,
+              "alpha_att": 1.0,
+              "alpha_ff": 1.0,
+              "beta_short": 0.07701635339554948,
+              "distance_slopes": [
+                0.0
+              ],
+              "epsilon": 1e-05,
+              "ffn_width": 512,
+              "full_frequencies": [
+                []
+              ],
+              "heads": 1,
+              "memory_read": "qry",
+              "position_scale": 9,
+              "read_frequencies": [],
+              "summary_width": 32,
+              "width": 128,
+              "window": 4608
+            }
+          },
+          {
+            "count": 32,
+            "configuration": {
+              "adapter_rank": 32,
+              "alpha_att": 1.0,
+              "alpha_ff": 1.0,
+              "beta_short": 0.07701635339554948,
+              "distance_slopes": [
+                0.0
+              ],
+              "epsilon": 1e-05,
+              "ffn_width": 512,
+              "full_frequencies": [
+                []
+              ],
+              "heads": 1,
+              "memory_read": "qry",
+              "position_scale": 9,
+              "read_frequencies": [],
+              "summary_width": 32,
+              "width": 128,
+              "window": 0
+            }
+          }
+        ],
+        "regions_groups": [
+          {
+            "count": 22,
+            "configuration": {
+              "allocation_base": "mu",
+              "allocation_temperature": 1.0,
+              "alpha_loc": null,
+              "alpha_match": null,
+              "alpha_res": null,
+              "alpha_sel": null,
+              "ent_alpha": null,
+              "eta": null,
+              "fixed_gain": 2.0,
+              "gain_logit": null,
+              "gamma_max": 2.0,
+              "hidden_width": 32,
+              "k": null,
+              "local_score": "cat",
+              "query_weight": null,
+              "read_mode": "+",
+              "region_control_mode": null,
+              "region_control_width": null,
+              "region_evidence": null,
+              "region_key": null,
+              "region_score": "ind",
+              "regularizer": null,
+              "selection_mode": "pooled_attention",
+              "selection_width": null,
+              "send_gain": "fixed",
+              "total_fraction": null
+            }
+          }
+        ],
+        "resolved_region_controls": {
+          "{\"allocation_temperature\": 1.0, \"k\": null, \"selection_mode\": \"pooled_attention\"}": 22
+        }
+      },
+      "parameters": {
+        "unique_tensors": 420,
+        "trainable": 24876408,
+        "bytes": 99505632
+      },
+      "runtime": {
+        "resolved_device": "npu:0",
+        "backend": "npu",
+        "logical_device_index": 0,
+        "resolution_reason": "explicit:npu",
+        "dtype": "float32",
+        "host_architecture": "aarch64",
+        "torch": "2.12.0+cpu",
+        "torch_git": "7661cd9c6b841b62b7f411aa52ec51f05457263b",
+        "python": "3.12.13",
+        "cxx11_abi": true,
+        "torch_npu": "2.12.0.post3",
+        "logical_device_count": 1,
+        "device_name": "Ascend910_9392",
+        "cann_version": "9.2.0",
+        "matmul_allow_hf32": false
+      },
+      "threads": {
+        "intraop": 2,
+        "interop": 1
+      },
+      "affinity": [
+        160,
+        161,
+        162,
+        163,
+        164,
+        165,
+        166,
+        167,
+        168,
+        169,
+        170,
+        171,
+        172,
+        173,
+        174,
+        175
+      ],
+      "dispatch_environment": {
+        "ASCEND_RT_VISIBLE_DEVICES": "7",
+        "ASCEND_LAUNCH_BLOCKING": null,
+        "TASK_QUEUE_ENABLE": null,
+        "CUDA_VISIBLE_DEVICES": null
+      },
+      "request": {
+        "case": "hb88-pool-s11",
+        "action": "measure",
+        "mode": "training",
+        "device": "npu:0",
+        "threads": 2,
+        "progress_tokens": 0,
+        "input_seed": 17,
+        "microbatch": null,
+        "global_batch": null,
+        "length": null,
+        "warmup": 1,
+        "prime_updates": 1,
+        "iterations": 1,
+        "max_parameter_bytes": 2147483648,
+        "max_trace_bytes": 8589934592
+      },
+      "measure_state": "passed",
+      "measure_material": {
+        "input_sha256": "9f839d90b9c74d984de34fa25021e612db8f93f4faf698b4cd51453eb6274167",
+        "initial_state_sha256": "6adb1feff8e0f2b2be3ab55dbc0bf0fe610d535bd6e68bbcc6d081ab5e933c77",
+        "weights_sha256": "b8f97dcf69d0255afb751c1c62ec4688309731cb533fcc2426398df86e627fc0",
+        "input_shape": [
+          64,
+          256
+        ],
+        "effective_targets": 16384,
+        "input_seed": 17,
+        "runtime_rng_seed": 11,
+        "progress_tokens": 0,
+        "private_state": "independent document blocks; no cross-update private state",
+        "weights": "frozen constructor/role-keyed seed plus explicit synthetic prime updates; no historical checkpoint",
+        "optimizer_initialization": "slots and weights from real synthetic updates at the same fixed progress",
+        "prime_updates": 1,
+        "inputs": "synthetic next-token IDs [4,4096)"
+      },
+      "measure_warmup_restored": true,
+      "measure": {
+        "loss": 8.356815338134766,
+        "tokens": 16384,
+        "gradient_norm": 0.2201114445924759,
+        "lr": 1.5625e-05,
+        "microbatches": 4,
+        "update_seconds": 2.6068593859672546,
+        "complete_seconds": 2.6124133691191673,
+        "input_positions": 16384,
+        "effective_target_tokens_per_second": 6271.595526830513,
+        "input_positions_per_second": 6271.595526830513,
+        "update_tokens_per_second": 6284.957327654573,
+        "memory": {
+          "process_peak_rss_bytes": 2924576768,
+          "rss_scope": "process lifetime high-water mark, including construction and warmup",
+          "allocated_bytes": 478426112,
+          "reserved_bytes": 17962106880,
+          "peak_allocated_bytes": 16017216000,
+          "device_scope": "allocator peak reset after warmup/restore; allocated live model included"
+        },
+        "instrumented": false,
+        "work": {
+          "work/candidates": 1441792.0,
+          "work/state_updates": 1441792.0,
+          "work/read_events": 1441792.0,
+          "work/full": 1441792.0,
+          "work/physical_full_rows": 1441792,
+          "activity/send_strength": 360447.9992675781,
+          "solver/max_feasibility_residual": 0,
+          "work/max_full_batch": 16384,
+          "numerical/positive_floor_events": 33783993.0,
+          "discrete/positive_support_errors": 0.0,
+          "work/node_slots": 1441792,
+          "work/unsaturated": 1441753.0,
+          "work/body_candidates": 1441792.0,
+          "work/body_full": 1441792.0,
+          "work/body_node_slots": 1441792,
+          "work/boundary_full": 0.0,
+          "work/boundary_candidates": 0.0,
+          "work/physical_light_rows": 0,
+          "activity/full_fraction": 1.0,
+          "activity/receipt_fraction": 1.0,
+          "activity/full_all_fraction": 1.0,
+          "activity/body_full_all_fraction": 1.0,
+          "activity/body_receipt_fraction": 1.0
+        }
+      },
+      "final_model_sha256": "7eb893d60d039f7097f8703ff5dd005dba320b86af84e33fcd5ea2f06bddfbfa",
+      "final_optimizer_sha256": "b28e2bc304724a5a3e015ac9d33b2d9c6236bd7c09db30f5becd2aa0d51dffc0",
+      "measure_profile_identity_match": {
+        "input_sha256": true,
+        "weights_sha256": false,
+        "initial_state_sha256": false
+      },
+      "profile": {
+        "trace_bytes": 215099414,
+        "trace_sha256": "49125dd43cfe2c0d2c3703f48877fa4e6597a918f8ef3e801576fb2ae9a7c5ac",
+        "kernel_events": 74999,
+        "kernel_union_us": 2361995.25,
+        "kernel_types": {
+          "KERNEL_AIVEC": 62354,
+          "KERNEL_MIX_AIV": 5957,
+          "KERNEL_AICORE": 5728,
+          "KERNEL_AICPU": 704,
+          "KERNEL_MIX_AIC": 256
+        },
+        "operator_categories": {
+          "other": 129102,
+          "copies": 7231,
+          "scalar_or_synchronization": 4935,
+          "index_and_assembly": 4913,
+          "matrix_interfaces": 4768,
+          "autograd_execution": 22652
+        },
+        "phases_inclusive_us": {
+          "req006::aggregate": 81565.44000000002,
+          "req006::backward": 1222838.2999999998,
+          "req006::clip": 17057.94,
+          "req006::input_upload": 784.48,
+          "req006::kv": 653655.1199999999,
+          "req006::loss": 716.0999999999999,
+          "req006::memory": 746393.99,
+          "req006::model": 1096306.78,
+          "req006::node_linear": 130624.27000000016,
+          "req006::optimizer": 87663.43,
+          "req006::region": 200588.17000000004,
+          "req006::zero_grad": 184.04
+        },
+        "observed_host_fallback_events": [],
+        "scope": "CPU interface events grouped by nearest same-thread labelled range at start; worker events may be unattributed. Inclusive ranges/operators overlap. matmul and nested mm/bmm are not separate mathematical work. Device kernel durations/union are not exclusive critical-path attribution. AICPU is not host fallback.",
+        "top_kernels": [
+          {
+            "name": "aclnnGeScalar_CastAiCpu_Cast",
+            "calls": 352,
+            "inclusive_us": 732225.1600000003
+          },
+          {
+            "name": "aclnnGeScalar_GreaterEqual_GreaterEqual",
+            "calls": 1384,
+            "inclusive_us": 679283.72
+          },
+          {
+            "name": "aclnnMul_MulAiCore_Mul",
+            "calls": 6376,
+            "inclusive_us": 116856.94000000002
+          },
+          {
+            "name": "aclnnBatchMatMul_BatchMatMulNd_BatchMatMulV2",
+            "calls": 3344,
+            "inclusive_us": 84588.53999999982
+          },
+          {
+            "name": "aclnnSWhere_SelectV2AiCore_SelectV2",
+            "calls": 3824,
+            "inclusive_us": 81009.42000000009
+          },
+          {
+            "name": "aclnnReduceSum_ReduceSumOpAiCore_ReduceSum",
+            "calls": 4212,
+            "inclusive_us": 71151.08000000015
+          },
+          {
+            "name": "aclnnAdd_AddAiCore_Add",
+            "calls": 6456,
+            "inclusive_us": 58429.700000000026
+          },
+          {
+            "name": "aclnnClampMin_ClipByValueV2AiCore_ClipByValueV2",
+            "calls": 2028,
+            "inclusive_us": 55711.040000000015
+          },
+          {
+            "name": "aclnnDiv_RealDivAiCore_RealDiv",
+            "calls": 2532,
+            "inclusive_us": 43589.36000000001
+          },
+          {
+            "name": "aclnnMatmul_BatchMatMulNd_BatchMatMulV2",
+            "calls": 1496,
+            "inclusive_us": 30261.359999999968
+          },
+          {
+            "name": "aclnnMuls_MulAiCore_Mul",
+            "calls": 2197,
+            "inclusive_us": 21355.80000000003
+          },
+          {
+            "name": "aclnnSub_SubAiCore_Sub",
+            "calls": 1232,
+            "inclusive_us": 21089.88000000001
+          }
+        ],
+        "matrix_shape_examples": [
+          {
+            "stage": "req006::node_linear",
+            "operator": "aten::bmm",
+            "calls": 1144,
+            "shapes": {
+              "\"4,4096,128;\\r\\n4,128,32\"": 440,
+              "\"4,4096,128;\\r\\n4,128,128\"": 176,
+              "\"4,4096,128;\\r\\n4,128,512\"": 176,
+              "\"4,4096,32;\\r\\n4,32,256\"": 88,
+              "\"4,4096,512;\\r\\n4,512,128\"": 88,
+              "\"4,4096,259;\\r\\n4,259,32\"": 88
+            }
+          }
+        ],
+        "original_state": "failed",
+        "original_error": "TypeError(\"bad operand type for unary -: 'str'\")",
+        "original_iterations_retained": 0,
+        "census": "not_collected_at_representative_scale",
+        "material": {
+          "input_sha256": "9f839d90b9c74d984de34fa25021e612db8f93f4faf698b4cd51453eb6274167",
+          "initial_state_sha256": "118240a1b41da67939e6725fad4ca2b2f2481c662d13fccb1d6ed1fb138da09a",
+          "weights_sha256": "c2ed4738b4c374df37bef5ecd3bf358c33de0dd37e2d60d0049c7b7b97c60317",
+          "input_shape": [
+            64,
+            256
+          ],
+          "effective_targets": 16384,
+          "input_seed": 17,
+          "runtime_rng_seed": 11,
+          "progress_tokens": 0,
+          "private_state": "independent document blocks; no cross-update private state",
+          "weights": "frozen constructor/role-keyed seed plus explicit synthetic prime updates; no historical checkpoint",
+          "optimizer_initialization": "slots and weights from real synthetic updates at the same fixed progress",
+          "prime_updates": 1,
+          "inputs": "synthetic next-token IDs [4,4096)"
+        },
+        "warmup_restored": true
+      },
+      "correctness": "not_checked; frozen downstream numerical guards remain enabled",
+      "independent_recovery": "not_checked"
+    },
+    "hb184-quad-s11": {
+      "configuration": {
+        "kind": "direct_semantic",
+        "configuration_sha256": "56c4ec457969637ff4db7d40e1f1bf31caa2800d95118c1cd602717e0f21f96b",
+        "seed": 11,
+        "dtype": "float32",
+        "training": {
+          "batch": 8,
+          "global_batch": 64,
+          "length": 256,
+          "lr": 0.001,
+          "betas": [
+            0.9,
+            0.95
+          ],
+          "eps": 1e-08,
+          "clip_norm": 1.0,
+          "weight_decay": 0.1,
+          "decay_policy": "matrix_only",
+          "warmup_tokens": 1048576
+        },
+        "transformer": null,
+        "overrides": {},
+        "plan_sha256": "87b35c8df7c30d2ed2a132c7546030e984d0d8527f95585f640d33ccd68289d1",
+        "graph": {
+          "nodes": 184,
+          "regions": 46,
+          "counts": {
+            "body_edges": 480,
+            "body_nodes": 184,
+            "encoded_edges": 488,
+            "encoded_nodes": 186,
+            "longest_body_delay": 8,
+            "output_reachable_nodes": 184,
+            "reachable_nodes": 184
+          }
+        },
+        "edges": 480,
+        "input_ports": 4,
+        "output_ports": 4,
+        "rank_region_counts": {
+          "1": 1,
+          "2": 2,
+          "3": 4,
+          "4": 8,
+          "5": 16,
+          "6": 8,
+          "7": 4,
+          "8": 2,
+          "9": 1
+        },
+        "body_regions": 46,
+        "light_regions": [],
+        "stride": 11,
+        "source_binding": {
+          "mode": "region",
+          "rank": null
+        },
+        "source_hidden_width": 32,
+        "aggregation_reduction": "matmul",
+        "memories_groups": [
+          {
+            "count": 120,
+            "configuration": {
+              "adapter_rank": 32,
+              "alpha_att": 1.0,
+              "alpha_ff": 1.0,
+              "beta_short": 0.06301338005090412,
+              "distance_slopes": [
+                0.0
+              ],
+              "epsilon": 1e-05,
+              "ffn_width": 512,
+              "full_frequencies": [
+                []
+              ],
+              "heads": 1,
+              "memory_read": "qry",
+              "position_scale": 11,
+              "read_frequencies": [],
+              "summary_width": 32,
+              "width": 128,
+              "window": 5632
+            }
+          },
+          {
+            "count": 64,
+            "configuration": {
+              "adapter_rank": 32,
+              "alpha_att": 1.0,
+              "alpha_ff": 1.0,
+              "beta_short": 0.06301338005090412,
+              "distance_slopes": [
+                0.0
+              ],
+              "epsilon": 1e-05,
+              "ffn_width": 512,
+              "full_frequencies": [
+                []
+              ],
+              "heads": 1,
+              "memory_read": "qry",
+              "position_scale": 11,
+              "read_frequencies": [],
+              "summary_width": 32,
+              "width": 128,
+              "window": 0
+            }
+          }
+        ],
+        "regions_groups": [
+          {
+            "count": 46,
+            "configuration": {
+              "allocation_base": null,
+              "allocation_temperature": 1.0,
+              "alpha_loc": null,
+              "alpha_match": null,
+              "alpha_res": null,
+              "alpha_sel": null,
+              "ent_alpha": null,
+              "eta": null,
+              "fixed_gain": null,
+              "gain_logit": null,
+              "gamma_max": 2.0,
+              "hidden_width": 32,
+              "k": 2,
+              "local_score": "cat",
+              "query_weight": null,
+              "read_mode": "+",
+              "region_control_mode": "context",
+              "region_control_width": 32,
+              "region_evidence": "cat",
+              "region_key": null,
+              "region_score": "ind",
+              "regularizer": "quad",
+              "selection_mode": "regional_total",
+              "selection_width": null,
+              "send_gain": null,
+              "total_fraction": null
+            }
+          }
+        ],
+        "resolved_region_controls": {
+          "{\"allocation_temperature\": 1.0, \"k\": 2, \"selection_mode\": \"regional_total\"}": 46
+        }
+      },
+      "parameters": {
+        "unique_tensors": 1152,
+        "trainable": 53021958,
+        "bytes": 212087832
+      },
+      "runtime": {
+        "resolved_device": "npu:0",
+        "backend": "npu",
+        "logical_device_index": 0,
+        "resolution_reason": "explicit:npu",
+        "dtype": "float32",
+        "host_architecture": "aarch64",
+        "torch": "2.12.0+cpu",
+        "torch_git": "7661cd9c6b841b62b7f411aa52ec51f05457263b",
+        "python": "3.12.13",
+        "cxx11_abi": true,
+        "torch_npu": "2.12.0.post3",
+        "logical_device_count": 1,
+        "device_name": "Ascend910_9392",
+        "cann_version": "9.2.0",
+        "matmul_allow_hf32": false
+      },
+      "threads": {
+        "intraop": 2,
+        "interop": 1
+      },
+      "affinity": [
+        160,
+        161,
+        162,
+        163,
+        164,
+        165,
+        166,
+        167,
+        168,
+        169,
+        170,
+        171,
+        172,
+        173,
+        174,
+        175
+      ],
+      "dispatch_environment": {
+        "ASCEND_RT_VISIBLE_DEVICES": "7",
+        "ASCEND_LAUNCH_BLOCKING": null,
+        "TASK_QUEUE_ENABLE": null,
+        "CUDA_VISIBLE_DEVICES": null
+      },
+      "request": {
+        "case": "hb184-quad-s11",
+        "action": "measure",
+        "mode": "training",
+        "device": "npu:0",
+        "threads": 2,
+        "progress_tokens": 0,
+        "input_seed": 17,
+        "microbatch": null,
+        "global_batch": null,
+        "length": null,
+        "warmup": 1,
+        "prime_updates": 1,
+        "iterations": 1,
+        "max_parameter_bytes": 2147483648,
+        "max_trace_bytes": 8589934592
+      },
+      "measure_state": "passed",
+      "measure_material": {
+        "input_sha256": "9f839d90b9c74d984de34fa25021e612db8f93f4faf698b4cd51453eb6274167",
+        "initial_state_sha256": "b0927965d0f5c1ab6a399dcd3369448fe42a79f177f22353a0bdf15576e79c4a",
+        "weights_sha256": "eac5b471a5c5cd0f5956ce860baf10740a4a9a4242359713432eb92072884f2f",
+        "input_shape": [
+          64,
+          256
+        ],
+        "effective_targets": 16384,
+        "input_seed": 17,
+        "runtime_rng_seed": 11,
+        "progress_tokens": 0,
+        "private_state": "independent document blocks; no cross-update private state",
+        "weights": "frozen constructor/role-keyed seed plus explicit synthetic prime updates; no historical checkpoint",
+        "optimizer_initialization": "slots and weights from real synthetic updates at the same fixed progress",
+        "prime_updates": 1,
+        "inputs": "synthetic next-token IDs [4,4096)"
+      },
+      "measure_warmup_restored": true,
+      "measure": {
+        "loss": 8.368889927864075,
+        "tokens": 16384,
+        "gradient_norm": 0.479400634765625,
+        "lr": 1.5625e-05,
+        "microbatches": 8,
+        "update_seconds": 10.384444884955883,
+        "complete_seconds": 10.397291608154774,
+        "input_positions": 16384,
+        "effective_target_tokens_per_second": 1575.7949875282663,
+        "input_positions_per_second": 1575.7949875282663,
+        "update_tokens_per_second": 1577.7444226928078,
+        "memory": {
+          "process_peak_rss_bytes": 3934879744,
+          "rss_scope": "process lifetime high-water mark, including construction and warmup",
+          "allocated_bytes": 1028250112,
+          "reserved_bytes": 19782434816,
+          "peak_allocated_bytes": 18012738048,
+          "device_scope": "allocator peak reset after warmup/restore; allocated live model included"
+        },
+        "instrumented": false,
+        "work": {
+          "work/candidates": 2966892.0,
+          "work/state_updates": 2966892.0,
+          "work/read_events": 2966892.0,
+          "work/full": 2403491.0,
+          "work/physical_full_rows": 3014656,
+          "activity/send_strength": 1135826.29296875,
+          "solver/max_feasibility_residual": 3.5762786865234375e-07,
+          "work/max_full_batch": 8192,
+          "numerical/positive_floor_events": 79582024.0,
+          "discrete/positive_support_errors": 0.0,
+          "work/node_slots": 3014656,
+          "work/unsaturated": 2132204.0,
+          "work/body_candidates": 2966892.0,
+          "work/body_full": 2403491.0,
+          "work/body_node_slots": 3014656,
+          "work/boundary_full": 0.0,
+          "work/boundary_candidates": 0.0,
+          "work/physical_light_rows": 0,
+          "activity/full_fraction": 0.8101039741251114,
+          "activity/receipt_fraction": 0.9841560695482336,
+          "activity/full_all_fraction": 0.7972687431003737,
+          "activity/body_full_all_fraction": 0.7972687431003737,
+          "activity/body_receipt_fraction": 0.9841560695482336
+        }
+      },
+      "final_model_sha256": "f587ac7867119d3bb73d3701df3cf1abd435142c6e60c456366ef651cca3ed1e",
+      "final_optimizer_sha256": "8a77a4c0309732638158142f8d81d7edda8f9039d736611432e715728aaeb5f3",
+      "measure_profile_identity_match": {
+        "input_sha256": true,
+        "weights_sha256": false,
+        "initial_state_sha256": false
+      },
+      "profile": {
+        "trace_bytes": 1462885765,
+        "trace_sha256": "baac4aae0ab1c6309d3adfeb1f4a2af81621cec772b8fc65b1b3cff18a7b3fca",
+        "kernel_events": 544339,
+        "kernel_union_us": 7494612.5,
+        "kernel_types": {
+          "KERNEL_AIVEC": 471818,
+          "KERNEL_MIX_AIV": 42345,
+          "KERNEL_AICORE": 27728,
+          "KERNEL_AICPU": 2208,
+          "KERNEL_MIX_AIC": 240
+        },
+        "operator_categories": {
+          "other": 815760,
+          "copies": 29321,
+          "scalar_or_synchronization": 41767,
+          "index_and_assembly": 20881,
+          "matrix_interfaces": 23952,
+          "autograd_execution": 105640
+        },
+        "phases_inclusive_us": {
+          "req006::aggregate": 315698.0900000002,
+          "req006::allocation": 5071027.479999998,
+          "req006::allocation_vjp": 221200.7699999999,
+          "req006::backward": 5988806.600000001,
+          "req006::clip": 48987.81,
+          "req006::input_upload": 1175.69,
+          "req006::kv": 2693918.35,
+          "req006::loss": 1376.17,
+          "req006::memory": 3071845.730000001,
+          "req006::model": 9526440.219999999,
+          "req006::node_linear": 576286.9700000024,
+          "req006::optimizer": 256332.48,
+          "req006::region": 5869729.660000004,
+          "req006::zero_grad": 319.74
+        },
+        "observed_host_fallback_events": [],
+        "scope": "CPU interface events grouped by nearest same-thread labelled range at start; worker events may be unattributed. Inclusive ranges/operators overlap. matmul and nested mm/bmm are not separate mathematical work. Device kernel durations/union are not exclusive critical-path attribution. AICPU is not host fallback.",
+        "top_kernels": [
+          {
+            "name": "aclnnGeScalar_CastAiCpu_Cast",
+            "calls": 1104,
+            "inclusive_us": 1894081.9199999997
+          },
+          {
+            "name": "aclnnGeScalar_GreaterEqual_GreaterEqual",
+            "calls": 5472,
+            "inclusive_us": 1497850.9280000024
+          },
+          {
+            "name": "aclnnReduceSum_ReduceSumOpAiCore_ReduceSum",
+            "calls": 34192,
+            "inclusive_us": 413018.6960000032
+          },
+          {
+            "name": "aclnnMul_MulAiCore_Mul",
+            "calls": 31536,
+            "inclusive_us": 359437.9600000009
+          },
+          {
+            "name": "aclnnSWhere_SelectV2AiCore_SelectV2",
+            "calls": 43688,
+            "inclusive_us": 304657.99200000556
+          },
+          {
+            "name": "aclnnBatchMatMul_BatchMatMulNd_BatchMatMulV2",
+            "calls": 15088,
+            "inclusive_us": 233011.64799999958
+          },
+          {
+            "name": "aclnnClampMin_ClipByValueV2AiCore_ClipByValueV2",
+            "calls": 20984,
+            "inclusive_us": 206687.94399999606
+          },
+          {
+            "name": "aclnnAdd_AddAiCore_Add",
+            "calls": 43480,
+            "inclusive_us": 194719.89599999593
+          },
+          {
+            "name": "aclnnSub_TransposeAiCore_Transpose",
+            "calls": 13984,
+            "inclusive_us": 167762.47199999905
+          },
+          {
+            "name": "aclnnSub_SubAiCore_Sub",
+            "calls": 22448,
+            "inclusive_us": 165713.4879999992
+          },
+          {
+            "name": "aclnnDiv_RealDivAiCore_RealDiv",
+            "calls": 12816,
+            "inclusive_us": 143276.19200000024
+          },
+          {
+            "name": "aclnnMinimum_TransposeAiCore_Transpose",
+            "calls": 12144,
+            "inclusive_us": 143197.07199999667
+          }
+        ],
+        "matrix_shape_examples": [
+          {
+            "stage": "req006::node_linear",
+            "operator": "aten::bmm",
+            "calls": 5152,
+            "shapes": {
+              "\"4,2048,128;\\r\\n4,128,32\"": 1840,
+              "\"4,2048,128;\\r\\n4,128,128\"": 736,
+              "\"4,2048,128;\\r\\n4,128,512\"": 736,
+              "\"4,2048,259;\\r\\n4,259,32\"": 736,
+              "\"4,2048,32;\\r\\n4,32,256\"": 368,
+              "\"4,2048,512;\\r\\n4,512,128\"": 368
+            }
+          }
+        ],
+        "original_state": "failed",
+        "original_error": "TypeError(\"bad operand type for unary -: 'str'\")",
+        "original_iterations_retained": 0,
+        "census": "not_collected_at_representative_scale",
+        "material": {
+          "input_sha256": "9f839d90b9c74d984de34fa25021e612db8f93f4faf698b4cd51453eb6274167",
+          "initial_state_sha256": "f032ecc084f27b142d1491958b91c64f8c6bd99d8824a353540cdbe536e57c10",
+          "weights_sha256": "f6319f07a584599258a3124125fdde2822dde3b6e5705e0789b26531a3e00b5b",
+          "input_shape": [
+            64,
+            256
+          ],
+          "effective_targets": 16384,
+          "input_seed": 17,
+          "runtime_rng_seed": 11,
+          "progress_tokens": 0,
+          "private_state": "independent document blocks; no cross-update private state",
+          "weights": "frozen constructor/role-keyed seed plus explicit synthetic prime updates; no historical checkpoint",
+          "optimizer_initialization": "slots and weights from real synthetic updates at the same fixed progress",
+          "prime_updates": 1,
+          "inputs": "synthetic next-token IDs [4,4096)"
+        },
+        "warmup_restored": true
+      },
+      "correctness": "not_checked; frozen downstream numerical guards remain enabled",
+      "independent_recovery": "not_checked"
+    },
+    "tree-r64-h2-q3-s11": {
+      "configuration": {
+        "kind": "direct_semantic",
+        "configuration_sha256": "9881f742e37315ec5063febf2b5b03e5ba1aeee8b430c9e9ef52c611aaec0913",
+        "seed": 11,
+        "dtype": "float32",
+        "training": {
+          "batch": 4,
+          "global_batch": 64,
+          "length": 256,
+          "lr": 0.001,
+          "betas": [
+            0.9,
+            0.95
+          ],
+          "eps": 1e-08,
+          "clip_norm": 1.0,
+          "weight_decay": 0.1,
+          "decay_policy": "matrix_only",
+          "warmup_tokens": 1048576
+        },
+        "transformer": null,
+        "overrides": {},
+        "plan_sha256": "ba1e898d53fb434158db83e4ad9115c21d0f20c9bdf8a080c9f316974e085545",
+        "graph": {
+          "nodes": 661,
+          "regions": 16,
+          "counts": {
+            "body_edges": 1536,
+            "body_nodes": 640,
+            "body_regions": 10,
+            "boundary_nodes": 21,
+            "output_reachable_nodes": 661,
+            "reachable_nodes": 661,
+            "total_edges": 1620
+          }
+        },
+        "edges": 1620,
+        "input_ports": 1,
+        "output_ports": 64,
+        "rank_region_counts": {
+          "4": 1,
+          "5": 2,
+          "6": 4,
+          "7": 2,
+          "8": 1,
+          "1": 1,
+          "2": 1,
+          "3": 4
+        },
+        "body_regions": 10,
+        "light_regions": [
+          10,
+          11
+        ],
+        "stride": 10,
+        "source_binding": {
+          "mode": "region",
+          "rank": null
+        },
+        "source_hidden_width": 32,
+        "aggregation_reduction": "matmul",
+        "memories_groups": [
+          {
+            "count": 405,
+            "configuration": {
+              "adapter_rank": 32,
+              "alpha_att": 1.0,
+              "alpha_ff": 1.0,
+              "beta_short": 0.06931471805599453,
+              "distance_slopes": [
+                0.0
+              ],
+              "epsilon": 1e-05,
+              "ffn_width": 256,
+              "full_frequencies": [
+                []
+              ],
+              "heads": 1,
+              "memory_read": "qry",
+              "position_scale": 10.0,
+              "read_frequencies": [],
+              "summary_width": 32,
+              "width": 64,
+              "window": 5120
+            }
+          },
+          {
+            "count": 256,
+            "configuration": {
+              "adapter_rank": 32,
+              "alpha_att": 1.0,
+              "alpha_ff": 1.0,
+              "beta_short": 0.06931471805599453,
+              "distance_slopes": [
+                0.0
+              ],
+              "epsilon": 1e-05,
+              "ffn_width": 256,
+              "full_frequencies": [
+                []
+              ],
+              "heads": 1,
+              "memory_read": "qry",
+              "position_scale": 10.0,
+              "read_frequencies": [],
+              "summary_width": 32,
+              "width": 64,
+              "window": 0
+            }
+          }
+        ],
+        "regions_groups": [
+          {
+            "count": 10,
+            "configuration": {
+              "activity_schedule": {
+                "end_tokens": 8388608,
+                "start_k": 32.0,
+                "start_temperature": 1.0,
+                "warmup_tokens": 2097152
+              },
+              "allocation_base": null,
+              "allocation_temperature": 0.5,
+              "alpha_loc": null,
+              "alpha_match": null,
+              "alpha_res": null,
+              "alpha_sel": null,
+              "ent_alpha": null,
+              "eta": null,
+              "fixed_gain": null,
+              "gain_logit": null,
+              "gamma_max": 2.0,
+              "hidden_width": 32,
+              "k": 2,
+              "local_score": "cat",
+              "query_weight": null,
+              "read_mode": "+",
+              "region_control_mode": "fixed",
+              "region_control_width": 32,
+              "region_evidence": "cat",
+              "region_key": null,
+              "region_score": "ind",
+              "regularizer": "quad",
+              "selection_mode": "regional_total",
+              "selection_width": null,
+              "send_gain": null,
+              "total_fraction": 0.5
+            }
+          },
+          {
+            "count": 6,
+            "configuration": {
+              "allocation_base": null,
+              "allocation_temperature": 0.5,
+              "alpha_loc": null,
+              "alpha_match": null,
+              "alpha_res": null,
+              "alpha_sel": null,
+              "ent_alpha": null,
+              "eta": null,
+              "fixed_gain": null,
+              "gain_logit": null,
+              "gamma_max": 2.0,
+              "hidden_width": 32,
+              "k": 1,
+              "local_score": "cat",
+              "query_weight": null,
+              "read_mode": "+",
+              "region_control_mode": "fixed",
+              "region_control_width": 32,
+              "region_evidence": "cat",
+              "region_key": null,
+              "region_score": "ind",
+              "regularizer": "quad",
+              "selection_mode": "regional_total",
+              "selection_width": null,
+              "send_gain": null,
+              "total_fraction": 0.5
+            }
+          }
+        ],
+        "resolved_region_controls": {
+          "{\"allocation_temperature\": 1.0, \"k\": 32.0, \"selection_mode\": \"regional_total\"}": 10,
+          "{\"allocation_temperature\": 0.5, \"k\": 1, \"selection_mode\": \"regional_total\"}": 4
+        }
+      },
+      "parameters": {
+        "unique_tensors": 268,
+        "trainable": 51621168,
+        "bytes": 206484672
+      },
+      "runtime": {
+        "resolved_device": "npu:0",
+        "backend": "npu",
+        "logical_device_index": 0,
+        "resolution_reason": "explicit:npu",
+        "dtype": "float32",
+        "host_architecture": "aarch64",
+        "torch": "2.12.0+cpu",
+        "torch_git": "7661cd9c6b841b62b7f411aa52ec51f05457263b",
+        "python": "3.12.13",
+        "cxx11_abi": true,
+        "torch_npu": "2.12.0.post3",
+        "logical_device_count": 1,
+        "device_name": "Ascend910_9392",
+        "cann_version": "9.2.0",
+        "matmul_allow_hf32": false
+      },
+      "threads": {
+        "intraop": 2,
+        "interop": 1
+      },
+      "affinity": [
+        176,
+        177,
+        178,
+        179,
+        180,
+        181,
+        182,
+        183,
+        184,
+        185,
+        186,
+        187,
+        188,
+        189,
+        190,
+        191
+      ],
+      "dispatch_environment": {
+        "ASCEND_RT_VISIBLE_DEVICES": "5",
+        "ASCEND_LAUNCH_BLOCKING": null,
+        "TASK_QUEUE_ENABLE": null,
+        "CUDA_VISIBLE_DEVICES": null
+      },
+      "request": {
+        "case": "tree-r64-h2-q3-s11",
+        "action": "measure",
+        "mode": "training",
+        "device": "npu:0",
+        "threads": 2,
+        "progress_tokens": 0,
+        "input_seed": 17,
+        "microbatch": null,
+        "global_batch": null,
+        "length": null,
+        "warmup": 1,
+        "prime_updates": 1,
+        "iterations": 1,
+        "max_parameter_bytes": 2147483648,
+        "max_trace_bytes": 8589934592
+      },
+      "measure_state": "passed",
+      "measure_material": {
+        "input_sha256": "9f839d90b9c74d984de34fa25021e612db8f93f4faf698b4cd51453eb6274167",
+        "initial_state_sha256": "b4ce12d7e429c65e4befe52ee9172d28072c136d1c1cafe902d9a34e4ccad6a3",
+        "weights_sha256": "5025e7876775fcbf2cd6a081766d5a6a7970c25e60362a48b8cfb7934803a961",
+        "input_shape": [
+          64,
+          256
+        ],
+        "effective_targets": 16384,
+        "input_seed": 17,
+        "runtime_rng_seed": 11,
+        "progress_tokens": 0,
+        "private_state": "independent document blocks; no cross-update private state",
+        "weights": "frozen constructor/role-keyed seed plus explicit synthetic prime updates; no historical checkpoint",
+        "optimizer_initialization": "slots and weights from real synthetic updates at the same fixed progress",
+        "prime_updates": 1,
+        "inputs": "synthetic next-token IDs [4,4096)"
+      },
+      "measure_warmup_restored": true,
+      "measure": {
+        "loss": 8.32569932937622,
+        "tokens": 16384,
+        "gradient_norm": 0.8469592332839966,
+        "lr": 1.5625e-05,
+        "microbatches": 16,
+        "update_seconds": 16.0304174721241,
+        "complete_seconds": 16.03616515547037,
+        "input_positions": 16384,
+        "effective_target_tokens_per_second": 1021.690649925177,
+        "input_positions_per_second": 1021.690649925177,
+        "update_tokens_per_second": 1022.0569756521163,
+        "memory": {
+          "process_peak_rss_bytes": 3710623744,
+          "rss_scope": "process lifetime high-water mark, including construction and warmup",
+          "allocated_bytes": 894919168,
+          "reserved_bytes": 24937234432,
+          "peak_allocated_bytes": 23772555776,
+          "device_scope": "allocator peak reset after warmup/restore; allocated live model included"
+        },
+        "instrumented": false,
+        "work": {
+          "work/candidates": 7133959.0,
+          "work/state_updates": 7133959.0,
+          "work/read_events": 7133959.0,
+          "work/full": 5649472.0,
+          "work/physical_full_rows": 10829824,
+          "activity/send_strength": 2726724.357421875,
+          "solver/max_feasibility_residual": 5.7220458984375e-06,
+          "work/max_full_batch": 65536,
+          "numerical/positive_floor_events": 107208749.0,
+          "discrete/positive_support_errors": 0.0,
+          "work/node_slots": 10829824,
+          "work/unsaturated": 4295326.0,
+          "work/body_candidates": 6789895.0,
+          "work/body_full": 5423629.0,
+          "work/body_node_slots": 10485760,
+          "work/boundary_full": 225843.0,
+          "work/boundary_candidates": 344064.0,
+          "work/physical_light_rows": 81920,
+          "activity/full_fraction": 0.7919125971988344,
+          "activity/receipt_fraction": 0.6587326811589921,
+          "activity/full_all_fraction": 0.5216587083963692,
+          "activity/body_full_all_fraction": 0.5172375679016114,
+          "activity/body_receipt_fraction": 0.6475348472595215
+        }
+      },
+      "final_model_sha256": "4a69d218f3559774b397f80f6b4d4293d24ff55366044b4ca2978477a7aff2ca",
+      "final_optimizer_sha256": "c418a722c296922f27a40133c347185ecf4acf0a4e8abf01a985ad99d8f6c90c",
+      "measure_profile_identity_match": {
+        "input_sha256": true,
+        "weights_sha256": false,
+        "initial_state_sha256": false
+      },
+      "profile": {
+        "trace_bytes": 1045749853,
+        "trace_sha256": "6ae5ddef821d0a27144b9959465b92a79dbe23b1f6ca70c952e014738edf4031",
+        "kernel_events": 360926,
+        "kernel_union_us": 15344598.25,
+        "kernel_types": {
+          "KERNEL_AIVEC": 321505,
+          "KERNEL_MIX_AIV": 22973,
+          "KERNEL_AICORE": 14624,
+          "KERNEL_AICPU": 1344,
+          "KERNEL_MIX_AIC": 480
+        },
+        "operator_categories": {
+          "other": 573182,
+          "copies": 35091,
+          "scalar_or_synchronization": 23471,
+          "index_and_assembly": 95265,
+          "matrix_interfaces": 12224,
+          "autograd_execution": 72240
+        },
+        "phases_inclusive_us": {
+          "req006::aggregate": 356906.25,
+          "req006::allocation": 3136775.109999997,
+          "req006::allocation_vjp": 121772.77000000003,
+          "req006::backward": 4633116.959999999,
+          "req006::clip": 11699.56,
+          "req006::input_upload": 2158.6,
+          "req006::kv": 2711507.11,
+          "req006::loss": 2808.7699999999995,
+          "req006::memory": 2947013.1300000004,
+          "req006::model": 7266504.609999999,
+          "req006::node_linear": 338703.08000000025,
+          "req006::optimizer": 59508.81,
+          "req006::region": 3465884.480000002,
+          "req006::zero_grad": 152.38
+        },
+        "observed_host_fallback_events": [],
+        "scope": "CPU interface events grouped by nearest same-thread labelled range at start; worker events may be unattributed. Inclusive ranges/operators overlap. matmul and nested mm/bmm are not separate mathematical work. Device kernel durations/union are not exclusive critical-path attribution. AICPU is not host fallback.",
+        "top_kernels": [
+          {
+            "name": "aclnnGeScalar_CastAiCpu_Cast",
+            "calls": 672,
+            "inclusive_us": 4511096.820000005
+          },
+          {
+            "name": "aclnnGeScalar_GreaterEqual_GreaterEqual",
+            "calls": 2768,
+            "inclusive_us": 4458586.999999999
+          },
+          {
+            "name": "aclnnReduceSum_ReduceSumOpAiCore_ReduceSum",
+            "calls": 18656,
+            "inclusive_us": 1489068.820000005
+          },
+          {
+            "name": "aclnnMul_MulAiCore_Mul",
+            "calls": 15744,
+            "inclusive_us": 543125.3000000025
+          },
+          {
+            "name": "aclnnSWhere_SelectV2AiCore_SelectV2",
+            "calls": 25648,
+            "inclusive_us": 486155.9400000079
+          },
+          {
+            "name": "aclnnAdd_AddAiCore_Add",
+            "calls": 47908,
+            "inclusive_us": 463380.03999998595
+          },
+          {
+            "name": "aclnnClampMin_ClipByValueV2AiCore_ClipByValueV2",
+            "calls": 12560,
+            "inclusive_us": 376821.78000000096
+          },
+          {
+            "name": "aclnnDiv_RealDivAiCore_RealDiv",
+            "calls": 6112,
+            "inclusive_us": 287394.82000000053
+          },
+          {
+            "name": "aclnnBatchMatMul_BatchMatMulNd_BatchMatMulV2",
+            "calls": 8512,
+            "inclusive_us": 278092.5400000016
+          },
+          {
+            "name": "aclnnSub_SubAiCore_Sub",
+            "calls": 13664,
+            "inclusive_us": 165805.8399999997
+          },
+          {
+            "name": "aclnnMatmul_BatchMatMulNd_BatchMatMulV2",
+            "calls": 3808,
+            "inclusive_us": 157216.46000000037
+          },
+          {
+            "name": "aclnnInplaceZero_ZerosLikeAiCore_ZerosLike",
+            "calls": 27472,
+            "inclusive_us": 133968.2800000003
+          }
+        ],
+        "matrix_shape_examples": [
+          {
+            "stage": "req006::node_linear",
+            "operator": "aten::bmm",
+            "calls": 2912,
+            "shapes": {
+              "\"64,1024,64;\\r\\n64,64,32\"": 800,
+              "\"4,1024,64;\\r\\n4,64,32\"": 320,
+              "\"64,1024,64;\\r\\n64,64,64\"": 320,
+              "\"64,1024,64;\\r\\n64,64,256\"": 320,
+              "\"64,1024,32;\\r\\n64,32,128\"": 160,
+              "\"64,1024,256;\\r\\n64,256,64\"": 160
+            }
+          }
+        ],
+        "original_state": "failed",
+        "original_error": "TypeError(\"bad operand type for unary -: 'str'\")",
+        "original_iterations_retained": 0,
+        "census": "not_collected_at_representative_scale",
+        "material": {
+          "input_sha256": "9f839d90b9c74d984de34fa25021e612db8f93f4faf698b4cd51453eb6274167",
+          "initial_state_sha256": "e2f64c56938f33f3a3cd6d20b234014ebf5d0d2f7bc0fa6f42f1de4dc88004b6",
+          "weights_sha256": "45dc2e61b57e5bc46e2547706ecadf5ea23cb8c9b016561cf6cd2699c6894826",
+          "input_shape": [
+            64,
+            256
+          ],
+          "effective_targets": 16384,
+          "input_seed": 17,
+          "runtime_rng_seed": 11,
+          "progress_tokens": 0,
+          "private_state": "independent document blocks; no cross-update private state",
+          "weights": "frozen constructor/role-keyed seed plus explicit synthetic prime updates; no historical checkpoint",
+          "optimizer_initialization": "slots and weights from real synthetic updates at the same fixed progress",
+          "prime_updates": 1,
+          "inputs": "synthetic next-token IDs [4,4096)"
+        },
+        "warmup_restored": true
+      },
+      "correctness": "not_checked; frozen downstream numerical guards remain enabled",
+      "independent_recovery": "not_checked"
+    },
+    "tf-hb184-s11": {
+      "configuration": {
+        "kind": "transformer",
+        "configuration_sha256": "3388b93dfe5b3b0f9b0cc34472e287a9cecc173caccb224ec82415668a53001f",
+        "seed": 11,
+        "dtype": "float32",
+        "training": {
+          "batch": 64,
+          "global_batch": 64,
+          "length": 256,
+          "lr": 0.0003,
+          "betas": [
+            0.9,
+            0.95
+          ],
+          "eps": 1e-08,
+          "clip_norm": 1.0,
+          "weight_decay": 0.1,
+          "decay_policy": "matrix_only",
+          "warmup_tokens": 1048576
+        },
+        "transformer": {
+          "ffn": 2048,
+          "heads": 4,
+          "initialization": "gpt2",
+          "layers": 16,
+          "position_scale": 0.028284271247461905,
+          "width": 512
+        },
+        "overrides": {},
+        "resolved_region_controls": {}
+      },
+      "parameters": {
+        "unique_tensors": 196,
+        "trainable": 52540416,
+        "bytes": 210161664
+      },
+      "runtime": {
+        "resolved_device": "npu:0",
+        "backend": "npu",
+        "logical_device_index": 0,
+        "resolution_reason": "explicit:npu",
+        "dtype": "float32",
+        "host_architecture": "aarch64",
+        "torch": "2.12.0+cpu",
+        "torch_git": "7661cd9c6b841b62b7f411aa52ec51f05457263b",
+        "python": "3.12.13",
+        "cxx11_abi": true,
+        "torch_npu": "2.12.0.post3",
+        "logical_device_count": 1,
+        "device_name": "Ascend910_9392",
+        "cann_version": "9.2.0",
+        "matmul_allow_hf32": false
+      },
+      "threads": {
+        "intraop": 2,
+        "interop": 1
+      },
+      "affinity": [
+        176,
+        177,
+        178,
+        179,
+        180,
+        181,
+        182,
+        183,
+        184,
+        185,
+        186,
+        187,
+        188,
+        189,
+        190,
+        191
+      ],
+      "dispatch_environment": {
+        "ASCEND_RT_VISIBLE_DEVICES": "5",
+        "ASCEND_LAUNCH_BLOCKING": null,
+        "TASK_QUEUE_ENABLE": null,
+        "CUDA_VISIBLE_DEVICES": null
+      },
+      "request": {
+        "case": "tf-hb184-s11",
+        "action": "measure",
+        "mode": "training",
+        "device": "npu:0",
+        "threads": 2,
+        "progress_tokens": 0,
+        "input_seed": 17,
+        "microbatch": null,
+        "global_batch": null,
+        "length": null,
+        "warmup": 1,
+        "prime_updates": 1,
+        "iterations": 1,
+        "max_parameter_bytes": 2147483648,
+        "max_trace_bytes": 8589934592
+      },
+      "measure_state": "passed",
+      "measure_material": {
+        "input_sha256": "9f839d90b9c74d984de34fa25021e612db8f93f4faf698b4cd51453eb6274167",
+        "initial_state_sha256": "884403f4aa0483fdace64a6042ef34983f72caa9c4f763d61bffa952721e7428",
+        "weights_sha256": "ff105e37855eaa7c650121d752cb3c744e320f5d010f737bab61668f3eae4ea4",
+        "input_shape": [
+          64,
+          256
+        ],
+        "effective_targets": 16384,
+        "input_seed": 17,
+        "runtime_rng_seed": 11,
+        "progress_tokens": 0,
+        "private_state": "independent document blocks; no cross-update private state",
+        "weights": "frozen constructor/role-keyed seed plus explicit synthetic prime updates; no historical checkpoint",
+        "optimizer_initialization": "slots and weights from real synthetic updates at the same fixed progress",
+        "prime_updates": 1,
+        "inputs": "synthetic next-token IDs [4,4096)"
+      },
+      "measure_warmup_restored": true,
+      "measure": {
+        "loss": 8.393406867980957,
+        "tokens": 16384,
+        "gradient_norm": 1.9500993490219116,
+        "lr": 4.6875e-06,
+        "microbatches": 1,
+        "update_seconds": 0.14442665874958038,
+        "complete_seconds": 0.14579924941062927,
+        "input_positions": 16384,
+        "effective_target_tokens_per_second": 112373.69236281919,
+        "input_positions_per_second": 112373.69236281919,
+        "update_tokens_per_second": 113441.66057602993,
+        "memory": {
+          "process_peak_rss_bytes": 3503857664,
+          "rss_scope": "process lifetime high-water mark, including construction and warmup",
+          "allocated_bytes": 889141248,
+          "reserved_bytes": 12188647424,
+          "peak_allocated_bytes": 11468235264,
+          "device_scope": "allocator peak reset after warmup/restore; allocated live model included"
+        },
+        "instrumented": false,
+        "work": {}
+      },
+      "final_model_sha256": "55c90f0ccbf893be8b62ff8bb0ff3f62e6e51b56bc6ac07d7b28427ca0364d4b",
+      "final_optimizer_sha256": "234892e458a7b803f7d1559dda93d7ad98af1e843cf1aad2ab5c8d27551c42a9",
+      "measure_profile_identity_match": {
+        "input_sha256": true,
+        "weights_sha256": false,
+        "initial_state_sha256": false
+      },
+      "profile": {
+        "trace_bytes": 8796577,
+        "trace_sha256": "8f3b080296dd777bb97b3a78e5e321d36a00034d6f09cf8b642e668a96d01e22",
+        "kernel_events": 2786,
+        "kernel_union_us": 128050.25,
+        "kernel_types": {
+          "KERNEL_AIVEC": 2198,
+          "KERNEL_MIX_AIV": 297,
+          "KERNEL_AICORE": 291
+        },
+        "operator_categories": {
+          "other": 6358,
+          "copies": 857,
+          "scalar_or_synchronization": 890,
+          "matrix_interfaces": 292,
+          "index_and_assembly": 81,
+          "autograd_execution": 735
+        },
+        "phases_inclusive_us": {
+          "req006::backward": 28770.54,
+          "req006::clip": 8299.13,
+          "req006::input_upload": 393.46,
+          "req006::loss": 154.1,
+          "req006::model": 20004.24,
+          "req006::optimizer": 38549.04,
+          "req006::transformer_block": 19361.929999999997,
+          "req006::zero_grad": 143.24
+        },
+        "observed_host_fallback_events": [],
+        "scope": "CPU interface events grouped by nearest same-thread labelled range at start; worker events may be unattributed. Inclusive ranges/operators overlap. matmul and nested mm/bmm are not separate mathematical work. Device kernel durations/union are not exclusive critical-path attribution. AICPU is not host fallback.",
+        "top_kernels": [
+          {
+            "name": "aclnnMm_MatMulCommon_MatMulV2",
+            "calls": 114,
+            "inclusive_us": 36984.25999999999
+          },
+          {
+            "name": "aclnnAddmm_MatMulCommon_MatMulV2",
+            "calls": 48,
+            "inclusive_us": 12897.42
+          },
+          {
+            "name": "aclnnMatmul_BatchMatMulNd_BatchMatMulV2",
+            "calls": 96,
+            "inclusive_us": 7527.119999999998
+          },
+          {
+            "name": "aclnnAddmm_MatMulV3Common_MatMulV3",
+            "calls": 17,
+            "inclusive_us": 7063.4
+          },
+          {
+            "name": "aclnnMm_MatMulV3Common_MatMulV3",
+            "calls": 16,
+            "inclusive_us": 6326.46
+          },
+          {
+            "name": "aclnnGeluBackward_GeluGradAiCore_GeluGrad",
+            "calls": 16,
+            "inclusive_us": 5565.7
+          },
+          {
+            "name": "aclnnAdd_AddAiCore_Add",
+            "calls": 66,
+            "inclusive_us": 4461.62
+          },
+          {
+            "name": "aclnnReduceSum_ReduceSumOpAiCore_ReduceSum",
+            "calls": 66,
+            "inclusive_us": 3920.0199999999995
+          },
+          {
+            "name": "aclnnInplaceMaskedFillScalar_MaskedFillAiCore_MaskedFill",
+            "calls": 32,
+            "inclusive_us": 3463.6000000000004
+          },
+          {
+            "name": "aclnnLayerNormBackward_LayerNormGradV3_LayerNormGradV3",
+            "calls": 33,
+            "inclusive_us": 3109.54
+          },
+          {
+            "name": "aclnnMatmul_AsStridedAiCore_AsStrided",
+            "calls": 48,
+            "inclusive_us": 3065.939999999999
+          },
+          {
+            "name": "aclnnLayerNormWithImplMode_LayerNormV3WithImplMode_LayerNormV3",
+            "calls": 33,
+            "inclusive_us": 2930.98
+          }
+        ],
+        "matrix_shape_examples": [
+          {
+            "stage": "req006::transformer_block",
+            "operator": "aten::addmm",
+            "calls": 64,
+            "shapes": {
+              "\"1536;\\r\\n16384,512;\\r\\n512,1536;\\r\\n;\\r\\n\"": 16,
+              "\"512;\\r\\n16384,512;\\r\\n512,512;\\r\\n;\\r\\n\"": 16,
+              "\"2048;\\r\\n16384,512;\\r\\n512,2048;\\r\\n;\\r\\n\"": 16,
+              "\"512;\\r\\n16384,2048;\\r\\n2048,512;\\r\\n;\\r\\n\"": 16
+            }
+          }
+        ],
+        "original_state": "failed",
+        "original_error": "TypeError(\"bad operand type for unary -: 'str'\")",
+        "original_iterations_retained": 0,
+        "census": "not_collected_at_representative_scale",
+        "material": {
+          "input_sha256": "9f839d90b9c74d984de34fa25021e612db8f93f4faf698b4cd51453eb6274167",
+          "initial_state_sha256": "941595fdccd5e0105f100005e9b39d51bddc0f40525b4629b2df8117b53e7c29",
+          "weights_sha256": "726069a99a7a4ff8b79f10d6f7139c9aa0e86f89c22f5f7253c83d2d7fc3358e",
+          "input_shape": [
+            64,
+            256
+          ],
+          "effective_targets": 16384,
+          "input_seed": 17,
+          "runtime_rng_seed": 11,
+          "progress_tokens": 0,
+          "private_state": "independent document blocks; no cross-update private state",
+          "weights": "frozen constructor/role-keyed seed plus explicit synthetic prime updates; no historical checkpoint",
+          "optimizer_initialization": "slots and weights from real synthetic updates at the same fixed progress",
+          "prime_updates": 1,
+          "inputs": "synthetic next-token IDs [4,4096)"
+        },
+        "warmup_restored": true
+      },
+      "correctness": "not_checked; frozen downstream numerical guards remain enabled",
+      "independent_recovery": "not_checked"
+    }
+  },
+  "downstream_files_sha256": {
+    "tide_lab/__init__.py": "03806b4af8a0f29bb684b614143fc692a6bfac2f18a0f2e955f04ad4890f39fd",
+    "tide_lab/batch.py": "3856d0d013d747dd225d00f449e20b958d9ada10b8ba1e428d537fd984423a73",
+    "tide_lab/bottleneck_checks.py": "2e67e1baeedd90479028d21619a382b72aea660d36ddd3b7b9690a49ce936c4a",
+    "tide_lab/campaign_config.py": "f541af9dac16cf66971822746873575d5480b47dd893e00d035d378fed91870c",
+    "tide_lab/campaign_data.py": "a40102a57f20a85f4f33a899b9785d492e59e791dea42d75c31870a27bf6d5d1",
+    "tide_lab/campaign_runtime.py": "099a00411413339c43b2b0f27f6b345d5d804efd80605f42bbc969cdc5608063",
+    "tide_lab/capability.py": "5afc861669b1f44097d0e9840c536f0d9d83f19eb4dfbe866fbec20cb8c31ef7",
+    "tide_lab/core5.py": "c0e7f7ecbb6b0a7621bfb012ff0f90bc30e054f5b307aa8af21fc9ffe8ecb5e4",
+    "tide_lab/diagnostics.py": "661fd7ca16956ae6a9c1ff9d38dafeb2a3eca0655c6dcdfe5b22e8c6a00a6a39",
+    "tide_lab/direct_graph_cost.py": "da5c644ed301bbd2f5a5693f5b5ba8b90d1b7478c253609824d1de5285cf8232",
+    "tide_lab/direct_semantic.py": "f27df574ad5d72e043194205a07f6f795840be3950f3f581a08a656ece41f75b",
+    "tide_lab/direct_semantic_memory.py": "42fd6ef1f167eefd7f49abcf219bbe3198817e2a23c8e8a6bc7ce9457fa056d5",
+    "tide_lab/direct_semantic_ops.py": "efda238af0eeb186322c1bc33eb37e597e8c4a14e108a3e65614e9317b83bce5",
+    "tide_lab/growth.py": "57022db20b4fa7bf578d8e959ae96f76f2b7d839ce904f5d7dd8addead1d6f39",
+    "tide_lab/heldout.py": "14842768a668c903884f5f0d507e73ed866a90fd989471972803c7529710ae57",
+    "tide_lab/language.py": "52b4afb2ff8d12c13256c1e3108bd19e045b7f98b74f51a4cc898d50e5be2301",
+    "tide_lab/language_checks.py": "8ebd0d684111524b59a7404b65e9d982196c8338a06289c75b9b240c687cac0f",
+    "tide_lab/language_completion.py": "fbe211060796625cbb0419a04041c98f739348ab38c2993ebd3fa024cf72faed",
+    "tide_lab/language_data.py": "b5a1ddfdddabab40295ffbaaf8decdc7bb0a054359e061bcaa546fb56e8c46a5",
+    "tide_lab/language_driver.py": "dd3df39dc44bc11e9a54093ba584b07946aa380d8692f0c7fc03daa1a8391bcc",
+    "tide_lab/language_inference.py": "ce27e82492f2924c503d0e6e4e971e9520d4f8df9911e82486eafd1bc47b028e",
+    "tide_lab/language_reuse.py": "ea47dfaedef85afe5d667ec91cb3570f76ef9e7e0c58f10ff17bdba87ac9594b",
+    "tide_lab/language_training.py": "7d3ab88ea72908d7fd377d9f736ff9f6feb2fcffd4c330cc4306ecaa360f19a6",
+    "tide_lab/records.py": "ccda7e73ee8e5e05c701f4b5bdb08dcd8daf93209d3f746a5e19907df48af17b",
+    "tide_lab/supervisor.py": "59fed18908d9c86cd8fbd7918aff87d27ac38daeaeff883e865b074ffce51220",
+    "tide_lab/tasks.py": "b58e7250edc46d01aae0db5a37ad6999b6e2895f010b54704076893111936d0b",
+    "tide_lab/train.py": "6fcefa884bc3d40578550df38c0be1fbc6d4693785713dba1cf19fc94f7918b8"
+  },
+  "downstream_content_sha256": "9423b4c8a94cdd87c325fb047c01a970119e967cb7efa362e3dca3a2dbcdf138",
+  "hb88_scalar_correlation": {
+    "method": "Exact async_npu torch_to_npu flow from hardware pid/tid/ts to CPU source; enclosing same-thread aten::ge and ClampMinBackward0; Sequence number maps back to forward aten::clamp_min and nearest labelled scope. Adjacent logsumexp/sub/clamp_min/exp confirms sampled positive_exp(logp).",
+    "scope": "HB88 only; kernel inclusive durations are not wall-time attribution; no backend source explanation or candidate result is inferred.",
+    "groups": [
+      {
+        "kernel": "aclnnGeScalar_CastAiCpu_Cast",
+        "task_type": "KERNEL_AICPU",
+        "backward_node": "ClampMinBackward0",
+        "ge_input_dims": "16,256,4;\r\n",
+        "ge_input_types": "float;\r\nScalar",
+        "forward_phase": "req006::region",
+        "calls": 88,
+        "kernel_inclusive_us": 37881.94000000002
+      },
+      {
+        "kernel": "aclnnGeScalar_CastAiCpu_Cast",
+        "task_type": "KERNEL_AICPU",
+        "backward_node": "ClampMinBackward0",
+        "ge_input_dims": "4,16,1,256,256;\r\n",
+        "ge_input_types": "float;\r\nScalar",
+        "forward_phase": "req006::kv",
+        "calls": 88,
+        "kernel_inclusive_us": 236819.92000000004
+      },
+      {
+        "kernel": "aclnnGeScalar_CastAiCpu_Cast",
+        "task_type": "KERNEL_AICPU",
+        "backward_node": "ClampMinBackward0",
+        "ge_input_dims": "4,16,256,256;\r\n",
+        "ge_input_types": "float;\r\nScalar",
+        "forward_phase": "req006::kv",
+        "calls": 176,
+        "kernel_inclusive_us": 457523.3000000001
+      },
+      {
+        "kernel": "aclnnGeScalar_GreaterEqual_GreaterEqual",
+        "task_type": "KERNEL_AIVEC",
+        "backward_node": null,
+        "ge_input_dims": "256,256;\r\n",
+        "ge_input_types": "long int;\r\nScalar",
+        "forward_phase": null,
+        "calls": 440,
+        "kernel_inclusive_us": 5637.32
+      },
+      {
+        "kernel": "aclnnGeScalar_GreaterEqual_GreaterEqual",
+        "task_type": "KERNEL_AIVEC",
+        "backward_node": "ClampMinBackward0",
+        "ge_input_dims": "16,256;\r\n",
+        "ge_input_types": "float;\r\nScalar",
+        "forward_phase": "req006::model",
+        "calls": 4,
+        "kernel_inclusive_us": 9.9
+      },
+      {
+        "kernel": "aclnnGeScalar_GreaterEqual_GreaterEqual",
+        "task_type": "KERNEL_AICPU",
+        "backward_node": "ClampMinBackward0",
+        "ge_input_dims": "16,256,4;\r\n",
+        "ge_input_types": "float;\r\nScalar",
+        "forward_phase": "req006::region",
+        "calls": 88,
+        "kernel_inclusive_us": 13255.779999999999
+      },
+      {
+        "kernel": "aclnnGeScalar_GreaterEqual_GreaterEqual",
+        "task_type": "KERNEL_AIVEC",
+        "backward_node": "ClampMinBackward0",
+        "ge_input_dims": "16,256,4;\r\n",
+        "ge_input_types": "float;\r\nScalar",
+        "forward_phase": "req006::region",
+        "calls": 84,
+        "kernel_inclusive_us": 324.8600000000002
+      },
+      {
+        "kernel": "aclnnGeScalar_GreaterEqual_GreaterEqual",
+        "task_type": "KERNEL_AIVEC",
+        "backward_node": "ClampMinBackward0",
+        "ge_input_dims": "4,16,256;\r\n",
+        "ge_input_types": "float;\r\nScalar",
+        "forward_phase": "req006::region",
+        "calls": 168,
+        "kernel_inclusive_us": 677.1200000000001
+      },
+      {
+        "kernel": "aclnnGeScalar_GreaterEqual_GreaterEqual",
+        "task_type": "KERNEL_AICPU",
+        "backward_node": "ClampMinBackward0",
+        "ge_input_dims": "4,16,1,256,256;\r\n",
+        "ge_input_types": "float;\r\nScalar",
+        "forward_phase": "req006::kv",
+        "calls": 88,
+        "kernel_inclusive_us": 215788.81999999992
+      },
+      {
+        "kernel": "aclnnGeScalar_GreaterEqual_GreaterEqual",
+        "task_type": "KERNEL_AIVEC",
+        "backward_node": "ClampMinBackward0",
+        "ge_input_dims": "4,16,1,256,256;\r\n",
+        "ge_input_types": "float;\r\nScalar",
+        "forward_phase": "req006::kv",
+        "calls": 84,
+        "kernel_inclusive_us": 2526.2999999999993
+      },
+      {
+        "kernel": "aclnnGeScalar_GreaterEqual_GreaterEqual",
+        "task_type": "KERNEL_AICPU",
+        "backward_node": "ClampMinBackward0",
+        "ge_input_dims": "4,16,256,256;\r\n",
+        "ge_input_types": "float;\r\nScalar",
+        "forward_phase": "req006::kv",
+        "calls": 176,
+        "kernel_inclusive_us": 435931.66000000015
+      },
+      {
+        "kernel": "aclnnGeScalar_GreaterEqual_GreaterEqual",
+        "task_type": "KERNEL_AIVEC",
+        "backward_node": "ClampMinBackward0",
+        "ge_input_dims": "4,16,256,256;\r\n",
+        "ge_input_types": "float;\r\nScalar",
+        "forward_phase": "req006::kv",
+        "calls": 168,
+        "kernel_inclusive_us": 4756.000000000001
+      },
+      {
+        "kernel": "aclnnGeScalar_GreaterEqual_GreaterEqual",
+        "task_type": "KERNEL_AIVEC",
+        "backward_node": null,
+        "ge_input_dims": "4,16,256;\r\n",
+        "ge_input_types": "float;\r\nScalar",
+        "forward_phase": null,
+        "calls": 84,
+        "kernel_inclusive_us": 375.95999999999987
+      }
+    ],
+    "samples": [
+      {
+        "kernel": {
+          "name": "aclnnGeScalar_CastAiCpu_Cast",
+          "pid": 3871962567,
+          "tid": 1916,
+          "ts": "1794453962317640.310",
+          "dur": 3357.46,
+          "ph": "X",
+          "args": {
+            "Model Id": 4294967295,
+            "Task Type": "KERNEL_AICPU",
+            "Physic Stream Id": 1916,
+            "Task Id": 29798,
+            "Batch Id": 0,
+            "Subtask Id": 4294967295,
+            "connection_id": 209087
+          }
+        },
+        "source_flow": {
+          "ph": "s",
+          "bp": "e",
+          "name": "torch_to_npu",
+          "id": 1794453962317640310,
+          "pid": 3781213,
+          "tid": 3792355,
+          "ts": "1794453962317622.590",
+          "cat": "async_npu"
+        },
+        "ge": {
+          "ph": "X",
+          "name": "aten::ge",
+          "pid": 3781213,
+          "tid": 3792355,
+          "ts": "1794453962317570.140",
+          "dur": 62.07,
+          "cat": "cpu_op",
+          "args": {
+            "Sequence number": -1,
+            "Fwd thread id": 0,
+            "Input Dims": "4,16,1,256,256;\r\n",
+            "Input type": "float;\r\nScalar"
+          }
+        },
+        "backward": {
+          "ph": "X",
+          "name": "ClampMinBackward0",
+          "pid": 3781213,
+          "tid": 3792355,
+          "ts": "1794453962317567.460",
+          "dur": 106.47,
+          "cat": "cpu_op",
+          "args": {
+            "Sequence number": 49596,
+            "Fwd thread id": 1,
+            "Input Dims": "4,16,1,256,256",
+            "Input type": "float"
+          }
+        },
+        "forward": {
+          "ph": "X",
+          "name": "aten::clamp_min",
+          "pid": 3781213,
+          "tid": 3781213,
+          "ts": "1794453962300706.930",
+          "dur": 19.55,
+          "cat": "cpu_op",
+          "args": {
+            "Sequence number": 49596,
+            "Fwd thread id": 0,
+            "Input Dims": "4,16,1,256,256;\r\n",
+            "Input type": "float;\r\nScalar"
+          }
+        },
+        "forward_phase": "req006::kv"
+      },
+      {
+        "kernel": {
+          "name": "aclnnGeScalar_CastAiCpu_Cast",
+          "pid": 3871962567,
+          "tid": 1916,
+          "ts": "1794453962324529.930",
+          "dur": 3406.44,
+          "ph": "X",
+          "args": {
+            "Model Id": 4294967295,
+            "Task Type": "KERNEL_AICPU",
+            "Physic Stream Id": 1916,
+            "Task Id": 29856,
+            "Batch Id": 0,
+            "Subtask Id": 4294967295,
+            "connection_id": 209526
+          }
+        },
+        "source_flow": {
+          "ph": "s",
+          "bp": "e",
+          "name": "torch_to_npu",
+          "id": 1794453962324529930,
+          "pid": 3781213,
+          "tid": 3792355,
+          "ts": "1794453962319810.970",
+          "cat": "async_npu"
+        },
+        "ge": {
+          "ph": "X",
+          "name": "aten::ge",
+          "pid": 3781213,
+          "tid": 3792355,
+          "ts": "1794453962319761.240",
+          "dur": 59.5,
+          "cat": "cpu_op",
+          "args": {
+            "Sequence number": -1,
+            "Fwd thread id": 0,
+            "Input Dims": "4,16,256,256;\r\n",
+            "Input type": "float;\r\nScalar"
+          }
+        },
+        "backward": {
+          "ph": "X",
+          "name": "ClampMinBackward0",
+          "pid": 3781213,
+          "tid": 3792355,
+          "ts": "1794453962319758.740",
+          "dur": 101.64,
+          "cat": "cpu_op",
+          "args": {
+            "Sequence number": 49557,
+            "Fwd thread id": 1,
+            "Input Dims": "4,16,256,256",
+            "Input type": "float"
+          }
+        },
+        "forward": {
+          "ph": "X",
+          "name": "aten::clamp_min",
+          "pid": 3781213,
+          "tid": 3781213,
+          "ts": "1794453962298603.790",
+          "dur": 18.69,
+          "cat": "cpu_op",
+          "args": {
+            "Sequence number": 49557,
+            "Fwd thread id": 0,
+            "Input Dims": "4,16,256,256;\r\n",
+            "Input type": "float;\r\nScalar"
+          }
+        },
+        "forward_phase": "req006::kv"
+      },
+      {
+        "kernel": {
+          "name": "aclnnGeScalar_GreaterEqual_GreaterEqual",
+          "pid": 3871962567,
+          "tid": 1916,
+          "ts": "1794453965001318.090",
+          "dur": 2656.66,
+          "ph": "X",
+          "args": {
+            "Model Id": 4294967295,
+            "Task Type": "KERNEL_AICPU",
+            "Physic Stream Id": 1916,
+            "Task Id": 25486,
+            "Batch Id": 1,
+            "Subtask Id": 4294967295,
+            "connection_id": 692699
+          }
+        },
+        "source_flow": {
+          "ph": "s",
+          "bp": "e",
+          "name": "torch_to_npu",
+          "id": 1794453965001318090,
+          "pid": 3781213,
+          "tid": 3792355,
+          "ts": "1794453964842637.910",
+          "cat": "async_npu"
+        },
+        "ge": {
+          "ph": "X",
+          "name": "aten::ge",
+          "pid": 3781213,
+          "tid": 3792355,
+          "ts": "1794453964842593.310",
+          "dur": 50.07,
+          "cat": "cpu_op",
+          "args": {
+            "Sequence number": -1,
+            "Fwd thread id": 0,
+            "Input Dims": "4,16,256,256;\r\n",
+            "Input type": "float;\r\nScalar"
+          }
+        },
+        "backward": {
+          "ph": "X",
+          "name": "ClampMinBackward0",
+          "pid": 3781213,
+          "tid": 3792355,
+          "ts": "1794453964842590.280",
+          "dur": 90.93,
+          "cat": "cpu_op",
+          "args": {
+            "Sequence number": 61575,
+            "Fwd thread id": 1,
+            "Input Dims": "4,16,256,256",
+            "Input type": "float"
+          }
+        },
+        "forward": {
+          "ph": "X",
+          "name": "aten::clamp_min",
+          "pid": 3781213,
+          "tid": 3781213,
+          "ts": "1794453964349661.240",
+          "dur": 20.41,
+          "cat": "cpu_op",
+          "args": {
+            "Sequence number": 61575,
+            "Fwd thread id": 0,
+            "Input Dims": "4,16,256,256;\r\n",
+            "Input type": "float;\r\nScalar"
+          }
+        },
+        "forward_phase": "req006::kv"
+      }
+    ]
+  },
+  "scope": "New synthetic primed updates; not historical learning replay. Profile/measure inputs match but primed weight and full-state hashes differ in all four pairs. Original profile failures remain failed; offline trace parsing does not reconstruct missing iteration/final-state records. No full-scale independent numeric, continuation, opaque-private-graph census or downstream acceptance claim."
+}

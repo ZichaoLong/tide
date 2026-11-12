@@ -1,0 +1,1750 @@
+{
+  "schema": "tide-req006-floor-evidence-v1",
+  "date": "2026-11-12",
+  "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+  "sources": {
+    "original_floor": "a95b8987af6f823366a25dcbfdeae225c986e184",
+    "initial_pair": "f681ef63472e686fa6ffffca41de507bbf0d1ca5",
+    "dtype_bound": "3f99eb22e520f87bd5cbe378b0b0c6a9f774e8f9",
+    "finite_failure_observation": "7d5e05c3dbc962a43dc76136aa1bedf6aafba3e7"
+  },
+  "downstream_source": "6e7bd49eb5e35c15445826cac3a9b6ddda75aff4",
+  "previous_report": "docs/evidence/req006-diagnostics-20261112.md",
+  "scope": "Reviewed operator witness and CPU cross-process initial-state facility evidence; not a production change, full-model speedup, foundation continuation or downstream acceptance.",
+  "floor_common": {
+    "runtime": {
+      "resolved_device": "npu:0",
+      "backend": "npu",
+      "logical_device_index": 0,
+      "resolution_reason": "explicit:npu",
+      "dtype": "float32",
+      "host_architecture": "aarch64",
+      "torch": "2.12.0+cpu",
+      "torch_git": "7661cd9c6b841b62b7f411aa52ec51f05457263b",
+      "python": "3.12.13",
+      "cxx11_abi": true,
+      "torch_npu": "2.12.0.post3",
+      "logical_device_count": 1,
+      "device_name": "Ascend910_9392",
+      "cann_version": "9.2.0",
+      "matmul_allow_hf32": false
+    },
+    "shape": [
+      4,
+      16,
+      256,
+      256
+    ],
+    "elements": 4194304,
+    "mode": "forward plus input VJP",
+    "input_and_cotangent_bytes": 33554432,
+    "threads": {
+      "intraop": 2,
+      "interop": 1
+    },
+    "warmup": 1,
+    "iterations": 1,
+    "max_input_bytes": 268435456,
+    "max_trace_bytes": 536870912,
+    "env": {
+      "OMP_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "TORCH_DEVICE_BACKEND_AUTOLOAD": "0",
+      "ASCEND_LAUNCH_BLOCKING": null
+    },
+    "material_pattern": "13 boundary inputs and cotangents repeated and truncated to the requested shape; the two original Scalar failures occurred before full-shape materialization.",
+    "formula": "b = round_to_input_dtype(log(finfo(dtype).tiny)); y = where(x >= b,x,b); input VJP = where(x >= b,bar,0), with equality on the active branch.",
+    "semantic_boundary": "The requested Python float is -87.3365447505531, above its FP32 representation -87.3365478515625. Its observed zero VJP at that FP32 input disagrees with the declared dtype-bound formula; this alone is not a vendor/math defect or proof of an equivalent production replacement.",
+    "timing_scope": "Constant-bound forward or forward+input VJP only; no optimizer/model/throughput claim. Input and cotangent creation/upload, reusable 0D bound creation, checks, output reads/hashes, warmup and profiler export excluded. Per-step device synchronization included. No gradient with respect to the bound, no double-backward qualification."
+  },
+  "boundary_cases": {
+    "requested": {
+      "inputs": [
+        -87.33655548095703,
+        -87.3365478515625,
+        -87.33654022216797,
+        -88.3365478515625,
+        -86.3365478515625,
+        -0.0,
+        0.0,
+        -1.1754943508222875e-38,
+        1.1754943508222875e-38,
+        -1.401298464324817e-45,
+        1.401298464324817e-45,
+        5.877471754111438e-39,
+        2.350988701644575e-38
+      ],
+      "cotangents": [
+        2.0,
+        -3.0,
+        5.0,
+        7.0,
+        -11.0,
+        13.0,
+        0.0,
+        -17.0,
+        19.0,
+        23.0,
+        -29.0,
+        31.0,
+        -37.0
+      ],
+      "expected_values": [
+        -87.3365478515625,
+        -87.3365478515625,
+        -87.33654022216797,
+        -87.3365478515625,
+        -86.3365478515625,
+        -0.0,
+        0.0,
+        -1.1754943508222875e-38,
+        1.1754943508222875e-38,
+        -1.401298464324817e-45,
+        1.401298464324817e-45,
+        5.877471754111438e-39,
+        2.350988701644575e-38
+      ],
+      "expected_gradients": [
+        0.0,
+        -3.0,
+        5.0,
+        0.0,
+        -11.0,
+        13.0,
+        0.0,
+        -17.0,
+        19.0,
+        23.0,
+        -29.0,
+        31.0,
+        -37.0
+      ],
+      "variants": {
+        "scalar": {
+          "finite": true,
+          "value_equal": true,
+          "gradient_equal": false,
+          "value_mismatches": 0,
+          "gradient_mismatches": 1,
+          "signed_zero_mismatches": 0,
+          "values": [
+            -87.3365478515625,
+            -87.3365478515625,
+            -87.33654022216797,
+            -87.3365478515625,
+            -86.3365478515625,
+            -0.0,
+            0.0,
+            -1.1754943508222875e-38,
+            1.1754943508222875e-38,
+            -1.401298464324817e-45,
+            1.401298464324817e-45,
+            5.877471754111438e-39,
+            2.350988701644575e-38
+          ],
+          "gradients": [
+            0.0,
+            0.0,
+            5.0,
+            0.0,
+            -11.0,
+            13.0,
+            0.0,
+            -17.0,
+            19.0,
+            23.0,
+            -29.0,
+            31.0,
+            -37.0
+          ]
+        },
+        "tensor": {
+          "finite": true,
+          "value_equal": true,
+          "gradient_equal": true,
+          "value_mismatches": 0,
+          "gradient_mismatches": 0,
+          "signed_zero_mismatches": 0,
+          "values": [
+            -87.3365478515625,
+            -87.3365478515625,
+            -87.33654022216797,
+            -87.3365478515625,
+            -86.3365478515625,
+            -0.0,
+            0.0,
+            -1.1754943508222875e-38,
+            1.1754943508222875e-38,
+            -1.401298464324817e-45,
+            1.401298464324817e-45,
+            5.877471754111438e-39,
+            2.350988701644575e-38
+          ],
+          "gradients": [
+            0.0,
+            -3.0,
+            5.0,
+            0.0,
+            -11.0,
+            13.0,
+            0.0,
+            -17.0,
+            19.0,
+            23.0,
+            -29.0,
+            31.0,
+            -37.0
+          ]
+        }
+      }
+    },
+    "dtype": {
+      "inputs": [
+        -87.33655548095703,
+        -87.3365478515625,
+        -87.33654022216797,
+        -88.3365478515625,
+        -86.3365478515625,
+        -0.0,
+        0.0,
+        -1.1754943508222875e-38,
+        1.1754943508222875e-38,
+        -1.401298464324817e-45,
+        1.401298464324817e-45,
+        5.877471754111438e-39,
+        2.350988701644575e-38
+      ],
+      "cotangents": [
+        2.0,
+        -3.0,
+        5.0,
+        7.0,
+        -11.0,
+        13.0,
+        0.0,
+        -17.0,
+        19.0,
+        23.0,
+        -29.0,
+        31.0,
+        -37.0
+      ],
+      "expected_values": [
+        -87.3365478515625,
+        -87.3365478515625,
+        -87.33654022216797,
+        -87.3365478515625,
+        -86.3365478515625,
+        -0.0,
+        0.0,
+        -1.1754943508222875e-38,
+        1.1754943508222875e-38,
+        -1.401298464324817e-45,
+        1.401298464324817e-45,
+        5.877471754111438e-39,
+        2.350988701644575e-38
+      ],
+      "expected_gradients": [
+        0.0,
+        -3.0,
+        5.0,
+        0.0,
+        -11.0,
+        13.0,
+        0.0,
+        -17.0,
+        19.0,
+        23.0,
+        -29.0,
+        31.0,
+        -37.0
+      ],
+      "variants": {
+        "scalar": {
+          "finite": true,
+          "value_equal": true,
+          "gradient_equal": true,
+          "value_mismatches": 0,
+          "gradient_mismatches": 0,
+          "signed_zero_mismatches": 0,
+          "values": [
+            -87.3365478515625,
+            -87.3365478515625,
+            -87.33654022216797,
+            -87.3365478515625,
+            -86.3365478515625,
+            -0.0,
+            0.0,
+            -1.1754943508222875e-38,
+            1.1754943508222875e-38,
+            -1.401298464324817e-45,
+            1.401298464324817e-45,
+            5.877471754111438e-39,
+            2.350988701644575e-38
+          ],
+          "gradients": [
+            0.0,
+            -3.0,
+            5.0,
+            0.0,
+            -11.0,
+            13.0,
+            0.0,
+            -17.0,
+            19.0,
+            23.0,
+            -29.0,
+            31.0,
+            -37.0
+          ]
+        },
+        "tensor": {
+          "finite": true,
+          "value_equal": true,
+          "gradient_equal": true,
+          "value_mismatches": 0,
+          "gradient_mismatches": 0,
+          "signed_zero_mismatches": 0,
+          "values": [
+            -87.3365478515625,
+            -87.3365478515625,
+            -87.33654022216797,
+            -87.3365478515625,
+            -86.3365478515625,
+            -0.0,
+            0.0,
+            -1.1754943508222875e-38,
+            1.1754943508222875e-38,
+            -1.401298464324817e-45,
+            1.401298464324817e-45,
+            5.877471754111438e-39,
+            2.350988701644575e-38
+          ],
+          "gradients": [
+            0.0,
+            -3.0,
+            5.0,
+            0.0,
+            -11.0,
+            13.0,
+            0.0,
+            -17.0,
+            19.0,
+            23.0,
+            -29.0,
+            31.0,
+            -37.0
+          ]
+        }
+      }
+    }
+  },
+  "floor_results": [
+    {
+      "id": "floor-shared-measure-scalar",
+      "raw_result": {
+        "path_hint": "artifacts/rewrite-20261112/floor-shared-measure-scalar/result.json",
+        "bytes": 7345,
+        "sha256": "16ae54a42a8f20b817dfdca92fe851c8da123d47a1c2d5ae07121490136965d6"
+      },
+      "source": "a95b8987af6f823366a25dcbfdeae225c986e184",
+      "dirty": "",
+      "state": "failed",
+      "exit_code": 1,
+      "action": "measure",
+      "variant": "scalar",
+      "bound_representation": "requested",
+      "representation_was_explicit": false,
+      "observe_finite_mismatch": false,
+      "physical_npu": 1,
+      "logical_device": "npu:0",
+      "affinity": {
+        "first": 0,
+        "last": 319,
+        "count": 320
+      },
+      "bound_requested": -87.3365447505531,
+      "bound_effective": -87.3365478515625,
+      "recorded_bound_argument_value": null,
+      "selected_boundary_formula_passed": false,
+      "boundary_case": "requested",
+      "observations": [],
+      "error": "AssertionError('independent boundary formula mismatch; see recorded values/VJPs')"
+    },
+    {
+      "id": "floor-shared-measure-tensor",
+      "raw_result": {
+        "path_hint": "artifacts/rewrite-20261112/floor-shared-measure-tensor/result.json",
+        "bytes": 7769,
+        "sha256": "1168926f22a0f25c4ae078e21ead11d2087289d5f988e319e53e3cd0d7774b18"
+      },
+      "source": "a95b8987af6f823366a25dcbfdeae225c986e184",
+      "dirty": "",
+      "state": "passed",
+      "exit_code": 0,
+      "action": "measure",
+      "variant": "tensor",
+      "bound_representation": "requested",
+      "representation_was_explicit": false,
+      "observe_finite_mismatch": false,
+      "physical_npu": 1,
+      "logical_device": "npu:0",
+      "affinity": {
+        "first": 0,
+        "last": 319,
+        "count": 320
+      },
+      "bound_requested": -87.3365447505531,
+      "bound_effective": -87.3365478515625,
+      "recorded_bound_argument_value": null,
+      "selected_boundary_formula_passed": true,
+      "boundary_case": "requested",
+      "observations": [
+        {
+          "instrumented": false,
+          "seconds": 0.00023986026644706726,
+          "formula_check": {
+            "finite": true,
+            "value_equal": true,
+            "gradient_equal": true,
+            "value_mismatches": 0,
+            "gradient_mismatches": 0,
+            "signed_zero_mismatches": 0
+          },
+          "output_sha256": "41e98570819df9dc85332a907919d269886feceb615dd1d8cbae0c6067f4a1e4"
+        }
+      ],
+      "material_sha256": "b238ba5705453e02d825b1972706fc8f4962426f815b2287724240b55c244f77",
+      "allocator_peak_bytes": 71306752
+    },
+    {
+      "id": "floor-shared-profile-scalar",
+      "raw_result": {
+        "path_hint": "artifacts/rewrite-20261112/floor-shared-profile-scalar/result.json",
+        "bytes": 7345,
+        "sha256": "3b288ea19c4bd286ce018bbf568ff3d47ac636153e2e8bf2ce8d001a6ee769e8"
+      },
+      "source": "a95b8987af6f823366a25dcbfdeae225c986e184",
+      "dirty": "",
+      "state": "failed",
+      "exit_code": 1,
+      "action": "profile",
+      "variant": "scalar",
+      "bound_representation": "requested",
+      "representation_was_explicit": false,
+      "observe_finite_mismatch": false,
+      "physical_npu": 1,
+      "logical_device": "npu:0",
+      "affinity": {
+        "first": 0,
+        "last": 319,
+        "count": 320
+      },
+      "bound_requested": -87.3365447505531,
+      "bound_effective": -87.3365478515625,
+      "recorded_bound_argument_value": null,
+      "selected_boundary_formula_passed": false,
+      "boundary_case": "requested",
+      "observations": [],
+      "error": "AssertionError('independent boundary formula mismatch; see recorded values/VJPs')"
+    },
+    {
+      "id": "floor-shared-profile-tensor",
+      "raw_result": {
+        "path_hint": "artifacts/rewrite-20261112/floor-shared-profile-tensor/result.json",
+        "bytes": 11171,
+        "sha256": "d0bf2bb1366ec008caecbaface2c100e9ba5a9de6cae551f21e35e2eeb95f107"
+      },
+      "source": "a95b8987af6f823366a25dcbfdeae225c986e184",
+      "dirty": "",
+      "state": "passed",
+      "exit_code": 0,
+      "action": "profile",
+      "variant": "tensor",
+      "bound_representation": "requested",
+      "representation_was_explicit": false,
+      "observe_finite_mismatch": false,
+      "physical_npu": 1,
+      "logical_device": "npu:0",
+      "affinity": {
+        "first": 0,
+        "last": 319,
+        "count": 320
+      },
+      "bound_requested": -87.3365447505531,
+      "bound_effective": -87.3365478515625,
+      "recorded_bound_argument_value": null,
+      "selected_boundary_formula_passed": true,
+      "boundary_case": "requested",
+      "observations": [
+        {
+          "instrumented": true,
+          "formula_check": {
+            "finite": true,
+            "value_equal": true,
+            "gradient_equal": true,
+            "value_mismatches": 0,
+            "gradient_mismatches": 0,
+            "signed_zero_mismatches": 0
+          },
+          "output_sha256": "41e98570819df9dc85332a907919d269886feceb615dd1d8cbae0c6067f4a1e4"
+        }
+      ],
+      "material_sha256": "b238ba5705453e02d825b1972706fc8f4962426f815b2287724240b55c244f77",
+      "allocator_peak_bytes": 71306752,
+      "trace": {
+        "kernel_events": 4,
+        "kernel_types": {
+          "KERNEL_AIVEC": 4
+        },
+        "kernel_names": {
+          "aclnnClampMinTensor_ClipByValueV2AiCore_ClipByValueV2": 1,
+          "aclnnGeTensor_GreaterEqual_GreaterEqual": 1,
+          "aclnnInplaceFillScalar_FillAiCore_Fill": 1,
+          "aclnnSWhere_SelectV2AiCore_SelectV2": 1
+        },
+        "kernel_inclusive_us": {
+          "aclnnClampMinTensor_ClipByValueV2AiCore_ClipByValueV2": 44.3,
+          "aclnnGeTensor_GreaterEqual_GreaterEqual": 9.48,
+          "aclnnInplaceFillScalar_FillAiCore_Fill": 0.96,
+          "aclnnSWhere_SelectV2AiCore_SelectV2": 52.68
+        },
+        "kernel_union_us": 107.5,
+        "phases_inclusive_us": {
+          "req006::floor_backward": 411.89,
+          "req006::floor_forward": 265.82
+        },
+        "observed_host_fallback_events": [],
+        "scope": "CPU interface events grouped by nearest same-thread labelled range at start; worker events may be unattributed. Inclusive ranges/operators overlap. matmul and nested mm/bmm are not separate mathematical work. Device kernel durations/union are not exclusive critical-path attribution. AICPU is not host fallback.",
+        "raw_trace": {
+          "path_hint": "artifacts/rewrite-20261112/floor-shared-profile-tensor/trace.json",
+          "bytes": 115428,
+          "sha256": "1f8c596e26067ded0db09668b96dcf0a41b354fdceb09d623b8b89ffcc045f62"
+        },
+        "device_events": [
+          {
+            "name": "aclnnClampMinTensor_ClipByValueV2AiCore_ClipByValueV2",
+            "task_type": "KERNEL_AIVEC",
+            "duration_us": 44.3
+          },
+          {
+            "name": "aclnnGeTensor_GreaterEqual_GreaterEqual",
+            "task_type": "KERNEL_AIVEC",
+            "duration_us": 9.48
+          },
+          {
+            "name": "aclnnInplaceFillScalar_FillAiCore_Fill",
+            "task_type": "KERNEL_AIVEC",
+            "duration_us": 0.96
+          },
+          {
+            "name": "aclnnSWhere_SelectV2AiCore_SelectV2",
+            "task_type": "KERNEL_AIVEC",
+            "duration_us": 52.68
+          }
+        ]
+      }
+    },
+    {
+      "id": "floor-3f99-shared-measure-scalar",
+      "raw_result": {
+        "path_hint": "artifacts/rewrite-20261112/floor-3f99-shared-measure-scalar/result.json",
+        "bytes": 7855,
+        "sha256": "83b92a637a9ebabde7fa6b68b0324760c496d9366986522e99678629e2c3d015"
+      },
+      "source": "3f99eb22e520f87bd5cbe378b0b0c6a9f774e8f9",
+      "dirty": "",
+      "state": "passed",
+      "exit_code": 0,
+      "action": "measure",
+      "variant": "scalar",
+      "bound_representation": "dtype",
+      "representation_was_explicit": true,
+      "observe_finite_mismatch": false,
+      "physical_npu": 9,
+      "logical_device": "npu:0",
+      "affinity": {
+        "first": 0,
+        "last": 319,
+        "count": 320
+      },
+      "bound_requested": -87.3365447505531,
+      "bound_effective": -87.3365478515625,
+      "recorded_bound_argument_value": -87.3365478515625,
+      "selected_boundary_formula_passed": true,
+      "boundary_case": "dtype",
+      "observations": [
+        {
+          "instrumented": false,
+          "seconds": 0.0002634413540363312,
+          "formula_check": {
+            "finite": true,
+            "value_equal": true,
+            "gradient_equal": true,
+            "value_mismatches": 0,
+            "gradient_mismatches": 0,
+            "signed_zero_mismatches": 0
+          },
+          "output_sha256": "41e98570819df9dc85332a907919d269886feceb615dd1d8cbae0c6067f4a1e4"
+        }
+      ],
+      "material_sha256": "b238ba5705453e02d825b1972706fc8f4962426f815b2287724240b55c244f77",
+      "allocator_peak_bytes": 71306240
+    },
+    {
+      "id": "floor-3f99-shared-measure-tensor",
+      "raw_result": {
+        "path_hint": "artifacts/rewrite-20261112/floor-3f99-shared-measure-tensor/result.json",
+        "bytes": 7856,
+        "sha256": "bddf0d9572171f11d7d70dafea5ca73a2377fb4859e1c1bfdfd6c61809b5d13c"
+      },
+      "source": "3f99eb22e520f87bd5cbe378b0b0c6a9f774e8f9",
+      "dirty": "",
+      "state": "passed",
+      "exit_code": 0,
+      "action": "measure",
+      "variant": "tensor",
+      "bound_representation": "dtype",
+      "representation_was_explicit": true,
+      "observe_finite_mismatch": false,
+      "physical_npu": 9,
+      "logical_device": "npu:0",
+      "affinity": {
+        "first": 0,
+        "last": 319,
+        "count": 320
+      },
+      "bound_requested": -87.3365447505531,
+      "bound_effective": -87.3365478515625,
+      "recorded_bound_argument_value": -87.3365478515625,
+      "selected_boundary_formula_passed": true,
+      "boundary_case": "dtype",
+      "observations": [
+        {
+          "instrumented": false,
+          "seconds": 0.00029784440994262695,
+          "formula_check": {
+            "finite": true,
+            "value_equal": true,
+            "gradient_equal": true,
+            "value_mismatches": 0,
+            "gradient_mismatches": 0,
+            "signed_zero_mismatches": 0
+          },
+          "output_sha256": "41e98570819df9dc85332a907919d269886feceb615dd1d8cbae0c6067f4a1e4"
+        }
+      ],
+      "material_sha256": "b238ba5705453e02d825b1972706fc8f4962426f815b2287724240b55c244f77",
+      "allocator_peak_bytes": 71306752
+    },
+    {
+      "id": "floor-3f99-shared-profile-scalar",
+      "raw_result": {
+        "path_hint": "artifacts/rewrite-20261112/floor-3f99-shared-profile-scalar/result.json",
+        "bytes": 11250,
+        "sha256": "e60298b2433bb9ed74e3ed8e82a08761a16e337b95a88866c24f654d2468a6c5"
+      },
+      "source": "3f99eb22e520f87bd5cbe378b0b0c6a9f774e8f9",
+      "dirty": "",
+      "state": "passed",
+      "exit_code": 0,
+      "action": "profile",
+      "variant": "scalar",
+      "bound_representation": "dtype",
+      "representation_was_explicit": true,
+      "observe_finite_mismatch": false,
+      "physical_npu": 9,
+      "logical_device": "npu:0",
+      "affinity": {
+        "first": 0,
+        "last": 319,
+        "count": 320
+      },
+      "bound_requested": -87.3365447505531,
+      "bound_effective": -87.3365478515625,
+      "recorded_bound_argument_value": -87.3365478515625,
+      "selected_boundary_formula_passed": true,
+      "boundary_case": "dtype",
+      "observations": [
+        {
+          "instrumented": true,
+          "formula_check": {
+            "finite": true,
+            "value_equal": true,
+            "gradient_equal": true,
+            "value_mismatches": 0,
+            "gradient_mismatches": 0,
+            "signed_zero_mismatches": 0
+          },
+          "output_sha256": "41e98570819df9dc85332a907919d269886feceb615dd1d8cbae0c6067f4a1e4"
+        }
+      ],
+      "material_sha256": "b238ba5705453e02d825b1972706fc8f4962426f815b2287724240b55c244f77",
+      "allocator_peak_bytes": 71306240,
+      "trace": {
+        "kernel_events": 4,
+        "kernel_types": {
+          "KERNEL_AIVEC": 4
+        },
+        "kernel_names": {
+          "aclnnClampMin_ClipByValueV2AiCore_ClipByValueV2": 1,
+          "aclnnGeScalar_GreaterEqual_GreaterEqual": 1,
+          "aclnnInplaceFillScalar_FillAiCore_Fill": 1,
+          "aclnnSWhere_SelectV2AiCore_SelectV2": 1
+        },
+        "kernel_inclusive_us": {
+          "aclnnClampMin_ClipByValueV2AiCore_ClipByValueV2": 81.016,
+          "aclnnGeScalar_GreaterEqual_GreaterEqual": 12.32,
+          "aclnnInplaceFillScalar_FillAiCore_Fill": 0.936,
+          "aclnnSWhere_SelectV2AiCore_SelectV2": 47.48
+        },
+        "kernel_union_us": 141.75,
+        "phases_inclusive_us": {
+          "req006::floor_backward": 416.75,
+          "req006::floor_forward": 400.49
+        },
+        "observed_host_fallback_events": [],
+        "scope": "CPU interface events grouped by nearest same-thread labelled range at start; worker events may be unattributed. Inclusive ranges/operators overlap. matmul and nested mm/bmm are not separate mathematical work. Device kernel durations/union are not exclusive critical-path attribution. AICPU is not host fallback.",
+        "raw_trace": {
+          "path_hint": "artifacts/rewrite-20261112/floor-3f99-shared-profile-scalar/trace.json",
+          "bytes": 130650,
+          "sha256": "4f61df7799d61b8ac85b5633edf2faa5ae605114c2fcaf8febec359654cc7722"
+        },
+        "device_events": [
+          {
+            "name": "aclnnClampMin_ClipByValueV2AiCore_ClipByValueV2",
+            "task_type": "KERNEL_AIVEC",
+            "duration_us": 81.016
+          },
+          {
+            "name": "aclnnGeScalar_GreaterEqual_GreaterEqual",
+            "task_type": "KERNEL_AIVEC",
+            "duration_us": 12.32
+          },
+          {
+            "name": "aclnnInplaceFillScalar_FillAiCore_Fill",
+            "task_type": "KERNEL_AIVEC",
+            "duration_us": 0.936
+          },
+          {
+            "name": "aclnnSWhere_SelectV2AiCore_SelectV2",
+            "task_type": "KERNEL_AIVEC",
+            "duration_us": 47.48
+          }
+        ]
+      }
+    },
+    {
+      "id": "floor-3f99-shared-profile-tensor",
+      "raw_result": {
+        "path_hint": "artifacts/rewrite-20261112/floor-3f99-shared-profile-tensor/result.json",
+        "bytes": 11258,
+        "sha256": "57f20f88beba73f0d39802babcf0f7309046010d3e75bbbd2652668ac7c8ddb2"
+      },
+      "source": "3f99eb22e520f87bd5cbe378b0b0c6a9f774e8f9",
+      "dirty": "",
+      "state": "passed",
+      "exit_code": 0,
+      "action": "profile",
+      "variant": "tensor",
+      "bound_representation": "dtype",
+      "representation_was_explicit": true,
+      "observe_finite_mismatch": false,
+      "physical_npu": 9,
+      "logical_device": "npu:0",
+      "affinity": {
+        "first": 0,
+        "last": 319,
+        "count": 320
+      },
+      "bound_requested": -87.3365447505531,
+      "bound_effective": -87.3365478515625,
+      "recorded_bound_argument_value": -87.3365478515625,
+      "selected_boundary_formula_passed": true,
+      "boundary_case": "dtype",
+      "observations": [
+        {
+          "instrumented": true,
+          "formula_check": {
+            "finite": true,
+            "value_equal": true,
+            "gradient_equal": true,
+            "value_mismatches": 0,
+            "gradient_mismatches": 0,
+            "signed_zero_mismatches": 0
+          },
+          "output_sha256": "41e98570819df9dc85332a907919d269886feceb615dd1d8cbae0c6067f4a1e4"
+        }
+      ],
+      "material_sha256": "b238ba5705453e02d825b1972706fc8f4962426f815b2287724240b55c244f77",
+      "allocator_peak_bytes": 71306752,
+      "trace": {
+        "kernel_events": 4,
+        "kernel_types": {
+          "KERNEL_AIVEC": 4
+        },
+        "kernel_names": {
+          "aclnnClampMinTensor_ClipByValueV2AiCore_ClipByValueV2": 1,
+          "aclnnGeTensor_GreaterEqual_GreaterEqual": 1,
+          "aclnnInplaceFillScalar_FillAiCore_Fill": 1,
+          "aclnnSWhere_SelectV2AiCore_SelectV2": 1
+        },
+        "kernel_inclusive_us": {
+          "aclnnClampMinTensor_ClipByValueV2AiCore_ClipByValueV2": 39.0,
+          "aclnnGeTensor_GreaterEqual_GreaterEqual": 10.5,
+          "aclnnInplaceFillScalar_FillAiCore_Fill": 0.92,
+          "aclnnSWhere_SelectV2AiCore_SelectV2": 46.26
+        },
+        "kernel_union_us": 96.75,
+        "phases_inclusive_us": {
+          "req006::floor_backward": 623.95,
+          "req006::floor_forward": 366.17
+        },
+        "observed_host_fallback_events": [],
+        "scope": "CPU interface events grouped by nearest same-thread labelled range at start; worker events may be unattributed. Inclusive ranges/operators overlap. matmul and nested mm/bmm are not separate mathematical work. Device kernel durations/union are not exclusive critical-path attribution. AICPU is not host fallback.",
+        "raw_trace": {
+          "path_hint": "artifacts/rewrite-20261112/floor-3f99-shared-profile-tensor/trace.json",
+          "bytes": 130200,
+          "sha256": "6c65d1d8fc47b15b87ae2e49ba156f96128b1ce2f1ada6bc7576a583dcfd6a28"
+        },
+        "device_events": [
+          {
+            "name": "aclnnClampMinTensor_ClipByValueV2AiCore_ClipByValueV2",
+            "task_type": "KERNEL_AIVEC",
+            "duration_us": 39.0
+          },
+          {
+            "name": "aclnnGeTensor_GreaterEqual_GreaterEqual",
+            "task_type": "KERNEL_AIVEC",
+            "duration_us": 10.5
+          },
+          {
+            "name": "aclnnInplaceFillScalar_FillAiCore_Fill",
+            "task_type": "KERNEL_AIVEC",
+            "duration_us": 0.92
+          },
+          {
+            "name": "aclnnSWhere_SelectV2AiCore_SelectV2",
+            "task_type": "KERNEL_AIVEC",
+            "duration_us": 46.26
+          }
+        ]
+      }
+    },
+    {
+      "id": "floor-7d5-shared-measure-scalar",
+      "raw_result": {
+        "path_hint": "artifacts/rewrite-20261112/floor-7d5-shared-measure-scalar/result.json",
+        "bytes": 5768,
+        "sha256": "de0d8739b6fcfd085ca529b7bba82beb8d348cc03ab66ec5fb7780517ba5d658"
+      },
+      "source": "7d5e05c3dbc962a43dc76136aa1bedf6aafba3e7",
+      "dirty": "",
+      "state": "failed",
+      "exit_code": 1,
+      "action": "measure",
+      "variant": "scalar",
+      "bound_representation": "requested",
+      "representation_was_explicit": true,
+      "observe_finite_mismatch": true,
+      "physical_npu": 9,
+      "logical_device": "npu:0",
+      "affinity": {
+        "first": 64,
+        "last": 127,
+        "count": 64
+      },
+      "bound_requested": -87.3365447505531,
+      "bound_effective": -87.3365478515625,
+      "recorded_bound_argument_value": -87.3365447505531,
+      "selected_boundary_formula_passed": false,
+      "boundary_case": "requested",
+      "observations": [
+        {
+          "instrumented": false,
+          "seconds": 0.005971696227788925,
+          "formula_check": {
+            "finite": true,
+            "value_equal": true,
+            "gradient_equal": false,
+            "value_mismatches": 0,
+            "gradient_mismatches": 322639,
+            "signed_zero_mismatches": 0
+          },
+          "output_sha256": "2c365860e2852198b67394ce5235344e4a4600bccb454e53ed08a2fb2c5eaa59"
+        }
+      ],
+      "strict_formula_passed": false,
+      "material_sha256": "b238ba5705453e02d825b1972706fc8f4962426f815b2287724240b55c244f77",
+      "allocator_peak_bytes": 88083456,
+      "execution": "completed",
+      "failure_kind": "finite_numeric"
+    },
+    {
+      "id": "floor-7d5-shared-profile-scalar",
+      "raw_result": {
+        "path_hint": "artifacts/rewrite-20261112/floor-7d5-shared-profile-scalar/result.json",
+        "bytes": 9278,
+        "sha256": "5b8008867bd5038b4f713005ecf32f8859b7a5be90ab0930b885b34e66b3f301"
+      },
+      "source": "7d5e05c3dbc962a43dc76136aa1bedf6aafba3e7",
+      "dirty": "",
+      "state": "failed",
+      "exit_code": 1,
+      "action": "profile",
+      "variant": "scalar",
+      "bound_representation": "requested",
+      "representation_was_explicit": true,
+      "observe_finite_mismatch": true,
+      "physical_npu": 9,
+      "logical_device": "npu:0",
+      "affinity": {
+        "first": 64,
+        "last": 127,
+        "count": 64
+      },
+      "bound_requested": -87.3365447505531,
+      "bound_effective": -87.3365478515625,
+      "recorded_bound_argument_value": -87.3365447505531,
+      "selected_boundary_formula_passed": false,
+      "boundary_case": "requested",
+      "observations": [
+        {
+          "instrumented": true,
+          "formula_check": {
+            "finite": true,
+            "value_equal": true,
+            "gradient_equal": false,
+            "value_mismatches": 0,
+            "gradient_mismatches": 322639,
+            "signed_zero_mismatches": 0
+          },
+          "output_sha256": "2c365860e2852198b67394ce5235344e4a4600bccb454e53ed08a2fb2c5eaa59"
+        }
+      ],
+      "strict_formula_passed": false,
+      "material_sha256": "b238ba5705453e02d825b1972706fc8f4962426f815b2287724240b55c244f77",
+      "allocator_peak_bytes": 88083456,
+      "execution": "completed",
+      "failure_kind": "finite_numeric",
+      "trace": {
+        "kernel_events": 5,
+        "kernel_types": {
+          "KERNEL_AIVEC": 3,
+          "KERNEL_AICPU": 2
+        },
+        "kernel_names": {
+          "aclnnClampMin_ClipByValueV2AiCore_ClipByValueV2": 1,
+          "aclnnGeScalar_CastAiCpu_Cast": 1,
+          "aclnnGeScalar_GreaterEqual_GreaterEqual": 1,
+          "aclnnInplaceFillScalar_FillAiCore_Fill": 1,
+          "aclnnSWhere_SelectV2AiCore_SelectV2": 1
+        },
+        "kernel_inclusive_us": {
+          "aclnnClampMin_ClipByValueV2AiCore_ClipByValueV2": 71.24,
+          "aclnnGeScalar_CastAiCpu_Cast": 3287.02,
+          "aclnnGeScalar_GreaterEqual_GreaterEqual": 2424.68,
+          "aclnnInplaceFillScalar_FillAiCore_Fill": 0.86,
+          "aclnnSWhere_SelectV2AiCore_SelectV2": 50.8
+        },
+        "kernel_union_us": 5834.5,
+        "phases_inclusive_us": {
+          "req006::floor_backward": 561.15,
+          "req006::floor_forward": 264.75
+        },
+        "observed_host_fallback_events": [],
+        "scope": "CPU interface events grouped by nearest same-thread labelled range at start; worker events may be unattributed. Inclusive ranges/operators overlap. matmul and nested mm/bmm are not separate mathematical work. Device kernel durations/union are not exclusive critical-path attribution. AICPU is not host fallback.",
+        "raw_trace": {
+          "path_hint": "artifacts/rewrite-20261112/floor-7d5-shared-profile-scalar/trace.json",
+          "bytes": 131683,
+          "sha256": "dd183999bd82f76ed9d8f83e74aae003b282af509fa43620306ebed32fc7269a"
+        },
+        "device_events": [
+          {
+            "name": "aclnnClampMin_ClipByValueV2AiCore_ClipByValueV2",
+            "task_type": "KERNEL_AIVEC",
+            "duration_us": 71.24
+          },
+          {
+            "name": "aclnnGeScalar_CastAiCpu_Cast",
+            "task_type": "KERNEL_AICPU",
+            "duration_us": 3287.02
+          },
+          {
+            "name": "aclnnGeScalar_GreaterEqual_GreaterEqual",
+            "task_type": "KERNEL_AICPU",
+            "duration_us": 2424.68
+          },
+          {
+            "name": "aclnnInplaceFillScalar_FillAiCore_Fill",
+            "task_type": "KERNEL_AIVEC",
+            "duration_us": 0.86
+          },
+          {
+            "name": "aclnnSWhere_SelectV2AiCore_SelectV2",
+            "task_type": "KERNEL_AIVEC",
+            "duration_us": 50.8
+          }
+        ]
+      }
+    }
+  ],
+  "paired_initial_state": {
+    "source": "f681ef63472e686fa6ffffca41de507bbf0d1ca5",
+    "state": "passed_within_listed_scope",
+    "fixture": {
+      "path_hint": "tests/fixtures/req006-tiny-transformer.json",
+      "bytes": 1613,
+      "sha256": "5086c635aa3ffc18f7b4ead31d7e29be7cc9835c9781ae2c7949c88b89dfce9d",
+      "archived_in": "3f99eb22e520f87bd5cbe378b0b0c6a9f774e8f9",
+      "original_path_hint": "artifacts/req006-dev/tiny-transformer.json",
+      "note": "Original and tracked fixture bytes are identical. Historical recipe/calibration metadata are not the actual tiny-model shape or measured device."
+    },
+    "actual_workload": {
+      "model": "frozen downstream SmallTransformer",
+      "width": 4,
+      "layers": 1,
+      "heads": 1,
+      "ffn": 8,
+      "global_batch": 2,
+      "microbatch": 1,
+      "length": 3,
+      "parameters": {
+        "unique_tensors": 16,
+        "trainable": 20660,
+        "bytes": 82640
+      },
+      "requested_device": "cpu",
+      "actual_device": "cpu",
+      "dtype": "float32",
+      "threads": {
+        "intraop": 1,
+        "interop": 1
+      },
+      "actual_cpu_affinity": "0-319",
+      "progress_tokens": 29,
+      "input_seed": 17,
+      "model_seed": 11,
+      "prime_updates": 1,
+      "warmup": 1,
+      "iterations": 1,
+      "mode": "training"
+    },
+    "identity": {
+      "configuration_sha256": "f9e08d5a7edb65585020290f094258236c3743a47ab6290c3bee141c41c38371",
+      "input_sha256": "3dd0d0b2e225214d33616dba8c1c9cf120507ff727d0e90f538f2516377cb2e0",
+      "input_shape": [
+        2,
+        3
+      ],
+      "progress_tokens": 29,
+      "input_seed": 17,
+      "model_seed": 11,
+      "dtype": "float32",
+      "prime_updates": 1,
+      "downstream_source": "6e7bd49eb5e35c15445826cac3a9b6ddda75aff4",
+      "downstream_content_sha256": "9423b4c8a94cdd87c325fb047c01a970119e967cb7efa362e3dca3a2dbcdf138",
+      "runtime": {
+        "backend": "cpu",
+        "dtype": "float32",
+        "host_architecture": "aarch64",
+        "torch": "2.12.0+cpu",
+        "torch_git": "7661cd9c6b841b62b7f411aa52ec51f05457263b",
+        "python": "3.12.13",
+        "cxx11_abi": true,
+        "threads": {
+          "intraop": 1,
+          "interop": 1
+        },
+        "float32_matmul_precision": "highest",
+        "deterministic_algorithms": false
+      },
+      "private_state": "independent document blocks; no cross-update private state"
+    },
+    "runtime": {
+      "resolved_device": "cpu",
+      "backend": "cpu",
+      "logical_device_index": null,
+      "resolution_reason": "explicit:cpu",
+      "dtype": "float32",
+      "host_architecture": "aarch64",
+      "torch": "2.12.0+cpu",
+      "torch_git": "7661cd9c6b841b62b7f411aa52ec51f05457263b",
+      "python": "3.12.13",
+      "cxx11_abi": true,
+      "logical_device_count": 1
+    },
+    "raw_initial_artifact": {
+      "path_hint": "artifacts/rewrite-20261112/paired-f681-initial.pt",
+      "bytes": 354842,
+      "sha256": "e4d3cf98ff48fe8080a3906d4b0e887f78bdd471acbb3a7da3f839fd07d6696f"
+    },
+    "verification": {
+      "same_input": true,
+      "same_full_initial_state": true,
+      "same_weights": true,
+      "same_final_model": true,
+      "same_final_optimizer": true,
+      "executed_prime_updates": [
+        1,
+        0,
+        0
+      ]
+    },
+    "directed_checks": {
+      "source": "f681ef63472e686fa6ffffca41de507bbf0d1ca5",
+      "raw_junit": {
+        "path_hint": "artifacts/rewrite-20261112/diagnostic-f681-cpu.xml",
+        "bytes": 5685,
+        "sha256": "29d05fc1bc72ce5e43c1b601f49233634c5b79f5aca663317a0a54ca2bd5cc4b"
+      },
+      "tests_by_module": {
+        "tests.test_req006_initial_state": 23,
+        "tests.test_req006_diagnostics": 11,
+        "tests.test_lh_tensor_check": 6
+      },
+      "passed": 40,
+      "failed": 0,
+      "skipped": 0,
+      "pytest_seconds": 3.011,
+      "scope": "Initial-state file integrity, identity rejection, no-replace publication and random next AdamW update; existing diagnostic and LH-check unit tests. Not all 40 are initial-state tests."
+    },
+    "artifact_contract": "Complete model/buffers, AdamW slots and CPU/device RNG. Same config/input/progress/prime/numeric runtime required; action/mode/physical ordinal may differ. Load verifies all state before restore and does not rerun prime. weights_only=True; same-directory fsynced staging and atomic hardlink no-replace publication.",
+    "runs": [
+      {
+        "action": "measure",
+        "raw_result": {
+          "path_hint": "artifacts/rewrite-20261112/paired-f681-measure/result.json",
+          "bytes": 17369,
+          "sha256": "3754aa544ffa1fccc1584b6d90c79e9ed00d1cad8876e7fc82227b54e8d830b6"
+        },
+        "source": "f681ef63472e686fa6ffffca41de507bbf0d1ca5",
+        "dirty": "",
+        "state": "passed",
+        "exit_code": 0,
+        "material": {
+          "input_sha256": "3dd0d0b2e225214d33616dba8c1c9cf120507ff727d0e90f538f2516377cb2e0",
+          "initial_state_sha256": "82f0252117f51b94b13e7e2c2ed997f0f7734a9a2fe484f41f768d23405fe0c0",
+          "weights_sha256": "fbdafc1c91702a1f34d091682db6e26b460e502e57b9c39cc20e6be886953033",
+          "input_shape": [
+            2,
+            3
+          ],
+          "effective_targets": 6,
+          "input_seed": 17,
+          "runtime_rng_seed": 11,
+          "progress_tokens": 29,
+          "private_state": "independent document blocks; no cross-update private state",
+          "weights": "frozen constructor/role-keyed seed plus explicit synthetic prime updates; no historical checkpoint",
+          "optimizer_initialization": "slots and weights from real synthetic updates at the same fixed progress",
+          "prime_updates": 1,
+          "executed_prime_updates": 1,
+          "initialization": "constructor plus requested prime updates",
+          "inputs": "synthetic next-token IDs [4,4096)"
+        },
+        "initial_state_artifact": {
+          "direction": "out",
+          "schema": "tide-req006-initial-state-v1",
+          "path_hint": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/rewrite-20261112/paired-f681-initial.pt",
+          "bytes": 354842,
+          "sha256": "e4d3cf98ff48fe8080a3906d4b0e887f78bdd471acbb3a7da3f839fd07d6696f",
+          "identity_sha256": "5570fa243b6cca5a229c76a3c3a84de8408670604e40e9a17d5a11060ceb9717",
+          "initial_state_sha256": "82f0252117f51b94b13e7e2c2ed997f0f7734a9a2fe484f41f768d23405fe0c0",
+          "weights_sha256": "fbdafc1c91702a1f34d091682db6e26b460e502e57b9c39cc20e6be886953033",
+          "producer": {
+            "source": "f681ef63472e686fa6ffffca41de507bbf0d1ca5",
+            "dirty": ""
+          }
+        },
+        "warmup_restored": true,
+        "final_model_sha256": "74f5ecf082e60d46e786b48066c90e563e368bc57c07762eb9bea62d2fcc5ae1",
+        "final_optimizer_sha256": "05fefe2f255a79523f78162099ab91661c7d9f97f53d5c0064a57d297dfcff81",
+        "correctness": "not_checked; frozen downstream numerical guards remain enabled",
+        "foundation_execution": false,
+        "independent_recovery": "not_checked"
+      },
+      {
+        "action": "profile",
+        "raw_result": {
+          "path_hint": "artifacts/rewrite-20261112/paired-f681-profile/result.json",
+          "bytes": 75612,
+          "sha256": "4b026cf7e59ebc33a78833c8e7a18a3d83ebcb9588a4c0d7fa370e472259842a"
+        },
+        "source": "f681ef63472e686fa6ffffca41de507bbf0d1ca5",
+        "dirty": "",
+        "state": "passed",
+        "exit_code": 0,
+        "material": {
+          "input_sha256": "3dd0d0b2e225214d33616dba8c1c9cf120507ff727d0e90f538f2516377cb2e0",
+          "initial_state_sha256": "82f0252117f51b94b13e7e2c2ed997f0f7734a9a2fe484f41f768d23405fe0c0",
+          "weights_sha256": "fbdafc1c91702a1f34d091682db6e26b460e502e57b9c39cc20e6be886953033",
+          "input_shape": [
+            2,
+            3
+          ],
+          "effective_targets": 6,
+          "input_seed": 17,
+          "runtime_rng_seed": 11,
+          "progress_tokens": 29,
+          "private_state": "independent document blocks; no cross-update private state",
+          "weights": "frozen constructor/role-keyed seed plus explicit synthetic prime updates; no historical checkpoint",
+          "optimizer_initialization": "slots and weights from real synthetic updates at the same fixed progress",
+          "prime_updates": 1,
+          "executed_prime_updates": 0,
+          "initialization": "shared initial-state artifact",
+          "inputs": "synthetic next-token IDs [4,4096)"
+        },
+        "initial_state_artifact": {
+          "direction": "in",
+          "schema": "tide-req006-initial-state-v1",
+          "path_hint": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/rewrite-20261112/paired-f681-initial.pt",
+          "bytes": 354842,
+          "sha256": "e4d3cf98ff48fe8080a3906d4b0e887f78bdd471acbb3a7da3f839fd07d6696f",
+          "identity_sha256": "5570fa243b6cca5a229c76a3c3a84de8408670604e40e9a17d5a11060ceb9717",
+          "initial_state_sha256": "82f0252117f51b94b13e7e2c2ed997f0f7734a9a2fe484f41f768d23405fe0c0",
+          "weights_sha256": "fbdafc1c91702a1f34d091682db6e26b460e502e57b9c39cc20e6be886953033",
+          "producer": {
+            "source": "f681ef63472e686fa6ffffca41de507bbf0d1ca5",
+            "dirty": ""
+          }
+        },
+        "warmup_restored": true,
+        "final_model_sha256": "74f5ecf082e60d46e786b48066c90e563e368bc57c07762eb9bea62d2fcc5ae1",
+        "final_optimizer_sha256": "05fefe2f255a79523f78162099ab91661c7d9f97f53d5c0064a57d297dfcff81",
+        "correctness": "not_checked; frozen downstream numerical guards remain enabled",
+        "foundation_execution": false,
+        "independent_recovery": "not_checked",
+        "trace": {
+          "path_hint": "artifacts/rewrite-20261112/paired-f681-profile/trace.json",
+          "bytes": 1056865,
+          "sha256": "576781da21cd8135e3a9d57a5bb4bbae1457ff2e3ecd04d7c341d429f579c232"
+        }
+      },
+      {
+        "action": "census",
+        "raw_result": {
+          "path_hint": "artifacts/rewrite-20261112/paired-f681-census/result.json",
+          "bytes": 28831,
+          "sha256": "0f4d0cc05f205fbf6ab3f9128c0397fa11c9d6991ec0b66603141704630fa746"
+        },
+        "source": "f681ef63472e686fa6ffffca41de507bbf0d1ca5",
+        "dirty": "",
+        "state": "passed",
+        "exit_code": 0,
+        "material": {
+          "input_sha256": "3dd0d0b2e225214d33616dba8c1c9cf120507ff727d0e90f538f2516377cb2e0",
+          "initial_state_sha256": "82f0252117f51b94b13e7e2c2ed997f0f7734a9a2fe484f41f768d23405fe0c0",
+          "weights_sha256": "fbdafc1c91702a1f34d091682db6e26b460e502e57b9c39cc20e6be886953033",
+          "input_shape": [
+            2,
+            3
+          ],
+          "effective_targets": 6,
+          "input_seed": 17,
+          "runtime_rng_seed": 11,
+          "progress_tokens": 29,
+          "private_state": "independent document blocks; no cross-update private state",
+          "weights": "frozen constructor/role-keyed seed plus explicit synthetic prime updates; no historical checkpoint",
+          "optimizer_initialization": "slots and weights from real synthetic updates at the same fixed progress",
+          "prime_updates": 1,
+          "executed_prime_updates": 0,
+          "initialization": "shared initial-state artifact",
+          "inputs": "synthetic next-token IDs [4,4096)"
+        },
+        "initial_state_artifact": {
+          "direction": "in",
+          "schema": "tide-req006-initial-state-v1",
+          "path_hint": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/rewrite-20261112/paired-f681-initial.pt",
+          "bytes": 354842,
+          "sha256": "e4d3cf98ff48fe8080a3906d4b0e887f78bdd471acbb3a7da3f839fd07d6696f",
+          "identity_sha256": "5570fa243b6cca5a229c76a3c3a84de8408670604e40e9a17d5a11060ceb9717",
+          "initial_state_sha256": "82f0252117f51b94b13e7e2c2ed997f0f7734a9a2fe484f41f768d23405fe0c0",
+          "weights_sha256": "fbdafc1c91702a1f34d091682db6e26b460e502e57b9c39cc20e6be886953033",
+          "producer": {
+            "source": "f681ef63472e686fa6ffffca41de507bbf0d1ca5",
+            "dirty": ""
+          }
+        },
+        "warmup_restored": true,
+        "final_model_sha256": "74f5ecf082e60d46e786b48066c90e563e368bc57c07762eb9bea62d2fcc5ae1",
+        "final_optimizer_sha256": "05fefe2f255a79523f78162099ab91661c7d9f97f53d5c0064a57d297dfcff81",
+        "correctness": "not_checked; frozen downstream numerical guards remain enabled",
+        "foundation_execution": false,
+        "independent_recovery": "not_checked"
+      }
+    ],
+    "limitations": [
+      "Small CPU fixture only; no new original-scale NPU pairing.",
+      "Same initial state does not guarantee deterministic future device updates.",
+      "Does not retroactively pair the older four original-scale measure/profile runs.",
+      "Independent numerical correctness and foundation recovery remain not_checked in these diagnostic actions."
+    ]
+  },
+  "jobs": [
+    {
+      "unit": "gef-rewrite-shared-qual",
+      "raw_status": {
+        "path_hint": "artifacts/jobs/rewrite-shared-qual/status.json",
+        "bytes": 414,
+        "sha256": "46d03d1cf481aa88c94caffef0018eb9702b333de8f5e2f07d62300e62b65e2f"
+      },
+      "status": {
+        "command": [
+          "/bin/bash",
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/rewrite-20261112/shared-qual-launch.sh"
+        ],
+        "cwd": "/dev/shm/gef-rewrite-20261112/batched-source",
+        "state": "failed",
+        "source": "a95b8987af6f823366a25dcbfdeae225c986e184",
+        "dirty": "",
+        "started": "2026-11-12T04:14:57.603249+00:00",
+        "exit_code": 1,
+        "finished": "2026-11-12T04:19:23.030422+00:00"
+      },
+      "raw_matrix": {
+        "path_hint": "artifacts/rewrite-20261112/shared-qual-matrix.json",
+        "bytes": 6125,
+        "sha256": "fc8777b3533fef84150daacb561194e5d9e5ed2782dbf88be4a3cefeacd0181a"
+      },
+      "raw_log": {
+        "path_hint": "artifacts/jobs/rewrite-shared-qual/task.log",
+        "bytes": 36024,
+        "sha256": "d954f74a6c32d408076df506a893026f3a2b567b254571139ee9ba538ab70666"
+      },
+      "slice": "background.slice",
+      "memory_max_bytes": 137438953472,
+      "runtime_max_seconds": 900,
+      "handoff_planned_affinity": "64-127",
+      "observed_systemd_cpu_affinity": "",
+      "main_pid_at_review": 0,
+      "active_state_at_review": "failed",
+      "control_group_at_review": "",
+      "interpretation": "Selected Tensor floor actions passed; original Scalar boundary checks failed before timing; the same job also had 12 regional device-placement test failures.",
+      "shared_device": {
+        "physical_npu": 1,
+        "raw_audit": {
+          "path_hint": "artifacts/rewrite-20261112/shared-qual-audit.jsonl",
+          "bytes": 14218,
+          "sha256": "aa17ac6a982bb5ab3e4e90c99aeb3480173f3ae497d4921c41e24c21b54874bf"
+        },
+        "raw_policy": {
+          "path_hint": "artifacts/rewrite-20261112/shared-qual-policy.json",
+          "bytes": 524,
+          "sha256": "da18cad33c602ace3f4f11e0bd8efcd7c819be5e3a8e711065a82c7ea118a16f"
+        },
+        "policy": {
+          "schema": "tide-npu-sharing-v1",
+          "reason": "Explicit user authorization 2026-11-12 covers shared NPU correctness, profiling and performance throughout this conversation; this one-card job is bounded to 900 seconds.",
+          "expires_unix": 1794460489.7118392,
+          "cards": {
+            "1": {
+              "max_hbm_mib": 49152,
+              "max_aicore_percent": 20,
+              "required_free_mib": 8192,
+              "processes": [
+                {
+                  "pid": 3989175,
+                  "start_ticks": 2196655054,
+                  "uid": 1017
+                }
+              ]
+            }
+          }
+        },
+        "selected_device_snapshots": [
+          {
+            "event": "snapshot",
+            "unix": 1794456900.074723,
+            "device": {
+              "board_id": 0,
+              "chip_id": 1,
+              "physical_id": 1,
+              "health": "OK",
+              "aicore_percent": 1,
+              "hbm_used_mib": 5654,
+              "hbm_total_mib": 65536,
+              "process_ids": [
+                3989175
+              ]
+            }
+          },
+          {
+            "event": "snapshot",
+            "unix": 1794456904.9464192,
+            "device": {
+              "board_id": 0,
+              "chip_id": 1,
+              "physical_id": 1,
+              "health": "OK",
+              "aicore_percent": 23,
+              "hbm_used_mib": 5654,
+              "hbm_total_mib": 65536,
+              "process_ids": [
+                3989175
+              ]
+            }
+          },
+          {
+            "event": "snapshot",
+            "unix": 1794456921.8633423,
+            "device": {
+              "board_id": 0,
+              "chip_id": 1,
+              "physical_id": 1,
+              "health": "OK",
+              "aicore_percent": 0,
+              "hbm_used_mib": 5654,
+              "hbm_total_mib": 65536,
+              "process_ids": [
+                3989175
+              ]
+            }
+          },
+          {
+            "event": "snapshot",
+            "unix": 1794456926.7049835,
+            "device": {
+              "board_id": 0,
+              "chip_id": 1,
+              "physical_id": 1,
+              "health": "OK",
+              "aicore_percent": 3,
+              "hbm_used_mib": 5654,
+              "hbm_total_mib": 65536,
+              "process_ids": [
+                3989175
+              ]
+            }
+          },
+          {
+            "event": "after",
+            "unix": 1794457163.0140598,
+            "device": {
+              "board_id": 0,
+              "chip_id": 1,
+              "physical_id": 1,
+              "health": "OK",
+              "aicore_percent": 24,
+              "hbm_used_mib": 5656,
+              "hbm_total_mib": 65536,
+              "process_ids": [
+                3989175
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "unit": "gef-rewrite-diagnostic-f681-cpu",
+      "raw_status": {
+        "path_hint": "artifacts/jobs/rewrite-diagnostic-f681-cpu/status.json",
+        "bytes": 428,
+        "sha256": "7f1051c0dbec027e375344b2e6e3429f2ae51acec7eb50e1aef756464a0f5a32"
+      },
+      "status": {
+        "command": [
+          "/bin/bash",
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/rewrite-20261112/diagnostic-f681-cpu-work.sh"
+        ],
+        "cwd": "/dev/shm/gef-rewrite-20261112/diagnostic-f681-source",
+        "state": "failed",
+        "source": "f681ef63472e686fa6ffffca41de507bbf0d1ca5",
+        "dirty": "",
+        "started": "2026-11-12T04:18:03.054067+00:00",
+        "exit_code": 1,
+        "finished": "2026-11-12T04:18:51.509148+00:00"
+      },
+      "raw_matrix": {
+        "path_hint": "artifacts/rewrite-20261112/diagnostic-f681-cpu-matrix.json",
+        "bytes": 4592,
+        "sha256": "ddaf38a548a76cb81847ee50823a6bbfff3ac38d86d1660d31f4a2ad34aa193b"
+      },
+      "raw_log": {
+        "path_hint": "artifacts/jobs/rewrite-diagnostic-f681-cpu/task.log",
+        "bytes": 1336,
+        "sha256": "e5d9a0ad54cdce32c07ea36bdf6a0f6f315f8f66311e0a713a9729c1fef1f170"
+      },
+      "slice": "background.slice",
+      "memory_max_bytes": 68719476736,
+      "runtime_max_seconds": 600,
+      "handoff_planned_affinity": "192-223",
+      "observed_systemd_cpu_affinity": "",
+      "main_pid_at_review": 0,
+      "active_state_at_review": "failed",
+      "control_group_at_review": "",
+      "interpretation": "40 directed tests and all three paired-state actions passed; separate LH176 FP32 projection check failed."
+    },
+    {
+      "unit": "gef-rewrite-diagnostic-3f99-npu",
+      "raw_status": {
+        "path_hint": "artifacts/jobs/rewrite-diagnostic-3f99-npu/status.json",
+        "bytes": 430,
+        "sha256": "637af603725de891f86d59ceb7a826d870a8e2b50d1eaeb235cfcfff7b38c937"
+      },
+      "status": {
+        "command": [
+          "/bin/bash",
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/rewrite-20261112/diagnostic-3f99-npu-launch.sh"
+        ],
+        "cwd": "/dev/shm/gef-rewrite-20261112/diagnostic-3f99-source",
+        "state": "failed",
+        "source": "3f99eb22e520f87bd5cbe378b0b0c6a9f774e8f9",
+        "dirty": "",
+        "started": "2026-11-12T04:22:11.959693+00:00",
+        "exit_code": 1,
+        "finished": "2026-11-12T04:23:41.738597+00:00"
+      },
+      "raw_matrix": {
+        "path_hint": "artifacts/rewrite-20261112/diagnostic-3f99-npu-matrix.json",
+        "bytes": 4045,
+        "sha256": "d1d628868bf9cef061d8e28bcadacf7402a75b30f1becbdf267d1e243ebb69ee"
+      },
+      "raw_log": {
+        "path_hint": "artifacts/jobs/rewrite-diagnostic-3f99-npu/task.log",
+        "bytes": 3885,
+        "sha256": "fd7270c30906084e806b492111a28209feb8bd2682686d9cc8b052176451994e"
+      },
+      "slice": "background.slice",
+      "memory_max_bytes": 68719476736,
+      "runtime_max_seconds": 900,
+      "handoff_planned_affinity": "64-127",
+      "observed_systemd_cpu_affinity": "",
+      "main_pid_at_review": 0,
+      "active_state_at_review": "failed",
+      "control_group_at_review": "",
+      "interpretation": "All four dtype-bound floor actions and 15 regional tests passed; separate LH176 FP32 projection check failed.",
+      "shared_device": {
+        "physical_npu": 9,
+        "raw_audit": {
+          "path_hint": "artifacts/rewrite-20261112/diagnostic-3f99-shared-audit.jsonl",
+          "bytes": 8670,
+          "sha256": "29a8d22585e5d7b6755166e8d89c1bde46e459253e2da675848b3f44a4c5108e"
+        },
+        "raw_policy": {
+          "path_hint": "artifacts/rewrite-20261112/diagnostic-3f99-shared-policy.json",
+          "bytes": 547,
+          "sha256": "bee1a14d6c4936d3a7478b98210ac6b3c5676205db01051a4baad0891fb87c0b"
+        },
+        "policy": {
+          "schema": "tide-npu-sharing-v1",
+          "reason": "Explicit continuing authorization in the current conversation includes shared correctness and performance; one-card finite followup. Card1 exceeded the utilization budget; select observed card9.",
+          "expires_unix": 1794460924.369968,
+          "cards": {
+            "9": {
+              "max_hbm_mib": 49152,
+              "max_aicore_percent": 20,
+              "required_free_mib": 8192,
+              "processes": [
+                {
+                  "pid": 1711169,
+                  "start_ticks": 2203892577,
+                  "uid": 1010
+                }
+              ]
+            }
+          }
+        },
+        "selected_device_snapshots": [
+          {
+            "event": "snapshot",
+            "unix": 1794457334.3817255,
+            "device": {
+              "board_id": 4,
+              "chip_id": 1,
+              "physical_id": 9,
+              "health": "OK",
+              "aicore_percent": 0,
+              "hbm_used_mib": 5654,
+              "hbm_total_mib": 65536,
+              "process_ids": [
+                1711169
+              ]
+            }
+          },
+          {
+            "event": "snapshot",
+            "unix": 1794457339.5406451,
+            "device": {
+              "board_id": 4,
+              "chip_id": 1,
+              "physical_id": 9,
+              "health": "OK",
+              "aicore_percent": 0,
+              "hbm_used_mib": 5654,
+              "hbm_total_mib": 65536,
+              "process_ids": [
+                1711169
+              ]
+            }
+          },
+          {
+            "event": "after",
+            "unix": 1794457421.7232747,
+            "device": {
+              "board_id": 4,
+              "chip_id": 1,
+              "physical_id": 9,
+              "health": "OK",
+              "aicore_percent": 0,
+              "hbm_used_mib": 5656,
+              "hbm_total_mib": 65536,
+              "process_ids": [
+                1711169
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "unit": "gef-rewrite-floor-7d5",
+      "raw_status": {
+        "path_hint": "artifacts/jobs/rewrite-floor-7d5/status.json",
+        "bytes": 417,
+        "sha256": "bf062e5ac3474210c4fb802c5ea8dede591a3a30a8715ec90a586e3eea12e9ee"
+      },
+      "status": {
+        "command": [
+          "/bin/bash",
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/rewrite-20261112/floor-7d5-launch.sh"
+        ],
+        "cwd": "/dev/shm/gef-rewrite-20261112/messages-7d5-source",
+        "state": "failed",
+        "source": "7d5e05c3dbc962a43dc76136aa1bedf6aafba3e7",
+        "dirty": "",
+        "started": "2026-11-12T04:26:17.388568+00:00",
+        "exit_code": 1,
+        "finished": "2026-11-12T04:26:43.852394+00:00"
+      },
+      "raw_matrix": {
+        "path_hint": "artifacts/rewrite-20261112/floor-7d5-matrix.json",
+        "bytes": 1347,
+        "sha256": "53500b36668da169634f403f8cd6e0526ccc3dec8177dc9be828f8b1d33bfac5"
+      },
+      "raw_log": {
+        "path_hint": "artifacts/jobs/rewrite-floor-7d5/task.log",
+        "bytes": 2148,
+        "sha256": "6584886e0c15f815277560c719c89b1c78798927fc718e4365cdb5f6a8c41e6d"
+      },
+      "slice": "background.slice",
+      "memory_max_bytes": 68719476736,
+      "runtime_max_seconds": 360,
+      "handoff_planned_affinity": "64-127",
+      "observed_systemd_cpu_affinity": "64-127",
+      "main_pid_at_review": 0,
+      "active_state_at_review": "failed",
+      "control_group_at_review": "",
+      "interpretation": "Both requested-Scalar actions completed diagnostic observation with finite_numeric strict failures and exit 1.",
+      "shared_device": {
+        "physical_npu": 9,
+        "raw_audit": {
+          "path_hint": "artifacts/rewrite-20261112/floor-7d5-shared-audit.jsonl",
+          "bytes": 8672,
+          "sha256": "8fdcbb112630a2774db17bac140ee9b59cb03f9f284f9cdf7755e361f7684fa8"
+        },
+        "raw_policy": {
+          "path_hint": "artifacts/rewrite-20261112/diagnostic-3f99-shared-policy.json",
+          "bytes": 547,
+          "sha256": "bee1a14d6c4936d3a7478b98210ac6b3c5676205db01051a4baad0891fb87c0b"
+        },
+        "policy": {
+          "schema": "tide-npu-sharing-v1",
+          "reason": "Explicit continuing authorization in the current conversation includes shared correctness and performance; one-card finite followup. Card1 exceeded the utilization budget; select observed card9.",
+          "expires_unix": 1794460924.369968,
+          "cards": {
+            "9": {
+              "max_hbm_mib": 49152,
+              "max_aicore_percent": 20,
+              "required_free_mib": 8192,
+              "processes": [
+                {
+                  "pid": 1711169,
+                  "start_ticks": 2203892577,
+                  "uid": 1010
+                }
+              ]
+            }
+          }
+        },
+        "selected_device_snapshots": [
+          {
+            "event": "snapshot",
+            "unix": 1794457579.8184335,
+            "device": {
+              "board_id": 4,
+              "chip_id": 1,
+              "physical_id": 9,
+              "health": "OK",
+              "aicore_percent": 0,
+              "hbm_used_mib": 5655,
+              "hbm_total_mib": 65536,
+              "process_ids": [
+                1711169
+              ]
+            }
+          },
+          {
+            "event": "snapshot",
+            "unix": 1794457584.5761929,
+            "device": {
+              "board_id": 4,
+              "chip_id": 1,
+              "physical_id": 9,
+              "health": "OK",
+              "aicore_percent": 0,
+              "hbm_used_mib": 5655,
+              "hbm_total_mib": 65536,
+              "process_ids": [
+                1711169
+              ]
+            }
+          },
+          {
+            "event": "after",
+            "unix": 1794457603.8412619,
+            "device": {
+              "board_id": 4,
+              "chip_id": 1,
+              "physical_id": 9,
+              "health": "OK",
+              "aicore_percent": 0,
+              "hbm_used_mib": 5655,
+              "hbm_total_mib": 65536,
+              "process_ids": [
+                1711169
+              ]
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "warnings": [
+    {
+      "scope": "all exported NPU floor profiles",
+      "message": "Please use level1 or level2 if you want to collect aic metrics, reset aic metrics to None!"
+    },
+    {
+      "scope": "all exported NPU floor profiles",
+      "message": "Incorrect schedule: Stop profiler while current state is RECORD which may result in incomplete parsed data."
+    },
+    {
+      "scope": "NPU startup",
+      "message": "The current CANN and Soc versions require processing for 32 padding size, with memory allocation."
+    },
+    {
+      "scope": "CPU paired profile",
+      "message": "Profiler clears events at the end of each cycle; only events from the current cycle will be reported; use acc_events=True to keep events across cycles."
+    }
+  ],
+  "conclusions": [
+    "Original requested Scalar strict formula failure is retained, including when finite costs/profile are observed.",
+    "Same-dtype Tensor and explicitly dtype-rounded Scalar both pass this finite value/input-VJP witness and both export four AIVEC kernels without AICPU.",
+    "Do not generalize Scalar is slow or Tensor is fast; constant representation and actual dispatch matter.",
+    "The original Scalar profile exports Cast and GreaterEqual AICPU kernels; AICPU is a device task type, not host fallback.",
+    "Shared one-step observations differ in source, time, physical device and/or CPU affinity; do not present their ratios as paired full-model speedups.",
+    "Any positive_exp candidate must declare constant/boundary-VJP identity and be checked at the fixed call site; no global clamp monkeypatch or unconditional production adoption."
+  ]
+}
