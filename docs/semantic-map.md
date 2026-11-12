@@ -223,6 +223,9 @@ actual presence和int64时钟伴随返回；role→canonical owner映射汇总�
 字面公式、独立调度、archive恢复和真机验收各自保留范围。
 [a3c公共资格](evidence/resident-block-public-20261112.md)连接sum/qry字面Mem/total根、
 完整flow根、Model独立Streaming、实验完整解码及新进程archive检查；规模容量失败另列。
+[042ea369服务资格](evidence/resident-services-20261112.md)补完整flow/原预算规模执行及恢复；
+后继`finish_resident_program`与`resource_usage`映射同时持有量/准入生命周期，
+`test_resident_block_resources`和services/public设备检查分别验收，资源库存不作为数学或性能资格。
 
 - [区域列边界](weighted-region-batch.md)：Alloc/SelStep的R×N完整描述、score/evidence/
   control/support与精确解映射VJP由`allocation_columns`、`regional_columns`和C++

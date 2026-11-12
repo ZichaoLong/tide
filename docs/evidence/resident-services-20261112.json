@@ -1,0 +1,2911 @@
+{
+  "schema": "tide-resident-services-evidence-v1",
+  "date": "2026-11-12",
+  "question": "Can bounded device-called regional programs complete independent KV flow/training/recovery and the original FC16/LH176 scale reservations?",
+  "sources": {
+    "production": "042ea369d9e3cac63d0fb0ccec87c4d872ae3c63",
+    "cpu_harness_fix": "7fd1dd1008ae581d4dfcbd543b1c8b992b4541b4",
+    "original_tile_candidate": "41c42759c60381f874dd755134cc3bb4723225d9",
+    "reused_core": "1f0e6e43a540a78f2fe810e97b7562b73481fb22",
+    "upstream": "0770593838a37c790a568226930567ed60f99b83"
+  },
+  "scope": {
+    "production": "single-NPU FP32 Settle KV block-v2; Python-owned and standalone SDK runtimes",
+    "cpu_harness": "generated CPU semantic-kernel launch context only; original NPU binaries remain at 042ea369",
+    "scale": "one measured complete training window per case, original budget, serial new-owner exact next-window restore; independent mathematics not checked",
+    "cuda": "not built or run in this evidence",
+    "multi_device": "not checked"
+  },
+  "implementation": [
+    {
+      "source": "41c42759c60381f874dd755134cc3bb4723225d9",
+      "change": "Replace bank-by-capacity branch trees by one fixed numerical tile body driven by device bank/tile cursors; padding bound P < A + G*T."
+    },
+    {
+      "source": "042ea369d9e3cac63d0fb0ccec87c4d872ae3c63",
+      "change": "Place each region forward/reverse numerical body in a bounded device-called TaskServices program. Coordinator choose/commit and actual reverse journal stay on device; storage admission covers the program union and shared workspace."
+    },
+    {
+      "source": "042ea369d9e3cac63d0fb0ccec87c4d872ae3c63",
+      "change": "Independent CPU FP64 per-row projection oracle over the actual FP32 material; original atol=1e-6 and rtol=1e-5 retained."
+    },
+    {
+      "source": "7fd1dd1008ae581d4dfcbd543b1c8b992b4541b4",
+      "change": "Restore CPU adapter thread-local worker/workers context on success/exception. Add success/exception/zero-grid check; NPU mathematical code unchanged."
+    }
+  ],
+  "builds": {
+    "resident-native": {
+      "manifest": {
+        "schema": "tide-device-control-build-v1",
+        "source": "042ea369d9e3cac63d0fb0ccec87c4d872ae3c63",
+        "dirty": "",
+        "component_sha256": "1cd8ce80c20fff7b61e4c9e520e046d4c3060ab8088056438f7d170aafcc9f56",
+        "core": {
+          "source": "1f0e6e43a540a78f2fe810e97b7562b73481fb22",
+          "cpp_source_sha256": "9bf33d6e5827278563d4f33e1e469efdf6a0c094cf6baff6ee75d8bea3d0aef6",
+          "torch": "2.12.0+cpu",
+          "distribution": {
+            "torch": "2.12.0+cpu",
+            "torch_dir": "/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/lib/python3.12/site-packages/torch/share/cmake/Torch",
+            "prefix": "/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/lib/python3.12/site-packages/torch/share/cmake",
+            "cuda": null,
+            "cxx11_abi": true,
+            "discovery": "python-torch"
+          },
+          "environment": {
+            "os": "Linux-5.10.0-182.0.0.95.r1941_123.hce2.aarch64-aarch64-with-glibc2.34",
+            "compiler": "c++ (GCC) 10.3.1",
+            "cxx_standard": 17,
+            "build_type": "Release",
+            "torch_prefix": "/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/lib/python3.12/site-packages/torch/share/cmake/Torch",
+            "cann_version": "9.2.0"
+          },
+          "build_jobs": 320,
+          "backend": "npu",
+          "npu_runtime": "python",
+          "torch_npu": "2.12.0.post3",
+          "cuda": null,
+          "architecture": "aarch64",
+          "python": "3.12.13",
+          "cxx11_abi": true,
+          "binary_sha256": {
+            "libtidegraph.a": "9d697e3b3abd0627b4f93968d22f2c6452e17654b305e6092b8f9b6cc1af1dda",
+            "libtidegraph_runtime.a": "05dc2a437667cd54a1d752a48acfe9e077e66eb21703cfb288fd0380ba130010",
+            "_tide_native.so": "3078fac227a9d0aa93dc73ac12680e0e96e8228f9d6d0abbd61f32b806c07e2f"
+          }
+        },
+        "build_jobs": 160,
+        "backend": "npu",
+        "runtime": "python",
+        "npu_runtime": "python",
+        "cuda_architectures": null,
+        "ascendc_soc": "Ascend910_9392",
+        "binary_sha256": {
+          "_tide_weighted_resident.so": "c8b3493584160d9e5b5d35a86110db251ac7de9cecf77eb8a60a2b1b0ab97969",
+          "libtide-weighted-flow.so": "0d9270feeef757ad8396208ff2a551f23d0bdf5874e0df0679d1de2f6ba78aea",
+          "libtide-weighted-training.so": "6832306a417656f3671ddb9d25a2dbf042396f142de9215ce774623576a5f13f",
+          "libtide-block-resident.so": "9935fdd6d3ac305cbddc348994e0805fac9b7d20a398d6ae00da75fc2f9c3dfa"
+        },
+        "loader_sha256": {
+          "_tide_weighted_resident.so": "452f1541bed52d53b51178e552c470a7a5f6789f8b25a9a6a89502c46b1c41e6",
+          "libtide-weighted-flow.so": "f47b66e40da07b081af7594ec00a43ef41525bc1e53e677210656fe8d3a53a07",
+          "libtide-weighted-training.so": "0b233dd0952b854a4a7be6840ae927b77960700bee780faad900c96c773e0867",
+          "libtide-block-resident.so": "40a2d448d45250a355309e3ce3aa8a4e95302a0add7639a02c7f3cfc3a65ed3f"
+        },
+        "requested_checks": null,
+        "python_component": "weighted",
+        "scope": "build/loader/help only; device control check required separately"
+      },
+      "record": {
+        "path": "/dev/shm/gef-resident-services-20261112/resident-native/control-build.json",
+        "bytes": 2885,
+        "sha256": "91223802f5228d5d9bcdff7b7798baab0c4607e40873fc415c4f923ac601a53d"
+      }
+    },
+    "resident-sdk": {
+      "manifest": {
+        "schema": "tide-device-control-build-v1",
+        "source": "042ea369d9e3cac63d0fb0ccec87c4d872ae3c63",
+        "dirty": "",
+        "component_sha256": "1cd8ce80c20fff7b61e4c9e520e046d4c3060ab8088056438f7d170aafcc9f56",
+        "core": {
+          "source": "1f0e6e43a540a78f2fe810e97b7562b73481fb22",
+          "cpp_source_sha256": "9bf33d6e5827278563d4f33e1e469efdf6a0c094cf6baff6ee75d8bea3d0aef6",
+          "torch": "2.12.0",
+          "distribution": {
+            "torch": "2.12.0",
+            "torch_dir": "/opt/software/libtorch/2.12.0-cpu-aarch64-abi1/share/cmake/Torch",
+            "prefix": "/opt/software/libtorch/2.12.0-cpu-aarch64-abi1",
+            "cxx11_abi": true,
+            "cuda": null,
+            "discovery": "standalone-prefix",
+            "distribution_sha256": {
+              "share/cmake/Torch/TorchConfig.cmake": "9846a61d981bc6c465ccfd604edb910e2ff37342310b80606c416697f9753d24",
+              "share/cmake/Torch/TorchConfigVersion.cmake": "6cc8fc1b03a7d604a57be1fc51491bfb4deb8c651506c415a41b5173b06344f3",
+              "lib/libtorch.so": "5d864dc3a979f6f8cf572e752caa583182324399c29a79b9143efe175f67d72e",
+              "lib/libtorch_cpu.so": "cb4931abca15245de366da71e361174afc9e411651d4c50046cfb7a2dac6c4f5",
+              "lib/libc10.so": "fa843366784bfce035e912360601c4ca098ce536b20f0c4a8ee50c3f00294e37"
+            }
+          },
+          "environment": {
+            "os": "Linux-5.10.0-182.0.0.95.r1941_123.hce2.aarch64-aarch64-with-glibc2.34",
+            "compiler": "c++ (GCC) 10.3.1",
+            "cxx_standard": 17,
+            "build_type": "Release",
+            "torch_prefix": "/opt/software/libtorch/2.12.0-cpu-aarch64-abi1/share/cmake/Torch",
+            "cann_version": "9.2.0",
+            "npu_sdk": {
+              "config": "/opt/software/libtorch-npu/2.12.0-cann9.2.0-aarch64-abi1/sdk/share/cmake/Torch_npu/Torch_npuConfig.cmake",
+              "config_sha256": "1711480e47f9dbb19ed01209f073e5526218efeb583cbbbc9ab101c373cc62dd",
+              "library_sha256": "9a851accc1f4c7063d7e3c3cf76186329c063000a00a4d48c45a30ca1e8e3c18"
+            }
+          },
+          "build_jobs": 320,
+          "backend": "npu",
+          "npu_runtime": "standalone",
+          "torch_npu": null,
+          "cuda": null,
+          "architecture": "aarch64",
+          "python": "3.12.13",
+          "cxx11_abi": true,
+          "binary_sha256": {
+            "libtidegraph.a": "6bf90f04657e35904bb6423da922bfd4277e419099e4364416bc79fc5df18cbe",
+            "libtidegraph_runtime.a": "cd69f1a5cf62c6633dbc304268128c5017f895fc56162164e4a8288ed7affd09",
+            "tidegraph-smoke": "094983d37825421cfb9cc4a05e943f2ebedef4a52f75ef110051928a82842530",
+            "tidegraph-kernel-check": "61624c7e03e7d3e64f98e7141f1a862be20b8168dd32d54dce5adc9816ebcb79",
+            "tidegraph-full-check": "54a705ac69ec49eb36f6c4f82178ec540cb25b1cf9c340ffd0ad68de4f51f008",
+            "tidegraph-aggregate-check": "c6c0e0468fab79b43980d7dbf64a4a3752ad5efa86a4f994bf3ab38dbe454d00",
+            "tidegraph-optimizer-check": "0c881d740a51a1067ea507bb914aaeeb6359bedbc4b2cd35cd882032926bc602",
+            "tidegraph-checkpoint-check": "c6ab2db771239e900dfbcaebc0f90cb289cf8c94698dee8d661d7ca768fbdaa5",
+            "tidegraph-weighted-training-check": "d6e6cda8d6f87897030ac702d520c4150098fc1b9fe63880b2587227b5ff873d",
+            "tidegraph-lh-scope-check": "746aedf44726838f1a9159a03747053ee5ec4d9de2e930ad3258aed8a2492e0d",
+            "tidegraph-streaming-bench": "0c11194d5d5cb1c14b98db6ce0ae3259fdee7ee31c4c141ec9e83843c32ae6f2",
+            "tidegraph-scale-bench": "56e28a035c4cd254b2e111b8593c99800efacca1acfd69514c186bf5797f6bc1",
+            "tidegraph-profile-check": "27b5ca2d75e14baa28a0ea1b77414363aff4167cb82e32926132cc8fff9fe7e0",
+            "tidegraph-settle-check": "2508210bc77d7204a535ac81c4c522c8a9358939365c218ed0dfa77af8c982e9",
+            "tidegraph-greedy-check": "bf7dda97d2a18491d75f19ad834457027e1fcb5d91bbd10db649456090b95ba7",
+            "tidegraph-accelerator-check": "c438a87cdc8abea319f61bb74ea0b1d6c8b93140eea5b1322cabb0a4820483c5",
+            "tidegraph-runtime-check": "cd6d5ea111da2de812c90d807b0d2836f854d47dd39c79746d6815fa1376f7ac",
+            "tidegraph-read-precision-check": "a874c29d03dcdf1ed94981fd3763549cbe39b2d07c05dbad48c19a51889ad5b2",
+            "tidegraph-placement-check": "32fecedf4d4e78809d634618f0cfb8c7ad63e063c9d3d9f3b5785826fd644623",
+            "tidegraph-payload-ownership-check": "aec04bcdd1456e41b4e5b372b3739ef0fc4251c32597db9be811571dd9b40fa9",
+            "tidegraph-weighted-binding-module-check": "7e8393e30b8c3b4c3b304b6f7a8bae62bf0728f6add99c6fe8c180c2268044df",
+            "tidegraph-column-check": "2e5e54d26738e95916476458ffa0d537a2fcd69601b0e2e2e952e944799b3235",
+            "tidegraph-kv-tensor-check": "91affe593bd54d68461b3153707d8f28e1e03f4053f21dc1b9e39a3cd75b8d80",
+            "tidegraph-kv-tensor-prepare-check": "a281aa939d625c1a8ee4dc39846a107c3d688eb9a5db5d48321820ca0b2177e5",
+            "tidegraph-read-transport-check": "9af2420c9462dfdc2ff25200d78c6f13edf6d90394d3c1471ebde89bd70e3c4d",
+            "tidegraph-aggregate-tensor-check": "c7fbeaf58d878f80a0b6031bf8222735b1927eb7a3bb6f36e712afd68b0ef33b",
+            "tidegraph-column-checkpoint-check": "44525dd1fa8c506ad1b8649e4cd0538dc0b156d86423218af291af57c4cb796c",
+            "libtidegraph-weighted-binding-module.so": "1704543694f6dff5313a07121479e323c3a57e2375799191953cb88e264cf231"
+          }
+        },
+        "build_jobs": 160,
+        "backend": "npu",
+        "runtime": "standalone",
+        "npu_runtime": "standalone",
+        "cuda_architectures": null,
+        "ascendc_soc": "Ascend910_9392",
+        "binary_sha256": {
+          "tide-device-services-check": "fc690a4f5a120b60c4c2702bb6a89e4370fc16eee7d7cdbf14f2de4323921cc1",
+          "tide-device-optimizer-check": "735c617954ba6153f92bf3e7bc1505558f8343c2b5259a83d748e042eb408428",
+          "tide-weighted-projection-check": "0fdf14f9e0fe702f370e181a3187cda976fa53bf812e4dff81ccae19714bbcf8",
+          "tide-weighted-head-check": "891ed2d877d5bd77fb164b58718c0e69325f0a6217d9f9d6e9c2b0793e116e96",
+          "tide-weighted-kv-update-check": "3d221838ea4266402a6bfc28920f46574fffd966e2992f00b7a623a0ce9fcb37",
+          "tide-weighted-aggregate-check": "19ae1d317898d3f1cd492124a9d12988697acb4862eb8bd2074d959ac345339b",
+          "tide-weighted-region-check": "7929453918bb483c342fa9f82e06b2d5b32744f1a82323ca6e907783e9dd26d6",
+          "tide-weighted-residual-check": "83b8b9dc73dfc7619f6d78f7ae518bd2c719c6e0116c9da48ebc0ed14388c2a3",
+          "tide-weighted-kv-query-check": "ee21fc27ef19c1ec3dc28bde41379b6951435676e9e16f7961f47d5648539eb9",
+          "tide-weighted-kv-full-check": "d2d9867dbd2694930a2aa840e8e3a475dea5aaecfaf64a5c215351b6759b4eea",
+          "tide-block-settle-model-check": "665a50a235232d1c22e8c776e11aabcd0e7896b209c209609229557f8464a15e",
+          "tide-block-resident-check": "f4e64c1af1d7c74d83bcdaa19428fe9a8b9b6a33d3cf76c894b35e812c0c6061",
+          "tide-block-read-selection-check": "09044cacb8d8305f75d8a9d64195a7af4b58862b7dcff20ceac0668a510e25ff",
+          "tide-block-kv-messages-check": "ca92b363659bfae5ac581a8d11f8c26b04ca3c4d6eb1a59a4caad0d005427478",
+          "tide-block-kv-sequence-check": "fd2c2425deaddbb83880b6bc5dbe1a61c1aceb2e2e13ff23ad06516e9d23d1bb",
+          "tide-block-settle-flow-check": "747e09b19cdf98b1f4bcc11087388a8313b6bcf57a8db1b067c6bffb0725b527",
+          "tide-block-settle-session-check": "9d790c7c5e4ca5b629c582dd85abc4ca759e8082b587a413d5b8167fc0396d59",
+          "tide-weighted-training-check": "78cfd34c49742f714b0c7645e7ffe780e8147fdcc08c3ab61713a14140e23d2c",
+          "libtide-weighted-flow.so": "e96d17f7204802e4c5a7021724d2364066db879f6ad8062353467ae7ed2706cd",
+          "libtide-weighted-training.so": "403cdb5d89fd68938588ec5c9115b58859f70973953a745e16dbe917f0611f66",
+          "libtide-block-resident.so": "c615fd39570d3c0487cfd9eb6e7f8a022c6c7fdfef6ca7ab200ea302fe385c01"
+        },
+        "loader_sha256": {
+          "tide-device-services-check": "9ffb402a72a6abe4316bbed681da2c2fa21ac1fdd06ee5f19a1ea6f6ccbf679f",
+          "tide-device-optimizer-check": "daee5ebea6f53c384cd8bdcc227232624cf93f555ddd69c4a8c6a7e4204ffec3",
+          "tide-weighted-projection-check": "3998116160c411efec7aa053d338a7d0ddeb61eb7d780cec5dd19af2ac29d154",
+          "tide-weighted-head-check": "3dce20a9bd401a35c0f81fa8f7845628aeea0645fce9b814ba93055756b7bca7",
+          "tide-weighted-kv-update-check": "346d9e07c574d4141606a65076747c6e7ef64716fa6bffd52d812d4026936ecf",
+          "tide-weighted-aggregate-check": "0c46b6b331ff2d02e44b90d9d92861c4d9793e96e83988d956d4b4db521282f9",
+          "tide-weighted-region-check": "450298907582d9bf3c379cccbbeb28e22e7b80914b68a2651032f481dbc8104f",
+          "tide-weighted-residual-check": "0611b9319592ab916c16fc9df3efd401bfa87b0f207834603ea6dbb9eb7f7e1e",
+          "tide-weighted-kv-query-check": "1c25c03ad79e9aa728b75d321f35b28eba16f93bcff6e43a4a57215361410b0a",
+          "tide-weighted-kv-full-check": "d70d74441c4e619fdab8cf6b14f121da102ceaeff00d4fd46531256fb580e9ca",
+          "tide-block-settle-model-check": "189f045619111a968ab13add30afe85455f119de7ab6e1c4ef2a86514e83fdda",
+          "tide-block-resident-check": "b7a5cb6e4a00d7777a4c22fdbb8c20190339dfb97f6f5fbc35bf5cb47898b1c5",
+          "tide-block-read-selection-check": "41d459065b2811096d01a2ddc2255fbe2f9f3e5558717f20a25b25f526bf48a2",
+          "tide-block-kv-messages-check": "755f5a40fa82d08ab92ddc653e9a8a0195d8a36ac541ec6a3419248bf9d29f58",
+          "tide-block-kv-sequence-check": "ea4d8d15749c5dba020c7dff8c0d325f77db4ec9459648944eeb6b82da8d74f9",
+          "tide-block-settle-flow-check": "17aeb45b7bc6d3f7dd0d20bdaf28b5a1b86f33f7b371577e45345dbba2f7aaea",
+          "tide-block-settle-session-check": "5aed07c3b79e3fbc631cd2d6869866a60bb8043ff3c770f854ef1b59d29b3957",
+          "tide-weighted-training-check": "0d3a4912f22afe26199772783c7e7e3004186f6d0291a92f8823d939b2790679",
+          "libtide-weighted-flow.so": "e21a8ccc7c14c747df9e205c75613d1845ae9acd539b83fbb23c970af38358fc",
+          "libtide-weighted-training.so": "b9f536f683a1a18cc00eac5c15f49caa4464fa41650bf44ebcc0a379670b3971",
+          "libtide-block-resident.so": "2a6485ae527643aae160e71f14921a97c5927dfbfaaeb11c878d89236b3b2c9f"
+        },
+        "requested_checks": [
+          "services",
+          "optimizer",
+          "weighted-projection",
+          "weighted-head",
+          "weighted-kv-update",
+          "weighted-aggregate",
+          "weighted-region",
+          "weighted-residual",
+          "weighted-kv-query",
+          "weighted-kv-full",
+          "resident-block-model",
+          "resident-block-public",
+          "resident-block-selection",
+          "resident-block-kv-messages",
+          "resident-block-kv-sequence",
+          "resident-block-settle-flow",
+          "resident-block-settle-session",
+          "weighted-training"
+        ],
+        "python_component": null,
+        "scope": "build/loader/help only; device control check required separately"
+      },
+      "record": {
+        "path": "/dev/shm/gef-resident-services-20261112/resident-sdk/control-build.json",
+        "bytes": 10243,
+        "sha256": "e71c87fb8ba30a276eca7379d9487a0b7573ebe7e790e36295e77bebb9177f9d"
+      }
+    }
+  },
+  "reused_python": {
+    "source": "042ea369d9e3cac63d0fb0ccec87c4d872ae3c63",
+    "original_source": "1f0e6e43a540a78f2fe810e97b7562b73481fb22",
+    "scope": "Unchanged Python bytes; new resident binary independently built",
+    "matched_files": 317,
+    "source_and_install_bytes_independently_rechecked": true,
+    "record": {
+      "path": "artifacts/resident-services-20261112/reused-python-install.json",
+      "bytes": 33947,
+      "sha256": "65169b597c808e897384400c48328a1b9de6b81f961a04e0d7aacd47eb159b10"
+    }
+  },
+  "build_launches": [
+    {
+      "unit": "resident-services-build-native",
+      "command": [
+        "systemd-run",
+        "--user",
+        "--unit=resident-services-build-native",
+        "--service-type=exec",
+        "--slice=background.slice",
+        "--working-directory=/dev/shm/gef-resident-services-20261112/source",
+        "--property=KillMode=control-group",
+        "--property=RuntimeMaxSec=2400",
+        "--property=TimeoutStopSec=30",
+        "--property=Nice=10",
+        "--property=MemoryMax=512G",
+        "/usr/bin/taskset",
+        "-c",
+        "0-159",
+        "/usr/bin/python3",
+        "/dev/shm/gef-resident-services-20261112/source/scripts/job.py",
+        "--output-dir",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/jobs/resident-services-build-native",
+        "--",
+        "/bin/bash",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/resident-services-20261112/native-build.sh"
+      ],
+      "source": "042ea369d9e3cac63d0fb0ccec87c4d872ae3c63",
+      "verification": "MainPID=1206262\nSlice=background.slice\nControlGroup=/user.slice/user-1003.slice/user@1003.service/background.slice/resident-services-build-native.service\nActiveState=active\n"
+    },
+    {
+      "unit": "resident-services-build-sdk",
+      "command": [
+        "systemd-run",
+        "--user",
+        "--unit=resident-services-build-sdk",
+        "--service-type=exec",
+        "--slice=background.slice",
+        "--working-directory=/dev/shm/gef-resident-services-20261112/source",
+        "--property=KillMode=control-group",
+        "--property=RuntimeMaxSec=2400",
+        "--property=TimeoutStopSec=30",
+        "--property=Nice=10",
+        "--property=MemoryMax=512G",
+        "/usr/bin/taskset",
+        "-c",
+        "160-319",
+        "/usr/bin/python3",
+        "/dev/shm/gef-resident-services-20261112/source/scripts/job.py",
+        "--output-dir",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/jobs/resident-services-build-sdk",
+        "--",
+        "/bin/bash",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/resident-services-20261112/sdk-build.sh"
+      ],
+      "source": "042ea369d9e3cac63d0fb0ccec87c4d872ae3c63",
+      "verification": "MainPID=1206265\nSlice=background.slice\nControlGroup=/user.slice/user-1003.slice/user@1003.service/background.slice/resident-services-build-sdk.service\nActiveState=active\n"
+    }
+  ],
+  "jobs": [
+    {
+      "unit": "resident-services-build-native.service",
+      "status": {
+        "command": [
+          "/bin/bash",
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/resident-services-20261112/native-build.sh"
+        ],
+        "cwd": "/dev/shm/gef-resident-services-20261112/source",
+        "state": "passed",
+        "source": "042ea369d9e3cac63d0fb0ccec87c4d872ae3c63",
+        "dirty": "",
+        "started": "2026-11-12T11:03:49.152966+00:00",
+        "exit_code": 0,
+        "finished": "2026-11-12T11:08:11.199119+00:00"
+      },
+      "record": {
+        "path": "artifacts/jobs/resident-services-build-native/status.json",
+        "bytes": 420,
+        "sha256": "684df4bb2f386ddf75d64f65152893ff8d3b52d1ac691139eaffeee50ed2ce82"
+      },
+      "log": {
+        "path": "artifacts/jobs/resident-services-build-native/task.log",
+        "bytes": 1143634,
+        "sha256": "1b7649998617cd644d596355f8bcbf2cc19fff1573a092e0a72b9d5e8bcfe9c8"
+      }
+    },
+    {
+      "unit": "resident-services-build-sdk.service",
+      "status": {
+        "command": [
+          "/bin/bash",
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/resident-services-20261112/sdk-build.sh"
+        ],
+        "cwd": "/dev/shm/gef-resident-services-20261112/source",
+        "state": "passed",
+        "source": "042ea369d9e3cac63d0fb0ccec87c4d872ae3c63",
+        "dirty": "",
+        "started": "2026-11-12T11:03:49.156757+00:00",
+        "exit_code": 0,
+        "finished": "2026-11-12T11:08:27.277395+00:00"
+      },
+      "record": {
+        "path": "artifacts/jobs/resident-services-build-sdk/status.json",
+        "bytes": 417,
+        "sha256": "58c2933c566d4b1816d048cfb2449e7e7e1b02b6091ccf1eafbb7727db8302f7"
+      },
+      "log": {
+        "path": "artifacts/jobs/resident-services-build-sdk/task.log",
+        "bytes": 2313006,
+        "sha256": "22c785b0cededa0d8a9569f3a273bf1926fb5fdfd6ca240abc115e1c5670399d"
+      }
+    },
+    {
+      "unit": "resident-services-cpu-context-fixed.service",
+      "status": {
+        "command": [
+          "/bin/bash",
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/resident-services-20261112/cpu-context-fixed.sh"
+        ],
+        "cwd": "/dev/shm/gef-resident-services-context-20261112",
+        "state": "passed",
+        "source": "7fd1dd1008ae581d4dfcbd543b1c8b992b4541b4",
+        "dirty": "",
+        "started": "2026-11-12T11:13:18.972195+00:00",
+        "exit_code": 0,
+        "finished": "2026-11-12T11:13:30.013801+00:00"
+      },
+      "record": {
+        "path": "artifacts/jobs/resident-services-cpu-context-fixed/status.json",
+        "bytes": 426,
+        "sha256": "c3f61f119f1b37fdc9d3b6de436008c57191bf1509345a5782de06d17a5e1c25"
+      },
+      "log": {
+        "path": "artifacts/jobs/resident-services-cpu-context-fixed/task.log",
+        "bytes": 168,
+        "sha256": "030418617f212eda01de741246ac106aa3a41f4a3bccbc80a4c58c61dbaa2e51"
+      }
+    },
+    {
+      "unit": "resident-services-cpu-directed.service",
+      "status": {
+        "command": [
+          "/bin/bash",
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/resident-services-20261112/cpu-directed.sh"
+        ],
+        "cwd": "/dev/shm/gef-resident-services-20261112/source",
+        "state": "failed",
+        "source": "042ea369d9e3cac63d0fb0ccec87c4d872ae3c63",
+        "dirty": "",
+        "started": "2026-11-12T11:09:10.555902+00:00",
+        "exit_code": 1,
+        "finished": "2026-11-12T11:09:21.241333+00:00"
+      },
+      "record": {
+        "path": "artifacts/jobs/resident-services-cpu-directed/status.json",
+        "bytes": 420,
+        "sha256": "94b0a5809b31a566884e5d2394fa43c62151356df2c5a1e5b31145153744d037"
+      },
+      "log": {
+        "path": "artifacts/jobs/resident-services-cpu-directed/task.log",
+        "bytes": 13533,
+        "sha256": "cc739f79d22a607ec1013b76a107765854282f0ae8d4e443d526cc3e140518e2"
+      }
+    },
+    {
+      "unit": "resident-services-resident-native.service",
+      "status": {
+        "command": [
+          "/bin/bash",
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/resident-services-20261112/resident-native.sh"
+        ],
+        "cwd": "/dev/shm/gef-resident-services-20261112/source",
+        "state": "passed",
+        "source": "042ea369d9e3cac63d0fb0ccec87c4d872ae3c63",
+        "dirty": "",
+        "started": "2026-11-12T11:08:59.707138+00:00",
+        "exit_code": 0,
+        "finished": "2026-11-12T11:09:48.759101+00:00"
+      },
+      "record": {
+        "path": "artifacts/jobs/resident-services-resident-native/status.json",
+        "bytes": 423,
+        "sha256": "01b7c57fd90c3f604349b8f05674bf08b6df0307a10367f4401527b6726132ec"
+      },
+      "log": {
+        "path": "artifacts/jobs/resident-services-resident-native/task.log",
+        "bytes": 887,
+        "sha256": "6e93595c75ca8cc9694adcfb7c83c37dcfa84583fcf350e3d48d8c6e1a00c255"
+      }
+    },
+    {
+      "unit": "resident-services-resident-scale.service",
+      "status": {
+        "command": [
+          "/bin/bash",
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/resident-services-20261112/resident-scale.sh"
+        ],
+        "cwd": "/dev/shm/gef-resident-services-20261112/source",
+        "state": "passed",
+        "source": "042ea369d9e3cac63d0fb0ccec87c4d872ae3c63",
+        "dirty": "",
+        "started": "2026-11-12T11:11:27.384319+00:00",
+        "exit_code": 0,
+        "finished": "2026-11-12T11:13:40.871503+00:00"
+      },
+      "record": {
+        "path": "artifacts/jobs/resident-services-resident-scale/status.json",
+        "bytes": 422,
+        "sha256": "b3acae83239b8bc091cadf12c9038efc568171890cdea2abc2e84818638dce75"
+      },
+      "log": {
+        "path": "artifacts/jobs/resident-services-resident-scale/task.log",
+        "bytes": 843,
+        "sha256": "213e4a66baa9419cc59a06e022e86219a06e3f94c3f5ba906bc31bafd48f324b"
+      }
+    },
+    {
+      "unit": "resident-services-resident-sdk.service",
+      "status": {
+        "command": [
+          "/bin/bash",
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/resident-services-20261112/resident-sdk.sh"
+        ],
+        "cwd": "/dev/shm/gef-resident-services-20261112/source",
+        "state": "failed",
+        "source": "042ea369d9e3cac63d0fb0ccec87c4d872ae3c63",
+        "dirty": "",
+        "started": "2026-11-12T11:05:35.035742+00:00",
+        "exit_code": 1,
+        "finished": "2026-11-12T11:07:35.640987+00:00"
+      },
+      "record": {
+        "path": "artifacts/jobs/resident-services-resident-sdk/status.json",
+        "bytes": 420,
+        "sha256": "a6a13bd706d1058f243be2bfb13c0a1d3b1f2a9af40f0f5e9a8aa469c9dc2c43"
+      },
+      "log": {
+        "path": "artifacts/jobs/resident-services-resident-sdk/task.log",
+        "bytes": 65,
+        "sha256": "f96c4aecc0b143ff4869cb428d05930a0c3b83fce2a300ba6df18954a795a97d"
+      }
+    },
+    {
+      "unit": "resident-services-sdk-ready.service",
+      "status": {
+        "command": [
+          "/bin/bash",
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/resident-services-20261112/sdk-ready.sh"
+        ],
+        "cwd": "/dev/shm/gef-resident-services-20261112/source",
+        "state": "passed",
+        "source": "042ea369d9e3cac63d0fb0ccec87c4d872ae3c63",
+        "dirty": "",
+        "started": "2026-11-12T11:08:59.663593+00:00",
+        "exit_code": 0,
+        "finished": "2026-11-12T11:10:59.190788+00:00"
+      },
+      "record": {
+        "path": "artifacts/jobs/resident-services-sdk-ready/status.json",
+        "bytes": 417,
+        "sha256": "7d269f9369688f90ece5976836d165171583031186bf609c6538467df4d6a25e"
+      },
+      "log": {
+        "path": "artifacts/jobs/resident-services-sdk-ready/task.log",
+        "bytes": 1211,
+        "sha256": "4fe3c27ea6545570e5f6675b16f689eb430f7b747d1cac48f9e31380dd7f9ffc"
+      }
+    }
+  ],
+  "cpu": {
+    "original": {
+      "source": "042ea369d9e3cac63d0fb0ccec87c4d872ae3c63",
+      "artifact": {
+        "path": "artifacts/resident-services-20261112/cpu-directed.xml",
+        "bytes": 19788,
+        "sha256": "312d92d18982a3fdbd57988275a316c68604059a99f29352fdfc587ee1983d09"
+      },
+      "tests": 38,
+      "passed": 29,
+      "failed": 9,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 8.616,
+      "failed_tests": [
+        {
+          "test": "tests.test_resident_block_flow_layout.test_physical_fibers_keep_same_class_duplicates_and_zero_G",
+          "message": "assert tensor(6108786722624) == 2\n +  where 2 = len([tensor([0.5000, 0.0000, 0.0000]), tensor([0.5000, 0.0000, 0.0000])])"
+        },
+        {
+          "test": "tests.test_resident_block_flow_layout.test_nonincreasing_sequence_positions_refused",
+          "message": "assert 0 == 79\n +  where 0 = <built-in method item of Tensor object at 0xffff7f70fa70>()\n +    where <built-in method item of Tensor object at 0xffff7f70fa70> = tensor([0], dtype=torch.int32).item"
+        },
+        {
+          "test": "tests.test_resident_block_flow_layout.test_physical_ports_and_guarded_publication",
+          "message": "assert [[True, True, True]] == [[True, True, False]]\n  \n  At index 0 diff: [True, True, True] != [True, True, False]\n  Use -v to get more diff"
+        },
+        {
+          "test": "tests.test_resident_block_flow_layout.test_raw_roots_fold_batch_time_and_preserve_connected_zero",
+          "message": "assert [[0.0, 0.0, 0....0, 0.0, 0.0]] == [[1.0, 2.0, 3....0, 0.0, 0.0]]\n  \n  At index 0 diff: [0.0, 0.0, 0.0, 0.0] != [1.0, 2.0, 3.0, 4.0]\n  Use -v to get more diff"
+        },
+        {
+          "test": "tests.test_resident_block_flow_layout.test_duplicate_ports_have_independent_strength_and_content_roots",
+          "message": "assert False\n +  where False = <built-in method equal of type object at 0xffff97b620e0>(tensor([[[0., 0., 0.],\\n         [0., 0., 0.]],\\n\\n        [[0., 0., 0.],\\n         [0., 0., 0.]]]), tensor([[[0.0000, 0.0000, 0.0000],\\n         [0.5000, 0.5000, 0.6000]],\\n\\n        [[0.0000, 0.7000, 0.8000],\\n         [0.0000, 0.0000, 0.0000]]]))\n +    where <built-in method equal of type object at 0xffff97b620e0> = torch.equal\n[+2 more lines; full report in element text]"
+        },
+        {
+          "test": "tests.test_resident_block_flow_layout.test_actual_fiber_transpose_sums_each_physical_use",
+          "message": "AssertionError: Tensor-likes are not close!\n\nMismatched elements: 3 / 6 (50.0%)\nGreatest absolute difference: 0.8999999761581421 at index (0, 2) (up to 1e-05 allowed)\nGreatest relative difference: 1.0 at index (0, 0) (up to 1.3e-06 allowed)"
+        },
+        {
+          "test": "tests.test_resident_block_flow_layout.test_reverse_uses_actual_forward_journal_and_refuses_incomplete",
+          "message": "assert ([0, 0, 0, 0] == [3, 1, 2, 0]\n  \n  At index 0 diff: 0 != 3\n  Use -v to get more diff)"
+        },
+        {
+          "test": "tests.test_resident_block_flow_layout.test_reverse_gather_combines_direct_and_downstream_without_false_roots",
+          "message": "AssertionError: Tensor-likes are not close!\n\nMismatched elements: 1 / 2 (50.0%)\nGreatest absolute difference: 0.30000001192092896 at index (0, 0) (up to 1e-05 allowed)\nGreatest relative difference: 1.0 at index (0, 0) (up to 1.3e-06 allowed)"
+        },
+        {
+          "test": "tests.test_resident_block_flow_layout.test_complete_cut_metadata_uses_actual_candidates_and_physical_input_counts",
+          "message": "assert (not 0 and [[False, Fals...False, False]] == [[True, False... False, True]]\n +  where 0 = <built-in method item of Tensor object at 0xffff7f4a73e0>()\n +    where <built-in method item of Tensor object at 0xffff7f4a73e0> = tensor([0], dtype=torch.int32).item\n  \n  At index 0 diff: [False, False, False] != [True, False, True]\n  Use -v to get more diff)"
+        }
+      ]
+    },
+    "fixed": {
+      "source": "7fd1dd1008ae581d4dfcbd543b1c8b992b4541b4",
+      "artifact": {
+        "path": "artifacts/resident-services-20261112/cpu-context-fixed.xml",
+        "bytes": 5824,
+        "sha256": "718de7d97fc1ef1c8cf753b6715c5fde568a78145011bddf2f885a891f7d1f15"
+      },
+      "tests": 39,
+      "passed": 39,
+      "failed": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 9.053,
+      "failed_tests": []
+    }
+  },
+  "device_qualification": {
+    "resident-sdk": {
+      "process_count": 21,
+      "passed_processes": 21,
+      "processes": [
+        {
+          "name": "device-services",
+          "command": [
+            "/dev/shm/gef-resident-services-20261112/resident-sdk/tide-device-services-check",
+            "--device=npu:0",
+            "--dtype=float32"
+          ],
+          "exit_code": 0,
+          "started": 1794481746.9170146,
+          "finished": 1794481751.0360348,
+          "cwd": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/resident-services-20261112/resident-sdk",
+          "device_visibility": "1",
+          "log": {
+            "path": "artifacts/resident-services-20261112/resident-sdk/device-services.log",
+            "bytes": 332,
+            "sha256": "f803559c2e3e36fa90221539209832886aae4d9cdc561a4300df42d6d2eab9f3"
+          },
+          "key_outputs": [
+            "task-services: passed repeated_windows=true empty_window=true nested_levels=3 root_services=2 sibling_services=true shared_workspace_bytes=16777472"
+          ],
+          "source": "042ea369d9e3cac63d0fb0ccec87c4d872ae3c63"
+        },
+        {
+          "name": "weighted-projection",
+          "command": [
+            "/dev/shm/gef-resident-services-20261112/resident-sdk/tide-weighted-projection-check",
+            "--device=npu:0",
+            "--dtype=float32"
+          ],
+          "exit_code": 0,
+          "started": 1794481751.0410156,
+          "finished": 1794481755.2694325,
+          "cwd": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/resident-services-20261112/resident-sdk",
+          "device_visibility": "1",
+          "log": {
+            "path": "artifacts/resident-services-20261112/resident-sdk/weighted-projection.log",
+            "bytes": 1482,
+            "sha256": "f78a10f5551838c109e49da428ac2a3d15b79ac610a3e8a7979060404f3c452e"
+          },
+          "key_outputs": [
+            "single-bank projection bytes: forward=34304 reverse=28993 allowance=65536 old_replicated_matrices=524288",
+            "multi-bank projection bytes: rows=64 bias=0 forward=71839 reverse=70623 allowance=131072 old_replicated_matrices=524288",
+            "projection-difference label=multi-bank.db-candidate-vs-fp64 shape=[3, 32] atol=1e-6 rtol=1e-5 failed=0 max_abs=7.4831768870353699e-07 max_tolerance_ratio=0.5789282454705984",
+            "projection-difference label=multi-bank.db-legacy-fp32-vs-fp64 shape=[3, 32] atol=1e-6 rtol=1e-5 failed=1 max_abs=1.8121208995580673e-06 max_tolerance_ratio=1.2532815861122615 first_flat=64 actual=0.044591896235942841 expected=0.044590084115043283 abs_error=1.8121208995580673e-06 tolerance=1.4459008411504328e-06",
+            "projection-difference label=multi-bank.db-candidate-vs-legacy-fp32 shape=[3, 32] atol=1e-6 rtol=1e-5 failed=1 max_abs=2.2724270820617676e-06 max_tolerance_ratio=1.5716144135447645 first_flat=64 actual=0.044589623808860779 expected=0.044591896235942841 abs_error=2.2724270820617676e-06 tolerance=1.4459189623594284e-06",
+            "multi-bank projection bytes: rows=193 bias=1 forward=126144 reverse=106093 allowance=131072 old_replicated_matrices=1581056",
+            "weighted-projection: passed configurations=8 single_bank=true banks3=true all_vjps=true none_zero=true saved_versions=true adjoint_dtype=float32"
+          ],
+          "source": "042ea369d9e3cac63d0fb0ccec87c4d872ae3c63"
+        },
+        {
+          "name": "block-kv-messages",
+          "command": [
+            "/dev/shm/gef-resident-services-20261112/resident-sdk/tide-block-kv-messages-check",
+            "--device=npu:0",
+            "--dtype=float32"
+          ],
+          "exit_code": 0,
+          "started": 1794481755.2726407,
+          "finished": 1794481759.4944668,
+          "cwd": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/resident-services-20261112/resident-sdk",
+          "device_visibility": "1",
+          "log": {
+            "path": "artifacts/resident-services-20261112/resident-sdk/block-kv-messages.log",
+            "bytes": 469,
+            "sha256": "0773e1c6295d7bf7ecf451c6d8d174b85edc6e428a2d346ba873832317a3857a"
+          },
+          "key_outputs": [
+            "block-kv-messages: passed separate_read_proposal=true roots=7 shared_roles=true message_pair_unscaled=true explicit_cG=true default_no_projection=true undefined_roots=true owner_bindings=2 trainable_subset=true refusal_checks=10 int64_times=true saved_reverse=true full_executor=false"
+          ],
+          "source": "042ea369d9e3cac63d0fb0ccec87c4d872ae3c63"
+        },
+        {
+          "name": "device-optimizer",
+          "command": [
+            "/dev/shm/gef-resident-services-20261112/resident-sdk/tide-device-optimizer-check",
+            "--device=npu:0",
+            "--dtype=float32"
+          ],
+          "exit_code": 0,
+          "started": 1794481759.497378,
+          "finished": 1794481763.716383,
+          "cwd": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/resident-services-20261112/resident-sdk",
+          "device_visibility": "1",
+          "log": {
+            "path": "artifacts/resident-services-20261112/resident-sdk/device-optimizer.log",
+            "bytes": 1170,
+            "sha256": "ae0d3ae4c6dd83a87887298b649c7d59f8d779151e71076b35fa7354a38dcb0d"
+          },
+          "key_outputs": [
+            "optimizer-finite: passed probes=504 widths=9 tails=true nonfinite_atomic=true disconnected_poison=true",
+            "device-optimizer: passed trajectories=32 updates=256 expected_half_refusals=0 CPU=FP32_FP64 master_dtype=FP32 finite_transaction=true half_boundaries=0 scope=owner_updates_not_public_training"
+          ],
+          "source": "042ea369d9e3cac63d0fb0ccec87c4d872ae3c63"
+        },
+        {
+          "name": "weighted-head",
+          "command": [
+            "/dev/shm/gef-resident-services-20261112/resident-sdk/tide-weighted-head-check",
+            "--device=npu:0",
+            "--dtype=float32"
+          ],
+          "exit_code": 0,
+          "started": 1794481763.7195761,
+          "finished": 1794481767.9394045,
+          "cwd": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/resident-services-20261112/resident-sdk",
+          "device_visibility": "1",
+          "log": {
+            "path": "artifacts/resident-services-20261112/resident-sdk/weighted-head.log",
+            "bytes": 422,
+            "sha256": "31087398e5818734cd0cb1174ef24e80cfa2e7fff735c079e866783ae16ba62e"
+          },
+          "key_outputs": [
+            "weighted-head: passed profiles=2 rows=24 complete_vjp=true shared_parameters=true saved_versions=true vendor_batched=true"
+          ],
+          "source": "042ea369d9e3cac63d0fb0ccec87c4d872ae3c63"
+        },
+        {
+          "name": "weighted-kv-update",
+          "command": [
+            "/dev/shm/gef-resident-services-20261112/resident-sdk/tide-weighted-kv-update-check",
+            "--device=npu:0",
+            "--dtype=float32"
+          ],
+          "exit_code": 0,
+          "started": 1794481767.9422553,
+          "finished": 1794481773.1669085,
+          "cwd": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/resident-services-20261112/resident-sdk",
+          "device_visibility": "1",
+          "log": {
+            "path": "artifacts/resident-services-20261112/resident-sdk/weighted-kv-update.log",
+            "bytes": 386,
+            "sha256": "bd8f730734b8e77e587330e8e9913ca9b5c8f1d7ec989bf5d1470e8a1c62c391"
+          },
+          "key_outputs": [
+            "weighted-kv-update: passed replay_rows=72 banks=3 roots=5 full_parameter_chain=true none_zero=true saved_versions=true exact_int64=true failed_no_commit=true compute_dtype=float32 adjoint_dtype=float32"
+          ],
+          "source": "042ea369d9e3cac63d0fb0ccec87c4d872ae3c63"
+        },
+        {
+          "name": "weighted-aggregate",
+          "command": [
+            "/dev/shm/gef-resident-services-20261112/resident-sdk/tide-weighted-aggregate-check",
+            "--device=npu:0",
+            "--dtype=float32"
+          ],
+          "exit_code": 0,
+          "started": 1794481773.1698267,
+          "finished": 1794481777.3903089,
+          "cwd": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/resident-services-20261112/resident-sdk",
+          "device_visibility": "1",
+          "log": {
+            "path": "artifacts/resident-services-20261112/resident-sdk/weighted-aggregate.log",
+            "bytes": 320,
+            "sha256": "b91c4c93ab4b6bedcc3eb2b31dd5d9fa07053fd6340a92d00bffc0b9feefa6fb"
+          },
+          "key_outputs": [
+            "weighted-aggregate: passed configurations=2 physical_rows=24 logical_fibers=20 full_vjp=true duplicate_classes=true saved_versions=true"
+          ],
+          "source": "042ea369d9e3cac63d0fb0ccec87c4d872ae3c63"
+        },
+        {
+          "name": "weighted-region",
+          "command": [
+            "/dev/shm/gef-resident-services-20261112/resident-sdk/tide-weighted-region-check",
+            "--device=npu:0",
+            "--dtype=float32"
+          ],
+          "exit_code": 0,
+          "started": 1794481777.393781,
+          "finished": 1794481781.6128488,
+          "cwd": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/resident-services-20261112/resident-sdk",
+          "device_visibility": "1",
+          "log": {
+            "path": "artifacts/resident-services-20261112/resident-sdk/weighted-region.log",
+            "bytes": 315,
+            "sha256": "d92ed8fa2b2f21136491b862d741e01b667357da88cee925813103811bef1a85"
+          },
+          "key_outputs": [
+            "weighted-region: passed configs=14 physical_rows=140 logical_frames=112 complete_fields_and_parameters_vjp=true history_int64=true"
+          ],
+          "source": "042ea369d9e3cac63d0fb0ccec87c4d872ae3c63"
+        },
+        {
+          "name": "weighted-residual",
+          "command": [
+            "/dev/shm/gef-resident-services-20261112/resident-sdk/tide-weighted-residual-check",
+            "--device=npu:0",
+            "--dtype=float32"
+          ],
+          "exit_code": 0,
+          "started": 1794481781.6158535,
+          "finished": 1794481785.83867,
+          "cwd": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/resident-services-20261112/resident-sdk",
+          "device_visibility": "1",
+          "log": {
+            "path": "artifacts/resident-services-20261112/resident-sdk/weighted-residual.log",
+            "bytes": 322,
+            "sha256": "c2b6e781fffa9b2015eff3eb6bd372c1cee4fa440e5c18d1f7ed6dfaaf207f44"
+          },
+          "key_outputs": [
+            "weighted-residual: passed configurations=4 replay_rows=48 shared_banks=3 complete_vjp=true connected_zero_scales=true saved_versions=true"
+          ],
+          "source": "042ea369d9e3cac63d0fb0ccec87c4d872ae3c63"
+        },
+        {
+          "name": "weighted-kv-query",
+          "command": [
+            "/dev/shm/gef-resident-services-20261112/resident-sdk/tide-weighted-kv-query-check",
+            "--device=npu:0",
+            "--dtype=float32"
+          ],
+          "exit_code": 0,
+          "started": 1794481785.8442473,
+          "finished": 1794481791.0654202,
+          "cwd": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/resident-services-20261112/resident-sdk",
+          "device_visibility": "1",
+          "log": {
+            "path": "artifacts/resident-services-20261112/resident-sdk/weighted-kv-query.log",
+            "bytes": 456,
+            "sha256": "8ac2bbcaa0824d2dc1edbe214c2b8257f174f3834575661966b3c956a87c5c4d"
+          },
+          "key_outputs": [
+            "weighted-kv-query: passed horizons=2 bank_layouts=2 independent_roots=4 full_input_parameter_raw_vjp=true saved_versions=true read_dtype=float32 adjoint_dtype=float32"
+          ],
+          "source": "042ea369d9e3cac63d0fb0ccec87c4d872ae3c63"
+        },
+        {
+          "name": "weighted-kv-full",
+          "command": [
+            "/dev/shm/gef-resident-services-20261112/resident-sdk/tide-weighted-kv-full-check",
+            "--device=npu:0",
+            "--dtype=float32"
+          ],
+          "exit_code": 0,
+          "started": 1794481791.068719,
+          "finished": 1794481795.293182,
+          "cwd": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/resident-services-20261112/resident-sdk",
+          "device_visibility": "1",
+          "log": {
+            "path": "artifacts/resident-services-20261112/resident-sdk/weighted-kv-full.log",
+            "bytes": 331,
+            "sha256": "d19903bf635761bbf2c1cf174b5f9166f6e6d575cbea4facc4b4ab6823145093"
+          },
+          "key_outputs": [
+            "weighted-kv-full: passed configurations=8 heads=2 all_parameter_input_raw_vjp=true saved_versions=true compute_dtype=float32 adjoint_dtype=float32"
+          ],
+          "source": "042ea369d9e3cac63d0fb0ccec87c4d872ae3c63"
+        },
+        {
+          "name": "block-read-selection",
+          "command": [
+            "/dev/shm/gef-resident-services-20261112/resident-sdk/tide-block-read-selection-check",
+            "--device=npu:0",
+            "--dtype=float32"
+          ],
+          "exit_code": 0,
+          "started": 1794481795.2957215,
+          "finished": 1794481799.518203,
+          "cwd": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/resident-services-20261112/resident-sdk",
+          "device_visibility": "1",
+          "log": {
+            "path": "artifacts/resident-services-20261112/resident-sdk/block-read-selection.log",
+            "bytes": 613,
+            "sha256": "a80b304cae9ff716da964c832390dd8808728846ae8150348085a3761fed2758"
+          },
+          "key_outputs": [
+            "block-read-selection: passed memory_read=qry frames=4 nodes=3 complete_regions=2 roots=3+Mem/total shared_banks=2 independent_formula_vjp=true saved_versions=true full_executor=false three_replay_seconds=0.0121891",
+            "block-read-selection: passed memory_read=sum frames=4 nodes=3 complete_regions=2 roots=3+Mem/total shared_banks=2 independent_formula_vjp=true saved_versions=true full_executor=false three_replay_seconds=0.00901402"
+          ],
+          "source": "042ea369d9e3cac63d0fb0ccec87c4d872ae3c63"
+        },
+        {
+          "name": "block-kv-sequence",
+          "command": [
+            "/dev/shm/gef-resident-services-20261112/resident-sdk/tide-block-kv-sequence-check",
+            "--device=npu:0",
+            "--dtype=float32"
+          ],
+          "exit_code": 0,
+          "started": 1794481799.5212052,
+          "finished": 1794481803.744211,
+          "cwd": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/resident-services-20261112/resident-sdk",
+          "device_visibility": "1",
+          "log": {
+            "path": "artifacts/resident-services-20261112/resident-sdk/block-kv-sequence.log",
+            "bytes": 344,
+            "sha256": "83accab1ef3397def7b4368759d7daedf347fc7bc3b982891760d12ff649ef85"
+          },
+          "key_outputs": [
+            "block-kv-sequence: passed B=2 L=3 N=2 actual_update=true independent_formula_vjp=true int64=true two_axis_isolation=true saved_reverse=true full_executor=false"
+          ],
+          "source": "042ea369d9e3cac63d0fb0ccec87c4d872ae3c63"
+        },
+        {
+          "name": "block-settle-flow",
+          "command": [
+            "/dev/shm/gef-resident-services-20261112/resident-sdk/tide-block-settle-flow-check",
+            "--device=npu:0",
+            "--dtype=float32"
+          ],
+          "exit_code": 0,
+          "started": 1794481803.7477942,
+          "finished": 1794481810.0230813,
+          "cwd": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/resident-services-20261112/resident-sdk",
+          "device_visibility": "1",
+          "log": {
+            "path": "artifacts/resident-services-20261112/resident-sdk/block-settle-flow.log",
+            "bytes": 381,
+            "sha256": "e94c37416cb0ff1e7938c81c5a9e6cf43e6c8ed1e92c3fde899bf9750fa91707"
+          },
+          "key_outputs": [
+            "block-settle-flow: passed actual_full_graph=true independent_scalar_formula=true roots=10 read_snapshots=3 B=2 L=2 duplicate_edges=true duplicate_ports=true shared_parameters=true exact_int64=true"
+          ],
+          "source": "042ea369d9e3cac63d0fb0ccec87c4d872ae3c63"
+        },
+        {
+          "name": "block-settle-session",
+          "command": [
+            "/dev/shm/gef-resident-services-20261112/resident-sdk/tide-block-settle-session-check",
+            "--device=npu:0",
+            "--dtype=float32"
+          ],
+          "exit_code": 0,
+          "started": 1794481810.0262775,
+          "finished": 1794481816.2993584,
+          "cwd": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/resident-services-20261112/resident-sdk",
+          "device_visibility": "1",
+          "log": {
+            "path": "artifacts/resident-services-20261112/resident-sdk/block-settle-session.log",
+            "bytes": 473,
+            "sha256": "5687fdb6e3c78369b594eb6e0f86c8ce0cae51754bd08b09c9162d092cd04f58"
+          },
+          "key_outputs": [
+            "block-session-storage: passed optimizer=11020 tensors=21874 exact_constructor=true below_limit_refusal=true input_refusal_unchanged=true",
+            "block-settle-session: passed two_window_bptt=true independent_formula_vjp=true AdamW_steps=3 exact_raw_checkpoint=true fresh_owner=true fresh_process=0"
+          ],
+          "source": "042ea369d9e3cac63d0fb0ccec87c4d872ae3c63"
+        },
+        {
+          "name": "block-settle-model",
+          "command": [
+            "/dev/shm/gef-resident-services-20261112/resident-sdk/tide-block-settle-model-check",
+            "--device=npu:0",
+            "--dtype=float32"
+          ],
+          "exit_code": 0,
+          "started": 1794481816.3027012,
+          "finished": 1794481817.6182282,
+          "cwd": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/resident-services-20261112/resident-sdk",
+          "device_visibility": "1",
+          "log": {
+            "path": "artifacts/resident-services-20261112/resident-sdk/block-settle-model.log",
+            "bytes": 139,
+            "sha256": "49352293dd5eaa2b6e39845c8a3cfd1fc7f2c4ad6e07e9fbbbbe544db68b8292"
+          },
+          "key_outputs": [
+            "block-settle-model: passed memory_read=qry,sum original_parameters=true source_factors=true heterogeneous_hidden_rank=true raw_import=true"
+          ],
+          "source": "042ea369d9e3cac63d0fb0ccec87c4d872ae3c63",
+          "scope": "model lowering and binding; not a device numerical comparison"
+        },
+        {
+          "name": "core-columns",
+          "command": [
+            "/dev/shm/gef-resident-services-20261112/core-sdk/tidegraph-column-check",
+            "--device=npu:0",
+            "--dtype=float32"
+          ],
+          "exit_code": 0,
+          "started": 1794481817.621467,
+          "finished": 1794481831.9035993,
+          "cwd": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/resident-services-20261112/resident-sdk",
+          "device_visibility": "1",
+          "log": {
+            "path": "artifacts/resident-services-20261112/resident-sdk/core-columns.log",
+            "bytes": 980,
+            "sha256": "2a33f2a51623c45aa57e0eda2d42fde1f6a447ac79fd90319c2663df02511579"
+          },
+          "key_outputs": [
+            "column case passed: kv mixed-a",
+            "column case passed: affine mixed-a",
+            "column case passed: delta mixed-a",
+            "column case passed: gated_delta mixed-a",
+            "column case passed: ssd mixed-a",
+            "column case passed: kv mixed-b",
+            "column case passed: affine mixed-b",
+            "column case passed: delta mixed-b",
+            "column case passed: gated_delta mixed-b",
+            "column case passed: ssd mixed-b",
+            "column case passed: kv mixed-c",
+            "column case passed: affine mixed-c",
+            "column case passed: delta mixed-c",
+            "column case passed: gated_delta mixed-c",
+            "column case passed: ssd mixed-c",
+            "column standalone: independent streaming, raw state, VJP, two SGD windows passed"
+          ],
+          "source": "1f0e6e43a540a78f2fe810e97b7562b73481fb22"
+        },
+        {
+          "name": "public-qry",
+          "command": [
+            "/dev/shm/gef-resident-services-20261112/resident-sdk/tide-block-resident-check",
+            "--device=npu:0",
+            "--dtype=float32",
+            "--memory-read",
+            "qry",
+            "--checkpoint-path",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/resident-services-20261112/resident-sdk/qry.pt"
+          ],
+          "exit_code": 0,
+          "started": 1794481831.9070625,
+          "finished": 1794481839.282161,
+          "cwd": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/resident-services-20261112/resident-sdk",
+          "device_visibility": "1",
+          "log": {
+            "path": "artifacts/resident-services-20261112/resident-sdk/public-qry.log",
+            "bytes": 389,
+            "sha256": "0dc4d98dd414cbf4f2f876a06b679ba69b9daba2285dee01997eccbb82719cf5"
+          },
+          "key_outputs": [
+            "block-resident-public: passed memory_read=qry actual_Model=true source_factors=true source_hidden_rank_padding=true independent_streaming=true AdamW_steps=3 windows=2 raw_continuation=true fresh_process=0"
+          ],
+          "source": "042ea369d9e3cac63d0fb0ccec87c4d872ae3c63"
+        },
+        {
+          "name": "restore-qry",
+          "command": [
+            "/dev/shm/gef-resident-services-20261112/resident-sdk/tide-block-resident-check",
+            "--device=npu:0",
+            "--dtype=float32",
+            "--memory-read",
+            "qry",
+            "--checkpoint-path",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/resident-services-20261112/resident-sdk/qry.pt",
+            "--restore-check"
+          ],
+          "exit_code": 0,
+          "started": 1794481839.2855375,
+          "finished": 1794481845.5584817,
+          "cwd": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/resident-services-20261112/resident-sdk",
+          "device_visibility": "1",
+          "log": {
+            "path": "artifacts/resident-services-20261112/resident-sdk/restore-qry.log",
+            "bytes": 389,
+            "sha256": "11e2f535c17d97ac6956a1861134c5ac77bbfa820d2df3f45c3f7cff2cdc08bc"
+          },
+          "key_outputs": [
+            "block-resident-public: passed memory_read=qry actual_Model=true source_factors=true source_hidden_rank_padding=true independent_streaming=true AdamW_steps=3 windows=2 raw_continuation=true fresh_process=1"
+          ],
+          "source": "042ea369d9e3cac63d0fb0ccec87c4d872ae3c63"
+        },
+        {
+          "name": "public-sum",
+          "command": [
+            "/dev/shm/gef-resident-services-20261112/resident-sdk/tide-block-resident-check",
+            "--device=npu:0",
+            "--dtype=float32",
+            "--memory-read",
+            "sum",
+            "--checkpoint-path",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/resident-services-20261112/resident-sdk/sum.pt"
+          ],
+          "exit_code": 0,
+          "started": 1794481845.5620413,
+          "finished": 1794481852.889131,
+          "cwd": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/resident-services-20261112/resident-sdk",
+          "device_visibility": "1",
+          "log": {
+            "path": "artifacts/resident-services-20261112/resident-sdk/public-sum.log",
+            "bytes": 389,
+            "sha256": "44b49b3385091312775c0406100005a01bce581eae8479f943cc5a28b6bd4391"
+          },
+          "key_outputs": [
+            "block-resident-public: passed memory_read=sum actual_Model=true source_factors=true source_hidden_rank_padding=true independent_streaming=true AdamW_steps=3 windows=2 raw_continuation=true fresh_process=0"
+          ],
+          "source": "042ea369d9e3cac63d0fb0ccec87c4d872ae3c63"
+        },
+        {
+          "name": "restore-sum",
+          "command": [
+            "/dev/shm/gef-resident-services-20261112/resident-sdk/tide-block-resident-check",
+            "--device=npu:0",
+            "--dtype=float32",
+            "--memory-read",
+            "sum",
+            "--checkpoint-path",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/resident-services-20261112/resident-sdk/sum.pt",
+            "--restore-check"
+          ],
+          "exit_code": 0,
+          "started": 1794481852.891859,
+          "finished": 1794481859.1694436,
+          "cwd": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/resident-services-20261112/resident-sdk",
+          "device_visibility": "1",
+          "log": {
+            "path": "artifacts/resident-services-20261112/resident-sdk/restore-sum.log",
+            "bytes": 389,
+            "sha256": "89d185d32f57a23465d0d4c536e39a0842f2a2c37caac68d7bd248a65e5728ba"
+          },
+          "key_outputs": [
+            "block-resident-public: passed memory_read=sum actual_Model=true source_factors=true source_hidden_rank_padding=true independent_streaming=true AdamW_steps=3 windows=2 raw_continuation=true fresh_process=1"
+          ],
+          "source": "042ea369d9e3cac63d0fb0ccec87c4d872ae3c63"
+        }
+      ],
+      "record": {
+        "path": "artifacts/resident-services-20261112/resident-sdk/processes.json",
+        "bytes": 9999,
+        "sha256": "99d2b8af75447c016b58e7a6c452757dc6537f5c38acaf532ccfe9a5209b3621"
+      }
+    },
+    "resident-native": {
+      "process_count": 4,
+      "passed_processes": 4,
+      "processes": [
+        {
+          "name": "public-qry",
+          "command": [
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/additive-work/env/bin/python",
+            "/dev/shm/gef-resident-services-20261112/source/examples/consumer_core5/block_resident.py",
+            "--device",
+            "npu:0",
+            "--memory-read",
+            "qry",
+            "--native-library",
+            "/dev/shm/gef-resident-services-20261112/core-native",
+            "--resident-library",
+            "/dev/shm/gef-resident-services-20261112/resident-native",
+            "--checkpoint-path",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/resident-services-20261112/resident-native/qry.pt"
+          ],
+          "exit_code": 0,
+          "started": 1794481753.774089,
+          "finished": 1794481762.4996119,
+          "cwd": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/resident-services-20261112/resident-native",
+          "device_visibility": "11",
+          "log": {
+            "path": "artifacts/resident-services-20261112/resident-native/public-qry.log",
+            "bytes": 418,
+            "sha256": "069929c3a671e007995a6fe5f357ad5fd6dfa20a903da5138e2e5872efc9b8cb"
+          },
+          "key_outputs": [
+            "{'state': 'passed', 'default': 'settle-block-v2', 'source': '/dev/shm/gef-resident-services-20261112/install/tidegraph/__init__.py', 'memory_read': 'qry', 'independent_python_schedule': True, 'adamw_steps': 3, 'fresh_process': False}"
+          ],
+          "source": "042ea369d9e3cac63d0fb0ccec87c4d872ae3c63"
+        },
+        {
+          "name": "restore-qry",
+          "command": [
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/additive-work/env/bin/python",
+            "/dev/shm/gef-resident-services-20261112/source/examples/consumer_core5/block_resident.py",
+            "--device",
+            "npu:0",
+            "--memory-read",
+            "qry",
+            "--native-library",
+            "/dev/shm/gef-resident-services-20261112/core-native",
+            "--resident-library",
+            "/dev/shm/gef-resident-services-20261112/resident-native",
+            "--checkpoint-path",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/resident-services-20261112/resident-native/qry.pt",
+            "--restore-check"
+          ],
+          "exit_code": 0,
+          "started": 1794481762.5021176,
+          "finished": 1794481771.2270253,
+          "cwd": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/resident-services-20261112/resident-native",
+          "device_visibility": "11",
+          "log": {
+            "path": "artifacts/resident-services-20261112/resident-native/restore-qry.log",
+            "bytes": 417,
+            "sha256": "f2791680be8da1a6b8660a49daf5bcd60d7cd5f0c6dfef6c225872c1b24c4e94"
+          },
+          "key_outputs": [
+            "{'state': 'passed', 'default': 'settle-block-v2', 'source': '/dev/shm/gef-resident-services-20261112/install/tidegraph/__init__.py', 'memory_read': 'qry', 'independent_python_schedule': True, 'adamw_steps': 3, 'fresh_process': True}"
+          ],
+          "source": "042ea369d9e3cac63d0fb0ccec87c4d872ae3c63"
+        },
+        {
+          "name": "public-sum",
+          "command": [
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/additive-work/env/bin/python",
+            "/dev/shm/gef-resident-services-20261112/source/examples/consumer_core5/block_resident.py",
+            "--device",
+            "npu:0",
+            "--memory-read",
+            "sum",
+            "--native-library",
+            "/dev/shm/gef-resident-services-20261112/core-native",
+            "--resident-library",
+            "/dev/shm/gef-resident-services-20261112/resident-native",
+            "--checkpoint-path",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/resident-services-20261112/resident-native/sum.pt"
+          ],
+          "exit_code": 0,
+          "started": 1794481771.2301555,
+          "finished": 1794481779.9567006,
+          "cwd": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/resident-services-20261112/resident-native",
+          "device_visibility": "11",
+          "log": {
+            "path": "artifacts/resident-services-20261112/resident-native/public-sum.log",
+            "bytes": 418,
+            "sha256": "959dd30c8a86d0c09f8c73dd005cafcc5d83f01ad69a37a24abccad56eed9149"
+          },
+          "key_outputs": [
+            "{'state': 'passed', 'default': 'settle-block-v2', 'source': '/dev/shm/gef-resident-services-20261112/install/tidegraph/__init__.py', 'memory_read': 'sum', 'independent_python_schedule': True, 'adamw_steps': 3, 'fresh_process': False}"
+          ],
+          "source": "042ea369d9e3cac63d0fb0ccec87c4d872ae3c63"
+        },
+        {
+          "name": "restore-sum",
+          "command": [
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/additive-work/env/bin/python",
+            "/dev/shm/gef-resident-services-20261112/source/examples/consumer_core5/block_resident.py",
+            "--device",
+            "npu:0",
+            "--memory-read",
+            "sum",
+            "--native-library",
+            "/dev/shm/gef-resident-services-20261112/core-native",
+            "--resident-library",
+            "/dev/shm/gef-resident-services-20261112/resident-native",
+            "--checkpoint-path",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/resident-services-20261112/resident-native/sum.pt",
+            "--restore-check"
+          ],
+          "exit_code": 0,
+          "started": 1794481779.959376,
+          "finished": 1794481788.7392645,
+          "cwd": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/resident-services-20261112/resident-native",
+          "device_visibility": "11",
+          "log": {
+            "path": "artifacts/resident-services-20261112/resident-native/restore-sum.log",
+            "bytes": 417,
+            "sha256": "73b36b4d86f1b8e549e5d00a6e12275130f9592080048f5dc6025c6d62820827"
+          },
+          "key_outputs": [
+            "{'state': 'passed', 'default': 'settle-block-v2', 'source': '/dev/shm/gef-resident-services-20261112/install/tidegraph/__init__.py', 'memory_read': 'sum', 'independent_python_schedule': True, 'adamw_steps': 3, 'fresh_process': True}"
+          ],
+          "source": "042ea369d9e3cac63d0fb0ccec87c4d872ae3c63"
+        }
+      ],
+      "record": {
+        "path": "artifacts/resident-services-20261112/resident-native/processes.json",
+        "bytes": 3637,
+        "sha256": "6aaf906b0d4995104d72ad855af069e045939fc6d199eb27f7874ebfa988b986"
+      }
+    }
+  },
+  "queues": {
+    "queue-sdk-ready.json": {
+      "record": {
+        "path": "artifacts/resident-services-20261112/queue-sdk-ready.json",
+        "bytes": 404,
+        "sha256": "1e82eaf372286dc9c461522c3040b1b171803c4419ef4d0e07abde98b91201f6"
+      },
+      "contents": {
+        "elapsed_seconds": 118.83502048999071,
+        "job_id": "resident-services-sdk-ready",
+        "logical_device": "npu:0",
+        "logical_devices": [
+          "npu:0"
+        ],
+        "npu_count": 1,
+        "physical_id": 1,
+        "physical_ids": [
+          1
+        ],
+        "priority": 0,
+        "project": "graph-execution-foundation",
+        "return_code": 0,
+        "schema_version": 1,
+        "status": "completed",
+        "timestamp": "2026-11-12T11:10:59.180188+00:00"
+      }
+    },
+    "queue-resident-native.json": {
+      "record": {
+        "path": "artifacts/resident-services-20261112/queue-resident-native.json",
+        "bytes": 411,
+        "sha256": "7bc8cdcf852675a52d3ae97e98079b9eca93a1fec205bcae898ac3ad01139f03"
+      },
+      "contents": {
+        "elapsed_seconds": 48.35585693642497,
+        "job_id": "resident-services-resident-native",
+        "logical_device": "npu:0",
+        "logical_devices": [
+          "npu:0"
+        ],
+        "npu_count": 1,
+        "physical_id": 11,
+        "physical_ids": [
+          11
+        ],
+        "priority": 0,
+        "project": "graph-execution-foundation",
+        "return_code": 0,
+        "schema_version": 1,
+        "status": "completed",
+        "timestamp": "2026-11-12T11:09:48.748779+00:00"
+      }
+    },
+    "resident-scale-queue.json": {
+      "record": {
+        "path": "artifacts/resident-services-20261112/resident-scale-queue.json",
+        "bytes": 409,
+        "sha256": "6e8c906067f443a999f1a3baf281883d7b9f24153c6dccbf0016fa544f9f03c9"
+      },
+      "contents": {
+        "elapsed_seconds": 132.79189747571945,
+        "job_id": "resident-services-resident-scale",
+        "logical_device": "npu:0",
+        "logical_devices": [
+          "npu:0"
+        ],
+        "npu_count": 1,
+        "physical_id": 1,
+        "physical_ids": [
+          1
+        ],
+        "priority": 0,
+        "project": "graph-execution-foundation",
+        "return_code": 0,
+        "schema_version": 1,
+        "status": "completed",
+        "timestamp": "2026-11-12T11:13:40.860562+00:00"
+      }
+    }
+  },
+  "preserved_failures": [
+    {
+      "name": "41c42759-projection",
+      "source": "41c42759c60381f874dd755134cc3bb4723225d9",
+      "processes": {
+        "name": "weighted-projection",
+        "command": [
+          "/dev/shm/gef-resident-tile-20261112/resident-sdk/tide-weighted-projection-check",
+          "--device=npu:0",
+          "--dtype=float32"
+        ],
+        "exit_code": 2,
+        "started": 1794480912.627327,
+        "finished": 1794480916.847736,
+        "cwd": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/resident-tile-20261112/resident-sdk",
+        "device_visibility": "1"
+      },
+      "artifacts": [
+        {
+          "path": "artifacts/resident-tile-20261112/resident-sdk/processes.json",
+          "bytes": 439,
+          "sha256": "7ae09f480565256fb7c3a95e435c969cbfec30ac684ef9a79494051fadd5ad4d"
+        },
+        {
+          "path": "artifacts/resident-tile-20261112/resident-sdk/weighted-projection.log",
+          "bytes": 2169,
+          "sha256": "bf0ec134a8f808788520babcaaacb86d58205265fa2d2933e3576a6a08f2cc52"
+        }
+      ],
+      "key_outputs": [
+        "weighted projection numeric difference"
+      ],
+      "interpretation": "193-row / 3-bank / width-32 bias-gradient comparison against sequential FP32 oracle failed. The original terminal failure is retained; successor independent FP64 check does not relabel it."
+    },
+    {
+      "name": "41c42759-flow",
+      "source": "41c42759c60381f874dd755134cc3bb4723225d9",
+      "processes": [
+        {
+          "name": "block-kv-messages",
+          "command": [
+            "/dev/shm/gef-resident-tile-20261112/resident-sdk/tide-block-kv-messages-check",
+            "--device=npu:0",
+            "--dtype=float32"
+          ],
+          "exit_code": 0,
+          "started": 1794481119.988647,
+          "finished": 1794481124.2133207,
+          "device_visibility": "1",
+          "scope": "independent components; projection db strict failure retained"
+        },
+        {
+          "name": "block-read-selection",
+          "command": [
+            "/dev/shm/gef-resident-tile-20261112/resident-sdk/tide-block-read-selection-check",
+            "--device=npu:0",
+            "--dtype=float32"
+          ],
+          "exit_code": 0,
+          "started": 1794481124.2165823,
+          "finished": 1794481128.4392252,
+          "device_visibility": "1",
+          "scope": "independent components; projection db strict failure retained"
+        },
+        {
+          "name": "block-kv-sequence",
+          "command": [
+            "/dev/shm/gef-resident-tile-20261112/resident-sdk/tide-block-kv-sequence-check",
+            "--device=npu:0",
+            "--dtype=float32"
+          ],
+          "exit_code": 0,
+          "started": 1794481128.4424047,
+          "finished": 1794481132.6633477,
+          "device_visibility": "1",
+          "scope": "independent components; projection db strict failure retained"
+        },
+        {
+          "name": "block-settle-flow",
+          "command": [
+            "/dev/shm/gef-resident-tile-20261112/resident-sdk/tide-block-settle-flow-check",
+            "--device=npu:0",
+            "--dtype=float32"
+          ],
+          "exit_code": 2,
+          "started": 1794481132.6673143,
+          "finished": 1794481137.8942504,
+          "device_visibility": "1",
+          "scope": "independent components; projection db strict failure retained"
+        }
+      ],
+      "artifacts": [
+        {
+          "path": "artifacts/resident-tile-20261112/components/processes.json",
+          "bytes": 1604,
+          "sha256": "090b7ed90327fe77e06e4ae9d99864c72a426589d537f69ce7b1b88f48fae294"
+        },
+        {
+          "path": "artifacts/resident-tile-20261112/components/block-settle-flow.log",
+          "bytes": 285,
+          "sha256": "ad4563dc3eac99823f7f5fcf2aaa51f976a8e2ac1f1898dac344719398b4c33a"
+        },
+        {
+          "path": "artifacts/jobs/resident-tile-flowtrace/task.log",
+          "bytes": 65625,
+          "sha256": "4540bda65cf5bf2b28f54aaf896fcd806abae825de16fb7ceaec9301b9f088c7"
+        }
+      ],
+      "key_outputs": [
+        "block-kv-messages/read-selection/kv-sequence: exit 0",
+        "LaunchAscendKernel ret 507002",
+        "weighted raw independent field adjoints failed with CANN status 507002",
+        "cann-op stream=1403 last_task=2041 name=aclnnInplaceZero workspace=0"
+      ],
+      "interpretation": "Complete flow failed during backward program recording, before numerical model execution. The last recorded vendor task is an observed trace point, not a general device limit."
+    },
+    {
+      "name": "resident-tile-resident-sdk",
+      "source": "41c42759c60381f874dd755134cc3bb4723225d9",
+      "status": {
+        "command": [
+          "/bin/bash",
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/resident-tile-20261112/resident-sdk.sh"
+        ],
+        "cwd": "/dev/shm/gef-resident-tile-20261112/source",
+        "state": "failed",
+        "source": "41c42759c60381f874dd755134cc3bb4723225d9",
+        "dirty": "",
+        "started": "2026-11-12T10:55:05.416909+00:00",
+        "exit_code": 1,
+        "finished": "2026-11-12T10:55:16.868787+00:00"
+      },
+      "record": {
+        "path": "artifacts/jobs/resident-tile-resident-sdk/status.json",
+        "bytes": 412,
+        "sha256": "13e30f70c1b8ce7e2c51368c614ba28235649c35aa64fb1c99c1ebaca0957c74"
+      }
+    },
+    {
+      "name": "resident-tile-components",
+      "source": "41c42759c60381f874dd755134cc3bb4723225d9",
+      "status": {
+        "command": [
+          "/bin/bash",
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/resident-tile-20261112/components.sh"
+        ],
+        "cwd": "/dev/shm/gef-resident-tile-20261112/source",
+        "state": "failed",
+        "source": "41c42759c60381f874dd755134cc3bb4723225d9",
+        "dirty": "",
+        "started": "2026-11-12T10:58:32.686873+00:00",
+        "exit_code": 1,
+        "finished": "2026-11-12T10:58:57.914825+00:00"
+      },
+      "record": {
+        "path": "artifacts/jobs/resident-tile-components/status.json",
+        "bytes": 410,
+        "sha256": "70dc55ec06ff18bbb7872680e59bc6eb0d63e7b68e1188d9a095465a74662eb9"
+      }
+    },
+    {
+      "name": "resident-tile-flowtrace",
+      "source": "41c42759c60381f874dd755134cc3bb4723225d9",
+      "status": {
+        "command": [
+          "/bin/bash",
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/resident-tile-20261112/flowtrace.sh"
+        ],
+        "cwd": "/dev/shm/gef-resident-tile-20261112/source",
+        "state": "failed",
+        "source": "41c42759c60381f874dd755134cc3bb4723225d9",
+        "dirty": "",
+        "started": "2026-11-12T11:04:34.081415+00:00",
+        "exit_code": 2,
+        "finished": "2026-11-12T11:04:46.537725+00:00"
+      },
+      "record": {
+        "path": "artifacts/jobs/resident-tile-flowtrace/status.json",
+        "bytes": 409,
+        "sha256": "5c8f08d751bda5cedd2d207f07e167abadbdb23a2b779fe028a8ef15e884dd40"
+      }
+    },
+    {
+      "name": "initial-sdk-prerequisite-timeout",
+      "source": "042ea369d9e3cac63d0fb0ccec87c4d872ae3c63",
+      "record": {
+        "path": "artifacts/jobs/resident-services-resident-sdk/task.log",
+        "bytes": 65,
+        "sha256": "f96c4aecc0b143ff4869cb428d05930a0c3b83fce2a300ba6df18954a795a97d"
+      },
+      "key_output": "SDK build did not finish within qualification precondition bound",
+      "bound_seconds": 120,
+      "device_admitted": false,
+      "device_checks_run": 0,
+      "queue_state_file_created": false,
+      "interpretation": "Build was still running at the launch prerequisite bound. A separate sdk-ready job was launched after build completion; this failed job remains failed."
+    },
+    {
+      "name": "042ea369-cpu-order-contamination",
+      "source": "042ea369d9e3cac63d0fb0ccec87c4d872ae3c63",
+      "result_reference": "cpu.original",
+      "interpretation": "29 passed / 9 failed. Generated multiblock CPU adapter left thread-local worker/workers at its exhausted loop state, contaminating following raw-source kernel probes in the same process. This is not treated as a floating-point tolerance failure. Fixed-source 39 passed is a separate result."
+    }
+  ],
+  "scale": [
+    {
+      "case": "fc16",
+      "source": "042ea369d9e3cac63d0fb0ccec87c4d872ae3c63",
+      "configuration": {
+        "schema": "tide-experiment-v1",
+        "name": "prefill-query-fc-kv",
+        "description": "Finite regression observation. Small independent gates qualify mechanisms; this actual scale has separate numerical/continuation evidence.",
+        "model": {
+          "recipe": {
+            "topology": "fc",
+            "width": 128,
+            "region_width": 4,
+            "depth": 4,
+            "family": "kv",
+            "memory_overrides": {
+              "memory_read": "qry"
+            }
+          }
+        },
+        "task": {
+          "samples": 4,
+          "positions": 16,
+          "seed": 7,
+          "input_pattern": "staggered-v1",
+          "objective": {
+            "kind": "weighted-output-square",
+            "scale": 1e-06
+          }
+        },
+        "execution": {
+          "family": "auto",
+          "client": "python-native",
+          "device": "npu:0",
+          "placement": "resident",
+          "dtype": "float32",
+          "scoring_dtype": "float32",
+          "schedule": "prefill",
+          "prefill_schedule": "auto",
+          "packing": "packed",
+          "return_packing": "scalar",
+          "return_mode": "outputs",
+          "peer_devices": [],
+          "query_execution": "auto",
+          "workers": 1,
+          "intraop_threads": 2,
+          "interop_threads": 1,
+          "resident_executor": "auto"
+        },
+        "measurement": {
+          "mode": "training",
+          "steps": 1,
+          "warmup": 1,
+          "validation": "none",
+          "checkpoint_check": true,
+          "timeout_seconds": 600,
+          "checkpoint_interval": 2
+        },
+        "resources": {
+          "max_materialize_bytes": 137438953472,
+          "checkpoint_max_bytes": 137438953472,
+          "resident_block_limits": {
+            "cache": 49,
+            "forward_bytes": 6375342080,
+            "backward_bytes": 11744051200,
+            "optimizer_bytes": 402653184,
+            "total_bytes": 18522046464,
+            "windows": 1,
+            "timeout_ms": 30000,
+            "workspace_bytes": 536870912
+          }
+        },
+        "site": {
+          "paths": {
+            "native_library": "/dev/shm/gef-resident-services-20261112/core-native",
+            "resident_library": "/dev/shm/gef-resident-services-20261112/resident-native"
+          }
+        }
+      },
+      "model_definition_reproduction": null,
+      "model_summary": {
+        "nodes": 16,
+        "regions": 4,
+        "body_edges": 48,
+        "width": 128,
+        "parameter_totals": {
+          "trainable": 4564404,
+          "frozen": 104,
+          "role_elements": 5352188,
+          "unique": 4564508
+        },
+        "canonical_parameter_owners": 417,
+        "heads": [
+          2
+        ],
+        "ffn_width": [
+          512
+        ],
+        "memory_read_counts": {
+          "sum": 0,
+          "qry": 16
+        },
+        "region_score_counts": {
+          "ind": 4,
+          "att": 0
+        },
+        "regional_common": {
+          "read_mode": "+",
+          "local_score": "cat",
+          "selection_mode": "regional_total",
+          "region_control_mode": "context",
+          "region_evidence": "cat",
+          "regularizer": "quad",
+          "k": 1
+        },
+        "source_binding": {
+          "mode": "region",
+          "rank": null
+        },
+        "source_hidden_width": 32,
+        "alpha_agg": 1.0
+      },
+      "raw_artifacts": {
+        "result.json": {
+          "path": "artifacts/resident-services-20261112/resident-scale/fc16/result.json",
+          "bytes": 512765,
+          "sha256": "ed9efbcf96f389a9986e9393ede5e334226e9530083aa2762b69adfe8d948212"
+        },
+        "resolved.json": {
+          "path": "artifacts/resident-services-20261112/resident-scale/fc16/resolved.json",
+          "bytes": 378693,
+          "sha256": "1d48851215404ce494591a3f7beb7c04e342829ce32513da4e2293d299d823bc"
+        },
+        "identity.json": {
+          "path": "artifacts/resident-services-20261112/resident-scale/fc16/identity.json",
+          "bytes": 35273,
+          "sha256": "09f3571f87a80d6feddeccc9c6ffb320f7700562aae58b90c58990c4b71b91f9"
+        }
+      },
+      "config_artifact": {
+        "path": "artifacts/resident-services-20261112/resident-fc16-config.json",
+        "bytes": 1905,
+        "sha256": "060964afbecacbd3f0af0ee44fe6f4c47dac00562d69ee8522ee95b34ba5e293"
+      },
+      "ids": {
+        "model_id": "928e6fd6338da79e445b4307cd508f2b772db43ba951c84e48b39b35152026d1",
+        "workload_id": "c243113a0b0292dede0cdb5e998898b5042098b96d4cc6d9f57e02fd00bb4f10",
+        "task_id": "e948d86c8750889bf6d15a7c64571bb9b371656f1bc43e92c55e6269673fd1cc",
+        "execution_id": "58730f6499032b38a7c63afec15004a130f2313bb7241b2a9043b8d4f360c296",
+        "config_id": "e30bebd844e3d0ec7a1ac4ec6b220fa33f99497a1628ebdd9517eab79a09fbf6"
+      },
+      "execution_status": "completed",
+      "phase": "complete",
+      "mathematics": "not_checked",
+      "validation": {
+        "policy": "none",
+        "numeric": "not_checked",
+        "discrete": "not_checked",
+        "complete": "not_checked",
+        "outcome": "not_checked",
+        "strict_passed": false
+      },
+      "strict_passed": false,
+      "throughput_qualified": false,
+      "timing_summary": {
+        "median_seconds": 3.9447636380791664,
+        "total_seconds": 3.9447636380791664,
+        "min_seconds": 3.9447636380791664,
+        "max_seconds": 3.9447636380791664,
+        "measured_windows": 1,
+        "interpretation": "unchecked or failed cost"
+      },
+      "timing_contract": {
+        "return_mode": "outputs",
+        "included": "input preparation, transfer, host/device scheduling, packing, forward, finite checks, requested return and synchronization; training includes loss, VJP and optimizer",
+        "excluded": "runtime/model construction, durable checkpoint publication, independent validation and recovery checks",
+        "no_cross_contract_speedup": true
+      },
+      "construction_seconds": 0.9272351376712322,
+      "measured_raw_metrics": [
+        {
+          "window": 1,
+          "seconds": 3.9447636380791664,
+          "loss": 1.330313801765442,
+          "candidate_updates": 915,
+          "full_calls": 306,
+          "messages": 912,
+          "outputs": 78,
+          "pending": 0,
+          "actual_stats": {
+            "candidate_events": 915,
+            "selected_events": 306,
+            "visited_edges": 912,
+            "received_atoms": 1095,
+            "resident_regions": 4,
+            "allocated_candidate_rows": 1024,
+            "allocated_message_rows": 1024
+          },
+          "input_positions": 64,
+          "effective_window_execution": {
+            "schedule": "settle-block-v2",
+            "input": "B\u00d7L\u00d7P",
+            "readiness": "device",
+            "selection": "device",
+            "progression": "device"
+          },
+          "output_artifact": "outputs-000001.pt",
+          "output_write_seconds": 0.006187859922647476,
+          "checkpoint_scheduled": true,
+          "checkpoint_cost": {
+            "schema": "tide-checkpoint-cost-v1",
+            "spans": {
+              "io.serialize": {
+                "seconds": 0.00022323057055473328,
+                "calls": 1,
+                "failed_calls": 0
+              },
+              "io.flush_fsync_file": {
+                "seconds": 0.0024875514209270477,
+                "calls": 1,
+                "failed_calls": 0
+              },
+              "io.publish_link": {
+                "seconds": 2.4493783712387085e-05,
+                "calls": 1,
+                "failed_calls": 0
+              },
+              "io.fsync_directory": {
+                "seconds": 0.0005434975028038025,
+                "calls": 1,
+                "failed_calls": 0
+              },
+              "generation.owner_save": {
+                "seconds": 0.1170351654291153,
+                "calls": 1,
+                "failed_calls": 0
+              },
+              "generation.hash_files": {
+                "seconds": 0.05191483721137047,
+                "calls": 1,
+                "failed_calls": 0
+              },
+              "generation.publish_metadata_pointer": {
+                "seconds": 0.003602638840675354,
+                "calls": 1,
+                "failed_calls": 0
+              }
+            },
+            "scope": "inclusive wall-time spans; nested spans must not be summed; no extra device synchronization",
+            "total_seconds": 0.17294356599450111
+          },
+          "checkpoint_seconds": 0.17296454682946205
+        }
+      ],
+      "warmup_raw_metrics": [
+        {
+          "window": 0,
+          "seconds": 3.571082767099142,
+          "loss": 1.5386719703674316,
+          "candidate_updates": 915,
+          "full_calls": 276,
+          "messages": 824,
+          "outputs": 70,
+          "pending": 0,
+          "actual_stats": {
+            "candidate_events": 915,
+            "selected_events": 276,
+            "visited_edges": 824,
+            "received_atoms": 1007,
+            "resident_regions": 4,
+            "allocated_candidate_rows": 1024,
+            "allocated_message_rows": 1024
+          },
+          "input_positions": 64,
+          "effective_window_execution": {
+            "schedule": "settle-block-v2",
+            "input": "B\u00d7L\u00d7P",
+            "readiness": "device",
+            "selection": "device",
+            "progression": "device"
+          },
+          "output_artifact": "outputs-000000.pt",
+          "output_write_seconds": 0.0069345757365226746,
+          "checkpoint_scheduled": false
+        }
+      ],
+      "checkpoint": {
+        "state": "passed",
+        "next_window": 2,
+        "bytes": 65691604,
+        "exact_resume": true,
+        "resume_check": {
+          "state": "passed",
+          "exact": true,
+          "next_window": 2,
+          "scope": "serial new owner: full decoded raw state before/after the actual selected next window; returned records, loss, parameters, gradients, optimizer and task"
+        },
+        "check_seconds": 10.998116850852966
+      },
+      "checkpoint_publication": {
+        "interval": 2,
+        "publications": 1,
+        "simultaneous_generations": 1,
+        "final_next_window": 2,
+        "final_always_saved": true,
+        "recovery_scope": "only published complete boundaries; unsaved windows are lost on interruption"
+      },
+      "original_budget_preserved": true,
+      "effective": {
+        "execution": "resident",
+        "scheduler": "settle-block-v2",
+        "device": "npu:0",
+        "payload_dtype": "float32",
+        "adjoint_dtype": "float32",
+        "metadata_dtype": "int64",
+        "initial_state": "actual raw",
+        "requested_limits": {
+          "cache": 49,
+          "forward_bytes": 6375342080,
+          "backward_bytes": 11744051200,
+          "optimizer_bytes": 402653184,
+          "total_bytes": 18522046464,
+          "windows": 1,
+          "timeout_ms": 30000,
+          "workspace_bytes": 536870912
+        },
+        "effective_limits": {
+          "cache": 49,
+          "forward_bytes": 6375342080,
+          "backward_bytes": 11744051200,
+          "optimizer_bytes": 402653184,
+          "total_bytes": 18522046464,
+          "workspace_bytes": 536870912,
+          "windows": 1,
+          "timeout_ms": 30000
+        },
+        "task": {
+          "kind": "built-in",
+          "objective": {
+            "kind": "weighted-output-square",
+            "scale": 1e-06
+          },
+          "optimizer": {
+            "kind": "sgd",
+            "lr": 0.001,
+            "momentum": 0.3,
+            "weight_decay": 0.01
+          }
+        },
+        "return_mode": "outputs",
+        "input_interface": "resident-block-B\u00d7L\u00d7P-v2",
+        "resident_dispatch": {
+          "schema": "tide-experiment-resident-selection-v1",
+          "requested": "auto",
+          "effective": "block-v2",
+          "reason": "compatible complete B\u00d7L Settle ports",
+          "capacity_field": "resident_block_limits",
+          "requested_limits": {
+            "cache": 49,
+            "forward_bytes": 6375342080,
+            "backward_bytes": 11744051200,
+            "optimizer_bytes": 402653184,
+            "total_bytes": 18522046464,
+            "windows": 1,
+            "timeout_ms": 30000,
+            "workspace_bytes": 536870912
+          },
+          "effective_limits": {
+            "cache": 49,
+            "forward_bytes": 6375342080,
+            "backward_bytes": 11744051200,
+            "optimizer_bytes": 402653184,
+            "total_bytes": 18522046464,
+            "workspace_bytes": 536870912,
+            "windows": 1,
+            "timeout_ms": 30000
+          }
+        },
+        "last_backward_statistics": {
+          "parameter_owners": 481,
+          "retained_windows": 1,
+          "scope": "public block field VJP; no old event counters"
+        }
+      },
+      "runtime": {
+        "resolved_device": "npu:0",
+        "backend": "npu",
+        "logical_device_index": 0,
+        "resolution_reason": "explicit:npu",
+        "dtype": "float32",
+        "host_architecture": "aarch64",
+        "torch": "2.12.0+cpu",
+        "torch_git": "7661cd9c6b841b62b7f411aa52ec51f05457263b",
+        "python": "3.12.13",
+        "cxx11_abi": true,
+        "runtime_queue_environment": {
+          "TASK_QUEUE_ENABLE": null,
+          "PER_STREAM_QUEUE": null,
+          "ASCEND_LAUNCH_BLOCKING": null
+        },
+        "torch_npu": "2.12.0.post3",
+        "logical_device_count": 1,
+        "device_name": "Ascend910_9392",
+        "cann_version": "9.2.0",
+        "matmul_allow_hf32": false,
+        "precision_policy": {
+          "matmul_allow_hf32": false,
+          "conv_allow_hf32": false
+        },
+        "actual_threads": {
+          "intraop": 2,
+          "interop": 1,
+          "workers": 1
+        }
+      },
+      "package": {
+        "package": "tidegraph",
+        "version": "0.3.0",
+        "path": "/dev/shm/gef-region-tensor-20261112/install/tidegraph",
+        "installed_files_sha256": "db08e1e336723e98e7605cc84b9cd565f470810d460fa8a551f9c88f057e26e3",
+        "content_scope": "recursive package files and relative names; __pycache__ and .pyc/.pyo excluded",
+        "source_provenance": "installation content; Git/wheel provenance requires an explicit dependency lock"
+      },
+      "dependencies": {
+        "torch": {
+          "version": "2.12.0+cpu",
+          "record_sha256": "d8c1ebcc0c0414b78a8a645941b98d37a9bcf8fdb9d51cb0700c5da9e3919fe6",
+          "scope": "installed version and RECORD metadata; dependency binaries are not rehashed"
+        },
+        "torch-npu": {
+          "version": "2.12.0.post3",
+          "record_sha256": "4a6b805fb2ce2fc232b8be71fd8d787ebcf4c6fb6ee8940c2152d50a0d33cb9d",
+          "scope": "installed version and RECORD metadata; dependency binaries are not rehashed"
+        },
+        "numpy": {
+          "version": "2.5.2",
+          "record_sha256": "79acc5eb79dcafa8281f3bb4aefb0f7621231e9fbee8a42e67d566524f8471d9",
+          "scope": "installed version and RECORD metadata; dependency binaries are not rehashed"
+        }
+      },
+      "resources": {
+        "cpu_affinity_count": 4,
+        "load_average_before": [
+          45.72,
+          68.05,
+          69.62
+        ],
+        "load_average_after": [
+          46.07,
+          66.69,
+          69.14
+        ],
+        "memory_phases": [
+          {
+            "phase": "runtime_ready",
+            "allocated_bytes": 0,
+            "reserved_bytes": 0,
+            "peak_allocated_bytes": 0,
+            "peak_reserved_bytes": 0,
+            "process_lifetime_peak_rss_bytes": 1715159040
+          },
+          {
+            "phase": "constructed",
+            "allocated_bytes": 69462528,
+            "reserved_bytes": 81788928,
+            "peak_allocated_bytes": 69462528,
+            "peak_reserved_bytes": 81788928,
+            "process_lifetime_peak_rss_bytes": 2021724160
+          },
+          {
+            "phase": "warmup",
+            "allocated_bytes": 96268288,
+            "reserved_bytes": 1518338048,
+            "peak_allocated_bytes": 1509114368,
+            "peak_reserved_bytes": 1518338048,
+            "process_lifetime_peak_rss_bytes": 2213064704
+          },
+          {
+            "phase": "measurement",
+            "allocated_bytes": 96268288,
+            "reserved_bytes": 1560281088,
+            "peak_allocated_bytes": 1517363712,
+            "peak_reserved_bytes": 1560281088,
+            "process_lifetime_peak_rss_bytes": 2277433344
+          },
+          {
+            "phase": "exact-resume",
+            "allocated_bytes": 0,
+            "reserved_bytes": 1595932672,
+            "peak_allocated_bytes": 1517677568,
+            "peak_reserved_bytes": 1595932672,
+            "process_lifetime_peak_rss_bytes": 2636263424
+          }
+        ],
+        "memory_scope": "process allocator only; excludes untracked vendor/driver memory; RSS is process-lifetime peak",
+        "memory_sampling": "outside step timers; peaks reset after runtime_ready, construction and warmup"
+      },
+      "input_denominator_correction": {
+        "raw_input_positions": 64,
+        "allocated_input_positions": 64,
+        "actual_input_positions": 61,
+        "sample_lengths": [
+          16,
+          15,
+          14,
+          16
+        ],
+        "physical_input_atoms": 183,
+        "derivation": "staggered-v1: length[b] = 16 - (b % 3). Count distinct (sample, original_position) with at least one physical input; sum = 16+15+14+16 = 61. Multi-port omission changes atom counts, not these position counts.",
+        "positions_per_second_unqualified": 15.463537386920065,
+        "raw_records_modified": false,
+        "scope": "Reviewed arithmetic correction only; no new execution or independent scale mathematical qualification."
+      },
+      "total_wall_seconds": 23.06407605484128
+    },
+    {
+      "case": "lh176",
+      "source": "042ea369d9e3cac63d0fb0ccec87c4d872ae3c63",
+      "configuration": {
+        "schema": "tide-experiment-v1",
+        "name": "LH176-textbook-block-boundary",
+        "description": "Finite block resident boundary; same 00bb LH176 topology and parameters, continuing measured windows; not reset harness timing.",
+        "task": {
+          "samples": 4,
+          "positions": 16,
+          "seed": 7,
+          "input_pattern": "staggered-v1",
+          "objective": {
+            "kind": "weighted-output-square",
+            "scale": 1e-06
+          }
+        },
+        "execution": {
+          "family": "auto",
+          "client": "python-native",
+          "device": "npu:0",
+          "placement": "resident",
+          "dtype": "float32",
+          "scoring_dtype": "float32",
+          "schedule": "prefill",
+          "prefill_schedule": "auto",
+          "packing": "packed",
+          "return_packing": "scalar",
+          "return_mode": "outputs",
+          "peer_devices": [],
+          "query_execution": "auto",
+          "workers": 1,
+          "intraop_threads": 2,
+          "interop_threads": 1,
+          "resident_executor": "auto"
+        },
+        "measurement": {
+          "mode": "training",
+          "steps": 1,
+          "warmup": 0,
+          "validation": "none",
+          "checkpoint_check": true,
+          "timeout_seconds": 600,
+          "checkpoint_interval": 1
+        },
+        "resources": {
+          "max_materialize_bytes": 137438953472,
+          "checkpoint_max_bytes": 137438953472,
+          "resident_block_limits": {
+            "cache": 49,
+            "forward_bytes": 6375342080,
+            "backward_bytes": 11744051200,
+            "optimizer_bytes": 402653184,
+            "total_bytes": 18522046464,
+            "windows": 1,
+            "timeout_ms": 30000,
+            "workspace_bytes": 536870912
+          }
+        },
+        "site": {
+          "paths": {
+            "native_library": "/dev/shm/gef-resident-services-20261112/core-native",
+            "resident_library": "/dev/shm/gef-resident-services-20261112/resident-native"
+          }
+        }
+      },
+      "model_definition_reproduction": {
+        "module": "prefill_regression_config.CASES and tidegraph.planning.recipes.prepare",
+        "call": "plan, _ = prepare(dict(CASES['many-lh'], family='kv'), samples=4, positions=16, seed=7, input_pattern='staggered-v1')",
+        "keys": [
+          "graph",
+          "memories",
+          "regions",
+          "classes",
+          "source_binding",
+          "source_hidden_width",
+          "alpha_agg"
+        ],
+        "definition_sha256": "6de707d9304585c659b10a6fd185a756bee735a3a74c07a8c16f1a2cdcf2ee67",
+        "recipe_request": {
+          "topology": "lh",
+          "width": 64,
+          "region_width": 8,
+          "depth": 3,
+          "profile": "textbook",
+          "family": "kv"
+        },
+        "note": "Set config.model.definition to these plan keys. Original definition was exactly regenerated from fixed source; do not replace it with a recipe field because that changes plan identity."
+      },
+      "model_summary": {
+        "nodes": 176,
+        "regions": 22,
+        "body_edges": 1058,
+        "width": 64,
+        "parameter_totals": {
+          "trainable": 14902694,
+          "frozen": 2132,
+          "role_elements": 20464346,
+          "unique": 14904826
+        },
+        "canonical_parameter_owners": 5809,
+        "heads": [
+          1
+        ],
+        "ffn_width": [
+          256
+        ],
+        "memory_read_counts": {
+          "sum": 120,
+          "qry": 56
+        },
+        "region_score_counts": {
+          "ind": 8,
+          "att": 14
+        },
+        "regional_common": {
+          "read_mode": "+",
+          "local_score": "cat",
+          "selection_mode": "regional_total",
+          "region_control_mode": "context",
+          "region_evidence": "cat",
+          "regularizer": "quad",
+          "k": 1
+        },
+        "source_binding": {
+          "mode": "region",
+          "rank": null
+        },
+        "source_hidden_width": 32,
+        "alpha_agg": 1.0
+      },
+      "raw_artifacts": {
+        "result.json": {
+          "path": "artifacts/resident-services-20261112/resident-scale/lh176/result.json",
+          "bytes": 6526715,
+          "sha256": "13b1e53766833eb82e94f12a4d0b98c1830baa74f7373d7951705ee10e20b52b"
+        },
+        "resolved.json": {
+          "path": "artifacts/resident-services-20261112/resident-scale/lh176/resolved.json",
+          "bytes": 5583244,
+          "sha256": "f755f650e7191a37087b588f0dc2ef382ce5565847dcd1cede89892b60a4fc37"
+        },
+        "identity.json": {
+          "path": "artifacts/resident-services-20261112/resident-scale/lh176/identity.json",
+          "bytes": 35273,
+          "sha256": "09f3571f87a80d6feddeccc9c6ffb320f7700562aae58b90c58990c4b71b91f9"
+        }
+      },
+      "config_artifact": {
+        "path": "artifacts/resident-services-20261112/resident-lh176-config.json",
+        "bytes": 331308,
+        "sha256": "90b1be851a0647baf10a8cc1579aa89b01e8350efe415f00afc090de14c85999"
+      },
+      "ids": {
+        "model_id": "ccc8d791c65369826d6b1d6274b5e7a2c7424d8fea296dd96b42c60df6274876",
+        "workload_id": "1d3a454b87770ecfcf96e612ef53125ef8698052262057bfb52113d9b2afb19d",
+        "task_id": "c9546f9a713b4650b8145f245a60bd8555049cdd8e3d96a66ed3eb89e6b375ea",
+        "execution_id": "923b51944407bedca22e514b4ccd5cd6753baeba9a6e6039ddfb2ec05106e4f9",
+        "config_id": "bb666f0d9b050fa58aabbb7ad76bf2a8070b041f3ee84590b9748be1a1975f53"
+      },
+      "execution_status": "completed",
+      "phase": "complete",
+      "mathematics": "not_checked",
+      "validation": {
+        "policy": "none",
+        "numeric": "not_checked",
+        "discrete": "not_checked",
+        "complete": "not_checked",
+        "outcome": "not_checked",
+        "strict_passed": false
+      },
+      "strict_passed": false,
+      "throughput_qualified": false,
+      "timing_summary": {
+        "median_seconds": 22.59179912507534,
+        "total_seconds": 22.59179912507534,
+        "min_seconds": 22.59179912507534,
+        "max_seconds": 22.59179912507534,
+        "measured_windows": 1,
+        "interpretation": "unchecked or failed cost"
+      },
+      "timing_contract": {
+        "return_mode": "outputs",
+        "included": "input preparation, transfer, host/device scheduling, packing, forward, finite checks, requested return and synchronization; training includes loss, VJP and optimizer",
+        "excluded": "runtime/model construction, durable checkpoint publication, independent validation and recovery checks",
+        "no_cross_contract_speedup": true
+      },
+      "construction_seconds": 3.440419379621744,
+      "measured_raw_metrics": [
+        {
+          "window": 0,
+          "seconds": 22.59179912507534,
+          "loss": 0.07371340692043304,
+          "candidate_updates": 8368,
+          "full_calls": 2572,
+          "messages": 15340,
+          "outputs": 122,
+          "pending": 0,
+          "actual_stats": {
+            "candidate_events": 8368,
+            "selected_events": 2572,
+            "visited_edges": 15340,
+            "received_atoms": 15706,
+            "resident_regions": 22,
+            "allocated_candidate_rows": 11264,
+            "allocated_message_rows": 11264
+          },
+          "input_positions": 64,
+          "effective_window_execution": {
+            "schedule": "settle-block-v2",
+            "input": "B\u00d7L\u00d7P",
+            "readiness": "device",
+            "selection": "device",
+            "progression": "device"
+          },
+          "output_artifact": "outputs-000000.pt",
+          "output_write_seconds": 0.010002490133047104,
+          "checkpoint_scheduled": true,
+          "checkpoint_cost": {
+            "schema": "tide-checkpoint-cost-v1",
+            "spans": {
+              "io.serialize": {
+                "seconds": 0.0010408461093902588,
+                "calls": 1,
+                "failed_calls": 0
+              },
+              "io.flush_fsync_file": {
+                "seconds": 0.0010613873600959778,
+                "calls": 1,
+                "failed_calls": 0
+              },
+              "io.publish_link": {
+                "seconds": 2.9452145099639893e-05,
+                "calls": 1,
+                "failed_calls": 0
+              },
+              "io.fsync_directory": {
+                "seconds": 0.0005041174590587616,
+                "calls": 1,
+                "failed_calls": 0
+              },
+              "generation.owner_save": {
+                "seconds": 0.6689117886126041,
+                "calls": 1,
+                "failed_calls": 0
+              },
+              "generation.hash_files": {
+                "seconds": 0.18900704383850098,
+                "calls": 1,
+                "failed_calls": 0
+              },
+              "generation.publish_metadata_pointer": {
+                "seconds": 0.0038147568702697754,
+                "calls": 1,
+                "failed_calls": 0
+              }
+            },
+            "scope": "inclusive wall-time spans; nested spans must not be summed; no extra device synchronization",
+            "total_seconds": 0.8621784187853336
+          },
+          "checkpoint_seconds": 0.8622023053467274
+        }
+      ],
+      "warmup_raw_metrics": [],
+      "checkpoint": {
+        "state": "passed",
+        "next_window": 1,
+        "bytes": 237404617,
+        "exact_resume": true,
+        "resume_check": {
+          "state": "passed",
+          "exact": true,
+          "next_window": 1,
+          "scope": "serial new owner: full decoded raw state before/after the actual selected next window; returned records, loss, parameters, gradients, optimizer and task"
+        },
+        "check_seconds": 60.59018822386861
+      },
+      "checkpoint_publication": {
+        "interval": 1,
+        "publications": 1,
+        "simultaneous_generations": 2,
+        "final_next_window": 1,
+        "final_always_saved": true,
+        "recovery_scope": "only published complete boundaries; unsaved windows are lost on interruption"
+      },
+      "original_budget_preserved": true,
+      "effective": {
+        "execution": "resident",
+        "scheduler": "settle-block-v2",
+        "device": "npu:0",
+        "payload_dtype": "float32",
+        "adjoint_dtype": "float32",
+        "metadata_dtype": "int64",
+        "initial_state": "actual raw",
+        "requested_limits": {
+          "cache": 49,
+          "forward_bytes": 6375342080,
+          "backward_bytes": 11744051200,
+          "optimizer_bytes": 402653184,
+          "total_bytes": 18522046464,
+          "windows": 1,
+          "timeout_ms": 30000,
+          "workspace_bytes": 536870912
+        },
+        "effective_limits": {
+          "cache": 49,
+          "forward_bytes": 6375342080,
+          "backward_bytes": 11744051200,
+          "optimizer_bytes": 402653184,
+          "total_bytes": 18522046464,
+          "workspace_bytes": 536870912,
+          "windows": 1,
+          "timeout_ms": 30000
+        },
+        "task": {
+          "kind": "built-in",
+          "objective": {
+            "kind": "weighted-output-square",
+            "scale": 1e-06
+          },
+          "optimizer": {
+            "kind": "sgd",
+            "lr": 0.001,
+            "momentum": 0.3,
+            "weight_decay": 0.01
+          }
+        },
+        "return_mode": "outputs",
+        "input_interface": "resident-block-B\u00d7L\u00d7P-v2",
+        "resident_dispatch": {
+          "schema": "tide-experiment-resident-selection-v1",
+          "requested": "auto",
+          "effective": "block-v2",
+          "reason": "compatible complete B\u00d7L Settle ports",
+          "capacity_field": "resident_block_limits",
+          "requested_limits": {
+            "cache": 49,
+            "forward_bytes": 6375342080,
+            "backward_bytes": 11744051200,
+            "optimizer_bytes": 402653184,
+            "total_bytes": 18522046464,
+            "windows": 1,
+            "timeout_ms": 30000,
+            "workspace_bytes": 536870912
+          },
+          "effective_limits": {
+            "cache": 49,
+            "forward_bytes": 6375342080,
+            "backward_bytes": 11744051200,
+            "optimizer_bytes": 402653184,
+            "total_bytes": 18522046464,
+            "workspace_bytes": 536870912,
+            "windows": 1,
+            "timeout_ms": 30000
+          }
+        },
+        "last_backward_statistics": {
+          "parameter_owners": 6513,
+          "retained_windows": 1,
+          "scope": "public block field VJP; no old event counters"
+        }
+      },
+      "runtime": {
+        "resolved_device": "npu:0",
+        "backend": "npu",
+        "logical_device_index": 0,
+        "resolution_reason": "explicit:npu",
+        "dtype": "float32",
+        "host_architecture": "aarch64",
+        "torch": "2.12.0+cpu",
+        "torch_git": "7661cd9c6b841b62b7f411aa52ec51f05457263b",
+        "python": "3.12.13",
+        "cxx11_abi": true,
+        "runtime_queue_environment": {
+          "TASK_QUEUE_ENABLE": null,
+          "PER_STREAM_QUEUE": null,
+          "ASCEND_LAUNCH_BLOCKING": null
+        },
+        "torch_npu": "2.12.0.post3",
+        "logical_device_count": 1,
+        "device_name": "Ascend910_9392",
+        "cann_version": "9.2.0",
+        "matmul_allow_hf32": false,
+        "precision_policy": {
+          "matmul_allow_hf32": false,
+          "conv_allow_hf32": false
+        },
+        "actual_threads": {
+          "intraop": 2,
+          "interop": 1,
+          "workers": 1
+        }
+      },
+      "package": {
+        "package": "tidegraph",
+        "version": "0.3.0",
+        "path": "/dev/shm/gef-region-tensor-20261112/install/tidegraph",
+        "installed_files_sha256": "db08e1e336723e98e7605cc84b9cd565f470810d460fa8a551f9c88f057e26e3",
+        "content_scope": "recursive package files and relative names; __pycache__ and .pyc/.pyo excluded",
+        "source_provenance": "installation content; Git/wheel provenance requires an explicit dependency lock"
+      },
+      "dependencies": {
+        "torch": {
+          "version": "2.12.0+cpu",
+          "record_sha256": "d8c1ebcc0c0414b78a8a645941b98d37a9bcf8fdb9d51cb0700c5da9e3919fe6",
+          "scope": "installed version and RECORD metadata; dependency binaries are not rehashed"
+        },
+        "torch-npu": {
+          "version": "2.12.0.post3",
+          "record_sha256": "4a6b805fb2ce2fc232b8be71fd8d787ebcf4c6fb6ee8940c2152d50a0d33cb9d",
+          "scope": "installed version and RECORD metadata; dependency binaries are not rehashed"
+        },
+        "numpy": {
+          "version": "2.5.2",
+          "record_sha256": "79acc5eb79dcafa8281f3bb4aefb0f7621231e9fbee8a42e67d566524f8471d9",
+          "scope": "installed version and RECORD metadata; dependency binaries are not rehashed"
+        }
+      },
+      "resources": {
+        "cpu_affinity_count": 4,
+        "load_average_before": [
+          45.43,
+          65.88,
+          68.85
+        ],
+        "load_average_after": [
+          46.27,
+          60.76,
+          66.75
+        ],
+        "memory_phases": [
+          {
+            "phase": "runtime_ready",
+            "allocated_bytes": 0,
+            "reserved_bytes": 0,
+            "peak_allocated_bytes": 0,
+            "peak_reserved_bytes": 0,
+            "process_lifetime_peak_rss_bytes": 1750306816
+          },
+          {
+            "phase": "constructed",
+            "allocated_bytes": 259170816,
+            "reserved_bytes": 278921216,
+            "peak_allocated_bytes": 259170816,
+            "peak_reserved_bytes": 278921216,
+            "process_lifetime_peak_rss_bytes": 2291191808
+          },
+          {
+            "phase": "measurement",
+            "allocated_bytes": 367057408,
+            "reserved_bytes": 8436842496,
+            "peak_allocated_bytes": 8276641792,
+            "peak_reserved_bytes": 8436842496,
+            "process_lifetime_peak_rss_bytes": 3090477056
+          },
+          {
+            "phase": "exact-resume",
+            "allocated_bytes": 0,
+            "reserved_bytes": 8709472256,
+            "peak_allocated_bytes": 8344217088,
+            "peak_reserved_bytes": 8709472256,
+            "process_lifetime_peak_rss_bytes": 4200603648
+          }
+        ],
+        "memory_scope": "process allocator only; excludes untracked vendor/driver memory; RSS is process-lifetime peak",
+        "memory_sampling": "outside step timers; peaks reset after runtime_ready, construction and warmup"
+      },
+      "input_denominator_correction": {
+        "raw_input_positions": 64,
+        "allocated_input_positions": 64,
+        "actual_input_positions": 61,
+        "sample_lengths": [
+          16,
+          15,
+          14,
+          16
+        ],
+        "physical_input_atoms": 366,
+        "derivation": "staggered-v1: length[b] = 16 - (b % 3). Count distinct (sample, original_position) with at least one physical input; sum = 16+15+14+16 = 61. Multi-port omission changes atom counts, not these position counts.",
+        "positions_per_second_unqualified": 2.700094829202611,
+        "raw_records_modified": false,
+        "scope": "Reviewed arithmetic correction only; no new execution or independent scale mathematical qualification."
+      },
+      "total_wall_seconds": 92.4614535458386
+    }
+  ],
+  "reproduction": {
+    "prerequisites": "Use clean fixed source checkouts, matching published runtime modules and project-private Python environment per docs/development.md. Long work belongs in a bounded background.slice service under current site admission. Paths below are placeholders, not dependencies on retired artifacts.",
+    "sources": {
+      "core_checkout": "1f0e6e43a540a78f2fe810e97b7562b73481fb22",
+      "resident_checkout": "042ea369d9e3cac63d0fb0ccec87c4d872ae3c63",
+      "cpu_check_checkout": "7fd1dd1008ae581d4dfcbd543b1c8b992b4541b4"
+    },
+    "runtime_modules": {
+      "native": "ascend/dev-workspace-9.2.0",
+      "sdk": "libtorch-npu/2.12.0-cann9.2.0"
+    },
+    "core_commands": {
+      "native": [
+        "python",
+        "scripts/build.py",
+        "--backend",
+        "npu",
+        "--npu-runtime",
+        "python",
+        "--build-dir",
+        "CORE_NATIVE",
+        "--jobs",
+        "all"
+      ],
+      "sdk": [
+        "python3",
+        "scripts/build.py",
+        "--backend",
+        "npu",
+        "--npu-runtime",
+        "standalone",
+        "--libtorch-prefix",
+        "LIBTORCH_ROOT",
+        "--cxx11-abi",
+        "1",
+        "--build-dir",
+        "CORE_SDK",
+        "--jobs",
+        "all"
+      ]
+    },
+    "resident_commands": {
+      "native": [
+        "python",
+        "scripts/build_device_control.py",
+        "--core-build",
+        "CORE_NATIVE",
+        "--build-dir",
+        "RESIDENT_NATIVE",
+        "--ascendc-soc",
+        "Ascend910_9392",
+        "--python-component",
+        "weighted",
+        "--jobs",
+        "all"
+      ],
+      "sdk": [
+        "python3",
+        "scripts/build_device_control.py",
+        "--core-build",
+        "CORE_SDK",
+        "--build-dir",
+        "RESIDENT_SDK",
+        "--ascendc-soc",
+        "Ascend910_9392",
+        "--jobs",
+        "all",
+        "--checks",
+        "services",
+        "optimizer",
+        "weighted-projection",
+        "weighted-head",
+        "weighted-kv-update",
+        "weighted-aggregate",
+        "weighted-region",
+        "weighted-residual",
+        "weighted-kv-query",
+        "weighted-kv-full",
+        "resident-block-model",
+        "resident-block-public",
+        "resident-block-selection",
+        "resident-block-kv-messages",
+        "resident-block-kv-sequence",
+        "resident-block-settle-flow",
+        "resident-block-settle-session",
+        "weighted-training"
+      ]
+    },
+    "cpu_command": [
+      "python",
+      "-m",
+      "pytest",
+      "-q",
+      "tests/test_resident_weighted_bank_gemm.py",
+      "tests/test_resident_weighted_bank_oracle.py",
+      "tests/test_resident_block_flow_layout.py",
+      "tests/test_resident_optimizer_storage.py",
+      "tests/test_semantic_kernel_launch_context.py"
+    ],
+    "qualification": "device_qualification embeds every original argv and key output. Replace only checkout/build/install/checkpoint/output paths and current physical-device visibility; use one new process per row. Public restore rows consume the matching public row checkpoint.",
+    "scale_configuration": "Copy scale[].configuration. For LH, reconstruct model.definition using model_definition_reproduction from the production checkout. Replace site.paths with matching newly built libraries. Run python -m tidegraph run NEW_CONFIG.json --output-dir NEW_OUTPUT. Preserve all model/task/measurement/resource values for the same witness.",
+    "scale_command": [
+      "python",
+      "-m",
+      "tidegraph",
+      "run",
+      "NEW_CONFIG.json",
+      "--output-dir",
+      "NEW_OUTPUT"
+    ],
+    "planning_recheck": {
+      "source": "042ea369d9e3cac63d0fb0ccec87c4d872ae3c63",
+      "python": "3.12.13",
+      "torch_or_device_execution": false,
+      "lh_definition_exact_match": true,
+      "json_normalized_resolved_configs_equal": true,
+      "config_ids": [
+        "e30bebd844e3d0ec7a1ac4ec6b220fa33f99497a1628ebdd9517eab79a09fbf6",
+        "bb666f0d9b050fa58aabbb7ad76bf2a8070b041f3ee84590b9748be1a1975f53"
+      ],
+      "note": "Resolver contains tuples before JSON encoding; equality checked after JSON normalization. Both original raw resolved JSON objects reproduced exactly with original site paths."
+    },
+    "original_script_records": {
+      "native-build.sh": {
+        "record": {
+          "path": "artifacts/resident-services-20261112/native-build.sh",
+          "bytes": 651,
+          "sha256": "f3acfe92910cb19db4b049805ffaddc521d9bb38f5707f85922286b71729803f"
+        },
+        "text": "#!/bin/bash\nset -euo pipefail\nsource /usr/share/Modules/init/bash\nmodule purge\nexport PYTHONDONTWRITEBYTECODE=1 TORCH_DEVICE_BACKEND_AUTOLOAD=0 OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1\nmodule load ascend/dev-workspace-9.2.0\nsource /mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/additive-work/env/bin/activate\nexport PYTHONPATH=\"$PWD/python:$PWD/tests:$PWD/scripts:${PYTHONPATH:-}\"\npython scripts/build_device_control.py --core-build /dev/shm/gef-region-tensor-20261112/core-native --build-dir /dev/shm/gef-resident-services-20261112/resident-native --ascendc-soc Ascend910_9392 --python-component weighted --jobs all\n"
+      },
+      "sdk-build.sh": {
+        "record": {
+          "path": "artifacts/resident-services-20261112/sdk-build.sh",
+          "bytes": 906,
+          "sha256": "fcb326e926ef2a893ac71646a754bdfafd2c50157e9d1bd565b58c221ed9c325"
+        },
+        "text": "#!/bin/bash\nset -euo pipefail\nsource /usr/share/Modules/init/bash\nmodule purge\nexport PYTHONDONTWRITEBYTECODE=1 TORCH_DEVICE_BACKEND_AUTOLOAD=0 OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1\nmodule load libtorch-npu/2.12.0-cann9.2.0\nexport PATH=/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/bin:$PATH\npython3 scripts/build_device_control.py --core-build /dev/shm/gef-region-tensor-20261112/core-sdk --build-dir /dev/shm/gef-resident-services-20261112/resident-sdk --ascendc-soc Ascend910_9392 --jobs all --checks services optimizer weighted-projection weighted-head weighted-kv-update weighted-aggregate weighted-region weighted-residual weighted-kv-query weighted-kv-full resident-block-model resident-block-public resident-block-selection resident-block-kv-messages resident-block-kv-sequence resident-block-settle-flow resident-block-settle-session weighted-training\n"
+      },
+      "resident-sdk.sh": {
+        "record": {
+          "path": "artifacts/resident-services-20261112/resident-sdk.sh",
+          "bytes": 1452,
+          "sha256": "2fbb8e726e7bc491aeeaa60b2a474bff58472bd1f074afd745f8e26280312fbd"
+        },
+        "text": "#!/bin/bash\nset -euo pipefail\n/usr/bin/python3 - <<'GATE'\nimport json,time\nfrom pathlib import Path\np=Path('/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/jobs/resident-services-build-sdk/status.json')\nfor _ in range(24):\n d=json.loads(p.read_text())\n if d['state']=='passed':break\n if d['state']!='running':raise SystemExit('SDK build failed: '+str(d))\n time.sleep(5)\nelse:raise SystemExit('SDK build did not finish within qualification precondition bound')\nGATE\nsource /usr/share/Modules/init/bash\nmodule purge\nmodule load libtorch-npu/2.12.0-cann9.2.0\nexport PATH=/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/bin:$PATH\nexport TORCH_DEVICE_BACKEND_AUTOLOAD=0 PYTHONDONTWRITEBYTECODE=1 OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1\nexport PYTHONPATH=\"/dev/shm/gef-resident-services-20261112/install:/dev/shm/gef-resident-services-20261112/source/scripts:${PYTHONPATH:-}\"\nexec python /mi/data2T/zlong/home/.agents/skills/use-local-ascend/scripts/run_on_free_npu.py --job-id resident-services-resident-sdk --project graph-execution-foundation --priority 0 --npu-count 1 --candidate-ids 0,1,5,6,10,11 --max-hbm-mib 4096 --max-wait-seconds 180 --state-file /mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/resident-services-20261112/queue-resident-sdk.json -- python /mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/resident-services-20261112/qualification.py resident-sdk\n"
+      },
+      "sdk-ready.sh": {
+        "record": {
+          "path": "artifacts/resident-services-20261112/sdk-ready.sh",
+          "bytes": 996,
+          "sha256": "195ddaf64783af4aaf9cd0f4675c0ac08d9f72cb78f2adcb1a1f6764835faa18"
+        },
+        "text": "#!/bin/bash\nset -euo pipefail\nsource /usr/share/Modules/init/bash\nmodule purge\nmodule load libtorch-npu/2.12.0-cann9.2.0\nexport PATH=/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/bin:$PATH\nexport TORCH_DEVICE_BACKEND_AUTOLOAD=0 PYTHONDONTWRITEBYTECODE=1 OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1\nexport PYTHONPATH=\"/dev/shm/gef-resident-services-20261112/install:/dev/shm/gef-resident-services-20261112/source/scripts:${PYTHONPATH:-}\"\nexec python /mi/data2T/zlong/home/.agents/skills/use-local-ascend/scripts/run_on_free_npu.py --job-id resident-services-sdk-ready --project graph-execution-foundation --priority 0 --npu-count 1 --candidate-ids 0,1,5,6,10,11 --max-hbm-mib 4096 --max-wait-seconds 180 --state-file /mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/resident-services-20261112/queue-sdk-ready.json -- python /mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/resident-services-20261112/qualification.py resident-sdk\n"
+      },
+      "resident-native.sh": {
+        "record": {
+          "path": "artifacts/resident-services-20261112/resident-native.sh",
+          "bytes": 1017,
+          "sha256": "0a86a4b848b8630c957b8261c5a07514fd1c77ef2505c1b7eeda0dd5d6210f7c"
+        },
+        "text": "#!/bin/bash\nset -euo pipefail\nsource /usr/share/Modules/init/bash\nmodule purge\nmodule load ascend/dev-workspace-9.2.0\nsource /mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/additive-work/env/bin/activate\nexport TORCH_DEVICE_BACKEND_AUTOLOAD=0 PYTHONDONTWRITEBYTECODE=1 OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1\nexport PYTHONPATH=\"/dev/shm/gef-resident-services-20261112/install:/dev/shm/gef-resident-services-20261112/source/scripts:${PYTHONPATH:-}\"\nexec python /mi/data2T/zlong/home/.agents/skills/use-local-ascend/scripts/run_on_free_npu.py --job-id resident-services-resident-native --project graph-execution-foundation --priority 0 --npu-count 1 --candidate-ids 0,1,5,6,10,11 --max-hbm-mib 4096 --max-wait-seconds 180 --state-file /mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/resident-services-20261112/queue-resident-native.json -- python /mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/resident-services-20261112/qualification.py resident-native\n"
+      },
+      "resident-scale.sh": {
+        "record": {
+          "path": "artifacts/resident-services-20261112/resident-scale.sh",
+          "bytes": 1002,
+          "sha256": "7c2e7dedfc24e280ce68e70c139aac884ad0e9a5ba005d6bdcbed09251b4c6f6"
+        },
+        "text": "#!/bin/bash\nset -euo pipefail\nsource /usr/share/Modules/init/bash\nmodule purge\nexport PYTHONDONTWRITEBYTECODE=1 TORCH_DEVICE_BACKEND_AUTOLOAD=0 OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1\nunset ASCEND_LAUNCH_BLOCKING TASK_QUEUE_ENABLE PER_STREAM_QUEUE\nmodule load ascend/dev-workspace-9.2.0\nsource /mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/additive-work/env/bin/activate\nexport PYTHONPATH=/dev/shm/gef-resident-services-20261112/install:${PYTHONPATH:-}\npython /mi/data2T/zlong/home/.agents/skills/use-local-ascend/scripts/run_on_free_npu.py --job-id resident-services-resident-scale --project graph-execution-foundation --priority 0 --npu-count 1 --candidate-ids 0,1,5,6,10,11 --max-hbm-mib 4096 --max-wait-seconds 180 --state-file /mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/resident-services-20261112/resident-scale-queue.json -- python /mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/resident-services-20261112/resident-scale.py\n"
+      },
+      "cpu-directed.sh": {
+        "record": {
+          "path": "artifacts/resident-services-20261112/cpu-directed.sh",
+          "bytes": 721,
+          "sha256": "4d399e6ac86e169cc698943354c0b2029aac839b5787455e69e0a933b16b8863"
+        },
+        "text": "#!/bin/bash\nset -euo pipefail\nsource /usr/share/Modules/init/bash\nmodule purge\nmodule load ascend/dev-workspace-9.2.0\nsource /mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/additive-work/env/bin/activate\nexport PYTHONDONTWRITEBYTECODE=1 TORCH_DEVICE_BACKEND_AUTOLOAD=0 OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1\nexport PYTHONPATH=\"$PWD/python:$PWD/tests:$PWD/scripts:${PYTHONPATH:-}\"\npython -m pytest -q tests/test_resident_weighted_bank_gemm.py tests/test_resident_weighted_bank_oracle.py tests/test_resident_block_flow_layout.py tests/test_resident_optimizer_storage.py --junitxml=/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/resident-services-20261112/cpu-directed.xml\n"
+      },
+      "cpu-context-fixed.sh": {
+        "record": {
+          "path": "artifacts/resident-services-20261112/cpu-context-fixed.sh",
+          "bytes": 771,
+          "sha256": "66367d06c112962f88bb58ad33ed5ea224901eb727435d1aab30ccbe9ca2fc8e"
+        },
+        "text": "#!/bin/bash\nset -euo pipefail\nsource /usr/share/Modules/init/bash\nmodule purge\nmodule load ascend/dev-workspace-9.2.0\nsource /mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/additive-work/env/bin/activate\nexport PYTHONDONTWRITEBYTECODE=1 TORCH_DEVICE_BACKEND_AUTOLOAD=0 OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1\nexport PYTHONPATH=\"$PWD/python:$PWD/tests:$PWD/scripts:${PYTHONPATH:-}\"\npython -m pytest -q tests/test_resident_weighted_bank_gemm.py tests/test_resident_weighted_bank_oracle.py tests/test_resident_block_flow_layout.py tests/test_resident_optimizer_storage.py tests/test_semantic_kernel_launch_context.py --junitxml=/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/resident-services-20261112/cpu-context-fixed.xml\n"
+      },
+      "qualification.py": {
+        "record": {
+          "path": "artifacts/resident-services-20261112/qualification.py",
+          "bytes": 2901,
+          "sha256": "439b2bf0bccb7263825f242a6cb5132b3861b922d101d043605de6ba11d85a07"
+        },
+        "text": "import os,sys,time,subprocess\nfrom pathlib import Path\nfrom durable_records import write_json\nbase=Path('/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/resident-services-20261112')\nbuild=Path('/dev/shm/gef-resident-services-20261112');src=build/'source'\nkind=sys.argv[1];out=base/kind;out.mkdir(exist_ok=False);rows=[]\ndef run(name,command,timeout=300,env=None):\n start=time.time();command=list(map(str,command))\n with (out/(name+'.log')).open('x') as log:\n  try:code=subprocess.run(command,cwd=out,env=env,stdout=log,stderr=subprocess.STDOUT,timeout=timeout).returncode\n  except subprocess.TimeoutExpired:code=124\n rows.append(dict(name=name,command=command,exit_code=code,started=start,finished=time.time(),cwd=str(out),device_visibility=os.environ.get('ASCEND_RT_VISIBLE_DEVICES')))\n write_json(out/'processes.json',rows);print(name,code,flush=True);return code\nif kind=='resident-sdk':\n for target in ('device-services','weighted-projection','block-kv-messages','device-optimizer','weighted-head','weighted-kv-update','weighted-aggregate','weighted-region','weighted-residual','weighted-kv-query','weighted-kv-full','block-read-selection','block-kv-sequence','block-settle-flow','block-settle-session','block-settle-model'):\n  if run(target,[build/'resident-sdk'/('tide-'+target+'-check'),'--device=npu:0','--dtype=float32']):sys.exit(1)\n if run('core-columns',[build/'core-sdk/tidegraph-column-check','--device=npu:0','--dtype=float32']):sys.exit(1)\n for read in ('qry','sum'):\n  args=[build/'resident-sdk/tide-block-resident-check','--device=npu:0','--dtype=float32','--memory-read',read,'--checkpoint-path',out/(read+'.pt')]\n  if run('public-'+read,args) or run('restore-'+read,args+['--restore-check']):sys.exit(1)\nelif kind=='resident-native':\n for read in ('qry','sum'):\n  args=[sys.executable,src/'examples/consumer_core5/block_resident.py','--device','npu:0','--memory-read',read,'--native-library',build/'core-native','--resident-library',build/'resident-native','--checkpoint-path',out/(read+'.pt')]\n  if run('public-'+read,args) or run('restore-'+read,args+['--restore-check']):sys.exit(1)\nelse:\n device='cpu' if kind=='host-cpu' else 'npu:0';dtype='float64' if device=='cpu' else 'float32'\n for client in ('python','native'):\n  common=['--client',client,'--native-library',build/'core-native','--device',device,'--dtype',dtype]\n  run('positions-'+client,[sys.executable,src/'examples/consumer_core5/tensor_window.py',*common,'--positions','--output-dir',out/('positions-'+client)])\n  run('mixed-a-'+client,[sys.executable,src/'examples/consumer_core5/tensor_window.py',*common,'--placement','mixed-a','--output-dir',out/('mixed-a-'+client)])\n  run('lh176-'+client,[sys.executable,src/'examples/consumer_core5/planned_windows.py',*common,'--plan',base/'lh176-plan.json','--output-dir',out/('lh176-'+client)],timeout=600)\nsys.exit(int(any(r['exit_code'] for r in rows)))\n"
+      },
+      "resident-scale.py": {
+        "record": {
+          "path": "artifacts/resident-services-20261112/resident-scale.py",
+          "bytes": 902,
+          "sha256": "36be6c502cd827f41612e1a49d49f51c569a2ed963fc2c3ad7be66c87ea36e2b"
+        },
+        "text": "from pathlib import Path\nimport subprocess,sys,time\nsys.path.insert(0,'/dev/shm/gef-resident-services-20261112/source/scripts')\nfrom durable_records import write_json\nbase=Path('/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/resident-services-20261112');out=base/'resident-scale';out.mkdir(exist_ok=False);rows=[]\nfor name in ('fc16','lh176'):\n command=[sys.executable,'-m','tidegraph','run',str(base/('resident-'+name+'-config.json')),'--output-dir',str(out/name)]\n start=time.time()\n with (out/(name+'.log')).open('x') as log:\n  try:code=subprocess.run(command,stdout=log,stderr=subprocess.STDOUT,timeout=600,cwd=out).returncode\n  except subprocess.TimeoutExpired:code=124\n rows.append(dict(name=name,command=command,exit_code=code,started=start,finished=time.time()));write_json(out/'processes.json',rows);print(name,code,flush=True)\nsys.exit(int(any(r['exit_code'] for r in rows)))\n"
+      },
+      "launch.py": {
+        "record": {
+          "path": "artifacts/resident-services-20261112/launch.py",
+          "bytes": 1061,
+          "sha256": "08018548290e7d55715003bf658d77fea9226efb0d6202b838c5811d3a73d45a"
+        },
+        "text": "from pathlib import Path\nimport subprocess,sys,json\nbase=Path(__file__).resolve().parent;root=base.parent.parent;source='/dev/shm/gef-resident-services-20261112/source'\nkind,cpus,timeout=sys.argv[1:];name='resident-services-'+kind\ncommand=['systemd-run','--user','--unit='+name,'--service-type=exec','--slice=background.slice','--working-directory='+source,'--property=KillMode=control-group','--property=RuntimeMaxSec='+timeout,'--property=TimeoutStopSec=30','--property=Nice=10','--property=CPUAffinity='+cpus.replace('-', ' - '),'--property=MemoryMax=256G','/usr/bin/taskset','-c',cpus,'/usr/bin/python3',source+'/scripts/job.py','--output-dir',str(root/'artifacts/jobs'/name),'--','/bin/bash',str(base/(kind+'.sh'))]\n# taskset supplies the actual inherited process mask; AllowedCPUs alone did not on this host.\ncommand=[arg for arg in command if not arg.startswith('--property=CPUAffinity=')]\nsubprocess.run(command,check=True)\nsubprocess.run(['systemctl','--user','show',name,'-p','MainPID','-p','Slice','-p','ControlGroup','-p','ActiveState'],check=True)\n"
+      }
+    }
+  },
+  "source_and_check_navigation": [
+    "tools/device_online/weighted_bank_gemm.cpp",
+    "tools/device_online/weighted_bank_layout.h",
+    "tools/device_online/block_settle_flow.cpp",
+    "tools/device_online/block_settle_flow_vjp.cpp",
+    "tools/device_online/cann_task_services.cpp",
+    "tools/device_online/task_services_check.cpp",
+    "tools/device_online/block_settle_session_budget.cpp",
+    "tools/device_online/weighted_projection_check.cpp",
+    "tests/test_resident_weighted_bank_oracle.py",
+    "tools/device_online/block_settle_flow_check.cpp",
+    "tools/device_online/block_settle_session_check.cpp",
+    "tools/device_online/block_resident_check.cpp",
+    "examples/consumer_core5/block_resident.py",
+    "tests/test_semantic_kernel_launch_context.py",
+    "tools/device_online/cuda/generate_kernels.py",
+    "python/tidegraph/planning/input_pattern.py",
+    "python/tidegraph/experiment/block_resident.py",
+    "docs/resident-block-session.md",
+    "docs/experiment-resident-blocks.md",
+    "docs/evidence/resident-block-public-20261112.md"
+  ],
+  "caveats": [
+    "CPU tests, build jobs, component processes and public-consumer processes are different units and must not be summed into one test count.",
+    "The SDK 21-process list includes the reused-core columns check and a static model-lowering check. Individual row scope and source are retained.",
+    "Small flow/session/public consumers have independent formula/schedule and gradient-root checks. This does not certify FC16/LH176 scale mathematics.",
+    "Scale checkpoint validation uses a serial new owner in the same process; separate small public consumers test fresh-process restore.",
+    "Scale elapsed values are unqualified complete-training costs. No inference, grad-enabled-forward, TTFT, statistical stability, CPU/mixed speedup or direct-formula parity is established by these two runs.",
+    "FC16 scale is B4/L16/d128 and has one warmup; it is not the main B8/L128 FC16 task. LH176 has no warmup and is not a 9B model.",
+    "Both use the original 18,522,046,464-byte total reservation; workspace_bytes is an independent bound, not observed total device usage. Allocator peaks exclude untracked vendor/driver memory.",
+    "The block-v2 domain remains single-NPU FP32 aligned Settle KV sum/qry with its declared local bindings. These results do not qualify recurrent/half/multiple-device/CUDA blocks or all general PDG/TimedDAG programs.",
+    "Original projection/flow failures, CPU29/9 and SDK prerequisite timeout remain distinct terminal failures. New results do not retrospectively relabel them.",
+    "Artifacts retain original path/hash identities. Reproduction uses embedded configurations/generators/argv at fixed sources and does not require old build/run directories."
+  ],
+  "resource_scope": {
+    "slice": "background.slice",
+    "builds": {
+      "native_cpu_mask": "0-159",
+      "sdk_cpu_mask": "160-319",
+      "jobs_reported_per_build": 160,
+      "memory_max_bytes": 549755813888,
+      "runtime_max_seconds": 2400
+    },
+    "qualification": {
+      "sdk_cpu_mask": "20-23",
+      "native_cpu_mask": "24-27",
+      "memory_max_bytes": 274877906944,
+      "runtime_max_seconds": 1200,
+      "per_process_timeout_seconds": 300
+    },
+    "scale": {
+      "cpu_mask": "24-27",
+      "reported_cpu_affinity_count": 4,
+      "memory_max_bytes": 274877906944,
+      "runtime_max_seconds": 1500,
+      "per_case_timeout_seconds": 600
+    },
+    "queue": {
+      "candidate_physical_ids": [
+        0,
+        1,
+        5,
+        6,
+        10,
+        11
+      ],
+      "npu_count": 1,
+      "max_hbm_mib": 4096,
+      "max_wait_seconds": 180
+    },
+    "contention": "Scale ran after both builds and both qualification jobs were terminal. Host load recorded per case; no per-device external-utilization trace was retained, so no exclusive/peak-throughput claim."
+  },
+  "projection_diagnosis": {
+    "source": "042ea369d9e3cac63d0fb0ccec87c4d872ae3c63",
+    "rows": 193,
+    "banks": 3,
+    "width": 32,
+    "atol": 1e-06,
+    "rtol": 1e-05,
+    "oracle": "Independent per-row CPU FP64 formula using the actual FP32 inputs; separate math.fsum CPU test of bias sums and cancellation counterexample.",
+    "candidate_vs_fp64": {
+      "failed_coordinates": 0,
+      "max_abs": 7.48317688703537e-07,
+      "max_tolerance_ratio": 0.5789282454705984
+    },
+    "legacy_fp32_vs_fp64": {
+      "failed_coordinates": 1,
+      "max_abs": 1.8121208995580673e-06,
+      "max_tolerance_ratio": 1.2532815861122615
+    },
+    "candidate_vs_legacy_fp32": {
+      "failed_coordinates": 1,
+      "max_abs": 2.2724270820617676e-06,
+      "max_tolerance_ratio": 1.5716144135447645
+    },
+    "key_outputs": [
+      "single-bank projection bytes: forward=34304 reverse=28993 allowance=65536 old_replicated_matrices=524288",
+      "multi-bank projection bytes: rows=64 bias=0 forward=71839 reverse=70623 allowance=131072 old_replicated_matrices=524288",
+      "projection-difference label=multi-bank.db-candidate-vs-fp64 shape=[3, 32] atol=1e-6 rtol=1e-5 failed=0 max_abs=7.4831768870353699e-07 max_tolerance_ratio=0.5789282454705984",
+      "projection-difference label=multi-bank.db-legacy-fp32-vs-fp64 shape=[3, 32] atol=1e-6 rtol=1e-5 failed=1 max_abs=1.8121208995580673e-06 max_tolerance_ratio=1.2532815861122615 first_flat=64 actual=0.044591896235942841 expected=0.044590084115043283 abs_error=1.8121208995580673e-06 tolerance=1.4459008411504328e-06",
+      "projection-difference label=multi-bank.db-candidate-vs-legacy-fp32 shape=[3, 32] atol=1e-6 rtol=1e-5 failed=1 max_abs=2.2724270820617676e-06 max_tolerance_ratio=1.5716144135447645 first_flat=64 actual=0.044589623808860779 expected=0.044591896235942841 abs_error=2.2724270820617676e-06 tolerance=1.4459189623594284e-06",
+      "multi-bank projection bytes: rows=193 bias=1 forward=126144 reverse=106093 allowance=131072 old_replicated_matrices=1581056"
+    ],
+    "limitation": "Changing the independent oracle is not making the new numerical result equal to the old sequential FP32 oracle. Original disagreement remains recorded."
+  },
+  "scale_processes": {
+    "record": {
+      "path": "artifacts/resident-services-20261112/resident-scale/processes.json",
+      "bytes": 1112,
+      "sha256": "664cc59104c9f2577f3ca99c683c44011b4b76848aac0cb59f64c0e89c482994"
+    },
+    "processes": [
+      {
+        "name": "fc16",
+        "command": [
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/additive-work/env/bin/python",
+          "-m",
+          "tidegraph",
+          "run",
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/resident-services-20261112/resident-fc16-config.json",
+          "--output-dir",
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/resident-services-20261112/resident-scale/fc16"
+        ],
+        "exit_code": 0,
+        "started": 1794481895.1205082,
+        "finished": 1794481921.7173274
+      },
+      {
+        "name": "lh176",
+        "command": [
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/additive-work/env/bin/python",
+          "-m",
+          "tidegraph",
+          "run",
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/resident-services-20261112/resident-lh176-config.json",
+          "--output-dir",
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/resident-services-20261112/resident-scale/lh176"
+        ],
+        "exit_code": 0,
+        "started": 1794481921.7202015,
+        "finished": 1794482020.8511214
+      }
+    ]
+  }
+}

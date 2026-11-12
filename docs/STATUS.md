@@ -52,3 +52,7 @@ CPU0–159/160–319，各512GiB、2400秒；artifacts/source-bank-20261112/{nat
 
 resident后继已实现已知存储/workspace预准入和当前程序/流/通知计数；开发8CPU/8C++ TU语法通过，
 主代理已审阅，固定后补构建与设备资源释放/训练恢复检查；CUDA program仅源码、无toolkit或真机资格。
+
+08a349ce resident资源后继：固定/dev/shm/gef-resident-resources-20261112/source；
+两构建resident-resources-build-{native,sdk}，CPU0–159/160–319，各512GiB/2400秒。
+复用并核验72e1d22c core hash，新建resident和Python安装；脚本artifacts/resident-resources-20261112，作业同名jobs。

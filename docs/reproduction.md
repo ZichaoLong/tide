@@ -1,6 +1,9 @@
 # 从 Git 复现问题与维护失败经验
 
-最新区域张量/录入诊断入口：[1f0e6e43固定记录](evidence/region-tensor-20261112.md)，
+Resident原预算后继见[042ea369完整重建记录](evidence/resident-services-20261112.md)，
+包括固定配置/生成器、两套构建、SDK/native进程与CPU模拟上下文修复。原失败身份保留。
+
+区域张量/录入诊断入口：[1f0e6e43固定记录](evidence/region-tensor-20261112.md)，
 包含完整CPU argv、LH展开计划、FC固定任务、全部成本命令、安装恢复与resident静态任务trace。
 继承历史路径的命令可按报告替换为干净checkout/新build；无需恢复旧运行目录。
 

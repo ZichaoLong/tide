@@ -19,13 +19,13 @@ CPU、主机混合与设备常驻分开验收；GPU按当前授权延后。
 | P2 加法对照 | FC/数学不等价Transformer、KV/SSD与LH已有独立公式→公共张量接口→默认执行器三层；三模式、完整返回投影和独立梯度根分别记录 | 后继以同材料复测被修改的边界，解释主要差距。LH FP64数值投影通过不等于完整根资格；原FP32有限超差及36个None/零差异保留。直接公式不是绝对性能上限 |
 | P3 默认FC整链 | Python/native及standalone公共B×L窗口、区域分配、消息、输出任务/训练/raw恢复已接通；[最近固定资格与成本](evidence/region-tensor-20261112.md) | 继续移除来源payload按接收者复制、KV阶段字段发布再重装配及实际跨设备重复。保留小型反馈PDG、非对齐TimedDAG、一般Settle端口、重复边/共享/None零；FC单点不代替全域验收 |
 | P4 有限模块候选 | 五记忆/原始时间短卷积、十种发送与适用评分/evidence/key/正则已接入主机张量列；[循环资格](evidence/recurrent-columns-20261111.md)、[half资格](evidence/column-half-20261111.md)、[放置资格](evidence/column-placement-20261111.md)分列 | 保持逐候选与有判别力的小组合，不穷举。正支持补值策略仍经记录后备；新resident块的half/循环记忆/多owner尚未接齐。旧一般执行器能力不能冒称新块实现 |
-| P5 规模与执行路径 | 主机LH176/FC/1B/9B有有限成本；新resident独立Model、KV sum/qry、小图三步/跨窗/新进程恢复已有[a3c资格](evidence/resident-block-public-20261112.md) | LH公共层差距仍明显，优先source-owner/region-window上下文。resident固定tile已越过原消息录入拒绝，完整flow后继有界program组合待真机；原预算FC16/LH176及共享历史/raw布局仍须闭环。多卡/普通异步和GPU按下表独立处理 |
+| P5 规模与执行路径 | 主机LH176/FC/1B/9B有有限成本；新resident独立Model、KV sum/qry、小图三步/跨窗/新进程恢复已有[a3c资格](evidence/resident-block-public-20261112.md) | LH公共层差距仍明显，优先source-owner/region-window上下文。[有界program组合](evidence/resident-services-20261112.md)已通过完整flow、小图新进程恢复及原预算FC16/LH176执行/换owner恢复；规模独立数学未检查、成本仍高，共享历史/raw布局仍须闭环。多卡/普通异步和GPU按下表独立处理 |
 | P6 治理与交付 | 配置/代码/数学/测试/证据/复现已有导航；skills保留加法、减法、静态循环/形状/复制/伴随分析 | 随每次边界重写更新符号/契约、固定资格、安装消费与精确恢复。清理陈旧交接叙述，保留可直接重建的输入与命令；不以文档链接检查宣布全仓治理完成 |
 
 ### 下一实现边界
 
 - **主机来源与区域窗口**：[1f0e6e43审阅](evidence/region-tensor-20261112.md)确认整组KV写入和中心化Aggregate VJP已经落实，不能继续把旧逐源图当根因。下一表示保留唯一实际来源块与物理incidence，再连接区域/Full；参数共享、计算共享和私有状态分别处理。mixed预设只在配置入口展开，实际设备边界才传输；区域参数视图和操作数别名应在调用级复用。
-- **resident程序资源**：41c42759用设备bank/tile游标复用一个矩阵体，替代容量树；CPU与消息/选择/序列真机已过，完整flow录入反向仍507002。042ea369把区域前后向交给设备通知调用的有界program；其构建、真机、训练/恢复与原预算规模逐层验收，不从开发检查外推。独立FP64投影oracle保留原阈值，旧FP32参考自身累加超差单列。
+- **resident程序资源**：[042ea369](evidence/resident-services-20261112.md)将区域前后向交给设备通知调用的有界program，已越过41c完整flow反向507002与原预算两规模失败。08a349ce补已知存储/workspace预准入与真实程序/流/通知计数，资格另验；部分提交故障、整体等待期限和更大资源规模仍独立处理。独立FP64投影oracle通过原阈值；旧FP32参考自身累加超差和CPU harness顺序污染保留。
 - **resident历史布局**：当前每帧old/proposal raw和Read历史重投影仍在。需要共享initial/write bank、快照索引及块伴随，保留三种Read、独立raw根、过期/原始int64时间与精确checkpoint；不是只放宽容量守卫。
 - **循环候选与广泛审阅**：SSD层链仍有默认/公式差距；按实际调用与有状态锚点继续审阅，不把KV优化自动当循环模块已优化。全仓未审范围由固定清单/hash记录，审阅发现机会不要求无限实施。
 
@@ -84,7 +84,7 @@ CPU、主机混合与设备常驻分开验收；GPU按当前授权延后。
 | 较大NPU训练/跨卡 | 已测停止。D64匹配9076975参数，native单/双NPU显式blocking自身磁盘恢复精确，独立CPU均在node89 keys严格失败；[有限证据](evidence/core5-boundary-performance-20261029.md)保留15.685/16.840s失败成本 | 原eager数值失败按首行重启条件处理；不重跑同候选。resident的新布局与新资源边界分列，不以参数量匹配或自身恢复替代独立正确性 |
 | resident局部纤维填充 | 已交付并[资格通过](evidence/core5-compact-fibers-20261029.md)：b7e0a29按物理入边/端口缩小槽；CPU两环境各10、公共NPU56、SDK7组件/dtype通过。medium完整窗2.794→2.470s，peak allocated514.8→376.4MB，完整核对/恢复通过 | 本候选实施、相关资格及一次对照闭环；单次观察不宣称普遍加速。跨节点数值批和减少物理缺席行仍需新的具体实现及独立根证据 |
 | NPU resident流资源 | 已定位并停止。相同D64/capacity的b7e0a29构造报207005；CANN日志明确Too many streams/EE1023，实际SQ/CQ=1984。未进入warmup，尚无完整训练、恢复或吞吐结果 | 重启须有界服务分派/复用或节点合批；先验证嵌套通知、在线顺序、共享workspace、独立VJP根、peer和恢复。该观测不是通用流上限；不靠加HBM预算或主机预选序列绕过 |
-| FC16 resident原预算与服务停止 | [3e926ede/e12aec0c](evidence/resident-shared-bank-20261112.md)：B4/L16/d128/KV qry的原局部预算拒绝已越过，原18.522GB总预算成功构造；反向构造阶段诊断EE1019。父子停止6项SDK/10安装检查通过，原规模warmup仍507002；SSD同预算训练/精确恢复通过 | 同候选停止。后继须把数值调用/根装配/停止等实际提交分布一并纳入有界服务设计，先有独立嵌套/空窗/共享workspace/根与跨窗见证，再原输入原预算验收；不从小图通过、原预算构造成功或增加HBM推断队列解除 |
+| FC16 resident原预算与服务停止 | [原失败](evidence/resident-shared-bank-20261112.md)保留；[042ea369后继](evidence/resident-services-20261112.md)在原18.522GB预算、B4/L16/d128完成训练与精确下一窗恢复，LH176原预算同样完成；SDK21/native4进程提供独立小图/新进程证据 | 指定录入/原预算执行见证已闭环，不继续原候选盲重跑。规模独立数学not_checked，成本仍高；共享历史/raw布局及程序构造须有新实现与对应独立根证据，不从小图恢复外推全部规模 |
 | 本轮NPU resident B512构造 | [新增证据](evidence/core5-platform-resident-20261031.md)：有界布局已通过HBM准入，aclnnInplaceCopy/361001，厂商日志EE1019/507002 stream task buffer full；未进入warmup。B128完成/恢复通过、数值探索 | 相同配置停止；先定位静态bool搬运调用者/段数，再独立验有界整型暂存还原或设备服务拆分。须保持其他字段、int64、重复owner、独立根、窗口/恢复和暂存预算；不靠主机逐事件flush或增加HBM预算 |
 | NPU resident在途任务资源 | [自然HB medium](evidence/core5-natural-study-20261029.md)：Python/SDK均在warmup反向服务提交报507002；短日志已复制并固定hash，明确stream task buffer full/EE1019。不同于流数量207005，也无HBM耗尽证据 | 相同原配置停止；下一候选为有界提交/服务复用，先验证通知的嵌套与所有权、窗口顺序、独立根及恢复。不缩减原输入或改成主机逐事件推进冒充修复 |
 | FC1B resident局部预算 | tensor12GiB、total48GiB时构造触发KV Full guard；B1/d1024/cache32前置估算需要当前剩余约3.499GB，失败节点剩余额度未导出。不是总内存OOM结论 | 本轮容量调查终态；需局部预算/实际保留量诊断、workspace生命周期或有界节点批方案后重启，不盲目提高所有分区。8B/16B无实测吞吐 |

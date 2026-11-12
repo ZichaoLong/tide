@@ -213,3 +213,17 @@ EE1019/task buffer full：每个bank复制一套容量分支体，静态图是ba
 [实际13类缓冲](resident-optimizer.md)按生命周期计费，视图按底层Storage去重，
 同时存活的每个程序workspace求和；局部分区不任意取总预算的某个比例。
 精确边界与少一字节拒绝由CPU算式和设备owner检查分别验收，预算通过不是无OOM保证。
+
+
+## 设备调用组合与资源生命周期
+
+[042ea369资格](evidence/resident-services-20261112.md)说明：把bank容量树改为设备tile循环后，
+局部消息通过，完整反向仍因单个录入program过长失败。将每区域数值体放进设备通知调用的
+有界worker，保留设备choose/commit和实际逆序journal，才让原flow和两原预算规模完成。
+不需要主机预跑或每事件flush，也不是增加HBM预算；旧失败仍有独立身份。
+
+共享workspace成立于严格的request→worker→done顺序，包括嵌套子调用；不同同时保留的
+窗口不共享同一arena。应计所有program的Storage并集和每组最大workspace，先按已知计划
+准入，再在lowering后复核。字节、program、stream、通知、静态录入长度和动态执行成本是
+不同约束；`resource_usage()`报告当前真实owner/handle，不能充当厂商内部峰值或通用上限。
+小图资格与原预算规模仍分开；当前逐帧raw、重复历史投影和程序构造未因服务拆分而消失。
