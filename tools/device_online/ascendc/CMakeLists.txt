@@ -8,6 +8,12 @@ find_file(TIDE_ASCENDC_CMAKE ascendc.cmake PATHS
 include("${TIDE_ASCENDC_CMAKE}")
 # The CANN generator embeds this target name in C++ symbols.
 ascendc_library(tide_closure_kernel STATIC tide_closure.cpp)
+ascendc_library(tide_block_dispatch_kernel STATIC tide_block_dispatch.cpp)
+ascendc_library(tide_block_probe_kernel STATIC tide_block_probe.cpp)
+ascendc_library(tide_block_selection_plan_kernel STATIC tide_block_selection_plan.cpp)
+ascendc_library(tide_block_selection_roots_kernel STATIC tide_block_selection_roots.cpp)
+ascendc_library(tide_block_selection_flags_kernel STATIC tide_block_selection_flags.cpp)
+ascendc_library(tide_block_node_gate_kernel STATIC tide_block_node_gate.cpp)
 ascendc_library(tide_weighted_node_pack_kernel STATIC tide_weighted_node_pack.cpp)
 ascendc_library(tide_weighted_region_pack_kernel STATIC tide_weighted_region_pack.cpp)
 ascendc_library(tide_weighted_owner_adopt_kernel STATIC tide_weighted_owner_adopt.cpp)

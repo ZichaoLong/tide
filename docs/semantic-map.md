@@ -199,6 +199,11 @@ Settle `ports` 在任意逻辑 cut 原样保留状态和 pending；`broadcast_su
 
 ## 批量计算、反向与设备实现
 
+新[resident块契约](resident-block-execution.md)映射Settle完成依赖/实际发送存在性到
+`BlockDispatcher`与静态潜在DAG；KV §3、架构Describe及分配SelStep到
+`append_block_read_selection`/VJP。元数据独立递归DAG与数值独立公式各自验证，
+不把局部块和静态lowering当作完整图、训练或checkpoint交付。
+
 - [区域列边界](weighted-region-batch.md)：Alloc/SelStep的R×N完整描述、score/evidence/
   control/support与精确解映射VJP由`allocation_columns`、`regional_columns`和C++
   `weighted_columns.h`连接；`test_weighted_columns`的手算/方向导数与既有独立根检查分工。

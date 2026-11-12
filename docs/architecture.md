@@ -6,6 +6,12 @@
 
 ## 分层
 
+[新的resident块边界](resident-block-execution.md)把潜在任务DAG、设备choose/commit、
+KV Read/Describe和完整区域数值分开：`tools/device_online/block_dispatch*`、`settle_block_plan.h`
+和`block_read_selection*`分别拥有调度、静态lowering和数值/VJP；`block_selection_formula.cpp`
+为独立公式锚点。修改同步CPU metadata检查、`device_component_checks`及对应设备check。
+这些是新执行器组合件，未成为公共完整图owner；旧resident资格不能自动继承。
+
 LH/HB同材料三层对照由[独立张量基线](lh-tensor-baseline.md)连接
 `lh_tensor_baseline/math/state`、`benchmark_lh_tensor`与`test_lh_tensor_baseline`；
 直接候选的dense Full/数值投影与公共selected Full/完整continuation职责分别记录。
@@ -83,6 +89,9 @@ transpose 在 `column_attention` / `weighted_column_attention`；位置元数据
 `row_linear.linear_blocks` / `weighted_row_linear`提供整块矩阵与一阶转置，
 相同参数身份用共享GEMM，独立矩阵用BMM；`test_linear_blocks`、`test_kv_column_groups`
 及SDK `weighted_sequence_columns`核对独立根、共享贡献、版本、零写与raw状态。
+`weighted/regional_packing`与C++ `weighted_regional_packing`拥有候选数量分组的int64关联布局，
+`regional_groups` / `weighted_regional_groups`组合完整区域数学、原始版本守卫及块反向。
+改变这些边界须同步`test_regional_packing`、`test_regional_groups`、一般Settle独立调度与恢复。
 卷积tap的有序一阶转置在`weighted/tap_gather.py` / `weighted_column_gather.cpp`，
 对应`test_tap_gather`的独立线性映射与`test_native_recurrent_columns`的完整循环检查。
 修改同时检查`column_capacity` / `workspace_bytes`与实际设备精确恢复。

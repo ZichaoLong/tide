@@ -124,6 +124,13 @@ if(TIDE_DEVICE_KERNELS)
     add_subdirectory(ascendc)
   endif()
   include_directories("${CMAKE_CURRENT_BINARY_DIR}/launch")
+  add_library(tide-block-dispatch STATIC block_dispatch.cpp)
+  set_target_properties(tide-block-dispatch PROPERTIES POSITION_INDEPENDENT_CODE ON)
+  target_link_libraries(tide-block-dispatch PUBLIC tide-device-control tide_block_dispatch_kernel)
+  if(TIDE_DEVICE_RUNTIME STREQUAL "standalone")
+    add_executable(tide-block-dispatch-check block_dispatch_check.cpp)
+    target_link_libraries(tide-block-dispatch-check PRIVATE tide-block-dispatch tide_block_probe_kernel)
+  endif()
   add_library(tide-weighted-allocation STATIC weighted_allocation.cpp)
   set_target_properties(tide-weighted-allocation PROPERTIES POSITION_INDEPENDENT_CODE ON)
   target_link_libraries(tide-weighted-allocation PUBLIC tide-device-control tide_weighted_allocate_kernel
@@ -238,7 +245,18 @@ if(TIDE_DEVICE_KERNELS)
   set_target_properties(tide-weighted-kv-update PROPERTIES POSITION_INDEPENDENT_CODE ON)
   target_link_libraries(tide-weighted-kv-update PUBLIC tide-weighted-projection tide-weighted-raw
     tide_weighted_source_guard_kernel tide_weighted_kv_prepare_kernel tide_weighted_kv_roots_kernel tide_weighted_kv_merge_kernel)
+  add_library(tide-block-read-selection STATIC
+    block_read_selection.cpp block_read_selection_vjp.cpp)
+  set_target_properties(tide-block-read-selection PROPERTIES POSITION_INDEPENDENT_CODE ON)
+  target_link_libraries(tide-block-read-selection PUBLIC
+    tide-block-dispatch tide-weighted-kv-query tide-weighted-describe tide-weighted-region tide::tidegraph
+    tide_block_selection_plan_kernel tide_block_selection_roots_kernel
+    tide_block_selection_flags_kernel tide_block_node_gate_kernel)
   if(TIDE_DEVICE_RUNTIME STREQUAL "standalone")
+    add_executable(tide-block-read-selection-check
+      block_read_selection_check.cpp block_selection_fixture.cpp block_selection_formula.cpp)
+    target_compile_options(tide-block-read-selection-check PRIVATE -fPIC)
+    target_link_libraries(tide-block-read-selection-check PRIVATE tide-block-read-selection)
     add_executable(tide-weighted-rotary-check weighted_rotary_check.cpp)
     target_compile_options(tide-weighted-rotary-check PRIVATE -fPIC)
     target_link_libraries(tide-weighted-rotary-check PRIVATE tide-weighted-rotary tide::tidegraph)
