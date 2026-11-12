@@ -36,6 +36,16 @@ def bound_argument(like, value, variant):
     raise ValueError("unknown bound variant")
 
 
+def represented_bound(value, dtype, representation):
+    """Choose an explicit Scalar identity; Tensor bounds always use input dtype."""
+    if representation == "requested":
+        return value
+    if representation == "dtype":
+        import torch
+        return torch.tensor(value, dtype=dtype).item()
+    raise ValueError("unknown bound representation")
+
+
 def boundary_material(dtype, value):
     """Representable neighbors, exact threshold, signed zero, tiny/subnormal."""
     import torch
@@ -110,6 +120,8 @@ def arguments():
     p.add_argument("--dtype", choices=("float32", "float64"), default="float32")
     p.add_argument("--bound", choices=("zero", "tiny", "log-tiny"), default="log-tiny")
     p.add_argument("--variant", choices=("scalar", "tensor"), default="scalar")
+    p.add_argument("--bound-representation", choices=("requested", "dtype"), default="requested",
+                   help="keep the requested Python float, or explicitly round it to input dtype before either overload")
     p.add_argument("--shape", default="4,16,256,256", help="actual tensor shape, comma separated positive dimensions")
     p.add_argument("--mode", choices=("forward", "backward"), default="backward")
     p.add_argument("--action", choices=("check", "measure", "profile"), default="check")
@@ -154,8 +166,10 @@ def main():
         torch.set_num_interop_threads(1)
         device, reason = resolve_device(a.device)
         dtype = getattr(torch, a.dtype)
-        value = bound_value(a.bound, dtype)
-        record.update(runtime=manifest(device, reason, dtype), bound_requested=value,
+        requested = bound_value(a.bound, dtype)
+        value = represented_bound(requested, dtype, a.bound_representation)
+        record.update(runtime=manifest(device, reason, dtype), bound_requested=requested,
+                      bound_argument_value=value,
                       bound_effective=torch.tensor(value, dtype=dtype).item(),
                       device_visibility=os.environ.get("ASCEND_RT_VISIBLE_DEVICES"))
         def sync():

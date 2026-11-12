@@ -96,6 +96,9 @@ artifact 使用 `weights_only=True`载入，身份和内部内容 hash在恢复 
 已占用目标时拒绝。本地文件保存的实际字节受磁盘余量影响；开始前检查空间，失败清理 staging。
 目录 fsync若在发布后失败，完整新文件可能已存在，命令仍失败，不能据文件存在推断成功。
 初态 I/O/hash不进入步骤计时；此文件不是下游训练checkpoint，也不认证基座 continuation。
+轻量复现可用`--config tests/fixtures/req006-tiny-transformer.json`替换`--case`：
+实际为width4/一层、global batch2/microbatch1/L3。它保留原配置的其余元数据以固定字节身份，
+其中旧recipe/calibration摘要不代表这个小模型的测量或效果。
 
 默认一次 warmup、一次测量；`--iterations`可显式增加独立初态重复。profile/census
 每进程只跑一次受观察步骤，分别启动新进程、新输出目录；插桩结果不报告吞吐。
@@ -134,3 +137,10 @@ bmm、自定义分配VJP和可选 matmul 聚合；节点/区域间 select/stack�
 [初态配对检查](../tests/test_req006_initial_state.py)覆盖含随机输入/Dropout的精确下一次
 AdamW更新、身份/内容拒绝、加载字节预算和失败/并发写入不覆盖已有材料。
 新证据由基座[证据索引](evidence/README.md)导航，当前待办仍只维护在 ROADMAP。
+
+`diagnose_scalar_floor.py`将实际浮点Scalar与同dtype/device的0D Tensor阈值分开调查，
+以独立分段公式验证阈值两侧、相等点、signed zero及次正规值，再独立测量/profile。
+默认保留请求的Python float；`--bound-representation dtype`显式先舍入为输入dtype的精确
+可表示常量，原请求、实际参数、输出dtype阈值均记录。它用于区分Scalar提升/比较边界与
+算子成本，不改变生产模型的正支持、下游clamp或原失败。不得用`maximum`代替：相等点
+的输入导数不同。任一公式失败均保留；对不同常量表示的成功结果不能覆盖原来的失败。

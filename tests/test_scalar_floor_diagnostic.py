@@ -8,7 +8,7 @@ import torch
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]/"scripts"))
 from diagnose_scalar_floor import (boundary_material, bound_argument, bound_value,
-                                   evaluate, independent_formula)
+                                   evaluate, independent_formula, represented_bound)
 
 
 @pytest.mark.parametrize("name", ["zero", "tiny", "log-tiny"])
@@ -52,6 +52,21 @@ def test_dtype_bound_is_explicit_constant_and_unknown_variant_is_rejected():
     assert bound.item() == torch.tensor(value, dtype=x.dtype).item()
     with pytest.raises(ValueError, match="unknown"):
         bound_argument(x, value, "maximum")
+
+
+def test_scalar_representation_is_explicit_and_preserves_the_original_request():
+    value = bound_value("log-tiny", torch.float32)
+    rounded = represented_bound(value, torch.float32, "dtype")
+    assert rounded != value
+    assert represented_bound(value, torch.float32, "requested") == value
+    assert rounded == torch.tensor(value, dtype=torch.float32).item()
+    x, bar = boundary_material(torch.float32, rounded)
+    for variant in ("scalar", "tensor"):
+        result = evaluate(x.requires_grad_(), bar, bound_argument(x, rounded, variant), "backward")
+        expected = independent_formula(x.detach(), bar, rounded)
+        assert torch.equal(result[0], expected[0]) and torch.equal(result[1], expected[1])
+    with pytest.raises(ValueError, match="representation"):
+        represented_bound(value, torch.float32, "implicit")
 
 
 @pytest.mark.parametrize("variant", ["scalar", "tensor"])
