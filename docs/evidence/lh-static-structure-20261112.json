@@ -1,0 +1,244 @@
+{
+  "schema": "tide-lh-static-review-v1",
+  "source": "fb83ee91cc34ba49bf00465916d6e7e7a7eacdec",
+  "plan_sha256": "5539e0fdb716b75d1003b8d200f7c3f68cafde515503d01a62ab2b3b1c8025d7",
+  "model_id": "ccc8d791c65369826d6b1d6274b5e7a2c7424d8fea296dd96b42c60df6274876",
+  "source_hashes": {
+    "scripts/lh_tensor_baseline.py": "5a25810bd0142e83f019e3a330832f53354a095603aa310c27643563a7e86017",
+    "scripts/lh_tensor_math.py": "e569dbf127538c32e064f7f7d6ab906fc94ad2537894b88783de9dd249190198",
+    "scripts/lh_tensor_state.py": "b7f10e710c7337f3dfff6a01d4c6d77cd1581e0d5a3eba4c3b8b92846e12bd64",
+    "cpp/src/weighted_settle_columns.cpp": "6c020f3e3f37d90646f15eaed020eb94a6993cb4ac5913ab95814de331fe9eea",
+    "cpp/src/weighted_column_state.cpp": "deaaf02ad121ded64ae4c8522dd7ca819bf1c00dedaa1fc7244eeac3289d01e2",
+    "cpp/src/weighted_column_read_groups.cpp": "8dad0a61f6f91623ee3f01359838d7b4b41688e038c019ebd83247511c46c4af",
+    "cpp/src/weighted_column_full_groups.cpp": "9334992acc4b73528adf796d15d8f7030196fd965884116489a446af1e75f0ee",
+    "cpp/src/weighted_regional_packing.cpp": "8a83cec73b4466e1ec7d3b4abba2a76b965637b917821755cbd22010d986a209",
+    "cpp/src/weighted_regional_groups.cpp": "66b22ba8f12b9647df8bd36d2c2e9cc697f873d6e9bb074f9bda7eb6af017b21",
+    "python/tidegraph/weighted/window_execution.py": "d643c9263d97b083bf604c816802ac58672c5d0a061a67241f4a77df112c3b14"
+  },
+  "regions": [
+    {
+      "region": 0,
+      "nodes": 8,
+      "source_atoms": 8,
+      "predecessor_blocks": 1,
+      "read": "qry",
+      "regional_score": "att",
+      "compiled_source_slots": 8
+    },
+    {
+      "region": 1,
+      "nodes": 8,
+      "source_atoms": 32,
+      "predecessor_blocks": 1,
+      "read": "qry",
+      "regional_score": "att",
+      "compiled_source_slots": 8
+    },
+    {
+      "region": 2,
+      "nodes": 8,
+      "source_atoms": 32,
+      "predecessor_blocks": 1,
+      "read": "qry",
+      "regional_score": "att",
+      "compiled_source_slots": 8
+    },
+    {
+      "region": 3,
+      "nodes": 8,
+      "source_atoms": 40,
+      "predecessor_blocks": 2,
+      "read": "qry",
+      "regional_score": "att",
+      "compiled_source_slots": 16
+    },
+    {
+      "region": 4,
+      "nodes": 8,
+      "source_atoms": 32,
+      "predecessor_blocks": 1,
+      "read": "qry",
+      "regional_score": "att",
+      "compiled_source_slots": 8
+    },
+    {
+      "region": 5,
+      "nodes": 8,
+      "source_atoms": 32,
+      "predecessor_blocks": 1,
+      "read": "qry",
+      "regional_score": "att",
+      "compiled_source_slots": 8
+    },
+    {
+      "region": 6,
+      "nodes": 8,
+      "source_atoms": 32,
+      "predecessor_blocks": 1,
+      "read": "qry",
+      "regional_score": "att",
+      "compiled_source_slots": 8
+    },
+    {
+      "region": 7,
+      "nodes": 8,
+      "source_atoms": 40,
+      "predecessor_blocks": 2,
+      "read": "sum",
+      "regional_score": "ind",
+      "compiled_source_slots": 16
+    },
+    {
+      "region": 8,
+      "nodes": 8,
+      "source_atoms": 40,
+      "predecessor_blocks": 2,
+      "read": "sum",
+      "regional_score": "ind",
+      "compiled_source_slots": 16
+    },
+    {
+      "region": 9,
+      "nodes": 8,
+      "source_atoms": 32,
+      "predecessor_blocks": 1,
+      "read": "sum",
+      "regional_score": "ind",
+      "compiled_source_slots": 8
+    },
+    {
+      "region": 10,
+      "nodes": 8,
+      "source_atoms": 33,
+      "predecessor_blocks": 2,
+      "read": "sum",
+      "regional_score": "ind",
+      "compiled_source_slots": 9
+    },
+    {
+      "region": 11,
+      "nodes": 8,
+      "source_atoms": 33,
+      "predecessor_blocks": 2,
+      "read": "sum",
+      "regional_score": "ind",
+      "compiled_source_slots": 9
+    },
+    {
+      "region": 12,
+      "nodes": 8,
+      "source_atoms": 32,
+      "predecessor_blocks": 1,
+      "read": "sum",
+      "regional_score": "ind",
+      "compiled_source_slots": 8
+    },
+    {
+      "region": 13,
+      "nodes": 8,
+      "source_atoms": 32,
+      "predecessor_blocks": 1,
+      "read": "sum",
+      "regional_score": "ind",
+      "compiled_source_slots": 8
+    },
+    {
+      "region": 14,
+      "nodes": 8,
+      "source_atoms": 32,
+      "predecessor_blocks": 1,
+      "read": "sum",
+      "regional_score": "ind",
+      "compiled_source_slots": 8
+    },
+    {
+      "region": 15,
+      "nodes": 8,
+      "source_atoms": 74,
+      "predecessor_blocks": 5,
+      "read": "sum",
+      "regional_score": "att",
+      "compiled_source_slots": 26
+    },
+    {
+      "region": 16,
+      "nodes": 8,
+      "source_atoms": 74,
+      "predecessor_blocks": 5,
+      "read": "sum",
+      "regional_score": "att",
+      "compiled_source_slots": 26
+    },
+    {
+      "region": 17,
+      "nodes": 8,
+      "source_atoms": 73,
+      "predecessor_blocks": 4,
+      "read": "sum",
+      "regional_score": "att",
+      "compiled_source_slots": 25
+    },
+    {
+      "region": 18,
+      "nodes": 8,
+      "source_atoms": 73,
+      "predecessor_blocks": 4,
+      "read": "sum",
+      "regional_score": "att",
+      "compiled_source_slots": 25
+    },
+    {
+      "region": 19,
+      "nodes": 8,
+      "source_atoms": 97,
+      "predecessor_blocks": 7,
+      "read": "sum",
+      "regional_score": "att",
+      "compiled_source_slots": 49
+    },
+    {
+      "region": 20,
+      "nodes": 8,
+      "source_atoms": 97,
+      "predecessor_blocks": 7,
+      "read": "sum",
+      "regional_score": "att",
+      "compiled_source_slots": 49
+    },
+    {
+      "region": 21,
+      "nodes": 8,
+      "source_atoms": 96,
+      "predecessor_blocks": 6,
+      "read": "sum",
+      "regional_score": "att",
+      "compiled_source_slots": 48
+    }
+  ],
+  "scope": "source-level forward dense anchor and conditional native loops; not kernel or timing counts",
+  "direct_matrix_products": {
+    "source_mlp": 44,
+    "incidence_aggregate": 44,
+    "kv_write": 88,
+    "read_memory_and_current": 94,
+    "describe_heads": 72,
+    "region_heads": 50,
+    "full": 154
+  },
+  "direct_matrix_products_total": 546,
+  "direct_normalizations": 132,
+  "native_source_occurrences_upper": 1066,
+  "direct_predecessor_block_iterations": 58,
+  "direct_compiled_source_slots": 394,
+  "source_slot_definition": "StaticKV._sources slots after deduplication by (kind, source identifier, ordered parameter aliases, alpha, epsilon); not a proof of minimum distinct numerical input/parameter work.",
+  "conditional_additional_source_reuse": {
+    "region": 0,
+    "current_compiled_input_slots": 8,
+    "shared_content_and_parameter_bindings": 1,
+    "basis": "All eight input ports use the same broadcast x and shared region A/B plus class-0 embedding. Per-port support affects mass aggregation, not F(x).",
+    "additional_transform_slots_saved": 7,
+    "slots_after_only_this_reuse": 387,
+    "preserved": "All eight physical input atoms, independent supports and mass contributions.",
+    "status": "Conditional source analysis only; fb83 still evaluates 394 slots. No implementation, measurement or global-minimum claim."
+  }
+}

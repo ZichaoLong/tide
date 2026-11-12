@@ -1,5 +1,18 @@
 # 历史验证与测量证据
 
+[LH静态结构对照（2026-11-12）](lh-static-structure-20261112.md)：固定fb83直接/公共/默认入口、
+区域/节点/物理原子循环、矩阵与归一化的明确计数口径，以及稠密/稀疏布局的取舍。
+源码计数与实测trace分开，来源重复是实现成本；不把直接实现当绝对最优。
+
+[共同原点KV与一般图显式异步资格（2026-11-12）](rope-qualification-20261112.md)：fb83 CPU281通过/9原xfail、
+八安装消费者三步/新进程恢复、SDK CPU及NPU15组合；LH非空FP32严格失败保持。
+55a一般图双NPU六格另列四步/精确恢复，不把源码、队列策略和恢复方式混合认证。
+
+[LH/FC/1B的42点成本与结构诊断（2026-11-12）](rope-performance-20261112.md)：fb83 LH176三层三模式、
+FC16默认/直接/Transformer、约1B推理，以及fb83 packing与f475独立profile/census。
+FC16默认训练CPU1/NPU2为1.2410/0.6050秒；LH仍有明显差距。实际路由差异、共享条件、
+None/零、数值投影原失败与NPU profiler警告分别保留；所有点可从固定配方和命令重建。
+
 [KV分组、LH生命周期与显式异步队列（2026-11-12）](query-lifecycle-20261112.md)：固定55a CPU254通过/9原xfail，
 standalone owner/五记忆CLI、LH176七族FP64数值投影和CPU/NPU四安装消费者恢复分列。
 NPU两族严格有限数值失败、None/零差异、原SDK include失败及普通队列EE1017保留；

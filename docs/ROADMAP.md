@@ -54,7 +54,9 @@ FC16仍在warmup报EE1019/507002，无吞吐或恢复结论；原失败和新增
 [节点/区域后继](evidence/node-region-batching-20261112.md)已采用prepare_many、真实候选数分组和
 有界unit检查，并补LH176独立公式/实际列尺度检查。跨节点Read/Full、Describe和有界共同原点RoPE已在55a/fb83后继实现，
 [独立根及LH生命周期](evidence/query-lifecycle-20261112.md)已补；fb83相关CPU281通过/9原xfail、
-两ABI新构建通过，新的LH/FC成本仍在运行。来源变换复用是剩余具体机会，
+两ABI新构建通过；[42点LH/FC/1B成本](evidence/rope-performance-20261112.md)、
+[安装/异步资格](evidence/rope-qualification-20261112.md)及[静态循环审阅](evidence/lh-static-structure-20261112.md)已审阅。
+00bb5ac2已实现来源变换合批与完整参数槽精确复用，新native/设备/成本资格继续，
 不能按外层调度已改造或局部合批已完成便关闭P5。
 [REQ006机制调查](evidence/req006-diagnostics-20261112.md)与
 [常量重载/初态配对](evidence/req006-floor-20261112.md)分开保留严格失败、算子成本及下游职责；
@@ -73,7 +75,7 @@ FC16仍在warmup报EE1019/507002，无吞吐或恢复结论；原失败和新增
 | P2 加法对照与紧凑实现 | FC/Transformer与KV/SSD基线保持；LH已补三层三模式及176节点raw/支持/任务VJP。55a已补非空左态七观察族、176节点三AdamW及CPU/NPU两个安装客户端新进程精确恢复；数值投影与完整连接资格分列，不能互相替代。区域张量公式/VJP锚点与Attention算子能力分别维护 | 同材料、同观察/计时范围的直接公式→公共块接口→小组合成本；LH CPU FP64数值投影通过，CPU/NPU FP32有限超差和36个None/零连接差异按声明范围保留；Transformer不作等价oracle |
 | P3 默认FC整链贯穿 | 以KV为首要候选，区域描述/控制/求解/VJP同步改造；消息及支持以批量数据进入下游，消除边界的强制拆行重拼。配置/能力按块分派，检查与optimizer纳入完整路径；保留一般图合法推进与声明观察能力，必要时迁移API/codec | FC4/FC16的CPU与NPU mixed-c三模式、阶段差额、图/算子/内存、训练与恢复；小型PDG反馈、非对齐TimedDAG、一般Settle端口、重复边/共享/None零等定向检查；Python/native与standalone实际接入。FC为第一个整链汇报点，不以局部提速代替架构验收 |
 | P4 有限候选与组合扩展 | 将当前五记忆/固定时间短卷积，以及评分/证据/key、十种发送与适用正则接入新块契约。区域的总量/阈值/受约束求解、Attention份额、比例、硬选择和小数零温发送分别保留实际支持与声明反向；优先打通功能，重性能按实测排序 | 每个候选有可用实现，合法组合可配置；逐项及有判别力的小组合覆盖，无需穷举。不同私有形状不逼迫逐行返回，不同分配语义不偷换同一Top-k；KV位置/过期/sum等域与循环序列VJP分别记录 |
-| P5 代表规模与执行路径 | LH相容节点read_many/full_many及共同原点RoPE已实现；正在测三层/三模式、FC16、CPU32与1B边界。Aggregate保留真实同源同参数复用机会。resident已写完整区域device循环、Aggregate/Upd/逐边路由、raw session与canonical optimizer；须完成整图独立根、跨窗/新进程、公开Model/Continuation接入及原预算FC16；逐帧raw快照尚非共享前缀bank | [resident块证据](evidence/resident-blocks-20261112.md)不解除旧FC16 EE1019；不再原样重跑旧服务树或仅增预算。先完整小图独立根/跨窗，再原预算规模；默认队列EE1017与GPU待验独立保留；显式per-stream列资格与一般PDG/TimedDAG六格四AdamW/恢复已通过。当前LH/FC成本是有限共享观察，不外推9B或不同放置 |
+| P5 代表规模与执行路径 | LH相容节点read_many/full_many及共同原点RoPE已有三层/三模式、FC16、CPU32与1B有限成本；42点结论按报告范围。00bb5ac2来源变换合批及精确复用继续新资格。resident已写完整区域device循环、Aggregate/Upd/逐边路由、raw session与canonical optimizer；须完成整图独立根、跨窗/新进程、公开Model/Continuation接入及原预算FC16；逐帧raw快照尚非共享前缀bank | [resident块证据](evidence/resident-blocks-20261112.md)不解除旧FC16 EE1019；不再原样重跑旧服务树或仅增预算。先完整小图独立根/跨窗，再原预算规模；默认队列EE1017与GPU待验独立保留；显式per-stream列资格与一般PDG/TimedDAG六格四AdamW/恢复已通过。当前LH/FC成本是有限共享观察，不外推9B或不同放置 |
 | P6 治理、交付与持续复用 | 贯穿各阶段维护语义对应/架构/复现/性能经验；[55a边界审阅](evidence/p1p6-boundary-review-20261112.md)已按hash记录24实际源码/测试及3段文档，已审与未审分列。完善安装客户端、替换局部模块、实际配置/路径可见性、诊断和恢复演练，提供消费者迁移说明 | 固定实现先提交，相关资格和性能证据随后独立记录；新线程和下游无需会话/旧raw目录即可导航复现。旧实验锁和证据不改写；全仓未审不冒充完成 |
 
 ### 测量、阶段边界与有限停止

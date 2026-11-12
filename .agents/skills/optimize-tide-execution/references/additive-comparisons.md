@@ -37,3 +37,26 @@ forward versus true backward/full training, operator submissions, autograd nodes
 bytes, synchronization and actual work. Use these to choose the next experiment,
 not an endless mandatory profile matrix. A baseline can be useful even when it
 is not promoted; record why, the remaining gap and a concrete reopening condition.
+
+When the gap is unclear, inspect both implementations statically before choosing
+another optimization. Describe their input/output and observation contracts,
+then expand the relevant call paths: loops over regions, nodes, physical atoms,
+samples, positions, fields, parameter owners and solver iterations. Separate
+construction from each invocation, metadata iteration from tensor work, and
+forward from explicit/nested backward. Record where the batch axes survive and
+where an interface forces gather, copies, materialization or separate calls.
+
+Count meaningful operations with a declared vocabulary (matrix contractions,
+normalization, source transforms, solver calls, gathers or bytes). Include loops
+and branches: exact counts where static, expressions or bounds where actual
+support, ragged lengths or convergence decide them. A Tensor API call, an ATen
+dispatch, an autograd node and a device kernel are different units. Do not invent
+one exact kernel total from source syntax, or rank algorithms by call count alone;
+padding, redundant arithmetic, memory traffic, concurrency and synchronization
+can outweigh fewer calls. Use measurements to test the static explanation.
+
+Classify the resulting differences as required mathematical work, required public
+observations, avoidable recomputation, or an explicit layout/algorithm tradeoff.
+Show the smallest alternative boundary that would carry the compact computation
+with the needed semantics. Reuse the analysis for later module replacements;
+do not turn it into a mandatory full-repository census for each small edit.

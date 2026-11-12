@@ -1,0 +1,5377 @@
+{
+  "schema": "tide-rope-qualification-evidence-v1",
+  "implementation": "fb83ee91cc34ba49bf00465916d6e7e7a7eacdec",
+  "numerical_change": "a6059a71e9503c1b8f16f854866e9845aa595832",
+  "upstream": "0770593838a37c790a568226930567ed60f99b83",
+  "scope": "Bounded common integer-origin KV position evaluation and execution-v6. Separate 55a general-graph peer qualification. No measured-scale strict qualification inferred from costs.",
+  "builds": {
+    "native": {
+      "path": "/dev/shm/gef-p1p6-20261112/core-rope-native/build-manifest.json",
+      "sha256": "be39936d8eac11f0a5cba119e67e2aecfab5d9fdf6864dbbb0ac7967a8b076c6",
+      "bytes": 1439,
+      "record": {
+        "source": "fb83ee91cc34ba49bf00465916d6e7e7a7eacdec",
+        "cpp_source_sha256": "7d72cbaeda08b3b6a5dfd1b6a9ed53e8d68851e1c03b722eeab4942b845390de",
+        "torch": "2.12.0+cpu",
+        "distribution": {
+          "torch": "2.12.0+cpu",
+          "torch_dir": "/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/lib/python3.12/site-packages/torch/share/cmake/Torch",
+          "prefix": "/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/lib/python3.12/site-packages/torch/share/cmake",
+          "cuda": null,
+          "cxx11_abi": true,
+          "discovery": "python-torch"
+        },
+        "environment": {
+          "os": "Linux-5.10.0-182.0.0.95.r1941_123.hce2.aarch64-aarch64-with-glibc2.34",
+          "compiler": "c++ (GCC) 10.3.1",
+          "cxx_standard": 17,
+          "build_type": "Release",
+          "torch_prefix": "/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/lib/python3.12/site-packages/torch/share/cmake/Torch",
+          "cann_version": "9.2.0"
+        },
+        "build_jobs": 128,
+        "backend": "npu",
+        "npu_runtime": "python",
+        "torch_npu": "2.12.0.post3",
+        "cuda": null,
+        "architecture": "aarch64",
+        "python": "3.12.13",
+        "cxx11_abi": true,
+        "binary_sha256": {
+          "libtidegraph.a": "180aa742369a3e4ca3c6b01fc8ec0371dd14e06286163c707eabbafc925ceb98",
+          "libtidegraph_runtime.a": "1837b93519782550deaf1f8cbe0c4d3d62a182c6ad5f85554a40c22edeb0c63b",
+          "_tide_native.so": "aebefd08b69e9e6d4ca878b519fb1cb3d18043858b9647b5b9a756e8c154c795"
+        }
+      }
+    },
+    "sdk": {
+      "path": "/dev/shm/gef-p1p6-20261112/core-rope-sdk/build-manifest.json",
+      "sha256": "728f3d0648235a46411f1e8328d92514c0aa41f0d6b9abd051ec86c640cf85e7",
+      "bytes": 4169,
+      "record": {
+        "source": "fb83ee91cc34ba49bf00465916d6e7e7a7eacdec",
+        "cpp_source_sha256": "7d72cbaeda08b3b6a5dfd1b6a9ed53e8d68851e1c03b722eeab4942b845390de",
+        "torch": "2.12.0",
+        "distribution": {
+          "torch": "2.12.0",
+          "torch_dir": "/opt/software/libtorch/2.12.0-cpu-aarch64-abi1/share/cmake/Torch",
+          "prefix": "/opt/software/libtorch/2.12.0-cpu-aarch64-abi1",
+          "cxx11_abi": true,
+          "cuda": null,
+          "discovery": "standalone-prefix",
+          "distribution_sha256": {
+            "share/cmake/Torch/TorchConfig.cmake": "9846a61d981bc6c465ccfd604edb910e2ff37342310b80606c416697f9753d24",
+            "share/cmake/Torch/TorchConfigVersion.cmake": "6cc8fc1b03a7d604a57be1fc51491bfb4deb8c651506c415a41b5173b06344f3",
+            "lib/libtorch.so": "5d864dc3a979f6f8cf572e752caa583182324399c29a79b9143efe175f67d72e",
+            "lib/libtorch_cpu.so": "cb4931abca15245de366da71e361174afc9e411651d4c50046cfb7a2dac6c4f5",
+            "lib/libc10.so": "fa843366784bfce035e912360601c4ca098ce536b20f0c4a8ee50c3f00294e37"
+          }
+        },
+        "environment": {
+          "os": "Linux-5.10.0-182.0.0.95.r1941_123.hce2.aarch64-aarch64-with-glibc2.34",
+          "compiler": "c++ (GCC) 10.3.1",
+          "cxx_standard": 17,
+          "build_type": "Release",
+          "torch_prefix": "/opt/software/libtorch/2.12.0-cpu-aarch64-abi1/share/cmake/Torch",
+          "cann_version": "9.2.0",
+          "npu_sdk": {
+            "config": "/opt/software/libtorch-npu/2.12.0-cann9.2.0-aarch64-abi1/sdk/share/cmake/Torch_npu/Torch_npuConfig.cmake",
+            "config_sha256": "1711480e47f9dbb19ed01209f073e5526218efeb583cbbbc9ab101c373cc62dd",
+            "library_sha256": "9a851accc1f4c7063d7e3c3cf76186329c063000a00a4d48c45a30ca1e8e3c18"
+          }
+        },
+        "build_jobs": 128,
+        "backend": "npu",
+        "npu_runtime": "standalone",
+        "torch_npu": null,
+        "cuda": null,
+        "architecture": "aarch64",
+        "python": "3.12.13",
+        "cxx11_abi": true,
+        "binary_sha256": {
+          "libtidegraph.a": "1a7f44ce05e6170a05cc271edf0d8323cd4fdf0332745f14f3e376ec3374f53d",
+          "libtidegraph_runtime.a": "aa3ac6c5868dce972e27369987e640057a72b3b065ec642158cf335897d188fe",
+          "tidegraph-smoke": "094983d37825421cfb9cc4a05e943f2ebedef4a52f75ef110051928a82842530",
+          "tidegraph-kernel-check": "61624c7e03e7d3e64f98e7141f1a862be20b8168dd32d54dce5adc9816ebcb79",
+          "tidegraph-full-check": "54a705ac69ec49eb36f6c4f82178ec540cb25b1cf9c340ffd0ad68de4f51f008",
+          "tidegraph-aggregate-check": "c6c0e0468fab79b43980d7dbf64a4a3752ad5efa86a4f994bf3ab38dbe454d00",
+          "tidegraph-optimizer-check": "0c881d740a51a1067ea507bb914aaeeb6359bedbc4b2cd35cd882032926bc602",
+          "tidegraph-checkpoint-check": "c6ab2db771239e900dfbcaebc0f90cb289cf8c94698dee8d661d7ca768fbdaa5",
+          "tidegraph-weighted-training-check": "d6e6cda8d6f87897030ac702d520c4150098fc1b9fe63880b2587227b5ff873d",
+          "tidegraph-lh-scope-check": "746aedf44726838f1a9159a03747053ee5ec4d9de2e930ad3258aed8a2492e0d",
+          "tidegraph-streaming-bench": "0c11194d5d5cb1c14b98db6ce0ae3259fdee7ee31c4c141ec9e83843c32ae6f2",
+          "tidegraph-scale-bench": "56e28a035c4cd254b2e111b8593c99800efacca1acfd69514c186bf5797f6bc1",
+          "tidegraph-profile-check": "27b5ca2d75e14baa28a0ea1b77414363aff4167cb82e32926132cc8fff9fe7e0",
+          "tidegraph-settle-check": "2508210bc77d7204a535ac81c4c522c8a9358939365c218ed0dfa77af8c982e9",
+          "tidegraph-greedy-check": "bf7dda97d2a18491d75f19ad834457027e1fcb5d91bbd10db649456090b95ba7",
+          "tidegraph-accelerator-check": "c438a87cdc8abea319f61bb74ea0b1d6c8b93140eea5b1322cabb0a4820483c5",
+          "tidegraph-runtime-check": "cd6d5ea111da2de812c90d807b0d2836f854d47dd39c79746d6815fa1376f7ac",
+          "tidegraph-read-precision-check": "a874c29d03dcdf1ed94981fd3763549cbe39b2d07c05dbad48c19a51889ad5b2",
+          "tidegraph-placement-check": "32fecedf4d4e78809d634618f0cfb8c7ad63e063c9d3d9f3b5785826fd644623",
+          "tidegraph-payload-ownership-check": "aec04bcdd1456e41b4e5b372b3739ef0fc4251c32597db9be811571dd9b40fa9",
+          "tidegraph-weighted-binding-module-check": "7e8393e30b8c3b4c3b304b6f7a8bae62bf0728f6add99c6fe8c180c2268044df",
+          "tidegraph-column-check": "03f05fc5855577a9f2cd8af260a496947174d01336ffc6b390367f997bf64104",
+          "libtidegraph-weighted-binding-module.so": "1704543694f6dff5313a07121479e323c3a57e2375799191953cb88e264cf231"
+        }
+      }
+    }
+  },
+  "jobs": {
+    "core-a605-native": {
+      "path": "artifacts/jobs/p1p6-core-a605-native/status.json",
+      "sha256": "55bb563732dd3f5dd9b9dd69cf658814006471557cd8c715b2fcf316d894f510",
+      "bytes": 405,
+      "record": {
+        "command": [
+          "/bin/bash",
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/p1p6-20261112/core-a605-native.sh"
+        ],
+        "cwd": "/dev/shm/gef-p1p6-20261112/core-a6059a71",
+        "state": "failed",
+        "source": "a6059a71e9503c1b8f16f854866e9845aa595832",
+        "dirty": false,
+        "started": "2026-11-12T07:01:17.502522+00:00",
+        "exit_code": 1,
+        "finished": "2026-11-12T07:02:06.645606+00:00"
+      },
+      "log": {
+        "path": "artifacts/jobs/p1p6-core-a605-native/task.log",
+        "sha256": "8df5e2a690eb3552185715885f746d05a5eec3451e4f32ba21c7e1a81e37c5bb",
+        "bytes": 19060
+      }
+    },
+    "core-a605-sdk": {
+      "path": "artifacts/jobs/p1p6-core-a605-sdk/status.json",
+      "sha256": "db5620f59320e8dc9c17e881f5236782c1fbdfba1bf0c9d4457c2d7aae8f9296",
+      "bytes": 402,
+      "record": {
+        "command": [
+          "/bin/bash",
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/p1p6-20261112/core-a605-sdk.sh"
+        ],
+        "cwd": "/dev/shm/gef-p1p6-20261112/core-a6059a71",
+        "state": "failed",
+        "source": "a6059a71e9503c1b8f16f854866e9845aa595832",
+        "dirty": false,
+        "started": "2026-11-12T07:01:17.520792+00:00",
+        "exit_code": 1,
+        "finished": "2026-11-12T07:01:51.437945+00:00"
+      },
+      "log": {
+        "path": "artifacts/jobs/p1p6-core-a605-sdk/task.log",
+        "sha256": "cfd91f5ca0da1988be7e7670b2842f07adc01b2ce7fe6adb0ea9b7e767b175b3",
+        "bytes": 21872
+      }
+    },
+    "core-rope-native": {
+      "path": "artifacts/jobs/p1p6-core-rope-native/status.json",
+      "sha256": "7fa31d89075979a62af3120d1df0bc6b807ab2def45f48e28a23e428cade17ef",
+      "bytes": 401,
+      "record": {
+        "command": [
+          "/bin/bash",
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/p1p6-20261112/core-rope-native.sh"
+        ],
+        "cwd": "/dev/shm/gef-p1p6-20261112/core-rope",
+        "state": "passed",
+        "source": "fb83ee91cc34ba49bf00465916d6e7e7a7eacdec",
+        "dirty": false,
+        "started": "2026-11-12T07:03:20.413796+00:00",
+        "exit_code": 0,
+        "finished": "2026-11-12T07:05:44.220472+00:00"
+      },
+      "log": {
+        "path": "artifacts/jobs/p1p6-core-rope-native/task.log",
+        "sha256": "530cb3b09801ff7fbe429d75b87ed0054d5cfe200973cc1c7bb86a9ab594ae09",
+        "bytes": 17033
+      }
+    },
+    "core-rope-sdk": {
+      "path": "artifacts/jobs/p1p6-core-rope-sdk/status.json",
+      "sha256": "9dcae2986c29f2a70891bdc359011eb32ac65985092ade7d9bc5361cc6971bd5",
+      "bytes": 398,
+      "record": {
+        "command": [
+          "/bin/bash",
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/p1p6-20261112/core-rope-sdk.sh"
+        ],
+        "cwd": "/dev/shm/gef-p1p6-20261112/core-rope",
+        "state": "passed",
+        "source": "fb83ee91cc34ba49bf00465916d6e7e7a7eacdec",
+        "dirty": false,
+        "started": "2026-11-12T07:03:20.443469+00:00",
+        "exit_code": 0,
+        "finished": "2026-11-12T07:04:38.802817+00:00"
+      },
+      "log": {
+        "path": "artifacts/jobs/p1p6-core-rope-sdk/task.log",
+        "sha256": "a12dac4c8c4a2b562714a8b13c616b286369d19fd0d62b736462c2fb2a972c17",
+        "bytes": 34738
+      }
+    },
+    "lifecycle-rope-cpu": {
+      "path": "artifacts/jobs/p1p6-lifecycle-rope-cpu/status.json",
+      "sha256": "c152dda6d019e2d909136dbfad2a18cde5ed6b0d4e396e99344932b0138afc5c",
+      "bytes": 403,
+      "record": {
+        "command": [
+          "/bin/bash",
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/p1p6-20261112/lifecycle-rope-cpu.sh"
+        ],
+        "cwd": "/dev/shm/gef-p1p6-20261112/core-rope",
+        "state": "passed",
+        "source": "fb83ee91cc34ba49bf00465916d6e7e7a7eacdec",
+        "dirty": false,
+        "started": "2026-11-12T07:07:06.080195+00:00",
+        "exit_code": 0,
+        "finished": "2026-11-12T07:10:27.154536+00:00"
+      },
+      "log": {
+        "path": "artifacts/jobs/p1p6-lifecycle-rope-cpu/task.log",
+        "sha256": "acbfc6878ce4f4a637d3b3187d6bde1a550c3be059b5d24facc848a8ec7ec112",
+        "bytes": 1796
+      }
+    },
+    "lifecycle-rope-npu": {
+      "path": "artifacts/jobs/p1p6-lifecycle-rope-npu/status.json",
+      "sha256": "40334b0fb2644024bc66ac2603da6ad381d518b82f2e4eb62f5c3897707d058b",
+      "bytes": 403,
+      "record": {
+        "command": [
+          "/bin/bash",
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/p1p6-20261112/lifecycle-rope-npu.sh"
+        ],
+        "cwd": "/dev/shm/gef-p1p6-20261112/core-rope",
+        "state": "failed",
+        "source": "fb83ee91cc34ba49bf00465916d6e7e7a7eacdec",
+        "dirty": false,
+        "started": "2026-11-12T07:07:06.098927+00:00",
+        "exit_code": 1,
+        "finished": "2026-11-12T07:13:26.085549+00:00"
+      },
+      "log": {
+        "path": "artifacts/jobs/p1p6-lifecycle-rope-npu/task.log",
+        "sha256": "345798385d12c7496ad35bfb2424c789d6775fdeb4c0e6e06ac4317643fa2522",
+        "bytes": 4202
+      }
+    },
+    "rope-mechanism": {
+      "path": "artifacts/jobs/p1p6-rope-mechanism/status.json",
+      "sha256": "14e726ab5bb9c25cf8621f3837f2512c8924c9dbb4774f9dac482251e0839ff5",
+      "bytes": 399,
+      "record": {
+        "command": [
+          "/bin/bash",
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/p1p6-20261112/rope-mechanism.sh"
+        ],
+        "cwd": "/dev/shm/gef-p1p6-20261112/core-rope",
+        "state": "passed",
+        "source": "fb83ee91cc34ba49bf00465916d6e7e7a7eacdec",
+        "dirty": false,
+        "started": "2026-11-12T07:24:37.884138+00:00",
+        "exit_code": 0,
+        "finished": "2026-11-12T07:25:54.601349+00:00"
+      },
+      "log": {
+        "path": "artifacts/jobs/p1p6-rope-mechanism/task.log",
+        "sha256": "dffb21dc1225f419d028bb041730e14fa31a5e871f8929109f47dcd5a522c7a3",
+        "bytes": 809
+      }
+    },
+    "peer-general-55": {
+      "path": "artifacts/jobs/p1p6-peer-general-55/status.json",
+      "sha256": "8685a3e71ab3c1d15ce50d925e434bf5cc0b18e9b7be09e1a5df38b2627af091",
+      "bytes": 404,
+      "record": {
+        "command": [
+          "/bin/bash",
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/p1p6-20261112/peer-general-55.sh"
+        ],
+        "cwd": "/dev/shm/gef-p1p6-20261112/core-55a3074a",
+        "state": "passed",
+        "source": "55a3074a441d77720cf00e44433bd702cd09e175",
+        "dirty": false,
+        "started": "2026-11-12T07:04:04.617659+00:00",
+        "exit_code": 0,
+        "finished": "2026-11-12T07:06:23.439840+00:00"
+      },
+      "log": {
+        "path": "artifacts/jobs/p1p6-peer-general-55/task.log",
+        "sha256": "055c8a4eacf209c520385c7804c0ccae541aa73175ad26b0fe9ef059bb212d70",
+        "bytes": 9262
+      }
+    }
+  },
+  "checks": {
+    "cpu": {
+      "path": "artifacts/p1p6-20261112/core-rope-cpu.xml",
+      "sha256": "92bdc5aecf5ee763782905b363402a71a4847477d133677bb4d0245f70c756b4",
+      "bytes": 43040,
+      "case_count": 290,
+      "counts": {
+        "passed": 281,
+        "xfail": 9
+      },
+      "class_counts": {
+        "tests.test_column_position_ops": 17,
+        "tests.test_query_sdk_capability": 9,
+        "tests.test_column_query_groups": 14,
+        "tests.test_column_query_dispatch": 18,
+        "tests.test_column_placement": 24,
+        "tests.test_settle_columns": 34,
+        "tests.test_column_positions": 8,
+        "tests.test_column_training": 6,
+        "tests.test_column_payload_owners": 4,
+        "tests.test_column_sharing": 3,
+        "tests.test_lh_tensor_observations": 15,
+        "tests.test_planned_window_consumer": 3,
+        "tests.test_experiment_columns": 26,
+        "tests.test_recurrent_columns": 15,
+        "tests.test_native_recurrent_columns": 36,
+        "tests.test_regional_groups_native": 28,
+        "tests.test_settle_ports": 22,
+        "tests.test_core5_hierarchy": 8
+      },
+      "exceptions": [
+        {
+          "classname": "tests.test_settle_columns",
+          "name": "test_general_ports_messages_states_and_gradients[float32-regional_total-python]",
+          "state": "xfail",
+          "attributes": {
+            "type": "pytest.xfail",
+            "message": "column FP32 reduction witness; same material FP64 check is separate"
+          }
+        },
+        {
+          "classname": "tests.test_settle_columns",
+          "name": "test_general_ports_messages_states_and_gradients[float32-regional_total-native]",
+          "state": "xfail",
+          "attributes": {
+            "type": "pytest.xfail",
+            "message": "column FP32 reduction witness; same material FP64 check is separate"
+          }
+        },
+        {
+          "classname": "tests.test_settle_columns",
+          "name": "test_general_ports_messages_states_and_gradients[float32-regional_total_zero-python]",
+          "state": "xfail",
+          "attributes": {
+            "type": "pytest.xfail",
+            "message": "column FP32 reduction witness; same material FP64 check is separate"
+          }
+        },
+        {
+          "classname": "tests.test_settle_columns",
+          "name": "test_general_ports_messages_states_and_gradients[float32-regional_total_zero-native]",
+          "state": "xfail",
+          "attributes": {
+            "type": "pytest.xfail",
+            "message": "column FP32 reduction witness; same material FP64 check is separate"
+          }
+        },
+        {
+          "classname": "tests.test_settle_columns",
+          "name": "test_general_ports_messages_states_and_gradients[float32-proportional-python]",
+          "state": "xfail",
+          "attributes": {
+            "type": "pytest.xfail",
+            "message": "column FP32 reduction witness; same material FP64 check is separate"
+          }
+        },
+        {
+          "classname": "tests.test_settle_columns",
+          "name": "test_general_ports_messages_states_and_gradients[float32-regional_threshold-python]",
+          "state": "xfail",
+          "attributes": {
+            "type": "pytest.xfail",
+            "message": "column FP32 reduction witness; same material FP64 check is separate"
+          }
+        },
+        {
+          "classname": "tests.test_settle_columns",
+          "name": "test_general_ports_messages_states_and_gradients[float32-regional_threshold-native]",
+          "state": "xfail",
+          "attributes": {
+            "type": "pytest.xfail",
+            "message": "column FP32 reduction witness; same material FP64 check is separate"
+          }
+        },
+        {
+          "classname": "tests.test_settle_columns",
+          "name": "test_general_ports_messages_states_and_gradients[float32-hard_selection-python]",
+          "state": "xfail",
+          "attributes": {
+            "type": "pytest.xfail",
+            "message": "column FP32 reduction witness; same material FP64 check is separate"
+          }
+        },
+        {
+          "classname": "tests.test_settle_columns",
+          "name": "test_general_ports_messages_states_and_gradients[float32-hard_selection-native]",
+          "state": "xfail",
+          "attributes": {
+            "type": "pytest.xfail",
+            "message": "column FP32 reduction witness; same material FP64 check is separate"
+          }
+        }
+      ]
+    },
+    "sdk_cpu": {
+      "source": "fb83ee91cc34ba49bf00465916d6e7e7a7eacdec",
+      "checks": [
+        "tidegraph-column-check",
+        "tidegraph-column-checkpoint-check",
+        "weighted-run-check"
+      ],
+      "ctests": [
+        "weighted-comparison-check",
+        "weighted-run-check",
+        "weighted-roots-check"
+      ],
+      "state": "passed",
+      "log": {
+        "path": "artifacts/jobs/p1p6-core-rope-sdk/task.log",
+        "sha256": "a12dac4c8c4a2b562714a8b13c616b286369d19fd0d62b736462c2fb2a972c17",
+        "bytes": 34738
+      }
+    },
+    "sdk_npu": {
+      "source": "fb83ee91cc34ba49bf00465916d6e7e7a7eacdec",
+      "state": "passed",
+      "device": "npu:0",
+      "families": [
+        "kv",
+        "affine",
+        "delta",
+        "gated_delta",
+        "ssd"
+      ],
+      "placements": [
+        "mixed-a",
+        "mixed-b",
+        "mixed-c"
+      ],
+      "case_count": 15,
+      "scope": "Actual tidegraph-column-check: independent Streaming/raw/VJP/two SGD windows. Not device column-checkpoint-check or new-process owner.",
+      "log": {
+        "path": "artifacts/p1p6-20261112/sdk-rope-npu-query.log",
+        "sha256": "fa4058c569e46210c1416c8edb7f3cdae1f569a89218513105b804c201260933",
+        "bytes": 1052
+      },
+      "launcher": {
+        "path": "artifacts/p1p6-20261112/sdk-rope-npu-check.sh",
+        "sha256": "dbedd8bfff249a06a0386ffd72a0ebc025fb9fbe1fc8acaeeb3169bca58eebc6",
+        "bytes": 432,
+        "text": "#!/bin/bash\nset -euo pipefail\nsource /usr/share/Modules/init/bash\nmodule purge\nmodule load libtorch-npu/2.12.0-cann9.2.0\nexport PATH=/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/bin:$PATH\nexport OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 TORCH_DEVICE_BACKEND_AUTOLOAD=0 PYTHONDONTWRITEBYTECODE=1\n/dev/shm/gef-p1p6-20261112/core-rope-sdk/tidegraph-column-check --device=npu:0 --dtype=float32\n"
+      }
+    }
+  },
+  "lh_roots": {
+    "cpu-task": {
+      "path": "artifacts/p1p6-20261112/lh176-rope-cpu-task/result.json",
+      "sha256": "1ce26a1ca7a5a7457defe1c8487e85b7450a34e2e6a62c43911693fb5d3daa50",
+      "bytes": 326953,
+      "source": "fb83ee91cc34ba49bf00465916d6e7e7a7eacdec",
+      "execution": "completed",
+      "qualification": "passed",
+      "exit_code": 0,
+      "tolerance": {
+        "atol": 1e-10,
+        "rtol": 1e-08
+      },
+      "initial_parameters_sha256": "20f75a37c73c8a77b8e3bc910ffa0125643472b6a39dd2d4b88efe587e249c1c",
+      "input_values_and_support_sha256": "f93c157bc5acd50b54db9b63218c4f6947cfd93403385d97f5b2a11ee3346ede",
+      "request": {
+        "device": "cpu",
+        "dtype": "float64",
+        "client": "native",
+        "left_entries": 3,
+        "start_position": 1099511627776,
+        "root_family": "task"
+      },
+      "comparisons_equal": true,
+      "hard_failure": false,
+      "numerical_failure": false,
+      "sections": {
+        "controls": {
+          "finite": "passed",
+          "numeric": "passed",
+          "discrete": "passed",
+          "strict_passed": true,
+          "compared_leaves": {
+            "numeric": 176,
+            "discrete": 0
+          },
+          "mismatch_counts": {
+            "numeric": 0,
+            "discrete": 0
+          },
+          "first_witness": null
+        },
+        "candidates": {
+          "finite": "passed",
+          "numeric": "passed",
+          "discrete": "passed",
+          "strict_passed": true,
+          "compared_leaves": {
+            "numeric": 0,
+            "discrete": 176
+          },
+          "mismatch_counts": {
+            "numeric": 0,
+            "discrete": 0
+          },
+          "first_witness": null
+        },
+        "active": {
+          "finite": "passed",
+          "numeric": "passed",
+          "discrete": "passed",
+          "strict_passed": true,
+          "compared_leaves": {
+            "numeric": 0,
+            "discrete": 176
+          },
+          "mismatch_counts": {
+            "numeric": 0,
+            "discrete": 0
+          },
+          "first_witness": null
+        },
+        "raw": {
+          "finite": "passed",
+          "numeric": "passed",
+          "discrete": "passed",
+          "strict_passed": true,
+          "compared_leaves": {
+            "numeric": 3520,
+            "discrete": 2112
+          },
+          "mismatch_counts": {
+            "numeric": 0,
+            "discrete": 0
+          },
+          "first_witness": null
+        },
+        "outputs": {
+          "finite": "passed",
+          "numeric": "passed",
+          "discrete": "passed",
+          "strict_passed": true,
+          "compared_leaves": {
+            "numeric": 8,
+            "discrete": 0
+          },
+          "mismatch_counts": {
+            "numeric": 0,
+            "discrete": 0
+          },
+          "first_witness": null
+        },
+        "task": {
+          "finite": "passed",
+          "numeric": "passed",
+          "discrete": "passed",
+          "strict_passed": true,
+          "compared_leaves": {
+            "numeric": 1,
+            "discrete": 0
+          },
+          "mismatch_counts": {
+            "numeric": 0,
+            "discrete": 0
+          },
+          "first_witness": null
+        },
+        "gradients": {
+          "finite": "passed",
+          "numeric": "passed",
+          "discrete": "passed",
+          "strict_passed": true,
+          "compared_leaves": {
+            "numeric": 3766,
+            "discrete": 0
+          },
+          "mismatch_counts": {
+            "numeric": 0,
+            "discrete": 0
+          },
+          "first_witness": null,
+          "connection_difference_count": 20,
+          "present_gradients_all_zero": true
+        }
+      }
+    },
+    "cpu-messages": {
+      "path": "artifacts/p1p6-20261112/lh176-rope-cpu-messages/result.json",
+      "sha256": "57859df0f88915287c24541a8b42831cfaa5655b7aca8f1f902195c6fac35752",
+      "bytes": 330354,
+      "source": "fb83ee91cc34ba49bf00465916d6e7e7a7eacdec",
+      "execution": "completed",
+      "qualification": "passed",
+      "exit_code": 0,
+      "tolerance": {
+        "atol": 1e-10,
+        "rtol": 1e-08
+      },
+      "initial_parameters_sha256": "20f75a37c73c8a77b8e3bc910ffa0125643472b6a39dd2d4b88efe587e249c1c",
+      "input_values_and_support_sha256": "f93c157bc5acd50b54db9b63218c4f6947cfd93403385d97f5b2a11ee3346ede",
+      "request": {
+        "device": "cpu",
+        "dtype": "float64",
+        "client": "native",
+        "left_entries": 3,
+        "start_position": 1099511627776,
+        "root_family": "messages"
+      },
+      "comparisons_equal": true,
+      "hard_failure": false,
+      "numerical_failure": false,
+      "sections": {
+        "controls": {
+          "finite": "passed",
+          "numeric": "passed",
+          "discrete": "passed",
+          "strict_passed": true,
+          "compared_leaves": {
+            "numeric": 176,
+            "discrete": 0
+          },
+          "mismatch_counts": {
+            "numeric": 0,
+            "discrete": 0
+          },
+          "first_witness": null
+        },
+        "candidates": {
+          "finite": "passed",
+          "numeric": "passed",
+          "discrete": "passed",
+          "strict_passed": true,
+          "compared_leaves": {
+            "numeric": 0,
+            "discrete": 176
+          },
+          "mismatch_counts": {
+            "numeric": 0,
+            "discrete": 0
+          },
+          "first_witness": null
+        },
+        "active": {
+          "finite": "passed",
+          "numeric": "passed",
+          "discrete": "passed",
+          "strict_passed": true,
+          "compared_leaves": {
+            "numeric": 0,
+            "discrete": 176
+          },
+          "mismatch_counts": {
+            "numeric": 0,
+            "discrete": 0
+          },
+          "first_witness": null
+        },
+        "raw": {
+          "finite": "passed",
+          "numeric": "passed",
+          "discrete": "passed",
+          "strict_passed": true,
+          "compared_leaves": {
+            "numeric": 3520,
+            "discrete": 2112
+          },
+          "mismatch_counts": {
+            "numeric": 0,
+            "discrete": 0
+          },
+          "first_witness": null
+        },
+        "outputs": {
+          "finite": "passed",
+          "numeric": "passed",
+          "discrete": "passed",
+          "strict_passed": true,
+          "compared_leaves": {
+            "numeric": 8,
+            "discrete": 0
+          },
+          "mismatch_counts": {
+            "numeric": 0,
+            "discrete": 0
+          },
+          "first_witness": null
+        },
+        "task": {
+          "finite": "passed",
+          "numeric": "passed",
+          "discrete": "passed",
+          "strict_passed": true,
+          "compared_leaves": {
+            "numeric": 1,
+            "discrete": 0
+          },
+          "mismatch_counts": {
+            "numeric": 0,
+            "discrete": 0
+          },
+          "first_witness": null
+        },
+        "root_values": {
+          "finite": "passed",
+          "numeric": "passed",
+          "discrete": "passed",
+          "strict_passed": true,
+          "compared_leaves": {
+            "numeric": 2132,
+            "discrete": 0
+          },
+          "mismatch_counts": {
+            "numeric": 0,
+            "discrete": 0
+          },
+          "first_witness": null
+        },
+        "gradients": {
+          "finite": "passed",
+          "numeric": "passed",
+          "discrete": "passed",
+          "strict_passed": true,
+          "compared_leaves": {
+            "numeric": 3759,
+            "discrete": 7
+          },
+          "mismatch_counts": {
+            "numeric": 0,
+            "discrete": 0
+          },
+          "first_witness": null,
+          "connection_difference_count": 26,
+          "present_gradients_all_zero": true
+        }
+      }
+    },
+    "cpu-raw": {
+      "path": "artifacts/p1p6-20261112/lh176-rope-cpu-raw/result.json",
+      "sha256": "ef02294834bc7ce0b9443f706013c5b3ece3bd1af7f77f679d71e3bd6793eb12",
+      "bytes": 327902,
+      "source": "fb83ee91cc34ba49bf00465916d6e7e7a7eacdec",
+      "execution": "completed",
+      "qualification": "passed",
+      "exit_code": 0,
+      "tolerance": {
+        "atol": 1e-10,
+        "rtol": 1e-08
+      },
+      "initial_parameters_sha256": "20f75a37c73c8a77b8e3bc910ffa0125643472b6a39dd2d4b88efe587e249c1c",
+      "input_values_and_support_sha256": "f93c157bc5acd50b54db9b63218c4f6947cfd93403385d97f5b2a11ee3346ede",
+      "request": {
+        "device": "cpu",
+        "dtype": "float64",
+        "client": "native",
+        "left_entries": 3,
+        "start_position": 1099511627776,
+        "root_family": "raw"
+      },
+      "comparisons_equal": true,
+      "hard_failure": false,
+      "numerical_failure": false,
+      "sections": {
+        "controls": {
+          "finite": "passed",
+          "numeric": "passed",
+          "discrete": "passed",
+          "strict_passed": true,
+          "compared_leaves": {
+            "numeric": 176,
+            "discrete": 0
+          },
+          "mismatch_counts": {
+            "numeric": 0,
+            "discrete": 0
+          },
+          "first_witness": null
+        },
+        "candidates": {
+          "finite": "passed",
+          "numeric": "passed",
+          "discrete": "passed",
+          "strict_passed": true,
+          "compared_leaves": {
+            "numeric": 0,
+            "discrete": 176
+          },
+          "mismatch_counts": {
+            "numeric": 0,
+            "discrete": 0
+          },
+          "first_witness": null
+        },
+        "active": {
+          "finite": "passed",
+          "numeric": "passed",
+          "discrete": "passed",
+          "strict_passed": true,
+          "compared_leaves": {
+            "numeric": 0,
+            "discrete": 176
+          },
+          "mismatch_counts": {
+            "numeric": 0,
+            "discrete": 0
+          },
+          "first_witness": null
+        },
+        "raw": {
+          "finite": "passed",
+          "numeric": "passed",
+          "discrete": "passed",
+          "strict_passed": true,
+          "compared_leaves": {
+            "numeric": 3520,
+            "discrete": 2112
+          },
+          "mismatch_counts": {
+            "numeric": 0,
+            "discrete": 0
+          },
+          "first_witness": null
+        },
+        "outputs": {
+          "finite": "passed",
+          "numeric": "passed",
+          "discrete": "passed",
+          "strict_passed": true,
+          "compared_leaves": {
+            "numeric": 8,
+            "discrete": 0
+          },
+          "mismatch_counts": {
+            "numeric": 0,
+            "discrete": 0
+          },
+          "first_witness": null
+        },
+        "task": {
+          "finite": "passed",
+          "numeric": "passed",
+          "discrete": "passed",
+          "strict_passed": true,
+          "compared_leaves": {
+            "numeric": 1,
+            "discrete": 0
+          },
+          "mismatch_counts": {
+            "numeric": 0,
+            "discrete": 0
+          },
+          "first_witness": null
+        },
+        "root_values": {
+          "finite": "passed",
+          "numeric": "passed",
+          "discrete": "passed",
+          "strict_passed": true,
+          "compared_leaves": {
+            "numeric": 3520,
+            "discrete": 2112
+          },
+          "mismatch_counts": {
+            "numeric": 0,
+            "discrete": 0
+          },
+          "first_witness": null
+        },
+        "gradients": {
+          "finite": "passed",
+          "numeric": "passed",
+          "discrete": "passed",
+          "strict_passed": true,
+          "compared_leaves": {
+            "numeric": 3638,
+            "discrete": 128
+          },
+          "mismatch_counts": {
+            "numeric": 0,
+            "discrete": 0
+          },
+          "first_witness": null,
+          "connection_difference_count": 20,
+          "present_gradients_all_zero": true
+        }
+      }
+    },
+    "npu-messages": {
+      "path": "artifacts/p1p6-20261112/lh176-rope-npu-messages/result.json",
+      "sha256": "0080f61e0a3f239fcf96bb8a0a64102fc897d402990e5433143b71f54ed0d413",
+      "bytes": 515433,
+      "source": "fb83ee91cc34ba49bf00465916d6e7e7a7eacdec",
+      "execution": "completed",
+      "qualification": "finite_numerical_failure",
+      "exit_code": 1,
+      "tolerance": {
+        "atol": 1e-06,
+        "rtol": 1e-05
+      },
+      "initial_parameters_sha256": "939fbb108327068ae9c9230e5f70d926c9e4bc4af7a55f6932667d6d553aa57f",
+      "input_values_and_support_sha256": "6fb027600264ffb28fbd08cf4daeb3d76495690f636d6ad50ea31bdc4f8022fc",
+      "request": {
+        "device": "npu:0",
+        "dtype": "float32",
+        "client": "native",
+        "left_entries": 3,
+        "start_position": 1099511627776,
+        "root_family": "messages"
+      },
+      "comparisons_equal": true,
+      "hard_failure": false,
+      "numerical_failure": true,
+      "sections": {
+        "controls": {
+          "finite": "passed",
+          "numeric": "failed",
+          "discrete": "passed",
+          "strict_passed": false,
+          "compared_leaves": {
+            "numeric": 176,
+            "discrete": 0
+          },
+          "mismatch_counts": {
+            "numeric": 119,
+            "discrete": 0
+          },
+          "first_witness": {
+            "path": "controls[node/17]",
+            "shape": [
+              64
+            ],
+            "max_abs_error": 2.3245811462402344e-06,
+            "reference_max_abs": 1.0
+          }
+        },
+        "candidates": {
+          "finite": "passed",
+          "numeric": "passed",
+          "discrete": "passed",
+          "strict_passed": true,
+          "compared_leaves": {
+            "numeric": 0,
+            "discrete": 176
+          },
+          "mismatch_counts": {
+            "numeric": 0,
+            "discrete": 0
+          },
+          "first_witness": null
+        },
+        "active": {
+          "finite": "passed",
+          "numeric": "passed",
+          "discrete": "passed",
+          "strict_passed": true,
+          "compared_leaves": {
+            "numeric": 0,
+            "discrete": 176
+          },
+          "mismatch_counts": {
+            "numeric": 0,
+            "discrete": 0
+          },
+          "first_witness": null
+        },
+        "raw": {
+          "finite": "passed",
+          "numeric": "failed",
+          "discrete": "passed",
+          "strict_passed": false,
+          "compared_leaves": {
+            "numeric": 3520,
+            "discrete": 2112
+          },
+          "mismatch_counts": {
+            "numeric": 2127,
+            "discrete": 0
+          },
+          "first_witness": {
+            "path": "raw[node/8/sample/0/values]",
+            "shape": [
+              13,
+              64
+            ],
+            "max_abs_error": 2.4437904357910156e-06,
+            "reference_max_abs": 4.929842948913574
+          }
+        },
+        "outputs": {
+          "finite": "passed",
+          "numeric": "failed",
+          "discrete": "passed",
+          "strict_passed": false,
+          "compared_leaves": {
+            "numeric": 8,
+            "discrete": 0
+          },
+          "mismatch_counts": {
+            "numeric": 8,
+            "discrete": 0
+          },
+          "first_witness": {
+            "path": "outputs[port/0]",
+            "shape": [
+              4,
+              16,
+              64
+            ],
+            "max_abs_error": 0.0002665519714355469,
+            "reference_max_abs": 10.859766960144043
+          }
+        },
+        "task": {
+          "finite": "passed",
+          "numeric": "passed",
+          "discrete": "passed",
+          "strict_passed": true,
+          "compared_leaves": {
+            "numeric": 1,
+            "discrete": 0
+          },
+          "mismatch_counts": {
+            "numeric": 0,
+            "discrete": 0
+          },
+          "first_witness": null
+        },
+        "root_values": {
+          "finite": "passed",
+          "numeric": "failed",
+          "discrete": "passed",
+          "strict_passed": false,
+          "compared_leaves": {
+            "numeric": 2132,
+            "discrete": 0
+          },
+          "mismatch_counts": {
+            "numeric": 1688,
+            "discrete": 0
+          },
+          "first_witness": {
+            "path": "root_values[edge/0/G]",
+            "shape": [
+              30,
+              64
+            ],
+            "max_abs_error": 4.76837158203125e-06,
+            "reference_max_abs": 8.46097469329834
+          }
+        },
+        "gradients": {
+          "finite": "passed",
+          "numeric": "failed",
+          "discrete": "passed",
+          "strict_passed": false,
+          "compared_leaves": {
+            "numeric": 3759,
+            "discrete": 7
+          },
+          "mismatch_counts": {
+            "numeric": 2771,
+            "discrete": 0
+          },
+          "first_witness": {
+            "path": "gradients[input]",
+            "shape": [
+              4,
+              16,
+              64
+            ],
+            "max_abs_error": 0.03515625,
+            "reference_max_abs": 946.8927001953125
+          },
+          "connection_difference_count": 26,
+          "present_gradients_all_zero": true
+        }
+      }
+    },
+    "npu-raw": {
+      "path": "artifacts/p1p6-20261112/lh176-rope-npu-raw/result.json",
+      "sha256": "e25efe65097ef2a2c82dde761dcbe24298c23c9b925894696a330df6082ffcd1",
+      "bytes": 513981,
+      "source": "fb83ee91cc34ba49bf00465916d6e7e7a7eacdec",
+      "execution": "completed",
+      "qualification": "finite_numerical_failure",
+      "exit_code": 1,
+      "tolerance": {
+        "atol": 1e-06,
+        "rtol": 1e-05
+      },
+      "initial_parameters_sha256": "939fbb108327068ae9c9230e5f70d926c9e4bc4af7a55f6932667d6d553aa57f",
+      "input_values_and_support_sha256": "6fb027600264ffb28fbd08cf4daeb3d76495690f636d6ad50ea31bdc4f8022fc",
+      "request": {
+        "device": "npu:0",
+        "dtype": "float32",
+        "client": "native",
+        "left_entries": 3,
+        "start_position": 1099511627776,
+        "root_family": "raw"
+      },
+      "comparisons_equal": true,
+      "hard_failure": false,
+      "numerical_failure": true,
+      "sections": {
+        "controls": {
+          "finite": "passed",
+          "numeric": "failed",
+          "discrete": "passed",
+          "strict_passed": false,
+          "compared_leaves": {
+            "numeric": 176,
+            "discrete": 0
+          },
+          "mismatch_counts": {
+            "numeric": 119,
+            "discrete": 0
+          },
+          "first_witness": {
+            "path": "controls[node/17]",
+            "shape": [
+              64
+            ],
+            "max_abs_error": 2.3245811462402344e-06,
+            "reference_max_abs": 1.0
+          }
+        },
+        "candidates": {
+          "finite": "passed",
+          "numeric": "passed",
+          "discrete": "passed",
+          "strict_passed": true,
+          "compared_leaves": {
+            "numeric": 0,
+            "discrete": 176
+          },
+          "mismatch_counts": {
+            "numeric": 0,
+            "discrete": 0
+          },
+          "first_witness": null
+        },
+        "active": {
+          "finite": "passed",
+          "numeric": "passed",
+          "discrete": "passed",
+          "strict_passed": true,
+          "compared_leaves": {
+            "numeric": 0,
+            "discrete": 176
+          },
+          "mismatch_counts": {
+            "numeric": 0,
+            "discrete": 0
+          },
+          "first_witness": null
+        },
+        "raw": {
+          "finite": "passed",
+          "numeric": "failed",
+          "discrete": "passed",
+          "strict_passed": false,
+          "compared_leaves": {
+            "numeric": 3520,
+            "discrete": 2112
+          },
+          "mismatch_counts": {
+            "numeric": 2127,
+            "discrete": 0
+          },
+          "first_witness": {
+            "path": "raw[node/8/sample/0/values]",
+            "shape": [
+              13,
+              64
+            ],
+            "max_abs_error": 2.4437904357910156e-06,
+            "reference_max_abs": 4.929842948913574
+          }
+        },
+        "outputs": {
+          "finite": "passed",
+          "numeric": "failed",
+          "discrete": "passed",
+          "strict_passed": false,
+          "compared_leaves": {
+            "numeric": 8,
+            "discrete": 0
+          },
+          "mismatch_counts": {
+            "numeric": 8,
+            "discrete": 0
+          },
+          "first_witness": {
+            "path": "outputs[port/0]",
+            "shape": [
+              4,
+              16,
+              64
+            ],
+            "max_abs_error": 0.0002665519714355469,
+            "reference_max_abs": 10.859766960144043
+          }
+        },
+        "task": {
+          "finite": "passed",
+          "numeric": "passed",
+          "discrete": "passed",
+          "strict_passed": true,
+          "compared_leaves": {
+            "numeric": 1,
+            "discrete": 0
+          },
+          "mismatch_counts": {
+            "numeric": 0,
+            "discrete": 0
+          },
+          "first_witness": null
+        },
+        "root_values": {
+          "finite": "passed",
+          "numeric": "failed",
+          "discrete": "passed",
+          "strict_passed": false,
+          "compared_leaves": {
+            "numeric": 3520,
+            "discrete": 2112
+          },
+          "mismatch_counts": {
+            "numeric": 2127,
+            "discrete": 0
+          },
+          "first_witness": {
+            "path": "root_values[node/8/sample/0/values]",
+            "shape": [
+              13,
+              64
+            ],
+            "max_abs_error": 2.4437904357910156e-06,
+            "reference_max_abs": 4.929842948913574
+          }
+        },
+        "gradients": {
+          "finite": "passed",
+          "numeric": "failed",
+          "discrete": "passed",
+          "strict_passed": false,
+          "compared_leaves": {
+            "numeric": 3638,
+            "discrete": 128
+          },
+          "mismatch_counts": {
+            "numeric": 2794,
+            "discrete": 0
+          },
+          "first_witness": {
+            "path": "gradients[input]",
+            "shape": [
+              4,
+              16,
+              64
+            ],
+            "max_abs_error": 0.0670928955078125,
+            "reference_max_abs": 801.6224975585938
+          },
+          "connection_difference_count": 20,
+          "present_gradients_all_zero": true
+        }
+      }
+    }
+  },
+  "installed": {
+    "positions-cpu-python": {
+      "path": "artifacts/p1p6-20261112/positions-rope-installed-cpu-python/result.json",
+      "sha256": "05989865b2ae14eb1f0180e4ac96d3797a7bed9912b5b5c57f3db35cb300a4b7",
+      "bytes": 2008,
+      "identity": {
+        "interface": "tensor-window-v1",
+        "device": "cpu",
+        "dtype": "float64",
+        "client": "python",
+        "positions": true,
+        "family": "kv",
+        "placement": "cpu",
+        "scoring_dtype": "float64",
+        "deterministic_algorithms": true,
+        "peer_device": null
+      },
+      "execution": "completed",
+      "strict_numerical": "passed",
+      "recovery": "passed",
+      "effective_execution": {
+        "interface": "tensor-window-v1",
+        "schedule": "settle-columns-v1",
+        "client": "python",
+        "fallback_reason": null,
+        "roots": "columns",
+        "max_workspace_bytes": 4294967296,
+        "position_policy": "bounded-common-origin-v1",
+        "placement": {
+          "payload": "cpu",
+          "read": "cpu",
+          "control": "cpu",
+          "selection": "cpu",
+          "events": "cpu",
+          "scoring_dtype": "float64"
+        }
+      },
+      "source": "fb83ee91cc34ba49bf00465916d6e7e7a7eacdec",
+      "package_import": "Explicit core-rope-install PYTHONPATH in lifecycle driver",
+      "comparisons": [
+        {
+          "schema": "tide-comparison-v1",
+          "finite": "passed",
+          "numeric": "passed",
+          "discrete": "passed",
+          "strict_passed": true,
+          "compared_leaves": {
+            "numeric": 483,
+            "discrete": 162
+          },
+          "mismatch_counts": {
+            "numeric": 0,
+            "discrete": 0
+          },
+          "differences": [],
+          "differences_truncated": false
+        },
+        {
+          "schema": "tide-comparison-v1",
+          "finite": "passed",
+          "numeric": "passed",
+          "discrete": "passed",
+          "strict_passed": true,
+          "compared_leaves": {
+            "numeric": 483,
+            "discrete": 162
+          },
+          "mismatch_counts": {
+            "numeric": 0,
+            "discrete": 0
+          },
+          "differences": [],
+          "differences_truncated": false
+        },
+        {
+          "schema": "tide-comparison-v1",
+          "finite": "passed",
+          "numeric": "passed",
+          "discrete": "passed",
+          "strict_passed": true,
+          "compared_leaves": {
+            "numeric": 483,
+            "discrete": 162
+          },
+          "mismatch_counts": {
+            "numeric": 0,
+            "discrete": 0
+          },
+          "differences": [],
+          "differences_truncated": false
+        }
+      ],
+      "children": {
+        "whole": {
+          "path": "artifacts/p1p6-20261112/positions-rope-installed-cpu-python/whole/result.json",
+          "sha256": "2a889330ef2ccc3e8673e432c19bee3e460f031ea385e7caab713d748690a8bd",
+          "bytes": 855,
+          "execution": "completed",
+          "strict_numerical": "not_checked",
+          "recovery": "not_checked",
+          "effective_execution": {
+            "interface": "tensor-window-v1",
+            "schedule": "settle-columns-v1",
+            "client": "python",
+            "fallback_reason": null,
+            "roots": "columns",
+            "max_workspace_bytes": 4294967296,
+            "position_policy": "bounded-common-origin-v1",
+            "placement": {
+              "payload": "cpu",
+              "read": "cpu",
+              "control": "cpu",
+              "selection": "cpu",
+              "events": "cpu",
+              "scoring_dtype": "float64"
+            }
+          }
+        },
+        "prefix": {
+          "path": "artifacts/p1p6-20261112/positions-rope-installed-cpu-python/prefix/result.json",
+          "sha256": "2a889330ef2ccc3e8673e432c19bee3e460f031ea385e7caab713d748690a8bd",
+          "bytes": 855,
+          "execution": "completed",
+          "strict_numerical": "not_checked",
+          "recovery": "not_checked",
+          "effective_execution": {
+            "interface": "tensor-window-v1",
+            "schedule": "settle-columns-v1",
+            "client": "python",
+            "fallback_reason": null,
+            "roots": "columns",
+            "max_workspace_bytes": 4294967296,
+            "position_policy": "bounded-common-origin-v1",
+            "placement": {
+              "payload": "cpu",
+              "read": "cpu",
+              "control": "cpu",
+              "selection": "cpu",
+              "events": "cpu",
+              "scoring_dtype": "float64"
+            }
+          }
+        },
+        "resumed": {
+          "path": "artifacts/p1p6-20261112/positions-rope-installed-cpu-python/resumed/result.json",
+          "sha256": "2a889330ef2ccc3e8673e432c19bee3e460f031ea385e7caab713d748690a8bd",
+          "bytes": 855,
+          "execution": "completed",
+          "strict_numerical": "not_checked",
+          "recovery": "not_checked",
+          "effective_execution": {
+            "interface": "tensor-window-v1",
+            "schedule": "settle-columns-v1",
+            "client": "python",
+            "fallback_reason": null,
+            "roots": "columns",
+            "max_workspace_bytes": 4294967296,
+            "position_policy": "bounded-common-origin-v1",
+            "placement": {
+              "payload": "cpu",
+              "read": "cpu",
+              "control": "cpu",
+              "selection": "cpu",
+              "events": "cpu",
+              "scoring_dtype": "float64"
+            }
+          }
+        }
+      }
+    },
+    "lh176-cpu-python": {
+      "path": "artifacts/p1p6-20261112/lh176-rope-installed-cpu-python/result.json",
+      "sha256": "6c9999a8b9691d27abb47c2741f1e2e94ae1e59957c173d09ce9a70c011d3d69",
+      "bytes": 1494198,
+      "execution": "completed",
+      "exact_fresh_process_resume": "passed",
+      "comparison": "actual final outputs, raw continuation/pending/history/ledger, independent gradients including None, parameters and all AdamW slots",
+      "exit_code": 0,
+      "scope": "public planned-column lifecycle; no independent math or throughput claim",
+      "source": "fb83ee91cc34ba49bf00465916d6e7e7a7eacdec",
+      "package_import": "Explicit core-rope-install PYTHONPATH in lifecycle driver",
+      "identity": {
+        "schema": "tide-planned-window-consumer-v1",
+        "plan_sha256": "d31de91a86bc328a8c5e7b29b7b2ee41be8d542efd9a6547509b5c127930ee82",
+        "client": "python",
+        "device": "cpu",
+        "dtype": "float64",
+        "placement": "cpu",
+        "deterministic_algorithms": true,
+        "threads": 1,
+        "optimizer": {
+          "name": "AdamW",
+          "lr": 1e-05,
+          "betas": [
+            0.9,
+            0.95
+          ],
+          "weight_decay": 0.01,
+          "foreach": false
+        },
+        "scripts": {
+          "planned_windows.py": "07691f2b5d3ce1152b24e0e0c04f09211e53ce3c563e8ca5704d34be52e83771",
+          "recording.py": "158f849f76dd7fd12a24970834fa2b0f8bc0c8b9e928cb37549b91122e7988a6"
+        },
+        "runtime": {
+          "resolved_device": "cpu",
+          "backend": "cpu",
+          "logical_device_index": null,
+          "resolution_reason": "explicit:cpu",
+          "dtype": "float64",
+          "host_architecture": "aarch64",
+          "torch": "2.12.0+cpu",
+          "torch_git": "7661cd9c6b841b62b7f411aa52ec51f05457263b",
+          "python": "3.12.13",
+          "cxx11_abi": true,
+          "runtime_queue_environment": {
+            "TASK_QUEUE_ENABLE": null,
+            "PER_STREAM_QUEUE": null,
+            "ASCEND_LAUNCH_BLOCKING": null
+          },
+          "logical_device_count": 1
+        },
+        "native_manifest_sha256": "be39936d8eac11f0a5cba119e67e2aecfab5d9fdf6864dbbb0ac7967a8b076c6"
+      },
+      "whole_steps": [
+        {
+          "step": 0,
+          "loss": 0.07371357459792452,
+          "counts": {
+            "candidate_events": 8368,
+            "selected_events": 2572,
+            "visited_edges": 15340,
+            "region_column_calls": 94,
+            "state_column_calls": 176
+          },
+          "execution": {
+            "interface": "tensor-window-v1",
+            "schedule": "settle-columns-v1",
+            "client": "python",
+            "fallback_reason": null,
+            "roots": "columns",
+            "max_workspace_bytes": 1073741824,
+            "position_policy": "bounded-common-origin-v1",
+            "placement": {
+              "payload": "cpu",
+              "read": "cpu",
+              "control": "cpu",
+              "selection": "cpu",
+              "events": "cpu",
+              "scoring_dtype": "float64"
+            }
+          }
+        },
+        {
+          "step": 1,
+          "loss": 0.059851309199421825,
+          "counts": {
+            "candidate_events": 8421,
+            "selected_events": 2737,
+            "visited_edges": 16007,
+            "region_column_calls": 95,
+            "state_column_calls": 176
+          },
+          "execution": {
+            "interface": "tensor-window-v1",
+            "schedule": "settle-columns-v1",
+            "client": "python",
+            "fallback_reason": null,
+            "roots": "columns",
+            "max_workspace_bytes": 1073741824,
+            "position_policy": "bounded-common-origin-v1",
+            "placement": {
+              "payload": "cpu",
+              "read": "cpu",
+              "control": "cpu",
+              "selection": "cpu",
+              "events": "cpu",
+              "scoring_dtype": "float64"
+            }
+          }
+        },
+        {
+          "step": 2,
+          "loss": 0.06898141101114715,
+          "counts": {
+            "candidate_events": 8586,
+            "selected_events": 2731,
+            "visited_edges": 16166,
+            "region_column_calls": 95,
+            "state_column_calls": 176
+          },
+          "execution": {
+            "interface": "tensor-window-v1",
+            "schedule": "settle-columns-v1",
+            "client": "python",
+            "fallback_reason": null,
+            "roots": "columns",
+            "max_workspace_bytes": 1073741824,
+            "position_policy": "bounded-common-origin-v1",
+            "placement": {
+              "payload": "cpu",
+              "read": "cpu",
+              "control": "cpu",
+              "selection": "cpu",
+              "events": "cpu",
+              "scoring_dtype": "float64"
+            }
+          }
+        }
+      ],
+      "children": {
+        "whole": {
+          "exit_code": 0,
+          "execution": "completed",
+          "steps": [
+            0,
+            1,
+            2
+          ],
+          "observation_sha256": "a4c2ce4d4449d1ad6c0e688d57f71836c836014488efdf4ebb9be520d19e0e8b"
+        },
+        "prefix": {
+          "exit_code": 0,
+          "execution": "completed",
+          "steps": [
+            0,
+            1
+          ],
+          "observation_sha256": "5be2f5e9c94d78ba74d39a37b4ff1852dc8ffe8b3f49b22881ad385436be1ab7"
+        },
+        "resumed": {
+          "exit_code": 0,
+          "execution": "completed",
+          "steps": [
+            2
+          ],
+          "observation_sha256": "471e86be35aab2cef28ed5a6096d7f4302e2680579e0f3f4f0743e43526d2008"
+        }
+      }
+    },
+    "positions-cpu-native": {
+      "path": "artifacts/p1p6-20261112/positions-rope-installed-cpu-native/result.json",
+      "sha256": "1a2adef12ec1e2146491a9905d86bad6ae36e7373ab4fa1733b556c3a543eee1",
+      "bytes": 2008,
+      "identity": {
+        "interface": "tensor-window-v1",
+        "device": "cpu",
+        "dtype": "float64",
+        "client": "native",
+        "positions": true,
+        "family": "kv",
+        "placement": "cpu",
+        "scoring_dtype": "float64",
+        "deterministic_algorithms": true,
+        "peer_device": null
+      },
+      "execution": "completed",
+      "strict_numerical": "passed",
+      "recovery": "passed",
+      "effective_execution": {
+        "interface": "tensor-window-v1",
+        "schedule": "settle-columns-v1",
+        "client": "native",
+        "fallback_reason": null,
+        "roots": "columns",
+        "max_workspace_bytes": 4294967296,
+        "position_policy": "bounded-common-origin-v1",
+        "placement": {
+          "payload": "cpu",
+          "read": "cpu",
+          "control": "cpu",
+          "selection": "cpu",
+          "events": "cpu",
+          "scoring_dtype": "float64"
+        }
+      },
+      "source": "fb83ee91cc34ba49bf00465916d6e7e7a7eacdec",
+      "package_import": "Explicit core-rope-install PYTHONPATH in lifecycle driver",
+      "comparisons": [
+        {
+          "schema": "tide-comparison-v1",
+          "finite": "passed",
+          "numeric": "passed",
+          "discrete": "passed",
+          "strict_passed": true,
+          "compared_leaves": {
+            "numeric": 483,
+            "discrete": 162
+          },
+          "mismatch_counts": {
+            "numeric": 0,
+            "discrete": 0
+          },
+          "differences": [],
+          "differences_truncated": false
+        },
+        {
+          "schema": "tide-comparison-v1",
+          "finite": "passed",
+          "numeric": "passed",
+          "discrete": "passed",
+          "strict_passed": true,
+          "compared_leaves": {
+            "numeric": 483,
+            "discrete": 162
+          },
+          "mismatch_counts": {
+            "numeric": 0,
+            "discrete": 0
+          },
+          "differences": [],
+          "differences_truncated": false
+        },
+        {
+          "schema": "tide-comparison-v1",
+          "finite": "passed",
+          "numeric": "passed",
+          "discrete": "passed",
+          "strict_passed": true,
+          "compared_leaves": {
+            "numeric": 483,
+            "discrete": 162
+          },
+          "mismatch_counts": {
+            "numeric": 0,
+            "discrete": 0
+          },
+          "differences": [],
+          "differences_truncated": false
+        }
+      ],
+      "children": {
+        "whole": {
+          "path": "artifacts/p1p6-20261112/positions-rope-installed-cpu-native/whole/result.json",
+          "sha256": "bd242f2f9979465e00fdcc0b8341a3f22a1b5f27612c5cc0f12c91ed852544ab",
+          "bytes": 855,
+          "execution": "completed",
+          "strict_numerical": "not_checked",
+          "recovery": "not_checked",
+          "effective_execution": {
+            "interface": "tensor-window-v1",
+            "schedule": "settle-columns-v1",
+            "client": "native",
+            "fallback_reason": null,
+            "roots": "columns",
+            "max_workspace_bytes": 4294967296,
+            "position_policy": "bounded-common-origin-v1",
+            "placement": {
+              "payload": "cpu",
+              "read": "cpu",
+              "control": "cpu",
+              "selection": "cpu",
+              "events": "cpu",
+              "scoring_dtype": "float64"
+            }
+          }
+        },
+        "prefix": {
+          "path": "artifacts/p1p6-20261112/positions-rope-installed-cpu-native/prefix/result.json",
+          "sha256": "bd242f2f9979465e00fdcc0b8341a3f22a1b5f27612c5cc0f12c91ed852544ab",
+          "bytes": 855,
+          "execution": "completed",
+          "strict_numerical": "not_checked",
+          "recovery": "not_checked",
+          "effective_execution": {
+            "interface": "tensor-window-v1",
+            "schedule": "settle-columns-v1",
+            "client": "native",
+            "fallback_reason": null,
+            "roots": "columns",
+            "max_workspace_bytes": 4294967296,
+            "position_policy": "bounded-common-origin-v1",
+            "placement": {
+              "payload": "cpu",
+              "read": "cpu",
+              "control": "cpu",
+              "selection": "cpu",
+              "events": "cpu",
+              "scoring_dtype": "float64"
+            }
+          }
+        },
+        "resumed": {
+          "path": "artifacts/p1p6-20261112/positions-rope-installed-cpu-native/resumed/result.json",
+          "sha256": "bd242f2f9979465e00fdcc0b8341a3f22a1b5f27612c5cc0f12c91ed852544ab",
+          "bytes": 855,
+          "execution": "completed",
+          "strict_numerical": "not_checked",
+          "recovery": "not_checked",
+          "effective_execution": {
+            "interface": "tensor-window-v1",
+            "schedule": "settle-columns-v1",
+            "client": "native",
+            "fallback_reason": null,
+            "roots": "columns",
+            "max_workspace_bytes": 4294967296,
+            "position_policy": "bounded-common-origin-v1",
+            "placement": {
+              "payload": "cpu",
+              "read": "cpu",
+              "control": "cpu",
+              "selection": "cpu",
+              "events": "cpu",
+              "scoring_dtype": "float64"
+            }
+          }
+        }
+      }
+    },
+    "lh176-cpu-native": {
+      "path": "artifacts/p1p6-20261112/lh176-rope-installed-cpu-native/result.json",
+      "sha256": "b489d5f41f1a86d1bab417d789e1bb6d1561f2f4b9137afc26f99dec98242f61",
+      "bytes": 1494196,
+      "execution": "completed",
+      "exact_fresh_process_resume": "passed",
+      "comparison": "actual final outputs, raw continuation/pending/history/ledger, independent gradients including None, parameters and all AdamW slots",
+      "exit_code": 0,
+      "scope": "public planned-column lifecycle; no independent math or throughput claim",
+      "source": "fb83ee91cc34ba49bf00465916d6e7e7a7eacdec",
+      "package_import": "Explicit core-rope-install PYTHONPATH in lifecycle driver",
+      "identity": {
+        "schema": "tide-planned-window-consumer-v1",
+        "plan_sha256": "d31de91a86bc328a8c5e7b29b7b2ee41be8d542efd9a6547509b5c127930ee82",
+        "client": "native",
+        "device": "cpu",
+        "dtype": "float64",
+        "placement": "cpu",
+        "deterministic_algorithms": true,
+        "threads": 1,
+        "optimizer": {
+          "name": "AdamW",
+          "lr": 1e-05,
+          "betas": [
+            0.9,
+            0.95
+          ],
+          "weight_decay": 0.01,
+          "foreach": false
+        },
+        "scripts": {
+          "planned_windows.py": "07691f2b5d3ce1152b24e0e0c04f09211e53ce3c563e8ca5704d34be52e83771",
+          "recording.py": "158f849f76dd7fd12a24970834fa2b0f8bc0c8b9e928cb37549b91122e7988a6"
+        },
+        "runtime": {
+          "resolved_device": "cpu",
+          "backend": "cpu",
+          "logical_device_index": null,
+          "resolution_reason": "explicit:cpu",
+          "dtype": "float64",
+          "host_architecture": "aarch64",
+          "torch": "2.12.0+cpu",
+          "torch_git": "7661cd9c6b841b62b7f411aa52ec51f05457263b",
+          "python": "3.12.13",
+          "cxx11_abi": true,
+          "runtime_queue_environment": {
+            "TASK_QUEUE_ENABLE": null,
+            "PER_STREAM_QUEUE": null,
+            "ASCEND_LAUNCH_BLOCKING": null
+          },
+          "logical_device_count": 1
+        },
+        "native_manifest_sha256": "be39936d8eac11f0a5cba119e67e2aecfab5d9fdf6864dbbb0ac7967a8b076c6"
+      },
+      "whole_steps": [
+        {
+          "step": 0,
+          "loss": 0.07371357459792452,
+          "counts": {
+            "candidate_events": 8368,
+            "region_column_calls": 94,
+            "selected_events": 2572,
+            "state_column_calls": 176,
+            "visited_edges": 15340
+          },
+          "execution": {
+            "interface": "tensor-window-v1",
+            "schedule": "settle-columns-v1",
+            "client": "native",
+            "fallback_reason": null,
+            "roots": "columns",
+            "max_workspace_bytes": 1073741824,
+            "position_policy": "bounded-common-origin-v1",
+            "placement": {
+              "payload": "cpu",
+              "read": "cpu",
+              "control": "cpu",
+              "selection": "cpu",
+              "events": "cpu",
+              "scoring_dtype": "float64"
+            }
+          }
+        },
+        {
+          "step": 1,
+          "loss": 0.059851309199421825,
+          "counts": {
+            "candidate_events": 8421,
+            "region_column_calls": 95,
+            "selected_events": 2737,
+            "state_column_calls": 176,
+            "visited_edges": 16007
+          },
+          "execution": {
+            "interface": "tensor-window-v1",
+            "schedule": "settle-columns-v1",
+            "client": "native",
+            "fallback_reason": null,
+            "roots": "columns",
+            "max_workspace_bytes": 1073741824,
+            "position_policy": "bounded-common-origin-v1",
+            "placement": {
+              "payload": "cpu",
+              "read": "cpu",
+              "control": "cpu",
+              "selection": "cpu",
+              "events": "cpu",
+              "scoring_dtype": "float64"
+            }
+          }
+        },
+        {
+          "step": 2,
+          "loss": 0.0689814110111473,
+          "counts": {
+            "candidate_events": 8586,
+            "region_column_calls": 95,
+            "selected_events": 2731,
+            "state_column_calls": 176,
+            "visited_edges": 16166
+          },
+          "execution": {
+            "interface": "tensor-window-v1",
+            "schedule": "settle-columns-v1",
+            "client": "native",
+            "fallback_reason": null,
+            "roots": "columns",
+            "max_workspace_bytes": 1073741824,
+            "position_policy": "bounded-common-origin-v1",
+            "placement": {
+              "payload": "cpu",
+              "read": "cpu",
+              "control": "cpu",
+              "selection": "cpu",
+              "events": "cpu",
+              "scoring_dtype": "float64"
+            }
+          }
+        }
+      ],
+      "children": {
+        "whole": {
+          "exit_code": 0,
+          "execution": "completed",
+          "steps": [
+            0,
+            1,
+            2
+          ],
+          "observation_sha256": "ffae99179f0d51f7396605cf427cd5ac2e066b8a0447d792ead0b2894550b7c1"
+        },
+        "prefix": {
+          "exit_code": 0,
+          "execution": "completed",
+          "steps": [
+            0,
+            1
+          ],
+          "observation_sha256": "13c3190f0fb8cf41f34b2550f123cc5621c75b4ad1ff86fa83a703f3f74d2ebc"
+        },
+        "resumed": {
+          "exit_code": 0,
+          "execution": "completed",
+          "steps": [
+            2
+          ],
+          "observation_sha256": "0ee39ee63104b9b80fb978271a4bea3a34ea58646774102c105c8d7d24be1df6"
+        }
+      }
+    },
+    "positions-npu-python": {
+      "path": "artifacts/p1p6-20261112/positions-rope-installed-npu-python/result.json",
+      "sha256": "796ab749a9e016fc7d01f85915701022a75ebadf367fbc29d615d1e58c5cba38",
+      "bytes": 2022,
+      "identity": {
+        "interface": "tensor-window-v1",
+        "device": "npu:0",
+        "dtype": "float32",
+        "client": "python",
+        "positions": true,
+        "family": "kv",
+        "placement": "mixed-c",
+        "scoring_dtype": "float32",
+        "deterministic_algorithms": true,
+        "peer_device": null
+      },
+      "execution": "completed",
+      "strict_numerical": "passed",
+      "recovery": "passed",
+      "effective_execution": {
+        "interface": "tensor-window-v1",
+        "schedule": "settle-columns-v1",
+        "client": "python",
+        "fallback_reason": null,
+        "roots": "columns",
+        "max_workspace_bytes": 4294967296,
+        "position_policy": "bounded-common-origin-v1",
+        "placement": {
+          "payload": "npu:0",
+          "read": "npu:0",
+          "control": "npu:0",
+          "selection": "npu:0",
+          "events": "cpu",
+          "scoring_dtype": "float32"
+        }
+      },
+      "source": "fb83ee91cc34ba49bf00465916d6e7e7a7eacdec",
+      "package_import": "Explicit core-rope-install PYTHONPATH in lifecycle driver",
+      "comparisons": [
+        {
+          "schema": "tide-comparison-v1",
+          "finite": "passed",
+          "numeric": "passed",
+          "discrete": "passed",
+          "strict_passed": true,
+          "compared_leaves": {
+            "numeric": 483,
+            "discrete": 162
+          },
+          "mismatch_counts": {
+            "numeric": 0,
+            "discrete": 0
+          },
+          "differences": [],
+          "differences_truncated": false
+        },
+        {
+          "schema": "tide-comparison-v1",
+          "finite": "passed",
+          "numeric": "passed",
+          "discrete": "passed",
+          "strict_passed": true,
+          "compared_leaves": {
+            "numeric": 483,
+            "discrete": 162
+          },
+          "mismatch_counts": {
+            "numeric": 0,
+            "discrete": 0
+          },
+          "differences": [],
+          "differences_truncated": false
+        },
+        {
+          "schema": "tide-comparison-v1",
+          "finite": "passed",
+          "numeric": "passed",
+          "discrete": "passed",
+          "strict_passed": true,
+          "compared_leaves": {
+            "numeric": 483,
+            "discrete": 162
+          },
+          "mismatch_counts": {
+            "numeric": 0,
+            "discrete": 0
+          },
+          "differences": [],
+          "differences_truncated": false
+        }
+      ],
+      "children": {
+        "whole": {
+          "path": "artifacts/p1p6-20261112/positions-rope-installed-npu-python/whole/result.json",
+          "sha256": "654657e3f4813e30808b94a59cf3090f80d8e57bc113babad32f3773e6082e74",
+          "bytes": 869,
+          "execution": "completed",
+          "strict_numerical": "not_checked",
+          "recovery": "not_checked",
+          "effective_execution": {
+            "interface": "tensor-window-v1",
+            "schedule": "settle-columns-v1",
+            "client": "python",
+            "fallback_reason": null,
+            "roots": "columns",
+            "max_workspace_bytes": 4294967296,
+            "position_policy": "bounded-common-origin-v1",
+            "placement": {
+              "payload": "npu:0",
+              "read": "npu:0",
+              "control": "npu:0",
+              "selection": "npu:0",
+              "events": "cpu",
+              "scoring_dtype": "float32"
+            }
+          }
+        },
+        "prefix": {
+          "path": "artifacts/p1p6-20261112/positions-rope-installed-npu-python/prefix/result.json",
+          "sha256": "654657e3f4813e30808b94a59cf3090f80d8e57bc113babad32f3773e6082e74",
+          "bytes": 869,
+          "execution": "completed",
+          "strict_numerical": "not_checked",
+          "recovery": "not_checked",
+          "effective_execution": {
+            "interface": "tensor-window-v1",
+            "schedule": "settle-columns-v1",
+            "client": "python",
+            "fallback_reason": null,
+            "roots": "columns",
+            "max_workspace_bytes": 4294967296,
+            "position_policy": "bounded-common-origin-v1",
+            "placement": {
+              "payload": "npu:0",
+              "read": "npu:0",
+              "control": "npu:0",
+              "selection": "npu:0",
+              "events": "cpu",
+              "scoring_dtype": "float32"
+            }
+          }
+        },
+        "resumed": {
+          "path": "artifacts/p1p6-20261112/positions-rope-installed-npu-python/resumed/result.json",
+          "sha256": "654657e3f4813e30808b94a59cf3090f80d8e57bc113babad32f3773e6082e74",
+          "bytes": 869,
+          "execution": "completed",
+          "strict_numerical": "not_checked",
+          "recovery": "not_checked",
+          "effective_execution": {
+            "interface": "tensor-window-v1",
+            "schedule": "settle-columns-v1",
+            "client": "python",
+            "fallback_reason": null,
+            "roots": "columns",
+            "max_workspace_bytes": 4294967296,
+            "position_policy": "bounded-common-origin-v1",
+            "placement": {
+              "payload": "npu:0",
+              "read": "npu:0",
+              "control": "npu:0",
+              "selection": "npu:0",
+              "events": "cpu",
+              "scoring_dtype": "float32"
+            }
+          }
+        }
+      }
+    },
+    "lh176-npu-python": {
+      "path": "artifacts/p1p6-20261112/lh176-rope-installed-npu-python/result.json",
+      "sha256": "55ca545dbfb36aa3fd2d9e95bfaf22cdfcd275120dff0718b79438899beea461",
+      "bytes": 1494758,
+      "execution": "completed",
+      "exact_fresh_process_resume": "passed",
+      "comparison": "actual final outputs, raw continuation/pending/history/ledger, independent gradients including None, parameters and all AdamW slots",
+      "exit_code": 0,
+      "scope": "public planned-column lifecycle; no independent math or throughput claim",
+      "source": "fb83ee91cc34ba49bf00465916d6e7e7a7eacdec",
+      "package_import": "Explicit core-rope-install PYTHONPATH in lifecycle driver",
+      "identity": {
+        "schema": "tide-planned-window-consumer-v1",
+        "plan_sha256": "d31de91a86bc328a8c5e7b29b7b2ee41be8d542efd9a6547509b5c127930ee82",
+        "client": "python",
+        "device": "npu:0",
+        "dtype": "float32",
+        "placement": "mixed-c",
+        "deterministic_algorithms": true,
+        "threads": 1,
+        "optimizer": {
+          "name": "AdamW",
+          "lr": 1e-05,
+          "betas": [
+            0.9,
+            0.95
+          ],
+          "weight_decay": 0.01,
+          "foreach": false
+        },
+        "scripts": {
+          "planned_windows.py": "07691f2b5d3ce1152b24e0e0c04f09211e53ce3c563e8ca5704d34be52e83771",
+          "recording.py": "158f849f76dd7fd12a24970834fa2b0f8bc0c8b9e928cb37549b91122e7988a6"
+        },
+        "runtime": {
+          "resolved_device": "npu:0",
+          "backend": "npu",
+          "logical_device_index": 0,
+          "resolution_reason": "explicit:npu",
+          "dtype": "float32",
+          "host_architecture": "aarch64",
+          "torch": "2.12.0+cpu",
+          "torch_git": "7661cd9c6b841b62b7f411aa52ec51f05457263b",
+          "python": "3.12.13",
+          "cxx11_abi": true,
+          "runtime_queue_environment": {
+            "TASK_QUEUE_ENABLE": null,
+            "PER_STREAM_QUEUE": null,
+            "ASCEND_LAUNCH_BLOCKING": null
+          },
+          "torch_npu": "2.12.0.post3",
+          "logical_device_count": 1,
+          "device_name": "Ascend910_9392",
+          "cann_version": "9.2.0",
+          "matmul_allow_hf32": false
+        },
+        "native_manifest_sha256": "be39936d8eac11f0a5cba119e67e2aecfab5d9fdf6864dbbb0ac7967a8b076c6"
+      },
+      "whole_steps": [
+        {
+          "step": 0,
+          "loss": 0.07371383905410767,
+          "counts": {
+            "candidate_events": 8368,
+            "selected_events": 2572,
+            "visited_edges": 15340,
+            "region_column_calls": 94,
+            "state_column_calls": 176
+          },
+          "execution": {
+            "interface": "tensor-window-v1",
+            "schedule": "settle-columns-v1",
+            "client": "python",
+            "fallback_reason": null,
+            "roots": "columns",
+            "max_workspace_bytes": 1073741824,
+            "position_policy": "bounded-common-origin-v1",
+            "placement": {
+              "payload": "npu:0",
+              "read": "npu:0",
+              "control": "npu:0",
+              "selection": "npu:0",
+              "events": "cpu",
+              "scoring_dtype": "float32"
+            }
+          }
+        },
+        {
+          "step": 1,
+          "loss": 0.059854261577129364,
+          "counts": {
+            "candidate_events": 8421,
+            "selected_events": 2737,
+            "visited_edges": 16007,
+            "region_column_calls": 95,
+            "state_column_calls": 176
+          },
+          "execution": {
+            "interface": "tensor-window-v1",
+            "schedule": "settle-columns-v1",
+            "client": "python",
+            "fallback_reason": null,
+            "roots": "columns",
+            "max_workspace_bytes": 1073741824,
+            "position_policy": "bounded-common-origin-v1",
+            "placement": {
+              "payload": "npu:0",
+              "read": "npu:0",
+              "control": "npu:0",
+              "selection": "npu:0",
+              "events": "cpu",
+              "scoring_dtype": "float32"
+            }
+          }
+        },
+        {
+          "step": 2,
+          "loss": 0.06898617744445801,
+          "counts": {
+            "candidate_events": 8586,
+            "selected_events": 2732,
+            "visited_edges": 16171,
+            "region_column_calls": 95,
+            "state_column_calls": 176
+          },
+          "execution": {
+            "interface": "tensor-window-v1",
+            "schedule": "settle-columns-v1",
+            "client": "python",
+            "fallback_reason": null,
+            "roots": "columns",
+            "max_workspace_bytes": 1073741824,
+            "position_policy": "bounded-common-origin-v1",
+            "placement": {
+              "payload": "npu:0",
+              "read": "npu:0",
+              "control": "npu:0",
+              "selection": "npu:0",
+              "events": "cpu",
+              "scoring_dtype": "float32"
+            }
+          }
+        }
+      ],
+      "children": {
+        "whole": {
+          "exit_code": 0,
+          "execution": "completed",
+          "steps": [
+            0,
+            1,
+            2
+          ],
+          "observation_sha256": "7eec9550cf101b0fbc77aefc79882995dd85973024ae4e2234b35ab0f47ad58e"
+        },
+        "prefix": {
+          "exit_code": 0,
+          "execution": "completed",
+          "steps": [
+            0,
+            1
+          ],
+          "observation_sha256": "5db7eb6b3540e874330336b3341eeea422006d463dc47aed42b7fa9d7bec6c48"
+        },
+        "resumed": {
+          "exit_code": 0,
+          "execution": "completed",
+          "steps": [
+            2
+          ],
+          "observation_sha256": "e3d7d7bc5bbf8498f88fdd7bd36bd29eb4cd259c50f7dbe5339dee0310a6b273"
+        }
+      }
+    },
+    "positions-npu-native": {
+      "path": "artifacts/p1p6-20261112/positions-rope-installed-npu-native/result.json",
+      "sha256": "87bf04ad978d752d2e312ccaa55554690b60de248135f6386e924501c8558e47",
+      "bytes": 2022,
+      "identity": {
+        "interface": "tensor-window-v1",
+        "device": "npu:0",
+        "dtype": "float32",
+        "client": "native",
+        "positions": true,
+        "family": "kv",
+        "placement": "mixed-c",
+        "scoring_dtype": "float32",
+        "deterministic_algorithms": true,
+        "peer_device": null
+      },
+      "execution": "completed",
+      "strict_numerical": "passed",
+      "recovery": "passed",
+      "effective_execution": {
+        "interface": "tensor-window-v1",
+        "schedule": "settle-columns-v1",
+        "client": "native",
+        "fallback_reason": null,
+        "roots": "columns",
+        "max_workspace_bytes": 4294967296,
+        "position_policy": "bounded-common-origin-v1",
+        "placement": {
+          "payload": "npu:0",
+          "read": "npu:0",
+          "control": "npu:0",
+          "selection": "npu:0",
+          "events": "cpu",
+          "scoring_dtype": "float32"
+        }
+      },
+      "source": "fb83ee91cc34ba49bf00465916d6e7e7a7eacdec",
+      "package_import": "Explicit core-rope-install PYTHONPATH in lifecycle driver",
+      "comparisons": [
+        {
+          "schema": "tide-comparison-v1",
+          "finite": "passed",
+          "numeric": "passed",
+          "discrete": "passed",
+          "strict_passed": true,
+          "compared_leaves": {
+            "numeric": 483,
+            "discrete": 162
+          },
+          "mismatch_counts": {
+            "numeric": 0,
+            "discrete": 0
+          },
+          "differences": [],
+          "differences_truncated": false
+        },
+        {
+          "schema": "tide-comparison-v1",
+          "finite": "passed",
+          "numeric": "passed",
+          "discrete": "passed",
+          "strict_passed": true,
+          "compared_leaves": {
+            "numeric": 483,
+            "discrete": 162
+          },
+          "mismatch_counts": {
+            "numeric": 0,
+            "discrete": 0
+          },
+          "differences": [],
+          "differences_truncated": false
+        },
+        {
+          "schema": "tide-comparison-v1",
+          "finite": "passed",
+          "numeric": "passed",
+          "discrete": "passed",
+          "strict_passed": true,
+          "compared_leaves": {
+            "numeric": 483,
+            "discrete": 162
+          },
+          "mismatch_counts": {
+            "numeric": 0,
+            "discrete": 0
+          },
+          "differences": [],
+          "differences_truncated": false
+        }
+      ],
+      "children": {
+        "whole": {
+          "path": "artifacts/p1p6-20261112/positions-rope-installed-npu-native/whole/result.json",
+          "sha256": "9b6407f15d963df23bba9e5ee4af2bd91859e34b0b575dd234dcd859a013bc77",
+          "bytes": 869,
+          "execution": "completed",
+          "strict_numerical": "not_checked",
+          "recovery": "not_checked",
+          "effective_execution": {
+            "interface": "tensor-window-v1",
+            "schedule": "settle-columns-v1",
+            "client": "native",
+            "fallback_reason": null,
+            "roots": "columns",
+            "max_workspace_bytes": 4294967296,
+            "position_policy": "bounded-common-origin-v1",
+            "placement": {
+              "payload": "npu:0",
+              "read": "npu:0",
+              "control": "npu:0",
+              "selection": "npu:0",
+              "events": "cpu",
+              "scoring_dtype": "float32"
+            }
+          }
+        },
+        "prefix": {
+          "path": "artifacts/p1p6-20261112/positions-rope-installed-npu-native/prefix/result.json",
+          "sha256": "9b6407f15d963df23bba9e5ee4af2bd91859e34b0b575dd234dcd859a013bc77",
+          "bytes": 869,
+          "execution": "completed",
+          "strict_numerical": "not_checked",
+          "recovery": "not_checked",
+          "effective_execution": {
+            "interface": "tensor-window-v1",
+            "schedule": "settle-columns-v1",
+            "client": "native",
+            "fallback_reason": null,
+            "roots": "columns",
+            "max_workspace_bytes": 4294967296,
+            "position_policy": "bounded-common-origin-v1",
+            "placement": {
+              "payload": "npu:0",
+              "read": "npu:0",
+              "control": "npu:0",
+              "selection": "npu:0",
+              "events": "cpu",
+              "scoring_dtype": "float32"
+            }
+          }
+        },
+        "resumed": {
+          "path": "artifacts/p1p6-20261112/positions-rope-installed-npu-native/resumed/result.json",
+          "sha256": "9b6407f15d963df23bba9e5ee4af2bd91859e34b0b575dd234dcd859a013bc77",
+          "bytes": 869,
+          "execution": "completed",
+          "strict_numerical": "not_checked",
+          "recovery": "not_checked",
+          "effective_execution": {
+            "interface": "tensor-window-v1",
+            "schedule": "settle-columns-v1",
+            "client": "native",
+            "fallback_reason": null,
+            "roots": "columns",
+            "max_workspace_bytes": 4294967296,
+            "position_policy": "bounded-common-origin-v1",
+            "placement": {
+              "payload": "npu:0",
+              "read": "npu:0",
+              "control": "npu:0",
+              "selection": "npu:0",
+              "events": "cpu",
+              "scoring_dtype": "float32"
+            }
+          }
+        }
+      }
+    },
+    "lh176-npu-native": {
+      "path": "artifacts/p1p6-20261112/lh176-rope-installed-npu-native/result.json",
+      "sha256": "5cdf88d14ee79592dbb64b1c7e720e1a18d64b8b5b3bff9876e3500457865d23",
+      "bytes": 1494758,
+      "execution": "completed",
+      "exact_fresh_process_resume": "passed",
+      "comparison": "actual final outputs, raw continuation/pending/history/ledger, independent gradients including None, parameters and all AdamW slots",
+      "exit_code": 0,
+      "scope": "public planned-column lifecycle; no independent math or throughput claim",
+      "source": "fb83ee91cc34ba49bf00465916d6e7e7a7eacdec",
+      "package_import": "Explicit core-rope-install PYTHONPATH in lifecycle driver",
+      "identity": {
+        "schema": "tide-planned-window-consumer-v1",
+        "plan_sha256": "d31de91a86bc328a8c5e7b29b7b2ee41be8d542efd9a6547509b5c127930ee82",
+        "client": "native",
+        "device": "npu:0",
+        "dtype": "float32",
+        "placement": "mixed-c",
+        "deterministic_algorithms": true,
+        "threads": 1,
+        "optimizer": {
+          "name": "AdamW",
+          "lr": 1e-05,
+          "betas": [
+            0.9,
+            0.95
+          ],
+          "weight_decay": 0.01,
+          "foreach": false
+        },
+        "scripts": {
+          "planned_windows.py": "07691f2b5d3ce1152b24e0e0c04f09211e53ce3c563e8ca5704d34be52e83771",
+          "recording.py": "158f849f76dd7fd12a24970834fa2b0f8bc0c8b9e928cb37549b91122e7988a6"
+        },
+        "runtime": {
+          "resolved_device": "npu:0",
+          "backend": "npu",
+          "logical_device_index": 0,
+          "resolution_reason": "explicit:npu",
+          "dtype": "float32",
+          "host_architecture": "aarch64",
+          "torch": "2.12.0+cpu",
+          "torch_git": "7661cd9c6b841b62b7f411aa52ec51f05457263b",
+          "python": "3.12.13",
+          "cxx11_abi": true,
+          "runtime_queue_environment": {
+            "TASK_QUEUE_ENABLE": null,
+            "PER_STREAM_QUEUE": null,
+            "ASCEND_LAUNCH_BLOCKING": null
+          },
+          "torch_npu": "2.12.0.post3",
+          "logical_device_count": 1,
+          "device_name": "Ascend910_9392",
+          "cann_version": "9.2.0",
+          "matmul_allow_hf32": false
+        },
+        "native_manifest_sha256": "be39936d8eac11f0a5cba119e67e2aecfab5d9fdf6864dbbb0ac7967a8b076c6"
+      },
+      "whole_steps": [
+        {
+          "step": 0,
+          "loss": 0.07371383905410767,
+          "counts": {
+            "candidate_events": 8368,
+            "region_column_calls": 94,
+            "selected_events": 2572,
+            "state_column_calls": 176,
+            "visited_edges": 15340
+          },
+          "execution": {
+            "interface": "tensor-window-v1",
+            "schedule": "settle-columns-v1",
+            "client": "native",
+            "fallback_reason": null,
+            "roots": "columns",
+            "max_workspace_bytes": 1073741824,
+            "position_policy": "bounded-common-origin-v1",
+            "placement": {
+              "payload": "npu:0",
+              "read": "npu:0",
+              "control": "npu:0",
+              "selection": "npu:0",
+              "events": "cpu",
+              "scoring_dtype": "float32"
+            }
+          }
+        },
+        {
+          "step": 1,
+          "loss": 0.059854257851839066,
+          "counts": {
+            "candidate_events": 8421,
+            "region_column_calls": 95,
+            "selected_events": 2737,
+            "state_column_calls": 176,
+            "visited_edges": 16007
+          },
+          "execution": {
+            "interface": "tensor-window-v1",
+            "schedule": "settle-columns-v1",
+            "client": "native",
+            "fallback_reason": null,
+            "roots": "columns",
+            "max_workspace_bytes": 1073741824,
+            "position_policy": "bounded-common-origin-v1",
+            "placement": {
+              "payload": "npu:0",
+              "read": "npu:0",
+              "control": "npu:0",
+              "selection": "npu:0",
+              "events": "cpu",
+              "scoring_dtype": "float32"
+            }
+          }
+        },
+        {
+          "step": 2,
+          "loss": 0.06898622214794159,
+          "counts": {
+            "candidate_events": 8586,
+            "region_column_calls": 95,
+            "selected_events": 2732,
+            "state_column_calls": 176,
+            "visited_edges": 16171
+          },
+          "execution": {
+            "interface": "tensor-window-v1",
+            "schedule": "settle-columns-v1",
+            "client": "native",
+            "fallback_reason": null,
+            "roots": "columns",
+            "max_workspace_bytes": 1073741824,
+            "position_policy": "bounded-common-origin-v1",
+            "placement": {
+              "payload": "npu:0",
+              "read": "npu:0",
+              "control": "npu:0",
+              "selection": "npu:0",
+              "events": "cpu",
+              "scoring_dtype": "float32"
+            }
+          }
+        }
+      ],
+      "children": {
+        "whole": {
+          "exit_code": 0,
+          "execution": "completed",
+          "steps": [
+            0,
+            1,
+            2
+          ],
+          "observation_sha256": "f3e8318998b4c82a8ad088fe93dab7d3cfc7dac7b394351089cdb9c1d114c7f1"
+        },
+        "prefix": {
+          "exit_code": 0,
+          "execution": "completed",
+          "steps": [
+            0,
+            1
+          ],
+          "observation_sha256": "e1a557eea554bc16761dc35949a7e71d408aa9717a115fc025e62a132e96c7cc"
+        },
+        "resumed": {
+          "exit_code": 0,
+          "execution": "completed",
+          "steps": [
+            2
+          ],
+          "observation_sha256": "b56298454a343dcd4457d4857e477c0a368b2309fd3e03f33285a57265e8d4e5"
+        }
+      }
+    }
+  },
+  "peer_general": {
+    "matrix": {
+      "path": "artifacts/p1p6-20261112/peer-general-55-matrix.json",
+      "sha256": "712d219eadc13244c82f5e3e48956a7209dcccc66502dd96bdd2ac1f9e77c54b",
+      "bytes": 5487,
+      "rows": [
+        {
+          "case": "delta-pdg",
+          "client": "python",
+          "command": [
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/additive-work/env/bin/python",
+            "/dev/shm/gef-p1p6-20261112/core-55a3074a/scripts/check_weighted_device.py",
+            "--device",
+            "npu:0",
+            "--peer-devices",
+            "npu:0",
+            "npu:1",
+            "--placement",
+            "mixed-c",
+            "--scoring-dtype",
+            "float32",
+            "--dtype",
+            "float32",
+            "--optimizer",
+            "adamw",
+            "--workers",
+            "1",
+            "--packing",
+            "auto",
+            "--implementation",
+            "python",
+            "--case",
+            "delta-pdg",
+            "--output-dir",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/p1p6-20261112/peer-general-55/delta-pdg-python"
+          ],
+          "started": 1794467052.102868,
+          "finished": 1794467074.9951668,
+          "exit_code": 0
+        },
+        {
+          "case": "delta-pdg",
+          "client": "native",
+          "command": [
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/additive-work/env/bin/python",
+            "/dev/shm/gef-p1p6-20261112/core-55a3074a/scripts/check_weighted_device.py",
+            "--device",
+            "npu:0",
+            "--peer-devices",
+            "npu:0",
+            "npu:1",
+            "--placement",
+            "mixed-c",
+            "--scoring-dtype",
+            "float32",
+            "--dtype",
+            "float32",
+            "--optimizer",
+            "adamw",
+            "--workers",
+            "1",
+            "--packing",
+            "auto",
+            "--implementation",
+            "native",
+            "--case",
+            "delta-pdg",
+            "--output-dir",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/p1p6-20261112/peer-general-55/delta-pdg-native",
+            "--native-library",
+            "/dev/shm/gef-p1p6-20261112/core-55-native"
+          ],
+          "started": 1794467075.0002637,
+          "finished": 1794467095.8912325,
+          "exit_code": 0
+        },
+        {
+          "case": "ssd-dag",
+          "client": "python",
+          "command": [
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/additive-work/env/bin/python",
+            "/dev/shm/gef-p1p6-20261112/core-55a3074a/scripts/check_weighted_device.py",
+            "--device",
+            "npu:0",
+            "--peer-devices",
+            "npu:0",
+            "npu:1",
+            "--placement",
+            "mixed-c",
+            "--scoring-dtype",
+            "float32",
+            "--dtype",
+            "float32",
+            "--optimizer",
+            "adamw",
+            "--workers",
+            "1",
+            "--packing",
+            "auto",
+            "--implementation",
+            "python",
+            "--case",
+            "ssd-dag",
+            "--output-dir",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/p1p6-20261112/peer-general-55/ssd-dag-python"
+          ],
+          "started": 1794467095.8970058,
+          "finished": 1794467116.7874818,
+          "exit_code": 0
+        },
+        {
+          "case": "ssd-dag",
+          "client": "native",
+          "command": [
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/additive-work/env/bin/python",
+            "/dev/shm/gef-p1p6-20261112/core-55a3074a/scripts/check_weighted_device.py",
+            "--device",
+            "npu:0",
+            "--peer-devices",
+            "npu:0",
+            "npu:1",
+            "--placement",
+            "mixed-c",
+            "--scoring-dtype",
+            "float32",
+            "--dtype",
+            "float32",
+            "--optimizer",
+            "adamw",
+            "--workers",
+            "1",
+            "--packing",
+            "auto",
+            "--implementation",
+            "native",
+            "--case",
+            "ssd-dag",
+            "--output-dir",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/p1p6-20261112/peer-general-55/ssd-dag-native",
+            "--native-library",
+            "/dev/shm/gef-p1p6-20261112/core-55-native"
+          ],
+          "started": 1794467116.7978663,
+          "finished": 1794467136.594397,
+          "exit_code": 0
+        },
+        {
+          "case": "kv-pdg-initial",
+          "client": "python",
+          "command": [
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/additive-work/env/bin/python",
+            "/dev/shm/gef-p1p6-20261112/core-55a3074a/scripts/check_weighted_device.py",
+            "--device",
+            "npu:0",
+            "--peer-devices",
+            "npu:0",
+            "npu:1",
+            "--placement",
+            "mixed-c",
+            "--scoring-dtype",
+            "float32",
+            "--dtype",
+            "float32",
+            "--optimizer",
+            "adamw",
+            "--workers",
+            "1",
+            "--packing",
+            "auto",
+            "--implementation",
+            "python",
+            "--case",
+            "kv-pdg-initial",
+            "--output-dir",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/p1p6-20261112/peer-general-55/kv-pdg-initial-python"
+          ],
+          "started": 1794467137.1728559,
+          "finished": 1794467160.0663383,
+          "exit_code": 0
+        },
+        {
+          "case": "kv-pdg-initial",
+          "client": "native",
+          "command": [
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/additive-work/env/bin/python",
+            "/dev/shm/gef-p1p6-20261112/core-55a3074a/scripts/check_weighted_device.py",
+            "--device",
+            "npu:0",
+            "--peer-devices",
+            "npu:0",
+            "npu:1",
+            "--placement",
+            "mixed-c",
+            "--scoring-dtype",
+            "float32",
+            "--dtype",
+            "float32",
+            "--optimizer",
+            "adamw",
+            "--workers",
+            "1",
+            "--packing",
+            "auto",
+            "--implementation",
+            "native",
+            "--case",
+            "kv-pdg-initial",
+            "--output-dir",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/p1p6-20261112/peer-general-55/kv-pdg-initial-native",
+            "--native-library",
+            "/dev/shm/gef-p1p6-20261112/core-55-native"
+          ],
+          "started": 1794467160.069519,
+          "finished": 1794467180.9107437,
+          "exit_code": 0
+        }
+      ]
+    },
+    "source": "55a3074a441d77720cf00e44433bd702cd09e175",
+    "cases": {
+      "delta-pdg-python": {
+        "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/p1p6-20261112/peer-general-55/delta-pdg-python/result.json",
+        "sha256": "0ea49a4e7b491aaeebd83e1a99b0d48ad3e9533bc0a4a4f72cf6eeb23a12c9a2",
+        "bytes": 3943,
+        "record": {
+          "state": "passed",
+          "source": "55a3074a441d77720cf00e44433bd702cd09e175",
+          "dirty": "",
+          "implementation": "python",
+          "argv": [
+            "--device",
+            "npu:0",
+            "--peer-devices",
+            "npu:0",
+            "npu:1",
+            "--placement",
+            "mixed-c",
+            "--scoring-dtype",
+            "float32",
+            "--dtype",
+            "float32",
+            "--optimizer",
+            "adamw",
+            "--workers",
+            "1",
+            "--packing",
+            "auto",
+            "--implementation",
+            "python",
+            "--case",
+            "delta-pdg",
+            "--output-dir",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/p1p6-20261112/peer-general-55/delta-pdg-python"
+          ],
+          "dispatch_environment": {
+            "ASCEND_LAUNCH_BLOCKING": null,
+            "CUDA_LAUNCH_BLOCKING": null,
+            "TASK_QUEUE_ENABLE": "1"
+          },
+          "runtime": {
+            "resolved_device": "npu:0",
+            "backend": "npu",
+            "logical_device_index": 0,
+            "resolution_reason": "explicit:npu",
+            "dtype": "float32",
+            "host_architecture": "aarch64",
+            "torch": "2.12.0+cpu",
+            "torch_git": "7661cd9c6b841b62b7f411aa52ec51f05457263b",
+            "python": "3.12.13",
+            "cxx11_abi": true,
+            "torch_npu": "2.12.0.post3",
+            "logical_device_count": 2,
+            "device_name": "Ascend910_9392",
+            "cann_version": "9.2.0",
+            "matmul_allow_hf32": false
+          },
+          "requested_placement": {
+            "preset": "mixed-c",
+            "read": "auto",
+            "control": "auto",
+            "selection": "auto",
+            "events": "auto",
+            "scoring_dtype": "float32"
+          },
+          "precision": {
+            "payload_dtype": "torch.float32",
+            "optimizer": "adamw",
+            "learning_rate": 0.001,
+            "loss_scale": 1.0,
+            "master_dtype": null,
+            "tolerances": {
+              "atol": 1e-06,
+              "rtol": 1e-05
+            }
+          },
+          "cuda_precision": null,
+          "workers": 1,
+          "packing": "auto",
+          "operator_policy": "standard ATen; batched VJPs when packed, replay when scalar",
+          "threads": {
+            "intraop": 1,
+            "interop": 1
+          },
+          "peer_devices": [
+            "npu:0",
+            "npu:1"
+          ],
+          "resolved_placement": {
+            "payload": "npu:0",
+            "read": "npu:0",
+            "control": "npu:0",
+            "selection": "npu:0",
+            "events": "cpu",
+            "scoring_dtype": "float32"
+          },
+          "cases": [
+            {
+              "configuration": {
+                "name": "delta-pdg",
+                "family": "delta",
+                "topology": "pdg",
+                "read": "+",
+                "sending": "regional_total",
+                "regularizer": "quad",
+                "attention": false
+              },
+              "state": "passed",
+              "coverage": {
+                "nodes": 3,
+                "edges": 5,
+                "regions": 2,
+                "observed_nodes": 3,
+                "unobserved_nodes": 0,
+                "events": 29,
+                "outputs": 20,
+                "pending": 13,
+                "state_owners": 6,
+                "history_owners": 4
+              },
+              "roots": [
+                "all",
+                "first-output",
+                "first-descriptor-w",
+                "first-descriptor-mu",
+                "first-descriptor-score",
+                "first-descriptor-evidence",
+                "first-control"
+              ],
+              "fixture_sha256": "c7019de72ff6d59efc3fedc42ee30d1bca2c3e75a3b5e53037da92c382c95844",
+              "pending_at_cut": 4,
+              "retained_cut": 3,
+              "streaming": true,
+              "prefill": true,
+              "inference": true,
+              "training_updates": 4,
+              "independent_raw_state_roots": 24,
+              "node_owners": [
+                "npu:0",
+                "npu:0",
+                "npu:1"
+              ],
+              "transport_stats": {
+                "cross_device_copy_groups": 12,
+                "cross_device_rows": 20,
+                "cross_device_bytes": 240,
+                "max_cross_device_batch": 2
+              },
+              "preparation_stats": {},
+              "same_device_resume": true,
+              "same_device_resume_exact": true,
+              "cpu_checkpoint_handoff": true
+            }
+          ],
+          "scope": "eager host schedule; actual device transfers; not resident",
+          "tolerances": {
+            "atol": 1e-06,
+            "rtol": 1e-05
+          },
+          "fallback_visibility": "requires separate profile/log audit",
+          "primitives": [
+            "stable-large-int64-score-ties",
+            "fractional-fill-literal-VJP",
+            "nonpositive-hard-fallback-literal-VJP",
+            "packed-transfer-None-zero-aliases-int64"
+          ]
+        }
+      },
+      "delta-pdg-native": {
+        "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/p1p6-20261112/peer-general-55/delta-pdg-native/result.json",
+        "sha256": "e5baa2ff9e9567fac7b4d744dd55df4b944001372398f300117c2c3ebbf2e78f",
+        "bytes": 4016,
+        "record": {
+          "state": "passed",
+          "source": "55a3074a441d77720cf00e44433bd702cd09e175",
+          "dirty": "",
+          "implementation": "native",
+          "argv": [
+            "--device",
+            "npu:0",
+            "--peer-devices",
+            "npu:0",
+            "npu:1",
+            "--placement",
+            "mixed-c",
+            "--scoring-dtype",
+            "float32",
+            "--dtype",
+            "float32",
+            "--optimizer",
+            "adamw",
+            "--workers",
+            "1",
+            "--packing",
+            "auto",
+            "--implementation",
+            "native",
+            "--case",
+            "delta-pdg",
+            "--output-dir",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/p1p6-20261112/peer-general-55/delta-pdg-native",
+            "--native-library",
+            "/dev/shm/gef-p1p6-20261112/core-55-native"
+          ],
+          "dispatch_environment": {
+            "ASCEND_LAUNCH_BLOCKING": null,
+            "CUDA_LAUNCH_BLOCKING": null,
+            "TASK_QUEUE_ENABLE": "1"
+          },
+          "runtime": {
+            "resolved_device": "npu:0",
+            "backend": "npu",
+            "logical_device_index": 0,
+            "resolution_reason": "explicit:npu",
+            "dtype": "float32",
+            "host_architecture": "aarch64",
+            "torch": "2.12.0+cpu",
+            "torch_git": "7661cd9c6b841b62b7f411aa52ec51f05457263b",
+            "python": "3.12.13",
+            "cxx11_abi": true,
+            "torch_npu": "2.12.0.post3",
+            "logical_device_count": 2,
+            "device_name": "Ascend910_9392",
+            "cann_version": "9.2.0",
+            "matmul_allow_hf32": false
+          },
+          "requested_placement": {
+            "preset": "mixed-c",
+            "read": "auto",
+            "control": "auto",
+            "selection": "auto",
+            "events": "auto",
+            "scoring_dtype": "float32"
+          },
+          "precision": {
+            "payload_dtype": "torch.float32",
+            "optimizer": "adamw",
+            "learning_rate": 0.001,
+            "loss_scale": 1.0,
+            "master_dtype": null,
+            "tolerances": {
+              "atol": 1e-06,
+              "rtol": 1e-05
+            }
+          },
+          "cuda_precision": null,
+          "workers": 1,
+          "packing": "auto",
+          "operator_policy": "standard ATen; batched VJPs when packed, replay when scalar",
+          "threads": {
+            "intraop": 1,
+            "interop": 1
+          },
+          "peer_devices": [
+            "npu:0",
+            "npu:1"
+          ],
+          "resolved_placement": {
+            "payload": "npu:0",
+            "read": "npu:0",
+            "control": "npu:0",
+            "selection": "npu:0",
+            "events": "cpu",
+            "scoring_dtype": "float32"
+          },
+          "cases": [
+            {
+              "configuration": {
+                "name": "delta-pdg",
+                "family": "delta",
+                "topology": "pdg",
+                "read": "+",
+                "sending": "regional_total",
+                "regularizer": "quad",
+                "attention": false
+              },
+              "state": "passed",
+              "coverage": {
+                "nodes": 3,
+                "edges": 5,
+                "regions": 2,
+                "observed_nodes": 3,
+                "unobserved_nodes": 0,
+                "events": 29,
+                "outputs": 20,
+                "pending": 13,
+                "state_owners": 6,
+                "history_owners": 4
+              },
+              "roots": [
+                "all",
+                "first-output",
+                "first-descriptor-w",
+                "first-descriptor-mu",
+                "first-descriptor-score",
+                "first-descriptor-evidence",
+                "first-control"
+              ],
+              "fixture_sha256": "c7019de72ff6d59efc3fedc42ee30d1bca2c3e75a3b5e53037da92c382c95844",
+              "pending_at_cut": 4,
+              "retained_cut": 3,
+              "streaming": true,
+              "prefill": true,
+              "inference": true,
+              "training_updates": 4,
+              "independent_raw_state_roots": 24,
+              "node_owners": [
+                "npu:0",
+                "npu:0",
+                "npu:1"
+              ],
+              "transport_stats": {
+                "cross_device_bytes": 240,
+                "cross_device_copy_groups": 12,
+                "cross_device_rows": 20,
+                "max_cross_device_batch": 2
+              },
+              "preparation_stats": {},
+              "same_device_resume": true,
+              "same_device_resume_exact": true,
+              "cpu_checkpoint_handoff": true
+            }
+          ],
+          "scope": "eager host schedule; actual device transfers; not resident",
+          "tolerances": {
+            "atol": 1e-06,
+            "rtol": 1e-05
+          },
+          "fallback_visibility": "requires separate profile/log audit",
+          "primitives": [
+            "stable-large-int64-score-ties",
+            "fractional-fill-literal-VJP",
+            "nonpositive-hard-fallback-literal-VJP",
+            "packed-transfer-None-zero-aliases-int64"
+          ]
+        }
+      },
+      "ssd-dag-python": {
+        "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/p1p6-20261112/peer-general-55/ssd-dag-python/result.json",
+        "sha256": "d1aea26c7cf996bd8b93a1ccfebf8e10a096c0d8f1ad5e25fac9723623ec6a1b",
+        "bytes": 3932,
+        "record": {
+          "state": "passed",
+          "source": "55a3074a441d77720cf00e44433bd702cd09e175",
+          "dirty": "",
+          "implementation": "python",
+          "argv": [
+            "--device",
+            "npu:0",
+            "--peer-devices",
+            "npu:0",
+            "npu:1",
+            "--placement",
+            "mixed-c",
+            "--scoring-dtype",
+            "float32",
+            "--dtype",
+            "float32",
+            "--optimizer",
+            "adamw",
+            "--workers",
+            "1",
+            "--packing",
+            "auto",
+            "--implementation",
+            "python",
+            "--case",
+            "ssd-dag",
+            "--output-dir",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/p1p6-20261112/peer-general-55/ssd-dag-python"
+          ],
+          "dispatch_environment": {
+            "ASCEND_LAUNCH_BLOCKING": null,
+            "CUDA_LAUNCH_BLOCKING": null,
+            "TASK_QUEUE_ENABLE": "1"
+          },
+          "runtime": {
+            "resolved_device": "npu:0",
+            "backend": "npu",
+            "logical_device_index": 0,
+            "resolution_reason": "explicit:npu",
+            "dtype": "float32",
+            "host_architecture": "aarch64",
+            "torch": "2.12.0+cpu",
+            "torch_git": "7661cd9c6b841b62b7f411aa52ec51f05457263b",
+            "python": "3.12.13",
+            "cxx11_abi": true,
+            "torch_npu": "2.12.0.post3",
+            "logical_device_count": 2,
+            "device_name": "Ascend910_9392",
+            "cann_version": "9.2.0",
+            "matmul_allow_hf32": false
+          },
+          "requested_placement": {
+            "preset": "mixed-c",
+            "read": "auto",
+            "control": "auto",
+            "selection": "auto",
+            "events": "auto",
+            "scoring_dtype": "float32"
+          },
+          "precision": {
+            "payload_dtype": "torch.float32",
+            "optimizer": "adamw",
+            "learning_rate": 0.001,
+            "loss_scale": 1.0,
+            "master_dtype": null,
+            "tolerances": {
+              "atol": 1e-06,
+              "rtol": 1e-05
+            }
+          },
+          "cuda_precision": null,
+          "workers": 1,
+          "packing": "auto",
+          "operator_policy": "standard ATen; batched VJPs when packed, replay when scalar",
+          "threads": {
+            "intraop": 1,
+            "interop": 1
+          },
+          "peer_devices": [
+            "npu:0",
+            "npu:1"
+          ],
+          "resolved_placement": {
+            "payload": "npu:0",
+            "read": "npu:0",
+            "control": "npu:0",
+            "selection": "npu:0",
+            "events": "cpu",
+            "scoring_dtype": "float32"
+          },
+          "cases": [
+            {
+              "configuration": {
+                "name": "ssd-dag",
+                "family": "ssd",
+                "topology": "dag",
+                "read": "+",
+                "sending": "regional_total",
+                "regularizer": "quad",
+                "attention": false
+              },
+              "state": "passed",
+              "coverage": {
+                "nodes": 3,
+                "edges": 4,
+                "regions": 2,
+                "observed_nodes": 3,
+                "unobserved_nodes": 0,
+                "events": 20,
+                "outputs": 16,
+                "pending": 2,
+                "state_owners": 6,
+                "history_owners": 4
+              },
+              "roots": [
+                "all",
+                "first-output",
+                "first-descriptor-w",
+                "first-descriptor-mu",
+                "first-descriptor-score",
+                "first-descriptor-evidence",
+                "first-control"
+              ],
+              "fixture_sha256": "e0abd9640837490bff81d3048cd41be90b233b3e028ceb4cc073187a94efb4ac",
+              "pending_at_cut": 2,
+              "retained_cut": 3,
+              "streaming": true,
+              "prefill": true,
+              "inference": true,
+              "training_updates": 4,
+              "independent_raw_state_roots": 30,
+              "node_owners": [
+                "npu:0",
+                "npu:0",
+                "npu:1"
+              ],
+              "transport_stats": {
+                "cross_device_copy_groups": 5,
+                "cross_device_rows": 9,
+                "cross_device_bytes": 108,
+                "max_cross_device_batch": 2
+              },
+              "preparation_stats": {},
+              "same_device_resume": true,
+              "same_device_resume_exact": true,
+              "cpu_checkpoint_handoff": true
+            }
+          ],
+          "scope": "eager host schedule; actual device transfers; not resident",
+          "tolerances": {
+            "atol": 1e-06,
+            "rtol": 1e-05
+          },
+          "fallback_visibility": "requires separate profile/log audit",
+          "primitives": [
+            "stable-large-int64-score-ties",
+            "fractional-fill-literal-VJP",
+            "nonpositive-hard-fallback-literal-VJP",
+            "packed-transfer-None-zero-aliases-int64"
+          ]
+        }
+      },
+      "ssd-dag-native": {
+        "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/p1p6-20261112/peer-general-55/ssd-dag-native/result.json",
+        "sha256": "f29732809ac5bc3c806dcf1895fd3c3d410d30554c86a6b674b3e11cd4f753d8",
+        "bytes": 4005,
+        "record": {
+          "state": "passed",
+          "source": "55a3074a441d77720cf00e44433bd702cd09e175",
+          "dirty": "",
+          "implementation": "native",
+          "argv": [
+            "--device",
+            "npu:0",
+            "--peer-devices",
+            "npu:0",
+            "npu:1",
+            "--placement",
+            "mixed-c",
+            "--scoring-dtype",
+            "float32",
+            "--dtype",
+            "float32",
+            "--optimizer",
+            "adamw",
+            "--workers",
+            "1",
+            "--packing",
+            "auto",
+            "--implementation",
+            "native",
+            "--case",
+            "ssd-dag",
+            "--output-dir",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/p1p6-20261112/peer-general-55/ssd-dag-native",
+            "--native-library",
+            "/dev/shm/gef-p1p6-20261112/core-55-native"
+          ],
+          "dispatch_environment": {
+            "ASCEND_LAUNCH_BLOCKING": null,
+            "CUDA_LAUNCH_BLOCKING": null,
+            "TASK_QUEUE_ENABLE": "1"
+          },
+          "runtime": {
+            "resolved_device": "npu:0",
+            "backend": "npu",
+            "logical_device_index": 0,
+            "resolution_reason": "explicit:npu",
+            "dtype": "float32",
+            "host_architecture": "aarch64",
+            "torch": "2.12.0+cpu",
+            "torch_git": "7661cd9c6b841b62b7f411aa52ec51f05457263b",
+            "python": "3.12.13",
+            "cxx11_abi": true,
+            "torch_npu": "2.12.0.post3",
+            "logical_device_count": 2,
+            "device_name": "Ascend910_9392",
+            "cann_version": "9.2.0",
+            "matmul_allow_hf32": false
+          },
+          "requested_placement": {
+            "preset": "mixed-c",
+            "read": "auto",
+            "control": "auto",
+            "selection": "auto",
+            "events": "auto",
+            "scoring_dtype": "float32"
+          },
+          "precision": {
+            "payload_dtype": "torch.float32",
+            "optimizer": "adamw",
+            "learning_rate": 0.001,
+            "loss_scale": 1.0,
+            "master_dtype": null,
+            "tolerances": {
+              "atol": 1e-06,
+              "rtol": 1e-05
+            }
+          },
+          "cuda_precision": null,
+          "workers": 1,
+          "packing": "auto",
+          "operator_policy": "standard ATen; batched VJPs when packed, replay when scalar",
+          "threads": {
+            "intraop": 1,
+            "interop": 1
+          },
+          "peer_devices": [
+            "npu:0",
+            "npu:1"
+          ],
+          "resolved_placement": {
+            "payload": "npu:0",
+            "read": "npu:0",
+            "control": "npu:0",
+            "selection": "npu:0",
+            "events": "cpu",
+            "scoring_dtype": "float32"
+          },
+          "cases": [
+            {
+              "configuration": {
+                "name": "ssd-dag",
+                "family": "ssd",
+                "topology": "dag",
+                "read": "+",
+                "sending": "regional_total",
+                "regularizer": "quad",
+                "attention": false
+              },
+              "state": "passed",
+              "coverage": {
+                "nodes": 3,
+                "edges": 4,
+                "regions": 2,
+                "observed_nodes": 3,
+                "unobserved_nodes": 0,
+                "events": 20,
+                "outputs": 16,
+                "pending": 2,
+                "state_owners": 6,
+                "history_owners": 4
+              },
+              "roots": [
+                "all",
+                "first-output",
+                "first-descriptor-w",
+                "first-descriptor-mu",
+                "first-descriptor-score",
+                "first-descriptor-evidence",
+                "first-control"
+              ],
+              "fixture_sha256": "e0abd9640837490bff81d3048cd41be90b233b3e028ceb4cc073187a94efb4ac",
+              "pending_at_cut": 2,
+              "retained_cut": 3,
+              "streaming": true,
+              "prefill": true,
+              "inference": true,
+              "training_updates": 4,
+              "independent_raw_state_roots": 30,
+              "node_owners": [
+                "npu:0",
+                "npu:0",
+                "npu:1"
+              ],
+              "transport_stats": {
+                "cross_device_bytes": 108,
+                "cross_device_copy_groups": 5,
+                "cross_device_rows": 9,
+                "max_cross_device_batch": 2
+              },
+              "preparation_stats": {},
+              "same_device_resume": true,
+              "same_device_resume_exact": true,
+              "cpu_checkpoint_handoff": true
+            }
+          ],
+          "scope": "eager host schedule; actual device transfers; not resident",
+          "tolerances": {
+            "atol": 1e-06,
+            "rtol": 1e-05
+          },
+          "fallback_visibility": "requires separate profile/log audit",
+          "primitives": [
+            "stable-large-int64-score-ties",
+            "fractional-fill-literal-VJP",
+            "nonpositive-hard-fallback-literal-VJP",
+            "packed-transfer-None-zero-aliases-int64"
+          ]
+        }
+      },
+      "kv-pdg-initial-python": {
+        "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/p1p6-20261112/peer-general-55/kv-pdg-initial-python/result.json",
+        "sha256": "5a879957dd2037becd0e84c6ccc40f291dd502e9cad52036927bc197aeeed40f",
+        "bytes": 4345,
+        "record": {
+          "state": "passed",
+          "source": "55a3074a441d77720cf00e44433bd702cd09e175",
+          "dirty": "",
+          "implementation": "python",
+          "argv": [
+            "--device",
+            "npu:0",
+            "--peer-devices",
+            "npu:0",
+            "npu:1",
+            "--placement",
+            "mixed-c",
+            "--scoring-dtype",
+            "float32",
+            "--dtype",
+            "float32",
+            "--optimizer",
+            "adamw",
+            "--workers",
+            "1",
+            "--packing",
+            "auto",
+            "--implementation",
+            "python",
+            "--case",
+            "kv-pdg-initial",
+            "--output-dir",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/p1p6-20261112/peer-general-55/kv-pdg-initial-python"
+          ],
+          "dispatch_environment": {
+            "ASCEND_LAUNCH_BLOCKING": null,
+            "CUDA_LAUNCH_BLOCKING": null,
+            "TASK_QUEUE_ENABLE": "1"
+          },
+          "runtime": {
+            "resolved_device": "npu:0",
+            "backend": "npu",
+            "logical_device_index": 0,
+            "resolution_reason": "explicit:npu",
+            "dtype": "float32",
+            "host_architecture": "aarch64",
+            "torch": "2.12.0+cpu",
+            "torch_git": "7661cd9c6b841b62b7f411aa52ec51f05457263b",
+            "python": "3.12.13",
+            "cxx11_abi": true,
+            "torch_npu": "2.12.0.post3",
+            "logical_device_count": 2,
+            "device_name": "Ascend910_9392",
+            "cann_version": "9.2.0",
+            "matmul_allow_hf32": false
+          },
+          "requested_placement": {
+            "preset": "mixed-c",
+            "read": "auto",
+            "control": "auto",
+            "selection": "auto",
+            "events": "auto",
+            "scoring_dtype": "float32"
+          },
+          "precision": {
+            "payload_dtype": "torch.float32",
+            "optimizer": "adamw",
+            "learning_rate": 0.001,
+            "loss_scale": 1.0,
+            "master_dtype": null,
+            "tolerances": {
+              "atol": 1e-06,
+              "rtol": 1e-05
+            }
+          },
+          "cuda_precision": null,
+          "workers": 1,
+          "packing": "auto",
+          "operator_policy": "standard ATen; batched VJPs when packed, replay when scalar",
+          "threads": {
+            "intraop": 1,
+            "interop": 1
+          },
+          "peer_devices": [
+            "npu:0",
+            "npu:1"
+          ],
+          "resolved_placement": {
+            "payload": "npu:0",
+            "read": "npu:0",
+            "control": "npu:0",
+            "selection": "npu:0",
+            "events": "cpu",
+            "scoring_dtype": "float32"
+          },
+          "cases": [
+            {
+              "configuration": {
+                "name": "kv-pdg-initial",
+                "family": "kv",
+                "topology": "pdg",
+                "read": "0",
+                "sending": "regional_total",
+                "regularizer": "quad",
+                "attention": false
+              },
+              "state": "passed",
+              "coverage": {
+                "nodes": 3,
+                "edges": 5,
+                "regions": 2,
+                "observed_nodes": 3,
+                "unobserved_nodes": 0,
+                "events": 29,
+                "outputs": 20,
+                "pending": 13,
+                "state_owners": 6,
+                "history_owners": 4
+              },
+              "roots": [
+                "all",
+                "first-output",
+                "first-descriptor-w",
+                "first-descriptor-mu",
+                "first-descriptor-score",
+                "first-descriptor-evidence",
+                "first-control"
+              ],
+              "fixture_sha256": "e310766beca0c9c2ecf078c21d1c1ca433c7f0c0fc23198548d323b58eee858a",
+              "pending_at_cut": 4,
+              "retained_cut": 3,
+              "streaming": true,
+              "prefill": true,
+              "inference": true,
+              "training_updates": 4,
+              "independent_raw_state_roots": 30,
+              "node_owners": [
+                "npu:0",
+                "npu:0",
+                "npu:1"
+              ],
+              "transport_stats": {
+                "cross_device_copy_groups": 12,
+                "cross_device_rows": 20,
+                "cross_device_bytes": 240,
+                "max_cross_device_batch": 2
+              },
+              "preparation_stats": {
+                "state_block_base_projection_calls": 8,
+                "state_private_projection_calls": 39,
+                "state_private_projection_rows": 69,
+                "max_state_private_projection_batch": 2,
+                "max_state_independent_projection_batch": 2,
+                "state_block_preparation_events": 24,
+                "state_independent_projection_calls": 4,
+                "state_independent_projection_rows": 8
+              },
+              "same_device_resume": true,
+              "same_device_resume_exact": true,
+              "cpu_checkpoint_handoff": true
+            }
+          ],
+          "scope": "eager host schedule; actual device transfers; not resident",
+          "tolerances": {
+            "atol": 1e-06,
+            "rtol": 1e-05
+          },
+          "fallback_visibility": "requires separate profile/log audit",
+          "primitives": [
+            "stable-large-int64-score-ties",
+            "fractional-fill-literal-VJP",
+            "nonpositive-hard-fallback-literal-VJP",
+            "packed-transfer-None-zero-aliases-int64"
+          ]
+        }
+      },
+      "kv-pdg-initial-native": {
+        "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/p1p6-20261112/peer-general-55/kv-pdg-initial-native/result.json",
+        "sha256": "7277d64f2b6a5a3b7a055dafeae61f44aa195f18c292f50807b1263c7be89704",
+        "bytes": 4418,
+        "record": {
+          "state": "passed",
+          "source": "55a3074a441d77720cf00e44433bd702cd09e175",
+          "dirty": "",
+          "implementation": "native",
+          "argv": [
+            "--device",
+            "npu:0",
+            "--peer-devices",
+            "npu:0",
+            "npu:1",
+            "--placement",
+            "mixed-c",
+            "--scoring-dtype",
+            "float32",
+            "--dtype",
+            "float32",
+            "--optimizer",
+            "adamw",
+            "--workers",
+            "1",
+            "--packing",
+            "auto",
+            "--implementation",
+            "native",
+            "--case",
+            "kv-pdg-initial",
+            "--output-dir",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/p1p6-20261112/peer-general-55/kv-pdg-initial-native",
+            "--native-library",
+            "/dev/shm/gef-p1p6-20261112/core-55-native"
+          ],
+          "dispatch_environment": {
+            "ASCEND_LAUNCH_BLOCKING": null,
+            "CUDA_LAUNCH_BLOCKING": null,
+            "TASK_QUEUE_ENABLE": "1"
+          },
+          "runtime": {
+            "resolved_device": "npu:0",
+            "backend": "npu",
+            "logical_device_index": 0,
+            "resolution_reason": "explicit:npu",
+            "dtype": "float32",
+            "host_architecture": "aarch64",
+            "torch": "2.12.0+cpu",
+            "torch_git": "7661cd9c6b841b62b7f411aa52ec51f05457263b",
+            "python": "3.12.13",
+            "cxx11_abi": true,
+            "torch_npu": "2.12.0.post3",
+            "logical_device_count": 2,
+            "device_name": "Ascend910_9392",
+            "cann_version": "9.2.0",
+            "matmul_allow_hf32": false
+          },
+          "requested_placement": {
+            "preset": "mixed-c",
+            "read": "auto",
+            "control": "auto",
+            "selection": "auto",
+            "events": "auto",
+            "scoring_dtype": "float32"
+          },
+          "precision": {
+            "payload_dtype": "torch.float32",
+            "optimizer": "adamw",
+            "learning_rate": 0.001,
+            "loss_scale": 1.0,
+            "master_dtype": null,
+            "tolerances": {
+              "atol": 1e-06,
+              "rtol": 1e-05
+            }
+          },
+          "cuda_precision": null,
+          "workers": 1,
+          "packing": "auto",
+          "operator_policy": "standard ATen; batched VJPs when packed, replay when scalar",
+          "threads": {
+            "intraop": 1,
+            "interop": 1
+          },
+          "peer_devices": [
+            "npu:0",
+            "npu:1"
+          ],
+          "resolved_placement": {
+            "payload": "npu:0",
+            "read": "npu:0",
+            "control": "npu:0",
+            "selection": "npu:0",
+            "events": "cpu",
+            "scoring_dtype": "float32"
+          },
+          "cases": [
+            {
+              "configuration": {
+                "name": "kv-pdg-initial",
+                "family": "kv",
+                "topology": "pdg",
+                "read": "0",
+                "sending": "regional_total",
+                "regularizer": "quad",
+                "attention": false
+              },
+              "state": "passed",
+              "coverage": {
+                "nodes": 3,
+                "edges": 5,
+                "regions": 2,
+                "observed_nodes": 3,
+                "unobserved_nodes": 0,
+                "events": 29,
+                "outputs": 20,
+                "pending": 13,
+                "state_owners": 6,
+                "history_owners": 4
+              },
+              "roots": [
+                "all",
+                "first-output",
+                "first-descriptor-w",
+                "first-descriptor-mu",
+                "first-descriptor-score",
+                "first-descriptor-evidence",
+                "first-control"
+              ],
+              "fixture_sha256": "e310766beca0c9c2ecf078c21d1c1ca433c7f0c0fc23198548d323b58eee858a",
+              "pending_at_cut": 4,
+              "retained_cut": 3,
+              "streaming": true,
+              "prefill": true,
+              "inference": true,
+              "training_updates": 4,
+              "independent_raw_state_roots": 30,
+              "node_owners": [
+                "npu:0",
+                "npu:0",
+                "npu:1"
+              ],
+              "transport_stats": {
+                "cross_device_bytes": 240,
+                "cross_device_copy_groups": 12,
+                "cross_device_rows": 20,
+                "max_cross_device_batch": 2
+              },
+              "preparation_stats": {
+                "max_state_independent_projection_batch": 2,
+                "max_state_private_projection_batch": 2,
+                "state_block_base_projection_calls": 8,
+                "state_block_preparation_events": 24,
+                "state_independent_projection_calls": 4,
+                "state_independent_projection_rows": 8,
+                "state_private_projection_calls": 39,
+                "state_private_projection_rows": 69
+              },
+              "same_device_resume": true,
+              "same_device_resume_exact": true,
+              "cpu_checkpoint_handoff": true
+            }
+          ],
+          "scope": "eager host schedule; actual device transfers; not resident",
+          "tolerances": {
+            "atol": 1e-06,
+            "rtol": 1e-05
+          },
+          "fallback_visibility": "requires separate profile/log audit",
+          "primitives": [
+            "stable-large-int64-score-ties",
+            "fractional-fill-literal-VJP",
+            "nonpositive-hard-fallback-literal-VJP",
+            "packed-transfer-None-zero-aliases-int64"
+          ]
+        }
+      }
+    },
+    "queue": {
+      "TASK_QUEUE_ENABLE": 1,
+      "PER_STREAM_QUEUE": 1,
+      "ASCEND_LAUNCH_BLOCKING": null
+    },
+    "scope": "Six separate test processes; internal checkpoint recovery constructs a fresh owner in the same process and compares exact fourth AdamW update. CPU handoff separate. No resident or throughput qualification.",
+    "admission": {
+      "path": "artifacts/p1p6-20261112/peer-general-audit.jsonl",
+      "sha256": "693c95027f54238c13d27961880996ea1c31fd8dcbf112e3f666faa7bbd1f7de",
+      "bytes": 8765,
+      "rows": [
+        {
+          "event": "policy",
+          "unix": 1794467044.749775,
+          "policy": {
+            "schema": "tide-npu-sharing-v1",
+            "reason": "Conversation-wide explicit shared NPU permission; finite existing PDG/TimedDAG peer full correctness with per-stream host queues.",
+            "expires_unix": 1794469644.5467436,
+            "cards": {
+              "9": {
+                "max_hbm_mib": 16000,
+                "max_aicore_percent": 20,
+                "required_free_mib": 16000,
+                "processes": [
+                  {
+                    "pid": 1711169,
+                    "start_ticks": 2203892577,
+                    "uid": 1010
+                  }
+                ]
+              }
+            }
+          },
+          "helper_sha256": "38e1122dac7e6529a9c594d72a0e40e3b20efedeef3203121fb74d8fc3b40e76",
+          "interpretation": "explicit shared-resource observation; not exclusive timing"
+        },
+        {
+          "event": "snapshot",
+          "unix": 1794467047.1657364,
+          "devices": {
+            "1": {
+              "board_id": 0,
+              "chip_id": 1,
+              "physical_id": 1,
+              "health": "OK",
+              "aicore_percent": 0,
+              "hbm_used_mib": 2878,
+              "hbm_total_mib": 65536,
+              "process_ids": []
+            },
+            "9": {
+              "board_id": 4,
+              "chip_id": 1,
+              "physical_id": 9,
+              "health": "OK",
+              "aicore_percent": 0,
+              "hbm_used_mib": 5654,
+              "hbm_total_mib": 65536,
+              "process_ids": [
+                1711169
+              ]
+            }
+          }
+        },
+        {
+          "event": "snapshot",
+          "unix": 1794467052.0626793,
+          "devices": {
+            "1": {
+              "board_id": 0,
+              "chip_id": 1,
+              "physical_id": 1,
+              "health": "OK",
+              "aicore_percent": 0,
+              "hbm_used_mib": 2878,
+              "hbm_total_mib": 65536,
+              "process_ids": []
+            },
+            "9": {
+              "board_id": 4,
+              "chip_id": 1,
+              "physical_id": 9,
+              "health": "OK",
+              "aicore_percent": 0,
+              "hbm_used_mib": 5654,
+              "hbm_total_mib": 65536,
+              "process_ids": [
+                1711169
+              ]
+            }
+          }
+        },
+        {
+          "event": "terminal",
+          "unix": 1794467180.9263737,
+          "exit_code": 0
+        },
+        {
+          "event": "after",
+          "unix": 1794467183.4256725,
+          "devices": {
+            "1": {
+              "board_id": 0,
+              "chip_id": 1,
+              "physical_id": 1,
+              "health": "OK",
+              "aicore_percent": 0,
+              "hbm_used_mib": 2878,
+              "hbm_total_mib": 65536,
+              "process_ids": []
+            },
+            "9": {
+              "board_id": 4,
+              "chip_id": 1,
+              "physical_id": 9,
+              "health": "OK",
+              "aicore_percent": 0,
+              "hbm_used_mib": 5654,
+              "hbm_total_mib": 65536,
+              "process_ids": [
+                1711169
+              ]
+            }
+          }
+        }
+      ],
+      "sampling_scope": "Two admission samples and one final sample, not continuous utilization monitoring."
+    }
+  },
+  "sources": [
+    {
+      "path": "cpp/src/weighted_column_positions.cpp",
+      "source": "fb83ee91cc34ba49bf00465916d6e7e7a7eacdec",
+      "sha256": "1966e1a3064e65adcce4921e72bb8a4ba7c8da204c9f22043b2eaecf5a078575"
+    },
+    {
+      "path": "python/tidegraph/weighted/column_position_ops.py",
+      "source": "fb83ee91cc34ba49bf00465916d6e7e7a7eacdec",
+      "sha256": "589f838e0b251073e8785f6477c948030285774baadd179cee7292bfb12a654c"
+    },
+    {
+      "path": "tests/test_column_position_ops.py",
+      "source": "fb83ee91cc34ba49bf00465916d6e7e7a7eacdec",
+      "sha256": "fa1afd66ee47b84968b089c506691dde3e2f7abd3bb0bfa7fffb199036994256"
+    },
+    {
+      "path": "scripts/check_query_sdk.py",
+      "source": "fb83ee91cc34ba49bf00465916d6e7e7a7eacdec",
+      "sha256": "d7f00d98857ee7f98393c50c3bd1d33afab07bbe5b75a95f3a0a7cb18e1bbd7a"
+    },
+    {
+      "path": "tests/test_query_sdk_capability.py",
+      "source": "fb83ee91cc34ba49bf00465916d6e7e7a7eacdec",
+      "sha256": "701507af72e77e7ebcba70a067314671a007d1de52183be7b4209b28a979a77f"
+    },
+    {
+      "path": "scripts/weighted_device_checks.py",
+      "source": "fb83ee91cc34ba49bf00465916d6e7e7a7eacdec",
+      "sha256": "2e0a815325aebb2d98e60afa30bce44c30828e194dd6535089d331301e4230bf"
+    }
+  ],
+  "wheel": {
+    "path": "/dev/shm/gef-p1p6-20261112/core-rope-wheels/tidegraph-0.3.0-py3-none-any.whl",
+    "sha256": "b37c75f7fd6e1f9acd310ff40151e304a02d19eba7754e60cf0d69140e6f2a93",
+    "bytes": 542178
+  },
+  "matrices": {
+    "cpu": {
+      "path": "artifacts/p1p6-20261112/lifecycle-rope-cpu-matrix.json",
+      "sha256": "af75f1f66ddba866211ad394355a840f4a2c530ac3401aa0c3cf15ede0ab0ce5",
+      "bytes": 5337,
+      "rows": [
+        {
+          "name": "lh176-nonempty-task",
+          "command": [
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/additive-work/env/bin/python",
+            "scripts/check_lh_tensor.py",
+            "--plan",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/p1p6-20261112/lh176-plan.json",
+            "--dtype",
+            "float64",
+            "--client",
+            "native",
+            "--native-library",
+            "/dev/shm/gef-p1p6-20261112/core-rope-native",
+            "--device",
+            "cpu",
+            "--left-entries",
+            "3",
+            "--start-position",
+            "1099511627776",
+            "--root-family",
+            "task",
+            "--output-dir",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/p1p6-20261112/lh176-rope-cpu-task"
+          ],
+          "exit_code": 0,
+          "started": 1794467226.1893947,
+          "finished": 1794467241.82175
+        },
+        {
+          "name": "lh176-nonempty-messages",
+          "command": [
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/additive-work/env/bin/python",
+            "scripts/check_lh_tensor.py",
+            "--plan",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/p1p6-20261112/lh176-plan.json",
+            "--dtype",
+            "float64",
+            "--client",
+            "native",
+            "--native-library",
+            "/dev/shm/gef-p1p6-20261112/core-rope-native",
+            "--device",
+            "cpu",
+            "--left-entries",
+            "3",
+            "--start-position",
+            "1099511627776",
+            "--root-family",
+            "messages",
+            "--output-dir",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/p1p6-20261112/lh176-rope-cpu-messages"
+          ],
+          "exit_code": 0,
+          "started": 1794467241.8248098,
+          "finished": 1794467257.8585973
+        },
+        {
+          "name": "lh176-nonempty-raw",
+          "command": [
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/additive-work/env/bin/python",
+            "scripts/check_lh_tensor.py",
+            "--plan",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/p1p6-20261112/lh176-plan.json",
+            "--dtype",
+            "float64",
+            "--client",
+            "native",
+            "--native-library",
+            "/dev/shm/gef-p1p6-20261112/core-rope-native",
+            "--device",
+            "cpu",
+            "--left-entries",
+            "3",
+            "--start-position",
+            "1099511627776",
+            "--root-family",
+            "raw",
+            "--output-dir",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/p1p6-20261112/lh176-rope-cpu-raw"
+          ],
+          "exit_code": 0,
+          "started": 1794467257.861371,
+          "finished": 1794467274.6454663
+        },
+        {
+          "name": "installed-positions-python",
+          "command": [
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/additive-work/env/bin/python",
+            "examples/consumer_core5/tensor_window.py",
+            "--client",
+            "python",
+            "--native-library",
+            "/dev/shm/gef-p1p6-20261112/core-rope-native",
+            "--device",
+            "cpu",
+            "--dtype",
+            "float64",
+            "--positions",
+            "--output-dir",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/p1p6-20261112/positions-rope-installed-cpu-python"
+          ],
+          "exit_code": 0,
+          "started": 1794467274.6482604,
+          "finished": 1794467287.178127
+        },
+        {
+          "name": "installed-lh176-python",
+          "command": [
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/additive-work/env/bin/python",
+            "examples/consumer_core5/planned_windows.py",
+            "--plan",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/p1p6-20261112/lh176-plan.json",
+            "--client",
+            "python",
+            "--native-library",
+            "/dev/shm/gef-p1p6-20261112/core-rope-native",
+            "--device",
+            "cpu",
+            "--dtype",
+            "float64",
+            "--output-dir",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/p1p6-20261112/lh176-rope-installed-cpu-python"
+          ],
+          "exit_code": 0,
+          "started": 1794467287.1809723,
+          "finished": 1794467355.4258194
+        },
+        {
+          "name": "installed-positions-native",
+          "command": [
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/additive-work/env/bin/python",
+            "examples/consumer_core5/tensor_window.py",
+            "--client",
+            "native",
+            "--native-library",
+            "/dev/shm/gef-p1p6-20261112/core-rope-native",
+            "--device",
+            "cpu",
+            "--dtype",
+            "float64",
+            "--positions",
+            "--output-dir",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/p1p6-20261112/positions-rope-installed-cpu-native"
+          ],
+          "exit_code": 0,
+          "started": 1794467355.42863,
+          "finished": 1794467367.8071153
+        },
+        {
+          "name": "installed-lh176-native",
+          "command": [
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/additive-work/env/bin/python",
+            "examples/consumer_core5/planned_windows.py",
+            "--plan",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/p1p6-20261112/lh176-plan.json",
+            "--client",
+            "native",
+            "--native-library",
+            "/dev/shm/gef-p1p6-20261112/core-rope-native",
+            "--device",
+            "cpu",
+            "--dtype",
+            "float64",
+            "--output-dir",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/p1p6-20261112/lh176-rope-installed-cpu-native"
+          ],
+          "exit_code": 0,
+          "started": 1794467367.8097138,
+          "finished": 1794467427.1433704
+        }
+      ]
+    },
+    "npu": {
+      "path": "artifacts/p1p6-20261112/lifecycle-rope-npu-matrix.json",
+      "sha256": "ed6af1a6a3a9309330affb7ab708c6faa2269fd88ed07ec4d501d73d0aae803d",
+      "bytes": 4515,
+      "rows": [
+        {
+          "name": "lh176-nonempty-messages",
+          "command": [
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/additive-work/env/bin/python",
+            "scripts/check_lh_tensor.py",
+            "--plan",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/p1p6-20261112/lh176-plan.json",
+            "--dtype",
+            "float32",
+            "--client",
+            "native",
+            "--native-library",
+            "/dev/shm/gef-p1p6-20261112/core-rope-native",
+            "--device",
+            "npu:0",
+            "--left-entries",
+            "3",
+            "--start-position",
+            "1099511627776",
+            "--root-family",
+            "messages",
+            "--output-dir",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/p1p6-20261112/lh176-rope-npu-messages"
+          ],
+          "exit_code": 1,
+          "started": 1794467233.6329026,
+          "finished": 1794467273.5963845
+        },
+        {
+          "name": "lh176-nonempty-raw",
+          "command": [
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/additive-work/env/bin/python",
+            "scripts/check_lh_tensor.py",
+            "--plan",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/p1p6-20261112/lh176-plan.json",
+            "--dtype",
+            "float32",
+            "--client",
+            "native",
+            "--native-library",
+            "/dev/shm/gef-p1p6-20261112/core-rope-native",
+            "--device",
+            "npu:0",
+            "--left-entries",
+            "3",
+            "--start-position",
+            "1099511627776",
+            "--root-family",
+            "raw",
+            "--output-dir",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/p1p6-20261112/lh176-rope-npu-raw"
+          ],
+          "exit_code": 1,
+          "started": 1794467273.5999348,
+          "finished": 1794467317.0664935
+        },
+        {
+          "name": "installed-positions-python",
+          "command": [
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/additive-work/env/bin/python",
+            "examples/consumer_core5/tensor_window.py",
+            "--client",
+            "python",
+            "--native-library",
+            "/dev/shm/gef-p1p6-20261112/core-rope-native",
+            "--device",
+            "npu:0",
+            "--dtype",
+            "float32",
+            "--positions",
+            "--output-dir",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/p1p6-20261112/positions-rope-installed-npu-python"
+          ],
+          "exit_code": 0,
+          "started": 1794467317.0691195,
+          "finished": 1794467349.4228418
+        },
+        {
+          "name": "installed-lh176-python",
+          "command": [
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/additive-work/env/bin/python",
+            "examples/consumer_core5/planned_windows.py",
+            "--plan",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/p1p6-20261112/lh176-plan.json",
+            "--client",
+            "python",
+            "--native-library",
+            "/dev/shm/gef-p1p6-20261112/core-rope-native",
+            "--device",
+            "npu:0",
+            "--dtype",
+            "float32",
+            "--output-dir",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/p1p6-20261112/lh176-rope-installed-npu-python"
+          ],
+          "exit_code": 0,
+          "started": 1794467349.4254153,
+          "finished": 1794467465.5301402
+        },
+        {
+          "name": "installed-positions-native",
+          "command": [
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/additive-work/env/bin/python",
+            "examples/consumer_core5/tensor_window.py",
+            "--client",
+            "native",
+            "--native-library",
+            "/dev/shm/gef-p1p6-20261112/core-rope-native",
+            "--device",
+            "npu:0",
+            "--dtype",
+            "float32",
+            "--positions",
+            "--output-dir",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/p1p6-20261112/positions-rope-installed-npu-native"
+          ],
+          "exit_code": 0,
+          "started": 1794467465.537863,
+          "finished": 1794467495.7403083
+        },
+        {
+          "name": "installed-lh176-native",
+          "command": [
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/additive-work/env/bin/python",
+            "examples/consumer_core5/planned_windows.py",
+            "--plan",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/p1p6-20261112/lh176-plan.json",
+            "--client",
+            "native",
+            "--native-library",
+            "/dev/shm/gef-p1p6-20261112/core-rope-native",
+            "--device",
+            "npu:0",
+            "--dtype",
+            "float32",
+            "--output-dir",
+            "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/p1p6-20261112/lh176-rope-installed-npu-native"
+          ],
+          "exit_code": 0,
+          "started": 1794467495.7429113,
+          "finished": 1794467603.5869217
+        }
+      ]
+    }
+  },
+  "admission": {
+    "lifecycle-rope": {
+      "path": "artifacts/p1p6-20261112/lifecycle-rope-audit.jsonl",
+      "sha256": "ff901ec9a8a1aff8c1b18e2b5773ddd18d04970b22037d1e7d69d0781695ecb9",
+      "bytes": 8685,
+      "rows": [
+        {
+          "event": "policy",
+          "unix": 1794467226.2398257,
+          "policy": {
+            "schema": "tide-npu-sharing-v1",
+            "reason": "Continuing explicit shared NPU authorization: fixed rope policy independent roots and installed training/resume.",
+            "expires_unix": 1794469426.0372403,
+            "cards": {
+              "9": {
+                "max_hbm_mib": 16000,
+                "max_aicore_percent": 20,
+                "required_free_mib": 16000,
+                "processes": [
+                  {
+                    "pid": 1711169,
+                    "start_ticks": 2203892577,
+                    "uid": 1010
+                  }
+                ]
+              }
+            }
+          },
+          "helper_sha256": "38e1122dac7e6529a9c594d72a0e40e3b20efedeef3203121fb74d8fc3b40e76",
+          "interpretation": "explicit shared-resource observation; not exclusive timing"
+        },
+        {
+          "event": "snapshot",
+          "unix": 1794467228.705231,
+          "devices": {
+            "9": {
+              "board_id": 4,
+              "chip_id": 1,
+              "physical_id": 9,
+              "health": "OK",
+              "aicore_percent": 0,
+              "hbm_used_mib": 5653,
+              "hbm_total_mib": 65536,
+              "process_ids": [
+                1711169
+              ]
+            }
+          }
+        },
+        {
+          "event": "snapshot",
+          "unix": 1794467233.5893707,
+          "devices": {
+            "9": {
+              "board_id": 4,
+              "chip_id": 1,
+              "physical_id": 9,
+              "health": "OK",
+              "aicore_percent": 0,
+              "hbm_used_mib": 5653,
+              "hbm_total_mib": 65536,
+              "process_ids": [
+                1711169
+              ]
+            }
+          }
+        },
+        {
+          "event": "terminal",
+          "unix": 1794467603.5982966,
+          "exit_code": 1
+        },
+        {
+          "event": "after",
+          "unix": 1794467606.0716312,
+          "devices": {
+            "9": {
+              "board_id": 4,
+              "chip_id": 1,
+              "physical_id": 9,
+              "health": "OK",
+              "aicore_percent": 0,
+              "hbm_used_mib": 5654,
+              "hbm_total_mib": 65536,
+              "process_ids": [
+                1711169
+              ]
+            }
+          }
+        }
+      ],
+      "sampling_scope": "Two admission samples and one final sample, not continuous utilization monitoring."
+    },
+    "rope-mechanism": {
+      "path": "artifacts/p1p6-20261112/rope-mechanism-audit.jsonl",
+      "sha256": "3bb8650e5beda861a2bbae917dff6f92a17e8a7030fe0033513d658fd3e306f0",
+      "bytes": 8501,
+      "rows": [
+        {
+          "event": "policy",
+          "unix": 1794468278.0186403,
+          "policy": {
+            "schema": "tide-npu-sharing-v1",
+            "reason": "Conversation-wide shared NPU authorization, finite actual packing observation and standalone independent query/owner qualification.",
+            "expires_unix": 1794469677.8210444,
+            "cards": {
+              "9": {
+                "max_hbm_mib": 16000,
+                "max_aicore_percent": 20,
+                "required_free_mib": 16000,
+                "processes": [
+                  {
+                    "pid": 1711169,
+                    "start_ticks": 2203892577,
+                    "uid": 1010
+                  }
+                ]
+              }
+            }
+          },
+          "helper_sha256": "38e1122dac7e6529a9c594d72a0e40e3b20efedeef3203121fb74d8fc3b40e76",
+          "interpretation": "explicit shared-resource observation; not exclusive timing"
+        },
+        {
+          "event": "snapshot",
+          "unix": 1794468280.361937,
+          "devices": {
+            "9": {
+              "board_id": 4,
+              "chip_id": 1,
+              "physical_id": 9,
+              "health": "OK",
+              "aicore_percent": 0,
+              "hbm_used_mib": 5653,
+              "hbm_total_mib": 65536,
+              "process_ids": [
+                1711169
+              ]
+            }
+          }
+        },
+        {
+          "event": "snapshot",
+          "unix": 1794468285.0980742,
+          "devices": {
+            "9": {
+              "board_id": 4,
+              "chip_id": 1,
+              "physical_id": 9,
+              "health": "OK",
+              "aicore_percent": 0,
+              "hbm_used_mib": 5653,
+              "hbm_total_mib": 65536,
+              "process_ids": [
+                1711169
+              ]
+            }
+          }
+        },
+        {
+          "event": "terminal",
+          "unix": 1794468352.2713954,
+          "exit_code": 0
+        },
+        {
+          "event": "after",
+          "unix": 1794468354.5870714,
+          "devices": {
+            "9": {
+              "board_id": 4,
+              "chip_id": 1,
+              "physical_id": 9,
+              "health": "OK",
+              "aicore_percent": 0,
+              "hbm_used_mib": 6026,
+              "hbm_total_mib": 65536,
+              "process_ids": [
+                1711169,
+                3885860
+              ]
+            }
+          }
+        }
+      ],
+      "sampling_scope": "Two admission samples and one final sample, not continuous utilization monitoring."
+    }
+  },
+  "failures_retained": [
+    "Both a605 builds fail std::string to const char* observation counter calls before qualification; fb83 fixes call type.",
+    "NPU nonempty LH messages/raw strictly fail finite numerical tolerance; lifecycle job remains failed.",
+    "55a ordinary peer queue0 EE1017 remains, explicit queue1 success is separate.",
+    "None/zero gradient differences remain in direct formula projections."
+  ],
+  "reproduction": {
+    "lh_plan": {
+      "path": "artifacts/p1p6-20261112/lh176-plan.json",
+      "sha256": "f91143bac6f907a0e8db948e91f09eb148579d92b12158d30c5b7fe3ca3f9753",
+      "bytes": 272616,
+      "model_id": "ccc8d791c65369826d6b1d6274b5e7a2c7424d8fea296dd96b42c60df6274876",
+      "width": 64,
+      "samples": 4,
+      "positions": 16,
+      "stride": 9,
+      "seed": 7,
+      "span": 144,
+      "recipe": {
+        "schema": "tide-core5-recipe-v1",
+        "requested": {
+          "topology": "lh",
+          "width": 64,
+          "region_width": 8,
+          "depth": 3,
+          "profile": "textbook",
+          "family": "kv"
+        },
+        "scale": null,
+        "sparse_budget": {
+          "requested_fraction": 0.125,
+          "effective_k": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "note": "k is sending strength; actual support and Full counts require execution"
+        }
+      },
+      "input_policy": "staggered-v1; unit-strength; sample lengths P-(sample%min(3,P)); omit (sample+global_position+port)%4==0 when multiple ports; contiguous per-port occurrences; original logical times; shared sin content",
+      "input_pattern": "staggered-v1",
+      "source_binding": {
+        "mode": "region",
+        "rank": null
+      },
+      "source_hidden_width": 32,
+      "alpha_agg": 1.0,
+      "state_boundary": "connected windows; detach at optimizer boundary",
+      "inventory": {
+        "sha256": "e0803aeba2156e4b4089967ac38abf4b58750d0058a2452e09f4b64d83d5d55b",
+        "totals": {
+          "trainable": 14902694,
+          "frozen": 2132,
+          "role_elements": 20464346,
+          "unique": 14904826
+        },
+        "owners": 5809
+      },
+      "graph": {
+        "nodes": 176,
+        "regions": 22,
+        "edges": 1058,
+        "inputs": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "outputs": [
+          168,
+          169,
+          170,
+          171,
+          172,
+          173,
+          174,
+          175
+        ],
+        "ranks": [
+          1,
+          2,
+          2,
+          3,
+          3,
+          3,
+          3,
+          4,
+          4,
+          4,
+          4,
+          4,
+          4,
+          4,
+          4,
+          5,
+          5,
+          5,
+          5,
+          6,
+          6,
+          7
+        ],
+        "counts": {
+          "body_edges": 1058,
+          "body_nodes": 176,
+          "encoded_edges": 1074,
+          "encoded_nodes": 178,
+          "longest_body_delay": 6,
+          "output_reachable_nodes": 176,
+          "reachable_nodes": 176
+        }
+      },
+      "memories_groups": [
+        {
+          "indices": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "configuration": {
+            "adapter_rank": 32,
+            "alpha_att": 1.0,
+            "alpha_ff": 1.0,
+            "beta_short": 0.07701635339554948,
+            "distance_slopes": [
+              0.0
+            ],
+            "epsilon": 1e-05,
+            "ffn_width": 256,
+            "full_frequencies": [
+              [
+                1.0,
+                0.7498942093324559,
+                0.5623413251903491,
+                0.4216965034285822,
+                0.31622776601683794,
+                0.23713737056616552,
+                0.1778279410038923,
+                0.1333521432163324,
+                0.1,
+                0.07498942093324558,
+                0.05623413251903491,
+                0.042169650342858224,
+                0.03162277660168379,
+                0.023713737056616554,
+                0.01778279410038923,
+                0.01333521432163324,
+                0.01,
+                0.007498942093324558,
+                0.005623413251903491,
+                0.004216965034285823,
+                0.0031622776601683794,
+                0.0023713737056616554,
+                0.0017782794100389228,
+                0.001333521432163324,
+                0.001,
+                0.0007498942093324559,
+                0.0005623413251903491,
+                0.00042169650342858224,
+                0.00031622776601683794,
+                0.00023713737056616554,
+                0.00017782794100389227,
+                0.0001333521432163324
+              ]
+            ],
+            "heads": 1,
+            "memory_read": "qry",
+            "position_origin": 1,
+            "position_scale": 9,
+            "read_frequencies": [
+              1.0,
+              0.5623413251903491,
+              0.31622776601683794,
+              0.1778279410038923,
+              0.1,
+              0.05623413251903491,
+              0.03162277660168379,
+              0.01778279410038923,
+              0.01,
+              0.005623413251903491,
+              0.0031622776601683794,
+              0.0017782794100389228,
+              0.001,
+              0.0005623413251903491,
+              0.00031622776601683794,
+              0.00017782794100389227
+            ],
+            "summary_width": 32,
+            "width": 64,
+            "window": 4608
+          }
+        },
+        {
+          "indices": [
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23
+          ],
+          "configuration": {
+            "adapter_rank": 32,
+            "alpha_att": 1.0,
+            "alpha_ff": 1.0,
+            "beta_short": 0.07701635339554948,
+            "distance_slopes": [
+              0.0
+            ],
+            "epsilon": 1e-05,
+            "ffn_width": 256,
+            "full_frequencies": [
+              [
+                1.0,
+                0.7498942093324559,
+                0.5623413251903491,
+                0.4216965034285822,
+                0.31622776601683794,
+                0.23713737056616552,
+                0.1778279410038923,
+                0.1333521432163324,
+                0.1,
+                0.07498942093324558,
+                0.05623413251903491,
+                0.042169650342858224,
+                0.03162277660168379,
+                0.023713737056616554,
+                0.01778279410038923,
+                0.01333521432163324,
+                0.01,
+                0.007498942093324558,
+                0.005623413251903491,
+                0.004216965034285823,
+                0.0031622776601683794,
+                0.0023713737056616554,
+                0.0017782794100389228,
+                0.001333521432163324,
+                0.001,
+                0.0007498942093324559,
+                0.0005623413251903491,
+                0.00042169650342858224,
+                0.00031622776601683794,
+                0.00023713737056616554,
+                0.00017782794100389227,
+                0.0001333521432163324
+              ]
+            ],
+            "heads": 1,
+            "memory_read": "qry",
+            "position_origin": 2,
+            "position_scale": 9,
+            "read_frequencies": [
+              1.0,
+              0.5623413251903491,
+              0.31622776601683794,
+              0.1778279410038923,
+              0.1,
+              0.05623413251903491,
+              0.03162277660168379,
+              0.01778279410038923,
+              0.01,
+              0.005623413251903491,
+              0.0031622776601683794,
+              0.0017782794100389228,
+              0.001,
+              0.0005623413251903491,
+              0.00031622776601683794,
+              0.00017782794100389227
+            ],
+            "summary_width": 32,
+            "width": 64,
+            "window": 4608
+          }
+        },
+        {
+          "indices": [
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43,
+            44,
+            45,
+            46,
+            47,
+            48,
+            49,
+            50,
+            51,
+            52,
+            53,
+            54,
+            55
+          ],
+          "configuration": {
+            "adapter_rank": 32,
+            "alpha_att": 1.0,
+            "alpha_ff": 1.0,
+            "beta_short": 0.07701635339554948,
+            "distance_slopes": [
+              0.0
+            ],
+            "epsilon": 1e-05,
+            "ffn_width": 256,
+            "full_frequencies": [
+              [
+                1.0,
+                0.7498942093324559,
+                0.5623413251903491,
+                0.4216965034285822,
+                0.31622776601683794,
+                0.23713737056616552,
+                0.1778279410038923,
+                0.1333521432163324,
+                0.1,
+                0.07498942093324558,
+                0.05623413251903491,
+                0.042169650342858224,
+                0.03162277660168379,
+                0.023713737056616554,
+                0.01778279410038923,
+                0.01333521432163324,
+                0.01,
+                0.007498942093324558,
+                0.005623413251903491,
+                0.004216965034285823,
+                0.0031622776601683794,
+                0.0023713737056616554,
+                0.0017782794100389228,
+                0.001333521432163324,
+                0.001,
+                0.0007498942093324559,
+                0.0005623413251903491,
+                0.00042169650342858224,
+                0.00031622776601683794,
+                0.00023713737056616554,
+                0.00017782794100389227,
+                0.0001333521432163324
+              ]
+            ],
+            "heads": 1,
+            "memory_read": "qry",
+            "position_origin": 3,
+            "position_scale": 9,
+            "read_frequencies": [
+              1.0,
+              0.5623413251903491,
+              0.31622776601683794,
+              0.1778279410038923,
+              0.1,
+              0.05623413251903491,
+              0.03162277660168379,
+              0.01778279410038923,
+              0.01,
+              0.005623413251903491,
+              0.0031622776601683794,
+              0.0017782794100389228,
+              0.001,
+              0.0005623413251903491,
+              0.00031622776601683794,
+              0.00017782794100389227
+            ],
+            "summary_width": 32,
+            "width": 64,
+            "window": 4608
+          }
+        },
+        {
+          "indices": [
+            56,
+            57,
+            58,
+            59,
+            60,
+            61,
+            62,
+            63,
+            64,
+            65,
+            66,
+            67,
+            68,
+            69,
+            70,
+            71,
+            72,
+            73,
+            74,
+            75,
+            76,
+            77,
+            78,
+            79,
+            80,
+            81,
+            82,
+            83,
+            84,
+            85,
+            86,
+            87,
+            88,
+            89,
+            90,
+            91,
+            92,
+            93,
+            94,
+            95,
+            96,
+            97,
+            98,
+            99,
+            100,
+            101,
+            102,
+            103,
+            104,
+            105,
+            106,
+            107,
+            108,
+            109,
+            110,
+            111,
+            112,
+            113,
+            114,
+            115,
+            116,
+            117,
+            118,
+            119
+          ],
+          "configuration": {
+            "adapter_rank": 32,
+            "alpha_att": 1.0,
+            "alpha_ff": 1.0,
+            "beta_short": 0.07701635339554948,
+            "distance_slopes": [
+              0.0
+            ],
+            "epsilon": 1e-05,
+            "ffn_width": 256,
+            "full_frequencies": [
+              []
+            ],
+            "heads": 1,
+            "memory_read": "sum",
+            "position_origin": 4,
+            "position_scale": 9,
+            "read_frequencies": [],
+            "summary_width": 32,
+            "width": 64,
+            "window": 0
+          }
+        },
+        {
+          "indices": [
+            120,
+            121,
+            122,
+            123,
+            124,
+            125,
+            126,
+            127,
+            128,
+            129,
+            130,
+            131,
+            132,
+            133,
+            134,
+            135,
+            136,
+            137,
+            138,
+            139,
+            140,
+            141,
+            142,
+            143,
+            144,
+            145,
+            146,
+            147,
+            148,
+            149,
+            150,
+            151
+          ],
+          "configuration": {
+            "adapter_rank": 32,
+            "alpha_att": 1.0,
+            "alpha_ff": 1.0,
+            "beta_short": 0.07701635339554948,
+            "distance_slopes": [
+              0.0
+            ],
+            "epsilon": 1e-05,
+            "ffn_width": 256,
+            "full_frequencies": [
+              [
+                1.0,
+                0.5623413251903491,
+                0.31622776601683794,
+                0.1778279410038923,
+                0.1,
+                0.05623413251903491,
+                0.03162277660168379,
+                0.01778279410038923,
+                0.01,
+                0.005623413251903491,
+                0.0031622776601683794,
+                0.0017782794100389228,
+                0.001,
+                0.0005623413251903491,
+                0.00031622776601683794,
+                0.00017782794100389227
+              ]
+            ],
+            "heads": 1,
+            "memory_read": "sum",
+            "position_origin": 5,
+            "position_scale": 9,
+            "read_frequencies": [],
+            "summary_width": 32,
+            "width": 64,
+            "window": 4608
+          }
+        },
+        {
+          "indices": [
+            152,
+            153,
+            154,
+            155,
+            156,
+            157,
+            158,
+            159,
+            160,
+            161,
+            162,
+            163,
+            164,
+            165,
+            166,
+            167
+          ],
+          "configuration": {
+            "adapter_rank": 32,
+            "alpha_att": 1.0,
+            "alpha_ff": 1.0,
+            "beta_short": 0.07701635339554948,
+            "distance_slopes": [
+              0.0
+            ],
+            "epsilon": 1e-05,
+            "ffn_width": 256,
+            "full_frequencies": [
+              [
+                1.0,
+                0.5623413251903491,
+                0.31622776601683794,
+                0.1778279410038923,
+                0.1,
+                0.05623413251903491,
+                0.03162277660168379,
+                0.01778279410038923,
+                0.01,
+                0.005623413251903491,
+                0.0031622776601683794,
+                0.0017782794100389228,
+                0.001,
+                0.0005623413251903491,
+                0.00031622776601683794,
+                0.00017782794100389227
+              ]
+            ],
+            "heads": 1,
+            "memory_read": "sum",
+            "position_origin": 6,
+            "position_scale": 9,
+            "read_frequencies": [],
+            "summary_width": 32,
+            "width": 64,
+            "window": 4608
+          }
+        },
+        {
+          "indices": [
+            168,
+            169,
+            170,
+            171,
+            172,
+            173,
+            174,
+            175
+          ],
+          "configuration": {
+            "adapter_rank": 32,
+            "alpha_att": 1.0,
+            "alpha_ff": 1.0,
+            "beta_short": 0.07701635339554948,
+            "distance_slopes": [
+              0.0
+            ],
+            "epsilon": 1e-05,
+            "ffn_width": 256,
+            "full_frequencies": [
+              [
+                1.0,
+                0.5623413251903491,
+                0.31622776601683794,
+                0.1778279410038923,
+                0.1,
+                0.05623413251903491,
+                0.03162277660168379,
+                0.01778279410038923,
+                0.01,
+                0.005623413251903491,
+                0.0031622776601683794,
+                0.0017782794100389228,
+                0.001,
+                0.0005623413251903491,
+                0.00031622776601683794,
+                0.00017782794100389227
+              ]
+            ],
+            "heads": 1,
+            "memory_read": "sum",
+            "position_origin": 7,
+            "position_scale": 9,
+            "read_frequencies": [],
+            "summary_width": 32,
+            "width": 64,
+            "window": 4608
+          }
+        }
+      ],
+      "regions_groups": [
+        {
+          "indices": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21
+          ],
+          "configuration": {
+            "allocation_base": null,
+            "allocation_temperature": 1.0,
+            "alpha_loc": 1.0,
+            "alpha_match": null,
+            "alpha_res": null,
+            "alpha_sel": 1.0,
+            "ent_alpha": null,
+            "eta": null,
+            "fixed_gain": null,
+            "gain_logit": null,
+            "gamma_max": 2.0,
+            "hidden_width": 32,
+            "k": 1,
+            "local_score": "cat",
+            "query_weight": "received",
+            "read_mode": "+",
+            "region_control_mode": "context",
+            "region_control_width": 32,
+            "region_evidence": "cat",
+            "region_key": "content_stats",
+            "region_score": "att",
+            "regularizer": "quad",
+            "selection_mode": "regional_total",
+            "selection_width": 32,
+            "send_gain": null,
+            "total_fraction": null
+          }
+        },
+        {
+          "indices": [
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14
+          ],
+          "configuration": {
+            "allocation_base": null,
+            "allocation_temperature": 1.0,
+            "alpha_loc": null,
+            "alpha_match": null,
+            "alpha_res": null,
+            "alpha_sel": null,
+            "ent_alpha": null,
+            "eta": null,
+            "fixed_gain": null,
+            "gain_logit": null,
+            "gamma_max": 2.0,
+            "hidden_width": 32,
+            "k": 1,
+            "local_score": "cat",
+            "query_weight": null,
+            "read_mode": "+",
+            "region_control_mode": "context",
+            "region_control_width": 32,
+            "region_evidence": "cat",
+            "region_key": null,
+            "region_score": "ind",
+            "regularizer": "quad",
+            "selection_mode": "regional_total",
+            "selection_width": null,
+            "send_gain": null,
+            "total_fraction": null
+          }
+        }
+      ],
+      "workload_sha256": "5539e0fdb716b75d1003b8d200f7c3f68cafde515503d01a62ab2b3b1c8025d7"
+    },
+    "commands": {
+      "cpu_launcher": "#!/bin/bash\nset -euo pipefail\nsource /usr/share/Modules/init/bash\nmodule purge\nexport PYTHONDONTWRITEBYTECODE=1 TORCH_DEVICE_BACKEND_AUTOLOAD=0\nexport OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1\nmodule load ascend/dev-workspace-9.2.0\nsource /mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/additive-work/env/bin/activate\nexport PYTHONPATH=\"$PWD/python:$PWD/tests:$PWD/scripts\"\nexport TIDE_BUILD_DIR=/dev/shm/gef-p1p6-20261112/core-rope-native\npython scripts/build.py --backend npu --npu-runtime python --build-dir \"$TIDE_BUILD_DIR\" --jobs all\npython -m pytest -q tests/test_column_position_ops.py tests/test_query_sdk_capability.py tests/test_column_query_groups.py tests/test_column_query_dispatch.py tests/test_column_placement.py tests/test_settle_columns.py tests/test_column_positions.py tests/test_column_training.py tests/test_column_payload_owners.py tests/test_column_sharing.py tests/test_lh_tensor_observations.py tests/test_planned_window_consumer.py tests/test_experiment_columns.py tests/test_recurrent_columns.py tests/test_native_recurrent_columns.py tests/test_regional_groups_native.py tests/test_settle_ports.py tests/test_core5_hierarchy.py --dtype both --junitxml=/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/p1p6-20261112/core-rope-cpu.xml\npython -m pip wheel --no-build-isolation --no-deps . -w /dev/shm/gef-p1p6-20261112/core-rope-wheels\npython -m pip install --no-deps --target /dev/shm/gef-p1p6-20261112/core-rope-install /dev/shm/gef-p1p6-20261112/core-rope-wheels/*.whl\n",
+      "sdk_launcher": "#!/bin/bash\nset -euo pipefail\nsource /usr/share/Modules/init/bash\nmodule purge\nexport PYTHONDONTWRITEBYTECODE=1 TORCH_DEVICE_BACKEND_AUTOLOAD=0\nexport OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1\nmodule load libtorch-npu/2.12.0-cann9.2.0\nexport PATH=/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/bin:$PATH\npython3 scripts/build.py --backend npu --npu-runtime standalone --libtorch-prefix \"$LIBTORCH_ROOT\" --cxx11-abi 1 --build-dir /dev/shm/gef-p1p6-20261112/core-rope-sdk --jobs all\n/dev/shm/gef-p1p6-20261112/core-rope-sdk/tidegraph-column-check\n/dev/shm/gef-p1p6-20261112/core-rope-sdk/tidegraph-column-checkpoint-check\npython3 scripts/build_weighted_benchmark.py --core-build /dev/shm/gef-p1p6-20261112/core-rope-sdk --json-include /mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/prefill-default/qualified/json-include --output-dir /dev/shm/gef-p1p6-20261112/core-rope-benchmark --jobs all\n/dev/shm/gef-p1p6-20261112/core-rope-benchmark/client/weighted-run-check\n\nctest --test-dir /dev/shm/gef-p1p6-20261112/core-rope-benchmark/client --output-on-failure\n",
+      "lifecycle_cpu": "DEVICE_NAME='cpu'\nimport os,sys,subprocess,time\nfrom pathlib import Path\nfrom durable_records import write_json\nout=Path('/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/p1p6-20261112');base=Path('/dev/shm/gef-p1p6-20261112');rows=[]\ndef run(name,argv,env=None):\n cmd=[sys.executable,*map(str,argv)];start=time.time()\n try:code=subprocess.run(cmd,env=env,timeout=600).returncode\n except subprocess.TimeoutExpired:code=124\n rows.append(dict(name=name,command=cmd,exit_code=code,started=start,finished=time.time()));write_json(out/('lifecycle-rope-'+DEVICE_NAME+'-matrix.json'),rows)\nfor root in ('task', 'messages', 'raw'):\n run('lh176-nonempty-'+root,['scripts/check_lh_tensor.py','--plan',out/'lh176-plan.json','--dtype','float64','--client','native','--native-library',base/'core-rope-native','--device','cpu','--left-entries','3','--start-position',str(2**40),'--root-family',root,'--output-dir',out/('lh176-rope-'+DEVICE_NAME+'-'+root)])\nfor client in ('python','native'):\n env=dict(os.environ,PYTHONPATH=str(base/'core-rope-install'))\n run('installed-positions-'+client,['examples/consumer_core5/tensor_window.py','--client',client,'--native-library',base/'core-rope-native','--device','cpu','--dtype','float64','--positions','--output-dir',out/('positions-rope-installed-'+DEVICE_NAME+'-'+client)],env)\n run('installed-lh176-'+client,['examples/consumer_core5/planned_windows.py','--plan',out/'lh176-plan.json','--client',client,'--native-library',base/'core-rope-native','--device','cpu','--dtype','float64','--output-dir',out/('lh176-rope-installed-'+DEVICE_NAME+'-'+client)],env)\nsys.exit(1 if any(r['exit_code'] for r in rows) else 0)\n",
+      "lifecycle_npu": "DEVICE_NAME='npu'\nimport os,sys,subprocess,time\nfrom pathlib import Path\nfrom durable_records import write_json\nout=Path('/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/p1p6-20261112');base=Path('/dev/shm/gef-p1p6-20261112');rows=[]\ndef run(name,argv,env=None):\n cmd=[sys.executable,*map(str,argv)];start=time.time()\n try:code=subprocess.run(cmd,env=env,timeout=600).returncode\n except subprocess.TimeoutExpired:code=124\n rows.append(dict(name=name,command=cmd,exit_code=code,started=start,finished=time.time()));write_json(out/('lifecycle-rope-'+DEVICE_NAME+'-matrix.json'),rows)\nfor root in ('messages', 'raw'):\n run('lh176-nonempty-'+root,['scripts/check_lh_tensor.py','--plan',out/'lh176-plan.json','--dtype','float32','--client','native','--native-library',base/'core-rope-native','--device','npu:0','--left-entries','3','--start-position',str(2**40),'--root-family',root,'--output-dir',out/('lh176-rope-'+DEVICE_NAME+'-'+root)])\nfor client in ('python','native'):\n env=dict(os.environ,PYTHONPATH=str(base/'core-rope-install'))\n run('installed-positions-'+client,['examples/consumer_core5/tensor_window.py','--client',client,'--native-library',base/'core-rope-native','--device','npu:0','--dtype','float32','--positions','--output-dir',out/('positions-rope-installed-'+DEVICE_NAME+'-'+client)],env)\n run('installed-lh176-'+client,['examples/consumer_core5/planned_windows.py','--plan',out/'lh176-plan.json','--client',client,'--native-library',base/'core-rope-native','--device','npu:0','--dtype','float32','--output-dir',out/('lh176-rope-installed-'+DEVICE_NAME+'-'+client)],env)\nsys.exit(1 if any(r['exit_code'] for r in rows) else 0)\n",
+      "peer_launcher": "#!/bin/bash\nset -euo pipefail\nsource /usr/share/Modules/init/bash\nmodule purge\nmodule load ascend/dev-workspace-9.2.0\nsource /mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/additive-work/env/bin/activate\nexport PYTHONDONTWRITEBYTECODE=1 TORCH_DEVICE_BACKEND_AUTOLOAD=0\nexport OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1\nexport PYTHONPATH=\"$PWD/python:$PWD/tests:$PWD/scripts\"\nexport TIDE_BUILD_DIR=/dev/shm/gef-p1p6-20261112/core-55-native\nexport PER_STREAM_QUEUE=1 TASK_QUEUE_ENABLE=1\nunset ASCEND_LAUNCH_BLOCKING\npython scripts/run_shared_npu.py --helper /mi/data2T/zlong/home/.agents/skills/use-local-ascend/scripts/run_on_free_npu.py --helper-sha256 38e1122dac7e6529a9c594d72a0e40e3b20efedeef3203121fb74d8fc3b40e76 --policy /mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/p1p6-20261112/peer-general-policy.json --audit /mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/p1p6-20261112/peer-general-audit.jsonl -- --job-id gef-p1p6-peer-general-55 --project graph-execution-foundation --priority 0 --npu-count 2 --candidate-ids 1,9 --max-hbm-mib 4096 --max-wait-seconds 180 --state-file /mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/p1p6-20261112/peer-general-queue.json -- python /mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/p1p6-20261112/peer-general-55.py\n"
+    },
+    "note": "Replace historical paths with new matching builds/install/output. Re-admit hardware; do not restart old queue."
+  }
+}

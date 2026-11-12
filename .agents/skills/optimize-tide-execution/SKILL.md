@@ -35,7 +35,9 @@ there is no prescribed ratio or universal ordering. Read
 [additive comparisons](references/additive-comparisons.md) when a large unexplained
 gap persists or a new numerical/interface module is being designed. Repeated
 small gains without explaining that gap are a reason to reconsider the algorithm
-or interface, not to extend the same optimization loop indefinitely.
+or interface, not to extend the same optimization loop indefinitely. Include
+source-level loop and dataflow review in that comparison: profiler counts alone
+do not explain which work the algorithm or its interfaces require.
 
 Read [comparisons and attribution](references/comparisons.md) when planning a
 diagnostic or performance claim. Reuse existing observations with their original
