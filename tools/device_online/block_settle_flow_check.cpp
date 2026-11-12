@@ -51,8 +51,8 @@ void compare(const Fixture& f,const Formula& ref,const BlockSettleFlowTape& t,co
   };
   ports({0,1,0},{1,1,1},t.edges,roots.edges);ports({2,2},{0,0},t.outputs,roots.outputs);
   for(int64_t r=0;r<2;++r){const auto& a=*t.regions[r].local;const auto& rs=roots.regions[r];const auto rows=Frames*a.sequence.nodes;
-    close(a.aggregate.output,at::stack(ref.received[r]),"received");close(a.messages.selection.query.memory,at::stack(ref.memory[r]),"Mem");
-    close(a.messages.selection.query.total,at::stack(ref.total[r]),"totals");close(a.messages.selection.controls.reshape({rows}),at::stack(ref.controls[r]),"controls");
+    close(a.aggregate.output,at::stack(ref.received[r]),"received");close(a.messages.selection.memory_values(),at::stack(ref.memory[r]),"Mem");
+    close(a.messages.selection.memory_totals(),at::stack(ref.total[r]),"totals");close(a.messages.selection.controls.reshape({rows}),at::stack(ref.controls[r]),"controls");
     close(a.messages.full.output,at::stack(ref.full[r]),"Full");
     for(int64_t i=0;i<rows;++i){row(ref.received[r][i],rs.received,i);row(ref.controls[r][i],rs.messages.controls,i);row(ref.full[r][i],rs.messages.full,i);
       for(int channel=0;channel<2;++channel){row(ref.memory[r][i][channel],rs.messages.read.memory,i*2+channel);row(ref.total[r][i][channel],rs.messages.read.total,i*2+channel);}

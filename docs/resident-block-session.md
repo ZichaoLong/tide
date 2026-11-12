@@ -137,9 +137,58 @@ and trainable parameter roots, three two-window AdamW steps and a fresh process.
 `tests/test_resident_block_public_dispatch.py` checks static default selection
 and refuses fallback after actual owner failure.
 
-The current concrete owner is KV qry, FP32 and single device, with homogeneous
+The current concrete owner is KV sum/qry, FP32 and single device, with homogeneous
 KV geometry/alpha per region and homogeneous factor presence per source group.
+Different regions may use different KV read functions. Sum lowering omits the
+Read query/key/value roles entirely, while keeping Full Attention roles. The
+typed Memory tape and the corresponding saved-storage/VJP dispatch preserve
+the lack of sum-Memory dependence on current content; Describe/Full dependencies
+are separate. Model checks exercise both read functions without synthetic owners.
+The named observation fields and schema-2 archive stay unchanged; `memory_read`
+already participates in identity, so sum and qry checkpoints are not interchangeable.
 General PDG lowering, other local-memory families, cross-device ownership,
 shared-prefix storage and FC16 scale/performance require their own implementation
 and evidence. Public source, build, actual device consumer and default experiment
 routing are separate delivery facts; none follows from the v1 internal owner.
+
+## Standalone benchmark entry
+
+`tools/weighted_benchmark/resident_policy.cpp` selects `auto|general|block-v2`
+from the actual Settle certificate and installed mathematical bindings before
+constructing an owner. New CLI invocations default to `--resident-executor auto`;
+missing selectors in historical fixture records mean general. Explicit general
+keeps the earlier checkpoint request identity. The block path currently requires
+FP32, one accelerator, prefill/tensor inputs, compatible KV sum/qry groups and
+`--return-mode outputs|metrics --validation none`. Complete event records,
+explicit record input, streaming and statically unsupported modules retain
+general under auto; an explicit block request rejects them. Runtime errors never
+retry another owner. Standalone block does not implement the public complete
+event `Result` decoder or inherit the general owner's complete-record tests.
+
+`--resident-limits JSON` explicitly retains the historical general capacities;
+`--resident-block-limits JSON` instead names `cache`, `forward_bytes`,
+`backward_bytes`, `optimizer_bytes`, `total_bytes`, `workspace_bytes`, `windows`
+and `timeout_ms`. The files are mutually exclusive. The report records requested
+and effective owner, refusal/fallback reason, capacities and checkpoint codec.
+An early resume check compares the request; exact effective owner/capacities are
+checked before restore. Unspecified block budgets reuse the saved effective
+budgets, preserving raw capacity shape. Insufficient capacity fails explicitly.
+
+`block_inputs.cpp` packs only actual fixture inputs once. Timed steps shift
+int64 positions, upload the whole B×L×P boundary, evaluate device windows and
+seed whole-column roots for `scale * sum_present((c*G)^2)`. Both inference return
+modes compute this task scalar; legacy metrics-only inference still reports no
+task loss. `task_loss_computed` makes that cost distinction explicit. Output
+records expand only actual physical output fields under no-grad; metrics avoid
+that expansion. Work counts come from actual presence/fiber metadata. No
+reference trajectory supplies batches, results or raw state.
+
+`resident_block.cpp` uses the public session for SGD, detach, complete-cut raw
+decode and the schema-2 archive. Inference currently also allocates the session's
+manual tape and optimizer storage; this is recorded, not an optimized separate
+inference owner. The existing benchmark timer includes input transfer, task,
+VJP/optimizer when training, requested output decode and synchronization;
+checkpoint I/O remains separately timed. Minimal-return runs are measurements,
+not complete-record qualification. `weighted-block-adapter-check` independently
+checks CPU policy, missing/zero/duplicate inputs and task VJP; actual standalone
+device execution and fresh-process archive restoration remain separate checks.

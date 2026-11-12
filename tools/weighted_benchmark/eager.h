@@ -28,7 +28,7 @@ class Eager : public Resident {
   RootDiagnostic diagnostic(bool split)const;
   std::map<std::string,Tensor> parameters()const;
   TrainingState training_state()const;
-  Json execution()const;
+  Json execution()const override;
   Continuation checkpoint()const;
   Index cut()const override{return state.cut;}
   void save(const std::filesystem::path&,int64_t max_file_bytes)const;

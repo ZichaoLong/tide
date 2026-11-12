@@ -8,7 +8,7 @@
 
 [`BlockKVMessageInput`](../tools/device_online/block_kv_messages.h) 明确包含两个 typed raw operand：
 
-- `read.read` 是真实绑定的 Read^0、Read^- 或 Read^+ 快照，进入 KV 查询与 Describe。
+- `read.read` 是真实绑定的 Read^0、Read^- 或 Read^+ 快照，进入 KV sum/qry Memory 与 Describe。
 - `proposal` 是本次 Upd 产生、供 Full 读取的状态。它可以有不同 cache capacity，不能由
   Read 的有效投影或参考递归补造。Read^+ 绑定可以将两者指向同一实际状态；反向仍先返回两条
   独立贡献，由接入 Upd 的 owner 按这个绑定汇总。
@@ -46,6 +46,9 @@ forward 的 tapes；独立 reverse 程序不重读后来被覆盖的原始 raw�
 bank 名称，并满足 owner 形状。若按物理参数选择 trainable 子集，映射须包含这些 owner 的全部
 使用角色；仅映射共享参数的一个别名会有意省略其他角色贡献。数值相等的独立参数不会被合并。绑定和更新 bank 的责任属于外层
 owner，本接口不从打包后的数值猜测参数身份，也不自动执行 optimizer。
+KV sum 没有 Read query/key/value 参数角色或对应连接位；参数发布/反向映射仅枚举真实角色。
+Full 的 query 与其他 Attention 参数不因此消失。Mem/total 独立根的值与连接由 typed
+Memory tape 分派，sum 不借虚假 query 参数或当前内容建立无关计算图。
 
 ## 检查、成本与剩余接口
 

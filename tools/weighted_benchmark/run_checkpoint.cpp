@@ -28,18 +28,20 @@ std::filesystem::path generation(const std::filesystem::path& directory) {
     throw std::invalid_argument("invalid checkpoint latest generation");
   return directory/name;
 }
-Json manifest(const std::filesystem::path& selected,const Json& identity) {
+Json manifest(const std::filesystem::path& selected,const Json& identity,bool request_only=false) {
   std::ifstream stream(selected/"manifest.json");if(!stream)throw std::invalid_argument("resume requires a complete checkpoint generation manifest");
   auto metadata=Json::parse(stream);
-  if(metadata.at("schema")!="tide-weighted-run-checkpoint-v1"||metadata.at("identity")!=identity||metadata.at("state")!="state.pt")
+  auto actual=metadata.at("identity");
+  if(request_only)actual.erase("resident_execution");
+  if(metadata.at("schema")!="tide-weighted-run-checkpoint-v1"||actual!=identity||metadata.at("state")!="state.pt")
     throw std::invalid_argument("resume model/workload/precision/task/codec identity differs");
   cut(metadata);
   if(!std::filesystem::exists(selected/"state.pt"))throw std::invalid_argument("resume checkpoint payload is missing");
   return metadata;
 }
 }
-Json checkpoint_manifest(const std::filesystem::path& directory,const Json& identity) {
-  return manifest(generation(directory),identity);
+Json checkpoint_manifest(const std::filesystem::path& directory,const Json& identity,bool request_only) {
+  return manifest(generation(directory),identity,request_only);
 }
 void save_run_checkpoint(const std::filesystem::path& directory,Resident& owner,const Json& identity,Index next,int64_t maximum) {
   std::filesystem::path previous;

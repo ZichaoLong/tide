@@ -1,10 +1,14 @@
 #pragma once
 #include "weighted_kv_query.h"
+#include "weighted_kv_sum.h"
 #include "weighted_describe.h"
 #include "weighted_region.h"
 #include "settle_block_plan.h"
 #include "block_dispatch.h"
 #include "tide/settle.h"
+#include <optional>
+#include <stdexcept>
+#include <variant>
 
 namespace tide::device_online {
 // A closed Read/Describe -> complete-region SelStep invocation. R flattens B,L;
@@ -15,16 +19,24 @@ struct BlockReadSelectionInput {
   at::Tensor mass,content,present,times,node_owners;
 };
 struct BlockReadSelectionParameters {
-  WeightedKVQueryParameters query;
+  WeightedKVQueryParameters query; // Undefined in sum mode; no synthetic owners.
   WeightedDescribeParameters describe;
   WeightedRegionParameters region;
 };
 struct BlockReadSelectionTape {
-  BlockReadSelectionTape(const weighted::KVConfig& config,int64_t capacity)
-    :query{WeightedKVWindowTape{WeightedRawLayout(config,capacity)}}{}
+  using Memory=std::variant<WeightedKVSumTape,WeightedKVQueryTape>;
   int64_t frames=0,nodes=0,regions=0,members=0;
   at::Tensor owners,present,node_times,order,inverse,ids,times,lengths,node_region_row;
-  WeightedKVQueryTape query;
+  std::optional<Memory> memory;
+  const Memory& memory_tape()const{
+    if(!memory)throw std::invalid_argument("missing block Memory tape");return *memory;
+  }
+  const at::Tensor& memory_values()const{
+    return std::visit([](const auto& t)->const at::Tensor&{return t.memory;},memory_tape());
+  }
+  const at::Tensor& memory_totals()const{
+    return std::visit([](const auto& t)->const at::Tensor&{return t.total;},memory_tape());
+  }
   WeightedDescribeTape describe;
   WeightedRegionTape region;
   at::Tensor controls,active; // [R,N], individual target support; no region-any replacement.

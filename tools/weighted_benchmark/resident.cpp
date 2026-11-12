@@ -1,5 +1,6 @@
 #include "benchmark.h"
 #include "resident_checkpoint.h"
+#include "resident_block.h"
 #include "tide/resident_weighted_training.h"
 #include "tide/parameters.h"
 #include "tide/graph_checkpoint.h"
@@ -14,11 +15,11 @@ namespace {
 class Candidate final:public Resident {
   Json material;Fixture data;at::Device device;ResidentParameterGradient last_gradient;
   WeightedTrainingLimits limits;std::vector<at::Device> node_owners;at::ScalarType dtype;std::unique_ptr<WeightedFlow> inference;std::unique_ptr<WeightedTrainingSession> training;
-  std::string return_mode;double loss_scale;Index current_cut=0;
+  std::string return_mode;double loss_scale;Index current_cut=0;Json selected;
  public:
-  Candidate(const Json& j,at::Device d,bool train,bool prefill,at::ScalarType dtype,const std::vector<at::Device>& peers,
-            std::vector<at::Device> owners,const std::string& returns):material(j),data(fixture(j,dtype)),device(d),dtype(dtype),
-            return_mode(returns),loss_scale(j.value("__task",Json::object()).value("loss_scale",.001)){
+  Candidate(const Json& j,Fixture f,Json selection,at::Device d,bool train,bool prefill,at::ScalarType dtype,const std::vector<at::Device>& peers,
+            std::vector<at::Device> owners,const std::string& returns):material(j),data(std::move(f)),device(d),dtype(dtype),
+            return_mode(returns),loss_scale(j.value("__task",Json::object()).value("loss_scale",.001)),selected(std::move(selection)){
     at::NoGradGuard ng;Continuation q;q.identity=data.graph.identity;q.batch_size=data.samples;
     WeightedTrainingLimits l;const auto& x=j.at("limits");
 #define FIELD(name) l.forward.name=x.at(#name).get<decltype(l.forward.name)>()
@@ -36,6 +37,7 @@ class Candidate final:public Resident {
       training=std::make_unique<WeightedTrainingSession>(data.graph,data.model,q,d,ResidentOptimizerKind::sgd,std::vector<OptimizerGroup>{group},l,owners);
     }else inference=std::make_unique<WeightedFlow>(data.graph,data.model,q,d,l.forward,owners);
   }
+  Json execution()const override{return selected;}
   Step step(Index index)override{
     if(index<0||index!=current_cut/data.span||current_cut%data.span)throw std::invalid_argument("window index disagrees with resident cut");
     at::NoGradGuard ng;auto xs=inputs(data,index);Result r;Tensor value;Json observation;
@@ -118,6 +120,8 @@ class Candidate final:public Resident {
 std::unique_ptr<Resident> resident(const Json& data,at::Device device,bool training,bool prefill,at::ScalarType dtype,
                                    const std::vector<at::Device>& peers,const std::vector<at::Device>& nodes,
                                    const std::string& returns){
-  return std::make_unique<Candidate>(data,device,training,prefill,dtype,peers,nodes,returns);
+  auto f=fixture(data,dtype);auto selection=select_resident_block(data,f,prefill,dtype,device,peers,nodes,returns);
+  if(selection.graph)return resident_block(data,std::move(f),std::move(selection),device,training,returns);
+  return std::make_unique<Candidate>(data,std::move(f),std::move(selection.record),device,training,prefill,dtype,peers,nodes,returns);
 }
 }

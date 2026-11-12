@@ -82,7 +82,7 @@ reset 先检查全部描述和严格递增 generation，再发布新窗口状态
   每个任务代表该 owner 的整个已证明合法 B×L 窗口；rank/delay/stride 使用 int64，
   同秩独立区域、重复边及重复外部端口保留。描述符只保存首位置时钟，实际逐帧时钟由
   数值输入持有。当前拒绝非 ports 绑定、未对齐边、空区域与预算/时钟溢出。
-- `block_read_selection.h::append_block_read_selection` 实际组合现有 resident KV/qry、
+- `block_read_selection.h::append_block_read_selection` 实际组合现有 resident KV sum/qry、
   Describe 和完整 SelStep 数值算子。输入为 `[R,N]` 的 mass/present/times/node owners、
   `[R,N,d]` 的 content，以及 `[R*N,raw_width]` 的 typed raw Read 快照，其中 `R=B×L`。
   raw 整数与浮点独立存储；调用者必须提供真实的绑定 Read^0/Read^-/Read^+ 快照。
@@ -94,15 +94,21 @@ reset 先检查全部描述和严格递增 generation，再发布新窗口状态
 Gate 反例包含同区域内无活动节点与有活动节点，区域总活动不能替代目标支持。
 
 组合的 `append_block_read_selection_vjp` 接受各个 control 的独立根位与 cotangent，
-先汇集完整区域反向，再经 Describe 和 KV Query 返回 raw、mass、content 与各参数角色梯度。
-结构连接位独立于数值零；absent 根忽略未使用的 NaN。保存的 region、Describe、Query tapes
+先汇集完整区域反向，再经 Describe 和所绑定 KV Memory 返回 raw、mass、content 与各参数角色梯度。
+Memory tape 是 `optional<variant<WeightedKVSumTape,WeightedKVQueryTape>>`，
+`memory_values()` / `memory_totals()` 交付相同的外部字段；未执行时没有占位 query tape。
+sum 复用既有原始时间窗口与加权 summary 公式、VJP，仅连接所读 raw summaries/weights，
+不绑定 read.query/key/value 参数，也不因为观察了零 Mem 伴随而连接当前 content。
+Describe 与 Full 对当前 content 的真实依赖仍独立保留；sum 模型的 Full 仍使用 KV Attention。
+结构连接位独立于数值零；absent 根忽略未使用的 NaN。保存的 region、Describe、Memory tapes
 支持独立 reverse 程序，不重读后来被覆盖的原输入/参数。`BlockReadObservations`另接
 两通道Mem/total与具名Describe独立根；公共owner通过`block_settle_observations`发布这些根，
 与control根分开。局部批量算子汇总同参数bank贡献，外层canonical布局汇总跨角色真实别名。
 
 当前数值组合使用同一 KV 配置与区域配置；参数 bank 通过 owner 显式绑定。
-查询支持原始时间窗口、位置和 FP32/FP16 raw，由既有局部能力决定，但本轮新增组合检查只覆盖
-FP32 raw、qry/cat/ind/context/cat/quad。其 raw 输入暂按帧提供快照，尚未采用共享 KV 前缀 bank；
+查询支持原始时间窗口、位置和 FP32/FP16 raw，由既有局部能力决定；组合检查源码覆盖
+FP32 raw、sum/qry 与 cat/ind/context/cat/quad，设备结果按各固定提交另记。
+其 raw 输入暂按帧提供快照，尚未采用共享 KV 前缀 bank；
 这会复制历史存储，不能据整块外形宣称已经取得完整 prefill 性能。其他记忆/异构组需独立接入。
 
 当前实现按职责连接如下，资格应沿各层独立检查读取：
@@ -133,9 +139,11 @@ FP32 raw、qry/cat/ind/context/cat/quad。其 raw 输入暂按帧提供快照，
 `tests/test_resident_block_selection.py` 检查静态 Settle lowerer、完整区域元数据、逐目标 Gate、
 独立 control 根及连接位，CPU 执行的是同一设备元数据语义源。
 `block_read_selection_check.cpp` 则执行真实 KV Read/Describe/SelStep 和整链 control VJP；
-`block_selection_formula.cpp` 用手写两候选 quad 闭式解、显式 KV Attention 与网络公式作独立锚点，
+`block_selection_formula.cpp` 用手写两候选 quad 闭式解、显式 KV sum/Attention 与网络公式作独立锚点，
 不调用候选、RegionKernel 或参考递归。材料为 B2/L2/N3、两个同秩区域、两个共享参数 bank，
 含大时钟、缺失/零质量、独立非零与连接零根、全部输入/参数梯度和原缓冲覆盖后的 saved reverse。
+独立 Mem/total 根在跨行/channel stack 之前取根，检查 sum 当前 content、keys/values 与查询参数
+断开；拒绝给 sum 绑定虚假查询参数。该新增源码检查不能继承旧 qry 真机资格。
 检查输出的三次 replay 时间只用于诊断这一小组合，不是模型吞吐或完整 resident 性能。
 实际设备执行结果须由固定源码资格单列；源码存在和语法检查不等于数值/VJP 已在设备通过。
 

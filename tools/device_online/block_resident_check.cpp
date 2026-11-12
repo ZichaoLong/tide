@@ -40,8 +40,8 @@ std::unique_ptr<BlockResidentSession> owner(const Fixture& f,at::Device device,c
   if(c)return std::make_unique<BlockResidentSession>(f.graph,f.model,f.initial,*c,device,l);
   return std::make_unique<BlockResidentSession>(f.graph,f.model,f.initial,device,ResidentOptimizerKind::adamw,std::vector<OptimizerGroup>{group},l);
 }
-void check(at::Device device,const std::string& path,bool restore){
-  at::NoGradGuard guard;auto consumer=fixture();std::vector<training_detail::Version> unused;
+void check(at::Device device,const std::string& path,bool restore,bool query){
+  at::NoGradGuard guard;auto consumer=fixture(query);std::vector<training_detail::Version> unused;
   auto reference=training_detail::freeze_model(consumer.model,at::kCPU,unused);auto q=training_detail::freeze_continuation(consumer.initial);
   auto parameters=reference.parameters();OptimizerGroup group;group.lr=.003;group.eps=.1;group.weight_decay=.02;
   for(const auto& p:parameters.owners())group.parameters.push_back(p.canonical);AdamW optimizer(parameters,{group});
@@ -88,13 +88,15 @@ void check(at::Device device,const std::string& path,bool restore){
 }
 }
 int main(int argc,char** argv){portable_torch::RuntimeSession runtime;
-  try{std::string path;bool restore=false;std::vector<char*> args{argv[0]};for(int j=1;j<argc;++j){const std::string x=argv[j];
+  try{std::string path;bool restore=false,query=true;std::vector<char*> args{argv[0]};for(int j=1;j<argc;++j){const std::string x=argv[j];
       if(x=="--checkpoint-path"){if(++j==argc)throw std::invalid_argument("missing checkpoint path");path=argv[j];}
+      else if(x=="--memory-read"){if(++j==argc)throw std::invalid_argument("missing memory Read");
+        const std::string read=argv[j];if(read!="sum"&&read!="qry")throw std::invalid_argument("invalid memory Read");query=read=="qry";}
       else if(x=="--restore-check")restore=true;else args.push_back(argv[j]);}
     const bool temporary=path.empty();if(temporary)path="/tmp/tide-public-block-"+std::to_string(::getpid())+".pt";
     const auto options=portable_torch::parse_cli(args.size(),args.data(),true);if(options.help){portable_torch::print_usage(std::cout,argv[0]);return 0;}
     if(options.device_spec=="auto"||options.dtype!=at::kFloat)throw std::invalid_argument("public block check requires explicit accelerator FP32");
-    at::set_num_threads(1);at::set_num_interop_threads(1);check(portable_torch::resolve_device(options),path,restore);
+    at::set_num_threads(1);at::set_num_interop_threads(1);check(portable_torch::resolve_device(options),path,restore,query);
     if(temporary){std::filesystem::remove(path);std::filesystem::remove(path+".expected");}
-    std::cout<<"block-resident-public: passed actual_Model=true source_factors=true source_hidden_rank_padding=true independent_streaming=true AdamW_steps=3 windows=2 raw_continuation=true fresh_process="<<restore<<'\n';return 0;
+    std::cout<<"block-resident-public: passed memory_read="<<(query?"qry":"sum")<<" actual_Model=true source_factors=true source_hidden_rank_padding=true independent_streaming=true AdamW_steps=3 windows=2 raw_continuation=true fresh_process="<<restore<<'\n';return 0;
   }catch(const std::exception& e){std::cerr<<e.what()<<'\n';return 2;}}

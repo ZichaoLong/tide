@@ -25,7 +25,8 @@ BlockReadSelectionGradient append_block_read_selection_vjp(DeviceProgram& p,cons
     throw std::invalid_argument("missing block read-selection tape");
   const auto rows=t.frames*t.nodes,rr=t.frames*t.regions,members=t.members;
   check(gradient,error,at::kFloat,{t.frames,t.nodes});check(roots,error,at::kBool,{t.frames,t.nodes});
-  auto borrowed=saved_tensors(t.query);auto describe_saved=t.describe.graph->saved_tensors();
+  auto borrowed=std::visit([](const auto& memory){return saved_tensors(memory);},t.memory_tape());
+  auto describe_saved=t.describe.graph->saved_tensors();
   borrowed.insert(borrowed.end(),describe_saved.begin(),describe_saved.end());
   auto regional_saved=region_saved(t.region);borrowed.insert(borrowed.end(),regional_saved.begin(),regional_saved.end());
   for(const auto& x:{t.owners,t.present,t.node_times,t.order,t.inverse,t.ids,t.times,t.lengths,t.node_region_row,
@@ -72,8 +73,8 @@ BlockReadSelectionGradient append_block_read_selection_vjp(DeviceProgram& p,cons
     describe_roots[name]=merge(describe_roots.at(name),root,width);
   }
   auto described=append_weighted_describe_vjp(p,t.describe,describe_roots,error,remaining());
-  const auto ds=t.query.memory.size(2);auto memory=at::zeros({rows,2*ds},gradient.options()),total=at::zeros({rows,2},gradient.options());
-  auto query_roots=at::zeros({rows,4},roots.options());
+  const auto ds=t.memory_values().size(2);auto memory=at::zeros({rows,2*ds},gradient.options()),total=at::zeros({rows,2},gradient.options());
+  auto memory_roots=at::zeros({rows,4},roots.options());
   for(int64_t channel=0;channel<2;++channel){
     auto mem=described.inputs.at(channel?"long_memory":"short_memory"),mass=described.inputs.at(channel?"long_total":"short_total");
     auto channel_root=[&](const WeightedRowAdjoint& root,int64_t width,bool vector){
@@ -86,19 +87,31 @@ BlockReadSelectionGradient append_block_read_selection_vjp(DeviceProgram& p,cons
     mem=merge(mem,channel_root(observations.memory,ds,true),ds);
     mass=merge(mass,channel_root(observations.total,1,false),1);
     put(p,memory,channel*ds,mem.value);put(p,total,channel,mass.value);
-    put(p,query_roots,channel,mem.connected.reshape({rows,1}));put(p,query_roots,2+channel,mass.connected.reshape({rows,1}));
+    put(p,memory_roots,channel,mem.connected.reshape({rows,1}));put(p,memory_roots,2+channel,mass.connected.reshape({rows,1}));
   }
-  auto query=append_weighted_kv_query_vjp(p,t.query,memory.reshape({rows,2,ds}),total,query_roots,error,remaining());
-  auto content=at::zeros_like(query.input),connected=at::zeros_like(query.input_connected);
-  p.copy(content,query.input);p.add(content,described.inputs.at("content").value);
-  const auto dflags=described.inputs.at("content").connected;
-  p.kernel([=](void* stream){check_device_launch(TIDE_LAUNCH_KERNEL(tide_block_selection_flags)(1,stream,
-    ptr(query.input_connected),ptr(t.node_region_row),ptr(dflags),ptr(connected),ptr(error),1,rows,rr),"block Read/Describe shared input root merge");},
-    {query.input_connected,t.node_region_row,dflags,connected,error});
-  admit(storage.bytes(),budget);
-  const auto mass=described.inputs.at("mass");
-  return {query.raw,query.raw_connected,mass.value.reshape({t.frames,t.nodes}),mass.connected.reshape({t.frames,t.nodes}),
-    content.reshape({t.frames,t.nodes,-1}),connected.reshape({t.frames,t.nodes}),query.parameters,
-    query.query_connected,query.key_connected,query.value_connected,std::move(described.parameters),regional.context_head,regional.query_head};
+  BlockReadSelectionGradient out;
+  const auto mass=described.inputs.at("mass"),input=described.inputs.at("content");
+  out.mass=mass.value.reshape({t.frames,t.nodes});out.mass_connected=mass.connected.reshape({t.frames,t.nodes});
+  if(const auto* sum=std::get_if<WeightedKVSumTape>(&t.memory_tape())){
+    auto mem=append_weighted_kv_sum_vjp(p,*sum,memory.reshape({rows,2,ds}),total,memory_roots,error,remaining());
+    out.raw=mem.raw;out.raw_connected=mem.connected;
+    // Only Describe reads current content. Sum Memory has no query/input
+    // contribution, including when a Mem cotangent is an observed zero.
+    out.content=input.value.reshape({t.frames,t.nodes,-1});
+    out.content_connected=input.connected.reshape({t.frames,t.nodes});
+  }else{
+    auto query=append_weighted_kv_query_vjp(p,std::get<WeightedKVQueryTape>(t.memory_tape()),memory.reshape({rows,2,ds}),total,memory_roots,error,remaining());
+    auto content=at::zeros_like(query.input),connected=at::zeros_like(query.input_connected);
+    p.copy(content,query.input);p.add(content,input.value);
+    const auto dflags=input.connected;
+    p.kernel([=](void* stream){check_device_launch(TIDE_LAUNCH_KERNEL(tide_block_selection_flags)(1,stream,
+      ptr(query.input_connected),ptr(t.node_region_row),ptr(dflags),ptr(connected),ptr(error),1,rows,rr),"block Read/Describe shared input root merge");},
+      {query.input_connected,t.node_region_row,dflags,connected,error});
+    out.raw=query.raw;out.raw_connected=query.raw_connected;
+    out.content=content.reshape({t.frames,t.nodes,-1});out.content_connected=connected.reshape({t.frames,t.nodes});
+    out.query=query.parameters;out.query_connected=query.query_connected;out.key_connected=query.key_connected;out.value_connected=query.value_connected;
+  }
+  out.describe=std::move(described.parameters);out.region_context=regional.context_head;out.region_query=regional.query_head;
+  admit(storage.bytes(),budget);return out;
 }
 }

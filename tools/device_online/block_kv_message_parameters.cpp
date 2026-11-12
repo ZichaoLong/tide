@@ -3,13 +3,14 @@
 namespace tide::device_online {
 std::map<std::string,WeightedRowAdjoint> block_kv_message_parameter_roots(const BlockKVMessageGradient& g){
   std::map<std::string,WeightedRowAdjoint> roles{
-    {"read.query",{g.read.query.query,g.read.query_connected}},{"read.key",{g.read.query.key,g.read.key_connected}},
-    {"read.value",{g.read.query.value,g.read.value_connected}},
     {"full.query",{g.full.parameters.query,g.full.query_connected}},
     {"full.out",{g.full.parameters.residual.out,g.full.out_connected}},
     {"full.gate",{g.full.parameters.residual.gate,g.full.gate_connected}},
     {"full.up",{g.full.parameters.residual.up,g.full.up_connected}},
     {"full.down",{g.full.parameters.residual.down,g.full.down_connected}}};
+  if(g.read.query.query.defined()){
+    roles["read.query"]={g.read.query.query,g.read.query_connected};roles["read.key"]={g.read.query.key,g.read.key_connected};
+    roles["read.value"]={g.read.query.value,g.read.value_connected};}
   for(const auto& [name,root]:g.read.describe)roles["describe."+name]=root;
   auto head=[&](const std::string& prefix,const std::optional<WeightedHeadGradient>& h){if(!h)return;
     roles[prefix+"matrix"]={h->parameters.matrix,h->owner_connected};

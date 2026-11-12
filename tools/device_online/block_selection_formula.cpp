@@ -47,7 +47,7 @@ Formula formula(const Fixture& f){
   const std::vector<std::string> qnames{"query","key","value"},hnames{"matrix","hidden_bias","projection","bias"};
   auto qroles=roles(f.weights.query),hroles=roles(f.weights.region.context);
   for(int64_t bank=0;bank<Banks;++bank){
-    for(int j=0;j<3;++j)params[bank][qnames[j]]=leaf(qroles[j][bank],"query",qnames[j],bank);
+    if(f.kv.memory_read=="qry")for(int j=0;j<3;++j)params[bank][qnames[j]]=leaf(qroles[j][bank],"query",qnames[j],bank);
     for(const auto& [name,value]:f.weights.describe)params[bank][name]=leaf(value[bank],"describe",name,bank);
     for(int j=0;j<4;++j)region[bank]["context."+hnames[j]]=leaf(hroles[j][bank],"context",hnames[j],bank);
   }
@@ -59,22 +59,26 @@ Formula formula(const Fixture& f){
     std::vector<Tensor> total{at::zeros({},at::kFloat),at::zeros({},at::kFloat)};
     if(f.input.present.reshape({Rows})[row].item<bool>()){
       const auto owner=f.input.node_owners.reshape({Rows})[row].item<int64_t>();const auto& p=params[owner];
-      auto cur=normalized(content[row],f.kv.epsilon),q=at::mv(p.at("query"),cur);
+      auto cur=normalized(content[row],f.kv.epsilon);
+      auto q=f.kv.memory_read=="qry"?at::mv(p.at("query"),cur):Tensor{};
       auto times=f.states[row].slots.at("times");const auto time=f.input.times.reshape({Rows})[row].item<int64_t>();
       std::vector<Tensor> logits,features;std::vector<int64_t> exact_age;
       for(int64_t j=0;j<times.numel();++j){
         const auto age=time-times[j].item<int64_t>();exact_age.push_back(age);
-        auto key=at::mv(p.at("key"),raw[row].at("keys")[j]);
-        auto phase=at::scalar_tensor(-float(age)/float(f.kv.position_scale)*float(f.kv.read_frequencies[0]),at::kFloat);
-        auto cosine=phase.cos(),sine=phase.sin();
-        auto rotated=at::stack({key[0]*cosine-key[1]*sine,key[0]*sine+key[1]*cosine});
-        logits.push_back((q*rotated).sum()/std::sqrt(2.));features.push_back(at::mv(p.at("value"),raw[row].at("values")[j]));
+        if(f.kv.memory_read=="qry"){
+          auto key=at::mv(p.at("key"),raw[row].at("keys")[j]);
+          auto phase=at::scalar_tensor(-float(age)/float(f.kv.position_scale)*float(f.kv.read_frequencies[0]),at::kFloat);
+          auto cosine=phase.cos(),sine=phase.sin();
+          auto rotated=at::stack({key[0]*cosine-key[1]*sine,key[0]*sine+key[1]*cosine});
+          logits.push_back((q*rotated).sum()/std::sqrt(2.));features.push_back(at::mv(p.at("value"),raw[row].at("values")[j]));
+        }
       }
       for(int channel=0;channel<2;++channel){
         auto ages=at::tensor(exact_age,at::kLong).to(at::kFloat),writes=raw[row].at("weights");
         auto weight=channel?writes:writes*at::exp(-float(f.kv.beta_short)*ages);total[channel]=weight.sum();
-        auto probability=(at::stack(logits)+weight.log()).softmax(0);
-        memory[channel]=total[channel].clamp_max(1)*(probability.unsqueeze(1)*at::stack(features)).sum(0);
+        if(f.kv.memory_read=="sum")memory[channel]=(weight.unsqueeze(1)*raw[row].at("summaries")).sum(0)/total[channel].clamp_min(1);
+        else {auto probability=(at::stack(logits)+weight.log()).softmax(0);
+          memory[channel]=total[channel].clamp_max(1)*(probability.unsqueeze(1)*at::stack(features)).sum(0);}
       }
       auto current=at::mv(p.at("summary.matrix"),cur);
       auto feature=at::cat({cur,mass[row].log1p().reshape({1}),memory[0],memory[1],
@@ -84,6 +88,8 @@ Formula formula(const Fixture& f){
       desc["evidence"]=normalized(at::mv(p.at("evidence.matrix"),feature)+p.at("evidence.bias"),f.kv.epsilon);
     }
     out.descriptions.push_back(desc);memories.push_back(at::stack(memory));totals.push_back(at::stack(total));
+    out.memory_roots.insert(out.memory_roots.end(),memory.begin(),memory.end());
+    out.total_roots.insert(out.total_roots.end(),total.begin(),total.end());
   }
   std::vector<Tensor> controls(Rows);for(auto& x:controls)x=at::zeros({},at::kFloat);
   for(int64_t frame=0;frame<Frames;++frame)for(int64_t rid=0;rid<2;++rid){

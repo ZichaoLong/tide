@@ -28,6 +28,7 @@ class ExecutionSpec:
     query_execution: str = "auto"
     prefill_schedule: str = "auto"
     input_interface: str = "auto"
+    resident_executor: str = "auto"
 
     def __post_init__(self):
         if self.client not in {"pytorch", "python-native", "libtorch"}:
@@ -36,6 +37,10 @@ class ExecutionSpec:
             raise ValueError("unknown schedule")
         if self.input_interface not in {"auto", "records"}:
             raise ValueError("input_interface must be auto or records")
+        if self.resident_executor not in {"auto", "general", "block-v2"}:
+            raise ValueError("resident_executor must be auto, general or block-v2")
+        if self.resident_executor != "auto" and self.placement != "resident":
+            raise ValueError("explicit resident_executor requires resident placement")
         if self.prefill_schedule not in {"auto", "greedy", "window"}:
             raise ValueError("unknown prefill_schedule")
         if self.prefill_schedule != "auto" and (self.schedule != "prefill" or self.placement == "resident"):
@@ -108,6 +113,7 @@ class ExecutionSpec:
         validate_column_position_record(record)
         requested = dict(record.get("requested", record))
         if "requested" in record:
+            requested.setdefault("resident_executor", "general" if requested.get("placement") == "resident" else "auto")
             requested.setdefault("input_interface", "records")
             requested.setdefault("query_execution", "legacy")
             host_prefill = (requested.get("schedule", "prefill") == "prefill"
@@ -117,11 +123,14 @@ class ExecutionSpec:
 
     def record(self):
         requested = asdict(self)
+        resident_policy = self.placement == "resident" and self.resident_executor != "general"
+        if not resident_policy:
+            requested.pop("resident_executor")
         columns_policy = (self.input_interface == "auto" and self.return_mode != "complete"
             and self.placement != "resident" and self.schedule == "prefill"
             and self.prefill_schedule != "greedy" and self.query_execution in {"auto", "dense-v1"}
             and self.packing != "scalar" and self.workers == 1)
-        if not columns_policy:
+        if not columns_policy and not resident_policy:
             requested.pop("input_interface")
         # Explicit greedy reproduces the pre-window execution identities.
         # Streaming/resident do not use the host prefill strategy at all.
@@ -153,6 +162,8 @@ class ExecutionSpec:
             effective["packing"] = "scalar" if self.client == "pytorch" and self.schedule == "streaming" else "packed"
         if self.placement == "resident":
             effective["operator"] = "aten+device-control"
+            if resident_policy:
+                effective["resident_policy"] = "settle-block-v2; actual certificate, compatible modules and task; general fallback before allocation only"
         if self.query_execution == "auto":
             effective["query_policy"] = "kv-block-v1+packed-v2+describe-batch-v2; independent capabilities, dtype/schedule fallback to legacy"
             # A record-query fallback is not a capability decision for the
@@ -160,7 +171,8 @@ class ExecutionSpec:
             if not columns_policy and (self.placement == "resident" or self.schedule == "streaming"
                     or self.packing == "scalar" or self.workers != 1 or self.dtype == "float16" or self.peer_devices):
                 effective["query_execution"] = "legacy"
-        body = dict(schema="tide-weighted-execution-v6" if columns_policy else
+        body = dict(schema="tide-weighted-execution-v7" if resident_policy else
+                    "tide-weighted-execution-v6" if columns_policy else
                     "tide-weighted-execution-v4" if selected_boundary else
                     "tide-weighted-execution-v3" if window_policy else
                     "tide-weighted-execution-v2" if extended else "tide-weighted-execution-v1",

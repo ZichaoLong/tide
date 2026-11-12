@@ -21,14 +21,15 @@ BlockReadSelectionInput move(const BlockReadSelectionInput& x,at::Device d){
   return {copy_weighted_raw_state(x.read,d),x.mass.to(d),x.content.to(d),x.present.to(d),x.times.to(d),x.node_owners.to(d)};
 }
 BlockReadSelectionParameters move(const BlockReadSelectionParameters& w,at::Device d){
-  BlockReadSelectionParameters out;out.query={w.query.query.to(d),w.query.key.to(d),w.query.value.to(d)};
+  BlockReadSelectionParameters out;
+  if(w.query.query.defined())out.query={w.query.query.to(d),w.query.key.to(d),w.query.value.to(d)};
   for(const auto& [name,value]:w.describe)out.describe[name]=value.to(d);
   auto h=w.region.context;out.region.context={h.matrix.to(d),h.hidden_bias.to(d),h.projection.to(d),h.bias.to(d)};
   out.region.context_owners=w.region.context_owners.to(d);return out;
 }
 void compare(const Fixture& f,const Formula& ref,const BlockReadSelectionTape& t,const BlockReadSelectionGradient& g,
-    const Tensor& roots,const Tensor& bar){
-  at::AutoGradMode enabled(true);close(t.query.memory,ref.memory);close(t.query.total,ref.total);close(t.controls,ref.controls);
+    const Tensor& roots,const Tensor& bar,const BlockReadObservations& observed={}){
+  at::AutoGradMode enabled(true);close(t.memory_values(),ref.memory);close(t.memory_totals(),ref.total);close(t.controls,ref.controls);
   require(at::equal(t.active.cpu(),ref.controls>0),"block per-node activity differs");
   require(at::equal(t.region.history_present.cpu(),t.lengths.cpu()>0),"block region history presence differs");
   for(int64_t row=0;row<Rows;++row)for(const auto& [name,expected]:ref.descriptions[row])close(t.describe.fields.at(name)[row],expected);
@@ -39,6 +40,11 @@ void compare(const Fixture& f,const Formula& ref,const BlockReadSelectionTape& t
   std::vector<Tensor> outputs,bars;
   for(int64_t row=0;row<Rows;++row)if(roots.reshape({Rows})[row].item<bool>()&&ref.control_roots[row].requires_grad()){
     outputs.push_back(ref.control_roots[row]);bars.push_back(bar.reshape({Rows})[row]);}
+  for(int part=0;part<2;++part){const auto& root=part?observed.total:observed.memory;
+    if(!root.value.defined())continue;const auto& source=part?ref.total_roots:ref.memory_roots;
+    for(int64_t row=0;row<Rows;++row)for(int channel=0;channel<2;++channel)
+      if(root.connected[row][channel].cpu().item<bool>()&&source[2*row+channel].requires_grad()){
+        outputs.push_back(source[2*row+channel]);bars.push_back(root.value[row][channel].cpu());}}
   auto expected=outputs.empty()?std::vector<Tensor>(ref.leaves.size()):torch::autograd::grad(outputs,ref.leaves,bars,true,false,true);
   const std::vector<std::string> qnames{"query","key","value"},hnames{"matrix","hidden_bias","projection","bias"};
   const auto qvalues=roles(g.query),qflags=std::vector<Tensor>{g.query_connected,g.key_connected,g.value_connected};
@@ -64,10 +70,17 @@ void compare(const Fixture& f,const Formula& ref,const BlockReadSelectionTape& t
     }catch(...){std::cerr<<"root="<<label.kind<<'.'<<label.name<<" row="<<label.row<<'\n';throw;}
   }
 }
-void check(at::Device device){
-  at::NoGradGuard no_grad;Fixture f;auto ref=formula(f);auto x=move(f.input,device);auto weights=move(f.weights,device);
+void check(at::Device device,const std::string& memory_read){
+  at::NoGradGuard no_grad;Fixture f(memory_read);auto ref=formula(f);auto x=move(f.input,device);auto weights=move(f.weights,device);
   auto error=at::zeros({1},x.times.options().dtype(at::kInt)),roots=at::zeros_like(x.present),bar=at::zeros_like(x.mass);
   DeviceProgram p(device);p.limit_workspace(128*1024*1024);
+  if(memory_read=="sum"){
+    auto invalid=weights;invalid.query.query=at::ones({Banks,2,2},x.content.options());
+    DeviceProgram rejected(device);bool refused=false;
+    try{append_block_read_selection(rejected,f.plan,f.kv,f.regional,x,invalid,error,128*1024*1024);}
+    catch(const std::invalid_argument& e){refused=std::string(e.what()).find("sum Read does not bind query")!=std::string::npos;}
+    require(refused,"sum Read accepted synthetic query parameters");rejected.close();
+  }
   auto tape=append_block_read_selection(p,f.plan,f.kv,f.regional,x,weights,error,128*1024*1024);
   auto gradient=append_block_read_selection_vjp(p,tape,bar,roots,error,128*1024*1024);p.finish();
   Tensor host_roots,host_bar;
@@ -85,21 +98,41 @@ void check(at::Device device){
   // subsequently overwritten input coordinates, raw state or parameter banks.
   DeviceProgram reverse(device);reverse.limit_workspace(128*1024*1024);
   auto saved=append_block_read_selection_vjp(reverse,tape,bar,roots,error,128*1024*1024);reverse.finish();
+  BlockReadObservations observed;
+  observed.memory={at::full({Rows,2,2},NAN,bar.options()),at::zeros({Rows,2},roots.options())};
+  observed.total={at::full({Rows,2},NAN,bar.options()),at::zeros({Rows,2},roots.options())};
+  observed.memory.value[0][0].fill_(.7);observed.memory.connected[0][0]=true;
+  observed.memory.value[4][1].zero_();observed.memory.connected[4][1]=true;
+  observed.total.value[6][0]=.3;observed.total.connected[6][0]=true;
+  observed.memory.connected[3].fill_(true); // An absent row must ignore its NaN bar.
+  auto no_bar=at::zeros_like(bar),no_roots=at::zeros_like(roots);
+  DeviceProgram mem_reverse(device);mem_reverse.limit_workspace(128*1024*1024);
+  auto mem_gradient=append_block_read_selection_vjp(mem_reverse,tape,no_bar,no_roots,error,128*1024*1024,observed);mem_reverse.finish();
   for(auto tensor:{x.read.floating,x.mass,x.content})tensor.fill_(NAN);
   for(auto tensor:{x.read.integer,x.times,x.node_owners})tensor.fill_(-99);x.present.zero_();
-  for(auto tensor:roles(weights.query))tensor.fill_(NAN);for(auto& [_,tensor]:weights.describe)tensor.fill_(NAN);
+  for(auto tensor:roles(weights.query))if(tensor.defined())tensor.fill_(NAN);for(auto& [_,tensor]:weights.describe)tensor.fill_(NAN);
   for(auto tensor:roles(weights.region.context))tensor.fill_(NAN);weights.region.context_owners.fill_(-99);
   portable_torch::synchronize(device);reverse.run();require(!error.cpu().item<int>(),"block reverse reread mutable source");
-  compare(f,ref,tape,saved,host_roots,host_bar);reverse.close();p.close();
+  compare(f,ref,tape,saved,host_roots,host_bar);reverse.close();
+  mem_reverse.run();require(!error.cpu().item<int>(),"block independent Mem reverse rejected saved input");
+  compare(f,ref,tape,mem_gradient,no_roots.cpu(),no_bar.cpu(),observed);
+  if(memory_read=="sum"){
+    require(!mem_gradient.content_connected.cpu().any().item<bool>(),"sum Mem fabricated a current-content dependency");
+    for(auto t:roles(mem_gradient.query))require(!t.defined(),"sum Mem fabricated query parameter gradients");
+    for(auto t:{mem_gradient.query_connected,mem_gradient.key_connected,mem_gradient.value_connected})
+      require(!t.defined(),"sum Mem fabricated query parameter connection flags");
+  }
+  mem_reverse.close();p.close();
   DeviceProgram refusal(device);bool denied=false;
   try{append_block_read_selection(refusal,f.plan,f.kv,f.regional,x,weights,error,1);}catch(const std::invalid_argument&){denied=true;}
   require(denied,"block read-selection omitted tensor-budget admission");refusal.close();
-  std::cout<<"block-read-selection: passed frames=4 nodes=3 complete_regions=2 roots=3 shared_banks=2 "
+  std::cout<<"block-read-selection: passed memory_read="<<memory_read<<" frames=4 nodes=3 complete_regions=2 roots=3+Mem/total shared_banks=2 "
     <<"independent_formula_vjp=true saved_versions=true full_executor=false three_replay_seconds="<<seconds<<'\n';
 }
 }
 int main(int argc,char** argv){portable_torch::RuntimeSession runtime;
   try{auto args=portable_torch::parse_cli(argc,argv,true);if(args.help){portable_torch::print_usage(std::cout,argv[0]);return 0;}
     if(args.device_spec=="auto"||args.dtype!=at::kFloat)throw std::invalid_argument("block Read-selection requires explicit accelerator/FP32");
-    auto device=portable_torch::resolve_device(args);at::set_num_threads(1);at::set_num_interop_threads(1);check(device);return 0;
+    auto device=portable_torch::resolve_device(args);at::set_num_threads(1);at::set_num_interop_threads(1);
+    for(const auto& read:{"qry","sum"})check(device,read);return 0;
   }catch(const std::exception& e){std::cerr<<e.what()<<'\n';return 2;}}

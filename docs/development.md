@@ -50,6 +50,13 @@ planning/默认列/checkpoint接口；逐物理端口输入、三次真实AdamW�
 `--client native --native-library /path/to/matching/build`；真实 NPU 在合法分配后选
 `--device npu:0 --dtype float32`。该小消费者的资格不能代替全部局部组合/规模。
 
+新 resident 的实际 Model 消费者为 `examples/consumer_core5/block_resident.py`，
+传入 `--device npu:0 --native-library CORE --resident-library BLOCK_BUILD
+--checkpoint-path NEW.pt --memory-read qry`；新进程加 `--restore-check`，sum 另用新的 checkpoint。
+它使用独立安装包，对照 Python 标量日程，检查三步 AdamW、非齐端口和精确恢复。
+公共实验 `tidegraph check CONFIG --scope full --output-dir NEW` 的默认分派及完整值解码
+见[resident实验契约](experiment-resident-blocks.md)；SDK输出任务与完整观察的资格范围分列。
+
 ## Python CPU 起步
 
 使用项目自己的 Python/Torch 环境。不要覆盖其他项目或公共厂商环境。

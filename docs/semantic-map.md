@@ -203,6 +203,9 @@ Settle `ports` 在任意逻辑 cut 原样保留状态和 pending；`broadcast_su
 `BlockDispatcher`与静态潜在DAG；KV §3、架构Describe及分配SelStep到
 `append_block_read_selection`/VJP。元数据独立递归DAG与数值独立公式各自验证，
 不把局部块和静态lowering当作完整图、训练或checkpoint交付。
+KV §3.2 的 sum 与 §3.3 的 qry 通过 typed Memory variant 分派既有函数及VJP；
+`block_selection_formula/check`核对两者独立Mem/total根、sum无query/current-content依赖，
+`block_settle_model_check`核对sum真实参数角色；检查源码和真机证据分列。
 [Read/Full消息组合](resident-block-kv-messages.md)把架构§3/§4.2与KV§3–4对应到
 `append_block_kv_messages`及其VJP：Read快照/proposal快照分别输入，(c,G)与显式cG分开，
 actual presence和int64时钟伴随返回；role→canonical owner映射汇总真实参数共享。

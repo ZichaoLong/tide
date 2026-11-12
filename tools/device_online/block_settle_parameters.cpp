@@ -30,9 +30,10 @@ ParameterVjp append_block_settle_parameter_vjp(DeviceProgram& p,const BlockSettl
 }
 std::map<std::string,at::Tensor> block_kv_local_parameters(const BlockKVLocalParameters& w){
   std::map<std::string,at::Tensor> out{{"update.base",w.update.base},{"update.left",w.update.left},{"update.right",w.update.right},{"update.summary",w.update.summary},
-    {"read.query",w.message.read.query.query},{"read.key",w.message.read.query.key},{"read.value",w.message.read.query.value},
     {"full.query",w.message.full.query},{"full.out",w.message.full.residual.out},{"full.gate",w.message.full.residual.gate},
     {"full.up",w.message.full.residual.up},{"full.down",w.message.full.residual.down}};
+  if(w.message.read.query.query.defined()){
+    out["read.query"]=w.message.read.query.query;out["read.key"]=w.message.read.query.key;out["read.value"]=w.message.read.query.value;}
   if(w.source.a.defined()){out["source.a"]=w.source.a;out["source.b"]=w.source.b;out["source.embedding"]=w.source.embedding;}
   if(w.source_factors){const auto& f=*w.source_factors;out["source.a_left"]=f.a_left;out["source.a_right"]=f.a_right;out["source.b_left"]=f.b_left;out["source.b_right"]=f.b_right;}
   for(const auto& [name,x]:w.message.read.describe)out["describe."+name]=x;
@@ -46,7 +47,7 @@ BlockKVLocalParameters block_kv_local_parameters(const std::map<std::string,at::
   auto get=[&](const std::string& name){const auto& value=values.at(name);
     if(value.sizes()!=expected.at(name).sizes())throw std::invalid_argument("block parameter role shape differs");return value;};
   w.update={get("update.base"),get("update.left"),get("update.right"),get("update.summary")};
-  w.message.read.query={get("read.query"),get("read.key"),get("read.value")};
+  if(w.message.read.query.query.defined())w.message.read.query={get("read.query"),get("read.key"),get("read.value")};
   w.message.full={get("full.query"),{get("full.out"),get("full.gate"),get("full.up"),get("full.down")}};
   if(w.source.a.defined())w.source={get("source.a"),get("source.b"),get("source.embedding")};
   if(w.source_factors)w.source_factors=WeightedSourceFactors{get("source.a_left"),get("source.a_right"),get("source.b_left"),get("source.b_right")};

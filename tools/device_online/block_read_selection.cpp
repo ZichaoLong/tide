@@ -18,8 +18,10 @@ BlockReadSelectionTape append_block_read_selection(DeviceProgram& p,const Settle
   kv.validate();config.validate();
   if(!error.defined()||error.dim()!=1||error.numel()!=1||error.scalar_type()!=at::kInt)
     throw std::invalid_argument("block read-selection requires an int32 error flag");
-  if(kv.memory_read!="qry"||!x.present.defined()||x.present.dim()!=2||x.present.size(0)<1||
-     layout.member_offsets.size()<2||layout.members.empty())throw std::invalid_argument("block read-selection requires nonempty KV qry layout");
+  if(!x.present.defined()||x.present.dim()!=2||x.present.size(0)<1||
+     layout.member_offsets.size()<2||layout.members.empty())throw std::invalid_argument("block read-selection requires nonempty KV sum/qry layout");
+  if(kv.memory_read=="sum"&&(weights.query.query.defined()||weights.query.key.defined()||weights.query.value.defined()))
+    throw std::invalid_argument("KV sum Read does not bind query parameters");
   const int64_t frames=x.present.size(0),nodes=layout.members.size(),regions=layout.member_offsets.size()-1;
   if(frames>std::numeric_limits<int64_t>::max()/nodes||frames>std::numeric_limits<int64_t>::max()/regions)
     throw std::invalid_argument("block read-selection row count overflow");
@@ -43,7 +45,7 @@ BlockReadSelectionTape append_block_read_selection(DeviceProgram& p,const Settle
   const WeightedStorageIncrement storage(p,borrowed(x,weights,error));
   admit(64.L*rows+rr*(32.L+members*(24.L+4.L*(3+e+2*q))),budget);
   auto remaining=[&](){auto used=storage.bytes();admit(used,budget);return budget-used;};
-  BlockReadSelectionTape t(kv,x.read.integer.size(1)-4);t.frames=frames;t.nodes=nodes;t.regions=regions;t.members=members;
+  BlockReadSelectionTape t;t.frames=frames;t.nodes=nodes;t.regions=regions;t.members=members;
   const auto longs=x.times.options(),booleans=x.present.options();
   t.owners=at::zeros({rows},longs);t.present=at::zeros({rows},booleans);t.node_times=at::zeros({rows},longs);
   t.order=at::zeros({rr,members},longs);t.inverse=at::zeros({rows},longs);t.ids=at::zeros_like(t.order);
@@ -54,10 +56,11 @@ BlockReadSelectionTape append_block_read_selection(DeviceProgram& p,const Settle
     ptr(x.present),ptr(x.times),ptr(x.node_owners),ptr(offsets),ptr(membership),ptr(t.owners),ptr(t.present),ptr(t.node_times),
     ptr(t.order),ptr(t.inverse),ptr(t.ids),ptr(t.times),ptr(t.lengths),ptr(t.node_region_row),ptr(error),frames,nodes,regions,members),
     "resident complete block candidate plan");},{x.present,x.times,x.node_owners,offsets,membership,t.owners,t.present,t.node_times,t.order,t.inverse,t.ids,t.times,t.lengths,t.node_region_row,error});
-  t.query=append_weighted_kv_query(p,kv,x.read,t.node_times,x.content.reshape({rows,kv.width}),t.owners,t.present,weights.query,error,remaining());
-  auto memory=t.query.memory.reshape({rows,2*kv.summary_width});
+  if(kv.memory_read=="sum")t.memory=append_weighted_kv_sum(p,kv,x.read,t.node_times,t.present,error,remaining());
+  else t.memory=append_weighted_kv_query(p,kv,x.read,t.node_times,x.content.reshape({rows,kv.width}),t.owners,t.present,weights.query,error,remaining());
+  auto memory=t.memory_values().reshape({rows,2*kv.summary_width});
   WeightedDescribeInput d{x.mass.reshape({rows}),x.content.reshape({rows,kv.width}),columns(p,memory,0,kv.summary_width),
-    columns(p,memory,kv.summary_width,kv.summary_width),columns(p,t.query.total,0,1).reshape({rows}),columns(p,t.query.total,1,1).reshape({rows})};
+    columns(p,memory,kv.summary_width,kv.summary_width),columns(p,t.memory_totals(),0,1).reshape({rows}),columns(p,t.memory_totals(),1,1).reshape({rows})};
   t.describe=append_weighted_describe(p,d,t.owners,weights.describe,config,kv.epsilon,error,remaining());
   auto pack=[&](const std::string& name,int64_t width){
     if(!t.describe.fields.count(name))return at::zeros({rr,members,width},x.mass.options());

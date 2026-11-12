@@ -1,6 +1,7 @@
 #pragma once
 #include "weighted_kv_full.h"
 #include "weighted_kv_query.h"
+#include "weighted_kv_sum.h"
 namespace tide::device_online {
 // Tapes borrowed by a new reverse program belong to the caller. Enumerating
 // their storage before appending keeps the local charge about new allocation.
@@ -25,6 +26,10 @@ inline std::vector<at::Tensor> saved_tensors(const WeightedKVQueryTape& t){
   std::vector<at::Tensor> out{t.scale,t.memory,t.total};append_saved_tensors(out,t.window);
   for(const auto* p:{&t.query,&t.key,&t.value})append_saved_tensors(out,*p);
   append_saved_tensors(out,t.rotary);append_saved_tensors(out,t.pool);return out;
+}
+inline std::vector<at::Tensor> saved_tensors(const WeightedKVSumTape& t){
+  std::vector<at::Tensor> out{t.memory,t.total};append_saved_tensors(out,t.window);
+  append_saved_tensors(out,t.pool);return out;
 }
 inline std::vector<at::Tensor> saved_tensors(const WeightedKVFullTape& t){
   std::vector<at::Tensor> out{t.queries,t.scale,t.output};append_saved_tensors(out,t.window);

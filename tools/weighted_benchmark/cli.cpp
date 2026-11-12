@@ -33,6 +33,11 @@ Json Request::task() const {
 Json Request::checkpoint_identity(const Json& fixture) const {
   Json identity={{"fixture_sha256",fixture.at("fixture_sha256")},{"mode",mode},{"dtype",precision},
     {"scoring_dtype",scoring},{"implementation",implementation},{"span",fixture.at("span")},{"task",task()}};
+  if(implementation=="resident"&&resident_executor!="general"){
+    identity["resident_executor"]=resident_executor;
+    identity["resident_policy"]="settle-block-v2-static-v1";
+    identity["resident_observations"]={{"return_mode",return_mode},{"trace_records",trace_records}};
+  }
   // Explicit legacy keeps historical manifests. New execution selections must
   // not silently resume them as an exact continuation of a different policy.
   if(query_execution!="legacy")identity["query_execution"]=query_execution;
@@ -90,7 +95,11 @@ void help() {
     "  Each completed window atomically publishes output/checkpoint/latest.json; resume reads that boundary.\n"
     "--loss-scale X --lr X --momentum X --weight-decay X (explicit diagnostic training task)\n"
     "--check-roots [true|false] (separate small eager independent VJP diagnostic, <= 5M parameters)\n"
-    "--resident-limits JSON --observe-work true|false (observation, not throughput qualification)\n";
+    "--resident-executor auto|general|block-v2 (auto selects compatible Settle tensor windows)\n"
+    "--resident-limits JSON (explicit historical general owner budgets)\n"
+    "--resident-block-limits JSON (independent block owner budgets; mutually exclusive)\n"
+    "  Complete observations retain general; explicit block requires outputs/metrics.\n"
+    "--observe-work true|false (observation, not throughput qualification)\n";
 }
 Request parse_request(int argc,char** argv) {
   Request r;
@@ -104,7 +113,8 @@ Request parse_request(int argc,char** argv) {
     if(i+1==argc)throw std::invalid_argument("missing value for "+key);const std::string value=argv[++i];
     if(key=="--fixture")r.input=value;else if(key=="--device")r.device=value;
     else if(key=="--output-dir")r.output=value;else if(key=="--resume")r.resume=value;
-    else if(key=="--resident-limits")r.limits=value;else if(key=="--implementation")r.implementation=value;
+    else if(key=="--resident-limits")r.limits=value;else if(key=="--resident-block-limits")r.block_limits=value;
+    else if(key=="--resident-executor")r.resident_executor=value;else if(key=="--implementation")r.implementation=value;
     else if(key=="--mode")r.mode=value;else if(key=="--schedule")r.schedule=value;
     else if(key=="--dtype")r.precision=value;else if(key=="--scoring-dtype")r.scoring=value;
     else if(key=="--placement")r.placement=value;else if(key=="--packing")r.packing=value;
@@ -137,6 +147,14 @@ Request parse_request(int argc,char** argv) {
   if(!one(r.communication,{"ordinary","blocking","cpu_bridge"}))throw std::invalid_argument("invalid communication policy");
   if(!one(r.trace_records,{"auto","complete"}))throw std::invalid_argument("invalid trace-records policy");
   if(!one(r.input_interface,{"auto","records"}))throw std::invalid_argument("invalid input-interface policy");
+  if(!one(r.resident_executor,{"auto","general","block-v2"}))throw std::invalid_argument("invalid resident-executor");
+  if(!r.limits.empty()&&!r.block_limits.empty())throw std::invalid_argument("general and block capacity files are mutually exclusive");
+  if(r.implementation!="resident"&&(!r.limits.empty()||!r.block_limits.empty()||r.resident_executor!="auto"))
+    throw std::invalid_argument("resident selection/capacity options require implementation=resident");
+  if((r.resident_executor=="block-v2"&&!r.limits.empty())||(r.resident_executor=="general"&&!r.block_limits.empty()))
+    throw std::invalid_argument("resident capacity belongs to a different explicitly requested owner");
+  if(r.resident_executor=="block-v2"&&(r.return_mode=="complete"||r.trace_records=="complete"))
+    throw std::invalid_argument("standalone block requires outputs/metrics without complete event records");
   if(!one(r.query_execution,{"auto","legacy","dense-v1","packed-v2"}))throw std::invalid_argument("unknown query_execution");
   if(!one(r.prefill_schedule,{"auto","greedy","window"})||(r.prefill_schedule!="auto"&&(r.implementation=="resident"||r.schedule!="prefill")))
     throw std::invalid_argument("explicit prefill_schedule requires host prefill");
@@ -159,6 +177,7 @@ Request parse_request(int argc,char** argv) {
   if(r.observe_work&&r.implementation!="native")throw std::invalid_argument("eager packing observation does not apply to resident");
   r.input=std::filesystem::absolute(r.input);r.output=std::filesystem::absolute(r.output);
   if(!r.limits.empty())r.limits=std::filesystem::absolute(r.limits);
+  if(!r.block_limits.empty())r.block_limits=std::filesystem::absolute(r.block_limits);
   if(!r.resume.empty())r.resume=std::filesystem::absolute(r.resume);
   return r;
 }

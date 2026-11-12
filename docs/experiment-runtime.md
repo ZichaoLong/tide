@@ -17,7 +17,8 @@
 每窗从静态 task 输入生成新的独立样例；CPU 输入的真实广播别名保留为同一根，
 按实际节点所有者可微复制。训练在该窗 loss、VJP、有限梯度检查与一次统一 optimizer 后 detach。
 固定默认平方输出诊断 loss、SGD 与 FP16 master 策略不变；新任务配方拥有新的 task 身份。
-推理不创建 optimizer 或扫描参数梯度。
+eager 与 general resident 推理不创建 optimizer 或扫描参数梯度。新 block resident 推理复用
+其训练 owner 的已分配存储，不执行 backward/step，构造成本单列。
 每窗也检查任务自身的张量状态是否有限，不要求任务带有 `task.module`；
 `validation=none` 和按需返回都不能绕过该运行检查。
 
@@ -30,6 +31,8 @@ scalar 仍可使用局部函数内部 ATen、共享计算和标量公式已有�
 `auto` 仅解析为既有路径：Python streaming 为 scalar，其他可用 eager 为 packed；不另算算法。
 `return_packing` 只改变完整返回的搬运，不能与数值 packing 混淆。
 resident 使用其公共设备库，拒绝 eager scalar/return-packed 覆盖。
+新配置按静态能力默认选择 [B×L block owner](experiment-resident-blocks.md)；
+旧记录/general、block-v2 的执行身份、容量和实际资格分别保留。
 
 ## 完整与按需返回
 
@@ -40,8 +43,10 @@ resident 使用其公共设备库，拒绝 eager scalar/return-packed 覆盖。
 | metrics | 实际工作计数/cut及声明的任务标量，状态仍归运行 owner | 独立配置；不把少返回的成本与完整返回混算加速比 |
 
 Eager 仍构建内部完整记录；按需返回不声称已消除内部对象或 autograd 图。
-resident 仍保留完整 device journal；按需返回避免不需要的 CPU 解码，不能把它当成 journal 容量压缩。
-resident inference 的 metrics 不额外计算诊断 loss；训练始终计算所声明的 loss/根/optimizer。
+general resident 仍保留完整 device journal；block resident 保留实际列与数值 tape。
+按需返回避免不需要的 CPU 解码，不能把它当成设备容量压缩。
+general resident inference 的 metrics 不额外计算诊断 loss；block-v2 的字段任务三种返回都计算任务标量。
+训练始终计算所声明的 loss/根/optimizer。
 
 Python运行将所需端口输出按窗保存为 `outputs-N.pt`（metrics无此文件），不将整个诊断轨迹长期落盘；输出持久化成本单列。
 

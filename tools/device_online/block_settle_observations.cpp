@@ -30,8 +30,8 @@ BlockWindow block_settle_observations(const BlockSettleWindow& w,ResidentToken t
     out.fields[p+"message.strength"]={x.messages.messages.strength,x.messages.messages.present,{}};
     out.fields[p+"message.content"]={x.messages.messages.content,x.messages.messages.present,{}};
     for(int channel=0;channel<2;++channel){const auto suffix=channel?"long":"short";
-      out.fields[p+"Mem."+suffix]={x.messages.selection.query.memory.select(1,channel),candidates,{}};
-      out.fields[p+"total."+suffix]={x.messages.selection.query.total.select(1,channel),candidates,{}};}
+      out.fields[p+"Mem."+suffix]={x.messages.selection.memory_values().select(1,channel),candidates,{}};
+      out.fields[p+"total."+suffix]={x.messages.selection.memory_totals().select(1,channel),candidates,{}};}
     for(const auto& [name,value]:x.messages.selection.describe.fields)out.fields[p+"Describe."+name]={value,candidates,{}};
     raw_fields(out,p+"old.",x.sequence.layout,x.sequence.old,candidates);raw_fields(out,p+"proposal.",x.sequence.layout,x.sequence.proposal,candidates);
     raw_fields(out,p+"final.",x.sequence.layout,x.sequence.final,w.boundary.node_present.index_select(1,stage.nodes).reshape({-1}));

@@ -12,6 +12,12 @@ def limits(resolved):
 
 
 class Resident:
+    def __new__(cls, resolved, *, checkpoint=None):
+        if cls is Resident and resolved.get("resident_dispatch", {}).get("effective") == "block-v2":
+            from .block_resident import BlockResident
+            return BlockResident(resolved, checkpoint=checkpoint)
+        return super().__new__(cls)
+
     def __init__(self, resolved, *, checkpoint=None):
         from ..planning.materialize import materialize
         from ..weighted import WeightedResident, WeightedResidentTraining
@@ -133,7 +139,8 @@ class Resident:
         with torch.no_grad():
             return dict(self.owner.manifest(), client=self.spec["client"], task=self.task_manifest,
                         return_mode=self.spec.get("return_mode", "complete"),
-                        scheduler="public device resident library", last_backward_statistics=getattr(self, "last_backward_statistics", None))
+                        scheduler="public device resident library", resident_dispatch=self.resolved.get("resident_dispatch"),
+                        last_backward_statistics=getattr(self, "last_backward_statistics", None))
 
     def close(self):
         with torch.no_grad():

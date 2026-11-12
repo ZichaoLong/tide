@@ -23,10 +23,15 @@ Json read_json(const std::filesystem::path& path) {
   std::ifstream stream(path);if(!stream)throw std::invalid_argument("cannot read "+path.string());return Json::parse(stream);
 }
 void limits(Json& data,const Request& request,Json& report) {
+  if(!request.block_limits.empty()){
+    data["__resident_block_limits"]=read_json(request.block_limits);
+    report["resident_block_limit_overrides"]=data.at("__resident_block_limits");
+  }
   if(request.limits.empty())return;
   if(request.implementation!="resident")throw std::invalid_argument("capacity overrides require resident");
   const auto values=read_json(request.limits);
   apply_resident_limits(data.at("limits"),values,request.mode=="training",request.schedule=="prefill");
+  data["__resident_general_limits"]=true;
   report["resident_limit_overrides"]=values;
 }
 }
@@ -45,10 +50,21 @@ int main(int argc,char** argv) {
     data["__prefill_schedule"]=r.prefill_schedule;
     data["__trace_records"]=r.trace_records;
     data["__input_interface"]=r.input_interface;
+    data["__resident_executor"]=r.resident_executor;
     if(r.check_roots)validate_root_budget(data);
     const auto fixture_seconds=tide_bench::seconds(fixture_start);
-    const auto identity=r.checkpoint_identity(data);
-    if(!r.resume.empty())checkpoint_manifest(r.resume,identity); // Reject mismatched input before allocating a model.
+    auto identity=r.checkpoint_identity(data);Index resume_window=0;
+    if(!r.resume.empty()){
+      // Reject changed requests before allocation. The selected owner/codec is
+      // compared exactly again before loading its archive.
+      const auto saved=checkpoint_manifest(r.resume,identity,true);resume_window=saved.at("next_window").get<Index>();
+      if(r.block_limits.empty()&&saved.at("identity").contains("resident_execution")){
+        const auto& execution=saved.at("identity").at("resident_execution");
+        if(execution.at("effective")=="block-v2")data["__resident_block_resume_limits"]=execution.at("effective_limits");
+      }
+    }
+    if(resume_window>std::numeric_limits<Index>::max()-windows-1)throw std::invalid_argument("resident window estimate overflows int64");
+    data["__logical_windows"]=resume_window+windows+1;
     if(!std::filesystem::create_directory(output))throw std::invalid_argument("output directory must be new");created=true;
     std::filesystem::current_path(output);
     auto begin=tide_bench::Clock::now();portable_torch::RuntimeSession runtime;
@@ -86,6 +102,7 @@ int main(int argc,char** argv) {
       {"return_packing",r.return_packing},{"return_mode",r.return_mode},{"trace_records",r.trace_records},
       {"task",r.task()},{"query_execution",r.query_execution},
       {"input_interface",r.input_interface},
+      {"resident_executor",r.resident_executor},
       {"prefill_schedule",r.prefill_schedule},{"scheduler",r.implementation=="resident"?"device":
         r.schedule=="streaming"?"streaming":r.prefill_schedule=="greedy"?"online-greedy":"component-window"},
       {"validation_mode",r.validation},{"exploratory_enabled",r.validation=="explore"},{"exploratory_accepted",false},
@@ -129,9 +146,22 @@ int main(int argc,char** argv) {
     }
     report["runtime_queue_environment"]=queue_environment;
     auto owner=make_owner();Index first=0;
-    if(const auto* eager=dynamic_cast<const Eager*>(owner.get())){
-      report["effective_execution"]=eager->execution();report["scheduler"]=report["effective_execution"].at("schedule");
+    const auto execution=owner->execution();
+    if(!execution.empty()){
+      report["effective_execution"]=execution;report["scheduler"]=execution.at("schedule");
+      if(r.implementation=="resident"&&r.resident_executor!="general"){
+        identity["resident_execution"]={{"effective",execution.at("effective")},{"checkpoint_codec",execution.at("checkpoint_codec")}};
+        if(execution.at("effective")=="block-v2"){
+          identity["resident_execution"]["effective_limits"]=execution.at("effective_limits");
+          report["resident_block_limits"]=execution.at("effective_limits");
+          report.erase("resident_limits");
+          report["optimizer_constructed"]=execution.at("optimizer_storage_constructed");
+          report["autograd_enabled"]=false;report["backward_kind"]=execution.at("backward");
+        }
+      }
     }
+    report["checkpoint_identity"]=identity;
+    report["task_loss_computed"]=training||r.return_mode!="metrics"||execution.value("task_loss_computed",false);
     if(!r.resume.empty())first=restore_run_checkpoint(r.resume,*owner,identity,r.checkpoint_bytes);
     const auto span=data.at("span").get<Index>();
     if(windows+2>std::numeric_limits<Index>::max()/span||first>std::numeric_limits<Index>::max()/span-windows-2)
@@ -148,7 +178,7 @@ int main(int argc,char** argv) {
       const auto communication=tide::communication_statistics();
       capture_memory(report,target,"window-"+std::to_string(window)+"-compute",true,devices);
       auto event=step.observation.is_null()?weighted_benchmark::work(step.result):step.observation;
-      event["step"]=window;event["seconds"]=seconds;event["loss"]=!training&&r.return_mode=="metrics"?Json(nullptr):Json(step.loss);
+      event["step"]=window;event["seconds"]=seconds;event["loss"]=report.at("task_loss_computed").get<bool>()?Json(step.loss):Json(nullptr);
       event["comm"]=communication;
       if(r.observe_work&&!warmup){event["packing_work"]=packing_work();tide::work::reset(false);}
       report[warmup?"warmup_metrics":"metrics"].push_back(event);

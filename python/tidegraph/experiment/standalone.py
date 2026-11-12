@@ -84,8 +84,7 @@ def run(resolved, output, *, resume=None, validation_override=None, check_roots=
         if e.get("node_devices"):
             command += ["--node-devices", ",".join(e["node_devices"])]
         if e["placement"] == "resident":
-            write_json(out/"resident-limits.json", resolved["resources"]["resident_limits"])
-            command += ["--resident-limits", str(out/"resident-limits.json")]
+            command += resident_arguments(resolved, out)
         if resume_path is not None:
             command += ["--resume", str(resume_path)]
         environment = launch_environment(resolved["site"], resolved["execution"])
@@ -145,3 +144,14 @@ def run(resolved, output, *, resume=None, validation_override=None, check_roots=
         record.update(finished=now(), total_wall_seconds=time.perf_counter()-start)
         write_json(out/"result.json", record)
     return record
+
+
+def resident_arguments(resolved, output):
+    """Preserve frozen general choices and the two distinct capacity schemas."""
+    e = resolved["execution"]["effective"]
+    selected = resolved.get("resident_dispatch", {}).get("effective", "general")
+    requested = e.get("resident_executor", "general")
+    key = "resident_block_limits" if selected == "block-v2" else "resident_limits"
+    path = Path(output)/("resident-block-limits.json" if selected == "block-v2" else "resident-limits.json")
+    write_json(path, resolved["resources"][key])
+    return ["--resident-executor", requested, "--"+key.replace("_", "-"), str(path)]

@@ -102,7 +102,7 @@ KV `window=0` 依照累计有限窗增长，不以固定 cache 截断。Settle �
 至多一次 node/sample 作用给上界。它们都不运行数值模型，也不向候选提供真实轨迹。
 这些上界可能较松，不能当作实测 candidate、Full、消息或时间批长。
 
-resident另输出 `resident_layout`，与 `weighted_flow_preflight` 同公式读取显式
+general resident 另输出 `resident_layout`，与 `weighted_flow_preflight` 同公式读取显式
 `resources.resident_limits` 的 queue/stages/cache/tensor_bytes，逐卡预留 physical raw
 initial/current/old，完整前向journal、queue/control在coordinator。
 FP16也沿用该C++前置守卫的FP32浮点预算，实际storage dtype单独记录。
@@ -110,6 +110,10 @@ FP16也沿用该C++前置守卫的FP32浮点预算，实际storage dtype单独�
 不能把eager区域payload owner当作其实际位置。resident表中的canonical参数仍是逻辑基数，
 额外physical role banks、数值tape、peer packet及服务资源为未知，须继续使用实际运行库准入。
 AMSGrad额外maximum槽、optimizer表/标量和下游head/loss专属内存也须按实际配置补预算。
+
+block-v2 使用独立 `resident_block_limits` 和 block raw/total/workspace 布局，
+不复用 queue/stages 估算；静态选择、请求/生效容量、旧配置保留和精确 archive
+见[resident 实验张量窗口](experiment-resident-blocks.md)。
 
 B128/B512没有额外的静态小batch白名单。原始时间、metadata和预算用整数；
 同一模型的参数量不随batch虚增，私有state、完整返回与恢复状态分别随真实batch计费。

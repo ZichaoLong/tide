@@ -43,6 +43,14 @@ int main() {
     rejects([&]{auto a=base;a.insert(a.end(),{"--steps","2garbage"});parse(a);});
     rejects([&]{auto a=base;a.insert(a.end(),{"--loss-scale","nan"});parse(a);});
     rejects([&]{auto a=base;a.insert(a.end(),{"--input-interface","invented"});parse(a);});
+    rejects([&]{auto a=base;a.insert(a.end(),{"--resident-executor","block-v2"});parse(a);});
+    auto block=base;block.insert(block.end(),{"--device","cuda:0","--implementation","resident","--return-mode","outputs","--validation","none"});
+    require(parse(block).resident_executor=="auto","resident auto default missing");
+    auto explicit_block=block;explicit_block.insert(explicit_block.end(),{"--resident-executor","block-v2","--resident-block-limits","block.json"});
+    require(parse(explicit_block).block_limits.is_absolute(),"block budget path not resolved");
+    rejects([&]{auto a=explicit_block;a.insert(a.end(),{"--resident-limits","general.json"});parse(a);});
+    rejects([&]{auto a=explicit_block;a.insert(a.end(),{"--return-mode","complete"});parse(a);});
+    rejects([&]{auto a=explicit_block;a.insert(a.end(),{"--resident-executor","general"});parse(a);});
     rejects([&]{auto a=base;a.insert(a.end(),{"--node-devices","cuda:0,"});parse(a);});
     Json limits={{"queue",64},{"prefill",true},{"retained_bytes",100}};
     apply_resident_limits(limits,{{"queue",128},{"prefill",true}},false,true);
@@ -56,6 +64,16 @@ int main() {
     CheckpointOwner owner;
     const Json fixture={{"fixture_sha256","one"},{"span",10}};
     const auto identity=request.checkpoint_identity(fixture);
+    auto block_request=parse(block);auto block_identity=block_request.checkpoint_identity(fixture);
+    require(block_identity.at("resident_executor")=="auto","resident policy absent from identity");
+    block_request.resident_executor="general";
+    require(!block_request.checkpoint_identity(fixture).contains("resident_executor"),"explicit general changed historical identity");
+    auto effective=block_identity;effective["resident_execution"]={{"effective","block-v2"},{"checkpoint_codec","block-schema-2"}};
+    save_run_checkpoint(root/"block-checkpoint",owner,effective,3,1000);
+    checkpoint_manifest(root/"block-checkpoint",block_identity,true);
+    rejects([&]{checkpoint_manifest(root/"block-checkpoint",block_identity);});
+    rejects([&]{auto changed=effective;changed["resident_execution"]["effective"]="general";restore_run_checkpoint(root/"block-checkpoint",owner,changed,1000);});
+    require(restore_run_checkpoint(root/"block-checkpoint",owner,effective,1000)==3,"effective block identity did not restore");
     require(identity.at("input_policy")=="tensor-window-v1; compatible Settle modules, explicit graph fallback",
             "tensor window identity missing");
     require(identity.at("position_policy")=="bounded-common-origin-v1","column position policy missing");

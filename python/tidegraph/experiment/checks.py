@@ -132,12 +132,27 @@ def resident_roots(resolved):
             leaves = {n: p for n, p in reference.binding.model.named_parameters() if p.requires_grad}
             want = _vjp(loss, leaves)
             with torch.no_grad():
-                xs = candidate.task.inputs(candidate.inputs, 0, device="cpu", training=False)
-                window = candidate.owner.advance(xs, stop=candidate.span, sealed_until=candidate.span)
-                f = window.fields["outputs"]
-                bar = torch.where(f.present[..., None], torch.full_like(f.values, scale, dtype=torch.float32), torch.zeros_like(f.values, dtype=torch.float32))
-                gradients = candidate.owner.backward([candidate.owner.cotangents(window, {"outputs": bar})])
-                got = candidate.layout.decode(gradients.parameters, candidate.owner.checkpoint())["gradients"]
+                if resolved.get("resident_dispatch", {}).get("effective") == "block-v2":
+                    from .block_checkpoint import record
+                    window, _ = candidate.advance(0)
+                    bars = {}
+                    for name in ("output.strength", "output.content"):
+                        f = window.fields[name]
+                        mask = f.present if f.values.ndim == f.present.ndim else f.present[..., None]
+                        bars[name] = torch.where(mask, torch.full_like(f.values, scale), torch.zeros_like(f.values))
+                    gradients = candidate.owner.backward([candidate.owner.cotangents(window, bars)])
+                    # The actual adjoints own their storage after tape detach.
+                    # A complete cut/archive cannot be requested on a live tape.
+                    candidate.owner.detach()
+                    saved = record(candidate.owner)
+                else:
+                    xs = candidate.task.inputs(candidate.inputs, 0, device="cpu", training=False)
+                    window = candidate.owner.advance(xs, stop=candidate.span, sealed_until=candidate.span)
+                    f = window.fields["outputs"]
+                    bar = torch.where(f.present[..., None], torch.full_like(f.values, scale, dtype=torch.float32), torch.zeros_like(f.values, dtype=torch.float32))
+                    gradients = candidate.owner.backward([candidate.owner.cotangents(window, {"outputs": bar})])
+                    saved = candidate.owner.checkpoint()
+                got = candidate.layout.decode(gradients.parameters, saved)["gradients"]
                 got = {name: got[name] for name in leaves}
                 equivalent(got, want, check_device=False, atol=atol, rtol=rtol)
             checked.append("output" if scale else "connected-zero")

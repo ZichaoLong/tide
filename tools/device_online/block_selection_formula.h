@@ -1,5 +1,5 @@
 #pragma once
-// Independent formula fixture for the concrete KV/qry/cat/ind/context/quad
+// Independent formula fixture for the concrete KV/sum-or-qry/cat/ind/context/quad
 // Read-selection block. This is a test oracle, never a runtime dependency.
 #include "block_read_selection.h"
 
@@ -15,7 +15,7 @@ struct Fixture {
   std::vector<State> states;
   BlockReadSelectionInput input;
   BlockReadSelectionParameters weights;
-  Fixture();
+  explicit Fixture(const std::string& memory_read="qry");
 };
 struct FormulaLabel {std::string kind,name;int64_t row;};
 struct Formula {
@@ -23,6 +23,7 @@ struct Formula {
   std::vector<FormulaLabel> labels;
   std::vector<Fields> descriptions;
   std::vector<at::Tensor> control_roots; // Before cross-region stacking: independent roots.
+  std::vector<at::Tensor> memory_roots,total_roots; // Before cross-row/channel stacking.
   at::Tensor memory,total,controls;
 };
 at::Tensor values(at::IntArrayRef,float shift);

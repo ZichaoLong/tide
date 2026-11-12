@@ -41,8 +41,8 @@ def block_resident_capability(spec, model, *, device=None, node_devices=None):
         if region.config.support_policy != "strict":
             return False, "requires strict mathematical support policy"
         nodes = [model.nodes[v] for v, n in enumerate(graph.nodes) if n.region == r]
-        if any(not isinstance(n.kernel.config, KVConfig) or n.kernel.config.memory_read != "qry" for n in nodes):
-            return False, "requires KV query sequence capability"
+        if any(not isinstance(n.kernel.config, KVConfig) for n in nodes):
+            return False, "requires KV sum/query sequence capability"
         if any(n.kernel.config != nodes[0].kernel.config or n.aggregate_program.alpha != nodes[0].aggregate_program.alpha for n in nodes):
             return False, "requires compatible KV geometry and Aggregate alpha within each region"
         factors = {hasattr(t, "a_left") for n in nodes for t in n.aggregate_program.transforms.values()}

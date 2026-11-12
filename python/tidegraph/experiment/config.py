@@ -19,7 +19,7 @@ RESOURCE_FIELDS = {"max_materialize_bytes", "checkpoint_max_bytes", "devices", "
                    "journal_bytes", "activation_bytes", "communication_bytes", "logical_windows",
                    "live_results", "host_results", "retained_windows", "host_capacity_bytes", "host_free_bytes",
                    "host_reserve_bytes", "disk_free_bytes", "disk_reserve_bytes", "device_reserve_bytes",
-                   "resident_limits", "storage_medium"}
+                   "resident_limits", "resident_block_limits", "storage_medium"}
 
 
 def _object(value, allowed, name):
@@ -149,7 +149,8 @@ def _resources(value, site, measurement):
     host_results += 2 if measurement["checkpoint_check"] else 1
     result["host_results"] = max(result.get("host_results", 0), host_results)
     result.setdefault("retained_windows", 1)
-    mappings = {"devices", "workspace_bytes", "journal_bytes", "activation_bytes", "communication_bytes", "resident_limits"}
+    mappings = {"devices", "workspace_bytes", "journal_bytes", "activation_bytes", "communication_bytes",
+                "resident_limits", "resident_block_limits"}
     for key, val in result.items():
         if key == "storage_medium":
             if val not in {"disk", "tmpfs"}:
@@ -175,6 +176,11 @@ def _resources(value, site, measurement):
                 raise ValueError("resources.resident_limits.prefill: expected true or false")
         else:
             positive(val, "resources.resident_limits."+key)
+    from ..planning.resident_policy import BLOCK_LIMITS
+    block = result.get("resident_block_limits", {})
+    fields(block, BLOCK_LIMITS, "resources.resident_block_limits")
+    for key, val in block.items():
+        positive(val, "resources.resident_block_limits."+key)
     return result
 
 
@@ -249,13 +255,19 @@ def resolve(value, *, site=None, base_dir=None):
         if spec.return_mode != "complete" and measurement["validation"] != "none":
             raise ValueError("execution.return_mode: independent validation requires complete return; "
                              "run check separately, then explicitly set measurement.validation=none for outputs/metrics")
-        if resources.get("resident_limits") and spec.placement != "resident":
-            raise ValueError("resources.resident_limits: only applies to execution.placement=resident")
+        if any(key in resources for key in ("resident_limits", "resident_block_limits")) and spec.placement != "resident":
+            raise ValueError("resources.resident_limits/resident_block_limits: only apply to execution.placement=resident")
         if resources.get("resident_limits", {}).get("prefill", spec.schedule == "prefill") != (spec.schedule == "prefill"):
             raise ValueError("resources.resident_limits.prefill: must match execution.schedule")
-        if spec.placement == "resident":
-            resources["resident_limits"] = resident_limits_defaults(plan, spec, measurement, resources)
         graph_view = execution_view(plan, family=family)
+        resident_dispatch = None
+        if spec.placement == "resident":
+            from ..planning.resident_policy import select, block_limits_defaults
+            resident_dispatch = select(plan, spec, graph_view["family"], task, resources)
+            key = resident_dispatch["capacity_field"]
+            resources[key] = (block_limits_defaults(plan, resources) if key == "resident_block_limits" else
+                              resident_limits_defaults(plan, spec, measurement, resources))
+            resident_dispatch["effective_limits"] = deepcopy(resources[key])
         from ..planning.placement import plan_payload_placement
         devices = spec.peer_devices or (spec.device,)
         # A site can describe more cards than this run selects. Resource budgets
@@ -284,8 +296,11 @@ def resolve(value, *, site=None, base_dir=None):
         raise ValueError(f"execution/resources: {error}; inspect device mapping, module support and explicit strategy") from error
     task["stride"] = plan["stride"]
     task["input_origins"] = graph_view["input_clock"]["origins"]
-    execution_id = fingerprint(dict(schema="tide-experiment-execution-v1",
-        execution_id=execution["execution_id"], view_id=graph_view["view_id"], placement_id=mapping["placement_id"]))
+    execution_identity = dict(schema="tide-experiment-execution-v1",
+        execution_id=execution["execution_id"], view_id=graph_view["view_id"], placement_id=mapping["placement_id"])
+    if resident_dispatch is not None and spec.resident_executor != "general":
+        execution_identity["resident_dispatch"] = resident_dispatch
+    execution_id = fingerprint(execution_identity)
     body = dict(schema=RESOLVED_SCHEMA, name=value.get("name", "experiment"),
         description=value.get("description", ""), plan=plan, inventory=inventory,
         execution=execution, graph_view=graph_view, payload_placement=mapping, capacity_budget=budget,
@@ -295,4 +310,6 @@ def resolve(value, *, site=None, base_dir=None):
         requested=value,
         resolved=dict(model=plan, task=task, execution=execution["effective"], family=graph_view["family"],
                       site=selected_site, measurement=measurement, resources=resources))
+    if resident_dispatch is not None:
+        body["resident_dispatch"] = resident_dispatch
     return dict(body, config_id=fingerprint(body))

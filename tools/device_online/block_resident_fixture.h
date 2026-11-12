@@ -4,9 +4,9 @@
 #include "tide/kernel.h"
 namespace tide::device_online::block_public_check {
 struct Fixture {SettleGraph graph;Model model;Continuation initial;};
-inline Fixture fixture(){
+inline Fixture fixture(bool query=true){
   weighted::RegionalConfig r("regional_total");r.hidden_width=3;r.k=2;r.gamma_max=1.6;r.validate();
-  auto [g,m]=weighted_flow_check::configured(r,true,true,false);
+  auto [g,m]=weighted_flow_check::configured(r,query,true,false);
   // The public Model retains physically duplicated edges and same-class atoms.
   for(auto& e:g.edges)e.delay=1;g.compile();SettleGraph graph(g,{1,2},"ports",3);
   for(auto& w:m.nodes){const std::string name="aggregate_program.transforms.1.";

@@ -62,7 +62,7 @@ def main():
     try:
         run(["cmake", "--install", core, "--prefix", prefix])
         if backend:
-            for component in ("weighted", "weighted-training"):
+            for component in ("weighted", "weighted-training", "weighted-blocks"):
                 run(["cmake", "--install", backend, "--prefix", prefix, "--component", component])
         prefixes = [str(prefix), *os.environ.get("CMAKE_PREFIX_PATH", "").split(os.pathsep)]
         run(["cmake", "-S", root/"tools/weighted_benchmark", "-B", build, "-G", "Ninja",
@@ -85,6 +85,7 @@ def main():
                       comparison_check_binary_sha256=digest(build/"weighted-comparison-check"),
                       run_check_binary_sha256=digest(build/"weighted-run-check"),
                       roots_check_binary_sha256=digest(build/"weighted-roots-check"),
+                      block_adapter_check_binary_sha256=digest(build/"weighted-block-adapter-check"),
                       return_check_binary_sha256=digest(build/"weighted-return-check"))
     except BaseException as error:
         report.update(state="failed", error=repr(error)); raise

@@ -14,10 +14,11 @@ from tidegraph.weighted import (KVConfig, RegionalConfig, SourceBinding, bind_la
                                fully_connected, WeightedResidentTraining, WeightedBlockResidentTraining)
 
 
-def fixture():
+def fixture(memory_read="qry"):
     return bind_layered(fully_connected(2, 2),
         memory=KVConfig(width=2, summary_width=2, adapter_rank=1, ffn_width=3,
-                        memory_read="qry", epsilon=.3, full_frequencies=((.23,),), read_frequencies=(.17,)),
+                        memory_read=memory_read, epsilon=.3, full_frequencies=((.23,),),
+                        read_frequencies=(.17,) if memory_read == "qry" else ()),
         regions=RegionalConfig(k=2, gamma_max=1.6, hidden_width=3),
         window_positions=4, alpha_agg=.3, source_hidden_width=3,
         source_binding=SourceBinding("adapted", 1), dtype=torch.float32)
@@ -43,14 +44,15 @@ def main():
     parser.add_argument("--device", required=True)
     parser.add_argument("--checkpoint-path", type=Path, required=True)
     parser.add_argument("--restore-check", action="store_true")
+    parser.add_argument("--memory-read", choices=("qry", "sum"), default="qry")
     args = parser.parse_args()
     root = Path(__file__).resolve().parents[2]
     if Path(tidegraph.__file__).resolve().is_relative_to(root/"python"):
         raise RuntimeError("public installation check must use an independently installed tidegraph")
     torch.set_num_threads(1)
     torch.set_num_interop_threads(1)
-    spec, binding = fixture()
-    _, oracle = fixture()
+    spec, binding = fixture(args.memory_read)
+    _, oracle = fixture(args.memory_read)
     parameters = [p for p in oracle.model.parameters() if p.requires_grad]
     optimizer = torch.optim.AdamW(parameters, lr=.003, eps=.1, weight_decay=.02, foreach=False)
     initial = Continuation(binding.graph.identity, 2)
@@ -146,7 +148,8 @@ def main():
             session.save(str(args.checkpoint_path)+".expected")
         session.close()
     print(dict(state="passed", default="settle-block-v2", source=str(tidegraph.__file__),
-               independent_python_schedule=True, adamw_steps=3, fresh_process=args.restore_check))
+               memory_read=args.memory_read, independent_python_schedule=True,
+               adamw_steps=3, fresh_process=args.restore_check))
 
 
 if __name__ == "__main__":

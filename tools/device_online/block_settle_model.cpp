@@ -36,13 +36,14 @@ BlockSettleModel lower_block_settle_model(const SettleGraph& spec,const Model& m
     std::vector<State> states,bound;std::map<std::pair<int64_t,int64_t>,int64_t> source_bank;
     for(size_t n=0;n<nodes.size();++n){const auto v=nodes[n];const auto& w=model.nodes[v];const auto b=weighted::node_binding(w);
       require(std::holds_alternative<weighted::KVConfig>(b.memory),"block Model local family requires the KV sequence implementation");
-      const auto c=std::get<weighted::KVConfig>(b.memory);require(c.memory_read=="qry","block Model Read implementation requires KV qry");
+      const auto c=std::get<weighted::KVConfig>(b.memory);
       require(weighted::same_configuration(b.regional,config),"block Model node/region configuration differs");
       if(!n){binding.memory=c;binding.aggregate_alpha=b.aggregate_alpha;}
       else require(weighted::same_configuration(binding.memory,c)&&binding.aggregate_alpha==b.aggregate_alpha,"block Model region needs one compatible KV/source geometry");
       binding.node_owners.push_back(n);const auto prefix="nodes."+std::to_string(v)+".extra.";WeightedBanks banks(w.extra,prefix,at::kCPU);
       const auto remaining=[&](){require(charged<budget,"block Model bank budget exhausted");return int64_t(budget-charged);};
-      auto update=bind_weighted_kv_update(banks,remaining());auto query=bind_weighted_kv_query(banks,remaining());
+      auto update=bind_weighted_kv_update(banks,remaining());
+      if(c.memory_read=="qry")bind_weighted_kv_query(banks,remaining());
       auto full=bind_weighted_kv_full(banks,remaining());auto describe=bind_weighted_describe(banks,c.width,c.summary_width,config,remaining());
       for(const auto& [role,part]:banks.roles()){const auto name=local_role(role);row_values[name].push_back(part.bank[0]);names[name].push_back(part.parameter);charge(part.bank);}
       std::set<int64_t> labels;
@@ -78,7 +79,7 @@ BlockSettleModel lower_block_settle_model(const SettleGraph& spec,const Model& m
       packed[role]=at::stack(padded);charge(packed[role]);}
     auto get=[&](const std::string& role){return packed.at(role);};
     binding.parameters.update={get("update.base"),get("update.left"),get("update.right"),get("update.summary")};
-    binding.parameters.message.read.query={get("read.query"),get("read.key"),get("read.value")};
+    if(binding.memory.memory_read=="qry")binding.parameters.message.read.query={get("read.query"),get("read.key"),get("read.value")};
     for(const auto& [role,value]:packed)if(role.rfind("describe.",0)==0)binding.parameters.message.read.describe[role.substr(9)]=value;
     binding.parameters.message.full={get("full.query"),{get("full.out"),get("full.gate"),get("full.up"),get("full.down")}};
     if(binding.aggregate_alpha){binding.parameters.source={get("source.a"),get("source.b"),get("source.embedding")};

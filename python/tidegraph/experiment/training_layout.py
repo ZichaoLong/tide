@@ -60,14 +60,19 @@ class SGDLayout:
         values, connected = gradient.values.detach().cpu(), gradient.connected.cpu()
         gradients = dict.fromkeys(self.names)
         for i, name in enumerate(gradient.names):
+            if name.replace(".extra.", ".") not in self.aliases:
+                if connected[i]:
+                    raise ValueError("unregistered resident parameter has a connected gradient: " + name)
+                continue
             name = self.name(name)
             a, b = self.span(gradient.offsets, i, name, values)
             if connected[i]:gradients[name] = values[a:b].reshape(self.shapes[name]).clone()
         state, counts = {}, dict.fromkeys(self.names, 0)
         raw, offsets = checkpoint["state"], checkpoint["offsets"]
+        momentum = groups[0]["momentum"] != 0
         # trainable contains every named alias; slots/offsets contain one row
         # per physical owner, ordered by the native canonical name.
-        owners = sorted(set(checkpoint["trainable"]) & checkpoint["parameters"].keys())
+        owners = checkpoint.get("owner_names", sorted(set(checkpoint["trainable"]) & checkpoint["parameters"].keys()))
         if len(owners) != len(offsets) or len(owners) != raw["steps"].numel():
             raise ValueError("benchmark SGD canonical owner layout differs")
         for unused in ("second", "maximum", "corrections"):
@@ -75,16 +80,24 @@ class SGDLayout:
                 raise ValueError("unused SGD storage is nonzero: "+unused)
         masters = {}
         for i, native in enumerate(owners):
+            if native.replace(".extra.", ".") not in self.aliases:
+                start = offsets[i]
+                end = start + checkpoint["parameters"][native].numel()
+                if int(raw["steps"][i]) or raw["first"][start:end].count_nonzero():
+                    raise ValueError("unregistered block owner has optimizer state: " + native)
+                torch.testing.assert_close(raw["values"][start:end].reshape(checkpoint["parameters"][native].shape),
+                                           checkpoint["parameters"][native], rtol=0, atol=0)
+                continue
             name = self.name(native);a, b = self.span(offsets, i, name, raw["values"])
             count = int(raw["steps"][i]);counts[name] = count
             # Master values must be the actual published parameters.
             masters[name] = raw["values"][a:b].reshape(self.shapes[name]).clone()
             torch.testing.assert_close(masters[name].to(self.dtype),
                                        checkpoint["parameters"][native], rtol=0, atol=0)
-            if count:
+            if count and momentum:
                 state[self.optimizer_names.index(name)] = {"momentum_buffer": raw["first"][a:b].reshape(self.shapes[name]).clone()}
             elif raw["first"][a:b].count_nonzero():
-                raise ValueError("unupdated SGD owner has momentum")
+                raise ValueError("inactive SGD momentum storage is nonzero")
         optimizer = dict(self.template, state=state)
         if self.half:
             optimizer["precision"] = dict(self.template["precision"], masters=[masters[n] for n in self.optimizer_names])

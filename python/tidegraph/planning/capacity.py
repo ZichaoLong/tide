@@ -129,8 +129,14 @@ def capacity_budget(plan, execution, *, placement=None, mode="inference", optimi
     scalar = {"float16": 2, "float32": 4, "float64": 8}[spec.dtype]
     score_scalar = 8 if spec.scoring_dtype == "float64" else 4
     train, resident = mode == "training", spec.placement == "resident"
+    block_resident = resident and "resident_block_limits" in resources
     resident_layout = None
-    if resident:
+    if block_resident:
+        if "resident_limits" in resources or spec.resident_executor == "general":
+            raise ValueError("resident_block_limits cannot apply to the general resident owner")
+        from .resident_block_capacity import resident_block_capacity
+        resident_layout = resident_block_capacity(plan, devices, placement["node_devices"], resources["resident_block_limits"])
+    elif resident:
         from .resident_capacity import resident_capacity
         limits = dict(resources.get("resident_limits") or {})
         limits.setdefault("prefill", spec.schedule == "prefill")
@@ -163,9 +169,13 @@ def capacity_budget(plan, execution, *, placement=None, mode="inference", optimi
         for device, values in components.items():
             values["private_state"] = resident_layout["node_private_preflight_bytes"][device]
             values["history_int64"] = 0  # Included in coordinator control reservation.
-            values["resident_queue_control"] = resident_layout["coordinator_queue_control_bytes"] if device == spec.device else 0
-            values["resident_forward_journal"] = resident_layout["coordinator_journal_bytes"] if device == spec.device else 0
-            values["resident_physical_role_banks"] = None
+            if block_resident:
+                values["resident_block_total_partition"] = resident_layout["reserved_total_bytes"]
+                values["resident_boundary_metadata"] = resident_layout["boundary_metadata_bytes"]
+            else:
+                values["resident_queue_control"] = resident_layout["coordinator_queue_control_bytes"] if device == spec.device else 0
+                values["resident_forward_journal"] = resident_layout["coordinator_journal_bytes"] if device == spec.device else 0
+                values["resident_physical_role_banks"] = None
             if train:
                 values["fp32_masters"] = values["master_gradients"] = values["optimizer_slots"] = 0
                 values["checkpoint_snapshot_staging"] = 0
@@ -175,6 +185,18 @@ def capacity_budget(plan, execution, *, placement=None, mode="inference", optimi
             coordinator["optimizer_slots"] = (8 if optimizer == "adamw" else 4)*inv["totals"]["trainable"]
             if checkpoint:
                 coordinator["checkpoint_snapshot_staging"] = coordinator["fp32_masters"]+coordinator["optimizer_slots"]
+        if block_resident:
+            # The current public block inference owner retains the same full
+            # canonical optimizer storage, including inert owners, without
+            # stepping it. Its exact archive therefore also contains these
+            # slots in inference. They are already inside total_bytes on device.
+            coordinator = components[spec.device]
+            bank = coordinator["parameters"]+coordinator["inert_buffers"]
+            coordinator["fp32_masters"] = coordinator["master_gradients"] = bank
+            coordinator["optimizer_slots"] = bank*(2 if optimizer == "adamw" else 1)
+            coordinator["history_int64"] = resident_layout["boundary_metadata_bytes"]
+            if checkpoint:
+                coordinator["checkpoint_snapshot_staging"] = bank+coordinator["optimizer_slots"]
     for v in g["inputs"]:
         components[placement["node_devices"][v]]["input_payloads"] += batch*plan["positions"]*payload
     copy_bytes = dict.fromkeys(devices, 0)
@@ -197,12 +219,17 @@ def capacity_budget(plan, execution, *, placement=None, mode="inference", optimi
     from .record_capacity import event_reservations
     live_records, selected_records, record_basis = event_reservations(
         plan, spec, placement, event_bytes, mode=mode, trace_records=trace_records)
+    if block_resident:
+        record_basis = "block tensors inside total partition; complete CPU observation estimate is separate"
     for device, values in components.items():
         if spec.return_mode == "complete":
             values["requested_return_estimate"] = values["complete_record_estimate"]
         elif spec.return_mode == "metrics":
             values["requested_return_estimate"] = 64*results
         values["live_record_estimate"] = live_records[device]
+        if block_resident:
+            values["live_record_estimate"] = 0  # No internal event objects.
+            values["pending_messages"] = 0  # Public block ends at a complete cut.
         if selected_records:
             # Output tensors still exist internally for the built-in objective,
             # including metrics-only returns. Preserve their logical upper bound.
@@ -221,6 +248,8 @@ def capacity_budget(plan, execution, *, placement=None, mode="inference", optimi
                     values["fp32_masters"]+values["optimizer_slots"])
         for key in ("workspace", "activation", "communication", "journal"):
             value = _reservation(resources, key+"_bytes", device)
+            if block_resident and value is None:
+                value = resident_layout["workspace_bytes"] if key == "workspace" else 0
             if key == "journal" and not train:
                 value = 0 if value is None else value
             values[key] = value
@@ -228,7 +257,9 @@ def capacity_budget(plan, execution, *, placement=None, mode="inference", optimi
     if not isinstance(device_info, dict) or set(device_info)-set(devices):
         raise ValueError("resources.devices must map declared devices to capacity/free/reserve bytes")
     per_device, rejections = {}, []
-    if resident_layout and resident_layout["exceeds_tensor_bytes"]:
+    if block_resident:
+        rejections.extend(resident_layout["static_rejections"])
+    elif resident_layout and resident_layout["exceeds_tensor_bytes"]:
         rejections.append("resources.resident_limits.tensor_bytes is below the declared physical state/journal preflight; "
                           "review queue/stages/cache and calibrate before changing explicit budgets")
     for device, values in components.items():
@@ -246,11 +277,15 @@ def capacity_budget(plan, execution, *, placement=None, mode="inference", optimi
         bank = values["parameters"]+values["inert_buffers"]
         if not resident and usable is not None and bank > usable:
             rejections.append(f"{device}: parameter bank {bank} exceeds {usable} usable bytes; do not allocate")
+        included = {"parameters", "inert_buffers", "private_state", "history_int64", "retained_state_snapshots",
+                    "input_payloads", "pending_messages", "payload_gradients", "fp32_masters", "master_gradients",
+                    "optimizer_slots", "live_record_estimate", "resident_boundary_metadata"} if block_resident else set()
         estimated = sum(value for key, value in values.items() if value is not None
-                        and key not in {"requested_return_estimate", "complete_record_estimate"})
+                        and key not in included | {"requested_return_estimate", "complete_record_estimate"})
         per_device[device] = dict(components=values, static_bank_bytes=bank, estimated_peak_bytes=estimated,
             record_reservation_basis=record_basis,
-            storage_basis="logical canonical bank plus resident physical state/journal preflight; role banks unknown" if resident else "canonical eager payload and inert bank",
+            storage_basis=("explicit block total/workspace reservations; diagnostic components inside total are not counted twice" if block_resident else
+                "logical canonical bank plus resident physical state/journal preflight; role banks unknown" if resident else "canonical eager payload and inert bank"),
             unknown_components=[key for key, value in values.items() if value is None],
             resource_snapshot=info, reserve_bytes=reserve, usable_bytes=usable,
             estimated_remaining_bytes=None if usable is None else usable-estimated,
@@ -258,7 +293,7 @@ def capacity_budget(plan, execution, *, placement=None, mode="inference", optimi
             forward_cross_owner_payload_bytes_upper=copy_bytes[device])
     bank = sum(row["static_bank_bytes"] for row in placement["per_device"].values())
     role_bank = scalar*inv["totals"]["role_elements"]+sum(row["inert_buffer_bytes"] for row in placement["per_device"].values())
-    checkpoint_weights = role_bank if spec.client != "libtorch" and spec.device != "cpu" else bank
+    checkpoint_weights = role_bank if not block_resident and spec.client != "libtorch" and spec.device != "cpu" else bank
     continuation = sum(v["private_state"]+v["pending_messages"]+v["history_int64"] for v in components.values())
     optimizer_bytes = sum(v["optimizer_slots"]+v["fp32_masters"] for v in components.values())
     checkpoint_estimate = checkpoint_weights+continuation+optimizer_bytes if checkpoint else 0
@@ -272,7 +307,7 @@ def capacity_budget(plan, execution, *, placement=None, mode="inference", optimi
         if materialize > _bytes(resources["max_materialize_bytes"], "resources.max_materialize_bytes"):
             rejections.append("max_materialize_bytes is below the FP32 construction/final bank floor")
     largest = max([row["elements"] for row in inv["owners"].values()]+[(plan["width"]+1)**2])
-    if (spec.client == "libtorch" or resident) and checkpoint and largest > 2**28:
+    if (spec.client == "libtorch" or resident) and not block_resident and checkpoint and largest > 2**28:
         rejections.append("native checkpoint has a tensor exceeding its 2^28 element codec limit")
     host_reserve = _bytes(resources.get("host_reserve_bytes", 8*GIB), "resources.host_reserve_bytes")
     disk_reserve = _bytes(resources.get("disk_reserve_bytes", GIB), "resources.disk_reserve_bytes")

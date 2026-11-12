@@ -29,6 +29,7 @@ class Resident {
   virtual Step step(Index)=0;
   virtual std::map<std::string,Tensor> parameters()const=0;
   virtual TrainingState training_state()const=0;
+  virtual Json execution()const{return Json::object();}
   virtual Continuation checkpoint()const=0;
   virtual Index cut()const=0;
   virtual void save(const std::filesystem::path&,int64_t max_file_bytes)const=0;

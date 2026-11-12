@@ -11,6 +11,10 @@ KV Read/Describe和完整区域数值分开：`tools/device_online/block_dispatc
 和`block_read_selection*`分别拥有调度、静态lowering和数值/VJP；`block_selection_formula.cpp`
 为独立公式锚点。修改同步CPU metadata检查、`device_component_checks`及对应设备check。
 [完整区域图](resident-block-flow.md)与[块训练owner](resident-block-session.md)将这些组件接成独立执行器；旧resident资格不能自动继承。
+[实验默认接入](experiment-resident-blocks.md)由 `planning/resident_policy.py` 选择能力，
+`experiment/block_inputs.py` 交接整块输入/loss，`block_records.py` 与 `block_checkpoint.py`
+分别解码实际观察和精确 archive；standalone 对应 `resident_policy.cpp` / `resident_block.cpp`。
+execution-v7、新 owner 的容量与历史 general 身份分开，实际设备及尺度资格另验。
 [KV消息组合](resident-block-kv-messages.md)由`block_kv_messages`/VJP连接独立Read与proposal
 快照、区域控制、Full及未缩放(c,G)；`block_kv_message_parameters`按实际owner汇总跨角色alias。
 `block_kv_message_formula`独立锚定数学，`block_kv_messages_check`核对独立根、默认分支和拒绝。
