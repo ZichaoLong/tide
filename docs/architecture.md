@@ -42,7 +42,11 @@ FC16同尺寸成本与诊断入口见[阶段归因](fc16-cost-attribution.md)：
 后继按层追踪[调度](evidence/scheduling-interface-audit-20261110.md)、[区域](evidence/region-batching-audit-20261110.md)
 和[循环/Describe](evidence/recurrent-interface-audit-20261110.md)的实际审阅；hash manifest不混算重叠覆盖。
 [本轮诊断/消息组件审阅](evidence/rewrite-followup-reviews-20261112.json)绑定7d5e05c3实际文件hash；
-范围限定于列出的文件与职责，C++自动函数提取和全仓剩余审阅未完成。
+后继[生产边界审阅](evidence/p1p6-boundary-review-20261112.md)绑定55a3074a的24个实际文件，
+覆盖当前默认能力分派、五记忆/区域列、standalone与原始状态交接，并区分实现自审和独立资格。
+这些记录不认证未列出的函数；C++自动函数提取尚未完成，也不把所有历史工具重审作为当前交付前置。
+新修改按[维护影响表](core5-study.md#修改时同步维护什么)选择相应层，记录实际审阅符号/hash与
+独立检查；构建、安装消费者、训练恢复和性能各归其固定证据。
 
 常驻单bank投影的整块GEMM/VJP在`tools/device_online/weighted_projection.cpp`，设备实际使用与有限性守卫
 在`ascendc/tide_weighted_projection_shared.cpp`；同源转换提供CUDA源码及CPU语义核检查。
@@ -90,6 +94,9 @@ C++ `weighted_sequence_columns.h` 公开 KV/recurrent typed状态与独立整链
 独立Streaming、三步SGD与exec新进程精确恢复；`tools/weighted_benchmark/eager_columns`
 把它接入standalone默认入口，整列task loss及反向后CPU解码与完整记录诊断分开。
 修改同时维护CLI/规划执行身份、`weighted-run-check`和`test_experiment_columns`的旧锁保持检查。
+SDK消费者的`check_query_sdk.py`从`effective_execution`区分列与records；列路径的实际工作量、
+独立scalar Streaming任务对照及精确恢复，与complete模式的独立事件根分别检查。
+`test_query_sdk_capability`和`test_standalone_columns`防止新默认入口仍被旧统计计数误拒绝。
 `weighted_column_modules` 负责私有状态分派，`weighted_column_recurrent_state/math/query`
 分别负责raw编解码/scan、系数与原始时间卷积、Read/Full。`weighted_column_state/query` 与
 `weighted_settle_columns` 分别拥有局部数学和调度。相对位置的 logits/共享 value-bank
@@ -108,7 +115,10 @@ transpose 在 `column_attention` / `weighted_column_attention`；位置元数据
 完整配置、实际query/bank形状和额外workspace决定分组，不按拓扑名称选择。
 `column_query_ops` / `weighted_column_query_ops`负责node×B收缩与独立多输出一阶边界，
 `dense_describe_groups` / `weighted_describe_groups`负责各Describe头的分阶段投影。
-原始相对位置仍由单节点query工具按int64 age求值；更换位置算法须重新检查超大时钟。
+`column_position_ops` / `weighted_column_positions`拥有单列/跨节点共同使用的位置求值，
+按dtype和实际时间/相位域选择共同整数原点的Q/K旋转或原relative展开；可见性仍用int64 age。
+其显式一阶旋转边界保留原值版本，`test_column_position_ops`核对独立公式、域外反例和默认路径。
+`column_policy`与planning/execution、两个实验客户端和standalone身份共同拒绝旧v5列锁静默升级。
 修改同步`test_column_query_groups/dispatch`、SDK `check_query_groups`、默认调度和放置测试，
 尤其区分普通独立列根与旧事件Content适配器的connected-zero。
 `weighted/regional_packing`与C++ `weighted_regional_packing`拥有候选数量分组的int64关联布局，
@@ -131,7 +141,7 @@ Python/C++列调度按节点/区域分别解析位置。readout及内置loss可�
 `block_attention` / `weighted_block_attention`及位置logits算子拥有共享bank的一阶转置和FP16内部FP32策略；
 `test_half_columns`覆盖溢出点积、原始版本、五记忆独立根、master更新和raw恢复，显式评分与消息精度不混同。
 `experiment/column_task.py`拥有内置任务的共享来源列、逐物理端口loss和无梯度CPU输出解码；
-`experiment/eager.py`按观察/模块能力选择，`planning/execution.py`固定execution-v5身份，
+`experiment/eager.py`按观察/模块能力选择，`planning/execution.py`固定新列策略的execution-v6身份，
 `planning/materialize.py`把参数构造与旧事件输入构造分离。修改同步
 `test_experiment_columns`、`test_selected_boundary_execution`、历史身份和CLI新进程恢复。
 `planning/execution`区分窗口能力与record-query后备；half/peer的auto窗口不得提前变成显式legacy。
@@ -203,6 +213,7 @@ KV快照数值共享位于`weighted/snapshot_bank.py`/`weighted_snapshot_bank.cp
 | host prefill 与流式状态 | [greedy](greedy-scheduler.md)、[frontier](frontier-contract.md)、[cursor](streaming-cursor.md) |
 | 三图关系和特化适用域 | [Settle 编码](settle-embedding.md)、[跨类策略](cross-family-policies.md) |
 | 查询与Describe默认策略 | `weighted/query_execution.py`、C++ `configure_query_execution`；[默认auto与显式路径](weighted-dense-query.md)、query_layout/query_packed及独立字段/别名/训练/恢复；[代表回归](prefill-regression.md) |
+| 默认列入口、一般图后备与实际执行身份 | [tensor windows](weighted-tensor-windows.md)、`window_execution.column_reason`、`experiment/column_task.reason`、standalone `column_owner`；`test_window_execution/test_experiment_columns/test_standalone_columns`分别核验公共、实验及SDK默认路径 |
 | core-5 带权配置、局部函数与精确时间 | [公共绑定](weighted-message.md)、[五记忆/卷积](weighted-recurrent.md)、[发送](weighted-sending.md)、[评分/证据/key](weighted-scoring.md)、[实际packing](weighted-packed.md) |
 | eager 与常驻、窗口与多卡 | [放置](execution-placement.md)、[resident 库](resident-library.md)、[训练](resident-training.md)、[peers](resident-peers.md)、[带权公共训练](resident-weighted-training.md)、[带权样本副本](resident-weighted-peers.md) |
 | 批量化的梯度连接 | [packed autograd](packed-autograd.md)、[Full VJP](full-batched-autograd.md)、[Aggregate VJP](aggregate-batched-autograd.md)、[resident graph VJP](resident-graph-vjp.md) |
@@ -218,3 +229,6 @@ shape、dtype、设备、有限性、时间顺序或所有权正确；必须结�
 
 源码与当前测试由 Git 保存；旧 build-manifest、运行路径和机器队列不是开发依赖。
 重新构建时生成新源码/二进制身份，不能沿用历史通过数认证新的库。
+当前维护入口的交付标准是：新上下文能从配置找到实际分派和局部模块、从行为找到独立检查、
+从报告找到固定源码/命令/结果，并知道修改时同步哪个契约与消费者。未修改的历史模块沿用
+其证据边界；新resident、位置算法或其他重写层在自身提交/资格中补审，不制造无限历史重审任务。

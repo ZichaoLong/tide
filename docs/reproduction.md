@@ -19,7 +19,8 @@
 | 调查问题 | Git内材料和入口 | 原证据与范围 |
 | --- | --- | --- |
 | FC4/FC16默认、直接公式与Transformer的巨大差距 | [有限suite](../scripts/run_fc_comparison.py)、[任务投影检查](../scripts/check_fc_comparison.py)、[通用配对与附件](../scripts/cost_comparison.py)、`test_fc_comparison_diagnostics/test_cost_comparison` | [前置调查](evidence/fc-three-layer-comparison-20261111.md)、[查询块实施与复测](evidence/kv-query-blocks-20261111.md)；同材料FP64诊断保留原FP32失败，公开根/任务投影/成本分列。manifest不绑定旧运行目录，profile与完整计时各有身份 |
-| 接口/文件/函数审阅是否完成、包身份与插件返回边界 | [源码清单与明确审阅覆盖](evidence/implementation-audit-20261110.md)、[清单工具](../scripts/review_inventory.py)、`test_session_restore/test_task_observations/test_package_content` | 固定基线25文件/128函数已审，自动清单其余未审；开发检查不代替新固定资格 |
+| 接口/文件/函数审阅、包身份与插件返回边界 | [当前生产边界与hash范围](evidence/p1p6-boundary-review-20261112.md)、[早期源码清单](evidence/implementation-audit-20261110.md)、[清单工具](../scripts/review_inventory.py)、`test_session_restore/test_task_observations/test_package_content` | 分开实际审阅、自审和固定资格，不相加重叠覆盖；按[维护影响表](core5-study.md#修改时同步维护什么)补当前改动层，不要求重审全部历史工具 |
+| 默认张量路径、三客户端选择及SDK旧计数误判 | [窗口契约](weighted-tensor-windows.md)、`test_window_execution/test_experiment_columns/test_standalone_columns`、[SDK资格入口](../scripts/check_query_sdk.py) | 检查实际interface/schedule/roots/fallback；outputs列任务与complete事件根分别资格；[当前FC/LH/规模证据](core5-study.md#当前张量路径与结果)不继承旧default成本 |
 | 外层/私有autograd图、构图与真实反向成本 | [图统计方法和两种runner](autograd-census.md)、[唯一KV存储与转置](weighted-snapshot-bank.md)、[小反例](../tests/test_snapshot_bank.py) | Python/native统计宇宙不相加，保存字节非峰值；FP32旧scalar差异与同材料FP64见证分列 |
 | FC16同尺寸Transformer/直接FC基线、VJP成本与复制隔离 | [归因契约](fc16-cost-attribution.md)、[独立公式](../scripts/fc_tensor_baseline.py)、[公式反例](../tests/test_fc_tensor_baseline.py)、[复制隔离](../tests/test_independent_copies.py)、[舍入见证](../scripts/diagnose_dense_rounding.py) | [固定结果与复现](evidence/fc16-cost-attribution-20261110.md)；训练吞吐与真实首token分列，历史退化/取消保留，直接公式不替代完整记录资格 |
 | TL-REQ-004 默认prefill、区域跨时间批及剩余碎片化 | [原始槽/默认策略反例](../tests/test_weighted_query_layout.py)、[分层回归目录](prefill-regression.md)、[standalone新进程检查](../scripts/check_query_sdk.py)、[profile CSV汇总](../scripts/summarize_query_profile.py) | [默认增量交付与完整复建命令](evidence/prefill-default-20261110.md)；资格入口在旧命令末追加`auto`，原任务成本和小型严格资格分开，不依赖历史运行目录 |
@@ -29,7 +30,7 @@
 | D64 FP32完整训练、局部精度和反向累加 | [计划生成](../scripts/prepare_weighted_workload.py)、[完整诊断](../scripts/diagnose_weighted_workload.py)、[汇合点探针](../scripts/diagnose_weighted_joins.py) | [算术诊断契约](weighted-arithmetic-diagnostics.md)、[eager边界](evidence/core5-eager-boundary-20261029.md)；参数/梯度/槽及每调度自身恢复分别核对 |
 | 原始逻辑时间反馈PDG | [四窗诊断](../scripts/diagnose_weighted_feedback.py) | [非GPU边界](evidence/core5-nongpu-boundaries-20261029.md)；W32/B4/seed7，FP32与显式FP64分开 |
 | FP16 GDN/默认AdamW | [完整精度诊断](../scripts/diagnose_weighted_precision.py)、[干预检查](../tests/test_weighted_half_probe.py)、[原训练用例](../tests/test_weighted_precision.py) | [数值隔离](evidence/core5-numerical-isolation-20261028.md)、[后续半精度干预](evidence/core5-boundary-isolation-20261029.md)；原strict xfail/epsilon/loss scale保持 |
-| 默认异步双NPU | [纯Torch小图](../scripts/diagnose_torch_peer.py)、[完整图诊断](../scripts/diagnose_weighted_async.py)、[桥接独立根检查](../tests/test_weighted_peer_bridge.py) | [数值/异步隔离](evidence/core5-numerical-isolation-20261028.md)、[完整CPU桥接失败](evidence/core5-boundary-isolation-20261029.md)；12轮小图不能认证完整图 |
+| 默认异步双NPU | [纯Torch小图](../scripts/diagnose_torch_peer.py)、[完整图诊断](../scripts/diagnose_weighted_async.py)、[一般图完整验收](#一般图异步策略的有限验收)、[桥接独立根检查](../tests/test_weighted_peer_bridge.py) | [数值/异步隔离](evidence/core5-numerical-isolation-20261028.md)、[完整CPU桥接失败](evidence/core5-boundary-isolation-20261029.md)；小图/队列探针不能认证完整图 |
 | CPU autograd之后晚注册NPU | [完整小程序和退出码](evidence/core5-resident-boundary-20261029.json)的bootstrap.program/相关结果 | [初始化边界](evidence/core5-resident-boundary-20261029.md)；early/late必须两个新进程，原程序已在Git中，无需旧私有启动器 |
 | native workers2跨进程恢复 | [安装消费者](../examples/consumer_core5/README.md)的check.py，显式FP32/native/workers2 | [原失败与命令](evidence/downstream-contract-20261030.md)；默认worker1不代表workers2修复，单次通过也不证明并发顺序确定 |
 | 本轮NPU1B/B512精确下一窗 | [有界恢复诊断](../scripts/diagnose_experiment_resume.py)：原安装运行`CONFIG --checkpoint OLD --windows 3 --output-dir NEW`；无旧目录时省略checkpoint，由相同固定配置重建新见证 | [规模原失败](evidence/core5-platform-scale-20261031.md)；先分开raw-boundary与next-complete，再比较状态/参数stride、offset、对齐与NPU format及工作量。布局差异不自动证明因果，不运行CPU参考轨迹或改变算术/布局 |
@@ -55,6 +56,35 @@ SDK affine、normalization、源变换及query舍入的旧临时变体不作为�
 该检查保留普通gather的观察，不要求它必然失败；要求有序tap VJP逐位相等，且两个新进程
 从同一checkpoint恢复的输出、loss、raw状态、全部参数/梯度/optimizer逐位相等。
 全局deterministic开关不修改。计时与这些正确性检查分开。
+
+## 一般图异步策略的有限验收
+
+新队列或通信实现先保留原失败，再用`check_weighted_device.py`的现成小配置检验真实一般图。
+下列三格沿用`scripts/weighted_device_cases.py`，无需专用新benchmark或预跑轨迹：
+
+| case | 能区分的行为 |
+| --- | --- |
+| `delta-pdg` | 原反馈反例：3节点/2区域、重复边、不同正延迟及跨owner反馈；delta旧态参与跨cut反向 |
+| `ssd-dag` | 非对齐TimedDAG：4条物理边，固定逻辑时间短卷积、SSD状态与跨owner消息 |
+| `kv-pdg-initial` | 同一反馈图的KV `Read^0`绑定初态；Full读取实际更新快照，KV窗口/位置与pending完整保留 |
+
+均为2样本、内容/summary宽2、FFN宽3，输入时间0/3，停止cut8，切面cut3；
+输入包含真实零质量消息。节点按region映射两张卡。各客户端、各case使用独立新进程，
+避免一个设备失败中断其余格。以native为例，Python客户端将implementation改为python并省略库参数：
+
+```sh
+TASK_QUEUE_ENABLE=1 PER_STREAM_QUEUE=1 python scripts/check_weighted_device.py \
+  --device npu:0 --peer-devices npu:0 npu:1 --implementation native \
+  --native-library MATCHING_CORE --placement mixed-c --scoring-dtype float32 \
+  --dtype float32 --optimizer adamw --workers 1 --packing auto \
+  --case delta-pdg --output-dir NEW_CASE
+```
+
+上式是显式候选策略，运行前应unset `ASCEND_LAUNCH_BLOCKING`并记录实际环境；
+不自动设置公共默认，不把开关请求值当成驱动内部生效证明。按执行契约分配设备及持久作业。
+检查覆盖完整记录、任务总根/首输出/逐字段Describe/控制独立根、raw状态根、streaming/prefill、
+保留cut、三次AdamW更新加恢复后的第四次更新、同设备精确恢复、CPU handoff和owner重映射。
+原严格数值失败、通信失败与精确恢复失败分列，不因为小图通过扩展成任意拓扑/设备或resident资格。
 
 ## 小型实际分配行
 
@@ -165,8 +195,11 @@ HB/LH沿[独立张量基线](lh-tensor-baseline.md)及`benchmark_lh_tensor.py`�
 进入四份压缩配置、固定Git源码及`diagnose_req006.py`，无需旧学习目录。
 [四代表证据](evidence/req006-diagnostics-20261112.md)的clamp反向热点可单独用
 `diagnose_scalar_floor.py`复验Scalar/Tensor阈值；measure/profile分进程，不修改下游生产函数。
-`check_lh_tensor.py`独立检查实际列/端口/raw和任务VJP；FP32失败、FP64后继及None/零连接差异
-见[本轮节点/区域证据](evidence/node-region-batching-20261112.md)。
+`check_lh_tensor.py`独立检查实际列/端口/raw和所选根族VJP；`--left-entries/--start-position`
+生成非空大时钟，`planned_windows.py`另验计划图的真实AdamW和新进程恢复。
+[节点/区域证据](evidence/node-region-batching-20261112.md)与
+[固定55a七根族/生命周期及显式队列证据](evidence/query-lifecycle-20261112.md)分列严格失败、
+None/零差异、独立安装和源码消费者的实际范围。
 REQ006跨进程配对用`--initial-state-out/in`复用实际模型、optimizer槽和RNG；小型固定配置位于
 `tests/fixtures/req006-tiny-transformer.json`。原Scalar失败和显式dtype常量的成功分别见
 [算子/初态证据](evidence/req006-floor-20261112.md)，不以同seed推定配对。

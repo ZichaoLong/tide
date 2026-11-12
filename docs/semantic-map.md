@@ -355,6 +355,9 @@ KV §4的共享Full矩阵收缩进一步由`bank_attention`/`query::bank_attenti
 及 standalone `weighted_sequence_columns.cpp` 验证分派、普通列根/共享梯度与 raw 恢复；
 KV §2 的 Rot(p)ᵀRot(q)=Rot(q−p) 对应 `column_attention` 和 `test_column_positions`，
 以 int64 求差保留超大时钟的小距离；Read/Full 频率及 raw 恢复分别验收。
+同一恒等式的有界共同整数原点求值由`column_position_ops` / `weighted_column_positions`实现；
+`test_column_position_ops`核对独立relative公式、分离相位域、绝对float时钟反例及独立VJP根。
+软件身份`bounded-common-origin-v1`/execution-v6只改变求值方式，原始int64可见性与raw key不变。
 旧任意 cut、完整独立事件根仍按记录接口单列验证。图 v13/checkpoint v5 不变。
 KV §3–4的相容节点Read/Full组对应`kv_column_groups`与C++ `columns::read_many/full_many`；
 区域Describe §3的完整有限字段对应`dense_describe_groups` / `query::describe_nodes`。
@@ -367,9 +370,15 @@ C++ `weighted_column_checkpoint::validate_owner/import_state/export_state`（nam
 `cpp/test/weighted_column_checkpoint.cpp`以独立Streaming检查稀疏/零端口、同秩、超大int64、
 完整raw/history/ledger、参数/输入梯度、三步SGD及新进程精确恢复。SDK组件、默认standalone入口、
 各设备实际运行分别记录，不由公共头文件或构建通过推断设备资格。
+standalone默认输出任务由`tools/weighted_benchmark/eager_columns`消费同一列结果；
+`test_standalone_columns`检查五记忆的真实CLI选择、标量Streaming对照及新进程精确恢复。
+`scripts/check_query_sdk.py`按有效接口选择资格：complete/records保留原事件根与VJP检查，
+columns的独立三步任务loss/work对照只认证该投影，不把旧事件计数移植为列VJP证明。
 实验内置任务经 `experiment/column_task.py`直接消费实际消息列；逐端口 `(cG)^2`属于
 任务投影，不是教材新定义。`test_experiment_columns`核对原输入逐位同一、重复物理端口
 贡献、独立标量训练及实际默认选择；`test_selected_boundary_execution`覆盖五族训练/恢复。
+生产者/消费者边界的实际审阅范围见[55a固定审阅](evidence/p1p6-boundary-review-20261112.md)；
+函数数学契约、检查源码、实际运行与当前[能力范围](execution-capabilities.md)分别追溯。
 
 有限五记忆在C++列接口由 `LocalState/LocalWindow` 分型；recurrent §1–4与固定时间卷积
 对应 `weighted_column_recurrent_state/math/query`，`test_native_recurrent_columns`覆盖两种Mem、

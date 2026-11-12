@@ -1,0 +1,244 @@
+{
+  "schema": "tide-implementation-review-v1",
+  "source": "55a3074a441d77720cf00e44433bd702cd09e175",
+  "meaning": "Scoped manual source review. 24 files with overlapping prior reviews; no whole-repository or 2157-file inventory coverage. C++ symbol names are manual scope labels; no Clang symbol extraction or new device/performance qualification.",
+  "files": [
+    {
+      "path": "python/tidegraph/weighted/execution.py",
+      "sha256": "f154393928ad703333ede63f15cdb2379d21c6749b9b43636c32baaf76ac47a1",
+      "symbols": "*",
+      "reviewed_symbols": "eager_runner; client; run",
+      "reviewer": "req006_diagnostics; source/contract audit, self-review explicitly marked",
+      "evidence": "docs/evidence/p1p6-boundary-review-20261112.md",
+      "scope": "Public record entry preserves independent native/Python graph schedules; actual capability dispatch does not change local mathematics."
+    },
+    {
+      "path": "python/tidegraph/weighted/window_execution.py",
+      "sha256": "ad0b0612a1a0896e1ddc137c2b598cdcede420f77f7db990ee62c79f0d85c398",
+      "symbols": "*",
+      "reviewed_symbols": "column_reason; EagerExecutor.__call__/run_positions/run_ports; WindowResult.readout",
+      "reviewer": "req006_diagnostics; source/contract audit, self-review explicitly marked",
+      "evidence": "docs/evidence/p1p6-boundary-review-20261112.md",
+      "scope": "Column capability resolved before numerical execution; physical Settle binding, exact int64 cuts, explicit general-record adapter and exception propagation; complete event roots stay separate."
+    },
+    {
+      "path": "python/tidegraph/weighted/column_modules.py",
+      "sha256": "428f6b9fbda272aa8f2d13ff16477865f36c5653443b690d25e52ebae16d13d7",
+      "symbols": "*",
+      "reviewed_symbols": "module_for; prepare_many; read_many; full_many",
+      "reviewer": "req006_diagnostics; source/contract audit, self-review explicitly marked",
+      "evidence": "docs/evidence/p1p6-boundary-review-20261112.md",
+      "scope": "Five actual memory families own typed columns. KV has cross-node grouping; recurrent fallback remains a tensor window per node, not an event replay."
+    },
+    {
+      "path": "python/tidegraph/weighted/native_columns.py",
+      "sha256": "daf53ac0668de44616d377c65e8622d65d436f78762b0b890ff5eb4a0e760cce",
+      "symbols": "*",
+      "reviewed_symbols": "layout; state; NativeColumns.__init__/run_ports",
+      "reviewer": "req006_diagnostics; source/contract audit, self-review explicitly marked",
+      "evidence": "docs/evidence/p1p6-boundary-review-20261112.md",
+      "scope": "Native adapter preserves actual typed results/int64 metadata and does not recursively obtain missing values from Python reference; capability version is explicit."
+    },
+    {
+      "path": "python/tidegraph/weighted/regional_columns.py",
+      "sha256": "4ff425d7e4620a04e957f381b0d0e07405f9284b875ba926b4d40e06e2eede7b",
+      "symbols": "*",
+      "reviewed_symbols": "RegionColumns; region_columns",
+      "reviewer": "req006_diagnostics; source/contract audit, self-review explicitly marked",
+      "evidence": "docs/evidence/p1p6-boundary-review-20261112.md",
+      "scope": "All ten sending candidates dispatch over complete R x N rows; vector descriptor shapes, controls and support retain distinct meanings."
+    },
+    {
+      "path": "python/tidegraph/weighted/allocation_batch.py",
+      "sha256": "f8d39ece4bc9ece21e3ae52e7d29b4b73a1a73006f92bbd8c3593c8ef06e47e8",
+      "symbols": "*",
+      "reviewed_symbols": "quad; entropy; solve",
+      "reviewer": "req006_diagnostics; source/contract audit, self-review explicitly marked",
+      "evidence": "docs/evidence/p1p6-boundary-review-20261112.md",
+      "scope": "Quadratic breakpoint solve, bounded safeguarded Newton/bracketing, explicit residual and positive-support rejection; forward solve is no-grad and distinct from exact-map VJP."
+    },
+    {
+      "path": "python/tidegraph/weighted/allocation_columns.py",
+      "sha256": "8ca7b638f9dfc6f24a3a28395273540fdd134c3d2feaa6478d166647ab483101",
+      "symbols": "*",
+      "reviewed_symbols": "row_scalar; AllocationColumns; pullback; _Columns; allocate_columns",
+      "reviewer": "req006_diagnostics; source/contract audit, self-review explicitly marked",
+      "evidence": "docs/evidence/p1p6-boundary-review-20261112.md",
+      "scope": "Scalar/row bounds, branch-specific structural support, version guards, None versus zero and first-order exact-solution derivative; no differentiation through iteration."
+    },
+    {
+      "path": "python/tidegraph/weighted/regional_groups.py",
+      "sha256": "f9b54eaf81e09e1863b706812242450105d569f55a136a7660d0c9c3442c68f3",
+      "symbols": "*",
+      "reviewed_symbols": "_save; _restore; _Grouped; region_groups",
+      "reviewer": "req006_diagnostics; source/contract audit, self-review explicitly marked",
+      "evidence": "docs/evidence/p1p6-boundary-review-20261112.md",
+      "scope": "Candidate-count grouping retains actual node incidence, original versions, parameter aliases and branch dependency support. Dense/inference fast path differs from ragged custom VJP."
+    },
+    {
+      "path": "python/tidegraph/weighted/sending_batch.py",
+      "sha256": "65a6c6bfbf59249d7f72167574c08a00ee8d3c08dbdbd24a9a6611b8e73c2ea6",
+      "symbols": "*",
+      "reviewed_symbols": "validate; _Shares; shares; attention; proportional; _Sorted; sorted_send",
+      "reviewer": "req006_diagnostics; source/contract audit, self-review explicitly marked",
+      "evidence": "docs/evidence/p1p6-boundary-review-20261112.md",
+      "scope": "Attention positive support, proportional zero case, stable int64 ties, fractional zero-temperature fill and separate hard branch derivative. Candidate-axis loop remains batched over rows."
+    },
+    {
+      "path": "python/tidegraph/weighted/config.py",
+      "sha256": "aa2ed776e2c8398af37c8077d6491732d3270cc1286c1afb36ac4053f34d805f",
+      "symbols": "*",
+      "reviewed_symbols": "KVConfig; RegionalConfig; region_profile; validate_regularizer; identity helpers",
+      "reviewer": "req006_diagnostics; source/contract audit, self-review explicitly marked",
+      "evidence": "docs/evidence/p1p6-boundary-review-20261112.md",
+      "scope": "Applicable/absent configuration checks, k and candidate capacity meanings, explicit backward identities, strict versus positive-floor extension."
+    },
+    {
+      "path": "python/tidegraph/weighted/settle_columns.py",
+      "sha256": "cdad9e0a1262dce7fa476d45df34983f17dd0d98cdd2b4bd8ddfe7a07d6808bd",
+      "symbols": "*",
+      "reviewed_symbols": "SettleColumnResult; SettleColumnPlan",
+      "reviewer": "req006_diagnostics; source/contract audit, self-review explicitly marked",
+      "evidence": "docs/evidence/p1p6-boundary-review-20261112.md",
+      "scope": "Region-order independent host schedule, actual port/edge support, state snapshots, typed module calls, finite guards, exact logical time and multiple payload owners."
+    },
+    {
+      "path": "python/tidegraph/experiment/column_task.py",
+      "sha256": "40904ee13082514ce50dbd8f67507633cd8027dce49913d74665c2711a66a427",
+      "symbols": "*",
+      "reviewed_symbols": "reason; ColumnInputs; loss; output_records; work; locations",
+      "reviewer": "req006_diagnostics; source/contract audit, self-review explicitly marked",
+      "evidence": "docs/evidence/p1p6-boundary-review-20261112.md",
+      "scope": "Built-in task retains shared source roots and per-port cG objective; half promotion before multiplication, CPU observations after backward. Plugins explicitly retain record interface."
+    },
+    {
+      "path": "python/tidegraph/planning/execution.py",
+      "sha256": "afaf548d028f31b74207c982708a44ceddbc67aed0b710de85566abe131bbc8f",
+      "symbols": [
+        "ExecutionSpec.__post_init__@31:4",
+        "ExecutionSpec.from_record@105:4",
+        "ExecutionSpec.record@116:4"
+      ],
+      "reviewed_symbols": "ExecutionSpec.__post_init__/from_record/record",
+      "reviewer": "req006_diagnostics; source/contract audit, self-review explicitly marked",
+      "evidence": "docs/evidence/p1p6-boundary-review-20261112.md",
+      "scope": "Requested/effective execution identity and old-record defaults; review is of fixed v5 policy at this source, not the subsequent v6 position-policy change."
+    },
+    {
+      "path": "cpp/src/weighted_column_modules.cpp",
+      "sha256": "3595192b8fd882dffca4fc746b8b16c44cccbbb8bc3f2ea2d597b3f7f2cd2bf6",
+      "symbols": "*",
+      "reviewed_symbols": "initial_columns; validate_columns; prepare_columns/prepare_columns_many; read_columns/read_columns_many; full_columns/full_columns_many; terminal_columns; workspace_bytes",
+      "reviewer": "req006_diagnostics; source/contract audit, self-review explicitly marked",
+      "evidence": "docs/evidence/p1p6-boundary-review-20261112.md",
+      "scope": "Typed memory variant dispatch and whole-window recurrent fallback; workspace estimates are explicit capacity boundaries, not measured peaks."
+    },
+    {
+      "path": "cpp/src/weighted_region_columns.cpp",
+      "sha256": "cb71f2decc899e73d2727d7f71d89f6c4bd7b2846ab88f207530fefcb77b9299",
+      "symbols": "*",
+      "reviewed_symbols": "region_columns; region_column_dependencies; region_column_differentiable; region_column_vjp_sources",
+      "reviewer": "req006_diagnostics; source/contract audit, self-review explicitly marked",
+      "evidence": "docs/evidence/p1p6-boundary-review-20261112.md",
+      "scope": "Native formal sending/scoring/control dispatch and selected-device copies; allocation branch dependencies and explicit pullbacks preserve whole columns."
+    },
+    {
+      "path": "cpp/src/weighted_settle_columns.cpp",
+      "sha256": "6c020f3e3f37d90646f15eaed020eb94a6993cb4ac5913ab95814de331fe9eea",
+      "symbols": "*",
+      "reviewed_symbols": "transport; positions; aggregate; settle; readout",
+      "reviewer": "req006_diagnostics; source/contract audit, self-review explicitly marked",
+      "evidence": "docs/evidence/p1p6-boundary-review-20261112.md",
+      "scope": "Independent Settle schedule, no numerical reference prepass, same-rank ordering, repeated physical edges, actual message incidence, finite fields and raw outputs. Native per-target source transform reuse remains an optimization opportunity."
+    },
+    {
+      "path": "tools/weighted_benchmark/eager_columns.cpp",
+      "sha256": "144832d24f6fc61b5717275b21616951d74870abeffcc8ec475bda11ce5b104f",
+      "symbols": "*",
+      "reviewed_symbols": "EagerColumns; column_owner; column_loss; column_work; column_projected",
+      "reviewer": "req006_diagnostics; source/contract audit, self-review explicitly marked",
+      "evidence": "docs/evidence/p1p6-boundary-review-20261112.md",
+      "scope": "Implementation self-review: static fixture columns, capability/fallback dispatch, no event graph in output task, actual work statistics and detached value-only publication."
+    },
+    {
+      "path": "tools/weighted_benchmark/eager.cpp",
+      "sha256": "5c45fe9c77071021c6c3855c8cd47e62bf84381cab501416dfc84f33ca6ce540",
+      "symbols": "*",
+      "reviewed_symbols": "Eager; placed_inputs; forward; step; parameters; training_state; checkpoint; execution; save; restore",
+      "reviewer": "req006_diagnostics; source/contract audit, self-review explicitly marked",
+      "evidence": "docs/evidence/p1p6-boundary-review-20261112.md",
+      "scope": "Implementation self-review: real standalone column execution, training owners and exact state lifecycle; full records keep independent graph contract."
+    },
+    {
+      "path": "cpp/src/weighted_column_checkpoint.cpp",
+      "sha256": "1e5c59036d8ee2af1820bd3efd3ac0f304582faa65c1984f72fcec3e35e582d5",
+      "symbols": "*",
+      "reviewed_symbols": "validate_owner; import_state; export_state; WindowExecutor",
+      "reviewer": "req006_diagnostics; source/contract audit, self-review explicitly marked",
+      "evidence": "docs/evidence/p1p6-boundary-review-20261112.md",
+      "scope": "Implementation self-review: exact raw state/history/ledger decoding at complete position cuts; no pending acceptance or reference replay."
+    },
+    {
+      "path": "scripts/check_query_sdk.py",
+      "sha256": "4c37a504356e391ac3e524f36a298fc8ed6e928fc415f2580775967bdab0535b",
+      "symbols": "*",
+      "reviewed_symbols": "check_query_selection; check_selected_state_vjp; main",
+      "reviewer": "req006_diagnostics; source/contract audit, self-review explicitly marked",
+      "evidence": "docs/evidence/p1p6-boundary-review-20261112.md",
+      "scope": "Identified fixed-source usability defect: outputs default now reaches columns but checker still requires old event-query/VJP counters. Subsequent repair has separate overlay hashes/tests below."
+    },
+    {
+      "path": "tests/test_window_execution.py",
+      "sha256": "4880f25ad4acc10fa42ca1945b65b5cbc149bdba3f0c552287723ffce95794b8",
+      "symbols": "*",
+      "reviewed_symbols": "test_default_ports_and_explicit_graph_adapter; test_empty_samples_capacity_and_rejection; test_remaining_send_candidates; test_scoring_key_evidence_and_smooth_regularizers",
+      "reviewer": "req006_diagnostics; source/contract audit, self-review explicitly marked",
+      "evidence": "docs/evidence/p1p6-boundary-review-20261112.md",
+      "scope": "Reviewed existing independent schedule, silent/empty sample, capacity/pending rejection, remaining send candidates and smooth mixed-head roots; this review is not a new execution of these tests."
+    },
+    {
+      "path": "tests/test_regional_groups.py",
+      "sha256": "7edde96b541619b55824a510f2538657d0e64cd15c08c795365e904082cd168f",
+      "symbols": "*",
+      "reviewed_symbols": "material; literal; compare_roots; all test functions",
+      "reviewer": "req006_diagnostics; source/contract audit, self-review explicitly marked",
+      "evidence": "docs/evidence/p1p6-boundary-review-20261112.md",
+      "scope": "Reviewed independent per-frame formula calls, disjoint candidate incidence, zero cotangents, caps branches, aliases, version rejection and first-order refusal."
+    },
+    {
+      "path": "tests/test_standalone_columns.py",
+      "sha256": "365faef4b63a652be614c62d04d021eea4f73ff593c7870e0ec41e42c68a6a40",
+      "symbols": "*",
+      "reviewed_symbols": "execute; checkpoint; test_actual_default_columns_three_sgd_and_new_process_resume",
+      "reviewer": "req006_diagnostics; source/contract audit, self-review explicitly marked",
+      "evidence": "docs/evidence/p1p6-boundary-review-20261112.md",
+      "scope": "Implementation self-review: five memories, real CLI default, three SGD steps, scalar Streaming task comparison and fresh-process canonical raw checkpoint bytes."
+    },
+    {
+      "path": "cpp/test/weighted_column_checkpoint.cpp",
+      "sha256": "68801b59c09f9c464e1d4da4298fcb003df7b9a24f039f9109594bea31e2c8f0",
+      "symbols": "*",
+      "reviewed_symbols": "input; observations; owners; check; retained; process_restore; main",
+      "reviewer": "req006_diagnostics; source/contract audit, self-review explicitly marked",
+      "evidence": "docs/evidence/p1p6-boundary-review-20261112.md",
+      "scope": "Implementation self-review: independent Streaming schedule, sparse/zero physical ports, clocks above 2^54, shared parameter roots, multiple SGD updates, retained cross-window roots and exec-process exact recovery."
+    }
+  ],
+  "navigation": [
+    {
+      "path": "README.md",
+      "sha256": "5b987e60642c9b4656602355d9ece908b070a288d43d2714189a520ac8c1b25d",
+      "scope": "current performance table and GPU support paragraph"
+    },
+    {
+      "path": "docs/core5-study.md",
+      "sha256": "f51b991912301f816e80bb51bb644bfd749cae143d17652818f155af7ef875be",
+      "scope": "current results row and change-maintenance navigation"
+    },
+    {
+      "path": "docs/execution-capabilities.md",
+      "sha256": "ac5c176d8b68c44c9ce905c9989595d4100b2799ee1d10aca8b532c448550aca",
+      "scope": "core-5 introductory tables, typed-window/multi-owner scope and environment paragraph"
+    }
+  ]
+}

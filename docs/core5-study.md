@@ -7,7 +7,7 @@
 | --- | --- |
 | 实验接入与需求反馈 | [协作规范](downstream-contract.md)、[可复制的core-5消费者](../examples/consumer_core5/README.md)；依赖锁/请求/交付/验收模板由规范导航 |
 | 选模型/执行组合 | [有限目录](../benchmarks/core5-study-v1.json)、下方测试表；公共`resolve_model`可配置目录外合法组合 |
-| 当前实测设置与结果 | [共享bank/FC/层链及代表成本](evidence/additive-interface-performance-20261110.md)、[对应资格](evidence/additive-interface-qualification-20261110.md)；历史[自然规模25配置](evidence/core5-natural-study-20261029.md)、[实际大文件后续窗口](evidence/core5-checkpoint-budget-20261029.md) |
+| 当前实测设置与结果 | [当前张量路径与结果](#当前张量路径与结果)按FC/LH、规模、放置和三客户端导航；[证据索引](evidence/README.md)保留后继及原失败 |
 | 已通过的功能门禁 | [实际26模型/52训练检查](evidence/core5-coverage-correction-20261030.md)、[三个消费者资格](evidence/core5-study-clients-20261029.md)、各模块独立公式/根测试见[semantic-map](semantic-map.md) |
 | 在新clone中筛选结果 | [逐配置证据索引](evidence/core5-index.json)；`python -S scripts/index_core5_study.py docs/evidence/core5-index.json --view coverage --kind correctness --format tsv` |
 | 修改时同步维护什么 | 本页维护表；[实现分层](architecture.md)、[开发/资格](verification.md)、[历史与新经验](performance-lessons.md) |
@@ -30,6 +30,28 @@ topology、profile、实际family、client、device、placement、dtype、kind�
 静态事实由`planning/facts.py`生成；新run自动保存，JUnit中的实际recipe/执行/检查记录可由
 `record_core5_checks.py --junit FILE --source EXACT_COMMIT --output NEW_JSON`提取。
 失败、跳过和缺少梯度/恢复断言分别保留；测试耗时不能变成性能时间。
+
+## 当前张量路径与结果
+
+当前实现入口是[公共张量窗口](weighted-tensor-windows.md)、
+`weighted.execution.eager_runner.run_ports/run_positions`及standalone `WindowExecutor`。
+内置outputs/metrics实验按能力选择列路径；完整事件根、插件和显式records保留声明边界。
+先查运行中的`effective_execution`/`effective_window_execution`及执行身份，不能只凭
+`native`、`packed`、`prefill`名称推断实际调度。开发、构建和新源码资格从
+[development](development.md)、[verification](verification.md)进入；当前作业只见STATUS。
+
+| 要比较的范围 | 固定证据与限制 |
+| --- | --- |
+| FC4/FC16：直接公式、公共列、默认入口，三种模式 | [张量窗口整链](evidence/tensor-windows-20261111.md)、[对齐消息/区域](evidence/aligned-columns-20261112.md)；对应源码的小型独立资格与完整尺度成本分列，Transformer仅作不等价计算参照 |
+| LH/HB：直接公式→公共接口→默认入口 | [LH三层成本](evidence/lh-three-layer-20261112.md)、[节点/区域后继](evidence/node-region-batching-20261112.md)、[非空七根族与安装恢复](evidence/query-lifecycle-20261112.md)；成本、数值投影/连接差异和精确生命周期分别记录 |
+| 宽FC、多节点HB/LH、约1B/9B | [公共实验代表](evidence/experiment-columns-20261111.md)；三客户端设置、训练/推理及容量/恢复失败各有身份，不能外推未测的8B/16B或大规模训练 |
+| mixed-a/b/c、多payload owner、FP16 | [混合放置](evidence/column-placement-20261111.md)、[多owner](evidence/column-owners-20261111.md)、[half后继](evidence/column-half-20261111.md)；host推进与resident不同，显式同步和普通异步分别资格 |
+| resident与GPU | [resident当前边界](resident-block-execution.md)、[能力与历史GPU证据](execution-capabilities.md)；组件、完整owner、训练/恢复、规模和新源码真机证据不互相替代 |
+
+后继固定结果从[证据索引](evidence/README.md)定位；表内报告保留原实现提交与环境，不因
+默认路径更新改写。旧[自然规模25配置](evidence/core5-natural-study-20261029.md)、
+[大文件后续窗口](evidence/core5-checkpoint-budget-20261029.md)和
+[加法接口成本](evidence/additive-interface-performance-20261110.md)仍用于历史对照。
 
 ## 配置与测量身份
 
@@ -111,7 +133,7 @@ python scripts/benchmark_weighted.py --workload NEW_PLAN/workload.json \
 | --- | --- |
 | 数学配置/形状/共享 | Config、planning/shapes与inventory、实际绑定；[semantic-map](semantic-map.md)对应、模块契约；独立公式与实际角色检查 |
 | 新拓扑/输入时钟 | planning/topology、recipes、端口/延迟/可达性检查；完整返回/续接；recipe身份 |
-| 具名数值执行路径 | `ExecutionSpec.query_execution`及公共eager/native选择；[默认策略与显式路径](weighted-dense-query.md)、三个客户端实际选择、独立根/数值失败/完整恢复、[代表回归](prefill-regression.md)和性能经验 |
+| 具名数值执行路径 | `ExecutionSpec`及公共eager/native选择、SDK checkpoint身份；[默认策略与显式路径](weighted-dense-query.md)、[列接口与execution-v6迁移](weighted-tensor-windows.md)、三个客户端实际选择、独立根/数值失败/完整恢复、[代表回归](prefill-regression.md)和性能经验 |
 | 调度/packing/局部优化 | 公共LocalProgram能力及独立调度；[packed](weighted-packed.md)、[区域批](weighted-region-batch.md)；独立根VJP、工作量与完整计时 |
 | 紧凑基线/公共批接口接入 | [加法/减法方法](../.agents/skills/optimize-tide-execution/references/additive-comparisons.md)、[架构中的调用边界](architecture.md)；投影/完整根分开，非零左态/共享/训练/恢复及实际默认调用检查，局部与组合成本分别保留正负经验 |
 | 实验输入/loss接口 | `experiment/column_task.py`、`eager.py`、`planning/execution.py`；[张量窗口](weighted-tensor-windows.md)、输入逐位一致/共享来源、逐端口目标、独立训练、新进程恢复及旧锁身份。观察CPU解码在反向之后，插件按其声明契约接入 |

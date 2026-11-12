@@ -9,8 +9,11 @@ The table below describes execution layers; each linked report retains its own
 source, dtype, topology, configuration and acceptance scope. It is not one
 Cartesian qualification of every option.
 
-Current natural-scale settings and failures are in the [25-configuration study](evidence/core5-natural-study-20261029.md)
-and [large checkpoint follow-up](evidence/core5-checkpoint-budget-20261029.md).
+Current tensor-window, FC/LH three-layer, scale and placement results are linked
+from the [current result map](core5-study.md#当前张量路径与结果) and [evidence index](evidence/README.md).
+The earlier [25-configuration study](evidence/core5-natural-study-20261029.md)
+and [large checkpoint follow-up](evidence/core5-checkpoint-budget-20261029.md)
+retain their original source and environment; they are historical results.
 The [corrected recipe qualification](evidence/core5-coverage-correction-20261030.md) covers 26 small models through PyTorch and Python/native on CPU FP64 (52 training cases, 73 related checks total). It adds no standalone, accelerator, or performance qualification.
 The [configuration/coverage query](core5-study.md), backed by the [per-configuration index](evidence/core5-index.json), separates exact small correctness cases from
 performance runs; it never extends a passing small case to another size, dtype, client or source.
@@ -44,17 +47,19 @@ exact next-window resume pass; original FP32 and asynchronous failures remain.
 | --- | --- |
 | General graphs and ports | PositiveDelayGraph, nonaligned TimedDAG and general SettleGraph with same-rank regions; [Settle embedding](settle-embedding.md), [typed records](structured-records.md) |
 | CPU mathematical baseline | Independent Python schedules and C++ core; five weighted memories, formal sending/scoring/evidence/key configurations and fixed-time convolution; [binding](weighted-message.md), [recurrent functions](weighted-recurrent.md), [sending](weighted-sending.md), [scoring](weighted-scoring.md) |
-| Typed tensor windows | [tensor-window-v1](weighted-tensor-windows.md): Python/C++ five-memory state, regional columns, B×L messages and raw continuation. CPU/mixed-a/b/c use host scheduling with explicit temporary column placement. Device-resident and multiple-payload-device column migration remain separate from existing general-engine capabilities |
+| Typed tensor windows | [tensor-window-v1](weighted-tensor-windows.md): Python/C++ five-memory state, regional columns, B×L messages and raw continuation, including standalone WindowExecutor/default output tasks. CPU/mixed-a/b/c and multiple payload owners use host scheduling with explicit column transfers. [Owner](evidence/column-owners-20261111.md) and [half/peer follow-up](evidence/column-half-20261111.md) qualify their fixed scopes; ordinary asynchronous peer failures remain separate from blocking-policy passes. The [new resident block executor](resident-block-execution.md) has its own component/complete-owner gates |
 | Exact joint evaluation | Online greedy prefill, actual ragged projection/affine scans, independent field roots, batched local VJPs and explicit sharing; [packing](weighted-packed.md), [region batches](weighted-region-batch.md), [sharing](weighted-compute-sharing.md) |
 | Mixed execution | Explicit payload/Read/control/selection placement; [placement](weighted-placement.md), [device qualification](weighted-device-validation.md), [precision](weighted-precision.md). Python/native and standalone evidence remain separate |
 | Resident single device | Independent device readiness/selection/progress, complete fields and raw cuts, retained first-order training, canonical FP32 masters and SGD/AdamW; [FP32/FP16 qualification](evidence/core5-resident-half-training-20261028.md) and [master assertion correction](evidence/core5-resident-weighted-peers-20261028.md) |
 | Resident sample replicas | Private graph states, canonical gradient sum and one optimizer boundary; [two-device qualification](evidence/core5-resident-weighted-peers-20261028.md) |
 | Resident node placement | One sample split by node, complete regional selection and exact cuts; [forward qualification](evidence/core5-weighted-node-placement-20261028.md). Placed window VJP, canonical optimizer publication, FP32/FP16 training and relocated restore have [independent qualification](evidence/core5-weighted-node-training-20261028.md) |
 | CUDA | [x86_64 RTX3090/SM86 eager evidence](evidence/core5-cuda-eager-20261031.md): PyTorch/native FP32 and FP16 each19/19, standalone23/24 and22/24; complete update/resume checks. Ordinary peer copies/explicit Python CPU bridge have scoped evidence; native peer GDN exact resume fails. [Single-device resident](evidence/core5-cuda-resident-20261031.md) has56 component/dtype and53 public checks, zero skips. [FC-small timeline and finite costs](evidence/core5-cuda-finite-20261031.md) separately qualify the actual small configurations; medium and HB-small resident strict differences remain. aarch64 still has build/loader evidence only |
-| Performance | [Natural-scale settings/results](evidence/core5-natural-study-20261029.md): 25 configurations, 7 fully checked CPU FP64 results including short-window LH-inspired 1.051B. NPU numerical/resource failures remain; 8B/16B are static plans. Earlier [small/medium comparison](evidence/core5-weighted-performance-20261028.md) and [startup observations](evidence/core5-weighted-observation-20261028.md) retain their own scope; no general large-batch or cross-card throughput claim |
+| Performance | [Current finite comparison map](core5-study.md#当前张量路径与结果): FC/Transformer and LH direct/public/default comparisons, wide/many-node/1B/9B representatives and mixed/half costs. Independent numerical roots, training/resume and timing scopes are separate. Historical [natural-scale results](evidence/core5-natural-study-20261029.md) retain their own identity; no general large-batch, 8B/16B or cross-card throughput claim |
 
-CPU FP64/FP32 remain the reference. NPU reports distinguish Torch2.12/CANN9.1
-Python-owned code from Torch2.10/CANN9.0 standalone SDK code. Resident FP16 has
+CPU FP64/FP32 remain the reference. Use [development](development.md) for current
+published toolchains and separate Python-owned/standalone builds; recent work uses
+Torch2.12/CANN9.2 identities. Earlier Torch2.12/CANN9.1 Python-owned and
+Torch2.10/CANN9.0 standalone reports retain those historical identities. Resident FP16 has
 FP32 arithmetic, adjoints and masters with explicit storage-boundary casts;
 it does not certify the different eager FP16 path. Explicit unavailable devices,
 dtypes, capacities and configurations fail. The retained strict eager GDN,

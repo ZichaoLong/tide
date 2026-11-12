@@ -21,7 +21,7 @@
 | 作为 Python/LibTorch 依赖调用 | [公共库](docs/library.md)、[安装客户端](examples/consumer/README.md) |
 | core-5 配置/拓扑/规模、运行和维护导航 | [候选与测试入口](docs/core5-study.md) |
 | 按配置查询正确性/性能覆盖 | [统一查询入口](docs/core5-study.md)、[逐配置索引](docs/evidence/core5-index.json)、[覆盖修正资格](docs/evidence/core5-coverage-correction-20261030.md) |
-| 当前core-5性能设置、合格结果与严格失败 | [自然规模对照](docs/evidence/core5-natural-study-20261029.md)、[大文件与下一窗边界](docs/evidence/core5-checkpoint-budget-20261029.md) |
+| 当前core-5性能设置、合格结果与严格失败 | [当前三层/默认路径结果导航](docs/core5-study.md#当前张量路径与结果)、[证据索引](docs/evidence/README.md)；历史[自然规模对照](docs/evidence/core5-natural-study-20261029.md)保留原源码身份 |
 | core-5 带权模块、训练与有限性能 | [公共绑定](docs/weighted-message.md)、[五记忆与短卷积](docs/weighted-recurrent.md)、[常驻训练](docs/resident-weighted-training.md)、[节点放置](docs/resident-weighted-placement.md)、[样本副本](docs/resident-weighted-peers.md)、[性能消费者](docs/weighted-performance.md) |
 | CPU/CUDA/NPU 与常驻后端 | [加速器](docs/accelerators.md)、[设备控制与 GPU 验证](docs/device-control.md)、[常驻库](docs/resident-library.md) |
 | 历史清理、旧提交号、新检出 | [迁移与映射](docs/history-migration.md) |
@@ -33,9 +33,11 @@
 Python 参考、LibTorch 核心和特化调度保留独立执行顺序；常驻后端拥有独立的
 CANN/CUDA 控制流实现。支持范围以配置能力、验证门禁及对应证据为准。
 
-CPU/NPU 已完成证据所列固定源码与声明范围的本机验证。CUDA eager/常驻源码已交付；
-历史构建仅认证其记录的提交，当前新增源码的CUDA构建仍待核验。
-**真实 GPU 正确性、常驻性、多卡、内存和性能仍待目标机验证**。
+CPU/NPU 已完成证据所列固定源码与声明范围的本机验证。
+历史 RTX3090 的 [eager](docs/evidence/core5-cuda-eager-20261031.md)、
+[resident](docs/evidence/core5-cuda-resident-20261031.md)及[有限性能](docs/evidence/core5-cuda-finite-20261031.md)
+已有真实 GPU 证据，保留各自通过范围与失败。本轮新增张量窗口/重写源码的 CUDA 构建及真机
+正确性、训练、恢复、多卡和性能仍待验证；历史资格不自动延伸到新源码。
 自定义 Python 程序不会自动转换为 C++ 或常驻内核；不支持的请求明确失败。
 完整矩阵、精度和兼容性边界见 [执行契约](docs/execution-flows.md)。
 

@@ -1,5 +1,10 @@
 # 历史验证与测量证据
 
+[KV分组、LH生命周期与显式异步队列（2026-11-12）](query-lifecycle-20261112.md)：固定55a CPU254通过/9原xfail，
+standalone owner/五记忆CLI、LH176七族FP64数值投影和CPU/NPU四安装消费者恢复分列。
+NPU两族严格有限数值失败、None/零差异、原SDK include失败及普通队列EE1017保留；
+显式每流队列整链与a097 resident KV sequence组件另有真机证据，没有新增吞吐结论。
+
 [节点/区域合批及LH尺度对照（2026-11-12）](node-region-batching-20261112.md)：a95的26个CPU/共享NPU
 成本点、定向资格与8组安装训练恢复；LH176区域调用307→94，默认训练CPU2.451/NPU5.011秒。
 f681/3f99独立公式检查中FP64数值投影通过，FP32有限严格失败、None/零连接差异及原放置测试失败保留。
@@ -14,6 +19,10 @@ Read-selection及后继KV Full/messages分别有CANN构建与真机证据；保�
 
 [本轮hash绑定审阅范围](rewrite-followup-reviews-20261112.json)记录实际审阅的诊断/共享准入与
 新消息组件，和上述证据相互定位；不累计重复覆盖，不称全仓逐函数审阅完成。
+
+[默认生产边界审阅（2026-11-12）](p1p6-boundary-review-20261112.md)：固定55a3074a的24个
+源码/测试文件及具体符号、3处文档段落hash；覆盖默认分派、五记忆/区域列、standalone及恢复边界。
+记录SDK检查设施回归与导航修正，明确有限性能机会、自审、未重审层及独立运行证据的区别。
 
 [REQ-006四代表与算子归因（2026-11-12）](req006-diagnostics-20261112.md)：c83a2820无插桩完整步及
 2927ba40离线trace恢复；HB88/HB184/入口树/Transformer成本、实际矩阵/发送工作分列。
