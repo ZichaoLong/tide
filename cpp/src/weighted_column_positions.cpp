@@ -89,11 +89,11 @@ std::vector<Tensor> position_logits_many(const std::vector<PositionQuery>& reque
     bool rotated=false;for(const auto& f:r.frequencies)rotated|=!f.empty();std::string reason;
     if(rotated){auto positions=rebase(r);reason=positions.reason;
       if(!positions.query.defined()){
-        result[i]=relative(r);work::packing::bucket("kv_rope_relative_"+reason,q.size(2),1);continue;}
+        result[i]=relative(r);work::packing::bucket(("kv_rope_relative_"+reason).c_str(),q.size(2),1);continue;}
       q=rotation(q,positions.query.to(q.device()),r.frequencies,r.scale);
       k=rotation(k,positions.key.to(k.device()),r.frequencies,r.scale);
     }else{reason="content_distance";if(q.scalar_type()==at::kHalf){q=q.to(at::kFloat);k=k.to(at::kFloat);}}
-    work::packing::bucket("kv_rope_"+reason,q.size(2),1);selected.push_back(i);
+    work::packing::bucket(("kv_rope_"+reason).c_str(),q.size(2),1);selected.push_back(i);
     operands.push_back({q.flatten(0,1),k.flatten(0,1).transpose(-1,-2)});
   }
   auto values=contract_nodes(Contraction::matmul,operands);
