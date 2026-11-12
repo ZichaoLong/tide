@@ -1,5 +1,8 @@
 # direct-v7：查看、停止与恢复
 
+2026-11-12：十条主轨迹的4M终点保留，其余筛选及中间权重已按授权退役。
+部分原续训父checkpoint现在只保留谱系/hash和观测；恢复前查[可用性清单](checkpoint-retirement-20261112.md)，不直接重跑原父checkpoint命令。
+
 项目记录为权威；当前快照见[STATUS](../STATUS.md)，研究范围见[固定表](direct-language-v7.md)。
 训练源码固定`d30559c8bce74d5b6ea392bb18f53e8ba3b90cf1`，只读目录`.local/source-v7-main`。
 校准源码3455c7a，解析计数首次bc58bef、修正b463f80，全部另有冻结目录；未改活动训练代码。

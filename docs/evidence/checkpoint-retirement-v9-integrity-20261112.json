@@ -1,0 +1,99 @@
+{
+  "at": "2026-11-12T12:20:27.575684+00:00",
+  "inputs": {
+    "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v9-execution/configs/studies/language/direct-v9/budget.json": {
+      "actual_sha256": "60e0accc7695af0bef9bbf01c7935e43ee2aa7a7f76ea366ef4021c24e22c286",
+      "expected_sha256": "60e0accc7695af0bef9bbf01c7935e43ee2aa7a7f76ea366ef4021c24e22c286"
+    },
+    "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v9-execution/configs/studies/language/direct-v9/resource.json": {
+      "actual_sha256": "ce03c71edcf8be2ba08c5c1b85a4a6b3950ae2979be20c5fb1988b4a9a69e151",
+      "expected_sha256": "ce03c71edcf8be2ba08c5c1b85a4a6b3950ae2979be20c5fb1988b4a9a69e151"
+    },
+    "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/main/configs/r64-h2-bern-s11.json": {
+      "actual_sha256": "2be5ae829d910ebdc4f903321327a90f5fcaa301facda2053c5720f9fa846b36",
+      "expected_sha256": "2be5ae829d910ebdc4f903321327a90f5fcaa301facda2053c5720f9fa846b36"
+    },
+    "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/main/configs/r64-h2-bern-s22.json": {
+      "actual_sha256": "9973ac85cb88fee3b7e451ef002940ab22101fb8475708410a80fd11cfad40dc",
+      "expected_sha256": "9973ac85cb88fee3b7e451ef002940ab22101fb8475708410a80fd11cfad40dc"
+    },
+    "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/main/configs/tree-r64-h2-bern-s11.json": {
+      "actual_sha256": "a03925f88901b222f3c9d3d7ca8c97870bd543c9468197f38d3327d998202f5b",
+      "expected_sha256": "a03925f88901b222f3c9d3d7ca8c97870bd543c9468197f38d3327d998202f5b"
+    },
+    "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/main/configs/tree-r64-h2-bern-s22.json": {
+      "actual_sha256": "4c800ed218c7c60728a6a030ea9683e0157b02cf71f3aa2532d954ea2af72103",
+      "expected_sha256": "4c800ed218c7c60728a6a030ea9683e0157b02cf71f3aa2532d954ea2af72103"
+    },
+    "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-campaign/state.json": {
+      "actual_sha256": "580daa9f33caef854ed756a2ff02b6894aee92ebb150c8c056fee459b28146b8",
+      "expected_sha256": "580daa9f33caef854ed756a2ff02b6894aee92ebb150c8c056fee459b28146b8"
+    },
+    "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-data-r3/data-lock.json": {
+      "actual_sha256": "40b7c0ebb9650d11aa0c0080532c884e2ca3846db578155f3df7068b82191d2f",
+      "expected_sha256": "40b7c0ebb9650d11aa0c0080532c884e2ca3846db578155f3df7068b82191d2f"
+    },
+    "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-main-r64-h2-bern-s11/check/result.json": {
+      "actual_sha256": "6e4562a5d18e9698a006e1fecbf7fb35eb72ab1da1d6def2a66868d8c7360f69",
+      "expected_sha256": "6e4562a5d18e9698a006e1fecbf7fb35eb72ab1da1d6def2a66868d8c7360f69"
+    },
+    "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-main-r64-h2-bern-s11/recovery.json": {
+      "actual_sha256": "bfa48c7e482016e9f9e0ab694680f2d9209ab828e6df8cb03746252c9680550a",
+      "expected_sha256": "bfa48c7e482016e9f9e0ab694680f2d9209ab828e6df8cb03746252c9680550a"
+    },
+    "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-main-r64-h2-bern-s11/train/latest.pt": {
+      "actual_sha256": "147337597097febd4d778a6e3dd3c80dc6568e1182a79d8599e25f94f7fde7d7",
+      "expected_sha256": "147337597097febd4d778a6e3dd3c80dc6568e1182a79d8599e25f94f7fde7d7"
+    },
+    "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-main-r64-h2-bern-s22/check/result.json": {
+      "actual_sha256": "94cbf29c07301748d4f2d91f7565536eb81b86e0d6139bbf9b98b794c505af87",
+      "expected_sha256": "94cbf29c07301748d4f2d91f7565536eb81b86e0d6139bbf9b98b794c505af87"
+    },
+    "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-main-r64-h2-bern-s22/recovery.json": {
+      "actual_sha256": "36b1807603baa1c1c2f22ace1a5e4fa2e621852d19099bdf10faa3b78d9f009c",
+      "expected_sha256": "36b1807603baa1c1c2f22ace1a5e4fa2e621852d19099bdf10faa3b78d9f009c"
+    },
+    "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-main-r64-h2-bern-s22/train/latest.pt": {
+      "actual_sha256": "dd5d154ea1b3a82dd7b1ad1f5a91aadf2e64e01189aa34477a93b0a412f09781",
+      "expected_sha256": "dd5d154ea1b3a82dd7b1ad1f5a91aadf2e64e01189aa34477a93b0a412f09781"
+    },
+    "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-recovery-20261112/main/w10.json": {
+      "actual_sha256": "04c5d99516fa553a45486b8060ae3a2f926fef9a97aa0b9cb176464e18cef57f",
+      "expected_sha256": "04c5d99516fa553a45486b8060ae3a2f926fef9a97aa0b9cb176464e18cef57f"
+    },
+    "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-recovery-20261112/main/w11.json": {
+      "actual_sha256": "b797b21332a18c0f5baa962e27cb156c5b938eacacf651a7ae09a518622192e9",
+      "expected_sha256": "b797b21332a18c0f5baa962e27cb156c5b938eacacf651a7ae09a518622192e9"
+    },
+    "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-recovery-20261112/main/w2.json": {
+      "actual_sha256": "22a9ea22f1dcb963a288df51a509e627520678009d494f3ef6d4aa3d7756ae88",
+      "expected_sha256": "22a9ea22f1dcb963a288df51a509e627520678009d494f3ef6d4aa3d7756ae88"
+    },
+    "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-recovery-20261112/main/w3.json": {
+      "actual_sha256": "cfba06df55c175f3999d4d7cc74110f29ae7dabfcd2859c8cbc751935798e080",
+      "expected_sha256": "cfba06df55c175f3999d4d7cc74110f29ae7dabfcd2859c8cbc751935798e080"
+    }
+  },
+  "jobs": [
+    "v9-recover-main-w10",
+    "v9-recover-main-w11",
+    "v9-recover-main-w2",
+    "v9-recover-main-w3",
+    "v9-recovery-controller"
+  ],
+  "passed": true,
+  "schema": "tide-retirement-active-input-verification-v1",
+  "scope": "after retirement: current v9 registered fixed inputs and frozen source; changing training outputs excluded",
+  "sources": {
+    "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v9-execution": {
+      "commit": "6e7bd49eb5e35c15445826cac3a9b6ddda75aff4",
+      "matches_job": true,
+      "tree_sha256": "a36b64f9bdfbd00fa87cac0aaca1c861b5b8d0c298abdcf763d3605393a3de98"
+    },
+    "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v9-recovery-20261112": {
+      "commit": "1809009ad59a7e6f7f27af06a0e20c1f74f4155c",
+      "matches_job": true,
+      "tree_sha256": "d6e29730ca01c829ebf3e49b82e050452502ac6f75988e1e38fa43d63468af89"
+    }
+  }
+}

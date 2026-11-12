@@ -1,0 +1,37 @@
+{
+  "actions": {
+    "gef_deleted": 14,
+    "tide_deduplicated": 76,
+    "tide_deleted": 1116
+  },
+  "actual_initial_cgroup": "/user.slice/user-1003.slice/user@1003.service/background.slice/tide-lab-retire-archives-20261112.service",
+  "at": "2026-11-12T12:20:27.974178+00:00",
+  "directory_bytes_after": {
+    "gef": 1737461760,
+    "tide": 70584782848
+  },
+  "execution_state": "completed",
+  "job_elapsed_seconds": 101.79377123713493,
+  "job_state": "completed",
+  "quota_hard_headroom_bytes": 577664208896,
+  "quota_used_bytes": 281329250304,
+  "reclaimed_bytes": {
+    "gef_deleted": 639459328,
+    "tide_deduplicated": 8086470656,
+    "tide_deleted": 71543263232
+  },
+  "retained_checkpoint_hashes_verified": 39,
+  "retained_files": 72901,
+  "retained_inventory_unchanged": true,
+  "schema": "tide-retirement-terminal-verification-v1",
+  "termination_verified_now": true,
+  "total_reclaimed_bytes": 80269193216,
+  "v9_active_jobs": [
+    "v9-recover-main-w10",
+    "v9-recover-main-w11",
+    "v9-recover-main-w2",
+    "v9-recover-main-w3",
+    "v9-recovery-controller"
+  ],
+  "v9_integrity_passed": true
+}

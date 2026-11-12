@@ -130,3 +130,6 @@
   Completed v6-v8 screening weights outside the named retention set and 14 old GEF
   benchmark states may be retired by the fixed manifest. Historical recovery records
   do not promise availability of retired bytes; consult the retirement receipt first.
+  This retirement is terminal: 74.7565GiB released, 1,130 files retired and 76 exact
+  duplicates hardlinked; selected weights and historical evidence verified intact.
+  Do not rerun the executed manifest or assume retired screening weights still exist.

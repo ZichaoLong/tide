@@ -1,5 +1,8 @@
 # direct-v8：查看、停止与恢复
 
+2026-11-12：历史筛选权重已按授权选择性退役，19个代表终点保留，全部结果/日志/失败保留。
+恢复或重新评价前先查[检查点可用性与退役清单](checkpoint-retirement-20261112.md)；以下原操作方法不承诺每项旧权重仍在。
+
 2026-11-11终态：本批40个服务全部退出且无后代，没有活动/排队任务。controller实际选19个局部复核，18完成、1失败；单项r2完成。
 以下保留固定来源及原作业操作方法；当前查看不会重启训练。结果入口为[终态交付](direct-v8-results.md)。
 
@@ -77,5 +80,5 @@ python scripts/review_direct_v8.py
 恢复使用**新的**job、worker plan、case output、run ID，仍使用原冻结源码、原config SHA、data lock、安装、backend与线程数。
 复用该case的check/result.json与recovery.json，在train_arguments中加`--resume <原train/latest.pt>`；
 checkpoint与两份资格记录都加入job.py的`--input`。复制原job.json的环境、资源策略及启动argv，保持原共享deadline/总预算，
-目标仍1M。latest/previous与1M里程碑均保留，三步恢复通过不认证整条长轨迹独立重放。
+目标仍1M。当前仅保留清单内的latest及相同终点的硬链接别名；其他旧权重已退役。三步恢复通过不认证整条长轨迹独立重放。
 预算用完或本批终态后不自动续到更多曝光；再次查看报告无需重跑。
