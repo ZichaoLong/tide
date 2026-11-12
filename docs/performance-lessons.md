@@ -25,7 +25,9 @@
 | 配置身份、安装、计时分母、归档与失败复现 | [测量与证据](performance-lessons-evidence.md) |
 | 外部Transformer/MoE、真实模型入口及计时范围 | [外部模型对照](performance-lessons-external-models.md) |
 
-新近机制：[来源列与精确计算复用](performance-lessons-batching.md#来源变换也要跨物理边保留张量粒度)、
+新近机制：[区域均值与真实共享传输](performance-lessons-batching.md#区域均值与传输必须保留真实共享身份)、
+[动态执行与静态控制图](performance-lessons-state-devices.md#动态执行次数与静态控制图大小分别预算)、
+[来源列与精确计算复用](performance-lessons-batching.md#来源变换也要跨物理边保留张量粒度)、
 [跨过批量接口的静态形状审阅](performance-lessons-state-devices.md#静态形状审阅要越过批量接口)、
 [旋转的整数域与原值守卫](performance-lessons-batching.md#旋转恒等式需要整数域与原值守卫)、
 [单bank矩阵与服务任务容量](performance-lessons-state-devices.md#单bank矩阵与服务任务容量是两类问题)、

@@ -306,3 +306,20 @@ LH176 的同材料 direct/default CPU profile（诊断入口`f4750204`、数值�
 开发检查中的新FP32舍入在具名字段保留为严格xfail，同材料FP64、结构/None零和恢复分别验收。
 批量workspace估计不代表整窗峰值；同形分组、共享矩阵、exact cache各自计数，后备必须可观察。
 局部公式/结构检查不能替代新native构建、异步跨owner恢复和完整LH/FC成本。
+
+## 区域均值与传输必须保留真实共享身份
+
+固定实现`1f0e6e43`将接收节点×窗口行×物理来源打包一次，均值为
+`m=sum(c_a), u=sum(c_a*z_a)/m`，中心化转置为
+`dc_a=dm+dot(du,z_a-u)/m, dz_a=c_a*du/m`。零总量、singleton和None/零根按
+[Aggregate契约](weighted-aggregate-batch.md)处理；pack和结果视图在显式VJP内部，
+不为每个物理来源建index-copy图。ragged来源数与行数共同决定padding，组预算必须重新计算；
+不能累加各成员原尺寸后当作整组内存。每条边仍单独计数，同SrcClass不合并物理原子。
+[Python独立公式](../tests/test_aggregate_tensor.py)及
+[C++字面原子/方向导数](../cpp/test/weighted_aggregate_tensor.cpp)检验实际数学和连接。
+
+Read跨设备/精度转换在同目标上统一映射所有节点的角色；真实共享参数只复制一次，
+相同数值的独立根仍分开。先逐节点复制再让数值层判断共享，会把原共享矩阵变成独立临时量。
+[Python传输检查](../tests/test_column_read_transport.py)和
+[C++检查](../cpp/test/weighted_read_transport.cpp)覆盖多个目标、同位置无操作及原值版本守卫。
+这些机制消除明确的重复工作，端到端收益仍由固定证据的FC/LH实际计量限定。

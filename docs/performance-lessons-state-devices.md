@@ -199,3 +199,17 @@ raw状态私有、参数canonical owner和optimizer边界保持；共享参数�
 这是具名源码的成本解释与替代边界，尚不是多bank/共享前缀新实现的速度结论。
 既有单bank优化证明其自身范围，不能自动覆盖提前gather、多bank、head或KV update调用链。
 运行时trace用于检验静态解释，不能把一个kernel、一个Function或一行调用当作算法已经紧凑。
+
+## 动态执行次数与静态控制图大小分别预算
+
+`6011d599`把resident bank矩阵计算改为GEMM后，消息组合仍在录入时报
+EE1019/task buffer full：每个bank复制一套容量分支体，静态图是bank×log(R)，
+即使每次只执行一条分支也会耗尽录入容量。`1f0e6e43`用设备游标选下一非空bank，
+复用同一套容量分支和GEMM暂存，静态体为log(R)；仍取覆盖实际行数的最小桶，
+并未改成每bank都计算满R。见[bank契约](resident-bank-gemm.md)与
+[布局检查](../tests/test_resident_weighted_bank_gemm.py)。设备执行资格与源码推导分开记录。
+
+优化器布局只需要owner/offset/extent，不应先建一份全参数零梯度作为身份占位。
+[实际13类缓冲](resident-optimizer.md)按生命周期计费，视图按底层Storage去重，
+同时存活的每个程序workspace求和；局部分区不任意取总预算的某个比例。
+精确边界与少一字节拒绝由CPU算式和设备owner检查分别验收，预算通过不是无OOM保证。

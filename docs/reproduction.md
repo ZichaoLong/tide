@@ -1,5 +1,9 @@
 # 从 Git 复现问题与维护失败经验
 
+最新区域张量/录入诊断入口：[1f0e6e43固定记录](evidence/region-tensor-20261112.md)，
+包含完整CPU argv、LH展开计划、FC固定任务、全部成本命令、安装恢复与resident静态任务trace。
+继承历史路径的命令可按报告替换为干净checkout/新build；无需恢复旧运行目录。
+
 本页是诊断入口导航，不是第二份状态表。当前限制、停止/重启条件仅见[ROADMAP](ROADMAP.md)；
 数学定义见[semantic-map](semantic-map.md)，已有正负经验见[performance-lessons](performance-lessons.md)。
 历史源码/环境身份及观察值以各审阅证据为准。清理不重跑旧队列，不改变任何失败或容差。

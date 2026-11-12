@@ -74,8 +74,13 @@ resident逐行矩阵、逐帧raw、重复历史投影和单block串行循环；r
 [6011d599整组KV固定资格与44点成本](evidence/tensor-kernels-20261112.md)已取得：
 8安装生命周期通过；FC16默认native NPU训练0.3636秒，LH176仍有公共层差距。
 CPU4个旧指标断言失败与9原数值xfail保留；resident9组件通过，完整消息块录入EE1019。
-后继已实施待固定：C++整组写入、跨节点Read传输保留共享角色、区域均值张量边界，
-resident设备bank循环体复用及实际optimizer存储计费。尚不能将源码改动视作真机解除。
+[1f0e6e43后继固定资格](evidence/region-tensor-20261112.md)：C++整组写入、共享Read传输和区域均值已验，
+CPU304通过/9原xfail、12安装训练/恢复与SDK五记忆×三放置通过。38点成本中FC16/LH176默认native NPU训练
+.2856/2.8407秒；LH直接.6121秒，剩余差距未闭合。38文件静态审阅确认来源payload仍按接收者复制，
+KV阶段仍发布节点字段后重装配。下一主机边界是source-owner/region-window typed上下文，不继续把旧均值/写入图当根因。
+resident9局部及实际optimizer通过，但原消息组合仍录入EE1019：14投影、140容量body，失败前929条vendor操作。
+依赖flow/owner/规模未运行；本候选停止重测，后继删除容量树、使用单一tile计算体并检查跨tile dW；
+更大flow的有界program组合和共享历史/逐帧raw仍是独立未完成边界，不以局部通过替代。
 
 原计划的三类未完成工作继续：实现/数值/异步/容量限制，LH及core-3经验的实际迁移，
 可复用正确性/性能设施与架构导航。既有skills、独立基线、诊断收集器和KV块优化复用，不重做。
