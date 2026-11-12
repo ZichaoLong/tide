@@ -77,13 +77,21 @@ python -m pytest -q tests/test_lh_tensor_baseline.py --dtype both
 
 尺度检查使用独立的[检查入口](../scripts/check_lh_tensor.py)，不会从参考轨迹生成候选输入。
 [解码与比较](../scripts/lh_tensor_check.py)读取候选实际返回的控制、候选/Full支持、全部raw
-终态字段及int64时钟、逐端口cG，再比较一个输出+raw任务对输入和共享参数的数值VJP。
-完整记录根、非空左态、optimizer和恢复不属于此命令的资格范围；None/连接零差异另列。
+终态字段及int64时钟、逐端口cG，再比较所选输出族对输入、共享参数和独立初态字段的数值VJP。
+默认是输出+raw任务；`--root-family aggregate|descriptors|control|full|messages|raw`分别施加
+不同符号、含零坐标的字段伴随，保留每个物理边/端口身份。`--left-entries 3`提供独立构造的
+非空raw输入，含稀疏槽与int64时钟；它不是CPU预跑真实轨迹。`--start-position`可检验巨大时钟。
+[材料及观察](../scripts/lh_tensor_observations.py)分别从直接公式和候选实际列提取所选字段，
+不从参考补齐候选。完整逐事件快照根、optimizer和恢复不属于此命令的资格范围；
+None/连接零差异继续单列，不把dense Full的数值投影认证为连接等价。
 形状、离散/非有限失败与有限数值超差分开，原严格阈值不改。小型入口检查见
 [test_lh_tensor_check](../tests/test_lh_tensor_check.py)。
+[非空初态及输出族根](../tests/test_lh_tensor_observations.py)另核对巨大int64时钟、
+共同初态编码的线性转置与七种独立任务边界。
 
 ```sh
 python scripts/check_lh_tensor.py --case many-lh --device cpu --dtype float64 --client native --native-library BUILD --output-dir NEW_CHECK
+python scripts/check_lh_tensor.py --case many-lh --device cpu --dtype float64 --client native --native-library BUILD --left-entries 3 --root-family messages --output-dir NEW_LEFT_ROOTS
 ```
 
 默认B4/L16/d64、176节点，`--level both`检查public/default；NPU改为显式设备和FP32。

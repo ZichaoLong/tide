@@ -3,8 +3,9 @@
 
 Same input/port material and unchanged parameters, independent forward/VJPs.
 Checks controls, actual candidate/Full support, all terminal raw KV fields and
-int64 metadata, per-port cG and one output+raw task derivative. This is not a
-performance run, all-root qualification, optimizer or checkpoint-resume test.
+int64 metadata, per-port cG and a chosen independently rooted observation family.
+Literal nonempty raw left states are optional. This is not a performance run,
+complete event-root qualification, optimizer or checkpoint-resume test.
 Exit 0: strict numerical projection passed; 1: retained finite numerical
 mismatch; 2: execution, capacity, nonfinite, structure or discrete failure.
 """
@@ -43,6 +44,9 @@ def arguments():
     p.add_argument("--max-node-rows", type=int, default=262144)
     p.add_argument("--max-pair-elements", type=int, default=2**26)
     p.add_argument("--max-differences", type=int, default=32)
+    p.add_argument("--left-entries", type=int, default=0, help="literal nonempty raw input slots, 0..16")
+    p.add_argument("--start-position", type=int, default=None)
+    p.add_argument("--root-family", choices=("task", "aggregate", "descriptors", "control", "full", "messages", "raw"), default="task")
     p.add_argument("--output-dir", "--output", type=Path, required=True)
     a = p.parse_args()
     limits = (a.batch, a.length, a.threads, a.max_materialize_bytes, a.max_workspace_bytes,
@@ -51,6 +55,12 @@ def arguments():
         p.error("positive int64 dimensions/budgets and L<=256 required")
     if a.client == "native" and not a.native_library:
         p.error("native requires its explicit matching library")
+    if not 0 <= a.left_entries <= 16:
+        p.error("left entries must be in [0,16]")
+    if a.start_position is None:
+        a.start_position = 2*a.left_entries+1 if a.left_entries else 0
+    if not 0 <= a.start_position < 2**63 or a.left_entries and a.start_position < 2*a.left_entries:
+        p.error("start must be a nonnegative int64 with room for the literal left slots")
     return a
 
 
@@ -75,17 +85,18 @@ def main():
     output = a.output_dir.resolve(); output.mkdir(parents=True, exist_ok=False)
     source, dirty = source_state(root)
     upstream = json.loads((root/"docs"/"upstream.json").read_text())
-    files = ("check_lh_tensor.py", "lh_tensor_check.py", "benchmark_lh_tensor.py", "lh_tensor_baseline.py",
+    files = ("check_lh_tensor.py", "lh_tensor_check.py", "lh_tensor_observations.py", "benchmark_lh_tensor.py", "lh_tensor_baseline.py",
              "lh_tensor_math.py", "lh_tensor_state.py")
     record = dict(schema="tide-lh-tensor-check-v1", source=source, dirty=bool(dirty), execution="running",
         mathematics={k: upstream[k] for k in ("semantic_version", "revision")},
         request={k: str(v) if isinstance(v, Path) else v for k, v in vars(a).items()},
         script_sha256={name: digest(root/"scripts"/name) for name in files},
         affinity=sorted(os.sched_getaffinity(0)), device_visibility=os.environ.get("ASCEND_RT_VISIBLE_DEVICES"),
-        scope="Same parameters and benchmark-generated unit-strength physical inputs/port support. Controls, actual candidate/Full rows, complete raw terminal KV slots/int64 clocks, per-port cG and one output+raw numerical task VJP. Empty left state only. No all-root, edge-content, optimizer, continuation/restore or performance qualification.",
+        scope="Same parameters and benchmark-generated unit-strength physical inputs/port support. Controls, actual candidate/Full rows, complete raw terminal KV slots/int64 clocks, per-port cG and a chosen independent observation-family VJP. Optional literal nonempty left banks. Does not certify every independent event-time root, optimizer, continuation/restore or performance.",
         raw_decode="Read actual candidate ColumnState banks; direct decodes its own padded banks. No recursive/reference fill. The direct inert KV field is an explicit constant-zero invariant.",
-        task="1e-6 sum(per-port cG squared) + 1e-3 sum(all terminal floating raw fields squared)",
-        gradient_scope="Named unique parameter owners and input; None-as-zero numeric projection. Connection differences reported separately.",
+        task=("1e-6 sum(per-port cG squared) + 1e-3 sum(all terminal floating raw fields squared)" if a.root_family == "task"
+              else "Distinct signed per-field cotangents on "+a.root_family+"; every seventh coordinate has zero cotangent"),
+        gradient_scope="Named unique parameter owners, input and each literal raw left field; None-as-zero numeric projection. Connection differences reported separately.",
         budgets="Materialization bounds known persistent tensors; node/pair limits bound declared shape. Workspace is per candidate node/group; comparison bytes bound reference plus one candidate CPU capture, not full process RSS/vendor workspace.",
         variants={}, comparisons={})
     write_json(output/"result.json", record)
@@ -124,7 +135,8 @@ def main():
         if a.native_library:
             record["native_build"] = json.loads((Path(a.native_library)/"build-manifest.json").read_text())
         options = dict(client=a.client, library=a.native_library, workspace_bytes=a.max_workspace_bytes,
-                       capture_bytes=a.max_comparison_bytes//2)
+                       capture_bytes=a.max_comparison_bytes//2, left_entries=a.left_entries,
+                       start=a.start_position, root_family=a.root_family)
         expected, info = evaluate(binding, spec, plan, host_x, support, level="direct", **options)
         record["variants"]["direct"] = info
         captured, after_direct, _ = snapshot(binding.model)

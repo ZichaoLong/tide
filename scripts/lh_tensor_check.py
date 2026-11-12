@@ -96,34 +96,44 @@ def capture(groups, budget):
 
 
 def evaluate(binding, spec, plan, host_x, support, *, level, client="python", library=None,
-             workspace_bytes=2**30, capture_bytes=2**30):
+             workspace_bytes=2**30, capture_bytes=2**30, left_entries=0, start=0, root_family="task"):
     """Independent forward/VJP; shared immutable parameters, fresh input roots."""
     from tidegraph import ExecutionPlacement
     from lh_tensor_baseline import StaticKV
+    from lh_tensor_observations import (ROOT_FAMILIES, initial_banks, initial_continuation,
+                                       left_roots, direct_roots, column_roots, root_objective)
+    if root_family not in ROOT_FAMILIES:
+        raise ValueError("unknown LH root family")
     device = binding.model.nodes[0].bias.device
     x = host_x.to(device).detach().clone().requires_grad_()
+    anchor = StaticKV(binding, spec)
+    left = initial_banks(anchor, x, start, left_entries)
     placement = ExecutionPlacement(preset="cpu" if device.type == "cpu" else "mixed-c", scoring_dtype=str(x.dtype).split(".")[-1])
     if level == "direct":
-        anchor = StaticKV(binding, spec)
-        result = anchor(x, support=support.to(device), records=True)
+        result = anchor(x, support=support.to(device), records=True, left=left, start=start)
         output = result["output_controls"][..., None]*result["output_contents"]
         raw = raw_direct(anchor, result, x)
         groups = direct_observations(anchor, result)
         work = dict(zip(("candidate_events", "selected_events", "visited_edges"), result["counts"].detach().cpu().tolist()))
         work["physical_full_rows"] = result["physical_full_rows"]
         execution = dict(schedule=result["implementation"], roots="numerical task projection")
+        observed = direct_roots(anchor, result, root_family)
     else:
         layout, payloads = ports(x, support)
+        from tidegraph.weighted.column_layout import SequenceLayout
+        layout = SequenceLayout(layout.offsets, layout.times+start)
+        initial = initial_continuation(anchor, left, start, x.shape[0])
         if level == "public":
             from tidegraph.weighted.settle_columns import SettleColumnPlan
             runner = SettleColumnPlan(binding, spec, implementation=client, native_library=library,
                                      placement=placement, max_workspace_bytes=workspace_bytes)
-            result = columns = runner.run_ports(layout, payloads)
+            result = columns = runner.run_ports(layout, payloads, left=runner.import_state(initial))
             execution = dict(schedule="public SettleColumnPlan", client=client, placement=runner.placement_record())
         elif level == "default":
             from tidegraph.weighted.execution import eager_runner
             runner = eager_runner(binding, client, placement, native_library=library, trace=False)
-            result = runner.run_ports(spec, layout, payloads, stop_position=plan["positions"], max_workspace_bytes=workspace_bytes)
+            result = runner.run_ports(spec, layout, payloads, state=initial,
+                stop_position=start+plan["positions"], max_workspace_bytes=workspace_bytes)
             columns, execution = result.columns, result.execution
             if columns is None:
                 raise ValueError("LH checker requested actual column execution; default reported a graph fallback")
@@ -133,15 +143,23 @@ def evaluate(binding, spec, plan, host_x, support, *, level, client="python", li
         raw, groups = raw_columns(columns), column_observations(columns, x)
         work = dict(result.stats)
         work["physical_full_rows"] = work["selected_events"]
-    loss = objective(output, raw)
+        observed = column_roots(columns, root_family)
+    if root_family == "raw":
+        observed = raw
+    loss = objective(output, raw) if root_family == "task" else root_objective(observed)
     groups.update(raw=raw, outputs={f"port/{p}": output[p] for p in range(len(binding.graph.outputs))}, task={"loss": loss})
+    if root_family != "task":
+        groups["root_values"] = observed
     parameters = dict(binding.model.named_parameters())
-    roots = {"input": x, **{"parameter/"+name: p for name, p in parameters.items() if p.requires_grad}}
-    gradients = torch.autograd.grad(loss, tuple(roots.values()), allow_unused=True)
+    roots = {"input": x, **left_roots(left),
+             **{"parameter/"+name: p for name, p in parameters.items() if p.requires_grad}}
+    gradients = (torch.autograd.grad(loss, tuple(roots.values()), allow_unused=True)
+                 if loss.requires_grad else (None,)*len(roots))
     groups["gradients"] = dict(zip(roots, gradients))
     owned, size = capture(groups, capture_bytes)
     return owned, dict(execution=execution, actual_work=work, capture_bytes=size,
-                       root_count=len(roots), connected_roots=sum(g is not None for g in gradients))
+                       root_count=len(roots), connected_roots=sum(g is not None for g in gradients),
+                       root_family=root_family, left_entries=left_entries, start_position=start)
 
 
 def compare(actual, expected, *, max_differences=32):

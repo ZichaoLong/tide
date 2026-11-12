@@ -157,7 +157,8 @@ class StaticKV:
             counts = counts+torch.stack(((mass > 0).sum(), active.sum(), (active*degree).sum()))
             physical += mass.numel()
             if records:
-                observations[r] = dict(controls=controls[r], active=active, candidates=mass > 0, descriptors=fields)
+                observations[r] = dict(controls=controls[r], active=active, candidates=mass > 0,
+                    descriptors=fields, mass=mass, content=u, full=outputs[r])
         port_values, port_controls = [], []
         for v in graph.outputs:
             r, i = self.location[v]
