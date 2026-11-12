@@ -94,8 +94,10 @@ Formula formula(const Fixture& f,const Formula* previous){
         std::vector<Tensor> mass,terms;for(auto j:order){auto x=atoms[j].second;mass.push_back(x[0].clamp_min(0));}
         auto total=at::stack(mass).sum(),u=at::zeros({2},at::kFloat);
         if(total.item<float>()>0){for(size_t k=0;k<order.size();++k){const auto j=order[k];auto z=atoms[j].second.slice(0,1);const auto& p=params[r][owners[j]];
-            auto hidden=at::mv(p.at("source.a"),norm(z,c.epsilon))+p.at("source.embedding");
-            auto transformed=z+binding.aggregate_alpha*at::mv(p.at("source.b"),hidden*hidden.sigmoid());terms.push_back(mass[k]*transformed);}
+            auto a=p.at("source.a"),b=p.at("source.b");
+            if(p.count("source.a_left")){a=a+at::mm(p.at("source.a_left"),p.at("source.a_right"));b=b+at::mm(p.at("source.b_left"),p.at("source.b_right"));}
+            auto hidden=at::mv(a,norm(z,c.epsilon))+p.at("source.embedding");
+            auto transformed=z+binding.aggregate_alpha*at::mv(b,hidden*hidden.sigmoid());terms.push_back(mass[k]*transformed);}
           u=at::stack(terms).sum(0)/total;}
         h=at::cat({total.reshape({1}),u});}
       o.received[r].push_back(h);o.old[r].push_back(states[r][owner]);const auto time=f.input.positions.reshape({Frames})[frame].item<int64_t>()*f.graph.stride()+f.graph.ranks()[r];

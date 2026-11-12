@@ -99,9 +99,13 @@ Python 的区域 rank 顺序和 C++ 的独立 region-order 调度都由实际候
 恒等索引和回填；非对齐部分仍按实际行域装配。重复物理来源各参与一次，全零纤维
 仍与内容/变换参数断开，质量根保留。`test_column_assembly`以独立逐纤维公式检查这些边界。
 
-Python共享Aggregate只在参数/实际输入句柄相同时复用。`column_sharing.shared_uses`
-为节点使用者提供只读整列视图，在一阶反向中按稳定节点顺序归并全部贡献；
+Python/C++在每区域收集实际来源列，以[来源列契约](weighted-source-binding.md#张量列精确共享和一阶转置)
+将归一化、两次投影、SiLU和低秩伴随合批；完整参数槽和输入身份相同才复用数值计算。
+整Aggregate还要求有序物理来源、strength/content根和行域相同，重复原子不去重。
+`column_sharing.shared_uses`及native `ordered_uses`为使用者提供只读整列视图，
+在一阶反向中按稳定使用顺序归并全部贡献；
 跨设备分支的到达顺序不再决定共享输入的累加顺序。不关闭全局autograd并行或确定性策略。
+缓存仅存活于该区域，不进入raw状态/checkpoint；形状不相容或附加workspace不足时局部分组/后备。
 这是整列调用根，不能把视图之间的关系当作旧逐事件因果根；完整独立事件观察仍用记录接口。
 
 当前张量能力：

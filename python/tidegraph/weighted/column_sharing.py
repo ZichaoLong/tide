@@ -35,6 +35,13 @@ class _Uses(torch.autograd.Function):
         return tuple(result)
 
 
+def ordered_uses(value, count):
+    """Stable use-order transpose for an exactly shared numerical column."""
+    if count < 2 or not torch.is_grad_enabled() or not value.requires_grad:
+        return [value]*count
+    return list(_Uses.apply(count, value))
+
+
 def shared_uses(received):
     """Keep one real aggregation and assign stable node-order use views.
 

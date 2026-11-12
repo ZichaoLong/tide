@@ -4,6 +4,7 @@
 #include "block_kv_sequence.h"
 #include "block_kv_messages.h"
 #include "weighted_aggregate.h"
+#include "weighted_source_adaptation.h"
 namespace tide::device_online {
 struct BlockKVLocalInput {
   at::Tensor payload,lengths,source_owners; // [B,L,N,A,d+1], int64 [B,L,N]/[B,L,N,A]
@@ -14,6 +15,7 @@ struct BlockKVLocalParameters {
   WeightedSourceParameters source;
   WeightedKVParameters update;
   BlockKVMessageParameters message;
+  std::optional<WeightedSourceFactors> source_factors;
 };
 struct BlockKVLocalTape {
   std::string read_mode;
@@ -24,6 +26,7 @@ struct BlockKVLocalTape {
   at::Tensor initial_mapping,present;
   std::shared_ptr<WeightedRowGraph> received;
   size_t received_index,mass_index,content_index;
+  std::optional<WeightedSourceAdaptation> source_adaptation;
 };
 struct BlockKVLocalRoots {
   BlockKVMessageRoots messages;
@@ -35,6 +38,7 @@ struct BlockKVLocalGradient {
   BlockKVSequenceGradient sequence;
   BlockKVMessageGradient messages;
   at::Tensor bound_initial,bound_initial_connected;
+  std::optional<WeightedSourceAdaptationGradient> source_adaptation;
 };
 BlockKVLocalTape append_block_kv_local(DeviceProgram&,const SettleBlockPlan&,
   const weighted::KVConfig&,const weighted::RegionalConfig&,const std::string& read_mode,

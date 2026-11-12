@@ -207,6 +207,11 @@ Settle `ports` 在任意逻辑 cut 原样保留状态和 pending；`broadcast_su
 `append_block_kv_messages`及其VJP：Read快照/proposal快照分别输入，(c,G)与显式cG分开，
 actual presence和int64时钟伴随返回；role→canonical owner映射汇总真实参数共享。
 独立C++公式/根与拒绝检查在`block_kv_message_formula`/`block_kv_messages_check`，设备资格另列。
+[实际图/owner](resident-block-session.md)继续映射架构Aggregate→Upd→Read→Full与逐物理端口，
+跨窗raw VJP、canonical共享参数及optimizer边界由`block_settle_flow/session`实现；
+`block_resident_*`映射真实Model、独立根、raw状态解码与输入账本。原始来源低秩因子、
+异宽source bank padding及别名由Model检查和独立Streaming公共消费者核对，
+字面公式、独立调度、archive恢复和真机验收各自保留范围。
 
 - [区域列边界](weighted-region-batch.md)：Alloc/SelStep的R×N完整描述、score/evidence/
   control/support与精确解映射VJP由`allocation_columns`、`regional_columns`和C++
@@ -392,8 +397,12 @@ columns的独立三步任务loss/work对照只认证该投影，不把旧事件�
 区域描述/控制/选择整列传输，原始状态和参数owner不迁移。对应原[放置契约](weighted-placement.md)，
 `test_column_placement`覆盖独立标量调度、不同评分dtype、共享/零根与发送支持；SDK独立设备入口另验收。
 
-Architecture §2.2的实际输入/参数共享在Python整列Aggregate之后由`column_sharing.shared_uses`
-汇总所有使用者的伴随，不合并私有状态。`test_column_sharing`给出独立公式和有消去的次序反例；
+Architecture §2.2在`column_sources` / `weighted_column_source_ops`通过整来源列MLP和显式块转置
+实现；`column_aggregate` / `weighted_column_aggregate`按完整参数槽/实际输入复用，保留重复物理原子。
+`test_column_sources`给出字面公式、低秩别名排列、None零、原始版本和预算反例；
+`test_column_source_schedule`核验非空左态、异宽类别、重复边与独立调度的全根。
+Python/C++整列共享由`column_sharing.shared_uses` / `ordered_uses`汇总所有使用者的伴随，
+不合并私有状态。`test_column_sharing`给出独立公式和有消去的次序反例；
 `check_column_adjoint_order.py`是设备累加重复性诊断，不能代替独立数学或checkpoint资格。
 
 Architecture物理逐边/端口消息与完整区域函数在多payload窗口中由`column_transport`、

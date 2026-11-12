@@ -9,7 +9,7 @@ from dataclasses import dataclass
 import torch
 from .column_layout import SequenceLayout
 from .column_modules import module_for
-from .message_columns import MessageColumns, aggregate_columns, readout_columns
+from .message_columns import MessageColumns, readout_columns
 
 
 @dataclass(frozen=True)
@@ -161,17 +161,19 @@ class SettleColumnPlan:
         transport_cache = {}
         candidate_count = full_count = calls = 0
         for r in self.regions:
-            windows, descriptors, rows_by_node, cache = {}, {}, {}, {}
-            received_by_node = {}
+            windows, descriptors, rows_by_node = {}, {}, {}
+            aggregate_requests = []
             for v in self.members[r]:
                 ref = model.nodes[v].bias
                 sources = [(ports[p], self.binding.source_classes.inputs[p]) for p in self.inputs[v] if p in ports]
                 sources += [(messages.get(g.edges[e].source, empties[v]), self.binding.source_classes.edges[e]) for e in self.edges[v]]
                 sources = [(column_transport.message(p, ref, transport_cache), c) for p, c in sources]
-                received_by_node[v] = aggregate_columns(model.nodes[v].aggregate_program, sources, cache=cache)
-            from .column_sharing import shared_uses
+                aggregate_requests.append((model.nodes[v].aggregate_program, sources))
+            from .column_aggregate import aggregate_columns_many
+            received_by_node = dict(zip(self.members[r], aggregate_columns_many(aggregate_requests,
+                max_workspace_bytes=self.max_workspace_bytes)))
             preparations = {}
-            for v, received in shared_uses(received_by_node).items():
+            for v, received in received_by_node.items():
                 if received is None:
                     continue
                 rows, mass, u = received

@@ -38,7 +38,9 @@ _EXPORTS = {'Allocation': '.allocation',
  'layered_inputs': '.instances',
  'readout': '.instances',
  'WeightedResident': '.resident',
- 'WeightedResidentTraining': '.resident_training'}
+ 'WeightedResidentTraining': '.resident_training',
+ 'WeightedBlockResidentTraining': '.resident_blocks',
+ 'block_resident_capability': '.resident_blocks'}
 
 __all__ = ['Allocation',
  'eager_runner', 'WindowResult', 'SequenceLayout', 'MessageColumns',
@@ -72,7 +74,9 @@ __all__ = ['Allocation',
  'layered_inputs',
  'readout',
  'WeightedResident',
- 'WeightedResidentTraining']
+ 'WeightedResidentTraining',
+ 'WeightedBlockResidentTraining',
+ 'block_resident_capability']
 
 
 def __getattr__(name):

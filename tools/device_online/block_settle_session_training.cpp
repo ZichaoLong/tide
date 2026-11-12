@@ -1,5 +1,7 @@
 #include "block_settle_session_internal.h"
 #include "block_read_selection_internal.h"
+#include "block_parameter_views.h"
+#include "sharded_parameter_banks.h"
 #include "device_launch_tide_block_raw_roots.h"
 #include <limits>
 #include <set>
@@ -39,7 +41,9 @@ BlockSettleAdjoints BlockSettleSession::backward(const std::vector<BlockSettleFl
     for(const auto& [role,names]:s.roles[r]){
       if(!found.count(role)&&role.rfind("source.",0)==0&&!window.regions[r].aggregate.parameters)continue;
       const auto& root=found.at(role);if(!root.value.defined()||root.value.size(0)!=int64_t(names.size()))throw std::logic_error("block role gradient extent differs");
-      for(size_t bank=0;bank<names.size();++bank){parts.push_back({names[bank],root.value[bank].reshape(s.registry.value(names[bank]).sizes()),root.connected[bank]});used.insert(s.registry.canonical_name(names[bank]));}}
+      for(size_t bank=0;bank<names.size();++bank){auto value=block_parameter_view(role,root.value[bank],s.registry.value(names[bank]).sizes());
+        if(!value.is_contiguous()){auto contiguous=at::zeros(value.sizes(),value.options());program->copy(contiguous,value);value=contiguous;}
+        parts.push_back({names[bank],value,root.connected[bank]});used.insert(s.registry.canonical_name(names[bank]));}}
   }
   // Keep the optimizer's complete canonical layout. Unused owners have an
   // explicit false bit, which preserves None and prevents decay/step changes.
@@ -62,12 +66,13 @@ BlockSettleAdjoints BlockSettleSession::backward(const std::vector<BlockSettleFl
   for(const auto& x:{s.gradient.values,s.gradient.connected})block_session_detail::remember(s.gradient_versions,x);
   return out;
 }
-void BlockSettleSession::Impl::publish(DeviceProgram& p){
+void BlockSettleSession::Impl::publish(DeviceProgram& p,const at::Tensor& error){
   std::map<std::string,int64_t> offsets;for(size_t j=0;j<layout.owners.size();++j)offsets[layout.owners[j].canonical]=layout.offsets[j];
-  const auto master=optimizer->values();
+  const auto master=optimizer->values();std::vector<ParameterWrite> writes;
   for(size_t r=0;r<bindings.size();++r)for(const auto& [role,bank]:block_kv_local_parameters(bindings[r].parameters)){
-    const auto& names=roles[r].at(role);for(size_t j=0;j<names.size();++j){const auto target=bank[j];
-      p.copy(target,master.narrow(0,offsets.at(registry.canonical_name(names[j])),target.numel()).reshape(target.sizes()));}}
+    const auto& names=roles[r].at(role);for(size_t j=0;j<names.size();++j){const auto target=block_parameter_view(role,bank[j],registry.value(names[j]).sizes());
+      writes.push_back({offsets.at(registry.canonical_name(names[j])),{target,at::kFloat}});}}
+  append_owner_parameter_publish(p,writes,master,error,limits.optimizer_bytes);
 }
 void BlockSettleSession::step(){
   auto& s=*impl_;s.check();if(!s.ready||s.generation==std::numeric_limits<int64_t>::max())throw std::logic_error("block optimizer needs unconsumed gradient generation");
@@ -75,13 +80,15 @@ void BlockSettleSession::step(){
   s.optimizer->append_step(program,s.gradient,error);
   auto zero=at::zeros_like(error),ok=at::zeros_like(error,error.options().dtype(at::kBool)),branch=at::zeros_like(error);
   const auto publish=program.label(),finish=program.label();program.equal(error,zero,ok);program.cast_index(ok,branch);program.branch(branch,{finish,publish});
-  program.mark(publish);s.publish(program);program.mark(finish);s.budget(program);
+  program.mark(publish);s.publish(program,error);program.mark(finish);s.budget(program);
   try{s.run(program,error);}catch(...){s.failed=true;throw;}program.close();s.discard();++s.generation;
 }
 BlockSettleCheckpoint BlockSettleSession::checkpoint()const{
   const auto& s=*impl_;s.check();if(!s.windows.empty()||s.ready)throw std::logic_error("block checkpoint requires a detached complete cut");
   BlockSettleCheckpoint out;out.identity=s.fingerprint;out.generation=s.generation;out.next_token=s.next_token;out.aliases=s.registry.alias_partitions();
   out.optimizer=s.kind;out.groups=s.optimizer->groups();out.slots=s.optimizer->snapshot();out.last_positions=s.positions.clone();
+  out.boundary={s.boundary.node_present.cpu().clone(),s.boundary.region_times.cpu().clone(),
+    s.boundary.input_counts.cpu().clone(),s.boundary.input_times.cpu().clone()};
   for(size_t j=0;j<s.layout.owners.size();++j){const auto& owner=s.layout.owners[j];
     out.parameters[owner.canonical]=out.slots.values.narrow(0,s.layout.offsets[j],owner.value.numel()).reshape(owner.value.sizes()).clone();}
   auto copy=[](const WeightedRawState& raw){return WeightedRawState{raw.floating.detach().cpu().clone(),raw.integer.detach().cpu().clone()};};

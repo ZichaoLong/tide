@@ -7,7 +7,7 @@ struct BlockSettleKVBinding {
   weighted::KVConfig memory;
   weighted::RegionalConfig regional;
   std::string read_mode="+";
-  float aggregate_alpha=0;
+  double aggregate_alpha=0; // Configuration identity; FP32 numeric conversion is checked.
   BlockKVLocalParameters parameters;
   std::vector<int64_t> node_owners,input_owners,edge_owners;
 };

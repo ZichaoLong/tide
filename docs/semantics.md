@@ -10,6 +10,12 @@
 
 [Weighted公共训练](resident-weighted-training.md)定义完整字段根、跨窗token、参数发布、四分区预算与独立checkpoint绑定；运行资格单列。
 
+[Settle resident张量owner](resident-block-session.md)使用独立的block checkpoint **schema 2**，
+保存实际raw浮点/int64状态、节点存在性、区域history、输入occurrence/time、参数别名及optimizer。
+独立执行身份为 `settle-block-v2`，不更改通用checkpoint v5，也不把有效状态投影当精确解码。
+真实Settle证书和适用KV绑定决定公共默认分派；数值/容量失败不回退。
+源码、构建、小图训练/恢复和原预算规模资格分别记录。
+
 [Weighted保留窗口](resident-weighted-retained.md)描述实际journal快照、版本检查与跨切面VJP连接；其公共生命周期由[训练owner](resident-weighted-training.md)组合并独立验收。
 
 [Weighted实际窗口VJP](resident-weighted-window-vjp.md)组合设备journal逆序、消息与状态前驱及canonical参数累加；公共训练owner另验收。

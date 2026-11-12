@@ -265,7 +265,7 @@ if(TIDE_DEVICE_KERNELS)
   add_library(tide-block-kv-local STATIC block_kv_local.cpp block_kv_local_vjp.cpp)
   set_target_properties(tide-block-kv-local PROPERTIES POSITION_INDEPENDENT_CODE ON)
   target_link_libraries(tide-block-kv-local PUBLIC tide-block-kv-sequence tide-block-kv-messages
-    tide-weighted-aggregate tide_block_raw_roots_kernel)
+    tide-weighted-aggregate tide-weighted-source tide_block_raw_roots_kernel)
   add_library(tide-block-settle-flow STATIC block_settle_flow.cpp block_settle_flow_vjp.cpp block_settle_parameters.cpp)
   set_target_properties(tide-block-settle-flow PROPERTIES POSITION_INDEPENDENT_CODE ON)
   target_link_libraries(tide-block-settle-flow PUBLIC tide-block-kv-local tide-block-dispatch
@@ -273,10 +273,27 @@ if(TIDE_DEVICE_KERNELS)
     tide_block_flow_reverse_ports_kernel tide_block_flow_reverse_gather_kernel
     tide_block_flow_reverse_fibers_kernel tide_block_flow_reverse_choose_kernel)
   add_library(tide-block-settle-session STATIC block_settle_session.cpp block_settle_session_layout.cpp
-    block_settle_session_training.cpp block_settle_checkpoint.cpp)
+    block_settle_session_training.cpp block_settle_checkpoint.cpp block_settle_boundary.cpp)
   set_target_properties(tide-block-settle-session PROPERTIES POSITION_INDEPENDENT_CODE ON)
-  target_link_libraries(tide-block-settle-session PUBLIC tide-block-settle-flow tide-device-optimizer)
+  target_link_libraries(tide-block-settle-session PUBLIC tide-block-settle-flow tide-device-optimizer
+    tide_block_flow_boundary_kernel)
+  add_library(tide-block-resident SHARED block_resident_owner.cpp block_resident_checkpoint.cpp
+    block_settle_model.cpp block_settle_observations.cpp)
+  target_link_libraries(tide-block-resident PRIVATE tide-block-settle-session tide-weighted-flow)
+  target_link_libraries(tide-block-resident PUBLIC tide::tidegraph)
+  target_link_options(tide-block-resident PRIVATE -Wl,-z,defs)
+  target_include_directories(tide-block-resident PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    $<INSTALL_INTERFACE:include>)
+  set_target_properties(tide-block-resident PROPERTIES EXPORT_NAME block_resident)
+  add_library(tide::block_resident ALIAS tide-block-resident)
   if(TIDE_DEVICE_RUNTIME STREQUAL "standalone")
+    add_executable(tide-block-resident-check block_resident_check.cpp weighted_flow_fixture.cpp)
+    target_compile_options(tide-block-resident-check PRIVATE -fPIC)
+    target_link_libraries(tide-block-resident-check PRIVATE tide-block-resident tide-device-optimizer)
+    add_executable(tide-block-settle-model-check block_settle_model_check.cpp weighted_flow_fixture.cpp)
+    target_compile_options(tide-block-settle-model-check PRIVATE -fPIC)
+    target_link_libraries(tide-block-settle-model-check PRIVATE tide-block-resident)
     add_executable(tide-block-settle-flow-check block_settle_flow_check.cpp
       block_settle_fixture.cpp block_settle_formula.cpp block_selection_fixture.cpp block_kv_message_fixture.cpp)
     target_compile_options(tide-block-settle-flow-check PRIVATE -fPIC)
@@ -637,8 +654,8 @@ if(TIDE_DEVICE_KERNELS)
     find_library(TORCH_PYTHON_LIBRARY torch_python PATHS "${TORCH_INSTALL_PREFIX}/lib" REQUIRED NO_DEFAULT_PATH)
     Python3_add_library(_tide_resident MODULE resident_bindings.cpp training_bindings.cpp training_binding_types.cpp)
     target_link_libraries(_tide_resident PRIVATE tide-resident ${TORCH_PYTHON_LIBRARY})
-    Python3_add_library(_tide_weighted_resident MODULE weighted_flow_bindings.cpp weighted_training_bindings.cpp training_binding_types.cpp)
-    target_link_libraries(_tide_weighted_resident PRIVATE tide-weighted-training ${TORCH_PYTHON_LIBRARY})
+    Python3_add_library(_tide_weighted_resident MODULE weighted_flow_bindings.cpp weighted_training_bindings.cpp training_binding_types.cpp block_resident_bindings.cpp)
+    target_link_libraries(_tide_weighted_resident PRIVATE tide-weighted-training tide-block-resident ${TORCH_PYTHON_LIBRARY})
     set_target_properties(_tide_weighted_resident PROPERTIES BUILD_RPATH "$ORIGIN")
     set_target_properties(_tide_resident PROPERTIES BUILD_RPATH "$ORIGIN")
   else()
@@ -704,6 +721,12 @@ if(TIDE_DEVICE_KERNELS)
       DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/TideWeightedResident COMPONENT weighted-training)
     install(EXPORT TideWeightedResidentTargets NAMESPACE tide::
       DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/TideWeightedResident COMPONENT weighted)
+    install(TARGETS tide-block-resident EXPORT TideBlockResidentTargets
+      LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT weighted-blocks)
+    install(FILES include/tide/resident_blocks.h include/tide/resident_training.h include/tide/resident.h
+      DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/tide COMPONENT weighted-blocks)
+    install(EXPORT TideBlockResidentTargets NAMESPACE tide::
+      DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/TideWeightedResident COMPONENT weighted-blocks)
     configure_package_config_file(TideWeightedResidentConfig.cmake.in
       "${CMAKE_CURRENT_BINARY_DIR}/TideWeightedResidentConfig.cmake"
       INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/TideWeightedResident)

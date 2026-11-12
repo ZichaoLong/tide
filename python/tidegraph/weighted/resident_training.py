@@ -16,9 +16,19 @@ from ..resident_training_options import GROUP_FIELDS, optimizer_groups
 
 
 class WeightedResidentTraining:
+    def __new__(cls, graph, model, **kwargs):
+        from .resident_blocks import WeightedBlockResidentTraining, block_resident_capability
+        if cls is WeightedResidentTraining and block_resident_capability(
+                graph, model, device=kwargs.get("device"), node_devices=kwargs.get("node_devices"))[0]:
+            return WeightedBlockResidentTraining(graph, model, **kwargs)
+        return super().__new__(cls)
+
     def __init__(self, graph, model, *, device, native_library, resident_library,
                  batch_size=1, continuation=None, optimizer=None, groups=None, limits=None, checkpoint=None,
                  node_devices=None):
+        from ..settle import SettleGraph
+        if isinstance(graph, SettleGraph):
+            graph = graph.graph
         integers("weighted training batch size", batch_size)
         if batch_size < 1 or torch.is_grad_enabled():
             raise ValueError("weighted training requires positive batch size and torch.no_grad()")

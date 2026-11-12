@@ -109,6 +109,8 @@ def main():
         names.append("libtide-weighted-flow.so")
     if (build / "libtide-weighted-training.so").is_file():
         names.append("libtide-weighted-training.so")
+    if (build / "libtide-block-resident.so").is_file():
+        names.append("libtide-block-resident.so")
     for name in names:
         binary = build / name
         closure = subprocess.check_output(["ldd", str(binary)], text=True)

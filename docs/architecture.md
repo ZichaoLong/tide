@@ -10,11 +10,15 @@
 KV Read/Describe和完整区域数值分开：`tools/device_online/block_dispatch*`、`settle_block_plan.h`
 和`block_read_selection*`分别拥有调度、静态lowering和数值/VJP；`block_selection_formula.cpp`
 为独立公式锚点。修改同步CPU metadata检查、`device_component_checks`及对应设备check。
-这些是新执行器组合件，未成为公共完整图owner；旧resident资格不能自动继承。
+[完整区域图](resident-block-flow.md)与[块训练owner](resident-block-session.md)将这些组件接成独立执行器；旧resident资格不能自动继承。
 [KV消息组合](resident-block-kv-messages.md)由`block_kv_messages`/VJP连接独立Read与proposal
 快照、区域控制、Full及未缩放(c,G)；`block_kv_message_parameters`按实际owner汇总跨角色alias。
 `block_kv_message_formula`独立锚定数学，`block_kv_messages_check`核对独立根、默认分支和拒绝。
-修改须同步设备检查注册、独立公式/容量测试；它尚无Aggregate/Upd、路由或公共训练owner。
+修改须同步设备检查注册、独立公式/容量测试。`block_settle_flow`接Aggregate/Upd与物理路由，
+`block_settle_session`接跨窗/optimizer/raw archive，`block_resident_*`接真实Model和公共接口；
+`block_settle_model`与`block_settle_observations`分别维护参数/状态lowering和批量字段/根。
+公共默认能力分派在`weighted/resident_blocks.py`与`resident_training.py`，修改须同步
+`test_resident_block_public_dispatch`及Model、public standalone消费者；代码、build、真机和规模资格分列。
 
 LH/HB同材料三层对照由[独立张量基线](lh-tensor-baseline.md)连接
 `lh_tensor_baseline/math/state`、`benchmark_lh_tensor`与`test_lh_tensor_baseline`；
@@ -133,7 +137,12 @@ transpose 在 `column_attention` / `weighted_column_attention`；位置元数据
 `column_placement` / `weighted_column_placement`拥有Read/control/selection临时列视图，
 按消费者选择实际参数/字段，复用已有显式copy/VJP和通信策略。私有raw状态留在payload owner。
 `test_column_placement`检查独立标量放置、共享根、None/零、评分dtype和正支持cast拒绝。
-`column_sharing.shared_uses`保留Aggregate计算共享并按稳定节点次序归并使用者伴随；
+`column_aggregate` / `weighted_column_aggregate`收集每区域的有序物理来源，按实际Tensor根、
+行域和完整参数槽复用；`column_sources` / `weighted_column_sources`拥有相容分组和字节预算，
+`weighted_column_source_ops`及Python `_Sources`拥有整MLP的显式多输出VJP。
+修改同步[来源契约](weighted-source-binding.md)、`test_column_sources/test_column_source_schedule`、
+standalone `check_source_groups`，以及相关混合owner训练/恢复。缓存不跨区域/窗口保存。
+`column_sharing.shared_uses` / native `ordered_uses`保留计算共享并按稳定使用次序归并伴随；
 `test_column_sharing`检查字面公式/None零/版本，`check_column_adjoint_order.py`定位同图重复反向差异。
 `column_transport`负责实际消息到目标owner的整列copy复用和区域描述汇集；
 Python/C++列调度按节点/区域分别解析位置。readout及内置loss可归约不同输出owner，

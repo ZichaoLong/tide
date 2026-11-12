@@ -3,6 +3,7 @@
 #include "device_launch_tide_block_flow_fibers.h"
 #include "device_launch_tide_block_flow_publish.h"
 #include <algorithm>
+#include <cmath>
 #include <limits>
 namespace tide::device_online {
 namespace {
@@ -56,6 +57,9 @@ BlockSettleFlowTape append_block_settle_flow(DeviceProgram& p,const SettleGraph&
   check(input.positions,error,at::kLong,{batch,length});check(input.payload,error,at::kFloat,{batch,length,ports,width});check(input.present,error,at::kBool,{batch,length,ports});
   BlockDispatchPlan plan;plan.groups=regions;plan.batch_capacity=1;plan.journal_capacity=regions;plan.tensor_bytes=budget;
   for(int64_t r=0;r<regions;++r){bindings[r].memory.validate();bindings[r].regional.validate();
+    const auto alpha=bindings[r].aggregate_alpha;
+    if(alpha<0||!std::isfinite(alpha)||!std::isfinite(float(alpha))||(alpha>0&&float(alpha)==0))
+      throw std::invalid_argument("resident block Aggregate alpha is outside its declared FP32 coefficient domain");
     if(bindings[r].memory.width!=d)throw std::invalid_argument("connected block graph payload widths differ");
     plan.tasks.push_back({r,0,r,spec.ranks()[r],1});}
   for(const auto& e:g.edges){if(spec.ranks()[g.nodes[e.target].region]-spec.ranks()[g.nodes[e.source].region]!=e.delay)
@@ -67,6 +71,7 @@ BlockSettleFlowTape append_block_settle_flow(DeviceProgram& p,const SettleGraph&
     auto xs=block_selection_detail::borrowed({input.initial[r],{},{},{},{},{}},w.message.read,error);borrowed.insert(borrowed.end(),xs.begin(),xs.end());
     borrowed.insert(borrowed.end(),{input.bound_initial[r].floating,input.bound_initial[r].integer,w.source.a,w.source.b,w.source.embedding,
       w.update.base,w.update.left,w.update.right,w.update.summary,w.message.full.query,w.message.full.residual.out,w.message.full.residual.gate,w.message.full.residual.up,w.message.full.residual.down});}
+  for(const auto& b:bindings)if(b.parameters.source_factors){const auto& f=*b.parameters.source_factors;borrowed.insert(borrowed.end(),{f.a_left,f.a_right,f.b_left,f.b_right});}
   const WeightedStorageIncrement storage(p,std::move(borrowed));
   // Register the dispatcher once before subsequent admission. Counting its
   // explicit bytes as well as retained program storage would charge it twice.

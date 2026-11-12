@@ -15,7 +15,7 @@ def kernels(tmp_path_factory):
     src.write_text('#define TIDE_KERNEL_CPU\n'+''.join(f'#include "{name}.cpp"\n' for name in
                    ("tide_block_flow_fibers", "tide_block_flow_publish", "tide_block_raw_roots",
                     "tide_block_flow_reverse_ports", "tide_block_flow_reverse_gather",
-                    "tide_block_flow_reverse_fibers", "tide_block_flow_reverse_choose")))
+                    "tide_block_flow_reverse_fibers", "tide_block_flow_reverse_choose", "tide_block_flow_boundary")))
     subprocess.run(["g++", "-std=c++17", "-shared", "-fPIC", "-O2", "-I"+str(root/"cuda"),
                     "-I"+str(root/"ascendc"), "-I"+str(Path(torch.__file__).parent/"include"), str(src), "-o", str(lib)], check=True)
     dll = ctypes.CDLL(str(lib))
@@ -24,6 +24,7 @@ def kernels(tmp_path_factory):
     dll.tide_block_raw_roots.argtypes = [ctypes.c_void_p]*8+[ctypes.c_int64]*5
     for name, pointers, integers in (("ports", 9, 4), ("gather", 13, 4), ("fibers", 9, 5), ("choose", 5, 2)):
         getattr(dll, "tide_block_flow_reverse_"+name).argtypes = [ctypes.c_void_p]*pointers+[ctypes.c_int64]*integers
+    dll.tide_block_flow_boundary.argtypes = [ctypes.c_void_p]*8+[ctypes.c_int64]*8
     return dll
 
 
@@ -166,3 +167,21 @@ def test_reverse_gather_combines_direct_and_downstream_without_false_roots(kerne
     torch.testing.assert_close(mass, torch.tensor([[.3, 0.]]))
     assert torch.equal(content, torch.tensor([[[.3, .4], [0., 0.]]]))
     assert mr.tolist() == cr.tolist() == [[True, False]]
+
+
+def test_complete_cut_metadata_uses_actual_candidates_and_physical_input_counts(kernels):
+    nodes = torch.tensor([0, 2]); present = torch.tensor([[[True, False], [False, True]], [[False, False], [True, True]]])
+    times = torch.tensor([[[2**55, -99], [-99, 2**55+6]], [[-99, -99], [2**55+26, 2**55+26]]])
+    seen = torch.zeros(2, 3, dtype=torch.bool); history = torch.full((2, 2), -1, dtype=torch.int64)
+    count = torch.full((2, 2), -1, dtype=torch.int64); clocks = count.clone(); error = torch.zeros(1, dtype=torch.int32)
+    arrays = nodes, present, times, seen, history, count, clocks, error
+    kernels.tide_block_flow_boundary(*(x.data_ptr() for x in arrays), 1, 2, 2, 2, 3, 1, 2, 2)
+    assert not error.item() and seen.tolist() == [[True, False, True], [True, False, True]]
+    assert history.tolist() == [[-1, 2**55+6], [-1, 2**55+26]]
+    ranks = torch.tensor([0, 1]); positions = torch.tensor([[2**54, 2**54+3], [2**54+10, 2**54+13]])
+    arrays = ranks, present, positions, seen, history, count, clocks, error
+    kernels.tide_block_flow_boundary(*(x.data_ptr() for x in arrays), 0, 2, 2, 2, 3, 0, 2, 2)
+    assert not error.item() and count.eq(0).all()  # One actual occurrence per physical port.
+    assert clocks.tolist() == [[2**55, 2**55+7], [2**55+26, 2**55+27]]
+    kernels.tide_block_flow_boundary(*(x.data_ptr() for x in arrays), 0, 2, 2, 2, 3, 0, 2, 2)
+    assert error.item() == 81  # Stale input occurrence cannot silently advance.

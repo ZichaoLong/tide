@@ -3,16 +3,13 @@
 #include "weighted_column_placement.h"
 #include "weighted_regional_groups.h"
 #include "weighted_placement.h"
-#include "weighted_mean.h"
-#include "weighted_source.h"
+#include "weighted_column_sources.h"
 #include "tide/ownership.h"
 #include "finite_guard.h"
-#include <set>
 #include <numeric>
 namespace tide::weighted::columns {
 using detail::require;
 namespace {
-struct Received {std::vector<Index> rows;Tensor mass,content;};
 using CopyKey=std::tuple<const Message*,int,int,int>;
 using Copies=std::map<CopyKey,Message>;
 const Message& transport(const Message& p,const Tensor& like,Copies& cache){
@@ -21,37 +18,6 @@ const Message& transport(const Message& p,const Tensor& like,Copies& cache){
   if(auto found=cache.find(key);found!=cache.end())return found->second;
   auto copied=p;placement_tensors({&copied.strength,&copied.content},like.device(),like.scalar_type());
   return cache.emplace(key,std::move(copied)).first->second;
-}
-std::vector<Index> positions(const std::vector<Index>& domain,const std::vector<Index>& rows){
-  std::vector<Index> ids;for(auto row:rows)ids.push_back(std::lower_bound(domain.begin(),domain.end(),row)-domain.begin());return ids;
-}
-Received aggregate(const NodeWeights& w,const NodeBinding& binding,const std::vector<std::pair<const Message*,Index>>& sources){
-  std::set<Index> present;for(const auto& [p,c]:sources)present.insert(p->rows.begin(),p->rows.end());
-  Received out;out.rows={present.begin(),present.end()};std::vector<Tensor> masses,values;
-  const auto width=std::visit([](const auto& c){return c.width;},binding.memory);
-  const auto epsilon=std::visit([](const auto& c){return c.epsilon;},binding.memory);
-  const auto n=static_cast<Index>(out.rows.size());
-  for(const auto& [p,label]:sources){
-    if(p->rows.empty())continue;auto z=p->content;
-    if(binding.aggregate_alpha){
-      auto prefix="aggregate_program.transforms."+std::to_string(label);
-      auto [a,b]=detail::source_matrices(w,prefix);
-      z=z+binding.aggregate_alpha*project(at::silu(project(normalize(z,epsilon),a)+detail::weight(w,prefix+".embedding")),b);
-    }
-    if(p->rows==out.rows){
-      masses.push_back(p->strength.clamp_min(0));values.push_back(z);
-    }else{
-      auto ids=indices(positions(out.rows,p->rows),z.device());
-      masses.push_back(at::zeros({n},z.options()).index_copy(0,ids,p->strength.clamp_min(0)));
-      values.push_back(at::zeros({n,width},z.options()).index_copy(0,ids,z));
-    }
-  }
-  if(out.rows.empty())return out;
-  auto mass=at::stack(masses,1),value=at::stack(values,1);out.mass=mass.sum(1);
-  auto positive=(out.mass.detach()>0).nonzero().flatten();out.content=at::zeros({n,width},value.options());
-  if(positive.numel()==n)out.content=weighted_mean(mass,value);
-  else if(positive.numel())out.content=out.content.index_copy(0,positive,weighted_mean(mass.index_select(0,positive),value.index_select(0,positive)));
-  return out;
 }
 }
 Result settle(const SettleGraph& spec,const Model& model,const Layout& layout,const std::map<Index,Message>& ports,
@@ -99,13 +65,18 @@ Result settle(const SettleGraph& spec,const Model& model,const Layout& layout,co
     const auto& placement=region_locations[region];
     std::map<Index,std::vector<Index>> rows_by_node;std::vector<Index> nodes;
     std::vector<LocalPrepareRequest> preparations;std::map<Index,Received> received_by_node;
+    std::vector<AggregateRequest> aggregate_requests;std::vector<Index> members;
     for(Index k=g.region_index.offsets[region];k<g.region_index.offsets[region+1];++k){
       const auto v=g.region_index.edges[k];const auto& w=model.nodes[v];const auto& b=binding[v];
       std::vector<std::pair<const Message*,Index>> sources;
       for(Index p=0;p<static_cast<Index>(g.inputs.size());++p)if(g.inputs[p]==v&&ports.count(p))sources.emplace_back(&transport(ports.at(p),w.bias,copies),b.sources.inputs[p]);
       for(Index j=g.csc.offsets[v];j<g.csc.offsets[v+1];++j){auto e=g.csc.edges[j];
         if(outgoing.count(g.edges[e].source))sources.emplace_back(&transport(outgoing.at(g.edges[e].source),w.bias,copies),b.sources.edges[e]);}
-      auto received=aggregate(w,b,sources);if(received.rows.empty())continue;
+      aggregate_requests.push_back({&w,&b,std::move(sources)});members.push_back(v);
+    }
+    auto received_columns=aggregate_columns_many(aggregate_requests,max_workspace_bytes);
+    for(size_t i=0;i<members.size();++i){auto v=members[i];const auto& w=model.nodes[v];const auto& b=binding[v];
+      auto received=std::move(received_columns[i]);if(received.rows.empty())continue;
       auto times=layout.select(received.rows);for(auto& t:times.times)t=t*spec.stride()+spec.rank(v);
       preparations.push_back({&w,b.memory,std::move(times),received.mass,received.content,result.states[v]});
       nodes.push_back(v);received_by_node.emplace(v,std::move(received));

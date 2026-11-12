@@ -6,6 +6,7 @@
 #include "tide/parameters.h"
 #include "tide/ownership.h"
 #include "tide/kernel.h"
+#include "../src/weighted_column_sources.h"
 #include <cstdlib>
 #include <torch/csrc/autograd/autograd.h>
 #include <ATen/Parallel.h>
@@ -20,6 +21,36 @@ void close_value(const Tensor& a,const Tensor& b,double rtol,double atol){
   if(!a.defined())return;
   require(a.sizes()==b.sizes()&&a.scalar_type()==b.scalar_type(),"column metadata mismatch");
   require(a.is_floating_point()?at::allclose(a,b,rtol,atol):at::equal(a,b),"column numerical mismatch");
+}
+void check_source_groups(at::Device device=at::kCPU,at::ScalarType dtype=at::kDouble){
+  auto leaf=[&](std::vector<int64_t> shape,double offset){Index n=1;for(auto d:shape)n*=d;
+    return (at::arange(n,at::kDouble)*.03+offset).reshape(shape).to(device,dtype).set_requires_grad(true);};
+  std::vector<col::SourceRequest> requests;
+  for(Index i=0;i<3;++i)requests.push_back({leaf({3,2},.1+i*.04),
+    {leaf({2,2},.2),leaf({2,2},-.1),leaf({2},.1),leaf({2,1},.12),leaf({1,2},.13),leaf({2,1},-.07),leaf({1,2},.09)},.4,.1});
+  requests[1].parameters[0]=requests[0].parameters[0];requests[1].parameters[3]=requests[0].parameters[3];
+  std::vector<Tensor> roots;
+  for(const auto& r:requests){roots.push_back(r.content);for(const auto& p:r.parameters){
+    bool found=false;for(const auto& old:roots)found|=old.is_same(p);if(!found)roots.push_back(p);}}
+  const auto unused=requests[2].content;
+  requests.push_back(requests[0]);
+  auto actual=col::source_columns(requests,Index{4}*1024*1024);std::vector<Tensor> expected;
+  for(const auto& r:requests){const auto& p=r.parameters;
+    auto a=p[0]+at::matmul(p[3],p[4]),b=p[1]+at::matmul(p[5],p[6]);
+    auto z=r.content.scalar_type()==at::kHalf?r.content.to(at::kFloat):r.content;
+    auto u=(z/at::sqrt(r.epsilon+z.square().mean(-1,true))).to(dtype);
+    auto h=at::matmul(u,a.t())+p[2];expected.push_back(r.content+r.alpha*at::matmul(h*at::sigmoid(h),b.t()));}
+  const double rtol=dtype==at::kHalf?2e-2:dtype==at::kFloat?1e-5:1e-8;
+  const double atol=dtype==at::kHalf?1e-3:dtype==at::kFloat?1e-6:1e-10;
+  for(size_t i=0;i<actual.size();++i)close_value(actual[i],expected[i],rtol,atol);
+  for(double factor:{1.,0.}){
+    auto loss=[&](const std::vector<Tensor>& v){return factor*(v[0].square().sum()+.3*v[1].sum()+.4*v[3].sum());};
+    auto ga=torch::autograd::grad({loss(actual)},roots,{},true,false,true),ge=torch::autograd::grad({loss(expected)},roots,{},true,false,true);
+    for(size_t i=0;i<roots.size();++i){close_value(ga[i],ge[i],rtol,atol);if(roots[i].is_same(unused))require(!ga[i].defined(),"unused source column connected");}
+  }
+  {at::NoGradGuard guard;requests[0].parameters[3].add_(.01);}
+  bool rejected=false;try{torch::autograd::grad({actual[0].sum()},roots,{},false,false,true);}catch(const std::exception&){rejected=true;}
+  require(rejected,"source column original version was not guarded");
 }
 void check_prepare_groups(at::Device device=at::kCPU,at::ScalarType dtype=at::kDouble){
   auto g=weighted_check::graph("fc","kv");auto m=weighted_check::model(g,"kv",device,dtype);
@@ -194,13 +225,14 @@ void check(const std::string& family,bool positional=false,bool scoring=false,
 }
 }
 int main(int argc,char** argv){portable_torch::RuntimeSession runtime;try{
-  if(argc==1){check_prepare_groups();check_query_groups();check("kv");check("kv",true);for(const auto& f:{"affine","delta","gated_delta","ssd"})check(f);
+  if(argc==1){check_source_groups();check_prepare_groups();check_query_groups();check("kv");check("kv",true);for(const auto& f:{"affine","delta","gated_delta","ssd"})check(f);
     check("kv",false,true);check("ssd",false,true);
   }else{
     auto args=portable_torch::parse_cli(argc,argv,true);
     if(args.help){portable_torch::print_usage(std::cout,argv[0]);return 0;}
     args.allow_npu_float16=true;
     auto device=portable_torch::resolve_device(args);
+    check_source_groups(device,args.dtype);
     check_prepare_groups(device,args.dtype);
     check_query_groups(device,args.dtype);
     std::optional<at::Device> peer;

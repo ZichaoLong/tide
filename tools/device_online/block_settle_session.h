@@ -1,5 +1,6 @@
 #pragma once
 #include "block_settle_parameters.h"
+#include "block_settle_boundary.h"
 #include "device_optimizer.h"
 namespace tide::device_online {
 struct BlockSettleLimits {
@@ -8,7 +9,7 @@ struct BlockSettleLimits {
   int32_t timeout_ms=30000;
 };
 struct BlockSettleCheckpoint {
-  int64_t schema=1,generation=0,next_token=0;
+  int64_t schema=2,generation=0,next_token=0;
   std::string identity;
   std::vector<std::vector<std::string>> aliases;
   std::map<std::string,at::Tensor> parameters;
@@ -17,10 +18,12 @@ struct BlockSettleCheckpoint {
   ResidentOptimizerState slots;
   std::vector<WeightedRawState> state,bound_initial;
   at::Tensor last_positions; // int64 [B], independent sample cuts.
+  BlockSettleBoundary boundary;
 };
 struct BlockSettleWindow {
   int64_t token=0,generation=0;
   std::shared_ptr<const BlockSettleFlowTape> tape;
+  BlockSettleBoundary boundary;
 };
 struct BlockSettleAdjoints {
   std::vector<BlockSettleFlowGradient> windows;
@@ -35,7 +38,8 @@ class BlockSettleSession {
   BlockSettleSession(SettleGraph,std::vector<BlockSettleKVBinding>,const ParameterRegistry&,
     std::vector<BlockKVParameterRoles>,std::vector<WeightedRawState> initial,
     std::vector<WeightedRawState> bound_initial,at::Device,DeviceOptimizerKind,
-    std::vector<OptimizerGroup>,BlockSettleLimits = {},const BlockSettleCheckpoint* = nullptr);
+    std::vector<OptimizerGroup>,BlockSettleLimits = {},const BlockSettleCheckpoint* = nullptr,
+    const BlockSettleBoundary* initial_metadata = nullptr,const at::Tensor& initial_positions = {});
   ~BlockSettleSession();
   BlockSettleWindow advance(const at::Tensor& positions,const at::Tensor& payload,const at::Tensor& present);
   // Roots are in forward window order; reverse carries exact raw adjoints

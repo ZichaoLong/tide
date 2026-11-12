@@ -76,11 +76,27 @@ void compare_checkpoint(const BlockSettleCheckpoint& actual,const Fixture& f,con
 void exact(const BlockSettleCheckpoint& a,const BlockSettleCheckpoint& b){
   require(a.identity==b.identity&&a.generation==b.generation&&a.next_token==b.next_token&&a.aliases==b.aliases,"restored block metadata differs");
   for(const auto& [name,x]:a.parameters)require(at::equal(x,b.parameters.at(name)),"restored block parameter differs");
-  const std::vector<Tensor> x{a.slots.values,a.slots.first,a.slots.second,a.slots.maximum,a.slots.steps,a.slots.corrections,a.last_positions},
-    y{b.slots.values,b.slots.first,b.slots.second,b.slots.maximum,b.slots.steps,b.slots.corrections,b.last_positions};
+  const std::vector<Tensor> x{a.slots.values,a.slots.first,a.slots.second,a.slots.maximum,a.slots.steps,a.slots.corrections,a.last_positions,
+      a.boundary.node_present,a.boundary.region_times,a.boundary.input_counts,a.boundary.input_times},
+    y{b.slots.values,b.slots.first,b.slots.second,b.slots.maximum,b.slots.steps,b.slots.corrections,b.last_positions,
+      b.boundary.node_present,b.boundary.region_times,b.boundary.input_counts,b.boundary.input_times};
   for(size_t j=0;j<x.size();++j)require(at::equal(x[j],y[j]),"restored optimizer/cut differs");
   for(size_t r=0;r<a.state.size();++r)for(const auto& pair:std::vector<std::pair<Tensor,Tensor>>{{a.state[r].floating,b.state[r].floating},{a.state[r].integer,b.state[r].integer},
       {a.bound_initial[r].floating,b.bound_initial[r].floating},{a.bound_initial[r].integer,b.bound_initial[r].integer}})require(at::equal(pair.first,pair.second),"restored raw/bound initial differs");
+}
+void complete_boundary(const BlockSettleCheckpoint& actual,const Fixture& f,const Formula& last,int step){
+  const auto counts=f.input.present.to(at::kLong).sum(1)*(2*(step+1))-1;
+  require(at::equal(actual.boundary.input_counts,counts),"independent input occurrence ledger differs");
+  require(actual.boundary.node_present.all().item<bool>(),"nonempty initial node presence lost");
+  auto input_times=at::full_like(counts,-1),region_times=at::full({Batch,2},-1,at::kLong);
+  for(int64_t b=0;b<Batch;++b)for(int64_t l=0;l<Length;++l){const auto frame=b*Length+l;
+    for(int64_t p=0;p<3;++p)if(f.input.present[b][l][p].item<bool>())
+      input_times[b][p]=f.input.positions[b][l].item<int64_t>()*f.graph.stride()+f.graph.rank(f.graph.graph().inputs[p]);
+    for(int64_t n=0;n<Nodes;++n)if(last.times[frame][n].item<int64_t>()>0)
+      region_times[b][f.graph.graph().nodes[n].region]=last.times[frame][n];
+  }
+  require(at::equal(actual.boundary.input_times,input_times),"independent input int64 clock differs");
+  require(at::equal(actual.boundary.region_times,region_times),"independent regional query history differs");
 }
 std::unique_ptr<BlockSettleSession> session(const Fixture& f,at::Device device,const tide::OptimizerGroup& group,const BlockSettleCheckpoint* saved=nullptr){
   BlockSettleLimits limits;limits.forward_bytes=1LL<<29;limits.backward_bytes=1LL<<30;limits.total_bytes=3LL<<30;
@@ -108,11 +124,16 @@ void check(at::Device device,const std::string& checkpoint_path,bool restore_onl
     update(f,reference.back(),gradients,adam,group);
     if(restore_only&&step==0)continue;
     compare_checkpoint(owner->checkpoint(),f,adam,actual.parameters);
+    complete_boundary(owner->checkpoint(),f,reference.back(),step);
     if(step==0){first=owner->checkpoint();save_block_settle_checkpoint(first,checkpoint_path);auto loaded=load_block_settle_checkpoint(checkpoint_path);exact(first,loaded);
       bool save_refused=false,load_refused=false;
       try{save_block_settle_checkpoint(first,checkpoint_path,1);}catch(const std::invalid_argument&){save_refused=true;}
       try{load_block_settle_checkpoint(checkpoint_path,1);}catch(const std::invalid_argument&){load_refused=true;}
       require(save_refused&&load_refused,"checkpoint byte budget was ignored");exact(first,load_block_settle_checkpoint(checkpoint_path));
+      auto corrupt=loaded;corrupt.boundary.region_times=loaded.boundary.region_times.clone();
+      corrupt.boundary.region_times[0][0]=(loaded.last_positions[0].item<int64_t>()+1)*consumer.graph.stride()+consumer.graph.ranks()[0];
+      bool cut_refused=false;try{session(consumer,device,group,&corrupt);}catch(const std::invalid_argument&){cut_refused=true;}
+      require(cut_refused,"checkpoint accepted regional query history beyond its complete cut");
       restored=session(consumer,device,group,&loaded);}
   }
   if(restore_only)exact(owner->checkpoint(),load_block_settle_checkpoint(checkpoint_path+".expected"));

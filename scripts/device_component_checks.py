@@ -7,6 +7,8 @@ CHECKS = {
     "resident-block-kv-sequence": ("tide-block-kv-sequence-check", ("float32",)),
     "resident-block-settle-flow": ("tide-block-settle-flow-check", ("float32",)),
     "resident-block-settle-session": ("tide-block-settle-session-check", ("float32",)),
+    "resident-block-public": ("tide-block-resident-check", ("float32",)),
+    "resident-block-model": ("tide-block-settle-model-check", ("float32",)),
     "weighted-node-replicas": ("tide-weighted-peer-check", ("float32", "float16")),
     "weighted-node-training": ("tide-weighted-node-training-check", ("float32", "float16")),
     "weighted-node-window": ("tide-weighted-node-window-check", ("float32",)),

@@ -32,7 +32,7 @@ template<class T> void emit(std::ostream& o,const std::vector<T>& xs){o<<xs.size
 }
 std::string identity(const SettleGraph& g,const std::vector<BlockSettleKVBinding>& bindings,const ParameterRegistry& registry,
     const std::vector<BlockKVParameterRoles>& roles,const std::vector<WeightedRawState>& state){
-  std::ostringstream o;o<<std::setprecision(17)<<"tide-resident-settle-block-v1 ";emit(o,g.graph().identity);emit(o,g.ranks());emit(o,g.stride());emit(o,g.binding());
+  std::ostringstream o;o<<std::setprecision(17)<<"tide-resident-settle-block-v2 ";emit(o,g.graph().identity);emit(o,g.ranks());emit(o,g.stride());emit(o,g.binding());
   for(size_t r=0;r<bindings.size();++r){const auto& b=bindings[r];const auto& c=b.memory;const auto& s=b.regional;
     for(auto x:{c.width,c.summary_width,c.adapter_rank,c.heads,c.ffn_width,c.window})emit(o,x);emit(o,c.memory_read);
     for(auto x:{c.beta_short,c.epsilon,c.alpha_att,c.alpha_ff,c.position_origin,c.position_scale})emit(o,x);
@@ -46,7 +46,7 @@ std::string identity(const SettleGraph& g,const std::vector<BlockSettleKVBinding
       emit(o,x->defined());if(x->defined()){const auto cpu=x->cpu().contiguous();for(int64_t j=0;j<cpu.numel();++j)emit(o,cpu.reshape({-1})[j].item<int64_t>());}}
     for(const auto& [name,paths]:roles[r]){emit(o,name);emit(o,paths);}emit(o,state[r].floating.sizes().vec());emit(o,state[r].integer.sizes().vec());
   }
-  emit(o,registry.alias_partitions());for(const auto& p:registry.owners()){emit(o,p.canonical);emit(o,p.value.sizes().vec());}
+  emit(o,registry.alias_partitions());for(const auto& p:registry.owners()){emit(o,p.canonical);emit(o,p.value.sizes().vec());emit(o,p.value.requires_grad());}
   return o.str();
 }
 }

@@ -16,16 +16,17 @@ struct BlockSettleSession::Impl {
   std::vector<BlockKVParameterRoles> roles;at::Device device;BlockSettleLimits limits;
   DeviceOptimizerKind kind;std::unique_ptr<DeviceOptimizer> optimizer;
   ParameterVjp layout,gradient;std::vector<WeightedRawState> state,bound;
+  BlockSettleBoundary boundary;
   at::Tensor positions;std::string fingerprint;int64_t generation=0,next_token=0;
   bool failed=false,ready=false,closed=false;
   std::vector<Window> windows;std::unique_ptr<DeviceProgram> reverse;
   std::vector<block_session_detail::Version> originals,gradient_versions;
   Impl(SettleGraph,std::vector<BlockSettleKVBinding>,const ParameterRegistry&,
     std::vector<BlockKVParameterRoles>,std::vector<WeightedRawState>,std::vector<WeightedRawState>,
-    at::Device,DeviceOptimizerKind,std::vector<OptimizerGroup>,BlockSettleLimits,const BlockSettleCheckpoint*);
+    at::Device,DeviceOptimizerKind,std::vector<OptimizerGroup>,BlockSettleLimits,const BlockSettleCheckpoint*,const BlockSettleBoundary*,const at::Tensor&);
   void check()const;
   void run(DeviceProgram&,const at::Tensor&);
-  void publish(DeviceProgram&);
+  void publish(DeviceProgram&,const at::Tensor& error);
   void discard();
   void budget(const DeviceProgram&)const;
 };

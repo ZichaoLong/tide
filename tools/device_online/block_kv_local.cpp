@@ -22,9 +22,12 @@ BlockKVLocalTape append_block_kv_local(DeviceProgram& p,const SettleBlockPlan& p
     parameters.update.base,parameters.update.left,parameters.update.right,parameters.update.summary,
     parameters.source.a,parameters.source.b,parameters.source.embedding,parameters.message.full.query,
     parameters.message.full.residual.out,parameters.message.full.residual.gate,parameters.message.full.residual.up,parameters.message.full.residual.down});
+  if(parameters.source_factors){const auto& f=*parameters.source_factors;borrowed.insert(borrowed.end(),{f.a_left,f.a_right,f.b_left,f.b_right});}
   const WeightedStorageIncrement storage(p,std::move(borrowed));auto remaining=[&](){admit(storage.bytes(),budget);return budget-storage.bytes();};
+  auto source=parameters.source;std::optional<WeightedSourceAdaptation> adaptation;
+  if(alpha>0&&parameters.source_factors){adaptation=append_weighted_source_adaptation(p,source,*parameters.source_factors,error,remaining());source=adaptation->effective;}
   auto aggregate=append_weighted_aggregate(p,input.payload.reshape({rows,a,d+1}),input.lengths.reshape({rows}),
-    input.source_owners.reshape({rows,a}),parameters.source,alpha,kv.epsilon,error,remaining());
+    input.source_owners.reshape({rows,a}),source,alpha,kv.epsilon,error,remaining());
   auto present=at::zeros({b,l,n},input.lengths.options().dtype(at::kBool));
   p.less(at::zeros_like(input.lengths),input.lengths,present);
   auto sequence=append_block_kv_sequence(p,kv,input.initial,aggregate.output,input.times,input.node_owners,present,parameters.update,error,remaining());
@@ -45,6 +48,6 @@ BlockKVLocalTape append_block_kv_local(DeviceProgram& p,const SettleBlockPlan& p
   auto received=std::make_shared<WeightedRowGraph>(p,messages.selection.owners,parameters.update.base.size(0),error,remaining(),std::vector<at::Tensor>{aggregate.output});
   const auto h=received->input(aggregate.output),r=received->slice(h,0,1),u=received->slice(h,1,d);
   admit(storage.bytes(),budget);
-  return {mode,std::move(aggregate),std::move(sequence),std::move(messages),read,indices,present,received,h,r,u};
+  return {mode,std::move(aggregate),std::move(sequence),std::move(messages),read,indices,present,received,h,r,u,std::move(adaptation)};
 }
 }

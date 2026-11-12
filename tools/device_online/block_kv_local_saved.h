@@ -15,6 +15,7 @@ inline std::vector<at::Tensor> saved(const BlockKVLocalTape& t){
   const auto& a=t.aggregate;
   for(const auto& x:{a.payload,a.lengths,a.owners,a.clean,a.normal,a.rstd,a.total,a.values,a.output,t.read.floating,t.read.integer,t.initial_mapping,t.present})out.push_back(x);
   if(a.source){const auto& h=*a.source;for(const auto& x:{h.input,h.owners,h.indices,h.preactivation,h.hidden,h.output,h.rows.matrix,h.rows.hidden_bias,h.rows.projection,h.rows.bias})out.push_back(x);}
+  if(t.source_adaptation){const auto& s=*t.source_adaptation;out.insert(out.end(),{s.effective.a,s.effective.b,s.effective.embedding,s.saved.a_left,s.saved.a_right,s.saved.b_left,s.saved.b_right});}
   return out;
 }
 }

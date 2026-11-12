@@ -49,7 +49,10 @@ BlockKVLocalGradient append_block_kv_local_vjp(DeviceProgram& p,const BlockKVLoc
   if(roots.received.value.defined())incoming.push_back({t.received_index,roots.received.value,roots.received.connected});
   auto received=t.received->reverse(p,incoming,error,remaining()).rows.at(t.received_index);
   auto aggregate=append_weighted_aggregate_vjp(p,t.aggregate,received.value,received.connected,error,remaining());
+  std::optional<WeightedSourceAdaptationGradient> adaptation;
+  if(t.source_adaptation){if(!aggregate.parameters)throw std::logic_error("active source adaptation lost Aggregate adjoints");
+    adaptation=append_weighted_source_adaptation_vjp(p,*t.source_adaptation,*aggregate.parameters,aggregate.owner_connected,error,remaining());}
   admit(storage.bytes(),budget);
-  return {std::move(aggregate),std::move(sequence),std::move(message),bound,bound_flags};
+  return {std::move(aggregate),std::move(sequence),std::move(message),bound,bound_flags,std::move(adaptation)};
 }
 }

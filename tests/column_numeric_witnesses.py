@@ -33,4 +33,11 @@ def settle(dtype, mode, implementation):
         "hard_selection": {"nodes.0.kernel.base": 1.4e-5, "nodes.3.full_program.content.out": 3e-6},
         "proportional": {"nodes.0.kernel.summary": 1.6e-5, "nodes.3.full_program.content.out": 2e-6}
                         if implementation == "python" else {}}
+    if implementation == "python":
+        # Source-column GEMM/explicit block transpose: same-material FP64 and
+        # zero VJPs pass; source-columns-dev-strict retains the new FP32 errors.
+        # These classify strict failures and never change passing tolerances.
+        for name in ("regional_total", "regional_threshold"):
+            fields[name]["nodes.0.kernel.base"] = 1e-5
+        fields["regional_total_zero"]["nodes.2.aggregate_program.transforms.0.embedding"] = 3.1e-6
     return {f"gradient[{n}]": limit for n, limit in fields.get(mode, {}).items()}
