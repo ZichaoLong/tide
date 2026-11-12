@@ -108,13 +108,14 @@ std::vector<Received> aggregate_tensor_many(const std::vector<AggregateTensorReq
     groups[{int(like.device().type()),like.device().index(),int(like.scalar_type()),like.size(1)}].push_back(i);}
   auto plan=[&](const std::vector<size_t>& ids){std::vector<const AggregateTensorRequest*> entries;
     for(auto i:ids)entries.push_back(&requests[i]);return aggregate_source_layout(entries);};
-  for(const auto& [key,ids]:groups){std::vector<size_t> pending;std::optional<AggregateSourceLayout> current;
-    auto flush=[&](){if(!pending.empty())tasks.push_back({std::move(pending),current->groups>1?std::move(current):std::nullopt});
-      pending.clear();current.reset();};
-    for(auto i:ids){auto proposed=pending;proposed.push_back(i);auto candidate=plan(proposed);
-      if(!pending.empty()&&candidate.bytes()>budget){flush();proposed={i};candidate=plan(proposed);}
-      if(candidate.bytes()>budget)tasks.push_back({{i},std::nullopt});
-      else {pending=std::move(proposed);current=std::move(candidate);}}
+  for(const auto& [key,ids]:groups){std::vector<size_t> pending;AggregateSourceFootprint footprint;
+    auto flush=[&](){if(!pending.empty()){
+        auto layout=pending.size()>1?std::optional<AggregateSourceLayout>(plan(pending)):std::nullopt;
+        tasks.push_back({std::move(pending),std::move(layout)});pending.clear();}};
+    for(auto i:ids){footprint.add(requests[i]);
+      if(!pending.empty()&&footprint.bytes()>budget){flush();footprint=AggregateSourceFootprint{};footprint.add(requests[i]);}
+      if(footprint.bytes()>budget){tasks.push_back({{i},std::nullopt});footprint=AggregateSourceFootprint{};}
+      else pending.push_back(i);}
     flush();
   }
   // Only real numerical budget boundaries publish ordered use roots. Within

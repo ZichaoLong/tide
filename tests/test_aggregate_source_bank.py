@@ -3,7 +3,7 @@ from dataclasses import replace
 import pytest
 import torch
 from tidegraph.compare import equivalent
-from tidegraph.weighted.aggregate_layout import SourceIncidence
+from tidegraph.weighted.aggregate_layout import SourceIncidence, SourceFootprint
 from tidegraph.weighted.aggregate_tensor import assemble_many, _rows
 from tidegraph.weighted.column_aggregate import assemble
 from tidegraph.weighted.column_sources import source_blocks
@@ -110,3 +110,27 @@ def test_centered_mass_vjp_keeps_large_common_offset_invariance():
     actual = assemble_many(entries, 2**24, assemble)
     gm = torch.autograd.grad((actual[0][2]*torch.tensor([.3, -.7, .9])).sum(), (a.strength, b.strength))
     assert all(torch.equal(g, torch.zeros_like(g)) for g in gm)
+
+
+def test_wide_group_admission_builds_only_final_incidence(monkeypatch):
+    entries, _ = fixture(torch.float64)
+    entries = [entries[0], entries[1], entries[2]]*24
+    builder, calls = SourceIncidence.build, []
+
+    def counted(cls, rows):
+        calls.append(len(rows))
+        return builder(rows)
+
+    monkeypatch.setattr(SourceIncidence, "build", classmethod(counted))
+    actual = assemble_many(entries, 2**30, assemble)
+    assert calls == [72]  # No growing prefix incidence allocations.
+    equivalent(actual, [literal(entry) for entry in entries])
+    footprint, prefix = SourceFootprint(), []
+    assert footprint.bytes() == 0
+    for atoms, values in entries[:5]:
+        entry = atoms, values, _rows(atoms)
+        footprint.add(entry); prefix.append(entry)
+        layout = builder(prefix)
+        assert (len(footprint.sources), len(footprint.rows), footprint.receivers) == (
+            len(layout.sources), len(layout.rows), len(layout.receivers))
+        assert footprint.bytes() == layout.bytes()

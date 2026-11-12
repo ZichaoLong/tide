@@ -128,7 +128,10 @@ void source_owners(){
     for(const auto& [p,label]:f.requests[i].sources)if(!p->rows.empty()){
       r.sources.push_back(p);r.values.push_back(owners.values[owners.owners[uses[i][j++]]]);rows.insert(p->rows.begin(),p->rows.end());}
     if(!rows.empty()){r.rows={rows.begin(),rows.end()};entries.push_back(std::move(r));}}
-  std::vector<const col::AggregateTensorRequest*> pointers;for(const auto& r:entries)pointers.push_back(&r);
+  std::vector<const col::AggregateTensorRequest*> pointers;col::AggregateSourceFootprint footprint;
+  require(footprint.bytes()==0,"empty source footprint differs");
+  for(const auto& r:entries){pointers.push_back(&r);footprint.add(r);
+    require(footprint.bytes()==col::aggregate_source_layout(pointers).bytes(),"incremental source footprint differs");}
   auto plan=col::aggregate_source_layout(pointers);
   require(plan.groups==6&&plan.sources==6&&plan.rows==8&&plan.originals.size()==12,"incidence incorrectly merged independent source roots");
   require(plan.incidence[0][0]==2&&plan.incidence[0][1]==1&&plan.incidence[3]==plan.incidence[0],"physical repeated uses lost multiplicity");

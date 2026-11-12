@@ -6,7 +6,7 @@ saved. The mass transpose retains the centered z-u expression.
 """
 from types import SimpleNamespace
 import torch
-from .aggregate_layout import SourceIncidence
+from .aggregate_layout import SourceIncidence, SourceFootprint
 from .column_sharing import ordered_uses
 from .packing_observation import bucket
 
@@ -113,21 +113,26 @@ def assemble_many(entries, budget, fallback):
         else:
             groups.setdefault((z.device, z.dtype, z.shape[-1]), []).append((i, entry))
     for group in groups.values():
-        pending, plan = [], None
+        pending, footprint = [], SourceFootprint()
+
+        def flush():
+            if pending:
+                plan = SourceIncidence.build([entry for _, entry in pending]) if len(pending) > 1 else None
+                tasks.append((list(pending), plan))
+                pending.clear()
+
         for item in group:
-            candidate = SourceIncidence.build([entry for _, entry in (*pending, item)])
-            if pending and candidate.bytes() > budget:
-                tasks.append((pending, plan if len(pending) > 1 else None))
-                pending = []
-                candidate = SourceIncidence.build([item[1]])
-            if candidate.bytes() > budget:
+            footprint.add(item[1])
+            if pending and footprint.bytes() > budget:
+                flush()
+                footprint = SourceFootprint()
+                footprint.add(item[1])
+            if footprint.bytes() > budget:
                 tasks.append(([item], None))
-                plan = None
+                footprint = SourceFootprint()
             else:
                 pending.append(item)
-                plan = candidate
-        if pending:
-            tasks.append((pending, plan if len(pending) > 1 else None))
+        flush()
     # A source shared across bounded numerical groups has one ordered reverse
     # boundary. Within a group it is passed exactly once, with all edge counts.
     roots, mappings = {}, [{} for _ in tasks]

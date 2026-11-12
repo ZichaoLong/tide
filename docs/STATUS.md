@@ -56,3 +56,13 @@ resident后继已实现已知存储/workspace预准入和当前程序/流/通知
 08a349ce resident资源后继：固定/dev/shm/gef-resident-resources-20261112/source；
 两构建resident-resources-build-{native,sdk}，CPU0–159/160–319，各512GiB/2400秒。
 复用并核验72e1d22c core hash，新建resident和Python安装；脚本artifacts/resident-resources-20261112，作业同名jobs。
+
+72e1d22c资格终态：CPU325通过/7原xfail/2已诊断FP32严格失败；两套core、SDK7CPU及15NPU组合、
+CPU/NPU共12安装三步/新进程恢复均通过。08a349ce两resident构建及8CPU通过。
+现开始source-bank-measure-{cpu,npu}（CPU0–7/32–35，256GiB/1800秒、32配置，物理NPU候选1），
+以及resident-resources-resident-{native,sdk}（CPU24–27/28–31、1200秒，其余空闲NPU）。
+所有构建已结束，正确性任务与计时使用不同CPU/设备，仍记录外部资源争用；日志/进程argv在各artifacts目录。
+
+32点成本与08a349ce全部设备检查已终态通过；新LH default-native训练CPU/NPU 1.405757/2.902243秒，
+FC16 B8/L128 NPU .291365秒，未见主要差距缩小，不宣称端到端加速。
+后继仅增量规划来源布局，移除重复pending前缀构造；30CPU/3TU语法通过，固定后补两套core定向资格。

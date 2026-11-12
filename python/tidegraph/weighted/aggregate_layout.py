@@ -7,6 +7,28 @@ from dataclasses import dataclass, replace
 import torch
 
 
+def _bytes(s, r, g, d, size):
+    return s*r*((18*d+18)*size+24)+g*r*(6*d+8)*size+g*s*(8+size)
+
+
+class SourceFootprint:
+    """Incremental admission metadata; build incidence only for a final group."""
+    def __init__(self):
+        self.sources, self.rows, self.receivers = set(), set(), 0
+        self.width = self.size = 0
+
+    def add(self, entry):
+        atoms, values, rows = entry
+        self.rows.update(rows.tolist())
+        for (p, _), value in zip(atoms, values):
+            self.sources.add((tuple(p.rows.tolist()), id(p.strength), id(value)))
+        self.receivers += 1
+        self.width, self.size = values[0].shape[-1], values[0].element_size()
+
+    def bytes(self):
+        return _bytes(len(self.sources), len(self.rows), self.receivers, self.width, self.size)
+
+
 @dataclass(frozen=True)
 class SourceIncidence:
     rows: tuple
@@ -50,7 +72,7 @@ class SourceIncidence:
         d, size = value.shape[-1], value.element_size()
         # Unique payload, one centered receiver tile, forward/reverse fields,
         # indices and incidence. No receiver x source x row x D allocation.
-        return s*r*((18*d+18)*size+24)+g*r*(6*d+8)*size+g*s*(8+size)
+        return _bytes(s, r, g, d, size)
 
     def metadata(self):
         # Only saved_tensors owns numerical roots across backward. Do not keep
