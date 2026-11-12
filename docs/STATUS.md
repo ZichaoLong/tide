@@ -1,4 +1,33 @@
-# 当前交接：v9已后台启动，12个NPU worker正在有限学习筛选
+# 当前交接：v9主训练36完成、8运行、14未启动；硬件利用已留证
+
+2026-11-12上午只读复核：[中期汇报](studies/direct-v9-interim-20261112.md) ·
+[共同曝光/活动/逐运行](evidence/direct-v9-interim-20261112.json) ·
+[AICPU/AICore原始采样](evidence/direct-v9-resources-20261112.json) · [操作/Lens](studies/direct-v9-operations.md)。
+
+19项batch校准及72项学习筛选全部完成。主58条：36完成、8运行、14在固定worker序列中尚未启动；
+没有训练执行失败，无自动重跑。四个worker已释放卡，当前活跃物理0、1、2、4、6、8、10、14。
+控制器继续运行，条件延伸尚未触发；截止仍11月13日21:36:26 +08:00，约余36h。
+固定训练源码6e7bd49e未改动；数学0770593、安装74e7bbd；本次没有新训练、profiler或上游修改。
+
+64M、双seed、同131072目标validation：HB40 pooled NLL3.4179，HB184 pooled3.1433；
+浅宽HB40/d256/FFN1280约50M参数为3.0112，近参数TF为2.9457，TF约25M为2.9027。
+已有本配置族容量/数据收益，但深度不自动更好，TF仍领先；不能声称联合目标已达成。
+R64/h2在16M：稠密NLL4.3774，Full10.58%为4.6415，Full3.34%为4.7907，固定轮转3.125%为5.0550。
+低活跃两seed达带且优于该固定控制，仍有质量代价；物理Full100%稠密遮罩。入口树还缺16M完整对照。
+
+8轮/37.67秒设备采样：HB88 pooled的AICore中位3%、AICPU30–31%、总NPU94.5%；
+R32入口树Bern为AICore2%、AICPU33%、总NPU96.5–100%。不能据总占用宣称算力充分利用。
+样本是设备级，物理1另有进程；不同计数器不能相加或充当kernel耗时比例。热点归因须后续短trace。
+
+116条已启动训练均有小型机制/三步新进程恢复通过，也均保留至少一个CPU/NPU严格有限超差。
+108条完成Lens投影verified/readback_matches，8条录制中；严格阈值未变，长轨迹精确重放未检。
+confirmation/test未开，原两次数据准备失败保留。账号约275GiB/800GiB，新批约39GiB/64GiB。
+
+继续只读检查`python scripts/review_direct_v9.py`。停止全批：
+`systemctl --user stop 'tide-lab-v9-*.service'`，再核对MainPID/后代；不要改活动快照/配置。
+详情、原始计数、对照、未知原因和后续基座分析线索均在中期报告。
+
+# 2026-11-11启动时交接（历史）
 
 2026-11-11 21:50北京时间附近复核。[固定执行表](studies/language-scale-activity-v9.md) ·
 [操作/Lens/停止/恢复](studies/direct-v9-operations.md) · [实际观测](evidence/direct-v9-observations.json) ·

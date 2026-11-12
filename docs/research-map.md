@@ -1,3 +1,5 @@
+v9最新中期状态及限定结论见[11月12日汇报](studies/direct-v9-interim-20261112.md)：主36完成/8运行/14未启动，筛选72完成；入口树端点与独立确认仍待齐备，AICPU/AICore采样与语言证据分列。
+
 当前执行依据为[v9有限执行表](studies/language-scale-activity-v9.md)，用户已授权启动。数据/容量/依赖深度、低活跃和入口树共同推进；允许稠密遮罩。执行状态见[STATUS](STATUS.md)，科学结论需独立审阅。以下历史的“未提交/待对齐”不再限制本批已授权工作。
 
 # 当前图：direct-v8覆盖与校准Transformer
