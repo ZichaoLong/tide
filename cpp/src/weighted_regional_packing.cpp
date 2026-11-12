@@ -1,5 +1,6 @@
 // Core-5 regional row layout and its linear transpose; no sending mathematics.
 #include "weighted_regional_packing.h"
+#include "weighted_column_blocks.h"
 #include <torch/csrc/autograd/functions/utils.h>
 #include <algorithm>
 #include <set>
@@ -79,11 +80,11 @@ PackedRegionalColumns RegionalPackingGroup::pack(const RegionalFields& sources) 
   auto direct=aligned(*this);auto index=direct?Tensor{}:ids(gather,ref.device());
   for(const auto& [name,first]:sources.at(participants[0])){
     std::vector<Tensor> values;for(auto node:participants)values.push_back(sources.at(node).at(name));
-    if(direct)out.fields[name]=values.size()==1?values[0].unsqueeze(1):at::stack(values,1);
+    if(direct)out.fields[name]=blocks::stack_columns(values);
     else{
       std::vector<Index> shape{static_cast<Index>(rows.size()),candidates};
       shape.insert(shape.end(),first.sizes().begin()+1,first.sizes().end());
-      out.fields[name]=at::cat(values).index_select(0,index).reshape(shape);
+      out.fields[name]=blocks::concatenate(values).index_select(0,index).reshape(shape);
     }
   }
   out.nodes=ids(node_ids,ref.device()).reshape({static_cast<Index>(rows.size()),candidates});
@@ -103,16 +104,24 @@ RegionalFields RegionalPackingGroup::pullback(const RegionalFields& sources,cons
   }
   RegionalFields out;
   for(auto node:participants)for(const auto& [name,t]:names)out[node][name]=Tensor{};
+  std::vector<Index> positions,target;std::set<Index> supported;
+  for(size_t i=0;i<node_ids.size();++i)if(active[i]){
+    positions.push_back(i);target.push_back(gather[i]);supported.insert(node_ids[i]);
+  }
+  Index total_rows=0;for(auto node:participants)total_rows+=domains.at(node).size();
+  auto source_ids=ids(positions,ref.device()),target_ids=ids(target,ref.device());
   for(const auto& [name,bar]:bars){
     if(!bar.defined())continue;
     auto shape=names.at(name).sizes().vec();shape[0]=candidates;shape.insert(shape.begin(),rows.size());
     require(bar.sizes()==shape&&bar.device()==ref.device()&&bar.scalar_type()==ref.scalar_type(),"regional field adjoint metadata mismatch");
+    if(positions.empty())continue;
     shape.erase(shape.begin());shape[0]=node_ids.size();auto flat=bar.reshape(shape);
-    for(auto node:participants){
-      std::vector<Index> positions,target;
-      for(size_t i=0;i<node_ids.size();++i)if(node_ids[i]==node&&active[i]){positions.push_back(i);target.push_back(local_rows[i]);}
-      if(positions.empty())continue;
-      out[node][name]=at::zeros_like(sources.at(node).at(name)).index_copy(0,ids(target,bar.device()),flat.index_select(0,ids(positions,bar.device())));
+    shape[0]=total_rows;
+    auto total=at::zeros(shape,bar.options()).index_copy(0,target_ids,flat.index_select(0,source_ids));
+    Index offset=0;
+    for(auto node:participants){const Index length=domains.at(node).size();
+      if(supported.count(node))out[node][name]=total.narrow(0,offset,length);
+      offset+=length;
     }
   }
   return out;

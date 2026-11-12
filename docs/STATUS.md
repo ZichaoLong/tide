@@ -31,7 +31,8 @@ mixed-a/b/c 仅为可迁移的性能对照预设，不强迫核心分层；重�
 ## 当前改动与本轮剩余
 
 - `lh_direct`：主机 Read/Describe→区域的 actual-row FieldBlock；发布一次、节点独立根视图、连续借用及整块伴随。
-  当前 Python 定向 85 项通过；补 native 实际消费者检查、审阅/契约后由主代理固定源码并做两套新构建及定向资格。
+  最终 Python 定向91项通过；扩大153通过/3原xfail/2既有FP32严格超差；3个C++ TU语法通过。
+  主代理审阅补空列/stride反例及导航；现固定host源码，接着两套新构建、定向资格与有限成本。
 - `resident_rewrite`：唯一 initial/write bank + old/proposal 快照索引、raw 解码与块伴随；当前尚未接完生产消费者。
   先完成相邻阶段及原小型整链/训练/恢复，不新增规模扫描。新增 C++/kernel 需进入两套构建。
 - `req006_diagnostics`：仅收尾已产生的证据和 mixed 预设定位审阅，不把已确认原则变成新改造任务。

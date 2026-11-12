@@ -6,6 +6,7 @@ This module owns linear layout operations, not regional numerical semantics.
 """
 from dataclasses import dataclass
 import torch
+from .column_blocks import concatenate, stack_columns
 
 
 def _ids(values, device):
@@ -41,20 +42,27 @@ class PackedRegion:
                 support = support[:, None].expand(shape)
             enabled = support.detach().cpu().flatten().tolist()
         result = {node: {name: None for name in self.fields} for node in g.participants}
+        positions = [i for i, used in enumerate(enabled) if used]
+        lengths = [len(g.domains[node]) for node in g.participants]
+        supported = {g.node_ids[i] for i in positions}
+        source_ids = _ids(positions, next(iter(self.fields.values())).device)
+        target_ids = _ids([g.gather[i] for i in positions], source_ids.device)
         for name, packed in self.fields.items():
             bar = bars.get(name)
             if bar is None:
                 continue
             if bar.shape != packed.shape or (bar.dtype, bar.device) != (packed.dtype, packed.device):
                 raise ValueError("regional field adjoint metadata mismatch")
+            if not positions:
+                continue
             flat = bar.reshape(shape[0]*shape[1], *bar.shape[2:])
-            for node in g.participants:
-                positions = [i for i, owner in enumerate(g.node_ids) if owner == node and enabled[i]]
-                if not positions:
-                    continue
-                target = [g.local_rows[i] for i in positions]
-                result[node][name] = torch.zeros_like(self.sources[node][name]).index_copy(
-                    0, _ids(target, bar.device), flat.index_select(0, _ids(positions, bar.device)))
+            # A complete field transpose owns one compact bank. Per-node roots
+            # only borrow slices; a missing support remains None, not zero.
+            total = bar.new_zeros((sum(lengths), *bar.shape[2:])).index_copy(
+                0, target_ids, flat.index_select(0, source_ids))
+            for node, value in zip(g.participants, total.split(lengths)):
+                if node in supported:
+                    result[node][name] = value
         return result
 
 
@@ -96,9 +104,9 @@ class RegionalGroup:
         for name in names:
             values = [sources[node][name] for node in self.participants]
             if aligned:
-                fields[name] = values[0].unsqueeze(1) if len(values) == 1 else torch.stack(values, 1)
+                fields[name] = stack_columns(values)
             else:
-                fields[name] = torch.cat(values).index_select(0, indices).reshape(
+                fields[name] = concatenate(values).index_select(0, indices).reshape(
                     len(self.rows), self.candidates, *values[0].shape[1:])
         nodes = _ids(self.node_ids, ref.device).reshape(len(self.rows), self.candidates)
         return PackedRegion(fields, nodes, self, {n: sources[n] for n in self.participants})

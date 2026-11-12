@@ -12,6 +12,9 @@
 修改同步`test_tensor_kernel`、`test_kv_tensor_batches`、逐字段Describe及一般端口/恢复检查。
 完整事件根与普通列根的观察契约分别验收；放置预设不强制规定内部软件层级。
 独立C++实现为`weighted_kv_tensor`及其`_layout/_positions/_math/_vjp`职责文件。
+`weighted/column_blocks`及C++ `weighted_column_blocks.h`拥有相邻阶段的实际字段存储和线性借用VJP；
+`regional_packing`只负责int64候选incidence及其转置，区域数学仍由`regional_groups`持有。
+修改同步`test_column_blocks`与standalone `weighted-kv-tensor`，特别是独立根、空列/stride及版本守卫。
 [resident bank GEMM](resident-bank-gemm.md)则以设备实际owner稳定分组，保存bank矩阵和块级伴随；
 这消除了投影/head/Upd的逐事件矩阵，尚不等于共享历史或整条resident重写完成。
 

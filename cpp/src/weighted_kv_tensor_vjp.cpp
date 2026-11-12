@@ -1,5 +1,6 @@
 // One compact private graph, one batched first-order transpose, exact root support.
 #include "weighted_kv_tensor.h"
+#include "weighted_column_blocks.h"
 #include "tide/autograd_census.h"
 #include <torch/csrc/autograd/autograd.h>
 #include <torch/csrc/autograd/functions/utils.h>
@@ -48,7 +49,7 @@ class Boundary final:public Node {
       if(pieces.empty())continue;
       // Fields may be slices of one KV projection. A contiguous adjoint makes
       // flatten a view; preserving an arbitrary field stride could copy here.
-      auto bar=at::zeros(fields[f].sizes(),fields[f].options());bar.flatten(0,2).index_copy_(0,at::cat(indices),at::cat(pieces));
+      auto bar=at::zeros(fields[f].sizes(),fields[f].options());bar.flatten(0,2).index_copy_(0,at::cat(indices),blocks::concatenate(pieces));
       active_fields.push_back(fields[f]);active_bars.push_back(bar);
     }
     if(active_fields.empty())return result;
@@ -99,8 +100,11 @@ std::vector<TensorFields> evaluate(Packed packed,const std::function<TensorField
     }
   }
   std::vector<TensorFields> out(packed.nodes);
-  for(size_t f=0;f<fields.size();++f){auto flat=fields[f].flatten(0,2);
-    for(size_t g=0;g<out.size();++g){auto value=flat.index_select(0,packed.publish[g]);bool used=false;
+  std::vector<Index> lengths;for(const auto& index:packed.publish)lengths.push_back(index.numel());
+  const auto publish=at::cat(packed.publish);
+  for(size_t f=0;f<fields.size();++f){
+    auto columns=blocks::FieldBlock::publish(fields[f],publish,lengths).columns();
+    for(size_t g=0;g<out.size();++g){auto value=columns[g];bool used=false;
       if(grad)for(size_t r=0;r<packed.roles.size();++r)used|=node->uses[f][r]&&packed.roles[r].originals[g].requires_grad();
       if(used){node->outputs.emplace_back(g,f);torch::autograd::set_history(value,node);}
       out[g][names[f]]=std::move(value);

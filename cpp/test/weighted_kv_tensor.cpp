@@ -3,6 +3,8 @@
 #include "tide/weighted_sequence_columns.h"
 #include "tide/packing_work.h"
 #include "tide/autograd_census.h"
+#include "../src/weighted_column_blocks.h"
+#include "../src/weighted_regional_packing.h"
 #include <ATen/Parallel.h>
 #include <ATen/core/grad_mode.h>
 #include <torch/csrc/autograd/autograd.h>
@@ -215,12 +217,70 @@ void check_multihead(){
     vjp(actual[0].content[0],literal,roots,"multihead literal VJP");
   }
 }
+void check_column_owner(){
+  auto f=fixture("sum",0,at::kDouble);
+  std::vector<col::KVReadRequest> requests(3,f.reads[0]);
+  for(size_t i=0;i<requests.size();++i)requests[i].weights=&f.owners[i];
+  auto descriptors=col::read_many(requests,16*1024*1024);
+  col::RegionalFields sources;std::map<Index,std::vector<Index>> domains;
+  std::vector<Tensor> roots=f.roots;
+  for(Index i=0;i<3;++i){sources[i]=descriptors[i];domains[i]={0,1,2,3,4};
+    for(const auto& [name,value]:descriptors[i]){
+      require(value.storage().unsafeGetStorageImpl()==descriptors[0].at(name).storage().unsafeGetStorageImpl(),
+              "Read published a separate numerical node field");
+      if(value.requires_grad())roots.push_back(value);
+    }
+  }
+  col::RegionalPacking packing(domains);
+  work::packing::reset(true);auto actual=packing.groups[0].pack(sources);auto metrics=work::packing::metrics();work::packing::reset(false);
+  require(metrics.at("packing/projection/column_block_borrow/calls")==static_cast<Index>(descriptors[0].size()),
+          "aligned region did not borrow each actual Read field owner");
+  for(const auto& [name,value]:actual.fields){
+    require(value.storage().unsafeGetStorageImpl()==descriptors[0].at(name).storage().unsafeGetStorageImpl(),
+            "region repacked an aligned owner");
+    std::vector<Tensor> values;for(const auto& fields:descriptors)values.push_back(fields.at(name));
+    auto expected=at::stack(values,1);close(value,expected,"borrowed field values");
+    if(value.requires_grad())vjp((value.select(1,0)-2*value.select(1,1)+value.select(1,2)).square(),
+      (expected.select(1,0)-2*expected.select(1,1)+expected.select(1,2)).square(),roots,"cross-node original roots");
+  }
+  col::RegionalPacking ragged({{0,{0,1,2,3,4}},{1,{0,2,4,6,8}},{2,{1,2,3,5,7}}});
+  for(const auto& group:ragged.groups)if(group.candidates==2){
+    auto packed=group.pack(sources);std::vector<Index> enabled;
+    for(auto node:group.node_ids)enabled.push_back(node!=2);
+    auto support=at::tensor(enabled,at::kLong).to(at::kBool).reshape({static_cast<Index>(group.rows.size()),2});
+    auto result=group.pullback(sources,{{"score",at::zeros_like(packed.fields.at("score"))}},support);
+    require(!result.at(2).at("score").defined(),"missing regional support became connected zero");
+    require(result.at(0).at("score").defined()&&result.at(1).at("score").defined(),"used zero disconnected");
+    require(result.at(0).at("score").storage().unsafeGetStorageImpl()==result.at(1).at("score").storage().unsafeGetStorageImpl(),
+            "regional transpose split its numerical bank by node");
+  }
+  auto owner=at::arange(12,at::kDouble).reshape({6,2});
+  auto a=owner.narrow(0,0,2).detach().set_requires_grad(true),b=owner.narrow(0,2,4).detach().set_requires_grad(true);
+  auto borrowed=col::blocks::concatenate({a,b});
+  auto independent=owner.narrow(0,0,2).detach().set_requires_grad(true);
+  auto bars=torch::autograd::grad({borrowed.sum()},{a,b,independent},{},true,false,true);
+  require(bars[0].defined()&&bars[1].defined()&&!bars[2].defined(),"borrow collapsed independent storage aliases");
+  for(Index kind=0;kind<3;++kind){
+    Tensor x,y;
+    if(kind==0){x=owner.as_strided({0,2},{999,7});y=owner;}
+    else if(kind==1){x=owner.as_strided({1,2},{999,1});y=owner.narrow(0,1,5);}
+    else{x=owner.as_strided({2,0},{999,7});y=owner.as_strided({3,0},{1,17});}
+    x=x.detach().set_requires_grad(true);y=y.detach().set_requires_grad(true);
+    require(x.is_contiguous()&&y.is_contiguous(),"degenerate stride fixture");
+    auto joined=col::blocks::concatenate({x,y}),literal=at::cat({x,y});
+    close(joined,literal,"degenerate contiguous owner");vjp(joined,literal,{x,y},"degenerate owner VJP");
+    {at::NoGradGuard guard;require(!col::blocks::concatenate({x,y}).requires_grad(),"no-grad borrow retained graph");}
+  }
+  {at::NoGradGuard guard;b.add_(1);}
+  bool rejected=false;try{torch::autograd::grad({borrowed.sum()},{a,b},{},false,false,true);}catch(const std::exception&){rejected=true;}
+  require(rejected,"borrowed owner failed original version guard");
+}
 }
 int main(){try{
   at::set_num_threads(1);
   for(auto dtype:{at::kDouble,at::kFloat})for(const auto* memory:{"sum","qry"})for(Index variant=0;variant<7;++variant)check(memory,variant,dtype);
   check("qry",6,at::kDouble,true);
   for(auto dtype:{at::kDouble,at::kFloat})for(Index variant:{0,1})check("qry",variant,dtype,false,true);
-  check_position_guards();check_graph_size();check_multihead();
+  check_position_guards();check_graph_size();check_multihead();check_column_owner();
   std::cout<<"KV tensor boundary: unequal Q/K, Describe candidates, independent roots, aliases, versions and direct Full passed\n";return 0;
 }catch(const std::exception& e){std::cerr<<e.what()<<'\n';return 1;}}

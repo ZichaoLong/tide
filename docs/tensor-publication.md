@@ -45,3 +45,15 @@ one tensor `select` per returned row. This composes the same linear view map,
 including partial cotangents, with one transpose node. Native Full and Describe
 and Python/native packed KV memory use this rule; it does not eliminate all row
 objects or claim a fixed kernel count for arbitrary feedback graphs.
+
+The host KV tensor boundary also publishes one compact actual-row owner per
+field across its node group. Public node columns are independent readonly roots
+over that storage. The regional consumer can borrow a proven contiguous span
+through an explicit linear VJP, avoiding publication by node followed by numerical
+stack/cat. Borrowing must connect the supplied roots rather than the storage base;
+equal values, overlapping views and reordered roots do not prove a contiguous
+span. Ragged candidate incidence still needs its actual gather. The regional
+transpose similarly owns one field bank and returns supported node slices.
+See [the tensor window contract](weighted-tensor-windows.md) and
+`test_column_blocks`; this does not merge a causally related state and final
+output into independent sibling roots or change the exact raw-state codec.

@@ -6,6 +6,7 @@ This boundary declares first order only. No scalar/reference replay is used.
 """
 from dataclasses import dataclass
 import torch
+from .column_blocks import FieldBlock, concatenate
 
 
 @dataclass(frozen=True)
@@ -90,10 +91,15 @@ class _Kernel(torch.autograd.Function):
         register_private_graph("tensor_kernel", ctx.fields)
         ctx.deps = [_dependencies(y, leaves) for y in ctx.fields]
         ctx.save_for_backward(*originals)
+        # One actual-row owner per field. Independent node roots are only
+        # views; the next stage can borrow the complete owner without repacking.
+        lengths = tuple(len(index) for index in kernel.output_indices)
+        publish = torch.cat(ctx.publish)
+        blocks = [FieldBlock.publish(y, publish, lengths).columns() for y in ctx.fields]
         outputs, disconnected = [], []
         for node, index in enumerate(kernel.output_indices):
             for f, y in enumerate(ctx.fields):
-                value = y[node].flatten(0, 1).index_select(0, index)
+                value = blocks[f][node]
                 outputs.append(value)
                 if not any(roles[r].values[node].requires_grad for r in ctx.deps[f]):
                     disconnected.append(value)
@@ -114,7 +120,7 @@ class _Kernel(torch.autograd.Function):
                 continue
             bar = output.new_zeros(output.shape)  # contiguous even for transposed formula fields
             indices = torch.cat([ctx.publish[g] for g in used])
-            values = torch.cat([bars[g*width+f] for g in used])
+            values = concatenate([bars[g*width+f] for g in used])
             bar.flatten(0, 2).index_copy_(0, indices, values)
             for g in used:
                 for r in ctx.deps[f]:

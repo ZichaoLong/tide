@@ -203,6 +203,9 @@ KV §3–4及分配§3的[整组数值边界](kv-tensor-kernels.md)由
 `kv_tensor_layout/kv_tensor_formula/tensor_describe/tensor_kernel`维护布局、数学与角色VJP。
 `test_kv_tensor_batches`核对不同Q/K、三个Read快照、选择后的Full及真实padding预算；
 `test_tensor_kernel`以独立标量/映射矩阵检查alias、None/零、冻结、版本和私图粒度。
+实际Read/Describe→区域字段由`column_blocks.FieldBlock`/C++ `blocks::FieldBlock`一次发布，
+连续storage借用以独立列根的线性VJP连接；不改变数学快照、区域耦合或raw解码。
+`test_column_blocks`及SDK `weighted-kv-tensor`独立检查跨节点多项式、真实借用/必要gather、空列与None/零。
 这允许每个数学作用通过实际字段解码对应，不要求逐作用Tensor或逐节点算子调用。
 
 新[resident块契约](resident-block-execution.md)映射Settle完成依赖/实际发送存在性到

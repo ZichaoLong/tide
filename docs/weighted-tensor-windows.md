@@ -93,6 +93,24 @@ Python 的区域 rank 顺序和 C++ 的独立 region-order 调度都由实际候
 不同成员组的反向携带结构行支持，并按分配的有限分支调用声明VJP；未共行的独立节点/字段保持None，
 被使用的零伴随保持连接。`regional_packing`拥有布局，`regional_groups`拥有组合/反向；
 相同成员的组及无梯度执行保留普通张量路径，避免给密集FC引入不必要的私有图。
+
+KV张量Read/Describe与区域之间使用实际字段owner：`column_blocks.FieldBlock`和
+`weighted_column_blocks.h`把本组真实行每字段紧凑发布一次，再给节点返回只读根视图。
+字段owner包含数值张量及整数行段，节点根仍独立；B/L不拆成逐事件可求导对象。
+区域装配验证各输入的真实storage、dtype/device、stride、offset和行段连续性。
+完整对齐时直接借owner并reshape/transpose；不齐候选只做实际incidence要求的gather，
+不先复制每个节点再cat。不同owner、重排或重叠根按真实布局重新装配，不能因值相等就共享。
+区域VJP每字段建立一次紧凑伴随bank，通过整数incidence回填，再返回节点根视图；
+无结构作用的节点保持None，有作用的零伴随保持连接。
+
+借用的线性VJP接回所有实际节点字段根，并保存其版本；直接返回storage base会绕过这些根，
+不属于合法实现。它只负责存储映射，跨节点区域求解和有限分支VJP仍由`regional_groups`拥有，
+不套用局部KV核的节点独立假设。原独立Tensor字段、完整返回及raw checkpoint编码保持；
+软件所有权沿用[readonly-view-v1](tensor-publication.md)，无需消费者更改读取或一阶梯度调用。
+`test_column_blocks`检查真实Read→region在对齐域无数值cat/stack/gather、独立根、别名、
+零/缺席及版本；native `tidegraph-kv-tensor-check`含对应storage与跨节点根见证。
+这些源码/布局事实不自动构成端到端性能或设备资格；实际device边界仍遵循显式传输契约。
+
 固定单位transport仍逐项检查`requires_grad`、逐元素检查等于1；数值比较按device/dtype及
 临时存储预算合并，不逐个scale回主机，也不缓存此前窗口的数值结论。
 已对齐的消息行直接作为聚合操作数，完整区域行直接交接描述/控制，不再先补零、
