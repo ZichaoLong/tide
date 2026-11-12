@@ -71,8 +71,14 @@ class StaticKV:
             for kind, source, label in atoms:
                 transform = agg.transforms[str(label)]
                 # Same input + actual aliased parameters allows shared compute;
-                # equal numeric values alone never do.
-                key = (kind, source, tuple(id(p) for p in transform.parameters()), agg.alpha, agg.epsilon)
+                # every ordered role matters, including repeated aliases.
+                # Module.parameters() removes duplicates and can conflate
+                # different low-rank slot bindings with the same root set.
+                roles = ("a", "b", "embedding")
+                if hasattr(transform, "a_left"):
+                    roles += ("a_left", "a_right", "b_left", "b_right")
+                slots_identity = tuple(id(getattr(transform, name)) for name in roles)
+                key = (kind, source, slots_identity, agg.alpha, agg.epsilon)
                 if key not in slots:
                     slots[key] = len(slots)
                     transforms.append((transform, agg.alpha, agg.epsilon))

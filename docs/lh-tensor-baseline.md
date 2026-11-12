@@ -19,7 +19,9 @@ content_stats key、fixed/context cat区域控制、regional_total/quad。对应
 
 区域间保持 `[node,B,L,…]` 张量。静态连接编译为每前驱区域一次 gather、源变换与 incidence
 矩阵归约；重复边形成重复计数，不由 SrcClass 合并原子。同一实际输入且变换参数身份相同才
-复用计算。不同节点矩阵使用 bmm，相同矩阵使用共享 GEMM；参数stack的真实成本纳入前向。
+复用计算。身份包含完整有序参数角色与重复别名，不能使用去重后的参数集合代替；
+`test_lh_source_slots`用相同前向值但不同独立梯度的低秩槽反例核验。
+不同节点矩阵使用 bmm，相同矩阵使用共享 GEMM；参数stack的真实成本纳入前向。
 更换参数owner、移动设备或dtype后须重新构造 StaticKV。
 
 直接候选显式采用 **dense Full 后 mask**。candidate、selected Full、消息、物理 Full行数
