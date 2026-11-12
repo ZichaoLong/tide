@@ -190,3 +190,12 @@
 ## 张量窗口跨owner的语义边界
 
 [详细观察](performance-lessons-state-devices.md#张量窗口跨owner的语义边界)。
+
+## 相容数值块与设备控制图的两个尺度
+
+[6011d599固定证据](evidence/tensor-kernels-20261112.md)把KV Read/Describe/Full从逐节点小算术
+改为G×B×Q/K算术，共享真实矩阵、QK并保留独立伴随。FC16 NPU训练到0.3636秒，
+但LH仍有逐接收节点装配和模块边界往返；局部成功不能覆盖这些另一层级的成本。
+另一负例：resident分组GEMM独立组件通过，bank×logR备选体组合后在录入阶段触发
+EE1019。数值workspace减少不等于控制任务数减少；静态图的循环体复用与数据分组同样需要
+小型真实组合验证。后继设备循环及optimizer计费源码未由该报告认证。

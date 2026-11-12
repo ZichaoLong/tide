@@ -18,6 +18,7 @@
 
 | 调查问题 | Git内材料和入口 | 原证据与范围 |
 | --- | --- | --- |
+| KV整组算术与resident组合录入任务过多 | [数值边界](kv-tensor-kernels.md)、[bank GEMM](resident-bank-gemm.md)、`test_tensor_kernel/test_kv_tensor_batches`、SDK `weighted-kv-tensor`和`block-kv-messages` | [6011d599资格/44点成本/四条profile](evidence/tensor-kernels-20261112.md)；9resident组件通过不代表第10组合通过；保留EE1019厂商摘录和依赖停止事实 |
 | FC4/FC16默认、直接公式与Transformer的巨大差距 | [有限suite](../scripts/run_fc_comparison.py)、[任务投影检查](../scripts/check_fc_comparison.py)、[通用配对与附件](../scripts/cost_comparison.py)、`test_fc_comparison_diagnostics/test_cost_comparison` | [前置调查](evidence/fc-three-layer-comparison-20261111.md)、[查询块实施与复测](evidence/kv-query-blocks-20261111.md)；同材料FP64诊断保留原FP32失败，公开根/任务投影/成本分列。manifest不绑定旧运行目录，profile与完整计时各有身份 |
 | 接口/文件/函数审阅、包身份与插件返回边界 | [当前生产边界与hash范围](evidence/p1p6-boundary-review-20261112.md)、[早期源码清单](evidence/implementation-audit-20261110.md)、[清单工具](../scripts/review_inventory.py)、`test_session_restore/test_task_observations/test_package_content` | 分开实际审阅、自审和固定资格，不相加重叠覆盖；按[维护影响表](core5-study.md#修改时同步维护什么)补当前改动层，不要求重审全部历史工具 |
 | 默认张量路径、三客户端选择及SDK旧计数误判 | [窗口契约](weighted-tensor-windows.md)、`test_window_execution/test_experiment_columns/test_standalone_columns`、[SDK资格入口](../scripts/check_query_sdk.py) | 检查实际interface/schedule/roots/fallback；outputs列任务与complete事件根分别资格；[当前FC/LH/规模证据](core5-study.md#当前张量路径与结果)不继承旧default成本 |

@@ -1,5 +1,10 @@
 # 历史验证与测量证据
 
+[KV整组数值边界44点成本与资格（2026-11-12）](tensor-kernels-20261112.md)：固定6011d599；
+FC16默认native训练CPU/NPU为1.1729/0.3636秒，8个安装三AdamW/新进程恢复通过。
+CPU272通过/9原xfail/4旧计数断言失败；resident9组件通过，第10项组合录入EE1019，依赖资格停止。
+33文件静态审阅及四条独立profile与吞吐分列。
+
 [Resident公共块训练与规模边界（2026-11-12）](resident-block-public-20261112.md)：固定a3c，
 KV sum/qry公共Model及实验默认接入；CPU70、两套runtime构建、native6/SDK9设备进程及
 standalone两项训练/新进程archive检查通过。原SDK头路径失败与后继通过分列；FC16查询预留和
