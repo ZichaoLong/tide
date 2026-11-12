@@ -42,7 +42,18 @@ BlockSettleAdjoints BlockSettleSession::backward(const std::vector<BlockSettleFl
       if(!found.count(role)&&role.rfind("source.",0)==0&&!window.regions[r].aggregate.parameters)continue;
       const auto& root=found.at(role);if(!root.value.defined()||root.value.size(0)!=int64_t(names.size()))throw std::logic_error("block role gradient extent differs");
       for(size_t bank=0;bank<names.size();++bank){auto value=block_parameter_view(role,root.value[bank],s.registry.value(names[bank]).sizes());
-        if(!value.is_contiguous()){auto contiguous=at::zeros(value.sizes(),value.options());program->copy(contiguous,value);value=contiguous;}
+        if(!value.is_contiguous()){
+          // This is a view of a padded source bank produced only when reverse
+          // runs. A host contiguous() would read it before computation; the
+          // control copy also requires contiguous buffers. Gather the static
+          // rectangular coordinates on the device after the producer.
+          const auto bank_value=root.value[bank];
+          if(!bank_value.is_contiguous())throw std::logic_error("block parameter bank row is not contiguous");
+          auto coordinates=at::arange(bank_value.numel(),at::kLong).reshape(bank_value.sizes());
+          auto indices=block_parameter_view(role,coordinates,value.sizes()).contiguous().reshape({-1}).to(value.device());
+          auto contiguous=at::zeros(value.sizes(),value.options());
+          program->index_select(bank_value.reshape({-1}),0,indices,contiguous.reshape({-1}));value=contiguous;
+        }
         parts.push_back({names[bank],value,root.connected[bank]});used.insert(s.registry.canonical_name(names[bank]));}}
   }
   // Keep the optimizer's complete canonical layout. Unused owners have an
