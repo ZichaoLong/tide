@@ -1,3 +1,12 @@
+# 当前查看：v9训练已全部终态
+
+2026-11-13：58条主轨迹和12条延伸完成，当前无本批活动服务或后代。
+只读全终点审阅：`python scripts/review_direct_v9_results.py`；`review_v9_progress.py`仅含主58条。
+[总报告](direct-v9-results.md)与[逐run/Lens/父SHA](../evidence/direct-v9-results.json)为当前交接。
+延伸精确前缀为`tl-v9-recover-extend-`，分别属于TL-SCALE-v9（HB88/TF256M）和TL-ACTIVITY-v9（R64 64M）。
+主轨迹含`tl-v9-main-`及`tl-v9-recover-main-`，都已终态；不能由旧中断projection的recording推断进程存活。
+原48h截止没有重置，未来追加训练需要新的有限表；以下保留实际启动/停止/恢复方法。
+
 # v9操作与运行身份
 
 2026-11-12故障恢复补充：原controller保留failed（quota软告警误判），新`v9-recovery-controller`继续同批。

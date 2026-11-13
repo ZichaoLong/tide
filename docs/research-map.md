@@ -1,19 +1,20 @@
-2026-11-12下午：主50完成/8运行，原控制器故障与恢复分列；HB64M/FC匹配TF及部分入口树已有[限定中期结果](studies/direct-v9-progress-20261112-pm.md)。全批与独立确认结果槽仍awaiting，不由恢复或退出码生成支持。
+# 当前图：v9训练终态与有范围的联合目标结果
 
-v9最新中期状态及限定结论见[11月12日汇报](studies/direct-v9-interim-20261112.md)：主36完成/8运行/14未启动，筛选72完成；入口树端点与独立确认仍待齐备，AICPU/AICore采样与语言证据分列。
-
-当前执行依据为[v9有限执行表](studies/language-scale-activity-v9.md)，用户已授权启动。数据/容量/依赖深度、低活跃和入口树共同推进；允许稠密遮罩。执行状态见[STATUS](STATUS.md)，科学结论需独立审阅。以下历史的“未提交/待对齐”不再限制本批已授权工作。
-
-# 当前图：direct-v8覆盖与校准Transformer
+2026-11-13：[终态审阅](studies/direct-v9-results.md)及[固定证据](evidence/direct-v9-results.json)已核对。
+四个v9研究组执行completed，四个结果节点scoped仅表示所测validation/机制的审阅结论：
+HB容量/曝光有收益但TF仍领先，约3%活动持续学习但有质量代价，入口树减少接收但没有质量收益。
+新confirmation/test仍未检查，严格数值失败保留；scoped不等于完整目标或独立正确性通过。
+图保留原失败/外部中断和未启动的旧提交身份，新增恢复/延伸谱系；不把同一轨迹多个阶段计为新seed。
+所有v9服务终态无后代，Lens用于既有曲线查看，图不自动轮询或提交任务。
 
 2026-11-12存储更新：[历史检查点清理](studies/checkpoint-retirement-20261112.md)已完成。
 多数已结束筛选的权重已退役，关键对照和失败复现保留；原配置、曲线、验证、结果与科学关系保持。
 图中历史“恢复通过”指当时的检查结果，不能推断全部旧checkpoint字节仍可取得。
 
 长期目标见[研究章程](RESEARCH_CHARTER.md)。图中v9有数据/容量、活跃比例、配方/机制及入口树四组，
-关联[已授权执行表](studies/language-scale-activity-v9.md)、实际配置/运行和校准；科学支持仍待审阅。
+关联[已授权执行表](studies/language-scale-activity-v9.md)、实际配置/运行和校准；四份validation限定结论已审阅，独立确认未测。
 稠密遮罩可继续作为主训练实现；逻辑活动、实际计算、硬件效率分列，真稀疏不是这些计划的统一前提。
-最新预算反馈为统一48h墙钟、无NPU卡时/CPU核时上限；活动及入口树对齐已完成，12个NPU worker已启动有限筛选。
+最新预算反馈为统一48h墙钟、无NPU卡时/CPU核时上限；活动及入口树执行现已终态，原最多12个NPU worker及有限表保持历史身份。
 [HB接收与更新说明](studies/hb-low-activity-alignment.md)及[小型机制证据](evidence/hb-activity-alignment.json)
 说明现有部分接收与三个比例，R32/R64及入口树已有固定配置，实际状态按控制器/运行证据更新，CPU固定路由不升级成学习结果。
 
@@ -26,7 +27,7 @@ v9最新中期状态及限定结论见[11月12日汇报](studies/direct-v9-inter
 
 # 研究图的读法
 
-本图表达知识与决策，Lens查看运行和指标；项目记录为权威。已完成设计见[v8广覆盖表](studies/direct-coverage-v8.md)，下一批建议见[v9阶梯](studies/language-scale-activity-v9-proposal.md)，实际交接见[STATUS](STATUS.md)。图不实时轮询作业或Lens。
+本图表达知识与决策，Lens查看运行和指标；项目记录为权威。v8广覆盖和v9阶梯现均有终态审阅，后继待办见[ROADMAP](ROADMAP.md)，实际交接见[STATUS](STATUS.md)。图不实时轮询作业或Lens。
 
 2026-11-11：v6全部200配置已终态，图中更新执行状态，科学结果槽不随退出码自动升级。新增TL-POSITIVE-v6及限定结果：实际三项正支持失败分为可表示值提前归零与真实范围下溢；聚合、Describe cast和Bern VJP另有静默局部见证。详见[补证报告](studies/positive-path-audit-v6-results.md)。用户已对齐并提交[TL-REQ-005](requests/TL-REQ-005.md)，待基座交付及下游验收，尚未修复。
 

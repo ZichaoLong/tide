@@ -133,3 +133,12 @@
   This retirement is terminal: 74.7565GiB released, 1,130 files retired and 76 exact
   duplicates hardlinked; selected weights and historical evidence verified intact.
   Do not rerun the executed manifest or assume retired screening weights still exist.
+
+- V9 training is now terminal: 58 main trajectories and 12 inherited extensions completed;
+  all services have no live descendants. See `docs/studies/direct-v9-results.md` and its
+  read-only auditor `scripts/review_direct_v9_results.py`. The old progress script covers
+  main trajectories only. Reviewed validation findings do not complete independent
+  confirmation: the fresh 262K split is still unevaluated and test remains sealed.
+  Preserve the four original interruptions, strict failures, fixed source and all v9
+  checkpoints. No automatic next training batch; retain the scoped negative inlet/depth
+  evidence alongside capacity/exposure gains.

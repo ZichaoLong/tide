@@ -1,4 +1,36 @@
-# 当前交接：v9持续运行；历史检查点清理完成
+# 当前交接：v9训练全部终态；独立确认待完成
+
+2026-11-13 14:16北京时间复核：[总报告](studies/direct-v9-results.md) ·
+[规模/曝光](studies/direct-v9-scale-results.md) · [低活动](studies/direct-v9-activity-results.md) ·
+[入口树](studies/direct-v9-inlet-results.md) · [检查/成本](studies/direct-v9-controls-results.md) ·
+[逐轨迹、父SHA、Lens及文档配对证据](evidence/direct-v9-results.json)。
+
+58/58主轨迹和12/12条件延伸完成，19项batch校准和72项学习筛选完成；目前无运行/排队或存活后代。
+控制器11月13日10:21:22完成，原共同截止21:36:26保持。72个服务65完成/3历史失败/4历史停止；
+142条完成训练=72筛选+58主+12延伸，另保留4次原budget_truncated。恢复和延伸不计独立seed。
+四次中断来自quota软告警误判；原失败不覆盖，没有新增模型执行失败。
+
+双seedvalidation：HB pooled40/88/184在64M为3.4179/3.2596/3.1433，quad为3.4767/3.3518/3.2240；
+浅宽约50M HB最好3.0112，近参数TF2.9457。HB88 pooled/quad与TF在256M为3.0541/3.1366/2.6804，
+均继续改善但与TF差距未缩小。容量/深度同时变化，不能归因于纯深度或普遍scaling。
+R64 q3在64M NLL4.4996，Full3.45%、接收16.61%；同形状pooled4.1092、Bern4.1150。
+R32低活动h2→h3质量变差4.6423→4.7773；树两组均减少接收但NLL变差，R64含边界Full5.22%。
+物理Full仍全部稠密遮罩，好的质量和最低活动未在同一配置结合。独立262K确认集未测，test仍密封。
+
+训练源码6e7bd49e、恢复控制器1809009a、数学0770593、安装74e7bbd保持；没有采用基座新优化。
+70个终点完整validation/有限生成、142条完成训练Lens读回均通过；原严格数值失败/阈值保持。
+三步新进程检查和16条实际恢复/延伸父SHA核对通过，不认证完整长轨迹独立精确重放或公共continuation。
+本批终态磁盘57.90GiB/64GiB；账号269.61/800GiB、硬余量530.39GiB。历史74.76GiB清理另记。
+成本为记录的共享设备租期302.89卡时、服务线程配额1267.76核时，不等于实际忙碌算时。
+
+只读：`python scripts/review_direct_v9_results.py`；原`review_v9_progress.py`仅汇总58主轨迹，不含12延伸。
+Lens项目tide-learning-lab，TL-SCALE-v9/TL-ACTIVITY-v9/TL-INLET-v9/TL-CALIBRATION-v9；
+延伸run前缀tl-v9-recover-extend-，精确投影见证据，私有入口仅.local/LENS.md。
+没有自动下一批。建议先冻结关键checkpoint做独立确认，再将浅宽质量参照与低活动联合；
+保留入口树/加深的负面证据。TL-REQ-006待上游定位/交付，性能不作为继续质量研究前置门槛。
+以下保留历史快照，不能用旧running字段判断当前任务。
+
+# 历史交接：11月12日存储清理与运行中快照
 
 2026-11-12 20:20存储交接：[清理报告与保留范围](studies/checkpoint-retirement-20261112.md) ·
 [逐文件执行凭据](evidence/checkpoint-retirement-execution-20261112.json)。已释放74.7565GiB，
