@@ -48,6 +48,13 @@ def admission(model,c,device,out):
     else:
         reference=make_model(c,torch.device('cpu'))
         reference.load_state_dict(cpu_tree(model.state_dict()))
+        # A token-derived activity schedule is not a parameter tensor. Loading
+        # weights alone left the CPU reference at final k/tau while update()
+        # had already put the device model in warmup. Align the same workload.
+        # Frozen v10 main jobs retain their original check and failure records;
+        # this correction applies only to new checks, never active inputs.
+        if hasattr(reference,'set_progress'):reference.set_progress(model.progress)
+        checks['reference_progress']=dict(tokens=getattr(model,'progress',None),aligned=True)
         model.zero_grad(set_to_none=True);reference.zero_grad(set_to_none=True)
         x=b['input_ids'];y=model(x);yr=reference(x.cpu())
         y.sum().backward();yr.sum().backward()

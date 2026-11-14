@@ -10,6 +10,20 @@ from tide_lab.campaign_data import Corpus
 
 
 class V10Contracts(unittest.TestCase):
+    def test_admission_compares_same_activity_schedule(self):
+        import torch
+        from tide_lab.v10_config import hb
+        from tide_lab.campaign_runtime import make_model
+        from scripts.campaign_stage import admission
+        torch.set_num_threads(2)
+        c=hb('warmup-admission',32,8,.1,micro=2)
+        model=make_model(c,torch.device('cpu'))
+        with tempfile.TemporaryDirectory() as temp:
+            result=admission(model,c,torch.device('cpu'),Path(temp))
+        self.assertEqual(result['checks']['forward']['state'],'passed')
+        self.assertTrue(all(v['state']=='passed' for v in result['checks']['parameter_vjp'].values()))
+        self.assertEqual(result['checks']['reference_progress']['tokens'],0)
+
     def test_extension_requires_whole_group_and_does_not_read_quality(self):
         groups=[dict(id='pair',ids=['a','b'])]
         rows=[dict(id=i,eligible=True,training_seconds=1000,nll=n) for i,n in [('a',9.),('b',2.)]]
