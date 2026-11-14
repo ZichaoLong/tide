@@ -168,7 +168,13 @@ def main(a):
                               failure_progress=before,failed_batch_ids=ids)
                 summary=gradients();atomic_json(a.output/'gradients.json',summary)
                 result['gradient_summary']={k:v for k,v in summary.items() if k!='parameters'}
-                tensor_save(a.output/'failure-checkpoint.pt',checkpoint(model,opt,before,ident,device))
+                saved_progress=copy.deepcopy(before)
+                if a.mode!='replay':
+                    # A failed-batch input probe uses OLD weights. Do not mint
+                    # an apparently resumable formal trajectory at newer tokens.
+                    saved_progress.update(probe=True,diagnostic_not_formal_resume=True,
+                        weights_progress=result['checkpoint_progress'],input_progress=before)
+                tensor_save(a.output/'failure-checkpoint.pt',checkpoint(model,opt,saved_progress,ident,device))
                 tensor_save(a.output/'failure-batches.pt',cpu_tree(batches))
                 # Persist proof even if deeper instrumentation reaches its budget.
                 atomic_json(a.output/'result.json',result)
