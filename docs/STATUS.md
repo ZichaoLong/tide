@@ -1,3 +1,14 @@
+# 当前交接：v10局部VJP修复已授权，正在冻结及提交
+
+2026-11-15用户批准[修复执行表](studies/direct-v10-repair.md)。生产路径仅新增显式ordered-v1聚合反向；
+13项原路径/局部回归、7项新增及提交契约检查、2项状态分类检查通过（含重复局部检查）。
+三条pool从已核对SHA的诊断失败前快照迁移；新进程完整batch恢复及64更新先导通过后，自动续训至原128Mi。
+新配置仅变更VJP选项，不改原48h截止、global64/physical8或16、LR/数据和种子；不改变原控制器的256Mi决定。
+尚未完成新源码NPU资格或提交；后续实际交接会替换本段。原固定作业不修改，原三项failed保留。
+只读修复入口`python scripts/review_v10_repair.py`，原20条用`python scripts/review_direct_v10.py`。
+
+以下为历史交接快照。
+
 # 当前交接：三项pool失败已定位，局部VJP候选通过；原训练保持原身份
 
 2026-11-15 04:36北京时间附近核对。[完整定位报告](studies/direct-v10-gradient-results.md) ·

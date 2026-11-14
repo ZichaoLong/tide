@@ -12,12 +12,18 @@ from torch.utils.checkpoint import checkpoint
 from .direct_semantic import DirectSemanticLM
 from .direct_semantic_ops import norm,FLOORS,positive_exp
 from .special_attention import weighted_attention
+from .ordered_divide import ordered_divide
 
 
 class SpecializedSemanticLM(DirectSemanticLM):
     def __init__(self,plan,seed=11,vocab_size=4096,*,attention='math',ffn_checkpoint=False,
-                 aggregation='neighbors',activity_controller=None):
+                 aggregation='neighbors',activity_controller=None,aggregate_vjp='native'):
         super().__init__(plan,seed,vocab_size)
+        if aggregate_vjp not in ('native','ordered-v1'):
+            raise ValueError('unknown aggregate VJP policy')
+        if aggregate_vjp=='ordered-v1' and aggregation!='neighbors':
+            raise ValueError('ordered-v1 is qualified only for static neighbors aggregation')
+        self.aggregate_vjp=aggregate_vjp
         self.attention=attention;self.ffn_checkpoint=ffn_checkpoint;self.aggregation=aggregation
         self._decay_cache={};self.role_counts=[];self.slot_degrees=[]
         self.activity_controller=dict(activity_controller or {})
@@ -95,7 +101,9 @@ class SpecializedSemanticLM(DirectSemanticLM):
         idx=getattr(self,'_neighbor_'+str(j));rnodes=len(self.members[j]);degree=self.slot_degrees[j]
         received=w.index_select(0,idx).reshape(rnodes,degree,b,l).sum(1)
         value=weighted.index_select(0,idx).reshape(rnodes,degree,b,l,d).sum(1)
-        return value/torch.where(received>0,received,torch.ones_like(received)).unsqueeze(-1),received
+        denominator=torch.where(received>0,received,torch.ones_like(received)).unsqueeze(-1)
+        value=(ordered_divide(value,denominator) if self.aggregate_vjp=='ordered-v1' else value/denominator)
+        return value,received
 
     def kv(self,j,u,r):
         m=self.memories[j];s=m.s;n,b,l,d=u.shape;stride=self.plan['stride']

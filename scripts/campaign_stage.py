@@ -124,7 +124,7 @@ def train(a,c,model,opt,device,ident,metrics,result):
     if micro>global_batch:raise ValueError('physical batch exceeds declared independent-sample global batch')
     result.update(axes=dict(execution='running',strict_numerical='see independent admission; finite exploration',
         discrete_semantics=checked['axes']['discrete_semantics'],mechanisms=checked['axes']['mechanisms'],
-        recovery='passed_same_stack_three_micro_updates; long_trajectory_replay_unchecked',learning='running'),
+        recovery='passed: '+recovered.get('scope','same_stack_three_micro_updates; long_trajectory_replay_unchecked'),learning='running'),
         global_batch=global_batch,microbatch=micro,accumulation=(global_batch+micro-1)//micro)
     atomic_json(a.output/'result.json',result)
     def save(label='latest'):

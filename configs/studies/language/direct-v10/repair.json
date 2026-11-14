@@ -1,0 +1,76 @@
+{
+  "schema": "tide-v10-repair-manifest-v1",
+  "parent_source": ".local/source-v10-execution",
+  "parent_commit": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+  "deadline_epoch": 1794837093.6220245,
+  "target_tokens": 134217728,
+  "repair_disk_ceiling_gib": 24,
+  "change": {
+    "implementation.aggregate_vjp": "ordered-v1"
+  },
+  "cases": [
+    {
+      "id": "hb-d128-r64-pool-s11",
+      "inputs": {
+        "config": {
+          "path": ".local/source-v10-execution/configs/studies/language/direct-v10/table/main/hb-d128-r64-pool-s11.json",
+          "sha256": "c882bf3cb746f984b6e5bd33257b91afa9a39c5cc4505b4abf9b618e5fa7869e"
+        },
+        "checkpoint": {
+          "path": "runs/v10-diag-hb-d128-r64-pool-s11/failure-checkpoint.pt",
+          "sha256": "476f1ce19a0b30e3d3f781ac07df4250221d4d8b1a688a83893f7dc057ee48cd"
+        },
+        "diagnosis": {
+          "path": "runs/v10-diag-hb-d128-r64-pool-s11/result.json",
+          "sha256": "c63e2ad3e4ca0f623b631d9cc9e15ebdf75a5717eafa06bd389384bb16e367c9"
+        },
+        "witness": {
+          "path": "runs/v10-diag-hb-d128-r64-pool-s11/operator-witness.pt",
+          "sha256": "cc0204149da518394774424c9817e2a3801e0354b0b204c783c3cf34c15d1160"
+        }
+      }
+    },
+    {
+      "id": "hb-d128-r64-pool-s22",
+      "inputs": {
+        "config": {
+          "path": ".local/source-v10-execution/configs/studies/language/direct-v10/table/main/hb-d128-r64-pool-s22.json",
+          "sha256": "c887bfcfcd6480fe5d1c2318c1acddf0b607834e5f11e9541251ce33bf5f9115"
+        },
+        "checkpoint": {
+          "path": "runs/v10-diag-hb-d128-r64-pool-s22/failure-checkpoint.pt",
+          "sha256": "c01b45f434a03c780b0486a6e1b018d967c3db2ba7035373304f5c8346a0331e"
+        },
+        "diagnosis": {
+          "path": "runs/v10-diag-hb-d128-r64-pool-s22/result.json",
+          "sha256": "d0ed1a7d298a6469232e188fd92f146d63f3f94177534ff42580bc53094f3c51"
+        },
+        "witness": {
+          "path": "runs/v10-diag-hb-d128-r64-pool-s22/operator-witness.pt",
+          "sha256": "bbbb9a6ef259a791f694b0c2d4b26ec3f6bad61a6bfc25983a51bacb6d414e6f"
+        }
+      }
+    },
+    {
+      "id": "hb-d128-r28-pool-s22",
+      "inputs": {
+        "config": {
+          "path": ".local/source-v10-execution/configs/studies/language/direct-v10/table/main/hb-d128-r28-pool-s22.json",
+          "sha256": "e68e99c094df56933942d9573d8dca60c039cc2da95c71340329e472b89dafba"
+        },
+        "checkpoint": {
+          "path": "runs/v10-diag-hb-d128-r28-pool-s22/failure-checkpoint.pt",
+          "sha256": "43ef640339e9d7e9ee47b37480a3422218f6976e44da889b77d84b109783f7fc"
+        },
+        "diagnosis": {
+          "path": "runs/v10-diag-hb-d128-r28-pool-s22/result.json",
+          "sha256": "7df15261f65acb8c68f318bf4dbf5f2a21379f5c5f4db9a440f8d5fd5a0a86a7"
+        },
+        "witness": {
+          "path": "runs/v10-diag-hb-d128-r28-pool-s22/operator-witness.pt",
+          "sha256": "415f27da48f9b8ac903fdcce626054c54df20d034ce5592bbc49cc20e2b46834"
+        }
+      }
+    }
+  ]
+}

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Independent local VJP probe, not a change to any training implementation."""
+"""Independent reference check of the explicitly selected production quotient VJP."""
 import argparse
 import json
 import math
@@ -10,23 +10,7 @@ sys.path.insert(0,str(Path(__file__).resolve().parents[1]))
 import torch
 from tide_lab.records import atomic_json,digest,now
 from tide_lab.train import runtime,installed_identity,source_identity
-
-
-class OrderedDivide(torch.autograd.Function):
-    """Same division forward; multiply incoming VJP before second division.
-
-    Diagnostic first-order candidate only. It does not clip, replace nonfinite
-    gradients, change support, or claim all magnitudes/higher derivatives safe.
-    """
-    @staticmethod
-    def forward(ctx,a,b):
-        y=a/b;ctx.save_for_backward(y,b);ctx.a_shape=a.shape;ctx.b_shape=b.shape
-        return y
-
-    @staticmethod
-    def backward(ctx,g):
-        y,b=ctx.saved_tensors
-        return (g/b).sum_to_size(ctx.a_shape),(-(g*y)/b).sum_to_size(ctx.b_shape)
+from tide_lab.ordered_divide import OrderedDivide
 
 
 def report(x):

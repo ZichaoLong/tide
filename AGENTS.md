@@ -144,3 +144,11 @@
   evidence alongside capacity/exposure gains.
 
 - The latest 2026-11-14 approval authorizes `docs/studies/language-capacity-activity-v10.md`: bounded specialized direct implementation optimization followed by capacity/exposure comparisons at about10%/3% activity and matched small dense controls. Maximum200M parameters, one shared48h deadline (first2–4h optimization), no aggregate compute caps;64GiB new disk target/96GiB ceiling and at least200GiB hard-quota headroom. Freeze new source/inputs; preserve v9 and all strict failures. No1G, broader candidate sweep or automatic additional depth.
+
+- The 2026-11-15 approval authorizes `docs/studies/direct-v10-repair.md`: explicit
+  new-source ordered quotient VJP, scoped regression, trained-state fresh-process
+  recovery and 64-update pilots, then the three failed pool controls to their
+  original 128Mi endpoints and predeclared confirmation. Reconstructed pre-failure
+  parents carry explicit ancestry; old failures/source remain unchanged. Keep the
+  original 48h deadline and global 12-slot policy, 24GiB repair-only disk ceiling;
+  no automatic repair extensions or changes to the original controller's decisions.

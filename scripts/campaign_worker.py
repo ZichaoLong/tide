@@ -28,11 +28,11 @@ class Worker:
         self.stopped=True
         if self.child and self.child.poll() is None:os.killpg(self.child.pid,sig)
 
-    def stage(self,case,name,action,cap,extra=(),record=False):
+    def stage(self,case,name,action,cap,extra=(),record=False,script='scripts/campaign_stage.py'):
         out=Path(case['output'])/name;cap=min(cap,self.a.deadline_epoch-time.time()-30)
         if cap<=30 or self.stopped:return None
         if action=='train':extra=[*extra,*case.get('train_arguments',[])]
-        argv=[sys.executable,'scripts/campaign_stage.py',action,'--config',case['config'],
+        argv=[sys.executable,script,*([action] if action else []),'--config',case['config'],
             '--data',str(self.a.data),'--output',str(out),'--deadline-epoch',str(min(self.a.deadline_epoch,time.time()+cap)),*map(str,extra)]
         entry=dict(name=name,action=action,state='running',argv=argv,output=str(out),started_at=now(),cap_seconds=cap)
         self.state['cases'][-1]['stages'].append(entry);self.publish();started=time.monotonic()
@@ -42,6 +42,7 @@ class Worker:
             entry['process_group']=self.child.pid;self.publish()
             try:
                 while self.child.poll() is None:
+                    if hasattr(self,'guard'):self.guard()
                     rss=0
                     for child in group_processes(self.child.pid):
                         try:rss+=int(Path('/proc',str(child['pid']),'statm').read_text().split()[1])*os.sysconf('SC_PAGE_SIZE')
