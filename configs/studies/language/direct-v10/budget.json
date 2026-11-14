@@ -1,0 +1,12 @@
+{
+  "aggregate_compute_cap": null,
+  "deadline_epoch": 1794837093.6220245,
+  "max_new_disk_gib": 96,
+  "max_npu_workers": 12,
+  "max_parameters": 200000000,
+  "minimum_quota_headroom_gib": 200,
+  "optimization_deadline_epoch": 1794678693.6220245,
+  "schema": "tide-v10-budget-v1",
+  "started_epoch": 1794664293.6220245,
+  "target_new_disk_gib": 64
+}

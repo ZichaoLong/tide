@@ -142,3 +142,5 @@
   Preserve the four original interruptions, strict failures, fixed source and all v9
   checkpoints. No automatic next training batch; retain the scoped negative inlet/depth
   evidence alongside capacity/exposure gains.
+
+- The latest 2026-11-14 approval authorizes `docs/studies/language-capacity-activity-v10.md`: bounded specialized direct implementation optimization followed by capacity/exposure comparisons at about10%/3% activity and matched small dense controls. Maximum200M parameters, one shared48h deadline (first2–4h optimization), no aggregate compute caps;64GiB new disk target/96GiB ceiling and at least200GiB hard-quota headroom. Freeze new source/inputs; preserve v9 and all strict failures. No1G, broader candidate sweep or automatic additional depth.
