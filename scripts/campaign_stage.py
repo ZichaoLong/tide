@@ -63,7 +63,7 @@ def admission(model,c,device,out):
             changed=x.clone();changed[:,2]=(changed[:,2]+17)%4096
             checks['causal']=finite_delta(model(changed)[:,:2],model(x)[:,:2],0,0)
         if checks['causal']['state']!='passed':raise AssertionError('causal intervention failed')
-        if c['kind']=='direct_semantic':
+        if c['kind'] in ('direct_semantic','direct_specialized'):
             work=model.last_metrics
             if not 0<work['work/full']<=work['work/candidates']<=work['work/physical_full_rows']:
                 raise AssertionError('static fixture support/work invariants failed')
@@ -74,7 +74,7 @@ def admission(model,c,device,out):
     return dict(checks=checks,admitted_for_finite_exploration=True,
         scope='actual topology/modules/width/backend, independent B2 L3; inactive routed regions recorded, not required to all fire',
         axes=dict(execution='passed',strict_numerical='see checks; original 1e-6/1e-5 and zero causal thresholds retained',
-            discrete_semantics='passed' if c['kind']=='tide' else ('passed_static_unit_input_fixture; general_continuation_unchecked' if c['kind']=='direct_semantic' else 'static_dense_graph; no learned routing' if c['kind']=='direct_graph' else 'not_applicable'),mechanisms='passed',
+            discrete_semantics='passed' if c['kind']=='tide' else ('passed_static_unit_input_fixture; general_continuation_unchecked' if c['kind'] in ('direct_semantic','direct_specialized') else 'static_dense_graph; no learned routing' if c['kind']=='direct_graph' else 'not_applicable'),mechanisms='passed',
             recovery='separate_fresh_process_probe_required',learning='unchecked'))
 
 

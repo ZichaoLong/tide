@@ -31,6 +31,12 @@ def make_model(config, device):
     elif config['kind']=='direct_semantic':
         from .direct_semantic import DirectSemanticLM
         model=DirectSemanticLM(seed=config['seed'],plan=config['direct']['plan'])
+    elif config['kind']=='direct_specialized':
+        from .direct_specialized import SpecializedSemanticLM
+        options=dict(config.get('implementation',{}))
+        attention=options.pop('npu_attention','npu_fusion_augmented') if device.type=='npu' else options.pop('cpu_attention','math')
+        options.pop('cpu_attention',None);options.pop('npu_attention',None)
+        model=SpecializedSemanticLM(seed=config['seed'],plan=config['direct']['plan'],attention=attention,**options)
     else:raise ValueError('unsupported campaign model')
     model=model.to(device)
     inventory=trainable_inventory(model)
@@ -50,7 +56,7 @@ def optimizer_for(model,config):
                 dict(params=[p for p in params if p.ndim<2],weight_decay=0.)]
     elif c.get('decay_policy','all')!='all':raise ValueError('unknown decay policy')
     return torch.optim.AdamW(params,lr=c['lr'],eps=c['eps'],weight_decay=c['weight_decay'],
-                            betas=tuple(c.get('betas',(.9,.999))),foreach=False)
+                            betas=tuple(c.get('betas',(.9,.999))),foreach=c.get('optimizer_foreach',False))
 
 
 def learning_rate(config,tokens):
@@ -107,6 +113,8 @@ def logical_update(model,opt,batches,config,tokens,device):
         work['activity/full_all_fraction']=work['work/full']/work['work/node_slots']
         work['activity/body_full_all_fraction']=work['work/body_full']/work['work/body_node_slots']
         work['activity/body_receipt_fraction']=work['work/body_candidates']/work['work/body_node_slots']
+    if work.get('work/prediction_positions'):
+        work['activity/active_parameters_per_position']=work['work/active_parameter_uses']/work['work/prediction_positions']
     return dict(loss=total,tokens=count,gradient_norm=float(norm),lr=lr,
         seconds=time.monotonic()-start,work=work,microbatches=len(batches))
 
