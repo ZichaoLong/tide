@@ -1,0 +1,3727 @@
+{
+  "cases": [
+    {
+      "full_batch_candidate": {
+        "batches_sha256": "97abc50ccecfdef88c4b43fa4a5b36e4204e1357088f16c4f542a28b534f5ac1",
+        "checkpoint_sha256": "476f1ce19a0b30e3d3f781ac07df4250221d4d8b1a688a83893f7dc057ee48cd",
+        "forward_bitwise_equal_all_microbatches": true,
+        "record": "runs/v10-fixcheck-hb-d128-r64-pool-s11/full-update/result.json",
+        "source_commit": "a8669103cd87932eb8beb38ecabaadb7d774505f",
+        "state": "completed",
+        "variants": {
+          "ordered_aggregate_quotient": {
+            "floor_events": 39454.0,
+            "gradient_acceptance": "passed",
+            "gradient_norm": 0.5523364543914795,
+            "loss": 3.8962224423885345,
+            "nonfinite_parameter_count": 0,
+            "optimizer": {
+              "embedding_changed": true,
+              "parameters_finite": true,
+              "tied_head_alias": true
+            },
+            "support_errors": 0.0
+          },
+          "original": {
+            "floor_events": 39454.0,
+            "gradient_acceptance": "failed",
+            "gradient_norm": null,
+            "loss": 3.8962224423885345,
+            "nonfinite_parameter_count": 34,
+            "optimizer": null,
+            "support_errors": 0.0
+          }
+        }
+      },
+      "gradients": {
+        "all_parameter_gradients_finite": false,
+        "finite_elements_norm_fp64": 0.43795547589192596,
+        "nonfinite_elements": 19524000,
+        "nonfinite_parameters": [
+          "memories.0.base",
+          "memories.0.current.weight",
+          "memories.0.ffgate.weight",
+          "memories.0.ffup.weight",
+          "memories.0.ffdown.weight",
+          "memories.0.adapter_in.weight",
+          "memories.0.adapter_out.weight",
+          "memories.0.query.weight",
+          "memories.0.output.weight",
+          "memories.0.read_q.weight",
+          "memories.0.read_k.weight",
+          "memories.0.read_v.weight",
+          "memories.2.base",
+          "memories.2.current.weight",
+          "memories.2.adapter_in.weight",
+          "memories.2.adapter_out.weight",
+          "memories.2.read_q.weight",
+          "memories.2.read_k.weight",
+          "memories.2.read_v.weight",
+          "selectors.0.local.a.weight",
+          "selectors.0.local.a.bias",
+          "selectors.0.local.b.weight",
+          "selectors.0.local.b.bias",
+          "selectors.2.local.a.weight",
+          "selectors.2.local.a.bias",
+          "selectors.2.local.b.weight",
+          "selectors.2.local.b.bias",
+          "aggregators.0.a",
+          "aggregators.0.b",
+          "aggregators.0.e",
+          "aggregators.2.a",
+          "aggregators.2.b",
+          "aggregators.2.e",
+          "embedding.weight"
+        ]
+      },
+      "id": "hb-d128-r64-pool-s11",
+      "incident": {
+        "forward_trace": [
+          "  File \"<repo>/.local/source-v10-execution/tide_lab/direct_semantic.py\", line 258, in forward\n    try:return self._forward(ids,observations)\n",
+          "  File \"<repo>/.local/source-v10-execution/tide_lab/direct_specialized.py\", line 132, in _forward\n    u,r=self.aggregate(j,z,w,getattr(self,'incidence_'+str(j)))\n",
+          "  File \"<repo>/.local/source-v10-execution/tide_lab/direct_specialized.py\", line 98, in aggregate\n    return value/torch.where(received>0,received,torch.ones_like(received)).unsqueeze(-1),received\n"
+        ],
+        "grad_inputs": [
+          {
+            "dtype": "torch.float32",
+            "elements": 16777216,
+            "finite_l2": 0.006391491108248956,
+            "inf": 0,
+            "max_abs_finite": 0.0011381101794540882,
+            "min_positive": 9.80908925027372e-45,
+            "nan": 0,
+            "shape": [
+              64,
+              8,
+              256,
+              128
+            ]
+          },
+          {
+            "dtype": "torch.float32",
+            "elements": 131072,
+            "finite_l2": 0.007286512688512633,
+            "inf": 0,
+            "max_abs_finite": 0.0036510652862489223,
+            "min_positive": 1.401298464324817e-45,
+            "nan": 1,
+            "shape": [
+              64,
+              8,
+              256,
+              1
+            ]
+          }
+        ],
+        "grad_outputs": [
+          {
+            "dtype": "torch.float32",
+            "elements": 16777216,
+            "finite_l2": 0.0004948526145379074,
+            "inf": 0,
+            "max_abs_finite": 1.9455163055681624e-05,
+            "min_positive": 1.401298464324817e-45,
+            "nan": 0,
+            "shape": [
+              64,
+              8,
+              256,
+              128
+            ]
+          }
+        ],
+        "microbatch": 3,
+        "node": "DivBackward0",
+        "saved": {
+          "_saved_other": {
+            "dtype": "torch.float32",
+            "elements": 131072,
+            "finite_l2": 28.750238020077244,
+            "inf": 0,
+            "max_abs_finite": 0.9852732419967651,
+            "min_positive": 8.636574620505972e-38,
+            "nan": 0,
+            "shape": [
+              64,
+              8,
+              256,
+              1
+            ]
+          },
+          "_saved_self": {
+            "dtype": "torch.float32",
+            "elements": 16777216,
+            "finite_l2": 1023.7979500465194,
+            "inf": 0,
+            "max_abs_finite": 43.21649932861328,
+            "min_positive": 6.513963937383199e-39,
+            "nan": 0,
+            "shape": [
+              64,
+              8,
+              256,
+              128
+            ]
+          }
+        },
+        "upstream_all_finite": true
+      },
+      "local_references": {
+        "cpu": {
+          "broadcast_fp64_gradcheck": true,
+          "record": "runs/v10-fixcheck-hb-d128-r64-pool-s11/division-cpu/result.json",
+          "state": "completed",
+          "witness": {
+            "examples": [
+              {
+                "denominator": 8.636574620505972e-38,
+                "fp64_element_grad_b": 0.0,
+                "index": [
+                  1,
+                  0,
+                  160,
+                  25
+                ],
+                "numerator": -2.724980329536433e-36,
+                "quotient": -31.551633834838867,
+                "unsafe_quotient_over_denominator": "-inf",
+                "upstream": 0.0
+              },
+              {
+                "denominator": 8.636574620505972e-38,
+                "fp64_element_grad_b": -0.0,
+                "index": [
+                  1,
+                  0,
+                  160,
+                  54
+                ],
+                "numerator": 2.720312324092074e-36,
+                "quotient": 31.497583389282227,
+                "unsafe_quotient_over_denominator": "inf",
+                "upstream": 0.0
+              },
+              {
+                "denominator": 8.636574620505972e-38,
+                "fp64_element_grad_b": 0.0,
+                "index": [
+                  1,
+                  0,
+                  160,
+                  55
+                ],
+                "numerator": -2.6506107968039896e-36,
+                "quotient": -30.690532684326172,
+                "unsafe_quotient_over_denominator": "-inf",
+                "upstream": 0.0
+              },
+              {
+                "denominator": 8.636574620505972e-38,
+                "fp64_element_grad_b": 0.0,
+                "index": [
+                  1,
+                  0,
+                  160,
+                  109
+                ],
+                "numerator": -3.046346272073286e-36,
+                "quotient": -35.272621154785156,
+                "unsafe_quotient_over_denominator": "-inf",
+                "upstream": 0.0
+              },
+              {
+                "denominator": 8.636574620505972e-38,
+                "fp64_element_grad_b": 0.0,
+                "index": [
+                  1,
+                  0,
+                  160,
+                  110
+                ],
+                "numerator": -2.6931582539204683e-36,
+                "quotient": -31.183176040649414,
+                "unsafe_quotient_over_denominator": "-inf",
+                "upstream": 0.0
+              },
+              {
+                "denominator": 8.636574620505972e-38,
+                "fp64_element_grad_b": -0.0,
+                "index": [
+                  1,
+                  0,
+                  160,
+                  113
+                ],
+                "numerator": 2.8343499482772768e-36,
+                "quotient": 32.81798553466797,
+                "unsafe_quotient_over_denominator": "inf",
+                "upstream": 0.0
+              }
+            ],
+            "microbatch": 3,
+            "node": "DivBackward0",
+            "overflowing_intermediate_elements": 6,
+            "sha256": "cc0204149da518394774424c9817e2a3801e0354b0b204c783c3cf34c15d1160",
+            "upstream_finite": true,
+            "variants": {
+              "ordered": {
+                "forward": {
+                  "check": {
+                    "atol": 1e-06,
+                    "failed_elements": 0,
+                    "max_abs": 4.9201798333342595e-06,
+                    "relative_l2": 2.452477237465689e-08,
+                    "rtol": 1e-05,
+                    "state": "passed"
+                  },
+                  "finite_l2": 27865.946653890056,
+                  "finite_max_abs": 132.3336944580078,
+                  "inf": 0,
+                  "nan": 0,
+                  "shape": [
+                    64,
+                    8,
+                    256,
+                    128
+                  ],
+                  "values": null
+                },
+                "forward_bitwise_equal_to_ordinary": true,
+                "grad_a": {
+                  "check": {
+                    "atol": 1e-06,
+                    "failed_elements": 0,
+                    "max_abs": 5.580168250217399e-11,
+                    "relative_l2": 2.7800249210848233e-08,
+                    "rtol": 1e-05,
+                    "state": "passed"
+                  },
+                  "finite_l2": 0.00639149108325316,
+                  "finite_max_abs": 0.0011381101794540882,
+                  "inf": 0,
+                  "nan": 0,
+                  "shape": [
+                    64,
+                    8,
+                    256,
+                    128
+                  ],
+                  "values": null
+                },
+                "grad_b": {
+                  "check": {
+                    "atol": 1e-06,
+                    "failed_elements": 0,
+                    "max_abs": 4.2844754003304453e-10,
+                    "relative_l2": 1.5765670835491572e-07,
+                    "rtol": 1e-05,
+                    "state": "passed"
+                  },
+                  "finite_l2": 0.007286512940714153,
+                  "finite_max_abs": 0.003651065519079566,
+                  "inf": 0,
+                  "nan": 0,
+                  "shape": [
+                    64,
+                    8,
+                    256,
+                    1
+                  ],
+                  "values": null
+                }
+              },
+              "ordinary": {
+                "forward": {
+                  "check": {
+                    "atol": 1e-06,
+                    "failed_elements": 0,
+                    "max_abs": 4.9201798333342595e-06,
+                    "relative_l2": 2.452477237465689e-08,
+                    "rtol": 1e-05,
+                    "state": "passed"
+                  },
+                  "finite_l2": 27865.946653890056,
+                  "finite_max_abs": 132.3336944580078,
+                  "inf": 0,
+                  "nan": 0,
+                  "shape": [
+                    64,
+                    8,
+                    256,
+                    128
+                  ],
+                  "values": null
+                },
+                "grad_a": {
+                  "check": {
+                    "atol": 1e-06,
+                    "failed_elements": 0,
+                    "max_abs": 5.580168250217399e-11,
+                    "relative_l2": 2.7800249210848233e-08,
+                    "rtol": 1e-05,
+                    "state": "passed"
+                  },
+                  "finite_l2": 0.00639149108325316,
+                  "finite_max_abs": 0.0011381101794540882,
+                  "inf": 0,
+                  "nan": 0,
+                  "shape": [
+                    64,
+                    8,
+                    256,
+                    128
+                  ],
+                  "values": null
+                },
+                "grad_b": {
+                  "check": {
+                    "atol": 1e-06,
+                    "reference": {
+                      "finite_l2": 0.007286513056368175,
+                      "finite_max_abs": 0.00365106590463191,
+                      "inf": 0,
+                      "nan": 0,
+                      "shape": [
+                        64,
+                        8,
+                        256,
+                        1
+                      ],
+                      "values": null
+                    },
+                    "rtol": 1e-05,
+                    "state": "nonfinite",
+                    "value": {
+                      "finite_l2": 0.007286512681373458,
+                      "finite_max_abs": 0.0036510652862489223,
+                      "inf": 0,
+                      "nan": 1,
+                      "shape": [
+                        64,
+                        8,
+                        256,
+                        1
+                      ],
+                      "values": null
+                    }
+                  },
+                  "finite_l2": 0.007286512681373458,
+                  "finite_max_abs": 0.0036510652862489223,
+                  "inf": 0,
+                  "nan": 1,
+                  "shape": [
+                    64,
+                    8,
+                    256,
+                    1
+                  ],
+                  "values": null
+                }
+              }
+            }
+          }
+        },
+        "npu": {
+          "broadcast_fp64_gradcheck": true,
+          "record": "runs/v10-fixcheck-hb-d128-r64-pool-s11/division-npu/result.json",
+          "state": "completed",
+          "witness": {
+            "examples": [
+              {
+                "denominator": 8.636574620505972e-38,
+                "fp64_element_grad_b": 0.0,
+                "index": [
+                  1,
+                  0,
+                  160,
+                  25
+                ],
+                "numerator": -2.724980329536433e-36,
+                "quotient": -31.551633834838867,
+                "unsafe_quotient_over_denominator": "-inf",
+                "upstream": 0.0
+              },
+              {
+                "denominator": 8.636574620505972e-38,
+                "fp64_element_grad_b": -0.0,
+                "index": [
+                  1,
+                  0,
+                  160,
+                  54
+                ],
+                "numerator": 2.720312324092074e-36,
+                "quotient": 31.497583389282227,
+                "unsafe_quotient_over_denominator": "inf",
+                "upstream": 0.0
+              },
+              {
+                "denominator": 8.636574620505972e-38,
+                "fp64_element_grad_b": 0.0,
+                "index": [
+                  1,
+                  0,
+                  160,
+                  55
+                ],
+                "numerator": -2.6506107968039896e-36,
+                "quotient": -30.690532684326172,
+                "unsafe_quotient_over_denominator": "-inf",
+                "upstream": 0.0
+              },
+              {
+                "denominator": 8.636574620505972e-38,
+                "fp64_element_grad_b": 0.0,
+                "index": [
+                  1,
+                  0,
+                  160,
+                  109
+                ],
+                "numerator": -3.046346272073286e-36,
+                "quotient": -35.272621154785156,
+                "unsafe_quotient_over_denominator": "-inf",
+                "upstream": 0.0
+              },
+              {
+                "denominator": 8.636574620505972e-38,
+                "fp64_element_grad_b": 0.0,
+                "index": [
+                  1,
+                  0,
+                  160,
+                  110
+                ],
+                "numerator": -2.6931582539204683e-36,
+                "quotient": -31.183176040649414,
+                "unsafe_quotient_over_denominator": "-inf",
+                "upstream": 0.0
+              },
+              {
+                "denominator": 8.636574620505972e-38,
+                "fp64_element_grad_b": -0.0,
+                "index": [
+                  1,
+                  0,
+                  160,
+                  113
+                ],
+                "numerator": 2.8343499482772768e-36,
+                "quotient": 32.81798553466797,
+                "unsafe_quotient_over_denominator": "inf",
+                "upstream": 0.0
+              }
+            ],
+            "microbatch": 3,
+            "node": "DivBackward0",
+            "overflowing_intermediate_elements": 6,
+            "sha256": "cc0204149da518394774424c9817e2a3801e0354b0b204c783c3cf34c15d1160",
+            "upstream_finite": true,
+            "variants": {
+              "ordered": {
+                "forward": {
+                  "check": {
+                    "atol": 1e-06,
+                    "failed_elements": 0,
+                    "max_abs": 5.318578246260586e-06,
+                    "relative_l2": 2.5216759481249458e-08,
+                    "rtol": 1e-05,
+                    "state": "passed"
+                  },
+                  "finite_l2": 27865.946639087997,
+                  "finite_max_abs": 132.3336944580078,
+                  "inf": 0,
+                  "nan": 0,
+                  "shape": [
+                    64,
+                    8,
+                    256,
+                    128
+                  ],
+                  "values": null
+                },
+                "forward_bitwise_equal_to_ordinary": true,
+                "grad_a": {
+                  "check": {
+                    "atol": 1e-06,
+                    "failed_elements": 0,
+                    "max_abs": 6.061363932476083e-11,
+                    "relative_l2": 2.832251099904503e-08,
+                    "rtol": 1e-05,
+                    "state": "passed"
+                  },
+                  "finite_l2": 0.006391491108248956,
+                  "finite_max_abs": 0.0011381101794540882,
+                  "inf": 0,
+                  "nan": 0,
+                  "shape": [
+                    64,
+                    8,
+                    256,
+                    128
+                  ],
+                  "values": null
+                },
+                "grad_b": {
+                  "check": {
+                    "atol": 1e-06,
+                    "failed_elements": 0,
+                    "max_abs": 4.1024041802506517e-10,
+                    "relative_l2": 1.4036554639111171e-07,
+                    "rtol": 1e-05,
+                    "state": "passed"
+                  },
+                  "finite_l2": 0.007286513016084393,
+                  "finite_max_abs": 0.0036510659847408533,
+                  "inf": 0,
+                  "nan": 0,
+                  "shape": [
+                    64,
+                    8,
+                    256,
+                    1
+                  ],
+                  "values": null
+                }
+              },
+              "ordinary": {
+                "forward": {
+                  "check": {
+                    "atol": 1e-06,
+                    "failed_elements": 0,
+                    "max_abs": 5.318578246260586e-06,
+                    "relative_l2": 2.5216759481249458e-08,
+                    "rtol": 1e-05,
+                    "state": "passed"
+                  },
+                  "finite_l2": 27865.946639087997,
+                  "finite_max_abs": 132.3336944580078,
+                  "inf": 0,
+                  "nan": 0,
+                  "shape": [
+                    64,
+                    8,
+                    256,
+                    128
+                  ],
+                  "values": null
+                },
+                "grad_a": {
+                  "check": {
+                    "atol": 1e-06,
+                    "failed_elements": 0,
+                    "max_abs": 6.061363932476083e-11,
+                    "relative_l2": 2.832251099904503e-08,
+                    "rtol": 1e-05,
+                    "state": "passed"
+                  },
+                  "finite_l2": 0.006391491108248956,
+                  "finite_max_abs": 0.0011381101794540882,
+                  "inf": 0,
+                  "nan": 0,
+                  "shape": [
+                    64,
+                    8,
+                    256,
+                    128
+                  ],
+                  "values": null
+                },
+                "grad_b": {
+                  "check": {
+                    "atol": 1e-06,
+                    "reference": {
+                      "finite_l2": 0.007286513056368175,
+                      "finite_max_abs": 0.00365106590463191,
+                      "inf": 0,
+                      "nan": 0,
+                      "shape": [
+                        64,
+                        8,
+                        256,
+                        1
+                      ],
+                      "values": null
+                    },
+                    "rtol": 1e-05,
+                    "state": "nonfinite",
+                    "value": {
+                      "finite_l2": 0.007286512688512633,
+                      "finite_max_abs": 0.0036510652862489223,
+                      "inf": 0,
+                      "nan": 1,
+                      "shape": [
+                        64,
+                        8,
+                        256,
+                        1
+                      ],
+                      "values": null
+                    }
+                  },
+                  "finite_l2": 0.007286512688512633,
+                  "finite_max_abs": 0.0036510652862489223,
+                  "inf": 0,
+                  "nan": 1,
+                  "shape": [
+                    64,
+                    8,
+                    256,
+                    1
+                  ],
+                  "values": null
+                }
+              }
+            }
+          }
+        }
+      },
+      "original_error": "RuntimeError('The total norm of order 2.0 for gradients from `parameters` is non-finite, so it cannot be clipped. To disable this error and scale the gradients by the non-finite norm anyway, set `error_if_nonfinite=False`')",
+      "original_last_step": 1523,
+      "original_last_tokens": 24344720,
+      "original_run": "tl-v10-main-hb-d128-r64-pool-s11",
+      "original_source": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+      "original_state": "failed",
+      "replay": {
+        "all_common_tokens_equal": true,
+        "checkpoint_progress": {
+          "cursor": 79360,
+          "dropped_tail_tokens": 12448,
+          "milestones": [
+            8388608
+          ],
+          "probe": false,
+          "step": 1240,
+          "tokens": 19821083
+        },
+        "checkpoint_sha256": "ad5534b5b6444db8a69cb6ff97481df4336270ca85b9c565b2a6f5ae6fcd90b9",
+        "common_steps": 19,
+        "diagnostic_source": {
+          "commit": "95bce59a3c1d5c9532915309132455a279cd7eee",
+          "tree_sha256": "f4c49b02e6bb845d36b00456f01506009d096cd8f77e0f747fb222520d272589"
+        },
+        "failure_progress": {
+          "cursor": 97472,
+          "dropped_tail_tokens": 12448,
+          "milestones": [
+            8388608
+          ],
+          "probe": false,
+          "step": 1523,
+          "tokens": 24344720
+        },
+        "failure_step": 1524,
+        "max_abs_gradient_norm_delta": 0.0,
+        "max_abs_loss_delta": 0.0,
+        "physical_visibility": "11",
+        "record": "runs/v10-diag-hb-d128-r64-pool-s11/result.json",
+        "seconds": 1273.066637776792,
+        "state": "failure_reproduced",
+        "training_source": {
+          "commit": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+          "tree_sha256": "b42a2533e88677e6c7e1fa298d2ba94b122bcbb8f873b851cc5e8ba517eef798"
+        }
+      },
+      "services": {
+        "v10-diag-hb-d128-r64-pool-s11": {
+          "elapsed_seconds": 1287.9380404092371,
+          "state": "completed",
+          "termination_verified_at_finalization": true
+        },
+        "v10-fixcheck-hb-d128-r64-pool-s11": {
+          "elapsed_seconds": 53.71205184981227,
+          "state": "completed",
+          "termination_verified_at_finalization": true
+        }
+      }
+    },
+    {
+      "full_batch_candidate": {
+        "batches_sha256": "426c0fede7146a3ce0be771ab66f667d98f33b6536fdd86ba535a2a59f1fd18c",
+        "checkpoint_sha256": "c01b45f434a03c780b0486a6e1b018d967c3db2ba7035373304f5c8346a0331e",
+        "forward_bitwise_equal_all_microbatches": true,
+        "record": "runs/v10-fixcheck-hb-d128-r64-pool-s22/full-update/result.json",
+        "source_commit": "a8669103cd87932eb8beb38ecabaadb7d774505f",
+        "state": "completed",
+        "variants": {
+          "ordered_aggregate_quotient": {
+            "floor_events": 39200.0,
+            "gradient_acceptance": "passed",
+            "gradient_norm": 0.5941798090934753,
+            "loss": 4.063545644283295,
+            "nonfinite_parameter_count": 0,
+            "optimizer": {
+              "embedding_changed": true,
+              "parameters_finite": true,
+              "tied_head_alias": true
+            },
+            "support_errors": 0.0
+          },
+          "original": {
+            "floor_events": 39200.0,
+            "gradient_acceptance": "failed",
+            "gradient_norm": null,
+            "loss": 4.063545644283295,
+            "nonfinite_parameter_count": 34,
+            "optimizer": null,
+            "support_errors": 0.0
+          }
+        }
+      },
+      "gradients": {
+        "all_parameter_gradients_finite": false,
+        "finite_elements_norm_fp64": 0.4518033436265521,
+        "nonfinite_elements": 19525152,
+        "nonfinite_parameters": [
+          "memories.0.base",
+          "memories.0.current.weight",
+          "memories.0.ffgate.weight",
+          "memories.0.ffup.weight",
+          "memories.0.ffdown.weight",
+          "memories.0.adapter_in.weight",
+          "memories.0.adapter_out.weight",
+          "memories.0.query.weight",
+          "memories.0.output.weight",
+          "memories.0.read_q.weight",
+          "memories.0.read_k.weight",
+          "memories.0.read_v.weight",
+          "memories.1.base",
+          "memories.1.current.weight",
+          "memories.1.adapter_in.weight",
+          "memories.1.adapter_out.weight",
+          "memories.1.read_q.weight",
+          "memories.1.read_k.weight",
+          "memories.1.read_v.weight",
+          "selectors.0.local.a.weight",
+          "selectors.0.local.a.bias",
+          "selectors.0.local.b.weight",
+          "selectors.0.local.b.bias",
+          "selectors.1.local.a.weight",
+          "selectors.1.local.a.bias",
+          "selectors.1.local.b.weight",
+          "selectors.1.local.b.bias",
+          "aggregators.0.a",
+          "aggregators.0.b",
+          "aggregators.0.e",
+          "aggregators.1.a",
+          "aggregators.1.b",
+          "aggregators.1.e",
+          "embedding.weight"
+        ]
+      },
+      "id": "hb-d128-r64-pool-s22",
+      "incident": {
+        "forward_trace": [
+          "  File \"<repo>/.local/source-v10-execution/tide_lab/direct_semantic.py\", line 258, in forward\n    try:return self._forward(ids,observations)\n",
+          "  File \"<repo>/.local/source-v10-execution/tide_lab/direct_specialized.py\", line 132, in _forward\n    u,r=self.aggregate(j,z,w,getattr(self,'incidence_'+str(j)))\n",
+          "  File \"<repo>/.local/source-v10-execution/tide_lab/direct_specialized.py\", line 98, in aggregate\n    return value/torch.where(received>0,received,torch.ones_like(received)).unsqueeze(-1),received\n"
+        ],
+        "grad_inputs": [
+          {
+            "dtype": "torch.float32",
+            "elements": 16777216,
+            "finite_l2": 0.027612767024715542,
+            "inf": 0,
+            "max_abs_finite": 0.001859877142123878,
+            "min_positive": 2.664193010433595e-20,
+            "nan": 0,
+            "shape": [
+              64,
+              8,
+              256,
+              128
+            ]
+          },
+          {
+            "dtype": "torch.float32",
+            "elements": 131072,
+            "finite_l2": 0.05887772140538597,
+            "inf": 0,
+            "max_abs_finite": 0.024027027189731598,
+            "min_positive": 1.5715002270409034e-17,
+            "nan": 1,
+            "shape": [
+              64,
+              8,
+              256,
+              1
+            ]
+          }
+        ],
+        "grad_outputs": [
+          {
+            "dtype": "torch.float32",
+            "elements": 16777216,
+            "finite_l2": 0.00038298850011355903,
+            "inf": 0,
+            "max_abs_finite": 1.607170997885987e-05,
+            "min_positive": 1.401298464324817e-45,
+            "nan": 0,
+            "shape": [
+              64,
+              8,
+              256,
+              128
+            ]
+          }
+        ],
+        "microbatch": 6,
+        "node": "DivBackward0",
+        "saved": {
+          "_saved_other": {
+            "dtype": "torch.float32",
+            "elements": 131072,
+            "finite_l2": 30.719700801730532,
+            "inf": 0,
+            "max_abs_finite": 0.9970159530639648,
+            "min_positive": 4.967183787530951e-38,
+            "nan": 0,
+            "shape": [
+              64,
+              8,
+              256,
+              1
+            ]
+          },
+          "_saved_self": {
+            "dtype": "torch.float32",
+            "elements": 16777216,
+            "finite_l2": 1408.150480007291,
+            "inf": 0,
+            "max_abs_finite": 60.55337142944336,
+            "min_positive": 2.6393736835250794e-39,
+            "nan": 0,
+            "shape": [
+              64,
+              8,
+              256,
+              128
+            ]
+          }
+        },
+        "upstream_all_finite": true
+      },
+      "local_references": {
+        "cpu": {
+          "broadcast_fp64_gradcheck": true,
+          "record": "runs/v10-fixcheck-hb-d128-r64-pool-s22/division-cpu/result.json",
+          "state": "completed",
+          "witness": {
+            "examples": [
+              {
+                "denominator": 4.967183787530951e-38,
+                "fp64_element_grad_b": -0.0,
+                "index": [
+                  36,
+                  6,
+                  189,
+                  16
+                ],
+                "numerator": 8.686186863960191e-37,
+                "quotient": 17.487146377563477,
+                "unsafe_quotient_over_denominator": "inf",
+                "upstream": 0.0
+              },
+              {
+                "denominator": 4.967183787530951e-38,
+                "fp64_element_grad_b": -0.0,
+                "index": [
+                  36,
+                  6,
+                  189,
+                  23
+                ],
+                "numerator": 8.746532829443383e-37,
+                "quotient": 17.60863494873047,
+                "unsafe_quotient_over_denominator": "inf",
+                "upstream": 0.0
+              },
+              {
+                "denominator": 4.967183787530951e-38,
+                "fp64_element_grad_b": 0.0,
+                "index": [
+                  36,
+                  6,
+                  189,
+                  43
+                ],
+                "numerator": -9.468700625031718e-37,
+                "quotient": -19.06251335144043,
+                "unsafe_quotient_over_denominator": "-inf",
+                "upstream": 0.0
+              },
+              {
+                "denominator": 4.967183787530951e-38,
+                "fp64_element_grad_b": -0.0,
+                "index": [
+                  36,
+                  6,
+                  189,
+                  47
+                ],
+                "numerator": 8.766675654088974e-37,
+                "quotient": 17.649187088012695,
+                "unsafe_quotient_over_denominator": "inf",
+                "upstream": 0.0
+              },
+              {
+                "denominator": 4.967183787530951e-38,
+                "fp64_element_grad_b": 0.0,
+                "index": [
+                  36,
+                  6,
+                  189,
+                  93
+                ],
+                "numerator": -1.2117955592703953e-36,
+                "quotient": -24.396028518676758,
+                "unsafe_quotient_over_denominator": "-inf",
+                "upstream": 0.0
+              },
+              {
+                "denominator": 4.967183787530951e-38,
+                "fp64_element_grad_b": -0.0,
+                "index": [
+                  36,
+                  6,
+                  189,
+                  111
+                ],
+                "numerator": 8.726734387908385e-37,
+                "quotient": 17.568777084350586,
+                "unsafe_quotient_over_denominator": "inf",
+                "upstream": 0.0
+              },
+              {
+                "denominator": 4.967183787530951e-38,
+                "fp64_element_grad_b": 0.0,
+                "index": [
+                  36,
+                  6,
+                  189,
+                  127
+                ],
+                "numerator": -1.0266473965860357e-36,
+                "quotient": -20.66860008239746,
+                "unsafe_quotient_over_denominator": "-inf",
+                "upstream": 0.0
+              }
+            ],
+            "microbatch": 6,
+            "node": "DivBackward0",
+            "overflowing_intermediate_elements": 7,
+            "sha256": "bbbb9a6ef259a791f694b0c2d4b26ec3f6bad61a6bfc25983a51bacb6d414e6f",
+            "upstream_finite": true,
+            "variants": {
+              "ordered": {
+                "forward": {
+                  "check": {
+                    "atol": 1e-06,
+                    "failed_elements": 0,
+                    "max_abs": 3.805139442647487e-06,
+                    "relative_l2": 2.440036544499523e-08,
+                    "rtol": 1e-05,
+                    "state": "passed"
+                  },
+                  "finite_l2": 20552.22527453203,
+                  "finite_max_abs": 98.4902114868164,
+                  "inf": 0,
+                  "nan": 0,
+                  "shape": [
+                    64,
+                    8,
+                    256,
+                    128
+                  ],
+                  "values": null
+                },
+                "forward_bitwise_equal_to_ordinary": true,
+                "grad_a": {
+                  "check": {
+                    "atol": 1e-06,
+                    "failed_elements": 0,
+                    "max_abs": 5.770538213933918e-11,
+                    "relative_l2": 2.6030472896850674e-08,
+                    "rtol": 1e-05,
+                    "state": "passed"
+                  },
+                  "finite_l2": 0.027612767065803692,
+                  "finite_max_abs": 0.001859877142123878,
+                  "inf": 0,
+                  "nan": 0,
+                  "shape": [
+                    64,
+                    8,
+                    256,
+                    128
+                  ],
+                  "values": null
+                },
+                "grad_b": {
+                  "check": {
+                    "atol": 1e-06,
+                    "failed_elements": 0,
+                    "max_abs": 4.314271264419968e-09,
+                    "relative_l2": 1.6221989682406472e-07,
+                    "rtol": 1e-05,
+                    "state": "passed"
+                  },
+                  "finite_l2": 0.05887771989619639,
+                  "finite_max_abs": 0.024027027189731598,
+                  "inf": 0,
+                  "nan": 0,
+                  "shape": [
+                    64,
+                    8,
+                    256,
+                    1
+                  ],
+                  "values": null
+                }
+              },
+              "ordinary": {
+                "forward": {
+                  "check": {
+                    "atol": 1e-06,
+                    "failed_elements": 0,
+                    "max_abs": 3.805139442647487e-06,
+                    "relative_l2": 2.440036544499523e-08,
+                    "rtol": 1e-05,
+                    "state": "passed"
+                  },
+                  "finite_l2": 20552.22527453203,
+                  "finite_max_abs": 98.4902114868164,
+                  "inf": 0,
+                  "nan": 0,
+                  "shape": [
+                    64,
+                    8,
+                    256,
+                    128
+                  ],
+                  "values": null
+                },
+                "grad_a": {
+                  "check": {
+                    "atol": 1e-06,
+                    "failed_elements": 0,
+                    "max_abs": 5.770538213933918e-11,
+                    "relative_l2": 2.6030472896850674e-08,
+                    "rtol": 1e-05,
+                    "state": "passed"
+                  },
+                  "finite_l2": 0.027612767065803692,
+                  "finite_max_abs": 0.001859877142123878,
+                  "inf": 0,
+                  "nan": 0,
+                  "shape": [
+                    64,
+                    8,
+                    256,
+                    128
+                  ],
+                  "values": null
+                },
+                "grad_b": {
+                  "check": {
+                    "atol": 1e-06,
+                    "reference": {
+                      "finite_l2": 0.05887772100500662,
+                      "finite_max_abs": 0.024027025264719813,
+                      "inf": 0,
+                      "nan": 0,
+                      "shape": [
+                        64,
+                        8,
+                        256,
+                        1
+                      ],
+                      "values": null
+                    },
+                    "rtol": 1e-05,
+                    "state": "nonfinite",
+                    "value": {
+                      "finite_l2": 0.05887772073718892,
+                      "finite_max_abs": 0.024027027189731598,
+                      "inf": 0,
+                      "nan": 1,
+                      "shape": [
+                        64,
+                        8,
+                        256,
+                        1
+                      ],
+                      "values": null
+                    }
+                  },
+                  "finite_l2": 0.05887772073718892,
+                  "finite_max_abs": 0.024027027189731598,
+                  "inf": 0,
+                  "nan": 1,
+                  "shape": [
+                    64,
+                    8,
+                    256,
+                    1
+                  ],
+                  "values": null
+                }
+              }
+            }
+          }
+        },
+        "npu": {
+          "broadcast_fp64_gradcheck": true,
+          "record": "runs/v10-fixcheck-hb-d128-r64-pool-s22/division-npu/result.json",
+          "state": "completed",
+          "witness": {
+            "examples": [
+              {
+                "denominator": 4.967183787530951e-38,
+                "fp64_element_grad_b": -0.0,
+                "index": [
+                  36,
+                  6,
+                  189,
+                  16
+                ],
+                "numerator": 8.686186863960191e-37,
+                "quotient": 17.487146377563477,
+                "unsafe_quotient_over_denominator": "inf",
+                "upstream": 0.0
+              },
+              {
+                "denominator": 4.967183787530951e-38,
+                "fp64_element_grad_b": -0.0,
+                "index": [
+                  36,
+                  6,
+                  189,
+                  23
+                ],
+                "numerator": 8.746532829443383e-37,
+                "quotient": 17.60863494873047,
+                "unsafe_quotient_over_denominator": "inf",
+                "upstream": 0.0
+              },
+              {
+                "denominator": 4.967183787530951e-38,
+                "fp64_element_grad_b": 0.0,
+                "index": [
+                  36,
+                  6,
+                  189,
+                  43
+                ],
+                "numerator": -9.468700625031718e-37,
+                "quotient": -19.06251335144043,
+                "unsafe_quotient_over_denominator": "-inf",
+                "upstream": 0.0
+              },
+              {
+                "denominator": 4.967183787530951e-38,
+                "fp64_element_grad_b": -0.0,
+                "index": [
+                  36,
+                  6,
+                  189,
+                  47
+                ],
+                "numerator": 8.766675654088974e-37,
+                "quotient": 17.649187088012695,
+                "unsafe_quotient_over_denominator": "inf",
+                "upstream": 0.0
+              },
+              {
+                "denominator": 4.967183787530951e-38,
+                "fp64_element_grad_b": 0.0,
+                "index": [
+                  36,
+                  6,
+                  189,
+                  93
+                ],
+                "numerator": -1.2117955592703953e-36,
+                "quotient": -24.396028518676758,
+                "unsafe_quotient_over_denominator": "-inf",
+                "upstream": 0.0
+              },
+              {
+                "denominator": 4.967183787530951e-38,
+                "fp64_element_grad_b": -0.0,
+                "index": [
+                  36,
+                  6,
+                  189,
+                  111
+                ],
+                "numerator": 8.726734387908385e-37,
+                "quotient": 17.568777084350586,
+                "unsafe_quotient_over_denominator": "inf",
+                "upstream": 0.0
+              },
+              {
+                "denominator": 4.967183787530951e-38,
+                "fp64_element_grad_b": 0.0,
+                "index": [
+                  36,
+                  6,
+                  189,
+                  127
+                ],
+                "numerator": -1.0266473965860357e-36,
+                "quotient": -20.66860008239746,
+                "unsafe_quotient_over_denominator": "-inf",
+                "upstream": 0.0
+              }
+            ],
+            "microbatch": 6,
+            "node": "DivBackward0",
+            "overflowing_intermediate_elements": 7,
+            "sha256": "bbbb9a6ef259a791f694b0c2d4b26ec3f6bad61a6bfc25983a51bacb6d414e6f",
+            "upstream_finite": true,
+            "variants": {
+              "ordered": {
+                "forward": {
+                  "check": {
+                    "atol": 1e-06,
+                    "failed_elements": 0,
+                    "max_abs": 5.022993505576778e-06,
+                    "relative_l2": 2.5106683043009232e-08,
+                    "rtol": 1e-05,
+                    "state": "passed"
+                  },
+                  "finite_l2": 20552.225265510693,
+                  "finite_max_abs": 98.4902114868164,
+                  "inf": 0,
+                  "nan": 0,
+                  "shape": [
+                    64,
+                    8,
+                    256,
+                    128
+                  ],
+                  "values": null
+                },
+                "forward_bitwise_equal_to_ordinary": true,
+                "grad_a": {
+                  "check": {
+                    "atol": 1e-06,
+                    "failed_elements": 0,
+                    "max_abs": 7.142848877476904e-11,
+                    "relative_l2": 2.7122219449339907e-08,
+                    "rtol": 1e-05,
+                    "state": "passed"
+                  },
+                  "finite_l2": 0.027612767024715542,
+                  "finite_max_abs": 0.001859877142123878,
+                  "inf": 0,
+                  "nan": 0,
+                  "shape": [
+                    64,
+                    8,
+                    256,
+                    128
+                  ],
+                  "values": null
+                },
+                "grad_b": {
+                  "check": {
+                    "atol": 1e-06,
+                    "failed_elements": 0,
+                    "max_abs": 5.650302083853864e-09,
+                    "relative_l2": 1.705121872678779e-07,
+                    "rtol": 1e-05,
+                    "state": "passed"
+                  },
+                  "finite_l2": 0.05887772312681279,
+                  "finite_max_abs": 0.024027030915021896,
+                  "inf": 0,
+                  "nan": 0,
+                  "shape": [
+                    64,
+                    8,
+                    256,
+                    1
+                  ],
+                  "values": null
+                }
+              },
+              "ordinary": {
+                "forward": {
+                  "check": {
+                    "atol": 1e-06,
+                    "failed_elements": 0,
+                    "max_abs": 5.022993505576778e-06,
+                    "relative_l2": 2.5106683043009232e-08,
+                    "rtol": 1e-05,
+                    "state": "passed"
+                  },
+                  "finite_l2": 20552.225265510693,
+                  "finite_max_abs": 98.4902114868164,
+                  "inf": 0,
+                  "nan": 0,
+                  "shape": [
+                    64,
+                    8,
+                    256,
+                    128
+                  ],
+                  "values": null
+                },
+                "grad_a": {
+                  "check": {
+                    "atol": 1e-06,
+                    "failed_elements": 0,
+                    "max_abs": 7.142848877476904e-11,
+                    "relative_l2": 2.7122219449339907e-08,
+                    "rtol": 1e-05,
+                    "state": "passed"
+                  },
+                  "finite_l2": 0.027612767024715542,
+                  "finite_max_abs": 0.001859877142123878,
+                  "inf": 0,
+                  "nan": 0,
+                  "shape": [
+                    64,
+                    8,
+                    256,
+                    128
+                  ],
+                  "values": null
+                },
+                "grad_b": {
+                  "check": {
+                    "atol": 1e-06,
+                    "reference": {
+                      "finite_l2": 0.05887772100500662,
+                      "finite_max_abs": 0.024027025264719813,
+                      "inf": 0,
+                      "nan": 0,
+                      "shape": [
+                        64,
+                        8,
+                        256,
+                        1
+                      ],
+                      "values": null
+                    },
+                    "rtol": 1e-05,
+                    "state": "nonfinite",
+                    "value": {
+                      "finite_l2": 0.05887772140538597,
+                      "finite_max_abs": 0.024027027189731598,
+                      "inf": 0,
+                      "nan": 1,
+                      "shape": [
+                        64,
+                        8,
+                        256,
+                        1
+                      ],
+                      "values": null
+                    }
+                  },
+                  "finite_l2": 0.05887772140538597,
+                  "finite_max_abs": 0.024027027189731598,
+                  "inf": 0,
+                  "nan": 1,
+                  "shape": [
+                    64,
+                    8,
+                    256,
+                    1
+                  ],
+                  "values": null
+                }
+              }
+            }
+          }
+        }
+      },
+      "original_error": "RuntimeError('The total norm of order 2.0 for gradients from `parameters` is non-finite, so it cannot be clipped. To disable this error and scale the gradients by the non-finite norm anyway, set `error_if_nonfinite=False`')",
+      "original_last_step": 1101,
+      "original_last_tokens": 17609242,
+      "original_run": "tl-v10-main-hb-d128-r64-pool-s22",
+      "original_source": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+      "original_state": "failed",
+      "replay": {
+        "all_common_tokens_equal": true,
+        "checkpoint_progress": {
+          "cursor": 59328,
+          "dropped_tail_tokens": 3917,
+          "milestones": [
+            8388608
+          ],
+          "probe": false,
+          "step": 927,
+          "tokens": 14826546
+        },
+        "checkpoint_sha256": "816ac254db7b967d5b9c4cc9ebabeb58c8ad29b8d0738715dc1ea43c5c80bb5b",
+        "common_steps": 12,
+        "diagnostic_source": {
+          "commit": "95bce59a3c1d5c9532915309132455a279cd7eee",
+          "tree_sha256": "f4c49b02e6bb845d36b00456f01506009d096cd8f77e0f747fb222520d272589"
+        },
+        "failure_progress": {
+          "cursor": 70464,
+          "dropped_tail_tokens": 3917,
+          "milestones": [
+            8388608
+          ],
+          "probe": false,
+          "step": 1101,
+          "tokens": 17609242
+        },
+        "failure_step": 1102,
+        "max_abs_gradient_norm_delta": 0.0,
+        "max_abs_loss_delta": 0.0,
+        "physical_visibility": "10",
+        "record": "runs/v10-diag-hb-d128-r64-pool-s22/result.json",
+        "seconds": 815.7256530150771,
+        "state": "failure_reproduced",
+        "training_source": {
+          "commit": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+          "tree_sha256": "b42a2533e88677e6c7e1fa298d2ba94b122bcbb8f873b851cc5e8ba517eef798"
+        }
+      },
+      "services": {
+        "v10-diag-hb-d128-r64-pool-s22": {
+          "elapsed_seconds": 830.7664848603308,
+          "state": "completed",
+          "termination_verified_at_finalization": true
+        },
+        "v10-fixcheck-hb-d128-r64-pool-s22": {
+          "elapsed_seconds": 52.6124915368855,
+          "state": "completed",
+          "termination_verified_at_finalization": true
+        }
+      }
+    },
+    {
+      "full_batch_candidate": {
+        "batches_sha256": "27f9fa4c2538b3177057299a7ec090a422c6cf6b97c204086dc9a30167763363",
+        "checkpoint_sha256": "43ef640339e9d7e9ee47b37480a3422218f6976e44da889b77d84b109783f7fc",
+        "forward_bitwise_equal_all_microbatches": true,
+        "record": "runs/v10-fixcheck-hb-d128-r28-pool-s22/full-update/result.json",
+        "source_commit": "a8669103cd87932eb8beb38ecabaadb7d774505f",
+        "state": "completed",
+        "variants": {
+          "ordered_aggregate_quotient": {
+            "floor_events": 10136.0,
+            "gradient_acceptance": "passed",
+            "gradient_norm": 0.5326507091522217,
+            "loss": 3.6109052896499634,
+            "nonfinite_parameter_count": 0,
+            "optimizer": {
+              "embedding_changed": true,
+              "parameters_finite": true,
+              "tied_head_alias": true
+            },
+            "support_errors": 0.0
+          },
+          "original": {
+            "floor_events": 10136.0,
+            "gradient_acceptance": "failed",
+            "gradient_norm": null,
+            "loss": 3.6109052896499634,
+            "nonfinite_parameter_count": 34,
+            "optimizer": null,
+            "support_errors": 0.0
+          }
+        }
+      },
+      "gradients": {
+        "all_parameter_gradients_finite": false,
+        "finite_elements_norm_fp64": 0.41980783981352526,
+        "nonfinite_elements": 8597208,
+        "nonfinite_parameters": [
+          "memories.0.base",
+          "memories.0.current.weight",
+          "memories.0.ffgate.weight",
+          "memories.0.ffup.weight",
+          "memories.0.ffdown.weight",
+          "memories.0.adapter_in.weight",
+          "memories.0.adapter_out.weight",
+          "memories.0.query.weight",
+          "memories.0.output.weight",
+          "memories.0.read_q.weight",
+          "memories.0.read_k.weight",
+          "memories.0.read_v.weight",
+          "memories.1.base",
+          "memories.1.current.weight",
+          "memories.1.adapter_in.weight",
+          "memories.1.adapter_out.weight",
+          "memories.1.read_q.weight",
+          "memories.1.read_k.weight",
+          "memories.1.read_v.weight",
+          "selectors.0.local.a.weight",
+          "selectors.0.local.a.bias",
+          "selectors.0.local.b.weight",
+          "selectors.0.local.b.bias",
+          "selectors.1.local.a.weight",
+          "selectors.1.local.a.bias",
+          "selectors.1.local.b.weight",
+          "selectors.1.local.b.bias",
+          "aggregators.0.a",
+          "aggregators.0.b",
+          "aggregators.0.e",
+          "aggregators.1.a",
+          "aggregators.1.b",
+          "aggregators.1.e",
+          "embedding.weight"
+        ]
+      },
+      "id": "hb-d128-r28-pool-s22",
+      "incident": {
+        "forward_trace": [
+          "  File \"<repo>/.local/source-v10-execution/tide_lab/direct_semantic.py\", line 258, in forward\n    try:return self._forward(ids,observations)\n",
+          "  File \"<repo>/.local/source-v10-execution/tide_lab/direct_specialized.py\", line 132, in _forward\n    u,r=self.aggregate(j,z,w,getattr(self,'incidence_'+str(j)))\n",
+          "  File \"<repo>/.local/source-v10-execution/tide_lab/direct_specialized.py\", line 98, in aggregate\n    return value/torch.where(received>0,received,torch.ones_like(received)).unsqueeze(-1),received\n"
+        ],
+        "grad_inputs": [
+          {
+            "dtype": "torch.float32",
+            "elements": 14680064,
+            "finite_l2": 0.00641393156091627,
+            "inf": 0,
+            "max_abs_finite": 0.0006284373230300844,
+            "min_positive": 2.6124305838819523e-33,
+            "nan": 0,
+            "shape": [
+              28,
+              16,
+              256,
+              128
+            ]
+          },
+          {
+            "dtype": "torch.float32",
+            "elements": 114688,
+            "finite_l2": 0.03492312977358415,
+            "inf": 1,
+            "max_abs_finite": 0.03445722162723541,
+            "min_positive": 7.025792437124636e-31,
+            "nan": 1,
+            "shape": [
+              28,
+              16,
+              256,
+              1
+            ]
+          }
+        ],
+        "grad_outputs": [
+          {
+            "dtype": "torch.float32",
+            "elements": 14680064,
+            "finite_l2": 0.000857774336551643,
+            "inf": 0,
+            "max_abs_finite": 3.6977111449232325e-05,
+            "min_positive": 1.401298464324817e-45,
+            "nan": 0,
+            "shape": [
+              28,
+              16,
+              256,
+              128
+            ]
+          }
+        ],
+        "microbatch": 1,
+        "node": "DivBackward0",
+        "saved": {
+          "_saved_other": {
+            "dtype": "torch.float32",
+            "elements": 114688,
+            "finite_l2": 40.54654232286122,
+            "inf": 0,
+            "max_abs_finite": 0.9718031287193298,
+            "min_positive": 2.612801141005781e-38,
+            "nan": 0,
+            "shape": [
+              28,
+              16,
+              256,
+              1
+            ]
+          },
+          "_saved_self": {
+            "dtype": "torch.float32",
+            "elements": 14680064,
+            "finite_l2": 1043.187645440443,
+            "inf": 0,
+            "max_abs_finite": 8.934170722961426,
+            "min_positive": 2.8083660744272594e-39,
+            "nan": 0,
+            "shape": [
+              28,
+              16,
+              256,
+              128
+            ]
+          }
+        },
+        "upstream_all_finite": true
+      },
+      "local_references": {
+        "cpu": {
+          "broadcast_fp64_gradcheck": true,
+          "record": "runs/v10-fixcheck-hb-d128-r28-pool-s22/division-cpu/result.json",
+          "state": "completed",
+          "witness": {
+            "examples": [
+              {
+                "denominator": 2.612801141005781e-38,
+                "fp64_element_grad_b": 1.1384286800552107e-06,
+                "index": [
+                  19,
+                  12,
+                  231,
+                  0
+                ],
+                "numerator": 2.773051279204547e-37,
+                "quotient": 10.613327026367188,
+                "unsafe_quotient_over_denominator": "inf",
+                "upstream": -2.802596928649634e-45
+              },
+              {
+                "denominator": 2.612801141005781e-38,
+                "fp64_element_grad_b": 5.605311605844407e-06,
+                "index": [
+                  19,
+                  12,
+                  231,
+                  2
+                ],
+                "numerator": 3.4134366059218337e-37,
+                "quotient": 13.06428050994873,
+                "unsafe_quotient_over_denominator": "inf",
+                "upstream": -1.1210387714598537e-44
+              },
+              {
+                "denominator": 2.612801141005781e-38,
+                "fp64_element_grad_b": -4.894350527938547e-06,
+                "index": [
+                  19,
+                  12,
+                  231,
+                  3
+                ],
+                "numerator": 4.768778310018408e-37,
+                "quotient": 18.2515926361084,
+                "unsafe_quotient_over_denominator": "inf",
+                "upstream": 7.006492321624085e-45
+              },
+              {
+                "denominator": 2.612801141005781e-38,
+                "fp64_element_grad_b": -1.2665931251118855e-06,
+                "index": [
+                  19,
+                  12,
+                  231,
+                  8
+                ],
+                "numerator": -6.170483487209511e-37,
+                "quotient": -23.61635398864746,
+                "unsafe_quotient_over_denominator": "-inf",
+                "upstream": -1.401298464324817e-45
+              },
+              {
+                "denominator": 2.612801141005781e-38,
+                "fp64_element_grad_b": 2.8646589208690506e-06,
+                "index": [
+                  19,
+                  12,
+                  231,
+                  9
+                ],
+                "numerator": -3.4889520196449124e-37,
+                "quotient": -13.353301048278809,
+                "unsafe_quotient_over_denominator": "-inf",
+                "upstream": 5.605193857299268e-45
+              },
+              {
+                "denominator": 2.612801141005781e-38,
+                "fp64_element_grad_b": 9.43229035970138e-07,
+                "index": [
+                  19,
+                  12,
+                  231,
+                  11
+                ],
+                "numerator": 4.5951450988620775e-37,
+                "quotient": 17.587045669555664,
+                "unsafe_quotient_over_denominator": "inf",
+                "upstream": -1.401298464324817e-45
+              },
+              {
+                "denominator": 2.612801141005781e-38,
+                "fp64_element_grad_b": -2.162248514926476e-06,
+                "index": [
+                  19,
+                  12,
+                  231,
+                  15
+                ],
+                "numerator": -2.633465809199486e-37,
+                "quotient": -10.079090118408203,
+                "unsafe_quotient_over_denominator": "-inf",
+                "upstream": -5.605193857299268e-45
+              },
+              {
+                "denominator": 2.612801141005781e-38,
+                "fp64_element_grad_b": -2.074777746526143e-06,
+                "index": [
+                  19,
+                  12,
+                  231,
+                  18
+                ],
+                "numerator": 2.526932597916639e-37,
+                "quotient": 9.671354293823242,
+                "unsafe_quotient_over_denominator": "inf",
+                "upstream": 5.605193857299268e-45
+              }
+            ],
+            "microbatch": 1,
+            "node": "DivBackward0",
+            "overflowing_intermediate_elements": 54,
+            "sha256": "415f27da48f9b8ac903fdcce626054c54df20d034ce5592bbc49cc20e2b46834",
+            "upstream_finite": true,
+            "variants": {
+              "ordered": {
+                "forward": {
+                  "check": {
+                    "atol": 1e-06,
+                    "failed_elements": 0,
+                    "max_abs": 1.9072826233923479e-06,
+                    "relative_l2": 2.4544041792493992e-08,
+                    "rtol": 1e-05,
+                    "state": "passed"
+                  },
+                  "finite_l2": 18338.104122343706,
+                  "finite_max_abs": 62.93628692626953,
+                  "inf": 0,
+                  "nan": 0,
+                  "shape": [
+                    28,
+                    16,
+                    256,
+                    128
+                  ],
+                  "values": null
+                },
+                "forward_bitwise_equal_to_ordinary": true,
+                "grad_a": {
+                  "check": {
+                    "atol": 1e-06,
+                    "failed_elements": 0,
+                    "max_abs": 1.445517620532466e-11,
+                    "relative_l2": 2.5455346403556092e-08,
+                    "rtol": 1e-05,
+                    "state": "passed"
+                  },
+                  "finite_l2": 0.006413931548944478,
+                  "finite_max_abs": 0.0006284373230300844,
+                  "inf": 0,
+                  "nan": 0,
+                  "shape": [
+                    28,
+                    16,
+                    256,
+                    128
+                  ],
+                  "values": null
+                },
+                "grad_b": {
+                  "check": {
+                    "atol": 1e-06,
+                    "failed_elements": 0,
+                    "max_abs": 8.160267802379735e-08,
+                    "relative_l2": 3.150478879438795e-06,
+                    "rtol": 1e-05,
+                    "state": "passed"
+                  },
+                  "finite_l2": 0.03492314902659914,
+                  "finite_max_abs": 0.034457217901945114,
+                  "inf": 0,
+                  "nan": 0,
+                  "shape": [
+                    28,
+                    16,
+                    256,
+                    1
+                  ],
+                  "values": null
+                }
+              },
+              "ordinary": {
+                "forward": {
+                  "check": {
+                    "atol": 1e-06,
+                    "failed_elements": 0,
+                    "max_abs": 1.9072826233923479e-06,
+                    "relative_l2": 2.4544041792493992e-08,
+                    "rtol": 1e-05,
+                    "state": "passed"
+                  },
+                  "finite_l2": 18338.104122343706,
+                  "finite_max_abs": 62.93628692626953,
+                  "inf": 0,
+                  "nan": 0,
+                  "shape": [
+                    28,
+                    16,
+                    256,
+                    128
+                  ],
+                  "values": null
+                },
+                "grad_a": {
+                  "check": {
+                    "atol": 1e-06,
+                    "failed_elements": 0,
+                    "max_abs": 1.445517620532466e-11,
+                    "relative_l2": 2.5455346403556092e-08,
+                    "rtol": 1e-05,
+                    "state": "passed"
+                  },
+                  "finite_l2": 0.006413931548944478,
+                  "finite_max_abs": 0.0006284373230300844,
+                  "inf": 0,
+                  "nan": 0,
+                  "shape": [
+                    28,
+                    16,
+                    256,
+                    128
+                  ],
+                  "values": null
+                },
+                "grad_b": {
+                  "check": {
+                    "atol": 1e-06,
+                    "reference": {
+                      "finite_l2": 0.034923152827777915,
+                      "finite_max_abs": 0.03445722175516086,
+                      "inf": 0,
+                      "nan": 0,
+                      "shape": [
+                        28,
+                        16,
+                        256,
+                        1
+                      ],
+                      "values": null
+                    },
+                    "rtol": 1e-05,
+                    "state": "nonfinite",
+                    "value": {
+                      "finite_l2": 0.034923129768188226,
+                      "finite_max_abs": 0.03445722162723541,
+                      "inf": 1,
+                      "nan": 1,
+                      "shape": [
+                        28,
+                        16,
+                        256,
+                        1
+                      ],
+                      "values": null
+                    }
+                  },
+                  "finite_l2": 0.034923129768188226,
+                  "finite_max_abs": 0.03445722162723541,
+                  "inf": 1,
+                  "nan": 1,
+                  "shape": [
+                    28,
+                    16,
+                    256,
+                    1
+                  ],
+                  "values": null
+                }
+              }
+            }
+          }
+        },
+        "npu": {
+          "broadcast_fp64_gradcheck": true,
+          "record": "runs/v10-fixcheck-hb-d128-r28-pool-s22/division-npu/result.json",
+          "state": "completed",
+          "witness": {
+            "examples": [
+              {
+                "denominator": 2.612801141005781e-38,
+                "fp64_element_grad_b": 1.1384286800552107e-06,
+                "index": [
+                  19,
+                  12,
+                  231,
+                  0
+                ],
+                "numerator": 2.773051279204547e-37,
+                "quotient": 10.613327026367188,
+                "unsafe_quotient_over_denominator": "inf",
+                "upstream": -2.802596928649634e-45
+              },
+              {
+                "denominator": 2.612801141005781e-38,
+                "fp64_element_grad_b": 5.605311605844407e-06,
+                "index": [
+                  19,
+                  12,
+                  231,
+                  2
+                ],
+                "numerator": 3.4134366059218337e-37,
+                "quotient": 13.06428050994873,
+                "unsafe_quotient_over_denominator": "inf",
+                "upstream": -1.1210387714598537e-44
+              },
+              {
+                "denominator": 2.612801141005781e-38,
+                "fp64_element_grad_b": -4.894350527938547e-06,
+                "index": [
+                  19,
+                  12,
+                  231,
+                  3
+                ],
+                "numerator": 4.768778310018408e-37,
+                "quotient": 18.2515926361084,
+                "unsafe_quotient_over_denominator": "inf",
+                "upstream": 7.006492321624085e-45
+              },
+              {
+                "denominator": 2.612801141005781e-38,
+                "fp64_element_grad_b": -1.2665931251118855e-06,
+                "index": [
+                  19,
+                  12,
+                  231,
+                  8
+                ],
+                "numerator": -6.170483487209511e-37,
+                "quotient": -23.61635398864746,
+                "unsafe_quotient_over_denominator": "-inf",
+                "upstream": -1.401298464324817e-45
+              },
+              {
+                "denominator": 2.612801141005781e-38,
+                "fp64_element_grad_b": 2.8646589208690506e-06,
+                "index": [
+                  19,
+                  12,
+                  231,
+                  9
+                ],
+                "numerator": -3.4889520196449124e-37,
+                "quotient": -13.353301048278809,
+                "unsafe_quotient_over_denominator": "-inf",
+                "upstream": 5.605193857299268e-45
+              },
+              {
+                "denominator": 2.612801141005781e-38,
+                "fp64_element_grad_b": 9.43229035970138e-07,
+                "index": [
+                  19,
+                  12,
+                  231,
+                  11
+                ],
+                "numerator": 4.5951450988620775e-37,
+                "quotient": 17.587045669555664,
+                "unsafe_quotient_over_denominator": "inf",
+                "upstream": -1.401298464324817e-45
+              },
+              {
+                "denominator": 2.612801141005781e-38,
+                "fp64_element_grad_b": -2.162248514926476e-06,
+                "index": [
+                  19,
+                  12,
+                  231,
+                  15
+                ],
+                "numerator": -2.633465809199486e-37,
+                "quotient": -10.079090118408203,
+                "unsafe_quotient_over_denominator": "-inf",
+                "upstream": -5.605193857299268e-45
+              },
+              {
+                "denominator": 2.612801141005781e-38,
+                "fp64_element_grad_b": -2.074777746526143e-06,
+                "index": [
+                  19,
+                  12,
+                  231,
+                  18
+                ],
+                "numerator": 2.526932597916639e-37,
+                "quotient": 9.671354293823242,
+                "unsafe_quotient_over_denominator": "inf",
+                "upstream": 5.605193857299268e-45
+              }
+            ],
+            "microbatch": 1,
+            "node": "DivBackward0",
+            "overflowing_intermediate_elements": 54,
+            "sha256": "415f27da48f9b8ac903fdcce626054c54df20d034ce5592bbc49cc20e2b46834",
+            "upstream_finite": true,
+            "variants": {
+              "ordered": {
+                "forward": {
+                  "check": {
+                    "atol": 1e-06,
+                    "failed_elements": 0,
+                    "max_abs": 2.5490597721500308e-06,
+                    "relative_l2": 2.5237544266668164e-08,
+                    "rtol": 1e-05,
+                    "state": "passed"
+                  },
+                  "finite_l2": 18338.104113529247,
+                  "finite_max_abs": 62.93628692626953,
+                  "inf": 0,
+                  "nan": 0,
+                  "shape": [
+                    28,
+                    16,
+                    256,
+                    128
+                  ],
+                  "values": null
+                },
+                "forward_bitwise_equal_to_ordinary": true,
+                "grad_a": {
+                  "check": {
+                    "atol": 1e-06,
+                    "failed_elements": 0,
+                    "max_abs": 1.6141516671463324e-11,
+                    "relative_l2": 2.6193859282151923e-08,
+                    "rtol": 1e-05,
+                    "state": "passed"
+                  },
+                  "finite_l2": 0.00641393156091627,
+                  "finite_max_abs": 0.0006284373230300844,
+                  "inf": 0,
+                  "nan": 0,
+                  "shape": [
+                    28,
+                    16,
+                    256,
+                    128
+                  ],
+                  "values": null
+                },
+                "grad_b": {
+                  "check": {
+                    "atol": 1e-06,
+                    "failed_elements": 0,
+                    "max_abs": 8.159904004499026e-08,
+                    "relative_l2": 3.150121491446874e-06,
+                    "rtol": 1e-05,
+                    "state": "passed"
+                  },
+                  "finite_l2": 0.03492315638047888,
+                  "finite_max_abs": 0.03445722535252571,
+                  "inf": 0,
+                  "nan": 0,
+                  "shape": [
+                    28,
+                    16,
+                    256,
+                    1
+                  ],
+                  "values": null
+                }
+              },
+              "ordinary": {
+                "forward": {
+                  "check": {
+                    "atol": 1e-06,
+                    "failed_elements": 0,
+                    "max_abs": 2.5490597721500308e-06,
+                    "relative_l2": 2.5237544266668164e-08,
+                    "rtol": 1e-05,
+                    "state": "passed"
+                  },
+                  "finite_l2": 18338.104113529247,
+                  "finite_max_abs": 62.93628692626953,
+                  "inf": 0,
+                  "nan": 0,
+                  "shape": [
+                    28,
+                    16,
+                    256,
+                    128
+                  ],
+                  "values": null
+                },
+                "grad_a": {
+                  "check": {
+                    "atol": 1e-06,
+                    "failed_elements": 0,
+                    "max_abs": 1.6141516671463324e-11,
+                    "relative_l2": 2.6193859282151923e-08,
+                    "rtol": 1e-05,
+                    "state": "passed"
+                  },
+                  "finite_l2": 0.00641393156091627,
+                  "finite_max_abs": 0.0006284373230300844,
+                  "inf": 0,
+                  "nan": 0,
+                  "shape": [
+                    28,
+                    16,
+                    256,
+                    128
+                  ],
+                  "values": null
+                },
+                "grad_b": {
+                  "check": {
+                    "atol": 1e-06,
+                    "reference": {
+                      "finite_l2": 0.034923152827777915,
+                      "finite_max_abs": 0.03445722175516086,
+                      "inf": 0,
+                      "nan": 0,
+                      "shape": [
+                        28,
+                        16,
+                        256,
+                        1
+                      ],
+                      "values": null
+                    },
+                    "rtol": 1e-05,
+                    "state": "nonfinite",
+                    "value": {
+                      "finite_l2": 0.03492312977358415,
+                      "finite_max_abs": 0.03445722162723541,
+                      "inf": 1,
+                      "nan": 1,
+                      "shape": [
+                        28,
+                        16,
+                        256,
+                        1
+                      ],
+                      "values": null
+                    }
+                  },
+                  "finite_l2": 0.03492312977358415,
+                  "finite_max_abs": 0.03445722162723541,
+                  "inf": 1,
+                  "nan": 1,
+                  "shape": [
+                    28,
+                    16,
+                    256,
+                    1
+                  ],
+                  "values": null
+                }
+              }
+            }
+          }
+        }
+      },
+      "original_error": "RuntimeError('The total norm of order 2.0 for gradients from `parameters` is non-finite, so it cannot be clipped. To disable this error and scale the gradients by the non-finite norm anyway, set `error_if_nonfinite=False`')",
+      "original_last_step": 3554,
+      "original_last_tokens": 56845183,
+      "original_run": "tl-v10-main-hb-d128-r28-pool-s22",
+      "original_source": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+      "original_state": "failed",
+      "replay": {
+        "all_common_tokens_equal": true,
+        "checkpoint_progress": {
+          "cursor": 198080,
+          "dropped_tail_tokens": 10522,
+          "milestones": [
+            8388608,
+            33554432
+          ],
+          "probe": false,
+          "step": 3095,
+          "tokens": 49507795
+        },
+        "checkpoint_sha256": "392fbc0ab858405ef53d8a6c242d945ae76d3ee58f52111cd0d4eed060350534",
+        "common_steps": 30,
+        "diagnostic_source": {
+          "commit": "95bce59a3c1d5c9532915309132455a279cd7eee",
+          "tree_sha256": "f4c49b02e6bb845d36b00456f01506009d096cd8f77e0f747fb222520d272589"
+        },
+        "failure_progress": {
+          "cursor": 227456,
+          "dropped_tail_tokens": 10522,
+          "milestones": [
+            8388608,
+            33554432
+          ],
+          "probe": false,
+          "step": 3554,
+          "tokens": 56845183
+        },
+        "failure_step": 3555,
+        "max_abs_gradient_norm_delta": 0.0,
+        "max_abs_loss_delta": 0.0,
+        "physical_visibility": "14",
+        "record": "runs/v10-diag-hb-d128-r28-pool-s22/result.json",
+        "seconds": 1677.6157439611852,
+        "state": "failure_reproduced",
+        "training_source": {
+          "commit": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+          "tree_sha256": "b42a2533e88677e6c7e1fa298d2ba94b122bcbb8f873b851cc5e8ba517eef798"
+        }
+      },
+      "services": {
+        "v10-diag-hb-d128-r28-pool-s22": {
+          "elapsed_seconds": 1692.3009225986898,
+          "state": "completed",
+          "termination_verified_at_finalization": true
+        },
+        "v10-fixcheck-hb-d128-r28-pool-s22": {
+          "elapsed_seconds": 46.14492293074727,
+          "state": "completed",
+          "termination_verified_at_finalization": true
+        }
+      }
+    }
+  ],
+  "diagnostic_disk_gib": 5.420284271240234,
+  "diagnostic_service_wall_hours": 1.1118581491739798,
+  "diagnostic_services": [
+    {
+      "descendants_terminated": true,
+      "id": "v10-diag-hb-d128-r28-pool-s22",
+      "physical_id": 14,
+      "service_seconds": 1692.3009225986898,
+      "state": "completed"
+    },
+    {
+      "descendants_terminated": true,
+      "id": "v10-diag-hb-d128-r64-pool-s11",
+      "physical_id": 11,
+      "service_seconds": 1287.9380404092371,
+      "state": "completed"
+    },
+    {
+      "descendants_terminated": true,
+      "id": "v10-diag-hb-d128-r64-pool-s22",
+      "physical_id": 10,
+      "service_seconds": 830.7664848603308,
+      "state": "completed"
+    },
+    {
+      "descendants_terminated": true,
+      "id": "v10-diag-quick-r28-s22",
+      "physical_id": 2,
+      "service_seconds": 24.052829649299383,
+      "state": "completed"
+    },
+    {
+      "descendants_terminated": true,
+      "id": "v10-divprobe-npu-scalar",
+      "physical_id": 2,
+      "service_seconds": 15.161593191325665,
+      "state": "completed"
+    },
+    {
+      "descendants_terminated": true,
+      "id": "v10-fixcheck-hb-d128-r28-pool-s22",
+      "physical_id": 11,
+      "service_seconds": 46.14492293074727,
+      "state": "completed"
+    },
+    {
+      "descendants_terminated": true,
+      "id": "v10-fixcheck-hb-d128-r64-pool-s11",
+      "physical_id": 11,
+      "service_seconds": 53.71205184981227,
+      "state": "completed"
+    },
+    {
+      "descendants_terminated": true,
+      "id": "v10-fixcheck-hb-d128-r64-pool-s22",
+      "physical_id": 2,
+      "service_seconds": 52.6124915368855,
+      "state": "completed"
+    }
+  ],
+  "distinctions": {
+    "discrete_semantics": "See unchanged support/floor observations; no general continuation claim.",
+    "execution": "Expected failure reproduction is completed diagnosis, not successful original training.",
+    "learning": "No new training trajectory or convergence result; main jobs and sealed test untouched.",
+    "recovery": "Common logged values compared, not all historic parameter bytes. Candidate fresh-process resume unchecked.",
+    "strict_numerical": "Local reference checks retain 1e-6/1e-5; old full-model strict failures retained."
+  },
+  "observed_at": "2026-11-14T20:34:39.787889+00:00",
+  "old_weights_failed_batch": {
+    "checkpoint_progress": {
+      "cursor": 198080,
+      "dropped_tail_tokens": 10522,
+      "milestones": [
+        8388608,
+        33554432
+      ],
+      "probe": false,
+      "step": 3095,
+      "tokens": 49507795
+    },
+    "config_id": "hb-d128-r28-pool-s22",
+    "mode": "checkpoint-failed-batch",
+    "seconds": 9.660559631884098,
+    "state": "failed_batch_at_old_weights_finite"
+  },
+  "review_note": "All three actual failure boundaries and captured operator data reviewed. Report scopes attribution; original failures and all prior strict thresholds remain.",
+  "scalar_probes": {
+    "cpu": {
+      "broadcast_fp64_gradcheck": true,
+      "cases": [
+        {
+          "case": "tiny_nonzero_vjp",
+          "checks": {
+            "forward": {
+              "atol": 1e-06,
+              "failed_elements": 0,
+              "max_abs": 1.9787067717658147e-07,
+              "relative_l2": 4.748896207873815e-08,
+              "rtol": 1e-05,
+              "state": "passed"
+            },
+            "grad_a": {
+              "atol": 1e-06,
+              "failed_elements": 0,
+              "max_abs": 1.4156409992763785e+25,
+              "relative_l2": 1.6987692110531312e-08,
+              "rtol": 1e-05,
+              "state": "passed"
+            },
+            "grad_b": {
+              "atol": 1e-06,
+              "reference": {
+                "finite_l2": 3.472222230292623e+33,
+                "finite_max_abs": 3.472222230292623e+33,
+                "inf": 0,
+                "nan": 0,
+                "shape": [],
+                "values": [
+                  -3.472222230292623e+33
+                ]
+              },
+              "rtol": 1e-05,
+              "state": "nonfinite",
+              "value": {
+                "finite_l2": 0.0,
+                "finite_max_abs": null,
+                "inf": 1,
+                "nan": 0,
+                "shape": [],
+                "values": [
+                  "-inf"
+                ]
+              }
+            }
+          },
+          "forward": {
+            "finite_l2": 4.166666507720947,
+            "finite_max_abs": 4.166666507720947,
+            "inf": 0,
+            "nan": 0,
+            "shape": [],
+            "values": [
+              4.166666507720947
+            ]
+          },
+          "grad_a": {
+            "finite_l2": 8.333333416416481e+32,
+            "finite_max_abs": 8.333333416416481e+32,
+            "inf": 0,
+            "nan": 0,
+            "shape": [],
+            "values": [
+              8.333333416416481e+32
+            ]
+          },
+          "grad_b": {
+            "finite_l2": 0.0,
+            "finite_max_abs": null,
+            "inf": 1,
+            "nan": 0,
+            "shape": [],
+            "values": [
+              "-inf"
+            ]
+          },
+          "method": "ordinary",
+          "reference_grad_b": {
+            "finite_l2": 3.472222230292623e+33,
+            "finite_max_abs": 3.472222230292623e+33,
+            "inf": 0,
+            "nan": 0,
+            "shape": [],
+            "values": [
+              -3.472222230292623e+33
+            ]
+          }
+        },
+        {
+          "case": "tiny_nonzero_vjp",
+          "checks": {
+            "forward": {
+              "atol": 1e-06,
+              "failed_elements": 0,
+              "max_abs": 1.9787067717658147e-07,
+              "relative_l2": 4.748896207873815e-08,
+              "rtol": 1e-05,
+              "state": "passed"
+            },
+            "grad_a": {
+              "atol": 1e-06,
+              "failed_elements": 0,
+              "max_abs": 1.4156409992763785e+25,
+              "relative_l2": 1.6987692110531312e-08,
+              "rtol": 1e-05,
+              "state": "passed"
+            },
+            "grad_b": {
+              "atol": 1e-06,
+              "failed_elements": 0,
+              "max_abs": 3.474134761799105e+26,
+              "relative_l2": 1.0005508090725865e-07,
+              "rtol": 1e-05,
+              "state": "passed"
+            }
+          },
+          "forward": {
+            "finite_l2": 4.166666507720947,
+            "finite_max_abs": 4.166666507720947,
+            "inf": 0,
+            "nan": 0,
+            "shape": [],
+            "values": [
+              4.166666507720947
+            ]
+          },
+          "grad_a": {
+            "finite_l2": 8.333333416416481e+32,
+            "finite_max_abs": 8.333333416416481e+32,
+            "inf": 0,
+            "nan": 0,
+            "shape": [],
+            "values": [
+              8.333333416416481e+32
+            ]
+          },
+          "grad_b": {
+            "finite_l2": 3.472221882879147e+33,
+            "finite_max_abs": 3.472221882879147e+33,
+            "inf": 0,
+            "nan": 0,
+            "shape": [],
+            "values": [
+              -3.472221882879147e+33
+            ]
+          },
+          "method": "ordered",
+          "reference_grad_b": {
+            "finite_l2": 3.472222230292623e+33,
+            "finite_max_abs": 3.472222230292623e+33,
+            "inf": 0,
+            "nan": 0,
+            "shape": [],
+            "values": [
+              -3.472222230292623e+33
+            ]
+          }
+        },
+        {
+          "case": "tiny_zero_vjp",
+          "checks": {
+            "forward": {
+              "atol": 1e-06,
+              "failed_elements": 0,
+              "max_abs": 1.9787067717658147e-07,
+              "relative_l2": 4.748896207873815e-08,
+              "rtol": 1e-05,
+              "state": "passed"
+            },
+            "grad_a": {
+              "atol": 1e-06,
+              "failed_elements": 0,
+              "max_abs": 0.0,
+              "relative_l2": 0.0,
+              "rtol": 1e-05,
+              "state": "passed"
+            },
+            "grad_b": {
+              "atol": 1e-06,
+              "reference": {
+                "finite_l2": 0.0,
+                "finite_max_abs": 0.0,
+                "inf": 0,
+                "nan": 0,
+                "shape": [],
+                "values": [
+                  -0.0
+                ]
+              },
+              "rtol": 1e-05,
+              "state": "nonfinite",
+              "value": {
+                "finite_l2": 0.0,
+                "finite_max_abs": null,
+                "inf": 0,
+                "nan": 1,
+                "shape": [],
+                "values": [
+                  "nan"
+                ]
+              }
+            }
+          },
+          "forward": {
+            "finite_l2": 4.166666507720947,
+            "finite_max_abs": 4.166666507720947,
+            "inf": 0,
+            "nan": 0,
+            "shape": [],
+            "values": [
+              4.166666507720947
+            ]
+          },
+          "grad_a": {
+            "finite_l2": 0.0,
+            "finite_max_abs": 0.0,
+            "inf": 0,
+            "nan": 0,
+            "shape": [],
+            "values": [
+              0.0
+            ]
+          },
+          "grad_b": {
+            "finite_l2": 0.0,
+            "finite_max_abs": null,
+            "inf": 0,
+            "nan": 1,
+            "shape": [],
+            "values": [
+              "nan"
+            ]
+          },
+          "method": "ordinary",
+          "reference_grad_b": {
+            "finite_l2": 0.0,
+            "finite_max_abs": 0.0,
+            "inf": 0,
+            "nan": 0,
+            "shape": [],
+            "values": [
+              -0.0
+            ]
+          }
+        },
+        {
+          "case": "tiny_zero_vjp",
+          "checks": {
+            "forward": {
+              "atol": 1e-06,
+              "failed_elements": 0,
+              "max_abs": 1.9787067717658147e-07,
+              "relative_l2": 4.748896207873815e-08,
+              "rtol": 1e-05,
+              "state": "passed"
+            },
+            "grad_a": {
+              "atol": 1e-06,
+              "failed_elements": 0,
+              "max_abs": 0.0,
+              "relative_l2": 0.0,
+              "rtol": 1e-05,
+              "state": "passed"
+            },
+            "grad_b": {
+              "atol": 1e-06,
+              "failed_elements": 0,
+              "max_abs": 0.0,
+              "relative_l2": 0.0,
+              "rtol": 1e-05,
+              "state": "passed"
+            }
+          },
+          "forward": {
+            "finite_l2": 4.166666507720947,
+            "finite_max_abs": 4.166666507720947,
+            "inf": 0,
+            "nan": 0,
+            "shape": [],
+            "values": [
+              4.166666507720947
+            ]
+          },
+          "grad_a": {
+            "finite_l2": 0.0,
+            "finite_max_abs": 0.0,
+            "inf": 0,
+            "nan": 0,
+            "shape": [],
+            "values": [
+              0.0
+            ]
+          },
+          "grad_b": {
+            "finite_l2": 0.0,
+            "finite_max_abs": 0.0,
+            "inf": 0,
+            "nan": 0,
+            "shape": [],
+            "values": [
+              0.0
+            ]
+          },
+          "method": "ordered",
+          "reference_grad_b": {
+            "finite_l2": 0.0,
+            "finite_max_abs": 0.0,
+            "inf": 0,
+            "nan": 0,
+            "shape": [],
+            "values": [
+              -0.0
+            ]
+          }
+        },
+        {
+          "case": "ordinary",
+          "checks": {
+            "forward": {
+              "atol": 1e-06,
+              "failed_elements": 0,
+              "max_abs": 1.7128153029233317e-07,
+              "relative_l2": 4.110756714845712e-08,
+              "rtol": 1e-05,
+              "state": "passed"
+            },
+            "grad_a": {
+              "atol": 1e-06,
+              "failed_elements": 0,
+              "max_abs": 7.977970653882949e-06,
+              "relative_l2": 9.5735651100423e-09,
+              "rtol": 1e-05,
+              "state": "passed"
+            },
+            "grad_b": {
+              "atol": 1e-06,
+              "failed_elements": 0,
+              "max_abs": 0.00019066134473177954,
+              "relative_l2": 5.491046898646142e-08,
+              "rtol": 1e-05,
+              "state": "passed"
+            }
+          },
+          "forward": {
+            "finite_l2": 4.166666507720947,
+            "finite_max_abs": 4.166666507720947,
+            "inf": 0,
+            "nan": 0,
+            "shape": [],
+            "values": [
+              4.166666507720947
+            ]
+          },
+          "grad_a": {
+            "finite_l2": 833.3333129882812,
+            "finite_max_abs": 833.3333129882812,
+            "inf": 0,
+            "nan": 0,
+            "shape": [],
+            "values": [
+              833.3333129882812
+            ]
+          },
+          "grad_b": {
+            "finite_l2": 3472.221923828125,
+            "finite_max_abs": 3472.221923828125,
+            "inf": 0,
+            "nan": 0,
+            "shape": [],
+            "values": [
+              -3472.221923828125
+            ]
+          },
+          "method": "ordinary",
+          "reference_grad_b": {
+            "finite_l2": 3472.2221144894697,
+            "finite_max_abs": 3472.2221144894697,
+            "inf": 0,
+            "nan": 0,
+            "shape": [],
+            "values": [
+              -3472.2221144894697
+            ]
+          }
+        },
+        {
+          "case": "ordinary",
+          "checks": {
+            "forward": {
+              "atol": 1e-06,
+              "failed_elements": 0,
+              "max_abs": 1.7128153029233317e-07,
+              "relative_l2": 4.110756714845712e-08,
+              "rtol": 1e-05,
+              "state": "passed"
+            },
+            "grad_a": {
+              "atol": 1e-06,
+              "failed_elements": 0,
+              "max_abs": 7.977970653882949e-06,
+              "relative_l2": 9.5735651100423e-09,
+              "rtol": 1e-05,
+              "state": "passed"
+            },
+            "grad_b": {
+              "atol": 1e-06,
+              "failed_elements": 0,
+              "max_abs": 0.00019066134473177954,
+              "relative_l2": 5.491046898646142e-08,
+              "rtol": 1e-05,
+              "state": "passed"
+            }
+          },
+          "forward": {
+            "finite_l2": 4.166666507720947,
+            "finite_max_abs": 4.166666507720947,
+            "inf": 0,
+            "nan": 0,
+            "shape": [],
+            "values": [
+              4.166666507720947
+            ]
+          },
+          "grad_a": {
+            "finite_l2": 833.3333129882812,
+            "finite_max_abs": 833.3333129882812,
+            "inf": 0,
+            "nan": 0,
+            "shape": [],
+            "values": [
+              833.3333129882812
+            ]
+          },
+          "grad_b": {
+            "finite_l2": 3472.221923828125,
+            "finite_max_abs": 3472.221923828125,
+            "inf": 0,
+            "nan": 0,
+            "shape": [],
+            "values": [
+              -3472.221923828125
+            ]
+          },
+          "method": "ordered",
+          "reference_grad_b": {
+            "finite_l2": 3472.2221144894697,
+            "finite_max_abs": 3472.2221144894697,
+            "inf": 0,
+            "nan": 0,
+            "shape": [],
+            "values": [
+              -3472.2221144894697
+            ]
+          }
+        },
+        {
+          "case": "genuine_overflow",
+          "checks": {
+            "forward": {
+              "atol": 1e-06,
+              "failed_elements": 0,
+              "max_abs": 1.9787067717658147e-07,
+              "relative_l2": 4.748896207873815e-08,
+              "rtol": 1e-05,
+              "state": "passed"
+            },
+            "grad_a": {
+              "atol": 1e-06,
+              "reference": {
+                "finite_l2": 8.333333485370092e+38,
+                "finite_max_abs": 8.333333485370092e+38,
+                "inf": 0,
+                "nan": 0,
+                "shape": [],
+                "values": [
+                  8.333333485370092e+38
+                ]
+              },
+              "rtol": 1e-05,
+              "state": "nonfinite",
+              "value": {
+                "finite_l2": 0.0,
+                "finite_max_abs": null,
+                "inf": 1,
+                "nan": 0,
+                "shape": [],
+                "values": [
+                  "inf"
+                ]
+              }
+            },
+            "grad_b": {
+              "atol": 1e-06,
+              "reference": {
+                "finite_l2": 3.472222318008337e+39,
+                "finite_max_abs": 3.472222318008337e+39,
+                "inf": 0,
+                "nan": 0,
+                "shape": [],
+                "values": [
+                  -3.472222318008337e+39
+                ]
+              },
+              "rtol": 1e-05,
+              "state": "nonfinite",
+              "value": {
+                "finite_l2": 0.0,
+                "finite_max_abs": null,
+                "inf": 1,
+                "nan": 0,
+                "shape": [],
+                "values": [
+                  "-inf"
+                ]
+              }
+            }
+          },
+          "forward": {
+            "finite_l2": 4.166666507720947,
+            "finite_max_abs": 4.166666507720947,
+            "inf": 0,
+            "nan": 0,
+            "shape": [],
+            "values": [
+              4.166666507720947
+            ]
+          },
+          "grad_a": {
+            "finite_l2": 0.0,
+            "finite_max_abs": null,
+            "inf": 1,
+            "nan": 0,
+            "shape": [],
+            "values": [
+              "inf"
+            ]
+          },
+          "grad_b": {
+            "finite_l2": 0.0,
+            "finite_max_abs": null,
+            "inf": 1,
+            "nan": 0,
+            "shape": [],
+            "values": [
+              "-inf"
+            ]
+          },
+          "method": "ordinary",
+          "reference_grad_b": {
+            "finite_l2": 3.472222318008337e+39,
+            "finite_max_abs": 3.472222318008337e+39,
+            "inf": 0,
+            "nan": 0,
+            "shape": [],
+            "values": [
+              -3.472222318008337e+39
+            ]
+          }
+        },
+        {
+          "case": "genuine_overflow",
+          "checks": {
+            "forward": {
+              "atol": 1e-06,
+              "failed_elements": 0,
+              "max_abs": 1.9787067717658147e-07,
+              "relative_l2": 4.748896207873815e-08,
+              "rtol": 1e-05,
+              "state": "passed"
+            },
+            "grad_a": {
+              "atol": 1e-06,
+              "reference": {
+                "finite_l2": 8.333333485370092e+38,
+                "finite_max_abs": 8.333333485370092e+38,
+                "inf": 0,
+                "nan": 0,
+                "shape": [],
+                "values": [
+                  8.333333485370092e+38
+                ]
+              },
+              "rtol": 1e-05,
+              "state": "nonfinite",
+              "value": {
+                "finite_l2": 0.0,
+                "finite_max_abs": null,
+                "inf": 1,
+                "nan": 0,
+                "shape": [],
+                "values": [
+                  "inf"
+                ]
+              }
+            },
+            "grad_b": {
+              "atol": 1e-06,
+              "reference": {
+                "finite_l2": 3.472222318008337e+39,
+                "finite_max_abs": 3.472222318008337e+39,
+                "inf": 0,
+                "nan": 0,
+                "shape": [],
+                "values": [
+                  -3.472222318008337e+39
+                ]
+              },
+              "rtol": 1e-05,
+              "state": "nonfinite",
+              "value": {
+                "finite_l2": 0.0,
+                "finite_max_abs": null,
+                "inf": 1,
+                "nan": 0,
+                "shape": [],
+                "values": [
+                  "-inf"
+                ]
+              }
+            }
+          },
+          "forward": {
+            "finite_l2": 4.166666507720947,
+            "finite_max_abs": 4.166666507720947,
+            "inf": 0,
+            "nan": 0,
+            "shape": [],
+            "values": [
+              4.166666507720947
+            ]
+          },
+          "grad_a": {
+            "finite_l2": 0.0,
+            "finite_max_abs": null,
+            "inf": 1,
+            "nan": 0,
+            "shape": [],
+            "values": [
+              "inf"
+            ]
+          },
+          "grad_b": {
+            "finite_l2": 0.0,
+            "finite_max_abs": null,
+            "inf": 1,
+            "nan": 0,
+            "shape": [],
+            "values": [
+              "-inf"
+            ]
+          },
+          "method": "ordered",
+          "reference_grad_b": {
+            "finite_l2": 3.472222318008337e+39,
+            "finite_max_abs": 3.472222318008337e+39,
+            "inf": 0,
+            "nan": 0,
+            "shape": [],
+            "values": [
+              -3.472222318008337e+39
+            ]
+          }
+        }
+      ],
+      "device": "cpu",
+      "record": "runs/v10-divprobe-cpu-scalar/result.json",
+      "seconds": 0.0514533631503582,
+      "state": "completed"
+    },
+    "npu": {
+      "broadcast_fp64_gradcheck": true,
+      "cases": [
+        {
+          "case": "tiny_nonzero_vjp",
+          "checks": {
+            "forward": {
+              "atol": 1e-06,
+              "failed_elements": 0,
+              "max_abs": 1.9787067717658147e-07,
+              "relative_l2": 4.748896207873815e-08,
+              "rtol": 1e-05,
+              "state": "passed"
+            },
+            "grad_a": {
+              "atol": 1e-06,
+              "failed_elements": 0,
+              "max_abs": 1.4156409992763785e+25,
+              "relative_l2": 1.6987692110531312e-08,
+              "rtol": 1e-05,
+              "state": "passed"
+            },
+            "grad_b": {
+              "atol": 1e-06,
+              "reference": {
+                "finite_l2": 3.472222230292623e+33,
+                "finite_max_abs": 3.472222230292623e+33,
+                "inf": 0,
+                "nan": 0,
+                "shape": [],
+                "values": [
+                  -3.472222230292623e+33
+                ]
+              },
+              "rtol": 1e-05,
+              "state": "nonfinite",
+              "value": {
+                "finite_l2": 0.0,
+                "finite_max_abs": null,
+                "inf": 1,
+                "nan": 0,
+                "shape": [],
+                "values": [
+                  "-inf"
+                ]
+              }
+            }
+          },
+          "forward": {
+            "finite_l2": 4.166666507720947,
+            "finite_max_abs": 4.166666507720947,
+            "inf": 0,
+            "nan": 0,
+            "shape": [],
+            "values": [
+              4.166666507720947
+            ]
+          },
+          "grad_a": {
+            "finite_l2": 8.333333416416481e+32,
+            "finite_max_abs": 8.333333416416481e+32,
+            "inf": 0,
+            "nan": 0,
+            "shape": [],
+            "values": [
+              8.333333416416481e+32
+            ]
+          },
+          "grad_b": {
+            "finite_l2": 0.0,
+            "finite_max_abs": null,
+            "inf": 1,
+            "nan": 0,
+            "shape": [],
+            "values": [
+              "-inf"
+            ]
+          },
+          "method": "ordinary",
+          "reference_grad_b": {
+            "finite_l2": 3.472222230292623e+33,
+            "finite_max_abs": 3.472222230292623e+33,
+            "inf": 0,
+            "nan": 0,
+            "shape": [],
+            "values": [
+              -3.472222230292623e+33
+            ]
+          }
+        },
+        {
+          "case": "tiny_nonzero_vjp",
+          "checks": {
+            "forward": {
+              "atol": 1e-06,
+              "failed_elements": 0,
+              "max_abs": 1.9787067717658147e-07,
+              "relative_l2": 4.748896207873815e-08,
+              "rtol": 1e-05,
+              "state": "passed"
+            },
+            "grad_a": {
+              "atol": 1e-06,
+              "failed_elements": 0,
+              "max_abs": 1.4156409992763785e+25,
+              "relative_l2": 1.6987692110531312e-08,
+              "rtol": 1e-05,
+              "state": "passed"
+            },
+            "grad_b": {
+              "atol": 1e-06,
+              "failed_elements": 0,
+              "max_abs": 3.474134761799105e+26,
+              "relative_l2": 1.0005508090725865e-07,
+              "rtol": 1e-05,
+              "state": "passed"
+            }
+          },
+          "forward": {
+            "finite_l2": 4.166666507720947,
+            "finite_max_abs": 4.166666507720947,
+            "inf": 0,
+            "nan": 0,
+            "shape": [],
+            "values": [
+              4.166666507720947
+            ]
+          },
+          "grad_a": {
+            "finite_l2": 8.333333416416481e+32,
+            "finite_max_abs": 8.333333416416481e+32,
+            "inf": 0,
+            "nan": 0,
+            "shape": [],
+            "values": [
+              8.333333416416481e+32
+            ]
+          },
+          "grad_b": {
+            "finite_l2": 3.472221882879147e+33,
+            "finite_max_abs": 3.472221882879147e+33,
+            "inf": 0,
+            "nan": 0,
+            "shape": [],
+            "values": [
+              -3.472221882879147e+33
+            ]
+          },
+          "method": "ordered",
+          "reference_grad_b": {
+            "finite_l2": 3.472222230292623e+33,
+            "finite_max_abs": 3.472222230292623e+33,
+            "inf": 0,
+            "nan": 0,
+            "shape": [],
+            "values": [
+              -3.472222230292623e+33
+            ]
+          }
+        },
+        {
+          "case": "tiny_zero_vjp",
+          "checks": {
+            "forward": {
+              "atol": 1e-06,
+              "failed_elements": 0,
+              "max_abs": 1.9787067717658147e-07,
+              "relative_l2": 4.748896207873815e-08,
+              "rtol": 1e-05,
+              "state": "passed"
+            },
+            "grad_a": {
+              "atol": 1e-06,
+              "failed_elements": 0,
+              "max_abs": 0.0,
+              "relative_l2": 0.0,
+              "rtol": 1e-05,
+              "state": "passed"
+            },
+            "grad_b": {
+              "atol": 1e-06,
+              "reference": {
+                "finite_l2": 0.0,
+                "finite_max_abs": 0.0,
+                "inf": 0,
+                "nan": 0,
+                "shape": [],
+                "values": [
+                  -0.0
+                ]
+              },
+              "rtol": 1e-05,
+              "state": "nonfinite",
+              "value": {
+                "finite_l2": 0.0,
+                "finite_max_abs": null,
+                "inf": 0,
+                "nan": 1,
+                "shape": [],
+                "values": [
+                  "nan"
+                ]
+              }
+            }
+          },
+          "forward": {
+            "finite_l2": 4.166666507720947,
+            "finite_max_abs": 4.166666507720947,
+            "inf": 0,
+            "nan": 0,
+            "shape": [],
+            "values": [
+              4.166666507720947
+            ]
+          },
+          "grad_a": {
+            "finite_l2": 0.0,
+            "finite_max_abs": 0.0,
+            "inf": 0,
+            "nan": 0,
+            "shape": [],
+            "values": [
+              0.0
+            ]
+          },
+          "grad_b": {
+            "finite_l2": 0.0,
+            "finite_max_abs": null,
+            "inf": 0,
+            "nan": 1,
+            "shape": [],
+            "values": [
+              "nan"
+            ]
+          },
+          "method": "ordinary",
+          "reference_grad_b": {
+            "finite_l2": 0.0,
+            "finite_max_abs": 0.0,
+            "inf": 0,
+            "nan": 0,
+            "shape": [],
+            "values": [
+              -0.0
+            ]
+          }
+        },
+        {
+          "case": "tiny_zero_vjp",
+          "checks": {
+            "forward": {
+              "atol": 1e-06,
+              "failed_elements": 0,
+              "max_abs": 1.9787067717658147e-07,
+              "relative_l2": 4.748896207873815e-08,
+              "rtol": 1e-05,
+              "state": "passed"
+            },
+            "grad_a": {
+              "atol": 1e-06,
+              "failed_elements": 0,
+              "max_abs": 0.0,
+              "relative_l2": 0.0,
+              "rtol": 1e-05,
+              "state": "passed"
+            },
+            "grad_b": {
+              "atol": 1e-06,
+              "failed_elements": 0,
+              "max_abs": 0.0,
+              "relative_l2": 0.0,
+              "rtol": 1e-05,
+              "state": "passed"
+            }
+          },
+          "forward": {
+            "finite_l2": 4.166666507720947,
+            "finite_max_abs": 4.166666507720947,
+            "inf": 0,
+            "nan": 0,
+            "shape": [],
+            "values": [
+              4.166666507720947
+            ]
+          },
+          "grad_a": {
+            "finite_l2": 0.0,
+            "finite_max_abs": 0.0,
+            "inf": 0,
+            "nan": 0,
+            "shape": [],
+            "values": [
+              0.0
+            ]
+          },
+          "grad_b": {
+            "finite_l2": 0.0,
+            "finite_max_abs": 0.0,
+            "inf": 0,
+            "nan": 0,
+            "shape": [],
+            "values": [
+              -0.0
+            ]
+          },
+          "method": "ordered",
+          "reference_grad_b": {
+            "finite_l2": 0.0,
+            "finite_max_abs": 0.0,
+            "inf": 0,
+            "nan": 0,
+            "shape": [],
+            "values": [
+              -0.0
+            ]
+          }
+        },
+        {
+          "case": "ordinary",
+          "checks": {
+            "forward": {
+              "atol": 1e-06,
+              "failed_elements": 0,
+              "max_abs": 1.7128153029233317e-07,
+              "relative_l2": 4.110756714845712e-08,
+              "rtol": 1e-05,
+              "state": "passed"
+            },
+            "grad_a": {
+              "atol": 1e-06,
+              "failed_elements": 0,
+              "max_abs": 7.977970653882949e-06,
+              "relative_l2": 9.5735651100423e-09,
+              "rtol": 1e-05,
+              "state": "passed"
+            },
+            "grad_b": {
+              "atol": 1e-06,
+              "failed_elements": 0,
+              "max_abs": 0.00019066134473177954,
+              "relative_l2": 5.491046898646142e-08,
+              "rtol": 1e-05,
+              "state": "passed"
+            }
+          },
+          "forward": {
+            "finite_l2": 4.166666507720947,
+            "finite_max_abs": 4.166666507720947,
+            "inf": 0,
+            "nan": 0,
+            "shape": [],
+            "values": [
+              4.166666507720947
+            ]
+          },
+          "grad_a": {
+            "finite_l2": 833.3333129882812,
+            "finite_max_abs": 833.3333129882812,
+            "inf": 0,
+            "nan": 0,
+            "shape": [],
+            "values": [
+              833.3333129882812
+            ]
+          },
+          "grad_b": {
+            "finite_l2": 3472.221923828125,
+            "finite_max_abs": 3472.221923828125,
+            "inf": 0,
+            "nan": 0,
+            "shape": [],
+            "values": [
+              -3472.221923828125
+            ]
+          },
+          "method": "ordinary",
+          "reference_grad_b": {
+            "finite_l2": 3472.2221144894697,
+            "finite_max_abs": 3472.2221144894697,
+            "inf": 0,
+            "nan": 0,
+            "shape": [],
+            "values": [
+              -3472.2221144894697
+            ]
+          }
+        },
+        {
+          "case": "ordinary",
+          "checks": {
+            "forward": {
+              "atol": 1e-06,
+              "failed_elements": 0,
+              "max_abs": 1.7128153029233317e-07,
+              "relative_l2": 4.110756714845712e-08,
+              "rtol": 1e-05,
+              "state": "passed"
+            },
+            "grad_a": {
+              "atol": 1e-06,
+              "failed_elements": 0,
+              "max_abs": 7.977970653882949e-06,
+              "relative_l2": 9.5735651100423e-09,
+              "rtol": 1e-05,
+              "state": "passed"
+            },
+            "grad_b": {
+              "atol": 1e-06,
+              "failed_elements": 0,
+              "max_abs": 0.00019066134473177954,
+              "relative_l2": 5.491046898646142e-08,
+              "rtol": 1e-05,
+              "state": "passed"
+            }
+          },
+          "forward": {
+            "finite_l2": 4.166666507720947,
+            "finite_max_abs": 4.166666507720947,
+            "inf": 0,
+            "nan": 0,
+            "shape": [],
+            "values": [
+              4.166666507720947
+            ]
+          },
+          "grad_a": {
+            "finite_l2": 833.3333129882812,
+            "finite_max_abs": 833.3333129882812,
+            "inf": 0,
+            "nan": 0,
+            "shape": [],
+            "values": [
+              833.3333129882812
+            ]
+          },
+          "grad_b": {
+            "finite_l2": 3472.221923828125,
+            "finite_max_abs": 3472.221923828125,
+            "inf": 0,
+            "nan": 0,
+            "shape": [],
+            "values": [
+              -3472.221923828125
+            ]
+          },
+          "method": "ordered",
+          "reference_grad_b": {
+            "finite_l2": 3472.2221144894697,
+            "finite_max_abs": 3472.2221144894697,
+            "inf": 0,
+            "nan": 0,
+            "shape": [],
+            "values": [
+              -3472.2221144894697
+            ]
+          }
+        },
+        {
+          "case": "genuine_overflow",
+          "checks": {
+            "forward": {
+              "atol": 1e-06,
+              "failed_elements": 0,
+              "max_abs": 1.9787067717658147e-07,
+              "relative_l2": 4.748896207873815e-08,
+              "rtol": 1e-05,
+              "state": "passed"
+            },
+            "grad_a": {
+              "atol": 1e-06,
+              "reference": {
+                "finite_l2": 8.333333485370092e+38,
+                "finite_max_abs": 8.333333485370092e+38,
+                "inf": 0,
+                "nan": 0,
+                "shape": [],
+                "values": [
+                  8.333333485370092e+38
+                ]
+              },
+              "rtol": 1e-05,
+              "state": "nonfinite",
+              "value": {
+                "finite_l2": 0.0,
+                "finite_max_abs": null,
+                "inf": 1,
+                "nan": 0,
+                "shape": [],
+                "values": [
+                  "inf"
+                ]
+              }
+            },
+            "grad_b": {
+              "atol": 1e-06,
+              "reference": {
+                "finite_l2": 3.472222318008337e+39,
+                "finite_max_abs": 3.472222318008337e+39,
+                "inf": 0,
+                "nan": 0,
+                "shape": [],
+                "values": [
+                  -3.472222318008337e+39
+                ]
+              },
+              "rtol": 1e-05,
+              "state": "nonfinite",
+              "value": {
+                "finite_l2": 0.0,
+                "finite_max_abs": null,
+                "inf": 1,
+                "nan": 0,
+                "shape": [],
+                "values": [
+                  "-inf"
+                ]
+              }
+            }
+          },
+          "forward": {
+            "finite_l2": 4.166666507720947,
+            "finite_max_abs": 4.166666507720947,
+            "inf": 0,
+            "nan": 0,
+            "shape": [],
+            "values": [
+              4.166666507720947
+            ]
+          },
+          "grad_a": {
+            "finite_l2": 0.0,
+            "finite_max_abs": null,
+            "inf": 1,
+            "nan": 0,
+            "shape": [],
+            "values": [
+              "inf"
+            ]
+          },
+          "grad_b": {
+            "finite_l2": 0.0,
+            "finite_max_abs": null,
+            "inf": 1,
+            "nan": 0,
+            "shape": [],
+            "values": [
+              "-inf"
+            ]
+          },
+          "method": "ordinary",
+          "reference_grad_b": {
+            "finite_l2": 3.472222318008337e+39,
+            "finite_max_abs": 3.472222318008337e+39,
+            "inf": 0,
+            "nan": 0,
+            "shape": [],
+            "values": [
+              -3.472222318008337e+39
+            ]
+          }
+        },
+        {
+          "case": "genuine_overflow",
+          "checks": {
+            "forward": {
+              "atol": 1e-06,
+              "failed_elements": 0,
+              "max_abs": 1.9787067717658147e-07,
+              "relative_l2": 4.748896207873815e-08,
+              "rtol": 1e-05,
+              "state": "passed"
+            },
+            "grad_a": {
+              "atol": 1e-06,
+              "reference": {
+                "finite_l2": 8.333333485370092e+38,
+                "finite_max_abs": 8.333333485370092e+38,
+                "inf": 0,
+                "nan": 0,
+                "shape": [],
+                "values": [
+                  8.333333485370092e+38
+                ]
+              },
+              "rtol": 1e-05,
+              "state": "nonfinite",
+              "value": {
+                "finite_l2": 0.0,
+                "finite_max_abs": null,
+                "inf": 1,
+                "nan": 0,
+                "shape": [],
+                "values": [
+                  "inf"
+                ]
+              }
+            },
+            "grad_b": {
+              "atol": 1e-06,
+              "reference": {
+                "finite_l2": 3.472222318008337e+39,
+                "finite_max_abs": 3.472222318008337e+39,
+                "inf": 0,
+                "nan": 0,
+                "shape": [],
+                "values": [
+                  -3.472222318008337e+39
+                ]
+              },
+              "rtol": 1e-05,
+              "state": "nonfinite",
+              "value": {
+                "finite_l2": 0.0,
+                "finite_max_abs": null,
+                "inf": 1,
+                "nan": 0,
+                "shape": [],
+                "values": [
+                  "-inf"
+                ]
+              }
+            }
+          },
+          "forward": {
+            "finite_l2": 4.166666507720947,
+            "finite_max_abs": 4.166666507720947,
+            "inf": 0,
+            "nan": 0,
+            "shape": [],
+            "values": [
+              4.166666507720947
+            ]
+          },
+          "grad_a": {
+            "finite_l2": 0.0,
+            "finite_max_abs": null,
+            "inf": 1,
+            "nan": 0,
+            "shape": [],
+            "values": [
+              "inf"
+            ]
+          },
+          "grad_b": {
+            "finite_l2": 0.0,
+            "finite_max_abs": null,
+            "inf": 1,
+            "nan": 0,
+            "shape": [],
+            "values": [
+              "-inf"
+            ]
+          },
+          "method": "ordered",
+          "reference_grad_b": {
+            "finite_l2": 3.472222318008337e+39,
+            "finite_max_abs": 3.472222318008337e+39,
+            "inf": 0,
+            "nan": 0,
+            "shape": [],
+            "values": [
+              -3.472222318008337e+39
+            ]
+          }
+        }
+      ],
+      "device": "npu:0",
+      "record": "runs/v10-divprobe-npu-scalar/result.json",
+      "seconds": 0.322648536413908,
+      "state": "completed"
+    }
+  },
+  "schema": "tide-v10-gradient-observations-v1",
+  "scope": "Observed records only. The separately authored report reviews attribution; no automatic scientific support."
+}

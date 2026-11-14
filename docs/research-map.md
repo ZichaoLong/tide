@@ -1,3 +1,12 @@
+# 最新图状态：v10三项pool非有限梯度已定位
+
+2026-11-15新增TL-GRADIENT-v10及限定结果：三项原失败步均复现，聚合DivBackward0中间溢出；
+三个完整batch的局部VJP候选保持前向逐位相同、梯度/optimizer有限，CPU/NPU局部参考通过原阈值。
+详见[定位报告](studies/direct-v10-gradient-results.md)。只建立对修复决策的informs关系，
+不升级容量/活动的学习支持；原失败、原数值资格及未测新源码恢复/长期稳定保持。
+
+以下为此前图说明。
+
 # 最新图状态：v10中期实际11完成、6运行、3失败
 
 2026-11-15：[共同曝光中期审阅](studies/direct-v10-progress-20261115-am.md)。

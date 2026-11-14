@@ -26,4 +26,7 @@
 使用 `python scripts/job.py status artifacts/jobs/v10-diag-<ID>` 检查；
 `systemctl --user stop tide-lab-v10-diag-<ID>.service` 停止，并核对所有后代。
 
-待运行/科学审阅：极小正质量归一化的VJP是候选机制，不能在真实回放前宣布已定位。
+本项已终态：[定位与候选验证结果](direct-v10-gradient-results.md)。三例原失败步全部复现，
+共同61个记录点一致；均捕获到聚合DivBackward0从有限上游产生非有限梯度。
+三个完整失败batch使用候选后前向逐位不变、梯度有限、单次optimizer更新通过；
+原failed不改，新源码恢复和长期训练仍未检查。8个服务已核对无存活后代。

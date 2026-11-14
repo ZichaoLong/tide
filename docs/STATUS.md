@@ -1,3 +1,27 @@
+# 当前交接：三项pool失败已定位，局部VJP候选通过；原训练保持原身份
+
+2026-11-15 04:36北京时间附近核对。[完整定位报告](studies/direct-v10-gradient-results.md) ·
+[回放/算子/候选证据](evidence/direct-v10-gradient-diagnosis.json) ·
+[当前主作业](evidence/direct-v10-observations-after-diagnosis.json)。
+
+三条d128 pool在原1524/1102/3555步全部复现，61个共同记录点loss/梯度范数/tokens完全一致。
+均为聚合`value/received`的DivBackward0在有限上游下产生非有限梯度；不是仅范数归约问题。
+每例34个参数梯度张量被污染；候选仅重排局部VJP，三个完整失败batch前向逐位相同、梯度全有限，
+一次optimizer更新通过，范数0.55234/0.59418/0.53265。CPU/NPU抽取算子的FP64参考均过原1e-6/1e-5。
+正式模型代码、活动源码、原failed、原严格有限超差均未改；没有自动恢复失败训练。
+候选新源码恢复/长期稳定/学习质量仍未检查，下一步建议见ROADMAP。
+
+主轨迹当前12完成128M、5运行、3原失败；控制器running，原48h截止不变。
+仍运行：hb-d128-r64-q3-s11 70.02M（物理5）；hb-d128-r64-q3-s22 67.77M（物理15）；hb-d64-r64-q3-s11 115.98M（物理0）；hb-d128-r28-pool-s11 98.68M（物理4）；hb-d128-r28-q10-s11 100.00M（物理8）。
+8个诊断服务全部终态且已核对无后代；约1.112累计服务小时，新增诊断及固定源码5.420GiB，账号约298/800GiB。
+独立confirmation/test状态不因诊断升级，d128原成组延伸前提仍不满足。
+
+固定：原模型0ea05d61；回放工具95bce59a；候选检查a8669103。复查`python scripts/review_v10_gradients.py`，
+主作业仍用`python scripts/review_direct_v10.py`。Lens原三个failed run及私有入口`.local/LENS.md`保持；
+诊断不计作新学习轨迹，具体配置、checkpoint/batch/算子见证路径在报告。
+
+以下为此前交接快照，不代表当前状态。
+
 # 当前交接：v10中期，11完成128M／6运行／3pool失败
 
 2026-11-15 03:52北京时间核对。20条主轨迹全部启动过，无排队主任务；11条完成128M，6条运行，3条训练失败。

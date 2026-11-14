@@ -1406,9 +1406,27 @@
       "source": "V10-CAPACITY",
       "status": "planned",
       "target": "V10-CONFIRMATION"
+    },
+    {
+      "detail": "\u5931\u8d25\u590d\u73b0\u548c\u5019\u9009\u5355\u6b65\u901a\u8fc7\u4e0d\u6539\u539f\u5b66\u4e60/\u6570\u503c\u8d44\u683c\u3002",
+      "id": "EV10-GRADIENT",
+      "kind": "produces",
+      "label": "\u5c40\u90e8\u6839\u56e0\u4e0e\u5e72\u9884\u5ba1\u9605",
+      "source": "V10-GRADIENT",
+      "status": "documented",
+      "target": "RV10-GRADIENT"
+    },
+    {
+      "detail": "\u5c1a\u672a\u6062\u590d\u6b63\u5f0f\u8bad\u7ec3\uff1b\u4fdd\u7559\u539f\u5931\u8d25\u548c\u65b0\u6e90\u7801\u8c31\u7cfb\uff0c\u5148\u9a8c\u6536\u6062\u590d\u4e0e\u77ed\u7a0b\u7a33\u5b9a\u3002",
+      "id": "EV10-GRADIENT-CONTROL",
+      "kind": "informs",
+      "label": "\u4fee\u590d\u540e\u8865\u9f50\u5bf9\u7167",
+      "source": "RV10-GRADIENT",
+      "status": "documented",
+      "target": "V10-CONTROL"
     }
   ],
-  "height": 9730,
+  "height": 9910,
   "nodes": [
     {
       "budget": "\u539fv5\u53ca\u8865\u9f50\u5df2\u7ec8\u6001\uff0c\u7d2f\u8ba110.1672/24\u8ba1\u7b97worker\u5c0f\u65f6\uff1b17:16\u7ed3\u675f\uff0c\u65e9\u4e8e\u539f22:49:13\u622a\u6b62\u3002\u5386\u53f2v4\u72ec\u7acb\uff0c\u4e0d\u81ea\u52a8\u8ffd\u52a0\u3002",
@@ -1519,7 +1537,7 @@
       "track": "shared",
       "view_group": "current",
       "x": 30,
-      "y": 4220
+      "y": 4400
     },
     {
       "budget": "\u4ee5\u5404\u5177\u540d\u6279\u6b21\u7684\u51bb\u7ed3\u9884\u7b97\u4e3a\u51c6\uff1b\u957f\u671f\u76ee\u6807\u6ca1\u6709\u56fa\u5b9a12h\u4e0a\u9650\uff0c\u4e5f\u4e0d\u81ea\u884c\u542f\u52a8\u4f5c\u4e1a\u3002",
@@ -1647,7 +1665,7 @@
       "track": "shared",
       "view_group": "current",
       "x": 30,
-      "y": 3860
+      "y": 4040
     },
     {
       "budget": "\u672c\u6b21\u8bca\u65ad\u22641800\u79d2/CPU1/8GiB\uff0c\u5b9e\u9645571.69\u79d2\uff1b\u5c5e\u4e8ev5\u539f24\u8ba1\u7b97worker\u5c0f\u65f6\u53ca22:49\u622a\u6b62\u3002\u5386\u53f2v4\u9884\u7b97\u72ec\u7acb\u3002",
@@ -2142,7 +2160,7 @@
       "track": "shared",
       "view_group": "current",
       "x": 325,
-      "y": 3860
+      "y": 4040
     },
     {
       "budget": "\u65b0v4\u517112h/8NPUh\uff1bA7.5h\u3001B0.5h\uff1b\u6761\u4ef6scale\u6765\u81eaA\u4f59\u91cf\uff0c\u5177\u4f53\u89c1\u7814\u7a76\u8868\u3002",
@@ -2439,7 +2457,7 @@
       "track": "tide",
       "view_group": "current",
       "x": 620,
-      "y": 4280
+      "y": 4460
     },
     {
       "budget": "\u65b0v4\u517112h/8NPUh\uff1bA7.5h\u3001B0.5h\uff1b\u6761\u4ef6scale\u6765\u81eaA\u4f59\u91cf\uff0c\u5177\u4f53\u89c1\u7814\u7a76\u8868\u3002",
@@ -2712,7 +2730,7 @@
       "track": "baseline",
       "view_group": "current",
       "x": 620,
-      "y": 4640
+      "y": 4820
     },
     {
       "budget": "\u65b0v4\u517112h/8NPUh\uff1bA7.5h\u3001B0.5h\uff1b\u6761\u4ef6scale\u6765\u81eaA\u4f59\u91cf\uff0c\u5177\u4f53\u89c1\u7814\u7a76\u8868\u3002",
@@ -2762,7 +2780,7 @@
       "track": "tide",
       "view_group": "current",
       "x": 620,
-      "y": 4820
+      "y": 5000
     },
     {
       "budget": "\u65b0v4\u517112h/8NPUh\uff1bA7.5h\u3001B0.5h\uff1b\u6761\u4ef6scale\u6765\u81eaA\u4f59\u91cf\uff0c\u5177\u4f53\u89c1\u7814\u7a76\u8868\u3002",
@@ -2816,7 +2834,7 @@
       "track": "shared",
       "view_group": "current",
       "x": 620,
-      "y": 5000
+      "y": 5180
     },
     {
       "budget": "\u5df2\u6388\u6743\u7684\u540c\u4e00\u4e2a12h/8NPU\u5c0f\u65f6\u6709\u754c\u5305\uff1b\u5f53\u524d\u72b6\u6001\u53ca\u5269\u4f59\u989d\u89c1STATUS\u3002",
@@ -2860,7 +2878,7 @@
       "unresolved": "\u5355seed\u548c\u5c0f\u6587\u6863\u96c6\u4e0d\u786e\u5b9a\u6027\u3001\u8bad\u7ec3\u4e0d\u8db3\u3001\u4efb\u52a1/\u53c2\u6570\u5206\u914d\u5f71\u54cd\u672a\u533a\u5206\uff1b\u5f53\u524d\u4f18\u52bf\u4e0d\u80fd\u5916\u63a8\u5145\u5206\u8bad\u7ec3\u7684\u666e\u901aLM\u3002",
       "view_group": "current",
       "x": 915,
-      "y": 4280
+      "y": 4460
     },
     {
       "budget": "\u5df2\u6388\u6743\u7684\u540c\u4e00\u4e2a12h/8NPU\u5c0f\u65f6\u6709\u754c\u5305\uff1b\u5f53\u524d\u72b6\u6001\u53ca\u5269\u4f59\u989d\u89c1STATUS\u3002",
@@ -2904,7 +2922,7 @@
       "unresolved": "32\u7ef4\u6295\u5f71\u74f6\u9888\u3001\u6709\u9650\u66dd\u5149/\u4f18\u5316\u53ca\u5c40\u90e8\u8868\u8fbe\u5dee\u5f02\u672a\u533a\u5206\uff1b\u539f\u56e0\u4e0d\u80fd\u5f52\u7ed3\u4e3ahidden\u65e0\u4fe1\u606f\uff0c\u6570\u503c\u5dee\u5f02\u4e5f\u672a\u8bc1\u660e\u53ea\u662f\u820d\u5165\u3002",
       "view_group": "current",
       "x": 915,
-      "y": 4640
+      "y": 4820
     },
     {
       "budget": "v4\u6761\u4ef6FC8\u22644h\u4e14\u6765\u81eaA\u603b7.5h\u4f59\u91cf",
@@ -2932,7 +2950,7 @@
       "track": "tide",
       "view_group": "current",
       "x": 915,
-      "y": 4820
+      "y": 5000
     },
     {
       "budget": "\u5df2\u6388\u6743\u7684\u540c\u4e00\u4e2a12h/8NPU\u5c0f\u65f6\u6709\u754c\u5305\uff1b\u5f53\u524d\u72b6\u6001\u53ca\u5269\u4f59\u989d\u89c1STATUS\u3002",
@@ -2976,7 +2994,7 @@
       "unresolved": "\u5e7f\u6cdb\u8bed\u8a00\u53ef\u7528\u6027\u3001\u79cd\u5b50\u7a33\u5065\u6027\u3001\u89c4\u6a21\u548c\u8de8\u533a\u57df\u5c40\u90e8\u6027\u5c1a\u672a\u786e\u5b9a\uff1b\u53c2\u6570\u5bb9\u91cf\u4e0e\u6df1\u5ea6\u53d8\u5316\u7684\u56e0\u679c\u56e0\u7d20\u672a\u533a\u5206\u3002",
       "view_group": "current",
       "x": 915,
-      "y": 5000
+      "y": 5180
     },
     {
       "budget": "\u4ee5\u5404\u5177\u540d\u6279\u6b21\u7684\u51bb\u7ed3\u9884\u7b97\u4e3a\u51c6\uff1b\u957f\u671f\u76ee\u6807\u6ca1\u6709\u56fa\u5b9a12h\u4e0a\u9650\uff0c\u4e5f\u4e0d\u81ea\u884c\u542f\u52a8\u4f5c\u4e1a\u3002",
@@ -3004,7 +3022,7 @@
       "track": "shared",
       "view_group": "current",
       "x": 1210,
-      "y": 1720
+      "y": 1900
     },
     {
       "budget": "\u4ee5\u5404\u5177\u540d\u6279\u6b21\u7684\u51bb\u7ed3\u9884\u7b97\u4e3a\u51c6\uff1b\u957f\u671f\u76ee\u6807\u6ca1\u6709\u56fa\u5b9a12h\u4e0a\u9650\uff0c\u4e5f\u4e0d\u81ea\u884c\u542f\u52a8\u4f5c\u4e1a\u3002",
@@ -3116,7 +3134,7 @@
       "track": "shared",
       "view_group": "current",
       "x": 1210,
-      "y": 1540
+      "y": 1720
     },
     {
       "budget": "\u590d\u7528\u7ea6 943 MiB \u6743\u91cd\uff1b\u6821\u51c6\u9650 20 min\uff0c\u9996\u6279\u4e0d\u6269\u5927\u6a21\u578b\u3002",
@@ -3143,7 +3161,7 @@
       "track": "baseline",
       "view_group": "history",
       "x": 30,
-      "y": 7100
+      "y": 7280
     },
     {
       "budget": "\u56fa\u5b9a\u6765\u6e90\uff0c\u65e0\u65b0\u8ba1\u7b97\u6216\u4e0b\u8f7d\u3002",
@@ -3164,7 +3182,7 @@
       "track": "tide",
       "view_group": "history",
       "x": 30,
-      "y": 7340
+      "y": 7520
     },
     {
       "budget": "\u590d\u7528\u56fa\u5b9a\u5386\u53f2\u8bc1\u636e\uff1b\u5f53\u524d\u4e0d\u91cd\u65b0\u8fd0\u884c\u3002",
@@ -3185,7 +3203,7 @@
       "track": "shared",
       "view_group": "history",
       "x": 30,
-      "y": 7580
+      "y": 7760
     },
     {
       "budget": "CPU/NPU \u5c0f\u68c0\u67e5\u5404\u6709\u754c\uff1b\u672c\u7ec4\u603b\u6821\u51c6 \u226420 min\u3002",
@@ -3265,7 +3283,7 @@
       "track": "baseline",
       "view_group": "history",
       "x": 325,
-      "y": 7100
+      "y": 7280
     },
     {
       "budget": "\u5355\u79cd\u5b50\u5148\u5bfc \u226480 updates\uff1b\u6700\u591a\u4e00\u6b21\u9884\u5148\u58f0\u660e\u7684\u5c0f\u4efb\u52a1\u964d\u9636\u3002\u6b63\u5f0f \u2264400 updates\uff0c\u81f3\u591a\u79cd\u5b50 11/22/33\u3002",
@@ -3463,7 +3481,7 @@
       "track": "tide",
       "view_group": "history",
       "x": 325,
-      "y": 7340
+      "y": 7520
     },
     {
       "budget": "\u5fae\u578b\u68c0\u67e5\u6bcf\u9879 \u226410 min\uff1b\u5148\u6821\u51c6\u6b63\u786e\u6027\uff0c\u518d\u51b3\u5b9a CPU/NPU \u8bad\u7ec3\u4e0e\u6709\u9650\u6570\u503c\u63a2\u7d22\u3002",
@@ -3544,7 +3562,7 @@
       "track": "shared",
       "view_group": "history",
       "x": 325,
-      "y": 7580
+      "y": 7760
     },
     {
       "budget": "pilot-b \u961f\u5217\u7b49\u5f85 \u226415 min\uff0c\u670d\u52a1\u603b\u65f6\u9650 70 min\uff0c\u7ec4\u5185\u8ba1\u7b97 50 min\uff1b\u4e09\u5019\u9009\u5404 40 updates\u3002\u540e\u7eed\u91cd\u590d\u4ecd\u987b\u7814\u7a76\u8868\u4e2d\u7684\u5b66\u4e60\u4e0e\u68af\u5ea6\u95e8\u69db\u3002",
@@ -3614,7 +3632,7 @@
       "track": "baseline",
       "view_group": "history",
       "x": 620,
-      "y": 7100
+      "y": 7280
     },
     {
       "budget": "\u5355\u79cd\u5b50\u5148\u5bfc \u226480 updates\uff1b\u901a\u8fc7\u7b5b\u9009\u540e\u6210\u5bf9\u79cd\u5b50 11/22/33\uff0c\u6bcf\u914d\u7f6e \u2264400 updates\u3002",
@@ -3690,7 +3708,7 @@
       "track": "tide",
       "view_group": "history",
       "x": 620,
-      "y": 7340
+      "y": 7520
     },
     {
       "budget": "\u4e0d\u5360\u672c\u6279\u4f5c\u4e1a\u9884\u7b97\uff1b\u6ca1\u6709\u5df2\u63d0\u4ea4\u7684\u66ff\u6362\u4efb\u52a1\u3002",
@@ -3719,7 +3737,7 @@
       "track": "baseline",
       "view_group": "history",
       "x": 620,
-      "y": 7580
+      "y": 7760
     },
     {
       "budget": "\u540cB32/40updates/1280\u8bad\u7ec3\u4f8b\uff1b\u5168\u6d41\u7a0b\u7ea634.60/888.32/34.35\u79d2\uff0c\u4e09\u6a21\u578b\u5b9e\u9645\u5de5\u4f5c\u4e0d\u540c\uff1b\u975e\u7b49\u4ef7\u52a0\u901f\u6bd4\u3002",
@@ -3758,7 +3776,7 @@
       "unresolved": "\u5355seed\u4ec5\u591a\u7b54\u5bf97/128\u4f8b\uff1b\u4f18\u5316\u8def\u5f84\u3001clip\u5f52\u4e00\u5316\u53d8\u5316\u3001\u989d\u5916\u53c2\u6570\u548c\u91c7\u6837\u5dee\u5f02\u672a\u533a\u5206\u3002\u672a\u8bc4\u4f30\u9002\u914d\u540e\u7684\u539f\u8bed\u8a00\u80fd\u529b\u4fdd\u7559\u3002",
       "view_group": "history",
       "x": 915,
-      "y": 7100
+      "y": 7280
     },
     {
       "budget": "CPU32/B32\uff0c\u540480updates/2560\u4f8b\uff0cvalidation128\u3001\u672a\u7528test\uff1b\u603b\u8fdb\u7a0b1183.53/1141.50\u79d2\u3002",
@@ -3805,7 +3823,7 @@
       "unresolved": "\u8bad\u7ec3\u4e0d\u8db3\u3001\u53d1\u9001\u6b63\u5219\u5316\u4e0e\u5b66\u4e60\u5230\u7684\u652f\u6301\u5206\u5e03\u3001\u56fa\u5b9a\u7a00\u758f\u5bf9\u7167\u3001seed/\u91c7\u6837\u6ce2\u52a8\u5c1a\u672a\u533a\u5206\u3002\u5019\u9009/\u72b6\u6001\u5f00\u9500\u3001\u4e3b\u673a\u8c03\u5ea6\u548c\u6bcf\u6b65\u89c2\u6d4b\u7684\u65f6\u95f4\u8d21\u732e\u672a\u77e5\uff1b\u805a\u5408\u65e0\u6574\u533a\u505c\u5de5\u4e0d\u6392\u9664\u5355\u6837\u672c/\u8282\u70b9\u9965\u997f\u3002",
       "view_group": "history",
       "x": 915,
-      "y": 7340
+      "y": 7520
     },
     {
       "budget": "\u672c\u6279\u590d\u7528\u5171\u540c\u4efb\u52a1\u8bc4\u4f30\uff0c\u4e0d\u81ea\u52a8\u589e\u52a0\u65b0\u4efb\u52a1\u3001\u66ff\u6362\u6216\u5019\u9009\u7ec4\u5408\u3002",
@@ -3842,7 +3860,7 @@
       "track": "shared",
       "view_group": "history",
       "x": 915,
-      "y": 7580
+      "y": 7760
     },
     {
       "budget": "\u5404B32/400updates/12800\u8bad\u7ec3\u4f8b\uff1bCPU64\u5404\u7ea642min\uff0cvalidation256/test256\uff1b\u673a\u4f1a\u6c34\u5e7312.5%\u3002",
@@ -3885,7 +3903,7 @@
       "unresolved": "\u9996\u6279\u672a\u6d4b\u7684query\u4ea4\u6362\u4e0edelay4/8\u5df2\u7531TL-A1-MECH\u5355\u72ec\u8865\u67e5\uff1b\u4e00\u822c\u5e8f\u5217/\u5206\u5e03\u5916\u7ec4\u5408\u4ecd\u672a\u77e5\u3002\u4e09seed\u5171\u7528\u540c\u4e00test\uff0c\u4e0d\u5408\u5e76\u6210768\u4e2a\u72ec\u7acb\u6837\u672c\u3002",
       "view_group": "history",
       "x": 915,
-      "y": 7820
+      "y": 8000
     },
     {
       "budget": "CPU1\u7ebf\u7a0b/4GiB\uff0c\u51c6\u5907\u52a0\u8bc4\u4f30\u226430min\u3002",
@@ -3941,7 +3959,7 @@
       "track": "tide",
       "view_group": "history",
       "x": 30,
-      "y": 8060
+      "y": 8240
     },
     {
       "budget": "CPU1\u7ebf\u7a0b/4GiB\uff0c\u51c6\u5907\u52a0\u8bc4\u4f30\u226430min\u3002",
@@ -3980,7 +3998,7 @@
       "unresolved": "\u91cd\u590dfiller\u4e0b\u7684\u72b6\u6001\u8870\u51cf\u3001\u65f6\u95f4/\u4f4d\u7f6e\u5206\u5e03\u6539\u53d8\u53ca\u5176\u4ed6\u8ba1\u7b97\u56e0\u7d20\u5c1a\u672a\u533a\u5206\uff1b\u4e0d\u662f384\u4e2a\u72ec\u7acb\u6d4b\u8bd5\u6837\u672c\u3002",
       "view_group": "history",
       "x": 30,
-      "y": 8290
+      "y": 8470
     },
     {
       "budget": "CPU2\u7ebf\u7a0b/16GiB\uff0c\u4e24\u4f5c\u4e1a\u5e76\u884c\u22642h\u3002",
@@ -4057,7 +4075,7 @@
       "track": "tide",
       "view_group": "history",
       "x": 325,
-      "y": 8060
+      "y": 8240
     },
     {
       "budget": "CPU2\u7ebf\u7a0b/16GiB\uff0c\u4e24\u4f5c\u4e1a\u5e76\u884c\u22642h\u3002",
@@ -4096,7 +4114,7 @@
       "unresolved": "\u79cd\u5b50\u53d8\u5316\u3001\u56fa\u5b9a\u7a00\u758f\u3001\u5b66\u4e60\u5230\u7684\u652f\u6301\u4e0e\u6b63\u5219\u5316\u6548\u5e94\u5c1a\u672a\u533a\u5206\uff1bHB\u9010\u4f8btest\u914d\u5bf9\u7edf\u8ba1\u7f3a\u5931\u3002\u5de5\u4f5c\u51cf\u5c11\u4e0d\u7b49\u4e8e\u540c\u6bd4FLOPs\u6216\u786c\u4ef6\u52a0\u901f\u3002",
       "view_group": "history",
       "x": 325,
-      "y": 8290
+      "y": 8470
     },
     {
       "budget": "1NPU/CPU4\u7ebf\u7a0b/8GiB\uff0c\u603b\u226415min\uff0c\u6392\u961f\u22645min\u3002",
@@ -4145,7 +4163,7 @@
       "track": "shared",
       "view_group": "history",
       "x": 620,
-      "y": 8060
+      "y": 8240
     },
     {
       "budget": "1NPU/CPU4\u7ebf\u7a0b/8GiB\uff0c\u603b\u226415min\uff0c\u6392\u961f\u22645min\u3002",
@@ -4165,7 +4183,7 @@
       "track": "shared",
       "view_group": "history",
       "x": 620,
-      "y": 8290
+      "y": 8470
     },
     {
       "budget": "1NPU/CPU4\u7ebf\u7a0b/24GiB\uff0c\u603b\u22641h\uff0c\u6392\u961f\u226410min\u3002",
@@ -4214,7 +4232,7 @@
       "track": "baseline",
       "view_group": "history",
       "x": 915,
-      "y": 8060
+      "y": 8240
     },
     {
       "budget": "1NPU/CPU4\u7ebf\u7a0b/24GiB\uff0c\u603b\u22641h\uff0c\u6392\u961f\u226410min\u3002",
@@ -4234,7 +4252,7 @@
       "track": "baseline",
       "view_group": "history",
       "x": 915,
-      "y": 8290
+      "y": 8470
     },
     {
       "budget": "CPU4\u8bad\u7ec3\u7ebf\u7a0b/32GiB\u22643h\uff1b\u8bc4\u4f30CPU1\u7ebf\u7a0b/4GiB\u22641h\uff1b\u5171\u752812h\u622a\u6b62\u3002",
@@ -4329,7 +4347,7 @@
       "track": "tide",
       "view_group": "history",
       "x": 325,
-      "y": 8520
+      "y": 8700
     },
     {
       "budget": "CPU4\u8bad\u7ec3\u7ebf\u7a0b/32GiB\u22643h\uff1b\u8bc4\u4f30CPU1\u7ebf\u7a0b/4GiB\u22641h\uff1b\u5171\u752812h\u622a\u6b62\u3002",
@@ -4368,7 +4386,7 @@
       "unresolved": "\u56fa\u5b9a\u7a00\u758f\u4e0e\u5b66\u5230\u7684\u8def\u7531\u6548\u5e94\u672a\u533a\u5206\uff1b\u76f8\u540c\u6620\u5c04\u4e0a\u7684\u4e09seed\u4e0d\u80fd\u5f536144\u4e2a\u72ec\u7acb\u6837\u672c\uff1b\u975e\u72ec\u5360CPU\u8ba1\u65f6\u4e0d\u786e\u8ba4\u666e\u9002\u786c\u4ef6\u52a0\u901f\u3002",
       "view_group": "history",
       "x": 325,
-      "y": 8820
+      "y": 9000
     },
     {
       "budget": "1NPU/4CPU\u7ebf\u7a0b/24GiB\uff1b\u7b49\u5361\u22648h\uff0c\u51c6\u5165\u6062\u590d\u53ca\u5b66\u4e60\u22643h\uff0c\u5171\u752812h\u622a\u6b62\u3002",
@@ -4472,7 +4490,7 @@
       "track": "baseline",
       "view_group": "history",
       "x": 915,
-      "y": 8520
+      "y": 8700
     },
     {
       "budget": "1NPU/4CPU\u7ebf\u7a0b/24GiB\uff1b\u7b49\u5361\u22648h\uff0c\u51c6\u5165\u6062\u590d\u53ca\u5b66\u4e60\u22643h\uff0c\u5171\u752812h\u622a\u6b62\u3002",
@@ -4519,7 +4537,7 @@
       "unresolved": "\u5355seed\u4e14\u672a\u67e5\u770b\u72ec\u7acbtest\uff1b\u68af\u5ea6\u5c3a\u5ea6/\u5168\u5c40\u88c1\u526a\u3001\u4f18\u5316\u914d\u65b9\u3001\u7b26\u53f7\u7f16\u7801\u548c\u521d\u59cb\u5316\u6548\u5e94\u672a\u533a\u5206\uff0c\u4e0d\u80fd\u9501\u5b9a\u552f\u4e00\u539f\u56e0\u6216\u53cd\u8bc1\u6240\u6709\u63a5\u5165\u3002",
       "view_group": "history",
       "x": 915,
-      "y": 8820
+      "y": 9000
     },
     {
       "budget": "1NPU/4CPU\u7ebf\u7a0b/8GiB\uff1b\u7b49\u5361\u22648h\uff0c\u8ba1\u7b97\u4e0e\u6e05\u7406\u226415min\uff0c\u5171\u752812h\u622a\u6b62\u3002",
@@ -4566,7 +4584,7 @@
       "track": "shared",
       "view_group": "history",
       "x": 620,
-      "y": 8520
+      "y": 8700
     },
     {
       "budget": "1NPU/4CPU\u7ebf\u7a0b/8GiB\uff1b\u7b49\u5361\u22648h\uff0c\u8ba1\u7b97\u4e0e\u6e05\u7406\u226415min\uff0c\u5171\u752812h\u622a\u6b62\u3002",
@@ -4605,7 +4623,7 @@
       "unresolved": "\u4e3b\u7ebf\u7a0b\u6808\u542b\u7b49\u5f85\u548cGIL\u504f\u5dee\uff0cbackward\u5f15\u64ce\u7ea6\u4e09\u5206\u4e4b\u4e00\u6837\u672c\u4e0d\u80fd\u7b49\u540cCPU\u81ea\u8017\u65f6\u6216NPU kernel\u6bd4\u4f8b\u3002",
       "view_group": "history",
       "x": 620,
-      "y": 8820
+      "y": 9000
     },
     {
       "budget": "\u5168\u94fe\u5171\u540c1NPU/4CPU\u7ebf\u7a0b/24GiB\uff1b\u8bbe\u5907\u22642h\u3001\u542b\u6392\u961f\u226412h\u3001\u65b0\u589e\u22644GiB\u3002",
@@ -4655,7 +4673,7 @@
       "track": "baseline",
       "view_group": "history",
       "x": 30,
-      "y": 9120
+      "y": 9300
     },
     {
       "budget": "\u5171\u4eab\u7b2c\u56db\u6279\u22642h\u8bbe\u5907\u8ba1\u7b97\u3001\u226412h\u5899\u949f\uff1b\u65e0\u72ec\u7acb\u65b0\u589e\u9884\u7b97\u3002",
@@ -4699,7 +4717,7 @@
       "unresolved": "\u590d\u5236\u5931\u8bef\u6765\u81ea\u63d0\u793a/\u683c\u5f0f\u8fd8\u662f\u6a21\u578b\u80fd\u529b\u672a\u533a\u5206\uff1b\u4e00\u8bcd\u67e5\u8868\u4e0d\u80fd\u8986\u76d6\u5e7f\u6cdb\u8bed\u8a00\u80fd\u529b\u3002",
       "view_group": "history",
       "x": 30,
-      "y": 9420
+      "y": 9600
     },
     {
       "budget": "\u5168\u94fe\u5171\u540c1NPU/4CPU\u7ebf\u7a0b/24GiB\uff1b\u8bbe\u5907\u22642h\u3001\u542b\u6392\u961f\u226412h\u3001\u65b0\u589e\u22644GiB\u3002",
@@ -4749,7 +4767,7 @@
       "track": "baseline",
       "view_group": "history",
       "x": 325,
-      "y": 9120
+      "y": 9300
     },
     {
       "budget": "\u5171\u4eab\u7b2c\u56db\u6279\u22642h\u8bbe\u5907\u8ba1\u7b97\u3001\u226412h\u5899\u949f\uff1b\u65e0\u72ec\u7acb\u65b0\u589e\u9884\u7b97\u3002",
@@ -4793,7 +4811,7 @@
       "unresolved": "\u6295\u5f71\u521d\u59cb\u5316\u3001tanh\u3001\u4f18\u5316\u9884\u7b97\u4e0e\u7ed3\u6784\u5f71\u54cd\u672a\u533a\u5206\uff1b\u5168\u7ef4\u4e0ePCA\u8bfb\u51fa\u7684\u53c2\u6570\u5bb9\u91cf\u4e0d\u540c\u3002",
       "view_group": "history",
       "x": 325,
-      "y": 9420
+      "y": 9600
     },
     {
       "budget": "\u5168\u94fe\u5171\u540c1NPU/4CPU\u7ebf\u7a0b/24GiB\uff1b\u8bbe\u5907\u22642h\u3001\u542b\u6392\u961f\u226412h\u3001\u65b0\u589e\u22644GiB\u3002",
@@ -4941,7 +4959,7 @@
       "track": "baseline",
       "view_group": "history",
       "x": 620,
-      "y": 9120
+      "y": 9300
     },
     {
       "budget": "\u5171\u4eab\u7b2c\u56db\u6279\u22642h\u8bbe\u5907\u8ba1\u7b97\u3001\u226412h\u5899\u949f\uff1b\u65e0\u72ec\u7acb\u65b0\u589e\u9884\u7b97\u3002",
@@ -4985,7 +5003,7 @@
       "unresolved": "16\u7ef4\u6295\u5f71/\u975e\u7ebf\u6027/\u4f18\u5316\u914d\u65b9\u4e0e\u7ed3\u6784\u8d21\u732e\u672a\u533a\u5206\uff1b\u672a\u53d1\u5e03\u91cd\u7b97\u91cf\u672a\u77e5\uff1b\u65e0\u5b8c\u6574128\u6b65\u4e0d\u4e2d\u65ad\u53c2\u8003\u3002",
       "view_group": "history",
       "x": 620,
-      "y": 9420
+      "y": 9600
     },
     {
       "budget": "\u5168\u94fe\u5171\u540c1NPU/4CPU\u7ebf\u7a0b/24GiB\uff1b\u8bbe\u5907\u22642h\u3001\u542b\u6392\u961f\u226412h\u3001\u65b0\u589e\u22644GiB\u3002",
@@ -5152,7 +5170,7 @@
       "track": "baseline",
       "view_group": "history",
       "x": 915,
-      "y": 9120
+      "y": 9300
     },
     {
       "budget": "\u5171\u4eab\u7b2c\u56db\u6279\u22642h\u8bbe\u5907\u8ba1\u7b97\u3001\u226412h\u5899\u949f\uff1b\u65e0\u72ec\u7acb\u65b0\u589e\u9884\u7b97\u3002",
@@ -5196,7 +5214,7 @@
       "unresolved": "\u8f83\u5f31\u5e72\u9884\u4e0e\u57fa\u7ebf\u9c81\u68d2\u6027\u8d21\u732e\u672a\u533a\u5206\uff1b\u9884\u6d4b\u5fae\u5c0f\u589e\u76ca\u4e0d\u8db3\u4ee5\u8ba4\u5b9a\u63d0\u5347\uff1b\u672a\u8986\u76d6\u957f\u751f\u6210\u3001\u5e7f\u6cdb\u4efb\u52a1\u4e0e\u5176\u4ed6\u5c42\u3002",
       "view_group": "history",
       "x": 915,
-      "y": 9420
+      "y": 9600
     },
     {
       "budget": "v4\u72ec\u7acb\u9884\u7b978NPUh/12h\uff0c\u4e0d\u91cd\u7f6e\u65e7\u6279\u6210\u672c\uff1b\u89c1\u7814\u7a76\u8868\u3002",
@@ -5240,7 +5258,7 @@
       "unresolved": "\u77ed\u4e0a\u4e0b\u6587\u3001\u4f18\u5316\u5145\u5206\u7a0b\u5ea6\u3001\u5355seed\u548c\u6587\u6863\u8986\u76d6\u9650\u5236\uff1b512\u6b65\u957f\u671f\u72ec\u7acb\u6062\u590d\u672a\u67e5\u3002",
       "view_group": "current",
       "x": 915,
-      "y": 5180
+      "y": 5360
     },
     {
       "budget": "v4\u72ec\u7acb\u9884\u7b978NPUh/12h\uff0c\u4e0d\u91cd\u7f6e\u65e7\u6279\u6210\u672c\uff1b\u89c1\u7814\u7a76\u8868\u3002",
@@ -5284,7 +5302,7 @@
       "unresolved": "\u5165\u53e3\u7ef4\u6570\u3001\u5c40\u90e8\u53d8\u6362\u5f62\u5f0f\u3001\u5e8f\u5217\u72b6\u6001\u53ca\u4f18\u5316\u672a\u5b8c\u5168\u9694\u79bb\uff1b\u5355seed\u6587\u6863\u533a\u95f4\u4e0d\u8986\u76d6\u8bad\u7ec3\u968f\u673a\u6027\u3001\u9884\u8bad\u7ec3\u6c61\u67d3\u53ca\u5e7f\u6cdb\u8bed\u6599\u3002\u672a\u77e5\u6570\u503c\u539f\u56e0\u672a\u89e3\u9664\u3002",
       "view_group": "current",
       "x": 915,
-      "y": 5360
+      "y": 5540
     },
     {
       "budget": "v4\u72ec\u7acb\u9884\u7b978NPUh/12h\uff0c\u4e0d\u91cd\u7f6e\u65e7\u6279\u6210\u672c\uff1b\u89c1\u7814\u7a76\u8868\u3002",
@@ -5328,7 +5346,7 @@
       "unresolved": "\u4ece\u96f6\u4e0e\u9884\u8bad\u7ec3\u80cc\u666f\u4e0d\u53ef\u4e92\u76f8\u66ff\u4ee3\uff0c\u8054\u5408\u89c4\u6a21/\u957f\u4e0a\u4e0b\u6587\u53ca\u8de8seed\u7a33\u5065\u6027\u5c1a\u672a\u5efa\u7acb\u3002",
       "view_group": "current",
       "x": 915,
-      "y": 5540
+      "y": 5720
     },
     {
       "budget": "\u672c\u6279\u5171\u4eab\u539f24\u7d2f\u8ba1\u8ba1\u7b97worker\u5c0f\u65f6/22:49:13\u622a\u6b62\uff1b\u539fv5\u53ca\u8865\u9f50\u603b\u5b9e\u626310.1672\u5c0f\u65f6\uff0c\u5df2\u7ec8\u6001\uff0c\u5404\u9879\u660e\u7ec6\u89c1\u7ec8\u6001\u8bc1\u636e\u3002",
@@ -5450,7 +5468,7 @@
       "track": "tide",
       "view_group": "current",
       "x": 620,
-      "y": 5780
+      "y": 5960
     },
     {
       "budget": "\u6765\u81ea\u5bf9\u5e94\u7814\u7a76\uff0c\u4e0d\u8ffd\u52a0\u5b9e\u9a8c\u3002",
@@ -5530,7 +5548,7 @@
       "unresolved": "\u8bad\u7ec3\u5145\u5206\u5ea6\u3001\u4f18\u5316\u3001\u8bfb\u51fa/\u4fe1\u606f\u8def\u5f84\u4e0e\u7ed3\u6784\u672a\u5206\u79bb\uff1b\u5355seed\u6587\u6863\u533a\u95f4\u4e0d\u5305\u62ec\u79cd\u5b50\u6216\u603b\u4f53\u5916\u63a8\u4e0d\u786e\u5b9a\u6027\u3002",
       "view_group": "current",
       "x": 915,
-      "y": 5780
+      "y": 5960
     },
     {
       "budget": "\u672c\u6279\u5171\u4eab\u539f24\u7d2f\u8ba1\u8ba1\u7b97worker\u5c0f\u65f6/22:49:13\u622a\u6b62\uff1b\u539fv5\u53ca\u8865\u9f50\u603b\u5b9e\u626310.1672\u5c0f\u65f6\uff0c\u5df2\u7ec8\u6001\uff0c\u5404\u9879\u660e\u7ec6\u89c1\u7ec8\u6001\u8bc1\u636e\u3002",
@@ -5657,7 +5675,7 @@
       "track": "tide",
       "view_group": "current",
       "x": 620,
-      "y": 5960
+      "y": 6140
     },
     {
       "budget": "\u6765\u81ea\u5bf9\u5e94\u7814\u7a76\uff0c\u4e0d\u8ffd\u52a0\u5b9e\u9a8c\u3002",
@@ -5737,7 +5755,7 @@
       "unresolved": "\u53cc\u4fa7\u8d28\u91cf\u533a\u95f4\u542b0\uff0c\u4e5f\u4e0d\u80fd\u5224\u5df2\u786e\u8ba4\u9000\u5316\uff1b\u8bad\u7ec3\u5145\u5206\u5ea6\u3001\u4f18\u5316\u4e0e\u62d3\u6251\u672a\u5206\u79bb\uff0c\u957f\u671f\u72ec\u7acb\u6062\u590d\u672a\u67e5\u3002",
       "view_group": "current",
       "x": 915,
-      "y": 5960
+      "y": 6140
     },
     {
       "budget": "\u5171\u4eab\u622a\u6b62\u5317\u4eac\u65f6\u95f422:49\uff1b\u65b0\u627924\u7d2f\u8ba1\u8ba1\u7b97worker\u5c0f\u65f6\uff0cCPU\u66ff\u4ee3\u8ba1\u5165\u540c\u4e00\u4e0a\u9650\u3002",
@@ -5813,7 +5831,7 @@
       "track": "baseline",
       "view_group": "current",
       "x": 620,
-      "y": 6140
+      "y": 6320
     },
     {
       "budget": "\u6765\u81ea\u5bf9\u5e94\u7814\u7a76\uff0c\u4e0d\u8ffd\u52a0\u5b9e\u9a8c\u3002",
@@ -5865,7 +5883,7 @@
       "unresolved": "\u53c2\u6570\u5bb9\u91cf\u3001\u6df1\u5ea6\u3001\u72b6\u6001\u53ca\u4f18\u5316\u672a\u5206\u79bb\uff1b\u5355seed\u6587\u6863\u533a\u95f4\u4e0d\u8986\u76d6\u968f\u673a\u6027\u548c\u5e7f\u6cdb\u80fd\u529b\u3002\u6570\u503c\u539f\u56e0\u672a\u77e5\u3002",
       "view_group": "current",
       "x": 915,
-      "y": 6140
+      "y": 6320
     },
     {
       "budget": "\u672c\u6279\u5171\u4eab\u539f24\u7d2f\u8ba1\u8ba1\u7b97worker\u5c0f\u65f6/22:49:13\u622a\u6b62\uff1b\u539fv5\u53ca\u8865\u9f50\u603b\u5b9e\u626310.1672\u5c0f\u65f6\uff0c\u5df2\u7ec8\u6001\uff0c\u5404\u9879\u660e\u7ec6\u89c1\u7ec8\u6001\u8bc1\u636e\u3002",
@@ -5992,7 +6010,7 @@
       "track": "shared",
       "view_group": "current",
       "x": 620,
-      "y": 6320
+      "y": 6500
     },
     {
       "budget": "\u6765\u81ea\u5bf9\u5e94\u7814\u7a76\uff0c\u4e0d\u8ffd\u52a0\u5b9e\u9a8c\u3002",
@@ -6072,7 +6090,7 @@
       "unresolved": "\u7ed3\u6784\u3001\u5145\u5206\u8bad\u7ec3\u3001\u4f18\u5316\u548c\u53c2\u6570\u89c4\u6a21\u4ecd\u672a\u5206\u79bb\uff1b\u540cseed\u4e0e\u6587\u6863\u6837\u672c\u7684\u8fb9\u754c\u4fdd\u6301\u3002",
       "view_group": "current",
       "x": 915,
-      "y": 6320
+      "y": 6500
     },
     {
       "budget": "\u672c\u6279\u5171\u4eab\u539f24\u7d2f\u8ba1\u8ba1\u7b97worker\u5c0f\u65f6/22:49:13\u622a\u6b62\uff1b\u539fv5\u53ca\u8865\u9f50\u603b\u5b9e\u626310.1672\u5c0f\u65f6\uff0c\u5df2\u7ec8\u6001\uff0c\u5404\u9879\u660e\u7ec6\u89c1\u7ec8\u6001\u8bc1\u636e\u3002",
@@ -6168,7 +6186,7 @@
       "track": "tide",
       "view_group": "current",
       "x": 620,
-      "y": 6500
+      "y": 6680
     },
     {
       "budget": "\u6765\u81ea\u5bf9\u5e94\u7814\u7a76\uff0c\u4e0d\u8ffd\u52a0\u5b9e\u9a8c\u3002",
@@ -6228,7 +6246,7 @@
       "unresolved": "\u5355seed\u3001\u5c0f\u6570\u636e\u4e0e\u77ed\u4e0a\u4e0b\u6587\uff1b\u8bad\u7ec3\u5145\u5206\u5ea6\u3001\u4f18\u5316\u3001\u62d3\u6251\u3001\u53c2\u6570\u4e0eShannon/quad\u5206\u914d\u914d\u65b9\u672a\u5206\u79bb\u3002\u72ec\u7acb\u53c2\u8003\u56e0\u679c/\u672a\u6765VJP/\u65e9\u671f\u652f\u6301\u53ca\u79bb\u6563\u68c0\u67e5\u901a\u8fc7\uff0c\u4f46\u6709\u9650\u6570\u503c\u4e0eeager\u96f6\u5bb9\u5dee\u5dee\u5f02\u539f\u56e0\u672a\u5b8c\u5168\u5b9a\u4f4d\uff1b\u5b8c\u657464\u6b65\u72ec\u7acb\u6062\u590d\u672a\u67e5\u3002",
       "view_group": "current",
       "x": 915,
-      "y": 6500
+      "y": 6680
     },
     {
       "budget": "\u672c\u6b21639.774\u79d2\u542b\u5f00\u53d1\u68c0\u67e5\uff1bv5\u7d2f\u8ba1\u7ea66.5475/24\u8ba1\u7b97\u5c0f\u65f6\uff0c22:49\u622a\u6b62\u4e0d\u5ef6\u957f\u3002",
@@ -6277,7 +6295,7 @@
       "track": "shared",
       "view_group": "current",
       "x": 620,
-      "y": 6680
+      "y": 6860
     },
     {
       "budget": "\u9a8c\u6536\u4e24\u4f5c\u4e1a\u5df2\u7ec8\u6001\uff1b\u540e\u7eed\u8865\u9f50\u8d39\u7528\u5355\u5217\u7eb3\u5165\u539fv5\u603b\u9884\u7b97\u3002",
@@ -6325,7 +6343,7 @@
       "unresolved": "\u6709\u9650\u6570\u503c\u8d85\u5dee\u539f\u56e0\u672a\u5b8c\u5168\u5206\u89e3\uff1bNPU\u957f\u8bad\u7ec3\u3001B/Qwen\u5b8c\u6574\u8fc1\u79fb\u4e0e\u66f4\u957f\u5b66\u4e60\u672a\u68c0\u67e5\uff1b\u6781\u5f31\u603b\u91cf\u548c\u4e0d\u53ef\u8868\u793a\u4f34\u968f\u4ecd\u62d2\u7edd\u3002",
       "view_group": "current",
       "x": 915,
-      "y": 6680
+      "y": 6860
     },
     {
       "budget": "\u5171\u4eab48h/1536 CPU\u6838\u65f6/384 NPU\u5361\u65f6\uff1b\u5355\u7b5b\u90098h\uff0c\u5355\u89c4\u6a2136h\uff1b\u4e0d\u81ea\u52a8\u8ffd\u52a0\u5019\u9009\u6216\u76ee\u6807\u3002",
@@ -8266,7 +8284,7 @@
       "track": "tide",
       "view_group": "current",
       "x": 620,
-      "y": 2320
+      "y": 2500
     },
     {
       "budget": "\u5171\u4eab48h/1536 CPU\u6838\u65f6/384 NPU\u5361\u65f6\uff1b\u5355\u7b5b\u90098h\uff0c\u5355\u89c4\u6a2136h\uff1b\u4e0d\u81ea\u52a8\u8ffd\u52a0\u5019\u9009\u6216\u76ee\u6807\u3002",
@@ -8471,7 +8489,7 @@
       "track": "tide",
       "view_group": "current",
       "x": 620,
-      "y": 2680
+      "y": 2860
     },
     {
       "budget": "\u5171\u4eab48h/1536 CPU\u6838\u65f6/384 NPU\u5361\u65f6\uff1b\u5355\u7b5b\u90098h\uff0c\u5355\u89c4\u6a2136h\uff1b\u4e0d\u81ea\u52a8\u8ffd\u52a0\u5019\u9009\u6216\u76ee\u6807\u3002",
@@ -8499,7 +8517,7 @@
       "track": "tide",
       "view_group": "current",
       "x": 915,
-      "y": 2320
+      "y": 2500
     },
     {
       "budget": "\u5171\u4eab48h/1536 CPU\u6838\u65f6/384 NPU\u5361\u65f6\uff1b\u5355\u7b5b\u90098h\uff0c\u5355\u89c4\u6a2136h\uff1b\u4e0d\u81ea\u52a8\u8ffd\u52a0\u5019\u9009\u6216\u76ee\u6807\u3002",
@@ -8527,7 +8545,7 @@
       "track": "tide",
       "view_group": "current",
       "x": 915,
-      "y": 2680
+      "y": 2860
     },
     {
       "budget": "\u5171\u4eab48h/1536 CPU\u6838\u65f6/384 NPU\u5361\u65f6\uff1b\u5355\u7b5b\u90098h\uff0c\u5355\u89c4\u6a2136h\uff1b\u4e0d\u81ea\u52a8\u8ffd\u52a0\u5019\u9009\u6216\u76ee\u6807\u3002",
@@ -8556,7 +8574,7 @@
       "track": "tide",
       "view_group": "current",
       "x": 620,
-      "y": 3040
+      "y": 3220
     },
     {
       "budget": "\u65b0\u589e\u22641 NPU\u5361\u65f6/3 CPU\u6838\u65f6/4GiB\uff1b\u5b9e\u9645\u670d\u52a10.36/0.81\u5c0f\u65f6\uff0c\u7ea62.42GiB\u3002",
@@ -8699,7 +8717,7 @@
       "track": "tide",
       "view_group": "current",
       "x": 620,
-      "y": 2500
+      "y": 2680
     },
     {
       "budget": "\u672c\u6b21\u5b9a\u4f4d\u7ec8\u6001\uff1b\u65e0\u65b0\u4f18\u5316/\u8bad\u7ec3\u4f5c\u4e1a\u81ea\u52a8\u542f\u52a8\u3002",
@@ -8742,7 +8760,7 @@
       "unresolved": "\u957fL128\u9010\u7b97\u5b50critical path\u3001\u5176\u4ed6\u8bed\u4e49\u65cf\u53caresident\uff1b\u4e25\u683c\u8f93\u51fa/\u68af\u5ea6\u5dee\u5f02\u672a\u5728\u672c\u5b9a\u4f4d\u91cd\u65b0\u8ba4\u8bc1\uff1b\u5c1a\u672a\u4ea4\u4ed8\u4fee\u6b63\u3002",
       "view_group": "current",
       "x": 915,
-      "y": 2500
+      "y": 2680
     },
     {
       "budget": "\u56db\u4e2aCPU1\u670d\u52a1\u7ea60.2395\u6838\u65f6\uff1b\u8bca\u65ad\u989d\u5ea6\u22641.75\u6838\u65f6\uff0c\u65e0NPU/\u65b0\u5b66\u4e60\u5019\u9009\u3002",
@@ -8809,7 +8827,7 @@
       "track": "tide",
       "view_group": "current",
       "x": 620,
-      "y": 2860
+      "y": 3040
     },
     {
       "budget": "\u8865\u8bc1\u5df2\u7ec8\u6001\uff1b\u4fee\u590d\u4e0e\u540e\u7eed\u8bad\u7ec3\u672a\u542f\u52a8\u3002",
@@ -8856,7 +8874,7 @@
       "unresolved": "\u5c1a\u672a\u5b9e\u73b0\u4fee\u590d\uff1b\u5b8c\u6574HB\u4e0a\u6e38\u8d28\u91cf\u8d77\u6e90\u3001\u5176\u4ed6\u65cf\u771f\u5b9e\u68af\u5ea6\u5f71\u54cd\u4e0e\u8bbe\u5907/\u957f\u8f68\u8ff9\u8d44\u683c\u672a\u8bc1\uff1b\u4e0d\u80fd\u628a\u9759\u6001\u98ce\u9669\u5f53\u6210\u5b9e\u9645\u8bad\u7ec3\u5931\u8d25\u3002",
       "view_group": "current",
       "x": 915,
-      "y": 2860
+      "y": 3040
     },
     {
       "budget": "25\u683c\u00d73\u6a21\u5f0f\u00d73\u6b63\u5f0f\u91cd\u590d\uff1bCPU\u7ea61.57\u6838\u65f6\u3001NPU\u7ea60.51\u5361\u65f6\uff08\u542b\u68af\u5ea6\u8865\u8bc1\u4fdd\u5b88\u6263\u8d26\uff09\u3002",
@@ -9087,7 +9105,7 @@
       "track": "tide",
       "view_group": "current",
       "x": 620,
-      "y": 3820
+      "y": 4000
     },
     {
       "budget": "25\u683c\u00d73\u6a21\u5f0f\u00d73\u6b63\u5f0f\u91cd\u590d\uff1bCPU\u7ea61.57\u6838\u65f6\u3001NPU\u7ea60.51\u5361\u65f6\uff08\u542b\u68af\u5ea6\u8865\u8bc1\u4fdd\u5b88\u6263\u8d26\uff09\u3002",
@@ -9130,7 +9148,7 @@
       "unresolved": "\u5dee\u989d\u4e2d\u5fc5\u8981\u6570\u5b66\u804c\u8d23\u4e0e\u53ef\u5220\u9664\u5b9e\u73b0\u5f00\u9500\u5c1a\u672a\u5206\u79bb\uff1b\u6ca1\u6709HB\u65b0\u57fa\u5ea7\u6027\u80fd\u3001\u7a33\u6001optimizer\u3001\u751f\u6210\u65f6\u5ef6\u6216\u8d28\u91cf\u8d44\u683c\u3002\u5171\u4eab\u8bbe\u5907/\u4e3b\u5b58\u4e89\u7528\u672a\u6392\u9664\u3002",
       "view_group": "current",
       "x": 915,
-      "y": 3820
+      "y": 4000
     },
     {
       "budget": "\u539fv6\u8bc1\u636e\u53ea\u8bfb\uff1bCPU1/16GiB/900\u79d2VJP\u8865\u8bc1\u5b9e\u9645\u7ea663\u79d2\u8ba1\u7b97\uff1b\u672a\u6253\u5f00test\u3002",
@@ -9233,7 +9251,7 @@
       "track": "tide",
       "view_group": "current",
       "x": 620,
-      "y": 4000
+      "y": 4180
     },
     {
       "budget": "\u672c\u6b21\u5ba1\u9605\u7ec8\u6001\uff1b\u65b0\u8bed\u8a00\u8bad\u7ec3\u5efa\u8bae\u5c1a\u672a\u63d0\u4ea4\u3002",
@@ -9288,7 +9306,7 @@
       "unresolved": "\u56fa\u5b9astd0.15\u3001\u7f3a\u6700\u7ec8\u5f52\u4e00\u5316\u3001\u5f3a\u65b9\u5411\u68af\u5ea6\u4e0e\u4e0d\u7a33\u5b9a\u76f8\u5173\uff0c\u4f46\u672a\u901a\u8fc7\u8bad\u7ec3\u5e72\u9884\u8bc1\u660e\u56e0\u679c\uff1b\u5206\u914d/\u6c47\u5408/\u68af\u5ea6\u5b9e\u73b0\u548c\u66dd\u5149\u4ecd\u672a\u5b8c\u5168\u533a\u5206\u3002",
       "view_group": "current",
       "x": 915,
-      "y": 4000
+      "y": 4180
     },
     {
       "budget": "\u5168\u6279\u5b9e\u964513.23\u5206\u949f\uff0c0.685 NPU\u5361\u65f6\uff1b\u542b\u5f00\u53d1\u9884\u75592.351 CPU\u6838\u65f6\u3002\u6700\u591a4\u5f20\u5171\u4eabNPU\u3002",
@@ -9435,7 +9453,7 @@
       "track": "tide",
       "view_group": "current",
       "x": 620,
-      "y": 3220
+      "y": 3400
     },
     {
       "budget": "12\u4e2a\u7b5b\u9009\u9636\u6bb5\u5b8c\u6210\uff0c\u4e0d\u4ee5\u9000\u51fa\u7801\u4ea7\u751f\u79d1\u5b66\u7ed3\u8bba\u3002",
@@ -9478,7 +9496,7 @@
       "unresolved": "\u66f4\u957f\u66dd\u5149\u3001LR/\u68af\u5ea6\u5c3a\u5ea6\u8026\u5408\u53ca\u539fTIDE\u5206\u914d\u8bed\u4e49\u7684\u5f71\u54cd\u672a\u533a\u5206\uff1b\u4e25\u683c\u6570\u503c\u6709\u9650\u5931\u8d25\u3002",
       "view_group": "current",
       "x": 915,
-      "y": 3220
+      "y": 3400
     },
     {
       "budget": "\u5168\u6279\u5b9e\u964513.23\u5206\u949f\uff0c0.685 NPU\u5361\u65f6\uff1b\u542b\u5f00\u53d1\u9884\u75592.351 CPU\u6838\u65f6\u3002\u6700\u591a4\u5f20\u5171\u4eabNPU\u3002",
@@ -9609,7 +9627,7 @@
       "track": "tide",
       "view_group": "current",
       "x": 620,
-      "y": 3400
+      "y": 3580
     },
     {
       "budget": "10\u67614M\u8f68\u8ff9\u5b8c\u6210\uff1b\u6761\u4ef6\u6b8b\u5dee0\u6761\u3002",
@@ -9664,7 +9682,7 @@
       "unresolved": "\u53c2\u6570\u91cf\u3001rank\u4e0e\u5206\u652f/\u6c47\u5408\u540c\u65f6\u6539\u53d8\uff1b\u957f\u7a0b\u5229\u7528\u3001\u5176\u4ed6\u6570\u636e/\u66f4\u5927\u89c4\u6a21\u3001TIDE\u8def\u7531\u548c\u5b9e\u9645\u7a00\u758f\u5747\u672a\u5224\u5b9a\u3002",
       "view_group": "current",
       "x": 915,
-      "y": 3400
+      "y": 3580
     },
     {
       "budget": "\u5b9e\u96450\u6761\u30010\u8bad\u7ec3\u6210\u672c\uff1b\u539f\u4e0a\u96502\u6761\u3002",
@@ -9689,7 +9707,7 @@
       "track": "tide",
       "view_group": "current",
       "x": 620,
-      "y": 3580
+      "y": 3760
     },
     {
       "budget": "\u540c\u4e00\u6709\u9650\u9884\u7b97\uff1b\u672a\u5f00\u542ftest\u3002",
@@ -9703,7 +9721,7 @@
       "track": "tide",
       "view_group": "current",
       "x": 915,
-      "y": 3580
+      "y": 3760
     },
     {
       "budget": "48h/240 NPU\u5361\u65f6/768 CPU\u6838\u65f6/128GiB\uff1b10\u5361\u72ec\u7acb\u5e76\u884c\uff1b\u4e0d\u81ea\u52a8\u6269\u5c55\u771f\u5b9e\u7a00\u758f\u6216\u89c4\u6a21\u3002",
@@ -12117,7 +12135,7 @@
       "track": "tide",
       "view_group": "current",
       "x": 620,
-      "y": 1540
+      "y": 1720
     },
     {
       "budget": "\u7528\u6237\u63a5\u53d7\u5171\u4eab48h\u5899\u949f\u3001\u53d6\u6d88\u805a\u5408NPU\u5361\u65f6/CPU\u6838\u65f6\u4e0a\u9650\uff1b\u5b9e\u9645\u6d88\u8017\u7ee7\u7eed\u8bb0\u5f55\u300264GiB\u65b0\u589e\u4e0e\u8d44\u6e90\u4f59\u91cf\u7ea6\u675f\u4fdd\u6301\u3002",
@@ -12192,7 +12210,7 @@
       "unresolved": "\u5bb9\u91cf\u4e0e\u4f9d\u8d56\u6df1\u5ea6\u8054\u52a8\uff1b\u4e0d\u662f\u7b49\u8ba1\u7b97\u6bd4\u8f83\u3002validation\u9009\u62e9\u504f\u5dee\u3001\u72ec\u7acb\u786e\u8ba4\u53ca\u901a\u7528scaling\u672a\u89e3\u51b3\u3002",
       "view_group": "current",
       "x": 915,
-      "y": 1540
+      "y": 1720
     },
     {
       "budget": "\u7528\u6237\u63a5\u53d7\u5171\u4eab48h\u5899\u949f\u3001\u53d6\u6d88\u805a\u5408NPU\u5361\u65f6/CPU\u6838\u65f6\u4e0a\u9650\uff1b\u5b9e\u9645\u6d88\u8017\u7ee7\u7eed\u8bb0\u5f55\u300264GiB\u65b0\u589e\u4e0e\u8d44\u6e90\u4f59\u91cf\u7ea6\u675f\u4fdd\u6301\u3002",
@@ -12518,7 +12536,7 @@
       "track": "tide",
       "view_group": "current",
       "x": 620,
-      "y": 1720
+      "y": 1900
     },
     {
       "budget": "\u7528\u6237\u63a5\u53d7\u5171\u4eab48h\u5899\u949f\u3001\u53d6\u6d88\u805a\u5408NPU\u5361\u65f6/CPU\u6838\u65f6\u4e0a\u9650\uff1b\u5b9e\u9645\u6d88\u8017\u7ee7\u7eed\u8bb0\u5f55\u300264GiB\u65b0\u589e\u4e0e\u8d44\u6e90\u4f59\u91cf\u7ea6\u675f\u4fdd\u6301\u3002",
@@ -12593,7 +12611,7 @@
       "unresolved": "\u533a\u57df\u8282\u70b9\u6570\u3001\u8282\u70b9\u5bbd\u5ea6\u3001\u6df1\u5ea6\u548c\u5b9e\u9645\u6d3b\u52a8\u6539\u53d8\u8026\u5408\uff1bquad/\u8f6e\u8f6c\u5b9e\u9645\u63a5\u6536\u4e0d\u540c\uff0c\u4e0d\u80fd\u53ea\u5f52\u56e0\u4e8e\u53ef\u5b66\u4e60\u8def\u7531\u3002",
       "view_group": "current",
       "x": 915,
-      "y": 1720
+      "y": 1900
     },
     {
       "budget": "\u7528\u6237\u63a5\u53d7\u5171\u4eab48h\u5899\u949f\u3001\u53d6\u6d88\u805a\u5408NPU\u5361\u65f6/CPU\u6838\u65f6\u4e0a\u9650\uff1b\u5b9e\u9645\u6d88\u8017\u7ee7\u7eed\u8bb0\u5f55\u300264GiB\u65b0\u589e\u4e0e\u8d44\u6e90\u4f59\u91cf\u7ea6\u675f\u4fdd\u6301\u3002",
@@ -13389,7 +13407,7 @@
       "track": "shared",
       "view_group": "current",
       "x": 620,
-      "y": 1900
+      "y": 2080
     },
     {
       "budget": "\u7528\u6237\u63a5\u53d7\u5171\u4eab48h\u5899\u949f\u3001\u53d6\u6d88\u805a\u5408NPU\u5361\u65f6/CPU\u6838\u65f6\u4e0a\u9650\uff1b\u5b9e\u9645\u6d88\u8017\u7ee7\u7eed\u8bb0\u5f55\u300264GiB\u65b0\u589e\u4e0e\u8d44\u6e90\u4f59\u91cf\u7ea6\u675f\u4fdd\u6301\u3002",
@@ -13464,7 +13482,7 @@
       "unresolved": "\u4e09\u6b65\u6062\u590d\u4e0d\u8ba4\u8bc1\u5b8c\u6574\u957f\u8f68\u8ff9\u72ec\u7acb\u91cd\u653e\uff1b\u6709\u9650\u751f\u6210\u4e0d\u7b49\u4e8e\u5f00\u653e\u5f0f\u8bed\u8a00\u8d28\u91cf\u3002AICPU/AICore\u6839\u56e0\u65e0\u65b0trace\uff0c\u72ec\u7acb\u786e\u8ba4\u672a\u6d4b\u3002",
       "view_group": "current",
       "x": 915,
-      "y": 1900
+      "y": 2080
     },
     {
       "budget": "\u5171\u4eab48h\uff0c\u65e0\u7d2f\u8ba1\u7b97\u65f6\u4e0a\u9650\uff1b\u6700\u591a12\u4e2a\u5355\u5361worker\u300164GiB\u65b0\u589e\u3001\u81f3\u5c11200GiB\u786c\u4f59\u91cf",
@@ -13636,7 +13654,7 @@
       "track": "tide",
       "view_group": "current",
       "x": 620,
-      "y": 2080
+      "y": 2260
     },
     {
       "budget": "\u5171\u4eab48h\uff0c\u65e0\u7d2f\u8ba1\u7b97\u65f6\u4e0a\u9650\uff1b\u6700\u591a12\u4e2a\u5355\u5361worker\u300164GiB\u65b0\u589e\u3001\u81f3\u5c11200GiB\u786c\u4f59\u91cf",
@@ -13711,7 +13729,7 @@
       "unresolved": "\u5165\u53e3\u8868\u793a/\u8986\u76d6\u74f6\u9888\u3001\u63a5\u6536\u5386\u53f2\u548c\u989d\u5916\u53c2\u6570\u672a\u5206\u79bb\uff1b\u4e0d\u8ba4\u5b9a\u6240\u6709\u6811\u65e0\u6548\uff0c\u4e5f\u4e0d\u9884\u8bbe\u5ef6\u957f\u4f1a\u89e3\u51b3\u3002",
       "view_group": "current",
       "x": 915,
-      "y": 2080
+      "y": 2260
     },
     {
       "budget": "\u5171\u4eab48h\u81f311\u670816\u65e521:51:33\uff1b\u6700\u591a12NPU worker\uff1b\u6700\u5927200M\uff1b64GiB\u76ee\u6807/96GiB\u4e0a\u9650\uff0c\u65e0\u7d2f\u8ba1\u7b97\u65f6\u4e0a\u9650\u3002",
@@ -13857,7 +13875,7 @@
     {
       "budget": "\u5171\u4eab48h\u81f311\u670816\u65e521:51:33\uff1b\u6700\u591a12NPU worker\uff1b\u6700\u5927200M\uff1b64GiB\u76ee\u6807/96GiB\u4e0a\u9650\uff0c\u65e0\u7d2f\u8ba1\u7b97\u65f6\u4e0a\u9650\u3002",
       "decision": "\u6309\u56fa\u5b9a\u6709\u9650\u8868\u6267\u884c\uff1b\u8d28\u91cf\u3001\u6570\u503c\u548c\u6027\u80fd\u5206\u522b\u5ba1\u9605\uff0c\u4e0d\u81ea\u52a8\u6269\u5019\u9009\u3002",
-      "execution_note": "11\u670815\u65e503:52\uff1a\u4e3b\u8f68\u8ff911\u5b8c\u6210128M\u30016\u8fd0\u884c\u30013pool\u68af\u5ea6\u603b\u8303\u6570\u975e\u6709\u9650\u5931\u8d25\uff1b\u5168\u90e820\u9879\u5c0f\u578b\u6062\u590d\u901a\u8fc7\u3002\u670d\u52a1\u5916\u5c42completed\u4e0d\u8986\u76d6\u8bad\u7ec3\u5931\u8d25\u3002\u72ec\u7acb\u786e\u8ba4\u672a\u5f00\u59cb\uff1b\u540c\u65e5\u7a0bNPU\u590d\u68382\u524d\u5411\u901a\u8fc7/2\u6709\u9650\u5931\u8d25\uff0cVJP\u4e25\u683c\u5931\u8d25\u4fdd\u7559\u3002",
+      "execution_note": "11\u670815\u65e5\u8bca\u65ad\u540e\uff1a\u4e3b\u8f68\u8ff912\u5b8c\u6210128M\u30015\u8fd0\u884c\u30013\u539f\u5931\u8d25\u3002\u4e09\u9879\u5931\u8d25\u5747\u5b9a\u4f4d\u4e3a\u805a\u5408\u9664\u6cd5\u53cd\u5411\u4e2d\u95f4\u6ea2\u51fa\uff1b\u5019\u9009\u5355\u6b65\u901a\u8fc7\uff0c\u672a\u81ea\u52a8\u6062\u590d\u3002\u72ec\u7acb\u786e\u8ba4\u4e0e\u539f\u4e25\u683c\u6709\u9650\u5931\u8d25\u4fdd\u6301\u3002",
       "id": "V10-CAPACITY",
       "kind": "experiment",
       "question": "\u56fa\u5b9a\u6d3b\u52a8\u6863\uff0cd64\u2192128\u589e\u52a0\u5bb9\u91cf\u662f\u5426\u6539\u5584\u5171\u540c\u66dd\u5149\u8d28\u91cf\uff1f",
@@ -13889,6 +13907,10 @@
         {
           "label": "\u9010\u8f68\u8ff9\u5931\u8d25\u3001\u9a8c\u8bc1\u4e0e\u6570\u503c\u8865\u8bc1",
           "path": "docs/evidence/direct-v10-progress-20261115-am.json"
+        },
+        {
+          "label": "\u4e09\u9879\u6545\u969c\u7684\u5b9a\u4f4d\u4e0e\u65b9\u6848",
+          "path": "docs/studies/direct-v10-gradient-results.md"
         }
       ],
       "runs": [
@@ -13922,7 +13944,7 @@
           "lens_record": "runs/v10-main-hb-d64-r64-q3-s22/train/projection.json",
           "record": "runs/v10-main-hb-d64-r64-q3-s22/train/result.json",
           "source_commit": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
-          "status": "running"
+          "status": "completed"
         },
         {
           "config": "configs/studies/language/direct-v10/table/main/hb-d128-r28-q10-s11.json",
@@ -14005,7 +14027,7 @@
     {
       "budget": "\u5171\u4eab48h\u81f311\u670816\u65e521:51:33\uff1b\u6700\u591a12NPU worker\uff1b\u6700\u5927200M\uff1b64GiB\u76ee\u6807/96GiB\u4e0a\u9650\uff0c\u65e0\u7d2f\u8ba1\u7b97\u65f6\u4e0a\u9650\u3002",
       "decision": "\u6309\u56fa\u5b9a\u6709\u9650\u8868\u6267\u884c\uff1b\u8d28\u91cf\u3001\u6570\u503c\u548c\u6027\u80fd\u5206\u522b\u5ba1\u9605\uff0c\u4e0d\u81ea\u52a8\u6269\u5019\u9009\u3002",
-      "execution_note": "11\u670815\u65e503:52\uff1a\u4e3b\u8f68\u8ff911\u5b8c\u6210128M\u30016\u8fd0\u884c\u30013pool\u68af\u5ea6\u603b\u8303\u6570\u975e\u6709\u9650\u5931\u8d25\uff1b\u5168\u90e820\u9879\u5c0f\u578b\u6062\u590d\u901a\u8fc7\u3002\u670d\u52a1\u5916\u5c42completed\u4e0d\u8986\u76d6\u8bad\u7ec3\u5931\u8d25\u3002\u72ec\u7acb\u786e\u8ba4\u672a\u5f00\u59cb\uff1b\u540c\u65e5\u7a0bNPU\u590d\u68382\u524d\u5411\u901a\u8fc7/2\u6709\u9650\u5931\u8d25\uff0cVJP\u4e25\u683c\u5931\u8d25\u4fdd\u7559\u3002",
+      "execution_note": "11\u670815\u65e5\u8bca\u65ad\u540e\uff1a\u4e3b\u8f68\u8ff912\u5b8c\u6210128M\u30015\u8fd0\u884c\u30013\u539f\u5931\u8d25\u3002\u4e09\u9879\u5931\u8d25\u5747\u5b9a\u4f4d\u4e3a\u805a\u5408\u9664\u6cd5\u53cd\u5411\u4e2d\u95f4\u6ea2\u51fa\uff1b\u5019\u9009\u5355\u6b65\u901a\u8fc7\uff0c\u672a\u81ea\u52a8\u6062\u590d\u3002\u72ec\u7acb\u786e\u8ba4\u4e0e\u539f\u4e25\u683c\u6709\u9650\u5931\u8d25\u4fdd\u6301\u3002",
       "id": "V10-ACTIVE",
       "kind": "experiment",
       "question": "\u5305\u62ecRead/\u5171\u4eab\u53c2\u6570\u5339\u914d\u65f6\uff0cdense\u2192R28\u2192R64\u662f\u5426\u53d7\u76ca\uff1f",
@@ -14037,6 +14059,10 @@
         {
           "label": "\u9010\u8f68\u8ff9\u5931\u8d25\u3001\u9a8c\u8bc1\u4e0e\u6570\u503c\u8865\u8bc1",
           "path": "docs/evidence/direct-v10-progress-20261115-am.json"
+        },
+        {
+          "label": "\u4e09\u9879\u6545\u969c\u7684\u5b9a\u4f4d\u4e0e\u65b9\u6848",
+          "path": "docs/studies/direct-v10-gradient-results.md"
         }
       ],
       "runs": [
@@ -14102,7 +14128,7 @@
           "lens_record": "runs/v10-main-hb-d64-r64-q3-s22/train/projection.json",
           "record": "runs/v10-main-hb-d64-r64-q3-s22/train/result.json",
           "source_commit": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
-          "status": "running"
+          "status": "completed"
         },
         {
           "config": "configs/studies/language/direct-v10/table/main/hb-d128-r28-q10-s11.json",
@@ -14185,7 +14211,7 @@
     {
       "budget": "\u5171\u4eab48h\u81f311\u670816\u65e521:51:33\uff1b\u6700\u591a12NPU worker\uff1b\u6700\u5927200M\uff1b64GiB\u76ee\u6807/96GiB\u4e0a\u9650\uff0c\u65e0\u7d2f\u8ba1\u7b97\u65f6\u4e0a\u9650\u3002",
       "decision": "\u6309\u56fa\u5b9a\u6709\u9650\u8868\u6267\u884c\uff1b\u8d28\u91cf\u3001\u6570\u503c\u548c\u6027\u80fd\u5206\u522b\u5ba1\u9605\uff0c\u4e0d\u81ea\u52a8\u6269\u5019\u9009\u3002",
-      "execution_note": "11\u670815\u65e503:52\uff1a\u4e3b\u8f68\u8ff911\u5b8c\u6210128M\u30016\u8fd0\u884c\u30013pool\u68af\u5ea6\u603b\u8303\u6570\u975e\u6709\u9650\u5931\u8d25\uff1b\u5168\u90e820\u9879\u5c0f\u578b\u6062\u590d\u901a\u8fc7\u3002\u670d\u52a1\u5916\u5c42completed\u4e0d\u8986\u76d6\u8bad\u7ec3\u5931\u8d25\u3002\u72ec\u7acb\u786e\u8ba4\u672a\u5f00\u59cb\uff1b\u540c\u65e5\u7a0bNPU\u590d\u68382\u524d\u5411\u901a\u8fc7/2\u6709\u9650\u5931\u8d25\uff0cVJP\u4e25\u683c\u5931\u8d25\u4fdd\u7559\u3002",
+      "execution_note": "11\u670815\u65e5\u8bca\u65ad\u540e\uff1a\u4e3b\u8f68\u8ff912\u5b8c\u6210128M\u30015\u8fd0\u884c\u30013\u539f\u5931\u8d25\u3002\u4e09\u9879\u5931\u8d25\u5747\u5b9a\u4f4d\u4e3a\u805a\u5408\u9664\u6cd5\u53cd\u5411\u4e2d\u95f4\u6ea2\u51fa\uff1b\u5019\u9009\u5355\u6b65\u901a\u8fc7\uff0c\u672a\u81ea\u52a8\u6062\u590d\u3002\u72ec\u7acb\u786e\u8ba4\u4e0e\u539f\u4e25\u683c\u6709\u9650\u5931\u8d25\u4fdd\u6301\u3002",
       "id": "V10-CONTROL",
       "kind": "experiment",
       "question": "\u4f4e\u6d3b\u52a8\u8d28\u91cf\u4ee3\u4ef7\u591a\u5927\uff0c\u4e0e\u5408\u7406\u8c03\u53c2TF\u6709\u4f55\u5dee\u8ddd\uff1f",
@@ -14217,6 +14243,10 @@
         {
           "label": "\u9010\u8f68\u8ff9\u5931\u8d25\u3001\u9a8c\u8bc1\u4e0e\u6570\u503c\u8865\u8bc1",
           "path": "docs/evidence/direct-v10-progress-20261115-am.json"
+        },
+        {
+          "label": "\u4e09\u9879\u6545\u969c\u7684\u5b9a\u4f4d\u4e0e\u65b9\u6848",
+          "path": "docs/studies/direct-v10-gradient-results.md"
         }
       ],
       "runs": [
@@ -14333,7 +14363,7 @@
     {
       "budget": "\u5171\u4eab48h\u81f311\u670816\u65e521:51:33\uff1b\u6700\u591a12NPU worker\uff1b\u6700\u5927200M\uff1b64GiB\u76ee\u6807/96GiB\u4e0a\u9650\uff0c\u65e0\u7d2f\u8ba1\u7b97\u65f6\u4e0a\u9650\u3002",
       "decision": "\u6309\u56fa\u5b9a\u6709\u9650\u8868\u6267\u884c\uff1b\u8d28\u91cf\u3001\u6570\u503c\u548c\u6027\u80fd\u5206\u522b\u5ba1\u9605\uff0c\u4e0d\u81ea\u52a8\u6269\u5019\u9009\u3002",
-      "execution_note": "11\u670815\u65e503:52\uff1a\u4e3b\u8f68\u8ff911\u5b8c\u6210128M\u30016\u8fd0\u884c\u30013pool\u68af\u5ea6\u603b\u8303\u6570\u975e\u6709\u9650\u5931\u8d25\uff1b\u5168\u90e820\u9879\u5c0f\u578b\u6062\u590d\u901a\u8fc7\u3002\u670d\u52a1\u5916\u5c42completed\u4e0d\u8986\u76d6\u8bad\u7ec3\u5931\u8d25\u3002\u72ec\u7acb\u786e\u8ba4\u672a\u5f00\u59cb\uff1b\u540c\u65e5\u7a0bNPU\u590d\u68382\u524d\u5411\u901a\u8fc7/2\u6709\u9650\u5931\u8d25\uff0cVJP\u4e25\u683c\u5931\u8d25\u4fdd\u7559\u3002",
+      "execution_note": "11\u670815\u65e5\u8bca\u65ad\u540e\uff1a\u4e3b\u8f68\u8ff912\u5b8c\u6210128M\u30015\u8fd0\u884c\u30013\u539f\u5931\u8d25\u3002\u4e09\u9879\u5931\u8d25\u5747\u5b9a\u4f4d\u4e3a\u805a\u5408\u9664\u6cd5\u53cd\u5411\u4e2d\u95f4\u6ea2\u51fa\uff1b\u5019\u9009\u5355\u6b65\u901a\u8fc7\uff0c\u672a\u81ea\u52a8\u6062\u590d\u3002\u72ec\u7acb\u786e\u8ba4\u4e0e\u539f\u4e25\u683c\u6709\u9650\u5931\u8d25\u4fdd\u6301\u3002",
       "id": "V10-CONFIRMATION",
       "kind": "experiment",
       "question": "\u5171\u540c\u66dd\u5149\u7ed3\u8bba\u80fd\u5426\u5728\u672a\u7528\u4e8e\u9009\u62e9\u7684262K split\u4fdd\u6301\uff1f",
@@ -14365,6 +14395,10 @@
         {
           "label": "\u9010\u8f68\u8ff9\u5931\u8d25\u3001\u9a8c\u8bc1\u4e0e\u6570\u503c\u8865\u8bc1",
           "path": "docs/evidence/direct-v10-progress-20261115-am.json"
+        },
+        {
+          "label": "\u4e09\u9879\u6545\u969c\u7684\u5b9a\u4f4d\u4e0e\u65b9\u6848",
+          "path": "docs/studies/direct-v10-gradient-results.md"
         }
       ],
       "runs": [],
@@ -14412,16 +14446,128 @@
       "view_group": "current",
       "x": 915,
       "y": 1360
+    },
+    {
+      "budget": "\u5404\u56de\u653e\u22643300s\uff0c\u77ed\u63a2\u9488\u2264300s\uff1b12GiB\u8bca\u65ad\u76d8\u9650\uff1b\u5df2\u7ec8\u6001\u3002",
+      "decision": "\u4fdd\u6301\u539ffailed\u548c\u6d3b\u52a8\u8f93\u5165\uff1b\u4e0d\u81ea\u52a8\u6062\u590d\u8bad\u7ec3\u3002",
+      "id": "V10-GRADIENT",
+      "kind": "experiment",
+      "question": "\u4e09\u9879pool\u975e\u6709\u9650\u68af\u5ea6\u7684\u5177\u4f53\u6765\u6e90\uff0c\u80fd\u5426\u4fdd\u6301\u524d\u5411\u4fee\u590d\uff1f",
+      "references": [
+        {
+          "label": "\u4e09\u9879\u6545\u969c\u7684\u5b9a\u4f4d\u4e0e\u65b9\u6848",
+          "path": "docs/studies/direct-v10-gradient-results.md"
+        },
+        {
+          "label": "\u56de\u653e\u548c\u5019\u9009\u5b9e\u9645\u8bc1\u636e",
+          "path": "docs/evidence/direct-v10-gradient-diagnosis.json"
+        },
+        {
+          "label": "\u6709\u754c\u8bca\u65ad\u8868",
+          "path": "docs/studies/direct-v10-gradient-diagnosis.md"
+        }
+      ],
+      "runs": [
+        {
+          "config": "configs/studies/language/direct-v10/table/main/hb-d128-r64-pool-s11.json",
+          "id": "v10-diag-hb-d128-r64-pool-s11",
+          "record": "runs/v10-diag-hb-d128-r64-pool-s11/result.json",
+          "source_commit": "95bce59a",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/direct-v10/table/main/hb-d128-r64-pool-s11.json",
+          "id": "v10-fixcheck-hb-d128-r64-pool-s11",
+          "record": "runs/v10-fixcheck-hb-d128-r64-pool-s11/full-update/result.json",
+          "source_commit": "a8669103",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/direct-v10/table/main/hb-d128-r64-pool-s22.json",
+          "id": "v10-diag-hb-d128-r64-pool-s22",
+          "record": "runs/v10-diag-hb-d128-r64-pool-s22/result.json",
+          "source_commit": "95bce59a",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/direct-v10/table/main/hb-d128-r64-pool-s22.json",
+          "id": "v10-fixcheck-hb-d128-r64-pool-s22",
+          "record": "runs/v10-fixcheck-hb-d128-r64-pool-s22/full-update/result.json",
+          "source_commit": "a8669103",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/direct-v10/table/main/hb-d128-r28-pool-s22.json",
+          "id": "v10-diag-hb-d128-r28-pool-s22",
+          "record": "runs/v10-diag-hb-d128-r28-pool-s22/result.json",
+          "source_commit": "95bce59a",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/direct-v10/table/main/hb-d128-r28-pool-s22.json",
+          "id": "v10-fixcheck-hb-d128-r28-pool-s22",
+          "record": "runs/v10-fixcheck-hb-d128-r28-pool-s22/full-update/result.json",
+          "source_commit": "a8669103",
+          "status": "completed"
+        }
+      ],
+      "status": "completed",
+      "study_id": "TL-GRADIENT-v10",
+      "summary": "\u4e09\u9879\u539f\u5931\u8d25\u6b65\u7cbe\u786e\u91cd\u73b0\uff1b\u5c40\u90e8VJP\u5019\u9009\u5355\u6b65\u9a8c\u8bc1",
+      "title": "pool\u68af\u5ea6\u6545\u969c\uff1a\u539f\u8f68\u8ff9\u56de\u653e",
+      "track": "shared",
+      "view_group": "current",
+      "x": 620,
+      "y": 1540
+    },
+    {
+      "budget": "\u8bca\u65ad\u5df2\u7ec8\u6001\uff0c\u4e0d\u8ffd\u52a0\u6b63\u5f0f\u8bad\u7ec3\u3002",
+      "comparisons": "\u539f34\u4e2a\u975e\u6709\u9650\u68af\u5ea6\u53c2\u6570\u5f20\u91cf/\u4f8b\u2192\u5019\u90090\uff1b\u5168\u90e8logits\u9010\u4f4d\u76f8\u540c\uff1b61\u4e2a\u5171\u540c\u56de\u653e\u8bb0\u5f55\u70b9\u4e00\u81f4\u3002",
+      "counterevidence": "R28\u65e7\u6743\u91cd\u5728\u5931\u8d25\u8f93\u5165\u4ecd\u6709\u9650\uff1b\u771f\u5b9e\u8303\u56f4\u6ea2\u51fa\u4fdd\u7559\u5931\u8d25\uff1b\u65e7\u6574\u7f51\u4e25\u683c\u6709\u9650\u8d85\u5dee\u4e0d\u88ab\u5c40\u90e8\u901a\u8fc7\u8986\u76d6\u3002",
+      "decision": "\u5efa\u8bae\u65b0\u6e90\u7801\u4fee\u590d\u4e0e\u6062\u590d/\u77ed\u7a0b\u68c0\u67e5\uff0c\u518d\u8865\u9f50pool\u5bf9\u7167\uff1b\u4e0d\u5224\u4e3a\u67b6\u6784\u8d28\u91cf\u8d1f\u9762\u3002",
+      "id": "RV10-GRADIENT",
+      "kind": "result",
+      "question": "\u4e09\u9879pool\u975e\u6709\u9650\u68af\u5ea6\u7684\u5177\u4f53\u6765\u6e90\uff0c\u80fd\u5426\u4fdd\u6301\u524d\u5411\u4fee\u590d\uff1f",
+      "references": [
+        {
+          "label": "\u4e09\u9879\u6545\u969c\u7684\u5b9a\u4f4d\u4e0e\u65b9\u6848",
+          "path": "docs/studies/direct-v10-gradient-results.md"
+        },
+        {
+          "label": "\u56de\u653e\u548c\u5019\u9009\u5b9e\u9645\u8bc1\u636e",
+          "path": "docs/evidence/direct-v10-gradient-diagnosis.json"
+        },
+        {
+          "label": "\u6709\u754c\u8bca\u65ad\u8868",
+          "path": "docs/studies/direct-v10-gradient-diagnosis.md"
+        }
+      ],
+      "scope": "\u56fa\u5b9a0ea05d61 direct FP32\u4e09\u9879\u5b9e\u9645\u5931\u8d25batch\uff1bCPU/NPU\u62bd\u53d6\u7b97\u5b50\u548c\u5b8c\u6574\u5355\u6b65\u5e72\u9884\uff0c\u975e\u957f\u671f\u8d28\u91cf\u7ed3\u8bba\u3002",
+      "sources": [
+        {
+          "label": "\u72ec\u7acb\u8bca\u65ad\u8bc1\u636e\u4e0e\u56fa\u5b9a\u8eab\u4efd",
+          "url": "https://github.com/ZichaoLong/tide/blob/tide-learning-lab/docs/evidence/direct-v10-gradient-diagnosis.json"
+        }
+      ],
+      "status": "scoped",
+      "summary": "\u6539VJP\u987a\u5e8f\u4fdd\u7559\u524d\u5411\uff0c\u4e09\u5931\u8d25batch\u68af\u5ea6\u53caoptimizer\u6709\u9650",
+      "title": "\u6781\u5c0f\u6b63\u8d28\u91cf\u7684\u9664\u6cd5\u53cd\u5411\u6ea2\u51fa",
+      "track": "shared",
+      "transfer_conditions": "\u4ec5\u5728\u76f8\u540c\u6b63\u8d28\u91cf\u805a\u5408\u516c\u5f0f\u53caVJP\u5951\u7ea6\u4e0b\u8fc1\u79fb\uff1b\u6570\u5b66\u7b49\u4ef7\u4e0d\u514d\u9664\u6765\u6e90/\u7cbe\u5ea6/\u6062\u590d\u68c0\u67e5\uff0c\u57fa\u5ea7\u672a\u636e\u6b64\u9a8c\u6536\u3002",
+      "unresolved": "\u5019\u9009\u65b0\u8fdb\u7a0b\u6062\u590d\u3001\u957f\u671f\u7a33\u5b9a\u3001\u5b66\u4e60\u8d28\u91cf\u548c\u5176\u4ed6\u6781\u7aef\u8303\u56f4\u672a\u6d4b\uff1b\u4e0d\u662f\u5168\u57df\u6570\u503c\u5b89\u5168\u4fdd\u8bc1\u3002",
+      "view_group": "current",
+      "x": 915,
+      "y": 1540
     }
   ],
-  "notice": "20\u4e3b\u8f68\u8ff9\u5b9e\u964511\u5b8c\u6210128M\u30016\u8fd0\u884c\u30013pool\u975e\u6709\u9650\u68af\u5ea6\u8303\u6570\u5931\u8d25\uff0c\u65e0\u4e3b\u8f68\u8ff9\u6392\u961f\uff1b\u5916\u5c42\u670d\u52a1completed\u4e0d\u80fd\u8986\u76d6\u5931\u8d25\u3002\u72ec\u7acb\u786e\u8ba4\u672a\u5f00\u59cb\uff0c\u4e25\u683c\u6570\u503c\u5931\u8d25\u4fdd\u6301\uff0c128M\u5404\u6bd4\u8f83\u5c1a\u672a\u5168\u9f50\u3002",
+  "notice": "\u4e3b\u8f68\u8ff912\u5b8c\u6210128M\u30015\u8fd0\u884c\u30013\u539f\u5931\u8d25\u3002\u4e09\u9879\u539f\u5931\u8d25\u5747\u590d\u73b0\u5e76\u5b9a\u4f4d\uff0c\u5c40\u90e8VJP\u5019\u9009\u4e0d\u6539\u524d\u5411\uff1b\u672a\u5207\u6362\u6d3b\u52a8\u6e90\u7801\u6216\u6062\u590d\u6b63\u5f0f\u8bad\u7ec3\u3002",
   "schema": "tide-research-map-prototype-v1",
-  "subtitle": "v10\u4e2d\u671f\uff1a11\u5b8c\u6210\u30016\u8fd0\u884c\u30013pool\u8bad\u7ec3\u5931\u8d25\uff1b\u8fd1\u6d3b\u8dc3\u5bb9\u91cf\u4f18\u52bf\u5c1a\u672a\u663e\u793a",
+  "subtitle": "v10\uff1apool\u53cd\u5411\u6545\u969c\u5df2\u5b9a\u4f4d\uff0c\u5355\u6b65\u4fee\u590d\u5019\u9009\u901a\u8fc7\uff1b\u957f\u671f\u5b66\u4e60\u8d44\u683c\u5f85\u9a8c",
   "title": "TIDE \u7814\u7a76\u56fe",
   "updated_at": "2026-11-15",
   "view_groups": [
     {
-      "height": 6880,
+      "height": 7060,
       "id": "current",
       "label": "\u5f53\u524d\uff1a\u8bed\u8a00\u4e0e\u7ed3\u6784\u8054\u5408\u7814\u7a76",
       "y": 0
@@ -14430,7 +14576,7 @@
       "height": 2750,
       "id": "history",
       "label": "\u5386\u53f2\uff1a\u56db\u6279\u7814\u7a76\u4e0e\u9650\u5b9a\u8bc1\u636e",
-      "y": 6980
+      "y": 7160
     }
   ],
   "width": 1490

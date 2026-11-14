@@ -1,5 +1,10 @@
 # v10：查看、停止与恢复
 
+2026-11-15三项pool故障诊断已终态，见[根因、候选和后续建议](direct-v10-gradient-results.md)。
+只读`python scripts/review_v10_gradients.py`可查看实际回放/单步干预证据；原三个Lens run仍是failed。
+诊断的`failure-checkpoint.pt`用于重现原失败；原源码恢复仍会遇到该错误，候选源码迁移和新进程恢复尚未验收。
+没有自动恢复正式训练；活动作业仍读原固定源码。
+
 本轮研究表见[固定配置/预算](language-capacity-activity-v10.md)，
 [校准和参数清单](../evidence/direct-v10-selection.json)。独立直接实现，不接入新基座。
 主配置目录`configs/studies/language/direct-v10/table/main/`，固定执行源码目录`.local/source-v10-execution`；
