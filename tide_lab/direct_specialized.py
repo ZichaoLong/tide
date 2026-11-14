@@ -16,10 +16,12 @@ from .special_attention import weighted_attention
 
 class SpecializedSemanticLM(DirectSemanticLM):
     def __init__(self,plan,seed=11,vocab_size=4096,*,attention='math',ffn_checkpoint=False,
-                 aggregation='neighbors'):
+                 aggregation='neighbors',activity_controller=None):
         super().__init__(plan,seed,vocab_size)
         self.attention=attention;self.ffn_checkpoint=ffn_checkpoint;self.aggregation=aggregation
         self._decay_cache={};self.role_counts=[];self.slot_degrees=[]
+        self.activity_controller=dict(activity_controller or {})
+        self.activity_state=dict(ema=None,scale=1.,updates=0,last_tokens=0)
         if self.light_regions or plan['source_binding']['mode']!='region':
             raise ValueError('specialization requires ordinary region-shared HB')
         g=plan['graph']
@@ -53,6 +55,35 @@ class SpecializedSemanticLM(DirectSemanticLM):
             self.role_counts.append((full,receive,shared,self.aggregators[j].e.shape[-1]))
         self.shared_lm_count=self.embedding.weight.numel()+self.head.bias.numel()
         self.total_parameter_count=sum(p.numel() for p in self.parameters())
+
+    def get_extra_state(self):
+        return dict(schema='tide-v10-activity-state-v1',**self.activity_state)
+
+    def set_extra_state(self,state):
+        if state['schema']!='tide-v10-activity-state-v1':raise ValueError('wrong activity-controller state')
+        self.activity_state={k:v for k,v in state.items() if k!='schema'}
+
+    def set_progress(self,tokens):
+        super().set_progress(tokens)
+        if self.activity_controller and tokens>=self.activity_controller.get('start_tokens',2*2**20):
+            for j,s in enumerate(self.selectors):
+                s.s['allocation_temperature']=max(.005,min(4.,self.plan['regions'][j]['allocation_temperature']*self.activity_state['scale']))
+
+    def observe_update(self,work,tokens):
+        """Training-statistics-only controller, once per optimizer update.
+
+        No validation feedback, no change to the quad formula or strength
+        budget. State is checkpointed; target is measured Full/all-node slots.
+        """
+        if not self.activity_controller:return {}
+        st=self.activity_state;st['updates']+=1;st['last_tokens']=int(tokens)
+        if tokens>=self.activity_controller.get('start_tokens',2*2**20):
+            ratio=work['work/full']/max(1,work['work/node_slots'])
+            st['ema']=ratio if st['ema'] is None else .9*st['ema']+.1*ratio
+            if st['updates']%8==0:
+                error=math.log(self.activity_controller['target']/max(st['ema'],1e-8))
+                st['scale']=max(.02,min(16.,st['scale']*math.exp(.3*max(-.5,min(.5,error)))))
+        return {'activity/controller_tau_scale':st['scale'],'activity/controller_ema':st['ema'] or 0.}
 
     def aggregate(self,j,z,w,incidence):
         if self.aggregation=='reference':return self.aggregators[j](z,w,incidence,self.plan['alpha_agg'])
@@ -112,7 +143,8 @@ class SpecializedSemanticLM(DirectSemanticLM):
                 unsat if unsat is not None else r.new_zeros(()),self.selectors[j].last_support_errors)).detach())
             extra.append(torch.stack((A*pf,C*pr,received.any(0).sum()*ps+(w>0).sum()*pe,
                 ((w>0)*getattr(self,'_degrees_'+str(j))[:,None,None]).sum(),
-                (full*hist).sum(),2*(received*hist).sum())).detach())
+                (full*hist).sum(),2*(received*hist).sum(),
+                (((c>0)&(c<(self.selectors[j].s['gamma_max']*r.clamp(0,1)).clamp_max(1))).sum(0)>1).sum())).detach())
         outputs=self.plan['graph']['outputs'];w=torch.stack([mass[v] for v in outputs])
         hidden=(w.unsqueeze(-1)*torch.stack([values[v] for v in outputs])).sum(0)/w.sum(0).clamp_min(1).unsqueeze(-1)
         floor_total=torch.stack(floors).sum() if floors else hidden.new_zeros(())
@@ -122,7 +154,7 @@ class SpecializedSemanticLM(DirectSemanticLM):
         support=sum(x[6] for x in rows);tol=1e-10 if hidden.dtype==torch.float64 else 2e-5
         if not math.isfinite(error) or error>tol:raise RuntimeError(f'allocation feasibility residual {error} > {tol}')
         if support:raise RuntimeError(f'mathematically positive sending lost support: {support} coordinates')
-        pf,pr,ps,messages,fpairs,rpairs=observation[7*nr:7*nr+6];ps+=self.shared_lm_count*b*l
+        pf,pr,ps,messages,fpairs,rpairs,router_rows=observation[7*nr:7*nr+7];ps+=self.shared_lm_count*b*l
         slots=self.plan['graph']['nodes']*b*l
         self.last_metrics={'work/candidates':candidates,'work/state_updates':candidates,'work/read_events':candidates,
             'work/full':active,'work/physical_full_rows':slots,'work/node_slots':slots,'work/body_candidates':candidates,
@@ -139,6 +171,7 @@ class SpecializedSemanticLM(DirectSemanticLM):
             'work/prediction_positions':b*l,'work/message_edges_including_input':messages,
             'work/logical_full_attention_pairs':fpairs,'work/logical_read_attention_pairs':rpairs,
             'work/physical_attention_pairs':3*slots*(l+1)/2,
+            'work/router_multi_unsaturated_rows':router_rows,
             'activity/active_parameters_per_position':(pf+pr+ps)/(b*l)}
         for j,row in zip(self.order,rows):
             self.last_metrics.update({f'region/{j}/candidates':row[0],f'region/{j}/full':row[1],f'region/{j}/unsaturated':row[5]})

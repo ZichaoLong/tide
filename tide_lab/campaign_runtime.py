@@ -24,7 +24,7 @@ def make_model(config, device):
     if config['kind']=='tide':
         model=TideLanguageModel(core_options(config),seed=config['seed'])
     elif config['kind']=='transformer':
-        model=SmallTransformer(seed=config['seed'],**config['transformer'])
+        model=SmallTransformer(seed=config['seed'],attention_backend=(config.get('npu_transformer_attention','eager') if device.type=='npu' else 'eager'),**config['transformer'])
     elif config['kind']=='direct_graph':
         from .direct_graph_cost import DirectGraphLM
         model=DirectGraphLM(seed=config['seed'],**config['direct'])
@@ -82,6 +82,7 @@ def update(model,opt,batch,config,tokens,device):
     norm=torch.nn.utils.clip_grad_norm_([p for p in model.parameters() if p.requires_grad],
                                       config['training']['clip_norm'],error_if_nonfinite=True)
     opt.step();synchronize(device)
+    if hasattr(model,'observe_update'):model.last_metrics.update(model.observe_update(model.last_metrics,tokens+count))
     return dict(loss=float(loss.detach()),tokens=count,gradient_norm=float(norm),lr=lr,
         seconds=time.monotonic()-start,work=dict(model.last_metrics))
 
@@ -115,6 +116,7 @@ def logical_update(model,opt,batches,config,tokens,device):
         work['activity/body_receipt_fraction']=work['work/body_candidates']/work['work/body_node_slots']
     if work.get('work/prediction_positions'):
         work['activity/active_parameters_per_position']=work['work/active_parameter_uses']/work['work/prediction_positions']
+    if hasattr(model,'observe_update'):work.update(model.observe_update(work,tokens+count))
     return dict(loss=total,tokens=count,gradient_norm=float(norm),lr=lr,
         seconds=time.monotonic()-start,work=work,microbatches=len(batches))
 

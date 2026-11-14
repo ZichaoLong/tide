@@ -33,7 +33,7 @@ class SpecializedChecks(unittest.TestCase):
             plan=c['direct']['plan']
             for s in plan['regions']:s.pop('activity_schedule',None)
             a=DirectSemanticLM(plan).double();b=SpecializedSemanticLM(plan).double()
-            self.assertEqual(list(a.state_dict()),list(b.state_dict()))
+            self.assertEqual(list(a.state_dict()),[k for k in b.state_dict() if k!='_extra_state'])
             x=torch.tensor([[1,2,3],[4,5,6]])
             ya=a(x);yb=b(x)
             torch.testing.assert_close(ya,yb,atol=1e-10,rtol=1e-10)
@@ -60,6 +60,17 @@ class SpecializedChecks(unittest.TestCase):
     def test_explicit_npu_request_rejected_on_cpu(self):
         x=torch.ones(1,2,4)
         with self.assertRaises(ValueError):weighted_attention(x,x,x,torch.ones(1,2),implementation='npu_fusion_augmented')
+
+    def test_activity_controller_state_and_eval_isolation(self):
+        c=direct('check','hb',2,64,'temperature1',region_width=4,k=2)
+        a=SpecializedSemanticLM(c['direct']['plan'],activity_controller={'target':.1,'start_tokens':0})
+        for _ in range(8):a.observe_update({'work/full':20,'work/node_slots':100},100)
+        self.assertLess(a.activity_state['scale'],1.)
+        b=SpecializedSemanticLM(c['direct']['plan'],activity_controller={'target':.1,'start_tokens':0})
+        b.load_state_dict(a.state_dict());self.assertEqual(a.activity_state,b.activity_state)
+        before=copy.deepcopy(b.activity_state)
+        b.eval();b(torch.tensor([[1,2,3]]))
+        self.assertEqual(before,b.activity_state)
 
 
 if __name__=='__main__':unittest.main()

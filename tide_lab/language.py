@@ -72,8 +72,8 @@ class TideLanguageModel(nn.Module):
 
 
 class CausalBlock(nn.Module):
-    def __init__(self,width,heads,ffn):
-        super().__init__();self.heads=heads
+    def __init__(self,width,heads,ffn,attention_backend='eager'):
+        super().__init__();self.heads=heads;self.attention_backend=attention_backend
         self.norm1=nn.LayerNorm(width);self.norm2=nn.LayerNorm(width)
         self.qkv=nn.Linear(width,3*width);self.out=nn.Linear(width,width)
         self.ffn=nn.Sequential(nn.Linear(width,ffn),nn.GELU(),nn.Linear(ffn,width))
@@ -81,22 +81,30 @@ class CausalBlock(nn.Module):
     def forward(self,x):
         b,l,d=x.shape
         q,k,v=self.qkv(self.norm1(x)).reshape(b,l,3,self.heads,d//self.heads).permute(2,0,3,1,4).unbind(0)
-        scores=q@k.transpose(-1,-2)/math.sqrt(d//self.heads)
         mask=torch.ones(l,l,dtype=torch.bool,device=x.device).triu(1)
-        attention=scores.masked_fill(mask,float('-inf')).softmax(-1)
-        x=x+self.out((attention@v).transpose(1,2).reshape(b,l,d))
+        if self.attention_backend=='npu_fusion':
+            if x.device.type!='npu':raise ValueError('explicit fused Transformer requires NPU')
+            import torch_npu
+            attended=torch_npu.npu_fusion_attention(q.contiguous(),k.contiguous(),v.contiguous(),self.heads,'BNSD',
+                atten_mask=mask,scale=1/math.sqrt(d//self.heads),keep_prob=1.,sparse_mode=0)[0]
+        elif self.attention_backend=='eager':
+            scores=q@k.transpose(-1,-2)/math.sqrt(d//self.heads)
+            attention=scores.masked_fill(mask,float('-inf')).softmax(-1)
+            attended=attention@v
+        else:raise ValueError('unknown Transformer attention backend')
+        x=x+self.out(attended.transpose(1,2).reshape(b,l,d))
         return x+self.ffn(self.norm2(x))
 
 
 class SmallTransformer(nn.Module):
     def __init__(self,seed=11,vocab_size=4096,width=96,layers=3,heads=4,ffn=384,position_scale=1.,
-                 initialization='legacy'):
+                 initialization='legacy',attention_backend='eager'):
         super().__init__()
         with torch.random.fork_rng(devices=[]):
             torch.manual_seed(seed)
             self.embedding=nn.Embedding(vocab_size,width)
             nn.init.normal_(self.embedding.weight,std=.02)
-            self.blocks=nn.ModuleList([CausalBlock(width,heads,ffn) for _ in range(layers)])
+            self.blocks=nn.ModuleList([CausalBlock(width,heads,ffn,attention_backend) for _ in range(layers)])
             self.norm=nn.LayerNorm(width);self.head=nn.Linear(width,vocab_size)
             self.head.weight=self.embedding.weight;nn.init.zeros_(self.head.bias)
             if initialization not in ('legacy','gpt2','fan_in_depth'):
