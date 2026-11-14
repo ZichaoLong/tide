@@ -1,3 +1,10 @@
+# 最新图状态：v10中期实际11完成、6运行、3失败
+
+2026-11-15：[共同曝光中期审阅](studies/direct-v10-progress-20261115-am.md)。
+三项pool内层训练因非有限梯度总范数失败，图中保留failed，不能被外层服务completed覆盖。
+准入同日程补证已完成，严格有限失败保持；容量/近活跃预算的结果槽仍awaiting，未用中期均值自动建立支持关系。
+独立确认未开始，d128整组不满足原条件256M前提。以下保留此前图说明。
+
 # 当前图：v10容量/活动执行准备，v9限定结论保留
 
 新增TL-PERF-v10、TL-CAPACITY-v10、TL-ACTIVE-v10、TL-CONTROL-v10与TL-CONFIRMATION-v10。

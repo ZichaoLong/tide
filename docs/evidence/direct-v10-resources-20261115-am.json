@@ -1,0 +1,4495 @@
+{
+  "elapsed_seconds": 16.347705006599426,
+  "limits": [
+    "Shared-card counters are not process-attributed; other workloads may contribute.",
+    "The percentages have different denominators and must not be summed or interpreted as kernel-time fractions.",
+    "Source identity is recorded for each service; independent direct models do not certify foundation execution.",
+    "Kernel/operator attribution and causal bottleneck diagnosis require a separate bounded trace."
+  ],
+  "observed_at": "2026-11-14T19:50:51.902281+00:00",
+  "samples": [
+    {
+      "at": "2026-11-14T19:50:36.751678+00:00",
+      "devices": [
+        {
+          "command": [
+            "npu-smi",
+            "info",
+            "-t",
+            "usages",
+            "-i",
+            "0",
+            "-c",
+            "0"
+          ],
+          "metrics": {
+            "Aicore Usage Rate(%)": 23.0,
+            "Aicpu Usage Rate(%)": 0.0,
+            "Aivector Usage Rate(%)": 68.0,
+            "Ctrlcpu Usage Rate(%)": 3.0,
+            "DDR Bandwidth Usage Rate(%)": 0.0,
+            "DDR Capacity(MB)": 0.0,
+            "DDR Hugepages Total(page)": 0.0,
+            "DDR Hugepages Usage Rate(%)": 0.0,
+            "DDR Usage Rate(%)": 0.0,
+            "HBM Bandwidth Usage Rate(%)": 50.0,
+            "HBM Capacity(MB)": 65536.0,
+            "HBM Usage Rate(%)": 61.0,
+            "NPU Utilization(%)": 100.0
+          },
+          "observed_at": "2026-11-14T19:50:36.393870+00:00",
+          "physical_id": 0
+        },
+        {
+          "command": [
+            "npu-smi",
+            "info",
+            "-t",
+            "usages",
+            "-i",
+            "2",
+            "-c",
+            "0"
+          ],
+          "metrics": {
+            "Aicore Usage Rate(%)": 9.0,
+            "Aicpu Usage Rate(%)": 0.0,
+            "Aivector Usage Rate(%)": 50.0,
+            "Ctrlcpu Usage Rate(%)": 5.0,
+            "DDR Bandwidth Usage Rate(%)": 0.0,
+            "DDR Capacity(MB)": 0.0,
+            "DDR Hugepages Total(page)": 0.0,
+            "DDR Hugepages Usage Rate(%)": 0.0,
+            "DDR Usage Rate(%)": 0.0,
+            "HBM Bandwidth Usage Rate(%)": 28.0,
+            "HBM Capacity(MB)": 65536.0,
+            "HBM Usage Rate(%)": 49.0,
+            "NPU Utilization(%)": 100.0
+          },
+          "observed_at": "2026-11-14T19:50:36.483259+00:00",
+          "physical_id": 4
+        },
+        {
+          "command": [
+            "npu-smi",
+            "info",
+            "-t",
+            "usages",
+            "-i",
+            "2",
+            "-c",
+            "1"
+          ],
+          "metrics": {
+            "Aicore Usage Rate(%)": 11.0,
+            "Aicpu Usage Rate(%)": 0.0,
+            "Aivector Usage Rate(%)": 65.0,
+            "Ctrlcpu Usage Rate(%)": 5.0,
+            "DDR Bandwidth Usage Rate(%)": 0.0,
+            "DDR Capacity(MB)": 0.0,
+            "DDR Hugepages Total(page)": 0.0,
+            "DDR Hugepages Usage Rate(%)": 0.0,
+            "DDR Usage Rate(%)": 0.0,
+            "HBM Bandwidth Usage Rate(%)": 57.0,
+            "HBM Capacity(MB)": 65536.0,
+            "HBM Usage Rate(%)": 56.0,
+            "NPU Utilization(%)": 100.0
+          },
+          "observed_at": "2026-11-14T19:50:36.543598+00:00",
+          "physical_id": 5
+        },
+        {
+          "command": [
+            "npu-smi",
+            "info",
+            "-t",
+            "usages",
+            "-i",
+            "3",
+            "-c",
+            "0"
+          ],
+          "metrics": {
+            "Aicore Usage Rate(%)": 11.0,
+            "Aicpu Usage Rate(%)": 0.0,
+            "Aivector Usage Rate(%)": 58.0,
+            "Ctrlcpu Usage Rate(%)": 5.0,
+            "DDR Bandwidth Usage Rate(%)": 0.0,
+            "DDR Capacity(MB)": 0.0,
+            "DDR Hugepages Total(page)": 0.0,
+            "DDR Hugepages Usage Rate(%)": 0.0,
+            "DDR Usage Rate(%)": 0.0,
+            "HBM Bandwidth Usage Rate(%)": 42.0,
+            "HBM Capacity(MB)": 65536.0,
+            "HBM Usage Rate(%)": 61.0,
+            "NPU Utilization(%)": 100.0
+          },
+          "observed_at": "2026-11-14T19:50:36.592647+00:00",
+          "physical_id": 6
+        },
+        {
+          "command": [
+            "npu-smi",
+            "info",
+            "-t",
+            "usages",
+            "-i",
+            "4",
+            "-c",
+            "0"
+          ],
+          "metrics": {
+            "Aicore Usage Rate(%)": 0.0,
+            "Aicpu Usage Rate(%)": 0.0,
+            "Aivector Usage Rate(%)": 41.0,
+            "Ctrlcpu Usage Rate(%)": 11.0,
+            "DDR Bandwidth Usage Rate(%)": 0.0,
+            "DDR Capacity(MB)": 0.0,
+            "DDR Hugepages Total(page)": 0.0,
+            "DDR Hugepages Usage Rate(%)": 0.0,
+            "DDR Usage Rate(%)": 0.0,
+            "HBM Bandwidth Usage Rate(%)": 14.0,
+            "HBM Capacity(MB)": 65536.0,
+            "HBM Usage Rate(%)": 49.0,
+            "NPU Utilization(%)": 100.0
+          },
+          "observed_at": "2026-11-14T19:50:36.526428+00:00",
+          "physical_id": 8
+        },
+        {
+          "command": [
+            "npu-smi",
+            "info",
+            "-t",
+            "usages",
+            "-i",
+            "7",
+            "-c",
+            "1"
+          ],
+          "metrics": {
+            "Aicore Usage Rate(%)": 23.0,
+            "Aicpu Usage Rate(%)": 0.0,
+            "Aivector Usage Rate(%)": 61.0,
+            "Ctrlcpu Usage Rate(%)": 5.0,
+            "DDR Bandwidth Usage Rate(%)": 0.0,
+            "DDR Capacity(MB)": 0.0,
+            "DDR Hugepages Total(page)": 0.0,
+            "DDR Hugepages Usage Rate(%)": 0.0,
+            "DDR Usage Rate(%)": 0.0,
+            "HBM Bandwidth Usage Rate(%)": 39.0,
+            "HBM Capacity(MB)": 65536.0,
+            "HBM Usage Rate(%)": 56.0,
+            "NPU Utilization(%)": 100.0
+          },
+          "observed_at": "2026-11-14T19:50:36.751241+00:00",
+          "physical_id": 15
+        }
+      ],
+      "elapsed_seconds": 1.197121050208807,
+      "index": 0,
+      "jobs": [
+        {
+          "case": "hb-d128-r28-pool-s11",
+          "config": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v10-execution/configs/studies/language/direct-v10/table/main/hb-d128-r28-pool-s11.json",
+            "sha256": "e5eaa67e498182189652b255d2dbf84a78d027417ea71ad3e23e03d2f3cb3c53"
+          },
+          "declared_cpu_quota": "4s",
+          "host_processes": [
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 363.45,
+              "pid": 1121592,
+              "start_ticks": 2225203349
+            },
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 2.3,
+              "pid": 1121653,
+              "start_ticks": 2225203377
+            },
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 0.04,
+              "pid": 1123567,
+              "start_ticks": 2225204098
+            },
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 1703.87,
+              "pid": 1123569,
+              "start_ticks": 2225204103
+            },
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 27554.71,
+              "pid": 1153817,
+              "start_ticks": 2225218938
+            },
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 6.1,
+              "pid": 1154511,
+              "start_ticks": 2225219837
+            }
+          ],
+          "job": "v10-main-hb-d128-r28-pool-s11",
+          "last_update": {
+            "activity/active_parameters_per_position": 75541048.0,
+            "activity/body_full_all_fraction": 1.0,
+            "activity/body_receipt_fraction": 1.0,
+            "activity/full_all_fraction": 1.0,
+            "activity/full_fraction": 1.0,
+            "activity/receipt_fraction": 1.0,
+            "activity/send_strength": 163839.9990234375,
+            "discrete/positive_support_errors": 0.0,
+            "numerical/attention_probability_floor_applied": 0.0,
+            "numerical/positive_floor_events": 533.0,
+            "region/0/candidates": 458752.0,
+            "region/0/full": 458752.0,
+            "region/0/unsaturated": 458752.0,
+            "region/1/candidates": 458752.0,
+            "region/1/full": 458752.0,
+            "region/1/unsaturated": 457719.0,
+            "region/2/candidates": 458752.0,
+            "region/2/full": 458752.0,
+            "region/2/unsaturated": 455436.0,
+            "region/3/candidates": 458752.0,
+            "region/3/full": 458752.0,
+            "region/3/unsaturated": 453598.0,
+            "region/4/candidates": 458752.0,
+            "region/4/full": 458752.0,
+            "region/4/unsaturated": 451023.0,
+            "region/5/candidates": 458752.0,
+            "region/5/full": 458752.0,
+            "region/5/unsaturated": 457345.0,
+            "region/6/candidates": 458752.0,
+            "region/6/full": 458752.0,
+            "region/6/unsaturated": 454510.0,
+            "region/7/candidates": 458752.0,
+            "region/7/full": 458752.0,
+            "region/7/unsaturated": 458601.0,
+            "region/8/candidates": 458752.0,
+            "region/8/full": 458752.0,
+            "region/8/unsaturated": 458514.0,
+            "region/9/candidates": 458752.0,
+            "region/9/full": 458752.0,
+            "region/9/unsaturated": 458539.0,
+            "resources/npu_allocated_mib": 1189.3134765625,
+            "resources/npu_peak_allocated_mib": 25875.93115234375,
+            "resources/npu_reserved_mib": 29214.0,
+            "resources/peak_rss_mib": 3979.19140625,
+            "solver/max_feasibility_residual": 0,
+            "train/gradient_norm": 0.4730392098426819,
+            "train/loss": 3.377145290374756,
+            "train/lr": 0.0007691263693883434,
+            "train/step_seconds": 3.5513925999403,
+            "train/tokens": 91454835,
+            "train/tokens_per_second": 4427.277344741978,
+            "work/active_parameter_uses": 1237664530432.0,
+            "work/body_candidates": 4587520.0,
+            "work/body_full": 4587520.0,
+            "work/body_node_slots": 4587520,
+            "work/boundary_candidates": 0.0,
+            "work/boundary_full": 0.0,
+            "work/candidates": 4587520.0,
+            "work/dense_causal_attention_pairs": 1768488960.0,
+            "work/dense_parameter_uses": 1237664530432,
+            "work/full": 4587520.0,
+            "work/full_parameter_uses": 1052266987520.0,
+            "work/logical_full_attention_pairs": 589496320.0,
+            "work/logical_read_attention_pairs": 1178992640.0,
+            "work/max_full_batch": 114688,
+            "work/message_edges_including_input": 11468800.0,
+            "work/node_slots": 4587520,
+            "work/physical_attention_pair_upper_bound": 3523215360,
+            "work/physical_full_rows": 4587520,
+            "work/physical_light_rows": 0.0,
+            "work/prediction_positions": 16384,
+            "work/read_events": 4587520.0,
+            "work/receive_parameter_uses": 169852928000.0,
+            "work/router_multi_unsaturated_rows": 163840.0,
+            "work/shared_parameter_uses": 15544614912.0,
+            "work/state_updates": 4587520.0,
+            "work/unsaturated": 4564037.0
+          },
+          "physical_id": 4,
+          "source_commit": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+          "stage": "train",
+          "step": 5717,
+          "training_tokens": 91454835
+        },
+        {
+          "case": "hb-d128-r28-q10-s11",
+          "config": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v10-execution/configs/studies/language/direct-v10/table/main/hb-d128-r28-q10-s11.json",
+            "sha256": "e7d38873d389dd57d24d5badffb7d155313bcc28dca7df5e90d4f936167ee69f"
+          },
+          "declared_cpu_quota": "4s",
+          "host_processes": [
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 363.2,
+              "pid": 1121738,
+              "start_ticks": 2225203415
+            },
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 2.33,
+              "pid": 1121789,
+              "start_ticks": 2225203444
+            },
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 0.03,
+              "pid": 1123635,
+              "start_ticks": 2225204149
+            },
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 1713.6,
+              "pid": 1123661,
+              "start_ticks": 2225204153
+            },
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 30346.47,
+              "pid": 1156019,
+              "start_ticks": 2225221135
+            },
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 7.59,
+              "pid": 1156412,
+              "start_ticks": 2225221842
+            }
+          ],
+          "job": "v10-main-hb-d128-r28-q10-s11",
+          "last_update": {
+            "activity/active_parameters_per_position": 10187177.0546875,
+            "activity/body_full_all_fraction": 0.10034659249441964,
+            "activity/body_receipt_fraction": 0.27040819440569197,
+            "activity/controller_ema": 0.10079452488652507,
+            "activity/controller_tau_scale": 0.05310996526871021,
+            "activity/full_all_fraction": 0.10034659249441964,
+            "activity/full_fraction": 0.3710930163006458,
+            "activity/receipt_fraction": 0.27040819440569197,
+            "activity/send_strength": 245760.0,
+            "discrete/positive_support_errors": 0.0,
+            "numerical/attention_probability_floor_applied": 0.0,
+            "numerical/positive_floor_events": 0.0,
+            "region/0/candidates": 458752.0,
+            "region/0/full": 45938.0,
+            "region/0/unsaturated": 42898.0,
+            "region/1/candidates": 87124.0,
+            "region/1/full": 40448.0,
+            "region/1/unsaturated": 24786.0,
+            "region/2/candidates": 87124.0,
+            "region/2/full": 47252.0,
+            "region/2/unsaturated": 40683.0,
+            "region/3/candidates": 71798.0,
+            "region/3/full": 48987.0,
+            "region/3/unsaturated": 39597.0,
+            "region/4/candidates": 71798.0,
+            "region/4/full": 35791.0,
+            "region/4/unsaturated": 18048.0,
+            "region/5/candidates": 80937.0,
+            "region/5/full": 52067.0,
+            "region/5/unsaturated": 44265.0,
+            "region/6/candidates": 80937.0,
+            "region/6/full": 47555.0,
+            "region/6/unsaturated": 39604.0,
+            "region/7/candidates": 90015.0,
+            "region/7/full": 43707.0,
+            "region/7/unsaturated": 34820.0,
+            "region/8/candidates": 103277.0,
+            "region/8/full": 42921.0,
+            "region/8/unsaturated": 26622.0,
+            "region/9/candidates": 108741.0,
+            "region/9/full": 55676.0,
+            "region/9/unsaturated": 52105.0,
+            "resources/npu_allocated_mib": 1189.3134765625,
+            "resources/npu_peak_allocated_mib": 25852.84912109375,
+            "resources/npu_reserved_mib": 29194.0,
+            "resources/peak_rss_mib": 3984.19140625,
+            "solver/max_feasibility_residual": 4.76837158203125e-07,
+            "train/gradient_norm": 1.4004433155059814,
+            "train/loss": 3.701650321483612,
+            "train/lr": 0.000792813759766696,
+            "train/step_seconds": 3.993061151355505,
+            "train/tokens": 86232882,
+            "train/tokens_per_second": 4103.117728221669,
+            "work/active_parameter_uses": 166906708864.0,
+            "work/body_candidates": 1240503.0,
+            "work/body_full": 460342.0,
+            "work/body_node_slots": 4587520,
+            "work/boundary_candidates": 0.0,
+            "work/boundary_full": 0.0,
+            "work/candidates": 1240503.0,
+            "work/dense_causal_attention_pairs": 1768488960.0,
+            "work/dense_parameter_uses": 1237664530432,
+            "work/full": 460342.0,
+            "work/full_parameter_uses": 105591406592.0,
+            "work/logical_full_attention_pairs": 49727326.0,
+            "work/logical_read_attention_pairs": 269991160.0,
+            "work/max_full_batch": 114688,
+            "work/message_edges_including_input": 1535360.0,
+            "work/node_slots": 4587520,
+            "work/physical_attention_pair_upper_bound": 3523215360,
+            "work/physical_full_rows": 4587520,
+            "work/physical_light_rows": 0.0,
+            "work/prediction_positions": 16384,
+            "work/read_events": 1240503.0,
+            "work/receive_parameter_uses": 45929622528.0,
+            "work/router_multi_unsaturated_rows": 111221.0,
+            "work/shared_parameter_uses": 15385679744.0,
+            "work/state_updates": 1240503.0,
+            "work/unsaturated": 363428.0
+          },
+          "physical_id": 8,
+          "source_commit": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+          "stage": "train",
+          "step": 5391,
+          "training_tokens": 86232882
+        },
+        {
+          "case": "hb-d128-r64-q3-s11",
+          "config": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v10-execution/configs/studies/language/direct-v10/table/main/hb-d128-r64-q3-s11.json",
+            "sha256": "2d7e4c835557d8c8846d4bdcde1f1f771603855ab22781bafa11994fa9f6caa2"
+          },
+          "declared_cpu_quota": "4s",
+          "host_processes": [
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 361.72,
+              "pid": 1121322,
+              "start_ticks": 2225203222
+            },
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 2.36,
+              "pid": 1121355,
+              "start_ticks": 2225203250
+            },
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 0.03,
+              "pid": 1123294,
+              "start_ticks": 2225203979
+            },
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 1710.08,
+              "pid": 1123296,
+              "start_ticks": 2225203983
+            },
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 25648.73,
+              "pid": 1908178,
+              "start_ticks": 2225227986
+            },
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 6.75,
+              "pid": 1909154,
+              "start_ticks": 2225228888
+            }
+          ],
+          "job": "v10-main-hb-d128-r64-q3-s11",
+          "last_update": {
+            "activity/active_parameters_per_position": 9352617.46484375,
+            "activity/body_full_all_fraction": 0.03130350112915039,
+            "activity/body_receipt_fraction": 0.16114358901977538,
+            "activity/controller_ema": 0.03131234205395571,
+            "activity/controller_tau_scale": 0.49187887219934423,
+            "activity/full_all_fraction": 0.03130350112915039,
+            "activity/full_fraction": 0.19425843323688696,
+            "activity/receipt_fraction": 0.16114358901977538,
+            "activity/send_strength": 245759.9990234375,
+            "discrete/positive_support_errors": 0.0,
+            "numerical/attention_probability_floor_applied": 0.0,
+            "numerical/positive_floor_events": 0.0,
+            "region/0/candidates": 1048576.0,
+            "region/0/full": 32773.0,
+            "region/0/unsaturated": 16390.0,
+            "region/1/candidates": 65542.0,
+            "region/1/full": 32785.0,
+            "region/1/unsaturated": 16399.0,
+            "region/2/candidates": 65542.0,
+            "region/2/full": 32788.0,
+            "region/2/unsaturated": 16404.0,
+            "region/3/candidates": 65496.0,
+            "region/3/full": 32787.0,
+            "region/3/unsaturated": 16442.0,
+            "region/4/candidates": 65496.0,
+            "region/4/full": 32775.0,
+            "region/4/unsaturated": 16401.0,
+            "region/5/candidates": 57728.0,
+            "region/5/full": 32814.0,
+            "region/5/unsaturated": 16442.0,
+            "region/6/candidates": 57728.0,
+            "region/6/full": 32815.0,
+            "region/6/unsaturated": 16448.0,
+            "region/7/candidates": 82013.0,
+            "region/7/full": 32775.0,
+            "region/7/unsaturated": 16396.0,
+            "region/8/candidates": 77090.0,
+            "region/8/full": 33098.0,
+            "region/8/unsaturated": 16745.0,
+            "region/9/candidates": 104502.0,
+            "region/9/full": 32831.0,
+            "region/9/unsaturated": 16470.0,
+            "resources/npu_allocated_mib": 2731.8369140625,
+            "resources/npu_peak_allocated_mib": 30829.61279296875,
+            "resources/npu_reserved_mib": 33712.0,
+            "resources/peak_rss_mib": 7115.359375,
+            "solver/max_feasibility_residual": 1.1920928955078125e-07,
+            "train/gradient_norm": 1.0066829919815063,
+            "train/loss": 4.488730013370514,
+            "train/lr": 0.0008807264648530643,
+            "train/step_seconds": 4.989733435213566,
+            "train/tokens": 64474531,
+            "train/tokens_per_second": 3223.4186873575118,
+            "work/active_parameter_uses": 153233284544.0,
+            "work/body_candidates": 1689713.0,
+            "work/body_full": 328241.0,
+            "work/body_node_slots": 10485760,
+            "work/boundary_candidates": 0.0,
+            "work/boundary_full": 0.0,
+            "work/candidates": 1689713.0,
+            "work/dense_causal_attention_pairs": 4042260480.0,
+            "work/dense_parameter_uses": 2809188057088,
+            "work/full": 328241.0,
+            "work/full_parameter_uses": 75290607616.0,
+            "work/logical_full_attention_pairs": 26306283.0,
+            "work/logical_read_attention_pairs": 362570756.0,
+            "work/max_full_batch": 131072,
+            "work/message_edges_including_input": 1836088.0,
+            "work/node_slots": 10485760,
+            "work/physical_attention_pair_upper_bound": 8053063680,
+            "work/physical_full_rows": 10485760,
+            "work/physical_light_rows": 0.0,
+            "work/prediction_positions": 16384,
+            "work/read_events": 1689713.0,
+            "work/receive_parameter_uses": 62561622528.0,
+            "work/router_multi_unsaturated_rows": 697.0,
+            "work/shared_parameter_uses": 15381054400.0,
+            "work/state_updates": 1689713.0,
+            "work/unsaturated": 164537.0
+          },
+          "physical_id": 5,
+          "source_commit": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+          "stage": "train",
+          "step": 4031,
+          "training_tokens": 64474531
+        },
+        {
+          "case": "hb-d128-r64-q3-s22",
+          "config": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v10-execution/configs/studies/language/direct-v10/table/main/hb-d128-r64-q3-s22.json",
+            "sha256": "e374334da59c8a9c2914df6b3ff6aaeee538e29f839f5ca80f9a2dd7d9dadfb5"
+          },
+          "declared_cpu_quota": "4s",
+          "host_processes": [
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 351.47,
+              "pid": 1121371,
+              "start_ticks": 2225203254
+            },
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 2.27,
+              "pid": 1121444,
+              "start_ticks": 2225203282
+            },
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 0.03,
+              "pid": 1123345,
+              "start_ticks": 2225203998
+            },
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 1669.95,
+              "pid": 1123352,
+              "start_ticks": 2225204003
+            },
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 26395.41,
+              "pid": 1910751,
+              "start_ticks": 2225229978
+            },
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 5.58,
+              "pid": 1912048,
+              "start_ticks": 2225231534
+            }
+          ],
+          "job": "v10-main-hb-d128-r64-q3-s22",
+          "last_update": {
+            "activity/active_parameters_per_position": 9132598.1796875,
+            "activity/body_full_all_fraction": 0.03127765655517578,
+            "activity/body_receipt_fraction": 0.15201864242553711,
+            "activity/controller_ema": 0.03127733894429886,
+            "activity/controller_tau_scale": 0.5915079804748695,
+            "activity/full_all_fraction": 0.03127765655517578,
+            "activity/full_fraction": 0.2057488216979469,
+            "activity/receipt_fraction": 0.15201864242553711,
+            "activity/send_strength": 245759.99975585938,
+            "discrete/positive_support_errors": 0.0,
+            "numerical/attention_probability_floor_applied": 0.0,
+            "numerical/positive_floor_events": 0.0,
+            "region/0/candidates": 1048576.0,
+            "region/0/full": 32768.0,
+            "region/0/unsaturated": 16384.0,
+            "region/1/candidates": 52350.0,
+            "region/1/full": 32790.0,
+            "region/1/unsaturated": 16459.0,
+            "region/2/candidates": 52350.0,
+            "region/2/full": 32768.0,
+            "region/2/unsaturated": 16384.0,
+            "region/3/candidates": 59301.0,
+            "region/3/full": 32862.0,
+            "region/3/unsaturated": 16499.0,
+            "region/4/candidates": 59301.0,
+            "region/4/full": 32808.0,
+            "region/4/unsaturated": 16452.0,
+            "region/5/candidates": 49350.0,
+            "region/5/full": 32768.0,
+            "region/5/unsaturated": 16384.0,
+            "region/6/candidates": 49350.0,
+            "region/6/full": 32769.0,
+            "region/6/unsaturated": 16410.0,
+            "region/7/candidates": 75973.0,
+            "region/7/full": 32776.0,
+            "region/7/unsaturated": 16389.0,
+            "region/8/candidates": 64038.0,
+            "region/8/full": 32784.0,
+            "region/8/unsaturated": 16472.0,
+            "region/9/candidates": 83442.0,
+            "region/9/full": 32877.0,
+            "region/9/unsaturated": 16516.0,
+            "resources/npu_allocated_mib": 2731.8369140625,
+            "resources/npu_peak_allocated_mib": 30829.61279296875,
+            "resources/npu_reserved_mib": 33712.0,
+            "resources/peak_rss_mib": 6963.8671875,
+            "solver/max_feasibility_residual": 1.1920928955078125e-07,
+            "train/gradient_norm": 0.7533290982246399,
+            "train/loss": 4.186707437038422,
+            "train/lr": 0.0008898122027989838,
+            "train/step_seconds": 4.602709025144577,
+            "train/tokens": 61897735,
+            "train/tokens_per_second": 3534.222978496676,
+            "work/active_parameter_uses": 149628488576.0,
+            "work/body_candidates": 1594031.0,
+            "work/body_full": 327970.0,
+            "work/body_node_slots": 10485760,
+            "work/boundary_candidates": 0.0,
+            "work/boundary_full": 0.0,
+            "work/candidates": 1594031.0,
+            "work/dense_causal_attention_pairs": 4042260480.0,
+            "work/dense_parameter_uses": 2809188057088,
+            "work/full": 327970.0,
+            "work/full_parameter_uses": 75228446720.0,
+            "work/logical_full_attention_pairs": 38818213.0,
+            "work/logical_read_attention_pairs": 392621604.0,
+            "work/max_full_batch": 131072,
+            "work/message_edges_including_input": 1835414.0,
+            "work/node_slots": 10485760,
+            "work/physical_attention_pair_upper_bound": 8053063680,
+            "work/physical_full_rows": 10485760,
+            "work/physical_light_rows": 0.0,
+            "work/prediction_positions": 16384,
+            "work/read_events": 1594031.0,
+            "work/receive_parameter_uses": 59018998272.0,
+            "work/router_multi_unsaturated_rows": 507.0,
+            "work/shared_parameter_uses": 15381043584.0,
+            "work/state_updates": 1594031.0,
+            "work/unsaturated": 164349.0
+          },
+          "physical_id": 15,
+          "source_commit": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+          "stage": "train",
+          "step": 3870,
+          "training_tokens": 61897735
+        },
+        {
+          "case": "hb-d64-r64-q3-s11",
+          "config": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v10-execution/configs/studies/language/direct-v10/table/main/hb-d64-r64-q3-s11.json",
+            "sha256": "4498fbb92058e0dc4388b71669786f134cf662bb19da0d516f465d730f107691"
+          },
+          "declared_cpu_quota": "4s",
+          "host_processes": [
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 369.81,
+              "pid": 1121461,
+              "start_ticks": 2225203286
+            },
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 2.25,
+              "pid": 1121514,
+              "start_ticks": 2225203314
+            },
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 0.04,
+              "pid": 1123453,
+              "start_ticks": 2225204031
+            },
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 1701.53,
+              "pid": 1123454,
+              "start_ticks": 2225204035
+            },
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 26661.68,
+              "pid": 1152190,
+              "start_ticks": 2225217446
+            },
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 7.74,
+              "pid": 1153099,
+              "start_ticks": 2225218432
+            }
+          ],
+          "job": "v10-main-hb-d64-r64-q3-s11",
+          "last_update": {
+            "activity/active_parameters_per_position": 3687221.12109375,
+            "activity/body_full_all_fraction": 0.03182134628295898,
+            "activity/body_receipt_fraction": 0.16119709014892578,
+            "activity/controller_ema": 0.03183521945395906,
+            "activity/controller_tau_scale": 0.053394715637426204,
+            "activity/full_all_fraction": 0.03182134628295898,
+            "activity/full_fraction": 0.19740645599470855,
+            "activity/receipt_fraction": 0.16119709014892578,
+            "activity/send_strength": 245760.00048828125,
+            "discrete/positive_support_errors": 0.0,
+            "numerical/attention_probability_floor_applied": 0.0,
+            "numerical/positive_floor_events": 0.0,
+            "region/0/candidates": 1048576.0,
+            "region/0/full": 32773.0,
+            "region/0/unsaturated": 16390.0,
+            "region/1/candidates": 65546.0,
+            "region/1/full": 32805.0,
+            "region/1/unsaturated": 16441.0,
+            "region/2/candidates": 65546.0,
+            "region/2/full": 32775.0,
+            "region/2/unsaturated": 16390.0,
+            "region/3/candidates": 61584.0,
+            "region/3/full": 32795.0,
+            "region/3/unsaturated": 16400.0,
+            "region/4/candidates": 61584.0,
+            "region/4/full": 32792.0,
+            "region/4/unsaturated": 16390.0,
+            "region/5/candidates": 65321.0,
+            "region/5/full": 32776.0,
+            "region/5/unsaturated": 16390.0,
+            "region/6/candidates": 65321.0,
+            "region/6/full": 32777.0,
+            "region/6/unsaturated": 16406.0,
+            "region/7/candidates": 82787.0,
+            "region/7/full": 32788.0,
+            "region/7/unsaturated": 16402.0,
+            "region/8/candidates": 70376.0,
+            "region/8/full": 32772.0,
+            "region/8/unsaturated": 16388.0,
+            "region/9/candidates": 103633.0,
+            "region/9/full": 38618.0,
+            "region/9/unsaturated": 25607.0,
+            "resources/npu_allocated_mib": 826.86572265625,
+            "resources/npu_peak_allocated_mib": 34967.27685546875,
+            "resources/npu_reserved_mib": 36906.0,
+            "resources/peak_rss_mib": 3890.0703125,
+            "solver/max_feasibility_residual": 2.384185791015625e-07,
+            "train/gradient_norm": 2.7505249977111816,
+            "train/loss": 4.345044136047363,
+            "train/lr": 0.0006904175683908776,
+            "train/step_seconds": 2.74900396540761,
+            "train/tokens": 107732739,
+            "train/tokens_per_second": 5863.214532544371,
+            "work/active_parameter_uses": 60411430848.0,
+            "work/body_candidates": 1690274.0,
+            "work/body_full": 333671.0,
+            "work/body_node_slots": 10485760,
+            "work/boundary_candidates": 0.0,
+            "work/boundary_full": 0.0,
+            "work/candidates": 1690274.0,
+            "work/dense_causal_attention_pairs": 4042260480.0,
+            "work/dense_parameter_uses": 824510513152,
+            "work/full": 333671.0,
+            "work/full_parameter_uses": 19134029824.0,
+            "work/logical_full_attention_pairs": 29641136.0,
+            "work/logical_read_attention_pairs": 373428112.0,
+            "work/max_full_batch": 262144,
+            "work/message_edges_including_input": 1835388.0,
+            "work/node_slots": 10485760,
+            "work/physical_attention_pair_upper_bound": 8053063680,
+            "work/physical_full_rows": 10485760,
+            "work/physical_light_rows": 0.0,
+            "work/prediction_positions": 16384,
+            "work/read_events": 1690274.0,
+            "work/receive_parameter_uses": 34888945664.0,
+            "work/router_multi_unsaturated_rows": 7048.0,
+            "work/shared_parameter_uses": 6388455360.0,
+            "work/state_updates": 1690274.0,
+            "work/unsaturated": 173204.0
+          },
+          "physical_id": 0,
+          "source_commit": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+          "stage": "train",
+          "step": 6735,
+          "training_tokens": 107732739
+        },
+        {
+          "case": "hb-d64-r64-q3-s22",
+          "config": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v10-execution/configs/studies/language/direct-v10/table/main/hb-d64-r64-q3-s22.json",
+            "sha256": "5eecd2a82918b5b98e5073ed5cc21cf5b3855c4d892018ead777fd7659f697ec"
+          },
+          "declared_cpu_quota": "4s",
+          "host_processes": [
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 370.21,
+              "pid": 1121527,
+              "start_ticks": 2225203317
+            },
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 2.25,
+              "pid": 1121578,
+              "start_ticks": 2225203345
+            },
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 0.03,
+              "pid": 1123524,
+              "start_ticks": 2225204078
+            },
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 1708.56,
+              "pid": 1123539,
+              "start_ticks": 2225204083
+            },
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 25341.73,
+              "pid": 1152023,
+              "start_ticks": 2225217335
+            },
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 7.77,
+              "pid": 1152820,
+              "start_ticks": 2225218016
+            }
+          ],
+          "job": "v10-main-hb-d64-r64-q3-s22",
+          "last_update": {
+            "activity/active_parameters_per_position": 3686183.25390625,
+            "activity/body_full_all_fraction": 0.031359386444091794,
+            "activity/body_receipt_fraction": 0.16240177154541016,
+            "activity/controller_ema": 0.03136039132953867,
+            "activity/controller_tau_scale": 0.3163947216567178,
+            "activity/full_all_fraction": 0.031359386444091794,
+            "activity/full_fraction": 0.19309756381150808,
+            "activity/receipt_fraction": 0.16240177154541016,
+            "activity/send_strength": 245760.0,
+            "discrete/positive_support_errors": 0.0,
+            "numerical/attention_probability_floor_applied": 0.0,
+            "numerical/positive_floor_events": 0.0,
+            "region/0/candidates": 1048576.0,
+            "region/0/full": 32788.0,
+            "region/0/unsaturated": 16413.0,
+            "region/1/candidates": 65574.0,
+            "region/1/full": 32788.0,
+            "region/1/unsaturated": 16384.0,
+            "region/2/candidates": 65574.0,
+            "region/2/full": 32904.0,
+            "region/2/unsaturated": 16583.0,
+            "region/3/candidates": 65575.0,
+            "region/3/full": 32796.0,
+            "region/3/unsaturated": 16433.0,
+            "region/4/candidates": 65575.0,
+            "region/4/full": 32863.0,
+            "region/4/unsaturated": 16568.0,
+            "region/5/candidates": 65059.0,
+            "region/5/full": 32895.0,
+            "region/5/unsaturated": 16461.0,
+            "region/6/candidates": 65059.0,
+            "region/6/full": 32972.0,
+            "region/6/unsaturated": 16549.0,
+            "region/7/candidates": 81940.0,
+            "region/7/full": 33145.0,
+            "region/7/unsaturated": 16972.0,
+            "region/8/candidates": 87291.0,
+            "region/8/full": 32867.0,
+            "region/8/unsaturated": 16445.0,
+            "region/9/candidates": 92683.0,
+            "region/9/full": 32809.0,
+            "region/9/unsaturated": 16429.0,
+            "resources/npu_allocated_mib": 826.86572265625,
+            "resources/npu_peak_allocated_mib": 34967.27685546875,
+            "resources/npu_reserved_mib": 36906.0,
+            "resources/peak_rss_mib": 3895.1953125,
+            "solver/max_feasibility_residual": 2.384185791015625e-07,
+            "train/gradient_norm": 10.838754653930664,
+            "train/loss": 4.425001740455627,
+            "train/lr": 0.0006357973638592862,
+            "train/step_seconds": 2.6398843601346016,
+            "train/tokens": 118414555,
+            "train/tokens_per_second": 6116.934606626728,
+            "work/active_parameter_uses": 60394426432.0,
+            "work/body_candidates": 1702906.0,
+            "work/body_full": 328827.0,
+            "work/body_node_slots": 10485760,
+            "work/boundary_candidates": 0.0,
+            "work/boundary_full": 0.0,
+            "work/candidates": 1702906.0,
+            "work/dense_causal_attention_pairs": 4042260480.0,
+            "work/dense_parameter_uses": 824510513152,
+            "work/full": 328827.0,
+            "work/full_parameter_uses": 18856255488.0,
+            "work/logical_full_attention_pairs": 26507605.0,
+            "work/logical_read_attention_pairs": 366759304.0,
+            "work/max_full_batch": 262144,
+            "work/message_edges_including_input": 1837572.0,
+            "work/node_slots": 10485760,
+            "work/physical_attention_pair_upper_bound": 8053063680,
+            "work/physical_full_rows": 10485760,
+            "work/physical_light_rows": 0.0,
+            "work/prediction_positions": 16384,
+            "work/read_events": 1702906.0,
+            "work/receive_parameter_uses": 35149680640.0,
+            "work/router_multi_unsaturated_rows": 1387.0,
+            "work/shared_parameter_uses": 6388490304.0,
+            "work/state_updates": 1702906.0,
+            "work/unsaturated": 165237.0
+          },
+          "physical_id": 6,
+          "source_commit": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+          "stage": "train",
+          "step": 7403,
+          "training_tokens": 118414555
+        }
+      ]
+    },
+    {
+      "at": "2026-11-14T19:50:41.799876+00:00",
+      "devices": [
+        {
+          "command": [
+            "npu-smi",
+            "info",
+            "-t",
+            "usages",
+            "-i",
+            "0",
+            "-c",
+            "0"
+          ],
+          "metrics": {
+            "Aicore Usage Rate(%)": 15.0,
+            "Aicpu Usage Rate(%)": 0.0,
+            "Aivector Usage Rate(%)": 62.0,
+            "Ctrlcpu Usage Rate(%)": 1.0,
+            "DDR Bandwidth Usage Rate(%)": 0.0,
+            "DDR Capacity(MB)": 0.0,
+            "DDR Hugepages Total(page)": 0.0,
+            "DDR Hugepages Usage Rate(%)": 0.0,
+            "DDR Usage Rate(%)": 0.0,
+            "HBM Bandwidth Usage Rate(%)": 40.0,
+            "HBM Capacity(MB)": 65536.0,
+            "HBM Usage Rate(%)": 61.0,
+            "NPU Utilization(%)": 100.0
+          },
+          "observed_at": "2026-11-14T19:50:41.688684+00:00",
+          "physical_id": 0
+        },
+        {
+          "command": [
+            "npu-smi",
+            "info",
+            "-t",
+            "usages",
+            "-i",
+            "2",
+            "-c",
+            "0"
+          ],
+          "metrics": {
+            "Aicore Usage Rate(%)": 24.0,
+            "Aicpu Usage Rate(%)": 0.0,
+            "Aivector Usage Rate(%)": 64.0,
+            "Ctrlcpu Usage Rate(%)": 3.0,
+            "DDR Bandwidth Usage Rate(%)": 0.0,
+            "DDR Capacity(MB)": 0.0,
+            "DDR Hugepages Total(page)": 0.0,
+            "DDR Hugepages Usage Rate(%)": 0.0,
+            "DDR Usage Rate(%)": 0.0,
+            "HBM Bandwidth Usage Rate(%)": 0.0,
+            "HBM Capacity(MB)": 65536.0,
+            "HBM Usage Rate(%)": 49.0,
+            "NPU Utilization(%)": 100.0
+          },
+          "observed_at": "2026-11-14T19:50:41.600160+00:00",
+          "physical_id": 4
+        },
+        {
+          "command": [
+            "npu-smi",
+            "info",
+            "-t",
+            "usages",
+            "-i",
+            "2",
+            "-c",
+            "1"
+          ],
+          "metrics": {
+            "Aicore Usage Rate(%)": 15.0,
+            "Aicpu Usage Rate(%)": 0.0,
+            "Aivector Usage Rate(%)": 63.0,
+            "Ctrlcpu Usage Rate(%)": 3.0,
+            "DDR Bandwidth Usage Rate(%)": 0.0,
+            "DDR Capacity(MB)": 0.0,
+            "DDR Hugepages Total(page)": 0.0,
+            "DDR Hugepages Usage Rate(%)": 0.0,
+            "DDR Usage Rate(%)": 0.0,
+            "HBM Bandwidth Usage Rate(%)": 34.0,
+            "HBM Capacity(MB)": 65536.0,
+            "HBM Usage Rate(%)": 56.0,
+            "NPU Utilization(%)": 100.0
+          },
+          "observed_at": "2026-11-14T19:50:41.791720+00:00",
+          "physical_id": 5
+        },
+        {
+          "command": [
+            "npu-smi",
+            "info",
+            "-t",
+            "usages",
+            "-i",
+            "3",
+            "-c",
+            "0"
+          ],
+          "metrics": {
+            "Aicore Usage Rate(%)": 12.0,
+            "Aicpu Usage Rate(%)": 0.0,
+            "Aivector Usage Rate(%)": 65.0,
+            "Ctrlcpu Usage Rate(%)": 5.0,
+            "DDR Bandwidth Usage Rate(%)": 0.0,
+            "DDR Capacity(MB)": 0.0,
+            "DDR Hugepages Total(page)": 0.0,
+            "DDR Hugepages Usage Rate(%)": 0.0,
+            "DDR Usage Rate(%)": 0.0,
+            "HBM Bandwidth Usage Rate(%)": 49.0,
+            "HBM Capacity(MB)": 65536.0,
+            "HBM Usage Rate(%)": 61.0,
+            "NPU Utilization(%)": 100.0
+          },
+          "observed_at": "2026-11-14T19:50:41.799506+00:00",
+          "physical_id": 6
+        },
+        {
+          "command": [
+            "npu-smi",
+            "info",
+            "-t",
+            "usages",
+            "-i",
+            "4",
+            "-c",
+            "0"
+          ],
+          "metrics": {
+            "Aicore Usage Rate(%)": 24.0,
+            "Aicpu Usage Rate(%)": 0.0,
+            "Aivector Usage Rate(%)": 65.0,
+            "Ctrlcpu Usage Rate(%)": 3.0,
+            "DDR Bandwidth Usage Rate(%)": 0.0,
+            "DDR Capacity(MB)": 0.0,
+            "DDR Hugepages Total(page)": 0.0,
+            "DDR Hugepages Usage Rate(%)": 0.0,
+            "DDR Usage Rate(%)": 0.0,
+            "HBM Bandwidth Usage Rate(%)": 53.0,
+            "HBM Capacity(MB)": 65536.0,
+            "HBM Usage Rate(%)": 49.0,
+            "NPU Utilization(%)": 100.0
+          },
+          "observed_at": "2026-11-14T19:50:41.662642+00:00",
+          "physical_id": 8
+        },
+        {
+          "command": [
+            "npu-smi",
+            "info",
+            "-t",
+            "usages",
+            "-i",
+            "7",
+            "-c",
+            "1"
+          ],
+          "metrics": {
+            "Aicore Usage Rate(%)": 12.0,
+            "Aicpu Usage Rate(%)": 0.0,
+            "Aivector Usage Rate(%)": 67.0,
+            "Ctrlcpu Usage Rate(%)": 2.0,
+            "DDR Bandwidth Usage Rate(%)": 0.0,
+            "DDR Capacity(MB)": 0.0,
+            "DDR Hugepages Total(page)": 0.0,
+            "DDR Hugepages Usage Rate(%)": 0.0,
+            "DDR Usage Rate(%)": 0.0,
+            "HBM Bandwidth Usage Rate(%)": 34.0,
+            "HBM Capacity(MB)": 65536.0,
+            "HBM Usage Rate(%)": 56.0,
+            "NPU Utilization(%)": 100.0
+          },
+          "observed_at": "2026-11-14T19:50:41.712096+00:00",
+          "physical_id": 15
+        }
+      ],
+      "elapsed_seconds": 6.245307475328445,
+      "index": 1,
+      "jobs": [
+        {
+          "case": "hb-d128-r28-pool-s11",
+          "config": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v10-execution/configs/studies/language/direct-v10/table/main/hb-d128-r28-pool-s11.json",
+            "sha256": "e5eaa67e498182189652b255d2dbf84a78d027417ea71ad3e23e03d2f3cb3c53"
+          },
+          "declared_cpu_quota": "4s",
+          "host_processes": [
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 363.63,
+              "pid": 1121592,
+              "start_ticks": 2225203349
+            },
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 2.3,
+              "pid": 1121653,
+              "start_ticks": 2225203377
+            },
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 0.04,
+              "pid": 1123567,
+              "start_ticks": 2225204098
+            },
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 1704.41,
+              "pid": 1123569,
+              "start_ticks": 2225204103
+            },
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 27561.77,
+              "pid": 1153817,
+              "start_ticks": 2225218938
+            },
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 6.1,
+              "pid": 1154511,
+              "start_ticks": 2225219837
+            }
+          ],
+          "job": "v10-main-hb-d128-r28-pool-s11",
+          "last_update": {
+            "activity/active_parameters_per_position": 75541048.0,
+            "activity/body_full_all_fraction": 1.0,
+            "activity/body_receipt_fraction": 1.0,
+            "activity/full_all_fraction": 1.0,
+            "activity/full_fraction": 1.0,
+            "activity/receipt_fraction": 1.0,
+            "activity/send_strength": 163839.99975585938,
+            "discrete/positive_support_errors": 0.0,
+            "numerical/attention_probability_floor_applied": 0.0,
+            "numerical/positive_floor_events": 497.0,
+            "region/0/candidates": 458752.0,
+            "region/0/full": 458752.0,
+            "region/0/unsaturated": 458752.0,
+            "region/1/candidates": 458752.0,
+            "region/1/full": 458752.0,
+            "region/1/unsaturated": 457764.0,
+            "region/2/candidates": 458752.0,
+            "region/2/full": 458752.0,
+            "region/2/unsaturated": 455504.0,
+            "region/3/candidates": 458752.0,
+            "region/3/full": 458752.0,
+            "region/3/unsaturated": 453350.0,
+            "region/4/candidates": 458752.0,
+            "region/4/full": 458752.0,
+            "region/4/unsaturated": 451124.0,
+            "region/5/candidates": 458752.0,
+            "region/5/full": 458752.0,
+            "region/5/unsaturated": 457361.0,
+            "region/6/candidates": 458752.0,
+            "region/6/full": 458752.0,
+            "region/6/unsaturated": 454486.0,
+            "region/7/candidates": 458752.0,
+            "region/7/full": 458752.0,
+            "region/7/unsaturated": 458543.0,
+            "region/8/candidates": 458752.0,
+            "region/8/full": 458752.0,
+            "region/8/unsaturated": 458490.0,
+            "region/9/candidates": 458752.0,
+            "region/9/full": 458752.0,
+            "region/9/unsaturated": 458566.0,
+            "resources/npu_allocated_mib": 1189.3134765625,
+            "resources/npu_peak_allocated_mib": 25875.93115234375,
+            "resources/npu_reserved_mib": 29214.0,
+            "resources/peak_rss_mib": 3979.19140625,
+            "solver/max_feasibility_residual": 0,
+            "train/gradient_norm": 0.477527916431427,
+            "train/loss": 3.3731380701065063,
+            "train/lr": 0.0007690523533138518,
+            "train/step_seconds": 2.941750019788742,
+            "train/tokens": 91470862,
+            "train/tokens_per_second": 5448.117580415945,
+            "work/active_parameter_uses": 1237664530432.0,
+            "work/body_candidates": 4587520.0,
+            "work/body_full": 4587520.0,
+            "work/body_node_slots": 4587520,
+            "work/boundary_candidates": 0.0,
+            "work/boundary_full": 0.0,
+            "work/candidates": 4587520.0,
+            "work/dense_causal_attention_pairs": 1768488960.0,
+            "work/dense_parameter_uses": 1237664530432,
+            "work/full": 4587520.0,
+            "work/full_parameter_uses": 1052266987520.0,
+            "work/logical_full_attention_pairs": 589496320.0,
+            "work/logical_read_attention_pairs": 1178992640.0,
+            "work/max_full_batch": 114688,
+            "work/message_edges_including_input": 11468800.0,
+            "work/node_slots": 4587520,
+            "work/physical_attention_pair_upper_bound": 3523215360,
+            "work/physical_full_rows": 4587520,
+            "work/physical_light_rows": 0.0,
+            "work/prediction_positions": 16384,
+            "work/read_events": 4587520.0,
+            "work/receive_parameter_uses": 169852928000.0,
+            "work/router_multi_unsaturated_rows": 163840.0,
+            "work/shared_parameter_uses": 15544614912.0,
+            "work/state_updates": 4587520.0,
+            "work/unsaturated": 4563940.0
+          },
+          "physical_id": 4,
+          "source_commit": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+          "stage": "train",
+          "step": 5718,
+          "training_tokens": 91470862
+        },
+        {
+          "case": "hb-d128-r28-q10-s11",
+          "config": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v10-execution/configs/studies/language/direct-v10/table/main/hb-d128-r28-q10-s11.json",
+            "sha256": "e7d38873d389dd57d24d5badffb7d155313bcc28dca7df5e90d4f936167ee69f"
+          },
+          "declared_cpu_quota": "4s",
+          "host_processes": [
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 363.37,
+              "pid": 1121738,
+              "start_ticks": 2225203415
+            },
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 2.33,
+              "pid": 1121789,
+              "start_ticks": 2225203444
+            },
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 0.03,
+              "pid": 1123635,
+              "start_ticks": 2225204149
+            },
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 1714.14,
+              "pid": 1123661,
+              "start_ticks": 2225204153
+            },
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 30354.9,
+              "pid": 1156019,
+              "start_ticks": 2225221135
+            },
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 7.6,
+              "pid": 1156412,
+              "start_ticks": 2225221842
+            }
+          ],
+          "job": "v10-main-hb-d128-r28-q10-s11",
+          "last_update": {
+            "activity/active_parameters_per_position": 10237052.484375,
+            "activity/body_full_all_fraction": 0.10099269321986608,
+            "activity/body_receipt_fraction": 0.2712158203125,
+            "activity/controller_ema": 0.10081434171985917,
+            "activity/controller_tau_scale": 0.05298089881817023,
+            "activity/full_all_fraction": 0.10099269321986608,
+            "activity/full_fraction": 0.37237021462649333,
+            "activity/receipt_fraction": 0.2712158203125,
+            "activity/send_strength": 245759.99853515625,
+            "discrete/positive_support_errors": 0.0,
+            "gradient/router_l2": 0.9498993158340454,
+            "numerical/attention_probability_floor_applied": 0.0,
+            "numerical/positive_floor_events": 0.0,
+            "region/0/candidates": 458752.0,
+            "region/0/full": 46258.0,
+            "region/0/unsaturated": 43309.0,
+            "region/1/candidates": 87691.0,
+            "region/1/full": 40406.0,
+            "region/1/unsaturated": 24623.0,
+            "region/2/candidates": 87691.0,
+            "region/2/full": 47811.0,
+            "region/2/unsaturated": 41168.0,
+            "region/3/candidates": 71934.0,
+            "region/3/full": 48977.0,
+            "region/3/unsaturated": 39654.0,
+            "region/4/candidates": 71934.0,
+            "region/4/full": 35780.0,
+            "region/4/unsaturated": 17916.0,
+            "region/5/candidates": 81572.0,
+            "region/5/full": 52471.0,
+            "region/5/unsaturated": 44647.0,
+            "region/6/candidates": 81572.0,
+            "region/6/full": 47846.0,
+            "region/6/unsaturated": 39977.0,
+            "region/7/candidates": 90020.0,
+            "region/7/full": 43998.0,
+            "region/7/unsaturated": 35213.0,
+            "region/8/candidates": 103796.0,
+            "region/8/full": 43692.0,
+            "region/8/unsaturated": 27355.0,
+            "region/9/candidates": 109246.0,
+            "region/9/full": 56067.0,
+            "region/9/unsaturated": 52574.0,
+            "resources/npu_allocated_mib": 1189.3134765625,
+            "resources/npu_peak_allocated_mib": 25852.84912109375,
+            "resources/npu_reserved_mib": 29194.0,
+            "resources/peak_rss_mib": 3984.19140625,
+            "solver/max_feasibility_residual": 4.76837158203125e-07,
+            "train/gradient_norm": 1.8062984943389893,
+            "train/loss": 3.7475579977035522,
+            "train/lr": 0.0007927419362085834,
+            "train/step_seconds": 4.621381063014269,
+            "train/tokens": 86249016,
+            "train/tokens_per_second": 3491.1641736543347,
+            "work/active_parameter_uses": 167723867904.0,
+            "work/body_candidates": 1244208.0,
+            "work/body_full": 463306.0,
+            "work/body_node_slots": 4587520,
+            "work/boundary_candidates": 0.0,
+            "work/boundary_full": 0.0,
+            "work/candidates": 1244208.0,
+            "work/dense_causal_attention_pairs": 1768488960.0,
+            "work/dense_parameter_uses": 1237664530432,
+            "work/full": 463306.0,
+            "work/full_parameter_uses": 106271277056.0,
+            "work/logical_full_attention_pairs": 50334784.0,
+            "work/logical_read_attention_pairs": 272258840.0,
+            "work/max_full_batch": 114688,
+            "work/message_edges_including_input": 1542180.0,
+            "work/node_slots": 4587520,
+            "work/physical_attention_pair_upper_bound": 3523215360,
+            "work/physical_full_rows": 4587520,
+            "work/physical_light_rows": 0.0,
+            "work/prediction_positions": 16384,
+            "work/read_events": 1244208.0,
+            "work/receive_parameter_uses": 46066801664.0,
+            "work/router_multi_unsaturated_rows": 112278.0,
+            "work/shared_parameter_uses": 15385789184.0,
+            "work/state_updates": 1244208.0,
+            "work/unsaturated": 366436.0
+          },
+          "physical_id": 8,
+          "source_commit": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+          "stage": "train",
+          "step": 5392,
+          "training_tokens": 86249016
+        },
+        {
+          "case": "hb-d128-r64-q3-s11",
+          "config": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v10-execution/configs/studies/language/direct-v10/table/main/hb-d128-r64-q3-s11.json",
+            "sha256": "2d7e4c835557d8c8846d4bdcde1f1f771603855ab22781bafa11994fa9f6caa2"
+          },
+          "declared_cpu_quota": "4s",
+          "host_processes": [
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 361.89,
+              "pid": 1121322,
+              "start_ticks": 2225203222
+            },
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 2.36,
+              "pid": 1121355,
+              "start_ticks": 2225203250
+            },
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 0.03,
+              "pid": 1123294,
+              "start_ticks": 2225203979
+            },
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 1710.63,
+              "pid": 1123296,
+              "start_ticks": 2225203983
+            },
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 25655.57,
+              "pid": 1908178,
+              "start_ticks": 2225227986
+            },
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 6.76,
+              "pid": 1909154,
+              "start_ticks": 2225228888
+            }
+          ],
+          "job": "v10-main-hb-d128-r64-q3-s11",
+          "last_update": {
+            "activity/active_parameters_per_position": 9352941.9609375,
+            "activity/body_full_all_fraction": 0.03130426406860352,
+            "activity/body_receipt_fraction": 0.16115255355834962,
+            "activity/controller_ema": 0.031310978898115745,
+            "activity/controller_tau_scale": 0.4915877781444532,
+            "activity/full_all_fraction": 0.03130426406860352,
+            "activity/full_fraction": 0.19425236136434515,
+            "activity/receipt_fraction": 0.16115255355834962,
+            "activity/send_strength": 245759.99926757812,
+            "discrete/positive_support_errors": 0.0,
+            "numerical/attention_probability_floor_applied": 0.0,
+            "numerical/positive_floor_events": 0.0,
+            "region/0/candidates": 1048576.0,
+            "region/0/full": 32777.0,
+            "region/0/unsaturated": 16398.0,
+            "region/1/candidates": 65553.0,
+            "region/1/full": 32778.0,
+            "region/1/unsaturated": 16397.0,
+            "region/2/candidates": 65553.0,
+            "region/2/full": 32795.0,
+            "region/2/unsaturated": 16411.0,
+            "region/3/candidates": 65491.0,
+            "region/3/full": 32787.0,
+            "region/3/unsaturated": 16461.0,
+            "region/4/candidates": 65491.0,
+            "region/4/full": 32780.0,
+            "region/4/unsaturated": 16397.0,
+            "region/5/candidates": 57763.0,
+            "region/5/full": 32824.0,
+            "region/5/unsaturated": 16423.0,
+            "region/6/candidates": 57763.0,
+            "region/6/full": 32808.0,
+            "region/6/unsaturated": 16429.0,
+            "region/7/candidates": 81994.0,
+            "region/7/full": 32778.0,
+            "region/7/unsaturated": 16394.0,
+            "region/8/candidates": 77215.0,
+            "region/8/full": 33066.0,
+            "region/8/unsaturated": 16695.0,
+            "region/9/candidates": 104408.0,
+            "region/9/full": 32856.0,
+            "region/9/unsaturated": 16483.0,
+            "resources/npu_allocated_mib": 2731.8369140625,
+            "resources/npu_peak_allocated_mib": 30829.61279296875,
+            "resources/npu_reserved_mib": 33712.0,
+            "resources/peak_rss_mib": 7115.359375,
+            "solver/max_feasibility_residual": 2.384185791015625e-07,
+            "train/gradient_norm": 2.452293872833252,
+            "train/loss": 4.572129517793655,
+            "train/lr": 0.000880611272764026,
+            "train/step_seconds": 4.837146136909723,
+            "train/tokens": 64506653,
+            "train/tokens_per_second": 3315.177905756806,
+            "work/active_parameter_uses": 153238601088.0,
+            "work/body_candidates": 1689807.0,
+            "work/body_full": 328249.0,
+            "work/body_node_slots": 10485760,
+            "work/boundary_candidates": 0.0,
+            "work/boundary_full": 0.0,
+            "work/candidates": 1689807.0,
+            "work/dense_causal_attention_pairs": 4042260480.0,
+            "work/dense_parameter_uses": 2809188057088,
+            "work/full": 328249.0,
+            "work/full_parameter_uses": 75292442624.0,
+            "work/logical_full_attention_pairs": 26419193.0,
+            "work/logical_read_attention_pairs": 363142320.0,
+            "work/max_full_batch": 131072,
+            "work/message_edges_including_input": 1836062.0,
+            "work/node_slots": 10485760,
+            "work/physical_attention_pair_upper_bound": 8053063680,
+            "work/physical_full_rows": 10485760,
+            "work/physical_light_rows": 0.0,
+            "work/prediction_positions": 16384,
+            "work/read_events": 1689807.0,
+            "work/receive_parameter_uses": 62565104640.0,
+            "work/router_multi_unsaturated_rows": 645.0,
+            "work/shared_parameter_uses": 15381053824.0,
+            "work/state_updates": 1689807.0,
+            "work/unsaturated": 164488.0
+          },
+          "physical_id": 5,
+          "source_commit": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+          "stage": "train",
+          "step": 4033,
+          "training_tokens": 64506653
+        },
+        {
+          "case": "hb-d128-r64-q3-s22",
+          "config": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v10-execution/configs/studies/language/direct-v10/table/main/hb-d128-r64-q3-s22.json",
+            "sha256": "e374334da59c8a9c2914df6b3ff6aaeee538e29f839f5ca80f9a2dd7d9dadfb5"
+          },
+          "declared_cpu_quota": "4s",
+          "host_processes": [
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 351.48,
+              "pid": 1121371,
+              "start_ticks": 2225203254
+            },
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 2.27,
+              "pid": 1121444,
+              "start_ticks": 2225203282
+            },
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 0.03,
+              "pid": 1123345,
+              "start_ticks": 2225203998
+            },
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 1670.51,
+              "pid": 1123352,
+              "start_ticks": 2225204003
+            },
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 26402.17,
+              "pid": 1910751,
+              "start_ticks": 2225229978
+            },
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 5.58,
+              "pid": 1912048,
+              "start_ticks": 2225231534
+            }
+          ],
+          "job": "v10-main-hb-d128-r64-q3-s22",
+          "last_update": {
+            "activity/active_parameters_per_position": 9134635.19140625,
+            "activity/body_full_all_fraction": 0.03127832412719726,
+            "activity/body_receipt_fraction": 0.15210046768188476,
+            "activity/controller_ema": 0.0312774374625887,
+            "activity/controller_tau_scale": 0.5915079804748695,
+            "activity/full_all_fraction": 0.03127832412719726,
+            "activity/full_fraction": 0.20564252433868438,
+            "activity/receipt_fraction": 0.15210046768188476,
+            "activity/send_strength": 245759.99975585938,
+            "discrete/positive_support_errors": 0.0,
+            "numerical/attention_probability_floor_applied": 0.0,
+            "numerical/positive_floor_events": 0.0,
+            "region/0/candidates": 1048576.0,
+            "region/0/full": 32771.0,
+            "region/0/unsaturated": 16387.0,
+            "region/1/candidates": 52359.0,
+            "region/1/full": 32794.0,
+            "region/1/unsaturated": 16465.0,
+            "region/2/candidates": 52359.0,
+            "region/2/full": 32769.0,
+            "region/2/unsaturated": 16385.0,
+            "region/3/candidates": 59499.0,
+            "region/3/full": 32860.0,
+            "region/3/unsaturated": 16490.0,
+            "region/4/candidates": 59499.0,
+            "region/4/full": 32824.0,
+            "region/4/unsaturated": 16458.0,
+            "region/5/candidates": 49385.0,
+            "region/5/full": 32770.0,
+            "region/5/unsaturated": 16386.0,
+            "region/6/candidates": 49385.0,
+            "region/6/full": 32771.0,
+            "region/6/unsaturated": 16405.0,
+            "region/7/candidates": 76261.0,
+            "region/7/full": 32785.0,
+            "region/7/unsaturated": 16389.0,
+            "region/8/candidates": 64082.0,
+            "region/8/full": 32787.0,
+            "region/8/unsaturated": 16481.0,
+            "region/9/candidates": 83484.0,
+            "region/9/full": 32846.0,
+            "region/9/unsaturated": 16477.0,
+            "resources/npu_allocated_mib": 2731.8369140625,
+            "resources/npu_peak_allocated_mib": 30829.61279296875,
+            "resources/npu_reserved_mib": 33712.0,
+            "resources/peak_rss_mib": 6963.8671875,
+            "solver/max_feasibility_residual": 1.1920928955078125e-07,
+            "train/gradient_norm": 1.637260913848877,
+            "train/loss": 4.064874947071075,
+            "train/lr": 0.0008897560392314301,
+            "train/step_seconds": 4.629048019647598,
+            "train/tokens": 61913937,
+            "train/tokens_per_second": 3500.071706154699,
+            "work/active_parameter_uses": 149661862976.0,
+            "work/body_candidates": 1594889.0,
+            "work/body_full": 327977.0,
+            "work/body_node_slots": 10485760,
+            "work/boundary_candidates": 0.0,
+            "work/boundary_full": 0.0,
+            "work/candidates": 1594889.0,
+            "work/dense_causal_attention_pairs": 4042260480.0,
+            "work/dense_parameter_uses": 2809188057088,
+            "work/full": 327977.0,
+            "work/full_parameter_uses": 75230052352.0,
+            "work/logical_full_attention_pairs": 38797268.0,
+            "work/logical_read_attention_pairs": 392716272.0,
+            "work/max_full_batch": 131072,
+            "work/message_edges_including_input": 1835506.0,
+            "work/node_slots": 10485760,
+            "work/physical_attention_pair_upper_bound": 8053063680,
+            "work/physical_full_rows": 10485760,
+            "work/physical_light_rows": 0.0,
+            "work/prediction_positions": 16384,
+            "work/read_events": 1594889.0,
+            "work/receive_parameter_uses": 59050765824.0,
+            "work/router_multi_unsaturated_rows": 483.0,
+            "work/shared_parameter_uses": 15381044800.0,
+            "work/state_updates": 1594889.0,
+            "work/unsaturated": 164323.0
+          },
+          "physical_id": 15,
+          "source_commit": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+          "stage": "train",
+          "step": 3871,
+          "training_tokens": 61913937
+        },
+        {
+          "case": "hb-d64-r64-q3-s11",
+          "config": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v10-execution/configs/studies/language/direct-v10/table/main/hb-d64-r64-q3-s11.json",
+            "sha256": "4498fbb92058e0dc4388b71669786f134cf662bb19da0d516f465d730f107691"
+          },
+          "declared_cpu_quota": "4s",
+          "host_processes": [
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 369.81,
+              "pid": 1121461,
+              "start_ticks": 2225203286
+            },
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 2.25,
+              "pid": 1121514,
+              "start_ticks": 2225203314
+            },
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 0.04,
+              "pid": 1123453,
+              "start_ticks": 2225204031
+            },
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 1702.08,
+              "pid": 1123454,
+              "start_ticks": 2225204035
+            },
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 26668.63,
+              "pid": 1152190,
+              "start_ticks": 2225217446
+            },
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 7.75,
+              "pid": 1153099,
+              "start_ticks": 2225218432
+            }
+          ],
+          "job": "v10-main-hb-d64-r64-q3-s11",
+          "last_update": {
+            "activity/active_parameters_per_position": 3687026.70703125,
+            "activity/body_full_all_fraction": 0.031809425354003905,
+            "activity/body_receipt_fraction": 0.16121549606323243,
+            "activity/controller_ema": 0.031831168298783505,
+            "activity/controller_tau_scale": 0.05309915656231238,
+            "activity/full_all_fraction": 0.031809425354003905,
+            "activity/full_fraction": 0.19730997410774656,
+            "activity/receipt_fraction": 0.16121549606323243,
+            "activity/send_strength": 245760.0,
+            "discrete/positive_support_errors": 0.0,
+            "numerical/attention_probability_floor_applied": 0.0,
+            "numerical/positive_floor_events": 0.0,
+            "region/0/candidates": 1048576.0,
+            "region/0/full": 32771.0,
+            "region/0/unsaturated": 16388.0,
+            "region/1/candidates": 65542.0,
+            "region/1/full": 32804.0,
+            "region/1/unsaturated": 16444.0,
+            "region/2/candidates": 65542.0,
+            "region/2/full": 32771.0,
+            "region/2/unsaturated": 16387.0,
+            "region/3/candidates": 61543.0,
+            "region/3/full": 32795.0,
+            "region/3/unsaturated": 16400.0,
+            "region/4/candidates": 61543.0,
+            "region/4/full": 32792.0,
+            "region/4/unsaturated": 16399.0,
+            "region/5/candidates": 65325.0,
+            "region/5/full": 32775.0,
+            "region/5/unsaturated": 16389.0,
+            "region/6/candidates": 65325.0,
+            "region/6/full": 32773.0,
+            "region/6/unsaturated": 16401.0,
+            "region/7/candidates": 82572.0,
+            "region/7/full": 32788.0,
+            "region/7/unsaturated": 16402.0,
+            "region/8/candidates": 70565.0,
+            "region/8/full": 32771.0,
+            "region/8/unsaturated": 16388.0,
+            "region/9/candidates": 103934.0,
+            "region/9/full": 38506.0,
+            "region/9/unsaturated": 25890.0,
+            "resources/npu_allocated_mib": 826.86572265625,
+            "resources/npu_peak_allocated_mib": 34967.27685546875,
+            "resources/npu_reserved_mib": 36906.0,
+            "resources/peak_rss_mib": 3890.0703125,
+            "solver/max_feasibility_residual": 3.5762786865234375e-07,
+            "train/gradient_norm": 15.321533203125,
+            "train/loss": 4.375253200531006,
+            "train/lr": 0.000690253461250451,
+            "train/step_seconds": 2.7456983029842377,
+            "train/tokens": 107765407,
+            "train/tokens_per_second": 5930.731713058673,
+            "work/active_parameter_uses": 60408245568.0,
+            "work/body_candidates": 1690467.0,
+            "work/body_full": 333546.0,
+            "work/body_node_slots": 10485760,
+            "work/boundary_candidates": 0.0,
+            "work/boundary_full": 0.0,
+            "work/candidates": 1690467.0,
+            "work/dense_causal_attention_pairs": 4042260480.0,
+            "work/dense_parameter_uses": 824510513152,
+            "work/full": 333546.0,
+            "work/full_parameter_uses": 19126861824.0,
+            "work/logical_full_attention_pairs": 29326208.0,
+            "work/logical_read_attention_pairs": 372316264.0,
+            "work/max_full_batch": 262144,
+            "work/message_edges_including_input": 1835348.0,
+            "work/node_slots": 10485760,
+            "work/physical_attention_pair_upper_bound": 8053063680,
+            "work/physical_full_rows": 10485760,
+            "work/physical_light_rows": 0.0,
+            "work/prediction_positions": 16384,
+            "work/read_events": 1690467.0,
+            "work/receive_parameter_uses": 34892929024.0,
+            "work/router_multi_unsaturated_rows": 7171.0,
+            "work/shared_parameter_uses": 6388454720.0,
+            "work/state_updates": 1690467.0,
+            "work/unsaturated": 173488.0
+          },
+          "physical_id": 0,
+          "source_commit": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+          "stage": "train",
+          "step": 6737,
+          "training_tokens": 107765407
+        },
+        {
+          "case": "hb-d64-r64-q3-s22",
+          "config": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v10-execution/configs/studies/language/direct-v10/table/main/hb-d64-r64-q3-s22.json",
+            "sha256": "5eecd2a82918b5b98e5073ed5cc21cf5b3855c4d892018ead777fd7659f697ec"
+          },
+          "declared_cpu_quota": "4s",
+          "host_processes": [
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 370.21,
+              "pid": 1121527,
+              "start_ticks": 2225203317
+            },
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 2.25,
+              "pid": 1121578,
+              "start_ticks": 2225203345
+            },
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 0.03,
+              "pid": 1123524,
+              "start_ticks": 2225204078
+            },
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 1709.11,
+              "pid": 1123539,
+              "start_ticks": 2225204083
+            },
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 25348.47,
+              "pid": 1152023,
+              "start_ticks": 2225217335
+            },
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 7.77,
+              "pid": 1152820,
+              "start_ticks": 2225218016
+            }
+          ],
+          "job": "v10-main-hb-d64-r64-q3-s22",
+          "last_update": {
+            "activity/active_parameters_per_position": 3685850.39453125,
+            "activity/body_full_all_fraction": 0.03134431838989258,
+            "activity/body_receipt_fraction": 0.16241846084594727,
+            "activity/controller_ema": 0.03135698556518316,
+            "activity/controller_tau_scale": 0.3163947216567178,
+            "activity/full_all_fraction": 0.03134431838989258,
+            "activity/full_fraction": 0.19298494904235325,
+            "activity/receipt_fraction": 0.16241846084594727,
+            "activity/send_strength": 245759.99951171875,
+            "discrete/positive_support_errors": 0.0,
+            "numerical/attention_probability_floor_applied": 0.0,
+            "numerical/positive_floor_events": 0.0,
+            "region/0/candidates": 1048576.0,
+            "region/0/full": 32781.0,
+            "region/0/unsaturated": 16406.0,
+            "region/1/candidates": 65561.0,
+            "region/1/full": 32780.0,
+            "region/1/unsaturated": 16388.0,
+            "region/2/candidates": 65561.0,
+            "region/2/full": 32865.0,
+            "region/2/unsaturated": 16557.0,
+            "region/3/candidates": 65558.0,
+            "region/3/full": 32792.0,
+            "region/3/unsaturated": 16440.0,
+            "region/4/candidates": 65558.0,
+            "region/4/full": 32856.0,
+            "region/4/unsaturated": 16559.0,
+            "region/5/candidates": 65189.0,
+            "region/5/full": 32858.0,
+            "region/5/unsaturated": 16449.0,
+            "region/6/candidates": 65189.0,
+            "region/6/full": 32923.0,
+            "region/6/unsaturated": 16540.0,
+            "region/7/candidates": 81871.0,
+            "region/7/full": 33171.0,
+            "region/7/unsaturated": 16983.0,
+            "region/8/candidates": 87370.0,
+            "region/8/full": 32830.0,
+            "region/8/unsaturated": 16451.0,
+            "region/9/candidates": 92648.0,
+            "region/9/full": 32813.0,
+            "region/9/unsaturated": 16435.0,
+            "resources/npu_allocated_mib": 826.86572265625,
+            "resources/npu_peak_allocated_mib": 34967.27685546875,
+            "resources/npu_reserved_mib": 36906.0,
+            "resources/peak_rss_mib": 3895.1953125,
+            "solver/max_feasibility_residual": 2.384185791015625e-07,
+            "train/gradient_norm": 14.611271858215332,
+            "train/loss": 4.508842825889587,
+            "train/lr": 0.0006356295231340483,
+            "train/step_seconds": 2.639677319675684,
+            "train/tokens": 118446892,
+            "train/tokens_per_second": 6206.819249412262,
+            "work/active_parameter_uses": 60388972864.0,
+            "work/body_candidates": 1703081.0,
+            "work/body_full": 328669.0,
+            "work/body_node_slots": 10485760,
+            "work/boundary_candidates": 0.0,
+            "work/boundary_full": 0.0,
+            "work/candidates": 1703081.0,
+            "work/dense_causal_attention_pairs": 4042260480.0,
+            "work/dense_parameter_uses": 824510513152,
+            "work/full": 328669.0,
+            "work/full_parameter_uses": 18847195136.0,
+            "work/logical_full_attention_pairs": 26618685.0,
+            "work/logical_read_attention_pairs": 367451232.0,
+            "work/max_full_batch": 262144,
+            "work/message_edges_including_input": 1837140.0,
+            "work/node_slots": 10485760,
+            "work/physical_attention_pair_upper_bound": 8053063680,
+            "work/physical_full_rows": 10485760,
+            "work/physical_light_rows": 0.0,
+            "work/prediction_positions": 16384,
+            "work/read_events": 1703081.0,
+            "work/receive_parameter_uses": 35153294336.0,
+            "work/router_multi_unsaturated_rows": 1358.0,
+            "work/shared_parameter_uses": 6388483392.0,
+            "work/state_updates": 1703081.0,
+            "work/unsaturated": 165208.0
+          },
+          "physical_id": 6,
+          "source_commit": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+          "stage": "train",
+          "step": 7405,
+          "training_tokens": 118446892
+        }
+      ]
+    },
+    {
+      "at": "2026-11-14T19:50:46.842618+00:00",
+      "devices": [
+        {
+          "command": [
+            "npu-smi",
+            "info",
+            "-t",
+            "usages",
+            "-i",
+            "0",
+            "-c",
+            "0"
+          ],
+          "metrics": {
+            "Aicore Usage Rate(%)": 20.0,
+            "Aicpu Usage Rate(%)": 0.0,
+            "Aivector Usage Rate(%)": 68.0,
+            "Ctrlcpu Usage Rate(%)": 4.0,
+            "DDR Bandwidth Usage Rate(%)": 0.0,
+            "DDR Capacity(MB)": 0.0,
+            "DDR Hugepages Total(page)": 0.0,
+            "DDR Hugepages Usage Rate(%)": 0.0,
+            "DDR Usage Rate(%)": 0.0,
+            "HBM Bandwidth Usage Rate(%)": 31.0,
+            "HBM Capacity(MB)": 65536.0,
+            "HBM Usage Rate(%)": 61.0,
+            "NPU Utilization(%)": 100.0
+          },
+          "observed_at": "2026-11-14T19:50:46.709664+00:00",
+          "physical_id": 0
+        },
+        {
+          "command": [
+            "npu-smi",
+            "info",
+            "-t",
+            "usages",
+            "-i",
+            "2",
+            "-c",
+            "0"
+          ],
+          "metrics": {
+            "Aicore Usage Rate(%)": 21.0,
+            "Aicpu Usage Rate(%)": 0.0,
+            "Aivector Usage Rate(%)": 64.0,
+            "Ctrlcpu Usage Rate(%)": 4.0,
+            "DDR Bandwidth Usage Rate(%)": 0.0,
+            "DDR Capacity(MB)": 0.0,
+            "DDR Hugepages Total(page)": 0.0,
+            "DDR Hugepages Usage Rate(%)": 0.0,
+            "DDR Usage Rate(%)": 0.0,
+            "HBM Bandwidth Usage Rate(%)": 35.0,
+            "HBM Capacity(MB)": 65536.0,
+            "HBM Usage Rate(%)": 49.0,
+            "NPU Utilization(%)": 100.0
+          },
+          "observed_at": "2026-11-14T19:50:46.659383+00:00",
+          "physical_id": 4
+        },
+        {
+          "command": [
+            "npu-smi",
+            "info",
+            "-t",
+            "usages",
+            "-i",
+            "2",
+            "-c",
+            "1"
+          ],
+          "metrics": {
+            "Aicore Usage Rate(%)": 16.0,
+            "Aicpu Usage Rate(%)": 0.0,
+            "Aivector Usage Rate(%)": 68.0,
+            "Ctrlcpu Usage Rate(%)": 1.0,
+            "DDR Bandwidth Usage Rate(%)": 0.0,
+            "DDR Capacity(MB)": 0.0,
+            "DDR Hugepages Total(page)": 0.0,
+            "DDR Hugepages Usage Rate(%)": 0.0,
+            "DDR Usage Rate(%)": 0.0,
+            "HBM Bandwidth Usage Rate(%)": 25.0,
+            "HBM Capacity(MB)": 65536.0,
+            "HBM Usage Rate(%)": 56.0,
+            "NPU Utilization(%)": 96.0
+          },
+          "observed_at": "2026-11-14T19:50:46.781860+00:00",
+          "physical_id": 5
+        },
+        {
+          "command": [
+            "npu-smi",
+            "info",
+            "-t",
+            "usages",
+            "-i",
+            "3",
+            "-c",
+            "0"
+          ],
+          "metrics": {
+            "Aicore Usage Rate(%)": 20.0,
+            "Aicpu Usage Rate(%)": 0.0,
+            "Aivector Usage Rate(%)": 68.0,
+            "Ctrlcpu Usage Rate(%)": 4.0,
+            "DDR Bandwidth Usage Rate(%)": 0.0,
+            "DDR Capacity(MB)": 0.0,
+            "DDR Hugepages Total(page)": 0.0,
+            "DDR Hugepages Usage Rate(%)": 0.0,
+            "DDR Usage Rate(%)": 0.0,
+            "HBM Bandwidth Usage Rate(%)": 50.0,
+            "HBM Capacity(MB)": 65536.0,
+            "HBM Usage Rate(%)": 61.0,
+            "NPU Utilization(%)": 100.0
+          },
+          "observed_at": "2026-11-14T19:50:46.827387+00:00",
+          "physical_id": 6
+        },
+        {
+          "command": [
+            "npu-smi",
+            "info",
+            "-t",
+            "usages",
+            "-i",
+            "4",
+            "-c",
+            "0"
+          ],
+          "metrics": {
+            "Aicore Usage Rate(%)": 24.0,
+            "Aicpu Usage Rate(%)": 0.0,
+            "Aivector Usage Rate(%)": 63.0,
+            "Ctrlcpu Usage Rate(%)": 8.0,
+            "DDR Bandwidth Usage Rate(%)": 0.0,
+            "DDR Capacity(MB)": 0.0,
+            "DDR Hugepages Total(page)": 0.0,
+            "DDR Hugepages Usage Rate(%)": 0.0,
+            "DDR Usage Rate(%)": 0.0,
+            "HBM Bandwidth Usage Rate(%)": 32.0,
+            "HBM Capacity(MB)": 65536.0,
+            "HBM Usage Rate(%)": 49.0,
+            "NPU Utilization(%)": 89.0
+          },
+          "observed_at": "2026-11-14T19:50:46.758715+00:00",
+          "physical_id": 8
+        },
+        {
+          "command": [
+            "npu-smi",
+            "info",
+            "-t",
+            "usages",
+            "-i",
+            "7",
+            "-c",
+            "1"
+          ],
+          "metrics": {
+            "Aicore Usage Rate(%)": 16.0,
+            "Aicpu Usage Rate(%)": 0.0,
+            "Aivector Usage Rate(%)": 65.0,
+            "Ctrlcpu Usage Rate(%)": 9.0,
+            "DDR Bandwidth Usage Rate(%)": 0.0,
+            "DDR Capacity(MB)": 0.0,
+            "DDR Hugepages Total(page)": 0.0,
+            "DDR Hugepages Usage Rate(%)": 0.0,
+            "DDR Usage Rate(%)": 0.0,
+            "HBM Bandwidth Usage Rate(%)": 38.0,
+            "HBM Capacity(MB)": 65536.0,
+            "HBM Usage Rate(%)": 56.0,
+            "NPU Utilization(%)": 100.0
+          },
+          "observed_at": "2026-11-14T19:50:46.842279+00:00",
+          "physical_id": 15
+        }
+      ],
+      "elapsed_seconds": 11.288049802184105,
+      "index": 2,
+      "jobs": [
+        {
+          "case": "hb-d128-r28-pool-s11",
+          "config": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v10-execution/configs/studies/language/direct-v10/table/main/hb-d128-r28-pool-s11.json",
+            "sha256": "e5eaa67e498182189652b255d2dbf84a78d027417ea71ad3e23e03d2f3cb3c53"
+          },
+          "declared_cpu_quota": "4s",
+          "host_processes": [
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 363.63,
+              "pid": 1121592,
+              "start_ticks": 2225203349
+            },
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 2.3,
+              "pid": 1121653,
+              "start_ticks": 2225203377
+            },
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 0.04,
+              "pid": 1123567,
+              "start_ticks": 2225204098
+            },
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 1704.78,
+              "pid": 1123569,
+              "start_ticks": 2225204103
+            },
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 27568.75,
+              "pid": 1153817,
+              "start_ticks": 2225218938
+            },
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 6.1,
+              "pid": 1154511,
+              "start_ticks": 2225219837
+            }
+          ],
+          "job": "v10-main-hb-d128-r28-pool-s11",
+          "last_update": {
+            "activity/active_parameters_per_position": 75541048.0,
+            "activity/body_full_all_fraction": 1.0,
+            "activity/body_receipt_fraction": 1.0,
+            "activity/full_all_fraction": 1.0,
+            "activity/full_fraction": 1.0,
+            "activity/receipt_fraction": 1.0,
+            "activity/send_strength": 163839.99829101562,
+            "discrete/positive_support_errors": 0.0,
+            "numerical/attention_probability_floor_applied": 0.0,
+            "numerical/positive_floor_events": 874.0,
+            "region/0/candidates": 458752.0,
+            "region/0/full": 458752.0,
+            "region/0/unsaturated": 458752.0,
+            "region/1/candidates": 458752.0,
+            "region/1/full": 458752.0,
+            "region/1/unsaturated": 457781.0,
+            "region/2/candidates": 458752.0,
+            "region/2/full": 458752.0,
+            "region/2/unsaturated": 455585.0,
+            "region/3/candidates": 458752.0,
+            "region/3/full": 458752.0,
+            "region/3/unsaturated": 453714.0,
+            "region/4/candidates": 458752.0,
+            "region/4/full": 458752.0,
+            "region/4/unsaturated": 451675.0,
+            "region/5/candidates": 458752.0,
+            "region/5/full": 458752.0,
+            "region/5/unsaturated": 457240.0,
+            "region/6/candidates": 458752.0,
+            "region/6/full": 458752.0,
+            "region/6/unsaturated": 454898.0,
+            "region/7/candidates": 458752.0,
+            "region/7/full": 458752.0,
+            "region/7/unsaturated": 458609.0,
+            "region/8/candidates": 458752.0,
+            "region/8/full": 458752.0,
+            "region/8/unsaturated": 458571.0,
+            "region/9/candidates": 458752.0,
+            "region/9/full": 458752.0,
+            "region/9/unsaturated": 458680.0,
+            "resources/npu_allocated_mib": 1189.3134765625,
+            "resources/npu_peak_allocated_mib": 25875.93115234375,
+            "resources/npu_reserved_mib": 29214.0,
+            "resources/peak_rss_mib": 3979.19140625,
+            "solver/max_feasibility_residual": 0,
+            "train/gradient_norm": 0.4969111979007721,
+            "train/loss": 3.391212284564972,
+            "train/lr": 0.0007689068431628266,
+            "train/step_seconds": 3.225314062088728,
+            "train/tokens": 91502365,
+            "train/tokens_per_second": 4867.743015956905,
+            "work/active_parameter_uses": 1237664530432.0,
+            "work/body_candidates": 4587520.0,
+            "work/body_full": 4587520.0,
+            "work/body_node_slots": 4587520,
+            "work/boundary_candidates": 0.0,
+            "work/boundary_full": 0.0,
+            "work/candidates": 4587520.0,
+            "work/dense_causal_attention_pairs": 1768488960.0,
+            "work/dense_parameter_uses": 1237664530432,
+            "work/full": 4587520.0,
+            "work/full_parameter_uses": 1052266987520.0,
+            "work/logical_full_attention_pairs": 589496320.0,
+            "work/logical_read_attention_pairs": 1178992640.0,
+            "work/max_full_batch": 114688,
+            "work/message_edges_including_input": 11468800.0,
+            "work/node_slots": 4587520,
+            "work/physical_attention_pair_upper_bound": 3523215360,
+            "work/physical_full_rows": 4587520,
+            "work/physical_light_rows": 0.0,
+            "work/prediction_positions": 16384,
+            "work/read_events": 4587520.0,
+            "work/receive_parameter_uses": 169852928000.0,
+            "work/router_multi_unsaturated_rows": 163840.0,
+            "work/shared_parameter_uses": 15544614912.0,
+            "work/state_updates": 4587520.0,
+            "work/unsaturated": 4565505.0
+          },
+          "physical_id": 4,
+          "source_commit": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+          "stage": "train",
+          "step": 5720,
+          "training_tokens": 91502365
+        },
+        {
+          "case": "hb-d128-r28-q10-s11",
+          "config": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v10-execution/configs/studies/language/direct-v10/table/main/hb-d128-r28-q10-s11.json",
+            "sha256": "e7d38873d389dd57d24d5badffb7d155313bcc28dca7df5e90d4f936167ee69f"
+          },
+          "declared_cpu_quota": "4s",
+          "host_processes": [
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 363.38,
+              "pid": 1121738,
+              "start_ticks": 2225203415
+            },
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 2.33,
+              "pid": 1121789,
+              "start_ticks": 2225203444
+            },
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 0.03,
+              "pid": 1123635,
+              "start_ticks": 2225204149
+            },
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 1714.51,
+              "pid": 1123661,
+              "start_ticks": 2225204153
+            },
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 30362.79,
+              "pid": 1156019,
+              "start_ticks": 2225221135
+            },
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 7.6,
+              "pid": 1156412,
+              "start_ticks": 2225221842
+            }
+          ],
+          "job": "v10-main-hb-d128-r28-q10-s11",
+          "last_update": {
+            "activity/active_parameters_per_position": 10287091.0703125,
+            "activity/body_full_all_fraction": 0.10163683210100447,
+            "activity/body_receipt_fraction": 0.27205134800502234,
+            "activity/controller_ema": 0.1008965907579737,
+            "activity/controller_tau_scale": 0.05298089881817023,
+            "activity/full_all_fraction": 0.10163683210100447,
+            "activity/full_fraction": 0.37359429698223057,
+            "activity/receipt_fraction": 0.27205134800502234,
+            "activity/send_strength": 245759.99951171875,
+            "discrete/positive_support_errors": 0.0,
+            "numerical/attention_probability_floor_applied": 0.0,
+            "numerical/positive_floor_events": 0.0,
+            "region/0/candidates": 458752.0,
+            "region/0/full": 47418.0,
+            "region/0/unsaturated": 44585.0,
+            "region/1/candidates": 89518.0,
+            "region/1/full": 40505.0,
+            "region/1/unsaturated": 23738.0,
+            "region/2/candidates": 89518.0,
+            "region/2/full": 47421.0,
+            "region/2/unsaturated": 40284.0,
+            "region/3/candidates": 72042.0,
+            "region/3/full": 50297.0,
+            "region/3/unsaturated": 40434.0,
+            "region/4/candidates": 72042.0,
+            "region/4/full": 35744.0,
+            "region/4/unsaturated": 17906.0,
+            "region/5/candidates": 81138.0,
+            "region/5/full": 52103.0,
+            "region/5/unsaturated": 44655.0,
+            "region/6/candidates": 81138.0,
+            "region/6/full": 48003.0,
+            "region/6/unsaturated": 40053.0,
+            "region/7/candidates": 90912.0,
+            "region/7/full": 43594.0,
+            "region/7/unsaturated": 34469.0,
+            "region/8/candidates": 103138.0,
+            "region/8/full": 44734.0,
+            "region/8/unsaturated": 28389.0,
+            "region/9/candidates": 109843.0,
+            "region/9/full": 56442.0,
+            "region/9/unsaturated": 53358.0,
+            "resources/npu_allocated_mib": 1189.3134765625,
+            "resources/npu_peak_allocated_mib": 25852.84912109375,
+            "resources/npu_reserved_mib": 29194.0,
+            "resources/peak_rss_mib": 3984.19140625,
+            "solver/max_feasibility_residual": 5.960464477539062e-07,
+            "train/gradient_norm": 1.2405644655227661,
+            "train/loss": 3.669429123401642,
+            "train/lr": 0.000792673198407498,
+            "train/step_seconds": 4.110859077423811,
+            "train/tokens": 86264455,
+            "train/tokens_per_second": 3755.662675178663,
+            "work/active_parameter_uses": 168543700096.0,
+            "work/body_candidates": 1248041.0,
+            "work/body_full": 466261.0,
+            "work/body_node_slots": 4587520,
+            "work/boundary_candidates": 0.0,
+            "work/boundary_full": 0.0,
+            "work/candidates": 1248041.0,
+            "work/dense_causal_attention_pairs": 1768488960.0,
+            "work/dense_parameter_uses": 1237664530432,
+            "work/full": 466261.0,
+            "work/full_parameter_uses": 106949083136.0,
+            "work/logical_full_attention_pairs": 51060470.0,
+            "work/logical_read_attention_pairs": 274029416.0,
+            "work/max_full_batch": 114688,
+            "work/message_edges_including_input": 1549078.0,
+            "work/node_slots": 4587520,
+            "work/physical_attention_pair_upper_bound": 3523215360,
+            "work/physical_full_rows": 4587520,
+            "work/physical_light_rows": 0.0,
+            "work/prediction_positions": 16384,
+            "work/read_events": 1248041.0,
+            "work/receive_parameter_uses": 46208717824.0,
+            "work/router_multi_unsaturated_rows": 111686.0,
+            "work/shared_parameter_uses": 15385899136.0,
+            "work/state_updates": 1248041.0,
+            "work/unsaturated": 367871.0
+          },
+          "physical_id": 8,
+          "source_commit": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+          "stage": "train",
+          "step": 5393,
+          "training_tokens": 86264455
+        },
+        {
+          "case": "hb-d128-r64-q3-s11",
+          "config": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v10-execution/configs/studies/language/direct-v10/table/main/hb-d128-r64-q3-s11.json",
+            "sha256": "2d7e4c835557d8c8846d4bdcde1f1f771603855ab22781bafa11994fa9f6caa2"
+          },
+          "declared_cpu_quota": "4s",
+          "host_processes": [
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 361.9,
+              "pid": 1121322,
+              "start_ticks": 2225203222
+            },
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 2.36,
+              "pid": 1121355,
+              "start_ticks": 2225203250
+            },
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 0.03,
+              "pid": 1123294,
+              "start_ticks": 2225203979
+            },
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 1710.98,
+              "pid": 1123296,
+              "start_ticks": 2225203983
+            },
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 25662.41,
+              "pid": 1908178,
+              "start_ticks": 2225227986
+            },
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 6.76,
+              "pid": 1909154,
+              "start_ticks": 2225228888
+            }
+          ],
+          "job": "v10-main-hb-d128-r64-q3-s11",
+          "last_update": {
+            "activity/active_parameters_per_position": 9352473.7890625,
+            "activity/body_full_all_fraction": 0.03131389617919922,
+            "activity/body_receipt_fraction": 0.16107311248779296,
+            "activity/controller_ema": 0.03131127062622409,
+            "activity/controller_tau_scale": 0.4915877781444532,
+            "activity/full_all_fraction": 0.03131389617919922,
+            "activity/full_fraction": 0.19440796601960716,
+            "activity/receipt_fraction": 0.16107311248779296,
+            "activity/send_strength": 245760.00146484375,
+            "discrete/positive_support_errors": 0.0,
+            "numerical/attention_probability_floor_applied": 0.0,
+            "numerical/positive_floor_events": 0.0,
+            "region/0/candidates": 1048576.0,
+            "region/0/full": 32790.0,
+            "region/0/unsaturated": 16409.0,
+            "region/1/candidates": 65577.0,
+            "region/1/full": 32785.0,
+            "region/1/unsaturated": 16399.0,
+            "region/2/candidates": 65577.0,
+            "region/2/full": 32811.0,
+            "region/2/unsaturated": 16410.0,
+            "region/3/candidates": 65519.0,
+            "region/3/full": 32794.0,
+            "region/3/unsaturated": 16464.0,
+            "region/4/candidates": 65519.0,
+            "region/4/full": 32777.0,
+            "region/4/unsaturated": 16397.0,
+            "region/5/candidates": 57609.0,
+            "region/5/full": 32835.0,
+            "region/5/unsaturated": 16435.0,
+            "region/6/candidates": 57609.0,
+            "region/6/full": 32830.0,
+            "region/6/unsaturated": 16444.0,
+            "region/7/candidates": 81945.0,
+            "region/7/full": 32782.0,
+            "region/7/unsaturated": 16390.0,
+            "region/8/candidates": 76830.0,
+            "region/8/full": 33101.0,
+            "region/8/unsaturated": 16742.0,
+            "region/9/candidates": 104213.0,
+            "region/9/full": 32845.0,
+            "region/9/unsaturated": 16479.0,
+            "resources/npu_allocated_mib": 2731.8369140625,
+            "resources/npu_peak_allocated_mib": 30829.61279296875,
+            "resources/npu_reserved_mib": 33712.0,
+            "resources/peak_rss_mib": 7115.359375,
+            "solver/max_feasibility_residual": 1.1920928955078125e-07,
+            "train/gradient_norm": 3.5923380851745605,
+            "train/loss": 4.544619679450989,
+            "train/lr": 0.0008805547532588541,
+            "train/step_seconds": 4.965706568211317,
+            "train/tokens": 64522409,
+            "train/tokens_per_second": 3172.962353608305,
+            "work/active_parameter_uses": 153230930560.0,
+            "work/body_candidates": 1688974.0,
+            "work/body_full": 328350.0,
+            "work/body_node_slots": 10485760,
+            "work/boundary_candidates": 0.0,
+            "work/boundary_full": 0.0,
+            "work/candidates": 1688974.0,
+            "work/dense_causal_attention_pairs": 4042260480.0,
+            "work/dense_parameter_uses": 2809188057088,
+            "work/full": 328350.0,
+            "work/full_parameter_uses": 75315609600.0,
+            "work/logical_full_attention_pairs": 26377412.0,
+            "work/logical_read_attention_pairs": 362582552.0,
+            "work/max_full_batch": 131072,
+            "work/message_edges_including_input": 1836358.0,
+            "work/node_slots": 10485760,
+            "work/physical_attention_pair_upper_bound": 8053063680,
+            "work/physical_full_rows": 10485760,
+            "work/physical_light_rows": 0.0,
+            "work/prediction_positions": 16384,
+            "work/read_events": 1688974.0,
+            "work/receive_parameter_uses": 62534262272.0,
+            "work/router_multi_unsaturated_rows": 729.0,
+            "work/shared_parameter_uses": 15381058688.0,
+            "work/state_updates": 1688974.0,
+            "work/unsaturated": 164569.0
+          },
+          "physical_id": 5,
+          "source_commit": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+          "stage": "train",
+          "step": 4034,
+          "training_tokens": 64522409
+        },
+        {
+          "case": "hb-d128-r64-q3-s22",
+          "config": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v10-execution/configs/studies/language/direct-v10/table/main/hb-d128-r64-q3-s22.json",
+            "sha256": "e374334da59c8a9c2914df6b3ff6aaeee538e29f839f5ca80f9a2dd7d9dadfb5"
+          },
+          "declared_cpu_quota": "4s",
+          "host_processes": [
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 351.65,
+              "pid": 1121371,
+              "start_ticks": 2225203254
+            },
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 2.27,
+              "pid": 1121444,
+              "start_ticks": 2225203282
+            },
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 0.03,
+              "pid": 1123345,
+              "start_ticks": 2225203998
+            },
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 1670.88,
+              "pid": 1123352,
+              "start_ticks": 2225204003
+            },
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 26408.73,
+              "pid": 1910751,
+              "start_ticks": 2225229978
+            },
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 5.59,
+              "pid": 1912048,
+              "start_ticks": 2225231534
+            }
+          ],
+          "job": "v10-main-hb-d128-r64-q3-s22",
+          "last_update": {
+            "activity/active_parameters_per_position": 9135742.58984375,
+            "activity/body_full_all_fraction": 0.03128032684326172,
+            "activity/body_receipt_fraction": 0.15213479995727539,
+            "activity/controller_ema": 0.03127772640065601,
+            "activity/controller_tau_scale": 0.5913506274947056,
+            "activity/full_all_fraction": 0.03128032684326172,
+            "activity/full_fraction": 0.2056092810589444,
+            "activity/receipt_fraction": 0.15213479995727539,
+            "activity/send_strength": 245759.99975585938,
+            "discrete/positive_support_errors": 0.0,
+            "gradient/router_l2": 0.09268202632665634,
+            "numerical/attention_probability_floor_applied": 0.0,
+            "numerical/positive_floor_events": 0.0,
+            "region/0/candidates": 1048576.0,
+            "region/0/full": 32768.0,
+            "region/0/unsaturated": 16385.0,
+            "region/1/candidates": 52257.0,
+            "region/1/full": 32801.0,
+            "region/1/unsaturated": 16493.0,
+            "region/2/candidates": 52257.0,
+            "region/2/full": 32774.0,
+            "region/2/unsaturated": 16391.0,
+            "region/3/candidates": 59679.0,
+            "region/3/full": 32855.0,
+            "region/3/unsaturated": 16493.0,
+            "region/4/candidates": 59679.0,
+            "region/4/full": 32818.0,
+            "region/4/unsaturated": 16452.0,
+            "region/5/candidates": 49372.0,
+            "region/5/full": 32770.0,
+            "region/5/unsaturated": 16386.0,
+            "region/6/candidates": 49372.0,
+            "region/6/full": 32774.0,
+            "region/6/unsaturated": 16403.0,
+            "region/7/candidates": 76415.0,
+            "region/7/full": 32787.0,
+            "region/7/unsaturated": 16396.0,
+            "region/8/candidates": 64149.0,
+            "region/8/full": 32782.0,
+            "region/8/unsaturated": 16472.0,
+            "region/9/candidates": 83493.0,
+            "region/9/full": 32869.0,
+            "region/9/unsaturated": 16507.0,
+            "resources/npu_allocated_mib": 2731.8369140625,
+            "resources/npu_peak_allocated_mib": 30829.61279296875,
+            "resources/npu_reserved_mib": 33712.0,
+            "resources/peak_rss_mib": 6963.8671875,
+            "solver/max_feasibility_residual": 1.1920928955078125e-07,
+            "train/gradient_norm": 0.8440918326377869,
+            "train/loss": 4.137385308742523,
+            "train/lr": 0.0008897022871920656,
+            "train/step_seconds": 4.634083017706871,
+            "train/tokens": 61929440,
+            "train/tokens_per_second": 3345.429924488384,
+            "work/active_parameter_uses": 149680006592.0,
+            "work/body_candidates": 1595249.0,
+            "work/body_full": 327998.0,
+            "work/body_node_slots": 10485760,
+            "work/boundary_candidates": 0.0,
+            "work/boundary_full": 0.0,
+            "work/candidates": 1595249.0,
+            "work/dense_causal_attention_pairs": 4042260480.0,
+            "work/dense_parameter_uses": 2809188057088,
+            "work/full": 327998.0,
+            "work/full_parameter_uses": 75234869248.0,
+            "work/logical_full_attention_pairs": 38890514.0,
+            "work/logical_read_attention_pairs": 393317932.0,
+            "work/max_full_batch": 131072,
+            "work/message_edges_including_input": 1835520.0,
+            "work/node_slots": 10485760,
+            "work/physical_attention_pair_upper_bound": 8053063680,
+            "work/physical_full_rows": 10485760,
+            "work/physical_light_rows": 0.0,
+            "work/prediction_positions": 16384,
+            "work/read_events": 1595249.0,
+            "work/receive_parameter_uses": 59064092160.0,
+            "work/router_multi_unsaturated_rows": 538.0,
+            "work/shared_parameter_uses": 15381045184.0,
+            "work/state_updates": 1595249.0,
+            "work/unsaturated": 164378.0
+          },
+          "physical_id": 15,
+          "source_commit": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+          "stage": "train",
+          "step": 3872,
+          "training_tokens": 61929440
+        },
+        {
+          "case": "hb-d64-r64-q3-s11",
+          "config": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v10-execution/configs/studies/language/direct-v10/table/main/hb-d64-r64-q3-s11.json",
+            "sha256": "4498fbb92058e0dc4388b71669786f134cf662bb19da0d516f465d730f107691"
+          },
+          "declared_cpu_quota": "4s",
+          "host_processes": [
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 369.99,
+              "pid": 1121461,
+              "start_ticks": 2225203286
+            },
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 2.25,
+              "pid": 1121514,
+              "start_ticks": 2225203314
+            },
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 0.04,
+              "pid": 1123453,
+              "start_ticks": 2225204031
+            },
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 1702.44,
+              "pid": 1123454,
+              "start_ticks": 2225204035
+            },
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 26675.08,
+              "pid": 1152190,
+              "start_ticks": 2225217446
+            },
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 7.75,
+              "pid": 1153099,
+              "start_ticks": 2225218432
+            }
+          ],
+          "job": "v10-main-hb-d64-r64-q3-s11",
+          "last_update": {
+            "activity/active_parameters_per_position": 3687062.125,
+            "activity/body_full_all_fraction": 0.031819725036621095,
+            "activity/body_receipt_fraction": 0.16118955612182617,
+            "activity/controller_ema": 0.031826582236626454,
+            "activity/controller_tau_scale": 0.05309915656231238,
+            "activity/full_all_fraction": 0.031819725036621095,
+            "activity/full_fraction": 0.1974056247947722,
+            "activity/receipt_fraction": 0.16118955612182617,
+            "activity/send_strength": 245760.00048828125,
+            "discrete/positive_support_errors": 0.0,
+            "numerical/attention_probability_floor_applied": 0.0,
+            "numerical/positive_floor_events": 0.0,
+            "region/0/candidates": 1048576.0,
+            "region/0/full": 32771.0,
+            "region/0/unsaturated": 16389.0,
+            "region/1/candidates": 65542.0,
+            "region/1/full": 32794.0,
+            "region/1/unsaturated": 16427.0,
+            "region/2/candidates": 65542.0,
+            "region/2/full": 32771.0,
+            "region/2/unsaturated": 16388.0,
+            "region/3/candidates": 61439.0,
+            "region/3/full": 32789.0,
+            "region/3/unsaturated": 16397.0,
+            "region/4/candidates": 61439.0,
+            "region/4/full": 32786.0,
+            "region/4/unsaturated": 16390.0,
+            "region/5/candidates": 65309.0,
+            "region/5/full": 32771.0,
+            "region/5/unsaturated": 16385.0,
+            "region/6/candidates": 65309.0,
+            "region/6/full": 32773.0,
+            "region/6/unsaturated": 16402.0,
+            "region/7/candidates": 82521.0,
+            "region/7/full": 32780.0,
+            "region/7/unsaturated": 16393.0,
+            "region/8/candidates": 70619.0,
+            "region/8/full": 32773.0,
+            "region/8/unsaturated": 16390.0,
+            "region/9/candidates": 103899.0,
+            "region/9/full": 38646.0,
+            "region/9/unsaturated": 26061.0,
+            "resources/npu_allocated_mib": 826.86572265625,
+            "resources/npu_peak_allocated_mib": 34967.27685546875,
+            "resources/npu_reserved_mib": 36906.0,
+            "resources/peak_rss_mib": 3890.0703125,
+            "solver/max_feasibility_residual": 3.5762786865234375e-07,
+            "train/gradient_norm": 3.0370445251464844,
+            "train/loss": 4.362788081169128,
+            "train/lr": 0.0006900914738537772,
+            "train/step_seconds": 2.7480152621865273,
+            "train/tokens": 107797649,
+            "train/tokens_per_second": 5858.4099664681,
+            "work/active_parameter_uses": 60408825856.0,
+            "work/body_candidates": 1690195.0,
+            "work/body_full": 333654.0,
+            "work/body_node_slots": 10485760,
+            "work/boundary_candidates": 0.0,
+            "work/boundary_full": 0.0,
+            "work/candidates": 1690195.0,
+            "work/dense_causal_attention_pairs": 4042260480.0,
+            "work/dense_parameter_uses": 824510513152,
+            "work/full": 333654.0,
+            "work/full_parameter_uses": 19133054976.0,
+            "work/logical_full_attention_pairs": 29422358.0,
+            "work/logical_read_attention_pairs": 372608896.0,
+            "work/max_full_batch": 262144,
+            "work/message_edges_including_input": 1835264.0,
+            "work/node_slots": 10485760,
+            "work/physical_attention_pair_upper_bound": 8053063680,
+            "work/physical_full_rows": 10485760,
+            "work/physical_light_rows": 0.0,
+            "work/prediction_positions": 16384,
+            "work/read_events": 1690195.0,
+            "work/receive_parameter_uses": 34887317504.0,
+            "work/router_multi_unsaturated_rows": 7214.0,
+            "work/shared_parameter_uses": 6388453376.0,
+            "work/state_updates": 1690195.0,
+            "work/unsaturated": 173622.0
+          },
+          "physical_id": 0,
+          "source_commit": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+          "stage": "train",
+          "step": 6739,
+          "training_tokens": 107797649
+        },
+        {
+          "case": "hb-d64-r64-q3-s22",
+          "config": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v10-execution/configs/studies/language/direct-v10/table/main/hb-d64-r64-q3-s22.json",
+            "sha256": "5eecd2a82918b5b98e5073ed5cc21cf5b3855c4d892018ead777fd7659f697ec"
+          },
+          "declared_cpu_quota": "4s",
+          "host_processes": [
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 370.4,
+              "pid": 1121527,
+              "start_ticks": 2225203317
+            },
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 2.25,
+              "pid": 1121578,
+              "start_ticks": 2225203345
+            },
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 0.03,
+              "pid": 1123524,
+              "start_ticks": 2225204078
+            },
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 1709.48,
+              "pid": 1123539,
+              "start_ticks": 2225204083
+            },
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 25354.83,
+              "pid": 1152023,
+              "start_ticks": 2225217335
+            },
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 7.77,
+              "pid": 1152820,
+              "start_ticks": 2225218016
+            }
+          ],
+          "job": "v10-main-hb-d64-r64-q3-s22",
+          "last_update": {
+            "activity/active_parameters_per_position": 3686518.787109375,
+            "activity/body_full_all_fraction": 0.03134622573852539,
+            "activity/body_receipt_fraction": 0.16246376037597657,
+            "activity/controller_ema": 0.03135590958251738,
+            "activity/controller_tau_scale": 0.3163947216567178,
+            "activity/full_all_fraction": 0.03134622573852539,
+            "activity/full_fraction": 0.1929428794826821,
+            "activity/receipt_fraction": 0.16246376037597657,
+            "activity/send_strength": 245760.0,
+            "discrete/positive_support_errors": 0.0,
+            "numerical/attention_probability_floor_applied": 0.0,
+            "numerical/positive_floor_events": 0.0,
+            "region/0/candidates": 1048576.0,
+            "region/0/full": 32786.0,
+            "region/0/unsaturated": 16412.0,
+            "region/1/candidates": 65571.0,
+            "region/1/full": 32786.0,
+            "region/1/unsaturated": 16386.0,
+            "region/2/candidates": 65571.0,
+            "region/2/full": 32862.0,
+            "region/2/unsaturated": 16538.0,
+            "region/3/candidates": 65569.0,
+            "region/3/full": 32790.0,
+            "region/3/unsaturated": 16443.0,
+            "region/4/candidates": 65569.0,
+            "region/4/full": 32855.0,
+            "region/4/unsaturated": 16566.0,
+            "region/5/candidates": 65189.0,
+            "region/5/full": 32851.0,
+            "region/5/unsaturated": 16445.0,
+            "region/6/candidates": 65189.0,
+            "region/6/full": 32943.0,
+            "region/6/unsaturated": 16566.0,
+            "region/7/candidates": 81901.0,
+            "region/7/full": 33197.0,
+            "region/7/unsaturated": 17002.0,
+            "region/8/candidates": 87901.0,
+            "region/8/full": 32819.0,
+            "region/8/unsaturated": 16438.0,
+            "region/9/candidates": 92520.0,
+            "region/9/full": 32800.0,
+            "region/9/unsaturated": 16427.0,
+            "resources/npu_allocated_mib": 826.86572265625,
+            "resources/npu_peak_allocated_mib": 34967.27685546875,
+            "resources/npu_reserved_mib": 36906.0,
+            "resources/peak_rss_mib": 3895.1953125,
+            "solver/max_feasibility_residual": 1.1920928955078125e-07,
+            "train/gradient_norm": 1.3555506467819214,
+            "train/loss": 4.472488164901733,
+            "train/lr": 0.0006355456370652375,
+            "train/step_seconds": 2.6394368819892406,
+            "train/tokens": 118463053,
+            "train/tokens_per_second": 6122.896936948189,
+            "work/active_parameter_uses": 60399923808.0,
+            "work/body_candidates": 1703556.0,
+            "work/body_full": 328689.0,
+            "work/body_node_slots": 10485760,
+            "work/boundary_candidates": 0.0,
+            "work/boundary_full": 0.0,
+            "work/candidates": 1703556.0,
+            "work/dense_causal_attention_pairs": 4042260480.0,
+            "work/dense_parameter_uses": 824510513152,
+            "work/full": 328689.0,
+            "work/full_parameter_uses": 18848342016.0,
+            "work/logical_full_attention_pairs": 26807320.0,
+            "work/logical_read_attention_pairs": 368307288.0,
+            "work/max_full_batch": 262144,
+            "work/message_edges_including_input": 1837222.0,
+            "work/node_slots": 10485760,
+            "work/physical_attention_pair_upper_bound": 8053063680,
+            "work/physical_full_rows": 10485760,
+            "work/physical_light_rows": 0.0,
+            "work/prediction_positions": 16384,
+            "work/read_events": 1703556.0,
+            "work/receive_parameter_uses": 35163097088.0,
+            "work/router_multi_unsaturated_rows": 1372.0,
+            "work/shared_parameter_uses": 6388484704.0,
+            "work/state_updates": 1703556.0,
+            "work/unsaturated": 165223.0
+          },
+          "physical_id": 6,
+          "source_commit": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+          "stage": "train",
+          "step": 7406,
+          "training_tokens": 118463053
+        }
+      ]
+    },
+    {
+      "at": "2026-11-14T19:50:51.901843+00:00",
+      "devices": [
+        {
+          "command": [
+            "npu-smi",
+            "info",
+            "-t",
+            "usages",
+            "-i",
+            "0",
+            "-c",
+            "0"
+          ],
+          "metrics": {
+            "Aicore Usage Rate(%)": 20.0,
+            "Aicpu Usage Rate(%)": 0.0,
+            "Aivector Usage Rate(%)": 65.0,
+            "Ctrlcpu Usage Rate(%)": 5.0,
+            "DDR Bandwidth Usage Rate(%)": 0.0,
+            "DDR Capacity(MB)": 0.0,
+            "DDR Hugepages Total(page)": 0.0,
+            "DDR Hugepages Usage Rate(%)": 0.0,
+            "DDR Usage Rate(%)": 0.0,
+            "HBM Bandwidth Usage Rate(%)": 39.0,
+            "HBM Capacity(MB)": 65536.0,
+            "HBM Usage Rate(%)": 61.0,
+            "NPU Utilization(%)": 100.0
+          },
+          "observed_at": "2026-11-14T19:50:51.733762+00:00",
+          "physical_id": 0
+        },
+        {
+          "command": [
+            "npu-smi",
+            "info",
+            "-t",
+            "usages",
+            "-i",
+            "2",
+            "-c",
+            "0"
+          ],
+          "metrics": {
+            "Aicore Usage Rate(%)": 12.0,
+            "Aicpu Usage Rate(%)": 0.0,
+            "Aivector Usage Rate(%)": 64.0,
+            "Ctrlcpu Usage Rate(%)": 2.0,
+            "DDR Bandwidth Usage Rate(%)": 0.0,
+            "DDR Capacity(MB)": 0.0,
+            "DDR Hugepages Total(page)": 0.0,
+            "DDR Hugepages Usage Rate(%)": 0.0,
+            "DDR Usage Rate(%)": 0.0,
+            "HBM Bandwidth Usage Rate(%)": 12.0,
+            "HBM Capacity(MB)": 65536.0,
+            "HBM Usage Rate(%)": 49.0,
+            "NPU Utilization(%)": 89.0
+          },
+          "observed_at": "2026-11-14T19:50:51.824577+00:00",
+          "physical_id": 4
+        },
+        {
+          "command": [
+            "npu-smi",
+            "info",
+            "-t",
+            "usages",
+            "-i",
+            "2",
+            "-c",
+            "1"
+          ],
+          "metrics": {
+            "Aicore Usage Rate(%)": 12.0,
+            "Aicpu Usage Rate(%)": 0.0,
+            "Aivector Usage Rate(%)": 60.0,
+            "Ctrlcpu Usage Rate(%)": 3.0,
+            "DDR Bandwidth Usage Rate(%)": 0.0,
+            "DDR Capacity(MB)": 0.0,
+            "DDR Hugepages Total(page)": 0.0,
+            "DDR Hugepages Usage Rate(%)": 0.0,
+            "DDR Usage Rate(%)": 0.0,
+            "HBM Bandwidth Usage Rate(%)": 48.0,
+            "HBM Capacity(MB)": 65536.0,
+            "HBM Usage Rate(%)": 56.0,
+            "NPU Utilization(%)": 100.0
+          },
+          "observed_at": "2026-11-14T19:50:51.700494+00:00",
+          "physical_id": 5
+        },
+        {
+          "command": [
+            "npu-smi",
+            "info",
+            "-t",
+            "usages",
+            "-i",
+            "3",
+            "-c",
+            "0"
+          ],
+          "metrics": {
+            "Aicore Usage Rate(%)": 12.0,
+            "Aicpu Usage Rate(%)": 0.0,
+            "Aivector Usage Rate(%)": 65.0,
+            "Ctrlcpu Usage Rate(%)": 2.0,
+            "DDR Bandwidth Usage Rate(%)": 0.0,
+            "DDR Capacity(MB)": 0.0,
+            "DDR Hugepages Total(page)": 0.0,
+            "DDR Hugepages Usage Rate(%)": 0.0,
+            "DDR Usage Rate(%)": 0.0,
+            "HBM Bandwidth Usage Rate(%)": 51.0,
+            "HBM Capacity(MB)": 65536.0,
+            "HBM Usage Rate(%)": 61.0,
+            "NPU Utilization(%)": 100.0
+          },
+          "observed_at": "2026-11-14T19:50:51.769422+00:00",
+          "physical_id": 6
+        },
+        {
+          "command": [
+            "npu-smi",
+            "info",
+            "-t",
+            "usages",
+            "-i",
+            "4",
+            "-c",
+            "0"
+          ],
+          "metrics": {
+            "Aicore Usage Rate(%)": 22.0,
+            "Aicpu Usage Rate(%)": 0.0,
+            "Aivector Usage Rate(%)": 63.0,
+            "Ctrlcpu Usage Rate(%)": 1.0,
+            "DDR Bandwidth Usage Rate(%)": 0.0,
+            "DDR Capacity(MB)": 0.0,
+            "DDR Hugepages Total(page)": 0.0,
+            "DDR Hugepages Usage Rate(%)": 0.0,
+            "DDR Usage Rate(%)": 0.0,
+            "HBM Bandwidth Usage Rate(%)": 40.0,
+            "HBM Capacity(MB)": 65536.0,
+            "HBM Usage Rate(%)": 49.0,
+            "NPU Utilization(%)": 100.0
+          },
+          "observed_at": "2026-11-14T19:50:51.864053+00:00",
+          "physical_id": 8
+        },
+        {
+          "command": [
+            "npu-smi",
+            "info",
+            "-t",
+            "usages",
+            "-i",
+            "7",
+            "-c",
+            "1"
+          ],
+          "metrics": {
+            "Aicore Usage Rate(%)": 12.0,
+            "Aicpu Usage Rate(%)": 0.0,
+            "Aivector Usage Rate(%)": 63.0,
+            "Ctrlcpu Usage Rate(%)": 3.0,
+            "DDR Bandwidth Usage Rate(%)": 0.0,
+            "DDR Capacity(MB)": 0.0,
+            "DDR Hugepages Total(page)": 0.0,
+            "DDR Hugepages Usage Rate(%)": 0.0,
+            "DDR Usage Rate(%)": 0.0,
+            "HBM Bandwidth Usage Rate(%)": 51.0,
+            "HBM Capacity(MB)": 65536.0,
+            "HBM Usage Rate(%)": 56.0,
+            "NPU Utilization(%)": 96.0
+          },
+          "observed_at": "2026-11-14T19:50:51.901567+00:00",
+          "physical_id": 15
+        }
+      ],
+      "elapsed_seconds": 16.34727457910776,
+      "index": 3,
+      "jobs": [
+        {
+          "case": "hb-d128-r28-pool-s11",
+          "config": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v10-execution/configs/studies/language/direct-v10/table/main/hb-d128-r28-pool-s11.json",
+            "sha256": "e5eaa67e498182189652b255d2dbf84a78d027417ea71ad3e23e03d2f3cb3c53"
+          },
+          "declared_cpu_quota": "4s",
+          "host_processes": [
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 363.8,
+              "pid": 1121592,
+              "start_ticks": 2225203349
+            },
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 2.3,
+              "pid": 1121653,
+              "start_ticks": 2225203377
+            },
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 0.04,
+              "pid": 1123567,
+              "start_ticks": 2225204098
+            },
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 1705.15,
+              "pid": 1123569,
+              "start_ticks": 2225204103
+            },
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 27575.76,
+              "pid": 1153817,
+              "start_ticks": 2225218938
+            },
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 6.1,
+              "pid": 1154511,
+              "start_ticks": 2225219837
+            }
+          ],
+          "job": "v10-main-hb-d128-r28-pool-s11",
+          "last_update": {
+            "activity/active_parameters_per_position": 75541048.0,
+            "activity/body_full_all_fraction": 1.0,
+            "activity/body_receipt_fraction": 1.0,
+            "activity/full_all_fraction": 1.0,
+            "activity/full_fraction": 1.0,
+            "activity/receipt_fraction": 1.0,
+            "activity/send_strength": 163840.0,
+            "discrete/positive_support_errors": 0.0,
+            "numerical/attention_probability_floor_applied": 0.0,
+            "numerical/positive_floor_events": 669.0,
+            "region/0/candidates": 458752.0,
+            "region/0/full": 458752.0,
+            "region/0/unsaturated": 458752.0,
+            "region/1/candidates": 458752.0,
+            "region/1/full": 458752.0,
+            "region/1/unsaturated": 457665.0,
+            "region/2/candidates": 458752.0,
+            "region/2/full": 458752.0,
+            "region/2/unsaturated": 455339.0,
+            "region/3/candidates": 458752.0,
+            "region/3/full": 458752.0,
+            "region/3/unsaturated": 453051.0,
+            "region/4/candidates": 458752.0,
+            "region/4/full": 458752.0,
+            "region/4/unsaturated": 451184.0,
+            "region/5/candidates": 458752.0,
+            "region/5/full": 458752.0,
+            "region/5/unsaturated": 457311.0,
+            "region/6/candidates": 458752.0,
+            "region/6/full": 458752.0,
+            "region/6/unsaturated": 454522.0,
+            "region/7/candidates": 458752.0,
+            "region/7/full": 458752.0,
+            "region/7/unsaturated": 458586.0,
+            "region/8/candidates": 458752.0,
+            "region/8/full": 458752.0,
+            "region/8/unsaturated": 458528.0,
+            "region/9/candidates": 458752.0,
+            "region/9/full": 458752.0,
+            "region/9/unsaturated": 458653.0,
+            "resources/npu_allocated_mib": 1189.3134765625,
+            "resources/npu_peak_allocated_mib": 25875.93115234375,
+            "resources/npu_reserved_mib": 29214.0,
+            "resources/peak_rss_mib": 3979.19140625,
+            "solver/max_feasibility_residual": 0,
+            "train/gradient_norm": 0.47062548995018005,
+            "train/loss": 3.2907058000564575,
+            "train/lr": 0.0007688315382099426,
+            "train/step_seconds": 3.374032389372587,
+            "train/tokens": 91518666,
+            "train/tokens_per_second": 4831.311060126256,
+            "work/active_parameter_uses": 1237664530432.0,
+            "work/body_candidates": 4587520.0,
+            "work/body_full": 4587520.0,
+            "work/body_node_slots": 4587520,
+            "work/boundary_candidates": 0.0,
+            "work/boundary_full": 0.0,
+            "work/candidates": 4587520.0,
+            "work/dense_causal_attention_pairs": 1768488960.0,
+            "work/dense_parameter_uses": 1237664530432,
+            "work/full": 4587520.0,
+            "work/full_parameter_uses": 1052266987520.0,
+            "work/logical_full_attention_pairs": 589496320.0,
+            "work/logical_read_attention_pairs": 1178992640.0,
+            "work/max_full_batch": 114688,
+            "work/message_edges_including_input": 11468800.0,
+            "work/node_slots": 4587520,
+            "work/physical_attention_pair_upper_bound": 3523215360,
+            "work/physical_full_rows": 4587520,
+            "work/physical_light_rows": 0.0,
+            "work/prediction_positions": 16384,
+            "work/read_events": 4587520.0,
+            "work/receive_parameter_uses": 169852928000.0,
+            "work/router_multi_unsaturated_rows": 163840.0,
+            "work/shared_parameter_uses": 15544614912.0,
+            "work/state_updates": 4587520.0,
+            "work/unsaturated": 4563591.0
+          },
+          "physical_id": 4,
+          "source_commit": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+          "stage": "train",
+          "step": 5721,
+          "training_tokens": 91518666
+        },
+        {
+          "case": "hb-d128-r28-q10-s11",
+          "config": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v10-execution/configs/studies/language/direct-v10/table/main/hb-d128-r28-q10-s11.json",
+            "sha256": "e7d38873d389dd57d24d5badffb7d155313bcc28dca7df5e90d4f936167ee69f"
+          },
+          "declared_cpu_quota": "4s",
+          "host_processes": [
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 363.55,
+              "pid": 1121738,
+              "start_ticks": 2225203415
+            },
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 2.33,
+              "pid": 1121789,
+              "start_ticks": 2225203444
+            },
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 0.03,
+              "pid": 1123635,
+              "start_ticks": 2225204149
+            },
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 1714.87,
+              "pid": 1123661,
+              "start_ticks": 2225204153
+            },
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 30370.9,
+              "pid": 1156019,
+              "start_ticks": 2225221135
+            },
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 7.6,
+              "pid": 1156412,
+              "start_ticks": 2225221842
+            },
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 0.0,
+              "pid": 3498752,
+              "start_ticks": 2227202111
+            }
+          ],
+          "job": "v10-main-hb-d128-r28-q10-s11",
+          "last_update": {
+            "activity/active_parameters_per_position": 10215918.703125,
+            "activity/body_full_all_fraction": 0.10084947858537946,
+            "activity/body_receipt_fraction": 0.2700648716517857,
+            "activity/controller_ema": 0.10092022567913728,
+            "activity/controller_tau_scale": 0.05298089881817023,
+            "activity/full_all_fraction": 0.10084947858537946,
+            "activity/full_fraction": 0.37342686580656825,
+            "activity/receipt_fraction": 0.2700648716517857,
+            "activity/send_strength": 245759.99853515625,
+            "discrete/positive_support_errors": 0.0,
+            "numerical/attention_probability_floor_applied": 0.0,
+            "numerical/positive_floor_events": 0.0,
+            "region/0/candidates": 458752.0,
+            "region/0/full": 46293.0,
+            "region/0/unsaturated": 43215.0,
+            "region/1/candidates": 87377.0,
+            "region/1/full": 40121.0,
+            "region/1/unsaturated": 23717.0,
+            "region/2/candidates": 87377.0,
+            "region/2/full": 46893.0,
+            "region/2/unsaturated": 40378.0,
+            "region/3/candidates": 71435.0,
+            "region/3/full": 49331.0,
+            "region/3/unsaturated": 39516.0,
+            "region/4/candidates": 71435.0,
+            "region/4/full": 36196.0,
+            "region/4/unsaturated": 17911.0,
+            "region/5/candidates": 80630.0,
+            "region/5/full": 52315.0,
+            "region/5/unsaturated": 44366.0,
+            "region/6/candidates": 80630.0,
+            "region/6/full": 48389.0,
+            "region/6/unsaturated": 41074.0,
+            "region/7/candidates": 89959.0,
+            "region/7/full": 44499.0,
+            "region/7/unsaturated": 35867.0,
+            "region/8/candidates": 103568.0,
+            "region/8/full": 42376.0,
+            "region/8/unsaturated": 26053.0,
+            "region/9/candidates": 107765.0,
+            "region/9/full": 56236.0,
+            "region/9/unsaturated": 52923.0,
+            "resources/npu_allocated_mib": 1189.3134765625,
+            "resources/npu_peak_allocated_mib": 25852.84912109375,
+            "resources/npu_reserved_mib": 29194.0,
+            "resources/peak_rss_mib": 3984.19140625,
+            "solver/max_feasibility_residual": 5.960464477539062e-07,
+            "train/gradient_norm": 1.5599991083145142,
+            "train/loss": 3.6802477836608887,
+            "train/lr": 0.0007925308177839247,
+            "train/step_seconds": 4.349305287003517,
+            "train/tokens": 86296429,
+            "train/tokens_per_second": 3733.6997355704057,
+            "work/active_parameter_uses": 167377612032.0,
+            "work/body_candidates": 1238928.0,
+            "work/body_full": 462649.0,
+            "work/body_node_slots": 4587520,
+            "work/boundary_candidates": 0.0,
+            "work/boundary_full": 0.0,
+            "work/candidates": 1238928.0,
+            "work/dense_causal_attention_pairs": 1768488960.0,
+            "work/dense_parameter_uses": 1237664530432,
+            "work/full": 462649.0,
+            "work/full_parameter_uses": 106120577024.0,
+            "work/logical_full_attention_pairs": 50009012.0,
+            "work/logical_read_attention_pairs": 270274584.0,
+            "work/max_full_batch": 114688,
+            "work/message_edges_including_input": 1538192.0,
+            "work/node_slots": 4587520,
+            "work/physical_attention_pair_upper_bound": 3523215360,
+            "work/physical_full_rows": 4587520,
+            "work/physical_light_rows": 0.0,
+            "work/prediction_positions": 16384,
+            "work/read_events": 1238928.0,
+            "work/receive_parameter_uses": 45871309824.0,
+            "work/router_multi_unsaturated_rows": 110618.0,
+            "work/shared_parameter_uses": 15385725184.0,
+            "work/state_updates": 1238928.0,
+            "work/unsaturated": 365020.0
+          },
+          "physical_id": 8,
+          "source_commit": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+          "stage": "train",
+          "step": 5395,
+          "training_tokens": 86296429
+        },
+        {
+          "case": "hb-d128-r64-q3-s11",
+          "config": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v10-execution/configs/studies/language/direct-v10/table/main/hb-d128-r64-q3-s11.json",
+            "sha256": "2d7e4c835557d8c8846d4bdcde1f1f771603855ab22781bafa11994fa9f6caa2"
+          },
+          "declared_cpu_quota": "4s",
+          "host_processes": [
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 362.07,
+              "pid": 1121322,
+              "start_ticks": 2225203222
+            },
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 2.36,
+              "pid": 1121355,
+              "start_ticks": 2225203250
+            },
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 0.03,
+              "pid": 1123294,
+              "start_ticks": 2225203979
+            },
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 1711.35,
+              "pid": 1123296,
+              "start_ticks": 2225203983
+            },
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 25669.25,
+              "pid": 1908178,
+              "start_ticks": 2225227986
+            },
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 6.76,
+              "pid": 1909154,
+              "start_ticks": 2225228888
+            }
+          ],
+          "job": "v10-main-hb-d128-r64-q3-s11",
+          "last_update": {
+            "activity/active_parameters_per_position": 9354393.890625,
+            "activity/body_full_all_fraction": 0.03131227493286133,
+            "activity/body_receipt_fraction": 0.16116418838500976,
+            "activity/controller_ema": 0.03131137105688781,
+            "activity/controller_tau_scale": 0.4915877781444532,
+            "activity/full_all_fraction": 0.03131227493286133,
+            "activity/full_fraction": 0.1942880440539218,
+            "activity/receipt_fraction": 0.16116418838500976,
+            "activity/send_strength": 245759.99975585938,
+            "discrete/positive_support_errors": 0.0,
+            "numerical/attention_probability_floor_applied": 0.0,
+            "numerical/positive_floor_events": 0.0,
+            "region/0/candidates": 1048576.0,
+            "region/0/full": 32788.0,
+            "region/0/unsaturated": 16405.0,
+            "region/1/candidates": 65572.0,
+            "region/1/full": 32796.0,
+            "region/1/unsaturated": 16404.0,
+            "region/2/candidates": 65572.0,
+            "region/2/full": 32793.0,
+            "region/2/unsaturated": 16405.0,
+            "region/3/candidates": 65527.0,
+            "region/3/full": 32788.0,
+            "region/3/unsaturated": 16454.0,
+            "region/4/candidates": 65527.0,
+            "region/4/full": 32778.0,
+            "region/4/unsaturated": 16397.0,
+            "region/5/candidates": 57637.0,
+            "region/5/full": 32814.0,
+            "region/5/unsaturated": 16426.0,
+            "region/6/candidates": 57637.0,
+            "region/6/full": 32821.0,
+            "region/6/unsaturated": 16432.0,
+            "region/7/candidates": 81914.0,
+            "region/7/full": 32786.0,
+            "region/7/unsaturated": 16399.0,
+            "region/8/candidates": 77187.0,
+            "region/8/full": 33124.0,
+            "region/8/unsaturated": 16745.0,
+            "region/9/candidates": 104780.0,
+            "region/9/full": 32845.0,
+            "region/9/unsaturated": 16475.0,
+            "resources/npu_allocated_mib": 2731.8369140625,
+            "resources/npu_peak_allocated_mib": 30829.61279296875,
+            "resources/npu_reserved_mib": 33712.0,
+            "resources/peak_rss_mib": 7115.359375,
+            "solver/max_feasibility_residual": 1.1920928955078125e-07,
+            "train/gradient_norm": 1.033454179763794,
+            "train/loss": 4.515279233455658,
+            "train/lr": 0.0008804979533066196,
+            "train/step_seconds": 4.850379776209593,
+            "train/tokens": 64538240,
+            "train/tokens_per_second": 3263.8681361918816,
+            "work/active_parameter_uses": 153262389504.0,
+            "work/body_candidates": 1689929.0,
+            "work/body_full": 328333.0,
+            "work/body_node_slots": 10485760,
+            "work/boundary_candidates": 0.0,
+            "work/boundary_full": 0.0,
+            "work/candidates": 1689929.0,
+            "work/dense_causal_attention_pairs": 4042260480.0,
+            "work/dense_parameter_uses": 2809188057088,
+            "work/full": 328333.0,
+            "work/full_parameter_uses": 75311710208.0,
+            "work/logical_full_attention_pairs": 26489383.0,
+            "work/logical_read_attention_pairs": 363436252.0,
+            "work/max_full_batch": 131072,
+            "work/message_edges_including_input": 1836306.0,
+            "work/node_slots": 10485760,
+            "work/physical_attention_pair_upper_bound": 8053063680,
+            "work/physical_full_rows": 10485760,
+            "work/physical_light_rows": 0.0,
+            "work/prediction_positions": 16384,
+            "work/read_events": 1689929.0,
+            "work/receive_parameter_uses": 62569621504.0,
+            "work/router_multi_unsaturated_rows": 698.0,
+            "work/shared_parameter_uses": 15381057792.0,
+            "work/state_updates": 1689929.0,
+            "work/unsaturated": 164542.0
+          },
+          "physical_id": 5,
+          "source_commit": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+          "stage": "train",
+          "step": 4035,
+          "training_tokens": 64538240
+        },
+        {
+          "case": "hb-d128-r64-q3-s22",
+          "config": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v10-execution/configs/studies/language/direct-v10/table/main/hb-d128-r64-q3-s22.json",
+            "sha256": "e374334da59c8a9c2914df6b3ff6aaeee538e29f839f5ca80f9a2dd7d9dadfb5"
+          },
+          "declared_cpu_quota": "4s",
+          "host_processes": [
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 351.66,
+              "pid": 1121371,
+              "start_ticks": 2225203254
+            },
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 2.27,
+              "pid": 1121444,
+              "start_ticks": 2225203282
+            },
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 0.03,
+              "pid": 1123345,
+              "start_ticks": 2225203998
+            },
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 1671.25,
+              "pid": 1123352,
+              "start_ticks": 2225204003
+            },
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 26415.21,
+              "pid": 1910751,
+              "start_ticks": 2225229978
+            },
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 5.59,
+              "pid": 1912048,
+              "start_ticks": 2225231534
+            }
+          ],
+          "job": "v10-main-hb-d128-r64-q3-s22",
+          "last_update": {
+            "activity/active_parameters_per_position": 9135066.40625,
+            "activity/body_full_all_fraction": 0.03128509521484375,
+            "activity/body_receipt_fraction": 0.15207672119140625,
+            "activity/controller_ema": 0.03127846328207479,
+            "activity/controller_tau_scale": 0.5913506274947056,
+            "activity/full_all_fraction": 0.03128509521484375,
+            "activity/full_fraction": 0.20571915918326394,
+            "activity/receipt_fraction": 0.15207672119140625,
+            "activity/send_strength": 245759.99975585938,
+            "discrete/positive_support_errors": 0.0,
+            "numerical/attention_probability_floor_applied": 0.0,
+            "numerical/positive_floor_events": 0.0,
+            "region/0/candidates": 1048576.0,
+            "region/0/full": 32770.0,
+            "region/0/unsaturated": 16386.0,
+            "region/1/candidates": 52275.0,
+            "region/1/full": 32785.0,
+            "region/1/unsaturated": 16484.0,
+            "region/2/candidates": 52275.0,
+            "region/2/full": 32822.0,
+            "region/2/unsaturated": 16453.0,
+            "region/3/candidates": 59488.0,
+            "region/3/full": 32842.0,
+            "region/3/unsaturated": 16476.0,
+            "region/4/candidates": 59488.0,
+            "region/4/full": 32805.0,
+            "region/4/unsaturated": 16453.0,
+            "region/5/candidates": 49410.0,
+            "region/5/full": 32774.0,
+            "region/5/unsaturated": 16384.0,
+            "region/6/candidates": 49410.0,
+            "region/6/full": 32816.0,
+            "region/6/unsaturated": 16416.0,
+            "region/7/candidates": 76084.0,
+            "region/7/full": 32776.0,
+            "region/7/unsaturated": 16389.0,
+            "region/8/candidates": 64237.0,
+            "region/8/full": 32784.0,
+            "region/8/unsaturated": 16460.0,
+            "region/9/candidates": 83397.0,
+            "region/9/full": 32874.0,
+            "region/9/unsaturated": 16509.0,
+            "resources/npu_allocated_mib": 2731.8369140625,
+            "resources/npu_peak_allocated_mib": 30829.61279296875,
+            "resources/npu_reserved_mib": 33712.0,
+            "resources/peak_rss_mib": 6963.8671875,
+            "solver/max_feasibility_residual": 2.384185791015625e-07,
+            "train/gradient_norm": 1.283591389656067,
+            "train/loss": 4.212761670351028,
+            "train/lr": 0.0008896475007335921,
+            "train/step_seconds": 4.630678169429302,
+            "train/tokens": 61945238,
+            "train/tokens_per_second": 3411.5953262083403,
+            "work/active_parameter_uses": 149668928000.0,
+            "work/body_candidates": 1594640.0,
+            "work/body_full": 328048.0,
+            "work/body_node_slots": 10485760,
+            "work/boundary_candidates": 0.0,
+            "work/boundary_full": 0.0,
+            "work/candidates": 1594640.0,
+            "work/dense_causal_attention_pairs": 4042260480.0,
+            "work/dense_parameter_uses": 2809188057088,
+            "work/full": 328048.0,
+            "work/full_parameter_uses": 75246338048.0,
+            "work/logical_full_attention_pairs": 38930974.0,
+            "work/logical_read_attention_pairs": 393377736.0,
+            "work/max_full_batch": 131072,
+            "work/message_edges_including_input": 1835678.0,
+            "work/node_slots": 10485760,
+            "work/physical_attention_pair_upper_bound": 8053063680,
+            "work/physical_full_rows": 10485760,
+            "work/physical_light_rows": 0.0,
+            "work/prediction_positions": 16384,
+            "work/read_events": 1594640.0,
+            "work/receive_parameter_uses": 59041542144.0,
+            "work/router_multi_unsaturated_rows": 568.0,
+            "work/shared_parameter_uses": 15381047808.0,
+            "work/state_updates": 1594640.0,
+            "work/unsaturated": 164410.0
+          },
+          "physical_id": 15,
+          "source_commit": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+          "stage": "train",
+          "step": 3873,
+          "training_tokens": 61945238
+        },
+        {
+          "case": "hb-d64-r64-q3-s11",
+          "config": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v10-execution/configs/studies/language/direct-v10/table/main/hb-d64-r64-q3-s11.json",
+            "sha256": "4498fbb92058e0dc4388b71669786f134cf662bb19da0d516f465d730f107691"
+          },
+          "declared_cpu_quota": "4s",
+          "host_processes": [
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 369.99,
+              "pid": 1121461,
+              "start_ticks": 2225203286
+            },
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 2.25,
+              "pid": 1121514,
+              "start_ticks": 2225203314
+            },
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 0.04,
+              "pid": 1123453,
+              "start_ticks": 2225204031
+            },
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 1702.8,
+              "pid": 1123454,
+              "start_ticks": 2225204035
+            },
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 26681.9,
+              "pid": 1152190,
+              "start_ticks": 2225217446
+            },
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 7.75,
+              "pid": 1153099,
+              "start_ticks": 2225218432
+            }
+          ],
+          "job": "v10-main-hb-d64-r64-q3-s11",
+          "last_update": {
+            "activity/active_parameters_per_position": 3688428.556640625,
+            "activity/body_full_all_fraction": 0.031818580627441403,
+            "activity/body_receipt_fraction": 0.16129617691040038,
+            "activity/controller_ema": 0.03182546533511714,
+            "activity/controller_tau_scale": 0.05309915656231238,
+            "activity/full_all_fraction": 0.031818580627441403,
+            "activity/full_fraction": 0.197268039682779,
+            "activity/receipt_fraction": 0.16129617691040038,
+            "activity/send_strength": 245759.99951171875,
+            "discrete/positive_support_errors": 0.0,
+            "numerical/attention_probability_floor_applied": 0.0,
+            "numerical/positive_floor_events": 0.0,
+            "region/0/candidates": 1048576.0,
+            "region/0/full": 32769.0,
+            "region/0/unsaturated": 16385.0,
+            "region/1/candidates": 65538.0,
+            "region/1/full": 32803.0,
+            "region/1/unsaturated": 16439.0,
+            "region/2/candidates": 65538.0,
+            "region/2/full": 32772.0,
+            "region/2/unsaturated": 16389.0,
+            "region/3/candidates": 61604.0,
+            "region/3/full": 32803.0,
+            "region/3/unsaturated": 16405.0,
+            "region/4/candidates": 61604.0,
+            "region/4/full": 32798.0,
+            "region/4/unsaturated": 16387.0,
+            "region/5/candidates": 65292.0,
+            "region/5/full": 32771.0,
+            "region/5/unsaturated": 16386.0,
+            "region/6/candidates": 65292.0,
+            "region/6/full": 32777.0,
+            "region/6/unsaturated": 16411.0,
+            "region/7/candidates": 83190.0,
+            "region/7/full": 32794.0,
+            "region/7/unsaturated": 16410.0,
+            "region/8/candidates": 70637.0,
+            "region/8/full": 32774.0,
+            "region/8/unsaturated": 16392.0,
+            "region/9/candidates": 104042.0,
+            "region/9/full": 38581.0,
+            "region/9/unsaturated": 25425.0,
+            "resources/npu_allocated_mib": 826.86572265625,
+            "resources/npu_peak_allocated_mib": 34967.27685546875,
+            "resources/npu_reserved_mib": 36906.0,
+            "resources/peak_rss_mib": 3890.0703125,
+            "solver/max_feasibility_residual": 3.5762786865234375e-07,
+            "train/gradient_norm": 4.305222511291504,
+            "train/loss": 4.3674492835998535,
+            "train/lr": 0.0006899309638163944,
+            "train/step_seconds": 2.746924865990877,
+            "train/tokens": 107829593,
+            "train/tokens_per_second": 5775.185261311289,
+            "work/active_parameter_uses": 60431213472.0,
+            "work/body_candidates": 1691313.0,
+            "work/body_full": 333642.0,
+            "work/body_node_slots": 10485760,
+            "work/boundary_candidates": 0.0,
+            "work/boundary_full": 0.0,
+            "work/candidates": 1691313.0,
+            "work/dense_causal_attention_pairs": 4042260480.0,
+            "work/dense_parameter_uses": 824510513152,
+            "work/full": 333642.0,
+            "work/full_parameter_uses": 19132366848.0,
+            "work/logical_full_attention_pairs": 29469604.0,
+            "work/logical_read_attention_pairs": 373014648.0,
+            "work/max_full_batch": 262144,
+            "work/message_edges_including_input": 1835386.0,
+            "work/node_slots": 10485760,
+            "work/physical_attention_pair_upper_bound": 8053063680,
+            "work/physical_full_rows": 10485760,
+            "work/physical_light_rows": 0.0,
+            "work/prediction_positions": 16384,
+            "work/read_events": 1691313.0,
+            "work/receive_parameter_uses": 34910391296.0,
+            "work/router_multi_unsaturated_rows": 7228.0,
+            "work/shared_parameter_uses": 6388455328.0,
+            "work/state_updates": 1691313.0,
+            "work/unsaturated": 173029.0
+          },
+          "physical_id": 0,
+          "source_commit": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+          "stage": "train",
+          "step": 6741,
+          "training_tokens": 107829593
+        },
+        {
+          "case": "hb-d64-r64-q3-s22",
+          "config": {
+            "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v10-execution/configs/studies/language/direct-v10/table/main/hb-d64-r64-q3-s22.json",
+            "sha256": "5eecd2a82918b5b98e5073ed5cc21cf5b3855c4d892018ead777fd7659f697ec"
+          },
+          "declared_cpu_quota": "4s",
+          "host_processes": [
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 370.4,
+              "pid": 1121527,
+              "start_ticks": 2225203317
+            },
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 2.26,
+              "pid": 1121578,
+              "start_ticks": 2225203345
+            },
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 0.03,
+              "pid": 1123524,
+              "start_ticks": 2225204078
+            },
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 1709.86,
+              "pid": 1123539,
+              "start_ticks": 2225204083
+            },
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 25361.46,
+              "pid": 1152023,
+              "start_ticks": 2225217335
+            },
+            {
+              "cpu_controller": [
+                "12:cpu,cpuacct:/user.slice"
+              ],
+              "cpu_seconds": 7.77,
+              "pid": 1152820,
+              "start_ticks": 2225218016
+            }
+          ],
+          "job": "v10-main-hb-d64-r64-q3-s22",
+          "last_update": {
+            "activity/active_parameters_per_position": 3687207.990234375,
+            "activity/body_full_all_fraction": 0.03134708404541016,
+            "activity/body_receipt_fraction": 0.16251354217529296,
+            "activity/controller_ema": 0.03135329717596262,
+            "activity/controller_tau_scale": 0.3160816403385128,
+            "activity/full_all_fraction": 0.03134708404541016,
+            "activity/full_fraction": 0.1928890578952372,
+            "activity/receipt_fraction": 0.16251354217529296,
+            "activity/send_strength": 245759.998046875,
+            "discrete/positive_support_errors": 0.0,
+            "gradient/router_l2": 0.10137965530157089,
+            "numerical/attention_probability_floor_applied": 0.0,
+            "numerical/positive_floor_events": 0.0,
+            "region/0/candidates": 1048576.0,
+            "region/0/full": 32790.0,
+            "region/0/unsaturated": 16415.0,
+            "region/1/candidates": 65579.0,
+            "region/1/full": 32789.0,
+            "region/1/unsaturated": 16386.0,
+            "region/2/candidates": 65579.0,
+            "region/2/full": 32865.0,
+            "region/2/unsaturated": 16549.0,
+            "region/3/candidates": 65577.0,
+            "region/3/full": 32803.0,
+            "region/3/unsaturated": 16447.0,
+            "region/4/candidates": 65577.0,
+            "region/4/full": 32856.0,
+            "region/4/unsaturated": 16563.0,
+            "region/5/candidates": 65234.0,
+            "region/5/full": 32842.0,
+            "region/5/unsaturated": 16443.0,
+            "region/6/candidates": 65234.0,
+            "region/6/full": 32934.0,
+            "region/6/unsaturated": 16550.0,
+            "region/7/candidates": 81954.0,
+            "region/7/full": 33174.0,
+            "region/7/unsaturated": 16939.0,
+            "region/8/candidates": 88715.0,
+            "region/8/full": 32834.0,
+            "region/8/unsaturated": 16449.0,
+            "region/9/candidates": 92053.0,
+            "region/9/full": 32811.0,
+            "region/9/unsaturated": 16427.0,
+            "resources/npu_allocated_mib": 826.86572265625,
+            "resources/npu_peak_allocated_mib": 34967.27685546875,
+            "resources/npu_reserved_mib": 36906.0,
+            "resources/peak_rss_mib": 3895.1953125,
+            "solver/max_feasibility_residual": 2.384185791015625e-07,
+            "train/gradient_norm": 19.782350540161133,
+            "train/loss": 4.460487723350525,
+            "train/lr": 0.0006353808146172342,
+            "train/step_seconds": 2.6380865648388863,
+            "train/tokens": 118494805,
+            "train/tokens_per_second": 5901.625900949476,
+            "work/active_parameter_uses": 60411215712.0,
+            "work/body_candidates": 1704078.0,
+            "work/body_full": 328698.0,
+            "work/body_node_slots": 10485760,
+            "work/boundary_candidates": 0.0,
+            "work/boundary_full": 0.0,
+            "work/candidates": 1704078.0,
+            "work/dense_causal_attention_pairs": 4042260480.0,
+            "work/dense_parameter_uses": 824510513152,
+            "work/full": 328698.0,
+            "work/full_parameter_uses": 18848858112.0,
+            "work/logical_full_attention_pairs": 27587300.0,
+            "work/logical_read_attention_pairs": 371975472.0,
+            "work/max_full_batch": 262144,
+            "work/message_edges_including_input": 1837238.0,
+            "work/node_slots": 10485760,
+            "work/physical_attention_pair_upper_bound": 8053063680,
+            "work/physical_full_rows": 10485760,
+            "work/physical_light_rows": 0.0,
+            "work/prediction_positions": 16384,
+            "work/read_events": 1704078.0,
+            "work/receive_parameter_uses": 35173872640.0,
+            "work/router_multi_unsaturated_rows": 1314.0,
+            "work/shared_parameter_uses": 6388484960.0,
+            "work/state_updates": 1704078.0,
+            "work/unsaturated": 165168.0
+          },
+          "physical_id": 6,
+          "source_commit": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+          "stage": "train",
+          "step": 7408,
+          "training_tokens": 118494805
+        }
+      ]
+    }
+  ],
+  "schema": "tide-v10-live-resource-observation-v1",
+  "scope": "Device-level sampled counters and existing service-owned process CPU deltas; no profiler, model execution, allocation or active-input mutation.",
+  "summary": [
+    {
+      "cases": [
+        "hb-d64-r64-q3-s11"
+      ],
+      "host_cpu": {
+        "average_cores": 1.4310086005825946,
+        "changed_process_set": false,
+        "declared_cpu_quota": "4s",
+        "scope": "CPU seconds of persistent service-owned PIDs; shared v1 CPU controller is not per-unit attribution"
+      },
+      "metrics": {
+        "Aicore Usage Rate(%)": {
+          "max": 23.0,
+          "median": 20.0,
+          "min": 15.0
+        },
+        "Aicpu Usage Rate(%)": {
+          "max": 0.0,
+          "median": 0.0,
+          "min": 0.0
+        },
+        "Aivector Usage Rate(%)": {
+          "max": 68.0,
+          "median": 66.5,
+          "min": 62.0
+        },
+        "Ctrlcpu Usage Rate(%)": {
+          "max": 5.0,
+          "median": 3.5,
+          "min": 1.0
+        },
+        "HBM Bandwidth Usage Rate(%)": {
+          "max": 50.0,
+          "median": 39.5,
+          "min": 31.0
+        },
+        "NPU Utilization(%)": {
+          "max": 100.0,
+          "median": 100.0,
+          "min": 100.0
+        }
+      },
+      "physical_id": 0
+    },
+    {
+      "cases": [
+        "hb-d128-r28-pool-s11"
+      ],
+      "host_cpu": {
+        "average_cores": 1.4970145323436717,
+        "changed_process_set": false,
+        "declared_cpu_quota": "4s",
+        "scope": "CPU seconds of persistent service-owned PIDs; shared v1 CPU controller is not per-unit attribution"
+      },
+      "metrics": {
+        "Aicore Usage Rate(%)": {
+          "max": 24.0,
+          "median": 16.5,
+          "min": 9.0
+        },
+        "Aicpu Usage Rate(%)": {
+          "max": 0.0,
+          "median": 0.0,
+          "min": 0.0
+        },
+        "Aivector Usage Rate(%)": {
+          "max": 64.0,
+          "median": 64.0,
+          "min": 50.0
+        },
+        "Ctrlcpu Usage Rate(%)": {
+          "max": 5.0,
+          "median": 3.5,
+          "min": 2.0
+        },
+        "HBM Bandwidth Usage Rate(%)": {
+          "max": 35.0,
+          "median": 20.0,
+          "min": 0.0
+        },
+        "NPU Utilization(%)": {
+          "max": 100.0,
+          "median": 100.0,
+          "min": 89.0
+        }
+      },
+      "physical_id": 4
+    },
+    {
+      "cases": [
+        "hb-d128-r64-q3-s11"
+      ],
+      "host_cpu": {
+        "average_cores": 1.4620313885103016,
+        "changed_process_set": false,
+        "declared_cpu_quota": "4s",
+        "scope": "CPU seconds of persistent service-owned PIDs; shared v1 CPU controller is not per-unit attribution"
+      },
+      "metrics": {
+        "Aicore Usage Rate(%)": {
+          "max": 16.0,
+          "median": 13.5,
+          "min": 11.0
+        },
+        "Aicpu Usage Rate(%)": {
+          "max": 0.0,
+          "median": 0.0,
+          "min": 0.0
+        },
+        "Aivector Usage Rate(%)": {
+          "max": 68.0,
+          "median": 64.0,
+          "min": 60.0
+        },
+        "Ctrlcpu Usage Rate(%)": {
+          "max": 5.0,
+          "median": 3.0,
+          "min": 1.0
+        },
+        "HBM Bandwidth Usage Rate(%)": {
+          "max": 57.0,
+          "median": 41.0,
+          "min": 25.0
+        },
+        "NPU Utilization(%)": {
+          "max": 100.0,
+          "median": 100.0,
+          "min": 96.0
+        }
+      },
+      "physical_id": 5
+    },
+    {
+      "cases": [
+        "hb-d64-r64-q3-s22"
+      ],
+      "host_cpu": {
+        "average_cores": 1.4013059312899527,
+        "changed_process_set": false,
+        "declared_cpu_quota": "4s",
+        "scope": "CPU seconds of persistent service-owned PIDs; shared v1 CPU controller is not per-unit attribution"
+      },
+      "metrics": {
+        "Aicore Usage Rate(%)": {
+          "max": 20.0,
+          "median": 12.0,
+          "min": 11.0
+        },
+        "Aicpu Usage Rate(%)": {
+          "max": 0.0,
+          "median": 0.0,
+          "min": 0.0
+        },
+        "Aivector Usage Rate(%)": {
+          "max": 68.0,
+          "median": 65.0,
+          "min": 58.0
+        },
+        "Ctrlcpu Usage Rate(%)": {
+          "max": 5.0,
+          "median": 4.5,
+          "min": 2.0
+        },
+        "HBM Bandwidth Usage Rate(%)": {
+          "max": 51.0,
+          "median": 49.5,
+          "min": 42.0
+        },
+        "NPU Utilization(%)": {
+          "max": 100.0,
+          "median": 100.0,
+          "min": 100.0
+        }
+      },
+      "physical_id": 6
+    },
+    {
+      "cases": [
+        "hb-d128-r28-q10-s11"
+      ],
+      "host_cpu": {
+        "average_cores": 1.720114581696534,
+        "changed_process_set": true,
+        "declared_cpu_quota": "4s",
+        "scope": "CPU seconds of persistent service-owned PIDs; shared v1 CPU controller is not per-unit attribution"
+      },
+      "metrics": {
+        "Aicore Usage Rate(%)": {
+          "max": 24.0,
+          "median": 23.0,
+          "min": 0.0
+        },
+        "Aicpu Usage Rate(%)": {
+          "max": 0.0,
+          "median": 0.0,
+          "min": 0.0
+        },
+        "Aivector Usage Rate(%)": {
+          "max": 65.0,
+          "median": 63.0,
+          "min": 41.0
+        },
+        "Ctrlcpu Usage Rate(%)": {
+          "max": 11.0,
+          "median": 5.5,
+          "min": 1.0
+        },
+        "HBM Bandwidth Usage Rate(%)": {
+          "max": 53.0,
+          "median": 36.0,
+          "min": 14.0
+        },
+        "NPU Utilization(%)": {
+          "max": 100.0,
+          "median": 100.0,
+          "min": 89.0
+        }
+      },
+      "physical_id": 8
+    },
+    {
+      "cases": [
+        "hb-d128-r64-q3-s22"
+      ],
+      "host_cpu": {
+        "average_cores": 1.4059263465132166,
+        "changed_process_set": false,
+        "declared_cpu_quota": "4s",
+        "scope": "CPU seconds of persistent service-owned PIDs; shared v1 CPU controller is not per-unit attribution"
+      },
+      "metrics": {
+        "Aicore Usage Rate(%)": {
+          "max": 23.0,
+          "median": 14.0,
+          "min": 12.0
+        },
+        "Aicpu Usage Rate(%)": {
+          "max": 0.0,
+          "median": 0.0,
+          "min": 0.0
+        },
+        "Aivector Usage Rate(%)": {
+          "max": 67.0,
+          "median": 64.0,
+          "min": 61.0
+        },
+        "Ctrlcpu Usage Rate(%)": {
+          "max": 9.0,
+          "median": 4.0,
+          "min": 2.0
+        },
+        "HBM Bandwidth Usage Rate(%)": {
+          "max": 51.0,
+          "median": 38.5,
+          "min": 34.0
+        },
+        "NPU Utilization(%)": {
+          "max": 100.0,
+          "median": 100.0,
+          "min": 96.0
+        }
+      },
+      "physical_id": 15
+    }
+  ]
+}
