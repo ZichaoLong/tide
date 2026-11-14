@@ -33,9 +33,20 @@ def review():
                 lens_run='tl-'+job,lens_status=projection.get('status','not_yet_recorded'),
                 source_commit=read(spec).get('source',{}).get('commit'),
                 descendants_terminated=observed['termination_verified_now']))
+    supplemental=[]
+    for name in ('v10-admission-aligned',):
+        spec=ROOT/'artifacts/jobs'/name/'job.json'
+        if spec.is_file():
+            observed=inspect(spec);result=read(ROOT/'runs'/name/'result.json')
+            supplemental.append(dict(job=name,execution=observed['state'].get('state'),
+                physical_id=(observed.get('queue') or {}).get('physical_id'),result_state=result.get('state','unchecked'),
+                source_commit=read(spec).get('source',{}).get('commit'),
+                cases=[dict(id=c['id'],state=c['state'],forward=c['checks']['forward'],
+                    strict_vjp_failures=sum(v['state']=='failed' for v in c['checks'].get('parameter_vjp',{}).values()))
+                    for c in result.get('cases',[])],descendants_terminated=observed['termination_verified_now']))
     return dict(schema='tide-v10-observation-v1',at=now(),controller_state=controller.get('state','not_submitted'),
         source_commit=controller.get('source'),deadline_epoch=controller.get('deadline_epoch'),
-        resources=controller.get('resources'),jobs=rows,
+        resources=controller.get('resources'),jobs=rows,supplemental_checks=supplemental,
         scientific_review='awaiting; strict numerical, discrete mechanisms, recovery and learning remain separate')
 
 

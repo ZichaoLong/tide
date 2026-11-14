@@ -3,7 +3,9 @@
 本轮研究表见[固定配置/预算](language-capacity-activity-v10.md)，
 [校准和参数清单](../evidence/direct-v10-selection.json)。独立直接实现，不接入新基座。
 主配置目录`configs/studies/language/direct-v10/table/main/`，固定执行源码目录`.local/source-v10-execution`；
-实际commit和tree SHA由该目录`.tide-source.json`及`artifacts/jobs/v10-controller/job.json`给出。
+实际commit **0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d**，tree SHA
+`b42a2533e88677e6c7e1fa298d2ba94b122bcbb8f873b851cc5e8ba517eef798`，
+见该目录`.tide-source.json`及`artifacts/jobs/v10-controller/job.json`。
 本轮私有环境`.venv-positive-floor-v1`保持原安装74e7bbd，数学0770593；运行identity记录实际Torch/TorchNPU/CANN来源。
 
 共同截止**2026-11-16 21:51:33北京时间**；最多12个单卡worker，每worker至多4CPU线程/72GiB主机内存。
@@ -63,6 +65,7 @@ python scripts/observe_v9_resources.py --campaign v10 --samples 8 --interval 4 -
 ```sh
 systemctl --user stop tide-lab-v10-controller.service
 systemctl --user stop 'tide-lab-v10-main-*.service' 'tide-lab-v10-extend-*.service' 'tide-lab-v10-confirm-*.service'
+systemctl --user stop tide-lab-v10-admission-aligned.service
 python scripts/review_direct_v10.py
 ```
 
@@ -85,3 +88,11 @@ train_arguments = [--resume, 原轨迹/train/latest.pt,
 
 当前控制器不自动恢复失败任务，不悄悄延长48h或覆盖原失败。后续唤醒本会话可按上述条件建立新身份，
 恢复记录必须补入交接；不得把权重可加载称为长轨迹精确重放。小型三更新新进程检查与正式实际续训分别记录。
+
+## 单独的检查口径修正
+
+`v10-admission-aligned`使用固定6125c751，对四个quad主形状补做同warmup设置的CPU/NPU检查。
+它遵守同一12slot锁，目前可排队，最晚11月15日01:51:33结束，不读取或修改任何活动权重。
+0ea05d61原准入CPU参照未同步`set_progress`，其大幅差异属于不同活动设置的无效等价比较，
+原failed保留，不解释成普通浮点误差；新检查的有限超差仍使用原阈值。具体见[补证说明](direct-v10-optimization.md)。
+本项只更新检查资格，不是新训练候选或正式轨迹的源码替换。

@@ -13716,6 +13716,7 @@
     {
       "budget": "\u5171\u4eab48h\u81f311\u670816\u65e521:51:33\uff1b\u6700\u591a12NPU worker\uff1b\u6700\u5927200M\uff1b64GiB\u76ee\u6807/96GiB\u4e0a\u9650\uff0c\u65e0\u7d2f\u8ba1\u7b97\u65f6\u4e0a\u9650\u3002",
       "decision": "\u6309\u56fa\u5b9a\u6709\u9650\u8868\u6267\u884c\uff1b\u8d28\u91cf\u3001\u6570\u503c\u548c\u6027\u80fd\u5206\u522b\u5ba1\u9605\uff0c\u4e0d\u81ea\u52a8\u6269\u5019\u9009\u3002",
+      "execution_note": "11\u670814\u65e522:25\u9644\u8fd1\uff1a20\u4e3b\u4f5c\u4e1a\u5df2\u63a5\u6536\uff0c12\u8bad\u7ec3/8\u6392\u961f\uff1b\u5df2\u542f\u52a8\u8005\u4e09\u6b65\u65b0\u8fdb\u7a0b\u6062\u590d\u5168\u901a\u8fc7\u3002\u539fquad CPU\u53c2\u7167\u7f3awarmup\u540c\u6b65\uff0c\u5927\u5dee\u5f02\u65e0\u6548\u6bd4\u8f83\u4fdd\u7559\uff1b\u65b0NPU\u5bf9\u9f50\u590d\u6838\u5355\u72ec\u6392\u961f\u3002\u8d28\u91cf\u7ed3\u8bbaawaiting\u3002",
       "id": "V10-PERF",
       "kind": "experiment",
       "question": "\u7279\u5316\u662f\u5426\u8ba9171M\u4f4e\u6d3b\u52a8\u6bd4\u8f83\u572848h\u5185\u53ef\u884c\uff1f",
@@ -13731,12 +13732,63 @@
         {
           "label": "\u67e5\u770b\u3001Lens\u3001\u505c\u6b62\u548c\u6062\u590d",
           "path": "docs/studies/direct-v10-operations.md"
+        },
+        {
+          "label": "\u5b9e\u9645\u670d\u52a1\u3001\u7269\u7406\u8bbe\u5907\u4e0e\u6062\u590d/Lens\u72b6\u6001",
+          "path": "docs/evidence/direct-v10-observations.json"
+        },
+        {
+          "label": "AICore/AIVector/AICPU\u516b\u6b21\u91c7\u6837",
+          "path": "docs/evidence/direct-v10-resources.json"
         }
       ],
-      "runs": [],
-      "status": "completed",
+      "runs": [
+        {
+          "config": "scripts/probe_attention_v10.py",
+          "id": "tl-v10-fusion-probe",
+          "record": "runs/v10-fusion-probe/result.json",
+          "source_commit": "6c927b32",
+          "status": "completed"
+        },
+        {
+          "config": "scripts/benchmark_specialized_v10.py",
+          "id": "tl-v10-benchmark-d64",
+          "record": "runs/v10-benchmark-d64/result.json",
+          "source_commit": "89217ec3",
+          "status": "completed"
+        },
+        {
+          "config": "scripts/benchmark_specialized_v10.py",
+          "id": "tl-v10-benchmark-d128",
+          "record": "runs/v10-benchmark-d128/result.json",
+          "source_commit": "89217ec3",
+          "status": "completed"
+        },
+        {
+          "config": "scripts/calibrate_v10_controls.py",
+          "id": "tl-v10-cal-controls",
+          "record": "runs/v10-cal-controls/result.json",
+          "source_commit": "5e07d8a2",
+          "status": "completed"
+        },
+        {
+          "config": "scripts/profile_specialized_v10.py",
+          "id": "v10-profile",
+          "record": "artifacts/jobs/v10-profile/state.json",
+          "source_commit": "456a79c6",
+          "status": "failed"
+        },
+        {
+          "config": "scripts/audit_v10_admission_schedule.py",
+          "id": "v10-admission-aligned",
+          "record": "artifacts/jobs/v10-admission-aligned/state.json",
+          "source_commit": "6125c751",
+          "status": "queued"
+        }
+      ],
+      "status": "running",
       "study_id": "TL-PERF-v10",
-      "summary": "\u878d\u5408\u68af\u5ea6/\u5b8c\u6574\u66f4\u65b0/\u5cf0\u503c\u5df2\u6d4b\uff1b\u539ftrace\u6c47\u603b\u5931\u8d25\u4fdd\u7559",
+      "summary": "\u6210\u672c/\u878d\u5408\u5df2\u6d4b\uff1b\u539ftrace\u6c47\u603b\u5931\u8d25\u4fdd\u7559\uff0c\u540c\u65e5\u7a0b\u51c6\u5165\u8865\u8bc1\u6392\u961f",
       "title": "\u6709\u754c\u7279\u5316\u4e0e\u6ce8\u610f\u529b\u8def\u5f84",
       "track": "shared",
       "view_group": "current",
@@ -13789,6 +13841,7 @@
     {
       "budget": "\u5171\u4eab48h\u81f311\u670816\u65e521:51:33\uff1b\u6700\u591a12NPU worker\uff1b\u6700\u5927200M\uff1b64GiB\u76ee\u6807/96GiB\u4e0a\u9650\uff0c\u65e0\u7d2f\u8ba1\u7b97\u65f6\u4e0a\u9650\u3002",
       "decision": "\u6309\u56fa\u5b9a\u6709\u9650\u8868\u6267\u884c\uff1b\u8d28\u91cf\u3001\u6570\u503c\u548c\u6027\u80fd\u5206\u522b\u5ba1\u9605\uff0c\u4e0d\u81ea\u52a8\u6269\u5019\u9009\u3002",
+      "execution_note": "11\u670814\u65e522:25\u9644\u8fd1\uff1a20\u4e3b\u4f5c\u4e1a\u5df2\u63a5\u6536\uff0c12\u8bad\u7ec3/8\u6392\u961f\uff1b\u5df2\u542f\u52a8\u8005\u4e09\u6b65\u65b0\u8fdb\u7a0b\u6062\u590d\u5168\u901a\u8fc7\u3002\u539fquad CPU\u53c2\u7167\u7f3awarmup\u540c\u6b65\uff0c\u5927\u5dee\u5f02\u65e0\u6548\u6bd4\u8f83\u4fdd\u7559\uff1b\u65b0NPU\u5bf9\u9f50\u590d\u6838\u5355\u72ec\u6392\u961f\u3002\u8d28\u91cf\u7ed3\u8bbaawaiting\u3002",
       "id": "V10-CAPACITY",
       "kind": "experiment",
       "question": "\u56fa\u5b9a\u6d3b\u52a8\u6863\uff0cd64\u2192128\u589e\u52a0\u5bb9\u91cf\u662f\u5426\u6539\u5584\u5171\u540c\u66dd\u5149\u8d28\u91cf\uff1f",
@@ -13804,6 +13857,14 @@
         {
           "label": "\u67e5\u770b\u3001Lens\u3001\u505c\u6b62\u548c\u6062\u590d",
           "path": "docs/studies/direct-v10-operations.md"
+        },
+        {
+          "label": "\u5b9e\u9645\u670d\u52a1\u3001\u7269\u7406\u8bbe\u5907\u4e0e\u6062\u590d/Lens\u72b6\u6001",
+          "path": "docs/evidence/direct-v10-observations.json"
+        },
+        {
+          "label": "AICore/AIVector/AICPU\u516b\u6b21\u91c7\u6837",
+          "path": "docs/evidence/direct-v10-resources.json"
         }
       ],
       "runs": [
@@ -13812,59 +13873,67 @@
           "id": "tl-v10-main-hb-d64-r28-q10-s11",
           "lens_record": "runs/v10-main-hb-d64-r28-q10-s11/train/projection.json",
           "record": "runs/v10-main-hb-d64-r28-q10-s11/train/result.json",
-          "status": "planned"
+          "source_commit": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+          "status": "running"
         },
         {
           "config": "configs/studies/language/direct-v10/table/main/hb-d64-r64-q3-s11.json",
           "id": "tl-v10-main-hb-d64-r64-q3-s11",
           "lens_record": "runs/v10-main-hb-d64-r64-q3-s11/train/projection.json",
           "record": "runs/v10-main-hb-d64-r64-q3-s11/train/result.json",
-          "status": "planned"
+          "source_commit": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+          "status": "running"
         },
         {
           "config": "configs/studies/language/direct-v10/table/main/hb-d64-r28-q10-s22.json",
           "id": "tl-v10-main-hb-d64-r28-q10-s22",
           "lens_record": "runs/v10-main-hb-d64-r28-q10-s22/train/projection.json",
           "record": "runs/v10-main-hb-d64-r28-q10-s22/train/result.json",
-          "status": "planned"
+          "source_commit": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+          "status": "running"
         },
         {
           "config": "configs/studies/language/direct-v10/table/main/hb-d64-r64-q3-s22.json",
           "id": "tl-v10-main-hb-d64-r64-q3-s22",
           "lens_record": "runs/v10-main-hb-d64-r64-q3-s22/train/projection.json",
           "record": "runs/v10-main-hb-d64-r64-q3-s22/train/result.json",
-          "status": "planned"
+          "source_commit": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+          "status": "running"
         },
         {
           "config": "configs/studies/language/direct-v10/table/main/hb-d128-r28-q10-s11.json",
           "id": "tl-v10-main-hb-d128-r28-q10-s11",
           "lens_record": "runs/v10-main-hb-d128-r28-q10-s11/train/projection.json",
           "record": "runs/v10-main-hb-d128-r28-q10-s11/train/result.json",
-          "status": "planned"
+          "source_commit": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+          "status": "running"
         },
         {
           "config": "configs/studies/language/direct-v10/table/main/hb-d128-r64-q3-s11.json",
           "id": "tl-v10-main-hb-d128-r64-q3-s11",
           "lens_record": "runs/v10-main-hb-d128-r64-q3-s11/train/projection.json",
           "record": "runs/v10-main-hb-d128-r64-q3-s11/train/result.json",
-          "status": "planned"
+          "source_commit": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+          "status": "running"
         },
         {
           "config": "configs/studies/language/direct-v10/table/main/hb-d128-r28-q10-s22.json",
           "id": "tl-v10-main-hb-d128-r28-q10-s22",
           "lens_record": "runs/v10-main-hb-d128-r28-q10-s22/train/projection.json",
           "record": "runs/v10-main-hb-d128-r28-q10-s22/train/result.json",
-          "status": "planned"
+          "source_commit": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+          "status": "running"
         },
         {
           "config": "configs/studies/language/direct-v10/table/main/hb-d128-r64-q3-s22.json",
           "id": "tl-v10-main-hb-d128-r64-q3-s22",
           "lens_record": "runs/v10-main-hb-d128-r64-q3-s22/train/projection.json",
           "record": "runs/v10-main-hb-d128-r64-q3-s22/train/result.json",
-          "status": "planned"
+          "source_commit": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+          "status": "running"
         }
       ],
-      "status": "planned",
+      "status": "running",
       "study_id": "TL-CAPACITY-v10",
       "summary": "R28/R64\uff0c\u5404\u5bbd\u5ea6\u53ccseed\uff1b8/32/128M\uff0c\u6761\u4ef6256M",
       "title": "\u7ea610%/3%\u7684\u5bb9\u91cf\u589e\u957f",
@@ -13904,6 +13973,7 @@
     {
       "budget": "\u5171\u4eab48h\u81f311\u670816\u65e521:51:33\uff1b\u6700\u591a12NPU worker\uff1b\u6700\u5927200M\uff1b64GiB\u76ee\u6807/96GiB\u4e0a\u9650\uff0c\u65e0\u7d2f\u8ba1\u7b97\u65f6\u4e0a\u9650\u3002",
       "decision": "\u6309\u56fa\u5b9a\u6709\u9650\u8868\u6267\u884c\uff1b\u8d28\u91cf\u3001\u6570\u503c\u548c\u6027\u80fd\u5206\u522b\u5ba1\u9605\uff0c\u4e0d\u81ea\u52a8\u6269\u5019\u9009\u3002",
+      "execution_note": "11\u670814\u65e522:25\u9644\u8fd1\uff1a20\u4e3b\u4f5c\u4e1a\u5df2\u63a5\u6536\uff0c12\u8bad\u7ec3/8\u6392\u961f\uff1b\u5df2\u542f\u52a8\u8005\u4e09\u6b65\u65b0\u8fdb\u7a0b\u6062\u590d\u5168\u901a\u8fc7\u3002\u539fquad CPU\u53c2\u7167\u7f3awarmup\u540c\u6b65\uff0c\u5927\u5dee\u5f02\u65e0\u6548\u6bd4\u8f83\u4fdd\u7559\uff1b\u65b0NPU\u5bf9\u9f50\u590d\u6838\u5355\u72ec\u6392\u961f\u3002\u8d28\u91cf\u7ed3\u8bbaawaiting\u3002",
       "id": "V10-ACTIVE",
       "kind": "experiment",
       "question": "\u5305\u62ecRead/\u5171\u4eab\u53c2\u6570\u5339\u914d\u65f6\uff0cdense\u2192R28\u2192R64\u662f\u5426\u53d7\u76ca\uff1f",
@@ -13919,6 +13989,14 @@
         {
           "label": "\u67e5\u770b\u3001Lens\u3001\u505c\u6b62\u548c\u6062\u590d",
           "path": "docs/studies/direct-v10-operations.md"
+        },
+        {
+          "label": "\u5b9e\u9645\u670d\u52a1\u3001\u7269\u7406\u8bbe\u5907\u4e0e\u6062\u590d/Lens\u72b6\u6001",
+          "path": "docs/evidence/direct-v10-observations.json"
+        },
+        {
+          "label": "AICore/AIVector/AICPU\u516b\u6b21\u91c7\u6837",
+          "path": "docs/evidence/direct-v10-resources.json"
         }
       ],
       "runs": [
@@ -13927,87 +14005,99 @@
           "id": "tl-v10-main-hb-d64-r4-dense-match-s11",
           "lens_record": "runs/v10-main-hb-d64-r4-dense-match-s11/train/projection.json",
           "record": "runs/v10-main-hb-d64-r4-dense-match-s11/train/result.json",
-          "status": "planned"
+          "source_commit": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+          "status": "queued"
         },
         {
           "config": "configs/studies/language/direct-v10/table/main/hb-d64-r4-dense-match-s22.json",
           "id": "tl-v10-main-hb-d64-r4-dense-match-s22",
           "lens_record": "runs/v10-main-hb-d64-r4-dense-match-s22/train/projection.json",
           "record": "runs/v10-main-hb-d64-r4-dense-match-s22/train/result.json",
-          "status": "planned"
+          "source_commit": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+          "status": "queued"
         },
         {
           "config": "configs/studies/language/direct-v10/table/main/hb-d128-r3-dense-match-s11.json",
           "id": "tl-v10-main-hb-d128-r3-dense-match-s11",
           "lens_record": "runs/v10-main-hb-d128-r3-dense-match-s11/train/projection.json",
           "record": "runs/v10-main-hb-d128-r3-dense-match-s11/train/result.json",
-          "status": "planned"
+          "source_commit": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+          "status": "queued"
         },
         {
           "config": "configs/studies/language/direct-v10/table/main/hb-d128-r3-dense-match-s22.json",
           "id": "tl-v10-main-hb-d128-r3-dense-match-s22",
           "lens_record": "runs/v10-main-hb-d128-r3-dense-match-s22/train/projection.json",
           "record": "runs/v10-main-hb-d128-r3-dense-match-s22/train/result.json",
-          "status": "planned"
+          "source_commit": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+          "status": "queued"
         },
         {
           "config": "configs/studies/language/direct-v10/table/main/hb-d64-r28-q10-s11.json",
           "id": "tl-v10-main-hb-d64-r28-q10-s11",
           "lens_record": "runs/v10-main-hb-d64-r28-q10-s11/train/projection.json",
           "record": "runs/v10-main-hb-d64-r28-q10-s11/train/result.json",
-          "status": "planned"
+          "source_commit": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+          "status": "running"
         },
         {
           "config": "configs/studies/language/direct-v10/table/main/hb-d64-r64-q3-s11.json",
           "id": "tl-v10-main-hb-d64-r64-q3-s11",
           "lens_record": "runs/v10-main-hb-d64-r64-q3-s11/train/projection.json",
           "record": "runs/v10-main-hb-d64-r64-q3-s11/train/result.json",
-          "status": "planned"
+          "source_commit": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+          "status": "running"
         },
         {
           "config": "configs/studies/language/direct-v10/table/main/hb-d64-r28-q10-s22.json",
           "id": "tl-v10-main-hb-d64-r28-q10-s22",
           "lens_record": "runs/v10-main-hb-d64-r28-q10-s22/train/projection.json",
           "record": "runs/v10-main-hb-d64-r28-q10-s22/train/result.json",
-          "status": "planned"
+          "source_commit": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+          "status": "running"
         },
         {
           "config": "configs/studies/language/direct-v10/table/main/hb-d64-r64-q3-s22.json",
           "id": "tl-v10-main-hb-d64-r64-q3-s22",
           "lens_record": "runs/v10-main-hb-d64-r64-q3-s22/train/projection.json",
           "record": "runs/v10-main-hb-d64-r64-q3-s22/train/result.json",
-          "status": "planned"
+          "source_commit": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+          "status": "running"
         },
         {
           "config": "configs/studies/language/direct-v10/table/main/hb-d128-r28-q10-s11.json",
           "id": "tl-v10-main-hb-d128-r28-q10-s11",
           "lens_record": "runs/v10-main-hb-d128-r28-q10-s11/train/projection.json",
           "record": "runs/v10-main-hb-d128-r28-q10-s11/train/result.json",
-          "status": "planned"
+          "source_commit": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+          "status": "running"
         },
         {
           "config": "configs/studies/language/direct-v10/table/main/hb-d128-r64-q3-s11.json",
           "id": "tl-v10-main-hb-d128-r64-q3-s11",
           "lens_record": "runs/v10-main-hb-d128-r64-q3-s11/train/projection.json",
           "record": "runs/v10-main-hb-d128-r64-q3-s11/train/result.json",
-          "status": "planned"
+          "source_commit": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+          "status": "running"
         },
         {
           "config": "configs/studies/language/direct-v10/table/main/hb-d128-r28-q10-s22.json",
           "id": "tl-v10-main-hb-d128-r28-q10-s22",
           "lens_record": "runs/v10-main-hb-d128-r28-q10-s22/train/projection.json",
           "record": "runs/v10-main-hb-d128-r28-q10-s22/train/result.json",
-          "status": "planned"
+          "source_commit": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+          "status": "running"
         },
         {
           "config": "configs/studies/language/direct-v10/table/main/hb-d128-r64-q3-s22.json",
           "id": "tl-v10-main-hb-d128-r64-q3-s22",
           "lens_record": "runs/v10-main-hb-d128-r64-q3-s22/train/projection.json",
           "record": "runs/v10-main-hb-d128-r64-q3-s22/train/result.json",
-          "status": "planned"
+          "source_commit": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+          "status": "running"
         }
       ],
-      "status": "planned",
+      "status": "running",
       "study_id": "TL-ACTIVE-v10",
       "summary": "\u5c0f\u7a20\u5bc63.756/9.668M\uff0c\u4e0e\u5bb9\u91cf\u7ec4\u8f68\u8ff9\u590d\u7528\u914d\u5bf9",
       "title": "\u8fd1\u6d3b\u8dc3\u9884\u7b97\u7684\u603b\u5bb9\u91cf\u6bd4\u8f83",
@@ -14047,6 +14137,7 @@
     {
       "budget": "\u5171\u4eab48h\u81f311\u670816\u65e521:51:33\uff1b\u6700\u591a12NPU worker\uff1b\u6700\u5927200M\uff1b64GiB\u76ee\u6807/96GiB\u4e0a\u9650\uff0c\u65e0\u7d2f\u8ba1\u7b97\u65f6\u4e0a\u9650\u3002",
       "decision": "\u6309\u56fa\u5b9a\u6709\u9650\u8868\u6267\u884c\uff1b\u8d28\u91cf\u3001\u6570\u503c\u548c\u6027\u80fd\u5206\u522b\u5ba1\u9605\uff0c\u4e0d\u81ea\u52a8\u6269\u5019\u9009\u3002",
+      "execution_note": "11\u670814\u65e522:25\u9644\u8fd1\uff1a20\u4e3b\u4f5c\u4e1a\u5df2\u63a5\u6536\uff0c12\u8bad\u7ec3/8\u6392\u961f\uff1b\u5df2\u542f\u52a8\u8005\u4e09\u6b65\u65b0\u8fdb\u7a0b\u6062\u590d\u5168\u901a\u8fc7\u3002\u539fquad CPU\u53c2\u7167\u7f3awarmup\u540c\u6b65\uff0c\u5927\u5dee\u5f02\u65e0\u6548\u6bd4\u8f83\u4fdd\u7559\uff1b\u65b0NPU\u5bf9\u9f50\u590d\u6838\u5355\u72ec\u6392\u961f\u3002\u8d28\u91cf\u7ed3\u8bbaawaiting\u3002",
       "id": "V10-CONTROL",
       "kind": "experiment",
       "question": "\u4f4e\u6d3b\u52a8\u8d28\u91cf\u4ee3\u4ef7\u591a\u5927\uff0c\u4e0e\u5408\u7406\u8c03\u53c2TF\u6709\u4f55\u5dee\u8ddd\uff1f",
@@ -14062,6 +14153,14 @@
         {
           "label": "\u67e5\u770b\u3001Lens\u3001\u505c\u6b62\u548c\u6062\u590d",
           "path": "docs/studies/direct-v10-operations.md"
+        },
+        {
+          "label": "\u5b9e\u9645\u670d\u52a1\u3001\u7269\u7406\u8bbe\u5907\u4e0e\u6062\u590d/Lens\u72b6\u6001",
+          "path": "docs/evidence/direct-v10-observations.json"
+        },
+        {
+          "label": "AICore/AIVector/AICPU\u516b\u6b21\u91c7\u6837",
+          "path": "docs/evidence/direct-v10-resources.json"
         }
       ],
       "runs": [
@@ -14070,59 +14169,67 @@
           "id": "tl-v10-main-tf-d192-l6-s11",
           "lens_record": "runs/v10-main-tf-d192-l6-s11/train/projection.json",
           "record": "runs/v10-main-tf-d192-l6-s11/train/result.json",
-          "status": "planned"
+          "source_commit": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+          "status": "queued"
         },
         {
           "config": "configs/studies/language/direct-v10/table/main/tf-d192-l6-s22.json",
           "id": "tl-v10-main-tf-d192-l6-s22",
           "lens_record": "runs/v10-main-tf-d192-l6-s22/train/projection.json",
           "record": "runs/v10-main-tf-d192-l6-s22/train/result.json",
-          "status": "planned"
+          "source_commit": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+          "status": "queued"
         },
         {
           "config": "configs/studies/language/direct-v10/table/main/tf-d256-l12-s11.json",
           "id": "tl-v10-main-tf-d256-l12-s11",
           "lens_record": "runs/v10-main-tf-d256-l12-s11/train/projection.json",
           "record": "runs/v10-main-tf-d256-l12-s11/train/result.json",
-          "status": "planned"
+          "source_commit": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+          "status": "queued"
         },
         {
           "config": "configs/studies/language/direct-v10/table/main/hb-d128-r28-pool-s11.json",
           "id": "tl-v10-main-hb-d128-r28-pool-s11",
           "lens_record": "runs/v10-main-hb-d128-r28-pool-s11/train/projection.json",
           "record": "runs/v10-main-hb-d128-r28-pool-s11/train/result.json",
-          "status": "planned"
+          "source_commit": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+          "status": "running"
         },
         {
           "config": "configs/studies/language/direct-v10/table/main/hb-d128-r64-pool-s11.json",
           "id": "tl-v10-main-hb-d128-r64-pool-s11",
           "lens_record": "runs/v10-main-hb-d128-r64-pool-s11/train/projection.json",
           "record": "runs/v10-main-hb-d128-r64-pool-s11/train/result.json",
-          "status": "planned"
+          "source_commit": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+          "status": "running"
         },
         {
           "config": "configs/studies/language/direct-v10/table/main/tf-d256-l12-s22.json",
           "id": "tl-v10-main-tf-d256-l12-s22",
           "lens_record": "runs/v10-main-tf-d256-l12-s22/train/projection.json",
           "record": "runs/v10-main-tf-d256-l12-s22/train/result.json",
-          "status": "planned"
+          "source_commit": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+          "status": "queued"
         },
         {
           "config": "configs/studies/language/direct-v10/table/main/hb-d128-r28-pool-s22.json",
           "id": "tl-v10-main-hb-d128-r28-pool-s22",
           "lens_record": "runs/v10-main-hb-d128-r28-pool-s22/train/projection.json",
           "record": "runs/v10-main-hb-d128-r28-pool-s22/train/result.json",
-          "status": "planned"
+          "source_commit": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+          "status": "running"
         },
         {
           "config": "configs/studies/language/direct-v10/table/main/hb-d128-r64-pool-s22.json",
           "id": "tl-v10-main-hb-d128-r64-pool-s22",
           "lens_record": "runs/v10-main-hb-d128-r64-pool-s22/train/projection.json",
           "record": "runs/v10-main-hb-d128-r64-pool-s22/train/result.json",
-          "status": "planned"
+          "source_commit": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+          "status": "running"
         }
       ],
-      "status": "planned",
+      "status": "running",
       "study_id": "TL-CONTROL-v10",
       "summary": "d128\u540c\u5f62\u72b6pool\u4e0e\u4e24\u6863TF\uff0c\u5404\u53ccseed\uff0c\u51718\u6761",
       "title": "\u540c\u5f62\u72b6pool\u53ca\u6821\u51c6TF",
@@ -14162,6 +14269,7 @@
     {
       "budget": "\u5171\u4eab48h\u81f311\u670816\u65e521:51:33\uff1b\u6700\u591a12NPU worker\uff1b\u6700\u5927200M\uff1b64GiB\u76ee\u6807/96GiB\u4e0a\u9650\uff0c\u65e0\u7d2f\u8ba1\u7b97\u65f6\u4e0a\u9650\u3002",
       "decision": "\u6309\u56fa\u5b9a\u6709\u9650\u8868\u6267\u884c\uff1b\u8d28\u91cf\u3001\u6570\u503c\u548c\u6027\u80fd\u5206\u522b\u5ba1\u9605\uff0c\u4e0d\u81ea\u52a8\u6269\u5019\u9009\u3002",
+      "execution_note": "11\u670814\u65e522:25\u9644\u8fd1\uff1a20\u4e3b\u4f5c\u4e1a\u5df2\u63a5\u6536\uff0c12\u8bad\u7ec3/8\u6392\u961f\uff1b\u5df2\u542f\u52a8\u8005\u4e09\u6b65\u65b0\u8fdb\u7a0b\u6062\u590d\u5168\u901a\u8fc7\u3002\u539fquad CPU\u53c2\u7167\u7f3awarmup\u540c\u6b65\uff0c\u5927\u5dee\u5f02\u65e0\u6548\u6bd4\u8f83\u4fdd\u7559\uff1b\u65b0NPU\u5bf9\u9f50\u590d\u6838\u5355\u72ec\u6392\u961f\u3002\u8d28\u91cf\u7ed3\u8bbaawaiting\u3002",
       "id": "V10-CONFIRMATION",
       "kind": "experiment",
       "question": "\u5171\u540c\u66dd\u5149\u7ed3\u8bba\u80fd\u5426\u5728\u672a\u7528\u4e8e\u9009\u62e9\u7684262K split\u4fdd\u6301\uff1f",
@@ -14177,6 +14285,14 @@
         {
           "label": "\u67e5\u770b\u3001Lens\u3001\u505c\u6b62\u548c\u6062\u590d",
           "path": "docs/studies/direct-v10-operations.md"
+        },
+        {
+          "label": "\u5b9e\u9645\u670d\u52a1\u3001\u7269\u7406\u8bbe\u5907\u4e0e\u6062\u590d/Lens\u72b6\u6001",
+          "path": "docs/evidence/direct-v10-observations.json"
+        },
+        {
+          "label": "AICore/AIVector/AICPU\u516b\u6b21\u91c7\u6837",
+          "path": "docs/evidence/direct-v10-resources.json"
         }
       ],
       "runs": [],
@@ -14218,9 +14334,9 @@
       "y": 1360
     }
   ],
-  "notice": "v10\u6821\u51c6\u5df2\u5b8c\u6210\u300120\u6761\u4e3b\u914d\u7f6e\u5df2\u56fa\u5b9a\uff1b\u6b63\u5f0f\u542f\u52a8\u72b6\u6001\u4ee5\u9879\u76ee\u8bb0\u5f55\u4e3a\u51c6\u3002\u903b\u8f91\u6d3b\u52a8/\u7269\u7406\u7a20\u5bc6\u5de5\u4f5c/\u541e\u5410\u5206\u5217\uff1b\u4e25\u683c\u6709\u9650\u5931\u8d25\u53ca\u539ftrace\u6c47\u603b\u5931\u8d25\u4fdd\u7559\uff0c\u8d28\u91cf\u7ed3\u679cawaiting\u3002",
+  "notice": "v10\u5b9e\u964512\u6761\u8bad\u7ec3\u30018\u6761\u6392\u961f\uff1b\u5df2\u542f\u52a812\u6761\u4e09\u6b65\u6062\u590d\u901a\u8fc7\uff0cLens\u8bb0\u5f55\u4e2d\u3002\u540c\u6d3b\u52a8\u8bbe\u7f6eNPU\u8865\u8bc1\u53e6\u6392\u961f\uff0c\u539f\u4e25\u683c\u5931\u8d25\u548c\u68c0\u67e5\u53e3\u5f84\u9519\u8bef\u4fdd\u7559\u3002\u8d28\u91cf\u7ed3\u679c\u5c1a\u5f85\u5171\u540c\u66dd\u5149\u548c\u72ec\u7acb\u786e\u8ba4\uff1b\u7269\u7406Full\u4ecd\u7a20\u5bc6\u906e\u7f69\u3002",
   "schema": "tide-research-map-prototype-v1",
-  "subtitle": "v10\u7279\u5316\u4e0e\u7ea610%/3%\u5bb9\u91cf/\u66dd\u5149\u6bd4\u8f83\uff1bv9\u9650\u5b9a\u7ed3\u679c\u53ca\u53cd\u8bc1\u4fdd\u7559",
+  "subtitle": "v10\u8fd0\u884c\u4e2d\uff1a\u7ea610%/3%\u7684\u5bb9\u91cf\u4e0e\u66dd\u5149\u6bd4\u8f83\uff1bv9\u5df2\u5ba1\u9650\u5b9a\u7ed3\u679c\u4fdd\u7559",
   "title": "TIDE \u7814\u7a76\u56fe",
   "updated_at": "2026-11-14",
   "view_groups": [

@@ -1,21 +1,50 @@
-# 当前交接：v10特化优化及低活动容量比较
+# 当前交接：v10已固定并后台执行，12训练/8排队
 
-2026-11-14：新48h批次已经授权，已完成有界性能/活动/Transformer校准并固定20条正式配置，正在提交。
-共同截止2026-11-16 21:51:33北京时间；最多12个单卡worker，无累计CPU/NPU算时上限。
-[研究表](studies/language-capacity-activity-v10.md) · [校准选择](evidence/direct-v10-selection.json) ·
-[性能/数值/恢复证据](evidence/direct-v10-optimization.json) · [操作入口](studies/direct-v10-operations.md)。
+2026-11-14 22:25北京时间附近核对：20个正式服务已接收，12条进入真实训练、8条排队；
+已启动12条均通过各自三步新进程精确恢复，12个Lens投影recording，无正式训练失败。
+控制器及各服务均在background.slice。另有1项同日程准入复核排队，遵守相同12slot锁。
+[研究表](studies/language-capacity-activity-v10.md) · [实际逐作业状态/卡号](evidence/direct-v10-observations.json) ·
+[校准/参数](evidence/direct-v10-selection.json) · [性能与检查](studies/direct-v10-optimization.md) ·
+[查看、停止、恢复及Lens](studies/direct-v10-operations.md)。
 
-R28/R64在约10%/3%活动下比较d64→d128容量增长；每宽度另有近活跃参数小稠密端点。
-主表20条=四稀疏构型×双seed、两小稠密×双seed、两d128同形状pool×双seed、两校准TF×双seed。
-统一L256/global64，128M主终点，8/32M中间点；整组成条件延伸256M，独立262K确认不参与选择，test密封。
-最大171.46M参数，真实短校准约3650有效目标/s、峰值30833MiB；不再提交1G/11天方案。
+共同截止 **2026-11-16 21:51:33 +08:00**；无累计CPU/NPU算时上限，最多12单卡worker。
+正式源码 **0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d**，`.local/source-v10-execution`；
+检查补证另用6125c751，不改任何活动输入。安装74e7bbd及数学0770593保持，不接入上游新优化。
+冻结配置`configs/studies/language/direct-v10/table/`，冻结预算/资源在同目录上一级。
 
-优化使用NPU融合加权注意力、静态邻接聚合、节点unbind和共享衰减矩阵；FFN重算未选中。
-严格有限误差仍保留，物理Full仍稠密遮罩。原trace导出后的汇总API错误为failed，已有CSV仅作限定只读分析。
-小型梯度/因果/状态与三步新进程恢复已通过；正式每条仍独立检查，不以先导替代长轨迹正确性。
-当前尚无正式语言质量结论，校准结果不是规模收益。v9原终态与未做独立确认的事实保持。
+|构型（均seed11/22）|当前物理设备/状态|
+|---|---|
+|d128 R64 pool|1 / 7，训练|
+|d128 R64约3% quad|5 / 15，训练|
+|d64 R64约3% quad|0 / 6，训练|
+|d128 R28 pool|4 / 14，训练|
+|d128 R28约10% quad|8 / 2，训练|
+|d64 R28约10% quad|9 / 10，训练|
+|两档小稠密、两档校准TF，共8条|已接收，等待slot/显存；结束即释放并动态取得下一项|
 
-以下为历史交接，旧“无活动任务”等表述只描述当时状态。
+全部L256/global64，参数3.46–171.46M；四稀疏构型为22.24/50.32/75.54/171.46M，
+小稠密为3.756/9.668M。共同8/32/128M检查点；两宽度组依完成/有限性/剩余时间整组延伸256M，
+不是按学习排名选择。所有起点即使用256M LR日程；262K独立确认在决策冻结后评价，test密封。
+前2M为活动warmup，不能说整段训练都在3%/10%。物理Full仍全节点稠密后遮罩。
+目前只有短校准及正在增长的曝光，尚无正式容量或语言质量结论。
+
+NPU特化已测：最大171M真实短程约3650有效目标/s、峰值30833MiB；同B4旧/新约1027/3059位置/s，
+但attention floor策略不同，不能称严格等价加速。FFN重算未改善吞吐，不选。
+八次设备[采样](evidence/direct-v10-resources.json)：AICPU均0%，各卡AICore中位11–20.5%，
+AIVector中位60–65%；仍非矩阵核充分利用，设备共享和host成本分别保留。
+trace汇总API失败原样保留，导出的30次FlashAttention前向/反向及算子CSV为有限路径证据。
+
+准入口径补证：原quad检查NPU已进入warmup，CPU只载参数却未同步set_progress，出现大幅无效对比。
+保留原failed，不把它解释成普通浮点误差；新CPU回归通过，同日程NPU四形状复核`v10-admission-aligned`
+已排队，最晚11月15日01:51:33结束。原fusion两项有限严格失败仍保留；各项执行、严格数值、离散机制、恢复、学习分列。
+
+当前账号270.50/800GiB，硬余量529.50GiB；新批参数checkpoint预计26.55GiB，含全延伸44.25GiB，
+加记录/临时峰值后受64GiB目标/96GiB上限、至少200GiB硬余量约束。v9及历史失败没有删除。
+只读状态：`python scripts/review_direct_v10.py`；控制器日志`artifacts/jobs/v10-controller/job.log`；
+Lens项目tide-learning-lab、TL-CAPACITY-v10/TL-ACTIVE-v10/TL-CONTROL-v10，入口`.local/LENS.md`。
+停止/恢复命令见操作页，不改冻结源码。普通推送后的分支文档更新不改变训练身份。
+
+以下是历史交接，旧“无活动任务”等表述只描述当时状态。
 
 # 当前交接：v9训练全部终态；独立确认待完成
 
