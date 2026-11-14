@@ -1,3 +1,13 @@
+# 最新图状态：v10三条pool显式修复续训
+
+2026-11-15新增`TL-REPAIR-v10`，连接已审阅的根因、原pool对照和待审阅的长期结果。
+实际Lens使用`TL-CONTROL-v10`与统一`tl-v10-repair-<ID>`；每条有固定配置、源码d089dd05、
+诊断父快照和恢复/先导谱系。原failed仍在原节点，修复不是新增独立seed。
+[修复表](studies/direct-v10-repair.md) · [操作入口](studies/direct-v10-operations.md)。
+执行状态按`review_v10_repair.py`只读核对，科学结果保持awaiting，不由恢复或退出码产生支持。
+
+以下保留历史图说明。
+
 # 最新图状态：v10三项pool非有限梯度已定位
 
 2026-11-15新增TL-GRADIENT-v10及限定结果：三项原失败步均复现，聚合DivBackward0中间溢出；

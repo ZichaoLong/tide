@@ -44,3 +44,5 @@ Lens项目仍`tide-learning-lab`，先导与正式续训同属`TL-CONTROL-v10`�
 若资格未完成，从对应未通过门槛继续，不能绕过检查。新源码SHA及实际状态在STATUS补充。
 
 只读汇总：`python scripts/review_v10_repair.py`。原20条状态仍用`python scripts/review_direct_v10.py`，不把修复链计作新seed。
+
+实际提交和门槛结果：见[修复交接](direct-v10-repair-handoff.md)，固定d089dd05，三条正式续训已运行。

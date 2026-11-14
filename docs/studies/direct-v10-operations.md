@@ -1,3 +1,38 @@
+# 2026-11-15修复续训的操作入口
+
+新增三条pool修复，原20条和原失败不改。固定源码d089dd0556798df55a0440ef471ffe254f8054e5，
+目录`.local/source-v10-repair-v1`；原安装/数学和共享截止2026-11-16 21:51:33 +08:00保持。
+逐链身份、完整启动argv和只读输入SHA位于`artifacts/jobs/v10-repair-<ID>/job.json`。
+ID为`hb-d128-r64-pool-s11`、`hb-d128-r64-pool-s22`、`hb-d128-r28-pool-s22`。
+解析配置/worker plan/资源策略在`runs/v10-repair-control/<ID>/`，都为只读固定输入。
+
+```bash
+python scripts/review_v10_repair.py
+python scripts/job.py status artifacts/jobs/v10-repair-hb-d128-r64-pool-s11
+tail -n 30 runs/v10-repair-hb-d128-r64-pool-s11/train.log
+```
+
+正式日志仅在门槛通过后出现；此前查看同目录`check.log`、`migration.log`、`recovery-*.log`、`pilot.log`。
+状态在`runs/v10-repair-<ID>-worker/state.json`，原20条仍用`python scripts/review_direct_v10.py`。
+停止任一链：`python scripts/job.py stop artifacts/jobs/v10-repair-<ID>`，它核对完整cgroup和已知后代。
+只停止该修复服务不会改动原控制器或其他作业。
+
+恢复采用**新job/output**，环境和固定d089dd05源码不变。已过门槛时使用该链最新完整
+`train/latest.pt`（正式尚未保存则`pilot/latest.pt`），`check/result.json`和
+`recovery-compare/recovery.json`；复用同一解析配置，原128Mi目标和256Mi LR日程。
+按现有`campaign_worker.py`单case plan设置`reuse_admission`、`reuse_recovery`，
+`train_arguments`显式包含`--resume <该checkpoint>`、`--until-tokens 134217728`和新run ID，
+再由固定源码的`job.py submit`提交；使用原resource.json、同一data-lock、4线程/72GiB/剩余共同截止，
+并把全部上述文件登记为`--input`。原argv可从job.json取出，不能覆盖原output。
+门槛未完成时不得绕过恢复/先导；截止后继续需要用户另行授权。临时恢复payload已通过比较后才退役，不可用作训练父。
+
+Lens项目`tide-learning-lab`，组`TL-CONTROL-v10`，三条正式run为`tl-v10-repair-<ID>`；
+先导`tl-v10-repair-pilot-<ID>`、独立确认`tl-v10-repair-confirm-<ID>`（后者TL-CONFIRMATION-v10）。
+私有访问方式仍在`.local/LENS.md`。先导verified/readback_matches是长续训门槛，确认不参与训练决策。
+局部参考、整网严格数值、离散机制、迁移/精确恢复、短程和长期学习分别记录。
+
+以下为原v10操作说明。
+
 # v10：查看、停止与恢复
 
 2026-11-15三项pool故障诊断已终态，见[根因、候选和后续建议](direct-v10-gradient-results.md)。

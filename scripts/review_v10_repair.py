@@ -23,7 +23,8 @@ def review(root=ROOT):
         stage=(current.get('stages') or [{}])[-1].get('name')
         progress=read(out/'train/progress.json') or read(out/'pilot/progress.json')
         recovery=read(out/'recovery-compare/recovery.json');migration=read(out/'migration/result.json')
-        projection=read(out/'train/projection.json') or read(out/'pilot/projection.json')
+        pilot_projection=read(out/'pilot/projection.json')
+        projection=read(out/'train/projection.json') or pilot_projection
         original=read(root/'runs'/('v10-main-'+cid)/'train/result.json')
         rows.append(dict(id=cid,job=job,original_run='tl-v10-main-'+cid,
             original_state=original.get('state','unchecked'),original_error=original.get('error'),
@@ -40,6 +41,8 @@ def review(root=ROOT):
             migration_state=migration.get('state','unchecked'),ancestry=migration.get('ancestry'),
             recovery_state=recovery.get('state','unchecked'),recovery_scope=recovery.get('scope'),
             pilot_state=pilot.get('state','unchecked'),pilot_updates=pilot.get('updates'),
+            pilot_lens_status=pilot_projection.get('status','unchecked'),
+            pilot_lens_readback_matches=pilot_projection.get('readback_matches'),
             pilot_initial_nll=pilot.get('initial_validation_nll'),pilot_final_nll=pilot.get('final_validation_nll'),
             pilot_max_gradient_norm=pilot.get('max_gradient_norm'),
             gates_passed_at=current.get('gates_passed_at'),tokens=progress.get('tokens'),step=progress.get('step'),

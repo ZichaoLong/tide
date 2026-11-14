@@ -1,11 +1,19 @@
-# 当前交接：v10局部VJP修复已授权，正在冻结及提交
+# 当前交接：三条pool修复门槛通过，正式128Mi续训运行
 
-2026-11-15用户批准[修复执行表](studies/direct-v10-repair.md)。生产路径仅新增显式ordered-v1聚合反向；
-13项原路径/局部回归、7项新增及提交契约检查、2项状态分类检查通过（含重复局部检查）。
-三条pool从已核对SHA的诊断失败前快照迁移；新进程完整batch恢复及64更新先导通过后，自动续训至原128Mi。
-新配置仅变更VJP选项，不改原48h截止、global64/physical8或16、LR/数据和种子；不改变原控制器的256Mi决定。
-尚未完成新源码NPU资格或提交；后续实际交接会替换本段。原固定作业不修改，原三项failed保留。
-只读修复入口`python scripts/review_v10_repair.py`，原20条用`python scripts/review_direct_v10.py`。
+2026-11-15 05:07 +08:00核对。[修复交接/结果范围](studies/direct-v10-repair-handoff.md) ·
+[实际逐链状态](evidence/direct-v10-repair-handoff.json) · [操作入口](studies/direct-v10-operations.md)。
+
+新固定源码d089dd05，`.local/source-v10-repair-v1`；原失败及活动0ea05d61源码不改。
+三个真实算子回归、整网因果/支持/别名/optimizer、显式状态迁移、完整batch新进程恢复和64更新先导均完成。
+三个先导Lens均verified/readback_matches；正式三条已实际更新：
+R64 seed11物理11、R64 seed22物理6、R28 seed22物理14，目标各为原累计128Mi，再做独立262K确认。
+整网参数VJP严格有限失败45/58/77项仍保留；短程稳定和NLL下降不升级为长期质量或数值全部合格。
+
+原20条12完成、5运行、3原失败；原条件256Mi规则不变，修复不计新seed。
+截止11月16日21:51:33不变，共享12slot、4线程/72GiB每服务；修复24GiB、全v10 96GiB停止线，当前硬余量492.9GiB。
+修复只读`python scripts/review_v10_repair.py`；原批`python scripts/review_direct_v10.py`。
+Lens项目tide-learning-lab/TL-CONTROL-v10，`tl-v10-repair-<ID>`；私有入口`.local/LENS.md`。
+研究图新增显式修复关系，终点学习结果仍awaiting。长作业后台继续；后继规模/候选不自动扩展。
 
 以下为历史交接快照。
 
