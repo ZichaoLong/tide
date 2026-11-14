@@ -1,0 +1,91 @@
+{
+  "cases": [
+    "hb-d64-r28-q10-s11",
+    "hb-d64-r64-q3-s11",
+    "hb-d64-r4-dense-match-s11",
+    "tf-d192-l6-s11",
+    "hb-d64-r28-q10-s22",
+    "hb-d64-r64-q3-s22",
+    "hb-d64-r4-dense-match-s22",
+    "tf-d192-l6-s22",
+    "hb-d128-r28-q10-s11",
+    "hb-d128-r64-q3-s11",
+    "hb-d128-r3-dense-match-s11",
+    "tf-d256-l12-s11",
+    "hb-d128-r28-pool-s11",
+    "hb-d128-r64-pool-s11",
+    "hb-d128-r28-q10-s22",
+    "hb-d128-r64-q3-s22",
+    "hb-d128-r3-dense-match-s22",
+    "tf-d256-l12-s22",
+    "hb-d128-r28-pool-s22",
+    "hb-d128-r64-pool-s22"
+  ],
+  "confirmation": {
+    "comparisons": "width within activity; q10/q3/dense within active budget; d128 same-shape pools; calibrated TF",
+    "endpoints": [
+      "all eligible128M",
+      "all eligible256M"
+    ],
+    "selection_feedback": false,
+    "test_access": false,
+    "tokens": 262144
+  },
+  "continuation_groups": [
+    {
+      "id": "active-budget-d64",
+      "ids": [
+        "hb-d64-r28-q10-s11",
+        "hb-d64-r64-q3-s11",
+        "hb-d64-r4-dense-match-s11",
+        "tf-d192-l6-s11",
+        "hb-d64-r28-q10-s22",
+        "hb-d64-r64-q3-s22",
+        "hb-d64-r4-dense-match-s22",
+        "tf-d192-l6-s22"
+      ]
+    },
+    {
+      "id": "active-budget-d128",
+      "ids": [
+        "hb-d128-r28-q10-s11",
+        "hb-d128-r64-q3-s11",
+        "hb-d128-r3-dense-match-s11",
+        "tf-d256-l12-s11",
+        "hb-d128-r28-pool-s11",
+        "hb-d128-r64-pool-s11",
+        "hb-d128-r28-q10-s22",
+        "hb-d128-r64-q3-s22",
+        "hb-d128-r3-dense-match-s22",
+        "tf-d256-l12-s22",
+        "hb-d128-r28-pool-s22",
+        "hb-d128-r64-pool-s22"
+      ]
+    }
+  ],
+  "created_at": "2026-11-14T14:12:27.716568+00:00",
+  "expected_parameter_checkpoint_gib": {
+    "main": 26.552756935358047,
+    "scope": "tensor bytes before serialization, metadata, recordings and transient recovery probes",
+    "with_extensions": 44.25459489226341
+  },
+  "extension_target_tokens": 268435456,
+  "main_target_tokens": 134217728,
+  "schema": "tide-v10-frozen-table-v1",
+  "selection": {
+    "128": {
+      "active_parameter_relative_difference": 0.018861230994659195,
+      "matching": "within10pct calibration only",
+      "q10": "v10-cal-hb-d128-r28-tau2",
+      "q3": "v10-cal-hb-d128-r64",
+      "reason": "minimum active-parameter mismatch within predeclared activity band; no NLL ranking"
+    },
+    "64": {
+      "active_parameter_relative_difference": 0.011402823929316241,
+      "matching": "within10pct calibration only",
+      "q10": "v10-cal-hb-d64-r28-tau2",
+      "q3": "v10-cal-hb-d64-r64",
+      "reason": "minimum active-parameter mismatch within predeclared activity band; no NLL ranking"
+    }
+  }
+}

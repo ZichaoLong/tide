@@ -1,3 +1,13 @@
+# 当前图：v10容量/活动执行准备，v9限定结论保留
+
+新增TL-PERF-v10、TL-CAPACITY-v10、TL-ACTIVE-v10、TL-CONTROL-v10与TL-CONFIRMATION-v10。
+[固定表](studies/language-capacity-activity-v10.md)关联20条主配置与统一tl-v10-main-运行ID；
+性能/机制有具名限定证据，质量结果仍awaiting。实际启动后按项目记录更新planned/queued/running，
+不以提交或退出码创建科学支持。Lens采用同一ID，私有入口不入图。
+R28/R64、两个宽度、小稠密、同形状pool与校准TF分清比较作用，原v9负面与独立确认未测保持。
+
+以下保留历史图说明。
+
 # 当前图：v9训练终态与有范围的联合目标结果
 
 2026-11-13：[终态审阅](studies/direct-v9-results.md)及[固定证据](evidence/direct-v9-results.json)已核对。

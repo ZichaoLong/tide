@@ -20,6 +20,30 @@ M=2**20
 def read(path):return json.loads(path.read_text()) if path.is_file() else {}
 
 
+def makespan(durations,workers=12):
+    """Conservative LPT estimate, not an exclusive-device timing promise."""
+    loads=[0.]*workers
+    for seconds in sorted(durations,reverse=True):
+        i=min(range(workers),key=loads.__getitem__);loads[i]+=seconds
+    return max(loads,default=0.)
+
+
+def continuation_plan(groups,rows,main_target,remaining_seconds,workers=12):
+    by={r['id']:r for r in rows};selected=[];decisions=[];durations=[]
+    for group in groups:
+        group_rows=[by[i] for i in group['ids']]
+        eligible=all(r['eligible'] and isinstance(r.get('training_seconds'),(int,float))
+            and math.isfinite(r['training_seconds']) and r['training_seconds']>0 for r in group_rows)
+        extra=[r['training_seconds']/main_target*(256*M-main_target) for r in group_rows] if eligible else []
+        estimate=makespan(durations+extra,workers)*1.35+1800 if eligible else None
+        fits=eligible and estimate<remaining_seconds
+        decisions.append(dict(group=group['id'],eligible=eligible,estimated_cumulative_seconds=estimate,
+            deadline_fits=fits,decision='extend_group' if fits else 'not_extended',
+            selection='finite execution and available time only; confirmation/quality not used'))
+        if fits:selected+=group['ids'];durations+=extra
+    return selected,decisions
+
+
 class Campaign:
     def __init__(self,a):
         self.a=a;self.root=a.root.resolve();self.source=Path(__file__).resolve().parents[1]
@@ -80,13 +104,35 @@ class Campaign:
         print(json.dumps(dict(submitted=job,until_tokens=until)),flush=True)
         return dict(id=cid,job=job,config=str(config),output=str(out),until_tokens=until)
 
-    def phase(self,name,configs,until,parents=None):
-        phase=dict(state='submitting',started_at=now(),cases=[],results=[]);self.state['phases'][name]=phase;self.publish()
-        # Longest measured trajectories request resources first. Each service
-        # owns one case, so a short/failed case never pins a strided work list.
-        for c in sorted(configs,key=lambda x:x['resource_admission']['targets_per_second']):
-            phase['cases'].append(self.submit(name,c,until,parents.get(c['id']) if parents else None));self.publish()
-        phase['state']='running';self.publish()
+    def confirm(self,stage,endpoints):
+        name='confirm-'+stage;phase=dict(state='submitting',cases=[],skipped=[],started_at=now())
+        self.state['phases'][name]=phase;self.publish()
+        for row in endpoints:
+            if not row['eligible']:
+                phase['skipped'].append(dict(id=row['id'],reason='endpoint execution incomplete; no quality exclusion'))
+                continue
+            self.guard();cid=row['id'];job='v10-'+name+'-'+cid;config=Path(row['config'])
+            checkpoint=Path(row['output'])/'train/latest.pt';out=self.root/'runs'/job
+            resource=self.a.output/stage/(cid+'-resource.json');cap=int(self.deadline-time.time()-30)
+            argv=[sys.executable,str(self.source/'scripts/job.py'),'submit','--name',job,'--source',str(self.source),
+                '--output',str(self.root/'artifacts/jobs'/job),'--env-script',str(self.source/'scripts/env.sh'),
+                '--env','TIDE_LAB_VENV='+str(self.root/'.venv-positive-floor-v1'),
+                '--env','TIDE_LAB_RESOURCE_POLICY='+str(resource),'--device','npu','--threads','4',
+                '--memory-gib','64','--timeout',str(cap),'--wait-seconds',str(cap-120),
+                '--queue-helper',str(self.source/'scripts/run_on_light_device.py')]
+            for p in (config,checkpoint,resource,self.a.data/'data-lock.json'):argv+=['--input',str(p)]
+            argv+=['--','python','scripts/evaluate_direct_v10.py','--config',str(config),'--checkpoint',str(checkpoint),
+                '--data',str(self.a.data),'--output',str(out),'--lens-cli',self.a.lens_cli,'--run-id','tl-'+job,
+                '--deadline-epoch',str(self.deadline)]
+            r=subprocess.run(argv,capture_output=True,text=True)
+            if r.returncode:raise RuntimeError(r.stderr+' '+r.stdout)
+            self.state['jobs'].append(job);phase['cases'].append(dict(id=cid,job=job,output=str(out)));self.publish()
+        phase['state']='running';self.publish();self.wait_phase(phase)
+        phase['results']=[dict(id=c['id'],job=c['job'],**{k:v for k,v in read(Path(c['output'])/'result.json').items()
+            if k in ('state','nll','tokens','error','exposure','checkpoint_sha256')}) for c in phase['cases']]
+        phase.update(state='terminal',finished_at=now());self.publish()
+
+    def wait_phase(self,phase):
         while True:
             self.guard();observed=[]
             for c in phase['cases']:
@@ -95,12 +141,21 @@ class Campaign:
                     terminal=o['termination_verified_now'] and o['state'].get('state') in TERMINAL,
                     physical_id=(o.get('queue') or {}).get('physical_id')))
             phase['observed']=observed;self.publish()
-            if all(x['terminal'] for x in observed):break
+            if all(x['terminal'] for x in observed):return
             time.sleep(20)
+
+    def phase(self,name,configs,until,parents=None):
+        phase=dict(state='submitting',started_at=now(),cases=[],results=[]);self.state['phases'][name]=phase;self.publish()
+        # Longest measured trajectories request resources first. Each service
+        # owns one case, so a short/failed case never pins a strided work list.
+        for c in sorted(configs,key=lambda x:x['resource_admission']['targets_per_second']):
+            phase['cases'].append(self.submit(name,c,until,parents.get(c['id']) if parents else None));self.publish()
+        phase['state']='running';self.publish()
+        self.wait_phase(phase)
         for c in phase['cases']:
             p=Path(c['output']);r=read(p/'train/result.json');v=read(p/'train/validation-final.json');pr=read(p/'train/progress.json')
             eligible=(r.get('state')=='completed' and r.get('progress',{}).get('tokens')==until and v.get('state')=='completed'
-                and v.get('tokens')==131072 and math.isfinite(v.get('nll',float('nan')))
+                and v.get('tokens')==131072 and isinstance(v.get('nll'),(int,float)) and math.isfinite(v['nll'])
                 and r.get('inference',{}).get('state')=='completed')
             phase['results'].append(dict(c,eligible=eligible,execution=r.get('state','not_started'),
                 tokens=r.get('progress',{}).get('tokens'),nll=v.get('nll'),last_update=pr.get('last_update',{}),
@@ -110,18 +165,17 @@ class Campaign:
     def run(self):
         configs=[read(self.cfg/'table/main'/(cid+'.json')) for cid in self.catalog['cases']]
         main_target=self.catalog['main_target_tokens'];main=self.phase('main',configs,main_target)
-        by={x['id']:x for x in main};extensions=[];decisions=[]
-        for group in self.catalog['continuation_groups']:
-            rows=[by[i] for i in group['ids']];eligible=all(x['eligible'] for x in rows)
-            remaining_tokens=256*M-main_target
-            worst=max((x['training_seconds']/main_target*remaining_tokens for x in rows if x['training_seconds']),default=float('inf'))
-            fits=time.time()+worst*1.35+1800<self.deadline
-            decisions.append(dict(group=group['id'],eligible=eligible,estimated_worst_seconds=worst if math.isfinite(worst) else None,
-                deadline_fits=fits,decision='extend_group' if eligible and fits else 'not_extended'))
-            if eligible and fits:extensions.extend(c for c in configs if c['id'] in group['ids'])
+        by={x['id']:x for x in main}
+        ids,decisions=continuation_plan(self.catalog['continuation_groups'],main,main_target,self.deadline-time.time(),
+            self.budget['max_npu_workers'])
         self.state['continuation_decisions']=decisions;self.publish()
-        if extensions:self.phase('extend',extensions,256*M,parents=by)
-        self.state.update(state='completed',finished_at=now(),scope='finite execution terminal; independent confirmation and scientific review are separate');self.publish()
+        # Decisions are frozen before observing the fresh confirmation split.
+        # Every eligible common endpoint is evaluated, including negatives.
+        self.confirm('main',main)
+        if ids:
+            extended=self.phase('extend',[c for c in configs if c['id'] in ids],256*M,parents=by)
+            self.confirm('extend',extended)
+        self.state.update(state='completed',finished_at=now(),scope='finite execution terminal; individual failures retained; scientific review remains separate');self.publish()
 
     def stop_children(self):
         for job in self.state['jobs']:

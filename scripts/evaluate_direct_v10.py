@@ -14,7 +14,7 @@ def main(a):
     from tide_lab.campaign_data import Corpus
     from tide_lab.campaign_runtime import make_model,evaluate,memory
     c=json.loads(a.config.read_text());device=runtime(c['device'],c['threads'],c['seed'])
-    a.output.mkdir(parents=True,exist_ok=False);run_id='tl-v10-confirm-'+c['id']
+    a.output.mkdir(parents=True,exist_ok=False);run_id=a.run_id
     report=dict(schema='tide-v10-confirmation-v1',state='running',started_at=now(),source=source_identity(),installation=installed_identity(),
         config_sha256=digest(a.config),checkpoint=str(a.checkpoint),checkpoint_sha256=digest(a.checkpoint),test_access=False)
     atomic_json(a.output/'result.json',report)
@@ -44,4 +44,5 @@ def main(a):
 if __name__=='__main__':
     p=argparse.ArgumentParser()
     for n in ('config','checkpoint','data','output'):p.add_argument('--'+n,type=Path,required=True)
-    p.add_argument('--lens-cli',required=True);p.add_argument('--deadline-epoch',type=float,required=True);main(p.parse_args())
+    p.add_argument('--lens-cli',required=True);p.add_argument('--run-id',required=True)
+    p.add_argument('--deadline-epoch',type=float,required=True);main(p.parse_args())

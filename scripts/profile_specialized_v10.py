@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """One real-shape NPU operator trace, separate from uninstrumented timing."""
 import argparse
+import csv
 import json
 from pathlib import Path
 import sys
@@ -22,11 +23,14 @@ def main(a):
             record_shapes=True,profile_memory=False,with_stack=False,
             on_trace_ready=torch_npu.profiler.tensorboard_trace_handler(str(a.output/'trace'))) as prof:
         row=update(model,opt,b,c,8*2**20,device);prof.step()
-    operations=[dict(key=e.key,count=e.count,self_cpu_time_total=e.self_cpu_time_total) for e in prof.key_averages()]
+    # TorchNPU exports CSV; its profiler object does not expose Torch's
+    # key_averages API. The original failed exporter/trace remains preserved.
+    file=next((a.output/'trace').glob('*/ASCEND_PROFILER_OUTPUT/operator_details.csv'))
+    with file.open() as f:operations=list(csv.DictReader(f))
     atomic_json(a.output/'result.json',dict(schema='tide-v10-operator-trace-v1',state='completed',at=now(),
         source=source_identity(),installation=installed_identity(),config=c,uninstrumented_warmups=warm,
         instrumented_update=row,operations=operations,scope='one fixed shape trace; instrumented time is not a speed estimate'))
-    print(json.dumps([o for o in operations if any(k in o['key'].lower() for k in ('fusion_attention','select_backward','unbind'))]),flush=True)
+    print(json.dumps([o for o in operations if any(k in o['Name'].lower() for k in ('fusion_attention','select_backward','unbind'))]),flush=True)
 
 
 if __name__=='__main__':

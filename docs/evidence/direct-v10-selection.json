@@ -1,0 +1,576 @@
+{
+  "catalog": {
+    "cases": [
+      "hb-d64-r28-q10-s11",
+      "hb-d64-r64-q3-s11",
+      "hb-d64-r4-dense-match-s11",
+      "tf-d192-l6-s11",
+      "hb-d64-r28-q10-s22",
+      "hb-d64-r64-q3-s22",
+      "hb-d64-r4-dense-match-s22",
+      "tf-d192-l6-s22",
+      "hb-d128-r28-q10-s11",
+      "hb-d128-r64-q3-s11",
+      "hb-d128-r3-dense-match-s11",
+      "tf-d256-l12-s11",
+      "hb-d128-r28-pool-s11",
+      "hb-d128-r64-pool-s11",
+      "hb-d128-r28-q10-s22",
+      "hb-d128-r64-q3-s22",
+      "hb-d128-r3-dense-match-s22",
+      "tf-d256-l12-s22",
+      "hb-d128-r28-pool-s22",
+      "hb-d128-r64-pool-s22"
+    ],
+    "confirmation": {
+      "comparisons": "width within activity; q10/q3/dense within active budget; d128 same-shape pools; calibrated TF",
+      "endpoints": [
+        "all eligible128M",
+        "all eligible256M"
+      ],
+      "selection_feedback": false,
+      "test_access": false,
+      "tokens": 262144
+    },
+    "continuation_groups": [
+      {
+        "id": "active-budget-d64",
+        "ids": [
+          "hb-d64-r28-q10-s11",
+          "hb-d64-r64-q3-s11",
+          "hb-d64-r4-dense-match-s11",
+          "tf-d192-l6-s11",
+          "hb-d64-r28-q10-s22",
+          "hb-d64-r64-q3-s22",
+          "hb-d64-r4-dense-match-s22",
+          "tf-d192-l6-s22"
+        ]
+      },
+      {
+        "id": "active-budget-d128",
+        "ids": [
+          "hb-d128-r28-q10-s11",
+          "hb-d128-r64-q3-s11",
+          "hb-d128-r3-dense-match-s11",
+          "tf-d256-l12-s11",
+          "hb-d128-r28-pool-s11",
+          "hb-d128-r64-pool-s11",
+          "hb-d128-r28-q10-s22",
+          "hb-d128-r64-q3-s22",
+          "hb-d128-r3-dense-match-s22",
+          "tf-d256-l12-s22",
+          "hb-d128-r28-pool-s22",
+          "hb-d128-r64-pool-s22"
+        ]
+      }
+    ],
+    "created_at": "2026-11-14T14:12:27.716568+00:00",
+    "expected_parameter_checkpoint_gib": {
+      "main": 26.552756935358047,
+      "scope": "tensor bytes before serialization, metadata, recordings and transient recovery probes",
+      "with_extensions": 44.25459489226341
+    },
+    "extension_target_tokens": 268435456,
+    "main_target_tokens": 134217728,
+    "schema": "tide-v10-frozen-table-v1",
+    "selection": {
+      "128": {
+        "active_parameter_relative_difference": 0.018861230994659195,
+        "matching": "within10pct calibration only",
+        "q10": "v10-cal-hb-d128-r28-tau2",
+        "q3": "v10-cal-hb-d128-r64",
+        "reason": "minimum active-parameter mismatch within predeclared activity band; no NLL ranking"
+      },
+      "64": {
+        "active_parameter_relative_difference": 0.011402823929316241,
+        "matching": "within10pct calibration only",
+        "q10": "v10-cal-hb-d64-r28-tau2",
+        "q3": "v10-cal-hb-d64-r64",
+        "reason": "minimum active-parameter mismatch within predeclared activity band; no NLL ranking"
+      }
+    }
+  },
+  "controls_result_sha256": "9c627ce382aa259e6dd35714e98dad125dc757b1e788a527469d6afe1c378d0b",
+  "created_at": "2026-11-14T14:12:27.717848+00:00",
+  "hb_calibrations": [
+    {
+      "id": "v10-cal-hb-d64-r20",
+      "mean_tail": {
+        "activity/active_parameters_per_position": 2804900.0112304688,
+        "activity/body_full_all_fraction": 0.10415496826171874,
+        "activity/body_receipt_fraction": 0.2956279754638672,
+        "activity/controller_ema": 0.10476090689345466,
+        "activity/controller_tau_scale": 0.7475949194640448,
+        "activity/full_all_fraction": 0.10415496826171874,
+        "activity/full_fraction": 0.3523165634000258,
+        "activity/receipt_fraction": 0.2956279754638672,
+        "activity/send_strength": 245760.0001220703,
+        "gradient/router_l2": 0.16458400059491396,
+        "train/tokens_per_second": 17923.942112781155,
+        "work/router_multi_unsaturated_rows": 12225.5
+      },
+      "nll": 6.599065561778843,
+      "parameters": 15993832,
+      "peak_mib": 21696.44580078125,
+      "region_width": 20,
+      "result": "runs/v10-calibration/v10-cal-hb-d64-r20/result.json",
+      "sha256": "812e60152424a0663bf99a55cf8a5db4d65f89610fc0b0af40fc162984698376",
+      "source_commit": "f263f0cc3d0bf0ddd206e90b4b349879535dc27c",
+      "temperature": 0.18410951769173398
+    },
+    {
+      "id": "v10-cal-hb-d64-r24",
+      "mean_tail": {
+        "activity/active_parameters_per_position": 2882061.5439453125,
+        "activity/body_full_all_fraction": 0.08666880925496419,
+        "activity/body_receipt_fraction": 0.26228607495625816,
+        "activity/controller_ema": 0.08724618716407688,
+        "activity/controller_tau_scale": 1.0958897818684326,
+        "activity/full_all_fraction": 0.08666880925496419,
+        "activity/full_fraction": 0.33043695547380275,
+        "activity/receipt_fraction": 0.26228607495625816,
+        "activity/send_strength": 245760.0,
+        "gradient/router_l2": 0.17423209454864264,
+        "train/tokens_per_second": 7262.405420679062,
+        "work/router_multi_unsaturated_rows": 15908.125
+      },
+      "nll": 6.505968436598778,
+      "parameters": 19114768,
+      "peak_mib": 25959.681640625,
+      "region_width": 24,
+      "result": "runs/v10-calibration/v10-cal-hb-d64-r24/result.json",
+      "sha256": "1a0e49b92916cfe5d9da8ed4392e1ded7318af1c7b627c24841d7ce079682ded",
+      "source_commit": "f263f0cc3d0bf0ddd206e90b4b349879535dc27c",
+      "temperature": 0.2869816145445966
+    },
+    {
+      "id": "v10-cal-hb-d64-r28",
+      "mean_tail": {
+        "activity/active_parameters_per_position": 2891560.703125,
+        "activity/body_full_all_fraction": 0.07447312218802316,
+        "activity/body_receipt_fraction": 0.22594424656459264,
+        "activity/controller_ema": 0.07464986757455103,
+        "activity/controller_tau_scale": 1.5990156618109617,
+        "activity/full_all_fraction": 0.07447312218802316,
+        "activity/full_fraction": 0.3296068582173587,
+        "activity/receipt_fraction": 0.22594424656459264,
+        "activity/send_strength": 245759.99951171875,
+        "gradient/router_l2": 0.13814660627394915,
+        "train/tokens_per_second": 11997.292001068587,
+        "work/router_multi_unsaturated_rows": 19341.6875
+      },
+      "nll": 6.289561408571899,
+      "parameters": 22235704,
+      "peak_mib": 30229.90625,
+      "region_width": 28,
+      "result": "runs/v10-calibration/v10-cal-hb-d64-r28/result.json",
+      "sha256": "77243bc8d3b118127474a3601f0618b6db2e42d6829c3f3a0c6fd748791092a1",
+      "source_commit": "f263f0cc3d0bf0ddd206e90b4b349879535dc27c",
+      "temperature": 0.44058729303598604
+    },
+    {
+      "id": "v10-cal-hb-d64-r64",
+      "mean_tail": {
+        "activity/active_parameters_per_position": 3697030.7923583984,
+        "activity/body_full_all_fraction": 0.032301797469456994,
+        "activity/body_receipt_fraction": 0.16060274243354797,
+        "activity/controller_ema": 0.03266640905236349,
+        "activity/controller_tau_scale": 0.7382417865292435,
+        "activity/full_all_fraction": 0.032301797469456994,
+        "activity/full_fraction": 0.20112861511418456,
+        "activity/receipt_fraction": 0.16060274243354797,
+        "activity/send_strength": 241920.00003051758,
+        "gradient/router_l2": 0.15961930248886347,
+        "train/tokens_per_second": 6010.1431573516375,
+        "work/router_multi_unsaturated_rows": 10180.8125
+      },
+      "nll": 6.599811826366931,
+      "parameters": 50324128,
+      "peak_mib": 34967.28125,
+      "region_width": 64,
+      "result": "runs/v10-calibration/v10-cal-hb-d64-r64/result.json",
+      "sha256": "970d92c2f41116db257acc3033816da3e8d6162ffbc2fdacb719ec0c2488cf00",
+      "source_commit": "f263f0cc3d0bf0ddd206e90b4b349879535dc27c",
+      "temperature": 0.1820363083945172
+    },
+    {
+      "id": "v10-cal-hb-d64-r28-tau2",
+      "mean_tail": {
+        "activity/active_parameters_per_position": 3654874.201171875,
+        "activity/body_full_all_fraction": 0.09760247639247349,
+        "activity/body_receipt_fraction": 0.2937098366873605,
+        "activity/controller_ema": 0.10128394425812655,
+        "activity/controller_tau_scale": 0.5427059481666107,
+        "activity/full_all_fraction": 0.09760247639247349,
+        "activity/full_fraction": 0.33230979615123696,
+        "activity/receipt_fraction": 0.2937098366873605,
+        "activity/send_strength": 245760.00067138672,
+        "gradient/router_l2": 0.19880891777575016,
+        "train/tokens_per_second": 12027.224499729928,
+        "work/router_multi_unsaturated_rows": 81787.0
+      },
+      "nll": 6.105592321138829,
+      "parameters": 22235704,
+      "peak_mib": 30229.90625,
+      "region_width": 28,
+      "result": "runs/v10-calibration/v10-cal-hb-d64-r28-tau2/result.json",
+      "sha256": "ea9969b8153de5817841deb9a2360054ce1304a81ae44daec631981656614459",
+      "source_commit": "456a79c6b98174c95bf1dd198cef7111ea4873b9",
+      "temperature": 1.085616851517404
+    },
+    {
+      "id": "v10-cal-hb-d128-r20",
+      "mean_tail": {
+        "activity/active_parameters_per_position": 7822863.280110677,
+        "activity/body_full_all_fraction": 0.10255396525065104,
+        "activity/body_receipt_fraction": 0.2943112246195475,
+        "activity/controller_ema": 0.10317685987186177,
+        "activity/controller_tau_scale": 0.7911373079869228,
+        "activity/full_all_fraction": 0.10255396525065104,
+        "activity/full_fraction": 0.34845436330679286,
+        "activity/receipt_fraction": 0.2943112246195475,
+        "activity/send_strength": 241920.0001220703,
+        "gradient/router_l2": 0.19220707472413778,
+        "train/tokens_per_second": 11055.902946911516,
+        "work/router_multi_unsaturated_rows": 9578.1875
+      },
+      "nll": 6.224020081572235,
+      "parameters": 54225896,
+      "peak_mib": 18535.93017578125,
+      "region_width": 20,
+      "result": "runs/v10-calibration/v10-cal-hb-d128-r20/result.json",
+      "sha256": "b9754ac95608d3baec7b551370144b74f58941e635346813376c66192ab8bd00",
+      "source_commit": "f263f0cc3d0bf0ddd206e90b4b349879535dc27c",
+      "temperature": 0.19583804345333727
+    },
+    {
+      "id": "v10-cal-hb-d128-r24",
+      "mean_tail": {
+        "activity/active_parameters_per_position": 7980238.3277994795,
+        "activity/body_full_all_fraction": 0.08604619767930773,
+        "activity/body_receipt_fraction": 0.2593478997548421,
+        "activity/controller_ema": 0.08643247782565508,
+        "activity/controller_tau_scale": 1.1552768804927902,
+        "activity/full_all_fraction": 0.08604619767930773,
+        "activity/full_fraction": 0.33177865367644144,
+        "activity/receipt_fraction": 0.2593478997548421,
+        "activity/send_strength": 241919.99993896484,
+        "gradient/router_l2": 0.17092094663530588,
+        "train/tokens_per_second": 9081.184344422796,
+        "work/router_multi_unsaturated_rows": 12631.125
+      },
+      "nll": 6.197107622399926,
+      "parameters": 64883472,
+      "peak_mib": 22154.4052734375,
+      "region_width": 24,
+      "result": "runs/v10-calibration/v10-cal-hb-d128-r24/result.json",
+      "sha256": "626abe4f844915852bbfb38563ccd4f17a1bd364706dc41bb65c12a3db2067d1",
+      "source_commit": "f263f0cc3d0bf0ddd206e90b4b349879535dc27c",
+      "temperature": 0.30343888009499054
+    },
+    {
+      "id": "v10-cal-hb-d128-r28",
+      "mean_tail": {
+        "activity/active_parameters_per_position": 8229541.734212239,
+        "activity/body_full_all_fraction": 0.07482653118315197,
+        "activity/body_receipt_fraction": 0.2396993773324149,
+        "activity/controller_ema": 0.07486840700767407,
+        "activity/controller_tau_scale": 1.582800722384739,
+        "activity/full_all_fraction": 0.07482653118315197,
+        "activity/full_fraction": 0.3121674323611855,
+        "activity/receipt_fraction": 0.2396993773324149,
+        "activity/send_strength": 241920.00024414062,
+        "gradient/router_l2": 0.18969073239713907,
+        "train/tokens_per_second": 8163.503386553916,
+        "work/router_multi_unsaturated_rows": 17225.3125
+      },
+      "nll": 6.129263427108526,
+      "parameters": 75541048,
+      "peak_mib": 25848.61181640625,
+      "region_width": 28,
+      "result": "runs/v10-calibration/v10-cal-hb-d128-r28/result.json",
+      "sha256": "fdf1de129a03b91cee6e3d9691f76493538bc7c2439901306e73e03de7e22a1d",
+      "source_commit": "f263f0cc3d0bf0ddd206e90b4b349879535dc27c",
+      "temperature": 0.43563147717620937
+    },
+    {
+      "id": "v10-cal-hb-d128-r64",
+      "mean_tail": {
+        "activity/active_parameters_per_position": 9418355.317220053,
+        "activity/body_full_all_fraction": 0.031853187084198,
+        "activity/body_receipt_fraction": 0.16051175991694133,
+        "activity/controller_ema": 0.031986178041235803,
+        "activity/controller_tau_scale": 0.7999598648938786,
+        "activity/full_all_fraction": 0.031853187084198,
+        "activity/full_fraction": 0.19844771896339325,
+        "activity/receipt_fraction": 0.16051175991694133,
+        "activity/send_strength": 241920.00003051758,
+        "gradient/router_l2": 0.18457345012575388,
+        "train/tokens_per_second": 3649.7311761003125,
+        "work/router_multi_unsaturated_rows": 6260.0
+      },
+      "nll": 6.161673383321613,
+      "parameters": 171459232,
+      "peak_mib": 30832.6162109375,
+      "region_width": 64,
+      "result": "runs/v10-calibration/v10-cal-hb-d128-r64/result.json",
+      "sha256": "c41de63af2b8151ebfa380fee1210e5268dde413ca32f8c5684872bf912833c2",
+      "source_commit": "f263f0cc3d0bf0ddd206e90b4b349879535dc27c",
+      "temperature": 0.19850293868686902
+    },
+    {
+      "id": "v10-cal-hb-d128-r28-tau2",
+      "mean_tail": {
+        "activity/active_parameters_per_position": 9595997.092447916,
+        "activity/body_full_all_fraction": 0.0918613660903204,
+        "activity/body_receipt_fraction": 0.2659547624133882,
+        "activity/controller_ema": 0.0960299676739583,
+        "activity/controller_tau_scale": 0.5758283952005333,
+        "activity/full_all_fraction": 0.0918613660903204,
+        "activity/full_fraction": 0.3454051462080484,
+        "activity/receipt_fraction": 0.2659547624133882,
+        "activity/send_strength": 241919.99954223633,
+        "gradient/router_l2": 0.19070767518132925,
+        "train/tokens_per_second": 7866.916704158487,
+        "work/router_multi_unsaturated_rows": 79122.0625
+      },
+      "nll": 5.828237080480903,
+      "parameters": 75541048,
+      "peak_mib": 25848.61181640625,
+      "region_width": 28,
+      "result": "runs/v10-calibration/v10-cal-hb-d128-r28-tau2/result.json",
+      "sha256": "d605351c3314d19c211a5eac1ba1d86daab57b93efe9fa245576f986430bb5be",
+      "source_commit": "456a79c6b98174c95bf1dd198cef7111ea4873b9",
+      "temperature": 1.1733820306301923
+    }
+  ],
+  "limitations": [
+    "calibration matching is not a guarantee of later activity matching",
+    "dense physical Full with masks; no achieved sparse compute saving",
+    "TF is a near-active-budget language control; its role mix differs",
+    "new attention omits historical normal-tiny attention flooring; strict failures retained"
+  ],
+  "schema": "tide-v10-selection-review-v1",
+  "table": [
+    {
+      "calibrated_active_parameters": 3654874.201171875,
+      "calibrated_full_all_fraction": 0.09760247639247349,
+      "global_batch": 64,
+      "group": "TL-CAPACITY-v10",
+      "id": "hb-d64-r28-q10-s11",
+      "microbatch": 32,
+      "parameters": 22235704,
+      "peak_mib": 30229.90625,
+      "rate": 12027.224499729928
+    },
+    {
+      "calibrated_active_parameters": 3697030.7923583984,
+      "calibrated_full_all_fraction": 0.032301797469456994,
+      "global_batch": 64,
+      "group": "TL-CAPACITY-v10",
+      "id": "hb-d64-r64-q3-s11",
+      "microbatch": 16,
+      "parameters": 50324128,
+      "peak_mib": 34967.28125,
+      "rate": 6010.1431573516375
+    },
+    {
+      "calibrated_active_parameters": null,
+      "calibrated_full_all_fraction": null,
+      "global_batch": 64,
+      "group": "TL-ACTIVE-v10",
+      "id": "hb-d64-r4-dense-match-s11",
+      "microbatch": 64,
+      "parameters": 3755848,
+      "peak_mib": 9701.76123046875,
+      "rate": 65915.0005896451
+    },
+    {
+      "calibrated_active_parameters": null,
+      "calibrated_full_all_fraction": null,
+      "global_batch": 64,
+      "group": "TL-CONTROL-v10",
+      "id": "tf-d192-l6-s11",
+      "microbatch": 64,
+      "parameters": 3460096,
+      "peak_mib": 2339.73388671875,
+      "rate": 409870.46937660716
+    },
+    {
+      "calibrated_active_parameters": 3654874.201171875,
+      "calibrated_full_all_fraction": 0.09760247639247349,
+      "global_batch": 64,
+      "group": "TL-CAPACITY-v10",
+      "id": "hb-d64-r28-q10-s22",
+      "microbatch": 32,
+      "parameters": 22235704,
+      "peak_mib": 30229.90625,
+      "rate": 12027.224499729928
+    },
+    {
+      "calibrated_active_parameters": 3697030.7923583984,
+      "calibrated_full_all_fraction": 0.032301797469456994,
+      "global_batch": 64,
+      "group": "TL-CAPACITY-v10",
+      "id": "hb-d64-r64-q3-s22",
+      "microbatch": 16,
+      "parameters": 50324128,
+      "peak_mib": 34967.28125,
+      "rate": 6010.1431573516375
+    },
+    {
+      "calibrated_active_parameters": null,
+      "calibrated_full_all_fraction": null,
+      "global_batch": 64,
+      "group": "TL-ACTIVE-v10",
+      "id": "hb-d64-r4-dense-match-s22",
+      "microbatch": 64,
+      "parameters": 3755848,
+      "peak_mib": 9701.76123046875,
+      "rate": 65915.0005896451
+    },
+    {
+      "calibrated_active_parameters": null,
+      "calibrated_full_all_fraction": null,
+      "global_batch": 64,
+      "group": "TL-CONTROL-v10",
+      "id": "tf-d192-l6-s22",
+      "microbatch": 64,
+      "parameters": 3460096,
+      "peak_mib": 2339.73388671875,
+      "rate": 409870.46937660716
+    },
+    {
+      "calibrated_active_parameters": 9595997.092447916,
+      "calibrated_full_all_fraction": 0.0918613660903204,
+      "global_batch": 64,
+      "group": "TL-CAPACITY-v10",
+      "id": "hb-d128-r28-q10-s11",
+      "microbatch": 16,
+      "parameters": 75541048,
+      "peak_mib": 25848.61181640625,
+      "rate": 7866.916704158487
+    },
+    {
+      "calibrated_active_parameters": 9418355.317220053,
+      "calibrated_full_all_fraction": 0.031853187084198,
+      "global_batch": 64,
+      "group": "TL-CAPACITY-v10",
+      "id": "hb-d128-r64-q3-s11",
+      "microbatch": 8,
+      "parameters": 171459232,
+      "peak_mib": 30832.6162109375,
+      "rate": 3649.7311761003125
+    },
+    {
+      "calibrated_active_parameters": null,
+      "calibrated_full_all_fraction": null,
+      "global_batch": 64,
+      "group": "TL-ACTIVE-v10",
+      "id": "hb-d128-r3-dense-match-s11",
+      "microbatch": 64,
+      "parameters": 9668478,
+      "peak_mib": 11944.24755859375,
+      "rate": 59238.00692589768
+    },
+    {
+      "calibrated_active_parameters": null,
+      "calibrated_full_all_fraction": null,
+      "global_batch": 64,
+      "group": "TL-CONTROL-v10",
+      "id": "tf-d256-l12-s11",
+      "microbatch": 64,
+      "parameters": 10530304,
+      "peak_mib": 4499.931640625,
+      "rate": 233938.14923538532
+    },
+    {
+      "calibrated_active_parameters": null,
+      "calibrated_full_all_fraction": null,
+      "global_batch": 64,
+      "group": "TL-CONTROL-v10",
+      "id": "hb-d128-r28-pool-s11",
+      "microbatch": 16,
+      "parameters": 75541048,
+      "peak_mib": 25509.3193359375,
+      "rate": 7833.045926782016
+    },
+    {
+      "calibrated_active_parameters": null,
+      "calibrated_full_all_fraction": null,
+      "global_batch": 64,
+      "group": "TL-CONTROL-v10",
+      "id": "hb-d128-r64-pool-s11",
+      "microbatch": 8,
+      "parameters": 171459232,
+      "peak_mib": 30118.794921875,
+      "rate": 3387.269882700757
+    },
+    {
+      "calibrated_active_parameters": 9595997.092447916,
+      "calibrated_full_all_fraction": 0.0918613660903204,
+      "global_batch": 64,
+      "group": "TL-CAPACITY-v10",
+      "id": "hb-d128-r28-q10-s22",
+      "microbatch": 16,
+      "parameters": 75541048,
+      "peak_mib": 25848.61181640625,
+      "rate": 7866.916704158487
+    },
+    {
+      "calibrated_active_parameters": 9418355.317220053,
+      "calibrated_full_all_fraction": 0.031853187084198,
+      "global_batch": 64,
+      "group": "TL-CAPACITY-v10",
+      "id": "hb-d128-r64-q3-s22",
+      "microbatch": 8,
+      "parameters": 171459232,
+      "peak_mib": 30832.6162109375,
+      "rate": 3649.7311761003125
+    },
+    {
+      "calibrated_active_parameters": null,
+      "calibrated_full_all_fraction": null,
+      "global_batch": 64,
+      "group": "TL-ACTIVE-v10",
+      "id": "hb-d128-r3-dense-match-s22",
+      "microbatch": 64,
+      "parameters": 9668478,
+      "peak_mib": 11944.24755859375,
+      "rate": 59238.00692589768
+    },
+    {
+      "calibrated_active_parameters": null,
+      "calibrated_full_all_fraction": null,
+      "global_batch": 64,
+      "group": "TL-CONTROL-v10",
+      "id": "tf-d256-l12-s22",
+      "microbatch": 64,
+      "parameters": 10530304,
+      "peak_mib": 4499.931640625,
+      "rate": 233938.14923538532
+    },
+    {
+      "calibrated_active_parameters": null,
+      "calibrated_full_all_fraction": null,
+      "global_batch": 64,
+      "group": "TL-CONTROL-v10",
+      "id": "hb-d128-r28-pool-s22",
+      "microbatch": 16,
+      "parameters": 75541048,
+      "peak_mib": 25509.3193359375,
+      "rate": 7833.045926782016
+    },
+    {
+      "calibrated_active_parameters": null,
+      "calibrated_full_all_fraction": null,
+      "global_batch": 64,
+      "group": "TL-CONTROL-v10",
+      "id": "hb-d128-r64-pool-s22",
+      "microbatch": 8,
+      "parameters": 171459232,
+      "peak_mib": 30118.794921875,
+      "rate": 3387.269882700757
+    }
+  ]
+}

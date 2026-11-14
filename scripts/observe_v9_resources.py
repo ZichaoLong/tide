@@ -20,9 +20,9 @@ ROOT=Path(__file__).resolve().parents[1]
 def read(p):return json.loads(p.read_text()) if p.exists() else {}
 
 
-def active():
+def active(campaign='v9'):
     result=[]
-    for p in sorted((ROOT/'runs').glob('v9-main-w*-worker/state.json')):
+    for p in sorted((ROOT/'runs').glob(campaign+'-main-*-worker/state.json')):
         w=read(p)
         if w.get('state')!='running':continue
         job=p.parent.name.removesuffix('-worker')
@@ -66,7 +66,7 @@ def main(a):
             if int(fields[3])!=2*int(fields[0])+int(fields[1]):raise ValueError('physical mapping changed')
     rows=[];started=time.monotonic()
     for i in range(a.samples):
-        jobs=active();ids=sorted({j['physical_id'] for j in jobs})
+        jobs=active(a.campaign);ids=sorted({j['physical_id'] for j in jobs if j['physical_id'] is not None})
         with ThreadPoolExecutor(max_workers=8) as pool:devices=list(pool.map(usages,ids))
         rows.append(dict(index=i,at=now(),elapsed_seconds=time.monotonic()-started,jobs=jobs,devices=devices))
         print(json.dumps(dict(sample=i,devices=len(devices))),flush=True)
@@ -86,18 +86,19 @@ def main(a):
         stats.append(dict(physical_id=phy,cases=sorted({j['case'] for j in jobs}),metrics=summary,
             host_cpu=dict(declared_cpu_quota=last['declared_cpu_quota'],average_cores=delta/max(duration,1e-6),
                 changed_process_set=before.keys()!=after.keys(),scope='CPU seconds of persistent service-owned PIDs; shared v1 CPU controller is not per-unit attribution')))
-    write_review_json(a.output,dict(schema='tide-v9-live-resource-observation-v1',observed_at=now(),
+    write_review_json(a.output,dict(schema='tide-'+a.campaign+'-live-resource-observation-v1',observed_at=now(),
         elapsed_seconds=time.monotonic()-started,samples=rows,summary=stats,
         scope='Device-level sampled counters and existing service-owned process CPU deltas; no profiler, model execution, allocation or active-input mutation.',
-        limits=['Shared-card counters are not process-attributed; physical1 also hosts another process at initial audit.',
+        limits=['Shared-card counters are not process-attributed; other workloads may contribute.',
                 'The percentages have different denominators and must not be summed or interpreted as kernel-time fractions.',
-                'Current training uses independent direct implementation6e7bd49e, not a new foundation execution build.',
+                'Source identity is recorded for each service; independent direct models do not certify foundation execution.',
                 'Kernel/operator attribution and causal bottleneck diagnosis require a separate bounded trace.']))
     print(json.dumps(stats),flush=True)
 
 
 if __name__=='__main__':
     p=argparse.ArgumentParser(description=__doc__);p.add_argument('--samples',type=int,default=8)
+    p.add_argument('--campaign',choices=('v9','v10'),default='v9')
     p.add_argument('--interval',type=float,default=4)
     p.add_argument('--output',type=Path,default=Path('docs/evidence/direct-v9-resources-20261112.json'))
     main(p.parse_args())

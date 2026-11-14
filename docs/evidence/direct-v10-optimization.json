@@ -1,0 +1,688 @@
+{
+  "at": "2026-11-14T14:15:00.782257+00:00",
+  "benchmarks": [
+    {
+      "cases": [
+        {
+          "batch": 4,
+          "config": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v10-benchmark-d64/config-r20-reference-b4.json",
+          "median_seconds": 0.41982147097587585,
+          "parameters": 15993832,
+          "peak_mib": 6760.115234375,
+          "positions_per_second": 2439.132037767649,
+          "region_width": 20,
+          "state": "completed",
+          "variant": "reference",
+          "width": 64
+        },
+        {
+          "batch": 4,
+          "config": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v10-benchmark-d64/config-r20-specialized-b4.json",
+          "median_seconds": 0.23535862192511559,
+          "parameters": 15993832,
+          "peak_mib": 2870.31103515625,
+          "positions_per_second": 4350.807255855737,
+          "region_width": 20,
+          "state": "completed",
+          "variant": "specialized",
+          "width": 64
+        },
+        {
+          "batch": 8,
+          "config": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v10-benchmark-d64/config-r20-specialized-b8.json",
+          "median_seconds": 0.23959900066256523,
+          "parameters": 15993832,
+          "peak_mib": 5543.986328125,
+          "positions_per_second": 8547.614949714512,
+          "region_width": 20,
+          "state": "completed",
+          "variant": "specialized",
+          "width": 64
+        },
+        {
+          "batch": 16,
+          "config": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v10-benchmark-d64/config-r20-specialized-b16.json",
+          "median_seconds": 0.29077647998929024,
+          "parameters": 15993832,
+          "peak_mib": 10888.25439453125,
+          "positions_per_second": 14086.421295666218,
+          "region_width": 20,
+          "state": "completed",
+          "variant": "specialized",
+          "width": 64
+        },
+        {
+          "batch": 32,
+          "config": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v10-benchmark-d64/config-r20-specialized-b32.json",
+          "median_seconds": 0.4538412392139435,
+          "parameters": 15993832,
+          "peak_mib": 21485.79638671875,
+          "positions_per_second": 18050.364956231406,
+          "region_width": 20,
+          "state": "completed",
+          "variant": "specialized",
+          "width": 64
+        },
+        {
+          "batch": 64,
+          "config": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v10-benchmark-d64/config-r20-specialized-b64.json",
+          "median_seconds": 0.8424142189323902,
+          "parameters": 15993832,
+          "peak_mib": 42891.69970703125,
+          "positions_per_second": 19448.864503692494,
+          "region_width": 20,
+          "state": "completed",
+          "variant": "specialized",
+          "width": 64
+        },
+        {
+          "batch": 4,
+          "config": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v10-benchmark-d64/config-r20-specialized-foreach-b4.json",
+          "median_seconds": 0.21298762783408165,
+          "parameters": 15993832,
+          "peak_mib": 2870.54541015625,
+          "positions_per_second": 4807.790999004415,
+          "region_width": 20,
+          "state": "completed",
+          "variant": "specialized-foreach",
+          "width": 64
+        },
+        {
+          "batch": 4,
+          "config": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v10-benchmark-d64/config-r64-reference-b4.json",
+          "median_seconds": 0.9473400637507439,
+          "parameters": 50324128,
+          "peak_mib": 21513.94580078125,
+          "positions_per_second": 1080.9212437883618,
+          "region_width": 64,
+          "state": "completed",
+          "variant": "reference",
+          "width": 64
+        },
+        {
+          "batch": 4,
+          "config": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v10-benchmark-d64/config-r64-specialized-b4.json",
+          "median_seconds": 0.26198577135801315,
+          "parameters": 50324128,
+          "peak_mib": 9088.08642578125,
+          "positions_per_second": 3908.6092145083194,
+          "region_width": 64,
+          "state": "completed",
+          "variant": "specialized",
+          "width": 64
+        },
+        {
+          "batch": 8,
+          "config": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v10-benchmark-d64/config-r64-specialized-b8.json",
+          "median_seconds": 0.38322997838258743,
+          "parameters": 50324128,
+          "peak_mib": 17553.89892578125,
+          "positions_per_second": 5344.04956690375,
+          "region_width": 64,
+          "state": "completed",
+          "variant": "specialized",
+          "width": 64
+        },
+        {
+          "batch": 16,
+          "config": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v10-benchmark-d64/config-r64-specialized-b16.json",
+          "median_seconds": 0.6894015222787857,
+          "parameters": 50324128,
+          "peak_mib": 34684.32421875,
+          "positions_per_second": 5941.385198078554,
+          "region_width": 64,
+          "state": "completed",
+          "variant": "specialized",
+          "width": 64
+        },
+        {
+          "batch": 32,
+          "reason": "measured conservative growth exceeds46000MiB",
+          "region_width": 64,
+          "state": "not_attempted",
+          "variant": "specialized",
+          "width": 64
+        },
+        {
+          "batch": 4,
+          "config": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v10-benchmark-d64/config-r64-specialized-foreach-b4.json",
+          "median_seconds": 0.24778146669268608,
+          "parameters": 50324128,
+          "peak_mib": 9086.65966796875,
+          "positions_per_second": 4132.6738987707595,
+          "region_width": 64,
+          "state": "completed",
+          "variant": "specialized-foreach",
+          "width": 64
+        }
+      ],
+      "result": "runs/v10-benchmark-d64/result.json",
+      "sha256": "e52805e4a616c34010f2b7f6c38488b65143257241a481c555b8b5fe16f107de",
+      "source_commit": "89217ec328e9df89b27390da6f0423cf265406de"
+    },
+    {
+      "cases": [
+        {
+          "batch": 4,
+          "config": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v10-benchmark-d128/config-r20-reference-b4.json",
+          "median_seconds": 0.43199221044778824,
+          "parameters": 54225896,
+          "peak_mib": 8904.83349609375,
+          "positions_per_second": 2370.4131121682885,
+          "region_width": 20,
+          "state": "completed",
+          "variant": "reference",
+          "width": 128
+        },
+        {
+          "batch": 4,
+          "config": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v10-benchmark-d128/config-r20-specialized-b4.json",
+          "median_seconds": 0.2109692469239235,
+          "parameters": 54225896,
+          "peak_mib": 5135.626953125,
+          "positions_per_second": 4853.788004321119,
+          "region_width": 20,
+          "state": "completed",
+          "variant": "specialized",
+          "width": 128
+        },
+        {
+          "batch": 8,
+          "config": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v10-benchmark-d128/config-r20-specialized-b8.json",
+          "median_seconds": 0.2678612619638443,
+          "parameters": 54225896,
+          "peak_mib": 9469.0576171875,
+          "positions_per_second": 7645.749090349755,
+          "region_width": 20,
+          "state": "completed",
+          "variant": "specialized",
+          "width": 128
+        },
+        {
+          "batch": 16,
+          "config": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v10-benchmark-d128/config-r20-specialized-b16.json",
+          "median_seconds": 0.3832039423286915,
+          "parameters": 54225896,
+          "peak_mib": 18245.0390625,
+          "positions_per_second": 10688.825316120245,
+          "region_width": 20,
+          "state": "completed",
+          "variant": "specialized",
+          "width": 128
+        },
+        {
+          "batch": 32,
+          "config": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v10-benchmark-d128/config-r20-specialized-b32.json",
+          "median_seconds": 0.7235611937940121,
+          "parameters": 54225896,
+          "peak_mib": 35781.56982421875,
+          "positions_per_second": 11321.779097971013,
+          "region_width": 20,
+          "state": "completed",
+          "variant": "specialized",
+          "width": 128
+        },
+        {
+          "batch": 64,
+          "reason": "measured conservative growth exceeds46000MiB",
+          "region_width": 20,
+          "state": "not_attempted",
+          "variant": "specialized",
+          "width": 128
+        },
+        {
+          "batch": 4,
+          "config": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v10-benchmark-d128/config-r20-specialized-foreach-b4.json",
+          "median_seconds": 0.21277718618512154,
+          "parameters": 54225896,
+          "peak_mib": 5134.494140625,
+          "positions_per_second": 4812.546017546703,
+          "region_width": 20,
+          "state": "completed",
+          "variant": "specialized-foreach",
+          "width": 128
+        },
+        {
+          "batch": 4,
+          "config": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v10-benchmark-d128/config-r64-reference-b4.json",
+          "median_seconds": 0.997233908623457,
+          "parameters": 171459232,
+          "peak_mib": 28379.63330078125,
+          "positions_per_second": 1026.8403341934993,
+          "region_width": 64,
+          "state": "completed",
+          "variant": "reference",
+          "width": 128
+        },
+        {
+          "batch": 4,
+          "config": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v10-benchmark-d128/config-r64-specialized-b4.json",
+          "median_seconds": 0.3347998447716236,
+          "parameters": 171459232,
+          "peak_mib": 16079.62060546875,
+          "positions_per_second": 3058.5438314599555,
+          "region_width": 64,
+          "state": "completed",
+          "variant": "specialized",
+          "width": 128
+        },
+        {
+          "batch": 8,
+          "config": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v10-benchmark-d128/config-r64-specialized-b8.json",
+          "median_seconds": 0.5902702882885933,
+          "parameters": 171459232,
+          "peak_mib": 30088.603515625,
+          "positions_per_second": 3469.5969636857235,
+          "region_width": 64,
+          "state": "completed",
+          "variant": "specialized",
+          "width": 128
+        },
+        {
+          "batch": 16,
+          "reason": "measured conservative growth exceeds46000MiB",
+          "region_width": 64,
+          "state": "not_attempted",
+          "variant": "specialized",
+          "width": 128
+        },
+        {
+          "batch": 4,
+          "config": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v10-benchmark-d128/config-r64-specialized-foreach-b4.json",
+          "median_seconds": 0.31971393525600433,
+          "parameters": 171459232,
+          "peak_mib": 16077.7392578125,
+          "positions_per_second": 3202.8632070105205,
+          "region_width": 64,
+          "state": "completed",
+          "variant": "specialized-foreach",
+          "width": 128
+        },
+        {
+          "batch": 4,
+          "config": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v10-benchmark-d128/config-r64-specialized-recompute-b4.json",
+          "median_seconds": 0.3555610738694668,
+          "parameters": 171459232,
+          "peak_mib": 11150.44140625,
+          "positions_per_second": 2879.955302351038,
+          "region_width": 64,
+          "state": "completed",
+          "variant": "specialized-recompute",
+          "width": 128
+        },
+        {
+          "batch": 8,
+          "config": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v10-benchmark-d128/config-r64-specialized-recompute-b8.json",
+          "median_seconds": 0.6511998102068901,
+          "parameters": 171459232,
+          "peak_mib": 20094.42724609375,
+          "positions_per_second": 3144.964061567122,
+          "region_width": 64,
+          "state": "completed",
+          "variant": "specialized-recompute",
+          "width": 128
+        },
+        {
+          "batch": 16,
+          "config": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v10-benchmark-d128/config-r64-specialized-recompute-b16.json",
+          "median_seconds": 1.241435743868351,
+          "parameters": 171459232,
+          "peak_mib": 38160.18310546875,
+          "positions_per_second": 3299.405563462142,
+          "region_width": 64,
+          "state": "completed",
+          "variant": "specialized-recompute",
+          "width": 128
+        },
+        {
+          "batch": 32,
+          "reason": "measured conservative growth exceeds46000MiB",
+          "region_width": 64,
+          "state": "not_attempted",
+          "variant": "specialized-recompute",
+          "width": 128
+        }
+      ],
+      "result": "runs/v10-benchmark-d128/result.json",
+      "sha256": "bd0463260355cdab8a43eb86b4b782768e26697cf4fb6f0172269b9af91e8853",
+      "source_commit": "89217ec328e9df89b27390da6f0423cf265406de"
+    }
+  ],
+  "fusion": {
+    "cases": [
+      {
+        "comparisons": [
+          {
+            "max_abs": 5.960464477539062e-07,
+            "name": "output",
+            "reference_max": 3.695815324783325,
+            "strict_passed": true
+          },
+          {
+            "max_abs": 3.5762786865234375e-07,
+            "name": "q",
+            "reference_max": 2.164242744445801,
+            "strict_passed": true
+          },
+          {
+            "max_abs": 7.152557373046875e-07,
+            "name": "k",
+            "reference_max": 3.5999667644500732,
+            "strict_passed": true
+          },
+          {
+            "max_abs": 9.5367431640625e-07,
+            "name": "v",
+            "reference_max": 3.58666729927063,
+            "strict_passed": true
+          },
+          {
+            "max_abs": 3.814697265625e-06,
+            "name": "receipt",
+            "reference_max": 27.516023635864258,
+            "strict_passed": true
+          }
+        ],
+        "d": 32,
+        "empty": false,
+        "rate": 0.0,
+        "receipt_mechanism": true,
+        "state": "completed"
+      },
+      {
+        "comparisons": [
+          {
+            "max_abs": 1.4901161193847656e-06,
+            "name": "output",
+            "reference_max": 3.089794158935547,
+            "strict_passed": false
+          },
+          {
+            "max_abs": 1.9073486328125e-06,
+            "name": "q",
+            "reference_max": 2.1043477058410645,
+            "strict_passed": true
+          },
+          {
+            "max_abs": 2.2649765014648438e-06,
+            "name": "k",
+            "reference_max": 2.6261098384857178,
+            "strict_passed": false
+          },
+          {
+            "max_abs": 9.5367431640625e-07,
+            "name": "v",
+            "reference_max": 2.549605369567871,
+            "strict_passed": true
+          },
+          {
+            "max_abs": 3.0517578125e-05,
+            "name": "receipt",
+            "reference_max": 60.607154846191406,
+            "strict_passed": true
+          }
+        ],
+        "d": 32,
+        "empty": false,
+        "rate": 0.099,
+        "receipt_mechanism": true,
+        "state": "completed"
+      },
+      {
+        "comparisons": [
+          {
+            "max_abs": 5.364418029785156e-07,
+            "name": "output",
+            "reference_max": 3.306813955307007,
+            "strict_passed": true
+          },
+          {
+            "max_abs": 9.5367431640625e-07,
+            "name": "q",
+            "reference_max": 2.36386775970459,
+            "strict_passed": true
+          },
+          {
+            "max_abs": 1.4603137969970703e-06,
+            "name": "k",
+            "reference_max": 2.473436117172241,
+            "strict_passed": true
+          },
+          {
+            "max_abs": 1.430511474609375e-06,
+            "name": "v",
+            "reference_max": 4.120179653167725,
+            "strict_passed": true
+          },
+          {
+            "max_abs": 9.1552734375e-05,
+            "name": "receipt",
+            "reference_max": 385.1888427734375,
+            "strict_passed": true
+          }
+        ],
+        "d": 64,
+        "empty": false,
+        "rate": 0.0,
+        "receipt_mechanism": true,
+        "state": "completed"
+      },
+      {
+        "comparisons": [
+          {
+            "max_abs": 1.5497207641601562e-06,
+            "name": "output",
+            "reference_max": 3.847825288772583,
+            "strict_passed": true
+          },
+          {
+            "max_abs": 7.472699508070946e-07,
+            "name": "q",
+            "reference_max": 2.010352611541748,
+            "strict_passed": true
+          },
+          {
+            "max_abs": 1.0728836059570312e-06,
+            "name": "k",
+            "reference_max": 2.9968700408935547,
+            "strict_passed": true
+          },
+          {
+            "max_abs": 9.5367431640625e-07,
+            "name": "v",
+            "reference_max": 2.5449788570404053,
+            "strict_passed": true
+          },
+          {
+            "max_abs": 1.52587890625e-05,
+            "name": "receipt",
+            "reference_max": 128.62911987304688,
+            "strict_passed": true
+          }
+        ],
+        "d": 128,
+        "empty": false,
+        "rate": 0.0,
+        "receipt_mechanism": true,
+        "state": "completed"
+      },
+      {
+        "comparisons": [
+          {
+            "max_abs": 0.0,
+            "name": "output",
+            "reference_max": 0.0,
+            "strict_passed": true
+          },
+          {
+            "max_abs": 0.0,
+            "name": "q",
+            "reference_max": 0.0,
+            "strict_passed": true
+          },
+          {
+            "max_abs": 0.0,
+            "name": "k",
+            "reference_max": 0.0,
+            "strict_passed": true
+          },
+          {
+            "max_abs": 0.0,
+            "name": "v",
+            "reference_max": 0.0,
+            "strict_passed": true
+          },
+          {
+            "max_abs": 0.0,
+            "name": "receipt",
+            "reference_max": 0.0,
+            "strict_passed": true
+          }
+        ],
+        "d": 32,
+        "empty": true,
+        "rate": 0.099,
+        "receipt_mechanism": true,
+        "state": "completed"
+      }
+    ],
+    "result": "runs/v10-fusion-probe/result.json",
+    "sha256": "ba69178bb32e4224d6dafea7e864b176f0762d3142aedea0933a55520f1a7c28",
+    "source_commit": "6c927b326dd6643754abe27ebfaac374d62e6164",
+    "strict_failures": 2,
+    "thresholds": {
+      "atol": 1e-06,
+      "rtol": 1e-05
+    }
+  },
+  "limits": [
+    "same-weight reference and specialized finite attention policies differ; no strict equivalent speedup claim",
+    "physical Full remains dense, sparse activity is logical",
+    "microbatch synthetic update timing excludes preparation/transfers/checkpoint/evaluation",
+    "benchmark work/physical_attention_pairs historically meant dense causal pairs; new names separate causal inventory and physical upper bound"
+  ],
+  "profile": {
+    "attention_kernel_count": 190,
+    "completeness": "profiler warned stop while RECORD; no complete-trace or level1 AICore attribution claim",
+    "kernel_count": 14910,
+    "operators": {
+      "IndexSelectBackward0": 29,
+      "UnbindBackward0": 20,
+      "autograd::engine::evaluate_function: IndexSelectBackward0": 29,
+      "autograd::engine::evaluate_function: UnbindBackward0": 20,
+      "npu::npu_fusion_attention": 30,
+      "npu::npu_fusion_attention_grad": 30
+    },
+    "original_execution": "failed after trace export: unsupported profiler.key_averages",
+    "raw": [
+      {
+        "path": "runs/v10-profile/trace/liteserver-mi-dev-00001_823011_20261114220909943_ascend_pt/ASCEND_PROFILER_OUTPUT/operator_details.csv",
+        "sha256": "4388a3037c60542b05254f272ad4196333d32faace3a6f491cabc5a7cf5014f2"
+      },
+      {
+        "path": "runs/v10-profile/trace/liteserver-mi-dev-00001_823011_20261114220909943_ascend_pt/ASCEND_PROFILER_OUTPUT/kernel_details.csv",
+        "sha256": "c4016c89fa11f3e30f95388c0d3753be1034cff6d1a96bae7fc884450c92837a"
+      }
+    ],
+    "scope": "one instrumented update; summed durations may overlap, not exclusive wall time or AICore utilization",
+    "top_kernel_summed_durations_us": [
+      {
+        "count": 29,
+        "name": "aclnnCumsum_CumsumAiCore_Cumsum",
+        "summed_us": 67987.10399999999
+      },
+      {
+        "count": 29,
+        "name": "aclnnIndexAdd_InplaceIndexAddAiCore_InplaceIndexAdd",
+        "summed_us": 59677.39999999998
+      },
+      {
+        "count": 380,
+        "name": "aclnnBatchMatMul_BatchMatMulNd_BatchMatMulV2",
+        "summed_us": 58157.06399999994
+      },
+      {
+        "count": 469,
+        "name": "aclnnMul_MulAiCore_Mul",
+        "summed_us": 46107.57599999993
+      },
+      {
+        "count": 30,
+        "name": "aclnnFlashAttentionScoreGrad_FlashAttentionScoreGrad_FlashAttentionScoreGrad",
+        "summed_us": 35793.664
+      },
+      {
+        "count": 1140,
+        "name": "aclnnAdd_AddAiCore_Add",
+        "summed_us": 28228.920000000024
+      },
+      {
+        "count": 30,
+        "name": "aclnnFlashAttentionScore_FlashAttentionScore_FlashAttentionScore",
+        "summed_us": 13596.096000000001
+      },
+      {
+        "count": 692,
+        "name": "aclnnReduceSum_ReduceSumOpAiCore_ReduceSum",
+        "summed_us": 12229.336000000005
+      },
+      {
+        "count": 50,
+        "name": "aclnnFlashAttentionScoreGrad_PadAiCore_Pad",
+        "summed_us": 10842.784
+      },
+      {
+        "count": 90,
+        "name": "aclnnConstantPadNd_StridedSliceAiCore_StridedSlice",
+        "summed_us": 10803.727999999997
+      },
+      {
+        "count": 1018,
+        "name": "aclnnSWhere_SelectV2AiCore_SelectV2",
+        "summed_us": 10556.927999999993
+      },
+      {
+        "count": 91,
+        "name": "aclnnCat_ConcatD_ConcatD",
+        "summed_us": 9846.840000000002
+      },
+      {
+        "count": 832,
+        "name": "aclnnStack_StridedSliceAiCore_StridedSlice",
+        "summed_us": 8438.928000000004
+      },
+      {
+        "count": 80,
+        "name": "aclnnAdd_SliceAiCore_Slice",
+        "summed_us": 8150.592000000001
+      },
+      {
+        "count": 30,
+        "name": "aclnnSiluBackward_SiluGradAiCore_SiluGrad",
+        "summed_us": 8034.255999999999
+      },
+      {
+        "count": 60,
+        "name": "aclnnBatchMatMul_SliceAiCore_Slice",
+        "summed_us": 7610.103999999998
+      },
+      {
+        "count": 579,
+        "name": "aclnnMuls_MulAiCore_Mul",
+        "summed_us": 7458.031999999997
+      },
+      {
+        "count": 90,
+        "name": "aclnnConstantPadNd_PadV3AiCore_PadV3",
+        "summed_us": 6950.608000000001
+      }
+    ]
+  },
+  "recovery": {
+    "result": "runs/v10-preflight/recovery.json",
+    "scope": "three B2/L3 real-data updates, same backend/config/install, fresh processes; full trajectory unchecked",
+    "sha256": "2cc49fc4c0ca76cfe975b5dbfba8b49520b734db1dda4ab48b3e834fa4ce12b4",
+    "state": "passed"
+  },
+  "schema": "tide-v10-optimization-review-v1"
+}
