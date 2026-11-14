@@ -20,7 +20,7 @@ def main(a):
     from tide_lab.v10_config import hb,transformer,M
     device=runtime('npu:0',2,11);a.output.mkdir(parents=True,exist_ok=False)
     if a.kind=='hb':
-        c=hb(a.id,a.width,a.region,a.target,micro=a.micro,controller=True)
+        c=hb(a.id,a.width,a.region,a.target,micro=a.micro,controller=True,temperature=a.temperature)
         for s in c['direct']['plan']['regions']:s.pop('activity_schedule',None)
         c['implementation']['activity_controller']['start_tokens']=0
         limit=M
@@ -58,7 +58,7 @@ def main(a):
         report.update(state='completed',nll=val['nll'],tokens=tokens,seconds=time.monotonic()-started,
             mean_tail={k:statistics.mean(x[k] for x in tail) for k in tail[0] if k.startswith(('activity/','gradient/','train/tokens_per_second','work/router_multi'))})
         if a.kind=='hb':
-            report['selected_temperature']=max(.005,min(4.,.25*model.activity_state['scale']))
+            report['selected_temperature']=max(.005,min(32.,a.temperature*model.activity_state['scale']))
             report['controller_state']=model.activity_state
     except BaseException as error:
         report.update(state='failed',error=repr(error),tokens=tokens,seconds=time.monotonic()-started);raise
@@ -72,5 +72,6 @@ if __name__=='__main__':
     for n in ('output','data'):p.add_argument('--'+n,type=Path,required=True)
     p.add_argument('--width',type=int,required=True);p.add_argument('--region',type=int,default=20);p.add_argument('--target',type=float,default=.1)
     p.add_argument('--micro',type=int,default=8);p.add_argument('--layers',type=int,default=6);p.add_argument('--initialization',default='fan_in_depth')
+    p.add_argument('--temperature',type=float,default=.25)
     p.add_argument('--lr',type=float,default=.001);p.add_argument('--deadline-epoch',type=float,required=True);p.add_argument('--lens-cli',required=True)
     main(p.parse_args())

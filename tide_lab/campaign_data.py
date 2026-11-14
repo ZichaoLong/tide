@@ -6,12 +6,13 @@ from .records import digest
 
 
 class Corpus:
-    def __init__(self,path,length,*,verify=True,allow_test=False,max_train_documents=None):
+    def __init__(self,path,length,*,verify=True,allow_test=False,max_train_documents=None,extra_splits=()):
         self.path=Path(path);self.lock=json.loads((self.path/'data-lock.json').read_text())
         if self.lock['schema']!='tide-language-corpus-v6':raise ValueError('wrong corpus schema')
         self.length=length;self.arrays={};self.blocks={};self.permutations={}
         self.documents={};self.allow_test=allow_test
-        for split in ('train','validation')+ (('test',) if allow_test else ()):
+        if any(s!='confirmation' for s in extra_splits):raise ValueError('only explicitly requested confirmation may be added')
+        for split in ('train','validation')+ (('test',) if allow_test else ()) + tuple(extra_splits):
             info=self.lock['splits'][split];file=self.path/info['file']
             if verify and digest(file)!=info['sha256']:raise ValueError('data content hash changed')
             self.arrays[split]=np.memmap(file,mode='r',dtype=self.lock['dtype'])

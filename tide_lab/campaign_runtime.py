@@ -150,14 +150,15 @@ def memory(device):
 
 
 @torch.no_grad()
-def evaluate(model,corpus,config,device,*,token_limit=None,deadline=None):
+def evaluate(model,corpus,config,device,*,token_limit=None,deadline=None,split='validation'):
     model.eval();c=config['training'];limit=token_limit or c['eval_tokens']
-    ids=corpus.evaluation_ids('validation',limit);records=[];total=0.;count=0
+    if split not in ('validation','confirmation'):raise ValueError('test remains sealed')
+    ids=corpus.evaluation_ids(split,limit);records=[];total=0.;count=0
     started=time.monotonic();work={};batch_size=c.get('eval_batch',c['batch'])
     for offset in range(0,len(ids),batch_size):
         if deadline is not None and time.time()>=deadline:break
         subset=ids[offset:offset+batch_size]
-        b=corpus.batch('validation',subset,device,token_limit=limit-count)
+        b=corpus.batch(split,subset,device,token_limit=limit-count)
         logits=model(b['input_ids'])
         losses=F.cross_entropy(logits.flatten(0,1),b['labels'].flatten(),ignore_index=-100,
                               reduction='none').reshape(b['labels'].shape)
@@ -165,7 +166,7 @@ def evaluate(model,corpus,config,device,*,token_limit=None,deadline=None):
         sums=losses.sum(1).cpu().tolist();counts=(b['labels']!=-100).sum(1).cpu().tolist()
         for i,nll,n in zip(subset,sums,counts):
             if n:
-                records.append(dict(corpus.metadata('validation',i),nll_sum=nll,tokens=n))
+                records.append(dict(corpus.metadata(split,i),nll_sum=nll,tokens=n))
                 total+=nll;count+=n
         for key,value in model.last_metrics.items():
             if key.startswith('work/'):
@@ -173,7 +174,7 @@ def evaluate(model,corpus,config,device,*,token_limit=None,deadline=None):
     synchronize(device)
     return dict(state='completed' if count==limit else 'budget_truncated',nll=total/count if count else None,
         nll_sum=total,tokens=count,target_tokens=limit,seconds=time.monotonic()-started,records=records,
-        work=work,split='validation',test_access=False)
+        work=work,split=split,test_access=False)
 
 
 def exact_tree(a,b,path='root'):

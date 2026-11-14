@@ -67,7 +67,7 @@ class SpecializedSemanticLM(DirectSemanticLM):
         super().set_progress(tokens)
         if self.activity_controller and tokens>=self.activity_controller.get('start_tokens',2*2**20):
             for j,s in enumerate(self.selectors):
-                s.s['allocation_temperature']=max(.005,min(4.,self.plan['regions'][j]['allocation_temperature']*self.activity_state['scale']))
+                s.s['allocation_temperature']=max(.005,min(32.,self.plan['regions'][j]['allocation_temperature']*self.activity_state['scale']))
 
     def observe_update(self,work,tokens):
         """Training-statistics-only controller, once per optimizer update.
@@ -82,7 +82,7 @@ class SpecializedSemanticLM(DirectSemanticLM):
             st['ema']=ratio if st['ema'] is None else .9*st['ema']+.1*ratio
             if st['updates']%8==0:
                 error=math.log(self.activity_controller['target']/max(st['ema'],1e-8))
-                st['scale']=max(.02,min(16.,st['scale']*math.exp(.3*max(-.5,min(.5,error)))))
+                st['scale']=max(.002,min(128.,st['scale']*math.exp(.3*max(-.5,min(.5,error)))))
         return {'activity/controller_tau_scale':st['scale'],'activity/controller_ema':st['ema'] or 0.}
 
     def aggregate(self,j,z,w,incidence):
@@ -170,7 +170,8 @@ class SpecializedSemanticLM(DirectSemanticLM):
             'work/active_parameter_uses':pf+pr+ps,'work/dense_parameter_uses':self.total_parameter_count*b*l,
             'work/prediction_positions':b*l,'work/message_edges_including_input':messages,
             'work/logical_full_attention_pairs':fpairs,'work/logical_read_attention_pairs':rpairs,
-            'work/physical_attention_pairs':3*slots*(l+1)/2,
+            'work/dense_causal_attention_pairs':3*slots*(l+1)/2,
+            'work/physical_attention_pair_upper_bound':3*slots*l,
             'work/router_multi_unsaturated_rows':router_rows,
             'activity/active_parameters_per_position':(pf+pr+ps)/(b*l)}
         for j,row in zip(self.order,rows):
