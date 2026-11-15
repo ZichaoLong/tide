@@ -4,7 +4,7 @@
 没有基于短期排名的淘汰或自动256Mi延伸。统一截止2026-11-17 23:08:07+08。
 共享12 NPU slot，最多200M参数；新增64GiB目标/96GiB停止，硬配额余量至少200GiB。
 
-校准源码`8e085be3`，`.local/source-hb-v12-cal`；主源码由
+校准源码`8e085be3`，`.local/source-hb-v12-cal`；主源码`51477014`由
 `artifacts/jobs/v12-main-<配置>/job.json`固定commit/tree/config/data/env身份，
 源码目录`.local/source-hb-v12-main`。不得编辑任何这些快照或活动配置。
 训练继续用`.venv-positive-floor-v1`及Torch2.12/TorchNPU2.12/CANN9.2，

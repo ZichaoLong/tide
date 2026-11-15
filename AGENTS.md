@@ -8,6 +8,15 @@
   single-intervention restriction for NEW v12 work only. Preserve active v11
   frozen inputs, original failures and2e-5 feasibility threshold. Explicit
   sharing/readout/top2 variants are different functions, not foundation fixes.
+- V12 is now submitted: all38 independent chains use frozen51477014 at
+  `.local/source-hb-v12-main`;8 calibration jobs (8e085be3) and fresh262K data
+  preparation completed. Re-entry: `python scripts/review_hb_v12.py` and
+  `docs/studies/hb-v12-operations.md`. Twenty historical controls are evaluated
+  without further training. Actual queue/physical devices are in job records;
+  pilot/recovery/128Mi/confirmation/diagnostic progression is already scheduled.
+  V11's four HB bias attempts are now all feasibility failures, not successful
+  128Mi endpoints. V12's bounded old-source replay is diagnostic only. Do not
+  edit active source/configs, relax thresholds or silently restart failures.
 
 - This is the independent experiment branch of `ZichaoLong/tide`, not the foundation source tree.
 - Re-entry: `git status --short --branch`; read `docs/RESEARCH_CHARTER.md`, `docs/STATUS.md`, `docs/ROADMAP.md`,

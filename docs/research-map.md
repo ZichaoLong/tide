@@ -1,3 +1,12 @@
+# 当前图：HB v12机制对照已启动，质量结论待审
+
+新增共享、宽度、路由、交互、读出、信息通路、配方和控制组，关联38个具体配置/run ID；
+另有校准、数值排查、终点诊断及新确认。已确认启动与等待的状态分开。
+只有校准/CPU机制检查按范围标记scoped；所有新语言质量槽保持awaiting。
+v11四条HB均failed，原成功MoE结果及所有数学/数值失败保留。
+[研究表](studies/hb-mechanisms-v12.md) · [操作与Lens统一ID](studies/hb-v12-operations.md)。
+以下保留历史图说明。
+
 # 当前图：v11 MoE两组限定结果，HB未终态
 
 2026-11-15 21:32审阅：EXPOSURE/BALANCE组已完成，质量结果按同一新262K确认限定标记scoped；
