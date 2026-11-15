@@ -1,3 +1,32 @@
+# 当前交接：v11容量利用实验已执行，诊断完成，训练并行中
+
+2026-11-15。用户批准的[有限研究表](studies/capacity-utilization-v11.md)已实施。
+[诊断与干预依据](studies/capacity-v11-diagnosis-and-intervention.md) · [操作/Lens/恢复](studies/capacity-v11-operations.md) ·
+[只读实时检查](../scripts/review_capacity_v11.py) · [交接快照](evidence/capacity-v11-handoff.json)。
+
+16/16父checkpoint诊断完成：HB R64在同512段训练窗口的Full机会高度集中，
+d64平均50.4/64节点零Full，d128双seed58.2/64；大MoE E64无窗口内零分配专家。
+这是选择路由机会干预的依据，不是唯一根因或终生未训练证明。
+本轮只测候选内负载偏置eta=.001/.01 ×seed11/22，不同时改Read/FFN预算。
+
+- 6条large dense/E20/E64延伸已通过显式端点迁移和完整global64/L256新进程恢复；dense双seed已完成256Mi，四条MoE实际越过128Mi并继续到256Mi。
+- 2条small E64 balance.01控制从零训练中，目标128Mi；原E64/.001与E20/.01保留。
+- 4条HB新固定源码159190c3链均通过准入/初始化新进程恢复，已实际进入8Mi先导；随后受训恢复→128Mi有条件推进。实测约5.6–6.0K目标/s、峰值34.1GiB；当前处于2Mi活动warmup，不能将早期高活动当最终3%结果。
+- 新确认集262,144目标/135文档准备完成，排除所有既有划分文档，test未读；固定28项新旧终点控制器已启动，最多4评价并发。
+- 研究图中的诊断已人工限定审阅；新语言质量/干预效果保持awaiting，不能用启动或退出码代替。
+
+六条最初的延伸请求被旧config的128Mi终点封顶、零新更新，已保留为request_not_fulfilled；
+新r2显式迁移没有改变原模型/Adam/RNG/数据游标及256Mi LR日程。
+数据首次启动因当前ML环境没有tokenizers失败，改用已有私有数据环境完成，未安装或升级公共包。
+原v10/MoE全部失败和严格数值超差继续保持；没有修改活动源码、放宽阈值或恢复旧q10失败。
+
+共享截止**2026-11-17 17:43:08 +08**；最多12NPU worker，64GiB目标/96GiB停止、硬余量>=200GiB。
+交接快照约14.4GiB新增、439.6GiB硬余量；实际卡、阶段与精确曝光以只读实时脚本为准。
+项目`tide-learning-lab`，五个TL-CAPACITY-*-v11组；私有查看入口`.local/LENS.md`。
+待本批终态后成组审阅，不自动扩大候选、曝光或规模。
+
+以下为历史快照，其“没有新作业/等待授权”只适用于当时批次。
+
 # 当前交接：v10与MoE全部终态，结果已审阅
 
 2026-11-15终态核对。[v10结果](studies/direct-v10-results.md) · [v10逐终点证据](evidence/direct-v10-results.json) ·

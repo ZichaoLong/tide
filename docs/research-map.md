@@ -1,3 +1,14 @@
+# 当前图：v11诊断已审阅，条件训练与新确认已启动
+
+新增五组TL-CAPACITY-*-v11及对应结果槽，关联固定配置、实际作业、源码和Lens记录。
+只有16项诊断产生限定结论：HB观察窗口内Full集中，支持优先检验路由机会；
+与HB干预建立informs关系，未宣称唯一根因或语言收益。
+曝光、balance、HB质量和新独立确认结果保持awaiting；六条原零进展请求保留failed标记及原因。
+[诊断选择](studies/capacity-v11-diagnosis-and-intervention.md) · [操作](studies/capacity-v11-operations.md)。
+从零完整TIDE与预训练生长两路线保持；本批直接实现仍不等于公共执行或B路线成功。
+
+以下为历史图状态。
+
 # 最新图状态：v10、修复与MoE全部终态审阅
 
 2026-11-15 16:54后：v10容量/活跃预算/控制/确认组均completed，20个128Mi及7个256Mi终点经独立确认。

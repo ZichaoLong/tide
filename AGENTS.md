@@ -184,3 +184,15 @@
   hard-quota headroom. Prepare fresh confirmation excluding all prior splits;
   old confirmation is now seen evidence. Preserve original failures and fixed
   parents; do not turn dense-to-MoE gains into an E20-toE64 scaling claim.
+
+- V11 is executing, not design-only. Six original extension requests made zero new
+  updates due to the old128Mi config endpoint; preserve them as unfulfilled requests.
+  Explicit endpoint-only r2 migrations (e3b2ab38) passed full-batch trained-state
+  recovery and now progress toward256Mi. Sixteen diagnostics completed; the reviewed
+  selection is only candidate-aware HB load-bias rates.001/.01 ×seeds11/22, fixed
+  source159190c3,8Mi pilot then trained-state recovery and conditional128Mi. See
+  `docs/studies/capacity-v11-diagnosis-and-intervention.md` and operations page.
+  Do not also launch Read/FFN budget or propagation variants. New confirmation
+  is prepared and fixed28 endpoints are controlled in background; test stays sealed.
+  Shared deadline2026-11-17 17:43:08+08,12 NPU slots,96GiB stop,>=200GiB headroom.
+  No active fixed input may be edited. Re-entry: `python scripts/review_capacity_v11.py`.

@@ -1,3 +1,15 @@
+# 当前设计：v11分开曝光、负载与HB容量利用
+
+[已执行研究表](studies/capacity-utilization-v11.md)比较large MoE/dense成组续训和small E64平衡强度，
+并依据16项诊断仅选择一个HB路由干预家族。
+[候选内负载偏置](studies/capacity-v11-diagnosis-and-intervention.md)保持原形状、quad与活动目标，
+新增可恢复的训练统计偏置；属于实验架构变体，不是等价执行优化。
+比较共同曝光质量、Full与接收机会、实际活动预算、稠密物理工作和吞吐，分别保留失败轴。
+旧确认已成为后继已见证据；新262K确认不参与本次家族/配方选择，test密封。
+状态归STATUS，历史学习和严格数值证据不被本轮覆盖。
+
+以下为历史设计。
+
 # 当前已审阅：低活动HB的两种容量问题
 
 [v10终态](studies/direct-v10-results.md)把同活动比例加宽与近活跃参数增加总容量分开：

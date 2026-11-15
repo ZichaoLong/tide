@@ -1,3 +1,16 @@
+# 当前：完成已授权v11，再决定后继
+
+[有限执行表](studies/capacity-utilization-v11.md)及[诊断选择](studies/capacity-v11-diagnosis-and-intervention.md)已落实。
+优先收齐：large dense/E20/E64的256Mi双seed、small E64 balance.01的128Mi双seed、
+候选内负载偏置两档×双seed的条件128Mi，以及固定28端点的新独立确认。
+复核曝光收益是否改变E20→E64差距；HB更均衡是否确实改善语言、活动目标是否保持、接收工作是否增加。
+
+Read/Full预算重分配、传播/读出改动、不同每单元曝光匹配仍是可选后继，当前不并行展开。
+先保留“large MoE覆盖广但边际容量收益小”的反证；不能用同一个路由解释覆盖所有模型。
+终态结果由用户验收后再确定下一批，不自动加seed、数据、深度或总容量。
+
+以下为历史优先级。
+
 # 当前：MoE与v10均终态，等待结果验收（2026-11-15）
 
 [MoE结果与解释边界](studies/moe-controls-results.md)已审阅：66阶段全部结束，四MoE在128Mi独立确认上优于近活跃dense，
