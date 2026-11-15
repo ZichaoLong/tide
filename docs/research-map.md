@@ -1,3 +1,11 @@
+# 最新图状态：MoE终态及独立确认已审阅
+
+2026-11-15下午：TL-MOE-CAL/CONTROL/CONFIRM均completed，三个结果节点按实际配对审阅标记scoped；
+见[终态结论](studies/moe-controls-results.md)和[逐运行证据](evidence/moe-controls-results.json)。
+明确保留small E64扩容反证、旧small强TF、稀疏专家行与低实际吞吐、全局attention的局部性限制，
+以及原12次准入失败和整网有限超差。旧v10仅128Mi与修复确认收齐，256Mi仍有两运行和一项新可行性失败。
+以下为历史图说明。
+
 # 最新图状态：已授权的MoE校准、主对照与独立确认
 
 新增`TL-MOE-CAL`、`TL-MOE-CONTROL`、`TL-MOE-CONFIRM`，关联固定候选表、实际批量/机制/Lens记录与只读审阅器。

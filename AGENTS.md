@@ -160,3 +160,12 @@
   deadline, at most8 new workers sharing the existing12-slot namespace; no aggregate
   compute caps,64GiB disk target/96GiB stop and>=200GiB hard-quota headroom. No automatic
   256Mi MoE extension. Preserve active v10 source, old failures and independent axes.
+
+- The MoE supplement is terminal as of 2026-11-15 14:26 +08: 30 screens,12 selected
+  continuations,12 fresh128Mi trajectories and12 independent confirmations completed.
+  See `docs/studies/moe-controls-results.md` and read-only `scripts/review_moe_results.py`.
+  Preserve the12 original causal-zero admission failures and finite CPU/NPU mismatches.
+  Calibration Adam states were retired by the recorded42-file receipt; formal
+  checkpoints and scientific weights remain. No automatic MoE extension/new grid.
+  Old v10 still owns its two active256Mi extensions; its new q10 feasibility failure
+  is separate and must not be silently resumed or have its2e-5 threshold relaxed.

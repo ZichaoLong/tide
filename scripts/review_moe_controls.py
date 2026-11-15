@@ -26,15 +26,17 @@ def review(root):
             inner=next((r for r in worker.get('cases',[]) if r.get('id')==case['id']),{})
             app=application_state(obs['state'].get('state'),result.get('state'),inner.get('state'))
             stages=inner.get('stages',[]);latest=stages[-1] if stages else {}
-            projection=read(training/'projection.json');recovery=read(path/'recovery.json');check=read(path/'check/result.json')
+            projection=read(training/'projection.json');reused=inner.get('qualification_reused',{})
+            recovery=read(Path(reused.get('recovery') or path/'recovery.json'))
+            check=read(Path(reused.get('admission') or path/'check/result.json'))
             checks=check.get('checks',{})
             v=read(training/'validation-final.json')
             rows.append(dict(id=case['id'],phase=phase,job=case['job'],application_state=app,
                 service_state=obs['state'].get('state'),stage=latest.get('name'),
                 physical_id=(obs.get('queue') or {}).get('physical_id'),
                 terminal=obs['termination_verified_now'] and obs['state'].get('state') in TERMINAL,
-                tokens=progress.get('tokens',result.get('progress',{}).get('tokens')),nll=v.get('nll',result.get('nll')),
-                error=result.get('error',inner.get('reason')),recovery=recovery.get('state','unchecked'),
+                tokens=progress.get('tokens',result.get('progress',{}).get('tokens',result.get('exposure'))),nll=v.get('nll',result.get('nll')),
+                error=result.get('error',inner.get('reason')),recovery=recovery.get('state','not_applicable_inference' if phase=='confirm' else 'unchecked'),
                 numerical=check.get('axes',{}).get('strict_numerical','unchecked'),
                 strict_forward=checks.get('forward',{}).get('state','unchecked'),
                 strict_vjp_failures=sum(v.get('state')=='failed' for v in checks.get('parameter_vjp',{}).values()),

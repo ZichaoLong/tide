@@ -1,3 +1,10 @@
+# 当前已审阅：标准MoE条件容量对照
+
+[MoE终态](studies/moe-controls-results.md)收齐两档、E20/E64、dense的双seed128Mi及独立262K确认。
+当前证据支持有限条件容量质量收益；small扩容变差而large微升，不能推断普遍scaling规律。
+保留旧small更强配方、global attention差异、物理专家行与吞吐差异；原严格数值失败不因学习改善升级。
+这提供了后继HB研究的可靠参照；下一训练批须在验收后另定，当前设计不会自动扩大候选。
+
 # 当前补充设计：标准MoE的条件容量控制
 
 [MoE执行表](studies/moe-controls-proposal.md)已授权：普通decoder-only Transformer的FFN全为top2独立专家，

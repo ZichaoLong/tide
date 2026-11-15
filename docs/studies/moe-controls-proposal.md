@@ -15,7 +15,8 @@ attention仍为普通因果稠密attention，专家没有独立KV历史，不先
 
 保持已校准Transformer的pre-LN、4头、位置编码/缩放、绑定embedding/head、NPU融合attention。
 专家用GELU两矩阵FFN，router为无bias线性层；每token/layer选择2个专家，选中权重重归一化，FP32路由。
-下表为解析参数清点，尚未构造或实测；[公式与逐项计数](../evidence/moe-controls-proposal-inventory.json)。
+下表的解析参数清点已由实际构造/训练核对；[公式与逐项计数](../evidence/moe-controls-proposal-inventory.json)，
+已完成批次的[结果与边界](moe-controls-results.md)。
 参数M=10^6；曝光Mi=2^20有效训练目标。
 
 |档位|宽度×层数|每专家FFN宽|每层专家E|top-k|k/E|总参数|每token活跃参数|活跃参数/总参数|

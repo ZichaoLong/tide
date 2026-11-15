@@ -1,0 +1,3092 @@
+{
+  "all_services_terminated": true,
+  "calibration_optimizer_retirement": {
+    "bytes": 33044104666,
+    "files": 42,
+    "state": "completed"
+  },
+  "comparisons": [
+    {
+      "bootstrap_document_ci95": [
+        -0.21645153873704118,
+        -0.199127341939508
+      ],
+      "complete_same_blocks": true,
+      "delta_left_minus_right": -0.20729600655613467,
+      "documents": 135,
+      "left": "runs/moe-r2-confirm-small-e20-lr0.003-b0.01-s11/confirmation.json",
+      "left_nll": 3.1020102760812733,
+      "left_shape": "small-e20",
+      "matched_blocks": 1035,
+      "right": "runs/moe-r2-confirm-small-dense-lr0.003-s11/confirmation.json",
+      "right_nll": 3.309306282637408,
+      "right_shape": "small-dense",
+      "scope": "independent confirmation; 2000 paired document bootstrap resamples, conditional on fixed seed/checkpoints; excludes seed/selection uncertainty",
+      "seed": 11,
+      "tokens": 262144
+    },
+    {
+      "bootstrap_document_ci95": [
+        -0.16524928351257312,
+        -0.15054799397474464
+      ],
+      "complete_same_blocks": true,
+      "delta_left_minus_right": -0.157619299228827,
+      "documents": 135,
+      "left": "runs/moe-r2-confirm-small-e64-lr0.003-b0.001-s11/confirmation.json",
+      "left_nll": 3.151686983408581,
+      "left_shape": "small-e64",
+      "matched_blocks": 1035,
+      "right": "runs/moe-r2-confirm-small-dense-lr0.003-s11/confirmation.json",
+      "right_nll": 3.309306282637408,
+      "right_shape": "small-dense",
+      "scope": "independent confirmation; 2000 paired document bootstrap resamples, conditional on fixed seed/checkpoints; excludes seed/selection uncertainty",
+      "seed": 11,
+      "tokens": 262144
+    },
+    {
+      "bootstrap_document_ci95": [
+        -0.20939512400404445,
+        -0.19273301600070925
+      ],
+      "complete_same_blocks": true,
+      "delta_left_minus_right": -0.20088894204673124,
+      "documents": 135,
+      "left": "runs/moe-r2-confirm-large-e20-lr0.001-b0.01-s11/confirmation.json",
+      "left_nll": 2.817881943497923,
+      "left_shape": "large-e20",
+      "matched_blocks": 1035,
+      "right": "runs/moe-r2-confirm-large-dense-lr0.001-s11/confirmation.json",
+      "right_nll": 3.0187708855446544,
+      "right_shape": "large-dense",
+      "scope": "independent confirmation; 2000 paired document bootstrap resamples, conditional on fixed seed/checkpoints; excludes seed/selection uncertainty",
+      "seed": 11,
+      "tokens": 262144
+    },
+    {
+      "bootstrap_document_ci95": [
+        -0.22153400740448068,
+        -0.20179089054507712
+      ],
+      "complete_same_blocks": true,
+      "delta_left_minus_right": -0.21151549323258223,
+      "documents": 135,
+      "left": "runs/moe-r2-confirm-large-e64-lr0.001-b0.01-s11/confirmation.json",
+      "left_nll": 2.807255392312072,
+      "left_shape": "large-e64",
+      "matched_blocks": 1035,
+      "right": "runs/moe-r2-confirm-large-dense-lr0.001-s11/confirmation.json",
+      "right_nll": 3.0187708855446544,
+      "right_shape": "large-dense",
+      "scope": "independent confirmation; 2000 paired document bootstrap resamples, conditional on fixed seed/checkpoints; excludes seed/selection uncertainty",
+      "seed": 11,
+      "tokens": 262144
+    },
+    {
+      "bootstrap_document_ci95": [
+        0.04505716296123277,
+        0.054558879396972355
+      ],
+      "complete_same_blocks": true,
+      "delta_left_minus_right": 0.04967670732730767,
+      "documents": 135,
+      "left": "runs/moe-r2-confirm-small-e64-lr0.003-b0.001-s11/confirmation.json",
+      "left_nll": 3.151686983408581,
+      "left_shape": "small-e64",
+      "matched_blocks": 1035,
+      "right": "runs/moe-r2-confirm-small-e20-lr0.003-b0.01-s11/confirmation.json",
+      "right_nll": 3.1020102760812733,
+      "right_shape": "small-e20",
+      "scope": "independent confirmation; 2000 paired document bootstrap resamples, conditional on fixed seed/checkpoints; excludes seed/selection uncertainty",
+      "seed": 11,
+      "tokens": 262144
+    },
+    {
+      "bootstrap_document_ci95": [
+        -0.014893028299385946,
+        -0.006370262258900649
+      ],
+      "complete_same_blocks": true,
+      "delta_left_minus_right": -0.010626551185850985,
+      "documents": 135,
+      "left": "runs/moe-r2-confirm-large-e64-lr0.001-b0.01-s11/confirmation.json",
+      "left_nll": 2.807255392312072,
+      "left_shape": "large-e64",
+      "matched_blocks": 1035,
+      "right": "runs/moe-r2-confirm-large-e20-lr0.001-b0.01-s11/confirmation.json",
+      "right_nll": 2.817881943497923,
+      "right_shape": "large-e20",
+      "scope": "independent confirmation; 2000 paired document bootstrap resamples, conditional on fixed seed/checkpoints; excludes seed/selection uncertainty",
+      "seed": 11,
+      "tokens": 262144
+    },
+    {
+      "bootstrap_document_ci95": [
+        -0.16159875023681342,
+        -0.14583451829239263
+      ],
+      "complete_same_blocks": true,
+      "delta_left_minus_right": -0.15351651218225015,
+      "documents": 135,
+      "left": "runs/moe-r2-confirm-small-e20-lr0.003-b0.01-s11/confirmation.json",
+      "left_nll": 3.1020102760812733,
+      "left_shape": "small-e20",
+      "matched_blocks": 1035,
+      "right": "runs/v10-confirm-main-tf-d192-l6-s11/confirmation.json",
+      "right_nll": 3.2555267882635235,
+      "right_shape": "old-small-tf",
+      "scope": "independent confirmation; 2000 paired document bootstrap resamples, conditional on fixed seed/checkpoints; excludes seed/selection uncertainty",
+      "seed": 11,
+      "tokens": 262144
+    },
+    {
+      "bootstrap_document_ci95": [
+        -0.11067219020048263,
+        -0.09710443573977123
+      ],
+      "complete_same_blocks": true,
+      "delta_left_minus_right": -0.10383980485494249,
+      "documents": 135,
+      "left": "runs/moe-r2-confirm-small-e64-lr0.003-b0.001-s11/confirmation.json",
+      "left_nll": 3.151686983408581,
+      "left_shape": "small-e64",
+      "matched_blocks": 1035,
+      "right": "runs/v10-confirm-main-tf-d192-l6-s11/confirmation.json",
+      "right_nll": 3.2555267882635235,
+      "right_shape": "old-small-tf",
+      "scope": "independent confirmation; 2000 paired document bootstrap resamples, conditional on fixed seed/checkpoints; excludes seed/selection uncertainty",
+      "seed": 11,
+      "tokens": 262144
+    },
+    {
+      "bootstrap_document_ci95": [
+        -0.2837033767920482,
+        -0.26327889907297847
+      ],
+      "complete_same_blocks": true,
+      "delta_left_minus_right": -0.27309214787965175,
+      "documents": 135,
+      "left": "runs/moe-r2-confirm-large-e20-lr0.001-b0.01-s11/confirmation.json",
+      "left_nll": 2.817881943497923,
+      "left_shape": "large-e20",
+      "matched_blocks": 1035,
+      "right": "runs/v10-confirm-main-tf-d256-l12-s11/confirmation.json",
+      "right_nll": 3.090974091377575,
+      "right_shape": "old-large-tf",
+      "scope": "independent confirmation; 2000 paired document bootstrap resamples, conditional on fixed seed/checkpoints; excludes seed/selection uncertainty",
+      "seed": 11,
+      "tokens": 262144
+    },
+    {
+      "bootstrap_document_ci95": [
+        -0.29602382373230235,
+        -0.2725374728242262
+      ],
+      "complete_same_blocks": true,
+      "delta_left_minus_right": -0.28371869906550273,
+      "documents": 135,
+      "left": "runs/moe-r2-confirm-large-e64-lr0.001-b0.01-s11/confirmation.json",
+      "left_nll": 2.807255392312072,
+      "left_shape": "large-e64",
+      "matched_blocks": 1035,
+      "right": "runs/v10-confirm-main-tf-d256-l12-s11/confirmation.json",
+      "right_nll": 3.090974091377575,
+      "right_shape": "old-large-tf",
+      "scope": "independent confirmation; 2000 paired document bootstrap resamples, conditional on fixed seed/checkpoints; excludes seed/selection uncertainty",
+      "seed": 11,
+      "tokens": 262144
+    },
+    {
+      "bootstrap_document_ci95": [
+        -0.7652457119577274,
+        -0.7261247600343173
+      ],
+      "complete_same_blocks": true,
+      "delta_left_minus_right": -0.7447583848479553,
+      "documents": 135,
+      "left": "runs/moe-r2-confirm-small-e20-lr0.003-b0.01-s11/confirmation.json",
+      "left_nll": 3.1020102760812733,
+      "left_shape": "small-e20",
+      "matched_blocks": 1035,
+      "right": "runs/v10-confirm-main-hb-d64-r28-q10-s11/confirmation.json",
+      "right_nll": 3.8467686609292286,
+      "right_shape": "hb-small-q10",
+      "scope": "independent confirmation; 2000 paired document bootstrap resamples, conditional on fixed seed/checkpoints; excludes seed/selection uncertainty",
+      "seed": 11,
+      "tokens": 262144
+    },
+    {
+      "bootstrap_document_ci95": [
+        -1.120229666492367,
+        -1.0733108508396227
+      ],
+      "complete_same_blocks": true,
+      "delta_left_minus_right": -1.0959102004489978,
+      "documents": 135,
+      "left": "runs/moe-r2-confirm-small-e64-lr0.003-b0.001-s11/confirmation.json",
+      "left_nll": 3.151686983408581,
+      "left_shape": "small-e64",
+      "matched_blocks": 1035,
+      "right": "runs/v10-confirm-main-hb-d64-r64-q3-s11/confirmation.json",
+      "right_nll": 4.247597183857579,
+      "right_shape": "hb-small-q3",
+      "scope": "independent confirmation; 2000 paired document bootstrap resamples, conditional on fixed seed/checkpoints; excludes seed/selection uncertainty",
+      "seed": 11,
+      "tokens": 262144
+    },
+    {
+      "bootstrap_document_ci95": [
+        -0.5993958577678343,
+        -0.5729734060053853
+      ],
+      "complete_same_blocks": true,
+      "delta_left_minus_right": -0.5853890575745027,
+      "documents": 135,
+      "left": "runs/moe-r2-confirm-large-e20-lr0.001-b0.01-s11/confirmation.json",
+      "left_nll": 2.817881943497923,
+      "left_shape": "large-e20",
+      "matched_blocks": 1035,
+      "right": "runs/v10-confirm-main-hb-d128-r28-q10-s11/confirmation.json",
+      "right_nll": 3.403271001072426,
+      "right_shape": "hb-large-q10",
+      "scope": "independent confirmation; 2000 paired document bootstrap resamples, conditional on fixed seed/checkpoints; excludes seed/selection uncertainty",
+      "seed": 11,
+      "tokens": 262144
+    },
+    {
+      "bootstrap_document_ci95": [
+        -0.8542369521270181,
+        -0.8154946636526583
+      ],
+      "complete_same_blocks": true,
+      "delta_left_minus_right": -0.8340657249791548,
+      "documents": 135,
+      "left": "runs/moe-r2-confirm-large-e64-lr0.001-b0.01-s11/confirmation.json",
+      "left_nll": 2.807255392312072,
+      "left_shape": "large-e64",
+      "matched_blocks": 1035,
+      "right": "runs/v10-confirm-main-hb-d128-r64-q3-s11/confirmation.json",
+      "right_nll": 3.641321117291227,
+      "right_shape": "hb-large-q3",
+      "scope": "independent confirmation; 2000 paired document bootstrap resamples, conditional on fixed seed/checkpoints; excludes seed/selection uncertainty",
+      "seed": 11,
+      "tokens": 262144
+    },
+    {
+      "bootstrap_document_ci95": [
+        -0.2053248188598191,
+        -0.1895196577103116
+      ],
+      "complete_same_blocks": true,
+      "delta_left_minus_right": -0.19716705886821728,
+      "documents": 135,
+      "left": "runs/moe-r2-confirm-small-e20-lr0.003-b0.01-s22/confirmation.json",
+      "left_nll": 3.106155562651111,
+      "left_shape": "small-e20",
+      "matched_blocks": 1035,
+      "right": "runs/moe-r2-confirm-small-dense-lr0.003-s22/confirmation.json",
+      "right_nll": 3.303322621519328,
+      "right_shape": "small-dense",
+      "scope": "independent confirmation; 2000 paired document bootstrap resamples, conditional on fixed seed/checkpoints; excludes seed/selection uncertainty",
+      "seed": 22,
+      "tokens": 262144
+    },
+    {
+      "bootstrap_document_ci95": [
+        -0.16495284187507986,
+        -0.1497453969198608
+      ],
+      "complete_same_blocks": true,
+      "delta_left_minus_right": -0.156963346307748,
+      "documents": 135,
+      "left": "runs/moe-r2-confirm-small-e64-lr0.003-b0.001-s22/confirmation.json",
+      "left_nll": 3.14635927521158,
+      "left_shape": "small-e64",
+      "matched_blocks": 1035,
+      "right": "runs/moe-r2-confirm-small-dense-lr0.003-s22/confirmation.json",
+      "right_nll": 3.303322621519328,
+      "right_shape": "small-dense",
+      "scope": "independent confirmation; 2000 paired document bootstrap resamples, conditional on fixed seed/checkpoints; excludes seed/selection uncertainty",
+      "seed": 22,
+      "tokens": 262144
+    },
+    {
+      "bootstrap_document_ci95": [
+        -0.21107639307401468,
+        -0.1944654705335162
+      ],
+      "complete_same_blocks": true,
+      "delta_left_minus_right": -0.20252500822243746,
+      "documents": 135,
+      "left": "runs/moe-r2-confirm-large-e20-lr0.001-b0.01-s22/confirmation.json",
+      "left_nll": 2.8129245096060913,
+      "left_shape": "large-e20",
+      "matched_blocks": 1035,
+      "right": "runs/moe-r2-confirm-large-dense-lr0.001-s22/confirmation.json",
+      "right_nll": 3.0154495178285288,
+      "right_shape": "large-dense",
+      "scope": "independent confirmation; 2000 paired document bootstrap resamples, conditional on fixed seed/checkpoints; excludes seed/selection uncertainty",
+      "seed": 22,
+      "tokens": 262144
+    },
+    {
+      "bootstrap_document_ci95": [
+        -0.22698257239651282,
+        -0.2079916980147694
+      ],
+      "complete_same_blocks": true,
+      "delta_left_minus_right": -0.21715665725787403,
+      "documents": 135,
+      "left": "runs/moe-r2-confirm-large-e64-lr0.001-b0.01-s22/confirmation.json",
+      "left_nll": 2.7982928605706547,
+      "left_shape": "large-e64",
+      "matched_blocks": 1035,
+      "right": "runs/moe-r2-confirm-large-dense-lr0.001-s22/confirmation.json",
+      "right_nll": 3.0154495178285288,
+      "right_shape": "large-dense",
+      "scope": "independent confirmation; 2000 paired document bootstrap resamples, conditional on fixed seed/checkpoints; excludes seed/selection uncertainty",
+      "seed": 22,
+      "tokens": 262144
+    },
+    {
+      "bootstrap_document_ci95": [
+        0.03534719932058805,
+        0.044838363671791524
+      ],
+      "complete_same_blocks": true,
+      "delta_left_minus_right": 0.040203712560469285,
+      "documents": 135,
+      "left": "runs/moe-r2-confirm-small-e64-lr0.003-b0.001-s22/confirmation.json",
+      "left_nll": 3.14635927521158,
+      "left_shape": "small-e64",
+      "matched_blocks": 1035,
+      "right": "runs/moe-r2-confirm-small-e20-lr0.003-b0.01-s22/confirmation.json",
+      "right_nll": 3.106155562651111,
+      "right_shape": "small-e20",
+      "scope": "independent confirmation; 2000 paired document bootstrap resamples, conditional on fixed seed/checkpoints; excludes seed/selection uncertainty",
+      "seed": 22,
+      "tokens": 262144
+    },
+    {
+      "bootstrap_document_ci95": [
+        -0.018745151053944812,
+        -0.010342577115008984
+      ],
+      "complete_same_blocks": true,
+      "delta_left_minus_right": -0.014631649035436567,
+      "documents": 135,
+      "left": "runs/moe-r2-confirm-large-e64-lr0.001-b0.01-s22/confirmation.json",
+      "left_nll": 2.7982928605706547,
+      "left_shape": "large-e64",
+      "matched_blocks": 1035,
+      "right": "runs/moe-r2-confirm-large-e20-lr0.001-b0.01-s22/confirmation.json",
+      "right_nll": 2.8129245096060913,
+      "right_shape": "large-e20",
+      "scope": "independent confirmation; 2000 paired document bootstrap resamples, conditional on fixed seed/checkpoints; excludes seed/selection uncertainty",
+      "seed": 22,
+      "tokens": 262144
+    },
+    {
+      "bootstrap_document_ci95": [
+        -0.1469701776746419,
+        -0.13038409047716243
+      ],
+      "complete_same_blocks": true,
+      "delta_left_minus_right": -0.1385575302701909,
+      "documents": 135,
+      "left": "runs/moe-r2-confirm-small-e20-lr0.003-b0.01-s22/confirmation.json",
+      "left_nll": 3.106155562651111,
+      "left_shape": "small-e20",
+      "matched_blocks": 1035,
+      "right": "runs/v10-confirm-main-tf-d192-l6-s22/confirmation.json",
+      "right_nll": 3.2447130929213017,
+      "right_shape": "old-small-tf",
+      "scope": "independent confirmation; 2000 paired document bootstrap resamples, conditional on fixed seed/checkpoints; excludes seed/selection uncertainty",
+      "seed": 22,
+      "tokens": 262144
+    },
+    {
+      "bootstrap_document_ci95": [
+        -0.1061185162520556,
+        -0.09082427623290669
+      ],
+      "complete_same_blocks": true,
+      "delta_left_minus_right": -0.09835381770972162,
+      "documents": 135,
+      "left": "runs/moe-r2-confirm-small-e64-lr0.003-b0.001-s22/confirmation.json",
+      "left_nll": 3.14635927521158,
+      "left_shape": "small-e64",
+      "matched_blocks": 1035,
+      "right": "runs/v10-confirm-main-tf-d192-l6-s22/confirmation.json",
+      "right_nll": 3.2447130929213017,
+      "right_shape": "old-small-tf",
+      "scope": "independent confirmation; 2000 paired document bootstrap resamples, conditional on fixed seed/checkpoints; excludes seed/selection uncertainty",
+      "seed": 22,
+      "tokens": 262144
+    },
+    {
+      "bootstrap_document_ci95": [
+        -0.28833294475498433,
+        -0.26649879774682933
+      ],
+      "complete_same_blocks": true,
+      "delta_left_minus_right": -0.2770270563487429,
+      "documents": 135,
+      "left": "runs/moe-r2-confirm-large-e20-lr0.001-b0.01-s22/confirmation.json",
+      "left_nll": 2.8129245096060913,
+      "left_shape": "large-e20",
+      "matched_blocks": 1035,
+      "right": "runs/v10-confirm-main-tf-d256-l12-s22/confirmation.json",
+      "right_nll": 3.0899515659548342,
+      "right_shape": "old-large-tf",
+      "scope": "independent confirmation; 2000 paired document bootstrap resamples, conditional on fixed seed/checkpoints; excludes seed/selection uncertainty",
+      "seed": 22,
+      "tokens": 262144
+    },
+    {
+      "bootstrap_document_ci95": [
+        -0.3039494867150675,
+        -0.27986061939513107
+      ],
+      "complete_same_blocks": true,
+      "delta_left_minus_right": -0.2916587053841795,
+      "documents": 135,
+      "left": "runs/moe-r2-confirm-large-e64-lr0.001-b0.01-s22/confirmation.json",
+      "left_nll": 2.7982928605706547,
+      "left_shape": "large-e64",
+      "matched_blocks": 1035,
+      "right": "runs/v10-confirm-main-tf-d256-l12-s22/confirmation.json",
+      "right_nll": 3.0899515659548342,
+      "right_shape": "old-large-tf",
+      "scope": "independent confirmation; 2000 paired document bootstrap resamples, conditional on fixed seed/checkpoints; excludes seed/selection uncertainty",
+      "seed": 22,
+      "tokens": 262144
+    },
+    {
+      "bootstrap_document_ci95": [
+        -0.7335209745380344,
+        -0.6980389441972186
+      ],
+      "complete_same_blocks": true,
+      "delta_left_minus_right": -0.7146345697692595,
+      "documents": 135,
+      "left": "runs/moe-r2-confirm-small-e20-lr0.003-b0.01-s22/confirmation.json",
+      "left_nll": 3.106155562651111,
+      "left_shape": "small-e20",
+      "matched_blocks": 1035,
+      "right": "runs/v10-confirm-main-hb-d64-r28-q10-s22/confirmation.json",
+      "right_nll": 3.8207901324203704,
+      "right_shape": "hb-small-q10",
+      "scope": "independent confirmation; 2000 paired document bootstrap resamples, conditional on fixed seed/checkpoints; excludes seed/selection uncertainty",
+      "seed": 22,
+      "tokens": 262144
+    },
+    {
+      "bootstrap_document_ci95": [
+        -1.2495806393349493,
+        -1.199932629304562
+      ],
+      "complete_same_blocks": true,
+      "delta_left_minus_right": -1.2241467829881003,
+      "documents": 135,
+      "left": "runs/moe-r2-confirm-small-e64-lr0.003-b0.001-s22/confirmation.json",
+      "left_nll": 3.14635927521158,
+      "left_shape": "small-e64",
+      "matched_blocks": 1035,
+      "right": "runs/v10-confirm-main-hb-d64-r64-q3-s22/confirmation.json",
+      "right_nll": 4.37050605819968,
+      "right_shape": "hb-small-q3",
+      "scope": "independent confirmation; 2000 paired document bootstrap resamples, conditional on fixed seed/checkpoints; excludes seed/selection uncertainty",
+      "seed": 22,
+      "tokens": 262144
+    },
+    {
+      "bootstrap_document_ci95": [
+        -0.5685926425527026,
+        -0.543341896211764
+      ],
+      "complete_same_blocks": true,
+      "delta_left_minus_right": -0.5556887996062869,
+      "documents": 135,
+      "left": "runs/moe-r2-confirm-large-e20-lr0.001-b0.01-s22/confirmation.json",
+      "left_nll": 2.8129245096060913,
+      "left_shape": "large-e20",
+      "matched_blocks": 1035,
+      "right": "runs/v10-confirm-main-hb-d128-r28-q10-s22/confirmation.json",
+      "right_nll": 3.3686133092123782,
+      "right_shape": "hb-large-q10",
+      "scope": "independent confirmation; 2000 paired document bootstrap resamples, conditional on fixed seed/checkpoints; excludes seed/selection uncertainty",
+      "seed": 22,
+      "tokens": 262144
+    },
+    {
+      "bootstrap_document_ci95": [
+        -0.7529295313544666,
+        -0.718555443577632
+      ],
+      "complete_same_blocks": true,
+      "delta_left_minus_right": -0.7352282904685126,
+      "documents": 135,
+      "left": "runs/moe-r2-confirm-large-e64-lr0.001-b0.01-s22/confirmation.json",
+      "left_nll": 2.7982928605706547,
+      "left_shape": "large-e64",
+      "matched_blocks": 1035,
+      "right": "runs/v10-confirm-main-hb-d128-r64-q3-s22/confirmation.json",
+      "right_nll": 3.5335211510391673,
+      "right_shape": "hb-large-q3",
+      "scope": "independent confirmation; 2000 paired document bootstrap resamples, conditional on fixed seed/checkpoints; excludes seed/selection uncertainty",
+      "seed": 22,
+      "tokens": 262144
+    }
+  ],
+  "confirmation_blocks": 1035,
+  "confirmation_targets": 262144,
+  "controller_terminated": true,
+  "external128": [
+    {
+      "active_parameters": 3460096,
+      "confirmation": 3.2555267882635235,
+      "id": "tf-d192-l6-s11",
+      "lr": 0.001,
+      "parameters": 3460096,
+      "seed": 11,
+      "shape": "old-small-tf",
+      "source": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+      "validation": 3.1877845651470125
+    },
+    {
+      "active_parameters": 10530304,
+      "confirmation": 3.090974091377575,
+      "id": "tf-d256-l12-s11",
+      "lr": 0.0003,
+      "parameters": 10530304,
+      "seed": 11,
+      "shape": "old-large-tf",
+      "source": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+      "validation": 3.0199182933429256
+    },
+    {
+      "active_parameters": 3737517.1198929963,
+      "confirmation": 3.8467686609292286,
+      "id": "hb-d64-r28-q10-s11",
+      "lr": 0.001,
+      "parameters": 22235704,
+      "seed": 11,
+      "shape": "hb-small-q10",
+      "source": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+      "validation": 3.7852093591936864
+    },
+    {
+      "active_parameters": 3682586.5216439688,
+      "confirmation": 4.247597183857579,
+      "id": "hb-d64-r64-q3-s11",
+      "lr": 0.001,
+      "parameters": 50324128,
+      "seed": 11,
+      "shape": "hb-small-q3",
+      "source": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+      "validation": 4.191685722616967
+    },
+    {
+      "active_parameters": 10094101.819309339,
+      "confirmation": 3.403271001072426,
+      "id": "hb-d128-r28-q10-s11",
+      "lr": 0.001,
+      "parameters": 75541048,
+      "seed": 11,
+      "shape": "hb-large-q10",
+      "source": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+      "validation": 3.3257350953062996
+    },
+    {
+      "active_parameters": 9480646.244649805,
+      "confirmation": 3.641321117291227,
+      "id": "hb-d128-r64-q3-s11",
+      "lr": 0.001,
+      "parameters": 171459232,
+      "seed": 11,
+      "shape": "hb-large-q3",
+      "source": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+      "validation": 3.5741902666632086
+    },
+    {
+      "active_parameters": 3460096,
+      "confirmation": 3.2447130929213017,
+      "id": "tf-d192-l6-s22",
+      "lr": 0.001,
+      "parameters": 3460096,
+      "seed": 22,
+      "shape": "old-small-tf",
+      "source": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+      "validation": 3.184016115614213
+    },
+    {
+      "active_parameters": 10530304,
+      "confirmation": 3.0899515659548342,
+      "id": "tf-d256-l12-s22",
+      "lr": 0.0003,
+      "parameters": 10530304,
+      "seed": 22,
+      "shape": "old-large-tf",
+      "source": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+      "validation": 3.021716407209169
+    },
+    {
+      "active_parameters": 3637451.210603113,
+      "confirmation": 3.8207901324203704,
+      "id": "hb-d64-r28-q10-s22",
+      "lr": 0.001,
+      "parameters": 22235704,
+      "seed": 22,
+      "shape": "hb-small-q10",
+      "source": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+      "validation": 3.755797088961117
+    },
+    {
+      "active_parameters": 3693996.1434824904,
+      "confirmation": 4.37050605819968,
+      "id": "hb-d64-r64-q3-s22",
+      "lr": 0.001,
+      "parameters": 50324128,
+      "seed": 22,
+      "shape": "hb-small-q3",
+      "source": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+      "validation": 4.315785676648375
+    },
+    {
+      "active_parameters": 10202672.894698443,
+      "confirmation": 3.3686133092123782,
+      "id": "hb-d128-r28-q10-s22",
+      "lr": 0.001,
+      "parameters": 75541048,
+      "seed": 22,
+      "shape": "hb-large-q10",
+      "source": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+      "validation": 3.2999898676062003
+    },
+    {
+      "active_parameters": 9156674.81979572,
+      "confirmation": 3.5335211510391673,
+      "id": "hb-d128-r64-q3-s22",
+      "lr": 0.001,
+      "parameters": 171459232,
+      "seed": 22,
+      "shape": "hb-large-q3",
+      "source": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+      "validation": 3.4715795647352934
+    }
+  ],
+  "finished_at": "2026-11-15T06:26:37.269814+00:00",
+  "lens_verified": 66,
+  "means": [
+    {
+      "active_parameters": 10136320,
+      "balance": 0.0,
+      "confirmation": 3.0171102016865916,
+      "lr": 0.001,
+      "max_peak_npu_gib": 4.291446685791016,
+      "parameters": 10136320,
+      "physical_expert_fraction": null,
+      "seed_confirmation": [
+        3.0187708855446544,
+        3.0154495178285288
+      ],
+      "seed_validation": [
+        2.9460893936338834,
+        2.9461760515114293
+      ],
+      "shape": "large-dense",
+      "targets_per_second": 237324.090818972,
+      "training_hours": 0.157097220706443,
+      "validation": 2.9461327225726563,
+      "validation_curve": {
+        "134217728": 2.9461327225726563,
+        "33554432": 3.4404996199300513,
+        "8388608": 4.523909237643238
+      }
+    },
+    {
+      "active_parameters": 10200832,
+      "balance": 0.01,
+      "confirmation": 2.8154032265520073,
+      "lr": 0.001,
+      "max_peak_npu_gib": 7.340993404388428,
+      "parameters": 63443968,
+      "physical_expert_fraction": 0.14316127594033723,
+      "seed_confirmation": [
+        2.817881943497923,
+        2.8129245096060913
+      ],
+      "seed_validation": [
+        2.735678109980654,
+        2.7327449076692574
+      ],
+      "shape": "large-e20",
+      "targets_per_second": 12615.619015134806,
+      "training_hours": 2.9560451102039464,
+      "validation": 2.7342115088249557,
+      "validation_curve": {
+        "134217728": 2.7342115088249557,
+        "33554432": 3.2742010793008376,
+        "8388608": 4.206790552212624
+      }
+    },
+    {
+      "active_parameters": 10336000,
+      "balance": 0.01,
+      "confirmation": 2.8027741264413635,
+      "lr": 0.001,
+      "max_peak_npu_gib": 9.239818572998047,
+      "parameters": 193729024,
+      "physical_expert_fraction": 0.045330349418748986,
+      "seed_confirmation": [
+        2.807255392312072,
+        2.7982928605706547
+      ],
+      "seed_validation": [
+        2.720264160889201,
+        2.7155414681183174
+      ],
+      "shape": "large-e64",
+      "targets_per_second": 11822.298122293185,
+      "training_hours": 3.153593801866389,
+      "validation": 2.717902814503759,
+      "validation_curve": {
+        "134217728": 2.717902814503759,
+        "33554432": 3.2689138037967496,
+        "8388608": 4.226606887037633
+      }
+    },
+    {
+      "active_parameters": 3460096,
+      "balance": 0.0,
+      "confirmation": 3.306314452078368,
+      "lr": 0.003,
+      "max_peak_npu_gib": 2.2848963737487793,
+      "parameters": 3460096,
+      "physical_expert_fraction": null,
+      "seed_confirmation": [
+        3.309306282637408,
+        3.303322621519328
+      ],
+      "seed_validation": [
+        3.2367463157279417,
+        3.23916865256615
+      ],
+      "shape": "small-dense",
+      "targets_per_second": 422129.73103898077,
+      "training_hours": 0.08832055660740783,
+      "validation": 3.2379574841470458,
+      "validation_curve": {
+        "134217728": 3.2379574841470458,
+        "33554432": 3.602416178153362,
+        "8388608": 4.429270419524983
+      }
+    },
+    {
+      "active_parameters": 3484288,
+      "balance": 0.01,
+      "confirmation": 3.104082919366192,
+      "lr": 0.003,
+      "max_peak_npu_gib": 3.3947343826293945,
+      "parameters": 19471744,
+      "physical_expert_fraction": 0.14227230007701036,
+      "seed_confirmation": [
+        3.1020102760812733,
+        3.106155562651111
+      ],
+      "seed_validation": [
+        3.0235177616705187,
+        3.0298746755579486
+      ],
+      "shape": "small-e20",
+      "targets_per_second": 25397.255145336872,
+      "training_hours": 1.4681612495141518,
+      "validation": 3.0266962186142337,
+      "validation_curve": {
+        "134217728": 3.0266962186142337,
+        "33554432": 3.508412229595706,
+        "8388608": 4.3471655472239945
+      }
+    },
+    {
+      "active_parameters": 3534976,
+      "balance": 0.001,
+      "confirmation": 3.1490231293100805,
+      "lr": 0.003,
+      "max_peak_npu_gib": 4.004283428192139,
+      "parameters": 58602880,
+      "physical_expert_fraction": 0.043293380242532015,
+      "seed_confirmation": [
+        3.151686983408581,
+        3.14635927521158
+      ],
+      "seed_validation": [
+        3.0759659580653533,
+        3.073846065904945
+      ],
+      "shape": "small-e64",
+      "targets_per_second": 22668.47638666263,
+      "training_hours": 1.6457582938365845,
+      "validation": 3.0749060119851492,
+      "validation_curve": {
+        "134217728": 3.0749060119851492,
+        "33554432": 3.5368530277046375,
+        "8388608": 4.322350403206656
+      }
+    }
+  ],
+  "new_training_failures": [],
+  "observed_at": "2026-11-15T07:34:35.096964+00:00",
+  "original_attempts": [
+    {
+      "check_error": "AssertionError('causal intervention failed')",
+      "id": "small-e20-lr0.0003-b0.001-s33",
+      "job": "moe-screen8-small-e20-lr0.0003-b0.001-s33",
+      "record": "runs/moe-screen8-small-e20-lr0.0003-b0.001-s33/check/result.json",
+      "source": "2f96d745",
+      "state": "failed"
+    },
+    {
+      "check_error": "AssertionError('causal intervention failed')",
+      "id": "small-e64-lr0.0003-b0.001-s33",
+      "job": "moe-screen8-small-e64-lr0.0003-b0.001-s33",
+      "record": "runs/moe-screen8-small-e64-lr0.0003-b0.001-s33/check/result.json",
+      "source": "2f96d745",
+      "state": "failed"
+    },
+    {
+      "check_error": "AssertionError('causal intervention failed')",
+      "id": "large-e20-lr0.0001-b0.001-s33",
+      "job": "moe-screen8-large-e20-lr0.0001-b0.001-s33",
+      "record": "runs/moe-screen8-large-e20-lr0.0001-b0.001-s33/check/result.json",
+      "source": "2f96d745",
+      "state": "failed"
+    },
+    {
+      "check_error": "AssertionError('causal intervention failed')",
+      "id": "large-e64-lr0.0001-b0.001-s33",
+      "job": "moe-screen8-large-e64-lr0.0001-b0.001-s33",
+      "record": "runs/moe-screen8-large-e64-lr0.0001-b0.001-s33/check/result.json",
+      "source": "2f96d745",
+      "state": "failed"
+    },
+    {
+      "check_error": null,
+      "id": "small-dense-lr0.0003-s33",
+      "job": "moe-screen8-small-dense-lr0.0003-s33",
+      "record": "runs/moe-screen8-small-dense-lr0.0003-s33/check/result.json",
+      "source": "2f96d745",
+      "state": "completed"
+    },
+    {
+      "check_error": null,
+      "id": "large-dense-lr0.0001-s33",
+      "job": "moe-screen8-large-dense-lr0.0001-s33",
+      "record": "runs/moe-screen8-large-dense-lr0.0001-s33/check/result.json",
+      "source": "2f96d745",
+      "state": "completed"
+    },
+    {
+      "check_error": "AssertionError('causal intervention failed')",
+      "id": "small-e20-lr0.0003-b0.01-s33",
+      "job": "moe-screen8-small-e20-lr0.0003-b0.01-s33",
+      "record": "runs/moe-screen8-small-e20-lr0.0003-b0.01-s33/check/result.json",
+      "source": "2f96d745",
+      "state": "failed"
+    },
+    {
+      "check_error": "AssertionError('causal intervention failed')",
+      "id": "small-e64-lr0.0003-b0.01-s33",
+      "job": "moe-screen8-small-e64-lr0.0003-b0.01-s33",
+      "record": "runs/moe-screen8-small-e64-lr0.0003-b0.01-s33/check/result.json",
+      "source": "2f96d745",
+      "state": "failed"
+    },
+    {
+      "check_error": "AssertionError('causal intervention failed')",
+      "id": "large-e20-lr0.0001-b0.01-s33",
+      "job": "moe-screen8-large-e20-lr0.0001-b0.01-s33",
+      "record": "runs/moe-screen8-large-e20-lr0.0001-b0.01-s33/check/result.json",
+      "source": "2f96d745",
+      "state": "failed"
+    },
+    {
+      "check_error": "AssertionError('causal intervention failed')",
+      "id": "large-e64-lr0.0001-b0.01-s33",
+      "job": "moe-screen8-large-e64-lr0.0001-b0.01-s33",
+      "record": "runs/moe-screen8-large-e64-lr0.0001-b0.01-s33/check/result.json",
+      "source": "2f96d745",
+      "state": "failed"
+    },
+    {
+      "check_error": null,
+      "id": "small-dense-lr0.001-s33",
+      "job": "moe-screen8-small-dense-lr0.001-s33",
+      "record": "runs/moe-screen8-small-dense-lr0.001-s33/check/result.json",
+      "source": "2f96d745",
+      "state": "completed"
+    },
+    {
+      "check_error": null,
+      "id": "large-dense-lr0.0003-s33",
+      "job": "moe-screen8-large-dense-lr0.0003-s33",
+      "record": "runs/moe-screen8-large-dense-lr0.0003-s33/check/result.json",
+      "source": "2f96d745",
+      "state": "completed"
+    },
+    {
+      "check_error": "AssertionError('causal intervention failed')",
+      "id": "small-e20-lr0.001-b0.001-s33",
+      "job": "moe-screen8-small-e20-lr0.001-b0.001-s33",
+      "record": "runs/moe-screen8-small-e20-lr0.001-b0.001-s33/check/result.json",
+      "source": "2f96d745",
+      "state": "failed"
+    },
+    {
+      "check_error": "AssertionError('causal intervention failed')",
+      "id": "small-e64-lr0.001-b0.001-s33",
+      "job": "moe-screen8-small-e64-lr0.001-b0.001-s33",
+      "record": "runs/moe-screen8-small-e64-lr0.001-b0.001-s33/check/result.json",
+      "source": "2f96d745",
+      "state": "failed"
+    },
+    {
+      "check_error": "AssertionError('causal intervention failed')",
+      "id": "large-e20-lr0.0003-b0.001-s33",
+      "job": "moe-screen8-large-e20-lr0.0003-b0.001-s33",
+      "record": "runs/moe-screen8-large-e20-lr0.0003-b0.001-s33/check/result.json",
+      "source": "2f96d745",
+      "state": "failed"
+    },
+    {
+      "check_error": "AssertionError('causal intervention failed')",
+      "id": "large-e64-lr0.0003-b0.001-s33",
+      "job": "moe-screen8-large-e64-lr0.0003-b0.001-s33",
+      "record": "runs/moe-screen8-large-e64-lr0.0003-b0.001-s33/check/result.json",
+      "source": "2f96d745",
+      "state": "failed"
+    }
+  ],
+  "phase_counts": {
+    "confirm": 12,
+    "main128": 12,
+    "screen32": 12,
+    "screen8": 30
+  },
+  "quota": {
+    "file_grace_expires_epoch": 0,
+    "file_hard": 0,
+    "file_soft": 0,
+    "files": 1644809,
+    "filesystem": "/dev/mapper/ascend_data-data",
+    "grace_expires_epoch": 1795294591,
+    "hard_gib": 800.0,
+    "hard_quota_headroom_gib": 454.59498596191406,
+    "query_returncode": 1,
+    "soft_exceeded": true,
+    "soft_gib": 300.0,
+    "used_gib": 345.40501403808594
+  },
+  "resources": {
+    "at": "2026-11-15T06:24:59.679947+00:00",
+    "new_disk_gib": 25.98489761352539,
+    "quota": {
+      "file_grace_expires_epoch": 0,
+      "file_hard": 0,
+      "file_soft": 0,
+      "files": 1644296,
+      "filesystem": "/dev/mapper/ascend_data-data",
+      "grace_expires_epoch": 1795294591,
+      "hard_gib": 800.0,
+      "hard_quota_headroom_gib": 455.30821228027344,
+      "query_returncode": 1,
+      "soft_exceeded": true,
+      "soft_gib": 300.0,
+      "used_gib": 344.69178771972656
+    }
+  },
+  "rows": [
+    {
+      "active_parameters": 10136320,
+      "balance": 0.0,
+      "causal_mechanism": null,
+      "checkpoint": {
+        "record": "runs/moe-r2-main128-large-dense-lr0.001-s11/train/latest.pt",
+        "sha256": "8724e2ba3edd688b8cebfaf1fecd152b67bbbbb0afbba8f3fa922071421c9ec9",
+        "verified_bytes": 122859545
+      },
+      "config": ".local/source-moe-execution-v2/configs/studies/language/moe-controls/table/configs/large-dense-lr0.001-s11.json",
+      "confirmation": {
+        "nll": 3.0187708855446544,
+        "record": "runs/moe-r2-confirm-large-dense-lr0.001-s11/confirmation.json",
+        "sha256": "7a3c9d0b181ea7edbd9676fbf87422c797fee779c5c1686af9bbb183ca58cfa7",
+        "tokens": 262144,
+        "work": {}
+      },
+      "dropped_tail_tokens": 25170,
+      "elapsed_seconds": 633.6661147028208,
+      "id": "large-dense-lr0.001-s11",
+      "identity": {
+        "config_sha256": "f98bd49c5c88680d594fc4b8b3dd6760dfb1888b99166ad448fc2d7e3df2766d",
+        "data_lock_sha256": "40b7c0ebb9650d11aa0c0080532c884e2ca3846db578155f3df7068b82191d2f",
+        "device": "npu:0",
+        "dtype": "float32",
+        "installation": {
+          "foundation_commit": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+          "foundation_lock_sha256": "ba5464d7e23fe6b8c7453a52bfc7b961f040c92d0b80786c18132e40d90308b7",
+          "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+          "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+          "tidegraph": "0.3.0",
+          "tidegraph_source_sha256": "cfe2168a2c87565a568fb8944429b6b38401f92cf24972fba59c47b7592a7847",
+          "torch": "2.12.0+cpu",
+          "torch_npu": "2.12.0.post3",
+          "transformers": null
+        },
+        "mode": "train",
+        "source_commit": "8bd33dd160ac65238fe7bd4eac3450251fe57c32",
+        "source_sha256": "ea7d91180cabc1b465d2ca97068f795bd3548bf321ab8ba92d9ba1ac0a88fdc6",
+        "threads": 4
+      },
+      "kind": "transformer",
+      "late_batch_cold_experts_mean": null,
+      "late_batch_max_load_fraction": null,
+      "lens": {
+        "confirmation": {
+          "destination_name": "tl-moe-r2-confirm-large-dense-lr0.001-s11-projection-8fb839f56c73",
+          "destination_run_id": "45b084bca4b34b46afd7d2b1aab51cab",
+          "event_count": 1,
+          "exactly_once": false,
+          "last_sequence": 0,
+          "project": "tide-learning-lab",
+          "readback_matches": true,
+          "sdk_version": "0.44.0",
+          "source_run_id": "tl-moe-r2-confirm-large-dense-lr0.001-s11",
+          "source_timestamps_preserved": false,
+          "status": "verified",
+          "steps_preserved": true,
+          "warning_count": 0,
+          "workload_status": "not-determined-by-recorder"
+        },
+        "train": {
+          "destination_name": "tl-moe-r2-main128-large-dense-lr0.001-s11-projection-18c373b94f6d",
+          "destination_run_id": "815469455ebe4e208815f9f4cd117b8a",
+          "event_count": 544,
+          "exactly_once": false,
+          "last_sequence": 543,
+          "project": "tide-learning-lab",
+          "readback_matches": true,
+          "sdk_version": "0.44.0",
+          "source_run_id": "tl-moe-r2-main128-large-dense-lr0.001-s11",
+          "source_timestamps_preserved": false,
+          "status": "verified",
+          "steps_preserved": true,
+          "warning_count": 0,
+          "workload_status": "not-determined-by-recorder"
+        }
+      },
+      "lr": 0.001,
+      "max_logged_gradient_norm": 38.68914794921875,
+      "padding_factor": null,
+      "parameters": 10136320,
+      "peak_npu_mib": 4394.44140625,
+      "physical_expert_fraction": null,
+      "recovery": {
+        "record": "runs/moe-r2-main128-large-dense-lr0.001-s11/recovery.json",
+        "scope": "three B4/L32 real-data task+aux updates, same backend/config/install, fresh processes; full trajectory unchecked",
+        "state": "passed"
+      },
+      "seed": 11,
+      "shape": "large-dense",
+      "steps": 8392,
+      "strict_causal": {
+        "atol": 0,
+        "elements": 16384,
+        "failed_elements": 0,
+        "max_abs": 0.0,
+        "relative_l2": 0.0,
+        "rtol": 0,
+        "state": "passed"
+      },
+      "strict_forward": {
+        "atol": 1e-06,
+        "elements": 24576,
+        "failed_elements": 22630,
+        "max_abs": 0.00016874074935913086,
+        "relative_l2": 0.00011247500661593524,
+        "rtol": 1e-05,
+        "state": "failed"
+      },
+      "strict_vjp_failed": 147,
+      "targets_per_second": 236706.0460099312,
+      "tokens": 134217728,
+      "training": {
+        "balance_coefficient": 0.0,
+        "batch": 64,
+        "betas": [
+          0.9,
+          0.95
+        ],
+        "checkpoint_seconds": 1800,
+        "clip_norm": 1.0,
+        "decay_policy": "matrix_only",
+        "eps": 1e-08,
+        "eval_batch": 64,
+        "eval_tokens": 131072,
+        "full_probe_batch": 4,
+        "full_probe_length": 32,
+        "global_batch": 64,
+        "initial_eval_tokens": 32768,
+        "keep_previous": false,
+        "length": 256,
+        "log_every": 16,
+        "lr": 0.001,
+        "lr_decay_tokens": 268435456,
+        "lr_floor_fraction": 0.1,
+        "milestone_weights_only": true,
+        "milestones": [
+          8388608,
+          33554432,
+          134217728
+        ],
+        "optimizer_foreach": false,
+        "target_tokens": 134217728,
+        "timeout_seconds": 172800,
+        "validation_every_tokens": 8388608,
+        "warmup_tokens": 1048576,
+        "weight_decay": 0.1,
+        "z_coefficient": 0.0
+      },
+      "training_seconds": 567.0228127352893,
+      "validation": {
+        "nll": 2.9460893936338834,
+        "record": "runs/moe-r2-main128-large-dense-lr0.001-s11/train/validation-final.json",
+        "sha256": "ca074e7bdd15ec5430392539bb059cb5fbbf6c5f2de6bbb7e186c6291f0ee36e",
+        "tokens": 131072,
+        "work": {}
+      },
+      "validation_curve": {
+        "134217728": 2.9460893936338834,
+        "33554432": 3.4298579399473965,
+        "8388608": 4.526892811642028
+      }
+    },
+    {
+      "active_parameters": 10136320,
+      "balance": 0.0,
+      "causal_mechanism": null,
+      "checkpoint": {
+        "record": "runs/moe-r2-main128-large-dense-lr0.001-s22/train/latest.pt",
+        "sha256": "f9a99b631e340b47bf38ba0f607208f47b2393f94efa8747b175df0d2a6d596c",
+        "verified_bytes": 122859545
+      },
+      "config": ".local/source-moe-execution-v2/configs/studies/language/moe-controls/table/configs/large-dense-lr0.001-s22.json",
+      "confirmation": {
+        "nll": 3.0154495178285288,
+        "record": "runs/moe-r2-confirm-large-dense-lr0.001-s22/confirmation.json",
+        "sha256": "2c7a19c558977148cab3d0ba07f3ba741b8658b433ace38efa138b65a3078d2c",
+        "tokens": 262144,
+        "work": {}
+      },
+      "dropped_tail_tokens": 24867,
+      "elapsed_seconds": 631.4358381070197,
+      "id": "large-dense-lr0.001-s22",
+      "identity": {
+        "config_sha256": "468e8fefd1022ec4f6431fb4aff66b9f3e8be0be3d3a17de88d8a40f6f31dc50",
+        "data_lock_sha256": "40b7c0ebb9650d11aa0c0080532c884e2ca3846db578155f3df7068b82191d2f",
+        "device": "npu:0",
+        "dtype": "float32",
+        "installation": {
+          "foundation_commit": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+          "foundation_lock_sha256": "ba5464d7e23fe6b8c7453a52bfc7b961f040c92d0b80786c18132e40d90308b7",
+          "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+          "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+          "tidegraph": "0.3.0",
+          "tidegraph_source_sha256": "cfe2168a2c87565a568fb8944429b6b38401f92cf24972fba59c47b7592a7847",
+          "torch": "2.12.0+cpu",
+          "torch_npu": "2.12.0.post3",
+          "transformers": null
+        },
+        "mode": "train",
+        "source_commit": "8bd33dd160ac65238fe7bd4eac3450251fe57c32",
+        "source_sha256": "ea7d91180cabc1b465d2ca97068f795bd3548bf321ab8ba92d9ba1ac0a88fdc6",
+        "threads": 4
+      },
+      "kind": "transformer",
+      "late_batch_cold_experts_mean": null,
+      "late_batch_max_load_fraction": null,
+      "lens": {
+        "confirmation": {
+          "destination_name": "tl-moe-r2-confirm-large-dense-lr0.001-s22-projection-62b8d553041c",
+          "destination_run_id": "efdf16cc17c14e8f9e09ebf4ae961a00",
+          "event_count": 1,
+          "exactly_once": false,
+          "last_sequence": 0,
+          "project": "tide-learning-lab",
+          "readback_matches": true,
+          "sdk_version": "0.44.0",
+          "source_run_id": "tl-moe-r2-confirm-large-dense-lr0.001-s22",
+          "source_timestamps_preserved": false,
+          "status": "verified",
+          "steps_preserved": true,
+          "warning_count": 0,
+          "workload_status": "not-determined-by-recorder"
+        },
+        "train": {
+          "destination_name": "tl-moe-r2-main128-large-dense-lr0.001-s22-projection-9671ef8064c5",
+          "destination_run_id": "5408b8b275d14fd284dbb228b2e20676",
+          "event_count": 544,
+          "exactly_once": false,
+          "last_sequence": 543,
+          "project": "tide-learning-lab",
+          "readback_matches": true,
+          "sdk_version": "0.44.0",
+          "source_run_id": "tl-moe-r2-main128-large-dense-lr0.001-s22",
+          "source_timestamps_preserved": false,
+          "status": "verified",
+          "steps_preserved": true,
+          "warning_count": 0,
+          "workload_status": "not-determined-by-recorder"
+        }
+      },
+      "lr": 0.001,
+      "max_logged_gradient_norm": 8.383352279663086,
+      "padding_factor": null,
+      "parameters": 10136320,
+      "peak_npu_mib": 4394.44140625,
+      "physical_expert_fraction": null,
+      "recovery": {
+        "record": "runs/moe-r2-main128-large-dense-lr0.001-s22/recovery.json",
+        "scope": "three B4/L32 real-data task+aux updates, same backend/config/install, fresh processes; full trajectory unchecked",
+        "state": "passed"
+      },
+      "seed": 22,
+      "shape": "large-dense",
+      "steps": 8392,
+      "strict_causal": {
+        "atol": 0,
+        "elements": 16384,
+        "failed_elements": 0,
+        "max_abs": 0.0,
+        "relative_l2": 0.0,
+        "rtol": 0,
+        "state": "passed"
+      },
+      "strict_forward": {
+        "atol": 1e-06,
+        "elements": 24576,
+        "failed_elements": 22735,
+        "max_abs": 0.0001534968614578247,
+        "relative_l2": 0.0001184500865009054,
+        "rtol": 1e-05,
+        "state": "failed"
+      },
+      "strict_vjp_failed": 147,
+      "targets_per_second": 237942.13562801282,
+      "tokens": 134217728,
+      "training": {
+        "balance_coefficient": 0.0,
+        "batch": 64,
+        "betas": [
+          0.9,
+          0.95
+        ],
+        "checkpoint_seconds": 1800,
+        "clip_norm": 1.0,
+        "decay_policy": "matrix_only",
+        "eps": 1e-08,
+        "eval_batch": 64,
+        "eval_tokens": 131072,
+        "full_probe_batch": 4,
+        "full_probe_length": 32,
+        "global_batch": 64,
+        "initial_eval_tokens": 32768,
+        "keep_previous": false,
+        "length": 256,
+        "log_every": 16,
+        "lr": 0.001,
+        "lr_decay_tokens": 268435456,
+        "lr_floor_fraction": 0.1,
+        "milestone_weights_only": true,
+        "milestones": [
+          8388608,
+          33554432,
+          134217728
+        ],
+        "optimizer_foreach": false,
+        "target_tokens": 134217728,
+        "timeout_seconds": 172800,
+        "validation_every_tokens": 8388608,
+        "warmup_tokens": 1048576,
+        "weight_decay": 0.1,
+        "z_coefficient": 0.0
+      },
+      "training_seconds": 564.0771763511002,
+      "validation": {
+        "nll": 2.9461760515114293,
+        "record": "runs/moe-r2-main128-large-dense-lr0.001-s22/train/validation-final.json",
+        "sha256": "8f9c0a2a7cb80ddb530310b0cf8af35ecf74fda48e04cf6bfa6126daa8ba7bf7",
+        "tokens": 131072,
+        "work": {}
+      },
+      "validation_curve": {
+        "134217728": 2.9461760515114293,
+        "33554432": 3.451141299912706,
+        "8388608": 4.520925663644448
+      }
+    },
+    {
+      "active_parameters": 10200832,
+      "balance": 0.01,
+      "causal_mechanism": "passed",
+      "checkpoint": {
+        "record": "runs/moe-r2-main128-large-e20-lr0.001-b0.01-s11/train/latest.pt",
+        "sha256": "5914b5ffa9e945ab366d126e37c0b61b443b4ee8df2b40716e193ca8aad66833",
+        "verified_bytes": 762565369
+      },
+      "config": ".local/source-moe-execution-v2/configs/studies/language/moe-controls/table/configs/large-e20-lr0.001-b0.01-s11.json",
+      "confirmation": {
+        "nll": 2.817881943497923,
+        "record": "runs/moe-r2-confirm-large-e20-lr0.001-b0.01-s11/confirmation.json",
+        "sha256": "48401b8bcfd8726ff8f7412cf2f3fb19535adc5659053f33576a2cf17ca82a78",
+        "tokens": 262144,
+        "work": {
+          "work/active_parameter_uses": 2702812446720,
+          "work/expert_assignments": 6359040,
+          "work/expert_slots": 63590400,
+          "work/physical_expert_rows": 9155840,
+          "work/prediction_positions": 264960
+        }
+      },
+      "dropped_tail_tokens": 25170,
+      "elapsed_seconds": 10620.037923630327,
+      "id": "large-e20-lr0.001-b0.01-s11",
+      "identity": {
+        "config_sha256": "dc83d8e82379ecad88471e497fc8792b7a0bcdbce9745daa5b2a4083ced522c4",
+        "data_lock_sha256": "40b7c0ebb9650d11aa0c0080532c884e2ca3846db578155f3df7068b82191d2f",
+        "device": "npu:0",
+        "dtype": "float32",
+        "installation": {
+          "foundation_commit": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+          "foundation_lock_sha256": "ba5464d7e23fe6b8c7453a52bfc7b961f040c92d0b80786c18132e40d90308b7",
+          "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+          "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+          "tidegraph": "0.3.0",
+          "tidegraph_source_sha256": "cfe2168a2c87565a568fb8944429b6b38401f92cf24972fba59c47b7592a7847",
+          "torch": "2.12.0+cpu",
+          "torch_npu": "2.12.0.post3",
+          "transformers": null
+        },
+        "mode": "train",
+        "source_commit": "8bd33dd160ac65238fe7bd4eac3450251fe57c32",
+        "source_sha256": "ea7d91180cabc1b465d2ca97068f795bd3548bf321ab8ba92d9ba1ac0a88fdc6",
+        "threads": 4
+      },
+      "kind": "moe",
+      "late_batch_cold_experts_mean": 0.0,
+      "late_batch_max_load_fraction": 0.1769421249628067,
+      "lens": {
+        "confirmation": {
+          "destination_name": "tl-moe-r2-confirm-large-e20-lr0.001-b0.01-s11-projection-7d8f77925d36",
+          "destination_run_id": "d45a59ef69514c1db25f7718044ac72b",
+          "event_count": 1,
+          "exactly_once": false,
+          "last_sequence": 0,
+          "project": "tide-learning-lab",
+          "readback_matches": true,
+          "sdk_version": "0.44.0",
+          "source_run_id": "tl-moe-r2-confirm-large-e20-lr0.001-b0.01-s11",
+          "source_timestamps_preserved": false,
+          "status": "verified",
+          "steps_preserved": true,
+          "warning_count": 0,
+          "workload_status": "not-determined-by-recorder"
+        },
+        "train": {
+          "destination_name": "tl-moe-r2-main128-large-e20-lr0.001-b0.01-s11-projection-627eb7cd118b",
+          "destination_run_id": "76ab49b52e2b4af58451cf0689e3db96",
+          "event_count": 544,
+          "exactly_once": false,
+          "last_sequence": 543,
+          "project": "tide-learning-lab",
+          "readback_matches": true,
+          "sdk_version": "0.44.0",
+          "source_run_id": "tl-moe-r2-main128-large-e20-lr0.001-b0.01-s11",
+          "source_timestamps_preserved": false,
+          "status": "verified",
+          "steps_preserved": true,
+          "warning_count": 0,
+          "workload_status": "not-determined-by-recorder"
+        }
+      },
+      "lr": 0.001,
+      "max_logged_gradient_norm": 6.4963603019714355,
+      "padding_factor": 1.4343511875810635,
+      "parameters": 63443968,
+      "peak_npu_mib": 7517.17724609375,
+      "physical_expert_fraction": 0.14343511875810636,
+      "recovery": {
+        "record": "runs/moe-r2-main128-large-e20-lr0.001-b0.01-s11/recovery.json",
+        "scope": "three B4/L32 real-data task+aux updates, same backend/config/install, fresh processes; full trajectory unchecked",
+        "state": "passed"
+      },
+      "seed": 11,
+      "shape": "large-e20",
+      "steps": 8392,
+      "strict_causal": {
+        "atol": 0,
+        "elements": 16384,
+        "failed_elements": 15497,
+        "max_abs": 7.450580596923828e-07,
+        "relative_l2": 4.8415327667286e-07,
+        "rtol": 0,
+        "state": "failed"
+      },
+      "strict_forward": {
+        "atol": 1e-06,
+        "elements": 24576,
+        "failed_elements": 21708,
+        "max_abs": 0.00010839104652404785,
+        "relative_l2": 7.555752719576519e-05,
+        "rtol": 1e-05,
+        "state": "failed"
+      },
+      "strict_vjp_failed": 159,
+      "targets_per_second": 12818.4164536519,
+      "tokens": 134217728,
+      "training": {
+        "balance_coefficient": 0.01,
+        "batch": 64,
+        "betas": [
+          0.9,
+          0.95
+        ],
+        "checkpoint_seconds": 1800,
+        "clip_norm": 1.0,
+        "decay_policy": "matrix_only",
+        "eps": 1e-08,
+        "eval_batch": 64,
+        "eval_tokens": 131072,
+        "full_probe_batch": 4,
+        "full_probe_length": 32,
+        "global_batch": 64,
+        "initial_eval_tokens": 32768,
+        "keep_previous": false,
+        "length": 256,
+        "log_every": 16,
+        "lr": 0.001,
+        "lr_decay_tokens": 268435456,
+        "lr_floor_fraction": 0.1,
+        "milestone_weights_only": true,
+        "milestones": [
+          8388608,
+          33554432,
+          134217728
+        ],
+        "optimizer_foreach": false,
+        "target_tokens": 134217728,
+        "timeout_seconds": 172800,
+        "validation_every_tokens": 8388608,
+        "warmup_tokens": 1048576,
+        "weight_decay": 0.1,
+        "z_coefficient": 0.001
+      },
+      "training_seconds": 10470.694916591048,
+      "validation": {
+        "nll": 2.735678109980654,
+        "record": "runs/moe-r2-main128-large-e20-lr0.001-b0.01-s11/train/validation-final.json",
+        "sha256": "c5802bc0c131c8e8c9b951b9fcdf05d600a7c2e00e8d9b549ee860f858dd5ed4",
+        "tokens": 131072,
+        "work": {
+          "work/active_parameter_uses": 1342266277888,
+          "work/expert_assignments": 3158016,
+          "work/expert_slots": 31580160,
+          "work/physical_expert_rows": 4529704,
+          "work/prediction_positions": 131584
+        }
+      },
+      "validation_curve": {
+        "134217728": 2.735678109980654,
+        "33554432": 3.288031547970604,
+        "8388608": 4.213835475442465
+      }
+    },
+    {
+      "active_parameters": 10200832,
+      "balance": 0.01,
+      "causal_mechanism": "passed",
+      "checkpoint": {
+        "record": "runs/moe-r2-main128-large-e20-lr0.001-b0.01-s22/train/latest.pt",
+        "sha256": "8dc19d7c9d6722981edf98b1b96f51c8c64680704e65a69b91ecfda14126c753",
+        "verified_bytes": 762565369
+      },
+      "config": ".local/source-moe-execution-v2/configs/studies/language/moe-controls/table/configs/large-e20-lr0.001-b0.01-s22.json",
+      "confirmation": {
+        "nll": 2.8129245096060913,
+        "record": "runs/moe-r2-confirm-large-e20-lr0.001-b0.01-s22/confirmation.json",
+        "sha256": "77f7e61d2c6af77e587c90a626722eb88524f65644c1a9891ebb3a19ee9368fd",
+        "tokens": 262144,
+        "work": {
+          "work/active_parameter_uses": 2702812446720,
+          "work/expert_assignments": 6359040,
+          "work/expert_slots": 63590400,
+          "work/physical_expert_rows": 9129424,
+          "work/prediction_positions": 264960
+        }
+      },
+      "dropped_tail_tokens": 24867,
+      "elapsed_seconds": 10952.399383760989,
+      "id": "large-e20-lr0.001-b0.01-s22",
+      "identity": {
+        "config_sha256": "e63accd1a117ad4ad4e979d5c93f2c1bfb9dcb8cd3c496cb3840a68b69d62052",
+        "data_lock_sha256": "40b7c0ebb9650d11aa0c0080532c884e2ca3846db578155f3df7068b82191d2f",
+        "device": "npu:0",
+        "dtype": "float32",
+        "installation": {
+          "foundation_commit": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+          "foundation_lock_sha256": "ba5464d7e23fe6b8c7453a52bfc7b961f040c92d0b80786c18132e40d90308b7",
+          "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+          "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+          "tidegraph": "0.3.0",
+          "tidegraph_source_sha256": "cfe2168a2c87565a568fb8944429b6b38401f92cf24972fba59c47b7592a7847",
+          "torch": "2.12.0+cpu",
+          "torch_npu": "2.12.0.post3",
+          "transformers": null
+        },
+        "mode": "train",
+        "source_commit": "8bd33dd160ac65238fe7bd4eac3450251fe57c32",
+        "source_sha256": "ea7d91180cabc1b465d2ca97068f795bd3548bf321ab8ba92d9ba1ac0a88fdc6",
+        "threads": 4
+      },
+      "kind": "moe",
+      "late_batch_cold_experts_mean": 0.0,
+      "late_batch_max_load_fraction": 0.1765783131122589,
+      "lens": {
+        "confirmation": {
+          "destination_name": "tl-moe-r2-confirm-large-e20-lr0.001-b0.01-s22-projection-3cefa7e45626",
+          "destination_run_id": "b5f33dc4242045b69416201b5b31172b",
+          "event_count": 1,
+          "exactly_once": false,
+          "last_sequence": 0,
+          "project": "tide-learning-lab",
+          "readback_matches": true,
+          "sdk_version": "0.44.0",
+          "source_run_id": "tl-moe-r2-confirm-large-e20-lr0.001-b0.01-s22",
+          "source_timestamps_preserved": false,
+          "status": "verified",
+          "steps_preserved": true,
+          "warning_count": 0,
+          "workload_status": "not-determined-by-recorder"
+        },
+        "train": {
+          "destination_name": "tl-moe-r2-main128-large-e20-lr0.001-b0.01-s22-projection-7a93d68e1848",
+          "destination_run_id": "4ac79d15927e420db2bf2eb1d0606aac",
+          "event_count": 544,
+          "exactly_once": false,
+          "last_sequence": 543,
+          "project": "tide-learning-lab",
+          "readback_matches": true,
+          "sdk_version": "0.44.0",
+          "source_run_id": "tl-moe-r2-main128-large-e20-lr0.001-b0.01-s22",
+          "source_timestamps_preserved": false,
+          "status": "verified",
+          "steps_preserved": true,
+          "warning_count": 0,
+          "workload_status": "not-determined-by-recorder"
+        }
+      },
+      "lr": 0.001,
+      "max_logged_gradient_norm": 6.721006393432617,
+      "padding_factor": 1.4288743312256809,
+      "parameters": 63443968,
+      "peak_npu_mib": 7435.701171875,
+      "physical_expert_fraction": 0.1428874331225681,
+      "recovery": {
+        "record": "runs/moe-r2-main128-large-e20-lr0.001-b0.01-s22/recovery.json",
+        "scope": "three B4/L32 real-data task+aux updates, same backend/config/install, fresh processes; full trajectory unchecked",
+        "state": "passed"
+      },
+      "seed": 22,
+      "shape": "large-e20",
+      "steps": 8392,
+      "strict_causal": {
+        "atol": 0,
+        "elements": 16384,
+        "failed_elements": 15426,
+        "max_abs": 6.556510925292969e-07,
+        "relative_l2": 4.5522022091725587e-07,
+        "rtol": 0,
+        "state": "failed"
+      },
+      "strict_forward": {
+        "atol": 1e-06,
+        "elements": 24576,
+        "failed_elements": 21627,
+        "max_abs": 0.0001041218638420105,
+        "relative_l2": 7.418246074779123e-05,
+        "rtol": 1e-05,
+        "state": "failed"
+      },
+      "strict_vjp_failed": 159,
+      "targets_per_second": 12412.821576617709,
+      "tokens": 134217728,
+      "training": {
+        "balance_coefficient": 0.01,
+        "batch": 64,
+        "betas": [
+          0.9,
+          0.95
+        ],
+        "checkpoint_seconds": 1800,
+        "clip_norm": 1.0,
+        "decay_policy": "matrix_only",
+        "eps": 1e-08,
+        "eval_batch": 64,
+        "eval_tokens": 131072,
+        "full_probe_batch": 4,
+        "full_probe_length": 32,
+        "global_batch": 64,
+        "initial_eval_tokens": 32768,
+        "keep_previous": false,
+        "length": 256,
+        "log_every": 16,
+        "lr": 0.001,
+        "lr_decay_tokens": 268435456,
+        "lr_floor_fraction": 0.1,
+        "milestone_weights_only": true,
+        "milestones": [
+          8388608,
+          33554432,
+          134217728
+        ],
+        "optimizer_foreach": false,
+        "target_tokens": 134217728,
+        "timeout_seconds": 172800,
+        "validation_every_tokens": 8388608,
+        "warmup_tokens": 1048576,
+        "weight_decay": 0.1,
+        "z_coefficient": 0.001
+      },
+      "training_seconds": 10812.829876877367,
+      "validation": {
+        "nll": 2.7327449076692574,
+        "record": "runs/moe-r2-main128-large-e20-lr0.001-b0.01-s22/train/validation-final.json",
+        "sha256": "5482f02450026a60bd48ed38703d073e2fe24825a19f1912b39161a0c7148aa9",
+        "tokens": 131072,
+        "work": {
+          "work/active_parameter_uses": 1342266277888,
+          "work/expert_assignments": 3158016,
+          "work/expert_slots": 31580160,
+          "work/physical_expert_rows": 4512408,
+          "work/prediction_positions": 131584
+        }
+      },
+      "validation_curve": {
+        "134217728": 2.7327449076692574,
+        "33554432": 3.260370610631071,
+        "8388608": 4.199745628982782
+      }
+    },
+    {
+      "active_parameters": 10336000,
+      "balance": 0.01,
+      "causal_mechanism": "passed",
+      "checkpoint": {
+        "record": "runs/moe-r2-main128-large-e64-lr0.001-b0.01-s11/train/latest.pt",
+        "sha256": "65622b37d44662896332996d50d9ab852cb90f16061dac3b0c218a1253cd8d5d",
+        "verified_bytes": 2325986041
+      },
+      "config": ".local/source-moe-execution-v2/configs/studies/language/moe-controls/table/configs/large-e64-lr0.001-b0.01-s11.json",
+      "confirmation": {
+        "nll": 2.807255392312072,
+        "record": "runs/moe-r2-confirm-large-e64-lr0.001-b0.01-s11/confirmation.json",
+        "sha256": "8ab44600d6c9136fe238286a588b397f33a1a34eb6b7aac4e17d4bbc22cd3328",
+        "tokens": 262144,
+        "work": {
+          "work/active_parameter_uses": 2738626560000,
+          "work/expert_assignments": 6359040,
+          "work/expert_slots": 203489280,
+          "work/physical_expert_rows": 9280143,
+          "work/prediction_positions": 264960
+        }
+      },
+      "dropped_tail_tokens": 25170,
+      "elapsed_seconds": 11576.476026315242,
+      "id": "large-e64-lr0.001-b0.01-s11",
+      "identity": {
+        "config_sha256": "111ab97a647b9942a7cf4339270e1a5e4b28ff33046c1b311700881ce3360574",
+        "data_lock_sha256": "40b7c0ebb9650d11aa0c0080532c884e2ca3846db578155f3df7068b82191d2f",
+        "device": "npu:0",
+        "dtype": "float32",
+        "installation": {
+          "foundation_commit": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+          "foundation_lock_sha256": "ba5464d7e23fe6b8c7453a52bfc7b961f040c92d0b80786c18132e40d90308b7",
+          "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+          "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+          "tidegraph": "0.3.0",
+          "tidegraph_source_sha256": "cfe2168a2c87565a568fb8944429b6b38401f92cf24972fba59c47b7592a7847",
+          "torch": "2.12.0+cpu",
+          "torch_npu": "2.12.0.post3",
+          "transformers": null
+        },
+        "mode": "train",
+        "source_commit": "8bd33dd160ac65238fe7bd4eac3450251fe57c32",
+        "source_sha256": "ea7d91180cabc1b465d2ca97068f795bd3548bf321ab8ba92d9ba1ac0a88fdc6",
+        "threads": 4
+      },
+      "kind": "moe",
+      "late_batch_cold_experts_mean": 0.0,
+      "late_batch_max_load_fraction": 0.16982296109199524,
+      "lens": {
+        "confirmation": {
+          "destination_name": "tl-moe-r2-confirm-large-e64-lr0.001-b0.01-s11-projection-2f986bf8e731",
+          "destination_run_id": "16bfaa3b23d040e28c76e44336f70610",
+          "event_count": 1,
+          "exactly_once": false,
+          "last_sequence": 0,
+          "project": "tide-learning-lab",
+          "readback_matches": true,
+          "sdk_version": "0.44.0",
+          "source_run_id": "tl-moe-r2-confirm-large-e64-lr0.001-b0.01-s11",
+          "source_timestamps_preserved": false,
+          "status": "verified",
+          "steps_preserved": true,
+          "warning_count": 0,
+          "workload_status": "not-determined-by-recorder"
+        },
+        "train": {
+          "destination_name": "tl-moe-r2-main128-large-e64-lr0.001-b0.01-s11-projection-614800693919",
+          "destination_run_id": "9a6dc3a99e3d4c329292ba7bc3bb6f2a",
+          "event_count": 544,
+          "exactly_once": false,
+          "last_sequence": 543,
+          "project": "tide-learning-lab",
+          "readback_matches": true,
+          "sdk_version": "0.44.0",
+          "source_run_id": "tl-moe-r2-main128-large-e64-lr0.001-b0.01-s11",
+          "source_timestamps_preserved": false,
+          "status": "verified",
+          "steps_preserved": true,
+          "warning_count": 0,
+          "workload_status": "not-determined-by-recorder"
+        }
+      },
+      "lr": 0.001,
+      "max_logged_gradient_norm": 6.349673748016357,
+      "padding_factor": 1.4568491736583982,
+      "parameters": 193729024,
+      "peak_npu_mib": 9457.7587890625,
+      "physical_expert_fraction": 0.04552653667682494,
+      "recovery": {
+        "record": "runs/moe-r2-main128-large-e64-lr0.001-b0.01-s11/recovery.json",
+        "scope": "three B4/L32 real-data task+aux updates, same backend/config/install, fresh processes; full trajectory unchecked",
+        "state": "passed"
+      },
+      "seed": 11,
+      "shape": "large-e64",
+      "steps": 8392,
+      "strict_causal": {
+        "atol": 0,
+        "elements": 16384,
+        "failed_elements": 15416,
+        "max_abs": 6.854534149169922e-07,
+        "relative_l2": 4.5932520359983537e-07,
+        "rtol": 0,
+        "state": "failed"
+      },
+      "strict_forward": {
+        "atol": 1e-06,
+        "elements": 24576,
+        "failed_elements": 21714,
+        "max_abs": 9.773299098014832e-05,
+        "relative_l2": 7.67971435785391e-05,
+        "rtol": 1e-05,
+        "state": "failed"
+      },
+      "strict_vjp_failed": 159,
+      "targets_per_second": 11831.755785101628,
+      "tokens": 134217728,
+      "training": {
+        "balance_coefficient": 0.01,
+        "batch": 64,
+        "betas": [
+          0.9,
+          0.95
+        ],
+        "checkpoint_seconds": 1800,
+        "clip_norm": 1.0,
+        "decay_policy": "matrix_only",
+        "eps": 1e-08,
+        "eval_batch": 64,
+        "eval_tokens": 131072,
+        "full_probe_batch": 4,
+        "full_probe_length": 32,
+        "global_batch": 64,
+        "initial_eval_tokens": 32768,
+        "keep_previous": false,
+        "length": 256,
+        "log_every": 16,
+        "lr": 0.001,
+        "lr_decay_tokens": 268435456,
+        "lr_floor_fraction": 0.1,
+        "milestone_weights_only": true,
+        "milestones": [
+          8388608,
+          33554432,
+          134217728
+        ],
+        "optimizer_foreach": false,
+        "target_tokens": 134217728,
+        "timeout_seconds": 172800,
+        "validation_every_tokens": 8388608,
+        "warmup_tokens": 1048576,
+        "weight_decay": 0.1,
+        "z_coefficient": 0.001
+      },
+      "training_seconds": 11343.855505283922,
+      "validation": {
+        "nll": 2.720264160889201,
+        "record": "runs/moe-r2-main128-large-e64-lr0.001-b0.01-s11/train/validation-final.json",
+        "sha256": "9b98b06666c53ca15fd32f8643e8e121ed14d31c51313838a7688f853f85f221",
+        "tokens": 131072,
+        "work": {
+          "work/active_parameter_uses": 1360052224000,
+          "work/expert_assignments": 3158016,
+          "work/expert_slots": 101056512,
+          "work/physical_expert_rows": 4600753,
+          "work/prediction_positions": 131584
+        }
+      },
+      "validation_curve": {
+        "134217728": 2.720264160889201,
+        "33554432": 3.2883150052512065,
+        "8388608": 4.240471483557485
+      }
+    },
+    {
+      "active_parameters": 10336000,
+      "balance": 0.01,
+      "causal_mechanism": "passed",
+      "checkpoint": {
+        "record": "runs/moe-r2-main128-large-e64-lr0.001-b0.01-s22/train/latest.pt",
+        "sha256": "d25f26d807346be8a00f61340971488c7b65851686a266367f2e19c8b948e7d6",
+        "verified_bytes": 2325986041
+      },
+      "config": ".local/source-moe-execution-v2/configs/studies/language/moe-controls/table/configs/large-e64-lr0.001-b0.01-s22.json",
+      "confirmation": {
+        "nll": 2.7982928605706547,
+        "record": "runs/moe-r2-confirm-large-e64-lr0.001-b0.01-s22/confirmation.json",
+        "sha256": "8a3a7cd8c3ad2f12ab25c810db5e55c9917712e9cf87e55ed4d41947eebdde67",
+        "tokens": 262144,
+        "work": {
+          "work/active_parameter_uses": 2738626560000,
+          "work/expert_assignments": 6359040,
+          "work/expert_slots": 203489280,
+          "work/physical_expert_rows": 9196530,
+          "work/prediction_positions": 264960
+        }
+      },
+      "dropped_tail_tokens": 24867,
+      "elapsed_seconds": 11582.037640273571,
+      "id": "large-e64-lr0.001-b0.01-s22",
+      "identity": {
+        "config_sha256": "d18ab3b288673ebd5b05cf4cdaa690d0e3345bb86ca8220ce90cd51819e1a360",
+        "data_lock_sha256": "40b7c0ebb9650d11aa0c0080532c884e2ca3846db578155f3df7068b82191d2f",
+        "device": "npu:0",
+        "dtype": "float32",
+        "installation": {
+          "foundation_commit": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+          "foundation_lock_sha256": "ba5464d7e23fe6b8c7453a52bfc7b961f040c92d0b80786c18132e40d90308b7",
+          "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+          "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+          "tidegraph": "0.3.0",
+          "tidegraph_source_sha256": "cfe2168a2c87565a568fb8944429b6b38401f92cf24972fba59c47b7592a7847",
+          "torch": "2.12.0+cpu",
+          "torch_npu": "2.12.0.post3",
+          "transformers": null
+        },
+        "mode": "train",
+        "source_commit": "8bd33dd160ac65238fe7bd4eac3450251fe57c32",
+        "source_sha256": "ea7d91180cabc1b465d2ca97068f795bd3548bf321ab8ba92d9ba1ac0a88fdc6",
+        "threads": 4
+      },
+      "kind": "moe",
+      "late_batch_cold_experts_mean": 0.0,
+      "late_batch_max_load_fraction": 0.16248978674411774,
+      "lens": {
+        "confirmation": {
+          "destination_name": "tl-moe-r2-confirm-large-e64-lr0.001-b0.01-s22-projection-19418e7007b1",
+          "destination_run_id": "3df37415b4e443b8ac80e65b839c4d38",
+          "event_count": 1,
+          "exactly_once": false,
+          "last_sequence": 0,
+          "project": "tide-learning-lab",
+          "readback_matches": true,
+          "sdk_version": "0.44.0",
+          "source_run_id": "tl-moe-r2-confirm-large-e64-lr0.001-b0.01-s22",
+          "source_timestamps_preserved": false,
+          "status": "verified",
+          "steps_preserved": true,
+          "warning_count": 0,
+          "workload_status": "not-determined-by-recorder"
+        },
+        "train": {
+          "destination_name": "tl-moe-r2-main128-large-e64-lr0.001-b0.01-s22-projection-65ebf5af415f",
+          "destination_run_id": "820d906f6e26439cb47898fba9fff811",
+          "event_count": 544,
+          "exactly_once": false,
+          "last_sequence": 543,
+          "project": "tide-learning-lab",
+          "readback_matches": true,
+          "sdk_version": "0.44.0",
+          "source_run_id": "tl-moe-r2-main128-large-e64-lr0.001-b0.01-s22",
+          "source_timestamps_preserved": false,
+          "status": "verified",
+          "steps_preserved": true,
+          "warning_count": 0,
+          "workload_status": "not-determined-by-recorder"
+        }
+      },
+      "lr": 0.001,
+      "max_logged_gradient_norm": 6.235993385314941,
+      "padding_factor": 1.444293189141537,
+      "parameters": 193729024,
+      "peak_npu_mib": 9461.57421875,
+      "physical_expert_fraction": 0.04513416216067303,
+      "recovery": {
+        "record": "runs/moe-r2-main128-large-e64-lr0.001-b0.01-s22/recovery.json",
+        "scope": "three B4/L32 real-data task+aux updates, same backend/config/install, fresh processes; full trajectory unchecked",
+        "state": "passed"
+      },
+      "seed": 22,
+      "shape": "large-e64",
+      "steps": 8392,
+      "strict_causal": {
+        "atol": 0,
+        "elements": 16384,
+        "failed_elements": 15481,
+        "max_abs": 6.556510925292969e-07,
+        "relative_l2": 4.7071017564776496e-07,
+        "rtol": 0,
+        "state": "failed"
+      },
+      "strict_forward": {
+        "atol": 1e-06,
+        "elements": 24576,
+        "failed_elements": 21879,
+        "max_abs": 0.00011733174324035645,
+        "relative_l2": 7.993037541753606e-05,
+        "rtol": 1e-05,
+        "state": "failed"
+      },
+      "strict_vjp_failed": 159,
+      "targets_per_second": 11812.840459484742,
+      "tokens": 134217728,
+      "training": {
+        "balance_coefficient": 0.01,
+        "batch": 64,
+        "betas": [
+          0.9,
+          0.95
+        ],
+        "checkpoint_seconds": 1800,
+        "clip_norm": 1.0,
+        "decay_policy": "matrix_only",
+        "eps": 1e-08,
+        "eval_batch": 64,
+        "eval_tokens": 131072,
+        "full_probe_batch": 4,
+        "full_probe_length": 32,
+        "global_batch": 64,
+        "initial_eval_tokens": 32768,
+        "keep_previous": false,
+        "length": 256,
+        "log_every": 16,
+        "lr": 0.001,
+        "lr_decay_tokens": 268435456,
+        "lr_floor_fraction": 0.1,
+        "milestone_weights_only": true,
+        "milestones": [
+          8388608,
+          33554432,
+          134217728
+        ],
+        "optimizer_foreach": false,
+        "target_tokens": 134217728,
+        "timeout_seconds": 172800,
+        "validation_every_tokens": 8388608,
+        "warmup_tokens": 1048576,
+        "weight_decay": 0.1,
+        "z_coefficient": 0.001
+      },
+      "training_seconds": 11362.019868154079,
+      "validation": {
+        "nll": 2.7155414681183174,
+        "record": "runs/moe-r2-main128-large-e64-lr0.001-b0.01-s22/train/validation-final.json",
+        "sha256": "88e6d7377134a145fc59262b32ca7bf67c809feac896fddc5c749d7015efe521",
+        "tokens": 131072,
+        "work": {
+          "work/active_parameter_uses": 1360052224000,
+          "work/expert_assignments": 3158016,
+          "work/expert_slots": 101056512,
+          "work/physical_expert_rows": 4561101,
+          "work/prediction_positions": 131584
+        }
+      },
+      "validation_curve": {
+        "134217728": 2.7155414681183174,
+        "33554432": 3.2495126023422927,
+        "8388608": 4.212742290517781
+      }
+    },
+    {
+      "active_parameters": 3460096,
+      "balance": 0.0,
+      "causal_mechanism": null,
+      "checkpoint": {
+        "record": "runs/moe-r2-main128-small-dense-lr0.003-s11/train/latest.pt",
+        "sha256": "d6888e0e1b4ba34e56383b8eee456a0ca8d24fc129ae8e816bb09d0a2ed9ddf6",
+        "verified_bytes": 42402777
+      },
+      "config": ".local/source-moe-execution-v2/configs/studies/language/moe-controls/table/configs/small-dense-lr0.003-s11.json",
+      "confirmation": {
+        "nll": 3.309306282637408,
+        "record": "runs/moe-r2-confirm-small-dense-lr0.003-s11/confirmation.json",
+        "sha256": "9fbee09c8c85b9ebf1b8270900d008503fe5560e923a7501cb0107c598c975f6",
+        "tokens": 262144,
+        "work": {}
+      },
+      "dropped_tail_tokens": 25170,
+      "elapsed_seconds": 351.50369975343347,
+      "id": "small-dense-lr0.003-s11",
+      "identity": {
+        "config_sha256": "d3ba51f8ed4094bc56f5a16bcace7846fe0bed9d48199d5a8621de6a527c0b70",
+        "data_lock_sha256": "40b7c0ebb9650d11aa0c0080532c884e2ca3846db578155f3df7068b82191d2f",
+        "device": "npu:0",
+        "dtype": "float32",
+        "installation": {
+          "foundation_commit": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+          "foundation_lock_sha256": "ba5464d7e23fe6b8c7453a52bfc7b961f040c92d0b80786c18132e40d90308b7",
+          "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+          "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+          "tidegraph": "0.3.0",
+          "tidegraph_source_sha256": "cfe2168a2c87565a568fb8944429b6b38401f92cf24972fba59c47b7592a7847",
+          "torch": "2.12.0+cpu",
+          "torch_npu": "2.12.0.post3",
+          "transformers": null
+        },
+        "mode": "train",
+        "source_commit": "8bd33dd160ac65238fe7bd4eac3450251fe57c32",
+        "source_sha256": "ea7d91180cabc1b465d2ca97068f795bd3548bf321ab8ba92d9ba1ac0a88fdc6",
+        "threads": 4
+      },
+      "kind": "transformer",
+      "late_batch_cold_experts_mean": null,
+      "late_batch_max_load_fraction": null,
+      "lens": {
+        "confirmation": {
+          "destination_name": "tl-moe-r2-confirm-small-dense-lr0.003-s11-projection-0750b1cbe017",
+          "destination_run_id": "e8cd9df4152342668c68ec1447049d2b",
+          "event_count": 1,
+          "exactly_once": false,
+          "last_sequence": 0,
+          "project": "tide-learning-lab",
+          "readback_matches": true,
+          "sdk_version": "0.44.0",
+          "source_run_id": "tl-moe-r2-confirm-small-dense-lr0.003-s11",
+          "source_timestamps_preserved": false,
+          "status": "verified",
+          "steps_preserved": true,
+          "warning_count": 0,
+          "workload_status": "not-determined-by-recorder"
+        },
+        "train": {
+          "destination_name": "tl-moe-r2-main128-small-dense-lr0.003-s11-projection-8aae3d043971",
+          "destination_run_id": "41ca8156096a4449bef0999897f3d2f1",
+          "event_count": 544,
+          "exactly_once": false,
+          "last_sequence": 543,
+          "project": "tide-learning-lab",
+          "readback_matches": true,
+          "sdk_version": "0.44.0",
+          "source_run_id": "tl-moe-r2-main128-small-dense-lr0.003-s11",
+          "source_timestamps_preserved": false,
+          "status": "verified",
+          "steps_preserved": true,
+          "warning_count": 0,
+          "workload_status": "not-determined-by-recorder"
+        }
+      },
+      "lr": 0.003,
+      "max_logged_gradient_norm": 41.02872848510742,
+      "padding_factor": null,
+      "parameters": 3460096,
+      "peak_npu_mib": 2339.73388671875,
+      "physical_expert_fraction": null,
+      "recovery": {
+        "record": "runs/moe-r2-main128-small-dense-lr0.003-s11/recovery.json",
+        "scope": "three B4/L32 real-data task+aux updates, same backend/config/install, fresh processes; full trajectory unchecked",
+        "state": "passed"
+      },
+      "seed": 11,
+      "shape": "small-dense",
+      "steps": 8392,
+      "strict_causal": {
+        "atol": 0,
+        "elements": 16384,
+        "failed_elements": 0,
+        "max_abs": 0.0,
+        "relative_l2": 0.0,
+        "rtol": 0,
+        "state": "passed"
+      },
+      "strict_forward": {
+        "atol": 1e-06,
+        "elements": 24576,
+        "failed_elements": 21500,
+        "max_abs": 8.844630792737007e-05,
+        "relative_l2": 7.282427961293981e-05,
+        "rtol": 1e-05,
+        "state": "failed"
+      },
+      "strict_vjp_failed": 75,
+      "targets_per_second": 421747.40232734376,
+      "tokens": 134217728,
+      "training": {
+        "balance_coefficient": 0.0,
+        "batch": 64,
+        "betas": [
+          0.9,
+          0.95
+        ],
+        "checkpoint_seconds": 1800,
+        "clip_norm": 1.0,
+        "decay_policy": "matrix_only",
+        "eps": 1e-08,
+        "eval_batch": 64,
+        "eval_tokens": 131072,
+        "full_probe_batch": 4,
+        "full_probe_length": 32,
+        "global_batch": 64,
+        "initial_eval_tokens": 32768,
+        "keep_previous": false,
+        "length": 256,
+        "log_every": 16,
+        "lr": 0.003,
+        "lr_decay_tokens": 268435456,
+        "lr_floor_fraction": 0.1,
+        "milestone_weights_only": true,
+        "milestones": [
+          8388608,
+          33554432,
+          134217728
+        ],
+        "optimizer_foreach": false,
+        "target_tokens": 134217728,
+        "timeout_seconds": 172800,
+        "validation_every_tokens": 8388608,
+        "warmup_tokens": 1048576,
+        "weight_decay": 0.1,
+        "z_coefficient": 0.0
+      },
+      "training_seconds": 318.2419791072607,
+      "validation": {
+        "nll": 3.2367463157279417,
+        "record": "runs/moe-r2-main128-small-dense-lr0.003-s11/train/validation-final.json",
+        "sha256": "e1f937a45bb6ee1224747716a0311dfb3e32549018327718ca5a8b64c3c623f6",
+        "tokens": 131072,
+        "work": {}
+      },
+      "validation_curve": {
+        "134217728": 3.2367463157279417,
+        "33554432": 3.607281682547182,
+        "8388608": 4.44364934344776
+      }
+    },
+    {
+      "active_parameters": 3460096,
+      "balance": 0.0,
+      "causal_mechanism": null,
+      "checkpoint": {
+        "record": "runs/moe-r2-main128-small-dense-lr0.003-s22/train/latest.pt",
+        "sha256": "22202de3ce518965b7cad88adc05387b16e37e90e037a24b8fc2d14c5c3ea925",
+        "verified_bytes": 42402777
+      },
+      "config": ".local/source-moe-execution-v2/configs/studies/language/moe-controls/table/configs/small-dense-lr0.003-s22.json",
+      "confirmation": {
+        "nll": 3.303322621519328,
+        "record": "runs/moe-r2-confirm-small-dense-lr0.003-s22/confirmation.json",
+        "sha256": "d6c7ceccd2b4b4e53de28a792cc5987527303553ff9da49834f764acfa0b5d30",
+        "tokens": 262144,
+        "work": {}
+      },
+      "dropped_tail_tokens": 24867,
+      "elapsed_seconds": 362.15516413003206,
+      "id": "small-dense-lr0.003-s22",
+      "identity": {
+        "config_sha256": "174b48ee596bd14547a4252af88beca0a0819b4c8822695252b3d12add6f2492",
+        "data_lock_sha256": "40b7c0ebb9650d11aa0c0080532c884e2ca3846db578155f3df7068b82191d2f",
+        "device": "npu:0",
+        "dtype": "float32",
+        "installation": {
+          "foundation_commit": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+          "foundation_lock_sha256": "ba5464d7e23fe6b8c7453a52bfc7b961f040c92d0b80786c18132e40d90308b7",
+          "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+          "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+          "tidegraph": "0.3.0",
+          "tidegraph_source_sha256": "cfe2168a2c87565a568fb8944429b6b38401f92cf24972fba59c47b7592a7847",
+          "torch": "2.12.0+cpu",
+          "torch_npu": "2.12.0.post3",
+          "transformers": null
+        },
+        "mode": "train",
+        "source_commit": "8bd33dd160ac65238fe7bd4eac3450251fe57c32",
+        "source_sha256": "ea7d91180cabc1b465d2ca97068f795bd3548bf321ab8ba92d9ba1ac0a88fdc6",
+        "threads": 4
+      },
+      "kind": "transformer",
+      "late_batch_cold_experts_mean": null,
+      "late_batch_max_load_fraction": null,
+      "lens": {
+        "confirmation": {
+          "destination_name": "tl-moe-r2-confirm-small-dense-lr0.003-s22-projection-04402fb2b725",
+          "destination_run_id": "b8c704bab2464bbab3d84d8cf66a696a",
+          "event_count": 1,
+          "exactly_once": false,
+          "last_sequence": 0,
+          "project": "tide-learning-lab",
+          "readback_matches": true,
+          "sdk_version": "0.44.0",
+          "source_run_id": "tl-moe-r2-confirm-small-dense-lr0.003-s22",
+          "source_timestamps_preserved": false,
+          "status": "verified",
+          "steps_preserved": true,
+          "warning_count": 0,
+          "workload_status": "not-determined-by-recorder"
+        },
+        "train": {
+          "destination_name": "tl-moe-r2-main128-small-dense-lr0.003-s22-projection-524b4859623b",
+          "destination_run_id": "a28270d299a941cb8ede46b5e4784eb1",
+          "event_count": 544,
+          "exactly_once": false,
+          "last_sequence": 543,
+          "project": "tide-learning-lab",
+          "readback_matches": true,
+          "sdk_version": "0.44.0",
+          "source_run_id": "tl-moe-r2-main128-small-dense-lr0.003-s22",
+          "source_timestamps_preserved": false,
+          "status": "verified",
+          "steps_preserved": true,
+          "warning_count": 0,
+          "workload_status": "not-determined-by-recorder"
+        }
+      },
+      "lr": 0.003,
+      "max_logged_gradient_norm": 4.337448596954346,
+      "padding_factor": null,
+      "parameters": 3460096,
+      "peak_npu_mib": 2339.73388671875,
+      "physical_expert_fraction": null,
+      "recovery": {
+        "record": "runs/moe-r2-main128-small-dense-lr0.003-s22/recovery.json",
+        "scope": "three B4/L32 real-data task+aux updates, same backend/config/install, fresh processes; full trajectory unchecked",
+        "state": "passed"
+      },
+      "seed": 22,
+      "shape": "small-dense",
+      "steps": 8392,
+      "strict_causal": {
+        "atol": 0,
+        "elements": 16384,
+        "failed_elements": 0,
+        "max_abs": 0.0,
+        "relative_l2": 0.0,
+        "rtol": 0,
+        "state": "passed"
+      },
+      "strict_forward": {
+        "atol": 1e-06,
+        "elements": 24576,
+        "failed_elements": 21898,
+        "max_abs": 0.0001131892204284668,
+        "relative_l2": 8.362046750015175e-05,
+        "rtol": 1e-05,
+        "state": "failed"
+      },
+      "strict_vjp_failed": 75,
+      "targets_per_second": 422512.0597506178,
+      "tokens": 134217728,
+      "training": {
+        "balance_coefficient": 0.0,
+        "batch": 64,
+        "betas": [
+          0.9,
+          0.95
+        ],
+        "checkpoint_seconds": 1800,
+        "clip_norm": 1.0,
+        "decay_policy": "matrix_only",
+        "eps": 1e-08,
+        "eval_batch": 64,
+        "eval_tokens": 131072,
+        "full_probe_batch": 4,
+        "full_probe_length": 32,
+        "global_batch": 64,
+        "initial_eval_tokens": 32768,
+        "keep_previous": false,
+        "length": 256,
+        "log_every": 16,
+        "lr": 0.003,
+        "lr_decay_tokens": 268435456,
+        "lr_floor_fraction": 0.1,
+        "milestone_weights_only": true,
+        "milestones": [
+          8388608,
+          33554432,
+          134217728
+        ],
+        "optimizer_foreach": false,
+        "target_tokens": 134217728,
+        "timeout_seconds": 172800,
+        "validation_every_tokens": 8388608,
+        "warmup_tokens": 1048576,
+        "weight_decay": 0.1,
+        "z_coefficient": 0.0
+      },
+      "training_seconds": 317.66602846607566,
+      "validation": {
+        "nll": 3.23916865256615,
+        "record": "runs/moe-r2-main128-small-dense-lr0.003-s22/train/validation-final.json",
+        "sha256": "e0cbe2e91e906ef94cec9712024913dd9661359737f138d40c3e258dce7398e0",
+        "tokens": 131072,
+        "work": {}
+      },
+      "validation_curve": {
+        "134217728": 3.23916865256615,
+        "33554432": 3.5975506737595424,
+        "8388608": 4.414891495602205
+      }
+    },
+    {
+      "active_parameters": 3484288,
+      "balance": 0.01,
+      "causal_mechanism": "passed",
+      "checkpoint": {
+        "record": "runs/moe-r2-main128-small-e20-lr0.003-b0.01-s11/train/latest.pt",
+        "sha256": "a09edce993ce6d7e78ca2b5be795be54efad065152ae247f87b098fffa02a778",
+        "verified_bytes": 234549545
+      },
+      "config": ".local/source-moe-execution-v2/configs/studies/language/moe-controls/table/configs/small-e20-lr0.003-b0.01-s11.json",
+      "confirmation": {
+        "nll": 3.1020102760812733,
+        "record": "runs/moe-r2-confirm-small-e20-lr0.003-b0.01-s11/confirmation.json",
+        "sha256": "baf75c7d5427e2bf4dd9dd77b2fbba3faac1b4e0b49fa460c3a613558df8fe8c",
+        "tokens": 262144,
+        "work": {
+          "work/active_parameter_uses": 923196948480,
+          "work/expert_assignments": 3179520,
+          "work/expert_slots": 31795200,
+          "work/physical_expert_rows": 4449664,
+          "work/prediction_positions": 264960
+        }
+      },
+      "dropped_tail_tokens": 25170,
+      "elapsed_seconds": 5303.97702305764,
+      "id": "small-e20-lr0.003-b0.01-s11",
+      "identity": {
+        "config_sha256": "bea804f74a4514053936284d3ae8516e68e5b68f4b70891a38e9d94aff691cd6",
+        "data_lock_sha256": "40b7c0ebb9650d11aa0c0080532c884e2ca3846db578155f3df7068b82191d2f",
+        "device": "npu:0",
+        "dtype": "float32",
+        "installation": {
+          "foundation_commit": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+          "foundation_lock_sha256": "ba5464d7e23fe6b8c7453a52bfc7b961f040c92d0b80786c18132e40d90308b7",
+          "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+          "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+          "tidegraph": "0.3.0",
+          "tidegraph_source_sha256": "cfe2168a2c87565a568fb8944429b6b38401f92cf24972fba59c47b7592a7847",
+          "torch": "2.12.0+cpu",
+          "torch_npu": "2.12.0.post3",
+          "transformers": null
+        },
+        "mode": "train",
+        "source_commit": "8bd33dd160ac65238fe7bd4eac3450251fe57c32",
+        "source_sha256": "ea7d91180cabc1b465d2ca97068f795bd3548bf321ab8ba92d9ba1ac0a88fdc6",
+        "threads": 4
+      },
+      "kind": "moe",
+      "late_batch_cold_experts_mean": 0.0,
+      "late_batch_max_load_fraction": 0.14153778553009033,
+      "lens": {
+        "confirmation": {
+          "destination_name": "tl-moe-r2-confirm-small-e20-lr0.003-b0.01-s11-projection-6a5ac76e5985",
+          "destination_run_id": "6984933310564dfcaaaf8302edb19753",
+          "event_count": 1,
+          "exactly_once": false,
+          "last_sequence": 0,
+          "project": "tide-learning-lab",
+          "readback_matches": true,
+          "sdk_version": "0.44.0",
+          "source_run_id": "tl-moe-r2-confirm-small-e20-lr0.003-b0.01-s11",
+          "source_timestamps_preserved": false,
+          "status": "verified",
+          "steps_preserved": true,
+          "warning_count": 0,
+          "workload_status": "not-determined-by-recorder"
+        },
+        "train": {
+          "destination_name": "tl-moe-r2-main128-small-e20-lr0.003-b0.01-s11-projection-ce2e160f1c1f",
+          "destination_run_id": "cb9c914e26e64e01b52985876a8af234",
+          "event_count": 544,
+          "exactly_once": false,
+          "last_sequence": 543,
+          "project": "tide-learning-lab",
+          "readback_matches": true,
+          "sdk_version": "0.44.0",
+          "source_run_id": "tl-moe-r2-main128-small-e20-lr0.003-b0.01-s11",
+          "source_timestamps_preserved": false,
+          "status": "verified",
+          "steps_preserved": true,
+          "warning_count": 0,
+          "workload_status": "not-determined-by-recorder"
+        }
+      },
+      "lr": 0.003,
+      "max_logged_gradient_norm": 3.3097145557403564,
+      "padding_factor": 1.419959873540856,
+      "parameters": 19471744,
+      "peak_npu_mib": 3476.2080078125,
+      "physical_expert_fraction": 0.1419959873540856,
+      "recovery": {
+        "record": "runs/moe-r2-main128-small-e20-lr0.003-b0.01-s11/recovery.json",
+        "scope": "three B4/L32 real-data task+aux updates, same backend/config/install, fresh processes; full trajectory unchecked",
+        "state": "passed"
+      },
+      "seed": 11,
+      "shape": "small-e20",
+      "steps": 8392,
+      "strict_causal": {
+        "atol": 0,
+        "elements": 16384,
+        "failed_elements": 15125,
+        "max_abs": 5.960464477539062e-07,
+        "relative_l2": 3.388500066596728e-07,
+        "rtol": 0,
+        "state": "failed"
+      },
+      "strict_forward": {
+        "atol": 1e-06,
+        "elements": 24576,
+        "failed_elements": 20182,
+        "max_abs": 6.154179573059082e-05,
+        "relative_l2": 5.216890193368428e-05,
+        "rtol": 1e-05,
+        "state": "failed"
+      },
+      "strict_vjp_failed": 81,
+      "targets_per_second": 25678.226175699765,
+      "tokens": 134217728,
+      "training": {
+        "balance_coefficient": 0.01,
+        "batch": 64,
+        "betas": [
+          0.9,
+          0.95
+        ],
+        "checkpoint_seconds": 1800,
+        "clip_norm": 1.0,
+        "decay_policy": "matrix_only",
+        "eps": 1e-08,
+        "eval_batch": 64,
+        "eval_tokens": 131072,
+        "full_probe_batch": 4,
+        "full_probe_length": 32,
+        "global_batch": 64,
+        "initial_eval_tokens": 32768,
+        "keep_previous": false,
+        "length": 256,
+        "log_every": 16,
+        "lr": 0.003,
+        "lr_decay_tokens": 268435456,
+        "lr_floor_fraction": 0.1,
+        "milestone_weights_only": true,
+        "milestones": [
+          8388608,
+          33554432,
+          134217728
+        ],
+        "optimizer_foreach": false,
+        "target_tokens": 134217728,
+        "timeout_seconds": 172800,
+        "validation_every_tokens": 8388608,
+        "warmup_tokens": 1048576,
+        "weight_decay": 0.1,
+        "z_coefficient": 0.001
+      },
+      "training_seconds": 5226.908084757626,
+      "validation": {
+        "nll": 3.0235177616705187,
+        "record": "runs/moe-r2-main128-small-e20-lr0.003-b0.01-s11/train/validation-final.json",
+        "sha256": "5320f6eae77052736185674142bb2b1ac33f298b934670412191cd9d1720914c",
+        "tokens": 131072,
+        "work": {
+          "work/active_parameter_uses": 458476552192,
+          "work/expert_assignments": 1579008,
+          "work/expert_slots": 15790080,
+          "work/physical_expert_rows": 2242128,
+          "work/prediction_positions": 131584
+        }
+      },
+      "validation_curve": {
+        "134217728": 3.0235177616705187,
+        "33554432": 3.4924726736498997,
+        "8388608": 4.337706117483322
+      }
+    },
+    {
+      "active_parameters": 3484288,
+      "balance": 0.01,
+      "causal_mechanism": "passed",
+      "checkpoint": {
+        "record": "runs/moe-r2-main128-small-e20-lr0.003-b0.01-s22/train/latest.pt",
+        "sha256": "cc6aeb11dcfe98ffe1e1c6fee1f53f18bb8d98f2ae37e586012756fae7d4cee4",
+        "verified_bytes": 234549545
+      },
+      "config": ".local/source-moe-execution-v2/configs/studies/language/moe-controls/table/configs/small-e20-lr0.003-b0.01-s22.json",
+      "confirmation": {
+        "nll": 3.106155562651111,
+        "record": "runs/moe-r2-confirm-small-e20-lr0.003-b0.01-s22/confirmation.json",
+        "sha256": "9e25b63271953715b6f39cc6aa66a8e7a871f1f4dfb643e2442b9b67159aa22d",
+        "tokens": 262144,
+        "work": {
+          "work/active_parameter_uses": 923196948480,
+          "work/expert_assignments": 3179520,
+          "work/expert_slots": 31795200,
+          "work/physical_expert_rows": 4532864,
+          "work/prediction_positions": 264960
+        }
+      },
+      "dropped_tail_tokens": 24867,
+      "elapsed_seconds": 5421.159811839461,
+      "id": "small-e20-lr0.003-b0.01-s22",
+      "identity": {
+        "config_sha256": "4ca7ab3ad4e26cf9793093c65e227acf40207111352deb1673d3c5d6214a6384",
+        "data_lock_sha256": "40b7c0ebb9650d11aa0c0080532c884e2ca3846db578155f3df7068b82191d2f",
+        "device": "npu:0",
+        "dtype": "float32",
+        "installation": {
+          "foundation_commit": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+          "foundation_lock_sha256": "ba5464d7e23fe6b8c7453a52bfc7b961f040c92d0b80786c18132e40d90308b7",
+          "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+          "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+          "tidegraph": "0.3.0",
+          "tidegraph_source_sha256": "cfe2168a2c87565a568fb8944429b6b38401f92cf24972fba59c47b7592a7847",
+          "torch": "2.12.0+cpu",
+          "torch_npu": "2.12.0.post3",
+          "transformers": null
+        },
+        "mode": "train",
+        "source_commit": "8bd33dd160ac65238fe7bd4eac3450251fe57c32",
+        "source_sha256": "ea7d91180cabc1b465d2ca97068f795bd3548bf321ab8ba92d9ba1ac0a88fdc6",
+        "threads": 4
+      },
+      "kind": "moe",
+      "late_batch_cold_experts_mean": 0.0,
+      "late_batch_max_load_fraction": 0.12907423079013824,
+      "lens": {
+        "confirmation": {
+          "destination_name": "tl-moe-r2-confirm-small-e20-lr0.003-b0.01-s22-projection-a0878f127631",
+          "destination_run_id": "cfa5452337704c698fe86f74f0f61ec2",
+          "event_count": 1,
+          "exactly_once": false,
+          "last_sequence": 0,
+          "project": "tide-learning-lab",
+          "readback_matches": true,
+          "sdk_version": "0.44.0",
+          "source_run_id": "tl-moe-r2-confirm-small-e20-lr0.003-b0.01-s22",
+          "source_timestamps_preserved": false,
+          "status": "verified",
+          "steps_preserved": true,
+          "warning_count": 0,
+          "workload_status": "not-determined-by-recorder"
+        },
+        "train": {
+          "destination_name": "tl-moe-r2-main128-small-e20-lr0.003-b0.01-s22-projection-0ce5b344d2f2",
+          "destination_run_id": "7786d5fa8fb64e84b6be0e346a16281c",
+          "event_count": 544,
+          "exactly_once": false,
+          "last_sequence": 543,
+          "project": "tide-learning-lab",
+          "readback_matches": true,
+          "sdk_version": "0.44.0",
+          "source_run_id": "tl-moe-r2-main128-small-e20-lr0.003-b0.01-s22",
+          "source_timestamps_preserved": false,
+          "status": "verified",
+          "steps_preserved": true,
+          "warning_count": 0,
+          "workload_status": "not-determined-by-recorder"
+        }
+      },
+      "lr": 0.003,
+      "max_logged_gradient_norm": 3.2665979862213135,
+      "padding_factor": 1.4254861279993516,
+      "parameters": 19471744,
+      "peak_npu_mib": 3469.8125,
+      "physical_expert_fraction": 0.14254861279993514,
+      "recovery": {
+        "record": "runs/moe-r2-main128-small-e20-lr0.003-b0.01-s22/recovery.json",
+        "scope": "three B4/L32 real-data task+aux updates, same backend/config/install, fresh processes; full trajectory unchecked",
+        "state": "passed"
+      },
+      "seed": 22,
+      "shape": "small-e20",
+      "steps": 8392,
+      "strict_causal": {
+        "atol": 0,
+        "elements": 16384,
+        "failed_elements": 15110,
+        "max_abs": 5.066394805908203e-07,
+        "relative_l2": 3.509951217520916e-07,
+        "rtol": 0,
+        "state": "failed"
+      },
+      "strict_forward": {
+        "atol": 1e-06,
+        "elements": 24576,
+        "failed_elements": 20171,
+        "max_abs": 5.922466516494751e-05,
+        "relative_l2": 5.0563760221968476e-05,
+        "rtol": 1e-05,
+        "state": "failed"
+      },
+      "strict_vjp_failed": 80,
+      "targets_per_second": 25116.284114973983,
+      "tokens": 134217728,
+      "training": {
+        "balance_coefficient": 0.01,
+        "batch": 64,
+        "betas": [
+          0.9,
+          0.95
+        ],
+        "checkpoint_seconds": 1800,
+        "clip_norm": 1.0,
+        "decay_policy": "matrix_only",
+        "eps": 1e-08,
+        "eval_batch": 64,
+        "eval_tokens": 131072,
+        "full_probe_batch": 4,
+        "full_probe_length": 32,
+        "global_batch": 64,
+        "initial_eval_tokens": 32768,
+        "keep_previous": false,
+        "length": 256,
+        "log_every": 16,
+        "lr": 0.003,
+        "lr_decay_tokens": 268435456,
+        "lr_floor_fraction": 0.1,
+        "milestone_weights_only": true,
+        "milestones": [
+          8388608,
+          33554432,
+          134217728
+        ],
+        "optimizer_foreach": false,
+        "target_tokens": 134217728,
+        "timeout_seconds": 172800,
+        "validation_every_tokens": 8388608,
+        "warmup_tokens": 1048576,
+        "weight_decay": 0.1,
+        "z_coefficient": 0.001
+      },
+      "training_seconds": 5343.852911744267,
+      "validation": {
+        "nll": 3.0298746755579486,
+        "record": "runs/moe-r2-main128-small-e20-lr0.003-b0.01-s22/train/validation-final.json",
+        "sha256": "dfeccd5f22888251498b3bf062ab70505cc2a525266ff975be6955aaa02c26aa",
+        "tokens": 131072,
+        "work": {
+          "work/active_parameter_uses": 458476552192,
+          "work/expert_assignments": 1579008,
+          "work/expert_slots": 15790080,
+          "work/physical_expert_rows": 2250854,
+          "work/prediction_positions": 131584
+        }
+      },
+      "validation_curve": {
+        "134217728": 3.0298746755579486,
+        "33554432": 3.524351785541512,
+        "8388608": 4.356624976964667
+      }
+    },
+    {
+      "active_parameters": 3534976,
+      "balance": 0.001,
+      "causal_mechanism": "passed",
+      "checkpoint": {
+        "record": "runs/moe-r2-main128-small-e64-lr0.003-b0.001-s11/train/latest.pt",
+        "sha256": "dc529a6509eee1cbdf4579517fcaa992e2fd579ee51a6694504b40df20357e71",
+        "verified_bytes": 704123177
+      },
+      "config": ".local/source-moe-execution-v2/configs/studies/language/moe-controls/table/configs/small-e64-lr0.003-b0.001-s11.json",
+      "confirmation": {
+        "nll": 3.151686983408581,
+        "record": "runs/moe-r2-confirm-small-e64-lr0.003-b0.001-s11/confirmation.json",
+        "sha256": "54bc2b7307cac54eca545b40a9522b85629ac408cef5f8115fbb9e22e9701dc7",
+        "tokens": 262144,
+        "work": {
+          "work/active_parameter_uses": 936627240960,
+          "work/expert_assignments": 3179520,
+          "work/expert_slots": 101744640,
+          "work/physical_expert_rows": 4420323,
+          "work/prediction_positions": 264960
+        }
+      },
+      "dropped_tail_tokens": 25170,
+      "elapsed_seconds": 5872.239517368376,
+      "id": "small-e64-lr0.003-b0.001-s11",
+      "identity": {
+        "config_sha256": "d8bef61e8bf1ee1d8b4469a2f9e816af7936c4c8915cb1975fd15bea3e47e28c",
+        "data_lock_sha256": "40b7c0ebb9650d11aa0c0080532c884e2ca3846db578155f3df7068b82191d2f",
+        "device": "npu:0",
+        "dtype": "float32",
+        "installation": {
+          "foundation_commit": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+          "foundation_lock_sha256": "ba5464d7e23fe6b8c7453a52bfc7b961f040c92d0b80786c18132e40d90308b7",
+          "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+          "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+          "tidegraph": "0.3.0",
+          "tidegraph_source_sha256": "cfe2168a2c87565a568fb8944429b6b38401f92cf24972fba59c47b7592a7847",
+          "torch": "2.12.0+cpu",
+          "torch_npu": "2.12.0.post3",
+          "transformers": null
+        },
+        "mode": "train",
+        "source_commit": "8bd33dd160ac65238fe7bd4eac3450251fe57c32",
+        "source_sha256": "ea7d91180cabc1b465d2ca97068f795bd3548bf321ab8ba92d9ba1ac0a88fdc6",
+        "threads": 4
+      },
+      "kind": "moe",
+      "late_batch_cold_experts_mean": 14.0078125,
+      "late_batch_max_load_fraction": 0.5,
+      "lens": {
+        "confirmation": {
+          "destination_name": "tl-moe-r2-confirm-small-e64-lr0.003-b0.001-s11-projection-4b0827cb1902",
+          "destination_run_id": "22a64bfd9f4340a78170bd83e9cc92e1",
+          "event_count": 1,
+          "exactly_once": false,
+          "last_sequence": 0,
+          "project": "tide-learning-lab",
+          "readback_matches": true,
+          "sdk_version": "0.44.0",
+          "source_run_id": "tl-moe-r2-confirm-small-e64-lr0.003-b0.001-s11",
+          "source_timestamps_preserved": false,
+          "status": "verified",
+          "steps_preserved": true,
+          "warning_count": 0,
+          "workload_status": "not-determined-by-recorder"
+        },
+        "train": {
+          "destination_name": "tl-moe-r2-main128-small-e64-lr0.003-b0.001-s11-projection-e6b93bab12b9",
+          "destination_run_id": "6890042d8dfd41c59713e88327cad0d7",
+          "event_count": 544,
+          "exactly_once": false,
+          "last_sequence": 543,
+          "project": "tide-learning-lab",
+          "readback_matches": true,
+          "sdk_version": "0.44.0",
+          "source_run_id": "tl-moe-r2-main128-small-e64-lr0.003-b0.001-s11",
+          "source_timestamps_preserved": false,
+          "status": "verified",
+          "steps_preserved": true,
+          "warning_count": 0,
+          "workload_status": "not-determined-by-recorder"
+        }
+      },
+      "lr": 0.003,
+      "max_logged_gradient_norm": 3.380053997039795,
+      "padding_factor": 1.3670836373216602,
+      "parameters": 58602880,
+      "peak_npu_mib": 4040.1396484375,
+      "physical_expert_fraction": 0.04272136366630188,
+      "recovery": {
+        "record": "runs/moe-r2-main128-small-e64-lr0.003-b0.001-s11/recovery.json",
+        "scope": "three B4/L32 real-data task+aux updates, same backend/config/install, fresh processes; full trajectory unchecked",
+        "state": "passed"
+      },
+      "seed": 11,
+      "shape": "small-e64",
+      "steps": 8392,
+      "strict_causal": {
+        "atol": 0,
+        "elements": 16384,
+        "failed_elements": 14995,
+        "max_abs": 4.172325134277344e-07,
+        "relative_l2": 3.0976922988076356e-07,
+        "rtol": 0,
+        "state": "failed"
+      },
+      "strict_forward": {
+        "atol": 1e-06,
+        "elements": 24576,
+        "failed_elements": 19937,
+        "max_abs": 5.6102871894836426e-05,
+        "relative_l2": 4.903777691985346e-05,
+        "rtol": 1e-05,
+        "state": "failed"
+      },
+      "strict_vjp_failed": 81,
+      "targets_per_second": 23244.995881263658,
+      "tokens": 134217728,
+      "training": {
+        "balance_coefficient": 0.001,
+        "batch": 64,
+        "betas": [
+          0.9,
+          0.95
+        ],
+        "checkpoint_seconds": 1800,
+        "clip_norm": 1.0,
+        "decay_policy": "matrix_only",
+        "eps": 1e-08,
+        "eval_batch": 64,
+        "eval_tokens": 131072,
+        "full_probe_batch": 4,
+        "full_probe_length": 32,
+        "global_batch": 64,
+        "initial_eval_tokens": 32768,
+        "keep_previous": false,
+        "length": 256,
+        "log_every": 16,
+        "lr": 0.003,
+        "lr_decay_tokens": 268435456,
+        "lr_floor_fraction": 0.1,
+        "milestone_weights_only": true,
+        "milestones": [
+          8388608,
+          33554432,
+          134217728
+        ],
+        "optimizer_foreach": false,
+        "target_tokens": 134217728,
+        "timeout_seconds": 172800,
+        "validation_every_tokens": 8388608,
+        "warmup_tokens": 1048576,
+        "weight_decay": 0.1,
+        "z_coefficient": 0.001
+      },
+      "training_seconds": 5774.048259057105,
+      "validation": {
+        "nll": 3.0759659580653533,
+        "record": "runs/moe-r2-main128-small-e64-lr0.003-b0.001-s11/train/validation-final.json",
+        "sha256": "f17fa8280cf0fe30b6ed13135f6c4700c46baef61a3d48787d5921c7656398f9",
+        "tokens": 131072,
+        "work": {
+          "work/active_parameter_uses": 465146281984,
+          "work/expert_assignments": 1579008,
+          "work/expert_slots": 50528256,
+          "work/physical_expert_rows": 2158636,
+          "work/prediction_positions": 131584
+        }
+      },
+      "validation_curve": {
+        "134217728": 3.0759659580653533,
+        "33554432": 3.556742437998764,
+        "8388608": 4.346201792825013
+      }
+    },
+    {
+      "active_parameters": 3534976,
+      "balance": 0.001,
+      "causal_mechanism": "passed",
+      "checkpoint": {
+        "record": "runs/moe-r2-main128-small-e64-lr0.003-b0.001-s22/train/latest.pt",
+        "sha256": "91813c98d23d557b8b2cfc13229033e7b00e0e24a7b15232acb1f4f80bc8151e",
+        "verified_bytes": 704123177
+      },
+      "config": ".local/source-moe-execution-v2/configs/studies/language/moe-controls/table/configs/small-e64-lr0.003-b0.001-s22.json",
+      "confirmation": {
+        "nll": 3.14635927521158,
+        "record": "runs/moe-r2-confirm-small-e64-lr0.003-b0.001-s22/confirmation.json",
+        "sha256": "313acf7f98270c98d8cdb8eca3ad84de1f32be3c4966a4b95e74898477e3eecf",
+        "tokens": 262144,
+        "work": {
+          "work/active_parameter_uses": 936627240960,
+          "work/expert_assignments": 3179520,
+          "work/expert_slots": 101744640,
+          "work/physical_expert_rows": 4469812,
+          "work/prediction_positions": 264960
+        }
+      },
+      "dropped_tail_tokens": 24867,
+      "elapsed_seconds": 6180.495453838259,
+      "id": "small-e64-lr0.003-b0.001-s22",
+      "identity": {
+        "config_sha256": "472048a5eb4b5cd4fd40821bf8483794f60b51be2fe53944d24352cfe4bee577",
+        "data_lock_sha256": "40b7c0ebb9650d11aa0c0080532c884e2ca3846db578155f3df7068b82191d2f",
+        "device": "npu:0",
+        "dtype": "float32",
+        "installation": {
+          "foundation_commit": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+          "foundation_lock_sha256": "ba5464d7e23fe6b8c7453a52bfc7b961f040c92d0b80786c18132e40d90308b7",
+          "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+          "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+          "tidegraph": "0.3.0",
+          "tidegraph_source_sha256": "cfe2168a2c87565a568fb8944429b6b38401f92cf24972fba59c47b7592a7847",
+          "torch": "2.12.0+cpu",
+          "torch_npu": "2.12.0.post3",
+          "transformers": null
+        },
+        "mode": "train",
+        "source_commit": "8bd33dd160ac65238fe7bd4eac3450251fe57c32",
+        "source_sha256": "ea7d91180cabc1b465d2ca97068f795bd3548bf321ab8ba92d9ba1ac0a88fdc6",
+        "threads": 4
+      },
+      "kind": "moe",
+      "late_batch_cold_experts_mean": 9.052083333333334,
+      "late_batch_max_load_fraction": 0.5,
+      "lens": {
+        "confirmation": {
+          "destination_name": "tl-moe-r2-confirm-small-e64-lr0.003-b0.001-s22-projection-fd70809c6cc1",
+          "destination_run_id": "c01d2708b98443918534299dbbb0057b",
+          "event_count": 1,
+          "exactly_once": false,
+          "last_sequence": 0,
+          "project": "tide-learning-lab",
+          "readback_matches": true,
+          "sdk_version": "0.44.0",
+          "source_run_id": "tl-moe-r2-confirm-small-e64-lr0.003-b0.001-s22",
+          "source_timestamps_preserved": false,
+          "status": "verified",
+          "steps_preserved": true,
+          "warning_count": 0,
+          "workload_status": "not-determined-by-recorder"
+        },
+        "train": {
+          "destination_name": "tl-moe-r2-main128-small-e64-lr0.003-b0.001-s22-projection-b41bf60d2560",
+          "destination_run_id": "ee516f0da39b453e8e9e694fad0ce5e5",
+          "event_count": 544,
+          "exactly_once": false,
+          "last_sequence": 543,
+          "project": "tide-learning-lab",
+          "readback_matches": true,
+          "sdk_version": "0.44.0",
+          "source_run_id": "tl-moe-r2-main128-small-e64-lr0.003-b0.001-s22",
+          "source_timestamps_preserved": false,
+          "status": "verified",
+          "steps_preserved": true,
+          "warning_count": 0,
+          "workload_status": "not-determined-by-recorder"
+        }
+      },
+      "lr": 0.003,
+      "max_logged_gradient_norm": 3.325413227081299,
+      "padding_factor": 1.403692698200389,
+      "parameters": 58602880,
+      "peak_npu_mib": 4100.38623046875,
+      "physical_expert_fraction": 0.043865396818762156,
+      "recovery": {
+        "record": "runs/moe-r2-main128-small-e64-lr0.003-b0.001-s22/recovery.json",
+        "scope": "three B4/L32 real-data task+aux updates, same backend/config/install, fresh processes; full trajectory unchecked",
+        "state": "passed"
+      },
+      "seed": 22,
+      "shape": "small-e64",
+      "steps": 8392,
+      "strict_causal": {
+        "atol": 0,
+        "elements": 16384,
+        "failed_elements": 14248,
+        "max_abs": 4.172325134277344e-07,
+        "relative_l2": 2.415796623567411e-07,
+        "rtol": 0,
+        "state": "failed"
+      },
+      "strict_forward": {
+        "atol": 1e-06,
+        "elements": 24576,
+        "failed_elements": 20299,
+        "max_abs": 7.359310984611511e-05,
+        "relative_l2": 5.3031409793396076e-05,
+        "rtol": 1e-05,
+        "state": "failed"
+      },
+      "strict_vjp_failed": 80,
+      "targets_per_second": 22091.956892061608,
+      "tokens": 134217728,
+      "training": {
+        "balance_coefficient": 0.001,
+        "batch": 64,
+        "betas": [
+          0.9,
+          0.95
+        ],
+        "checkpoint_seconds": 1800,
+        "clip_norm": 1.0,
+        "decay_policy": "matrix_only",
+        "eps": 1e-08,
+        "eval_batch": 64,
+        "eval_tokens": 131072,
+        "full_probe_batch": 4,
+        "full_probe_length": 32,
+        "global_batch": 64,
+        "initial_eval_tokens": 32768,
+        "keep_previous": false,
+        "length": 256,
+        "log_every": 16,
+        "lr": 0.003,
+        "lr_decay_tokens": 268435456,
+        "lr_floor_fraction": 0.1,
+        "milestone_weights_only": true,
+        "milestones": [
+          8388608,
+          33554432,
+          134217728
+        ],
+        "optimizer_foreach": false,
+        "target_tokens": 134217728,
+        "timeout_seconds": 172800,
+        "validation_every_tokens": 8388608,
+        "warmup_tokens": 1048576,
+        "weight_decay": 0.1,
+        "z_coefficient": 0.001
+      },
+      "training_seconds": 6075.411456566304,
+      "validation": {
+        "nll": 3.073846065904945,
+        "record": "runs/moe-r2-main128-small-e64-lr0.003-b0.001-s22/train/validation-final.json",
+        "sha256": "a383447d2438c4b16349764012b5d5e9595e62cbf2e6a1147b6c952e65395be9",
+        "tokens": 131072,
+        "work": {
+          "work/active_parameter_uses": 465146281984,
+          "work/expert_assignments": 1579008,
+          "work/expert_slots": 50528256,
+          "work/physical_expert_rows": 2216442,
+          "work/prediction_positions": 131584
+        }
+      },
+      "validation_curve": {
+        "134217728": 3.073846065904945,
+        "33554432": 3.516963617410511,
+        "8388608": 4.298499013588298
+      }
+    }
+  ],
+  "schema": "tide-moe-terminal-review-v1",
+  "scope": "Reviewed finite next-token/capacity comparison; no full TIDE execution equivalence, global locality, universal scaling or strict numerical pass claim",
+  "selection32": {
+    "method": "lowest complete32Mi validation NLL within shape; seed33 only; no confirmation",
+    "selected": [
+      "large-dense-lr0.001-s33",
+      "large-e20-lr0.001-b0.01-s33",
+      "large-e64-lr0.001-b0.01-s33",
+      "small-dense-lr0.003-s33",
+      "small-e20-lr0.003-b0.01-s33",
+      "small-e64-lr0.003-b0.001-s33"
+    ]
+  },
+  "source": "8bd33dd160ac65238fe7bd4eac3450251fe57c32",
+  "state": "terminal_reviewed",
+  "test_access": false,
+  "wall_hours_from_budget_start": 5.358130503892898
+}

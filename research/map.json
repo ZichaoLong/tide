@@ -1453,48 +1453,48 @@
       "target": "RV10-REPAIR"
     },
     {
-      "detail": "\u6267\u884c\u9000\u51fa\u7801\u548c\u77ed\u7a0bloss\u4e0b\u964d\u5747\u4e0d\u81ea\u52a8\u6784\u6210\u79d1\u5b66\u652f\u6301\u3002",
+      "detail": "\u4f9d\u636e\u5b8c\u6574\u8fd0\u884c\u53ca\u72ec\u7acb\u5ba1\u9605\uff0c\u975e\u9000\u51fa\u7801\u81ea\u52a8\u4ea7\u751f\u79d1\u5b66\u652f\u6301\u3002",
       "id": "EMOE-CAL-RESULT",
       "kind": "produces",
-      "label": "\u5b9e\u9645\u7ed3\u679c\u5f85\u5ba1\u9605",
+      "label": "\u5df2\u5b8c\u6210\u5e76\u5ba1\u9605",
       "source": "MOE-CAL",
-      "status": "planned",
+      "status": "documented",
       "target": "RMOE-CAL"
     },
     {
-      "detail": "\u6267\u884c\u9000\u51fa\u7801\u548c\u77ed\u7a0bloss\u4e0b\u964d\u5747\u4e0d\u81ea\u52a8\u6784\u6210\u79d1\u5b66\u652f\u6301\u3002",
+      "detail": "\u4f9d\u636e\u5b8c\u6574\u8fd0\u884c\u53ca\u72ec\u7acb\u5ba1\u9605\uff0c\u975e\u9000\u51fa\u7801\u81ea\u52a8\u4ea7\u751f\u79d1\u5b66\u652f\u6301\u3002",
       "id": "EMOE-MAIN-RESULT",
       "kind": "produces",
-      "label": "\u5b9e\u9645\u7ed3\u679c\u5f85\u5ba1\u9605",
+      "label": "\u5df2\u5b8c\u6210\u5e76\u5ba1\u9605",
       "source": "MOE-MAIN",
-      "status": "planned",
+      "status": "documented",
       "target": "RMOE-MAIN"
     },
     {
-      "detail": "\u6267\u884c\u9000\u51fa\u7801\u548c\u77ed\u7a0bloss\u4e0b\u964d\u5747\u4e0d\u81ea\u52a8\u6784\u6210\u79d1\u5b66\u652f\u6301\u3002",
+      "detail": "\u4f9d\u636e\u5b8c\u6574\u8fd0\u884c\u53ca\u72ec\u7acb\u5ba1\u9605\uff0c\u975e\u9000\u51fa\u7801\u81ea\u52a8\u4ea7\u751f\u79d1\u5b66\u652f\u6301\u3002",
       "id": "EMOE-CONFIRM-RESULT",
       "kind": "produces",
-      "label": "\u5b9e\u9645\u7ed3\u679c\u5f85\u5ba1\u9605",
+      "label": "\u5df2\u5b8c\u6210\u5e76\u5ba1\u9605",
       "source": "MOE-CONFIRM",
-      "status": "planned",
+      "status": "documented",
       "target": "RMOE-CONFIRM"
     },
     {
-      "detail": "\u4ec5\u5728\u5404\u81ea\u5f62\u72b6\u5185\u4f7f\u7528validation\u9009\u62e9\uff0c\u4e0d\u8bfbconfirmation\u3002",
+      "detail": "\u4f9d\u636e\u5b8c\u6574\u8fd0\u884c\u53ca\u72ec\u7acb\u5ba1\u9605\uff0c\u975e\u9000\u51fa\u7801\u81ea\u52a8\u4ea7\u751f\u79d1\u5b66\u652f\u6301\u3002",
       "id": "EMOE-CAL-MAIN",
       "kind": "precondition",
       "label": "\u51bb\u7ed3\u6700\u4f73\u914d\u65b9",
       "source": "MOE-CAL",
-      "status": "planned",
+      "status": "documented",
       "target": "MOE-MAIN"
     },
     {
-      "detail": "\u56fa\u5b9a128Mi\uff0c\u4e0d\u6309\u8d28\u91cf\u6311\u786e\u8ba4\u7ed3\u679c\u3002",
+      "detail": "\u4f9d\u636e\u5b8c\u6574\u8fd0\u884c\u53ca\u72ec\u7acb\u5ba1\u9605\uff0c\u975e\u9000\u51fa\u7801\u81ea\u52a8\u4ea7\u751f\u79d1\u5b66\u652f\u6301\u3002",
       "id": "EMOE-MAIN-CONFIRM",
       "kind": "precondition",
       "label": "\u5168\u90e8\u5408\u683c\u7ec8\u70b9",
       "source": "MOE-MAIN",
-      "status": "planned",
+      "status": "documented",
       "target": "MOE-CONFIRM"
     },
     {
@@ -13956,7 +13956,7 @@
     {
       "budget": "\u5171\u4eab48h\u81f311\u670816\u65e521:51:33\uff1b\u6700\u591a12NPU worker\uff1b\u6700\u5927200M\uff1b64GiB\u76ee\u6807/96GiB\u4e0a\u9650\uff0c\u65e0\u7d2f\u8ba1\u7b97\u65f6\u4e0a\u9650\u3002",
       "decision": "\u6309\u56fa\u5b9a\u6709\u9650\u8868\u6267\u884c\uff1b\u8d28\u91cf\u3001\u6570\u503c\u548c\u6027\u80fd\u5206\u522b\u5ba1\u9605\uff0c\u4e0d\u81ea\u52a8\u6269\u5019\u9009\u3002",
-      "execution_note": "11\u670815\u65e508:35\u9644\u8fd1\uff1a\u539f15\u5b8c\u6210/2\u8fd0\u884c/3failed\uff1b\u53e6\u4fee\u590d1\u5b8c\u6210/2\u8fd0\u884c\uff0c16/20\u914d\u7f6e\u5230128Mi\u3002\u539f\u4e3b\u786e\u8ba4\u5f85\u9636\u6bb5\uff0c\u4fee\u590dR28\u5df2\u786e\u8ba4\uff1b\u4e25\u683c\u5931\u8d25\u4fdd\u7559\u3002",
+      "execution_note": "20\u4e2a128Mi\u914d\u7f6e\u542b3\u4fee\u590d\u5747\u5b8c\u6210\u53ca\u786e\u8ba4\uff1b\u65e7256Mi\u5ef6\u4f385\u5b8c\u6210/2\u8fd0\u884c/1\u53ef\u884c\u6027\u5931\u8d25\uff0c\u4fdd\u6301\u539f\u9608\u503c\u3002",
       "id": "V10-CAPACITY",
       "kind": "experiment",
       "question": "\u56fa\u5b9a\u6d3b\u52a8\u6863\uff0cd64\u2192128\u589e\u52a0\u5bb9\u91cf\u662f\u5426\u6539\u5584\u5171\u540c\u66dd\u5149\u8d28\u91cf\uff1f",
@@ -13996,6 +13996,10 @@
         {
           "label": "11\u670815\u65e5\u4e0a\u5348\u5171\u540c128Mi\u8fdb\u5c55",
           "path": "docs/studies/direct-v10-progress-20261115-morning.md"
+        },
+        {
+          "label": "11\u670815\u65e5\u4e0b\u5348\u72b6\u6001/\u65b0\u5931\u8d25",
+          "path": "docs/evidence/direct-v10-progress-20261115-pm.json"
         }
       ],
       "runs": [
@@ -14045,7 +14049,7 @@
           "lens_record": "runs/v10-main-hb-d128-r64-q3-s11/train/projection.json",
           "record": "runs/v10-main-hb-d128-r64-q3-s11/train/result.json",
           "source_commit": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
-          "status": "running"
+          "status": "completed"
         },
         {
           "config": "configs/studies/language/direct-v10/table/main/hb-d128-r28-q10-s22.json",
@@ -14061,7 +14065,7 @@
           "lens_record": "runs/v10-main-hb-d128-r64-q3-s22/train/projection.json",
           "record": "runs/v10-main-hb-d128-r64-q3-s22/train/result.json",
           "source_commit": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
-          "status": "running"
+          "status": "completed"
         }
       ],
       "status": "running",
@@ -14116,7 +14120,7 @@
     {
       "budget": "\u5171\u4eab48h\u81f311\u670816\u65e521:51:33\uff1b\u6700\u591a12NPU worker\uff1b\u6700\u5927200M\uff1b64GiB\u76ee\u6807/96GiB\u4e0a\u9650\uff0c\u65e0\u7d2f\u8ba1\u7b97\u65f6\u4e0a\u9650\u3002",
       "decision": "\u6309\u56fa\u5b9a\u6709\u9650\u8868\u6267\u884c\uff1b\u8d28\u91cf\u3001\u6570\u503c\u548c\u6027\u80fd\u5206\u522b\u5ba1\u9605\uff0c\u4e0d\u81ea\u52a8\u6269\u5019\u9009\u3002",
-      "execution_note": "11\u670815\u65e508:35\u9644\u8fd1\uff1a\u539f15\u5b8c\u6210/2\u8fd0\u884c/3failed\uff1b\u53e6\u4fee\u590d1\u5b8c\u6210/2\u8fd0\u884c\uff0c16/20\u914d\u7f6e\u5230128Mi\u3002\u539f\u4e3b\u786e\u8ba4\u5f85\u9636\u6bb5\uff0c\u4fee\u590dR28\u5df2\u786e\u8ba4\uff1b\u4e25\u683c\u5931\u8d25\u4fdd\u7559\u3002",
+      "execution_note": "20\u4e2a128Mi\u914d\u7f6e\u542b3\u4fee\u590d\u5747\u5b8c\u6210\u53ca\u786e\u8ba4\uff1b\u65e7256Mi\u5ef6\u4f385\u5b8c\u6210/2\u8fd0\u884c/1\u53ef\u884c\u6027\u5931\u8d25\uff0c\u4fdd\u6301\u539f\u9608\u503c\u3002",
       "id": "V10-ACTIVE",
       "kind": "experiment",
       "question": "\u5305\u62ecRead/\u5171\u4eab\u53c2\u6570\u5339\u914d\u65f6\uff0cdense\u2192R28\u2192R64\u662f\u5426\u53d7\u76ca\uff1f",
@@ -14156,6 +14160,10 @@
         {
           "label": "11\u670815\u65e5\u4e0a\u5348\u5171\u540c128Mi\u8fdb\u5c55",
           "path": "docs/studies/direct-v10-progress-20261115-morning.md"
+        },
+        {
+          "label": "11\u670815\u65e5\u4e0b\u5348\u72b6\u6001/\u65b0\u5931\u8d25",
+          "path": "docs/evidence/direct-v10-progress-20261115-pm.json"
         }
       ],
       "runs": [
@@ -14237,7 +14245,7 @@
           "lens_record": "runs/v10-main-hb-d128-r64-q3-s11/train/projection.json",
           "record": "runs/v10-main-hb-d128-r64-q3-s11/train/result.json",
           "source_commit": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
-          "status": "running"
+          "status": "completed"
         },
         {
           "config": "configs/studies/language/direct-v10/table/main/hb-d128-r28-q10-s22.json",
@@ -14253,7 +14261,7 @@
           "lens_record": "runs/v10-main-hb-d128-r64-q3-s22/train/projection.json",
           "record": "runs/v10-main-hb-d128-r64-q3-s22/train/result.json",
           "source_commit": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
-          "status": "running"
+          "status": "completed"
         }
       ],
       "status": "running",
@@ -14308,7 +14316,7 @@
     {
       "budget": "\u5171\u4eab48h\u81f311\u670816\u65e521:51:33\uff1b\u6700\u591a12NPU worker\uff1b\u6700\u5927200M\uff1b64GiB\u76ee\u6807/96GiB\u4e0a\u9650\uff0c\u65e0\u7d2f\u8ba1\u7b97\u65f6\u4e0a\u9650\u3002",
       "decision": "\u6309\u56fa\u5b9a\u6709\u9650\u8868\u6267\u884c\uff1b\u8d28\u91cf\u3001\u6570\u503c\u548c\u6027\u80fd\u5206\u522b\u5ba1\u9605\uff0c\u4e0d\u81ea\u52a8\u6269\u5019\u9009\u3002",
-      "execution_note": "11\u670815\u65e508:35\u9644\u8fd1\uff1a\u539f15\u5b8c\u6210/2\u8fd0\u884c/3failed\uff1b\u53e6\u4fee\u590d1\u5b8c\u6210/2\u8fd0\u884c\uff0c16/20\u914d\u7f6e\u5230128Mi\u3002\u539f\u4e3b\u786e\u8ba4\u5f85\u9636\u6bb5\uff0c\u4fee\u590dR28\u5df2\u786e\u8ba4\uff1b\u4e25\u683c\u5931\u8d25\u4fdd\u7559\u3002",
+      "execution_note": "20\u4e2a128Mi\u914d\u7f6e\u542b3\u4fee\u590d\u5747\u5b8c\u6210\u53ca\u786e\u8ba4\uff1b\u65e7256Mi\u5ef6\u4f385\u5b8c\u6210/2\u8fd0\u884c/1\u53ef\u884c\u6027\u5931\u8d25\uff0c\u4fdd\u6301\u539f\u9608\u503c\u3002",
       "id": "V10-CONTROL",
       "kind": "experiment",
       "question": "\u4f4e\u6d3b\u52a8\u8d28\u91cf\u4ee3\u4ef7\u591a\u5927\uff0c\u4e0e\u5408\u7406\u8c03\u53c2TF\u6709\u4f55\u5dee\u8ddd\uff1f",
@@ -14348,6 +14356,10 @@
         {
           "label": "11\u670815\u65e5\u4e0a\u5348\u5171\u540c128Mi\u8fdb\u5c55",
           "path": "docs/studies/direct-v10-progress-20261115-morning.md"
+        },
+        {
+          "label": "11\u670815\u65e5\u4e0b\u5348\u72b6\u6001/\u65b0\u5931\u8d25",
+          "path": "docs/evidence/direct-v10-progress-20261115-pm.json"
         }
       ],
       "runs": [
@@ -14468,7 +14480,7 @@
     {
       "budget": "\u5171\u4eab48h\u81f311\u670816\u65e521:51:33\uff1b\u6700\u591a12NPU worker\uff1b\u6700\u5927200M\uff1b64GiB\u76ee\u6807/96GiB\u4e0a\u9650\uff0c\u65e0\u7d2f\u8ba1\u7b97\u65f6\u4e0a\u9650\u3002",
       "decision": "\u6309\u56fa\u5b9a\u6709\u9650\u8868\u6267\u884c\uff1b\u8d28\u91cf\u3001\u6570\u503c\u548c\u6027\u80fd\u5206\u522b\u5ba1\u9605\uff0c\u4e0d\u81ea\u52a8\u6269\u5019\u9009\u3002",
-      "execution_note": "11\u670815\u65e508:35\u9644\u8fd1\uff1a\u539f15\u5b8c\u6210/2\u8fd0\u884c/3failed\uff1b\u53e6\u4fee\u590d1\u5b8c\u6210/2\u8fd0\u884c\uff0c16/20\u914d\u7f6e\u5230128Mi\u3002\u539f\u4e3b\u786e\u8ba4\u5f85\u9636\u6bb5\uff0c\u4fee\u590dR28\u5df2\u786e\u8ba4\uff1b\u4e25\u683c\u5931\u8d25\u4fdd\u7559\u3002",
+      "execution_note": "20\u4e2a128Mi\u914d\u7f6e\u542b3\u4fee\u590d\u5747\u5b8c\u6210\u53ca\u786e\u8ba4\uff1b\u65e7256Mi\u5ef6\u4f385\u5b8c\u6210/2\u8fd0\u884c/1\u53ef\u884c\u6027\u5931\u8d25\uff0c\u4fdd\u6301\u539f\u9608\u503c\u3002",
       "id": "V10-CONFIRMATION",
       "kind": "experiment",
       "question": "\u5171\u540c\u66dd\u5149\u7ed3\u8bba\u80fd\u5426\u5728\u672a\u7528\u4e8e\u9009\u62e9\u7684262K split\u4fdd\u6301\uff1f",
@@ -14504,12 +14516,16 @@
         {
           "label": "\u4e09\u9879\u6545\u969c\u7684\u5b9a\u4f4d\u4e0e\u65b9\u6848",
           "path": "docs/studies/direct-v10-gradient-results.md"
+        },
+        {
+          "label": "11\u670815\u65e5\u4e0b\u5348\u72b6\u6001/\u65b0\u5931\u8d25",
+          "path": "docs/evidence/direct-v10-progress-20261115-pm.json"
         }
       ],
       "runs": [],
-      "status": "planned",
+      "status": "running",
       "study_id": "TL-CONFIRMATION-v10",
-      "summary": "\u5168\u4f53\u5408\u683c128M\u53ca\u5b9e\u9645256M\u7ec8\u70b9\uff1btest\u5bc6\u5c01",
+      "summary": "128Mi\u539f17\u9879\u53ca3\u4fee\u590d\u786e\u8ba4\u5b8c\u6210\uff1b\u5b9e\u9645256Mi\u786e\u8ba4\u7b49\u5f85\u5ef6\u4f38\u9636\u6bb5\u3002",
       "title": "\u51bb\u7ed3\u7ec8\u70b9\u7684\u72ec\u7acb\u786e\u8ba4",
       "track": "shared",
       "view_group": "current",
@@ -14667,7 +14683,7 @@
     {
       "budget": "\u539f48h\u622a\u6b6211\u670816\u65e521:51:33\uff1b\u5171\u4eab12slot\uff0c\u65b0\u4fee\u590d24GiB\uff1b\u65e0\u7d2f\u8ba1CPU/NPU\u7b97\u65f6\u4e0a\u9650\u3002",
       "decision": "\u539ffailed\u4fdd\u7559\uff1b\u6bcf\u94fe\u901a\u8fc7\u5b8c\u6574batch\u6062\u590d\u548c64\u6b65\u5148\u5bfc\u540e\u5230\u539f128Mi\u7ec8\u70b9\uff0c\u4e0d\u81ea\u52a8\u6269\u5230256Mi\u3002",
-      "execution_note": "\u4e09\u94fe\u6062\u590d/\u5148\u5bfc\u901a\u8fc7\uff0cR28\u8fbe\u5230\u6b63\u5f0f\u7ec8\u70b9\uff1b\u4e09\u6761\u5b8c\u6574\u957f\u671f\u5bf9\u7167\u4ecd\u672a\u6536\u9f50\u3002",
+      "execution_note": "R64\u4e24seed\u786e\u8ba43.06429/3.06124\uff0cR28 seed22\u786e\u8ba43.07558\uff1b\u65e0\u5b58\u6d3b\u540e\u4ee3\u3002",
       "id": "V10-REPAIR",
       "kind": "experiment",
       "lens_group": "TL-CONTROL-v10",
@@ -14703,31 +14719,31 @@
           "config": "runs/v10-repair-control/hb-d128-r64-pool-s11/config.json",
           "id": "tl-v10-repair-hb-d128-r64-pool-s11",
           "lens_record": "runs/v10-repair-hb-d128-r64-pool-s11/train/projection.json",
-          "note": "\u6b63\u5f0f\u7eed\u8bad\u63a8\u8fdb\u4e2d\uff0c\u65e0\u65b0\u589e\u5931\u8d25\uff1b\u4fdd\u6301\u539f128Mi\u76ee\u6807\u3002",
+          "note": "\u539f128Mi\u53ca262K\u786e\u8ba4\u5b8c\u6210\uff0c\u670d\u52a1\u65e0\u5b58\u6d3b\u540e\u4ee3\uff1b\u4e0d\u662f\u65b0\u589e\u72ec\u7acbseed\u3002",
           "parent": "v10-diag-hb-d128-r64-pool-s11/failure-checkpoint.pt",
           "parent_sha256": "476f1ce19a0b30e3d3f781ac07df4250221d4d8b1a688a83893f7dc057ee48cd",
           "physical_id": 11,
           "record": "runs/v10-repair-hb-d128-r64-pool-s11/train/result.json",
           "source_commit": "d089dd0556798df55a0440ef471ffe254f8054e5",
-          "status": "running"
+          "status": "completed"
         },
         {
           "config": "runs/v10-repair-control/hb-d128-r64-pool-s22/config.json",
           "id": "tl-v10-repair-hb-d128-r64-pool-s22",
           "lens_record": "runs/v10-repair-hb-d128-r64-pool-s22/train/projection.json",
-          "note": "\u6b63\u5f0f\u7eed\u8bad\u63a8\u8fdb\u4e2d\uff0c\u65e0\u65b0\u589e\u5931\u8d25\uff1b\u4fdd\u6301\u539f128Mi\u76ee\u6807\u3002",
+          "note": "\u539f128Mi\u53ca262K\u786e\u8ba4\u5b8c\u6210\uff0c\u670d\u52a1\u65e0\u5b58\u6d3b\u540e\u4ee3\uff1b\u4e0d\u662f\u65b0\u589e\u72ec\u7acbseed\u3002",
           "parent": "v10-diag-hb-d128-r64-pool-s22/failure-checkpoint.pt",
           "parent_sha256": "c01b45f434a03c780b0486a6e1b018d967c3db2ba7035373304f5c8346a0331e",
           "physical_id": 6,
           "record": "runs/v10-repair-hb-d128-r64-pool-s22/train/result.json",
           "source_commit": "d089dd0556798df55a0440ef471ffe254f8054e5",
-          "status": "running"
+          "status": "completed"
         },
         {
           "config": "runs/v10-repair-control/hb-d128-r28-pool-s22/config.json",
           "id": "tl-v10-repair-hb-d128-r28-pool-s22",
           "lens_record": "runs/v10-repair-hb-d128-r28-pool-s22/train/projection.json",
-          "note": "128Mi\u4e0e262K\u786e\u8ba4\u5747\u5b8c\u6210\uff0cLens\u8bfb\u56de\u901a\u8fc7\uff1b\u539ffailed\u4fdd\u7559\u3002",
+          "note": "\u539f128Mi\u53ca262K\u786e\u8ba4\u5b8c\u6210\uff0c\u670d\u52a1\u65e0\u5b58\u6d3b\u540e\u4ee3\uff1b\u4e0d\u662f\u65b0\u589e\u72ec\u7acbseed\u3002",
           "parent": "v10-diag-hb-d128-r28-pool-s22/failure-checkpoint.pt",
           "parent_sha256": "43ef640339e9d7e9ee47b37480a3422218f6976e44da889b77d84b109783f7fc",
           "physical_id": 14,
@@ -14736,9 +14752,9 @@
           "status": "completed"
         }
       ],
-      "status": "running",
+      "status": "completed",
       "study_id": "TL-REPAIR-v10",
-      "summary": "R28\u4fee\u590d\u5b8c\u6210128Mi\u53ca\u786e\u8ba4\uff0c\u4e24\u4e2aR64\u7ee7\u7eed",
+      "summary": "\u4e09\u4fee\u590d\u5747\u5b8c\u6210128Mi\u53ca\u72ec\u7acb\u786e\u8ba4\uff1b\u539ffailed\u4fdd\u7559\u3002",
       "title": "\u4e09\u6761pool\uff1a\u65b0\u6e90\u7801\u4fee\u590d\u7eed\u8bad",
       "track": "shared",
       "view_group": "current",
@@ -14780,11 +14796,11 @@
       ],
       "scope": "\u9650\u5b9a\u72ec\u7acbdirect\u5b9e\u73b0/FP32\u4e09\u6761\u539f\u8f68\u8ff9\uff1b\u6e90\u53d8\u66f4\u663e\u5f0f\u3002",
       "status": "awaiting",
-      "summary": "R28\u5355\u8f68\u8ff9128Mi\u53ca\u786e\u8ba4\u5b8c\u6210\uff0c\u5b8c\u6574\u7ec4\u5f85\u5ba1\u9605",
+      "summary": "\u4e09\u4fee\u590d\u5747\u6536\u9f50128Mi/\u786e\u8ba4\uff1b\u539f\u9608\u503c\u548c\u4e25\u683c\u5931\u8d25\u4fdd\u7559\u3002",
       "title": "\u4fee\u590d\u540e\u957f\u671f\u7a33\u5b9a\u4e0e\u8d28\u91cf\uff1a\u5f85\u5ba1\u9605",
       "track": "shared",
       "transfer_conditions": "\u4ec5\u76f8\u540c\u805a\u5408\u516c\u5f0f\u4e0eVJP\u5951\u7ea6\uff1b\u57fa\u5ea7\u4ecd\u9700\u72ec\u7acb\u63a5\u5165\u9a8c\u6536\u3002",
-      "unresolved": "R64\u4e24\u6761\u7ec8\u70b9\u672a\u5b8c\u6210\uff1b\u4e00\u6761\u4fee\u590d\u5b8c\u6210\u4e0d\u4fdd\u8bc1\u5168\u90e8\u8303\u56f4\u7a33\u5b9a\uff0c\u539f\u4e25\u683c\u6709\u9650\u8d85\u5dee\u4fdd\u7559\u3002",
+      "unresolved": "\u4fee\u590d\u4ec5\u9650\u5b9a\u4e09\u8f68\u8ff9\u8303\u56f4\uff1b\u65e7v10\u5ef6\u4f38\u53e6\u6709\u5206\u914d\u53ef\u884c\u6027\u5931\u8d25\uff0c\u4e0d\u7531\u8be5\u4fee\u590d\u8986\u76d6\u3002",
       "view_group": "current",
       "x": 915,
       "y": 2260
@@ -14792,7 +14808,7 @@
     {
       "budget": "\u72ec\u7acb48h\u81f311\u670817\u65e509:05:08\uff1b\u65b0\u589e\u6700\u591a8worker\uff0c\u5171\u4eab12slot\uff1b64GiB\u76ee\u6807/96GiB\u505c\u6b62\uff0c\u786c\u4f59\u91cf200GiB\u3002",
       "decision": "\u6309\u5f62\u72b6\u4fdd\u7559\u8c03\u53c2\u540d\u989d\uff1b\u6267\u884c\u3001\u4e25\u683c\u6570\u503c\u3001\u79bb\u6563\u8bed\u4e49\u3001\u6062\u590d\u3001\u5b66\u4e60\u4e0e\u541e\u5410\u5206\u5217\u3002",
-      "execution_note": "8\u6761\u5f53\u524dMoE\u6062\u590d\u5168\u90e8\u901a\u8fc7\uff1b\u539f12\u6b21\u51c6\u5165\u5931\u8d25\u4e0e\u6574\u7f51\u6709\u9650\u4e25\u683c\u5931\u8d25\u4fdd\u7559\uff0c\u8d28\u91cf\u4ecd\u5f85\u5ba1\u9605\u3002",
+      "execution_note": "2026-11-15 14:26\u5168\u90e8\u9636\u6bb5\u7ec8\u6001\uff0c\u65e0\u5b58\u6d3b\u540e\u4ee3\uff1b\u539f12\u6b21\u51c6\u5165\u5931\u8d25\u53e6\u5217\u3002",
       "id": "MOE-CAL",
       "kind": "experiment",
       "lens_group": "TL-MOE-CAL",
@@ -14829,6 +14845,18 @@
         {
           "label": "\u72b6\u6001\u3001\u505c\u6b62\u3001\u6062\u590d\u4e0eLens",
           "path": "docs/studies/moe-controls-operations.md"
+        },
+        {
+          "label": "MoE\u7ec8\u6001\uff1a\u914d\u65b9\u3001\u8d28\u91cf\u4e0e\u72ec\u7acb\u786e\u8ba4",
+          "path": "docs/studies/moe-controls-results.md"
+        },
+        {
+          "label": "\u9010\u8f68\u8ff9\u4e0e\u6587\u6863\u914d\u5bf9\u5ba1\u9605\u8bc1\u636e",
+          "path": "docs/evidence/moe-controls-results.json"
+        },
+        {
+          "label": "\u53ef\u91cd\u590d\u7684\u53ea\u8bfb\u7ec8\u6001\u5ba1\u9605\u5668",
+          "path": "scripts/review_moe_results.py"
         }
       ],
       "runs": [
@@ -14879,126 +14907,6 @@
           "record": "runs/moe-batch-large-dense/result.json",
           "source_commit": "0a79e70f",
           "status": "completed"
-        },
-        {
-          "config": ".local/source-moe-execution-v1/configs/studies/language/moe-controls/table/configs/small-dense-lr0.0003-s33.json",
-          "id": "tl-moe-screen8-small-dense-lr0.0003-s33",
-          "lens_record": "runs/moe-screen8-small-dense-lr0.0003-s33/train/projection.json",
-          "note": "B4/L32\u65b0\u8fdb\u7a0b\u6062\u590d\u901a\u8fc7\uff1b8Mi\u5b8c\u6210\uff0cLens\u8bfb\u56de\u901a\u8fc7\u3002",
-          "physical_id": 14,
-          "record": "runs/moe-screen8-small-dense-lr0.0003-s33/train/result.json",
-          "source_commit": "2f96d745",
-          "status": "completed"
-        },
-        {
-          "config": ".local/source-moe-execution-v1/configs/studies/language/moe-controls/table/configs/large-dense-lr0.0001-s33.json",
-          "id": "tl-moe-screen8-large-dense-lr0.0001-s33",
-          "lens_record": "runs/moe-screen8-large-dense-lr0.0001-s33/train/projection.json",
-          "note": "B4/L32\u65b0\u8fdb\u7a0b\u6062\u590d\u901a\u8fc7\uff1b8Mi\u5b8c\u6210\uff0cLens\u8bfb\u56de\u901a\u8fc7\u3002",
-          "physical_id": 10,
-          "record": "runs/moe-screen8-large-dense-lr0.0001-s33/train/result.json",
-          "source_commit": "2f96d745",
-          "status": "completed"
-        },
-        {
-          "config": ".local/source-moe-execution-v1/configs/studies/language/moe-controls/table/configs/small-dense-lr0.001-s33.json",
-          "id": "tl-moe-screen8-small-dense-lr0.001-s33",
-          "lens_record": "runs/moe-screen8-small-dense-lr0.001-s33/train/projection.json",
-          "note": "B4/L32\u65b0\u8fdb\u7a0b\u6062\u590d\u901a\u8fc7\uff1b8Mi\u5b8c\u6210\uff0cLens\u8bfb\u56de\u901a\u8fc7\u3002",
-          "physical_id": 0,
-          "record": "runs/moe-screen8-small-dense-lr0.001-s33/train/result.json",
-          "source_commit": "2f96d745",
-          "status": "completed"
-        },
-        {
-          "config": ".local/source-moe-execution-v1/configs/studies/language/moe-controls/table/configs/large-dense-lr0.0003-s33.json",
-          "id": "tl-moe-screen8-large-dense-lr0.0003-s33",
-          "lens_record": "runs/moe-screen8-large-dense-lr0.0003-s33/train/projection.json",
-          "note": "B4/L32\u65b0\u8fdb\u7a0b\u6062\u590d\u901a\u8fc7\uff1b8Mi\u5b8c\u6210\uff0cLens\u8bfb\u56de\u901a\u8fc7\u3002",
-          "physical_id": 4,
-          "record": "runs/moe-screen8-large-dense-lr0.0003-s33/train/result.json",
-          "source_commit": "2f96d745",
-          "status": "completed"
-        },
-        {
-          "config": ".local/source-moe-execution-v2/configs/studies/language/moe-controls/table/configs/small-e20-lr0.0003-b0.001-s33.json",
-          "id": "tl-moe-r2-screen8-small-e20-lr0.0003-b0.001-s33",
-          "lens_record": "runs/moe-r2-screen8-small-e20-lr0.0003-b0.001-s33/train/projection.json",
-          "note": "B4/L32\u65b0\u8fdb\u7a0b\u6062\u590d\u901a\u8fc7\uff1b\u771f\u5b9e\u6570\u636e\u8bad\u7ec3\u4e2d\uff0cLens\u8bb0\u5f55\uff1b\u4e25\u683c\u6709\u9650\u5931\u8d25\u4fdd\u7559\u3002",
-          "physical_id": 1,
-          "record": "runs/moe-r2-screen8-small-e20-lr0.0003-b0.001-s33/train/result.json",
-          "source_commit": "8bd33dd1",
-          "status": "running"
-        },
-        {
-          "config": ".local/source-moe-execution-v2/configs/studies/language/moe-controls/table/configs/small-e64-lr0.0003-b0.001-s33.json",
-          "id": "tl-moe-r2-screen8-small-e64-lr0.0003-b0.001-s33",
-          "lens_record": "runs/moe-r2-screen8-small-e64-lr0.0003-b0.001-s33/train/projection.json",
-          "note": "B4/L32\u65b0\u8fdb\u7a0b\u6062\u590d\u901a\u8fc7\uff1b\u771f\u5b9e\u6570\u636e\u8bad\u7ec3\u4e2d\uff0cLens\u8bb0\u5f55\uff1b\u4e25\u683c\u6709\u9650\u5931\u8d25\u4fdd\u7559\u3002",
-          "physical_id": 7,
-          "record": "runs/moe-r2-screen8-small-e64-lr0.0003-b0.001-s33/train/result.json",
-          "source_commit": "8bd33dd1",
-          "status": "running"
-        },
-        {
-          "config": ".local/source-moe-execution-v2/configs/studies/language/moe-controls/table/configs/large-e20-lr0.0001-b0.001-s33.json",
-          "id": "tl-moe-r2-screen8-large-e20-lr0.0001-b0.001-s33",
-          "lens_record": "runs/moe-r2-screen8-large-e20-lr0.0001-b0.001-s33/train/projection.json",
-          "note": "B4/L32\u65b0\u8fdb\u7a0b\u6062\u590d\u901a\u8fc7\uff1b\u771f\u5b9e\u6570\u636e\u8bad\u7ec3\u4e2d\uff0cLens\u8bb0\u5f55\uff1b\u4e25\u683c\u6709\u9650\u5931\u8d25\u4fdd\u7559\u3002",
-          "physical_id": 0,
-          "record": "runs/moe-r2-screen8-large-e20-lr0.0001-b0.001-s33/train/result.json",
-          "source_commit": "8bd33dd1",
-          "status": "running"
-        },
-        {
-          "config": ".local/source-moe-execution-v2/configs/studies/language/moe-controls/table/configs/large-e64-lr0.0001-b0.001-s33.json",
-          "id": "tl-moe-r2-screen8-large-e64-lr0.0001-b0.001-s33",
-          "lens_record": "runs/moe-r2-screen8-large-e64-lr0.0001-b0.001-s33/train/projection.json",
-          "note": "B4/L32\u65b0\u8fdb\u7a0b\u6062\u590d\u901a\u8fc7\uff1b\u771f\u5b9e\u6570\u636e\u8bad\u7ec3\u4e2d\uff0cLens\u8bb0\u5f55\uff1b\u4e25\u683c\u6709\u9650\u5931\u8d25\u4fdd\u7559\u3002",
-          "physical_id": 4,
-          "record": "runs/moe-r2-screen8-large-e64-lr0.0001-b0.001-s33/train/result.json",
-          "source_commit": "8bd33dd1",
-          "status": "running"
-        },
-        {
-          "config": ".local/source-moe-execution-v2/configs/studies/language/moe-controls/table/configs/small-e20-lr0.0003-b0.01-s33.json",
-          "id": "tl-moe-r2-screen8-small-e20-lr0.0003-b0.01-s33",
-          "lens_record": "runs/moe-r2-screen8-small-e20-lr0.0003-b0.01-s33/train/projection.json",
-          "note": "B4/L32\u65b0\u8fdb\u7a0b\u6062\u590d\u901a\u8fc7\uff1b\u771f\u5b9e\u6570\u636e\u8bad\u7ec3\u4e2d\uff0cLens\u8bb0\u5f55\uff1b\u4e25\u683c\u6709\u9650\u5931\u8d25\u4fdd\u7559\u3002",
-          "physical_id": 14,
-          "record": "runs/moe-r2-screen8-small-e20-lr0.0003-b0.01-s33/train/result.json",
-          "source_commit": "8bd33dd1",
-          "status": "running"
-        },
-        {
-          "config": ".local/source-moe-execution-v2/configs/studies/language/moe-controls/table/configs/small-e64-lr0.0003-b0.01-s33.json",
-          "id": "tl-moe-r2-screen8-small-e64-lr0.0003-b0.01-s33",
-          "lens_record": "runs/moe-r2-screen8-small-e64-lr0.0003-b0.01-s33/train/projection.json",
-          "note": "B4/L32\u65b0\u8fdb\u7a0b\u6062\u590d\u901a\u8fc7\uff1b\u771f\u5b9e\u6570\u636e\u8bad\u7ec3\u4e2d\uff0cLens\u8bb0\u5f55\uff1b\u4e25\u683c\u6709\u9650\u5931\u8d25\u4fdd\u7559\u3002",
-          "physical_id": 10,
-          "record": "runs/moe-r2-screen8-small-e64-lr0.0003-b0.01-s33/train/result.json",
-          "source_commit": "8bd33dd1",
-          "status": "running"
-        },
-        {
-          "config": ".local/source-moe-execution-v2/configs/studies/language/moe-controls/table/configs/large-e20-lr0.0001-b0.01-s33.json",
-          "id": "tl-moe-r2-screen8-large-e20-lr0.0001-b0.01-s33",
-          "lens_record": "runs/moe-r2-screen8-large-e20-lr0.0001-b0.01-s33/train/projection.json",
-          "note": "B4/L32\u65b0\u8fdb\u7a0b\u6062\u590d\u901a\u8fc7\uff1b\u771f\u5b9e\u6570\u636e\u8bad\u7ec3\u4e2d\uff0cLens\u8bb0\u5f55\uff1b\u4e25\u683c\u6709\u9650\u5931\u8d25\u4fdd\u7559\u3002",
-          "physical_id": 8,
-          "record": "runs/moe-r2-screen8-large-e20-lr0.0001-b0.01-s33/train/result.json",
-          "source_commit": "8bd33dd1",
-          "status": "running"
-        },
-        {
-          "config": ".local/source-moe-execution-v2/configs/studies/language/moe-controls/table/configs/large-e64-lr0.0001-b0.01-s33.json",
-          "id": "tl-moe-r2-screen8-large-e64-lr0.0001-b0.01-s33",
-          "lens_record": "runs/moe-r2-screen8-large-e64-lr0.0001-b0.01-s33/train/projection.json",
-          "note": "B4/L32\u65b0\u8fdb\u7a0b\u6062\u590d\u901a\u8fc7\uff1b\u771f\u5b9e\u6570\u636e\u8bad\u7ec3\u4e2d\uff0cLens\u8bb0\u5f55\uff1b\u4e25\u683c\u6709\u9650\u5931\u8d25\u4fdd\u7559\u3002",
-          "physical_id": 2,
-          "record": "runs/moe-r2-screen8-large-e64-lr0.0001-b0.01-s33/train/result.json",
-          "source_commit": "8bd33dd1",
-          "status": "running"
         },
         {
           "config": "configs/studies/language/moe-controls/table/configs/small-e20-lr0.0003-b0.001-s33.json",
@@ -15095,11 +15003,389 @@
           "record": "runs/moe-screen8-large-e64-lr0.0003-b0.001-s33/check/result.json",
           "source_commit": "2f96d745",
           "status": "failed"
+        },
+        {
+          "config": ".local/source-moe-execution-v2/configs/studies/language/moe-controls/table/configs/large-dense-lr0.001-s33.json",
+          "id": "tl-moe-r2-screen32-large-dense-lr0.001-s33",
+          "lens_record": "runs/moe-r2-screen32-large-dense-lr0.001-s33/train/projection.json",
+          "note": "\u76f8\u540c\u786e\u8ba4split\u548c\u56fa\u5b9a\u8eab\u4efd\u5df2\u5ba1\u9605\uff1b\u6570\u503c/\u6062\u590d/\u5b66\u4e60/\u7269\u7406\u5de5\u4f5c\u5206\u522b\u89e3\u91ca\u3002",
+          "record": "runs/moe-r2-screen32-large-dense-lr0.001-s33/train/result.json",
+          "source_commit": "8bd33dd1",
+          "status": "completed"
+        },
+        {
+          "config": ".local/source-moe-execution-v1/configs/studies/language/moe-controls/table/configs/large-dense-lr0.0003-s33.json",
+          "id": "tl-moe-r2-screen32-large-dense-lr0.0003-s33",
+          "lens_record": "runs/moe-r2-screen32-large-dense-lr0.0003-s33/train/projection.json",
+          "note": "\u76f8\u540c\u786e\u8ba4split\u548c\u56fa\u5b9a\u8eab\u4efd\u5df2\u5ba1\u9605\uff1b\u6570\u503c/\u6062\u590d/\u5b66\u4e60/\u7269\u7406\u5de5\u4f5c\u5206\u522b\u89e3\u91ca\u3002",
+          "record": "runs/moe-r2-screen32-large-dense-lr0.0003-s33/train/result.json",
+          "source_commit": "8bd33dd1",
+          "status": "completed"
+        },
+        {
+          "config": ".local/source-moe-execution-v2/configs/studies/language/moe-controls/table/configs/large-e20-lr0.001-b0.01-s33.json",
+          "id": "tl-moe-r2-screen32-large-e20-lr0.001-b0.01-s33",
+          "lens_record": "runs/moe-r2-screen32-large-e20-lr0.001-b0.01-s33/train/projection.json",
+          "note": "\u76f8\u540c\u786e\u8ba4split\u548c\u56fa\u5b9a\u8eab\u4efd\u5df2\u5ba1\u9605\uff1b\u6570\u503c/\u6062\u590d/\u5b66\u4e60/\u7269\u7406\u5de5\u4f5c\u5206\u522b\u89e3\u91ca\u3002",
+          "record": "runs/moe-r2-screen32-large-e20-lr0.001-b0.01-s33/train/result.json",
+          "source_commit": "8bd33dd1",
+          "status": "completed"
+        },
+        {
+          "config": ".local/source-moe-execution-v2/configs/studies/language/moe-controls/table/configs/large-e20-lr0.001-b0.001-s33.json",
+          "id": "tl-moe-r2-screen32-large-e20-lr0.001-b0.001-s33",
+          "lens_record": "runs/moe-r2-screen32-large-e20-lr0.001-b0.001-s33/train/projection.json",
+          "note": "\u76f8\u540c\u786e\u8ba4split\u548c\u56fa\u5b9a\u8eab\u4efd\u5df2\u5ba1\u9605\uff1b\u6570\u503c/\u6062\u590d/\u5b66\u4e60/\u7269\u7406\u5de5\u4f5c\u5206\u522b\u89e3\u91ca\u3002",
+          "record": "runs/moe-r2-screen32-large-e20-lr0.001-b0.001-s33/train/result.json",
+          "source_commit": "8bd33dd1",
+          "status": "completed"
+        },
+        {
+          "config": ".local/source-moe-execution-v2/configs/studies/language/moe-controls/table/configs/large-e64-lr0.001-b0.001-s33.json",
+          "id": "tl-moe-r2-screen32-large-e64-lr0.001-b0.001-s33",
+          "lens_record": "runs/moe-r2-screen32-large-e64-lr0.001-b0.001-s33/train/projection.json",
+          "note": "\u76f8\u540c\u786e\u8ba4split\u548c\u56fa\u5b9a\u8eab\u4efd\u5df2\u5ba1\u9605\uff1b\u6570\u503c/\u6062\u590d/\u5b66\u4e60/\u7269\u7406\u5de5\u4f5c\u5206\u522b\u89e3\u91ca\u3002",
+          "record": "runs/moe-r2-screen32-large-e64-lr0.001-b0.001-s33/train/result.json",
+          "source_commit": "8bd33dd1",
+          "status": "completed"
+        },
+        {
+          "config": ".local/source-moe-execution-v2/configs/studies/language/moe-controls/table/configs/large-e64-lr0.001-b0.01-s33.json",
+          "id": "tl-moe-r2-screen32-large-e64-lr0.001-b0.01-s33",
+          "lens_record": "runs/moe-r2-screen32-large-e64-lr0.001-b0.01-s33/train/projection.json",
+          "note": "\u76f8\u540c\u786e\u8ba4split\u548c\u56fa\u5b9a\u8eab\u4efd\u5df2\u5ba1\u9605\uff1b\u6570\u503c/\u6062\u590d/\u5b66\u4e60/\u7269\u7406\u5de5\u4f5c\u5206\u522b\u89e3\u91ca\u3002",
+          "record": "runs/moe-r2-screen32-large-e64-lr0.001-b0.01-s33/train/result.json",
+          "source_commit": "8bd33dd1",
+          "status": "completed"
+        },
+        {
+          "config": ".local/source-moe-execution-v2/configs/studies/language/moe-controls/table/configs/small-dense-lr0.003-s33.json",
+          "id": "tl-moe-r2-screen32-small-dense-lr0.003-s33",
+          "lens_record": "runs/moe-r2-screen32-small-dense-lr0.003-s33/train/projection.json",
+          "note": "\u76f8\u540c\u786e\u8ba4split\u548c\u56fa\u5b9a\u8eab\u4efd\u5df2\u5ba1\u9605\uff1b\u6570\u503c/\u6062\u590d/\u5b66\u4e60/\u7269\u7406\u5de5\u4f5c\u5206\u522b\u89e3\u91ca\u3002",
+          "record": "runs/moe-r2-screen32-small-dense-lr0.003-s33/train/result.json",
+          "source_commit": "8bd33dd1",
+          "status": "completed"
+        },
+        {
+          "config": ".local/source-moe-execution-v1/configs/studies/language/moe-controls/table/configs/small-dense-lr0.001-s33.json",
+          "id": "tl-moe-r2-screen32-small-dense-lr0.001-s33",
+          "lens_record": "runs/moe-r2-screen32-small-dense-lr0.001-s33/train/projection.json",
+          "note": "\u76f8\u540c\u786e\u8ba4split\u548c\u56fa\u5b9a\u8eab\u4efd\u5df2\u5ba1\u9605\uff1b\u6570\u503c/\u6062\u590d/\u5b66\u4e60/\u7269\u7406\u5de5\u4f5c\u5206\u522b\u89e3\u91ca\u3002",
+          "record": "runs/moe-r2-screen32-small-dense-lr0.001-s33/train/result.json",
+          "source_commit": "8bd33dd1",
+          "status": "completed"
+        },
+        {
+          "config": ".local/source-moe-execution-v2/configs/studies/language/moe-controls/table/configs/small-e20-lr0.003-b0.001-s33.json",
+          "id": "tl-moe-r2-screen32-small-e20-lr0.003-b0.001-s33",
+          "lens_record": "runs/moe-r2-screen32-small-e20-lr0.003-b0.001-s33/train/projection.json",
+          "note": "\u76f8\u540c\u786e\u8ba4split\u548c\u56fa\u5b9a\u8eab\u4efd\u5df2\u5ba1\u9605\uff1b\u6570\u503c/\u6062\u590d/\u5b66\u4e60/\u7269\u7406\u5de5\u4f5c\u5206\u522b\u89e3\u91ca\u3002",
+          "record": "runs/moe-r2-screen32-small-e20-lr0.003-b0.001-s33/train/result.json",
+          "source_commit": "8bd33dd1",
+          "status": "completed"
+        },
+        {
+          "config": ".local/source-moe-execution-v2/configs/studies/language/moe-controls/table/configs/small-e20-lr0.003-b0.01-s33.json",
+          "id": "tl-moe-r2-screen32-small-e20-lr0.003-b0.01-s33",
+          "lens_record": "runs/moe-r2-screen32-small-e20-lr0.003-b0.01-s33/train/projection.json",
+          "note": "\u76f8\u540c\u786e\u8ba4split\u548c\u56fa\u5b9a\u8eab\u4efd\u5df2\u5ba1\u9605\uff1b\u6570\u503c/\u6062\u590d/\u5b66\u4e60/\u7269\u7406\u5de5\u4f5c\u5206\u522b\u89e3\u91ca\u3002",
+          "record": "runs/moe-r2-screen32-small-e20-lr0.003-b0.01-s33/train/result.json",
+          "source_commit": "8bd33dd1",
+          "status": "completed"
+        },
+        {
+          "config": ".local/source-moe-execution-v2/configs/studies/language/moe-controls/table/configs/small-e64-lr0.003-b0.01-s33.json",
+          "id": "tl-moe-r2-screen32-small-e64-lr0.003-b0.01-s33",
+          "lens_record": "runs/moe-r2-screen32-small-e64-lr0.003-b0.01-s33/train/projection.json",
+          "note": "\u76f8\u540c\u786e\u8ba4split\u548c\u56fa\u5b9a\u8eab\u4efd\u5df2\u5ba1\u9605\uff1b\u6570\u503c/\u6062\u590d/\u5b66\u4e60/\u7269\u7406\u5de5\u4f5c\u5206\u522b\u89e3\u91ca\u3002",
+          "record": "runs/moe-r2-screen32-small-e64-lr0.003-b0.01-s33/train/result.json",
+          "source_commit": "8bd33dd1",
+          "status": "completed"
+        },
+        {
+          "config": ".local/source-moe-execution-v2/configs/studies/language/moe-controls/table/configs/small-e64-lr0.003-b0.001-s33.json",
+          "id": "tl-moe-r2-screen32-small-e64-lr0.003-b0.001-s33",
+          "lens_record": "runs/moe-r2-screen32-small-e64-lr0.003-b0.001-s33/train/projection.json",
+          "note": "\u76f8\u540c\u786e\u8ba4split\u548c\u56fa\u5b9a\u8eab\u4efd\u5df2\u5ba1\u9605\uff1b\u6570\u503c/\u6062\u590d/\u5b66\u4e60/\u7269\u7406\u5de5\u4f5c\u5206\u522b\u89e3\u91ca\u3002",
+          "record": "runs/moe-r2-screen32-small-e64-lr0.003-b0.001-s33/train/result.json",
+          "source_commit": "8bd33dd1",
+          "status": "completed"
+        },
+        {
+          "config": ".local/source-moe-execution-v1/configs/studies/language/moe-controls/table/configs/small-dense-lr0.0003-s33.json",
+          "id": "tl-moe-screen8-small-dense-lr0.0003-s33",
+          "lens_record": "runs/moe-screen8-small-dense-lr0.0003-s33/train/projection.json",
+          "note": "\u76f8\u540c\u786e\u8ba4split\u548c\u56fa\u5b9a\u8eab\u4efd\u5df2\u5ba1\u9605\uff1b\u6570\u503c/\u6062\u590d/\u5b66\u4e60/\u7269\u7406\u5de5\u4f5c\u5206\u522b\u89e3\u91ca\u3002",
+          "record": "runs/moe-screen8-small-dense-lr0.0003-s33/train/result.json",
+          "source_commit": "2f96d745",
+          "status": "completed"
+        },
+        {
+          "config": ".local/source-moe-execution-v1/configs/studies/language/moe-controls/table/configs/large-dense-lr0.0001-s33.json",
+          "id": "tl-moe-screen8-large-dense-lr0.0001-s33",
+          "lens_record": "runs/moe-screen8-large-dense-lr0.0001-s33/train/projection.json",
+          "note": "\u76f8\u540c\u786e\u8ba4split\u548c\u56fa\u5b9a\u8eab\u4efd\u5df2\u5ba1\u9605\uff1b\u6570\u503c/\u6062\u590d/\u5b66\u4e60/\u7269\u7406\u5de5\u4f5c\u5206\u522b\u89e3\u91ca\u3002",
+          "record": "runs/moe-screen8-large-dense-lr0.0001-s33/train/result.json",
+          "source_commit": "2f96d745",
+          "status": "completed"
+        },
+        {
+          "config": ".local/source-moe-execution-v1/configs/studies/language/moe-controls/table/configs/small-dense-lr0.001-s33.json",
+          "id": "tl-moe-screen8-small-dense-lr0.001-s33",
+          "lens_record": "runs/moe-screen8-small-dense-lr0.001-s33/train/projection.json",
+          "note": "\u76f8\u540c\u786e\u8ba4split\u548c\u56fa\u5b9a\u8eab\u4efd\u5df2\u5ba1\u9605\uff1b\u6570\u503c/\u6062\u590d/\u5b66\u4e60/\u7269\u7406\u5de5\u4f5c\u5206\u522b\u89e3\u91ca\u3002",
+          "record": "runs/moe-screen8-small-dense-lr0.001-s33/train/result.json",
+          "source_commit": "2f96d745",
+          "status": "completed"
+        },
+        {
+          "config": ".local/source-moe-execution-v1/configs/studies/language/moe-controls/table/configs/large-dense-lr0.0003-s33.json",
+          "id": "tl-moe-screen8-large-dense-lr0.0003-s33",
+          "lens_record": "runs/moe-screen8-large-dense-lr0.0003-s33/train/projection.json",
+          "note": "\u76f8\u540c\u786e\u8ba4split\u548c\u56fa\u5b9a\u8eab\u4efd\u5df2\u5ba1\u9605\uff1b\u6570\u503c/\u6062\u590d/\u5b66\u4e60/\u7269\u7406\u5de5\u4f5c\u5206\u522b\u89e3\u91ca\u3002",
+          "record": "runs/moe-screen8-large-dense-lr0.0003-s33/train/result.json",
+          "source_commit": "2f96d745",
+          "status": "completed"
+        },
+        {
+          "config": ".local/source-moe-execution-v2/configs/studies/language/moe-controls/table/configs/small-e20-lr0.0003-b0.001-s33.json",
+          "id": "tl-moe-r2-screen8-small-e20-lr0.0003-b0.001-s33",
+          "lens_record": "runs/moe-r2-screen8-small-e20-lr0.0003-b0.001-s33/train/projection.json",
+          "note": "\u76f8\u540c\u786e\u8ba4split\u548c\u56fa\u5b9a\u8eab\u4efd\u5df2\u5ba1\u9605\uff1b\u6570\u503c/\u6062\u590d/\u5b66\u4e60/\u7269\u7406\u5de5\u4f5c\u5206\u522b\u89e3\u91ca\u3002",
+          "record": "runs/moe-r2-screen8-small-e20-lr0.0003-b0.001-s33/train/result.json",
+          "source_commit": "8bd33dd1",
+          "status": "completed"
+        },
+        {
+          "config": ".local/source-moe-execution-v2/configs/studies/language/moe-controls/table/configs/small-e64-lr0.0003-b0.001-s33.json",
+          "id": "tl-moe-r2-screen8-small-e64-lr0.0003-b0.001-s33",
+          "lens_record": "runs/moe-r2-screen8-small-e64-lr0.0003-b0.001-s33/train/projection.json",
+          "note": "\u76f8\u540c\u786e\u8ba4split\u548c\u56fa\u5b9a\u8eab\u4efd\u5df2\u5ba1\u9605\uff1b\u6570\u503c/\u6062\u590d/\u5b66\u4e60/\u7269\u7406\u5de5\u4f5c\u5206\u522b\u89e3\u91ca\u3002",
+          "record": "runs/moe-r2-screen8-small-e64-lr0.0003-b0.001-s33/train/result.json",
+          "source_commit": "8bd33dd1",
+          "status": "completed"
+        },
+        {
+          "config": ".local/source-moe-execution-v2/configs/studies/language/moe-controls/table/configs/large-e20-lr0.0001-b0.001-s33.json",
+          "id": "tl-moe-r2-screen8-large-e20-lr0.0001-b0.001-s33",
+          "lens_record": "runs/moe-r2-screen8-large-e20-lr0.0001-b0.001-s33/train/projection.json",
+          "note": "\u76f8\u540c\u786e\u8ba4split\u548c\u56fa\u5b9a\u8eab\u4efd\u5df2\u5ba1\u9605\uff1b\u6570\u503c/\u6062\u590d/\u5b66\u4e60/\u7269\u7406\u5de5\u4f5c\u5206\u522b\u89e3\u91ca\u3002",
+          "record": "runs/moe-r2-screen8-large-e20-lr0.0001-b0.001-s33/train/result.json",
+          "source_commit": "8bd33dd1",
+          "status": "completed"
+        },
+        {
+          "config": ".local/source-moe-execution-v2/configs/studies/language/moe-controls/table/configs/large-e64-lr0.0001-b0.001-s33.json",
+          "id": "tl-moe-r2-screen8-large-e64-lr0.0001-b0.001-s33",
+          "lens_record": "runs/moe-r2-screen8-large-e64-lr0.0001-b0.001-s33/train/projection.json",
+          "note": "\u76f8\u540c\u786e\u8ba4split\u548c\u56fa\u5b9a\u8eab\u4efd\u5df2\u5ba1\u9605\uff1b\u6570\u503c/\u6062\u590d/\u5b66\u4e60/\u7269\u7406\u5de5\u4f5c\u5206\u522b\u89e3\u91ca\u3002",
+          "record": "runs/moe-r2-screen8-large-e64-lr0.0001-b0.001-s33/train/result.json",
+          "source_commit": "8bd33dd1",
+          "status": "completed"
+        },
+        {
+          "config": ".local/source-moe-execution-v2/configs/studies/language/moe-controls/table/configs/small-e20-lr0.0003-b0.01-s33.json",
+          "id": "tl-moe-r2-screen8-small-e20-lr0.0003-b0.01-s33",
+          "lens_record": "runs/moe-r2-screen8-small-e20-lr0.0003-b0.01-s33/train/projection.json",
+          "note": "\u76f8\u540c\u786e\u8ba4split\u548c\u56fa\u5b9a\u8eab\u4efd\u5df2\u5ba1\u9605\uff1b\u6570\u503c/\u6062\u590d/\u5b66\u4e60/\u7269\u7406\u5de5\u4f5c\u5206\u522b\u89e3\u91ca\u3002",
+          "record": "runs/moe-r2-screen8-small-e20-lr0.0003-b0.01-s33/train/result.json",
+          "source_commit": "8bd33dd1",
+          "status": "completed"
+        },
+        {
+          "config": ".local/source-moe-execution-v2/configs/studies/language/moe-controls/table/configs/small-e64-lr0.0003-b0.01-s33.json",
+          "id": "tl-moe-r2-screen8-small-e64-lr0.0003-b0.01-s33",
+          "lens_record": "runs/moe-r2-screen8-small-e64-lr0.0003-b0.01-s33/train/projection.json",
+          "note": "\u76f8\u540c\u786e\u8ba4split\u548c\u56fa\u5b9a\u8eab\u4efd\u5df2\u5ba1\u9605\uff1b\u6570\u503c/\u6062\u590d/\u5b66\u4e60/\u7269\u7406\u5de5\u4f5c\u5206\u522b\u89e3\u91ca\u3002",
+          "record": "runs/moe-r2-screen8-small-e64-lr0.0003-b0.01-s33/train/result.json",
+          "source_commit": "8bd33dd1",
+          "status": "completed"
+        },
+        {
+          "config": ".local/source-moe-execution-v2/configs/studies/language/moe-controls/table/configs/large-e20-lr0.0001-b0.01-s33.json",
+          "id": "tl-moe-r2-screen8-large-e20-lr0.0001-b0.01-s33",
+          "lens_record": "runs/moe-r2-screen8-large-e20-lr0.0001-b0.01-s33/train/projection.json",
+          "note": "\u76f8\u540c\u786e\u8ba4split\u548c\u56fa\u5b9a\u8eab\u4efd\u5df2\u5ba1\u9605\uff1b\u6570\u503c/\u6062\u590d/\u5b66\u4e60/\u7269\u7406\u5de5\u4f5c\u5206\u522b\u89e3\u91ca\u3002",
+          "record": "runs/moe-r2-screen8-large-e20-lr0.0001-b0.01-s33/train/result.json",
+          "source_commit": "8bd33dd1",
+          "status": "completed"
+        },
+        {
+          "config": ".local/source-moe-execution-v2/configs/studies/language/moe-controls/table/configs/large-e64-lr0.0001-b0.01-s33.json",
+          "id": "tl-moe-r2-screen8-large-e64-lr0.0001-b0.01-s33",
+          "lens_record": "runs/moe-r2-screen8-large-e64-lr0.0001-b0.01-s33/train/projection.json",
+          "note": "\u76f8\u540c\u786e\u8ba4split\u548c\u56fa\u5b9a\u8eab\u4efd\u5df2\u5ba1\u9605\uff1b\u6570\u503c/\u6062\u590d/\u5b66\u4e60/\u7269\u7406\u5de5\u4f5c\u5206\u522b\u89e3\u91ca\u3002",
+          "record": "runs/moe-r2-screen8-large-e64-lr0.0001-b0.01-s33/train/result.json",
+          "source_commit": "8bd33dd1",
+          "status": "completed"
+        },
+        {
+          "config": ".local/source-moe-execution-v2/configs/studies/language/moe-controls/table/configs/small-e20-lr0.001-b0.001-s33.json",
+          "id": "tl-moe-r2-screen8-small-e20-lr0.001-b0.001-s33",
+          "lens_record": "runs/moe-r2-screen8-small-e20-lr0.001-b0.001-s33/train/projection.json",
+          "note": "\u76f8\u540c\u786e\u8ba4split\u548c\u56fa\u5b9a\u8eab\u4efd\u5df2\u5ba1\u9605\uff1b\u6570\u503c/\u6062\u590d/\u5b66\u4e60/\u7269\u7406\u5de5\u4f5c\u5206\u522b\u89e3\u91ca\u3002",
+          "record": "runs/moe-r2-screen8-small-e20-lr0.001-b0.001-s33/train/result.json",
+          "source_commit": "8bd33dd1",
+          "status": "completed"
+        },
+        {
+          "config": ".local/source-moe-execution-v2/configs/studies/language/moe-controls/table/configs/small-e64-lr0.001-b0.001-s33.json",
+          "id": "tl-moe-r2-screen8-small-e64-lr0.001-b0.001-s33",
+          "lens_record": "runs/moe-r2-screen8-small-e64-lr0.001-b0.001-s33/train/projection.json",
+          "note": "\u76f8\u540c\u786e\u8ba4split\u548c\u56fa\u5b9a\u8eab\u4efd\u5df2\u5ba1\u9605\uff1b\u6570\u503c/\u6062\u590d/\u5b66\u4e60/\u7269\u7406\u5de5\u4f5c\u5206\u522b\u89e3\u91ca\u3002",
+          "record": "runs/moe-r2-screen8-small-e64-lr0.001-b0.001-s33/train/result.json",
+          "source_commit": "8bd33dd1",
+          "status": "completed"
+        },
+        {
+          "config": ".local/source-moe-execution-v2/configs/studies/language/moe-controls/table/configs/large-e20-lr0.0003-b0.001-s33.json",
+          "id": "tl-moe-r2-screen8-large-e20-lr0.0003-b0.001-s33",
+          "lens_record": "runs/moe-r2-screen8-large-e20-lr0.0003-b0.001-s33/train/projection.json",
+          "note": "\u76f8\u540c\u786e\u8ba4split\u548c\u56fa\u5b9a\u8eab\u4efd\u5df2\u5ba1\u9605\uff1b\u6570\u503c/\u6062\u590d/\u5b66\u4e60/\u7269\u7406\u5de5\u4f5c\u5206\u522b\u89e3\u91ca\u3002",
+          "record": "runs/moe-r2-screen8-large-e20-lr0.0003-b0.001-s33/train/result.json",
+          "source_commit": "8bd33dd1",
+          "status": "completed"
+        },
+        {
+          "config": ".local/source-moe-execution-v2/configs/studies/language/moe-controls/table/configs/large-e64-lr0.0003-b0.001-s33.json",
+          "id": "tl-moe-r2-screen8-large-e64-lr0.0003-b0.001-s33",
+          "lens_record": "runs/moe-r2-screen8-large-e64-lr0.0003-b0.001-s33/train/projection.json",
+          "note": "\u76f8\u540c\u786e\u8ba4split\u548c\u56fa\u5b9a\u8eab\u4efd\u5df2\u5ba1\u9605\uff1b\u6570\u503c/\u6062\u590d/\u5b66\u4e60/\u7269\u7406\u5de5\u4f5c\u5206\u522b\u89e3\u91ca\u3002",
+          "record": "runs/moe-r2-screen8-large-e64-lr0.0003-b0.001-s33/train/result.json",
+          "source_commit": "8bd33dd1",
+          "status": "completed"
+        },
+        {
+          "config": ".local/source-moe-execution-v2/configs/studies/language/moe-controls/table/configs/small-dense-lr0.003-s33.json",
+          "id": "tl-moe-r2-screen8-small-dense-lr0.003-s33",
+          "lens_record": "runs/moe-r2-screen8-small-dense-lr0.003-s33/train/projection.json",
+          "note": "\u76f8\u540c\u786e\u8ba4split\u548c\u56fa\u5b9a\u8eab\u4efd\u5df2\u5ba1\u9605\uff1b\u6570\u503c/\u6062\u590d/\u5b66\u4e60/\u7269\u7406\u5de5\u4f5c\u5206\u522b\u89e3\u91ca\u3002",
+          "record": "runs/moe-r2-screen8-small-dense-lr0.003-s33/train/result.json",
+          "source_commit": "8bd33dd1",
+          "status": "completed"
+        },
+        {
+          "config": ".local/source-moe-execution-v2/configs/studies/language/moe-controls/table/configs/large-dense-lr0.001-s33.json",
+          "id": "tl-moe-r2-screen8-large-dense-lr0.001-s33",
+          "lens_record": "runs/moe-r2-screen8-large-dense-lr0.001-s33/train/projection.json",
+          "note": "\u76f8\u540c\u786e\u8ba4split\u548c\u56fa\u5b9a\u8eab\u4efd\u5df2\u5ba1\u9605\uff1b\u6570\u503c/\u6062\u590d/\u5b66\u4e60/\u7269\u7406\u5de5\u4f5c\u5206\u522b\u89e3\u91ca\u3002",
+          "record": "runs/moe-r2-screen8-large-dense-lr0.001-s33/train/result.json",
+          "source_commit": "8bd33dd1",
+          "status": "completed"
+        },
+        {
+          "config": ".local/source-moe-execution-v2/configs/studies/language/moe-controls/table/configs/small-e20-lr0.001-b0.01-s33.json",
+          "id": "tl-moe-r2-screen8-small-e20-lr0.001-b0.01-s33",
+          "lens_record": "runs/moe-r2-screen8-small-e20-lr0.001-b0.01-s33/train/projection.json",
+          "note": "\u76f8\u540c\u786e\u8ba4split\u548c\u56fa\u5b9a\u8eab\u4efd\u5df2\u5ba1\u9605\uff1b\u6570\u503c/\u6062\u590d/\u5b66\u4e60/\u7269\u7406\u5de5\u4f5c\u5206\u522b\u89e3\u91ca\u3002",
+          "record": "runs/moe-r2-screen8-small-e20-lr0.001-b0.01-s33/train/result.json",
+          "source_commit": "8bd33dd1",
+          "status": "completed"
+        },
+        {
+          "config": ".local/source-moe-execution-v2/configs/studies/language/moe-controls/table/configs/small-e64-lr0.001-b0.01-s33.json",
+          "id": "tl-moe-r2-screen8-small-e64-lr0.001-b0.01-s33",
+          "lens_record": "runs/moe-r2-screen8-small-e64-lr0.001-b0.01-s33/train/projection.json",
+          "note": "\u76f8\u540c\u786e\u8ba4split\u548c\u56fa\u5b9a\u8eab\u4efd\u5df2\u5ba1\u9605\uff1b\u6570\u503c/\u6062\u590d/\u5b66\u4e60/\u7269\u7406\u5de5\u4f5c\u5206\u522b\u89e3\u91ca\u3002",
+          "record": "runs/moe-r2-screen8-small-e64-lr0.001-b0.01-s33/train/result.json",
+          "source_commit": "8bd33dd1",
+          "status": "completed"
+        },
+        {
+          "config": ".local/source-moe-execution-v2/configs/studies/language/moe-controls/table/configs/large-e20-lr0.0003-b0.01-s33.json",
+          "id": "tl-moe-r2-screen8-large-e20-lr0.0003-b0.01-s33",
+          "lens_record": "runs/moe-r2-screen8-large-e20-lr0.0003-b0.01-s33/train/projection.json",
+          "note": "\u76f8\u540c\u786e\u8ba4split\u548c\u56fa\u5b9a\u8eab\u4efd\u5df2\u5ba1\u9605\uff1b\u6570\u503c/\u6062\u590d/\u5b66\u4e60/\u7269\u7406\u5de5\u4f5c\u5206\u522b\u89e3\u91ca\u3002",
+          "record": "runs/moe-r2-screen8-large-e20-lr0.0003-b0.01-s33/train/result.json",
+          "source_commit": "8bd33dd1",
+          "status": "completed"
+        },
+        {
+          "config": ".local/source-moe-execution-v2/configs/studies/language/moe-controls/table/configs/large-e64-lr0.0003-b0.01-s33.json",
+          "id": "tl-moe-r2-screen8-large-e64-lr0.0003-b0.01-s33",
+          "lens_record": "runs/moe-r2-screen8-large-e64-lr0.0003-b0.01-s33/train/projection.json",
+          "note": "\u76f8\u540c\u786e\u8ba4split\u548c\u56fa\u5b9a\u8eab\u4efd\u5df2\u5ba1\u9605\uff1b\u6570\u503c/\u6062\u590d/\u5b66\u4e60/\u7269\u7406\u5de5\u4f5c\u5206\u522b\u89e3\u91ca\u3002",
+          "record": "runs/moe-r2-screen8-large-e64-lr0.0003-b0.01-s33/train/result.json",
+          "source_commit": "8bd33dd1",
+          "status": "completed"
+        },
+        {
+          "config": ".local/source-moe-execution-v2/configs/studies/language/moe-controls/table/configs/small-e20-lr0.003-b0.001-s33.json",
+          "id": "tl-moe-r2-screen8-small-e20-lr0.003-b0.001-s33",
+          "lens_record": "runs/moe-r2-screen8-small-e20-lr0.003-b0.001-s33/train/projection.json",
+          "note": "\u76f8\u540c\u786e\u8ba4split\u548c\u56fa\u5b9a\u8eab\u4efd\u5df2\u5ba1\u9605\uff1b\u6570\u503c/\u6062\u590d/\u5b66\u4e60/\u7269\u7406\u5de5\u4f5c\u5206\u522b\u89e3\u91ca\u3002",
+          "record": "runs/moe-r2-screen8-small-e20-lr0.003-b0.001-s33/train/result.json",
+          "source_commit": "8bd33dd1",
+          "status": "completed"
+        },
+        {
+          "config": ".local/source-moe-execution-v2/configs/studies/language/moe-controls/table/configs/small-e64-lr0.003-b0.001-s33.json",
+          "id": "tl-moe-r2-screen8-small-e64-lr0.003-b0.001-s33",
+          "lens_record": "runs/moe-r2-screen8-small-e64-lr0.003-b0.001-s33/train/projection.json",
+          "note": "\u76f8\u540c\u786e\u8ba4split\u548c\u56fa\u5b9a\u8eab\u4efd\u5df2\u5ba1\u9605\uff1b\u6570\u503c/\u6062\u590d/\u5b66\u4e60/\u7269\u7406\u5de5\u4f5c\u5206\u522b\u89e3\u91ca\u3002",
+          "record": "runs/moe-r2-screen8-small-e64-lr0.003-b0.001-s33/train/result.json",
+          "source_commit": "8bd33dd1",
+          "status": "completed"
+        },
+        {
+          "config": ".local/source-moe-execution-v2/configs/studies/language/moe-controls/table/configs/large-e20-lr0.001-b0.001-s33.json",
+          "id": "tl-moe-r2-screen8-large-e20-lr0.001-b0.001-s33",
+          "lens_record": "runs/moe-r2-screen8-large-e20-lr0.001-b0.001-s33/train/projection.json",
+          "note": "\u76f8\u540c\u786e\u8ba4split\u548c\u56fa\u5b9a\u8eab\u4efd\u5df2\u5ba1\u9605\uff1b\u6570\u503c/\u6062\u590d/\u5b66\u4e60/\u7269\u7406\u5de5\u4f5c\u5206\u522b\u89e3\u91ca\u3002",
+          "record": "runs/moe-r2-screen8-large-e20-lr0.001-b0.001-s33/train/result.json",
+          "source_commit": "8bd33dd1",
+          "status": "completed"
+        },
+        {
+          "config": ".local/source-moe-execution-v2/configs/studies/language/moe-controls/table/configs/large-e64-lr0.001-b0.001-s33.json",
+          "id": "tl-moe-r2-screen8-large-e64-lr0.001-b0.001-s33",
+          "lens_record": "runs/moe-r2-screen8-large-e64-lr0.001-b0.001-s33/train/projection.json",
+          "note": "\u76f8\u540c\u786e\u8ba4split\u548c\u56fa\u5b9a\u8eab\u4efd\u5df2\u5ba1\u9605\uff1b\u6570\u503c/\u6062\u590d/\u5b66\u4e60/\u7269\u7406\u5de5\u4f5c\u5206\u522b\u89e3\u91ca\u3002",
+          "record": "runs/moe-r2-screen8-large-e64-lr0.001-b0.001-s33/train/result.json",
+          "source_commit": "8bd33dd1",
+          "status": "completed"
+        },
+        {
+          "config": ".local/source-moe-execution-v2/configs/studies/language/moe-controls/table/configs/small-e20-lr0.003-b0.01-s33.json",
+          "id": "tl-moe-r2-screen8-small-e20-lr0.003-b0.01-s33",
+          "lens_record": "runs/moe-r2-screen8-small-e20-lr0.003-b0.01-s33/train/projection.json",
+          "note": "\u76f8\u540c\u786e\u8ba4split\u548c\u56fa\u5b9a\u8eab\u4efd\u5df2\u5ba1\u9605\uff1b\u6570\u503c/\u6062\u590d/\u5b66\u4e60/\u7269\u7406\u5de5\u4f5c\u5206\u522b\u89e3\u91ca\u3002",
+          "record": "runs/moe-r2-screen8-small-e20-lr0.003-b0.01-s33/train/result.json",
+          "source_commit": "8bd33dd1",
+          "status": "completed"
+        },
+        {
+          "config": ".local/source-moe-execution-v2/configs/studies/language/moe-controls/table/configs/small-e64-lr0.003-b0.01-s33.json",
+          "id": "tl-moe-r2-screen8-small-e64-lr0.003-b0.01-s33",
+          "lens_record": "runs/moe-r2-screen8-small-e64-lr0.003-b0.01-s33/train/projection.json",
+          "note": "\u76f8\u540c\u786e\u8ba4split\u548c\u56fa\u5b9a\u8eab\u4efd\u5df2\u5ba1\u9605\uff1b\u6570\u503c/\u6062\u590d/\u5b66\u4e60/\u7269\u7406\u5de5\u4f5c\u5206\u522b\u89e3\u91ca\u3002",
+          "record": "runs/moe-r2-screen8-small-e64-lr0.003-b0.01-s33/train/result.json",
+          "source_commit": "8bd33dd1",
+          "status": "completed"
+        },
+        {
+          "config": ".local/source-moe-execution-v2/configs/studies/language/moe-controls/table/configs/large-e20-lr0.001-b0.01-s33.json",
+          "id": "tl-moe-r2-screen8-large-e20-lr0.001-b0.01-s33",
+          "lens_record": "runs/moe-r2-screen8-large-e20-lr0.001-b0.01-s33/train/projection.json",
+          "note": "\u76f8\u540c\u786e\u8ba4split\u548c\u56fa\u5b9a\u8eab\u4efd\u5df2\u5ba1\u9605\uff1b\u6570\u503c/\u6062\u590d/\u5b66\u4e60/\u7269\u7406\u5de5\u4f5c\u5206\u522b\u89e3\u91ca\u3002",
+          "record": "runs/moe-r2-screen8-large-e20-lr0.001-b0.01-s33/train/result.json",
+          "source_commit": "8bd33dd1",
+          "status": "completed"
+        },
+        {
+          "config": ".local/source-moe-execution-v2/configs/studies/language/moe-controls/table/configs/large-e64-lr0.001-b0.01-s33.json",
+          "id": "tl-moe-r2-screen8-large-e64-lr0.001-b0.01-s33",
+          "lens_record": "runs/moe-r2-screen8-large-e64-lr0.001-b0.01-s33/train/projection.json",
+          "note": "\u76f8\u540c\u786e\u8ba4split\u548c\u56fa\u5b9a\u8eab\u4efd\u5df2\u5ba1\u9605\uff1b\u6570\u503c/\u6062\u590d/\u5b66\u4e60/\u7269\u7406\u5de5\u4f5c\u5206\u522b\u89e3\u91ca\u3002",
+          "record": "runs/moe-r2-screen8-large-e64-lr0.001-b0.01-s33/train/result.json",
+          "source_commit": "8bd33dd1",
+          "status": "completed"
         }
       ],
-      "status": "running",
+      "status": "completed",
       "study_id": "TL-MOE-CAL",
-      "summary": "30\u914d\u65b9\uff1a4dense8Mi\u5b8c\u6210\uff0c8MoE\u5b9e\u9645\u8bad\u7ec3\uff0c18\u5f85\u63a7\u5236\u5668\u5b89\u6392\uff1b\u5f62\u72b6\u5185\u8c03\u53c2\uff0c\u4e0d\u6269\u5019\u9009\u3002",
+      "summary": "30\u4e2a8Mi\u7b5b\u9009\u53ca12\u4e2a32Mi\u664b\u7ea7\u5b8c\u6210\uff1b\u5f62\u72b6\u5185\u9009\u62e9\uff0c\u65e7\u5931\u8d25\u4fdd\u7559\u3002",
       "title": "MoE\u4e0edense\u7684\u6709\u9650\u914d\u65b9\u6821\u51c6",
       "track": "shared",
       "view_group": "current",
@@ -15108,40 +15394,39 @@
     },
     {
       "budget": "\u6765\u81ea\u5bf9\u5e94\u7814\u7a76\u7ec4\uff0c\u4e0d\u65b0\u589e\u4efb\u52a1\u3002",
-      "counterevidence": "12\u6b21\u539f\u96f6\u9608\u503c\u56e0\u679c\u51c6\u5165\u5931\u8d25\uff1b\u5fae\u5c0fpacking\u76f8\u5173\u524d\u7f00\u5dee\u5f02\u4ecd\u5b58\u5728\uff0c\u4e0d\u5347\u7ea7\u4e3a\u9010\u4f4d\u56e0\u679c\u901a\u8fc7\u3002",
-      "decision": "\u7b49\u5f85\u5b9e\u9645\u7ec8\u70b9\u4e0e\u4eba\u5de5\u5ba1\u9605\u540e\u624d\u5efa\u7acb\u79d1\u5b66\u652f\u6301\u3002",
+      "comparisons": "30\u914d\u65b98Mi\u2192\u5404\u5f62\u72b62\u4e2a32Mi\uff1b\u6240\u6709\u6700\u4f73LR\u4f4d\u4e8e\u7f51\u683c\u4e0a\u754c\u3002",
+      "counterevidence": "small dense32Mi\u6700\u4f73LR.003\u5728128Mi\u5f31\u4e8e\u65e7LR.001\uff1b12\u6b21\u539f\u51c6\u5165\u5931\u8d25\u4fdd\u6301\u3002",
+      "decision": "\u62a5\u544a\u65e7\u5f3a\u57fa\u7ebf\uff0c\u4e0d\u628a\u5df2\u8c03\u53c2\u5f53\u5168\u5c40\u6700\u4f18\uff1b\u540e\u7ee7\u7f51\u683c\u9700\u53e6\u5b9a\u3002",
       "id": "RMOE-CAL",
       "kind": "result",
       "question": "\u5171\u540c\u81ea\u7136\u6587\u672c\u66dd\u5149\u3001\u8fd1\u6bcftoken\u6d3b\u8dc3\u53c2\u6570\u4e0b\uff0c\u6807\u51c6MoE\u4e0eHB\u3001\u5339\u914ddense\u6709\u4f55\u5dee\u5f02\uff1f",
       "references": [
         {
-          "label": "\u5df2\u6388\u6743MoE\u7814\u7a76\u8868",
-          "path": "docs/studies/moe-controls-proposal.md"
+          "label": "MoE\u7ec8\u6001\uff1a\u914d\u65b9\u3001\u8d28\u91cf\u4e0e\u72ec\u7acb\u786e\u8ba4",
+          "path": "docs/studies/moe-controls-results.md"
         },
         {
-          "label": "\u5b9e\u73b0\u3001\u9884\u7b97\u548c\u9a8c\u6536\u53e3\u5f84",
-          "path": "docs/studies/moe-controls-execution.md"
+          "label": "\u9010\u8f68\u8ff9\u4e0e\u6587\u6863\u914d\u5bf9\u5ba1\u9605\u8bc1\u636e",
+          "path": "docs/evidence/moe-controls-results.json"
         },
         {
-          "label": "\u5b9e\u9645\u6279\u91cf/\u6570\u503c/Lens\u63a5\u5165",
-          "path": "docs/evidence/moe-controls-admission.json"
-        },
-        {
-          "label": "\u56fa\u5b9a\u5019\u9009\u53ca\u6709\u6761\u4ef6seed\u8868",
-          "path": "configs/studies/language/moe-controls/table/catalog.json"
-        },
-        {
-          "label": "\u53ea\u8bfb\u72b6\u6001\u5ba1\u9605\u5668",
-          "path": "scripts/review_moe_controls.py"
+          "label": "\u53ef\u91cd\u590d\u7684\u53ea\u8bfb\u7ec8\u6001\u5ba1\u9605\u5668",
+          "path": "scripts/review_moe_results.py"
         }
       ],
-      "scope": "\u666e\u901aTransformer-MoE\uff0c\u4e0d\u662fTIDE\u6267\u884c/\u8def\u7531\u6216\u57fa\u5ea7\u6865\u63a5\u3002",
-      "status": "awaiting",
-      "summary": "\u56dbdense8Mi\u5b8c\u6210\uff1bMoE\u5df2\u8fdb\u5165\u6709\u754c\u6570\u503c\u63a2\u7d22\uff0c\u5b8c\u6574\u914d\u65b9\u9009\u62e9\u5c1a\u672a\u7ed3\u675f\u3002",
-      "title": "MoE\u4e0edense\u7684\u6709\u9650\u914d\u65b9\u6821\u51c6\uff1a\u5f85\u5ba1\u9605",
+      "scope": "\u72ec\u7acbdirect FP32\u3001\u540c\u81ea\u7136\u6587\u672c/\u8bcd\u88684096/L256/global64\u3001128Mi\u53ca\u53ccseed\uff1b\u4e0d\u662fTIDE\u6267\u884c\u6216\u6574\u7f51\u4e25\u683c\u6570\u503c\u8ba4\u8bc1\u3002",
+      "sources": [
+        {
+          "label": "MoE\u7ec8\u6001\u5ba1\u9605",
+          "url": "https://github.com/ZichaoLong/tide/blob/tide-learning-lab/docs/studies/moe-controls-results.md"
+        }
+      ],
+      "status": "scoped",
+      "summary": "\u4e24\u68636\u5f62\u72b6\u5b8c\u6210\u6709\u9650\u8c03\u53c2\uff1b\u4fdd\u7559\u65e7small\u66f4\u5f3a\u957f\u66dd\u5149\u57fa\u7ebf\u3002",
+      "title": "\u914d\u65b9\u6821\u51c6\u5b8c\u6210\uff1a\u77ed\u5148\u5bfc\u6392\u5e8f\u6709\u9650",
       "track": "shared",
-      "transfer_conditions": "\u4ec5\u540c\u8bcd\u8868\u3001\u6570\u636e\u3001\u66dd\u5149\u548c\u660e\u786e\u6d3b\u8dc3\u5bb9\u91cf\u53e3\u5f84\uff1b\u5171\u4eab\u5168\u5c40attention\u4e0eHB\u5c40\u90e8\u7ed3\u6784\u7684\u5dee\u5f02\u5fc5\u987b\u4fdd\u7559\u3002",
-      "unresolved": "\u8c03\u53c2\u3001\u79cd\u5b50\u3001\u66dd\u5149\u548c\u62d3\u6251\u5dee\u5f02\uff1b\u4e0d\u80fd\u7531\u8bad\u7ec3\u5b8c\u6210\u81ea\u52a8\u63a8\u65ad\u67b6\u6784\u6536\u76ca\u3002",
+      "transfer_conditions": "\u4ec5\u540c\u66dd\u5149\u53ca\u660e\u786e\u53c2\u6570\u53e3\u5f84\u4e0b\u8fc1\u79fb\uff1bMoE\u5171\u4eab\u5168\u5c40attention\uff0c\u4e0d\u80fd\u66ff\u4ee3HB\u5c40\u90e8\u5316\u9a8c\u8bc1\u3002\u6570\u503c\u8d85\u5dee\u4ecd\u72ec\u7acb\u4fdd\u7559\u3002",
+      "unresolved": "\u77ed\u5148\u5bfc\u9009\u62e9/\u7f51\u683c\u8fb9\u754c\u548c\u66f4\u957f\u66dd\u5149\u6700\u4f18\u914d\u65b9\u672a\u5145\u5206\u533a\u5206\u3002",
       "view_group": "current",
       "x": 915,
       "y": 640
@@ -15149,6 +15434,7 @@
     {
       "budget": "\u72ec\u7acb48h\u81f311\u670817\u65e509:05:08\uff1b\u65b0\u589e\u6700\u591a8worker\uff0c\u5171\u4eab12slot\uff1b64GiB\u76ee\u6807/96GiB\u505c\u6b62\uff0c\u786c\u4f59\u91cf200GiB\u3002",
       "decision": "\u6309\u5f62\u72b6\u4fdd\u7559\u8c03\u53c2\u540d\u989d\uff1b\u6267\u884c\u3001\u4e25\u683c\u6570\u503c\u3001\u79bb\u6563\u8bed\u4e49\u3001\u6062\u590d\u3001\u5b66\u4e60\u4e0e\u541e\u5410\u5206\u5217\u3002",
+      "execution_note": "2026-11-15 14:26\u5168\u90e8\u9636\u6bb5\u7ec8\u6001\uff0c\u65e0\u5b58\u6d3b\u540e\u4ee3\uff1b\u539f12\u6b21\u51c6\u5165\u5931\u8d25\u53e6\u5217\u3002",
       "id": "MOE-MAIN",
       "kind": "experiment",
       "lens_group": "TL-MOE-CONTROL",
@@ -15177,12 +15463,133 @@
         {
           "label": "\u72b6\u6001\u3001\u505c\u6b62\u3001\u6062\u590d\u4e0eLens",
           "path": "docs/studies/moe-controls-operations.md"
+        },
+        {
+          "label": "MoE\u7ec8\u6001\uff1a\u914d\u65b9\u3001\u8d28\u91cf\u4e0e\u72ec\u7acb\u786e\u8ba4",
+          "path": "docs/studies/moe-controls-results.md"
+        },
+        {
+          "label": "\u9010\u8f68\u8ff9\u4e0e\u6587\u6863\u914d\u5bf9\u5ba1\u9605\u8bc1\u636e",
+          "path": "docs/evidence/moe-controls-results.json"
+        },
+        {
+          "label": "\u53ef\u91cd\u590d\u7684\u53ea\u8bfb\u7ec8\u6001\u5ba1\u9605\u5668",
+          "path": "scripts/review_moe_results.py"
         }
       ],
-      "runs": [],
-      "status": "planned",
+      "runs": [
+        {
+          "config": ".local/source-moe-execution-v2/configs/studies/language/moe-controls/table/configs/large-dense-lr0.001-s11.json",
+          "id": "tl-moe-r2-main128-large-dense-lr0.001-s11",
+          "lens_record": "runs/moe-r2-main128-large-dense-lr0.001-s11/train/projection.json",
+          "note": "\u76f8\u540c\u786e\u8ba4split\u548c\u56fa\u5b9a\u8eab\u4efd\u5df2\u5ba1\u9605\uff1b\u6570\u503c/\u6062\u590d/\u5b66\u4e60/\u7269\u7406\u5de5\u4f5c\u5206\u522b\u89e3\u91ca\u3002",
+          "record": "runs/moe-r2-main128-large-dense-lr0.001-s11/train/result.json",
+          "source_commit": "8bd33dd1",
+          "status": "completed"
+        },
+        {
+          "config": ".local/source-moe-execution-v2/configs/studies/language/moe-controls/table/configs/large-dense-lr0.001-s22.json",
+          "id": "tl-moe-r2-main128-large-dense-lr0.001-s22",
+          "lens_record": "runs/moe-r2-main128-large-dense-lr0.001-s22/train/projection.json",
+          "note": "\u76f8\u540c\u786e\u8ba4split\u548c\u56fa\u5b9a\u8eab\u4efd\u5df2\u5ba1\u9605\uff1b\u6570\u503c/\u6062\u590d/\u5b66\u4e60/\u7269\u7406\u5de5\u4f5c\u5206\u522b\u89e3\u91ca\u3002",
+          "record": "runs/moe-r2-main128-large-dense-lr0.001-s22/train/result.json",
+          "source_commit": "8bd33dd1",
+          "status": "completed"
+        },
+        {
+          "config": ".local/source-moe-execution-v2/configs/studies/language/moe-controls/table/configs/large-e20-lr0.001-b0.01-s11.json",
+          "id": "tl-moe-r2-main128-large-e20-lr0.001-b0.01-s11",
+          "lens_record": "runs/moe-r2-main128-large-e20-lr0.001-b0.01-s11/train/projection.json",
+          "note": "\u76f8\u540c\u786e\u8ba4split\u548c\u56fa\u5b9a\u8eab\u4efd\u5df2\u5ba1\u9605\uff1b\u6570\u503c/\u6062\u590d/\u5b66\u4e60/\u7269\u7406\u5de5\u4f5c\u5206\u522b\u89e3\u91ca\u3002",
+          "record": "runs/moe-r2-main128-large-e20-lr0.001-b0.01-s11/train/result.json",
+          "source_commit": "8bd33dd1",
+          "status": "completed"
+        },
+        {
+          "config": ".local/source-moe-execution-v2/configs/studies/language/moe-controls/table/configs/large-e20-lr0.001-b0.01-s22.json",
+          "id": "tl-moe-r2-main128-large-e20-lr0.001-b0.01-s22",
+          "lens_record": "runs/moe-r2-main128-large-e20-lr0.001-b0.01-s22/train/projection.json",
+          "note": "\u76f8\u540c\u786e\u8ba4split\u548c\u56fa\u5b9a\u8eab\u4efd\u5df2\u5ba1\u9605\uff1b\u6570\u503c/\u6062\u590d/\u5b66\u4e60/\u7269\u7406\u5de5\u4f5c\u5206\u522b\u89e3\u91ca\u3002",
+          "record": "runs/moe-r2-main128-large-e20-lr0.001-b0.01-s22/train/result.json",
+          "source_commit": "8bd33dd1",
+          "status": "completed"
+        },
+        {
+          "config": ".local/source-moe-execution-v2/configs/studies/language/moe-controls/table/configs/large-e64-lr0.001-b0.01-s11.json",
+          "id": "tl-moe-r2-main128-large-e64-lr0.001-b0.01-s11",
+          "lens_record": "runs/moe-r2-main128-large-e64-lr0.001-b0.01-s11/train/projection.json",
+          "note": "\u76f8\u540c\u786e\u8ba4split\u548c\u56fa\u5b9a\u8eab\u4efd\u5df2\u5ba1\u9605\uff1b\u6570\u503c/\u6062\u590d/\u5b66\u4e60/\u7269\u7406\u5de5\u4f5c\u5206\u522b\u89e3\u91ca\u3002",
+          "record": "runs/moe-r2-main128-large-e64-lr0.001-b0.01-s11/train/result.json",
+          "source_commit": "8bd33dd1",
+          "status": "completed"
+        },
+        {
+          "config": ".local/source-moe-execution-v2/configs/studies/language/moe-controls/table/configs/large-e64-lr0.001-b0.01-s22.json",
+          "id": "tl-moe-r2-main128-large-e64-lr0.001-b0.01-s22",
+          "lens_record": "runs/moe-r2-main128-large-e64-lr0.001-b0.01-s22/train/projection.json",
+          "note": "\u76f8\u540c\u786e\u8ba4split\u548c\u56fa\u5b9a\u8eab\u4efd\u5df2\u5ba1\u9605\uff1b\u6570\u503c/\u6062\u590d/\u5b66\u4e60/\u7269\u7406\u5de5\u4f5c\u5206\u522b\u89e3\u91ca\u3002",
+          "record": "runs/moe-r2-main128-large-e64-lr0.001-b0.01-s22/train/result.json",
+          "source_commit": "8bd33dd1",
+          "status": "completed"
+        },
+        {
+          "config": ".local/source-moe-execution-v2/configs/studies/language/moe-controls/table/configs/small-dense-lr0.003-s11.json",
+          "id": "tl-moe-r2-main128-small-dense-lr0.003-s11",
+          "lens_record": "runs/moe-r2-main128-small-dense-lr0.003-s11/train/projection.json",
+          "note": "\u76f8\u540c\u786e\u8ba4split\u548c\u56fa\u5b9a\u8eab\u4efd\u5df2\u5ba1\u9605\uff1b\u6570\u503c/\u6062\u590d/\u5b66\u4e60/\u7269\u7406\u5de5\u4f5c\u5206\u522b\u89e3\u91ca\u3002",
+          "record": "runs/moe-r2-main128-small-dense-lr0.003-s11/train/result.json",
+          "source_commit": "8bd33dd1",
+          "status": "completed"
+        },
+        {
+          "config": ".local/source-moe-execution-v2/configs/studies/language/moe-controls/table/configs/small-dense-lr0.003-s22.json",
+          "id": "tl-moe-r2-main128-small-dense-lr0.003-s22",
+          "lens_record": "runs/moe-r2-main128-small-dense-lr0.003-s22/train/projection.json",
+          "note": "\u76f8\u540c\u786e\u8ba4split\u548c\u56fa\u5b9a\u8eab\u4efd\u5df2\u5ba1\u9605\uff1b\u6570\u503c/\u6062\u590d/\u5b66\u4e60/\u7269\u7406\u5de5\u4f5c\u5206\u522b\u89e3\u91ca\u3002",
+          "record": "runs/moe-r2-main128-small-dense-lr0.003-s22/train/result.json",
+          "source_commit": "8bd33dd1",
+          "status": "completed"
+        },
+        {
+          "config": ".local/source-moe-execution-v2/configs/studies/language/moe-controls/table/configs/small-e20-lr0.003-b0.01-s11.json",
+          "id": "tl-moe-r2-main128-small-e20-lr0.003-b0.01-s11",
+          "lens_record": "runs/moe-r2-main128-small-e20-lr0.003-b0.01-s11/train/projection.json",
+          "note": "\u76f8\u540c\u786e\u8ba4split\u548c\u56fa\u5b9a\u8eab\u4efd\u5df2\u5ba1\u9605\uff1b\u6570\u503c/\u6062\u590d/\u5b66\u4e60/\u7269\u7406\u5de5\u4f5c\u5206\u522b\u89e3\u91ca\u3002",
+          "record": "runs/moe-r2-main128-small-e20-lr0.003-b0.01-s11/train/result.json",
+          "source_commit": "8bd33dd1",
+          "status": "completed"
+        },
+        {
+          "config": ".local/source-moe-execution-v2/configs/studies/language/moe-controls/table/configs/small-e20-lr0.003-b0.01-s22.json",
+          "id": "tl-moe-r2-main128-small-e20-lr0.003-b0.01-s22",
+          "lens_record": "runs/moe-r2-main128-small-e20-lr0.003-b0.01-s22/train/projection.json",
+          "note": "\u76f8\u540c\u786e\u8ba4split\u548c\u56fa\u5b9a\u8eab\u4efd\u5df2\u5ba1\u9605\uff1b\u6570\u503c/\u6062\u590d/\u5b66\u4e60/\u7269\u7406\u5de5\u4f5c\u5206\u522b\u89e3\u91ca\u3002",
+          "record": "runs/moe-r2-main128-small-e20-lr0.003-b0.01-s22/train/result.json",
+          "source_commit": "8bd33dd1",
+          "status": "completed"
+        },
+        {
+          "config": ".local/source-moe-execution-v2/configs/studies/language/moe-controls/table/configs/small-e64-lr0.003-b0.001-s11.json",
+          "id": "tl-moe-r2-main128-small-e64-lr0.003-b0.001-s11",
+          "lens_record": "runs/moe-r2-main128-small-e64-lr0.003-b0.001-s11/train/projection.json",
+          "note": "\u76f8\u540c\u786e\u8ba4split\u548c\u56fa\u5b9a\u8eab\u4efd\u5df2\u5ba1\u9605\uff1b\u6570\u503c/\u6062\u590d/\u5b66\u4e60/\u7269\u7406\u5de5\u4f5c\u5206\u522b\u89e3\u91ca\u3002",
+          "record": "runs/moe-r2-main128-small-e64-lr0.003-b0.001-s11/train/result.json",
+          "source_commit": "8bd33dd1",
+          "status": "completed"
+        },
+        {
+          "config": ".local/source-moe-execution-v2/configs/studies/language/moe-controls/table/configs/small-e64-lr0.003-b0.001-s22.json",
+          "id": "tl-moe-r2-main128-small-e64-lr0.003-b0.001-s22",
+          "lens_record": "runs/moe-r2-main128-small-e64-lr0.003-b0.001-s22/train/projection.json",
+          "note": "\u76f8\u540c\u786e\u8ba4split\u548c\u56fa\u5b9a\u8eab\u4efd\u5df2\u5ba1\u9605\uff1b\u6570\u503c/\u6062\u590d/\u5b66\u4e60/\u7269\u7406\u5de5\u4f5c\u5206\u522b\u89e3\u91ca\u3002",
+          "record": "runs/moe-r2-main128-small-e64-lr0.003-b0.001-s22/train/result.json",
+          "source_commit": "8bd33dd1",
+          "status": "completed"
+        }
+      ],
+      "status": "completed",
       "study_id": "TL-MOE-CONTROL",
-      "summary": "4\u4e2aMoE\u548c2\u4e2adense\u5404seed11/22\uff1b\u5171\u540c128Mi\uff0c\u4fdd\u7559HB\u548c\u5386\u53f2TF\u53c2\u7167\u3002",
+      "summary": "12\u6761fresh seed11/22\u5747\u5b8c\u6210128Mi\u3001\u6709\u9650\u751f\u6210\u548c\u6062\u590d\u68c0\u67e5\u3002",
       "title": "\u8fd1\u6d3b\u8dc3\u9884\u7b97\u7684MoE\u6761\u4ef6\u5bb9\u91cf\u5bf9\u7167",
       "track": "shared",
       "view_group": "current",
@@ -15191,40 +15598,39 @@
     },
     {
       "budget": "\u6765\u81ea\u5bf9\u5e94\u7814\u7a76\u7ec4\uff0c\u4e0d\u65b0\u589e\u4efb\u52a1\u3002",
-      "counterevidence": "\u539fHB\u8d1f\u9762\u3001\u6570\u503c\u5931\u8d25\u53caMoE\u4e0d\u652f\u6301\u7684grouped GEMM\u53cd\u5411\u4fdd\u7559\u3002",
-      "decision": "\u7b49\u5f85\u5b9e\u9645\u7ec8\u70b9\u4e0e\u4eba\u5de5\u5ba1\u9605\u540e\u624d\u5efa\u7acb\u79d1\u5b66\u652f\u6301\u3002",
+      "comparisons": "128Mi\u56dbMoE\u4f18\u4e8e\u5339\u914ddense\uff1bsmall E20/E64\u76f8\u5bf9\u65e7\u5f3aTF\u6539\u5584.1460/.1011\u786e\u8ba4NLL\u3002",
+      "counterevidence": "\u5c0fE64\u8d1f\u8f7d\u96c6\u4e2d\uff1bMoE\u5b8c\u6574\u6b65\u6bd4\u8fd1\u6d3b\u8dc3dense\u6162\u7ea616\u201320\u500d\uff0c\u672a\u6709\u541e\u5410\u4f18\u52bf\u3002",
+      "decision": "\u4fdd\u7559\u6b63\u9762\u6761\u4ef6\u5bb9\u91cf\u8bc1\u636e\u548csmall\u6269\u5bb9\u53cd\u8bc1\uff1b\u4e0d\u81ea\u52a8\u589e\u52a0\u66dd\u5149\u3002",
       "id": "RMOE-MAIN",
       "kind": "result",
       "question": "\u5171\u540c\u81ea\u7136\u6587\u672c\u66dd\u5149\u3001\u8fd1\u6bcftoken\u6d3b\u8dc3\u53c2\u6570\u4e0b\uff0c\u6807\u51c6MoE\u4e0eHB\u3001\u5339\u914ddense\u6709\u4f55\u5dee\u5f02\uff1f",
       "references": [
         {
-          "label": "\u5df2\u6388\u6743MoE\u7814\u7a76\u8868",
-          "path": "docs/studies/moe-controls-proposal.md"
+          "label": "MoE\u7ec8\u6001\uff1a\u914d\u65b9\u3001\u8d28\u91cf\u4e0e\u72ec\u7acb\u786e\u8ba4",
+          "path": "docs/studies/moe-controls-results.md"
         },
         {
-          "label": "\u5b9e\u73b0\u3001\u9884\u7b97\u548c\u9a8c\u6536\u53e3\u5f84",
-          "path": "docs/studies/moe-controls-execution.md"
+          "label": "\u9010\u8f68\u8ff9\u4e0e\u6587\u6863\u914d\u5bf9\u5ba1\u9605\u8bc1\u636e",
+          "path": "docs/evidence/moe-controls-results.json"
         },
         {
-          "label": "\u5b9e\u9645\u6279\u91cf/\u6570\u503c/Lens\u63a5\u5165",
-          "path": "docs/evidence/moe-controls-admission.json"
-        },
-        {
-          "label": "\u56fa\u5b9a\u5019\u9009\u53ca\u6709\u6761\u4ef6seed\u8868",
-          "path": "configs/studies/language/moe-controls/table/catalog.json"
-        },
-        {
-          "label": "\u53ea\u8bfb\u72b6\u6001\u5ba1\u9605\u5668",
-          "path": "scripts/review_moe_controls.py"
+          "label": "\u53ef\u91cd\u590d\u7684\u53ea\u8bfb\u7ec8\u6001\u5ba1\u9605\u5668",
+          "path": "scripts/review_moe_results.py"
         }
       ],
-      "scope": "\u666e\u901aTransformer-MoE\uff0c\u4e0d\u662fTIDE\u6267\u884c/\u8def\u7531\u6216\u57fa\u5ea7\u6865\u63a5\u3002",
-      "status": "awaiting",
-      "summary": "\u6027\u80fd/\u673a\u5236\u6709\u5c0f\u578b\u63a5\u5165\u8bc1\u636e\uff1b\u8bed\u8a00\u5b66\u4e60\u4e0e\u72ec\u7acb\u8d28\u91cf\u7ed3\u8bba\u5c1a\u672a\u5f62\u6210\u3002",
-      "title": "\u8fd1\u6d3b\u8dc3\u9884\u7b97\u7684MoE\u6761\u4ef6\u5bb9\u91cf\u5bf9\u7167\uff1a\u5f85\u5ba1\u9605",
+      "scope": "\u72ec\u7acbdirect FP32\u3001\u540c\u81ea\u7136\u6587\u672c/\u8bcd\u88684096/L256/global64\u3001128Mi\u53ca\u53ccseed\uff1b\u4e0d\u662fTIDE\u6267\u884c\u6216\u6574\u7f51\u4e25\u683c\u6570\u503c\u8ba4\u8bc1\u3002",
+      "sources": [
+        {
+          "label": "MoE\u7ec8\u6001\u5ba1\u9605",
+          "url": "https://github.com/ZichaoLong/tide/blob/tide-learning-lab/docs/studies/moe-controls-results.md"
+        }
+      ],
+      "status": "scoped",
+      "summary": "E20\u2192E64\uff1asmall\u786e\u8ba4\u53d8\u5dee.04494\uff0clarge\u6539\u5584.01263\uff1b\u4e24seed\u65b9\u5411\u4e00\u81f4\u3002",
+      "title": "MoE\u8fd1\u6d3b\u8dc3\u53c2\u6570\u8d28\u91cf\u6709\u6536\u76ca\uff1b\u6269\u5bb9\u5206\u6863",
       "track": "shared",
-      "transfer_conditions": "\u4ec5\u540c\u8bcd\u8868\u3001\u6570\u636e\u3001\u66dd\u5149\u548c\u660e\u786e\u6d3b\u8dc3\u5bb9\u91cf\u53e3\u5f84\uff1b\u5171\u4eab\u5168\u5c40attention\u4e0eHB\u5c40\u90e8\u7ed3\u6784\u7684\u5dee\u5f02\u5fc5\u987b\u4fdd\u7559\u3002",
-      "unresolved": "\u8c03\u53c2\u3001\u79cd\u5b50\u3001\u66dd\u5149\u548c\u62d3\u6251\u5dee\u5f02\uff1b\u4e0d\u80fd\u7531\u8bad\u7ec3\u5b8c\u6210\u81ea\u52a8\u63a8\u65ad\u67b6\u6784\u6536\u76ca\u3002",
+      "transfer_conditions": "\u4ec5\u540c\u66dd\u5149\u53ca\u660e\u786e\u53c2\u6570\u53e3\u5f84\u4e0b\u8fc1\u79fb\uff1bMoE\u5171\u4eab\u5168\u5c40attention\uff0c\u4e0d\u80fd\u66ff\u4ee3HB\u5c40\u90e8\u5316\u9a8c\u8bc1\u3002\u6570\u503c\u8d85\u5dee\u4ecd\u72ec\u7acb\u4fdd\u7559\u3002",
+      "unresolved": "small\u7684balance/\u8d1f\u8f7d\u96c6\u4e2d/\u5bb9\u91cf\u4f5c\u7528\u672a\u9694\u79bb\uff1b\u591a\u7ef4\u5c3a\u5ea6\u53d8\u5316\u4e0d\u80fd\u63a8\u51fa\u666e\u904dscaling\u89c4\u5f8b\u3002",
       "view_group": "current",
       "x": 915,
       "y": 820
@@ -15232,6 +15638,7 @@
     {
       "budget": "\u72ec\u7acb48h\u81f311\u670817\u65e509:05:08\uff1b\u65b0\u589e\u6700\u591a8worker\uff0c\u5171\u4eab12slot\uff1b64GiB\u76ee\u6807/96GiB\u505c\u6b62\uff0c\u786c\u4f59\u91cf200GiB\u3002",
       "decision": "\u6309\u5f62\u72b6\u4fdd\u7559\u8c03\u53c2\u540d\u989d\uff1b\u6267\u884c\u3001\u4e25\u683c\u6570\u503c\u3001\u79bb\u6563\u8bed\u4e49\u3001\u6062\u590d\u3001\u5b66\u4e60\u4e0e\u541e\u5410\u5206\u5217\u3002",
+      "execution_note": "2026-11-15 14:26\u5168\u90e8\u9636\u6bb5\u7ec8\u6001\uff0c\u65e0\u5b58\u6d3b\u540e\u4ee3\uff1b\u539f12\u6b21\u51c6\u5165\u5931\u8d25\u53e6\u5217\u3002",
       "id": "MOE-CONFIRM",
       "kind": "experiment",
       "lens_group": "TL-MOE-CONFIRM",
@@ -15260,12 +15667,133 @@
         {
           "label": "\u72b6\u6001\u3001\u505c\u6b62\u3001\u6062\u590d\u4e0eLens",
           "path": "docs/studies/moe-controls-operations.md"
+        },
+        {
+          "label": "MoE\u7ec8\u6001\uff1a\u914d\u65b9\u3001\u8d28\u91cf\u4e0e\u72ec\u7acb\u786e\u8ba4",
+          "path": "docs/studies/moe-controls-results.md"
+        },
+        {
+          "label": "\u9010\u8f68\u8ff9\u4e0e\u6587\u6863\u914d\u5bf9\u5ba1\u9605\u8bc1\u636e",
+          "path": "docs/evidence/moe-controls-results.json"
+        },
+        {
+          "label": "\u53ef\u91cd\u590d\u7684\u53ea\u8bfb\u7ec8\u6001\u5ba1\u9605\u5668",
+          "path": "scripts/review_moe_results.py"
         }
       ],
-      "runs": [],
-      "status": "planned",
+      "runs": [
+        {
+          "config": ".local/source-moe-execution-v2/configs/studies/language/moe-controls/table/configs/large-dense-lr0.001-s11.json",
+          "id": "tl-moe-r2-confirm-large-dense-lr0.001-s11",
+          "lens_record": "runs/moe-r2-confirm-large-dense-lr0.001-s11/projection.json",
+          "note": "\u76f8\u540c\u786e\u8ba4split\u548c\u56fa\u5b9a\u8eab\u4efd\u5df2\u5ba1\u9605\uff1b\u6570\u503c/\u6062\u590d/\u5b66\u4e60/\u7269\u7406\u5de5\u4f5c\u5206\u522b\u89e3\u91ca\u3002",
+          "record": "runs/moe-r2-confirm-large-dense-lr0.001-s11/result.json",
+          "source_commit": "8bd33dd1",
+          "status": "completed"
+        },
+        {
+          "config": ".local/source-moe-execution-v2/configs/studies/language/moe-controls/table/configs/large-dense-lr0.001-s22.json",
+          "id": "tl-moe-r2-confirm-large-dense-lr0.001-s22",
+          "lens_record": "runs/moe-r2-confirm-large-dense-lr0.001-s22/projection.json",
+          "note": "\u76f8\u540c\u786e\u8ba4split\u548c\u56fa\u5b9a\u8eab\u4efd\u5df2\u5ba1\u9605\uff1b\u6570\u503c/\u6062\u590d/\u5b66\u4e60/\u7269\u7406\u5de5\u4f5c\u5206\u522b\u89e3\u91ca\u3002",
+          "record": "runs/moe-r2-confirm-large-dense-lr0.001-s22/result.json",
+          "source_commit": "8bd33dd1",
+          "status": "completed"
+        },
+        {
+          "config": ".local/source-moe-execution-v2/configs/studies/language/moe-controls/table/configs/large-e20-lr0.001-b0.01-s11.json",
+          "id": "tl-moe-r2-confirm-large-e20-lr0.001-b0.01-s11",
+          "lens_record": "runs/moe-r2-confirm-large-e20-lr0.001-b0.01-s11/projection.json",
+          "note": "\u76f8\u540c\u786e\u8ba4split\u548c\u56fa\u5b9a\u8eab\u4efd\u5df2\u5ba1\u9605\uff1b\u6570\u503c/\u6062\u590d/\u5b66\u4e60/\u7269\u7406\u5de5\u4f5c\u5206\u522b\u89e3\u91ca\u3002",
+          "record": "runs/moe-r2-confirm-large-e20-lr0.001-b0.01-s11/result.json",
+          "source_commit": "8bd33dd1",
+          "status": "completed"
+        },
+        {
+          "config": ".local/source-moe-execution-v2/configs/studies/language/moe-controls/table/configs/large-e20-lr0.001-b0.01-s22.json",
+          "id": "tl-moe-r2-confirm-large-e20-lr0.001-b0.01-s22",
+          "lens_record": "runs/moe-r2-confirm-large-e20-lr0.001-b0.01-s22/projection.json",
+          "note": "\u76f8\u540c\u786e\u8ba4split\u548c\u56fa\u5b9a\u8eab\u4efd\u5df2\u5ba1\u9605\uff1b\u6570\u503c/\u6062\u590d/\u5b66\u4e60/\u7269\u7406\u5de5\u4f5c\u5206\u522b\u89e3\u91ca\u3002",
+          "record": "runs/moe-r2-confirm-large-e20-lr0.001-b0.01-s22/result.json",
+          "source_commit": "8bd33dd1",
+          "status": "completed"
+        },
+        {
+          "config": ".local/source-moe-execution-v2/configs/studies/language/moe-controls/table/configs/large-e64-lr0.001-b0.01-s11.json",
+          "id": "tl-moe-r2-confirm-large-e64-lr0.001-b0.01-s11",
+          "lens_record": "runs/moe-r2-confirm-large-e64-lr0.001-b0.01-s11/projection.json",
+          "note": "\u76f8\u540c\u786e\u8ba4split\u548c\u56fa\u5b9a\u8eab\u4efd\u5df2\u5ba1\u9605\uff1b\u6570\u503c/\u6062\u590d/\u5b66\u4e60/\u7269\u7406\u5de5\u4f5c\u5206\u522b\u89e3\u91ca\u3002",
+          "record": "runs/moe-r2-confirm-large-e64-lr0.001-b0.01-s11/result.json",
+          "source_commit": "8bd33dd1",
+          "status": "completed"
+        },
+        {
+          "config": ".local/source-moe-execution-v2/configs/studies/language/moe-controls/table/configs/large-e64-lr0.001-b0.01-s22.json",
+          "id": "tl-moe-r2-confirm-large-e64-lr0.001-b0.01-s22",
+          "lens_record": "runs/moe-r2-confirm-large-e64-lr0.001-b0.01-s22/projection.json",
+          "note": "\u76f8\u540c\u786e\u8ba4split\u548c\u56fa\u5b9a\u8eab\u4efd\u5df2\u5ba1\u9605\uff1b\u6570\u503c/\u6062\u590d/\u5b66\u4e60/\u7269\u7406\u5de5\u4f5c\u5206\u522b\u89e3\u91ca\u3002",
+          "record": "runs/moe-r2-confirm-large-e64-lr0.001-b0.01-s22/result.json",
+          "source_commit": "8bd33dd1",
+          "status": "completed"
+        },
+        {
+          "config": ".local/source-moe-execution-v2/configs/studies/language/moe-controls/table/configs/small-dense-lr0.003-s11.json",
+          "id": "tl-moe-r2-confirm-small-dense-lr0.003-s11",
+          "lens_record": "runs/moe-r2-confirm-small-dense-lr0.003-s11/projection.json",
+          "note": "\u76f8\u540c\u786e\u8ba4split\u548c\u56fa\u5b9a\u8eab\u4efd\u5df2\u5ba1\u9605\uff1b\u6570\u503c/\u6062\u590d/\u5b66\u4e60/\u7269\u7406\u5de5\u4f5c\u5206\u522b\u89e3\u91ca\u3002",
+          "record": "runs/moe-r2-confirm-small-dense-lr0.003-s11/result.json",
+          "source_commit": "8bd33dd1",
+          "status": "completed"
+        },
+        {
+          "config": ".local/source-moe-execution-v2/configs/studies/language/moe-controls/table/configs/small-dense-lr0.003-s22.json",
+          "id": "tl-moe-r2-confirm-small-dense-lr0.003-s22",
+          "lens_record": "runs/moe-r2-confirm-small-dense-lr0.003-s22/projection.json",
+          "note": "\u76f8\u540c\u786e\u8ba4split\u548c\u56fa\u5b9a\u8eab\u4efd\u5df2\u5ba1\u9605\uff1b\u6570\u503c/\u6062\u590d/\u5b66\u4e60/\u7269\u7406\u5de5\u4f5c\u5206\u522b\u89e3\u91ca\u3002",
+          "record": "runs/moe-r2-confirm-small-dense-lr0.003-s22/result.json",
+          "source_commit": "8bd33dd1",
+          "status": "completed"
+        },
+        {
+          "config": ".local/source-moe-execution-v2/configs/studies/language/moe-controls/table/configs/small-e20-lr0.003-b0.01-s11.json",
+          "id": "tl-moe-r2-confirm-small-e20-lr0.003-b0.01-s11",
+          "lens_record": "runs/moe-r2-confirm-small-e20-lr0.003-b0.01-s11/projection.json",
+          "note": "\u76f8\u540c\u786e\u8ba4split\u548c\u56fa\u5b9a\u8eab\u4efd\u5df2\u5ba1\u9605\uff1b\u6570\u503c/\u6062\u590d/\u5b66\u4e60/\u7269\u7406\u5de5\u4f5c\u5206\u522b\u89e3\u91ca\u3002",
+          "record": "runs/moe-r2-confirm-small-e20-lr0.003-b0.01-s11/result.json",
+          "source_commit": "8bd33dd1",
+          "status": "completed"
+        },
+        {
+          "config": ".local/source-moe-execution-v2/configs/studies/language/moe-controls/table/configs/small-e20-lr0.003-b0.01-s22.json",
+          "id": "tl-moe-r2-confirm-small-e20-lr0.003-b0.01-s22",
+          "lens_record": "runs/moe-r2-confirm-small-e20-lr0.003-b0.01-s22/projection.json",
+          "note": "\u76f8\u540c\u786e\u8ba4split\u548c\u56fa\u5b9a\u8eab\u4efd\u5df2\u5ba1\u9605\uff1b\u6570\u503c/\u6062\u590d/\u5b66\u4e60/\u7269\u7406\u5de5\u4f5c\u5206\u522b\u89e3\u91ca\u3002",
+          "record": "runs/moe-r2-confirm-small-e20-lr0.003-b0.01-s22/result.json",
+          "source_commit": "8bd33dd1",
+          "status": "completed"
+        },
+        {
+          "config": ".local/source-moe-execution-v2/configs/studies/language/moe-controls/table/configs/small-e64-lr0.003-b0.001-s11.json",
+          "id": "tl-moe-r2-confirm-small-e64-lr0.003-b0.001-s11",
+          "lens_record": "runs/moe-r2-confirm-small-e64-lr0.003-b0.001-s11/projection.json",
+          "note": "\u76f8\u540c\u786e\u8ba4split\u548c\u56fa\u5b9a\u8eab\u4efd\u5df2\u5ba1\u9605\uff1b\u6570\u503c/\u6062\u590d/\u5b66\u4e60/\u7269\u7406\u5de5\u4f5c\u5206\u522b\u89e3\u91ca\u3002",
+          "record": "runs/moe-r2-confirm-small-e64-lr0.003-b0.001-s11/result.json",
+          "source_commit": "8bd33dd1",
+          "status": "completed"
+        },
+        {
+          "config": ".local/source-moe-execution-v2/configs/studies/language/moe-controls/table/configs/small-e64-lr0.003-b0.001-s22.json",
+          "id": "tl-moe-r2-confirm-small-e64-lr0.003-b0.001-s22",
+          "lens_record": "runs/moe-r2-confirm-small-e64-lr0.003-b0.001-s22/projection.json",
+          "note": "\u76f8\u540c\u786e\u8ba4split\u548c\u56fa\u5b9a\u8eab\u4efd\u5df2\u5ba1\u9605\uff1b\u6570\u503c/\u6062\u590d/\u5b66\u4e60/\u7269\u7406\u5de5\u4f5c\u5206\u522b\u89e3\u91ca\u3002",
+          "record": "runs/moe-r2-confirm-small-e64-lr0.003-b0.001-s22/result.json",
+          "source_commit": "8bd33dd1",
+          "status": "completed"
+        }
+      ],
+      "status": "completed",
       "study_id": "TL-MOE-CONFIRM",
-      "summary": "\u5168\u90e8\u5408\u683c128Mi\u5230262K\u65b0split\uff1bconfirmation\u4e0d\u9009\u62e9\u914d\u65b9\uff0ctest\u5bc6\u5c01\u3002",
+      "summary": "12\u4e2a\u72ec\u7acb262K\u7ec8\u70b9\u5b8c\u6210\uff1btest\u4ecd\u5bc6\u5c01\uff0cLens\u5168\u90e8\u8bfb\u56de\u3002",
       "title": "\u56fa\u5b9a\u7ec8\u70b9\u7684\u72ec\u7acb\u786e\u8ba4",
       "track": "shared",
       "view_group": "current",
@@ -15274,40 +15802,39 @@
     },
     {
       "budget": "\u6765\u81ea\u5bf9\u5e94\u7814\u7a76\u7ec4\uff0c\u4e0d\u65b0\u589e\u4efb\u52a1\u3002",
-      "counterevidence": "\u539fHB\u8d1f\u9762\u3001\u6570\u503c\u5931\u8d25\u53caMoE\u4e0d\u652f\u6301\u7684grouped GEMM\u53cd\u5411\u4fdd\u7559\u3002",
-      "decision": "\u7b49\u5f85\u5b9e\u9645\u7ec8\u70b9\u4e0e\u4eba\u5de5\u5ba1\u9605\u540e\u624d\u5efa\u7acb\u79d1\u5b66\u652f\u6301\u3002",
+      "comparisons": "\u5927\u6863\u786e\u8ba4\uff1adense3.01711\u3001E20 2.81540\u3001E64 2.80277\uff1bHB q10/q3\u4e3a3.38594/3.58742\u3002",
+      "counterevidence": "MoE\u4e0eHB\u62d3\u6251/\u5168\u5c40attention/\u6d3b\u8dc3\u53c2\u6570\u4ec5\u8fd1\u4f3c\u5339\u914d\uff0c\u4e0d\u80fd\u5ba3\u79f0\u5c40\u90e8HB\u4e0d\u53ef\u80fd\u6709\u6548\u3002",
+      "decision": "\u5c06\u6b64\u7ec4\u7528\u4f5c\u53ef\u9760\u67b6\u6784\u53c2\u7167\uff1b\u65b0\u7814\u7a76\u7b49\u5f85\u7528\u6237\u9a8c\u6536\u3002",
       "id": "RMOE-CONFIRM",
       "kind": "result",
       "question": "\u5171\u540c\u81ea\u7136\u6587\u672c\u66dd\u5149\u3001\u8fd1\u6bcftoken\u6d3b\u8dc3\u53c2\u6570\u4e0b\uff0c\u6807\u51c6MoE\u4e0eHB\u3001\u5339\u914ddense\u6709\u4f55\u5dee\u5f02\uff1f",
       "references": [
         {
-          "label": "\u5df2\u6388\u6743MoE\u7814\u7a76\u8868",
-          "path": "docs/studies/moe-controls-proposal.md"
+          "label": "MoE\u7ec8\u6001\uff1a\u914d\u65b9\u3001\u8d28\u91cf\u4e0e\u72ec\u7acb\u786e\u8ba4",
+          "path": "docs/studies/moe-controls-results.md"
         },
         {
-          "label": "\u5b9e\u73b0\u3001\u9884\u7b97\u548c\u9a8c\u6536\u53e3\u5f84",
-          "path": "docs/studies/moe-controls-execution.md"
+          "label": "\u9010\u8f68\u8ff9\u4e0e\u6587\u6863\u914d\u5bf9\u5ba1\u9605\u8bc1\u636e",
+          "path": "docs/evidence/moe-controls-results.json"
         },
         {
-          "label": "\u5b9e\u9645\u6279\u91cf/\u6570\u503c/Lens\u63a5\u5165",
-          "path": "docs/evidence/moe-controls-admission.json"
-        },
-        {
-          "label": "\u56fa\u5b9a\u5019\u9009\u53ca\u6709\u6761\u4ef6seed\u8868",
-          "path": "configs/studies/language/moe-controls/table/catalog.json"
-        },
-        {
-          "label": "\u53ea\u8bfb\u72b6\u6001\u5ba1\u9605\u5668",
-          "path": "scripts/review_moe_controls.py"
+          "label": "\u53ef\u91cd\u590d\u7684\u53ea\u8bfb\u7ec8\u6001\u5ba1\u9605\u5668",
+          "path": "scripts/review_moe_results.py"
         }
       ],
-      "scope": "\u666e\u901aTransformer-MoE\uff0c\u4e0d\u662fTIDE\u6267\u884c/\u8def\u7531\u6216\u57fa\u5ea7\u6865\u63a5\u3002",
-      "status": "awaiting",
-      "summary": "\u6027\u80fd/\u673a\u5236\u6709\u5c0f\u578b\u63a5\u5165\u8bc1\u636e\uff1b\u8bed\u8a00\u5b66\u4e60\u4e0e\u72ec\u7acb\u8d28\u91cf\u7ed3\u8bba\u5c1a\u672a\u5f62\u6210\u3002",
-      "title": "\u56fa\u5b9a\u7ec8\u70b9\u7684\u72ec\u7acb\u786e\u8ba4\uff1a\u5f85\u5ba1\u9605",
+      "scope": "\u72ec\u7acbdirect FP32\u3001\u540c\u81ea\u7136\u6587\u672c/\u8bcd\u88684096/L256/global64\u3001128Mi\u53ca\u53ccseed\uff1b\u4e0d\u662fTIDE\u6267\u884c\u6216\u6574\u7f51\u4e25\u683c\u6570\u503c\u8ba4\u8bc1\u3002",
+      "sources": [
+        {
+          "label": "MoE\u7ec8\u6001\u5ba1\u9605",
+          "url": "https://github.com/ZichaoLong/tide/blob/tide-learning-lab/docs/studies/moe-controls-results.md"
+        }
+      ],
+      "status": "scoped",
+      "summary": "262K/135\u6587\u6863\u3001\u53ccseed\u786e\u8ba4\uff1b\u5f53\u524d\u4f4e\u6d3b\u52a8HB\u4ecd\u660e\u663e\u5f31\u4e8eMoE\u3002",
+      "title": "\u72ec\u7acb\u786e\u8ba4\u652f\u6301\u6709\u9650MoE\u4f18\u52bf",
       "track": "shared",
-      "transfer_conditions": "\u4ec5\u540c\u8bcd\u8868\u3001\u6570\u636e\u3001\u66dd\u5149\u548c\u660e\u786e\u6d3b\u8dc3\u5bb9\u91cf\u53e3\u5f84\uff1b\u5171\u4eab\u5168\u5c40attention\u4e0eHB\u5c40\u90e8\u7ed3\u6784\u7684\u5dee\u5f02\u5fc5\u987b\u4fdd\u7559\u3002",
-      "unresolved": "\u8c03\u53c2\u3001\u79cd\u5b50\u3001\u66dd\u5149\u548c\u62d3\u6251\u5dee\u5f02\uff1b\u4e0d\u80fd\u7531\u8bad\u7ec3\u5b8c\u6210\u81ea\u52a8\u63a8\u65ad\u67b6\u6784\u6536\u76ca\u3002",
+      "transfer_conditions": "\u4ec5\u540c\u66dd\u5149\u53ca\u660e\u786e\u53c2\u6570\u53e3\u5f84\u4e0b\u8fc1\u79fb\uff1bMoE\u5171\u4eab\u5168\u5c40attention\uff0c\u4e0d\u80fd\u66ff\u4ee3HB\u5c40\u90e8\u5316\u9a8c\u8bc1\u3002\u6570\u503c\u8d85\u5dee\u4ecd\u72ec\u7acb\u4fdd\u7559\u3002",
+      "unresolved": "\u7f6e\u4fe1\u533a\u95f4\u6761\u4ef6\u4e8e\u56fa\u5b9acheckpoint\uff0c\u4e0d\u5305\u542b\u603b\u4f53\u79cd\u5b50/\u9009\u62e9\u4e0d\u786e\u5b9a\u6027\uff1btest\u672a\u8bfb\u3002",
       "view_group": "current",
       "x": 915,
       "y": 1000

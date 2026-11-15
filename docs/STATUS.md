@@ -1,3 +1,36 @@
+# 当前交接：MoE全部完成，旧v10剩两条256Mi延伸
+
+2026-11-15 15:39 +08核对。[MoE终态结论](studies/moe-controls-results.md) · [逐运行/配对审阅](evidence/moe-controls-results.json) ·
+[v10下午状态与新失败](studies/direct-v10-progress-20261115-pm.md)。本轮未启动/恢复/修改训练。
+
+MoE在14:26:37结束，从预算起点约5小时21分；30个8Mi、12个32Mi续训、12条128Mi和12独立确认，共66阶段均完成。
+42个从零训练配置恢复通过，12主checkpoint已验证完整SHA，全部相关服务及控制器无后代；66项Lens读回通过。
+原12次零因果准入失败、整网CPU/NPU有限超差保持，不给严格数值等价或全TIDE执行背书。
+
+128Mi双seed独立confirmation：small E20/E64为3.104083/3.149023，旧更强small TF为3.250120；
+large E20/E64为2.815403/2.802774，本批更强dense为3.017110。
+small扩容变差约.04494且出现负载集中；large扩容改善约.01263，不能称普遍scaling。
+当前低活动HB大档q10/q3为3.385942/3.587421，仍弱于MoE；global attention/局部边界不同，参数仅近似匹配。
+详细每seed、配方、物理工作、吞吐和置信区间见终态报告。MoE批无自动256Mi或新网格。
+
+旧v10的20个不同配置（含3修复）已收齐128Mi及独立确认。原d64八条256Mi延伸：5完成、2运行、1新失败。
+
+|仍运行配置|物理NPU|累计目标|
+|---|---:|---:|
+|hb-d64-r64-q3-s11|15|236.62/256Mi|
+|hb-d64-r64-q3-s22|2|232.18/256Mi|
+
+新失败q10 seed11在195.84Mi触发分配可行性残差3.004e-5>2e-5；阈值保持，未重放根因或重启。
+两条q3仍在原源码/原截止（11月16日21:51:33）内运行，预计还需约1–1.3h及随后确认；这不是完成承诺。
+
+MoE源码8bd33dd1/继承dense2f96d745、安装74e7bbd及数学0770593保持。正式checkpoint与科学权重保留；
+校准42个Adam文件已按控制器回执退休30.77GiB，不再承诺这些优化器字节可恢复。
+当前账号约345.41/800GiB、硬余量454.59GiB；MoE末记录新增约25.98GiB。
+Lens项目tide-learning-lab，TL-MOE-CAL/CONTROL/CONFIRM；私有入口`.local/LENS.md`。
+[状态/停止/恢复操作](studies/moe-controls-operations.md)，只读`python scripts/review_moe_controls.py`与`python scripts/review_moe_results.py`。
+
+以下为此前交接快照。
+
 # 当前交接：MoE补充批已后台训练，8运行／4完成先导
 
 2026-11-15 09:26 +08核对：固定30个筛选配方中，8条MoE均通过B4/L32三步新进程精确恢复并实际训练，
