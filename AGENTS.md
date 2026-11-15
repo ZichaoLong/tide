@@ -175,3 +175,12 @@
   failure at195.84Mi; no silent restart or relaxation of its2e-5 threshold.
   The q10 256Mi result is seed22 only. Neither this terminal review nor remaining
   wall budget authorizes a new training batch or automatic exposure extension.
+
+- The latest 2026-11-15 approval authorizes `docs/studies/capacity-utilization-v11.md`:
+  at most16 endpoint diagnostics,6 large MoE/dense128-to256Mi continuations,2 fresh
+  small E64 balance.01 controls to128Mi, and one diagnosis-selected HB intervention
+  family (at most2 variants ×2 seeds, short pilots then at most128Mi). New shared48h,
+  at most12 NPU workers, no aggregate compute caps,64GiB target/96GiB stop and>=200GiB
+  hard-quota headroom. Prepare fresh confirmation excluding all prior splits;
+  old confirmation is now seen evidence. Preserve original failures and fixed
+  parents; do not turn dense-to-MoE gains into an E20-toE64 scaling claim.

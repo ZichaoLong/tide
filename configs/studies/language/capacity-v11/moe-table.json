@@ -1,0 +1,104 @@
+{
+  "cases": [
+    {
+      "config": ".local/source-moe-execution-v2/configs/studies/language/moe-controls/table/configs/large-dense-lr0.001-s11.json",
+      "config_sha256": "f98bd49c5c88680d594fc4b8b3dd6760dfb1888b99166ad448fc2d7e3df2766d",
+      "execution_source": ".local/source-moe-execution-v2",
+      "group": "TL-CAPACITY-EXPOSURE-v11",
+      "id": "large-dense-lr0.001-s11",
+      "parent": "runs/moe-r2-main128-large-dense-lr0.001-s11",
+      "parent_checkpoint_sha256": "8724e2ba3edd688b8cebfaf1fecd152b67bbbbb0afbba8f3fa922071421c9ec9",
+      "peak_mib": 10000,
+      "phase": "moe-extend",
+      "until_tokens": 268435456
+    },
+    {
+      "config": ".local/source-moe-execution-v2/configs/studies/language/moe-controls/table/configs/large-dense-lr0.001-s22.json",
+      "config_sha256": "468e8fefd1022ec4f6431fb4aff66b9f3e8be0be3d3a17de88d8a40f6f31dc50",
+      "execution_source": ".local/source-moe-execution-v2",
+      "group": "TL-CAPACITY-EXPOSURE-v11",
+      "id": "large-dense-lr0.001-s22",
+      "parent": "runs/moe-r2-main128-large-dense-lr0.001-s22",
+      "parent_checkpoint_sha256": "f9a99b631e340b47bf38ba0f607208f47b2393f94efa8747b175df0d2a6d596c",
+      "peak_mib": 10000,
+      "phase": "moe-extend",
+      "until_tokens": 268435456
+    },
+    {
+      "config": ".local/source-moe-execution-v2/configs/studies/language/moe-controls/table/configs/large-e20-lr0.001-b0.01-s11.json",
+      "config_sha256": "dc83d8e82379ecad88471e497fc8792b7a0bcdbce9745daa5b2a4083ced522c4",
+      "execution_source": ".local/source-moe-execution-v2",
+      "group": "TL-CAPACITY-EXPOSURE-v11",
+      "id": "large-e20-lr0.001-b0.01-s11",
+      "parent": "runs/moe-r2-main128-large-e20-lr0.001-b0.01-s11",
+      "parent_checkpoint_sha256": "5914b5ffa9e945ab366d126e37c0b61b443b4ee8df2b40716e193ca8aad66833",
+      "peak_mib": 10000,
+      "phase": "moe-extend",
+      "until_tokens": 268435456
+    },
+    {
+      "config": ".local/source-moe-execution-v2/configs/studies/language/moe-controls/table/configs/large-e20-lr0.001-b0.01-s22.json",
+      "config_sha256": "e63accd1a117ad4ad4e979d5c93f2c1bfb9dcb8cd3c496cb3840a68b69d62052",
+      "execution_source": ".local/source-moe-execution-v2",
+      "group": "TL-CAPACITY-EXPOSURE-v11",
+      "id": "large-e20-lr0.001-b0.01-s22",
+      "parent": "runs/moe-r2-main128-large-e20-lr0.001-b0.01-s22",
+      "parent_checkpoint_sha256": "8dc19d7c9d6722981edf98b1b96f51c8c64680704e65a69b91ecfda14126c753",
+      "peak_mib": 10000,
+      "phase": "moe-extend",
+      "until_tokens": 268435456
+    },
+    {
+      "config": ".local/source-moe-execution-v2/configs/studies/language/moe-controls/table/configs/large-e64-lr0.001-b0.01-s11.json",
+      "config_sha256": "111ab97a647b9942a7cf4339270e1a5e4b28ff33046c1b311700881ce3360574",
+      "execution_source": ".local/source-moe-execution-v2",
+      "group": "TL-CAPACITY-EXPOSURE-v11",
+      "id": "large-e64-lr0.001-b0.01-s11",
+      "parent": "runs/moe-r2-main128-large-e64-lr0.001-b0.01-s11",
+      "parent_checkpoint_sha256": "65622b37d44662896332996d50d9ab852cb90f16061dac3b0c218a1253cd8d5d",
+      "peak_mib": 10000,
+      "phase": "moe-extend",
+      "until_tokens": 268435456
+    },
+    {
+      "config": ".local/source-moe-execution-v2/configs/studies/language/moe-controls/table/configs/large-e64-lr0.001-b0.01-s22.json",
+      "config_sha256": "d18ab3b288673ebd5b05cf4cdaa690d0e3345bb86ca8220ce90cd51819e1a360",
+      "execution_source": ".local/source-moe-execution-v2",
+      "group": "TL-CAPACITY-EXPOSURE-v11",
+      "id": "large-e64-lr0.001-b0.01-s22",
+      "parent": "runs/moe-r2-main128-large-e64-lr0.001-b0.01-s22",
+      "parent_checkpoint_sha256": "d25f26d807346be8a00f61340971488c7b65851686a266367f2e19c8b948e7d6",
+      "peak_mib": 10000,
+      "phase": "moe-extend",
+      "until_tokens": 268435456
+    },
+    {
+      "config": ".local/source-moe-execution-v2/configs/studies/language/moe-controls/table/configs/small-e64-lr0.003-b0.01-s11.json",
+      "config_sha256": "a54d15a4f35c786216da035a4f629545dbe767e98244bbbe2410c4cbfdfb2e3d",
+      "execution_source": ".local/source-moe-execution-v2",
+      "group": "TL-CAPACITY-BALANCE-v11",
+      "id": "small-e64-lr0.003-b0.01-s11",
+      "parent": null,
+      "peak_mib": 5000,
+      "phase": "moe-balance",
+      "until_tokens": 134217728
+    },
+    {
+      "config": ".local/source-moe-execution-v2/configs/studies/language/moe-controls/table/configs/small-e64-lr0.003-b0.01-s22.json",
+      "config_sha256": "d1c2399672a02880f4d243d156245f40e72e049ed3ba269c471969683eb345ed",
+      "execution_source": ".local/source-moe-execution-v2",
+      "group": "TL-CAPACITY-BALANCE-v11",
+      "id": "small-e64-lr0.003-b0.01-s22",
+      "parent": null,
+      "peak_mib": 5000,
+      "phase": "moe-balance",
+      "until_tokens": 134217728
+    }
+  ],
+  "created_at": "2026-11-15T09:43:08.617496+00:00",
+  "data_lock_sha256": "40b7c0ebb9650d11aa0c0080532c884e2ca3846db578155f3df7068b82191d2f",
+  "prior_confirmation_scope": "seen; descriptive bridge, not fresh independent confirmation",
+  "recording_admission": "runs/v11-recording-admission/projection.json",
+  "schema": "tide-capacity-v11-moe-table-v1",
+  "training_data": "runs/v9-data-r3"
+}
