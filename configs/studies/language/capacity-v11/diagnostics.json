@@ -1,0 +1,167 @@
+{
+  "cases": [
+    {
+      "checkpoint": "runs/v10-main-hb-d128-r64-q3-s11/train/latest.pt",
+      "config": ".local/source-v10-execution/configs/studies/language/direct-v10/table/main/hb-d128-r64-q3-s11.json",
+      "history": {
+        "33554432": "runs/v10-main-hb-d128-r64-q3-s11/train/tokens-33554432.pt",
+        "8388608": "runs/v10-main-hb-d128-r64-q3-s11/train/tokens-8388608.pt"
+      },
+      "id": "hb-d128-r64-q3-s11",
+      "sha256": "3fe811d009e0126fefd008f95be920ce0a4ae78e551a7285190591efb2fa89e9"
+    },
+    {
+      "checkpoint": "runs/v10-main-hb-d128-r64-q3-s22/train/latest.pt",
+      "config": ".local/source-v10-execution/configs/studies/language/direct-v10/table/main/hb-d128-r64-q3-s22.json",
+      "history": {
+        "33554432": "runs/v10-main-hb-d128-r64-q3-s22/train/tokens-33554432.pt",
+        "8388608": "runs/v10-main-hb-d128-r64-q3-s22/train/tokens-8388608.pt"
+      },
+      "id": "hb-d128-r64-q3-s22",
+      "sha256": "8f6413789274c6d9ec761999a2344277c7d388e190561132deeb723aef30a751"
+    },
+    {
+      "checkpoint": "runs/v10-main-hb-d64-r64-q3-s11/train/latest.pt",
+      "config": ".local/source-v10-execution/configs/studies/language/direct-v10/table/main/hb-d64-r64-q3-s11.json",
+      "history": {
+        "33554432": "runs/v10-main-hb-d64-r64-q3-s11/train/tokens-33554432.pt",
+        "8388608": "runs/v10-main-hb-d64-r64-q3-s11/train/tokens-8388608.pt"
+      },
+      "id": "hb-d64-r64-q3-s11",
+      "sha256": "9b6303ddc9fa386e27b1cabe15cc6a0a15f8b0e69ca340c3805ec80aa2a07d4b"
+    },
+    {
+      "checkpoint": "runs/v10-main-hb-d128-r28-pool-s11/train/latest.pt",
+      "config": ".local/source-v10-execution/configs/studies/language/direct-v10/table/main/hb-d128-r28-pool-s11.json",
+      "history": {
+        "33554432": "runs/v10-main-hb-d128-r28-pool-s11/train/tokens-33554432.pt",
+        "8388608": "runs/v10-main-hb-d128-r28-pool-s11/train/tokens-8388608.pt"
+      },
+      "id": "hb-d128-r28-pool-s11",
+      "sha256": "89ac203fd56adeec8d07ec53cb8397f3693095b8dd7254c8b77787b58bebe2ae"
+    },
+    {
+      "checkpoint": "runs/v10-main-hb-d128-r28-q10-s11/train/latest.pt",
+      "config": ".local/source-v10-execution/configs/studies/language/direct-v10/table/main/hb-d128-r28-q10-s11.json",
+      "history": {
+        "33554432": "runs/v10-main-hb-d128-r28-q10-s11/train/tokens-33554432.pt",
+        "8388608": "runs/v10-main-hb-d128-r28-q10-s11/train/tokens-8388608.pt"
+      },
+      "id": "hb-d128-r28-q10-s11",
+      "sha256": "d571c786d074139e493b5725f64cc21d865fec6cfedb325d575eca903178571f"
+    },
+    {
+      "checkpoint": "runs/v10-main-hb-d64-r28-q10-s11/train/latest.pt",
+      "config": ".local/source-v10-execution/configs/studies/language/direct-v10/table/main/hb-d64-r28-q10-s11.json",
+      "history": {
+        "33554432": "runs/v10-main-hb-d64-r28-q10-s11/train/tokens-33554432.pt",
+        "8388608": "runs/v10-main-hb-d64-r28-q10-s11/train/tokens-8388608.pt"
+      },
+      "id": "hb-d64-r28-q10-s11",
+      "sha256": "bd19c9350fe7087672810bb213c5b5f0883f20fecca2e790a4e23efd0fe9707a"
+    },
+    {
+      "checkpoint": "runs/v10-main-hb-d128-r3-dense-match-s11/train/latest.pt",
+      "config": ".local/source-v10-execution/configs/studies/language/direct-v10/table/main/hb-d128-r3-dense-match-s11.json",
+      "history": {
+        "33554432": "runs/v10-main-hb-d128-r3-dense-match-s11/train/tokens-33554432.pt",
+        "8388608": "runs/v10-main-hb-d128-r3-dense-match-s11/train/tokens-8388608.pt"
+      },
+      "id": "hb-d128-r3-dense-match-s11",
+      "sha256": "a8709a6c938c7334bd1e44ef26fec79a3f755f76a7f4f76fc6118e21c96d0601"
+    },
+    {
+      "checkpoint": "runs/v10-main-hb-d64-r4-dense-match-s11/train/latest.pt",
+      "config": ".local/source-v10-execution/configs/studies/language/direct-v10/table/main/hb-d64-r4-dense-match-s11.json",
+      "history": {
+        "33554432": "runs/v10-main-hb-d64-r4-dense-match-s11/train/tokens-33554432.pt",
+        "8388608": "runs/v10-main-hb-d64-r4-dense-match-s11/train/tokens-8388608.pt"
+      },
+      "id": "hb-d64-r4-dense-match-s11",
+      "sha256": "dc34017e3f039fadcc20bf20014bbb6f575229fe3f8ca3b4c2717f4f5b4eeaa7"
+    },
+    {
+      "checkpoint": "runs/v10-repair-hb-d128-r64-pool-s11/train/latest.pt",
+      "config": "runs/v10-repair-control/hb-d128-r64-pool-s11/config.json",
+      "history": {
+        "33554432": "runs/v10-repair-hb-d128-r64-pool-s11/train/tokens-33554432.pt"
+      },
+      "id": "hb-d128-r64-pool-s11",
+      "sha256": "78e6aea3a4e1d738db104025bafd40df9cc25136d1126b1bf095a1760594d641"
+    },
+    {
+      "checkpoint": "runs/moe-r2-main128-large-dense-lr0.001-s11/train/latest.pt",
+      "config": ".local/source-moe-execution-v2/configs/studies/language/moe-controls/table/configs/large-dense-lr0.001-s11.json",
+      "history": {
+        "33554432": "runs/moe-r2-main128-large-dense-lr0.001-s11/train/tokens-33554432.pt",
+        "8388608": "runs/moe-r2-main128-large-dense-lr0.001-s11/train/tokens-8388608.pt"
+      },
+      "id": "large-dense-lr0.001-s11",
+      "sha256": "8724e2ba3edd688b8cebfaf1fecd152b67bbbbb0afbba8f3fa922071421c9ec9"
+    },
+    {
+      "checkpoint": "runs/moe-r2-main128-large-e20-lr0.001-b0.01-s11/train/latest.pt",
+      "config": ".local/source-moe-execution-v2/configs/studies/language/moe-controls/table/configs/large-e20-lr0.001-b0.01-s11.json",
+      "history": {
+        "33554432": "runs/moe-r2-main128-large-e20-lr0.001-b0.01-s11/train/tokens-33554432.pt",
+        "8388608": "runs/moe-r2-main128-large-e20-lr0.001-b0.01-s11/train/tokens-8388608.pt"
+      },
+      "id": "large-e20-lr0.001-b0.01-s11",
+      "sha256": "5914b5ffa9e945ab366d126e37c0b61b443b4ee8df2b40716e193ca8aad66833"
+    },
+    {
+      "checkpoint": "runs/moe-r2-main128-large-e64-lr0.001-b0.01-s11/train/latest.pt",
+      "config": ".local/source-moe-execution-v2/configs/studies/language/moe-controls/table/configs/large-e64-lr0.001-b0.01-s11.json",
+      "history": {
+        "33554432": "runs/moe-r2-main128-large-e64-lr0.001-b0.01-s11/train/tokens-33554432.pt",
+        "8388608": "runs/moe-r2-main128-large-e64-lr0.001-b0.01-s11/train/tokens-8388608.pt"
+      },
+      "id": "large-e64-lr0.001-b0.01-s11",
+      "sha256": "65622b37d44662896332996d50d9ab852cb90f16061dac3b0c218a1253cd8d5d"
+    },
+    {
+      "checkpoint": "runs/moe-r2-main128-small-dense-lr0.003-s11/train/latest.pt",
+      "config": ".local/source-moe-execution-v2/configs/studies/language/moe-controls/table/configs/small-dense-lr0.003-s11.json",
+      "history": {
+        "33554432": "runs/moe-r2-main128-small-dense-lr0.003-s11/train/tokens-33554432.pt",
+        "8388608": "runs/moe-r2-main128-small-dense-lr0.003-s11/train/tokens-8388608.pt"
+      },
+      "id": "small-dense-lr0.003-s11",
+      "sha256": "d6888e0e1b4ba34e56383b8eee456a0ca8d24fc129ae8e816bb09d0a2ed9ddf6"
+    },
+    {
+      "checkpoint": "runs/moe-r2-main128-small-e20-lr0.003-b0.01-s11/train/latest.pt",
+      "config": ".local/source-moe-execution-v2/configs/studies/language/moe-controls/table/configs/small-e20-lr0.003-b0.01-s11.json",
+      "history": {
+        "33554432": "runs/moe-r2-main128-small-e20-lr0.003-b0.01-s11/train/tokens-33554432.pt",
+        "8388608": "runs/moe-r2-main128-small-e20-lr0.003-b0.01-s11/train/tokens-8388608.pt"
+      },
+      "id": "small-e20-lr0.003-b0.01-s11",
+      "sha256": "a09edce993ce6d7e78ca2b5be795be54efad065152ae247f87b098fffa02a778"
+    },
+    {
+      "checkpoint": "runs/moe-r2-main128-small-e64-lr0.003-b0.001-s11/train/latest.pt",
+      "config": ".local/source-moe-execution-v2/configs/studies/language/moe-controls/table/configs/small-e64-lr0.003-b0.001-s11.json",
+      "history": {
+        "33554432": "runs/moe-r2-main128-small-e64-lr0.003-b0.001-s11/train/tokens-33554432.pt",
+        "8388608": "runs/moe-r2-main128-small-e64-lr0.003-b0.001-s11/train/tokens-8388608.pt"
+      },
+      "id": "small-e64-lr0.003-b0.001-s11",
+      "sha256": "dc529a6509eee1cbdf4579517fcaa992e2fd579ee51a6694504b40df20357e71"
+    },
+    {
+      "checkpoint": "runs/moe-r2-main128-small-e64-lr0.003-b0.001-s22/train/latest.pt",
+      "config": ".local/source-moe-execution-v2/configs/studies/language/moe-controls/table/configs/small-e64-lr0.003-b0.001-s22.json",
+      "history": {
+        "33554432": "runs/moe-r2-main128-small-e64-lr0.003-b0.001-s22/train/tokens-33554432.pt",
+        "8388608": "runs/moe-r2-main128-small-e64-lr0.003-b0.001-s22/train/tokens-8388608.pt"
+      },
+      "id": "small-e64-lr0.003-b0.001-s22",
+      "sha256": "91813c98d23d557b8b2cfc13229033e7b00e0e24a7b15232acb1f4f80bc8151e"
+    }
+  ],
+  "observation_sequences": 512,
+  "schema": "tide-capacity-v11-diagnostic-table",
+  "selection_seed": 110011,
+  "update_sequences": 64
+}
