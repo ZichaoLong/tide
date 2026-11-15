@@ -26,6 +26,14 @@ def review(root=ROOT):
         pilot_projection=read(out/'pilot/projection.json')
         projection=read(out/'train/projection.json') or pilot_projection
         original=read(root/'runs'/('v10-main-'+cid)/'train/result.json')
+        confirmed=read(out/'confirmation/result.json')
+        confirmation={k:confirmed[k] for k in ('schema','state','nll','tokens','exposure','error',
+            'test_access','checkpoint_sha256','config_sha256','started_at','finished_at') if k in confirmed}
+        if confirmed:
+            confirmation.update(record=str(out/'confirmation/result.json'),
+                source_commit=confirmed.get('source',{}).get('commit'),
+                training_identity=confirmed.get('training_identity'))
+        confirm_projection=read(out/'confirmation/projection.json')
         rows.append(dict(id=cid,job=job,original_run='tl-v10-main-'+cid,
             original_state=original.get('state','unchecked'),original_error=original.get('error'),
             service_state=observed.get('state',{}).get('state','not_submitted'),
@@ -47,7 +55,9 @@ def review(root=ROOT):
             pilot_max_gradient_norm=pilot.get('max_gradient_norm'),
             gates_passed_at=current.get('gates_passed_at'),tokens=progress.get('tokens'),step=progress.get('step'),
             last_update=progress.get('last_update'),training_state=trained.get('state','unchecked'),
-            final_nll=trained.get('final_validation_nll'),confirmation=read(out/'confirmation/result.json'),
+            final_nll=trained.get('final_validation_nll'),confirmation=confirmation,
+            confirmation_lens_status=confirm_projection.get('status','unchecked'),
+            confirmation_lens_readback_matches=confirm_projection.get('readback_matches'),
             lens_run='tl-'+job,lens_status=projection.get('status','unchecked'),
             lens_readback_matches=projection.get('readback_matches'),
             error=current.get('error'),resources=worker.get('resources')))

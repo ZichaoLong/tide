@@ -13902,7 +13902,7 @@
     {
       "budget": "\u5171\u4eab48h\u81f311\u670816\u65e521:51:33\uff1b\u6700\u591a12NPU worker\uff1b\u6700\u5927200M\uff1b64GiB\u76ee\u6807/96GiB\u4e0a\u9650\uff0c\u65e0\u7d2f\u8ba1\u7b97\u65f6\u4e0a\u9650\u3002",
       "decision": "\u6309\u56fa\u5b9a\u6709\u9650\u8868\u6267\u884c\uff1b\u8d28\u91cf\u3001\u6570\u503c\u548c\u6027\u80fd\u5206\u522b\u5ba1\u9605\uff0c\u4e0d\u81ea\u52a8\u6269\u5019\u9009\u3002",
-      "execution_note": "\u539f20\u676112\u5b8c\u6210\u30015\u8fd0\u884c\u30013\u539f\u5931\u8d25\uff1b\u4e09\u5931\u8d25\u53e6\u4ee5d089dd05\u663e\u5f0f\u4fee\u590d\u7eed\u8bad\uff0c\u4e0d\u8986\u76d6\u539f\u8bb0\u5f55\u3002\u786e\u8ba4\u53ca\u4e25\u683c\u5931\u8d25\u5206\u5217\u3002",
+      "execution_note": "11\u670815\u65e508:35\u9644\u8fd1\uff1a\u539f15\u5b8c\u6210/2\u8fd0\u884c/3failed\uff1b\u53e6\u4fee\u590d1\u5b8c\u6210/2\u8fd0\u884c\uff0c16/20\u914d\u7f6e\u5230128Mi\u3002\u539f\u4e3b\u786e\u8ba4\u5f85\u9636\u6bb5\uff0c\u4fee\u590dR28\u5df2\u786e\u8ba4\uff1b\u4e25\u683c\u5931\u8d25\u4fdd\u7559\u3002",
       "id": "V10-CAPACITY",
       "kind": "experiment",
       "question": "\u56fa\u5b9a\u6d3b\u52a8\u6863\uff0cd64\u2192128\u589e\u52a0\u5bb9\u91cf\u662f\u5426\u6539\u5584\u5171\u540c\u66dd\u5149\u8d28\u91cf\uff1f",
@@ -13938,6 +13938,10 @@
         {
           "label": "\u4e09\u9879\u6545\u969c\u7684\u5b9a\u4f4d\u4e0e\u65b9\u6848",
           "path": "docs/studies/direct-v10-gradient-results.md"
+        },
+        {
+          "label": "11\u670815\u65e5\u4e0a\u5348\u5171\u540c128Mi\u8fdb\u5c55",
+          "path": "docs/studies/direct-v10-progress-20261115-morning.md"
         }
       ],
       "runs": [
@@ -13955,7 +13959,7 @@
           "lens_record": "runs/v10-main-hb-d64-r64-q3-s11/train/projection.json",
           "record": "runs/v10-main-hb-d64-r64-q3-s11/train/result.json",
           "source_commit": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
-          "status": "running"
+          "status": "completed"
         },
         {
           "config": "configs/studies/language/direct-v10/table/main/hb-d64-r28-q10-s22.json",
@@ -13979,7 +13983,7 @@
           "lens_record": "runs/v10-main-hb-d128-r28-q10-s11/train/projection.json",
           "record": "runs/v10-main-hb-d128-r28-q10-s11/train/result.json",
           "source_commit": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
-          "status": "running"
+          "status": "completed"
         },
         {
           "config": "configs/studies/language/direct-v10/table/main/hb-d128-r64-q3-s11.json",
@@ -14041,6 +14045,10 @@
         {
           "label": "\u9010\u8f68\u8ff9\u5931\u8d25\u3001\u9a8c\u8bc1\u4e0e\u6570\u503c\u8865\u8bc1",
           "path": "docs/evidence/direct-v10-progress-20261115-am.json"
+        },
+        {
+          "label": "11\u670815\u65e5\u4e0a\u5348\u5171\u540c128Mi\u8fdb\u5c55",
+          "path": "docs/studies/direct-v10-progress-20261115-morning.md"
         }
       ],
       "status": "awaiting",
@@ -14054,7 +14062,7 @@
     {
       "budget": "\u5171\u4eab48h\u81f311\u670816\u65e521:51:33\uff1b\u6700\u591a12NPU worker\uff1b\u6700\u5927200M\uff1b64GiB\u76ee\u6807/96GiB\u4e0a\u9650\uff0c\u65e0\u7d2f\u8ba1\u7b97\u65f6\u4e0a\u9650\u3002",
       "decision": "\u6309\u56fa\u5b9a\u6709\u9650\u8868\u6267\u884c\uff1b\u8d28\u91cf\u3001\u6570\u503c\u548c\u6027\u80fd\u5206\u522b\u5ba1\u9605\uff0c\u4e0d\u81ea\u52a8\u6269\u5019\u9009\u3002",
-      "execution_note": "\u539f20\u676112\u5b8c\u6210\u30015\u8fd0\u884c\u30013\u539f\u5931\u8d25\uff1b\u4e09\u5931\u8d25\u53e6\u4ee5d089dd05\u663e\u5f0f\u4fee\u590d\u7eed\u8bad\uff0c\u4e0d\u8986\u76d6\u539f\u8bb0\u5f55\u3002\u786e\u8ba4\u53ca\u4e25\u683c\u5931\u8d25\u5206\u5217\u3002",
+      "execution_note": "11\u670815\u65e508:35\u9644\u8fd1\uff1a\u539f15\u5b8c\u6210/2\u8fd0\u884c/3failed\uff1b\u53e6\u4fee\u590d1\u5b8c\u6210/2\u8fd0\u884c\uff0c16/20\u914d\u7f6e\u5230128Mi\u3002\u539f\u4e3b\u786e\u8ba4\u5f85\u9636\u6bb5\uff0c\u4fee\u590dR28\u5df2\u786e\u8ba4\uff1b\u4e25\u683c\u5931\u8d25\u4fdd\u7559\u3002",
       "id": "V10-ACTIVE",
       "kind": "experiment",
       "question": "\u5305\u62ecRead/\u5171\u4eab\u53c2\u6570\u5339\u914d\u65f6\uff0cdense\u2192R28\u2192R64\u662f\u5426\u53d7\u76ca\uff1f",
@@ -14090,6 +14098,10 @@
         {
           "label": "\u4e09\u9879\u6545\u969c\u7684\u5b9a\u4f4d\u4e0e\u65b9\u6848",
           "path": "docs/studies/direct-v10-gradient-results.md"
+        },
+        {
+          "label": "11\u670815\u65e5\u4e0a\u5348\u5171\u540c128Mi\u8fdb\u5c55",
+          "path": "docs/studies/direct-v10-progress-20261115-morning.md"
         }
       ],
       "runs": [
@@ -14139,7 +14151,7 @@
           "lens_record": "runs/v10-main-hb-d64-r64-q3-s11/train/projection.json",
           "record": "runs/v10-main-hb-d64-r64-q3-s11/train/result.json",
           "source_commit": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
-          "status": "running"
+          "status": "completed"
         },
         {
           "config": "configs/studies/language/direct-v10/table/main/hb-d64-r28-q10-s22.json",
@@ -14163,7 +14175,7 @@
           "lens_record": "runs/v10-main-hb-d128-r28-q10-s11/train/projection.json",
           "record": "runs/v10-main-hb-d128-r28-q10-s11/train/result.json",
           "source_commit": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
-          "status": "running"
+          "status": "completed"
         },
         {
           "config": "configs/studies/language/direct-v10/table/main/hb-d128-r64-q3-s11.json",
@@ -14225,6 +14237,10 @@
         {
           "label": "\u9010\u8f68\u8ff9\u5931\u8d25\u3001\u9a8c\u8bc1\u4e0e\u6570\u503c\u8865\u8bc1",
           "path": "docs/evidence/direct-v10-progress-20261115-am.json"
+        },
+        {
+          "label": "11\u670815\u65e5\u4e0a\u5348\u5171\u540c128Mi\u8fdb\u5c55",
+          "path": "docs/studies/direct-v10-progress-20261115-morning.md"
         }
       ],
       "status": "awaiting",
@@ -14238,7 +14254,7 @@
     {
       "budget": "\u5171\u4eab48h\u81f311\u670816\u65e521:51:33\uff1b\u6700\u591a12NPU worker\uff1b\u6700\u5927200M\uff1b64GiB\u76ee\u6807/96GiB\u4e0a\u9650\uff0c\u65e0\u7d2f\u8ba1\u7b97\u65f6\u4e0a\u9650\u3002",
       "decision": "\u6309\u56fa\u5b9a\u6709\u9650\u8868\u6267\u884c\uff1b\u8d28\u91cf\u3001\u6570\u503c\u548c\u6027\u80fd\u5206\u522b\u5ba1\u9605\uff0c\u4e0d\u81ea\u52a8\u6269\u5019\u9009\u3002",
-      "execution_note": "\u539f20\u676112\u5b8c\u6210\u30015\u8fd0\u884c\u30013\u539f\u5931\u8d25\uff1b\u4e09\u5931\u8d25\u53e6\u4ee5d089dd05\u663e\u5f0f\u4fee\u590d\u7eed\u8bad\uff0c\u4e0d\u8986\u76d6\u539f\u8bb0\u5f55\u3002\u786e\u8ba4\u53ca\u4e25\u683c\u5931\u8d25\u5206\u5217\u3002",
+      "execution_note": "11\u670815\u65e508:35\u9644\u8fd1\uff1a\u539f15\u5b8c\u6210/2\u8fd0\u884c/3failed\uff1b\u53e6\u4fee\u590d1\u5b8c\u6210/2\u8fd0\u884c\uff0c16/20\u914d\u7f6e\u5230128Mi\u3002\u539f\u4e3b\u786e\u8ba4\u5f85\u9636\u6bb5\uff0c\u4fee\u590dR28\u5df2\u786e\u8ba4\uff1b\u4e25\u683c\u5931\u8d25\u4fdd\u7559\u3002",
       "id": "V10-CONTROL",
       "kind": "experiment",
       "question": "\u4f4e\u6d3b\u52a8\u8d28\u91cf\u4ee3\u4ef7\u591a\u5927\uff0c\u4e0e\u5408\u7406\u8c03\u53c2TF\u6709\u4f55\u5dee\u8ddd\uff1f",
@@ -14274,6 +14290,10 @@
         {
           "label": "\u4e09\u9879\u6545\u969c\u7684\u5b9a\u4f4d\u4e0e\u65b9\u6848",
           "path": "docs/studies/direct-v10-gradient-results.md"
+        },
+        {
+          "label": "11\u670815\u65e5\u4e0a\u5348\u5171\u540c128Mi\u8fdb\u5c55",
+          "path": "docs/studies/direct-v10-progress-20261115-morning.md"
         }
       ],
       "runs": [
@@ -14307,7 +14327,7 @@
           "lens_record": "runs/v10-main-hb-d128-r28-pool-s11/train/projection.json",
           "record": "runs/v10-main-hb-d128-r28-pool-s11/train/result.json",
           "source_commit": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
-          "status": "running"
+          "status": "completed"
         },
         {
           "config": "configs/studies/language/direct-v10/table/main/hb-d128-r64-pool-s11.json",
@@ -14377,6 +14397,10 @@
         {
           "label": "\u9010\u8f68\u8ff9\u5931\u8d25\u3001\u9a8c\u8bc1\u4e0e\u6570\u503c\u8865\u8bc1",
           "path": "docs/evidence/direct-v10-progress-20261115-am.json"
+        },
+        {
+          "label": "11\u670815\u65e5\u4e0a\u5348\u5171\u540c128Mi\u8fdb\u5c55",
+          "path": "docs/studies/direct-v10-progress-20261115-morning.md"
         }
       ],
       "status": "awaiting",
@@ -14390,7 +14414,7 @@
     {
       "budget": "\u5171\u4eab48h\u81f311\u670816\u65e521:51:33\uff1b\u6700\u591a12NPU worker\uff1b\u6700\u5927200M\uff1b64GiB\u76ee\u6807/96GiB\u4e0a\u9650\uff0c\u65e0\u7d2f\u8ba1\u7b97\u65f6\u4e0a\u9650\u3002",
       "decision": "\u6309\u56fa\u5b9a\u6709\u9650\u8868\u6267\u884c\uff1b\u8d28\u91cf\u3001\u6570\u503c\u548c\u6027\u80fd\u5206\u522b\u5ba1\u9605\uff0c\u4e0d\u81ea\u52a8\u6269\u5019\u9009\u3002",
-      "execution_note": "\u539f20\u676112\u5b8c\u6210\u30015\u8fd0\u884c\u30013\u539f\u5931\u8d25\uff1b\u4e09\u5931\u8d25\u53e6\u4ee5d089dd05\u663e\u5f0f\u4fee\u590d\u7eed\u8bad\uff0c\u4e0d\u8986\u76d6\u539f\u8bb0\u5f55\u3002\u786e\u8ba4\u53ca\u4e25\u683c\u5931\u8d25\u5206\u5217\u3002",
+      "execution_note": "11\u670815\u65e508:35\u9644\u8fd1\uff1a\u539f15\u5b8c\u6210/2\u8fd0\u884c/3failed\uff1b\u53e6\u4fee\u590d1\u5b8c\u6210/2\u8fd0\u884c\uff0c16/20\u914d\u7f6e\u5230128Mi\u3002\u539f\u4e3b\u786e\u8ba4\u5f85\u9636\u6bb5\uff0c\u4fee\u590dR28\u5df2\u786e\u8ba4\uff1b\u4e25\u683c\u5931\u8d25\u4fdd\u7559\u3002",
       "id": "V10-CONFIRMATION",
       "kind": "experiment",
       "question": "\u5171\u540c\u66dd\u5149\u7ed3\u8bba\u80fd\u5426\u5728\u672a\u7528\u4e8e\u9009\u62e9\u7684262K split\u4fdd\u6301\uff1f",
@@ -14589,7 +14613,7 @@
     {
       "budget": "\u539f48h\u622a\u6b6211\u670816\u65e521:51:33\uff1b\u5171\u4eab12slot\uff0c\u65b0\u4fee\u590d24GiB\uff1b\u65e0\u7d2f\u8ba1CPU/NPU\u7b97\u65f6\u4e0a\u9650\u3002",
       "decision": "\u539ffailed\u4fdd\u7559\uff1b\u6bcf\u94fe\u901a\u8fc7\u5b8c\u6574batch\u6062\u590d\u548c64\u6b65\u5148\u5bfc\u540e\u5230\u539f128Mi\u7ec8\u70b9\uff0c\u4e0d\u81ea\u52a8\u6269\u5230256Mi\u3002",
-      "execution_note": "2026-11-15 05:07 +08:00\uff1a\u4e09\u6761\u5747\u5b9e\u9645\u8bad\u7ec3\u4e2d\uff1b\u539f\u5931\u8d25\u53ca\u4e25\u683c\u8d85\u5dee\u4fdd\u7559\u3002",
+      "execution_note": "\u4e09\u94fe\u6062\u590d/\u5148\u5bfc\u901a\u8fc7\uff0cR28\u8fbe\u5230\u6b63\u5f0f\u7ec8\u70b9\uff1b\u4e09\u6761\u5b8c\u6574\u957f\u671f\u5bf9\u7167\u4ecd\u672a\u6536\u9f50\u3002",
       "id": "V10-REPAIR",
       "kind": "experiment",
       "lens_group": "TL-CONTROL-v10",
@@ -14614,6 +14638,10 @@
         {
           "label": "\u9010\u94fe\u5b9e\u9645\u8eab\u4efd\u4e0e\u72b6\u6001",
           "path": "docs/evidence/direct-v10-repair-handoff.json"
+        },
+        {
+          "label": "11\u670815\u65e5\u4e0a\u5348\u5171\u540c128Mi\u8fdb\u5c55",
+          "path": "docs/studies/direct-v10-progress-20261115-morning.md"
         }
       ],
       "runs": [
@@ -14621,7 +14649,7 @@
           "config": "runs/v10-repair-control/hb-d128-r64-pool-s11/config.json",
           "id": "tl-v10-repair-hb-d128-r64-pool-s11",
           "lens_record": "runs/v10-repair-hb-d128-r64-pool-s11/train/projection.json",
-          "note": "\u5b8c\u6574batch\u65b0\u8fdb\u7a0b\u6062\u590d\u53ca64\u66f4\u65b0\u901a\u8fc7\uff0c\u6b63\u5f0f\u7eed\u8bad\u4e2d\uff1b\u7ec8\u70b9\u5b66\u4e60\u5c1a\u672a\u5ba1\u9605\u3002",
+          "note": "\u6b63\u5f0f\u7eed\u8bad\u63a8\u8fdb\u4e2d\uff0c\u65e0\u65b0\u589e\u5931\u8d25\uff1b\u4fdd\u6301\u539f128Mi\u76ee\u6807\u3002",
           "parent": "v10-diag-hb-d128-r64-pool-s11/failure-checkpoint.pt",
           "parent_sha256": "476f1ce19a0b30e3d3f781ac07df4250221d4d8b1a688a83893f7dc057ee48cd",
           "physical_id": 11,
@@ -14633,7 +14661,7 @@
           "config": "runs/v10-repair-control/hb-d128-r64-pool-s22/config.json",
           "id": "tl-v10-repair-hb-d128-r64-pool-s22",
           "lens_record": "runs/v10-repair-hb-d128-r64-pool-s22/train/projection.json",
-          "note": "\u5b8c\u6574batch\u65b0\u8fdb\u7a0b\u6062\u590d\u53ca64\u66f4\u65b0\u901a\u8fc7\uff0c\u6b63\u5f0f\u7eed\u8bad\u4e2d\uff1b\u7ec8\u70b9\u5b66\u4e60\u5c1a\u672a\u5ba1\u9605\u3002",
+          "note": "\u6b63\u5f0f\u7eed\u8bad\u63a8\u8fdb\u4e2d\uff0c\u65e0\u65b0\u589e\u5931\u8d25\uff1b\u4fdd\u6301\u539f128Mi\u76ee\u6807\u3002",
           "parent": "v10-diag-hb-d128-r64-pool-s22/failure-checkpoint.pt",
           "parent_sha256": "c01b45f434a03c780b0486a6e1b018d967c3db2ba7035373304f5c8346a0331e",
           "physical_id": 6,
@@ -14645,18 +14673,18 @@
           "config": "runs/v10-repair-control/hb-d128-r28-pool-s22/config.json",
           "id": "tl-v10-repair-hb-d128-r28-pool-s22",
           "lens_record": "runs/v10-repair-hb-d128-r28-pool-s22/train/projection.json",
-          "note": "\u5b8c\u6574batch\u65b0\u8fdb\u7a0b\u6062\u590d\u53ca64\u66f4\u65b0\u901a\u8fc7\uff0c\u6b63\u5f0f\u7eed\u8bad\u4e2d\uff1b\u7ec8\u70b9\u5b66\u4e60\u5c1a\u672a\u5ba1\u9605\u3002",
+          "note": "128Mi\u4e0e262K\u786e\u8ba4\u5747\u5b8c\u6210\uff0cLens\u8bfb\u56de\u901a\u8fc7\uff1b\u539ffailed\u4fdd\u7559\u3002",
           "parent": "v10-diag-hb-d128-r28-pool-s22/failure-checkpoint.pt",
           "parent_sha256": "43ef640339e9d7e9ee47b37480a3422218f6976e44da889b77d84b109783f7fc",
           "physical_id": 14,
           "record": "runs/v10-repair-hb-d128-r28-pool-s22/train/result.json",
           "source_commit": "d089dd0556798df55a0440ef471ffe254f8054e5",
-          "status": "running"
+          "status": "completed"
         }
       ],
       "status": "running",
       "study_id": "TL-REPAIR-v10",
-      "summary": "\u4e09\u94fe\u6062\u590d/64\u66f4\u65b0/Lens\u901a\u8fc7\uff0c\u6b63\u5f0f128Mi\u7eed\u8bad",
+      "summary": "R28\u4fee\u590d\u5b8c\u6210128Mi\u53ca\u786e\u8ba4\uff0c\u4e24\u4e2aR64\u7ee7\u7eed",
       "title": "\u4e09\u6761pool\uff1a\u65b0\u6e90\u7801\u4fee\u590d\u7eed\u8bad",
       "track": "shared",
       "view_group": "current",
@@ -14690,15 +14718,19 @@
         {
           "label": "\u9010\u94fe\u5b9e\u9645\u8eab\u4efd\u4e0e\u72b6\u6001",
           "path": "docs/evidence/direct-v10-repair-handoff.json"
+        },
+        {
+          "label": "11\u670815\u65e5\u4e0a\u5348\u5171\u540c128Mi\u8fdb\u5c55",
+          "path": "docs/studies/direct-v10-progress-20261115-morning.md"
         }
       ],
       "scope": "\u9650\u5b9a\u72ec\u7acbdirect\u5b9e\u73b0/FP32\u4e09\u6761\u539f\u8f68\u8ff9\uff1b\u6e90\u53d8\u66f4\u663e\u5f0f\u3002",
       "status": "awaiting",
-      "summary": "\u77ed\u7a0b\u673a\u5236\u8d44\u683c\u4e0d\u7b49\u4e8e\u957f\u671f\u7a33\u5b9a\u6216\u8bed\u8a00\u4f18\u52bf",
+      "summary": "R28\u5355\u8f68\u8ff9128Mi\u53ca\u786e\u8ba4\u5b8c\u6210\uff0c\u5b8c\u6574\u7ec4\u5f85\u5ba1\u9605",
       "title": "\u4fee\u590d\u540e\u957f\u671f\u7a33\u5b9a\u4e0e\u8d28\u91cf\uff1a\u5f85\u5ba1\u9605",
       "track": "shared",
       "transfer_conditions": "\u4ec5\u76f8\u540c\u805a\u5408\u516c\u5f0f\u4e0eVJP\u5951\u7ea6\uff1b\u57fa\u5ea7\u4ecd\u9700\u72ec\u7acb\u63a5\u5165\u9a8c\u6536\u3002",
-      "unresolved": "\u7ec8\u70b9\u7a33\u5b9a\u3001\u8d28\u91cf\u3001262K\u786e\u8ba4\u5c1a\u672a\u5b8c\u6210\uff1b\u672a\u77e5\u5176\u4ed6\u6570\u503c\u6781\u7aef\u8303\u56f4\u3002",
+      "unresolved": "R64\u4e24\u6761\u7ec8\u70b9\u672a\u5b8c\u6210\uff1b\u4e00\u6761\u4fee\u590d\u5b8c\u6210\u4e0d\u4fdd\u8bc1\u5168\u90e8\u8303\u56f4\u7a33\u5b9a\uff0c\u539f\u4e25\u683c\u6709\u9650\u8d85\u5dee\u4fdd\u7559\u3002",
       "view_group": "current",
       "x": 915,
       "y": 1720
