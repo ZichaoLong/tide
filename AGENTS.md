@@ -167,5 +167,11 @@
   Preserve the12 original causal-zero admission failures and finite CPU/NPU mismatches.
   Calibration Adam states were retired by the recorded42-file receipt; formal
   checkpoints and scientific weights remain. No automatic MoE extension/new grid.
-  Old v10 still owns its two active256Mi extensions; its new q10 feasibility failure
-  is separate and must not be silently resumed or have its2e-5 threshold relaxed.
+  V10 is also terminal as of 2026-11-15 16:54 +08: 20 distinct128Mi configurations
+  (17 original successes plus3 explicit repairs),7 successful256Mi extensions and
+  all27 independent confirmations. All relevant services/controllers have no live
+  descendants. See `docs/studies/direct-v10-results.md` and its read-only auditor.
+  Preserve the3 original pool failures and the q10 seed11 extension feasibility
+  failure at195.84Mi; no silent restart or relaxation of its2e-5 threshold.
+  The q10 256Mi result is seed22 only. Neither this terminal review nor remaining
+  wall budget authorizes a new training batch or automatic exposure extension.

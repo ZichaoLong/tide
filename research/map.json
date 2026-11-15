@@ -1327,39 +1327,39 @@
       "target": "RV10-PERF"
     },
     {
-      "detail": "\u6267\u884c\u3001\u4e25\u683c\u6570\u503c\u3001\u79bb\u6563\u673a\u5236\u3001\u6062\u590d\u3001\u5b66\u4e60\u5206\u5f00\u3002",
+      "detail": "\u4f9d\u636e\u914d\u5bf9\u7ed3\u679c\u3001\u5931\u8d25\u53ca\u89e3\u91ca\u8fb9\u754c\u4eba\u5de5\u5ba1\u9605\uff1b\u9000\u51fa\u7801\u4e0d\u4ea7\u751f\u79d1\u5b66\u652f\u6301\u3002",
       "id": "EV10-CAPACITY",
       "kind": "produces",
-      "label": "\u7b49\u5f85\u79d1\u5b66\u5ba1\u9605",
+      "label": "\u7ec8\u6001\u4e0e\u72ec\u7acb\u786e\u8ba4\u5ba1\u9605",
       "source": "V10-CAPACITY",
-      "status": "planned",
+      "status": "documented",
       "target": "RV10-CAPACITY"
     },
     {
-      "detail": "\u6267\u884c\u3001\u4e25\u683c\u6570\u503c\u3001\u79bb\u6563\u673a\u5236\u3001\u6062\u590d\u3001\u5b66\u4e60\u5206\u5f00\u3002",
+      "detail": "\u4f9d\u636e\u914d\u5bf9\u7ed3\u679c\u3001\u5931\u8d25\u53ca\u89e3\u91ca\u8fb9\u754c\u4eba\u5de5\u5ba1\u9605\uff1b\u9000\u51fa\u7801\u4e0d\u4ea7\u751f\u79d1\u5b66\u652f\u6301\u3002",
       "id": "EV10-ACTIVE",
       "kind": "produces",
-      "label": "\u7b49\u5f85\u79d1\u5b66\u5ba1\u9605",
+      "label": "\u7ec8\u6001\u4e0e\u72ec\u7acb\u786e\u8ba4\u5ba1\u9605",
       "source": "V10-ACTIVE",
-      "status": "planned",
+      "status": "documented",
       "target": "RV10-ACTIVE"
     },
     {
-      "detail": "\u6267\u884c\u3001\u4e25\u683c\u6570\u503c\u3001\u79bb\u6563\u673a\u5236\u3001\u6062\u590d\u3001\u5b66\u4e60\u5206\u5f00\u3002",
+      "detail": "\u4f9d\u636e\u914d\u5bf9\u7ed3\u679c\u3001\u5931\u8d25\u53ca\u89e3\u91ca\u8fb9\u754c\u4eba\u5de5\u5ba1\u9605\uff1b\u9000\u51fa\u7801\u4e0d\u4ea7\u751f\u79d1\u5b66\u652f\u6301\u3002",
       "id": "EV10-CONTROL",
       "kind": "produces",
-      "label": "\u7b49\u5f85\u79d1\u5b66\u5ba1\u9605",
+      "label": "\u7ec8\u6001\u4e0e\u72ec\u7acb\u786e\u8ba4\u5ba1\u9605",
       "source": "V10-CONTROL",
-      "status": "planned",
+      "status": "documented",
       "target": "RV10-CONTROL"
     },
     {
-      "detail": "\u6267\u884c\u3001\u4e25\u683c\u6570\u503c\u3001\u79bb\u6563\u673a\u5236\u3001\u6062\u590d\u3001\u5b66\u4e60\u5206\u5f00\u3002",
+      "detail": "\u4f9d\u636e\u914d\u5bf9\u7ed3\u679c\u3001\u5931\u8d25\u53ca\u89e3\u91ca\u8fb9\u754c\u4eba\u5de5\u5ba1\u9605\uff1b\u9000\u51fa\u7801\u4e0d\u4ea7\u751f\u79d1\u5b66\u652f\u6301\u3002",
       "id": "EV10-CONFIRMATION",
       "kind": "produces",
-      "label": "\u7b49\u5f85\u79d1\u5b66\u5ba1\u9605",
+      "label": "\u7ec8\u6001\u4e0e\u72ec\u7acb\u786e\u8ba4\u5ba1\u9605",
       "source": "V10-CONFIRMATION",
-      "status": "planned",
+      "status": "documented",
       "target": "RV10-CONFIRMATION"
     },
     {
@@ -1377,7 +1377,7 @@
       "kind": "precondition",
       "label": "\u6709\u754c\u53ef\u8fd0\u884c\u5b9e\u73b0",
       "source": "RV10-PERF",
-      "status": "planned",
+      "status": "documented",
       "target": "V10-CAPACITY"
     },
     {
@@ -1386,7 +1386,7 @@
       "kind": "comparison",
       "label": "\u590d\u7528\u540c\u4e00\u8f68\u8ff9",
       "source": "V10-CAPACITY",
-      "status": "planned",
+      "status": "documented",
       "target": "V10-ACTIVE"
     },
     {
@@ -1395,7 +1395,7 @@
       "kind": "comparison",
       "label": "\u5c0f\u7a20\u5bc6\u53caTF\u5bf9\u7167",
       "source": "V10-CONTROL",
-      "status": "planned",
+      "status": "documented",
       "target": "V10-ACTIVE"
     },
     {
@@ -1404,7 +1404,7 @@
       "kind": "precondition",
       "label": "\u51bb\u7ed3\u5171\u540c\u7ec8\u70b9",
       "source": "V10-CAPACITY",
-      "status": "planned",
+      "status": "documented",
       "target": "V10-CONFIRMATION"
     },
     {
@@ -1417,7 +1417,7 @@
       "target": "RV10-GRADIENT"
     },
     {
-      "detail": "\u5df2\u6388\u6743\u65b0\u6e90\u7801\u4fee\u590d\uff0c\u6062\u590d\u4e0e\u77ed\u7a0b\u95e8\u69db\u901a\u8fc7\uff0c\u6b63\u5f0f\u8865\u9f50\u4e2d\uff1b\u539f\u5931\u8d25\u548c\u6e90\u7801\u8c31\u7cfb\u4fdd\u7559\u3002",
+      "detail": "\u4e09\u6761\u65b0\u6e90\u7801\u4fee\u590d\u5df2\u8865\u9f50128Mi\u548c\u786e\u8ba4\uff1b\u539f\u5931\u8d25\u53ca\u8c31\u7cfb\u4fdd\u7559\u3002",
       "id": "EV10-GRADIENT-CONTROL",
       "kind": "informs",
       "label": "\u4fee\u590d\u540e\u8865\u9f50\u5bf9\u7167",
@@ -1444,12 +1444,12 @@
       "target": "V10-REPAIR"
     },
     {
-      "detail": "\u6267\u884c\u9000\u51fa\u7801\u4e0d\u80fd\u81ea\u52a8\u6210\u4e3a\u79d1\u5b66\u652f\u6301\u3002",
+      "detail": "\u4f9d\u636e\u914d\u5bf9\u7ed3\u679c\u3001\u5931\u8d25\u53ca\u89e3\u91ca\u8fb9\u754c\u4eba\u5de5\u5ba1\u9605\uff1b\u9000\u51fa\u7801\u4e0d\u4ea7\u751f\u79d1\u5b66\u652f\u6301\u3002",
       "id": "EV10-REPAIR-RESULT",
       "kind": "produces",
-      "label": "\u7b49\u5f85\u7ec8\u70b9\u4e0e\u4eba\u5de5\u5ba1\u9605",
+      "label": "\u7ec8\u6001\u4e0e\u72ec\u7acb\u786e\u8ba4\u5ba1\u9605",
       "source": "V10-REPAIR",
-      "status": "planned",
+      "status": "documented",
       "target": "RV10-REPAIR"
     },
     {
@@ -13955,8 +13955,8 @@
     },
     {
       "budget": "\u5171\u4eab48h\u81f311\u670816\u65e521:51:33\uff1b\u6700\u591a12NPU worker\uff1b\u6700\u5927200M\uff1b64GiB\u76ee\u6807/96GiB\u4e0a\u9650\uff0c\u65e0\u7d2f\u8ba1\u7b97\u65f6\u4e0a\u9650\u3002",
-      "decision": "\u6309\u56fa\u5b9a\u6709\u9650\u8868\u6267\u884c\uff1b\u8d28\u91cf\u3001\u6570\u503c\u548c\u6027\u80fd\u5206\u522b\u5ba1\u9605\uff0c\u4e0d\u81ea\u52a8\u6269\u5019\u9009\u3002",
-      "execution_note": "20\u4e2a128Mi\u914d\u7f6e\u542b3\u4fee\u590d\u5747\u5b8c\u6210\u53ca\u786e\u8ba4\uff1b\u65e7256Mi\u5ef6\u4f385\u5b8c\u6210/2\u8fd0\u884c/1\u53ef\u884c\u6027\u5931\u8d25\uff0c\u4fdd\u6301\u539f\u9608\u503c\u3002",
+      "decision": "\u672c\u6279\u7ec8\u6001\uff0c\u4fdd\u7559\u5931\u8d25\u548c\u56fa\u5b9a\u6e90\u7801\uff1b\u4e0d\u81ea\u52a8\u65b0\u589e\u5019\u9009\u6216\u5ef6\u4f38\u3002",
+      "execution_note": "\u5168\u90e8\u76f8\u5173\u670d\u52a1\u7ec8\u6001\u65e0\u540e\u4ee3\uff1b\u539f\u5931\u8d25\u4fdd\u7559\uff1b\u5b9e\u9645\u8d28\u91cf\u4f9d\u72ec\u7acb\u786e\u8ba4\u5ba1\u9605\u3002",
       "id": "V10-CAPACITY",
       "kind": "experiment",
       "question": "\u56fa\u5b9a\u6d3b\u52a8\u6863\uff0cd64\u2192128\u589e\u52a0\u5bb9\u91cf\u662f\u5426\u6539\u5584\u5171\u540c\u66dd\u5149\u8d28\u91cf\uff1f",
@@ -14000,6 +14000,14 @@
         {
           "label": "11\u670815\u65e5\u4e0b\u5348\u72b6\u6001/\u65b0\u5931\u8d25",
           "path": "docs/evidence/direct-v10-progress-20261115-pm.json"
+        },
+        {
+          "label": "v10\u7ec8\u6001\u7ed3\u8bba\u4e0e\u89e3\u91ca\u8fb9\u754c",
+          "path": "docs/studies/direct-v10-results.md"
+        },
+        {
+          "label": "27\u7ec8\u70b9\u3001\u8eab\u4efd\u4e0e\u914d\u5bf9\u786e\u8ba4",
+          "path": "docs/evidence/direct-v10-results.json"
         }
       ],
       "runs": [
@@ -14066,11 +14074,43 @@
           "record": "runs/v10-main-hb-d128-r64-q3-s22/train/result.json",
           "source_commit": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
           "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/direct-v10/table/main/hb-d64-r64-q3-s11.json",
+          "id": "tl-v10-extend-hb-d64-r64-q3-s11",
+          "lens_record": "runs/v10-extend-hb-d64-r64-q3-s11/train/projection.json",
+          "record": "runs/v10-extend-hb-d64-r64-q3-s11/train/result.json",
+          "source_commit": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/direct-v10/table/main/hb-d64-r64-q3-s22.json",
+          "id": "tl-v10-extend-hb-d64-r64-q3-s22",
+          "lens_record": "runs/v10-extend-hb-d64-r64-q3-s22/train/projection.json",
+          "record": "runs/v10-extend-hb-d64-r64-q3-s22/train/result.json",
+          "source_commit": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/direct-v10/table/main/hb-d64-r28-q10-s11.json",
+          "id": "tl-v10-extend-hb-d64-r28-q10-s11",
+          "lens_record": "runs/v10-extend-hb-d64-r28-q10-s11/train/projection.json",
+          "record": "runs/v10-extend-hb-d64-r28-q10-s11/train/result.json",
+          "source_commit": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+          "status": "failed"
+        },
+        {
+          "config": "configs/studies/language/direct-v10/table/main/hb-d64-r28-q10-s22.json",
+          "id": "tl-v10-extend-hb-d64-r28-q10-s22",
+          "lens_record": "runs/v10-extend-hb-d64-r28-q10-s22/train/projection.json",
+          "record": "runs/v10-extend-hb-d64-r28-q10-s22/train/result.json",
+          "source_commit": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+          "status": "completed"
         }
       ],
-      "status": "running",
+      "status": "completed",
       "study_id": "TL-CAPACITY-v10",
-      "summary": "10%\u52a0\u5bbd32M\u4e24seed\u6539\u5584\uff1b3%\u4e24seed\u4e0d\u4e00\u81f4\uff1b\u5171\u540c128M\u5f85\u9f50",
+      "summary": "128Mi\u786e\u8ba4\uff1a\u7ea610%\u52a0\u5bbd\u6539\u55840.448\uff0c\u7ea63%\u6539\u55840.722\uff1b\u4e24\u4e2aseed\u5747\u6539\u5584\u3002",
       "title": "\u7ea610%/3%\u7684\u5bb9\u91cf\u589e\u957f",
       "track": "tide",
       "view_group": "current",
@@ -14079,7 +14119,9 @@
     },
     {
       "budget": "\u7531\u5bf9\u5e94\u7814\u7a76\u7ec4\u627f\u62c5\uff1b\u4e0d\u8ffd\u52a0\u4f5c\u4e1a\u3002",
-      "decision": "\u4fdd\u7559\u53cd\u8bc1\u3001\u672a\u533a\u5206\u89e3\u91ca\u548c\u8fc1\u79fb\u6761\u4ef6\uff0c\u4e0d\u80fd\u7531\u4f5c\u4e1a\u9000\u51fa\u7801\u81ea\u52a8\u751f\u6210\u652f\u6301\u3002",
+      "comparisons": "d64\u2192d128\uff0c10\u533a\u57df/5\u9636\u6bb5\u3001\u540c\u6d3b\u52a8\u76ee\u6807\u3001\u540c\u66dd\u5149\uff1b\u603b\u5bb9\u91cf\u548c\u6d3b\u8dc3\u5bb9\u91cf\u4e00\u8d77\u589e\u52a0\u3002",
+      "counterevidence": "32Mi\u7ea63%\u6709\u4e00\u4e2aseed\u52a0\u5bbd\u66f4\u5dee\uff1b128Mi\u624d\u53cd\u8f6c\u3002\u6ca1\u6709\u65b0\u7684\u6df1\u5ea6\u6216\u5165\u53e3\u6bd4\u8f83\u3002",
+      "decision": "\u4f5c\u4e3a\u4e0b\u4e00\u6279\u5177\u540d\u5047\u8bf4\u7684\u4f9d\u636e\uff0c\u5f53\u524d\u4e0d\u81ea\u52a8\u63d0\u4ea4\u65b0\u5b9e\u9a8c\u3002",
       "id": "RV10-CAPACITY",
       "kind": "result",
       "question": "\u56fa\u5b9a\u6d3b\u52a8\u6863\uff0cd64\u2192128\u589e\u52a0\u5bb9\u91cf\u662f\u5426\u6539\u5584\u5171\u540c\u66dd\u5149\u8d28\u91cf\uff1f",
@@ -14107,20 +14149,41 @@
         {
           "label": "11\u670815\u65e5\u4e0a\u5348\u5171\u540c128Mi\u8fdb\u5c55",
           "path": "docs/studies/direct-v10-progress-20261115-morning.md"
+        },
+        {
+          "label": "v10\u7ec8\u6001\u7ed3\u8bba\u4e0e\u89e3\u91ca\u8fb9\u754c",
+          "path": "docs/studies/direct-v10-results.md"
+        },
+        {
+          "label": "27\u7ec8\u70b9\u3001\u8eab\u4efd\u4e0e\u914d\u5bf9\u786e\u8ba4",
+          "path": "docs/evidence/direct-v10-results.json"
         }
       ],
-      "status": "awaiting",
-      "summary": "\u5c1a\u65e0\u6b63\u5f0f\u8bad\u7ec3/\u72ec\u7acb\u786e\u8ba4\u7ed3\u8bba",
-      "title": "\u7ea610%/3%\u7684\u5bb9\u91cf\u589e\u957f\uff1a\u5f85\u5ba1\u9605",
+      "scope": "\u72ec\u7acbdirect\u5b9e\u73b0/FP32\uff0c\u56fa\u5b9a\u8bcd\u88684096/L256/global64\uff0cseed11/22\u3001128Mi\u53ca\u6709\u6761\u4ef6256Mi\uff1b\u4e25\u683c\u6570\u503c\u5931\u8d25\u5355\u5217\u3002",
+      "sources": [
+        {
+          "label": "v10\u7ec8\u6001\u7ed3\u8bba\u4e0e\u89e3\u91ca\u8fb9\u754c",
+          "url": "https://github.com/ZichaoLong/tide/blob/tide-learning-lab/docs/studies/direct-v10-results.md"
+        },
+        {
+          "label": "27\u7ec8\u70b9\u3001\u8eab\u4efd\u4e0e\u914d\u5bf9\u786e\u8ba4",
+          "url": "https://github.com/ZichaoLong/tide/blob/tide-learning-lab/docs/evidence/direct-v10-results.json"
+        }
+      ],
+      "status": "scoped",
+      "summary": "128Mi\u786e\u8ba4\uff1a\u7ea610%\u52a0\u5bbd\u6539\u55840.448\uff0c\u7ea63%\u6539\u55840.722\uff1b\u4e24\u4e2aseed\u5747\u6539\u5584\u3002",
+      "title": "\u540c\u6d3b\u52a8\u6bd4\u4f8b\u52a0\u5bbd\u6709\u8d28\u91cf\u6536\u76ca",
       "track": "shared",
+      "transfer_conditions": "\u9650\u76f8\u540c\u76f4\u63a5FP32\u5b9e\u73b0/\u4efb\u52a1/\u6d3b\u52a8\u53e3\u5f84\uff1b\u8fc1\u79fb\u57fa\u5ea7\u6216\u5176\u4ed6\u6df1\u5ea6\u9700\u72ec\u7acb\u9a8c\u8bc1\u3002",
+      "unresolved": "\u5bbd\u5ea6\u3001\u6d3b\u8dc3\u8ba1\u7b97\u4e0e\u4f18\u5316\u914d\u65b9\u4f5c\u7528\u672a\u5206\u79bb\uff0c\u4e0d\u80fd\u63a8\u65ad\u6240\u6709\u89c4\u6a21\u7684\u6536\u76ca\u3002",
       "view_group": "current",
       "x": 915,
       "y": 1360
     },
     {
       "budget": "\u5171\u4eab48h\u81f311\u670816\u65e521:51:33\uff1b\u6700\u591a12NPU worker\uff1b\u6700\u5927200M\uff1b64GiB\u76ee\u6807/96GiB\u4e0a\u9650\uff0c\u65e0\u7d2f\u8ba1\u7b97\u65f6\u4e0a\u9650\u3002",
-      "decision": "\u6309\u56fa\u5b9a\u6709\u9650\u8868\u6267\u884c\uff1b\u8d28\u91cf\u3001\u6570\u503c\u548c\u6027\u80fd\u5206\u522b\u5ba1\u9605\uff0c\u4e0d\u81ea\u52a8\u6269\u5019\u9009\u3002",
-      "execution_note": "20\u4e2a128Mi\u914d\u7f6e\u542b3\u4fee\u590d\u5747\u5b8c\u6210\u53ca\u786e\u8ba4\uff1b\u65e7256Mi\u5ef6\u4f385\u5b8c\u6210/2\u8fd0\u884c/1\u53ef\u884c\u6027\u5931\u8d25\uff0c\u4fdd\u6301\u539f\u9608\u503c\u3002",
+      "decision": "\u672c\u6279\u7ec8\u6001\uff0c\u4fdd\u7559\u5931\u8d25\u548c\u56fa\u5b9a\u6e90\u7801\uff1b\u4e0d\u81ea\u52a8\u65b0\u589e\u5019\u9009\u6216\u5ef6\u4f38\u3002",
+      "execution_note": "\u5168\u90e8\u76f8\u5173\u670d\u52a1\u7ec8\u6001\u65e0\u540e\u4ee3\uff1b\u539f\u5931\u8d25\u4fdd\u7559\uff1b\u5b9e\u9645\u8d28\u91cf\u4f9d\u72ec\u7acb\u786e\u8ba4\u5ba1\u9605\u3002",
       "id": "V10-ACTIVE",
       "kind": "experiment",
       "question": "\u5305\u62ecRead/\u5171\u4eab\u53c2\u6570\u5339\u914d\u65f6\uff0cdense\u2192R28\u2192R64\u662f\u5426\u53d7\u76ca\uff1f",
@@ -14164,6 +14227,14 @@
         {
           "label": "11\u670815\u65e5\u4e0b\u5348\u72b6\u6001/\u65b0\u5931\u8d25",
           "path": "docs/evidence/direct-v10-progress-20261115-pm.json"
+        },
+        {
+          "label": "v10\u7ec8\u6001\u7ed3\u8bba\u4e0e\u89e3\u91ca\u8fb9\u754c",
+          "path": "docs/studies/direct-v10-results.md"
+        },
+        {
+          "label": "27\u7ec8\u70b9\u3001\u8eab\u4efd\u4e0e\u914d\u5bf9\u786e\u8ba4",
+          "path": "docs/evidence/direct-v10-results.json"
         }
       ],
       "runs": [
@@ -14262,11 +14333,27 @@
           "record": "runs/v10-main-hb-d128-r64-q3-s22/train/result.json",
           "source_commit": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
           "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/direct-v10/table/main/hb-d64-r4-dense-match-s11.json",
+          "id": "tl-v10-extend-hb-d64-r4-dense-match-s11",
+          "lens_record": "runs/v10-extend-hb-d64-r4-dense-match-s11/train/projection.json",
+          "record": "runs/v10-extend-hb-d64-r4-dense-match-s11/train/result.json",
+          "source_commit": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/direct-v10/table/main/hb-d64-r4-dense-match-s22.json",
+          "id": "tl-v10-extend-hb-d64-r4-dense-match-s22",
+          "lens_record": "runs/v10-extend-hb-d64-r4-dense-match-s22/train/projection.json",
+          "record": "runs/v10-extend-hb-d64-r4-dense-match-s22/train/result.json",
+          "source_commit": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+          "status": "completed"
         }
       ],
-      "status": "running",
+      "status": "completed",
       "study_id": "TL-ACTIVE-v10",
-      "summary": "\u7a84\u6863128M\uff1aq10 3.7705\u3001\u5c0f\u7a20\u5bc63.5952\uff1b\u8fd1\u6d3b\u8dc3\u5bb9\u91cf\u4f18\u52bf\u672a\u89c1",
+      "summary": "\u4e24\u6863\u5c0f\u7a20\u5bc6HB\u4f18\u4e8e10%\u548c3% HB\uff1b256Mi\u7ee7\u7eed\u6539\u5584\u4f46\u672a\u8ffd\u5e73\u3002",
       "title": "\u8fd1\u6d3b\u8dc3\u9884\u7b97\u7684\u603b\u5bb9\u91cf\u6bd4\u8f83",
       "track": "tide",
       "view_group": "current",
@@ -14275,7 +14362,9 @@
     },
     {
       "budget": "\u7531\u5bf9\u5e94\u7814\u7a76\u7ec4\u627f\u62c5\uff1b\u4e0d\u8ffd\u52a0\u4f5c\u4e1a\u3002",
-      "decision": "\u4fdd\u7559\u53cd\u8bc1\u3001\u672a\u533a\u5206\u89e3\u91ca\u548c\u8fc1\u79fb\u6761\u4ef6\uff0c\u4e0d\u80fd\u7531\u4f5c\u4e1a\u9000\u51fa\u7801\u81ea\u52a8\u751f\u6210\u652f\u6301\u3002",
+      "comparisons": "\u5c0f\u6863\u786e\u8ba43.668\u21923.834\u21924.309\uff0c\u5927\u68633.292\u21923.386\u21923.587\uff1b\u7ea63%\u5ef6\u4f38\u81f3256Mi\u4e3a3.998\u3002",
+      "counterevidence": "\u540c\u6d3b\u52a8\u6bd4\u4f8b\u52a0\u5bbd\u6709\u76ca\uff1b\u7ea63%\u589e\u52a0\u66dd\u5149\u6539\u55840.311\uff0c\u76f8\u5bf9TF\u5dee\u8ddd\u6709\u6240\u7f29\u5c0f\u3002",
+      "decision": "\u4f5c\u4e3a\u4e0b\u4e00\u6279\u5177\u540d\u5047\u8bf4\u7684\u4f9d\u636e\uff0c\u5f53\u524d\u4e0d\u81ea\u52a8\u63d0\u4ea4\u65b0\u5b9e\u9a8c\u3002",
       "id": "RV10-ACTIVE",
       "kind": "result",
       "question": "\u5305\u62ecRead/\u5171\u4eab\u53c2\u6570\u5339\u914d\u65f6\uff0cdense\u2192R28\u2192R64\u662f\u5426\u53d7\u76ca\uff1f",
@@ -14303,20 +14392,41 @@
         {
           "label": "11\u670815\u65e5\u4e0a\u5348\u5171\u540c128Mi\u8fdb\u5c55",
           "path": "docs/studies/direct-v10-progress-20261115-morning.md"
+        },
+        {
+          "label": "v10\u7ec8\u6001\u7ed3\u8bba\u4e0e\u89e3\u91ca\u8fb9\u754c",
+          "path": "docs/studies/direct-v10-results.md"
+        },
+        {
+          "label": "27\u7ec8\u70b9\u3001\u8eab\u4efd\u4e0e\u914d\u5bf9\u786e\u8ba4",
+          "path": "docs/evidence/direct-v10-results.json"
         }
       ],
-      "status": "awaiting",
-      "summary": "\u5c1a\u65e0\u6b63\u5f0f\u8bad\u7ec3/\u72ec\u7acb\u786e\u8ba4\u7ed3\u8bba",
-      "title": "\u8fd1\u6d3b\u8dc3\u9884\u7b97\u7684\u603b\u5bb9\u91cf\u6bd4\u8f83\uff1a\u5f85\u5ba1\u9605",
+      "scope": "\u72ec\u7acbdirect\u5b9e\u73b0/FP32\uff0c\u56fa\u5b9a\u8bcd\u88684096/L256/global64\uff0cseed11/22\u3001128Mi\u53ca\u6709\u6761\u4ef6256Mi\uff1b\u4e25\u683c\u6570\u503c\u5931\u8d25\u5355\u5217\u3002",
+      "sources": [
+        {
+          "label": "v10\u7ec8\u6001\u7ed3\u8bba\u4e0e\u89e3\u91ca\u8fb9\u754c",
+          "url": "https://github.com/ZichaoLong/tide/blob/tide-learning-lab/docs/studies/direct-v10-results.md"
+        },
+        {
+          "label": "27\u7ec8\u70b9\u3001\u8eab\u4efd\u4e0e\u914d\u5bf9\u786e\u8ba4",
+          "url": "https://github.com/ZichaoLong/tide/blob/tide-learning-lab/docs/evidence/direct-v10-results.json"
+        }
+      ],
+      "status": "scoped",
+      "summary": "\u4e24\u6863\u5c0f\u7a20\u5bc6HB\u4f18\u4e8e10%\u548c3% HB\uff1b256Mi\u7ee7\u7eed\u6539\u5584\u4f46\u672a\u8ffd\u5e73\u3002",
+      "title": "\u8fd1\u6d3b\u8dc3\u9884\u7b97\u7684\u603b\u5bb9\u91cf\u4f18\u52bf\u672a\u51fa\u73b0",
       "track": "shared",
+      "transfer_conditions": "\u6d3b\u8dc3\u53c2\u6570\u4e3a\u903b\u8f91\u4f7f\u7528\u91cf\u3001\u975eFLOPs\uff1b\u4fdd\u7559\u5927\u6863\u7ea68.90%\u5339\u914d\u504f\u5dee\u53ca\u7a20\u5bc6\u7269\u7406Full\u3002",
+      "unresolved": "\u533a\u57df\u5bbd\u5ea6\u3001\u4f4e\u6d3b\u52a8\u9009\u62e9\u3001\u63a5\u6536/\u8bfb\u51fa\u4e0e\u5c40\u90e8\u8fb9\u754c\u5171\u540c\u53d8\u5316\uff1b\u4e0d\u8bc6\u522b\u5355\u4e2a\u6839\u56e0\u3002",
       "view_group": "current",
       "x": 915,
       "y": 1540
     },
     {
       "budget": "\u5171\u4eab48h\u81f311\u670816\u65e521:51:33\uff1b\u6700\u591a12NPU worker\uff1b\u6700\u5927200M\uff1b64GiB\u76ee\u6807/96GiB\u4e0a\u9650\uff0c\u65e0\u7d2f\u8ba1\u7b97\u65f6\u4e0a\u9650\u3002",
-      "decision": "\u6309\u56fa\u5b9a\u6709\u9650\u8868\u6267\u884c\uff1b\u8d28\u91cf\u3001\u6570\u503c\u548c\u6027\u80fd\u5206\u522b\u5ba1\u9605\uff0c\u4e0d\u81ea\u52a8\u6269\u5019\u9009\u3002",
-      "execution_note": "20\u4e2a128Mi\u914d\u7f6e\u542b3\u4fee\u590d\u5747\u5b8c\u6210\u53ca\u786e\u8ba4\uff1b\u65e7256Mi\u5ef6\u4f385\u5b8c\u6210/2\u8fd0\u884c/1\u53ef\u884c\u6027\u5931\u8d25\uff0c\u4fdd\u6301\u539f\u9608\u503c\u3002",
+      "decision": "\u672c\u6279\u7ec8\u6001\uff0c\u4fdd\u7559\u5931\u8d25\u548c\u56fa\u5b9a\u6e90\u7801\uff1b\u4e0d\u81ea\u52a8\u65b0\u589e\u5019\u9009\u6216\u5ef6\u4f38\u3002",
+      "execution_note": "\u5168\u90e8\u76f8\u5173\u670d\u52a1\u7ec8\u6001\u65e0\u540e\u4ee3\uff1b\u539f\u5931\u8d25\u4fdd\u7559\uff1b\u5b9e\u9645\u8d28\u91cf\u4f9d\u72ec\u7acb\u786e\u8ba4\u5ba1\u9605\u3002",
       "id": "V10-CONTROL",
       "kind": "experiment",
       "question": "\u4f4e\u6d3b\u52a8\u8d28\u91cf\u4ee3\u4ef7\u591a\u5927\uff0c\u4e0e\u5408\u7406\u8c03\u53c2TF\u6709\u4f55\u5dee\u8ddd\uff1f",
@@ -14360,6 +14470,14 @@
         {
           "label": "11\u670815\u65e5\u4e0b\u5348\u72b6\u6001/\u65b0\u5931\u8d25",
           "path": "docs/evidence/direct-v10-progress-20261115-pm.json"
+        },
+        {
+          "label": "v10\u7ec8\u6001\u7ed3\u8bba\u4e0e\u89e3\u91ca\u8fb9\u754c",
+          "path": "docs/studies/direct-v10-results.md"
+        },
+        {
+          "label": "27\u7ec8\u70b9\u3001\u8eab\u4efd\u4e0e\u914d\u5bf9\u786e\u8ba4",
+          "path": "docs/evidence/direct-v10-results.json"
         }
       ],
       "runs": [
@@ -14426,11 +14544,27 @@
           "record": "runs/v10-main-hb-d128-r64-pool-s22/train/result.json",
           "source_commit": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
           "status": "failed"
+        },
+        {
+          "config": "configs/studies/language/direct-v10/table/main/tf-d192-l6-s11.json",
+          "id": "tl-v10-extend-tf-d192-l6-s11",
+          "lens_record": "runs/v10-extend-tf-d192-l6-s11/train/projection.json",
+          "record": "runs/v10-extend-tf-d192-l6-s11/train/result.json",
+          "source_commit": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/direct-v10/table/main/tf-d192-l6-s22.json",
+          "id": "tl-v10-extend-tf-d192-l6-s22",
+          "lens_record": "runs/v10-extend-tf-d192-l6-s22/train/projection.json",
+          "record": "runs/v10-extend-tf-d192-l6-s22/train/result.json",
+          "source_commit": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+          "status": "completed"
         }
       ],
-      "status": "running",
+      "status": "completed",
       "study_id": "TL-CONTROL-v10",
-      "summary": "TF\u53ccseed128M\u9f50\uff1b3\u4e2a\u540c\u5f62\u72b6pool\u53d1\u751f\u975e\u6709\u9650\u8303\u6570\u5931\u8d25\uff0c1\u4ecd\u8fd0\u884c",
+      "summary": "\u5927pool\u7ea63.063\u20133.065\uff1b\u66f4\u5f3aTF3.017\uff0cMoE\u7ea62.803\u20132.815\u3002",
       "title": "\u540c\u5f62\u72b6pool\u53ca\u6821\u51c6TF",
       "track": "shared",
       "view_group": "current",
@@ -14439,7 +14573,9 @@
     },
     {
       "budget": "\u7531\u5bf9\u5e94\u7814\u7a76\u7ec4\u627f\u62c5\uff1b\u4e0d\u8ffd\u52a0\u4f5c\u4e1a\u3002",
-      "decision": "\u4fdd\u7559\u53cd\u8bc1\u3001\u672a\u533a\u5206\u89e3\u91ca\u548c\u8fc1\u79fb\u6761\u4ef6\uff0c\u4e0d\u80fd\u7531\u4f5c\u4e1a\u9000\u51fa\u7801\u81ea\u52a8\u751f\u6210\u652f\u6301\u3002",
+      "comparisons": "\u540c\u5f62\u72b6quad\u76f8\u5bf9pool\u5dee0.321/0.525 NLL\uff1bpool R28\u2192R64\u5747\u503c\u4ec5\u6539\u55840.002\u3002",
+      "counterevidence": "pool\u6269\u5bb9\u4e24\u4e2aseed\u65b9\u5411\u76f8\u53cd\uff1b\u539fTF\u8f83\u5f31\uff0c\u4e0d\u80fd\u53ea\u7528\u65e73.090\u5ba3\u79f0HB\u4f18\u52bf\u3002",
+      "decision": "\u4f5c\u4e3a\u4e0b\u4e00\u6279\u5177\u540d\u5047\u8bf4\u7684\u4f9d\u636e\uff0c\u5f53\u524d\u4e0d\u81ea\u52a8\u63d0\u4ea4\u65b0\u5b9e\u9a8c\u3002",
       "id": "RV10-CONTROL",
       "kind": "result",
       "question": "\u4f4e\u6d3b\u52a8\u8d28\u91cf\u4ee3\u4ef7\u591a\u5927\uff0c\u4e0e\u5408\u7406\u8c03\u53c2TF\u6709\u4f55\u5dee\u8ddd\uff1f",
@@ -14467,20 +14603,41 @@
         {
           "label": "11\u670815\u65e5\u4e0a\u5348\u5171\u540c128Mi\u8fdb\u5c55",
           "path": "docs/studies/direct-v10-progress-20261115-morning.md"
+        },
+        {
+          "label": "v10\u7ec8\u6001\u7ed3\u8bba\u4e0e\u89e3\u91ca\u8fb9\u754c",
+          "path": "docs/studies/direct-v10-results.md"
+        },
+        {
+          "label": "27\u7ec8\u70b9\u3001\u8eab\u4efd\u4e0e\u914d\u5bf9\u786e\u8ba4",
+          "path": "docs/evidence/direct-v10-results.json"
         }
       ],
-      "status": "awaiting",
-      "summary": "\u5c1a\u65e0\u6b63\u5f0f\u8bad\u7ec3/\u72ec\u7acb\u786e\u8ba4\u7ed3\u8bba",
-      "title": "\u540c\u5f62\u72b6pool\u53ca\u6821\u51c6TF\uff1a\u5f85\u5ba1\u9605",
+      "scope": "\u72ec\u7acbdirect\u5b9e\u73b0/FP32\uff0c\u56fa\u5b9a\u8bcd\u88684096/L256/global64\uff0cseed11/22\u3001128Mi\u53ca\u6709\u6761\u4ef6256Mi\uff1b\u4e25\u683c\u6570\u503c\u5931\u8d25\u5355\u5217\u3002",
+      "sources": [
+        {
+          "label": "v10\u7ec8\u6001\u7ed3\u8bba\u4e0e\u89e3\u91ca\u8fb9\u754c",
+          "url": "https://github.com/ZichaoLong/tide/blob/tide-learning-lab/docs/studies/direct-v10-results.md"
+        },
+        {
+          "label": "27\u7ec8\u70b9\u3001\u8eab\u4efd\u4e0e\u914d\u5bf9\u786e\u8ba4",
+          "url": "https://github.com/ZichaoLong/tide/blob/tide-learning-lab/docs/evidence/direct-v10-results.json"
+        }
+      ],
+      "status": "scoped",
+      "summary": "\u5927pool\u7ea63.063\u20133.065\uff1b\u66f4\u5f3aTF3.017\uff0cMoE\u7ea62.803\u20132.815\u3002",
+      "title": "pool\u4ee3\u4ef7\u4e0e\u66f4\u5f3aTF/MoE\u53c2\u7167",
       "track": "shared",
+      "transfer_conditions": "\u5bf9\u7167\u91c7\u7528\u76f8\u540c128Mi/\u72ec\u7acb\u786e\u8ba4\uff1b\u603b\u4e0e\u6d3b\u8dc3\u53c2\u6570\u5206\u522b\u5217\uff0cpool\u4fee\u590d\u8c31\u7cfb\u4e0d\u589eseed\u3002",
+      "unresolved": "MoE\u6709\u5168\u5c40attention\uff0cHB\u6709\u5c40\u90e8\u4f20\u64ad/\u8bb0\u5fc6\uff1b\u4e0d\u662f\u540c\u62d3\u6251\u5355\u56e0\u7d20\u6bd4\u8f83\u3002",
       "view_group": "current",
       "x": 915,
       "y": 1720
     },
     {
       "budget": "\u5171\u4eab48h\u81f311\u670816\u65e521:51:33\uff1b\u6700\u591a12NPU worker\uff1b\u6700\u5927200M\uff1b64GiB\u76ee\u6807/96GiB\u4e0a\u9650\uff0c\u65e0\u7d2f\u8ba1\u7b97\u65f6\u4e0a\u9650\u3002",
-      "decision": "\u6309\u56fa\u5b9a\u6709\u9650\u8868\u6267\u884c\uff1b\u8d28\u91cf\u3001\u6570\u503c\u548c\u6027\u80fd\u5206\u522b\u5ba1\u9605\uff0c\u4e0d\u81ea\u52a8\u6269\u5019\u9009\u3002",
-      "execution_note": "20\u4e2a128Mi\u914d\u7f6e\u542b3\u4fee\u590d\u5747\u5b8c\u6210\u53ca\u786e\u8ba4\uff1b\u65e7256Mi\u5ef6\u4f385\u5b8c\u6210/2\u8fd0\u884c/1\u53ef\u884c\u6027\u5931\u8d25\uff0c\u4fdd\u6301\u539f\u9608\u503c\u3002",
+      "decision": "\u672c\u6279\u7ec8\u6001\uff0c\u4fdd\u7559\u5931\u8d25\u548c\u56fa\u5b9a\u6e90\u7801\uff1b\u4e0d\u81ea\u52a8\u65b0\u589e\u5019\u9009\u6216\u5ef6\u4f38\u3002",
+      "execution_note": "\u5168\u90e8\u76f8\u5173\u670d\u52a1\u7ec8\u6001\u65e0\u540e\u4ee3\uff1b\u539f\u5931\u8d25\u4fdd\u7559\uff1b\u5b9e\u9645\u8d28\u91cf\u4f9d\u72ec\u7acb\u786e\u8ba4\u5ba1\u9605\u3002",
       "id": "V10-CONFIRMATION",
       "kind": "experiment",
       "question": "\u5171\u540c\u66dd\u5149\u7ed3\u8bba\u80fd\u5426\u5728\u672a\u7528\u4e8e\u9009\u62e9\u7684262K split\u4fdd\u6301\uff1f",
@@ -14520,12 +14677,240 @@
         {
           "label": "11\u670815\u65e5\u4e0b\u5348\u72b6\u6001/\u65b0\u5931\u8d25",
           "path": "docs/evidence/direct-v10-progress-20261115-pm.json"
+        },
+        {
+          "label": "v10\u7ec8\u6001\u7ed3\u8bba\u4e0e\u89e3\u91ca\u8fb9\u754c",
+          "path": "docs/studies/direct-v10-results.md"
+        },
+        {
+          "label": "27\u7ec8\u70b9\u3001\u8eab\u4efd\u4e0e\u914d\u5bf9\u786e\u8ba4",
+          "path": "docs/evidence/direct-v10-results.json"
         }
       ],
-      "runs": [],
-      "status": "running",
+      "runs": [
+        {
+          "config": "configs/studies/language/direct-v10/table/main/hb-d128-r64-q3-s11.json",
+          "id": "tl-v10-confirm-main-hb-d128-r64-q3-s11",
+          "lens_record": "runs/v10-confirm-main-hb-d128-r64-q3-s11/projection.json",
+          "record": "runs/v10-confirm-main-hb-d128-r64-q3-s11/result.json",
+          "source_commit": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/direct-v10/table/main/hb-d128-r64-q3-s22.json",
+          "id": "tl-v10-confirm-main-hb-d128-r64-q3-s22",
+          "lens_record": "runs/v10-confirm-main-hb-d128-r64-q3-s22/projection.json",
+          "record": "runs/v10-confirm-main-hb-d128-r64-q3-s22/result.json",
+          "source_commit": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/direct-v10/table/main/hb-d64-r64-q3-s11.json",
+          "id": "tl-v10-confirm-main-hb-d64-r64-q3-s11",
+          "lens_record": "runs/v10-confirm-main-hb-d64-r64-q3-s11/projection.json",
+          "record": "runs/v10-confirm-main-hb-d64-r64-q3-s11/result.json",
+          "source_commit": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/direct-v10/table/main/hb-d64-r64-q3-s22.json",
+          "id": "tl-v10-confirm-main-hb-d64-r64-q3-s22",
+          "lens_record": "runs/v10-confirm-main-hb-d64-r64-q3-s22/projection.json",
+          "record": "runs/v10-confirm-main-hb-d64-r64-q3-s22/result.json",
+          "source_commit": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/direct-v10/table/main/hb-d128-r28-pool-s11.json",
+          "id": "tl-v10-confirm-main-hb-d128-r28-pool-s11",
+          "lens_record": "runs/v10-confirm-main-hb-d128-r28-pool-s11/projection.json",
+          "record": "runs/v10-confirm-main-hb-d128-r28-pool-s11/result.json",
+          "source_commit": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/direct-v10/table/main/hb-d128-r28-q10-s11.json",
+          "id": "tl-v10-confirm-main-hb-d128-r28-q10-s11",
+          "lens_record": "runs/v10-confirm-main-hb-d128-r28-q10-s11/projection.json",
+          "record": "runs/v10-confirm-main-hb-d128-r28-q10-s11/result.json",
+          "source_commit": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/direct-v10/table/main/hb-d128-r28-q10-s22.json",
+          "id": "tl-v10-confirm-main-hb-d128-r28-q10-s22",
+          "lens_record": "runs/v10-confirm-main-hb-d128-r28-q10-s22/projection.json",
+          "record": "runs/v10-confirm-main-hb-d128-r28-q10-s22/result.json",
+          "source_commit": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/direct-v10/table/main/hb-d64-r28-q10-s11.json",
+          "id": "tl-v10-confirm-main-hb-d64-r28-q10-s11",
+          "lens_record": "runs/v10-confirm-main-hb-d64-r28-q10-s11/projection.json",
+          "record": "runs/v10-confirm-main-hb-d64-r28-q10-s11/result.json",
+          "source_commit": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/direct-v10/table/main/hb-d64-r28-q10-s22.json",
+          "id": "tl-v10-confirm-main-hb-d64-r28-q10-s22",
+          "lens_record": "runs/v10-confirm-main-hb-d64-r28-q10-s22/projection.json",
+          "record": "runs/v10-confirm-main-hb-d64-r28-q10-s22/result.json",
+          "source_commit": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/direct-v10/table/main/hb-d128-r3-dense-match-s11.json",
+          "id": "tl-v10-confirm-main-hb-d128-r3-dense-match-s11",
+          "lens_record": "runs/v10-confirm-main-hb-d128-r3-dense-match-s11/projection.json",
+          "record": "runs/v10-confirm-main-hb-d128-r3-dense-match-s11/result.json",
+          "source_commit": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/direct-v10/table/main/hb-d128-r3-dense-match-s22.json",
+          "id": "tl-v10-confirm-main-hb-d128-r3-dense-match-s22",
+          "lens_record": "runs/v10-confirm-main-hb-d128-r3-dense-match-s22/projection.json",
+          "record": "runs/v10-confirm-main-hb-d128-r3-dense-match-s22/result.json",
+          "source_commit": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/direct-v10/table/main/hb-d64-r4-dense-match-s11.json",
+          "id": "tl-v10-confirm-main-hb-d64-r4-dense-match-s11",
+          "lens_record": "runs/v10-confirm-main-hb-d64-r4-dense-match-s11/projection.json",
+          "record": "runs/v10-confirm-main-hb-d64-r4-dense-match-s11/result.json",
+          "source_commit": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/direct-v10/table/main/hb-d64-r4-dense-match-s22.json",
+          "id": "tl-v10-confirm-main-hb-d64-r4-dense-match-s22",
+          "lens_record": "runs/v10-confirm-main-hb-d64-r4-dense-match-s22/projection.json",
+          "record": "runs/v10-confirm-main-hb-d64-r4-dense-match-s22/result.json",
+          "source_commit": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/direct-v10/table/main/tf-d256-l12-s11.json",
+          "id": "tl-v10-confirm-main-tf-d256-l12-s11",
+          "lens_record": "runs/v10-confirm-main-tf-d256-l12-s11/projection.json",
+          "record": "runs/v10-confirm-main-tf-d256-l12-s11/result.json",
+          "source_commit": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/direct-v10/table/main/tf-d256-l12-s22.json",
+          "id": "tl-v10-confirm-main-tf-d256-l12-s22",
+          "lens_record": "runs/v10-confirm-main-tf-d256-l12-s22/projection.json",
+          "record": "runs/v10-confirm-main-tf-d256-l12-s22/result.json",
+          "source_commit": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/direct-v10/table/main/tf-d192-l6-s11.json",
+          "id": "tl-v10-confirm-main-tf-d192-l6-s11",
+          "lens_record": "runs/v10-confirm-main-tf-d192-l6-s11/projection.json",
+          "record": "runs/v10-confirm-main-tf-d192-l6-s11/result.json",
+          "source_commit": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/direct-v10/table/main/tf-d192-l6-s22.json",
+          "id": "tl-v10-confirm-main-tf-d192-l6-s22",
+          "lens_record": "runs/v10-confirm-main-tf-d192-l6-s22/projection.json",
+          "record": "runs/v10-confirm-main-tf-d192-l6-s22/result.json",
+          "source_commit": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/direct-v10/table/main/hb-d64-r64-q3-s11.json",
+          "id": "tl-v10-confirm-extend-hb-d64-r64-q3-s11",
+          "lens_record": "runs/v10-confirm-extend-hb-d64-r64-q3-s11/projection.json",
+          "record": "runs/v10-confirm-extend-hb-d64-r64-q3-s11/result.json",
+          "source_commit": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/direct-v10/table/main/hb-d64-r64-q3-s22.json",
+          "id": "tl-v10-confirm-extend-hb-d64-r64-q3-s22",
+          "lens_record": "runs/v10-confirm-extend-hb-d64-r64-q3-s22/projection.json",
+          "record": "runs/v10-confirm-extend-hb-d64-r64-q3-s22/result.json",
+          "source_commit": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/direct-v10/table/main/hb-d64-r28-q10-s22.json",
+          "id": "tl-v10-confirm-extend-hb-d64-r28-q10-s22",
+          "lens_record": "runs/v10-confirm-extend-hb-d64-r28-q10-s22/projection.json",
+          "record": "runs/v10-confirm-extend-hb-d64-r28-q10-s22/result.json",
+          "source_commit": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/direct-v10/table/main/hb-d64-r4-dense-match-s11.json",
+          "id": "tl-v10-confirm-extend-hb-d64-r4-dense-match-s11",
+          "lens_record": "runs/v10-confirm-extend-hb-d64-r4-dense-match-s11/projection.json",
+          "record": "runs/v10-confirm-extend-hb-d64-r4-dense-match-s11/result.json",
+          "source_commit": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/direct-v10/table/main/hb-d64-r4-dense-match-s22.json",
+          "id": "tl-v10-confirm-extend-hb-d64-r4-dense-match-s22",
+          "lens_record": "runs/v10-confirm-extend-hb-d64-r4-dense-match-s22/projection.json",
+          "record": "runs/v10-confirm-extend-hb-d64-r4-dense-match-s22/result.json",
+          "source_commit": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/direct-v10/table/main/tf-d192-l6-s11.json",
+          "id": "tl-v10-confirm-extend-tf-d192-l6-s11",
+          "lens_record": "runs/v10-confirm-extend-tf-d192-l6-s11/projection.json",
+          "record": "runs/v10-confirm-extend-tf-d192-l6-s11/result.json",
+          "source_commit": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+          "status": "completed"
+        },
+        {
+          "config": "configs/studies/language/direct-v10/table/main/tf-d192-l6-s22.json",
+          "id": "tl-v10-confirm-extend-tf-d192-l6-s22",
+          "lens_record": "runs/v10-confirm-extend-tf-d192-l6-s22/projection.json",
+          "record": "runs/v10-confirm-extend-tf-d192-l6-s22/result.json",
+          "source_commit": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+          "status": "completed"
+        },
+        {
+          "config": "runs/v10-repair-control/hb-d128-r64-pool-s11/config.json",
+          "id": "tl-v10-repair-confirm-hb-d128-r64-pool-s11",
+          "lens_record": "runs/v10-repair-hb-d128-r64-pool-s11/confirmation/projection.json",
+          "note": "\u539f\u5931\u8d25\u7684\u663e\u5f0f\u4fee\u590d\u94fe\uff0c\u4e0d\u589e\u52a0\u72ec\u7acbseed\u3002",
+          "record": "runs/v10-repair-hb-d128-r64-pool-s11/confirmation/result.json",
+          "source_commit": "d089dd0556798df55a0440ef471ffe254f8054e5",
+          "status": "completed"
+        },
+        {
+          "config": "runs/v10-repair-control/hb-d128-r64-pool-s22/config.json",
+          "id": "tl-v10-repair-confirm-hb-d128-r64-pool-s22",
+          "lens_record": "runs/v10-repair-hb-d128-r64-pool-s22/confirmation/projection.json",
+          "note": "\u539f\u5931\u8d25\u7684\u663e\u5f0f\u4fee\u590d\u94fe\uff0c\u4e0d\u589e\u52a0\u72ec\u7acbseed\u3002",
+          "record": "runs/v10-repair-hb-d128-r64-pool-s22/confirmation/result.json",
+          "source_commit": "d089dd0556798df55a0440ef471ffe254f8054e5",
+          "status": "completed"
+        },
+        {
+          "config": "runs/v10-repair-control/hb-d128-r28-pool-s22/config.json",
+          "id": "tl-v10-repair-confirm-hb-d128-r28-pool-s22",
+          "lens_record": "runs/v10-repair-hb-d128-r28-pool-s22/confirmation/projection.json",
+          "note": "\u539f\u5931\u8d25\u7684\u663e\u5f0f\u4fee\u590d\u94fe\uff0c\u4e0d\u589e\u52a0\u72ec\u7acbseed\u3002",
+          "record": "runs/v10-repair-hb-d128-r28-pool-s22/confirmation/result.json",
+          "source_commit": "d089dd0556798df55a0440ef471ffe254f8054e5",
+          "status": "completed"
+        }
+      ],
+      "status": "completed",
       "study_id": "TL-CONFIRMATION-v10",
-      "summary": "128Mi\u539f17\u9879\u53ca3\u4fee\u590d\u786e\u8ba4\u5b8c\u6210\uff1b\u5b9e\u9645256Mi\u786e\u8ba4\u7b49\u5f85\u5ef6\u4f38\u9636\u6bb5\u3002",
+      "summary": "20\u4e2a128Mi\u548c7\u4e2a256Mi\u5728\u76f8\u540c262K/135\u6587\u6863\u4e0a\u786e\u8ba4\uff1btest\u672a\u8bc4\u4ef7\u3002",
       "title": "\u51bb\u7ed3\u7ec8\u70b9\u7684\u72ec\u7acb\u786e\u8ba4",
       "track": "shared",
       "view_group": "current",
@@ -14534,7 +14919,9 @@
     },
     {
       "budget": "\u7531\u5bf9\u5e94\u7814\u7a76\u7ec4\u627f\u62c5\uff1b\u4e0d\u8ffd\u52a0\u4f5c\u4e1a\u3002",
-      "decision": "\u4fdd\u7559\u53cd\u8bc1\u3001\u672a\u533a\u5206\u89e3\u91ca\u548c\u8fc1\u79fb\u6761\u4ef6\uff0c\u4e0d\u80fd\u7531\u4f5c\u4e1a\u9000\u51fa\u7801\u81ea\u52a8\u751f\u6210\u652f\u6301\u3002",
+      "comparisons": "\u4e03\u6761\u5ef6\u4f38\u5747\u6539\u5584\uff1b\u7ea63%\u4e0eTF\u7684\u5dee\u8ddd1.059\u21920.925\u300210%256Mi\u4ec5seed22\u3002",
+      "counterevidence": "q10 seed11\u5ef6\u4f38\u53ef\u884c\u6027\u5931\u8d25\uff1b\u6ca1\u6709\u53ccseed256Mi q10\u7ed3\u8bba\uff0cd128\u672a\u6309\u89c4\u5219\u5ef6\u4f38\u3002",
+      "decision": "\u4f5c\u4e3a\u4e0b\u4e00\u6279\u5177\u540d\u5047\u8bf4\u7684\u4f9d\u636e\uff0c\u5f53\u524d\u4e0d\u81ea\u52a8\u63d0\u4ea4\u65b0\u5b9e\u9a8c\u3002",
       "id": "RV10-CONFIRMATION",
       "kind": "result",
       "question": "\u5171\u540c\u66dd\u5149\u7ed3\u8bba\u80fd\u5426\u5728\u672a\u7528\u4e8e\u9009\u62e9\u7684262K split\u4fdd\u6301\uff1f",
@@ -14558,12 +14945,33 @@
         {
           "label": "\u9010\u8f68\u8ff9\u5931\u8d25\u3001\u9a8c\u8bc1\u4e0e\u6570\u503c\u8865\u8bc1",
           "path": "docs/evidence/direct-v10-progress-20261115-am.json"
+        },
+        {
+          "label": "v10\u7ec8\u6001\u7ed3\u8bba\u4e0e\u89e3\u91ca\u8fb9\u754c",
+          "path": "docs/studies/direct-v10-results.md"
+        },
+        {
+          "label": "27\u7ec8\u70b9\u3001\u8eab\u4efd\u4e0e\u914d\u5bf9\u786e\u8ba4",
+          "path": "docs/evidence/direct-v10-results.json"
         }
       ],
-      "status": "awaiting",
-      "summary": "\u5c1a\u65e0\u6b63\u5f0f\u8bad\u7ec3/\u72ec\u7acb\u786e\u8ba4\u7ed3\u8bba",
-      "title": "\u51bb\u7ed3\u7ec8\u70b9\u7684\u72ec\u7acb\u786e\u8ba4\uff1a\u5f85\u5ba1\u9605",
+      "scope": "\u72ec\u7acbdirect\u5b9e\u73b0/FP32\uff0c\u56fa\u5b9a\u8bcd\u88684096/L256/global64\uff0cseed11/22\u3001128Mi\u53ca\u6709\u6761\u4ef6256Mi\uff1b\u4e25\u683c\u6570\u503c\u5931\u8d25\u5355\u5217\u3002",
+      "sources": [
+        {
+          "label": "v10\u7ec8\u6001\u7ed3\u8bba\u4e0e\u89e3\u91ca\u8fb9\u754c",
+          "url": "https://github.com/ZichaoLong/tide/blob/tide-learning-lab/docs/studies/direct-v10-results.md"
+        },
+        {
+          "label": "27\u7ec8\u70b9\u3001\u8eab\u4efd\u4e0e\u914d\u5bf9\u786e\u8ba4",
+          "url": "https://github.com/ZichaoLong/tide/blob/tide-learning-lab/docs/evidence/direct-v10-results.json"
+        }
+      ],
+      "status": "scoped",
+      "summary": "20\u4e2a128Mi\u548c7\u4e2a256Mi\u5728\u76f8\u540c262K/135\u6587\u6863\u4e0a\u786e\u8ba4\uff1btest\u672a\u8bc4\u4ef7\u3002",
+      "title": "27\u7ec8\u70b9\u72ec\u7acb\u786e\u8ba4\u5b8c\u6210",
       "track": "shared",
+      "transfer_conditions": "\u72ec\u7acb\u786e\u8ba4\u96c6\u4ece\u6b64\u5c5e\u4e8e\u5df2\u5ba1\u9605\u6570\u636e\uff0c\u540e\u7ee7\u81ea\u9002\u5e94\u8bbe\u8ba1\u4e0d\u53ef\u628a\u5b83\u518d\u6b21\u79f0\u4e3a\u5168\u65b0\u672a\u89c1\u786e\u8ba4\u3002",
+      "unresolved": "\u6587\u6863bootstrap\u4e0d\u8986\u76d6\u79cd\u5b50\u603b\u4f53/\u9009\u62e9\u4e0d\u786e\u5b9a\u6027\uff1b256Mi\u662f\u56fa\u5b9a\u6c60\u91cd\u590d\u66dd\u5149\u3002",
       "view_group": "current",
       "x": 915,
       "y": 1900
@@ -14675,15 +15083,15 @@
       "title": "\u6781\u5c0f\u6b63\u8d28\u91cf\u7684\u9664\u6cd5\u53cd\u5411\u6ea2\u51fa",
       "track": "shared",
       "transfer_conditions": "\u4ec5\u5728\u76f8\u540c\u6b63\u8d28\u91cf\u805a\u5408\u516c\u5f0f\u53caVJP\u5951\u7ea6\u4e0b\u8fc1\u79fb\uff1b\u6570\u5b66\u7b49\u4ef7\u4e0d\u514d\u9664\u6765\u6e90/\u7cbe\u5ea6/\u6062\u590d\u68c0\u67e5\uff0c\u57fa\u5ea7\u672a\u636e\u6b64\u9a8c\u6536\u3002",
-      "unresolved": "\u8bca\u65ad\u65f6\u672a\u6d4b\u7684\u65b0\u6e90\u7801\u6062\u590d/64\u66f4\u65b0\u5df2\u7531\u540e\u7eedV10-REPAIR\u5355\u5217\u9a8c\u8bc1\uff1b\u957f\u671f\u7a33\u5b9a\u3001\u5b66\u4e60\u8d28\u91cf\u3001\u5176\u4ed6\u6781\u7aef\u8303\u56f4\u4ecd\u672a\u6d4b\u3002",
+      "unresolved": "\u540e\u7ee7\u4e09\u6761\u4fee\u590d\u5df2\u901a\u8fc7\u6062\u590d\u300164\u6b65\u548c128Mi\u786e\u8ba4\uff1b\u4e00\u822c\u6781\u7aef\u8303\u56f4\u7a33\u5b9a\u6027\u3001\u5176\u4ed6\u5206\u914d\u53ef\u884c\u6027\u9519\u8bef\u548c\u57fa\u5ea7\u8fc1\u79fb\u4ecd\u672a\u9a8c\u8bc1\u3002",
       "view_group": "current",
       "x": 915,
       "y": 2080
     },
     {
       "budget": "\u539f48h\u622a\u6b6211\u670816\u65e521:51:33\uff1b\u5171\u4eab12slot\uff0c\u65b0\u4fee\u590d24GiB\uff1b\u65e0\u7d2f\u8ba1CPU/NPU\u7b97\u65f6\u4e0a\u9650\u3002",
-      "decision": "\u539ffailed\u4fdd\u7559\uff1b\u6bcf\u94fe\u901a\u8fc7\u5b8c\u6574batch\u6062\u590d\u548c64\u6b65\u5148\u5bfc\u540e\u5230\u539f128Mi\u7ec8\u70b9\uff0c\u4e0d\u81ea\u52a8\u6269\u5230256Mi\u3002",
-      "execution_note": "R64\u4e24seed\u786e\u8ba43.06429/3.06124\uff0cR28 seed22\u786e\u8ba43.07558\uff1b\u65e0\u5b58\u6d3b\u540e\u4ee3\u3002",
+      "decision": "\u672c\u6279\u7ec8\u6001\uff0c\u4fdd\u7559\u5931\u8d25\u548c\u56fa\u5b9a\u6e90\u7801\uff1b\u4e0d\u81ea\u52a8\u65b0\u589e\u5019\u9009\u6216\u5ef6\u4f38\u3002",
+      "execution_note": "\u5168\u90e8\u76f8\u5173\u670d\u52a1\u7ec8\u6001\u65e0\u540e\u4ee3\uff1b\u539f\u5931\u8d25\u4fdd\u7559\uff1b\u5b9e\u9645\u8d28\u91cf\u4f9d\u72ec\u7acb\u786e\u8ba4\u5ba1\u9605\u3002",
       "id": "V10-REPAIR",
       "kind": "experiment",
       "lens_group": "TL-CONTROL-v10",
@@ -14712,6 +15120,14 @@
         {
           "label": "11\u670815\u65e5\u4e0a\u5348\u5171\u540c128Mi\u8fdb\u5c55",
           "path": "docs/studies/direct-v10-progress-20261115-morning.md"
+        },
+        {
+          "label": "v10\u7ec8\u6001\u7ed3\u8bba\u4e0e\u89e3\u91ca\u8fb9\u754c",
+          "path": "docs/studies/direct-v10-results.md"
+        },
+        {
+          "label": "27\u7ec8\u70b9\u3001\u8eab\u4efd\u4e0e\u914d\u5bf9\u786e\u8ba4",
+          "path": "docs/evidence/direct-v10-results.json"
         }
       ],
       "runs": [
@@ -14754,7 +15170,7 @@
       ],
       "status": "completed",
       "study_id": "TL-REPAIR-v10",
-      "summary": "\u4e09\u4fee\u590d\u5747\u5b8c\u6210128Mi\u53ca\u72ec\u7acb\u786e\u8ba4\uff1b\u539ffailed\u4fdd\u7559\u3002",
+      "summary": "\u4e09\u94fe128Mi\u53ca\u786e\u8ba4\u5b8c\u6210\uff0c\u672a\u518d\u89e6\u53d1\u539f\u975e\u6709\u9650\uff1b\u4ec5\u8be5\u8303\u56f4\u7a33\u5b9a\u3002",
       "title": "\u4e09\u6761pool\uff1a\u65b0\u6e90\u7801\u4fee\u590d\u7eed\u8bad",
       "track": "shared",
       "view_group": "current",
@@ -14763,8 +15179,9 @@
     },
     {
       "budget": "\u539f48h\u622a\u6b6211\u670816\u65e521:51:33\uff1b\u5171\u4eab12slot\uff0c\u65b0\u4fee\u590d24GiB\uff1b\u65e0\u7d2f\u8ba1CPU/NPU\u7b97\u65f6\u4e0a\u9650\u3002",
-      "counterevidence": "\u539f\u4e09\u9879\u975e\u6709\u9650\u5931\u8d25\u3001\u6574\u7f51\u4e25\u683c\u6709\u9650\u8d85\u5dee\u4fdd\u6301\u3002",
-      "decision": "\u539ffailed\u4fdd\u7559\uff1b\u6bcf\u94fe\u901a\u8fc7\u5b8c\u6574batch\u6062\u590d\u548c64\u6b65\u5148\u5bfc\u540e\u5230\u539f128Mi\u7ec8\u70b9\uff0c\u4e0d\u81ea\u52a8\u6269\u5230256Mi\u3002",
+      "comparisons": "\u76f8\u540c\u7236\u8f68\u8ff9\u4e0e\u914d\u7f6e\uff0c\u4ec5\u5c40\u90e8\u805a\u5408VJP\u663e\u5f0f\u53d8\u5316\uff1b\u5b8c\u6574batch\u6062\u590d\u548c64\u6b65\u5148\u5bfc\u540e\u8865\u9f50\u3002",
+      "counterevidence": "\u539f3\u6b21\u975e\u6709\u9650\u53ca\u4e25\u683c\u6709\u9650\u8d85\u5dee\u4fdd\u7559\uff1bquad\u5ef6\u4f38\u7684\u65b0\u53ef\u884c\u6027\u9519\u8bef\u4e0d\u7531\u6b64\u4fee\u590d\u8986\u76d6\u3002",
+      "decision": "\u4f5c\u4e3a\u4e0b\u4e00\u6279\u5177\u540d\u5047\u8bf4\u7684\u4f9d\u636e\uff0c\u5f53\u524d\u4e0d\u81ea\u52a8\u63d0\u4ea4\u65b0\u5b9e\u9a8c\u3002",
       "id": "RV10-REPAIR",
       "kind": "result",
       "question": "\u524d\u5411\u4e0d\u53d8\u7684\u5c40\u90e8VJP\u4fee\u590d\u80fd\u5426\u7a33\u5b9a\u8865\u9f50\u4e09\u4e2a\u539fpool\u5bf9\u7167\uff1f",
@@ -14792,15 +15209,33 @@
         {
           "label": "11\u670815\u65e5\u4e0a\u5348\u5171\u540c128Mi\u8fdb\u5c55",
           "path": "docs/studies/direct-v10-progress-20261115-morning.md"
+        },
+        {
+          "label": "v10\u7ec8\u6001\u7ed3\u8bba\u4e0e\u89e3\u91ca\u8fb9\u754c",
+          "path": "docs/studies/direct-v10-results.md"
+        },
+        {
+          "label": "27\u7ec8\u70b9\u3001\u8eab\u4efd\u4e0e\u914d\u5bf9\u786e\u8ba4",
+          "path": "docs/evidence/direct-v10-results.json"
         }
       ],
-      "scope": "\u9650\u5b9a\u72ec\u7acbdirect\u5b9e\u73b0/FP32\u4e09\u6761\u539f\u8f68\u8ff9\uff1b\u6e90\u53d8\u66f4\u663e\u5f0f\u3002",
-      "status": "awaiting",
-      "summary": "\u4e09\u4fee\u590d\u5747\u6536\u9f50128Mi/\u786e\u8ba4\uff1b\u539f\u9608\u503c\u548c\u4e25\u683c\u5931\u8d25\u4fdd\u7559\u3002",
-      "title": "\u4fee\u590d\u540e\u957f\u671f\u7a33\u5b9a\u4e0e\u8d28\u91cf\uff1a\u5f85\u5ba1\u9605",
+      "scope": "\u72ec\u7acbdirect\u5b9e\u73b0/FP32\uff0c\u56fa\u5b9a\u8bcd\u88684096/L256/global64\uff0cseed11/22\u3001128Mi\u53ca\u6709\u6761\u4ef6256Mi\uff1b\u4e25\u683c\u6570\u503c\u5931\u8d25\u5355\u5217\u3002",
+      "sources": [
+        {
+          "label": "v10\u7ec8\u6001\u7ed3\u8bba\u4e0e\u89e3\u91ca\u8fb9\u754c",
+          "url": "https://github.com/ZichaoLong/tide/blob/tide-learning-lab/docs/studies/direct-v10-results.md"
+        },
+        {
+          "label": "27\u7ec8\u70b9\u3001\u8eab\u4efd\u4e0e\u914d\u5bf9\u786e\u8ba4",
+          "url": "https://github.com/ZichaoLong/tide/blob/tide-learning-lab/docs/evidence/direct-v10-results.json"
+        }
+      ],
+      "status": "scoped",
+      "summary": "\u4e09\u94fe128Mi\u53ca\u786e\u8ba4\u5b8c\u6210\uff0c\u672a\u518d\u89e6\u53d1\u539f\u975e\u6709\u9650\uff1b\u4ec5\u8be5\u8303\u56f4\u7a33\u5b9a\u3002",
+      "title": "\u4e09\u6761pool\u4fee\u590d\u8865\u9f50\uff0c\u539f\u5931\u8d25\u4fdd\u7559",
       "track": "shared",
-      "transfer_conditions": "\u4ec5\u76f8\u540c\u805a\u5408\u516c\u5f0f\u4e0eVJP\u5951\u7ea6\uff1b\u57fa\u5ea7\u4ecd\u9700\u72ec\u7acb\u63a5\u5165\u9a8c\u6536\u3002",
-      "unresolved": "\u4fee\u590d\u4ec5\u9650\u5b9a\u4e09\u8f68\u8ff9\u8303\u56f4\uff1b\u65e7v10\u5ef6\u4f38\u53e6\u6709\u5206\u914d\u53ef\u884c\u6027\u5931\u8d25\uff0c\u4e0d\u7531\u8be5\u4fee\u590d\u8986\u76d6\u3002",
+      "transfer_conditions": "\u53ea\u8fc1\u79fb\u76f8\u540c\u6b63\u8d28\u91cf\u805a\u5408\u516c\u5f0f/VJP\u5951\u7ea6\uff1b\u72ec\u7acb\u6765\u6e90\u3001\u6062\u590d\u4e0e\u957f\u671f\u5b66\u4e60\u4ecd\u9700\u9a8c\u8bc1\u3002",
+      "unresolved": "\u6ca1\u6709\u4efb\u610f\u8303\u56f4\u7a33\u5b9a\u6027\u3001\u957f\u8f68\u8ff9\u72ec\u7acb\u9010\u4f4d\u91cd\u653e\u6216\u516c\u5171\u57fa\u5ea7\u8fc1\u79fb\u8bc1\u660e\u3002",
       "view_group": "current",
       "x": 915,
       "y": 2260
@@ -15840,9 +16275,9 @@
       "y": 1000
     }
   ],
-  "notice": "\u4e3b\u8f68\u8ff912\u5b8c\u6210128M\u30015\u8fd0\u884c\u30013\u539f\u5931\u8d25\u3002\u4e09\u9879\u539f\u5931\u8d25\u5747\u590d\u73b0\u5e76\u5b9a\u4f4d\uff0c\u5c40\u90e8VJP\u5019\u9009\u4e0d\u6539\u524d\u5411\uff1b\u672a\u5207\u6362\u6d3b\u52a8\u6e90\u7801\u6216\u6062\u590d\u6b63\u5f0f\u8bad\u7ec3\u3002",
+  "notice": "20\u4e2aHB/TF\u914d\u7f6e\u5230128Mi\uff0c7\u4e2a256Mi\u7ec8\u70b9\u53ca\u72ec\u7acb\u786e\u8ba4\u5b8c\u6210\uff1bMoE66\u9636\u6bb5\u5b8c\u6210\u3002\u65e0\u6d3b\u52a8\u4f5c\u4e1a\uff0c3\u539fpool\u5931\u8d25\u4e0e1\u53ef\u884c\u6027\u5931\u8d25\u4fdd\u7559\uff1b\u4e0d\u81ea\u52a8\u6269\u5c55\u3002",
   "schema": "tide-research-map-prototype-v1",
-  "subtitle": "v10\uff1apool\u53cd\u5411\u6545\u969c\u5df2\u5b9a\u4f4d\uff0c\u5355\u6b65\u4fee\u590d\u5019\u9009\u901a\u8fc7\uff1b\u957f\u671f\u5b66\u4e60\u8d44\u683c\u5f85\u9a8c",
+  "subtitle": "v10\u4e0eMoE\u7ec8\u6001\uff1a\u540c\u6d3b\u52a8\u52a0\u5bbd\u6709\u6536\u76ca\uff0c\u4f4e\u6d3b\u52a8HB\u7684\u8fd1\u6d3b\u8dc3\u5bb9\u91cf\u4f18\u52bf\u4ecd\u672a\u51fa\u73b0",
   "title": "TIDE \u7814\u7a76\u56fe",
   "updated_at": "2026-11-15",
   "view_groups": [

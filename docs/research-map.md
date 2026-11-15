@@ -1,3 +1,13 @@
+# 最新图状态：v10、修复与MoE全部终态审阅
+
+2026-11-15 16:54后：v10容量/活跃预算/控制/确认组均completed，20个128Mi及7个256Mi终点经独立确认。
+四个质量结果及修复结果节点依据[终态报告](studies/direct-v10-results.md)和[配对证据](evidence/direct-v10-results.json)标记scoped。
+保留原3项pool失败、q10 seed11延伸失败、单seed256Mi及原严格数值失败；completed不等于全部尝试成功。
+明确同活动加宽的收益、近活跃预算的负面、曝光改善但差距保持、pool扩容双seed方向相反。
+关联实际延伸/确认ID和Lens投影，不依据退出码自动推断科学支持。没有新作业。
+
+以下为历史图说明。
+
 # 最新图状态：MoE终态及独立确认已审阅
 
 2026-11-15下午：TL-MOE-CAL/CONTROL/CONFIRM均completed，三个结果节点按实际配对审阅标记scoped；

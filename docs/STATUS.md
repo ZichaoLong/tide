@@ -1,3 +1,39 @@
+# 当前交接：v10与MoE全部终态，结果已审阅
+
+2026-11-15终态核对。[v10结果](studies/direct-v10-results.md) · [v10逐终点证据](evidence/direct-v10-results.json) ·
+[MoE结果](studies/moe-controls-results.md)。v10于16:54:30结束，自预算起点约19小时03分；MoE于14:26结束。
+两批控制器及全部相关服务无存活后代，当前没有这两批的活动作业。本次未启动/恢复训练。
+
+v10原20主轨迹17成功、3原失败，3条显式修复均补齐128Mi及确认；20个不同配置收齐，不增加seed。
+d64组8延伸：7完成256Mi及确认、1失败。全部27成功终点的独立262K确认完成，checkpoint完整SHA已核对。
+61项原训练/失败/延伸/确认/修复先导Lens投影读回通过。MoE仍为66阶段完成，既有42项恢复和终点审阅保持。
+
+|同128Mi确认NLL（双seed）|小档|大档|
+|---|---:|---:|
+|较强TF参照|3.250120|3.017110|
+|小稠密HB|3.667633|3.291992|
+|HB约10% Full/全图|3.833779|3.385942|
+|HB约3% Full/全图|4.309052|3.587421|
+|MoE E20/top2|3.104083|2.815403|
+|MoE E64/top2|3.149023|2.802774|
+
+小档近活跃容量约3.5–3.8M，大档约9.3–10.5M，并非精确等FLOPs或总参数；MoE全局attention与HB局部结构不同。
+HB同活动比例加宽有收益，但近活跃容量增加总参数仍弱于小稠密。pool d128 R28/R64为3.065124/3.062763，
+均值几乎不变、两seed扩容方向相反；全活动pool不能冒充低活动模型。
+
+新增256Mi：小TF3.073258、小稠密HB3.470053、约3% HB3.998331，均双seed；约10% HB为3.586218，仅seed22。
+约3% HB相对TF的差距由1.058932缩小至0.925074，仍明显；256Mi重复固定128Mi池，不是新增256Mi独立数据。
+原q10 seed11停于195.84Mi：可行性残差3.004e-5>2e-5，未重放根因或恢复；原3次pool非有限失败也保留。
+严格数值有限超差、离散机制、恢复和学习分别报告。test保持密封。
+
+原源码0ea05d61、修复d089dd05、MoE8bd33dd1/继承dense2f96d745；安装74e7bbd、数学0770593保持。
+账号约345.96/800GiB，硬余量454.04GiB；本次未删除权重或记录。没有自动下一批、MoE256Mi或新候选。
+Lens项目tide-learning-lab；v10四组及TL-MOE-CAL/CONTROL/CONFIRM，私有入口`.local/LENS.md`。
+[操作入口](studies/direct-v10-operations.md)；只读审阅`python scripts/review_direct_v10_results.py`，
+轻量状态`python scripts/review_direct_v10.py`。后继建议归ROADMAP，待用户验收后确定。
+
+以下为历史快照。
+
 # 当前交接：MoE全部完成，旧v10剩两条256Mi延伸
 
 2026-11-15 15:39 +08核对。[MoE终态结论](studies/moe-controls-results.md) · [逐运行/配对审阅](evidence/moe-controls-results.json) ·
