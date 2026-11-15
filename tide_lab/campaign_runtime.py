@@ -41,7 +41,10 @@ def make_model(config, device):
         options=dict(config.get('implementation',{}))
         attention=options.pop('npu_attention','npu_fusion_augmented') if device.type=='npu' else options.pop('cpu_attention','math')
         options.pop('cpu_attention',None);options.pop('npu_attention',None)
-        model=SpecializedSemanticLM(seed=config['seed'],plan=config['direct']['plan'],attention=attention,**options)
+        if 'routing_balance' in options:
+            from .capacity_balance import CapacityBalancedLM
+            model=CapacityBalancedLM(seed=config['seed'],plan=config['direct']['plan'],attention=attention,**options)
+        else:model=SpecializedSemanticLM(seed=config['seed'],plan=config['direct']['plan'],attention=attention,**options)
     else:raise ValueError('unsupported campaign model')
     model=model.to(device)
     inventory=trainable_inventory(model)
@@ -76,7 +79,7 @@ def learning_rate(config,tokens):
 
 def update(model,opt,batch,config,tokens,device):
     """Full device transfer is owned by caller; timing includes model/loss/VJP/AdamW."""
-    if config['kind']=='moe':return logical_update(model,opt,[batch],config,tokens,device)
+    if config['kind']=='moe' or hasattr(model,'begin_update'):return logical_update(model,opt,[batch],config,tokens,device)
     if hasattr(model,'set_progress'):model.set_progress(tokens)
     model.train();synchronize(device);start=time.monotonic()
     count=int((batch['labels']!=-100).sum())
@@ -102,6 +105,7 @@ def logical_update(model,opt,batches,config,tokens,device):
     if count<=0:raise ValueError('empty logical batch')
     if hasattr(model,'set_progress'):model.set_progress(tokens)
     model.train();synchronize(device);start=time.monotonic()
+    if hasattr(model,'begin_update'):model.begin_update()
     lr=learning_rate(config,tokens+count)
     for group in opt.param_groups:group['lr']=lr
     opt.zero_grad(set_to_none=True);total=0.;work={}
@@ -110,6 +114,7 @@ def logical_update(model,opt,batches,config,tokens,device):
         total,work,actual=objective_backward(model,batches,config)
         if actual!=count:raise AssertionError('MoE target count changed')
     for b in ([] if config['kind']=='moe' else batches):
+        if hasattr(model,'set_training_mask'):model.set_training_mask(b['labels']!=-100)
         logits=model(b['input_ids'])
         loss=F.cross_entropy(logits.flatten(0,1),b['labels'].flatten(),ignore_index=-100,reduction='sum')/count
         if not torch.isfinite(loss):raise FloatingPointError('nonfinite logical-batch loss')

@@ -1,0 +1,34 @@
+{
+  "cases": [
+    {
+      "config": "configs/studies/language/capacity-v11/hb/hb-d64-r64-q3-bias0.001-s11.json",
+      "id": "hb-d64-r64-q3-bias0.001-s11",
+      "parent_config": ".local/source-v10-execution/configs/studies/language/direct-v10/table/main/hb-d64-r64-q3-s11.json"
+    },
+    {
+      "config": "configs/studies/language/capacity-v11/hb/hb-d64-r64-q3-bias0.001-s22.json",
+      "id": "hb-d64-r64-q3-bias0.001-s22",
+      "parent_config": ".local/source-v10-execution/configs/studies/language/direct-v10/table/main/hb-d64-r64-q3-s22.json"
+    },
+    {
+      "config": "configs/studies/language/capacity-v11/hb/hb-d64-r64-q3-bias0.01-s11.json",
+      "id": "hb-d64-r64-q3-bias0.01-s11",
+      "parent_config": ".local/source-v10-execution/configs/studies/language/direct-v10/table/main/hb-d64-r64-q3-s11.json"
+    },
+    {
+      "config": "configs/studies/language/capacity-v11/hb/hb-d64-r64-q3-bias0.01-s22.json",
+      "id": "hb-d64-r64-q3-bias0.01-s22",
+      "parent_config": ".local/source-v10-execution/configs/studies/language/direct-v10/table/main/hb-d64-r64-q3-s22.json"
+    }
+  ],
+  "family": "candidate-load-bias-v1",
+  "pilot_tokens": 8388608,
+  "rates": [
+    0.001,
+    0.01
+  ],
+  "schema": "tide-capacity-hb-v11",
+  "selection_evidence": "docs/evidence/capacity-v11-diagnostics.json",
+  "selection_reason": "Full opportunity collapse across both widths and both d128 seeds; large MoE unlike HB is broadly used; isolate routing before budget redesign",
+  "target_tokens": 134217728
+}

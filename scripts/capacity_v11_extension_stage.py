@@ -118,7 +118,7 @@ def main(a):
                 raise ValueError('wrong trained-state recovery identity')
             exact_tree(left, right)
             recovery = dict(state='passed', identity=ident, at=now(),
-                scope='Two full L256/global64 updates after128Mi; continuous versus1+1 fresh processes, model/Adam/cursor/gradients/CPU+NPU+Python RNG; no full-trajectory certification.',
+                scope='Two full L256/global64 trained-state updates; continuous versus1+1 fresh processes, model/Adam/cursor/gradients/CPU+NPU+Python RNG and registered controller state; no full-trajectory certification.',
                 sources=[dict(path=str(p), sha256=digest(p)) for p in (a.checkpoint_a, a.checkpoint_b)])
             atomic_json(a.output/'recovery.json', recovery)
             result.update(state='completed', recovery=recovery)

@@ -1,0 +1,215 @@
+{
+  "cases": [
+    {
+      "checkpoint": "runs/moe-r2-main128-large-dense-lr0.001-s11/train/latest.pt",
+      "config": ".local/source-moe-execution-v2/configs/studies/language/moe-controls/table/configs/large-dense-lr0.001-s11.json",
+      "id": "parent128-large-dense-lr0.001-s11",
+      "tokens": 134217728,
+      "training_result": "runs/moe-r2-main128-large-dense-lr0.001-s11/train/result.json"
+    },
+    {
+      "checkpoint": "runs/moe-r2-main128-large-dense-lr0.001-s22/train/latest.pt",
+      "config": ".local/source-moe-execution-v2/configs/studies/language/moe-controls/table/configs/large-dense-lr0.001-s22.json",
+      "id": "parent128-large-dense-lr0.001-s22",
+      "tokens": 134217728,
+      "training_result": "runs/moe-r2-main128-large-dense-lr0.001-s22/train/result.json"
+    },
+    {
+      "checkpoint": "runs/moe-r2-main128-large-e20-lr0.001-b0.01-s11/train/latest.pt",
+      "config": ".local/source-moe-execution-v2/configs/studies/language/moe-controls/table/configs/large-e20-lr0.001-b0.01-s11.json",
+      "id": "parent128-large-e20-lr0.001-b0.01-s11",
+      "tokens": 134217728,
+      "training_result": "runs/moe-r2-main128-large-e20-lr0.001-b0.01-s11/train/result.json"
+    },
+    {
+      "checkpoint": "runs/moe-r2-main128-large-e20-lr0.001-b0.01-s22/train/latest.pt",
+      "config": ".local/source-moe-execution-v2/configs/studies/language/moe-controls/table/configs/large-e20-lr0.001-b0.01-s22.json",
+      "id": "parent128-large-e20-lr0.001-b0.01-s22",
+      "tokens": 134217728,
+      "training_result": "runs/moe-r2-main128-large-e20-lr0.001-b0.01-s22/train/result.json"
+    },
+    {
+      "checkpoint": "runs/moe-r2-main128-large-e64-lr0.001-b0.01-s11/train/latest.pt",
+      "config": ".local/source-moe-execution-v2/configs/studies/language/moe-controls/table/configs/large-e64-lr0.001-b0.01-s11.json",
+      "id": "parent128-large-e64-lr0.001-b0.01-s11",
+      "tokens": 134217728,
+      "training_result": "runs/moe-r2-main128-large-e64-lr0.001-b0.01-s11/train/result.json"
+    },
+    {
+      "checkpoint": "runs/moe-r2-main128-large-e64-lr0.001-b0.01-s22/train/latest.pt",
+      "config": ".local/source-moe-execution-v2/configs/studies/language/moe-controls/table/configs/large-e64-lr0.001-b0.01-s22.json",
+      "id": "parent128-large-e64-lr0.001-b0.01-s22",
+      "tokens": 134217728,
+      "training_result": "runs/moe-r2-main128-large-e64-lr0.001-b0.01-s22/train/result.json"
+    },
+    {
+      "checkpoint": "runs/moe-r2-main128-small-dense-lr0.003-s11/train/latest.pt",
+      "config": ".local/source-moe-execution-v2/configs/studies/language/moe-controls/table/configs/small-dense-lr0.003-s11.json",
+      "id": "parent128-small-dense-lr0.003-s11",
+      "tokens": 134217728,
+      "training_result": "runs/moe-r2-main128-small-dense-lr0.003-s11/train/result.json"
+    },
+    {
+      "checkpoint": "runs/moe-r2-main128-small-dense-lr0.003-s22/train/latest.pt",
+      "config": ".local/source-moe-execution-v2/configs/studies/language/moe-controls/table/configs/small-dense-lr0.003-s22.json",
+      "id": "parent128-small-dense-lr0.003-s22",
+      "tokens": 134217728,
+      "training_result": "runs/moe-r2-main128-small-dense-lr0.003-s22/train/result.json"
+    },
+    {
+      "checkpoint": "runs/moe-r2-main128-small-e20-lr0.003-b0.01-s11/train/latest.pt",
+      "config": ".local/source-moe-execution-v2/configs/studies/language/moe-controls/table/configs/small-e20-lr0.003-b0.01-s11.json",
+      "id": "parent128-small-e20-lr0.003-b0.01-s11",
+      "tokens": 134217728,
+      "training_result": "runs/moe-r2-main128-small-e20-lr0.003-b0.01-s11/train/result.json"
+    },
+    {
+      "checkpoint": "runs/moe-r2-main128-small-e20-lr0.003-b0.01-s22/train/latest.pt",
+      "config": ".local/source-moe-execution-v2/configs/studies/language/moe-controls/table/configs/small-e20-lr0.003-b0.01-s22.json",
+      "id": "parent128-small-e20-lr0.003-b0.01-s22",
+      "tokens": 134217728,
+      "training_result": "runs/moe-r2-main128-small-e20-lr0.003-b0.01-s22/train/result.json"
+    },
+    {
+      "checkpoint": "runs/moe-r2-main128-small-e64-lr0.003-b0.001-s11/train/latest.pt",
+      "config": ".local/source-moe-execution-v2/configs/studies/language/moe-controls/table/configs/small-e64-lr0.003-b0.001-s11.json",
+      "id": "parent128-small-e64-lr0.003-b0.001-s11",
+      "tokens": 134217728,
+      "training_result": "runs/moe-r2-main128-small-e64-lr0.003-b0.001-s11/train/result.json"
+    },
+    {
+      "checkpoint": "runs/moe-r2-main128-small-e64-lr0.003-b0.001-s22/train/latest.pt",
+      "config": ".local/source-moe-execution-v2/configs/studies/language/moe-controls/table/configs/small-e64-lr0.003-b0.001-s22.json",
+      "id": "parent128-small-e64-lr0.003-b0.001-s22",
+      "tokens": 134217728,
+      "training_result": "runs/moe-r2-main128-small-e64-lr0.003-b0.001-s22/train/result.json"
+    },
+    {
+      "checkpoint": "runs/v10-main-hb-d64-r64-q3-s11/train/latest.pt",
+      "config": ".local/source-v10-execution/configs/studies/language/direct-v10/table/main/hb-d64-r64-q3-s11.json",
+      "id": "parent128-hb-d64-r64-q3-s11",
+      "tokens": 134217728,
+      "training_result": "runs/v10-main-hb-d64-r64-q3-s11/train/result.json"
+    },
+    {
+      "checkpoint": "runs/v10-main-hb-d64-r64-q3-s22/train/latest.pt",
+      "config": ".local/source-v10-execution/configs/studies/language/direct-v10/table/main/hb-d64-r64-q3-s22.json",
+      "id": "parent128-hb-d64-r64-q3-s22",
+      "tokens": 134217728,
+      "training_result": "runs/v10-main-hb-d64-r64-q3-s22/train/result.json"
+    },
+    {
+      "checkpoint": "runs/v10-main-hb-d64-r4-dense-match-s11/train/latest.pt",
+      "config": ".local/source-v10-execution/configs/studies/language/direct-v10/table/main/hb-d64-r4-dense-match-s11.json",
+      "id": "parent128-hb-d64-r4-dense-match-s11",
+      "tokens": 134217728,
+      "training_result": "runs/v10-main-hb-d64-r4-dense-match-s11/train/result.json"
+    },
+    {
+      "checkpoint": "runs/v10-main-hb-d64-r4-dense-match-s22/train/latest.pt",
+      "config": ".local/source-v10-execution/configs/studies/language/direct-v10/table/main/hb-d64-r4-dense-match-s22.json",
+      "id": "parent128-hb-d64-r4-dense-match-s22",
+      "tokens": 134217728,
+      "training_result": "runs/v10-main-hb-d64-r4-dense-match-s22/train/result.json"
+    },
+    {
+      "checkpoint": "runs/v11-extend-r2-large-dense-lr0.001-s11/train/latest.pt",
+      "config": "runs/v11-extension-r2-control/large-dense-lr0.001-s11/config.json",
+      "id": "extend256-large-dense-lr0.001-s11",
+      "producer": "artifacts/jobs/v11-extend-r2-large-dense-lr0.001-s11",
+      "tokens": 268435456,
+      "training_result": "runs/v11-extend-r2-large-dense-lr0.001-s11/train/result.json"
+    },
+    {
+      "checkpoint": "runs/v11-extend-r2-large-dense-lr0.001-s22/train/latest.pt",
+      "config": "runs/v11-extension-r2-control/large-dense-lr0.001-s22/config.json",
+      "id": "extend256-large-dense-lr0.001-s22",
+      "producer": "artifacts/jobs/v11-extend-r2-large-dense-lr0.001-s22",
+      "tokens": 268435456,
+      "training_result": "runs/v11-extend-r2-large-dense-lr0.001-s22/train/result.json"
+    },
+    {
+      "checkpoint": "runs/v11-extend-r2-large-e20-lr0.001-b0.01-s11/train/latest.pt",
+      "config": "runs/v11-extension-r2-control/large-e20-lr0.001-b0.01-s11/config.json",
+      "id": "extend256-large-e20-lr0.001-b0.01-s11",
+      "producer": "artifacts/jobs/v11-extend-r2-large-e20-lr0.001-b0.01-s11",
+      "tokens": 268435456,
+      "training_result": "runs/v11-extend-r2-large-e20-lr0.001-b0.01-s11/train/result.json"
+    },
+    {
+      "checkpoint": "runs/v11-extend-r2-large-e20-lr0.001-b0.01-s22/train/latest.pt",
+      "config": "runs/v11-extension-r2-control/large-e20-lr0.001-b0.01-s22/config.json",
+      "id": "extend256-large-e20-lr0.001-b0.01-s22",
+      "producer": "artifacts/jobs/v11-extend-r2-large-e20-lr0.001-b0.01-s22",
+      "tokens": 268435456,
+      "training_result": "runs/v11-extend-r2-large-e20-lr0.001-b0.01-s22/train/result.json"
+    },
+    {
+      "checkpoint": "runs/v11-extend-r2-large-e64-lr0.001-b0.01-s11/train/latest.pt",
+      "config": "runs/v11-extension-r2-control/large-e64-lr0.001-b0.01-s11/config.json",
+      "id": "extend256-large-e64-lr0.001-b0.01-s11",
+      "producer": "artifacts/jobs/v11-extend-r2-large-e64-lr0.001-b0.01-s11",
+      "tokens": 268435456,
+      "training_result": "runs/v11-extend-r2-large-e64-lr0.001-b0.01-s11/train/result.json"
+    },
+    {
+      "checkpoint": "runs/v11-extend-r2-large-e64-lr0.001-b0.01-s22/train/latest.pt",
+      "config": "runs/v11-extension-r2-control/large-e64-lr0.001-b0.01-s22/config.json",
+      "id": "extend256-large-e64-lr0.001-b0.01-s22",
+      "producer": "artifacts/jobs/v11-extend-r2-large-e64-lr0.001-b0.01-s22",
+      "tokens": 268435456,
+      "training_result": "runs/v11-extend-r2-large-e64-lr0.001-b0.01-s22/train/result.json"
+    },
+    {
+      "checkpoint": "runs/v11-moe-balance-small-e64-lr0.003-b0.01-s11/train/latest.pt",
+      "config": ".local/source-moe-execution-v2/configs/studies/language/moe-controls/table/configs/small-e64-lr0.003-b0.01-s11.json",
+      "id": "balance128-small-e64-lr0.003-b0.01-s11",
+      "producer": "artifacts/jobs/v11-moe-balance-small-e64-lr0.003-b0.01-s11",
+      "tokens": 134217728,
+      "training_result": "runs/v11-moe-balance-small-e64-lr0.003-b0.01-s11/train/result.json"
+    },
+    {
+      "checkpoint": "runs/v11-moe-balance-small-e64-lr0.003-b0.01-s22/train/latest.pt",
+      "config": ".local/source-moe-execution-v2/configs/studies/language/moe-controls/table/configs/small-e64-lr0.003-b0.01-s22.json",
+      "id": "balance128-small-e64-lr0.003-b0.01-s22",
+      "producer": "artifacts/jobs/v11-moe-balance-small-e64-lr0.003-b0.01-s22",
+      "tokens": 134217728,
+      "training_result": "runs/v11-moe-balance-small-e64-lr0.003-b0.01-s22/train/result.json"
+    },
+    {
+      "checkpoint": "runs/v11-hb-hb-d64-r64-q3-bias0.001-s11/train/latest.pt",
+      "config": ".local/source-capacity-v11-hb/configs/studies/language/capacity-v11/hb/hb-d64-r64-q3-bias0.001-s11.json",
+      "id": "hb-d64-r64-q3-bias0.001-s11",
+      "producer": "artifacts/jobs/v11-hb-hb-d64-r64-q3-bias0.001-s11",
+      "tokens": 134217728,
+      "training_result": "runs/v11-hb-hb-d64-r64-q3-bias0.001-s11/train/result.json"
+    },
+    {
+      "checkpoint": "runs/v11-hb-hb-d64-r64-q3-bias0.001-s22/train/latest.pt",
+      "config": ".local/source-capacity-v11-hb/configs/studies/language/capacity-v11/hb/hb-d64-r64-q3-bias0.001-s22.json",
+      "id": "hb-d64-r64-q3-bias0.001-s22",
+      "producer": "artifacts/jobs/v11-hb-hb-d64-r64-q3-bias0.001-s22",
+      "tokens": 134217728,
+      "training_result": "runs/v11-hb-hb-d64-r64-q3-bias0.001-s22/train/result.json"
+    },
+    {
+      "checkpoint": "runs/v11-hb-hb-d64-r64-q3-bias0.01-s11/train/latest.pt",
+      "config": ".local/source-capacity-v11-hb/configs/studies/language/capacity-v11/hb/hb-d64-r64-q3-bias0.01-s11.json",
+      "id": "hb-d64-r64-q3-bias0.01-s11",
+      "producer": "artifacts/jobs/v11-hb-hb-d64-r64-q3-bias0.01-s11",
+      "tokens": 134217728,
+      "training_result": "runs/v11-hb-hb-d64-r64-q3-bias0.01-s11/train/result.json"
+    },
+    {
+      "checkpoint": "runs/v11-hb-hb-d64-r64-q3-bias0.01-s22/train/latest.pt",
+      "config": ".local/source-capacity-v11-hb/configs/studies/language/capacity-v11/hb/hb-d64-r64-q3-bias0.01-s22.json",
+      "id": "hb-d64-r64-q3-bias0.01-s22",
+      "producer": "artifacts/jobs/v11-hb-hb-d64-r64-q3-bias0.01-s22",
+      "tokens": 134217728,
+      "training_result": "runs/v11-hb-hb-d64-r64-q3-bias0.01-s22/train/result.json"
+    }
+  ],
+  "deadline_epoch": 1794908588.6106293,
+  "schema": "tide-v11-fresh-confirmation-table-v1",
+  "selection_policy": "28 fixed relevant old/control/new endpoints; no endpoint selection from fresh data; failed prerequisites recorded ineligible"
+}
