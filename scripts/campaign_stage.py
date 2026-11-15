@@ -70,6 +70,21 @@ def admission(model,c,device,out):
         checks['forward']=finite_delta(y,yr,1e-6,1e-5)
         checks['parameter_vjp']={n:finite_delta(p.grad,dict(reference.named_parameters())[n].grad,1e-6,1e-5)
             for n,p in model.named_parameters() if p.grad is not None}
+        if hasattr(model,'mechanism'):
+            # The top2 response starts after warmup; initialization-only
+            # admission would never exercise the changed path.
+            model.set_progress(4*2**20);reference.set_progress(4*2**20)
+            model.zero_grad(set_to_none=True);reference.zero_grad(set_to_none=True)
+            late=model(x);late_ref=reference(x.cpu())
+            late.square().mean().backward();late_ref.square().mean().backward()
+            for owner in (model,reference):
+                if any(p.grad is not None and not torch.isfinite(p.grad).all() for p in owner.parameters()):
+                    raise FloatingPointError('nonfinite post-warmup mechanism VJP')
+            if not torch.isfinite(late).all() or not torch.isfinite(late_ref).all():raise FloatingPointError('nonfinite post-warmup output')
+            checks['post_warmup']=dict(tokens=4*2**20,forward=finite_delta(late,late_ref,1e-6,1e-5),
+                parameter_vjp={n:finite_delta(p.grad,dict(reference.named_parameters())[n].grad,1e-6,1e-5)
+                    for n,p in model.named_parameters() if p.grad is not None},work=dict(model.last_metrics),
+                scope='finite CPU/NPU comparison after route transition; original numerical thresholds retained')
         with torch.no_grad():
             changed=x.clone();changed[:,2]=(changed[:,2]+17)%4096
             checks['causal']=finite_delta(model(changed)[:,:2],model(x)[:,:2],0,0)

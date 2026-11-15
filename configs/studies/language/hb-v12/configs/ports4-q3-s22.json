@@ -24634,6 +24634,16 @@
   "planned_inventory": {
     "lm_trainable": 51372704
   },
+  "resource_admission": {
+    "global_batch": 64,
+    "micro": 16,
+    "peak_mib": 34409.2666015625,
+    "reuse_scope": "same d/region shape; sharing variants use share8 except q10 conservative base; additional read projection uses base peak plus safety margin",
+    "sha256": "0dc282ac581efff69f38c99597ec3b705b90af069144ce15c6530ab24ebc5767",
+    "source": "runs/v12-cal-ports4-q3/result.json",
+    "targets_per_second": 6165.411936743514,
+    "timing": "complete synthetic L256 global64 logical update; separately observed physical microbatch and accumulation"
+  },
   "resources": {
     "max_rss_gib": 64
   },

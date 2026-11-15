@@ -1,0 +1,366 @@
+{
+  "calibrations": [
+    {
+      "candidates": [
+        {
+          "accumulation": 8,
+          "global_batch": 64,
+          "micro": 8,
+          "peak_mib": 7713.3720703125,
+          "state": "completed",
+          "targets_per_second": 8688.04024791841
+        },
+        {
+          "accumulation": 4,
+          "global_batch": 64,
+          "micro": 16,
+          "peak_mib": 15107.4560546875,
+          "state": "completed",
+          "targets_per_second": 12866.100532159751
+        },
+        {
+          "accumulation": 2,
+          "global_batch": 64,
+          "micro": 32,
+          "peak_mib": 29725.38427734375,
+          "state": "completed",
+          "targets_per_second": 12947.255643591056
+        }
+      ],
+      "job": "v12-cal-base-q10",
+      "lens": {
+        "project": "tide-learning-lab",
+        "readback_matches": true,
+        "run_id": "tl-v12-cal-base-q10-s11",
+        "status": "verified"
+      },
+      "record": "runs/v12-cal-base-q10/result.json",
+      "selected": {
+        "global_batch": 64,
+        "micro": 32,
+        "peak_mib": 29725.38427734375,
+        "targets_per_second": 12947.255643591056
+      },
+      "sha256": "ac558b0d3a9dde2ca3225d0dce9ee43b603a48b0c43905ebea9963d850cc0de1",
+      "source_commit": "8e085be3a5dd85bc8d5f15a3561e956244176e65",
+      "state": "completed"
+    },
+    {
+      "candidates": [
+        {
+          "accumulation": 8,
+          "global_batch": 64,
+          "micro": 8,
+          "peak_mib": 17530.412109375,
+          "state": "completed",
+          "targets_per_second": 5700.5855699389
+        },
+        {
+          "accumulation": 4,
+          "global_batch": 64,
+          "micro": 16,
+          "peak_mib": 34389.25927734375,
+          "state": "completed",
+          "targets_per_second": 6127.952236185602
+        },
+        {
+          "micro": 32,
+          "reason": "measured peak growth exceeds52000MiB",
+          "state": "not_attempted"
+        }
+      ],
+      "job": "v12-cal-base-q3",
+      "lens": {
+        "project": "tide-learning-lab",
+        "readback_matches": true,
+        "run_id": "tl-v12-cal-base-q3-s11",
+        "status": "verified"
+      },
+      "record": "runs/v12-cal-base-q3/result.json",
+      "selected": {
+        "global_batch": 64,
+        "micro": 16,
+        "peak_mib": 34389.25927734375,
+        "targets_per_second": 6127.952236185602
+      },
+      "sha256": "d7b1142f8523f4e977df13a2972a0f3b22273b7518ebc1b6f3211a90fedd064c",
+      "source_commit": "8e085be3a5dd85bc8d5f15a3561e956244176e65",
+      "state": "completed"
+    },
+    {
+      "candidates": [
+        {
+          "accumulation": 16,
+          "global_batch": 64,
+          "micro": 4,
+          "peak_mib": 16497.662109375,
+          "state": "completed",
+          "targets_per_second": 2595.5483439193063
+        },
+        {
+          "accumulation": 8,
+          "global_batch": 64,
+          "micro": 8,
+          "peak_mib": 30251.1171875,
+          "state": "completed",
+          "targets_per_second": 1501.270818658969
+        },
+        {
+          "micro": 16,
+          "reason": "measured peak growth exceeds52000MiB",
+          "state": "not_attempted"
+        }
+      ],
+      "job": "v12-cal-base128-q3",
+      "lens": {
+        "project": "tide-learning-lab",
+        "readback_matches": true,
+        "run_id": "tl-v12-cal-base128-q3-s11",
+        "status": "verified"
+      },
+      "record": "runs/v12-cal-base128-q3/result.json",
+      "selected": {
+        "global_batch": 64,
+        "micro": 4,
+        "peak_mib": 16497.662109375,
+        "targets_per_second": 2595.5483439193063
+      },
+      "sha256": "c7678b81df945a7791aff10bc4748def3268f8a7ffa22917843c6c90dd926867",
+      "source_commit": "8e085be3a5dd85bc8d5f15a3561e956244176e65",
+      "state": "completed"
+    },
+    {
+      "candidates": [
+        {
+          "accumulation": 8,
+          "global_batch": 64,
+          "micro": 8,
+          "peak_mib": 17548.408203125,
+          "state": "completed",
+          "targets_per_second": 5701.283875888521
+        },
+        {
+          "accumulation": 4,
+          "global_batch": 64,
+          "micro": 16,
+          "peak_mib": 34409.2666015625,
+          "state": "completed",
+          "targets_per_second": 6165.411936743514
+        },
+        {
+          "micro": 32,
+          "reason": "measured peak growth exceeds52000MiB",
+          "state": "not_attempted"
+        }
+      ],
+      "job": "v12-cal-ports4-q3",
+      "lens": {
+        "project": "tide-learning-lab",
+        "readback_matches": true,
+        "run_id": "tl-v12-cal-ports4-q3-s11",
+        "status": "verified"
+      },
+      "record": "runs/v12-cal-ports4-q3/result.json",
+      "selected": {
+        "global_batch": 64,
+        "micro": 16,
+        "peak_mib": 34409.2666015625,
+        "targets_per_second": 6165.411936743514
+      },
+      "sha256": "0dc282ac581efff69f38c99597ec3b705b90af069144ce15c6530ab24ebc5767",
+      "source_commit": "8e085be3a5dd85bc8d5f15a3561e956244176e65",
+      "state": "completed"
+    },
+    {
+      "candidates": [
+        {
+          "accumulation": 16,
+          "global_batch": 64,
+          "micro": 4,
+          "peak_mib": 14794.9560546875,
+          "state": "completed",
+          "targets_per_second": 3123.264931572535
+        },
+        {
+          "accumulation": 8,
+          "global_batch": 64,
+          "micro": 8,
+          "peak_mib": 28621.2744140625,
+          "state": "completed",
+          "targets_per_second": 3125.5821218616074
+        },
+        {
+          "micro": 16,
+          "reason": "measured peak growth exceeds52000MiB",
+          "state": "not_attempted"
+        }
+      ],
+      "job": "v12-cal-share8-d128-q3",
+      "lens": {
+        "project": "tide-learning-lab",
+        "readback_matches": true,
+        "run_id": "tl-v12-cal-share8-d128-q3-s11",
+        "status": "verified"
+      },
+      "record": "runs/v12-cal-share8-d128-q3/result.json",
+      "selected": {
+        "global_batch": 64,
+        "micro": 8,
+        "peak_mib": 28621.2744140625,
+        "targets_per_second": 3125.5821218616074
+      },
+      "sha256": "c1434f41a8de5d060e92fbc0603d0e3765c51efc651023aae74f37417c58c085",
+      "source_commit": "8e085be3a5dd85bc8d5f15a3561e956244176e65",
+      "state": "completed"
+    },
+    {
+      "candidates": [
+        {
+          "accumulation": 32,
+          "global_batch": 64,
+          "micro": 2,
+          "peak_mib": 11309.55810546875,
+          "state": "completed",
+          "targets_per_second": 1778.5927239193056
+        },
+        {
+          "accumulation": 16,
+          "global_batch": 64,
+          "micro": 4,
+          "peak_mib": 20855.3720703125,
+          "state": "completed",
+          "targets_per_second": 1785.2281025284835
+        },
+        {
+          "accumulation": 8,
+          "global_batch": 64,
+          "micro": 8,
+          "peak_mib": 40090.2021484375,
+          "state": "completed",
+          "targets_per_second": 1428.5233767441612
+        }
+      ],
+      "job": "v12-cal-share8-d192-q3",
+      "lens": {
+        "project": "tide-learning-lab",
+        "readback_matches": true,
+        "run_id": "tl-v12-cal-share8-d192-q3-s11",
+        "status": "verified"
+      },
+      "record": "runs/v12-cal-share8-d192-q3/result.json",
+      "selected": {
+        "global_batch": 64,
+        "micro": 4,
+        "peak_mib": 20855.3720703125,
+        "targets_per_second": 1785.2281025284835
+      },
+      "sha256": "a6ef10717d4f9b16d5b621981be7e93c30e8692a19b77137012ddf1767ed7380",
+      "source_commit": "8e085be3a5dd85bc8d5f15a3561e956244176e65",
+      "state": "completed"
+    },
+    {
+      "candidates": [
+        {
+          "accumulation": 8,
+          "global_batch": 64,
+          "micro": 8,
+          "peak_mib": 17228.0625,
+          "state": "completed",
+          "targets_per_second": 5408.176283295782
+        },
+        {
+          "accumulation": 4,
+          "global_batch": 64,
+          "micro": 16,
+          "peak_mib": 34205.18408203125,
+          "state": "completed",
+          "targets_per_second": 5416.800662529543
+        },
+        {
+          "micro": 32,
+          "reason": "measured peak growth exceeds52000MiB",
+          "state": "not_attempted"
+        }
+      ],
+      "job": "v12-cal-share8-q3",
+      "lens": {
+        "project": "tide-learning-lab",
+        "readback_matches": true,
+        "run_id": "tl-v12-cal-share8-q3-s11",
+        "status": "verified"
+      },
+      "record": "runs/v12-cal-share8-q3/result.json",
+      "selected": {
+        "global_batch": 64,
+        "micro": 16,
+        "peak_mib": 34205.18408203125,
+        "targets_per_second": 5416.800662529543
+      },
+      "sha256": "d04dafb0bfaa8abc2feb22d9bfbcf7eb49f38917c0c8c6f58cb48b9509c6e0f4",
+      "source_commit": "8e085be3a5dd85bc8d5f15a3561e956244176e65",
+      "state": "completed"
+    },
+    {
+      "candidates": [
+        {
+          "accumulation": 8,
+          "global_batch": 64,
+          "micro": 8,
+          "peak_mib": 17541.45654296875,
+          "state": "completed",
+          "targets_per_second": 6282.160511203163
+        },
+        {
+          "accumulation": 4,
+          "global_batch": 64,
+          "micro": 16,
+          "peak_mib": 34375.48486328125,
+          "state": "completed",
+          "targets_per_second": 6530.059142117222
+        },
+        {
+          "micro": 32,
+          "reason": "measured peak growth exceeds52000MiB",
+          "state": "not_attempted"
+        }
+      ],
+      "job": "v12-cal-top2-q3",
+      "lens": {
+        "project": "tide-learning-lab",
+        "readback_matches": true,
+        "run_id": "tl-v12-cal-top2-q3-s11",
+        "status": "verified"
+      },
+      "record": "runs/v12-cal-top2-q3/result.json",
+      "selected": {
+        "global_batch": 64,
+        "micro": 16,
+        "peak_mib": 34375.48486328125,
+        "targets_per_second": 6530.059142117222
+      },
+      "sha256": "c7dc0f619fe7ab9c8044c213cd802dd485fe69f95e8ac439c968f70a833aec16",
+      "source_commit": "8e085be3a5dd85bc8d5f15a3561e956244176e65",
+      "state": "completed"
+    }
+  ],
+  "data": {
+    "data_lock_sha256": "5f684931b2f786e37c159c00ded85373e13a0153217f6995fc9458473fa3686c",
+    "explicit_retry": "v12-data-r2 existing private data env; shared environments unchanged",
+    "first_attempt": "v12-data failed before output creation: tokenizers absent in training env",
+    "record": "runs/v12-data/state.json"
+  },
+  "independent_checks": {
+    "legacy": "8 existing direct-specialized/capacity-balance regressions passed; initial new argsort signature error corrected before calibration",
+    "new": "7 CPU checks: sharing VJP accumulation, singleton score VJP, centered quad formula/VJP, top2 caps/absence/gradcheck, unchanged default function, causal variants/state, post-warmup untied admission"
+  },
+  "learning": "unchecked; calibration is not language efficacy",
+  "numerical_stress": {
+    "record": "runs/v12-quad-stress/result.json",
+    "scope": "16 conditions2048 rows,32 original feasibility failures versus0 centered; same represented inputs, finite scope only",
+    "sha256": "8c82ca166f79ea3c8466d6785d8efd8c4937fd85b4a8fd5a376ab804c8913d95"
+  },
+  "reviewed_at": "2026-11-15T15:18:28.168059+00:00",
+  "schema": "tide-hb-v12-preparation-review-v1",
+  "scope": "reviewed bounded preparation, no model-quality or foundation-execution certification",
+  "strict_numerical": "formal CPU/NPU checks per trajectory pending; original thresholds unchanged"
+}

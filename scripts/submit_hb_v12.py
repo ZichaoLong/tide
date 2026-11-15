@@ -19,7 +19,7 @@ def main(a):
         cap=int(deadline-time.time()-30)
         command=[sys.executable,str(source/'scripts/job.py'),'submit','--name',job,'--source',str(source),
             '--output',str(root/'artifacts/jobs'/job),'--env-script',str(source/'scripts/env.sh'),
-            '--env','TIDE_LAB_VENV='+str(root/'.venv-positive-floor-v1'),'--device',device,
+            '--env','TIDE_LAB_VENV='+str(root/('.venv' if job=='v12-data' else '.venv-positive-floor-v1')),'--device',device,
             '--threads',str(threads),'--memory-gib',str(memory),'--timeout',str(cap)]
         if device=='npu':command+=['--env','TIDE_LAB_RESOURCE_POLICY='+str(policy),'--queue-helper',str(source/'scripts/run_on_light_device.py'),'--wait-seconds',str(cap-180)]
         for p in inputs:command+=['--input',str(p)]
@@ -41,7 +41,8 @@ def main(a):
         table=json.loads((base/'table.json').read_text())
         if len(table['cases'])!=38:raise ValueError('finite38 trajectories')
         if json.loads((root/'runs/v12-data/state.json').read_text())['state']!='completed':raise ValueError('confirmation preparation incomplete')
-        for c in table['cases']:
+        ordered=sorted(table['cases'],key=lambda c:json.loads((source/c['config']).read_text())['resource_admission']['targets_per_second'])
+        for c in ordered:
             cfg=source/c['config'];config=json.loads(cfg.read_text());job='v12-main-'+c['id']
             if 'resource_admission' not in config:raise ValueError('calibration missing')
             dest=out/c['id'];dest.mkdir();policy=json.loads((base/'resource.json').read_text())

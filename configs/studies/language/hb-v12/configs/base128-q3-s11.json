@@ -24633,6 +24633,16 @@
   "planned_inventory": {
     "lm_trainable": 171459232
   },
+  "resource_admission": {
+    "global_batch": 64,
+    "micro": 4,
+    "peak_mib": 16497.662109375,
+    "reuse_scope": "same d/region shape; sharing variants use share8 except q10 conservative base; additional read projection uses base peak plus safety margin",
+    "sha256": "c7678b81df945a7791aff10bc4748def3268f8a7ffa22917843c6c90dd926867",
+    "source": "runs/v12-cal-base128-q3/result.json",
+    "targets_per_second": 2595.5483439193063,
+    "timing": "complete synthetic L256 global64 logical update; separately observed physical microbatch and accumulation"
+  },
   "resources": {
     "max_rss_gib": 64
   },
@@ -24645,7 +24655,7 @@
   "study_id": "TL-HB-WIDTH-v12",
   "threads": 2,
   "training": {
-    "batch": 8,
+    "batch": 4,
     "betas": [
       0.9,
       0.95
@@ -24654,7 +24664,7 @@
     "clip_norm": 1.0,
     "decay_policy": "matrix_only",
     "eps": 1e-08,
-    "eval_batch": 8,
+    "eval_batch": 4,
     "eval_tokens": 131072,
     "full_probe_batch": 4,
     "full_probe_length": 32,

@@ -24635,6 +24635,16 @@
   "planned_inventory": {
     "lm_trainable": 102212256
   },
+  "resource_admission": {
+    "global_batch": 64,
+    "micro": 4,
+    "peak_mib": 20855.3720703125,
+    "reuse_scope": "same d/region shape; sharing variants use share8 except q10 conservative base; additional read projection uses base peak plus safety margin",
+    "sha256": "a6ef10717d4f9b16d5b621981be7e93c30e8692a19b77137012ddf1767ed7380",
+    "source": "runs/v12-cal-share8-d192-q3/result.json",
+    "targets_per_second": 1785.2281025284835,
+    "timing": "complete synthetic L256 global64 logical update; separately observed physical microbatch and accumulation"
+  },
   "resources": {
     "max_rss_gib": 64
   },

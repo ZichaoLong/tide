@@ -11061,6 +11061,16 @@
   "planned_inventory": {
     "lm_trainable": 22235704
   },
+  "resource_admission": {
+    "global_batch": 64,
+    "micro": 32,
+    "peak_mib": 29725.38427734375,
+    "reuse_scope": "same d/region shape; sharing variants use share8 except q10 conservative base; additional read projection uses base peak plus safety margin",
+    "sha256": "ac558b0d3a9dde2ca3225d0dce9ee43b603a48b0c43905ebea9963d850cc0de1",
+    "source": "runs/v12-cal-base-q10/result.json",
+    "targets_per_second": 12947.255643591056,
+    "timing": "complete synthetic L256 global64 logical update; separately observed physical microbatch and accumulation"
+  },
   "resources": {
     "max_rss_gib": 64
   },
@@ -11073,7 +11083,7 @@
   "study_id": "TL-HB-CONTROL-v12",
   "threads": 2,
   "training": {
-    "batch": 16,
+    "batch": 32,
     "betas": [
       0.9,
       0.95

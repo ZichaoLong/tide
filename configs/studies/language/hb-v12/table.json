@@ -1,4 +1,5 @@
 {
+  "calibration_resolved": true,
   "cases": [
     {
       "config": "configs/studies/language/hb-v12/configs/base-q3-s11.json",

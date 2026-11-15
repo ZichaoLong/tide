@@ -79,4 +79,18 @@ class HBMechanisms(unittest.TestCase):
             self.assertGreater(m.last_metrics['work/active_parameter_uses'],0)
             self.assertLessEqual(m.last_metrics['activity/active_parameters_per_position'],m.total_parameter_count)
 
+    def test_application_admission_includes_untied_head_and_late_route(self):
+        import tempfile
+        from pathlib import Path
+        from scripts.campaign_stage import admission
+        from tide_lab.campaign_runtime import make_model
+        c=direct('check','hb',2,64,'temperature1',region_width=4,k=2)
+        c['kind']='direct_specialized';c.pop('planned_inventory',None)
+        c['implementation']={'mechanism':{'readout':'ports4','route':'top2'}};c['head_tied']=False
+        model=make_model(c,torch.device('cpu'))
+        with tempfile.TemporaryDirectory() as tmp:
+            result=admission(model,c,torch.device('cpu'),Path(tmp))
+        self.assertTrue(result['admitted_for_finite_exploration'])
+        self.assertEqual(result['checks']['post_warmup']['tokens'],4*2**20)
+
 if __name__=='__main__':unittest.main()
