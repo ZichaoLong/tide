@@ -29,7 +29,8 @@ def main(a):
             worker=worker.get('state'),stage=stage,stage_state=result.get('state'),exposure=exposure,requested_tokens=target,
             physical_device=worker.get('physical_visibility'),source_commit=read(artifact/'job.json').get('source',{}).get('commit'),
             endpoint='attained' if read(root/'runs'/job/'train/result.json').get('progress',{}).get('tokens')==target else 'pending_or_failed',
-            science='unreviewed',error=worker.get('error'),run='tl-'+job,projection=str((root/'runs'/job/'train/projection.json').relative_to(root)))
+            science='see separate scoped scientific review',error=result.get('error') or worker.get('error'),
+            worker_error=worker.get('error'),run='tl-'+job,projection=str((root/'runs'/job/'train/projection.json').relative_to(root)))
         if unit:
             r=subprocess.run(['systemctl','--user','show',unit,'-p','ActiveState','-p','SubState','-p','Slice','-p','ControlGroup','-p','MainPID'],capture_output=True,text=True)
             row['systemd']=dict(s.split('=',1) for s in r.stdout.splitlines() if '=' in s)

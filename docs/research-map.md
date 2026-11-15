@@ -1,3 +1,13 @@
+# 当前图：v11 MoE两组限定结果，HB未终态
+
+2026-11-15 21:32审阅：EXPOSURE/BALANCE组已完成，质量结果按同一新262K确认限定标记scoped；
+保留E64小档两seed相对E20方向相反、大档仅小收益、全局attention和近活跃预算差异。
+HB两个seed22标记failed，两个seed11仍running；质量槽保持awaiting，64Mi负面和严格阈值失败分列。
+确认组24完成、2不合格、2等待；不由退出码产生科学支持。
+[本次结果](studies/capacity-v11-progress-20261115.md) · [证据](evidence/capacity-v11-progress-20261115.json)。
+
+以下为历史图状态。
+
 # 当前图：v11诊断已审阅，条件训练与新确认已启动
 
 新增五组TL-CAPACITY-*-v11及对应结果槽，关联固定配置、实际作业、源码和Lens记录。

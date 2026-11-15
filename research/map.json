@@ -1516,21 +1516,21 @@
       "target": "RV11-DIAG"
     },
     {
-      "detail": "\u9879\u76ee\u8bb0\u5f55\u4e3a\u6743\u5a01\uff1bLens\u4ec5\u4e3a\u67e5\u770b\uff0c\u79d1\u5b66\u652f\u6301\u4e0d\u81ea\u52a8\u751f\u6210\u3002",
+      "detail": "\u56fa\u5b9a\u65b0\u786e\u8ba4\u4e0e\u540c\u66dd\u5149\u53ccseed\u4eba\u5de5\u5ba1\u9605\uff1b\u4e0d\u662f\u4f9d\u636e\u9000\u51fa\u7801\u63a8\u65ad\u3002",
       "id": "EV11-EXPOSURE",
       "kind": "produces",
-      "label": "\u7b49\u5f85\u7ec8\u6001\u5ba1\u9605",
+      "label": "\u5df2\u5b8c\u6210\u5b50\u7ec4\u9650\u5b9a\u5ba1\u9605",
       "source": "V11-EXPOSURE",
-      "status": "planned",
+      "status": "documented",
       "target": "RV11-EXPOSURE"
     },
     {
-      "detail": "\u9879\u76ee\u8bb0\u5f55\u4e3a\u6743\u5a01\uff1bLens\u4ec5\u4e3a\u67e5\u770b\uff0c\u79d1\u5b66\u652f\u6301\u4e0d\u81ea\u52a8\u751f\u6210\u3002",
+      "detail": "\u56fa\u5b9a\u65b0\u786e\u8ba4\u4e0e\u540c\u66dd\u5149\u53ccseed\u4eba\u5de5\u5ba1\u9605\uff1b\u4e0d\u662f\u4f9d\u636e\u9000\u51fa\u7801\u63a8\u65ad\u3002",
       "id": "EV11-BALANCE",
       "kind": "produces",
-      "label": "\u7b49\u5f85\u7ec8\u6001\u5ba1\u9605",
+      "label": "\u5df2\u5b8c\u6210\u5b50\u7ec4\u9650\u5b9a\u5ba1\u9605",
       "source": "V11-BALANCE",
-      "status": "planned",
+      "status": "documented",
       "target": "RV11-BALANCE"
     },
     {
@@ -16414,6 +16414,10 @@
         {
           "label": "\u53ea\u8bfb\u72b6\u6001",
           "path": "scripts/review_capacity_v11.py"
+        },
+        {
+          "label": "v11\u4e2d\u671f\u7ed3\u679c\u4e0e\u5931\u8d25\u5ba1\u9605",
+          "path": "docs/studies/capacity-v11-progress-20261115.md"
         }
       ],
       "runs": [
@@ -16579,6 +16583,10 @@
         {
           "label": "\u53ea\u8bfb\u72b6\u6001",
           "path": "scripts/review_capacity_v11.py"
+        },
+        {
+          "label": "v11\u4e2d\u671f\u7ed3\u679c\u4e0e\u5931\u8d25\u5ba1\u9605",
+          "path": "docs/studies/capacity-v11-progress-20261115.md"
         }
       ],
       "scope": "16\u4e2a128Mi\u7236checkpoint\uff1b\u540c512\u6bb5\u8bad\u7ec3\u7a97\u53e3\u4e0e\u5355global64\u5185\u5b58\u5185\u66f4\u65b0\uff0c\u4e0d\u662f\u5168\u7a0b\u4f7f\u7528\u6216\u72ec\u7acb\u786e\u8ba4\u3002",
@@ -16621,6 +16629,10 @@
         {
           "label": "\u53ea\u8bfb\u72b6\u6001",
           "path": "scripts/review_capacity_v11.py"
+        },
+        {
+          "label": "v11\u4e2d\u671f\u7ed3\u679c\u4e0e\u5931\u8d25\u5ba1\u9605",
+          "path": "docs/studies/capacity-v11-progress-20261115.md"
         }
       ],
       "runs": [
@@ -16666,7 +16678,7 @@
           "lens_record": "runs/v11-extend-r2-large-e20-lr0.001-b0.01-s11/train/projection.json",
           "record": "runs/v11-extend-r2-large-e20-lr0.001-b0.01-s11/train/result.json",
           "source_commit": "e3b2ab38",
-          "status": "running"
+          "status": "completed"
         },
         {
           "config": ".local/source-moe-execution-v2/configs/studies/language/moe-controls/table/configs/large-e20-lr0.001-b0.01-s11.json",
@@ -16684,7 +16696,7 @@
           "lens_record": "runs/v11-extend-r2-large-e20-lr0.001-b0.01-s22/train/projection.json",
           "record": "runs/v11-extend-r2-large-e20-lr0.001-b0.01-s22/train/result.json",
           "source_commit": "e3b2ab38",
-          "status": "running"
+          "status": "completed"
         },
         {
           "config": ".local/source-moe-execution-v2/configs/studies/language/moe-controls/table/configs/large-e20-lr0.001-b0.01-s22.json",
@@ -16702,7 +16714,7 @@
           "lens_record": "runs/v11-extend-r2-large-e64-lr0.001-b0.01-s11/train/projection.json",
           "record": "runs/v11-extend-r2-large-e64-lr0.001-b0.01-s11/train/result.json",
           "source_commit": "e3b2ab38",
-          "status": "running"
+          "status": "completed"
         },
         {
           "config": ".local/source-moe-execution-v2/configs/studies/language/moe-controls/table/configs/large-e64-lr0.001-b0.01-s11.json",
@@ -16720,7 +16732,7 @@
           "lens_record": "runs/v11-extend-r2-large-e64-lr0.001-b0.01-s22/train/projection.json",
           "record": "runs/v11-extend-r2-large-e64-lr0.001-b0.01-s22/train/result.json",
           "source_commit": "e3b2ab38",
-          "status": "running"
+          "status": "completed"
         },
         {
           "config": ".local/source-moe-execution-v2/configs/studies/language/moe-controls/table/configs/large-e64-lr0.001-b0.01-s22.json",
@@ -16733,9 +16745,9 @@
           "status": "completed"
         }
       ],
-      "status": "running",
+      "status": "completed",
       "study_id": "TL-CAPACITY-EXPOSURE-v11",
-      "summary": "6\u6761128\u2192256Mi\u5b9e\u9645\u65b0\u66f4\u65b0\uff1b\u539f6\u6b21\u65e0\u8fdb\u5c55\u8bf7\u6c42\u4fdd\u7559\u3002",
+      "summary": "6\u6761large128\u2192256Mi\u5b8c\u6210\u53ca\u65b0\u786e\u8ba4\uff1b\u539f6\u9879\u96f6\u8fdb\u5c55\u8bf7\u6c42\u4fdd\u7559\u3002",
       "title": "large MoE/dense\u6210\u7ec4\u5ef6\u4f38",
       "track": "shared",
       "view_group": "current",
@@ -16743,8 +16755,10 @@
       "y": 820
     },
     {
-      "budget": "\u6765\u81eav11\u56fa\u5b9a\u8868\uff0c\u65e0\u989d\u5916\u81ea\u52a8\u5b9e\u9a8c\u3002",
-      "decision": "\u7ec8\u70b9\u6210\u7ec4\u786e\u8ba4\u540e\u6309\u8303\u56f4\u89e3\u91ca\uff0c\u7b49\u5f85\u7528\u6237\u9a8c\u6536\u3002",
+      "budget": "\u6765\u81eav11\u5df2\u5b8c\u6210\u5b50\u7ec4\uff0c\u65e0\u65b0\u589e\u4efb\u52a1\u3002",
+      "comparisons": "E64\u9886\u5148E20\u7531128Mi\u7684.01281\u5230256Mi\u7684.01735\uff0c\u4e24seed\u5747\u6709\u5c0f\u6536\u76ca\u3002",
+      "counterevidence": "\u603b\u5bb9\u91cf\u589e\u7ea63\u500d\u4ec5\u5c0f\u5e45\u9886\u5148\uff1b\u8fd1\u6d3b\u8dc3\u9884\u7b97\u56e0router\u5e76\u975e\u4e25\u683c\u76f8\u540c\u3002",
+      "decision": "\u4e0d\u5c06\u5c0f\u5e45\u8fb9\u9645\u6536\u76ca\u6269\u5199\u4e3a\u666e\u904dscaling\uff1b\u4fdd\u7559\u53ccseed\u53ca\u603b/\u6d3b\u8dc3\u9884\u7b97\u3002",
       "id": "RV11-EXPOSURE",
       "kind": "result",
       "question": "\u5bb9\u91cf\u6269\u5f20\u7684\u6536\u76ca\u53d7\u66dd\u5149\u3001\u5355\u5143\u8bad\u7ec3\u673a\u4f1a\u4e0eHB\u4fe1\u606f\u4f20\u64ad\u5982\u4f55\u5171\u540c\u9650\u5236\uff1f",
@@ -16764,12 +16778,25 @@
         {
           "label": "\u53ea\u8bfb\u72b6\u6001",
           "path": "scripts/review_capacity_v11.py"
+        },
+        {
+          "label": "v11\u4e2d\u671f\u7ed3\u679c\u4e0e\u5931\u8d25\u5ba1\u9605",
+          "path": "docs/studies/capacity-v11-progress-20261115.md"
         }
       ],
-      "status": "awaiting",
-      "summary": "\u4fdd\u6301\u672a\u5ba1\u9605\uff1b\u542f\u52a8\u3001\u9000\u51fa\u7801\u6216\u66f4\u5747\u8861\u5747\u4e0d\u81ea\u52a8\u610f\u5473\u7740\u8bed\u8a00\u8d28\u91cf\u6539\u5584\u3002",
-      "title": "large MoE/dense\u6210\u7ec4\u5ef6\u4f38\uff1a\u7ed3\u679c\u5f85\u5ba1\u9605",
+      "scope": "\u540c\u4e00\u65b0262K/135\u6587\u6863\u786e\u8ba4\u3001\u53ccseed\u3001\u56fa\u5b9adirect FP32\u914d\u65b9\uff1b\u672a\u5b8c\u6210HB\uff0c\u4e0d\u8bc1\u660e\u5b8c\u6574TIDE\u6216\u4e25\u683c\u6570\u503c\u901a\u8fc7\u3002",
+      "sources": [
+        {
+          "label": "v11\u4e2d\u671f\u5ba1\u9605",
+          "url": "https://github.com/ZichaoLong/tide/blob/tide-learning-lab/docs/studies/capacity-v11-progress-20261115.md"
+        }
+      ],
+      "status": "scoped",
+      "summary": "\u65b0\u786e\u8ba4256Mi\uff1adense2.839916\u3001E20 2.617433\u3001E64 2.600087\u3002",
+      "title": "\u66dd\u5149\u7ee7\u7eed\u6709\u76ca\uff1b\u5927\u6863\u8fb9\u9645\u5bb9\u91cf\u6536\u76ca\u4ecd\u5c0f",
       "track": "shared",
+      "transfer_conditions": "\u53ea\u5bf9\u540c\u4efb\u52a1/\u66dd\u5149/\u8fd1\u6d3b\u8dc3\u9884\u7b97\u53ca\u8fd9\u4e9b\u914d\u65b9\u6709\u6548\uff1bMoE\u5168\u5c40attention\u4e0d\u8fc1\u79fb\u4e3aHB\u5c40\u90e8\u6027\u6210\u529f\u3002",
+      "unresolved": "\u66f4\u5927\u65b0\u6570\u636e\u3001\u6bcf\u4e13\u5bb6\u66dd\u5149\u3001\u914d\u65b9\u4e0e\u5bb9\u91cf\u6536\u76ca\u5c1a\u672a\u9694\u79bb\uff1b\u7f6e\u4fe1\u533a\u95f4\u4e0d\u542b\u79cd\u5b50/\u9009\u62e9\u4e0d\u786e\u5b9a\u6027\u3002",
       "view_group": "current",
       "x": 915,
       "y": 820
@@ -16797,6 +16824,10 @@
         {
           "label": "\u53ea\u8bfb\u72b6\u6001",
           "path": "scripts/review_capacity_v11.py"
+        },
+        {
+          "label": "v11\u4e2d\u671f\u7ed3\u679c\u4e0e\u5931\u8d25\u5ba1\u9605",
+          "path": "docs/studies/capacity-v11-progress-20261115.md"
         }
       ],
       "runs": [
@@ -16806,7 +16837,7 @@
           "lens_record": "runs/v11-moe-balance-small-e64-lr0.003-b0.01-s11/train/projection.json",
           "record": "runs/v11-moe-balance-small-e64-lr0.003-b0.01-s11/train/result.json",
           "source_commit": "8bd33dd1",
-          "status": "running"
+          "status": "completed"
         },
         {
           "config": ".local/source-moe-execution-v2/configs/studies/language/moe-controls/table/configs/small-e64-lr0.003-b0.01-s22.json",
@@ -16814,12 +16845,12 @@
           "lens_record": "runs/v11-moe-balance-small-e64-lr0.003-b0.01-s22/train/projection.json",
           "record": "runs/v11-moe-balance-small-e64-lr0.003-b0.01-s22/train/result.json",
           "source_commit": "8bd33dd1",
-          "status": "running"
+          "status": "completed"
         }
       ],
-      "status": "running",
+      "status": "completed",
       "study_id": "TL-CAPACITY-BALANCE-v11",
-      "summary": "balance.01\u00d7\u53ccseed128Mi\uff0c\u4e0e\u539f.001\u548cE20/.01\u5bf9\u7167\u3002",
+      "summary": "\u4e24\u6761small E64 balance.01\u5b8c\u6210128Mi\u53ca\u65b0\u786e\u8ba4\u3002",
       "title": "small E64\u5e73\u8861\u7cfb\u6570\u5bf9\u7167",
       "track": "shared",
       "view_group": "current",
@@ -16827,8 +16858,10 @@
       "y": 1000
     },
     {
-      "budget": "\u6765\u81eav11\u56fa\u5b9a\u8868\uff0c\u65e0\u989d\u5916\u81ea\u52a8\u5b9e\u9a8c\u3002",
-      "decision": "\u7ec8\u70b9\u6210\u7ec4\u786e\u8ba4\u540e\u6309\u8303\u56f4\u89e3\u91ca\uff0c\u7b49\u5f85\u7528\u6237\u9a8c\u6536\u3002",
+      "budget": "\u6765\u81eav11\u5df2\u5b8c\u6210\u5b50\u7ec4\uff0c\u65e0\u65b0\u589e\u4efb\u52a1\u3002",
+      "comparisons": "\u53ccseed\u6539\u5584.04647\uff1b\u6700\u540e64\u8bb0\u5f55batch\u5e73\u5747\u51b7\u4e13\u5bb614.01/9.05\u964d\u81f3.018/.013\u3002",
+      "counterevidence": "\u65b0E64\u76f8\u5bf9E20\u4e00seed\u5dee.00548\u3001\u53e6\u4e00\u597d.00708\uff0c\u5747\u503c\u8fd1\u96f6\uff1b\u6ca1\u6709\u7a33\u5b9a\u6269\u5bb9\u4f18\u52bf\u3002",
+      "decision": "\u539f\u8d1f\u9762\u4f9d\u8d56\u5e73\u8861\u914d\u65b9\uff1b\u8d1f\u8f7d\u6539\u5584\u4e0d\u662f\u66f4\u591a\u5bb9\u91cf\u6709\u6548\u7684\u5145\u5206\u6761\u4ef6\uff0c\u4e0d\u6269\u7f51\u683c\u3002",
       "id": "RV11-BALANCE",
       "kind": "result",
       "question": "\u5bb9\u91cf\u6269\u5f20\u7684\u6536\u76ca\u53d7\u66dd\u5149\u3001\u5355\u5143\u8bad\u7ec3\u673a\u4f1a\u4e0eHB\u4fe1\u606f\u4f20\u64ad\u5982\u4f55\u5171\u540c\u9650\u5236\uff1f",
@@ -16848,12 +16881,25 @@
         {
           "label": "\u53ea\u8bfb\u72b6\u6001",
           "path": "scripts/review_capacity_v11.py"
+        },
+        {
+          "label": "v11\u4e2d\u671f\u7ed3\u679c\u4e0e\u5931\u8d25\u5ba1\u9605",
+          "path": "docs/studies/capacity-v11-progress-20261115.md"
         }
       ],
-      "status": "awaiting",
-      "summary": "\u4fdd\u6301\u672a\u5ba1\u9605\uff1b\u542f\u52a8\u3001\u9000\u51fa\u7801\u6216\u66f4\u5747\u8861\u5747\u4e0d\u81ea\u52a8\u610f\u5473\u7740\u8bed\u8a00\u8d28\u91cf\u6539\u5584\u3002",
-      "title": "small E64\u5e73\u8861\u7cfb\u6570\u5bf9\u7167\uff1a\u7ed3\u679c\u5f85\u5ba1\u9605",
+      "scope": "\u540c\u4e00\u65b0262K/135\u6587\u6863\u786e\u8ba4\u3001\u53ccseed\u3001\u56fa\u5b9adirect FP32\u914d\u65b9\uff1b\u672a\u5b8c\u6210HB\uff0c\u4e0d\u8bc1\u660e\u5b8c\u6574TIDE\u6216\u4e25\u683c\u6570\u503c\u901a\u8fc7\u3002",
+      "sources": [
+        {
+          "label": "v11\u4e2d\u671f\u5ba1\u9605",
+          "url": "https://github.com/ZichaoLong/tide/blob/tide-learning-lab/docs/studies/capacity-v11-progress-20261115.md"
+        }
+      ],
+      "status": "scoped",
+      "summary": "E64 .001\u2192.01\uff1a\u65b0\u786e\u8ba43.170540\u21923.124068\uff1bE20\u4e3a3.124865\u3002",
+      "title": "\u52a0\u5f3abalance\u6d88\u9664\u5c0f\u6863E64\u539f\u52a3\u52bf",
       "track": "shared",
+      "transfer_conditions": "\u53ea\u5bf9\u540c\u4efb\u52a1/\u66dd\u5149/\u8fd1\u6d3b\u8dc3\u9884\u7b97\u53ca\u8fd9\u4e9b\u914d\u65b9\u6709\u6548\uff1bMoE\u5168\u5c40attention\u4e0d\u8fc1\u79fb\u4e3aHB\u5c40\u90e8\u6027\u6210\u529f\u3002",
+      "unresolved": "\u8d1f\u8f7d\u4e4b\u5916\u7684\u6b63\u5219\u5316/\u4f18\u5316\u4f5c\u7528\u672a\u9694\u79bb\uff1b\u89c2\u5bdf\u7a97\u53e3\u4e0d\u4ee3\u8868\u7ec8\u751f\u4e13\u5bb6\u8d21\u732e\u3002",
       "view_group": "current",
       "x": 915,
       "y": 1000
@@ -16861,6 +16907,7 @@
     {
       "budget": "\u5171\u4eab48h\u81f32026-11-17 17:43:08+08\uff1b12NPU\u69fd\uff1b64GiB\u76ee\u6807/96GiB\u505c\u6b62\uff0c\u786c\u4f59\u91cf200GiB\u3002",
       "decision": "\u4fdd\u7559\u72ec\u7acb\u9a8c\u6536\u8f74\uff1b\u672a\u8fbe\u7aef\u70b9\u4e0d\u8bb0\u6210\u529f\uff0c\u4e0d\u7531\u5b8c\u6210\u81ea\u52a8\u63a8\u5bfc\u79d1\u5b66\u652f\u6301\u3002",
+      "execution_note": "4\u6761\u5747\u901a\u8fc78Mi\u5148\u5bfc\u53ca\u53d7\u8bad\u6062\u590d\uff1b\u5931\u8d25\u672a\u91cd\u542f\uff0c\u6d3b\u52a8\u8f93\u5165\u4fdd\u6301\u3002",
       "id": "V11-HB",
       "kind": "experiment",
       "lens_group": "TL-CAPACITY-HB-v11",
@@ -16885,6 +16932,10 @@
         {
           "label": "\u51bb\u7ed3HB\u914d\u7f6e\u8868",
           "path": "configs/studies/language/capacity-v11/hb-table.json"
+        },
+        {
+          "label": "v11\u4e2d\u671f\u7ed3\u679c\u4e0e\u5931\u8d25\u5ba1\u9605",
+          "path": "docs/studies/capacity-v11-progress-20261115.md"
         }
       ],
       "runs": [
@@ -16895,7 +16946,7 @@
           "note": "durable admission/recovery/pilot chain; formal128Mi remains conditional",
           "record": "runs/v11-hb-hb-d64-r64-q3-bias0.001-s11/pilot/result.json",
           "source_commit": "159190c3",
-          "status": "running"
+          "status": "completed"
         },
         {
           "config": ".local/source-capacity-v11-hb/configs/studies/language/capacity-v11/hb/hb-d64-r64-q3-bias0.001-s22.json",
@@ -16904,7 +16955,7 @@
           "note": "durable admission/recovery/pilot chain; formal128Mi remains conditional",
           "record": "runs/v11-hb-hb-d64-r64-q3-bias0.001-s22/pilot/result.json",
           "source_commit": "159190c3",
-          "status": "running"
+          "status": "completed"
         },
         {
           "config": ".local/source-capacity-v11-hb/configs/studies/language/capacity-v11/hb/hb-d64-r64-q3-bias0.01-s11.json",
@@ -16913,7 +16964,7 @@
           "note": "durable admission/recovery/pilot chain; formal128Mi remains conditional",
           "record": "runs/v11-hb-hb-d64-r64-q3-bias0.01-s11/pilot/result.json",
           "source_commit": "159190c3",
-          "status": "running"
+          "status": "completed"
         },
         {
           "config": ".local/source-capacity-v11-hb/configs/studies/language/capacity-v11/hb/hb-d64-r64-q3-bias0.01-s22.json",
@@ -16922,48 +16973,48 @@
           "note": "durable admission/recovery/pilot chain; formal128Mi remains conditional",
           "record": "runs/v11-hb-hb-d64-r64-q3-bias0.01-s22/pilot/result.json",
           "source_commit": "159190c3",
-          "status": "running"
+          "status": "completed"
         },
         {
           "config": ".local/source-capacity-v11-hb/configs/studies/language/capacity-v11/hb/hb-d64-r64-q3-bias0.001-s11.json",
           "id": "tl-v11-hb-hb-d64-r64-q3-bias0.001-s11",
           "lens_record": "runs/v11-hb-hb-d64-r64-q3-bias0.001-s11/train/projection.json",
-          "note": "conditional128Mi after8Mi gate and trained-state exact recovery; not started yet",
+          "note": "passed8Mi pilot and fullbatch trained-state recovery; formal128Mi running, not final learning result",
           "record": "runs/v11-hb-hb-d64-r64-q3-bias0.001-s11/train/result.json",
           "source_commit": "159190c3",
-          "status": "planned"
+          "status": "running"
         },
         {
           "config": ".local/source-capacity-v11-hb/configs/studies/language/capacity-v11/hb/hb-d64-r64-q3-bias0.001-s22.json",
           "id": "tl-v11-hb-hb-d64-r64-q3-bias0.001-s22",
           "lens_record": "runs/v11-hb-hb-d64-r64-q3-bias0.001-s22/train/projection.json",
-          "note": "conditional128Mi after8Mi gate and trained-state exact recovery; not started yet",
+          "note": "RuntimeError('allocation feasibility residual 2.4318695068359375e-05 > 2e-05')",
           "record": "runs/v11-hb-hb-d64-r64-q3-bias0.001-s22/train/result.json",
           "source_commit": "159190c3",
-          "status": "planned"
+          "status": "failed"
         },
         {
           "config": ".local/source-capacity-v11-hb/configs/studies/language/capacity-v11/hb/hb-d64-r64-q3-bias0.01-s11.json",
           "id": "tl-v11-hb-hb-d64-r64-q3-bias0.01-s11",
           "lens_record": "runs/v11-hb-hb-d64-r64-q3-bias0.01-s11/train/projection.json",
-          "note": "conditional128Mi after8Mi gate and trained-state exact recovery; not started yet",
+          "note": "passed8Mi pilot and fullbatch trained-state recovery; formal128Mi running, not final learning result",
           "record": "runs/v11-hb-hb-d64-r64-q3-bias0.01-s11/train/result.json",
           "source_commit": "159190c3",
-          "status": "planned"
+          "status": "running"
         },
         {
           "config": ".local/source-capacity-v11-hb/configs/studies/language/capacity-v11/hb/hb-d64-r64-q3-bias0.01-s22.json",
           "id": "tl-v11-hb-hb-d64-r64-q3-bias0.01-s22",
           "lens_record": "runs/v11-hb-hb-d64-r64-q3-bias0.01-s22/train/projection.json",
-          "note": "conditional128Mi after8Mi gate and trained-state exact recovery; not started yet",
+          "note": "RuntimeError('allocation feasibility residual 2.8133392333984375e-05 > 2e-05')",
           "record": "runs/v11-hb-hb-d64-r64-q3-bias0.01-s22/train/result.json",
           "source_commit": "159190c3",
-          "status": "planned"
+          "status": "failed"
         }
       ],
       "status": "running",
       "study_id": "TL-CAPACITY-HB-v11",
-      "summary": "\u4ec5eta.001/.01\u00d7\u53ccseed\uff1b8Mi\u5148\u5bfc\u3001\u53d7\u8bad\u6062\u590d\u540e\u6761\u4ef6128Mi\u3002",
+      "summary": "\u4e24seed11\u5728\u8bad\u7ec3\uff1b\u4e24seed22\u572821.48/32.29Mi\u56e0\u539f2e-5\u53ef\u884c\u6027\u9608\u503c\u5931\u8d25\u3002",
       "title": "HB\u5019\u9009\u5185\u8d1f\u8f7d\u504f\u7f6e",
       "track": "A",
       "view_group": "current",
@@ -16972,7 +17023,7 @@
     },
     {
       "budget": "\u6765\u81eav11\u56fa\u5b9a\u8868\uff0c\u65e0\u989d\u5916\u81ea\u52a8\u5b9e\u9a8c\u3002",
-      "decision": "\u7ec8\u70b9\u6210\u7ec4\u786e\u8ba4\u540e\u6309\u8303\u56f4\u89e3\u91ca\uff0c\u7b49\u5f85\u7528\u6237\u9a8c\u6536\u3002",
+      "decision": "\u4fdd\u7559\u4e24\u6761\u72ec\u7acb\u8fd0\u884c\uff1b\u53ef\u884c\u6027\u5931\u8d25\u4e0d\u653e\u5bbd\u9608\u503c\u3001\u4e0d\u81ea\u52a8\u6062\u590d\uff0c\u8d28\u91cf\u4e0e\u6570\u503c\u5206\u5f00\u3002",
       "id": "RV11-HB",
       "kind": "result",
       "question": "\u5bb9\u91cf\u6269\u5f20\u7684\u6536\u76ca\u53d7\u66dd\u5149\u3001\u5355\u5143\u8bad\u7ec3\u673a\u4f1a\u4e0eHB\u4fe1\u606f\u4f20\u64ad\u5982\u4f55\u5171\u540c\u9650\u5236\uff1f",
@@ -16992,10 +17043,14 @@
         {
           "label": "\u53ea\u8bfb\u72b6\u6001",
           "path": "scripts/review_capacity_v11.py"
+        },
+        {
+          "label": "v11\u4e2d\u671f\u7ed3\u679c\u4e0e\u5931\u8d25\u5ba1\u9605",
+          "path": "docs/studies/capacity-v11-progress-20261115.md"
         }
       ],
       "status": "awaiting",
-      "summary": "\u4fdd\u6301\u672a\u5ba1\u9605\uff1b\u542f\u52a8\u3001\u9000\u51fa\u7801\u6216\u66f4\u5747\u8861\u5747\u4e0d\u81ea\u52a8\u610f\u5473\u7740\u8bed\u8a00\u8d28\u91cf\u6539\u5584\u3002",
+      "summary": "64Mi seed11\u4e24\u5e72\u9884\u6bd4\u539fHB\u5dee.133/.168NLL\uff1b\u4e24seed22\u5931\u8d25\uff0c\u5b8c\u6574\u8d28\u91cf\u4ecd\u5f85\u7ec8\u6001\u3002",
       "title": "HB\u5019\u9009\u5185\u8d1f\u8f7d\u504f\u7f6e\uff1a\u7ed3\u679c\u5f85\u5ba1\u9605",
       "track": "A",
       "view_group": "current",
@@ -17029,6 +17084,10 @@
         {
           "label": "\u56fa\u5b9a28\u9879\u786e\u8ba4\u8868",
           "path": "configs/studies/language/capacity-v11/confirmation-table.json"
+        },
+        {
+          "label": "v11\u4e2d\u671f\u7ed3\u679c\u4e0e\u5931\u8d25\u5ba1\u9605",
+          "path": "docs/studies/capacity-v11-progress-20261115.md"
         }
       ],
       "runs": [
@@ -17094,7 +17153,7 @@
           "lens_record": "runs/v11-fresh-parent128-small-dense-lr0.003-s22/projection.json",
           "record": "runs/v11-fresh-parent128-small-dense-lr0.003-s22/result.json",
           "source_commit": "159190c3",
-          "status": "running"
+          "status": "completed"
         },
         {
           "config": ".local/source-moe-execution-v2/configs/studies/language/moe-controls/table/configs/small-e20-lr0.003-b0.01-s11.json",
@@ -17102,7 +17161,7 @@
           "lens_record": "runs/v11-fresh-parent128-small-e20-lr0.003-b0.01-s11/projection.json",
           "record": "runs/v11-fresh-parent128-small-e20-lr0.003-b0.01-s11/result.json",
           "source_commit": "159190c3",
-          "status": "planned"
+          "status": "completed"
         },
         {
           "config": ".local/source-moe-execution-v2/configs/studies/language/moe-controls/table/configs/small-e20-lr0.003-b0.01-s22.json",
@@ -17110,7 +17169,7 @@
           "lens_record": "runs/v11-fresh-parent128-small-e20-lr0.003-b0.01-s22/projection.json",
           "record": "runs/v11-fresh-parent128-small-e20-lr0.003-b0.01-s22/result.json",
           "source_commit": "159190c3",
-          "status": "planned"
+          "status": "completed"
         },
         {
           "config": ".local/source-moe-execution-v2/configs/studies/language/moe-controls/table/configs/small-e64-lr0.003-b0.001-s11.json",
@@ -17118,7 +17177,7 @@
           "lens_record": "runs/v11-fresh-parent128-small-e64-lr0.003-b0.001-s11/projection.json",
           "record": "runs/v11-fresh-parent128-small-e64-lr0.003-b0.001-s11/result.json",
           "source_commit": "159190c3",
-          "status": "planned"
+          "status": "completed"
         },
         {
           "config": ".local/source-moe-execution-v2/configs/studies/language/moe-controls/table/configs/small-e64-lr0.003-b0.001-s22.json",
@@ -17126,7 +17185,7 @@
           "lens_record": "runs/v11-fresh-parent128-small-e64-lr0.003-b0.001-s22/projection.json",
           "record": "runs/v11-fresh-parent128-small-e64-lr0.003-b0.001-s22/result.json",
           "source_commit": "159190c3",
-          "status": "planned"
+          "status": "completed"
         },
         {
           "config": ".local/source-v10-execution/configs/studies/language/direct-v10/table/main/hb-d64-r64-q3-s11.json",
@@ -17134,7 +17193,7 @@
           "lens_record": "runs/v11-fresh-parent128-hb-d64-r64-q3-s11/projection.json",
           "record": "runs/v11-fresh-parent128-hb-d64-r64-q3-s11/result.json",
           "source_commit": "159190c3",
-          "status": "planned"
+          "status": "completed"
         },
         {
           "config": ".local/source-v10-execution/configs/studies/language/direct-v10/table/main/hb-d64-r64-q3-s22.json",
@@ -17142,7 +17201,7 @@
           "lens_record": "runs/v11-fresh-parent128-hb-d64-r64-q3-s22/projection.json",
           "record": "runs/v11-fresh-parent128-hb-d64-r64-q3-s22/result.json",
           "source_commit": "159190c3",
-          "status": "planned"
+          "status": "completed"
         },
         {
           "config": ".local/source-v10-execution/configs/studies/language/direct-v10/table/main/hb-d64-r4-dense-match-s11.json",
@@ -17150,7 +17209,7 @@
           "lens_record": "runs/v11-fresh-parent128-hb-d64-r4-dense-match-s11/projection.json",
           "record": "runs/v11-fresh-parent128-hb-d64-r4-dense-match-s11/result.json",
           "source_commit": "159190c3",
-          "status": "planned"
+          "status": "completed"
         },
         {
           "config": ".local/source-v10-execution/configs/studies/language/direct-v10/table/main/hb-d64-r4-dense-match-s22.json",
@@ -17158,7 +17217,7 @@
           "lens_record": "runs/v11-fresh-parent128-hb-d64-r4-dense-match-s22/projection.json",
           "record": "runs/v11-fresh-parent128-hb-d64-r4-dense-match-s22/result.json",
           "source_commit": "159190c3",
-          "status": "planned"
+          "status": "completed"
         },
         {
           "config": "runs/v11-extension-r2-control/large-dense-lr0.001-s11/config.json",
@@ -17166,7 +17225,7 @@
           "lens_record": "runs/v11-fresh-extend256-large-dense-lr0.001-s11/projection.json",
           "record": "runs/v11-fresh-extend256-large-dense-lr0.001-s11/result.json",
           "source_commit": "159190c3",
-          "status": "planned"
+          "status": "completed"
         },
         {
           "config": "runs/v11-extension-r2-control/large-dense-lr0.001-s22/config.json",
@@ -17174,7 +17233,7 @@
           "lens_record": "runs/v11-fresh-extend256-large-dense-lr0.001-s22/projection.json",
           "record": "runs/v11-fresh-extend256-large-dense-lr0.001-s22/result.json",
           "source_commit": "159190c3",
-          "status": "planned"
+          "status": "completed"
         },
         {
           "config": "runs/v11-extension-r2-control/large-e20-lr0.001-b0.01-s11/config.json",
@@ -17182,7 +17241,7 @@
           "lens_record": "runs/v11-fresh-extend256-large-e20-lr0.001-b0.01-s11/projection.json",
           "record": "runs/v11-fresh-extend256-large-e20-lr0.001-b0.01-s11/result.json",
           "source_commit": "159190c3",
-          "status": "planned"
+          "status": "completed"
         },
         {
           "config": "runs/v11-extension-r2-control/large-e20-lr0.001-b0.01-s22/config.json",
@@ -17190,7 +17249,7 @@
           "lens_record": "runs/v11-fresh-extend256-large-e20-lr0.001-b0.01-s22/projection.json",
           "record": "runs/v11-fresh-extend256-large-e20-lr0.001-b0.01-s22/result.json",
           "source_commit": "159190c3",
-          "status": "planned"
+          "status": "completed"
         },
         {
           "config": "runs/v11-extension-r2-control/large-e64-lr0.001-b0.01-s11/config.json",
@@ -17198,7 +17257,7 @@
           "lens_record": "runs/v11-fresh-extend256-large-e64-lr0.001-b0.01-s11/projection.json",
           "record": "runs/v11-fresh-extend256-large-e64-lr0.001-b0.01-s11/result.json",
           "source_commit": "159190c3",
-          "status": "planned"
+          "status": "completed"
         },
         {
           "config": "runs/v11-extension-r2-control/large-e64-lr0.001-b0.01-s22/config.json",
@@ -17206,7 +17265,7 @@
           "lens_record": "runs/v11-fresh-extend256-large-e64-lr0.001-b0.01-s22/projection.json",
           "record": "runs/v11-fresh-extend256-large-e64-lr0.001-b0.01-s22/result.json",
           "source_commit": "159190c3",
-          "status": "planned"
+          "status": "completed"
         },
         {
           "config": ".local/source-moe-execution-v2/configs/studies/language/moe-controls/table/configs/small-e64-lr0.003-b0.01-s11.json",
@@ -17214,7 +17273,7 @@
           "lens_record": "runs/v11-fresh-balance128-small-e64-lr0.003-b0.01-s11/projection.json",
           "record": "runs/v11-fresh-balance128-small-e64-lr0.003-b0.01-s11/result.json",
           "source_commit": "159190c3",
-          "status": "planned"
+          "status": "completed"
         },
         {
           "config": ".local/source-moe-execution-v2/configs/studies/language/moe-controls/table/configs/small-e64-lr0.003-b0.01-s22.json",
@@ -17222,7 +17281,7 @@
           "lens_record": "runs/v11-fresh-balance128-small-e64-lr0.003-b0.01-s22/projection.json",
           "record": "runs/v11-fresh-balance128-small-e64-lr0.003-b0.01-s22/result.json",
           "source_commit": "159190c3",
-          "status": "planned"
+          "status": "completed"
         },
         {
           "config": ".local/source-capacity-v11-hb/configs/studies/language/capacity-v11/hb/hb-d64-r64-q3-bias0.001-s11.json",
@@ -17236,9 +17295,10 @@
           "config": ".local/source-capacity-v11-hb/configs/studies/language/capacity-v11/hb/hb-d64-r64-q3-bias0.001-s22.json",
           "id": "tl-v11-fresh-hb-d64-r64-q3-bias0.001-s22",
           "lens_record": "runs/v11-fresh-hb-d64-r64-q3-bias0.001-s22/projection.json",
+          "note": "ineligible: training parent failed; confirmation was not launched",
           "record": "runs/v11-fresh-hb-d64-r64-q3-bias0.001-s22/result.json",
           "source_commit": "159190c3",
-          "status": "planned"
+          "status": "unchecked"
         },
         {
           "config": ".local/source-capacity-v11-hb/configs/studies/language/capacity-v11/hb/hb-d64-r64-q3-bias0.01-s11.json",
@@ -17252,14 +17312,15 @@
           "config": ".local/source-capacity-v11-hb/configs/studies/language/capacity-v11/hb/hb-d64-r64-q3-bias0.01-s22.json",
           "id": "tl-v11-fresh-hb-d64-r64-q3-bias0.01-s22",
           "lens_record": "runs/v11-fresh-hb-d64-r64-q3-bias0.01-s22/projection.json",
+          "note": "ineligible: training parent failed; confirmation was not launched",
           "record": "runs/v11-fresh-hb-d64-r64-q3-bias0.01-s22/result.json",
           "source_commit": "159190c3",
-          "status": "planned"
+          "status": "unchecked"
         }
       ],
       "status": "running",
       "study_id": "TL-CAPACITY-CONFIRM-v11",
-      "summary": "\u65b0135\u6587\u6863\u5df2\u6392\u9664\u65e7\u5212\u5206\uff1b\u56fa\u5b9a28\u7aef\u70b9\u63a7\u5236\u5668\uff0ctest\u5bc6\u5c01\u3002",
+      "summary": "24\u9879\u5b8c\u6210\u30012\u9879HB\u7236\u5931\u8d25\u4e0d\u5408\u683c\u30012\u9879\u5f85\u7236\u7ec8\u70b9\uff1b\u65b0\u786e\u8ba4\u4e0d\u53c2\u4e0e\u914d\u65b9\u9009\u62e9\u3002",
       "title": "v11\u65b0\u72ec\u7acb262K\u786e\u8ba4",
       "track": "shared",
       "view_group": "current",
@@ -17288,10 +17349,14 @@
         {
           "label": "\u53ea\u8bfb\u72b6\u6001",
           "path": "scripts/review_capacity_v11.py"
+        },
+        {
+          "label": "v11\u4e2d\u671f\u7ed3\u679c\u4e0e\u5931\u8d25\u5ba1\u9605",
+          "path": "docs/studies/capacity-v11-progress-20261115.md"
         }
       ],
       "status": "awaiting",
-      "summary": "\u4fdd\u6301\u672a\u5ba1\u9605\uff1b\u542f\u52a8\u3001\u9000\u51fa\u7801\u6216\u66f4\u5747\u8861\u5747\u4e0d\u81ea\u52a8\u610f\u5473\u7740\u8bed\u8a00\u8d28\u91cf\u6539\u5584\u3002",
+      "summary": "24/28\u5b8c\u6210\uff1b2\u5931\u8d25\u7236\u4e0d\u5408\u683c\uff0c2\u8fd0\u884c\u7236\u7b49\u5f85\u3002\u672a\u5f62\u6210\u5b8c\u6574HB\u786e\u8ba4\u3002",
       "title": "v11\u65b0\u72ec\u7acb262K\u786e\u8ba4\uff1a\u7ed3\u679c\u5f85\u5ba1\u9605",
       "track": "shared",
       "view_group": "current",
@@ -17303,7 +17368,7 @@
   "schema": "tide-research-map-prototype-v1",
   "subtitle": "v11\uff1a\u66dd\u5149\u3001\u8d1f\u8f7d\u4e0e\u4f4e\u6d3b\u52a8\u5bb9\u91cf\u5229\u7528\uff1b\u8bca\u65ad\u5df2\u5ba1\u9605\uff0c\u5e72\u9884\u8d28\u91cf\u5f85\u786e\u8ba4",
   "title": "TIDE \u7814\u7a76\u56fe",
-  "updated_at": "2026-11-15T10:02:55.488129+00:00",
+  "updated_at": "2026-11-15T13:34:20.828730+00:00",
   "view_groups": [
     {
       "height": 8860,

@@ -196,3 +196,11 @@
   is prepared and fixed28 endpoints are controlled in background; test stays sealed.
   Shared deadline2026-11-17 17:43:08+08,12 NPU slots,96GiB stop,>=200GiB headroom.
   No active fixed input may be edited. Re-entry: `python scripts/review_capacity_v11.py`.
+
+- V11 inspection2026-11-15 21:32+08: all8 MoE/dense endpoints and24 fresh
+  confirmations completed and scoped-reviewed. See `capacity-v11-progress-20261115.md`.
+  HB seed11 variants remain running on6/8; both seed22 variants failed allocation
+  feasibility (2.432e-5/2.813e-5 > original2e-5) after21.477/32.288Mi. Do not
+  conflate the last progress with saved weights (13.327/32Mi), waive the failure,
+  or silently restart. Existing128Mi targets and shared deadline remain. Status
+  requests do not launch repair or broaden the selected intervention family.

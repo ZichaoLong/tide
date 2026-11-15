@@ -1,0 +1,1094 @@
+{
+  "allocated_new_gib": 28.815391540527344,
+  "budget": {
+    "aggregate_compute_cap": null,
+    "deadline_epoch": 1794908588.6106293,
+    "max_diagnostics": 16,
+    "max_hb_training": 4,
+    "max_moe_training": 8,
+    "max_new_disk_gib": 96,
+    "max_npu_workers": 12,
+    "max_parameters": 200000000,
+    "minimum_quota_headroom_gib": 200,
+    "schema": "tide-capacity-v11-budget-v1",
+    "started_epoch": 1794735788.6106293,
+    "target_new_disk_gib": 64
+  },
+  "diagnostics": {
+    "counterevidence": "Small MoE E64 also shows imbalance; larger MoE has broad use yet weak marginal E20-toE64 gain. More exposure and task difficulty remain plausible.",
+    "decision": "Choose only candidate-aware routing load-bias family, rates.001/.01,d64 R64,seeds11/22. Do not also modify Read/FFN budget.",
+    "limits": [
+      "512 sequences, not cumulative lifetime use",
+      "no diagnostic optimizer update is training ancestry",
+      "near-equal active parameter totals hide Full/receipt/shared decomposition",
+      "no fresh confirmation was used to select intervention",
+      "no foundation bug or universal capacity-scaling conclusion"
+    ],
+    "observed_at": "2026-11-15T09:56:27.472834+00:00",
+    "rationale": "HB R64 use concentrated in both widths and both large-width seeds; large MoE E64 has broad coverage. This separates HB opportunity bottleneck from exposure and does not establish a unique cause.",
+    "reviewed_scope": "Fixed train-window Full/assignment coverage and one-update gradient support; all 16 observers preserve same-device output exactly. Historical parameter changes include weight decay/Adam memory, not evidence of task gradients at every node.",
+    "rows": [
+      {
+        "average_effective_units": 2.268954382123269,
+        "average_max_share": 0.4897510050277278,
+        "average_zero_units": 58.2,
+        "full_all": 0.031634938716888425,
+        "id": "hb-d128-r64-q3-s11",
+        "logical_parameter_budget": {
+          "full": 4644029.25,
+          "receive": 3904688.39453125,
+          "shared": 938785.2719726562
+        },
+        "mean_zero_gradient_nodes_in_one_update": {
+          "ffup": 62,
+          "query": 62,
+          "read_q": 62.3
+        },
+        "observer_output_equality": "passed_exact_same_batch",
+        "parameter_history_exposures": [
+          "33554432",
+          "8388608"
+        ],
+        "projection": "runs/v11-diag-hb-d128-r64-q3-s11/projection.json",
+        "receipt_all": 0.16478259563446046,
+        "record": "runs/v11-diag-hb-d128-r64-q3-s11/result.json",
+        "regions_or_layers": 10,
+        "sha256": "692117f3d9856392428ca0fd0208ffe7aacb89bcb0ab7bd25d9fd7f245bd128f",
+        "state": "completed",
+        "train_window_nll": 3.778025234409888,
+        "update_global_batch": 64,
+        "valid_targets": 127641,
+        "window_sequences": 512
+      },
+      {
+        "average_effective_units": 2.752401302184997,
+        "average_max_share": 0.4763083751783929,
+        "average_zero_units": 58.2,
+        "full_all": 0.031455373764038085,
+        "id": "hb-d128-r64-q3-s22",
+        "logical_parameter_budget": {
+          "full": 4617669.0,
+          "receive": 3602814.26171875,
+          "shared": 938784.2392578125
+        },
+        "mean_zero_gradient_nodes_in_one_update": {
+          "ffup": 60.7,
+          "query": 60.7,
+          "read_q": 61.1
+        },
+        "observer_output_equality": "passed_exact_same_batch",
+        "parameter_history_exposures": [
+          "33554432",
+          "8388608"
+        ],
+        "projection": "runs/v11-diag-hb-d128-r64-q3-s22/projection.json",
+        "receipt_all": 0.1520431399345398,
+        "record": "runs/v11-diag-hb-d128-r64-q3-s22/result.json",
+        "regions_or_layers": 10,
+        "sha256": "a585db62fc935fa2cafc0c5c56ac0a8619a82095811eab64562ec8db18158891",
+        "state": "completed",
+        "train_window_nll": 3.679951481198978,
+        "update_global_batch": 64,
+        "valid_targets": 127641,
+        "window_sequences": 512
+      },
+      {
+        "average_effective_units": 4.15485583014198,
+        "average_max_share": 0.40384742093741244,
+        "average_zero_units": 50.4,
+        "full_all": 0.03183822631835938,
+        "id": "hb-d64-r64-q3-s11",
+        "logical_parameter_budget": {
+          "full": 1168468.0,
+          "receive": 2125626.6484375,
+          "shared": 389920.138671875
+        },
+        "mean_zero_gradient_nodes_in_one_update": {
+          "ffup": 58.9,
+          "query": 59,
+          "read_q": 58.8
+        },
+        "observer_output_equality": "passed_exact_same_batch",
+        "parameter_history_exposures": [
+          "33554432",
+          "8388608"
+        ],
+        "projection": "runs/v11-diag-hb-d64-r64-q3-s11/projection.json",
+        "receipt_all": 0.16090749502182006,
+        "record": "runs/v11-diag-hb-d64-r64-q3-s11/result.json",
+        "regions_or_layers": 10,
+        "sha256": "3cb33880d1c4106df5b0addb072cfedbd304e90a687b9d3b5988d1726af61102",
+        "state": "completed",
+        "train_window_nll": 4.360894750094993,
+        "update_global_batch": 64,
+        "valid_targets": 127641,
+        "window_sequences": 512
+      },
+      {
+        "average_effective_units": 27.999999999999986,
+        "average_max_share": 0.03571428571428571,
+        "average_zero_units": 0,
+        "full_all": 1.0,
+        "id": "hb-d128-r28-pool-s11",
+        "logical_parameter_budget": {
+          "full": 64225280.0,
+          "receive": 10367000.0,
+          "shared": 948768.0
+        },
+        "mean_zero_gradient_nodes_in_one_update": {
+          "ffup": 0,
+          "query": 0,
+          "read_q": 0
+        },
+        "observer_output_equality": "passed_exact_same_batch",
+        "parameter_history_exposures": [
+          "33554432",
+          "8388608"
+        ],
+        "projection": "runs/v11-diag-hb-d128-r28-pool-s11/projection.json",
+        "receipt_all": 1.0,
+        "record": "runs/v11-diag-hb-d128-r28-pool-s11/result.json",
+        "regions_or_layers": 10,
+        "sha256": "92f7f821500aebe2c187d5dfc3f811f7e4601d48c6c3b71c5115c844c496144c",
+        "state": "completed",
+        "train_window_nll": 3.2052165748319505,
+        "update_global_batch": 64,
+        "valid_targets": 127641,
+        "window_sequences": 512
+      },
+      {
+        "average_effective_units": 5.245095749367289,
+        "average_max_share": 0.3184548180345056,
+        "average_zero_units": 15.4,
+        "full_all": 0.10032727377755302,
+        "id": "hb-d128-r28-q10-s11",
+        "logical_parameter_budget": {
+          "full": 6443547.25,
+          "receive": 2796552.3828125,
+          "shared": 939070.958984375
+        },
+        "mean_zero_gradient_nodes_in_one_update": {
+          "ffup": 17.3,
+          "query": 17.3,
+          "read_q": 18.8
+        },
+        "observer_output_equality": "passed_exact_same_batch",
+        "parameter_history_exposures": [
+          "33554432",
+          "8388608"
+        ],
+        "projection": "runs/v11-diag-hb-d128-r28-q10-s11/projection.json",
+        "receipt_all": 0.2697552272251674,
+        "record": "runs/v11-diag-hb-d128-r28-q10-s11/result.json",
+        "regions_or_layers": 10,
+        "sha256": "0dddb100a9a28a179a74758bd2f452e09d3485db81da87bb6d398ecc8e9acced",
+        "state": "completed",
+        "train_window_nll": 3.54334727594141,
+        "update_global_batch": 64,
+        "valid_targets": 127641,
+        "window_sequences": 512
+      },
+      {
+        "average_effective_units": 6.427386481097721,
+        "average_max_share": 0.33217301327021953,
+        "average_zero_units": 9.1,
+        "full_all": 0.10114871433803013,
+        "id": "hb-d64-r28-q10-s11",
+        "logical_parameter_budget": {
+          "full": 1624076.125,
+          "receive": 1738152.4375,
+          "shared": 390234.35205078125
+        },
+        "mean_zero_gradient_nodes_in_one_update": {
+          "ffup": 12.7,
+          "query": 12.7,
+          "read_q": 15.7
+        },
+        "observer_output_equality": "passed_exact_same_batch",
+        "parameter_history_exposures": [
+          "33554432",
+          "8388608"
+        ],
+        "projection": "runs/v11-diag-hb-d64-r28-q10-s11/projection.json",
+        "receipt_all": 0.30074547358921594,
+        "record": "runs/v11-diag-hb-d64-r28-q10-s11/result.json",
+        "regions_or_layers": 10,
+        "sha256": "43beb5cfba747229936a5f6d4f9b0ec2ab4d231139fa63fb039d262aa245c655",
+        "state": "completed",
+        "train_window_nll": 3.9763782674649994,
+        "update_global_batch": 64,
+        "valid_targets": 127641,
+        "window_sequences": 512
+      },
+      {
+        "average_effective_units": 2.9999999999999996,
+        "average_max_share": 0.3333333333333333,
+        "average_zero_units": 0,
+        "full_all": 1.0,
+        "id": "hb-d128-r3-dense-match-s11",
+        "logical_parameter_budget": {
+          "full": 7618560.0,
+          "receive": 1110750.0,
+          "shared": 939168.0
+        },
+        "mean_zero_gradient_nodes_in_one_update": {
+          "ffup": 0,
+          "query": 0,
+          "read_q": 0
+        },
+        "observer_output_equality": "passed_exact_same_batch",
+        "parameter_history_exposures": [
+          "33554432",
+          "8388608"
+        ],
+        "projection": "runs/v11-diag-hb-d128-r3-dense-match-s11/projection.json",
+        "receipt_all": 1.0,
+        "record": "runs/v11-diag-hb-d128-r3-dense-match-s11/result.json",
+        "regions_or_layers": 10,
+        "sha256": "70228f0e9cc0af6ae7a2df7a92c1433f5c4bc1b3247169ca291c146492f36a3e",
+        "state": "completed",
+        "train_window_nll": 3.4378159496165024,
+        "update_global_batch": 64,
+        "valid_targets": 127641,
+        "window_sequences": 512
+      },
+      {
+        "average_effective_units": 4.0,
+        "average_max_share": 0.25,
+        "average_zero_units": 0,
+        "full_all": 1.0,
+        "id": "hb-d64-r4-dense-match-s11",
+        "logical_parameter_budget": {
+          "full": 2539520.0,
+          "receive": 825640.0,
+          "shared": 390688.0
+        },
+        "mean_zero_gradient_nodes_in_one_update": {
+          "ffup": 0,
+          "query": 0,
+          "read_q": 0
+        },
+        "observer_output_equality": "passed_exact_same_batch",
+        "parameter_history_exposures": [
+          "33554432",
+          "8388608"
+        ],
+        "projection": "runs/v11-diag-hb-d64-r4-dense-match-s11/projection.json",
+        "receipt_all": 1.0,
+        "record": "runs/v11-diag-hb-d64-r4-dense-match-s11/result.json",
+        "regions_or_layers": 10,
+        "sha256": "e052810cdca5ab1e2454fad99fc27aea893061b054bed22c31690b32888fb803",
+        "state": "completed",
+        "train_window_nll": 3.802151487129919,
+        "update_global_batch": 64,
+        "valid_targets": 127641,
+        "window_sequences": 512
+      },
+      {
+        "average_effective_units": 63.99999999999998,
+        "average_max_share": 0.015625,
+        "average_zero_units": 0,
+        "full_all": 1.0,
+        "id": "hb-d128-r64-pool-s11",
+        "logical_parameter_budget": {
+          "full": 146800640.0,
+          "receive": 23696000.0,
+          "shared": 962592.0
+        },
+        "mean_zero_gradient_nodes_in_one_update": {
+          "ffup": 0,
+          "query": 0,
+          "read_q": 0
+        },
+        "observer_output_equality": "passed_exact_same_batch",
+        "parameter_history_exposures": [
+          "33554432"
+        ],
+        "projection": "runs/v11-diag-hb-d128-r64-pool-s11/projection.json",
+        "receipt_all": 1.0,
+        "record": "runs/v11-diag-hb-d128-r64-pool-s11/result.json",
+        "regions_or_layers": 10,
+        "sha256": "3af0069060f08ea3d47e756888263de8644429785783eca77733c9120d2b7f77",
+        "state": "completed",
+        "train_window_nll": 3.2114031882817335,
+        "update_global_batch": 64,
+        "valid_targets": 127641,
+        "window_sequences": 512
+      },
+      {
+        "average_effective_units": null,
+        "average_max_share": null,
+        "average_zero_units": null,
+        "id": "large-dense-lr0.001-s11",
+        "observer_output_equality": "passed_exact_same_batch",
+        "parameter_history_exposures": [
+          "33554432",
+          "8388608"
+        ],
+        "projection": "runs/v11-diag-large-dense-lr0.001-s11/projection.json",
+        "record": "runs/v11-diag-large-dense-lr0.001-s11/result.json",
+        "regions_or_layers": 0,
+        "sha256": "8a4195cb5c09b6717221991a5916a3179ed857996628868d40ae5971f109f00c",
+        "state": "completed",
+        "train_window_nll": 3.1688994915426862,
+        "update_global_batch": 64,
+        "valid_targets": 127641,
+        "window_sequences": 512
+      },
+      {
+        "average_effective_units": 18.826566210801623,
+        "average_max_share": 0.09535990264361242,
+        "average_zero_units": 0,
+        "id": "large-e20-lr0.001-b0.01-s11",
+        "observer_output_equality": "passed_exact_same_batch",
+        "parameter_history_exposures": [
+          "33554432",
+          "8388608"
+        ],
+        "projection": "runs/v11-diag-large-e20-lr0.001-b0.01-s11/projection.json",
+        "record": "runs/v11-diag-large-e20-lr0.001-b0.01-s11/result.json",
+        "regions_or_layers": 12,
+        "sha256": "458788e6fde11f7c96be50393cccd4103b05e3157008dc68c51c228fe5a042d4",
+        "state": "completed",
+        "train_window_nll": 2.9571203977366207,
+        "update_global_batch": 64,
+        "valid_targets": 127641,
+        "window_sequences": 512
+      },
+      {
+        "average_effective_units": 53.14726766841886,
+        "average_max_share": 0.05917247070559877,
+        "average_zero_units": 0,
+        "id": "large-e64-lr0.001-b0.01-s11",
+        "observer_output_equality": "passed_exact_same_batch",
+        "parameter_history_exposures": [
+          "33554432",
+          "8388608"
+        ],
+        "projection": "runs/v11-diag-large-e64-lr0.001-b0.01-s11/projection.json",
+        "record": "runs/v11-diag-large-e64-lr0.001-b0.01-s11/result.json",
+        "regions_or_layers": 12,
+        "sha256": "82dbc8b46cdaffb9744296f5548fc0d7552866acf9c1f2f31f415aca1218a52b",
+        "state": "completed",
+        "train_window_nll": 2.9427055790263315,
+        "update_global_batch": 64,
+        "valid_targets": 127641,
+        "window_sequences": 512
+      },
+      {
+        "average_effective_units": null,
+        "average_max_share": null,
+        "average_zero_units": null,
+        "id": "small-dense-lr0.003-s11",
+        "observer_output_equality": "passed_exact_same_batch",
+        "parameter_history_exposures": [
+          "33554432",
+          "8388608"
+        ],
+        "projection": "runs/v11-diag-small-dense-lr0.003-s11/projection.json",
+        "record": "runs/v11-diag-small-dense-lr0.003-s11/result.json",
+        "regions_or_layers": 0,
+        "sha256": "2f3ee9cfef72de1f5691335f23bc3628e38f6701a0390815d4c204b530ba3b91",
+        "state": "completed",
+        "train_window_nll": 3.4546757054453505,
+        "update_global_batch": 64,
+        "valid_targets": 127641,
+        "window_sequences": 512
+      },
+      {
+        "average_effective_units": 18.75860293472401,
+        "average_max_share": 0.1061453608166655,
+        "average_zero_units": 0,
+        "id": "small-e20-lr0.003-b0.01-s11",
+        "observer_output_equality": "passed_exact_same_batch",
+        "parameter_history_exposures": [
+          "33554432",
+          "8388608"
+        ],
+        "projection": "runs/v11-diag-small-e20-lr0.003-b0.01-s11/projection.json",
+        "record": "runs/v11-diag-small-e20-lr0.003-b0.01-s11/result.json",
+        "regions_or_layers": 6,
+        "sha256": "d19233bd0e684c6442d28ff6372bea7ff5c853af1dd8a1c94e85152ebbd6da80",
+        "state": "completed",
+        "train_window_nll": 3.257331475583864,
+        "update_global_batch": 64,
+        "valid_targets": 127641,
+        "window_sequences": 512
+      },
+      {
+        "average_effective_units": 12.498902861168832,
+        "average_max_share": 0.3335664089124968,
+        "average_zero_units": 13.5,
+        "id": "small-e64-lr0.003-b0.001-s11",
+        "observer_output_equality": "passed_exact_same_batch",
+        "parameter_history_exposures": [
+          "33554432",
+          "8388608"
+        ],
+        "projection": "runs/v11-diag-small-e64-lr0.003-b0.001-s11/projection.json",
+        "record": "runs/v11-diag-small-e64-lr0.003-b0.001-s11/result.json",
+        "regions_or_layers": 6,
+        "sha256": "069c28c02d286e76c340eaf4692a207a60cb71258df541ece505367ddf377490",
+        "state": "completed",
+        "train_window_nll": 3.309791812338904,
+        "update_global_batch": 64,
+        "valid_targets": 127641,
+        "window_sequences": 512
+      },
+      {
+        "average_effective_units": 14.455920359756046,
+        "average_max_share": 0.2912112879090574,
+        "average_zero_units": 7.833333333333333,
+        "id": "small-e64-lr0.003-b0.001-s22",
+        "observer_output_equality": "passed_exact_same_batch",
+        "parameter_history_exposures": [
+          "33554432",
+          "8388608"
+        ],
+        "projection": "runs/v11-diag-small-e64-lr0.003-b0.001-s22/projection.json",
+        "record": "runs/v11-diag-small-e64-lr0.003-b0.001-s22/result.json",
+        "regions_or_layers": 6,
+        "sha256": "5cb637c53ae93f074c8d4e6779a5a36e2523c0b4e03e7f2a4ad49b42632d6cae",
+        "state": "completed",
+        "train_window_nll": 3.3054667240541833,
+        "update_global_batch": 64,
+        "valid_targets": 127641,
+        "window_sequences": 512
+      }
+    ],
+    "schema": "tide-capacity-v11-diagnostic-review-v1"
+  },
+  "fresh_controller": {
+    "cases": [
+      {
+        "at": "2026-11-15T09:58:33.488853+00:00",
+        "finished_at": "2026-11-15T10:02:06.660934+00:00",
+        "id": "parent128-large-dense-lr0.001-s11",
+        "job": "v11-fresh-parent128-large-dense-lr0.001-s11",
+        "job_output": "/mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v11-fresh-parent128-large-dense-lr0.001-s11",
+        "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v11-fresh-parent128-large-dense-lr0.001-s11",
+        "result": 3.0395894227767712,
+        "state": "completed"
+      },
+      {
+        "at": "2026-11-15T09:58:33.938492+00:00",
+        "finished_at": "2026-11-15T10:02:41.906185+00:00",
+        "id": "parent128-large-dense-lr0.001-s22",
+        "job": "v11-fresh-parent128-large-dense-lr0.001-s22",
+        "job_output": "/mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v11-fresh-parent128-large-dense-lr0.001-s22",
+        "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v11-fresh-parent128-large-dense-lr0.001-s22",
+        "result": 3.039799460064387,
+        "state": "completed"
+      },
+      {
+        "at": "2026-11-15T09:58:34.984046+00:00",
+        "finished_at": "2026-11-15T10:02:06.663075+00:00",
+        "id": "parent128-large-e20-lr0.001-b0.01-s11",
+        "job": "v11-fresh-parent128-large-e20-lr0.001-b0.01-s11",
+        "job_output": "/mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v11-fresh-parent128-large-e20-lr0.001-b0.01-s11",
+        "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v11-fresh-parent128-large-e20-lr0.001-b0.01-s11",
+        "result": 2.84451795447967,
+        "state": "completed"
+      },
+      {
+        "at": "2026-11-15T09:58:35.957520+00:00",
+        "finished_at": "2026-11-15T10:02:41.909369+00:00",
+        "id": "parent128-large-e20-lr0.001-b0.01-s22",
+        "job": "v11-fresh-parent128-large-e20-lr0.001-b0.01-s22",
+        "job_output": "/mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v11-fresh-parent128-large-e20-lr0.001-b0.01-s22",
+        "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v11-fresh-parent128-large-e20-lr0.001-b0.01-s22",
+        "result": 2.84145291565801,
+        "state": "completed"
+      },
+      {
+        "at": "2026-11-15T10:02:09.537347+00:00",
+        "finished_at": "2026-11-15T10:02:41.911332+00:00",
+        "id": "parent128-large-e64-lr0.001-b0.01-s11",
+        "job": "v11-fresh-parent128-large-e64-lr0.001-b0.01-s11",
+        "job_output": "/mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v11-fresh-parent128-large-e64-lr0.001-b0.01-s11",
+        "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v11-fresh-parent128-large-e64-lr0.001-b0.01-s11",
+        "result": 2.8315858230962476,
+        "state": "completed"
+      },
+      {
+        "at": "2026-11-15T10:02:11.889773+00:00",
+        "finished_at": "2026-11-15T10:02:41.913329+00:00",
+        "id": "parent128-large-e64-lr0.001-b0.01-s22",
+        "job": "v11-fresh-parent128-large-e64-lr0.001-b0.01-s22",
+        "job_output": "/mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v11-fresh-parent128-large-e64-lr0.001-b0.01-s22",
+        "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v11-fresh-parent128-large-e64-lr0.001-b0.01-s22",
+        "result": 2.828764236619463,
+        "state": "completed"
+      },
+      {
+        "at": "2026-11-15T10:02:42.305328+00:00",
+        "finished_at": "2026-11-15T10:03:13.843949+00:00",
+        "id": "parent128-small-dense-lr0.003-s11",
+        "job": "v11-fresh-parent128-small-dense-lr0.003-s11",
+        "job_output": "/mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v11-fresh-parent128-small-dense-lr0.003-s11",
+        "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v11-fresh-parent128-small-dense-lr0.003-s11",
+        "result": 3.3202787312693545,
+        "state": "completed"
+      },
+      {
+        "at": "2026-11-15T10:02:42.707279+00:00",
+        "finished_at": "2026-11-15T10:03:13.846115+00:00",
+        "id": "parent128-small-dense-lr0.003-s22",
+        "job": "v11-fresh-parent128-small-dense-lr0.003-s22",
+        "job_output": "/mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v11-fresh-parent128-small-dense-lr0.003-s22",
+        "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v11-fresh-parent128-small-dense-lr0.003-s22",
+        "result": 3.320398366686277,
+        "state": "completed"
+      },
+      {
+        "at": "2026-11-15T10:02:43.265786+00:00",
+        "finished_at": "2026-11-15T10:03:13.848132+00:00",
+        "id": "parent128-small-e20-lr0.003-b0.01-s11",
+        "job": "v11-fresh-parent128-small-e20-lr0.003-b0.01-s11",
+        "job_output": "/mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v11-fresh-parent128-small-e20-lr0.003-b0.01-s11",
+        "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v11-fresh-parent128-small-e20-lr0.003-b0.01-s11",
+        "result": 3.1228342054746463,
+        "state": "completed"
+      },
+      {
+        "at": "2026-11-15T10:02:43.827504+00:00",
+        "finished_at": "2026-11-15T10:03:13.850076+00:00",
+        "id": "parent128-small-e20-lr0.003-b0.01-s22",
+        "job": "v11-fresh-parent128-small-e20-lr0.003-b0.01-s22",
+        "job_output": "/mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v11-fresh-parent128-small-e20-lr0.003-b0.01-s22",
+        "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v11-fresh-parent128-small-e20-lr0.003-b0.01-s22",
+        "result": 3.1268962441245094,
+        "state": "completed"
+      },
+      {
+        "at": "2026-11-15T10:03:14.947517+00:00",
+        "finished_at": "2026-11-15T10:03:47.596436+00:00",
+        "id": "parent128-small-e64-lr0.003-b0.001-s11",
+        "job": "v11-fresh-parent128-small-e64-lr0.003-b0.001-s11",
+        "job_output": "/mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v11-fresh-parent128-small-e64-lr0.003-b0.001-s11",
+        "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v11-fresh-parent128-small-e64-lr0.003-b0.001-s11",
+        "result": 3.1732073599050636,
+        "state": "completed"
+      },
+      {
+        "at": "2026-11-15T10:03:15.823910+00:00",
+        "finished_at": "2026-11-15T10:03:47.598487+00:00",
+        "id": "parent128-small-e64-lr0.003-b0.001-s22",
+        "job": "v11-fresh-parent128-small-e64-lr0.003-b0.001-s22",
+        "job_output": "/mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v11-fresh-parent128-small-e64-lr0.003-b0.001-s22",
+        "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v11-fresh-parent128-small-e64-lr0.003-b0.001-s22",
+        "result": 3.1678725737292552,
+        "state": "completed"
+      },
+      {
+        "at": "2026-11-15T10:03:16.772523+00:00",
+        "finished_at": "2026-11-15T10:04:18.411126+00:00",
+        "id": "parent128-hb-d64-r64-q3-s11",
+        "job": "v11-fresh-parent128-hb-d64-r64-q3-s11",
+        "job_output": "/mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v11-fresh-parent128-hb-d64-r64-q3-s11",
+        "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v11-fresh-parent128-hb-d64-r64-q3-s11",
+        "result": 4.2453673632735445,
+        "state": "completed"
+      },
+      {
+        "at": "2026-11-15T10:03:17.582858+00:00",
+        "finished_at": "2026-11-15T10:04:18.413411+00:00",
+        "id": "parent128-hb-d64-r64-q3-s22",
+        "job": "v11-fresh-parent128-hb-d64-r64-q3-s22",
+        "job_output": "/mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v11-fresh-parent128-hb-d64-r64-q3-s22",
+        "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v11-fresh-parent128-hb-d64-r64-q3-s22",
+        "result": 4.365083487649827,
+        "state": "completed"
+      },
+      {
+        "at": "2026-11-15T10:03:48.005065+00:00",
+        "finished_at": "2026-11-15T10:04:49.319352+00:00",
+        "id": "parent128-hb-d64-r4-dense-match-s11",
+        "job": "v11-fresh-parent128-hb-d64-r4-dense-match-s11",
+        "job_output": "/mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v11-fresh-parent128-hb-d64-r4-dense-match-s11",
+        "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v11-fresh-parent128-hb-d64-r4-dense-match-s11",
+        "result": 3.681399140492431,
+        "state": "completed"
+      },
+      {
+        "at": "2026-11-15T10:03:48.397673+00:00",
+        "finished_at": "2026-11-15T10:04:49.321530+00:00",
+        "id": "parent128-hb-d64-r4-dense-match-s22",
+        "job": "v11-fresh-parent128-hb-d64-r4-dense-match-s22",
+        "job_output": "/mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v11-fresh-parent128-hb-d64-r4-dense-match-s22",
+        "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v11-fresh-parent128-hb-d64-r4-dense-match-s22",
+        "result": 3.6661492246166745,
+        "state": "completed"
+      },
+      {
+        "at": "2026-11-15T10:04:18.862371+00:00",
+        "finished_at": "2026-11-15T10:04:49.323557+00:00",
+        "id": "extend256-large-dense-lr0.001-s11",
+        "job": "v11-fresh-extend256-large-dense-lr0.001-s11",
+        "job_output": "/mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v11-fresh-extend256-large-dense-lr0.001-s11",
+        "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v11-fresh-extend256-large-dense-lr0.001-s11",
+        "result": 2.843618537463044,
+        "state": "completed"
+      },
+      {
+        "at": "2026-11-15T10:04:19.302784+00:00",
+        "finished_at": "2026-11-15T10:04:49.325543+00:00",
+        "id": "extend256-large-dense-lr0.001-s22",
+        "job": "v11-fresh-extend256-large-dense-lr0.001-s22",
+        "job_output": "/mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v11-fresh-extend256-large-dense-lr0.001-s22",
+        "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v11-fresh-extend256-large-dense-lr0.001-s22",
+        "result": 2.83621288791619,
+        "state": "completed"
+      },
+      {
+        "at": "2026-11-15T11:21:52.338146+00:00",
+        "finished_at": "2026-11-15T11:22:23.284501+00:00",
+        "id": "balance128-small-e64-lr0.003-b0.01-s11",
+        "job": "v11-fresh-balance128-small-e64-lr0.003-b0.01-s11",
+        "job_output": "/mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v11-fresh-balance128-small-e64-lr0.003-b0.01-s11",
+        "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v11-fresh-balance128-small-e64-lr0.003-b0.01-s11",
+        "result": 3.1283155913552037,
+        "state": "completed"
+      },
+      {
+        "at": "2026-11-15T11:21:53.269366+00:00",
+        "finished_at": "2026-11-15T11:22:23.286804+00:00",
+        "id": "balance128-small-e64-lr0.003-b0.01-s22",
+        "job": "v11-fresh-balance128-small-e64-lr0.003-b0.01-s22",
+        "job_output": "/mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v11-fresh-balance128-small-e64-lr0.003-b0.01-s22",
+        "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v11-fresh-balance128-small-e64-lr0.003-b0.01-s22",
+        "result": 3.119820004198118,
+        "state": "completed"
+      },
+      {
+        "at": "2026-11-15T11:25:53.791737+00:00",
+        "id": "hb-d64-r64-q3-bias0.001-s22",
+        "reason": "required scientific endpoint missing or failed",
+        "state": "ineligible"
+      },
+      {
+        "at": "2026-11-15T11:39:54.153070+00:00",
+        "id": "hb-d64-r64-q3-bias0.01-s22",
+        "reason": "required scientific endpoint missing or failed",
+        "state": "ineligible"
+      },
+      {
+        "at": "2026-11-15T12:48:27.442961+00:00",
+        "finished_at": "2026-11-15T12:48:57.457997+00:00",
+        "id": "extend256-large-e20-lr0.001-b0.01-s22",
+        "job": "v11-fresh-extend256-large-e20-lr0.001-b0.01-s22",
+        "job_output": "/mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v11-fresh-extend256-large-e20-lr0.001-b0.01-s22",
+        "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v11-fresh-extend256-large-e20-lr0.001-b0.01-s22",
+        "result": 2.6191105378456996,
+        "state": "completed"
+      },
+      {
+        "at": "2026-11-15T12:48:58.396143+00:00",
+        "finished_at": "2026-11-15T12:49:28.411252+00:00",
+        "id": "extend256-large-e20-lr0.001-b0.01-s11",
+        "job": "v11-fresh-extend256-large-e20-lr0.001-b0.01-s11",
+        "job_output": "/mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v11-fresh-extend256-large-e20-lr0.001-b0.01-s11",
+        "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v11-fresh-extend256-large-e20-lr0.001-b0.01-s11",
+        "result": 2.615755735365383,
+        "state": "completed"
+      },
+      {
+        "at": "2026-11-15T13:00:01.188806+00:00",
+        "finished_at": "2026-11-15T13:00:31.203262+00:00",
+        "id": "extend256-large-e64-lr0.001-b0.01-s11",
+        "job": "v11-fresh-extend256-large-e64-lr0.001-b0.01-s11",
+        "job_output": "/mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v11-fresh-extend256-large-e64-lr0.001-b0.01-s11",
+        "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v11-fresh-extend256-large-e64-lr0.001-b0.01-s11",
+        "result": 2.601143710708129,
+        "state": "completed"
+      },
+      {
+        "at": "2026-11-15T13:02:04.091803+00:00",
+        "finished_at": "2026-11-15T13:02:34.106275+00:00",
+        "id": "extend256-large-e64-lr0.001-b0.01-s22",
+        "job": "v11-fresh-extend256-large-e64-lr0.001-b0.01-s22",
+        "job_output": "/mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v11-fresh-extend256-large-e64-lr0.001-b0.01-s22",
+        "output": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v11-fresh-extend256-large-e64-lr0.001-b0.01-s22",
+        "result": 2.5990296681484324,
+        "state": "completed"
+      }
+    ],
+    "schema": "tide-v11-confirmation-controller-v1",
+    "started_at": "2026-11-15T09:58:33.001541+00:00",
+    "state": "running"
+  },
+  "fresh_data": {
+    "data_lock_sha256": "d9be5ec8260cd7f6d938a6a6c30924790c55f657c0ef11cb96aa69acf3ae306f",
+    "documents": 135,
+    "finished_at": "2026-11-15T09:53:25.064199+00:00",
+    "schema": "tide-v11-confirmation-preparation-v1",
+    "started_at": "2026-11-15T09:53:05.307609+00:00",
+    "state": "completed",
+    "test_access": false,
+    "tokens": 262144,
+    "unused_pool_documents": 2519
+  },
+  "limitation": "Live read-only snapshot; recorded progress is not completed independent quality review; original thresholds and failures retained.",
+  "observed_at": "2026-11-15T13:33:43.067845+00:00",
+  "original_no_progress_requests": [
+    {
+      "assessment": "request_not_fulfilled; old config target128Mi; zero new updates",
+      "inner_state": "completed",
+      "job": "v11-moe-extend-large-dense-lr0.001-s11",
+      "requested_tokens": 268435456,
+      "tokens": 134217728
+    },
+    {
+      "assessment": "request_not_fulfilled; old config target128Mi; zero new updates",
+      "inner_state": "completed",
+      "job": "v11-moe-extend-large-dense-lr0.001-s22",
+      "requested_tokens": 268435456,
+      "tokens": 134217728
+    },
+    {
+      "assessment": "request_not_fulfilled; old config target128Mi; zero new updates",
+      "inner_state": "completed",
+      "job": "v11-moe-extend-large-e20-lr0.001-b0.01-s11",
+      "requested_tokens": 268435456,
+      "tokens": 134217728
+    },
+    {
+      "assessment": "request_not_fulfilled; old config target128Mi; zero new updates",
+      "inner_state": "completed",
+      "job": "v11-moe-extend-large-e20-lr0.001-b0.01-s22",
+      "requested_tokens": 268435456,
+      "tokens": 134217728
+    },
+    {
+      "assessment": "request_not_fulfilled; old config target128Mi; zero new updates",
+      "inner_state": "completed",
+      "job": "v11-moe-extend-large-e64-lr0.001-b0.01-s11",
+      "requested_tokens": 268435456,
+      "tokens": 134217728
+    },
+    {
+      "assessment": "request_not_fulfilled; old config target128Mi; zero new updates",
+      "inner_state": "completed",
+      "job": "v11-moe-extend-large-e64-lr0.001-b0.01-s22",
+      "requested_tokens": 268435456,
+      "tokens": 134217728
+    }
+  ],
+  "quota": {
+    "file_grace_expires_epoch": 0,
+    "file_hard": 0,
+    "file_soft": 0,
+    "files": 1656397,
+    "filesystem": "/dev/mapper/ascend_data-data",
+    "grace_expires_epoch": 1795294591,
+    "hard_gib": 800.0,
+    "hard_quota_headroom_gib": 424.9745750427246,
+    "query_returncode": 1,
+    "soft_exceeded": true,
+    "soft_gib": 300.0,
+    "used_gib": 375.0254249572754
+  },
+  "schema": "tide-capacity-v11-status-v1",
+  "training": [
+    {
+      "endpoint": "attained",
+      "error": null,
+      "exposure": 268435456,
+      "job": "v11-extend-r2-large-dense-lr0.001-s11",
+      "lifecycle": "completed",
+      "physical_device": "11",
+      "projection": "runs/v11-extend-r2-large-dense-lr0.001-s11/train/projection.json",
+      "requested_tokens": 268435456,
+      "run": "tl-v11-extend-r2-large-dense-lr0.001-s11",
+      "science": "see separate scoped scientific review",
+      "source_commit": "e3b2ab38c711c7302f2bef6478237da43cacef69",
+      "stage": "confirmation-seen",
+      "stage_state": "completed",
+      "study_id": "TL-CAPACITY-EXPOSURE-v11",
+      "systemd": {
+        "ActiveState": "inactive",
+        "ControlGroup": "",
+        "MainPID": "0",
+        "Slice": "",
+        "SubState": "dead"
+      },
+      "worker": "completed",
+      "worker_error": null
+    },
+    {
+      "endpoint": "attained",
+      "error": null,
+      "exposure": 268435456,
+      "job": "v11-extend-r2-large-dense-lr0.001-s22",
+      "lifecycle": "completed",
+      "physical_device": "1",
+      "projection": "runs/v11-extend-r2-large-dense-lr0.001-s22/train/projection.json",
+      "requested_tokens": 268435456,
+      "run": "tl-v11-extend-r2-large-dense-lr0.001-s22",
+      "science": "see separate scoped scientific review",
+      "source_commit": "e3b2ab38c711c7302f2bef6478237da43cacef69",
+      "stage": "confirmation-seen",
+      "stage_state": "completed",
+      "study_id": "TL-CAPACITY-EXPOSURE-v11",
+      "systemd": {
+        "ActiveState": "inactive",
+        "ControlGroup": "",
+        "MainPID": "0",
+        "Slice": "",
+        "SubState": "dead"
+      },
+      "worker": "completed",
+      "worker_error": null
+    },
+    {
+      "endpoint": "attained",
+      "error": null,
+      "exposure": 268435456,
+      "job": "v11-extend-r2-large-e20-lr0.001-b0.01-s11",
+      "lifecycle": "completed",
+      "physical_device": "7",
+      "projection": "runs/v11-extend-r2-large-e20-lr0.001-b0.01-s11/train/projection.json",
+      "requested_tokens": 268435456,
+      "run": "tl-v11-extend-r2-large-e20-lr0.001-b0.01-s11",
+      "science": "see separate scoped scientific review",
+      "source_commit": "e3b2ab38c711c7302f2bef6478237da43cacef69",
+      "stage": "confirmation-seen",
+      "stage_state": "completed",
+      "study_id": "TL-CAPACITY-EXPOSURE-v11",
+      "systemd": {
+        "ActiveState": "inactive",
+        "ControlGroup": "",
+        "MainPID": "0",
+        "Slice": "",
+        "SubState": "dead"
+      },
+      "worker": "completed",
+      "worker_error": null
+    },
+    {
+      "endpoint": "attained",
+      "error": null,
+      "exposure": 268435456,
+      "job": "v11-extend-r2-large-e20-lr0.001-b0.01-s22",
+      "lifecycle": "completed",
+      "physical_device": "5",
+      "projection": "runs/v11-extend-r2-large-e20-lr0.001-b0.01-s22/train/projection.json",
+      "requested_tokens": 268435456,
+      "run": "tl-v11-extend-r2-large-e20-lr0.001-b0.01-s22",
+      "science": "see separate scoped scientific review",
+      "source_commit": "e3b2ab38c711c7302f2bef6478237da43cacef69",
+      "stage": "confirmation-seen",
+      "stage_state": "completed",
+      "study_id": "TL-CAPACITY-EXPOSURE-v11",
+      "systemd": {
+        "ActiveState": "inactive",
+        "ControlGroup": "",
+        "MainPID": "0",
+        "Slice": "",
+        "SubState": "dead"
+      },
+      "worker": "completed",
+      "worker_error": null
+    },
+    {
+      "endpoint": "attained",
+      "error": null,
+      "exposure": 268435456,
+      "job": "v11-extend-r2-large-e64-lr0.001-b0.01-s11",
+      "lifecycle": "completed",
+      "physical_device": "10",
+      "projection": "runs/v11-extend-r2-large-e64-lr0.001-b0.01-s11/train/projection.json",
+      "requested_tokens": 268435456,
+      "run": "tl-v11-extend-r2-large-e64-lr0.001-b0.01-s11",
+      "science": "see separate scoped scientific review",
+      "source_commit": "e3b2ab38c711c7302f2bef6478237da43cacef69",
+      "stage": "confirmation-seen",
+      "stage_state": "completed",
+      "study_id": "TL-CAPACITY-EXPOSURE-v11",
+      "systemd": {
+        "ActiveState": "inactive",
+        "ControlGroup": "",
+        "MainPID": "0",
+        "Slice": "",
+        "SubState": "dead"
+      },
+      "worker": "completed",
+      "worker_error": null
+    },
+    {
+      "endpoint": "attained",
+      "error": null,
+      "exposure": 268435456,
+      "job": "v11-extend-r2-large-e64-lr0.001-b0.01-s22",
+      "lifecycle": "completed",
+      "physical_device": "4",
+      "projection": "runs/v11-extend-r2-large-e64-lr0.001-b0.01-s22/train/projection.json",
+      "requested_tokens": 268435456,
+      "run": "tl-v11-extend-r2-large-e64-lr0.001-b0.01-s22",
+      "science": "see separate scoped scientific review",
+      "source_commit": "e3b2ab38c711c7302f2bef6478237da43cacef69",
+      "stage": "confirmation-seen",
+      "stage_state": "completed",
+      "study_id": "TL-CAPACITY-EXPOSURE-v11",
+      "systemd": {
+        "ActiveState": "inactive",
+        "ControlGroup": "",
+        "MainPID": "0",
+        "Slice": "",
+        "SubState": "dead"
+      },
+      "worker": "completed",
+      "worker_error": null
+    },
+    {
+      "endpoint": "attained",
+      "error": null,
+      "exposure": 134217728,
+      "job": "v11-moe-balance-small-e64-lr0.003-b0.01-s11",
+      "lifecycle": "completed",
+      "physical_device": "15",
+      "projection": "runs/v11-moe-balance-small-e64-lr0.003-b0.01-s11/train/projection.json",
+      "requested_tokens": 134217728,
+      "run": "tl-v11-moe-balance-small-e64-lr0.003-b0.01-s11",
+      "science": "see separate scoped scientific review",
+      "source_commit": "8bd33dd160ac65238fe7bd4eac3450251fe57c32",
+      "stage": "train",
+      "stage_state": "completed",
+      "study_id": "TL-CAPACITY-BALANCE-v11",
+      "systemd": {
+        "ActiveState": "inactive",
+        "ControlGroup": "",
+        "MainPID": "0",
+        "Slice": "",
+        "SubState": "dead"
+      },
+      "worker": "completed",
+      "worker_error": null
+    },
+    {
+      "endpoint": "attained",
+      "error": null,
+      "exposure": 134217728,
+      "job": "v11-moe-balance-small-e64-lr0.003-b0.01-s22",
+      "lifecycle": "completed",
+      "physical_device": "0",
+      "projection": "runs/v11-moe-balance-small-e64-lr0.003-b0.01-s22/train/projection.json",
+      "requested_tokens": 134217728,
+      "run": "tl-v11-moe-balance-small-e64-lr0.003-b0.01-s22",
+      "science": "see separate scoped scientific review",
+      "source_commit": "8bd33dd160ac65238fe7bd4eac3450251fe57c32",
+      "stage": "train",
+      "stage_state": "completed",
+      "study_id": "TL-CAPACITY-BALANCE-v11",
+      "systemd": {
+        "ActiveState": "inactive",
+        "ControlGroup": "",
+        "MainPID": "0",
+        "Slice": "",
+        "SubState": "dead"
+      },
+      "worker": "completed",
+      "worker_error": null
+    },
+    {
+      "endpoint": "pending_or_failed",
+      "error": null,
+      "exposure": 72856164,
+      "job": "v11-hb-hb-d64-r64-q3-bias0.001-s11",
+      "lifecycle": "running",
+      "physical_device": "6",
+      "projection": "runs/v11-hb-hb-d64-r64-q3-bias0.001-s11/train/projection.json",
+      "requested_tokens": 134217728,
+      "run": "tl-v11-hb-hb-d64-r64-q3-bias0.001-s11",
+      "science": "see separate scoped scientific review",
+      "source_commit": "159190c3154193e4cff72cabf6e2bb23fd498b0a",
+      "stage": "train",
+      "stage_state": "running",
+      "study_id": "TL-CAPACITY-HB-v11",
+      "systemd": {
+        "ActiveState": "active",
+        "ControlGroup": "/user.slice/user-1003.slice/user@1003.service/background.slice/tide-lab-v11-hb-hb-d64-r64-q3-bias0.001-s11.service",
+        "MainPID": "1332959",
+        "Slice": "background.slice",
+        "SubState": "running"
+      },
+      "worker": "running",
+      "worker_error": null
+    },
+    {
+      "endpoint": "pending_or_failed",
+      "error": "RuntimeError('allocation feasibility residual 2.4318695068359375e-05 > 2e-05')",
+      "exposure": 22520520,
+      "job": "v11-hb-hb-d64-r64-q3-bias0.001-s22",
+      "lifecycle": "failed",
+      "physical_device": "14",
+      "projection": "runs/v11-hb-hb-d64-r64-q3-bias0.001-s22/train/projection.json",
+      "requested_tokens": 134217728,
+      "run": "tl-v11-hb-hb-d64-r64-q3-bias0.001-s22",
+      "science": "see separate scoped scientific review",
+      "source_commit": "159190c3154193e4cff72cabf6e2bb23fd498b0a",
+      "stage": "train",
+      "stage_state": "failed",
+      "study_id": "TL-CAPACITY-HB-v11",
+      "systemd": {
+        "ActiveState": "failed",
+        "ControlGroup": "",
+        "MainPID": "0",
+        "Slice": "background.slice",
+        "SubState": "failed"
+      },
+      "worker": "failed",
+      "worker_error": "RuntimeError('stage failed: train')"
+    },
+    {
+      "endpoint": "pending_or_failed",
+      "error": null,
+      "exposure": 75259651,
+      "job": "v11-hb-hb-d64-r64-q3-bias0.01-s11",
+      "lifecycle": "running",
+      "physical_device": "8",
+      "projection": "runs/v11-hb-hb-d64-r64-q3-bias0.01-s11/train/projection.json",
+      "requested_tokens": 134217728,
+      "run": "tl-v11-hb-hb-d64-r64-q3-bias0.01-s11",
+      "science": "see separate scoped scientific review",
+      "source_commit": "159190c3154193e4cff72cabf6e2bb23fd498b0a",
+      "stage": "train",
+      "stage_state": "running",
+      "study_id": "TL-CAPACITY-HB-v11",
+      "systemd": {
+        "ActiveState": "active",
+        "ControlGroup": "/user.slice/user-1003.slice/user@1003.service/background.slice/tide-lab-v11-hb-hb-d64-r64-q3-bias0.01-s11.service",
+        "MainPID": "1333018",
+        "Slice": "background.slice",
+        "SubState": "running"
+      },
+      "worker": "running",
+      "worker_error": null
+    },
+    {
+      "endpoint": "pending_or_failed",
+      "error": "RuntimeError('allocation feasibility residual 2.8133392333984375e-05 > 2e-05')",
+      "exposure": 33856143,
+      "job": "v11-hb-hb-d64-r64-q3-bias0.01-s22",
+      "lifecycle": "failed",
+      "physical_device": "2",
+      "projection": "runs/v11-hb-hb-d64-r64-q3-bias0.01-s22/train/projection.json",
+      "requested_tokens": 134217728,
+      "run": "tl-v11-hb-hb-d64-r64-q3-bias0.01-s22",
+      "science": "see separate scoped scientific review",
+      "source_commit": "159190c3154193e4cff72cabf6e2bb23fd498b0a",
+      "stage": "train",
+      "stage_state": "failed",
+      "study_id": "TL-CAPACITY-HB-v11",
+      "systemd": {
+        "ActiveState": "failed",
+        "ControlGroup": "",
+        "MainPID": "0",
+        "Slice": "background.slice",
+        "SubState": "failed"
+      },
+      "worker": "failed",
+      "worker_error": "RuntimeError('stage failed: train')"
+    }
+  ]
+}

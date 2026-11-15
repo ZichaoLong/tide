@@ -1,3 +1,13 @@
+# 当前：收齐v11剩余HB，分开配方收益和求解器失败
+
+[v11中期审阅](studies/capacity-v11-progress-20261115.md)：8条MoE/dense已完成并有新确认。
+small E64加强balance消除了相对E20的原劣势，但未形成稳定扩容收益；large E64在256Mi小幅领先E20。
+保留两条HB seed11继续原128Mi及确认；当前64Mi干预质量更差，不能仅凭负载更均衡升级结论。
+两条seed22可行性失败保持停止；后继可选有界重放区分quad数值稳定性、路由非平稳与质量问题，
+不由本次状态检查自动提交修复、放宽阈值或再开架构网格。
+
+以下为历史优先级。
+
 # 当前：完成已授权v11，再决定后继
 
 [有限执行表](studies/capacity-utilization-v11.md)及[诊断选择](studies/capacity-v11-diagnosis-and-intervention.md)已落实。

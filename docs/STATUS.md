@@ -1,3 +1,26 @@
+# 当前交接：v11 MoE已完成，HB两运行、两失败
+
+2026-11-15 21:32 +08。[本次进展与结果](studies/capacity-v11-progress-20261115.md) ·
+[可复核证据](evidence/capacity-v11-progress-20261115.json) · [状态快照](evidence/capacity-v11-status-20261115-2130.json)。
+6条大档dense/E20/E64均完成256Mi，两条小E64 balance.01均完成128Mi；新确认24项完成，
+2项HB失败不合格，2项等待正在训练的终点。已完成8个新checkpoint完整SHA和Lens读回通过。
+
+新确认双seed：large E20/E64在256Mi为2.617433/2.600087，小幅差0.017346。
+small E64 balance.001→.01由3.170540改善至3.124068，与E20的3.124865基本相同、两seed相对方向相反。
+支持平衡配方解释原小档劣势，不支持小档稳定容量收益；不得与旧确认绝对值直接比较。
+
+HB全部通过8Mi先导及受训状态恢复，但两个seed22分别在21.477/32.288Mi触发
+quad可行性残差2.432e-5/2.813e-5>原2e-5，均已退出且未重启；根因未重放确认。
+最后保存权重仅为13.327/32Mi，原progress不等于完整可恢复checkpoint。
+两个seed11在NPU6/8继续128Mi，当前约68–72Mi、约6K目标/s；Full/all约3.15–3.17%。
+同seed11的64.0074Mi验证：原HB4.408345、bias.001为4.541100、bias.01为4.575870，尚无质量改善。
+
+批截止仍为11月17日17:43:08+08；约28.8GiB新增，硬配额余量约425GiB。
+本次只读检查和审阅，没有启动/修改/恢复训练或更改阈值。剩余终点与成组确认继续后台运行。
+只读实时状态`python scripts/review_capacity_v11.py`；结果复核`python scripts/review_capacity_v11_progress.py`。
+
+以下为历史交接快照。
+
 # 当前交接：v11容量利用实验已执行，诊断完成，训练并行中
 
 2026-11-15。用户批准的[有限研究表](studies/capacity-utilization-v11.md)已实施。
