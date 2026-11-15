@@ -29,6 +29,9 @@ class Scalar(nn.Module):
 
 
 class Selector(nn.Module):
+    def regional_allocation(self,score,caps,budget):
+        return allocation(score,caps,budget,budget,self.s['allocation_temperature'],self.s['regularizer'],selected(self.s,'ent_alpha',1.))
+
     def __init__(self,n,width,summary_width,spec):
         super().__init__();self.s=dict(spec);self.n=n;self.progress=0;self.last_unsaturated=None
         d=width;ds=summary_width;hidden=spec['hidden_width'];sel=selected(spec,'selection_width',hidden)
@@ -115,7 +118,7 @@ class Selector(nn.Module):
                 fraction=torch.sigmoid(control) if control is not None else s['total_fraction']
                 budget=bottom+fraction*(top-bottom)
                 if mode=='regional_total_zero':c=sorted_send(score,caps,s['k'],total=budget);residual=zero
-                else:c,residual=allocation(score,caps,budget,budget,s['allocation_temperature'],s['regularizer'],selected(s,'ent_alpha',1.))
+                else:c,residual=self.regional_allocation(score,caps,budget)
             else:
                 t=score-(control if control is not None else s['eta'])
                 if mode=='regional_threshold_hard':c=sorted_send(t,caps,s['k']);residual=zero

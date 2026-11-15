@@ -41,7 +41,10 @@ def make_model(config, device):
         options=dict(config.get('implementation',{}))
         attention=options.pop('npu_attention','npu_fusion_augmented') if device.type=='npu' else options.pop('cpu_attention','math')
         options.pop('cpu_attention',None);options.pop('npu_attention',None)
-        if 'routing_balance' in options:
+        if 'mechanism' in options:
+            from .hb_mechanisms import HBMechanismLM
+            model=HBMechanismLM(seed=config['seed'],plan=config['direct']['plan'],attention=attention,**options)
+        elif 'routing_balance' in options:
             from .capacity_balance import CapacityBalancedLM
             model=CapacityBalancedLM(seed=config['seed'],plan=config['direct']['plan'],attention=attention,**options)
         else:model=SpecializedSemanticLM(seed=config['seed'],plan=config['direct']['plan'],attention=attention,**options)

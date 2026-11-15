@@ -1,0 +1,15 @@
+{
+  "aggregate_compute_cap": null,
+  "deadline_epoch": 1794928087.6161592,
+  "max_new_disk_gib": 96,
+  "max_npu_workers": 12,
+  "max_parameters": 200000000,
+  "max_training": 38,
+  "max_variants": 19,
+  "maximum_tokens_per_trajectory": 134217728,
+  "minimum_quota_headroom_gib": 200,
+  "schema": "tide-hb-v12-budget-v1",
+  "started_epoch": 1794755287.6161592,
+  "target_new_disk_gib": 64,
+  "target_tokens": 134217728
+}

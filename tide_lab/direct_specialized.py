@@ -131,8 +131,20 @@ class SpecializedSemanticLM(DirectSemanticLM):
         content=content+s['alpha_ff']*extra
         return dict(x=x,p=p,memory=values,mass=masses,content=content)
 
+    def embed(self,ids):
+        return self.embedding(ids)
+
+    def readout(self,values,mass,embedding):
+        outputs=self.plan['graph']['outputs'];w=torch.stack([mass[v] for v in outputs])
+        return (w.unsqueeze(-1)*torch.stack([values[v] for v in outputs])).sum(0)/w.sum(0).clamp_min(1).unsqueeze(-1)
+
+    def parameter_uses(self,j,received,full,w):
+        pf,pr,ps,pe=self.role_counts[j]
+        return (full.sum()*pf,received.sum()*pr,
+                received.any(0).sum()*ps+(w>0).sum()*pe)
+
     def _forward(self,ids,floors):
-        embedding=self.embedding(ids);b,l,d=embedding.shape;one=embedding.new_ones(b,l)
+        embedding=self.embed(ids);b,l,d=embedding.shape;one=embedding.new_ones(b,l)
         values={-1:embedding};mass={-1:one};counts=[];errors=[];extra=[]
         for j in self.order:
             slots=self.connections[j]
@@ -149,12 +161,11 @@ class SpecializedSemanticLM(DirectSemanticLM):
             unsat=self.selectors[j].last_unsaturated
             counts.append(torch.stack((C,A,c.sum(),(c==0).sum(),error,
                 unsat if unsat is not None else r.new_zeros(()),self.selectors[j].last_support_errors)).detach())
-            extra.append(torch.stack((A*pf,C*pr,received.any(0).sum()*ps+(w>0).sum()*pe,
+            extra.append(torch.stack((*self.parameter_uses(j,received,full,w),
                 ((w>0)*getattr(self,'_degrees_'+str(j))[:,None,None]).sum(),
                 (full*hist).sum(),2*(received*hist).sum(),
                 (((c>0)&(c<(self.selectors[j].s['gamma_max']*r.clamp(0,1)).clamp_max(1))).sum(0)>1).sum())).detach())
-        outputs=self.plan['graph']['outputs'];w=torch.stack([mass[v] for v in outputs])
-        hidden=(w.unsqueeze(-1)*torch.stack([values[v] for v in outputs])).sum(0)/w.sum(0).clamp_min(1).unsqueeze(-1)
+        hidden=self.readout(values,mass,embedding)
         floor_total=torch.stack(floors).sum() if floors else hidden.new_zeros(())
         observation=torch.cat((torch.stack(counts).flatten(),torch.stack(extra).sum(0),floor_total.reshape(1))).detach().cpu().tolist()
         nr=len(self.members);rows=[observation[7*i:7*i+7] for i in range(nr)]

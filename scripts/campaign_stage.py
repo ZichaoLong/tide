@@ -39,7 +39,8 @@ def admission(model,c,device,out):
     b=synthetic_batch(2,3,991,device);model.eval();logits=model(b['input_ids'])
     checks=dict(analytic_ce_vjp=ce_formula(logits,b['labels']))
     opt=optimizer_for(model,c)
-    if model.embedding.weight is not model.head.weight:raise AssertionError('tied embedding/head alias lost')
+    tied=c.get('head_tied',True)
+    if (model.embedding.weight is model.head.weight)!=tied:raise AssertionError('declared embedding/head alias contract lost')
     before=model.embedding.weight.detach().clone()
     update(model,opt,b,c,0,device)
     if torch.equal(before,model.embedding.weight):raise AssertionError('optimizer did not update tied head')
@@ -189,6 +190,7 @@ def train(a,c,model,opt,device,ident,metrics,result):
             if hasattr(model,'selectors'):
                 grad=[p.grad.detach().square().sum() for p in model.selectors.parameters() if p.grad is not None]
                 values['gradient/router_l2']=float(torch.stack(grad).sum().sqrt()) if grad else 0.
+            if hasattr(model,'gradient_metrics'):values.update(model.gradient_metrics())
             metrics.log(progress['step'],values)
         atomic_json(a.output/'progress.json',dict(progress,updated_at=now(),last_update=values,
             training_seconds=training_seconds,elapsed_seconds=time.monotonic()-started))

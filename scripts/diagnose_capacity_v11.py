@@ -77,8 +77,9 @@ def main(a):
     c=json.loads((root/case['config']).read_text());a.output.mkdir(parents=True,exist_ok=False)
     report=dict(schema='tide-capacity-diagnostic-v11',state='running',started_at=now(),case=case,source=source_identity(),installation=installed_identity(),
         scope='512 fixed train sequences plus one disposable global64 update; no lifetime-use inference, no confirmation/test access; parameter deltas include weight decay and optimizer history')
-    atomic_json(a.output/'result.json',report);run='tl-v11-diag-'+case['id'];metrics=Metrics(a.output,run)
-    atomic_json(a.output/'manifest.json',dict(project='tide-learning-lab',run_id=run,name=run,group='TL-CAPACITY-DIAG-v11',study_id='TL-CAPACITY-DIAG-v11',config=c))
+    atomic_json(a.output/'result.json',report);run=getattr(a,'run_id',None) or 'tl-v11-diag-'+case['id'];metrics=Metrics(a.output,run)
+    group=getattr(a,'recording_group',None) or 'TL-CAPACITY-DIAG-v11'
+    atomic_json(a.output/'manifest.json',dict(project='tide-learning-lab',run_id=run,name=run,group=group,study_id=group,config=c))
     try:
         device=runtime(c['device'],c['threads'],c['seed']);state=torch.load(root/case['checkpoint'],map_location='cpu',weights_only=False)
         if digest(root/case['config'])!=state['identity']['config_sha256'] or digest(a.data/'data-lock.json')!=state['identity']['data_lock_sha256']:

@@ -1,0 +1,352 @@
+{
+  "cases": [
+    {
+      "config": "configs/studies/language/hb-v12/configs/base-q3-s11.json",
+      "id": "base-q3-s11",
+      "parameters": 50324128,
+      "seed": 11,
+      "study_id": "TL-HB-CONTROL-v12",
+      "variant": "base-q3",
+      "width": 64
+    },
+    {
+      "config": "configs/studies/language/hb-v12/configs/base-q3-s22.json",
+      "id": "base-q3-s22",
+      "parameters": 50324128,
+      "seed": 22,
+      "study_id": "TL-HB-CONTROL-v12",
+      "variant": "base-q3",
+      "width": 64
+    },
+    {
+      "config": "configs/studies/language/hb-v12/configs/base-q10-s11.json",
+      "id": "base-q10-s11",
+      "parameters": 22235704,
+      "seed": 11,
+      "study_id": "TL-HB-CONTROL-v12",
+      "variant": "base-q10",
+      "width": 64
+    },
+    {
+      "config": "configs/studies/language/hb-v12/configs/base-q10-s22.json",
+      "id": "base-q10-s22",
+      "parameters": 22235704,
+      "seed": 22,
+      "study_id": "TL-HB-CONTROL-v12",
+      "variant": "base-q10",
+      "width": 64
+    },
+    {
+      "config": "configs/studies/language/hb-v12/configs/base128-q3-s11.json",
+      "id": "base128-q3-s11",
+      "parameters": 171459232,
+      "seed": 11,
+      "study_id": "TL-HB-WIDTH-v12",
+      "variant": "base128-q3",
+      "width": 128
+    },
+    {
+      "config": "configs/studies/language/hb-v12/configs/base128-q3-s22.json",
+      "id": "base128-q3-s22",
+      "parameters": 171459232,
+      "seed": 22,
+      "study_id": "TL-HB-WIDTH-v12",
+      "variant": "base128-q3",
+      "width": 128
+    },
+    {
+      "config": "configs/studies/language/hb-v12/configs/share0-q3-s11.json",
+      "id": "share0-q3-s11",
+      "parameters": 19358368,
+      "seed": 11,
+      "study_id": "TL-HB-SHARING-v12",
+      "variant": "share0-q3",
+      "width": 64
+    },
+    {
+      "config": "configs/studies/language/hb-v12/configs/share0-q3-s22.json",
+      "id": "share0-q3-s22",
+      "parameters": 19358368,
+      "seed": 22,
+      "study_id": "TL-HB-SHARING-v12",
+      "variant": "share0-q3",
+      "width": 64
+    },
+    {
+      "config": "configs/studies/language/hb-v12/configs/share8-q3-s11.json",
+      "id": "share8-q3-s11",
+      "parameters": 24273568,
+      "seed": 11,
+      "study_id": "TL-HB-SHARING-v12",
+      "variant": "share8-q3",
+      "width": 64
+    },
+    {
+      "config": "configs/studies/language/hb-v12/configs/share8-q3-s22.json",
+      "id": "share8-q3-s22",
+      "parameters": 24273568,
+      "seed": 22,
+      "study_id": "TL-HB-SHARING-v12",
+      "variant": "share8-q3",
+      "width": 64
+    },
+    {
+      "config": "configs/studies/language/hb-v12/configs/fullshare8-q3-s11.json",
+      "id": "fullshare8-q3-s11",
+      "parameters": 20423328,
+      "seed": 11,
+      "study_id": "TL-HB-SHARING-v12",
+      "variant": "fullshare8-q3",
+      "width": 64
+    },
+    {
+      "config": "configs/studies/language/hb-v12/configs/fullshare8-q3-s22.json",
+      "id": "fullshare8-q3-s22",
+      "parameters": 20423328,
+      "seed": 22,
+      "study_id": "TL-HB-SHARING-v12",
+      "variant": "fullshare8-q3",
+      "width": 64
+    },
+    {
+      "config": "configs/studies/language/hb-v12/configs/share8-q10-s11.json",
+      "id": "share8-q10-s11",
+      "parameters": 11115064,
+      "seed": 11,
+      "study_id": "TL-HB-SHARING-v12",
+      "variant": "share8-q10",
+      "width": 64
+    },
+    {
+      "config": "configs/studies/language/hb-v12/configs/share8-q10-s22.json",
+      "id": "share8-q10-s22",
+      "parameters": 11115064,
+      "seed": 22,
+      "study_id": "TL-HB-SHARING-v12",
+      "variant": "share8-q10",
+      "width": 64
+    },
+    {
+      "config": "configs/studies/language/hb-v12/configs/share8-d128-q3-s11.json",
+      "id": "share8-d128-q3-s11",
+      "parameters": 57426592,
+      "seed": 11,
+      "study_id": "TL-HB-WIDTH-v12",
+      "variant": "share8-d128-q3",
+      "width": 128
+    },
+    {
+      "config": "configs/studies/language/hb-v12/configs/share8-d128-q3-s22.json",
+      "id": "share8-d128-q3-s22",
+      "parameters": 57426592,
+      "seed": 22,
+      "study_id": "TL-HB-WIDTH-v12",
+      "variant": "share8-d128-q3",
+      "width": 128
+    },
+    {
+      "config": "configs/studies/language/hb-v12/configs/share8-d192-q3-s11.json",
+      "id": "share8-d192-q3-s11",
+      "parameters": 102212256,
+      "seed": 11,
+      "study_id": "TL-HB-WIDTH-v12",
+      "variant": "share8-d192-q3",
+      "width": 192
+    },
+    {
+      "config": "configs/studies/language/hb-v12/configs/share8-d192-q3-s22.json",
+      "id": "share8-d192-q3-s22",
+      "parameters": 102212256,
+      "seed": 22,
+      "study_id": "TL-HB-WIDTH-v12",
+      "variant": "share8-d192-q3",
+      "width": 192
+    },
+    {
+      "config": "configs/studies/language/hb-v12/configs/budget0-q3-s11.json",
+      "id": "budget0-q3-s11",
+      "parameters": 50324128,
+      "seed": 11,
+      "study_id": "TL-HB-ROUTING-v12",
+      "variant": "budget0-q3",
+      "width": 64
+    },
+    {
+      "config": "configs/studies/language/hb-v12/configs/budget0-q3-s22.json",
+      "id": "budget0-q3-s22",
+      "parameters": 50324128,
+      "seed": 22,
+      "study_id": "TL-HB-ROUTING-v12",
+      "variant": "budget0-q3",
+      "width": 64
+    },
+    {
+      "config": "configs/studies/language/hb-v12/configs/top2-q3-s11.json",
+      "id": "top2-q3-s11",
+      "parameters": 50324128,
+      "seed": 11,
+      "study_id": "TL-HB-ROUTING-v12",
+      "variant": "top2-q3",
+      "width": 64
+    },
+    {
+      "config": "configs/studies/language/hb-v12/configs/top2-q3-s22.json",
+      "id": "top2-q3-s22",
+      "parameters": 50324128,
+      "seed": 22,
+      "study_id": "TL-HB-ROUTING-v12",
+      "variant": "top2-q3",
+      "width": 64
+    },
+    {
+      "config": "configs/studies/language/hb-v12/configs/share8-budget0-q3-s11.json",
+      "id": "share8-budget0-q3-s11",
+      "parameters": 24273568,
+      "seed": 11,
+      "study_id": "TL-HB-INTERACTION-v12",
+      "variant": "share8-budget0-q3",
+      "width": 64
+    },
+    {
+      "config": "configs/studies/language/hb-v12/configs/share8-budget0-q3-s22.json",
+      "id": "share8-budget0-q3-s22",
+      "parameters": 24273568,
+      "seed": 22,
+      "study_id": "TL-HB-INTERACTION-v12",
+      "variant": "share8-budget0-q3",
+      "width": 64
+    },
+    {
+      "config": "configs/studies/language/hb-v12/configs/share8-top2-q3-s11.json",
+      "id": "share8-top2-q3-s11",
+      "parameters": 24273568,
+      "seed": 11,
+      "study_id": "TL-HB-INTERACTION-v12",
+      "variant": "share8-top2-q3",
+      "width": 64
+    },
+    {
+      "config": "configs/studies/language/hb-v12/configs/share8-top2-q3-s22.json",
+      "id": "share8-top2-q3-s22",
+      "parameters": 24273568,
+      "seed": 22,
+      "study_id": "TL-HB-INTERACTION-v12",
+      "variant": "share8-top2-q3",
+      "width": 64
+    },
+    {
+      "config": "configs/studies/language/hb-v12/configs/readcontent-q3-s11.json",
+      "id": "readcontent-q3-s11",
+      "parameters": 52945568,
+      "seed": 11,
+      "study_id": "TL-HB-INFORMATION-v12",
+      "variant": "readcontent-q3",
+      "width": 64
+    },
+    {
+      "config": "configs/studies/language/hb-v12/configs/readcontent-q3-s22.json",
+      "id": "readcontent-q3-s22",
+      "parameters": 52945568,
+      "seed": 22,
+      "study_id": "TL-HB-INFORMATION-v12",
+      "variant": "readcontent-q3",
+      "width": 64
+    },
+    {
+      "config": "configs/studies/language/hb-v12/configs/untied-q3-s11.json",
+      "id": "untied-q3-s11",
+      "parameters": 50586272,
+      "seed": 11,
+      "study_id": "TL-HB-READOUT-v12",
+      "variant": "untied-q3",
+      "width": 64
+    },
+    {
+      "config": "configs/studies/language/hb-v12/configs/untied-q3-s22.json",
+      "id": "untied-q3-s22",
+      "parameters": 50586272,
+      "seed": 22,
+      "study_id": "TL-HB-READOUT-v12",
+      "variant": "untied-q3",
+      "width": 64
+    },
+    {
+      "config": "configs/studies/language/hb-v12/configs/ports4-q3-s11.json",
+      "id": "ports4-q3-s11",
+      "parameters": 51372704,
+      "seed": 11,
+      "study_id": "TL-HB-READOUT-v12",
+      "variant": "ports4-q3",
+      "width": 64
+    },
+    {
+      "config": "configs/studies/language/hb-v12/configs/ports4-q3-s22.json",
+      "id": "ports4-q3-s22",
+      "parameters": 51372704,
+      "seed": 22,
+      "study_id": "TL-HB-READOUT-v12",
+      "variant": "ports4-q3",
+      "width": 64
+    },
+    {
+      "config": "configs/studies/language/hb-v12/configs/position-q3-s11.json",
+      "id": "position-q3-s11",
+      "parameters": 50324128,
+      "seed": 11,
+      "study_id": "TL-HB-INFORMATION-v12",
+      "variant": "position-q3",
+      "width": 64
+    },
+    {
+      "config": "configs/studies/language/hb-v12/configs/position-q3-s22.json",
+      "id": "position-q3-s22",
+      "parameters": 50324128,
+      "seed": 22,
+      "study_id": "TL-HB-INFORMATION-v12",
+      "variant": "position-q3",
+      "width": 64
+    },
+    {
+      "config": "configs/studies/language/hb-v12/configs/residual-q3-s11.json",
+      "id": "residual-q3-s11",
+      "parameters": 50324128,
+      "seed": 11,
+      "study_id": "TL-HB-INFORMATION-v12",
+      "variant": "residual-q3",
+      "width": 64
+    },
+    {
+      "config": "configs/studies/language/hb-v12/configs/residual-q3-s22.json",
+      "id": "residual-q3-s22",
+      "parameters": 50324128,
+      "seed": 22,
+      "study_id": "TL-HB-INFORMATION-v12",
+      "variant": "residual-q3",
+      "width": 64
+    },
+    {
+      "config": "configs/studies/language/hb-v12/configs/share8-lr3-q3-s11.json",
+      "id": "share8-lr3-q3-s11",
+      "parameters": 24273568,
+      "seed": 11,
+      "study_id": "TL-HB-RECIPE-v12",
+      "variant": "share8-lr3-q3",
+      "width": 64
+    },
+    {
+      "config": "configs/studies/language/hb-v12/configs/share8-lr3-q3-s22.json",
+      "id": "share8-lr3-q3-s22",
+      "parameters": 24273568,
+      "seed": 22,
+      "study_id": "TL-HB-RECIPE-v12",
+      "variant": "share8-lr3-q3",
+      "width": 64
+    }
+  ],
+  "confirmation": "new262K whole-document split excluding prior v6/v9/v11 and official documents; test sealed",
+  "created_at": "2026-11-15T15:08:07.624645+00:00",
+  "estimated_checkpoint_gib": 40.584057569503784,
+  "schema": "tide-hb-v12-table-v1",
+  "scope": "dense masked physical execution; weight-sharing unique active parameters and application work separately interpreted",
+  "selection": "all19 named variants x seeds11/22; execution/pilot gates only, no quality ranking exclusion or automatic extension"
+}

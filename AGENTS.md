@@ -1,5 +1,14 @@
 # Working on tide-learning-lab
 
+- Latest user approval authorizes the fuller HB mechanism campaign in
+  `docs/studies/hb-mechanisms-v12.md`:19 named variants x seeds11/22, each bounded
+  at128Mi, shared48h,<=200M parameters, shared12 NPU slots, no aggregate compute
+  cap,64GiB disk target/96GiB stop and>=200GiB hard-quota headroom. Implement and
+  submit directly after finite checks/calibration. This supersedes v11's
+  single-intervention restriction for NEW v12 work only. Preserve active v11
+  frozen inputs, original failures and2e-5 feasibility threshold. Explicit
+  sharing/readout/top2 variants are different functions, not foundation fixes.
+
 - This is the independent experiment branch of `ZichaoLong/tide`, not the foundation source tree.
 - Re-entry: `git status --short --branch`; read `docs/RESEARCH_CHARTER.md`, `docs/STATUS.md`, `docs/ROADMAP.md`,
   `docs/research-design.md`, `docs/research-map.md` and `dependencies/foundation-source.json`.

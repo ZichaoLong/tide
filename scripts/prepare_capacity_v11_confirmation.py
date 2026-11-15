@@ -17,7 +17,7 @@ def main(a):
     report=dict(schema='tide-v11-confirmation-preparation-v1',state='running',started_at=now(),test_access=False)
     atomic_json(a.output/'state.json',report)
     try:
-        locks=[root/'runs/v9-data-r3/data-lock.json',root/'runs/v6-data-final/data-lock.json']
+        locks=[root/'runs/v9-data-r3/data-lock.json',root/'runs/v6-data-final/data-lock.json',*getattr(a,'exclude_lock',[])]
         old=json.loads(locks[0].read_text());official=root/'runs/lm-data-v1/documents/documents.jsonl'
         known=[json.loads(s) for s in official.read_text().splitlines()]
         for p in locks:
@@ -31,7 +31,8 @@ def main(a):
             h=d['normalized_sha256'];t=title(d)
             if h in hs or t in ts or h in seen_h or t in seen_t:continue
             seen_h.add(h);seen_t.add(t);pool.append(d)
-        pool.sort(key=lambda d:text_hash('v11-fresh-confirmation:'+d['normalized_sha256']))
+        salt=getattr(a,'salt','v11-fresh-confirmation')
+        pool.sort(key=lambda d:text_hash(salt+':'+d['normalized_sha256']))
         tokenizer_path=root/'runs/lm-data-v1/tokens/tokenizer-a.json';tok=Tokenizer.from_file(str(tokenizer_path))
         file=a.output/'confirmation.u16';spans=[];count=0;target=262144
         with file.open('xb') as f:
@@ -48,7 +49,7 @@ def main(a):
         for s,v in splits.items():(a.output/v['file']).symlink_to(root/'runs/v9-data-r3'/v['file'])
         file.chmod(0o444);splits['confirmation']=dict(file=file.name,sha256=digest(file),tokens=count,documents=spans)
         lock=dict(old,splits=splits,created_at=now(),training_parent_lock_sha256=digest(locks[0]),
-            tokenizer_sha256=digest(tokenizer_path),preparation='v11-fresh-confirmation whole-document normalized hash AND title exclusion; unused W103 train articles',
+            tokenizer_sha256=digest(tokenizer_path),preparation=salt+' whole-document normalized hash AND title exclusion; unused W103 train articles',
             input_locks=[dict(path=str(p.relative_to(root)),sha256=digest(p)) for p in locks],
             official_documents_sha256=digest(official),raw_sha256=digest(raw),
             limitations='Exact hash/title exclusions include entire truncated train-tail article. Near-duplicate paraphrases not certified absent. Original test tokens never opened.')
@@ -60,4 +61,5 @@ def main(a):
 if __name__=='__main__':
     p=argparse.ArgumentParser()
     for n in ('root','output'):p.add_argument('--'+n,type=Path,required=True)
+    p.add_argument('--exclude-lock',type=Path,action='append',default=[]);p.add_argument('--salt',default='v11-fresh-confirmation')
     p.add_argument('--deadline-epoch',type=float,required=True);main(p.parse_args())
