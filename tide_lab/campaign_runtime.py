@@ -25,6 +25,11 @@ def make_model(config, device):
         model=TideLanguageModel(core_options(config),seed=config['seed'])
     elif config['kind']=='transformer':
         model=SmallTransformer(seed=config['seed'],attention_backend=(config.get('npu_transformer_attention','eager') if device.type=='npu' else 'eager'),**config['transformer'])
+    elif config['kind']=='moe':
+        from .moe import MoETransformer
+        options=dict(config['moe'])
+        if device.type=='cpu':options['expert_implementation']='reference'
+        model=MoETransformer(seed=config['seed'],attention_backend=(config.get('npu_transformer_attention','eager') if device.type=='npu' else 'eager'),**options)
     elif config['kind']=='direct_graph':
         from .direct_graph_cost import DirectGraphLM
         model=DirectGraphLM(seed=config['seed'],**config['direct'])
@@ -52,8 +57,11 @@ def optimizer_for(model,config):
     c=config['training']
     if c.get('decay_policy','all')=='matrix_only':
         # Tied embeddings occur once; normalization scales and biases are not decayed.
-        params=[dict(params=[p for p in params if p.ndim>=2],weight_decay=c['weight_decay']),
-                dict(params=[p for p in params if p.ndim<2],weight_decay=0.)]
+        excluded=model.no_weight_decay() if hasattr(model,'no_weight_decay') else set()
+        named=[(n,p) for n,p in model.named_parameters() if p.requires_grad]
+        decay=[p for n,p in named if p.ndim>=2 and n not in excluded]
+        no_decay=[p for n,p in named if p.ndim<2 or n in excluded]
+        params=[dict(params=decay,weight_decay=c['weight_decay']),dict(params=no_decay,weight_decay=0.)]
     elif c.get('decay_policy','all')!='all':raise ValueError('unknown decay policy')
     return torch.optim.AdamW(params,lr=c['lr'],eps=c['eps'],weight_decay=c['weight_decay'],
                             betas=tuple(c.get('betas',(.9,.999))),foreach=c.get('optimizer_foreach',False))
@@ -68,6 +76,7 @@ def learning_rate(config,tokens):
 
 def update(model,opt,batch,config,tokens,device):
     """Full device transfer is owned by caller; timing includes model/loss/VJP/AdamW."""
+    if config['kind']=='moe':return logical_update(model,opt,[batch],config,tokens,device)
     if hasattr(model,'set_progress'):model.set_progress(tokens)
     model.train();synchronize(device);start=time.monotonic()
     count=int((batch['labels']!=-100).sum())
@@ -96,7 +105,11 @@ def logical_update(model,opt,batches,config,tokens,device):
     lr=learning_rate(config,tokens+count)
     for group in opt.param_groups:group['lr']=lr
     opt.zero_grad(set_to_none=True);total=0.;work={}
-    for b in batches:
+    if config['kind']=='moe':
+        from .moe import objective_backward
+        total,work,actual=objective_backward(model,batches,config)
+        if actual!=count:raise AssertionError('MoE target count changed')
+    for b in ([] if config['kind']=='moe' else batches):
         logits=model(b['input_ids'])
         loss=F.cross_entropy(logits.flatten(0,1),b['labels'].flatten(),ignore_index=-100,reduction='sum')/count
         if not torch.isfinite(loss):raise FloatingPointError('nonfinite logical-batch loss')

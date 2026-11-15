@@ -46,6 +46,9 @@ def admission(model,c,device,out):
     if c['kind']=='tide':
         checks['core']=core_axes(model.encoder,core_options(c),c['seed'],device,require_all_regions=False)
     else:
+        if c['kind']=='moe':
+            from tide_lab.moe_checks import mechanism_checks
+            checks['moe_mechanisms']=mechanism_checks(device)
         reference=make_model(c,torch.device('cpu'))
         reference.load_state_dict(cpu_tree(model.state_dict()))
         # A token-derived activity schedule is not a parameter tensor. Loading
@@ -81,17 +84,17 @@ def admission(model,c,device,out):
     return dict(checks=checks,admitted_for_finite_exploration=True,
         scope='actual topology/modules/width/backend, independent B2 L3; inactive routed regions recorded, not required to all fire',
         axes=dict(execution='passed',strict_numerical='see checks; original 1e-6/1e-5 and zero causal thresholds retained',
-            discrete_semantics='passed' if c['kind']=='tide' else ('passed_static_unit_input_fixture; general_continuation_unchecked' if c['kind'] in ('direct_semantic','direct_specialized') else 'static_dense_graph; no learned routing' if c['kind']=='direct_graph' else 'not_applicable'),mechanisms='passed',
+            discrete_semantics='passed_dropless_top2_fixture' if c['kind']=='moe' else ('passed' if c['kind']=='tide' else ('passed_static_unit_input_fixture; general_continuation_unchecked' if c['kind'] in ('direct_semantic','direct_specialized') else 'static_dense_graph; no learned routing' if c['kind']=='direct_graph' else 'not_applicable')),mechanisms='passed',
             recovery='separate_fresh_process_probe_required',learning='unchecked'))
 
 
 def probe(a,c,model,opt,device,ident):
-    corpus=Corpus(a.data,3,max_train_documents=8);progress=dict(step=0,tokens=0,cursor=0,probe=True)
+    corpus=Corpus(a.data,c['training'].get('full_probe_length',3),max_train_documents=8);progress=dict(step=0,tokens=0,cursor=0,probe=True)
     if a.resume:progress=restore(a.resume,model,opt,ident,device)
     if not progress.get('probe'):raise ValueError('probe cannot restore a training trajectory')
     losses=[]
     for _ in range(a.steps):
-        ids,cursor=corpus.sample_ids(progress['cursor'],2,c['seed'])
+        ids,cursor=corpus.sample_ids(progress['cursor'],c['training'].get('full_probe_batch',2),c['seed'])
         b=corpus.batch('train',ids,device)
         row=update(model,opt,b,c,progress['tokens'],device)
         progress.update(step=progress['step']+1,tokens=progress['tokens']+row['tokens'],cursor=cursor)
@@ -160,6 +163,7 @@ def train(a,c,model,opt,device,ident,metrics,result):
             b=corpus.batch('train',subset,device,token_limit=remain)
             remain-=int((b['labels']!=-100).sum());batches.append(b)
         if hasattr(model,'encoder'):model.encoder.observe=progress['step']%t['log_every']==0
+        if c['kind']=='moe':model.observe=progress['step']<=2 or progress['step']%t['log_every']==0
         row=logical_update(model,opt,batches,c,progress['tokens'],device)
         training_seconds+=row['seconds'];progress.update(step=progress['step']+1,
             tokens=progress['tokens']+row['tokens'],cursor=cursor,

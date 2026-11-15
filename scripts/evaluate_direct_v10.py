@@ -20,7 +20,7 @@ def main(a):
     atomic_json(a.output/'result.json',report)
     metrics=Metrics(a.output,run_id)
     atomic_json(a.output/'manifest.json',dict(schema='tide-lab-run-v1',project='tide-learning-lab',run_id=run_id,name=run_id,
-        group='TL-CONFIRMATION-v10',study_id='TL-CONFIRMATION-v10',config=c,created_at=now()))
+        group=getattr(a,'recording_group',None) or 'TL-CONFIRMATION-v10',study_id=getattr(a,'recording_group',None) or 'TL-CONFIRMATION-v10',config=c,created_at=now()))
     try:
         state=torch.load(a.checkpoint,map_location='cpu',weights_only=False)
         if state['identity']['config_sha256']!=digest(a.config) or state['identity']['data_lock_sha256']!=digest(a.data/'data-lock.json'):
@@ -45,4 +45,5 @@ if __name__=='__main__':
     p=argparse.ArgumentParser()
     for n in ('config','checkpoint','data','output'):p.add_argument('--'+n,type=Path,required=True)
     p.add_argument('--lens-cli',required=True);p.add_argument('--run-id',required=True)
+    p.add_argument('--recording-group')
     p.add_argument('--deadline-epoch',type=float,required=True);main(p.parse_args())

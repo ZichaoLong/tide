@@ -8,7 +8,9 @@ from .train import cpu_tree
 
 
 def finite_delta(a,b,atol,rtol):
-    a=a.detach().double().cpu();b=b.detach().double().cpu()
+    # Convert on CPU: the NPU does not implement FP64. Casting before transfer
+    # produced an implicit device cast warning instead of a double comparison.
+    a=a.detach().cpu().double();b=b.detach().cpu().double()
     if a.shape!=b.shape or not torch.isfinite(a).all() or not torch.isfinite(b).all():
         raise AssertionError('shape or nonfinite independent comparison')
     error=(a-b).abs();bad=error>atol+rtol*b.abs()

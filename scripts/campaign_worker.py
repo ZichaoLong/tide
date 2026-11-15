@@ -109,6 +109,10 @@ class Worker:
                 extra=['--steps','2','--resume',out/'probe-split/checkpoint.pt']) if split else None
             recovery=dict(state='failed',config_sha256=digest(case['config']),
                 scope='three B2/L3 real-data updates, same backend/config/install, fresh processes; full trajectory unchecked')
+            if full and full.get('progress'):
+                cfg=json.loads(Path(case['config']).read_text())
+                if cfg['training'].get('full_probe_batch'):
+                    recovery['scope']=f"three B{cfg['training']['full_probe_batch']}/L{cfg['training']['full_probe_length']} real-data task+aux updates, same backend/config/install, fresh processes; full trajectory unchecked"
             if full and split and resumed:
                 recovery['identity']=full['identity']
                 # Keep this comparison outside model-owning subprocesses.
