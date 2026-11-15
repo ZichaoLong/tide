@@ -152,3 +152,11 @@
   parents carry explicit ancestry; old failures/source remain unchanged. Keep the
   original 48h deadline and global 12-slot policy, 24GiB repair-only disk ceiling;
   no automatic repair extensions or changes to the original controller's decisions.
+
+- The subsequent 2026-11-15 approval authorizes `docs/studies/moe-controls-proposal.md`:
+  implement and calibrate ordinary top2 Transformer-MoE (two sizes, E20/E64) and matched
+  dense controls, at most30 seed33 8Mi screens /12 selected32Mi continuations /12 fresh
+  seed11/22 128Mi main trajectories, then independent262K confirmation. New48h wall
+  deadline, at most8 new workers sharing the existing12-slot namespace; no aggregate
+  compute caps,64GiB disk target/96GiB stop and>=200GiB hard-quota headroom. No automatic
+  256Mi MoE extension. Preserve active v10 source, old failures and independent axes.

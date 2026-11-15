@@ -1,0 +1,14 @@
+{
+  "schema": "tide-moe-budget-v1",
+  "started_epoch": 1794704708.0,
+  "deadline_epoch": 1794877508.0,
+  "max_npu_workers": 8,
+  "global_slot_limit": 12,
+  "target_new_disk_gib": 64,
+  "max_new_disk_gib": 96,
+  "minimum_quota_headroom_gib": 200,
+  "max_parameters": 200000000,
+  "aggregate_compute_caps": null,
+  "main_tokens": 134217728,
+  "automatic_extension": false
+}
