@@ -74,13 +74,14 @@ class Campaign:
             terminal=o['termination_verified_now'] and o['state'].get('state') in TERMINAL,
             physical_id=(o.get('queue') or {}).get('physical_id'))
 
-    def launch(self,job,inputs,resource,command):
+    def launch(self,job,inputs,resource,command,execution_source=None):
         self.guard();cap=int(self.deadline-time.time()-30)
-        argv=[sys.executable,str(self.source/'scripts/job.py'),'submit','--name',job,'--source',str(self.source),
-            '--output',str(self.root/'artifacts/jobs'/job),'--env-script',str(self.source/'scripts/env.sh'),
+        source=Path(execution_source) if execution_source else self.source
+        argv=[sys.executable,str(self.source/'scripts/job.py'),'submit','--name',job,'--source',str(source),
+            '--output',str(self.root/'artifacts/jobs'/job),'--env-script',str(source/'scripts/env.sh'),
             '--env','TIDE_LAB_VENV='+str(self.root/'.venv-positive-floor-v1'),
             '--env','TIDE_LAB_RESOURCE_POLICY='+str(resource),'--device','npu','--threads','4','--memory-gib','72',
-            '--timeout',str(cap),'--wait-seconds',str(cap-120),'--queue-helper',str(self.source/'scripts/run_on_light_device.py')]
+            '--timeout',str(cap),'--wait-seconds',str(cap-120),'--queue-helper',str(source/'scripts/run_on_light_device.py')]
         for p in inputs:argv+=['--input',str(p)]
         result=subprocess.run(argv+['--',*command],capture_output=True,text=True)
         if result.returncode:raise RuntimeError(result.stderr+' '+result.stdout)
@@ -88,8 +89,11 @@ class Campaign:
         print(json.dumps(dict(submitted=job,at=now())),flush=True)
 
     def submit(self,phase,c,until,parent=None):
-        cid=c['id'];job='moe-'+phase+'-'+cid;dest=self.a.output/phase;dest.mkdir(exist_ok=True)
+        cid=c['id'];job='moe-r2-'+phase+'-'+cid;dest=self.a.output/phase;dest.mkdir(exist_ok=True)
         config=self.cfg/'table/configs'/(cid+'.json');out=self.root/'runs'/job
+        execution_source=str(self.source)
+        if parent and parent.get('execution_source'):
+            execution_source=parent['execution_source'];config=Path(parent['config'])
         args=['--until-tokens',str(until),'--run-id','tl-'+job,'--recording-group',c['study_id']]
         row=dict(id=cid,config=str(config),output=str(out),max_rss_gib=64,
             timeout_seconds=self.deadline-time.time()-240,retire_probe_checkpoints=True,train_arguments=args)
@@ -103,12 +107,13 @@ class Campaign:
         policy['minimum_free_hbm_mib']=max(16384,int(c['resource_admission']['peak_mib']*1.5+8192))
         resource=dest/(cid+'-resource.json');atomic_json(resource,policy);resource.chmod(0o444);inputs.append(resource)
         self.launch(job,inputs,resource,['python','scripts/campaign_worker.py','--plan',str(plan),'--data',str(self.a.data),
-            '--output',str(self.root/'runs'/(job+'-worker')),'--recording-cli',self.a.lens_cli,'--deadline-epoch',str(self.deadline)])
-        return dict(id=cid,shape=c['selection_key'],job=job,config=str(config),output=str(out),until_tokens=until,resource=str(resource))
+            '--output',str(self.root/'runs'/(job+'-worker')),'--recording-cli',self.a.lens_cli,'--deadline-epoch',str(self.deadline)],execution_source)
+        return dict(id=cid,shape=c['selection_key'],job=job,config=str(config),output=str(out),until_tokens=until,resource=str(resource),execution_source=execution_source)
 
-    def phase(self,name,configs,until,parents=None):
-        phase=dict(state='running',started_at=now(),cases=[],results=[],not_submitted=[c['id'] for c in configs])
-        self.state['phases'][name]=phase;self.publish();pending=list(configs)
+    def phase(self,name,configs,until,parents=None,inherited=()):
+        ids={r['id'] for r in inherited};pending=[c for c in configs if c['id'] not in ids]
+        phase=dict(state='running',started_at=now(),cases=list(inherited),results=[],not_submitted=[c['id'] for c in pending])
+        self.state['phases'][name]=phase;self.publish()
         while pending or any(not self.observe(r)['terminal'] for r in phase['cases']):
             self.guard();observed=[self.observe(r) for r in phase['cases']]
             live=sum(not r['terminal'] for r in observed)
@@ -172,7 +177,7 @@ class Campaign:
         while pending or any(not self.observe(r)['terminal'] for r in phase['cases']):
             self.guard();live=sum(not self.observe(r)['terminal'] for r in phase['cases'])
             while pending and live<self.budget['max_npu_workers']:
-                row=pending.pop(0);cid=row['id'];job='moe-confirm-'+cid
+                row=pending.pop(0);cid=row['id'];job='moe-r2-confirm-'+cid
                 config=Path(row['config']);checkpoint=Path(row.get('checkpoint') or str(Path(row['output'])/'train/latest.pt'))
                 out=self.root/'runs'/job;resource=self.cfg/'resource.json'
                 self.launch(job,[config,checkpoint,resource,self.a.data/'data-lock.json'],resource,
@@ -190,7 +195,17 @@ class Campaign:
     def run(self):
         configs=[read(self.cfg/'table/configs'/(cid+'.json')) for cid in self.catalog['screen_cases']]
         by={c['id']:c for c in configs}
-        screen=self.phase('screen8',configs,8*M)
+        inherited=[];receipt=read(self.cfg/'inherit-r2.json')
+        for entry in receipt.get('completed_dense_prefixes',[]):
+            row=dict(entry['case']);row['execution_source']=str(self.root/entry['execution_source'])
+            for key in ('config','output','resource'):
+                if key in row:row[key]=str(self.root/row[key])
+            for path,sha in entry['files'].items():
+                if digest(self.root/path)!=sha:raise ValueError('inherited dense identity changed: '+path)
+            if not self.observe(row)['terminal']:raise ValueError('inherited prefix still active')
+            inherited.append(row)
+        self.state['original_attempts']=receipt.get('original_attempts',[]);self.publish()
+        screen=self.phase('screen8',configs,8*M,inherited=inherited)
         promoted=select_within_shape(screen,2);parents={r['id']:r for r in promoted}
         self.state['selection8']=dict(selected=[r['id'] for r in promoted],method='lowest complete validation NLL within each of six shapes; max2; no confirmation')
         self.publish()

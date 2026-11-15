@@ -1,0 +1,217 @@
+{
+  "at": "2026-11-15T01:20:53.138761+00:00",
+  "completed_dense_prefixes": [
+    {
+      "case": {
+        "config": ".local/source-moe-execution-v1/configs/studies/language/moe-controls/table/configs/small-dense-lr0.0003-s33.json",
+        "id": "small-dense-lr0.0003-s33",
+        "job": "moe-screen8-small-dense-lr0.0003-s33",
+        "output": "runs/moe-screen8-small-dense-lr0.0003-s33",
+        "resource": "runs/moe-controller/screen8/small-dense-lr0.0003-s33-resource.json",
+        "shape": "small-dense",
+        "until_tokens": 8388608
+      },
+      "execution_source": ".local/source-moe-execution-v1",
+      "files": {
+        ".local/source-moe-execution-v1/configs/studies/language/moe-controls/table/configs/small-dense-lr0.0003-s33.json": "facaad9e11183571762df0b7d47d50368cfb8f9417df585ab84fd48702b76d98",
+        "runs/moe-screen8-small-dense-lr0.0003-s33/check/result.json": "42c24bd43e082a28c84be98ef7171b8c6be6bfb87cb50b47b6680a12c3c99f4f",
+        "runs/moe-screen8-small-dense-lr0.0003-s33/recovery.json": "a25d0d82273aa2fd745a0ab6459a7f3275c97d72b58d38c13360a977a025f400",
+        "runs/moe-screen8-small-dense-lr0.0003-s33/train/latest.pt": "e6bb369a7b4592d490e443d81a8b0fb91f67fa68778ddd595d684fe34409e7bd",
+        "runs/moe-screen8-small-dense-lr0.0003-s33/train/result.json": "d6d707eeb3886b87824e70d89787605c8999b5525849df1ae72f0c586a2cd187",
+        "runs/moe-screen8-small-dense-lr0.0003-s33/train/validation-final.json": "5b9d3432629938646bca1818f84c3e68f1ecc9f44642cec65766d174e0451141"
+      }
+    },
+    {
+      "case": {
+        "config": ".local/source-moe-execution-v1/configs/studies/language/moe-controls/table/configs/large-dense-lr0.0001-s33.json",
+        "id": "large-dense-lr0.0001-s33",
+        "job": "moe-screen8-large-dense-lr0.0001-s33",
+        "output": "runs/moe-screen8-large-dense-lr0.0001-s33",
+        "resource": "runs/moe-controller/screen8/large-dense-lr0.0001-s33-resource.json",
+        "shape": "large-dense",
+        "until_tokens": 8388608
+      },
+      "execution_source": ".local/source-moe-execution-v1",
+      "files": {
+        ".local/source-moe-execution-v1/configs/studies/language/moe-controls/table/configs/large-dense-lr0.0001-s33.json": "a896477fc8ed7c11c0488fce2e598a97634a9783c5341159b77f4318f23de2e1",
+        "runs/moe-screen8-large-dense-lr0.0001-s33/check/result.json": "a34b276e19ecdba25d024f45502923c4c625520c60d33e8976f463dc4e8f66cd",
+        "runs/moe-screen8-large-dense-lr0.0001-s33/recovery.json": "8b78a798a3df1869a75d2e525091848cff26d3e1f76130a084cf8fd2f7a614de",
+        "runs/moe-screen8-large-dense-lr0.0001-s33/train/latest.pt": "fafda19bac18244967593c361d4404f3102163366f790ed64776bf41e18a68f2",
+        "runs/moe-screen8-large-dense-lr0.0001-s33/train/result.json": "ce4e62eb8967e67b80741a7ee034f6aedd25b1a5551212062f003e15c19e44fa",
+        "runs/moe-screen8-large-dense-lr0.0001-s33/train/validation-final.json": "946696f5aedecf7aa5ab792db641482b59ca45603216fd9f33298c983a729cb1"
+      }
+    },
+    {
+      "case": {
+        "config": ".local/source-moe-execution-v1/configs/studies/language/moe-controls/table/configs/small-dense-lr0.001-s33.json",
+        "id": "small-dense-lr0.001-s33",
+        "job": "moe-screen8-small-dense-lr0.001-s33",
+        "output": "runs/moe-screen8-small-dense-lr0.001-s33",
+        "resource": "runs/moe-controller/screen8/small-dense-lr0.001-s33-resource.json",
+        "shape": "small-dense",
+        "until_tokens": 8388608
+      },
+      "execution_source": ".local/source-moe-execution-v1",
+      "files": {
+        ".local/source-moe-execution-v1/configs/studies/language/moe-controls/table/configs/small-dense-lr0.001-s33.json": "1efcc7da3b33b6cd1bfd9945fdf630c1cea7b264b053c3d9c89c96b5dd58be26",
+        "runs/moe-screen8-small-dense-lr0.001-s33/check/result.json": "c39227415453ccb3214b99ad67368f2adfa109cdeee46e175537cb4ad1135f7c",
+        "runs/moe-screen8-small-dense-lr0.001-s33/recovery.json": "e0fc650ecfb2fcb1b37f911941a1f2b548c62d32da87b326127b882987dbef9c",
+        "runs/moe-screen8-small-dense-lr0.001-s33/train/latest.pt": "c4f807e32daf852a2d07aa9259af216f3981b399ad7d9911c06bcafbbf8a51a7",
+        "runs/moe-screen8-small-dense-lr0.001-s33/train/result.json": "d432c38c6fbb5b80c74fbdcb1c15a898d536af3a13147f4cfd826272f27f5b28",
+        "runs/moe-screen8-small-dense-lr0.001-s33/train/validation-final.json": "7beb5b406a4fcaf17866debd5ad71cdd68022d0259410d203b8b45f76b687811"
+      }
+    },
+    {
+      "case": {
+        "config": ".local/source-moe-execution-v1/configs/studies/language/moe-controls/table/configs/large-dense-lr0.0003-s33.json",
+        "id": "large-dense-lr0.0003-s33",
+        "job": "moe-screen8-large-dense-lr0.0003-s33",
+        "output": "runs/moe-screen8-large-dense-lr0.0003-s33",
+        "resource": "runs/moe-controller/screen8/large-dense-lr0.0003-s33-resource.json",
+        "shape": "large-dense",
+        "until_tokens": 8388608
+      },
+      "execution_source": ".local/source-moe-execution-v1",
+      "files": {
+        ".local/source-moe-execution-v1/configs/studies/language/moe-controls/table/configs/large-dense-lr0.0003-s33.json": "d2017e5cce8bbd54186cfe5e36dc67acb0f1da9f2668b5818137a9429136b7a7",
+        "runs/moe-screen8-large-dense-lr0.0003-s33/check/result.json": "7e95803ca584c6bbbbc2d7c8533f72312be91ec9b1874d9a2286fbc584987194",
+        "runs/moe-screen8-large-dense-lr0.0003-s33/recovery.json": "2a9d3bb4a99631261e669f0eba2e2267e6816a77dfb4c4b6c1f7af2875e81a98",
+        "runs/moe-screen8-large-dense-lr0.0003-s33/train/latest.pt": "5a95b2549b1fe7b9813e0425c524241cbe20aa2d286fdf70897eb2a16d4d1a51",
+        "runs/moe-screen8-large-dense-lr0.0003-s33/train/result.json": "5d9dc941ac5850686d5b32490644d7bb91cfe7b2ca29d7f32a7e9b987522798d",
+        "runs/moe-screen8-large-dense-lr0.0003-s33/train/validation-final.json": "9a3c9b3e07657fd78a8c686edc65f30fb823208627d9efa54ee10287a5ef20a2"
+      }
+    }
+  ],
+  "meaning": "12 original zero-causal admission failures preserved; four8Mi dense prefixes reused under their original source; no new candidate or extended deadline",
+  "original_attempts": [
+    {
+      "check_error": "AssertionError('causal intervention failed')",
+      "id": "small-e20-lr0.0003-b0.001-s33",
+      "job": "moe-screen8-small-e20-lr0.0003-b0.001-s33",
+      "record": "runs/moe-screen8-small-e20-lr0.0003-b0.001-s33/check/result.json",
+      "source": "2f96d745",
+      "state": "failed"
+    },
+    {
+      "check_error": "AssertionError('causal intervention failed')",
+      "id": "small-e64-lr0.0003-b0.001-s33",
+      "job": "moe-screen8-small-e64-lr0.0003-b0.001-s33",
+      "record": "runs/moe-screen8-small-e64-lr0.0003-b0.001-s33/check/result.json",
+      "source": "2f96d745",
+      "state": "failed"
+    },
+    {
+      "check_error": "AssertionError('causal intervention failed')",
+      "id": "large-e20-lr0.0001-b0.001-s33",
+      "job": "moe-screen8-large-e20-lr0.0001-b0.001-s33",
+      "record": "runs/moe-screen8-large-e20-lr0.0001-b0.001-s33/check/result.json",
+      "source": "2f96d745",
+      "state": "failed"
+    },
+    {
+      "check_error": "AssertionError('causal intervention failed')",
+      "id": "large-e64-lr0.0001-b0.001-s33",
+      "job": "moe-screen8-large-e64-lr0.0001-b0.001-s33",
+      "record": "runs/moe-screen8-large-e64-lr0.0001-b0.001-s33/check/result.json",
+      "source": "2f96d745",
+      "state": "failed"
+    },
+    {
+      "check_error": null,
+      "id": "small-dense-lr0.0003-s33",
+      "job": "moe-screen8-small-dense-lr0.0003-s33",
+      "record": "runs/moe-screen8-small-dense-lr0.0003-s33/check/result.json",
+      "source": "2f96d745",
+      "state": "completed"
+    },
+    {
+      "check_error": null,
+      "id": "large-dense-lr0.0001-s33",
+      "job": "moe-screen8-large-dense-lr0.0001-s33",
+      "record": "runs/moe-screen8-large-dense-lr0.0001-s33/check/result.json",
+      "source": "2f96d745",
+      "state": "completed"
+    },
+    {
+      "check_error": "AssertionError('causal intervention failed')",
+      "id": "small-e20-lr0.0003-b0.01-s33",
+      "job": "moe-screen8-small-e20-lr0.0003-b0.01-s33",
+      "record": "runs/moe-screen8-small-e20-lr0.0003-b0.01-s33/check/result.json",
+      "source": "2f96d745",
+      "state": "failed"
+    },
+    {
+      "check_error": "AssertionError('causal intervention failed')",
+      "id": "small-e64-lr0.0003-b0.01-s33",
+      "job": "moe-screen8-small-e64-lr0.0003-b0.01-s33",
+      "record": "runs/moe-screen8-small-e64-lr0.0003-b0.01-s33/check/result.json",
+      "source": "2f96d745",
+      "state": "failed"
+    },
+    {
+      "check_error": "AssertionError('causal intervention failed')",
+      "id": "large-e20-lr0.0001-b0.01-s33",
+      "job": "moe-screen8-large-e20-lr0.0001-b0.01-s33",
+      "record": "runs/moe-screen8-large-e20-lr0.0001-b0.01-s33/check/result.json",
+      "source": "2f96d745",
+      "state": "failed"
+    },
+    {
+      "check_error": "AssertionError('causal intervention failed')",
+      "id": "large-e64-lr0.0001-b0.01-s33",
+      "job": "moe-screen8-large-e64-lr0.0001-b0.01-s33",
+      "record": "runs/moe-screen8-large-e64-lr0.0001-b0.01-s33/check/result.json",
+      "source": "2f96d745",
+      "state": "failed"
+    },
+    {
+      "check_error": null,
+      "id": "small-dense-lr0.001-s33",
+      "job": "moe-screen8-small-dense-lr0.001-s33",
+      "record": "runs/moe-screen8-small-dense-lr0.001-s33/check/result.json",
+      "source": "2f96d745",
+      "state": "completed"
+    },
+    {
+      "check_error": null,
+      "id": "large-dense-lr0.0003-s33",
+      "job": "moe-screen8-large-dense-lr0.0003-s33",
+      "record": "runs/moe-screen8-large-dense-lr0.0003-s33/check/result.json",
+      "source": "2f96d745",
+      "state": "completed"
+    },
+    {
+      "check_error": "AssertionError('causal intervention failed')",
+      "id": "small-e20-lr0.001-b0.001-s33",
+      "job": "moe-screen8-small-e20-lr0.001-b0.001-s33",
+      "record": "runs/moe-screen8-small-e20-lr0.001-b0.001-s33/check/result.json",
+      "source": "2f96d745",
+      "state": "failed"
+    },
+    {
+      "check_error": "AssertionError('causal intervention failed')",
+      "id": "small-e64-lr0.001-b0.001-s33",
+      "job": "moe-screen8-small-e64-lr0.001-b0.001-s33",
+      "record": "runs/moe-screen8-small-e64-lr0.001-b0.001-s33/check/result.json",
+      "source": "2f96d745",
+      "state": "failed"
+    },
+    {
+      "check_error": "AssertionError('causal intervention failed')",
+      "id": "large-e20-lr0.0003-b0.001-s33",
+      "job": "moe-screen8-large-e20-lr0.0003-b0.001-s33",
+      "record": "runs/moe-screen8-large-e20-lr0.0003-b0.001-s33/check/result.json",
+      "source": "2f96d745",
+      "state": "failed"
+    },
+    {
+      "check_error": "AssertionError('causal intervention failed')",
+      "id": "large-e64-lr0.0003-b0.001-s33",
+      "job": "moe-screen8-large-e64-lr0.0003-b0.001-s33",
+      "record": "runs/moe-screen8-large-e64-lr0.0003-b0.001-s33/check/result.json",
+      "source": "2f96d745",
+      "state": "failed"
+    }
+  ],
+  "schema": "tide-moe-r2-inheritance-v1"
+}

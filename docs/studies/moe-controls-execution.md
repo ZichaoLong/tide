@@ -24,6 +24,16 @@ logits，再对选中logits做softmax（与全softmax选择后归一化实数等
 每层一次小计数下载，整数packing元数据在host构造，数值/反向在NPU；无逐token/逐专家Python矩阵乘。
 CPU逐专家路径仅用于小型独立参考，不当作NPU吞吐基线。
 
+首轮12项MoE在整网零容差因果干预检查失败，未进入训练；四项dense已完成8Mi。
+[有界定位](../evidence/moe-causal-diagnosis.json)覆盖四MoE形状：前缀最大差3.58e-7至6.26e-7，
+首次差异在分桶FFN，前缀top2支持相同、未来embedding输入的前缀VJP严格为零，
+固定形状的NPU逐专家参考与CPU参考的因果检查均零差异。
+因此新准入将零阈值失败原样保留，仅当上述机制及原1e-6/1e-5有限阈值通过时继续标记探索。
+没有修改模型、训练精度或原阈值；不承诺逐位因果等价、所有近阈值路由或长期数值等价。
+原控制器停止新增提交后，16个已提交worker自然终态；原12项失败不覆盖。
+后继控制器`moe-controller-r2`在同一截止/30配方内继续，四dense前缀及其32Mi续训保持原源码，
+其余新作业用显式新源码。继承哈希见`configs/studies/language/moe-controls/inherit-r2.json`。
+
 辅助目标按层均值：`f_i=count_i/(2*Nvalid)` stop-gradient，
 `balance=E*sum(f_i*mean(p_i))`，`z=mean(logsumexp(logits)^2)`；padding不计统计。
 物理拆分时先做确定性无梯度遍历收集全global64频率，逐micro的概率和/z项以同一个Nvalid归一化。

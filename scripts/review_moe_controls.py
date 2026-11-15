@@ -8,13 +8,15 @@ sys.path.insert(0,str(Path(__file__).resolve().parents[1]))
 from scripts.job import inspect
 from tide_lab.records import now
 from tide_lab.supervisor import TERMINAL
+from scripts.review_direct_v10 import application_state
 
 
 def read(p):return json.loads(p.read_text()) if p.is_file() else {}
 
 
 def review(root):
-    state=read(root/'runs/moe-controller/state.json');rows=[]
+    current='moe-controller-r2' if (root/'runs/moe-controller-r2/state.json').is_file() else 'moe-controller'
+    state=read(root/'runs'/current/'state.json');rows=[]
     for phase,value in state.get('phases',{}).items():
         for case in value.get('cases',[]):
             path=Path(case['output']);training=path if phase=='confirm' else path/'train'
@@ -22,7 +24,7 @@ def review(root):
             record=root/'artifacts/jobs'/case['job']/'job.json';obs=inspect(record)
             worker=read(root/'runs'/(case['job']+'-worker')/'state.json')
             inner=next((r for r in worker.get('cases',[]) if r.get('id')==case['id']),{})
-            app=result.get('state') or inner.get('state') or obs['state'].get('state')
+            app=application_state(obs['state'].get('state'),result.get('state'),inner.get('state'))
             stages=inner.get('stages',[]);latest=stages[-1] if stages else {}
             projection=read(training/'projection.json');recovery=read(path/'recovery.json');check=read(path/'check/result.json')
             v=read(training/'validation-final.json')
@@ -39,7 +41,8 @@ def review(root):
     counts={}
     for row in rows:counts[row['application_state']]=counts.get(row['application_state'],0)+1
     return dict(schema='tide-moe-review-v1',observed_at=now(),controller=state.get('state','not_submitted'),
-        source=state.get('source'),deadline_epoch=state.get('deadline_epoch'),counts=counts,cases=rows,
+        controller_job=current,source=state.get('source'),deadline_epoch=state.get('deadline_epoch'),counts=counts,cases=rows,
+        original_attempts=state.get('original_attempts',[]),
         selections={k:state.get(k) for k in ('selection8','selection32')},resources=state.get('resources'),
         reused_dense=state.get('reused_dense',[]),scope='read-only execution/metrics; scientific conclusions await review')
 
