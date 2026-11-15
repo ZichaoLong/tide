@@ -18,12 +18,13 @@ from tide_lab.records import atomic_json,now,Metrics,project_to_lens
 def main(a):
     dev=runtime('npu:0',4,33);a.output.mkdir(parents=True,exist_ok=False)
     report=dict(state='running',started_at=now(),source=source_identity(),installation=installed_identity(),shape=a.shape,cases=[])
-    run_id='tl-moe-batch-'+a.shape;metrics=Metrics(a.output,run_id)
+    run_id='tl-'+a.output.name;metrics=Metrics(a.output,run_id)
     atomic_json(a.output/'manifest.json',dict(schema='tide-lab-run-v1',project='tide-learning-lab',name=run_id,run_id=run_id,
         group='TL-MOE-CAL',study_id='TL-MOE-CAL',stage='batch-calibration',created_at=now(),config=dict(shape=a.shape)))
     try:
         if not a.shape.endswith('dense'):report['mechanisms']=mechanism_checks(dev)
-        for micro in (16,32,64):
+        for micro in a.batches:
+            if micro not in (16,32,64):raise ValueError('finite approved batch choices only')
             c=config(a.shape,.001,micro=micro);atomic_json(a.output/f'config-b{micro}.json',c)
             m=make_model(c,dev);opt=optimizer_for(m,c);torch.npu.reset_peak_memory_stats()
             rows=[]
@@ -50,4 +51,4 @@ def main(a):
 
 if __name__=='__main__':
     p=argparse.ArgumentParser();p.add_argument('--shape',required=True);p.add_argument('--output',type=Path,required=True)
-    p.add_argument('--lens-cli',required=True);main(p.parse_args())
+    p.add_argument('--lens-cli',required=True);p.add_argument('--batches',nargs='+',type=int,default=[16,32,64]);main(p.parse_args())

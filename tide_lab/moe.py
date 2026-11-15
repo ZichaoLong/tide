@@ -24,7 +24,7 @@ def parameter_inventory(width,layers,hidden,experts,k=2,vocab_size=4096):
 class Top2Experts(nn.Module):
     def __init__(self,width,hidden,experts,layers,implementation='bucketed_bmm'):
         super().__init__()
-        if experts<2 or implementation not in ('bucketed_bmm','reference'):
+        if not 2<=experts<2**24 or implementation not in ('bucketed_bmm','reference'):
             raise ValueError('unsupported expert count/implementation')
         self.width=width;self.hidden=hidden;self.experts=experts;self.k=2
         self.implementation=implementation
@@ -51,7 +51,10 @@ class Top2Experts(nn.Module):
 
     def bucketed(self,x,indices,weights):
         e=self.experts;k=self.k;assignments=indices.flatten()
-        order=torch.argsort(assignments,stable=True)
+        # Expert IDs are exactly representable (<2**24). On the installed NPU,
+        # integer ArgSort falls back to AICPU; sorting these exact FP32 keys
+        # retains the same stable permutation on the matrix/vector path.
+        order=torch.argsort(assignments.to(torch.float32),stable=True)
         counts=torch.bincount(assignments,minlength=e)
         # Explicit bounded host synchronization. Shapes and buckets are routing
         # metadata; the CPU reference never supplies the execution schedule.
