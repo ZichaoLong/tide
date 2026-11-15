@@ -1,0 +1,847 @@
+{
+  "calibration": [
+    {
+      "cases": [
+        {
+          "accumulation": 4,
+          "global_batch": 64,
+          "median_seconds": 0.9847424775362015,
+          "microbatch": 16,
+          "parameters": 19471744,
+          "peak_mib": 1110.88134765625,
+          "positions_per_second": 16637.85240684683,
+          "state": "completed",
+          "timing_scope": "full model, auxiliary prepass if needed, task/aux VJP, clip, AdamW and synchronization; input already on device"
+        },
+        {
+          "accumulation": 2,
+          "global_batch": 64,
+          "median_seconds": 0.8135051615536213,
+          "microbatch": 32,
+          "parameters": 19471744,
+          "peak_mib": 1877.02099609375,
+          "positions_per_second": 20140.007432417584,
+          "state": "completed",
+          "timing_scope": "full model, auxiliary prepass if needed, task/aux VJP, clip, AdamW and synchronization; input already on device"
+        },
+        {
+          "accumulation": 1,
+          "global_batch": 64,
+          "median_seconds": 0.6478921994566917,
+          "microbatch": 64,
+          "parameters": 19471744,
+          "peak_mib": 3296.42236328125,
+          "positions_per_second": 25288.1575264207,
+          "state": "completed",
+          "timing_scope": "full model, auxiliary prepass if needed, task/aux VJP, clip, AdamW and synchronization; input already on device"
+        }
+      ],
+      "lens": {
+        "project": "tide-learning-lab",
+        "readback_matches": true,
+        "source_run_id": "tl-moe-batch-small-e20",
+        "status": "verified"
+      },
+      "mechanisms": {
+        "discrete": {
+          "cold_experts_exercised": true,
+          "dropless_rows": true,
+          "gradients_finite": true,
+          "top2_distinct": true,
+          "top2_indices_match_cpu": true,
+          "valid_assignment_count": true,
+          "weights_sum_one": true
+        },
+        "scope": "B2 L5 d16 h32 E20, CPU scalar-expert reference; input/router/expert+bias VJP includes aux, padding and empty experts",
+        "state": "passed",
+        "strict_numerical": {
+          "forward": {
+            "atol": 1e-06,
+            "elements": 160,
+            "failed_elements": 0,
+            "max_abs": 1.3969838619232178e-08,
+            "relative_l2": 2.440034971711078e-06,
+            "rtol": 1e-05,
+            "state": "passed"
+          },
+          "input_vjp": {
+            "atol": 1e-06,
+            "elements": 160,
+            "failed_elements": 0,
+            "max_abs": 2.805609256029129e-08,
+            "relative_l2": 4.315256388683927e-06,
+            "rtol": 1e-05,
+            "state": "passed"
+          },
+          "parameters": {
+            "b1": {
+              "atol": 1e-06,
+              "elements": 640,
+              "failed_elements": 0,
+              "max_abs": 4.78699803352356e-07,
+              "relative_l2": 4.341451888144295e-06,
+              "rtol": 1e-05,
+              "state": "passed"
+            },
+            "b2": {
+              "atol": 1e-06,
+              "elements": 320,
+              "failed_elements": 0,
+              "max_abs": 1.1920928955078125e-07,
+              "relative_l2": 4.094017577583766e-08,
+              "rtol": 1e-05,
+              "state": "passed"
+            },
+            "router.weight": {
+              "atol": 1e-06,
+              "elements": 320,
+              "failed_elements": 0,
+              "max_abs": 3.725290298461914e-08,
+              "relative_l2": 3.993324286318418e-07,
+              "rtol": 1e-05,
+              "state": "passed"
+            },
+            "w1": {
+              "atol": 1e-06,
+              "elements": 10240,
+              "failed_elements": 0,
+              "max_abs": 9.98377799987793e-07,
+              "relative_l2": 4.207834710138876e-06,
+              "rtol": 1e-05,
+              "state": "passed"
+            },
+            "w2": {
+              "atol": 1e-06,
+              "elements": 10240,
+              "failed_elements": 0,
+              "max_abs": 1.2814998626708984e-06,
+              "relative_l2": 2.7589142357474562e-06,
+              "rtol": 1e-05,
+              "state": "passed"
+            }
+          }
+        }
+      },
+      "record": "runs/moe-batch-small-e20/result.json",
+      "sha256": "0815fc25779c39217c3d1fafba14b9b324832e56ef280a3a8827cc10a4e749e0",
+      "shape": "small-e20",
+      "source": "0a79e70f247bf297f4448240344ac6ae2fd9bf6f"
+    },
+    {
+      "cases": [
+        {
+          "accumulation": 4,
+          "global_batch": 64,
+          "median_seconds": 1.0230310820043087,
+          "microbatch": 16,
+          "parameters": 58602880,
+          "peak_mib": 1781.7197265625,
+          "positions_per_second": 16015.153682232887,
+          "state": "completed",
+          "timing_scope": "full model, auxiliary prepass if needed, task/aux VJP, clip, AdamW and synchronization; input already on device"
+        },
+        {
+          "accumulation": 2,
+          "global_batch": 64,
+          "median_seconds": 0.8143737800419331,
+          "microbatch": 32,
+          "parameters": 58602880,
+          "peak_mib": 2564.3740234375,
+          "positions_per_second": 20118.52591712416,
+          "state": "completed",
+          "timing_scope": "full model, auxiliary prepass if needed, task/aux VJP, clip, AdamW and synchronization; input already on device"
+        },
+        {
+          "accumulation": 1,
+          "global_batch": 64,
+          "median_seconds": 0.647964607924223,
+          "microbatch": 64,
+          "parameters": 58602880,
+          "peak_mib": 3867.6572265625,
+          "positions_per_second": 25285.331636378585,
+          "state": "completed",
+          "timing_scope": "full model, auxiliary prepass if needed, task/aux VJP, clip, AdamW and synchronization; input already on device"
+        }
+      ],
+      "lens": {
+        "project": "tide-learning-lab",
+        "readback_matches": true,
+        "source_run_id": "tl-moe-batch-small-e64",
+        "status": "verified"
+      },
+      "mechanisms": {
+        "discrete": {
+          "cold_experts_exercised": true,
+          "dropless_rows": true,
+          "gradients_finite": true,
+          "top2_distinct": true,
+          "top2_indices_match_cpu": true,
+          "valid_assignment_count": true,
+          "weights_sum_one": true
+        },
+        "scope": "B2 L5 d16 h32 E20, CPU scalar-expert reference; input/router/expert+bias VJP includes aux, padding and empty experts",
+        "state": "passed",
+        "strict_numerical": {
+          "forward": {
+            "atol": 1e-06,
+            "elements": 160,
+            "failed_elements": 0,
+            "max_abs": 1.3969838619232178e-08,
+            "relative_l2": 2.440034971711078e-06,
+            "rtol": 1e-05,
+            "state": "passed"
+          },
+          "input_vjp": {
+            "atol": 1e-06,
+            "elements": 160,
+            "failed_elements": 0,
+            "max_abs": 2.805609256029129e-08,
+            "relative_l2": 4.315256388683927e-06,
+            "rtol": 1e-05,
+            "state": "passed"
+          },
+          "parameters": {
+            "b1": {
+              "atol": 1e-06,
+              "elements": 640,
+              "failed_elements": 0,
+              "max_abs": 4.78699803352356e-07,
+              "relative_l2": 4.341451888144295e-06,
+              "rtol": 1e-05,
+              "state": "passed"
+            },
+            "b2": {
+              "atol": 1e-06,
+              "elements": 320,
+              "failed_elements": 0,
+              "max_abs": 1.1920928955078125e-07,
+              "relative_l2": 4.094017577583766e-08,
+              "rtol": 1e-05,
+              "state": "passed"
+            },
+            "router.weight": {
+              "atol": 1e-06,
+              "elements": 320,
+              "failed_elements": 0,
+              "max_abs": 3.725290298461914e-08,
+              "relative_l2": 3.993324286318418e-07,
+              "rtol": 1e-05,
+              "state": "passed"
+            },
+            "w1": {
+              "atol": 1e-06,
+              "elements": 10240,
+              "failed_elements": 0,
+              "max_abs": 9.98377799987793e-07,
+              "relative_l2": 4.207834710138876e-06,
+              "rtol": 1e-05,
+              "state": "passed"
+            },
+            "w2": {
+              "atol": 1e-06,
+              "elements": 10240,
+              "failed_elements": 0,
+              "max_abs": 1.2814998626708984e-06,
+              "relative_l2": 2.7589142357474562e-06,
+              "rtol": 1e-05,
+              "state": "passed"
+            }
+          }
+        }
+      },
+      "record": "runs/moe-batch-small-e64/result.json",
+      "sha256": "223bdb57ad41731437d3e330d332d283efd2594ed439335052aa3d5ad6accee5",
+      "shape": "small-e64",
+      "source": "0a79e70f247bf297f4448240344ac6ae2fd9bf6f"
+    },
+    {
+      "cases": [
+        {
+          "accumulation": 4,
+          "global_batch": 64,
+          "median_seconds": 1.7737738378345966,
+          "microbatch": 16,
+          "parameters": 63443968,
+          "peak_mib": 2599.3173828125,
+          "positions_per_second": 9236.803278145879,
+          "state": "completed",
+          "timing_scope": "full model, auxiliary prepass if needed, task/aux VJP, clip, AdamW and synchronization; input already on device"
+        },
+        {
+          "accumulation": 2,
+          "global_batch": 64,
+          "median_seconds": 1.462100576609373,
+          "microbatch": 32,
+          "parameters": 63443968,
+          "peak_mib": 4122.11083984375,
+          "positions_per_second": 11205.795457652217,
+          "state": "completed",
+          "timing_scope": "full model, auxiliary prepass if needed, task/aux VJP, clip, AdamW and synchronization; input already on device"
+        },
+        {
+          "accumulation": 1,
+          "global_batch": 64,
+          "median_seconds": 1.2092921398580074,
+          "microbatch": 64,
+          "parameters": 63443968,
+          "peak_mib": 6859.064453125,
+          "positions_per_second": 13548.42180808665,
+          "state": "completed",
+          "timing_scope": "full model, auxiliary prepass if needed, task/aux VJP, clip, AdamW and synchronization; input already on device"
+        }
+      ],
+      "lens": {
+        "project": "tide-learning-lab",
+        "readback_matches": true,
+        "source_run_id": "tl-moe-batch-large-e20",
+        "status": "verified"
+      },
+      "mechanisms": {
+        "discrete": {
+          "cold_experts_exercised": true,
+          "dropless_rows": true,
+          "gradients_finite": true,
+          "top2_distinct": true,
+          "top2_indices_match_cpu": true,
+          "valid_assignment_count": true,
+          "weights_sum_one": true
+        },
+        "scope": "B2 L5 d16 h32 E20, CPU scalar-expert reference; input/router/expert+bias VJP includes aux, padding and empty experts",
+        "state": "passed",
+        "strict_numerical": {
+          "forward": {
+            "atol": 1e-06,
+            "elements": 160,
+            "failed_elements": 0,
+            "max_abs": 1.3969838619232178e-08,
+            "relative_l2": 2.440034971711078e-06,
+            "rtol": 1e-05,
+            "state": "passed"
+          },
+          "input_vjp": {
+            "atol": 1e-06,
+            "elements": 160,
+            "failed_elements": 0,
+            "max_abs": 2.805609256029129e-08,
+            "relative_l2": 4.315256388683927e-06,
+            "rtol": 1e-05,
+            "state": "passed"
+          },
+          "parameters": {
+            "b1": {
+              "atol": 1e-06,
+              "elements": 640,
+              "failed_elements": 0,
+              "max_abs": 4.78699803352356e-07,
+              "relative_l2": 4.341451888144295e-06,
+              "rtol": 1e-05,
+              "state": "passed"
+            },
+            "b2": {
+              "atol": 1e-06,
+              "elements": 320,
+              "failed_elements": 0,
+              "max_abs": 1.1920928955078125e-07,
+              "relative_l2": 4.094017577583766e-08,
+              "rtol": 1e-05,
+              "state": "passed"
+            },
+            "router.weight": {
+              "atol": 1e-06,
+              "elements": 320,
+              "failed_elements": 0,
+              "max_abs": 3.725290298461914e-08,
+              "relative_l2": 3.993324286318418e-07,
+              "rtol": 1e-05,
+              "state": "passed"
+            },
+            "w1": {
+              "atol": 1e-06,
+              "elements": 10240,
+              "failed_elements": 0,
+              "max_abs": 9.98377799987793e-07,
+              "relative_l2": 4.207834710138876e-06,
+              "rtol": 1e-05,
+              "state": "passed"
+            },
+            "w2": {
+              "atol": 1e-06,
+              "elements": 10240,
+              "failed_elements": 0,
+              "max_abs": 1.2814998626708984e-06,
+              "relative_l2": 2.7589142357474562e-06,
+              "rtol": 1e-05,
+              "state": "passed"
+            }
+          }
+        }
+      },
+      "record": "runs/moe-batch-large-e20/result.json",
+      "sha256": "86994974a447f1721e860e38647a9a7103265f6bdbc3c070bfb9acb898b3b65d",
+      "shape": "large-e20",
+      "source": "0a79e70f247bf297f4448240344ac6ae2fd9bf6f"
+    },
+    {
+      "cases": [
+        {
+          "accumulation": 4,
+          "global_batch": 64,
+          "median_seconds": 1.916831597685814,
+          "microbatch": 16,
+          "parameters": 193729024,
+          "peak_mib": 4821.17041015625,
+          "positions_per_second": 8547.438397708158,
+          "state": "completed",
+          "timing_scope": "full model, auxiliary prepass if needed, task/aux VJP, clip, AdamW and synchronization; input already on device"
+        },
+        {
+          "accumulation": 2,
+          "global_batch": 64,
+          "median_seconds": 1.5743358843028545,
+          "microbatch": 32,
+          "parameters": 193729024,
+          "peak_mib": 6384.5947265625,
+          "positions_per_second": 10406.927875657959,
+          "state": "completed",
+          "timing_scope": "full model, auxiliary prepass if needed, task/aux VJP, clip, AdamW and synchronization; input already on device"
+        },
+        {
+          "accumulation": 1,
+          "global_batch": 64,
+          "median_seconds": 1.2890632934868336,
+          "microbatch": 64,
+          "parameters": 193729024,
+          "peak_mib": 8728.7509765625,
+          "positions_per_second": 12710.004297525476,
+          "state": "completed",
+          "timing_scope": "full model, auxiliary prepass if needed, task/aux VJP, clip, AdamW and synchronization; input already on device"
+        }
+      ],
+      "lens": {
+        "project": "tide-learning-lab",
+        "readback_matches": true,
+        "source_run_id": "tl-moe-batch-large-e64",
+        "status": "verified"
+      },
+      "mechanisms": {
+        "discrete": {
+          "cold_experts_exercised": true,
+          "dropless_rows": true,
+          "gradients_finite": true,
+          "top2_distinct": true,
+          "top2_indices_match_cpu": true,
+          "valid_assignment_count": true,
+          "weights_sum_one": true
+        },
+        "scope": "B2 L5 d16 h32 E20, CPU scalar-expert reference; input/router/expert+bias VJP includes aux, padding and empty experts",
+        "state": "passed",
+        "strict_numerical": {
+          "forward": {
+            "atol": 1e-06,
+            "elements": 160,
+            "failed_elements": 0,
+            "max_abs": 1.3969838619232178e-08,
+            "relative_l2": 2.440034971711078e-06,
+            "rtol": 1e-05,
+            "state": "passed"
+          },
+          "input_vjp": {
+            "atol": 1e-06,
+            "elements": 160,
+            "failed_elements": 0,
+            "max_abs": 2.805609256029129e-08,
+            "relative_l2": 4.315256388683927e-06,
+            "rtol": 1e-05,
+            "state": "passed"
+          },
+          "parameters": {
+            "b1": {
+              "atol": 1e-06,
+              "elements": 640,
+              "failed_elements": 0,
+              "max_abs": 4.78699803352356e-07,
+              "relative_l2": 4.341451888144295e-06,
+              "rtol": 1e-05,
+              "state": "passed"
+            },
+            "b2": {
+              "atol": 1e-06,
+              "elements": 320,
+              "failed_elements": 0,
+              "max_abs": 1.1920928955078125e-07,
+              "relative_l2": 4.094017577583766e-08,
+              "rtol": 1e-05,
+              "state": "passed"
+            },
+            "router.weight": {
+              "atol": 1e-06,
+              "elements": 320,
+              "failed_elements": 0,
+              "max_abs": 3.725290298461914e-08,
+              "relative_l2": 3.993324286318418e-07,
+              "rtol": 1e-05,
+              "state": "passed"
+            },
+            "w1": {
+              "atol": 1e-06,
+              "elements": 10240,
+              "failed_elements": 0,
+              "max_abs": 9.98377799987793e-07,
+              "relative_l2": 4.207834710138876e-06,
+              "rtol": 1e-05,
+              "state": "passed"
+            },
+            "w2": {
+              "atol": 1e-06,
+              "elements": 10240,
+              "failed_elements": 0,
+              "max_abs": 1.2814998626708984e-06,
+              "relative_l2": 2.7589142357474562e-06,
+              "rtol": 1e-05,
+              "state": "passed"
+            }
+          }
+        }
+      },
+      "record": "runs/moe-batch-large-e64/result.json",
+      "sha256": "5e99f69d08f0be88bb1378d8cd0661949bd9adeced00a963ad77b55fff62f299",
+      "shape": "large-e64",
+      "source": "0a79e70f247bf297f4448240344ac6ae2fd9bf6f"
+    },
+    {
+      "cases": [
+        {
+          "accumulation": 4,
+          "global_batch": 64,
+          "median_seconds": 0.05709175020456314,
+          "microbatch": 16,
+          "parameters": 3460096,
+          "peak_mib": 633.71728515625,
+          "positions_per_second": 286976.6637262854,
+          "state": "completed",
+          "timing_scope": "full model, auxiliary prepass if needed, task/aux VJP, clip, AdamW and synchronization; input already on device"
+        },
+        {
+          "accumulation": 2,
+          "global_batch": 64,
+          "median_seconds": 0.04046124219894409,
+          "microbatch": 32,
+          "parameters": 3460096,
+          "peak_mib": 1215.12890625,
+          "positions_per_second": 404930.7215888584,
+          "state": "completed",
+          "timing_scope": "full model, auxiliary prepass if needed, task/aux VJP, clip, AdamW and synchronization; input already on device"
+        },
+        {
+          "accumulation": 1,
+          "global_batch": 64,
+          "median_seconds": 0.03375643864274025,
+          "microbatch": 64,
+          "parameters": 3460096,
+          "peak_mib": 2339.73388671875,
+          "positions_per_second": 485359.2576337607,
+          "state": "completed",
+          "timing_scope": "full model, auxiliary prepass if needed, task/aux VJP, clip, AdamW and synchronization; input already on device"
+        }
+      ],
+      "lens": {
+        "project": "tide-learning-lab",
+        "readback_matches": true,
+        "source_run_id": "tl-moe-batch-small-dense",
+        "status": "verified"
+      },
+      "mechanisms": null,
+      "record": "runs/moe-batch-small-dense/result.json",
+      "sha256": "278997cc9b5ac1afb3297b48f6bc5e0c80bf964a1ba2cc114a9a37b10fb160c2",
+      "shape": "small-dense",
+      "source": "0a79e70f247bf297f4448240344ac6ae2fd9bf6f"
+    },
+    {
+      "cases": [
+        {
+          "accumulation": 4,
+          "global_batch": 64,
+          "median_seconds": 0.10316190868616104,
+          "microbatch": 16,
+          "parameters": 10136320,
+          "peak_mib": 1231.83251953125,
+          "positions_per_second": 158818.31005902938,
+          "state": "completed",
+          "timing_scope": "full model, auxiliary prepass if needed, task/aux VJP, clip, AdamW and synchronization; input already on device"
+        },
+        {
+          "accumulation": 2,
+          "global_batch": 64,
+          "median_seconds": 0.07357242703437805,
+          "microbatch": 32,
+          "parameters": 10136320,
+          "peak_mib": 2314.583984375,
+          "positions_per_second": 222692.12340030973,
+          "state": "completed",
+          "timing_scope": "full model, auxiliary prepass if needed, task/aux VJP, clip, AdamW and synchronization; input already on device"
+        },
+        {
+          "accumulation": 1,
+          "global_batch": 64,
+          "median_seconds": 0.06378791853785515,
+          "microbatch": 64,
+          "parameters": 10136320,
+          "peak_mib": 4394.44140625,
+          "positions_per_second": 256851.1463542561,
+          "state": "completed",
+          "timing_scope": "full model, auxiliary prepass if needed, task/aux VJP, clip, AdamW and synchronization; input already on device"
+        }
+      ],
+      "lens": {
+        "project": "tide-learning-lab",
+        "readback_matches": true,
+        "source_run_id": "tl-moe-batch-large-dense",
+        "status": "verified"
+      },
+      "mechanisms": null,
+      "record": "runs/moe-batch-large-dense/result.json",
+      "sha256": "08af37892f8b2097b91bd521a37e2156ba97166a8dc62a3633a18d905e264cc0",
+      "shape": "large-dense",
+      "source": "0a79e70f247bf297f4448240344ac6ae2fd9bf6f"
+    }
+  ],
+  "cpu_tests": {
+    "cases": 6,
+    "command": "python -m unittest tests.test_moe tests.test_moe_controller -v",
+    "regression_cases": 5,
+    "scope": "FP32/FP64 reference VJP, global auxiliary accumulation/padding, alias/optimizer, inventories, inner failure/stratified selection; regression cadence and Transformer recipes",
+    "state": "passed"
+  },
+  "decision": "select physical/global64 for all six shapes; final-source per-case network admission and fresh-process recovery still required",
+  "observed_at": "2026-11-15T01:16:26.223025+00:00",
+  "operator_probe": {
+    "cases": {
+      "autograd": {
+        "error": "AttributeError(\"'NoneType' object has no attribute 'detach'\")",
+        "state": "failed"
+      },
+      "explicit_vjp": {
+        "error": "RuntimeError('npu_grouped_matmul_add:../third_party/op-plugin/op_plugin/ops/opapi/GroupedMatmulAddNpuOpApi.cpp:46 NPU function error: call aclnnGroupedMatmulAdd failed, error code is 161002\\n[ERROR] 2026-11-15-09:08:44 (PID:1821950, Device:0, RankID:-1) ERR00100 PTA call acl api failed.\\n[PID: 1821950] 2026-11-15-09:08:44.008.603 AclNN_Parameter_Error(EZ1001): In op [grouped_matmul_add], when non-quant, the data types of [x, weight...] are mismatched, the reason is: [x dtype DT_FLOAT and weight dtype DT_FLOAT are not supported. This operator supports x/weight dtype FLOAT16 or BF16 only].\\n')",
+        "state": "failed"
+      },
+      "forward": {
+        "delta": {
+          "atol": 1e-06,
+          "elements": 432,
+          "failed_elements": 0,
+          "max_abs": 4.76837158203125e-06,
+          "relative_l2": 1.2954376385790456e-07,
+          "rtol": 1e-05,
+          "state": "passed"
+        },
+        "requires_grad": true,
+        "shape": [
+          9,
+          48
+        ],
+        "state": "completed"
+      }
+    },
+    "record": "runs/moe-kernel-v1/result.json"
+  },
+  "schema": "tide-moe-admission-review-v1",
+  "scope": "implementation and timing admission only; language learning/quality unreviewed; shared-device timing not a native sparse speedup claim",
+  "sort_followup": [
+    {
+      "cases": [
+        {
+          "accumulation": 1,
+          "global_batch": 64,
+          "median_seconds": 1.261124886572361,
+          "microbatch": 64,
+          "parameters": 193729024,
+          "peak_mib": 8728.96337890625,
+          "positions_per_second": 12991.57615113792,
+          "state": "completed",
+          "timing_scope": "full model, auxiliary prepass if needed, task/aux VJP, clip, AdamW and synchronization; input already on device"
+        }
+      ],
+      "mechanisms": {
+        "discrete": {
+          "cold_experts_exercised": true,
+          "dropless_rows": true,
+          "gradients_finite": true,
+          "top2_distinct": true,
+          "top2_indices_match_cpu": true,
+          "valid_assignment_count": true,
+          "weights_sum_one": true
+        },
+        "scope": "B2 L5 d16 h32 E20, CPU scalar-expert reference; input/router/expert+bias VJP includes aux, padding and empty experts",
+        "state": "passed",
+        "strict_numerical": {
+          "forward": {
+            "atol": 1e-06,
+            "elements": 160,
+            "failed_elements": 0,
+            "max_abs": 1.3969838619232178e-08,
+            "relative_l2": 2.440034971711078e-06,
+            "rtol": 1e-05,
+            "state": "passed"
+          },
+          "input_vjp": {
+            "atol": 1e-06,
+            "elements": 160,
+            "failed_elements": 0,
+            "max_abs": 2.805609256029129e-08,
+            "relative_l2": 4.315256388683927e-06,
+            "rtol": 1e-05,
+            "state": "passed"
+          },
+          "parameters": {
+            "b1": {
+              "atol": 1e-06,
+              "elements": 640,
+              "failed_elements": 0,
+              "max_abs": 4.78699803352356e-07,
+              "relative_l2": 4.341451888144295e-06,
+              "rtol": 1e-05,
+              "state": "passed"
+            },
+            "b2": {
+              "atol": 1e-06,
+              "elements": 320,
+              "failed_elements": 0,
+              "max_abs": 1.1920928955078125e-07,
+              "relative_l2": 4.094017577583766e-08,
+              "rtol": 1e-05,
+              "state": "passed"
+            },
+            "router.weight": {
+              "atol": 1e-06,
+              "elements": 320,
+              "failed_elements": 0,
+              "max_abs": 3.725290298461914e-08,
+              "relative_l2": 3.993324286318418e-07,
+              "rtol": 1e-05,
+              "state": "passed"
+            },
+            "w1": {
+              "atol": 1e-06,
+              "elements": 10240,
+              "failed_elements": 0,
+              "max_abs": 9.98377799987793e-07,
+              "relative_l2": 4.207834710138876e-06,
+              "rtol": 1e-05,
+              "state": "passed"
+            },
+            "w2": {
+              "atol": 1e-06,
+              "elements": 10240,
+              "failed_elements": 0,
+              "max_abs": 1.2814998626708984e-06,
+              "relative_l2": 2.7589142357474562e-06,
+              "rtol": 1e-05,
+              "state": "passed"
+            }
+          }
+        }
+      },
+      "record": "runs/moe-sort2-large-e64/result.json",
+      "sha256": "2308144fc3d6a5c49d19198f862fae03f4630e6f2ab502f1dcb3165826c70ce7",
+      "source": "269c2eaf6866de146585ba685c1139a5798a53c7"
+    },
+    {
+      "cases": [
+        {
+          "accumulation": 1,
+          "global_batch": 64,
+          "median_seconds": 0.6341330036520958,
+          "microbatch": 64,
+          "parameters": 58602880,
+          "peak_mib": 3866.00341796875,
+          "positions_per_second": 25836.85111110973,
+          "state": "completed",
+          "timing_scope": "full model, auxiliary prepass if needed, task/aux VJP, clip, AdamW and synchronization; input already on device"
+        }
+      ],
+      "mechanisms": {
+        "discrete": {
+          "cold_experts_exercised": true,
+          "dropless_rows": true,
+          "gradients_finite": true,
+          "top2_distinct": true,
+          "top2_indices_match_cpu": true,
+          "valid_assignment_count": true,
+          "weights_sum_one": true
+        },
+        "scope": "B2 L5 d16 h32 E20, CPU scalar-expert reference; input/router/expert+bias VJP includes aux, padding and empty experts",
+        "state": "passed",
+        "strict_numerical": {
+          "forward": {
+            "atol": 1e-06,
+            "elements": 160,
+            "failed_elements": 0,
+            "max_abs": 1.3969838619232178e-08,
+            "relative_l2": 2.440034971711078e-06,
+            "rtol": 1e-05,
+            "state": "passed"
+          },
+          "input_vjp": {
+            "atol": 1e-06,
+            "elements": 160,
+            "failed_elements": 0,
+            "max_abs": 2.805609256029129e-08,
+            "relative_l2": 4.315256388683927e-06,
+            "rtol": 1e-05,
+            "state": "passed"
+          },
+          "parameters": {
+            "b1": {
+              "atol": 1e-06,
+              "elements": 640,
+              "failed_elements": 0,
+              "max_abs": 4.78699803352356e-07,
+              "relative_l2": 4.341451888144295e-06,
+              "rtol": 1e-05,
+              "state": "passed"
+            },
+            "b2": {
+              "atol": 1e-06,
+              "elements": 320,
+              "failed_elements": 0,
+              "max_abs": 1.1920928955078125e-07,
+              "relative_l2": 4.094017577583766e-08,
+              "rtol": 1e-05,
+              "state": "passed"
+            },
+            "router.weight": {
+              "atol": 1e-06,
+              "elements": 320,
+              "failed_elements": 0,
+              "max_abs": 3.725290298461914e-08,
+              "relative_l2": 3.993324286318418e-07,
+              "rtol": 1e-05,
+              "state": "passed"
+            },
+            "w1": {
+              "atol": 1e-06,
+              "elements": 10240,
+              "failed_elements": 0,
+              "max_abs": 9.98377799987793e-07,
+              "relative_l2": 4.207834710138876e-06,
+              "rtol": 1e-05,
+              "state": "passed"
+            },
+            "w2": {
+              "atol": 1e-06,
+              "elements": 10240,
+              "failed_elements": 0,
+              "max_abs": 1.2814998626708984e-06,
+              "relative_l2": 2.7589142357474562e-06,
+              "rtol": 1e-05,
+              "state": "passed"
+            }
+          }
+        }
+      },
+      "record": "runs/moe-sort2-small-e64/result.json",
+      "sha256": "a4d06082350baa3ff8d15b28ae7fad3c3ab12a808f654e569b5a70b7e902357b",
+      "source": "269c2eaf6866de146585ba685c1139a5798a53c7"
+    }
+  ]
+}

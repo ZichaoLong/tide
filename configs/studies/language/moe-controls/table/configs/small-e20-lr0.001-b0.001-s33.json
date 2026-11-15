@@ -1,0 +1,98 @@
+{
+  "campaign": "moe-controls",
+  "checks": {
+    "core_atol": 1e-06,
+    "core_rtol": 1e-05,
+    "finite_exploration": true
+  },
+  "comparison_scope": "ordinary Transformer-MoE; dense attention, top2 FFN; expert fraction is not HB Full/all",
+  "core": {},
+  "device": "npu:0",
+  "dtype": "float32",
+  "evaluation": {
+    "inference_length": 16,
+    "test_policy": "sealed"
+  },
+  "id": "small-e20-lr0.001-b0.001-s33",
+  "kind": "moe",
+  "moe": {
+    "expert_implementation": "bucketed_bmm",
+    "experts": 20,
+    "heads": 4,
+    "hidden": 384,
+    "layers": 6,
+    "position_scale": 0.028284271247461905,
+    "width": 192
+  },
+  "npu_transformer_attention": "npu_fusion",
+  "numerical_policy": {
+    "auxiliary": "global64 valid-token frequencies stop-gradient; mean over layers; no-grad prepass if accumulated",
+    "finite_exploration": "bounded mechanism checks; retain finite strict mismatches, block nonfinite/discrete/recovery failures",
+    "routing": "FP32 top2 selected-logit softmax; dropless",
+    "strict_atol": 1e-06,
+    "strict_rtol": 1e-05
+  },
+  "planned_inventory": {
+    "active_per_token": 3484288,
+    "lm_trainable": 19471744
+  },
+  "resource_admission": {
+    "implementation_note": "integer-sort baseline; new lossless FP32-key sort has separate scope check and E64 full-update recheck",
+    "measured_source": "0a79e70f247bf297f4448240344ac6ae2fd9bf6f",
+    "peak_mib": 3296.42236328125,
+    "record": "runs/moe-batch-small-e20/result.json",
+    "record_sha256": "0815fc25779c39217c3d1fafba14b9b324832e56ef280a3a8827cc10a4e749e0",
+    "selection": "fastest measured full global64 update with >=8GiB extra HBM allowance; peak below24GiB",
+    "targets_per_second": 25288.1575264207
+  },
+  "resources": {
+    "max_rss_gib": 64
+  },
+  "revisions": {
+    "foundation_metadata": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+    "mathematics": "0770593838a37c790a568226930567ed60f99b83"
+  },
+  "schema": "tide-moe-control-config-v1",
+  "seed": 33,
+  "selection_key": "small-e20",
+  "study_id": "TL-MOE-CAL",
+  "threads": 4,
+  "training": {
+    "balance_coefficient": 0.001,
+    "batch": 64,
+    "betas": [
+      0.9,
+      0.95
+    ],
+    "checkpoint_seconds": 1800,
+    "clip_norm": 1.0,
+    "decay_policy": "matrix_only",
+    "eps": 1e-08,
+    "eval_batch": 64,
+    "eval_tokens": 131072,
+    "full_probe_batch": 4,
+    "full_probe_length": 32,
+    "global_batch": 64,
+    "initial_eval_tokens": 32768,
+    "keep_previous": false,
+    "length": 256,
+    "log_every": 16,
+    "lr": 0.001,
+    "lr_decay_tokens": 268435456,
+    "lr_floor_fraction": 0.1,
+    "milestone_weights_only": true,
+    "milestones": [
+      8388608,
+      33554432,
+      134217728
+    ],
+    "optimizer_foreach": false,
+    "target_tokens": 134217728,
+    "timeout_seconds": 172800,
+    "validation_every_tokens": 8388608,
+    "warmup_tokens": 1048576,
+    "weight_decay": 0.1,
+    "z_coefficient": 0.001
+  },
+  "transformer": null
+}

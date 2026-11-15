@@ -1,3 +1,13 @@
+# 当前交接：MoE实现与批量校准完成，固定有限表准备提交
+
+2026-11-15约09:17 +08：用户已授权[MoE补充表](studies/moe-controls-proposal.md)。
+[实现/验收/预算](studies/moe-controls-execution.md)及[实际接入证据](evidence/moe-controls-admission.json)已建立。
+四MoE形状和两dense均选择physical/global64；最高193.729M，最高实测峰值8.53GiB。
+CPU独立公式/VJP/累积一致性检查通过；NPU微型机制与六项Lens读回通过；逐配置整网和新进程恢复仍须worker验收。
+当前尚无MoE语言质量结论。固定候选表在`configs/studies/language/moe-controls/table/`。
+独立48h至11月17日09:05:08；新增最多8worker共享旧12slot，64GiB目标/96GiB停止，硬余量200GiB。
+旧v10及修复输入完全保持。以下为此前交接快照。
+
 # 当前交接：16/20配置到128Mi，四条继续，无新增失败
 
 2026-11-15 08:35 +08:00核对。[上午结果表与边界](studies/direct-v10-progress-20261115-morning.md) ·

@@ -1,3 +1,11 @@
+# 最新图状态：已授权的MoE校准、主对照与独立确认
+
+新增`TL-MOE-CAL`、`TL-MOE-CONTROL`、`TL-MOE-CONFIRM`，关联固定候选表、实际批量/机制/Lens记录与只读审阅器。
+纯MoE用于HB的条件容量参照，不是TIDE执行或预训练B路线。正式质量节点保持awaiting；
+校准通过、提交和退出码均不自动产生科学支持。私有Lens入口不入图，统一ID关联本地projection记录。
+[授权研究表](studies/moe-controls-proposal.md) · [执行口径](studies/moe-controls-execution.md)。
+旧v10、失败与修复谱系保持。以下为历史图快照。
+
 # 最新图状态：v10三条pool显式修复续训
 
 2026-11-15新增`TL-REPAIR-v10`，连接已审阅的根因、原pool对照和待审阅的长期结果。

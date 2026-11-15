@@ -1,0 +1,226 @@
+{
+  "automatic_extension": false,
+  "created_at": "2026-11-15T01:15:48.002438+00:00",
+  "data": "runs/v9-data-r3/data-lock.json",
+  "data_lock_sha256": "40b7c0ebb9650d11aa0c0080532c884e2ca3846db578155f3df7068b82191d2f",
+  "main_by_recipe": {
+    "large-dense-lr0.0001-s33": [
+      "large-dense-lr0.0001-s11",
+      "large-dense-lr0.0001-s22"
+    ],
+    "large-dense-lr0.0003-s33": [
+      "large-dense-lr0.0003-s11",
+      "large-dense-lr0.0003-s22"
+    ],
+    "large-dense-lr0.001-s33": [
+      "large-dense-lr0.001-s11",
+      "large-dense-lr0.001-s22"
+    ],
+    "large-e20-lr0.0001-b0.001-s33": [
+      "large-e20-lr0.0001-b0.001-s11",
+      "large-e20-lr0.0001-b0.001-s22"
+    ],
+    "large-e20-lr0.0001-b0.01-s33": [
+      "large-e20-lr0.0001-b0.01-s11",
+      "large-e20-lr0.0001-b0.01-s22"
+    ],
+    "large-e20-lr0.0003-b0.001-s33": [
+      "large-e20-lr0.0003-b0.001-s11",
+      "large-e20-lr0.0003-b0.001-s22"
+    ],
+    "large-e20-lr0.0003-b0.01-s33": [
+      "large-e20-lr0.0003-b0.01-s11",
+      "large-e20-lr0.0003-b0.01-s22"
+    ],
+    "large-e20-lr0.001-b0.001-s33": [
+      "large-e20-lr0.001-b0.001-s11",
+      "large-e20-lr0.001-b0.001-s22"
+    ],
+    "large-e20-lr0.001-b0.01-s33": [
+      "large-e20-lr0.001-b0.01-s11",
+      "large-e20-lr0.001-b0.01-s22"
+    ],
+    "large-e64-lr0.0001-b0.001-s33": [
+      "large-e64-lr0.0001-b0.001-s11",
+      "large-e64-lr0.0001-b0.001-s22"
+    ],
+    "large-e64-lr0.0001-b0.01-s33": [
+      "large-e64-lr0.0001-b0.01-s11",
+      "large-e64-lr0.0001-b0.01-s22"
+    ],
+    "large-e64-lr0.0003-b0.001-s33": [
+      "large-e64-lr0.0003-b0.001-s11",
+      "large-e64-lr0.0003-b0.001-s22"
+    ],
+    "large-e64-lr0.0003-b0.01-s33": [
+      "large-e64-lr0.0003-b0.01-s11",
+      "large-e64-lr0.0003-b0.01-s22"
+    ],
+    "large-e64-lr0.001-b0.001-s33": [
+      "large-e64-lr0.001-b0.001-s11",
+      "large-e64-lr0.001-b0.001-s22"
+    ],
+    "large-e64-lr0.001-b0.01-s33": [
+      "large-e64-lr0.001-b0.01-s11",
+      "large-e64-lr0.001-b0.01-s22"
+    ],
+    "small-dense-lr0.0003-s33": [
+      "small-dense-lr0.0003-s11",
+      "small-dense-lr0.0003-s22"
+    ],
+    "small-dense-lr0.001-s33": [
+      "small-dense-lr0.001-s11",
+      "small-dense-lr0.001-s22"
+    ],
+    "small-dense-lr0.003-s33": [
+      "small-dense-lr0.003-s11",
+      "small-dense-lr0.003-s22"
+    ],
+    "small-e20-lr0.0003-b0.001-s33": [
+      "small-e20-lr0.0003-b0.001-s11",
+      "small-e20-lr0.0003-b0.001-s22"
+    ],
+    "small-e20-lr0.0003-b0.01-s33": [
+      "small-e20-lr0.0003-b0.01-s11",
+      "small-e20-lr0.0003-b0.01-s22"
+    ],
+    "small-e20-lr0.001-b0.001-s33": [
+      "small-e20-lr0.001-b0.001-s11",
+      "small-e20-lr0.001-b0.001-s22"
+    ],
+    "small-e20-lr0.001-b0.01-s33": [
+      "small-e20-lr0.001-b0.01-s11",
+      "small-e20-lr0.001-b0.01-s22"
+    ],
+    "small-e20-lr0.003-b0.001-s33": [
+      "small-e20-lr0.003-b0.001-s11",
+      "small-e20-lr0.003-b0.001-s22"
+    ],
+    "small-e20-lr0.003-b0.01-s33": [
+      "small-e20-lr0.003-b0.01-s11",
+      "small-e20-lr0.003-b0.01-s22"
+    ],
+    "small-e64-lr0.0003-b0.001-s33": [
+      "small-e64-lr0.0003-b0.001-s11",
+      "small-e64-lr0.0003-b0.001-s22"
+    ],
+    "small-e64-lr0.0003-b0.01-s33": [
+      "small-e64-lr0.0003-b0.01-s11",
+      "small-e64-lr0.0003-b0.01-s22"
+    ],
+    "small-e64-lr0.001-b0.001-s33": [
+      "small-e64-lr0.001-b0.001-s11",
+      "small-e64-lr0.001-b0.001-s22"
+    ],
+    "small-e64-lr0.001-b0.01-s33": [
+      "small-e64-lr0.001-b0.01-s11",
+      "small-e64-lr0.001-b0.01-s22"
+    ],
+    "small-e64-lr0.003-b0.001-s33": [
+      "small-e64-lr0.003-b0.001-s11",
+      "small-e64-lr0.003-b0.001-s22"
+    ],
+    "small-e64-lr0.003-b0.01-s33": [
+      "small-e64-lr0.003-b0.01-s11",
+      "small-e64-lr0.003-b0.01-s22"
+    ]
+  },
+  "main_target_tokens": 134217728,
+  "max_main_trajectories": 12,
+  "max_selected32": 12,
+  "measurements": {
+    "large-dense": {
+      "implementation_note": "integer-sort baseline; new lossless FP32-key sort has separate scope check and E64 full-update recheck",
+      "measured_source": "0a79e70f247bf297f4448240344ac6ae2fd9bf6f",
+      "peak_mib": 4394.44140625,
+      "record": "runs/moe-batch-large-dense/result.json",
+      "record_sha256": "08af37892f8b2097b91bd521a37e2156ba97166a8dc62a3633a18d905e264cc0",
+      "selection": "fastest measured full global64 update with >=8GiB extra HBM allowance; peak below24GiB",
+      "targets_per_second": 256851.1463542561
+    },
+    "large-e20": {
+      "implementation_note": "integer-sort baseline; new lossless FP32-key sort has separate scope check and E64 full-update recheck",
+      "measured_source": "0a79e70f247bf297f4448240344ac6ae2fd9bf6f",
+      "peak_mib": 6859.064453125,
+      "record": "runs/moe-batch-large-e20/result.json",
+      "record_sha256": "86994974a447f1721e860e38647a9a7103265f6bdbc3c070bfb9acb898b3b65d",
+      "selection": "fastest measured full global64 update with >=8GiB extra HBM allowance; peak below24GiB",
+      "targets_per_second": 13548.42180808665
+    },
+    "large-e64": {
+      "implementation_note": "integer-sort baseline; new lossless FP32-key sort has separate scope check and E64 full-update recheck",
+      "measured_source": "0a79e70f247bf297f4448240344ac6ae2fd9bf6f",
+      "peak_mib": 8728.7509765625,
+      "record": "runs/moe-batch-large-e64/result.json",
+      "record_sha256": "5e99f69d08f0be88bb1378d8cd0661949bd9adeced00a963ad77b55fff62f299",
+      "selection": "fastest measured full global64 update with >=8GiB extra HBM allowance; peak below24GiB",
+      "targets_per_second": 12710.004297525476
+    },
+    "small-dense": {
+      "implementation_note": "integer-sort baseline; new lossless FP32-key sort has separate scope check and E64 full-update recheck",
+      "measured_source": "0a79e70f247bf297f4448240344ac6ae2fd9bf6f",
+      "peak_mib": 2339.73388671875,
+      "record": "runs/moe-batch-small-dense/result.json",
+      "record_sha256": "278997cc9b5ac1afb3297b48f6bc5e0c80bf964a1ba2cc114a9a37b10fb160c2",
+      "selection": "fastest measured full global64 update with >=8GiB extra HBM allowance; peak below24GiB",
+      "targets_per_second": 485359.2576337607
+    },
+    "small-e20": {
+      "implementation_note": "integer-sort baseline; new lossless FP32-key sort has separate scope check and E64 full-update recheck",
+      "measured_source": "0a79e70f247bf297f4448240344ac6ae2fd9bf6f",
+      "peak_mib": 3296.42236328125,
+      "record": "runs/moe-batch-small-e20/result.json",
+      "record_sha256": "0815fc25779c39217c3d1fafba14b9b324832e56ef280a3a8827cc10a4e749e0",
+      "selection": "fastest measured full global64 update with >=8GiB extra HBM allowance; peak below24GiB",
+      "targets_per_second": 25288.1575264207
+    },
+    "small-e64": {
+      "implementation_note": "integer-sort baseline; new lossless FP32-key sort has separate scope check and E64 full-update recheck",
+      "measured_source": "0a79e70f247bf297f4448240344ac6ae2fd9bf6f",
+      "peak_mib": 3867.6572265625,
+      "record": "runs/moe-batch-small-e64/result.json",
+      "record_sha256": "223bdb57ad41731437d3e330d332d283efd2594ed439335052aa3d5ad6accee5",
+      "selection": "fastest measured full global64 update with >=8GiB extra HBM allowance; peak below24GiB",
+      "targets_per_second": 25285.331636378585
+    }
+  },
+  "schema": "tide-moe-controls-table-v1",
+  "screen_cases": [
+    "small-e20-lr0.0003-b0.001-s33",
+    "small-e64-lr0.0003-b0.001-s33",
+    "large-e20-lr0.0001-b0.001-s33",
+    "large-e64-lr0.0001-b0.001-s33",
+    "small-dense-lr0.0003-s33",
+    "large-dense-lr0.0001-s33",
+    "small-e20-lr0.0003-b0.01-s33",
+    "small-e64-lr0.0003-b0.01-s33",
+    "large-e20-lr0.0001-b0.01-s33",
+    "large-e64-lr0.0001-b0.01-s33",
+    "small-dense-lr0.001-s33",
+    "large-dense-lr0.0003-s33",
+    "small-e20-lr0.001-b0.001-s33",
+    "small-e64-lr0.001-b0.001-s33",
+    "large-e20-lr0.0003-b0.001-s33",
+    "large-e64-lr0.0003-b0.001-s33",
+    "small-dense-lr0.003-s33",
+    "large-dense-lr0.001-s33",
+    "small-e20-lr0.001-b0.01-s33",
+    "small-e64-lr0.001-b0.01-s33",
+    "large-e20-lr0.0003-b0.01-s33",
+    "large-e64-lr0.0003-b0.01-s33",
+    "small-e20-lr0.003-b0.001-s33",
+    "small-e64-lr0.003-b0.001-s33",
+    "large-e20-lr0.001-b0.001-s33",
+    "large-e64-lr0.001-b0.001-s33",
+    "small-e20-lr0.003-b0.01-s33",
+    "small-e64-lr0.003-b0.01-s33",
+    "large-e20-lr0.001-b0.01-s33",
+    "large-e64-lr0.001-b0.01-s33"
+  ],
+  "screen_targets": [
+    8388608,
+    33554432
+  ],
+  "selection": "per-shape complete finite validation NLL; tie exact equality by ID; no confirmation feedback",
+  "unused_configs": "Possible fresh seeds only; controller submits one winning recipe per shape, not the whole set"
+}

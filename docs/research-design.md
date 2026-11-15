@@ -1,3 +1,12 @@
+# 当前补充设计：标准MoE的条件容量控制
+
+[MoE执行表](studies/moe-controls-proposal.md)已授权：普通decoder-only Transformer的FFN全为top2独立专家，
+不含TIDE记忆/区域；共享attention保持稠密。两档容量、E20/E64与近活跃预算dense，均经形状内有限配方筛选。
+共同语料/划分/global64/L256与8/32/128Mi口径；选择只读validation，正式双seed独立262K确认，test密封。
+专家选择10%/3.125%和全模型活跃参数约16–18%/5–6%分列，不能与HB Full/all或等FLOPs混用。
+这是架构条件容量参照，不是同拓扑单因素试验，也不改变A/B路线含义。实现/数值/恢复/学习边界见
+[执行口径](studies/moe-controls-execution.md)，实际状态归STATUS。
+
 # 当前设计：v10同模型的语言、容量与低活动联合比较
 
 [v10执行表](studies/language-capacity-activity-v10.md)是最新已授权设计：在固定h2/5阶段下，
