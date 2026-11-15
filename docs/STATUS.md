@@ -1,12 +1,28 @@
-# 当前交接：MoE实现与批量校准完成，固定有限表准备提交
+# 当前交接：MoE补充批已后台训练，8运行／4完成先导
 
-2026-11-15约09:17 +08：用户已授权[MoE补充表](studies/moe-controls-proposal.md)。
-[实现/验收/预算](studies/moe-controls-execution.md)及[实际接入证据](evidence/moe-controls-admission.json)已建立。
-四MoE形状和两dense均选择physical/global64；最高193.729M，最高实测峰值8.53GiB。
-CPU独立公式/VJP/累积一致性检查通过；NPU微型机制与六项Lens读回通过；逐配置整网和新进程恢复仍须worker验收。
-当前尚无MoE语言质量结论。固定候选表在`configs/studies/language/moe-controls/table/`。
-独立48h至11月17日09:05:08；新增最多8worker共享旧12slot，64GiB目标/96GiB停止，硬余量200GiB。
-旧v10及修复输入完全保持。以下为此前交接快照。
+2026-11-15 09:26 +08核对：固定30个筛选配方中，8条MoE均通过B4/L32三步新进程精确恢复并实际训练，
+4条dense已完成8Mi并Lens读回verified；另18条由持久控制器按8并发继续安排。
+[已授权研究表](studies/moe-controls-proposal.md) · [实施/数值边界](studies/moe-controls-execution.md) ·
+[实际逐运行交接](evidence/moe-controls-handoff.json) · [查看/停止/恢复/Lens](studies/moe-controls-operations.md)。
+
+新源码 **8bd33dd1**，`.local/source-moe-execution-v2`；控制器`moe-controller-r2`，全部在background.slice。
+已完成四dense前缀及其32Mi续训保留**2f96d745**，不重复训练；旧v10及修复输入保持原身份。
+首批设备：small-E20 balance.001/.01在1/14，small-E64在7/10，large-E20在0/8，large-E64在4/2。
+所有配方physical/global64、L256、FP32；最高193.729M，校准峰值8.53GiB，实际语料当前峰值约9.25GiB。两档E20/E64专家选择10%/3.125%，
+全模型活跃参数另计。当前仅有运行和短程曲线，不宣称MoE/HB质量或扩展胜负。
+
+原12次MoE零阈值因果准入失败保留；[四形状定位](evidence/moe-causal-diagnosis.json)显示packing相关约1e-7前缀差异、
+前缀支持一致、未来输入VJP为零、固定形状NPU/CPU参考严格因果。后继仅作具名有限探索，不放宽原阈值。
+整网前向和81/159个参数VJP仍有独立有限超差，未完全区分原因；局部机制/恢复通过不等于整网数值等价。
+
+共同截止**11月17日09:05:08**，无累计算时上限；新增最多8worker，共享全局12slot，64GiB目标/96GiB停止，
+账号当前硬余量约485.0GiB。筛选8Mi→形状内前2到32Mi→各形状最佳fresh seed11/22至128Mi，
+随后独立262K确认；不自动256Mi，test密封。已有精确配方一致的小dense可按原v10身份复用。
+Lens项目`tide-learning-lab`，组`TL-MOE-CAL` / `TL-MOE-CONTROL` / `TL-MOE-CONFIRM`；私有入口`.local/LENS.md`。
+[训练中的三次设备采样](evidence/moe-resources-training.json)：AICPU均0%，AICore约0–4%，AIVector11–56%；
+不能称矩阵算力已充分利用，也不从不同分母的计数器直接推断各算子耗时。当前吞吐足以推进有界学习比较。
+
+以下为此前交接快照。
 
 # 当前交接：16/20配置到128Mi，四条继续，无新增失败
 

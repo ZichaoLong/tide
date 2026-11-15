@@ -27,6 +27,7 @@ def review(root):
             app=application_state(obs['state'].get('state'),result.get('state'),inner.get('state'))
             stages=inner.get('stages',[]);latest=stages[-1] if stages else {}
             projection=read(training/'projection.json');recovery=read(path/'recovery.json');check=read(path/'check/result.json')
+            checks=check.get('checks',{})
             v=read(training/'validation-final.json')
             rows.append(dict(id=case['id'],phase=phase,job=case['job'],application_state=app,
                 service_state=obs['state'].get('state'),stage=latest.get('name'),
@@ -35,6 +36,10 @@ def review(root):
                 tokens=progress.get('tokens',result.get('progress',{}).get('tokens')),nll=v.get('nll',result.get('nll')),
                 error=result.get('error',inner.get('reason')),recovery=recovery.get('state','unchecked'),
                 numerical=check.get('axes',{}).get('strict_numerical','unchecked'),
+                strict_forward=checks.get('forward',{}).get('state','unchecked'),
+                strict_vjp_failures=sum(v.get('state')=='failed' for v in checks.get('parameter_vjp',{}).values()),
+                strict_causal=checks.get('causal',{}).get('state','unchecked'),
+                causal_mechanism=checks.get('moe_causal_diagnosis',{}).get('mechanism_state','not_required_or_unchecked'),
                 last_update=progress.get('last_update',{}),
                 lens_status=projection.get('status'),lens_readback_matches=projection.get('readback_matches'),
                 config=case.get('config'),record=str(training/'result.json')))

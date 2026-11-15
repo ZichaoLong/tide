@@ -1,0 +1,727 @@
+{
+  "phases": {
+    "large-e20-lr0.0001-b0.001-s33": "probe-split",
+    "large-e20-lr0.0001-b0.01-s33": "probe-split",
+    "large-e64-lr0.0001-b0.001-s33": "probe-full",
+    "large-e64-lr0.0001-b0.01-s33": "probe-full",
+    "small-e20-lr0.0003-b0.001-s33": "train",
+    "small-e20-lr0.0003-b0.01-s33": "probe-resumed",
+    "small-e64-lr0.0003-b0.001-s33": "probe-resumed",
+    "small-e64-lr0.0003-b0.01-s33": "probe-split"
+  },
+  "samples": [
+    {
+      "at": "2026-11-15T01:23:13.265602+00:00",
+      "devices": [
+        {
+          "command": [
+            "npu-smi",
+            "info",
+            "-t",
+            "usages",
+            "-i",
+            "0",
+            "-c",
+            "0"
+          ],
+          "exit_code": 0,
+          "metrics": {
+            "Aicore Usage Rate(%)": 0.0,
+            "Aicpu Usage Rate(%)": 0.0,
+            "Aivector Usage Rate(%)": 0.0,
+            "Ctrlcpu Usage Rate(%)": 3.0,
+            "DDR Bandwidth Usage Rate(%)": 0.0,
+            "DDR Capacity(MB)": 0.0,
+            "DDR Hugepages Total(page)": 0.0,
+            "DDR Hugepages Usage Rate(%)": 0.0,
+            "DDR Usage Rate(%)": 0.0,
+            "HBM Bandwidth Usage Rate(%)": 0.0,
+            "HBM Capacity(MB)": 65536.0,
+            "HBM Usage Rate(%)": 6.0,
+            "NPU Utilization(%)": 0.0
+          },
+          "physical_id": 0
+        },
+        {
+          "command": [
+            "npu-smi",
+            "info",
+            "-t",
+            "usages",
+            "-i",
+            "0",
+            "-c",
+            "1"
+          ],
+          "exit_code": 0,
+          "metrics": {
+            "Aicore Usage Rate(%)": 0.0,
+            "Aicpu Usage Rate(%)": 0.0,
+            "Aivector Usage Rate(%)": 0.0,
+            "Ctrlcpu Usage Rate(%)": 4.0,
+            "DDR Bandwidth Usage Rate(%)": 0.0,
+            "DDR Capacity(MB)": 0.0,
+            "DDR Hugepages Total(page)": 0.0,
+            "DDR Hugepages Usage Rate(%)": 0.0,
+            "DDR Usage Rate(%)": 0.0,
+            "HBM Bandwidth Usage Rate(%)": 0.0,
+            "HBM Capacity(MB)": 65536.0,
+            "HBM Usage Rate(%)": 4.0,
+            "NPU Utilization(%)": 0.0
+          },
+          "physical_id": 1
+        },
+        {
+          "command": [
+            "npu-smi",
+            "info",
+            "-t",
+            "usages",
+            "-i",
+            "1",
+            "-c",
+            "0"
+          ],
+          "exit_code": 0,
+          "metrics": {
+            "Aicore Usage Rate(%)": 0.0,
+            "Aicpu Usage Rate(%)": 0.0,
+            "Aivector Usage Rate(%)": 0.0,
+            "Ctrlcpu Usage Rate(%)": 1.0,
+            "DDR Bandwidth Usage Rate(%)": 0.0,
+            "DDR Capacity(MB)": 0.0,
+            "DDR Hugepages Total(page)": 0.0,
+            "DDR Hugepages Usage Rate(%)": 0.0,
+            "DDR Usage Rate(%)": 0.0,
+            "HBM Bandwidth Usage Rate(%)": 0.0,
+            "HBM Capacity(MB)": 65536.0,
+            "HBM Usage Rate(%)": 11.0,
+            "NPU Utilization(%)": 0.0
+          },
+          "physical_id": 2
+        },
+        {
+          "command": [
+            "npu-smi",
+            "info",
+            "-t",
+            "usages",
+            "-i",
+            "2",
+            "-c",
+            "0"
+          ],
+          "exit_code": 0,
+          "metrics": {
+            "Aicore Usage Rate(%)": 0.0,
+            "Aicpu Usage Rate(%)": 0.0,
+            "Aivector Usage Rate(%)": 0.0,
+            "Ctrlcpu Usage Rate(%)": 5.0,
+            "DDR Bandwidth Usage Rate(%)": 0.0,
+            "DDR Capacity(MB)": 0.0,
+            "DDR Hugepages Total(page)": 0.0,
+            "DDR Hugepages Usage Rate(%)": 0.0,
+            "DDR Usage Rate(%)": 0.0,
+            "HBM Bandwidth Usage Rate(%)": 0.0,
+            "HBM Capacity(MB)": 65536.0,
+            "HBM Usage Rate(%)": 10.0,
+            "NPU Utilization(%)": 0.0
+          },
+          "physical_id": 4
+        },
+        {
+          "command": [
+            "npu-smi",
+            "info",
+            "-t",
+            "usages",
+            "-i",
+            "3",
+            "-c",
+            "1"
+          ],
+          "exit_code": 0,
+          "metrics": {
+            "Aicore Usage Rate(%)": 0.0,
+            "Aicpu Usage Rate(%)": 0.0,
+            "Aivector Usage Rate(%)": 0.0,
+            "Ctrlcpu Usage Rate(%)": 1.0,
+            "DDR Bandwidth Usage Rate(%)": 0.0,
+            "DDR Capacity(MB)": 0.0,
+            "DDR Hugepages Total(page)": 0.0,
+            "DDR Hugepages Usage Rate(%)": 0.0,
+            "DDR Usage Rate(%)": 0.0,
+            "HBM Bandwidth Usage Rate(%)": 0.0,
+            "HBM Capacity(MB)": 65536.0,
+            "HBM Usage Rate(%)": 6.0,
+            "NPU Utilization(%)": 0.0
+          },
+          "physical_id": 7
+        },
+        {
+          "command": [
+            "npu-smi",
+            "info",
+            "-t",
+            "usages",
+            "-i",
+            "4",
+            "-c",
+            "0"
+          ],
+          "exit_code": 0,
+          "metrics": {
+            "Aicore Usage Rate(%)": 0.0,
+            "Aicpu Usage Rate(%)": 0.0,
+            "Aivector Usage Rate(%)": 0.0,
+            "Ctrlcpu Usage Rate(%)": 1.0,
+            "DDR Bandwidth Usage Rate(%)": 0.0,
+            "DDR Capacity(MB)": 0.0,
+            "DDR Hugepages Total(page)": 0.0,
+            "DDR Hugepages Usage Rate(%)": 0.0,
+            "DDR Usage Rate(%)": 0.0,
+            "HBM Bandwidth Usage Rate(%)": 0.0,
+            "HBM Capacity(MB)": 65536.0,
+            "HBM Usage Rate(%)": 7.0,
+            "NPU Utilization(%)": 0.0
+          },
+          "physical_id": 8
+        },
+        {
+          "command": [
+            "npu-smi",
+            "info",
+            "-t",
+            "usages",
+            "-i",
+            "5",
+            "-c",
+            "0"
+          ],
+          "exit_code": 0,
+          "metrics": {
+            "Aicore Usage Rate(%)": 0.0,
+            "Aicpu Usage Rate(%)": 0.0,
+            "Aivector Usage Rate(%)": 0.0,
+            "Ctrlcpu Usage Rate(%)": 3.0,
+            "DDR Bandwidth Usage Rate(%)": 0.0,
+            "DDR Capacity(MB)": 0.0,
+            "DDR Hugepages Total(page)": 0.0,
+            "DDR Hugepages Usage Rate(%)": 0.0,
+            "DDR Usage Rate(%)": 0.0,
+            "HBM Bandwidth Usage Rate(%)": 0.0,
+            "HBM Capacity(MB)": 65536.0,
+            "HBM Usage Rate(%)": 7.0,
+            "NPU Utilization(%)": 0.0
+          },
+          "physical_id": 10
+        },
+        {
+          "command": [
+            "npu-smi",
+            "info",
+            "-t",
+            "usages",
+            "-i",
+            "7",
+            "-c",
+            "0"
+          ],
+          "exit_code": 0,
+          "metrics": {
+            "Aicore Usage Rate(%)": 0.0,
+            "Aicpu Usage Rate(%)": 0.0,
+            "Aivector Usage Rate(%)": 0.0,
+            "Ctrlcpu Usage Rate(%)": 8.0,
+            "DDR Bandwidth Usage Rate(%)": 0.0,
+            "DDR Capacity(MB)": 0.0,
+            "DDR Hugepages Total(page)": 0.0,
+            "DDR Hugepages Usage Rate(%)": 0.0,
+            "DDR Usage Rate(%)": 0.0,
+            "HBM Bandwidth Usage Rate(%)": 0.0,
+            "HBM Capacity(MB)": 65536.0,
+            "HBM Usage Rate(%)": 5.0,
+            "NPU Utilization(%)": 0.0
+          },
+          "physical_id": 14
+        }
+      ]
+    },
+    {
+      "at": "2026-11-15T01:23:22.246602+00:00",
+      "devices": [
+        {
+          "command": [
+            "npu-smi",
+            "info",
+            "-t",
+            "usages",
+            "-i",
+            "0",
+            "-c",
+            "0"
+          ],
+          "exit_code": 0,
+          "metrics": {
+            "Aicore Usage Rate(%)": 0.0,
+            "Aicpu Usage Rate(%)": 0.0,
+            "Aivector Usage Rate(%)": 0.0,
+            "Ctrlcpu Usage Rate(%)": 4.0,
+            "DDR Bandwidth Usage Rate(%)": 0.0,
+            "DDR Capacity(MB)": 0.0,
+            "DDR Hugepages Total(page)": 0.0,
+            "DDR Hugepages Usage Rate(%)": 0.0,
+            "DDR Usage Rate(%)": 0.0,
+            "HBM Bandwidth Usage Rate(%)": 0.0,
+            "HBM Capacity(MB)": 65536.0,
+            "HBM Usage Rate(%)": 4.0,
+            "NPU Utilization(%)": 0.0
+          },
+          "physical_id": 0
+        },
+        {
+          "command": [
+            "npu-smi",
+            "info",
+            "-t",
+            "usages",
+            "-i",
+            "0",
+            "-c",
+            "1"
+          ],
+          "exit_code": 0,
+          "metrics": {
+            "Aicore Usage Rate(%)": 0.0,
+            "Aicpu Usage Rate(%)": 0.0,
+            "Aivector Usage Rate(%)": 48.0,
+            "Ctrlcpu Usage Rate(%)": 4.0,
+            "DDR Bandwidth Usage Rate(%)": 0.0,
+            "DDR Capacity(MB)": 0.0,
+            "DDR Hugepages Total(page)": 0.0,
+            "DDR Hugepages Usage Rate(%)": 0.0,
+            "DDR Usage Rate(%)": 0.0,
+            "HBM Bandwidth Usage Rate(%)": 0.0,
+            "HBM Capacity(MB)": 65536.0,
+            "HBM Usage Rate(%)": 10.0,
+            "NPU Utilization(%)": 100.0
+          },
+          "physical_id": 1
+        },
+        {
+          "command": [
+            "npu-smi",
+            "info",
+            "-t",
+            "usages",
+            "-i",
+            "1",
+            "-c",
+            "0"
+          ],
+          "exit_code": 0,
+          "metrics": {
+            "Aicore Usage Rate(%)": 0.0,
+            "Aicpu Usage Rate(%)": 0.0,
+            "Aivector Usage Rate(%)": 0.0,
+            "Ctrlcpu Usage Rate(%)": 6.0,
+            "DDR Bandwidth Usage Rate(%)": 0.0,
+            "DDR Capacity(MB)": 0.0,
+            "DDR Hugepages Total(page)": 0.0,
+            "DDR Hugepages Usage Rate(%)": 0.0,
+            "DDR Usage Rate(%)": 0.0,
+            "HBM Bandwidth Usage Rate(%)": 0.0,
+            "HBM Capacity(MB)": 65536.0,
+            "HBM Usage Rate(%)": 11.0,
+            "NPU Utilization(%)": 0.0
+          },
+          "physical_id": 2
+        },
+        {
+          "command": [
+            "npu-smi",
+            "info",
+            "-t",
+            "usages",
+            "-i",
+            "2",
+            "-c",
+            "0"
+          ],
+          "exit_code": 0,
+          "metrics": {
+            "Aicore Usage Rate(%)": 0.0,
+            "Aicpu Usage Rate(%)": 0.0,
+            "Aivector Usage Rate(%)": 0.0,
+            "Ctrlcpu Usage Rate(%)": 0.0,
+            "DDR Bandwidth Usage Rate(%)": 0.0,
+            "DDR Capacity(MB)": 0.0,
+            "DDR Hugepages Total(page)": 0.0,
+            "DDR Hugepages Usage Rate(%)": 0.0,
+            "DDR Usage Rate(%)": 0.0,
+            "HBM Bandwidth Usage Rate(%)": 0.0,
+            "HBM Capacity(MB)": 65536.0,
+            "HBM Usage Rate(%)": 10.0,
+            "NPU Utilization(%)": 0.0
+          },
+          "physical_id": 4
+        },
+        {
+          "command": [
+            "npu-smi",
+            "info",
+            "-t",
+            "usages",
+            "-i",
+            "3",
+            "-c",
+            "1"
+          ],
+          "exit_code": 0,
+          "metrics": {
+            "Aicore Usage Rate(%)": 0.0,
+            "Aicpu Usage Rate(%)": 0.0,
+            "Aivector Usage Rate(%)": 0.0,
+            "Ctrlcpu Usage Rate(%)": 1.0,
+            "DDR Bandwidth Usage Rate(%)": 0.0,
+            "DDR Capacity(MB)": 0.0,
+            "DDR Hugepages Total(page)": 0.0,
+            "DDR Hugepages Usage Rate(%)": 0.0,
+            "DDR Usage Rate(%)": 0.0,
+            "HBM Bandwidth Usage Rate(%)": 0.0,
+            "HBM Capacity(MB)": 65536.0,
+            "HBM Usage Rate(%)": 6.0,
+            "NPU Utilization(%)": 0.0
+          },
+          "physical_id": 7
+        },
+        {
+          "command": [
+            "npu-smi",
+            "info",
+            "-t",
+            "usages",
+            "-i",
+            "4",
+            "-c",
+            "0"
+          ],
+          "exit_code": 0,
+          "metrics": {
+            "Aicore Usage Rate(%)": 0.0,
+            "Aicpu Usage Rate(%)": 0.0,
+            "Aivector Usage Rate(%)": 0.0,
+            "Ctrlcpu Usage Rate(%)": 9.0,
+            "DDR Bandwidth Usage Rate(%)": 0.0,
+            "DDR Capacity(MB)": 0.0,
+            "DDR Hugepages Total(page)": 0.0,
+            "DDR Hugepages Usage Rate(%)": 0.0,
+            "DDR Usage Rate(%)": 0.0,
+            "HBM Bandwidth Usage Rate(%)": 0.0,
+            "HBM Capacity(MB)": 65536.0,
+            "HBM Usage Rate(%)": 5.0,
+            "NPU Utilization(%)": 0.0
+          },
+          "physical_id": 8
+        },
+        {
+          "command": [
+            "npu-smi",
+            "info",
+            "-t",
+            "usages",
+            "-i",
+            "5",
+            "-c",
+            "0"
+          ],
+          "exit_code": 0,
+          "metrics": {
+            "Aicore Usage Rate(%)": 0.0,
+            "Aicpu Usage Rate(%)": 0.0,
+            "Aivector Usage Rate(%)": 0.0,
+            "Ctrlcpu Usage Rate(%)": 4.0,
+            "DDR Bandwidth Usage Rate(%)": 0.0,
+            "DDR Capacity(MB)": 0.0,
+            "DDR Hugepages Total(page)": 0.0,
+            "DDR Hugepages Usage Rate(%)": 0.0,
+            "DDR Usage Rate(%)": 0.0,
+            "HBM Bandwidth Usage Rate(%)": 0.0,
+            "HBM Capacity(MB)": 65536.0,
+            "HBM Usage Rate(%)": 5.0,
+            "NPU Utilization(%)": 0.0
+          },
+          "physical_id": 10
+        },
+        {
+          "command": [
+            "npu-smi",
+            "info",
+            "-t",
+            "usages",
+            "-i",
+            "7",
+            "-c",
+            "0"
+          ],
+          "exit_code": 0,
+          "metrics": {
+            "Aicore Usage Rate(%)": 3.0,
+            "Aicpu Usage Rate(%)": 0.0,
+            "Aivector Usage Rate(%)": 53.0,
+            "Ctrlcpu Usage Rate(%)": 4.0,
+            "DDR Bandwidth Usage Rate(%)": 0.0,
+            "DDR Capacity(MB)": 0.0,
+            "DDR Hugepages Total(page)": 0.0,
+            "DDR Hugepages Usage Rate(%)": 0.0,
+            "DDR Usage Rate(%)": 0.0,
+            "HBM Bandwidth Usage Rate(%)": 1.0,
+            "HBM Capacity(MB)": 65536.0,
+            "HBM Usage Rate(%)": 10.0,
+            "NPU Utilization(%)": 51.0
+          },
+          "physical_id": 14
+        }
+      ]
+    },
+    {
+      "at": "2026-11-15T01:23:29.562804+00:00",
+      "devices": [
+        {
+          "command": [
+            "npu-smi",
+            "info",
+            "-t",
+            "usages",
+            "-i",
+            "0",
+            "-c",
+            "0"
+          ],
+          "exit_code": 0,
+          "metrics": {
+            "Aicore Usage Rate(%)": 0.0,
+            "Aicpu Usage Rate(%)": 0.0,
+            "Aivector Usage Rate(%)": 0.0,
+            "Ctrlcpu Usage Rate(%)": 4.0,
+            "DDR Bandwidth Usage Rate(%)": 0.0,
+            "DDR Capacity(MB)": 0.0,
+            "DDR Hugepages Total(page)": 0.0,
+            "DDR Hugepages Usage Rate(%)": 0.0,
+            "DDR Usage Rate(%)": 0.0,
+            "HBM Bandwidth Usage Rate(%)": 0.0,
+            "HBM Capacity(MB)": 65536.0,
+            "HBM Usage Rate(%)": 7.0,
+            "NPU Utilization(%)": 0.0
+          },
+          "physical_id": 0
+        },
+        {
+          "command": [
+            "npu-smi",
+            "info",
+            "-t",
+            "usages",
+            "-i",
+            "0",
+            "-c",
+            "1"
+          ],
+          "exit_code": 0,
+          "metrics": {
+            "Aicore Usage Rate(%)": 0.0,
+            "Aicpu Usage Rate(%)": 0.0,
+            "Aivector Usage Rate(%)": 13.0,
+            "Ctrlcpu Usage Rate(%)": 2.0,
+            "DDR Bandwidth Usage Rate(%)": 0.0,
+            "DDR Capacity(MB)": 0.0,
+            "DDR Hugepages Total(page)": 0.0,
+            "DDR Hugepages Usage Rate(%)": 0.0,
+            "DDR Usage Rate(%)": 0.0,
+            "HBM Bandwidth Usage Rate(%)": 0.0,
+            "HBM Capacity(MB)": 65536.0,
+            "HBM Usage Rate(%)": 10.0,
+            "NPU Utilization(%)": 75.0
+          },
+          "physical_id": 1
+        },
+        {
+          "command": [
+            "npu-smi",
+            "info",
+            "-t",
+            "usages",
+            "-i",
+            "1",
+            "-c",
+            "0"
+          ],
+          "exit_code": 0,
+          "metrics": {
+            "Aicore Usage Rate(%)": 0.0,
+            "Aicpu Usage Rate(%)": 0.0,
+            "Aivector Usage Rate(%)": 0.0,
+            "Ctrlcpu Usage Rate(%)": 6.0,
+            "DDR Bandwidth Usage Rate(%)": 0.0,
+            "DDR Capacity(MB)": 0.0,
+            "DDR Hugepages Total(page)": 0.0,
+            "DDR Hugepages Usage Rate(%)": 0.0,
+            "DDR Usage Rate(%)": 0.0,
+            "HBM Bandwidth Usage Rate(%)": 0.0,
+            "HBM Capacity(MB)": 65536.0,
+            "HBM Usage Rate(%)": 11.0,
+            "NPU Utilization(%)": 0.0
+          },
+          "physical_id": 2
+        },
+        {
+          "command": [
+            "npu-smi",
+            "info",
+            "-t",
+            "usages",
+            "-i",
+            "2",
+            "-c",
+            "0"
+          ],
+          "exit_code": 0,
+          "metrics": {
+            "Aicore Usage Rate(%)": 0.0,
+            "Aicpu Usage Rate(%)": 0.0,
+            "Aivector Usage Rate(%)": 0.0,
+            "Ctrlcpu Usage Rate(%)": 1.0,
+            "DDR Bandwidth Usage Rate(%)": 0.0,
+            "DDR Capacity(MB)": 0.0,
+            "DDR Hugepages Total(page)": 0.0,
+            "DDR Hugepages Usage Rate(%)": 0.0,
+            "DDR Usage Rate(%)": 0.0,
+            "HBM Bandwidth Usage Rate(%)": 0.0,
+            "HBM Capacity(MB)": 65536.0,
+            "HBM Usage Rate(%)": 10.0,
+            "NPU Utilization(%)": 0.0
+          },
+          "physical_id": 4
+        },
+        {
+          "command": [
+            "npu-smi",
+            "info",
+            "-t",
+            "usages",
+            "-i",
+            "3",
+            "-c",
+            "1"
+          ],
+          "exit_code": 0,
+          "metrics": {
+            "Aicore Usage Rate(%)": 0.0,
+            "Aicpu Usage Rate(%)": 0.0,
+            "Aivector Usage Rate(%)": 0.0,
+            "Ctrlcpu Usage Rate(%)": 2.0,
+            "DDR Bandwidth Usage Rate(%)": 0.0,
+            "DDR Capacity(MB)": 0.0,
+            "DDR Hugepages Total(page)": 0.0,
+            "DDR Hugepages Usage Rate(%)": 0.0,
+            "DDR Usage Rate(%)": 0.0,
+            "HBM Bandwidth Usage Rate(%)": 0.0,
+            "HBM Capacity(MB)": 65536.0,
+            "HBM Usage Rate(%)": 4.0,
+            "NPU Utilization(%)": 0.0
+          },
+          "physical_id": 7
+        },
+        {
+          "command": [
+            "npu-smi",
+            "info",
+            "-t",
+            "usages",
+            "-i",
+            "4",
+            "-c",
+            "0"
+          ],
+          "exit_code": 0,
+          "metrics": {
+            "Aicore Usage Rate(%)": 0.0,
+            "Aicpu Usage Rate(%)": 0.0,
+            "Aivector Usage Rate(%)": 0.0,
+            "Ctrlcpu Usage Rate(%)": 6.0,
+            "DDR Bandwidth Usage Rate(%)": 0.0,
+            "DDR Capacity(MB)": 0.0,
+            "DDR Hugepages Total(page)": 0.0,
+            "DDR Hugepages Usage Rate(%)": 0.0,
+            "DDR Usage Rate(%)": 0.0,
+            "HBM Bandwidth Usage Rate(%)": 0.0,
+            "HBM Capacity(MB)": 65536.0,
+            "HBM Usage Rate(%)": 7.0,
+            "NPU Utilization(%)": 13.0
+          },
+          "physical_id": 8
+        },
+        {
+          "command": [
+            "npu-smi",
+            "info",
+            "-t",
+            "usages",
+            "-i",
+            "5",
+            "-c",
+            "0"
+          ],
+          "exit_code": 0,
+          "metrics": {
+            "Aicore Usage Rate(%)": 0.0,
+            "Aicpu Usage Rate(%)": 0.0,
+            "Aivector Usage Rate(%)": 0.0,
+            "Ctrlcpu Usage Rate(%)": 3.0,
+            "DDR Bandwidth Usage Rate(%)": 0.0,
+            "DDR Capacity(MB)": 0.0,
+            "DDR Hugepages Total(page)": 0.0,
+            "DDR Hugepages Usage Rate(%)": 0.0,
+            "DDR Usage Rate(%)": 0.0,
+            "HBM Bandwidth Usage Rate(%)": 0.0,
+            "HBM Capacity(MB)": 65536.0,
+            "HBM Usage Rate(%)": 7.0,
+            "NPU Utilization(%)": 0.0
+          },
+          "physical_id": 10
+        },
+        {
+          "command": [
+            "npu-smi",
+            "info",
+            "-t",
+            "usages",
+            "-i",
+            "7",
+            "-c",
+            "0"
+          ],
+          "exit_code": 0,
+          "metrics": {
+            "Aicore Usage Rate(%)": 0.0,
+            "Aicpu Usage Rate(%)": 0.0,
+            "Aivector Usage Rate(%)": 52.0,
+            "Ctrlcpu Usage Rate(%)": 6.0,
+            "DDR Bandwidth Usage Rate(%)": 0.0,
+            "DDR Capacity(MB)": 0.0,
+            "DDR Hugepages Total(page)": 0.0,
+            "DDR Hugepages Usage Rate(%)": 0.0,
+            "DDR Usage Rate(%)": 0.0,
+            "HBM Bandwidth Usage Rate(%)": 3.0,
+            "HBM Capacity(MB)": 65536.0,
+            "HBM Usage Rate(%)": 10.0,
+            "NPU Utilization(%)": 100.0
+          },
+          "physical_id": 14
+        }
+      ]
+    }
+  ],
+  "schema": "tide-moe-resources-review-v1",
+  "scope": "shared-card snapshots during admission/recovery/startup, not steady-state throughput or process attribution; counters have different denominators"
+}
