@@ -6,6 +6,12 @@
   configurations under new frozen source. Keep the original deadline,38 training
   chains,128Mi endpoints,12 shared slots and disk limits. No active old inputs
   change, no relaxed thresholds and no silent retry; at most one repair per chain.
+- V12 repair preparation is submitted: qualification source555a6863 passed CPU;
+  NPU qualification is queued. Durable controller source62e32602 at
+  `.local/source-hb-v12-repair-v2` waits for qualification/Lens before submitting
+  explicit repair descendants. Inspect `scripts/review_hb_v12_repair.py` and
+  `docs/evidence/hb-v12-repair-handoff.json`; do not equate a queued check with
+  qualified NPU operation or a running controller with resumed training.
 - Latest user approval authorizes the fuller HB mechanism campaign in
   `docs/studies/hb-mechanisms-v12.md`:19 named variants x seeds11/22, each bounded
   at128Mi, shared48h,<=200M parameters, shared12 NPU slots, no aggregate compute

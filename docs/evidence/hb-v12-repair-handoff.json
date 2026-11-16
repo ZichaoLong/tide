@@ -1,0 +1,565 @@
+{
+  "checks": {
+    "controller_disk_quota": {
+      "state": "passed",
+      "tests": 8
+    },
+    "cpu_mechanism_disk_hb_regressions": {
+      "state": "passed",
+      "tests": 13
+    },
+    "note": "disk tests occur in both commands; not21 distinct tests; NPU and per-chain recovery not yet complete"
+  },
+  "controller": {
+    "budget": {
+      "aggregate_compute_cap": null,
+      "deadline_epoch": 1794928087.6161592,
+      "max_new_disk_gib": 96,
+      "max_npu_workers": 12,
+      "max_parameters": 200000000,
+      "max_training": 38,
+      "max_variants": 19,
+      "maximum_tokens_per_trajectory": 134217728,
+      "minimum_quota_headroom_gib": 200,
+      "schema": "tide-hb-v12-budget-v1",
+      "started_epoch": 1794755287.6161592,
+      "target_new_disk_gib": 64,
+      "target_tokens": 134217728
+    },
+    "jobs": {},
+    "schema": "tide-hb-v12-repair-controller-v1",
+    "scope": "one repair per supported original failure; active originals untouched; no new candidates/seeds/exposure",
+    "source_commit": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+    "started_at": "2026-11-16T01:27:01.821063+00:00",
+    "state": "waiting_qualification",
+    "unhandled": {}
+  },
+  "cpu_qualification": {
+    "allocator_seconds": {
+      "original": 0.015777444001287222,
+      "pivot": 0.024874322582036257
+    },
+    "allocator_time_ratio": 1.5765749243037628,
+    "axes": {
+      "execution": "passed",
+      "full_model_recovery": "required_per_chain",
+      "learning": "unchecked",
+      "local_strict_numerical": "passed",
+      "witness_discrete_and_vjp": "passed"
+    },
+    "device": "cpu",
+    "finished_at": "2026-11-16T01:20:38.746289+00:00",
+    "implementation_sha256": {
+      "tide_lab/direct_semantic_ops.py": "4205336428856dd931d8c1908c435701f2947d296bfeaadae074a05e6484849d",
+      "tide_lab/disk_usage.py": "6787a634eb83aea53cf5b4e1cb2901fb39075ec83721e0c020cdafa314b2af06"
+    },
+    "installation": {
+      "foundation_commit": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+      "foundation_lock_sha256": "ba5464d7e23fe6b8c7453a52bfc7b961f040c92d0b80786c18132e40d90308b7",
+      "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+      "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+      "tidegraph": "0.3.0",
+      "tidegraph_source_sha256": "cfe2168a2c87565a568fb8944429b6b38401f92cf24972fba59c47b7592a7847",
+      "torch": "2.12.0+cpu",
+      "torch_npu": "2.12.0.post3",
+      "transformers": null
+    },
+    "original_feasibility_threshold": 2e-05,
+    "rows": [
+      {
+        "centered": false,
+        "forward": {
+          "atol": 1e-06,
+          "elements": 64,
+          "failed_elements": 0,
+          "max_abs": 2.609024107869118e-14,
+          "relative_l2": 2.3336047475151083e-14,
+          "rtol": 1e-05,
+          "state": "passed"
+        },
+        "interior_mask_equal": true,
+        "max_residual": 0.0,
+        "nonzero_values": [
+          0.5000242590904236,
+          0.9999757409095764
+        ],
+        "vjp": {
+          "budget": {
+            "atol": 1e-06,
+            "elements": 1,
+            "failed_elements": 0,
+            "max_abs": 0.0,
+            "relative_l2": 0.0,
+            "rtol": 1e-05,
+            "state": "passed"
+          },
+          "cap": {
+            "atol": 1e-06,
+            "elements": 64,
+            "failed_elements": 0,
+            "max_abs": 0.0,
+            "relative_l2": 0.0,
+            "rtol": 1e-05,
+            "state": "passed"
+          },
+          "score": {
+            "atol": 1e-06,
+            "elements": 64,
+            "failed_elements": 0,
+            "max_abs": 0.0,
+            "relative_l2": 0.0,
+            "rtol": 1e-05,
+            "state": "passed"
+          }
+        }
+      },
+      {
+        "centered": true,
+        "forward": {
+          "atol": 1e-06,
+          "elements": 64,
+          "failed_elements": 0,
+          "max_abs": 2.609024107869118e-14,
+          "relative_l2": 2.3336047475151083e-14,
+          "rtol": 1e-05,
+          "state": "passed"
+        },
+        "interior_mask_equal": true,
+        "max_residual": 0.0,
+        "nonzero_values": [
+          0.5000242590904236,
+          0.9999757409095764
+        ],
+        "vjp": {
+          "budget": {
+            "atol": 1e-06,
+            "elements": 1,
+            "failed_elements": 0,
+            "max_abs": 0.0,
+            "relative_l2": 0.0,
+            "rtol": 1e-05,
+            "state": "passed"
+          },
+          "cap": {
+            "atol": 1e-06,
+            "elements": 64,
+            "failed_elements": 0,
+            "max_abs": 0.0,
+            "relative_l2": 0.0,
+            "rtol": 1e-05,
+            "state": "passed"
+          },
+          "score": {
+            "atol": 1e-06,
+            "elements": 64,
+            "failed_elements": 0,
+            "max_abs": 0.0,
+            "relative_l2": 0.0,
+            "rtol": 1e-05,
+            "state": "passed"
+          }
+        }
+      }
+    ],
+    "schema": "tide-hb-v12-quad-repair-check-v1",
+    "scope": "Captured row, independent scalar CPU FP64 roots, exact witness VJP, finite bounded stress and allocator-only timing; full-model recovery/learning separate.",
+    "source_commit": "555a68637ded4fb83ef5a8aa1c768fdab78545c1",
+    "started_at": "2026-11-16T01:20:37.097883+00:00",
+    "state": "completed",
+    "stress": [
+      {
+        "absent_exact_zero": true,
+        "bounds": true,
+        "finite": true,
+        "forward": {
+          "atol": 1e-06,
+          "elements": 2048,
+          "failed_elements": 0,
+          "max_abs": 7.748512871330604e-07,
+          "relative_l2": 1.197061117944063e-07,
+          "rtol": 1e-05,
+          "state": "passed"
+        },
+        "max_residual": 9.5367431640625e-07,
+        "offset": 0.0,
+        "shape": [
+          32,
+          64
+        ],
+        "tau": 0.001
+      },
+      {
+        "absent_exact_zero": true,
+        "bounds": true,
+        "finite": true,
+        "forward": {
+          "atol": 1e-06,
+          "elements": 2048,
+          "failed_elements": 0,
+          "max_abs": 7.152556710243729e-07,
+          "relative_l2": 1.254478956367399e-07,
+          "rtol": 1e-05,
+          "state": "passed"
+        },
+        "max_residual": 9.5367431640625e-07,
+        "offset": 0.0,
+        "shape": [
+          32,
+          64
+        ],
+        "tau": 0.12
+      },
+      {
+        "absent_exact_zero": true,
+        "bounds": true,
+        "finite": true,
+        "forward": {
+          "atol": 1e-06,
+          "elements": 2048,
+          "failed_elements": 0,
+          "max_abs": 1.7285346984863281e-06,
+          "relative_l2": 2.5184128213313145e-07,
+          "rtol": 1e-05,
+          "state": "passed"
+        },
+        "max_residual": 9.5367431640625e-07,
+        "offset": 0.0,
+        "shape": [
+          32,
+          64
+        ],
+        "tau": 1.0
+      },
+      {
+        "absent_exact_zero": true,
+        "bounds": true,
+        "finite": true,
+        "forward": {
+          "atol": 1e-06,
+          "elements": 2048,
+          "failed_elements": 0,
+          "max_abs": 3.814697276949275e-07,
+          "relative_l2": 1.0032707189956865e-07,
+          "rtol": 1e-05,
+          "state": "passed"
+        },
+        "max_residual": 1.9073486328125e-06,
+        "offset": 0.0,
+        "shape": [
+          32,
+          64
+        ],
+        "tau": 100.0
+      },
+      {
+        "absent_exact_zero": true,
+        "bounds": true,
+        "finite": true,
+        "forward": {
+          "atol": 1e-06,
+          "elements": 2048,
+          "failed_elements": 0,
+          "max_abs": 1.3709145605389494e-06,
+          "relative_l2": 1.5714876245288563e-07,
+          "rtol": 1e-05,
+          "state": "passed"
+        },
+        "max_residual": 9.5367431640625e-07,
+        "offset": 10000.0,
+        "shape": [
+          32,
+          64
+        ],
+        "tau": 0.001
+      },
+      {
+        "absent_exact_zero": true,
+        "bounds": true,
+        "finite": true,
+        "forward": {
+          "atol": 1e-06,
+          "elements": 2048,
+          "failed_elements": 0,
+          "max_abs": 1.4305114461876656e-06,
+          "relative_l2": 2.3565109391890646e-07,
+          "rtol": 1e-05,
+          "state": "passed"
+        },
+        "max_residual": 9.5367431640625e-07,
+        "offset": 10000.0,
+        "shape": [
+          32,
+          64
+        ],
+        "tau": 0.12
+      },
+      {
+        "absent_exact_zero": true,
+        "bounds": true,
+        "finite": true,
+        "forward": {
+          "atol": 1e-06,
+          "elements": 2048,
+          "failed_elements": 0,
+          "max_abs": 1.8477439880371094e-06,
+          "relative_l2": 1.9665558611472767e-07,
+          "rtol": 1e-05,
+          "state": "passed"
+        },
+        "max_residual": 9.5367431640625e-07,
+        "offset": 10000.0,
+        "shape": [
+          32,
+          64
+        ],
+        "tau": 1.0
+      },
+      {
+        "absent_exact_zero": true,
+        "bounds": true,
+        "finite": true,
+        "forward": {
+          "atol": 1e-06,
+          "elements": 2048,
+          "failed_elements": 0,
+          "max_abs": 8.332729345417178e-07,
+          "relative_l2": 1.274127695084825e-07,
+          "rtol": 1e-05,
+          "state": "passed"
+        },
+        "max_residual": 9.5367431640625e-07,
+        "offset": 10000.0,
+        "shape": [
+          32,
+          64
+        ],
+        "tau": 100.0
+      },
+      {
+        "absent_exact_zero": true,
+        "bounds": true,
+        "finite": true,
+        "forward": {
+          "atol": 1e-06,
+          "elements": 2048,
+          "failed_elements": 0,
+          "max_abs": 1.966957142940373e-06,
+          "relative_l2": 2.3354540096528562e-07,
+          "rtol": 1e-05,
+          "state": "passed"
+        },
+        "max_residual": 9.5367431640625e-07,
+        "offset": 1000000.0,
+        "shape": [
+          32,
+          64
+        ],
+        "tau": 0.001
+      },
+      {
+        "absent_exact_zero": true,
+        "bounds": true,
+        "finite": true,
+        "forward": {
+          "atol": 1e-06,
+          "elements": 2048,
+          "failed_elements": 0,
+          "max_abs": 1.4901162330716033e-06,
+          "relative_l2": 1.636870461107801e-07,
+          "rtol": 1e-05,
+          "state": "passed"
+        },
+        "max_residual": 9.5367431640625e-07,
+        "offset": 1000000.0,
+        "shape": [
+          32,
+          64
+        ],
+        "tau": 0.12
+      },
+      {
+        "absent_exact_zero": true,
+        "bounds": true,
+        "finite": true,
+        "forward": {
+          "atol": 1e-06,
+          "elements": 2048,
+          "failed_elements": 0,
+          "max_abs": 1.0132789611816406e-06,
+          "relative_l2": 1.387028493698366e-07,
+          "rtol": 1e-05,
+          "state": "passed"
+        },
+        "max_residual": 9.5367431640625e-07,
+        "offset": 1000000.0,
+        "shape": [
+          32,
+          64
+        ],
+        "tau": 1.0
+      },
+      {
+        "absent_exact_zero": true,
+        "bounds": true,
+        "finite": true,
+        "forward": {
+          "atol": 1e-06,
+          "elements": 2048,
+          "failed_elements": 0,
+          "max_abs": 1.3709068309442074e-06,
+          "relative_l2": 1.4867988858851462e-07,
+          "rtol": 1e-05,
+          "state": "passed"
+        },
+        "max_residual": 9.5367431640625e-07,
+        "offset": 1000000.0,
+        "shape": [
+          32,
+          64
+        ],
+        "tau": 100.0
+      }
+    ],
+    "witness_sha256": "339ae0f5dc30e04070f1203f0c83bc4f4931df470d6c1eb2d75d8476da63a901"
+  },
+  "frozen_sources": {
+    "original": "5147701447dd15a092cc4b052f828b037ed98df4",
+    "qualification": "555a68637ded4fb83ef5a8aa1c768fdab78545c1",
+    "repair": "62e32602b23e371eb1669f7b99409db626a1c4f8"
+  },
+  "observed_at": "2026-11-16T01:27:53.239569+00:00",
+  "qualification": [
+    {
+      "allocator_time_ratio": 1.5765749243037628,
+      "device": "cpu",
+      "error": null,
+      "lens": "verified",
+      "record": "runs/v12-repair-qualification-cpu/result.json",
+      "state": "completed"
+    },
+    {
+      "allocator_time_ratio": null,
+      "device": "npu",
+      "error": null,
+      "lens": null,
+      "record": "runs/v12-repair-qualification-npu/result.json",
+      "state": "not_started"
+    }
+  ],
+  "repairs": [],
+  "resources": {
+    "disk": {
+      "bytes": 49257525248,
+      "entries": 3553,
+      "gib": 45.8746452331543,
+      "scope": "allocated bytes, hardlinks once, no symlink traversal; live observation, not atomic snapshot",
+      "vanished": 0
+    },
+    "quota": {
+      "file_grace_expires_epoch": 0,
+      "file_hard": 0,
+      "file_soft": 0,
+      "files": 1674039,
+      "filesystem": "/dev/mapper/ascend_data-data",
+      "grace_expires_epoch": 1795294591,
+      "hard_gib": 800.0,
+      "hard_quota_headroom_gib": 378.4035987854004,
+      "query_returncode": 1,
+      "soft_exceeded": true,
+      "soft_gib": 300.0,
+      "used_gib": 421.5964012145996
+    }
+  },
+  "schema": "tide-hb-v12-repair-live-review-v1",
+  "scope": "Original failures remain in review_hb_v12.py; new source migration is not a new seed or old-source exact continuation",
+  "units": {
+    "v12-repair-controller": {
+      "lifecycle": "running",
+      "physical_device": null,
+      "queue_state": null,
+      "systemd": {
+        "ActiveState": "active",
+        "CPUQuotaPerSecUSec": "1s",
+        "ControlGroup": "/user.slice/user-1003.slice/user@1003.service/background.slice/tide-lab-v12-repair-controller.service",
+        "ExecMainStatus": "0",
+        "Id": "tide-lab-v12-repair-controller.service",
+        "LoadState": "loaded",
+        "MainPID": "2576674",
+        "MemoryMax": "8589934592",
+        "Result": "success",
+        "RuntimeMaxUSec": "1d 13h 40min 36s",
+        "Slice": "background.slice",
+        "SubState": "running",
+        "Transient": "yes",
+        "inspection_exit_code": 0
+      },
+      "termination_verified": false
+    },
+    "v12-repair-hardware": {
+      "lifecycle": "running",
+      "physical_device": null,
+      "queue_state": null,
+      "systemd": {
+        "ActiveState": "active",
+        "CPUQuotaPerSecUSec": "1s",
+        "ControlGroup": "/user.slice/user-1003.slice/user@1003.service/background.slice/tide-lab-v12-repair-hardware.service",
+        "ExecMainStatus": "0",
+        "Id": "tide-lab-v12-repair-hardware.service",
+        "LoadState": "loaded",
+        "MainPID": "2576694",
+        "MemoryMax": "2147483648",
+        "Result": "success",
+        "RuntimeMaxUSec": "1d 13h 40min 36s",
+        "Slice": "background.slice",
+        "SubState": "running",
+        "Transient": "yes",
+        "inspection_exit_code": 0
+      },
+      "termination_verified": false
+    },
+    "v12-repair-qualification-cpu": {
+      "lifecycle": "completed",
+      "physical_device": null,
+      "queue_state": null,
+      "systemd": {
+        "ActiveState": "inactive",
+        "CPUQuotaPerSecUSec": "infinity",
+        "ControlGroup": "",
+        "ExecMainStatus": "0",
+        "Id": "tide-lab-v12-repair-qualification-cpu.service",
+        "LoadState": "not-found",
+        "MainPID": "0",
+        "MemoryMax": "infinity",
+        "Result": "success",
+        "RuntimeMaxUSec": "infinity",
+        "Slice": "",
+        "SubState": "dead",
+        "Transient": "no",
+        "inspection_exit_code": 0
+      },
+      "termination_verified": true
+    },
+    "v12-repair-qualification-npu": {
+      "lifecycle": "waiting_resources",
+      "physical_device": null,
+      "queue_state": "waiting_resources",
+      "systemd": {
+        "ActiveState": "active",
+        "CPUQuotaPerSecUSec": "2s",
+        "ControlGroup": "/user.slice/user-1003.slice/user@1003.service/background.slice/tide-lab-v12-repair-qualification-npu.service",
+        "ExecMainStatus": "0",
+        "Id": "tide-lab-v12-repair-qualification-npu.service",
+        "LoadState": "loaded",
+        "MainPID": "2479472",
+        "MemoryMax": "8589934592",
+        "Result": "success",
+        "RuntimeMaxUSec": "1d 13h 47min 3s",
+        "Slice": "background.slice",
+        "SubState": "running",
+        "Transient": "yes",
+        "inspection_exit_code": 0
+      },
+      "termination_verified": false
+    }
+  }
+}

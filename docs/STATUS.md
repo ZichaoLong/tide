@@ -1,4 +1,28 @@
-# 当前交接：HB v12两条完成、22条失败，12条继续
+# 当前交接：v12修复已冻结，CPU通过，NPU资格排队
+
+2026-11-16 09:28 +08。用户“请修复”已实施两项补丁及显式续训流程：
+[修复方案](studies/hb-v12-repair.md) · [实际服务与CPU证据](evidence/hb-v12-repair-handoff.json) ·
+[操作/Lens/停止/恢复](studies/hb-v12-operations.md)。
+资格源码555a6863，实际续训控制器源码62e32602（`.local/source-hb-v12-repair-v2`），
+原活动51477014不变。更早4fca6da0快照未提交作业，不能当实际运行身份。
+
+CPU捕获行残差从2.432e-5到0，内部集合和score/cap/budget VJP通过原阈值；
+12条件384行标量FP64参考对照最大残差1.907e-6。13项数值/磁盘/HB测试、8项控制/磁盘/配额测试通过（磁盘测试重复），
+CPU资格Lens verified。局部分配CPU耗时约原1.58倍，不等于完整训练步变慢1.58倍；NPU/完整步仍待测。
+22条原失败的[实际父状态](evidence/hb-v12-repair-parents.json)均可解码、SHA/source/config/data一致且有optimizer；
+实际父曝光0.685–122.721Mi。此审计不替代后台的新源码精确恢复门槛。
+
+`v12-repair-qualification-npu`当前waiting_resources；`v12-repair-controller`在background.slice运行，
+等待CPU/NPU资格与Lens读回，尚未提交修复训练。资格通过后为原表中同类失败每链最多提交一次新作业，
+每条校验实际父SHA/进度、迁移值不变、完成global64/L256新进程恢复及64更新后补原128Mi。
+未完成8Mi的基础设施失败先补原先导及其后恢复。新失败不自动循环重试。
+
+原11月17日23:08:07截止、12共享槽、96GiB新增停止保持；此时约45.875GiB新增、378.4GiB硬余量。
+旧失败与科学结论不改写；严格数值、离散机制、恢复和学习仍分别记录。
+修复只读状态：`python scripts/review_hb_v12_repair.py`；旧38条状态：`python scripts/review_hb_v12.py`。
+以下为此前状态快照。
+
+# 历史交接：HB v12两条完成、22条失败，12条继续
 
 2026-11-16 08:56 +08只读审阅：38链为2完成、12运行、22失败、2等待。
 21条quad可行性残差超原2e-5，另1条du碰上原子临时文件消失；后者不是额度耗尽。

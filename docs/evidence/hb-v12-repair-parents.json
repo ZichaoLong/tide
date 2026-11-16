@@ -1,0 +1,834 @@
+{
+  "observed_at": "2026-11-16T01:30:10.930280+00:00",
+  "parents": [
+    {
+      "bytes": 267094503,
+      "id": "base-q10-s11",
+      "identity": {
+        "config_sha256": "2223c54b216c1472b94595c61d4f401ff8221374402fd293e37613c3d342f679",
+        "data_lock_sha256": "40b7c0ebb9650d11aa0c0080532c884e2ca3846db578155f3df7068b82191d2f",
+        "device": "npu:0",
+        "dtype": "float32",
+        "installation": {
+          "foundation_commit": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+          "foundation_lock_sha256": "ba5464d7e23fe6b8c7453a52bfc7b961f040c92d0b80786c18132e40d90308b7",
+          "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+          "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+          "tidegraph": "0.3.0",
+          "tidegraph_source_sha256": "cfe2168a2c87565a568fb8944429b6b38401f92cf24972fba59c47b7592a7847",
+          "torch": "2.12.0+cpu",
+          "torch_npu": "2.12.0.post3",
+          "transformers": null
+        },
+        "mode": "train",
+        "source_commit": "5147701447dd15a092cc4b052f828b037ed98df4",
+        "source_sha256": "547c262230864633c48921e64f5ffdeea5e5af5979eff16aa8aab061b29872b8",
+        "threads": 2
+      },
+      "parent": "runs/v12-main-base-q10-s11/train/latest.pt",
+      "parent_sha256": "9d08414c69496826b704b5d61872cc6e36ce13ada2d72a278908758ab2e8f041",
+      "progress": {
+        "cursor": 134336,
+        "dropped_tail_tokens": 13074,
+        "milestones": [
+          8388608,
+          33554432
+        ],
+        "probe": false,
+        "step": 2099,
+        "tokens": 33554432
+      }
+    },
+    {
+      "bytes": 267094503,
+      "id": "base-q10-s22",
+      "identity": {
+        "config_sha256": "e81dad7b3c060cae1ce1892e60726576a2da316f8b515973e92eb4d72115624e",
+        "data_lock_sha256": "40b7c0ebb9650d11aa0c0080532c884e2ca3846db578155f3df7068b82191d2f",
+        "device": "npu:0",
+        "dtype": "float32",
+        "installation": {
+          "foundation_commit": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+          "foundation_lock_sha256": "ba5464d7e23fe6b8c7453a52bfc7b961f040c92d0b80786c18132e40d90308b7",
+          "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+          "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+          "tidegraph": "0.3.0",
+          "tidegraph_source_sha256": "cfe2168a2c87565a568fb8944429b6b38401f92cf24972fba59c47b7592a7847",
+          "torch": "2.12.0+cpu",
+          "torch_npu": "2.12.0.post3",
+          "transformers": null
+        },
+        "mode": "train",
+        "source_commit": "5147701447dd15a092cc4b052f828b037ed98df4",
+        "source_sha256": "547c262230864633c48921e64f5ffdeea5e5af5979eff16aa8aab061b29872b8",
+        "threads": 2
+      },
+      "parent": "runs/v12-main-base-q10-s22/train/latest.pt",
+      "parent_sha256": "ed37406554444d8ab224d52140df52fa8754de53349c776c320d01d609fe0b11",
+      "progress": {
+        "cursor": 229312,
+        "dropped_tail_tokens": 10522,
+        "milestones": [
+          8388608,
+          33554432
+        ],
+        "probe": false,
+        "step": 3583,
+        "tokens": 57309204
+      }
+    },
+    {
+      "bytes": 2057937959,
+      "id": "base128-q3-s11",
+      "identity": {
+        "config_sha256": "798b9a22488d2369f22066de8a283107f4e51938f788f416224f130a31c40d3a",
+        "data_lock_sha256": "40b7c0ebb9650d11aa0c0080532c884e2ca3846db578155f3df7068b82191d2f",
+        "device": "npu:0",
+        "dtype": "float32",
+        "installation": {
+          "foundation_commit": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+          "foundation_lock_sha256": "ba5464d7e23fe6b8c7453a52bfc7b961f040c92d0b80786c18132e40d90308b7",
+          "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+          "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+          "tidegraph": "0.3.0",
+          "tidegraph_source_sha256": "cfe2168a2c87565a568fb8944429b6b38401f92cf24972fba59c47b7592a7847",
+          "torch": "2.12.0+cpu",
+          "torch_npu": "2.12.0.post3",
+          "transformers": null
+        },
+        "mode": "train",
+        "source_commit": "5147701447dd15a092cc4b052f828b037ed98df4",
+        "source_sha256": "547c262230864633c48921e64f5ffdeea5e5af5979eff16aa8aab061b29872b8",
+        "threads": 2
+      },
+      "parent": "runs/v12-main-base128-q3-s11/train/latest.pt",
+      "parent_sha256": "2bfd4ef8f4faa8972ea62c10fe71ec26e4b7d7869dfedd3730f83a4d537c73d2",
+      "progress": {
+        "cursor": 56512,
+        "dropped_tail_tokens": 12448,
+        "milestones": [
+          8388608
+        ],
+        "probe": false,
+        "step": 883,
+        "tokens": 14110084
+      }
+    },
+    {
+      "bytes": 2057937959,
+      "id": "base128-q3-s22",
+      "identity": {
+        "config_sha256": "69913ce19f6492caec247f60f4789b5facf912ac54b8f8908b37e226c8174007",
+        "data_lock_sha256": "40b7c0ebb9650d11aa0c0080532c884e2ca3846db578155f3df7068b82191d2f",
+        "device": "npu:0",
+        "dtype": "float32",
+        "installation": {
+          "foundation_commit": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+          "foundation_lock_sha256": "ba5464d7e23fe6b8c7453a52bfc7b961f040c92d0b80786c18132e40d90308b7",
+          "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+          "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+          "tidegraph": "0.3.0",
+          "tidegraph_source_sha256": "cfe2168a2c87565a568fb8944429b6b38401f92cf24972fba59c47b7592a7847",
+          "torch": "2.12.0+cpu",
+          "torch_npu": "2.12.0.post3",
+          "transformers": null
+        },
+        "mode": "train",
+        "source_commit": "5147701447dd15a092cc4b052f828b037ed98df4",
+        "source_sha256": "547c262230864633c48921e64f5ffdeea5e5af5979eff16aa8aab061b29872b8",
+        "threads": 2
+      },
+      "parent": "runs/v12-main-base128-q3-s22/train/latest.pt",
+      "parent_sha256": "34e34922c2cd091b3caceb24e734f2f8b48977055b9ee7a6939471ea9f95702d",
+      "progress": {
+        "cursor": 134272,
+        "dropped_tail_tokens": 10522,
+        "milestones": [
+          8388608,
+          33554432
+        ],
+        "probe": false,
+        "step": 2098,
+        "tokens": 33554432
+      }
+    },
+    {
+      "bytes": 232726695,
+      "id": "share0-q3-s11",
+      "identity": {
+        "config_sha256": "cdcd210db988d20bc492e9f31f53563705509577c0ad0bebef5a9453b0a00088",
+        "data_lock_sha256": "40b7c0ebb9650d11aa0c0080532c884e2ca3846db578155f3df7068b82191d2f",
+        "device": "npu:0",
+        "dtype": "float32",
+        "installation": {
+          "foundation_commit": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+          "foundation_lock_sha256": "ba5464d7e23fe6b8c7453a52bfc7b961f040c92d0b80786c18132e40d90308b7",
+          "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+          "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+          "tidegraph": "0.3.0",
+          "tidegraph_source_sha256": "cfe2168a2c87565a568fb8944429b6b38401f92cf24972fba59c47b7592a7847",
+          "torch": "2.12.0+cpu",
+          "torch_npu": "2.12.0.post3",
+          "transformers": null
+        },
+        "mode": "train",
+        "source_commit": "5147701447dd15a092cc4b052f828b037ed98df4",
+        "source_sha256": "547c262230864633c48921e64f5ffdeea5e5af5979eff16aa8aab061b29872b8",
+        "threads": 2
+      },
+      "parent": "runs/v12-main-share0-q3-s11/train/latest.pt",
+      "parent_sha256": "8f321ff407f3d4116f753b935a86701d86763af7bf8fee1dd3953a56b1659548",
+      "progress": {
+        "cursor": 134336,
+        "dropped_tail_tokens": 13074,
+        "milestones": [
+          8388608,
+          33554432
+        ],
+        "probe": false,
+        "step": 2099,
+        "tokens": 33554432
+      }
+    },
+    {
+      "bytes": 232726695,
+      "id": "share0-q3-s22",
+      "identity": {
+        "config_sha256": "daf80239fc785b292c41fa8923c22c2d2e78c6132d9585de1414d001bcc9ff4a",
+        "data_lock_sha256": "40b7c0ebb9650d11aa0c0080532c884e2ca3846db578155f3df7068b82191d2f",
+        "device": "npu:0",
+        "dtype": "float32",
+        "installation": {
+          "foundation_commit": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+          "foundation_lock_sha256": "ba5464d7e23fe6b8c7453a52bfc7b961f040c92d0b80786c18132e40d90308b7",
+          "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+          "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+          "tidegraph": "0.3.0",
+          "tidegraph_source_sha256": "cfe2168a2c87565a568fb8944429b6b38401f92cf24972fba59c47b7592a7847",
+          "torch": "2.12.0+cpu",
+          "torch_npu": "2.12.0.post3",
+          "transformers": null
+        },
+        "mode": "train",
+        "source_commit": "5147701447dd15a092cc4b052f828b037ed98df4",
+        "source_sha256": "547c262230864633c48921e64f5ffdeea5e5af5979eff16aa8aab061b29872b8",
+        "threads": 2
+      },
+      "parent": "runs/v12-main-share0-q3-s22/train/latest.pt",
+      "parent_sha256": "c6859c30fcd4532ad84e1f29a2b6bad518e83be47f562d06c1151865692bb064",
+      "progress": {
+        "cursor": 134272,
+        "dropped_tail_tokens": 10522,
+        "milestones": [
+          8388608,
+          33554432
+        ],
+        "probe": false,
+        "step": 2098,
+        "tokens": 33554432
+      }
+    },
+    {
+      "bytes": 291777115,
+      "id": "share8-q3-s11",
+      "identity": {
+        "config_sha256": "55296152a782db0cac05effed682d77e4f460ee6a9bb2ae72ee173d604a54c4f",
+        "data_lock_sha256": "40b7c0ebb9650d11aa0c0080532c884e2ca3846db578155f3df7068b82191d2f",
+        "device": "npu:0",
+        "dtype": "float32",
+        "installation": {
+          "foundation_commit": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+          "foundation_lock_sha256": "ba5464d7e23fe6b8c7453a52bfc7b961f040c92d0b80786c18132e40d90308b7",
+          "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+          "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+          "tidegraph": "0.3.0",
+          "tidegraph_source_sha256": "cfe2168a2c87565a568fb8944429b6b38401f92cf24972fba59c47b7592a7847",
+          "torch": "2.12.0+cpu",
+          "torch_npu": "2.12.0.post3",
+          "transformers": null
+        },
+        "mode": "train",
+        "source_commit": "5147701447dd15a092cc4b052f828b037ed98df4",
+        "source_sha256": "547c262230864633c48921e64f5ffdeea5e5af5979eff16aa8aab061b29872b8",
+        "threads": 2
+      },
+      "parent": "runs/v12-main-share8-q3-s11/train/latest.pt",
+      "parent_sha256": "ad067b699122428b05bd6becb458b6c6eb4f983c66dab50303578967f8f48278",
+      "progress": {
+        "cursor": 426240,
+        "dropped_tail_tokens": 13074,
+        "milestones": [
+          8388608,
+          33554432
+        ],
+        "probe": false,
+        "step": 6660,
+        "tokens": 106537388
+      }
+    },
+    {
+      "bytes": 291777115,
+      "id": "share8-q3-s22",
+      "identity": {
+        "config_sha256": "43de102dc5a2effacc6511899998c5ab7da02ba555678eab3db1d25066222629",
+        "data_lock_sha256": "40b7c0ebb9650d11aa0c0080532c884e2ca3846db578155f3df7068b82191d2f",
+        "device": "npu:0",
+        "dtype": "float32",
+        "installation": {
+          "foundation_commit": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+          "foundation_lock_sha256": "ba5464d7e23fe6b8c7453a52bfc7b961f040c92d0b80786c18132e40d90308b7",
+          "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+          "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+          "tidegraph": "0.3.0",
+          "tidegraph_source_sha256": "cfe2168a2c87565a568fb8944429b6b38401f92cf24972fba59c47b7592a7847",
+          "torch": "2.12.0+cpu",
+          "torch_npu": "2.12.0.post3",
+          "transformers": null
+        },
+        "mode": "train",
+        "source_commit": "5147701447dd15a092cc4b052f828b037ed98df4",
+        "source_sha256": "547c262230864633c48921e64f5ffdeea5e5af5979eff16aa8aab061b29872b8",
+        "threads": 2
+      },
+      "parent": "runs/v12-main-share8-q3-s22/train/latest.pt",
+      "parent_sha256": "feb7b3a8baa1e448d84bfc8d0b2d1df9add501d0a5afde26ecb6f34ef9d1b996",
+      "progress": {
+        "cursor": 405760,
+        "dropped_tail_tokens": 10522,
+        "milestones": [
+          8388608,
+          33554432
+        ],
+        "probe": false,
+        "step": 6340,
+        "tokens": 101416617
+      }
+    },
+    {
+      "bytes": 245619323,
+      "id": "fullshare8-q3-s11",
+      "identity": {
+        "config_sha256": "321bd0e86905d1c94a782f70984256c6392f6cc796fd0f0341e890e05257edbe",
+        "data_lock_sha256": "40b7c0ebb9650d11aa0c0080532c884e2ca3846db578155f3df7068b82191d2f",
+        "device": "npu:0",
+        "dtype": "float32",
+        "installation": {
+          "foundation_commit": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+          "foundation_lock_sha256": "ba5464d7e23fe6b8c7453a52bfc7b961f040c92d0b80786c18132e40d90308b7",
+          "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+          "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+          "tidegraph": "0.3.0",
+          "tidegraph_source_sha256": "cfe2168a2c87565a568fb8944429b6b38401f92cf24972fba59c47b7592a7847",
+          "torch": "2.12.0+cpu",
+          "torch_npu": "2.12.0.post3",
+          "transformers": null
+        },
+        "mode": "train",
+        "source_commit": "5147701447dd15a092cc4b052f828b037ed98df4",
+        "source_sha256": "547c262230864633c48921e64f5ffdeea5e5af5979eff16aa8aab061b29872b8",
+        "threads": 2
+      },
+      "parent": "runs/v12-main-fullshare8-q3-s11/train/latest.pt",
+      "parent_sha256": "a18486a944511cc456d9edb26e93e91217a83dc9820b82a56178b819a2d7f04b",
+      "progress": {
+        "cursor": 162432,
+        "dropped_tail_tokens": 13074,
+        "milestones": [
+          8388608,
+          33554432
+        ],
+        "probe": false,
+        "step": 2538,
+        "tokens": 40586675
+      }
+    },
+    {
+      "bytes": 133714011,
+      "id": "share8-q10-s11",
+      "identity": {
+        "config_sha256": "782c2226d0b6625a3a703aa46ee0e03ff2f9958f5b1158daf9af10f15eea7374",
+        "data_lock_sha256": "40b7c0ebb9650d11aa0c0080532c884e2ca3846db578155f3df7068b82191d2f",
+        "device": "npu:0",
+        "dtype": "float32",
+        "installation": {
+          "foundation_commit": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+          "foundation_lock_sha256": "ba5464d7e23fe6b8c7453a52bfc7b961f040c92d0b80786c18132e40d90308b7",
+          "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+          "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+          "tidegraph": "0.3.0",
+          "tidegraph_source_sha256": "cfe2168a2c87565a568fb8944429b6b38401f92cf24972fba59c47b7592a7847",
+          "torch": "2.12.0+cpu",
+          "torch_npu": "2.12.0.post3",
+          "transformers": null
+        },
+        "mode": "train",
+        "source_commit": "5147701447dd15a092cc4b052f828b037ed98df4",
+        "source_sha256": "547c262230864633c48921e64f5ffdeea5e5af5979eff16aa8aab061b29872b8",
+        "threads": 2
+      },
+      "parent": "runs/v12-main-share8-q10-s11/train/latest.pt",
+      "parent_sha256": "8ae6cfceb906b621290d37888a712edc8bfb52fdf04a470c6caf892b5f8de483",
+      "progress": {
+        "cursor": 514880,
+        "dropped_tail_tokens": 13074,
+        "milestones": [
+          8388608,
+          33554432
+        ],
+        "probe": false,
+        "step": 8045,
+        "tokens": 128682716
+      }
+    },
+    {
+      "bytes": 689613851,
+      "id": "share8-d128-q3-s11",
+      "identity": {
+        "config_sha256": "ada4a06c2832535da1e52125059387b9af1cd7fa6625b3fd4492c9793f82c3b6",
+        "data_lock_sha256": "40b7c0ebb9650d11aa0c0080532c884e2ca3846db578155f3df7068b82191d2f",
+        "device": "npu:0",
+        "dtype": "float32",
+        "installation": {
+          "foundation_commit": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+          "foundation_lock_sha256": "ba5464d7e23fe6b8c7453a52bfc7b961f040c92d0b80786c18132e40d90308b7",
+          "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+          "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+          "tidegraph": "0.3.0",
+          "tidegraph_source_sha256": "cfe2168a2c87565a568fb8944429b6b38401f92cf24972fba59c47b7592a7847",
+          "torch": "2.12.0+cpu",
+          "torch_npu": "2.12.0.post3",
+          "transformers": null
+        },
+        "mode": "train",
+        "source_commit": "5147701447dd15a092cc4b052f828b037ed98df4",
+        "source_sha256": "547c262230864633c48921e64f5ffdeea5e5af5979eff16aa8aab061b29872b8",
+        "threads": 2
+      },
+      "parent": "runs/v12-main-share8-d128-q3-s11/train/latest.pt",
+      "parent_sha256": "4bafc6093f9968a3d3635ec8fc8efc9d19280764b23470e619bd8a35eece5e2c",
+      "progress": {
+        "cursor": 182400,
+        "dropped_tail_tokens": 13074,
+        "milestones": [
+          8388608,
+          33554432
+        ],
+        "probe": false,
+        "step": 2850,
+        "tokens": 45573288
+      }
+    },
+    {
+      "bytes": 689613915,
+      "id": "share8-d128-q3-s22",
+      "identity": {
+        "config_sha256": "b4d0a4ac26f07b17194ad345c95fc745002b203057b73e88d79bfd51774db9ff",
+        "data_lock_sha256": "40b7c0ebb9650d11aa0c0080532c884e2ca3846db578155f3df7068b82191d2f",
+        "device": "npu:0",
+        "dtype": "float32",
+        "installation": {
+          "foundation_commit": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+          "foundation_lock_sha256": "ba5464d7e23fe6b8c7453a52bfc7b961f040c92d0b80786c18132e40d90308b7",
+          "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+          "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+          "tidegraph": "0.3.0",
+          "tidegraph_source_sha256": "cfe2168a2c87565a568fb8944429b6b38401f92cf24972fba59c47b7592a7847",
+          "torch": "2.12.0+cpu",
+          "torch_npu": "2.12.0.post3",
+          "transformers": null
+        },
+        "mode": "train",
+        "source_commit": "5147701447dd15a092cc4b052f828b037ed98df4",
+        "source_sha256": "547c262230864633c48921e64f5ffdeea5e5af5979eff16aa8aab061b29872b8",
+        "threads": 2
+      },
+      "parent": "runs/v12-main-share8-d128-q3-s22/train/latest.pt",
+      "parent_sha256": "3b73100a97302e6d2105b51fe772882c9b46018d4cbb19bc77cb6bc914f869e6",
+      "progress": {
+        "cursor": 57664,
+        "dropped_tail_tokens": 3917,
+        "milestones": [
+          8388608
+        ],
+        "probe": false,
+        "step": 901,
+        "tokens": 14409739
+      }
+    },
+    {
+      "bytes": 1227041883,
+      "id": "share8-d192-q3-s11",
+      "identity": {
+        "config_sha256": "5058bdb16a06a91191e0d49b0eaa5ec1c09a06faa454f2c84648cfdd04e0976f",
+        "data_lock_sha256": "40b7c0ebb9650d11aa0c0080532c884e2ca3846db578155f3df7068b82191d2f",
+        "device": "npu:0",
+        "dtype": "float32",
+        "installation": {
+          "foundation_commit": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+          "foundation_lock_sha256": "ba5464d7e23fe6b8c7453a52bfc7b961f040c92d0b80786c18132e40d90308b7",
+          "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+          "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+          "tidegraph": "0.3.0",
+          "tidegraph_source_sha256": "cfe2168a2c87565a568fb8944429b6b38401f92cf24972fba59c47b7592a7847",
+          "torch": "2.12.0+cpu",
+          "torch_npu": "2.12.0.post3",
+          "transformers": null
+        },
+        "mode": "train",
+        "source_commit": "5147701447dd15a092cc4b052f828b037ed98df4",
+        "source_sha256": "547c262230864633c48921e64f5ffdeea5e5af5979eff16aa8aab061b29872b8",
+        "threads": 2
+      },
+      "parent": "runs/v12-main-share8-d192-q3-s11/train/latest.pt",
+      "parent_sha256": "95c223331435bd08754f4348a257bd87e5ba358a94ea48856e9a2e1ca2634c8f",
+      "progress": {
+        "cursor": 82624,
+        "dropped_tail_tokens": 12448,
+        "milestones": [
+          8388608
+        ],
+        "probe": false,
+        "step": 1291,
+        "tokens": 20635011
+      }
+    },
+    {
+      "bytes": 1227041883,
+      "id": "share8-d192-q3-s22",
+      "identity": {
+        "config_sha256": "8724af6080952101bda2e8d87785ec4a8b8c01fdd4a4389edb423bd4a9bf7582",
+        "data_lock_sha256": "40b7c0ebb9650d11aa0c0080532c884e2ca3846db578155f3df7068b82191d2f",
+        "device": "npu:0",
+        "dtype": "float32",
+        "installation": {
+          "foundation_commit": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+          "foundation_lock_sha256": "ba5464d7e23fe6b8c7453a52bfc7b961f040c92d0b80786c18132e40d90308b7",
+          "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+          "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+          "tidegraph": "0.3.0",
+          "tidegraph_source_sha256": "cfe2168a2c87565a568fb8944429b6b38401f92cf24972fba59c47b7592a7847",
+          "torch": "2.12.0+cpu",
+          "torch_npu": "2.12.0.post3",
+          "transformers": null
+        },
+        "mode": "train",
+        "source_commit": "5147701447dd15a092cc4b052f828b037ed98df4",
+        "source_sha256": "547c262230864633c48921e64f5ffdeea5e5af5979eff16aa8aab061b29872b8",
+        "threads": 2
+      },
+      "parent": "runs/v12-main-share8-d192-q3-s22/train/latest.pt",
+      "parent_sha256": "605eeed68da16351698929b87b0fc3f7d1495ae373f929ba08d8e546ba0e4c52",
+      "progress": {
+        "cursor": 49856,
+        "dropped_tail_tokens": 3917,
+        "milestones": [
+          8388608
+        ],
+        "probe": false,
+        "step": 779,
+        "tokens": 12450651
+      }
+    },
+    {
+      "bytes": 635785047,
+      "id": "readcontent-q3-s11",
+      "identity": {
+        "config_sha256": "37acf7c18595ded04fec01c322dcfc2805465b280bd817c836e62671a3ae9e57",
+        "data_lock_sha256": "40b7c0ebb9650d11aa0c0080532c884e2ca3846db578155f3df7068b82191d2f",
+        "device": "npu:0",
+        "dtype": "float32",
+        "installation": {
+          "foundation_commit": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+          "foundation_lock_sha256": "ba5464d7e23fe6b8c7453a52bfc7b961f040c92d0b80786c18132e40d90308b7",
+          "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+          "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+          "tidegraph": "0.3.0",
+          "tidegraph_source_sha256": "cfe2168a2c87565a568fb8944429b6b38401f92cf24972fba59c47b7592a7847",
+          "torch": "2.12.0+cpu",
+          "torch_npu": "2.12.0.post3",
+          "transformers": null
+        },
+        "mode": "train",
+        "source_commit": "5147701447dd15a092cc4b052f828b037ed98df4",
+        "source_sha256": "547c262230864633c48921e64f5ffdeea5e5af5979eff16aa8aab061b29872b8",
+        "threads": 2
+      },
+      "parent": "runs/v12-main-readcontent-q3-s11/train/latest.pt",
+      "parent_sha256": "b21dd740cf11779e2d82734668fdfda3d3f273be7f16e0d21f685eb88dd52af2",
+      "progress": {
+        "cursor": 216576,
+        "dropped_tail_tokens": 13074,
+        "milestones": [
+          8388608,
+          33554432
+        ],
+        "probe": false,
+        "step": 3384,
+        "tokens": 54122829
+      }
+    },
+    {
+      "bytes": 635785047,
+      "id": "readcontent-q3-s22",
+      "identity": {
+        "config_sha256": "60c09b1f7e892202ffef8cf657f3d016a695792b7bd0e5f8ded8b95eac56fb12",
+        "data_lock_sha256": "40b7c0ebb9650d11aa0c0080532c884e2ca3846db578155f3df7068b82191d2f",
+        "device": "npu:0",
+        "dtype": "float32",
+        "installation": {
+          "foundation_commit": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+          "foundation_lock_sha256": "ba5464d7e23fe6b8c7453a52bfc7b961f040c92d0b80786c18132e40d90308b7",
+          "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+          "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+          "tidegraph": "0.3.0",
+          "tidegraph_source_sha256": "cfe2168a2c87565a568fb8944429b6b38401f92cf24972fba59c47b7592a7847",
+          "torch": "2.12.0+cpu",
+          "torch_npu": "2.12.0.post3",
+          "transformers": null
+        },
+        "mode": "train",
+        "source_commit": "5147701447dd15a092cc4b052f828b037ed98df4",
+        "source_sha256": "547c262230864633c48921e64f5ffdeea5e5af5979eff16aa8aab061b29872b8",
+        "threads": 2
+      },
+      "parent": "runs/v12-main-readcontent-q3-s22/pilot/latest.pt",
+      "parent_sha256": "1e5137b439fca2a0c6c200fd1a8d6d4a9b52f41205cffa5795183295ca434a39",
+      "progress": {
+        "cursor": 33600,
+        "dropped_tail_tokens": 3917,
+        "milestones": [
+          8388608
+        ],
+        "probe": false,
+        "step": 525,
+        "tokens": 8388608
+      }
+    },
+    {
+      "bytes": 607463263,
+      "id": "untied-q3-s22",
+      "identity": {
+        "config_sha256": "60d84c1de796656d7e2a885a0767ffbd623f75a74c32632f3d7a155e88d75c0b",
+        "data_lock_sha256": "40b7c0ebb9650d11aa0c0080532c884e2ca3846db578155f3df7068b82191d2f",
+        "device": "npu:0",
+        "dtype": "float32",
+        "installation": {
+          "foundation_commit": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+          "foundation_lock_sha256": "ba5464d7e23fe6b8c7453a52bfc7b961f040c92d0b80786c18132e40d90308b7",
+          "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+          "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+          "tidegraph": "0.3.0",
+          "tidegraph_source_sha256": "cfe2168a2c87565a568fb8944429b6b38401f92cf24972fba59c47b7592a7847",
+          "torch": "2.12.0+cpu",
+          "torch_npu": "2.12.0.post3",
+          "transformers": null
+        },
+        "mode": "train",
+        "source_commit": "5147701447dd15a092cc4b052f828b037ed98df4",
+        "source_sha256": "547c262230864633c48921e64f5ffdeea5e5af5979eff16aa8aab061b29872b8",
+        "threads": 2
+      },
+      "parent": "runs/v12-main-untied-q3-s22/train/latest.pt",
+      "parent_sha256": "a241e591e364a3d1d2d603e189c27194fa43234a88ab543186ae214a0f3b388d",
+      "progress": {
+        "cursor": 295936,
+        "dropped_tail_tokens": 10522,
+        "milestones": [
+          8388608,
+          33554432
+        ],
+        "probe": false,
+        "step": 4624,
+        "tokens": 73958204
+      }
+    },
+    {
+      "bytes": 604578853,
+      "id": "position-q3-s11",
+      "identity": {
+        "config_sha256": "5624909860739f5adf97677f5c3fdacf342c93501f5a222a0563ebc097bf2adb",
+        "data_lock_sha256": "40b7c0ebb9650d11aa0c0080532c884e2ca3846db578155f3df7068b82191d2f",
+        "device": "npu:0",
+        "dtype": "float32",
+        "installation": {
+          "foundation_commit": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+          "foundation_lock_sha256": "ba5464d7e23fe6b8c7453a52bfc7b961f040c92d0b80786c18132e40d90308b7",
+          "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+          "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+          "tidegraph": "0.3.0",
+          "tidegraph_source_sha256": "cfe2168a2c87565a568fb8944429b6b38401f92cf24972fba59c47b7592a7847",
+          "torch": "2.12.0+cpu",
+          "torch_npu": "2.12.0.post3",
+          "transformers": null
+        },
+        "mode": "train",
+        "source_commit": "5147701447dd15a092cc4b052f828b037ed98df4",
+        "source_sha256": "547c262230864633c48921e64f5ffdeea5e5af5979eff16aa8aab061b29872b8",
+        "threads": 2
+      },
+      "parent": "runs/v12-main-position-q3-s11/train/latest.pt",
+      "parent_sha256": "0b9d87ae8e40b29c5b8be9a22cb140cf6e04d2f0b92532820352ad7e2135d663",
+      "progress": {
+        "cursor": 393856,
+        "dropped_tail_tokens": 13074,
+        "milestones": [
+          8388608,
+          33554432
+        ],
+        "probe": false,
+        "step": 6154,
+        "tokens": 98451490
+      }
+    },
+    {
+      "bytes": 604316391,
+      "id": "residual-q3-s11",
+      "identity": {
+        "config_sha256": "d0ecc6431e84e06e4dbcb88c4a6e3e41a55606325ed1b1ccb39c1dbdf30d75e8",
+        "data_lock_sha256": "40b7c0ebb9650d11aa0c0080532c884e2ca3846db578155f3df7068b82191d2f",
+        "device": "npu:0",
+        "dtype": "float32",
+        "installation": {
+          "foundation_commit": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+          "foundation_lock_sha256": "ba5464d7e23fe6b8c7453a52bfc7b961f040c92d0b80786c18132e40d90308b7",
+          "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+          "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+          "tidegraph": "0.3.0",
+          "tidegraph_source_sha256": "cfe2168a2c87565a568fb8944429b6b38401f92cf24972fba59c47b7592a7847",
+          "torch": "2.12.0+cpu",
+          "torch_npu": "2.12.0.post3",
+          "transformers": null
+        },
+        "mode": "train",
+        "source_commit": "5147701447dd15a092cc4b052f828b037ed98df4",
+        "source_sha256": "547c262230864633c48921e64f5ffdeea5e5af5979eff16aa8aab061b29872b8",
+        "threads": 2
+      },
+      "parent": "runs/v12-main-residual-q3-s11/pilot/latest.pt",
+      "parent_sha256": "28b0e9b4f24df1b447d88a57c24b036800694a94c19228fa7e669d620da25471",
+      "progress": {
+        "cursor": 2880,
+        "dropped_tail_tokens": 0,
+        "milestones": [],
+        "probe": false,
+        "step": 45,
+        "tokens": 717882
+      }
+    },
+    {
+      "bytes": 604316455,
+      "id": "residual-q3-s22",
+      "identity": {
+        "config_sha256": "0f2b0f54bdbc9f6970ef5745c0454b0d76e62fa0af5395bda6d5ec234de83fa2",
+        "data_lock_sha256": "40b7c0ebb9650d11aa0c0080532c884e2ca3846db578155f3df7068b82191d2f",
+        "device": "npu:0",
+        "dtype": "float32",
+        "installation": {
+          "foundation_commit": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+          "foundation_lock_sha256": "ba5464d7e23fe6b8c7453a52bfc7b961f040c92d0b80786c18132e40d90308b7",
+          "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+          "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+          "tidegraph": "0.3.0",
+          "tidegraph_source_sha256": "cfe2168a2c87565a568fb8944429b6b38401f92cf24972fba59c47b7592a7847",
+          "torch": "2.12.0+cpu",
+          "torch_npu": "2.12.0.post3",
+          "transformers": null
+        },
+        "mode": "train",
+        "source_commit": "5147701447dd15a092cc4b052f828b037ed98df4",
+        "source_sha256": "547c262230864633c48921e64f5ffdeea5e5af5979eff16aa8aab061b29872b8",
+        "threads": 2
+      },
+      "parent": "runs/v12-main-residual-q3-s22/train/latest.pt",
+      "parent_sha256": "72a45ca52ce275ecc55092a1cec368e0701df0884f98c498141375b5d9018b29",
+      "progress": {
+        "cursor": 257216,
+        "dropped_tail_tokens": 10522,
+        "milestones": [
+          8388608,
+          33554432
+        ],
+        "probe": false,
+        "step": 4019,
+        "tokens": 64280666
+      }
+    },
+    {
+      "bytes": 291777115,
+      "id": "share8-lr3-q3-s11",
+      "identity": {
+        "config_sha256": "93165e637dae466fffb3e3f476b45f4ba8bb5c5ddeb893eb10220830b9be2fce",
+        "data_lock_sha256": "40b7c0ebb9650d11aa0c0080532c884e2ca3846db578155f3df7068b82191d2f",
+        "device": "npu:0",
+        "dtype": "float32",
+        "installation": {
+          "foundation_commit": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+          "foundation_lock_sha256": "ba5464d7e23fe6b8c7453a52bfc7b961f040c92d0b80786c18132e40d90308b7",
+          "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+          "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+          "tidegraph": "0.3.0",
+          "tidegraph_source_sha256": "cfe2168a2c87565a568fb8944429b6b38401f92cf24972fba59c47b7592a7847",
+          "torch": "2.12.0+cpu",
+          "torch_npu": "2.12.0.post3",
+          "transformers": null
+        },
+        "mode": "train",
+        "source_commit": "5147701447dd15a092cc4b052f828b037ed98df4",
+        "source_sha256": "547c262230864633c48921e64f5ffdeea5e5af5979eff16aa8aab061b29872b8",
+        "threads": 2
+      },
+      "parent": "runs/v12-main-share8-lr3-q3-s11/pilot/latest.pt",
+      "parent_sha256": "e8796b3d6469353da2718e63cab22954f70e4da23fb459757d126d98d66ea39c",
+      "progress": {
+        "cursor": 33600,
+        "dropped_tail_tokens": 12448,
+        "milestones": [
+          8388608
+        ],
+        "probe": false,
+        "step": 525,
+        "tokens": 8388608
+      }
+    },
+    {
+      "bytes": 291777115,
+      "id": "share8-lr3-q3-s22",
+      "identity": {
+        "config_sha256": "c5f1f7c85b9fd3aff42bfe954cfc9c586a6e26b9648d90a6a1cc8726bd61a774",
+        "data_lock_sha256": "40b7c0ebb9650d11aa0c0080532c884e2ca3846db578155f3df7068b82191d2f",
+        "device": "npu:0",
+        "dtype": "float32",
+        "installation": {
+          "foundation_commit": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+          "foundation_lock_sha256": "ba5464d7e23fe6b8c7453a52bfc7b961f040c92d0b80786c18132e40d90308b7",
+          "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+          "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+          "tidegraph": "0.3.0",
+          "tidegraph_source_sha256": "cfe2168a2c87565a568fb8944429b6b38401f92cf24972fba59c47b7592a7847",
+          "torch": "2.12.0+cpu",
+          "torch_npu": "2.12.0.post3",
+          "transformers": null
+        },
+        "mode": "train",
+        "source_commit": "5147701447dd15a092cc4b052f828b037ed98df4",
+        "source_sha256": "547c262230864633c48921e64f5ffdeea5e5af5979eff16aa8aab061b29872b8",
+        "threads": 2
+      },
+      "parent": "runs/v12-main-share8-lr3-q3-s22/pilot/latest.pt",
+      "parent_sha256": "47fb45c5f53c3dc37f72dd47ef48d980e792f07b9635a86ae7fc38c32b9fc957",
+      "progress": {
+        "cursor": 33600,
+        "dropped_tail_tokens": 3917,
+        "milestones": [
+          8388608
+        ],
+        "probe": false,
+        "step": 525,
+        "tokens": 8388608
+      }
+    }
+  ],
+  "schema": "tide-hb-v12-repair-parent-audit-v1",
+  "scope": "Read-only decode/full SHA and original source/config/data/schema/optimizer presence audit; no model execution or claim of exact restored trajectory. Actual migration and new-source full-batch recovery are separate required gates.",
+  "state": "completed"
+}

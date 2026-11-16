@@ -21,7 +21,7 @@ def review(root):
         path=root/'runs'/job;r=read(path/stage/'result.json') if stage else {};progress=read(path/stage/'progress.json') if stage else {}
         train=read(path/'train/result.json');confirm=read(path/'confirmation/result.json')
         rows.append(dict(id=name,job=job,lifecycle=obs['state']['state'],stage=stage,stage_state=r.get('state'),
-            physical_device=obs.get('queue',{}).get('physical_id'),termination_verified=obs.get('termination_verified_now'),
+            physical_device=(obs.get('queue') or {}).get('physical_id'),termination_verified=obs.get('termination_verified_now'),
             tokens=train.get('progress',{}).get('tokens') if train.get('state')=='completed' else progress.get('tokens',r.get('progress',{}).get('tokens')),
             recovered_parent_progress=case.get('recovered_parent_progress'),prefix_progress=case.get('prefix_progress'),
             parent_checkpoint=item['parent_checkpoint'],parent_sha256=item['parent_sha256'],
