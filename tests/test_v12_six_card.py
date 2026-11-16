@@ -6,7 +6,7 @@ from types import SimpleNamespace
 import unittest
 from unittest.mock import patch
 
-from scripts.resume_hb_v12_six_card import DEVICES, MODEL_COMMIT, SixCardWorker, validate_plan
+from scripts.resume_hb_v12_six_card import DEVICES, MODEL_COMMIT, SixCardWorker, validate_plan, try_preparation_lock
 from tide_lab.records import digest
 
 
@@ -56,6 +56,35 @@ class SixCardTests(unittest.TestCase):
         self.assertEqual(case['train_arguments'][-1], 'tl-v12-four-main-test')
         self.assertEqual(stage.call_args.args[4], ['--run-id', 'tl-v12-four-prefix-test'])
         self.assertEqual(case['train_arguments'][1], str(128*2**20))
+
+    def test_all_cards_require_bounded_temporary_checkpoint_phases(self):
+        plan = dict(self.plan, card_limit=16, run_prefix='tl-v12-all-', preparation_slots=2)
+        policy = dict(self.policy, candidate_ids=list(range(16)), max_new_concurrent_npus=16)
+        validate_plan(plan, dict(commit=MODEL_COMMIT), policy, 1000)
+        with self.assertRaisesRegex(ValueError, 'preparation slots'):
+            validate_plan(dict(plan, preparation_slots=12), dict(commit=MODEL_COMMIT), policy, 1000)
+
+    def test_preparation_lock_bounds_concurrency_and_releases(self):
+        directory = self.root/'locks'
+        left, lslot = try_preparation_lock(directory, 2)
+        right, rslot = try_preparation_lock(directory, 2)
+        self.addCleanup(left.close); self.addCleanup(right.close)
+        self.assertNotEqual(lslot, rslot)
+        self.assertEqual(try_preparation_lock(directory, 2), (None, None))
+        left.close()
+        replacement, slot = try_preparation_lock(directory, 2)
+        self.addCleanup(replacement.close); self.assertEqual(slot, lslot)
+
+    def test_temporary_recovery_slots_do_not_limit_formal_training(self):
+        worker = object.__new__(SixCardWorker)
+        worker.plan = dict(self.plan, preparation_slots=2, card_limit=16, run_prefix='tl-v12-all-')
+        with patch.object(worker, 'enter_preparation') as enter, patch.object(worker, 'leave_preparation') as leave, \
+                patch('scripts.run_hb_v12_repair_worker.RepairWorker.stage'):
+            worker.stage({}, 'recovery-full', 'segment', 1200)
+            enter.assert_called_once(); leave.assert_not_called()
+            worker.stage({}, 'prefix', 'prefix', 1200)
+            worker.stage({}, 'train', 'train', 1200)
+            self.assertEqual(leave.call_count, 2)
 
     def test_failed_recovery_cannot_enter_training(self):
         worker = object.__new__(SixCardWorker)

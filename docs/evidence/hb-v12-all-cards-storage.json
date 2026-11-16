@@ -1,0 +1,273 @@
+{
+  "at": "2026-11-16T14:09:01.984825+00:00",
+  "new_final_checkpoint_gib": 6.208299748599529,
+  "new_milestone_tensor_gib": 2.0834795981645584,
+  "parents": [
+    {
+      "checkpoint": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v12-main-base-q10-s22/train/latest.pt",
+      "checkpoint_gib": 0.24875114019960165,
+      "id": "base-q10-s22",
+      "mode": "requeue_unstarted",
+      "model_tensor_gib": 0.08384616672992706,
+      "parent_sha256": "ed37406554444d8ab224d52140df52fa8754de53349c776c320d01d609fe0b11",
+      "progress": {
+        "cursor": 229312,
+        "dropped_tail_tokens": 10522,
+        "milestones": [
+          8388608,
+          33554432
+        ],
+        "probe": false,
+        "step": 3583,
+        "tokens": 57309204
+      },
+      "remaining_milestones": [
+        134217728
+      ]
+    },
+    {
+      "checkpoint": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v12-main-fullshare8-q3-s11/train/latest.pt",
+      "checkpoint_gib": 0.22875082027167082,
+      "id": "fullshare8-q3-s11",
+      "mode": "requeue_unstarted",
+      "model_tensor_gib": 0.07724273204803467,
+      "parent_sha256": "a18486a944511cc456d9edb26e93e91217a83dc9820b82a56178b819a2d7f04b",
+      "progress": {
+        "cursor": 162432,
+        "dropped_tail_tokens": 13074,
+        "milestones": [
+          8388608,
+          33554432
+        ],
+        "probe": false,
+        "step": 2538,
+        "tokens": 40586675
+      },
+      "remaining_milestones": [
+        134217728
+      ]
+    },
+    {
+      "checkpoint": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v12-repair-fullshare8-q3-s22/train/latest.pt",
+      "checkpoint_gib": 0.2287508798763156,
+      "id": "fullshare8-q3-s22",
+      "mode": "resume_train",
+      "model_tensor_gib": 0.07724273204803467,
+      "parent_sha256": "93a6ceda560876697d1717fed8f17280126e5ecaf016bf79fab6f203173a6de6",
+      "progress": {
+        "cursor": 241088,
+        "dropped_tail_tokens": 10522,
+        "milestones": [
+          8388608,
+          33554432
+        ],
+        "probe": false,
+        "step": 3767,
+        "tokens": 60253574
+      },
+      "remaining_milestones": [
+        134217728
+      ]
+    },
+    {
+      "checkpoint": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v12-main-ports4-q3-s22/train/latest.pt",
+      "checkpoint_gib": 0.5745333125814795,
+      "id": "ports4-q3-s22",
+      "mode": "requeue_unstarted",
+      "model_tensor_gib": 0.19156157970428467,
+      "parent_sha256": "4f61ec8ba00e037ae42bdb2e7f07958ad5ab0d2fcca32b71cb02f6bc087ac9ef",
+      "progress": {
+        "cursor": 219136,
+        "dropped_tail_tokens": 10522,
+        "milestones": [
+          8388608,
+          33554432
+        ],
+        "probe": false,
+        "step": 3424,
+        "tokens": 54767213
+      },
+      "remaining_milestones": [
+        134217728
+      ]
+    },
+    {
+      "checkpoint": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v12-main-readcontent-q3-s11/train/latest.pt",
+      "checkpoint_gib": 0.592120966874063,
+      "id": "readcontent-q3-s11",
+      "mode": "requeue_unstarted",
+      "model_tensor_gib": 0.19839751720428467,
+      "parent_sha256": "b21dd740cf11779e2d82734668fdfda3d3f273be7f16e0d21f685eb88dd52af2",
+      "progress": {
+        "cursor": 216576,
+        "dropped_tail_tokens": 13074,
+        "milestones": [
+          8388608,
+          33554432
+        ],
+        "probe": false,
+        "step": 3384,
+        "tokens": 54122829
+      },
+      "remaining_milestones": [
+        134217728
+      ]
+    },
+    {
+      "checkpoint": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v12-repair-residual-q3-s11/train/latest.pt",
+      "checkpoint_gib": 0.5628134971484542,
+      "id": "residual-q3-s11",
+      "mode": "resume_train",
+      "model_tensor_gib": 0.18863189220428467,
+      "parent_sha256": "7e270acff8c14fefdcb896472a6e44f81c056e0cf9f1548cf355f306e6cc4d5e",
+      "progress": {
+        "cursor": 223744,
+        "dropped_tail_tokens": 13074,
+        "milestones": [
+          8388608,
+          33554432
+        ],
+        "probe": false,
+        "step": 3496,
+        "tokens": 55913808
+      },
+      "remaining_milestones": [
+        134217728
+      ]
+    },
+    {
+      "checkpoint": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v12-main-share0-q3-s11/train/latest.pt",
+      "checkpoint_gib": 0.2167436247691512,
+      "id": "share0-q3-s11",
+      "mode": "requeue_unstarted",
+      "model_tensor_gib": 0.07327544689178467,
+      "parent_sha256": "8f321ff407f3d4116f753b935a86701d86763af7bf8fee1dd3953a56b1659548",
+      "progress": {
+        "cursor": 134336,
+        "dropped_tail_tokens": 13074,
+        "milestones": [
+          8388608,
+          33554432
+        ],
+        "probe": false,
+        "step": 2099,
+        "tokens": 33554432
+      },
+      "remaining_milestones": [
+        134217728
+      ]
+    },
+    {
+      "checkpoint": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v12-repair-share8-d192-q3-s11/train/latest.pt",
+      "checkpoint_gib": 1.1427718056365848,
+      "id": "share8-d192-q3-s11",
+      "mode": "resume_train",
+      "model_tensor_gib": 0.38388335704803467,
+      "parent_sha256": "65a8624f5aed6bc2ff38d1ebdfdcca9906f3548fa7ff84b51fc86429da5f0d2b",
+      "progress": {
+        "cursor": 234944,
+        "dropped_tail_tokens": 13074,
+        "milestones": [
+          8388608,
+          33554432
+        ],
+        "probe": false,
+        "step": 3671,
+        "tokens": 58713137
+      },
+      "remaining_milestones": [
+        134217728
+      ]
+    },
+    {
+      "checkpoint": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v12-main-top2-q3-s11/train/latest.pt",
+      "checkpoint_gib": 0.5628134971484542,
+      "id": "top2-q3-s11",
+      "mode": "requeue_unstarted",
+      "model_tensor_gib": 0.18863189220428467,
+      "parent_sha256": "e19c39d8ecc3c7ff5bd0c1d8cc891a184ee98ccda1bcb67ae23bfacb6ee76356",
+      "progress": {
+        "cursor": 288128,
+        "dropped_tail_tokens": 13074,
+        "milestones": [
+          8388608,
+          33554432
+        ],
+        "probe": false,
+        "step": 4502,
+        "tokens": 72007838
+      },
+      "remaining_milestones": [
+        134217728
+      ]
+    },
+    {
+      "checkpoint": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v12-main-untied-q3-s22/train/latest.pt",
+      "checkpoint_gib": 0.5657442500814795,
+      "id": "untied-q3-s22",
+      "mode": "requeue_unstarted",
+      "model_tensor_gib": 0.18863189220428467,
+      "parent_sha256": "a241e591e364a3d1d2d603e189c27194fa43234a88ab543186ae214a0f3b388d",
+      "progress": {
+        "cursor": 295936,
+        "dropped_tail_tokens": 10522,
+        "milestones": [
+          8388608,
+          33554432
+        ],
+        "probe": false,
+        "step": 4624,
+        "tokens": 73958204
+      },
+      "remaining_milestones": [
+        134217728
+      ]
+    },
+    {
+      "checkpoint": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v12-repair-share8-d128-q3-s11/train/latest.pt",
+      "checkpoint_gib": 0.642252947203815,
+      "id": "share8-d128-q3-s11",
+      "mode": "resume_train",
+      "model_tensor_gib": 0.21606719493865967,
+      "parent_sha256": "4a530de36b3b11de21f5a7a3faeaf7bb5b14cf097b052429a7e1140a3614ebae",
+      "progress": {
+        "cursor": 228096,
+        "dropped_tail_tokens": 13074,
+        "milestones": [
+          8388608,
+          33554432
+        ],
+        "probe": false,
+        "step": 3564,
+        "tokens": 56999987
+      },
+      "remaining_milestones": [
+        134217728
+      ]
+    },
+    {
+      "checkpoint": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v12-repair-share8-d128-q3-s22/train/latest.pt",
+      "checkpoint_gib": 0.6422530068084598,
+      "id": "share8-d128-q3-s22",
+      "mode": "resume_train",
+      "model_tensor_gib": 0.21606719493865967,
+      "parent_sha256": "9df42fdae116f1647e51fffbdb779f6b46e63bc00337c24a2baf2c7c3c34fe53",
+      "progress": {
+        "cursor": 323648,
+        "dropped_tail_tokens": 10522,
+        "milestones": [
+          8388608,
+          33554432
+        ],
+        "probe": false,
+        "step": 5057,
+        "tokens": 80889473
+      },
+      "remaining_milestones": [
+        134217728
+      ]
+    }
+  ],
+  "scope": "finite upper planning inventory; serialization and atomic writer slack separate; shared preparation locks bound3 temporary recovery states per chain",
+  "two_recovery_slots_peak_gib": 5.3550744373351336
+}

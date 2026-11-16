@@ -65,6 +65,8 @@ def main(args):
         plan.update(administrative_mode=item['mode'], model_source=model_id['commit'], deadline_epoch=deadline,
                     original_config_sha256=digest(case['config']), previous_job=item['previous_job'],
                     card_limit=limit, run_prefix='tl-'+prefix+'-')
+        if spec.get('preparation_slots'):
+            plan['preparation_slots'] = spec['preparation_slots']
         case['output'] = str(root/'runs'/job); case['administrative_parent'] = item['previous_job']
         extra_inputs = []
         if item['mode'] == 'resume_train':

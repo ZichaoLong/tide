@@ -1,0 +1,136 @@
+{
+  "administrative_case_count": 12,
+  "authorization": "2026-11-16 user permits all remaining cards for unfinished tasks; overrides old12/six/four-card caps",
+  "candidate_ids": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15
+  ],
+  "cases": [
+    {
+      "base_plan": "runs/v12-four-submit/share8-d192-q3-s11/plan.json",
+      "checkpoint": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v12-repair-share8-d192-q3-s11/train/latest.pt",
+      "id": "share8-d192-q3-s11",
+      "mode": "resume_train",
+      "previous_job": "v12-four-share8-d192-q3-s11",
+      "resume_parent_job": "v12-repair-share8-d192-q3-s11",
+      "sha256": "65a8624f5aed6bc2ff38d1ebdfdcca9906f3548fa7ff84b51fc86429da5f0d2b"
+    },
+    {
+      "base_plan": "runs/v12-four-submit/share8-d128-q3-s22/plan.json",
+      "checkpoint": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v12-repair-share8-d128-q3-s22/train/latest.pt",
+      "id": "share8-d128-q3-s22",
+      "mode": "resume_train",
+      "previous_job": "v12-four-share8-d128-q3-s22",
+      "resume_parent_job": "v12-repair-share8-d128-q3-s22",
+      "sha256": "9df42fdae116f1647e51fffbdb779f6b46e63bc00337c24a2baf2c7c3c34fe53"
+    },
+    {
+      "base_plan": "runs/v12-four-submit/share8-d128-q3-s11/plan.json",
+      "checkpoint": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v12-repair-share8-d128-q3-s11/train/latest.pt",
+      "id": "share8-d128-q3-s11",
+      "mode": "resume_train",
+      "previous_job": "v12-four-share8-d128-q3-s11",
+      "resume_parent_job": "v12-repair-share8-d128-q3-s11",
+      "sha256": "4a530de36b3b11de21f5a7a3faeaf7bb5b14cf097b052429a7e1140a3614ebae"
+    },
+    {
+      "base_plan": "runs/v12-four-submit/readcontent-q3-s11/plan.json",
+      "id": "readcontent-q3-s11",
+      "mode": "requeue_unstarted",
+      "previous_job": "v12-four-readcontent-q3-s11"
+    },
+    {
+      "base_plan": "runs/v12-four-submit/ports4-q3-s22/plan.json",
+      "id": "ports4-q3-s22",
+      "mode": "requeue_unstarted",
+      "previous_job": "v12-four-ports4-q3-s22"
+    },
+    {
+      "base_plan": "runs/v12-four-submit/untied-q3-s22/plan.json",
+      "id": "untied-q3-s22",
+      "mode": "requeue_unstarted",
+      "previous_job": "v12-four-untied-q3-s22"
+    },
+    {
+      "base_plan": "runs/v12-four-submit/residual-q3-s11/plan.json",
+      "checkpoint": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v12-repair-residual-q3-s11/train/latest.pt",
+      "id": "residual-q3-s11",
+      "mode": "resume_train",
+      "previous_job": "v12-four-residual-q3-s11",
+      "resume_parent_job": "v12-repair-residual-q3-s11",
+      "sha256": "7e270acff8c14fefdcb896472a6e44f81c056e0cf9f1548cf355f306e6cc4d5e"
+    },
+    {
+      "base_plan": "runs/v12-four-submit/top2-q3-s11/plan.json",
+      "id": "top2-q3-s11",
+      "mode": "requeue_unstarted",
+      "previous_job": "v12-four-top2-q3-s11"
+    },
+    {
+      "base_plan": "runs/v12-four-submit/base-q10-s22/plan.json",
+      "id": "base-q10-s22",
+      "mode": "requeue_unstarted",
+      "previous_job": "v12-four-base-q10-s22"
+    },
+    {
+      "base_plan": "runs/v12-four-submit/fullshare8-q3-s22/plan.json",
+      "checkpoint": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v12-repair-fullshare8-q3-s22/train/latest.pt",
+      "id": "fullshare8-q3-s22",
+      "mode": "resume_train",
+      "previous_job": "v12-four-fullshare8-q3-s22",
+      "resume_parent_job": "v12-repair-fullshare8-q3-s22",
+      "sha256": "93a6ceda560876697d1717fed8f17280126e5ecaf016bf79fab6f203173a6de6"
+    },
+    {
+      "base_plan": "runs/v12-four-submit/fullshare8-q3-s11/plan.json",
+      "id": "fullshare8-q3-s11",
+      "mode": "requeue_unstarted",
+      "previous_job": "v12-four-fullshare8-q3-s11"
+    },
+    {
+      "base_plan": "runs/v12-four-submit/share0-q3-s11/plan.json",
+      "id": "share0-q3-s11",
+      "mode": "requeue_unstarted",
+      "previous_job": "v12-four-share0-q3-s11"
+    }
+  ],
+  "deadline": "2026-11-19T23:08:07+08:00",
+  "deadline_epoch": 1795100887.6161592,
+  "job_prefix": "v12-all",
+  "limits": {
+    "hard_quota_headroom_gib": 200,
+    "new_disk_stop_gib": 96,
+    "new_disk_target_gib": 64,
+    "original_chains": 38,
+    "target_tokens": 134217728
+  },
+  "max_new_concurrent_npus": 16,
+  "model_source": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+  "no_automatic_retry": true,
+  "original_deadline_epoch": 1794928087.6161592,
+  "preparation_disk_soft_gib": 90,
+  "preparation_slots": 2,
+  "retained_jobs": [
+    "v12-four-base128-q3-s11",
+    "v12-four-position-q3-s11",
+    "v12-four-readcontent-q3-s22",
+    "v12-four-share8-d192-q3-s22"
+  ],
+  "schema": "tide-hb-v12-all-cards-v1",
+  "scope": "administrative expansion only: preserve38 chains, original128Mi/source/configs/seeds/thresholds; leave4 active fixed jobs untouched",
+  "slot_namespace": "tide-direct-v10"
+}

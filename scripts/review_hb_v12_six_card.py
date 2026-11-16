@@ -39,6 +39,7 @@ def review(root, policy_name='six-card'):
                          tokens=progress.get('tokens', result.get('progress', {}).get('tokens')),
                          saved_tokens=ck.get('progress', {}).get('tokens'),
                          recovery=read(output/'recovery-compare/recovery.json').get('state'),
+                         preparation_admission=worker.get('preparation_admission'),
                          lens=read(output/'train/projection.json').get('status'),
                          error=result.get('error', worker.get('error'))))
     live = []
@@ -63,7 +64,7 @@ def review(root, policy_name='six-card'):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--root', type=Path, default=Path.cwd()); parser.add_argument('--output', type=Path)
-    parser.add_argument('--policy', choices=('six-card', 'four-card'), default='six-card')
+    parser.add_argument('--policy', choices=('six-card', 'four-card', 'all-cards'), default='six-card')
     args = parser.parse_args(); result = review(args.root.resolve(), args.policy)
     if args.output: write_review_json(args.output, result)
     else: print(json.dumps(result, indent=2, ensure_ascii=False))

@@ -5,6 +5,7 @@ This file is a separately pinned orchestration input. The job cwd/PYTHONPATH,
 stage scripts, models and checkpoint identity remain the original repair source.
 """
 import argparse
+import fcntl
 import json
 import os
 from pathlib import Path
@@ -15,10 +16,11 @@ sys.path.insert(0, str(Path.cwd()))
 from scripts.run_hb_v12_repair_worker import RepairWorker
 from tide_lab.records import atomic_json, digest, now
 from tide_lab.supervisor import verify_source
+from tide_lab.disk_usage import campaign_usage
 
 MODEL_COMMIT = '62e32602b23e371eb1669f7b99409db626a1c4f8'
 DEVICES = [4, 6, 9, 11, 12, 14]
-PLACEMENTS = {6: DEVICES, 4: [4, 9, 12, 14]}
+PLACEMENTS = {6: DEVICES, 4: [4, 9, 12, 14], 16: list(range(16))}
 
 
 def validate_plan(plan, source, policy, deadline):
@@ -30,8 +32,10 @@ def validate_plan(plan, source, policy, deadline):
             or policy['slot_namespace'] != 'tide-direct-v10'
             or policy['deadline_epoch'] != deadline or plan['deadline_epoch'] != deadline):
         raise ValueError('fixed physical placement/deadline contract changed')
-    if plan.get('run_prefix', 'tl-v12-six-') != {6: 'tl-v12-six-', 4: 'tl-v12-four-'}[limit]:
+    if plan.get('run_prefix', 'tl-v12-six-') != {6: 'tl-v12-six-', 4: 'tl-v12-four-', 16: 'tl-v12-all-'}[limit]:
         raise ValueError('administrative run namespace changed')
+    if limit == 16 and plan.get('preparation_slots') != 2:
+        raise ValueError('all-card temporary checkpoint phases require two shared preparation slots')
     if len(plan['cases']) != 1 or plan['administrative_mode'] not in ('resume_train', 'requeue_unstarted'):
         raise ValueError('one original repair chain per service')
     case = plan['cases'][0]
@@ -44,8 +48,58 @@ def validate_plan(plan, source, policy, deadline):
         raise ValueError('fixed parent changed')
 
 
+def try_preparation_lock(directory, slots):
+    directory.mkdir(parents=True, exist_ok=True)
+    for slot in range(slots):
+        handle = (directory/(str(slot)+'.lock')).open('a+')
+        try:
+            fcntl.flock(handle, fcntl.LOCK_EX | fcntl.LOCK_NB)
+            return handle, slot
+        except BlockingIOError:
+            handle.close()
+    return None, None
+
+
 class SixCardWorker(RepairWorker):
+    def enter_preparation(self):
+        if getattr(self, '_preparation_handle', None) is not None:
+            return
+        directory = Path(os.environ.get('XDG_RUNTIME_DIR', '/run/user/'+str(os.getuid())))/'tide-v12-preparation'
+        self.state['preparation_admission'] = dict(state='waiting', started_at=now(), slots=self.plan['preparation_slots'])
+        self.publish()
+        while True:
+            self.guard()
+            handle, slot = try_preparation_lock(directory, self.plan['preparation_slots'])
+            if handle is not None:
+                # Three retained probe states plus one atomic write. Keep6GiB
+                # outside this preparation estimate for concurrent training I/O.
+                disk = campaign_usage(Path(self.plan['root']))['gib']
+                reserve = 4*Path(self.plan['cases'][0]['parent_checkpoint']).stat().st_size/2**30
+                if disk+reserve > 90:
+                    handle.close()
+                    self.state['preparation_admission'].update(state='waiting_disk_headroom',
+                        observed_disk_gib=disk,estimated_write_gib=reserve,preparation_limit_gib=90)
+                    self.publish(); time.sleep(5); continue
+                self._preparation_handle = handle
+                self.state['preparation_admission'].update(state='admitted', slot=slot, admitted_at=now())
+                self.publish(); return
+            time.sleep(2)
+
+    def leave_preparation(self):
+        handle = getattr(self, '_preparation_handle', None)
+        if handle is not None:
+            handle.close(); self._preparation_handle = None
+            self.state['preparation_admission'].update(state='released', released_at=now())
+            self.publish()
+
     def stage(self, case, name, action, cap, extra=(), record=False, script='scripts/campaign_stage.py'):
+        if self.plan.get('preparation_slots'):
+            if name in ('recovery-full', 'postpilot-full'):
+                self.enter_preparation()
+            elif name in ('prefix', 'train'):
+                # The existing worker has compared and retired all3 probe states.
+                # Prefix and formal training keep the full admitted NPU concurrency.
+                self.leave_preparation()
         # Run IDs distinguish the administrative segment; learning inputs do not change.
         prefix = self.plan.get('run_prefix', 'tl-v12-six-')
         rename = lambda value: str(value).replace('tl-v12-repair-', prefix).replace('tl-v12-six-', prefix)
@@ -131,3 +185,5 @@ if __name__ == '__main__':
             worker.state['cases'][-1].update(state='failed', error=repr(error), finished_at=now())
         worker.state.update(state='failed', error=repr(error), finished_at=now()); worker.publish()
         raise
+    finally:
+        worker.leave_preparation()

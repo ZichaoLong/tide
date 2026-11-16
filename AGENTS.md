@@ -1,5 +1,20 @@
 # Working on tide-learning-lab
 
+- Latest2026-11-16 user instruction allows ALL remaining cards for unfinished
+  work, superseding the four/six/old12-card caps. See
+  `docs/studies/hb-v12-all-cards.md` and `configs/studies/language/hb-v12/all-cards.json`.
+  All16 physical IDs are candidates, at most16 one-card workers in the existing
+  namespace; shared health/load/HBM checks and lifetime locks remain. Preserve
+  the4 active `v12-four-*` jobs and requeue only12 never-started waiters as
+  `v12-all-*`, same scientific source62e32602 and128Mi/configs/thresholds.
+  Retain11/19 23:08:07+08 deadline,96GiB stop and200GiB quota headroom. Two shared
+  temporary-recovery slots and a90GiB preparation projection prevent simultaneous
+  checkpoint copies from consuming the training write margin; training itself
+  uses all admitted cards. Never rerun obsolete controllers/waiters or failed
+  scientific attempts automatically. Re-entry:
+  `python scripts/review_hb_v12_six_card.py --policy all-cards`.
+  The four/six-card instructions below are historical.
+
 - Latest user instruction reduces the current campaign further to FOUR physical
   NPUs: only4/9/12/14, four slots in the existing namespace. See
   `docs/studies/hb-v12-four-card.md` and `configs/studies/language/hb-v12/four-card.json`.

@@ -1,0 +1,625 @@
+{
+  "at": "2026-11-16T14:08:52.642793+00:00",
+  "before": [
+    {
+      "error": null,
+      "job": "v12-repair-base128-q3-s22",
+      "lens": "verified",
+      "lifecycle": "completed",
+      "mode": "retained",
+      "physical_device": 12,
+      "recovery": "passed",
+      "saved_tokens": 134217728,
+      "stage": "diagnostic",
+      "stage_state": "completed",
+      "termination_verified": true,
+      "tokens": null
+    },
+    {
+      "error": null,
+      "job": "v12-repair-residual-q3-s22",
+      "lens": "verified",
+      "lifecycle": "completed",
+      "mode": "retained",
+      "physical_device": 14,
+      "recovery": "passed",
+      "saved_tokens": 134217728,
+      "stage": "diagnostic",
+      "stage_state": "completed",
+      "termination_verified": true,
+      "tokens": null
+    },
+    {
+      "error": null,
+      "job": "v12-repair-share8-lr3-q3-s11",
+      "lens": "verified",
+      "lifecycle": "completed",
+      "mode": "retained",
+      "physical_device": 4,
+      "recovery": "passed",
+      "saved_tokens": 134217728,
+      "stage": "diagnostic",
+      "stage_state": "completed",
+      "termination_verified": true,
+      "tokens": null
+    },
+    {
+      "error": null,
+      "job": "v12-repair-share8-lr3-q3-s22",
+      "lens": "verified",
+      "lifecycle": "completed",
+      "mode": "retained",
+      "physical_device": 9,
+      "recovery": "passed",
+      "saved_tokens": 134217728,
+      "stage": "diagnostic",
+      "stage_state": "completed",
+      "termination_verified": true,
+      "tokens": null
+    },
+    {
+      "error": null,
+      "job": "v12-four-base-q10-s22",
+      "lens": null,
+      "lifecycle": "waiting_resources",
+      "mode": "requeue_unstarted",
+      "physical_device": null,
+      "recovery": null,
+      "saved_tokens": null,
+      "stage": null,
+      "stage_state": null,
+      "termination_verified": false,
+      "tokens": null
+    },
+    {
+      "error": null,
+      "job": "v12-four-base128-q3-s11",
+      "lens": "recording",
+      "lifecycle": "running",
+      "mode": "resume_train",
+      "physical_device": 12,
+      "recovery": "passed",
+      "saved_tokens": 43816788,
+      "stage": "train",
+      "stage_state": "running",
+      "termination_verified": false,
+      "tokens": 48986693
+    },
+    {
+      "error": null,
+      "job": "v12-four-fullshare8-q3-s11",
+      "lens": null,
+      "lifecycle": "waiting_resources",
+      "mode": "requeue_unstarted",
+      "physical_device": null,
+      "recovery": null,
+      "saved_tokens": null,
+      "stage": null,
+      "stage_state": null,
+      "termination_verified": false,
+      "tokens": null
+    },
+    {
+      "error": null,
+      "job": "v12-four-fullshare8-q3-s22",
+      "lens": null,
+      "lifecycle": "waiting_resources",
+      "mode": "resume_train",
+      "physical_device": null,
+      "recovery": null,
+      "saved_tokens": null,
+      "stage": null,
+      "stage_state": null,
+      "termination_verified": false,
+      "tokens": null
+    },
+    {
+      "error": null,
+      "job": "v12-four-ports4-q3-s22",
+      "lens": null,
+      "lifecycle": "waiting_resources",
+      "mode": "requeue_unstarted",
+      "physical_device": null,
+      "recovery": null,
+      "saved_tokens": null,
+      "stage": null,
+      "stage_state": null,
+      "termination_verified": false,
+      "tokens": null
+    },
+    {
+      "error": null,
+      "job": "v12-four-position-q3-s11",
+      "lens": "recording",
+      "lifecycle": "running",
+      "mode": "requeue_unstarted",
+      "physical_device": 14,
+      "recovery": "passed",
+      "saved_tokens": 106616854,
+      "stage": "train",
+      "stage_state": "running",
+      "termination_verified": false,
+      "tokens": 107492584
+    },
+    {
+      "error": null,
+      "job": "v12-four-readcontent-q3-s11",
+      "lens": null,
+      "lifecycle": "waiting_resources",
+      "mode": "requeue_unstarted",
+      "physical_device": null,
+      "recovery": null,
+      "saved_tokens": null,
+      "stage": null,
+      "stage_state": null,
+      "termination_verified": false,
+      "tokens": null
+    },
+    {
+      "error": null,
+      "job": "v12-four-readcontent-q3-s22",
+      "lens": "recording",
+      "lifecycle": "running",
+      "mode": "resume_train",
+      "physical_device": 4,
+      "recovery": "passed",
+      "saved_tokens": 53710867,
+      "stage": "train",
+      "stage_state": "running",
+      "termination_verified": false,
+      "tokens": 61690558
+    },
+    {
+      "error": null,
+      "job": "v12-four-residual-q3-s11",
+      "lens": null,
+      "lifecycle": "waiting_resources",
+      "mode": "resume_train",
+      "physical_device": null,
+      "recovery": null,
+      "saved_tokens": null,
+      "stage": null,
+      "stage_state": null,
+      "termination_verified": false,
+      "tokens": null
+    },
+    {
+      "error": null,
+      "job": "v12-four-share0-q3-s11",
+      "lens": null,
+      "lifecycle": "waiting_resources",
+      "mode": "requeue_unstarted",
+      "physical_device": null,
+      "recovery": null,
+      "saved_tokens": null,
+      "stage": null,
+      "stage_state": null,
+      "termination_verified": false,
+      "tokens": null
+    },
+    {
+      "error": null,
+      "job": "v12-four-share8-d192-q3-s11",
+      "lens": null,
+      "lifecycle": "waiting_resources",
+      "mode": "resume_train",
+      "physical_device": null,
+      "recovery": null,
+      "saved_tokens": null,
+      "stage": null,
+      "stage_state": null,
+      "termination_verified": false,
+      "tokens": null
+    },
+    {
+      "error": null,
+      "job": "v12-four-share8-d192-q3-s22",
+      "lens": "recording",
+      "lifecycle": "running",
+      "mode": "resume_train",
+      "physical_device": 9,
+      "recovery": "passed",
+      "saved_tokens": 48113309,
+      "stage": "train",
+      "stage_state": "running",
+      "termination_verified": false,
+      "tokens": 49044538
+    },
+    {
+      "error": null,
+      "job": "v12-four-top2-q3-s11",
+      "lens": null,
+      "lifecycle": "waiting_resources",
+      "mode": "requeue_unstarted",
+      "physical_device": null,
+      "recovery": null,
+      "saved_tokens": null,
+      "stage": null,
+      "stage_state": null,
+      "termination_verified": false,
+      "tokens": null
+    },
+    {
+      "error": null,
+      "job": "v12-four-untied-q3-s22",
+      "lens": null,
+      "lifecycle": "waiting_resources",
+      "mode": "requeue_unstarted",
+      "physical_device": null,
+      "recovery": null,
+      "saved_tokens": null,
+      "stage": null,
+      "stage_state": null,
+      "termination_verified": false,
+      "tokens": null
+    },
+    {
+      "error": null,
+      "job": "v12-four-share8-d128-q3-s11",
+      "lens": null,
+      "lifecycle": "waiting_resources",
+      "mode": "resume_train",
+      "physical_device": null,
+      "recovery": null,
+      "saved_tokens": null,
+      "stage": null,
+      "stage_state": null,
+      "termination_verified": false,
+      "tokens": null
+    },
+    {
+      "error": null,
+      "job": "v12-four-share8-d128-q3-s22",
+      "lens": null,
+      "lifecycle": "waiting_resources",
+      "mode": "resume_train",
+      "physical_device": null,
+      "recovery": null,
+      "saved_tokens": null,
+      "stage": null,
+      "stage_state": null,
+      "termination_verified": false,
+      "tokens": null
+    }
+  ],
+  "candidate_ids": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15
+  ],
+  "deadline": "2026-11-19T23:08:07+08:00",
+  "device_observation": {
+    "0": {
+      "aicore_percent": 0,
+      "hbm_total_mib": 65536,
+      "hbm_used_mib": 3336,
+      "health": "OK",
+      "physical_id": 0,
+      "processes": []
+    },
+    "1": {
+      "aicore_percent": 0,
+      "hbm_total_mib": 65536,
+      "hbm_used_mib": 57482,
+      "health": "OK",
+      "physical_id": 1,
+      "processes": [
+        {
+          "parent_pid": 80312,
+          "pid": 81281,
+          "process_group": 81281,
+          "start_ticks": 2241037421,
+          "state": "S"
+        }
+      ]
+    },
+    "2": {
+      "aicore_percent": 0,
+      "hbm_total_mib": 65536,
+      "hbm_used_mib": 3338,
+      "health": "OK",
+      "physical_id": 2,
+      "processes": []
+    },
+    "3": {
+      "aicore_percent": 0,
+      "hbm_total_mib": 65536,
+      "hbm_used_mib": 20908,
+      "health": "OK",
+      "physical_id": 3,
+      "processes": [
+        {
+          "parent_pid": 98286,
+          "pid": 936483,
+          "process_group": 936483,
+          "start_ticks": 2185908193,
+          "state": "S"
+        }
+      ]
+    },
+    "4": {
+      "aicore_percent": 11,
+      "hbm_total_mib": 65536,
+      "hbm_used_mib": 40725,
+      "health": "OK",
+      "physical_id": 4,
+      "processes": [
+        {
+          "parent_pid": 1243821,
+          "pid": 1256246,
+          "process_group": 1256246,
+          "start_ticks": 2241717022,
+          "state": "S"
+        }
+      ]
+    },
+    "5": {
+      "aicore_percent": 0,
+      "hbm_total_mib": 65536,
+      "hbm_used_mib": 2889,
+      "health": "OK",
+      "physical_id": 5,
+      "processes": []
+    },
+    "6": {
+      "aicore_percent": 0,
+      "hbm_total_mib": 65536,
+      "hbm_used_mib": 3156,
+      "health": "OK",
+      "physical_id": 6,
+      "processes": []
+    },
+    "7": {
+      "aicore_percent": 0,
+      "hbm_total_mib": 65536,
+      "hbm_used_mib": 2890,
+      "health": "OK",
+      "physical_id": 7,
+      "processes": []
+    },
+    "8": {
+      "aicore_percent": 0,
+      "hbm_total_mib": 65536,
+      "hbm_used_mib": 3361,
+      "health": "OK",
+      "physical_id": 8,
+      "processes": []
+    },
+    "9": {
+      "aicore_percent": 28,
+      "hbm_total_mib": 65536,
+      "hbm_used_mib": 27824,
+      "health": "OK",
+      "physical_id": 9,
+      "processes": [
+        {
+          "parent_pid": 2084723,
+          "pid": 2101888,
+          "process_group": 2101888,
+          "start_ticks": 2242182481,
+          "state": "R"
+        },
+        {
+          "parent_pid": 98286,
+          "pid": 1827462,
+          "process_group": 1827462,
+          "start_ticks": 2233013102,
+          "state": "S"
+        }
+      ]
+    },
+    "10": {
+      "aicore_percent": 0,
+      "hbm_total_mib": 65536,
+      "hbm_used_mib": 3143,
+      "health": "OK",
+      "physical_id": 10,
+      "processes": []
+    },
+    "11": {
+      "aicore_percent": 0,
+      "hbm_total_mib": 65536,
+      "hbm_used_mib": 2881,
+      "health": "OK",
+      "physical_id": 11,
+      "processes": []
+    },
+    "12": {
+      "aicore_percent": 17,
+      "hbm_total_mib": 65536,
+      "hbm_used_mib": 44856,
+      "health": "OK",
+      "physical_id": 12,
+      "processes": [
+        {
+          "parent_pid": 1873753,
+          "pid": 1894784,
+          "process_group": 1894784,
+          "start_ticks": 2242074344,
+          "state": "S"
+        },
+        {
+          "parent_pid": 1,
+          "pid": 3640094,
+          "process_group": 3639772,
+          "start_ticks": 2160655122,
+          "state": "S"
+        }
+      ]
+    },
+    "13": {
+      "aicore_percent": 0,
+      "hbm_total_mib": 65536,
+      "hbm_used_mib": 58473,
+      "health": "OK",
+      "physical_id": 13,
+      "processes": [
+        {
+          "parent_pid": 1,
+          "pid": 3640094,
+          "process_group": 3639772,
+          "start_ticks": 2160655122,
+          "state": "S"
+        }
+      ]
+    },
+    "14": {
+      "aicore_percent": 15,
+      "hbm_total_mib": 65536,
+      "hbm_used_mib": 39724,
+      "health": "OK",
+      "physical_id": 14,
+      "processes": [
+        {
+          "parent_pid": 2109334,
+          "pid": 2166933,
+          "process_group": 2166933,
+          "start_ticks": 2242226124,
+          "state": "S"
+        }
+      ]
+    },
+    "15": {
+      "aicore_percent": 0,
+      "hbm_total_mib": 65536,
+      "hbm_used_mib": 57610,
+      "health": "OK",
+      "physical_id": 15,
+      "processes": [
+        {
+          "parent_pid": 80312,
+          "pid": 81282,
+          "process_group": 81282,
+          "start_ticks": 2241037421,
+          "state": "S"
+        },
+        {
+          "parent_pid": 1,
+          "pid": 3560380,
+          "process_group": 3560352,
+          "start_ticks": 2147334415,
+          "state": "S"
+        }
+      ]
+    }
+  },
+  "max_concurrent_npus": 16,
+  "request": "user permits all remaining cards for unfinished work",
+  "resources": {
+    "disk": {
+      "bytes": 82707091456,
+      "entries": 6759,
+      "gib": 77.02698135375977,
+      "scope": "allocated bytes, hardlinks once, no symlink traversal; live observation, not atomic snapshot",
+      "vanished": 0
+    },
+    "quota": {
+      "file_grace_expires_epoch": 0,
+      "file_hard": 0,
+      "file_soft": 0,
+      "files": 1636635,
+      "filesystem": "/dev/mapper/ascend_data-data",
+      "grace_expires_epoch": 1795294591,
+      "hard_gib": 800.0,
+      "hard_quota_headroom_gib": 347.4960517883301,
+      "query_returncode": 1,
+      "soft_exceeded": true,
+      "soft_gib": 300.0,
+      "used_gib": 452.5039482116699
+    }
+  },
+  "retained_jobs": [
+    "v12-four-base128-q3-s11",
+    "v12-four-position-q3-s11",
+    "v12-four-readcontent-q3-s22",
+    "v12-four-share8-d192-q3-s22"
+  ],
+  "schema": "tide-v12-all-cards-transition-v1",
+  "waiters_stopped": [
+    {
+      "at": "2026-11-16T14:09:04.730148+00:00",
+      "job": "v12-four-base-q10-s22",
+      "state": "stopped",
+      "termination_verified": true
+    },
+    {
+      "at": "2026-11-16T14:09:05.611231+00:00",
+      "job": "v12-four-fullshare8-q3-s11",
+      "state": "stopped",
+      "termination_verified": true
+    },
+    {
+      "at": "2026-11-16T14:09:09.670948+00:00",
+      "job": "v12-four-fullshare8-q3-s22",
+      "state": "stopped",
+      "termination_verified": true
+    },
+    {
+      "at": "2026-11-16T14:09:10.650621+00:00",
+      "job": "v12-four-ports4-q3-s22",
+      "state": "stopped",
+      "termination_verified": true
+    },
+    {
+      "at": "2026-11-16T14:09:19.907726+00:00",
+      "job": "v12-four-readcontent-q3-s11",
+      "state": "stopped",
+      "termination_verified": true
+    },
+    {
+      "at": "2026-11-16T14:09:20.825983+00:00",
+      "job": "v12-four-residual-q3-s11",
+      "state": "stopped",
+      "termination_verified": true
+    },
+    {
+      "at": "2026-11-16T14:09:29.357899+00:00",
+      "job": "v12-four-share0-q3-s11",
+      "state": "stopped",
+      "termination_verified": true
+    },
+    {
+      "at": "2026-11-16T14:09:34.593079+00:00",
+      "job": "v12-four-share8-d192-q3-s11",
+      "state": "stopped",
+      "termination_verified": true
+    },
+    {
+      "at": "2026-11-16T14:09:38.746900+00:00",
+      "job": "v12-four-top2-q3-s11",
+      "state": "stopped",
+      "termination_verified": true
+    },
+    {
+      "at": "2026-11-16T14:09:40.650796+00:00",
+      "job": "v12-four-untied-q3-s22",
+      "state": "stopped",
+      "termination_verified": true
+    },
+    {
+      "at": "2026-11-16T14:09:41.549527+00:00",
+      "job": "v12-four-share8-d128-q3-s11",
+      "state": "stopped",
+      "termination_verified": true
+    },
+    {
+      "at": "2026-11-16T14:09:46.610925+00:00",
+      "job": "v12-four-share8-d128-q3-s22",
+      "state": "stopped",
+      "termination_verified": true
+    }
+  ]
+}
