@@ -3,8 +3,8 @@
 - The 2026-11-16 user instruction authorizes the bounded v12 repair in
   `docs/studies/hb-v12-repair.md`: repair quad collapsed-interior feasibility
   and live disk-scan disappearance, then explicitly resume the affected original
-  configurations under new frozen source. Keep the original deadline,38 variants/
-  seed chains,128Mi endpoints,12 shared slots and disk limits. No active old inputs
+  configurations under new frozen source. Keep the original deadline,38 training
+  chains,128Mi endpoints,12 shared slots and disk limits. No active old inputs
   change, no relaxed thresholds and no silent retry; at most one repair per chain.
 - Latest user approval authorizes the fuller HB mechanism campaign in
   `docs/studies/hb-mechanisms-v12.md`:19 named variants x seeds11/22, each bounded

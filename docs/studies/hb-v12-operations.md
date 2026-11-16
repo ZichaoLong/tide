@@ -1,5 +1,22 @@
 # v12操作、固定身份与记录
 
+2026-11-16修复已授权，方案见[修复表](hb-v12-repair.md)。原38链及其失败记录保持；
+新增有界控制器`v12-repair-controller`只为原表中quad可行性/磁盘扫描消失失败各提交一次显式后代。
+修复接入需CPU/NPU资格和Lens读回，之后每条迁移→完整batch恢复→64更新→原128Mi→确认/诊断。
+原不足8Mi的基础设施失败先补学习先导及先导后的受训恢复。新源码/队列状态以提交与job.json记录为准。
+
+- 修复状态：`python scripts/review_hb_v12_repair.py`；原失败：`python scripts/review_hb_v12.py`。
+- 新服务/日志：`artifacts/jobs/v12-repair-<配置>/`、`runs/v12-repair-<配置>/`；
+  `migration/result.json`记实际父曝光，不能把旧最后有效进度当父检查点位置。
+- Lens：原study组内`tl-v12-repair-main-*`为修复正式段，`tl-v12-repair-prefix-*`在`TL-HB-REPAIR-v12`；
+  确认/诊断分别为`tl-v12-repair-confirm-*`和`tl-v12-repair-diag-*`，原曲线不覆盖。
+- 停止新增提交：`python scripts/job.py stop artifacts/jobs/v12-repair-controller`。
+  已独立提交的修复需逐个`python scripts/job.py stop artifacts/jobs/v12-repair-<配置>`并检查后代退出。
+  每个服务均保留原共享截止，停止控制器不隐式停止子作业。
+- 修复后再次失败不自动循环；恢复需要新作业/输出，沿用对应修复源码和配置，
+  选择实际完整latest.pt及其准入/恢复记录，显式`--resume`。源码迁移不冒充旧源码精确续训。
+- 新硬件采样`runs/v12-repair-hardware/observations.jsonl`，与旧采样分开。
+
 研究表：[HB机制对照](hb-mechanisms-v12.md)。19配置×seed11/22，全部目标128Mi，
 没有基于短期排名的淘汰或自动256Mi延伸。统一截止2026-11-17 23:08:07+08。
 共享12 NPU slot，最多200M参数；新增64GiB目标/96GiB停止，硬配额余量至少200GiB。
