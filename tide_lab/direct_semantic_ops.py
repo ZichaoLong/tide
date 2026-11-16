@@ -97,10 +97,32 @@ class _Allocation(torch.autograd.Function):
             # same affine active-set root relative to an interior score.
             # The threshold is unchanged; this is not a post-hoc renormalization.
             for _ in range(3):
-                active=(c>0)&(c<mu);count=active.sum(-1,keepdim=True)
+                active=(c>0)&(c<mu)
+                saturated=(c>=mu)&(mu>0)
+                # A converged FP32 bracket can round the last interior value
+                # onto a cap (or zero). Then the old affine refinement had no
+                # pivot and silently skipped the very row needing repair.
+                # Move toward the target through the next KKT breakpoint:
+                # smallest t-tau*mu among saturated nodes if mass is excessive,
+                # largest t among zero nodes if mass is deficient. Re-solving
+                # this active set preserves the quadratic objective, unlike
+                # normalizing the returned allocations after the solve.
+                error=c.sum(-1,keepdim=True)-target
+                eligible=mu>0
+                offset=t.masked_fill(~eligible,float('-inf')).amax(-1,keepdim=True)
+                offset=torch.where(eligible.any(-1,keepdim=True),offset,torch.zeros_like(offset))
+                relative_score=t-offset
+                down=(relative_score-tau*mu).masked_fill(~saturated,float('inf')).argmin(-1,keepdim=True)
+                zero=(c<=0)&eligible
+                up=relative_score.masked_fill(~zero,float('-inf')).argmax(-1,keepdim=True)
+                index=torch.where(error>0,down,up)
+                rescue=(~active.any(-1,keepdim=True)) & bound & ~full & ~empty & (error!=0)
+                rescue=rescue & torch.where(error>0,saturated.any(-1,keepdim=True),zero.any(-1,keepdim=True))
+                pivot=torch.zeros_like(active).scatter(-1,index,rescue)
+                active=active|pivot;saturated=saturated&~pivot
+                count=active.sum(-1,keepdim=True)
                 origin=t.masked_fill(~active,float('-inf')).amax(-1,keepdim=True)
                 origin=torch.where(count>0,origin,torch.zeros_like(origin))
-                saturated=(c>=mu)&(mu>0)
                 free_target=target-(mu*saturated).sum(-1,keepdim=True)
                 relative=((torch.where(active,t-origin,torch.zeros_like(t))).sum(-1,keepdim=True)-tau*free_target)/count.clamp_min(1)
                 refined=response((t-origin)-relative,mu,tau,kind,alpha)

@@ -7,6 +7,7 @@ sys.path.insert(0,str(Path(__file__).resolve().parents[1]))
 from scripts.campaign_worker import Worker
 from tide_lab.records import atomic_json,digest,now
 from tide_lab.quota import account_quota
+from tide_lab.disk_usage import campaign_usage
 
 M=2**20
 
@@ -16,9 +17,8 @@ class MechanismWorker(Worker):
         if self.stopped or time.time()>self.a.deadline_epoch-60:raise TimeoutError('v12 stopped/shared deadline')
         if time.monotonic()-self.last_guard<60:return
         self.last_guard=time.monotonic();root=Path(self.plan['root'])
-        paths=[p for base in ('runs','artifacts/jobs') for p in (root/base).glob('v12-*')]
-        size=sum(int(x.split()[0]) for x in subprocess.check_output(['du','-s','-B1',*map(str,paths)],text=True).splitlines())/2**30 if paths else 0
-        quota=account_quota();self.state['resources']=dict(at=now(),new_disk_gib=size,quota=quota);self.publish()
+        disk=campaign_usage(root);size=disk['gib']
+        quota=account_quota();self.state['resources']=dict(at=now(),new_disk_gib=size,disk_scan=disk,quota=quota);self.publish()
         if size>96 or quota['hard_quota_headroom_gib']<200:raise RuntimeError('v12 disk/headroom guard')
 
     def run(self):
