@@ -47,6 +47,11 @@ def main(a):
                 p=root/'runs'/('v12-repair-qualification-'+dev);r=read(p/'result.json');projection=read(p/'projection.json')
                 if r.get('state')=='failed':raise RuntimeError(dev+' repair qualification failed')
                 if r.get('state')!='completed' or projection.get('status')!='verified' or not projection.get('readback_matches'):
+                    job=root/'artifacts/jobs'/('v12-repair-qualification-'+dev)/'job.json'
+                    if job.exists():
+                        observation=inspect(job)
+                        if observation['state']['state'] in TERMINAL and observation.get('termination_verified_now'):
+                            raise RuntimeError(dev+' qualification terminated without complete checks and Lens readback')
                     ready=False;continue
                 for path,h in r['implementation_sha256'].items():
                     if digest(source/path)!=h:raise ValueError('qualified implementation changed: '+path)
