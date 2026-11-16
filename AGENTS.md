@@ -1,5 +1,17 @@
 # Working on tide-learning-lab
 
+- Latest user instruction reduces the current campaign further to FOUR physical
+  NPUs: only4/9/12/14, four slots in the existing namespace. See
+  `docs/studies/hb-v12-four-card.md` and `configs/studies/language/hb-v12/four-card.json`.
+  Keep the already extended2026-11-19 23:08:07+08 deadline and all scientific/disk
+  limits. Four original services remain; two additional boundary-saved trains
+  plus the fourteen stopped six-card waiters are explicitly requeued as16
+  `v12-four-*` descendants. These are administrative continuations, not new
+  numerical repairs. Never restart the old12-slot controller or six-card waiters.
+  Model source62e32602 remains fixed; only orchestration/resource inputs change.
+  Current status: `python scripts/review_hb_v12_six_card.py --policy four-card`.
+  The six-card notes below are historical.
+
 - The latest 2026-11-16 user request reduces the current campaign to at most SIX
   physical NPUs and permits more wall time. See `docs/studies/hb-v12-six-card.md`
   and `configs/studies/language/hb-v12/six-card.json`: use only4/6/9/11/12/14,

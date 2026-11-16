@@ -18,15 +18,20 @@ from tide_lab.supervisor import verify_source
 
 MODEL_COMMIT = '62e32602b23e371eb1669f7b99409db626a1c4f8'
 DEVICES = [4, 6, 9, 11, 12, 14]
+PLACEMENTS = {6: DEVICES, 4: [4, 9, 12, 14]}
 
 
 def validate_plan(plan, source, policy, deadline):
     if source['commit'] != MODEL_COMMIT or plan['model_source'] != source['commit']:
         raise ValueError('administrative continuation cannot migrate model source')
-    if (policy['candidate_ids'] != DEVICES or policy['max_new_concurrent_npus'] != 6
+    limit = plan.get('card_limit', 6)
+    if (limit not in PLACEMENTS or policy['candidate_ids'] != PLACEMENTS[limit]
+            or policy['max_new_concurrent_npus'] != limit
             or policy['slot_namespace'] != 'tide-direct-v10'
             or policy['deadline_epoch'] != deadline or plan['deadline_epoch'] != deadline):
-        raise ValueError('six-card physical placement/deadline contract changed')
+        raise ValueError('fixed physical placement/deadline contract changed')
+    if plan.get('run_prefix', 'tl-v12-six-') != {6: 'tl-v12-six-', 4: 'tl-v12-four-'}[limit]:
+        raise ValueError('administrative run namespace changed')
     if len(plan['cases']) != 1 or plan['administrative_mode'] not in ('resume_train', 'requeue_unstarted'):
         raise ValueError('one original repair chain per service')
     case = plan['cases'][0]
@@ -42,7 +47,8 @@ def validate_plan(plan, source, policy, deadline):
 class SixCardWorker(RepairWorker):
     def stage(self, case, name, action, cap, extra=(), record=False, script='scripts/campaign_stage.py'):
         # Run IDs distinguish the administrative segment; learning inputs do not change.
-        rename = lambda value: str(value).replace('tl-v12-repair-', 'tl-v12-six-')
+        prefix = self.plan.get('run_prefix', 'tl-v12-six-')
+        rename = lambda value: str(value).replace('tl-v12-repair-', prefix).replace('tl-v12-six-', prefix)
         if 'train_arguments' in case:
             case['train_arguments'] = [rename(x) for x in case['train_arguments']]
         return super().stage(case, name, action, cap, [rename(x) for x in extra], record, script)

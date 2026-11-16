@@ -38,6 +38,25 @@ class SixCardTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'endpoint required'):
             validate_plan(self.plan, dict(commit=MODEL_COMMIT), self.policy, 1000)
 
+    def test_four_card_policy_cannot_admit_old_six_card_set(self):
+        plan = dict(self.plan, card_limit=4, run_prefix='tl-v12-four-')
+        policy = dict(self.policy, candidate_ids=[4, 9, 12, 14], max_new_concurrent_npus=4)
+        validate_plan(plan, dict(commit=MODEL_COMMIT), policy, 1000)
+        with self.assertRaisesRegex(ValueError, 'placement'):
+            validate_plan(plan, dict(commit=MODEL_COMMIT), self.policy, 1000)
+        with self.assertRaisesRegex(ValueError, 'namespace'):
+            validate_plan(dict(plan, run_prefix='tl-v12-six-'), dict(commit=MODEL_COMMIT), policy, 1000)
+
+    def test_four_card_recording_keeps_distinct_segment_names(self):
+        worker = object.__new__(SixCardWorker)
+        worker.plan = dict(self.plan, card_limit=4, run_prefix='tl-v12-four-')
+        case = dict(train_arguments=['--until-tokens', str(128*2**20), '--run-id', 'tl-v12-six-main-test'])
+        with patch('scripts.run_hb_v12_repair_worker.RepairWorker.stage') as stage:
+            worker.stage(case, 'prefix', 'prefix', 1200, ['--run-id', 'tl-v12-repair-prefix-test'])
+        self.assertEqual(case['train_arguments'][-1], 'tl-v12-four-main-test')
+        self.assertEqual(stage.call_args.args[4], ['--run-id', 'tl-v12-four-prefix-test'])
+        self.assertEqual(case['train_arguments'][1], str(128*2**20))
+
     def test_failed_recovery_cannot_enter_training(self):
         worker = object.__new__(SixCardWorker)
         worker.plan = copy.deepcopy(self.plan); worker.state = {'cases': []}

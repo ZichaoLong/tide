@@ -1,0 +1,607 @@
+{
+  "at": "2026-11-16T09:57:05.839310+00:00",
+  "before": [
+    {
+      "error": null,
+      "job": "v12-repair-base128-q3-s22",
+      "lens": "recording",
+      "lifecycle": "running",
+      "mode": "retained",
+      "physical_device": 12,
+      "recovery": "passed",
+      "saved_tokens": 98774722,
+      "stage": "train",
+      "stage_state": "running",
+      "termination_verified": false,
+      "tokens": 100936975
+    },
+    {
+      "error": null,
+      "job": "v12-repair-residual-q3-s22",
+      "lens": "recording",
+      "lifecycle": "running",
+      "mode": "retained",
+      "physical_device": 14,
+      "recovery": "passed",
+      "saved_tokens": 79093781,
+      "stage": "train",
+      "stage_state": "running",
+      "termination_verified": false,
+      "tokens": 84233080
+    },
+    {
+      "error": null,
+      "job": "v12-repair-share8-d128-q3-s11",
+      "lens": "recording",
+      "lifecycle": "running",
+      "mode": "retained",
+      "physical_device": 11,
+      "recovery": "passed",
+      "saved_tokens": 52492436,
+      "stage": "train",
+      "stage_state": "running",
+      "termination_verified": false,
+      "tokens": 56745082
+    },
+    {
+      "error": null,
+      "job": "v12-repair-share8-d128-q3-s22",
+      "lens": "recording",
+      "lifecycle": "running",
+      "mode": "retained",
+      "physical_device": 6,
+      "recovery": "passed",
+      "saved_tokens": 77123375,
+      "stage": "train",
+      "stage_state": "running",
+      "termination_verified": false,
+      "tokens": 80664765
+    },
+    {
+      "error": null,
+      "job": "v12-repair-share8-lr3-q3-s11",
+      "lens": "recording",
+      "lifecycle": "running",
+      "mode": "retained",
+      "physical_device": 4,
+      "recovery": "passed",
+      "saved_tokens": 88318332,
+      "stage": "train",
+      "stage_state": "running",
+      "termination_verified": false,
+      "tokens": 96208036
+    },
+    {
+      "error": null,
+      "job": "v12-repair-share8-lr3-q3-s22",
+      "lens": "recording",
+      "lifecycle": "running",
+      "mode": "retained",
+      "physical_device": 9,
+      "recovery": "passed",
+      "saved_tokens": 84921984,
+      "stage": "train",
+      "stage_state": "running",
+      "termination_verified": false,
+      "tokens": 88870855
+    },
+    {
+      "error": null,
+      "job": "v12-six-base-q10-s22",
+      "lens": null,
+      "lifecycle": "waiting_resources",
+      "mode": "requeue_unstarted",
+      "physical_device": null,
+      "recovery": null,
+      "saved_tokens": null,
+      "stage": null,
+      "stage_state": null,
+      "termination_verified": false,
+      "tokens": null
+    },
+    {
+      "error": null,
+      "job": "v12-six-base128-q3-s11",
+      "lens": null,
+      "lifecycle": "waiting_resources",
+      "mode": "resume_train",
+      "physical_device": null,
+      "recovery": null,
+      "saved_tokens": null,
+      "stage": null,
+      "stage_state": null,
+      "termination_verified": false,
+      "tokens": null
+    },
+    {
+      "error": null,
+      "job": "v12-six-fullshare8-q3-s11",
+      "lens": null,
+      "lifecycle": "waiting_resources",
+      "mode": "requeue_unstarted",
+      "physical_device": null,
+      "recovery": null,
+      "saved_tokens": null,
+      "stage": null,
+      "stage_state": null,
+      "termination_verified": false,
+      "tokens": null
+    },
+    {
+      "error": null,
+      "job": "v12-six-fullshare8-q3-s22",
+      "lens": null,
+      "lifecycle": "waiting_resources",
+      "mode": "resume_train",
+      "physical_device": null,
+      "recovery": null,
+      "saved_tokens": null,
+      "stage": null,
+      "stage_state": null,
+      "termination_verified": false,
+      "tokens": null
+    },
+    {
+      "error": null,
+      "job": "v12-six-ports4-q3-s22",
+      "lens": null,
+      "lifecycle": "waiting_resources",
+      "mode": "requeue_unstarted",
+      "physical_device": null,
+      "recovery": null,
+      "saved_tokens": null,
+      "stage": null,
+      "stage_state": null,
+      "termination_verified": false,
+      "tokens": null
+    },
+    {
+      "error": null,
+      "job": "v12-six-position-q3-s11",
+      "lens": null,
+      "lifecycle": "waiting_resources",
+      "mode": "requeue_unstarted",
+      "physical_device": null,
+      "recovery": null,
+      "saved_tokens": null,
+      "stage": null,
+      "stage_state": null,
+      "termination_verified": false,
+      "tokens": null
+    },
+    {
+      "error": null,
+      "job": "v12-six-readcontent-q3-s11",
+      "lens": null,
+      "lifecycle": "waiting_resources",
+      "mode": "requeue_unstarted",
+      "physical_device": null,
+      "recovery": null,
+      "saved_tokens": null,
+      "stage": null,
+      "stage_state": null,
+      "termination_verified": false,
+      "tokens": null
+    },
+    {
+      "error": null,
+      "job": "v12-six-readcontent-q3-s22",
+      "lens": null,
+      "lifecycle": "waiting_resources",
+      "mode": "resume_train",
+      "physical_device": null,
+      "recovery": null,
+      "saved_tokens": null,
+      "stage": null,
+      "stage_state": null,
+      "termination_verified": false,
+      "tokens": null
+    },
+    {
+      "error": null,
+      "job": "v12-six-residual-q3-s11",
+      "lens": null,
+      "lifecycle": "waiting_resources",
+      "mode": "resume_train",
+      "physical_device": null,
+      "recovery": null,
+      "saved_tokens": null,
+      "stage": null,
+      "stage_state": null,
+      "termination_verified": false,
+      "tokens": null
+    },
+    {
+      "error": null,
+      "job": "v12-six-share0-q3-s11",
+      "lens": null,
+      "lifecycle": "waiting_resources",
+      "mode": "requeue_unstarted",
+      "physical_device": null,
+      "recovery": null,
+      "saved_tokens": null,
+      "stage": null,
+      "stage_state": null,
+      "termination_verified": false,
+      "tokens": null
+    },
+    {
+      "error": null,
+      "job": "v12-six-share8-d192-q3-s11",
+      "lens": null,
+      "lifecycle": "waiting_resources",
+      "mode": "resume_train",
+      "physical_device": null,
+      "recovery": null,
+      "saved_tokens": null,
+      "stage": null,
+      "stage_state": null,
+      "termination_verified": false,
+      "tokens": null
+    },
+    {
+      "error": null,
+      "job": "v12-six-share8-d192-q3-s22",
+      "lens": null,
+      "lifecycle": "waiting_resources",
+      "mode": "resume_train",
+      "physical_device": null,
+      "recovery": null,
+      "saved_tokens": null,
+      "stage": null,
+      "stage_state": null,
+      "termination_verified": false,
+      "tokens": null
+    },
+    {
+      "error": null,
+      "job": "v12-six-top2-q3-s11",
+      "lens": null,
+      "lifecycle": "waiting_resources",
+      "mode": "requeue_unstarted",
+      "physical_device": null,
+      "recovery": null,
+      "saved_tokens": null,
+      "stage": null,
+      "stage_state": null,
+      "termination_verified": false,
+      "tokens": null
+    },
+    {
+      "error": null,
+      "job": "v12-six-untied-q3-s22",
+      "lens": null,
+      "lifecycle": "waiting_resources",
+      "mode": "requeue_unstarted",
+      "physical_device": null,
+      "recovery": null,
+      "saved_tokens": null,
+      "stage": null,
+      "stage_state": null,
+      "termination_verified": false,
+      "tokens": null
+    }
+  ],
+  "deadline": "2026-11-19T23:08:07+08:00",
+  "pause_devices": [
+    6,
+    11
+  ],
+  "pause_requests": [
+    {
+      "argv": "/mi/data2T/zlong/home/llm/tide-learning-lab/.venv-positive-floor-v1/bin/python scripts/campaign_stage.py train --config /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2/configs/studies/language/hb-v12/configs/share8-d128-q3-s11.json --data /mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-data-r3 --output /mi/data2T/zlong/home/llm/tide-learning-lab/runs/v12-repair-share8-d128-q3-s11/train --deadline-epoch 1794926287.6162038 --resume /mi/data2T/zlong/home/llm/tide-learning-lab/runs/v12-repair-share8-d128-q3-s11/prefix/latest.pt --admission /mi/data2T/zlong/home/llm/tide-learning-lab/runs/v12-repair-share8-d128-q3-s11/check/result.json --recovery /mi/data2T/zlong/home/llm/tide-learning-lab/runs/v12-repair-share8-d128-q3-s11/recovery-compare/recovery.json --until-tokens 134217728 --run-id tl-v12-repair-main-share8-d128-q3-s11 --recording-group TL-HB-WIDTH-v12 ",
+      "cgroup": "12:cpu,cpuacct:/user.slice\n11:perf_event:/\n10:freezer:/\n9:memory:/user.slice/user-1003.slice/user@1003.service\n8:pids:/user.slice/user-1003.slice/user@1003.service\n7:cpuset:/\n6:blkio:/\n5:rdma:/\n4:hugetlb:/\n3:net_cls,net_prio:/\n2:devices:/user.slice\n1:name=systemd:/user.slice/user-1003.slice/user@1003.service/background.slice/tide-lab-v12-repair-share8-d128-q3-s11.service\n",
+      "cwd": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2",
+      "device": 11,
+      "job": "v12-repair-share8-d128-q3-s11",
+      "pid": 3497302,
+      "reason": "user administrative reduction from six to four physical NPUs; boundary save, not numerical failure",
+      "requested_at": "2026-11-16T09:58:16.733353+00:00"
+    },
+    {
+      "argv": "/mi/data2T/zlong/home/llm/tide-learning-lab/.venv-positive-floor-v1/bin/python scripts/campaign_stage.py train --config /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2/configs/studies/language/hb-v12/configs/share8-d128-q3-s22.json --data /mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-data-r3 --output /mi/data2T/zlong/home/llm/tide-learning-lab/runs/v12-repair-share8-d128-q3-s22/train --deadline-epoch 1794926287.6162045 --resume /mi/data2T/zlong/home/llm/tide-learning-lab/runs/v12-repair-share8-d128-q3-s22/prefix/latest.pt --admission /mi/data2T/zlong/home/llm/tide-learning-lab/runs/v12-repair-share8-d128-q3-s22/check/result.json --recovery /mi/data2T/zlong/home/llm/tide-learning-lab/runs/v12-repair-share8-d128-q3-s22/recovery-compare/recovery.json --until-tokens 134217728 --run-id tl-v12-repair-main-share8-d128-q3-s22 --recording-group TL-HB-WIDTH-v12 ",
+      "cgroup": "12:cpu,cpuacct:/user.slice\n11:perf_event:/\n10:freezer:/\n9:memory:/user.slice/user-1003.slice/user@1003.service\n8:pids:/user.slice/user-1003.slice/user@1003.service\n7:cpuset:/\n6:blkio:/\n5:rdma:/\n4:hugetlb:/\n3:net_cls,net_prio:/\n2:devices:/user.slice\n1:name=systemd:/user.slice/user-1003.slice/user@1003.service/background.slice/tide-lab-v12-repair-share8-d128-q3-s22.service\n",
+      "cwd": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2",
+      "device": 6,
+      "job": "v12-repair-share8-d128-q3-s22",
+      "pid": 122658,
+      "reason": "user administrative reduction from six to four physical NPUs; boundary save, not numerical failure",
+      "requested_at": "2026-11-16T09:58:16.747665+00:00"
+    }
+  ],
+  "pauses_verified": [
+    {
+      "at": "2026-11-16T09:59:25.723120+00:00",
+      "bytes": 689613851,
+      "checkpoint": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v12-repair-share8-d128-q3-s11/train/latest.pt",
+      "device": 11,
+      "identity": {
+        "config_sha256": "ada4a06c2832535da1e52125059387b9af1cd7fa6625b3fd4492c9793f82c3b6",
+        "data_lock_sha256": "40b7c0ebb9650d11aa0c0080532c884e2ca3846db578155f3df7068b82191d2f",
+        "device": "npu:0",
+        "dtype": "float32",
+        "installation": {
+          "foundation_commit": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+          "foundation_lock_sha256": "ba5464d7e23fe6b8c7453a52bfc7b961f040c92d0b80786c18132e40d90308b7",
+          "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+          "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+          "tidegraph": "0.3.0",
+          "tidegraph_source_sha256": "cfe2168a2c87565a568fb8944429b6b38401f92cf24972fba59c47b7592a7847",
+          "torch": "2.12.0+cpu",
+          "torch_npu": "2.12.0.post3",
+          "transformers": null
+        },
+        "mode": "train",
+        "source_commit": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+        "source_sha256": "f2d6a00e81f525fc341fa5f9cce227432b69600afda78cd511095f88e50a0740",
+        "threads": 2
+      },
+      "job": "v12-repair-share8-d128-q3-s11",
+      "progress": {
+        "cursor": 228096,
+        "dropped_tail_tokens": 13074,
+        "milestones": [
+          8388608,
+          33554432
+        ],
+        "probe": false,
+        "step": 3564,
+        "tokens": 56999987
+      },
+      "raw_job_state": "failed",
+      "raw_stage_state": "budget_truncated",
+      "sha256": "4a530de36b3b11de21f5a7a3faeaf7bb5b14cf097b052429a7e1140a3614ebae",
+      "state": "administratively_paused",
+      "termination_verified": true
+    },
+    {
+      "at": "2026-11-16T09:59:26.924234+00:00",
+      "bytes": 689613915,
+      "checkpoint": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v12-repair-share8-d128-q3-s22/train/latest.pt",
+      "device": 6,
+      "identity": {
+        "config_sha256": "b4d0a4ac26f07b17194ad345c95fc745002b203057b73e88d79bfd51774db9ff",
+        "data_lock_sha256": "40b7c0ebb9650d11aa0c0080532c884e2ca3846db578155f3df7068b82191d2f",
+        "device": "npu:0",
+        "dtype": "float32",
+        "installation": {
+          "foundation_commit": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+          "foundation_lock_sha256": "ba5464d7e23fe6b8c7453a52bfc7b961f040c92d0b80786c18132e40d90308b7",
+          "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+          "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+          "tidegraph": "0.3.0",
+          "tidegraph_source_sha256": "cfe2168a2c87565a568fb8944429b6b38401f92cf24972fba59c47b7592a7847",
+          "torch": "2.12.0+cpu",
+          "torch_npu": "2.12.0.post3",
+          "transformers": null
+        },
+        "mode": "train",
+        "source_commit": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+        "source_sha256": "f2d6a00e81f525fc341fa5f9cce227432b69600afda78cd511095f88e50a0740",
+        "threads": 2
+      },
+      "job": "v12-repair-share8-d128-q3-s22",
+      "progress": {
+        "cursor": 323648,
+        "dropped_tail_tokens": 10522,
+        "milestones": [
+          8388608,
+          33554432
+        ],
+        "probe": false,
+        "step": 5057,
+        "tokens": 80889473
+      },
+      "raw_job_state": "failed",
+      "raw_stage_state": "budget_truncated",
+      "sha256": "9df42fdae116f1647e51fffbdb779f6b46e63bc00337c24a2baf2c7c3c34fe53",
+      "state": "administratively_paused",
+      "termination_verified": true
+    }
+  ],
+  "request": "user requests at most four physical NPUs",
+  "resources": {
+    "at": "2026-11-16T09:59:27.032280+00:00",
+    "disk": {
+      "bytes": 79491518464,
+      "entries": 6264,
+      "gib": 74.03224563598633,
+      "scope": "allocated bytes, hardlinks once, no symlink traversal; live observation, not atomic snapshot",
+      "vanished": 0
+    },
+    "quota": {
+      "file_grace_expires_epoch": 0,
+      "file_hard": 0,
+      "file_soft": 0,
+      "files": 1634401,
+      "filesystem": "/dev/mapper/ascend_data-data",
+      "grace_expires_epoch": 1795294591,
+      "hard_gib": 800.0,
+      "hard_quota_headroom_gib": 350.5884780883789,
+      "query_returncode": 1,
+      "soft_exceeded": true,
+      "soft_gib": 300.0,
+      "used_gib": 449.4115219116211
+    }
+  },
+  "retain_devices": [
+    4,
+    9,
+    12,
+    14
+  ],
+  "schema": "tide-v12-four-card-transition-v1",
+  "time_planning": {
+    "assumption": "Every queued case starts from zero at calibration throughput/1.5, plus1h per chain. Actual parents preserve exposure. Fixed-card/shared contention can change elapsed time.",
+    "estimated_four_slot_hours": 67.26408905782769,
+    "queued": [
+      {
+        "id": "base-q10-s22",
+        "rate_for_planning": 8631.503762394037,
+        "seconds": 19149.750274658203
+      },
+      {
+        "id": "base128-q3-s11",
+        "rate_for_planning": 1730.365562612871,
+        "seconds": 81166.11140441895
+      },
+      {
+        "id": "fullshare8-q3-s11",
+        "rate_for_planning": 3611.200441686362,
+        "seconds": 40767.06678771973
+      },
+      {
+        "id": "fullshare8-q3-s22",
+        "rate_for_planning": 3611.200441686362,
+        "seconds": 40767.06678771973
+      },
+      {
+        "id": "ports4-q3-s22",
+        "rate_for_planning": 4110.274624495676,
+        "seconds": 36254.19960021973
+      },
+      {
+        "id": "position-q3-s11",
+        "rate_for_planning": 4085.301490790401,
+        "seconds": 36453.81221008301
+      },
+      {
+        "id": "readcontent-q3-s11",
+        "rate_for_planning": 4085.301490790401,
+        "seconds": 36453.81221008301
+      },
+      {
+        "id": "readcontent-q3-s22",
+        "rate_for_planning": 4085.301490790401,
+        "seconds": 36453.81221008301
+      },
+      {
+        "id": "residual-q3-s11",
+        "rate_for_planning": 4085.301490790401,
+        "seconds": 36453.81221008301
+      },
+      {
+        "id": "share0-q3-s11",
+        "rate_for_planning": 3611.200441686362,
+        "seconds": 40767.06678771973
+      },
+      {
+        "id": "share8-d192-q3-s11",
+        "rate_for_planning": 1190.1520683523224,
+        "seconds": 116373.59555053711
+      },
+      {
+        "id": "share8-d192-q3-s22",
+        "rate_for_planning": 1190.1520683523224,
+        "seconds": 116373.59555053711
+      },
+      {
+        "id": "top2-q3-s11",
+        "rate_for_planning": 4353.372761411481,
+        "seconds": 34430.74557495117
+      },
+      {
+        "id": "untied-q3-s22",
+        "rate_for_planning": 4085.301490790401,
+        "seconds": 36453.81221008301
+      },
+      {
+        "id": "share8-d128-q3-s11",
+        "rate_for_planning": 2083.721414574405,
+        "seconds": 68012.5107421875
+      },
+      {
+        "id": "share8-d128-q3-s22",
+        "rate_for_planning": 2083.721414574405,
+        "seconds": 68012.5107421875
+      }
+    ],
+    "remaining_wall_hours": 77.14460663643148
+  },
+  "waiters_stopped": [
+    {
+      "at": "2026-11-16T09:57:06.694961+00:00",
+      "job": "v12-six-base-q10-s22",
+      "state": "stopped",
+      "termination_verified": true
+    },
+    {
+      "at": "2026-11-16T09:57:07.600704+00:00",
+      "job": "v12-six-base128-q3-s11",
+      "state": "stopped",
+      "termination_verified": true
+    },
+    {
+      "at": "2026-11-16T09:57:10.393010+00:00",
+      "job": "v12-six-fullshare8-q3-s11",
+      "state": "stopped",
+      "termination_verified": true
+    },
+    {
+      "at": "2026-11-16T09:57:11.238582+00:00",
+      "job": "v12-six-fullshare8-q3-s22",
+      "state": "stopped",
+      "termination_verified": true
+    },
+    {
+      "at": "2026-11-16T09:57:12.045539+00:00",
+      "job": "v12-six-ports4-q3-s22",
+      "state": "stopped",
+      "termination_verified": true
+    },
+    {
+      "at": "2026-11-16T09:57:21.875701+00:00",
+      "job": "v12-six-position-q3-s11",
+      "state": "stopped",
+      "termination_verified": true
+    },
+    {
+      "at": "2026-11-16T09:57:26.179286+00:00",
+      "job": "v12-six-readcontent-q3-s11",
+      "state": "stopped",
+      "termination_verified": true
+    },
+    {
+      "at": "2026-11-16T09:57:27.010181+00:00",
+      "job": "v12-six-readcontent-q3-s22",
+      "state": "stopped",
+      "termination_verified": true
+    },
+    {
+      "at": "2026-11-16T09:57:27.832194+00:00",
+      "job": "v12-six-residual-q3-s11",
+      "state": "stopped",
+      "termination_verified": true
+    },
+    {
+      "at": "2026-11-16T09:57:28.657382+00:00",
+      "job": "v12-six-share0-q3-s11",
+      "state": "stopped",
+      "termination_verified": true
+    },
+    {
+      "at": "2026-11-16T09:57:29.516806+00:00",
+      "job": "v12-six-share8-d192-q3-s11",
+      "state": "stopped",
+      "termination_verified": true
+    },
+    {
+      "at": "2026-11-16T09:57:30.728475+00:00",
+      "job": "v12-six-share8-d192-q3-s22",
+      "state": "stopped",
+      "termination_verified": true
+    },
+    {
+      "at": "2026-11-16T09:57:31.665499+00:00",
+      "job": "v12-six-top2-q3-s11",
+      "state": "stopped",
+      "termination_verified": true
+    },
+    {
+      "at": "2026-11-16T09:57:32.593091+00:00",
+      "job": "v12-six-untied-q3-s22",
+      "state": "stopped",
+      "termination_verified": true
+    }
+  ]
+}

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Submit exactly fourteen administrative descendants under a fixed six-card policy."""
+"""Submit a fixed administrative manifest; preserve the original scientific source."""
 import argparse
 import copy
 import json
@@ -25,12 +25,15 @@ def main(args):
     orchestration = verify_source(source)
     model = root/'.local/source-hb-v12-repair-v2'
     model_id = verify_source(model)
-    spec_path = source/'configs/studies/language/hb-v12/six-card.json'
+    spec_path = source/args.spec
     spec = read(spec_path); deadline = spec['deadline_epoch']
+    prefix = spec.get('job_prefix', 'v12-six')
+    limit = spec['max_new_concurrent_npus']
     if model_id['commit'] != spec['model_source'] or time.time() > deadline-3600:
         raise ValueError('wrong model source or insufficient budget')
-    if len(spec['cases']) != 14 or len({x['id'] for x in spec['cases']}) != 14:
-        raise ValueError('fixed fourteen administrative descendants only')
+    expected = spec.get('administrative_case_count', 14)
+    if not 0 < expected <= 38 or len(spec['cases']) != expected or len({x['id'] for x in spec['cases']}) != expected:
+        raise ValueError('only fixed unique original administrative descendants')
     quota = account_quota(); disk = campaign_usage(root)
     if quota['hard_quota_headroom_gib'] < 200 or disk['gib'] > 96:
         raise RuntimeError('original disk/headroom limits')
@@ -46,25 +49,30 @@ def main(args):
     for item in spec['cases']:
         if not inspect(root/'artifacts/jobs'/item['previous_job']/'job.json')['termination_verified_now']:
             raise ValueError('previous service still alive: '+item['id'])
-        if (root/'artifacts/jobs'/('v12-six-'+item['id'])).exists():
-            raise FileExistsError('never automatically retry an existing six-card descendant')
-    out = root/'runs/v12-six-submit'; out.mkdir(exist_ok=False)
+        if (root/'artifacts/jobs'/(prefix+'-'+item['id'])).exists():
+            raise FileExistsError('never automatically retry an existing administrative descendant')
+    out = root/'runs'/(prefix+'-submit'); out.mkdir(exist_ok=False)
     state = dict(state='submitting', started_at=now(), orchestration_source=orchestration['commit'],
                  model_source=model_id['commit'], deadline_epoch=deadline, jobs=[], retained_jobs=spec['retained_jobs'],
                  resources=dict(quota=quota, disk=disk))
     atomic_json(out/'state.json', state)
     for item in spec['cases']:
-        name = item['id']; job = 'v12-six-'+name
+        name = item['id']; job = prefix+'-'+name
         dest = out/name; dest.mkdir()
-        original = root/'runs/v12-repair-controller'/name
+        original = (root/item['base_plan']).parent if item.get('base_plan') else root/'runs/v12-repair-controller'/name
         plan = copy.deepcopy(read(original/'plan.json')); case = plan['cases'][0]
         if case['id'] != name: raise ValueError('original case identity mismatch')
         plan.update(administrative_mode=item['mode'], model_source=model_id['commit'], deadline_epoch=deadline,
-                    original_config_sha256=digest(case['config']), previous_job=item['previous_job'])
+                    original_config_sha256=digest(case['config']), previous_job=item['previous_job'],
+                    card_limit=limit, run_prefix='tl-'+prefix+'-')
         case['output'] = str(root/'runs'/job); case['administrative_parent'] = item['previous_job']
         extra_inputs = []
         if item['mode'] == 'resume_train':
-            parent_run = root/'runs'/item['previous_job']; result = read(parent_run/'train/result.json')
+            parent_run = root/'runs'/item.get('resume_parent_job', item['previous_job'])
+            parent_observation = inspect(root/'artifacts/jobs'/parent_run.name/'job.json')
+            if not parent_observation['termination_verified_now']:
+                raise ValueError('scientific parent still alive')
+            result = read(parent_run/'train/result.json')
             if result['state'] != 'budget_truncated' or result['stop_signal'] != [15]:
                 raise ValueError('only user administrative boundary stop can resume here')
             if digest(item['checkpoint']) != item['sha256']:
@@ -75,7 +83,7 @@ def main(args):
         elif (root/'runs'/item['previous_job']).exists():
             raise ValueError('unstarted repair unexpectedly produced stage output')
         policy = read(original/'resource.json')
-        policy.update(candidate_ids=spec['candidate_ids'], max_new_concurrent_npus=6, deadline_epoch=deadline,
+        policy.update(candidate_ids=spec['candidate_ids'], max_new_concurrent_npus=limit, deadline_epoch=deadline,
                       latest_authorization=spec['authorization'])
         pp = dest/'plan.json'; rp = dest/'resource.json'
         atomic_json(pp, plan); atomic_json(rp, policy); pp.chmod(0o444); rp.chmod(0o444)
@@ -108,4 +116,5 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--root', type=Path, required=True)
     parser.add_argument('--lens-cli', type=Path, required=True)
+    parser.add_argument('--spec', type=Path, default=Path('configs/studies/language/hb-v12/six-card.json'))
     main(parser.parse_args())
