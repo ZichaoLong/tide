@@ -1,0 +1,729 @@
+{
+  "at": "2026-11-16T08:55:00.793488+00:00",
+  "before": [
+    {
+      "device": 14,
+      "job": "v12-repair-base-q10-s11",
+      "lifecycle": "completed",
+      "queue": "completed",
+      "record": "artifacts/jobs/v12-repair-base-q10-s11/job.json",
+      "source": {
+        "commit": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2",
+        "tree_sha256": "f2d6a00e81f525fc341fa5f9cce227432b69600afda78cd511095f88e50a0740"
+      },
+      "terminated": true
+    },
+    {
+      "device": null,
+      "job": "v12-repair-base-q10-s22",
+      "lifecycle": "waiting_resources",
+      "queue": "waiting_resources",
+      "record": "artifacts/jobs/v12-repair-base-q10-s22/job.json",
+      "source": {
+        "commit": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2",
+        "tree_sha256": "f2d6a00e81f525fc341fa5f9cce227432b69600afda78cd511095f88e50a0740"
+      },
+      "terminated": false
+    },
+    {
+      "device": 5,
+      "job": "v12-repair-base-q3-s22",
+      "lifecycle": "completed",
+      "queue": "completed",
+      "record": "artifacts/jobs/v12-repair-base-q3-s22/job.json",
+      "source": {
+        "commit": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2",
+        "tree_sha256": "f2d6a00e81f525fc341fa5f9cce227432b69600afda78cd511095f88e50a0740"
+      },
+      "terminated": true
+    },
+    {
+      "device": 7,
+      "job": "v12-repair-base128-q3-s11",
+      "lifecycle": "running",
+      "queue": "running",
+      "record": "artifacts/jobs/v12-repair-base128-q3-s11/job.json",
+      "source": {
+        "commit": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2",
+        "tree_sha256": "f2d6a00e81f525fc341fa5f9cce227432b69600afda78cd511095f88e50a0740"
+      },
+      "terminated": false
+    },
+    {
+      "device": 12,
+      "job": "v12-repair-base128-q3-s22",
+      "lifecycle": "running",
+      "queue": "running",
+      "record": "artifacts/jobs/v12-repair-base128-q3-s22/job.json",
+      "source": {
+        "commit": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2",
+        "tree_sha256": "f2d6a00e81f525fc341fa5f9cce227432b69600afda78cd511095f88e50a0740"
+      },
+      "terminated": false
+    },
+    {
+      "device": null,
+      "job": "v12-repair-fullshare8-q3-s11",
+      "lifecycle": "waiting_resources",
+      "queue": "waiting_resources",
+      "record": "artifacts/jobs/v12-repair-fullshare8-q3-s11/job.json",
+      "source": {
+        "commit": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2",
+        "tree_sha256": "f2d6a00e81f525fc341fa5f9cce227432b69600afda78cd511095f88e50a0740"
+      },
+      "terminated": false
+    },
+    {
+      "device": 15,
+      "job": "v12-repair-fullshare8-q3-s22",
+      "lifecycle": "running",
+      "queue": "running",
+      "record": "artifacts/jobs/v12-repair-fullshare8-q3-s22/job.json",
+      "source": {
+        "commit": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2",
+        "tree_sha256": "f2d6a00e81f525fc341fa5f9cce227432b69600afda78cd511095f88e50a0740"
+      },
+      "terminated": false
+    },
+    {
+      "device": 11,
+      "job": "v12-repair-ports4-q3-s11",
+      "lifecycle": "completed",
+      "queue": "completed",
+      "record": "artifacts/jobs/v12-repair-ports4-q3-s11/job.json",
+      "source": {
+        "commit": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2",
+        "tree_sha256": "f2d6a00e81f525fc341fa5f9cce227432b69600afda78cd511095f88e50a0740"
+      },
+      "terminated": true
+    },
+    {
+      "device": null,
+      "job": "v12-repair-ports4-q3-s22",
+      "lifecycle": "waiting_resources",
+      "queue": "waiting_resources",
+      "record": "artifacts/jobs/v12-repair-ports4-q3-s22/job.json",
+      "source": {
+        "commit": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2",
+        "tree_sha256": "f2d6a00e81f525fc341fa5f9cce227432b69600afda78cd511095f88e50a0740"
+      },
+      "terminated": false
+    },
+    {
+      "device": null,
+      "job": "v12-repair-position-q3-s11",
+      "lifecycle": "waiting_resources",
+      "queue": "waiting_resources",
+      "record": "artifacts/jobs/v12-repair-position-q3-s11/job.json",
+      "source": {
+        "commit": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2",
+        "tree_sha256": "f2d6a00e81f525fc341fa5f9cce227432b69600afda78cd511095f88e50a0740"
+      },
+      "terminated": false
+    },
+    {
+      "device": 11,
+      "job": "v12-repair-position-q3-s22",
+      "lifecycle": "completed",
+      "queue": "completed",
+      "record": "artifacts/jobs/v12-repair-position-q3-s22/job.json",
+      "source": {
+        "commit": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2",
+        "tree_sha256": "f2d6a00e81f525fc341fa5f9cce227432b69600afda78cd511095f88e50a0740"
+      },
+      "terminated": true
+    },
+    {
+      "device": 5,
+      "job": "v12-repair-qualification-npu",
+      "lifecycle": "completed",
+      "queue": "completed",
+      "record": "artifacts/jobs/v12-repair-qualification-npu/job.json",
+      "source": {
+        "commit": "555a68637ded4fb83ef5a8aa1c768fdab78545c1",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-quad-v1",
+        "tree_sha256": "1601e4e3c69bd5fc7219d68afe37df781a4921553df4ea374d09b5804c8d7e16"
+      },
+      "terminated": true
+    },
+    {
+      "device": null,
+      "job": "v12-repair-readcontent-q3-s11",
+      "lifecycle": "waiting_resources",
+      "queue": "waiting_resources",
+      "record": "artifacts/jobs/v12-repair-readcontent-q3-s11/job.json",
+      "source": {
+        "commit": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2",
+        "tree_sha256": "f2d6a00e81f525fc341fa5f9cce227432b69600afda78cd511095f88e50a0740"
+      },
+      "terminated": false
+    },
+    {
+      "device": 2,
+      "job": "v12-repair-readcontent-q3-s22",
+      "lifecycle": "running",
+      "queue": "running",
+      "record": "artifacts/jobs/v12-repair-readcontent-q3-s22/job.json",
+      "source": {
+        "commit": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2",
+        "tree_sha256": "f2d6a00e81f525fc341fa5f9cce227432b69600afda78cd511095f88e50a0740"
+      },
+      "terminated": false
+    },
+    {
+      "device": 5,
+      "job": "v12-repair-residual-q3-s11",
+      "lifecycle": "running",
+      "queue": "running",
+      "record": "artifacts/jobs/v12-repair-residual-q3-s11/job.json",
+      "source": {
+        "commit": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2",
+        "tree_sha256": "f2d6a00e81f525fc341fa5f9cce227432b69600afda78cd511095f88e50a0740"
+      },
+      "terminated": false
+    },
+    {
+      "device": 14,
+      "job": "v12-repair-residual-q3-s22",
+      "lifecycle": "running",
+      "queue": "running",
+      "record": "artifacts/jobs/v12-repair-residual-q3-s22/job.json",
+      "source": {
+        "commit": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2",
+        "tree_sha256": "f2d6a00e81f525fc341fa5f9cce227432b69600afda78cd511095f88e50a0740"
+      },
+      "terminated": false
+    },
+    {
+      "device": null,
+      "job": "v12-repair-share0-q3-s11",
+      "lifecycle": "waiting_resources",
+      "queue": "waiting_resources",
+      "record": "artifacts/jobs/v12-repair-share0-q3-s11/job.json",
+      "source": {
+        "commit": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2",
+        "tree_sha256": "f2d6a00e81f525fc341fa5f9cce227432b69600afda78cd511095f88e50a0740"
+      },
+      "terminated": false
+    },
+    {
+      "device": 2,
+      "job": "v12-repair-share0-q3-s22",
+      "lifecycle": "completed",
+      "queue": "completed",
+      "record": "artifacts/jobs/v12-repair-share0-q3-s22/job.json",
+      "source": {
+        "commit": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2",
+        "tree_sha256": "f2d6a00e81f525fc341fa5f9cce227432b69600afda78cd511095f88e50a0740"
+      },
+      "terminated": true
+    },
+    {
+      "device": 11,
+      "job": "v12-repair-share8-d128-q3-s11",
+      "lifecycle": "running",
+      "queue": "running",
+      "record": "artifacts/jobs/v12-repair-share8-d128-q3-s11/job.json",
+      "source": {
+        "commit": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2",
+        "tree_sha256": "f2d6a00e81f525fc341fa5f9cce227432b69600afda78cd511095f88e50a0740"
+      },
+      "terminated": false
+    },
+    {
+      "device": 6,
+      "job": "v12-repair-share8-d128-q3-s22",
+      "lifecycle": "running",
+      "queue": "running",
+      "record": "artifacts/jobs/v12-repair-share8-d128-q3-s22/job.json",
+      "source": {
+        "commit": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2",
+        "tree_sha256": "f2d6a00e81f525fc341fa5f9cce227432b69600afda78cd511095f88e50a0740"
+      },
+      "terminated": false
+    },
+    {
+      "device": 0,
+      "job": "v12-repair-share8-d192-q3-s11",
+      "lifecycle": "running",
+      "queue": "running",
+      "record": "artifacts/jobs/v12-repair-share8-d192-q3-s11/job.json",
+      "source": {
+        "commit": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2",
+        "tree_sha256": "f2d6a00e81f525fc341fa5f9cce227432b69600afda78cd511095f88e50a0740"
+      },
+      "terminated": false
+    },
+    {
+      "device": 10,
+      "job": "v12-repair-share8-d192-q3-s22",
+      "lifecycle": "running",
+      "queue": "running",
+      "record": "artifacts/jobs/v12-repair-share8-d192-q3-s22/job.json",
+      "source": {
+        "commit": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2",
+        "tree_sha256": "f2d6a00e81f525fc341fa5f9cce227432b69600afda78cd511095f88e50a0740"
+      },
+      "terminated": false
+    },
+    {
+      "device": 4,
+      "job": "v12-repair-share8-lr3-q3-s11",
+      "lifecycle": "running",
+      "queue": "running",
+      "record": "artifacts/jobs/v12-repair-share8-lr3-q3-s11/job.json",
+      "source": {
+        "commit": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2",
+        "tree_sha256": "f2d6a00e81f525fc341fa5f9cce227432b69600afda78cd511095f88e50a0740"
+      },
+      "terminated": false
+    },
+    {
+      "device": 9,
+      "job": "v12-repair-share8-lr3-q3-s22",
+      "lifecycle": "running",
+      "queue": "running",
+      "record": "artifacts/jobs/v12-repair-share8-lr3-q3-s22/job.json",
+      "source": {
+        "commit": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2",
+        "tree_sha256": "f2d6a00e81f525fc341fa5f9cce227432b69600afda78cd511095f88e50a0740"
+      },
+      "terminated": false
+    },
+    {
+      "device": 1,
+      "job": "v12-repair-share8-q10-s11",
+      "lifecycle": "completed",
+      "queue": "completed",
+      "record": "artifacts/jobs/v12-repair-share8-q10-s11/job.json",
+      "source": {
+        "commit": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2",
+        "tree_sha256": "f2d6a00e81f525fc341fa5f9cce227432b69600afda78cd511095f88e50a0740"
+      },
+      "terminated": true
+    },
+    {
+      "device": 1,
+      "job": "v12-repair-share8-q3-s11",
+      "lifecycle": "completed",
+      "queue": "completed",
+      "record": "artifacts/jobs/v12-repair-share8-q3-s11/job.json",
+      "source": {
+        "commit": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2",
+        "tree_sha256": "f2d6a00e81f525fc341fa5f9cce227432b69600afda78cd511095f88e50a0740"
+      },
+      "terminated": true
+    },
+    {
+      "device": 7,
+      "job": "v12-repair-share8-q3-s22",
+      "lifecycle": "completed",
+      "queue": "completed",
+      "record": "artifacts/jobs/v12-repair-share8-q3-s22/job.json",
+      "source": {
+        "commit": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2",
+        "tree_sha256": "f2d6a00e81f525fc341fa5f9cce227432b69600afda78cd511095f88e50a0740"
+      },
+      "terminated": true
+    },
+    {
+      "device": null,
+      "job": "v12-repair-top2-q3-s11",
+      "lifecycle": "waiting_resources",
+      "queue": "waiting_resources",
+      "record": "artifacts/jobs/v12-repair-top2-q3-s11/job.json",
+      "source": {
+        "commit": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2",
+        "tree_sha256": "f2d6a00e81f525fc341fa5f9cce227432b69600afda78cd511095f88e50a0740"
+      },
+      "terminated": false
+    },
+    {
+      "device": null,
+      "job": "v12-repair-untied-q3-s22",
+      "lifecycle": "waiting_resources",
+      "queue": "waiting_resources",
+      "record": "artifacts/jobs/v12-repair-untied-q3-s22/job.json",
+      "source": {
+        "commit": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2",
+        "tree_sha256": "f2d6a00e81f525fc341fa5f9cce227432b69600afda78cd511095f88e50a0740"
+      },
+      "terminated": false
+    }
+  ],
+  "method": "stop submission controller and waiters, SIGTERM only training owner to save boundary state, confirm release; resubmit under fixed six-card policy with unchanged model source",
+  "new_deadline": "2026-11-19T23:08:07+08:00",
+  "pause_devices": [
+    0,
+    2,
+    5,
+    7,
+    10,
+    15
+  ],
+  "pause_requests": [
+    {
+      "argv": "/mi/data2T/zlong/home/llm/tide-learning-lab/.venv-positive-floor-v1/bin/python scripts/campaign_stage.py train --config /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2/configs/studies/language/hb-v12/configs/base128-q3-s11.json --data /mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-data-r3 --output /mi/data2T/zlong/home/llm/tide-learning-lab/runs/v12-repair-base128-q3-s11/train --deadline-epoch 1794926287.6162071 --resume /mi/data2T/zlong/home/llm/tide-learning-lab/runs/v12-repair-base128-q3-s11/prefix/latest.pt --admission /mi/data2T/zlong/home/llm/tide-learning-lab/runs/v12-repair-base128-q3-s11/check/result.json --recovery /mi/data2T/zlong/home/llm/tide-learning-lab/runs/v12-repair-base128-q3-s11/recovery-compare/recovery.json --until-tokens 134217728 --run-id tl-v12-repair-main-base128-q3-s11 --recording-group TL-HB-WIDTH-v12 ",
+      "cgroup": "12:cpu,cpuacct:/user.slice\n11:perf_event:/\n10:freezer:/\n9:memory:/user.slice/user-1003.slice/user@1003.service\n8:pids:/user.slice/user-1003.slice/user@1003.service\n7:cpuset:/\n6:blkio:/\n5:rdma:/\n4:hugetlb:/\n3:net_cls,net_prio:/\n2:devices:/user.slice\n1:name=systemd:/user.slice/user-1003.slice/user@1003.service/background.slice/tide-lab-v12-repair-base128-q3-s11.service\n",
+      "cwd": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2",
+      "device": 7,
+      "job": "v12-repair-base128-q3-s11",
+      "pid": 2039683,
+      "reason": "user administrative reduction to six physical NPUs; graceful update-boundary checkpoint; not a numerical failure or new repair",
+      "requested_at": "2026-11-16T08:58:54.166146+00:00"
+    },
+    {
+      "argv": "/mi/data2T/zlong/home/llm/tide-learning-lab/.venv-positive-floor-v1/bin/python scripts/campaign_stage.py train --config /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2/configs/studies/language/hb-v12/configs/fullshare8-q3-s22.json --data /mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-data-r3 --output /mi/data2T/zlong/home/llm/tide-learning-lab/runs/v12-repair-fullshare8-q3-s22/train --deadline-epoch 1794926287.6162038 --resume /mi/data2T/zlong/home/llm/tide-learning-lab/runs/v12-repair-fullshare8-q3-s22/prefix/latest.pt --admission /mi/data2T/zlong/home/llm/tide-learning-lab/runs/v12-repair-fullshare8-q3-s22/check/result.json --recovery /mi/data2T/zlong/home/llm/tide-learning-lab/runs/v12-repair-fullshare8-q3-s22/recovery-compare/recovery.json --until-tokens 134217728 --run-id tl-v12-repair-main-fullshare8-q3-s22 --recording-group TL-HB-SHARING-v12 ",
+      "cgroup": "12:cpu,cpuacct:/user.slice\n11:perf_event:/\n10:freezer:/\n9:memory:/user.slice/user-1003.slice/user@1003.service\n8:pids:/user.slice/user-1003.slice/user@1003.service\n7:cpuset:/\n6:blkio:/\n5:rdma:/\n4:hugetlb:/\n3:net_cls,net_prio:/\n2:devices:/user.slice\n1:name=systemd:/user.slice/user-1003.slice/user@1003.service/background.slice/tide-lab-v12-repair-fullshare8-q3-s22.service\n",
+      "cwd": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2",
+      "device": 15,
+      "job": "v12-repair-fullshare8-q3-s22",
+      "pid": 3091288,
+      "reason": "user administrative reduction to six physical NPUs; graceful update-boundary checkpoint; not a numerical failure or new repair",
+      "requested_at": "2026-11-16T08:58:54.190681+00:00"
+    },
+    {
+      "argv": "/mi/data2T/zlong/home/llm/tide-learning-lab/.venv-positive-floor-v1/bin/python scripts/campaign_stage.py train --config /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2/configs/studies/language/hb-v12/configs/readcontent-q3-s22.json --data /mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-data-r3 --output /mi/data2T/zlong/home/llm/tide-learning-lab/runs/v12-repair-readcontent-q3-s22/train --deadline-epoch 1794926287.6162632 --resume /mi/data2T/zlong/home/llm/tide-learning-lab/runs/v12-repair-readcontent-q3-s22/prefix/latest.pt --admission /mi/data2T/zlong/home/llm/tide-learning-lab/runs/v12-repair-readcontent-q3-s22/check/result.json --recovery /mi/data2T/zlong/home/llm/tide-learning-lab/runs/v12-repair-readcontent-q3-s22/recovery-compare/recovery.json --until-tokens 134217728 --run-id tl-v12-repair-main-readcontent-q3-s22 --recording-group TL-HB-INFORMATION-v12 ",
+      "cgroup": "12:cpu,cpuacct:/user.slice\n11:perf_event:/\n10:freezer:/\n9:memory:/user.slice/user-1003.slice/user@1003.service\n8:pids:/user.slice/user-1003.slice/user@1003.service\n7:cpuset:/\n6:blkio:/\n5:rdma:/\n4:hugetlb:/\n3:net_cls,net_prio:/\n2:devices:/user.slice\n1:name=systemd:/user.slice/user-1003.slice/user@1003.service/background.slice/tide-lab-v12-repair-readcontent-q3-s22.service\n",
+      "cwd": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2",
+      "device": 2,
+      "job": "v12-repair-readcontent-q3-s22",
+      "pid": 3084434,
+      "reason": "user administrative reduction to six physical NPUs; graceful update-boundary checkpoint; not a numerical failure or new repair",
+      "requested_at": "2026-11-16T08:58:54.214797+00:00"
+    },
+    {
+      "argv": "/mi/data2T/zlong/home/llm/tide-learning-lab/.venv-positive-floor-v1/bin/python scripts/campaign_stage.py train --config /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2/configs/studies/language/hb-v12/configs/residual-q3-s11.json --data /mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-data-r3 --output /mi/data2T/zlong/home/llm/tide-learning-lab/runs/v12-repair-residual-q3-s11/train --deadline-epoch 1794926287.6162317 --resume /mi/data2T/zlong/home/llm/tide-learning-lab/runs/v12-repair-residual-q3-s11/pilot/latest.pt --admission /mi/data2T/zlong/home/llm/tide-learning-lab/runs/v12-repair-residual-q3-s11/check/result.json --recovery /mi/data2T/zlong/home/llm/tide-learning-lab/runs/v12-repair-residual-q3-s11/postpilot-compare/recovery.json --until-tokens 134217728 --run-id tl-v12-repair-main-residual-q3-s11 --recording-group TL-HB-INFORMATION-v12 ",
+      "cgroup": "12:cpu,cpuacct:/user.slice\n11:perf_event:/\n10:freezer:/\n9:memory:/user.slice/user-1003.slice/user@1003.service\n8:pids:/user.slice/user-1003.slice/user@1003.service\n7:cpuset:/\n6:blkio:/\n5:rdma:/\n4:hugetlb:/\n3:net_cls,net_prio:/\n2:devices:/user.slice\n1:name=systemd:/user.slice/user-1003.slice/user@1003.service/background.slice/tide-lab-v12-repair-residual-q3-s11.service\n",
+      "cwd": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2",
+      "device": 5,
+      "job": "v12-repair-residual-q3-s11",
+      "pid": 2085942,
+      "reason": "user administrative reduction to six physical NPUs; graceful update-boundary checkpoint; not a numerical failure or new repair",
+      "requested_at": "2026-11-16T08:58:54.232923+00:00"
+    },
+    {
+      "argv": "/mi/data2T/zlong/home/llm/tide-learning-lab/.venv-positive-floor-v1/bin/python scripts/campaign_stage.py train --config /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2/configs/studies/language/hb-v12/configs/share8-d192-q3-s11.json --data /mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-data-r3 --output /mi/data2T/zlong/home/llm/tide-learning-lab/runs/v12-repair-share8-d192-q3-s11/train --deadline-epoch 1794926287.616202 --resume /mi/data2T/zlong/home/llm/tide-learning-lab/runs/v12-repair-share8-d192-q3-s11/prefix/latest.pt --admission /mi/data2T/zlong/home/llm/tide-learning-lab/runs/v12-repair-share8-d192-q3-s11/check/result.json --recovery /mi/data2T/zlong/home/llm/tide-learning-lab/runs/v12-repair-share8-d192-q3-s11/recovery-compare/recovery.json --until-tokens 134217728 --run-id tl-v12-repair-main-share8-d192-q3-s11 --recording-group TL-HB-WIDTH-v12 ",
+      "cgroup": "12:cpu,cpuacct:/user.slice\n11:perf_event:/\n10:freezer:/\n9:memory:/user.slice/user-1003.slice/user@1003.service\n8:pids:/user.slice/user-1003.slice/user@1003.service\n7:cpuset:/\n6:blkio:/\n5:rdma:/\n4:hugetlb:/\n3:net_cls,net_prio:/\n2:devices:/user.slice\n1:name=systemd:/user.slice/user-1003.slice/user@1003.service/background.slice/tide-lab-v12-repair-share8-d192-q3-s11.service\n",
+      "cwd": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2",
+      "device": 0,
+      "job": "v12-repair-share8-d192-q3-s11",
+      "pid": 354084,
+      "reason": "user administrative reduction to six physical NPUs; graceful update-boundary checkpoint; not a numerical failure or new repair",
+      "requested_at": "2026-11-16T08:58:54.247496+00:00"
+    },
+    {
+      "argv": "/mi/data2T/zlong/home/llm/tide-learning-lab/.venv-positive-floor-v1/bin/python scripts/campaign_stage.py train --config /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2/configs/studies/language/hb-v12/configs/share8-d192-q3-s22.json --data /mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-data-r3 --output /mi/data2T/zlong/home/llm/tide-learning-lab/runs/v12-repair-share8-d192-q3-s22/train --deadline-epoch 1794926287.6162152 --resume /mi/data2T/zlong/home/llm/tide-learning-lab/runs/v12-repair-share8-d192-q3-s22/prefix/latest.pt --admission /mi/data2T/zlong/home/llm/tide-learning-lab/runs/v12-repair-share8-d192-q3-s22/check/result.json --recovery /mi/data2T/zlong/home/llm/tide-learning-lab/runs/v12-repair-share8-d192-q3-s22/recovery-compare/recovery.json --until-tokens 134217728 --run-id tl-v12-repair-main-share8-d192-q3-s22 --recording-group TL-HB-WIDTH-v12 ",
+      "cgroup": "12:cpu,cpuacct:/user.slice\n11:perf_event:/\n10:freezer:/\n9:memory:/user.slice/user-1003.slice/user@1003.service\n8:pids:/user.slice/user-1003.slice/user@1003.service\n7:cpuset:/\n6:blkio:/\n5:rdma:/\n4:hugetlb:/\n3:net_cls,net_prio:/\n2:devices:/user.slice\n1:name=systemd:/user.slice/user-1003.slice/user@1003.service/background.slice/tide-lab-v12-repair-share8-d192-q3-s22.service\n",
+      "cwd": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2",
+      "device": 10,
+      "job": "v12-repair-share8-d192-q3-s22",
+      "pid": 818636,
+      "reason": "user administrative reduction to six physical NPUs; graceful update-boundary checkpoint; not a numerical failure or new repair",
+      "requested_at": "2026-11-16T08:58:54.262507+00:00"
+    }
+  ],
+  "pauses_verified": [
+    {
+      "at": "2026-11-16T09:00:22.824664+00:00",
+      "bytes": 2057937959,
+      "checkpoint": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v12-repair-base128-q3-s11/train/latest.pt",
+      "device": 7,
+      "identity": {
+        "config_sha256": "798b9a22488d2369f22066de8a283107f4e51938f788f416224f130a31c40d3a",
+        "data_lock_sha256": "40b7c0ebb9650d11aa0c0080532c884e2ca3846db578155f3df7068b82191d2f",
+        "device": "npu:0",
+        "dtype": "float32",
+        "installation": {
+          "foundation_commit": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+          "foundation_lock_sha256": "ba5464d7e23fe6b8c7453a52bfc7b961f040c92d0b80786c18132e40d90308b7",
+          "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+          "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+          "tidegraph": "0.3.0",
+          "tidegraph_source_sha256": "cfe2168a2c87565a568fb8944429b6b38401f92cf24972fba59c47b7592a7847",
+          "torch": "2.12.0+cpu",
+          "torch_npu": "2.12.0.post3",
+          "transformers": null
+        },
+        "mode": "train",
+        "source_commit": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+        "source_sha256": "f2d6a00e81f525fc341fa5f9cce227432b69600afda78cd511095f88e50a0740",
+        "threads": 2
+      },
+      "job": "v12-repair-base128-q3-s11",
+      "progress": {
+        "cursor": 153600,
+        "dropped_tail_tokens": 13074,
+        "milestones": [
+          8388608,
+          33554432
+        ],
+        "probe": false,
+        "step": 2400,
+        "tokens": 38372849
+      },
+      "raw_job_state": "failed",
+      "raw_stage_state": "budget_truncated",
+      "sha256": "2f3c5f7fdf71aae6b96f76ba461737c1b0933d78f15a0a912c1ea66bdda85d6f",
+      "state": "administratively_paused",
+      "termination_verified": true
+    },
+    {
+      "at": "2026-11-16T09:00:23.153600+00:00",
+      "bytes": 245619387,
+      "checkpoint": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v12-repair-fullshare8-q3-s22/train/latest.pt",
+      "device": 15,
+      "identity": {
+        "config_sha256": "03da1d18afd9bf5ca480b762bfb53bcce73bdcf17fa1ef57b7282e0966502deb",
+        "data_lock_sha256": "40b7c0ebb9650d11aa0c0080532c884e2ca3846db578155f3df7068b82191d2f",
+        "device": "npu:0",
+        "dtype": "float32",
+        "installation": {
+          "foundation_commit": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+          "foundation_lock_sha256": "ba5464d7e23fe6b8c7453a52bfc7b961f040c92d0b80786c18132e40d90308b7",
+          "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+          "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+          "tidegraph": "0.3.0",
+          "tidegraph_source_sha256": "cfe2168a2c87565a568fb8944429b6b38401f92cf24972fba59c47b7592a7847",
+          "torch": "2.12.0+cpu",
+          "torch_npu": "2.12.0.post3",
+          "transformers": null
+        },
+        "mode": "train",
+        "source_commit": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+        "source_sha256": "f2d6a00e81f525fc341fa5f9cce227432b69600afda78cd511095f88e50a0740",
+        "threads": 2
+      },
+      "job": "v12-repair-fullshare8-q3-s22",
+      "progress": {
+        "cursor": 241088,
+        "dropped_tail_tokens": 10522,
+        "milestones": [
+          8388608,
+          33554432
+        ],
+        "probe": false,
+        "step": 3767,
+        "tokens": 60253574
+      },
+      "raw_job_state": "failed",
+      "raw_stage_state": "budget_truncated",
+      "sha256": "93a6ceda560876697d1717fed8f17280126e5ecaf016bf79fab6f203173a6de6",
+      "state": "administratively_paused",
+      "termination_verified": true
+    },
+    {
+      "at": "2026-11-16T09:00:24.222897+00:00",
+      "bytes": 635785047,
+      "checkpoint": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v12-repair-readcontent-q3-s22/train/latest.pt",
+      "device": 2,
+      "identity": {
+        "config_sha256": "60c09b1f7e892202ffef8cf657f3d016a695792b7bd0e5f8ded8b95eac56fb12",
+        "data_lock_sha256": "40b7c0ebb9650d11aa0c0080532c884e2ca3846db578155f3df7068b82191d2f",
+        "device": "npu:0",
+        "dtype": "float32",
+        "installation": {
+          "foundation_commit": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+          "foundation_lock_sha256": "ba5464d7e23fe6b8c7453a52bfc7b961f040c92d0b80786c18132e40d90308b7",
+          "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+          "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+          "tidegraph": "0.3.0",
+          "tidegraph_source_sha256": "cfe2168a2c87565a568fb8944429b6b38401f92cf24972fba59c47b7592a7847",
+          "torch": "2.12.0+cpu",
+          "torch_npu": "2.12.0.post3",
+          "transformers": null
+        },
+        "mode": "train",
+        "source_commit": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+        "source_sha256": "f2d6a00e81f525fc341fa5f9cce227432b69600afda78cd511095f88e50a0740",
+        "threads": 2
+      },
+      "job": "v12-repair-readcontent-q3-s22",
+      "progress": {
+        "cursor": 87488,
+        "dropped_tail_tokens": 3917,
+        "milestones": [
+          8388608
+        ],
+        "probe": false,
+        "step": 1367,
+        "tokens": 21864368
+      },
+      "raw_job_state": "failed",
+      "raw_stage_state": "budget_truncated",
+      "sha256": "a00f800d5192417c1c18a16c7593fcf61d256b9bfb82dbc010276a52c78593c3",
+      "state": "administratively_paused",
+      "termination_verified": true
+    },
+    {
+      "at": "2026-11-16T09:00:25.185742+00:00",
+      "bytes": 604316391,
+      "checkpoint": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v12-repair-residual-q3-s11/train/latest.pt",
+      "device": 5,
+      "identity": {
+        "config_sha256": "d0ecc6431e84e06e4dbcb88c4a6e3e41a55606325ed1b1ccb39c1dbdf30d75e8",
+        "data_lock_sha256": "40b7c0ebb9650d11aa0c0080532c884e2ca3846db578155f3df7068b82191d2f",
+        "device": "npu:0",
+        "dtype": "float32",
+        "installation": {
+          "foundation_commit": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+          "foundation_lock_sha256": "ba5464d7e23fe6b8c7453a52bfc7b961f040c92d0b80786c18132e40d90308b7",
+          "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+          "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+          "tidegraph": "0.3.0",
+          "tidegraph_source_sha256": "cfe2168a2c87565a568fb8944429b6b38401f92cf24972fba59c47b7592a7847",
+          "torch": "2.12.0+cpu",
+          "torch_npu": "2.12.0.post3",
+          "transformers": null
+        },
+        "mode": "train",
+        "source_commit": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+        "source_sha256": "f2d6a00e81f525fc341fa5f9cce227432b69600afda78cd511095f88e50a0740",
+        "threads": 2
+      },
+      "job": "v12-repair-residual-q3-s11",
+      "progress": {
+        "cursor": 223744,
+        "dropped_tail_tokens": 13074,
+        "milestones": [
+          8388608,
+          33554432
+        ],
+        "probe": false,
+        "step": 3496,
+        "tokens": 55913808
+      },
+      "raw_job_state": "failed",
+      "raw_stage_state": "budget_truncated",
+      "sha256": "7e270acff8c14fefdcb896472a6e44f81c056e0cf9f1548cf355f306e6cc4d5e",
+      "state": "administratively_paused",
+      "termination_verified": true
+    },
+    {
+      "at": "2026-11-16T09:00:27.037000+00:00",
+      "bytes": 1227041883,
+      "checkpoint": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v12-repair-share8-d192-q3-s11/train/latest.pt",
+      "device": 0,
+      "identity": {
+        "config_sha256": "5058bdb16a06a91191e0d49b0eaa5ec1c09a06faa454f2c84648cfdd04e0976f",
+        "data_lock_sha256": "40b7c0ebb9650d11aa0c0080532c884e2ca3846db578155f3df7068b82191d2f",
+        "device": "npu:0",
+        "dtype": "float32",
+        "installation": {
+          "foundation_commit": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+          "foundation_lock_sha256": "ba5464d7e23fe6b8c7453a52bfc7b961f040c92d0b80786c18132e40d90308b7",
+          "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+          "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+          "tidegraph": "0.3.0",
+          "tidegraph_source_sha256": "cfe2168a2c87565a568fb8944429b6b38401f92cf24972fba59c47b7592a7847",
+          "torch": "2.12.0+cpu",
+          "torch_npu": "2.12.0.post3",
+          "transformers": null
+        },
+        "mode": "train",
+        "source_commit": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+        "source_sha256": "f2d6a00e81f525fc341fa5f9cce227432b69600afda78cd511095f88e50a0740",
+        "threads": 2
+      },
+      "job": "v12-repair-share8-d192-q3-s11",
+      "progress": {
+        "cursor": 234944,
+        "dropped_tail_tokens": 13074,
+        "milestones": [
+          8388608,
+          33554432
+        ],
+        "probe": false,
+        "step": 3671,
+        "tokens": 58713137
+      },
+      "raw_job_state": "failed",
+      "raw_stage_state": "budget_truncated",
+      "sha256": "65a8624f5aed6bc2ff38d1ebdfdcca9906f3548fa7ff84b51fc86429da5f0d2b",
+      "state": "administratively_paused",
+      "termination_verified": true
+    },
+    {
+      "at": "2026-11-16T09:00:28.295292+00:00",
+      "bytes": 1227041947,
+      "checkpoint": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v12-repair-share8-d192-q3-s22/train/latest.pt",
+      "device": 10,
+      "identity": {
+        "config_sha256": "8724af6080952101bda2e8d87785ec4a8b8c01fdd4a4389edb423bd4a9bf7582",
+        "data_lock_sha256": "40b7c0ebb9650d11aa0c0080532c884e2ca3846db578155f3df7068b82191d2f",
+        "device": "npu:0",
+        "dtype": "float32",
+        "installation": {
+          "foundation_commit": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+          "foundation_lock_sha256": "ba5464d7e23fe6b8c7453a52bfc7b961f040c92d0b80786c18132e40d90308b7",
+          "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+          "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+          "tidegraph": "0.3.0",
+          "tidegraph_source_sha256": "cfe2168a2c87565a568fb8944429b6b38401f92cf24972fba59c47b7592a7847",
+          "torch": "2.12.0+cpu",
+          "torch_npu": "2.12.0.post3",
+          "transformers": null
+        },
+        "mode": "train",
+        "source_commit": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+        "source_sha256": "f2d6a00e81f525fc341fa5f9cce227432b69600afda78cd511095f88e50a0740",
+        "threads": 2
+      },
+      "job": "v12-repair-share8-d192-q3-s22",
+      "progress": {
+        "cursor": 181952,
+        "dropped_tail_tokens": 10522,
+        "milestones": [
+          8388608,
+          33554432
+        ],
+        "probe": false,
+        "step": 2843,
+        "tokens": 45474655
+      },
+      "raw_job_state": "failed",
+      "raw_stage_state": "budget_truncated",
+      "sha256": "eaf8dc7b8eabe540cb65e66fa3356f64055e520907da45e1d6fb595f6119ab68",
+      "state": "administratively_paused",
+      "termination_verified": true
+    }
+  ],
+  "request": "user requests at most6 cards and permits longer execution",
+  "retain_devices": [
+    4,
+    6,
+    9,
+    11,
+    12,
+    14
+  ],
+  "schema": "tide-v12-six-card-transition-v1"
+}

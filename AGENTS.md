@@ -1,5 +1,21 @@
 # Working on tide-learning-lab
 
+- The latest 2026-11-16 user request reduces the current campaign to at most SIX
+  physical NPUs and permits more wall time. See `docs/studies/hb-v12-six-card.md`
+  and `configs/studies/language/hb-v12/six-card.json`: use only4/6/9/11/12/14,
+  deadline2026-11-19 23:08:07+08. This supersedes the old12-slot/original deadline
+  for administrative continuation only. Preserve38 chains,128Mi/configs/seeds,
+  original thresholds and64GiB target/96GiB stop/>=200GiB hard-quota headroom.
+  Six train owners saved complete boundary checkpoints and exited; eight waiters
+  and the old controller were stopped. These six raw outer failures are USER
+  RESOURCE PAUSES, not new solver failures or second repairs. Frozen model source
+  stays62e32602; new orchestration is a separately pinned input. Do not restart the
+  old12-slot controller. Inspect `scripts/review_hb_v12_six_card.py` for live state.
+- V12 repair qualification is now completed on CPU and NPU with Lens readback;
+  eight repair chains have completed, six are retained running, and fourteen
+  administrative descendants are being prepared. The queued-qualification notes
+  below are historical. Full comparison quality remains awaiting scoped review.
+
 - The 2026-11-16 user instruction authorizes the bounded v12 repair in
   `docs/studies/hb-v12-repair.md`: repair quad collapsed-interior feasibility
   and live disk-scan disappearance, then explicitly resume the affected original
