@@ -1,5 +1,14 @@
 # Working on tide-learning-lab
 
+- 2026-11-16 23:10 +08 live quota changed from800 to700GiB during the
+  user's storage-status review;700GiB is now the effective account hard cap.
+  Existing all-card workers already use min(frozen plan cap,live kernel quota),
+  so do not edit active inputs to reflect this administrative change.
+  Filesystem free space is separate: last observed about81GiB versus about20GiB
+  remaining planned write peak; shared-disk risk persists and no independent
+  filesystem low-water guard has been installed. Recheck before new writes;
+  see `docs/evidence/hb-v12-quota700-review-20261116.json`.
+
 - Latest2026-11-16 user instruction allows ALL remaining cards for unfinished
   work, superseding the four/six/old12-card caps. See
   `docs/studies/hb-v12-all-cards.md` and `configs/studies/language/hb-v12/all-cards.json`.

@@ -1,0 +1,175 @@
+{
+  "assessment": {
+    "actions": "review documentation only; no job stop/restart, deletion, frozen-input change or background watchdog installed",
+    "frozen_guard_compatibility": "new orchestration uses min(plan800GiB,live kernel quota), reads at most once each60s; no fixed-input edit needed",
+    "own_quota_sufficient": true,
+    "own_remaining_writes_fit_current_filesystem": true,
+    "shared_filesystem_risk": "remains: quotas cap individual use but reserve no blocks and do not reclaim existing files; all accounts can collectively exhaust filesystem below their individual caps"
+  },
+  "at": "2026-11-16T23:11:32.644325+08:00",
+  "campaign": {
+    "bytes": 91399544832,
+    "entries": 7389,
+    "gib": 85.1224594116211,
+    "scope": "allocated bytes, hardlinks once, no symlink traversal; live observation, not atomic snapshot",
+    "vanished": 0
+  },
+  "estimate_evidence": "docs/evidence/hb-v12-filesystem-risk-20261116.json",
+  "filesystem": {
+    "ascend_storage_percent_at_2310": 98.4,
+    "available_bytes": 87281573888,
+    "available_gib": 81.28730010986328,
+    "public_assets_scope": "ascend existing public snapshot, not a fresh full scan",
+    "public_assets_snapshot_gib": 1072,
+    "total_gib": 5410121490432
+  },
+  "jobs": [
+    {
+      "job": "v12-four-base128-q3-s11",
+      "observed_effective_account_limit_gib": null,
+      "resource_observation_at": "2026-11-16T15:10:48.238542+00:00",
+      "state": "running",
+      "worker_error": null
+    },
+    {
+      "job": "v12-four-position-q3-s11",
+      "observed_effective_account_limit_gib": null,
+      "resource_observation_at": "2026-11-16T15:11:19.294575+00:00",
+      "state": "running",
+      "worker_error": null
+    },
+    {
+      "job": "v12-four-readcontent-q3-s22",
+      "observed_effective_account_limit_gib": null,
+      "resource_observation_at": "2026-11-16T15:11:13.161958+00:00",
+      "state": "running",
+      "worker_error": null
+    },
+    {
+      "job": "v12-four-share8-d192-q3-s22",
+      "observed_effective_account_limit_gib": null,
+      "resource_observation_at": "2026-11-16T15:11:23.881454+00:00",
+      "state": "running",
+      "worker_error": null
+    },
+    {
+      "job": "v12-all-share8-d192-q3-s11",
+      "observed_effective_account_limit_gib": 700.0,
+      "resource_observation_at": "2026-11-16T15:11:14.780258+00:00",
+      "state": "running",
+      "worker_error": null
+    },
+    {
+      "job": "v12-all-share8-d128-q3-s22",
+      "observed_effective_account_limit_gib": 700.0,
+      "resource_observation_at": "2026-11-16T15:11:19.923423+00:00",
+      "state": "running",
+      "worker_error": null
+    },
+    {
+      "job": "v12-all-share8-d128-q3-s11",
+      "observed_effective_account_limit_gib": 700.0,
+      "resource_observation_at": "2026-11-16T15:11:15.170845+00:00",
+      "state": "running",
+      "worker_error": null
+    },
+    {
+      "job": "v12-all-readcontent-q3-s11",
+      "observed_effective_account_limit_gib": 700.0,
+      "resource_observation_at": "2026-11-16T15:11:18.829103+00:00",
+      "state": "running",
+      "worker_error": null
+    },
+    {
+      "job": "v12-all-ports4-q3-s22",
+      "observed_effective_account_limit_gib": 700.0,
+      "resource_observation_at": "2026-11-16T15:11:23.729766+00:00",
+      "state": "running",
+      "worker_error": null
+    },
+    {
+      "job": "v12-all-untied-q3-s22",
+      "observed_effective_account_limit_gib": 700.0,
+      "resource_observation_at": "2026-11-16T15:11:17.353077+00:00",
+      "state": "running",
+      "worker_error": null
+    },
+    {
+      "job": "v12-all-residual-q3-s11",
+      "observed_effective_account_limit_gib": 700.0,
+      "resource_observation_at": "2026-11-16T15:11:23.061787+00:00",
+      "state": "running",
+      "worker_error": null
+    },
+    {
+      "job": "v12-all-top2-q3-s11",
+      "observed_effective_account_limit_gib": 700.0,
+      "resource_observation_at": "2026-11-16T15:11:19.528749+00:00",
+      "state": "running",
+      "worker_error": null
+    },
+    {
+      "job": "v12-all-base-q10-s22",
+      "observed_effective_account_limit_gib": 700.0,
+      "resource_observation_at": "2026-11-16T15:11:23.725351+00:00",
+      "state": "running",
+      "worker_error": null
+    },
+    {
+      "job": "v12-all-fullshare8-q3-s22",
+      "observed_effective_account_limit_gib": null,
+      "resource_observation_at": null,
+      "state": "waiting_resources",
+      "worker_error": null
+    },
+    {
+      "job": "v12-all-fullshare8-q3-s11",
+      "observed_effective_account_limit_gib": null,
+      "resource_observation_at": null,
+      "state": "waiting_resources",
+      "worker_error": null
+    },
+    {
+      "job": "v12-all-share0-q3-s11",
+      "observed_effective_account_limit_gib": null,
+      "resource_observation_at": null,
+      "state": "waiting_resources",
+      "worker_error": null
+    }
+  ],
+  "observations": [
+    {
+      "at": "2026-11-16T23:10:03.530162+08:00",
+      "filesystem_available_gib": 81.24130249023438,
+      "hard_quota_gib": 800
+    },
+    {
+      "at": "2026-11-16T23:10:39.527102+08:00",
+      "filesystem_available_gib": 81.28777313232422,
+      "hard_quota_gib": 700
+    }
+  ],
+  "quota": {
+    "file_grace_expires_epoch": 0,
+    "file_hard": 0,
+    "file_soft": 0,
+    "files": 1639084,
+    "filesystem": "/dev/mapper/ascend_data-data",
+    "grace_expires_epoch": 1795294591,
+    "hard_gib": 700.0,
+    "hard_quota_headroom_gib": 239.29580688476562,
+    "query_returncode": 1,
+    "soft_exceeded": true,
+    "soft_gib": 300.0,
+    "used_gib": 460.7041931152344
+  },
+  "remaining_peak_estimate_gib": 20.180578495375812,
+  "schema": "tide-v12-quota700-review-v1",
+  "sources": [
+    "ascend status",
+    "ascend status --watch,storage view2; exited normally",
+    "quota -w -p",
+    "os.statvfs",
+    "current v12 job records"
+  ]
+}
