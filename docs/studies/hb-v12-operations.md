@@ -1,6 +1,12 @@
 # v12操作、固定身份与记录
 
-最新资源变更：用户要求最多六张卡，已落实为物理4/6/9/11/12/14与六槽。
+最新资源变更为四卡：物理4/9/12/14与四槽，4条原服务继续、16条`v12-four-*`已排队。
+详见[四卡调度](hb-v12-four-card.md)及[交接证据](../evidence/hb-v12-four-card-handoff.json)。
+统一状态：`python scripts/review_hb_v12_six_card.py --policy four-card`；
+新Lens主段`tl-v12-four-main-*`，硬件观测`runs/v12-four-hardware/observations.jsonl`。
+旧六卡等待器已停止，禁止重启；截止仍11月19日23:08:07+08。以下资源说明为历史记录。
+
+此前资源变更：用户要求最多六张卡，落实为物理4/6/9/11/12/14与六槽。
 新截止11月19日23:08:07+08；详细[六卡操作与谱系](hb-v12-six-card.md)、
 [交接证据](../evidence/hb-v12-six-card-handoff.json)。旧12槽控制器已停止，不得重启。
 当前六条`v12-repair-*`继续、十四条`v12-six-*`排队；

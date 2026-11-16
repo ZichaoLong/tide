@@ -1,0 +1,805 @@
+{
+  "active_physical_devices": [
+    4,
+    9,
+    12,
+    14
+  ],
+  "administrative_pauses": [
+    {
+      "at": "2026-11-16T09:59:25.723120+00:00",
+      "bytes": 689613851,
+      "checkpoint": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v12-repair-share8-d128-q3-s11/train/latest.pt",
+      "device": 11,
+      "identity": {
+        "config_sha256": "ada4a06c2832535da1e52125059387b9af1cd7fa6625b3fd4492c9793f82c3b6",
+        "data_lock_sha256": "40b7c0ebb9650d11aa0c0080532c884e2ca3846db578155f3df7068b82191d2f",
+        "device": "npu:0",
+        "dtype": "float32",
+        "installation": {
+          "foundation_commit": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+          "foundation_lock_sha256": "ba5464d7e23fe6b8c7453a52bfc7b961f040c92d0b80786c18132e40d90308b7",
+          "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+          "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+          "tidegraph": "0.3.0",
+          "tidegraph_source_sha256": "cfe2168a2c87565a568fb8944429b6b38401f92cf24972fba59c47b7592a7847",
+          "torch": "2.12.0+cpu",
+          "torch_npu": "2.12.0.post3",
+          "transformers": null
+        },
+        "mode": "train",
+        "source_commit": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+        "source_sha256": "f2d6a00e81f525fc341fa5f9cce227432b69600afda78cd511095f88e50a0740",
+        "threads": 2
+      },
+      "job": "v12-repair-share8-d128-q3-s11",
+      "progress": {
+        "cursor": 228096,
+        "dropped_tail_tokens": 13074,
+        "milestones": [
+          8388608,
+          33554432
+        ],
+        "probe": false,
+        "step": 3564,
+        "tokens": 56999987
+      },
+      "raw_job_state": "failed",
+      "raw_stage_state": "budget_truncated",
+      "sha256": "4a530de36b3b11de21f5a7a3faeaf7bb5b14cf097b052429a7e1140a3614ebae",
+      "state": "administratively_paused",
+      "termination_verified": true
+    },
+    {
+      "at": "2026-11-16T09:59:26.924234+00:00",
+      "bytes": 689613915,
+      "checkpoint": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v12-repair-share8-d128-q3-s22/train/latest.pt",
+      "device": 6,
+      "identity": {
+        "config_sha256": "b4d0a4ac26f07b17194ad345c95fc745002b203057b73e88d79bfd51774db9ff",
+        "data_lock_sha256": "40b7c0ebb9650d11aa0c0080532c884e2ca3846db578155f3df7068b82191d2f",
+        "device": "npu:0",
+        "dtype": "float32",
+        "installation": {
+          "foundation_commit": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+          "foundation_lock_sha256": "ba5464d7e23fe6b8c7453a52bfc7b961f040c92d0b80786c18132e40d90308b7",
+          "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+          "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+          "tidegraph": "0.3.0",
+          "tidegraph_source_sha256": "cfe2168a2c87565a568fb8944429b6b38401f92cf24972fba59c47b7592a7847",
+          "torch": "2.12.0+cpu",
+          "torch_npu": "2.12.0.post3",
+          "transformers": null
+        },
+        "mode": "train",
+        "source_commit": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+        "source_sha256": "f2d6a00e81f525fc341fa5f9cce227432b69600afda78cd511095f88e50a0740",
+        "threads": 2
+      },
+      "job": "v12-repair-share8-d128-q3-s22",
+      "progress": {
+        "cursor": 323648,
+        "dropped_tail_tokens": 10522,
+        "milestones": [
+          8388608,
+          33554432
+        ],
+        "probe": false,
+        "step": 5057,
+        "tokens": 80889473
+      },
+      "raw_job_state": "failed",
+      "raw_stage_state": "budget_truncated",
+      "sha256": "9df42fdae116f1647e51fffbdb779f6b46e63bc00337c24a2baf2c7c3c34fe53",
+      "state": "administratively_paused",
+      "termination_verified": true
+    }
+  ],
+  "all_live_v12_npu_jobs": [
+    {
+      "job": "v12-repair-base128-q3-s22",
+      "lifecycle": "running",
+      "physical_device": 12
+    },
+    {
+      "job": "v12-four-share8-d128-q3-s11",
+      "lifecycle": "waiting_resources",
+      "physical_device": null
+    },
+    {
+      "job": "v12-four-share0-q3-s11",
+      "lifecycle": "waiting_resources",
+      "physical_device": null
+    },
+    {
+      "job": "v12-repair-share8-lr3-q3-s11",
+      "lifecycle": "running",
+      "physical_device": 4
+    },
+    {
+      "job": "v12-four-residual-q3-s11",
+      "lifecycle": "waiting_resources",
+      "physical_device": null
+    },
+    {
+      "job": "v12-four-share8-d128-q3-s22",
+      "lifecycle": "waiting_resources",
+      "physical_device": null
+    },
+    {
+      "job": "v12-four-readcontent-q3-s22",
+      "lifecycle": "waiting_resources",
+      "physical_device": null
+    },
+    {
+      "job": "v12-four-position-q3-s11",
+      "lifecycle": "waiting_resources",
+      "physical_device": null
+    },
+    {
+      "job": "v12-four-fullshare8-q3-s11",
+      "lifecycle": "waiting_resources",
+      "physical_device": null
+    },
+    {
+      "job": "v12-four-base-q10-s22",
+      "lifecycle": "waiting_resources",
+      "physical_device": null
+    },
+    {
+      "job": "v12-four-ports4-q3-s22",
+      "lifecycle": "waiting_resources",
+      "physical_device": null
+    },
+    {
+      "job": "v12-four-base128-q3-s11",
+      "lifecycle": "waiting_resources",
+      "physical_device": null
+    },
+    {
+      "job": "v12-four-share8-d192-q3-s22",
+      "lifecycle": "waiting_resources",
+      "physical_device": null
+    },
+    {
+      "job": "v12-repair-residual-q3-s22",
+      "lifecycle": "running",
+      "physical_device": 14
+    },
+    {
+      "job": "v12-four-top2-q3-s11",
+      "lifecycle": "waiting_resources",
+      "physical_device": null
+    },
+    {
+      "job": "v12-four-fullshare8-q3-s22",
+      "lifecycle": "waiting_resources",
+      "physical_device": null
+    },
+    {
+      "job": "v12-four-untied-q3-s22",
+      "lifecycle": "waiting_resources",
+      "physical_device": null
+    },
+    {
+      "job": "v12-repair-share8-lr3-q3-s22",
+      "lifecycle": "running",
+      "physical_device": 9
+    },
+    {
+      "job": "v12-four-readcontent-q3-s11",
+      "lifecycle": "waiting_resources",
+      "physical_device": null
+    },
+    {
+      "job": "v12-four-share8-d192-q3-s11",
+      "lifecycle": "waiting_resources",
+      "physical_device": null
+    }
+  ],
+  "allowed_devices": [
+    4,
+    9,
+    12,
+    14
+  ],
+  "card_limit": 4,
+  "counts": {
+    "running": 4,
+    "waiting_resources": 16
+  },
+  "deadline": "2026-11-19T23:08:07+08:00",
+  "disk": {
+    "bytes": 79492513792,
+    "entries": 6470,
+    "gib": 74.03317260742188,
+    "scope": "allocated bytes, hardlinks once, no symlink traversal; live observation, not atomic snapshot",
+    "vanished": 0
+  },
+  "final_verification": {
+    "active_physical_devices": [
+      4,
+      9,
+      12,
+      14
+    ],
+    "at": "2026-11-16T10:03:56.413588+00:00",
+    "counts": {
+      "running": 4,
+      "waiting_resources": 16
+    },
+    "hardware": {
+      "active_devices": [
+        12,
+        14,
+        4,
+        9
+      ],
+      "last_at": "2026-11-16T10:02:58.563513+00:00",
+      "samples": 4,
+      "scope": "board/chip AICore,AIVector,AICPU,HBM; shared occupants may contribute;60s samples miss short bursts",
+      "started_at": "2026-11-16T10:02:55.637946+00:00",
+      "state": "running"
+    },
+    "map_render": "passed",
+    "previous16_services_terminated": true,
+    "unit_tests_passed": 19,
+    "within_card_limit": true
+  },
+  "hardware": {
+    "job": "v12-four-hardware",
+    "observations": "runs/v12-four-hardware/observations.jsonl",
+    "record": "artifacts/jobs/v12-four-hardware/job.json"
+  },
+  "jobs": [
+    {
+      "error": null,
+      "job": "v12-repair-base128-q3-s22",
+      "lens": "recording",
+      "lifecycle": "running",
+      "mode": "retained",
+      "physical_device": 12,
+      "recovery": "passed",
+      "saved_tokens": 98774722,
+      "stage": "train",
+      "stage_state": "running",
+      "termination_verified": false,
+      "tokens": 101978242
+    },
+    {
+      "error": null,
+      "job": "v12-repair-residual-q3-s22",
+      "lens": "recording",
+      "lifecycle": "running",
+      "mode": "retained",
+      "physical_device": 14,
+      "recovery": "passed",
+      "saved_tokens": 79093781,
+      "stage": "train",
+      "stage_state": "running",
+      "termination_verified": false,
+      "tokens": 85496456
+    },
+    {
+      "error": null,
+      "job": "v12-repair-share8-lr3-q3-s11",
+      "lens": "recording",
+      "lifecycle": "running",
+      "mode": "retained",
+      "physical_device": 4,
+      "recovery": "passed",
+      "saved_tokens": 97571377,
+      "stage": "train",
+      "stage_state": "running",
+      "termination_verified": false,
+      "tokens": 97955283
+    },
+    {
+      "error": null,
+      "job": "v12-repair-share8-lr3-q3-s22",
+      "lens": "recording",
+      "lifecycle": "running",
+      "mode": "retained",
+      "physical_device": 9,
+      "recovery": "passed",
+      "saved_tokens": 89494730,
+      "stage": "train",
+      "stage_state": "running",
+      "termination_verified": false,
+      "tokens": 89605988
+    },
+    {
+      "error": null,
+      "job": "v12-four-base-q10-s22",
+      "lens": null,
+      "lifecycle": "waiting_resources",
+      "mode": "requeue_unstarted",
+      "physical_device": null,
+      "recovery": null,
+      "saved_tokens": null,
+      "stage": null,
+      "stage_state": null,
+      "termination_verified": false,
+      "tokens": null
+    },
+    {
+      "error": null,
+      "job": "v12-four-base128-q3-s11",
+      "lens": null,
+      "lifecycle": "waiting_resources",
+      "mode": "resume_train",
+      "physical_device": null,
+      "recovery": null,
+      "saved_tokens": null,
+      "stage": null,
+      "stage_state": null,
+      "termination_verified": false,
+      "tokens": null
+    },
+    {
+      "error": null,
+      "job": "v12-four-fullshare8-q3-s11",
+      "lens": null,
+      "lifecycle": "waiting_resources",
+      "mode": "requeue_unstarted",
+      "physical_device": null,
+      "recovery": null,
+      "saved_tokens": null,
+      "stage": null,
+      "stage_state": null,
+      "termination_verified": false,
+      "tokens": null
+    },
+    {
+      "error": null,
+      "job": "v12-four-fullshare8-q3-s22",
+      "lens": null,
+      "lifecycle": "waiting_resources",
+      "mode": "resume_train",
+      "physical_device": null,
+      "recovery": null,
+      "saved_tokens": null,
+      "stage": null,
+      "stage_state": null,
+      "termination_verified": false,
+      "tokens": null
+    },
+    {
+      "error": null,
+      "job": "v12-four-ports4-q3-s22",
+      "lens": null,
+      "lifecycle": "waiting_resources",
+      "mode": "requeue_unstarted",
+      "physical_device": null,
+      "recovery": null,
+      "saved_tokens": null,
+      "stage": null,
+      "stage_state": null,
+      "termination_verified": false,
+      "tokens": null
+    },
+    {
+      "error": null,
+      "job": "v12-four-position-q3-s11",
+      "lens": null,
+      "lifecycle": "waiting_resources",
+      "mode": "requeue_unstarted",
+      "physical_device": null,
+      "recovery": null,
+      "saved_tokens": null,
+      "stage": null,
+      "stage_state": null,
+      "termination_verified": false,
+      "tokens": null
+    },
+    {
+      "error": null,
+      "job": "v12-four-readcontent-q3-s11",
+      "lens": null,
+      "lifecycle": "waiting_resources",
+      "mode": "requeue_unstarted",
+      "physical_device": null,
+      "recovery": null,
+      "saved_tokens": null,
+      "stage": null,
+      "stage_state": null,
+      "termination_verified": false,
+      "tokens": null
+    },
+    {
+      "error": null,
+      "job": "v12-four-readcontent-q3-s22",
+      "lens": null,
+      "lifecycle": "waiting_resources",
+      "mode": "resume_train",
+      "physical_device": null,
+      "recovery": null,
+      "saved_tokens": null,
+      "stage": null,
+      "stage_state": null,
+      "termination_verified": false,
+      "tokens": null
+    },
+    {
+      "error": null,
+      "job": "v12-four-residual-q3-s11",
+      "lens": null,
+      "lifecycle": "waiting_resources",
+      "mode": "resume_train",
+      "physical_device": null,
+      "recovery": null,
+      "saved_tokens": null,
+      "stage": null,
+      "stage_state": null,
+      "termination_verified": false,
+      "tokens": null
+    },
+    {
+      "error": null,
+      "job": "v12-four-share0-q3-s11",
+      "lens": null,
+      "lifecycle": "waiting_resources",
+      "mode": "requeue_unstarted",
+      "physical_device": null,
+      "recovery": null,
+      "saved_tokens": null,
+      "stage": null,
+      "stage_state": null,
+      "termination_verified": false,
+      "tokens": null
+    },
+    {
+      "error": null,
+      "job": "v12-four-share8-d192-q3-s11",
+      "lens": null,
+      "lifecycle": "waiting_resources",
+      "mode": "resume_train",
+      "physical_device": null,
+      "recovery": null,
+      "saved_tokens": null,
+      "stage": null,
+      "stage_state": null,
+      "termination_verified": false,
+      "tokens": null
+    },
+    {
+      "error": null,
+      "job": "v12-four-share8-d192-q3-s22",
+      "lens": null,
+      "lifecycle": "waiting_resources",
+      "mode": "resume_train",
+      "physical_device": null,
+      "recovery": null,
+      "saved_tokens": null,
+      "stage": null,
+      "stage_state": null,
+      "termination_verified": false,
+      "tokens": null
+    },
+    {
+      "error": null,
+      "job": "v12-four-top2-q3-s11",
+      "lens": null,
+      "lifecycle": "waiting_resources",
+      "mode": "requeue_unstarted",
+      "physical_device": null,
+      "recovery": null,
+      "saved_tokens": null,
+      "stage": null,
+      "stage_state": null,
+      "termination_verified": false,
+      "tokens": null
+    },
+    {
+      "error": null,
+      "job": "v12-four-untied-q3-s22",
+      "lens": null,
+      "lifecycle": "waiting_resources",
+      "mode": "requeue_unstarted",
+      "physical_device": null,
+      "recovery": null,
+      "saved_tokens": null,
+      "stage": null,
+      "stage_state": null,
+      "termination_verified": false,
+      "tokens": null
+    },
+    {
+      "error": null,
+      "job": "v12-four-share8-d128-q3-s11",
+      "lens": null,
+      "lifecycle": "waiting_resources",
+      "mode": "resume_train",
+      "physical_device": null,
+      "recovery": null,
+      "saved_tokens": null,
+      "stage": null,
+      "stage_state": null,
+      "termination_verified": false,
+      "tokens": null
+    },
+    {
+      "error": null,
+      "job": "v12-four-share8-d128-q3-s22",
+      "lens": null,
+      "lifecycle": "waiting_resources",
+      "mode": "resume_train",
+      "physical_device": null,
+      "recovery": null,
+      "saved_tokens": null,
+      "stage": null,
+      "stage_state": null,
+      "termination_verified": false,
+      "tokens": null
+    }
+  ],
+  "lens_destination_unchanged": true,
+  "model_source": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+  "observed_at": "2026-11-16T10:02:56.112219+00:00",
+  "orchestration_source": "79259e55e8c858b7df04f43fba836b53f3c591e5",
+  "quota": {
+    "file_grace_expires_epoch": 0,
+    "file_hard": 0,
+    "file_soft": 0,
+    "files": 1636276,
+    "filesystem": "/dev/mapper/ascend_data-data",
+    "grace_expires_epoch": 1795294591,
+    "hard_gib": 800.0,
+    "hard_quota_headroom_gib": 350.4964599609375,
+    "query_returncode": 1,
+    "soft_exceeded": true,
+    "soft_gib": 300.0,
+    "used_gib": 449.5035400390625
+  },
+  "schema": "tide-hb-v12-four-card-review-v1",
+  "scope": "Administrative pauses retain raw budget_truncated/outer failed records; not new numerical failures. Scientific source62 unchanged; recovery/quality separately reviewed.",
+  "submission_checks": [
+    {
+      "four_card_policy_verified": false,
+      "job": "v12-repair-base128-q3-s22",
+      "job_sha256": "c6fdb1cbc66382df4c4d8c6508fdca589308efe0be40ca22db9513d76e7f91a0",
+      "slice": "background.slice",
+      "source": {
+        "commit": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2",
+        "tree_sha256": "f2d6a00e81f525fc341fa5f9cce227432b69600afda78cd511095f88e50a0740"
+      },
+      "state": "running"
+    },
+    {
+      "four_card_policy_verified": false,
+      "job": "v12-repair-residual-q3-s22",
+      "job_sha256": "baa54d02c56f5e823a3e44d89b0d4011de1df2246f23d41b4d290ab8a7436053",
+      "slice": "background.slice",
+      "source": {
+        "commit": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2",
+        "tree_sha256": "f2d6a00e81f525fc341fa5f9cce227432b69600afda78cd511095f88e50a0740"
+      },
+      "state": "running"
+    },
+    {
+      "four_card_policy_verified": false,
+      "job": "v12-repair-share8-lr3-q3-s11",
+      "job_sha256": "9e5b5066b500485aa6d81f0fc4698478273b1d80895bb691652ecf91655d5b76",
+      "slice": "background.slice",
+      "source": {
+        "commit": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2",
+        "tree_sha256": "f2d6a00e81f525fc341fa5f9cce227432b69600afda78cd511095f88e50a0740"
+      },
+      "state": "running"
+    },
+    {
+      "four_card_policy_verified": false,
+      "job": "v12-repair-share8-lr3-q3-s22",
+      "job_sha256": "7604d3123db132ccf42bbd0822210fa20f214f252c06f90f2d0870a3c32a7260",
+      "slice": "background.slice",
+      "source": {
+        "commit": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2",
+        "tree_sha256": "f2d6a00e81f525fc341fa5f9cce227432b69600afda78cd511095f88e50a0740"
+      },
+      "state": "running"
+    },
+    {
+      "four_card_policy_verified": true,
+      "job": "v12-four-base-q10-s22",
+      "job_sha256": "9225c43e368330dd47be6f08f21b4ad7d3c5efaf00ecfd236c926f2c99ce6ebd",
+      "slice": "background.slice",
+      "source": {
+        "commit": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2",
+        "tree_sha256": "f2d6a00e81f525fc341fa5f9cce227432b69600afda78cd511095f88e50a0740"
+      },
+      "state": "waiting_resources"
+    },
+    {
+      "four_card_policy_verified": true,
+      "job": "v12-four-base128-q3-s11",
+      "job_sha256": "4f40545109cf01a6655bbc09198f801d20fe87f1fd39c6a5622b6e73b2904e38",
+      "slice": "background.slice",
+      "source": {
+        "commit": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2",
+        "tree_sha256": "f2d6a00e81f525fc341fa5f9cce227432b69600afda78cd511095f88e50a0740"
+      },
+      "state": "waiting_resources"
+    },
+    {
+      "four_card_policy_verified": true,
+      "job": "v12-four-fullshare8-q3-s11",
+      "job_sha256": "dc5a08155af25b201377db3367ce270f6061ab5927707cbd800ed810a3f92075",
+      "slice": "background.slice",
+      "source": {
+        "commit": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2",
+        "tree_sha256": "f2d6a00e81f525fc341fa5f9cce227432b69600afda78cd511095f88e50a0740"
+      },
+      "state": "waiting_resources"
+    },
+    {
+      "four_card_policy_verified": true,
+      "job": "v12-four-fullshare8-q3-s22",
+      "job_sha256": "1773273bf2b6f76b562f207ea0026bc128467af2ba4399bbab8e0bea6fa42161",
+      "slice": "background.slice",
+      "source": {
+        "commit": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2",
+        "tree_sha256": "f2d6a00e81f525fc341fa5f9cce227432b69600afda78cd511095f88e50a0740"
+      },
+      "state": "waiting_resources"
+    },
+    {
+      "four_card_policy_verified": true,
+      "job": "v12-four-ports4-q3-s22",
+      "job_sha256": "938831723fdc3a7f98cae09d48378d45cd9b7c267f8f90c910c5f3908ec28d33",
+      "slice": "background.slice",
+      "source": {
+        "commit": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2",
+        "tree_sha256": "f2d6a00e81f525fc341fa5f9cce227432b69600afda78cd511095f88e50a0740"
+      },
+      "state": "waiting_resources"
+    },
+    {
+      "four_card_policy_verified": true,
+      "job": "v12-four-position-q3-s11",
+      "job_sha256": "8738c6609885f559983fbdef5e3d5eba71511f07f50d5480f9af37441791fe15",
+      "slice": "background.slice",
+      "source": {
+        "commit": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2",
+        "tree_sha256": "f2d6a00e81f525fc341fa5f9cce227432b69600afda78cd511095f88e50a0740"
+      },
+      "state": "waiting_resources"
+    },
+    {
+      "four_card_policy_verified": true,
+      "job": "v12-four-readcontent-q3-s11",
+      "job_sha256": "f51e768e8adb343021ecc5ba279cb9b6a223ec39accf630ad4657f51021ce381",
+      "slice": "background.slice",
+      "source": {
+        "commit": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2",
+        "tree_sha256": "f2d6a00e81f525fc341fa5f9cce227432b69600afda78cd511095f88e50a0740"
+      },
+      "state": "waiting_resources"
+    },
+    {
+      "four_card_policy_verified": true,
+      "job": "v12-four-readcontent-q3-s22",
+      "job_sha256": "7a6c44fa674c9ea7882ced0b6e1ca12e9c3496a5e335768120fdedac3cf7bf67",
+      "slice": "background.slice",
+      "source": {
+        "commit": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2",
+        "tree_sha256": "f2d6a00e81f525fc341fa5f9cce227432b69600afda78cd511095f88e50a0740"
+      },
+      "state": "waiting_resources"
+    },
+    {
+      "four_card_policy_verified": true,
+      "job": "v12-four-residual-q3-s11",
+      "job_sha256": "2d4f11f6583edf0e685457d088d257c6b91b48d7a21588c570787e9e50425a25",
+      "slice": "background.slice",
+      "source": {
+        "commit": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2",
+        "tree_sha256": "f2d6a00e81f525fc341fa5f9cce227432b69600afda78cd511095f88e50a0740"
+      },
+      "state": "waiting_resources"
+    },
+    {
+      "four_card_policy_verified": true,
+      "job": "v12-four-share0-q3-s11",
+      "job_sha256": "e2827e1fd05af8d0dda80517fbbe727c2f462300f6561b0973f077bb4e43746a",
+      "slice": "background.slice",
+      "source": {
+        "commit": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2",
+        "tree_sha256": "f2d6a00e81f525fc341fa5f9cce227432b69600afda78cd511095f88e50a0740"
+      },
+      "state": "waiting_resources"
+    },
+    {
+      "four_card_policy_verified": true,
+      "job": "v12-four-share8-d192-q3-s11",
+      "job_sha256": "bb9ce484d001bdfbf82bb7401a4a1eb13986d2aeb066ffb53d6fe3004d963989",
+      "slice": "background.slice",
+      "source": {
+        "commit": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2",
+        "tree_sha256": "f2d6a00e81f525fc341fa5f9cce227432b69600afda78cd511095f88e50a0740"
+      },
+      "state": "waiting_resources"
+    },
+    {
+      "four_card_policy_verified": true,
+      "job": "v12-four-share8-d192-q3-s22",
+      "job_sha256": "827364f8c7920243c4e75f79252ef6c99c61ff8e9f1727cd3e9458df9b009649",
+      "slice": "background.slice",
+      "source": {
+        "commit": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2",
+        "tree_sha256": "f2d6a00e81f525fc341fa5f9cce227432b69600afda78cd511095f88e50a0740"
+      },
+      "state": "waiting_resources"
+    },
+    {
+      "four_card_policy_verified": true,
+      "job": "v12-four-top2-q3-s11",
+      "job_sha256": "8b3f2b66d318755aa82aaf88b72347abe3da5c61de1dbb89e5619c3192d541e9",
+      "slice": "background.slice",
+      "source": {
+        "commit": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2",
+        "tree_sha256": "f2d6a00e81f525fc341fa5f9cce227432b69600afda78cd511095f88e50a0740"
+      },
+      "state": "waiting_resources"
+    },
+    {
+      "four_card_policy_verified": true,
+      "job": "v12-four-untied-q3-s22",
+      "job_sha256": "1e42dd368e8550ad90148f9a21ebc4d609aede70907cf1b31186f3a08d6b3c9f",
+      "slice": "background.slice",
+      "source": {
+        "commit": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2",
+        "tree_sha256": "f2d6a00e81f525fc341fa5f9cce227432b69600afda78cd511095f88e50a0740"
+      },
+      "state": "waiting_resources"
+    },
+    {
+      "four_card_policy_verified": true,
+      "job": "v12-four-share8-d128-q3-s11",
+      "job_sha256": "05063a5114658030ca44871eb8d3bfacc6adc2b0013747a28de5d32da47accc2",
+      "slice": "background.slice",
+      "source": {
+        "commit": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2",
+        "tree_sha256": "f2d6a00e81f525fc341fa5f9cce227432b69600afda78cd511095f88e50a0740"
+      },
+      "state": "waiting_resources"
+    },
+    {
+      "four_card_policy_verified": true,
+      "job": "v12-four-share8-d128-q3-s22",
+      "job_sha256": "c61b108ef39fc5c2061ec9cfe9cce31ce22ba2e08646840d33acd92c8545fb5f",
+      "slice": "background.slice",
+      "source": {
+        "commit": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2",
+        "tree_sha256": "f2d6a00e81f525fc341fa5f9cce227432b69600afda78cd511095f88e50a0740"
+      },
+      "state": "waiting_resources"
+    }
+  ],
+  "submissions_state": "submitted",
+  "tests": {
+    "all16_config_source_parent_hash_preflight": "passed",
+    "scheduler_tests": 5,
+    "stale_deadline_preflight": "rejected then rebuilt with the declared extended deadline"
+  },
+  "within_card_limit": true
+}

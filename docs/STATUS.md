@@ -1,4 +1,30 @@
-# 当前交接：v12已缩减到六卡，14条后续排队
+# 当前交接：v12进一步缩减到四卡，16条后续排队
+
+2026-11-16 18:02 +08。用户再次要求缩减至四张物理卡；
+[四卡调度/停止/恢复](studies/hb-v12-four-card.md) · [实际交接证据](evidence/hb-v12-four-card-handoff.json)。
+当前实际占卡仅4、9、12、14，四条原服务继续；6、11上的share8-d128-q3双seed
+已在完整更新边界保存并退出，完整可恢复位置54.3594/77.1422Mi。
+两份checkpoint的解码、optimizer、progress、身份和SHA已核对，服务无存活后代。
+
+14个旧六卡等待器全部停止、没有模型启动；加本次两条暂停，16条`v12-four-*`
+均已被systemd接受并确认waiting_resources。限制为固定四卡、四槽、全寿命物理锁，
+只有原四条释放设备后才能接续。不能重启旧12槽控制器或六卡等待器。
+新编排79259e55（`.local/source-hb-v12-four-card`）为独立固定输入；
+科学源码/模型阶段/cwd仍62e32602，四条保留作业的活动输入不变。
+
+截止保持11月19日23:08:07+08，38链、128Mi、配置/种子/阈值及磁盘限额不变。
+本次仅资源调整，不改变既有质量结论。原10完成加8修复完成保持；其余4运行、16排队。
+行政暂停保留原始failed/budget_truncated/stop_signal15，区别于数值失败及第二次修复。
+续段实际卡上的恢复检查仍待执行，检查点解码不等于恢复已通过。
+
+状态：`python scripts/review_hb_v12_six_card.py --policy four-card`。
+新Lens段`tl-v12-four-main-*`，保留段`tl-v12-repair-main-*`，项目`tide-learning-lab`；
+私有入口`.local/LENS.md`保持。新硬件记录`runs/v12-four-hardware/observations.jsonl`。
+约74GiB新增，96GiB停止及至少200GiB硬余量保持，未提高限额。
+
+以下为历史交接快照。
+
+# 历史交接：v12已缩减到六卡，14条后续排队
 
 2026-11-16 17:08 +08。用户授权最多六张物理卡并允许延时；
 [六卡调度/停止/恢复](studies/hb-v12-six-card.md) · [实际交接证据](evidence/hb-v12-six-card-handoff.json)。

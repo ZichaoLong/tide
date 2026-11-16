@@ -10,6 +10,9 @@
   numerical repairs. Never restart the old12-slot controller or six-card waiters.
   Model source62e32602 remains fixed; only orchestration/resource inputs change.
   Current status: `python scripts/review_hb_v12_six_card.py --policy four-card`.
+  Four-card orchestration79259e55 is frozen at`.local/source-hb-v12-four-card`;
+  all16 descendants are submitted and waiting, four retained originals running.
+  See `docs/evidence/hb-v12-four-card-handoff.json` for observed states and IDs.
   The six-card notes below are historical.
 
 - The latest 2026-11-16 user request reduces the current campaign to at most SIX

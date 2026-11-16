@@ -41,3 +41,7 @@ prefix/confirm/diag同用`tl-v12-four-`。四条保留段仍为`tl-v12-repair-ma
 此前14个`v12-six-*`从未启动模型或产生训练曲线，其停止不计科学失败。
 私有入口`.local/LENS.md`保持；新硬件采样只覆盖固定20个剩余服务，全部终态后结束。
 提交/排队、实际恢复、学习结果分别报告，资源调整不升级质量结论。
+
+18:02交接：16条已提交并确认waiting_resources，4条原服务继续；
+新增编排冻结79259e55，实际身份/策略/父状态见[交接证据](../evidence/hb-v12-four-card-handoff.json)。
+新CPU采样服务`v12-four-hardware`只观察固定20个剩余作业，不占用NPU训练槽。
