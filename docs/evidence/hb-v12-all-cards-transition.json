@@ -326,6 +326,100 @@
         }
       ]
     },
+    "10": {
+      "aicore_percent": 0,
+      "hbm_total_mib": 65536,
+      "hbm_used_mib": 3143,
+      "health": "OK",
+      "physical_id": 10,
+      "processes": []
+    },
+    "11": {
+      "aicore_percent": 0,
+      "hbm_total_mib": 65536,
+      "hbm_used_mib": 2881,
+      "health": "OK",
+      "physical_id": 11,
+      "processes": []
+    },
+    "12": {
+      "aicore_percent": 17,
+      "hbm_total_mib": 65536,
+      "hbm_used_mib": 44856,
+      "health": "OK",
+      "physical_id": 12,
+      "processes": [
+        {
+          "parent_pid": 1873753,
+          "pid": 1894784,
+          "process_group": 1894784,
+          "start_ticks": 2242074344,
+          "state": "S"
+        },
+        {
+          "parent_pid": 1,
+          "pid": 3640094,
+          "process_group": 3639772,
+          "start_ticks": 2160655122,
+          "state": "S"
+        }
+      ]
+    },
+    "13": {
+      "aicore_percent": 0,
+      "hbm_total_mib": 65536,
+      "hbm_used_mib": 58473,
+      "health": "OK",
+      "physical_id": 13,
+      "processes": [
+        {
+          "parent_pid": 1,
+          "pid": 3640094,
+          "process_group": 3639772,
+          "start_ticks": 2160655122,
+          "state": "S"
+        }
+      ]
+    },
+    "14": {
+      "aicore_percent": 15,
+      "hbm_total_mib": 65536,
+      "hbm_used_mib": 39724,
+      "health": "OK",
+      "physical_id": 14,
+      "processes": [
+        {
+          "parent_pid": 2109334,
+          "pid": 2166933,
+          "process_group": 2166933,
+          "start_ticks": 2242226124,
+          "state": "S"
+        }
+      ]
+    },
+    "15": {
+      "aicore_percent": 0,
+      "hbm_total_mib": 65536,
+      "hbm_used_mib": 57610,
+      "health": "OK",
+      "physical_id": 15,
+      "processes": [
+        {
+          "parent_pid": 80312,
+          "pid": 81282,
+          "process_group": 81282,
+          "start_ticks": 2241037421,
+          "state": "S"
+        },
+        {
+          "parent_pid": 1,
+          "pid": 3560380,
+          "process_group": 3560352,
+          "start_ticks": 2147334415,
+          "state": "S"
+        }
+      ]
+    },
     "2": {
       "aicore_percent": 0,
       "hbm_total_mib": 65536,
@@ -420,101 +514,14 @@
           "state": "S"
         }
       ]
-    },
-    "10": {
-      "aicore_percent": 0,
-      "hbm_total_mib": 65536,
-      "hbm_used_mib": 3143,
-      "health": "OK",
-      "physical_id": 10,
-      "processes": []
-    },
-    "11": {
-      "aicore_percent": 0,
-      "hbm_total_mib": 65536,
-      "hbm_used_mib": 2881,
-      "health": "OK",
-      "physical_id": 11,
-      "processes": []
-    },
-    "12": {
-      "aicore_percent": 17,
-      "hbm_total_mib": 65536,
-      "hbm_used_mib": 44856,
-      "health": "OK",
-      "physical_id": 12,
-      "processes": [
-        {
-          "parent_pid": 1873753,
-          "pid": 1894784,
-          "process_group": 1894784,
-          "start_ticks": 2242074344,
-          "state": "S"
-        },
-        {
-          "parent_pid": 1,
-          "pid": 3640094,
-          "process_group": 3639772,
-          "start_ticks": 2160655122,
-          "state": "S"
-        }
-      ]
-    },
-    "13": {
-      "aicore_percent": 0,
-      "hbm_total_mib": 65536,
-      "hbm_used_mib": 58473,
-      "health": "OK",
-      "physical_id": 13,
-      "processes": [
-        {
-          "parent_pid": 1,
-          "pid": 3640094,
-          "process_group": 3639772,
-          "start_ticks": 2160655122,
-          "state": "S"
-        }
-      ]
-    },
-    "14": {
-      "aicore_percent": 15,
-      "hbm_total_mib": 65536,
-      "hbm_used_mib": 39724,
-      "health": "OK",
-      "physical_id": 14,
-      "processes": [
-        {
-          "parent_pid": 2109334,
-          "pid": 2166933,
-          "process_group": 2166933,
-          "start_ticks": 2242226124,
-          "state": "S"
-        }
-      ]
-    },
-    "15": {
-      "aicore_percent": 0,
-      "hbm_total_mib": 65536,
-      "hbm_used_mib": 57610,
-      "health": "OK",
-      "physical_id": 15,
-      "processes": [
-        {
-          "parent_pid": 80312,
-          "pid": 81282,
-          "process_group": 81282,
-          "start_ticks": 2241037421,
-          "state": "S"
-        },
-        {
-          "parent_pid": 1,
-          "pid": 3560380,
-          "process_group": 3560352,
-          "start_ticks": 2147334415,
-          "state": "S"
-        }
-      ]
     }
+  },
+  "disk_authorization_update": {
+    "account_hard_limit_gib": 800,
+    "at": "2026-11-16T14:15:09.671488+00:00",
+    "estimated_new_writes_gib": 34,
+    "legacy_active_inputs_unchanged": true,
+    "request": "user permits disk growth up to account800GiB total; removes project96GiB and fixed200GiB headroom"
   },
   "max_concurrent_npus": 16,
   "request": "user permits all remaining cards for unfinished work",

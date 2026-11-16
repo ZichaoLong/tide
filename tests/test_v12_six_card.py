@@ -6,7 +6,7 @@ from types import SimpleNamespace
 import unittest
 from unittest.mock import patch
 
-from scripts.resume_hb_v12_six_card import DEVICES, MODEL_COMMIT, SixCardWorker, validate_plan, try_preparation_lock
+from scripts.resume_hb_v12_six_card import DEVICES, MODEL_COMMIT, SixCardWorker, validate_plan, try_preparation_lock, legacy_guard_active
 from tide_lab.records import digest
 
 
@@ -58,11 +58,13 @@ class SixCardTests(unittest.TestCase):
         self.assertEqual(case['train_arguments'][1], str(128*2**20))
 
     def test_all_cards_require_bounded_temporary_checkpoint_phases(self):
-        plan = dict(self.plan, card_limit=16, run_prefix='tl-v12-all-', preparation_slots=2)
+        plan = dict(self.plan, card_limit=16, run_prefix='tl-v12-all-', preparation_slots=2, account_hard_limit_gib=800)
         policy = dict(self.policy, candidate_ids=list(range(16)), max_new_concurrent_npus=16)
         validate_plan(plan, dict(commit=MODEL_COMMIT), policy, 1000)
         with self.assertRaisesRegex(ValueError, 'preparation slots'):
             validate_plan(dict(plan, preparation_slots=12), dict(commit=MODEL_COMMIT), policy, 1000)
+        with self.assertRaisesRegex(ValueError, '800GiB'):
+            validate_plan(dict(plan, account_hard_limit_gib=900), dict(commit=MODEL_COMMIT), policy, 1000)
 
     def test_preparation_lock_bounds_concurrency_and_releases(self):
         directory = self.root/'locks'
@@ -85,6 +87,28 @@ class SixCardTests(unittest.TestCase):
             worker.stage({}, 'prefix', 'prefix', 1200)
             worker.stage({}, 'train', 'train', 1200)
             self.assertEqual(leave.call_count, 2)
+
+    def test_legacy_compatibility_ends_only_after_verified_termination(self):
+        path = self.root/'artifacts/jobs/old/state.json'; path.parent.mkdir(parents=True)
+        self.assertTrue(legacy_guard_active(self.root, ['old']))
+        for state in ({'state': 'running'}, {'state': 'completed', 'termination_verified': False}):
+            path.write_text(json.dumps(state)); self.assertTrue(legacy_guard_active(self.root, ['old']))
+        path.write_text(json.dumps({'state': 'completed', 'termination_verified': True}))
+        self.assertFalse(legacy_guard_active(self.root, ['old']))
+
+    def test_account_guard_allows_over96_project_and_under200_headroom(self):
+        worker = object.__new__(SixCardWorker)
+        worker.plan = dict(self.plan, root=str(self.root), account_hard_limit_gib=800)
+        worker.a = SimpleNamespace(deadline_epoch=10**12); worker.last_guard = 0; worker.stopped = False
+        worker.state = {}; worker.publish = lambda: None
+        with patch('scripts.resume_hb_v12_six_card.campaign_usage', return_value={'gib': 150}), \
+                patch('scripts.resume_hb_v12_six_card.account_quota', return_value={'hard_gib': 800, 'used_gib': 700}):
+            worker.guard()
+        worker.last_guard = 0
+        with patch('scripts.resume_hb_v12_six_card.campaign_usage', return_value={'gib': 150}), \
+                patch('scripts.resume_hb_v12_six_card.account_quota', return_value={'hard_gib': 800, 'used_gib': 800}):
+            with self.assertRaisesRegex(RuntimeError, 'hard quota'):
+                worker.guard()
 
     def test_failed_recovery_cannot_enter_training(self):
         worker = object.__new__(SixCardWorker)

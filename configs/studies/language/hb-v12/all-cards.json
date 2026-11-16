@@ -1,6 +1,7 @@
 {
+  "account_hard_limit_gib": 800,
   "administrative_case_count": 12,
-  "authorization": "2026-11-16 user permits all remaining cards for unfinished tasks; overrides old12/six/four-card caps",
+  "authorization": "2026-11-16 user permits all remaining cards for unfinished tasks; overrides old12/six/four-card caps; subsequent user removes project disk ceiling and fixed headroom, only800GiB total quota",
   "candidate_ids": [
     0,
     1,
@@ -110,11 +111,16 @@
   ],
   "deadline": "2026-11-19T23:08:07+08:00",
   "deadline_epoch": 1795100887.6161592,
+  "estimated_new_writes_gib": 34,
   "job_prefix": "v12-all",
+  "legacy_guard_jobs": [
+    "v12-four-base128-q3-s11",
+    "v12-four-position-q3-s11",
+    "v12-four-readcontent-q3-s22",
+    "v12-four-share8-d192-q3-s22"
+  ],
   "limits": {
-    "hard_quota_headroom_gib": 200,
-    "new_disk_stop_gib": 96,
-    "new_disk_target_gib": 64,
+    "account_hard_limit_gib": 800,
     "original_chains": 38,
     "target_tokens": 134217728
   },
@@ -123,6 +129,7 @@
   "no_automatic_retry": true,
   "original_deadline_epoch": 1794928087.6161592,
   "preparation_disk_soft_gib": 90,
+  "preparation_scope": "temporary compatibility only while4 untouched frozen96GiB workers remain; no fixed project ceiling or200GiB reserve in new workers",
   "preparation_slots": 2,
   "retained_jobs": [
     "v12-four-base128-q3-s11",

@@ -35,7 +35,10 @@ def main(args):
     if not 0 < expected <= 38 or len(spec['cases']) != expected or len({x['id'] for x in spec['cases']}) != expected:
         raise ValueError('only fixed unique original administrative descendants')
     quota = account_quota(); disk = campaign_usage(root)
-    if quota['hard_quota_headroom_gib'] < 200 or disk['gib'] > 96:
+    if spec.get('account_hard_limit_gib'):
+        if min(spec['account_hard_limit_gib'], quota['hard_gib'])-quota['used_gib'] < spec['estimated_new_writes_gib']:
+            raise RuntimeError('account hard quota cannot fit the declared remaining writes')
+    elif quota['hard_quota_headroom_gib'] < 200 or disk['gib'] > 96:
         raise RuntimeError('original disk/headroom limits')
     if not inspect(root/'artifacts/jobs/v12-repair-controller/job.json')['termination_verified_now']:
         raise ValueError('old submission controller still alive')
@@ -67,6 +70,9 @@ def main(args):
                     card_limit=limit, run_prefix='tl-'+prefix+'-')
         if spec.get('preparation_slots'):
             plan['preparation_slots'] = spec['preparation_slots']
+        if spec.get('account_hard_limit_gib'):
+            plan['account_hard_limit_gib'] = spec['account_hard_limit_gib']
+            plan['legacy_guard_jobs'] = spec['retained_jobs']
         case['output'] = str(root/'runs'/job); case['administrative_parent'] = item['previous_job']
         extra_inputs = []
         if item['mode'] == 'resume_train':

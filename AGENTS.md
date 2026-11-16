@@ -7,10 +7,13 @@
   namespace; shared health/load/HBM checks and lifetime locks remain. Preserve
   the4 active `v12-four-*` jobs and requeue only12 never-started waiters as
   `v12-all-*`, same scientific source62e32602 and128Mi/configs/thresholds.
-  Retain11/19 23:08:07+08 deadline,96GiB stop and200GiB quota headroom. Two shared
-  temporary-recovery slots and a90GiB preparation projection prevent simultaneous
-  checkpoint copies from consuming the training write margin; training itself
-  uses all admitted cards. Never rerun obsolete controllers/waiters or failed
+  Retain11/19 23:08:07+08 deadline. The subsequent user instruction removes the
+  project96GiB stop and fixed200GiB headroom: new workers use the account800GiB
+  hard cap and actual checkpoint write requirements. The4 untouched old workers
+  still contain frozen96GiB checks. Two temporary-recovery slots/90GiB preparation
+  projection only protect those legacy checks, and disable automatically after
+  all4 old workers have verified termination. Training uses all admitted cards.
+  Never rerun obsolete controllers/waiters or failed
   scientific attempts automatically. Re-entry:
   `python scripts/review_hb_v12_six_card.py --policy all-cards`.
   The four/six-card instructions below are historical.

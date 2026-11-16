@@ -15,8 +15,9 @@ import time
 sys.path.insert(0, str(Path.cwd()))
 from scripts.run_hb_v12_repair_worker import RepairWorker
 from tide_lab.records import atomic_json, digest, now
-from tide_lab.supervisor import verify_source
+from tide_lab.supervisor import verify_source, TERMINAL
 from tide_lab.disk_usage import campaign_usage
+from tide_lab.quota import account_quota
 
 MODEL_COMMIT = '62e32602b23e371eb1669f7b99409db626a1c4f8'
 DEVICES = [4, 6, 9, 11, 12, 14]
@@ -36,6 +37,8 @@ def validate_plan(plan, source, policy, deadline):
         raise ValueError('administrative run namespace changed')
     if limit == 16 and plan.get('preparation_slots') != 2:
         raise ValueError('all-card temporary checkpoint phases require two shared preparation slots')
+    if limit == 16 and plan.get('account_hard_limit_gib') != 800:
+        raise ValueError('all-card account disk contract must preserve the800GiB hard limit')
     if len(plan['cases']) != 1 or plan['administrative_mode'] not in ('resume_train', 'requeue_unstarted'):
         raise ValueError('one original repair chain per service')
     case = plan['cases'][0]
@@ -60,7 +63,35 @@ def try_preparation_lock(directory, slots):
     return None, None
 
 
+def legacy_guard_active(root, jobs):
+    for job in jobs:
+        path = root/'artifacts/jobs'/job/'state.json'
+        state = json.loads(path.read_text()) if path.is_file() else {}
+        if state.get('state') not in TERMINAL or not state.get('termination_verified'):
+            return True
+    return False
+
+
 class SixCardWorker(RepairWorker):
+    def guard(self):
+        if not self.plan.get('account_hard_limit_gib'):
+            return super().guard()
+        if self.stopped or time.time() > self.a.deadline_epoch-60:
+            raise TimeoutError('v12 stopped/shared deadline')
+        if time.monotonic()-self.last_guard < 60:
+            return
+        self.last_guard = time.monotonic()
+        root = Path(self.plan['root']); quota = account_quota(); disk = campaign_usage(root)
+        limit = min(self.plan['account_hard_limit_gib'], quota['hard_gib'])
+        # Actual possible writes for this chain, not a fixed200GiB reserve or a
+        # per-project disk ceiling. Kernel quota remains the final shared cap.
+        required = 4*Path(self.plan['cases'][0]['parent_checkpoint']).stat().st_size/2**30
+        self.state['resources'] = dict(at=now(), quota=quota, disk_scan=disk,
+            account_limit_gib=limit, required_checkpoint_write_gib=required)
+        self.publish()
+        if limit-quota['used_gib'] < required:
+            raise RuntimeError('account hard quota cannot fit this chain checkpoint writes')
+
     def enter_preparation(self):
         if getattr(self, '_preparation_handle', None) is not None:
             return
@@ -69,10 +100,14 @@ class SixCardWorker(RepairWorker):
         self.publish()
         while True:
             self.guard()
+            if not legacy_guard_active(Path(self.plan['root']), self.plan.get('legacy_guard_jobs', [])):
+                self.state['preparation_admission'].update(state='not_required', at=now(),
+                    reason='all untouched legacy96GiB workers terminated; only account quota applies')
+                self.publish(); return
             handle, slot = try_preparation_lock(directory, self.plan['preparation_slots'])
             if handle is not None:
-                # Three retained probe states plus one atomic write. Keep6GiB
-                # outside this preparation estimate for concurrent training I/O.
+                # Temporary compatibility with the untouched active workers'
+                # frozen96GiB checks. Automatically disappears when they finish.
                 disk = campaign_usage(Path(self.plan['root']))['gib']
                 reserve = 4*Path(self.plan['cases'][0]['parent_checkpoint']).stat().st_size/2**30
                 if disk+reserve > 90:
