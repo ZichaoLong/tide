@@ -1,0 +1,1227 @@
+{
+  "account_hard_limit_gib": 800,
+  "active_physical_devices": [
+    0,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    14
+  ],
+  "administrative_pauses": [],
+  "all_live_v12_npu_jobs": [
+    {
+      "job": "v12-all-share8-d128-q3-s11",
+      "lifecycle": "running",
+      "physical_device": 7
+    },
+    {
+      "job": "v12-all-ports4-q3-s22",
+      "lifecycle": "running",
+      "physical_device": 6
+    },
+    {
+      "job": "v12-all-readcontent-q3-s11",
+      "lifecycle": "running",
+      "physical_device": 10
+    },
+    {
+      "job": "v12-all-share0-q3-s11",
+      "lifecycle": "waiting_resources",
+      "physical_device": null
+    },
+    {
+      "job": "v12-all-residual-q3-s11",
+      "lifecycle": "running",
+      "physical_device": 2
+    },
+    {
+      "job": "v12-all-fullshare8-q3-s11",
+      "lifecycle": "waiting_resources",
+      "physical_device": null
+    },
+    {
+      "job": "v12-all-base-q10-s22",
+      "lifecycle": "running",
+      "physical_device": 3
+    },
+    {
+      "job": "v12-four-readcontent-q3-s22",
+      "lifecycle": "running",
+      "physical_device": 4
+    },
+    {
+      "job": "v12-all-share8-d192-q3-s11",
+      "lifecycle": "running",
+      "physical_device": 11
+    },
+    {
+      "job": "v12-all-fullshare8-q3-s22",
+      "lifecycle": "waiting_resources",
+      "physical_device": null
+    },
+    {
+      "job": "v12-four-position-q3-s11",
+      "lifecycle": "running",
+      "physical_device": 14
+    },
+    {
+      "job": "v12-all-untied-q3-s22",
+      "lifecycle": "running",
+      "physical_device": 0
+    },
+    {
+      "job": "v12-four-base128-q3-s11",
+      "lifecycle": "running",
+      "physical_device": 12
+    },
+    {
+      "job": "v12-all-top2-q3-s11",
+      "lifecycle": "running",
+      "physical_device": 8
+    },
+    {
+      "job": "v12-four-share8-d192-q3-s22",
+      "lifecycle": "running",
+      "physical_device": 9
+    },
+    {
+      "job": "v12-all-share8-d128-q3-s22",
+      "lifecycle": "running",
+      "physical_device": 5
+    }
+  ],
+  "allowed_devices": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15
+  ],
+  "card_limit": 16,
+  "counts": {
+    "running": 13,
+    "waiting_resources": 3
+  },
+  "deadline": "2026-11-19T23:08:07+08:00",
+  "disk": {
+    "bytes": 88586448896,
+    "entries": 7062,
+    "gib": 82.50255966186523,
+    "scope": "allocated bytes, hardlinks once, no symlink traversal; live observation, not atomic snapshot",
+    "vanished": 0
+  },
+  "estimated_new_writes_gib": 34,
+  "final_verification": {
+    "at": "2026-11-16T14:19:24.141660+00:00",
+    "cards": [
+      0,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      14
+    ],
+    "counts": {
+      "running": 13,
+      "waiting_resources": 3
+    },
+    "disk": {
+      "bytes": 87264174080,
+      "entries": 7133,
+      "gib": 81.2710952758789,
+      "scope": "allocated bytes, hardlinks once, no symlink traversal; live observation, not atomic snapshot",
+      "vanished": 0
+    },
+    "hardware": {
+      "active_devices": [
+        12,
+        14,
+        4,
+        9,
+        11,
+        5,
+        7,
+        10,
+        6,
+        0,
+        2,
+        8,
+        3
+      ],
+      "last_at": "2026-11-16T14:19:13.784427+00:00",
+      "samples": 26,
+      "scope": "board/chip AICore,AIVector,AICPU,HBM; shared occupants may contribute;60s samples miss short bursts",
+      "started_at": "2026-11-16T14:17:54.508722+00:00",
+      "state": "running"
+    },
+    "map_render": "passed",
+    "new_guard_proof": [
+      {
+        "account_limit_gib": 800,
+        "checkpoint_write_gib": 4.571087222546339,
+        "job": "v12-all-share8-d192-q3-s11",
+        "orchestration_source": "711e96befa6ad1aae3e244e2939c0c084532020b"
+      },
+      {
+        "account_limit_gib": 800,
+        "checkpoint_write_gib": 2.569012027233839,
+        "job": "v12-all-share8-d128-q3-s22",
+        "orchestration_source": "711e96befa6ad1aae3e244e2939c0c084532020b"
+      },
+      {
+        "account_limit_gib": 800,
+        "checkpoint_write_gib": 2.56901178881526,
+        "job": "v12-all-share8-d128-q3-s11",
+        "orchestration_source": "711e96befa6ad1aae3e244e2939c0c084532020b"
+      },
+      {
+        "account_limit_gib": 800,
+        "checkpoint_write_gib": 2.368483867496252,
+        "job": "v12-all-readcontent-q3-s11",
+        "orchestration_source": "711e96befa6ad1aae3e244e2939c0c084532020b"
+      },
+      {
+        "account_limit_gib": 800,
+        "checkpoint_write_gib": 2.298133250325918,
+        "job": "v12-all-ports4-q3-s22",
+        "orchestration_source": "711e96befa6ad1aae3e244e2939c0c084532020b"
+      },
+      {
+        "account_limit_gib": 800,
+        "checkpoint_write_gib": 2.262977000325918,
+        "job": "v12-all-untied-q3-s22",
+        "orchestration_source": "711e96befa6ad1aae3e244e2939c0c084532020b"
+      },
+      {
+        "account_limit_gib": 800,
+        "checkpoint_write_gib": 2.2512539885938168,
+        "job": "v12-all-residual-q3-s11",
+        "orchestration_source": "711e96befa6ad1aae3e244e2939c0c084532020b"
+      },
+      {
+        "account_limit_gib": 800,
+        "checkpoint_write_gib": 2.2512539885938168,
+        "job": "v12-all-top2-q3-s11",
+        "orchestration_source": "711e96befa6ad1aae3e244e2939c0c084532020b"
+      },
+      {
+        "account_limit_gib": 800,
+        "checkpoint_write_gib": 0.9950045607984066,
+        "job": "v12-all-base-q10-s22",
+        "orchestration_source": "711e96befa6ad1aae3e244e2939c0c084532020b"
+      }
+    ],
+    "new_training": [
+      {
+        "job": "v12-all-share8-d192-q3-s11",
+        "lens": "recording",
+        "recovery": "passed",
+        "run_id": "tl-v12-all-main-share8-d192-q3-s11",
+        "scientific_source": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+        "tokens": 58728479
+      },
+      {
+        "job": "v12-all-share8-d128-q3-s22",
+        "lens": "recording",
+        "recovery": "passed",
+        "run_id": "tl-v12-all-main-share8-d128-q3-s22",
+        "scientific_source": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+        "tokens": 81112262
+      }
+    ],
+    "old12_waiters_terminated": true,
+    "quota": {
+      "file_grace_expires_epoch": 0,
+      "file_hard": 0,
+      "file_soft": 0,
+      "files": 1638749,
+      "filesystem": "/dev/mapper/ascend_data-data",
+      "grace_expires_epoch": 1795294591,
+      "hard_gib": 800.0,
+      "hard_quota_headroom_gib": 343.15637588500977,
+      "query_returncode": 1,
+      "soft_exceeded": true,
+      "soft_gib": 300.0,
+      "used_gib": 456.84362411499023
+    },
+    "stages": {
+      "migration": 3,
+      "prefix": 1,
+      "recovery-full": 1,
+      "recovery-resumed": 1,
+      "train": 6,
+      "waiting": 4
+    },
+    "tests_passed": 24
+  },
+  "hardware": {
+    "job": "v12-all-hardware",
+    "observations": "runs/v12-all-hardware/observations.jsonl",
+    "record": "artifacts/jobs/v12-all-hardware/job.json"
+  },
+  "jobs": [
+    {
+      "error": null,
+      "job": "v12-four-base128-q3-s11",
+      "lens": "recording",
+      "lifecycle": "running",
+      "mode": "retained",
+      "physical_device": 12,
+      "preparation_admission": null,
+      "recovery": "passed",
+      "saved_tokens": 49210505,
+      "stage": "train",
+      "stage_state": "running",
+      "termination_verified": false,
+      "tokens": 50506534
+    },
+    {
+      "error": null,
+      "job": "v12-four-position-q3-s11",
+      "lens": "recording",
+      "lifecycle": "running",
+      "mode": "retained",
+      "physical_device": 14,
+      "preparation_admission": null,
+      "recovery": "passed",
+      "saved_tokens": 106616854,
+      "stage": "train",
+      "stage_state": "running",
+      "termination_verified": false,
+      "tokens": 109398328
+    },
+    {
+      "error": null,
+      "job": "v12-four-readcontent-q3-s22",
+      "lens": "recording",
+      "lifecycle": "running",
+      "mode": "retained",
+      "physical_device": 4,
+      "preparation_admission": null,
+      "recovery": "passed",
+      "saved_tokens": 63897636,
+      "stage": "train",
+      "stage_state": "running",
+      "termination_verified": false,
+      "tokens": 64759961
+    },
+    {
+      "error": null,
+      "job": "v12-four-share8-d192-q3-s22",
+      "lens": "recording",
+      "lifecycle": "running",
+      "mode": "retained",
+      "physical_device": 9,
+      "preparation_admission": null,
+      "recovery": "passed",
+      "saved_tokens": 48113309,
+      "stage": "train",
+      "stage_state": "running",
+      "termination_verified": false,
+      "tokens": 49730428
+    },
+    {
+      "error": null,
+      "job": "v12-all-share8-d192-q3-s11",
+      "lens": null,
+      "lifecycle": "running",
+      "mode": "resume_train",
+      "physical_device": 11,
+      "preparation_admission": {
+        "admitted_at": "2026-11-16T14:16:14.956557+00:00",
+        "slot": 0,
+        "slots": 2,
+        "started_at": "2026-11-16T14:16:14.914612+00:00",
+        "state": "admitted"
+      },
+      "recovery": null,
+      "saved_tokens": null,
+      "stage": "recovery-resumed",
+      "stage_state": "running",
+      "termination_verified": false,
+      "tokens": null
+    },
+    {
+      "error": null,
+      "job": "v12-all-share8-d128-q3-s22",
+      "lens": null,
+      "lifecycle": "running",
+      "mode": "resume_train",
+      "physical_device": 5,
+      "preparation_admission": {
+        "admitted_at": "2026-11-16T14:16:15.193678+00:00",
+        "slot": 1,
+        "slots": 2,
+        "started_at": "2026-11-16T14:16:15.153903+00:00",
+        "state": "admitted"
+      },
+      "recovery": "passed",
+      "saved_tokens": null,
+      "stage": "recovery-compare",
+      "stage_state": "completed",
+      "termination_verified": false,
+      "tokens": null
+    },
+    {
+      "error": null,
+      "job": "v12-all-share8-d128-q3-s11",
+      "lens": null,
+      "lifecycle": "running",
+      "mode": "resume_train",
+      "physical_device": 7,
+      "preparation_admission": {
+        "slots": 2,
+        "started_at": "2026-11-16T14:16:16.548851+00:00",
+        "state": "waiting"
+      },
+      "recovery": null,
+      "saved_tokens": null,
+      "stage": null,
+      "stage_state": null,
+      "termination_verified": false,
+      "tokens": null
+    },
+    {
+      "error": null,
+      "job": "v12-all-readcontent-q3-s11",
+      "lens": null,
+      "lifecycle": "running",
+      "mode": "requeue_unstarted",
+      "physical_device": 10,
+      "preparation_admission": {
+        "slots": 2,
+        "started_at": "2026-11-16T14:16:43.957951+00:00",
+        "state": "waiting"
+      },
+      "recovery": null,
+      "saved_tokens": null,
+      "stage": "migration",
+      "stage_state": "completed",
+      "termination_verified": false,
+      "tokens": 54122829
+    },
+    {
+      "error": null,
+      "job": "v12-all-ports4-q3-s22",
+      "lens": null,
+      "lifecycle": "running",
+      "mode": "requeue_unstarted",
+      "physical_device": 6,
+      "preparation_admission": {
+        "slots": 2,
+        "started_at": "2026-11-16T14:16:49.381548+00:00",
+        "state": "waiting"
+      },
+      "recovery": null,
+      "saved_tokens": null,
+      "stage": "migration",
+      "stage_state": "completed",
+      "termination_verified": false,
+      "tokens": 54767213
+    },
+    {
+      "error": null,
+      "job": "v12-all-untied-q3-s22",
+      "lens": null,
+      "lifecycle": "running",
+      "mode": "requeue_unstarted",
+      "physical_device": 0,
+      "preparation_admission": {
+        "slots": 2,
+        "started_at": "2026-11-16T14:16:51.640717+00:00",
+        "state": "waiting"
+      },
+      "recovery": null,
+      "saved_tokens": null,
+      "stage": "migration",
+      "stage_state": "completed",
+      "termination_verified": false,
+      "tokens": 73958204
+    },
+    {
+      "error": null,
+      "job": "v12-all-residual-q3-s11",
+      "lens": null,
+      "lifecycle": "running",
+      "mode": "resume_train",
+      "physical_device": 2,
+      "preparation_admission": {
+        "slots": 2,
+        "started_at": "2026-11-16T14:16:20.975142+00:00",
+        "state": "waiting"
+      },
+      "recovery": null,
+      "saved_tokens": null,
+      "stage": null,
+      "stage_state": null,
+      "termination_verified": false,
+      "tokens": null
+    },
+    {
+      "error": null,
+      "job": "v12-all-top2-q3-s11",
+      "lens": null,
+      "lifecycle": "running",
+      "mode": "requeue_unstarted",
+      "physical_device": 8,
+      "preparation_admission": {
+        "slots": 2,
+        "started_at": "2026-11-16T14:16:47.707542+00:00",
+        "state": "waiting"
+      },
+      "recovery": null,
+      "saved_tokens": null,
+      "stage": "migration",
+      "stage_state": "completed",
+      "termination_verified": false,
+      "tokens": 72007838
+    },
+    {
+      "error": null,
+      "job": "v12-all-base-q10-s22",
+      "lens": null,
+      "lifecycle": "running",
+      "mode": "requeue_unstarted",
+      "physical_device": 3,
+      "preparation_admission": {
+        "slots": 2,
+        "started_at": "2026-11-16T14:16:52.809211+00:00",
+        "state": "waiting"
+      },
+      "recovery": null,
+      "saved_tokens": null,
+      "stage": "migration",
+      "stage_state": "completed",
+      "termination_verified": false,
+      "tokens": 57309204
+    },
+    {
+      "error": null,
+      "job": "v12-all-fullshare8-q3-s22",
+      "lens": null,
+      "lifecycle": "waiting_resources",
+      "mode": "resume_train",
+      "physical_device": null,
+      "preparation_admission": null,
+      "recovery": null,
+      "saved_tokens": null,
+      "stage": null,
+      "stage_state": null,
+      "termination_verified": false,
+      "tokens": null
+    },
+    {
+      "error": null,
+      "job": "v12-all-fullshare8-q3-s11",
+      "lens": null,
+      "lifecycle": "waiting_resources",
+      "mode": "requeue_unstarted",
+      "physical_device": null,
+      "preparation_admission": null,
+      "recovery": null,
+      "saved_tokens": null,
+      "stage": null,
+      "stage_state": null,
+      "termination_verified": false,
+      "tokens": null
+    },
+    {
+      "error": null,
+      "job": "v12-all-share0-q3-s11",
+      "lens": null,
+      "lifecycle": "waiting_resources",
+      "mode": "requeue_unstarted",
+      "physical_device": null,
+      "preparation_admission": null,
+      "recovery": null,
+      "saved_tokens": null,
+      "stage": null,
+      "stage_state": null,
+      "termination_verified": false,
+      "tokens": null
+    }
+  ],
+  "latest_review": {
+    "active_physical_devices": [
+      0,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      14
+    ],
+    "administrative_pauses": [],
+    "all_live_v12_npu_jobs": [
+      {
+        "job": "v12-all-share8-d128-q3-s11",
+        "lifecycle": "running",
+        "physical_device": 7
+      },
+      {
+        "job": "v12-all-ports4-q3-s22",
+        "lifecycle": "running",
+        "physical_device": 6
+      },
+      {
+        "job": "v12-all-readcontent-q3-s11",
+        "lifecycle": "running",
+        "physical_device": 10
+      },
+      {
+        "job": "v12-all-share0-q3-s11",
+        "lifecycle": "waiting_resources",
+        "physical_device": null
+      },
+      {
+        "job": "v12-all-residual-q3-s11",
+        "lifecycle": "running",
+        "physical_device": 2
+      },
+      {
+        "job": "v12-all-fullshare8-q3-s11",
+        "lifecycle": "waiting_resources",
+        "physical_device": null
+      },
+      {
+        "job": "v12-all-base-q10-s22",
+        "lifecycle": "running",
+        "physical_device": 3
+      },
+      {
+        "job": "v12-four-readcontent-q3-s22",
+        "lifecycle": "running",
+        "physical_device": 4
+      },
+      {
+        "job": "v12-all-share8-d192-q3-s11",
+        "lifecycle": "running",
+        "physical_device": 11
+      },
+      {
+        "job": "v12-all-fullshare8-q3-s22",
+        "lifecycle": "waiting_resources",
+        "physical_device": null
+      },
+      {
+        "job": "v12-four-position-q3-s11",
+        "lifecycle": "running",
+        "physical_device": 14
+      },
+      {
+        "job": "v12-all-untied-q3-s22",
+        "lifecycle": "running",
+        "physical_device": 0
+      },
+      {
+        "job": "v12-four-base128-q3-s11",
+        "lifecycle": "running",
+        "physical_device": 12
+      },
+      {
+        "job": "v12-all-top2-q3-s11",
+        "lifecycle": "running",
+        "physical_device": 8
+      },
+      {
+        "job": "v12-four-share8-d192-q3-s22",
+        "lifecycle": "running",
+        "physical_device": 9
+      },
+      {
+        "job": "v12-all-share8-d128-q3-s22",
+        "lifecycle": "running",
+        "physical_device": 5
+      }
+    ],
+    "allowed_devices": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15
+    ],
+    "card_limit": 16,
+    "counts": {
+      "running": 13,
+      "waiting_resources": 3
+    },
+    "deadline": "2026-11-19T23:08:07+08:00",
+    "jobs": [
+      {
+        "error": null,
+        "job": "v12-four-base128-q3-s11",
+        "lens": "recording",
+        "lifecycle": "running",
+        "mode": "retained",
+        "physical_device": 12,
+        "preparation_admission": null,
+        "recovery": "passed",
+        "saved_tokens": 49210505,
+        "stage": "train",
+        "stage_state": "running",
+        "termination_verified": false,
+        "tokens": 50778690
+      },
+      {
+        "error": null,
+        "job": "v12-four-position-q3-s11",
+        "lens": "recording",
+        "lifecycle": "running",
+        "mode": "retained",
+        "physical_device": 14,
+        "preparation_admission": null,
+        "recovery": "passed",
+        "saved_tokens": 106616854,
+        "stage": "train",
+        "stage_state": "running",
+        "termination_verified": false,
+        "tokens": 109717224
+      },
+      {
+        "error": null,
+        "job": "v12-four-readcontent-q3-s22",
+        "lens": "recording",
+        "lifecycle": "running",
+        "mode": "retained",
+        "physical_device": 4,
+        "preparation_admission": null,
+        "recovery": "passed",
+        "saved_tokens": 63897636,
+        "stage": "train",
+        "stage_state": "running",
+        "termination_verified": false,
+        "tokens": 65254844
+      },
+      {
+        "error": null,
+        "job": "v12-four-share8-d192-q3-s22",
+        "lens": "recording",
+        "lifecycle": "running",
+        "mode": "retained",
+        "physical_device": 9,
+        "preparation_admission": null,
+        "recovery": "passed",
+        "saved_tokens": 48113309,
+        "stage": "train",
+        "stage_state": "running",
+        "termination_verified": false,
+        "tokens": 49843452
+      },
+      {
+        "error": null,
+        "job": "v12-all-share8-d192-q3-s11",
+        "lens": "recording",
+        "lifecycle": "running",
+        "mode": "resume_train",
+        "physical_device": 11,
+        "preparation_admission": {
+          "admitted_at": "2026-11-16T14:16:14.956557+00:00",
+          "released_at": "2026-11-16T14:18:27.589565+00:00",
+          "slot": 0,
+          "slots": 2,
+          "started_at": "2026-11-16T14:16:14.914612+00:00",
+          "state": "released"
+        },
+        "recovery": "passed",
+        "saved_tokens": null,
+        "stage": "train",
+        "stage_state": "running",
+        "termination_verified": false,
+        "tokens": 58728479
+      },
+      {
+        "error": null,
+        "job": "v12-all-share8-d128-q3-s22",
+        "lens": "recording",
+        "lifecycle": "running",
+        "mode": "resume_train",
+        "physical_device": 5,
+        "preparation_admission": {
+          "admitted_at": "2026-11-16T14:16:15.193678+00:00",
+          "released_at": "2026-11-16T14:17:55.423375+00:00",
+          "slot": 1,
+          "slots": 2,
+          "started_at": "2026-11-16T14:16:15.153903+00:00",
+          "state": "released"
+        },
+        "recovery": "passed",
+        "saved_tokens": null,
+        "stage": "train",
+        "stage_state": "running",
+        "termination_verified": false,
+        "tokens": 81112262
+      },
+      {
+        "error": null,
+        "job": "v12-all-share8-d128-q3-s11",
+        "lens": null,
+        "lifecycle": "running",
+        "mode": "resume_train",
+        "physical_device": 7,
+        "preparation_admission": {
+          "slots": 2,
+          "started_at": "2026-11-16T14:16:16.548851+00:00",
+          "state": "waiting"
+        },
+        "recovery": null,
+        "saved_tokens": null,
+        "stage": null,
+        "stage_state": null,
+        "termination_verified": false,
+        "tokens": null
+      },
+      {
+        "error": null,
+        "job": "v12-all-readcontent-q3-s11",
+        "lens": null,
+        "lifecycle": "running",
+        "mode": "requeue_unstarted",
+        "physical_device": 10,
+        "preparation_admission": {
+          "slots": 2,
+          "started_at": "2026-11-16T14:16:43.957951+00:00",
+          "state": "waiting"
+        },
+        "recovery": null,
+        "saved_tokens": null,
+        "stage": "migration",
+        "stage_state": "completed",
+        "termination_verified": false,
+        "tokens": 54122829
+      },
+      {
+        "error": null,
+        "job": "v12-all-ports4-q3-s22",
+        "lens": null,
+        "lifecycle": "running",
+        "mode": "requeue_unstarted",
+        "physical_device": 6,
+        "preparation_admission": {
+          "admitted_at": "2026-11-16T14:17:55.524033+00:00",
+          "released_at": "2026-11-16T14:19:03.177316+00:00",
+          "slot": 1,
+          "slots": 2,
+          "started_at": "2026-11-16T14:16:49.381548+00:00",
+          "state": "released"
+        },
+        "recovery": "passed",
+        "saved_tokens": null,
+        "stage": "prefix",
+        "stage_state": "running",
+        "termination_verified": false,
+        "tokens": null
+      },
+      {
+        "error": null,
+        "job": "v12-all-untied-q3-s22",
+        "lens": null,
+        "lifecycle": "running",
+        "mode": "requeue_unstarted",
+        "physical_device": 0,
+        "preparation_admission": {
+          "admitted_at": "2026-11-16T14:18:27.860560+00:00",
+          "slot": 0,
+          "slots": 2,
+          "started_at": "2026-11-16T14:16:51.640717+00:00",
+          "state": "admitted"
+        },
+        "recovery": null,
+        "saved_tokens": null,
+        "stage": "recovery-resumed",
+        "stage_state": "running",
+        "termination_verified": false,
+        "tokens": null
+      },
+      {
+        "error": null,
+        "job": "v12-all-residual-q3-s11",
+        "lens": null,
+        "lifecycle": "running",
+        "mode": "resume_train",
+        "physical_device": 2,
+        "preparation_admission": {
+          "admitted_at": "2026-11-16T14:19:03.232019+00:00",
+          "slot": 1,
+          "slots": 2,
+          "started_at": "2026-11-16T14:16:20.975142+00:00",
+          "state": "admitted"
+        },
+        "recovery": null,
+        "saved_tokens": null,
+        "stage": "recovery-full",
+        "stage_state": "completed",
+        "termination_verified": false,
+        "tokens": 55946038
+      },
+      {
+        "error": null,
+        "job": "v12-all-top2-q3-s11",
+        "lens": null,
+        "lifecycle": "running",
+        "mode": "requeue_unstarted",
+        "physical_device": 8,
+        "preparation_admission": {
+          "slots": 2,
+          "started_at": "2026-11-16T14:16:47.707542+00:00",
+          "state": "waiting"
+        },
+        "recovery": null,
+        "saved_tokens": null,
+        "stage": "migration",
+        "stage_state": "completed",
+        "termination_verified": false,
+        "tokens": 72007838
+      },
+      {
+        "error": null,
+        "job": "v12-all-base-q10-s22",
+        "lens": null,
+        "lifecycle": "running",
+        "mode": "requeue_unstarted",
+        "physical_device": 3,
+        "preparation_admission": {
+          "slots": 2,
+          "started_at": "2026-11-16T14:16:52.809211+00:00",
+          "state": "waiting"
+        },
+        "recovery": null,
+        "saved_tokens": null,
+        "stage": "migration",
+        "stage_state": "completed",
+        "termination_verified": false,
+        "tokens": 57309204
+      },
+      {
+        "error": null,
+        "job": "v12-all-fullshare8-q3-s22",
+        "lens": null,
+        "lifecycle": "waiting_resources",
+        "mode": "resume_train",
+        "physical_device": null,
+        "preparation_admission": null,
+        "recovery": null,
+        "saved_tokens": null,
+        "stage": null,
+        "stage_state": null,
+        "termination_verified": false,
+        "tokens": null
+      },
+      {
+        "error": null,
+        "job": "v12-all-fullshare8-q3-s11",
+        "lens": null,
+        "lifecycle": "waiting_resources",
+        "mode": "requeue_unstarted",
+        "physical_device": null,
+        "preparation_admission": null,
+        "recovery": null,
+        "saved_tokens": null,
+        "stage": null,
+        "stage_state": null,
+        "termination_verified": false,
+        "tokens": null
+      },
+      {
+        "error": null,
+        "job": "v12-all-share0-q3-s11",
+        "lens": null,
+        "lifecycle": "waiting_resources",
+        "mode": "requeue_unstarted",
+        "physical_device": null,
+        "preparation_admission": null,
+        "recovery": null,
+        "saved_tokens": null,
+        "stage": null,
+        "stage_state": null,
+        "termination_verified": false,
+        "tokens": null
+      }
+    ],
+    "observed_at": "2026-11-16T14:19:23.940426+00:00",
+    "schema": "tide-hb-v12-all-cards-review-v1",
+    "scope": "Administrative pauses retain raw budget_truncated/outer failed records; not new numerical failures. Scientific source62 unchanged; recovery/quality separately reviewed.",
+    "submissions_state": "submitted",
+    "within_card_limit": true
+  },
+  "lens_destination_unchanged": true,
+  "model_source": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+  "observed_at": "2026-11-16T14:17:55.127152+00:00",
+  "orchestration_source": "711e96befa6ad1aae3e244e2939c0c084532020b",
+  "quota": {
+    "file_grace_expires_epoch": 0,
+    "file_hard": 0,
+    "file_soft": 0,
+    "files": 1638658,
+    "filesystem": "/dev/mapper/ascend_data-data",
+    "grace_expires_epoch": 1795294591,
+    "hard_gib": 800.0,
+    "hard_quota_headroom_gib": 341.2843208312988,
+    "query_returncode": 1,
+    "soft_exceeded": true,
+    "soft_gib": 300.0,
+    "used_gib": 458.7156791687012
+  },
+  "schema": "tide-hb-v12-all-cards-review-v1",
+  "scope": "Administrative pauses retain raw budget_truncated/outer failed records; not new numerical failures. Scientific source62 unchanged; recovery/quality separately reviewed.",
+  "scope_note": "Service running/allocated card may still be in checks, fresh-process recovery or temporary compatibility wait; not all allocated cards are yet in formal training.",
+  "submission_checks": [
+    {
+      "all_card_policy_verified": false,
+      "job": "v12-four-base128-q3-s11",
+      "job_sha256": "4f40545109cf01a6655bbc09198f801d20fe87f1fd39c6a5622b6e73b2904e38",
+      "new_account_guard": "unchanged legacy frozen guard",
+      "slice": "background.slice",
+      "source": {
+        "commit": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2",
+        "tree_sha256": "f2d6a00e81f525fc341fa5f9cce227432b69600afda78cd511095f88e50a0740"
+      },
+      "state": "running"
+    },
+    {
+      "all_card_policy_verified": false,
+      "job": "v12-four-position-q3-s11",
+      "job_sha256": "8738c6609885f559983fbdef5e3d5eba71511f07f50d5480f9af37441791fe15",
+      "new_account_guard": "unchanged legacy frozen guard",
+      "slice": "background.slice",
+      "source": {
+        "commit": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2",
+        "tree_sha256": "f2d6a00e81f525fc341fa5f9cce227432b69600afda78cd511095f88e50a0740"
+      },
+      "state": "running"
+    },
+    {
+      "all_card_policy_verified": false,
+      "job": "v12-four-readcontent-q3-s22",
+      "job_sha256": "7a6c44fa674c9ea7882ced0b6e1ca12e9c3496a5e335768120fdedac3cf7bf67",
+      "new_account_guard": "unchanged legacy frozen guard",
+      "slice": "background.slice",
+      "source": {
+        "commit": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2",
+        "tree_sha256": "f2d6a00e81f525fc341fa5f9cce227432b69600afda78cd511095f88e50a0740"
+      },
+      "state": "running"
+    },
+    {
+      "all_card_policy_verified": false,
+      "job": "v12-four-share8-d192-q3-s22",
+      "job_sha256": "827364f8c7920243c4e75f79252ef6c99c61ff8e9f1727cd3e9458df9b009649",
+      "new_account_guard": "unchanged legacy frozen guard",
+      "slice": "background.slice",
+      "source": {
+        "commit": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2",
+        "tree_sha256": "f2d6a00e81f525fc341fa5f9cce227432b69600afda78cd511095f88e50a0740"
+      },
+      "state": "running"
+    },
+    {
+      "all_card_policy_verified": true,
+      "job": "v12-all-share8-d192-q3-s11",
+      "job_sha256": "f02c5203e88cfbfa75e3acb8310efd97b8c2c4f616b1fb80ba879ab124a385cd",
+      "new_account_guard": 800,
+      "slice": "background.slice",
+      "source": {
+        "commit": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2",
+        "tree_sha256": "f2d6a00e81f525fc341fa5f9cce227432b69600afda78cd511095f88e50a0740"
+      },
+      "state": "running"
+    },
+    {
+      "all_card_policy_verified": true,
+      "job": "v12-all-share8-d128-q3-s22",
+      "job_sha256": "c735f89a45c1378ccbec220e6f4bf7e6c6ea4cd119b1d7d275adbdd602ed9b1a",
+      "new_account_guard": 800,
+      "slice": "background.slice",
+      "source": {
+        "commit": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2",
+        "tree_sha256": "f2d6a00e81f525fc341fa5f9cce227432b69600afda78cd511095f88e50a0740"
+      },
+      "state": "running"
+    },
+    {
+      "all_card_policy_verified": true,
+      "job": "v12-all-share8-d128-q3-s11",
+      "job_sha256": "0766b6a795d44d2d2818f4496306cb94c9c23f29f184acf910e027c1b30844da",
+      "new_account_guard": 800,
+      "slice": "background.slice",
+      "source": {
+        "commit": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2",
+        "tree_sha256": "f2d6a00e81f525fc341fa5f9cce227432b69600afda78cd511095f88e50a0740"
+      },
+      "state": "running"
+    },
+    {
+      "all_card_policy_verified": true,
+      "job": "v12-all-readcontent-q3-s11",
+      "job_sha256": "08daade281d3ca1d87683a97c1a7ca0f864e1a4f7b0ed5ae4836f988d2eb5090",
+      "new_account_guard": 800,
+      "slice": "background.slice",
+      "source": {
+        "commit": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2",
+        "tree_sha256": "f2d6a00e81f525fc341fa5f9cce227432b69600afda78cd511095f88e50a0740"
+      },
+      "state": "running"
+    },
+    {
+      "all_card_policy_verified": true,
+      "job": "v12-all-ports4-q3-s22",
+      "job_sha256": "54300b1fe31d130b481c2847f70234a5136e9e30241295a3a530329f08148a44",
+      "new_account_guard": 800,
+      "slice": "background.slice",
+      "source": {
+        "commit": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2",
+        "tree_sha256": "f2d6a00e81f525fc341fa5f9cce227432b69600afda78cd511095f88e50a0740"
+      },
+      "state": "running"
+    },
+    {
+      "all_card_policy_verified": true,
+      "job": "v12-all-untied-q3-s22",
+      "job_sha256": "6fd70c97ba7cc469ba0ebbedebe16f58ff2f9ee7d6398709d12c81f612f48abb",
+      "new_account_guard": 800,
+      "slice": "background.slice",
+      "source": {
+        "commit": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2",
+        "tree_sha256": "f2d6a00e81f525fc341fa5f9cce227432b69600afda78cd511095f88e50a0740"
+      },
+      "state": "running"
+    },
+    {
+      "all_card_policy_verified": true,
+      "job": "v12-all-residual-q3-s11",
+      "job_sha256": "d9d4c6793f6c5fb427904a6d8f842e0d319e31d49efad38294263ea0ae056bc8",
+      "new_account_guard": 800,
+      "slice": "background.slice",
+      "source": {
+        "commit": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2",
+        "tree_sha256": "f2d6a00e81f525fc341fa5f9cce227432b69600afda78cd511095f88e50a0740"
+      },
+      "state": "running"
+    },
+    {
+      "all_card_policy_verified": true,
+      "job": "v12-all-top2-q3-s11",
+      "job_sha256": "1a4301f4ae60cd6753b57a43ce320217572771f5c8bb21f873b86b6852aa18ca",
+      "new_account_guard": 800,
+      "slice": "background.slice",
+      "source": {
+        "commit": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2",
+        "tree_sha256": "f2d6a00e81f525fc341fa5f9cce227432b69600afda78cd511095f88e50a0740"
+      },
+      "state": "running"
+    },
+    {
+      "all_card_policy_verified": true,
+      "job": "v12-all-base-q10-s22",
+      "job_sha256": "10d554904f71e3e34aa989a61b05feada3f7d335b332dff7f981f9f7d5cb8f86",
+      "new_account_guard": 800,
+      "slice": "background.slice",
+      "source": {
+        "commit": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2",
+        "tree_sha256": "f2d6a00e81f525fc341fa5f9cce227432b69600afda78cd511095f88e50a0740"
+      },
+      "state": "running"
+    },
+    {
+      "all_card_policy_verified": true,
+      "job": "v12-all-fullshare8-q3-s22",
+      "job_sha256": "07390dd1d4861fa8d302e03a799117be309120b56fc8ccfbfa7c1b9b1ebb04fe",
+      "new_account_guard": 800,
+      "slice": "background.slice",
+      "source": {
+        "commit": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2",
+        "tree_sha256": "f2d6a00e81f525fc341fa5f9cce227432b69600afda78cd511095f88e50a0740"
+      },
+      "state": "waiting_resources"
+    },
+    {
+      "all_card_policy_verified": true,
+      "job": "v12-all-fullshare8-q3-s11",
+      "job_sha256": "8d7bb8fce1c4a20ba4a558b4bd449c0c58440ed3b726c7f2641e912b2c7b99f0",
+      "new_account_guard": 800,
+      "slice": "background.slice",
+      "source": {
+        "commit": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2",
+        "tree_sha256": "f2d6a00e81f525fc341fa5f9cce227432b69600afda78cd511095f88e50a0740"
+      },
+      "state": "waiting_resources"
+    },
+    {
+      "all_card_policy_verified": true,
+      "job": "v12-all-share0-q3-s11",
+      "job_sha256": "88b00bc7f2f89d625d69255e0a8f16422909482ad01a9596e0274ddc13f42da0",
+      "new_account_guard": 800,
+      "slice": "background.slice",
+      "source": {
+        "commit": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2",
+        "tree_sha256": "f2d6a00e81f525fc341fa5f9cce227432b69600afda78cd511095f88e50a0740"
+      },
+      "state": "waiting_resources"
+    }
+  ],
+  "submissions_state": "submitted",
+  "tests": {
+    "all12_config_source_parent_hash_preflight": "passed",
+    "scheduler_tests": 10
+  },
+  "within_card_limit": true
+}

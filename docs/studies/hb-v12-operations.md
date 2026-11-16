@@ -1,5 +1,13 @@
 # v12操作、固定身份与记录
 
+最新已允许剩余任务使用全部可用卡，并取消项目磁盘上限/固定保留量。
+当前以[全部可用卡调度](hb-v12-all-cards.md)和[交接证据](../evidence/hb-v12-all-cards-handoff.json)为准：
+0–15候选、16槽，新作业按账号800GiB及实际写入需求检查空间；旧4条活动输入不变。
+只读：`python scripts/review_hb_v12_six_card.py --policy all-cards`，
+新job/Lens分别`v12-all-*`/`tl-v12-all-main-*`，硬件`runs/v12-all-hardware/`。
+恢复名额的短暂兼容状态见`preparation_admission`，不能把取得NPU一概当成主训练。
+以下四卡/六卡约束为历史记录，不再限制新作业。
+
 最新资源变更为四卡：物理4/9/12/14与四槽，4条原服务继续、16条`v12-four-*`已排队。
 详见[四卡调度](hb-v12-four-card.md)及[交接证据](../evidence/hb-v12-four-card-handoff.json)。
 统一状态：`python scripts/review_hb_v12_six_card.py --policy four-card`；

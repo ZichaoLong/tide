@@ -46,3 +46,12 @@ Lens项目`tide-learning-lab`，新段`tl-v12-all-main-*`，prefix/confirm/diag�
 保留四条仍为`tl-v12-four-main-*`。原study/seed保持，私有入口`.local/LENS.md`不变。
 硬件采样`v12-all-hardware`覆盖固定16个未完成服务，记录AICore/AIVector/AICPU及HBM。
 放开设备和作业完成均不自动升级科学结论；完整配对质量等待审阅。
+
+22:17交接：12条均已提交，新编排711e96be（`.local/source-hb-v12-all-cards`），
+当前13张取得设备、3条等待；含接入/恢复阶段，逐条见[实际交接](../evidence/hb-v12-all-cards-handoff.json)。
+原4条保持运行；84063baf准备版未提交。新CPU硬件采样覆盖固定16个剩余作业。
+
+交接复核：新增share8-d192-q3-s11与share8-d128-q3-s22已通过受训状态精确恢复，
+从原科学父继续主训练并开始Lens记录；科学身份仍62e32602。当前6条处于主训练，
+其余已分配任务仍在接入/恢复或等待临时恢复名额，3条等待设备。账号约456.84GiB，
+新worker实际资源记录中的`account_limit_gib`均为800；完整证据见交接的`final_verification`。

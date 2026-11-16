@@ -16,6 +16,12 @@
   Never rerun obsolete controllers/waiters or failed
   scientific attempts automatically. Re-entry:
   `python scripts/review_hb_v12_six_card.py --policy all-cards`.
+  All12 descendants are submitted using orchestration711e96be at
+  `.local/source-hb-v12-all-cards`; the earlier84063baf preparation commit was
+  not submitted. Observed13 physical cards allocated and3 waiters; allocated
+  jobs include checks/recovery, not only formal training. See
+  `docs/evidence/hb-v12-all-cards-handoff.json`. Original38 now have22 completed
+  chain endpoints; remaining work and independent scientific review continue.
   The four/six-card instructions below are historical.
 
 - Latest user instruction reduces the current campaign further to FOUR physical
