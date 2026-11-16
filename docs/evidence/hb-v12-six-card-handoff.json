@@ -1,0 +1,1224 @@
+{
+  "active_physical_devices": [
+    4,
+    6,
+    9,
+    11,
+    12,
+    14
+  ],
+  "administrative_pauses": [
+    {
+      "at": "2026-11-16T09:00:22.824664+00:00",
+      "bytes": 2057937959,
+      "checkpoint": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v12-repair-base128-q3-s11/train/latest.pt",
+      "device": 7,
+      "identity": {
+        "config_sha256": "798b9a22488d2369f22066de8a283107f4e51938f788f416224f130a31c40d3a",
+        "data_lock_sha256": "40b7c0ebb9650d11aa0c0080532c884e2ca3846db578155f3df7068b82191d2f",
+        "device": "npu:0",
+        "dtype": "float32",
+        "installation": {
+          "foundation_commit": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+          "foundation_lock_sha256": "ba5464d7e23fe6b8c7453a52bfc7b961f040c92d0b80786c18132e40d90308b7",
+          "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+          "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+          "tidegraph": "0.3.0",
+          "tidegraph_source_sha256": "cfe2168a2c87565a568fb8944429b6b38401f92cf24972fba59c47b7592a7847",
+          "torch": "2.12.0+cpu",
+          "torch_npu": "2.12.0.post3",
+          "transformers": null
+        },
+        "mode": "train",
+        "source_commit": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+        "source_sha256": "f2d6a00e81f525fc341fa5f9cce227432b69600afda78cd511095f88e50a0740",
+        "threads": 2
+      },
+      "job": "v12-repair-base128-q3-s11",
+      "progress": {
+        "cursor": 153600,
+        "dropped_tail_tokens": 13074,
+        "milestones": [
+          8388608,
+          33554432
+        ],
+        "probe": false,
+        "step": 2400,
+        "tokens": 38372849
+      },
+      "raw_job_state": "failed",
+      "raw_stage_state": "budget_truncated",
+      "sha256": "2f3c5f7fdf71aae6b96f76ba461737c1b0933d78f15a0a912c1ea66bdda85d6f",
+      "state": "administratively_paused",
+      "termination_verified": true
+    },
+    {
+      "at": "2026-11-16T09:00:23.153600+00:00",
+      "bytes": 245619387,
+      "checkpoint": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v12-repair-fullshare8-q3-s22/train/latest.pt",
+      "device": 15,
+      "identity": {
+        "config_sha256": "03da1d18afd9bf5ca480b762bfb53bcce73bdcf17fa1ef57b7282e0966502deb",
+        "data_lock_sha256": "40b7c0ebb9650d11aa0c0080532c884e2ca3846db578155f3df7068b82191d2f",
+        "device": "npu:0",
+        "dtype": "float32",
+        "installation": {
+          "foundation_commit": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+          "foundation_lock_sha256": "ba5464d7e23fe6b8c7453a52bfc7b961f040c92d0b80786c18132e40d90308b7",
+          "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+          "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+          "tidegraph": "0.3.0",
+          "tidegraph_source_sha256": "cfe2168a2c87565a568fb8944429b6b38401f92cf24972fba59c47b7592a7847",
+          "torch": "2.12.0+cpu",
+          "torch_npu": "2.12.0.post3",
+          "transformers": null
+        },
+        "mode": "train",
+        "source_commit": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+        "source_sha256": "f2d6a00e81f525fc341fa5f9cce227432b69600afda78cd511095f88e50a0740",
+        "threads": 2
+      },
+      "job": "v12-repair-fullshare8-q3-s22",
+      "progress": {
+        "cursor": 241088,
+        "dropped_tail_tokens": 10522,
+        "milestones": [
+          8388608,
+          33554432
+        ],
+        "probe": false,
+        "step": 3767,
+        "tokens": 60253574
+      },
+      "raw_job_state": "failed",
+      "raw_stage_state": "budget_truncated",
+      "sha256": "93a6ceda560876697d1717fed8f17280126e5ecaf016bf79fab6f203173a6de6",
+      "state": "administratively_paused",
+      "termination_verified": true
+    },
+    {
+      "at": "2026-11-16T09:00:24.222897+00:00",
+      "bytes": 635785047,
+      "checkpoint": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v12-repair-readcontent-q3-s22/train/latest.pt",
+      "device": 2,
+      "identity": {
+        "config_sha256": "60c09b1f7e892202ffef8cf657f3d016a695792b7bd0e5f8ded8b95eac56fb12",
+        "data_lock_sha256": "40b7c0ebb9650d11aa0c0080532c884e2ca3846db578155f3df7068b82191d2f",
+        "device": "npu:0",
+        "dtype": "float32",
+        "installation": {
+          "foundation_commit": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+          "foundation_lock_sha256": "ba5464d7e23fe6b8c7453a52bfc7b961f040c92d0b80786c18132e40d90308b7",
+          "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+          "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+          "tidegraph": "0.3.0",
+          "tidegraph_source_sha256": "cfe2168a2c87565a568fb8944429b6b38401f92cf24972fba59c47b7592a7847",
+          "torch": "2.12.0+cpu",
+          "torch_npu": "2.12.0.post3",
+          "transformers": null
+        },
+        "mode": "train",
+        "source_commit": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+        "source_sha256": "f2d6a00e81f525fc341fa5f9cce227432b69600afda78cd511095f88e50a0740",
+        "threads": 2
+      },
+      "job": "v12-repair-readcontent-q3-s22",
+      "progress": {
+        "cursor": 87488,
+        "dropped_tail_tokens": 3917,
+        "milestones": [
+          8388608
+        ],
+        "probe": false,
+        "step": 1367,
+        "tokens": 21864368
+      },
+      "raw_job_state": "failed",
+      "raw_stage_state": "budget_truncated",
+      "sha256": "a00f800d5192417c1c18a16c7593fcf61d256b9bfb82dbc010276a52c78593c3",
+      "state": "administratively_paused",
+      "termination_verified": true
+    },
+    {
+      "at": "2026-11-16T09:00:25.185742+00:00",
+      "bytes": 604316391,
+      "checkpoint": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v12-repair-residual-q3-s11/train/latest.pt",
+      "device": 5,
+      "identity": {
+        "config_sha256": "d0ecc6431e84e06e4dbcb88c4a6e3e41a55606325ed1b1ccb39c1dbdf30d75e8",
+        "data_lock_sha256": "40b7c0ebb9650d11aa0c0080532c884e2ca3846db578155f3df7068b82191d2f",
+        "device": "npu:0",
+        "dtype": "float32",
+        "installation": {
+          "foundation_commit": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+          "foundation_lock_sha256": "ba5464d7e23fe6b8c7453a52bfc7b961f040c92d0b80786c18132e40d90308b7",
+          "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+          "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+          "tidegraph": "0.3.0",
+          "tidegraph_source_sha256": "cfe2168a2c87565a568fb8944429b6b38401f92cf24972fba59c47b7592a7847",
+          "torch": "2.12.0+cpu",
+          "torch_npu": "2.12.0.post3",
+          "transformers": null
+        },
+        "mode": "train",
+        "source_commit": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+        "source_sha256": "f2d6a00e81f525fc341fa5f9cce227432b69600afda78cd511095f88e50a0740",
+        "threads": 2
+      },
+      "job": "v12-repair-residual-q3-s11",
+      "progress": {
+        "cursor": 223744,
+        "dropped_tail_tokens": 13074,
+        "milestones": [
+          8388608,
+          33554432
+        ],
+        "probe": false,
+        "step": 3496,
+        "tokens": 55913808
+      },
+      "raw_job_state": "failed",
+      "raw_stage_state": "budget_truncated",
+      "sha256": "7e270acff8c14fefdcb896472a6e44f81c056e0cf9f1548cf355f306e6cc4d5e",
+      "state": "administratively_paused",
+      "termination_verified": true
+    },
+    {
+      "at": "2026-11-16T09:00:27.037000+00:00",
+      "bytes": 1227041883,
+      "checkpoint": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v12-repair-share8-d192-q3-s11/train/latest.pt",
+      "device": 0,
+      "identity": {
+        "config_sha256": "5058bdb16a06a91191e0d49b0eaa5ec1c09a06faa454f2c84648cfdd04e0976f",
+        "data_lock_sha256": "40b7c0ebb9650d11aa0c0080532c884e2ca3846db578155f3df7068b82191d2f",
+        "device": "npu:0",
+        "dtype": "float32",
+        "installation": {
+          "foundation_commit": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+          "foundation_lock_sha256": "ba5464d7e23fe6b8c7453a52bfc7b961f040c92d0b80786c18132e40d90308b7",
+          "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+          "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+          "tidegraph": "0.3.0",
+          "tidegraph_source_sha256": "cfe2168a2c87565a568fb8944429b6b38401f92cf24972fba59c47b7592a7847",
+          "torch": "2.12.0+cpu",
+          "torch_npu": "2.12.0.post3",
+          "transformers": null
+        },
+        "mode": "train",
+        "source_commit": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+        "source_sha256": "f2d6a00e81f525fc341fa5f9cce227432b69600afda78cd511095f88e50a0740",
+        "threads": 2
+      },
+      "job": "v12-repair-share8-d192-q3-s11",
+      "progress": {
+        "cursor": 234944,
+        "dropped_tail_tokens": 13074,
+        "milestones": [
+          8388608,
+          33554432
+        ],
+        "probe": false,
+        "step": 3671,
+        "tokens": 58713137
+      },
+      "raw_job_state": "failed",
+      "raw_stage_state": "budget_truncated",
+      "sha256": "65a8624f5aed6bc2ff38d1ebdfdcca9906f3548fa7ff84b51fc86429da5f0d2b",
+      "state": "administratively_paused",
+      "termination_verified": true
+    },
+    {
+      "at": "2026-11-16T09:00:28.295292+00:00",
+      "bytes": 1227041947,
+      "checkpoint": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v12-repair-share8-d192-q3-s22/train/latest.pt",
+      "device": 10,
+      "identity": {
+        "config_sha256": "8724af6080952101bda2e8d87785ec4a8b8c01fdd4a4389edb423bd4a9bf7582",
+        "data_lock_sha256": "40b7c0ebb9650d11aa0c0080532c884e2ca3846db578155f3df7068b82191d2f",
+        "device": "npu:0",
+        "dtype": "float32",
+        "installation": {
+          "foundation_commit": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+          "foundation_lock_sha256": "ba5464d7e23fe6b8c7453a52bfc7b961f040c92d0b80786c18132e40d90308b7",
+          "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+          "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+          "tidegraph": "0.3.0",
+          "tidegraph_source_sha256": "cfe2168a2c87565a568fb8944429b6b38401f92cf24972fba59c47b7592a7847",
+          "torch": "2.12.0+cpu",
+          "torch_npu": "2.12.0.post3",
+          "transformers": null
+        },
+        "mode": "train",
+        "source_commit": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+        "source_sha256": "f2d6a00e81f525fc341fa5f9cce227432b69600afda78cd511095f88e50a0740",
+        "threads": 2
+      },
+      "job": "v12-repair-share8-d192-q3-s22",
+      "progress": {
+        "cursor": 181952,
+        "dropped_tail_tokens": 10522,
+        "milestones": [
+          8388608,
+          33554432
+        ],
+        "probe": false,
+        "step": 2843,
+        "tokens": 45474655
+      },
+      "raw_job_state": "failed",
+      "raw_stage_state": "budget_truncated",
+      "sha256": "eaf8dc7b8eabe540cb65e66fa3356f64055e520907da45e1d6fb595f6119ab68",
+      "state": "administratively_paused",
+      "termination_verified": true
+    }
+  ],
+  "all_live_v12_npu_jobs": [
+    {
+      "job": "v12-six-base128-q3-s11",
+      "lifecycle": "waiting_resources",
+      "physical_device": null
+    },
+    {
+      "job": "v12-repair-base128-q3-s22",
+      "lifecycle": "running",
+      "physical_device": 12
+    },
+    {
+      "job": "v12-six-top2-q3-s11",
+      "lifecycle": "waiting_resources",
+      "physical_device": null
+    },
+    {
+      "job": "v12-six-readcontent-q3-s22",
+      "lifecycle": "waiting_resources",
+      "physical_device": null
+    },
+    {
+      "job": "v12-six-residual-q3-s11",
+      "lifecycle": "waiting_resources",
+      "physical_device": null
+    },
+    {
+      "job": "v12-six-untied-q3-s22",
+      "lifecycle": "waiting_resources",
+      "physical_device": null
+    },
+    {
+      "job": "v12-repair-share8-lr3-q3-s11",
+      "lifecycle": "running",
+      "physical_device": 4
+    },
+    {
+      "job": "v12-six-share8-d192-q3-s11",
+      "lifecycle": "waiting_resources",
+      "physical_device": null
+    },
+    {
+      "job": "v12-six-share0-q3-s11",
+      "lifecycle": "waiting_resources",
+      "physical_device": null
+    },
+    {
+      "job": "v12-repair-share8-d128-q3-s22",
+      "lifecycle": "running",
+      "physical_device": 6
+    },
+    {
+      "job": "v12-six-position-q3-s11",
+      "lifecycle": "waiting_resources",
+      "physical_device": null
+    },
+    {
+      "job": "v12-six-base-q10-s22",
+      "lifecycle": "waiting_resources",
+      "physical_device": null
+    },
+    {
+      "job": "v12-six-share8-d192-q3-s22",
+      "lifecycle": "waiting_resources",
+      "physical_device": null
+    },
+    {
+      "job": "v12-six-fullshare8-q3-s11",
+      "lifecycle": "waiting_resources",
+      "physical_device": null
+    },
+    {
+      "job": "v12-six-ports4-q3-s22",
+      "lifecycle": "waiting_resources",
+      "physical_device": null
+    },
+    {
+      "job": "v12-six-fullshare8-q3-s22",
+      "lifecycle": "waiting_resources",
+      "physical_device": null
+    },
+    {
+      "job": "v12-repair-share8-d128-q3-s11",
+      "lifecycle": "running",
+      "physical_device": 11
+    },
+    {
+      "job": "v12-six-readcontent-q3-s11",
+      "lifecycle": "waiting_resources",
+      "physical_device": null
+    },
+    {
+      "job": "v12-repair-residual-q3-s22",
+      "lifecycle": "running",
+      "physical_device": 14
+    },
+    {
+      "job": "v12-repair-share8-lr3-q3-s22",
+      "lifecycle": "running",
+      "physical_device": 9
+    }
+  ],
+  "allowed_devices": [
+    4,
+    6,
+    9,
+    11,
+    12,
+    14
+  ],
+  "counts": {
+    "running": 6,
+    "waiting_resources": 14
+  },
+  "deadline": "2026-11-19T23:08:07+08:00",
+  "disk": {
+    "bytes": 78798516224,
+    "entries": 6212,
+    "gib": 73.38683700561523,
+    "scope": "allocated bytes, hardlinks once, no symlink traversal; live observation, not atomic snapshot",
+    "vanished": 0
+  },
+  "final_verification": {
+    "active_physical_devices": [
+      4,
+      6,
+      9,
+      11,
+      12,
+      14
+    ],
+    "at": "2026-11-16T09:08:01.781233+00:00",
+    "checks": {
+      "render_check": "passed",
+      "research_map_tests": 14,
+      "six_card_control_tests": 3
+    },
+    "counts": {
+      "running": 6,
+      "waiting_resources": 14
+    },
+    "disk": {
+      "bytes": 78799192064,
+      "entries": 6222,
+      "gib": 73.38746643066406,
+      "scope": "allocated bytes, hardlinks once, no symlink traversal; live observation, not atomic snapshot",
+      "vanished": 0
+    },
+    "hardware": {
+      "active_devices": [
+        12,
+        14,
+        11,
+        6,
+        4,
+        9
+      ],
+      "last_at": "2026-11-16T09:07:23.690870+00:00",
+      "samples": 18,
+      "scope": "board/chip AICore,AIVector,AICPU,HBM; shared occupants may contribute;60s samples miss short bursts",
+      "started_at": "2026-11-16T09:05:09.788577+00:00",
+      "state": "running"
+    },
+    "quota": {
+      "file_grace_expires_epoch": 0,
+      "file_hard": 0,
+      "file_soft": 0,
+      "files": 1634339,
+      "filesystem": "/dev/mapper/ascend_data-data",
+      "grace_expires_epoch": 1795294591,
+      "hard_gib": 800.0,
+      "hard_quota_headroom_gib": 351.2291450500488,
+      "query_returncode": 1,
+      "soft_exceeded": true,
+      "soft_gib": 300.0,
+      "used_gib": 448.7708549499512
+    },
+    "within_six_card_limit": true
+  },
+  "hardware_job": {
+    "log": "runs/v12-six-hardware/observations.jsonl",
+    "record": "artifacts/jobs/v12-six-hardware/job.json"
+  },
+  "jobs": [
+    {
+      "error": null,
+      "job": "v12-repair-base128-q3-s22",
+      "lens": "recording",
+      "lifecycle": "running",
+      "mode": "retained",
+      "physical_device": 12,
+      "recovery": "passed",
+      "saved_tokens": 87991401,
+      "stage": "train",
+      "stage_state": "running",
+      "termination_verified": false,
+      "tokens": 91751893
+    },
+    {
+      "error": null,
+      "job": "v12-repair-residual-q3-s22",
+      "lens": "recording",
+      "lifecycle": "running",
+      "mode": "retained",
+      "physical_device": 14,
+      "recovery": "passed",
+      "saved_tokens": 72051683,
+      "stage": "train",
+      "stage_state": "running",
+      "termination_verified": false,
+      "tokens": 72051683
+    },
+    {
+      "error": null,
+      "job": "v12-repair-share8-d128-q3-s11",
+      "lens": null,
+      "lifecycle": "running",
+      "mode": "retained",
+      "physical_device": 11,
+      "recovery": "passed",
+      "saved_tokens": null,
+      "stage": "train",
+      "stage_state": null,
+      "termination_verified": false,
+      "tokens": null
+    },
+    {
+      "error": null,
+      "job": "v12-repair-share8-d128-q3-s22",
+      "lens": "recording",
+      "lifecycle": "running",
+      "mode": "retained",
+      "physical_device": 6,
+      "recovery": "passed",
+      "saved_tokens": 66278902,
+      "stage": "train",
+      "stage_state": "running",
+      "termination_verified": false,
+      "tokens": 71268833
+    },
+    {
+      "error": null,
+      "job": "v12-repair-share8-lr3-q3-s11",
+      "lens": "recording",
+      "lifecycle": "running",
+      "mode": "retained",
+      "physical_device": 4,
+      "recovery": "passed",
+      "saved_tokens": 79065809,
+      "stage": "train",
+      "stage_state": "running",
+      "termination_verified": false,
+      "tokens": 80185938
+    },
+    {
+      "error": null,
+      "job": "v12-repair-share8-lr3-q3-s22",
+      "lens": "recording",
+      "lifecycle": "running",
+      "mode": "retained",
+      "physical_device": 9,
+      "recovery": "passed",
+      "saved_tokens": 75335060,
+      "stage": "train",
+      "stage_state": "running",
+      "termination_verified": false,
+      "tokens": 76263249
+    },
+    {
+      "error": null,
+      "job": "v12-six-base-q10-s22",
+      "lens": null,
+      "lifecycle": "waiting_resources",
+      "mode": "requeue_unstarted",
+      "physical_device": null,
+      "recovery": null,
+      "saved_tokens": null,
+      "stage": null,
+      "stage_state": null,
+      "termination_verified": false,
+      "tokens": null
+    },
+    {
+      "error": null,
+      "job": "v12-six-base128-q3-s11",
+      "lens": null,
+      "lifecycle": "waiting_resources",
+      "mode": "resume_train",
+      "physical_device": null,
+      "recovery": null,
+      "saved_tokens": null,
+      "stage": null,
+      "stage_state": null,
+      "termination_verified": false,
+      "tokens": null
+    },
+    {
+      "error": null,
+      "job": "v12-six-fullshare8-q3-s11",
+      "lens": null,
+      "lifecycle": "waiting_resources",
+      "mode": "requeue_unstarted",
+      "physical_device": null,
+      "recovery": null,
+      "saved_tokens": null,
+      "stage": null,
+      "stage_state": null,
+      "termination_verified": false,
+      "tokens": null
+    },
+    {
+      "error": null,
+      "job": "v12-six-fullshare8-q3-s22",
+      "lens": null,
+      "lifecycle": "waiting_resources",
+      "mode": "resume_train",
+      "physical_device": null,
+      "recovery": null,
+      "saved_tokens": null,
+      "stage": null,
+      "stage_state": null,
+      "termination_verified": false,
+      "tokens": null
+    },
+    {
+      "error": null,
+      "job": "v12-six-ports4-q3-s22",
+      "lens": null,
+      "lifecycle": "waiting_resources",
+      "mode": "requeue_unstarted",
+      "physical_device": null,
+      "recovery": null,
+      "saved_tokens": null,
+      "stage": null,
+      "stage_state": null,
+      "termination_verified": false,
+      "tokens": null
+    },
+    {
+      "error": null,
+      "job": "v12-six-position-q3-s11",
+      "lens": null,
+      "lifecycle": "waiting_resources",
+      "mode": "requeue_unstarted",
+      "physical_device": null,
+      "recovery": null,
+      "saved_tokens": null,
+      "stage": null,
+      "stage_state": null,
+      "termination_verified": false,
+      "tokens": null
+    },
+    {
+      "error": null,
+      "job": "v12-six-readcontent-q3-s11",
+      "lens": null,
+      "lifecycle": "waiting_resources",
+      "mode": "requeue_unstarted",
+      "physical_device": null,
+      "recovery": null,
+      "saved_tokens": null,
+      "stage": null,
+      "stage_state": null,
+      "termination_verified": false,
+      "tokens": null
+    },
+    {
+      "error": null,
+      "job": "v12-six-readcontent-q3-s22",
+      "lens": null,
+      "lifecycle": "waiting_resources",
+      "mode": "resume_train",
+      "physical_device": null,
+      "recovery": null,
+      "saved_tokens": null,
+      "stage": null,
+      "stage_state": null,
+      "termination_verified": false,
+      "tokens": null
+    },
+    {
+      "error": null,
+      "job": "v12-six-residual-q3-s11",
+      "lens": null,
+      "lifecycle": "waiting_resources",
+      "mode": "resume_train",
+      "physical_device": null,
+      "recovery": null,
+      "saved_tokens": null,
+      "stage": null,
+      "stage_state": null,
+      "termination_verified": false,
+      "tokens": null
+    },
+    {
+      "error": null,
+      "job": "v12-six-share0-q3-s11",
+      "lens": null,
+      "lifecycle": "waiting_resources",
+      "mode": "requeue_unstarted",
+      "physical_device": null,
+      "recovery": null,
+      "saved_tokens": null,
+      "stage": null,
+      "stage_state": null,
+      "termination_verified": false,
+      "tokens": null
+    },
+    {
+      "error": null,
+      "job": "v12-six-share8-d192-q3-s11",
+      "lens": null,
+      "lifecycle": "waiting_resources",
+      "mode": "resume_train",
+      "physical_device": null,
+      "recovery": null,
+      "saved_tokens": null,
+      "stage": null,
+      "stage_state": null,
+      "termination_verified": false,
+      "tokens": null
+    },
+    {
+      "error": null,
+      "job": "v12-six-share8-d192-q3-s22",
+      "lens": null,
+      "lifecycle": "waiting_resources",
+      "mode": "resume_train",
+      "physical_device": null,
+      "recovery": null,
+      "saved_tokens": null,
+      "stage": null,
+      "stage_state": null,
+      "termination_verified": false,
+      "tokens": null
+    },
+    {
+      "error": null,
+      "job": "v12-six-top2-q3-s11",
+      "lens": null,
+      "lifecycle": "waiting_resources",
+      "mode": "requeue_unstarted",
+      "physical_device": null,
+      "recovery": null,
+      "saved_tokens": null,
+      "stage": null,
+      "stage_state": null,
+      "termination_verified": false,
+      "tokens": null
+    },
+    {
+      "error": null,
+      "job": "v12-six-untied-q3-s22",
+      "lens": null,
+      "lifecycle": "waiting_resources",
+      "mode": "requeue_unstarted",
+      "physical_device": null,
+      "recovery": null,
+      "saved_tokens": null,
+      "stage": null,
+      "stage_state": null,
+      "termination_verified": false,
+      "tokens": null
+    }
+  ],
+  "model_source": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+  "notes": [
+    "NPU/CPU local qualification reviewed; whole-model strict finite mismatches remain.",
+    "Six original services retain their earlier fixed deadline; measured remaining durations fit it. New descendants use extended deadline.",
+    "Six administrative parents decoded with optimizer, progress and SHA verified; actual-card 2-vs1+1 recovery is queued, not passed yet."
+  ],
+  "observed_at": "2026-11-16T09:05:10.192937+00:00",
+  "orchestration_source": "a9a63245977df487bed91eb53cc8ad7f8ef8e21d",
+  "qualification": [
+    {
+      "allocator_time_ratio": 1.5765749243037628,
+      "axes": {
+        "execution": "passed",
+        "full_model_recovery": "required_per_chain",
+        "learning": "unchecked",
+        "local_strict_numerical": "passed",
+        "witness_discrete_and_vjp": "passed"
+      },
+      "device": "cpu",
+      "lens": {
+        "readback_matches": true,
+        "status": "verified"
+      },
+      "original_feasibility_threshold": 2e-05,
+      "record": "runs/v12-repair-qualification-cpu/result.json",
+      "rows": [
+        {
+          "centered": false,
+          "forward": {
+            "atol": 1e-06,
+            "elements": 64,
+            "failed_elements": 0,
+            "max_abs": 2.609024107869118e-14,
+            "relative_l2": 2.3336047475151083e-14,
+            "rtol": 1e-05,
+            "state": "passed"
+          },
+          "interior_mask_equal": true,
+          "max_residual": 0.0,
+          "nonzero_values": [
+            0.5000242590904236,
+            0.9999757409095764
+          ],
+          "vjp": {
+            "budget": {
+              "atol": 1e-06,
+              "elements": 1,
+              "failed_elements": 0,
+              "max_abs": 0.0,
+              "relative_l2": 0.0,
+              "rtol": 1e-05,
+              "state": "passed"
+            },
+            "cap": {
+              "atol": 1e-06,
+              "elements": 64,
+              "failed_elements": 0,
+              "max_abs": 0.0,
+              "relative_l2": 0.0,
+              "rtol": 1e-05,
+              "state": "passed"
+            },
+            "score": {
+              "atol": 1e-06,
+              "elements": 64,
+              "failed_elements": 0,
+              "max_abs": 0.0,
+              "relative_l2": 0.0,
+              "rtol": 1e-05,
+              "state": "passed"
+            }
+          }
+        },
+        {
+          "centered": true,
+          "forward": {
+            "atol": 1e-06,
+            "elements": 64,
+            "failed_elements": 0,
+            "max_abs": 2.609024107869118e-14,
+            "relative_l2": 2.3336047475151083e-14,
+            "rtol": 1e-05,
+            "state": "passed"
+          },
+          "interior_mask_equal": true,
+          "max_residual": 0.0,
+          "nonzero_values": [
+            0.5000242590904236,
+            0.9999757409095764
+          ],
+          "vjp": {
+            "budget": {
+              "atol": 1e-06,
+              "elements": 1,
+              "failed_elements": 0,
+              "max_abs": 0.0,
+              "relative_l2": 0.0,
+              "rtol": 1e-05,
+              "state": "passed"
+            },
+            "cap": {
+              "atol": 1e-06,
+              "elements": 64,
+              "failed_elements": 0,
+              "max_abs": 0.0,
+              "relative_l2": 0.0,
+              "rtol": 1e-05,
+              "state": "passed"
+            },
+            "score": {
+              "atol": 1e-06,
+              "elements": 64,
+              "failed_elements": 0,
+              "max_abs": 0.0,
+              "relative_l2": 0.0,
+              "rtol": 1e-05,
+              "state": "passed"
+            }
+          }
+        }
+      ],
+      "scope": "Captured row, independent scalar CPU FP64 roots, exact witness VJP, finite bounded stress and allocator-only timing; full-model recovery/learning separate.",
+      "sha256": "638ecfde3a56bc55dfe2768a72e5aa0fee9c9789b538d7b6be886f0cae6a8345",
+      "source": "555a68637ded4fb83ef5a8aa1c768fdab78545c1",
+      "state": "completed"
+    },
+    {
+      "allocator_time_ratio": 1.2744961060721878,
+      "axes": {
+        "execution": "passed",
+        "full_model_recovery": "required_per_chain",
+        "learning": "unchecked",
+        "local_strict_numerical": "passed",
+        "witness_discrete_and_vjp": "passed"
+      },
+      "device": "npu",
+      "lens": {
+        "readback_matches": true,
+        "status": "verified"
+      },
+      "original_feasibility_threshold": 2e-05,
+      "record": "runs/v12-repair-qualification-npu/result.json",
+      "rows": [
+        {
+          "centered": false,
+          "forward": {
+            "atol": 1e-06,
+            "elements": 64,
+            "failed_elements": 0,
+            "max_abs": 2.609024107869118e-14,
+            "relative_l2": 2.3336047475151083e-14,
+            "rtol": 1e-05,
+            "state": "passed"
+          },
+          "interior_mask_equal": true,
+          "max_residual": 0.0,
+          "nonzero_values": [
+            0.5000242590904236,
+            0.9999757409095764
+          ],
+          "vjp": {
+            "budget": {
+              "atol": 1e-06,
+              "elements": 1,
+              "failed_elements": 0,
+              "max_abs": 0.0,
+              "relative_l2": 0.0,
+              "rtol": 1e-05,
+              "state": "passed"
+            },
+            "cap": {
+              "atol": 1e-06,
+              "elements": 64,
+              "failed_elements": 0,
+              "max_abs": 0.0,
+              "relative_l2": 0.0,
+              "rtol": 1e-05,
+              "state": "passed"
+            },
+            "score": {
+              "atol": 1e-06,
+              "elements": 64,
+              "failed_elements": 0,
+              "max_abs": 0.0,
+              "relative_l2": 0.0,
+              "rtol": 1e-05,
+              "state": "passed"
+            }
+          }
+        },
+        {
+          "centered": true,
+          "forward": {
+            "atol": 1e-06,
+            "elements": 64,
+            "failed_elements": 0,
+            "max_abs": 2.609024107869118e-14,
+            "relative_l2": 2.3336047475151083e-14,
+            "rtol": 1e-05,
+            "state": "passed"
+          },
+          "interior_mask_equal": true,
+          "max_residual": 0.0,
+          "nonzero_values": [
+            0.5000242590904236,
+            0.9999757409095764
+          ],
+          "vjp": {
+            "budget": {
+              "atol": 1e-06,
+              "elements": 1,
+              "failed_elements": 0,
+              "max_abs": 0.0,
+              "relative_l2": 0.0,
+              "rtol": 1e-05,
+              "state": "passed"
+            },
+            "cap": {
+              "atol": 1e-06,
+              "elements": 64,
+              "failed_elements": 0,
+              "max_abs": 0.0,
+              "relative_l2": 0.0,
+              "rtol": 1e-05,
+              "state": "passed"
+            },
+            "score": {
+              "atol": 1e-06,
+              "elements": 64,
+              "failed_elements": 0,
+              "max_abs": 0.0,
+              "relative_l2": 0.0,
+              "rtol": 1e-05,
+              "state": "passed"
+            }
+          }
+        }
+      ],
+      "scope": "Captured row, independent scalar CPU FP64 roots, exact witness VJP, finite bounded stress and allocator-only timing; full-model recovery/learning separate.",
+      "sha256": "e92349f4c99215035984090ff9f56a907b5b1c34a13c536fb3a7e96c6a624014",
+      "source": "555a68637ded4fb83ef5a8aa1c768fdab78545c1",
+      "state": "completed"
+    }
+  ],
+  "quota": {
+    "file_grace_expires_epoch": 0,
+    "file_hard": 0,
+    "file_soft": 0,
+    "files": 1634327,
+    "filesystem": "/dev/mapper/ascend_data-data",
+    "grace_expires_epoch": 1795294591,
+    "hard_gib": 800.0,
+    "hard_quota_headroom_gib": 351.23080825805664,
+    "query_returncode": 1,
+    "soft_exceeded": true,
+    "soft_gib": 300.0,
+    "used_gib": 448.76919174194336
+  },
+  "schema": "tide-hb-v12-six-card-review-v1",
+  "scope": "Administrative pauses retain raw budget_truncated/outer failed records; not new numerical failures. Scientific source62 unchanged; recovery/quality separately reviewed.",
+  "submission_checks": [
+    {
+      "job": "v12-repair-base128-q3-s22",
+      "lifecycle": "running",
+      "queue_policy_verified": false,
+      "slice": "background.slice",
+      "source": {
+        "commit": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2",
+        "tree_sha256": "f2d6a00e81f525fc341fa5f9cce227432b69600afda78cd511095f88e50a0740"
+      }
+    },
+    {
+      "job": "v12-repair-residual-q3-s22",
+      "lifecycle": "running",
+      "queue_policy_verified": false,
+      "slice": "background.slice",
+      "source": {
+        "commit": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2",
+        "tree_sha256": "f2d6a00e81f525fc341fa5f9cce227432b69600afda78cd511095f88e50a0740"
+      }
+    },
+    {
+      "job": "v12-repair-share8-d128-q3-s11",
+      "lifecycle": "running",
+      "queue_policy_verified": false,
+      "slice": "background.slice",
+      "source": {
+        "commit": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2",
+        "tree_sha256": "f2d6a00e81f525fc341fa5f9cce227432b69600afda78cd511095f88e50a0740"
+      }
+    },
+    {
+      "job": "v12-repair-share8-d128-q3-s22",
+      "lifecycle": "running",
+      "queue_policy_verified": false,
+      "slice": "background.slice",
+      "source": {
+        "commit": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2",
+        "tree_sha256": "f2d6a00e81f525fc341fa5f9cce227432b69600afda78cd511095f88e50a0740"
+      }
+    },
+    {
+      "job": "v12-repair-share8-lr3-q3-s11",
+      "lifecycle": "running",
+      "queue_policy_verified": false,
+      "slice": "background.slice",
+      "source": {
+        "commit": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2",
+        "tree_sha256": "f2d6a00e81f525fc341fa5f9cce227432b69600afda78cd511095f88e50a0740"
+      }
+    },
+    {
+      "job": "v12-repair-share8-lr3-q3-s22",
+      "lifecycle": "running",
+      "queue_policy_verified": false,
+      "slice": "background.slice",
+      "source": {
+        "commit": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2",
+        "tree_sha256": "f2d6a00e81f525fc341fa5f9cce227432b69600afda78cd511095f88e50a0740"
+      }
+    },
+    {
+      "job": "v12-six-base-q10-s22",
+      "lifecycle": "waiting_resources",
+      "queue_policy_verified": true,
+      "slice": "background.slice",
+      "source": {
+        "commit": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2",
+        "tree_sha256": "f2d6a00e81f525fc341fa5f9cce227432b69600afda78cd511095f88e50a0740"
+      }
+    },
+    {
+      "job": "v12-six-base128-q3-s11",
+      "lifecycle": "waiting_resources",
+      "queue_policy_verified": true,
+      "slice": "background.slice",
+      "source": {
+        "commit": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2",
+        "tree_sha256": "f2d6a00e81f525fc341fa5f9cce227432b69600afda78cd511095f88e50a0740"
+      }
+    },
+    {
+      "job": "v12-six-fullshare8-q3-s11",
+      "lifecycle": "waiting_resources",
+      "queue_policy_verified": true,
+      "slice": "background.slice",
+      "source": {
+        "commit": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2",
+        "tree_sha256": "f2d6a00e81f525fc341fa5f9cce227432b69600afda78cd511095f88e50a0740"
+      }
+    },
+    {
+      "job": "v12-six-fullshare8-q3-s22",
+      "lifecycle": "waiting_resources",
+      "queue_policy_verified": true,
+      "slice": "background.slice",
+      "source": {
+        "commit": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2",
+        "tree_sha256": "f2d6a00e81f525fc341fa5f9cce227432b69600afda78cd511095f88e50a0740"
+      }
+    },
+    {
+      "job": "v12-six-ports4-q3-s22",
+      "lifecycle": "waiting_resources",
+      "queue_policy_verified": true,
+      "slice": "background.slice",
+      "source": {
+        "commit": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2",
+        "tree_sha256": "f2d6a00e81f525fc341fa5f9cce227432b69600afda78cd511095f88e50a0740"
+      }
+    },
+    {
+      "job": "v12-six-position-q3-s11",
+      "lifecycle": "waiting_resources",
+      "queue_policy_verified": true,
+      "slice": "background.slice",
+      "source": {
+        "commit": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2",
+        "tree_sha256": "f2d6a00e81f525fc341fa5f9cce227432b69600afda78cd511095f88e50a0740"
+      }
+    },
+    {
+      "job": "v12-six-readcontent-q3-s11",
+      "lifecycle": "waiting_resources",
+      "queue_policy_verified": true,
+      "slice": "background.slice",
+      "source": {
+        "commit": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2",
+        "tree_sha256": "f2d6a00e81f525fc341fa5f9cce227432b69600afda78cd511095f88e50a0740"
+      }
+    },
+    {
+      "job": "v12-six-readcontent-q3-s22",
+      "lifecycle": "waiting_resources",
+      "queue_policy_verified": true,
+      "slice": "background.slice",
+      "source": {
+        "commit": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2",
+        "tree_sha256": "f2d6a00e81f525fc341fa5f9cce227432b69600afda78cd511095f88e50a0740"
+      }
+    },
+    {
+      "job": "v12-six-residual-q3-s11",
+      "lifecycle": "waiting_resources",
+      "queue_policy_verified": true,
+      "slice": "background.slice",
+      "source": {
+        "commit": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2",
+        "tree_sha256": "f2d6a00e81f525fc341fa5f9cce227432b69600afda78cd511095f88e50a0740"
+      }
+    },
+    {
+      "job": "v12-six-share0-q3-s11",
+      "lifecycle": "waiting_resources",
+      "queue_policy_verified": true,
+      "slice": "background.slice",
+      "source": {
+        "commit": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2",
+        "tree_sha256": "f2d6a00e81f525fc341fa5f9cce227432b69600afda78cd511095f88e50a0740"
+      }
+    },
+    {
+      "job": "v12-six-share8-d192-q3-s11",
+      "lifecycle": "waiting_resources",
+      "queue_policy_verified": true,
+      "slice": "background.slice",
+      "source": {
+        "commit": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2",
+        "tree_sha256": "f2d6a00e81f525fc341fa5f9cce227432b69600afda78cd511095f88e50a0740"
+      }
+    },
+    {
+      "job": "v12-six-share8-d192-q3-s22",
+      "lifecycle": "waiting_resources",
+      "queue_policy_verified": true,
+      "slice": "background.slice",
+      "source": {
+        "commit": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2",
+        "tree_sha256": "f2d6a00e81f525fc341fa5f9cce227432b69600afda78cd511095f88e50a0740"
+      }
+    },
+    {
+      "job": "v12-six-top2-q3-s11",
+      "lifecycle": "waiting_resources",
+      "queue_policy_verified": true,
+      "slice": "background.slice",
+      "source": {
+        "commit": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2",
+        "tree_sha256": "f2d6a00e81f525fc341fa5f9cce227432b69600afda78cd511095f88e50a0740"
+      }
+    },
+    {
+      "job": "v12-six-untied-q3-s22",
+      "lifecycle": "waiting_resources",
+      "queue_policy_verified": true,
+      "slice": "background.slice",
+      "source": {
+        "commit": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2",
+        "tree_sha256": "f2d6a00e81f525fc341fa5f9cce227432b69600afda78cd511095f88e50a0740"
+      }
+    }
+  ],
+  "submissions_state": "submitted",
+  "within_six_card_limit": true
+}

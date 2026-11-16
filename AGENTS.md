@@ -13,7 +13,10 @@
   old12-slot controller. Inspect `scripts/review_hb_v12_six_card.py` for live state.
 - V12 repair qualification is now completed on CPU and NPU with Lens readback;
   eight repair chains have completed, six are retained running, and fourteen
-  administrative descendants are being prepared. The queued-qualification notes
+  administrative descendants are submitted and waiting for those six cards.
+  Orchestration sourcea9a63245 is a separate frozen input; model source62e32602
+  stays unchanged. See `docs/evidence/hb-v12-six-card-handoff.json`.
+  The queued-qualification notes
   below are historical. Full comparison quality remains awaiting scoped review.
 
 - The 2026-11-16 user instruction authorizes the bounded v12 repair in
