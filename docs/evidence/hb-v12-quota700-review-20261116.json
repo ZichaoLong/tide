@@ -21,7 +21,8 @@
     "available_gib": 81.28730010986328,
     "public_assets_scope": "ascend existing public snapshot, not a fresh full scan",
     "public_assets_snapshot_gib": 1072,
-    "total_gib": 5410121490432
+    "total_bytes": 5410121490432,
+    "total_gib": 5038.56827545166
   },
   "jobs": [
     {
@@ -163,6 +164,7 @@
     "soft_gib": 300.0,
     "used_gib": 460.7041931152344
   },
+  "record_correction": "Corrected total_gib field from byte count to GiB; original raw byte count retained as total_bytes. Observed free space, quota and risk assessment unchanged.",
   "remaining_peak_estimate_gib": 20.180578495375812,
   "schema": "tide-v12-quota700-review-v1",
   "sources": [

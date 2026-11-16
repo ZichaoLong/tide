@@ -1,0 +1,23 @@
+{
+  "account_hard_gib": 700,
+  "account_used_gib": 460.7032470703125,
+  "at": "2026-11-16T23:20:29.725354+08:00",
+  "basis": "Current16 remaining jobs and their exact parent file sizes, existing final/prefix files, and previous model tensor inventory; docs/evidence/hb-v12-filesystem-risk-20261116.json",
+  "campaign_gib": 85.12332153320312,
+  "estimate": {
+    "all_latest_atomic_overlap_gib": 10.422854593023658,
+    "conservative_additional_peak_gib": 20.180578495375812,
+    "existing_prefix_retirement_gib": 3.107021100819111,
+    "logs_serialization_allowance_gib": 2,
+    "net_new_checkpoint_and_weight_gib": 1.0627326117828488,
+    "new_final_checkpoint_and_weight_gib": 4.16975371260196,
+    "queued_migration_prefix_gib": 0.8909888900816441,
+    "queued_recovery_with_gradients_gib": 2.6969812996685505,
+    "recommended_remaining_workspace_gib": 25
+  },
+  "filesystem_available_gib": 92.58865356445312,
+  "running": 13,
+  "schema": "tide-v12-remaining-storage-review-v1",
+  "scope": "Whole currently authorized remaining batch; additional to existing usage. Successful planned prefix retirement only, not new deletion authority. Normal planned outputs, no guarantee for abnormal dumps, other workloads or external writers. No job changes.",
+  "waiting": 3
+}
