@@ -1,0 +1,768 @@
+{
+  "assessment": {
+    "actions": "Read-only inspection of jobs/artifacts; only review documentation written. No stop, resume, deletion, scientific change, frozen-input edit or external watchdog installed.",
+    "cause_attribution": "Most sampled filesystem growth is outside this campaign and account quota growth; writers not identified. Do not extrapolate short-window decline into a time-to-full prediction.",
+    "current_v12_errors": [],
+    "own_planned_writes_fit_observed_free": true,
+    "quota_headroom_is_not_filesystem_reservation": true,
+    "recommendation": "Independent filesystem f_bavail monitor and checkpoint-aware low-water shutdown; cleanup/migration requires concrete safe candidates. No promise of safety until shared growth is bounded.",
+    "shared_filesystem_risk": "elevated:99percent use, observed free-space decline, no filesystem-wide guard in frozen workers"
+  },
+  "at": "2026-11-16T23:00:59.391179+08:00",
+  "campaign": {
+    "bytes": 91398819840,
+    "entries": 7386,
+    "gib": 85.12178421020508,
+    "scope": "allocated bytes, hardlinks once, no symlink traversal; live observation, not atomic snapshot",
+    "vanished": 0
+  },
+  "estimate": {
+    "conservative_additional_peak_gib": 20.180578495375812,
+    "existing_prefix_retirement_not_credited_gib": 3.107021100819111,
+    "full_checkpoint_atomic_overlap_gib": 10.422854593023658,
+    "missing_final_latest_gib": 0.6742453249171376,
+    "queued_migration_and_prefix_gib": 0.8909888900816441,
+    "queued_three_recovery_states_with_gradient_allowance_gib": 2.6969812996685505,
+    "remaining_128Mi_weights_tensor_gib": 3.495508387684822,
+    "scope": "Planning envelope, not a guaranteed bound: intentionally sums mutually exclusive phases and simultaneous latest.pt.tmp writes; includes no external growth, unexpected core dumps or new workloads. All current chains passed32Mi, so only128Mi future weights remain. Recovery probes may include last_gradients in addition to optimizer; parent-file-only3x estimate understates them.",
+    "serialization_metadata_logs_allowance_gib": 2
+  },
+  "filesystem": {
+    "available_bytes": 77105545216,
+    "device": "/dev/mapper/ascend_data-data",
+    "free_bytes_including_reserved": 99112509440,
+    "inodes_free": 323336206,
+    "inodes_total": 335544320,
+    "models_same_filesystem": true,
+    "mount": "/mi/data2T",
+    "total_bytes": 5410121490432,
+    "type": "ext4"
+  },
+  "job_review": {
+    "active_physical_devices": [
+      0,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      14
+    ],
+    "administrative_pauses": [],
+    "all_live_v12_npu_jobs": [
+      {
+        "job": "v12-all-share8-d128-q3-s11",
+        "lifecycle": "running",
+        "physical_device": 7
+      },
+      {
+        "job": "v12-all-ports4-q3-s22",
+        "lifecycle": "running",
+        "physical_device": 6
+      },
+      {
+        "job": "v12-all-readcontent-q3-s11",
+        "lifecycle": "running",
+        "physical_device": 10
+      },
+      {
+        "job": "v12-all-share0-q3-s11",
+        "lifecycle": "waiting_resources",
+        "physical_device": null
+      },
+      {
+        "job": "v12-all-residual-q3-s11",
+        "lifecycle": "running",
+        "physical_device": 2
+      },
+      {
+        "job": "v12-all-fullshare8-q3-s11",
+        "lifecycle": "waiting_resources",
+        "physical_device": null
+      },
+      {
+        "job": "v12-all-base-q10-s22",
+        "lifecycle": "running",
+        "physical_device": 3
+      },
+      {
+        "job": "v12-four-readcontent-q3-s22",
+        "lifecycle": "running",
+        "physical_device": 4
+      },
+      {
+        "job": "v12-all-share8-d192-q3-s11",
+        "lifecycle": "running",
+        "physical_device": 11
+      },
+      {
+        "job": "v12-all-fullshare8-q3-s22",
+        "lifecycle": "waiting_resources",
+        "physical_device": null
+      },
+      {
+        "job": "v12-four-position-q3-s11",
+        "lifecycle": "running",
+        "physical_device": 14
+      },
+      {
+        "job": "v12-all-untied-q3-s22",
+        "lifecycle": "running",
+        "physical_device": 0
+      },
+      {
+        "job": "v12-four-base128-q3-s11",
+        "lifecycle": "running",
+        "physical_device": 12
+      },
+      {
+        "job": "v12-all-top2-q3-s11",
+        "lifecycle": "running",
+        "physical_device": 8
+      },
+      {
+        "job": "v12-four-share8-d192-q3-s22",
+        "lifecycle": "running",
+        "physical_device": 9
+      },
+      {
+        "job": "v12-all-share8-d128-q3-s22",
+        "lifecycle": "running",
+        "physical_device": 5
+      }
+    ],
+    "allowed_devices": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15
+    ],
+    "card_limit": 16,
+    "counts": {
+      "running": 13,
+      "waiting_resources": 3
+    },
+    "deadline": "2026-11-19T23:08:07+08:00",
+    "jobs": [
+      {
+        "error": null,
+        "job": "v12-four-base128-q3-s11",
+        "lens": "recording",
+        "lifecycle": "running",
+        "mode": "retained",
+        "physical_device": 12,
+        "preparation_admission": null,
+        "recovery": "passed",
+        "saved_tokens": 54540496,
+        "stage": "train",
+        "stage_state": "running",
+        "termination_verified": false,
+        "tokens": 58155290
+      },
+      {
+        "error": null,
+        "job": "v12-four-position-q3-s11",
+        "lens": "recording",
+        "lifecycle": "running",
+        "mode": "retained",
+        "physical_device": 14,
+        "preparation_admission": null,
+        "recovery": "passed",
+        "saved_tokens": 113203305,
+        "stage": "train",
+        "stage_state": "running",
+        "termination_verified": false,
+        "tokens": 118815081
+      },
+      {
+        "error": null,
+        "job": "v12-four-readcontent-q3-s22",
+        "lens": "recording",
+        "lifecycle": "running",
+        "mode": "retained",
+        "physical_device": 4,
+        "preparation_admission": null,
+        "recovery": "passed",
+        "saved_tokens": 74070676,
+        "stage": "train",
+        "stage_state": "running",
+        "termination_verified": false,
+        "tokens": 79302877
+      },
+      {
+        "error": null,
+        "job": "v12-four-share8-d192-q3-s22",
+        "lens": "recording",
+        "lifecycle": "running",
+        "mode": "retained",
+        "physical_device": 9,
+        "preparation_admission": null,
+        "recovery": "passed",
+        "saved_tokens": 52913853,
+        "stage": "train",
+        "stage_state": "running",
+        "termination_verified": false,
+        "tokens": 53089108
+      },
+      {
+        "error": null,
+        "job": "v12-all-share8-d192-q3-s11",
+        "lens": "recording",
+        "lifecycle": "running",
+        "mode": "resume_train",
+        "physical_device": 11,
+        "preparation_admission": {
+          "admitted_at": "2026-11-16T14:16:14.956557+00:00",
+          "released_at": "2026-11-16T14:18:27.589565+00:00",
+          "slot": 0,
+          "slots": 2,
+          "started_at": "2026-11-16T14:16:14.914612+00:00",
+          "state": "released"
+        },
+        "recovery": "passed",
+        "saved_tokens": 62553203,
+        "stage": "train",
+        "stage_state": "running",
+        "termination_verified": false,
+        "tokens": 63544319
+      },
+      {
+        "error": null,
+        "job": "v12-all-share8-d128-q3-s22",
+        "lens": "recording",
+        "lifecycle": "running",
+        "mode": "resume_train",
+        "physical_device": 5,
+        "preparation_admission": {
+          "admitted_at": "2026-11-16T14:16:15.193678+00:00",
+          "released_at": "2026-11-16T14:17:55.423375+00:00",
+          "slot": 1,
+          "slots": 2,
+          "started_at": "2026-11-16T14:16:15.153903+00:00",
+          "state": "released"
+        },
+        "recovery": "passed",
+        "saved_tokens": 86632084,
+        "stage": "train",
+        "stage_state": "running",
+        "termination_verified": false,
+        "tokens": 89079174
+      },
+      {
+        "error": null,
+        "job": "v12-all-share8-d128-q3-s11",
+        "lens": "recording",
+        "lifecycle": "running",
+        "mode": "resume_train",
+        "physical_device": 7,
+        "preparation_admission": {
+          "admitted_at": "2026-11-16T14:21:00.980520+00:00",
+          "released_at": "2026-11-16T14:22:38.990432+00:00",
+          "slot": 1,
+          "slots": 2,
+          "started_at": "2026-11-16T14:16:16.548851+00:00",
+          "state": "released"
+        },
+        "recovery": "passed",
+        "saved_tokens": 62776302,
+        "stage": "train",
+        "stage_state": "running",
+        "termination_verified": false,
+        "tokens": 64314247
+      },
+      {
+        "error": null,
+        "job": "v12-all-readcontent-q3-s11",
+        "lens": "recording",
+        "lifecycle": "running",
+        "mode": "requeue_unstarted",
+        "physical_device": 10,
+        "preparation_admission": {
+          "admitted_at": "2026-11-16T14:19:44.287999+00:00",
+          "released_at": "2026-11-16T14:20:53.930616+00:00",
+          "slot": 0,
+          "slots": 2,
+          "started_at": "2026-11-16T14:16:43.957951+00:00",
+          "state": "released"
+        },
+        "recovery": "passed",
+        "saved_tokens": 64890954,
+        "stage": "train",
+        "stage_state": "running",
+        "termination_verified": false,
+        "tokens": 66924181
+      },
+      {
+        "error": null,
+        "job": "v12-all-ports4-q3-s22",
+        "lens": "recording",
+        "lifecycle": "running",
+        "mode": "requeue_unstarted",
+        "physical_device": 6,
+        "preparation_admission": {
+          "admitted_at": "2026-11-16T14:17:55.524033+00:00",
+          "released_at": "2026-11-16T14:19:03.177316+00:00",
+          "slot": 1,
+          "slots": 2,
+          "started_at": "2026-11-16T14:16:49.381548+00:00",
+          "state": "released"
+        },
+        "recovery": "passed",
+        "saved_tokens": 66278902,
+        "stage": "train",
+        "stage_state": "running",
+        "termination_verified": false,
+        "tokens": 67785193
+      },
+      {
+        "error": null,
+        "job": "v12-all-untied-q3-s22",
+        "lens": "recording",
+        "lifecycle": "running",
+        "mode": "requeue_unstarted",
+        "physical_device": 0,
+        "preparation_admission": {
+          "admitted_at": "2026-11-16T14:18:27.860560+00:00",
+          "released_at": "2026-11-16T14:19:44.164320+00:00",
+          "slot": 0,
+          "slots": 2,
+          "started_at": "2026-11-16T14:16:51.640717+00:00",
+          "state": "released"
+        },
+        "recovery": "passed",
+        "saved_tokens": 85336195,
+        "stage": "train",
+        "stage_state": "running",
+        "termination_verified": false,
+        "tokens": 87895217
+      },
+      {
+        "error": null,
+        "job": "v12-all-residual-q3-s11",
+        "lens": "recording",
+        "lifecycle": "running",
+        "mode": "resume_train",
+        "physical_device": 2,
+        "preparation_admission": {
+          "admitted_at": "2026-11-16T14:19:03.232019+00:00",
+          "released_at": "2026-11-16T14:20:08.913498+00:00",
+          "slot": 1,
+          "slots": 2,
+          "started_at": "2026-11-16T14:16:20.975142+00:00",
+          "state": "released"
+        },
+        "recovery": "passed",
+        "saved_tokens": 66122717,
+        "stage": "train",
+        "stage_state": "running",
+        "termination_verified": false,
+        "tokens": 69241743
+      },
+      {
+        "error": null,
+        "job": "v12-all-top2-q3-s11",
+        "lens": "recording",
+        "lifecycle": "running",
+        "mode": "requeue_unstarted",
+        "physical_device": 8,
+        "preparation_admission": {
+          "admitted_at": "2026-11-16T14:20:54.108357+00:00",
+          "released_at": "2026-11-16T14:22:05.710427+00:00",
+          "slot": 0,
+          "slots": 2,
+          "started_at": "2026-11-16T14:16:47.707542+00:00",
+          "state": "released"
+        },
+        "recovery": "passed",
+        "saved_tokens": 83559678,
+        "stage": "train",
+        "stage_state": "running",
+        "termination_verified": false,
+        "tokens": 84617069
+      },
+      {
+        "error": null,
+        "job": "v12-all-base-q10-s22",
+        "lens": "recording",
+        "lifecycle": "running",
+        "mode": "requeue_unstarted",
+        "physical_device": 3,
+        "preparation_admission": {
+          "admitted_at": "2026-11-16T14:20:09.129449+00:00",
+          "released_at": "2026-11-16T14:21:00.325575+00:00",
+          "slot": 1,
+          "slots": 2,
+          "started_at": "2026-11-16T14:16:52.809211+00:00",
+          "state": "released"
+        },
+        "recovery": "passed",
+        "saved_tokens": 81033166,
+        "stage": "train",
+        "stage_state": "running",
+        "termination_verified": false,
+        "tokens": 87047583
+      },
+      {
+        "error": null,
+        "job": "v12-all-fullshare8-q3-s22",
+        "lens": null,
+        "lifecycle": "waiting_resources",
+        "mode": "resume_train",
+        "physical_device": null,
+        "preparation_admission": null,
+        "recovery": null,
+        "saved_tokens": null,
+        "stage": null,
+        "stage_state": null,
+        "termination_verified": false,
+        "tokens": null
+      },
+      {
+        "error": null,
+        "job": "v12-all-fullshare8-q3-s11",
+        "lens": null,
+        "lifecycle": "waiting_resources",
+        "mode": "requeue_unstarted",
+        "physical_device": null,
+        "preparation_admission": null,
+        "recovery": null,
+        "saved_tokens": null,
+        "stage": null,
+        "stage_state": null,
+        "termination_verified": false,
+        "tokens": null
+      },
+      {
+        "error": null,
+        "job": "v12-all-share0-q3-s11",
+        "lens": null,
+        "lifecycle": "waiting_resources",
+        "mode": "requeue_unstarted",
+        "physical_device": null,
+        "preparation_admission": null,
+        "recovery": null,
+        "saved_tokens": null,
+        "stage": null,
+        "stage_state": null,
+        "termination_verified": false,
+        "tokens": null
+      }
+    ],
+    "observed_at": "2026-11-16T15:00:59.334713+00:00",
+    "schema": "tide-hb-v12-all-cards-review-v1",
+    "scope": "Administrative pauses retain raw budget_truncated/outer failed records; not new numerical failures. Scientific source62 unchanged; recovery/quality separately reviewed.",
+    "submissions_state": "submitted",
+    "within_card_limit": true
+  },
+  "quota": {
+    "file_grace_expires_epoch": 0,
+    "file_hard": 0,
+    "file_soft": 0,
+    "files": 1639071,
+    "filesystem": "/dev/mapper/ascend_data-data",
+    "grace_expires_epoch": 1795294591,
+    "hard_gib": 800.0,
+    "hard_quota_headroom_gib": 339.3003959655762,
+    "query_returncode": 1,
+    "soft_exceeded": true,
+    "soft_gib": 300.0,
+    "used_gib": 460.6996040344238
+  },
+  "review_source": "64c74d15",
+  "samples": [
+    {
+      "account_used_gib": 460.13270568847656,
+      "at": "2026-11-16T22:57:19+08:00",
+      "available_bytes": 92691783680,
+      "available_gib": 86.3259506225586,
+      "campaign_gib": 84.55857467651367
+    },
+    {
+      "at": "2026-11-16T22:58:58+08:00",
+      "available_bytes": 79951900672,
+      "available_gib": 74.46100997924805
+    },
+    {
+      "account_used_gib": 460.6984634399414,
+      "at": "2026-11-16T22:59:34.711144+08:00",
+      "available_bytes": 79045787648,
+      "available_gib": 73.61712646484375,
+      "campaign_gib": 85.1217155456543
+    },
+    {
+      "account_used_gib": 460.6990051269531,
+      "at": "2026-11-16T23:00:12.213090+08:00",
+      "available_bytes": 78183366656,
+      "available_gib": 72.81393432617188,
+      "campaign_gib": 85.12174224853516
+    },
+    {
+      "account_used_gib": 460.6996040344238,
+      "at": "2026-11-16T23:00:59.391179+08:00",
+      "available_bytes": 77105545216,
+      "available_gib": 71.81013488769531,
+      "campaign_gib": 85.12178421020508
+    }
+  ],
+  "schema": "tide-v12-filesystem-risk-review-v1",
+  "write_inventory": [
+    {
+      "checkpoint_seconds": 1800,
+      "configuration": ".local/source-hb-v12-repair-v2/configs/studies/language/hb-v12/configs/base128-q3-s11.json",
+      "existing_prefix_bytes": 0,
+      "full_checkpoint_bytes": 2057937959,
+      "job": "v12-four-base128-q3-s11",
+      "latest_exists": true,
+      "milestones": [
+        8388608,
+        33554432,
+        134217728
+      ],
+      "mode": "resume_train",
+      "model_tensor_gib": 0.6408718824386597
+    },
+    {
+      "checkpoint_seconds": 1800,
+      "configuration": ".local/source-hb-v12-repair-v2/configs/studies/language/hb-v12/configs/position-q3-s11.json",
+      "existing_prefix_bytes": 604578853,
+      "full_checkpoint_bytes": 604578853,
+      "job": "v12-four-position-q3-s11",
+      "latest_exists": true,
+      "milestones": [
+        8388608,
+        33554432,
+        134217728
+      ],
+      "mode": "requeue_unstarted",
+      "model_tensor_gib": 0.18887603282928467
+    },
+    {
+      "checkpoint_seconds": 1800,
+      "configuration": ".local/source-hb-v12-repair-v2/configs/studies/language/hb-v12/configs/readcontent-q3-s22.json",
+      "existing_prefix_bytes": 0,
+      "full_checkpoint_bytes": 635785047,
+      "job": "v12-four-readcontent-q3-s22",
+      "latest_exists": true,
+      "milestones": [
+        8388608,
+        33554432,
+        134217728
+      ],
+      "mode": "resume_train",
+      "model_tensor_gib": 0.19839751720428467
+    },
+    {
+      "checkpoint_seconds": 1800,
+      "configuration": ".local/source-hb-v12-repair-v2/configs/studies/language/hb-v12/configs/share8-d192-q3-s22.json",
+      "existing_prefix_bytes": 0,
+      "full_checkpoint_bytes": 1227041947,
+      "job": "v12-four-share8-d192-q3-s22",
+      "latest_exists": true,
+      "milestones": [
+        8388608,
+        33554432,
+        134217728
+      ],
+      "mode": "resume_train",
+      "model_tensor_gib": 0.38388335704803467
+    },
+    {
+      "checkpoint_seconds": 1800,
+      "configuration": ".local/source-hb-v12-repair-v2/configs/studies/language/hb-v12/configs/share8-d192-q3-s11.json",
+      "existing_prefix_bytes": 0,
+      "full_checkpoint_bytes": 1227041883,
+      "job": "v12-all-share8-d192-q3-s11",
+      "latest_exists": true,
+      "milestones": [
+        8388608,
+        33554432,
+        134217728
+      ],
+      "mode": "resume_train",
+      "model_tensor_gib": 0.38388335704803467
+    },
+    {
+      "checkpoint_seconds": 1800,
+      "configuration": ".local/source-hb-v12-repair-v2/configs/studies/language/hb-v12/configs/share8-d128-q3-s22.json",
+      "existing_prefix_bytes": 0,
+      "full_checkpoint_bytes": 689613915,
+      "job": "v12-all-share8-d128-q3-s22",
+      "latest_exists": true,
+      "milestones": [
+        8388608,
+        33554432,
+        134217728
+      ],
+      "mode": "resume_train",
+      "model_tensor_gib": 0.21606719493865967
+    },
+    {
+      "checkpoint_seconds": 1800,
+      "configuration": ".local/source-hb-v12-repair-v2/configs/studies/language/hb-v12/configs/share8-d128-q3-s11.json",
+      "existing_prefix_bytes": 0,
+      "full_checkpoint_bytes": 689613851,
+      "job": "v12-all-share8-d128-q3-s11",
+      "latest_exists": true,
+      "milestones": [
+        8388608,
+        33554432,
+        134217728
+      ],
+      "mode": "resume_train",
+      "model_tensor_gib": 0.21606719493865967
+    },
+    {
+      "checkpoint_seconds": 1800,
+      "configuration": ".local/source-hb-v12-repair-v2/configs/studies/language/hb-v12/configs/readcontent-q3-s11.json",
+      "existing_prefix_bytes": 635785047,
+      "full_checkpoint_bytes": 635785047,
+      "job": "v12-all-readcontent-q3-s11",
+      "latest_exists": true,
+      "milestones": [
+        8388608,
+        33554432,
+        134217728
+      ],
+      "mode": "requeue_unstarted",
+      "model_tensor_gib": 0.19839751720428467
+    },
+    {
+      "checkpoint_seconds": 1800,
+      "configuration": ".local/source-hb-v12-repair-v2/configs/studies/language/hb-v12/configs/ports4-q3-s22.json",
+      "existing_prefix_bytes": 616900447,
+      "full_checkpoint_bytes": 616900447,
+      "job": "v12-all-ports4-q3-s22",
+      "latest_exists": true,
+      "milestones": [
+        8388608,
+        33554432,
+        134217728
+      ],
+      "mode": "requeue_unstarted",
+      "model_tensor_gib": 0.19156157970428467
+    },
+    {
+      "checkpoint_seconds": 1800,
+      "configuration": ".local/source-hb-v12-repair-v2/configs/studies/language/hb-v12/configs/untied-q3-s22.json",
+      "existing_prefix_bytes": 607463263,
+      "full_checkpoint_bytes": 607463263,
+      "job": "v12-all-untied-q3-s22",
+      "latest_exists": true,
+      "milestones": [
+        8388608,
+        33554432,
+        134217728
+      ],
+      "mode": "requeue_unstarted",
+      "model_tensor_gib": 0.18863189220428467
+    },
+    {
+      "checkpoint_seconds": 1800,
+      "configuration": ".local/source-hb-v12-repair-v2/configs/studies/language/hb-v12/configs/residual-q3-s11.json",
+      "existing_prefix_bytes": 0,
+      "full_checkpoint_bytes": 604316391,
+      "job": "v12-all-residual-q3-s11",
+      "latest_exists": true,
+      "milestones": [
+        8388608,
+        33554432,
+        134217728
+      ],
+      "mode": "resume_train",
+      "model_tensor_gib": 0.18863189220428467
+    },
+    {
+      "checkpoint_seconds": 1800,
+      "configuration": ".local/source-hb-v12-repair-v2/configs/studies/language/hb-v12/configs/top2-q3-s11.json",
+      "existing_prefix_bytes": 604316391,
+      "full_checkpoint_bytes": 604316391,
+      "job": "v12-all-top2-q3-s11",
+      "latest_exists": true,
+      "milestones": [
+        8388608,
+        33554432,
+        134217728
+      ],
+      "mode": "requeue_unstarted",
+      "model_tensor_gib": 0.18863189220428467
+    },
+    {
+      "checkpoint_seconds": 1800,
+      "configuration": ".local/source-hb-v12-repair-v2/configs/studies/language/hb-v12/configs/base-q10-s22.json",
+      "existing_prefix_bytes": 267094503,
+      "full_checkpoint_bytes": 267094503,
+      "job": "v12-all-base-q10-s22",
+      "latest_exists": true,
+      "milestones": [
+        8388608,
+        33554432,
+        134217728
+      ],
+      "mode": "requeue_unstarted",
+      "model_tensor_gib": 0.08384616672992706
+    },
+    {
+      "checkpoint_seconds": 1800,
+      "configuration": ".local/source-hb-v12-repair-v2/configs/studies/language/hb-v12/configs/fullshare8-q3-s22.json",
+      "existing_prefix_bytes": 0,
+      "full_checkpoint_bytes": 245619387,
+      "job": "v12-all-fullshare8-q3-s22",
+      "latest_exists": false,
+      "milestones": [
+        8388608,
+        33554432,
+        134217728
+      ],
+      "mode": "resume_train",
+      "model_tensor_gib": 0.07724273204803467
+    },
+    {
+      "checkpoint_seconds": 1800,
+      "configuration": ".local/source-hb-v12-repair-v2/configs/studies/language/hb-v12/configs/fullshare8-q3-s11.json",
+      "existing_prefix_bytes": 0,
+      "full_checkpoint_bytes": 245619323,
+      "job": "v12-all-fullshare8-q3-s11",
+      "latest_exists": false,
+      "milestones": [
+        8388608,
+        33554432,
+        134217728
+      ],
+      "mode": "requeue_unstarted",
+      "model_tensor_gib": 0.07724273204803467
+    },
+    {
+      "checkpoint_seconds": 1800,
+      "configuration": ".local/source-hb-v12-repair-v2/configs/studies/language/hb-v12/configs/share0-q3-s11.json",
+      "existing_prefix_bytes": 0,
+      "full_checkpoint_bytes": 232726695,
+      "job": "v12-all-share0-q3-s11",
+      "latest_exists": false,
+      "milestones": [
+        8388608,
+        33554432,
+        134217728
+      ],
+      "mode": "requeue_unstarted",
+      "model_tensor_gib": 0.07327544689178467
+    }
+  ]
+}
