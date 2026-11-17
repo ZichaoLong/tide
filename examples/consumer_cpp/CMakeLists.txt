@@ -1,5 +1,0 @@
-cmake_minimum_required(VERSION 3.18)
-project(tide_consumer LANGUAGES CXX)
-find_package(TideGraph 0.2 CONFIG REQUIRED)
-add_executable(consumer main.cpp)
-target_link_libraries(consumer PRIVATE tide::runtime)

@@ -1,141 +1,52 @@
-# Working on graph-execution-foundation
+# Working on Tide instances
 
-## Re-entry (also after context compression)
-
+## Re-entry
 1. Run `git status --short --branch` and `python scripts/status.py`.
-2. Read `docs/STATUS.md`; follow its next action and active-job record.
-3. Read `docs/ROADMAP.md` and `docs/execution-flows.md`. Use
-   `docs/semantic-map.md`, `docs/architecture.md` and `rg` to locate definitions,
-   implementation and independent tests. `docs/development.md` starts from a clean checkout.
-4. Consult `docs/semantics.md` before changing an observable behavior.
-   The immutable upstream revision and offline textbook snapshot hashes are in
-   `docs/upstream.json`; run `python scripts/check_upstream.py`. Do not adopt
-   an upstream working-tree draft or a new semantic version without the user's task.
-5. Preserve user changes and work only on the authorized branch. Reference
-   repositories (`lh`, `fractal-latcarf`, ObsidianVault) are read-only unless the
-   current task explicitly includes recoverable experiments there. For such
-   experiments, prefer an independent snapshot and preserve the original dirty state.
-6. Old evidence uses original commit IDs. Resolve them with
-   `python scripts/resolve_history_commit.py OLD_SHA`; see `docs/history-migration.md`.
-   Clone/fetch only `graph-execution-foundation` for the small development base.
-   Do not merge or fetch `graph-execution-foundation-old` into that checkout.
+2. Read docs/STATUS.md and docs/ROADMAP.md. Do not resume retired P1–P6 plans.
+3. Mathematics is the immutable snapshot in math/; identity is docs/upstream.json.
+   Run `python scripts/check_upstream.py`. Do not follow mutable upstream HEAD.
 
-## Task workflows
+## Current purpose and priorities
+Semantic correctness first, performance second. Deliver the current FC and HB
+main bindings. General graph foundations are a long-term possibility, not a
+short-term requirement. Old teaching bindings and LH-DAG/PDG are excluded.
+The user authorized a complete rewrite without consulting or reusing the retired
+implementation/tests. Git preserves that history. Preserve user untracked files.
 
-Read only the repository skill relevant to the work:
+Production code need not expose mathematical action records, dependency traces,
+independent internal gradient roots or universal state decoding. Check model
+values, selection, parameter gradients and necessary continuation directly.
+Do not build generic frameworks or compatibility wrappers before useful models.
 
-- [Develop](.agents/skills/develop-tide-foundation/SKILL.md): implementation,
-  mathematical correspondence, directed checks and delivery.
-- [Optimize](.agents/skills/optimize-tide-execution/SKILL.md): performance across
-  scheduling, local modules, autograd, validation and device execution.
-- [Maintain](.agents/skills/maintain-tide-foundation/SKILL.md): architecture,
-  interfaces, navigation and consumer usability.
+## Work
+Use the relevant repository skill for development, optimization or maintenance.
+User instructions override historical skill/doc requirements. Share code where
+useful; separate instance/backend implementations are allowed. Tensor batches
+should cross computation boundaries without per-event tensor reconstruction.
+Three Attention families need separate shape/device/performance decisions.
+Choose serial tools, concurrent calls or agents by expected benefit; coordinate
+edits/resources, review and integrate one coherent result.
 
-These are versioned development guidance, not runtime dependencies. The linked
-contracts, tests and evidence remain authoritative; do not duplicate them in skills.
+Only edit the authorized branch. Reference repositories and public software are
+read-only. Do not send downstream messages without authorization. Keep data,
+task heads, losses and model-quality research in downstream experiments.
 
-## Downstream collaboration
+## Verification and execution
+Write new small formula tests from the fixed mathematics. Test all candidates
+and useful combinations, not their Cartesian product. Keep meaningful gradient,
+multiple-update and continuation checks. Finite rounding discrepancies get
+bounded diagnosis; do not disguise support, causal or state errors as rounding.
+Record actual dtype/operator/device, elapsed time, throughput denominator and
+peak memory. Grad-enabled forward is not training. Count real candidates/Fulls
+when explaining sparse performance. Use optimized external comparisons.
 
-- For experiment-repository requests, read `docs/downstream-contract.md` at the
-  adopted protocol revision. Check the request's fixed source, dependency lock,
-  actual configuration, evidence and acceptance conditions before changing code.
-- Keep the request in its originating repository; link accepted foundation work
-  from ROADMAP and current activity from STATUS. Deliver implementation/evidence
-  commits and a downstream reproduction command. Upstream delivery and each
-  downstream acceptance are separate facts, never inferred from one another.
-- Use `templates/downstream/` for portable requests/replies/acceptance and
-  `examples/consumer_core5/` for installed public-API consumption. Repository
-  access and request text do not grant cross-repository write/push authority;
-  existing user authorization still applies without repeated permission checks.
-- Freeze dependencies used by active experiments. Keep application-specific
-  training in the consumer; contribute general modules/optimizations here with
-  independent tests, explicit scope and recorded positive/negative lessons.
+Long builds/tests/benchmarks use frozen source in detached background.slice
+user services, bounded memory/time and durable logs. Available CPUs/memory and
+idle NPUs may all be used; coordinate jobs instead of imposing a thread cap.
+Shared NPU use follows current conversation authorization, never a new-session
+default. Never stop other projects' jobs. Public toolchains remain unchanged.
 
-## Execution and checkpoints
-
-- Continue implementation autonomously in reviewable, tested increments.
-- `STATUS.md` is the single current handoff; `ROADMAP.md` is the single backlog.
-  Replace stale status, do not accumulate session diaries or duplicate ledgers.
-- `scripts/status.py` shows all live and recent terminal job records. Use
-  `--all-jobs` when auditing retained historical failures; never relabel an old
-  failure as passed merely because a newer run succeeded.
-- Use fsynced staging plus atomic replacement for programmatic handoff writes;
-  verify the result. Prefer `scripts/durable_records.py` for these writes.
-  Check storage capacity before large writes. A failed write
-  must not replace a known-good handoff or be reported as successful.
-- Update the handoff before long jobs, at commit boundaries, and before ending
-  a session. Include exact next commands, blockers, source identity, job/unit,
-  logs, terminal status and any uncommitted work. Never call a live job passed.
-- Commit a coherent implementation after relevant tests pass. For durable
-  qualification, commit the implementation first, test that immutable commit,
-  then commit the evidence separately. Do not push without task authorization.
-- Use `docs/verification.md` for development/full gate scopes and isolated
-  qualification. Smoke evidence must never stand in for a complete matrix.
-- Long builds/tests use a detached user service in `background.slice`, a frozen
-  checkout, explicit resource/time bounds and durable status/logs. Builds and
-  tests may use all available CPUs and memory, plus idle NPUs; allocate them to
-  one job or independent jobs as appropriate. Builds default to `--jobs all`;
-  `half` or a positive count is an option, not a standing cap. Coordinate CPU,
-  memory, I/O and devices to avoid contention; keep formal timing clear of
-  competing heavy work and record actual constraints. Never edit source an
-  active job reads. Short checks may run interactively.
-- Shared NPU use requires explicit authorization in the current conversation,
-  for the turn or continuing scope specified by that prompt. Historical use,
-  free HBM or low utilization is not standing permission for a new conversation.
-- Choose serial work, concurrent tool calls or sub-agent work by dependencies
-  and expected benefit. Separate conflicting edits and active-job inputs;
-  coordinate resources, review results and integrate one coherent change.
-
-## Structure and contracts
-
-- One responsibility per file; target < 350 lines, investigate files > 500.
-  Split by semantic layer rather than arbitrary line count. Generated data,
-  lock files and checksummed immutable upstream snapshots are exempt. Use symbol
-  searches and bounded reads, not whole trees.
-- Keep the C++ core independent of Python. Bindings are a testing/client adapter.
-  Python reference scheduling must remain independent of native scheduling.
-- Specializations must have independent schedules. Wrapping a generic executor
-  is not a specialization or an independent equivalence anchor.
-- Keep local kernels, graph representation, scheduling, checkpointing and
-  comparison separate. Retain edge identities, including parallel edges.
-- Design interfaces for performance, generality, clarity and replaceable local
-  modules. Preserve mathematics and required public capabilities; redesign
-  representations and API contracts when useful. Version and document necessary
-  migrations instead of carrying costly historical compatibility in the default path.
-- Changes to observable semantics need a short contract update and meaningful
-  tests. HST is a declared VJP; do not gradcheck its hard forward.
-- Avoid in-place autograd mutation. Compare final states, in-flight messages,
-  history, routes and gradients, not just outputs. Check disconnected gradients.
-- CPU FP64/FP32 remain the reference. Eager and resident CPU/CUDA/NPU scopes
-  are declared separately in the execution contract and module capability gates.
-  Explicit unavailable devices/dtypes must fail; never silently substitute an
-  algorithm. CUDA qualification is source/device/profile scoped; keep source/build
-  and actual-device evidence separate. User alignment overrides generic experiment skills.
-
-## Evidence and housekeeping
-
-- `docs/evidence/` contains small reviewed reports tied to exact source commits.
-  Build products, raw logs, snapshots and checkpoints belong under ignored
-  `artifacts/` or `build/`, never alongside source.
-  The retired-record archive is preserved only on the frozen old branch;
-  `docs/history-migration.md` documents explicit retrieval outside this checkout.
-  Preserve actual historical evidence identities; use the map to find equivalent code.
-- Preserve active-job inputs, unsaved changes and minimal reproducers for new
-  unresolved issues. The user authorized retirement of historical experiment
-  artifacts on 2026-10-12; old reports need not be re-audited by default. Follow
-  `docs/artifact-retention.md`: keep necessary records, inspect the dry run,
-  and distinguish historical citations from live dependencies. Never clean
-  reference repositories or shared toolchains as experiment artifacts.
-- Use `docs/reproduction.md` to connect unresolved issues to tracked generators,
-  small fixtures, diagnostics and reviewed evidence. A clean checkout must not
-  depend on retired run directories. Keep current limitations only in ROADMAP.
-  At authorized retirement, curate necessary lessons/inputs first, then remove
-  raw runs and temporary environments/builds; never promote an outer job status
-  into a claim that every inner check passed. Retired byte hashes are identities,
-  not a guarantee that the original bytes remain available.
-- Git history retains superseded plans/evidence; do not keep renamed copies of
-  old handoffs. Fix broken navigation when moving files.
-- Report implemented/verified/planned separately. A small formula profile does
-  not certify all models, graph families, scales, platforms or performance.
-- `docs/semantics.md` owns current graph/checkpoint versions. Module documents
-  link there; immutable evidence retains the versions tested at its source commit.
+STATUS is the current handoff and ROADMAP is the backlog. Keep brief configuration,
+run/result and useful performance notes; no exhaustive traceability ledger.
+Update handoffs atomically, commit tested increments, and keep implementation and
+measured claims distinct. Push only under task authorization (granted here).

@@ -1,47 +1,8 @@
-#!/usr/bin/env python3
-"""Dependency-free re-entry: source, current handoff and durable job status."""
+"""Small current-work handoff; no imports from a model implementation."""
 from pathlib import Path
-import argparse
-import json
 import subprocess
-import sys
-from durable_records import read_jobs
 
-parser = argparse.ArgumentParser(description=__doc__)
-parser.add_argument("--recent", type=int, default=3, help="number of recent terminal jobs (default: 3)")
-parser.add_argument("--all-jobs", action="store_true", help="include all historical durable job records")
-args = parser.parse_args()
-if args.recent < 0:
-    parser.error("--recent must be nonnegative")
 root = Path(__file__).resolve().parents[1]
 subprocess.run(["git", "status", "--short", "--branch"], cwd=root, check=True)
-subprocess.run(["git", "log", "-3", "--oneline"], cwd=root, check=True)
 print((root / "docs/STATUS.md").read_text())
-if (root / "docs/history/migration-20261030.json").is_file():
-    print("Historical source IDs: python scripts/resolve_history_commit.py OLD_SHA; "
-          "migration/clone policy: docs/history-migration.md")
-records, errors = read_jobs(root / "artifacts")
-live = [(p, d) for p, d in records if d.get("state") in {"starting", "running"}]
-terminal = [(p, d) for p, d in records if d.get("state") not in {"starting", "running"}]
-selected = records if args.all_jobs else live + terminal[:args.recent]
-print("Durable records: all history" if args.all_jobs else
-      f"Durable records: all live and {args.recent} recent terminal jobs (--all-jobs for history)")
-if not records and not errors:
-    print("No local job records. Historical results: docs/evidence/README.md; "
-          "retention: docs/artifact-retention.md; reproduction: docs/reproduction.md. "
-          "Missing raw runs do not imply passed or untested.")
-for status, data in selected:
-    # Raw failures are retained, without repeatedly flooding re-entry with old
-    # dirty-file lists or implying that every historical failure is still open.
-    summary = {key: data[key] for key in ("state", "source", "started", "finished", "observed", "record_kind", "exit_code") if key in data}
-    summary["dirty"] = bool(data.get("dirty"))
-    if "source" not in data:
-        summary.pop("dirty")
-        summary["installed_package_sha256"] = data["metadata"]["install_identity"]["package"]["installed_files_sha256"]
-        summary["task_kind"] = data["metadata"].get("task_kind", "unknown")
-        summary["scope"] = "launcher state only; inspect individual run/check results"
-    summary["log"] = str((status.parent / "task.log").relative_to(root))
-    print(f"{status.relative_to(root)}: {json.dumps(summary)}")
-for path, error in errors:
-    print(f"{path.relative_to(root)}: unknown state; unreadable/inconsistent record: {error}")
-sys.exit(1 if errors else 0)
+

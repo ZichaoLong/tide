@@ -1,200 +1,21 @@
-# 持续执行契约
+# Execution
 
-本契约整理已确认的持续要求，替代已完成阶段的临时排队与操作清单。
-当前任务/状态以用户最新指令和 [STATUS](STATUS.md) 为准；唯一待办表是
-[ROADMAP](ROADMAP.md)。旧实验默认不复核、不自动恢复。
-2026-10-27 任务已授权采用 core-5 和带权局部定义；当前数学版本由 [upstream.json](upstream.json) 固定。
+New model implementations own their tensor layouts and evaluation order.
+Batch B, sequence positions and compatible nodes across operations. Real sparse
+Full selection must not become complete dense Full followed by masking.
+Flash attention, ordinary batched attention and chunked attention are chosen for
+the actual family, shape, dtype and device. Preserve weighted-prior gradients,
+original-time visibility and softmax normalization across key chunks.
 
-## 1. 基座定位与独立执行
+CPU/NPU are the immediate platforms. PyTorch is the first public entry;
+LibTorch/custom kernels are used for demonstrated scheduling/operator benefit.
+Historical mixed-a/b/c and resident frameworks impose no layer or delivery duty.
+Training includes preparation, forward, loss, backward, optimizer and sync.
 
-本项目是 20-tide 后续训练、推理实验的公共调用与等价性验证基座。
-提供语义一致、可配置的 CPU、混合、NPU/GPU 常驻流程。每个候选独立消费相同
-输入、参数和初始状态；CPU 参考的输出、路由、事件轨迹和梯度不能成为候选输入。
+Use all available CPU/memory/idle NPUs as useful without self-contention. Shared
+NPU admission follows conversation authorization. Long work uses frozen inputs,
+a detached background.slice systemd user service, bounded runtime/memory, logs
+and checked terminal status. Never alter an active job's source.
 
-图/调度、局部计算、设备后端、实验消费者分层。模型头、loss、数据和训练配方
-由实验拥有。训练交付指声明的 forward、loss 接口、VJP/backward、optimizer、
-续接与 checkpoint；小模型/短更新验证机制，不要求模型收敛或效果搜索。
-
-用户对齐与本契约优先于 run-ml-experiments skill。记录源码/输入/配置/环境身份、
-实际结果和失败、计时边界、有限资源与停止条件；复用已有工具，Trackio 不作前置。
-普通正确性测试无需接入实验追踪。串行、工具并行或子代理协作按任务依赖与收益选择；
-协调冲突修改、运行输入和资源，审阅后统一集成，不预定每项工作采用哪一种组织方式。
-
-接口服务于性能、通用性、架构清晰和局部模块可替换性。固定数学、必要公共能力与
-历史调用形式分别处理：可重新设计批量输入、状态句柄、返回表示和反向接口；必要时
-版本化迁移消费者。兼容成本不能进入默认计算路径或妨碍清楚的架构。
-完整记录、声明的梯度根及精确状态仍须由候选实际结果提供；历史测试中仅绑定旧API、
-对象可变性或布局的部分随新契约调整，不能借接口迁移改掉数学要求。
-
-### 批量接口与模块替换
-
-2026-11-11用户对齐：固定core-5全局/局部数学是锚点，代表性能测试牵引实现取舍，
-公共实验基座是定位。架构、接口与源码必要时可整体重写；兼容旧API不能成为性能和清晰性的负担。
-以下是设计与验收要求，不代表当前实现已完成。数学与完整公共能力保留，迁移和实现形式可变。
-固定[实现核对§1.3](upstream/tide-core-5/reference/weighted-message-implementation-checks.md#13-从定义到验证证据)
-允许函数拆分、融合或共享实现；对应要求可追溯、可解码、可独立验证，不要求每个数学作用
-对应一次调用、一个Tensor或一个autograd节点。独立参考可保持逐事件调度；候选不能借参考补写结果。
-
-合法B×L块以张量列、布局元数据和状态所有权/范围交接，覆盖Aggregate、Upd/Read/Describe、
-区域评分/证据/控制/分配、Full、活动支持、逐边/端口消息、下一阶段聚合和反向。
-KV是重点候选，区域分配是同等重要的独立设计边界：不同评分、证据、发送规则、约束求解及
-声明反向都须保持张量贯穿；不能仅优化KV或把区域都限制为regional_total/quad。
-消息存在性、可求导强度、原始int64时间和容量元数据分别表示；缺席、零、平票与梯度连接不混同。
-配置和能力尽量在计划阶段确定，执行按兼容块分派；真正递归、异构能力和容量限制在必要范围内拆块。
-数学步骤不强制物化独立Tensor，允许跨步骤联合求值。普通任务与完整观察可有不同物化成本，
-完整记录、独立中间根和精确续接能力仍须通过实际候选数据和明确接口提供。
-
-当前有限局部候选指导实现，通用图语义保持；不预建自动优化任意未来局部程序的通用框架。
-统一模块调用、生命周期、外部消息/区域描述与块反向契约，私有状态采用有类型的张量组：
-KV保存可变历史bank，affine/delta/GDN/SSD保存各自矩阵、摘要及适用卷积缓存。
-不同节点私有尺寸可不同，交接字段按绑定相容；不强制全部模块使用同一大张量或相同状态形状。
-连续缓冲区是可选存储实现，reshape可能复制、gather实际搬运，int64与浮点保持独立类型。
-新增模块允许增加状态类型和专用序列算法；同形状不保证相同依赖或轻量接入，不同形状也不必重写调度。
-
-前向布局和块反向一起设计，避免逐行视图反复生成/清零整块梯度。自定义Function须实际减少
-外层及私有图工作，不仅隐藏节点；普通批量autograd、显式VJP、indexing/分段归约和sparse/dense
-算子按实际能力选用，不预设某一种一定更快。缓存寿命包含异步读者和反向，版本守卫与数值依赖分开。
-模块替换性用KV与小型GDN/SSD及异构组合实际检验，不能只凭接口签名或一个FC例子宣称完成。
-
-## 2. 在线 streaming / prefill
-
-prefill 是节点级时间批与正典的在线贪心/契约相对最大前沿，不是先运行模型再离线打包。
-根据当前 continuation、实际已知消息、已完成作用和有效封闭下界构造合法批次。
-可静态准备拓扑、延迟、owner、索引、模块能力、locality 和缓冲区；
-真实消息、选择、就绪和批边界依据输入/状态在线决定。
-
-算法接受各类别定义内的合法任意拓扑/输入：PDG 含正时延反馈环，TimedDAG 保持无环，
-SettleGraph 保持自身结构条件；设备模块支持域另行声明。缺少精确批量能力时使用
-合法单作用后备，报告实际批长与原因。不为性能 fixture 的编号/输入定制通用算法。
-独立特化可以限制结构，但必须显式校验适用域，并拥有自己的循环/依赖顺序。
-
-允许随拓扑/输入退化为 streaming；不承诺全局最少批次、固定阶段数或最优耗时。
-尽量把合法递归放进块内批量计算，阶段数、算子提交数与硬件内核数分别观察。
-逻辑时间可跨窗口持续增长；不以有限缓冲区偷换有限总运行时长。
-
-## 3. 矩阵与执行位置
-
-| 图类别 | LibTorch | 纯 PyTorch |
-| --- | --- | --- |
-| PDG | 实现及性能候选 | 保留独立正确性参考，不要求必做性能扫描 |
-| TimedDAG | 实现及性能候选 | 实现及性能候选 |
-| SettleGraph | 实现及性能候选 | 实现及性能候选 |
-
-覆盖 streaming/prefill、推理/声明的完整一阶训练、状态续接与配置。
-CPU FP64/FP32 是参考；NPU FP32/FP16 按独立精度契约验证。CUDA 源码功能按声明范围
-对齐，但构建、CPU 契约、真实 GPU 正确性/常驻/多卡/性能分别记账。
-Python 调用 native、纯 Python、独立 C++ 的证据不能互相冒充。
-
-| 常用预设 | payload | Read/控制 | 选择 | 事件推进 |
-| --- | --- | --- | --- | --- |
-| CPU | CPU | CPU | CPU | CPU |
-| mixed-a | 加速器 | CPU | CPU | CPU |
-| mixed-b | 加速器 | 加速器 | CPU | CPU |
-| mixed-c | 加速器 | 加速器 | 加速器 | CPU |
-| resident | 加速器 | 加速器 | 加速器 | 加速器 |
-
-保留 Read/控制/选择/队列位置、payload/scoring dtype、卡数、放置、容量和切分等
-细开关；记录请求及生效值。不支持的组合提前明确拒绝，不静默替代算法。
-设备、推进位置、算子实现方式是独立维度，不要求为所有开关排列维护重复实现。
-
-2026-11-12用户进一步明确：mixed-a/b/c是性能对照的放置预设，不是必须保留的
-软件层级。紧凑数值块及接口可跨越这些历史分层；只有实际跨设备时才建立必要传输边界。
-预设若阻碍张量贯穿，可合并、简化或版本化迁移，不以兼容预设为理由维持拆分计算。
-仍须明确请求、生效放置及计时范围，不能把改过的预设冒称原对照。
-
-常驻允许主机构造、窗口输入输出、顶层提交与报告；窗口内在线就绪、合批、
-选择和推进不能依赖逐事件主机标量/分支。前向、反向、optimizer 和跨卡完成分别验证。
-自定义 Function/算子封装不等于底层融合；优先批量 LibTorch/ATen 与厂商算子，
-有能力缺口或 profiling 依据时才补后端专用内核。
-
-## 4. 语义与打包不变量
-
-遵守 [semantics](semantics.md) 与 [语义对应](semantic-map.md)：int64 时间/计数、
-稳定平票、物理重复边、完整候选、Next-before-Full、缺失/零消息、None/零梯度。
-保留 HARD/HST/SOFTP 的不同指定 VJP；不能通过未证明的全节点计算后乘零替代选择。
-局部程序不可随意修改借用状态、权重或 comparison；共享参数身份必须保留。
-
-消息生成、路由、放置、聚合、计算和通信都尽量打包。连续缓冲区不自动意味着
-完成批量化；优先索引、计数/前缀和、gather/scatter、分段操作与批量矩阵调用。
-CSR offsets 是表示，不强制使用某个 sparse 算子。不能用冲突 scatter、
-填充或数值零判断改变消息存在性、归一化、溢出行为或求导连接关系。
-内核内部循环和依赖结果的阶段循环允许存在；混合路径的主机工作计入完整成本。
-
-## 5. 容量、切分与训练边界
-
-预分配队列保存待办与张量范围，容量限制同时在途数据，不限制累计事件数。
-参数、状态、KV、激活、通信、反向 journals/adjoints 和 workspace 分别预算。
-总 HBM 准入不代替各内部子预算；不能依赖真实 CPU 预跑来决定候选轨迹或容量。
-
-保留保守与偏激进安全切分；性能优先偏激进。估算可近似，但须留余量、用有限观测
-校准峰值，在超预算提交前分批或明确拒绝，不以反复 OOM 搜索为默认流程。
-不可消解的容量不足显式失败，不返回似乎完整的结果。
-
-物理切分不改变逻辑 batch、Attention 可见性/全局归一化、loss 归约、梯度汇总或
-optimizer 边界。不丢消息、截断 KV 或静默改 dtype。续接保留必要状态/history/pending；
-训练 detach、截断与持久化梯度边界显式定义。设备拒绝后的恢复遵守 owner 契约。
-
-## 6. 验证与有限性能
-
-先手算/独立参考，再相关回归和必要干净源码资格。比较完整状态、消息、history、
-路由、pending、控制、独立根 VJP 和 optimizer；覆盖反馈、重复边、空/不齐输入、
-非对齐延迟、窗口切换、checkpoint、保留/截断图。特化不能只包装通用执行器自证。
-GPU 真机缺失明确待验证，不能把编译或 CPU 测试当成设备通过。
-
-浮点近似平票可能使合法实现走不同离散轨迹。保留严格失败与可解释的见证，单列限制；
-不得放宽路由检查、改平票规则或修改输入来制造通过。性能同时说明实际工作量，
-不把有路由差异的配置称为严格等价加速。
-
-2026-11-10用户明确：有限浮点舍入超差只能有限阻塞。每类新差异做有界的首差、
-独立公式/高精度或梯度连接诊断；确认是舍入后保留原严格失败、误差尺度和复现，
-继续受影响配置的明确数值探索及其余实施/性能工作。原因未明须标未判定，
-不因数值有限直接认定舍入，也不无限重复同一诊断或扩大FP64作为默认执行。
-数值失败不等于实现错误；控制/支持差异须区分阈值敏感和真实语义错误并记录实际工作量。
-非有限、非法配置、求解/通信/容量错误和声明精确恢复失败仍独立处理，不冒称严格等价。
-
-性能以回答具体选型问题为完成标准，不要求全矩阵。默认一配置一次独立进程，
-小耗时检查可少量重复衡量噪声，大耗时检查仅在阶段边界或新依据时补测；不恢复历史队列；新测量先声明问题、范围、预算和停止条件。
-以层级、批量粒度和接口管理组合复杂度，复用已有依据的局部优化经验。通过相关语义与
-模块检查后可以采用，不要求每项局部修改先证明全局收益或遍历配置组合。
-端到端测量用于发现集成问题、评价收益和排序；性能声明仍限于实际测量范围。
-独立公式、同函数直接张量、无梯度/构图/真实反向/完整训练、不同函数Transformer、
-LH/core-3与候选对照分别回答问题，见[性能工作方法](../.agents/skills/optimize-tide-execution/SKILL.md)。
-遇到明显差距，按直接公式→公共批量接口→模块组合→默认执行器逐层加入职责，固定材料、
-观察范围和计时边界，记录每层新增的数学工作、布局/图装配、同步、内存和完整耗时。
-直接FC自身的B×L计算与Attention算子能力也要审视；Transformer是不同函数对照，不把差额全归冗余。
-加法与减法调查按问题有限编排；每轮给出采用、重设计或暂缓及重启依据，主要差距未解释时
-不能只凭局部提速宣称架构问题完成。有限候选逐项和关键组合检查，不遍历配置笛卡尔积。
-接受外部争用并记录已知情况/未排除争用；协调正式计时使用的资源，避免自身任务互扰，不停止其他任务。
-先小中规模 profiling，实际识别提交、同步、packing、内核归属、通信和内存成本；
-不凭内核数推断瓶颈。只补会改变选型的全尺寸案例，不设加速比门槛。
-
-完整训练计时含必要输入准备/上传、调度、packing、forward/loss、backward、
-finite checks、optimizer、通信、清理和同步；构造/编译/捕获、warmup 与冷启动单列。
-profiling 与正式吞吐进程分开；单次或共享负载观测不宣称统计稳定和普遍最快。
-
-## 7. 提交、资源与交接
-
-先提交实现，再以固定源码进行必要资格并单独记录证据；运行中的任务不能标为通过。
-长任务在独立 background.slice 服务中运行，有限线程/内存/时长，使用稳定源码、
-新日志/输出路径；不将 systemd 属性当成资源隔离已获证明。先检查磁盘和设备余量。
-构建、测试可使用全部可用CPU、内存和空闲NPU，按任务选择集中资源加速单项或并行
-独立任务。构建默认 `--jobs all`（进程可用CPU），`half` 或显式正整数是可选配置，
-不是长期资源上限。按实际CPU/内存/I/O/设备占用协调资源，以尽快得到可信结果为目标。
-性能计时前固定并记录ATen/BLAS和调度线程，避开争用同一资源的重型构建/测试；
-外部争用单列，不宣称独占测量。资源准入记录实际占用，避免不必要的长队等待。
-共享NPU仅按当前对话中明确prompt的授权范围使用：可限定当前轮次或后续对话，
-不能从历史共用、剩余HBM或低AICore利用率推定许可，也不能成为新会话的默认准入。
-若用户将共享授权延续到当前对话后续，按该范围复用，不逐作业重复请求。
-授权可包含正确性、profiling和正式性能测试；记录同卡进程身份、资源余量、已知争用及实际映射，
-结果标为共享条件测量。共享不使结果无效，也不允许宣称独占峰值或把未配对差额全归为实现收益。
-遵守当前用户对提交/推送、设备共享和暂停/恢复的授权；旧计划不自动成为新任务。
-
-只维护 STATUS 当前交接、ROADMAP 待办和相关模块契约。完成/失败/编译/实测分别表述。
-2026-10-12 用户批准旧实验默认不复核，必要记录及可清理边界见
-[artifact-retention](artifact-retention.md)。保留当前问题的最小复现和未保存修改，
-旧失败不因归档而改为成功。工具链和只读参考仓库不属于实验产物清理对象。
-
-Python运行manifest与standalone benchmark的`runtime_queue_environment`只记录
-`TASK_QUEUE_ENABLE`、`PER_STREAM_QUEUE`、`ASCEND_LAUNCH_BLOCKING`的进程启动请求；
-未设置为null，不推断厂商默认或自动修改全局环境。队列配置必须在设备初始化前由启动器显式选择。
-某队列配置下的异步全链资格不能改写另一配置的失败，关闭主机任务队列也不等于逐算子设备同步。
+Only minimal configuration, commands/results and reusable lessons are maintained.
+No obligation to produce full action/dependency records or universal decoders.
