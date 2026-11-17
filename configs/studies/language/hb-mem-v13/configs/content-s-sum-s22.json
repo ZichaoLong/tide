@@ -24642,6 +24642,17 @@
   "planned_inventory": {
     "lm_trainable": 49013408
   },
+  "resource_admission": {
+    "bounded_choice": "completed finite rows only, peak<=34000MiB; smallest batch within5% of measured best; failed larger batch remains failed",
+    "calibration_state": "completed",
+    "global_batch": 64,
+    "micro": 8,
+    "peak_mib": 14627.70849609375,
+    "sha256": "978a85e1bbccd69989abeb9dabc9ad6e8270bb88f8f3874d2b279ec2272f30ee",
+    "source": "runs/v13-cal-content-s/result.json",
+    "strict_numerical": "see separate qualification; finite exploration",
+    "targets_per_second": 2577.966397885758
+  },
   "resources": {
     "max_rss_gib": 64
   },
@@ -24654,7 +24665,7 @@
   "study_id": "TL-HB-MEM-SUMQRY",
   "threads": 2,
   "training": {
-    "batch": 16,
+    "batch": 8,
     "betas": [
       0.9,
       0.95
@@ -24663,7 +24674,7 @@
     "clip_norm": 1.0,
     "decay_policy": "matrix_only",
     "eps": 1e-08,
-    "eval_batch": 16,
+    "eval_batch": 8,
     "eval_tokens": 131072,
     "full_probe_batch": 4,
     "full_probe_length": 32,

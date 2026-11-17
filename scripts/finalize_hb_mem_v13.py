@@ -8,6 +8,7 @@ from scripts.prepare_direct_v10 import finalize
 
 def main():
  root=Path.cwd();base=root/'configs/studies/language/hb-mem-v13';table=json.loads((base/'table.json').read_text());extra=[];reuse=[]
+ if table.get('calibration_resolved'):raise ValueError('already resolved; never overwrite frozen main configuration')
  for row in table['cases']:
   group=row['group'];fresh=group in ('q10-l','pool-l');cp=root/'runs'/('v13-cal-'+('r2-' if fresh else '')+group)/'result.json'
   cal=json.loads(cp.read_text());projection=json.loads(cp.with_name('projection.json').read_text())

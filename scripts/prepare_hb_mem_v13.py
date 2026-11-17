@@ -23,7 +23,7 @@ def main():
   start=start.isoformat(),deadline=deadline.isoformat(),deadline_epoch=deadline.timestamp(),
   max_sum_chains=12,max_conditional_qry_chains=4,target_tokens=128*2**20,max_parameters=200000000,
   max_new_concurrent_npus=16,aggregate_compute_cap=None,account_hard_limit_gib=700,
-  planned_new_disk_gib=60,filesystem_low_water_gib=32,account_checkpoint_reserve_gib=32,
+  planned_new_disk_gib=80,filesystem_low_water_gib=32,account_checkpoint_reserve_gib=32,
   no_automatic_retry=True,original_feasibility_threshold=2e-5)
  atomic_json(base/'budget.json',budget)
  policy=json.loads((root/'configs/studies/language/hb-v12/resource.json').read_text())
@@ -39,6 +39,9 @@ def main():
    c.pop('planned_inventory',None);c.pop('resource_admission',None)
    for mem in c['direct']['plan']['memories']:mem['memory_read']='sum'
    c['implementation']['sum_implementation']='matrix'
+   if group in ('q10-l','pool-l'):
+    c['implementation']['aggregate_vjp']='ordered-v1'
+    c['mem_comparison']['conditional_qry']='new matched qry because historical native quotient/old allocator or mixed repaired ancestry is not a same-source single-Mem control'
    c['training'].update(target_tokens=128*2**20,milestones=[8*2**20,32*2**20,128*2**20],full_probe_batch=4,full_probe_length=32)
    finalize(c);cfg=base/'configs'/(c['id']+'.json');atomic_json(cfg,c)
    rows.append(dict(id=c['id'],group=group,seed=seed,mem='sum',route=route,config=str(cfg.relative_to(root)),

@@ -1,5 +1,5 @@
 {
-  "calibration_resolved": false,
+  "calibration_resolved": true,
   "cases": [
     {
       "config": "configs/studies/language/hb-mem-v13/configs/q10-s-sum-s11.json",
@@ -132,9 +132,330 @@
       "route": "quad",
       "seed": 22,
       "sum_parameters": 49013408
+    },
+    {
+      "config": "configs/studies/language/hb-mem-v13/configs/q10-l-qry-s11.json",
+      "group": "q10-l",
+      "id": "q10-l-qry-s11",
+      "mem": "qry",
+      "qry_config": "configs/studies/language/direct-v10/table/main/hb-d128-r28-q10-s11.json",
+      "qry_parameters": 75541048,
+      "reason": "conditional v10 control: old native quotient/allocator or mixed repaired ancestry not used as same-source single-Mem comparison",
+      "route": "quad",
+      "seed": 11,
+      "sum_parameters": 72100408
+    },
+    {
+      "config": "configs/studies/language/hb-mem-v13/configs/q10-l-qry-s22.json",
+      "group": "q10-l",
+      "id": "q10-l-qry-s22",
+      "mem": "qry",
+      "qry_config": "configs/studies/language/direct-v10/table/main/hb-d128-r28-q10-s22.json",
+      "qry_parameters": 75541048,
+      "reason": "conditional v10 control: old native quotient/allocator or mixed repaired ancestry not used as same-source single-Mem comparison",
+      "route": "quad",
+      "seed": 22,
+      "sum_parameters": 72100408
+    },
+    {
+      "config": "configs/studies/language/hb-mem-v13/configs/pool-l-qry-s11.json",
+      "group": "pool-l",
+      "id": "pool-l-qry-s11",
+      "mem": "qry",
+      "qry_config": "configs/studies/language/direct-v10/table/main/hb-d128-r64-pool-s11.json",
+      "qry_parameters": 171459232,
+      "reason": "conditional v10 control: old native quotient/allocator or mixed repaired ancestry not used as same-source single-Mem comparison",
+      "route": "pool",
+      "seed": 11,
+      "sum_parameters": 163594912
+    },
+    {
+      "config": "configs/studies/language/hb-mem-v13/configs/pool-l-qry-s22.json",
+      "group": "pool-l",
+      "id": "pool-l-qry-s22",
+      "mem": "qry",
+      "qry_config": "configs/studies/language/direct-v10/table/main/hb-d128-r64-pool-s22.json",
+      "qry_parameters": 171459232,
+      "reason": "conditional v10 control: old native quotient/allocator or mixed repaired ancestry not used as same-source single-Mem comparison",
+      "route": "pool",
+      "seed": 22,
+      "sum_parameters": 163594912
     }
   ],
   "confirmation": "fresh262K excluding old locks; old qry endpoints re-evaluated; test sealed",
+  "new_qry_chains": 4,
+  "new_sum_chains": 12,
+  "preserved_calibration_failures": [
+    "runs/v13-cal-q3-l/result.json",
+    "runs/v13-cal-q10-l/result.json",
+    "runs/v13-cal-pool-l/result.json"
+  ],
+  "qry_reuse": [
+    {
+      "checkpoint": "runs/v12-repair-base-q10-s11/train/latest.pt",
+      "config": "configs/studies/language/hb-v12/configs/base-q10-s11.json",
+      "group": "q10-s",
+      "id": "q10-s-qry-s11",
+      "mem": "qry",
+      "original_confirmation": "runs/v12-repair-base-q10-s11/confirmation/result.json",
+      "original_job": "v12-repair-base-q10-s11",
+      "scope": "same original qry parameter/function/recipe; retain historical numerical source/repair provenance; fresh evaluator source recorded, not exact trajectory equivalence",
+      "seed": 11,
+      "sha256": "9685296cee10cc33cfc3fea9d2447836c57a6ffbaadaf54ae24abd5efe2ba9d5",
+      "training_identity": {
+        "config_sha256": "2223c54b216c1472b94595c61d4f401ff8221374402fd293e37613c3d342f679",
+        "data_lock_sha256": "40b7c0ebb9650d11aa0c0080532c884e2ca3846db578155f3df7068b82191d2f",
+        "device": "npu:0",
+        "dtype": "float32",
+        "installation": {
+          "foundation_commit": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+          "foundation_lock_sha256": "ba5464d7e23fe6b8c7453a52bfc7b961f040c92d0b80786c18132e40d90308b7",
+          "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+          "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+          "tidegraph": "0.3.0",
+          "tidegraph_source_sha256": "cfe2168a2c87565a568fb8944429b6b38401f92cf24972fba59c47b7592a7847",
+          "torch": "2.12.0+cpu",
+          "torch_npu": "2.12.0.post3",
+          "transformers": null
+        },
+        "mode": "train",
+        "source_commit": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+        "source_sha256": "f2d6a00e81f525fc341fa5f9cce227432b69600afda78cd511095f88e50a0740",
+        "threads": 2
+      }
+    },
+    {
+      "checkpoint": "runs/v12-all-base-q10-s22/train/latest.pt",
+      "config": "configs/studies/language/hb-v12/configs/base-q10-s22.json",
+      "group": "q10-s",
+      "id": "q10-s-qry-s22",
+      "mem": "qry",
+      "original_confirmation": "runs/v12-all-base-q10-s22/confirmation/result.json",
+      "original_job": "v12-all-base-q10-s22",
+      "scope": "same original qry parameter/function/recipe; retain historical numerical source/repair provenance; fresh evaluator source recorded, not exact trajectory equivalence",
+      "seed": 22,
+      "sha256": "cee2b95d03e40072dccaae78aa7a68ed69e970f9660cf8772509e3238c57e4ef",
+      "training_identity": {
+        "config_sha256": "e81dad7b3c060cae1ce1892e60726576a2da316f8b515973e92eb4d72115624e",
+        "data_lock_sha256": "40b7c0ebb9650d11aa0c0080532c884e2ca3846db578155f3df7068b82191d2f",
+        "device": "npu:0",
+        "dtype": "float32",
+        "installation": {
+          "foundation_commit": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+          "foundation_lock_sha256": "ba5464d7e23fe6b8c7453a52bfc7b961f040c92d0b80786c18132e40d90308b7",
+          "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+          "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+          "tidegraph": "0.3.0",
+          "tidegraph_source_sha256": "cfe2168a2c87565a568fb8944429b6b38401f92cf24972fba59c47b7592a7847",
+          "torch": "2.12.0+cpu",
+          "torch_npu": "2.12.0.post3",
+          "transformers": null
+        },
+        "mode": "train",
+        "source_commit": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+        "source_sha256": "f2d6a00e81f525fc341fa5f9cce227432b69600afda78cd511095f88e50a0740",
+        "threads": 2
+      }
+    },
+    {
+      "checkpoint": "runs/v12-main-base-q3-s11/train/latest.pt",
+      "config": "configs/studies/language/hb-v12/configs/base-q3-s11.json",
+      "group": "q3-s",
+      "id": "q3-s-qry-s11",
+      "mem": "qry",
+      "original_confirmation": "runs/v12-main-base-q3-s11/confirmation/result.json",
+      "original_job": "v12-main-base-q3-s11",
+      "scope": "same original qry parameter/function/recipe; retain historical numerical source/repair provenance; fresh evaluator source recorded, not exact trajectory equivalence",
+      "seed": 11,
+      "sha256": "4c11590f53d9e41e91d46b67aa0a2e1f65d1912f97f15e4abd46aa60581271e8",
+      "training_identity": {
+        "config_sha256": "ef83914d389549f5aac07a1e65712015c46e703694cf7287c7c456a08f158ac8",
+        "data_lock_sha256": "40b7c0ebb9650d11aa0c0080532c884e2ca3846db578155f3df7068b82191d2f",
+        "device": "npu:0",
+        "dtype": "float32",
+        "installation": {
+          "foundation_commit": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+          "foundation_lock_sha256": "ba5464d7e23fe6b8c7453a52bfc7b961f040c92d0b80786c18132e40d90308b7",
+          "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+          "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+          "tidegraph": "0.3.0",
+          "tidegraph_source_sha256": "cfe2168a2c87565a568fb8944429b6b38401f92cf24972fba59c47b7592a7847",
+          "torch": "2.12.0+cpu",
+          "torch_npu": "2.12.0.post3",
+          "transformers": null
+        },
+        "mode": "train",
+        "source_commit": "5147701447dd15a092cc4b052f828b037ed98df4",
+        "source_sha256": "547c262230864633c48921e64f5ffdeea5e5af5979eff16aa8aab061b29872b8",
+        "threads": 2
+      }
+    },
+    {
+      "checkpoint": "runs/v12-repair-base-q3-s22/train/latest.pt",
+      "config": "configs/studies/language/hb-v12/configs/base-q3-s22.json",
+      "group": "q3-s",
+      "id": "q3-s-qry-s22",
+      "mem": "qry",
+      "original_confirmation": "runs/v12-repair-base-q3-s22/confirmation/result.json",
+      "original_job": "v12-repair-base-q3-s22",
+      "scope": "same original qry parameter/function/recipe; retain historical numerical source/repair provenance; fresh evaluator source recorded, not exact trajectory equivalence",
+      "seed": 22,
+      "sha256": "9b33db32dd39f65b657f43ab28ae64df74812fee3472ff9ec634199f4d2d559c",
+      "training_identity": {
+        "config_sha256": "383baf05b02b8714a8802c592ba90ca48dfd03b34190d9fd0ac04554ba15f6fd",
+        "data_lock_sha256": "40b7c0ebb9650d11aa0c0080532c884e2ca3846db578155f3df7068b82191d2f",
+        "device": "npu:0",
+        "dtype": "float32",
+        "installation": {
+          "foundation_commit": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+          "foundation_lock_sha256": "ba5464d7e23fe6b8c7453a52bfc7b961f040c92d0b80786c18132e40d90308b7",
+          "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+          "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+          "tidegraph": "0.3.0",
+          "tidegraph_source_sha256": "cfe2168a2c87565a568fb8944429b6b38401f92cf24972fba59c47b7592a7847",
+          "torch": "2.12.0+cpu",
+          "torch_npu": "2.12.0.post3",
+          "transformers": null
+        },
+        "mode": "train",
+        "source_commit": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+        "source_sha256": "f2d6a00e81f525fc341fa5f9cce227432b69600afda78cd511095f88e50a0740",
+        "threads": 2
+      }
+    },
+    {
+      "checkpoint": "runs/v12-four-base128-q3-s11/train/latest.pt",
+      "config": "configs/studies/language/hb-v12/configs/base128-q3-s11.json",
+      "group": "q3-l",
+      "id": "q3-l-qry-s11",
+      "mem": "qry",
+      "original_confirmation": "runs/v12-four-base128-q3-s11/confirmation/result.json",
+      "original_job": "v12-four-base128-q3-s11",
+      "scope": "same original qry parameter/function/recipe; retain historical numerical source/repair provenance; fresh evaluator source recorded, not exact trajectory equivalence",
+      "seed": 11,
+      "sha256": "267dbb92a96bb58d5e702ad19ed150e9093abbc0f563b899afcfe3345851d5da",
+      "training_identity": {
+        "config_sha256": "798b9a22488d2369f22066de8a283107f4e51938f788f416224f130a31c40d3a",
+        "data_lock_sha256": "40b7c0ebb9650d11aa0c0080532c884e2ca3846db578155f3df7068b82191d2f",
+        "device": "npu:0",
+        "dtype": "float32",
+        "installation": {
+          "foundation_commit": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+          "foundation_lock_sha256": "ba5464d7e23fe6b8c7453a52bfc7b961f040c92d0b80786c18132e40d90308b7",
+          "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+          "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+          "tidegraph": "0.3.0",
+          "tidegraph_source_sha256": "cfe2168a2c87565a568fb8944429b6b38401f92cf24972fba59c47b7592a7847",
+          "torch": "2.12.0+cpu",
+          "torch_npu": "2.12.0.post3",
+          "transformers": null
+        },
+        "mode": "train",
+        "source_commit": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+        "source_sha256": "f2d6a00e81f525fc341fa5f9cce227432b69600afda78cd511095f88e50a0740",
+        "threads": 2
+      }
+    },
+    {
+      "checkpoint": "runs/v12-repair-base128-q3-s22/train/latest.pt",
+      "config": "configs/studies/language/hb-v12/configs/base128-q3-s22.json",
+      "group": "q3-l",
+      "id": "q3-l-qry-s22",
+      "mem": "qry",
+      "original_confirmation": "runs/v12-repair-base128-q3-s22/confirmation/result.json",
+      "original_job": "v12-repair-base128-q3-s22",
+      "scope": "same original qry parameter/function/recipe; retain historical numerical source/repair provenance; fresh evaluator source recorded, not exact trajectory equivalence",
+      "seed": 22,
+      "sha256": "95d573f9c5c7b81d6799f29298b96641730ab7a8df994c165d0610b0a62a311f",
+      "training_identity": {
+        "config_sha256": "69913ce19f6492caec247f60f4789b5facf912ac54b8f8908b37e226c8174007",
+        "data_lock_sha256": "40b7c0ebb9650d11aa0c0080532c884e2ca3846db578155f3df7068b82191d2f",
+        "device": "npu:0",
+        "dtype": "float32",
+        "installation": {
+          "foundation_commit": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+          "foundation_lock_sha256": "ba5464d7e23fe6b8c7453a52bfc7b961f040c92d0b80786c18132e40d90308b7",
+          "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+          "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+          "tidegraph": "0.3.0",
+          "tidegraph_source_sha256": "cfe2168a2c87565a568fb8944429b6b38401f92cf24972fba59c47b7592a7847",
+          "torch": "2.12.0+cpu",
+          "torch_npu": "2.12.0.post3",
+          "transformers": null
+        },
+        "mode": "train",
+        "source_commit": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+        "source_sha256": "f2d6a00e81f525fc341fa5f9cce227432b69600afda78cd511095f88e50a0740",
+        "threads": 2
+      }
+    },
+    {
+      "checkpoint": "runs/v12-all-readcontent-q3-s11/train/latest.pt",
+      "config": "configs/studies/language/hb-v12/configs/readcontent-q3-s11.json",
+      "group": "content-s",
+      "id": "content-s-qry-s11",
+      "mem": "qry",
+      "original_confirmation": "runs/v12-all-readcontent-q3-s11/confirmation/result.json",
+      "original_job": "v12-all-readcontent-q3-s11",
+      "scope": "same original qry parameter/function/recipe; retain historical numerical source/repair provenance; fresh evaluator source recorded, not exact trajectory equivalence",
+      "seed": 11,
+      "sha256": "48093c7516367dbcb943e95f799a97331be6d1dc6d2148159147f47c0df682c5",
+      "training_identity": {
+        "config_sha256": "37acf7c18595ded04fec01c322dcfc2805465b280bd817c836e62671a3ae9e57",
+        "data_lock_sha256": "40b7c0ebb9650d11aa0c0080532c884e2ca3846db578155f3df7068b82191d2f",
+        "device": "npu:0",
+        "dtype": "float32",
+        "installation": {
+          "foundation_commit": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+          "foundation_lock_sha256": "ba5464d7e23fe6b8c7453a52bfc7b961f040c92d0b80786c18132e40d90308b7",
+          "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+          "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+          "tidegraph": "0.3.0",
+          "tidegraph_source_sha256": "cfe2168a2c87565a568fb8944429b6b38401f92cf24972fba59c47b7592a7847",
+          "torch": "2.12.0+cpu",
+          "torch_npu": "2.12.0.post3",
+          "transformers": null
+        },
+        "mode": "train",
+        "source_commit": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+        "source_sha256": "f2d6a00e81f525fc341fa5f9cce227432b69600afda78cd511095f88e50a0740",
+        "threads": 2
+      }
+    },
+    {
+      "checkpoint": "runs/v12-four-readcontent-q3-s22/train/latest.pt",
+      "config": "configs/studies/language/hb-v12/configs/readcontent-q3-s22.json",
+      "group": "content-s",
+      "id": "content-s-qry-s22",
+      "mem": "qry",
+      "original_confirmation": "runs/v12-four-readcontent-q3-s22/confirmation/result.json",
+      "original_job": "v12-four-readcontent-q3-s22",
+      "scope": "same original qry parameter/function/recipe; retain historical numerical source/repair provenance; fresh evaluator source recorded, not exact trajectory equivalence",
+      "seed": 22,
+      "sha256": "980ce9cab287a794f3586931d6b7d7e9e01647032bb2fd62e58dfb9f8a73e997",
+      "training_identity": {
+        "config_sha256": "60c09b1f7e892202ffef8cf657f3d016a695792b7bd0e5f8ded8b95eac56fb12",
+        "data_lock_sha256": "40b7c0ebb9650d11aa0c0080532c884e2ca3846db578155f3df7068b82191d2f",
+        "device": "npu:0",
+        "dtype": "float32",
+        "installation": {
+          "foundation_commit": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+          "foundation_lock_sha256": "ba5464d7e23fe6b8c7453a52bfc7b961f040c92d0b80786c18132e40d90308b7",
+          "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+          "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+          "tidegraph": "0.3.0",
+          "tidegraph_source_sha256": "cfe2168a2c87565a568fb8944429b6b38401f92cf24972fba59c47b7592a7847",
+          "torch": "2.12.0+cpu",
+          "torch_npu": "2.12.0.post3",
+          "transformers": null
+        },
+        "mode": "train",
+        "source_commit": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+        "source_sha256": "f2d6a00e81f525fc341fa5f9cce227432b69600afda78cd511095f88e50a0740",
+        "threads": 2
+      }
+    }
+  ],
   "schema": "tide-hb-mem-v13-table-v1",
   "selection": "implementation and physical microbatch by bounded synthetic cost only; no quality pruning"
 }

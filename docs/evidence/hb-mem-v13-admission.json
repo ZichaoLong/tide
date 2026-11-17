@@ -1,0 +1,66 @@
+{
+  "confirmation": {
+    "documents": 138,
+    "old_v1_v4_v5_titles_in_official_exclusion": true,
+    "other_excluded_locks": [
+      "runs/v9-data-r3/data-lock.json",
+      "runs/v6-data-final/data-lock.json",
+      "runs/v11-confirmation-data/data-lock.json",
+      "runs/v12-data/data-lock.json"
+    ],
+    "record": "runs/v13-data/data-lock.json",
+    "sha256": "b8de8be163b72082532b9118e4c96903f392d7565b452ff358323c177707b692",
+    "test_access": false,
+    "tokens": 262144
+  },
+  "cpu_suite": {
+    "command": "TORCH_DEVICE_BACKEND_AUTOLOAD=0 .venv-positive-floor-v1/bin/python -m unittest tests.test_sum_memory tests.test_direct_specialized tests.test_hb_mechanisms -q",
+    "scope": "independent history/VJP; whole-model FP64 sum vs general formula; shared initialization, empty history, causality and regression",
+    "state": "14 tests passed"
+  },
+  "decision": "admit explicitly labelled finite NPU FP32 learning exploration; per-chain gates remain",
+  "learning": "unchecked; no8Mi quality-based ranking; exact same-stack fresh-process recovery then128Mi and fresh confirmation required",
+  "numerical": {
+    "atol": 1e-06,
+    "bounded_triage": "Separate short/long on FP32-rounded inputs: finite CPU32/NPU32 differences also present; exact-zero future-input VJP for both histories. Original elementwise causes not fully isolated; do not relabel strict pass.",
+    "feasibility": 2e-05,
+    "observations": "Original NPU L256 w-VJP: matrix6/1024, blocked5/1024 elements over original tolerance; max_abs2.7359e-5, relativeL2~2.1e-7. Forward and p-VJP pass. CPU FP64 history/VJP pass.",
+    "rtol": 1e-05,
+    "strict_state": "failed_finite_retained",
+    "unresolved": "Long trained states and near-boundary routing may amplify finite differences. Per-chain feasibility/nonfinite/causal/exact-resume failures still stop that chain."
+  },
+  "qry_regression": "Small old62e32602 versus new qry forward/parameter VJP exact on CPU and NPU; no claim of full-history bitwise equivalence.",
+  "records": [
+    {
+      "axes": {
+        "discrete_semantics": "empty_history_exact_zero",
+        "execution": "passed",
+        "learning": "unchecked",
+        "qry_regression": "passed",
+        "recovery": "per_chain_required",
+        "strict_numerical": "passed"
+      },
+      "path": "runs/v13-check-cpu/result.json",
+      "sha256": "5f2070463d837465367e297e5fbaa3658b251d096e13709d3069000c0b0ec035"
+    },
+    {
+      "axes": {
+        "discrete_semantics": "empty_history_exact_zero",
+        "execution": "passed",
+        "learning": "unchecked",
+        "qry_regression": "passed",
+        "recovery": "per_chain_required",
+        "strict_numerical": "failed_finite_retained"
+      },
+      "path": "runs/v13-check-npu/result.json",
+      "sha256": "6eb2963c146a6ccf90c8b15a353632b36be971c1644d5e34115bb43d2e7f2041"
+    },
+    {
+      "axes": null,
+      "path": "runs/v13-numeric-triage/result.json",
+      "sha256": "77e0ec6346ec9d8babb7e6b306cb8c4589026c51a450482ecfa3ba5975997d76"
+    }
+  ],
+  "reviewed_at": "2026-11-17T10:04:36.313402+00:00",
+  "schema": "tide-hb-mem-v13-admission-v1"
+}

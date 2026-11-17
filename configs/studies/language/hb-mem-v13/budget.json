@@ -5,6 +5,7 @@
   "authorized": "2026-11-17 user approval of hb-sum-qry-proposal",
   "deadline": "2026-11-19T17:44:00+08:00",
   "deadline_epoch": 1795081440.0,
+  "disk_revision_reason": "16 resolved chains include4 conditional qry controls; simultaneous trained recovery retains pilot optimizer+8Mi weights+3 recovery states (52bytes/parameter), then temporary states retired after exact pass",
   "filesystem_low_water_gib": 32,
   "max_conditional_qry_chains": 4,
   "max_new_concurrent_npus": 16,
@@ -12,7 +13,7 @@
   "max_sum_chains": 12,
   "no_automatic_retry": true,
   "original_feasibility_threshold": 2e-05,
-  "planned_new_disk_gib": 60,
+  "planned_new_disk_gib": 80,
   "schema": "tide-hb-mem-v13-budget-v1",
   "start": "2026-11-17T17:44:00+08:00",
   "target_tokens": 134217728

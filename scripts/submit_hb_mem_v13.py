@@ -12,7 +12,8 @@ def main(a):
  root=a.root.resolve();source=a.source.resolve();sid=verify_source(source)
  base=source/'configs/studies/language/hb-mem-v13';budget=json.loads((base/'budget.json').read_text());deadline=budget['deadline_epoch']
  quota=account_quota();fs=os.statvfs(root);free=fs.f_bavail*fs.f_frsize/2**30
- if min(700,quota['hard_gib'])-quota['used_gib']<92 or free<92:raise RuntimeError('new writes plus simultaneous checkpoint reserve unavailable')
+ required=budget['planned_new_disk_gib']+budget['account_checkpoint_reserve_gib']
+ if min(700,quota['hard_gib'])-quota['used_gib']<required or free<required:raise RuntimeError('new writes plus simultaneous checkpoint reserve unavailable')
  out=root/f'runs/v13-submit-{a.phase}';out.mkdir(parents=True,exist_ok=False)
  state=dict(state='submitting',source=sid['commit'],started_at=now(),jobs=[]);atomic_json(out/'state.json',state)
  def launch(job,argv,inputs,device='npu',policy=None,threads=4,memory=72,cap=None):

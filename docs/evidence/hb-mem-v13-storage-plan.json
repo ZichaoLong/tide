@@ -1,0 +1,9 @@
+{
+  "final_weights_and_optimizer_gib": 34.07349908351898,
+  "initial_micro_recovery_peak_gib": 68.14699816703796,
+  "planning_peak_gib": 80,
+  "scope": "all16 overlap worst-case; no automatic old checkpoint retirement; quota700 and filesystem free separately guarded",
+  "simultaneous_write_reserve_gib": 32,
+  "total_trainable_parameters": 1524422544,
+  "trained_recovery_peak_gib": 73.8259146809578
+}
