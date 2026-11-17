@@ -25,8 +25,12 @@ def main():
     args=parser.parse_args()
     if args.device.startswith("npu"):
         import torch_npu
+        torch.npu.matmul.allow_hf32 = False
+        torch.npu.conv.allow_hf32 = False
     torch.set_num_threads(4)
     device=torch.device(args.device)
+    if device.type=="npu":
+        torch.npu.set_device(device)
     configs=[
         ModelConfig(topology=TopologyConfig(n=8,layers=4),d=64),
         ModelConfig(topology=TopologyConfig(n=8,layers=4),d=64,memory="S",allocation="pool",

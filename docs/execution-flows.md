@@ -19,3 +19,14 @@ and checked terminal status. Never alter an active job's source.
 
 Only minimal configuration, commands/results and reusable lessons are maintained.
 No obligation to produce full action/dependency records or universal decoders.
+
+The optional shared NPU adapter in scripts/npu_shared_queue.py requires an
+expiring policy created from current observed device occupants and explicit
+conversation authorization. If an existing cooperative exclusive lock is
+borrowed, the policy also binds its actual PID/start/UID/device/inode. The old
+lock is never rewritten or released. A separate whole-group borrower mutex,
+the existing FIFO/two sampling phases, an additional post-lock resource check
+and a lifetime identity/expiry monitor remain in force. Identity changes stop
+our adapter/child, never the original owner. These measurements are shared
+observations, not exclusive hardware timings. Policy files belong in ignored
+run records and must not become a later conversation's standing permission.

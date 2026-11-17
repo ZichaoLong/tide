@@ -155,9 +155,12 @@ def run_qualification(device_name, cases=CASES, lengths=("short", "long"),
     family = str(device_name).split(":")[0]
     if family not in {"cpu", "npu"}:
         raise ValueError("this qualification compares CPU with CPU or NPU only")
-    npu_version, device_label = None, platform.machine()
+    npu_version, device_label, hf32 = None, platform.machine(), None
     if family == "npu":
         import torch_npu  # Must precede CPU autograd to avoid late registration.
+        torch.npu.matmul.allow_hf32 = False
+        torch.npu.conv.allow_hf32 = False
+        hf32 = {"matmul": torch.npu.matmul.allow_hf32, "conv": torch.npu.conv.allow_hf32}
         npu_version = torch_npu.__version__
     device = torch.device(device_name)
     if device.type == "npu":
@@ -169,7 +172,7 @@ def run_qualification(device_name, cases=CASES, lengths=("short", "long"),
     report = {"scope": "weighted_attention forward and first-order VJP; no model or performance claim",
               "run_state": "running", "started": datetime.now(timezone.utc).isoformat(),
               "device": str(device), "device_name": device_label, "torch": torch.__version__,
-              "torch_npu": npu_version, "python": platform.python_version(),
+              "torch_npu": npu_version, "allow_hf32": hf32, "python": platform.python_version(),
               "source_head": subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=root, text=True).strip(),
               "attention_sha256": hashlib.sha256(source.read_bytes()).hexdigest(),
               "harness_sha256": hashlib.sha256(Path(__file__).read_bytes()).hexdigest(), "results": []}

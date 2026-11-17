@@ -21,7 +21,7 @@ from benchmarks.baselines import TransformerBaseline, SSDBaseline, parameter_cou
 
 def synchronize(device):
     if device.type == "npu":
-        torch.npu.synchronize()
+        torch.npu.synchronize(device)
     elif device.type == "cuda":
         torch.cuda.synchronize(device)
 
@@ -50,7 +50,11 @@ def main():
     output.parent.mkdir(parents=True,exist_ok=True)
     if args.device.startswith("npu"):
         import torch_npu
+        torch.npu.matmul.allow_hf32 = False
+        torch.npu.conv.allow_hf32 = False
     device = torch.device(args.device)
+    if device.type=="npu":
+        torch.npu.set_device(device)
     torch.set_num_threads(args.threads)
     torch.manual_seed(args.seed)
     cfg = ModelConfig.from_dict(json.loads(Path(args.config).read_text()))
@@ -81,6 +85,7 @@ def main():
                   precision="fp32", observations=[])
     if device.type=="npu":
         record["torch_npu"] = torch_npu.__version__
+        record["allow_hf32"] = {"matmul":torch.npu.matmul.allow_hf32,"conv":torch.npu.conv.allow_hf32}
     def persist():
         temporary = output.with_suffix(output.suffix+".tmp")
         with temporary.open("w") as stream:
@@ -93,9 +98,11 @@ def main():
             model,spec = factory(subject)
             model = model.to(device)
             model.train(mode!="inference")
-            x = torch.randn(args.batch,args.length,cfg.d,device=device)
+            input_width = (cfg.input_dim or cfg.d) if subject=="tide" else cfg.d
+            x = torch.randn(args.batch,args.length,input_width,device=device)
             opt = torch.optim.AdamW(model.parameters(),lr=1e-4,foreach=True) if mode=="train" else None
-            row = dict(subject=subject,mode=mode,spec=spec,parameters=parameter_count(model),state="running")
+            row = dict(subject=subject,mode=mode,spec=spec,parameters=parameter_count(model),state="running",
+                       host_load_before=os.getloadavg(),cpu_affinity=sorted(os.sched_getaffinity(0)))
             record["observations"].append(row); persist()
             try:
                 def step():
