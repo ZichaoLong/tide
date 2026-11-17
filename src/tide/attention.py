@@ -98,7 +98,7 @@ def _native_attention(q, k, v, weights, mask, backend, *, unit_prior=False, no_m
 
         fusion = getattr(torch_npu, "npu_fusion_attention_v2", None)
         if fusion is None:
-            raise RuntimeError("npu_fusion requires npu_fusion_attention_v2 with pse_type=0")
+            raise RuntimeError("npu_fusion requires npu_fusion_attention_v2")
         batch = math.prod(q.shape[:-3])
         heads, queries, width = q.shape[-3:]
         keys, value_width, scale = k.shape[-2], v.shape[-1], width ** -0.5
@@ -126,7 +126,9 @@ def _native_attention(q, k, v, weights, mask, backend, *, unit_prior=False, no_m
             v.reshape(batch, heads, keys, width).contiguous(),
             heads, "BNSD", pse=pse, atten_mask=blocked,
             scale=scale, keep_prob=1.0, sparse_mode=1,
-            inner_precise=2, pse_type=0,
+            # CANN requires the default PSE mode when no PSE tensor exists.
+            # With an actual log prior, select scale(QK^T) + pse explicitly.
+            inner_precise=2, pse_type=1 if pse is None else 0,
         )[0].reshape_as(q)[..., :value_width]
     return output if unit and no_mask else torch.where(visible.any(-1, keepdim=True), output, 0)
 
@@ -218,8 +220,9 @@ def weighted_attention(q: Tensor, k: Tensor, v: Tensor, weights: Tensor | None =
     Backends are math, sdpa, tiled and npu_fusion. auto uses native SDPA on
     CPU/CUDA and native NPU fusion for supported inputs; zero trainable priors
     use tiled to retain their right derivatives. Explicit
-    unavailable requests fail. The NPU adapter requires v2, pse_type=0 and
-    equal Q/K/V head widths in [1,768]; it has no CPU fallback. Positive
+    unavailable requests fail. The NPU adapter requires v2 and equal Q/K/V
+    head widths in [1,768]; it has no CPU fallback. PSE mode is the default
+    one when absent and zero for an actual frozen log prior. Positive
     trainable NPU key priors use a rank-one Q/K extension (padded to 16) and
     retain the original scaling. Native fused backward remains in use.
     Query-dependent trainable NPU priors require math/tiled. Tiled uses 64

@@ -386,7 +386,7 @@
     "status": "passed",
     "threads_for_tests": 1
   },
-  "resource_note": "CPU affinity0-31,ATen32 threads,64GB service cap; other host jobs present; no NPU compute overlapped this workflow. RSS is process cumulative, not incremental per subject.",
+  "resource_note": "ATen32 threads. AllowedCPUs0-31 and MemoryMax64GB were requested, but later host inspection found the per-service cpuset/memory controllers undelegated; these requests must not be treated as enforced. This first workflow did not record effective affinity. Observed process peak RSS was about2.1GB. Other host jobs present; no NPU compute overlapped this workflow. RSS is cumulative, not incremental per subject.",
   "npu_attempt": {
     "state": "admission_failed",
     "exit_code": 3,

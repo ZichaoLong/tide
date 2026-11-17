@@ -188,8 +188,11 @@ def test_npu_adapter_algebra_and_compact_arguments_without_device(monkeypatch, t
     def fake_fusion(q, k, v, heads, layout, **kwargs):
         seen.update(kwargs, q_shape=q.shape, k_shape=k.shape)
         assert layout == "BNSD" and heads == 2
-        assert kwargs["pse_type"] == 0
         bias = kwargs["pse"]
+        if bias is None and kwargs["pse_type"] != 1:
+            raise RuntimeError("PseInput is nullptr while pseType is not default")
+        if bias is not None:
+            assert kwargs["pse_type"] == 0
         blocked = kwargs["atten_mask"]
         if blocked is not None:
             bias = torch.zeros_like(blocked, dtype=q.dtype) if bias is None else bias

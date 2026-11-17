@@ -13,8 +13,10 @@ the long-window test that found it is a subsequent independent check.
 FC is four regions/layers × eight nodes, d128, K, source_residual, encoded
 regional attention, role quad with k1, independent parameters. B8/L128 means
 eight independent samples, each containing128 input positions. Timing starts
-from zero history. All values are FP32. CPU used32 ATen threads on cores0–31,
-with a64GB service memory limit. One warmup and three measured windows per mode;
+from zero history. All values are FP32. CPU used32 ATen threads. The requested
+AllowedCPUs0–31 and MemoryMax64GB were not enforced by this host's undelegated
+per-service controllers; effective affinity was not recorded for this first
+workflow. Observed process peak RSS stayed near2.1GB. One warmup and three measured windows per mode;
 the table uses the median. Other host jobs were present.
 
 | Subject | Parameters incl boundary | Inference positions/s | Grad-forward positions/s | Complete train positions/s |

@@ -30,3 +30,11 @@ and a lifetime identity/expiry monitor remain in force. Identity changes stop
 our adapter/child, never the original owner. These measurements are shared
 observations, not exclusive hardware timings. Policy files belong in ignored
 run records and must not become a later conversation's standing permission.
+
+This host currently uses a legacy cgroup hierarchy: systemd user
+MemoryMax/AllowedCPUs requests alone do not establish per-service enforcement.
+`scripts/job.py --max-rss-gib 64` enforces a sampled process-tree RSS sum bound
+and terminates only its own process group on breach. This is not a cgroup hard
+memory limit. Use CPUAffinity when pinning is intended and record the actual
+process affinity and Torch thread count; lifecycle isolation in background.slice
+is verified separately from resource enforcement.

@@ -33,6 +33,9 @@ For truncated training, use `detach_state(result.state)` at optimizer boundaries
 state and optional optimizer state. `load_checkpoint(path, device=...)` returns
 `(model,state,optimizer_state)`; load the latter into an identically configured
 optimizer. Checkpoint files are trusted Torch pickle files.
+An installed-API example is `python examples/train.py --checkpoint NEW.pt`.
+It performs three updates and checks the next window after restore; its scalar
+objective verifies the mechanism and is not an experiment training recipe.
 
 The finite choices in `ModelConfig` are:
 
