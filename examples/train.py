@@ -39,7 +39,41 @@ def main():
     with torch.no_grad():
         torch.testing.assert_close(restored(next_input,restored_state).readout(),
                                    model(next_input,state).readout(),rtol=0,atol=0)
-    print({"checkpoint":str(args.checkpoint),"restored_optimizer":bool(opt_state),"continuation":"exact"})
+    restored_optimizer=torch.optim.AdamW(restored.parameters(),lr=1e-4,foreach=True)
+    restored_optimizer.load_state_dict(opt_state)
+    torch.testing.assert_close(restored.state_dict(),model.state_dict(),rtol=0,atol=0)
+    torch.testing.assert_close(restored_optimizer.state_dict(),optimizer.state_dict(),
+                               rtol=0,atol=0,check_device=False)
+    for current,step_optimizer,current_state in ((model,optimizer,state),
+                                                (restored,restored_optimizer,restored_state)):
+        step_optimizer.zero_grad(set_to_none=True)
+        current(next_input,current_state).readout().square().mean().backward()
+        step_optimizer.step()
+    # Exact decoding does not make parallel FP32 gradient reductions bitwise.
+    tolerance=dict(atol=1e-6,rtol=2e-3)
+    failures=[];max_abs=0.0
+    for (name,a),(_,b) in zip(restored.named_parameters(),model.named_parameters()):
+        if not bool(torch.isfinite(a).all() and torch.isfinite(b).all()):
+            raise ArithmeticError("non-finite resumed parameter: "+name)
+        delta=(a-b).abs();maximum=float(delta.max().detach());max_abs=max(max_abs,maximum)
+        if bool((delta>tolerance["atol"]+tolerance["rtol"]*b.abs()).any()):
+            failures.append({"parameter":name,"max_abs":maximum})
+    for current_optimizer in (optimizer,restored_optimizer):
+        for entries in current_optimizer.state.values():
+            for value in entries.values():
+                if isinstance(value,torch.Tensor) and not bool(torch.isfinite(value).all()):
+                    raise ArithmeticError("non-finite resumed optimizer state")
+    optimizer_difference=None
+    try:
+        torch.testing.assert_close(restored_optimizer.state_dict(),optimizer.state_dict(),
+                                   **tolerance,check_device=False)
+    except AssertionError as error:
+        optimizer_difference=str(error)
+    print({"checkpoint":str(args.checkpoint),"restored_optimizer":bool(opt_state),
+           "continuation":"exact","next_optimizer_update":
+           "finite_deviation" if failures or optimizer_difference else "within_threshold",
+           "update_threshold":tolerance,"parameter_max_abs":max_abs,
+           "parameter_threshold_failures":failures,"optimizer_difference":optimizer_difference})
 
 
 if __name__=="__main__":
