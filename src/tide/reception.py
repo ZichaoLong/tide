@@ -3,7 +3,7 @@ import torch
 from torch import nn
 
 from .attention import weighted_attention
-from .parameters import NodeLinear, norm
+from .parameters import NodeLinear, norm, owner_ids
 
 
 class SourceEmbedding(nn.Module):
@@ -24,7 +24,7 @@ class SourceEmbedding(nn.Module):
         self.weight = nn.Parameter(torch.zeros(len(slots),width))
 
     def forward(self, owners, classes):
-        indices = self.lookup[owners[:,None], classes]
+        indices = self.lookup[owner_ids(owners)[:,None], classes]
         return self.weight[indices]
 
 

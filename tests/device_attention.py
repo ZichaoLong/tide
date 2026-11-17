@@ -173,7 +173,8 @@ def run_qualification(device_name, cases=CASES, lengths=("short", "long"),
               "run_state": "running", "started": datetime.now(timezone.utc).isoformat(),
               "device": str(device), "device_name": device_label, "torch": torch.__version__,
               "torch_npu": npu_version, "allow_hf32": hf32, "python": platform.python_version(),
-              "source_head": subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=root, text=True).strip(),
+              "source_head": os.environ.get("TIDE_SOURCE_COMMIT") or subprocess.check_output(
+                  ["git", "rev-parse", "HEAD"], cwd=root, text=True).strip(),
               "attention_sha256": hashlib.sha256(source.read_bytes()).hexdigest(),
               "harness_sha256": hashlib.sha256(Path(__file__).read_bytes()).hexdigest(), "results": []}
     for length in lengths:

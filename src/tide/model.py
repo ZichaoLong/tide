@@ -8,6 +8,7 @@ from .topology import build_topology
 from .reception import Reception
 from .region import Description, RegionNetwork, region_control
 from .kv import KVMemory
+from .parameters import NodeOwners
 
 
 def _number(keys):
@@ -105,7 +106,7 @@ class TideModel(nn.Module):
         self.region_group = [-1 if skip else next(iterator) for skip in fixed]
         self.regional = nn.ModuleList(RegionNetwork(d,config.attention_backend) for _ in set(labels))
         self.inputs = nn.ModuleDict({role:nn.Linear(config.input_dim or d,d,bias=False)
-                                    for role in set(graph.nodes[v].role for v in graph.input_nodes)})
+                                    for role in sorted(set(graph.nodes[v].role for v in graph.input_nodes))})
         self.layer_nodes = [tuple(v.id for v in graph.nodes if v.layer==l) for l in range(len(graph.widths))]
         self.layer_regions = [tuple(r for r,vs in enumerate(graph.regions) if graph.nodes[vs[0]].layer==l)
                               for l in range(len(graph.widths))]
@@ -188,6 +189,12 @@ class TideModel(nn.Module):
             raise ValueError("input must be nonempty [B,L,input_dim]")
         b,positions,_ = x.shape
         start = 0 if state is None else state.position
+        if type(start) is not int or start < 0:
+            raise OverflowError("state.position must be a nonnegative Python int")
+        maximum = ((start+positions-1)*self.graph.period+len(self.layer_nodes) if self.settle else
+                   (start+positions)*self.graph.period)
+        if maximum > torch.iinfo(torch.int64).max:
+            raise OverflowError("continuation logical time exceeds int64")
         length = positions if self.settle else positions*self.graph.period
         embedded = {role:projection(x) for role,projection in self.inputs.items()}
         if not self.settle:
@@ -200,7 +207,7 @@ class TideModel(nn.Module):
             values,controls = [],[]
             for region in regions:
                 members = self.graph.regions[region]
-                owners = torch.tensor(members,device=x.device)
+                owners = NodeOwners(torch.tensor(members,device=x.device),members)
                 contents,masses,classes = self._incoming(region,layers,() if state is None else state.pending,
                                                          embedded,b,length,x.device,inject)
                 received,u = self.receive(contents,masses,classes,owners)
@@ -220,7 +227,8 @@ class TideModel(nn.Module):
                     if not idx:
                         continue
                     sub = torch.tensor(idx,device=x.device)
-                    mids = torch.tensor([self.memory_ids[kind][members[i]] for i in idx],device=x.device)
+                    possible = tuple(self.memory_ids[kind][members[i]] for i in idx)
+                    mids = NodeOwners(torch.tensor(possible,device=x.device),possible)
                     old = None if state is None else state.memories[region][kind]
                     parts,context,updated = self.memories[kind].prepare(u[sub],mass[sub],times[sub],mids,old)
                     desc = [a.index_copy(0,sub,z.to(a.dtype)) for a,z in zip(desc,parts)]
@@ -230,7 +238,8 @@ class TideModel(nn.Module):
                 if bool(roles.all()) and self.graph.config.partition=="singleton":
                     control = torch.where(received>=0.5,torch.ones_like(received),2*received)
                 else:
-                    description_owners = torch.tensor([self.description_ids[v] for v in members],device=x.device)
+                    possible = tuple(self.description_ids[v] for v in members)
+                    description_owners = NodeOwners(torch.tensor(possible,device=x.device),possible)
                     z,score = self.describe(u,received,desc,description_owners)
                     score = self.regional[self.region_group[region]](z,score,mass)
                     control = region_control(score,received,roles,self.config.budget or max(1,self.graph.config.n//32),

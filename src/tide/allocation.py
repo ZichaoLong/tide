@@ -46,6 +46,98 @@ def _save_solution(ctx, c, scores, mu, lower, upper, low_active, high_active, ki
     return c
 
 
+def _quad_sorted(shifted, lower, upper, target):
+    """Finite breakpoint solve: S(lambda)=intercept-count*lambda per interval.
+
+    At shifted-upper a coordinate enters the interior (+1, +breakpoint);
+    at shifted-lower it leaves (-1, -breakpoint). Fixed coordinates emit zero
+    events. Prefix sums after the last equal breakpoint represent the whole
+    tie group, so only positive-width intervals can supply a candidate.
+    """
+    free = lower < upper
+    enter = torch.where(free, shifted - upper, 0)
+    leave = torch.where(free, shifted - lower, 0)
+    events, order = torch.cat((enter, leave), -1).sort(-1)
+    signs = torch.cat((free.to(shifted.dtype), -free.to(shifted.dtype)), -1).gather(-1, order)
+    count = signs.cumsum(-1)
+    intercept = upper.sum(-1, keepdim=True) + (events * signs).cumsum(-1)
+    following = torch.cat((events[..., 1:], torch.full_like(events[..., :1], torch.inf)), -1)
+    candidates = (intercept - target) / torch.where(count > 0, count, 1)
+    intervals = ((count > 0) & (events < following) & torch.isfinite(candidates)
+                 & (candidates >= events) & (candidates <= following))
+    index = intervals.to(torch.int32).argmax(-1, keepdim=True)
+    multiplier = candidates.gather(-1, index)
+    c = _response(shifted, multiplier, lower, upper, "quad")
+    # Exact ties use their declared boundary face, including rounding in the
+    # subtraction that constructs the breakpoint itself.
+    c = torch.where(free & (multiplier == enter), upper, c)
+    c = torch.where(free & (multiplier == leave), lower, c)
+    # Reconstruct the selected face from its exact remaining mass. A rounded
+    # multiplier beside a flat interval can otherwise invent a positive sender
+    # even when the other coordinates already consume the entire target.
+    inside = (c > lower) & (c < upper)
+    count = inside.sum(-1, keepdim=True).clamp_min(1)
+    remainder = target - torch.where(inside, 0, c).sum(-1, keepdim=True)
+    origin = torch.where(inside, shifted, -torch.inf).amax(-1, keepdim=True)
+    offsets = torch.where(inside, shifted - origin, 0)
+    reconstructed = offsets - offsets.sum(-1, keepdim=True) / count + remainder / count
+    # These exact residual equalities identify whole boundary faces. The local
+    # score origin also protects genuine tiny mass among equal interior scores.
+    inside_lower = torch.where(inside, lower, 0).sum(-1, keepdim=True)
+    inside_upper = torch.where(inside, upper, 0).sum(-1, keepdim=True)
+    reconstructed = torch.where(remainder == inside_lower, lower,
+                                torch.where(remainder == inside_upper, upper, reconstructed))
+    c = torch.maximum(lower, torch.minimum(upper, torch.where(inside, reconstructed, c)))
+    tolerance = 32 * torch.finfo(shifted.dtype).eps * target.abs().clamp_min(torch.finfo(shifted.dtype).tiny)
+    # A tiny cap at a large score can collapse its two floating breakpoints.
+    # Its lost mass may hide inside a large total's residual tolerance.
+    resolved = (~free | (torch.isfinite(enter) & torch.isfinite(leave) & (enter < leave))).all(-1, keepdim=True)
+    valid = (resolved & intervals.any(-1, keepdim=True) & torch.isfinite(c).all(-1, keepdim=True)
+             & ((c.sum(-1, keepdim=True) - target).abs() <= tolerance))
+    return c, valid
+
+
+def _bisect(shifted, lower, upper, target, solve, kind):
+    """Original safeguarded solve, also the numerical fallback for quad."""
+    free = lower < upper
+    sum_lower = lower.sum(-1, keepdim=True)
+    if kind == "quad":
+        left = torch.where(free, shifted - upper, torch.inf).amin(-1, keepdim=True)
+        right = torch.where(free, shifted - lower, -torch.inf).amax(-1, keepdim=True)
+    else:
+        log_upper = torch.where(upper > 0, upper, 1).log()
+        left = torch.where(free, shifted - 1 - log_upper, torch.inf).amin(-1, keepdim=True)
+        residual = torch.where(target > sum_lower, target - sum_lower, 1)
+        count = free.sum(-1, keepdim=True).clamp_min(1)
+        right = (torch.where(free, shifted - 1, -torch.inf).amax(-1, keepdim=True)
+                 - residual.log() + count.log())
+    left, right = torch.where(solve, left, 0), torch.where(solve, right, 0)
+    for _ in range(64 if shifted.dtype == torch.float64 else 40):
+        middle = left * 0.5 + right * 0.5
+        above = _response(shifted, middle, lower, upper, kind).sum(-1, keepdim=True) > target
+        left, right = torch.where(above, middle, left), torch.where(above, right, middle)
+    multiplier = left * 0.5 + right * 0.5
+    c = _response(shifted, multiplier, lower, upper, kind)
+    for _ in range(3):
+        inside = (c > lower) & (c < upper)
+        slope = (inside.to(c.dtype) if kind == "quad" else torch.where(inside, c, 0)).sum(-1, keepdim=True)
+        correction = (c.sum(-1, keepdim=True) - target) / torch.where(slope > 0, slope, 1)
+        multiplier = torch.maximum(left, torch.minimum(right, multiplier + correction))
+        c = _response(shifted, multiplier, lower, upper, kind)
+    # Preserve the original weak-mass reconstruction on the selected face.
+    inside = (c > lower) & (c < upper)
+    count = inside.sum(-1, keepdim=True).clamp_min(1)
+    remainder = target - torch.where(inside, 0, c).sum(-1, keepdim=True)
+    if kind == "quad":
+        average = torch.where(inside, shifted, 0).sum(-1, keepdim=True) / count
+        reconstructed = shifted - average + remainder / count
+    else:
+        logits = torch.where(inside, shifted, -torch.inf)
+        logits = torch.where(inside.any(-1, keepdim=True), logits, 0)
+        reconstructed = remainder * torch.softmax(logits, -1)
+    return torch.maximum(lower, torch.minimum(upper, torch.where(inside, reconstructed, c)))
+
+
 class _Constrained(torch.autograd.Function):
     @staticmethod
     def forward(ctx, scores, mu, lower, upper, low_total, high_total, kind):
@@ -68,42 +160,13 @@ class _Constrained(torch.autograd.Function):
         center = torch.where(free.any(-1, keepdim=True), center, 0)
         shifted = scores - center
         if kind == "quad":
-            left = torch.where(free, shifted - upper, torch.inf).amin(-1, keepdim=True)
-            right = torch.where(free, shifted - lower, -torch.inf).amax(-1, keepdim=True)
+            c, valid = _quad_sorted(shifted, lower, upper, target)
+            fallback = solve & ~valid
+            if bool(fallback.any()):
+                recovered = _bisect(shifted, lower, upper, target, fallback, kind)
+                c = torch.where(fallback, recovered, c)
         else:
-            log_upper = torch.where(upper > 0, upper, 1).log()
-            left = torch.where(free, shifted - 1 - log_upper, torch.inf).amin(-1, keepdim=True)
-            residual = torch.where(target > sum_lower, target - sum_lower, 1)
-            count = free.sum(-1, keepdim=True).clamp_min(1)
-            right = (torch.where(free, shifted - 1, -torch.inf).amax(-1, keepdim=True)
-                     - residual.log() + count.log())
-        left, right = torch.where(solve, left, 0), torch.where(solve, right, 0)
-        for _ in range(64 if scores.dtype == torch.float64 else 40):
-            middle = left * 0.5 + right * 0.5
-            above = _response(shifted, middle, lower, upper, kind).sum(-1, keepdim=True) > target
-            left, right = torch.where(above, middle, left), torch.where(above, right, middle)
-        multiplier = left * 0.5 + right * 0.5
-        c = _response(shifted, multiplier, lower, upper, kind)
-        for _ in range(3):
-            inside = (c > lower) & (c < upper)
-            slope = (inside.to(c.dtype) if kind == "quad" else torch.where(inside, c, 0)).sum(-1, keepdim=True)
-            correction = (c.sum(-1, keepdim=True) - target) / torch.where(slope > 0, slope, 1)
-            multiplier = torch.maximum(left, torch.minimum(right, multiplier + correction))
-            c = _response(shifted, multiplier, lower, upper, kind)
-        # Reconstruct the selected smooth face from its residual mass. This
-        # avoids subtracting nearly equal score/multiplier values for weak
-        # receiving masses; the solve still decides the active coordinates.
-        inside = (c > lower) & (c < upper)
-        count = inside.sum(-1, keepdim=True).clamp_min(1)
-        remainder = target - torch.where(inside, 0, c).sum(-1, keepdim=True)
-        if kind == "quad":
-            average = torch.where(inside, shifted, 0).sum(-1, keepdim=True) / count
-            reconstructed = shifted - average + remainder / count
-        else:
-            logits = torch.where(inside, shifted, -torch.inf)
-            logits = torch.where(inside.any(-1, keepdim=True), logits, 0)
-            reconstructed = remainder * torch.softmax(logits, -1)
-        c = torch.maximum(lower, torch.minimum(upper, torch.where(inside, reconstructed, c)))
+            c = _bisect(shifted, lower, upper, target, solve, kind)
         c = torch.where(at_lower, lower, torch.where(at_upper, upper, c))
         c = torch.where(active, c, c0)
         tolerance = 32 * torch.finfo(scores.dtype).eps * target.abs().clamp_min(torch.finfo(scores.dtype).tiny)

@@ -78,3 +78,12 @@ train; all time fresh prefill windows. `B*L/seconds` is input-position throughpu
 Window latency is not first-token or decode latency. Comparisons identify actual
 parameter counts, layer/node counts and the intentionally different mathematics.
 Use [execution-flows.md](execution-flows.md) for frozen long runs.
+
+The timing harness generates inputs on CPU, moves them before timing, and
+records input and initial-parameter hashes for paired device comparisons.
+`TIDE_SOURCE_COMMIT` identifies the model source; `TIDE_HARNESS_COMMIT` can
+separately identify a newer harness used to measure an earlier implementation.
+Raw work counters are a separate audit window after timing (after updates in
+train mode), not a sum of every timed step. CPU RSS is a process high-water mark;
+NPU allocator peaks are recorded per timed observation. Shared-device timings
+remain shared observations even when the inputs match.

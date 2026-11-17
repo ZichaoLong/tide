@@ -36,3 +36,14 @@ matrices; private adapters preserve mathematical ownership, including per-head
 KV query adapters. Full packs selected queries once and publishes once. This
 does not imply zero padding or zero host scheduling; timing/profiling must
 identify their cost before claiming efficient execution at every graph size.
+
+Region membership supplies static owner metadata. When every possible owner
+uses the same base matrix, NodeLinear flattens node/B/position rows into one
+GEMM; private adapters still use node BMMs. Mixed groups retain independent
+BMMs. This dispatch does not inspect device owner values on the host.
+
+Quad allocation sorts its clipped-linear response breakpoints, then rebuilds
+the selected face from its remaining mass. Exact endpoints preserve zero
+senders. Ill-conditioned rows retain the safeguarded bisection fallback;
+Shannon uses that iterative solver. Both use the declared solution-mapping
+first-order VJP, not differentiation through solver iterations.

@@ -6,6 +6,7 @@ Inputs and model construction are outside timing. Every window starts from the
 bound zero state; this is prefill throughput, not decode or first-token latency.
 """
 import argparse
+import hashlib
 import json
 import os
 from pathlib import Path
@@ -61,10 +62,12 @@ def main():
     tide = TideModel(cfg)
     target = parameter_count(tide)
     nodes, layers = len(tide.graph.nodes), len(tide.graph.widths)
+    edges = len(tide.graph.edges)
+    del tide
     def factory(subject):
         if subject == "tide":
             return TideModel(cfg), {"family":"tide", "config":cfg.to_dict(),
-                                   "nodes":nodes,"layers":layers,"edges":len(tide.graph.edges)}
+                                   "nodes":nodes,"layers":layers,"edges":edges}
         constructor = TransformerBaseline if subject.startswith("transformer") else SSDBaseline
         count = nodes if subject.endswith("nodes") else layers
         if subject.endswith("parameters"):
@@ -78,7 +81,8 @@ def main():
         return model,model.configuration()
 
     source = os.environ.get("TIDE_SOURCE_COMMIT") or subprocess.check_output(["git","rev-parse","HEAD"],text=True).strip()
-    record = dict(source=source, arguments=vars(args),torch=torch.__version__,
+    record = dict(source=source, harness_source=os.environ.get("TIDE_HARNESS_COMMIT",source),
+                  arguments=vars(args),torch=torch.__version__,
                   physical_devices=os.environ.get("ASCEND_RT_VISIBLE_DEVICES"),
                   timing="prefill_from_zero; forward includes state/packing/returns; train includes AdamW",
                   input_positions=args.batch*args.length, comparisons_equivalent=False,
@@ -96,13 +100,22 @@ def main():
         for mode in args.modes:
             torch.manual_seed(args.seed)
             model,spec = factory(subject)
+            fingerprint=hashlib.sha256()
+            for name,parameter in model.named_parameters():
+                fingerprint.update(name.encode());fingerprint.update(str(tuple(parameter.shape)).encode())
+                fingerprint.update(parameter.detach().contiguous().numpy().tobytes())
+            parameter_hash=fingerprint.hexdigest()
             model = model.to(device)
             model.train(mode!="inference")
             input_width = (cfg.input_dim or cfg.d) if subject=="tide" else cfg.d
-            x = torch.randn(args.batch,args.length,input_width,device=device)
+            generator=torch.Generator(device="cpu").manual_seed(args.seed+1)
+            x_cpu=torch.randn(args.batch,args.length,input_width,generator=generator)
+            input_hash=hashlib.sha256(x_cpu.numpy().tobytes()).hexdigest()
+            x=x_cpu.to(device)
             opt = torch.optim.AdamW(model.parameters(),lr=1e-4,foreach=True) if mode=="train" else None
             row = dict(subject=subject,mode=mode,spec=spec,parameters=parameter_count(model),state="running",
                        host_load_before=os.getloadavg(),cpu_affinity=sorted(os.sched_getaffinity(0)))
+            row.update(input_sha256=input_hash,initial_parameter_sha256=parameter_hash)
             record["observations"].append(row); persist()
             try:
                 def step():

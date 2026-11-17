@@ -4,9 +4,11 @@ Run as python -m benchmarks.profile with the same config/device/batch/length/
 threads arguments as benchmarks.run. Synchronization at every stage boundary
 changes execution: these are diagnostic wall times, not normal throughput or
 device kernel times. --cpu-operators adds a separate unwrapped CPU observation
-containing operator counts/shapes only. Every step starts from zero state.
+containing operator counts/shapes and instrumented CPU times. Every step starts
+from zero state; none of these CPU observations are NPU device kernel times.
 """
 import argparse
+import hashlib
 from contextlib import contextmanager
 import importlib
 import json
@@ -154,15 +156,19 @@ def main():
     config = ModelConfig.from_dict(json.loads(Path(args.config).read_text()))
     model = TideModel(config).to(device)
     model.train(args.mode != "inference")
-    inputs = torch.randn(args.batch, args.length, config.input_dim or config.d, device=device)
+    inputs_cpu = torch.randn(args.batch,args.length,config.input_dim or config.d,
+                             generator=torch.Generator().manual_seed(args.seed+1))
+    inputs = inputs_cpu.to(device)
     optimizer = torch.optim.AdamW(model.parameters(), lr=1e-4, foreach=True) if args.mode == "train" else None
     source = os.environ.get("TIDE_SOURCE_COMMIT") or subprocess.check_output(["git", "rev-parse", "HEAD"], text=True).strip()
-    record = dict(state="running", source=source, arguments=vars(args), config=config.to_dict(),
+    record = dict(state="running", source=source, harness_source=os.environ.get("TIDE_HARNESS_COMMIT",source),
+                  arguments=vars(args), config=config.to_dict(),
                   torch=str(torch.__version__), precision="fp32", device=str(device),
                   physical_devices=os.environ.get("ASCEND_RT_VISIBLE_DEVICES"),
                   timing="intrusive synchronized wall time; prefill from zero through returned window",
                   device_kernel_times=False, warmup_steps=1, observed_steps=1,
                   parameters=sum(parameter.numel() for parameter in model.parameters()))
+    record["input_sha256"]=hashlib.sha256(inputs_cpu.numpy().tobytes()).hexdigest()
     record["working_tree_dirty"] = (None if os.environ.get("TIDE_SOURCE_COMMIT") else bool(subprocess.check_output(
         ["git", "status", "--porcelain", "--", "src/tide", "benchmarks/profile.py"], text=True).strip()))
     if device.type == "npu":
@@ -181,11 +187,12 @@ def main():
         if args.cpu_operators:
             with torch.profiler.profile(activities=[torch.profiler.ProfilerActivity.CPU], record_shapes=True) as profile:
                 step(model, inputs, optimizer, args.mode, device)
-            groups = [dict(operator=event.key, count=event.count, input_shapes=event.input_shapes)
+            groups = [dict(operator=event.key, count=event.count, input_shapes=event.input_shapes,
+                           self_cpu_time_us=event.self_cpu_time_total,cpu_time_us=event.cpu_time_total)
                       for event in profile.key_averages(group_by_input_shape=True)]
             record["cpu_operator_observation"] = dict(
-                scope="separate unwrapped step after timing; same mode; counts/shapes only",
-                total_shape_groups=len(groups), groups=sorted(groups, key=lambda row: row["count"], reverse=True)[:100])
+                scope="separate unwrapped CPU step; counts/shapes and instrumented CPU times; not device kernel times",
+                total_shape_groups=len(groups), groups=sorted(groups, key=lambda row: row["self_cpu_time_us"], reverse=True)[:100])
         record["state"] = "passed"
     except Exception as error:
         record.update(state="failed", error=repr(error))

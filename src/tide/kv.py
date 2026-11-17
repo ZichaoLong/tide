@@ -7,7 +7,7 @@ from torch import nn
 
 from .attention import weighted_attention
 from .layout import select_queries
-from .parameters import FeedForward, HeadQuery, NodeLinear, norm
+from .parameters import FeedForward, HeadQuery, NodeLinear, norm, select_owners
 
 
 @dataclass
@@ -106,7 +106,7 @@ class KVMemory(nn.Module):
         packed = select_queries(u, control, times)
         if packed is None:
             return torch.zeros_like(u)
-        ids = owners[packed.nodes]
+        ids = select_owners(owners, packed.nodes)
         n, b, qlen, d = packed.data.shape
         queries = self.query(norm(packed.data), ids).reshape(n,b,qlen,d//32,32).transpose(2,3)
         anchor = packed.positions[:,:,:1]

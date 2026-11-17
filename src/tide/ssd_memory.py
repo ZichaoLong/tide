@@ -12,7 +12,7 @@ from torch import nn
 from torch.nn import functional as F
 
 from .layout import select_queries
-from .parameters import FeedForward, NodeLinear, NodeVector, norm
+from .parameters import FeedForward, NodeLinear, NodeVector, norm, owner_ids, select_owners
 from .ssd import ConvState, logical_conv, ssd_scan
 
 
@@ -92,7 +92,8 @@ class SSDMemory(nn.Module):
         mixed_mass = u.dtype in (torch.float16, torch.bfloat16) and mass.dtype == torch.float32
         if mass.device != u.device or mass.dtype != u.dtype and not mixed_mass:
             raise ValueError("SSD mass must share input dtype/device, or be FP32 with low-precision input")
-        if owners.shape != (u.shape[0],) or owners.dtype != torch.int64 or owners.device != u.device:
+        ids = owner_ids(owners)
+        if ids.shape != (u.shape[0],) or ids.dtype != torch.int64 or ids.device != u.device:
             raise ValueError("SSD owners must be int64 [N] on the input device")
         n, b, length, d = u.shape
         state = self._initial(u, times) if state is None else state
@@ -147,7 +148,7 @@ class SSDMemory(nn.Module):
         packed = select_queries(u, control, times)
         if packed is None:
             return torch.zeros_like(u)
-        ids = owners[packed.nodes]
+        ids = select_owners(owners, packed.nodes)
         index = (packed.nodes[packed.node], packed.batch, packed.time)
         rows = torch.cat((reads[index], values[index], gate[index]), dim=-1)
         selected = rows.new_zeros((*packed.data.shape[:-1], 3*self.d))

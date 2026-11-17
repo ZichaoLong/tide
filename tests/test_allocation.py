@@ -6,6 +6,7 @@ import math
 import pytest
 import torch
 
+import tide.allocation as allocation
 from tide.allocation import allocate, pool
 
 
@@ -16,11 +17,13 @@ def tensor(values, grad=False):
     return torch.tensor(values, dtype=DTYPE, requires_grad=grad)
 
 
-def active_set_oracle(scores, w, lower, upper, k, kind):
+def active_set_oracle(scores, w, lower, upper, k, kind, total_bounds=None):
     """Enumerate faces and their stationary points; no multiplier root solve."""
     n = len(scores)
     high = min(k, sum(upper))
     low = max(sum(lower), min(min(1, sum(w)), high))
+    if total_bounds is not None:
+        low, high = total_bounds
     candidates = []
     for faces in itertools.product((0, 1, 2), repeat=n):
         free = [i for i, face in enumerate(faces) if face == 1]
@@ -230,3 +233,159 @@ def test_positive_sender_underflow_is_explicit(kind):
 def test_pool_rejects_final_mass_underflow_even_when_probability_survives():
     with pytest.raises(ArithmeticError, match="positive sender"):
         pool(tensor([-700., 0.]), tensor([1e-200, 1e-200]))
+
+
+@pytest.mark.parametrize("n", [8, 32, 128])
+@pytest.mark.parametrize("dtype", [torch.float32, torch.float64])
+def test_sorted_quad_against_independent_repeated_face_enumeration(n, dtype):
+    # Strict convexity makes identical coordinates equal. Enumerating four
+    # distinct classes therefore independently solves all n coordinates.
+    repeats = n // 4
+    cases = [([1.6, 1.2, .8, -.3], [.9, .8, .7, .6], [.1, 0., .05, 0.]),
+             ([-1.1, -.9, -.7, -.6], [.9, .8, .7, .6], [.1, 0., .05, 0.]),
+             ([-.01, -.02, -.03, -.04], [.002, .003, .004, .005], [.002, .0003, .0004, .0005])]
+    for values, caps, floors in cases:
+        s, mu, lower = [torch.tensor(x, dtype=dtype) for x in (values, caps, floors)]
+        w, upper, k = mu / 2, mu, max(1, n // 8)
+        arguments = [x.repeat_interleave(repeats) for x in (s, w, mu, lower, upper)]
+        result = allocate(*arguments, k)
+        high = min(k, repeats * sum(upper.tolist()))
+        low = max(repeats * sum(lower.tolist()), min(1, repeats * sum(w.tolist()), high))
+        expected = active_set_oracle(s.tolist(), w.tolist(), lower.tolist(), upper.tolist(), k, "quad",
+                                     total_bounds=(low / repeats, high / repeats))
+        expected = torch.tensor(expected, dtype=dtype).repeat_interleave(repeats)
+        atol, rtol = (1e-6, 5e-6) if dtype == torch.float32 else (2e-13, 2e-13)
+        torch.testing.assert_close(result, expected, atol=atol, rtol=rtol)
+
+
+@pytest.mark.parametrize("n", [8, 32, 128])
+@pytest.mark.parametrize("dtype", [torch.float32, torch.float64])
+def test_sorted_quad_matches_retained_bisection_values_and_vjps(monkeypatch, n, dtype):
+    generator = torch.Generator().manual_seed(172)
+    scores = torch.randn(6, n, generator=generator, dtype=dtype)
+    mu = .5 + .5 * torch.rand(6, n, generator=generator, dtype=dtype)
+    # Two tiny role floors per region leave room for the ordinary competitors.
+    lower = torch.zeros_like(mu)
+    lower[:, :2] = .03
+    roots = tuple(x.requires_grad_() for x in (scores, mu / 2, mu, lower, mu * .9))
+    budget = float(max(1, n // 32))
+    result = allocate(*roots, budget)
+    seed = torch.randn(result.shape, generator=generator, dtype=dtype)
+    gradients = torch.autograd.grad(result, roots, seed)
+    # Exercise the retained production bisection, not a second copy of the
+    # sorted-prefix algorithm. The enumeration above is the independent anchor.
+    def force_original(shifted, low, high, target):
+        return torch.zeros_like(shifted), torch.zeros_like(target, dtype=torch.bool)
+    monkeypatch.setattr(allocation, "_quad_sorted", force_original)
+    reference_roots = tuple(x.detach().clone().requires_grad_() for x in roots)
+    reference = allocate(*reference_roots, budget)
+    reference_gradients = torch.autograd.grad(reference, reference_roots, seed)
+    atol, rtol = (1e-6, 5e-6) if dtype == torch.float32 else (2e-13, 2e-13)
+    torch.testing.assert_close(result, reference, atol=atol, rtol=rtol)
+    for actual, expected in zip(gradients, reference_gradients):
+        torch.testing.assert_close(actual, expected, atol=0, rtol=0)
+
+
+@pytest.mark.parametrize("n", [8, 32, 128])
+@pytest.mark.parametrize("dtype,offset", [(torch.float32, 1e6), (torch.float64, 1e12)])
+def test_equal_enter_leave_breakpoints_keep_boundary_vjp(monkeypatch, n, dtype, offset):
+    # Half of the nodes leave the free set exactly when the other half enter.
+    scores = torch.tensor([offset + .25] * (n // 2) + [offset + 1.25] * (n // 2),
+                          dtype=dtype, requires_grad=True)
+    caps = torch.ones(n, dtype=dtype)
+    def no_fallback(*args):
+        pytest.fail("exact tied breakpoints should be solved by the finite path")
+    monkeypatch.setattr(allocation, "_bisect", no_fallback)
+    result = allocate(scores, caps, caps, 0., caps, n // 2)
+    expected = torch.cat((torch.zeros(n // 2, dtype=dtype), torch.ones(n // 2, dtype=dtype)))
+    torch.testing.assert_close(result, expected, atol=0, rtol=0)
+    gradient = torch.autograd.grad(result.sum(), scores)[0]
+    torch.testing.assert_close(gradient, torch.zeros_like(scores), atol=0, rtol=0)
+
+
+def test_weak_mass_prefix_cancellation_uses_original_fallback(monkeypatch):
+    scores = torch.tensor([[-2.] * 8, [-2., -3., -100., -1000., 0., 0., 0., 0.]], requires_grad=True)
+    w = torch.tensor([[1.] * 8, [2e-7, 1e-8, 1e-8, 1e-8, 0., 0., 0., 0.]], requires_grad=True)
+    mu = (2 * w).clamp_max(1)
+    called = []
+    original = allocation._bisect
+    def count_fallback(shifted, lower, upper, target, solve, kind):
+        called.append(solve.clone())
+        return original(shifted, lower, upper, target, solve, kind)
+    monkeypatch.setattr(allocation, "_bisect", count_fallback)
+    result = allocate(scores, w, mu, 0., mu, 1.)
+    assert len(called) == 1 and torch.equal(called[0], torch.tensor([[False], [True]]))
+    torch.testing.assert_close(result[0], torch.full((8,), 1 / 8), atol=0, rtol=0)
+    expected = torch.zeros(8)
+    expected[0] = w[1].detach().sum()
+    torch.testing.assert_close(result[1], expected, atol=0, rtol=0)
+    score_grad, received_grad = torch.autograd.grad(result[1, 0], (scores, w))
+    torch.testing.assert_close(score_grad, torch.zeros_like(scores), atol=0, rtol=0)
+    torch.testing.assert_close(received_grad[1, :4], torch.ones(4), atol=0, rtol=0)
+
+
+def test_collapsed_breakpoints_are_rejected_even_if_total_residual_hides_them():
+    shifted = torch.tensor([0., -1.])
+    lower, upper, target = torch.zeros(2), torch.tensor([1., 1e-8]), torch.tensor([.5])
+    candidate, valid = allocation._quad_sorted(shifted, lower, upper, target)
+    assert candidate.sum() == target[0] and not valid.item()
+
+
+@pytest.mark.parametrize("dtype", [torch.float32, torch.float64])
+@pytest.mark.parametrize("positive", [False, True])
+def test_flat_multiplier_interval_preserves_exact_zero_and_tiny_positive_support(monkeypatch, dtype, positive):
+    # Actual FC regression: prefix cancellation placed the multiplier one ULP
+    # before the flat interval and invented a 2.22e-16 sender in FP64.
+    scores = torch.tensor([0.5230857817411676, 1.7626989407125895],
+                          dtype=dtype, requires_grad=True)
+    caps = torch.ones(2, dtype=dtype)
+    budget = torch.tensor(1 + (4 * torch.finfo(dtype).eps if positive else 0),
+                          dtype=dtype, requires_grad=True)
+    def no_fallback(*args):
+        pytest.fail("the selected corner face should be solved by the finite path")
+    monkeypatch.setattr(allocation, "_bisect", no_fallback)
+    result = allocate(scores, caps, caps, 0., caps, budget)
+    expected = torch.stack((budget.detach() - 1, budget.new_ones(())))
+    torch.testing.assert_close(result, expected, atol=0, rtol=0)
+    assert bool(result[0] > 0) == positive
+    score_gradient, budget_gradient = torch.autograd.grad(result[0], (scores, budget))
+    torch.testing.assert_close(score_gradient, torch.zeros_like(scores), atol=0, rtol=0)
+    torch.testing.assert_close(budget_gradient, budget.new_tensor(float(positive)), atol=0, rtol=0)
+
+
+@pytest.mark.parametrize("dtype,gap", [(torch.float32, -1.9289610385894775),
+                                      (torch.float64, -1.641518376635315)])
+@pytest.mark.parametrize("positive", [False, True])
+def test_repeated_score_corner_keeps_support_after_face_mean_reconstruction(dtype, gap, positive):
+    # Three identical low scores expose rounding in an uncentered face mean.
+    shifted = torch.tensor([gap] * 3 + [0.] * 3, dtype=dtype)
+    lower, upper = torch.zeros_like(shifted), torch.ones_like(shifted)
+    target = shifted.new_tensor([3 * (1 + (4 * torch.finfo(dtype).eps if positive else 0))])
+    result, valid = allocation._quad_sorted(shifted, lower, upper, target)
+    assert valid.item()
+    expected = torch.cat(((target - 3).expand(3) / 3, torch.ones(3, dtype=dtype)))
+    torch.testing.assert_close(result, expected, atol=0, rtol=0)
+    assert bool((result[:3] > 0).all()) == positive
+
+
+@pytest.mark.parametrize("n", [8, 32, 128])
+def test_sorted_quad_directional_derivative_in_strict_interior(n):
+    generator = torch.Generator().manual_seed(654)
+    scores = (torch.rand(n, generator=generator, dtype=DTYPE) * .02 + 1).requires_grad_()
+    w = torch.full((n,), .1 / n, dtype=DTYPE, requires_grad=True)
+    mu = torch.full((n,), .8, dtype=DTYPE, requires_grad=True)
+    lower = torch.full((n,), .01, dtype=DTYPE, requires_grad=True)
+    upper = torch.full((n,), .7, dtype=DTYPE, requires_grad=True)
+    k = tensor(n / 4, True)
+    roots = (scores, w, mu, lower, upper, k)
+    directions = tuple(torch.randn(x.shape, generator=generator, dtype=DTYPE) * .01 for x in roots)
+    seed = torch.randn(n, generator=generator, dtype=DTYPE)
+    result = allocate(*roots)
+    gradients = torch.autograd.grad(result, roots, seed)
+    expected = sum((gradient * direction).sum() for gradient, direction in zip(gradients, directions))
+    epsilon = 1e-6
+    with torch.no_grad():
+        plus = allocate(*(x + epsilon * direction for x, direction in zip(roots, directions)))
+        minus = allocate(*(x - epsilon * direction for x, direction in zip(roots, directions)))
+    numerical = ((plus - minus) * seed).sum() / (2 * epsilon)
+    torch.testing.assert_close(expected, numerical, atol=2e-8, rtol=2e-6)

@@ -20,6 +20,8 @@ def main():
         parser.error("choose a new checkpoint path")
     if args.device.startswith("npu"):
         import torch_npu
+        torch.npu.matmul.allow_hf32 = False
+        torch.npu.conv.allow_hf32 = False
         torch.npu.set_device(args.device)
     torch.set_num_threads(args.threads);torch.manual_seed(17)
     model=TideModel(ModelConfig(topology=TopologyConfig(n=8,layers=4),d=64,memory=args.memory)).to(args.device)
