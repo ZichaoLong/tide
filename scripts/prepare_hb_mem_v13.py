@@ -3,7 +3,6 @@
 import copy,datetime,json,sys
 from pathlib import Path
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]))
-from scripts.prepare_direct_v10 import finalize
 from tide_lab.records import atomic_json,digest
 
 GROUPS={
@@ -16,6 +15,7 @@ GROUPS={
 }
 
 def main():
+ from scripts.prepare_direct_v10 import finalize
  root=Path.cwd();base=root/'configs/studies/language/hb-mem-v13';base.mkdir(exist_ok=False)
  (base/'configs').mkdir();rows=[]
  start=datetime.datetime.fromisoformat('2026-11-17T17:44:00+08:00');deadline=start+datetime.timedelta(hours=48)

@@ -11038,6 +11038,7 @@
       "start_tokens": 2097152,
       "target": 0.1
     },
+    "aggregate_vjp": "ordered-v1",
     "aggregation": "neighbors",
     "cpu_attention": "math",
     "ffn_checkpoint": false,
@@ -11047,6 +11048,7 @@
   "initialization": "role-keyed-fan-in-v1",
   "kind": "direct_specialized",
   "mem_comparison": {
+    "conditional_qry": "new matched qry because historical v10 native quotient/old solver trajectories are not identical to the currently qualified repaired numerical path; pool old repaired parents also have mixed original/repair ancestry",
     "group": "q10-l",
     "mem": "sum",
     "qry_config": "configs/studies/language/direct-v10/table/main/hb-d128-r28-q10-s22.json",

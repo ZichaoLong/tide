@@ -27,12 +27,14 @@ def main(a):
   r=subprocess.run(command,capture_output=True,text=True);atomic_json(out/(job+'.json'),dict(exit_code=r.returncode,stdout=r.stdout,stderr=r.stderr))
   if r.returncode:raise RuntimeError(r.stderr+' '+r.stdout)
   row.update(state='submitted',at=now());atomic_json(out/'state.json',state);print(job,flush=True)
- if a.phase=='cal':
-  for name in GROUPS:
-   cfg=base/'configs'/(name+'-sum-s11.json');job='v13-cal-'+name
+ if a.phase in ('cal','cal-r2'):
+  for name in (GROUPS if a.phase=='cal' else ('q10-l','pool-l')):
+   cfg=base/'configs'/(name+'-sum-s11.json');job='v13-'+a.phase+'-'+name
    launch(job,['scripts/calibrate_hb_mem_v13.py','--config',cfg,'--output',root/'runs'/job,
-    '--deadline-epoch',min(deadline,time.time()+5400),'--lens-cli',a.lens_cli],
+    '--deadline-epoch',min(deadline,time.time()+5400),'--lens-cli',a.lens_cli,*(['--qry-batches'] if a.phase=='cal-r2' else [])],
     [cfg,base/'resource.json',base/'budget.json'],policy=base/'resource.json',cap=5400)
+  if a.phase=='cal-r2':
+   state.update(state='submitted',finished_at=now());atomic_json(out/'state.json',state);return
   parent=root/'.local/source-hb-v12-repair-v2'
   for device in ('cpu','npu'):
    launch('v13-check-'+device,['scripts/check_hb_mem_v13.py','--device',device+(':0' if device=='npu' else ''),
@@ -47,6 +49,6 @@ def main(a):
  state.update(state='submitted',finished_at=now());atomic_json(out/'state.json',state)
 
 if __name__=='__main__':
- p=argparse.ArgumentParser();p.add_argument('phase',choices=('cal','main'))
+ p=argparse.ArgumentParser();p.add_argument('phase',choices=('cal','cal-r2','main'))
  for n in ('root','source','lens-cli'):p.add_argument('--'+n,type=Path,required=True)
  main(p.parse_args())

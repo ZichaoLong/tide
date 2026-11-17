@@ -19,7 +19,7 @@ def main(a):
   for mode in ('qry','matrix','blocked'):
    previous=None
    # qry supplies a matched physical-batch cost anchor, not recipe selection.
-   for micro in (batches[:1] if mode=='qry' else batches):
+   for micro in (batches[:1] if mode=='qry' and not a.qry_batches else batches):
     if previous and previous['peak_mib']*1.85>52000:
      report['cases'].append(dict(implementation=mode,micro=micro,state='not_attempted',reason='measured next-peak estimate exceeds52000MiB'));break
     if time.time()>a.deadline_epoch-120:raise TimeoutError('bounded calibration deadline')
@@ -58,4 +58,5 @@ def main(a):
 if __name__=='__main__':
  p=argparse.ArgumentParser()
  for n in ('config','output'):p.add_argument('--'+n,type=Path,required=True)
- p.add_argument('--deadline-epoch',type=float,required=True);p.add_argument('--lens-cli',required=True);main(p.parse_args())
+ p.add_argument('--deadline-epoch',type=float,required=True);p.add_argument('--lens-cli',required=True)
+ p.add_argument('--qry-batches',action='store_true');main(p.parse_args())
