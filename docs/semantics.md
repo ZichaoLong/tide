@@ -16,3 +16,10 @@ The rewrite intentionally has a new public API and state representation.
 
 Execution and performance use FP32. FP64 is available for CPU accuracy checks;
 FP16/BF16 are outside the requested implementation and validation scope.
+
+Zero reception performs no KV/SSD write, including its first-order boundary:
+an absent padded write has zero derivative. This is separate from the reusable
+Attention primitive's right derivative at an explicitly supplied zero key prior.
+Whole-window and continued KV evaluation use the same no-write convention.
+KV Full tiles original logical positions and restricts each key bank to the
+finite history window; sparse event indices never replace logical time.

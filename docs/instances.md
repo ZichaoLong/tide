@@ -2,6 +2,8 @@
 
 Install `tide-instances` from this checkout; import `tide`. Mathematics is fixed
 at the revision in [upstream.json](upstream.json). No retired executor is used.
+Models and benchmarks use FP32. CPU FP64 is available for accuracy verification;
+FP16/BF16 are outside this delivery.
 
 ```python
 import torch

@@ -1,33 +1,36 @@
-# Current handoff — instance rewrite, 2026-11-17
+# Current handoff — new instances, 2026-11-17
 
 Authorized branch: graph-execution-foundation. Fixed math:
-4f5b9f20a4030d68ee66ae2d26e34659a5e37234, snapshot math/ (108 files checked).
-Scaffold/governance commit c0d5e07b; first complete implementation follows it.
-Retired implementation/tests are not consulted or reused. User four untracked
-handoff documents remain untouched. Old P1–P6 is not the active task.
+4f5b9f20a4030d68ee66ae2d26e34659a5e37234; complete snapshot math/ checked.
+Scope: current FC/HB main bindings, correctness first then performance.
+FP32 execution/performance only; CPU FP64 optional for accuracy. Old teaching,
+LH-DAG/PDG, historical APIs/backend matrices and old P1–P6 are excluded.
+No retired implementation/tests are consulted or reused. Four user untracked
+handoff files remain untouched.
 
-New source: src/tide. FC, Lattice, Exchange, Multiscale Settle/Timed; K/S/X,
-four reception profiles, quad/Shannon/pool, three parameter sharing profiles.
-Independent FC formulas, allocation/Attention/SSD formulas, topology, gradient,
-optimizer/checkpoint/continuation/Timed flush checks: 227 CPU tests passed
-in 24.43s before this implementation commit. This is development evidence,
-not frozen-source or NPU qualification. Execution/performance are FP32 only;
-CPU FP64 is used for independent accuracy checks.
+Pushed implementation e73bc03e and evidence02a57ac5. New package src/tide:
+FC/Lattice/Exchange/Multiscale Settle/Timed; K/S/X, four reception profiles,
+quad/Shannon/pool, three sharing profiles, optimizer/checkpoint/flush.
+Frozen CPU qualification:227 passed25.26s. First FC FP32 CPU comparison is
+recorded in docs/evidence/instances-first-cpu-20261117.{md,json}.
+The NPU attempt failed admission (exit3) before device code: every admissible
+shared device held an existing exclusive cooperative lock. Preserve this fact.
+Both original jobs are terminal; no running measurement at this handoff.
 
-Current work: long-window independent KV checks, real-device FP32 checks and
-finite comparisons. Independent HB oracle and 21 parameter inventory cases pass. Fresh Transformer
-and SSD baselines in benchmarks/baselines.py; benchmark entry benchmarks/run.py.
-No active durable jobs. No new device or performance result yet.
+Next implementation increment: zero-reception KV no-write VJP and bounded-key
+long-prefill tiles;47 relevant checks passed21.55s including new independent
+long-window gradients. Attention remains FP32/CPU FP64; no low-precision work.
+Agent owns shared-lease adapter/tests (explicit observed lock-holder identities,
+separate borrower mutex, no changes to foreign locks, expiry/owner monitor).
+Another agent owns optional stage/profiler diagnostics. Main integrates and
+will commit/freeze before new CPU/HB/NPU runs. Do not edit frozen run inputs.
 
-Next: finish current owned edits, run CPU tests, commit implementation, freeze
-that commit for bounded background.slice CPU/NPU checks and measurements.
-Main owns model/config/benchmark integration; agents own independent HB oracle,
-Attention/device primitive checks, and SSD/parameter audit respectively.
-Shared NPU use is explicitly authorized in this continuing conversation;
-scripts/npu_shared_queue.py retains site queue/locks and requires an expiring
-observed-PID policy. No shared default for later conversations. Long jobs use
-frozen source and separate logs; never edit their inputs.
+Previous jobs/source/logs: artifacts/instances/source-e73bc03e and
+artifacts/instances/{cpu-first,npu-first}/{run.log,status.json,launch.json}.
+Inspect python scripts/status.py. New runs use bounded background.slice user
+services, all useful CPU/memory and authorized shared NPU, with contention
+recorded. Shared admission authorization applies to this conversation only.
 
-Disk: 865GB free, user quota 502GB of 700GB hard (soft300GB, grace4days),
-shm273GB available at last check. Not blocked; small new source/results only.
-Continue all current main candidates and comparisons, not merely first FC.
+Disk has865GB free; user quota502GB/700GB hard (soft300GB, grace4days), shm273GB
+at last check. Not blocked. Continue full current delivery per ROADMAP, not
+just first FC. User authorized ordinary commits/pushes; no force push.

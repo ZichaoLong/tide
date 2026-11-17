@@ -51,6 +51,10 @@ class KVMemory(nn.Module):
 
     def prepare(self, u, mass, times, owners, state=None):
         n, b, length, d = u.shape
+        # No reception means no write, including at the first-order boundary.
+        # A padding slot must not become a differentiable key prior in a whole
+        # window while disappearing from the saved continuation state.
+        mass = torch.where(mass>0,mass,torch.zeros_like(mass))
         normal = norm(u)
         keys, values = self.kv(normal, owners).split(d, -1)
         features = self.summary(normal, owners)
@@ -85,6 +89,20 @@ class KVMemory(nn.Module):
 
     def finish(self, context, control):
         u, times, owners, bank, old = context
+        # A tile is an interval in the original input, not in the packed query
+        # list. Its earliest query can see at most slots-1 preceding entries.
+        # Integer masks still decide visibility when receptions have gaps.
+        outputs = []
+        for start in range(0, u.shape[2], self.chunk):
+            end = min(u.shape[2], start+self.chunk)
+            lo, hi = max(0, old+start-self.slots+1), old+end
+            outputs.append(self._finish_tile(u[:, :, start:end], times[:, :, start:end], owners,
+                                             bank, lo, hi, control[:, :, start:end]))
+        if not outputs:
+            return torch.zeros_like(u)
+        return outputs[0] if len(outputs) == 1 else torch.cat(outputs, 2)
+
+    def _finish_tile(self, u, times, owners, bank, lo, hi, control):
         packed = select_queries(u, control, times)
         if packed is None:
             return torch.zeros_like(u)
@@ -93,20 +111,17 @@ class KVMemory(nn.Module):
         queries = self.query(norm(packed.data), ids).reshape(n,b,qlen,d//32,32).transpose(2,3)
         anchor = packed.positions[:,:,:1]
         queries = rope(queries, packed.positions-anchor, self.period)
-        keys = bank.keys[packed.nodes].reshape(n,b,-1,d//32,32).transpose(2,3)
-        values = bank.values[packed.nodes].reshape(n,b,-1,d//32,32).transpose(2,3)
-        keys = rope(keys, bank.times[packed.nodes]-anchor, self.period)
-        chunks = []
-        for start in range(0, qlen, self.chunk):
-            end = min(qlen,start+self.chunk)
-            delta = packed.positions[:, :, start:end, None] - bank.times[packed.nodes, :, None, :]
-            visible = (delta >= 0) & (delta < self.window) & packed.valid[:, :, start:end, None]
-            w = bank.weight[packed.nodes]
-            read = weighted_attention(queries[:, :, :, start:end], keys, values,
-                                      weights=None if self.unit_weights else w,
-                                      mask=visible[:, :, None], backend=self.backend)
-            amount = (visible*w[:, :, None]).sum(-1).clamp(max=1)
-            chunks.append(read.transpose(2,3).reshape(n,b,end-start,d) * amount[...,None])
-        read = torch.cat(chunks,2)
+        keys = bank.keys[packed.nodes, :, lo:hi].reshape(n,b,-1,d//32,32).transpose(2,3)
+        values = bank.values[packed.nodes, :, lo:hi].reshape(n,b,-1,d//32,32).transpose(2,3)
+        key_times = bank.times[packed.nodes, :, lo:hi]
+        keys = rope(keys, key_times-anchor, self.period)
+        delta = packed.positions[..., None] - key_times[:, :, None, :]
+        visible = (delta >= 0) & (delta < self.window) & packed.valid[..., None]
+        w = bank.weight[packed.nodes, :, lo:hi]
+        read = weighted_attention(queries, keys, values,
+                                  weights=None if self.unit_weights else w,
+                                  mask=visible[:, :, None], backend=self.backend)
+        amount = (visible*w[:, :, None]).sum(-1).clamp(max=1)
+        read = read.transpose(2,3).reshape(n,b,qlen,d) * amount[...,None]
         x = packed.data + self.output(read, ids)
         return packed.publish(self.ffn(x, ids))

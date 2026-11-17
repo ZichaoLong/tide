@@ -10,6 +10,8 @@
 Semantic correctness first, performance second. Deliver the current FC and HB
 main bindings. General graph foundations are a long-term possibility, not a
 short-term requirement. Old teaching bindings and LH-DAG/PDG are excluded.
+Execution and performance use FP32. FP64 may be used for accuracy verification;
+FP16/BF16 implementation and validation are not part of this task.
 The user authorized a complete rewrite without consulting or reusing the retired
 implementation/tests. Git preserves that history. Preserve user untracked files.
 
