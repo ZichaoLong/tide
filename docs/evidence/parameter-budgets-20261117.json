@@ -1,0 +1,1695 @@
+{
+  "definition": "Average logical parameter participation per model position, including padded positions. HB Full/private and shared-presence, receiving/Read/router, other shared and tied vocabulary parameters. Shared regional matrices counted once when used. Not FLOPs, gradient count, or physical executed work.",
+  "limits": [
+    "v12 and v10 confirmation sets differ: compare NLL only within each table.",
+    "Near active parameters are not exact matches or equal FLOPs; HB remains dense physical Full with masks.",
+    "Historical controls and new v12 HB retain distinct numerical/repair ancestry.",
+    "R3/R4/R28/R64 comparisons also change local region size, selection and sometimes FFN recipe.",
+    "No matched100M-total or13.2M-active Transformer at this128Mi endpoint; FC evidence is older16Mi validation only.",
+    "Two seeds and finite calibrated recipes do not establish architecture-wide scaling laws."
+  ],
+  "near_active_large": [
+    {
+      "active_parameters": 10136320,
+      "family": "Transformer",
+      "model": "parent128-large-dense-lr0.001",
+      "nll": 3.0760689083472244,
+      "parameters": 10136320,
+      "seed_active_parameters": {
+        "11": 10136320,
+        "22": 10136320
+      },
+      "seed_nll": {
+        "11": 3.0751376862317557,
+        "22": 3.077000130462693
+      },
+      "seeds": [
+        11,
+        22
+      ]
+    },
+    {
+      "active_parameters": 10200832.0,
+      "family": "MoE",
+      "model": "parent128-large-e20-lr0.001-b0.01",
+      "nll": 2.8803779837362526,
+      "parameters": 63443968,
+      "seed_active_parameters": {
+        "11": 10200832.0,
+        "22": 10200832.0
+      },
+      "seed_nll": {
+        "11": 2.8813758337128093,
+        "22": 2.879380133759696
+      },
+      "seeds": [
+        11,
+        22
+      ]
+    },
+    {
+      "active_parameters": 10336000.0,
+      "family": "MoE",
+      "model": "parent128-large-e64-lr0.001-b0.01",
+      "nll": 2.869588315341389,
+      "parameters": 193729024,
+      "seed_active_parameters": {
+        "11": 10336000.0,
+        "22": 10336000.0
+      },
+      "seed_nll": {
+        "11": 2.8719975785788847,
+        "22": 2.867179052103893
+      },
+      "seeds": [
+        11,
+        22
+      ]
+    },
+    {
+      "active_parameters": 9176764.552314367,
+      "family": "HB",
+      "model": "base128-q3",
+      "nll": 3.700169924501097,
+      "parameters": 171459232,
+      "seed_active_parameters": {
+        "11": 9287423.146335583,
+        "22": 9066105.958293153
+      },
+      "seed_nll": {
+        "11": 3.620583018142497,
+        "22": 3.7797568308596965
+      },
+      "seeds": [
+        11,
+        22
+      ]
+    }
+  ],
+  "near_active_small": [
+    {
+      "active_parameters": 3460096,
+      "family": "Transformer",
+      "model": "parent128-tf-d192-l6",
+      "nll": 3.3069330675934907,
+      "parameters": 3460096,
+      "seed_active_parameters": {
+        "11": 3460096,
+        "22": 3460096
+      },
+      "seed_nll": {
+        "11": 3.3100850657356204,
+        "22": 3.303781069451361
+      },
+      "seeds": [
+        11,
+        22
+      ]
+    },
+    {
+      "active_parameters": 3484288.0,
+      "family": "MoE",
+      "model": "parent128-small-e20-lr0.003-b0.01",
+      "nll": 3.1644963379440014,
+      "parameters": 19471744,
+      "seed_active_parameters": {
+        "11": 3484288.0,
+        "22": 3484288.0
+      },
+      "seed_nll": {
+        "11": 3.1622550963802496,
+        "22": 3.1667375795077533
+      },
+      "seeds": [
+        11,
+        22
+      ]
+    },
+    {
+      "active_parameters": 3534976.0,
+      "family": "MoE",
+      "model": "balance128-small-e64-lr0.003-b0.01",
+      "nll": 3.1660751758972765,
+      "parameters": 58602880,
+      "seed_active_parameters": {
+        "11": 3534976.0,
+        "22": 3534976.0
+      },
+      "seed_nll": {
+        "11": 3.170533956057625,
+        "22": 3.161616395736928
+      },
+      "seeds": [
+        11,
+        22
+      ]
+    },
+    {
+      "active_parameters": 3755848.0,
+      "family": "HB",
+      "model": "parent128-hb-d64-r4-dense-match",
+      "nll": 3.7118374674682855,
+      "parameters": 3755848,
+      "seed_active_parameters": {
+        "11": 3755848.0,
+        "22": 3755848.0
+      },
+      "seed_nll": {
+        "11": 3.7209218826756114,
+        "22": 3.7027530522609595
+      },
+      "seeds": [
+        11,
+        22
+      ]
+    },
+    {
+      "active_parameters": 3751697.9736620057,
+      "family": "HB",
+      "model": "base-q10",
+      "nll": 3.901626281432982,
+      "parameters": 22235704,
+      "seed_active_parameters": {
+        "11": 3754360.693105111,
+        "22": 3749035.2542189006
+      },
+      "seed_nll": {
+        "11": 3.897532606351888,
+        "22": 3.9057199565140763
+      },
+      "seeds": [
+        11,
+        22
+      ]
+    },
+    {
+      "active_parameters": 3701885.5857642237,
+      "family": "HB",
+      "model": "base-q3",
+      "nll": 4.091614552919054,
+      "parameters": 50324128,
+      "seed_active_parameters": {
+        "11": 3662953.360535198,
+        "22": 3740817.8109932495
+      },
+      "seed_nll": {
+        "11": 4.080452771449927,
+        "22": 4.102776334388182
+      },
+      "seeds": [
+        11,
+        22
+      ]
+    }
+  ],
+  "near_total_cross_family": [
+    {
+      "active_parameters": 7378613.042008197,
+      "family": "HB",
+      "model": "share8-d128-q3",
+      "nll": 3.717118115906487,
+      "parameters": 57426592,
+      "seed_active_parameters": {
+        "11": 7302609.156099325,
+        "22": 7454616.927917069
+      },
+      "seed_nll": {
+        "11": 3.7412585818674415,
+        "22": 3.692977649945533
+      },
+      "seeds": [
+        11,
+        22
+      ]
+    },
+    {
+      "active_parameters": 3534976.0,
+      "family": "MoE",
+      "model": "balance128-small-e64-lr0.003-b0.01",
+      "nll": 3.1660751758972765,
+      "parameters": 58602880,
+      "seed_active_parameters": {
+        "11": 3534976.0,
+        "22": 3534976.0
+      },
+      "seed_nll": {
+        "11": 3.170533956057625,
+        "22": 3.161616395736928
+      },
+      "seeds": [
+        11,
+        22
+      ]
+    }
+  ],
+  "observed_at": "2026-11-17T11:18:56.424241+00:00",
+  "same_total_same_graph_v10": [
+    {
+      "activity": {
+        "active_parameters": 75541048.0,
+        "full_all": 1.0,
+        "full_candidates": 1.0,
+        "physical_full_all": 1.0,
+        "receipt_all": 1.0
+      },
+      "confirmation": 3.0651241441191814,
+      "exposure": 134217728,
+      "parameters": 75541048,
+      "seed_confirmation": {
+        "11": 3.0546681203122716,
+        "22": 3.0755801679260912
+      },
+      "seeds": [
+        11,
+        22
+      ],
+      "shape": "hb-d128-r28-pool",
+      "validation": 2.9935828704037704
+    },
+    {
+      "activity": {
+        "active_parameters": 10148387.35700389,
+        "full_all": 0.09991294262871733,
+        "full_candidates": 0.3709321338294843,
+        "physical_full_all": 1.0,
+        "receipt_all": 0.2693536882469427
+      },
+      "confirmation": 3.385942155142402,
+      "exposure": 134217728,
+      "parameters": 75541048,
+      "seed_confirmation": {
+        "11": 3.403271001072426,
+        "22": 3.3686133092123782
+      },
+      "seeds": [
+        11,
+        22
+      ],
+      "shape": "hb-d128-r28-q10",
+      "validation": 3.31286248145625
+    },
+    {
+      "activity": {
+        "active_parameters": 171459232.0,
+        "full_all": 1.0,
+        "full_candidates": 1.0,
+        "physical_full_all": 1.0,
+        "receipt_all": 1.0
+      },
+      "confirmation": 3.062763064415776,
+      "exposure": 134217728,
+      "parameters": 171459232,
+      "seed_confirmation": {
+        "11": 3.0642881714447867,
+        "22": 3.0612379573867656
+      },
+      "seeds": [
+        11,
+        22
+      ],
+      "shape": "hb-d128-r64-pool",
+      "validation": 2.9847081267507747
+    },
+    {
+      "activity": {
+        "active_parameters": 9318660.532222763,
+        "full_all": 0.031517622535794626,
+        "full_candidates": 0.19929684623322858,
+        "physical_full_all": 1.0,
+        "receipt_all": 0.1583840574271948
+      },
+      "confirmation": 3.587421134165197,
+      "exposure": 134217728,
+      "parameters": 171459232,
+      "seed_confirmation": {
+        "11": 3.641321117291227,
+        "22": 3.5335211510391673
+      },
+      "seeds": [
+        11,
+        22
+      ],
+      "shape": "hb-d128-r64-q3",
+      "validation": 3.522884915699251
+    }
+  ],
+  "schema": "tide-parameter-budget-review-v1",
+  "scope": "Read-only re-tabulation of existing128Mi endpoints. No new model execution, test access, resume, or active-input modification.",
+  "source_record": "docs/evidence/hb-v12-results-20261117.json",
+  "source_sha256": "f8c45423d6316242a2cb786d764ad233c6fa27fff36f068dd417406a495a4ad7",
+  "strongest_low_activity_hb_vs_named_transformer": {
+    "active_ratio": 3.819883313701249,
+    "hb": {
+      "active_parameters": 13217162.974204436,
+      "family": "HB",
+      "model": "share8-d192-q3",
+      "nll": 3.4206021615536883,
+      "parameters": 102212256,
+      "seed_active_parameters": {
+        "11": 12924576.796528447,
+        "22": 13509749.151880424
+      },
+      "seed_nll": {
+        "11": 3.3638485144037986,
+        "22": 3.477355808703578
+      },
+      "seeds": [
+        11,
+        22
+      ]
+    },
+    "nll_delta": 0.11366909396019764,
+    "total_ratio": 29.54029483575022,
+    "transformer": {
+      "active_parameters": 3460096,
+      "family": "Transformer",
+      "model": "parent128-tf-d192-l6",
+      "nll": 3.3069330675934907,
+      "parameters": 3460096,
+      "seed_active_parameters": {
+        "11": 3460096,
+        "22": 3460096
+      },
+      "seed_nll": {
+        "11": 3.3100850657356204,
+        "22": 3.303781069451361
+      },
+      "seeds": [
+        11,
+        22
+      ]
+    }
+  },
+  "v12_confirmation_lock_sha256": "5f684931b2f786e37c159c00ded85373e13a0153217f6995fc9458473fa3686c",
+  "v12_means": [
+    {
+      "active_parameters": 3534976.0,
+      "family": "MoE",
+      "model": "balance128-small-e64-lr0.003-b0.01",
+      "nll": 3.1660751758972765,
+      "parameters": 58602880,
+      "seed_active_parameters": {
+        "11": 3534976.0,
+        "22": 3534976.0
+      },
+      "seed_nll": {
+        "11": 3.170533956057625,
+        "22": 3.161616395736928
+      },
+      "seeds": [
+        11,
+        22
+      ]
+    },
+    {
+      "active_parameters": 3751697.9736620057,
+      "family": "HB",
+      "model": "base-q10",
+      "nll": 3.901626281432982,
+      "parameters": 22235704,
+      "seed_active_parameters": {
+        "11": 3754360.693105111,
+        "22": 3749035.2542189006
+      },
+      "seed_nll": {
+        "11": 3.897532606351888,
+        "22": 3.9057199565140763
+      },
+      "seeds": [
+        11,
+        22
+      ]
+    },
+    {
+      "active_parameters": 3701885.5857642237,
+      "family": "HB",
+      "model": "base-q3",
+      "nll": 4.091614552919054,
+      "parameters": 50324128,
+      "seed_active_parameters": {
+        "11": 3662953.360535198,
+        "22": 3740817.8109932495
+      },
+      "seed_nll": {
+        "11": 4.080452771449927,
+        "22": 4.102776334388182
+      },
+      "seeds": [
+        11,
+        22
+      ]
+    },
+    {
+      "active_parameters": 9176764.552314367,
+      "family": "HB",
+      "model": "base128-q3",
+      "nll": 3.700169924501097,
+      "parameters": 171459232,
+      "seed_active_parameters": {
+        "11": 9287423.146335583,
+        "22": 9066105.958293153
+      },
+      "seed_nll": {
+        "11": 3.620583018142497,
+        "22": 3.7797568308596965
+      },
+      "seeds": [
+        11,
+        22
+      ]
+    },
+    {
+      "active_parameters": 3620496.0998071358,
+      "family": "HB",
+      "model": "budget0-q3",
+      "nll": 3.9127816092659486,
+      "parameters": 50324128,
+      "seed_active_parameters": {
+        "11": 3628891.4323770492,
+        "22": 3612100.7672372228
+      },
+      "seed_nll": {
+        "11": 3.8907177450309973,
+        "22": 3.9348454735009
+      },
+      "seeds": [
+        11,
+        22
+      ]
+    },
+    {
+      "active_parameters": 3184939.274831244,
+      "family": "HB",
+      "model": "fullshare8-q3",
+      "nll": 4.441035859446856,
+      "parameters": 20423328,
+      "seed_active_parameters": {
+        "11": 3183952.192381871,
+        "22": 3185926.357280617
+      },
+      "seed_nll": {
+        "11": 4.4069568497361615,
+        "22": 4.475114869157551
+      },
+      "seeds": [
+        11,
+        22
+      ]
+    },
+    {
+      "active_parameters": 75541048.02314368,
+      "family": "HB",
+      "model": "parent128-hb-d128-r28-pool",
+      "nll": 3.1162281451252056,
+      "parameters": 75541048,
+      "seed_active_parameters": {
+        "11": 75541048.02314368
+      },
+      "seed_nll": {
+        "11": 3.1162281451252056
+      },
+      "seeds": [
+        11
+      ]
+    },
+    {
+      "active_parameters": 3755848.0,
+      "family": "HB",
+      "model": "parent128-hb-d64-r4-dense-match",
+      "nll": 3.7118374674682855,
+      "parameters": 3755848,
+      "seed_active_parameters": {
+        "11": 3755848.0,
+        "22": 3755848.0
+      },
+      "seed_nll": {
+        "11": 3.7209218826756114,
+        "22": 3.7027530522609595
+      },
+      "seeds": [
+        11,
+        22
+      ]
+    },
+    {
+      "active_parameters": 3688392.8099083896,
+      "family": "HB",
+      "model": "parent128-hb-d64-r64-q3",
+      "nll": 4.335420905146748,
+      "parameters": 50324128,
+      "seed_active_parameters": {
+        "11": 3683017.5215766635,
+        "22": 3693768.0982401157
+      },
+      "seed_nll": {
+        "11": 4.277586598036578,
+        "22": 4.393255212256918
+      },
+      "seeds": [
+        11,
+        22
+      ]
+    },
+    {
+      "active_parameters": 10136320,
+      "family": "Transformer",
+      "model": "parent128-large-dense-lr0.001",
+      "nll": 3.0760689083472244,
+      "parameters": 10136320,
+      "seed_active_parameters": {
+        "11": 10136320,
+        "22": 10136320
+      },
+      "seed_nll": {
+        "11": 3.0751376862317557,
+        "22": 3.077000130462693
+      },
+      "seeds": [
+        11,
+        22
+      ]
+    },
+    {
+      "active_parameters": 10200832.0,
+      "family": "MoE",
+      "model": "parent128-large-e20-lr0.001-b0.01",
+      "nll": 2.8803779837362526,
+      "parameters": 63443968,
+      "seed_active_parameters": {
+        "11": 10200832.0,
+        "22": 10200832.0
+      },
+      "seed_nll": {
+        "11": 2.8813758337128093,
+        "22": 2.879380133759696
+      },
+      "seeds": [
+        11,
+        22
+      ]
+    },
+    {
+      "active_parameters": 10336000.0,
+      "family": "MoE",
+      "model": "parent128-large-e64-lr0.001-b0.01",
+      "nll": 2.869588315341389,
+      "parameters": 193729024,
+      "seed_active_parameters": {
+        "11": 10336000.0,
+        "22": 10336000.0
+      },
+      "seed_nll": {
+        "11": 2.8719975785788847,
+        "22": 2.867179052103893
+      },
+      "seeds": [
+        11,
+        22
+      ]
+    },
+    {
+      "active_parameters": 3484288.0,
+      "family": "MoE",
+      "model": "parent128-small-e20-lr0.003-b0.01",
+      "nll": 3.1644963379440014,
+      "parameters": 19471744,
+      "seed_active_parameters": {
+        "11": 3484288.0,
+        "22": 3484288.0
+      },
+      "seed_nll": {
+        "11": 3.1622550963802496,
+        "22": 3.1667375795077533
+      },
+      "seeds": [
+        11,
+        22
+      ]
+    },
+    {
+      "active_parameters": 3460096,
+      "family": "Transformer",
+      "model": "parent128-tf-d192-l6",
+      "nll": 3.3069330675934907,
+      "parameters": 3460096,
+      "seed_active_parameters": {
+        "11": 3460096,
+        "22": 3460096
+      },
+      "seed_nll": {
+        "11": 3.3100850657356204,
+        "22": 3.303781069451361
+      },
+      "seeds": [
+        11,
+        22
+      ]
+    },
+    {
+      "active_parameters": 4762653.915200097,
+      "family": "HB",
+      "model": "ports4-q3",
+      "nll": 4.102451723229024,
+      "parameters": 51372704,
+      "seed_active_parameters": {
+        "11": 4758301.656702025,
+        "22": 4767006.173698168
+      },
+      "seed_nll": {
+        "11": 4.053200412425213,
+        "22": 4.151703034032835
+      },
+      "seeds": [
+        11,
+        22
+      ]
+    },
+    {
+      "active_parameters": 3698233.380846191,
+      "family": "HB",
+      "model": "position-q3",
+      "nll": 4.052971533703385,
+      "parameters": 50324128,
+      "seed_active_parameters": {
+        "11": 3694292.424300868,
+        "22": 3702174.337391514
+      },
+      "seed_nll": {
+        "11": 4.011944716447033,
+        "22": 4.093998350959737
+      },
+      "seeds": [
+        11,
+        22
+      ]
+    },
+    {
+      "active_parameters": 3775397.931051109,
+      "family": "HB",
+      "model": "readcontent-q3",
+      "nll": 3.9317780249693897,
+      "parameters": 52945568,
+      "seed_active_parameters": {
+        "11": 3790533.3964561233,
+        "22": 3760262.4656460946
+      },
+      "seed_nll": {
+        "11": 3.9670662925054785,
+        "22": 3.896489757433301
+      },
+      "seeds": [
+        11,
+        22
+      ]
+    },
+    {
+      "active_parameters": 3670933.2390308585,
+      "family": "HB",
+      "model": "residual-q3",
+      "nll": 4.203083597734803,
+      "parameters": 50324128,
+      "seed_active_parameters": {
+        "11": 3645021.905617165,
+        "22": 3696844.5724445516
+      },
+      "seed_nll": {
+        "11": 4.137106612586649,
+        "22": 4.2690605828829575
+      },
+      "seeds": [
+        11,
+        22
+      ]
+    },
+    {
+      "active_parameters": 3156165.9909594986,
+      "family": "HB",
+      "model": "share0-q3",
+      "nll": 4.232737604499562,
+      "parameters": 19358368,
+      "seed_active_parameters": {
+        "11": 3209315.9545564125,
+        "22": 3103016.0273625846
+      },
+      "seed_nll": {
+        "11": 4.2983564454334555,
+        "22": 4.167118763565668
+      },
+      "seeds": [
+        11,
+        22
+      ]
+    },
+    {
+      "active_parameters": 3251869.4385245903,
+      "family": "HB",
+      "model": "share8-budget0-q3",
+      "nll": 3.9816564745487995,
+      "parameters": 24273568,
+      "seed_active_parameters": {
+        "11": 3250129.3514946965,
+        "22": 3253609.525554484
+      },
+      "seed_nll": {
+        "11": 3.9821040881070076,
+        "22": 3.9812088609905913
+      },
+      "seeds": [
+        11,
+        22
+      ]
+    },
+    {
+      "active_parameters": 7378613.042008197,
+      "family": "HB",
+      "model": "share8-d128-q3",
+      "nll": 3.717118115906487,
+      "parameters": 57426592,
+      "seed_active_parameters": {
+        "11": 7302609.156099325,
+        "22": 7454616.927917069
+      },
+      "seed_nll": {
+        "11": 3.7412585818674415,
+        "22": 3.692977649945533
+      },
+      "seeds": [
+        11,
+        22
+      ]
+    },
+    {
+      "active_parameters": 13217162.974204436,
+      "family": "HB",
+      "model": "share8-d192-q3",
+      "nll": 3.4206021615536883,
+      "parameters": 102212256,
+      "seed_active_parameters": {
+        "11": 12924576.796528447,
+        "22": 13509749.151880424
+      },
+      "seed_nll": {
+        "11": 3.3638485144037986,
+        "22": 3.477355808703578
+      },
+      "seeds": [
+        11,
+        22
+      ]
+    },
+    {
+      "active_parameters": 3301137.224083896,
+      "family": "HB",
+      "model": "share8-lr3-q3",
+      "nll": 4.190148653608048,
+      "parameters": 24273568,
+      "seed_active_parameters": {
+        "11": 3273533.3114754097,
+        "22": 3328741.136692382
+      },
+      "seed_nll": {
+        "11": 4.007176593062468,
+        "22": 4.373120714153629
+      },
+      "seeds": [
+        11,
+        22
+      ]
+    },
+    {
+      "active_parameters": 2956726.969744455,
+      "family": "HB",
+      "model": "share8-q10",
+      "nll": 3.941704781311273,
+      "parameters": 11115064,
+      "seed_active_parameters": {
+        "11": 3014804.800747348,
+        "22": 2898649.138741562
+      },
+      "seed_nll": {
+        "11": 3.955554480300634,
+        "22": 3.927855082321912
+      },
+      "seeds": [
+        11,
+        22
+      ]
+    },
+    {
+      "active_parameters": 3323704.5896215043,
+      "family": "HB",
+      "model": "share8-q3",
+      "nll": 4.303005664645752,
+      "parameters": 24273568,
+      "seed_active_parameters": {
+        "11": 3341082.6078833174,
+        "22": 3306326.571359691
+      },
+      "seed_nll": {
+        "11": 4.158786847139709,
+        "22": 4.447224482151796
+      },
+      "seeds": [
+        11,
+        22
+      ]
+    },
+    {
+      "active_parameters": 3293816.661523626,
+      "family": "HB",
+      "model": "share8-top2-q3",
+      "nll": 4.272908425125934,
+      "parameters": 24273568,
+      "seed_active_parameters": {
+        "11": 3300009.3461909355,
+        "22": 3287623.9768563164
+      },
+      "seed_nll": {
+        "11": 4.246444148127921,
+        "22": 4.2993727021239465
+      },
+      "seeds": [
+        11,
+        22
+      ]
+    },
+    {
+      "active_parameters": 3644333.5670202505,
+      "family": "HB",
+      "model": "top2-q3",
+      "nll": 4.253850814617181,
+      "parameters": 50324128,
+      "seed_active_parameters": {
+        "11": 3642633.6721311477,
+        "22": 3646033.4619093537
+      },
+      "seed_nll": {
+        "11": 4.131110540343798,
+        "22": 4.376591088890564
+      },
+      "seeds": [
+        11,
+        22
+      ]
+    },
+    {
+      "active_parameters": 3912942.9123674063,
+      "family": "HB",
+      "model": "untied-q3",
+      "nll": 4.045555412820249,
+      "parameters": 50586272,
+      "seed_active_parameters": {
+        "11": 3909325.0219382835,
+        "22": 3916560.8027965287
+      },
+      "seed_nll": {
+        "11": 4.072759781673085,
+        "22": 4.018351043967414
+      },
+      "seeds": [
+        11,
+        22
+      ]
+    }
+  ],
+  "v12_rows": [
+    {
+      "active_parameters": 3749035.2542189006,
+      "confirmation": "runs/v12-all-base-q10-s22/confirmation/confirmation.json",
+      "family": "HB",
+      "full_all": 0.10111958269475824,
+      "model": "base-q10",
+      "nll": 3.9057199565140763,
+      "parameters": 22235704,
+      "parts": {
+        "full_parameter_uses": 1623608.3780135005,
+        "receive_parameter_uses": 1735188.6422372228,
+        "shared_parameter_uses": 390238.23396817746
+      },
+      "seed": 22,
+      "source_commit": "62e32602b23e371eb1669f7b99409db626a1c4f8"
+    },
+    {
+      "active_parameters": 3183952.192381871,
+      "confirmation": "runs/v12-all-fullshare8-q3-s11/confirmation/confirmation.json",
+      "family": "HB",
+      "full_all": 0.03131442534429243,
+      "model": "fullshare8-q3",
+      "nll": 4.4069568497361615,
+      "parameters": 20423328,
+      "parts": {
+        "full_parameter_uses": 768401.1070395372,
+        "receive_parameter_uses": 2025630.543876567,
+        "shared_parameter_uses": 389920.5414657666
+      },
+      "seed": 11,
+      "source_commit": "62e32602b23e371eb1669f7b99409db626a1c4f8"
+    },
+    {
+      "active_parameters": 3185926.357280617,
+      "confirmation": "runs/v12-all-fullshare8-q3-s22/confirmation/confirmation.json",
+      "family": "HB",
+      "full_all": 0.031320440573770494,
+      "model": "fullshare8-q3",
+      "nll": 4.475114869157551,
+      "parameters": 20423328,
+      "parts": {
+        "full_parameter_uses": 768438.5573770492,
+        "receive_parameter_uses": 2027566.4590163934,
+        "shared_parameter_uses": 389921.34088717453
+      },
+      "seed": 22,
+      "source_commit": "62e32602b23e371eb1669f7b99409db626a1c4f8"
+    },
+    {
+      "active_parameters": 4767006.173698168,
+      "confirmation": "runs/v12-all-ports4-q3-s22/confirmation/confirmation.json",
+      "family": "HB",
+      "full_all": 0.03148153924896034,
+      "model": "ports4-q3",
+      "nll": 4.151703034032835,
+      "parameters": 51372704,
+      "parts": {
+        "full_parameter_uses": 1155377.5274831243,
+        "receive_parameter_uses": 2173131.4021215043,
+        "shared_parameter_uses": 1438497.244093539
+      },
+      "seed": 22,
+      "source_commit": "62e32602b23e371eb1669f7b99409db626a1c4f8"
+    },
+    {
+      "active_parameters": 3790533.3964561233,
+      "confirmation": "runs/v12-all-readcontent-q3-s11/confirmation/confirmation.json",
+      "family": "HB",
+      "full_all": 0.031295561537563285,
+      "model": "readcontent-q3",
+      "nll": 3.9670662925054785,
+      "parameters": 52945568,
+      "parts": {
+        "full_parameter_uses": 1230591.5525554484,
+        "receive_parameter_uses": 2170020.649951784,
+        "shared_parameter_uses": 389921.193948891
+      },
+      "seed": 11,
+      "source_commit": "62e32602b23e371eb1669f7b99409db626a1c4f8"
+    },
+    {
+      "active_parameters": 3645021.905617165,
+      "confirmation": "runs/v12-all-residual-q3-s11/confirmation/confirmation.json",
+      "family": "HB",
+      "full_all": 0.031598995138847036,
+      "model": "residual-q3",
+      "nll": 4.137106612586649,
+      "parameters": 50324128,
+      "parts": {
+        "full_parameter_uses": 1159688.1774349085,
+        "receive_parameter_uses": 2095413.243972999,
+        "shared_parameter_uses": 389920.48420925747
+      },
+      "seed": 11,
+      "source_commit": "62e32602b23e371eb1669f7b99409db626a1c4f8"
+    },
+    {
+      "active_parameters": 3209315.9545564125,
+      "confirmation": "runs/v12-all-share0-q3-s11/confirmation/confirmation.json",
+      "family": "HB",
+      "full_all": 0.03164726411824976,
+      "model": "share0-q3",
+      "nll": 4.2983564454334555,
+      "parameters": 19358368,
+      "parts": {
+        "full_parameter_uses": 657442.8081002893,
+        "receive_parameter_uses": 2161952.387656702,
+        "shared_parameter_uses": 389920.7587994214
+      },
+      "seed": 11,
+      "source_commit": "62e32602b23e371eb1669f7b99409db626a1c4f8"
+    },
+    {
+      "active_parameters": 7302609.156099325,
+      "confirmation": "runs/v12-all-share8-d128-q3-s11/confirmation/confirmation.json",
+      "family": "HB",
+      "full_all": 0.031276426986650195,
+      "model": "share8-d128-q3",
+      "nll": 3.7412585818674415,
+      "parameters": 57426592,
+      "parts": {
+        "full_parameter_uses": 2929454.0019286405,
+        "receive_parameter_uses": 3434370.667309547,
+        "shared_parameter_uses": 938784.4868611379
+      },
+      "seed": 11,
+      "source_commit": "62e32602b23e371eb1669f7b99409db626a1c4f8"
+    },
+    {
+      "active_parameters": 7454616.927917069,
+      "confirmation": "runs/v12-all-share8-d128-q3-s22/confirmation/confirmation.json",
+      "family": "HB",
+      "full_all": 0.03128995831010427,
+      "model": "share8-d128-q3",
+      "nll": 3.692977649945533,
+      "parameters": 57426592,
+      "parts": {
+        "full_parameter_uses": 2929870.792671167,
+        "receive_parameter_uses": 3585961.855351977,
+        "shared_parameter_uses": 938784.2798939248
+      },
+      "seed": 22,
+      "source_commit": "62e32602b23e371eb1669f7b99409db626a1c4f8"
+    },
+    {
+      "active_parameters": 12924576.796528447,
+      "confirmation": "runs/v12-all-share8-d192-q3-s11/confirmation/confirmation.json",
+      "family": "HB",
+      "full_all": 0.031250035314458774,
+      "model": "share8-d192-q3",
+      "nll": 3.3638485144037986,
+      "parameters": 102212256,
+      "parts": {
+        "full_parameter_uses": 6359042.18707811,
+        "receive_parameter_uses": 4914046.608486017,
+        "shared_parameter_uses": 1651488.0009643203
+      },
+      "seed": 11,
+      "source_commit": "62e32602b23e371eb1669f7b99409db626a1c4f8"
+    },
+    {
+      "active_parameters": 3642633.6721311477,
+      "confirmation": "runs/v12-all-top2-q3-s11/confirmation/confirmation.json",
+      "family": "HB",
+      "full_all": 0.03125,
+      "model": "top2-q3",
+      "nll": 4.131110540343798,
+      "parameters": 50324128,
+      "parts": {
+        "full_parameter_uses": 1146880.0,
+        "receive_parameter_uses": 2105833.6721311477,
+        "shared_parameter_uses": 389920.0
+      },
+      "seed": 11,
+      "source_commit": "62e32602b23e371eb1669f7b99409db626a1c4f8"
+    },
+    {
+      "active_parameters": 3916560.8027965287,
+      "confirmation": "runs/v12-all-untied-q3-s22/confirmation/confirmation.json",
+      "family": "HB",
+      "full_all": 0.03136686142983064,
+      "model": "untied-q3",
+      "nll": 4.018351043967414,
+      "parameters": 50586272,
+      "parts": {
+        "full_parameter_uses": 1151168.8331726133,
+        "receive_parameter_uses": 2113324.8216007715,
+        "shared_parameter_uses": 652067.1480231436
+      },
+      "seed": 22,
+      "source_commit": "62e32602b23e371eb1669f7b99409db626a1c4f8"
+    },
+    {
+      "active_parameters": 9287423.146335583,
+      "confirmation": "runs/v12-four-base128-q3-s11/confirmation/confirmation.json",
+      "family": "HB",
+      "full_all": 0.03142617206334378,
+      "model": "base128-q3",
+      "nll": 3.620583018142497,
+      "parameters": 171459232,
+      "parts": {
+        "full_parameter_uses": 4613382.171648988,
+        "receive_parameter_uses": 3735256.7085342333,
+        "shared_parameter_uses": 938784.2661523626
+      },
+      "seed": 11,
+      "source_commit": "62e32602b23e371eb1669f7b99409db626a1c4f8"
+    },
+    {
+      "active_parameters": 3694292.424300868,
+      "confirmation": "runs/v12-four-position-q3-s11/confirmation/confirmation.json",
+      "family": "HB",
+      "full_all": 0.031713278613187075,
+      "model": "position-q3",
+      "nll": 4.011944716447033,
+      "parameters": 50324128,
+      "parts": {
+        "full_parameter_uses": 1163882.399228544,
+        "receive_parameter_uses": 2140480.4860173576,
+        "shared_parameter_uses": 389929.53905496624
+      },
+      "seed": 11,
+      "source_commit": "62e32602b23e371eb1669f7b99409db626a1c4f8"
+    },
+    {
+      "active_parameters": 3760262.4656460946,
+      "confirmation": "runs/v12-four-readcontent-q3-s22/confirmation/confirmation.json",
+      "family": "HB",
+      "full_all": 0.03144317008950096,
+      "model": "readcontent-q3",
+      "nll": 3.896489757433301,
+      "parameters": 52945568,
+      "parts": {
+        "full_parameter_uses": 1236395.7569913212,
+        "receive_parameter_uses": 2133946.2410800387,
+        "shared_parameter_uses": 389920.4675747348
+      },
+      "seed": 22,
+      "source_commit": "62e32602b23e371eb1669f7b99409db626a1c4f8"
+    },
+    {
+      "active_parameters": 13509749.151880424,
+      "confirmation": "runs/v12-four-share8-d192-q3-s22/confirmation/confirmation.json",
+      "family": "HB",
+      "full_all": 0.03125151852172734,
+      "model": "share8-d192-q3",
+      "nll": 3.477355808703578,
+      "parameters": 102212256,
+      "parts": {
+        "full_parameter_uses": 6359134.0443587275,
+        "receive_parameter_uses": 5499127.088235294,
+        "shared_parameter_uses": 1651488.0192864032
+      },
+      "seed": 22,
+      "source_commit": "62e32602b23e371eb1669f7b99409db626a1c4f8"
+    },
+    {
+      "active_parameters": 3662953.360535198,
+      "confirmation": "runs/v12-main-base-q3-s11/confirmation/confirmation.json",
+      "family": "HB",
+      "full_all": 0.03146383493362765,
+      "model": "base-q3",
+      "nll": 4.080452771449927,
+      "parameters": 50324128,
+      "parts": {
+        "full_parameter_uses": 1154727.7762777242,
+        "receive_parameter_uses": 2118302.1118611377,
+        "shared_parameter_uses": 389923.47239633556
+      },
+      "seed": 11,
+      "source_commit": "5147701447dd15a092cc4b052f828b037ed98df4"
+    },
+    {
+      "active_parameters": 3628891.4323770492,
+      "confirmation": "runs/v12-main-budget0-q3-s11/confirmation/confirmation.json",
+      "family": "HB",
+      "full_all": 0.0313692098413392,
+      "model": "budget0-q3",
+      "nll": 3.8907177450309973,
+      "parameters": 50324128,
+      "parts": {
+        "full_parameter_uses": 1151255.0202507232,
+        "receive_parameter_uses": 2087727.949855352,
+        "shared_parameter_uses": 389908.46227097395
+      },
+      "seed": 11,
+      "source_commit": "5147701447dd15a092cc4b052f828b037ed98df4"
+    },
+    {
+      "active_parameters": 3612100.7672372228,
+      "confirmation": "runs/v12-main-budget0-q3-s22/confirmation/confirmation.json",
+      "family": "HB",
+      "full_all": 0.0314685788425898,
+      "model": "budget0-q3",
+      "nll": 3.9348454735009,
+      "parameters": 50324128,
+      "parts": {
+        "full_parameter_uses": 1154901.8784956606,
+        "receive_parameter_uses": 2067259.6470588236,
+        "shared_parameter_uses": 389939.24168273865
+      },
+      "seed": 22,
+      "source_commit": "5147701447dd15a092cc4b052f828b037ed98df4"
+    },
+    {
+      "active_parameters": 3250129.3514946965,
+      "confirmation": "runs/v12-main-share8-budget0-q3-s11/confirmation/confirmation.json",
+      "family": "HB",
+      "full_all": 0.03155048484397601,
+      "model": "share8-budget0-q3",
+      "nll": 3.9821040881070076,
+      "parameters": 24273568,
+      "parts": {
+        "full_parameter_uses": 812012.3490838959,
+        "receive_parameter_uses": 2048191.6046287369,
+        "shared_parameter_uses": 389925.39778206364
+      },
+      "seed": 11,
+      "source_commit": "5147701447dd15a092cc4b052f828b037ed98df4"
+    },
+    {
+      "active_parameters": 3253609.525554484,
+      "confirmation": "runs/v12-main-share8-budget0-q3-s22/confirmation/confirmation.json",
+      "family": "HB",
+      "full_all": 0.0314697265625,
+      "model": "share8-budget0-q3",
+      "nll": 3.9812088609905913,
+      "parameters": 24273568,
+      "parts": {
+        "full_parameter_uses": 811192.0,
+        "receive_parameter_uses": 2052446.362584378,
+        "shared_parameter_uses": 389971.16297010606
+      },
+      "seed": 22,
+      "source_commit": "5147701447dd15a092cc4b052f828b037ed98df4"
+    },
+    {
+      "active_parameters": 2898649.138741562,
+      "confirmation": "runs/v12-main-share8-q10-s22/confirmation/confirmation.json",
+      "family": "HB",
+      "full_all": 0.10025129096208156,
+      "model": "share8-q10",
+      "nll": 3.927855082321912,
+      "parameters": 11115064,
+      "parts": {
+        "full_parameter_uses": 937052.7772420443,
+        "receive_parameter_uses": 1571382.2680810029,
+        "shared_parameter_uses": 390214.09341851494
+      },
+      "seed": 22,
+      "source_commit": "5147701447dd15a092cc4b052f828b037ed98df4"
+    },
+    {
+      "active_parameters": 3300009.3461909355,
+      "confirmation": "runs/v12-main-share8-top2-q3-s11/confirmation/confirmation.json",
+      "family": "HB",
+      "full_all": 0.03125,
+      "model": "share8-top2-q3",
+      "nll": 4.246444148127921,
+      "parameters": 24273568,
+      "parts": {
+        "full_parameter_uses": 808960.0,
+        "receive_parameter_uses": 2101129.3461909355,
+        "shared_parameter_uses": 389920.0
+      },
+      "seed": 11,
+      "source_commit": "5147701447dd15a092cc4b052f828b037ed98df4"
+    },
+    {
+      "active_parameters": 3287623.9768563164,
+      "confirmation": "runs/v12-main-share8-top2-q3-s22/confirmation/confirmation.json",
+      "family": "HB",
+      "full_all": 0.03125,
+      "model": "share8-top2-q3",
+      "nll": 4.2993727021239465,
+      "parameters": 24273568,
+      "parts": {
+        "full_parameter_uses": 808960.0,
+        "receive_parameter_uses": 2088743.9768563162,
+        "shared_parameter_uses": 389920.0
+      },
+      "seed": 22,
+      "source_commit": "5147701447dd15a092cc4b052f828b037ed98df4"
+    },
+    {
+      "active_parameters": 3646033.4619093537,
+      "confirmation": "runs/v12-main-top2-q3-s22/confirmation/confirmation.json",
+      "family": "HB",
+      "full_all": 0.03125,
+      "model": "top2-q3",
+      "nll": 4.376591088890564,
+      "parameters": 50324128,
+      "parts": {
+        "full_parameter_uses": 1146880.0,
+        "receive_parameter_uses": 2109233.4619093537,
+        "shared_parameter_uses": 389920.0
+      },
+      "seed": 22,
+      "source_commit": "5147701447dd15a092cc4b052f828b037ed98df4"
+    },
+    {
+      "active_parameters": 3909325.0219382835,
+      "confirmation": "runs/v12-main-untied-q3-s11/confirmation/confirmation.json",
+      "family": "HB",
+      "full_all": 0.03154662379648324,
+      "model": "untied-q3",
+      "nll": 4.072759781673085,
+      "parameters": 50586272,
+      "parts": {
+        "full_parameter_uses": 1157766.1407907426,
+        "receive_parameter_uses": 2099494.474445516,
+        "shared_parameter_uses": 652064.4067020251
+      },
+      "seed": 11,
+      "source_commit": "5147701447dd15a092cc4b052f828b037ed98df4"
+    },
+    {
+      "active_parameters": 3754360.693105111,
+      "confirmation": "runs/v12-repair-base-q10-s11/confirmation/confirmation.json",
+      "family": "HB",
+      "full_all": 0.10021794065987051,
+      "model": "base-q10",
+      "nll": 3.897532606351888,
+      "parameters": 22235704,
+      "parts": {
+        "full_parameter_uses": 1609131.324975892,
+        "receive_parameter_uses": 1755000.181292189,
+        "shared_parameter_uses": 390229.1868370299
+      },
+      "seed": 11,
+      "source_commit": "62e32602b23e371eb1669f7b99409db626a1c4f8"
+    },
+    {
+      "active_parameters": 3740817.8109932495,
+      "confirmation": "runs/v12-repair-base-q3-s22/confirmation/confirmation.json",
+      "family": "HB",
+      "full_all": 0.031641584376130065,
+      "model": "base-q3",
+      "nll": 4.102776334388182,
+      "parameters": 50324128,
+      "parts": {
+        "full_parameter_uses": 1161251.2092574735,
+        "receive_parameter_uses": 2189646.5361620057,
+        "shared_parameter_uses": 389920.0655737705
+      },
+      "seed": 22,
+      "source_commit": "62e32602b23e371eb1669f7b99409db626a1c4f8"
+    },
+    {
+      "active_parameters": 9066105.958293153,
+      "confirmation": "runs/v12-repair-base128-q3-s22/confirmation/confirmation.json",
+      "family": "HB",
+      "full_all": 0.03126047073702688,
+      "model": "base128-q3",
+      "nll": 3.7797568308596965,
+      "parameters": 171459232,
+      "parts": {
+        "full_parameter_uses": 4589057.110896817,
+        "receive_parameter_uses": 3538264.5896817744,
+        "shared_parameter_uses": 938784.2577145612
+      },
+      "seed": 22,
+      "source_commit": "62e32602b23e371eb1669f7b99409db626a1c4f8"
+    },
+    {
+      "active_parameters": 4758301.656702025,
+      "confirmation": "runs/v12-repair-ports4-q3-s11/confirmation/confirmation.json",
+      "family": "HB",
+      "full_all": 0.031335502190438166,
+      "model": "ports4-q3",
+      "nll": 4.053200412425213,
+      "parameters": 51372704,
+      "parts": {
+        "full_parameter_uses": 1150017.9440694312,
+        "receive_parameter_uses": 2169786.443587271,
+        "shared_parameter_uses": 1438497.2690453231
+      },
+      "seed": 11,
+      "source_commit": "62e32602b23e371eb1669f7b99409db626a1c4f8"
+    },
+    {
+      "active_parameters": 3702174.337391514,
+      "confirmation": "runs/v12-repair-position-q3-s22/confirmation/confirmation.json",
+      "family": "HB",
+      "full_all": 0.031649853845226616,
+      "model": "position-q3",
+      "nll": 4.093998350959737,
+      "parameters": 50324128,
+      "parts": {
+        "full_parameter_uses": 1161554.7000964321,
+        "receive_parameter_uses": 2150693.581485053,
+        "shared_parameter_uses": 389926.0558100289
+      },
+      "seed": 22,
+      "source_commit": "62e32602b23e371eb1669f7b99409db626a1c4f8"
+    },
+    {
+      "active_parameters": 3696844.5724445516,
+      "confirmation": "runs/v12-repair-residual-q3-s22/confirmation/confirmation.json",
+      "family": "HB",
+      "full_all": 0.031727304339064004,
+      "model": "residual-q3",
+      "nll": 4.2690605828829575,
+      "parameters": 50324128,
+      "parts": {
+        "full_parameter_uses": 1164397.1456123432,
+        "receive_parameter_uses": 2142526.900675024,
+        "shared_parameter_uses": 389920.5261571842
+      },
+      "seed": 22,
+      "source_commit": "62e32602b23e371eb1669f7b99409db626a1c4f8"
+    },
+    {
+      "active_parameters": 3103016.0273625846,
+      "confirmation": "runs/v12-repair-share0-q3-s22/confirmation/confirmation.json",
+      "family": "HB",
+      "full_all": 0.03165301448928701,
+      "model": "share0-q3",
+      "nll": 4.167118763565668,
+      "parameters": 19358368,
+      "parts": {
+        "full_parameter_uses": 657472.9566055931,
+        "receive_parameter_uses": 2055614.7039537127,
+        "shared_parameter_uses": 389928.3668032787
+      },
+      "seed": 22,
+      "source_commit": "62e32602b23e371eb1669f7b99409db626a1c4f8"
+    },
+    {
+      "active_parameters": 3273533.3114754097,
+      "confirmation": "runs/v12-repair-share8-lr3-q3-s11/confirmation/confirmation.json",
+      "family": "HB",
+      "full_all": 0.03140690802608185,
+      "model": "share8-lr3-q3",
+      "nll": 4.007176593062468,
+      "parameters": 24273568,
+      "parts": {
+        "full_parameter_uses": 810553.8842815815,
+        "receive_parameter_uses": 2073055.168756027,
+        "shared_parameter_uses": 389924.2584378013
+      },
+      "seed": 11,
+      "source_commit": "62e32602b23e371eb1669f7b99409db626a1c4f8"
+    },
+    {
+      "active_parameters": 3328741.136692382,
+      "confirmation": "runs/v12-repair-share8-lr3-q3-s22/confirmation/confirmation.json",
+      "family": "HB",
+      "full_all": 0.03125037668756027,
+      "model": "share8-lr3-q3",
+      "nll": 4.373120714153629,
+      "parameters": 24273568,
+      "parts": {
+        "full_parameter_uses": 808963.8264223723,
+        "receive_parameter_uses": 2129857.299903568,
+        "shared_parameter_uses": 389920.0103664417
+      },
+      "seed": 22,
+      "source_commit": "62e32602b23e371eb1669f7b99409db626a1c4f8"
+    },
+    {
+      "active_parameters": 3014804.800747348,
+      "confirmation": "runs/v12-repair-share8-q10-s11/confirmation/confirmation.json",
+      "family": "HB",
+      "full_all": 0.09994040264671443,
+      "model": "share8-q10",
+      "nll": 3.955554480300634,
+      "parameters": 11115064,
+      "parts": {
+        "full_parameter_uses": 935671.1398264223,
+        "receive_parameter_uses": 1688902.9006750241,
+        "shared_parameter_uses": 390230.76024590165
+      },
+      "seed": 11,
+      "source_commit": "62e32602b23e371eb1669f7b99409db626a1c4f8"
+    },
+    {
+      "active_parameters": 3341082.6078833174,
+      "confirmation": "runs/v12-repair-share8-q3-s11/confirmation/confirmation.json",
+      "family": "HB",
+      "full_all": 0.03188901513153929,
+      "model": "share8-q3",
+      "nll": 4.158786847139709,
+      "parameters": 24273568,
+      "parts": {
+        "full_parameter_uses": 815451.1668273867,
+        "receive_parameter_uses": 2135711.085824494,
+        "shared_parameter_uses": 389920.35523143684
+      },
+      "seed": 11,
+      "source_commit": "62e32602b23e371eb1669f7b99409db626a1c4f8"
+    },
+    {
+      "active_parameters": 3306326.571359691,
+      "confirmation": "runs/v12-repair-share8-q3-s22/confirmation/confirmation.json",
+      "family": "HB",
+      "full_all": 0.03134488995072927,
+      "model": "share8-q3",
+      "nll": 4.447224482151796,
+      "parameters": 24273568,
+      "parts": {
+        "full_parameter_uses": 809923.899710704,
+        "receive_parameter_uses": 2106480.2275795564,
+        "shared_parameter_uses": 389922.44406943105
+      },
+      "seed": 22,
+      "source_commit": "62e32602b23e371eb1669f7b99409db626a1c4f8"
+    },
+    {
+      "active_parameters": 3534976.0,
+      "confirmation": "runs/v12-control-balance128-small-e64-lr0.003-b0.01-s11/confirmation.json",
+      "family": "MoE",
+      "model": "balance128-small-e64-lr0.003-b0.01",
+      "nll": 3.170533956057625,
+      "parameters": 58602880,
+      "seed": 11,
+      "source_commit": "8bd33dd160ac65238fe7bd4eac3450251fe57c32"
+    },
+    {
+      "active_parameters": 3534976.0,
+      "confirmation": "runs/v12-control-balance128-small-e64-lr0.003-b0.01-s22/confirmation.json",
+      "family": "MoE",
+      "model": "balance128-small-e64-lr0.003-b0.01",
+      "nll": 3.161616395736928,
+      "parameters": 58602880,
+      "seed": 22,
+      "source_commit": "8bd33dd160ac65238fe7bd4eac3450251fe57c32"
+    },
+    {
+      "active_parameters": 75541048.02314368,
+      "confirmation": "runs/v12-control-parent128-hb-d128-r28-pool-s11/confirmation.json",
+      "family": "HB",
+      "model": "parent128-hb-d128-r28-pool",
+      "nll": 3.1162281451252056,
+      "parameters": 75541048,
+      "seed": 11,
+      "source_commit": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d"
+    },
+    {
+      "active_parameters": 3755848.0,
+      "confirmation": "runs/v12-control-parent128-hb-d64-r4-dense-match-s11/confirmation.json",
+      "family": "HB",
+      "model": "parent128-hb-d64-r4-dense-match",
+      "nll": 3.7209218826756114,
+      "parameters": 3755848,
+      "seed": 11,
+      "source_commit": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d"
+    },
+    {
+      "active_parameters": 3755848.0,
+      "confirmation": "runs/v12-control-parent128-hb-d64-r4-dense-match-s22/confirmation.json",
+      "family": "HB",
+      "model": "parent128-hb-d64-r4-dense-match",
+      "nll": 3.7027530522609595,
+      "parameters": 3755848,
+      "seed": 22,
+      "source_commit": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d"
+    },
+    {
+      "active_parameters": 3683017.5215766635,
+      "confirmation": "runs/v12-control-parent128-hb-d64-r64-q3-s11/confirmation.json",
+      "family": "HB",
+      "model": "parent128-hb-d64-r64-q3",
+      "nll": 4.277586598036578,
+      "parameters": 50324128,
+      "seed": 11,
+      "source_commit": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d"
+    },
+    {
+      "active_parameters": 3693768.0982401157,
+      "confirmation": "runs/v12-control-parent128-hb-d64-r64-q3-s22/confirmation.json",
+      "family": "HB",
+      "model": "parent128-hb-d64-r64-q3",
+      "nll": 4.393255212256918,
+      "parameters": 50324128,
+      "seed": 22,
+      "source_commit": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d"
+    },
+    {
+      "active_parameters": 10136320,
+      "confirmation": "runs/v12-control-parent128-large-dense-lr0.001-s11/confirmation.json",
+      "family": "Transformer",
+      "model": "parent128-large-dense-lr0.001",
+      "nll": 3.0751376862317557,
+      "parameters": 10136320,
+      "seed": 11,
+      "source_commit": "8bd33dd160ac65238fe7bd4eac3450251fe57c32"
+    },
+    {
+      "active_parameters": 10136320,
+      "confirmation": "runs/v12-control-parent128-large-dense-lr0.001-s22/confirmation.json",
+      "family": "Transformer",
+      "model": "parent128-large-dense-lr0.001",
+      "nll": 3.077000130462693,
+      "parameters": 10136320,
+      "seed": 22,
+      "source_commit": "8bd33dd160ac65238fe7bd4eac3450251fe57c32"
+    },
+    {
+      "active_parameters": 10200832.0,
+      "confirmation": "runs/v12-control-parent128-large-e20-lr0.001-b0.01-s11/confirmation.json",
+      "family": "MoE",
+      "model": "parent128-large-e20-lr0.001-b0.01",
+      "nll": 2.8813758337128093,
+      "parameters": 63443968,
+      "seed": 11,
+      "source_commit": "8bd33dd160ac65238fe7bd4eac3450251fe57c32"
+    },
+    {
+      "active_parameters": 10200832.0,
+      "confirmation": "runs/v12-control-parent128-large-e20-lr0.001-b0.01-s22/confirmation.json",
+      "family": "MoE",
+      "model": "parent128-large-e20-lr0.001-b0.01",
+      "nll": 2.879380133759696,
+      "parameters": 63443968,
+      "seed": 22,
+      "source_commit": "8bd33dd160ac65238fe7bd4eac3450251fe57c32"
+    },
+    {
+      "active_parameters": 10336000.0,
+      "confirmation": "runs/v12-control-parent128-large-e64-lr0.001-b0.01-s11/confirmation.json",
+      "family": "MoE",
+      "model": "parent128-large-e64-lr0.001-b0.01",
+      "nll": 2.8719975785788847,
+      "parameters": 193729024,
+      "seed": 11,
+      "source_commit": "8bd33dd160ac65238fe7bd4eac3450251fe57c32"
+    },
+    {
+      "active_parameters": 10336000.0,
+      "confirmation": "runs/v12-control-parent128-large-e64-lr0.001-b0.01-s22/confirmation.json",
+      "family": "MoE",
+      "model": "parent128-large-e64-lr0.001-b0.01",
+      "nll": 2.867179052103893,
+      "parameters": 193729024,
+      "seed": 22,
+      "source_commit": "8bd33dd160ac65238fe7bd4eac3450251fe57c32"
+    },
+    {
+      "active_parameters": 3484288.0,
+      "confirmation": "runs/v12-control-parent128-small-e20-lr0.003-b0.01-s11/confirmation.json",
+      "family": "MoE",
+      "model": "parent128-small-e20-lr0.003-b0.01",
+      "nll": 3.1622550963802496,
+      "parameters": 19471744,
+      "seed": 11,
+      "source_commit": "8bd33dd160ac65238fe7bd4eac3450251fe57c32"
+    },
+    {
+      "active_parameters": 3484288.0,
+      "confirmation": "runs/v12-control-parent128-small-e20-lr0.003-b0.01-s22/confirmation.json",
+      "family": "MoE",
+      "model": "parent128-small-e20-lr0.003-b0.01",
+      "nll": 3.1667375795077533,
+      "parameters": 19471744,
+      "seed": 22,
+      "source_commit": "8bd33dd160ac65238fe7bd4eac3450251fe57c32"
+    },
+    {
+      "active_parameters": 3460096,
+      "confirmation": "runs/v12-control-parent128-tf-d192-l6-s11/confirmation.json",
+      "family": "Transformer",
+      "model": "parent128-tf-d192-l6",
+      "nll": 3.3100850657356204,
+      "parameters": 3460096,
+      "seed": 11,
+      "source_commit": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d"
+    },
+    {
+      "active_parameters": 3460096,
+      "confirmation": "runs/v12-control-parent128-tf-d192-l6-s22/confirmation.json",
+      "family": "Transformer",
+      "model": "parent128-tf-d192-l6",
+      "nll": 3.303781069451361,
+      "parameters": 3460096,
+      "seed": 22,
+      "source_commit": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d"
+    }
+  ]
+}
