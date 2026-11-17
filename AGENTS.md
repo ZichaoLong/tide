@@ -1,5 +1,19 @@
 # Working on tide-learning-lab
 
+- V13 Mem comparisons are now submitted with frozenefa97b91 at
+  `.local/source-hb-mem-v13-main`:12 sum plus4 conditional fresh qry128Mi
+  chains, and8 reused qry endpoints on a new262K confirmation. Deadline
+  2026-11-19 17:44+08,all16 shared-card candidates. Read
+  `docs/studies/hb-mem-v13-operations.md`; status:
+  `python scripts/review_hb_mem_v13.py`. CPU qualification passed; finite
+  NPU VJP failures and3 calibration OOMs remain; smaller measured batches
+  selected. Do not edit active frozen inputs or auto-retry scientific failures.
+  Revised concurrent write peak80GiB includes4 added qry controls and recovery;
+  account700GiB/live lower quota and filesystem32GiB write reserve both guard.
+  V12 now has38 verified128Mi train/inference/confirmation endpoints and no
+  live services. Preserve8 failed post-training diagnostics and3 historical
+  control confirmation identity failures; see its20261117 results page.
+
 - The 2026-11-17 user approval authorizes the six paired Mem.sum/qry groups in
   `docs/studies/hb-sum-qry-proposal.md`:12 new sum chains, seeds11/22,128Mi,
   plus at most4 conditional qry controls only if the named v10 endpoints cannot

@@ -1,3 +1,14 @@
+# 当前执行设计：固定六组Mem.sum/qry
+
+[执行表](studies/hb-sum-qry-proposal.md)只比较历史信息形式：同图、Full注意力、组内路由与训练规则，
+Mem.qry与Mem.sum分别训练/评价；sum减少Read投影参数，如实记录，不为等参加宽。
+12sum＋4个v10数值谱系不匹配时的新qry控制，另8个已有qry只重评；统一global64/L256/128Mi，
+新262K确认，test密封。根据成本校准选物理microbatch，不能用sum理论少计算推断当前NPU更快。
+
+CPU/NPU数值、离散语义、恢复、执行和学习分别记录；原有限超差保持失败，经有界机制排查
+可继续标记探索。[v12审阅](studies/hb-v12-results-20261117.md)是提出问题的依据，
+没有直接转化为新sum/qry质量结论。状态以STATUS为准，下方为设计沿革。
+
 # 当前执行设计：HB v12的可区分机制对照
 
 [固定研究表](studies/hb-mechanisms-v12.md)落实已授权的更充分对照：

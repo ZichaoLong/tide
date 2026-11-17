@@ -1,3 +1,26 @@
+# 当前：六组sum/qry已提交；v12的38个训练终点已核验
+
+2026-11-17T18:13+08:00。已执行用户批准的[Mem比较](studies/hb-sum-qry-proposal.md)：
+12条sum＋4条具名同源码qry控制，共16条独立128Mi链；另8个旧qry终点只做新确认。
+冻结科学/编排源码`efa97b91`，`.local/source-hb-mem-v13-main`；共享截止11月19日17:44+08。
+最近确认13条已通过接入和小型新进程恢复、进入8Mi先导，3条等待；未产生128Mi新质量结论。
+8个旧qry确认等待资源；小型Lens已verified/readback_matches。实际状态以只读命令为准。
+
+`python scripts/review_hb_mem_v13.py` · [操作、批量、Lens及停止/恢复](studies/hb-mem-v13-operations.md) ·
+[实际交接](evidence/hb-mem-v13-handoff.json)。总/活跃参数与活动、物理工作分列。
+原1e-6/1e-5数值失败和2e-5可行性阈值保留；新sum小型CPU公式/VJP通过，NPU有限VJP超差
+经有界机制检查后按授权探索。3个成本校准大batch OOM保留，正式批量来自已完成的较小batch；
+sum当前没有端到端速度优势。16链并发恢复按80GiB新增峰规划，终态约34GiB，账号700GiB和
+整盘可用各保留并发保存32GiB；不是恢复旧项目96GiB或固定200GiB限制。
+
+[上一批完整审阅](studies/hb-v12-results-20261117.md)：38个配置均达到128Mi，训练/推理、
+checkpoint身份/SHA、恢复和同一262K确认已核验，v12所有服务无存活后代。
+诊断30完成、8项行政history目录误读失败；20个旧控制17完成、3项修复配置身份不匹配失败。
+这些后置失败没有重训或静默改成功。共享后加宽有双seed收益；d64单独共享变差，
+budget0及Read直达内容改善；最强本批HB均值3.420602，仍弱于同集TF的3.306933。
+
+以下为历史审计快照。
+
 # 当前容量复核：700GiB硬配额已生效，共享盘可用约81GiB
 
 2026-11-16 23:10 +08。按用户要求检查`ascend status`概览与存储页，

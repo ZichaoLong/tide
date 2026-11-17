@@ -19,7 +19,7 @@ def review(root):
   progress=read(out/(stage or 'train')/'progress.json');result=read(out/(stage or 'train')/'result.json')
   projection=read(out/(stage or 'train')/'projection.json');cfg=read(root/case['config'])
   rows.append(dict(id=case['id'],group=case['group'],mem=case['mem'],seed=case['seed'],job=job,config=case['config'],
-   source=ob.get('job',{}).get('source_commit'),execution=ob.get('state',{}).get('state','not_submitted'),
+   source=read(record).get('source',{}).get('commit'),execution=ob.get('state',{}).get('state','not_submitted'),
    terminated=ob.get('termination_verified_now'),device=(ob.get('queue') or {}).get('physical_id'),stage=stage,
    stage_state=result.get('state'),tokens=progress.get('tokens',result.get('progress',{}).get('tokens')),
    error=result.get('error',w.get('error')),lens=projection.get('status'),lens_name=projection.get('destination_name'),
