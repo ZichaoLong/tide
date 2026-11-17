@@ -1,0 +1,140 @@
+{
+  "calibration_resolved": false,
+  "cases": [
+    {
+      "config": "configs/studies/language/hb-mem-v13/configs/q10-s-sum-s11.json",
+      "group": "q10-s",
+      "id": "q10-s-sum-s11",
+      "mem": "sum",
+      "qry_config": "configs/studies/language/hb-v12/configs/base-q10-s11.json",
+      "qry_parameters": 22235704,
+      "route": "quad",
+      "seed": 11,
+      "sum_parameters": 20515384
+    },
+    {
+      "config": "configs/studies/language/hb-mem-v13/configs/q10-s-sum-s22.json",
+      "group": "q10-s",
+      "id": "q10-s-sum-s22",
+      "mem": "sum",
+      "qry_config": "configs/studies/language/hb-v12/configs/base-q10-s22.json",
+      "qry_parameters": 22235704,
+      "route": "quad",
+      "seed": 22,
+      "sum_parameters": 20515384
+    },
+    {
+      "config": "configs/studies/language/hb-mem-v13/configs/q3-s-sum-s11.json",
+      "group": "q3-s",
+      "id": "q3-s-sum-s11",
+      "mem": "sum",
+      "qry_config": "configs/studies/language/hb-v12/configs/base-q3-s11.json",
+      "qry_parameters": 50324128,
+      "route": "quad",
+      "seed": 11,
+      "sum_parameters": 46391968
+    },
+    {
+      "config": "configs/studies/language/hb-mem-v13/configs/q3-s-sum-s22.json",
+      "group": "q3-s",
+      "id": "q3-s-sum-s22",
+      "mem": "sum",
+      "qry_config": "configs/studies/language/hb-v12/configs/base-q3-s22.json",
+      "qry_parameters": 50324128,
+      "route": "quad",
+      "seed": 22,
+      "sum_parameters": 46391968
+    },
+    {
+      "config": "configs/studies/language/hb-mem-v13/configs/q10-l-sum-s11.json",
+      "group": "q10-l",
+      "id": "q10-l-sum-s11",
+      "mem": "sum",
+      "qry_config": "configs/studies/language/direct-v10/table/main/hb-d128-r28-q10-s11.json",
+      "qry_parameters": 75541048,
+      "route": "quad",
+      "seed": 11,
+      "sum_parameters": 72100408
+    },
+    {
+      "config": "configs/studies/language/hb-mem-v13/configs/q10-l-sum-s22.json",
+      "group": "q10-l",
+      "id": "q10-l-sum-s22",
+      "mem": "sum",
+      "qry_config": "configs/studies/language/direct-v10/table/main/hb-d128-r28-q10-s22.json",
+      "qry_parameters": 75541048,
+      "route": "quad",
+      "seed": 22,
+      "sum_parameters": 72100408
+    },
+    {
+      "config": "configs/studies/language/hb-mem-v13/configs/q3-l-sum-s11.json",
+      "group": "q3-l",
+      "id": "q3-l-sum-s11",
+      "mem": "sum",
+      "qry_config": "configs/studies/language/hb-v12/configs/base128-q3-s11.json",
+      "qry_parameters": 171459232,
+      "route": "quad",
+      "seed": 11,
+      "sum_parameters": 163594912
+    },
+    {
+      "config": "configs/studies/language/hb-mem-v13/configs/q3-l-sum-s22.json",
+      "group": "q3-l",
+      "id": "q3-l-sum-s22",
+      "mem": "sum",
+      "qry_config": "configs/studies/language/hb-v12/configs/base128-q3-s22.json",
+      "qry_parameters": 171459232,
+      "route": "quad",
+      "seed": 22,
+      "sum_parameters": 163594912
+    },
+    {
+      "config": "configs/studies/language/hb-mem-v13/configs/pool-l-sum-s11.json",
+      "group": "pool-l",
+      "id": "pool-l-sum-s11",
+      "mem": "sum",
+      "qry_config": "configs/studies/language/direct-v10/table/main/hb-d128-r64-pool-s11.json",
+      "qry_parameters": 171459232,
+      "route": "pool",
+      "seed": 11,
+      "sum_parameters": 163594912
+    },
+    {
+      "config": "configs/studies/language/hb-mem-v13/configs/pool-l-sum-s22.json",
+      "group": "pool-l",
+      "id": "pool-l-sum-s22",
+      "mem": "sum",
+      "qry_config": "configs/studies/language/direct-v10/table/main/hb-d128-r64-pool-s22.json",
+      "qry_parameters": 171459232,
+      "route": "pool",
+      "seed": 22,
+      "sum_parameters": 163594912
+    },
+    {
+      "config": "configs/studies/language/hb-mem-v13/configs/content-s-sum-s11.json",
+      "group": "content-s",
+      "id": "content-s-sum-s11",
+      "mem": "sum",
+      "qry_config": "configs/studies/language/hb-v12/configs/readcontent-q3-s11.json",
+      "qry_parameters": 52945568,
+      "route": "quad",
+      "seed": 11,
+      "sum_parameters": 49013408
+    },
+    {
+      "config": "configs/studies/language/hb-mem-v13/configs/content-s-sum-s22.json",
+      "group": "content-s",
+      "id": "content-s-sum-s22",
+      "mem": "sum",
+      "qry_config": "configs/studies/language/hb-v12/configs/readcontent-q3-s22.json",
+      "qry_parameters": 52945568,
+      "route": "quad",
+      "seed": 22,
+      "sum_parameters": 49013408
+    }
+  ],
+  "confirmation": "fresh262K excluding old locks; old qry endpoints re-evaluated; test sealed",
+  "schema": "tide-hb-mem-v13-table-v1",
+  "selection": "implementation and physical microbatch by bounded synthetic cost only; no quality pruning"
+}

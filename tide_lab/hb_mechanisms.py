@@ -161,9 +161,9 @@ class HBMechanismLM(SpecializedSemanticLM):
         return h
 
     def gradient_metrics(self):
-        groups={'read':[],'ffn':[],'router':[]};zero=nodes=0
+        groups={'read':[],'summary':[],'ffn':[],'router':[]};zero=nodes=0
         for name,p in self.named_parameters():
-            group='router' if name.startswith('selectors.') else 'read' if '.read_' in name else 'ffn' if any('.'+r+'.' in name for r in ('ffup','ffgate','ffdown')) else None
+            group='router' if name.startswith('selectors.') else 'read' if '.read_' in name else 'summary' if '.current.' in name else 'ffn' if any('.'+r+'.' in name for r in ('ffup','ffgate','ffdown')) else None
             if group and p.grad is not None:groups[group].append(p.grad.detach().square().sum())
             if '.read_q.weight' in name and p.grad is not None:
                 v=p.grad.detach().flatten(1).square().sum(1);zero+=(v==0).sum();nodes+=v.numel()

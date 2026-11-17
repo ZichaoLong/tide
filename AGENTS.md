@@ -1,5 +1,17 @@
 # Working on tide-learning-lab
 
+- The 2026-11-17 user approval authorizes the six paired Mem.sum/qry groups in
+  `docs/studies/hb-sum-qry-proposal.md`:12 new sum chains, seeds11/22,128Mi,
+  plus at most4 conditional qry controls only if the named v10 endpoints cannot
+  be matched. New shared48h begins17:44+08, ends11/19 17:44+08; no aggregate
+  compute cap, all16 shared-card candidates,<=200M. Preserve original thresholds,
+  old failures and frozen inputs. New account cap700GiB and filesystem/checkpoint
+  write guards apply. Qualify/cost-calibrate sum matrix/blocked, freeze inputs,
+  submit directly; do not prune on8Mi quality or add candidates/exposure.
+  Reuse qry only with explicit config/source/data identity and fresh confirmation.
+  Old v12 training/confirmation endpoints are separate from failed diagnostics;
+  no automatic repair or rerun of those historical diagnostics.
+
 - 2026-11-16 23:10 +08 live quota changed from800 to700GiB during the
   user's storage-status review;700GiB is now the effective account hard cap.
   Existing all-card workers already use min(frozen plan cap,live kernel quota),

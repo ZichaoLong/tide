@@ -17,7 +17,7 @@ from .ordered_divide import ordered_divide
 
 class SpecializedSemanticLM(DirectSemanticLM):
     def __init__(self,plan,seed=11,vocab_size=4096,*,attention='math',ffn_checkpoint=False,
-                 aggregation='neighbors',activity_controller=None,aggregate_vjp='native'):
+                 aggregation='neighbors',activity_controller=None,aggregate_vjp='native',sum_implementation='matrix'):
         super().__init__(plan,seed,vocab_size)
         if aggregate_vjp not in ('native','ordered-v1'):
             raise ValueError('unknown aggregate VJP policy')
@@ -25,6 +25,8 @@ class SpecializedSemanticLM(DirectSemanticLM):
             raise ValueError('ordered-v1 is qualified only for static neighbors aggregation')
         self.aggregate_vjp=aggregate_vjp
         self.attention=attention;self.ffn_checkpoint=ffn_checkpoint;self.aggregation=aggregation
+        if sum_implementation not in ('matrix','blocked'):raise ValueError('unknown Mem.sum implementation')
+        self.sum_implementation=sum_implementation
         self._decay_cache={};self.role_counts=[];self.slot_degrees=[]
         self.activity_controller=dict(activity_controller or {})
         self.activity_state=dict(ema=None,scale=1.,updates=0,last_tokens=0)
@@ -33,7 +35,7 @@ class SpecializedSemanticLM(DirectSemanticLM):
         g=plan['graph']
         for j,nodes in enumerate(self.members):
             m=self.memories[j];s=m.s;sel=self.selectors[j].s
-            if (m.family!='kv' or s['memory_read']!='qry' or s['heads']!=1 or
+            if (m.family!='kv' or s['memory_read'] not in ('qry','sum') or s['heads']!=1 or
                 any(s['full_frequencies']) or s['read_frequencies'] or any(s['distance_slopes']) or
                 sel['read_mode']!='+' or sel['region_score']!='ind' or sel['local_score']!='cat' or
                 sel['selection_mode'] not in ('regional_total','pooled_attention') or
@@ -61,6 +63,9 @@ class SpecializedSemanticLM(DirectSemanticLM):
             self.role_counts.append((full,receive,shared,self.aggregators[j].e.shape[-1]))
         self.shared_lm_count=self.embedding.weight.numel()+self.head.bias.numel()
         self.total_parameter_count=sum(p.numel() for p in self.parameters())
+        self.query_read=all(m.s['memory_read']=='qry' for m in self.memories)
+        if not self.query_read and any(m.s['memory_read']!='sum' for m in self.memories):
+            raise ValueError('bounded specialization requires homogeneous Mem mode')
 
     def get_extra_state(self):
         return dict(schema='tide-v10-activity-state-v1',**self.activity_state)
@@ -118,9 +123,14 @@ class SpecializedSemanticLM(DirectSemanticLM):
             dt=(position[:,None]-position[None,:])*stride
             self._decay_cache[key]=positive_exp(-s['beta_short']*dt.clamp_min(0).to(x.dtype))*(dt>=0)
         masses=[F.linear(w,self._decay_cache[key]),w.cumsum(-1)]
-        q=m.read_q(x);rk=m.read_k(k);rv=m.read_v(v)
-        values=[weighted_attention(q,rk,rv,w,rate=rate,stride=stride,implementation=self.attention)*mass.clamp_max(1).unsqueeze(-1)
-                for rate,mass in zip((s['beta_short'],0.),masses)]
+        if s['memory_read']=='qry':
+            q=m.read_q(x);rk=m.read_k(k);rv=m.read_v(v)
+            values=[weighted_attention(q,rk,rv,w,rate=rate,stride=stride,implementation=self.attention)*mass.clamp_max(1).unsqueeze(-1)
+                    for rate,mass in zip((s['beta_short'],0.),masses)]
+        else:
+            from .sum_memory import sum_read
+            values=sum_read(w,p,masses,self._decay_cache[key],rate=s['beta_short'],stride=stride,
+                            implementation=self.sum_implementation)
         full=weighted_attention(m.query(x),k,v,w,implementation=self.attention)*masses[1].clamp_max(1).unsqueeze(-1)
         content=u+s['alpha_att']*m.output(full)
         def ffn(y):
@@ -163,7 +173,7 @@ class SpecializedSemanticLM(DirectSemanticLM):
                 unsat if unsat is not None else r.new_zeros(()),self.selectors[j].last_support_errors)).detach())
             extra.append(torch.stack((*self.parameter_uses(j,received,full,w),
                 ((w>0)*getattr(self,'_degrees_'+str(j))[:,None,None]).sum(),
-                (full*hist).sum(),2*(received*hist).sum(),
+                (full*hist).sum(),(2 if self.query_read else 0)*(received*hist).sum(),
                 (((c>0)&(c<(self.selectors[j].s['gamma_max']*r.clamp(0,1)).clamp_max(1))).sum(0)>1).sum())).detach())
         hidden=self.readout(values,mass,embedding)
         floor_total=torch.stack(floors).sum() if floors else hidden.new_zeros(())
@@ -189,8 +199,10 @@ class SpecializedSemanticLM(DirectSemanticLM):
             'work/active_parameter_uses':pf+pr+ps,'work/dense_parameter_uses':self.total_parameter_count*b*l,
             'work/prediction_positions':b*l,'work/message_edges_including_input':messages,
             'work/logical_full_attention_pairs':fpairs,'work/logical_read_attention_pairs':rpairs,
-            'work/dense_causal_attention_pairs':3*slots*(l+1)/2,
-            'work/physical_attention_pair_upper_bound':3*slots*l,
+            'work/dense_causal_attention_pairs':(3 if self.query_read else 1)*slots*(l+1)/2,
+            'work/physical_attention_pair_upper_bound':(3 if self.query_read else 1)*slots*l,
+            'work/sum_read_candidate_rows':0 if self.query_read else 2*candidates,
+            'work/physical_sum_value_rows':0 if self.query_read else 2*slots,
             'work/router_multi_unsaturated_rows':router_rows,
             'activity/active_parameters_per_position':(pf+pr+ps)/(b*l)}
         for j,row in zip(self.order,rows):

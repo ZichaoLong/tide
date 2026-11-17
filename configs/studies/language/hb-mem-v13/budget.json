@@ -1,0 +1,19 @@
+{
+  "account_checkpoint_reserve_gib": 32,
+  "account_hard_limit_gib": 700,
+  "aggregate_compute_cap": null,
+  "authorized": "2026-11-17 user approval of hb-sum-qry-proposal",
+  "deadline": "2026-11-19T17:44:00+08:00",
+  "deadline_epoch": 1795081440.0,
+  "filesystem_low_water_gib": 32,
+  "max_conditional_qry_chains": 4,
+  "max_new_concurrent_npus": 16,
+  "max_parameters": 200000000,
+  "max_sum_chains": 12,
+  "no_automatic_retry": true,
+  "original_feasibility_threshold": 2e-05,
+  "planned_new_disk_gib": 60,
+  "schema": "tide-hb-mem-v13-budget-v1",
+  "start": "2026-11-17T17:44:00+08:00",
+  "target_tokens": 134217728
+}
