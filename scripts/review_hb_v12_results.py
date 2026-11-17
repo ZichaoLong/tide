@@ -68,9 +68,13 @@ def audit(root):
     scope='fresh v12 confirmation, document-bootstrap conditional on fixed seed/checkpoints; not selection/seed uncertainty',left_shape=left,right_shape=right,seed=seed);comparisons.append(r)
  controls=[]
  for p in sorted((root/'runs').glob('v12-control-*/result.json')):
-  r=read(p);v,sig=endpoint(p.with_name('confirmation.json'),262144)
+  r=read(p)
+  if r['state']!='completed':
+   controls.append(dict(id=p.parent.name.removeprefix('v12-control-'),state=r['state'],error=r.get('error'),record=str(p.relative_to(root))))
+   continue
+  v,sig=endpoint(p.with_name('confirmation.json'),262144)
   if r['state']!='completed' or r['confirmation_lock_sha256']!=conf_sha or sig!=signatures['confirmation']:raise ValueError('historical control not matched')
-  controls.append(dict(id=p.parent.name.removeprefix('v12-control-'),nll=v['nll'],exposure=r['exposure'],checkpoint=r['checkpoint'],
+  controls.append(dict(id=p.parent.name.removeprefix('v12-control-'),state='completed',nll=v['nll'],exposure=r['exposure'],checkpoint=r['checkpoint'],
    checkpoint_sha256=r['checkpoint_sha256'],training_identity=r['training_identity'],record=str(p.relative_to(root))))
  return dict(schema='tide-hb-v12-terminal-review-v1',state='reviewed_with_limits',observed_at=now(),
   training_lock_sha256=train_sha,confirmation_lock_sha256=conf_sha,rows=rows,means=means,comparisons=comparisons,controls=controls,
