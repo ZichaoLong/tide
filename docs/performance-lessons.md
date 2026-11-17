@@ -1,5 +1,8 @@
 # 性能经验与适用条件
 
+当前重写首先看[FC/HB 实例的实测经验](performance-lessons-instances.md)和
+[FP32 交付报告](evidence/instances-fp32-20261118.md)。下列历史记录按需查阅。
+
 本页按问题机制导航，详细观察保留原源码、配置、结果和失败身份。
 当前工作安排只在[ROADMAP](ROADMAP.md)，当前交接只在[STATUS](STATUS.md)。
 历史提交定位见[迁移映射](history-migration.md)，具体复现见[reproduction](reproduction.md)。

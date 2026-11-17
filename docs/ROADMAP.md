@@ -1,25 +1,35 @@
-# Remaining current delivery
+# Follow-up after the current instance delivery
 
-The new FC, Lattice, Exchange and Multiscale Settle/Timed implementations are
-present, including K/S/X, four reception profiles, three allocations and three
-sharing profiles. CPU formula/integration evidence and the first FC comparison
-are linked from docs/evidence/instances-first-cpu-20261117.md. The scope and API
-are in semantics.md and instances.md; this list contains remaining work.
+The agreed fresh FC/HB implementation and finite CPU/NPU FP32 delivery are
+complete at the scope in [semantics](semantics.md), with measured qualifications
+and limits in [the report](evidence/instances-fp32-20261118.md). No job is active.
+These are remaining limits/opportunities, not an instruction to restart a broad
+rewrite or resume old P1–P6.
 
-1. Qualify the next immutable implementation containing independent long KV
-   window checks and the zero-reception continuation-gradient fix.
-2. Complete real NPU FP32 Attention/model/training/continuation checks. The first
-   attempt failed shared admission before device execution; existing locks
-   require explicitly bound shared leases. Preserve that failed attempt.
-3. Run finite FC/HB comparisons against parameter-matched and dimension/layer
-   matched Transformer/SSD, with complete training and actual candidate/Full
-   work. Resolve major measured costs with bounded diagnostics; do not invent
-   throughput or universal scaling conclusions from smoke tests.
-4. Record the actual backend/device limits, observations and reusable findings;
-   leave a clean installed consumer example and concise navigation.
+1. Preserve four whole-model NPU finite-deviation records. Their support,
+   metadata, gradient connectivity, finite updates and exact restore passed;
+   the worst case has a bounded FP64 explanation. Strict elementwise passage
+   of every FP32 state/value remains unclaimed. Revisit if a consumer's actual
+   scale, learning behavior or numerical requirement makes it material.
+   Actual resumed FP32 AdamW updates also retain small common-bias parameter
+   deviations despite exact saved data/forward; bitwise optimizer replay is
+   not promised. Their attempts and thresholds remain in the same report.
+2. FC Full packing currently processes 2.02× selected rows in the measured case;
+   consider query buckets/ragged operators. Lattice's factor is only 1.07×.
+   Head-query and gate/up packing, short Attention backend choice and Shannon
+   iteration cost are other concrete candidates, to prioritize from actual need.
+   KV time ordering currently invokes device AiCPU Argsort; consider stable
+   compaction while retaining int64 time semantics.
+3. Larger/longer configurations and billion-parameter capacity/performance are
+   unmeasured. Choose useful downstream configurations, with real activity and
+   padding counters; do not infer 3% Full from k/n or exhaust all combinations.
+4. Native/LibTorch kernels may be added for demonstrated benefit. CUDA,
+   multi-device, exclusive NPU timings and resident scheduling are not qualified
+   by this delivery and are not inherited from historical implementations.
 
-Execution/performance is FP32 only. CPU FP64 may validate formulas. FP16/BF16,
-old teaching bindings, LH-DAG/PDG, arbitrary graph executors, historical APIs,
-resident/mixed matrices and exhaustive action/dependency records are excluded.
-No need to restore or complete old P1–P6. Native/LibTorch kernels remain options
-for a demonstrated benefit, not compulsory interfaces for this delivery.
+All current models/configuration candidates remain available in PyTorch. No
+FP16/BF16 work, old teaching binding, LH-DAG/PDG or arbitrary graph engine is
+required. New downstream work starts from the current public API/configuration,
+fixed mathematical source and observed needs. Relevant checks and portable
+commands are in the report; [measured lessons](performance-lessons-instances.md)
+explain successful changes and remaining costs.
