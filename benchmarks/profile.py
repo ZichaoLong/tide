@@ -34,7 +34,7 @@ def synchronize(device):
 
 
 @contextmanager
-def stage_observation(model, device, observations):
+def stage_observation(model, device, observations, layouts):
     """Temporarily wrap this model and its regional control call; always restore."""
     originals = []
 
@@ -54,6 +54,23 @@ def stage_observation(model, device, observations):
         originals.append((owner, attribute, original, attribute in vars(owner)))
         setattr(owner, attribute, observed)
 
+    def observe_packing(kind):
+        module = importlib.import_module("tide.kv" if kind == "K" else "tide.ssd_memory")
+        original = module.select_queries
+        label = "KV" if kind == "K" else "SSD"
+
+        def observed(*args, **kwargs):
+            packed = original(*args, **kwargs)
+            row = layouts.setdefault(label, dict(calls=0, selected_rows=0, padded_rows=0))
+            row["calls"] += 1
+            if packed is not None:
+                row["selected_rows"] += packed.node.numel()
+                row["padded_rows"] += packed.data.numel() // packed.data.shape[-1]
+            return packed
+
+        originals.append((module, "select_queries", original, True))
+        module.select_queries = observed
+
     try:
         wrap(model.receive, "forward", "Reception")
         wrap(model.describe, "forward", "Description")
@@ -63,6 +80,7 @@ def stage_observation(model, device, observations):
             label = "KV" if kind == "K" else "SSD"
             wrap(memory, "prepare", label + ".prepare")
             wrap(memory, "finish", label + ".finish")
+            observe_packing(kind)
         wrap(importlib.import_module("tide.model"), "region_control", "region_control")
         yield
     finally:
@@ -73,7 +91,7 @@ def stage_observation(model, device, observations):
                 delattr(owner, attribute)
 
 
-def step(model, inputs, optimizer, mode, device, stages=None):
+def step(model, inputs, optimizer, mode, device, stages=None, layouts=None):
     phases = {}
 
     def timed(name, operation):
@@ -92,7 +110,7 @@ def step(model, inputs, optimizer, mode, device, stages=None):
         if stages is None:
             result = timed("forward", lambda: model(inputs))
         else:
-            with stage_observation(model, device, stages):
+            with stage_observation(model, device, stages, layouts):
                 result = timed("forward", lambda: model(inputs))
         loss = timed("readout_and_loss", lambda: result.readout().float().square().mean())
     if optimizer is not None:
@@ -178,8 +196,10 @@ def main():
     try:
         step(model, inputs, optimizer, args.mode, device)
         stages = {label: dict(calls=0, seconds=0.0) for label in STAGES}
-        observation = step(model, inputs, optimizer, args.mode, device, stages)
+        layouts = {}
+        observation = step(model, inputs, optimizer, args.mode, device, stages, layouts)
         observation["stages"] = stages
+        observation["selected_query_packing"] = layouts
         observation["forward_unattributed_seconds"] = (observation["phases_seconds"]["forward"]
                                                        - sum(stage["seconds"] for stage in stages.values()))
         record["intrusive_observation"] = observation
