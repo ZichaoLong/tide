@@ -13,3 +13,6 @@ KV windows, positions and SSD convolution. k bounds mass, not active node count.
 Correctness tests target actual values, support, parameter gradients and stateful
 continuation. Full action journals and generic intermediate decoding are omitted.
 The rewrite intentionally has a new public API and state representation.
+
+Execution and performance use FP32. FP64 is available for CPU accuracy checks;
+FP16/BF16 are outside the requested implementation and validation scope.

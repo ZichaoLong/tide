@@ -9,6 +9,7 @@ legacy APIs, old teaching bindings and LH-DAG/PDG are outside this delivery.
 No retired model implementation or test is reused.
 
 - [Current work](docs/STATUS.md) / [remaining work](docs/ROADMAP.md)
+- [Use/configure/train/continue](docs/instances.md) / [current navigation](docs/README.md)
 - [Scope and mathematical choices](docs/semantics.md)
 - [Development](docs/development.md) / [execution](docs/execution-flows.md)
 - [Performance experience](docs/performance-lessons.md): historical observations,
