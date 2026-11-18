@@ -1,9 +1,9 @@
 {
   "schema": "tide-roadmap-retirement-1",
-  "recorded_at_utc": "2026-11-18T05:38:02.345776+00:00",
-  "state": "reviewed_main_retirement_and_installed_smoke",
+  "recorded_at_utc": "2026-11-18T05:39:00.784184+00:00",
+  "state": "completed",
   "scope": "Current-thread project artifact cleanup and isolated installed-wheel dependency check. No new broad numerical or hardware qualification.",
-  "reviewed_evidence_commit": "da45086c9228e14e03b18e775a4d7d5d601a2ffb",
+  "reviewed_evidence_commit": "4ddaec87976a484d91b98e83565f63b153dac5ba",
   "implementation": "0992b467584c1f603314ed04d8efe8596a14f576",
   "mathematics": "4f5b9f20a4030d68ee66ae2d26e34659a5e37234",
   "inventory": {
@@ -3708,14 +3708,39 @@
     ]
   },
   "temporary_validation_retirement": {
-    "state": "pending_after_evidence_commit",
-    "scope": "Retire only this follow-up private venv, tmp directory and two checkpoint files after reviewed evidence is committed."
+    "state": "completed",
+    "started": "2026-11-18T05:38:48.134177+00:00",
+    "reviewed_evidence_commit": "4ddaec87976a484d91b98e83565f63b153dac5ba",
+    "scope": "Only the post-cleanup validation venv/tmp/two checkpoints, after their complete result was committed. No public/consumer path or retained witness.",
+    "no_active_candidate_users": [],
+    "removed": [
+      {
+        "path": "artifacts/retirement-roadmap-20261118/post-cleanup-venv",
+        "allocated_bytes": 13963264
+      },
+      {
+        "path": "artifacts/retirement-roadmap-20261118/post-cleanup-tmp",
+        "allocated_bytes": 8192
+      },
+      {
+        "path": "artifacts/retirement-roadmap-20261118/fp32-checkpoint.pt",
+        "allocated_bytes": 29020160,
+        "sha256": "c62c443041dafbaae0e550029dead4849a6e4b2f90dc1d878d3757165049d2c9"
+      },
+      {
+        "path": "artifacts/retirement-roadmap-20261118/bf16-checkpoint.pt",
+        "allocated_bytes": 28626944,
+        "sha256": "1487534a72d1fea5f7b4fef1f21fb51235e3f79d04217c510925956106c31fc6"
+      }
+    ],
+    "finished": "2026-11-18T05:38:48.259339+00:00",
+    "removed_allocated_bytes": 71618560
   },
   "final_snapshot": {
-    "artifacts_allocated_bytes": 917180416,
-    "project_allocated_bytes": 1081393152,
-    "quota": "Disk quotas for user zlong (uid 1003): \n     Filesystem   space   quota   limit   grace   files   quota   limit   grace\n/dev/mapper/ascend_data-data\n                 39804M    300G    700G            358k       0       0        \n",
-    "worktrees": "worktree /mi/data2T/zlong/home/llm/graph-execution-foundation\nHEAD da45086c9228e14e03b18e775a4d7d5d601a2ffb\nbranch refs/heads/graph-execution-foundation\n\nworktree /mi/data2T/zlong/home/llm/tide-learning-lab\nHEAD 5f30ed2a32d7648f5011f5bfde5c6cae086a463c\nbranch refs/heads/tide-learning-lab\n\n",
+    "artifacts_allocated_bytes": 845565952,
+    "project_allocated_bytes": 1009971200,
+    "quota": "Disk quotas for user zlong (uid 1003): \n     Filesystem   space   quota   limit   grace   files   quota   limit   grace\n/dev/mapper/ascend_data-data\n                 39736M    300G    700G            357k       0       0        \n",
+    "worktrees": "worktree /mi/data2T/zlong/home/llm/graph-execution-foundation\nHEAD 4ddaec87976a484d91b98e83565f63b153dac5ba\nbranch refs/heads/graph-execution-foundation\n\nworktree /mi/data2T/zlong/home/llm/tide-learning-lab\nHEAD 5f30ed2a32d7648f5011f5bfde5c6cae086a463c\nbranch refs/heads/tide-learning-lab\n\n",
     "active_tide_units": "  UNIT LOAD ACTIVE SUB DESCRIPTION\n0 loaded units listed.\n",
     "named_tmpfs_entries": []
   },
@@ -3751,6 +3776,10 @@
     "artifacts/retirement-roadmap-20261118/train.py": {
       "sha256": "8843b1579af7d49ad52657b0dd54578bd147bbe49f4a8301f709d08500dc6316",
       "bytes": 4822
+    },
+    "artifacts/retirement-roadmap-20261118/validation-retirement.json": {
+      "sha256": "87eaf6d3facb58971a4b2b74ef1a1244c2e33188c3cd6cacc1a5ca8f3943c3c9",
+      "bytes": 1099
     }
   },
   "reconstruction": "Retired source directories are reproducible Git archives of each launch source; inputs/commands/results/logs remain. Rebuild tensors/checkpoints through their recorded finite commands in fresh outputs. The isolated smoke used the preserved fixed wheel, its retained harness and examples/train.py read from Git, without retired source paths."

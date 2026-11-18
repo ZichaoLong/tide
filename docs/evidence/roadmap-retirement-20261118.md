@@ -62,10 +62,10 @@ FP32/BF16 均执行推理、三次 AdamW 更新、checkpoint、恢复后前向�
 
 ## 最终留存与复现
 
-本次检查的临时 venv、临时目录和两个 checkpoint 暂留；本记录提交后按同一所有权规则删除，再补记实际释放量。
+本记录先在 `4ddaec87` 固定安装检查结果，再移除本次独有的临时 venv、临时目录和两个 checkpoint，共 4 个路径、71,618,560 allocated bytes。小结果、驱动、输入、日志及固定 wheel 保留。
 
-最新 snapshot：artifacts 917,180,416 allocated bytes，
-本项目目录（包括保留 Git 对象）1,081,393,152 bytes；
+最新 snapshot：artifacts 845,565,952 allocated bytes，
+本项目目录（包括保留 Git 对象）1,009,971,200 bytes；
 测量时间见 JSON，随后发布文档会再增加少量字节。原始终态和失败没有被改成成功，
 没有活动本轮 Tide service。没有发现当前账户以 Tide/项目命名的顶层 `/dev/shm` 条目；
 未清理任何其他 tmpfs 内容。
