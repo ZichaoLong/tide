@@ -1,12 +1,13 @@
-"""Finite HB layer-shard qualification or a bounded large inference execution.
+"""Finite HB layer-shard qualification or bounded large capacity execution.
 
 Run actual accelerators only inside an admitted whole-device-group service.
 The reference is an ordinary one-device model initialized from the same CPU data.
-Large --mode inference deliberately omits that duplicate capacity requirement.
+Large --mode inference/train omit that duplicate capacity requirement.
 """
 import argparse
 from collections import OrderedDict
 import copy
+from dataclasses import fields, is_dataclass
 import hashlib
 import json
 import os
@@ -61,36 +62,251 @@ def _full(model, x, state=None, *, record_work=False):
     return result, model.flush(result.state, record_work=record_work)
 
 
-def _train(model, optimizer, x, state, precision, devices, *, progress=None, label="update", phase_sync=False):
-    mark = (lambda phase: progress(label+"."+phase)) if progress is not None else (lambda phase: None)
-    mark("forward")
-    _sync(devices); started = time.perf_counter()
+def _named_tensors(value, prefix=""):
+    if isinstance(value, torch.Tensor):
+        yield prefix, value
+    elif is_dataclass(value):
+        for field in fields(value):
+            yield from _named_tensors(getattr(value, field.name), prefix+"."+field.name)
+    elif isinstance(value, dict):
+        for name, item in value.items():
+            yield from _named_tensors(item, prefix+"."+str(name))
+    elif isinstance(value, (tuple, list)):
+        for index, item in enumerate(value):
+            yield from _named_tensors(item, prefix+"."+str(index))
+
+
+def _storage_record(items):
+    """Actual visible payload and retained storage; never gather device tensors."""
+    devices, stores = {}, {}
+    for _, tensor in items:
+        device, dtype = str(tensor.device), str(tensor.dtype)
+        row = devices.setdefault(device, dict(payload_bytes=0, retained_storage_bytes=0,
+                                              tensor_count=0, elements=0, dtypes={}))
+        typed = row["dtypes"].setdefault(dtype, dict(tensor_count=0, elements=0, payload_bytes=0))
+        size = tensor.numel()*tensor.element_size()
+        for target in (row, typed):
+            target["tensor_count"] += 1
+            target["elements"] += tensor.numel()
+            target["payload_bytes"] += size
+        storage = tensor.untyped_storage()
+        stores[device, storage.data_ptr()] = storage.nbytes()
+    for (device, _), size in stores.items():
+        devices[device]["retained_storage_bytes"] += size
+    return dict(by_device=devices, **{key: sum(row[key] for row in devices.values())
+                                    for key in ("payload_bytes", "retained_storage_bytes", "tensor_count", "elements")})
+
+
+def _finite_record(items, *, chunk_elements=1 << 20):
+    """Bound temporary masks even for a multi-GiB Parameter or AdamW slot."""
+    bad, tensors, elements = [], 0, 0
+    for name, tensor in items:
+        if not tensor.is_floating_point() and not tensor.is_complex():
+            continue
+        tensors += 1
+        elements += tensor.numel()
+        value = tensor.detach().reshape(-1)
+        finite = torch.ones((), dtype=torch.bool, device=tensor.device)
+        for start in range(0, value.numel(), chunk_elements):
+            finite.logical_and_(torch.isfinite(value[start:start+chunk_elements]).all())
+        if not bool(finite):
+            bad.append(name)
+    return dict(finite=not bad, nonfinite_tensors=bad, floating_tensors=tensors,
+                floating_elements=elements, chunk_elements=chunk_elements)
+
+
+def _training_tensors(model, optimizer, state):
+    parameters = list(model.named_parameters())
+    return dict(parameters=parameters,
+                gradients=[(name, value.grad) for name, value in parameters if value.grad is not None],
+                optimizer_slots=[(name+"."+str(slot), value)
+                                 for name, parameter in parameters
+                                 for slot, value in optimizer.state.get(parameter, {}).items()
+                                 if isinstance(value, torch.Tensor)],
+                buffers=list(model.named_buffers()),
+                private_state=list(_named_tensors(state, "state")))
+
+
+def _parameter_sample(model):
+    # A bounded update witness, not a full-parameter equality comparison.
+    return {name: parameter.detach().reshape(-1)[:16].cpu().clone()
+            for name, parameter in model.named_parameters()}
+
+
+def _sample_delta(before, after):
+    differences = [(after[name]-value).abs() for name, value in before.items()]
+    return dict(sampled_parameters=len(before), sampled_elements=sum(value.numel() for value in before.values()),
+                changed_elements=sum(int((value > 0).sum()) for value in differences),
+                max_abs=max((float(value.max()) for value in differences if value.numel()), default=0.0),
+                scope="first up to 16 scalars of every actual Parameter; not a full-parameter trajectory comparison")
+
+
+def _capacity_update(model, optimizer, x, state, precision, devices, *, mark, label, phase_sync):
+    phases = {}
+    mark(label+".forward")
+    _sync(devices)
+    whole_started = started = time.perf_counter()
     optimizer.zero_grad(set_to_none=True)
     with precision_context(devices[0], precision):
         result, tail = _full(model, x, state)
         loss = _objective(result)+(0 if tail is None else _objective(tail))
     if phase_sync:
         _sync(devices)
-    forward_seconds = time.perf_counter()-started
-    mark("backward")
+    phases["zero_grad_forward_loss"] = time.perf_counter()-started
+    mark(label+".backward")
     started = time.perf_counter()
     loss.backward()
     if phase_sync:
         _sync(devices)
-    backward_seconds = time.perf_counter()-started
-    mark("optimizer")
+    phases["backward"] = time.perf_counter()-started
+    mark(label+".optimizer")
     started = time.perf_counter()
-    optimizer.step(); _sync(devices)
-    optimizer_seconds = time.perf_counter()-started
-    elapsed = forward_seconds+backward_seconds+optimizer_seconds
+    optimizer.step()
+    following = detach_state((result if tail is None else tail).state)
+    _sync(devices)
+    finished = time.perf_counter()
+    phases["optimizer_detach_sync"] = finished-started
+    complete = finished-whole_started
+    return following, result, tail, loss, dict(complete_seconds=complete, phase_seconds=phases,
+                                               between_phase_host_seconds=complete-sum(phases.values()))
+
+
+def capacity_train(config, devices, precision, batch=1, length=8, steps=2, *, progress=None,
+                   transport="auto", foreach=True, phase_sync=False):
+    """One placed model, continued real updates, no duplicate model/checkpoint."""
+    if min(batch, length, steps) < 1:
+        raise ValueError("positive capacity training batch, length and steps required")
+    torch.manual_seed(807)
+    record = dict(config=config.to_dict(), precision=precision_policy(devices[0], precision),
+                  mode="capacity_train", state="running", seed=807, batch=batch, length=length,
+                  requested_updates=steps, updates=[], progress=[], phase_synchronization=phase_sync,
+                  comparison="capacity training execution only; no one-device equivalence reference or checkpoint",
+                  optimizer=dict(kind="placement_adamw", learning_rate=1e-4, foreach=foreach),
+                  continuation="carry detached private state into the next update; Timed flush contributes to loss and advances the resumed clock",
+                  timing="complete wall time includes zero_grad, forward/readout/necessary flush/loss, backward, cross-device transport, AdamW, detach, final all-device sync and intervening diagnostic stage record IO; individual host phases exclude stage IO and measure device latency only with phase_sync",
+                  timing_exclusions=["CPU construction", "parameter identity hash", "placement and input transfer",
+                                     "optimizer construction", "work/operator audits", "finite/storage/update-witness scans"],
+                  audit_scope="separate graph-enabled forwards at each update's identical parameters, input and private state; no update or detach of the timed state",
+                  memory_scope="timed allocator peaks reset after audit graphs are released; reserved bytes can retain construction/audit caches; process RSS covers the whole process")
+    def mark(name):
+        record["last_stage"] = name
+        record["progress"].append(dict(stage=name, monotonic_seconds=time.monotonic()))
+        if progress is not None:
+            progress(record)
+        print(json.dumps(dict(stage=name)), flush=True)
+
+    costs = record["preparation_seconds"] = {}
+    mark("construction.cpu")
+    started = time.perf_counter()
+    model = TideModel(config)
+    costs["cpu_model"] = time.perf_counter()-started
+    mark("construction.parameter_identity")
+    started = time.perf_counter()
+    fingerprint = hashlib.sha256()
+    for name, parameter in model.named_parameters():
+        fingerprint.update(name.encode())
+        fingerprint.update(str(tuple(parameter.shape)).encode())
+        fingerprint.update(str(parameter.dtype).encode())
+        fingerprint.update(memoryview(parameter.detach().numpy()).cast("B"))
+    record["initial_parameter_sha256"] = fingerprint.hexdigest()
+    record["initial_parameter_hash_format"] = "sha256 of ordered name, shape, dtype and contiguous CPU bytes; zero-copy memoryview"
+    costs["parameter_identity"] = time.perf_counter()-started
+    mark("construction.placement")
+    started = time.perf_counter()
+    model = place_model(model, devices, transport=transport)
+    _sync(devices)
+    costs["placement_transfer"] = time.perf_counter()-started
+    record["placement"] = placement_report(model)
+    mark("construction.optimizer_input")
+    started = time.perf_counter()
+    optimizer = placement_adamw(model, lr=1e-4, foreach=foreach)
+    x_cpu = torch.randn(batch, length, config.input_dim or config.d)
+    x = x_cpu.to(devices[0])
+    _sync(devices)
+    costs["optimizer_input_transfer"] = time.perf_counter()-started
+    record["input_sha256"] = hashlib.sha256(memoryview(x_cpu.numpy()).cast("B")).hexdigest()
+    record["construction_transfer_seconds"] = sum(value for key, value in costs.items() if key != "parameter_identity")
+    record["construction_peak_device_memory"] = _peaks(devices)
+    state = None
+    sample = _parameter_sample(model)
+    for step in range(steps):
+        label = f"update.{step}.placed"
+        row = dict(index=step, state_before_position=0 if state is None else state.position)
+        record["updates"].append(row)
+        mark(label+".work_audit")
+        started = time.perf_counter()
+        with torch.enable_grad(), precision_context(devices[0], precision):
+            observed, tail = _full(model, x, state, record_work=True)
+        _sync(devices)
+        row["work"] = dict(input=observed.work, flush=None if tail is None else tail.work)
+        del observed, tail
+        _sync(devices)
+        row["work_audit_seconds"] = time.perf_counter()-started
+        if step == 0:
+            mark(label+".operator_audit")
+            started = time.perf_counter()
+            audit = RuntimeAudit()
+            with torch.enable_grad(), precision_context(devices[0], precision), audit:
+                observed, tail = _full(model, x, state)
+            _sync(devices)
+            record["operator_witness"] = dict(audit.report(), update_index=step,
+                                               state_position=row["state_before_position"])
+            del observed, tail
+            _sync(devices)
+            row["operator_audit_seconds"] = time.perf_counter()-started
+        _peaks(devices, reset=True)
+        with torch.enable_grad():
+            state, result, tail, loss, timing = _capacity_update(
+                model, optimizer, x, state, precision, devices, mark=mark, label=label, phase_sync=phase_sync)
+        row.update(timing, peak_device_memory=_peaks(devices), state_position=state.position)
+        mark(label+".finite_storage_checks")
+        started = time.perf_counter()
+        tensors = _training_tensors(model, optimizer, state)
+        row["actual_storage"] = {name: _storage_record(items) for name, items in tensors.items()}
+        row["actual_storage"]["combined"] = _storage_record([item for items in tensors.values() for item in items])
+        outputs = [("result.values", result.values), ("result.strengths", result.strengths), ("loss", loss)]
+        if tail is not None:
+            outputs += [("flush.values", tail.values), ("flush.strengths", tail.strengths)]
+        row["finite_checks"] = {name: _finite_record(items) for name, items in dict(tensors, outputs=outputs).items()}
+        row["finite"] = all(check["finite"] for check in row["finite_checks"].values())
+        row["loss"] = float(loss.detach())
+        row["output_positive_strengths"] = int((result.strengths.detach() > 0).sum())
+        row["flush_output_positive_strengths"] = 0 if tail is None else int((tail.strengths.detach() > 0).sum())
+        row["private_state_requires_grad_tensors"] = sum(value.requires_grad for _, value in tensors["private_state"])
+        counters = [float(slots["step"]) for slots in optimizer.state.values() if "step" in slots]
+        row["optimizer_step_counters"] = dict(count=len(counters), minimum=min(counters, default=None),
+                                                maximum=max(counters, default=None))
+        following_sample = _parameter_sample(model)
+        row["parameter_update_witness"] = _sample_delta(sample, following_sample)
+        sample = following_sample
+        row["checks_seconds"] = time.perf_counter()-started
+        del tensors, outputs, result, tail, loss
+        mark(label+".complete")
+        if not row["finite"]:
+            record["state"] = "nonfinite"
+            record["not_run_updates"] = list(range(step+1, steps))
+            mark("stopped.nonfinite")
+            return record
+    samples = [row["complete_seconds"] for row in record["updates"]]
+    record.update(state="completed", completed_updates=len(samples), seconds=samples,
+                  median_seconds=statistics.median(samples),
+                  input_positions_per_second=batch*length/statistics.median(samples),
+                  state_memory=state_memory(state))
+    mark("completed")
+    return record
+
+
+def _train(model, optimizer, x, state, precision, devices, *, progress=None, label="update", phase_sync=False):
+    following, result, tail, loss, timing = _capacity_update(
+        model, optimizer, x, state, precision, devices,
+        mark=progress if progress is not None else lambda phase: None, label=label, phase_sync=phase_sync)
     finite = bool(torch.isfinite(loss)) and all(
         bool(torch.isfinite(p).all()) and (p.grad is None or bool(torch.isfinite(p.grad).all()))
         for p in model.parameters())
-    return detach_state((result if tail is None else tail).state), dict(
-        loss=float(loss.detach()), complete_seconds=elapsed, finite=finite,
-        phase_seconds=dict(forward_loss=forward_seconds, backward=backward_seconds, optimizer=optimizer_seconds),
+    return following, dict(
+        loss=float(loss.detach()), finite=finite, **timing,
         phase_synchronization=phase_sync,
-        timing="host phase durations plus final all-device sync; stage record IO excluded; individual phases are device latency only with phase_sync",
+        timing="complete wall time through final all-device sync and detach includes intervening stage record IO; individual host phases exclude stage IO and measure device latency only with phase_sync",
         output_positive_strengths=(result.strengths.detach() > 0).sum().item(),
         flush_output_positive_strengths=0 if tail is None else (tail.strengths.detach() > 0).sum().item())
 
@@ -264,15 +480,25 @@ def main():
     parser.add_argument("--precision", choices=("fp32", "bf16"), default="fp32")
     parser.add_argument("--transport", choices=("auto", "direct", "host_stage", "synchronized"), default="auto")
     parser.add_argument("--phase-sync", action="store_true", help="diagnostic synchronization between forward/backward/update")
-    parser.add_argument("--mode", choices=("qualify", "inference"), default="qualify")
+    parser.add_argument("--mode", choices=("qualify", "inference", "train"), default="qualify")
     parser.add_argument("--config", type=Path)
-    parser.add_argument("--batch", type=int, default=2)
-    parser.add_argument("--length", type=int, default=5)
-    parser.add_argument("--steps", type=int, default=3)
-    parser.add_argument("--warmup", type=int, default=1)
+    parser.add_argument("--batch", type=int, help="default: train 1, qualify/inference 2")
+    parser.add_argument("--length", type=int, help="default: train 8, qualify/inference 5")
+    parser.add_argument("--steps", type=int, help="default: train 2, qualify/inference 3")
+    parser.add_argument("--warmup", type=int, help="inference only; default 1")
+    parser.add_argument("--no-foreach", action="store_true", help="capacity train only: bound AdamW tensor-list temporaries")
     parser.add_argument("--threads", type=int, default=4)
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
+    for name, usual, training in (("batch", 2, 1), ("length", 5, 8), ("steps", 3, 2)):
+        if getattr(args, name) is None:
+            setattr(args, name, training if args.mode == "train" else usual)
+    if args.warmup is None:
+        args.warmup = 1 if args.mode == "inference" else 0
+    if args.no_foreach and args.mode != "train":
+        parser.error("--no-foreach is only supported in capacity --mode train")
+    if args.mode == "train" and args.warmup:
+        parser.error("capacity training has no warmup updates; use --steps to declare every real update")
     if min(args.batch, args.length, args.steps, args.threads) < 1 or args.warmup < 0:
         parser.error("counts must be positive and warmup nonnegative")
     if args.output.exists():
@@ -307,6 +533,10 @@ def main():
                 with tempfile.TemporaryDirectory(prefix="placement-", dir=args.output.parent) as directory:
                     row = qualify(config, args.devices, args.precision, Path(directory)/"checkpoint.pt",
                                   args.batch, args.length, args.steps, progress=progress, transport=args.transport, phase_sync=args.phase_sync)
+            elif args.mode == "train":
+                row = capacity_train(config, args.devices, args.precision, args.batch, args.length, args.steps,
+                                     progress=progress, transport=args.transport, foreach=not args.no_foreach,
+                                     phase_sync=args.phase_sync)
             else:
                 row = inference(config, args.devices, args.precision, args.batch, args.length, args.steps, args.warmup,
                                 transport=args.transport)

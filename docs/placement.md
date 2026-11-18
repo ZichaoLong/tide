@@ -89,6 +89,10 @@ python -m scripts.check_placement --devices npu:0 npu:1 --precision bf16 \
 python -m scripts.check_placement --devices npu:0 npu:1 --precision bf16 \
   --mode inference --config LARGE.json --batch 1 --length 1 --steps 1 \
   --warmup 0 --output NEW-capacity.json
+# Bounded continued AdamW capacity execution, without a duplicate reference:
+python -m scripts.check_placement --devices npu:0 npu:1 npu:2 npu:3 \
+  --precision bf16 --mode train --no-foreach --config HB-9B.json \
+  --batch 1 --length 8 --steps 2 --output NEW-training-capacity.json
 ```
 
 The inference mode measures construction/transfer separately, and then forward,
@@ -98,6 +102,26 @@ witness. No small check or one-step large execution qualifies all shapes, full
 training capacity or sustained service. Optimizer bytes still follow the FP32
 master/gradient/moment policy; a BF16 matrix policy does not halve that capacity.
 
+Capacity `--mode train` defaults to B1/L8 and two real updates. It carries detached
+private state between updates; any Timed flush contributes to the loss and its
+advanced clock is the next segment's start. `--no-foreach`, available only in
+this mode, avoids AdamW's tensor-list temporary allowance. It does not change
+FP32 parameter, gradient or moment storage. There is one placed model and no
+large duplicate reference, warmup update or checkpoint qualification.
+
+Each update's complete wall time includes zeroing gradients, forward, necessary
+flush, loss, backward, transport, AdamW, state detach and all-device synchronization.
+It also includes intervening diagnostic stage persistence; this overhead is not
+subtracted while asynchronous kernels may be running. Work counting replays the
+identical pre-update parameters/input/state with gradients enabled outside timing;
+the first update has an additional ordinary operator/dtype audit. Timed allocator
+peaks start after those graphs are released, although reserved memory can retain
+their allocator cache. Full parameter/gradient/optimizer/private-state finite scans,
+actual payload/retained-storage counts and a bounded sampled update witness are
+recorded outside timing. CPU construction, initial parameter hashing, placement
+and optimizer/input preparation have separate costs. These records establish the
+observed capacity and finite updates, not one-device trajectory equivalence.
+
 To isolate transfer/backward failures, run each candidate in a separate admitted
 process with `python -m scripts.probe_placement_copy --devices npu:0 npu:1
 --transport host_stage --output NEW.json`. This probe is a diagnostic, not a
@@ -105,7 +129,7 @@ performance measurement. `scripts.check_placement --transport host_stage` then
 checks the complete HB path. Its current phase and partial comparisons persist
 before each forward/backward/optimizer stage, including the specific update and
 reference or placed owner. Diagnostic stage record I/O is excluded from host phase
-durations. Each complete update synchronizes all devices; `--phase-sync` adds
+durations and included in complete wall time, along with state detach. Each complete update synchronizes all devices; `--phase-sync` adds
 extra diagnostic fences before backward/optimizer and is recorded separately.
 Individual phase durations measure device latency only with those extra fences. The checkpoint preserves the requested transport. An explicit transport remains
 explicit after restore; `auto` resolves for the newly requested device mapping.
