@@ -10,8 +10,15 @@
   reviews/configs/source remain; old recovery success does not imply current
   checkpoint availability. Do not run old submit/resume/review commands as
   if their inputs still exist; use the retained closure evidence instead.
-  Keep runs/v9-data-r3, v11-confirmation-data, v12-data and v13-data (~1.095GiB),
-  private environments, install wheels, current code/configs and summaries.
+  Subsequent2026-11-18 user instruction separated downloaded public data:
+  the two original WikiText-103 shards (~300MiB) are verified and staged at
+  ../tide-public-data-20261118 for the user to move into shared storage.
+  runs/ is now EMPTY: generated text/token arrays and full data/split locks
+  were deleted, freeing another821.883MiB. See
+  docs/studies/generated-data-retirement-20261118.md. Do not use the old
+  keep-data rule or automatically regenerate data. The three private
+  environments remain; their purpose/removal recommendation was audited.
+  Keep install wheels, current code/configs and summaries.
   Lens service/auth and other projects were unchanged. User is independently
   cleaning the foundation worktree; do not restore it if it disappears.
   Earlier retain-all-artifacts/deadline/queued-work notes below are HISTORY,

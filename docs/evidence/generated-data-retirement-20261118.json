@@ -1,0 +1,372 @@
+{
+  "active_project_services": [],
+  "authorization": "2026-11-18 user requested separating downloaded public data and deleting regenerable data",
+  "completed_at": "2026-11-18T02:35:21.781300+00:00",
+  "environment_action": "inspected only; private environments retained pending the user decision about their removal",
+  "environment_audit": [
+    {
+      "allocated_bytes": 174026752,
+      "historical_foundation_revision": "85d161d",
+      "installation_record": "artifacts/setup/installation.lock.json",
+      "path": ".venv",
+      "role": "Legacy foundation85d161d; early A/B experiments and private Hugging Face libraries",
+      "state": "retained",
+      "system_site_packages": true
+    },
+    {
+      "allocated_bytes": 17784832,
+      "historical_foundation_revision": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+      "installation_record": "dependencies/positive-floor-v1/installation.lock.json",
+      "path": ".venv-positive-floor-v1",
+      "role": "Foundation74e7bbd with explicit positive-floor-v1 acceptance",
+      "state": "retained",
+      "system_site_packages": true
+    },
+    {
+      "allocated_bytes": 149147648,
+      "path": ".local/language-data-venv",
+      "role": "Parquet preparation with pyarrow20.0.0",
+      "state": "retained",
+      "system_site_packages": true
+    }
+  ],
+  "generated_allocated_bytes_retired": 861806592,
+  "generated_files_retired": 16,
+  "git_head": "3061e030106907e29b56905077b5a3397761df2c",
+  "original_inventory": [
+    {
+      "allocated_bytes": 4096,
+      "device": 64768,
+      "inode": 62070983,
+      "kind": "directory",
+      "mode": 16877,
+      "mtime_ns": 1794404905101802948,
+      "path": "v9-data-r3",
+      "size": 4096
+    },
+    {
+      "allocated_bytes": 589824,
+      "device": 64768,
+      "inode": 62038821,
+      "kind": "file",
+      "mode": 33060,
+      "mtime_ns": 1794404904813800147,
+      "path": "v9-data-r3/test.u16",
+      "size": 588952
+    },
+    {
+      "allocated_bytes": 549482496,
+      "device": 64768,
+      "inode": 62033226,
+      "kind": "file",
+      "mode": 33188,
+      "mtime_ns": 1794404650799328995,
+      "path": "v9-data-r3/raw-rows.jsonl",
+      "size": 549476200
+    },
+    {
+      "allocated_bytes": 268439552,
+      "device": 64768,
+      "inode": 62033304,
+      "kind": "file",
+      "mode": 33060,
+      "mtime_ns": 1794404903317785595,
+      "path": "v9-data-r3/train.u16",
+      "size": 268435456
+    },
+    {
+      "allocated_bytes": 524288,
+      "device": 64768,
+      "inode": 62038815,
+      "kind": "file",
+      "mode": 33060,
+      "mtime_ns": 1794404904813800147,
+      "path": "v9-data-r3/confirmation.u16",
+      "size": 524288
+    },
+    {
+      "allocated_bytes": 520192,
+      "device": 64768,
+      "inode": 62038819,
+      "kind": "file",
+      "mode": 33060,
+      "mtime_ns": 1794404904813800147,
+      "path": "v9-data-r3/validation.u16",
+      "size": 517980
+    },
+    {
+      "allocated_bytes": 10203136,
+      "device": 64768,
+      "inode": 62038822,
+      "kind": "file",
+      "mode": 33060,
+      "mtime_ns": 1794404905081802753,
+      "path": "v9-data-r3/data-lock.json",
+      "size": 10202788
+    },
+    {
+      "allocated_bytes": 4096,
+      "device": 64768,
+      "inode": 62038823,
+      "kind": "file",
+      "mode": 33188,
+      "mtime_ns": 1794404905101802948,
+      "path": "v9-data-r3/state.json",
+      "size": 607
+    },
+    {
+      "allocated_bytes": 4096,
+      "device": 64768,
+      "inode": 62070984,
+      "kind": "directory",
+      "mode": 16877,
+      "mtime_ns": 1794404379220686176,
+      "path": "v9-data-r3/raw",
+      "size": 4096
+    },
+    {
+      "allocated_bytes": 157093888,
+      "device": 64768,
+      "inode": 62033166,
+      "kind": "file",
+      "mode": 33060,
+      "mtime_ns": 1794404643815261041,
+      "path": "v9-data-r3/raw/train-00001-of-00002.parquet",
+      "size": 157088770
+    },
+    {
+      "allocated_bytes": 156995584,
+      "device": 64768,
+      "inode": 62033116,
+      "kind": "file",
+      "mode": 33060,
+      "mtime_ns": 1794404372168617538,
+      "path": "v9-data-r3/raw/train-00000-of-00002.parquet",
+      "size": 156987808
+    },
+    {
+      "allocated_bytes": 4096,
+      "device": 64768,
+      "inode": 66101531,
+      "kind": "directory",
+      "mode": 16877,
+      "mtime_ns": 1794736405064002229,
+      "path": "v11-confirmation-data",
+      "size": 4096
+    },
+    {
+      "allocated_bytes": 4096,
+      "device": 64768,
+      "inode": 66077851,
+      "kind": "symlink",
+      "mode": 41471,
+      "mtime_ns": 1794736404207994151,
+      "path": "v11-confirmation-data/train.u16",
+      "size": 69,
+      "target": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-data-r3/train.u16"
+    },
+    {
+      "allocated_bytes": 524288,
+      "device": 64768,
+      "inode": 66077858,
+      "kind": "file",
+      "mode": 33060,
+      "mtime_ns": 1794736404207994151,
+      "path": "v11-confirmation-data/confirmation.u16",
+      "size": 524288
+    },
+    {
+      "allocated_bytes": 4096,
+      "device": 64768,
+      "inode": 66077863,
+      "kind": "symlink",
+      "mode": 41471,
+      "mtime_ns": 1794736404207994151,
+      "path": "v11-confirmation-data/validation.u16",
+      "size": 74,
+      "target": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-data-r3/validation.u16"
+    },
+    {
+      "allocated_bytes": 10137600,
+      "device": 64768,
+      "inode": 66077864,
+      "kind": "file",
+      "mode": 33060,
+      "mtime_ns": 1794736405040002003,
+      "path": "v11-confirmation-data/data-lock.json",
+      "size": 10136713
+    },
+    {
+      "allocated_bytes": 4096,
+      "device": 64768,
+      "inode": 66077862,
+      "kind": "file",
+      "mode": 33188,
+      "mtime_ns": 1794736405060002191,
+      "path": "v11-confirmation-data/state.json",
+      "size": 371
+    },
+    {
+      "allocated_bytes": 4096,
+      "device": 64768,
+      "inode": 66380061,
+      "kind": "directory",
+      "mode": 16877,
+      "mtime_ns": 1794755594797229289,
+      "path": "v12-data",
+      "size": 4096
+    },
+    {
+      "allocated_bytes": 4096,
+      "device": 64768,
+      "inode": 66337186,
+      "kind": "symlink",
+      "mode": 41471,
+      "mtime_ns": 1794755593965221485,
+      "path": "v12-data/train.u16",
+      "size": 69,
+      "target": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-data-r3/train.u16"
+    },
+    {
+      "allocated_bytes": 524288,
+      "device": 64768,
+      "inode": 66337185,
+      "kind": "file",
+      "mode": 33060,
+      "mtime_ns": 1794755593965221485,
+      "path": "v12-data/confirmation.u16",
+      "size": 524288
+    },
+    {
+      "allocated_bytes": 4096,
+      "device": 64768,
+      "inode": 66337187,
+      "kind": "symlink",
+      "mode": 41471,
+      "mtime_ns": 1794755593965221485,
+      "path": "v12-data/validation.u16",
+      "size": 74,
+      "target": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-data-r3/validation.u16"
+    },
+    {
+      "allocated_bytes": 10137600,
+      "device": 64768,
+      "inode": 66337188,
+      "kind": "file",
+      "mode": 33060,
+      "mtime_ns": 1794755594773229064,
+      "path": "v12-data/data-lock.json",
+      "size": 10137016
+    },
+    {
+      "allocated_bytes": 4096,
+      "device": 64768,
+      "inode": 66337189,
+      "kind": "file",
+      "mode": 33188,
+      "mtime_ns": 1794755594797229289,
+      "path": "v12-data/state.json",
+      "size": 371
+    },
+    {
+      "allocated_bytes": 4096,
+      "device": 64768,
+      "inode": 68100123,
+      "kind": "directory",
+      "mode": 16877,
+      "mtime_ns": 1794909247992976843,
+      "path": "v13-data",
+      "size": 4096
+    },
+    {
+      "allocated_bytes": 4096,
+      "device": 64768,
+      "inode": 68079245,
+      "kind": "symlink",
+      "mode": 41471,
+      "mtime_ns": 1794909247140968724,
+      "path": "v13-data/train.u16",
+      "size": 69,
+      "target": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-data-r3/train.u16"
+    },
+    {
+      "allocated_bytes": 524288,
+      "device": 64768,
+      "inode": 68079196,
+      "kind": "file",
+      "mode": 33060,
+      "mtime_ns": 1794909247140968724,
+      "path": "v13-data/confirmation.u16",
+      "size": 524288
+    },
+    {
+      "allocated_bytes": 4096,
+      "device": 64768,
+      "inode": 68079246,
+      "kind": "symlink",
+      "mode": 41471,
+      "mtime_ns": 1794909247140968724,
+      "path": "v13-data/validation.u16",
+      "size": 74,
+      "target": "/mi/data2T/zlong/home/llm/tide-learning-lab/runs/v9-data-r3/validation.u16"
+    },
+    {
+      "allocated_bytes": 10141696,
+      "device": 64768,
+      "inode": 68079247,
+      "kind": "file",
+      "mode": 33060,
+      "mtime_ns": 1794909247972976652,
+      "path": "v13-data/data-lock.json",
+      "size": 10137771
+    },
+    {
+      "allocated_bytes": 4096,
+      "device": 64768,
+      "inode": 68079248,
+      "kind": "file",
+      "mode": 33188,
+      "mtime_ns": 1794909247992976843,
+      "path": "v13-data/state.json",
+      "size": 371
+    }
+  ],
+  "project_allocated_bytes_after_data_cleanup": 449380352,
+  "public_destination_verified_at": "2026-11-18T02:35:21.610362+00:00",
+  "public_file_bytes": 314076578,
+  "public_files_sha256_verified": true,
+  "public_manifest_sha256": "5a5c9ab4a913b0883200bfbc3a6d1c8da4382eec29c07b4d407eca3f7cf95672",
+  "public_staging_directory": "/mi/data2T/zlong/home/llm/tide-public-data-20261118",
+  "retained_environments": [
+    ".venv",
+    ".venv-positive-floor-v1",
+    ".local/language-data-venv"
+  ],
+  "runs_empty": true,
+  "schema": "tide-generated-data-retirement-v1",
+  "scope": "Only four named runs data directories. Public raw shards moved, generated text/token/split data removed. No shared environment or other project mutation.",
+  "source": {
+    "files": [
+      {
+        "path": "wikitext-103-raw-v1/train-00000-of-00002.parquet",
+        "sha256": "74da360f23826045b3e6ac6375411fdb15f003030aa74f2596ed08b857cb9212",
+        "size": 156987808
+      },
+      {
+        "path": "wikitext-103-raw-v1/train-00001-of-00002.parquet",
+        "sha256": "ba090ac30dbf5461e8dcbdd1a1b8e6f3cf9c2c756d64f0c1220450acd514f720",
+        "size": 157088770
+      }
+    ],
+    "licenses": [
+      "cc-by-sa-3.0",
+      "gfdl"
+    ],
+    "repository": "Salesforce/wikitext",
+    "revision": "b08601e04326c79dfdd32d625aee71d232d685c3",
+    "subset": "wikitext-103-raw-v1"
+  },
+  "started_at": "2026-11-18T02:35:21.318607+00:00",
+  "state": "completed",
+  "symlinks_retired": 6
+}
