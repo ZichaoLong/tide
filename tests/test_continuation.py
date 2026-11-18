@@ -202,7 +202,7 @@ def test_continuous_joint_cli_records_paired_prefix_and_actual_match(tmp_path, m
     path.write_text(json.dumps(config.to_dict()))
     monkeypatch.setattr(sys, "argv", ["continuous", "--config", str(path), "--subject", "transformer",
         "--joint-match", "B", "--batch", "1", "--prefill", "2", "--prefill-chunk", "1", "--decode", "1",
-        "--updates", "1", "--warmup", "0", "--seed", "84", "--output", str(output)])
+        "--updates", "1", "--warmup", "0", "--seed", "84", "--transformer-chunk", "256", "--output", str(output)])
     assert continuous.main() == 0
     record = json.loads(output.read_text())
     assert record["comparison"]["kind"] == "joint" and record["comparison"]["joint_class"] == "B"
@@ -211,6 +211,7 @@ def test_continuous_joint_cli_records_paired_prefix_and_actual_match(tmp_path, m
     assert record["comparison"]["tide_input_sha256"] == tensor_hash(expected)
     assert record["comparison"]["shared_input_prefix_sha256"] == tensor_hash(expected[..., :prefix])
     assert record["parameters"] == record["comparison"]["match"]["actual"]["parameters"]
+    assert record["spec"]["chunk"] == 256
     assert record["observations"][0]["input_positions"] == 3
 
 

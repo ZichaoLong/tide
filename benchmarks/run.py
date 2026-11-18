@@ -98,6 +98,8 @@ def main():
     parser.add_argument("--config", required=True)
     parser.add_argument("--device", default="cpu")
     parser.add_argument("--precision", choices=("fp32", "bf16"), default="fp32")
+    parser.add_argument("--transformer-chunk", type=int, default=128,
+                        help="explicit matched baseline query tile size; parameter matching is unchanged")
     parser.add_argument("--threads", type=int, default=8)
     parser.add_argument("--batch", type=int, default=8)
     parser.add_argument("--length", type=int, default=128)
@@ -118,7 +120,7 @@ def main():
     parser.add_argument("--output", required=True)
     parser.add_argument("--seed", type=int, default=1107)
     args = parser.parse_args()
-    if min(args.threads, args.batch, args.length, args.steps) < 1 or args.warmup < 0:
+    if min(args.threads, args.batch, args.length, args.steps, args.transformer_chunk) < 1 or args.warmup < 0:
         parser.error("counts must be positive, warmup nonnegative")
     if args.device_budget_gib is not None and not 0 < args.device_budget_gib < float("inf"):
         parser.error("device budget must be positive and finite")
@@ -238,7 +240,7 @@ def main():
             return model, dict(family="tide", config=cfg.to_dict(), nodes=nodes, layers=layers)
         if subject.startswith("transformer_") and subject[-1] in "ABCD":
             match = record["joint_matches_by_mode"][mode][subject[-1]]
-            model = TransformerBaseline(**match["constructor"])
+            model = TransformerBaseline(**dict(match["constructor"], chunk=args.transformer_chunk))
             if parameter_count(model) != match["actual"]["parameters"]:
                 raise AssertionError("matching formula differs from actual unique parameters")
             return model, dict(model.configuration(), joint_match=match)
@@ -250,7 +252,7 @@ def main():
             per_block = parameter_count(two)-parameter_count(one)
             constant = 2*parameter_count(one)-parameter_count(two)
             count = max(1, round((target-constant)/per_block))
-        model = constructor(cfg.d, count)
+        model = constructor(cfg.d, count, **(dict(chunk=args.transformer_chunk) if constructor is TransformerBaseline else {}))
         return model, dict(model.configuration(), comparison_class="auxiliary_single_axis; not A/B/C/D")
 
     for subject in args.subjects:

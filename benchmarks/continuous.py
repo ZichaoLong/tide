@@ -379,6 +379,7 @@ def main():
     parser.add_argument("--transformer-layers", type=int)
     parser.add_argument("--ffn-width", type=int)
     parser.add_argument("--head-dim", type=int)
+    parser.add_argument("--transformer-chunk", type=int, default=128)
     parser.add_argument("--device", default="cpu")
     parser.add_argument("--precision", choices=("fp32", "bf16"), default="fp32")
     parser.add_argument("--mode", choices=("inference", "grad_forward", "train"), default="inference")
@@ -396,7 +397,7 @@ def main():
     parser.add_argument("--checkpoint", type=Path)
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
-    if min(args.batch, args.prefill, args.prefill_chunk, args.updates, args.threads) < 1 or min(args.decode, args.warmup) < 0:
+    if min(args.batch, args.prefill, args.prefill_chunk, args.updates, args.threads, args.transformer_chunk) < 1 or min(args.decode, args.warmup) < 0:
         parser.error("counts must be positive; decode/warmup can be zero")
     if args.device_budget_gib is not None and (not math.isfinite(args.device_budget_gib) or args.device_budget_gib <= 0):
         parser.error("device budget must be finite and positive")
@@ -447,7 +448,7 @@ def main():
                     batch=args.batch, prefill=args.prefill, prefill_chunk=args.prefill_chunk,
                     decode=args.decode, seed=args.seed)
                 torch.manual_seed(args.seed)
-                model = TransformerBaseline(**constructor)
+                model = TransformerBaseline(**dict(constructor, chunk=args.transformer_chunk))
                 resolved = torch.device(args.device)
                 if resolved.type in {"npu", "cuda"}:
                     getattr(torch, resolved.type).empty_cache()
@@ -455,7 +456,8 @@ def main():
                 if args.transformer_width is None or args.transformer_layers is None:
                     raise ValueError("Transformer requires --joint-match or explicit width/layers")
                 model = TransformerBaseline(args.transformer_width, args.transformer_layers,
-                                            ffn_width=args.ffn_width, head_dim=args.head_dim or 32)
+                                            ffn_width=args.ffn_width, head_dim=args.head_dim or 32,
+                                            chunk=args.transformer_chunk)
                 comparison = dict(kind="auxiliary_explicit_constructor", comparisons_equivalent=False,
                                   qualification="explicit width/layers do not establish any of the four joint matches")
             width, spec = model.d, model.configuration()
