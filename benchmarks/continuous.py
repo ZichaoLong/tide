@@ -59,7 +59,7 @@ def nested_comparison(actual, expected, *, atol=1e-6, rtol=2e-3):
                   numerical_failures=[], max_abs=0.0, max_scaled_error=0.0,
                   atol=atol, rtol=rtol, floating_tensors=0)
 
-    def visit(a, b, path):
+    def visit(a, b, path, semantic_support=False):
         if type(a) is not type(b):
             result["metadata_mismatches"].append(path+":type")
             result["exact"] = False
@@ -75,7 +75,7 @@ def nested_comparison(actual, expected, *, atol=1e-6, rtol=2e-3):
                     result["metadata_mismatches"].append(path+":value")
                 return
             result["floating_tensors"] += 1
-            if path.rsplit(".", 1)[-1] in {"weight", "strengths"} and not torch.equal(a > 0, b > 0):
+            if semantic_support and not torch.equal(a > 0, b > 0):
                 result["support_mismatches"].append(path)
             finite = bool(torch.isfinite(a).all() and torch.isfinite(b).all())
             result["finite"] &= finite
@@ -93,8 +93,12 @@ def nested_comparison(actual, expected, *, atol=1e-6, rtol=2e-3):
             if scaled is None or scaled > 1:
                 result["numerical_failures"].append(dict(path=path, max_abs=absolute, scaled_error=scaled))
         elif is_dataclass(a):
+            from tide.kv import KVState
+            from tide.model import LayerOutput, Result
             for field in fields(a):
-                visit(getattr(a, field.name), getattr(b, field.name), path+"."+field.name)
+                support = (isinstance(a, KVState) and field.name == "weight" or
+                           isinstance(a, (LayerOutput, Result)) and field.name == "strengths")
+                visit(getattr(a, field.name), getattr(b, field.name), path+"."+field.name, support)
         elif isinstance(a, dict):
             if a.keys() != b.keys():
                 result["metadata_mismatches"].append(path+":keys")

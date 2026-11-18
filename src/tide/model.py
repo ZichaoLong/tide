@@ -191,7 +191,8 @@ class TideModel(nn.Module):
         placed = hasattr(self,"_placement_spec")
         if placed:
             from .placement import move_tensors
-            x = x.to(self._placement_devices[self._layer_partitions[0]])
+            transport = self._placement_spec.get("transport","direct")
+            x = move_tensors(x,self._placement_devices[self._layer_partitions[0]],transport)
         b,positions,_ = x.shape
         start = 0 if state is None else state.position
         if type(start) is not int or start < 0:
@@ -219,9 +220,9 @@ class TideModel(nn.Module):
                 source_layers = list(layers)
                 source_pending = list(source_pending)
                 for origin in dependencies:
-                    source_layers[origin] = move_tensors(layers[origin],device)
+                    source_layers[origin] = move_tensors(layers[origin],device,transport)
                     if source_pending:
-                        source_pending[origin] = move_tensors(source_pending[origin],device)
+                        source_pending[origin] = move_tensors(source_pending[origin],device,transport)
             values,controls = [],[]
             for region in regions:
                 members = self.graph.regions[region]
@@ -249,7 +250,7 @@ class TideModel(nn.Module):
                     mids = NodeOwners(torch.tensor(possible,device=device),possible)
                     old = None if state is None else state.memories[region][kind]
                     if placed and old is not None:
-                        old = move_tensors(old,device)
+                        old = move_tensors(old,device,transport)
                     parts,context,updated = self.memories[kind].prepare(u[sub],mass[sub],times[sub],mids,old)
                     desc = [a.index_copy(0,sub,z.to(a.dtype)) for a,z in zip(desc,parts)]
                     contexts[kind] = (sub,context)

@@ -59,7 +59,8 @@ def load_checkpoint(path, *, device="cpu", placement_devices=None):
         devices = ([device]*len(placement["devices"]) if placement_devices is None else placement_devices)
         if len(devices) != len(placement["devices"]):
             raise ValueError("restored placement must preserve the saved number of partitions")
-        place_model(model,devices,layer_partitions=placement["layer_partitions"])
+        place_model(model,devices,layer_partitions=placement["layer_partitions"],
+                    transport=placement.get("transport","direct"))
         model.load_state_dict(payload["parameters"])
         state = place_state(model,payload["state"])
     else:

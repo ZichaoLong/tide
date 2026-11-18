@@ -9,23 +9,67 @@ from dataclasses import fields, is_dataclass
 
 import torch
 from torch import nn
+from torch.autograd.function import once_differentiable
 
 from .parameters import NodeLinear, NodeOwners, NodeVector, owner_ids
 from .reception import SourceEmbedding
 
 
-def move_tensors(value, device):
+def _sync_device(device):
+    if device.type in {"npu", "cuda"}:
+        getattr(torch, device.type).synchronize(device)
+
+
+class _SynchronizedCopy(torch.autograd.Function):
+    """Finite first-order copy candidate with explicit source/destination fences."""
+    @staticmethod
+    def forward(ctx, value, target):
+        ctx.source = value.device
+        _sync_device(value.device); _sync_device(target)
+        result = value.detach().to(target)
+        _sync_device(target)
+        return result
+
+    @staticmethod
+    @once_differentiable
+    def backward(ctx, gradient):
+        _sync_device(gradient.device); _sync_device(ctx.source)
+        result = gradient.detach().to(ctx.source)
+        _sync_device(ctx.source)
+        return result, None
+
+
+def transfer_tensor(value, device, transport="direct"):
+    """Explicit inter-accelerator transport; no peer-DMA capability is implied."""
+    target = torch.device(device)
+    if transport not in {"direct", "host_stage", "synchronized"}:
+        raise ValueError("unknown layer transport")
+    crossed = value.device.type in {"npu", "cuda"} and target.type == value.device.type and target != value.device
+    if not crossed or transport == "direct":
+        return value.to(target)
+    if transport == "synchronized":
+        return _SynchronizedCopy.apply(value, target)
+    # Ordinary differentiable NPU->CPU->NPU copies, with host-visible completion.
+    # This deliberately pays CPU transport; it is never described as peer DMA.
+    _sync_device(value.device)
+    staged = value.to("cpu")
+    result = staged.to(target)
+    _sync_device(target)
+    return result
+
+
+def move_tensors(value, device, transport="direct"):
     """Move private state without detaching floating history or changing int64."""
     if isinstance(value, torch.Tensor):
-        return value.to(device)
+        return transfer_tensor(value, device, transport)
     if is_dataclass(value):
-        return type(value)(**{f.name: move_tensors(getattr(value, f.name), device) for f in fields(value)})
+        return type(value)(**{f.name: move_tensors(getattr(value, f.name), device, transport) for f in fields(value)})
     if isinstance(value, dict):
-        return {k: move_tensors(v, device) for k, v in value.items()}
+        return {k: move_tensors(v, device, transport) for k, v in value.items()}
     if isinstance(value, tuple) and hasattr(value, "_fields"):
-        return type(value)(*(move_tensors(v, device) for v in value))
+        return type(value)(*(move_tensors(v, device, transport) for v in value))
     if isinstance(value, (tuple, list)):
-        return type(value)(move_tensors(v, device) for v in value)
+        return type(value)(move_tensors(v, device, transport) for v in value)
     return value
 
 
@@ -211,7 +255,7 @@ def _default_partitions(model, count):
     return tuple(partitions)
 
 
-def place_model(model, devices, *, layer_partitions=None):
+def place_model(model, devices, *, layer_partitions=None, transport="direct"):
     """Split HB parameters in place, before optimizer construction.
 
     ``devices`` can repeat CPU for logical-partition formula checks. Real devices
@@ -221,6 +265,8 @@ def place_model(model, devices, *, layer_partitions=None):
     """
     if hasattr(model, "_placement_spec"):
         raise ValueError("model is already placed; restore into a new owner to change placement")
+    if transport not in {"direct", "host_stage", "synchronized"}:
+        raise ValueError("unknown layer transport")
     if model.graph.config.kind not in {"lattice", "exchange", "multiscale"}:
         raise ValueError("layer placement currently supports the strictly layered HB instances")
     devices = tuple(torch.device(device) for device in devices)
@@ -267,7 +313,7 @@ def place_model(model, devices, *, layer_partitions=None):
     model._placement_devices, model._layer_partitions = devices, partitions
     model._shard_registry = registry
     model._placement_spec = dict(kind="hb-layer-shards-1", devices=[str(device) for device in devices],
-                                 layer_partitions=list(partitions),
+                                 layer_partitions=list(partitions), transport=transport,
                                  optimizer="placement_adamw; align disconnected shards per original Parameter before step",
                                  communication="single-process autograd tensor.to copies of actual predecessor banks; no HCCL replicas")
     return model
@@ -317,9 +363,11 @@ def place_state(model, state):
         return state
     from .model import ModelState
     memories = tuple(move_tensors(memory, model._placement_devices[
-        model._layer_partitions[model.graph.nodes[model.graph.regions[region][0]].layer]])
+        model._layer_partitions[model.graph.nodes[model.graph.regions[region][0]].layer]],
+        model._placement_spec.get("transport", "direct"))
         for region, memory in enumerate(state.memories))
-    pending = tuple(move_tensors(layer, model._placement_devices[model._layer_partitions[index]])
+    pending = tuple(move_tensors(layer, model._placement_devices[model._layer_partitions[index]],
+                                 model._placement_spec.get("transport", "direct"))
                     for index, layer in enumerate(state.pending))
     return ModelState(state.position, memories, pending)
 

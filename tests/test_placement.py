@@ -131,3 +131,48 @@ def test_placement_validation_is_explicit(tmp_path):
     save_checkpoint(tmp_path/"right.pt", placed)
     with pytest.raises(ValueError, match="number of partitions"):
         load_checkpoint(tmp_path/"right.pt", placement_devices=["cpu"])
+
+
+
+def test_explicit_copy_candidates_preserve_first_derivative_on_cpu():
+    from tide.placement import _SynchronizedCopy, transfer_tensor
+    torch.manual_seed(2)
+    x = torch.randn(3, 5, dtype=torch.float64, requires_grad=True)
+    copied = _SynchronizedCopy.apply(x, torch.device("cpu"))
+    torch.testing.assert_close(copied, x, atol=0, rtol=0)
+    gradient, = torch.autograd.grad(copied.square().sum(), x)
+    torch.testing.assert_close(gradient, 2*x, atol=0, rtol=0)
+    for transport in ("direct", "host_stage", "synchronized"):
+        torch.testing.assert_close(transfer_tensor(x, "cpu", transport), x, atol=0, rtol=0)
+    with pytest.raises(ValueError, match="transport"):
+        transfer_tensor(x, "cpu", "implicit")
+
+
+def test_checkpoint_preserves_declared_transport(tmp_path):
+    model = place_model(TideModel(_config()), ["cpu", "cpu"], transport="host_stage")
+    path = tmp_path/"transport.pt"
+    save_checkpoint(path, model)
+    restored, _, _ = load_checkpoint(path)
+    assert placement_report(restored)["transport"] == "host_stage"
+
+
+def test_qualification_retains_partial_stage_and_stops_after_first_execution_error(tmp_path, monkeypatch):
+    import json
+    import sys
+    from scripts import check_placement
+    calls = []
+    def fail(config, devices, precision, checkpoint, batch, length, steps, *, progress, transport):
+        calls.append(config)
+        progress(dict(config=config.to_dict(), state="running", last_stage="update.1.placed.backward",
+                      comparisons={"initial_whole": {"exact": True}}))
+        raise RuntimeError("injected backend event failure")
+    monkeypatch.setattr(check_placement, "qualify", fail)
+    output = tmp_path/"partial.json"
+    monkeypatch.setattr(sys, "argv", ["check_placement", "--output", str(output)])
+    assert check_placement.main() == 1
+    record = json.loads(output.read_text())
+    assert len(calls) == 1 and len(record["not_run_after_execution_failure"]) == 1
+    observed = record["observations"][0]
+    assert observed["last_stage"] == "update.1.placed.backward"
+    assert observed["comparisons"]["initial_whole"]["exact"]
+    assert observed["state"] == "execution_failed"

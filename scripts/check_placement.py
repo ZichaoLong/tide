@@ -61,25 +61,38 @@ def _full(model, x, state=None, *, record_work=False):
     return result, model.flush(result.state, record_work=record_work)
 
 
-def _train(model, optimizer, x, state, precision, devices):
+def _train(model, optimizer, x, state, precision, devices, *, progress=None, label="update"):
+    mark = (lambda phase: progress(label+"."+phase)) if progress is not None else (lambda phase: None)
+    mark("forward")
     _sync(devices); started = time.perf_counter()
     optimizer.zero_grad(set_to_none=True)
     with precision_context(devices[0], precision):
         result, tail = _full(model, x, state)
         loss = _objective(result)+(0 if tail is None else _objective(tail))
-    loss.backward()
+    _sync(devices)
+    forward_seconds = time.perf_counter()-started
+    mark("backward")
+    started = time.perf_counter()
+    loss.backward(); _sync(devices)
+    backward_seconds = time.perf_counter()-started
+    mark("optimizer")
+    started = time.perf_counter()
     optimizer.step(); _sync(devices)
-    elapsed = time.perf_counter()-started
+    optimizer_seconds = time.perf_counter()-started
+    elapsed = forward_seconds+backward_seconds+optimizer_seconds
     finite = bool(torch.isfinite(loss)) and all(
         bool(torch.isfinite(p).all()) and (p.grad is None or bool(torch.isfinite(p.grad).all()))
         for p in model.parameters())
     return detach_state((result if tail is None else tail).state), dict(
         loss=float(loss.detach()), complete_seconds=elapsed, finite=finite,
+        phase_seconds=dict(forward_loss=forward_seconds, backward=backward_seconds, optimizer=optimizer_seconds),
+        timing="sum of synchronized phases; diagnostic stage record IO excluded",
         output_positive_strengths=(result.strengths.detach() > 0).sum().item(),
         flush_output_positive_strengths=0 if tail is None else (tail.strengths.detach() > 0).sum().item())
 
 
-def qualify(config, devices, precision, checkpoint, batch, length, steps):
+def qualify(config, devices, precision, checkpoint, batch, length, steps, *, progress=None,
+            transport="direct"):
     torch.manual_seed(807)
     source = TideModel(config)
     fingerprint = hashlib.sha256()
@@ -88,8 +101,16 @@ def qualify(config, devices, precision, checkpoint, batch, length, steps):
     record = dict(config=config.to_dict(), precision=precision_policy(devices[0], precision),
                   initial_parameter_sha256=fingerprint.hexdigest(),
                   reference="one-device ordinary model with identical initial CPU parameters and inputs")
+    record.update(state="running", progress=[])
+    def mark(name):
+        record["last_stage"] = name
+        record["progress"].append(dict(stage=name, monotonic_seconds=time.monotonic()))
+        if progress is not None:
+            progress(record)
+        print(json.dumps(dict(stage=name)), flush=True)
+    mark("construction")
     reference = copy.deepcopy(source).to(devices[0])
-    candidate = place_model(source, devices)
+    candidate = place_model(source, devices, transport=transport)
     record["placement"] = placement_report(candidate)
     x_cpu = torch.randn(batch, length, config.input_dim or config.d)
     record["input_sha256"] = hashlib.sha256(x_cpu.numpy().tobytes()).hexdigest()
@@ -97,12 +118,18 @@ def qualify(config, devices, precision, checkpoint, batch, length, steps):
     y = x_cpu.to(devices[0]).detach().clone().requires_grad_()
     comparisons = {}
     record["comparisons"] = comparisons
+    mark("initial_forward")
     with precision_context(devices[0], precision):
         expected, expected_tail = _full(reference, x, record_work=True)
         actual, actual_tail = _full(candidate, y, record_work=True)
         reference_loss = _objective(expected)+(0 if expected_tail is None else _objective(expected_tail))
         candidate_loss = _objective(actual)+(0 if actual_tail is None else _objective(actual_tail))
-    reference_loss.backward(); candidate_loss.backward(); _sync(devices)
+    _sync(devices)
+    mark("initial_reference_backward")
+    reference_loss.backward(); _sync(devices)
+    mark("initial_placed_backward")
+    candidate_loss.backward(); _sync(devices)
+    mark("initial_comparisons")
     comparisons["whole_result"] = nested_comparison(actual, expected)
     comparisons["flush_result"] = nested_comparison(actual_tail, expected_tail)
     comparisons["input_gradient"] = nested_comparison(y.grad, x.grad, rtol=1e-2)
@@ -110,6 +137,7 @@ def qualify(config, devices, precision, checkpoint, batch, length, steps):
         OrderedDict((name, None if p.grad is None else p.grad.detach().cpu())
                     for name, p in reference.named_parameters()))
     record["work"] = actual.work
+    mark("continuation_and_operator_audit")
     with torch.no_grad(), precision_context(devices[0], precision):
         split = max(1, length//2)
         first = candidate(y[:, :split])
@@ -143,25 +171,33 @@ def qualify(config, devices, precision, checkpoint, batch, length, steps):
     record["updates"] = []
     for step in range(steps):
         row = dict(index=step, observations=[])
-        for index, (current, optimizer) in enumerate(zip((reference, candidate), optimizers)):
-            states[index], observed = _train(current, optimizer, x_cpu.to(devices[0]), states[index], precision, devices)
-            row["observations"].append(observed)
-        row["parameters"] = nested_comparison(canonical_state_dict(candidate), reference.state_dict())
         record["updates"].append(row)
+        for index, (current, optimizer) in enumerate(zip((reference, candidate), optimizers)):
+            owner = "reference" if index == 0 else "placed"
+            states[index], observed = _train(current, optimizer, x_cpu.to(devices[0]), states[index], precision, devices,
+                                             progress=mark, label=f"update.{step}.{owner}")
+            row["observations"].append(dict(owner=owner, **observed))
+        row["parameters"] = nested_comparison(canonical_state_dict(candidate), reference.state_dict())
+        mark(f"update.{step}.complete")
     saved_state = states[1]
+    mark("checkpoint.save")
     save_checkpoint(checkpoint, candidate, state=saved_state, optimizer=optimizers[1])
+    mark("checkpoint.load")
     restored, restored_state, slots = load_checkpoint(checkpoint, placement_devices=devices)
     resumed = placement_adamw(restored, lr=1e-4, foreach=True)
     resumed.load_state_dict(slots)
     comparisons["checkpoint_data"] = nested_comparison(
         dict(parameters=restored.state_dict(), state=restored_state, slots=resumed.state_dict()),
         dict(parameters=candidate.state_dict(), state=saved_state, slots=optimizers[1].state_dict()), atol=0, rtol=0)
+    mark("checkpoint.next_forward")
     with torch.no_grad(), precision_context(devices[0], precision):
         a = restored(x_cpu.to(devices[0]), restored_state)
         b = candidate(x_cpu.to(devices[0]), saved_state)
         comparisons["checkpoint_next_result"] = nested_comparison(a, b, atol=0, rtol=0)
-    next_state_a, update_a = _train(candidate, optimizers[1], x_cpu.to(devices[0]), saved_state, precision, devices)
-    next_state_b, update_b = _train(restored, resumed, x_cpu.to(devices[0]), restored_state, precision, devices)
+    next_state_a, update_a = _train(candidate, optimizers[1], x_cpu.to(devices[0]), saved_state, precision, devices,
+                                   progress=mark, label="checkpoint.original_update")
+    next_state_b, update_b = _train(restored, resumed, x_cpu.to(devices[0]), restored_state, precision, devices,
+                                   progress=mark, label="checkpoint.restored_update")
     record["restored_updates"] = [update_a, update_b]
     comparisons["restored_updated_parameters"] = nested_comparison(restored.state_dict(), candidate.state_dict())
     comparisons["restored_updated_optimizer"] = nested_comparison(resumed.state_dict(), optimizers[1].state_dict())
@@ -176,13 +212,14 @@ def qualify(config, devices, precision, checkpoint, batch, length, steps):
     close = all(c["within_threshold"] for c in comparisons.values()) and all(
         row["parameters"]["within_threshold"] for row in record["updates"])
     record["state"] = "nonfinite" if not finite else "structural_failed" if structural else "within_threshold" if close else "finite_deviation"
+    mark("completed")
     return record
 
 
-def inference(config, devices, precision, batch, length, steps, warmup):
+def inference(config, devices, precision, batch, length, steps, warmup, *, transport="direct"):
     torch.manual_seed(807)
     started = time.perf_counter()
-    model = place_model(TideModel(config), devices)
+    model = place_model(TideModel(config), devices, transport=transport)
     x_cpu = torch.randn(batch, length, config.input_dim or config.d)
     x = x_cpu.to(devices[0])
     _sync(devices)
@@ -221,6 +258,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--devices", nargs="+", default=["cpu", "cpu"])
     parser.add_argument("--precision", choices=("fp32", "bf16"), default="fp32")
+    parser.add_argument("--transport", choices=("direct", "host_stage", "synchronized"), default="direct")
     parser.add_argument("--mode", choices=("qualify", "inference"), default="qualify")
     parser.add_argument("--config", type=Path)
     parser.add_argument("--batch", type=int, default=2)
@@ -254,22 +292,31 @@ def main():
                   observations=[], state="running")
     atomic(args.output, record)
     for index, config in enumerate(configs):
+        record["observations"].append(dict(config=config.to_dict(), state="running", last_stage="start"))
+        def progress(partial):
+            record["observations"][index] = partial
+            atomic(args.output, record)
         try:
             _peaks(args.devices, reset=True)
             if args.mode == "qualify":
                 with tempfile.TemporaryDirectory(prefix="placement-", dir=args.output.parent) as directory:
                     row = qualify(config, args.devices, args.precision, Path(directory)/"checkpoint.pt",
-                                  args.batch, args.length, args.steps)
+                                  args.batch, args.length, args.steps, progress=progress, transport=args.transport)
             else:
-                row = inference(config, args.devices, args.precision, args.batch, args.length, args.steps, args.warmup)
+                row = inference(config, args.devices, args.precision, args.batch, args.length, args.steps, args.warmup,
+                                transport=args.transport)
         except Exception as error:
             import traceback
             traceback.print_exc()
-            row = dict(config=config.to_dict(), state="execution_failed", error=repr(error))
+            row = record["observations"][index]
+            row.update(state="execution_failed", error=repr(error))
         row["process_peak_rss_kib"] = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
-        record["observations"].append(row)
+        record["observations"][index] = row
         atomic(args.output, record)
         print(json.dumps(dict(index=index, state=row["state"], placement=row.get("placement"))), flush=True)
+        if row["state"] == "execution_failed":
+            record["not_run_after_execution_failure"] = [config.to_dict() for config in configs[index+1:]]
+            break  # A backend failure can poison device state for the entire process.
     failed = any(row["state"] in {"execution_failed", "structural_failed", "nonfinite"} for row in record["observations"])
     record["state"] = "failed" if failed else "completed"
     atomic(args.output, record)

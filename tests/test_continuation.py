@@ -121,3 +121,17 @@ def test_checkpoint_actual_update_reports_original_thresholds(tmp_path, precisio
     assert all(check["finite"] for check in result.values() if isinstance(check, dict) and "finite" in check)
     with pytest.raises(FileExistsError):
         checkpoint_resume(model, optimizer, state, x, precision, tmp_path/"continued.pt")
+
+
+def test_numerical_comparison_does_not_treat_parameter_sign_as_message_support():
+    from tide.kv import KVState
+    a = {"weight": torch.tensor([-1e-9, 0.0, 1.0])}
+    b = {"weight": torch.tensor([1e-9, 0.0, 1.0])}
+    numeric = nested_comparison(a, b)
+    assert numeric["within_threshold"] and not numeric["support_mismatches"]
+    times = torch.arange(3, dtype=torch.int64).reshape(1, 1, 3)
+    keys = torch.zeros(1, 1, 3, 1)
+    absent = KVState(times, torch.tensor([[[0.0, 0.0, 1.0]]]), keys, keys, keys)
+    positive = KVState(times, torch.tensor([[[1e-9, 0.0, 1.0]]]), keys, keys, keys)
+    semantics = nested_comparison(absent, positive)
+    assert semantics["within_threshold"] and semantics["support_mismatches"] == ["root.weight"]
