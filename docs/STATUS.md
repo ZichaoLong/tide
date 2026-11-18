@@ -7,27 +7,35 @@
 
 ## 当前工作
 
-已提交并冻结：`d845674b` 放置分区内相容区域合批；`57eb12c3` SSD block/
-incremental/doubling；`b4cf1514` 接收融合QKV与结构padding掩码；`d635a982`
-完整Reception微基准。默认数学及旧执行候选保留。CPU开发检查已通过相关公式/VJP、
-多步与恢复；正式主分支完整CPU套件正在运行，不能提前称全套通过。
+实现已集成：placed同分区区域合批、SSD block/incremental/doubling、接收QKV融合与
+结构padding候选、完整Reception微基准、新连续推理与A–D/Transformer分层放置。
+`28941994`修复 inference_mode 生成静态mask后切换训练的缓存错误；`aa4a7c5e`
+修复诊断工具冷导入泄漏故障注入别名（harness问题）。当前候选配置在configs/agg-inference。
+默认数学和旧实现保留；代码可用与正式数值/性能资格分别记账。
 
-[起点测量](evidence/reception-start-20261118.md)记录source/light64 FP32完整训练及
-SSD微测的四个已完成冻结作业。L256矩阵scan微测有明显收益且原阈值通过；整图收益、
-长期更新和推荐仍待各自结果，不从局部加速外推。
+[起点证据](evidence/reception-start-20261118.md)已提交，后续原始记录保持独立。
+`agg-cost-doubling-fp32-v1`已完成：同B8/L256 FP32 source训练中位1.147秒（旧1.368）。
+`agg-reception-sites-fp32-v1` 48行全部原阈值内。`agg-light64-variants-fp32-v1`
+六候选完成，组合scan+QKV+mask+接收重算1.683秒，基线1.905秒；仍需结合容量挑选默认。
 
-当前根代理管理的持久作业（逐次查artifacts终态，不重复提交）：
-- `agg-integration-cpu-v1`：冻结 `b4cf1514` 完整CPU套件，CPU56–63。
-- `agg-cost-doubling-fp32-v1`：source B8/L256新scan完整成本/trace，CPU80–83。
-- `agg-light64-variants-fp32-v1`：6个接收/重算/scan组合，CPU84–87。
-- `agg-fc-capacity-fp32-v1`：FC FP32 B32/64/128有限训练搜寻，CPU88–91。
-- `agg-reception-sites-fp32-v1`：3种接收、真实零质量/padding、4候选，CPU92–95。
+完整CPU首轮 `agg-integration-cpu-v1` 冻结b4cf1514：715 passed / 11 failed。
+10项由上述诊断alias泄漏复现，已修；另1项是接收Timed恢复exact检查，正在有界排查。
+不能称当前主分支全套通过；最终受影响/全套与隔离安装尚待完成。
 
-`codex/agg-inference-streaming`正在完成独立持续推理入口与实际负载A–D审计；
-`codex/agg-inference-ssd`补新候选的非空状态路径资格；`codex/agg-inference-reception`
-做有界有限超差解释。工作树在`artifacts/worktrees/agg-inference-*`；根统一集成与NPU调度。
-下一步：接入持续推理入口、正式路径/恢复检查，根据候选数据选择100更新主测和
-0.5B/1B/9B/17B推理矩阵。所有训练优先FP32。阶段汇报后继续。
+`agg-train-fc-fp32-100-v1`和`agg-train-settle-fp32-100-v1`已完成100真实更新与配对
+恢复，均原恢复阈值内。稳定输入位置吞吐约30333和2644/s；新进程恢复尚待根提交。
+Timed100更新、0.5B成本/容量、light64重算容量、三接收正式FP32路径、BF16微测正在
+运行或协作队列等待。全部根任务清单及冻结命令可查
+`artifacts/agg-inference-preflight-20261118/jobs.json`（快照，实际终态仍逐查status.json）。
+
+新推理作业：FC0.5B的A–D已完成；HB0.5B、9B单卡、17B双卡仍按各自完整负载执行。
+原始文件是对应`artifacts/agg-inference-*/inference.json`和reference.json。
+当前是16次增量的初步对照；256次主测、大sequence/batch、约1B、放置并发对照仍待推进。
+每卡预算allocated48/reserved56GiB；静态容量计划在本轮preflight目录，不能替代实测。
+
+根统一NPU和提交。Reception代理处理恢复检查，SSD代理只读汇总新成本，Inference
+代理在隔离工作树审查静态参数gather候选。不要重交活动任务、修改冻结源或清理依赖。
+下一步完成当前资格/容量检查，补模式与大尺度矩阵、连续训练/恢复、安装、推荐和最终证据。
 
 [起步记录](../artifacts/agg-inference-preflight-20261118/preflight.json)保存实际账户、
 工作区、服务、资源和四份用户文档SHA。配额约125GiB/300GiB软限、700GiB硬限；
