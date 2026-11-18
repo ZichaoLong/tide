@@ -137,3 +137,30 @@ vary at that selected checkpoint; another restored owner reproduces the original
 update exactly. Four scalar FP64 AdamW witnesses explain selected update deltas,
 not every gradient difference. Regional multi-NPU qualification and its original
 tolerances are recorded [separately](evidence/region-capacity-20261118.md).
+
+## Training candidate and mode checks
+
+The [fixed-start training-path evidence](evidence/training-paths-20261118.md)
+compares ordinary regions, compatible batches, whole/Reception recomputation,
+prefix summaries and placed serial/concurrent execution from a nonempty private
+state and AdamW anchor. It records inference, grad-forward, repeated backward,
+updates and a new-process restored update separately. CPU FP64 independent
+recurrence checks pass their stated scope; FP32/BF16 cross-path deviations remain.
+Timed BF16 prefix combinations retain support and integer-memory-time differences
+and are not selected as a training default. An unbatched prefix witness still
+changes support after updates; its separately warmed anchor cannot identify the
+cause of every difference in the original combined trajectory.
+
+A targeted FP32 Attention witness locates the fourth Attention call at the
+regional site: identical Q/K/V/prior values use native additive log-prior PSE in
+inference and a rank-one Q/K extension with gradients. Same-input replays
+reproduce the small output difference; eight complete query rows agree with an
+independent scalar FP64 formula at the original FP32 tolerance. This explains
+that local difference, not all later model/state deviations or their gradients.
+The production dispatch policy was not changed to manufacture an exact match.
+
+The [twenty-update record](evidence/training-continuous-20261118.md) retains a
+large-batch FC BF16 paired restored-gradient/moment deviation. The selected HB
+points pass their paired restored-update thresholds, while all six new-process
+updates complete finitely. Those single-owner new-process timing runs do not
+compare the full original-owner update and are not additional equivalence passes.

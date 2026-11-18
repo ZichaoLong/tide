@@ -15,7 +15,7 @@
 
 正常样本是两次预热更新后的五次完整AdamW foreach更新，每步私有状态从零开始。
 计入zero_grad、准备/packing、forward、必要flush、readout/loss、backward、AdamW、同步/标量与释放；
-这组为Settle，实际不执行flush。分母是2048个实际输入位置，不是节点、tick或padding。
+这组为Settle，实际不执行flush。吞吐是2048个实际输入位置除以完整时间，不用节点、tick或padding替代输入数。
 构造、输入传输、预热、CPU anchor快照/恢复/哈希、语义审计、profiling和checkpoint IO均不在正常计时内。
 这不是带历史增量状态的多步续接；连续训练、恢复、路径数值资格由对应专项记录承担。
 
@@ -173,8 +173,8 @@ A的设备轨迹确有376次FlashAttentionScore和376次Grad，总duration约19.
 本轮已有独立数值路径工作，不能用大kernel duration直接替代语义证明。任何后续方案应先保持矩阵状态、零衰减/零质量、
 完整参数/输入梯度和恢复后更新，再做有限同条件测试。更大批量/不同形态的同预算吞吐与这里的B8成本归因是不同问题。
 
-主代理另行采集FC BF16 B128/L256、Settle FP32组合B24/L256、Timed FP32组合B12/L128的A–D chunk256正常训练比较；
-本页不把尚未归档的这些测点、连续训练或数值见证写成已通过，也不要求重复已有B8匹配来填充表格。
+FC BF16 B128/L256、Settle FP32组合B24/L256、Timed FP32组合B12/L128的A–D chunk256正常训练比较已单独归档于
+[模式主表](training-modes-20261118.md)。连续训练与数值见证另有资格，不把本页B8成本直接套到这些不同负载。
 
 原始终态入口：
 

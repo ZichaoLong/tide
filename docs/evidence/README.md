@@ -1,5 +1,17 @@
 # Current evidence
 
+The training-default, numerical-path and cost-attribution cycle is recorded in:
+
+- [Finite budget searches, pure batching/recomputation and new training candidates](training-search-20261118.md).
+- [Normal timing, saved memory, actual hardware traces and Transformer tuning](training-costs-20261118.md).
+- [Fixed nonempty-state comparisons, repeated backward and first Attention difference](training-paths-20261118.md).
+- [Twenty continuing updates, KV bounds and actual new-process restored updates](training-continuous-20261118.md).
+- [Recommended-shape A–D training, inference/grad-forward and cached prefill/decode](training-modes-20261118.md).
+- [Source-scoped CPU checks, new installed wheel and final handoff identity](training-validation-20261118.md).
+
+Loadable choices and their numerical/memory limits are in
+[execution recommendations](../execution-recommendations.md).
+
 The capacity, throughput and regional-execution phase has concluded. Its records
 retain actual frozen source identities, original numerical failures and bounded
 search limits:

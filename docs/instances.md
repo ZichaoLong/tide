@@ -27,6 +27,9 @@ The default `"block"` keeps the existing block algorithm; the 32×32 SSD matrix
 state recurrence is unchanged. Both options are saved in checkpoints. Their
 different floating evaluation order needs the same bounded numerical checks as
 other implementation candidates; neither is enabled automatically.
+The measured `npu-hb-*` training presets explicitly enable both, together with
+compatible region batching. Select a preset and an admitted device explicitly;
+the no-argument training example remains a small CPU run.
 
 The [training entry and recommendations](execution-recommendations.md) provide
 loadable presets, explicit overrides, three modes and actual resume. Use

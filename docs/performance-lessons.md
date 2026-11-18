@@ -100,3 +100,35 @@ standalone/resident matrices and full-record duties do not accompany these lesso
   [The standalone regional slice](evidence/native-regional-performance-20261118.md)
   helped small NPU dispatch-heavy shapes; larger shapes did not benefit uniformly
   from C++ workers. It does not justify a second complete model implementation.
+
+## Training choices and attribution, 2026-11-18
+
+- Reception may save large edge activations despite a short forward. Local
+  non-reentrant recomputation reduced the selected peaks about22–25% for a
+  roughly1–5% time cost; whole-region recomputation saved more but did not win
+  same-budget throughput. Saved-site storage aliases other sites and includes
+  checkpoint inputs; measure the unique union and allocator peaks separately.
+- K=1 SSD vector summaries need not use the matrix-state block scan. Parallel
+  affine composition avoids logs/inverse decay and preserves zero decay;
+  selected normal update times fell about6–9%. The matrix recurrence still has
+  a substantial device Cumprod cost, including observed Ascend AICPU kernels.
+  This is a bounded next opportunity, not proof that a new scan will be faster.
+- A/B parameter and block matching does not match arithmetic. In the measured
+  Settle point, Tide NodeLinear alone performs about123 G forward multiply-adds,
+  versus about32 G for Transformer A/C linear layers. Region batching reduces
+  dispatch but can increase packed padding. Record both selected and executed
+  work before attributing an entire gap to Python or Attention.
+- Give the comparison model the same finite optimization opportunity. Increasing
+  Transformer query tiles128→256 improved A/B at L256 despite more masked
+  arithmetic; contiguous QKV did not yield a clear general gain. Keep noise and
+  actual operator identity, and do not call either baseline globally optimal.
+- Choose training settings using continuing history and reserved memory as well
+  as single-window allocated peaks. Settle FP32 B24 and BF16 B32 reached similar
+  twenty-step throughput, while FP32 had a lower allocated/reserved peak.
+  Inference, first backbone output and cached decode need separate choices.
+
+These observations are scoped to [search](evidence/training-search-20261118.md),
+[costs and real traces](evidence/training-costs-20261118.md),
+[continuous training](evidence/training-continuous-20261118.md) and
+[other modes](evidence/training-modes-20261118.md). Cross-path activity changes
+and retained numerical failures prevent strict equal-trajectory speedup claims.

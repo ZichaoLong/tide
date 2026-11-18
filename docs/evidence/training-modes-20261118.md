@@ -24,7 +24,7 @@ FP32、BF16各自同精度比较。BF16矩阵输出确实在NPU观测到BF16，F
 | C | 区域层数/串行深度 | 总参数 |
 | D | 区域层数/串行深度 | 实际有效触及参数 |
 
-总参数统计实际唯一Parameter，Tide包含入口投影；Transformer包含主干blocks与final RMSNorm，均无任务头、embedding或为凑数而添加的无效权重。活跃量包含入口、接收、memory prepare、regional和Full的语义有效owner/group/source参数切片；共享参数在每样本每时刻去重。Settle按输入步跨层去重，Timed按逻辑tick跨区域去重且包含flush；它不是非零梯度、物理访存、FLOPs或输出因果归属。教材k/n代理仍保留，不用作B/D目标，k/n也不是硬活动数量上限。
+总参数统计实际唯一Parameter，Tide包含入口投影；Transformer包含主干blocks与final RMSNorm，均不含任务头、词表embedding或为凑数而添加的无效权重。活跃量包含入口、接收、memory prepare、regional和Full的语义有效owner/group/source参数切片；共享参数在每样本每时刻去重。Settle按输入步跨层去重，Timed按逻辑tick跨区域去重且包含flush；它不是非零梯度、物理访存、FLOPs或输出因果归属。教材k/n代理仍保留，不用作B/D目标，k/n也不是硬活动数量上限。
 
 每种模式的匹配先固定初态、输入、精度和初始参数，再独立审计；训练审计建图但不更新。固定匹配后，预热及计时中的训练活动变化不会改变基线构造器。缓存匹配另按B1、seed751的真实初始prefill/decode/flush审计，不用训练B/L或种子的活跃量替代。不同宽度输入共享逐特征种子前缀，完整hash自然不同。
 JSON另列每输入位置的消息、候选、Full、实际Attention对数、查询packing的selected/executed行及NodeLinear multiply-add；大规模逐样本时刻数组保留在SHA标识的原件，参数去重不消除这些重复工作。
@@ -139,7 +139,7 @@ Tide在这些完整训练点尚未追平A/B，C/D更快。参数相近并不等�
 
 Transformer只计算新query，使用原位置RoPE与逐层真实K/V历史，不重算前缀；window128在下一次调用前保留127个历史位置。冻结源码对位置/缓存长度作校验，记录的payload和retained storage也等于2×层数×127×宽度×dtype字节。通用continuation的kv_retained字段只识别Tide KVState，Transformer的null不能解读成没有缓存。FC Tide记录K容量128；Timed Tide记录K容量512，这是容量而非有效写入数。
 
-稳定decode每段舍弃第一个decode，时延取余下7次的中位数、吞吐取7/sum(7次时间)，再分别取三段指标的中位数；吞吐不是1/中位时延。首输出列仅取初始段，在同步chunk边界确认主干输出可用，支持性检查在计时后；它没有任务头或生成token，不能称LM TTFT。Timed每段末尾另执行8个flush tick，输出552 slot，输入分母仍136。
+稳定decode每段舍弃第一个decode，时延取余下7次的中位数、吞吐取7/sum(7次时间)，再分别取三段指标的中位数；吞吐不是1/中位时延。首输出列仅取初始段，在同步chunk边界确认主干输出可用，支持性检查在计时后；它没有任务头或生成token，不能称LM TTFT。Timed每段末尾另执行8个flush tick，输出552 slot，吞吐仍按136个实际输入位置计算。
 
 ### FC BF16，B1、128+8位置
 

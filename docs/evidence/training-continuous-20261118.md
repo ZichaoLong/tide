@@ -25,14 +25,15 @@ Timed 每次输入窗口后完整 flush。稳态吞吐是更新3–20的**总输
 三项组合为 `region_batch_size=4`、`ssd_summary_backend="prefix"`、
 `checkpoint_reception=True`；FC-K保留原计算策略。FC/0.5B冻结 `ae247dee`，
 Settle/Timed冻结 `22527cf4`，二者 `src/tide` tree 相同。
-Settle BF16没有在本点获得更高持续吞吐，reserved反而多7.63 GiB，因此优先推荐FP32。
+Settle BF16在本点的持续吞吐基本相当，reserved反而多7.63 GiB，因此优先推荐FP32。
 0.5B也优先FP32，BF16保留为内存备选。0.5B的本轮负载与旧chunk64+decode8不同，
 不能把与旧报告的巨大差值全部归因于新优化。
 
 六组逐步输出、参数、梯度、optimizer和私有状态均有限；更新后状态无残留计算图。
 所有活跃参数的AdamW step逐次1→20。FC/Settle/0.5B的KV槽长度填满且不超过128；
-Timed填满且不超过512。Timed每更新128个输入位置、另推进2个flush逻辑时刻，
-故20步末位置2600；flush输出槽不计为输入token。完整逐步记录保留了这种区别。
+Timed填满且不超过512。Timed每更新128个输入位置，flush另推进2个输入周期，
+即8个逻辑tick；`state.position`按输入周期计，故20步末位置2600。
+flush输出槽不计为输入token。完整逐步记录保留了这种区别。
 
 ## 配对恢复与独立进程执行分别判定
 

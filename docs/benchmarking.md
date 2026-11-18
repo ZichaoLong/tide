@@ -21,6 +21,19 @@ grad-forward and training enable it for the initial audit, without updating.
 The baseline stays fixed through warmup and measured updates. A post-timing
 audit records the resulting work instead of silently matching again.
 
+`benchmarks.run` and `benchmarks.continuous` accept `--transformer-chunk` (default
+128). The finite baseline audit found a benefit from 256 for selected L256
+workloads; this changes tiling, not A–D parameter matching or the retained KV
+window. [Cost evidence](evidence/training-costs-20261118.md) keeps the candidate
+anchors, noise and original baseline results. A tile at least as large as an
+L128 call still produces one tile, so 128→256 does not improve that call by itself.
+
+`benchmarks.costs` separates normal AdamW timing from synchronized stage, saved
+storage, work/dtype and real profiler observations. Each diagnostic restores
+the same post-warmup parameter/gradient/optimizer/RNG anchor. Inclusive stage,
+host and concurrent device durations cannot be added into wall-time shares.
+`benchmarks.cost_report` reads these results without executing the model.
+
 `matching.py` fixes block count to node count or spatial depth, then searches
 widths that are multiples of 16, at least 32, and FFN widths that are multiples
 of 8 between 2d and 6d. Every selected weight participates in the baseline.

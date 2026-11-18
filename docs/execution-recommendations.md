@@ -172,6 +172,26 @@ cost and memory are outside the table's update boundary. The example does not
 enforce the measured 48 GiB budget itself. Explicit overrides remain available
 and need matching evidence for a new performance or numerical claim.
 
+## Other modes and starting settings
+
+The [mode-specific A–D tables](evidence/training-modes-20261118.md) measure these
+finite starting points. They do not select a universal fastest implementation:
+
+| Objective | Starting setting and measured scope |
+| --- | --- |
+| Sustained training | Use the named training presets above; recheck reserved/actual free memory after adding the task head and data. |
+| Offline inference throughput | FC BF16 B128/L256 and Timed FP32 B4/L128 have separate no-grad observations; compatible batches/prefix remain candidates, while recomputation provides no inference saving. |
+| Grad-enabled forward | The same two shapes have separate measurements; include graph construction and retained activations even though no backward/optimizer runs. |
+| First backbone output / prefill | B1, prefill128 in one chunk has explicit output-ready timing. Select a smaller chunk only after checking launch overhead and when a usable output actually appears. |
+| Cached decode | B1, eight single-position calls after prefill, with real KV/SSD state. Keep this separate from a large-batch fresh-window throughput result. |
+
+For the example, `--mode inference` and `--mode grad_forward` select the first
+two forward-only modes. For precise first-output/prefill/decode boundaries use
+`benchmarks.continuous`, including the final output-assembly synchronization.
+Timed input and flush remain separately reported and included in whole-window
+cost; no task head is present, so backbone output-ready latency is not LM TTFT.
+The large training presets should not be used as automatic latency choices.
+
 ## Save, verify and resume
 
 ```sh

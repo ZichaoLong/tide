@@ -1,45 +1,61 @@
-# 当前交接：训练默认、路径核对与性能归因进行中
+# 当前交接：训练默认、路径核对与性能归因已交付
 
-用户已确认执行 [ROADMAP](ROADMAP.md) 的新六项计划。起点为
-`3a49a789a252ffc6eac215b612e9407fdb7428c9`，分支 `graph-execution-foundation`。
-数学仍固定 `4f5b9f20a4030d68ee66ae2d26e34659a5e37234`，本轮108文件核验通过。
-持续 FC/HB 实例路线不变，通用基座未启动。计划中的能力不视为已验证。
+本轮执行用户已确认的六项计划；原五类完善及容量/区域执行的证据仍保留原身份。
+分支为 `graph-execution-foundation`，持续 FC/HB 实例路线不变，通用基座未启动。
+数学固定 `4f5b9f20a4030d68ee66ae2d26e34659a5e37234`，108文件核验通过。
+本轮起点 `3a49a789`；生产优化 `007a3828`，训练预设 `32ab13a5`，
+forward-only完整计时修复 `f8235fe4`。生产 `src/tide` tree 为
+`d3e8a6cb40eceaf487dc642a4283d58f90d5726f`；各实测源码见证据，不能用最终HEAD替代。
 
-## 当前工作与资源
+## 本轮结果与入口
 
-- 主代理负责集成、预算搜索、生产优化、统一设备准入和证据；三个独立工作树分别实现
-  路径诊断、双边性能归因、公开训练入口。代理不独立提交 NPU 任务。
-- 起步无遗留 Tide 运行服务；已核对账户83.4 GiB使用/300 GiB软配额/700 GiB硬配额，
-  主机约1.8 TiB可用内存。NPU有其他项目任务，后续按协作队列逐作业准入。
-- 本轮尚未取得新的实验结论。关键缺口是 batch-only 同预算搜索、不同实现首处分歧、
-  双边成本说明、选定配置二十步连续训练及新进程恢复。默认设置待证据决定。
-- 四份原用户未跟踪文档保留；原始hash在
-  [前阶段集成记录](evidence/capacity-validation-20261118.json)。不改参考仓库、公共环境或下游。
+- [训练建议](execution-recommendations.md)提供四个主力NPU训练预设及两个BF16备选，
+  必须显式选择已准入设备；无参数CPU入口安全可运行。可覆盖参数、查看最终设置、
+  保存和真实恢复；默认入口服务训练，其他模式分开给建议。
+- [有限搜索](evidence/training-search-20261118.md)补齐batch-only及纯batch+整区域重算。
+  新增Reception局部重算和SSD向量摘要prefix；同尺寸分别观察到约22–25%降峰和
+  约6–9%缩短时间。原单区域、合批、math/tiled/fusion、整区域重算及放置候选均保留。
+- [连续训练](evidence/training-continuous-20261118.md)六组各20次真实更新，历史窗口
+  填满、optimizer step1→20、数据有限；另有六次新进程20→21更新。
+  主力FC BF16 B128/L256约38249输入位置/秒；Settle FP32组合B24/L256约2075；
+  Timed FP32组合B12/L128约317；0.5B FP32 B1/L128约96。allocated/reserved峰值
+  和恢复数值分别判定，不能从allocated单独推断真实显存余量。
+- [四类主表与其他模式](evidence/training-modes-20261118.md)包含正式A–D联合匹配，
+  推理、含图前向、完整训练、首个主干输出和真实缓存decode。Tide当前完整训练仍
+  慢于代表A/B；C/D的宽浅结构是不同计算参照。完整同步修复后的缓存结果单独归档。
+- [成本证据](evidence/training-costs-20261118.md)有正常计时、固定anchor阶段/内存
+  诊断和实际Ascend设备trace。差距包括数学工作、padding、矩阵SSD、索引和调度；
+  Transformer自身chunk256有收益。重叠时间不相加，也不把诊断时间当正常占比。
 
-## 可复用的当前实现与资格
+## 数值事实与限制
 
-完整模型是 PyTorch，C++17/LibTorch 为独立区域评分切片。已实现合法 FC/HB 主菜单、
-可选 Hub/时钟、相容区域合批、区域重算、Attention 后端选择、完整区域归属及
-serial/per_device 执行；区域放置目前要求 batch1。详见 [实例](instances.md)、
-[配置](optional-bindings.md)、[放置](placement.md) 和 [native](native-regional.md)。
+[31候选路径核对](evidence/training-paths-20261118.md)结果为9 within、20 finite、
+2 structural；31套保存/下一前向精确，恢复更新28 within、3 finite。原阈值不变。
+Timed BF16的prefix组合在第二次更新出现实际支持和KV时间差异；不合批prefix隔离
+也有后续支持差异，捕获界限内未建立完整因果链，该组合不作为Timed BF16默认。
 
-前阶段交付见 [集成验证](evidence/capacity-validation-20261118.md)：冻结 `8a22530d`
-完整CPU544项通过，`5ae060db`定向17项通过。硬件实验各有实际冻结提交，不能自动
-覆盖本轮修改。CPU/NPU有真机证据；CUDA、peer DMA/HCCL、编译训练仍无资格。
+定向FP32 Attention见证定位同输入PSE/rank-one两种表示的局部微差，独立FP64八行
+均在原阈值内；不能据此解释全部状态或训练轨迹差异。两卡serial/per_device有反向
+与恢复超差；单卡FC大batch BF16也保留配对恢复梯度/moment超差。
+新进程实际执行成功、精确checkpoint和正常性能均不等于后续轨迹严格等价。
 
-[容量搜索](evidence/capacity-search-20261118.md)全部到有限候选停止，未证明硬件极限。
-[执行候选](evidence/capacity-execution-20261118.md)中 batch4 同尺寸用时为基线
-0.695–0.792、峰值约1.009–1.038；重算增加用时但明显降低峰值。旧 combined 同时
-改变local_math、合批、重算，不能当纯合批重算结果。32 GiB搜索缺少batch-only。
+[集成与安装](evidence/training-validation-20261118.md)：冻结`ae247dee`完整CPU625项
+通过；`32ab13a5`后续定向83项通过；同步边界回归2项通过。新wheel21文件与生产源
+一致，安装API/真实恢复运行完成；placed CPU BF16仍有154梯度、140更新项超差。
 
-[0.5B/1B连续](evidence/capacity-continuous-20261118.md)已有三模式、三段及新进程恢复；
-[区域多卡](evidence/region-capacity-20261118.md)已有小型资格、六更新观察及9B/17B两步
-容量事实，不是大模型长序列长期训练资格。并发后续活动不同，速度比不是严格同轨迹加速。
+完整模型仍是PyTorch，C++17/LibTorch是既有区域评分切片。CPU/NPU有实际证据；
+CUDA、peer DMA/HCCL、全模型C++、compiled/resident训练没有新增资格。
+全部合法主菜单可表达与元数据检查通过，不代表全笛卡尔组合、任意尺度或任务质量已验证。
 
-[舍入](evidence/capacity-rounding-20261118.md)修复了BF16偏置提升错误，并保留全部有限
-支持/时间/梯度/更新超差。[隔离安装](evidence/capacity-installed-20261118.md)保存数据
-和下一前向精确，但placed BF16恢复梯度/更新有超差；同owner并发反向可变。已有小见证
-不能解释所有轨迹。新轮将有界核对，原阈值与失败不改写。
+## 工作区、资源及后续
 
-完整结果从 [证据索引](evidence/README.md) 查阅；日常复用
-[性能经验](performance-lessons.md)，不需要重跑旧矩阵或查看退役历史。
+本轮所有Tide实验已终态，当前无遗留运行服务或已记录存活后代；内层失败完整保留。
+本线程允许共享NPU，本轮所列设备实验实际采用协作队列独占准入，仍共享主机；
+不能称全机独占。配额从约83GiB增至约125GiB，低于300GiB软限，未清理复现依赖。
+
+四份用户未跟踪文档保持原字节，不纳入提交；哈希见集成记录。参考、公共环境和下游
+保持只读边界。没有下游发布或验收。冻结源、checkpoint、anchor、trace、私有wheel环境
+及代理工作树保留；日常复用[性能经验](performance-lessons.md)，不查退役周期。
+
+本轮没有待运行任务。有限后续机会与未解决数值边界列于[ROADMAP](ROADMAP.md)；
+从[证据索引](evidence/README.md)可直接复核，不需要重新启动实验。

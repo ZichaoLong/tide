@@ -24,6 +24,9 @@ separate responsibilities but no compulsory universal intermediate representatio
 | four joint matches and actual touched-parameter accounting | benchmarks/matching.py, benchmarks/statistics.py | test_benchmark_contract.py |
 | real incremental KV, continuation and fresh-process restored timing | benchmarks/continuous.py, benchmarks/restore.py | test_continuation.py, test_restore_benchmark.py |
 | bounded common/budget searches and separate memory lifetime ledger | benchmarks/search.py, benchmarks/variants.py, benchmarks/memory_ledger.py | test_search.py, test_variants.py, test_memory_ledger.py |
+| restored-anchor training cost, actual device trace and baseline candidates | benchmarks/costs.py, benchmarks/stages.py, benchmarks/cost_report.py | test_costs.py |
+| fixed nonempty training-state path comparisons and first Attention mode witness | scripts/check_training_paths.py, scripts/diagnose_attention_modes.py | test_training_paths.py, test_attention_mode_diagnosis.py |
+| named training settings, public-API example and actual resume | configs/recommended, examples/train.py | test_train_example.py |
 | optional standalone regional scoring slice | native/regional | test_native_region.py; scripts/check_native_region.py |
 | three Attention performance sites | benchmarks/attention_sites.py | test_attention_sites.py |
 | frozen finite suites and process ownership | benchmarks/programme.py, scripts/launch.py, scripts/job.py | test_programme.py, test_job.py |
@@ -63,6 +66,14 @@ detach cross-window state. This saves internal activations at the cost of repeat
 work; regional input messages remain saved inputs. Static last consumers release
 unused layer references; Timed pending owns a compact last-tick copy instead of
 keeping full-window storage through a view. Autograd may retain other tensors.
+
+`checkpoint_reception=True` recomputes only reception when the surrounding region
+is not already checkpointed. Both single and batched regions use the same boundary.
+`ssd_summary_backend="prefix"` uses parallel affine composition for short/long
+vector summaries, preserving zero decay without logs or inverse decay. The
+default block implementation and the separate SSD matrix state scan remain
+available. [Training measurements](evidence/training-search-20261118.md) select
+these options in named HB presets; ModelConfig defaults stay explicit and general.
 
 Region membership supplies static owner metadata. When every possible owner
 uses the same base matrix, NodeLinear flattens node/B/position rows into one

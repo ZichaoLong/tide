@@ -58,3 +58,13 @@ value/support/gradient/update failures. Earlier [FP32](evidence/instances-fp32-2
 and [installed results](evidence/roadmap-installed-20261118.md) remain unchanged;
 no test count certifies a later source or relabels numerical failures.
 Finite deviations follow [precision](precision.md).
+
+The [training validation record](evidence/training-validation-20261118.md) adds
+625 CPU tests on frozen `ae247dee`, targeted checks for later harness/preset
+changes, and a new isolated wheel exercising prefix summaries and Reception
+recomputation through actual restored updates. Production `src/tide` identity
+is verified separately from later documentation and harness commits. The
+[path investigation](evidence/training-paths-20261118.md) and
+[continuous training](evidence/training-continuous-20261118.md) retain finite
+and structural comparison failures; installed completion and test counts never
+erase those failures or certify arbitrary configurations.
