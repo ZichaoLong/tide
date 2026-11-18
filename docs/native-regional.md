@@ -7,6 +7,10 @@ allocation, graph timing and model continuation are outside this executable.
 Its checkpoint resumes the shared regional parameters, AdamW moments and update
 counter with the caller's fixed input bundle.
 
+The [fixed CPU record](evidence/native-regional-cpu-20261118.md) covers its finite
+two-precision, shared-gradient, worker-concurrency and restored-update checks;
+device and performance qualification remain separate.
+
 ## Math and precision
 
 Inputs are `z[tasks,nodes,B,L,d/2]`, scalar scores, nonnegative key priors and fixed
