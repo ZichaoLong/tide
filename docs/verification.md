@@ -3,7 +3,8 @@
 Current facts are in [STATUS](STATUS.md) and source-scoped [evidence](evidence/README.md).
 The active tests are `tests/`; no retired LH/native/full-matrix gate is a prerequisite.
 Use [development](development.md) for a clean environment and [execution](execution-flows.md)
-for frozen long jobs. The next FP32/BF16 programme is [ROADMAP](ROADMAP.md).
+for frozen long jobs. [ROADMAP](ROADMAP.md) owns the cycle's work; completed
+qualification is recorded in the linked evidence, not inferred from the plan.
 
 | Change | Relevant independent checks |
 |---|---|
@@ -25,19 +26,32 @@ Current commands (with the matching environment):
 ```sh
 TORCH_DEVICE_BACKEND_AUTOLOAD=0 python -m pytest -q
 python scripts/check_upstream.py
-# Only in an admitted device job:
-python tests/device_attention.py --device npu:0 --output NEW-attention.json
-python scripts/check_device.py --device npu:0 --output NEW-models.json
+# Finite CPU formula/VJP and whole/chunk diagnostics, each with a new output:
+TORCH_DEVICE_BACKEND_AUTOLOAD=0 python -m scripts.qualify_precision --device cpu \
+  --precision bf16 --primitives-only --output NEW-primitives.json
+TORCH_DEVICE_BACKEND_AUTOLOAD=0 python -m scripts.check_continuation --device cpu \
+  --precision fp64 --output NEW-continuation-fp64.json
 ```
 
-These existing device scripts certify their recorded FP32 scope, not future BF16.
+The [current numerical report](evidence/roadmap-numerics-followup-20261118.md)
+owns actual-width CPU fixture generation, admitted NPU FP32/BF16 comparison,
+multi-step/restore and whole/chunk commands. `tests/device_attention.py` and
+`scripts/check_device.py` retain their earlier FP32 scope; current BF16 coverage
+uses `scripts.qualify_precision`. The [placement contract](placement.md) and
+[resident probe](evidence/roadmap-resident-20261118.md) separate execution completion,
+numerical outcomes and unqualified backend paths. NPU admission and the frozen
+lifecycle for long jobs follow [execution](execution-flows.md).
+
 Use formula witnesses, solved-map VJPs, direction derivatives and independent
 schedules for the questions they answer. The mathematically different
 Transformer/SSD comparison cannot replace those checks.
 Returned values/strengths, relevant state, support, input/parameter gradients,
 None/zero distinctions, updates and continuation matter, not just a readout.
 
-The current frozen model passed 308 CPU tests and 10 device Attention checks;
-six integrated NPU cases have separate structural and numerical outcomes. Those
-counts remain attached to their source; a new change does not inherit
-qualification automatically. Finite deviations follow [precision](precision.md).
+At `0992b467584c1f603314ed04d8efe8596a14f576`, the
+[clean CPU suite and installed-wheel report](evidence/roadmap-installed-20261118.md)
+records 424 CPU tests and a separate FP32/BF16 public-API smoke. The smoke
+preserves its FP32 restored-update deviations. Earlier FP32 device results remain
+in [their original report](evidence/instances-fp32-20261118.md); none of these
+source-scoped counts certifies a later source or relabels numerical failures.
+Finite deviations follow [precision](precision.md).

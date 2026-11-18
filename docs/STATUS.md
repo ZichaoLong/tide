@@ -74,10 +74,10 @@ stopped before backend invocation at a static-role tensor guard. This is an
 observed capture boundary, not proof that resident execution is impossible;
 no resident scheduler was implemented or qualified.
 
-Active: `representative-cpu-v5` (CPU32, cores 0–31). Three NPU continuous
-programmes have completed; `continuous-npu-hb-multiscale-x-timed-v8` is finishing.
-They cover B1/B4, both precisions, three modes, Tide/A–D, 128 prefill + 8 decode,
-three continuing segments and actual restored updates.
+Active: `representative-cpu-v5` (CPU32, cores 0–31). All four NPU continuous
+programmes completed 240 children / 720 continuing segments. They cover B1/B4,
+both precisions, three modes, Tide/A–D, 128 prefill + 8 decode and actual restored
+updates. CPU continuous and remaining scale work are still running.
 
 The not-yet-computing scale/CPU jobs were superseded before device admission;
 original stop statuses and `superseded.json` remain in each old run. New jobs use
@@ -87,15 +87,32 @@ fixed `0992b467`, with observed NUMA policy/affinity in `numa-policy.json`:
 | --- | --- |
 | `continuous-cpu-v16` | NUMA 7, cores 280–295; finite 4/8/16-thread calibration, then compact B1/B4 Tide/A–D continuous matrix |
 | `attention-sites-cpu-v16` | NUMA 7, cores 280–311; waits for CPU continuous |
-| `scale-cpu-hb-17b-v16` | interleave NUMA 6/7, cores 240–303; waits for CPU Attention, calibrates 16/32/64 threads, then 17B A–D inference and two BF16 CPU updates |
+| `scale-cpu-hb-17b-inference-v17` | NUMA 6, cores 240–279; finite 16/32/40-thread calibration, then 17B A–D FP32/BF16 inference |
+| `scale-cpu-hb-17b-train-v17` | interleave NUMA 6/7, cores 240–279; waits for CPU17B inference and CPU Attention, then two BF16 CPU updates using the selected thread count |
 | `scale-npu-hb-9b-v16` | NUMA 4, cores 176–191; cooperative one-NPU A–D inference |
 | `scale-two-npu-hb-17b-v16` | interleave NUMA 4/5, cores 192–207; cooperative two-NPU inference |
 | `scale-four-npu-hb-9b-train-v16` | NUMA 5, cores 208–223; waits for two-NPU run, then four-NPU FP32/BF16 training, two continuing updates each |
 
-CPU17B admission checks global available RAM ≥700 GiB and each of NUMA 6/7
-free plus file LRU/reclaimable slab ≥210 GiB before the programme and again
-before training. Its sampled process-tree RSS bound is 384 GiB. These checks
-are margins, not reservations. Other jobs/users may still create contention.
+CPU17B admission checks global available RAM ≥700 GiB. Inference requires
+NUMA 6 free plus file LRU/reclaimable slab ≥160 GiB (RSS bound 192 GiB);
+training requires each of NUMA 6/7 ≥210 GiB (RSS bound 384 GiB). These checks
+are margins, not reservations. The earlier combined CPU17B v16 was also
+superseded before computation so independent inference could start earlier.
+Other jobs/users may still create contention.
+
+`scale-two-npu-hb-17b-v16` completed both precisions: FP32 median 1.283656 s,
+BF16 1.478270 s at B1/L8; per-card timed peaks were 42.406/20.778 GiB and
+42.980/21.351 GiB. These are host-staged capacity observations, without A–D
+multi-device references. Four-NPU 9B FP32 completed two continuing updates;
+its BF16 attempt is ongoing. Current large evidence is still being reviewed.
+
+`ca6199d4` fixes launcher-only CANN Python-path loss. The previous launcher
+hid `tbe` by replacing module-provided paths; the fix preserves the selected
+baseline and records actual paths/module origins. No model arithmetic changed.
+`environment-cpu-v18` passed an actual service import/isolation check;
+`placement-environment-npu-v18` is a bounded two-card follow-up of auto/BF16,
+synchronized/FP32 and direct/FP32 in separate processes. Original environment
+failures and active source/environment identities remain unchanged.
 
 Next: finish these actual runs, investigate execution failures within the finite
 scope, integrate reviewed comparison/continuation/placement/capacity evidence,

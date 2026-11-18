@@ -1,17 +1,18 @@
-# Precision: requested policy and measured capability
+# Precision policy and recorded qualification
 
-Original model qualification is FP32 on CPU/single NPU, with finite numerical
-deviations recorded in [the report](evidence/instances-fp32-20261118.md).
-The current implementation adds the explicit BF16 arithmetic policy below.
-New device qualification and finite deviations belong to [STATUS](STATUS.md);
-the implementation alone does not establish numerical equivalence.
-CPU FP64 is available for bounded accuracy diagnosis. FP16 is outside this cycle.
+The current implementation has FP32 and explicit BF16 arithmetic paths, exercised
+on CPU and NPU in [fixed numerical qualification](evidence/roadmap-numerics-followup-20261118.md).
+The [initial BF16 investigation](evidence/roadmap-numerics-initial-20261118.md) and
+[original FP32 report](evidence/instances-fp32-20261118.md) retain their failures.
+Implementation, completed execution and numerical equivalence are separate facts;
+[STATUS](STATUS.md) owns the current handoff. CPU FP64 is available for bounded
+accuracy diagnosis. FP16 is outside this cycle.
 
 ## Implemented arithmetic policy
 
-Keep model parameters and floating inputs in FP32 and use
-`with tide.precision.precision_context(device, "bf16"):` around forward/loss;
-run backward and AdamW outside that context. `"fp32"` explicitly disables outer
+Keep model parameters and floating inputs in FP32, import `precision_context`
+from `tide.precision`, and use `with precision_context(device, "bf16"):` around
+forward/loss; run backward and AdamW outside that context. `"fp32"` explicitly disables outer
 autocast. Bare `model.to(bfloat16)` is not this policy. Matrix projections use
 actual BF16 operations, while mass, allocation, sensitive scalar score contraction,
 KV summaries and SSD recurrence/state use FP32. KV keys/values use BF16; original
@@ -31,6 +32,35 @@ operator/input/output dtypes in a separate intrusive call. Neither certifies an
 unobserved hardware accumulator or kernel. `scripts/qualify_precision.py` compares
 independent attention formulas and frozen integrated CPU fixtures, retaining
 metadata, support, connectivity, nonfinite and numerical outcomes separately.
+
+The production context accepts `fp32` and `bf16`. CPU `fp64` options in the
+qualification/continuation diagnostics use explicit float64 tensors with autocast
+disabled; they are not a third production autocast policy.
+
+## Recorded qualification and boundaries
+
+The seven-case CPU/single-NPU records cover inference, grad-enabled forward,
+three continuing AdamW updates, saved data and an actual restored update.
+BF16 inference/grad-forward values, support and state are exact in those records,
+but all four HB comparisons against FP32 retain support/KV timestamp failures.
+FP32 device/reference and some restored updates also retain finite deviations;
+BF16 FC restored-update deviations remain. The fixed report gives each case's
+source, threshold and outcome rather than an all-model precision pass.
+
+Whole/chunk full-backward witnesses pass their existing thresholds in CPU FP64
+and CPU/NPU FP32. BF16 retains finite value/state differences in FC-K, Exchange
+and Timed, including with forced tiled Attention; their support, logical metadata
+and gradient-connectivity checks remain distinct from numerical tolerance checks.
+See the [bounded investigations](evidence/roadmap-numerics-followup-20261118.md)
+for the scope of rounded-input allocation and repeated-backward/AdamW explanations.
+
+Optional two-NPU [host-staged placement](placement.md) has separate
+[FP32/BF16 evidence and finite failures](evidence/roadmap-placement-20261118.md).
+The direct NPU transport's full-graph backward event failure remains recorded;
+an isolated copy success does not qualify that path. CUDA hardware is unqualified.
+The [TorchAir probe](evidence/roadmap-resident-20261118.md) selected the real backend
+but stopped at a frontend static-role guard before invoking it; no resident
+scheduler or compiled training was qualified.
 
 ## BF16 delivery contract
 
@@ -65,8 +95,9 @@ explanation, not an automatic claim of identical support or an implementation bu
 
 Finite rounding differences receive bounded investigation and do not indefinitely
 block unrelated work. Bitwise saved data/forward, tolerant replay and a bitwise
-subsequent optimizer trajectory are different claims. The present FP32 report
-retains small restored AdamW parameter deviations; governance does not resolve them.
+subsequent optimizer trajectory are different claims. Original and follow-up
+FP32/BF16 restored-update failures remain attached to their actual records;
+an exact next forward or a later within-threshold observation does not erase them.
 
 Performance compares FP32 with FP32 and BF16 with BF16 first, then reports the
 speed/memory/numerical tradeoff of changing policy. BF16 AdamW memory includes

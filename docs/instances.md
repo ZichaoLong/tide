@@ -1,11 +1,12 @@
-# Using the new instances
+# Using Tide instances
 
 Install `tide-instances` from this checkout; import `tide`. Mathematics is fixed
 at the revision in [upstream.json](upstream.json). No retired executor is used.
-Current FP32 CPU/single-NPU observations have the scope and finite deviations in
-[the report](evidence/instances-fp32-20261118.md). CPU FP64 supports accuracy checks.
-BF16 is planned in [ROADMAP](ROADMAP.md), not yet qualified;
-see [precision](precision.md). FP16 is outside the current cycle.
+Current CPU/NPU FP32 and BF16 observations, including retained support and
+finite numerical deviations, are in the [numerical evidence](evidence/roadmap-numerics-followup-20261118.md).
+Use the explicit [precision policy](precision.md): FP32 parameters with BF16
+matrix arithmetic under `precision_context`, rather than casting the whole model.
+CPU FP64 supports bounded accuracy diagnosis. FP16 is outside this cycle.
 
 ```python
 import torch
@@ -88,7 +89,9 @@ The timing harness generates inputs on CPU, moves them before timing, and
 records input and initial-parameter hashes for paired device comparisons.
 `TIDE_SOURCE_COMMIT` identifies the model source; `TIDE_HARNESS_COMMIT` can
 separately identify a newer harness used to measure an earlier implementation.
-Raw work counters are a separate audit window after timing (after updates in
-train mode), not a sum of every timed step. CPU RSS is a process high-water mark;
+Initial same-mode work audits fix the four joint Transformer matches before
+warmup or updates. A separate post-timing audit records changed work; neither
+is a sum of every timed step. The definitions and continuous cached comparisons
+are in [benchmarking](benchmarking.md). CPU RSS is a process high-water mark;
 NPU allocator peaks are recorded per timed observation. Shared-device timings
 remain shared observations even when the inputs match.
