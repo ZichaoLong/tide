@@ -77,8 +77,10 @@ mask. Work counts are separate from numerical equality.
 
 At most one differing unplaced candidate receives an optional internal replay
 using the existing `diagnose_region_batch.Trace`, dot/projection replays and
-Decimal quad witness. Capture is capped at two million elements per path, and
-only selected tensors are saved to `first-witness.pt`. `--no-internal-witness`
+Decimal quad witness. Capture defaults to two million elements per path;
+`--witness-elements` sets an explicit cap from 1 to 20 million. The requested cap
+is recorded even if no internal replay is needed. Only selected tensors are
+saved to `first-witness.pt`. `--no-internal-witness`
 skips it. Replays explicitly retain their capture-match checks; unmatched replay,
 capture limit, or an exact forward with divergent VJP leaves attribution open.
 Concurrent placement keeps its returned-field witness and same-owner repeats;

@@ -506,7 +506,10 @@ def check_restore(model, optimizer, state, value, options, directory, *, new_pro
 
 def run(config, *, device, precision, candidates, batch, length, steps, chunk, directory,
         placement_devices=(), transport="auto", new_process=True, witness=True,
-        deterministic=None, candidate_overrides=None, progress=lambda record: None):
+        deterministic=None, candidate_overrides=None, witness_elements=2_000_000,
+        progress=lambda record: None):
+    if type(witness_elements) is not int or not 1 <= witness_elements <= 20_000_000:
+        raise ValueError("witness_elements must be 1..20000000")
     if any(directory.iterdir()):
         raise ValueError("training-path output directory must be empty")
     if deterministic is not None:
@@ -538,6 +541,7 @@ def run(config, *, device, precision, candidates, batch, length, steps, chunk, d
     record = dict(schema="tide-training-paths-v1", state="running", tolerance=THRESHOLDS[precision],
         restore_tolerance=THRESHOLDS["fp64"] if precision == "fp64" else RESTORE_TOLERANCE,
         deterministic_requested=deterministic, deterministic_algorithms=torch.are_deterministic_algorithms_enabled(),
+        witness_elements=witness_elements,
         resolved_candidates={name: variants[name] for name in candidates},
         fixed_start=screen(anchor), input_hashes=[tensor_hash(x) for x in inputs],
         anchor_optimizer=dict(parameter_states=len(anchor["optimizer"]["state"]), steps=sorted(anchor_steps)),
@@ -570,7 +574,8 @@ def run(config, *, device, precision, candidates, batch, length, steps, chunk, d
         case["checks"]["inference_vs_grad_forward"] = compare(observed["inference"]["forward"], observed["vjp1"]["forward"], THRESHOLDS[precision])
         case["checks"]["start_unchanged_after_vjp"] = compare(training_data(model, optimizer, state), anchor, THRESHOLDS[precision])
         if witness and not witnessed and baseline is not None and not case["checks"]["vjp1_vs_baseline"]["comparison"]["exact"]:
-            case["first_divergence_witness"] = first_path_witness(config, name, anchor, inputs[1], device, precision, chunk, case_dir, overrides=variants[name])
+            case["first_divergence_witness"] = first_path_witness(config, name, anchor, inputs[1], device, precision, chunk, case_dir,
+                overrides=variants[name], witness_elements=witness_elements)
             witnessed = True
         observed["updates"] = []
         for index in range(steps):
@@ -601,8 +606,11 @@ def run(config, *, device, precision, candidates, batch, length, steps, chunk, d
     return record
 
 
-def first_path_witness(config, name, anchor, value, device, precision, chunk, directory, *, overrides=None):
+def first_path_witness(config, name, anchor, value, device, precision, chunk, directory, *, overrides=None,
+                       witness_elements=2_000_000):
     """A bounded serial internal replay only for unplaced forward differences."""
+    if type(witness_elements) is not int or not 1 <= witness_elements <= 20_000_000:
+        raise ValueError("witness_elements must be 1..20000000")
     if name.startswith("placement_"):
         return dict(state="returned_fields_only", reason="per_device instrumentation changes scheduling; use recorded support/time/None/coordinate witnesses and same-owner repeats; no causal claim")
     from scripts.diagnose_region_batch import Trace, difference, linear_replay, regional_replay, support_witness
@@ -612,8 +620,8 @@ def first_path_witness(config, name, anchor, value, device, precision, chunk, di
         elements = 0
         def charge(self, tensor):
             self.elements += tensor.numel()
-            if self.elements > 2_000_000:
-                raise Limit("2,000,000 captured elements per path")
+            if self.elements > witness_elements:
+                raise Limit(f"{witness_elements:,} captured elements per path")
         def put(self, region, stage, tensor, **metadata):
             self.charge(tensor); super().put(region, stage, tensor, **metadata)
         def linear_hook(self, module_name):
@@ -684,11 +692,15 @@ def main():
     parser.add_argument("--max-parameters", type=int, default=20_000_000)
     parser.add_argument("--restore-mode", choices=("new_process", "same_process"), default="new_process")
     parser.add_argument("--no-internal-witness", action="store_true")
+    parser.add_argument("--witness-elements", type=int, default=2_000_000,
+                        help="internal capture cap per path, 1..20000000 (default: 2000000)")
     parser.add_argument("--output-dir", type=Path)
     parser.add_argument("--resume-bundle", type=Path); parser.add_argument("--resume-output", type=Path)
     args = parser.parse_args()
     if not 1 <= args.threads <= 16:
         parser.error("threads must be 1..16")
+    if not 1 <= args.witness_elements <= 20_000_000:
+        parser.error("witness-elements must be 1..20000000")
     expected_package = Path(__file__).resolve().parents[1]/"src"/"tide"
     if Path(tide.__file__).resolve().parent != expected_package:
         parser.error("Tide must resolve inside this frozen checkout; prepend its src to the existing PYTHONPATH")
@@ -748,7 +760,8 @@ def main():
             batch=args.batch, length=args.length, steps=args.steps, chunk=args.chunk, directory=args.output_dir,
             placement_devices=args.placement_devices, transport=args.transport,
             new_process=args.restore_mode == "new_process", witness=not args.no_internal_witness,
-            deterministic=args.deterministic, candidate_overrides=args.candidate_overrides, progress=progress)
+            deterministic=args.deterministic, candidate_overrides=args.candidate_overrides,
+            witness_elements=args.witness_elements, progress=progress)
     except Exception as error:
         record.update(state="execution_failed", error=repr(error)); atomic(args.output_dir/"result.json", record)
         raise

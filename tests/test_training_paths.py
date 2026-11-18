@@ -6,8 +6,8 @@ import torch
 
 from tide import ModelConfig, TopologyConfig, TideModel, place_model, placement_adamw
 from scripts.check_training_paths import (THRESHOLDS, VARIANTS, canonical_optimizer, compare,
-    checked_optimizer_step, first_differences, load_canonical_optimizer, resolve_variants, run, screen,
-    validate_restore_record)
+    checked_optimizer_step, first_differences, first_path_witness, load_canonical_optimizer,
+    resolve_variants, run, screen, training_data, validate_restore_record)
 
 
 def tiny_config(*, hb=False, timing="settle"):
@@ -149,6 +149,21 @@ def test_witness_coordinate_bound_and_parameter_weight_not_support():
     assert set(first) == {"numeric"}
     assert len(first["numeric"]["coordinates"]) == 8
     assert VARIANTS["combined"] == dict(region_batch_size=4, checkpoint_regions=True)
+
+
+def test_internal_witness_stops_at_the_requested_capture_bound(tmp_path):
+    config = tiny_config()
+    model = TideModel(config)
+    optimizer = placement_adamw(model, lr=1e-4, foreach=False)
+    anchor = training_data(model, optimizer, None)
+    args = (config, "batch4", anchor, torch.zeros(1, 2, 64), "cpu", "fp32", 1, tmp_path)
+    result = first_path_witness(*args, witness_elements=1)
+    assert result["state"] == "capture_limit"
+    assert result["reason"] == "1 captured elements per path"
+    assert not (tmp_path/"first-witness.pt").exists()
+    for invalid in (0, 20_000_001):
+        with pytest.raises(ValueError, match="witness_elements"):
+            first_path_witness(*args, witness_elements=invalid)
 
 
 def test_time_witness_keeps_int64_above_float_exact_range():
