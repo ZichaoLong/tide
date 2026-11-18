@@ -144,19 +144,44 @@ def build_region_transfer_plan(model):
     # Wrappers are shared Python objects, but every tensor shard belongs to one
     # task. Populate their shared dispatch dictionary before workers start.
     # Each shard's uniform-group cache is touched only by its device task.
-    for region, members in enumerate(model.graph.regions):
-        for name, wrapper in model._shard_registry.items():
-            if name.startswith("receive."):
-                possible = members
-            elif name.startswith("describe."):
-                possible = tuple(model.description_ids[node] for node in members
-                                 if node in model.description_ids)
-            else:
-                kind = name.split(".")[1]
-                possible = tuple(model.memory_ids[kind][node] for node in members
-                                 if node in model.memory_ids[kind])
-            if possible:
-                wrapper._prepare_dispatch(tuple(possible))
+    for region in range(len(model.graph.regions)):
+        _prepare_owner_dispatch(model, (region,))
+
+
+def _prepare_owner_dispatch(model, regions):
+    members = tuple(node for region in regions for node in model.graph.regions[region])
+    for name, wrapper in model._shard_registry.items():
+        if name.startswith("receive."):
+            possible = members
+        elif name.startswith("describe."):
+            possible = tuple(model.description_ids[node] for node in members
+                             if node in model.description_ids)
+        else:
+            kind = name.split(".")[1]
+            possible = tuple(model.memory_ids[kind][node] for node in members
+                             if node in model.memory_ids[kind])
+        if possible:
+            wrapper._prepare_dispatch(possible)
+
+
+def region_batches(model, regions, state):
+    """Compatible batches stay within a parameter partition, even on one device.
+
+    Private-state shapes can change after continuation. Recompute the grouping
+    from host metadata, and prepare shared wrapper dispatch before workers run.
+    No device-valued routing decision is copied to the host here.
+    """
+    if model.config.region_batch_size == 1:
+        return [(region,) for region in regions]
+    partitions = {}
+    for region in regions:
+        partitions.setdefault(model._region_partitions[region], []).append(region)
+    batches = [batch for members in partitions.values()
+               for batch in model._region_batches(members, state)]
+    for batch in batches:
+        if len(batch) > 1:
+            _prepare_owner_dispatch(model, batch)
+    return batches
 
 
 def _transport_bank(bank, plan, device, transport):
@@ -211,27 +236,52 @@ def run_region_model(model, x, state=None, *, record_work=False, inject=True):
     with RegionExecutor(model) as executor:
         for layer, regions in enumerate(model.layer_regions):
             inputs = _layer_inputs(model, layer, layers, state, embedded)
-            def evaluate(region):
-                partition = model._region_partitions[region]
+            batches = region_batches(model, regions, state)
+            by_first = {members[0]: members for members in batches}
+            times = {}
+            for partition in inputs:
+                device = model._placement_devices[partition]
+                base = torch.arange(length, device=device, dtype=torch.int64)
+                times[partition] = ((base+start)*model.graph.period+layer+1 if model.settle else
+                                    base+start*model.graph.period+1)
+
+            def evaluate(first):
+                members = by_first[first]
+                partition = model._region_partitions[first]
                 device = model._placement_devices[partition]
                 banks, pending, projected = inputs[partition]
-                contents, masses, classes = model._incoming(region, banks, pending, projected, batch, length,
-                                                            device, inject, routes=model._region_routes[region])
-                base = torch.arange(length, device=device, dtype=torch.int64)
-                time = ((base+start)*model.graph.period+layer+1 if model.settle else base+start*model.graph.period+1)
-                old = None if state is None else state.memories[region]
-                args = (region, contents, masses, classes, time, old, record_work)
+                incoming = [model._incoming(region, banks, pending, projected, batch, length,
+                                             device, inject, routes=model._region_routes[region])
+                            for region in members]
+                time = times[partition]
+                if len(members) == 1:
+                    contents, masses, classes = incoming[0]
+                    old = None if state is None else state.memories[first]
+                    function = model._evaluate_region
+                    args = (first, contents, masses, classes, time, old, record_work)
+                else:
+                    from .region_batch import evaluate_regions
+                    contents, masses, classes = (torch.cat([row[i] for row in incoming], 0) for i in range(3))
+                    old = None if state is None else [state.memories[region] for region in members]
+                    function = evaluate_regions
+                    args = (model, members, contents, masses, classes, time, old, record_work)
                 if model.config.checkpoint_regions and torch.is_grad_enabled():
                     from torch.utils.checkpoint import checkpoint
-                    full, control, saved, measured = checkpoint(model._evaluate_region, *args, use_reentrant=False)
+                    full, control, saved, measured = checkpoint(function, *args, use_reentrant=False)
                 else:
-                    full, control, saved, measured = model._evaluate_region(*args)
-                return LayerOutput(full, control), saved, measured, time
-            chunks = []
-            for chunk, saved, measured, time in executor.map(regions, evaluate):
-                chunks.append(chunk); memories.append(saved)
+                    full, control, saved, measured = function(*args)
+                if len(members) == 1:
+                    full, control, saved = (full,), (control,), (saved,)
+                return dict(zip(members, zip(full, control, saved))), measured
+
+            results = {}
+            for grouped, measured in executor.map(tuple(by_first), evaluate):
+                results.update(grouped)
                 if measured is not None:
                     work.append(measured)
+            chunks = [LayerOutput(results[region][0], results[region][1]) for region in regions]
+            memories.extend(results[region][2] for region in regions)
+            time = times[model._region_partitions[regions[-1]]]
             bank = RegionLayerOutput(tuple(chunks))
             layers.append(bank)
             if not model.settle:

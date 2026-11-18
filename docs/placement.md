@@ -167,9 +167,14 @@ base, source-embedding row or regional network may never span partitions. A
 `layer_shared` proposal that crosses one of these groups is rejected before any
 model module is mutated; no private replica or independent optimizer is created.
 A legal layout that keeps all users of each base together can use the same
-mechanism, but it does not establish shared-replica training. Regional placement
-currently requires `region_batch_size=1` when that execution option is present;
-combining cross-region batching with placement is a separate integration.
+mechanism, but it does not establish shared-replica training. With
+`region_batch_size > 1`, compatible same-layer regions batch within one parameter
+partition. Regions from different partitions remain separate even when both
+partitions use the same device. Shape/role/private-state compatibility is checked
+on every continued call; shared wrapper dispatch is prepared on the caller before
+device workers start. Regional Attention and allocation keep separate region axes.
+This composes with `per_device` concurrency and activation recomputation; hardware
+performance and numerical qualification still belong to each recorded candidate.
 
 Input projections remain on partition zero, including under `independent` node
 sharing. Their projected inputs are transported to first-layer consumers, and

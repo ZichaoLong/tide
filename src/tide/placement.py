@@ -298,8 +298,6 @@ def place_model(model, devices, *, layer_partitions=None, region_partitions=None
     requested_transport = transport
     transport = _resolve_transport(devices, requested_transport)
     if region_partitions is not None:
-        if getattr(model.config, "region_batch_size", 1) != 1:
-            raise ValueError("region placement currently requires region_batch_size=1")
         if layer_partitions is not None:
             raise ValueError("layer_partitions and region_partitions are mutually exclusive")
         regions = tuple(region_partitions)

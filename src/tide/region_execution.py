@@ -58,7 +58,8 @@ def execution_report(model):
     return dict(policy=policy, maximum_layer_devices=max(widths),
                 maximum_workers=max(widths) if policy == "per_device" and max(widths) > 1 else 0,
                 device_identity="CPU indices are logical simulation groups; repeated devices share one task",
-                ownership="caller projects and transports; one serial region task per device; join each layer",
+                region_batch_size=model.config.region_batch_size,
+                ownership="caller projects and transports; compatible regions batch within each parameter partition; one task per device; join each layer",
                 streams="caller current stream per accelerator, captured before worker creation; no extra streams",
                 backward="ordinary autograd engine, without a separate region thread scheduler",
                 instrumentation="record_work aggregates returned per-region counters; caller dispatch/function modes require explicit serial_region_audit; hooks/profilers are not propagated")

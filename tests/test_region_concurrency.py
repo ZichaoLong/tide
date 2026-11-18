@@ -85,6 +85,7 @@ def test_same_device_serial_order_and_failure_joins_workers():
     # A sibling task must finish before a failure escapes the executor context.
     fake = SimpleNamespace(_placement_devices=(torch.device("cpu:0"), torch.device("cpu:1")),
                            _region_partitions=(0, 1, 0, 1), layer_regions=((0, 1, 2, 3),),
+                           config=SimpleNamespace(region_batch_size=1),
                            _placement_spec={"region_concurrency": "per_device"})
     barrier, finished = threading.Barrier(2, timeout=10), threading.Event()
     order = []
@@ -108,6 +109,7 @@ def test_public_device_stream_context_is_captured_on_caller_and_entered_on_worke
     # while a real backend's stream semantics require hardware qualification.
     devices = (torch.device("cuda:0"), torch.device("cuda:1"))
     fake = SimpleNamespace(_placement_devices=devices, _region_partitions=(0, 1),
+                           config=SimpleNamespace(region_batch_size=1),
                            layer_regions=((0, 1),), _placement_spec={"region_concurrency": "per_device"})
     caller, local, captured, exits = threading.get_ident(), threading.local(), [], []
     streams = {device: object() for device in devices}

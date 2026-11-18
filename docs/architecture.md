@@ -108,7 +108,11 @@ shards; checkpoint format 2 retains partitions, transport and optional execution
 `region_concurrency="per_device"` joins one same-layer task per device before
 publication, carrying grad/autocast/device/current-stream context. Caller-thread
 instrumentation uses an explicitly labelled `serial_region_audit` witness.
-Whole-region placement currently requires `region_batch_size=1`.
+Whole-region placement batches compatible regions within one parameter partition;
+different partitions remain separate batches even when they use one device.
+The caller prepares shard routing before concurrent workers start, and publication
+restores the original region order. Batching composes with recomputation and
+`per_device` execution; candidate qualification is recorded separately.
 Default cross-NPU transport uses host staging; its measured qualification does
 not erase the direct transport's recorded backward event failure or establish
 peer DMA, replicas or CUDA hardware qualification.
