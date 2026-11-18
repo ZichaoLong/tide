@@ -96,7 +96,7 @@ def _train(model, optimizer, x, state, precision, devices, *, progress=None, lab
 
 
 def qualify(config, devices, precision, checkpoint, batch, length, steps, *, progress=None,
-            transport="direct", phase_sync=False):
+            transport="auto", phase_sync=False):
     torch.manual_seed(807)
     source = TideModel(config)
     fingerprint = hashlib.sha256()
@@ -220,7 +220,7 @@ def qualify(config, devices, precision, checkpoint, batch, length, steps, *, pro
     return record
 
 
-def inference(config, devices, precision, batch, length, steps, warmup, *, transport="direct"):
+def inference(config, devices, precision, batch, length, steps, warmup, *, transport="auto"):
     torch.manual_seed(807)
     started = time.perf_counter()
     model = place_model(TideModel(config), devices, transport=transport)
@@ -262,7 +262,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--devices", nargs="+", default=["cpu", "cpu"])
     parser.add_argument("--precision", choices=("fp32", "bf16"), default="fp32")
-    parser.add_argument("--transport", choices=("direct", "host_stage", "synchronized"), default="direct")
+    parser.add_argument("--transport", choices=("auto", "direct", "host_stage", "synchronized"), default="auto")
     parser.add_argument("--phase-sync", action="store_true", help="diagnostic synchronization between forward/backward/update")
     parser.add_argument("--mode", choices=("qualify", "inference"), default="qualify")
     parser.add_argument("--config", type=Path)

@@ -176,3 +176,24 @@ def test_qualification_retains_partial_stage_and_stops_after_first_execution_err
     assert observed["last_stage"] == "update.1.placed.backward"
     assert observed["comparisons"]["initial_whole"]["exact"]
     assert observed["state"] == "execution_failed"
+
+
+
+def test_auto_transport_policy_uses_host_staging_only_for_distinct_npus():
+    from collections import namedtuple
+    from tide.placement import _resolve_transport
+    Device = namedtuple("Device", "type index")
+    assert _resolve_transport((Device("npu", 0), Device("npu", 1)), "auto") == "host_stage"
+    assert _resolve_transport((Device("npu", 0), Device("npu", 0)), "auto") == "direct"
+    assert _resolve_transport((Device("cpu", None), Device("cpu", None)), "auto") == "direct"
+    assert _resolve_transport((Device("cuda", 0), Device("cuda", 1)), "auto") == "direct"
+    assert _resolve_transport((Device("npu", 0), Device("npu", 1)), "direct") == "direct"
+
+
+def test_auto_transport_checkpoint_keeps_request_and_resolves_on_target(tmp_path):
+    model = place_model(TideModel(_config()), ["cpu", "cpu"])
+    path = tmp_path/"auto.pt"
+    save_checkpoint(path, model)
+    restored, _, _ = load_checkpoint(path)
+    report = placement_report(restored)
+    assert report["requested_transport"] == "auto" and report["transport"] == "direct"

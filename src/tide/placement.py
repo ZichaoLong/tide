@@ -255,7 +255,15 @@ def _default_partitions(model, count):
     return tuple(partitions)
 
 
-def place_model(model, devices, *, layer_partitions=None, transport="direct"):
+def _resolve_transport(devices, requested):
+    if requested not in {"auto", "direct", "host_stage", "synchronized"}:
+        raise ValueError("unknown layer transport")
+    if requested == "auto":
+        return "host_stage" if devices[0].type == "npu" and len(set(devices)) > 1 else "direct"
+    return requested
+
+
+def place_model(model, devices, *, layer_partitions=None, transport="auto"):
     """Split HB parameters in place, before optimizer construction.
 
     ``devices`` can repeat CPU for logical-partition formula checks. Real devices
@@ -265,8 +273,7 @@ def place_model(model, devices, *, layer_partitions=None, transport="direct"):
     """
     if hasattr(model, "_placement_spec"):
         raise ValueError("model is already placed; restore into a new owner to change placement")
-    if transport not in {"direct", "host_stage", "synchronized"}:
-        raise ValueError("unknown layer transport")
+    requested_transport = transport
     if model.graph.config.kind not in {"lattice", "exchange", "multiscale"}:
         raise ValueError("layer placement currently supports the strictly layered HB instances")
     devices = tuple(torch.device(device) for device in devices)
@@ -274,6 +281,7 @@ def place_model(model, devices, *, layer_partitions=None, transport="direct"):
         raise ValueError("placement needs explicit CPU, NPU or CUDA devices")
     if len({device.type for device in devices}) != 1:
         raise ValueError("mixed CPU/accelerator model placement is not implemented")
+    transport = _resolve_transport(devices,requested_transport)
     partitions = _default_partitions(model, len(devices)) if layer_partitions is None else tuple(layer_partitions)
     if (len(partitions) != len(model.layer_nodes) or any(type(index) is not int for index in partitions)
             or tuple(sorted(partitions)) != partitions or set(partitions) != set(range(len(devices)))):
@@ -313,7 +321,8 @@ def place_model(model, devices, *, layer_partitions=None, transport="direct"):
     model._placement_devices, model._layer_partitions = devices, partitions
     model._shard_registry = registry
     model._placement_spec = dict(kind="hb-layer-shards-1", devices=[str(device) for device in devices],
-                                 layer_partitions=list(partitions), transport=transport,
+                                 layer_partitions=list(partitions), requested_transport=requested_transport,
+                                 transport=transport,
                                  optimizer="placement_adamw; align disconnected shards per original Parameter before step",
                                  communication="single-process autograd tensor.to copies of actual predecessor banks; no HCCL replicas")
     return model

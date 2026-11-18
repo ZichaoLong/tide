@@ -7,12 +7,15 @@ move once per destination layer; their ordinary Torch copies retain autograd.
 This path has no replicas, all-reduce or device-resident scheduler. A successful
 copy does not establish a native peer-DMA implementation.
 
-The transport is explicit: `transport="direct"` uses ordinary cross-device Torch
-copies; `"host_stage"` uses synchronized accelerator→CPU→accelerator copies;
+The default `transport="auto"` resolves to `host_stage` for multiple distinct NPU
+devices and to `direct` for CPU/CUDA. Requested and resolved choices are recorded.
+Explicit `transport="direct"` uses ordinary cross-device Torch copies;
+`"host_stage"` uses synchronized accelerator→CPU→accelerator copies;
 `"synchronized"` is a first-order custom copy with source/destination fences in
 forward and backward. The latter is not a higher-order differentiation API.
 These are bounded backend candidates, with hardware qualification attached to
-its recorded source. Host staging deliberately pays CPU transport and is never
+its recorded source. The native direct NPU path has a recorded full-graph backward
+event failure; isolated copy success does not qualify it. Host staging deliberately pays CPU transport and is never
 reported as peer DMA. A device runtime error ends that process's qualification;
 subsequent values from the same process cannot diagnose an independent failure.
 
@@ -104,5 +107,7 @@ before each forward/backward/optimizer stage, including the specific update and
 reference or placed owner. Diagnostic stage record I/O is excluded from host phase
 durations. Each complete update synchronizes all devices; `--phase-sync` adds
 extra diagnostic fences before backward/optimizer and is recorded separately.
-Individual phase durations measure device latency only with those extra fences. The checkpoint preserves the selected
-transport so a restore does not silently change execution policy.
+Individual phase durations measure device latency only with those extra fences. The checkpoint preserves the requested transport. An explicit transport remains
+explicit after restore; `auto` resolves for the newly requested device mapping.
+Older sharded checkpoints without a requested choice retain their saved resolved
+transport. Both current choices are visible in `placement_report`.
