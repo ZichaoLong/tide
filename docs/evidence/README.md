@@ -1,5 +1,10 @@
 # Current evidence
 
+The subsequent [fixed-budget FP32 decode batch search](decode-capacity-20261118.md)
+completes twelve Tide/Transformer series across one, two and four NPUs. It separates
+same-batch comparisons from independently selected budget-best points, retains
+sampled-budget refusals, and audits input reconstruction plus terminal ownership.
+
 The subsequent [fixed 32/48-layer Transformer and Tide batch/multi-device measurements](transformer-depth-batch-20261118.md)
 add twelve FP32 short-request points on source `237cc8d4`. They retain the original A-D
 and B1 identities; larger batch throughput and four-device memory savings are separate

@@ -192,3 +192,29 @@ work indicators, not a measured communication percentage. B4 had one Full/suppor
 B8 work/support/time summaries matched but packing differed. Device count, parameter balance
 and a per-device thread policy alone do not establish efficient scaling. Replicas, transfer
 paths, communication-aware partitions and CPU scheduling require their own finite comparisons.
+
+## Per-budget decode batch search, 2026-11-18
+
+The [twelve-series follow-up](evidence/decode-capacity-20261118.md) keeps model,
+precision, request and per-card allocated/reserved budgets fixed. Same-batch and
+independently selected budget-best throughput answer different questions. At 17B,
+four-card Tide B34 reached 24.28 positions/s versus
+two-card B8 at 9.90, even though four cards were slower
+at the previously measured common B8. Capacity can outweigh poorer same-batch
+efficiency; this is not a same-work concurrency speedup.
+
+The largest passing batch did not always win. For the 17B four-card 48-layer
+Transformer, B128 formally reached 333.577 positions/s versus 324.383 at B155,
+with lower allocated/reserved peaks. For the four-card 32-layer model, B197 and
+B198 reached 284.166 and 284.197; that 0.011% difference is not a demonstrated
+performance advantage. Retain the alternate batch when memory margin matters.
+
+Track both allocator quantities. A reserved-budget refusal is not hardware OOM,
+and observed reserved peaks need not increase monotonically with batch: the 17B
+two-card 48-layer Transformer fell from 47.314 GiB at B32 to 43.098 GiB at B49,
+while allocated grew from 38.205 to 41.988 GiB. Keep physical-device/allocator
+history identities and avoid assigning the change to an unprofiled kernel.
+An adjacent refused batch is a finite stopping observation, not proof that every
+larger batch fails. Larger-batch holes, other prefill chunks and allocator choices
+were not exhaustively searched. Final private-state storage is an all-device
+snapshot and cannot replace the measured whole-request per-device peaks.

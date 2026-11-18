@@ -85,6 +85,18 @@ for capacity in this comparison. The B4 placement pair retained a Full/support d
 B8 work/support/time summaries matched while packing differed. This is not four-card
 training/restore qualification, a maximum-throughput search, or a replica-parallel measurement.
 
+The later [fixed-budget decode search](evidence/decode-capacity-20261118.md) formally
+confirmed Tide B8 at 12.29 positions/s for 9B on one NPU,
+B8 at 9.90 for 17B on two, and B34 at
+24.28 for 17B on four. These are total batch throughput choices
+within the fixed 48/56 GiB allocated/reserved budget and the same short request.
+Four devices enable a larger batch and higher total throughput here; the earlier
+same-B8 comparison still favors two devices. Keep B1 for the measured low-latency
+objective and reserve more memory when adding a downstream head or changing context.
+All points keep the measured gather/doubling/prefix/region-batch4 candidates; the search
+did not tune all operators, Transformer shapes or replicas. The report gives each
+point's latency, per-card rate, budget boundary and retained-state memory separately.
+
 `benchmarks.inference` keeps real state across prefill, decode and stream chunks, consumes/releases
 one output at a time, and drains Timed only once at the finite stream end. In contrast, the training
 example and `benchmarks.continuous` use finite windows with their declared flush boundary.
