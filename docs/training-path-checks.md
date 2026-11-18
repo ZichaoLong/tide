@@ -139,3 +139,50 @@ optimizer-row values, corrupted shard counters, support/time/None classification
 FP64 continued updates, fresh-process source/restore checks, logical CPU placement,
 and the pure BF16 batch4+checkpoint combination. They validate the facility and
 mechanisms; formal numerical outcomes still belong to frozen run records.
+
+## Selected Attention mode witness
+
+`scripts/diagnose_attention_modes.py` reuses a training-path `anchor.pt` and its
+adjacent `result.json`: exact parameters, nonempty private state and AdamW slots,
+`inputs[1]`, chunk boundary, deterministic policy and unchanged production package
+hash. It accepts the original FP32 record only and performs no update/backward.
+The original mode comparison remains attached to the new result unchanged.
+
+The first inference pass retains only a bounded in-memory index of call hashes.
+The grad-enabled pass stops at the first Attention call with changed input or
+output values/layout. One inference prefix replay then recovers that call and
+must reproduce its original hash. Only this pair is saved in `witness.pt`; the
+full call index is not an output event log. Earlier matching Attention calls do
+not establish equality of every intervening non-Attention operation.
+
+The selected call records q/k/v/prior/mask/output tensors and hashes, each input's
+requires_grad, actual native/custom-forward dispatch, and native QKV shapes/dtypes.
+NPU fusion observations distinguish actual PSE from padded rank-one Q/K or unit
+prior paths. Two isolated calls use the same captured inference inputs with each
+mode's original requires_grad flags; capture-match checks qualify their relevance.
+At most eight complete query rows by default (maximum 32) are independently
+evaluated with CPU scalar FP64 dot products and weighted exponential quotients.
+All visible keys and output coordinates of those rows are included, with no
+production Attention/matmul/softmax/autograd in the oracle. This is a local
+forward arithmetic witness, not a whole-model FP64 or VJP qualification.
+
+Bounds are at most three model forward attempts, two primitive replays, 4,096
+Attention calls per attempt by default (maximum 8,192), and two million captured
+input/output elements per call (maximum 20 million). `--capture-elements`,
+`--max-calls` and `--oracle-rows` make those finite choices explicit. A capture
+limit, changed inference repeat or unmatched invocation remains inconclusive;
+there is no retry expansion or production policy change. Source/anchor hashes,
+requested device, resource identity and original thresholds are recorded.
+
+Inside an admitted frozen NPU service:
+
+```sh
+python -m scripts.diagnose_attention_modes \
+  --anchor /ABS/PREVIOUS-training-paths/results/anchor.pt \
+  --device npu:0 --output-dir /ABS/NEW-attention-mode-witness
+```
+
+`tests/test_attention_mode_diagnosis.py` checks the independent weighted quotient,
+zero-prior native/tiled observations, strict capture bounds, and an injected
+mode error at a real small training anchor. These short CPU method checks do not
+stand in for running the selected original NPU fixture.
