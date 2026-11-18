@@ -1,7 +1,9 @@
 # 四类联合匹配与性能口径
 
 本页是已确认的比较目标；实施计划在 [ROADMAP](ROADMAP.md)，已有结果在
-[FP32 报告](evidence/instances-fp32-20261118.md)。当前 benchmark 尚未实现本页全部设施。
+[FP32 报告](evidence/instances-fp32-20261118.md)。新的联合匹配、实际触及统计、精度和
+计时入口见 [比较设施](benchmarking.md)。设施可执行与正式资格分别记录；已有单轴
+结果保留原身份，新源码的实测范围仍以 STATUS 和固定证据为准。
 
 ## 同时匹配两个约束
 

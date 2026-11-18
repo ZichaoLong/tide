@@ -35,7 +35,7 @@ See [instances](instances.md) for the API. From an installed source checkout:
 
 ```sh
 TORCH_DEVICE_BACKEND_AUTOLOAD=0 python examples/train.py --checkpoint NEW.pt
-TORCH_DEVICE_BACKEND_AUTOLOAD=0 python -m benchmarks.run --config configs/fc-k.json --device cpu --output NEW.json
+TORCH_DEVICE_BACKEND_AUTOLOAD=0 python -m benchmarks.run --config configs/fc-k.json --device cpu --precision bf16 --threads 8 --output NEW.json
 ```
 
 Use new output identities. The example checks mechanism, including restored
@@ -44,5 +44,8 @@ updates, and reports finite numeric deviations separately. Use
 complete stream training, and `python -m scripts.qualify_precision --help` for
 the explicit FP32/BF16 policy and fixed-fixture comparisons. Source qualification
 remains scoped to recorded evidence in [STATUS](STATUS.md).
+`benchmarks.run` fixes four joint Transformer matches from each mode's initial
+work audit. The [comparison guide](benchmarking.md) defines effective touches,
+synthetic support fixtures, timing/memory boundaries and finite suite commands.
 Long work follows [execution](execution-flows.md); checks follow [verification](verification.md).
 Cleanup may remove private environments and outputs; these steps rebuild them.

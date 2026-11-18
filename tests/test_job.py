@@ -89,13 +89,14 @@ def test_runner_stops_child_above_small_rss_bound(tmp_path):
     assert record["cleanup_complete"] and not live(record["child_pid"])
 
 
-def test_runner_counts_nested_child_rss_and_stops_the_group(tmp_path):
+@pytest.mark.parametrize("new_session",[False,True])
+def test_runner_counts_nested_child_rss_and_stops_the_group(tmp_path,new_session):
     marker=tmp_path/"nested.pid"
     nested=("import os,time; from pathlib import Path; "
             f"Path({str(marker)!r}).write_text(str(os.getpid())); "
             "memory=bytearray(8*1024*1024); time.sleep(20)")
     code=("import subprocess,sys,time; "
-          f"child=subprocess.Popen([sys.executable,'-c',{nested!r}]); time.sleep(20)")
+          f"child=subprocess.Popen([sys.executable,'-c',{nested!r}],start_new_session={new_session!r}); time.sleep(20)")
     process,status=launch(tmp_path,code,limit=24/1024)
     record,stderr=completed(process,status)
     assert process.returncode==1,stderr
@@ -103,6 +104,33 @@ def test_runner_counts_nested_child_rss_and_stops_the_group(tmp_path):
     assert record["peak_rss_bytes"]>24*2**20 and record["cleanup_complete"]
     assert marker.exists() and not live(int(marker.read_text()))
     assert not live(record["child_pid"])
+
+
+def test_runner_adopts_and_stops_nested_session_after_parent_exits(tmp_path):
+    marker=tmp_path/"orphan.pid"
+    nested=("import os,time; from pathlib import Path; "
+            f"Path({str(marker)!r}).write_text(str(os.getpid())); "
+            "time.sleep(.1); memory=bytearray(32*1024*1024); time.sleep(20)")
+    code=("import os,subprocess,sys; "
+          f"subprocess.Popen([sys.executable,'-c',{nested!r}],start_new_session=True); os._exit(0)")
+    process,status=launch(tmp_path,code,limit=24/1024)
+    record,stderr=completed(process,status)
+    assert process.returncode==1,stderr
+    assert record["reason"]=="max_rss_exceeded" and record["cleanup_complete"]
+    assert marker.exists() and not live(int(marker.read_text()))
+    assert any(row["pid"]==int(marker.read_text()) and row["start_ticks"]>0
+               for row in record["descendant_identities"])
+
+
+def test_identity_checked_signal_rejects_different_process_birth():
+    from scripts.job import _signal_identity
+    other=subprocess.Popen([sys.executable,"-c","import time;time.sleep(20)"],start_new_session=True)
+    try:
+        assert not _signal_identity(other.pid,-1,signal.SIGKILL)
+        assert other.poll() is None
+    finally:
+        other.terminate()
+        other.wait(timeout=3)
 
 
 def test_sigterm_escalates_only_own_group_and_records_termination(tmp_path):

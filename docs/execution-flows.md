@@ -34,7 +34,11 @@ run records and must not become a later conversation's standing permission.
 This host currently uses a legacy cgroup hierarchy: systemd user
 MemoryMax/AllowedCPUs requests alone do not establish per-service enforcement.
 `scripts/job.py --max-rss-gib 64` enforces a sampled process-tree RSS sum bound
-and terminates only its own process group on breach. This is not a cgroup hard
+and terminates only its tracked workload descendants on breach, including nested
+sessions. The dedicated runner adopts orphan descendants as a Linux child
+subreaper, retains PID/start-time identities, and rechecks each identity before
+signalling (using pidfds when supported). The finite programme driver uses the
+same ownership rules. This is not a cgroup hard
 memory limit. Use CPUAffinity when pinning is intended and record the actual
 process affinity and Torch thread count; lifecycle isolation in background.slice
 is verified separately from resource enforcement.
