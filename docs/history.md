@@ -19,3 +19,9 @@ Old evidence retains its own source, environment and result identity in Git.
 Artifact hashes identify former bytes; they do not promise raw binaries, traces
 or checkpoints remain on disk. Current reproduction uses tracked generators,
 configurations and the current [development entry](development.md).
+
+Unique uncommitted experimental source and small runtime records were preserved
+before disk retirement at `9efc86e2aad143434ce526b021f41927f5c8eb50`, under
+`retirement-preservation/`. Its README defines exact bytes, Git-blob references,
+log tails and numerical summaries. The bundle is absent from the active tree;
+retrieve it only for an explicit historical request. Raw large results were retired.
