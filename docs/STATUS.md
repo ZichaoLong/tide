@@ -6,6 +6,19 @@
 生产 `src/tide` tree 为 `539c5eb15176827ca14a19c7de82f08df5b6c1d1`。
 实现、测量与后续文档分别保留源码身份，不用整理 HEAD 追认旧测量。
 
+## 当前执行：固定预算下的 decode batch 搜索
+
+用户已同意继续搜索各自吞吐最优 batch。沿用9B单卡、17B双卡/四卡的Tide，
+及同规模设备上的近总参数Transformer C/32/48层，共12个系列；不重跑原A/B/D，
+不把这轮辅助比较改称四类联合匹配。FP32、prompt128/chunk32/decode16、每卡
+48/56GiB allocated/reserved预算固定，四卡也继续扩大batch。
+
+复用有效旧点；新增点先warmup1/samples2筛选，必要最佳/邻点warmup2/samples5确认。
+按实测内存预测扩大并细化边界，吞吐连续趋平或预算相邻边界成立时停止；不靠反复OOM。
+每系列最多8个新增筛选点、2个确认点，单作业2700秒、总墙钟4小时，最多并用7张卡。
+原始方案与配额/资源/用户文件身份在`artifacts/decode-capacity-20261118/preflight.json`。
+当前为准备阶段，结果和停止理由完成后归档；此前交付的终态事实保持原身份。
+
 ## 追加测量已完成：Transformer深度与Tide batch/多卡
 
 用户追加的约9B/17B固定32/48层Transformer及Tide batch/多卡问题已完成有限补测。
