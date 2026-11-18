@@ -74,7 +74,8 @@ stopped before backend invocation at a static-role tensor guard. This is an
 observed capture boundary, not proof that resident execution is impossible;
 no resident scheduler was implemented or qualified.
 
-Active: `representative-cpu-v5` (CPU32, cores 0–31). All four NPU continuous
+Completed: the [representative CPU/NPU matrix](evidence/roadmap-representative-20261118.md),
+432 rows / 2160 samples. All four NPU continuous
 programmes completed 240 children / 720 continuing segments. They cover B1/B4,
 both precisions, three modes, Tide/A–D, 128 prefill + 8 decode and actual restored
 updates. CPU continuous and remaining scale work are still running.
@@ -88,31 +89,42 @@ fixed `0992b467`, with observed NUMA policy/affinity in `numa-policy.json`:
 | `continuous-cpu-v16` | NUMA 7, cores 280–295; finite 4/8/16-thread calibration, then compact B1/B4 Tide/A–D continuous matrix |
 | `attention-sites-cpu-v16` | NUMA 7, cores 280–311; waits for CPU continuous |
 | `scale-cpu-hb-17b-inference-v17` | NUMA 6, cores 240–279; finite 16/32/40-thread calibration, then 17B A–D FP32/BF16 inference |
-| `scale-cpu-hb-17b-train-v17` | interleave NUMA 6/7, cores 240–279; waits for CPU17B inference and CPU Attention, then two BF16 CPU updates using the selected thread count |
+| `scale-cpu-hb-17b-train-v20` | interleave NUMA 0/1, cores 0–39; after primary CPU matrix released these nodes, run two BF16 updates with the independently selected 40 threads |
 | `scale-npu-hb-9b-v16` | NUMA 4, cores 176–191; cooperative one-NPU A–D inference |
 | `scale-two-npu-hb-17b-v16` | interleave NUMA 4/5, cores 192–207; cooperative two-NPU inference |
 | `scale-four-npu-hb-9b-train-v16` | NUMA 5, cores 208–223; waits for two-NPU run, then four-NPU FP32/BF16 training, two continuing updates each |
 
 CPU17B admission checks global available RAM ≥700 GiB. Inference requires
 NUMA 6 free plus file LRU/reclaimable slab ≥160 GiB (RSS bound 192 GiB);
-training requires each of NUMA 6/7 ≥210 GiB (RSS bound 384 GiB). These checks
+training requires each of NUMA 0/1 ≥210 GiB (RSS bound 384 GiB). These checks
 are margins, not reservations. The earlier combined CPU17B v16 was also
 superseded before computation so independent inference could start earlier.
+The waiting train-v17 was superseded before computation after the primary matrix
+finished; NUMA0/1 then had about 240/238 GiB free plus reclaimable memory each.
+The train-v20 placement and corrected launcher environment are distinct from the
+NUMA6 thread calibration and earlier launcher identities.
 Other jobs/users may still create contention.
 
 `scale-two-npu-hb-17b-v16` completed both precisions: FP32 median 1.283656 s,
 BF16 1.478270 s at B1/L8; per-card timed peaks were 42.406/20.778 GiB and
 42.980/21.351 GiB. These are host-staged capacity observations, without A–D
-multi-device references. Four-NPU 9B FP32 completed two continuing updates;
-its BF16 attempt is ongoing. Current large evidence is still being reviewed.
+multi-device references. Four-NPU 9B FP32/BF16 each completed two continuing updates, with all scanned
+parameters/gradients/slots/state/output finite; highest per-card timed peaks were
+52.178/49.638 GiB. Single-NPU 9B A–D inference also completed both precisions.
+The [large-scale report](evidence/roadmap-scale-large-20261118.md) retains actual
+work, complete time boundaries and explicitly pending CPU work.
 
 `ca6199d4` fixes launcher-only CANN Python-path loss. The previous launcher
 hid `tbe` by replacing module-provided paths; the fix preserves the selected
 baseline and records actual paths/module origins. No model arithmetic changed.
 `environment-cpu-v18` passed an actual service import/isolation check;
-`placement-environment-npu-v18` is a bounded two-card follow-up of auto/BF16,
-synchronized/FP32 and direct/FP32 in separate processes. Original environment
-failures and active source/environment identities remain unchanged.
+`placement-environment-npu-v18` completed its bounded two-card follow-up.
+Auto/BF16 host staging completed both small cases with finite deviations;
+synchronized/FP32 failed during the post-checkpoint original backward and
+direct/FP32 failed at the first placed-update backward, both with invalid event
+handles. Its outer status is failed; TBE lookup did not fail again.
+[Placement evidence](evidence/roadmap-placement-20261118.md) preserves all
+original and new outcomes. Default host staging remains the qualified transport.
 
 Next: finish these actual runs, investigate execution failures within the finite
 scope, integrate reviewed comparison/continuation/placement/capacity evidence,
