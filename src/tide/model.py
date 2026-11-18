@@ -196,18 +196,22 @@ class TideModel(nn.Module):
             return None
         key = (tuple(regions), torch.device(device))
         if key not in self._reception_masks:
-            masks = []
-            for region in regions:
-                classes, banks = self._routes[region]
-                mask = torch.zeros_like(classes, dtype=torch.bool)
-                if self.graph.nodes[self.graph.regions[region][0]].layer == 0:
-                    mask[:, 0] = True
-                for _, valid in banks.values():
-                    mask |= valid
-                masks.append(mask)
-            mask = torch.cat(masks)
-            # An all-real layout needs no Attention mask or extra mass write.
-            self._reception_masks[key] = None if bool(mask.all()) else mask.to(device)
+            # This static cache outlives the current execution mode. Training
+            # Attention/checkpointing must be able to save its tensors even
+            # when the first use was an inference-mode warmup.
+            with torch.inference_mode(False):
+                masks = []
+                for region in regions:
+                    classes, banks = self._routes[region]
+                    mask = torch.zeros_like(classes, dtype=torch.bool)
+                    if self.graph.nodes[self.graph.regions[region][0]].layer == 0:
+                        mask[:, 0] = True
+                    for _, valid in banks.values():
+                        mask |= valid
+                    masks.append(mask)
+                mask = torch.cat(masks)
+                # An all-real layout needs no Attention mask or extra mass write.
+                self._reception_masks[key] = None if bool(mask.all()) else mask.to(device)
         return self._reception_masks[key]
 
     def _receive(self, contents, masses, classes, owners, edge_mask=None):

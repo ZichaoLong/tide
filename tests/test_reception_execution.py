@@ -5,7 +5,7 @@ import pytest
 import torch
 
 from tide import (ModelConfig, TideModel, TopologyConfig, canonical_state_dict,
-                  load_checkpoint, place_model, save_checkpoint)
+                  load_checkpoint, place_model, placement_adamw, save_checkpoint)
 from benchmarks.continuous import nested_comparison
 from benchmarks.statistics import audit_model
 from test_training_optimizations import update
@@ -136,3 +136,41 @@ def test_reception_execution_configuration_and_older_checkpoint_defaults():
     for options in (dict(reception_qkv_backend="implicit"), dict(reception_mask_padding=1)):
         with pytest.raises(ValueError, match="reception_"):
             ModelConfig(**options)
+
+
+@pytest.mark.parametrize("backend", ["math", "tiled"])
+@pytest.mark.parametrize("placement", [None, "serial", "per_device"])
+@pytest.mark.parametrize("recompute", [False, True])
+def test_reception_padding_cache_can_train_after_inference_mode(backend, placement, recompute):
+    torch.manual_seed(523)
+    cfg = replace(config("incoming_light_64", reception_mask_padding=True,
+                         reception_qkv_backend="fused", checkpoint_reception=recompute),
+                  attention_backend=backend)
+    model = TideModel(cfg)
+    if placement is not None:
+        # All regions sharing a layer base keep one parameter owner; compatible
+        # regions within that owner must still exercise actual placed batching.
+        owners = [model.graph.nodes[nodes[0]].layer % 2 for nodes in model.graph.regions]
+        place_model(model, ["cpu:0", "cpu:1"], region_partitions=owners,
+                    region_concurrency=placement)
+    x = torch.randn(1, 3, 64)
+    with torch.inference_mode():
+        model(x)
+    masks = {key: value for key, value in model._reception_masks.items() if value is not None}
+    assert masks and any((~mask).any() for mask in masks.values())
+    if placement is not None:
+        assert any(len(regions) > 1 for regions, device in masks)
+    # This is a new training stream. Its graph must be able to save cached
+    # structural metadata even though that metadata was first used in inference.
+    x.requires_grad_()
+    optimizer = (placement_adamw(model, lr=1e-4, foreach=False) if placement is not None else
+                 torch.optim.AdamW(model.parameters(), lr=1e-4, foreach=False))
+    initial = next(model.parameters()).detach().clone()
+    result = model(x)
+    result.readout().square().mean().backward()
+    assert x.grad is not None and torch.isfinite(x.grad).all()
+    assert all(p.grad is None or torch.isfinite(p.grad).all() for p in model.parameters())
+    optimizer.step()
+    assert not torch.equal(next(model.parameters()), initial)
+    assert all(not mask.is_inference() for mask in masks.values())
+    assert all(model._reception_masks[key] is mask for key, mask in masks.items())
