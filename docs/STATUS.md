@@ -1,65 +1,52 @@
-# 当前交接：训练默认、路径核对与性能归因已交付
+# 当前交接：接收 Attention、FP32 训练与大参数推理正在实施
 
-本轮执行用户已确认的六项计划；原五类完善及容量/区域执行的证据仍保留原身份。
-分支为 `graph-execution-foundation`，持续 FC/HB 实例路线不变，通用基座未启动。
-数学固定 `4f5b9f20a4030d68ee66ae2d26e34659a5e37234`，108文件核验通过。
-本轮起点 `3a49a789`；生产优化 `007a3828`，训练预设 `32ab13a5`，
-forward-only完整计时修复 `f8235fe4`。生产 `src/tide` tree 为
-`d3e8a6cb40eceaf487dc642a4283d58f90d5726f`；各实测源码见证据，不能用最终HEAD替代。
+用户已确认 [ROADMAP](ROADMAP.md) 的七阶段计划，实际训练优先 FP32。
+分支 `graph-execution-foundation`；本轮起点 `df2a0f18ec0efe321b2064f60ce0ea4d9d78c9ac`。
+数学固定 `4f5b9f20a4030d68ee66ae2d26e34659a5e37234`，本轮108文件核验通过。
+持续 FC/HB 实例路线与[范围约定](project-scope.md)不变。
 
-## 本轮结果与入口
+## 当前工作
 
-- 按用户最新约定，实际训练及后续优化优先FP32，BF16为次选。
-  [训练建议](execution-recommendations.md)提供三个主力FP32 NPU预设及三个BF16参考，
-  必须显式选择已准入设备；无参数CPU入口安全可运行。可覆盖参数、查看最终设置、
-  保存和真实恢复；默认入口服务训练，其他模式分开给建议。
-- [有限搜索](evidence/training-search-20261118.md)补齐batch-only及纯batch+整区域重算。
-  新增Reception局部重算和SSD向量摘要prefix；同尺寸分别观察到约22–25%降峰和
-  约6–9%缩短时间。原单区域、合批、math/tiled/fusion、整区域重算及放置候选均保留。
-- [连续训练](evidence/training-continuous-20261118.md)六组各20次真实更新，历史窗口
-  填满、optimizer step1→20、数据有限；另有六次新进程20→21更新。
-  已测FC BF16 B128/L256约38249输入位置/秒；Settle FP32组合B24/L256约2075；
-  Timed FP32组合B12/L128约317；0.5B FP32 B1/L128约96。allocated/reserved峰值
-  和恢复数值分别判定，不能从allocated单独推断真实显存余量。
-- [FP32优先吞吐与计算流程](computation-and-throughput.md)按规模、拓扑、活跃量和
-  原测量身份整理已有结果，并给出公式/伪代码。FC FP32已有较早零态长度搜索，
-  尚无与上述BF16大batch对应的新20更新连续训练预设；本次文档补充未重跑模型。
-- [四类主表与其他模式](evidence/training-modes-20261118.md)包含正式A–D联合匹配，
-  推理、含图前向、完整训练、首个主干输出和真实缓存decode。Tide当前完整训练仍
-  慢于代表A/B；C/D的宽浅结构是不同计算参照。完整同步修复后的缓存结果单独归档。
-- [成本证据](evidence/training-costs-20261118.md)有正常计时、固定anchor阶段/内存
-  诊断和实际Ascend设备trace。差距包括数学工作、padding、矩阵SSD、索引和调度；
-  Transformer自身chunk256有收益。重叠时间不相加，也不把诊断时间当正常占比。
+- 根代理统一集成、资源和测量；检查 placed 同卡区域合批、packing及正式FP32成本。
+- `codex/agg-inference-reception`：接收 Attention QKV/结构掩码/执行候选及独立验证。
+- `codex/agg-inference-streaming`：真正连续的推理、prompt/增量边界、A–D与大模型放置设施。
+- `codex/agg-inference-ssd`：完整矩阵SSD与单位置递推候选、独立公式和梯度。
+- 三条支线均在 `artifacts/worktrees/agg-inference-*`，开发根为本轮起点；它们的开发
+  检查不自动构成主分支或硬件资格。NPU/长期作业由根代理统一调度。
 
-## 数值事实与限制
+[起步记录](../artifacts/agg-inference-preflight-20261118/preflight.json)保存实际账户、
+工作区、服务、资源和四份用户文档SHA。配额约125GiB/300GiB软限、700GiB硬限；
+320 CPU、约1.8TiB可用内存。观测时7张无进程空闲NPU，每卡64GiB；逐次准入仍需复核。
+当前没有遗留Tide服务。共享NPU授权只属于本线程，当前优先协作队列独占准入。
 
-[31候选路径核对](evidence/training-paths-20261118.md)结果为9 within、20 finite、
-2 structural；31套保存/下一前向精确，恢复更新28 within、3 finite。原阈值不变。
-Timed BF16的prefix组合在第二次更新出现实际支持和KV时间差异；不合批prefix隔离
-也有后续支持差异，捕获界限内未建立完整因果链，该组合不作为Timed BF16默认。
+## 可复用证据及未解决边界
 
-定向FP32 Attention见证定位同输入PSE/rank-one两种表示的局部微差，独立FP64八行
-均在原阈值内；不能据此解释全部状态或训练轨迹差异。两卡serial/per_device有反向
-与恢复超差；单卡FC大batch BF16也保留配对恢复梯度/moment超差。
-新进程实际执行成功、精确checkpoint和正常性能均不等于后续轨迹严格等价。
+此前生产 `src/tide` tree 为 `d3e8a6cb40eceaf487dc642a4283d58f90d5726f`。
+[训练集成](evidence/training-validation-20261118.md)记录冻结 `ae247dee` 的625项CPU检查，
+后续预设/同步边界检查及安装事实；新源码需自己的相关验证。
+[训练建议](execution-recommendations.md)、[计算流程](computation-and-throughput.md)、
+[连续训练](evidence/training-continuous-20261118.md)、[成本](evidence/training-costs-20261118.md)
+和[四类模式](evidence/training-modes-20261118.md)保留各自实际源码和负载身份。
 
-[集成与安装](evidence/training-validation-20261118.md)：冻结`ae247dee`完整CPU625项
-通过；`32ab13a5`后续定向83项通过；同步边界回归2项通过。新wheel21文件与生产源
-一致，安装API/真实恢复运行完成；placed CPU BF16仍有154梯度、140更新项超差。
+现有接收三种 incoming 配置已实现，有独立FP64公式/梯度及部分组合运行；本轮补完整
+训练、持续推理和大参数性能交付，不把所有配置称为已同等验证。此前FC大batch连续
+测点为BF16，本轮优先补FP32。
 
-完整模型仍是PyTorch，C++17/LibTorch是既有区域评分切片。CPU/NPU有实际证据；
-CUDA、peer DMA/HCCL、全模型C++、compiled/resident训练没有新增资格。
-全部合法主菜单可表达与元数据检查通过，不代表全笛卡尔组合、任意尺度或任务质量已验证。
+[31候选路径](evidence/training-paths-20261118.md)与原FP32/BF16有限超差均保留。
+Timed BF16 prefix有支持/时间分歧，单卡FC BF16恢复有梯度/moment超差，多卡路径有
+反向及恢复差异；精确保存/下一前向不意味着后续优化轨迹精确相同。CPU FP64用于
+有界诊断，阈值不为通过标签修改。
 
-## 工作区、资源及后续
+完整模型仍是PyTorch，LibTorch是区域评分切片。CPU/NPU已有所列实际证据；
+CUDA、peer DMA/HCCL、全模型C++、compiled/resident训练没有自动新增资格。
 
-本轮所有Tide实验已终态，当前无遗留运行服务或已记录存活后代；内层失败完整保留。
-本线程允许共享NPU，本轮所列设备实验实际采用协作队列独占准入，仍共享主机；
-不能称全机独占。配额从约83GiB增至约125GiB，低于300GiB软限，未清理复现依赖。
+## 用户文件与接续
 
-四份用户未跟踪文档保持原字节，不纳入提交；哈希见集成记录。参考、公共环境和下游
-保持只读边界。没有下游发布或验收。冻结源、checkpoint、anchor、trace、私有wheel环境
-及代理工作树保留；日常复用[性能经验](performance-lessons.md)，不查退役周期。
+以下四份未跟踪文件保持原字节、不纳入提交：
+`tide-learning-lab-TL-REQ-004-handoff.md`、`tide-learning-lab-TL-REQ-005-handoff.md`、
+`tide-learning-lab-TL-REQ-006-handoff.md`、`upstream-lh-semantics-discussion-20261113.md`，
+均位于docs，SHA见本轮起步记录。参考、公共环境和下游只读；没有下游发布或验收。
+既有checkpoint、trace、冻结源和工作树保留，不在运行任务期间清理复现依赖。
 
-本轮没有待运行任务。有限后续机会与未解决数值边界列于[ROADMAP](ROADMAP.md)；
-从[证据索引](evidence/README.md)可直接复核，不需要重新启动实验。
+接续先查实际HEAD/工作区、活动服务与本轮artifacts终态，再读ROADMAP；不要重复提交
+仍在运行或已经完成的实验。阶段汇报后继续推进到本轮交付完成。
