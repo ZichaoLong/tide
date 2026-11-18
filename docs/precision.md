@@ -19,6 +19,15 @@ KV summaries and SSD recurrence/state use FP32. KV keys/values use BF16; origina
 times remain int64. Parameter gradients and AdamW moments remain FP32, with the
 parameters themselves serving as master weights. Autocast's cast cache is disabled.
 
+Explicit math/tiled Attention promotes BF16 Q/K/V to FP32 for its score,
+normalization and value products, then returns the payload dtype. Native SDPA
+arithmetic depends on its selected backend: the recorded CPU site audits
+(including auto→SDPA) observed FP32 `bmm` for BF16 payloads. Native NPU fusion
+has separate observed inputs/operators. See the [Attention evidence](evidence/roadmap-attention-20261118.md);
+a payload dtype or API name alone does not identify the executed matrix kernel.
+The integrated models still perform genuine BF16 projections outside these
+explicitly stable subcalculations.
+
 BF16 `auto` Attention uses tiled math whenever a visible key prior is zero,
 with or without a recorded gradient. Positive explicit NPU priors use the same
 rank-one encoding in inference and training; omitted unit priors retain the
