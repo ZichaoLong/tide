@@ -23,6 +23,7 @@ def main():
     parser.add_argument("--devices", nargs=2, default=["cpu", "cpu"])
     parser.add_argument("--transport", choices=("direct", "host_stage", "synchronized"), required=True)
     parser.add_argument("--precision", choices=("fp32", "bf16"), default="fp32")
+    parser.add_argument("--phase-sync", action="store_true", help="diagnostic fences before backward/update")
     parser.add_argument("--steps", type=int, default=8)
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
@@ -69,9 +70,12 @@ def main():
                 c = torch.sin(b@second)
                 # The output stays with the destination just as an HB last layer.
                 loss = c.float().square().mean()
-            sync()
+            if args.phase_sync:
+                sync()
             stage(f"step.{step}.backward")
-            loss.backward(); sync()
+            loss.backward()
+            if args.phase_sync:
+                sync()
             stage(f"step.{step}.optimizer")
             optimizer.step(); sync()
             state = c.detach()/8

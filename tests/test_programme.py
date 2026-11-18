@@ -11,7 +11,7 @@ def _arguments(**updates):
     values = dict(configs=["configs/fc-k.json", "configs/fc-s.json"], suite="representative", batch=1,
                   length=2, precision=["fp32", "bf16"], threads=4, warmup=0, steps=1,
                   modes=["inference", "train"], subjects=None, device="cpu", child_timeout=10,
-                  continuous_transformers=None, checkpoints=False, prefill_chunk=2, decode=1,
+                  continuous_transformers=None, continuous_joint=[], checkpoints=False, prefill_chunk=2, decode=1,
                   activities=["natural", "sparse03", "sparse10", "high"])
     values.update(updates)
     return Namespace(**values)
@@ -37,6 +37,16 @@ def test_shape_changes_one_dimension_and_generated_inputs_are_recorded(tmp_path)
         config = json.loads(Path(row["config"]).read_text())
         shapes.append((int(args[args.index("--batch")+1]), int(args[args.index("--length")+1]), config["topology"]["n"]))
     assert shapes == [(1, 2, 8), (4, 2, 8), (1, 8, 8), (1, 2, 16)]
+
+
+def test_continuous_joint_uses_child_stream_match_in_each_mode(tmp_path):
+    plan = build_plan(_arguments(configs=["configs/fc-k.json"], suite="continuous", precision=["bf16"],
+                                 modes=["inference", "train"], continuous_joint=list("ABCD")), tmp_path)
+    assert len(plan) == 10
+    for mode in ("inference", "train"):
+        matches = [row for row in plan if row["identity"].endswith("-"+mode) and "--joint-match" in row["command"]]
+        assert {row["command"][row["command"].index("--joint-match")+1] for row in matches} == set("ABCD")
+        assert all("--transformer-width" not in row["command"] for row in matches)
 
 
 def test_zero_process_exit_cannot_hide_inner_failure(tmp_path):

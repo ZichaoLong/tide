@@ -5,7 +5,6 @@ Every chunk advances real private state; Transformer uses its incremental cache.
 """
 import argparse
 from dataclasses import fields, is_dataclass
-import hashlib
 import json
 import os
 from pathlib import Path
@@ -19,6 +18,9 @@ import torch
 from tide import ModelConfig, TideModel, detach_state, load_checkpoint, save_checkpoint
 from tide.precision import precision_context, precision_policy
 from benchmarks.baselines import TransformerBaseline, parameter_count
+from benchmarks.matching import match_transformers
+from benchmarks.statistics import WorkAudit
+from benchmarks.workloads import paired_input, parameter_hash, tensor_hash
 
 
 def synchronize(device):
@@ -151,7 +153,7 @@ def checkpoint_resume(model, optimizer, state, next_input, precision, path):
     load_seconds = time.perf_counter()-start
     record = dict(save_seconds=save_seconds, load_seconds=load_seconds,
                   file_bytes=Path(path).stat().st_size,
-                  boundary="state detached before checkpoint; one full next window + AdamW on each owner",
+                  boundary="state detached before checkpoint; complete next window plus required Timed flush contributes to one loss/backward/AdamW on each owner",
                   saved_data=nested_comparison(
                       dict(parameters=restored.state_dict(), state=saved, optimizer=resumed_optimizer.state_dict()),
                       dict(parameters=model.state_dict(), state=state, optimizer=optimizer.state_dict()), atol=0, rtol=0))
@@ -160,14 +162,27 @@ def checkpoint_resume(model, optimizer, state, next_input, precision, path):
         b, sb, rb = forward_state(model, next_input, state)
         record["next_forward"] = nested_comparison(a, b, atol=0, rtol=0)
         record["next_state"] = nested_comparison(sa, sb, atol=0, rtol=0)
-    gradients, inputs, losses, results = [], [], [], []
+        if not model.settle:
+            flush_a, flush_b = restored.flush(sa), model.flush(sb)
+            record["next_flush_result"] = nested_comparison(flush_a, flush_b, atol=0, rtol=0)
+    gradients, inputs, losses, results, windows = [], [], [], [], []
     for current, step_optimizer, current_state in ((model, optimizer, state),
                                                   (restored, resumed_optimizer, saved)):
         step_optimizer.zero_grad(set_to_none=True)
         x = next_input.detach().clone().requires_grad_(True)
         with precision_context(x.device, precision):
             value, following, _ = forward_state(current, x, current_state)
+            window_slots, flush_slots = value.shape[1], 0
+            if not current.settle:
+                flushed = current.flush(following)
+                flush_value, following = flushed.readout(), flushed.state
+                flush_slots = flush_value.shape[1]
+                value = torch.cat((value, flush_value), 1)
             loss = value.float().square().mean()
+        windows.append(dict(input_positions=x.shape[0]*x.shape[1],
+                            window_output_slots=x.shape[0]*window_slots,
+                            flush_output_slots=x.shape[0]*flush_slots,
+                            final_state_position=following.position))
         loss.backward()
         gradients.append({name: None if p.grad is None else p.grad.detach().clone()
                           for name, p in current.named_parameters()})
@@ -176,7 +191,7 @@ def checkpoint_resume(model, optimizer, state, next_input, precision, path):
         losses.append(float(loss.detach()))
         step_optimizer.step()
     synchronize(next_input.device)
-    record.update(losses=losses, input_gradients=nested_comparison(inputs[1], inputs[0], rtol=1e-2),
+    record.update(losses=losses, update_windows=windows, input_gradients=nested_comparison(inputs[1], inputs[0], rtol=1e-2),
                   parameter_gradients=nested_comparison(gradients[1], gradients[0]),
                   updated_parameters=nested_comparison(restored.state_dict(), model.state_dict()),
                   updated_optimizer=nested_comparison(resumed_optimizer.state_dict(), optimizer.state_dict()),
@@ -273,6 +288,48 @@ def run_stream(model, x, prefill, prefill_chunk, *, state=None, mode="inference"
     return joined, state, phases
 
 
+def continuous_joint_match(config, joint_class, *, device, precision, mode, batch, prefill,
+                           prefill_chunk, decode, seed):
+    """Match from the exact initial stream schedule, outside all timed samples.
+
+    Training uses its graph-enabled forward before any update. WorkAudit sees
+    each actual chunk, decode, and necessary Timed flush; no fresh-prefill audit
+    from another batch/length/trajectory supplies the active-parameter target.
+    """
+    if joint_class not in {"A", "B", "C", "D"}:
+        raise ValueError("joint match must be A, B, C or D")
+    torch.manual_seed(seed)
+    model = TideModel(config)
+    initial_hash = parameter_hash(model)
+    input_cpu = paired_input(batch, prefill+decode, config.input_dim or config.d, seed+1)
+    nodes, depth = len(model.graph.nodes), len(model.graph.widths)
+    model = model.to(device)
+    audit_mode = "grad_forward" if mode == "train" else mode
+    model.train(audit_mode != "inference")
+    with WorkAudit(model) as audit:
+        value, state, phase = run_stream(model, input_cpu.to(device), prefill, prefill_chunk,
+                                         mode=audit_mode, precision=precision)
+    if not (phase["finite_output"] and phase["finite_parameters"] and phase["finite_gradients"]):
+        raise ArithmeticError("nonfinite Tide initial stream cannot define a joint comparison")
+    measured = audit.report()
+    selected = match_transformers(nodes, depth, measured["parameters"]["unique_parameters"],
+                                   measured["effective_touched"]["mean"])[joint_class]
+    metadata = dict(kind="joint", joint_class=joint_class, match=selected, initial_audit=measured,
+                    tide_initial_parameter_sha256=initial_hash, tide_input_sha256=tensor_hash(input_cpu),
+                    tide_input_shape=list(input_cpu.shape), audit_device=str(device),
+                    audit_requested_mode=mode, audit_effective_mode=audit_mode,
+                    audit_precision=precision_policy(device, precision),
+                    audit_boundary=dict(initial_state="zero", batch=batch, prefill=prefill,
+                                        prefill_chunk=prefill_chunk, decode=decode,
+                                        timed_flush=not model.settle, optimizer_updates=0),
+                    matching_boundary="initial actual stream only; fixed for every later timed update/continuation",
+                    comparisons_equivalent=False)
+    # Do not retain the graph, audit hooks or Tide weights while timing the
+    # matched Transformer. The hashes/statistics above contain no live tensors.
+    del value, state, model, audit
+    return selected["constructor"], metadata
+
+
 def _persist(path, record):
     from scripts.job import atomic
     atomic(path, record)
@@ -282,10 +339,11 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--config", required=True)
     parser.add_argument("--subject", choices=("tide", "transformer"), default="tide")
+    parser.add_argument("--joint-match", choices=("A", "B", "C", "D"))
     parser.add_argument("--transformer-width", type=int)
     parser.add_argument("--transformer-layers", type=int)
     parser.add_argument("--ffn-width", type=int)
-    parser.add_argument("--head-dim", type=int, default=32)
+    parser.add_argument("--head-dim", type=int)
     parser.add_argument("--device", default="cpu")
     parser.add_argument("--precision", choices=("fp32", "bf16"), default="fp32")
     parser.add_argument("--mode", choices=("inference", "grad_forward", "train"), default="inference")
@@ -306,6 +364,11 @@ def main():
         parser.error("choose new output/checkpoint identities")
     if args.checkpoint is not None and (args.subject != "tide" or args.mode != "train"):
         parser.error("checkpoint requires Tide train mode")
+    if args.joint_match is not None and args.subject != "transformer":
+        parser.error("--joint-match requires --subject transformer")
+    if args.joint_match is not None and any(value is not None for value in
+            (args.transformer_width, args.transformer_layers, args.ffn_width, args.head_dim)):
+        parser.error("joint matching chooses width/layers/FFN; omit explicit constructor overrides")
     if args.device.startswith("npu"):
         import torch_npu
         torch.npu.set_device(args.device)
@@ -314,33 +377,59 @@ def main():
     torch.set_num_threads(args.threads)
     torch.manual_seed(args.seed)
     config = ModelConfig.from_dict(json.loads(Path(args.config).read_text()))
-    if args.subject == "tide":
-        model = TideModel(config)
-        width = config.input_dim or config.d
-        spec = config.to_dict()
-    else:
-        if args.transformer_width is None or args.transformer_layers is None:
-            parser.error("Transformer requires explicit matched --transformer-width/--transformer-layers")
-        model = TransformerBaseline(args.transformer_width, args.transformer_layers,
-                                    ffn_width=args.ffn_width, head_dim=args.head_dim)
-        width, spec = args.transformer_width, model.configuration()
-    generator = torch.Generator(device="cpu").manual_seed(args.seed+1)
-    x_cpu = torch.randn(args.batch, args.prefill+args.decode, width, generator=generator)
-    identity = hashlib.sha256()
-    for name, tensor in model.named_parameters():
-        identity.update(name.encode()); identity.update(tensor.detach().numpy().tobytes())
     source = os.environ.get("TIDE_SOURCE_COMMIT") or subprocess.check_output(["git", "rev-parse", "HEAD"], text=True).strip()
-    record = dict(source=source, arguments={k: str(v) if isinstance(v, Path) else v for k, v in vars(args).items()},
-                  spec=spec, parameters=parameter_count(model), precision=precision_policy(args.device, args.precision),
-                  initial_parameters_sha256=identity.hexdigest(), input_sha256=hashlib.sha256(x_cpu.numpy().tobytes()).hexdigest(),
+    record = dict(source=source, harness_source=os.environ.get("TIDE_HARNESS_COMMIT", source),
+                  arguments={k: str(v) if isinstance(v, Path) else v for k, v in vars(args).items()},
+                  precision=precision_policy(args.device, args.precision),
                   physical_devices=os.environ.get("ASCEND_RT_VISIBLE_DEVICES"), torch=str(torch.__version__),
                   cpu_affinity=sorted(os.sched_getaffinity(0)), host_load_before=os.getloadavg(),
-                  timing="input transfer/construction/warmup/checkpoint excluded; full stream train includes concatenation/loss/backward/AdamW/sync",
+                  timing="input transfer/construction/initial matching audit/warmup/checkpoint excluded; full stream train includes concatenation/loss/backward/AdamW/sync",
                   training_boundary="full BPTT within prefill+decode+flush; detach after each optimizer update",
                   initial_state="zero; subsequent measured streams continue previous private state",
                   first_output="first available backbone output, no task head or language-model TTFT",
-                  observations=[], state="running")
+                  input_pairing="feature-wise seeded CPU inputs; the shared feature prefix is identical at different model widths",
+                  process_peak_rss_scope="cumulative process high-water including construction and initial Tide matching audit; not isolated baseline peak",
+                  observations=[], state="preparing", last_stage="construct_or_match")
     _persist(args.output, record)
+    try:
+        if args.subject == "tide":
+            model = TideModel(config)
+            width, spec = config.input_dim or config.d, config.to_dict()
+            comparison = dict(kind="tide", comparisons_equivalent=False)
+        else:
+            if args.joint_match is not None:
+                constructor, comparison = continuous_joint_match(
+                    config, args.joint_match, device=args.device, precision=args.precision, mode=args.mode,
+                    batch=args.batch, prefill=args.prefill, prefill_chunk=args.prefill_chunk,
+                    decode=args.decode, seed=args.seed)
+                torch.manual_seed(args.seed)
+                model = TransformerBaseline(**constructor)
+                resolved = torch.device(args.device)
+                if resolved.type in {"npu", "cuda"}:
+                    getattr(torch, resolved.type).empty_cache()
+            else:
+                if args.transformer_width is None or args.transformer_layers is None:
+                    raise ValueError("Transformer requires --joint-match or explicit width/layers")
+                model = TransformerBaseline(args.transformer_width, args.transformer_layers,
+                                            ffn_width=args.ffn_width, head_dim=args.head_dim or 32)
+                comparison = dict(kind="auxiliary_explicit_constructor", comparisons_equivalent=False,
+                                  qualification="explicit width/layers do not establish any of the four joint matches")
+            width, spec = model.d, model.configuration()
+        x_cpu = paired_input(args.batch, args.prefill+args.decode, width, args.seed+1)
+        prefix = min(width, config.input_dim or config.d)
+        comparison["audit_source"] = source if args.joint_match is not None else None
+        comparison["shared_input_prefix_width"] = prefix
+        comparison["shared_input_prefix_sha256"] = tensor_hash(x_cpu[..., :prefix])
+        record.update(spec=spec, parameters=parameter_count(model), comparison=comparison,
+                      initial_parameters_sha256=parameter_hash(model), input_sha256=tensor_hash(x_cpu),
+                      input_shape=list(x_cpu.shape), state="running", last_stage="warmup")
+        _persist(args.output, record)
+    except Exception as error:
+        import traceback
+        traceback.print_exc()
+        record.update(state="execution_failed", error=repr(error))
+        _persist(args.output, record)
+        return 1
     model = model.to(args.device)
     model.train(args.mode != "inference")
     x = x_cpu.to(args.device)

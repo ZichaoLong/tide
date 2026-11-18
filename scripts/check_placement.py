@@ -61,7 +61,7 @@ def _full(model, x, state=None, *, record_work=False):
     return result, model.flush(result.state, record_work=record_work)
 
 
-def _train(model, optimizer, x, state, precision, devices, *, progress=None, label="update"):
+def _train(model, optimizer, x, state, precision, devices, *, progress=None, label="update", phase_sync=False):
     mark = (lambda phase: progress(label+"."+phase)) if progress is not None else (lambda phase: None)
     mark("forward")
     _sync(devices); started = time.perf_counter()
@@ -69,11 +69,14 @@ def _train(model, optimizer, x, state, precision, devices, *, progress=None, lab
     with precision_context(devices[0], precision):
         result, tail = _full(model, x, state)
         loss = _objective(result)+(0 if tail is None else _objective(tail))
-    _sync(devices)
+    if phase_sync:
+        _sync(devices)
     forward_seconds = time.perf_counter()-started
     mark("backward")
     started = time.perf_counter()
-    loss.backward(); _sync(devices)
+    loss.backward()
+    if phase_sync:
+        _sync(devices)
     backward_seconds = time.perf_counter()-started
     mark("optimizer")
     started = time.perf_counter()
@@ -86,13 +89,14 @@ def _train(model, optimizer, x, state, precision, devices, *, progress=None, lab
     return detach_state((result if tail is None else tail).state), dict(
         loss=float(loss.detach()), complete_seconds=elapsed, finite=finite,
         phase_seconds=dict(forward_loss=forward_seconds, backward=backward_seconds, optimizer=optimizer_seconds),
-        timing="sum of synchronized phases; diagnostic stage record IO excluded",
+        phase_synchronization=phase_sync,
+        timing="host phase durations plus final all-device sync; stage record IO excluded; individual phases are device latency only with phase_sync",
         output_positive_strengths=(result.strengths.detach() > 0).sum().item(),
         flush_output_positive_strengths=0 if tail is None else (tail.strengths.detach() > 0).sum().item())
 
 
 def qualify(config, devices, precision, checkpoint, batch, length, steps, *, progress=None,
-            transport="direct"):
+            transport="direct", phase_sync=False):
     torch.manual_seed(807)
     source = TideModel(config)
     fingerprint = hashlib.sha256()
@@ -101,7 +105,7 @@ def qualify(config, devices, precision, checkpoint, batch, length, steps, *, pro
     record = dict(config=config.to_dict(), precision=precision_policy(devices[0], precision),
                   initial_parameter_sha256=fingerprint.hexdigest(),
                   reference="one-device ordinary model with identical initial CPU parameters and inputs")
-    record.update(state="running", progress=[])
+    record.update(state="running", progress=[], phase_synchronization=phase_sync)
     def mark(name):
         record["last_stage"] = name
         record["progress"].append(dict(stage=name, monotonic_seconds=time.monotonic()))
@@ -175,7 +179,7 @@ def qualify(config, devices, precision, checkpoint, batch, length, steps, *, pro
         for index, (current, optimizer) in enumerate(zip((reference, candidate), optimizers)):
             owner = "reference" if index == 0 else "placed"
             states[index], observed = _train(current, optimizer, x_cpu.to(devices[0]), states[index], precision, devices,
-                                             progress=mark, label=f"update.{step}.{owner}")
+                                             progress=mark, label=f"update.{step}.{owner}", phase_sync=phase_sync)
             row["observations"].append(dict(owner=owner, **observed))
         row["parameters"] = nested_comparison(canonical_state_dict(candidate), reference.state_dict())
         mark(f"update.{step}.complete")
@@ -195,9 +199,9 @@ def qualify(config, devices, precision, checkpoint, batch, length, steps, *, pro
         b = candidate(x_cpu.to(devices[0]), saved_state)
         comparisons["checkpoint_next_result"] = nested_comparison(a, b, atol=0, rtol=0)
     next_state_a, update_a = _train(candidate, optimizers[1], x_cpu.to(devices[0]), saved_state, precision, devices,
-                                   progress=mark, label="checkpoint.original_update")
+                                   progress=mark, label="checkpoint.original_update", phase_sync=phase_sync)
     next_state_b, update_b = _train(restored, resumed, x_cpu.to(devices[0]), restored_state, precision, devices,
-                                   progress=mark, label="checkpoint.restored_update")
+                                   progress=mark, label="checkpoint.restored_update", phase_sync=phase_sync)
     record["restored_updates"] = [update_a, update_b]
     comparisons["restored_updated_parameters"] = nested_comparison(restored.state_dict(), candidate.state_dict())
     comparisons["restored_updated_optimizer"] = nested_comparison(resumed.state_dict(), optimizers[1].state_dict())
@@ -259,6 +263,7 @@ def main():
     parser.add_argument("--devices", nargs="+", default=["cpu", "cpu"])
     parser.add_argument("--precision", choices=("fp32", "bf16"), default="fp32")
     parser.add_argument("--transport", choices=("direct", "host_stage", "synchronized"), default="direct")
+    parser.add_argument("--phase-sync", action="store_true", help="diagnostic synchronization between forward/backward/update")
     parser.add_argument("--mode", choices=("qualify", "inference"), default="qualify")
     parser.add_argument("--config", type=Path)
     parser.add_argument("--batch", type=int, default=2)
@@ -301,7 +306,7 @@ def main():
             if args.mode == "qualify":
                 with tempfile.TemporaryDirectory(prefix="placement-", dir=args.output.parent) as directory:
                     row = qualify(config, args.devices, args.precision, Path(directory)/"checkpoint.pt",
-                                  args.batch, args.length, args.steps, progress=progress, transport=args.transport)
+                                  args.batch, args.length, args.steps, progress=progress, transport=args.transport, phase_sync=args.phase_sync)
             else:
                 row = inference(config, args.devices, args.precision, args.batch, args.length, args.steps, args.warmup,
                                 transport=args.transport)

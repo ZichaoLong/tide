@@ -117,7 +117,9 @@ before execution. `scale` requires explicit config paths and a prior capacity
 budget. `hotspots` and `projections` invoke the bounded candidate tools.
 
 `continuous` forwards `--prefill-chunk`, `--decode`, `--steps` as stream updates,
-and optionally `--checkpoints` for Tide training. It defaults to Tide. Optional
+and optionally `--checkpoints` for Tide training. It defaults to Tide;
+`--continuous-joint A B C D` adds baselines matched by each child's initial
+audit of that exact prefill/decode/flush stream and mode. Optional
 `--continuous-transformers FILE.json` supplies explicit lists of
 `label/d/layers/ffn_width/head_dim` specifications and their reference identities;
 the driver preserves them and does not invent a joint-match qualification for

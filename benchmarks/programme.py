@@ -86,6 +86,10 @@ def build_plan(args, output_dir):
                             "--prefill", str(length), "--prefill-chunk", str(args.prefill_chunk),
                             "--decode", str(args.decode), "--updates", str(args.steps)]
                     commands.append(("tide-"+mode, "benchmarks.continuous", [*base, "--subject", "tide"], mode == "train", None))
+                    for joint in args.continuous_joint:
+                        commands.append(("joint-"+joint+"-"+mode, "benchmarks.continuous",
+                                         [*base, "--subject", "transformer", "--joint-match", joint],
+                                         False, dict(joint_class=joint, reference="initial audit of this exact stream in child")))
                     for spec in transformer_specs:
                         flags = ["--subject", "transformer", "--transformer-width", str(spec["d"]),
                                  "--transformer-layers", str(spec["layers"]), "--ffn-width", str(spec["ffn_width"]),
@@ -190,6 +194,8 @@ def main():
     parser.add_argument("--prefill-chunk", type=int, default=64)
     parser.add_argument("--decode", type=int, default=8)
     parser.add_argument("--continuous-transformers", help="JSON list of explicit d/layers/ffn_width/head_dim/label specs, each with its reference identity")
+    parser.add_argument("--continuous-joint", nargs="*", choices=("A", "B", "C", "D"), default=[],
+                        help="joint matches built from each child's exact initial stream, not reused from fresh-prefill records")
     parser.add_argument("--checkpoints", action="store_true", help="save and test one restore after each continuous Tide train run")
     parser.add_argument("--child-timeout", type=float, default=1800)
     parser.add_argument("--stop-on-failure", action="store_true")

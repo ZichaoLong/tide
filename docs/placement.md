@@ -101,6 +101,8 @@ process with `python -m scripts.probe_placement_copy --devices npu:0 npu:1
 performance measurement. `scripts.check_placement --transport host_stage` then
 checks the complete HB path. Its current phase and partial comparisons persist
 before each forward/backward/optimizer stage, including the specific update and
-reference or placed owner. Diagnostic stage record I/O is excluded from each
-synchronized phase's measured duration. The checkpoint preserves the selected
+reference or placed owner. Diagnostic stage record I/O is excluded from host phase
+durations. Each complete update synchronizes all devices; `--phase-sync` adds
+extra diagnostic fences before backward/optimizer and is recorded separately.
+Individual phase durations measure device latency only with those extra fences. The checkpoint preserves the selected
 transport so a restore does not silently change execution policy.

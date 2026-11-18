@@ -135,3 +135,90 @@ def test_numerical_comparison_does_not_treat_parameter_sign_as_message_support()
     positive = KVState(times, torch.tensor([[[1e-9, 0.0, 1.0]]]), keys, keys, keys)
     semantics = nested_comparison(absent, positive)
     assert semantics["within_threshold"] and semantics["support_mismatches"] == ["root.weight"]
+
+
+@pytest.mark.parametrize("joint_class", ["A", "B", "C", "D"])
+def test_continuous_joint_match_audits_exact_chunk_decode_schedule(joint_class, monkeypatch):
+    from benchmarks.continuous import continuous_joint_match
+    from benchmarks.matching import transformer_parameters
+    calls = []
+    original = TideModel._run
+    def observed(model, x, state=None, **kwargs):
+        calls.append((x.shape[0], x.shape[1], 0 if state is None else state.position, torch.is_grad_enabled()))
+        return original(model, x, state, **kwargs)
+    monkeypatch.setattr(TideModel, "_run", observed)
+    config = ModelConfig(topology=TopologyConfig(n=2, layers=2), d=64)
+    constructor, report = continuous_joint_match(config, joint_class, device="cpu", precision="fp32",
+        mode="train", batch=2, prefill=3, prefill_chunk=2, decode=2, seed=82)
+    assert calls == [(2, 2, 0, True), (2, 1, 2, True), (2, 1, 3, True), (2, 1, 4, True)]
+    assert report["initial_audit"]["input_positions"] == 10
+    assert report["initial_audit"]["sample_time_slots"] == 10
+    assert report["audit_effective_mode"] == "grad_forward"
+    assert report["audit_boundary"]["optimizer_updates"] == 0
+    assert constructor["layers"] == (4 if joint_class in {"A", "B"} else 2)
+    target = (report["initial_audit"]["parameters"]["unique_parameters"] if joint_class in {"A", "C"}
+              else report["initial_audit"]["effective_touched"]["mean"])
+    assert report["match"]["targets"]["parameters"] == target
+    assert report["match"]["actual"]["parameters"] == transformer_parameters(
+        constructor["d"], constructor["layers"], constructor["ffn_width"])
+
+
+def test_continuous_joint_match_timed_flush_has_no_fictional_input_positions():
+    from benchmarks.continuous import continuous_joint_match
+    config = ModelConfig(topology=TopologyConfig(kind="multiscale", n=2, hubs=1,
+                         profile="compact-5-dd4", timing="timed"), d=64, memory="X")
+    _, report = continuous_joint_match(config, "D", device="cpu", precision="bf16", mode="inference",
+                                       batch=1, prefill=3, prefill_chunk=2, decode=1, seed=83)
+    assert report["audit_boundary"]["timed_flush"]
+    assert report["initial_audit"]["input_positions"] == 4
+    assert report["initial_audit"]["sample_time_slots"] > 4*TideModel(config).graph.period
+    assert report["initial_audit"]["logical_axis"] == "tick"
+
+
+def test_continuous_joint_cli_records_paired_prefix_and_actual_match(tmp_path, monkeypatch):
+    import json
+    import sys
+    from benchmarks import continuous
+    from benchmarks.workloads import paired_input, tensor_hash
+    config = ModelConfig(topology=TopologyConfig(n=2, layers=2), d=64)
+    path, output = tmp_path/"config.json", tmp_path/"matched.json"
+    path.write_text(json.dumps(config.to_dict()))
+    monkeypatch.setattr(sys, "argv", ["continuous", "--config", str(path), "--subject", "transformer",
+        "--joint-match", "B", "--batch", "1", "--prefill", "2", "--prefill-chunk", "1", "--decode", "1",
+        "--updates", "1", "--warmup", "0", "--seed", "84", "--output", str(output)])
+    assert continuous.main() == 0
+    record = json.loads(output.read_text())
+    assert record["comparison"]["kind"] == "joint" and record["comparison"]["joint_class"] == "B"
+    prefix = record["comparison"]["shared_input_prefix_width"]
+    expected = paired_input(1, 3, 64, 85)
+    assert record["comparison"]["tide_input_sha256"] == tensor_hash(expected)
+    assert record["comparison"]["shared_input_prefix_sha256"] == tensor_hash(expected[..., :prefix])
+    assert record["parameters"] == record["comparison"]["match"]["actual"]["parameters"]
+    assert record["observations"][0]["input_positions"] == 3
+
+
+
+@pytest.mark.parametrize("precision", ["fp32", "bf16"])
+def test_timed_restored_update_includes_flush_in_loss_and_backward(tmp_path, monkeypatch, precision):
+    torch.manual_seed(39)
+    model = TideModel(ModelConfig(topology=TopologyConfig(kind="multiscale", n=2, hubs=1,
+                    profile="compact-5-dd4", timing="timed"), d=64, memory="X", sharing="region_shared"))
+    optimizer = torch.optim.AdamW(model.parameters(), lr=1e-4)
+    x = torch.randn(1, 3, 64)
+    _, state, _ = run_stream(model, x, 2, 1, mode="train", precision=precision, optimizer=optimizer)
+    gradient_norms = []
+    original = TideModel.flush
+    def observed(current, pending, **kwargs):
+        result = original(current, pending, **kwargs)
+        if torch.is_grad_enabled():
+            result.values.register_hook(lambda gradient: gradient_norms.append(float(gradient.abs().sum())))
+        return result
+    monkeypatch.setattr(TideModel, "flush", observed)
+    record = checkpoint_resume(model, optimizer, state, x, precision, tmp_path/"timed.pt")
+    assert record["next_forward"]["exact"] and record["next_state"]["exact"]
+    assert record["next_flush_result"]["exact"]
+    assert len(gradient_norms) == 2 and all(value > 0 for value in gradient_norms)
+    assert all(window["flush_output_slots"] > 0 and
+               window["final_state_position"] > state.position+x.shape[1]
+               for window in record["update_windows"])
+    assert record["state"] in {"within_threshold", "finite_deviation"}

@@ -161,7 +161,7 @@ def test_qualification_retains_partial_stage_and_stops_after_first_execution_err
     import sys
     from scripts import check_placement
     calls = []
-    def fail(config, devices, precision, checkpoint, batch, length, steps, *, progress, transport):
+    def fail(config, devices, precision, checkpoint, batch, length, steps, *, progress, transport, phase_sync):
         calls.append(config)
         progress(dict(config=config.to_dict(), state="running", last_stage="update.1.placed.backward",
                       comparisons={"initial_whole": {"exact": True}}))
