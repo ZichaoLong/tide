@@ -39,12 +39,12 @@ def test_affine_prefix_against_sequential_formula_and_all_input_derivatives(leng
             torch.testing.assert_close(x, y, atol=3e-13, rtol=3e-13)
 
 
-def update(model, optimizer, state, inputs, precision="fp32"):
+def update(model, optimizer, state, inputs, precision="fp32", split=2):
     optimizer.zero_grad(set_to_none=True)
     x = inputs.clone().requires_grad_()
     with precision_context(x.device, precision):
-        first = model(x[:, :2], state)
-        second = model(x[:, 2:], first.state)
+        first = model(x[:, :split], state)
+        second = model(x[:, split:], first.state)
         results = [first, second]
         if not model.settle:
             results.append(model.flush(second.state))
@@ -102,6 +102,56 @@ def test_partial_recompute_prefix_checkpoint_restores_real_update(tmp_path, prec
     observations = []
     for m, opt, s in ((model, optimizer, state), (restored, ropt, rs)):
         following, grads, results = update(m, opt, s, inputs, precision)
+        observations.append(dict(state=following, gradients=grads, results=results,
+                                 parameters=m.state_dict(), optimizer=opt.state_dict()))
+    assert nested_comparison(*observations, atol=0, rtol=0)["exact"]
+
+
+@pytest.mark.parametrize("backend", ["incremental", "doubling"])
+@pytest.mark.parametrize("timing", ["settle", "timed"])
+def test_ssd_scan_candidates_preserve_shared_full_bptt_and_three_updates(backend, timing):
+    torch.manual_seed(556)
+    config = ModelConfig(topology=TopologyConfig(kind="multiscale", profile="compact-5-dd4",
+                         n=2, hubs=1, timing=timing), d=64, memory="X", sharing="layer_shared",
+                         region_batch_size=4, attention_backend="math", ssd_summary_backend="prefix")
+    reference = TideModel(config).double()
+    candidate = TideModel(replace(config, ssd_scan_backend=backend)).double()
+    candidate.load_state_dict(reference.state_dict())
+    optimizers = [torch.optim.AdamW(m.parameters(), lr=1e-4) for m in (reference, candidate)]
+    states = [None, None]
+    for _ in range(3):
+        # Two connected single-position calls exercise the direct recurrence
+        # in Settle; Timed also checks its expanded clock and pending messages.
+        x = torch.randn(1, 2, 64, dtype=torch.float64)
+        observations = []
+        for i, (m, opt) in enumerate(zip((reference, candidate), optimizers)):
+            states[i], grads, results = update(m, opt, states[i], x, split=1)
+            observations.append(dict(state=states[i], gradients=grads, results=results,
+                                     parameters=m.state_dict(), optimizer=opt.state_dict()))
+        report = nested_comparison(*observations, atol=2e-8, rtol=2e-7)
+        assert report["within_threshold"], report
+        assert not report["support_mismatches"], report
+
+
+@pytest.mark.parametrize("backend", ["incremental", "doubling"])
+@pytest.mark.parametrize("precision", ["fp32", "bf16"])
+def test_ssd_candidate_checkpoint_restores_actual_incremental_update(tmp_path, backend, precision):
+    torch.manual_seed(557)
+    config = ModelConfig(topology=TopologyConfig(kind="multiscale", profile="compact-5-dd4",
+                         n=2, hubs=1, timing="settle"), d=64, memory="X", sharing="region_shared",
+                         region_batch_size=4, ssd_summary_backend="prefix", ssd_scan_backend=backend)
+    model = TideModel(config)
+    optimizer = torch.optim.AdamW(model.parameters(), lr=1e-4)
+    state, _, _ = update(model, optimizer, None, torch.randn(1, 2, 64), precision, split=1)
+    path = tmp_path / "training.pt"
+    save_checkpoint(path, model, state=state, optimizer=optimizer)
+    restored, rs, slots = load_checkpoint(path)
+    assert restored.config == config
+    ropt = torch.optim.AdamW(restored.parameters()); ropt.load_state_dict(slots)
+    inputs = torch.randn(1, 2, 64)
+    observations = []
+    for m, opt, s in ((model, optimizer, state), (restored, ropt, rs)):
+        following, grads, results = update(m, opt, s, inputs, precision, split=1)
         observations.append(dict(state=following, gradients=grads, results=results,
                                  parameters=m.state_dict(), optimizer=opt.state_dict()))
     assert nested_comparison(*observations, atol=0, rtol=0)["exact"]

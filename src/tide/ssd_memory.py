@@ -31,7 +31,7 @@ class SSDState:
 
 class SSDMemory(nn.Module):
     def __init__(self, nodes, d, groups, rank, period, settle=True, backend="auto", chunk=128,
-                 *, short_decay=None, conv_stride=None, summary_backend="block"):
+                 *, short_decay=None, conv_stride=None, summary_backend="block", scan_backend="block"):
         super().__init__()
         if d < 32 or d % 32:
             raise ValueError("SSD width must be a positive multiple of 32")
@@ -48,6 +48,9 @@ class SSDMemory(nn.Module):
         if summary_backend not in ("block", "prefix"):
             raise ValueError("summary_backend must be block or prefix")
         self.summary_backend = summary_backend
+        if scan_backend not in ("block", "incremental", "doubling"):
+            raise ValueError("scan_backend must be block, incremental or doubling")
+        self.scan_backend = scan_backend
         self.input = NodeLinear(nodes, d, 2*d + 64 + self.heads, groups, rank)
         self.summary = NodeLinear(nodes, d, d//4, groups, rank)
         self.read = NodeLinear(nodes, d, d//4, groups, rank)
@@ -126,7 +129,8 @@ class SSDMemory(nn.Module):
             write = dt[..., None] * values.reshape(n, b, length, self.heads, 32)
             B = B[..., None, :].expand(n, b, length, self.heads, 32)
             C = C[..., None, :].expand(n, b, length, self.heads, 32)
-            reads, matrix = ssd_scan(decay, write, B, C, state.matrix, chunk_size=self.chunk)
+            reads, matrix = ssd_scan(decay, write, B, C, state.matrix, chunk_size=self.chunk,
+                                     backend=self.scan_backend)
             reads = reads.reshape(n, b, length, d)
             summaries = self._summaries(features.to(dtype), weight, times, state)
         short, long = summaries[..., 0, :-1], summaries[..., 1, :-1]

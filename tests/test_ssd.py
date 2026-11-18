@@ -28,10 +28,11 @@ def scan_inputs(length=45):
     return [x.requires_grad_() for x in (decay, values, B, C, initial)]
 
 
+@pytest.mark.parametrize("backend", ["block", "incremental", "doubling"])
 @pytest.mark.parametrize("chunk_size", [1, 7, 32])
-def test_scan_matches_recurrence_and_all_input_vjps(chunk_size):
+def test_scan_matches_recurrence_and_all_input_vjps(chunk_size, backend):
     inputs = scan_inputs()
-    actual = ssd_scan(*inputs, chunk_size=chunk_size)
+    actual = ssd_scan(*inputs, chunk_size=chunk_size, backend=backend)
     expected = recurrence(*inputs)
     for got, want in zip(actual, expected):
         torch.testing.assert_close(got, want, atol=1e-12, rtol=1e-12)
@@ -42,36 +43,68 @@ def test_scan_matches_recurrence_and_all_input_vjps(chunk_size):
         torch.testing.assert_close(got, want, atol=1e-11, rtol=1e-11)
 
 
-def test_scan_scalar_example_and_nonempty_continuation():
+@pytest.mark.parametrize("backend", ["block", "incremental", "doubling"])
+def test_scan_scalar_example_and_nonempty_continuation(backend):
     decay = torch.full((2, 1), .5, dtype=torch.float64)
     values = torch.ones(2, 1, 1, dtype=torch.float64)
     B, C = torch.ones_like(values), 3 * torch.ones_like(values)
-    reads, final = ssd_scan(decay, values, B, C, torch.zeros(1, 1, 1, dtype=torch.float64))
+    reads, final = ssd_scan(decay, values, B, C, torch.zeros(1, 1, 1, dtype=torch.float64), backend=backend)
     torch.testing.assert_close(reads.flatten(), torch.tensor([3., 4.5], dtype=torch.float64))
     torch.testing.assert_close(final, torch.full_like(final, 1.5))
     inputs = scan_inputs()
-    whole, terminal = ssd_scan(*inputs)
-    left, state = ssd_scan(*(x[..., :19, :] if i == 0 else x[..., :19, :, :]
-                             for i, x in enumerate(inputs[:4])), inputs[4])
-    right, state = ssd_scan(*(x[..., 19:, :] if i == 0 else x[..., 19:, :, :]
-                              for i, x in enumerate(inputs[:4])), state)
+    whole, terminal = ssd_scan(*inputs, backend=backend)
+    left, state = ssd_scan(*(x[..., :1, :] if i == 0 else x[..., :1, :, :]
+                             for i, x in enumerate(inputs[:4])), inputs[4], backend=backend)
+    right, state = ssd_scan(*(x[..., 1:, :] if i == 0 else x[..., 1:, :, :]
+                              for i, x in enumerate(inputs[:4])), state, backend=backend)
     torch.testing.assert_close(torch.cat((left, right), dim=-3), whole, atol=1e-12, rtol=1e-12)
     torch.testing.assert_close(state, terminal, atol=1e-12, rtol=1e-12)
+    roots = (torch.sin(torch.arange(whole.numel(), dtype=whole.dtype)).reshape_as(whole),
+             torch.cos(torch.arange(terminal.numel(), dtype=terminal.dtype)).reshape_as(terminal))
+    actual = torch.autograd.grad((torch.cat((left, right), -3), state), inputs, roots, retain_graph=True)
+    expected = torch.autograd.grad(recurrence(*inputs), inputs, roots)
+    for got, want in zip(actual, expected):
+        torch.testing.assert_close(got, want, atol=1e-11, rtol=1e-11)
 
 
-def test_scan_empty_and_absent_receptions():
+@pytest.mark.parametrize("backend", ["block", "incremental", "doubling"])
+def test_scan_empty_and_absent_receptions(backend):
     initial = torch.randn(2, 3, 4, dtype=torch.float64)
     empty = torch.empty(0, 2, dtype=torch.float64)
     reads, final = ssd_scan(empty, torch.empty(0, 2, 3, dtype=empty.dtype),
                             torch.empty(0, 2, 4, dtype=empty.dtype),
-                            torch.empty(0, 2, 4, dtype=empty.dtype), initial)
+                            torch.empty(0, 2, 4, dtype=empty.dtype), initial, backend=backend)
     assert reads.shape == (0, 2, 3) and final is initial
-    decay = torch.ones(5, 2, dtype=empty.dtype)
-    values = torch.zeros(5, 2, 3, dtype=empty.dtype)
-    B, C = torch.randn(5, 2, 4, dtype=empty.dtype), torch.randn(5, 2, 4, dtype=empty.dtype)
-    reads, final = ssd_scan(decay, values, B, C, initial)
-    torch.testing.assert_close(final, initial, atol=0, rtol=0)
-    torch.testing.assert_close(reads, torch.einsum("hvk,lhk->lhv", initial, C))
+    for length in (1, 5):
+        decay = torch.ones(length, 2, dtype=empty.dtype)
+        values = torch.zeros(length, 2, 3, dtype=empty.dtype)
+        B, C = [torch.randn(length, 2, 4, dtype=empty.dtype) for _ in range(2)]
+        reads, final = ssd_scan(decay, values, B, C, initial, backend=backend)
+        torch.testing.assert_close(final, initial, atol=0, rtol=0)
+        torch.testing.assert_close(reads, torch.einsum("hvk,lhk->lhv", initial, C))
+
+
+@pytest.mark.parametrize("backend", ["block", "incremental", "doubling"])
+@pytest.mark.parametrize("batch", [(), (2, 3)])
+def test_single_position_zero_decay_retains_all_root_derivatives(backend, batch):
+    generator = torch.Generator().manual_seed(1702)
+    shape = (*batch, 1, 2)
+    decay = torch.zeros(shape, dtype=torch.float64, requires_grad=True)
+    values, B, C = [torch.randn(*shape, width, dtype=torch.float64, generator=generator).requires_grad_()
+                    for width in (3, 4, 4)]
+    initial = torch.randn(*batch, 2, 3, 4, dtype=torch.float64, generator=generator).requires_grad_()
+    inputs = (decay, values, B, C, initial)
+    actual, expected = ssd_scan(*inputs, backend=backend), recurrence(*inputs)
+    roots = [torch.randn(x.shape, dtype=x.dtype, generator=generator) for x in actual]
+    for got, want in zip(actual, expected):
+        torch.testing.assert_close(got, want, atol=1e-12, rtol=1e-12)
+    got_grad = torch.autograd.grad(actual, inputs, roots, retain_graph=True)
+    want_grad = torch.autograd.grad(expected, inputs, roots)
+    for got, want in zip(got_grad, want_grad):
+        torch.testing.assert_close(got, want, atol=1e-11, rtol=1e-11)
+    # Forgetting the incoming state value does not remove the decay derivative.
+    assert torch.count_nonzero(got_grad[0]) == decay.numel()
+    assert torch.count_nonzero(got_grad[-1]) == 0
 
 
 def literal_conv(projected, mass, times, kernel, bias, state, stride):
@@ -183,6 +216,8 @@ def test_invalid_metadata_is_rejected():
     inputs = scan_inputs()
     with pytest.raises(ValueError, match="chunk_size"):
         ssd_scan(*inputs, chunk_size=64)
+    with pytest.raises(ValueError, match="backend"):
+        ssd_scan(*inputs, backend="unknown")
     with pytest.raises(ValueError, match="initial"):
         ssd_scan(*inputs[:4], inputs[4][..., :2])
     projected, mass, times, kernel, bias, state = conv_inputs()

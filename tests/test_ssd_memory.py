@@ -162,8 +162,9 @@ def evaluated(module, u, mass, times, owners, initial, control):
 
 @pytest.mark.parametrize("shared,settle", [(False, True), (True, True), (True, False)])
 @pytest.mark.parametrize("summary_backend", ["block", "prefix"])
-def test_full_binding_matches_independent_values_and_all_gradients(shared, settle, summary_backend):
-    args = fixture(shared, settle, summary_backend=summary_backend)
+@pytest.mark.parametrize("scan_backend", ["block", "doubling"])
+def test_full_binding_matches_independent_values_and_all_gradients(shared, settle, summary_backend, scan_backend):
+    args = fixture(shared, settle, summary_backend=summary_backend, scan_backend=scan_backend)
     module, u, mass, _, _, initial, _ = args
     actual, expected = evaluated(*args), literal(*args)
     assert_result(actual, expected)
@@ -175,14 +176,16 @@ def test_full_binding_matches_independent_values_and_all_gradients(shared, settl
 
 
 @pytest.mark.parametrize("summary_backend", ["block", "prefix"])
-def test_full_binding_split_continuation_values_raw_state_and_all_gradients(summary_backend):
-    module, u, mass, times, owners, initial, control = fixture(True, False, summary_backend=summary_backend)
+@pytest.mark.parametrize("scan_backend", ["block", "incremental", "doubling"])
+def test_full_binding_split_continuation_values_raw_state_and_all_gradients(summary_backend, scan_backend):
+    module, u, mass, times, owners, initial, control = fixture(True, False, summary_backend=summary_backend,
+                                                              scan_backend=scan_backend)
     whole = evaluated(module, u, mass, times, owners, initial, control)
-    left, ctx, state = module.prepare(u[:, :, :3], mass[:, :, :3], times[:, :, :3], owners, initial)
-    left_g = module.finish(ctx, control[:, :, :3])
-    right, ctx, state = module.prepare(u[:, :, 3:], mass[:, :, 3:], times[:, :, 3:], owners, state)
+    left, ctx, state = module.prepare(u[:, :, :1], mass[:, :, :1], times[:, :, :1], owners, initial)
+    left_g = module.finish(ctx, control[:, :, :1])
+    right, ctx, state = module.prepare(u[:, :, 1:], mass[:, :, 1:], times[:, :, 1:], owners, state)
     split = (tuple(torch.cat((a, b), 2) for a, b in zip(left, right)),
-             torch.cat((left_g, module.finish(ctx, control[:, :, 3:])), 2),
+             torch.cat((left_g, module.finish(ctx, control[:, :, 1:])), 2),
              state_values(state), decode_cache(state.conv))
     assert_result(split, whole)
     roots = inputs(module, u, mass, initial)
@@ -219,8 +222,10 @@ def test_full_uses_one_selected_pack_and_skips_output_work_without_control(monke
 
 
 @pytest.mark.parametrize("summary_backend,short_decay", [("block", None), ("prefix", None), ("prefix", 0.)])
-def test_idle_and_empty_windows_preserve_raw_state_with_large_logical_clock(summary_backend, short_decay):
-    module, u, mass, times, owners, initial, control = fixture(summary_backend=summary_backend, short_decay=short_decay)
+@pytest.mark.parametrize("scan_backend", ["block", "incremental", "doubling"])
+def test_idle_and_empty_windows_preserve_raw_state_with_large_logical_clock(summary_backend, short_decay, scan_backend):
+    module, u, mass, times, owners, initial, control = fixture(summary_backend=summary_backend, short_decay=short_decay,
+                                                              scan_backend=scan_backend)
     offset = 2**55
     initial.times = initial.times + offset
     initial.conv = ConvState(initial.conv.times + offset, initial.conv.values)
@@ -258,15 +263,17 @@ def test_idle_and_empty_windows_preserve_raw_state_with_large_logical_clock(summ
             torch.testing.assert_close(x, y, atol=2e-9, rtol=2e-10)
 
 
-def test_fp32_training_from_zero_matches_literal_for_three_optimizer_steps():
+@pytest.mark.parametrize("scan_backend,length", [("block", 5), ("doubling", 5), ("incremental", 1)])
+def test_fp32_training_from_zero_matches_literal_for_three_optimizer_steps(scan_backend, length):
     torch.manual_seed(91)
-    actual_module = SSDMemory(1, 32, None, 2, 1)
+    actual_module = SSDMemory(1, 32, None, 2, 1, scan_backend=scan_backend)
     expected_module = copy.deepcopy(actual_module)
     actual_optimizer = torch.optim.SGD(actual_module.parameters(), lr=.001, momentum=.8)
     expected_optimizer = torch.optim.SGD(expected_module.parameters(), lr=.001, momentum=.8)
     u = torch.randn(1, 2, 5, 32)
     mass = torch.tensor([[[.4, 0, .7, .1, 0], [.3, .5, 0, .6, 0]]])
     times = torch.tensor([1, 2, 4, 5, 8]).expand(1, 2, 5)
+    u, mass, times = u[:, :, :length], mass[:, :, :length], times[:, :, :length]
     owners, control = torch.tensor([0]), (mass > 0).to(u.dtype)
     initial = SSDState(torch.zeros(1, 2, dtype=torch.int64), torch.zeros(1, 2, 1, 32, 32),
                        torch.zeros(1, 2, 8), torch.zeros(1, 2, 8), torch.zeros(1, 2), torch.zeros(1, 2),

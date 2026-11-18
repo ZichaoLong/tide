@@ -55,6 +55,7 @@ def ssd_scan(
     initial: Tensor,
     *,
     chunk_size: int = 32,
+    backend: str = "block",
 ) -> tuple[Tensor, Tensor]:
     """Return all matrix reads and the final SSD matrix, without a state per row.
 
@@ -71,9 +72,19 @@ def ssd_scan(
     Direct products also handle a decay rounded to zero without log(0)/0/0.
     Nonzero passive decay, if selected, is included in ``decay`` by the caller.
     An absent reception uses decay=1 and write_value=0.
+
+    ``block`` retains cumulative products. ``incremental`` uses the direct
+    recurrence for L=1 and otherwise retains ``block``. ``doubling`` also uses
+    direct L=1, and replaces block cumulative products by multiplication at
+    doubling offsets. No variant divides by decay, preserving its derivative
+    even at zero. Doubling bounds each stage to the same block, but autograd
+    can retain O(chunk_size**2 * log(chunk_size)) products per head per block.
+    Candidate choice is explicit; device performance is shape dependent.
     """
     if not isinstance(chunk_size, int) or not 1 <= chunk_size <= 32:
         raise ValueError("chunk_size must be an integer between 1 and 32")
+    if backend not in ("block", "incremental", "doubling"):
+        raise ValueError("SSD scan backend must be block, incremental or doubling")
     if decay.ndim < 2 or write_value.ndim != decay.ndim + 1:
         raise ValueError("expected decay [..., L, H] and write_value [..., L, H, V]")
     if write_value.shape[:-1] != decay.shape or B.shape != C.shape:
@@ -89,6 +100,14 @@ def ssd_scan(
     length = decay.shape[-2]
     if length == 0:
         return write_value, initial
+    if length == 1 and backend != "block":
+        # Settle continuation often supplies one position. Avoid propagation,
+        # masks and packing, while keeping node/sample/head axes batched and
+        # the incoming state connected to the complete backward graph.
+        state = (decay[..., 0, :, None, None] * initial
+                 + write_value[..., 0, :, :, None] * B[..., 0, :, None, :])
+        reads = (state @ C[..., 0, :, :, None]).squeeze(-1).unsqueeze(-3)
+        return reads, state
 
     # Move heads ahead of time for the block matrix products.
     d, values = decay.transpose(-1, -2), write_value.transpose(-2, -3)
@@ -101,8 +120,18 @@ def ssd_scan(
         order = torch.arange(stop - start, device=decay.device)
         lower = order[:, None] > order[None, :]
         factors = torch.where(lower, a.unsqueeze(-1), 1)
-        propagation = factors.cumprod(-2).masked_fill(~(order[:, None] >= order[None, :]), 0)
-        prefix = a.cumprod(-1)
+        if backend == "doubling":
+            products = factors
+            offset = 1
+            while offset < stop - start:
+                products = torch.cat((products[..., :offset, :],
+                                      products[..., offset:, :] * products[..., :-offset, :]), -2)
+                offset *= 2
+            propagation = products.masked_fill(~(order[:, None] >= order[None, :]), 0)
+            prefix = propagation[..., :, 0] * a[..., :1]
+        else:
+            propagation = factors.cumprod(-2).masked_fill(~(order[:, None] >= order[None, :]), 0)
+            prefix = a.cumprod(-1)
         local = (torch.matmul(c, b.transpose(-1, -2)) * propagation) @ v
         carried = torch.matmul(c, state.transpose(-1, -2)) * prefix.unsqueeze(-1)
         outputs.append((local + carried).transpose(-2, -3))

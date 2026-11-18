@@ -57,6 +57,7 @@ class ModelConfig:
     checkpoint_regions: bool = False
     checkpoint_reception: bool = False
     ssd_summary_backend: str = "block"
+    ssd_scan_backend: str = "block"
     region_batch_size: int = 1
     local_attention_backend: str | None = None
     hub_allocation: str = "bounded"
@@ -69,6 +70,8 @@ class ModelConfig:
             raise ValueError("checkpoint_reception must be boolean")
         if self.ssd_summary_backend not in ("block", "prefix"):
             raise ValueError("ssd_summary_backend must be block or prefix")
+        if self.ssd_scan_backend not in ("block", "incremental", "doubling"):
+            raise ValueError("ssd_scan_backend must be block, incremental or doubling")
         if type(self.region_batch_size) is not int or self.region_batch_size < 1:
             raise ValueError("region_batch_size must be positive")
         if not isinstance(self.clock, ClockConfig):

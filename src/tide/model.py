@@ -104,7 +104,8 @@ class TideModel(nn.Module):
                 from .ssd_memory import SSDMemory
                 self.memories[kind] = SSDMemory(*args,**kwargs,short_decay=self.clock.short_decay,
                                                conv_stride=self.clock.ssd_stride,
-                                               summary_backend=config.ssd_summary_backend)
+                                               summary_backend=config.ssd_summary_backend,
+                                               scan_backend=config.ssd_scan_backend)
         rkeys = [(graph.region_ranks[r],tuple(sorted(set(graph.nodes[v].role for v in nodes))))
                  for r,nodes in enumerate(graph.regions)]
         fixed = self.fixed_regions
