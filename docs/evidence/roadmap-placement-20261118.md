@@ -217,6 +217,8 @@ checkpoint. Their current lifecycle, actual completed results and failures are
 owned by the [large-scale report](roadmap-scale-large-20261118.md), along with
 the one-NPU 9B A–D and CPU 17B workloads. No pending job is a capacity pass.
 
+All five final large-workload jobs are now terminal: 20 completed Tide/A–D inference comparison rows and 5 completed capacity rows, with 0 execution/nonfinite failures in this group. The CPU17B BF16 capacity row includes two real updates and finite/storage scans. Detailed mode, precision, memory and unmeasured-checkpoint boundaries remain in that report.
+
 At the current captured state, the 17B two-device BF16, FP32 inference rows completed with recorded `auto`→`host_stage`. This is actual large-shape inference evidence; it does not extend the small-model gradient/restore comparisons to 17B.
 
 The 9B four-device BF16, FP32 capacity rows completed two real continued updates each. Their actual gradients/moments, state advancement, finite scans and full wall times are in the large-scale report; no large reference or checkpoint qualification was performed.

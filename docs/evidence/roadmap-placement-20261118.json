@@ -8568,13 +8568,13 @@
       }
     }
   ],
-  "large_execution_updated_at_utc": "2026-11-18T05:06:02.805123+00:00",
+  "large_execution_updated_at_utc": "2026-11-18T05:27:51.962219+00:00",
   "large_execution": [
     {
       "identity": "scale-two-npu-hb-17b-v16",
       "source": "0992b467584c1f603314ed04d8efe8596a14f576",
       "workload_state": "passed",
-      "observed_at_utc": "2026-11-18T05:06:02.805123+00:00",
+      "observed_at_utc": "2026-11-18T05:27:51.962219+00:00",
       "wrapper_state": "passed",
       "result_files": [
         "artifacts/scale-two-npu-hb-17b-v16/bf16.json",
@@ -8587,7 +8587,7 @@
       "identity": "scale-four-npu-hb-9b-train-v16",
       "source": "0992b467584c1f603314ed04d8efe8596a14f576",
       "workload_state": "passed",
-      "observed_at_utc": "2026-11-18T05:06:02.805123+00:00",
+      "observed_at_utc": "2026-11-18T05:27:51.962219+00:00",
       "wrapper_state": "passed",
       "result_files": [
         "artifacts/scale-four-npu-hb-9b-train-v16/bf16.json",
