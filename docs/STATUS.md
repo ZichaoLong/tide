@@ -19,6 +19,12 @@ The four original untracked user documents are preserved and excluded from commi
   exact meta-only parameter partition budgets and corrected private-state bounds.
 - `6fc53d81`: finite whole-model capture probes, including compiler descendant
   supervision. `c8026e47`: observable resource waits before NPU admission.
+- `5059ff8f`: composite `matmul`/`linear` audit witnesses, without arithmetic changes.
+  `0992b467`: bounded capacity training with actual storage/finite scans and
+  complete wall time. This source passed all 424 CPU tests and the clean installed
+  wheel checks; [installed evidence](evidence/roadmap-installed-20261118.md) retains
+  the two finite FP32 restored-update deviations. `e967a02d` publishes the
+  reviewed Attention, sparse/shape/combinations and 0.5B/1B evidence.
 
 [Hotspot evidence](evidence/roadmap-hotspots-20261118.md) preserves adopted NPU
 compaction/query fusion and rejected full bucketing/extra gate-up fusion. The
@@ -68,19 +74,33 @@ stopped before backend invocation at a static-role tensor guard. This is an
 observed capture boundary, not proof that resident execution is impossible;
 no resident scheduler was implemented or qualified.
 
-Active: `representative-cpu-v5` (CPU32, cores 0–31); four
-`continuous-npu-{fc-k,fc-s,hb-multiscale-x-settle,hb-multiscale-x-timed}-v8`
-jobs (B1/B4, both precisions, three modes, Tide/A–D, 128 prefill + 8 decode,
-three continuing segments and actual restored updates).
-`scale-npu-hb-9b-v12` and `scale-two-npu-hb-17b-v12` wait for the CPU main
-matrix to release resources **before** device admission. Their weight
-initialization must not compete with that CPU timing.
+Active: `representative-cpu-v5` (CPU32, cores 0–31). Three NPU continuous
+programmes have completed; `continuous-npu-hb-multiscale-x-timed-v8` is finishing.
+They cover B1/B4, both precisions, three modes, Tide/A–D, 128 prefill + 8 decode,
+three continuing segments and actual restored updates.
 
-Next: finish the active matrices, measure 9B four-NPU training and 17B CPU
-capacity alternatives, run the compact CPU continuous matrix after a finite
-thread calibration, then integrate reviewed performance/continuation/backend
-reports and the final installed smoke/current CPU suite. All five workstreams
-are not yet complete; stage reports do not stop this task.
+The not-yet-computing scale/CPU jobs were superseded before device admission;
+original stop statuses and `superseded.json` remain in each old run. New jobs use
+fixed `0992b467`, with observed NUMA policy/affinity in `numa-policy.json`:
+
+| Job | Placement and sequencing |
+| --- | --- |
+| `continuous-cpu-v16` | NUMA 7, cores 280–295; finite 4/8/16-thread calibration, then compact B1/B4 Tide/A–D continuous matrix |
+| `attention-sites-cpu-v16` | NUMA 7, cores 280–311; waits for CPU continuous |
+| `scale-cpu-hb-17b-v16` | interleave NUMA 6/7, cores 240–303; waits for CPU Attention, calibrates 16/32/64 threads, then 17B A–D inference and two BF16 CPU updates |
+| `scale-npu-hb-9b-v16` | NUMA 4, cores 176–191; cooperative one-NPU A–D inference |
+| `scale-two-npu-hb-17b-v16` | interleave NUMA 4/5, cores 192–207; cooperative two-NPU inference |
+| `scale-four-npu-hb-9b-train-v16` | NUMA 5, cores 208–223; waits for two-NPU run, then four-NPU FP32/BF16 training, two continuing updates each |
+
+CPU17B admission checks global available RAM ≥700 GiB and each of NUMA 6/7
+free plus file LRU/reclaimable slab ≥210 GiB before the programme and again
+before training. Its sampled process-tree RSS bound is 384 GiB. These checks
+are margins, not reservations. Other jobs/users may still create contention.
+
+Next: finish these actual runs, investigate execution failures within the finite
+scope, integrate reviewed comparison/continuation/placement/capacity evidence,
+and complete the handoff and artifact review. All five workstreams are not yet
+complete; stage reports do not stop this task.
 
 ## Capacity and resources
 
@@ -94,7 +114,7 @@ AdamW persistent storage, so even all five layers on separate 60 GiB devices
 cannot train it under current layer placement. CPU memory is a feasible
 alternative; no unrun capacity point is a pass.
 
-Latest preflight: about 43 GiB account use / 300 GiB soft / 700 GiB hard;
+Latest preflight: about 44 GiB account use / 300 GiB soft / 700 GiB hard;
 about 1.3 TiB disk and 1.8 TiB host memory available. Public environments,
 reference and downstream repositories remain unchanged. Private environment:
 `ascend/dev-workspace-9.2.0`, Torch2.12/TorchNPU2.12.post3/CANN9.2.
