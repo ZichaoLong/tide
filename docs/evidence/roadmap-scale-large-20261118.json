@@ -42260,7 +42260,7 @@
   },
   "frozen_source_validation": {
     "source": "0992b467584c1f603314ed04d8efe8596a14f576",
-    "checked_at_utc": "2026-11-18T05:15:14.457155+00:00",
+    "checked_at_utc": "2026-11-18T05:36:01.081517+00:00",
     "source_file_sha256": {
       "benchmarks/attention_sites.py": "e88de18a025ac0d238dd177aaa23d964c8a95da965ae7925acc6eaa0f248d621",
       "benchmarks/baselines.py": "8f37361c0690299d70264bf632825774591563b44f34789c17a8b2c43ccd926a",
@@ -42335,7 +42335,8 @@
         "mathematics_files_checked": 108,
         "state": "passed"
       }
-    ]
+    ],
+    "review_note": "All five final archives were rechecked after train-v20 completed; replaces an earlier snapshot timestamp carried forward when the final job was added."
   },
   "terminal_cpu_artifact_review": {
     "state": "reviewed_terminal_cpu17b",
