@@ -8,14 +8,16 @@ The instance product is a continuing route; the general graph foundation is a
 separate future direction. [Project scope](docs/project-scope.md) records that
 agreement and how semantic cycles change.
 
-- [Current status](docs/STATUS.md) / [next work programme](docs/ROADMAP.md)
+- [Current status](docs/STATUS.md) / [current backlog](docs/ROADMAP.md)
 - [Use, train and continue](docs/instances.md) / [clean development](docs/development.md)
 - [Documentation map](docs/README.md) / [architecture](docs/architecture.md)
 - [Adopted semantics](docs/semantics.md) / [precision](docs/precision.md)
 - [Four joint Transformer comparisons](docs/benchmark-contract.md)
-- [Measured FP32 results](docs/evidence/instances-fp32-20261118.md)
+- [Source-scoped numerical, performance and continuation evidence](docs/evidence/README.md)
 - [Applicable performance experience](docs/performance-lessons.md)
 
-The package is `tide-instances`, imported as `tide`. FP32 CPU/single-NPU evidence
-exists; BF16 is an agreed next delivery target, not yet a qualification claim.
+The package is `tide-instances`, imported as `tide`. CPU/NPU FP32 and explicit
+BF16 paths have been exercised, including training and restored updates. The
+linked evidence retains finite numerical deviations and cross-precision support
+differences; completed execution does not imply identical optimization trajectories.
 Retired implementation cycles are available only through explicit [historical lookup](docs/history.md).

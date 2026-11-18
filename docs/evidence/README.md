@@ -6,6 +6,8 @@ The five-workstream implementation has separate source-scoped records:
 - [Three Attention families and actual operator witnesses](roadmap-attention-20261118.md).
 - [Sparse, shape and useful-combination comparisons](roadmap-supplementary-20261118.md).
 - [Actual 0.5B/1B four-class scale comparisons](roadmap-scale-small-20261118.md).
+- [9B/17B scale and actual capacity](roadmap-scale-large-20261118.md), including the explicitly pending CPU17B work at this stage.
+- [Multi-NPU placement, transport failures and corrected launch environment](roadmap-placement-20261118.md).
 - [Initial precision and rounded-allocation diagnosis](roadmap-numerics-initial-20261118.md),
   then [continued VJP, repeated backward and restored updates](roadmap-numerics-followup-20261118.md).
 - [Bounded whole-model capture boundary](roadmap-resident-20261118.md).

@@ -12,8 +12,8 @@ The current source is `src/tide`, tests `tests`, comparisons `benchmarks`, confi
 | Accepted work, stages, acceptance and stopping | [ROADMAP](ROADMAP.md) |
 | Adopted mathematics / where implemented | [semantics](semantics.md), [semantic map](semantic-map.md), [architecture](architecture.md) |
 | Public API, configuration, training, state | [instances](instances.md) |
-| Requested precision and numerical policy | [precision](precision.md) |
-| Four joint matches, work counts and timing | [benchmark contract](benchmark-contract.md) |
+| Arithmetic policy and recorded numerical scope | [precision](precision.md) |
+| Four joint matches, work counts and timing | [benchmark contract](benchmark-contract.md), [runnable comparisons](benchmarking.md) |
 | Environment, checks, durable execution | [development](development.md), [verification](verification.md), [execution](execution-flows.md) |
 | Measured results and applicable experience | [evidence](evidence/README.md), [performance lessons](performance-lessons.md) |
 | Downstream requests and acceptance | [collaboration](downstream-contract.md) |
