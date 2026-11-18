@@ -177,3 +177,7 @@ python -m scripts.check_training_paths \
   --candidate-overrides '{"qkv_mask":{"reception_qkv_backend":"fused","reception_mask_padding":true},"optimized":{"region_batch_size":4,"reception_qkv_backend":"fused","reception_mask_padding":true,"ssd_scan_backend":"doubling"}}' \
   --output-dir NEW-reception-paths
 ```
+
+后续的[最终集成、隔离安装与后端证据](reception-validation-20261118.md)另行记录
+`1fbe15c9` 的完整 CPU/新 wheel/static_view，以及 `1553b301` 的 BF16 与双 NPU 路径。
+其中活动支持和恢复更新的原超差分别保留，不改变本页三种 FP32 小图的限定结论。
