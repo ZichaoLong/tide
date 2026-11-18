@@ -4,7 +4,13 @@
 仍有明显性能差异。训练优先 FP32，BF16 保留为次选；约定归属
 [project scope](project-scope.md)，可运行设置见[训练建议](execution-recommendations.md)。
 
-这里整理已有证据，没有重跑模型。计算流程核对于 `b83e8187` 的生产实现，数学固定
+本轮新增的三种接收、FP32 百步训练及 A–D 对照在
+[Reception 训练表](evidence/reception-training-20261118.md)；9B/17B 常驻首输出与缓存增量在
+[连续推理表](evidence/reception-inference-20261118.md)。SSD 扫描公式、真实设备任务和
+0.5B 双边成本归因见[性能报告](evidence/reception-performance-20261118.md)。
+下文较早的全拓扑结果保留原身份，供拓扑与活跃量的横向参考。
+
+这里整理各自冻结的已有证据。计算流程对应当前生产 tree `539c5eb1`，数学固定
 `4f5b9f20a4030d68ee66ae2d26e34659a5e37234`。下面每组数据保留原测量提交，
 不能把较早实现的全拓扑矩阵称为当前 HEAD 重测，更不能把不同 B/L 排成同条件名次。
 
@@ -49,7 +55,7 @@ FC-S 参数较少，却在该点慢于 FC-K：两个配置的 Full 比例、记�
 不能仅凭参数数目预测吞吐，也不能从此表单独归因 SSD 的耗时占比。
 各模式、A–D、原样本、峰值和设备身份见[代表矩阵](evidence/roadmap-representative-20261118.md)。
 
-## 扩大窗口与最新连续训练
+## 扩大窗口与二十步训练参照
 
 先看较早 FP32 长度搜索。同一组固定 B，改变 L；每点独立进程、一预热三采样，
 每步私有状态清零。源码 `f486a56ed7b6f68e2aff2e7100673bf2a2fe20be`。
@@ -72,7 +78,7 @@ FC-S 参数较少，却在该点慢于 FC-K：两个配置的 Full 比例、记�
 四次更新后为 254.190M。[原始搜索与四类对照](evidence/capacity-search-20261118.md)
 保留每点活动变化、波动和完整命令。
 
-最新训练组合使用 `region_batch_size=4`、`checkpoint_reception=true`、
+上一组二十步训练组合使用 `region_batch_size=4`、`checkpoint_reception=true`、
 `ssd_summary_backend=prefix`，整区域重算关闭。下表是真实保留历史的 20 次更新，
 吞吐按更新 3–20 的总输入位置/总 `complete_seconds`；峰值取全部 20 步。
 
@@ -89,9 +95,10 @@ Settle/Timed 来源 `22527cf472fc4d6ea9ca7ce22528b7e4ca9cc96a`；0.5B 来源
 均在原阈值内；独立进程也实际完成 20→21 更新，后者没有原 owner 对照，不是额外
 轨迹等价通过。[连续记录](evidence/training-continuous-20261118.md)保留原数值限制。
 
-FC 新的大 batch 连续训练点是 **BF16** B128/L256、38,248.5 输入位置/s；
-它现在作为次选参考保留，不能当作 FP32 结果。FC FP32 可从上述 B8/L512 设置起步，
-但尚无与该大 batch BF16 点对应的新 FP32 20 更新容量选择。
+这组较早的 FC 大 batch 连续训练点为 **BF16** B128/L256、38,248.5 输入位置/s，
+保留为次选参考。本轮已另完成 FP32 B128/L256 的100更新：30,333.2输入位置/s，
+allocated/reserved 为37.36/39.58GiB，配对恢复更新阈内；见[新训练证据](evidence/reception-training-20261118.md)。
+两条记录的源码、精度及更新步数不同，不把其比值称为纯精度切换收益。
 
 本机每卡 64 GiB；48 GiB 是实验的 sampled allocated 预算，不含 reserved 和 Torch 外
 占用，也非硬显存隔离。较新准入快照的设备外占用约 2.8–3.3 GiB，不是运行峰值。
@@ -111,8 +118,9 @@ FC 新的大 batch 连续训练点是 **BF16** B128/L256、38,248.5 输入位置
 | HB-X 1B | 976.769 | 279.603 | 848/5、256 | 18.499% | 5.706 | 18.200 |
 
 这张短窗口表主要暴露参数持有、调度与小矩阵成本，不代表充分扩大 B/L 后的训练速度。
-0.5B HB 比 1B HB 窄且节点更多，不能从两行排序推断“模型越大越快”。0.5B 的最新
-L128 连续训练为上表 96.08，B/L、状态和实现都变了，不能把比值全归给某个优化。
+0.5B HB 比 1B HB 窄且节点更多，不能从两行排序推断“模型越大越快”。0.5B 的上一组
+B1/L128 连续训练为上表96.08，本轮B4/L128百步为267.40；B/L、状态和实现都变了，
+不能把比值全归给某个优化。
 详情及 A–D 见[规模记录](evidence/roadmap-scale-small-20261118.md)。
 
 9B/17B 也有实际 FP32 更新，但目前只是两步容量记录：HB Multiscale-X、d768、
@@ -203,6 +211,41 @@ self-attention；默认 `source_residual` 没有这项入度平方计算。
 实际张量按每区最大入度 Emax 补齐；零质量遮罩保护数学含义，并不保证所有接收投影
 都跳过这些零边。见 [reception.py](../src/tide/reception.py)。
 
+三种 incoming 绑定在上述逐边 MLP 之前，对同一接收节点、同一样本、同一接收逻辑时刻θ的
+入边做 self-attention。令 \(x_e=N(y_e)+e^{SA}_{v,k_e}\)，对每个宽32的头：
+
+\[
+q_e=Q_vx_e,\quad \kappa_e=K_vx_e,\quad \upsilon_e=V_vx_e,\qquad
+h_e=\frac{\sum_f a_f\exp(q_e^\top \kappa_f/\sqrt{32})\upsilon_f}
+          {\sum_f a_f\exp(q_e^\top \kappa_f/\sqrt{32})},
+\]
+\[
+\widetilde y_e=y_e+O_v\operatorname{ConcatHeads}(h_e).
+\]
+
+随后以 \(\widetilde y_e\) 代替第一式的 \(y_e\)，再做逐边残差 MLP 和按 \(a_e\)
+的最终加权聚合。空分母使用声明的零约定；light64/light128 的 Attention 总宽为64/128，
+逐边 MLP 仍为d/8，wide的两者宽度均为d。接收 Attention 轴为入边，区域 Attention
+轴为同区节点，KV Attention 轴为历史原时刻，这三种形状不能混成一个站点。
+
+```python
+# 保留接收节点 × sample × time 的独立批量轴，Attention只混入边
+x = norm(messages) + sa_source_embedding
+q, k, v = Q_v(x), K_v(x), V_v(x)
+mixed = weighted_self_attention(q, k, v, prior=edge_strength)
+y = messages + O_v(concat_heads(mixed))
+messages = y + B_v(silu(A_v(norm(y)) + mlp_source_embedding))
+received, content = weighted_edge_mean(messages, edge_strength)
+```
+
+Q/K/V/O/A/B是各用途独立的有效节点矩阵；共享时由共享基座及各自私有适配器组成。
+SA与MLP来源嵌入也是两套，均按声明的参数归属持有。
+
+融合QKV减少投影调用，但当前每次还会拼接权重；结构mask仅排除不存在的边，真实
+零质量边的导数域保留。二者都是同一接收数学内的执行选项，不能自动改选Agg。
+[接收执行说明](reception-execution.md)给出接口和零质量边界，
+[实测](evidence/reception-performance-20261118.md)保留融合变慢或峰值增大的形状。
+
 ### 2. K 记忆：未选中 Full 也要写 KV 和算描述
 
 准备阶段对候选计算 `KV(N(u))` 和 `p=W_pN(u)`（p 宽 d/4），使用原始 int64 时刻
@@ -269,6 +312,13 @@ Y=(CB^\top\odot P)V+\operatorname{diag}(\prod_{k\le i}a_k)CH_{in}^\top.
 
 它对长度 T 的时间轴用 ⌈log₂T⌉ 个批量合成阶段，避免摘要也生成块内成对传播矩阵；
 Timed 的 T=LP，没有替换完整矩阵 SSD。
+
+本轮另加入 `ssd_scan_backend=incremental/doubling`：L=1直接执行上面的矩阵递推，
+省去块内成对传播；doubling 对长块的乘积P使用有界乘法树，替换原block里的cumprod。
+不使用逆衰减或log差，保留零衰减导数及块边界矩阵状态；其反向保存可能更多。
+NPU L256 基元前向约32.32→5.03ms，完整小模型FP32训练吞吐约+19.25%，两种
+计时边界分别保留，不能把局部倍数套给全模型。公式、全部根VJP与设备任务见
+[SSD证据](evidence/reception-performance-20261118.md)。
 见 [ssd.py](../src/tide/ssd.py)、[ssd_memory.py](../src/tide/ssd_memory.py)。
 
 ### 4. 区域描述、Attention 与强度分配
@@ -352,7 +402,7 @@ A/B 分别为近节点 block 数×近总/实际活跃参数，C/D 为近层数�
 合法合批是 Tide 的结构优势，不应为了比较禁用；四类匹配都没有保证逐边工作、矩阵形状、
 算术量、历史访问或关键路径相同。Transformer 也不是已经证明的全局最优。
 
-较新的 FP32 零态完整训练对照（源码 `2c011b8a…`，两预热五采样、Transformer chunk256）：
+上一组 FP32 零态完整训练对照（源码 `2c011b8a…`，两预热五采样、Transformer chunk256）：
 
 | 配置 | B/L | Tide 秒 | A 秒 | B 秒 | C 秒 | D 秒 |
 |---|---|---:|---:|---:|---:|---:|
@@ -368,7 +418,15 @@ Settle 对 A/B 耗时约 4.77/4.83 倍，Timed 约 3.49/3.50 倍。另一方面�
 
 ### 已测成本证据
 
-最完整的算子/内存归因点目前是 **Settle-X BF16 B8/L256**，188 节点、9 层、15.694M
+本轮已经补齐小型FP32与0.5B FP32的双方同步阶段诊断和真实Ascend设备trace。
+0.5B B1/L128的Tide普通完整更新1.3437s；另一次侵入式前向0.7773s中，allocation
+为0.2153s（该诊断前向27.69%）、gather约69.8ms、packing约64.5ms、SSD矩阵约36.6ms。
+其K查询执行行约为选中行5.25倍。Transformer A有1712串行层，trace硬件首末跨度
+14.96s而kernel区间并集1.78s，支持存在显著调度间隙；这些不是正常时间的可加占比。
+[本轮性能归因](evidence/reception-performance-20261118.md)保存具体形状、原样本、
+双方operator、source和设备身份；不同规模的A/B与Tide胜负确实不同。
+
+下表是较早的 **Settle-X BF16 B8/L256** 机制见证，188节点、9层、15.694M
 参数；它解释计算机制，不能充当 FP32 成本百分比。来源分别为 `d5c7f30b`、`ae247dee`，
 Transformer 候选为 `007a3828`。正常时间与侵入式诊断严格分开。
 
@@ -387,7 +445,7 @@ serial 有 270,583 次 Full，约占 candidate slots 的 70.28%；K 的 147,703 
 约 123G，约为其 3.8 倍，且还没计 Attention、普通 regional Linear、SSD、归一化或反向。
 这不是完整 FLOPs 统计，也不是“理论必慢 3.8 倍”，却足以否定“近参数就应近计算量”。
 
-另外一次同步侵入式观察中，新组合的矩阵 SSD 为 0.25349s、向量摘要 prefix 为
+另外一次同步侵入式观察中，该较早组合的矩阵 SSD 为 0.25349s、向量摘要 prefix 为
 0.01018s、allocation 为 0.09314s、messages.gather 为 0.06982s。
 反向 0.64914s 内含 Reception 重算 0.13345s，不能再把重算加一次。
 实际设备 trace 的 128 次 Cumprod 累计 233.860ms，任务类型是 **KERNEL_AICPU**，
@@ -400,7 +458,8 @@ serial 有 270,583 次 Full，约占 candidate slots 的 70.28%；K 的 147,703 
 ### 分块与重算已经用了什么，还能改什么
 
 当前 K 有窗口/query tile 和 native/fusion/tiled Attention；SSD 有 32 长度块与边界
-矩阵 carry，向量摘要另有 prefix；训练还有 Reception 局部重算及可选整区域重算。
+矩阵 carry，向量摘要另有 prefix，矩阵传播可选doubling、单位置用直接递推；
+训练还有 Reception 局部重算及可选整区域重算。
 这些避免某些大中间张量，却不能像 Attention 那样自动消除逐边接收或区域求解。
 Flash 类优化的前提是相应数学、prior/零质量导数、mask 和后端支持，而非任何矩阵都
 可以用一个 Flash Attention 调用替代。
@@ -415,10 +474,12 @@ Flash 类优化的前提是相应数学、prior/零质量导数、mask 和后端
 Transformer 自身 query chunk128→256 也使 A/B 在成本实验中减少约 19–21% 时间，
 而提前 contiguous 没有一致收益，说明双方批量粒度都需要实测。
 
-后续可研究完整矩阵 SSD 的传播/扫描、动态索引与 padding、allocation 融合和专用反向。
-目前暂缓是因为还需覆盖零质量/零衰减、原时钟、全部梯度及续接；现有 trace 也不能
-直接给出端到端收益上界，不是已经证明没有优化空间。FP32 应优先承担后续真实训练
-测量，BF16 成本见证不能替代它。具体有限候选归属 [ROADMAP](ROADMAP.md)。
+矩阵扫描的doubling优化与单位置直接递推已在本轮实施并测量；可选static_view也已减少适用静态
+owner的参数物化，9B持续decode观察到约9.5%吞吐收益而峰allocated基本不变。
+剩余明确方向是分配的小算子/同步、按有效查询行分桶以减少padding，以及索引梯度归并。
+分桶会增加launch，专用分配反向要保留解面和零质量导数，不能仅由trace推算净收益。
+这些方向仍需独立公式、全部梯度及续接检查，不是已证明没有优化空间。具体机会归属
+[ROADMAP](ROADMAP.md)；各候选继续保留，未做未经测量的全局默认替换。
 
 ## 复核入口与限制
 

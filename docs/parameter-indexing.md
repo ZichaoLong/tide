@@ -48,3 +48,10 @@ inference-mode warmup、训练及重算使用；缓存中没有投影权重或�
 依旧动态读取，所以这个局部数字不代表完整模型降峰或吞吐收益。相关独立公式、
 VJP、更新、续接和恢复检查位于 `tests/test_parameter_views.py`；硬件结果以冻结
 运行记录为准，该候选不是新的默认性能或数值资格声明。
+
+[单卡 FP32 路径证据](evidence/reception-validation-20261118.md#fp32-static_view-路径)
+单独改变 gather/views（两者 region batch1）：推理 exact、两次 VJP 原阈值内，
+三次更新仍有逐步扩大的有限超差；support、int64 和工作计数一致，各自新进程
+恢复更新阈内。内部见证达到 capture_limit，尚未建立全部差异的因果解释。
+大参数常驻推理的时间和内存取舍见[推理实测](evidence/reception-inference-20261118.md)，
+不能用静态少分配量直接推定吞吐收益。

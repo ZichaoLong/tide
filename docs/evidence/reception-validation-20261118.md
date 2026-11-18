@@ -187,3 +187,25 @@ wheel 安装 `tide` 包。测试、安装和各个硬件点分别给出资格，
 公共工具链、参考仓库和下游未修改，本页不声明下游发布/验收。
 完整模型仍是 PyTorch；[LibTorch 区域评分切片](native-regional-performance-20261118.md)
 沿用自己的原资格。不同数学模型的性能对照及各模式建议由单独证据负责。
+
+## 交付跟进核对
+
+五个实测FP32训练预设及公开入口的后续定向检查为 **34 passed，9.32秒**。
+测试在工作区执行，相关文件逐字节核对为提交 `ffeca387`；完整命令、14份被测文件
+身份、JUnit和日志SHA保存在JSON的`delivery_followup.preset_targeted_check`。
+之后BF16 preset仅删去已经过时的跨精度吞吐描述，未修改其模型、运行或测量记录。
+这不是将783全套重标成后来HEAD的另一轮全套。
+
+三项NPU独立缓存诊断的原始时间、逐owner写入/保留集合、实际淘汰和SSD/Conv/pending
+检查均通过，具体配置和容量填满/窗口淘汰的区别见[推理证据](reception-inference-20261118.md)。
+它们是正常性能运行之外的诊断，不反向认证所有大模型bank均填满。
+
+本轮52个已提交作业均已终态：外层50 passed、2 failed。两项原失败分别为首轮CPU
+集成与BF16接收微测；前者有修复后的冻结全套，后者保留21个数值超差，不能改写成
+全部通过。所有相关服务MainPID为0、没有仍存活的已记录PID/start后代；失败服务的
+failed状态保留。全部冻结归档常规文件与各自Git提交一致，四份用户文件哈希未改变。
+原记录中的dirty标记原样保留，另用归档字节核对建立实际冻结源身份。
+
+最终生命周期/配额/固定数学与被测文件身份随`delivery_followup`保存；完整原始审核
+位于`artifacts/agg-inference-preflight-20261118/release-audit.json`。源码/文档提交与测量
+身份分别记账。没有清理checkpoint、trace、冻结源、wheel或复现环境，也没有下游写入。

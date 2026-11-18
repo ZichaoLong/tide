@@ -3,9 +3,11 @@
 Install `tide-instances` from this checkout; import `tide`. Mathematics is fixed
 at the revision in [upstream.json](upstream.json). No retired executor is used.
 Current CPU/NPU FP32 and BF16 observations, including retained support and
-finite numerical deviations, are in the [numerical evidence](evidence/roadmap-numerics-followup-20261118.md).
-Use the explicit [precision policy](precision.md): FP32 parameters with BF16
-matrix arithmetic under `precision_context`, rather than casting the whole model.
+finite numerical deviations, are indexed by [STATUS](STATUS.md) and the
+[source-scoped evidence](evidence/README.md). Actual training prioritizes FP32.
+Use the explicit [precision policy](precision.md): `precision_context(device, "fp32")`
+selects FP32. Optional `"bf16"` keeps FP32 parameters while selecting BF16 matrix
+arithmetic; it does not cast the whole model to BF16.
 CPU FP64 supports bounded accuracy diagnosis. FP16 is outside this cycle.
 
 Execution candidates are explicit `ModelConfig` options: `region_batch_size`

@@ -1,5 +1,17 @@
 # Current evidence
 
+The Reception, FP32 training and resident-inference cycle is recorded in:
+
+- [Starting cost and SSD measurements](reception-start-20261118.md).
+- [Three Reception profiles, numerical deviations and actual restored updates](reception-numerics-20261118.md).
+- [SSD/Reception candidates, memory tradeoffs and two-sided device cost attribution](reception-performance-20261118.md).
+- [One hundred FP32 updates, capacity and joint A–D inference/grad-forward/training](reception-training-20261118.md).
+- [Resident large-model inference, regional execution and uninterrupted streams](reception-inference-20261118.md).
+- [Integrated CPU, installed wheel, secondary BF16 and placed-path qualification](reception-validation-20261118.md).
+
+Each report keeps its actual source and workload. Finite numerical and support
+deviations remain attached to the original comparisons.
+
 The training-default, numerical-path and cost-attribution cycle is recorded in:
 
 - [Finite budget searches, pure batching/recomputation and new training candidates](training-search-20261118.md).

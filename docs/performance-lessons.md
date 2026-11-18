@@ -132,3 +132,41 @@ These observations are scoped to [search](evidence/training-search-20261118.md),
 [continuous training](evidence/training-continuous-20261118.md) and
 [other modes](evidence/training-modes-20261118.md). Cross-path activity changes
 and retained numerical failures prevent strict equal-trajectory speedup claims.
+
+## Reception and SSD, 2026-11-18
+
+- A short matrix-state scan can spend more time in a device Cumprod than in
+  its matrix products. Bounded doubling removed 128 observed Ascend AICPU
+  Cumprod tasks, with about 19% higher complete FP32 throughput at the selected
+  small point. More multiplication tasks and saved intermediates remain;
+  primitive gains and memory savings cannot be assumed to scale together.
+- A structural Reception mask can enable native fusion while preserving real
+  zero-strength derivatives, yet the measured FP32 padded microcases became
+  slower and larger. QKV fusion helped light64 more than the wider profiles.
+  Keep per-site shape and whole-model evidence separate.
+- Static complete owner order can avoid parameter gather materialization.
+  A possible-owner superset is insufficient; repeated/nonconsecutive rows and
+  dynamic Full must retain gathers. Cached metadata must survive inference-mode
+  initialization before training, without caching weights or activations.
+- Near-equal parameters/blocks need not imply near-equal physical work. The
+  0.5B point had K packing execute about 5.25 times its selected rows, while
+  Transformer A had 1712 narrow sequential blocks. Both packing and launch gaps
+  are concrete opportunities; neither model's entire gap is just Attention.
+- At the 17B inference point, serial region batch1→4 changed one Full action,
+  whereas batch4 serial→per_device retained identical recorded work, packing,
+  output support and time hashes. The latter observed about 64% higher decode
+  throughput across different physical-card pairs. Separate batching from
+  concurrency before attributing an activity change to threading.
+- Static views gave about 9.5% higher 9B B1 sustained decode throughput with
+  essentially unchanged allocated peak and slightly higher reserved peak.
+  Cumulative eliminated index outputs are neither peak memory nor measured
+  hardware bandwidth; the candidate also caches static IDs. Source/card scope
+  and separate training deviations remain part of that observation.
+- Profiler kernel-interval unions and synchronized stage observations describe
+  their intrusive runs. Never add nested events, or divide them by ordinary
+  timing to manufacture a normal-run utilization percentage.
+
+These results and their negative candidates are scoped in
+[Reception/SSD costs](evidence/reception-performance-20261118.md),
+[parameter indexing](parameter-indexing.md), [resident inference](evidence/reception-inference-20261118.md)
+and the separate [continuous training](evidence/reception-training-20261118.md) record.

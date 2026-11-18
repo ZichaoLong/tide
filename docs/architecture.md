@@ -24,6 +24,7 @@ separate responsibilities but no compulsory universal intermediate representatio
 | four joint matches and actual touched-parameter accounting | benchmarks/matching.py, benchmarks/statistics.py | test_benchmark_contract.py |
 | real incremental KV, continuation and fresh-process restored timing | benchmarks/continuous.py, benchmarks/restore.py | test_continuation.py, test_restore_benchmark.py |
 | complete resident inference schedules, bounded activity and matched layer placement | benchmarks/inference.py, benchmarks/streaming_audit.py, benchmarks/transformer_placement.py | test_inference_benchmark.py |
+| independent KV eviction, original-time and SSD/Conv metadata observer | benchmarks/cache_metadata.py, scripts/check_inference_cache.py | test_inference_cache.py |
 | bounded common/budget searches and separate memory lifetime ledger | benchmarks/search.py, benchmarks/variants.py, benchmarks/memory_ledger.py | test_search.py, test_variants.py, test_memory_ledger.py |
 | restored-anchor training cost, actual device trace and baseline candidates | benchmarks/costs.py, benchmarks/stages.py, benchmarks/cost_report.py | test_costs.py |
 | fixed nonempty training-state path comparisons and first Attention mode witness | scripts/check_training_paths.py, scripts/diagnose_attention_modes.py | test_training_paths.py, test_attention_mode_diagnosis.py |

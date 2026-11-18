@@ -68,3 +68,14 @@ is verified separately from later documentation and harness commits. The
 [continuous training](evidence/training-continuous-20261118.md) retain finite
 and structural comparison failures; installed completion and test counts never
 erase those failures or certify arbitrary configurations.
+
+The [Reception integration record](evidence/reception-validation-20261118.md)
+adds 783 CPU tests on frozen `1fbe15c9`, an isolated installed wheel, BF16 and
+actual two-NPU paths, and optional static parameter indexing. Production
+`src/tide` tree identity is `539c5eb15176827ca14a19c7de82f08df5b6c1d1`.
+Later cache diagnostics and preset checks retain their own source and counts;
+they do not relabel that frozen full-suite result. The independent
+[cache-time observer](inference-benchmark.md#独立缓存时间与淘汰诊断) checks actual
+positive writes, retained time sets and eviction separately from normal timing.
+Its tested hardware scope belongs to the
+[resident-inference evidence](evidence/reception-inference-20261118.md).

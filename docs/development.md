@@ -51,18 +51,21 @@ outside the checkout with `PYTHONPATH` removed and Python `-I`. Check that loade
 Use project artifact directories for build/install outputs; keep the frozen input
 unchanged and the shared baseline read-only.
 
-The [current installed-wheel report](evidence/capacity-installed-20261118.md) fixes
-production source `8a22530d`, checks 21 package files/modules, and exercises optional
-bindings, batching/recomputation and logical CPU placement with actual new-process
-fourth updates. Batched FP32/BF16 updates are exact; placed FP32 is within the original
-tolerance and placed BF16 retains finite gradient/update deviations. The original
-harness exit2 and corrected classification are recorded separately.
+The [current integration and installed-wheel report](evidence/reception-validation-20261118.md)
+fixes source `1fbe15c9`, verifies 21 installed/loaded package files, and exercises
+incoming Reception, fused QKV, structural padding, doubling, static views,
+batching/recomputation and logical CPU placement through actual new-process
+fourth updates. Batched FP32/BF16 restored updates are exact; placed FP32 is within
+the original tolerance, while placed BF16 retains gradient/update deviations.
+The same frozen source has 783 passing CPU tests; later preset and cache checks
+have their own recorded scope. Installation and test counts do not extend hardware
+or numerical qualification beyond the measured cases.
 
-The [integrated CPU record](evidence/capacity-validation-20261118.md) identifies
-544 full-suite tests and a separate 17-test integration check. Earlier
-[installed results](evidence/roadmap-installed-20261118.md) retain their source and
-failures. Neither installation nor test completion extends hardware or numerical
-qualification beyond those observations.
+Earlier [installed](evidence/capacity-installed-20261118.md),
+[CPU integration](evidence/capacity-validation-20261118.md) and
+[initial package](evidence/roadmap-installed-20261118.md) records retain their
+source identities and failures. Use the new report for the current production
+package; no task head, data recipe or downstream installation is included.
 
 ## Run and resume
 

@@ -6,8 +6,8 @@ locks retain their original adopted revision; rewriting this page does not migra
 or accept any downstream installation.
 
 Install a fixed `tide-instances` source/wheel in the consumer's private environment.
-Start from [instances](instances.md), [development](development.md), and the installed
-`examples/train.py` mechanism example. The public entry is `tide`, not a benchmark
+Start from [instances](instances.md), [development](development.md), and the checkout
+`examples/train.py` mechanism example (the wheel installs `tide`). The public entry is `tide`, not a benchmark
 script. Keep the source commit, package/wheel identity, math revision, complete model
 configuration, actual device/dtype and environment with the experiment dependency lock.
 

@@ -167,3 +167,23 @@ large-batch FC BF16 paired restored-gradient/moment deviation. The selected HB
 points pass their paired restored-update thresholds, while all six new-process
 updates complete finitely. Those single-owner new-process timing runs do not
 compare the full original-owner update and are not additional equivalence passes.
+
+## Reception and static indexing follow-up
+
+The [three-profile FP32 evidence](evidence/reception-numerics-20261118.md) covers
+inference, grad-forward, repeated VJPs, three updates and nine candidate-local
+new-process restores. Eight of nine paths retain finite deviations under the
+original thresholds, without observed support/integer-time/connectivity changes.
+All nine local restored updates are within threshold; this does not establish
+cross-candidate training equivalence. Bounded CPU formulas and Decimal AdamW
+witnesses explain their selected coordinates only; the NPU capture limit did not
+locate an earliest causal divergence.
+
+The [final integration evidence](evidence/reception-validation-20261118.md)
+separately records BF16 light64 output-support differences after updates,
+FP32 two-NPU restored parameter deviations, installed placed BF16 deviations,
+and optional static-view FP32 update deviations. Static views preserve recorded
+support/work in that small comparison, but do not promise a bitwise optimizer
+trajectory. The five [100-update FP32 runs](evidence/reception-training-20261118.md)
+are finite with paired restored updates within their original threshold; they
+are training-shape observations and do not erase any of these cross-path failures.
