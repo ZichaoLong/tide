@@ -1,0 +1,112 @@
+{
+  "schema": "tide-example-preset-1",
+  "description": "FP32 fc training choice from 100 continuing updates; explicit device admission and downstream memory recheck required.",
+  "model": {
+    "topology": {
+      "kind": "fc",
+      "n": 8,
+      "layers": 4,
+      "depth": null,
+      "rounds": null,
+      "profile": null,
+      "hubs": 0,
+      "partition": "group",
+      "timing": "settle",
+      "hub_mask": "all",
+      "period": null,
+      "probes": null,
+      "terminal_hubs": false
+    },
+    "d": 128,
+    "memory": "K",
+    "aggregation": "source_residual",
+    "allocation": "quad",
+    "sharing": "independent",
+    "adapter_rank": 8,
+    "budget": null,
+    "attention_backend": "auto",
+    "attention_chunk": 128,
+    "input_dim": null,
+    "checkpoint_regions": false,
+    "checkpoint_reception": false,
+    "reception_qkv_backend": "separate",
+    "reception_mask_padding": false,
+    "ssd_summary_backend": "block",
+    "ssd_scan_backend": "block",
+    "region_batch_size": 1,
+    "local_attention_backend": null,
+    "hub_allocation": "bounded",
+    "clock": {
+      "position_period": null,
+      "position_origin": "binding",
+      "kv_window": null,
+      "short_decay": null,
+      "ssd_stride": null
+    },
+    "parameter_indexing": "gather"
+  },
+  "execution": {
+    "mode": "train",
+    "device": null,
+    "precision": "fp32",
+    "batch": 128,
+    "length": 256,
+    "steps": 100,
+    "threads": 4,
+    "learning_rate": 0.0001,
+    "foreach": true,
+    "seed": 751
+  },
+  "recommendation": {
+    "status": "selected_training_shape",
+    "scope": "FP32 fc training choice from 100 continuing updates; explicit device admission and downstream memory recheck required.",
+    "evidence": [
+      "docs/evidence/reception-training-20261118.md",
+      "docs/evidence/reception-numerics-20261118.md",
+      "docs/evidence/reception-performance-20261118.md",
+      "docs/evidence/reception-validation-20261118.md"
+    ],
+    "device": "Explicit admitted NPU required; null device has no runtime default.",
+    "hardware": {
+      "device_capacity_gib": 64,
+      "sampled_budget_gib": 48,
+      "budget_is_hard_isolation": false,
+      "sampled_budget_scope": "allocated only; reserved memory and non-Torch allocations are separate",
+      "resource_identity": "exclusive_cooperative_queue; external jobs not controlled"
+    },
+    "measurement": {
+      "source": "8ce51410de272400c226d736996cf0a83593504e",
+      "record": "artifacts/agg-train-fc-fp32-100-v1/continuous.json",
+      "record_sha256": "3900727777b432f797619413e748236781f7361ab81f4ced011411b2c7e10433",
+      "parameters": 9334304,
+      "updates": 100,
+      "steady_rule": "sum(input_positions)/sum(complete_seconds), updates 3 through 100",
+      "steady_input_positions_per_second": 30333.158338590914,
+      "peak_allocated_gib": 37.36092519760132,
+      "peak_reserved_gib": 39.576171875,
+      "timing": "input transfer/construction/initial matching audit/warmup/checkpoint excluded; full stream train includes concatenation/loss/backward/AdamW/sync"
+    },
+    "qualification": {
+      "paired_restore": "within_threshold",
+      "saved_data_exact": true,
+      "next_forward_exact": true,
+      "cross_path": "finite deviations retained; three incoming profiles and placed paths have separate evidence",
+      "full_numerical_equivalence": false
+    },
+    "fresh_process_restore": {
+      "state": "completed_finite",
+      "record": "artifacts/agg-restore-fc-fp32-100-v1/restore.json",
+      "record_sha256": "014e8aa482d844c227b854d22f12ad4193bab8a0dba1638a9b7f4491a4b32007",
+      "source": "1553b301bf960ec6337fbc38e8e3cada26205eb2",
+      "checkpoint_producer_source": "8ce51410de272400c226d736996cf0a83593504e",
+      "checkpoint_sha256": "7e47af3feb74529ba9353cd10be1ce6fe724c031ae78116e5f66979873230b94",
+      "optimizer_step_before": 100,
+      "optimizer_step_after": 101,
+      "optimizer_step_increment_errors": [],
+      "load_complete_seconds": 0.8331744633615017,
+      "next_update_complete_seconds": 2.5995631963014603,
+      "numerical_equivalence_qualification": false
+    },
+    "entry_boundary": "Preset carries model and runtime choices. The example has its own synthetic sequence, loss normalization and diagnostic checks; use the recorded benchmark command to reproduce timings."
+  }
+}

@@ -64,10 +64,12 @@ def test_reception_and_ssd_cli_overrides_are_saved_model_options(tmp_path):
 
 
 @pytest.mark.parametrize("name,precision,batch,length", [
+    ("npu-fc-k-fp32", "fp32", 128, 256),
     ("npu-fc-k-bf16", "bf16", 128, 256),
     ("npu-hb-settle-fp32", "fp32", 24, 256),
     ("npu-hb-timed-fp32", "fp32", 12, 128),
-    ("npu-hb-0p5b-fp32", "fp32", 1, 128),
+    ("npu-hb-0p5b-fp32", "fp32", 4, 128),
+    ("npu-hb-light64-fp32", "fp32", 24, 256),
     ("npu-hb-settle-bf16", "bf16", 32, 256),
     ("npu-hb-0p5b-bf16", "bf16", 1, 128),
 ])
@@ -75,13 +77,14 @@ def test_measured_presets_require_explicit_device_and_retain_qualification(name,
     with pytest.raises(ValueError, match="requires an explicit --device"):
         train.resolve(train.parser().parse_args(["--preset", name]))
     settings = train.resolve(train.parser().parse_args(["--preset", name, "--device", "npu:3", "--dry-run"]))
+    updates = 100 if precision == "fp32" else 20
     assert settings["execution"] == dict(train.EXECUTION_DEFAULTS, device="npu:3", precision=precision,
-                                        batch=batch, length=length, steps=20, threads=4, seed=751)
+                                        batch=batch, length=length, steps=updates, threads=4, seed=751)
     qualification = settings["recommendation"]["qualification"]
     assert qualification["full_numerical_equivalence"] is False
     assert qualification["paired_restore"] == ("finite_deviation" if name == "npu-fc-k-bf16" else "within_threshold")
-    assert settings["recommendation"]["fresh_process_restore"]["optimizer_step_after"] == 21
-    if name != "npu-fc-k-bf16":
+    assert settings["recommendation"]["fresh_process_restore"]["optimizer_step_after"] == updates+1
+    if name.startswith("npu-hb-"):
         assert settings["config"].region_batch_size == 4
         assert settings["config"].checkpoint_reception and settings["config"].ssd_summary_backend == "prefix"
         assert not settings["config"].checkpoint_regions and settings["config"].local_attention_backend is None

@@ -1,6 +1,6 @@
 {
   "schema": "tide-example-preset-1",
-  "description": "HB 494,110,704-parameter Settle FP32 choice; BF16 is a lower-memory alternative.",
+  "description": "FP32 half training choice from 100 continuing updates; explicit device admission and downstream memory recheck required.",
   "model": {
     "topology": {
       "kind": "multiscale",
@@ -29,7 +29,10 @@
     "input_dim": null,
     "checkpoint_regions": false,
     "checkpoint_reception": true,
+    "reception_qkv_backend": "separate",
+    "reception_mask_padding": false,
     "ssd_summary_backend": "prefix",
+    "ssd_scan_backend": "doubling",
     "region_batch_size": 4,
     "local_attention_backend": null,
     "hub_allocation": "bounded",
@@ -39,15 +42,16 @@
       "kv_window": null,
       "short_decay": null,
       "ssd_stride": null
-    }
+    },
+    "parameter_indexing": "gather"
   },
   "execution": {
     "mode": "train",
     "device": null,
     "precision": "fp32",
-    "batch": 1,
+    "batch": 4,
     "length": 128,
-    "steps": 20,
+    "steps": 100,
     "threads": 4,
     "learning_rate": 0.0001,
     "foreach": true,
@@ -55,50 +59,52 @@
   },
   "recommendation": {
     "status": "selected_training_shape",
-    "scope": "HB 494,110,704-parameter Settle FP32 choice; BF16 is a lower-memory alternative.",
+    "scope": "FP32 half training choice from 100 continuing updates; explicit device admission and downstream memory recheck required.",
     "evidence": [
-      "docs/evidence/training-search-20261118.md",
-      "docs/evidence/training-continuous-20261118.md",
-      "docs/evidence/training-paths-20261118.md",
-      "docs/evidence/training-validation-20261118.md"
+      "docs/evidence/reception-training-20261118.md",
+      "docs/evidence/reception-numerics-20261118.md",
+      "docs/evidence/reception-performance-20261118.md",
+      "docs/evidence/reception-validation-20261118.md"
     ],
     "device": "Explicit admitted NPU required; null device has no runtime default.",
     "hardware": {
       "device_capacity_gib": 64,
       "sampled_budget_gib": 48,
       "budget_is_hard_isolation": false,
-      "sampled_budget_scope": "allocated only; reserved memory and non-Torch allocations are excluded",
+      "sampled_budget_scope": "allocated only; reserved memory and non-Torch allocations are separate",
       "resource_identity": "exclusive_cooperative_queue; external jobs not controlled"
     },
     "measurement": {
-      "source": "ae247dee82c60b63495e9abea7f703abd84ac3c7",
-      "record": "artifacts/training-continuous-scale-fp32/continuous.json",
-      "record_sha256": "100073d04b47dff0467a3bdfa519e731100a9a63e9ba4157610c8e8499d1a587",
+      "source": "6570d0610e389c42f548c0afffa281b536df01db",
+      "record": "artifacts/agg-train-half-fp32-100-v1/continuous.json",
+      "record_sha256": "aa734952ff988a2b821f8b2d799934b1c43c825d5cbf2ef25ce7a57697cd14dc",
       "parameters": 494110704,
-      "updates": 20,
-      "steady_rule": "sum(input_positions) / sum(complete_seconds), observations[2:20]",
-      "steady_input_positions_per_second": 96.08,
-      "peak_allocated_gib": 15.372356,
-      "peak_reserved_gib": 16.505859,
+      "updates": 100,
+      "steady_rule": "sum(input_positions)/sum(complete_seconds), updates 3 through 100",
+      "steady_input_positions_per_second": 267.3995283772168,
+      "peak_allocated_gib": 33.839773654937744,
+      "peak_reserved_gib": 35.6171875,
       "timing": "input transfer/construction/initial matching audit/warmup/checkpoint excluded; full stream train includes concatenation/loss/backward/AdamW/sync"
     },
     "qualification": {
       "paired_restore": "within_threshold",
       "saved_data_exact": true,
       "next_forward_exact": true,
-      "cross_path": "finite deviations retained; see training-paths evidence",
+      "cross_path": "finite deviations retained; three incoming profiles and placed paths have separate evidence",
       "full_numerical_equivalence": false
     },
     "fresh_process_restore": {
       "state": "completed_finite",
-      "record": "artifacts/training-restore-scale-fp32/restore.json",
-      "record_sha256": "d55c4bdf014206495e6bbbd4d7e106f3c28941c0ae3bf5bc5e7337b153c40250",
-      "source": "22527cf472fc4d6ea9ca7ce22528b7e4ca9cc96a",
-      "checkpoint_producer_source": "ae247dee82c60b63495e9abea7f703abd84ac3c7",
-      "checkpoint_sha256": "dbc4640df99c71d135df6276a601b81882898753f4661ab4033325616366f6f7",
-      "optimizer_step_before": 20,
-      "optimizer_step_after": 21,
+      "record": "artifacts/agg-restore-half-fp32-100-v1/restore.json",
+      "record_sha256": "4dc19885f20515fa3ec4759cdbc5e7272c2ffced2a1340bed0250eea7cbebaca",
+      "source": "1fbe15c9b0ce900bfffbf5c148ca61c81cb34046",
+      "checkpoint_producer_source": "6570d0610e389c42f548c0afffa281b536df01db",
+      "checkpoint_sha256": "b98db421399ac3976a0f02b21780581fa526d18d35e1b64fc990691259da1c89",
+      "optimizer_step_before": 100,
+      "optimizer_step_after": 101,
       "optimizer_step_increment_errors": [],
+      "load_complete_seconds": 7.286910112947226,
+      "next_update_complete_seconds": 3.525787442922592,
       "numerical_equivalence_qualification": false
     },
     "entry_boundary": "Preset carries model and runtime choices. The example has its own synthetic sequence, loss normalization and diagnostic checks; use the recorded benchmark command to reproduce timings."
