@@ -9,6 +9,26 @@ from tide.precision import precision_context
 from benchmarks.statistics import audit_model
 
 
+def test_batched_regional_bias_preserves_bf16_linear_rounding_boundary():
+    from tide.region import RegionNetwork
+    from tide.region_batch import regional_scores
+    networks = [RegionNetwork(64, "math") for _ in range(2)]
+    with torch.no_grad():
+        for network in networks:
+            for parameter in network.parameters():
+                parameter.zero_()
+            network.first.bias.fill_(1.001)
+            network.second.weight.fill_(0.125)
+            network.readout.fill_(0.25)
+    z = torch.zeros(2, 3, 1, 2, 32)
+    scores = torch.zeros(2, 3, 1, 2)
+    weight = torch.ones_like(scores)
+    with precision_context("cpu", "bf16"):
+        expected = torch.stack([m(z[i], scores[i], weight[i]) for i, m in enumerate(networks)])
+        actual = regional_scores(networks, z, scores, weight)
+    torch.testing.assert_close(actual, expected, rtol=0, atol=0)
+
+
 @pytest.mark.parametrize("sharing,memory,timing,partition", [
     ("independent", "K", "settle", "group"),
     ("region_shared", "X", "settle", "group"),

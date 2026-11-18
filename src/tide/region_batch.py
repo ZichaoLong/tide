@@ -54,9 +54,14 @@ def regional_scores(networks, z, score, weight):
     def linear(values, name):
         layers = [getattr(network, name) for network in networks]
         matrices = torch.stack([layer.weight for layer in layers])
-        result = torch.bmm(values.reshape(r, -1, values.shape[-1]), matrices.transpose(1, 2))
-        if layers[0].bias is not None:
-            result = result + torch.stack([layer.bias for layer in layers])[:, None]
+        flat = values.reshape(r, -1, values.shape[-1])
+        if layers[0].bias is None:
+            result = torch.bmm(flat, matrices.transpose(1, 2))
+        else:
+            # Match Linear's autocast boundary: bias belongs to the matrix
+            # epilogue, before the result is rounded to the compute dtype.
+            result = torch.baddbmm(torch.stack([layer.bias for layer in layers])[:, None],
+                                  flat, matrices.transpose(1, 2))
         return result.reshape(*values.shape[:-1], matrices.shape[1])
 
     def project(name):
