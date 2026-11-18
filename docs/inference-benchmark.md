@@ -96,3 +96,29 @@ reserved；warmup 的常规缓存则保留供正常样本复用。
 `--allocated-budget-gib`、`--reserved-budget-gib` 是请求完成后的有限停止条件，
 不是硬 allocator 上限。首次、诊断、样本和失败阶段以 fsync/atomic replacement
 持久化；长作业仍需外层 service 时间、RSS 和设备准入边界。
+
+## 独立缓存时间与淘汰诊断
+
+性能入口的输出时间、有限性和状态字节记录，不单独证明每个 KV bank 已填满或
+正确淘汰。`python -m scripts.check_inference_cache` 在独立、完全不计时的请求中
+观察真实正接收写入，以每个 owner/sample 的有限时间戳队列作为参照，再抽查实际
+KV、SSD/Conv 和 pending。它不复制 K/V payload，也不改正常生产或计时路径。
+
+```sh
+python -m scripts.check_inference_cache \
+  --config configs/continuous/fc-k-small.json \
+  --prefill 128 --prefill-chunk 32 --decode 256 --sample-every 64 \
+  --require-kv-eviction --threads 4 --output NEW-cache-diagnostic.json
+```
+
+每个抽查边界记录 KV 容量、正条目数、原始 int64 首末时间、最后正写入时间、窗口
+年龄及完整保留时间戳集合的摘要，并逐项与独立写入队列比较。淘汰证据要求同一个
+owner/sample 的最早保留时间前移，旧条目已超出该 owner 的窗口，且两端保留集合
+均通过核验。空 bank 和不再活跃的 owner 合法；窗口相对于其最后正写入，而不是
+当前全局时钟，因此不要求所有 owner 都填满。`--require-kv-eviction` 要求至少一个
+owner 出现这样的证据，不代表所有 owner 均已跨窗。
+
+原始输出 int64 时间轴逐调用检查；SSD 原始时间与最后正接收一致，Conv 保留集合
+按其有限 horizon 检查。Timed 只在最后 drain，结束时有出边节点必须无待发送强度；
+period=1 的终端节点可保留合法输出尾部。每次抽查原子保存进度，失败不会被过滤。
+这些观察验证被运行配置的续接元数据契约，不能替代独立数学、梯度或长训练检查。
