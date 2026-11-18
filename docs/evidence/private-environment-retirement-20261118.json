@@ -1,0 +1,52 @@
+{
+  "active_project_services": [],
+  "all_targets_absent": true,
+  "allocated_bytes_retired": 341753856,
+  "authorization": "2026-11-18 user explicitly authorized deleting both .venv directories and all project .local contents",
+  "cleanup_content": "One-time prior retirement executors, manifests, logs and raw receipts; tracked closure evidence retained. Entire .local including private LENS.md removed without publishing its content.",
+  "completed_at": "2026-11-18T02:40:09.009155+00:00",
+  "environment_executable_processes": [],
+  "lens_writer_unregister": [
+    {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.venv/bin/python",
+      "status": "unregistered"
+    },
+    {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.venv-positive-floor-v1/bin/python",
+      "status": "unregistered"
+    },
+    {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/language-data-venv/bin/python",
+      "status": "unregistered"
+    }
+  ],
+  "project_allocated_bytes_after": 107638784,
+  "schema": "tide-private-environment-retirement-v1",
+  "scope": "Only the three named project directories. Shared /opt environments, account-level ~/.local and public-data staging are outside the deletion scope.",
+  "source_commit": "2795e2229a4fff121bc2f317be0f7264beda608f",
+  "started_at": "2026-11-18T02:40:08.695006+00:00",
+  "state": "completed",
+  "targets": [
+    {
+      "allocated_bytes": 174026752,
+      "directories": 1071,
+      "files": 6461,
+      "path": ".venv",
+      "symlinks": 4
+    },
+    {
+      "allocated_bytes": 17784832,
+      "directories": 121,
+      "files": 1367,
+      "path": ".venv-positive-floor-v1",
+      "symlinks": 4
+    },
+    {
+      "allocated_bytes": 149942272,
+      "directories": 171,
+      "files": 1741,
+      "path": ".local",
+      "symlinks": 4
+    }
+  ]
+}

@@ -9,9 +9,10 @@
 长期目标、用户反馈及推进原则统一见[研究章程](docs/RESEARCH_CHARTER.md)，重新接续时先读此页。
 
 **当前状态（2026-11-18）：全部实验任务已停止，历史权重、原始运行记录、旧快照和Lens历史已退役，释放305.807GiB。**
-源码、配置、研究结论和私有环境保留；旧检查点不能恢复或重新评价。
+源码、配置和研究结论保留；旧检查点不能恢复或重新评价。
 后续[数据清理](docs/studies/generated-data-retirement-20261118.md)已将公开原始语料单独整理，
 删除可再生成的数据并清空`runs/`，另释放821.883MiB；旧token/划分数据已不可直接使用。
+两个`.venv`与整个项目`.local`也已删除，另释放325.922MiB；当前工作目录约103MiB。
 [清理结果与保留范围](docs/studies/project-retirement-20261118.md) ·
 [最后一批关闭摘要](docs/studies/hb-mem-v13-closed-20261118.md)。v13为9条新链完成、7条用户取消，后续没有自动任务。
 
@@ -28,8 +29,8 @@ HB在所测容量和曝光下有质量收益，但TF仍领先；约3%活动可�
 - [图的读法与维护](docs/research-map.md) / [原型验证](docs/verification.md)
 - [当前研究设计](docs/research-design.md)
 - [当前交接](docs/STATUS.md) / [后台操作与恢复](docs/RUNNING.md) / [待办](docs/ROADMAP.md)
-- [基座来源](dependencies/foundation-source.json) / [实际安装锁](dependencies/foundation.lock.json) / [环境身份](dependencies/environment.lock.json)
-- [正支持补正验收](docs/studies/positive-support-acceptance-results.md) / [四种数值方案](docs/studies/shannon-numerical-options.md)：当前选择74e7bbd、新私有环境；旧运行与严格失败保留。
+- [历史基座来源](dependencies/foundation-source.json) / [历史安装锁](dependencies/foundation.lock.json) / [历史环境身份](dependencies/environment.lock.json)
+- [正支持补正验收](docs/studies/positive-support-acceptance-results.md) / [四种数值方案](docs/studies/shannon-numerical-options.md)：保留74e7bbd的限定验收与严格失败，本地私有环境已删除。
 - [HB直接图成本实测](docs/studies/hb-cost-results-20261111.md) / [HB学习结果与后继建议](docs/studies/hb-learning-results-20261111.md) / [共享模型当前路径](dependencies/public-model-paths.json)
 
 直接用浏览器打开`web/index.html`，不需要安装Python包、网络/CDN或运行模型。

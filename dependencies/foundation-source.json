@@ -7,6 +7,6 @@
   "mathematics_revision": "0770593838a37c790a568226930567ed60f99b83",
   "protocol": "tide-downstream-contract-v1",
   "protocol_url": "https://github.com/ZichaoLong/tide/blob/74e7bbd62341d2ccd382194a2c52ad4fea033665/docs/downstream-contract.md",
-  "installation_status": "fixed_wheel_installed_and_scoped_acceptance",
-  "note": "TL-REQ-003 positive-floor-v1下游有限验收完成；新私有环境和运行身份，默认strict保留。CPU真实HB16边界/FC16干预及CPU/NPU小型接入通过；严格有限超差仍失败，B/Qwen完整模型未迁移。旧85d161d安装/冻结运行保留。见docs/studies/positive-support-acceptance-results.md。"
+  "installation_status": "historical_installation_retired",
+  "note": "保留TL-REQ-003 positive-floor-v1下游有限验收的历史来源；CPU真实HB16边界/FC16干预及CPU/NPU小型接入通过，严格有限超差仍失败，B/Qwen完整模型未迁移。2026-11-18用户授权清理后，两个私有基座环境及旧冻结运行产物均已删除，安装锁仅为历史身份；未来需重新安装并验收。见docs/studies/positive-support-acceptance-results.md和docs/evidence/private-environment-retirement-20261118.json。"
 }

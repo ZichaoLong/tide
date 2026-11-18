@@ -3,6 +3,7 @@
 2026-11-18用户要求停止并清理全部实验历史。图保留科学结论和来源，
 增加“用户取消”与“已结束”生命周期，原始记录链接引导到退役摘要，Lens历史已清空。
 后续数据清理已清空`runs/`，公开原始语料单独暂存；图中旧数据路径也不再指向可用文件。
+三套私有环境及整个项目`.local`也已退役，含一次性清理材料和旧私有查看说明。
 Q10-S/Q10-L/CONTENT-S双seed结果scoped；Q3-S只保留单seed负面，另一个seed取消，
 Q3-L及POOL-L比较未完成。缺失终点不改成成功或质量失败，不自动恢复。
 [清理及可用性](studies/project-retirement-20261118.md) ·
@@ -285,7 +286,8 @@ TIDE局部函数拟合成立、10%混合小样本保持筛选通过，但同参�
 ## 查看和维护
 
 鼠标或Tab/Enter选节点，详情查看问题、预算、配置/计划、固定来源、run/seed及检查边界；点线看关系含义。聚焦只强调直接邻接，不计算成功概率。
-Lens项目`tide-learning-lab`与项目记录共用study/config/seed/run ID；私有地址、数据目录和凭据不入公开图，入口由本机`.local/LENS.md`提供。
+历史Lens项目`tide-learning-lab`与项目记录共用study/config/seed/run ID；私有地址、数据目录和凭据不入公开图。
+原本机入口说明`.local/LENS.md`已删除；未来需按use-trackio-lens重新发现当前实例，旧运行历史不再可查看。
 
 人维护`research/map.json`，`view_group`只管理显示分区，不能代替证据的`scope`。
 每条实际结果需固定来源、比较、反证/未成功尝试、未区分解释和迁移条件。状态/审阅只读运行目录，JSON使用`scripts.review_io.write_review_json`写入图或证据目录。

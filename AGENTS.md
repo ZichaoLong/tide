@@ -16,8 +16,14 @@
   runs/ is now EMPTY: generated text/token arrays and full data/split locks
   were deleted, freeing another821.883MiB. See
   docs/studies/generated-data-retirement-20261118.md. Do not use the old
-  keep-data rule or automatically regenerate data. The three private
-  environments remain; their purpose/removal recommendation was audited.
+  keep-data rule or automatically regenerate data. The latest explicit
+  instruction also retired .venv, .venv-positive-floor-v1 and ALL of the
+  project .local, including the data environment, cleanup executors/logs
+  and private LENS.md. Another325.922MiB freed; project now~103MiB.
+  All three Lens writer registrations were removed before deletion.
+  See docs/evidence/private-environment-retirement-20261118.json.
+  Old installation locks are historical; no current private installation
+  or recovery environment exists. Do not recreate retired directories.
   Keep install wheels, current code/configs and summaries.
   Lens service/auth and other projects were unchanged. User is independently
   cleaning the foundation worktree; do not restore it if it disappears.

@@ -21531,7 +21531,7 @@
       "y": 100
     }
   ],
-  "notice": "2026-11-18\uff1a\u5168\u90e8\u4efb\u52a1\u5df2\u505c\u6b62\uff0c\u5386\u53f2\u6743\u91cd\u3001\u539f\u59cb\u8bb0\u5f55\u53caLens\u8fd0\u884c\u5df2\u9000\u5f79\u3002\u914d\u7f6e/\u7ed3\u8bba\u4fdd\u7559\uff1b\u516c\u5f00\u539f\u59cb\u8bed\u6599\u5355\u72ec\u6682\u5b58\uff0c\u751f\u6210\u6570\u636e\u5df2\u5220\u3001runs\u5df2\u6e05\u7a7a\u3002\u65e7\u6a21\u578b\u4e0d\u53ef\u7eed\u8bad\u6216\u91cd\u8bc4\uff1b\u7528\u6237\u53d6\u6d88\u4e0d\u5c5e\u4e8e\u79d1\u5b66\u5931\u8d25\u3002",
+  "notice": "2026-11-18\uff1a\u5168\u90e8\u4efb\u52a1\u5df2\u505c\u6b62\uff0c\u65e7\u6743\u91cd\u3001\u539f\u59cb\u8bb0\u5f55\u3001Lens\u5386\u53f2\u3001\u79c1\u6709\u73af\u5883\u53ca\u9879\u76ee.local\u5df2\u9000\u5f79\u3002\u914d\u7f6e/\u7ed3\u8bba\u4fdd\u7559\uff1b\u516c\u5f00\u539f\u59cb\u8bed\u6599\u5355\u72ec\u6682\u5b58\uff0cruns\u5df2\u6e05\u7a7a\u3002\u65e7\u6a21\u578b\u4e0d\u53ef\u7eed\u8bad\u6216\u91cd\u8bc4\uff1b\u7528\u6237\u53d6\u6d88\u4e0d\u5c5e\u4e8e\u79d1\u5b66\u5931\u8d25\u3002",
   "retirement": {
     "at": "2026-11-18T02:19:16.465492+00:00",
     "generated_data_retirement": {
@@ -21539,6 +21539,17 @@
       "public_raw_data": "staged outside repository for user relocation",
       "report": "docs/studies/generated-data-retirement-20261118.md",
       "runs_empty": true
+    },
+    "private_environment_retirement": {
+      "at": "2026-11-18T02:40:09.009155+00:00",
+      "paths": [
+        ".venv",
+        ".venv-positive-floor-v1",
+        ".local"
+      ],
+      "receipt": "docs/evidence/private-environment-retirement-20261118.json",
+      "report": "docs/studies/generated-data-retirement-20261118.md",
+      "state": "completed"
     },
     "report": "docs/studies/project-retirement-20261118.md",
     "retained_prefixes": [
@@ -21550,7 +21561,7 @@
   "schema": "tide-research-map-prototype-v1",
   "subtitle": "\u7814\u7a76\u76ee\u6807\u4e0e\u9650\u5b9a\u7ed3\u8bba\u4fdd\u7559\uff1b\u5f53\u524d\u65e0\u6d3b\u52a8\u4efb\u52a1\u3002v13\u5173\u95ed\uff1a9\u6761\u5b8c\u6210\u30017\u6761\u7528\u6237\u53d6\u6d88\uff0c\u540e\u7eed\u5f85\u65b0\u6279\u6b21\u51b3\u7b56\u3002",
   "title": "TIDE \u7814\u7a76\u56fe",
-  "updated_at": "2026-11-18T02:35:21.781300+00:00",
+  "updated_at": "2026-11-18T02:40:09.009155+00:00",
   "view_groups": [
     {
       "height": 12640,
