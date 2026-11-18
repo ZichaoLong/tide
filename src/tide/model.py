@@ -166,6 +166,55 @@ class TideModel(nn.Module):
             mass = mass + strengths[ids].permute(0,2,3,1)*valid[:,None,None,:]
         return content,mass,classes.to(device)
 
+    def _evaluate_region(self, region, contents, masses, classes, time, old=None, record_work=False):
+        """Pure regional tensor work, with explicit input/state ownership.
+
+        Keeping the call free of publication side effects permits non-reentrant
+        activation recomputation while retaining the original grad/autocast mode.
+        """
+        members = self.graph.regions[region]
+        device, b, length = contents.device, contents.shape[1], contents.shape[2]
+        owners = NodeOwners(torch.tensor(members,device=device),members)
+        received,u = self.receive(contents,masses,classes,owners)
+        # Unit FC ingress and the received lower budget imply every
+        # node writes unit weight. Use that exact reachable-state identity.
+        mass = (torch.ones_like(received) if self.graph.config.kind=="fc" else
+                torch.where(received>=1,torch.ones_like(received),received.clamp_min(0)))
+        times = time[None,None].expand(len(members),b,length)
+        desc = [u.new_zeros((len(members),b,length,self.config.d//4)) for _ in range(3)]
+        desc += [u.new_zeros((len(members),b,length)) for _ in range(2)]
+        contexts,saved = {},{}
+        for kind in self.memories:
+            idx = [i for i,v in enumerate(members) if self.kinds[v]==kind]
+            if not idx:
+                continue
+            sub = torch.tensor(idx,device=device)
+            possible = tuple(self.memory_ids[kind][members[i]] for i in idx)
+            mids = NodeOwners(torch.tensor(possible,device=device),possible)
+            previous = None if old is None else old[kind]
+            parts,context,updated = self.memories[kind].prepare(u[sub],mass[sub],times[sub],mids,previous)
+            desc = [a.index_copy(0,sub,z.to(a.dtype)) for a,z in zip(desc,parts)]
+            contexts[kind] = (sub,context)
+            saved[kind] = updated
+        roles = torch.tensor([self.graph.nodes[v].role=="H" for v in members],device=device)
+        if bool(roles.all()) and self.graph.config.partition=="singleton":
+            control = torch.where(received>=0.5,torch.ones_like(received),2*received)
+        else:
+            possible = tuple(self.description_ids[v] for v in members)
+            description_owners = NodeOwners(torch.tensor(possible,device=device),possible)
+            z,score = self.describe(u,received,desc,description_owners)
+            score = self.regional[self.region_group[region]](z,score,mass)
+            control = region_control(score,received,roles,self.config.budget or max(1,self.graph.config.n//32),
+                                     self.config.allocation,self.graph.config.partition)
+        full = torch.zeros_like(u)
+        measured = None
+        if record_work:
+            measured = torch.stack(((received>0).sum(),(control>0).sum(),(masses>0).sum(),
+                                    torch.as_tensor(received.numel(),device=device)))
+        for kind,(sub,context) in contexts.items():
+            full = full.index_copy(0,sub,self.memories[kind].finish(context,control[sub]).to(full.dtype))
+        return full, control, saved, measured
+
     def forward(self,x,state=None,*,record_work=False):
         return self._run(x,state,record_work=record_work)
 
@@ -223,54 +272,25 @@ class TideModel(nn.Module):
                     source_layers[origin] = move_tensors(layers[origin],device,transport)
                     if source_pending:
                         source_pending[origin] = move_tensors(source_pending[origin],device,transport)
+            base = torch.arange(length,device=device,dtype=torch.int64)
+            time = ((base+start)*self.graph.period+layer+1 if self.settle else
+                    base+start*self.graph.period+1)
             values,controls = [],[]
             for region in regions:
-                members = self.graph.regions[region]
-                owners = NodeOwners(torch.tensor(members,device=device),members)
                 contents,masses,classes = self._incoming(region,source_layers,source_pending,
                                                          embedded,b,length,device,inject)
-                received,u = self.receive(contents,masses,classes,owners)
-                # Unit FC ingress and the received lower budget imply every
-                # node writes unit weight. Use that exact reachable-state identity.
-                mass = (torch.ones_like(received) if self.graph.config.kind=="fc" else
-                        torch.where(received>=1,torch.ones_like(received),received.clamp_min(0)))
-                base = torch.arange(length,device=device,dtype=torch.int64)
-                time = ((base+start)*self.graph.period+layer+1 if self.settle else
-                        base+start*self.graph.period+1)
-                times = time[None,None].expand(len(members),b,length)
-                desc = [u.new_zeros((len(members),b,length,self.config.d//4)) for _ in range(3)]
-                desc += [u.new_zeros((len(members),b,length)) for _ in range(2)]
-                contexts,saved = {},{}
-                for kind in self.memories:
-                    idx = [i for i,v in enumerate(members) if self.kinds[v]==kind]
-                    if not idx:
-                        continue
-                    sub = torch.tensor(idx,device=device)
-                    possible = tuple(self.memory_ids[kind][members[i]] for i in idx)
-                    mids = NodeOwners(torch.tensor(possible,device=device),possible)
-                    old = None if state is None else state.memories[region][kind]
-                    if placed and old is not None:
-                        old = move_tensors(old,device,transport)
-                    parts,context,updated = self.memories[kind].prepare(u[sub],mass[sub],times[sub],mids,old)
-                    desc = [a.index_copy(0,sub,z.to(a.dtype)) for a,z in zip(desc,parts)]
-                    contexts[kind] = (sub,context)
-                    saved[kind] = updated
-                roles = torch.tensor([self.graph.nodes[v].role=="H" for v in members],device=device)
-                if bool(roles.all()) and self.graph.config.partition=="singleton":
-                    control = torch.where(received>=0.5,torch.ones_like(received),2*received)
+                old = None if state is None else state.memories[region]
+                if placed and old is not None:
+                    old = move_tensors(old,device,transport)
+                arguments = (region, contents, masses, classes, time, old, record_work)
+                if self.config.checkpoint_regions and torch.is_grad_enabled():
+                    from torch.utils.checkpoint import checkpoint
+                    full, control, saved, measured = checkpoint(
+                        self._evaluate_region, *arguments, use_reentrant=False)
                 else:
-                    possible = tuple(self.description_ids[v] for v in members)
-                    description_owners = NodeOwners(torch.tensor(possible,device=device),possible)
-                    z,score = self.describe(u,received,desc,description_owners)
-                    score = self.regional[self.region_group[region]](z,score,mass)
-                    control = region_control(score,received,roles,self.config.budget or max(1,self.graph.config.n//32),
-                                             self.config.allocation,self.graph.config.partition)
-                full = torch.zeros_like(u)
-                if record_work:
-                    work.append(torch.stack(((received>0).sum(),(control>0).sum(),(masses>0).sum(),
-                                             torch.as_tensor(received.numel(),device=device))))
-                for kind,(sub,context) in contexts.items():
-                    full = full.index_copy(0,sub,self.memories[kind].finish(context,control[sub]).to(full.dtype))
+                    full, control, saved, measured = self._evaluate_region(*arguments)
+                if measured is not None:
+                    work.append(measured)
                 values.append(full); controls.append(control); newmem.append(saved)
             layers.append(LayerOutput(torch.cat(values,0),torch.cat(controls,0)))
         pending = tuple(LayerOutput(v.values[:,:,-1:],v.strengths[:,:,-1:]) for v in layers) if not self.settle else ()

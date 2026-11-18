@@ -16,8 +16,11 @@ class ModelConfig:
     attention_backend: str = "auto"
     attention_chunk: int = 128
     input_dim: int | None = None
+    checkpoint_regions: bool = False
 
     def __post_init__(self):
+        if type(self.checkpoint_regions) is not bool:
+            raise ValueError("checkpoint_regions must be boolean")
         if self.d not in (64, 128, 192, 256, 384, 512, 768):
             raise ValueError("d must be a registered main-instance width")
         if self.memory not in ("K", "S", "X"):
