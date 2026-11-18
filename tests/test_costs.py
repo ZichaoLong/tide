@@ -93,11 +93,41 @@ def test_cost_cli_keeps_normal_and_restored_trace_separate(tmp_path):
     cfg.write_text(json.dumps(config.to_dict()))
     assert main(["--config", str(cfg), "--output", str(output), "--subjects", "transformer_D",
                  "--batch", "1", "--length", "3", "--warmup", "1", "--steps", "2",
+                 "--transformer-candidates", "standard", "chunk256", "contiguous_qkv",
                  "--diagnostics", "runtime", "trace"]) == 0
     record = json.loads(output.read_text())
+    assert len(record["observations"]) == 3
+    assert len({r["initial_parameter_sha256"] for r in record["observations"]}) == 1
+    assert len({r["input_sha256"] for r in record["observations"]}) == 1
+    assert all(r["anchor"] == record["observations"][0]["anchor"] for r in record["observations"])
     row = record["observations"][0]
     assert len(row["normal"]["seconds"]) == 2
     assert row["normal"]["start_identity"] == row["diagnostics"]["runtime"]["start_identity"] == row["diagnostics"]["trace"]["start_identity"]
     assert row["normal"]["losses"][0] == row["diagnostics"]["runtime"]["loss"] == row["diagnostics"]["trace"]["loss"]
     assert row["diagnostics"]["trace"]["summary"]["complete_event_count"] > 0
     assert all(r["parameter_target_kind"] in {"total", "effective_touched"} for r in record["joint_matches"].values())
+    from benchmarks.cost_report import main as report_main
+    report = tmp_path/"report.md"
+    assert report_main([str(output), "--output", str(report), "--limit", "3"]) == 0
+    assert "transformer_D/chunk256" in report.read_text()
+
+
+def test_failed_diagnostic_preserves_normal_samples_and_reason(tmp_path, monkeypatch):
+    import benchmarks.costs as costs
+    def fail(*args, **kwargs):
+        raise RuntimeError("retained profiler failure")
+    monkeypatch.setattr(costs, "trace_step", fail)
+    config = ModelConfig(topology=TopologyConfig(kind="fc", n=2, layers=1), d=64)
+    cfg, output = tmp_path/"config.json", tmp_path/"costs.json"
+    cfg.write_text(json.dumps(config.to_dict()))
+    assert main(["--config", str(cfg), "--output", str(output), "--subjects", "transformer_C",
+                 "--length", "2", "--warmup", "0", "--steps", "1", "--diagnostics", "trace"]) == 1
+    record = json.loads(output.read_text())
+    row = record["observations"][0]
+    assert record["state"] == row["state"] == row["diagnostics"]["trace"]["state"] == "failed"
+    assert row["normal"]["state"] == "completed_finite" and len(row["normal"]["seconds"]) == 1
+    assert "retained profiler failure" in row["diagnostics"]["trace"]["error"]
+    from benchmarks.cost_report import main as report_main
+    report = tmp_path/"report.md"
+    assert report_main([str(output), "--output", str(report)]) == 0
+    assert "retained profiler failure" in report.read_text()

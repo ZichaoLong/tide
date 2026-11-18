@@ -166,10 +166,11 @@ def test_invalid_baseline_shape_fails(constructor, kwargs):
 
 
 @pytest.mark.parametrize("batch,head_dim,window", [(1, 32, 4), (3, 16, 5), (2, 64, 1)])
-def test_transformer_incremental_cache_crosses_window_with_full_gradients(batch, head_dim, window):
+@pytest.mark.parametrize("contiguous_qkv", [False, True])
+def test_transformer_incremental_cache_crosses_window_with_full_gradients(batch, head_dim, window, contiguous_qkv):
     torch.manual_seed(752)
     model = TransformerBaseline(64, 2, window=window, chunk=3,
-                                head_dim=head_dim, ffn_width=152).double()
+                                head_dim=head_dim, ffn_width=152, contiguous_qkv=contiguous_qkv).double()
     x = torch.randn(batch, 13, 64, dtype=torch.float64, requires_grad=True)
     # Independent dense formula checks the values and derivatives, not a second
     # application of the incremental implementation's schedule.
@@ -197,6 +198,21 @@ def test_transformer_incremental_cache_crosses_window_with_full_gradients(batch,
     actual_grad = torch.autograd.grad(continued, inputs, root, retain_graph=True)
     expected_grad = torch.autograd.grad(expected, inputs, root)
     for a, b in zip(actual_grad, expected_grad):
+        torch.testing.assert_close(a, b, atol=6e-11, rtol=6e-11)
+
+
+@pytest.mark.parametrize("candidate", [dict(chunk=256), dict(contiguous_qkv=True)])
+def test_bounded_transformer_candidates_cross_tile_boundary_against_dense_formula(candidate):
+    torch.manual_seed(191)
+    model = TransformerBaseline(32, 1, window=17, **candidate).double()
+    x = torch.randn(1, 259, 32, dtype=torch.float64, requires_grad=True)
+    actual, expected = model(x), transformer_formula(model, x)
+    torch.testing.assert_close(actual, expected, atol=3e-12, rtol=3e-12)
+    root = torch.sin(torch.arange(actual.numel(), dtype=x.dtype)).reshape_as(actual)
+    inputs = [x, *model.parameters()]
+    got = torch.autograd.grad(actual, inputs, root, retain_graph=True)
+    want = torch.autograd.grad(expected, inputs, root)
+    for a, b in zip(got, want):
         torch.testing.assert_close(a, b, atol=6e-11, rtol=6e-11)
 
 

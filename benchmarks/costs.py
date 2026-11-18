@@ -27,11 +27,14 @@ from tide.precision import precision_context, precision_policy
 from benchmarks.baselines import TransformerBaseline, parameter_count
 from benchmarks.matching import match_transformers
 from benchmarks.references import file_identity, load_reference
-from benchmarks.run import _clear, _device_memory, _loss, check_memory, synchronize
+from benchmarks.run import _clear, _device_memory, _loss, _storage, check_memory, synchronize
 from benchmarks.stages import SavedAudit, ShapeAudit, StageTimes, stage_hooks
 from benchmarks.statistics import audit_model
 from benchmarks.workloads import activity_fixture, paired_input, parameter_hash, tensor_hash
 from scripts.job import atomic
+
+
+TRANSFORMER_CANDIDATES = dict(standard={}, chunk256=dict(chunk=256), contiguous_qkv=dict(contiguous_qkv=True))
 
 
 def _cpu_copy(value):
@@ -82,6 +85,10 @@ class TrainingAnchor:
         self.rng = _cpu_copy(_rng(device))
         self.identity = dict(model_sha256=state_hash(self.model), optimizer_sha256=state_hash(self.optimizer),
                              gradients_sha256=state_hash(self.gradients), rng_sha256=state_hash(self.rng))
+        from torch.utils._pytree import tree_flatten
+        self.cpu_tensor_bytes = sum(t.numel()*t.element_size() for t in
+                                    tree_flatten((self.model, self.optimizer, self.gradients, self.rng))[0]
+                                    if isinstance(t, torch.Tensor))
 
     def restore(self, model, optimizer):
         model.load_state_dict(self.model)
@@ -186,6 +193,8 @@ def summarize_trace(path, limit=50):
 
 
 def trace_step(model, inputs, optimizer, args, device, trace_path):
+    if trace_path.exists():
+        raise FileExistsError("trace already exists; preserve its observation identity: "+str(trace_path))
     if device.type == "npu":
         import torch_npu
         profiler = torch_npu.profiler
@@ -211,6 +220,7 @@ def observe(model, inputs, optimizer, args, device, row, persist, trace_path, an
     if anchor is None:
         anchor = TrainingAnchor(model, optimizer, device)
     row["anchor"] = anchor.identity
+    row["anchor_cpu_tensor_bytes"] = anchor.cpu_tensor_bytes
     row["normal"] = dict(state="running", start_identity=anchor.restore(model, optimizer), seconds=[], losses=[],
                          memory_scope="cumulative allocator peak since immediately before normal samples; construction and warmup excluded")
     synchronize(device)
@@ -229,6 +239,10 @@ def observe(model, inputs, optimizer, args, device, row, persist, trace_path, an
                   input_positions_per_second=args.batch*args.length/median,
                   sample_range_over_median=(max(normal["seconds"])-min(normal["seconds"]))/median,
                   final_parameter_sha256=parameter_hash(model))
+    normal["actual_storage"] = dict(parameters=_storage(model.parameters()),
+                                    gradients=_storage(p.grad for p in model.parameters()),
+                                    optimizer=_storage(t for state in optimizer.state.values() for t in state.values()
+                                                       if isinstance(t, torch.Tensor)))
     if not all(bool(torch.isfinite(p).all()) and (p.grad is None or bool(torch.isfinite(p.grad).all())) for p in model.parameters()):
         raise ArithmeticError("non-finite normal endpoint parameters or gradients")
     if "work" in args.diagnostics:
@@ -283,6 +297,8 @@ def main(argv=None):
                         default=["tide", "transformer_A", "transformer_B", "transformer_C", "transformer_D"])
     parser.add_argument("--diagnostics", nargs="*", choices=("stages", "runtime", "work", "saved", "trace"),
                         default=["stages", "runtime", "work"])
+    parser.add_argument("--transformer-candidates", nargs="+", choices=tuple(TRANSFORMER_CANDIDATES), default=["standard"],
+                        help="standard must come first; optional chunk256 and contiguous_qkv share its post-warmup anchor")
     parser.add_argument("--activity", choices=("natural", "sparse03", "sparse10", "high"), default="natural")
     parser.add_argument("--reference-record", help="completed exact B/L initial train audit from benchmarks.run")
     parser.add_argument("--optimizer-foreach", action=argparse.BooleanOptionalAction, default=True)
@@ -295,6 +311,8 @@ def main(argv=None):
         parser.error("device budget must be positive and finite")
     if len(set(args.subjects)) != len(args.subjects) or len(set(args.diagnostics)) != len(args.diagnostics):
         parser.error("subjects/diagnostics must not repeat")
+    if args.transformer_candidates[0] != "standard" or len(set(args.transformer_candidates)) != len(args.transformer_candidates):
+        parser.error("Transformer candidates must start with standard and must not repeat")
     output = Path(args.output).resolve()
     if output.exists():
         parser.error("output already exists; choose a new observation identity")
@@ -325,6 +343,13 @@ def main(argv=None):
                               diagnostics="each starts at the exact normal first-step anchor; never used as normal throughput",
                               input_positions=args.batch*args.length),
                   comparisons_equivalent=False, numerical_equivalence_qualification=False, observations=[])
+    record["baseline_strength"] = dict(
+        existing="fused QKV, fused SwiGLU gate/up, tensorized batch/length/heads, cached RoPE/window masks and native unit-prior attention",
+        bounded_candidates=TRANSFORMER_CANDIDATES,
+        rationale=dict(chunk256="fewer attention tile calls with more masked operand work; same window/function/parameters",
+                       contiguous_qkv="one complete head-major Q/K/V layout before tiles; may add copies, and sliced tiles can still need adapter copies"),
+        fairness="each subject's candidates use identical initial tensors and standard's exact post-warmup parameters/gradients/AdamW/RNG; candidate warmup updates are discarded before restoring that anchor; input common prefixes paired across model widths",
+        limits="two finite alternatives, no claim of globally optimal Transformer; same-function tests are CPU FP64, device numerical/trajectory qualification remains separate")
     if device.type == "npu":
         record.update(torch_npu=str(torch_npu.__version__), allow_hf32=dict(matmul=False, conv=False))
     def persist():
@@ -358,40 +383,48 @@ def main(argv=None):
         persist()
         raise
     for subject in args.subjects:
-        row = dict(subject=subject, candidate="standard", state="running")
-        record["observations"].append(row)
-        persist()
-        model = optimizer = inputs = anchor = None
-        try:
-            torch.manual_seed(args.seed)
-            if subject == "tide":
-                model = TideModel(config)
-                activity_fixture(model, args.activity)
-                row["spec"] = dict(family="tide", config=config.to_dict())
-            else:
-                match = record["joint_matches"][subject[-1]]
-                model = TransformerBaseline(**match["constructor"])
-                row["spec"] = dict(model.configuration(), joint_match=match)
-                if parameter_count(model) != match["actual"]["parameters"]:
-                    raise AssertionError("actual Transformer parameter count differs from joint match")
-            row.update(parameters=parameter_count(model), initial_parameter_sha256=parameter_hash(model))
-            model = model.to(device).train()
-            width = (config.input_dim or config.d) if subject == "tide" else model.d
-            inputs_cpu = paired_input(args.batch, args.length, width, args.seed+1)
-            row["input_sha256"] = tensor_hash(inputs_cpu)
-            inputs = inputs_cpu.to(device)
-            del inputs_cpu
-            optimizer = torch.optim.AdamW(model.parameters(), lr=1e-4, foreach=args.optimizer_foreach)
-            anchor = observe(model, inputs, optimizer, args, device, row, persist,
-                             output.with_name(output.stem+"-"+subject+"-standard-trace.json"))
-        except Exception as error:
-            row.update(state="failed", error=repr(error))
-            traceback.print_exc()
-        finally:
-            model = optimizer = inputs = anchor = None
-            _clear(device)
-        persist()
-        print(json.dumps(dict(subject=subject, state=row["state"], normal=row.get("normal", {}).get("median_seconds"))), flush=True)
+        anchor = None
+        for candidate in (["standard"] if subject == "tide" else args.transformer_candidates):
+            row = dict(subject=subject, candidate=candidate, state="running")
+            record["observations"].append(row)
+            persist()
+            model = optimizer = inputs = None
+            try:
+                if candidate != "standard" and anchor is None:
+                    raise RuntimeError("standard candidate did not produce a reusable training anchor")
+                torch.manual_seed(args.seed)
+                if subject == "tide":
+                    model = TideModel(config)
+                    activity_fixture(model, args.activity)
+                    row["spec"] = dict(family="tide", config=config.to_dict())
+                else:
+                    match = record["joint_matches"][subject[-1]]
+                    model = TransformerBaseline(**(match["constructor"] | TRANSFORMER_CANDIDATES[candidate]))
+                    row["spec"] = dict(model.configuration(), joint_match=match)
+                    if parameter_count(model) != match["actual"]["parameters"]:
+                        raise AssertionError("actual Transformer parameter count differs from joint match")
+                row.update(parameters=parameter_count(model), initial_parameter_sha256=parameter_hash(model))
+                model = model.to(device).train()
+                width = (config.input_dim or config.d) if subject == "tide" else model.d
+                inputs_cpu = paired_input(args.batch, args.length, width, args.seed+1)
+                row["input_sha256"] = tensor_hash(inputs_cpu)
+                inputs = inputs_cpu.to(device)
+                del inputs_cpu
+                optimizer = torch.optim.AdamW(model.parameters(), lr=1e-4, foreach=args.optimizer_foreach)
+                anchor = observe(model, inputs, optimizer, args, device, row, persist,
+                                 output.with_name(output.stem+"-"+subject+"-"+candidate+"-trace.json"), anchor)
+            except Exception as error:
+                row.update(state="failed", error=repr(error))
+                if row.get("normal", {}).get("state") == "running":
+                    row["normal"].update(state="failed", error=repr(error))
+                traceback.print_exc()
+            finally:
+                model = optimizer = inputs = None
+                _clear(device)
+            persist()
+            print(json.dumps(dict(subject=subject, candidate=candidate, state=row["state"],
+                                  normal=row.get("normal", {}).get("median_seconds"))), flush=True)
+        anchor = None
     record.update(state="failed" if any(r["state"] == "failed" for r in record["observations"]) else "completed_finite",
                   host_load_after=os.getloadavg())
     persist()

@@ -79,9 +79,10 @@ class TransformerState:
 
 
 class _TransformerBlock(nn.Module):
-    def __init__(self, d, backend, head_dim=32, ffn_width=None):
+    def __init__(self, d, backend, head_dim=32, ffn_width=None, contiguous_qkv=False):
         super().__init__()
         self.heads, self.head_dim, self.backend = d // head_dim, head_dim, backend
+        self.contiguous_qkv = contiguous_qkv
         self.attention_norm = nn.RMSNorm(d, eps=1e-5)
         self.qkv = nn.Linear(d, 3*d, bias=False)
         self.output = nn.Linear(d, d, bias=False)
@@ -102,6 +103,11 @@ class _TransformerBlock(nn.Module):
                         or previous.dtype != current.dtype or previous.device != current.device):
                     raise ValueError("Transformer cache shape/dtype/device differs from projected input")
             k, v = torch.cat((old_k, k), -2), torch.cat((old_v, v), -2)
+        if self.contiguous_qkv:
+            # Optional benchmark candidate: prepare the complete head-major
+            # projections once. Tile slices may still require native-adapter
+            # copies, so this is not assumed to be faster than projected views.
+            q, k, v = q.contiguous(), k.contiguous(), v.contiguous()
         reads = []
         for start, stop, lo, hi, mask in tiles:
             # Only the new query rows are projected/read. Keys are real history.
@@ -120,7 +126,7 @@ class _TransformerBlock(nn.Module):
 
 class TransformerBaseline(_Baseline):
     def __init__(self, d, layers, window=128, chunk=128, backend="auto", final_norm=True,
-                 ffn_width=None, head_dim=32):
+                 ffn_width=None, head_dim=32, contiguous_qkv=False):
         super().__init__()
         ffn_width = 4*d if ffn_width is None else ffn_width
         for name, value in (("d", d), ("layers", layers), ("window", window), ("chunk", chunk),
@@ -130,14 +136,16 @@ class TransformerBaseline(_Baseline):
             raise ValueError("Transformer head width must be even and divide model width")
         if backend not in {"auto", "sdpa", "npu_fusion", "math", "tiled"}:
             raise ValueError(f"unknown attention backend: {backend}")
+        if type(contiguous_qkv) is not bool:
+            raise ValueError("contiguous_qkv must be boolean")
         self.d, self.window, self.chunk, self.head_dim = d, window, chunk, head_dim
-        self.blocks = nn.ModuleList(_TransformerBlock(d, backend, head_dim, ffn_width)
+        self.blocks = nn.ModuleList(_TransformerBlock(d, backend, head_dim, ffn_width, contiguous_qkv)
                                     for _ in range(layers))
         self.final_norm = nn.RMSNorm(d, eps=1e-5) if final_norm else nn.Identity()
         self._layout_cache = None
         self.spec = dict(family="transformer", d=d, layers=layers, heads=d//head_dim, head_dim=head_dim,
                          window=window, chunk=chunk, backend=backend, ffn_width=ffn_width,
-                         final_norm=bool(final_norm))
+                         final_norm=bool(final_norm), contiguous_qkv=contiguous_qkv)
 
     def _layout(self, x, position=0, history=0):
         key = (x.shape[1], position, history, x.device, x.dtype)
