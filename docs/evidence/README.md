@@ -1,5 +1,19 @@
 # Current evidence
 
+The five-workstream implementation has separate source-scoped records:
+
+- [Measured hotspot choices](roadmap-hotspots-20261118.md).
+- [Three Attention families and actual operator witnesses](roadmap-attention-20261118.md).
+- [Sparse, shape and useful-combination comparisons](roadmap-supplementary-20261118.md).
+- [Actual 0.5B/1B four-class scale comparisons](roadmap-scale-small-20261118.md).
+- [Initial precision and rounded-allocation diagnosis](roadmap-numerics-initial-20261118.md),
+  then [continued VJP, repeated backward and restored updates](roadmap-numerics-followup-20261118.md).
+- [Bounded whole-model capture boundary](roadmap-resident-20261118.md).
+- [Clean installed wheel and actual restored updates](roadmap-installed-20261118.md).
+
+These reports preserve both failures and passes; the live handoff and outstanding
+matrices remain in [STATUS](../STATUS.md). Each links its reviewed JSON evidence.
+
 - [FP32 instance delivery, 2026-11-18](instances-fp32-20261118.md), with
   [complete reviewed observations](instances-fp32-20261118.json).
 - [Instance governance and project cleanup, 2026-11-18](governance-cleanup-20261118.md),

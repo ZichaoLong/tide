@@ -160,7 +160,7 @@ NPU 热点峰值在计时后的 work audit 之后读取，可能包含审计分�
 JSON 的 `launch_arguments`，将任务名与输出改成新身份；例如复现查询候选的一点：
 
 ```sh
-python scripts/launch.py --name NEW-query-candidates \
+python scripts/launch.py --name new-query-candidates \
   --revision c09e5d7cf18de19d73c242a6e461c14e5dba1101 \
   --npu-count 1 --threads 4 --affinity 68-71 --seconds 1800 --rss-gib 48 \
   -- python -m benchmarks.hotspots --config configs/fc-k.json --device npu:0 \

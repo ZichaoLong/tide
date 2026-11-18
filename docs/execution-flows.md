@@ -17,6 +17,14 @@ NPU admission follows conversation authorization. Long work uses frozen inputs,
 a detached background.slice systemd user service, bounded runtime/memory, logs
 and checked terminal status. Never alter an active job's source.
 
+`scripts/launch.py --after-unit tide-NAME.service` waits inside the bounded
+service before device admission or expensive CPU initialization. The separate
+`dependency.json` records the observed unit state and release; it does not turn
+a predecessor's failure into success. This sequences shared host resources
+without holding idle NPU locks while another CPU timing programme finishes.
+The overall service time bound includes waiting. Neither the waiter nor the
+queue stops or rewrites the predecessor or another project's workload.
+
 Only minimal configuration, commands/results and reusable lessons are maintained.
 No obligation to produce full action/dependency records or universal decoders.
 

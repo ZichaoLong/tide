@@ -125,3 +125,37 @@ audit of that exact prefill/decode/flush stream and mode. Optional
 the driver preserves them and does not invent a joint-match qualification for
 different inputs. Keep the matching workload and reference scope with those
 specifications.
+
+## Continuous and capacity boundaries
+
+`benchmarks.continuous --subject transformer --joint-match A` (likewise B/C/D)
+audits the exact initial chunk/decode/flush schedule before choosing the baseline.
+Input features use a shared seeded prefix across widths. Each measured stream
+continues the preceding private state; train retains full BPTT within the stream
+and detaches after the actual update. A Timed segment ends with flush, so its
+successor starts at the advanced, flushed clock. First output means a backbone
+output, without a language-model task head. Checkpoint time is separate, and the
+restored update includes the complete next Timed flush in its loss.
+
+The four `configs/continuous/*-small.json` cases are finite d64 CPU continuation
+workloads: four FC nodes or 17 Multiscale nodes. They are distinct from the larger
+NPU main configurations; their timings are not a same-shape CPU/NPU comparison.
+Both retain the real 128-position window and use legal K/S/X state mechanisms.
+Small independent whole/chunk VJP checks are available through
+`python -m scripts.check_continuation --device cpu --precision fp64 --output NEW.json`.
+The FP32/BF16 versions retain numerical, support, metadata and connectivity failures.
+
+`python -m benchmarks.capacity --placement-partitions 2 --output NEW-budget.json`
+counts scale parameters on the meta device without allocating their payloads.
+It records FP32 master/gradient/AdamW floors, workspace allowances, private-state
+bounds and exact HB layer partition ownership. The planning allowance is not an
+allocation guarantee. `scripts.check_placement --mode inference` or `--mode train
+--no-foreach` measures a large placed model without constructing a duplicate
+one-device reference; see [placement](placement.md). Capacity execution does not
+establish trajectory equivalence or large-checkpoint qualification.
+
+`benchmarks.attention_sites` measures the three post-projection Attention families
+with identical fixtures. Its forward/backward boundary has no optimizer and is
+not complete training. Normal samples and the intrusive dispatch/dtype audit are
+separate; composite device `matmul` is included in the audit. Primitive finite
+execution does not replace independent formula/VJP qualification.

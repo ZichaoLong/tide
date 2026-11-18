@@ -1,7 +1,8 @@
 # Current instance implementation: measured lessons
 
-These observations concern the fresh implementation at c17c613f and the
-[FP32 delivery report](evidence/instances-fp32-20261118.md). They guide a relevant
+The first observations concern the implementation at c17c613f and the
+[FP32 delivery report](evidence/instances-fp32-20261118.md); the later measured
+extensions below retain their own sources. They guide a relevant
 change; they are not a compulsory experiment matrix or a reason to recover old
 code. Semantic correctness comes first, performance second.
 
@@ -128,3 +129,44 @@ host's user cgroup MemoryMax requests were not hard limits; scripts/job.py uses
 a sampled process-tree RSS bound. The current jobs stayed well below their
 bounds, with ample disk quota headroom. Check storage before large runs and
 report a real blocker rather than silently serializing or abandoning work.
+
+## Measured extensions in the five-workstream programme
+
+- Specialize after whole-path measurements. NPU stable KV compaction and compatible
+  head-query fusion reduced the measured training times; CPU retained stable sort
+  and separate heads. Full bucketing regressed despite reducing padded work, and
+  extra gate/up fusion did not have convincing whole-model benefit. Some later
+  routing differed, so the observations are not strict same-trajectory speedups.
+  See [the finite candidate record](evidence/roadmap-hotspots-20261118.md).
+- Low Full support leaves other required work. The legal constructed 3.125% and
+  9.375% fixtures still perform candidate preparation and regional computation;
+  their construction is not evidence of learned sparsity. Measure these costs and
+  sharing/time deduplication explicitly in [four-class comparisons](benchmarking.md).
+- Attention shape matters. Long unit-prior KV favored native fusion; small
+  reception/regional shapes favored ordinary math in the post-projection witness.
+  The latter remains a candidate for integrated validation, not a blanket dispatch
+  change. Zero-prior math/tiled has a memory/time tradeoff. See
+  [the site comparison](evidence/roadmap-attention-20261118.md).
+- Precision changes can alter allocation support before the solve. Independent
+  Decimal solutions agreed with each rounded input in the examined crossings;
+  promoting only the final solve cannot recover earlier scores. Separately,
+  keeping BF16 inference/training Attention representations consistent repaired a
+  mode-dependent discrepancy. [The numerical reports](evidence/roadmap-numerics-followup-20261118.md)
+  retain cross-precision support differences and finite whole/chunk errors.
+- Exact checkpoint data and forward are weaker than exact training continuation.
+  FC-S BF16 backward varied even on the same owner. Selected actual AdamW update
+  differences agree with scalar FP64 predictions from the measured gradients;
+  a restore-only or common-bias-only explanation would be too narrow.
+- BF16 arithmetic does not halve FP32-master AdamW storage. Actual 0.5B/1B
+  short-window training peaks remain near 9.2/18.2–18.6 GiB in
+  [the scale witnesses](evidence/roadmap-scale-small-20261118.md).
+  Budget the widest layer and temporary storage, not only aggregate device RAM.
+- An isolated differentiable copy is insufficient for a multi-device model.
+  Complete HB backward exposed an event failure; explicit CPU host staging
+  completed updates and restore checks with retained finite deviations. This is
+  a transport choice with real CPU cost, not a peer-DMA or HCCL claim.
+- A fullgraph capture blocker is local evidence. The observed static-role guard
+  can be moved out of capture; it does not prove resident execution impossible.
+  A backend callback count of zero establishes no backend lowering or autonomous
+  device-controlled progression. Keep the [bounded probe](evidence/roadmap-resident-20261118.md)
+  distinct from a resident implementation.
