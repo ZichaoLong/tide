@@ -12,7 +12,7 @@ import resource
 import torch
 
 from benchmarks.cache_metadata import CacheMetadataDiagnostic
-from benchmarks.inference import (InferenceSchedule, _placement, bounded_parameter_identity,
+from benchmarks.inference import (InferenceSchedule, _placement, allocator_stats, bounded_parameter_identity,
                                   run_request, source_identity)
 from benchmarks.workloads import paired_input, tensor_hash
 from scripts.job import atomic
@@ -89,6 +89,7 @@ def main():
         x_cpu = paired_input(args.batch, schedule.positions, config.input_dim or config.d, args.seed+1)
         record["input_sha256"], record["input_shape"] = tensor_hash(x_cpu), list(x_cpu.shape)
         x = x_cpu.to(devices[0]); del x_cpu
+        allocator_stats(devices, reset=True)
         def persist_snapshot(observer):
             record.update(stage="diagnostic", completed_calls=observer.calls,
                           sampled_boundaries=observer.snapshots,
@@ -104,6 +105,7 @@ def main():
         record["actual_calls"] = [{key: call[key] for key in ("phase", "start", "stop", "input_positions", "state_before", "state_after", "output_slots")}
                                   for call in boundary["calls"]]
         record.update(state="passed" if diagnosis["passed"] else "check_failed", stage="complete",
+                      device_memory=allocator_stats(devices),
                       process_peak_rss_kib=resource.getrusage(resource.RUSAGE_SELF).ru_maxrss)
         atomic(args.output, record)
         print(json.dumps(dict(state=record["state"], output=str(args.output),
