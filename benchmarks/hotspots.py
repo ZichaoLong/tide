@@ -18,6 +18,7 @@ import tide.kv as kv
 from tide import ModelConfig, TideModel
 from tide.precision import precision_context
 from benchmarks.continuous import synchronize
+from benchmarks.projections import projection_candidate
 from scripts.job import atomic
 
 
@@ -53,7 +54,9 @@ def candidate(model, name):
                         previous, bound = upper, bound*4
                     return output
                 memory._finish_tile = types.MethodType(finish, memory)
-        yield
+        projection = name if name in {"head_query", "gate_up", "both"} else "native"
+        with projection_candidate(model, projection):
+            yield
     finally:
         kv.chronological_compaction = original_order
         for memory, original in originals:
@@ -71,6 +74,8 @@ def main():
     parser.add_argument("--threads",type=int,default=8)
     parser.add_argument("--warmup",type=int,default=2)
     parser.add_argument("--steps",type=int,default=5)
+    parser.add_argument("--candidates",nargs="+",choices=("argsort","compact","bucketed","head_query","gate_up","both"),
+                        default=["argsort","compact","bucketed"])
     parser.add_argument("--output",required=True)
     args=parser.parse_args()
     if Path(args.output).exists():
@@ -91,7 +96,7 @@ def main():
                 physical_devices=os.environ.get("ASCEND_RT_VISIBLE_DEVICES"),
                 cpu_affinity=sorted(os.sched_getaffinity(0)),host_load=os.getloadavg(),
                 timing="fresh state; forward and full loss/backward/AdamW/sync for train; no construction or audit",rows=[])
-    for name in ("argsort","compact","bucketed"):
+    for name in args.candidates:
         torch.manual_seed(1107)
         model=TideModel(config).to(device)
         optimizer=torch.optim.AdamW(model.parameters(),lr=1e-4,foreach=True) if args.mode=="train" else None
