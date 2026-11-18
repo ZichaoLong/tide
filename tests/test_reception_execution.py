@@ -87,7 +87,8 @@ def test_fused_masked_reception_restores_actual_update(tmp_path, profile, precis
         following, grads, results = update(owner, opt, old, inputs, precision)
         observations.append(dict(state=following, gradients=grads, results=results,
                                  parameters=owner.state_dict(), optimizer=opt.state_dict()))
-    assert nested_comparison(*observations, atol=0, rtol=0)["exact"]
+    report = nested_comparison(*observations, atol=0, rtol=0)
+    assert report["exact"], report
 
 
 def test_fused_reception_keeps_work_and_parameter_inventory():
