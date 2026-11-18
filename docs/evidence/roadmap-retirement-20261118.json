@@ -1,0 +1,3757 @@
+{
+  "schema": "tide-roadmap-retirement-1",
+  "recorded_at_utc": "2026-11-18T05:38:02.345776+00:00",
+  "state": "reviewed_main_retirement_and_installed_smoke",
+  "scope": "Current-thread project artifact cleanup and isolated installed-wheel dependency check. No new broad numerical or hardware qualification.",
+  "reviewed_evidence_commit": "da45086c9228e14e03b18e775a4d7d5d601a2ffb",
+  "implementation": "0992b467584c1f603314ed04d8efe8596a14f576",
+  "mathematics": "4f5b9f20a4030d68ee66ae2d26e34659a5e37234",
+  "inventory": {
+    "timestamp": "2026-11-18T05:33:16.552676+00:00",
+    "root": "/mi/data2T/zlong/home/llm/graph-execution-foundation",
+    "state": "dry_run_only",
+    "quota": "Disk quotas for user zlong (uid 1003): \n     Filesystem   space   quota   limit   grace   files   quota   limit   grace\n/dev/mapper/ascend_data-data\n                 46228M    300G    700G            379k       0       0        \n",
+    "disk": "Filesystem                    Size  Used Avail Use% Mounted on\n/dev/mapper/ascend_data-data  5.0T  3.7T  1.3T  74% /mi/data2T\n",
+    "worktrees": "worktree /mi/data2T/zlong/home/llm/graph-execution-foundation\nHEAD a1af48698aef14699e0e2dbe85bf6d6d83e1ca05\nbranch refs/heads/graph-execution-foundation\n\nworktree /mi/data2T/zlong/home/llm/tide-learning-lab\nHEAD 5f30ed2a32d7648f5011f5bfde5c6cae086a463c\nbranch refs/heads/tide-learning-lab\n\n",
+    "git_status": "## graph-execution-foundation...origin/graph-execution-foundation [ahead 1]\n M docs/ROADMAP.md\n M docs/evidence/README.md\n M docs/evidence/roadmap-placement-20261118.json\n M docs/evidence/roadmap-placement-20261118.md\n M docs/evidence/roadmap-scale-large-20261118.json\n M docs/evidence/roadmap-scale-large-20261118.md\n M docs/next-thread.md\n?? docs/tide-learning-lab-TL-REQ-004-handoff.md\n?? docs/tide-learning-lab-TL-REQ-005-handoff.md\n?? docs/tide-learning-lab-TL-REQ-006-handoff.md\n?? docs/upstream-lh-semantics-discussion-20261113.md\n",
+    "rules": "Only current-thread project-owned artifacts; preserve all root/user/downstream changes, launch/input identities, small results/logs, original terminal failures and small unresolved witnesses. No public/reference/consumer mutation.",
+    "user_files": {
+      "docs/tide-learning-lab-TL-REQ-004-handoff.md": {
+        "bytes": 11627,
+        "sha256": "69607cba0a7e87a260929ed5741d996103cef804c51f3fa2c02b3bd7a454a220"
+      },
+      "docs/tide-learning-lab-TL-REQ-005-handoff.md": {
+        "bytes": 7415,
+        "sha256": "83bec6f6eaa476ae9d7c859fe168333ac2ee564433297f36ab9aa1ef33c38732"
+      },
+      "docs/tide-learning-lab-TL-REQ-006-handoff.md": {
+        "bytes": 7355,
+        "sha256": "8706f0477c8f31d0c8337e55ba7f8f5b28bb9a455656586fa1585c82ec58b4df"
+      },
+      "docs/upstream-lh-semantics-discussion-20261113.md": {
+        "bytes": 12905,
+        "sha256": "3118419cb014570395323baf887ffe5a7e797f97049e85eacef26ecb1fd81c07"
+      }
+    },
+    "runs": [
+      {
+        "name": "attention-operators-npu-v13",
+        "source": "5059ff8f751a1aeb0e65d6d1346c6a2d461676c0",
+        "unit": "tide-attention-operators-npu-v13",
+        "status_state": "passed",
+        "terminal": {
+          "MainPID": "0",
+          "Result": "success",
+          "ExecMainStatus": "0",
+          "ControlGroup": "",
+          "ActiveState": "inactive",
+          "SubState": "dead"
+        },
+        "terminal_and_stopped": true,
+        "allocated_bytes": 6115328,
+        "frozen_archive_check": {
+          "tracked_files": 252,
+          "mismatched": [],
+          "unrecognized_extras": []
+        }
+      },
+      {
+        "name": "attention-sites-cpu-v14",
+        "source": "0992b467584c1f603314ed04d8efe8596a14f576",
+        "unit": "tide-attention-sites-cpu-v14",
+        "status_state": "terminated",
+        "terminal": {
+          "MainPID": "0",
+          "Result": "exit-code",
+          "ExecMainStatus": "143",
+          "ControlGroup": "",
+          "ActiveState": "failed",
+          "SubState": "failed"
+        },
+        "terminal_and_stopped": true,
+        "allocated_bytes": 5603328,
+        "frozen_archive_check": {
+          "tracked_files": 253,
+          "mismatched": [],
+          "unrecognized_extras": []
+        }
+      },
+      {
+        "name": "attention-sites-cpu-v16",
+        "source": "0992b467584c1f603314ed04d8efe8596a14f576",
+        "unit": "tide-attention-sites-cpu-v16",
+        "status_state": "passed",
+        "terminal": {
+          "MainPID": "0",
+          "Result": "success",
+          "ExecMainStatus": "0",
+          "ControlGroup": "",
+          "ActiveState": "inactive",
+          "SubState": "dead"
+        },
+        "terminal_and_stopped": true,
+        "allocated_bytes": 6164480,
+        "frozen_archive_check": {
+          "tracked_files": 253,
+          "mismatched": [],
+          "unrecognized_extras": []
+        }
+      },
+      {
+        "name": "attention-sites-npu-v7",
+        "source": "e2a4d39104a006feec4525e534eadae4a94cde0d",
+        "unit": "tide-attention-sites-npu-v7",
+        "status_state": "passed",
+        "terminal": {
+          "MainPID": "0",
+          "Result": "success",
+          "ExecMainStatus": "0",
+          "ControlGroup": "",
+          "ActiveState": "inactive",
+          "SubState": "dead"
+        },
+        "terminal_and_stopped": true,
+        "allocated_bytes": 4468736,
+        "frozen_archive_check": {
+          "tracked_files": 233,
+          "mismatched": [],
+          "unrecognized_extras": []
+        }
+      },
+      {
+        "name": "calibration-cpu-v2",
+        "source": "3b9f919b560d829fbed70302749ba4c9584bbd9b",
+        "unit": "tide-calibration-cpu-v2",
+        "status_state": "passed",
+        "terminal": {
+          "MainPID": "0",
+          "Result": "success",
+          "ExecMainStatus": "0",
+          "ControlGroup": "",
+          "ActiveState": "inactive",
+          "SubState": "dead"
+        },
+        "terminal_and_stopped": true,
+        "allocated_bytes": 39399424,
+        "frozen_archive_check": {
+          "tracked_files": 222,
+          "mismatched": [],
+          "unrecognized_extras": []
+        }
+      },
+      {
+        "name": "combinations-npu-v7",
+        "source": "e2a4d39104a006feec4525e534eadae4a94cde0d",
+        "unit": "tide-combinations-npu-v7",
+        "status_state": "passed",
+        "terminal": {
+          "MainPID": "0",
+          "Result": "success",
+          "ExecMainStatus": "0",
+          "ControlGroup": "",
+          "ActiveState": "inactive",
+          "SubState": "dead"
+        },
+        "terminal_and_stopped": true,
+        "allocated_bytes": 7045120,
+        "frozen_archive_check": {
+          "tracked_files": 233,
+          "mismatched": [],
+          "unrecognized_extras": []
+        }
+      },
+      {
+        "name": "continuation-fp64-cpu-v10",
+        "source": "0e0023ff773f56920da78374e26ded6f10ceac06",
+        "unit": "tide-continuation-fp64-cpu-v10",
+        "status_state": "passed",
+        "terminal": {
+          "MainPID": "0",
+          "Result": "success",
+          "ExecMainStatus": "0",
+          "ControlGroup": "",
+          "ActiveState": "inactive",
+          "SubState": "dead"
+        },
+        "terminal_and_stopped": true,
+        "allocated_bytes": 5083136,
+        "frozen_archive_check": {
+          "tracked_files": 240,
+          "mismatched": [],
+          "unrecognized_extras": []
+        }
+      },
+      {
+        "name": "continuation-numerics-cpu-v9",
+        "source": "5185dc0d1d3ae4c570e0712a42826e3974161bed",
+        "unit": "tide-continuation-numerics-cpu-v9",
+        "status_state": "failed",
+        "terminal": {
+          "MainPID": "0",
+          "Result": "exit-code",
+          "ExecMainStatus": "1",
+          "ControlGroup": "",
+          "ActiveState": "failed",
+          "SubState": "failed"
+        },
+        "terminal_and_stopped": true,
+        "allocated_bytes": 4362240,
+        "frozen_archive_check": {
+          "tracked_files": 236,
+          "mismatched": [],
+          "unrecognized_extras": []
+        }
+      },
+      {
+        "name": "continuation-numerics-npu-v9",
+        "source": "5185dc0d1d3ae4c570e0712a42826e3974161bed",
+        "unit": "tide-continuation-numerics-npu-v9",
+        "status_state": "passed",
+        "terminal": {
+          "MainPID": "0",
+          "Result": "success",
+          "ExecMainStatus": "0",
+          "ControlGroup": "",
+          "ActiveState": "inactive",
+          "SubState": "dead"
+        },
+        "terminal_and_stopped": true,
+        "allocated_bytes": 4370432,
+        "frozen_archive_check": {
+          "tracked_files": 236,
+          "mismatched": [],
+          "unrecognized_extras": []
+        }
+      },
+      {
+        "name": "continuation-tiled-npu-v10",
+        "source": "0e0023ff773f56920da78374e26ded6f10ceac06",
+        "unit": "tide-continuation-tiled-npu-v10",
+        "status_state": "passed",
+        "terminal": {
+          "MainPID": "0",
+          "Result": "success",
+          "ExecMainStatus": "0",
+          "ControlGroup": "",
+          "ActiveState": "inactive",
+          "SubState": "dead"
+        },
+        "terminal_and_stopped": true,
+        "allocated_bytes": 5091328,
+        "frozen_archive_check": {
+          "tracked_files": 240,
+          "mismatched": [],
+          "unrecognized_extras": []
+        }
+      },
+      {
+        "name": "continuous-cpu-v14",
+        "source": "0992b467584c1f603314ed04d8efe8596a14f576",
+        "unit": "tide-continuous-cpu-v14",
+        "status_state": "terminated",
+        "terminal": {
+          "MainPID": "0",
+          "Result": "exit-code",
+          "ExecMainStatus": "143",
+          "ControlGroup": "",
+          "ActiveState": "failed",
+          "SubState": "failed"
+        },
+        "terminal_and_stopped": true,
+        "allocated_bytes": 5611520,
+        "frozen_archive_check": {
+          "tracked_files": 253,
+          "mismatched": [],
+          "unrecognized_extras": []
+        }
+      },
+      {
+        "name": "continuous-cpu-v16",
+        "source": "0992b467584c1f603314ed04d8efe8596a14f576",
+        "unit": "tide-continuous-cpu-v16",
+        "status_state": "passed",
+        "terminal": {
+          "MainPID": "0",
+          "Result": "success",
+          "ExecMainStatus": "0",
+          "ControlGroup": "",
+          "ActiveState": "inactive",
+          "SubState": "dead"
+        },
+        "terminal_and_stopped": true,
+        "allocated_bytes": 371904512,
+        "frozen_archive_check": {
+          "tracked_files": 253,
+          "mismatched": [],
+          "unrecognized_extras": []
+        }
+      },
+      {
+        "name": "continuous-npu-fc-k-v8",
+        "source": "9a1f600f2b712aaebf28a1a689d864b2358a5fa6",
+        "unit": "tide-continuous-npu-fc-k-v8",
+        "status_state": "passed",
+        "terminal": {
+          "MainPID": "0",
+          "Result": "success",
+          "ExecMainStatus": "0",
+          "ControlGroup": "",
+          "ActiveState": "inactive",
+          "SubState": "dead"
+        },
+        "terminal_and_stopped": true,
+        "allocated_bytes": 517627904,
+        "frozen_archive_check": {
+          "tracked_files": 233,
+          "mismatched": [],
+          "unrecognized_extras": []
+        }
+      },
+      {
+        "name": "continuous-npu-fc-s-v8",
+        "source": "9a1f600f2b712aaebf28a1a689d864b2358a5fa6",
+        "unit": "tide-continuous-npu-fc-s-v8",
+        "status_state": "passed",
+        "terminal": {
+          "MainPID": "0",
+          "Result": "success",
+          "ExecMainStatus": "0",
+          "ControlGroup": "",
+          "ActiveState": "inactive",
+          "SubState": "dead"
+        },
+        "terminal_and_stopped": true,
+        "allocated_bytes": 146784256,
+        "frozen_archive_check": {
+          "tracked_files": 233,
+          "mismatched": [],
+          "unrecognized_extras": []
+        }
+      },
+      {
+        "name": "continuous-npu-hb-multiscale-x-settle-v8",
+        "source": "9a1f600f2b712aaebf28a1a689d864b2358a5fa6",
+        "unit": "tide-continuous-npu-hb-multiscale-x-settle-v8",
+        "status_state": "passed",
+        "terminal": {
+          "MainPID": "0",
+          "Result": "success",
+          "ExecMainStatus": "0",
+          "ControlGroup": "",
+          "ActiveState": "inactive",
+          "SubState": "dead"
+        },
+        "terminal_and_stopped": true,
+        "allocated_bytes": 961867776,
+        "frozen_archive_check": {
+          "tracked_files": 233,
+          "mismatched": [],
+          "unrecognized_extras": []
+        }
+      },
+      {
+        "name": "continuous-npu-hb-multiscale-x-timed-v8",
+        "source": "9a1f600f2b712aaebf28a1a689d864b2358a5fa6",
+        "unit": "tide-continuous-npu-hb-multiscale-x-timed-v8",
+        "status_state": "passed",
+        "terminal": {
+          "MainPID": "0",
+          "Result": "success",
+          "ExecMainStatus": "0",
+          "ControlGroup": "",
+          "ActiveState": "inactive",
+          "SubState": "dead"
+        },
+        "terminal_and_stopped": true,
+        "allocated_bytes": 1481355264,
+        "frozen_archive_check": {
+          "tracked_files": 233,
+          "mismatched": [],
+          "unrecognized_extras": []
+        }
+      },
+      {
+        "name": "environment-cpu-v18",
+        "source": "ca6199d427ea452492422bb7be21c03ce45aab5c",
+        "unit": "tide-environment-cpu-v18",
+        "status_state": "passed",
+        "terminal": {
+          "MainPID": "0",
+          "Result": "success",
+          "ExecMainStatus": "0",
+          "ControlGroup": "",
+          "ActiveState": "inactive",
+          "SubState": "dead"
+        },
+        "terminal_and_stopped": true,
+        "allocated_bytes": 7905280,
+        "frozen_archive_check": {
+          "tracked_files": 261,
+          "mismatched": [],
+          "unrecognized_extras": []
+        }
+      },
+      {
+        "name": "hotspots-cpu-v3",
+        "source": "c09e5d7cf18de19d73c242a6e461c14e5dba1101",
+        "unit": "tide-hotspots-cpu-v3",
+        "status_state": "passed",
+        "terminal": {
+          "MainPID": "0",
+          "Result": "success",
+          "ExecMainStatus": "0",
+          "ControlGroup": "",
+          "ActiveState": "inactive",
+          "SubState": "dead"
+        },
+        "terminal_and_stopped": true,
+        "allocated_bytes": 4153344,
+        "frozen_archive_check": {
+          "tracked_files": 223,
+          "mismatched": [],
+          "unrecognized_extras": []
+        }
+      },
+      {
+        "name": "hotspots-npu-v2",
+        "source": "3b9f919b560d829fbed70302749ba4c9584bbd9b",
+        "unit": "tide-hotspots-npu-v2",
+        "status_state": "passed",
+        "terminal": {
+          "MainPID": "0",
+          "Result": "success",
+          "ExecMainStatus": "0",
+          "ControlGroup": "",
+          "ActiveState": "inactive",
+          "SubState": "dead"
+        },
+        "terminal_and_stopped": true,
+        "allocated_bytes": 4120576,
+        "frozen_archive_check": {
+          "tracked_files": 222,
+          "mismatched": [],
+          "unrecognized_extras": []
+        }
+      },
+      {
+        "name": "placement-copy-probes-v6",
+        "source": "7bcb0df17f0613793d82511d9517e37e1870850a",
+        "unit": "tide-placement-copy-probes-v6",
+        "status_state": "passed",
+        "terminal": {
+          "MainPID": "0",
+          "Result": "success",
+          "ExecMainStatus": "0",
+          "ControlGroup": "",
+          "ActiveState": "inactive",
+          "SubState": "dead"
+        },
+        "terminal_and_stopped": true,
+        "allocated_bytes": 4198400,
+        "frozen_archive_check": {
+          "tracked_files": 231,
+          "mismatched": [],
+          "unrecognized_extras": []
+        }
+      },
+      {
+        "name": "placement-environment-npu-v18",
+        "source": "ca6199d427ea452492422bb7be21c03ce45aab5c",
+        "unit": "tide-placement-environment-npu-v18",
+        "status_state": "failed",
+        "terminal": {
+          "MainPID": "0",
+          "Result": "exit-code",
+          "ExecMainStatus": "1",
+          "ControlGroup": "",
+          "ActiveState": "failed",
+          "SubState": "failed"
+        },
+        "terminal_and_stopped": true,
+        "allocated_bytes": 8282112,
+        "frozen_archive_check": {
+          "tracked_files": 261,
+          "mismatched": [],
+          "unrecognized_extras": []
+        }
+      },
+      {
+        "name": "placement-host-stage-npu-v8",
+        "source": "20062c170e85ef0c5fd91130b6df724f90622913",
+        "unit": "tide-placement-host-stage-npu-v8",
+        "status_state": "passed",
+        "terminal": {
+          "MainPID": "0",
+          "Result": "success",
+          "ExecMainStatus": "0",
+          "ControlGroup": "",
+          "ActiveState": "inactive",
+          "SubState": "dead"
+        },
+        "terminal_and_stopped": true,
+        "allocated_bytes": 4534272,
+        "frozen_archive_check": {
+          "tracked_files": 233,
+          "mismatched": [],
+          "unrecognized_extras": []
+        }
+      },
+      {
+        "name": "placement-npu-v4",
+        "source": "bdcb81de615e9aa4b21e7443871d33149b4f1553",
+        "unit": "tide-placement-npu-v4",
+        "status_state": "failed",
+        "terminal": {
+          "MainPID": "0",
+          "Result": "exit-code",
+          "ExecMainStatus": "1",
+          "ControlGroup": "",
+          "ActiveState": "failed",
+          "SubState": "failed"
+        },
+        "terminal_and_stopped": true,
+        "allocated_bytes": 4263936,
+        "frozen_archive_check": {
+          "tracked_files": 227,
+          "mismatched": [],
+          "unrecognized_extras": []
+        }
+      },
+      {
+        "name": "placement-transport-diagnosis-v6",
+        "source": "7bcb0df17f0613793d82511d9517e37e1870850a",
+        "unit": "tide-placement-transport-diagnosis-v6",
+        "status_state": "failed",
+        "terminal": {
+          "MainPID": "0",
+          "Result": "exit-code",
+          "ExecMainStatus": "1",
+          "ControlGroup": "",
+          "ActiveState": "failed",
+          "SubState": "failed"
+        },
+        "terminal_and_stopped": true,
+        "allocated_bytes": 4448256,
+        "frozen_archive_check": {
+          "tracked_files": 231,
+          "mismatched": [],
+          "unrecognized_extras": []
+        }
+      },
+      {
+        "name": "primitives-npu-bf16-v2",
+        "source": "3b9f919b560d829fbed70302749ba4c9584bbd9b",
+        "unit": "tide-primitives-npu-bf16-v2",
+        "status_state": "passed",
+        "terminal": {
+          "MainPID": "0",
+          "Result": "success",
+          "ExecMainStatus": "0",
+          "ControlGroup": "",
+          "ActiveState": "inactive",
+          "SubState": "dead"
+        },
+        "terminal_and_stopped": true,
+        "allocated_bytes": 4042752,
+        "frozen_archive_check": {
+          "tracked_files": 222,
+          "mismatched": [],
+          "unrecognized_extras": []
+        }
+      },
+      {
+        "name": "projections-e2e-npu-v3",
+        "source": "c09e5d7cf18de19d73c242a6e461c14e5dba1101",
+        "unit": "tide-projections-e2e-npu-v3",
+        "status_state": "passed",
+        "terminal": {
+          "MainPID": "0",
+          "Result": "success",
+          "ExecMainStatus": "0",
+          "ControlGroup": "",
+          "ActiveState": "inactive",
+          "SubState": "dead"
+        },
+        "terminal_and_stopped": true,
+        "allocated_bytes": 4157440,
+        "frozen_archive_check": {
+          "tracked_files": 223,
+          "mismatched": [],
+          "unrecognized_extras": []
+        }
+      },
+      {
+        "name": "projections-npu-v2",
+        "source": "3b9f919b560d829fbed70302749ba4c9584bbd9b",
+        "unit": "tide-projections-npu-v2",
+        "status_state": "passed",
+        "terminal": {
+          "MainPID": "0",
+          "Result": "success",
+          "ExecMainStatus": "0",
+          "ControlGroup": "",
+          "ActiveState": "inactive",
+          "SubState": "dead"
+        },
+        "terminal_and_stopped": true,
+        "allocated_bytes": 4046848,
+        "frozen_archive_check": {
+          "tracked_files": 222,
+          "mismatched": [],
+          "unrecognized_extras": []
+        }
+      },
+      {
+        "name": "qualification-attention-npu-v1",
+        "source": "050dafa305d45162b2c86e736253455d7b476d27",
+        "unit": "tide-qualification-attention-npu-v1",
+        "status_state": "passed",
+        "terminal": {
+          "MainPID": "0",
+          "Result": "success",
+          "ExecMainStatus": "0",
+          "ControlGroup": "",
+          "ActiveState": "inactive",
+          "SubState": "dead"
+        },
+        "terminal_and_stopped": true,
+        "allocated_bytes": 3911680,
+        "frozen_archive_check": {
+          "tracked_files": 215,
+          "mismatched": [],
+          "unrecognized_extras": []
+        }
+      },
+      {
+        "name": "qualification-cpu-bf16-v1",
+        "source": "050dafa305d45162b2c86e736253455d7b476d27",
+        "unit": "tide-qualification-cpu-bf16-v1",
+        "status_state": "failed",
+        "terminal": {
+          "MainPID": "0",
+          "Result": "exit-code",
+          "ExecMainStatus": "1",
+          "ControlGroup": "",
+          "ActiveState": "failed",
+          "SubState": "failed"
+        },
+        "terminal_and_stopped": true,
+        "allocated_bytes": 4308992,
+        "frozen_archive_check": {
+          "tracked_files": 215,
+          "mismatched": [],
+          "unrecognized_extras": []
+        }
+      },
+      {
+        "name": "qualification-cpu-fp32-v1",
+        "source": "050dafa305d45162b2c86e736253455d7b476d27",
+        "unit": "tide-qualification-cpu-fp32-v1",
+        "status_state": "passed",
+        "terminal": {
+          "MainPID": "0",
+          "Result": "success",
+          "ExecMainStatus": "0",
+          "ControlGroup": "",
+          "ActiveState": "inactive",
+          "SubState": "dead"
+        },
+        "terminal_and_stopped": true,
+        "allocated_bytes": 1711325184,
+        "frozen_archive_check": {
+          "tracked_files": 215,
+          "mismatched": [],
+          "unrecognized_extras": []
+        }
+      },
+      {
+        "name": "qualification-cpu-v8",
+        "source": "9a1f600f2b712aaebf28a1a689d864b2358a5fa6",
+        "unit": "tide-qualification-cpu-v8",
+        "status_state": "failed",
+        "terminal": {
+          "MainPID": "0",
+          "Result": "exit-code",
+          "ExecMainStatus": "1",
+          "ControlGroup": "",
+          "ActiveState": "failed",
+          "SubState": "failed"
+        },
+        "terminal_and_stopped": true,
+        "allocated_bytes": 1711992832,
+        "frozen_archive_check": {
+          "tracked_files": 233,
+          "mismatched": [],
+          "unrecognized_extras": []
+        }
+      },
+      {
+        "name": "qualification-npu-bf16-v1",
+        "source": "050dafa305d45162b2c86e736253455d7b476d27",
+        "unit": "tide-qualification-npu-bf16-v1",
+        "status_state": "failed",
+        "terminal": {
+          "MainPID": "0",
+          "Result": "exit-code",
+          "ExecMainStatus": "1",
+          "ControlGroup": "",
+          "ActiveState": "failed",
+          "SubState": "failed"
+        },
+        "terminal_and_stopped": true,
+        "allocated_bytes": 4317184,
+        "frozen_archive_check": {
+          "tracked_files": 215,
+          "mismatched": [],
+          "unrecognized_extras": []
+        }
+      },
+      {
+        "name": "qualification-npu-bf16-v5",
+        "source": "778c65fb2961624bb416343eb3ad0f6f031deff7",
+        "unit": "tide-qualification-npu-bf16-v5",
+        "status_state": "failed",
+        "terminal": {
+          "MainPID": "0",
+          "Result": "exit-code",
+          "ExecMainStatus": "1",
+          "ControlGroup": "",
+          "ActiveState": "failed",
+          "SubState": "failed"
+        },
+        "terminal_and_stopped": true,
+        "allocated_bytes": 4538368,
+        "frozen_archive_check": {
+          "tracked_files": 230,
+          "mismatched": [],
+          "unrecognized_extras": []
+        }
+      },
+      {
+        "name": "qualification-npu-bf16-v9",
+        "source": "5185dc0d1d3ae4c570e0712a42826e3974161bed",
+        "unit": "tide-qualification-npu-bf16-v9",
+        "status_state": "failed",
+        "terminal": {
+          "MainPID": "0",
+          "Result": "exit-code",
+          "ExecMainStatus": "1",
+          "ControlGroup": "",
+          "ActiveState": "failed",
+          "SubState": "failed"
+        },
+        "terminal_and_stopped": true,
+        "allocated_bytes": 4718592,
+        "frozen_archive_check": {
+          "tracked_files": 236,
+          "mismatched": [],
+          "unrecognized_extras": []
+        }
+      },
+      {
+        "name": "qualification-npu-fp32-v1",
+        "source": "050dafa305d45162b2c86e736253455d7b476d27",
+        "unit": "tide-qualification-npu-fp32-v1",
+        "status_state": "passed",
+        "terminal": {
+          "MainPID": "0",
+          "Result": "success",
+          "ExecMainStatus": "0",
+          "ControlGroup": "",
+          "ActiveState": "inactive",
+          "SubState": "dead"
+        },
+        "terminal_and_stopped": true,
+        "allocated_bytes": 4202496,
+        "frozen_archive_check": {
+          "tracked_files": 215,
+          "mismatched": [],
+          "unrecognized_extras": []
+        }
+      },
+      {
+        "name": "qualification-npu-fp32-v9",
+        "source": "5185dc0d1d3ae4c570e0712a42826e3974161bed",
+        "unit": "tide-qualification-npu-fp32-v9",
+        "status_state": "passed",
+        "terminal": {
+          "MainPID": "0",
+          "Result": "success",
+          "ExecMainStatus": "0",
+          "ControlGroup": "",
+          "ActiveState": "inactive",
+          "SubState": "dead"
+        },
+        "terminal_and_stopped": true,
+        "allocated_bytes": 4599808,
+        "frozen_archive_check": {
+          "tracked_files": 236,
+          "mismatched": [],
+          "unrecognized_extras": []
+        }
+      },
+      {
+        "name": "representative-cpu-v5",
+        "source": "778c65fb2961624bb416343eb3ad0f6f031deff7",
+        "unit": "tide-representative-cpu-v5",
+        "status_state": "passed",
+        "terminal": {
+          "MainPID": "0",
+          "Result": "success",
+          "ExecMainStatus": "0",
+          "ControlGroup": "",
+          "ActiveState": "inactive",
+          "SubState": "dead"
+        },
+        "terminal_and_stopped": true,
+        "allocated_bytes": 138067968,
+        "frozen_archive_check": {
+          "tracked_files": 230,
+          "mismatched": [],
+          "unrecognized_extras": []
+        }
+      },
+      {
+        "name": "representative-npu-fc-k-149m-v5",
+        "source": "778c65fb2961624bb416343eb3ad0f6f031deff7",
+        "unit": "tide-representative-npu-fc-k-149m-v5",
+        "status_state": "passed",
+        "terminal": {
+          "MainPID": "0",
+          "Result": "success",
+          "ExecMainStatus": "0",
+          "ControlGroup": "",
+          "ActiveState": "inactive",
+          "SubState": "dead"
+        },
+        "terminal_and_stopped": true,
+        "allocated_bytes": 17776640,
+        "frozen_archive_check": {
+          "tracked_files": 230,
+          "mismatched": [],
+          "unrecognized_extras": []
+        }
+      },
+      {
+        "name": "representative-npu-fc-k-v5",
+        "source": "778c65fb2961624bb416343eb3ad0f6f031deff7",
+        "unit": "tide-representative-npu-fc-k-v5",
+        "status_state": "passed",
+        "terminal": {
+          "MainPID": "0",
+          "Result": "success",
+          "ExecMainStatus": "0",
+          "ControlGroup": "",
+          "ActiveState": "inactive",
+          "SubState": "dead"
+        },
+        "terminal_and_stopped": true,
+        "allocated_bytes": 17645568,
+        "frozen_archive_check": {
+          "tracked_files": 230,
+          "mismatched": [],
+          "unrecognized_extras": []
+        }
+      },
+      {
+        "name": "representative-npu-fc-s-v5",
+        "source": "778c65fb2961624bb416343eb3ad0f6f031deff7",
+        "unit": "tide-representative-npu-fc-s-v5",
+        "status_state": "passed",
+        "terminal": {
+          "MainPID": "0",
+          "Result": "success",
+          "ExecMainStatus": "0",
+          "ControlGroup": "",
+          "ActiveState": "inactive",
+          "SubState": "dead"
+        },
+        "terminal_and_stopped": true,
+        "allocated_bytes": 17072128,
+        "frozen_archive_check": {
+          "tracked_files": 230,
+          "mismatched": [],
+          "unrecognized_extras": []
+        }
+      },
+      {
+        "name": "representative-npu-hb-exchange-x-v5",
+        "source": "778c65fb2961624bb416343eb3ad0f6f031deff7",
+        "unit": "tide-representative-npu-hb-exchange-x-v5",
+        "status_state": "passed",
+        "terminal": {
+          "MainPID": "0",
+          "Result": "success",
+          "ExecMainStatus": "0",
+          "ControlGroup": "",
+          "ActiveState": "inactive",
+          "SubState": "dead"
+        },
+        "terminal_and_stopped": true,
+        "allocated_bytes": 17715200,
+        "frozen_archive_check": {
+          "tracked_files": 230,
+          "mismatched": [],
+          "unrecognized_extras": []
+        }
+      },
+      {
+        "name": "representative-npu-hb-lattice-k-v5",
+        "source": "778c65fb2961624bb416343eb3ad0f6f031deff7",
+        "unit": "tide-representative-npu-hb-lattice-k-v5",
+        "status_state": "passed",
+        "terminal": {
+          "MainPID": "0",
+          "Result": "success",
+          "ExecMainStatus": "0",
+          "ControlGroup": "",
+          "ActiveState": "inactive",
+          "SubState": "dead"
+        },
+        "terminal_and_stopped": true,
+        "allocated_bytes": 17678336,
+        "frozen_archive_check": {
+          "tracked_files": 230,
+          "mismatched": [],
+          "unrecognized_extras": []
+        }
+      },
+      {
+        "name": "representative-npu-hb-multiscale-x-settle-v5",
+        "source": "778c65fb2961624bb416343eb3ad0f6f031deff7",
+        "unit": "tide-representative-npu-hb-multiscale-x-settle-v5",
+        "status_state": "passed",
+        "terminal": {
+          "MainPID": "0",
+          "Result": "success",
+          "ExecMainStatus": "0",
+          "ControlGroup": "",
+          "ActiveState": "inactive",
+          "SubState": "dead"
+        },
+        "terminal_and_stopped": true,
+        "allocated_bytes": 17801216,
+        "frozen_archive_check": {
+          "tracked_files": 230,
+          "mismatched": [],
+          "unrecognized_extras": []
+        }
+      },
+      {
+        "name": "representative-npu-hb-multiscale-x-timed-v5",
+        "source": "778c65fb2961624bb416343eb3ad0f6f031deff7",
+        "unit": "tide-representative-npu-hb-multiscale-x-timed-v5",
+        "status_state": "passed",
+        "terminal": {
+          "MainPID": "0",
+          "Result": "success",
+          "ExecMainStatus": "0",
+          "ControlGroup": "",
+          "ActiveState": "inactive",
+          "SubState": "dead"
+        },
+        "terminal_and_stopped": true,
+        "allocated_bytes": 58269696,
+        "frozen_archive_check": {
+          "tracked_files": 230,
+          "mismatched": [],
+          "unrecognized_extras": []
+        }
+      },
+      {
+        "name": "resident-npu-v11",
+        "source": "6fc53d81910252ac42bd5fce1476f7a70b968ed7",
+        "unit": "tide-resident-npu-v11",
+        "status_state": "passed",
+        "terminal": {
+          "MainPID": "0",
+          "Result": "success",
+          "ExecMainStatus": "0",
+          "ControlGroup": "",
+          "ActiveState": "inactive",
+          "SubState": "dead"
+        },
+        "terminal_and_stopped": true,
+        "allocated_bytes": 5193728,
+        "frozen_archive_check": {
+          "tracked_files": 243,
+          "mismatched": [],
+          "unrecognized_extras": []
+        }
+      },
+      {
+        "name": "restore-backward-npu-v9",
+        "source": "5185dc0d1d3ae4c570e0712a42826e3974161bed",
+        "unit": "tide-restore-backward-npu-v9",
+        "status_state": "passed",
+        "terminal": {
+          "MainPID": "0",
+          "Result": "success",
+          "ExecMainStatus": "0",
+          "ControlGroup": "",
+          "ActiveState": "inactive",
+          "SubState": "dead"
+        },
+        "terminal_and_stopped": true,
+        "allocated_bytes": 4415488,
+        "frozen_archive_check": {
+          "tracked_files": 236,
+          "mismatched": [],
+          "unrecognized_extras": []
+        }
+      },
+      {
+        "name": "routing-analysis-v3",
+        "source": "c09e5d7cf18de19d73c242a6e461c14e5dba1101",
+        "unit": "tide-routing-analysis-v3",
+        "status_state": "passed",
+        "terminal": {
+          "MainPID": "0",
+          "Result": "success",
+          "ExecMainStatus": "0",
+          "ControlGroup": "",
+          "ActiveState": "inactive",
+          "SubState": "dead"
+        },
+        "terminal_and_stopped": true,
+        "allocated_bytes": 4292608,
+        "frozen_archive_check": {
+          "tracked_files": 223,
+          "mismatched": [],
+          "unrecognized_extras": []
+        }
+      },
+      {
+        "name": "routing-npu-v3",
+        "source": "c09e5d7cf18de19d73c242a6e461c14e5dba1101",
+        "unit": "tide-routing-npu-v3",
+        "status_state": "passed",
+        "terminal": {
+          "MainPID": "0",
+          "Result": "success",
+          "ExecMainStatus": "0",
+          "ControlGroup": "",
+          "ActiveState": "inactive",
+          "SubState": "dead"
+        },
+        "terminal_and_stopped": true,
+        "allocated_bytes": 50245632,
+        "frozen_archive_check": {
+          "tracked_files": 223,
+          "mismatched": [],
+          "unrecognized_extras": []
+        }
+      },
+      {
+        "name": "scale-cpu-hb-17b-inference-v17",
+        "source": "0992b467584c1f603314ed04d8efe8596a14f576",
+        "unit": "tide-scale-cpu-hb-17b-inference-v17",
+        "status_state": "passed",
+        "terminal": {
+          "MainPID": "0",
+          "Result": "success",
+          "ExecMainStatus": "0",
+          "ControlGroup": "",
+          "ActiveState": "inactive",
+          "SubState": "dead"
+        },
+        "terminal_and_stopped": true,
+        "allocated_bytes": 6471680,
+        "frozen_archive_check": {
+          "tracked_files": 253,
+          "mismatched": [],
+          "unrecognized_extras": []
+        }
+      },
+      {
+        "name": "scale-cpu-hb-17b-train-v17",
+        "source": "0992b467584c1f603314ed04d8efe8596a14f576",
+        "unit": "tide-scale-cpu-hb-17b-train-v17",
+        "status_state": "terminated",
+        "terminal": {
+          "MainPID": "0",
+          "Result": "exit-code",
+          "ExecMainStatus": "143",
+          "ControlGroup": "",
+          "ActiveState": "failed",
+          "SubState": "failed"
+        },
+        "terminal_and_stopped": true,
+        "allocated_bytes": 5627904,
+        "frozen_archive_check": {
+          "tracked_files": 253,
+          "mismatched": [],
+          "unrecognized_extras": []
+        }
+      },
+      {
+        "name": "scale-cpu-hb-17b-train-v20",
+        "source": "0992b467584c1f603314ed04d8efe8596a14f576",
+        "unit": "tide-scale-cpu-hb-17b-train-v20",
+        "status_state": "passed",
+        "terminal": {
+          "MainPID": "0",
+          "Result": "success",
+          "ExecMainStatus": "0",
+          "ControlGroup": "",
+          "ActiveState": "inactive",
+          "SubState": "dead"
+        },
+        "terminal_and_stopped": true,
+        "allocated_bytes": 6139904,
+        "frozen_archive_check": {
+          "tracked_files": 253,
+          "mismatched": [],
+          "unrecognized_extras": []
+        }
+      },
+      {
+        "name": "scale-cpu-hb-17b-v15",
+        "source": "0992b467584c1f603314ed04d8efe8596a14f576",
+        "unit": "tide-scale-cpu-hb-17b-v15",
+        "status_state": "terminated",
+        "terminal": {
+          "MainPID": "0",
+          "Result": "exit-code",
+          "ExecMainStatus": "143",
+          "ControlGroup": "",
+          "ActiveState": "failed",
+          "SubState": "failed"
+        },
+        "terminal_and_stopped": true,
+        "allocated_bytes": 5623808,
+        "frozen_archive_check": {
+          "tracked_files": 253,
+          "mismatched": [],
+          "unrecognized_extras": []
+        }
+      },
+      {
+        "name": "scale-cpu-hb-17b-v16",
+        "source": "0992b467584c1f603314ed04d8efe8596a14f576",
+        "unit": "tide-scale-cpu-hb-17b-v16",
+        "status_state": "terminated",
+        "terminal": {
+          "MainPID": "0",
+          "Result": "exit-code",
+          "ExecMainStatus": "143",
+          "ControlGroup": "",
+          "ActiveState": "failed",
+          "SubState": "failed"
+        },
+        "terminal_and_stopped": true,
+        "allocated_bytes": 5632000,
+        "frozen_archive_check": {
+          "tracked_files": 253,
+          "mismatched": [],
+          "unrecognized_extras": []
+        }
+      },
+      {
+        "name": "scale-four-npu-hb-9b-train-v14",
+        "source": "0992b467584c1f603314ed04d8efe8596a14f576",
+        "unit": "tide-scale-four-npu-hb-9b-train-v14",
+        "status_state": "terminated",
+        "terminal": {
+          "MainPID": "0",
+          "Result": "exit-code",
+          "ExecMainStatus": "143",
+          "ControlGroup": "",
+          "ActiveState": "failed",
+          "SubState": "failed"
+        },
+        "terminal_and_stopped": true,
+        "allocated_bytes": 5607424,
+        "frozen_archive_check": {
+          "tracked_files": 253,
+          "mismatched": [],
+          "unrecognized_extras": []
+        }
+      },
+      {
+        "name": "scale-four-npu-hb-9b-train-v16",
+        "source": "0992b467584c1f603314ed04d8efe8596a14f576",
+        "unit": "tide-scale-four-npu-hb-9b-train-v16",
+        "status_state": "passed",
+        "terminal": {
+          "MainPID": "0",
+          "Result": "success",
+          "ExecMainStatus": "0",
+          "ControlGroup": "",
+          "ActiveState": "inactive",
+          "SubState": "dead"
+        },
+        "terminal_and_stopped": true,
+        "allocated_bytes": 6205440,
+        "frozen_archive_check": {
+          "tracked_files": 253,
+          "mismatched": [],
+          "unrecognized_extras": []
+        }
+      },
+      {
+        "name": "scale-npu-fc-0p5b-v7",
+        "source": "e2a4d39104a006feec4525e534eadae4a94cde0d",
+        "unit": "tide-scale-npu-fc-0p5b-v7",
+        "status_state": "passed",
+        "terminal": {
+          "MainPID": "0",
+          "Result": "success",
+          "ExecMainStatus": "0",
+          "ControlGroup": "",
+          "ActiveState": "inactive",
+          "SubState": "dead"
+        },
+        "terminal_and_stopped": true,
+        "allocated_bytes": 4710400,
+        "frozen_archive_check": {
+          "tracked_files": 233,
+          "mismatched": [],
+          "unrecognized_extras": []
+        }
+      },
+      {
+        "name": "scale-npu-fc-1b-v7",
+        "source": "e2a4d39104a006feec4525e534eadae4a94cde0d",
+        "unit": "tide-scale-npu-fc-1b-v7",
+        "status_state": "passed",
+        "terminal": {
+          "MainPID": "0",
+          "Result": "success",
+          "ExecMainStatus": "0",
+          "ControlGroup": "",
+          "ActiveState": "inactive",
+          "SubState": "dead"
+        },
+        "terminal_and_stopped": true,
+        "allocated_bytes": 4714496,
+        "frozen_archive_check": {
+          "tracked_files": 233,
+          "mismatched": [],
+          "unrecognized_extras": []
+        }
+      },
+      {
+        "name": "scale-npu-hb-0p5b-v7",
+        "source": "e2a4d39104a006feec4525e534eadae4a94cde0d",
+        "unit": "tide-scale-npu-hb-0p5b-v7",
+        "status_state": "passed",
+        "terminal": {
+          "MainPID": "0",
+          "Result": "success",
+          "ExecMainStatus": "0",
+          "ControlGroup": "",
+          "ActiveState": "inactive",
+          "SubState": "dead"
+        },
+        "terminal_and_stopped": true,
+        "allocated_bytes": 4726784,
+        "frozen_archive_check": {
+          "tracked_files": 233,
+          "mismatched": [],
+          "unrecognized_extras": []
+        }
+      },
+      {
+        "name": "scale-npu-hb-1b-v7",
+        "source": "e2a4d39104a006feec4525e534eadae4a94cde0d",
+        "unit": "tide-scale-npu-hb-1b-v7",
+        "status_state": "passed",
+        "terminal": {
+          "MainPID": "0",
+          "Result": "success",
+          "ExecMainStatus": "0",
+          "ControlGroup": "",
+          "ActiveState": "inactive",
+          "SubState": "dead"
+        },
+        "terminal_and_stopped": true,
+        "allocated_bytes": 4734976,
+        "frozen_archive_check": {
+          "tracked_files": 233,
+          "mismatched": [],
+          "unrecognized_extras": []
+        }
+      },
+      {
+        "name": "scale-npu-hb-9b-v12",
+        "source": "c8026e47ee5b6fbe03b9d8c5e84e2bfde70f8267",
+        "unit": "tide-scale-npu-hb-9b-v12",
+        "status_state": "terminated",
+        "terminal": {
+          "MainPID": "0",
+          "Result": "exit-code",
+          "ExecMainStatus": "143",
+          "ControlGroup": "",
+          "ActiveState": "failed",
+          "SubState": "failed"
+        },
+        "terminal_and_stopped": true,
+        "allocated_bytes": 4775936,
+        "frozen_archive_check": {
+          "tracked_files": 244,
+          "mismatched": [],
+          "unrecognized_extras": []
+        }
+      },
+      {
+        "name": "scale-npu-hb-9b-v16",
+        "source": "0992b467584c1f603314ed04d8efe8596a14f576",
+        "unit": "tide-scale-npu-hb-9b-v16",
+        "status_state": "passed",
+        "terminal": {
+          "MainPID": "0",
+          "Result": "success",
+          "ExecMainStatus": "0",
+          "ControlGroup": "",
+          "ActiveState": "inactive",
+          "SubState": "dead"
+        },
+        "terminal_and_stopped": true,
+        "allocated_bytes": 6205440,
+        "frozen_archive_check": {
+          "tracked_files": 253,
+          "mismatched": [],
+          "unrecognized_extras": []
+        }
+      },
+      {
+        "name": "scale-two-npu-hb-17b-v12",
+        "source": "c8026e47ee5b6fbe03b9d8c5e84e2bfde70f8267",
+        "unit": "tide-scale-two-npu-hb-17b-v12",
+        "status_state": "terminated",
+        "terminal": {
+          "MainPID": "0",
+          "Result": "exit-code",
+          "ExecMainStatus": "143",
+          "ControlGroup": "",
+          "ActiveState": "failed",
+          "SubState": "failed"
+        },
+        "terminal_and_stopped": true,
+        "allocated_bytes": 4775936,
+        "frozen_archive_check": {
+          "tracked_files": 244,
+          "mismatched": [],
+          "unrecognized_extras": []
+        }
+      },
+      {
+        "name": "scale-two-npu-hb-17b-v16",
+        "source": "0992b467584c1f603314ed04d8efe8596a14f576",
+        "unit": "tide-scale-two-npu-hb-17b-v16",
+        "status_state": "passed",
+        "terminal": {
+          "MainPID": "0",
+          "Result": "success",
+          "ExecMainStatus": "0",
+          "ControlGroup": "",
+          "ActiveState": "inactive",
+          "SubState": "dead"
+        },
+        "terminal_and_stopped": true,
+        "allocated_bytes": 6111232,
+        "frozen_archive_check": {
+          "tracked_files": 253,
+          "mismatched": [],
+          "unrecognized_extras": []
+        }
+      },
+      {
+        "name": "shape-npu-v7",
+        "source": "e2a4d39104a006feec4525e534eadae4a94cde0d",
+        "unit": "tide-shape-npu-v7",
+        "status_state": "passed",
+        "terminal": {
+          "MainPID": "0",
+          "Result": "success",
+          "ExecMainStatus": "0",
+          "ControlGroup": "",
+          "ActiveState": "inactive",
+          "SubState": "dead"
+        },
+        "terminal_and_stopped": true,
+        "allocated_bytes": 13508608,
+        "frozen_archive_check": {
+          "tracked_files": 233,
+          "mismatched": [],
+          "unrecognized_extras": []
+        }
+      },
+      {
+        "name": "sparse-npu-v7",
+        "source": "e2a4d39104a006feec4525e534eadae4a94cde0d",
+        "unit": "tide-sparse-npu-v7",
+        "status_state": "passed",
+        "terminal": {
+          "MainPID": "0",
+          "Result": "success",
+          "ExecMainStatus": "0",
+          "ControlGroup": "",
+          "ActiveState": "inactive",
+          "SubState": "dead"
+        },
+        "terminal_and_stopped": true,
+        "allocated_bytes": 11919360,
+        "frozen_archive_check": {
+          "tracked_files": 233,
+          "mismatched": [],
+          "unrecognized_extras": []
+        }
+      },
+      {
+        "name": "stages-npu-v2",
+        "source": "3b9f919b560d829fbed70302749ba4c9584bbd9b",
+        "unit": "tide-stages-npu-v2",
+        "status_state": "passed",
+        "terminal": {
+          "MainPID": "0",
+          "Result": "success",
+          "ExecMainStatus": "0",
+          "ControlGroup": "",
+          "ActiveState": "inactive",
+          "SubState": "dead"
+        },
+        "terminal_and_stopped": true,
+        "allocated_bytes": 4009984,
+        "frozen_archive_check": {
+          "tracked_files": 222,
+          "mismatched": [],
+          "unrecognized_extras": []
+        }
+      },
+      {
+        "name": "suite-cpu-v15",
+        "source": "0992b467584c1f603314ed04d8efe8596a14f576",
+        "unit": "tide-suite-cpu-v15",
+        "status_state": "passed",
+        "terminal": {
+          "MainPID": "0",
+          "Result": "success",
+          "ExecMainStatus": "0",
+          "ControlGroup": "",
+          "ActiveState": "inactive",
+          "SubState": "dead"
+        },
+        "terminal_and_stopped": true,
+        "allocated_bytes": 7311360,
+        "frozen_archive_check": {
+          "tracked_files": 253,
+          "mismatched": [],
+          "unrecognized_extras": []
+        }
+      },
+      {
+        "name": "suite-cpu-v2",
+        "source": "3b9f919b560d829fbed70302749ba4c9584bbd9b",
+        "unit": "tide-suite-cpu-v2",
+        "status_state": "passed",
+        "terminal": {
+          "MainPID": "0",
+          "Result": "success",
+          "ExecMainStatus": "0",
+          "ControlGroup": "",
+          "ActiveState": "inactive",
+          "SubState": "dead"
+        },
+        "terminal_and_stopped": true,
+        "allocated_bytes": 5083136,
+        "frozen_archive_check": {
+          "tracked_files": 222,
+          "mismatched": [],
+          "unrecognized_extras": []
+        }
+      },
+      {
+        "name": "wheel-installed-cpu-v15",
+        "source": "0992b467584c1f603314ed04d8efe8596a14f576",
+        "unit": "tide-wheel-installed-cpu-v15",
+        "status_state": "passed",
+        "terminal": {
+          "MainPID": "0",
+          "Result": "success",
+          "ExecMainStatus": "0",
+          "ControlGroup": "",
+          "ActiveState": "inactive",
+          "SubState": "dead"
+        },
+        "terminal_and_stopped": true,
+        "allocated_bytes": 83091456,
+        "frozen_archive_check": {
+          "tracked_files": 253,
+          "mismatched": [],
+          "unrecognized_extras": []
+        }
+      }
+    ],
+    "candidates": [
+      {
+        "path": "artifacts/attention-operators-npu-v13/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 5865472,
+        "source": "5059ff8f751a1aeb0e65d6d1346c6a2d461676c0"
+      },
+      {
+        "path": "artifacts/attention-sites-cpu-v14/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 5574656,
+        "source": "0992b467584c1f603314ed04d8efe8596a14f576"
+      },
+      {
+        "path": "artifacts/attention-sites-cpu-v16/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 5890048,
+        "source": "0992b467584c1f603314ed04d8efe8596a14f576"
+      },
+      {
+        "path": "artifacts/attention-sites-npu-v7/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 4222976,
+        "source": "e2a4d39104a006feec4525e534eadae4a94cde0d"
+      },
+      {
+        "path": "artifacts/calibration-cpu-v2/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 4083712,
+        "source": "3b9f919b560d829fbed70302749ba4c9584bbd9b"
+      },
+      {
+        "path": "artifacts/combinations-npu-v7/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 4308992,
+        "source": "e2a4d39104a006feec4525e534eadae4a94cde0d"
+      },
+      {
+        "path": "artifacts/continuation-fp64-cpu-v10/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 5033984,
+        "source": "0e0023ff773f56920da78374e26ded6f10ceac06"
+      },
+      {
+        "path": "artifacts/continuation-numerics-cpu-v9/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 4284416,
+        "source": "5185dc0d1d3ae4c570e0712a42826e3974161bed"
+      },
+      {
+        "path": "artifacts/continuation-numerics-npu-v9/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 4284416,
+        "source": "5185dc0d1d3ae4c570e0712a42826e3974161bed"
+      },
+      {
+        "path": "artifacts/continuation-tiled-npu-v10/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 5033984,
+        "source": "0e0023ff773f56920da78374e26ded6f10ceac06"
+      },
+      {
+        "path": "artifacts/continuous-cpu-v14/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 5574656,
+        "source": "0992b467584c1f603314ed04d8efe8596a14f576"
+      },
+      {
+        "path": "artifacts/continuous-cpu-v16/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 6004736,
+        "source": "0992b467584c1f603314ed04d8efe8596a14f576"
+      },
+      {
+        "path": "artifacts/continuous-cpu-v16/b1/010-fc-k-small-fp32-tide-train.pt",
+        "kind": "rebuildable_tensor_or_checkpoint",
+        "allocated_bytes": 4046848,
+        "sha256": "545364540c5e6a018100207243847952fe29c5df925c1068e690fff9afc9d903"
+      },
+      {
+        "path": "artifacts/continuous-cpu-v16/b1/100-hb-timed-small-fp32-tide-train.pt",
+        "kind": "rebuildable_tensor_or_checkpoint",
+        "allocated_bytes": 17711104,
+        "sha256": "462b5e12a17cac567522760b23640de3fccd28581fa73dcc2887ddea03eb766f"
+      },
+      {
+        "path": "artifacts/continuous-cpu-v16/b1/025-fc-k-small-bf16-tide-train.pt",
+        "kind": "rebuildable_tensor_or_checkpoint",
+        "allocated_bytes": 3915776,
+        "sha256": "8cd179d8097937b4ff58e836329060fe1852670f7dc2a406c3f9be313d3becde"
+      },
+      {
+        "path": "artifacts/continuous-cpu-v16/b1/055-fc-s-small-bf16-tide-train.pt",
+        "kind": "rebuildable_tensor_or_checkpoint",
+        "allocated_bytes": 3903488,
+        "sha256": "6c7469ff9065b0d637263d0db7f28b51a3f8b20379fa7b32e5344d1901531ecd"
+      },
+      {
+        "path": "artifacts/continuous-cpu-v16/b1/070-hb-settle-small-fp32-tide-train.pt",
+        "kind": "rebuildable_tensor_or_checkpoint",
+        "allocated_bytes": 15020032,
+        "sha256": "b1fa6475f69e03c204cdf3fa234f6510639072b2017f8e22a7d8d5a0cd315dd6"
+      },
+      {
+        "path": "artifacts/continuous-cpu-v16/b1/085-hb-settle-small-bf16-tide-train.pt",
+        "kind": "rebuildable_tensor_or_checkpoint",
+        "allocated_bytes": 14626816,
+        "sha256": "c3c6135765e049aa4ec9bf0367c61760ebe242699999549156c18b88a192e99b"
+      },
+      {
+        "path": "artifacts/continuous-cpu-v16/b1/115-hb-timed-small-bf16-tide-train.pt",
+        "kind": "rebuildable_tensor_or_checkpoint",
+        "allocated_bytes": 16138240,
+        "sha256": "b4b3848e68582f44b31ab48c4ed341191b27ff43c1dc25d45101b95dc38a62d4"
+      },
+      {
+        "path": "artifacts/continuous-cpu-v16/b1/040-fc-s-small-fp32-tide-train.pt",
+        "kind": "rebuildable_tensor_or_checkpoint",
+        "allocated_bytes": 3903488,
+        "sha256": "44a1bbcb176580dde12f7854ede6a0338df108f673b479ae4e4e7a81f7d82973"
+      },
+      {
+        "path": "artifacts/continuous-cpu-v16/b4/010-fc-k-small-fp32-tide-train.pt",
+        "kind": "rebuildable_tensor_or_checkpoint",
+        "allocated_bytes": 4952064,
+        "sha256": "4bf8aee08d89787065ba48b6d189ff8fcf9ea759cd2bf16c1f66c256cf2cf8f7"
+      },
+      {
+        "path": "artifacts/continuous-cpu-v16/b4/100-hb-timed-small-fp32-tide-train.pt",
+        "kind": "rebuildable_tensor_or_checkpoint",
+        "allocated_bytes": 28758016,
+        "sha256": "2eb663618a8bed1f7fcf39e4e637b8edc363307bf94413d0f445326274cecf6b"
+      },
+      {
+        "path": "artifacts/continuous-cpu-v16/b4/025-fc-k-small-bf16-tide-train.pt",
+        "kind": "rebuildable_tensor_or_checkpoint",
+        "allocated_bytes": 4427776,
+        "sha256": "53815658b2d3bcdde00ce9de0d4015f01a7cea291f0256a5989b9b1c4c55a60c"
+      },
+      {
+        "path": "artifacts/continuous-cpu-v16/b4/055-fc-s-small-bf16-tide-train.pt",
+        "kind": "rebuildable_tensor_or_checkpoint",
+        "allocated_bytes": 4087808,
+        "sha256": "9e23232fc4ed5ac25c0b77145d87e26b353cfb55e6e4dfe2c44f0b688d8db60d"
+      },
+      {
+        "path": "artifacts/continuous-cpu-v16/b4/070-hb-settle-small-fp32-tide-train.pt",
+        "kind": "rebuildable_tensor_or_checkpoint",
+        "allocated_bytes": 18001920,
+        "sha256": "45da7284beb87a642e61501c02fe4e5fe0ad94f8f71db67951abc1415137d6c7"
+      },
+      {
+        "path": "artifacts/continuous-cpu-v16/b4/085-hb-settle-small-bf16-tide-train.pt",
+        "kind": "rebuildable_tensor_or_checkpoint",
+        "allocated_bytes": 16429056,
+        "sha256": "3b10a023e9f19539ad5ab5cfbfe3a68474f8cfe10af229679115c3ce3977e74a"
+      },
+      {
+        "path": "artifacts/continuous-cpu-v16/b4/115-hb-timed-small-bf16-tide-train.pt",
+        "kind": "rebuildable_tensor_or_checkpoint",
+        "allocated_bytes": 22466560,
+        "sha256": "511715ec2fab449924d1d7cfb3147338107ce4a3c0ff2fe2f94e885624c3d205"
+      },
+      {
+        "path": "artifacts/continuous-cpu-v16/b4/040-fc-s-small-fp32-tide-train.pt",
+        "kind": "rebuildable_tensor_or_checkpoint",
+        "allocated_bytes": 4087808,
+        "sha256": "6425d06502c6eda1b1ae4597e885d86156db27d18ccdd7f0fe60e708dd2db01f"
+      },
+      {
+        "path": "artifacts/continuous-npu-fc-k-v8/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 4333568,
+        "source": "9a1f600f2b712aaebf28a1a689d864b2358a5fa6"
+      },
+      {
+        "path": "artifacts/continuous-npu-fc-k-v8/b1/010-fc-k-fp32-tide-train.pt",
+        "kind": "rebuildable_tensor_or_checkpoint",
+        "allocated_bytes": 116895744,
+        "sha256": "2f399dd53aba388cce1650bd6493941d1760f4a2b9a4888bb3aa74e0fbbd40a1"
+      },
+      {
+        "path": "artifacts/continuous-npu-fc-k-v8/b1/025-fc-k-bf16-tide-train.pt",
+        "kind": "rebuildable_tensor_or_checkpoint",
+        "allocated_bytes": 114798592,
+        "sha256": "0377641dd6e0da557726346e97df7f8755fde7e84f252f08dd55b836b38b5f64"
+      },
+      {
+        "path": "artifacts/continuous-npu-fc-k-v8/b4/010-fc-k-fp32-tide-train.pt",
+        "kind": "rebuildable_tensor_or_checkpoint",
+        "allocated_bytes": 131194880,
+        "sha256": "d2a4d3123bf39e4d27103aacfdfde3d67ed8ffcd271abdb92e563984c308a5e5"
+      },
+      {
+        "path": "artifacts/continuous-npu-fc-k-v8/b4/025-fc-k-bf16-tide-train.pt",
+        "kind": "rebuildable_tensor_or_checkpoint",
+        "allocated_bytes": 122806272,
+        "sha256": "8a64ec47ca3b5f2276d8c76087a4c8a863ce7b623fb8fa9a3da2c8d17b9fa1f2"
+      },
+      {
+        "path": "artifacts/continuous-npu-fc-s-v8/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 4349952,
+        "source": "9a1f600f2b712aaebf28a1a689d864b2358a5fa6"
+      },
+      {
+        "path": "artifacts/continuous-npu-fc-s-v8/b1/010-fc-s-fp32-tide-train.pt",
+        "kind": "rebuildable_tensor_or_checkpoint",
+        "allocated_bytes": 27537408,
+        "sha256": "79a830a02a01e23160f1ecdc704efcde5724be0a393e8e84dc618911dc9ae22c"
+      },
+      {
+        "path": "artifacts/continuous-npu-fc-s-v8/b1/025-fc-s-bf16-tide-train.pt",
+        "kind": "rebuildable_tensor_or_checkpoint",
+        "allocated_bytes": 27537408,
+        "sha256": "150602e33bc79040215c552858ec7561e8f8a28a654fcbfbe133f75530af52d1"
+      },
+      {
+        "path": "artifacts/continuous-npu-fc-s-v8/b4/010-fc-s-fp32-tide-train.pt",
+        "kind": "rebuildable_tensor_or_checkpoint",
+        "allocated_bytes": 30552064,
+        "sha256": "63b7630e6f68b7517d874b89edf03d787419df44b95ce596061d7fdced2eac78"
+      },
+      {
+        "path": "artifacts/continuous-npu-fc-s-v8/b4/025-fc-s-bf16-tide-train.pt",
+        "kind": "rebuildable_tensor_or_checkpoint",
+        "allocated_bytes": 30552064,
+        "sha256": "a8adfdedb15ab388b298ac96da031331fb00eb930e2199ab09db06561a846abc"
+      },
+      {
+        "path": "artifacts/continuous-npu-hb-multiscale-x-settle-v8/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 4349952,
+        "source": "9a1f600f2b712aaebf28a1a689d864b2358a5fa6"
+      },
+      {
+        "path": "artifacts/continuous-npu-hb-multiscale-x-settle-v8/b1/025-hb-multiscale-x-settle-bf16-tide-train.pt",
+        "kind": "rebuildable_tensor_or_checkpoint",
+        "allocated_bytes": 202178560,
+        "sha256": "5b92ce785a87e6745116219e877d6abca61358bfa7074a219e69da795b16ebf4"
+      },
+      {
+        "path": "artifacts/continuous-npu-hb-multiscale-x-settle-v8/b1/010-hb-multiscale-x-settle-fp32-tide-train.pt",
+        "kind": "rebuildable_tensor_or_checkpoint",
+        "allocated_bytes": 210567168,
+        "sha256": "5c4325f9d6dac9fa5ae547e00b6c58eb9897fcf7ddeba72c54de5e21bb45dccb"
+      },
+      {
+        "path": "artifacts/continuous-npu-hb-multiscale-x-settle-v8/b4/025-hb-multiscale-x-settle-bf16-tide-train.pt",
+        "kind": "rebuildable_tensor_or_checkpoint",
+        "allocated_bytes": 241557504,
+        "sha256": "6bf737c0753f110326bbb62bbad739313f4fbbb510411b6624719e21796719a0"
+      },
+      {
+        "path": "artifacts/continuous-npu-hb-multiscale-x-settle-v8/b4/010-hb-multiscale-x-settle-fp32-tide-train.pt",
+        "kind": "rebuildable_tensor_or_checkpoint",
+        "allocated_bytes": 275111936,
+        "sha256": "551105bd4f11c21b04f454e9123b24cd9f56ccda78c7e2fb0f703100b90f6d18"
+      },
+      {
+        "path": "artifacts/continuous-npu-hb-multiscale-x-timed-v8/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 4349952,
+        "source": "9a1f600f2b712aaebf28a1a689d864b2358a5fa6"
+      },
+      {
+        "path": "artifacts/continuous-npu-hb-multiscale-x-timed-v8/b1/010-hb-multiscale-x-timed-fp32-tide-train.pt",
+        "kind": "rebuildable_tensor_or_checkpoint",
+        "allocated_bytes": 267304960,
+        "sha256": "e5dc260730f9f713e529f194d00019837033306a12049c8ee51d394a0d8c1fa6"
+      },
+      {
+        "path": "artifacts/continuous-npu-hb-multiscale-x-timed-v8/b1/025-hb-multiscale-x-timed-bf16-tide-train.pt",
+        "kind": "rebuildable_tensor_or_checkpoint",
+        "allocated_bytes": 233750528,
+        "sha256": "7c498cceea96965cd7a3b3d14720c0b14922445012d3dfefbf18169cc948152c"
+      },
+      {
+        "path": "artifacts/continuous-npu-hb-multiscale-x-timed-v8/b4/010-hb-multiscale-x-timed-fp32-tide-train.pt",
+        "kind": "rebuildable_tensor_or_checkpoint",
+        "allocated_bytes": 502046720,
+        "sha256": "fb72424f6b94f78ab58d69b52100cde8956d1ab2aa8af64a846bb72af5065141"
+      },
+      {
+        "path": "artifacts/continuous-npu-hb-multiscale-x-timed-v8/b4/025-hb-multiscale-x-timed-bf16-tide-train.pt",
+        "kind": "rebuildable_tensor_or_checkpoint",
+        "allocated_bytes": 367828992,
+        "sha256": "c8eae69a22c73a228ad31d8d8bb92d41612aa87ac08154cb9c996cb428fdc46c"
+      },
+      {
+        "path": "artifacts/environment-cpu-v18/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 7876608,
+        "source": "ca6199d427ea452492422bb7be21c03ce45aab5c"
+      },
+      {
+        "path": "artifacts/hotspots-cpu-v3/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 4087808,
+        "source": "c09e5d7cf18de19d73c242a6e461c14e5dba1101"
+      },
+      {
+        "path": "artifacts/hotspots-npu-v2/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 4050944,
+        "source": "3b9f919b560d829fbed70302749ba4c9584bbd9b"
+      },
+      {
+        "path": "artifacts/placement-copy-probes-v6/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 4145152,
+        "source": "7bcb0df17f0613793d82511d9517e37e1870850a"
+      },
+      {
+        "path": "artifacts/placement-environment-npu-v18/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 8097792,
+        "source": "ca6199d427ea452492422bb7be21c03ce45aab5c"
+      },
+      {
+        "path": "artifacts/placement-host-stage-npu-v8/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 4358144,
+        "source": "20062c170e85ef0c5fd91130b6df724f90622913"
+      },
+      {
+        "path": "artifacts/placement-npu-v4/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 4227072,
+        "source": "bdcb81de615e9aa4b21e7443871d33149b4f1553"
+      },
+      {
+        "path": "artifacts/placement-transport-diagnosis-v6/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 4304896,
+        "source": "7bcb0df17f0613793d82511d9517e37e1870850a"
+      },
+      {
+        "path": "artifacts/primitives-npu-bf16-v2/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 3993600,
+        "source": "3b9f919b560d829fbed70302749ba4c9584bbd9b"
+      },
+      {
+        "path": "artifacts/projections-e2e-npu-v3/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 4087808,
+        "source": "c09e5d7cf18de19d73c242a6e461c14e5dba1101"
+      },
+      {
+        "path": "artifacts/projections-npu-v2/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 3977216,
+        "source": "3b9f919b560d829fbed70302749ba4c9584bbd9b"
+      },
+      {
+        "path": "artifacts/qualification-attention-npu-v1/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 3854336,
+        "source": "050dafa305d45162b2c86e736253455d7b476d27"
+      },
+      {
+        "path": "artifacts/qualification-cpu-bf16-v1/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 4018176,
+        "source": "050dafa305d45162b2c86e736253455d7b476d27"
+      },
+      {
+        "path": "artifacts/qualification-cpu-fp32-v1/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 4018176,
+        "source": "050dafa305d45162b2c86e736253455d7b476d27"
+      },
+      {
+        "path": "artifacts/qualification-cpu-fp32-v1/tensors/fc-s.pt",
+        "kind": "rebuildable_tensor_or_checkpoint",
+        "allocated_bytes": 20856832,
+        "sha256": "3951750cd600c1230282101ea4f483c5c5e21d826824fb6e0fa227865faa9439"
+      },
+      {
+        "path": "artifacts/qualification-cpu-fp32-v1/tensors/hb-exchange-x.pt",
+        "kind": "rebuildable_tensor_or_checkpoint",
+        "allocated_bytes": 67166208,
+        "sha256": "ea9a92470f34d3f7c5cd7ff09478c3a63b2ea2438998d2c72ba978f2d0eecb50"
+      },
+      {
+        "path": "artifacts/qualification-cpu-fp32-v1/tensors/attention.pt",
+        "kind": "rebuildable_tensor_or_checkpoint",
+        "allocated_bytes": 8192,
+        "sha256": "c40da9c99f32234605e0ddf405679ae32313d1a5073f6dd8e52afd8a0267b608"
+      },
+      {
+        "path": "artifacts/qualification-cpu-fp32-v1/tensors/hb-multiscale-x-timed.pt",
+        "kind": "rebuildable_tensor_or_checkpoint",
+        "allocated_bytes": 155164672,
+        "sha256": "6329f29eda8f54977bd81dfc4bee204c1abedd21e277c007233491aa87f937d6"
+      },
+      {
+        "path": "artifacts/qualification-cpu-fp32-v1/tensors/fc-k.pt",
+        "kind": "rebuildable_tensor_or_checkpoint",
+        "allocated_bytes": 76292096,
+        "sha256": "e09d29a16620d475e2f4010785662a792357f033d3e8bb0a1b984d757a932fdb"
+      },
+      {
+        "path": "artifacts/qualification-cpu-fp32-v1/tensors/hb-multiscale-x-settle.pt",
+        "kind": "rebuildable_tensor_or_checkpoint",
+        "allocated_bytes": 137814016,
+        "sha256": "c75022ffe73f056152744d1fb49b1524b233b20a144ccc85ffc12a0a7c737892"
+      },
+      {
+        "path": "artifacts/qualification-cpu-fp32-v1/tensors/hb-lattice-k.pt",
+        "kind": "rebuildable_tensor_or_checkpoint",
+        "allocated_bytes": 49991680,
+        "sha256": "11e1ec511618c12122e7c61b3f5f5be39a936999d8cde177c49932fb22dd6f5f"
+      },
+      {
+        "path": "artifacts/qualification-cpu-fp32-v1/tensors/fc-k-149m.pt",
+        "kind": "rebuildable_tensor_or_checkpoint",
+        "allocated_bytes": 1199915008,
+        "sha256": "051291cf50985ad7267b3793278514daca7220560c8d1d8fc5fd580079a0ca57"
+      },
+      {
+        "path": "artifacts/qualification-cpu-v8/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 4366336,
+        "source": "9a1f600f2b712aaebf28a1a689d864b2358a5fa6"
+      },
+      {
+        "path": "artifacts/qualification-cpu-v8/tensors/hb-exchange-x.pt",
+        "kind": "rebuildable_tensor_or_checkpoint",
+        "allocated_bytes": 67166208,
+        "sha256": "ea9a92470f34d3f7c5cd7ff09478c3a63b2ea2438998d2c72ba978f2d0eecb50"
+      },
+      {
+        "path": "artifacts/qualification-cpu-v8/tensors/hb-multiscale-x-timed.pt",
+        "kind": "rebuildable_tensor_or_checkpoint",
+        "allocated_bytes": 155168768,
+        "sha256": "6329f29eda8f54977bd81dfc4bee204c1abedd21e277c007233491aa87f937d6"
+      },
+      {
+        "path": "artifacts/qualification-cpu-v8/tensors/hb-multiscale-x-settle.pt",
+        "kind": "rebuildable_tensor_or_checkpoint",
+        "allocated_bytes": 137818112,
+        "sha256": "c75022ffe73f056152744d1fb49b1524b233b20a144ccc85ffc12a0a7c737892"
+      },
+      {
+        "path": "artifacts/qualification-cpu-v8/tensors/hb-lattice-k.pt",
+        "kind": "rebuildable_tensor_or_checkpoint",
+        "allocated_bytes": 49991680,
+        "sha256": "11e1ec511618c12122e7c61b3f5f5be39a936999d8cde177c49932fb22dd6f5f"
+      },
+      {
+        "path": "artifacts/qualification-cpu-v8/tensors/fc-k-149m.pt",
+        "kind": "rebuildable_tensor_or_checkpoint",
+        "allocated_bytes": 1199915008,
+        "sha256": "9e1307b66a404e19b1323fb42923154731c9a01c8639a15e817b40195cbfabe8"
+      },
+      {
+        "path": "artifacts/qualification-npu-bf16-v1/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 4018176,
+        "source": "050dafa305d45162b2c86e736253455d7b476d27"
+      },
+      {
+        "path": "artifacts/qualification-npu-bf16-v5/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 4255744,
+        "source": "778c65fb2961624bb416343eb3ad0f6f031deff7"
+      },
+      {
+        "path": "artifacts/qualification-npu-bf16-v9/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 4395008,
+        "source": "5185dc0d1d3ae4c570e0712a42826e3974161bed"
+      },
+      {
+        "path": "artifacts/qualification-npu-fp32-v1/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 4018176,
+        "source": "050dafa305d45162b2c86e736253455d7b476d27"
+      },
+      {
+        "path": "artifacts/qualification-npu-fp32-v9/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 4395008,
+        "source": "5185dc0d1d3ae4c570e0712a42826e3974161bed"
+      },
+      {
+        "path": "artifacts/representative-cpu-v5/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 4284416,
+        "source": "778c65fb2961624bb416343eb3ad0f6f031deff7"
+      },
+      {
+        "path": "artifacts/representative-npu-fc-k-149m-v5/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 4268032,
+        "source": "778c65fb2961624bb416343eb3ad0f6f031deff7"
+      },
+      {
+        "path": "artifacts/representative-npu-fc-k-v5/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 4268032,
+        "source": "778c65fb2961624bb416343eb3ad0f6f031deff7"
+      },
+      {
+        "path": "artifacts/representative-npu-fc-s-v5/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 4284416,
+        "source": "778c65fb2961624bb416343eb3ad0f6f031deff7"
+      },
+      {
+        "path": "artifacts/representative-npu-hb-exchange-x-v5/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 4284416,
+        "source": "778c65fb2961624bb416343eb3ad0f6f031deff7"
+      },
+      {
+        "path": "artifacts/representative-npu-hb-lattice-k-v5/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 4268032,
+        "source": "778c65fb2961624bb416343eb3ad0f6f031deff7"
+      },
+      {
+        "path": "artifacts/representative-npu-hb-multiscale-x-settle-v5/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 4284416,
+        "source": "778c65fb2961624bb416343eb3ad0f6f031deff7"
+      },
+      {
+        "path": "artifacts/representative-npu-hb-multiscale-x-timed-v5/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 4284416,
+        "source": "778c65fb2961624bb416343eb3ad0f6f031deff7"
+      },
+      {
+        "path": "artifacts/resident-npu-v11/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 5050368,
+        "source": "6fc53d81910252ac42bd5fce1476f7a70b968ed7"
+      },
+      {
+        "path": "artifacts/restore-backward-npu-v9/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 4288512,
+        "source": "5185dc0d1d3ae4c570e0712a42826e3974161bed"
+      },
+      {
+        "path": "artifacts/routing-analysis-v3/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 4067328,
+        "source": "c09e5d7cf18de19d73c242a6e461c14e5dba1101"
+      },
+      {
+        "path": "artifacts/routing-npu-v3/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 4067328,
+        "source": "c09e5d7cf18de19d73c242a6e461c14e5dba1101"
+      },
+      {
+        "path": "artifacts/scale-cpu-hb-17b-inference-v17/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 5992448,
+        "source": "0992b467584c1f603314ed04d8efe8596a14f576"
+      },
+      {
+        "path": "artifacts/scale-cpu-hb-17b-train-v17/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 5574656,
+        "source": "0992b467584c1f603314ed04d8efe8596a14f576"
+      },
+      {
+        "path": "artifacts/scale-cpu-hb-17b-train-v20/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 6033408,
+        "source": "0992b467584c1f603314ed04d8efe8596a14f576"
+      },
+      {
+        "path": "artifacts/scale-cpu-hb-17b-v15/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 5574656,
+        "source": "0992b467584c1f603314ed04d8efe8596a14f576"
+      },
+      {
+        "path": "artifacts/scale-cpu-hb-17b-v16/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 5574656,
+        "source": "0992b467584c1f603314ed04d8efe8596a14f576"
+      },
+      {
+        "path": "artifacts/scale-four-npu-hb-9b-train-v14/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 5574656,
+        "source": "0992b467584c1f603314ed04d8efe8596a14f576"
+      },
+      {
+        "path": "artifacts/scale-four-npu-hb-9b-train-v16/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 6033408,
+        "source": "0992b467584c1f603314ed04d8efe8596a14f576"
+      },
+      {
+        "path": "artifacts/scale-npu-fc-0p5b-v7/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 4308992,
+        "source": "e2a4d39104a006feec4525e534eadae4a94cde0d"
+      },
+      {
+        "path": "artifacts/scale-npu-fc-1b-v7/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 4308992,
+        "source": "e2a4d39104a006feec4525e534eadae4a94cde0d"
+      },
+      {
+        "path": "artifacts/scale-npu-hb-0p5b-v7/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 4325376,
+        "source": "e2a4d39104a006feec4525e534eadae4a94cde0d"
+      },
+      {
+        "path": "artifacts/scale-npu-hb-1b-v7/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 4325376,
+        "source": "e2a4d39104a006feec4525e534eadae4a94cde0d"
+      },
+      {
+        "path": "artifacts/scale-npu-hb-9b-v12/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 4743168,
+        "source": "c8026e47ee5b6fbe03b9d8c5e84e2bfde70f8267"
+      },
+      {
+        "path": "artifacts/scale-npu-hb-9b-v16/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 5992448,
+        "source": "0992b467584c1f603314ed04d8efe8596a14f576"
+      },
+      {
+        "path": "artifacts/scale-two-npu-hb-17b-v12/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 4743168,
+        "source": "c8026e47ee5b6fbe03b9d8c5e84e2bfde70f8267"
+      },
+      {
+        "path": "artifacts/scale-two-npu-hb-17b-v16/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 6033408,
+        "source": "0992b467584c1f603314ed04d8efe8596a14f576"
+      },
+      {
+        "path": "artifacts/shape-npu-v7/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 4308992,
+        "source": "e2a4d39104a006feec4525e534eadae4a94cde0d"
+      },
+      {
+        "path": "artifacts/sparse-npu-v7/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 4308992,
+        "source": "e2a4d39104a006feec4525e534eadae4a94cde0d"
+      },
+      {
+        "path": "artifacts/stages-npu-v2/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 3960832,
+        "source": "3b9f919b560d829fbed70302749ba4c9584bbd9b"
+      },
+      {
+        "path": "artifacts/suite-cpu-v15/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 7286784,
+        "source": "0992b467584c1f603314ed04d8efe8596a14f576"
+      },
+      {
+        "path": "artifacts/suite-cpu-v2/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 5058560,
+        "source": "3b9f919b560d829fbed70302749ba4c9584bbd9b"
+      },
+      {
+        "path": "artifacts/wheel-installed-cpu-v15/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 5550080,
+        "source": "0992b467584c1f603314ed04d8efe8596a14f576"
+      },
+      {
+        "path": "artifacts/wheel-installed-cpu-v15/bf16-checkpoint.pt",
+        "kind": "rebuildable_tensor_or_checkpoint",
+        "allocated_bytes": 28626944,
+        "sha256": "0995277477bf309f41aba128b0afd63203f36f7545b2db8ea575fa3f9d489a4b"
+      },
+      {
+        "path": "artifacts/wheel-installed-cpu-v15/fp32-checkpoint.pt",
+        "kind": "rebuildable_tensor_or_checkpoint",
+        "allocated_bytes": 29020160,
+        "sha256": "39b86a7f7e47e58e39146c6c9814e699c9ab1b92172d9acdb56cb84a5bbdf5b9"
+      },
+      {
+        "path": "artifacts/wheel-installed-cpu-v15/installed-venv",
+        "kind": "project_only_installed_smoke_or_build",
+        "allocated_bytes": 13963264
+      },
+      {
+        "path": "artifacts/wheel-installed-cpu-v15/build-copy",
+        "kind": "project_only_installed_smoke_or_build",
+        "allocated_bytes": 5754880
+      }
+    ],
+    "retained_witnesses": [
+      {
+        "path": "artifacts/qualification-cpu-v8/tensors/fc-s.pt",
+        "allocated_bytes": 20856832,
+        "reason": "small bounded unresolved numerical/support witness"
+      },
+      {
+        "path": "artifacts/qualification-cpu-v8/tensors/attention.pt",
+        "allocated_bytes": 16384,
+        "reason": "small bounded unresolved numerical/support witness"
+      },
+      {
+        "path": "artifacts/qualification-cpu-v8/tensors/fc-k.pt",
+        "allocated_bytes": 76292096,
+        "reason": "small bounded unresolved numerical/support witness"
+      },
+      {
+        "path": "artifacts/routing-npu-v3/hb-exchange-x.pt",
+        "allocated_bytes": 8679424,
+        "reason": "small bounded unresolved numerical/support witness"
+      },
+      {
+        "path": "artifacts/routing-npu-v3/hb-multiscale-x-timed.pt",
+        "allocated_bytes": 34009088,
+        "reason": "small bounded unresolved numerical/support witness"
+      },
+      {
+        "path": "artifacts/routing-npu-v3/hb-lattice-k.pt",
+        "allocated_bytes": 3436544,
+        "reason": "small bounded unresolved numerical/support witness"
+      }
+    ],
+    "candidate_allocated_bytes": 6808735744,
+    "artifacts_allocated_bytes": 7654203392
+  },
+  "dependency_review": {
+    "scope": "registered main/downstream worktrees and their immediate private venv pth/direct_url metadata; no install mutation",
+    "worktrees": "worktree /mi/data2T/zlong/home/llm/graph-execution-foundation\nHEAD a1af48698aef14699e0e2dbe85bf6d6d83e1ca05\nbranch refs/heads/graph-execution-foundation\n\nworktree /mi/data2T/zlong/home/llm/tide-learning-lab\nHEAD 5f30ed2a32d7648f5011f5bfde5c6cae086a463c\nbranch refs/heads/tide-learning-lab\n\n",
+    "scanned_files": [
+      "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/lib/python3.12/site-packages/__editable__.tide_instances-0.1.0.pth",
+      "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/lib/python3.12/site-packages/tide_instances-0.1.0.dist-info/direct_url.json"
+    ],
+    "candidate_references": [],
+    "original_user_hashes_match": true,
+    "main_environment_preserved": true
+  },
+  "retirement": {
+    "state": "completed",
+    "started": "2026-11-18T05:36:10.038778+00:00",
+    "inventory_sha256": "ef4fc5e11d580b089135c9317fbe071728773a2442623bc8bd16c96e1da6215f",
+    "reviewed_candidate_paths": 118,
+    "removed": [
+      {
+        "path": "artifacts/attention-operators-npu-v13/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 5865472,
+        "source": "5059ff8f751a1aeb0e65d6d1346c6a2d461676c0",
+        "state": "removed"
+      },
+      {
+        "path": "artifacts/attention-sites-cpu-v14/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 5574656,
+        "source": "0992b467584c1f603314ed04d8efe8596a14f576",
+        "state": "removed"
+      },
+      {
+        "path": "artifacts/attention-sites-cpu-v16/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 5890048,
+        "source": "0992b467584c1f603314ed04d8efe8596a14f576",
+        "state": "removed"
+      },
+      {
+        "path": "artifacts/attention-sites-npu-v7/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 4222976,
+        "source": "e2a4d39104a006feec4525e534eadae4a94cde0d",
+        "state": "removed"
+      },
+      {
+        "path": "artifacts/calibration-cpu-v2/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 4083712,
+        "source": "3b9f919b560d829fbed70302749ba4c9584bbd9b",
+        "state": "removed"
+      },
+      {
+        "path": "artifacts/combinations-npu-v7/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 4308992,
+        "source": "e2a4d39104a006feec4525e534eadae4a94cde0d",
+        "state": "removed"
+      },
+      {
+        "path": "artifacts/continuation-fp64-cpu-v10/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 5033984,
+        "source": "0e0023ff773f56920da78374e26ded6f10ceac06",
+        "state": "removed"
+      },
+      {
+        "path": "artifacts/continuation-numerics-cpu-v9/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 4284416,
+        "source": "5185dc0d1d3ae4c570e0712a42826e3974161bed",
+        "state": "removed"
+      },
+      {
+        "path": "artifacts/continuation-numerics-npu-v9/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 4284416,
+        "source": "5185dc0d1d3ae4c570e0712a42826e3974161bed",
+        "state": "removed"
+      },
+      {
+        "path": "artifacts/continuation-tiled-npu-v10/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 5033984,
+        "source": "0e0023ff773f56920da78374e26ded6f10ceac06",
+        "state": "removed"
+      },
+      {
+        "path": "artifacts/continuous-cpu-v14/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 5574656,
+        "source": "0992b467584c1f603314ed04d8efe8596a14f576",
+        "state": "removed"
+      },
+      {
+        "path": "artifacts/continuous-cpu-v16/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 6004736,
+        "source": "0992b467584c1f603314ed04d8efe8596a14f576",
+        "state": "removed"
+      },
+      {
+        "path": "artifacts/continuous-cpu-v16/b1/010-fc-k-small-fp32-tide-train.pt",
+        "kind": "rebuildable_tensor_or_checkpoint",
+        "allocated_bytes": 4046848,
+        "sha256": "545364540c5e6a018100207243847952fe29c5df925c1068e690fff9afc9d903",
+        "state": "removed"
+      },
+      {
+        "path": "artifacts/continuous-cpu-v16/b1/100-hb-timed-small-fp32-tide-train.pt",
+        "kind": "rebuildable_tensor_or_checkpoint",
+        "allocated_bytes": 17711104,
+        "sha256": "462b5e12a17cac567522760b23640de3fccd28581fa73dcc2887ddea03eb766f",
+        "state": "removed"
+      },
+      {
+        "path": "artifacts/continuous-cpu-v16/b1/025-fc-k-small-bf16-tide-train.pt",
+        "kind": "rebuildable_tensor_or_checkpoint",
+        "allocated_bytes": 3915776,
+        "sha256": "8cd179d8097937b4ff58e836329060fe1852670f7dc2a406c3f9be313d3becde",
+        "state": "removed"
+      },
+      {
+        "path": "artifacts/continuous-cpu-v16/b1/055-fc-s-small-bf16-tide-train.pt",
+        "kind": "rebuildable_tensor_or_checkpoint",
+        "allocated_bytes": 3903488,
+        "sha256": "6c7469ff9065b0d637263d0db7f28b51a3f8b20379fa7b32e5344d1901531ecd",
+        "state": "removed"
+      },
+      {
+        "path": "artifacts/continuous-cpu-v16/b1/070-hb-settle-small-fp32-tide-train.pt",
+        "kind": "rebuildable_tensor_or_checkpoint",
+        "allocated_bytes": 15020032,
+        "sha256": "b1fa6475f69e03c204cdf3fa234f6510639072b2017f8e22a7d8d5a0cd315dd6",
+        "state": "removed"
+      },
+      {
+        "path": "artifacts/continuous-cpu-v16/b1/085-hb-settle-small-bf16-tide-train.pt",
+        "kind": "rebuildable_tensor_or_checkpoint",
+        "allocated_bytes": 14626816,
+        "sha256": "c3c6135765e049aa4ec9bf0367c61760ebe242699999549156c18b88a192e99b",
+        "state": "removed"
+      },
+      {
+        "path": "artifacts/continuous-cpu-v16/b1/115-hb-timed-small-bf16-tide-train.pt",
+        "kind": "rebuildable_tensor_or_checkpoint",
+        "allocated_bytes": 16138240,
+        "sha256": "b4b3848e68582f44b31ab48c4ed341191b27ff43c1dc25d45101b95dc38a62d4",
+        "state": "removed"
+      },
+      {
+        "path": "artifacts/continuous-cpu-v16/b1/040-fc-s-small-fp32-tide-train.pt",
+        "kind": "rebuildable_tensor_or_checkpoint",
+        "allocated_bytes": 3903488,
+        "sha256": "44a1bbcb176580dde12f7854ede6a0338df108f673b479ae4e4e7a81f7d82973",
+        "state": "removed"
+      },
+      {
+        "path": "artifacts/continuous-cpu-v16/b4/010-fc-k-small-fp32-tide-train.pt",
+        "kind": "rebuildable_tensor_or_checkpoint",
+        "allocated_bytes": 4952064,
+        "sha256": "4bf8aee08d89787065ba48b6d189ff8fcf9ea759cd2bf16c1f66c256cf2cf8f7",
+        "state": "removed"
+      },
+      {
+        "path": "artifacts/continuous-cpu-v16/b4/100-hb-timed-small-fp32-tide-train.pt",
+        "kind": "rebuildable_tensor_or_checkpoint",
+        "allocated_bytes": 28758016,
+        "sha256": "2eb663618a8bed1f7fcf39e4e637b8edc363307bf94413d0f445326274cecf6b",
+        "state": "removed"
+      },
+      {
+        "path": "artifacts/continuous-cpu-v16/b4/025-fc-k-small-bf16-tide-train.pt",
+        "kind": "rebuildable_tensor_or_checkpoint",
+        "allocated_bytes": 4427776,
+        "sha256": "53815658b2d3bcdde00ce9de0d4015f01a7cea291f0256a5989b9b1c4c55a60c",
+        "state": "removed"
+      },
+      {
+        "path": "artifacts/continuous-cpu-v16/b4/055-fc-s-small-bf16-tide-train.pt",
+        "kind": "rebuildable_tensor_or_checkpoint",
+        "allocated_bytes": 4087808,
+        "sha256": "9e23232fc4ed5ac25c0b77145d87e26b353cfb55e6e4dfe2c44f0b688d8db60d",
+        "state": "removed"
+      },
+      {
+        "path": "artifacts/continuous-cpu-v16/b4/070-hb-settle-small-fp32-tide-train.pt",
+        "kind": "rebuildable_tensor_or_checkpoint",
+        "allocated_bytes": 18001920,
+        "sha256": "45da7284beb87a642e61501c02fe4e5fe0ad94f8f71db67951abc1415137d6c7",
+        "state": "removed"
+      },
+      {
+        "path": "artifacts/continuous-cpu-v16/b4/085-hb-settle-small-bf16-tide-train.pt",
+        "kind": "rebuildable_tensor_or_checkpoint",
+        "allocated_bytes": 16429056,
+        "sha256": "3b10a023e9f19539ad5ab5cfbfe3a68474f8cfe10af229679115c3ce3977e74a",
+        "state": "removed"
+      },
+      {
+        "path": "artifacts/continuous-cpu-v16/b4/115-hb-timed-small-bf16-tide-train.pt",
+        "kind": "rebuildable_tensor_or_checkpoint",
+        "allocated_bytes": 22466560,
+        "sha256": "511715ec2fab449924d1d7cfb3147338107ce4a3c0ff2fe2f94e885624c3d205",
+        "state": "removed"
+      },
+      {
+        "path": "artifacts/continuous-cpu-v16/b4/040-fc-s-small-fp32-tide-train.pt",
+        "kind": "rebuildable_tensor_or_checkpoint",
+        "allocated_bytes": 4087808,
+        "sha256": "6425d06502c6eda1b1ae4597e885d86156db27d18ccdd7f0fe60e708dd2db01f",
+        "state": "removed"
+      },
+      {
+        "path": "artifacts/continuous-npu-fc-k-v8/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 4333568,
+        "source": "9a1f600f2b712aaebf28a1a689d864b2358a5fa6",
+        "state": "removed"
+      },
+      {
+        "path": "artifacts/continuous-npu-fc-k-v8/b1/010-fc-k-fp32-tide-train.pt",
+        "kind": "rebuildable_tensor_or_checkpoint",
+        "allocated_bytes": 116895744,
+        "sha256": "2f399dd53aba388cce1650bd6493941d1760f4a2b9a4888bb3aa74e0fbbd40a1",
+        "state": "removed"
+      },
+      {
+        "path": "artifacts/continuous-npu-fc-k-v8/b1/025-fc-k-bf16-tide-train.pt",
+        "kind": "rebuildable_tensor_or_checkpoint",
+        "allocated_bytes": 114798592,
+        "sha256": "0377641dd6e0da557726346e97df7f8755fde7e84f252f08dd55b836b38b5f64",
+        "state": "removed"
+      },
+      {
+        "path": "artifacts/continuous-npu-fc-k-v8/b4/010-fc-k-fp32-tide-train.pt",
+        "kind": "rebuildable_tensor_or_checkpoint",
+        "allocated_bytes": 131194880,
+        "sha256": "d2a4d3123bf39e4d27103aacfdfde3d67ed8ffcd271abdb92e563984c308a5e5",
+        "state": "removed"
+      },
+      {
+        "path": "artifacts/continuous-npu-fc-k-v8/b4/025-fc-k-bf16-tide-train.pt",
+        "kind": "rebuildable_tensor_or_checkpoint",
+        "allocated_bytes": 122806272,
+        "sha256": "8a64ec47ca3b5f2276d8c76087a4c8a863ce7b623fb8fa9a3da2c8d17b9fa1f2",
+        "state": "removed"
+      },
+      {
+        "path": "artifacts/continuous-npu-fc-s-v8/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 4349952,
+        "source": "9a1f600f2b712aaebf28a1a689d864b2358a5fa6",
+        "state": "removed"
+      },
+      {
+        "path": "artifacts/continuous-npu-fc-s-v8/b1/010-fc-s-fp32-tide-train.pt",
+        "kind": "rebuildable_tensor_or_checkpoint",
+        "allocated_bytes": 27537408,
+        "sha256": "79a830a02a01e23160f1ecdc704efcde5724be0a393e8e84dc618911dc9ae22c",
+        "state": "removed"
+      },
+      {
+        "path": "artifacts/continuous-npu-fc-s-v8/b1/025-fc-s-bf16-tide-train.pt",
+        "kind": "rebuildable_tensor_or_checkpoint",
+        "allocated_bytes": 27537408,
+        "sha256": "150602e33bc79040215c552858ec7561e8f8a28a654fcbfbe133f75530af52d1",
+        "state": "removed"
+      },
+      {
+        "path": "artifacts/continuous-npu-fc-s-v8/b4/010-fc-s-fp32-tide-train.pt",
+        "kind": "rebuildable_tensor_or_checkpoint",
+        "allocated_bytes": 30552064,
+        "sha256": "63b7630e6f68b7517d874b89edf03d787419df44b95ce596061d7fdced2eac78",
+        "state": "removed"
+      },
+      {
+        "path": "artifacts/continuous-npu-fc-s-v8/b4/025-fc-s-bf16-tide-train.pt",
+        "kind": "rebuildable_tensor_or_checkpoint",
+        "allocated_bytes": 30552064,
+        "sha256": "a8adfdedb15ab388b298ac96da031331fb00eb930e2199ab09db06561a846abc",
+        "state": "removed"
+      },
+      {
+        "path": "artifacts/continuous-npu-hb-multiscale-x-settle-v8/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 4349952,
+        "source": "9a1f600f2b712aaebf28a1a689d864b2358a5fa6",
+        "state": "removed"
+      },
+      {
+        "path": "artifacts/continuous-npu-hb-multiscale-x-settle-v8/b1/025-hb-multiscale-x-settle-bf16-tide-train.pt",
+        "kind": "rebuildable_tensor_or_checkpoint",
+        "allocated_bytes": 202178560,
+        "sha256": "5b92ce785a87e6745116219e877d6abca61358bfa7074a219e69da795b16ebf4",
+        "state": "removed"
+      },
+      {
+        "path": "artifacts/continuous-npu-hb-multiscale-x-settle-v8/b1/010-hb-multiscale-x-settle-fp32-tide-train.pt",
+        "kind": "rebuildable_tensor_or_checkpoint",
+        "allocated_bytes": 210567168,
+        "sha256": "5c4325f9d6dac9fa5ae547e00b6c58eb9897fcf7ddeba72c54de5e21bb45dccb",
+        "state": "removed"
+      },
+      {
+        "path": "artifacts/continuous-npu-hb-multiscale-x-settle-v8/b4/025-hb-multiscale-x-settle-bf16-tide-train.pt",
+        "kind": "rebuildable_tensor_or_checkpoint",
+        "allocated_bytes": 241557504,
+        "sha256": "6bf737c0753f110326bbb62bbad739313f4fbbb510411b6624719e21796719a0",
+        "state": "removed"
+      },
+      {
+        "path": "artifacts/continuous-npu-hb-multiscale-x-settle-v8/b4/010-hb-multiscale-x-settle-fp32-tide-train.pt",
+        "kind": "rebuildable_tensor_or_checkpoint",
+        "allocated_bytes": 275111936,
+        "sha256": "551105bd4f11c21b04f454e9123b24cd9f56ccda78c7e2fb0f703100b90f6d18",
+        "state": "removed"
+      },
+      {
+        "path": "artifacts/continuous-npu-hb-multiscale-x-timed-v8/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 4349952,
+        "source": "9a1f600f2b712aaebf28a1a689d864b2358a5fa6",
+        "state": "removed"
+      },
+      {
+        "path": "artifacts/continuous-npu-hb-multiscale-x-timed-v8/b1/010-hb-multiscale-x-timed-fp32-tide-train.pt",
+        "kind": "rebuildable_tensor_or_checkpoint",
+        "allocated_bytes": 267304960,
+        "sha256": "e5dc260730f9f713e529f194d00019837033306a12049c8ee51d394a0d8c1fa6",
+        "state": "removed"
+      },
+      {
+        "path": "artifacts/continuous-npu-hb-multiscale-x-timed-v8/b1/025-hb-multiscale-x-timed-bf16-tide-train.pt",
+        "kind": "rebuildable_tensor_or_checkpoint",
+        "allocated_bytes": 233750528,
+        "sha256": "7c498cceea96965cd7a3b3d14720c0b14922445012d3dfefbf18169cc948152c",
+        "state": "removed"
+      },
+      {
+        "path": "artifacts/continuous-npu-hb-multiscale-x-timed-v8/b4/010-hb-multiscale-x-timed-fp32-tide-train.pt",
+        "kind": "rebuildable_tensor_or_checkpoint",
+        "allocated_bytes": 502046720,
+        "sha256": "fb72424f6b94f78ab58d69b52100cde8956d1ab2aa8af64a846bb72af5065141",
+        "state": "removed"
+      },
+      {
+        "path": "artifacts/continuous-npu-hb-multiscale-x-timed-v8/b4/025-hb-multiscale-x-timed-bf16-tide-train.pt",
+        "kind": "rebuildable_tensor_or_checkpoint",
+        "allocated_bytes": 367828992,
+        "sha256": "c8eae69a22c73a228ad31d8d8bb92d41612aa87ac08154cb9c996cb428fdc46c",
+        "state": "removed"
+      },
+      {
+        "path": "artifacts/environment-cpu-v18/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 7876608,
+        "source": "ca6199d427ea452492422bb7be21c03ce45aab5c",
+        "state": "removed"
+      },
+      {
+        "path": "artifacts/hotspots-cpu-v3/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 4087808,
+        "source": "c09e5d7cf18de19d73c242a6e461c14e5dba1101",
+        "state": "removed"
+      },
+      {
+        "path": "artifacts/hotspots-npu-v2/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 4050944,
+        "source": "3b9f919b560d829fbed70302749ba4c9584bbd9b",
+        "state": "removed"
+      },
+      {
+        "path": "artifacts/placement-copy-probes-v6/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 4145152,
+        "source": "7bcb0df17f0613793d82511d9517e37e1870850a",
+        "state": "removed"
+      },
+      {
+        "path": "artifacts/placement-environment-npu-v18/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 8097792,
+        "source": "ca6199d427ea452492422bb7be21c03ce45aab5c",
+        "state": "removed"
+      },
+      {
+        "path": "artifacts/placement-host-stage-npu-v8/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 4358144,
+        "source": "20062c170e85ef0c5fd91130b6df724f90622913",
+        "state": "removed"
+      },
+      {
+        "path": "artifacts/placement-npu-v4/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 4227072,
+        "source": "bdcb81de615e9aa4b21e7443871d33149b4f1553",
+        "state": "removed"
+      },
+      {
+        "path": "artifacts/placement-transport-diagnosis-v6/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 4304896,
+        "source": "7bcb0df17f0613793d82511d9517e37e1870850a",
+        "state": "removed"
+      },
+      {
+        "path": "artifacts/primitives-npu-bf16-v2/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 3993600,
+        "source": "3b9f919b560d829fbed70302749ba4c9584bbd9b",
+        "state": "removed"
+      },
+      {
+        "path": "artifacts/projections-e2e-npu-v3/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 4087808,
+        "source": "c09e5d7cf18de19d73c242a6e461c14e5dba1101",
+        "state": "removed"
+      },
+      {
+        "path": "artifacts/projections-npu-v2/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 3977216,
+        "source": "3b9f919b560d829fbed70302749ba4c9584bbd9b",
+        "state": "removed"
+      },
+      {
+        "path": "artifacts/qualification-attention-npu-v1/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 3854336,
+        "source": "050dafa305d45162b2c86e736253455d7b476d27",
+        "state": "removed"
+      },
+      {
+        "path": "artifacts/qualification-cpu-bf16-v1/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 4018176,
+        "source": "050dafa305d45162b2c86e736253455d7b476d27",
+        "state": "removed"
+      },
+      {
+        "path": "artifacts/qualification-cpu-fp32-v1/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 4018176,
+        "source": "050dafa305d45162b2c86e736253455d7b476d27",
+        "state": "removed"
+      },
+      {
+        "path": "artifacts/qualification-cpu-fp32-v1/tensors/fc-s.pt",
+        "kind": "rebuildable_tensor_or_checkpoint",
+        "allocated_bytes": 20856832,
+        "sha256": "3951750cd600c1230282101ea4f483c5c5e21d826824fb6e0fa227865faa9439",
+        "state": "removed"
+      },
+      {
+        "path": "artifacts/qualification-cpu-fp32-v1/tensors/hb-exchange-x.pt",
+        "kind": "rebuildable_tensor_or_checkpoint",
+        "allocated_bytes": 67166208,
+        "sha256": "ea9a92470f34d3f7c5cd7ff09478c3a63b2ea2438998d2c72ba978f2d0eecb50",
+        "state": "removed"
+      },
+      {
+        "path": "artifacts/qualification-cpu-fp32-v1/tensors/attention.pt",
+        "kind": "rebuildable_tensor_or_checkpoint",
+        "allocated_bytes": 8192,
+        "sha256": "c40da9c99f32234605e0ddf405679ae32313d1a5073f6dd8e52afd8a0267b608",
+        "state": "removed"
+      },
+      {
+        "path": "artifacts/qualification-cpu-fp32-v1/tensors/hb-multiscale-x-timed.pt",
+        "kind": "rebuildable_tensor_or_checkpoint",
+        "allocated_bytes": 155164672,
+        "sha256": "6329f29eda8f54977bd81dfc4bee204c1abedd21e277c007233491aa87f937d6",
+        "state": "removed"
+      },
+      {
+        "path": "artifacts/qualification-cpu-fp32-v1/tensors/fc-k.pt",
+        "kind": "rebuildable_tensor_or_checkpoint",
+        "allocated_bytes": 76292096,
+        "sha256": "e09d29a16620d475e2f4010785662a792357f033d3e8bb0a1b984d757a932fdb",
+        "state": "removed"
+      },
+      {
+        "path": "artifacts/qualification-cpu-fp32-v1/tensors/hb-multiscale-x-settle.pt",
+        "kind": "rebuildable_tensor_or_checkpoint",
+        "allocated_bytes": 137814016,
+        "sha256": "c75022ffe73f056152744d1fb49b1524b233b20a144ccc85ffc12a0a7c737892",
+        "state": "removed"
+      },
+      {
+        "path": "artifacts/qualification-cpu-fp32-v1/tensors/hb-lattice-k.pt",
+        "kind": "rebuildable_tensor_or_checkpoint",
+        "allocated_bytes": 49991680,
+        "sha256": "11e1ec511618c12122e7c61b3f5f5be39a936999d8cde177c49932fb22dd6f5f",
+        "state": "removed"
+      },
+      {
+        "path": "artifacts/qualification-cpu-fp32-v1/tensors/fc-k-149m.pt",
+        "kind": "rebuildable_tensor_or_checkpoint",
+        "allocated_bytes": 1199915008,
+        "sha256": "051291cf50985ad7267b3793278514daca7220560c8d1d8fc5fd580079a0ca57",
+        "state": "removed"
+      },
+      {
+        "path": "artifacts/qualification-cpu-v8/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 4366336,
+        "source": "9a1f600f2b712aaebf28a1a689d864b2358a5fa6",
+        "state": "removed"
+      },
+      {
+        "path": "artifacts/qualification-cpu-v8/tensors/hb-exchange-x.pt",
+        "kind": "rebuildable_tensor_or_checkpoint",
+        "allocated_bytes": 67166208,
+        "sha256": "ea9a92470f34d3f7c5cd7ff09478c3a63b2ea2438998d2c72ba978f2d0eecb50",
+        "state": "removed"
+      },
+      {
+        "path": "artifacts/qualification-cpu-v8/tensors/hb-multiscale-x-timed.pt",
+        "kind": "rebuildable_tensor_or_checkpoint",
+        "allocated_bytes": 155168768,
+        "sha256": "6329f29eda8f54977bd81dfc4bee204c1abedd21e277c007233491aa87f937d6",
+        "state": "removed"
+      },
+      {
+        "path": "artifacts/qualification-cpu-v8/tensors/hb-multiscale-x-settle.pt",
+        "kind": "rebuildable_tensor_or_checkpoint",
+        "allocated_bytes": 137818112,
+        "sha256": "c75022ffe73f056152744d1fb49b1524b233b20a144ccc85ffc12a0a7c737892",
+        "state": "removed"
+      },
+      {
+        "path": "artifacts/qualification-cpu-v8/tensors/hb-lattice-k.pt",
+        "kind": "rebuildable_tensor_or_checkpoint",
+        "allocated_bytes": 49991680,
+        "sha256": "11e1ec511618c12122e7c61b3f5f5be39a936999d8cde177c49932fb22dd6f5f",
+        "state": "removed"
+      },
+      {
+        "path": "artifacts/qualification-cpu-v8/tensors/fc-k-149m.pt",
+        "kind": "rebuildable_tensor_or_checkpoint",
+        "allocated_bytes": 1199915008,
+        "sha256": "9e1307b66a404e19b1323fb42923154731c9a01c8639a15e817b40195cbfabe8",
+        "state": "removed"
+      },
+      {
+        "path": "artifacts/qualification-npu-bf16-v1/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 4018176,
+        "source": "050dafa305d45162b2c86e736253455d7b476d27",
+        "state": "removed"
+      },
+      {
+        "path": "artifacts/qualification-npu-bf16-v5/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 4255744,
+        "source": "778c65fb2961624bb416343eb3ad0f6f031deff7",
+        "state": "removed"
+      },
+      {
+        "path": "artifacts/qualification-npu-bf16-v9/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 4395008,
+        "source": "5185dc0d1d3ae4c570e0712a42826e3974161bed",
+        "state": "removed"
+      },
+      {
+        "path": "artifacts/qualification-npu-fp32-v1/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 4018176,
+        "source": "050dafa305d45162b2c86e736253455d7b476d27",
+        "state": "removed"
+      },
+      {
+        "path": "artifacts/qualification-npu-fp32-v9/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 4395008,
+        "source": "5185dc0d1d3ae4c570e0712a42826e3974161bed",
+        "state": "removed"
+      },
+      {
+        "path": "artifacts/representative-cpu-v5/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 4284416,
+        "source": "778c65fb2961624bb416343eb3ad0f6f031deff7",
+        "state": "removed"
+      },
+      {
+        "path": "artifacts/representative-npu-fc-k-149m-v5/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 4268032,
+        "source": "778c65fb2961624bb416343eb3ad0f6f031deff7",
+        "state": "removed"
+      },
+      {
+        "path": "artifacts/representative-npu-fc-k-v5/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 4268032,
+        "source": "778c65fb2961624bb416343eb3ad0f6f031deff7",
+        "state": "removed"
+      },
+      {
+        "path": "artifacts/representative-npu-fc-s-v5/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 4284416,
+        "source": "778c65fb2961624bb416343eb3ad0f6f031deff7",
+        "state": "removed"
+      },
+      {
+        "path": "artifacts/representative-npu-hb-exchange-x-v5/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 4284416,
+        "source": "778c65fb2961624bb416343eb3ad0f6f031deff7",
+        "state": "removed"
+      },
+      {
+        "path": "artifacts/representative-npu-hb-lattice-k-v5/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 4268032,
+        "source": "778c65fb2961624bb416343eb3ad0f6f031deff7",
+        "state": "removed"
+      },
+      {
+        "path": "artifacts/representative-npu-hb-multiscale-x-settle-v5/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 4284416,
+        "source": "778c65fb2961624bb416343eb3ad0f6f031deff7",
+        "state": "removed"
+      },
+      {
+        "path": "artifacts/representative-npu-hb-multiscale-x-timed-v5/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 4284416,
+        "source": "778c65fb2961624bb416343eb3ad0f6f031deff7",
+        "state": "removed"
+      },
+      {
+        "path": "artifacts/resident-npu-v11/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 5050368,
+        "source": "6fc53d81910252ac42bd5fce1476f7a70b968ed7",
+        "state": "removed"
+      },
+      {
+        "path": "artifacts/restore-backward-npu-v9/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 4288512,
+        "source": "5185dc0d1d3ae4c570e0712a42826e3974161bed",
+        "state": "removed"
+      },
+      {
+        "path": "artifacts/routing-analysis-v3/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 4067328,
+        "source": "c09e5d7cf18de19d73c242a6e461c14e5dba1101",
+        "state": "removed"
+      },
+      {
+        "path": "artifacts/routing-npu-v3/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 4067328,
+        "source": "c09e5d7cf18de19d73c242a6e461c14e5dba1101",
+        "state": "removed"
+      },
+      {
+        "path": "artifacts/scale-cpu-hb-17b-inference-v17/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 5992448,
+        "source": "0992b467584c1f603314ed04d8efe8596a14f576",
+        "state": "removed"
+      },
+      {
+        "path": "artifacts/scale-cpu-hb-17b-train-v17/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 5574656,
+        "source": "0992b467584c1f603314ed04d8efe8596a14f576",
+        "state": "removed"
+      },
+      {
+        "path": "artifacts/scale-cpu-hb-17b-train-v20/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 6033408,
+        "source": "0992b467584c1f603314ed04d8efe8596a14f576",
+        "state": "removed"
+      },
+      {
+        "path": "artifacts/scale-cpu-hb-17b-v15/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 5574656,
+        "source": "0992b467584c1f603314ed04d8efe8596a14f576",
+        "state": "removed"
+      },
+      {
+        "path": "artifacts/scale-cpu-hb-17b-v16/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 5574656,
+        "source": "0992b467584c1f603314ed04d8efe8596a14f576",
+        "state": "removed"
+      },
+      {
+        "path": "artifacts/scale-four-npu-hb-9b-train-v14/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 5574656,
+        "source": "0992b467584c1f603314ed04d8efe8596a14f576",
+        "state": "removed"
+      },
+      {
+        "path": "artifacts/scale-four-npu-hb-9b-train-v16/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 6033408,
+        "source": "0992b467584c1f603314ed04d8efe8596a14f576",
+        "state": "removed"
+      },
+      {
+        "path": "artifacts/scale-npu-fc-0p5b-v7/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 4308992,
+        "source": "e2a4d39104a006feec4525e534eadae4a94cde0d",
+        "state": "removed"
+      },
+      {
+        "path": "artifacts/scale-npu-fc-1b-v7/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 4308992,
+        "source": "e2a4d39104a006feec4525e534eadae4a94cde0d",
+        "state": "removed"
+      },
+      {
+        "path": "artifacts/scale-npu-hb-0p5b-v7/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 4325376,
+        "source": "e2a4d39104a006feec4525e534eadae4a94cde0d",
+        "state": "removed"
+      },
+      {
+        "path": "artifacts/scale-npu-hb-1b-v7/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 4325376,
+        "source": "e2a4d39104a006feec4525e534eadae4a94cde0d",
+        "state": "removed"
+      },
+      {
+        "path": "artifacts/scale-npu-hb-9b-v12/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 4743168,
+        "source": "c8026e47ee5b6fbe03b9d8c5e84e2bfde70f8267",
+        "state": "removed"
+      },
+      {
+        "path": "artifacts/scale-npu-hb-9b-v16/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 5992448,
+        "source": "0992b467584c1f603314ed04d8efe8596a14f576",
+        "state": "removed"
+      },
+      {
+        "path": "artifacts/scale-two-npu-hb-17b-v12/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 4743168,
+        "source": "c8026e47ee5b6fbe03b9d8c5e84e2bfde70f8267",
+        "state": "removed"
+      },
+      {
+        "path": "artifacts/scale-two-npu-hb-17b-v16/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 6033408,
+        "source": "0992b467584c1f603314ed04d8efe8596a14f576",
+        "state": "removed"
+      },
+      {
+        "path": "artifacts/shape-npu-v7/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 4308992,
+        "source": "e2a4d39104a006feec4525e534eadae4a94cde0d",
+        "state": "removed"
+      },
+      {
+        "path": "artifacts/sparse-npu-v7/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 4308992,
+        "source": "e2a4d39104a006feec4525e534eadae4a94cde0d",
+        "state": "removed"
+      },
+      {
+        "path": "artifacts/stages-npu-v2/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 3960832,
+        "source": "3b9f919b560d829fbed70302749ba4c9584bbd9b",
+        "state": "removed"
+      },
+      {
+        "path": "artifacts/suite-cpu-v15/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 7286784,
+        "source": "0992b467584c1f603314ed04d8efe8596a14f576",
+        "state": "removed"
+      },
+      {
+        "path": "artifacts/suite-cpu-v2/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 5058560,
+        "source": "3b9f919b560d829fbed70302749ba4c9584bbd9b",
+        "state": "removed"
+      },
+      {
+        "path": "artifacts/wheel-installed-cpu-v15/source",
+        "kind": "rebuildable_git_archive",
+        "allocated_bytes": 5550080,
+        "source": "0992b467584c1f603314ed04d8efe8596a14f576",
+        "state": "removed"
+      },
+      {
+        "path": "artifacts/wheel-installed-cpu-v15/bf16-checkpoint.pt",
+        "kind": "rebuildable_tensor_or_checkpoint",
+        "allocated_bytes": 28626944,
+        "sha256": "0995277477bf309f41aba128b0afd63203f36f7545b2db8ea575fa3f9d489a4b",
+        "state": "removed"
+      },
+      {
+        "path": "artifacts/wheel-installed-cpu-v15/fp32-checkpoint.pt",
+        "kind": "rebuildable_tensor_or_checkpoint",
+        "allocated_bytes": 29020160,
+        "sha256": "39b86a7f7e47e58e39146c6c9814e699c9ab1b92172d9acdb56cb84a5bbdf5b9",
+        "state": "removed"
+      },
+      {
+        "path": "artifacts/wheel-installed-cpu-v15/installed-venv",
+        "kind": "project_only_installed_smoke_or_build",
+        "allocated_bytes": 13963264,
+        "state": "removed"
+      },
+      {
+        "path": "artifacts/wheel-installed-cpu-v15/build-copy",
+        "kind": "project_only_installed_smoke_or_build",
+        "allocated_bytes": 5754880,
+        "state": "removed"
+      }
+    ],
+    "preserved_user_files": {
+      "docs/tide-learning-lab-TL-REQ-004-handoff.md": {
+        "bytes": 11627,
+        "sha256": "69607cba0a7e87a260929ed5741d996103cef804c51f3fa2c02b3bd7a454a220"
+      },
+      "docs/tide-learning-lab-TL-REQ-005-handoff.md": {
+        "bytes": 7415,
+        "sha256": "83bec6f6eaa476ae9d7c859fe168333ac2ee564433297f36ab9aa1ef33c38732"
+      },
+      "docs/tide-learning-lab-TL-REQ-006-handoff.md": {
+        "bytes": 7355,
+        "sha256": "8706f0477c8f31d0c8337e55ba7f8f5b28bb9a455656586fa1585c82ec58b4df"
+      },
+      "docs/upstream-lh-semantics-discussion-20261113.md": {
+        "bytes": 12905,
+        "sha256": "3118419cb014570395323baf887ffe5a7e797f97049e85eacef26ecb1fd81c07"
+      }
+    },
+    "retained_witnesses": [
+      {
+        "path": "artifacts/qualification-cpu-v8/tensors/fc-s.pt",
+        "allocated_bytes": 20856832,
+        "reason": "small bounded unresolved numerical/support witness"
+      },
+      {
+        "path": "artifacts/qualification-cpu-v8/tensors/attention.pt",
+        "allocated_bytes": 16384,
+        "reason": "small bounded unresolved numerical/support witness"
+      },
+      {
+        "path": "artifacts/qualification-cpu-v8/tensors/fc-k.pt",
+        "allocated_bytes": 76292096,
+        "reason": "small bounded unresolved numerical/support witness"
+      },
+      {
+        "path": "artifacts/routing-npu-v3/hb-exchange-x.pt",
+        "allocated_bytes": 8679424,
+        "reason": "small bounded unresolved numerical/support witness"
+      },
+      {
+        "path": "artifacts/routing-npu-v3/hb-multiscale-x-timed.pt",
+        "allocated_bytes": 34009088,
+        "reason": "small bounded unresolved numerical/support witness"
+      },
+      {
+        "path": "artifacts/routing-npu-v3/hb-lattice-k.pt",
+        "allocated_bytes": 3436544,
+        "reason": "small bounded unresolved numerical/support witness"
+      }
+    ],
+    "protected": "main private environment, wheelhouse, all small results/configs/commands/lifecycle/logs, Git worktrees/history, user documents and all external/public/consumer paths",
+    "no_active_artifact_cwd": [],
+    "finished": "2026-11-18T05:36:19.367616+00:00",
+    "removed_allocated_bytes": 6808735744,
+    "quota_after": "Disk quotas for user zlong (uid 1003): \n     Filesystem   space   quota   limit   grace   files   quota   limit   grace\n/dev/mapper/ascend_data-data\n                 39736M    300G    700G            357k       0       0        \n",
+    "artifact_du_after": "845516800\t/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts\n",
+    "git_status_after": "## graph-execution-foundation...origin/graph-execution-foundation [ahead 3]\n M docs/ROADMAP.md\n M docs/evidence/README.md\n M docs/next-thread.md\n?? docs/tide-learning-lab-TL-REQ-004-handoff.md\n?? docs/tide-learning-lab-TL-REQ-005-handoff.md\n?? docs/tide-learning-lab-TL-REQ-006-handoff.md\n?? docs/upstream-lh-semantics-discussion-20261113.md\n"
+  },
+  "retained_witnesses": [
+    {
+      "path": "artifacts/qualification-cpu-v8/tensors/fc-s.pt",
+      "allocated_bytes": 20856832,
+      "reason": "small bounded unresolved numerical/support witness",
+      "sha256": "1992fdc574a5409bf2dd5f0d82eb203e945b04440444ce4361190b969c42e1b8"
+    },
+    {
+      "path": "artifacts/qualification-cpu-v8/tensors/attention.pt",
+      "allocated_bytes": 16384,
+      "reason": "small bounded unresolved numerical/support witness",
+      "sha256": "82613087e9e719cc07f3609767e628fa5bc568f7c880e25f0b96785df36d0927"
+    },
+    {
+      "path": "artifacts/qualification-cpu-v8/tensors/fc-k.pt",
+      "allocated_bytes": 76292096,
+      "reason": "small bounded unresolved numerical/support witness",
+      "sha256": "3743a333ba1f4ab1a4110f82a23d6a92f9f9433613588233f6781121bf3d9822"
+    },
+    {
+      "path": "artifacts/routing-npu-v3/hb-exchange-x.pt",
+      "allocated_bytes": 8679424,
+      "reason": "small bounded unresolved numerical/support witness",
+      "sha256": "661ceebb1d36024ab999b3b33c1251a88907b2e36371702775aa935bbbba3c5b"
+    },
+    {
+      "path": "artifacts/routing-npu-v3/hb-multiscale-x-timed.pt",
+      "allocated_bytes": 34009088,
+      "reason": "small bounded unresolved numerical/support witness",
+      "sha256": "be57cc86a22da9eb9a5e275a5e399ad95b178a394df64e9a3bc14e9361f57eaf"
+    },
+    {
+      "path": "artifacts/routing-npu-v3/hb-lattice-k.pt",
+      "allocated_bytes": 3436544,
+      "reason": "small bounded unresolved numerical/support witness",
+      "sha256": "ad6399b14b0e58e2c7c5f3c5a1c9a761b788bf6e06cada0ba571761270c8e222"
+    }
+  ],
+  "post_cleanup_driver": {
+    "state": "passed",
+    "started": "2026-11-18T05:36:39.475277+00:00",
+    "source": "0992b467584c1f603314ed04d8efe8596a14f576",
+    "scope": "post-retirement installed-public-API dependency smoke, not new numerical qualification",
+    "cwd": "/mi/data2T/zlong/home/llm/graph-execution-foundation",
+    "affinity": [
+      224,
+      225,
+      226,
+      227
+    ],
+    "commands": [
+      {
+        "command": [
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+          "-I",
+          "-m",
+          "venv",
+          "--system-site-packages",
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/retirement-roadmap-20261118/post-cleanup-venv"
+        ],
+        "cwd": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/retirement-roadmap-20261118",
+        "log": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/retirement-roadmap-20261118/post-cleanup-venv-create.log",
+        "exit_code": 0,
+        "elapsed_seconds": 2.5667381398379803
+      },
+      {
+        "command": [
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/retirement-roadmap-20261118/post-cleanup-venv/bin/python",
+          "-I",
+          "-m",
+          "pip",
+          "install",
+          "--ignore-installed",
+          "--no-deps",
+          "--no-index",
+          "--no-cache-dir",
+          "--no-compile",
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/wheel-installed-cpu-v15/wheelhouse/tide_instances-0.1.0-py3-none-any.whl"
+        ],
+        "cwd": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/retirement-roadmap-20261118",
+        "log": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/retirement-roadmap-20261118/post-cleanup-wheel-install.log",
+        "exit_code": 0,
+        "elapsed_seconds": 0.4142676144838333
+      },
+      {
+        "command": [
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/retirement-roadmap-20261118/post-cleanup-venv/bin/python",
+          "-I",
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/wheel-installed-cpu-v15-inputs/smoke.py",
+          "--output",
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/retirement-roadmap-20261118/post-cleanup-smoke-result.json",
+          "--example",
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/retirement-roadmap-20261118/train.py",
+          "--wheel",
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/wheel-installed-cpu-v15/wheelhouse/tide_instances-0.1.0-py3-none-any.whl",
+          "--source",
+          "0992b467584c1f603314ed04d8efe8596a14f576"
+        ],
+        "cwd": "/",
+        "log": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/retirement-roadmap-20261118/post-cleanup-installed-smoke.log",
+        "exit_code": 0,
+        "elapsed_seconds": 4.469527114182711
+      }
+    ],
+    "preflight": {
+      "quota": "Disk quotas for user zlong (uid 1003): \n     Filesystem   space   quota   limit   grace   files   quota   limit   grace\n/dev/mapper/ascend_data-data\n                 39736M    300G    700G            357k       0       0        \n",
+      "memory": "               total        used        free      shared  buff/cache   available\nMem:           2.0Ti       112Gi       988Gi       6.4Gi       909Gi       1.8Ti\nSwap:             0B          0B          0B\n",
+      "units": "  UNIT LOAD ACTIVE SUB DESCRIPTION\n0 loaded units listed.\n"
+    },
+    "retired_candidates_absent": 118,
+    "input_hashes": {
+      "artifacts/retirement-roadmap-20261118/post-cleanup.py": "263fa9d80bbc99cb61cb97a498cc4705e2eddce86f1365ae3bcc63d7fac42213",
+      "artifacts/wheel-installed-cpu-v15-inputs/smoke.py": "ebc190070bb913db9d4841d44baca313c25aaa78d7f29ea28c0e0259a3533d88",
+      "artifacts/retirement-roadmap-20261118/train.py": "8843b1579af7d49ad52657b0dd54578bd147bbe49f4a8301f709d08500dc6316",
+      "artifacts/wheel-installed-cpu-v15/wheelhouse/tide_instances-0.1.0-py3-none-any.whl": "1b3349526257e87daf1177d88c5a97ea30484b402f88080d00a72b4f521eb0e4"
+    },
+    "venv_config": "home = /opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/bin\ninclude-system-site-packages = true\nversion = 3.12.13\nexecutable = /opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/bin/python3.12\ncommand = /mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python -m venv --system-site-packages /mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/retirement-roadmap-20261118/post-cleanup-venv\n",
+    "elapsed_seconds": 7.470528554171324,
+    "finished": "2026-11-18T05:36:46.965085+00:00"
+  },
+  "post_cleanup_installed_smoke": {
+    "source": "0992b467584c1f603314ed04d8efe8596a14f576",
+    "state": "passed",
+    "scope": "installed-public-API mechanism smoke; no expanded precision or performance qualification",
+    "cwd": "/",
+    "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+    "executable": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/retirement-roadmap-20261118/post-cleanup-venv/bin/python",
+    "prefix": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/retirement-roadmap-20261118/post-cleanup-venv",
+    "base_prefix": "/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1",
+    "purelib": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/retirement-roadmap-20261118/post-cleanup-venv/lib/python3.12/site-packages",
+    "sys_path": [
+      "/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/lib/python312.zip",
+      "/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/lib/python3.12",
+      "/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/lib/python3.12/lib-dynload",
+      "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/retirement-roadmap-20261118/post-cleanup-venv/lib/python3.12/site-packages",
+      "/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/lib/python3.12/site-packages"
+    ],
+    "pythonpath": null,
+    "isolated": true,
+    "tide_file": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/retirement-roadmap-20261118/post-cleanup-venv/lib/python3.12/site-packages/tide/__init__.py",
+    "tide_version": "0.1.0",
+    "wheel_sha256": "1b3349526257e87daf1177d88c5a97ea30484b402f88080d00a72b4f521eb0e4",
+    "installed_files_match_wheel": true,
+    "installed_python_file_count": 17,
+    "torch": "2.12.0+cpu",
+    "torch_file": "/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/lib/python3.12/site-packages/torch/__init__.py",
+    "backend_autoload": "0",
+    "cpu_affinity": [
+      224,
+      225,
+      226,
+      227
+    ],
+    "torch_threads": 4,
+    "example_sha256": "8843b1579af7d49ad52657b0dd54578bd147bbe49f4a8301f709d08500dc6316",
+    "rows": [
+      {
+        "precision": "fp32",
+        "state": "passed",
+        "policy": {
+          "name": "fp32",
+          "device": "cpu",
+          "parameters": "float32",
+          "input": "float32",
+          "matrix_arithmetic": "float32",
+          "normalization_mass_allocation": "float32",
+          "kv_keys_values": "float32",
+          "kv_summary_and_ssd_state": "float32",
+          "logical_time_indices": "int64",
+          "parameter_gradients": "float32",
+          "master_weights": "parameters_are_fp32_masters; no_separate_copy",
+          "adamw_moments": "float32",
+          "attention": "native_by_shape_and_prior; math/tiled_accumulate_float32",
+          "attention_mode_selection": "established_fp32_gradient_dependent_prior_dispatch",
+          "loss": "float32",
+          "autocast_cache": false
+        },
+        "config": {
+          "topology": {
+            "kind": "fc",
+            "n": 8,
+            "layers": 4,
+            "depth": null,
+            "rounds": null,
+            "profile": null,
+            "hubs": 0,
+            "partition": "group",
+            "timing": "settle",
+            "hub_mask": "all",
+            "period": null,
+            "probes": null
+          },
+          "d": 64,
+          "memory": "K",
+          "aggregation": "source_residual",
+          "allocation": "quad",
+          "sharing": "independent",
+          "adapter_rank": 8,
+          "budget": null,
+          "attention_backend": "auto",
+          "attention_chunk": 128,
+          "input_dim": null
+        },
+        "batch": 2,
+        "length": 8,
+        "inference_seed": 271118,
+        "parameter_sha256": "85713606aea99942d64085387d1fdd9ce847d061a9a9f96f464d9dc5405c6b8d",
+        "input_sha256": "5c8f69bb7fb7a344ea0cff0a7942868fb232d929140dd59b81f2cdb2b9dff0f2",
+        "inference_finite": true,
+        "inference_readout_shape": [
+          2,
+          8,
+          64
+        ],
+        "inference_state_position": 8,
+        "inference_arithmetic": [
+          {
+            "operator": "aten.bmm.default",
+            "inputs": [
+              "cpu:float32"
+            ],
+            "outputs": [
+              "cpu:float32"
+            ],
+            "calls": 44
+          },
+          {
+            "operator": "aten.linear.default",
+            "inputs": [
+              "cpu:float32"
+            ],
+            "outputs": [
+              "cpu:float32"
+            ],
+            "calls": 21
+          },
+          {
+            "operator": "aten.matmul.default",
+            "inputs": [
+              "cpu:float32"
+            ],
+            "outputs": [
+              "cpu:float32"
+            ],
+            "calls": 24
+          },
+          {
+            "operator": "aten.scaled_dot_product_attention.default",
+            "inputs": [
+              "cpu:bool",
+              "cpu:float32"
+            ],
+            "outputs": [
+              "cpu:float32"
+            ],
+            "calls": 4
+          },
+          {
+            "operator": "aten.scaled_dot_product_attention.default",
+            "inputs": [
+              "cpu:float32"
+            ],
+            "outputs": [
+              "cpu:float32"
+            ],
+            "calls": 4
+          }
+        ],
+        "example_command": [
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/retirement-roadmap-20261118/post-cleanup-venv/bin/python",
+          "-I",
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/retirement-roadmap-20261118/train.py",
+          "--device",
+          "cpu",
+          "--precision",
+          "fp32",
+          "--memory",
+          "K",
+          "--steps",
+          "3",
+          "--threads",
+          "4",
+          "--checkpoint",
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/retirement-roadmap-20261118/fp32-checkpoint.pt"
+        ],
+        "example_stdout": "{'step': 0, 'loss': 3.301395893096924}\n{'step': 1, 'loss': 2.4176342487335205}\n{'step': 2, 'loss': 2.309516191482544}\n{'checkpoint': '/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/retirement-roadmap-20261118/fp32-checkpoint.pt', 'restored_optimizer': True, 'precision': {'name': 'fp32', 'device': 'cpu', 'parameters': 'float32', 'input': 'float32', 'matrix_arithmetic': 'float32', 'normalization_mass_allocation': 'float32', 'kv_keys_values': 'float32', 'kv_summary_and_ssd_state': 'float32', 'logical_time_indices': 'int64', 'parameter_gradients': 'float32', 'master_weights': 'parameters_are_fp32_masters; no_separate_copy', 'adamw_moments': 'float32', 'attention': 'native_by_shape_and_prior; math/tiled_accumulate_float32', 'attention_mode_selection': 'established_fp32_gradient_dependent_prior_dispatch', 'loss': 'float32', 'autocast_cache': False}, 'continuation': 'exact', 'next_optimizer_update': 'finite_deviation', 'update_threshold': {'atol': 1e-06, 'rtol': 0.002}, 'parameter_max_abs': 1.3813376426696777e-05, 'parameter_threshold_failures': [{'parameter': 'regional.1.second.bias', 'max_abs': 1.3813376426696777e-05}], 'optimizer_difference': None}\n",
+        "training_seed": 17,
+        "training_updates": [
+          {
+            "step": 0,
+            "loss": 3.301395893096924
+          },
+          {
+            "step": 1,
+            "loss": 2.4176342487335205
+          },
+          {
+            "step": 2,
+            "loss": 2.309516191482544
+          }
+        ],
+        "restore": {
+          "checkpoint": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/retirement-roadmap-20261118/fp32-checkpoint.pt",
+          "restored_optimizer": true,
+          "precision": {
+            "name": "fp32",
+            "device": "cpu",
+            "parameters": "float32",
+            "input": "float32",
+            "matrix_arithmetic": "float32",
+            "normalization_mass_allocation": "float32",
+            "kv_keys_values": "float32",
+            "kv_summary_and_ssd_state": "float32",
+            "logical_time_indices": "int64",
+            "parameter_gradients": "float32",
+            "master_weights": "parameters_are_fp32_masters; no_separate_copy",
+            "adamw_moments": "float32",
+            "attention": "native_by_shape_and_prior; math/tiled_accumulate_float32",
+            "attention_mode_selection": "established_fp32_gradient_dependent_prior_dispatch",
+            "loss": "float32",
+            "autocast_cache": false
+          },
+          "continuation": "exact",
+          "next_optimizer_update": "finite_deviation",
+          "update_threshold": {
+            "atol": 1e-06,
+            "rtol": 0.002
+          },
+          "parameter_max_abs": 1.3813376426696777e-05,
+          "parameter_threshold_failures": [
+            {
+              "parameter": "regional.1.second.bias",
+              "max_abs": 1.3813376426696777e-05
+            }
+          ],
+          "optimizer_difference": null
+        },
+        "checkpoint_sha256": "c62c443041dafbaae0e550029dead4849a6e4b2f90dc1d878d3757165049d2c9",
+        "checkpoint_bytes": 29016155
+      },
+      {
+        "precision": "bf16",
+        "state": "passed",
+        "policy": {
+          "name": "bf16",
+          "device": "cpu",
+          "parameters": "float32",
+          "input": "float32",
+          "matrix_arithmetic": "bfloat16_autocast",
+          "normalization_mass_allocation": "float32",
+          "kv_keys_values": "bfloat16",
+          "kv_summary_and_ssd_state": "float32",
+          "logical_time_indices": "int64",
+          "parameter_gradients": "float32",
+          "master_weights": "parameters_are_fp32_masters; no_separate_copy",
+          "adamw_moments": "float32",
+          "attention": "native_by_shape_and_prior; math/tiled_accumulate_float32",
+          "attention_mode_selection": "visible_zero_prior_auto_tiled_in_all_modes; NPU_explicit_key_priors_rank_one_in_all_modes",
+          "loss": "float32",
+          "autocast_cache": false
+        },
+        "config": {
+          "topology": {
+            "kind": "fc",
+            "n": 8,
+            "layers": 4,
+            "depth": null,
+            "rounds": null,
+            "profile": null,
+            "hubs": 0,
+            "partition": "group",
+            "timing": "settle",
+            "hub_mask": "all",
+            "period": null,
+            "probes": null
+          },
+          "d": 64,
+          "memory": "K",
+          "aggregation": "source_residual",
+          "allocation": "quad",
+          "sharing": "independent",
+          "adapter_rank": 8,
+          "budget": null,
+          "attention_backend": "auto",
+          "attention_chunk": 128,
+          "input_dim": null
+        },
+        "batch": 2,
+        "length": 8,
+        "inference_seed": 271118,
+        "parameter_sha256": "85713606aea99942d64085387d1fdd9ce847d061a9a9f96f464d9dc5405c6b8d",
+        "input_sha256": "5c8f69bb7fb7a344ea0cff0a7942868fb232d929140dd59b81f2cdb2b9dff0f2",
+        "inference_finite": true,
+        "inference_readout_shape": [
+          2,
+          8,
+          64
+        ],
+        "inference_state_position": 8,
+        "inference_arithmetic": [
+          {
+            "operator": "aten.bmm.default",
+            "inputs": [
+              "cpu:bfloat16"
+            ],
+            "outputs": [
+              "cpu:bfloat16"
+            ],
+            "calls": 44
+          },
+          {
+            "operator": "aten.linear.default",
+            "inputs": [
+              "cpu:bfloat16"
+            ],
+            "outputs": [
+              "cpu:bfloat16"
+            ],
+            "calls": 21
+          },
+          {
+            "operator": "aten.matmul.default",
+            "inputs": [
+              "cpu:float32"
+            ],
+            "outputs": [
+              "cpu:float32"
+            ],
+            "calls": 24
+          },
+          {
+            "operator": "aten.scaled_dot_product_attention.default",
+            "inputs": [
+              "cpu:bfloat16",
+              "cpu:bool"
+            ],
+            "outputs": [
+              "cpu:bfloat16"
+            ],
+            "calls": 4
+          },
+          {
+            "operator": "aten.scaled_dot_product_attention.default",
+            "inputs": [
+              "cpu:bfloat16",
+              "cpu:float32"
+            ],
+            "outputs": [
+              "cpu:bfloat16"
+            ],
+            "calls": 4
+          }
+        ],
+        "example_command": [
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/retirement-roadmap-20261118/post-cleanup-venv/bin/python",
+          "-I",
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/retirement-roadmap-20261118/train.py",
+          "--device",
+          "cpu",
+          "--precision",
+          "bf16",
+          "--memory",
+          "K",
+          "--steps",
+          "3",
+          "--threads",
+          "4",
+          "--checkpoint",
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/retirement-roadmap-20261118/bf16-checkpoint.pt"
+        ],
+        "example_stdout": "{'step': 0, 'loss': 3.2959322929382324}\n{'step': 1, 'loss': 2.4053313732147217}\n{'step': 2, 'loss': 2.3110694885253906}\n{'checkpoint': '/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/retirement-roadmap-20261118/bf16-checkpoint.pt', 'restored_optimizer': True, 'precision': {'name': 'bf16', 'device': 'cpu', 'parameters': 'float32', 'input': 'float32', 'matrix_arithmetic': 'bfloat16_autocast', 'normalization_mass_allocation': 'float32', 'kv_keys_values': 'bfloat16', 'kv_summary_and_ssd_state': 'float32', 'logical_time_indices': 'int64', 'parameter_gradients': 'float32', 'master_weights': 'parameters_are_fp32_masters; no_separate_copy', 'adamw_moments': 'float32', 'attention': 'native_by_shape_and_prior; math/tiled_accumulate_float32', 'attention_mode_selection': 'visible_zero_prior_auto_tiled_in_all_modes; NPU_explicit_key_priors_rank_one_in_all_modes', 'loss': 'float32', 'autocast_cache': False}, 'continuation': 'exact', 'next_optimizer_update': 'finite_deviation', 'update_threshold': {'atol': 1e-06, 'rtol': 0.002}, 'parameter_max_abs': 1.6644597053527832e-05, 'parameter_threshold_failures': [{'parameter': 'regional.1.second.bias', 'max_abs': 1.6644597053527832e-05}], 'optimizer_difference': \"Tensor-likes are not close!\\n\\nMismatched elements: 39 / 16384 (0.2%)\\nGreatest absolute difference: 9.765662252902985e-05 at index (5, 1, 41) (up to 1e-06 allowed)\\nGreatest relative difference: 0.13652795553207397 at index (3, 4, 23) (up to 0.002 allowed)\\n\\nThe failure occurred for item ['state'][0]['exp_avg']\"}\n",
+        "training_seed": 17,
+        "training_updates": [
+          {
+            "step": 0,
+            "loss": 3.2959322929382324
+          },
+          {
+            "step": 1,
+            "loss": 2.4053313732147217
+          },
+          {
+            "step": 2,
+            "loss": 2.3110694885253906
+          }
+        ],
+        "restore": {
+          "checkpoint": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/retirement-roadmap-20261118/bf16-checkpoint.pt",
+          "restored_optimizer": true,
+          "precision": {
+            "name": "bf16",
+            "device": "cpu",
+            "parameters": "float32",
+            "input": "float32",
+            "matrix_arithmetic": "bfloat16_autocast",
+            "normalization_mass_allocation": "float32",
+            "kv_keys_values": "bfloat16",
+            "kv_summary_and_ssd_state": "float32",
+            "logical_time_indices": "int64",
+            "parameter_gradients": "float32",
+            "master_weights": "parameters_are_fp32_masters; no_separate_copy",
+            "adamw_moments": "float32",
+            "attention": "native_by_shape_and_prior; math/tiled_accumulate_float32",
+            "attention_mode_selection": "visible_zero_prior_auto_tiled_in_all_modes; NPU_explicit_key_priors_rank_one_in_all_modes",
+            "loss": "float32",
+            "autocast_cache": false
+          },
+          "continuation": "exact",
+          "next_optimizer_update": "finite_deviation",
+          "update_threshold": {
+            "atol": 1e-06,
+            "rtol": 0.002
+          },
+          "parameter_max_abs": 1.6644597053527832e-05,
+          "parameter_threshold_failures": [
+            {
+              "parameter": "regional.1.second.bias",
+              "max_abs": 1.6644597053527832e-05
+            }
+          ],
+          "optimizer_difference": "Tensor-likes are not close!\n\nMismatched elements: 39 / 16384 (0.2%)\nGreatest absolute difference: 9.765662252902985e-05 at index (5, 1, 41) (up to 1e-06 allowed)\nGreatest relative difference: 0.13652795553207397 at index (3, 4, 23) (up to 0.002 allowed)\n\nThe failure occurred for item ['state'][0]['exp_avg']"
+        },
+        "checkpoint_sha256": "1487534a72d1fea5f7b4fef1f21fb51235e3f79d04217c510925956106c31fc6",
+        "checkpoint_bytes": 28623003
+      }
+    ],
+    "loaded_tide_modules": {
+      "tide.topology_hb": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/retirement-roadmap-20261118/post-cleanup-venv/lib/python3.12/site-packages/tide/topology_hb.py",
+      "tide.topology": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/retirement-roadmap-20261118/post-cleanup-venv/lib/python3.12/site-packages/tide/topology.py",
+      "tide.config": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/retirement-roadmap-20261118/post-cleanup-venv/lib/python3.12/site-packages/tide/config.py",
+      "tide.attention": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/retirement-roadmap-20261118/post-cleanup-venv/lib/python3.12/site-packages/tide/attention.py",
+      "tide.parameters": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/retirement-roadmap-20261118/post-cleanup-venv/lib/python3.12/site-packages/tide/parameters.py",
+      "tide.reception": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/retirement-roadmap-20261118/post-cleanup-venv/lib/python3.12/site-packages/tide/reception.py",
+      "tide.allocation": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/retirement-roadmap-20261118/post-cleanup-venv/lib/python3.12/site-packages/tide/allocation.py",
+      "tide.region": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/retirement-roadmap-20261118/post-cleanup-venv/lib/python3.12/site-packages/tide/region.py",
+      "tide.layout": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/retirement-roadmap-20261118/post-cleanup-venv/lib/python3.12/site-packages/tide/layout.py",
+      "tide.kv": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/retirement-roadmap-20261118/post-cleanup-venv/lib/python3.12/site-packages/tide/kv.py",
+      "tide.model": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/retirement-roadmap-20261118/post-cleanup-venv/lib/python3.12/site-packages/tide/model.py",
+      "tide.checkpoint": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/retirement-roadmap-20261118/post-cleanup-venv/lib/python3.12/site-packages/tide/checkpoint.py",
+      "tide.placement": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/retirement-roadmap-20261118/post-cleanup-venv/lib/python3.12/site-packages/tide/placement.py",
+      "tide": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/retirement-roadmap-20261118/post-cleanup-venv/lib/python3.12/site-packages/tide/__init__.py",
+      "tide.precision": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/retirement-roadmap-20261118/post-cleanup-venv/lib/python3.12/site-packages/tide/precision.py"
+    }
+  },
+  "original_installed_smoke_comparison": {
+    "environment_equal": {
+      "torch": true,
+      "torch_file": true,
+      "wheel_sha256": true,
+      "example_sha256": true,
+      "torch_threads": true,
+      "cpu_affinity": true
+    },
+    "rows": [
+      {
+        "precision": "fp32",
+        "initial_identity_equal": {
+          "parameter_sha256": true,
+          "input_sha256": true,
+          "training_seed": true,
+          "config": true
+        },
+        "previous_update": "finite_deviation",
+        "new_update": "finite_deviation",
+        "scope": "Saved/next-forward exactness and actual optimizer tolerance are separate. Initial inference hashes and equal training seed do not prove an identical subsequent gradient trajectory."
+      },
+      {
+        "precision": "bf16",
+        "initial_identity_equal": {
+          "parameter_sha256": true,
+          "input_sha256": true,
+          "training_seed": true,
+          "config": true
+        },
+        "previous_update": "within_threshold",
+        "new_update": "finite_deviation",
+        "scope": "Saved/next-forward exactness and actual optimizer tolerance are separate. Initial inference hashes and equal training seed do not prove an identical subsequent gradient trajectory."
+      }
+    ]
+  },
+  "temporary_validation_retirement": {
+    "state": "pending_after_evidence_commit",
+    "scope": "Retire only this follow-up private venv, tmp directory and two checkpoint files after reviewed evidence is committed."
+  },
+  "final_snapshot": {
+    "artifacts_allocated_bytes": 917180416,
+    "project_allocated_bytes": 1081393152,
+    "quota": "Disk quotas for user zlong (uid 1003): \n     Filesystem   space   quota   limit   grace   files   quota   limit   grace\n/dev/mapper/ascend_data-data\n                 39804M    300G    700G            358k       0       0        \n",
+    "worktrees": "worktree /mi/data2T/zlong/home/llm/graph-execution-foundation\nHEAD da45086c9228e14e03b18e775a4d7d5d601a2ffb\nbranch refs/heads/graph-execution-foundation\n\nworktree /mi/data2T/zlong/home/llm/tide-learning-lab\nHEAD 5f30ed2a32d7648f5011f5bfde5c6cae086a463c\nbranch refs/heads/tide-learning-lab\n\n",
+    "active_tide_units": "  UNIT LOAD ACTIVE SUB DESCRIPTION\n0 loaded units listed.\n",
+    "named_tmpfs_entries": []
+  },
+  "raw_files": {
+    "artifacts/retirement-roadmap-20261118/inventory.json": {
+      "sha256": "ef4fc5e11d580b089135c9317fbe071728773a2442623bc8bd16c96e1da6215f",
+      "bytes": 71931
+    },
+    "artifacts/retirement-roadmap-20261118/retirement.json": {
+      "sha256": "77ff9ed00f3dedeabc7f49ac81aa6bced080bdf408047899d4db48f743506793",
+      "bytes": 33233
+    },
+    "artifacts/retirement-roadmap-20261118/dependency-review.json": {
+      "sha256": "a462e0812fb6a6004c8fd432c9c82bb51c114c1b208d39dd024358c6068610d4",
+      "bytes": 875
+    },
+    "artifacts/retirement-roadmap-20261118/retirement-scripts.json": {
+      "sha256": "b2082c618be44f2edae6a502a1a13876a3d32c0933ee3082370fabe068a1a792",
+      "bytes": 299
+    },
+    "artifacts/retirement-roadmap-20261118/post-cleanup-driver-result.json": {
+      "sha256": "ec46e9d82c4550c81c784f1011669b70a5ee0906f8f83facd8cf28aaff469aa7",
+      "bytes": 4617
+    },
+    "artifacts/retirement-roadmap-20261118/post-cleanup-smoke-result.json": {
+      "sha256": "d036de5a992ec5ded8d2a412ca39de195e01ea074a8c00b74150e9278fc815ff",
+      "bytes": 19022
+    },
+    "artifacts/retirement-roadmap-20261118/post-cleanup.py": {
+      "sha256": "263fa9d80bbc99cb61cb97a498cc4705e2eddce86f1365ae3bcc63d7fac42213",
+      "bytes": 4137
+    },
+    "artifacts/retirement-roadmap-20261118/train.py": {
+      "sha256": "8843b1579af7d49ad52657b0dd54578bd147bbe49f4a8301f709d08500dc6316",
+      "bytes": 4822
+    }
+  },
+  "reconstruction": "Retired source directories are reproducible Git archives of each launch source; inputs/commands/results/logs remain. Rebuild tensors/checkpoints through their recorded finite commands in fresh outputs. The isolated smoke used the preserved fixed wheel, its retained harness and examples/train.py read from Git, without retired source paths."
+}
