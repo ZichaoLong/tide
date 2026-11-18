@@ -9,7 +9,8 @@ forward-only完整计时修复 `f8235fe4`。生产 `src/tide` tree 为
 
 ## 本轮结果与入口
 
-- [训练建议](execution-recommendations.md)提供四个主力NPU训练预设及两个BF16备选，
+- 按用户最新约定，实际训练及后续优化优先FP32，BF16为次选。
+  [训练建议](execution-recommendations.md)提供三个主力FP32 NPU预设及三个BF16参考，
   必须显式选择已准入设备；无参数CPU入口安全可运行。可覆盖参数、查看最终设置、
   保存和真实恢复；默认入口服务训练，其他模式分开给建议。
 - [有限搜索](evidence/training-search-20261118.md)补齐batch-only及纯batch+整区域重算。
@@ -17,9 +18,12 @@ forward-only完整计时修复 `f8235fe4`。生产 `src/tide` tree 为
   约6–9%缩短时间。原单区域、合批、math/tiled/fusion、整区域重算及放置候选均保留。
 - [连续训练](evidence/training-continuous-20261118.md)六组各20次真实更新，历史窗口
   填满、optimizer step1→20、数据有限；另有六次新进程20→21更新。
-  主力FC BF16 B128/L256约38249输入位置/秒；Settle FP32组合B24/L256约2075；
+  已测FC BF16 B128/L256约38249输入位置/秒；Settle FP32组合B24/L256约2075；
   Timed FP32组合B12/L128约317；0.5B FP32 B1/L128约96。allocated/reserved峰值
   和恢复数值分别判定，不能从allocated单独推断真实显存余量。
+- [FP32优先吞吐与计算流程](computation-and-throughput.md)按规模、拓扑、活跃量和
+  原测量身份整理已有结果，并给出公式/伪代码。FC FP32已有较早零态长度搜索，
+  尚无与上述BF16大batch对应的新20更新连续训练预设；本次文档补充未重跑模型。
 - [四类主表与其他模式](evidence/training-modes-20261118.md)包含正式A–D联合匹配，
   推理、含图前向、完整训练、首个主干输出和真实缓存decode。Tide当前完整训练仍
   慢于代表A/B；C/D的宽浅结构是不同计算参照。完整同步修复后的缓存结果单独归档。

@@ -14,6 +14,6 @@
   "recommendation": {
     "status": "cpu_example",
     "evidence": [],
-    "scope": "Small CPU FC-K example; the separate npu-fc-k-bf16 preset records the measured NPU training choice and its retained deviations."
+    "scope": "FP32-first small CPU FC-K example; NPU FP32 capacity starting settings are documented in docs/execution-recommendations.md. The separate npu-fc-k-bf16 preset remains a secondary measured reference with retained deviations."
   }
 }

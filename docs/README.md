@@ -15,6 +15,7 @@ The current source is `src/tide`, tests `tests`, comparisons `benchmarks`, confi
 | Named training choices, explicit overrides and per-mode advice | [execution recommendations](execution-recommendations.md) |
 | Arithmetic policy and recorded numerical scope | [precision](precision.md) |
 | Four joint matches, work counts and timing | [benchmark contract](benchmark-contract.md), [runnable comparisons](benchmarking.md) |
+| FP32 throughput by scale/topology, active work and computation formulas | [computation and throughput](computation-and-throughput.md) |
 | Environment, checks, durable execution | [development](development.md), [verification](verification.md), [execution](execution-flows.md) |
 | Measured results and applicable experience | [evidence](evidence/README.md), [performance lessons](performance-lessons.md) |
 | Downstream requests and acceptance | [collaboration](downstream-contract.md) |

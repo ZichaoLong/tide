@@ -10,7 +10,8 @@ agreement and how semantic cycles change.
 
 - [Current status](docs/STATUS.md) / [current backlog](docs/ROADMAP.md)
 - [Use, train and continue](docs/instances.md) / [clean development](docs/development.md)
-- [Named training presets and mode-specific recommendations](docs/execution-recommendations.md)
+- [Named training presets and mode-specific recommendations](docs/execution-recommendations.md) (FP32 first for training)
+- [Throughput by scale/topology and the mathematical computation flow](docs/computation-and-throughput.md)
 - [Documentation map](docs/README.md) / [architecture](docs/architecture.md)
 - [Adopted semantics](docs/semantics.md) / [precision](docs/precision.md)
 - [Four joint Transformer comparisons](docs/benchmark-contract.md)

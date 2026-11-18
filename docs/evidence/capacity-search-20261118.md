@@ -12,7 +12,7 @@
 
 - 每个候选使用一个独立进程、一轮预热更新、三次正常训练采样；`train` 包括 zero_grad、准备与 packing、前向/readout、必要的 Timed flush、loss、反向、完整 AdamW foreach、设备同步及标量 loss 读取。每步从零状态 prefill，参数累计更新；后审计位于共四次更新之后。
 - 模型构造、输入传输、初态/后更新审计、checkpoint、JSON 写入和样本后内存探针不计入上述秒数。峰值为预热后清零、后审计前的累计 allocated peak，包含当时存活的参数、梯度、优化器状态和执行临时量。
-- 吞吐分母为实际 B×L 输入位置。Transformer 历史窗口固定 128；Tide 既定逻辑 KV 窗口 128×period 不变。扩大 L 是扩大输入流及反向图范围，没有修改历史语义。
+- 吞吐为实际 B×L 输入位置数除以完整秒数。Transformer 历史窗口固定 128；Tide 既定逻辑 KV 窗口 128×period 不变。扩大 L 是扩大输入流及反向图范围，没有修改历史语义。
 - 两表均为同精度比较。BF16 是 autocast 矩阵计算；实际参数、梯度、AdamW 一二阶矩和主权重仍为 FP32，没有另设一份主权重。原始独立 runtime audit 记录了 BF16 矩阵输出；FP32 的 matmul/conv HF32 均关闭。
 - 每卡 allocated 预算 48 GiB，单子进程树采样 RSS 预算 112 GiB；外层服务 128 GiB/5400 s，队列等待最多 600 s。搜索总限时 4800 s、单子进程 900 s。预算是同步点检查及采样监督，不是硬显存隔离。
 - 候选按单轴倍增；稳定条件为三样本 `(max−min)/median ≤ 25%`。预设平坦规则是连续两个稳定候选相对最佳吞吐增益不超过 3%；本次所有线都先到 `candidate_limit`，没有 OOM、预算、超时或平坦停止。

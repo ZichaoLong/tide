@@ -1,6 +1,6 @@
 {
   "schema": "tide-example-preset-1",
-  "description": "FC-K BF16 training shape; paired restored-update finite deviation remains.",
+  "description": "Secondary FC-K BF16 training reference; actual training prioritizes FP32. Paired restored-update finite deviation remains.",
   "model": {
     "topology": {
       "kind": "fc",
@@ -54,8 +54,8 @@
     "seed": 751
   },
   "recommendation": {
-    "status": "selected_training_shape",
-    "scope": "FC-K BF16 training shape; paired restored-update finite deviation remains.",
+    "status": "alternative_precision",
+    "scope": "Secondary FC-K BF16 training reference; actual training prioritizes FP32. Paired restored-update finite deviation remains.",
     "evidence": [
       "docs/evidence/training-search-20261118.md",
       "docs/evidence/training-continuous-20261118.md",

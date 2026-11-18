@@ -6,7 +6,10 @@ The [initial BF16 investigation](evidence/roadmap-numerics-initial-20261118.md) 
 [original FP32 report](evidence/instances-fp32-20261118.md) retain their failures.
 Implementation, completed execution and numerical equivalence are separate facts;
 [STATUS](STATUS.md) owns the current handoff. CPU FP64 is available for bounded
-accuracy diagnosis. FP16 is outside this cycle.
+accuracy diagnosis. FP16 is outside this cycle. Actual training and subsequent
+training optimization prioritize FP32; BF16 remains a secondary option, as agreed
+in [project scope](project-scope.md). This priority does not alter arithmetic
+policies, thresholds or the qualification of existing records.
 
 ## Implemented arithmetic policy
 

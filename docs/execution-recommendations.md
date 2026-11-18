@@ -7,6 +7,12 @@ JSON lines. Synthetic normal inputs and the squared readout scalar demonstrate
 the mechanism. Task heads, data, losses and training recipes remain downstream.
 The entry performs diagnostic finite checks; its elapsed time is not a benchmark.
 
+Actual training and subsequent training optimization prioritize **FP32**. BF16
+remains a secondary option; its measured presets, numerical deviations and original
+runtime settings are retained. Throughput, latency and memory still need their own
+mode/configuration-specific evidence. See the [scale/topology tables and computation
+flow](computation-and-throughput.md) for an FP32-first view of existing results.
+
 ```sh
 python examples/train.py
 python examples/train.py --list-presets
@@ -102,10 +108,10 @@ source, record SHA256, checkpoint hash, qualification and resource identity.
 
 | Preset | B/L | Steady input positions/s | Peak allocated/reserved GiB | Selection and paired restore |
 | --- | --- | ---: | ---: | --- |
-| `npu-fc-k-bf16` | 128/256 | 38,248.5 | 25.692 / 29.936 | FC choice; restored update retains finite deviation |
-| `npu-hb-settle-fp32` | 24/256 | 2,074.5 | 38.285 / 42.998 | Settle choice; restored update within original threshold |
-| `npu-hb-timed-fp32` | 12/128 | 317.4 | 41.653 / 46.387 | Timed choice; restored update within original threshold |
-| `npu-hb-0p5b-fp32` | 1/128 | 96.08 | 15.372 / 16.506 | Scale choice; restored update within original threshold |
+| `npu-hb-settle-fp32` | 24/256 | 2,074.5 | 38.285 / 42.998 | Primary Settle choice; restored update within original threshold |
+| `npu-hb-timed-fp32` | 12/128 | 317.4 | 41.653 / 46.387 | Primary Timed choice; restored update within original threshold |
+| `npu-hb-0p5b-fp32` | 1/128 | 96.08 | 15.372 / 16.506 | Primary scale choice; restored update within original threshold |
+| `npu-fc-k-bf16` | 128/256 | 38,248.5 | 25.692 / 29.936 | Secondary BF16 reference; restored update retains finite deviation |
 | `npu-hb-settle-bf16` | 32/256 | 2,078.2 | 41.835 / 50.625 | Alternative; similar throughput with a higher peak at this B |
 | `npu-hb-0p5b-bf16` | 1/128 | 90.61 | 13.180 / 14.641 | Alternative; lower peak and lower throughput than scale FP32 |
 
@@ -114,6 +120,23 @@ an admission snapshot, not a measured running HBM peak; do not infer free HBM
 from allocated peak alone. Settle BF16 B32's 50.625 GiB reserved peak makes it a
 less conservative choice than selected FP32 B24. Adding downstream task heads
 and data storage requires checking the actual remaining device memory again.
+
+FC-K FP32 has separate [fresh-window capacity observations](evidence/capacity-search-20261118.md):
+B8/L512 reached 16,352.99 input positions/s at 4.067 GiB allocated, and B8/L1024
+reached 18,400.58 at 7.976 GiB, using source `f486a56e`. These are earlier
+zero-private-state updates, not the latest 20-update continuous qualification.
+An admitted-device starting configuration is:
+
+```sh
+python examples/train.py --preset fc-k --device npu:0 --precision fp32 \
+  --batch 8 --length 512 --threads 4 --dry-run
+```
+
+Remove `--dry-run` only within the normal admitted, bounded execution workflow.
+This is a starting setting, not a new measured preset. The large-batch FC
+20-update record above remains BF16; overriding its precision does not transfer
+its throughput, memory or restored-update qualification to FP32. A comparable
+FP32 FC continuous capacity choice remains a follow-up measurement.
 
 FC-K retains its original computation options: n8, 4 layers, d128, independent
 parameters, `region_batch_size=1`, both recomputation options false and SSD
@@ -179,7 +202,7 @@ finite starting points. They do not select a universal fastest implementation:
 
 | Objective | Starting setting and measured scope |
 | --- | --- |
-| Sustained training | Use the named training presets above; recheck reserved/actual free memory after adding the task head and data. |
+| Sustained training | Start with the FP32 choices above; FC FP32 currently uses the separately labelled capacity starting point. Recheck reserved/actual free memory after adding the task head and data. |
 | Offline inference throughput | FC BF16 B128/L256 and Timed FP32 B4/L128 have separate no-grad observations; compatible batches/prefix remain candidates, while recomputation provides no inference saving. |
 | Grad-enabled forward | The same two shapes have separate measurements; include graph construction and retained activations even though no backward/optimizer runs. |
 | First backbone output / prefill | B1, prefill128 in one chunk has explicit output-ready timing. Select a smaller chunk only after checking launch overhead and when a usable output actually appears. |
@@ -242,7 +265,7 @@ device admission under the [execution contract](execution-flows.md), an explicit
 selected NPU uses the same entry and disables HF32:
 
 ```sh
-python examples/train.py --preset hb-settle --device npu:0 --precision bf16 \
+python examples/train.py --preset hb-settle --device npu:0 --precision fp32 \
   --batch 2 --length 8 --steps 3
 ```
 
