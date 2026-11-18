@@ -51,12 +51,18 @@ outside the checkout with `PYTHONPATH` removed and Python `-I`. Check that loade
 Use project artifact directories for build/install outputs; keep the frozen input
 unchanged and the shared baseline read-only.
 
-The [clean installed-wheel report](evidence/roadmap-installed-20261118.md) provides
-the exact offline build/install commands and reconstructible harness at `0992b467`.
-It covers CPU FP32/BF16 inference, three updates, checkpoint restore and a real
-next update; its FP32 finite restored-update errors remain recorded. The separate
-current CPU suite is in the same report. Neither installation nor test completion
-extends hardware or numerical qualification beyond those observations.
+The [current installed-wheel report](evidence/capacity-installed-20261118.md) fixes
+production source `8a22530d`, checks 21 package files/modules, and exercises optional
+bindings, batching/recomputation and logical CPU placement with actual new-process
+fourth updates. Batched FP32/BF16 updates are exact; placed FP32 is within the original
+tolerance and placed BF16 retains finite gradient/update deviations. The original
+harness exit2 and corrected classification are recorded separately.
+
+The [integrated CPU record](evidence/capacity-validation-20261118.md) identifies
+544 full-suite tests and a separate 17-test integration check. Earlier
+[installed results](evidence/roadmap-installed-20261118.md) retain their source and
+failures. Neither installation nor test completion extends hardware or numerical
+qualification beyond those observations.
 
 ## Run and resume
 

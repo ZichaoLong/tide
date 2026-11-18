@@ -1,6 +1,20 @@
 # Current evidence
 
-The five-workstream implementation has separate source-scoped records:
+The capacity, throughput and regional-execution phase has concluded. Its records
+retain actual frozen source identities, original numerical failures and bounded
+search limits:
+
+- [Integrated CPU suite, support catalog and final identity checks](capacity-validation-20261118.md).
+- [Longer inputs, larger batches and all four joint Transformer matches](capacity-search-20261118.md).
+- [Execution variants, memory lifetime and expanded-batch throughput](capacity-execution-20261118.md).
+- [BF16 batching correction and bounded first-divergence witnesses](capacity-rounding-20261118.md).
+- [0.5B/1B continuous execution and fresh-process restored-update timing](capacity-continuous-20261118.md).
+- [Whole-region placement, two-NPU concurrency and 9B/17B capacity](region-capacity-20261118.md).
+- [Standalone LibTorch CPU checks](native-regional-cpu-20261118.md) and
+  [CPU/NPU regional performance, restored gradients and pool streams](native-regional-performance-20261118.md).
+- [Isolated new wheel, optional bindings and bounded restored-gradient diagnosis](capacity-installed-20261118.md).
+
+The preceding five-workstream records remain scoped to their own implementations:
 
 - [Seven-point CPU/NPU four-class representative matrix](roadmap-representative-20261118.md).
 - [CPU/NPU continuous use, complete timing and actual restored updates](roadmap-continuous-20261118.md).
@@ -27,6 +41,9 @@ qualification boundaries are in [STATUS](../STATUS.md). Each links its reviewed 
   with [exact retirement and preservation records](cleanup-followup-20261118.json).
 
 Each report identifies source, configuration, actual tests and remaining limits.
+[Main-branch file mappings](capacity-validation-20261118.md) make original sub-worktree
+implementation/harness files reproducible from the delivered branch; whole-tree
+and binary identities still remain those of their actual runs.
 The existing FP32 report retains its original bytes and its original delivery
 scope; its historical BF16 exclusion does not override the current precision policy and qualification.
 Governance evidence does not extend the model's numerical or performance qualification.

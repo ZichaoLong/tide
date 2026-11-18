@@ -48,10 +48,13 @@ Transformer/SSD comparison cannot replace those checks.
 Returned values/strengths, relevant state, support, input/parameter gradients,
 None/zero distinctions, updates and continuation matter, not just a readout.
 
-At `0992b467584c1f603314ed04d8efe8596a14f576`, the
-[clean CPU suite and installed-wheel report](evidence/roadmap-installed-20261118.md)
-records 424 CPU tests and a separate FP32/BF16 public-API smoke. The smoke
-preserves its FP32 restored-update deviations. Earlier FP32 device results remain
-in [their original report](evidence/instances-fp32-20261118.md); none of these
-source-scoped counts certifies a later source or relabels numerical failures.
+The [integrated CPU record](evidence/capacity-validation-20261118.md) records
+544 tests on frozen `8a22530d` and 17 targeted integration tests on `5ae060db`.
+The [new installed wheel](evidence/capacity-installed-20261118.md) covers optional
+bindings, batching/recomputation, logical CPU placement and new-process restored
+updates. The [execution-candidate investigation](evidence/capacity-rounding-20261118.md)
+and [regional NPU record](evidence/region-capacity-20261118.md) retain their finite
+value/support/gradient/update failures. Earlier [FP32](evidence/instances-fp32-20261118.md)
+and [installed results](evidence/roadmap-installed-20261118.md) remain unchanged;
+no test count certifies a later source or relabels numerical failures.
 Finite deviations follow [precision](precision.md).

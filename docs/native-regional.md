@@ -9,7 +9,10 @@ counter with the caller's fixed input bundle.
 
 The [fixed CPU record](evidence/native-regional-cpu-20261118.md) covers its finite
 two-precision, shared-gradient, worker-concurrency and restored-update checks;
-device and performance qualification remain separate.
+device and performance qualification remain separate. The
+[CPU/NPU performance and stream record](evidence/native-regional-performance-20261118.md)
+now supplies those finite observations, including retained BF16 failures, noisy
+samples and CPU inner-thread controls; it does not establish full-model adoption.
 
 ## Math and precision
 

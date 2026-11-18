@@ -129,3 +129,11 @@ small checks and larger performance-shape comparisons; four BF16 five-update
 comparisons and the original four-worker restored gradient remain outside their
 strict thresholds. Successful forward values or exact checkpoint decoding do not
 certify an identical subsequent gradient/optimizer trajectory.
+
+The [new installed-wheel checks](evidence/capacity-installed-20261118.md) observe
+exact checkpoint data/next forwards in four cases, while placed BF16 retains
+restored gradient/update deviations. Same-owner per-device backward can already
+vary at that selected checkpoint; another restored owner reproduces the original
+update exactly. Four scalar FP64 AdamW witnesses explain selected update deltas,
+not every gradient difference. Regional multi-NPU qualification and its original
+tolerances are recorded [separately](evidence/region-capacity-20261118.md).
