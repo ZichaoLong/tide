@@ -4,6 +4,10 @@ The implementation follows [the comparison contract](benchmark-contract.md).
 Use an installed checkout and the environment/admission rules in
 [development](development.md) and [execution](execution-flows.md). For example:
 
+For bounded B/L expansion, independent subject processes, resource stop rules
+and the separate common-shape versus fixed-model capacity tables, see
+[capacity search](capacity-search.md).
+
 ```sh
 TORCH_DEVICE_BACKEND_AUTOLOAD=0 python -m benchmarks.run \
   --config configs/fc-k.json --device cpu --precision bf16 \

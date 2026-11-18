@@ -24,6 +24,7 @@ from benchmarks.baselines import TransformerBaseline, SSDBaseline, parameter_cou
 from benchmarks.matching import match_transformers, parameter_memory_budget
 from benchmarks.statistics import audit_model, RuntimeAudit
 from benchmarks.workloads import activity_fixture, paired_input, parameter_hash, tensor_hash
+from benchmarks.references import file_identity, load_reference
 from scripts.job import atomic
 
 
@@ -81,6 +82,17 @@ def _loss(values):
     return sum(value.float().square().sum() for value in values) / sum(value.numel() for value in values)
 
 
+class DeviceBudgetExceeded(RuntimeError):
+    """A sampled allocator peak crossed the declared budget, not an OOM."""
+
+
+def check_memory(device, budget_gib):
+    memory = _device_memory(device)
+    if memory is not None and budget_gib is not None and memory["peak_allocated_bytes"] > budget_gib*2**30:
+        raise DeviceBudgetExceeded(f"{device}: peak allocated {memory['peak_allocated_bytes']} bytes exceeds {budget_gib} GiB")
+    return memory
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--config", required=True)
@@ -97,6 +109,10 @@ def main():
     parser.add_argument("--activity", choices=("natural", "sparse03", "sparse10", "high"), default="natural")
     parser.add_argument("--no-flush", action="store_true")
     parser.add_argument("--audit-only", action="store_true")
+    parser.add_argument("--reference-record", help="completed initial audit at this exact B/L; avoids allocating a Tide reference in each child")
+    parser.add_argument("--calibration-record", help="freeze A-D constructors from this initial calibration; actual B/L audits, when available, remain separate")
+    parser.add_argument("--device-budget-gib", type=float, help="stop this child after a synchronized phase/step exceeds allocator peak budget; not a hard allocator limit")
+    parser.add_argument("--optimizer-foreach", action=argparse.BooleanOptionalAction, default=True)
     parser.add_argument("--warmup", type=int, default=2)
     parser.add_argument("--steps", type=int, default=5)
     parser.add_argument("--output", required=True)
@@ -104,6 +120,10 @@ def main():
     args = parser.parse_args()
     if min(args.threads, args.batch, args.length, args.steps) < 1 or args.warmup < 0:
         parser.error("counts must be positive, warmup nonnegative")
+    if args.device_budget_gib is not None and not 0 < args.device_budget_gib < float("inf"):
+        parser.error("device budget must be positive and finite")
+    if args.audit_only and (args.reference_record or args.calibration_record):
+        parser.error("audit-only must observe the actual workload, without external references")
     output = Path(args.output)
     if output.exists():
         parser.error("output already exists; choose a new observation identity")
@@ -121,6 +141,7 @@ def main():
     record = dict(schema="tide-joint-comparison-v1", source=source,
                   harness_source=os.environ.get("TIDE_HARNESS_COMMIT", source),
                   state="running", arguments=vars(args), torch=str(torch.__version__),
+                  config=cfg.to_dict(), config_file=file_identity(args.config),
                   python=sys.version, executable=sys.executable, loaded_modules=os.environ.get("LOADEDMODULES"),
                   working_tree_dirty=(None if os.environ.get("TIDE_SOURCE_COMMIT") else bool(subprocess.check_output(
                       ["git", "status", "--porcelain", "--", "src/tide", "benchmarks"], text=True).strip())),
@@ -138,19 +159,38 @@ def main():
     if device.type == "npu":
         record.update(torch_npu=str(torch_npu.__version__), allow_hf32=dict(matmul=False, conv=False))
     atomic(output, record)
-    torch.manual_seed(args.seed)
-    initial = TideModel(cfg)
-    record["activity_fixture"] = activity_fixture(initial, args.activity)
-    record["initial_tide_parameter_sha256"] = parameter_hash(initial)
-    target = parameter_count(initial)
-    nodes, layers = len(initial.graph.nodes), len(initial.graph.widths)
-    x_cpu = paired_input(args.batch, args.length, cfg.input_dim or cfg.d, args.seed+1)
-    record["audit_input_sha256"] = tensor_hash(x_cpu)
-    initial = initial.to(device)
-    audit_inputs = x_cpu.to(device)
+    initial = x_cpu = audit_inputs = None
     try:
         record["initial_audits"], record["initial_runtime_audits"], record["joint_matches_by_mode"] = {}, {}, {}
-        for reference_mode in args.modes:
+        reference = None
+        if args.reference_record or args.calibration_record:
+            reference = load_reference(args.reference_record or args.calibration_record, cfg, args,
+                                       same_shape=bool(args.reference_record))
+            record["reference_record"] = file_identity(args.reference_record or args.calibration_record)
+            record["reference_source"] = reference["source"]
+            record["initial_tide_parameter_sha256"] = reference["initial_tide_parameter_sha256"]
+            record["activity_fixture"] = reference["activity_fixture"]
+            nodes, layers = reference["topology"]["nodes"], reference["topology"]["layers"]
+            target = reference["initial_audits"][args.modes[0]]["parameters"]["unique_parameters"]
+            if args.reference_record:
+                for key in ("initial_audits", "initial_runtime_audits", "joint_matches_by_mode", "audit_input_sha256"):
+                    record[key] = reference[key]
+                record["initial_audit_scope"] = "this exact initial workload; frozen external child"
+            else:
+                record["initial_audit_scope"] = "not measured at this B/L; constructors refer only to the calibration workload"
+        else:
+            torch.manual_seed(args.seed)
+            initial = TideModel(cfg)
+            record["activity_fixture"] = activity_fixture(initial, args.activity)
+            record["initial_tide_parameter_sha256"] = parameter_hash(initial)
+            target = parameter_count(initial)
+            nodes, layers = len(initial.graph.nodes), len(initial.graph.widths)
+            x_cpu = paired_input(args.batch, args.length, cfg.input_dim or cfg.d, args.seed+1)
+            record["audit_input_sha256"] = tensor_hash(x_cpu)
+            initial = initial.to(device)
+            audit_inputs = x_cpu.to(device)
+            check_memory(device, args.device_budget_gib)
+        for reference_mode in ([] if reference is not None else args.modes):
             initial.train(reference_mode != "inference")
             with torch.set_grad_enabled(reference_mode != "inference"), precision_context(device, args.precision):
                 audit_result, audit_tail, audit = audit_model(initial, audit_inputs, flush=not args.no_flush)
@@ -166,8 +206,20 @@ def main():
             if args.precision == "bf16" and not record["initial_runtime_audits"][reference_mode]["bf16_matrix_observed"]:
                 raise AssertionError("BF16 requested but no BF16 matrix output observed")
             record["joint_matches_by_mode"][reference_mode] = match_transformers(nodes, layers, target, audit["effective_touched"]["mean"])
+            record.setdefault("initial_audit_device_memory", {})[reference_mode] = check_memory(device, args.device_budget_gib)
+        record["topology"] = dict(nodes=nodes, layers=layers)
+        if args.calibration_record:
+            calibration = load_reference(args.calibration_record, cfg, args, same_shape=False)
+            record["calibration_record"] = file_identity(args.calibration_record)
+            record["calibration_source"] = calibration["source"]
+            record["calibration_arguments"] = calibration["arguments"]
+            record["calibration_audits"] = calibration["initial_audits"]
+            record["joint_matches_by_mode"] = calibration["joint_matches_by_mode"]
+            record["matching_policy"] = "fixed calibration model; no B/L rematching; current-shape actual Tide activity is separate and may be unmeasured"
     except Exception as error:
-        record.update(state="failed", initial_audit_error=repr(error))
+        record.update(state="failed", initial_audit_error=repr(error),
+                      failure_kind="device_budget_exceeded" if isinstance(error, DeviceBudgetExceeded) else
+                      "out_of_memory" if "out of memory" in str(error).lower() else "execution_error")
         atomic(output, record)
         raise
     finally:
@@ -219,7 +271,8 @@ def main():
                 row["input_sha256"] = tensor_hash(inputs_cpu)
                 inputs = inputs_cpu.to(device)
                 del inputs_cpu
-                optimizer = torch.optim.AdamW(model.parameters(), lr=1e-4, foreach=True) if mode == "train" else None
+                optimizer = torch.optim.AdamW(model.parameters(), lr=1e-4, foreach=args.optimizer_foreach) if mode == "train" else None
+                row["construction_device_memory"] = check_memory(device, args.device_budget_gib)
 
                 def step():
                     if optimizer is not None:
@@ -235,14 +288,19 @@ def main():
 
                 for _ in range(args.warmup):
                     step()
+                    check_memory(device, args.device_budget_gib)
                 synchronize(device)
+                row["warmup_device_memory"] = check_memory(device, args.device_budget_gib)
                 row["device_memory_before"] = _device_memory(device, reset=True)
-                times, losses = [], []
+                times, losses, sample_memory = [], [], []
+                row.update(seconds=times, losses=losses, sample_device_memory=sample_memory)
                 for _ in range(args.steps):
                     start = time.perf_counter()
                     loss = step()
                     times.append(time.perf_counter()-start)
                     losses.append(loss)
+                    sample_memory.append(check_memory(device, args.device_budget_gib))
+                    atomic(output, record)
                 memory = _device_memory(device)
                 median = statistics.median(times)
                 with torch.set_grad_enabled(mode != "inference"), precision_context(device, args.precision):
@@ -263,25 +321,36 @@ def main():
                     if not all(bool(torch.isfinite(p).all()) and (p.grad is None or bool(torch.isfinite(p.grad).all()))
                                for p in model.parameters()):
                         raise ArithmeticError("non-finite parameters or gradients")
+                row["post_audit_device_memory"] = check_memory(device, args.device_budget_gib)
                 row.update(state="completed_finite", seconds=times, median_seconds=median,
+                           sample_device_memory=sample_memory,
+                           sample_device_memory_scope="cumulative allocator peak since post-warmup reset; read after each timed sample",
                            input_positions_per_second=args.batch*args.length/median,
                            window_latency_ms=1000*median, losses=losses,
                            process_lifetime_peak_rss_kib=resource.getrusage(resource.RUSAGE_SELF).ru_maxrss,
                            peak_device_bytes=None if memory is None else memory["peak_allocated_bytes"],
                            device_memory=memory, numerical_equivalence_qualification=False,
                            host_load_after=os.getloadavg())
+                row["device_memory_by_device"] = {} if memory is None else {str(device): memory}
+                row["sample_range_over_median"] = (max(times)-min(times))/median
                 row["actual_storage"] = dict(parameters=_storage(model.parameters()),
                                              gradients=_storage(p.grad for p in model.parameters()),
                                              optimizer=_storage(value for state in optimizer.state.values() for value in state.values()
                                                                 if isinstance(value, torch.Tensor)) if optimizer is not None else {})
             except Exception as error:
-                row.update(state="failed", error=repr(error))
+                row.update(state="failed", error=repr(error),
+                           failure_kind="device_budget_exceeded" if isinstance(error, DeviceBudgetExceeded) else
+                           "out_of_memory" if "out of memory" in str(error).lower() else "execution_error")
                 import traceback
                 traceback.print_exc()
             atomic(output, record)
             print(json.dumps({k: row[k] for k in ("subject", "mode", "state", "parameters", "median_seconds", "input_positions_per_second", "error") if k in row}), flush=True)
             model = optimizer = inputs = None
             _clear(device)
+            if row.get("failure_kind") in {"device_budget_exceeded", "out_of_memory"}:
+                record["state"] = "failed"
+                atomic(output, record)
+                return 1
     failed = any(row["state"] != "completed_finite" for row in record["observations"])
     record["state"] = "failed" if failed else "completed_finite"
     atomic(output, record)

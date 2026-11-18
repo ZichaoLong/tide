@@ -140,14 +140,21 @@ def run_child(row, persist, *, supervisor_pid=None):
                 deadline = time.monotonic()+row["timeout_seconds"]
                 while True:
                     code = child.poll()
-                    _, count = tracker.rss()
+                    rss, count = tracker.rss()
+                    row["sampled_process_tree_peak_rss_bytes"] = max(row.get("sampled_process_tree_peak_rss_bytes", 0), rss)
+                    if row.get("max_rss_bytes") is not None and rss > row["max_rss_bytes"]:
+                        escalated, gone = stop_group(child, 5, tracker)
+                        row.update(state="rss_budget_exceeded", exit_code=child.returncode,
+                                   escalated=escalated, descendants_gone=gone)
+                        break
                     if code is not None and count == 0:
                         break
                     remaining = deadline-time.monotonic()
                     if remaining <= 0:
                         raise subprocess.TimeoutExpired(row["command"], row["timeout_seconds"])
                     time.sleep(min(.1, remaining))
-                row.update(exit_code=code, state="completed" if code == 0 else "failed")
+                if row["state"] == "running":
+                    row.update(exit_code=code, state="completed" if code == 0 else "failed")
             except subprocess.TimeoutExpired:
                 escalated, gone = stop_group(child, 5, tracker)
                 row.update(state="timed_out", exit_code=child.returncode, escalated=escalated, descendants_gone=gone)
