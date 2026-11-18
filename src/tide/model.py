@@ -77,7 +77,8 @@ class TideModel(nn.Module):
         sources = [set(graph.edges[e].source_class for e in graph.incoming[v.id]) |
                    ({"ext"} if v.layer==0 else set()) for v in graph.nodes]
         local_backend = config.local_attention_backend or config.attention_backend
-        self.receive = Reception(sources,d,config.aggregation,groups,config.adapter_rank,local_backend)
+        self.receive = Reception(sources,d,config.aggregation,groups,config.adapter_rank,local_backend,
+                                 qkv_backend=config.reception_qkv_backend)
         scored = [v.id for v in graph.nodes if not self.fixed_regions[v.region]]
         self.description_ids = {v:i for i,v in enumerate(scored)}
         self.describe = Description(len(scored),d,None if groups is None else _number([gkeys[v] for v in scored]),config.adapter_rank)
@@ -120,6 +121,7 @@ class TideModel(nn.Module):
         self.layer_regions = [tuple(r for r,vs in enumerate(graph.regions) if graph.nodes[vs[0]].layer==l)
                               for l in range(len(graph.widths))]
         self._routes = self._make_routes()
+        self._reception_masks = {}
         last_use = list(range(len(self.layer_nodes)))
         for region, (_, banks) in enumerate(self._routes):
             consumer = self.graph.nodes[self.graph.regions[region][0]].layer
@@ -183,13 +185,38 @@ class TideModel(nn.Module):
             mass = mass + strengths[ids].permute(0,2,3,1)*valid[:,None,None,:]
         return content,mass,classes.to(device)
 
-    def _receive(self, contents, masses, classes, owners):
+    def _reception_mask(self, regions, device):
+        """Cache topology membership, independent of runtime sender strength.
+
+        Region tuples identify the exact ordered owner rows. NodeOwners' static
+        possible-ID superset alone is insufficient to infer their actual order.
+        This metadata cache is not persistent model or continuation state.
+        """
+        if not self.config.reception_mask_padding:
+            return None
+        key = (tuple(regions), torch.device(device))
+        if key not in self._reception_masks:
+            masks = []
+            for region in regions:
+                classes, banks = self._routes[region]
+                mask = torch.zeros_like(classes, dtype=torch.bool)
+                if self.graph.nodes[self.graph.regions[region][0]].layer == 0:
+                    mask[:, 0] = True
+                for _, valid in banks.values():
+                    mask |= valid
+                masks.append(mask)
+            mask = torch.cat(masks)
+            # An all-real layout needs no Attention mask or extra mass write.
+            self._reception_masks[key] = None if bool(mask.all()) else mask.to(device)
+        return self._reception_masks[key]
+
+    def _receive(self, contents, masses, classes, owners, edge_mask=None):
         # The whole-region policy already recomputes reception. Avoid nested
         # checkpointing while keeping the independently selectable cheap stage.
         if self.config.checkpoint_reception and not self.config.checkpoint_regions and torch.is_grad_enabled():
             from torch.utils.checkpoint import checkpoint
-            return checkpoint(self.receive, contents, masses, classes, owners, use_reentrant=False)
-        return self.receive(contents, masses, classes, owners)
+            return checkpoint(self.receive, contents, masses, classes, owners, edge_mask, use_reentrant=False)
+        return self.receive(contents, masses, classes, owners, edge_mask)
 
     def _evaluate_region(self, region, contents, masses, classes, time, old=None, record_work=False):
         """Pure regional tensor work, with explicit input/state ownership.
@@ -200,7 +227,7 @@ class TideModel(nn.Module):
         members = self.graph.regions[region]
         device, b, length = contents.device, contents.shape[1], contents.shape[2]
         owners = NodeOwners(torch.tensor(members,device=device),members)
-        received,u = self._receive(contents,masses,classes,owners)
+        received,u = self._receive(contents,masses,classes,owners,self._reception_mask((region,),device))
         # Unit FC ingress and the received lower budget imply every
         # node writes unit weight. Use that exact reachable-state identity.
         mass = (torch.ones_like(received) if self.graph.config.kind=="fc" else

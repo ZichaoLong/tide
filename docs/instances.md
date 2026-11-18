@@ -31,6 +31,22 @@ The measured `npu-hb-*` training presets explicitly enable both, together with
 compatible region batching. Select a preset and an admitted device explicitly;
 the no-argument training example remains a small CPU run.
 
+Reception self-Attention has two additional execution choices. With
+`aggregation="incoming_light_64"`, `"incoming_light_128"` or `"incoming_wide"`,
+`reception_qkv_backend="fused"` concatenates the compatible Q/K/V projections
+while retaining their original parameters and private low-rank adapters.
+The default is `"separate"`; placed owner wrappers explicitly fall back to
+separate projections, reported by `model.receive.effective_qkv_backend`.
+`reception_mask_padding=True` uses graph membership to exclude structural
+padding from Attention. Genuine zero-strength edges remain visible to the
+declared right derivative; this option never replaces that domain with
+`mass > 0`. Its default is false. Both choices compose with reception/region
+recomputation and compatible region batching and are saved in checkpoints.
+They do not switch `source_residual` into self-Attention. The training entry
+accepts `--aggregation`, `--reception-qkv-backend`, and
+`--[no-]reception-mask-padding` as explicit overrides. These are implementation
+candidates; qualification and measured recommendations retain their source scope.
+
 The [training entry and recommendations](execution-recommendations.md) provide
 loadable presets, explicit overrides, three modes and actual resume. Use
 [training path checks](training-path-checks.md) for fixed nonempty state/AdamW,

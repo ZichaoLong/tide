@@ -89,7 +89,7 @@ def evaluate_regions(model, regions, contents, masses, classes, time, old=None, 
     r, n = len(regions), len(model.graph.regions[regions[0]])
     device, b, length = contents.device, contents.shape[1], contents.shape[2]
     owners = NodeOwners(torch.tensor(members, device=device), members)
-    received, u = model._receive(contents, masses, classes, owners)
+    received, u = model._receive(contents, masses, classes, owners, model._reception_mask(regions, device))
     mass = (torch.ones_like(received) if model.graph.config.kind == "fc" else
             torch.where(received >= 1, torch.ones_like(received), received.clamp_min(0)))
     times = time[None, None].expand(len(members), b, length)

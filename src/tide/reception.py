@@ -3,7 +3,7 @@ import torch
 from torch import nn
 
 from .attention import weighted_attention
-from .parameters import NodeLinear, norm, owner_ids
+from .parameters import NodeLinear, fused_node_linears, norm, owner_ids
 
 
 class SourceEmbedding(nn.Module):
@@ -29,10 +29,13 @@ class SourceEmbedding(nn.Module):
 
 
 class Reception(nn.Module):
-    def __init__(self, sources, d, profile, groups=None, rank=8, backend="auto"):
+    def __init__(self, sources, d, profile, groups=None, rank=8, backend="auto", *, qkv_backend="separate"):
         super().__init__()
+        if qkv_backend not in ("separate", "fused"):
+            raise ValueError("reception QKV backend must be separate or fused")
         n = len(sources)
         self.profile, self.backend = profile, backend
+        self.qkv_backend = qkv_backend
         hidden = d if profile == "incoming_wide" else d//8
         self.a = NodeLinear(n,d,hidden,groups,rank)
         self.b = NodeLinear(n,hidden,d,groups,rank)
@@ -46,19 +49,46 @@ class Reception(nn.Module):
             self.v = NodeLinear(n,d,width,groups,rank)
             self.o = NodeLinear(n,width,d,groups,rank)
 
-    def forward(self, content, mass, classes, owners):
+    @property
+    def effective_qkv_backend(self):
+        """Report the selected projection path, including placed fallbacks.
+
+        Sharded owner wrappers retain their own device/parameter routing. They
+        use their ordinary projections rather than bypassing that ownership.
+        """
+        if self.profile == "source_residual":
+            return "none"
+        if self.qkv_backend == "fused" and not all(isinstance(p, NodeLinear) for p in (self.q, self.k, self.v)):
+            return "separate_owner_wrapper"
+        return self.qkv_backend
+
+    def forward(self, content, mass, classes, owners, edge_mask=None):
+        """Aggregate real edges, preserving derivatives at genuine zero mass.
+
+        ``edge_mask`` is static structural membership [node, edge], never a
+        test of positive mass. A masked slot has no mathematical mass root;
+        an existing edge with zero mass keeps its declared right derivative.
+        """
+        if edge_mask is not None and (edge_mask.dtype != torch.bool or
+                edge_mask.shape != (content.shape[0], content.shape[-2])):
+            raise ValueError("reception edge_mask must be boolean [node, edge]")
         if mass.dtype in (torch.float16,torch.bfloat16):
             mass = mass.float()
+        if edge_mask is not None:
+            mass = mass.masked_fill(~edge_mask[:, None, None], 0)
         mass = mass.clamp_min(0)
         total = mass.sum(-1)
         y = content
         if self.profile != "source_residual":
             x = norm(content) + self.sa_embedding(owners,classes)[:,None,None]
             shape = x.shape[:-1]
-            def heads(proj):
-                return proj(x,owners).reshape(*shape,self.heads,32).transpose(-3,-2)
-            q,k,v = heads(self.q),heads(self.k),heads(self.v)
-            read = weighted_attention(q,k,v,weights=mass,backend=self.backend)
+            if self.effective_qkv_backend == "fused":
+                projections = fused_node_linears((self.q,self.k,self.v), x, owners).chunk(3, -1)
+            else:
+                projections = (projection(x,owners) for projection in (self.q,self.k,self.v))
+            q,k,v = (value.reshape(*shape,self.heads,32).transpose(-3,-2) for value in projections)
+            key_mask = None if edge_mask is None else edge_mask[:,None,None,None,None,:]
+            read = weighted_attention(q,k,v,weights=mass,mask=key_mask,backend=self.backend)
             read = read.transpose(-3,-2).flatten(-2)
             y = y + self.o(read,owners)
         hidden = self.a(norm(y),owners) + self.embedding(owners,classes)[:,None,None]

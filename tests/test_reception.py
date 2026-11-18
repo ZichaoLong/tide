@@ -12,10 +12,10 @@ PROFILES = ("source_residual", "incoming_light_64", "incoming_light_128", "incom
 WIDTH = 64
 
 
-def _fixture(profile, shared):
+def _fixture(profile, shared, qkv_backend="separate"):
     groups = [0, 0, 1] if shared else None
     module = Reception([{"DD", "HD", "ext"}] * 3, WIDTH, profile,
-                       groups=groups, rank=4, backend="math").double()
+                       groups=groups, rank=4, backend="math", qkv_backend=qkv_backend).double()
     generator = torch.Generator().manual_seed(903)
     with torch.no_grad():
         for parameter in module.parameters():
@@ -76,8 +76,9 @@ def _formula(content, mass, classes, owners, parameters, profile, groups):
 
 @pytest.mark.parametrize("profile", PROFILES)
 @pytest.mark.parametrize("shared", [False, True])
-def test_all_profiles_match_literal_values_and_all_root_vjps(profile, shared):
-    module, groups = _fixture(profile, shared)
+@pytest.mark.parametrize("qkv_backend", ["separate", "fused"])
+def test_all_profiles_match_literal_values_and_all_root_vjps(profile, shared, qkv_backend):
+    module, groups = _fixture(profile, shared, qkv_backend)
     generator = torch.Generator().manual_seed(138)
     owners = torch.tensor([2, 0, 1, 0])  # Repeated owner and shared bases sum real contributions.
     classes = torch.tensor([[0, 1, 2], [2, 1, 0], [1, 0, 2], [0, 2, 1]])
@@ -101,6 +102,60 @@ def test_all_profiles_match_literal_values_and_all_root_vjps(profile, shared):
     if profile != "source_residual":
         expected_width = WIDTH if profile == "incoming_wide" else int(profile.rsplit("_", 1)[1])
         assert module.q.out_features == expected_width and module.heads == expected_width // 32
+        assert module.effective_qkv_backend == qkv_backend
+
+
+@pytest.mark.parametrize("profile", PROFILES)
+@pytest.mark.parametrize("qkv_backend", ["separate", "fused"])
+@pytest.mark.parametrize("zero_real", [False, True])
+def test_structural_padding_matches_deleted_edges_and_keeps_real_zero_vjp(profile, qkv_backend, zero_real):
+    """The reference removes padded atoms before constructing any Attention.
+
+    Fake padded mass is deliberately nonzero: structural membership, rather
+    than a runtime mass comparison, defines the derivative domain.
+    """
+    module, groups = _fixture(profile, True, qkv_backend)
+    module.backend = "auto"
+    generator = torch.Generator().manual_seed(713)
+    owners = torch.tensor([0, 2, 0])
+    classes = torch.tensor([[0, 1, 2, 0], [1, 0, 2, 1], [0, 2, 1, 0]])
+    edge_mask = torch.tensor([[True, False, True, False],
+                              [True, True, True, False],
+                              [True, True, False, False]])
+    content = torch.randn(3, 1, 2, 4, WIDTH, generator=generator, dtype=torch.float64).requires_grad_()
+    mass = .2 + torch.rand(3, 1, 2, 4, generator=generator, dtype=torch.float64)
+    if zero_real:
+        mass[0, 0, 0, 2] = 0
+    mass.requires_grad_()
+    parameters = dict(module.named_parameters())
+    actual = module(content, mass, classes, owners, edge_mask)
+    pieces = [_formula(content[i:i+1, ..., visible, :], mass[i:i+1, ..., visible],
+                       classes[i:i+1, visible], owners[i:i+1], parameters, profile, groups)
+              for i, visible in enumerate(edge_mask)]
+    reference = tuple(torch.cat([piece[j] for piece in pieces]) for j in range(2))
+    for got, expected in zip(actual, reference):
+        torch.testing.assert_close(got, expected, atol=2e-13, rtol=2e-12)
+    probes = [torch.randn(value.shape, generator=generator, dtype=value.dtype) for value in actual]
+    roots = (content, mass, *parameters.values())
+    actual_grads = torch.autograd.grad(actual, roots, grad_outputs=probes, retain_graph=True)
+    expected_grads = torch.autograd.grad(reference, roots, grad_outputs=probes)
+    for name, got, expected in zip(("content", "mass", *parameters), actual_grads, expected_grads):
+        torch.testing.assert_close(got, expected, atol=3e-12, rtol=3e-11,
+                                   msg=lambda message: f"{name}: {message}")
+    assert torch.equal(actual_grads[1][~edge_mask[:, None, None].expand_as(mass)],
+                       torch.zeros_like(actual_grads[1][~edge_mask[:, None, None].expand_as(mass)]))
+    if zero_real:
+        # A real, currently zero sender is still a differentiable prior. A
+        # blanket mass>0 Attention mask would incorrectly erase this term.
+        assert actual_grads[1][0, 0, 0, 2].abs().item() > 1e-4
+        epsilon = 1e-7
+        with torch.no_grad():
+            moved = mass.detach().clone()
+            moved[0, 0, 0, 2] = epsilon
+            values = module(content.detach(), moved, classes, owners, edge_mask)
+            right_difference = sum(((new-old.detach())*probe).sum()
+                                   for new, old, probe in zip(values, actual, probes)) / epsilon
+        torch.testing.assert_close(actual_grads[1][0, 0, 0, 2], right_difference, atol=3e-6, rtol=3e-5)
 
 
 @pytest.mark.parametrize("profile", PROFILES)

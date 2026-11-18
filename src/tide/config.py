@@ -56,6 +56,8 @@ class ModelConfig:
     input_dim: int | None = None
     checkpoint_regions: bool = False
     checkpoint_reception: bool = False
+    reception_qkv_backend: str = "separate"
+    reception_mask_padding: bool = False
     ssd_summary_backend: str = "block"
     ssd_scan_backend: str = "block"
     region_batch_size: int = 1
@@ -68,6 +70,10 @@ class ModelConfig:
             raise ValueError("checkpoint_regions must be boolean")
         if type(self.checkpoint_reception) is not bool:
             raise ValueError("checkpoint_reception must be boolean")
+        if self.reception_qkv_backend not in ("separate", "fused"):
+            raise ValueError("reception_qkv_backend must be separate or fused")
+        if type(self.reception_mask_padding) is not bool:
+            raise ValueError("reception_mask_padding must be boolean")
         if self.ssd_summary_backend not in ("block", "prefix"):
             raise ValueError("ssd_summary_backend must be block or prefix")
         if self.ssd_scan_backend not in ("block", "incremental", "doubling"):
