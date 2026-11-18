@@ -29,7 +29,7 @@ def scale_configs():
 
 
 def _private_state_budget(model, batch, length, precision, *, steady=False):
-    """Payload bounds per node, plus retained Timed pending-view storage.
+    """Payload bounds per node, using the resolved local memory capacities.
 
     This accounts for the implementation's convolution cache capacity in logical
     time slots, including its padded entries, rather than assuming four events.
@@ -40,16 +40,18 @@ def _private_state_budget(model, batch, length, precision, *, steady=False):
         raise ValueError("positive batch/length and FP32/BF16 policy required")
     d, period = model.config.d, model.graph.period
     ticks = length if model.settle else length*period
-    kv_slots = (128 if model.settle else 128*period)
+    kv_slots = model.memories["K"].slots if "K" in model.memories else 0
     if not steady:
         kv_slots = min(kv_slots, ticks)
-    conv_slots = 3*(period if model.settle else 1)+1
+    conv_slots = 3*model.memories["S"].stride+1 if "S" in model.memories else 0
     if not steady:
         conv_slots = min(conv_slots, ticks)
     kv = batch*kv_slots*(8+4+2*d*(2 if precision == "bf16" else 4)+(d//4)*4)
     ssd = batch*(8+4*(d*32+2*(d//4)+2)+conv_slots*(8+4*(d+64)))
     pending_payload = 0 if model.settle else batch*(d+1)*4
-    pending_retained = 0 if model.settle else batch*ticks*(d+1)*4
+    # Dense, layer-placed and region-placed paths all clone the last tick.
+    # This is only the retained state's storage, not autograd's saved tensors.
+    pending_retained = pending_payload
     return dict(K=kv, S=ssd, kv_slots=kv_slots, convolution_slots=conv_slots,
                 pending_payload_per_node=pending_payload,
                 pending_retained_storage_upper_per_node=pending_retained)
@@ -102,11 +104,6 @@ def _partition_budget(model, batch, length, precision, mode, partitions, layer_p
     if sum(counts) != total:
         raise AssertionError("partition count differs from unique meta Parameters")
     cold, steady = (_private_state_budget(model, batch, length, precision, steady=kind) for kind in (False, True))
-    if partition_kind == "region":
-        # Region placement stores differentiable compact Timed tails rather
-        # than views retaining the complete output window.
-        for state in (cold, steady):
-            state["pending_retained_storage_upper_per_node"] = state["pending_payload_per_node"]
     rows = []
     for partition, parameters in enumerate(counts):
         nodes = [node.id for node in model.graph.nodes if node_partition[node.id] == partition]

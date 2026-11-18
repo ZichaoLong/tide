@@ -68,3 +68,34 @@ def test_17b_budget_materializes_no_model_payload(monkeypatch):
     assert 16e9 < planned["unique_parameters"] < 18e9
     assert sum(row["unique_parameters"] for row in planned["partitions"]) == planned["unique_parameters"]
     assert all(row["headroom_after_parameter_floor_and_steady_state_bytes"] > 0 for row in planned["partitions"])
+
+
+@pytest.mark.parametrize("timing", ["settle", "timed"])
+@pytest.mark.parametrize("precision", ["fp32", "bf16"])
+def test_explicit_clocks_and_compact_pending_budget_match_live_state(timing, precision):
+    from benchmarks.capacity import budget
+    from tide import ClockConfig
+    config = ModelConfig(topology=TopologyConfig(kind="multiscale", n=2, hubs=1,
+                         profile="compact-5-dd4", timing=timing), d=64, memory="X",
+                         clock=ClockConfig(kv_window=7, ssd_stride=2))
+    planned = budget(config, 2, 9, precision, "inference")
+    model = TideModel(config)
+    expected_kv_slots = (7+model.graph.period-1)//model.graph.period if timing == "settle" else 7
+    assert planned["state_layout"]["kv_slots"] == expected_kv_slots
+    assert planned["state_layout"]["convolution_slots"] == 7
+    assert planned["state_layout"]["pending_retained_storage_upper_per_node"] == (
+        0 if timing == "settle" else 2*65*4)
+    for placement in (None, "layer", "region"):
+        candidate = TideModel(config)
+        if placement:
+            plan = placement_budget(config, 2, 9, precision, partition_kind=placement)
+            layout = {placement+"_partitions": plan[placement+"_partitions"]}
+            candidate = place_model(candidate, ["cpu", "cpu"], **layout)
+            expected = sum(row["cold_state_payload_bytes"] for row in plan["partitions"])
+        else:
+            expected = planned["bounded_state_bytes"]
+        with torch.no_grad(), precision_context("cpu", precision):
+            result = candidate(torch.randn(2, 9, 64))
+        measured = state_memory(result.state)
+        assert measured["payload_bytes"] == expected
+        assert measured["retained_storage_bytes"] <= expected
