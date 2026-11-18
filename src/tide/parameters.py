@@ -18,9 +18,15 @@ class NodeOwners:
     The model already knows this superset from its fixed region membership.
     Dynamic selection keeps it unchanged; it is never reconstructed from device
     values. Callers must ensure every actual ID belongs to possible_ids.
+    ``exact_ids`` is a stronger, ordered identity, supplied only when actual
+    IDs are constructed from known host metadata. It is never inferred from a
+    superset or from a dynamic selection's shape. Use ``from_static`` to build
+    both representations together. Direct exact annotations are trusted input;
+    validation intentionally never reads device IDs back to the host.
     """
     ids: torch.Tensor
     possible_ids: tuple[int, ...]
+    exact_ids: tuple[int, ...] | None = None
 
     def __post_init__(self):
         if self.ids.ndim != 1 or self.ids.dtype != torch.int64:
@@ -29,6 +35,18 @@ class NodeOwners:
             raise ValueError("possible owner IDs must be a tuple of nonnegative Python integers")
         if self.ids.numel() and not self.possible_ids:
             raise ValueError("nonempty owners require a nonempty possible-ID superset")
+        if self.exact_ids is not None:
+            if (not isinstance(self.exact_ids, tuple) or len(self.exact_ids) != self.ids.numel()
+                    or any(type(i) is not int or i < 0 for i in self.exact_ids)
+                    or not set(self.exact_ids) <= set(self.possible_ids)):
+                raise ValueError("exact owner order must match the ID shape and belong to the possible superset")
+
+    @classmethod
+    def from_static(cls, ordered_ids, *, device, possible_ids=None):
+        """Construct actual device IDs from their exact, known host order."""
+        ordered = tuple(ordered_ids)
+        possible = ordered if possible_ids is None else tuple(possible_ids)
+        return cls(torch.tensor(ordered, dtype=torch.int64, device=device), possible, ordered)
 
 
 def owner_ids(owners):
@@ -37,6 +55,8 @@ def owner_ids(owners):
 
 def select_owners(owners, selected):
     ids = owner_ids(owners)[selected]
+    # The dynamic indices may reorder/repeat/drop owners, even at equal length.
+    # Keep only the superset; Full selection must continue using real gathers.
     return NodeOwners(ids, owners.possible_ids) if isinstance(owners, NodeOwners) else ids
 
 
@@ -50,6 +70,7 @@ class _OwnerGroups(nn.Module):
         # inspects device IDs to select the shared-base implementation.
         self._host_groups = tuple(self.groups.detach().cpu().tolist())
         self._uniform_groups = {}
+        self._view_indices = {}
 
     def _uniform_group(self, owners):
         if not isinstance(owners, NodeOwners):
@@ -59,6 +80,26 @@ class _OwnerGroups(nn.Module):
             groups = {self._host_groups[i] for i in possible}
             self._uniform_groups[possible] = next(iter(groups)) if len(groups) == 1 else None
         return self._uniform_groups[possible]
+
+    def _parameter_index(self, owners, *, grouped):
+        """A view only for an explicitly exact consecutive parameter row order.
+
+        Uniform bases keep their existing MM path. Repeated groups, duplicate
+        owners, permutations and arbitrary dynamic Full retain tensor gathers.
+        """
+        exact = owners.exact_ids if isinstance(owners, NodeOwners) else None
+        if exact is not None:
+            key = (exact, grouped)
+            if key not in self._view_indices:
+                rows = tuple(self._host_groups[i] for i in exact) if grouped else exact
+                start = rows[0] if rows else 0
+                consecutive = all(row == start+offset for offset, row in enumerate(rows))
+                self._view_indices[key] = slice(start, start+len(rows)) if consecutive else None
+            span = self._view_indices[key]
+            if span is not None:
+                return span
+        ids = owner_ids(owners)
+        return self.groups[ids] if grouped else ids
 
     def _load_from_state_dict(self, *args, **kwargs):
         super()._load_from_state_dict(*args, **kwargs)
@@ -99,14 +140,15 @@ class NodeLinear(_OwnerGroups):
         shape = x.shape
         flat = x.reshape(len(ids), -1, self.in_features)
         if uniform is None:
-            groups = self.groups[ids]
+            groups = self._parameter_index(owners, grouped=True)
             out = torch.bmm(flat, self.weight[groups].transpose(1, 2))
         else:
             out = torch.mm(flat.reshape(-1, self.in_features), self.weight[uniform].T)
             out = out.reshape(len(ids), -1, self.out_features)
         if self.shared:
-            out = out + torch.bmm(torch.bmm(flat, self.right[ids].transpose(1, 2)),
-                                  self.left[ids].transpose(1, 2))
+            private = self._parameter_index(owners, grouped=False)
+            out = out + torch.bmm(torch.bmm(flat, self.right[private].transpose(1, 2)),
+                                  self.left[private].transpose(1, 2))
         if self.bias is not None:
             out = out + (self.bias[groups, None, :] if uniform is None else self.bias[uniform])
         return out.reshape(*shape[:-1], self.out_features)
@@ -141,7 +183,7 @@ class NodeVector(_OwnerGroups):
         uniform = self._uniform_group(owners)
         if uniform is not None:
             return self.value[uniform].expand(len(owner_ids(owners)), -1)
-        return self.value[self.groups if owners is None else self.groups[owner_ids(owners)]]
+        return self.value[self.groups if owners is None else self._parameter_index(owners, grouped=True)]
 
     def selected(self, owners):
         return self(owners)
@@ -164,7 +206,7 @@ def fused_node_linears(layers, x, owners=None):
     n, branches, width = len(ids), len(layers), first.out_features
     flat = x.reshape(n, -1, first.in_features)
     if uniform is None:
-        groups = first.groups[ids]
+        groups = first._parameter_index(owners, grouped=True)
         weights = torch.cat([layer.weight[groups] for layer in layers], 1)
         output = torch.bmm(flat, weights.transpose(1, 2))
     else:
@@ -175,10 +217,11 @@ def fused_node_linears(layers, x, owners=None):
         rank = first.right.shape[1]
         if any(layer.right.shape[1] != rank for layer in layers):
             raise ValueError("adapter ranks must agree")
-        right = torch.cat([layer.right[ids] for layer in layers], 1)
+        private_index = first._parameter_index(owners, grouped=False)
+        right = torch.cat([layer.right[private_index] for layer in layers], 1)
         low = torch.bmm(flat, right.transpose(1, 2))
         low = low.reshape(n, -1, branches, rank).transpose(1, 2).reshape(n * branches, -1, rank)
-        left = torch.stack([layer.left[ids] for layer in layers], 1).reshape(n * branches, width, rank)
+        left = torch.stack([layer.left[private_index] for layer in layers], 1).reshape(n * branches, width, rank)
         private = torch.bmm(low, left.transpose(1, 2))
         private = private.reshape(n, branches, -1, width).transpose(1, 2).reshape(n, -1, branches * width)
         output = output + private

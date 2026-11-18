@@ -58,6 +58,7 @@ class ModelConfig:
     checkpoint_reception: bool = False
     reception_qkv_backend: str = "separate"
     reception_mask_padding: bool = False
+    parameter_indexing: str = "gather"
     ssd_summary_backend: str = "block"
     ssd_scan_backend: str = "block"
     region_batch_size: int = 1
@@ -74,6 +75,8 @@ class ModelConfig:
             raise ValueError("reception_qkv_backend must be separate or fused")
         if type(self.reception_mask_padding) is not bool:
             raise ValueError("reception_mask_padding must be boolean")
+        if self.parameter_indexing not in ("gather", "static_view"):
+            raise ValueError("parameter_indexing must be gather or static_view")
         if self.ssd_summary_backend not in ("block", "prefix"):
             raise ValueError("ssd_summary_backend must be block or prefix")
         if self.ssd_scan_backend not in ("block", "incremental", "doubling"):

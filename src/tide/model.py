@@ -122,6 +122,7 @@ class TideModel(nn.Module):
                               for l in range(len(graph.widths))]
         self._routes = self._make_routes()
         self._reception_masks = {}
+        self._static_owners = {}
         last_use = list(range(len(self.layer_nodes)))
         for region, (_, banks) in enumerate(self._routes):
             consumer = self.graph.nodes[self.graph.regions[region][0]].layer
@@ -222,6 +223,19 @@ class TideModel(nn.Module):
             return checkpoint(self.receive, contents, masses, classes, owners, edge_mask, use_reentrant=False)
         return self.receive(contents, masses, classes, owners, edge_mask)
 
+    def _owners(self, ordered_ids, device):
+        """Static owner order is known here, before any dynamic Full packing."""
+        ordered = tuple(ordered_ids)
+        if self.config.parameter_indexing == "gather":
+            return NodeOwners(torch.tensor(ordered, dtype=torch.int64, device=device), ordered)
+        key = (ordered, torch.device(device))
+        if key not in self._static_owners:
+            # A metadata cache must remain usable by training after an
+            # inference-mode warmup; it contains IDs, never projected weights.
+            with torch.inference_mode(False):
+                self._static_owners[key] = NodeOwners.from_static(ordered, device=device)
+        return self._static_owners[key]
+
     def _evaluate_region(self, region, contents, masses, classes, time, old=None, record_work=False):
         """Pure regional tensor work, with explicit input/state ownership.
 
@@ -230,7 +244,7 @@ class TideModel(nn.Module):
         """
         members = self.graph.regions[region]
         device, b, length = contents.device, contents.shape[1], contents.shape[2]
-        owners = NodeOwners(torch.tensor(members,device=device),members)
+        owners = self._owners(members,device)
         received,u = self._receive(contents,masses,classes,owners,self._reception_mask((region,),device))
         # Unit FC ingress and the received lower budget imply every
         # node writes unit weight. Use that exact reachable-state identity.
@@ -246,7 +260,7 @@ class TideModel(nn.Module):
                 continue
             sub = torch.tensor(idx,device=device)
             possible = tuple(self.memory_ids[kind][members[i]] for i in idx)
-            mids = NodeOwners(torch.tensor(possible,device=device),possible)
+            mids = self._owners(possible,device)
             previous = None if old is None else old[kind]
             parts,context,updated = self.memories[kind].prepare(u[sub],mass[sub],times[sub],mids,previous)
             desc = [a.index_copy(0,sub,z.to(a.dtype)) for a,z in zip(desc,parts)]
@@ -257,7 +271,7 @@ class TideModel(nn.Module):
             control = torch.where(received>=0.5,torch.ones_like(received),2*received)
         else:
             possible = tuple(self.description_ids[v] for v in members)
-            description_owners = NodeOwners(torch.tensor(possible,device=device),possible)
+            description_owners = self._owners(possible,device)
             z,score = self.describe(u,received,desc,description_owners)
             score = self.regional[self.region_group[region]](z,score,mass)
             control = region_control(score,received,roles,self.config.budget or max(1,self.graph.config.n//32),

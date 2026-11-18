@@ -4,7 +4,7 @@ from dataclasses import fields, is_dataclass
 import torch
 
 from .attention import weighted_attention
-from .parameters import NodeOwners, norm
+from .parameters import norm
 from .region import region_control
 
 
@@ -88,7 +88,7 @@ def evaluate_regions(model, regions, contents, masses, classes, time, old=None, 
     members = tuple(v for region in regions for v in model.graph.regions[region])
     r, n = len(regions), len(model.graph.regions[regions[0]])
     device, b, length = contents.device, contents.shape[1], contents.shape[2]
-    owners = NodeOwners(torch.tensor(members, device=device), members)
+    owners = model._owners(members, device)
     received, u = model._receive(contents, masses, classes, owners, model._reception_mask(regions, device))
     mass = (torch.ones_like(received) if model.graph.config.kind == "fc" else
             torch.where(received >= 1, torch.ones_like(received), received.clamp_min(0)))
@@ -102,7 +102,7 @@ def evaluate_regions(model, regions, contents, masses, classes, time, old=None, 
             continue
         sub = torch.tensor(indices, device=device)
         possible = tuple(model.memory_ids[kind][members[i]] for i in indices)
-        mids = NodeOwners(torch.tensor(possible, device=device), possible)
+        mids = model._owners(possible, device)
         previous = None if old is None else join_states([item[kind] for item in old])
         parts, context, updated = model.memories[kind].prepare(u[sub], mass[sub], times[sub], mids, previous)
         desc = [a.index_copy(0, sub, z.to(a.dtype)) for a, z in zip(desc, parts)]
@@ -114,7 +114,7 @@ def evaluate_regions(model, regions, contents, masses, classes, time, old=None, 
         control = torch.where(received >= 0.5, torch.ones_like(received), 2*received)
     else:
         possible = tuple(model.description_ids[v] for v in members)
-        d_owners = NodeOwners(torch.tensor(possible, device=device), possible)
+        d_owners = model._owners(possible, device)
         z, score = model.describe(u, received, desc, d_owners)
         score = model._score_regions(regions, z.reshape(r, n, b, length, -1),
                                      score.reshape(r, n, b, length), mass.reshape(r, n, b, length))

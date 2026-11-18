@@ -89,6 +89,7 @@ class _ShardedOwners(nn.Module):
         self._original_buffers = {name: value.detach().cpu().clone()
                                   for name, value in source.named_buffers(recurse=False)}
         self._dispatch = {}
+        self._exact_dispatch, self._host_owner_maps = {}, {}
         self._live_partitions = []
 
     def _new_shard(self, cls, partition, owners):
@@ -96,6 +97,7 @@ class _ShardedOwners(nn.Module):
         nn.Module.__init__(shard)
         lookup = torch.full((len(self.partitions),), -1, dtype=torch.int64)
         lookup[list(owners)] = torch.arange(len(owners))
+        self._host_owner_maps[partition] = {owner: local for local, owner in enumerate(owners)}
         shard.register_buffer("owner_lookup", lookup.to(self.devices[partition]))
         self._live_partitions.append(partition)
         self.shards.append(shard)
@@ -131,6 +133,15 @@ class _ShardedOwners(nn.Module):
         ids = owner_ids(owners)
         if ids.device != shard.owner_lookup.device:
             raise ValueError("owner IDs must be on their partition device")
+        if owners.exact_ids is not None:
+            key = (index, owners.possible_ids, owners.exact_ids)
+            if key not in self._exact_dispatch:
+                mapping = self._host_owner_maps[self._live_partitions[index]]
+                local = tuple(mapping[owner] for owner in owners.exact_ids)
+                with torch.inference_mode(False):
+                    self._exact_dispatch[key] = NodeOwners.from_static(local, device=ids.device,
+                                                                       possible_ids=possible_local)
+            return shard, self._exact_dispatch[key]
         return shard, NodeOwners(shard.owner_lookup[ids], possible_local)
 
     def canonical(self, *, gradients=False, device="cpu"):
