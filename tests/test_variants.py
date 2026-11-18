@@ -8,13 +8,13 @@ import sys
 from benchmarks.variants import VARIANTS, build_plan
 
 
-def test_five_variants_preserve_mathematical_config_and_separate_ledger_children(tmp_path):
+def test_variants_preserve_mathematical_config_and_separate_ledger_children(tmp_path):
     args = Namespace(config="configs/fc-k.json", variants=list(VARIANTS), ledger_variants=["baseline", "combined"],
                      device="cpu", precision="fp32", batch=1, length=2, threads=4, seed=1107, warmup=2,
                      activity="natural", optimizer_foreach=True, device_budget_gib=None, mode="train", steps=5,
                      ledger_segments=1, child_timeout=30, rss_gib=4)
     plan = build_plan(args, tmp_path)
-    assert [row["kind"] for row in plan] == ["normal"]*5+["ledger"]*2
+    assert [row["kind"] for row in plan] == ["normal"]*len(VARIANTS)+["ledger"]*2
     original = json.loads(Path(args.config).read_text())
     for row in plan:
         resolved = json.loads(Path(row["config_file"]["path"]).read_text())

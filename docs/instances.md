@@ -18,6 +18,21 @@ of a universal speed or memory improvement. Compare them with the
 [bounded search](capacity-search.md), and use `scripts.check_execution` for
 same-function values, gradients, multiple updates and restored-update checks.
 
+Two additional explicit training candidates retain the same ownership and state
+contract. `checkpoint_reception=True` recomputes only the reception module; whole
+region recomputation takes precedence to avoid nested checkpoints.
+`ssd_summary_backend="prefix"` uses parallel affine composition for the short/long
+vector summaries, including zero decay, without logarithms or division by decay.
+The default `"block"` keeps the existing block algorithm; the 32×32 SSD matrix
+state recurrence is unchanged. Both options are saved in checkpoints. Their
+different floating evaluation order needs the same bounded numerical checks as
+other implementation candidates; neither is enabled automatically.
+
+The [training entry and recommendations](execution-recommendations.md) provide
+loadable presets, explicit overrides, three modes and actual resume. Use
+[training path checks](training-path-checks.md) for fixed nonempty state/AdamW,
+same-owner repeat and fresh-process restored-update comparisons.
+
 ```python
 import torch
 from tide import ModelConfig, TopologyConfig, TideModel, detach_state

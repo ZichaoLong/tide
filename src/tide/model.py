@@ -103,7 +103,8 @@ class TideModel(nn.Module):
             else:
                 from .ssd_memory import SSDMemory
                 self.memories[kind] = SSDMemory(*args,**kwargs,short_decay=self.clock.short_decay,
-                                               conv_stride=self.clock.ssd_stride)
+                                               conv_stride=self.clock.ssd_stride,
+                                               summary_backend=config.ssd_summary_backend)
         rkeys = [(graph.region_ranks[r],tuple(sorted(set(graph.nodes[v].role for v in nodes))))
                  for r,nodes in enumerate(graph.regions)]
         fixed = self.fixed_regions
@@ -181,6 +182,14 @@ class TideModel(nn.Module):
             mass = mass + strengths[ids].permute(0,2,3,1)*valid[:,None,None,:]
         return content,mass,classes.to(device)
 
+    def _receive(self, contents, masses, classes, owners):
+        # The whole-region policy already recomputes reception. Avoid nested
+        # checkpointing while keeping the independently selectable cheap stage.
+        if self.config.checkpoint_reception and not self.config.checkpoint_regions and torch.is_grad_enabled():
+            from torch.utils.checkpoint import checkpoint
+            return checkpoint(self.receive, contents, masses, classes, owners, use_reentrant=False)
+        return self.receive(contents, masses, classes, owners)
+
     def _evaluate_region(self, region, contents, masses, classes, time, old=None, record_work=False):
         """Pure regional tensor work, with explicit input/state ownership.
 
@@ -190,7 +199,7 @@ class TideModel(nn.Module):
         members = self.graph.regions[region]
         device, b, length = contents.device, contents.shape[1], contents.shape[2]
         owners = NodeOwners(torch.tensor(members,device=device),members)
-        received,u = self.receive(contents,masses,classes,owners)
+        received,u = self._receive(contents,masses,classes,owners)
         # Unit FC ingress and the received lower budget imply every
         # node writes unit weight. Use that exact reachable-state identity.
         mass = (torch.ones_like(received) if self.graph.config.kind=="fc" else

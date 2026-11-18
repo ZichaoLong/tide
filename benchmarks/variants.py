@@ -24,7 +24,17 @@ VARIANTS = {
     "batch4": dict(local_attention_backend=None, region_batch_size=4, checkpoint_regions=False),
     "recompute": dict(local_attention_backend=None, region_batch_size=1, checkpoint_regions=True),
     "combined": dict(local_attention_backend="math", region_batch_size=4, checkpoint_regions=True),
+    "batch_recompute": dict(local_attention_backend=None, region_batch_size=4, checkpoint_regions=True),
+    "batch_reception": dict(local_attention_backend=None, region_batch_size=4, checkpoint_regions=False,
+                            checkpoint_reception=True),
+    "batch_prefix": dict(local_attention_backend=None, region_batch_size=4, checkpoint_regions=False,
+                         ssd_summary_backend="prefix"),
+    "batch_prefix_reception": dict(local_attention_backend=None, region_batch_size=4, checkpoint_regions=False,
+                                   checkpoint_reception=True, ssd_summary_backend="prefix"),
 }
+DEFAULT_VARIANTS = ["baseline", "local_math", "batch4", "recompute", "combined"]
+VARIANTS = {name: {"checkpoint_reception": False, "ssd_summary_backend": "block", **options}
+            for name, options in VARIANTS.items()}
 
 
 def build_plan(args, output):
@@ -87,7 +97,7 @@ def summary(children, mode):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--config", required=True)
-    parser.add_argument("--variants", nargs="+", choices=VARIANTS, default=list(VARIANTS))
+    parser.add_argument("--variants", nargs="+", choices=VARIANTS, default=DEFAULT_VARIANTS)
     parser.add_argument("--ledger-variants", nargs="*", choices=VARIANTS, default=[])
     parser.add_argument("--ledger-segments", type=int, default=1)
     parser.add_argument("--device", default="cpu")
@@ -131,7 +141,7 @@ def main():
                   config_file=file_identity(args.config), cpu_affinity=sorted(os.sched_getaffinity(0)),
                   physical_devices=os.environ.get("ASCEND_RT_VISIBLE_DEVICES"),
                   resource_identity=os.environ.get("TIDE_RESOURCE_IDENTITY", "unspecified; admission belongs to the outer launcher"),
-                  scope="fixed B/L and five finite execution candidates; serial independent children on the same inherited device mapping; not capacity search or automatic numerical qualification",
+                  scope="fixed B/L and explicitly selected finite execution candidates; serial independent children on the same inherited device mapping; not capacity search or automatic numerical qualification",
                   timing_scope="normal benchmark samples only; semantic/runtime audits outside timing; selected ledger children run separately after all normal candidates",
                   pairing_scope="same seed/input shape; initial hashes are checked in summary; work summaries are not full support or trajectory equality",
                   order_scope="fixed declared candidate order; same device does not remove time/order/host-contention effects",

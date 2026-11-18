@@ -19,6 +19,34 @@ def _floating_like(reference: Tensor, *others: Tensor) -> None:
         raise ValueError("SSD values must have the same dtype and device")
 
 
+def affine_prefix(decay: Tensor, writes: Tensor, initial: Tensor) -> tuple[Tensor, Tensor]:
+    """Parallel affine recurrence for vector summaries, including zero decay.
+
+    decay [..., L, H], writes [..., L, H, V], initial [..., H, V]. Compose
+    (a, b): x -> a*x+b in log2(L) batched stages. No division, logarithm or
+    growing inverse decay is used. This avoids the K=1 summary's pairwise
+    block matrices; the full SSD matrix recurrence remains ssd_scan.
+    """
+    if decay.ndim < 2 or writes.shape[:-1] != decay.shape:
+        raise ValueError("expected decay [..., L, H] and writes [..., L, H, V]")
+    if initial.shape != writes.shape[:-3] + writes.shape[-2:]:
+        raise ValueError("initial affine summary shape disagrees with writes")
+    _floating_like(decay, writes, initial)
+    length = decay.shape[-2]
+    if length == 0:
+        return writes, initial
+    a, b = decay, writes
+    offset = 1
+    while offset < length:
+        following_a = a[..., offset:, :] * a[..., :-offset, :]
+        following_b = b[..., offset:, :, :] + a[..., offset:, :, None] * b[..., :-offset, :, :]
+        a = torch.cat((a[..., :offset, :], following_a), -2)
+        b = torch.cat((b[..., :offset, :, :], following_b), -3)
+        offset *= 2
+    values = b + a[..., None] * initial.unsqueeze(-3)
+    return values, values[..., -1, :, :]
+
+
 def ssd_scan(
     decay: Tensor,
     write_value: Tensor,

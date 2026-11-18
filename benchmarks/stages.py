@@ -81,7 +81,7 @@ def stage_hooks(model, observer):
         seen.add(key)
         original, owned = getattr(obj, name), name in vars(obj)
         def run(*args, **kwargs):
-            with observer.scope(label):
+            with observer.scope(label(*args, **kwargs) if callable(label) else label):
                 return original(*args, **kwargs)
         originals.append((obj, name, original, owned))
         setattr(obj, name, run)
@@ -114,7 +114,9 @@ def stage_hooks(model, observer):
             for module_name in ("tide.kv", "tide.reception", "tide.region", "tide.region_batch"):
                 wrap(importlib.import_module(module_name), "weighted_attention", "attention")
             ssd = importlib.import_module("tide.ssd_memory")
-            wrap(ssd, "ssd_scan", "ssd.scan")
+            wrap(ssd, "ssd_scan", lambda *args, **kwargs:
+                 "ssd.summary.block" if args[4].shape[-1] == 1 else "ssd.matrix")
+            wrap(ssd, "affine_prefix", "ssd.summary.prefix")
             wrap(ssd, "logical_conv", "ssd.convolution")
         else:
             wrap(model, "_layout", "layout.rope_masks")

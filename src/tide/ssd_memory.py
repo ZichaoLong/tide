@@ -13,7 +13,7 @@ from torch.nn import functional as F
 
 from .layout import select_queries
 from .parameters import FeedForward, NodeLinear, NodeVector, norm, owner_ids, select_owners
-from .ssd import ConvState, logical_conv, ssd_scan
+from .ssd import ConvState, affine_prefix, logical_conv, ssd_scan
 
 
 @dataclass
@@ -31,7 +31,7 @@ class SSDState:
 
 class SSDMemory(nn.Module):
     def __init__(self, nodes, d, groups, rank, period, settle=True, backend="auto", chunk=128,
-                 *, short_decay=None, conv_stride=None):
+                 *, short_decay=None, conv_stride=None, summary_backend="block"):
         super().__init__()
         if d < 32 or d % 32:
             raise ValueError("SSD width must be a positive multiple of 32")
@@ -45,6 +45,9 @@ class SSDMemory(nn.Module):
             self.stride = conv_stride
         self.short_decay = math.log(2)/(8*period) if short_decay is None else short_decay
         self.backend = backend
+        if summary_backend not in ("block", "prefix"):
+            raise ValueError("summary_backend must be block or prefix")
+        self.summary_backend = summary_backend
         self.input = NodeLinear(nodes, d, 2*d + 64 + self.heads, groups, rank)
         self.summary = NodeLinear(nodes, d, d//4, groups, rank)
         self.read = NodeLinear(nodes, d, d//4, groups, rank)
@@ -75,6 +78,8 @@ class SSDMemory(nn.Module):
         writes = writes.unsqueeze(-2).expand(*writes.shape[:-1], 2, writes.shape[-1])
         initial = torch.stack((torch.cat((state.short, state.short_weight[..., None]), -1),
                                torch.cat((state.long, state.long_weight[..., None]), -1)), -2)
+        if self.summary_backend == "prefix":
+            return affine_prefix(decay, writes, initial)[0]
         ones = torch.ones_like(decay[..., None])
         effective, _ = ssd_scan(decay, writes, ones, ones, initial[..., None], chunk_size=self.chunk)
         return effective

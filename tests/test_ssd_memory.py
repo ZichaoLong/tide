@@ -161,8 +161,9 @@ def evaluated(module, u, mass, times, owners, initial, control):
 
 
 @pytest.mark.parametrize("shared,settle", [(False, True), (True, True), (True, False)])
-def test_full_binding_matches_independent_values_and_all_gradients(shared, settle):
-    args = fixture(shared, settle)
+@pytest.mark.parametrize("summary_backend", ["block", "prefix"])
+def test_full_binding_matches_independent_values_and_all_gradients(shared, settle, summary_backend):
+    args = fixture(shared, settle, summary_backend=summary_backend)
     module, u, mass, _, _, initial, _ = args
     actual, expected = evaluated(*args), literal(*args)
     assert_result(actual, expected)
@@ -173,8 +174,9 @@ def test_full_binding_matches_independent_values_and_all_gradients(shared, settl
         torch.testing.assert_close(x, y, atol=2e-9, rtol=2e-10)
 
 
-def test_full_binding_split_continuation_values_raw_state_and_all_gradients():
-    module, u, mass, times, owners, initial, control = fixture(True, False)
+@pytest.mark.parametrize("summary_backend", ["block", "prefix"])
+def test_full_binding_split_continuation_values_raw_state_and_all_gradients(summary_backend):
+    module, u, mass, times, owners, initial, control = fixture(True, False, summary_backend=summary_backend)
     whole = evaluated(module, u, mass, times, owners, initial, control)
     left, ctx, state = module.prepare(u[:, :, :3], mass[:, :, :3], times[:, :, :3], owners, initial)
     left_g = module.finish(ctx, control[:, :, :3])
@@ -216,8 +218,9 @@ def test_full_uses_one_selected_pack_and_skips_output_work_without_control(monke
         handle.remove()
 
 
-def test_idle_and_empty_windows_preserve_raw_state_with_large_logical_clock():
-    module, u, mass, times, owners, initial, control = fixture()
+@pytest.mark.parametrize("summary_backend,short_decay", [("block", None), ("prefix", None), ("prefix", 0.)])
+def test_idle_and_empty_windows_preserve_raw_state_with_large_logical_clock(summary_backend, short_decay):
+    module, u, mass, times, owners, initial, control = fixture(summary_backend=summary_backend, short_decay=short_decay)
     offset = 2**55
     initial.times = initial.times + offset
     initial.conv = ConvState(initial.conv.times + offset, initial.conv.values)
@@ -230,12 +233,29 @@ def test_idle_and_empty_windows_preserve_raw_state_with_large_logical_clock():
             assert got.keys() == want.keys()
             for t in got:
                 torch.testing.assert_close(got[t], want[t], atol=0, rtol=0)
-    assert torch.count_nonzero(description[1]) == 0
-    assert torch.count_nonzero(description[3]) == 0
+    if module.short_decay:
+        assert torch.count_nonzero(description[1]) == 0
+        assert torch.count_nonzero(description[3]) == 0
     assert all(torch.isfinite(x).all() for x in description)
     empty, context, unchanged = module.prepare(u[:, :, :0], mass[:, :, :0], times[:, :, :0], owners, initial)
     assert unchanged is initial and all(x.shape[2] == 0 for x in empty)
     assert module.finish(context, control[:, :, :0]).shape == u[:, :, :0].shape
+    # A real reception after the all-idle gap must resume the raw state, not
+    # an effective decayed summary accidentally committed by that idle window.
+    actual = evaluated(module, u, mass, times+128, owners, idle, control)
+    expected = literal(module, u, mass, times+128, owners, initial, control)
+    assert_result(actual, expected)
+    roots = inputs(module, u, mass, initial)
+    observed = torch.autograd.grad(loss(actual), roots, retain_graph=True, allow_unused=True)
+    reference = torch.autograd.grad(loss(expected), roots, allow_unused=True)
+    for root, x, y in zip(roots, observed, reference):
+        if y is None:
+            # The dictionary oracle never reads the now-expired convolution
+            # cache; rectangular gather can retain a connected zero VJP.
+            assert root is initial.conv.values
+            assert x is None or torch.count_nonzero(x) == 0
+        else:
+            torch.testing.assert_close(x, y, atol=2e-9, rtol=2e-10)
 
 
 def test_fp32_training_from_zero_matches_literal_for_three_optimizer_steps():
