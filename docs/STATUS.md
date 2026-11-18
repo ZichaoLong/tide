@@ -19,26 +19,30 @@
 六候选完成，组合scan+QKV+mask+接收重算1.683秒，基线1.905秒；仍需结合容量挑选默认。
 
 完整CPU首轮 `agg-integration-cpu-v1` 冻结b4cf1514：715 passed / 11 failed。
-10项由上述诊断alias泄漏复现，已修；另1项是接收Timed恢复exact检查，正在有界排查。
+10项由上述诊断alias泄漏复现，已修；另1项由前序CLI测试泄漏Torch线程数引起，
+`1553b301`恢复测试线程隔离，原exact断言保留。
 不能称当前主分支全套通过；最终受影响/全套与隔离安装尚待完成。
 
 `agg-train-fc-fp32-100-v1`和`agg-train-settle-fp32-100-v1`已完成100真实更新与配对
-恢复，均原恢复阈值内。稳定输入位置吞吐约30333和2644/s；新进程恢复尚待根提交。
-Timed100更新、0.5B成本/容量、light64重算容量、三接收正式FP32路径、BF16微测正在
-运行或协作队列等待。全部根任务清单及冻结命令可查
+恢复，均原恢复阈值内。稳定输入位置吞吐约30333和2644/s；两者新进程实际更新也已完成。
+Timed100更新已完成；0.5B容量到B4/L128约274位置/s、29.53GiB allocated。
+light64容量比较已完成，B24重算与B16不重算的峰值/持续运行另核验。
+三接收正式FP32路径9候选中1 within/8 finite；99比较41超差，无观察到的结构分歧，
+9次新进程恢复更新均原阈值内。BF16接收微测48行完整，27 within/21 finite，不改阈值。全部根任务清单及冻结命令可查
 `artifacts/agg-inference-preflight-20261118/jobs.json`（快照，实际终态仍逐查status.json）。
 
-新推理作业：FC0.5B的A–D已完成；HB0.5B、9B单卡、17B双卡仍按各自完整负载执行。
+新推理作业：FC/HB0.5B、9B单卡A–D已完成；17B双卡仍按完整负载执行。
 原始文件是对应`artifacts/agg-inference-*/inference.json`和reference.json。
-当前是16次增量的初步对照；256次主测、大sequence/batch、约1B、放置并发对照仍待推进。
+先有16次增量初步对照；现已提交FC/HB约1B、9B/17B的256次主测、
+Timed B4/prompt2048连续流、17B串行batch1/batch4与并发batch4对照、接收双卡资格。
 每卡预算allocated48/reserved56GiB；静态容量计划在本轮preflight目录，不能替代实测。
 
-根统一NPU和提交。Reception代理处理恢复检查，SSD代理只读汇总新成本，Inference
+根统一NPU和提交。Reception代理整理数值证据，SSD代理整理新成本证据，Inference
 代理在隔离工作树审查静态参数gather候选。不要重交活动任务、修改冻结源或清理依赖。
 下一步完成当前资格/容量检查，补模式与大尺度矩阵、连续训练/恢复、安装、推荐和最终证据。
 
 [起步记录](../artifacts/agg-inference-preflight-20261118/preflight.json)保存实际账户、
-工作区、服务、资源和四份用户文档SHA。配额约125GiB/300GiB软限、700GiB硬限；
+工作区、服务、资源和四份用户文档SHA。最近配额约137GiB/300GiB软限、700GiB硬限；
 320 CPU、约1.8TiB可用内存。观测时7张无进程空闲NPU，每卡64GiB；逐次准入仍需复核。
 当前没有遗留Tide服务。共享NPU授权只属于本线程，当前优先协作队列独占准入。
 
