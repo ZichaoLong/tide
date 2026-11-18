@@ -1,0 +1,2992 @@
+{
+  "comparisons": [
+    {
+      "bootstrap_document_ci95": [
+        -0.10214634783568338,
+        -0.08735257035320895
+      ],
+      "complete_same_blocks": true,
+      "delta_left_minus_right": -0.09465586664737202,
+      "documents": 138,
+      "group": "content-s",
+      "left": "runs/v13-main-content-s-sum-s11/confirmation/confirmation.json",
+      "left_nll": 3.9135171883244766,
+      "matched_blocks": 1040,
+      "right": "runs/v13-reuse-content-s-qry-s11/confirmation.json",
+      "right_nll": 4.008173054971849,
+      "scope": "v13 fresh confirmation document bootstrap conditional on fixed seed/checkpoints; excludes seed/model-selection uncertainty",
+      "seed": 11,
+      "tokens": 262144
+    },
+    {
+      "bootstrap_document_ci95": [
+        -0.01558135240156025,
+        -0.0012430242818931494
+      ],
+      "complete_same_blocks": true,
+      "delta_left_minus_right": -0.008387291214603465,
+      "documents": 138,
+      "group": "content-s",
+      "left": "runs/v13-main-content-s-sum-s22/confirmation/confirmation.json",
+      "left_nll": 3.9292096760109416,
+      "matched_blocks": 1040,
+      "right": "runs/v13-reuse-content-s-qry-s22/confirmation.json",
+      "right_nll": 3.937596967225545,
+      "scope": "v13 fresh confirmation document bootstrap conditional on fixed seed/checkpoints; excludes seed/model-selection uncertainty",
+      "seed": 22,
+      "tokens": 262144
+    },
+    {
+      "bootstrap_document_ci95": [
+        -0.045767406045882655,
+        -0.031080254902272533
+      ],
+      "complete_same_blocks": true,
+      "delta_left_minus_right": -0.03801649507659022,
+      "documents": 138,
+      "group": "q10-l",
+      "left": "runs/v13-main-q10-l-sum-s11/confirmation/confirmation.json",
+      "left_nll": 3.5278856045915745,
+      "matched_blocks": 1040,
+      "right": "runs/v13-main-q10-l-qry-s11/confirmation/confirmation.json",
+      "right_nll": 3.5659020996681647,
+      "scope": "v13 fresh confirmation document bootstrap conditional on fixed seed/checkpoints; excludes seed/model-selection uncertainty",
+      "seed": 11,
+      "tokens": 262144
+    },
+    {
+      "bootstrap_document_ci95": [
+        -0.0800284675600909,
+        -0.06402886385040633
+      ],
+      "complete_same_blocks": true,
+      "delta_left_minus_right": -0.0718713282403769,
+      "documents": 138,
+      "group": "q10-l",
+      "left": "runs/v13-main-q10-l-sum-s22/confirmation/confirmation.json",
+      "left_nll": 3.4399453136793454,
+      "matched_blocks": 1040,
+      "right": "runs/v13-main-q10-l-qry-s22/confirmation/confirmation.json",
+      "right_nll": 3.5118166419197223,
+      "scope": "v13 fresh confirmation document bootstrap conditional on fixed seed/checkpoints; excludes seed/model-selection uncertainty",
+      "seed": 22,
+      "tokens": 262144
+    },
+    {
+      "bootstrap_document_ci95": [
+        -0.035339180969426454,
+        -0.021592458884257728
+      ],
+      "complete_same_blocks": true,
+      "delta_left_minus_right": -0.028651957611145917,
+      "documents": 138,
+      "group": "q10-s",
+      "left": "runs/v13-main-q10-s-sum-s11/confirmation/confirmation.json",
+      "left_nll": 3.9221777765487786,
+      "matched_blocks": 1040,
+      "right": "runs/v13-reuse-q10-s-qry-s11/confirmation.json",
+      "right_nll": 3.9508297341599246,
+      "scope": "v13 fresh confirmation document bootstrap conditional on fixed seed/checkpoints; excludes seed/model-selection uncertainty",
+      "seed": 11,
+      "tokens": 262144
+    },
+    {
+      "bootstrap_document_ci95": [
+        -0.06779835788346862,
+        -0.05451936566190048
+      ],
+      "complete_same_blocks": true,
+      "delta_left_minus_right": -0.06111040309042437,
+      "documents": 138,
+      "group": "q10-s",
+      "left": "runs/v13-main-q10-s-sum-s22/confirmation/confirmation.json",
+      "left_nll": 3.8968179314251756,
+      "matched_blocks": 1040,
+      "right": "runs/v13-reuse-q10-s-qry-s22/confirmation.json",
+      "right_nll": 3.9579283345156,
+      "scope": "v13 fresh confirmation document bootstrap conditional on fixed seed/checkpoints; excludes seed/model-selection uncertainty",
+      "seed": 22,
+      "tokens": 262144
+    }
+  ],
+  "confirmation_lock_sha256": "b8de8be163b72082532b9118e4c96903f392d7565b452ff358323c177707b692",
+  "endpoints": [
+    {
+      "active_parameters": 3175926.5265625,
+      "active_parts": {
+        "full": 1610553.5384615385,
+        "receive": 1175130.3884615384,
+        "shared": 390242.5996394231
+      },
+      "checkpoint": "runs/v13-main-q10-s-sum-s11/train/latest.pt",
+      "checkpoint_sha256": "814d12c96e1f8e629f2b8a1e85a0e8f3410bc90106671b8bee0144de1e1afdb2",
+      "config": "configs/studies/language/hb-mem-v13/configs/q10-s-sum-s11.json",
+      "confirmation": {
+        "nll": 3.9221777765487786,
+        "record": "runs/v13-main-q10-s-sum-s11/confirmation/confirmation.json",
+        "sha256": "ae6f9b0893dcdeaa6066f1e9c007ef0491317b71b46153b1d3f4bfdcaf952bf6"
+      },
+      "diagnostic": {
+        "mean_region_effective_units": 6.075512432215287,
+        "nodes": 280,
+        "record": "runs/v13-main-q10-s-sum-s11/diagnostic/result.json",
+        "scope": "512 fixed train sequences plus one disposable global64 update; no lifetime-use inference, no confirmation/test access; parameter deltas include weight decay and optimizer history",
+        "state": "completed",
+        "zero_full_nodes": 124
+      },
+      "exposure": 134217728,
+      "full_all": 0.1003065172132555,
+      "group": "q10-s",
+      "id": "q10-s-sum-s11",
+      "identity": {
+        "config_sha256": "8de3c03ce8487b1cdb4ca70fe50d5c16dac3c46a636be59c55690de448e76433",
+        "data_lock_sha256": "40b7c0ebb9650d11aa0c0080532c884e2ca3846db578155f3df7068b82191d2f",
+        "device": "npu:0",
+        "dtype": "float32",
+        "installation": {
+          "foundation_commit": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+          "foundation_lock_sha256": "ba5464d7e23fe6b8c7453a52bfc7b961f040c92d0b80786c18132e40d90308b7",
+          "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+          "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+          "tidegraph": "0.3.0",
+          "tidegraph_source_sha256": "cfe2168a2c87565a568fb8944429b6b38401f92cf24972fba59c47b7592a7847",
+          "torch": "2.12.0+cpu",
+          "torch_npu": "2.12.0.post3",
+          "transformers": null
+        },
+        "mode": "train",
+        "source_commit": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
+        "source_sha256": "bb5a375a0236250197612aec5b27d19140993a68f14c18423db2c37bc7450a5d",
+        "threads": 2
+      },
+      "inference": "completed",
+      "lens": {
+        "confirmation": {
+          "destination_name": "tl-v13-confirm-q10-s-sum-s11-projection-4c543a4246b8",
+          "destination_run_id": "e58c3db0e7664d09ab28def0ddce7f00",
+          "readback_matches": true,
+          "source_run_id": "tl-v13-confirm-q10-s-sum-s11",
+          "status": "verified"
+        },
+        "diagnostic": {
+          "destination_name": "tl-v13-diag-q10-s-sum-s11-projection-29d7cd393e97",
+          "destination_run_id": "ba492f66b2bb4a449e0a71159b423e3b",
+          "readback_matches": true,
+          "source_run_id": "tl-v13-diag-q10-s-sum-s11",
+          "status": "verified"
+        },
+        "pilot": {
+          "destination_name": "tl-v13-pilot-q10-s-sum-s11-projection-264e61bad6f3",
+          "destination_run_id": "e5e93ef6f85949158593969fc22dc2a6",
+          "readback_matches": true,
+          "source_run_id": "tl-v13-pilot-q10-s-sum-s11",
+          "status": "verified"
+        },
+        "train": {
+          "destination_name": "tl-v13-main-q10-s-sum-s11-projection-a0efa501bc77",
+          "destination_run_id": "401d2259af7a4d6586f99448106a16cc",
+          "readback_matches": true,
+          "source_run_id": "tl-v13-main-q10-s-sum-s11",
+          "status": "verified"
+        }
+      },
+      "main_training_seconds": 22083.025446102023,
+      "mem": "sum",
+      "preserved_source_scope": "new frozen source",
+      "receipt_all": 0.2895008799793956,
+      "reused": false,
+      "seed": 11,
+      "timing_scope": "new main segment8Mi-to128Mi update time; excludes pilot/checks/evaluation/I/O; shared cards",
+      "total_parameters": 20515384,
+      "validation": {
+        "nll": 3.7615232861135155,
+        "record": "runs/v13-main-q10-s-sum-s11/train/validation-final.json",
+        "sha256": "83da80df0f9ba5b1f44093b0d8fbff278990c0f27d5ff6f5db25da8d7742d6f1"
+      },
+      "work": {
+        "work/active_parameter_uses": 845558678432.0,
+        "work/body_candidates": 21581480.0,
+        "work/body_full": 7477570.0,
+        "work/body_node_slots": 74547200,
+        "work/boundary_candidates": 0.0,
+        "work/boundary_full": 0.0,
+        "work/candidates": 21581480.0,
+        "work/dense_causal_attention_pairs": 9579315200.0,
+        "work/dense_parameter_uses": 5462015836160,
+        "work/full": 7477570.0,
+        "work/full_parameter_uses": 428793774080.0,
+        "work/logical_full_attention_pairs": 785752332.0,
+        "work/logical_read_attention_pairs": 0.0,
+        "work/max_full_batch": 114688,
+        "work/message_edges_including_input": 25602298.0,
+        "work/node_slots": 74547200,
+        "work/physical_attention_pair_upper_bound": 19084083200,
+        "work/physical_full_rows": 74547200,
+        "work/physical_light_rows": 0.0,
+        "work/physical_sum_value_rows": 149094400,
+        "work/prediction_positions": 266240,
+        "work/read_events": 21581480.0,
+        "work/receive_parameter_uses": 312866714624.0,
+        "work/router_multi_unsaturated_rows": 1387961.0,
+        "work/shared_parameter_uses": 103898189728.0,
+        "work/state_updates": 21581480.0,
+        "work/sum_read_candidate_rows": 43162960.0,
+        "work/unsaturated": 5325584.0
+      }
+    },
+    {
+      "active_parameters": 3200205.713822115,
+      "active_parts": {
+        "full": 1606700.523076923,
+        "receive": 1203240.5596153846,
+        "shared": 390264.6311298077
+      },
+      "checkpoint": "runs/v13-main-q10-s-sum-s22/train/latest.pt",
+      "checkpoint_sha256": "b43b3fa40310a6388f4ca75459e6aad5b5d18c3759f9d2d9f54c2a6494ccc0cd",
+      "config": "configs/studies/language/hb-mem-v13/configs/q10-s-sum-s22.json",
+      "confirmation": {
+        "nll": 3.8968179314251756,
+        "record": "runs/v13-main-q10-s-sum-s22/confirmation/confirmation.json",
+        "sha256": "11ccc755c2ca240615b3881ee294d43ef8d54c66b9a5550d6b23d96ab48df34c"
+      },
+      "diagnostic": {
+        "mean_region_effective_units": 6.379622550154846,
+        "nodes": 280,
+        "record": "runs/v13-main-q10-s-sum-s22/diagnostic/result.json",
+        "scope": "512 fixed train sequences plus one disposable global64 update; no lifetime-use inference, no confirmation/test access; parameter deltas include weight decay and optimizer history",
+        "state": "completed",
+        "zero_full_nodes": 99
+      },
+      "exposure": 134217728,
+      "full_all": 0.10006654844179258,
+      "group": "q10-s",
+      "id": "q10-s-sum-s22",
+      "identity": {
+        "config_sha256": "b032b7b14b3f93c965e3117db0c0af488bf83212d2b08fb4ca864c3b92cec82c",
+        "data_lock_sha256": "40b7c0ebb9650d11aa0c0080532c884e2ca3846db578155f3df7068b82191d2f",
+        "device": "npu:0",
+        "dtype": "float32",
+        "installation": {
+          "foundation_commit": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+          "foundation_lock_sha256": "ba5464d7e23fe6b8c7453a52bfc7b961f040c92d0b80786c18132e40d90308b7",
+          "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+          "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+          "tidegraph": "0.3.0",
+          "tidegraph_source_sha256": "cfe2168a2c87565a568fb8944429b6b38401f92cf24972fba59c47b7592a7847",
+          "torch": "2.12.0+cpu",
+          "torch_npu": "2.12.0.post3",
+          "transformers": null
+        },
+        "mode": "train",
+        "source_commit": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
+        "source_sha256": "bb5a375a0236250197612aec5b27d19140993a68f14c18423db2c37bc7450a5d",
+        "threads": 2
+      },
+      "inference": "completed",
+      "lens": {
+        "confirmation": {
+          "destination_name": "tl-v13-confirm-q10-s-sum-s22-projection-ba99104939c8",
+          "destination_run_id": "13664e1355e5408babbb4e19b97c0396",
+          "readback_matches": true,
+          "source_run_id": "tl-v13-confirm-q10-s-sum-s22",
+          "status": "verified"
+        },
+        "diagnostic": {
+          "destination_name": "tl-v13-diag-q10-s-sum-s22-projection-6d8faf1674e0",
+          "destination_run_id": "707db4c0715c4b168405a4d809c41917",
+          "readback_matches": true,
+          "source_run_id": "tl-v13-diag-q10-s-sum-s22",
+          "status": "verified"
+        },
+        "pilot": {
+          "destination_name": "tl-v13-pilot-q10-s-sum-s22-projection-62b2ec6fbae9",
+          "destination_run_id": "6c2b0ce66b0149108250827cdd3a7b08",
+          "readback_matches": true,
+          "source_run_id": "tl-v13-pilot-q10-s-sum-s22",
+          "status": "verified"
+        },
+        "train": {
+          "destination_name": "tl-v13-main-q10-s-sum-s22-projection-1362f5ca28bb",
+          "destination_run_id": "331acdbfb9e041228c08072f71e074b8",
+          "readback_matches": true,
+          "source_run_id": "tl-v13-main-q10-s-sum-s22",
+          "status": "verified"
+        }
+      },
+      "main_training_seconds": 22469.68604945764,
+      "mem": "sum",
+      "preserved_source_scope": "new frozen source",
+      "receipt_all": 0.2964259958791209,
+      "reused": false,
+      "seed": 22,
+      "timing_scope": "new main segment8Mi-to128Mi update time; excludes pilot/checks/evaluation/I/O; shared cards",
+      "total_parameters": 20515384,
+      "validation": {
+        "nll": 3.739271415222902,
+        "record": "runs/v13-main-q10-s-sum-s22/train/validation-final.json",
+        "sha256": "8e76516cb967b924d2f8abf9e894492dd123f575b0ba1066edfd7729560cc9c0"
+      },
+      "work": {
+        "work/active_parameter_uses": 852022769248.0,
+        "work/body_candidates": 22097728.0,
+        "work/body_full": 7459681.0,
+        "work/body_node_slots": 74547200,
+        "work/boundary_candidates": 0.0,
+        "work/boundary_full": 0.0,
+        "work/candidates": 22097728.0,
+        "work/dense_causal_attention_pairs": 9579315200.0,
+        "work/dense_parameter_uses": 5462015836160,
+        "work/full": 7459681.0,
+        "work/full_parameter_uses": 427767947264.0,
+        "work/logical_full_attention_pairs": 756978536.0,
+        "work/logical_read_attention_pairs": 0.0,
+        "work/max_full_batch": 114688,
+        "work/message_edges_including_input": 25968902.0,
+        "work/node_slots": 74547200,
+        "work/physical_attention_pair_upper_bound": 19084083200,
+        "work/physical_full_rows": 74547200,
+        "work/physical_light_rows": 0.0,
+        "work/physical_sum_value_rows": 149094400,
+        "work/prediction_positions": 266240,
+        "work/read_events": 22097728.0,
+        "work/receive_parameter_uses": 320350766592.0,
+        "work/router_multi_unsaturated_rows": 1528134.0,
+        "work/shared_parameter_uses": 103904055392.0,
+        "work/state_updates": 22097728.0,
+        "work/sum_read_candidate_rows": 44195456.0,
+        "work/unsaturated": 5651605.0
+      }
+    },
+    {
+      "active_parameters": 3041872.013581731,
+      "active_parts": {
+        "full": 1157424.1538461538,
+        "receive": 1494521.95,
+        "shared": 389925.90973557695
+      },
+      "checkpoint": "runs/v13-main-q3-s-sum-s11/train/latest.pt",
+      "checkpoint_sha256": "1863f422197b639d622b411cf3e63945a40d6bc86b3d87499448e4f4001a69db",
+      "config": "configs/studies/language/hb-mem-v13/configs/q3-s-sum-s11.json",
+      "confirmation": {
+        "nll": 4.165166905004298,
+        "record": "runs/v13-main-q3-s-sum-s11/confirmation/confirmation.json",
+        "sha256": "3b7879908d16a3b3c33114835c0abdfb5024e038bc5002f1cc414111d1577223"
+      },
+      "diagnostic": {
+        "mean_region_effective_units": 4.294403121251761,
+        "nodes": 640,
+        "record": "runs/v13-main-q3-s-sum-s11/diagnostic/result.json",
+        "scope": "512 fixed train sequences plus one disposable global64 update; no lifetime-use inference, no confirmation/test access; parameter deltas include weight decay and optimizer history",
+        "state": "completed",
+        "zero_full_nodes": 533
+      },
+      "exposure": 134217728,
+      "full_all": 0.031537305391751806,
+      "group": "q3-s",
+      "id": "q3-s-sum-s11",
+      "identity": {
+        "config_sha256": "d8d389be8ff87a23463d88a114d836305a89d4e2329bcf2ffc10d50781d0dcf4",
+        "data_lock_sha256": "40b7c0ebb9650d11aa0c0080532c884e2ca3846db578155f3df7068b82191d2f",
+        "device": "npu:0",
+        "dtype": "float32",
+        "installation": {
+          "foundation_commit": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+          "foundation_lock_sha256": "ba5464d7e23fe6b8c7453a52bfc7b961f040c92d0b80786c18132e40d90308b7",
+          "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+          "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+          "tidegraph": "0.3.0",
+          "tidegraph_source_sha256": "cfe2168a2c87565a568fb8944429b6b38401f92cf24972fba59c47b7592a7847",
+          "torch": "2.12.0+cpu",
+          "torch_npu": "2.12.0.post3",
+          "transformers": null
+        },
+        "mode": "train",
+        "source_commit": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
+        "source_sha256": "bb5a375a0236250197612aec5b27d19140993a68f14c18423db2c37bc7450a5d",
+        "threads": 2
+      },
+      "inference": "completed",
+      "lens": {
+        "confirmation": {
+          "destination_name": "tl-v13-confirm-q3-s-sum-s11-projection-80a161196ed8",
+          "destination_run_id": "a27dbb62490b4e2fbee315b4f82ed27d",
+          "readback_matches": true,
+          "source_run_id": "tl-v13-confirm-q3-s-sum-s11",
+          "status": "verified"
+        },
+        "diagnostic": {
+          "destination_name": "tl-v13-diag-q3-s-sum-s11-projection-08a0525b3654",
+          "destination_run_id": "527dd94de1674805badda691c7977d76",
+          "readback_matches": true,
+          "source_run_id": "tl-v13-diag-q3-s-sum-s11",
+          "status": "verified"
+        },
+        "pilot": {
+          "destination_name": "tl-v13-pilot-q3-s-sum-s11-projection-964c30a53625",
+          "destination_run_id": "70a17e1e9a62436b9a6d3eecb07575eb",
+          "readback_matches": true,
+          "source_run_id": "tl-v13-pilot-q3-s-sum-s11",
+          "status": "verified"
+        },
+        "train": {
+          "destination_name": "tl-v13-main-q3-s-sum-s11-projection-a8bcee64b178",
+          "destination_run_id": "08d56a59090e4efd86fde592fe926e29",
+          "readback_matches": true,
+          "source_run_id": "tl-v13-main-q3-s-sum-s11",
+          "status": "verified"
+        }
+      },
+      "main_training_seconds": 51095.50192480162,
+      "mem": "sum",
+      "preserved_source_scope": "new frozen source",
+      "receipt_all": 0.16108095022348257,
+      "reused": false,
+      "seed": 11,
+      "timing_scope": "new main segment8Mi-to128Mi update time; excludes pilot/checks/evaluation/I/O; shared cards",
+      "total_parameters": 46391968,
+      "validation": {
+        "nll": 4.026962102623656,
+        "record": "runs/v13-main-q3-s-sum-s11/train/validation-final.json",
+        "sha256": "aa561bc97d6038e1c56e32b4436d6d0993fb9f6545d05a62861a82ca741fc516"
+      },
+      "work": {
+        "work/active_parameter_uses": 809868004896.0,
+        "work/body_candidates": 27447163.0,
+        "work/body_full": 5373755.0,
+        "work/body_node_slots": 170393600,
+        "work/boundary_candidates": 0.0,
+        "work/boundary_full": 0.0,
+        "work/candidates": 27447163.0,
+        "work/dense_causal_attention_pairs": 21895577600.0,
+        "work/dense_parameter_uses": 12351397560320,
+        "work/full": 5373755.0,
+        "work/full_parameter_uses": 308152606720.0,
+        "work/logical_full_attention_pairs": 506573114.0,
+        "work/logical_read_attention_pairs": 0.0,
+        "work/max_full_batch": 131072,
+        "work/message_edges_including_input": 29917218.0,
+        "work/node_slots": 170393600,
+        "work/physical_attention_pair_upper_bound": 43620761600,
+        "work/physical_full_rows": 170393600,
+        "work/physical_light_rows": 0.0,
+        "work/physical_sum_value_rows": 340787200,
+        "work/prediction_positions": 266240,
+        "work/read_events": 27447163.0,
+        "work/receive_parameter_uses": 397901523968.0,
+        "work/router_multi_unsaturated_rows": 61246.0,
+        "work/shared_parameter_uses": 103813874208.0,
+        "work/state_updates": 27447163.0,
+        "work/sum_read_candidate_rows": 54894326.0,
+        "work/unsaturated": 2724336.0
+      }
+    },
+    {
+      "active_parameters": 9480825.627163462,
+      "active_parts": {
+        "full": 6531333.415384616,
+        "receive": 2010390.3057692307,
+        "shared": 939101.9060096154
+      },
+      "checkpoint": "runs/v13-main-q10-l-sum-s11/train/latest.pt",
+      "checkpoint_sha256": "040a5697250ca96468cacf4ce61953197e67800d2d993ef5a2b83e0da6c65118",
+      "config": "configs/studies/language/hb-mem-v13/configs/q10-l-sum-s11.json",
+      "confirmation": {
+        "nll": 3.5278856045915745,
+        "record": "runs/v13-main-q10-l-sum-s11/confirmation/confirmation.json",
+        "sha256": "f4744ba9b8895edc1f21490cac13a089a5c4138631b0f59868d016c14bff7397"
+      },
+      "diagnostic": {
+        "mean_region_effective_units": 6.114268228092083,
+        "nodes": 280,
+        "record": "runs/v13-main-q10-l-sum-s11/diagnostic/result.json",
+        "scope": "512 fixed train sequences plus one disposable global64 update; no lifetime-use inference, no confirmation/test access; parameter deltas include weight decay and optimizer history",
+        "state": "completed",
+        "zero_full_nodes": 124
+      },
+      "exposure": 134217728,
+      "full_all": 0.10169412130837913,
+      "group": "q10-l",
+      "id": "q10-l-sum-s11",
+      "identity": {
+        "config_sha256": "be24204a723b7ddb06ef1f058113f4f9250e1dce2a5161371f710fd437ab6369",
+        "data_lock_sha256": "40b7c0ebb9650d11aa0c0080532c884e2ca3846db578155f3df7068b82191d2f",
+        "device": "npu:0",
+        "dtype": "float32",
+        "installation": {
+          "foundation_commit": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+          "foundation_lock_sha256": "ba5464d7e23fe6b8c7453a52bfc7b961f040c92d0b80786c18132e40d90308b7",
+          "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+          "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+          "tidegraph": "0.3.0",
+          "tidegraph_source_sha256": "cfe2168a2c87565a568fb8944429b6b38401f92cf24972fba59c47b7592a7847",
+          "torch": "2.12.0+cpu",
+          "torch_npu": "2.12.0.post3",
+          "transformers": null
+        },
+        "mode": "train",
+        "source_commit": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
+        "source_sha256": "bb5a375a0236250197612aec5b27d19140993a68f14c18423db2c37bc7450a5d",
+        "threads": 2
+      },
+      "inference": "completed",
+      "lens": {
+        "confirmation": {
+          "destination_name": "tl-v13-confirm-q10-l-sum-s11-projection-e510a752a0e9",
+          "destination_run_id": "62942eb478e74d52a8b5d560d7187ef6",
+          "readback_matches": true,
+          "source_run_id": "tl-v13-confirm-q10-l-sum-s11",
+          "status": "verified"
+        },
+        "diagnostic": {
+          "destination_name": "tl-v13-diag-q10-l-sum-s11-projection-6c2cb2edb9ac",
+          "destination_run_id": "1adb5b9879bf4c9d97d252f711464602",
+          "readback_matches": true,
+          "source_run_id": "tl-v13-diag-q10-l-sum-s11",
+          "status": "verified"
+        },
+        "pilot": {
+          "destination_name": "tl-v13-pilot-q10-l-sum-s11-projection-1866713ff7a5",
+          "destination_run_id": "f5ae083863bd46e7802642a82db1addd",
+          "readback_matches": true,
+          "source_run_id": "tl-v13-pilot-q10-l-sum-s11",
+          "status": "verified"
+        },
+        "train": {
+          "destination_name": "tl-v13-main-q10-l-sum-s11-projection-2f2d623898a4",
+          "destination_run_id": "c6e68dbf21444e97a6fd78fb06d1c2c5",
+          "readback_matches": true,
+          "source_run_id": "tl-v13-main-q10-l-sum-s11",
+          "status": "verified"
+        }
+      },
+      "main_training_seconds": 31095.07288336754,
+      "mem": "sum",
+      "preserved_source_scope": "new frozen source",
+      "receipt_all": 0.2902520684881525,
+      "reused": false,
+      "seed": 11,
+      "timing_scope": "new main segment8Mi-to128Mi update time; excludes pilot/checks/evaluation/I/O; shared cards",
+      "total_parameters": 72100408,
+      "validation": {
+        "nll": 3.3630609781248495,
+        "record": "runs/v13-main-q10-l-sum-s11/train/validation-final.json",
+        "sha256": "5e7c939ec6687a01afffb84e8e694232bd748c01905ebc45a2757316e53eae38"
+      },
+      "work": {
+        "work/active_parameter_uses": 2524175014976.0,
+        "work/body_candidates": 21637479.0,
+        "work/body_full": 7581012.0,
+        "work/body_node_slots": 74547200,
+        "work/boundary_candidates": 0.0,
+        "work/boundary_full": 0.0,
+        "work/candidates": 21637479.0,
+        "work/dense_causal_attention_pairs": 9579315200.0,
+        "work/dense_parameter_uses": 19196012625920,
+        "work/full": 7581012.0,
+        "work/full_parameter_uses": 1738902208512.0,
+        "work/logical_full_attention_pairs": 787616358.0,
+        "work/logical_read_attention_pairs": 0.0,
+        "work/max_full_batch": 57344,
+        "work/message_edges_including_input": 25524136.0,
+        "work/node_slots": 74547200,
+        "work/physical_attention_pair_upper_bound": 19084083200,
+        "work/physical_full_rows": 74547200,
+        "work/physical_light_rows": 0.0,
+        "work/physical_sum_value_rows": 149094400,
+        "work/prediction_positions": 266240,
+        "work/read_events": 21637479.0,
+        "work/receive_parameter_uses": 535246315008.0,
+        "work/router_multi_unsaturated_rows": 1435800.0,
+        "work/shared_parameter_uses": 250026491456.0,
+        "work/state_updates": 21637479.0,
+        "work/sum_read_candidate_rows": 43274958.0,
+        "work/unsaturated": 5730088.0
+      }
+    },
+    {
+      "active_parameters": 9401011.685336538,
+      "active_parts": {
+        "full": 6466425.969230769,
+        "receive": 1995471.928846154,
+        "shared": 939113.7872596154
+      },
+      "checkpoint": "runs/v13-main-q10-l-sum-s22/train/latest.pt",
+      "checkpoint_sha256": "9cbaefd83510e95a4896091fb42a887ff9e9162334162b94e249f4618743f4af",
+      "config": "configs/studies/language/hb-mem-v13/configs/q10-l-sum-s22.json",
+      "confirmation": {
+        "nll": 3.4399453136793454,
+        "record": "runs/v13-main-q10-l-sum-s22/confirmation/confirmation.json",
+        "sha256": "fe31b3a32c2dc33a4c5f5a1dd95e097671fecf80e1134453fdd9b2e50fe66d20"
+      },
+      "diagnostic": {
+        "mean_region_effective_units": 6.422029928718451,
+        "nodes": 280,
+        "record": "runs/v13-main-q10-l-sum-s22/diagnostic/result.json",
+        "scope": "512 fixed train sequences plus one disposable global64 update; no lifetime-use inference, no confirmation/test access; parameter deltas include weight decay and optimizer history",
+        "state": "completed",
+        "zero_full_nodes": 124
+      },
+      "exposure": 134217728,
+      "full_all": 0.10068349984975962,
+      "group": "q10-l",
+      "id": "q10-l-sum-s22",
+      "identity": {
+        "config_sha256": "c5daa15ca99f14ccc3e066edf6ee9a9bfe3f95a6c242c10fcb9dc5f31a093d79",
+        "data_lock_sha256": "40b7c0ebb9650d11aa0c0080532c884e2ca3846db578155f3df7068b82191d2f",
+        "device": "npu:0",
+        "dtype": "float32",
+        "installation": {
+          "foundation_commit": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+          "foundation_lock_sha256": "ba5464d7e23fe6b8c7453a52bfc7b961f040c92d0b80786c18132e40d90308b7",
+          "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+          "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+          "tidegraph": "0.3.0",
+          "tidegraph_source_sha256": "cfe2168a2c87565a568fb8944429b6b38401f92cf24972fba59c47b7592a7847",
+          "torch": "2.12.0+cpu",
+          "torch_npu": "2.12.0.post3",
+          "transformers": null
+        },
+        "mode": "train",
+        "source_commit": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
+        "source_sha256": "bb5a375a0236250197612aec5b27d19140993a68f14c18423db2c37bc7450a5d",
+        "threads": 2
+      },
+      "inference": "completed",
+      "lens": {
+        "confirmation": {
+          "destination_name": "tl-v13-confirm-q10-l-sum-s22-projection-2748506614eb",
+          "destination_run_id": "cb88c25a50fc48db9607e5a9c113761f",
+          "readback_matches": true,
+          "source_run_id": "tl-v13-confirm-q10-l-sum-s22",
+          "status": "verified"
+        },
+        "diagnostic": {
+          "destination_name": "tl-v13-diag-q10-l-sum-s22-projection-f47a2916714a",
+          "destination_run_id": "aa0735fb8d3b4a909a8b2f267db69993",
+          "readback_matches": true,
+          "source_run_id": "tl-v13-diag-q10-l-sum-s22",
+          "status": "verified"
+        },
+        "pilot": {
+          "destination_name": "tl-v13-pilot-q10-l-sum-s22-projection-ed0e3918ff03",
+          "destination_run_id": "a94d204eb20b47e187e09d2085856182",
+          "readback_matches": true,
+          "source_run_id": "tl-v13-pilot-q10-l-sum-s22",
+          "status": "verified"
+        },
+        "train": {
+          "destination_name": "tl-v13-main-q10-l-sum-s22-projection-ace57163f2b9",
+          "destination_run_id": "8a85c6a48b434417b8a3ec3828ba24e9",
+          "readback_matches": true,
+          "source_run_id": "tl-v13-main-q10-l-sum-s22",
+          "status": "verified"
+        }
+      },
+      "main_training_seconds": 30396.000088348985,
+      "mem": "sum",
+      "preserved_source_scope": "new frozen source",
+      "receipt_all": 0.28809821160285026,
+      "reused": false,
+      "seed": 22,
+      "timing_scope": "new main segment8Mi-to128Mi update time; excludes pilot/checks/evaluation/I/O; shared cards",
+      "total_parameters": 72100408,
+      "validation": {
+        "nll": 3.273000221932307,
+        "record": "runs/v13-main-q10-l-sum-s22/train/validation-final.json",
+        "sha256": "5f93b7e6e19ac59ea07786eabc91d1617b331bb049a6e69e9c4e1c9eec617afb"
+      },
+      "work": {
+        "work/active_parameter_uses": 2502925351104.0,
+        "work/body_candidates": 21476915.0,
+        "work/body_full": 7505673.0,
+        "work/body_node_slots": 74547200,
+        "work/boundary_candidates": 0.0,
+        "work/boundary_full": 0.0,
+        "work/candidates": 21476915.0,
+        "work/dense_causal_attention_pairs": 9579315200.0,
+        "work/dense_parameter_uses": 19196012625920,
+        "work/full": 7505673.0,
+        "work/full_parameter_uses": 1721621250048.0,
+        "work/logical_full_attention_pairs": 746514730.0,
+        "work/logical_read_attention_pairs": 0.0,
+        "work/max_full_batch": 57344,
+        "work/message_edges_including_input": 25721912.0,
+        "work/node_slots": 74547200,
+        "work/physical_attention_pair_upper_bound": 19084083200,
+        "work/physical_full_rows": 74547200,
+        "work/physical_light_rows": 0.0,
+        "work/physical_sum_value_rows": 149094400,
+        "work/prediction_positions": 266240,
+        "work/read_events": 21476915.0,
+        "work/receive_parameter_uses": 531274446336.0,
+        "work/router_multi_unsaturated_rows": 1643731.0,
+        "work/shared_parameter_uses": 250029654720.0,
+        "work/state_updates": 21476915.0,
+        "work/sum_read_candidate_rows": 42953830.0,
+        "work/unsaturated": 5680025.0
+      }
+    },
+    {
+      "active_parameters": 3134626.8319711536,
+      "active_parts": {
+        "full": 1229845.1538461538,
+        "receive": 1514860.9798076923,
+        "shared": 389920.6983173077
+      },
+      "checkpoint": "runs/v13-main-content-s-sum-s11/train/latest.pt",
+      "checkpoint_sha256": "10eb1caf1385f5502c8d968cb7764fba7eabd59074fa0d0ce83f2588e7ddd5fd",
+      "config": "configs/studies/language/hb-mem-v13/configs/content-s-sum-s11.json",
+      "confirmation": {
+        "nll": 3.9135171883244766,
+        "record": "runs/v13-main-content-s-sum-s11/confirmation/confirmation.json",
+        "sha256": "a389409672b7925a0c9fd020bd294ba07193e789e7b3882feb11526e0681eb40"
+      },
+      "diagnostic": {
+        "mean_region_effective_units": 3.3885021710842245,
+        "nodes": 640,
+        "record": "runs/v13-main-content-s-sum-s11/diagnostic/result.json",
+        "scope": "512 fixed train sequences plus one disposable global64 update; no lifetime-use inference, no confirmation/test access; parameter deltas include weight decay and optimizer history",
+        "state": "completed",
+        "zero_full_nodes": 523
+      },
+      "exposure": 134217728,
+      "full_all": 0.03127657963679387,
+      "group": "content-s",
+      "id": "content-s-sum-s11",
+      "identity": {
+        "config_sha256": "5f995064786146a4a24cc31d54b867c95481eef3340cedf1dff2e664a077a646",
+        "data_lock_sha256": "40b7c0ebb9650d11aa0c0080532c884e2ca3846db578155f3df7068b82191d2f",
+        "device": "npu:0",
+        "dtype": "float32",
+        "installation": {
+          "foundation_commit": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+          "foundation_lock_sha256": "ba5464d7e23fe6b8c7453a52bfc7b961f040c92d0b80786c18132e40d90308b7",
+          "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+          "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+          "tidegraph": "0.3.0",
+          "tidegraph_source_sha256": "cfe2168a2c87565a568fb8944429b6b38401f92cf24972fba59c47b7592a7847",
+          "torch": "2.12.0+cpu",
+          "torch_npu": "2.12.0.post3",
+          "transformers": null
+        },
+        "mode": "train",
+        "source_commit": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
+        "source_sha256": "bb5a375a0236250197612aec5b27d19140993a68f14c18423db2c37bc7450a5d",
+        "threads": 2
+      },
+      "inference": "completed",
+      "lens": {
+        "confirmation": {
+          "destination_name": "tl-v13-confirm-content-s-sum-s11-projection-47086b4a5e09",
+          "destination_run_id": "d8c6d03e5ea640638dffbc7457b42fb7",
+          "readback_matches": true,
+          "source_run_id": "tl-v13-confirm-content-s-sum-s11",
+          "status": "verified"
+        },
+        "diagnostic": {
+          "destination_name": "tl-v13-diag-content-s-sum-s11-projection-4aef835e2c8f",
+          "destination_run_id": "a1d21b4851c541658a5d0d6edb2bdca0",
+          "readback_matches": true,
+          "source_run_id": "tl-v13-diag-content-s-sum-s11",
+          "status": "verified"
+        },
+        "pilot": {
+          "destination_name": "tl-v13-pilot-content-s-sum-s11-projection-c31192c90208",
+          "destination_run_id": "bd15131925054b63aefe89325e197f04",
+          "readback_matches": true,
+          "source_run_id": "tl-v13-pilot-content-s-sum-s11",
+          "status": "verified"
+        },
+        "train": {
+          "destination_name": "tl-v13-main-content-s-sum-s11-projection-37d324de8de4",
+          "destination_run_id": "a259af58bc9c4cbeaf5dcc7240cdaa38",
+          "readback_matches": true,
+          "source_run_id": "tl-v13-main-content-s-sum-s11",
+          "status": "verified"
+        }
+      },
+      "main_training_seconds": 49900.33404041827,
+      "mem": "sum",
+      "preserved_source_scope": "new frozen source",
+      "receipt_all": 0.16327311002291167,
+      "reused": false,
+      "seed": 11,
+      "timing_scope": "new main segment8Mi-to128Mi update time; excludes pilot/checks/evaluation/I/O; shared cards",
+      "total_parameters": 49013408,
+      "validation": {
+        "nll": 3.780879496363923,
+        "record": "runs/v13-main-content-s-sum-s11/train/validation-final.json",
+        "sha256": "66757885f95ad91c4dbc63839827b183a91afb861e085e4c38f221fa41c7fa88"
+      },
+      "work": {
+        "work/active_parameter_uses": 834563047744.0,
+        "work/body_candidates": 27820693.0,
+        "work/body_full": 5329329.0,
+        "work/body_node_slots": 170393600,
+        "work/boundary_candidates": 0.0,
+        "work/boundary_full": 0.0,
+        "work/candidates": 27820693.0,
+        "work/dense_causal_attention_pairs": 21895577600.0,
+        "work/dense_parameter_uses": 13049329745920,
+        "work/full": 5329329.0,
+        "work/full_parameter_uses": 327433973760.0,
+        "work/logical_full_attention_pairs": 566058854.0,
+        "work/logical_read_attention_pairs": 0.0,
+        "work/max_full_batch": 131072,
+        "work/message_edges_including_input": 29830500.0,
+        "work/node_slots": 170393600,
+        "work/physical_attention_pair_upper_bound": 43620761600,
+        "work/physical_full_rows": 170393600,
+        "work/physical_light_rows": 0.0,
+        "work/physical_sum_value_rows": 340787200,
+        "work/prediction_positions": 266240,
+        "work/read_events": 27820693.0,
+        "work/receive_parameter_uses": 403316587264.0,
+        "work/router_multi_unsaturated_rows": 7825.0,
+        "work/shared_parameter_uses": 103812486720.0,
+        "work/state_updates": 27820693.0,
+        "work/sum_read_candidate_rows": 55641386.0,
+        "work/unsaturated": 2670257.0
+      }
+    },
+    {
+      "active_parameters": 3106017.7521634614,
+      "active_parts": {
+        "full": 1231063.1538461538,
+        "receive": 1485033.3730769232,
+        "shared": 389921.22524038464
+      },
+      "checkpoint": "runs/v13-main-content-s-sum-s22/train/latest.pt",
+      "checkpoint_sha256": "0f5692b797a3b5d57c60912a74fd73543af3515f654b94864860048fb864ceb4",
+      "config": "configs/studies/language/hb-mem-v13/configs/content-s-sum-s22.json",
+      "confirmation": {
+        "nll": 3.9292096760109416,
+        "record": "runs/v13-main-content-s-sum-s22/confirmation/confirmation.json",
+        "sha256": "5e6cc46105fe7932ab4fc6df2171710c06c96e687770aebcd4b40226efd5043b"
+      },
+      "diagnostic": {
+        "mean_region_effective_units": 4.141688733960349,
+        "nodes": 640,
+        "record": "runs/v13-main-content-s-sum-s22/diagnostic/result.json",
+        "scope": "512 fixed train sequences plus one disposable global64 update; no lifetime-use inference, no confirmation/test access; parameter deltas include weight decay and optimizer history",
+        "state": "completed",
+        "zero_full_nodes": 564
+      },
+      "exposure": 134217728,
+      "full_all": 0.031307554978590744,
+      "group": "content-s",
+      "id": "content-s-sum-s22",
+      "identity": {
+        "config_sha256": "97e187f645e6dda1f5d2350a78e15caf5482c27404c300184ef05a281b53191d",
+        "data_lock_sha256": "40b7c0ebb9650d11aa0c0080532c884e2ca3846db578155f3df7068b82191d2f",
+        "device": "npu:0",
+        "dtype": "float32",
+        "installation": {
+          "foundation_commit": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+          "foundation_lock_sha256": "ba5464d7e23fe6b8c7453a52bfc7b961f040c92d0b80786c18132e40d90308b7",
+          "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+          "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+          "tidegraph": "0.3.0",
+          "tidegraph_source_sha256": "cfe2168a2c87565a568fb8944429b6b38401f92cf24972fba59c47b7592a7847",
+          "torch": "2.12.0+cpu",
+          "torch_npu": "2.12.0.post3",
+          "transformers": null
+        },
+        "mode": "train",
+        "source_commit": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
+        "source_sha256": "bb5a375a0236250197612aec5b27d19140993a68f14c18423db2c37bc7450a5d",
+        "threads": 2
+      },
+      "inference": "completed",
+      "lens": {
+        "confirmation": {
+          "destination_name": "tl-v13-confirm-content-s-sum-s22-projection-f235583752ed",
+          "destination_run_id": "bf328f1f542947d4b407a9cf80078e8e",
+          "readback_matches": true,
+          "source_run_id": "tl-v13-confirm-content-s-sum-s22",
+          "status": "verified"
+        },
+        "diagnostic": {
+          "destination_name": "tl-v13-diag-content-s-sum-s22-projection-6122fe130217",
+          "destination_run_id": "1cbed673332c4607b16590d372c182c1",
+          "readback_matches": true,
+          "source_run_id": "tl-v13-diag-content-s-sum-s22",
+          "status": "verified"
+        },
+        "pilot": {
+          "destination_name": "tl-v13-pilot-content-s-sum-s22-projection-f613061260ed",
+          "destination_run_id": "8bea61f207014102af15ddfd08f32a1d",
+          "readback_matches": true,
+          "source_run_id": "tl-v13-pilot-content-s-sum-s22",
+          "status": "verified"
+        },
+        "train": {
+          "destination_name": "tl-v13-main-content-s-sum-s22-projection-24cb7c5f62f8",
+          "destination_run_id": "299a7c1d32d7441c917d3fcd695a3f13",
+          "readback_matches": true,
+          "source_run_id": "tl-v13-main-content-s-sum-s22",
+          "status": "verified"
+        }
+      },
+      "main_training_seconds": 50745.63921302557,
+      "mem": "sum",
+      "preserved_source_scope": "new frozen source",
+      "receipt_all": 0.16005826509915866,
+      "reused": false,
+      "seed": 22,
+      "timing_scope": "new main segment8Mi-to128Mi update time; excludes pilot/checks/evaluation/I/O; shared cards",
+      "total_parameters": 49013408,
+      "validation": {
+        "nll": 3.786739876959473,
+        "record": "runs/v13-main-content-s-sum-s22/train/validation-final.json",
+        "sha256": "9299b864a3eb5a026ae6a4bfbc7782e634a2e459f9691523cdb00c7eef3d7dec"
+      },
+      "work": {
+        "work/active_parameter_uses": 826946166336.0,
+        "work/body_candidates": 27272904.0,
+        "work/body_full": 5334607.0,
+        "work/body_node_slots": 170393600,
+        "work/boundary_candidates": 0.0,
+        "work/boundary_full": 0.0,
+        "work/candidates": 27272904.0,
+        "work/dense_causal_attention_pairs": 21895577600.0,
+        "work/dense_parameter_uses": 13049329745920,
+        "work/full": 5334607.0,
+        "work/full_parameter_uses": 327758254080.0,
+        "work/logical_full_attention_pairs": 526148035.0,
+        "work/logical_read_attention_pairs": 0.0,
+        "work/max_full_batch": 131072,
+        "work/message_edges_including_input": 29839268.0,
+        "work/node_slots": 170393600,
+        "work/physical_attention_pair_upper_bound": 43620761600,
+        "work/physical_full_rows": 170393600,
+        "work/physical_light_rows": 0.0,
+        "work/physical_sum_value_rows": 340787200,
+        "work/prediction_positions": 266240,
+        "work/read_events": 27272904.0,
+        "work/receive_parameter_uses": 395375285248.0,
+        "work/router_multi_unsaturated_rows": 19093.0,
+        "work/shared_parameter_uses": 103812627008.0,
+        "work/state_updates": 27272904.0,
+        "work/sum_read_candidate_rows": 54545808.0,
+        "work/unsaturated": 2681752.0
+      }
+    },
+    {
+      "active_parameters": 10181165.247115385,
+      "active_parts": {
+        "full": 6390639.015384615,
+        "receive": 2851488.3384615383,
+        "shared": 939037.8932692307
+      },
+      "checkpoint": "runs/v13-main-q10-l-qry-s11/train/latest.pt",
+      "checkpoint_sha256": "fb28591bb3434682cc07fcaa652b862e03ec5e38481982f57a10c068d3e9e776",
+      "config": "configs/studies/language/hb-mem-v13/configs/q10-l-qry-s11.json",
+      "confirmation": {
+        "nll": 3.5659020996681647,
+        "record": "runs/v13-main-q10-l-qry-s11/confirmation/confirmation.json",
+        "sha256": "f9e7294b6efbbabe782a6269c9575d19d255fb5635741545c3e9575af2c039eb"
+      },
+      "diagnostic": {
+        "mean_region_effective_units": 6.437598268527322,
+        "nodes": 280,
+        "record": "runs/v13-main-q10-l-qry-s11/diagnostic/result.json",
+        "scope": "512 fixed train sequences plus one disposable global64 update; no lifetime-use inference, no confirmation/test access; parameter deltas include weight decay and optimizer history",
+        "state": "completed",
+        "zero_full_nodes": 152
+      },
+      "exposure": 134217728,
+      "full_all": 0.09950348235748627,
+      "group": "q10-l",
+      "id": "q10-l-qry-s11",
+      "identity": {
+        "config_sha256": "e426e9e1d17e076c749b8517d6ea01be5201a35a71563bfe80a2a9c9ff80acf4",
+        "data_lock_sha256": "40b7c0ebb9650d11aa0c0080532c884e2ca3846db578155f3df7068b82191d2f",
+        "device": "npu:0",
+        "dtype": "float32",
+        "installation": {
+          "foundation_commit": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+          "foundation_lock_sha256": "ba5464d7e23fe6b8c7453a52bfc7b961f040c92d0b80786c18132e40d90308b7",
+          "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+          "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+          "tidegraph": "0.3.0",
+          "tidegraph_source_sha256": "cfe2168a2c87565a568fb8944429b6b38401f92cf24972fba59c47b7592a7847",
+          "torch": "2.12.0+cpu",
+          "torch_npu": "2.12.0.post3",
+          "transformers": null
+        },
+        "mode": "train",
+        "source_commit": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
+        "source_sha256": "bb5a375a0236250197612aec5b27d19140993a68f14c18423db2c37bc7450a5d",
+        "threads": 2
+      },
+      "inference": "completed",
+      "lens": {
+        "confirmation": {
+          "destination_name": "tl-v13-confirm-q10-l-qry-s11-projection-44ec2e72b287",
+          "destination_run_id": "81d171952b724453a844181c22075ed1",
+          "readback_matches": true,
+          "source_run_id": "tl-v13-confirm-q10-l-qry-s11",
+          "status": "verified"
+        },
+        "diagnostic": {
+          "destination_name": "tl-v13-diag-q10-l-qry-s11-projection-e6629f2c4e13",
+          "destination_run_id": "b78d0cca6d84422e821fc6f8567e3ace",
+          "readback_matches": true,
+          "source_run_id": "tl-v13-diag-q10-l-qry-s11",
+          "status": "verified"
+        },
+        "pilot": {
+          "destination_name": "tl-v13-pilot-q10-l-qry-s11-projection-70221520fa16",
+          "destination_run_id": "09942038cd8c4b719be86f11f39e86a2",
+          "readback_matches": true,
+          "source_run_id": "tl-v13-pilot-q10-l-qry-s11",
+          "status": "verified"
+        },
+        "train": {
+          "destination_name": "tl-v13-main-q10-l-qry-s11-projection-31ca8abf8df2",
+          "destination_run_id": "79bce0355dd24c2488ec7b1b802fc893",
+          "readback_matches": true,
+          "source_run_id": "tl-v13-main-q10-l-qry-s11",
+          "status": "verified"
+        }
+      },
+      "main_training_seconds": 18898.76932965219,
+      "mem": "qry",
+      "preserved_source_scope": "new frozen source",
+      "receipt_all": 0.2750543414105426,
+      "reused": false,
+      "seed": 11,
+      "timing_scope": "new main segment8Mi-to128Mi update time; excludes pilot/checks/evaluation/I/O; shared cards",
+      "total_parameters": 75541048,
+      "validation": {
+        "nll": 3.398333682969678,
+        "record": "runs/v13-main-q10-l-qry-s11/train/validation-final.json",
+        "sha256": "fc1e64d2770f455f2add82b7fed6e7ecad058ce0d81975b3f0b3f1106fc9fe78"
+      },
+      "work": {
+        "work/active_parameter_uses": 2710633435392.0,
+        "work/body_candidates": 20504531.0,
+        "work/body_full": 7417706.0,
+        "work/body_node_slots": 74547200,
+        "work/boundary_candidates": 0.0,
+        "work/boundary_full": 0.0,
+        "work/candidates": 20504531.0,
+        "work/dense_causal_attention_pairs": 28737945600.0,
+        "work/dense_parameter_uses": 20112048619520,
+        "work/full": 7417706.0,
+        "work/full_parameter_uses": 1701443731456.0,
+        "work/logical_full_attention_pairs": 723801560.0,
+        "work/logical_read_attention_pairs": 4189797648.0,
+        "work/max_full_batch": 57344,
+        "work/message_edges_including_input": 24459006.0,
+        "work/node_slots": 74547200,
+        "work/physical_attention_pair_upper_bound": 57252249600,
+        "work/physical_full_rows": 74547200,
+        "work/physical_light_rows": 0.0,
+        "work/physical_sum_value_rows": 0,
+        "work/prediction_positions": 266240,
+        "work/read_events": 20504531.0,
+        "work/receive_parameter_uses": 759180255232.0,
+        "work/router_multi_unsaturated_rows": 1441208.0,
+        "work/shared_parameter_uses": 250009448704.0,
+        "work/state_updates": 20504531.0,
+        "work/sum_read_candidate_rows": 0,
+        "work/unsaturated": 5600695.0
+      }
+    },
+    {
+      "active_parameters": 10234704.67596154,
+      "active_parts": {
+        "full": 6448835.076923077,
+        "receive": 2846803.4961538464,
+        "shared": 939066.1028846154
+      },
+      "checkpoint": "runs/v13-main-q10-l-qry-s22/train/latest.pt",
+      "checkpoint_sha256": "311e4a29852125897725582977b3b4949392f6b1ae16c2a708af00cd05e4d5b9",
+      "config": "configs/studies/language/hb-mem-v13/configs/q10-l-qry-s22.json",
+      "confirmation": {
+        "nll": 3.5118166419197223,
+        "record": "runs/v13-main-q10-l-qry-s22/confirmation/confirmation.json",
+        "sha256": "ad5cb7dc2f1b74de0a76c61e39c45a99068651356cd76b16cdc2fd8538b4d8c5"
+      },
+      "diagnostic": {
+        "mean_region_effective_units": 5.9993654536764325,
+        "nodes": 280,
+        "record": "runs/v13-main-q10-l-qry-s22/diagnostic/result.json",
+        "scope": "512 fixed train sequences plus one disposable global64 update; no lifetime-use inference, no confirmation/test access; parameter deltas include weight decay and optimizer history",
+        "state": "completed",
+        "zero_full_nodes": 159
+      },
+      "exposure": 134217728,
+      "full_all": 0.10040960626287775,
+      "group": "q10-l",
+      "id": "q10-l-qry-s22",
+      "identity": {
+        "config_sha256": "e7aaa62cf1d50af2654181f3b85068bae66f0ffb3d15b49cf7023f34475753e9",
+        "data_lock_sha256": "40b7c0ebb9650d11aa0c0080532c884e2ca3846db578155f3df7068b82191d2f",
+        "device": "npu:0",
+        "dtype": "float32",
+        "installation": {
+          "foundation_commit": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+          "foundation_lock_sha256": "ba5464d7e23fe6b8c7453a52bfc7b961f040c92d0b80786c18132e40d90308b7",
+          "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+          "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+          "tidegraph": "0.3.0",
+          "tidegraph_source_sha256": "cfe2168a2c87565a568fb8944429b6b38401f92cf24972fba59c47b7592a7847",
+          "torch": "2.12.0+cpu",
+          "torch_npu": "2.12.0.post3",
+          "transformers": null
+        },
+        "mode": "train",
+        "source_commit": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
+        "source_sha256": "bb5a375a0236250197612aec5b27d19140993a68f14c18423db2c37bc7450a5d",
+        "threads": 2
+      },
+      "inference": "completed",
+      "lens": {
+        "confirmation": {
+          "destination_name": "tl-v13-confirm-q10-l-qry-s22-projection-1f9f7f1cbc4c",
+          "destination_run_id": "35c966af4a704737af288159e6ccad18",
+          "readback_matches": true,
+          "source_run_id": "tl-v13-confirm-q10-l-qry-s22",
+          "status": "verified"
+        },
+        "diagnostic": {
+          "destination_name": "tl-v13-diag-q10-l-qry-s22-projection-248e40b5d2ed",
+          "destination_run_id": "52cb8f69a1d84f1587381c5c97fa62e7",
+          "readback_matches": true,
+          "source_run_id": "tl-v13-diag-q10-l-qry-s22",
+          "status": "verified"
+        },
+        "pilot": {
+          "destination_name": "tl-v13-pilot-q10-l-qry-s22-projection-c152ea6425ae",
+          "destination_run_id": "632384da87b4432383b5c219aed54163",
+          "readback_matches": true,
+          "source_run_id": "tl-v13-pilot-q10-l-qry-s22",
+          "status": "verified"
+        },
+        "train": {
+          "destination_name": "tl-v13-main-q10-l-qry-s22-projection-5a4292fc74b9",
+          "destination_run_id": "6ff721704248496ea00236becf754a93",
+          "readback_matches": true,
+          "source_run_id": "tl-v13-main-q10-l-qry-s22",
+          "status": "verified"
+        }
+      },
+      "main_training_seconds": 20895.115377184004,
+      "mem": "qry",
+      "preserved_source_scope": "new frozen source",
+      "receipt_all": 0.2746024397965316,
+      "reused": false,
+      "seed": 22,
+      "timing_scope": "new main segment8Mi-to128Mi update time; excludes pilot/checks/evaluation/I/O; shared cards",
+      "total_parameters": 75541048,
+      "validation": {
+        "nll": 3.3404019384179264,
+        "record": "runs/v13-main-q10-l-qry-s22/train/validation-final.json",
+        "sha256": "90883f3faaf0c62cdd1442be8826a807fb7776236040b648eca819e0cb42d5c2"
+      },
+      "work": {
+        "work/active_parameter_uses": 2724887772928.0,
+        "work/body_candidates": 20470843.0,
+        "work/body_full": 7485255.0,
+        "work/body_node_slots": 74547200,
+        "work/boundary_candidates": 0.0,
+        "work/boundary_full": 0.0,
+        "work/candidates": 20470843.0,
+        "work/dense_causal_attention_pairs": 28737945600.0,
+        "work/dense_parameter_uses": 20112048619520,
+        "work/full": 7485255.0,
+        "work/full_parameter_uses": 1716937850880.0,
+        "work/logical_full_attention_pairs": 750732875.0,
+        "work/logical_read_attention_pairs": 4208758788.0,
+        "work/max_full_batch": 57344,
+        "work/message_edges_including_input": 24928454.0,
+        "work/node_slots": 74547200,
+        "work/physical_attention_pair_upper_bound": 57252249600,
+        "work/physical_full_rows": 74547200,
+        "work/physical_light_rows": 0.0,
+        "work/physical_sum_value_rows": 0,
+        "work/prediction_positions": 266240,
+        "work/read_events": 20470843.0,
+        "work/receive_parameter_uses": 757932962816.0,
+        "work/router_multi_unsaturated_rows": 1563675.0,
+        "work/shared_parameter_uses": 250016959232.0,
+        "work/state_updates": 20470843.0,
+        "work/sum_read_candidate_rows": 0,
+        "work/unsaturated": 5602717.0
+      }
+    },
+    {
+      "active_parameters": 3755495.6055288464,
+      "active_parts": {
+        "full": 1610025.6307692307,
+        "receive": 1755240.6903846154,
+        "shared": 390229.284375
+      },
+      "checkpoint": "runs/v12-repair-base-q10-s11/train/latest.pt",
+      "checkpoint_sha256": "9685296cee10cc33cfc3fea9d2447836c57a6ffbaadaf54ae24abd5efe2ba9d5",
+      "config": "configs/studies/language/hb-v12/configs/base-q10-s11.json",
+      "confirmation": {
+        "nll": 3.9508297341599246,
+        "record": "runs/v13-reuse-q10-s-qry-s11/confirmation.json",
+        "sha256": "46b087afa4c01df9e42ac23be057957a9123571bc3e85835a079a9f6f6a2a554"
+      },
+      "diagnostic": {
+        "state": "not_repeated_for_reused_parent"
+      },
+      "exposure": 134217728,
+      "full_all": 0.10027363871480083,
+      "group": "q10-s",
+      "id": "q10-s-qry-s11",
+      "identity": {
+        "config_sha256": "2223c54b216c1472b94595c61d4f401ff8221374402fd293e37613c3d342f679",
+        "data_lock_sha256": "40b7c0ebb9650d11aa0c0080532c884e2ca3846db578155f3df7068b82191d2f",
+        "device": "npu:0",
+        "dtype": "float32",
+        "installation": {
+          "foundation_commit": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+          "foundation_lock_sha256": "ba5464d7e23fe6b8c7453a52bfc7b961f040c92d0b80786c18132e40d90308b7",
+          "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+          "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+          "tidegraph": "0.3.0",
+          "tidegraph_source_sha256": "cfe2168a2c87565a568fb8944429b6b38401f92cf24972fba59c47b7592a7847",
+          "torch": "2.12.0+cpu",
+          "torch_npu": "2.12.0.post3",
+          "transformers": null
+        },
+        "mode": "train",
+        "source_commit": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+        "source_sha256": "f2d6a00e81f525fc341fa5f9cce227432b69600afda78cd511095f88e50a0740",
+        "threads": 2
+      },
+      "inference": "completed",
+      "lens": {
+        "confirmation": {
+          "destination_name": "tl-v13-reuse-q10-s-qry-s11-projection-16eba9d1e413",
+          "destination_run_id": "632e7792843044279604dc8548195974",
+          "readback_matches": true,
+          "source_run_id": "tl-v13-reuse-q10-s-qry-s11",
+          "status": "verified"
+        },
+        "train": {
+          "destination_name": "tl-v12-repair-main-base-q10-s11-projection-4c349fb7562d",
+          "destination_run_id": "917b4117ca82403c9fc8c70879040b50",
+          "readback_matches": true,
+          "source_run_id": "tl-v12-repair-main-base-q10-s11",
+          "status": "verified"
+        }
+      },
+      "main_training_seconds": null,
+      "mem": "qry",
+      "preserved_source_scope": "same original qry parameter/function/recipe; retain historical numerical source/repair provenance; fresh evaluator source recorded, not exact trajectory equivalence",
+      "receipt_all": 0.3037021779490041,
+      "reused": true,
+      "seed": 11,
+      "timing_scope": "new main segment8Mi-to128Mi update time; excludes pilot/checks/evaluation/I/O; shared cards",
+      "total_parameters": 22235704,
+      "validation": {
+        "nll": 3.7936393067939207,
+        "record": "runs/v12-repair-base-q10-s11/train/validation-final.json",
+        "sha256": "e688428c54c4027ec919458dd141c4fba312420b26fac97595b7bebe2523f382"
+      },
+      "work": {
+        "work/active_parameter_uses": 999863150016.0,
+        "work/body_candidates": 22640147.0,
+        "work/body_full": 7475119.0,
+        "work/body_node_slots": 74547200,
+        "work/boundary_candidates": 0.0,
+        "work/boundary_full": 0.0,
+        "work/candidates": 22640147.0,
+        "work/dense_causal_attention_pairs": 28737945600.0,
+        "work/dense_parameter_uses": 5920033832960,
+        "work/full": 7475119.0,
+        "work/full_parameter_uses": 428653223936.0,
+        "work/logical_full_attention_pairs": 771955202.0,
+        "work/logical_read_attention_pairs": 4731295192.0,
+        "work/max_full_batch": 114688,
+        "work/message_edges_including_input": 25380732.0,
+        "work/node_slots": 74547200,
+        "work/physical_attention_pair_upper_bound": 57252249600,
+        "work/physical_full_rows": 74547200,
+        "work/physical_light_rows": 0.0,
+        "work/physical_sum_value_rows": 0,
+        "work/prediction_positions": 266240,
+        "work/read_events": 22640147.0,
+        "work/receive_parameter_uses": 467315281408.0,
+        "work/router_multi_unsaturated_rows": 1279138.0,
+        "work/shared_parameter_uses": 103894644672.0,
+        "work/state_updates": 22640147.0,
+        "work/sum_read_candidate_rows": 0,
+        "work/unsaturated": 5422495.0
+      }
+    },
+    {
+      "active_parameters": 3750955.3661057693,
+      "active_parts": {
+        "full": 1625377.1692307692,
+        "receive": 1735339.4365384616,
+        "shared": 390238.7603365385
+      },
+      "checkpoint": "runs/v12-all-base-q10-s22/train/latest.pt",
+      "checkpoint_sha256": "cee2b95d03e40072dccaae78aa7a68ed69e970f9660cf8772509e3238c57e4ef",
+      "config": "configs/studies/language/hb-v12/configs/base-q10-s22.json",
+      "confirmation": {
+        "nll": 3.9579283345156,
+        "record": "runs/v13-reuse-q10-s-qry-s22/confirmation.json",
+        "sha256": "a2aa4d78ad78971cdc009b7d7d5708b292b44dd00cb34c8ce8566243502b6082"
+      },
+      "diagnostic": {
+        "state": "not_repeated_for_reused_parent"
+      },
+      "exposure": 134217728,
+      "full_all": 0.10122974437671703,
+      "group": "q10-s",
+      "id": "q10-s-qry-s22",
+      "identity": {
+        "config_sha256": "e81dad7b3c060cae1ce1892e60726576a2da316f8b515973e92eb4d72115624e",
+        "data_lock_sha256": "40b7c0ebb9650d11aa0c0080532c884e2ca3846db578155f3df7068b82191d2f",
+        "device": "npu:0",
+        "dtype": "float32",
+        "installation": {
+          "foundation_commit": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+          "foundation_lock_sha256": "ba5464d7e23fe6b8c7453a52bfc7b961f040c92d0b80786c18132e40d90308b7",
+          "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+          "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+          "tidegraph": "0.3.0",
+          "tidegraph_source_sha256": "cfe2168a2c87565a568fb8944429b6b38401f92cf24972fba59c47b7592a7847",
+          "torch": "2.12.0+cpu",
+          "torch_npu": "2.12.0.post3",
+          "transformers": null
+        },
+        "mode": "train",
+        "source_commit": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+        "source_sha256": "f2d6a00e81f525fc341fa5f9cce227432b69600afda78cd511095f88e50a0740",
+        "threads": 2
+      },
+      "inference": "completed",
+      "lens": {
+        "confirmation": {
+          "destination_name": "tl-v13-reuse-q10-s-qry-s22-projection-91583aed173a",
+          "destination_run_id": "546284533dd34f6e9fe560c33c21606b",
+          "readback_matches": true,
+          "source_run_id": "tl-v13-reuse-q10-s-qry-s22",
+          "status": "verified"
+        },
+        "train": {
+          "destination_name": "tl-v12-all-main-base-q10-s22-projection-fef0ea01b113",
+          "destination_run_id": "e47c3f3648fc48ae9d051fe5c6cf7ded",
+          "readback_matches": true,
+          "source_run_id": "tl-v12-all-main-base-q10-s22",
+          "status": "verified"
+        }
+      },
+      "main_training_seconds": null,
+      "mem": "qry",
+      "preserved_source_scope": "same original qry parameter/function/recipe; retain historical numerical source/repair provenance; fresh evaluator source recorded, not exact trajectory equivalence",
+      "receipt_all": 0.30025874881953984,
+      "reused": true,
+      "seed": 22,
+      "timing_scope": "new main segment8Mi-to128Mi update time; excludes pilot/checks/evaluation/I/O; shared cards",
+      "total_parameters": 22235704,
+      "validation": {
+        "nll": 3.801572903408669,
+        "record": "runs/v12-all-base-q10-s22/train/validation-final.json",
+        "sha256": "302bd72f227a24fa704f277da6f14d33a375d5f8c30f4dbda282e8a09c64761f"
+      },
+      "work": {
+        "work/active_parameter_uses": 998654356672.0,
+        "work/body_candidates": 22383449.0,
+        "work/body_full": 7546394.0,
+        "work/body_node_slots": 74547200,
+        "work/boundary_candidates": 0.0,
+        "work/boundary_full": 0.0,
+        "work/candidates": 22383449.0,
+        "work/dense_causal_attention_pairs": 28737945600.0,
+        "work/dense_parameter_uses": 5920033832960,
+        "work/full": 7546394.0,
+        "work/full_parameter_uses": 432740417536.0,
+        "work/logical_full_attention_pairs": 789328672.0,
+        "work/logical_read_attention_pairs": 4611104744.0,
+        "work/max_full_batch": 114688,
+        "work/message_edges_including_input": 25538412.0,
+        "work/node_slots": 74547200,
+        "work/physical_attention_pair_upper_bound": 57252249600,
+        "work/physical_full_rows": 74547200,
+        "work/physical_light_rows": 0.0,
+        "work/physical_sum_value_rows": 0,
+        "work/prediction_positions": 266240,
+        "work/read_events": 22383449.0,
+        "work/receive_parameter_uses": 462016771584.0,
+        "work/router_multi_unsaturated_rows": 1167198.0,
+        "work/shared_parameter_uses": 103897167552.0,
+        "work/state_updates": 22383449.0,
+        "work/sum_read_candidate_rows": 0,
+        "work/unsaturated": 5310869.0
+      }
+    },
+    {
+      "active_parameters": 3663536.09375,
+      "active_parts": {
+        "full": 1154947.2307692308,
+        "receive": 2118665.280769231,
+        "shared": 389923.58221153845
+      },
+      "checkpoint": "runs/v12-main-base-q3-s11/train/latest.pt",
+      "checkpoint_sha256": "4c11590f53d9e41e91d46b67aa0a2e1f65d1912f97f15e4abd46aa60581271e8",
+      "config": "configs/studies/language/hb-v12/configs/base-q3-s11.json",
+      "confirmation": {
+        "nll": 4.1337029224669095,
+        "record": "runs/v13-reuse-q3-s-qry-s11/confirmation.json",
+        "sha256": "8ac8b9e28de9be90cd039f1b4179f0bc9ed5169be319245ec3b52f824e161401"
+      },
+      "diagnostic": {
+        "state": "not_repeated_for_reused_parent"
+      },
+      "exposure": 134217728,
+      "full_all": 0.03146981459397536,
+      "group": "q3-s",
+      "id": "q3-s-qry-s11",
+      "identity": {
+        "config_sha256": "ef83914d389549f5aac07a1e65712015c46e703694cf7287c7c456a08f158ac8",
+        "data_lock_sha256": "40b7c0ebb9650d11aa0c0080532c884e2ca3846db578155f3df7068b82191d2f",
+        "device": "npu:0",
+        "dtype": "float32",
+        "installation": {
+          "foundation_commit": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+          "foundation_lock_sha256": "ba5464d7e23fe6b8c7453a52bfc7b961f040c92d0b80786c18132e40d90308b7",
+          "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+          "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+          "tidegraph": "0.3.0",
+          "tidegraph_source_sha256": "cfe2168a2c87565a568fb8944429b6b38401f92cf24972fba59c47b7592a7847",
+          "torch": "2.12.0+cpu",
+          "torch_npu": "2.12.0.post3",
+          "transformers": null
+        },
+        "mode": "train",
+        "source_commit": "5147701447dd15a092cc4b052f828b037ed98df4",
+        "source_sha256": "547c262230864633c48921e64f5ffdeea5e5af5979eff16aa8aab061b29872b8",
+        "threads": 2
+      },
+      "inference": "completed",
+      "lens": {
+        "confirmation": {
+          "destination_name": "tl-v13-reuse-q3-s-qry-s11-projection-d5e023d24f55",
+          "destination_run_id": "4e9594515b914e72bfb4fe09b6ea7874",
+          "readback_matches": true,
+          "source_run_id": "tl-v13-reuse-q3-s-qry-s11",
+          "status": "verified"
+        },
+        "train": {
+          "destination_name": "tl-v12-main-base-q3-s11-projection-9507f01f626a",
+          "destination_run_id": "b1be539720514f9eb5f3d0711ab7f795",
+          "readback_matches": true,
+          "source_run_id": "tl-v12-main-base-q3-s11",
+          "status": "verified"
+        }
+      },
+      "main_training_seconds": null,
+      "mem": "qry",
+      "preserved_source_scope": "same original qry parameter/function/recipe; retain historical numerical source/repair provenance; fresh evaluator source recorded, not exact trajectory equivalence",
+      "receipt_all": 0.16038053072415864,
+      "reused": true,
+      "seed": 11,
+      "timing_scope": "new main segment8Mi-to128Mi update time; excludes pilot/checks/evaluation/I/O; shared cards",
+      "total_parameters": 50324128,
+      "validation": {
+        "nll": 3.988891305460129,
+        "record": "runs/v12-main-base-q3-s11/train/validation-final.json",
+        "sha256": "038ba642d0b02753f8b3005f89ec9c3f343155c05cab79f2c57238b69e5c9152"
+      },
+      "work": {
+        "work/active_parameter_uses": 975379849600.0,
+        "work/body_candidates": 27327816.0,
+        "work/body_full": 5362255.0,
+        "work/body_node_slots": 170393600,
+        "work/boundary_candidates": 0.0,
+        "work/boundary_full": 0.0,
+        "work/candidates": 27327816.0,
+        "work/dense_causal_attention_pairs": 65686732800.0,
+        "work/dense_parameter_uses": 13398295838720,
+        "work/full": 5362255.0,
+        "work/full_parameter_uses": 307493150720.0,
+        "work/logical_full_attention_pairs": 555424312.0,
+        "work/logical_read_attention_pairs": 6415180424.0,
+        "work/max_full_batch": 262144,
+        "work/message_edges_including_input": 29878488.0,
+        "work/node_slots": 170393600,
+        "work/physical_attention_pair_upper_bound": 130862284800,
+        "work/physical_full_rows": 170393600,
+        "work/physical_light_rows": 0.0,
+        "work/physical_sum_value_rows": 0,
+        "work/prediction_positions": 266240,
+        "work/read_events": 27327816.0,
+        "work/receive_parameter_uses": 564073444352.0,
+        "work/router_multi_unsaturated_rows": 64962.0,
+        "work/shared_parameter_uses": 103813254528.0,
+        "work/state_updates": 27327816.0,
+        "work/sum_read_candidate_rows": 0,
+        "work/unsaturated": 2729820.0
+      }
+    },
+    {
+      "active_parameters": 3740883.6115384614,
+      "active_parts": {
+        "full": 1161278.0307692308,
+        "receive": 2189685.519230769,
+        "shared": 389920.06153846154
+      },
+      "checkpoint": "runs/v12-repair-base-q3-s22/train/latest.pt",
+      "checkpoint_sha256": "9b33db32dd39f65b657f43ab28ae64df74812fee3472ff9ec634199f4d2d559c",
+      "config": "configs/studies/language/hb-v12/configs/base-q3-s22.json",
+      "confirmation": {
+        "nll": 4.157562333974056,
+        "record": "runs/v13-reuse-q3-s-qry-s22/confirmation.json",
+        "sha256": "4ea7009ee39165916885b80817c3465994323a3e7abf301cb6fcc392d8b2b5cd"
+      },
+      "diagnostic": {
+        "state": "not_repeated_for_reused_parent"
+      },
+      "exposure": 134217728,
+      "full_all": 0.03164231520432692,
+      "group": "q3-s",
+      "id": "q3-s-qry-s22",
+      "identity": {
+        "config_sha256": "383baf05b02b8714a8802c592ba90ca48dfd03b34190d9fd0ac04554ba15f6fd",
+        "data_lock_sha256": "40b7c0ebb9650d11aa0c0080532c884e2ca3846db578155f3df7068b82191d2f",
+        "device": "npu:0",
+        "dtype": "float32",
+        "installation": {
+          "foundation_commit": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+          "foundation_lock_sha256": "ba5464d7e23fe6b8c7453a52bfc7b961f040c92d0b80786c18132e40d90308b7",
+          "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+          "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+          "tidegraph": "0.3.0",
+          "tidegraph_source_sha256": "cfe2168a2c87565a568fb8944429b6b38401f92cf24972fba59c47b7592a7847",
+          "torch": "2.12.0+cpu",
+          "torch_npu": "2.12.0.post3",
+          "transformers": null
+        },
+        "mode": "train",
+        "source_commit": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+        "source_sha256": "f2d6a00e81f525fc341fa5f9cce227432b69600afda78cd511095f88e50a0740",
+        "threads": 2
+      },
+      "inference": "completed",
+      "lens": {
+        "confirmation": {
+          "destination_name": "tl-v13-reuse-q3-s-qry-s22-projection-2cf54b45a615",
+          "destination_run_id": "0994b5b895d545d4ad4543b76a34f241",
+          "readback_matches": true,
+          "source_run_id": "tl-v13-reuse-q3-s-qry-s22",
+          "status": "verified"
+        },
+        "train": {
+          "destination_name": "tl-v12-repair-main-base-q3-s22-projection-ed9ea1a15fee",
+          "destination_run_id": "2fc54c568ab34497b87cbab769089827",
+          "readback_matches": true,
+          "source_run_id": "tl-v12-repair-main-base-q3-s22",
+          "status": "verified"
+        }
+      },
+      "main_training_seconds": null,
+      "mem": "qry",
+      "preserved_source_scope": "same original qry parameter/function/recipe; retain historical numerical source/repair provenance; fresh evaluator source recorded, not exact trajectory equivalence",
+      "receipt_all": 0.16575667748084436,
+      "reused": true,
+      "seed": 22,
+      "timing_scope": "new main segment8Mi-to128Mi update time; excludes pilot/checks/evaluation/I/O; shared cards",
+      "total_parameters": 50324128,
+      "validation": {
+        "nll": 4.01341800292721,
+        "record": "runs/v12-repair-base-q3-s22/train/validation-final.json",
+        "sha256": "37f8fbda9ae83d62b5fd622e3edb0fc1b331634b2334db4993bcd237525d8009"
+      },
+      "work": {
+        "work/active_parameter_uses": 995972852736.0,
+        "work/body_candidates": 28243877.0,
+        "work/body_full": 5391648.0,
+        "work/body_node_slots": 170393600,
+        "work/boundary_candidates": 0.0,
+        "work/boundary_full": 0.0,
+        "work/candidates": 28243877.0,
+        "work/dense_causal_attention_pairs": 65686732800.0,
+        "work/dense_parameter_uses": 13398295838720,
+        "work/full": 5391648.0,
+        "work/full_parameter_uses": 309178662912.0,
+        "work/logical_full_attention_pairs": 544944916.0,
+        "work/logical_read_attention_pairs": 6576237232.0,
+        "work/max_full_batch": 262144,
+        "work/message_edges_including_input": 29819904.0,
+        "work/node_slots": 170393600,
+        "work/physical_attention_pair_upper_bound": 130862284800,
+        "work/physical_full_rows": 170393600,
+        "work/physical_light_rows": 0.0,
+        "work/physical_sum_value_rows": 0,
+        "work/prediction_positions": 266240,
+        "work/read_events": 28243877.0,
+        "work/receive_parameter_uses": 582981872640.0,
+        "work/router_multi_unsaturated_rows": 99287.0,
+        "work/shared_parameter_uses": 103812317184.0,
+        "work/state_updates": 28243877.0,
+        "work/sum_read_candidate_rows": 0,
+        "work/unsaturated": 2784203.0
+      }
+    },
+    {
+      "active_parameters": 9288958.69158654,
+      "active_parts": {
+        "full": 4614326.769230769,
+        "receive": 3735847.6528846156,
+        "shared": 938784.2694711538
+      },
+      "checkpoint": "runs/v12-four-base128-q3-s11/train/latest.pt",
+      "checkpoint_sha256": "267dbb92a96bb58d5e702ad19ed150e9093abbc0f563b899afcfe3345851d5da",
+      "config": "configs/studies/language/hb-v12/configs/base128-q3-s11.json",
+      "confirmation": {
+        "nll": 3.6607526867155684,
+        "record": "runs/v13-reuse-q3-l-qry-s11/confirmation.json",
+        "sha256": "0529b94f848c7c670614a8147249badc9b6abd9eb2fd171926eeaaa9b972aa1e"
+      },
+      "diagnostic": {
+        "state": "not_repeated_for_reused_parent"
+      },
+      "exposure": 134217728,
+      "full_all": 0.03143260662372296,
+      "group": "q3-l",
+      "id": "q3-l-qry-s11",
+      "identity": {
+        "config_sha256": "798b9a22488d2369f22066de8a283107f4e51938f788f416224f130a31c40d3a",
+        "data_lock_sha256": "40b7c0ebb9650d11aa0c0080532c884e2ca3846db578155f3df7068b82191d2f",
+        "device": "npu:0",
+        "dtype": "float32",
+        "installation": {
+          "foundation_commit": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+          "foundation_lock_sha256": "ba5464d7e23fe6b8c7453a52bfc7b961f040c92d0b80786c18132e40d90308b7",
+          "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+          "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+          "tidegraph": "0.3.0",
+          "tidegraph_source_sha256": "cfe2168a2c87565a568fb8944429b6b38401f92cf24972fba59c47b7592a7847",
+          "torch": "2.12.0+cpu",
+          "torch_npu": "2.12.0.post3",
+          "transformers": null
+        },
+        "mode": "train",
+        "source_commit": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+        "source_sha256": "f2d6a00e81f525fc341fa5f9cce227432b69600afda78cd511095f88e50a0740",
+        "threads": 2
+      },
+      "inference": "completed",
+      "lens": {
+        "confirmation": {
+          "destination_name": "tl-v13-reuse-q3-l-qry-s11-projection-dcec07de930c",
+          "destination_run_id": "b96fc4f08d8d4f20a94f8e752a60158a",
+          "readback_matches": true,
+          "source_run_id": "tl-v13-reuse-q3-l-qry-s11",
+          "status": "verified"
+        },
+        "train": {
+          "destination_name": "tl-v12-four-main-base128-q3-s11-projection-fe050055473b",
+          "destination_run_id": "e21acfdbabc648b39ee0bf61a9432c88",
+          "readback_matches": true,
+          "source_run_id": "tl-v12-four-main-base128-q3-s11",
+          "status": "verified"
+        }
+      },
+      "main_training_seconds": null,
+      "mem": "qry",
+      "preserved_source_scope": "same original qry parameter/function/recipe; retain historical numerical source/repair provenance; fresh evaluator source recorded, not exact trajectory equivalence",
+      "receipt_all": 0.15765731224646934,
+      "reused": true,
+      "seed": 11,
+      "timing_scope": "new main segment8Mi-to128Mi update time; excludes pilot/checks/evaluation/I/O; shared cards",
+      "total_parameters": 171459232,
+      "validation": {
+        "nll": 3.5068831429816782,
+        "record": "runs/v12-four-base128-q3-s11/train/validation-final.json",
+        "sha256": "ee287f8f6ab6184410b984318ee7ec2ab04ed1ea84622607af4b9e886f2aa395"
+      },
+      "work": {
+        "work/active_parameter_uses": 2473092362048.0,
+        "work/body_candidates": 26863797.0,
+        "work/body_full": 5355915.0,
+        "work/body_node_slots": 170393600,
+        "work/boundary_candidates": 0.0,
+        "work/boundary_full": 0.0,
+        "work/candidates": 26863797.0,
+        "work/dense_causal_attention_pairs": 65686732800.0,
+        "work/dense_parameter_uses": 45649305927680,
+        "work/full": 5355915.0,
+        "work/full_parameter_uses": 1228518359040.0,
+        "work/logical_full_attention_pairs": 653930988.0,
+        "work/logical_read_attention_pairs": 6697077654.0,
+        "work/max_full_batch": 65536,
+        "work/message_edges_including_input": 29823364.0,
+        "work/node_slots": 170393600,
+        "work/physical_attention_pair_upper_bound": 130862284800,
+        "work/physical_full_rows": 170393600,
+        "work/physical_light_rows": 0.0,
+        "work/physical_sum_value_rows": 0,
+        "work/prediction_positions": 266240,
+        "work/read_events": 26863797.0,
+        "work/receive_parameter_uses": 994632079104.0,
+        "work/router_multi_unsaturated_rows": 33594.0,
+        "work/shared_parameter_uses": 249941923904.0,
+        "work/state_updates": 26863797.0,
+        "work/sum_read_candidate_rows": 0,
+        "work/unsaturated": 2696600.0
+      }
+    },
+    {
+      "active_parameters": 9066193.739302885,
+      "active_parts": {
+        "full": 4589063.015384615,
+        "receive": 3538346.4634615383,
+        "shared": 938784.2604567307
+      },
+      "checkpoint": "runs/v12-repair-base128-q3-s22/train/latest.pt",
+      "checkpoint_sha256": "95d573f9c5c7b81d6799f29298b96641730ab7a8df994c165d0610b0a62a311f",
+      "config": "configs/studies/language/hb-v12/configs/base128-q3-s22.json",
+      "confirmation": {
+        "nll": 3.8314415856293635,
+        "record": "runs/v13-reuse-q3-l-qry-s22/confirmation.json",
+        "sha256": "4ee8540f4de48ed7bd9c4de29829b0213eb9736efbacceb74a76516b394b0b6c"
+      },
+      "diagnostic": {
+        "state": "not_repeated_for_reused_parent"
+      },
+      "exposure": 134217728,
+      "full_all": 0.03126051095815805,
+      "group": "q3-l",
+      "id": "q3-l-qry-s22",
+      "identity": {
+        "config_sha256": "69913ce19f6492caec247f60f4789b5facf912ac54b8f8908b37e226c8174007",
+        "data_lock_sha256": "40b7c0ebb9650d11aa0c0080532c884e2ca3846db578155f3df7068b82191d2f",
+        "device": "npu:0",
+        "dtype": "float32",
+        "installation": {
+          "foundation_commit": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+          "foundation_lock_sha256": "ba5464d7e23fe6b8c7453a52bfc7b961f040c92d0b80786c18132e40d90308b7",
+          "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+          "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+          "tidegraph": "0.3.0",
+          "tidegraph_source_sha256": "cfe2168a2c87565a568fb8944429b6b38401f92cf24972fba59c47b7592a7847",
+          "torch": "2.12.0+cpu",
+          "torch_npu": "2.12.0.post3",
+          "transformers": null
+        },
+        "mode": "train",
+        "source_commit": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+        "source_sha256": "f2d6a00e81f525fc341fa5f9cce227432b69600afda78cd511095f88e50a0740",
+        "threads": 2
+      },
+      "inference": "completed",
+      "lens": {
+        "confirmation": {
+          "destination_name": "tl-v13-reuse-q3-l-qry-s22-projection-7109443b543b",
+          "destination_run_id": "2d30ca335d864ed29955a7c79a66b637",
+          "readback_matches": true,
+          "source_run_id": "tl-v13-reuse-q3-l-qry-s22",
+          "status": "verified"
+        },
+        "train": {
+          "destination_name": "tl-v12-repair-main-base128-q3-s22-projection-4b91c5a7cb85",
+          "destination_run_id": "48501e5fceae411cad91d4beff88d244",
+          "readback_matches": true,
+          "source_run_id": "tl-v12-repair-main-base128-q3-s22",
+          "status": "verified"
+        }
+      },
+      "main_training_seconds": null,
+      "mem": "qry",
+      "preserved_source_scope": "same original qry parameter/function/recipe; retain historical numerical source/repair provenance; fresh evaluator source recorded, not exact trajectory equivalence",
+      "receipt_all": 0.14932252150315506,
+      "reused": true,
+      "seed": 22,
+      "timing_scope": "new main segment8Mi-to128Mi update time; excludes pilot/checks/evaluation/I/O; shared cards",
+      "total_parameters": 171459232,
+      "validation": {
+        "nll": 3.6647009984590113,
+        "record": "runs/v12-repair-base128-q3-s22/train/validation-final.json",
+        "sha256": "e723ff24f67d88ec559617486c75a3b1789f69c724d22f595c4d0fb1d069973e"
+      },
+      "work": {
+        "work/active_parameter_uses": 2413783421152.0,
+        "work/body_candidates": 25443602.0,
+        "work/body_full": 5326591.0,
+        "work/body_node_slots": 170393600,
+        "work/boundary_candidates": 0.0,
+        "work/boundary_full": 0.0,
+        "work/candidates": 25443602.0,
+        "work/dense_causal_attention_pairs": 65686732800.0,
+        "work/dense_parameter_uses": 45649305927680,
+        "work/full": 5326591.0,
+        "work/full_parameter_uses": 1221792137216.0,
+        "work/logical_full_attention_pairs": 587709726.0,
+        "work/logical_read_attention_pairs": 6050857548.0,
+        "work/max_full_batch": 65536,
+        "work/message_edges_including_input": 29823214.0,
+        "work/node_slots": 170393600,
+        "work/physical_attention_pair_upper_bound": 130862284800,
+        "work/physical_full_rows": 170393600,
+        "work/physical_light_rows": 0.0,
+        "work/physical_sum_value_rows": 0,
+        "work/prediction_positions": 266240,
+        "work/read_events": 25443602.0,
+        "work/receive_parameter_uses": 942049362432.0,
+        "work/router_multi_unsaturated_rows": 3096.0,
+        "work/shared_parameter_uses": 249941921504.0,
+        "work/state_updates": 25443602.0,
+        "work/sum_read_candidate_rows": 0,
+        "work/unsaturated": 2665496.0
+      }
+    },
+    {
+      "active_parameters": 3790460.1338942307,
+      "active_parts": {
+        "full": 1230529.6153846155,
+        "receive": 2170009.357692308,
+        "shared": 389921.1608173077
+      },
+      "checkpoint": "runs/v12-all-readcontent-q3-s11/train/latest.pt",
+      "checkpoint_sha256": "48093c7516367dbcb943e95f799a97331be6d1dc6d2148159147f47c0df682c5",
+      "config": "configs/studies/language/hb-v12/configs/readcontent-q3-s11.json",
+      "confirmation": {
+        "nll": 4.008173054971849,
+        "record": "runs/v13-reuse-content-s-qry-s11/confirmation.json",
+        "sha256": "ee149c93accc4c461600b24070b492eab32472fcb9a4e68770209042b70fdac1"
+      },
+      "diagnostic": {
+        "state": "not_repeated_for_reused_parent"
+      },
+      "exposure": 134217728,
+      "full_all": 0.03129398639385517,
+      "group": "content-s",
+      "id": "content-s-qry-s11",
+      "identity": {
+        "config_sha256": "37acf7c18595ded04fec01c322dcfc2805465b280bd817c836e62671a3ae9e57",
+        "data_lock_sha256": "40b7c0ebb9650d11aa0c0080532c884e2ca3846db578155f3df7068b82191d2f",
+        "device": "npu:0",
+        "dtype": "float32",
+        "installation": {
+          "foundation_commit": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+          "foundation_lock_sha256": "ba5464d7e23fe6b8c7453a52bfc7b961f040c92d0b80786c18132e40d90308b7",
+          "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+          "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+          "tidegraph": "0.3.0",
+          "tidegraph_source_sha256": "cfe2168a2c87565a568fb8944429b6b38401f92cf24972fba59c47b7592a7847",
+          "torch": "2.12.0+cpu",
+          "torch_npu": "2.12.0.post3",
+          "transformers": null
+        },
+        "mode": "train",
+        "source_commit": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+        "source_sha256": "f2d6a00e81f525fc341fa5f9cce227432b69600afda78cd511095f88e50a0740",
+        "threads": 2
+      },
+      "inference": "completed",
+      "lens": {
+        "confirmation": {
+          "destination_name": "tl-v13-reuse-content-s-qry-s11-projection-b70848141a92",
+          "destination_run_id": "5f1c609faf284646bc7c58e7ce0d737a",
+          "readback_matches": true,
+          "source_run_id": "tl-v13-reuse-content-s-qry-s11",
+          "status": "verified"
+        },
+        "train": {
+          "destination_name": "tl-v12-all-main-readcontent-q3-s11-projection-6421b93155f7",
+          "destination_run_id": "c531e83668a9439092a0f338b119a848",
+          "readback_matches": true,
+          "source_run_id": "tl-v12-all-main-readcontent-q3-s11",
+          "status": "verified"
+        }
+      },
+      "main_training_seconds": null,
+      "mem": "qry",
+      "preserved_source_scope": "same original qry parameter/function/recipe; retain historical numerical source/repair provenance; fresh evaluator source recorded, not exact trajectory equivalence",
+      "receipt_all": 0.1642672142615685,
+      "reused": true,
+      "seed": 11,
+      "timing_scope": "new main segment8Mi-to128Mi update time; excludes pilot/checks/evaluation/I/O; shared cards",
+      "total_parameters": 52945568,
+      "validation": {
+        "nll": 3.8773913285695016,
+        "record": "runs/v12-all-readcontent-q3-s11/train/validation-final.json",
+        "sha256": "10a4f2edb5822865b05e05d63920cc4009568649e511787b8d54e47adde61fba"
+      },
+      "work": {
+        "work/active_parameter_uses": 1009172106048.0,
+        "work/body_candidates": 27990082.0,
+        "work/body_full": 5332295.0,
+        "work/body_node_slots": 170393600,
+        "work/boundary_candidates": 0.0,
+        "work/boundary_full": 0.0,
+        "work/candidates": 27990082.0,
+        "work/dense_causal_attention_pairs": 65686732800.0,
+        "work/dense_parameter_uses": 14096228024320,
+        "work/full": 5332295.0,
+        "work/full_parameter_uses": 327616204800.0,
+        "work/logical_full_attention_pairs": 527900893.0,
+        "work/logical_read_attention_pairs": 6371604912.0,
+        "work/max_full_batch": 262144,
+        "work/message_edges_including_input": 29838196.0,
+        "work/node_slots": 170393600,
+        "work/physical_attention_pair_upper_bound": 130862284800,
+        "work/physical_full_rows": 170393600,
+        "work/physical_light_rows": 0.0,
+        "work/physical_sum_value_rows": 0,
+        "work/prediction_positions": 266240,
+        "work/read_events": 27990082.0,
+        "work/receive_parameter_uses": 577743291392.0,
+        "work/router_multi_unsaturated_rows": 8031.0,
+        "work/shared_parameter_uses": 103812609856.0,
+        "work/state_updates": 27990082.0,
+        "work/sum_read_candidate_rows": 0,
+        "work/unsaturated": 2670439.0
+      }
+    },
+    {
+      "active_parameters": 3760327.0709134615,
+      "active_parts": {
+        "full": 1236541.8461538462,
+        "receive": 2133864.7115384615,
+        "shared": 389920.5132211539
+      },
+      "checkpoint": "runs/v12-four-readcontent-q3-s22/train/latest.pt",
+      "checkpoint_sha256": "980ce9cab287a794f3586931d6b7d7e9e01647032bb2fd62e58dfb9f8a73e997",
+      "config": "configs/studies/language/hb-v12/configs/readcontent-q3-s22.json",
+      "confirmation": {
+        "nll": 3.937596967225545,
+        "record": "runs/v13-reuse-content-s-qry-s22/confirmation.json",
+        "sha256": "7dbf78ff75a0b3737fea74b130a62ba170010bed97f97f1a1f319376b8e56870"
+      },
+      "diagnostic": {
+        "state": "not_repeated_for_reused_parent"
+      },
+      "exposure": 134217728,
+      "full_all": 0.03144688532902644,
+      "group": "content-s",
+      "id": "content-s-qry-s22",
+      "identity": {
+        "config_sha256": "60c09b1f7e892202ffef8cf657f3d016a695792b7bd0e5f8ded8b95eac56fb12",
+        "data_lock_sha256": "40b7c0ebb9650d11aa0c0080532c884e2ca3846db578155f3df7068b82191d2f",
+        "device": "npu:0",
+        "dtype": "float32",
+        "installation": {
+          "foundation_commit": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+          "foundation_lock_sha256": "ba5464d7e23fe6b8c7453a52bfc7b961f040c92d0b80786c18132e40d90308b7",
+          "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+          "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+          "tidegraph": "0.3.0",
+          "tidegraph_source_sha256": "cfe2168a2c87565a568fb8944429b6b38401f92cf24972fba59c47b7592a7847",
+          "torch": "2.12.0+cpu",
+          "torch_npu": "2.12.0.post3",
+          "transformers": null
+        },
+        "mode": "train",
+        "source_commit": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+        "source_sha256": "f2d6a00e81f525fc341fa5f9cce227432b69600afda78cd511095f88e50a0740",
+        "threads": 2
+      },
+      "inference": "completed",
+      "lens": {
+        "confirmation": {
+          "destination_name": "tl-v13-reuse-content-s-qry-s22-projection-c31a8ab55908",
+          "destination_run_id": "d775c105461d4373ac9571f1d169300a",
+          "readback_matches": true,
+          "source_run_id": "tl-v13-reuse-content-s-qry-s22",
+          "status": "verified"
+        },
+        "train": {
+          "destination_name": "tl-v12-four-main-readcontent-q3-s22-projection-f20ed771e274",
+          "destination_run_id": "69674494c1c344cf8ade74fe55bdb8a9",
+          "readback_matches": true,
+          "source_run_id": "tl-v12-four-main-readcontent-q3-s22",
+          "status": "verified"
+        }
+      },
+      "main_training_seconds": null,
+      "mem": "qry",
+      "preserved_source_scope": "same original qry parameter/function/recipe; retain historical numerical source/repair provenance; fresh evaluator source recorded, not exact trajectory equivalence",
+      "receipt_all": 0.1615311079758864,
+      "reused": true,
+      "seed": 22,
+      "timing_scope": "new main segment8Mi-to128Mi update time; excludes pilot/checks/evaluation/I/O; shared cards",
+      "total_parameters": 52945568,
+      "validation": {
+        "nll": 3.797084967372939,
+        "record": "runs/v12-four-readcontent-q3-s22/train/validation-final.json",
+        "sha256": "3f9a32324cff6e9d5577d1588b4e7b56e07510450f606c06379c128217ec3a47"
+      },
+      "work": {
+        "work/active_parameter_uses": 1001149479360.0,
+        "work/body_candidates": 27523867.0,
+        "work/body_full": 5358348.0,
+        "work/body_node_slots": 170393600,
+        "work/boundary_candidates": 0.0,
+        "work/boundary_full": 0.0,
+        "work/candidates": 27523867.0,
+        "work/dense_causal_attention_pairs": 65686732800.0,
+        "work/dense_parameter_uses": 14096228024320,
+        "work/full": 5358348.0,
+        "work/full_parameter_uses": 329216901120.0,
+        "work/logical_full_attention_pairs": 577927369.0,
+        "work/logical_read_attention_pairs": 6496883712.0,
+        "work/max_full_batch": 262144,
+        "work/message_edges_including_input": 29827420.0,
+        "work/node_slots": 170393600,
+        "work/physical_attention_pair_upper_bound": 130862284800,
+        "work/physical_full_rows": 170393600,
+        "work/physical_light_rows": 0.0,
+        "work/physical_sum_value_rows": 0,
+        "work/prediction_positions": 266240,
+        "work/read_events": 27523867.0,
+        "work/receive_parameter_uses": 568120140800.0,
+        "work/router_multi_unsaturated_rows": 46727.0,
+        "work/shared_parameter_uses": 103812437440.0,
+        "work/state_updates": 27523867.0,
+        "work/sum_read_candidate_rows": 0,
+        "work/unsaturated": 2709466.0
+      }
+    }
+  ],
+  "limits": [
+    "This audit does not create scientific support automatically; the associated narrative/map is reviewed separately.",
+    "Logical active parameters include Full/receipt/shared per model position including padding; not FLOPs or measured physical sparsity.",
+    "Different model functions and realized routing; sum has fewer parameters. Not an equal-parameter or equivalent-implementation experiment.",
+    "Historical qry parents retain source/repair ancestry. Same evaluator does not make training trajectories identical.",
+    "Only v13 confirmation is used for paired NLL; do not subtract v12 or earlier absolute confirmation values.",
+    "Original finite numerical failures and3 calibration OOMs remain. Recovery and task quality do not waive strict thresholds.",
+    "ETA uses last8 logged updates, excludes later confirmation/diagnosis and is subject to shared-device contention.",
+    "No new training or evaluation was launched; test remains sealed."
+  ],
+  "live": {
+    "budget": {
+      "account_checkpoint_reserve_gib": 32,
+      "account_hard_limit_gib": 700,
+      "aggregate_compute_cap": null,
+      "authorized": "2026-11-17 user approval of hb-sum-qry-proposal",
+      "deadline": "2026-11-19T17:44:00+08:00",
+      "deadline_epoch": 1795081440.0,
+      "disk_revision_reason": "16 resolved chains include4 conditional qry controls; simultaneous trained recovery retains pilot optimizer+8Mi weights+3 recovery states (52bytes/parameter), then temporary states retired after exact pass",
+      "filesystem_low_water_gib": 32,
+      "max_conditional_qry_chains": 4,
+      "max_new_concurrent_npus": 16,
+      "max_parameters": 200000000,
+      "max_sum_chains": 12,
+      "no_automatic_retry": true,
+      "original_feasibility_threshold": 2e-05,
+      "planned_new_disk_gib": 80,
+      "schema": "tide-hb-mem-v13-budget-v1",
+      "start": "2026-11-17T17:44:00+08:00",
+      "target_tokens": 134217728
+    },
+    "counts": {
+      "completed": 9,
+      "failed": 6,
+      "interrupted": 1
+    },
+    "new_training": [
+      {
+        "config": "configs/studies/language/hb-mem-v13/configs/q10-s-sum-s11.json",
+        "confirmation": "completed",
+        "device": 12,
+        "error": null,
+        "execution": "completed",
+        "global_batch": 64,
+        "group": "q10-s",
+        "id": "q10-s-sum-s11",
+        "job": "v13-main-q10-s-sum-s11",
+        "lens": "verified",
+        "lens_name": "tl-v13-diag-q10-s-sum-s11-projection-29d7cd393e97",
+        "mem": "sum",
+        "parameters": 20515384,
+        "physical_batch": 16,
+        "recovery": "passed",
+        "seed": 11,
+        "source": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
+        "stage": "diagnostic",
+        "stage_state": "completed",
+        "terminated": true,
+        "tokens": null
+      },
+      {
+        "config": "configs/studies/language/hb-mem-v13/configs/q10-s-sum-s22.json",
+        "confirmation": "completed",
+        "device": 15,
+        "error": null,
+        "execution": "completed",
+        "global_batch": 64,
+        "group": "q10-s",
+        "id": "q10-s-sum-s22",
+        "job": "v13-main-q10-s-sum-s22",
+        "lens": "verified",
+        "lens_name": "tl-v13-diag-q10-s-sum-s22-projection-6d8faf1674e0",
+        "mem": "sum",
+        "parameters": 20515384,
+        "physical_batch": 16,
+        "recovery": "passed",
+        "seed": 22,
+        "source": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
+        "stage": "diagnostic",
+        "stage_state": "completed",
+        "terminated": true,
+        "tokens": null
+      },
+      {
+        "config": "configs/studies/language/hb-mem-v13/configs/q3-s-sum-s11.json",
+        "confirmation": "completed",
+        "device": 6,
+        "error": null,
+        "execution": "completed",
+        "global_batch": 64,
+        "group": "q3-s",
+        "id": "q3-s-sum-s11",
+        "job": "v13-main-q3-s-sum-s11",
+        "lens": "verified",
+        "lens_name": "tl-v13-diag-q3-s-sum-s11-projection-08a0525b3654",
+        "mem": "sum",
+        "parameters": 46391968,
+        "physical_batch": 8,
+        "recovery": "passed",
+        "seed": 11,
+        "source": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
+        "stage": "diagnostic",
+        "stage_state": "completed",
+        "terminated": true,
+        "tokens": null
+      },
+      {
+        "config": "configs/studies/language/hb-mem-v13/configs/q3-s-sum-s22.json",
+        "confirmation": null,
+        "device": 14,
+        "error": "RuntimeError('stage failed: train')",
+        "execution": "interrupted",
+        "global_batch": 64,
+        "group": "q3-s",
+        "id": "q3-s-sum-s22",
+        "job": "v13-main-q3-s-sum-s22",
+        "lens": "recording",
+        "lens_name": "tl-v13-main-q3-s-sum-s22-projection-e82661bfdd48",
+        "mem": "sum",
+        "parameters": 46391968,
+        "physical_batch": 8,
+        "recovery": "passed",
+        "seed": 22,
+        "source": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
+        "stage": "train",
+        "stage_state": "budget_truncated",
+        "terminated": true,
+        "tokens": 128562308
+      },
+      {
+        "config": "configs/studies/language/hb-mem-v13/configs/q10-l-sum-s11.json",
+        "confirmation": "completed",
+        "device": 2,
+        "error": null,
+        "execution": "completed",
+        "global_batch": 64,
+        "group": "q10-l",
+        "id": "q10-l-sum-s11",
+        "job": "v13-main-q10-l-sum-s11",
+        "lens": "verified",
+        "lens_name": "tl-v13-diag-q10-l-sum-s11-projection-6c2cb2edb9ac",
+        "mem": "sum",
+        "parameters": 72100408,
+        "physical_batch": 8,
+        "recovery": "passed",
+        "seed": 11,
+        "source": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
+        "stage": "diagnostic",
+        "stage_state": "completed",
+        "terminated": true,
+        "tokens": null
+      },
+      {
+        "config": "configs/studies/language/hb-mem-v13/configs/q10-l-sum-s22.json",
+        "confirmation": "completed",
+        "device": 5,
+        "error": null,
+        "execution": "completed",
+        "global_batch": 64,
+        "group": "q10-l",
+        "id": "q10-l-sum-s22",
+        "job": "v13-main-q10-l-sum-s22",
+        "lens": "verified",
+        "lens_name": "tl-v13-diag-q10-l-sum-s22-projection-f47a2916714a",
+        "mem": "sum",
+        "parameters": 72100408,
+        "physical_batch": 8,
+        "recovery": "passed",
+        "seed": 22,
+        "source": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
+        "stage": "diagnostic",
+        "stage_state": "completed",
+        "terminated": true,
+        "tokens": null
+      },
+      {
+        "config": "configs/studies/language/hb-mem-v13/configs/q3-l-sum-s11.json",
+        "confirmation": null,
+        "device": 10,
+        "error": null,
+        "execution": "failed",
+        "global_batch": 64,
+        "group": "q3-l",
+        "id": "q3-l-sum-s11",
+        "job": "v13-main-q3-l-sum-s11",
+        "lens": "recording",
+        "lens_name": "tl-v13-main-q3-l-sum-s11-projection-fe6bce50087c",
+        "mem": "sum",
+        "parameters": 163594912,
+        "physical_batch": 8,
+        "recovery": "passed",
+        "seed": 11,
+        "source": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
+        "stage": "train",
+        "stage_state": "budget_truncated",
+        "terminated": true,
+        "tokens": 112101192
+      },
+      {
+        "config": "configs/studies/language/hb-mem-v13/configs/q3-l-sum-s22.json",
+        "confirmation": null,
+        "device": 8,
+        "error": null,
+        "execution": "failed",
+        "global_batch": 64,
+        "group": "q3-l",
+        "id": "q3-l-sum-s22",
+        "job": "v13-main-q3-l-sum-s22",
+        "lens": "recording",
+        "lens_name": "tl-v13-main-q3-l-sum-s22-projection-cff6b2e3655b",
+        "mem": "sum",
+        "parameters": 163594912,
+        "physical_batch": 8,
+        "recovery": "passed",
+        "seed": 22,
+        "source": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
+        "stage": "train",
+        "stage_state": "budget_truncated",
+        "terminated": true,
+        "tokens": 79238067
+      },
+      {
+        "config": "configs/studies/language/hb-mem-v13/configs/pool-l-sum-s11.json",
+        "confirmation": null,
+        "device": 9,
+        "error": null,
+        "execution": "failed",
+        "global_batch": 64,
+        "group": "pool-l",
+        "id": "pool-l-sum-s11",
+        "job": "v13-main-pool-l-sum-s11",
+        "lens": "recording",
+        "lens_name": "tl-v13-main-pool-l-sum-s11-projection-e60f39d87482",
+        "mem": "sum",
+        "parameters": 163594912,
+        "physical_batch": 4,
+        "recovery": "passed",
+        "seed": 11,
+        "source": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
+        "stage": "train",
+        "stage_state": "budget_truncated",
+        "terminated": true,
+        "tokens": 93790134
+      },
+      {
+        "config": "configs/studies/language/hb-mem-v13/configs/pool-l-sum-s22.json",
+        "confirmation": null,
+        "device": 11,
+        "error": null,
+        "execution": "failed",
+        "global_batch": 64,
+        "group": "pool-l",
+        "id": "pool-l-sum-s22",
+        "job": "v13-main-pool-l-sum-s22",
+        "lens": "recording",
+        "lens_name": "tl-v13-main-pool-l-sum-s22-projection-adcf93fc0ac5",
+        "mem": "sum",
+        "parameters": 163594912,
+        "physical_batch": 4,
+        "recovery": "passed",
+        "seed": 22,
+        "source": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
+        "stage": "train",
+        "stage_state": "budget_truncated",
+        "terminated": true,
+        "tokens": 93385177
+      },
+      {
+        "config": "configs/studies/language/hb-mem-v13/configs/content-s-sum-s11.json",
+        "confirmation": "completed",
+        "device": 7,
+        "error": null,
+        "execution": "completed",
+        "global_batch": 64,
+        "group": "content-s",
+        "id": "content-s-sum-s11",
+        "job": "v13-main-content-s-sum-s11",
+        "lens": "verified",
+        "lens_name": "tl-v13-diag-content-s-sum-s11-projection-4aef835e2c8f",
+        "mem": "sum",
+        "parameters": 49013408,
+        "physical_batch": 8,
+        "recovery": "passed",
+        "seed": 11,
+        "source": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
+        "stage": "diagnostic",
+        "stage_state": "completed",
+        "terminated": true,
+        "tokens": null
+      },
+      {
+        "config": "configs/studies/language/hb-mem-v13/configs/content-s-sum-s22.json",
+        "confirmation": "completed",
+        "device": 3,
+        "error": null,
+        "execution": "completed",
+        "global_batch": 64,
+        "group": "content-s",
+        "id": "content-s-sum-s22",
+        "job": "v13-main-content-s-sum-s22",
+        "lens": "verified",
+        "lens_name": "tl-v13-diag-content-s-sum-s22-projection-6122fe130217",
+        "mem": "sum",
+        "parameters": 49013408,
+        "physical_batch": 8,
+        "recovery": "passed",
+        "seed": 22,
+        "source": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
+        "stage": "diagnostic",
+        "stage_state": "completed",
+        "terminated": true,
+        "tokens": null
+      },
+      {
+        "config": "configs/studies/language/hb-mem-v13/configs/q10-l-qry-s11.json",
+        "confirmation": "completed",
+        "device": 4,
+        "error": null,
+        "execution": "completed",
+        "global_batch": 64,
+        "group": "q10-l",
+        "id": "q10-l-qry-s11",
+        "job": "v13-main-q10-l-qry-s11",
+        "lens": "verified",
+        "lens_name": "tl-v13-diag-q10-l-qry-s11-projection-e6629f2c4e13",
+        "mem": "qry",
+        "parameters": 75541048,
+        "physical_batch": 8,
+        "recovery": "passed",
+        "seed": 11,
+        "source": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
+        "stage": "diagnostic",
+        "stage_state": "completed",
+        "terminated": true,
+        "tokens": null
+      },
+      {
+        "config": "configs/studies/language/hb-mem-v13/configs/q10-l-qry-s22.json",
+        "confirmation": "completed",
+        "device": 0,
+        "error": null,
+        "execution": "completed",
+        "global_batch": 64,
+        "group": "q10-l",
+        "id": "q10-l-qry-s22",
+        "job": "v13-main-q10-l-qry-s22",
+        "lens": "verified",
+        "lens_name": "tl-v13-diag-q10-l-qry-s22-projection-248e40b5d2ed",
+        "mem": "qry",
+        "parameters": 75541048,
+        "physical_batch": 8,
+        "recovery": "passed",
+        "seed": 22,
+        "source": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
+        "stage": "diagnostic",
+        "stage_state": "completed",
+        "terminated": true,
+        "tokens": null
+      },
+      {
+        "config": "configs/studies/language/hb-mem-v13/configs/pool-l-qry-s11.json",
+        "confirmation": null,
+        "device": 0,
+        "error": null,
+        "execution": "failed",
+        "global_batch": 64,
+        "group": "pool-l",
+        "id": "pool-l-qry-s11",
+        "job": "v13-main-pool-l-qry-s11",
+        "lens": "recording",
+        "lens_name": "tl-v13-main-pool-l-qry-s11-projection-412aaa7166c4",
+        "mem": "qry",
+        "parameters": 171459232,
+        "physical_batch": 8,
+        "recovery": "passed",
+        "seed": 11,
+        "source": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
+        "stage": "train",
+        "stage_state": "budget_truncated",
+        "terminated": true,
+        "tokens": 124606154
+      },
+      {
+        "config": "configs/studies/language/hb-mem-v13/configs/pool-l-qry-s22.json",
+        "confirmation": null,
+        "device": 1,
+        "error": null,
+        "execution": "failed",
+        "global_batch": 64,
+        "group": "pool-l",
+        "id": "pool-l-qry-s22",
+        "job": "v13-main-pool-l-qry-s22",
+        "lens": "recording",
+        "lens_name": "tl-v13-main-pool-l-qry-s22-projection-04833d17549a",
+        "mem": "qry",
+        "parameters": 171459232,
+        "physical_batch": 8,
+        "recovery": "passed",
+        "seed": 22,
+        "source": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
+        "stage": "train",
+        "stage_state": "budget_truncated",
+        "terminated": true,
+        "tokens": 112576034
+      }
+    ],
+    "observed_at": "2026-11-18T02:10:51.332008+00:00",
+    "reused_qry_confirmation": [
+      {
+        "device": 1,
+        "error": null,
+        "execution": "completed",
+        "id": "q10-s-qry-s11",
+        "job": "v13-reuse-q10-s-qry-s11",
+        "nll": 3.9508297341599246,
+        "state": "completed",
+        "terminated": true
+      },
+      {
+        "device": 0,
+        "error": null,
+        "execution": "completed",
+        "id": "q10-s-qry-s22",
+        "job": "v13-reuse-q10-s-qry-s22",
+        "nll": 3.9579283345156,
+        "state": "completed",
+        "terminated": true
+      },
+      {
+        "device": 15,
+        "error": null,
+        "execution": "completed",
+        "id": "q3-s-qry-s11",
+        "job": "v13-reuse-q3-s-qry-s11",
+        "nll": 4.1337029224669095,
+        "state": "completed",
+        "terminated": true
+      },
+      {
+        "device": 0,
+        "error": null,
+        "execution": "completed",
+        "id": "q3-s-qry-s22",
+        "job": "v13-reuse-q3-s-qry-s22",
+        "nll": 4.157562333974056,
+        "state": "completed",
+        "terminated": true
+      },
+      {
+        "device": 1,
+        "error": null,
+        "execution": "completed",
+        "id": "q3-l-qry-s11",
+        "job": "v13-reuse-q3-l-qry-s11",
+        "nll": 3.6607526867155684,
+        "state": "completed",
+        "terminated": true
+      },
+      {
+        "device": 12,
+        "error": null,
+        "execution": "completed",
+        "id": "q3-l-qry-s22",
+        "job": "v13-reuse-q3-l-qry-s22",
+        "nll": 3.8314415856293635,
+        "state": "completed",
+        "terminated": true
+      },
+      {
+        "device": 1,
+        "error": null,
+        "execution": "completed",
+        "id": "content-s-qry-s11",
+        "job": "v13-reuse-content-s-qry-s11",
+        "nll": 4.008173054971849,
+        "state": "completed",
+        "terminated": true
+      },
+      {
+        "device": 1,
+        "error": null,
+        "execution": "completed",
+        "id": "content-s-qry-s22",
+        "job": "v13-reuse-content-s-qry-s22",
+        "nll": 3.937596967225545,
+        "state": "completed",
+        "terminated": true
+      }
+    ],
+    "schema": "tide-hb-mem-v13-review-v1",
+    "scientific_state": "awaiting terminal paired review; execution is not strict numerical or quality acceptance"
+  },
+  "observed_at": "2026-11-18T02:11:04.525493+00:00",
+  "paired_groups": [
+    {
+      "delta_sum_minus_qry": -0.051521578930987744,
+      "group": "content-s",
+      "means": {
+        "qry": {
+          "active_parameters": 3775393.602403846,
+          "full_all": 0.0313704358614408,
+          "mean_nll": 3.972885011098697,
+          "receipt_all": 0.16289916111872746,
+          "seed_nll": {
+            "11": 4.008173054971849,
+            "22": 3.937596967225545
+          },
+          "total_parameters": 52945568
+        },
+        "sum": {
+          "active_parameters": 3120322.2920673075,
+          "full_all": 0.03129206730769231,
+          "mean_nll": 3.921363432167709,
+          "receipt_all": 0.16166568756103517,
+          "seed_nll": {
+            "11": 3.9135171883244766,
+            "22": 3.9292096760109416
+          },
+          "total_parameters": 49013408
+        }
+      }
+    },
+    {
+      "delta_sum_minus_qry": -0.05494391165848356,
+      "group": "q10-l",
+      "means": {
+        "qry": {
+          "active_parameters": 10207934.961538462,
+          "full_all": 0.099956544310182,
+          "mean_nll": 3.5388593707939435,
+          "receipt_all": 0.2748283906035371,
+          "seed_nll": {
+            "11": 3.5659020996681647,
+            "22": 3.5118166419197223
+          },
+          "total_parameters": 75541048
+        },
+        "sum": {
+          "active_parameters": 9440918.65625,
+          "full_all": 0.10118881057906937,
+          "mean_nll": 3.48391545913546,
+          "receipt_all": 0.2891751400455014,
+          "seed_nll": {
+            "11": 3.5278856045915745,
+            "22": 3.4399453136793454
+          },
+          "total_parameters": 72100408
+        }
+      }
+    },
+    {
+      "delta_sum_minus_qry": -0.044881180350785144,
+      "group": "q10-s",
+      "means": {
+        "qry": {
+          "active_parameters": 3753225.4858173076,
+          "full_all": 0.10075169154575893,
+          "mean_nll": 3.9543790343377623,
+          "receipt_all": 0.301980463384272,
+          "seed_nll": {
+            "11": 3.9508297341599246,
+            "22": 3.9579283345156
+          },
+          "total_parameters": 22235704
+        },
+        "sum": {
+          "active_parameters": 3188066.1201923075,
+          "full_all": 0.10018653282752404,
+          "mean_nll": 3.909497853986977,
+          "receipt_all": 0.2929634379292583,
+          "seed_nll": {
+            "11": 3.9221777765487786,
+            "22": 3.8968179314251756
+          },
+          "total_parameters": 20515384
+        }
+      }
+    }
+  ],
+  "pending": [
+    {
+      "device": 14,
+      "error": "RuntimeError('stage failed: train')",
+      "estimated_remaining_train_h": 0.7412269827710222,
+      "group": "q3-s",
+      "id": "q3-s-sum-s22",
+      "lens_status": "recording",
+      "median_last8_update_targets_s": 2112.606675495881,
+      "mem": "sum",
+      "progress_updated_at": "2026-11-18T02:09:20.468487+00:00",
+      "recent_wall_targets_s": 2119.391274892773,
+      "seed": 22,
+      "stage": "train",
+      "state": "interrupted",
+      "tokens": 128562308,
+      "validation_at_32Mi": 4.489904832676984
+    },
+    {
+      "device": 10,
+      "error": null,
+      "estimated_remaining_train_h": 3.1452330570874008,
+      "group": "q3-l",
+      "id": "q3-l-sum-s11",
+      "lens_status": "recording",
+      "median_last8_update_targets_s": 1966.1902279799806,
+      "mem": "sum",
+      "progress_updated_at": "2026-11-18T02:09:25.356318+00:00",
+      "recent_wall_targets_s": 1953.2677263386352,
+      "seed": 11,
+      "stage": "train",
+      "state": "failed",
+      "tokens": 112101192,
+      "validation_at_32Mi": 4.382121543050744
+    },
+    {
+      "device": 8,
+      "error": null,
+      "estimated_remaining_train_h": 13.885573157623693,
+      "group": "q3-l",
+      "id": "q3-l-sum-s22",
+      "lens_status": "recording",
+      "median_last8_update_targets_s": 1131.8960093875341,
+      "mem": "sum",
+      "progress_updated_at": "2026-11-18T02:09:19.171981+00:00",
+      "recent_wall_targets_s": 1099.8557914889234,
+      "seed": 22,
+      "stage": "train",
+      "state": "failed",
+      "tokens": 79238067,
+      "validation_at_32Mi": 4.561626408365555
+    },
+    {
+      "device": 9,
+      "error": null,
+      "estimated_remaining_train_h": 7.735339718961616,
+      "group": "pool-l",
+      "id": "pool-l-sum-s11",
+      "lens_status": "recording",
+      "median_last8_update_targets_s": 1511.620265898479,
+      "mem": "sum",
+      "progress_updated_at": "2026-11-18T02:09:23.367720+00:00",
+      "recent_wall_targets_s": 1451.7639341287663,
+      "seed": 11,
+      "stage": "train",
+      "state": "failed",
+      "tokens": 93790134,
+      "validation_at_32Mi": 3.5716815617633983
+    },
+    {
+      "device": 11,
+      "error": null,
+      "estimated_remaining_train_h": 5.82958130399287,
+      "group": "pool-l",
+      "id": "pool-l-sum-s22",
+      "lens_status": "recording",
+      "median_last8_update_targets_s": 2008.5028397644442,
+      "mem": "sum",
+      "progress_updated_at": "2026-11-18T02:09:25.877915+00:00",
+      "recent_wall_targets_s": 1945.6586479047842,
+      "seed": 22,
+      "stage": "train",
+      "state": "failed",
+      "tokens": 93385177,
+      "validation_at_32Mi": 3.5613452141406015
+    },
+    {
+      "device": 0,
+      "error": null,
+      "estimated_remaining_train_h": 0.7257349328797363,
+      "group": "pool-l",
+      "id": "pool-l-qry-s11",
+      "lens_status": "recording",
+      "median_last8_update_targets_s": 3692.4763096308916,
+      "mem": "qry",
+      "progress_updated_at": "2026-11-18T02:09:20.240583+00:00",
+      "recent_wall_targets_s": 3678.8661337721505,
+      "seed": 11,
+      "stage": "train",
+      "state": "failed",
+      "tokens": 124606154,
+      "validation_at_32Mi": 3.5573744592256844
+    },
+    {
+      "device": 1,
+      "error": null,
+      "estimated_remaining_train_h": 3.329874347966093,
+      "group": "pool-l",
+      "id": "pool-l-qry-s22",
+      "lens_status": "recording",
+      "median_last8_update_targets_s": 1868.127297711958,
+      "mem": "qry",
+      "progress_updated_at": "2026-11-18T02:09:23.224021+00:00",
+      "recent_wall_targets_s": 1805.3479015923158,
+      "seed": 22,
+      "stage": "train",
+      "state": "failed",
+      "tokens": 112576034,
+      "validation_at_32Mi": 3.5381274924147874
+    }
+  ],
+  "recoveries": [
+    {
+      "checks": [
+        {
+          "record": "runs/v13-main-q10-s-sum-s11/recovery.json",
+          "state": "passed"
+        },
+        {
+          "record": "runs/v13-main-q10-s-sum-s11/trained-compare/recovery.json",
+          "state": "passed"
+        }
+      ],
+      "id": "q10-s-sum-s11"
+    },
+    {
+      "checks": [
+        {
+          "record": "runs/v13-main-q10-s-sum-s22/recovery.json",
+          "state": "passed"
+        },
+        {
+          "record": "runs/v13-main-q10-s-sum-s22/trained-compare/recovery.json",
+          "state": "passed"
+        }
+      ],
+      "id": "q10-s-sum-s22"
+    },
+    {
+      "checks": [
+        {
+          "record": "runs/v13-main-q3-s-sum-s11/recovery.json",
+          "state": "passed"
+        },
+        {
+          "record": "runs/v13-main-q3-s-sum-s11/trained-compare/recovery.json",
+          "state": "passed"
+        }
+      ],
+      "id": "q3-s-sum-s11"
+    },
+    {
+      "checks": [
+        {
+          "record": "runs/v13-main-q3-s-sum-s22/recovery.json",
+          "state": "passed"
+        },
+        {
+          "record": "runs/v13-main-q3-s-sum-s22/trained-compare/recovery.json",
+          "state": "passed"
+        }
+      ],
+      "id": "q3-s-sum-s22"
+    },
+    {
+      "checks": [
+        {
+          "record": "runs/v13-main-q10-l-sum-s11/recovery.json",
+          "state": "passed"
+        },
+        {
+          "record": "runs/v13-main-q10-l-sum-s11/trained-compare/recovery.json",
+          "state": "passed"
+        }
+      ],
+      "id": "q10-l-sum-s11"
+    },
+    {
+      "checks": [
+        {
+          "record": "runs/v13-main-q10-l-sum-s22/recovery.json",
+          "state": "passed"
+        },
+        {
+          "record": "runs/v13-main-q10-l-sum-s22/trained-compare/recovery.json",
+          "state": "passed"
+        }
+      ],
+      "id": "q10-l-sum-s22"
+    },
+    {
+      "checks": [
+        {
+          "record": "runs/v13-main-q3-l-sum-s11/recovery.json",
+          "state": "passed"
+        },
+        {
+          "record": "runs/v13-main-q3-l-sum-s11/trained-compare/recovery.json",
+          "state": "passed"
+        }
+      ],
+      "id": "q3-l-sum-s11"
+    },
+    {
+      "checks": [
+        {
+          "record": "runs/v13-main-q3-l-sum-s22/recovery.json",
+          "state": "passed"
+        },
+        {
+          "record": "runs/v13-main-q3-l-sum-s22/trained-compare/recovery.json",
+          "state": "passed"
+        }
+      ],
+      "id": "q3-l-sum-s22"
+    },
+    {
+      "checks": [
+        {
+          "record": "runs/v13-main-pool-l-sum-s11/recovery.json",
+          "state": "passed"
+        },
+        {
+          "record": "runs/v13-main-pool-l-sum-s11/trained-compare/recovery.json",
+          "state": "passed"
+        }
+      ],
+      "id": "pool-l-sum-s11"
+    },
+    {
+      "checks": [
+        {
+          "record": "runs/v13-main-pool-l-sum-s22/recovery.json",
+          "state": "passed"
+        },
+        {
+          "record": "runs/v13-main-pool-l-sum-s22/trained-compare/recovery.json",
+          "state": "passed"
+        }
+      ],
+      "id": "pool-l-sum-s22"
+    },
+    {
+      "checks": [
+        {
+          "record": "runs/v13-main-content-s-sum-s11/recovery.json",
+          "state": "passed"
+        },
+        {
+          "record": "runs/v13-main-content-s-sum-s11/trained-compare/recovery.json",
+          "state": "passed"
+        }
+      ],
+      "id": "content-s-sum-s11"
+    },
+    {
+      "checks": [
+        {
+          "record": "runs/v13-main-content-s-sum-s22/recovery.json",
+          "state": "passed"
+        },
+        {
+          "record": "runs/v13-main-content-s-sum-s22/trained-compare/recovery.json",
+          "state": "passed"
+        }
+      ],
+      "id": "content-s-sum-s22"
+    },
+    {
+      "checks": [
+        {
+          "record": "runs/v13-main-q10-l-qry-s11/recovery.json",
+          "state": "passed"
+        },
+        {
+          "record": "runs/v13-main-q10-l-qry-s11/trained-compare/recovery.json",
+          "state": "passed"
+        }
+      ],
+      "id": "q10-l-qry-s11"
+    },
+    {
+      "checks": [
+        {
+          "record": "runs/v13-main-q10-l-qry-s22/recovery.json",
+          "state": "passed"
+        },
+        {
+          "record": "runs/v13-main-q10-l-qry-s22/trained-compare/recovery.json",
+          "state": "passed"
+        }
+      ],
+      "id": "q10-l-qry-s22"
+    },
+    {
+      "checks": [
+        {
+          "record": "runs/v13-main-pool-l-qry-s11/recovery.json",
+          "state": "passed"
+        },
+        {
+          "record": "runs/v13-main-pool-l-qry-s11/trained-compare/recovery.json",
+          "state": "passed"
+        }
+      ],
+      "id": "pool-l-qry-s11"
+    },
+    {
+      "checks": [
+        {
+          "record": "runs/v13-main-pool-l-qry-s22/recovery.json",
+          "state": "passed"
+        },
+        {
+          "record": "runs/v13-main-pool-l-qry-s22/trained-compare/recovery.json",
+          "state": "passed"
+        }
+      ],
+      "id": "pool-l-qry-s22"
+    }
+  ],
+  "resources": {
+    "account_quota": {
+      "file_grace_expires_epoch": 0,
+      "file_hard": 0,
+      "file_soft": 0,
+      "files": 768159,
+      "filesystem": "/dev/mapper/ascend_data-data",
+      "grace_expires_epoch": 1795294591,
+      "hard_gib": 700.0,
+      "hard_quota_headroom_gib": 348.4319725036621,
+      "query_returncode": 1,
+      "soft_exceeded": true,
+      "soft_gib": 300.0,
+      "used_gib": 351.5680274963379
+    },
+    "filesystem_available_gib": 1014.4172821044922
+  },
+  "retirement_context": {
+    "raw_state_interpretation": "7 stopped trajectories are user cancellations; raw failed/interrupted and recording fields are historical snapshots, not new scientific failures or current running state",
+    "receipt": "docs/evidence/project-retirement-completed-20261118.json",
+    "remaining_time_estimates": "obsolete after cancellation",
+    "state": "closed_artifacts_retired"
+  },
+  "schema": "tide-hb-mem-v13-endpoint-review-v1",
+  "source_commit": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
+  "state": "partial_endpoints_audited",
+  "table_sha256": "bb8cb630ef67beb430405db3b90954932830d0236201146b8dcfb1e43aa03d31",
+  "training_lock_sha256": "40b7c0ebb9650d11aa0c0080532c884e2ca3846db578155f3df7068b82191d2f"
+}

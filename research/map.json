@@ -1867,10 +1867,10 @@
       "target": "V13-MEM-Q10-S"
     },
     {
-      "detail": "\u6267\u884c\u3001\u4e25\u683c\u6570\u503c\u3001\u79bb\u6563\u8bed\u4e49\u3001\u6062\u590d\u4e0e\u5b66\u4e60\u5206\u522b\u8bb0\u5f55\u3002",
+      "detail": "\u7528\u6237\u53d6\u6d88\u540e\u4e0d\u518d\u7b49\u5f85\u81ea\u52a8\u7eed\u8bad\uff1b\u7ed3\u679c\u7f3a\u53e3\u4e0d\u6784\u6210\u8d28\u91cf\u5931\u8d25\u6216\u6210\u529f\u3002",
       "id": "EV13-MEM-Q3-S",
       "kind": "produces",
-      "label": "\u7b49\u5f85\u7ec8\u6001\u914d\u5bf9\u5ba1\u9605",
+      "label": "\u914d\u5bf9\u672a\u5b8c\u6210\uff0c\u672c\u6279\u5df2\u5173\u95ed",
       "source": "V13-MEM-Q3-S",
       "status": "planned",
       "target": "RV13-MEM-Q3-S"
@@ -1903,10 +1903,10 @@
       "target": "V13-MEM-Q10-L"
     },
     {
-      "detail": "\u6267\u884c\u3001\u4e25\u683c\u6570\u503c\u3001\u79bb\u6563\u8bed\u4e49\u3001\u6062\u590d\u4e0e\u5b66\u4e60\u5206\u522b\u8bb0\u5f55\u3002",
+      "detail": "\u7528\u6237\u53d6\u6d88\u540e\u4e0d\u518d\u7b49\u5f85\u81ea\u52a8\u7eed\u8bad\uff1b\u7ed3\u679c\u7f3a\u53e3\u4e0d\u6784\u6210\u8d28\u91cf\u5931\u8d25\u6216\u6210\u529f\u3002",
       "id": "EV13-MEM-Q3-L",
       "kind": "produces",
-      "label": "\u7b49\u5f85\u7ec8\u6001\u914d\u5bf9\u5ba1\u9605",
+      "label": "\u914d\u5bf9\u672a\u5b8c\u6210\uff0c\u672c\u6279\u5df2\u5173\u95ed",
       "source": "V13-MEM-Q3-L",
       "status": "planned",
       "target": "RV13-MEM-Q3-L"
@@ -1921,10 +1921,10 @@
       "target": "V13-MEM-Q3-L"
     },
     {
-      "detail": "\u6267\u884c\u3001\u4e25\u683c\u6570\u503c\u3001\u79bb\u6563\u8bed\u4e49\u3001\u6062\u590d\u4e0e\u5b66\u4e60\u5206\u522b\u8bb0\u5f55\u3002",
+      "detail": "\u7528\u6237\u53d6\u6d88\u540e\u4e0d\u518d\u7b49\u5f85\u81ea\u52a8\u7eed\u8bad\uff1b\u7ed3\u679c\u7f3a\u53e3\u4e0d\u6784\u6210\u8d28\u91cf\u5931\u8d25\u6216\u6210\u529f\u3002",
       "id": "EV13-MEM-POOL-L",
       "kind": "produces",
-      "label": "\u7b49\u5f85\u7ec8\u6001\u914d\u5bf9\u5ba1\u9605",
+      "label": "\u914d\u5bf9\u672a\u5b8c\u6210\uff0c\u672c\u6279\u5df2\u5173\u95ed",
       "source": "V13-MEM-POOL-L",
       "status": "planned",
       "target": "RV13-MEM-POOL-L"
@@ -1939,12 +1939,12 @@
       "target": "V13-MEM-POOL-L"
     },
     {
-      "detail": "\u6267\u884c\u3001\u4e25\u683c\u6570\u503c\u3001\u79bb\u6563\u8bed\u4e49\u3001\u6062\u590d\u4e0e\u5b66\u4e60\u5206\u522b\u8bb0\u5f55\u3002",
+      "detail": "\u4eba\u5de5\u5ba1\u9605\u4e24seed\u3001\u6d3b\u8dc3/\u603b\u53c2\u6570\u53ca\u53cd\u8bc1\uff1b\u539f\u59cb\u4ea7\u7269\u968f\u540e\u9000\u5f79\uff0c\u4e0d\u81ea\u52a8\u63a8\u5e7f\u5230\u5176\u4ed63%\u914d\u7f6e\u3002",
       "id": "EV13-MEM-CONTENT-S",
       "kind": "produces",
-      "label": "\u7b49\u5f85\u7ec8\u6001\u914d\u5bf9\u5ba1\u9605",
+      "label": "\u540c\u96c6\u53ccseed\u7ed3\u679c\u5df2\u5ba1\u9605",
       "source": "V13-MEM-CONTENT-S",
-      "status": "planned",
+      "status": "documented",
       "target": "RV13-MEM-CONTENT-S"
     },
     {
@@ -6978,6 +6978,7 @@
     {
       "budget": "\u5171\u4eab48h/1536 CPU\u6838\u65f6/384 NPU\u5361\u65f6\uff1b\u5355\u7b5b\u90098h\uff0c\u5355\u89c4\u6a2136h\uff1b\u4e0d\u81ea\u52a8\u8ffd\u52a0\u5019\u9009\u6216\u76ee\u6807\u3002",
       "decision": "\u539f\u6570\u503c\u9608\u503c\u4fdd\u6301\uff1b\u79bb\u6563/\u673a\u5236\u3001\u4e09\u6b65\u65b0\u8fdb\u7a0b\u6062\u590d\u5206\u522b\u9a8c\u6536\u3002\u6709\u9650\u8d85\u5dee\u4e0d\u662f\u6548\u679c\u5931\u8d25\uff0c\u4e5f\u4e0d\u662f\u6570\u503c\u901a\u8fc7\u3002",
+      "execution_note": "\u5386\u53f2\u6279\u6b21\u73b0\u65e0\u6d3b\u52a8\u8fdb\u7a0b\uff0c\u539f\u6210\u529f/\u5931\u8d25\u4ee5\u65e2\u6709\u5ba1\u9605\u4e3a\u51c6\uff1b\u539f\u59cb\u8fd0\u884c\u4ea7\u7269\u5df2\u6309\u7528\u6237\u8981\u6c42\u9000\u5f79\u3002",
       "id": "V6-EXEC",
       "kind": "experiment",
       "question": "\u54ea\u4e9b\u540e\u7aef\u3001\u5b9e\u9645batch\u4e0e\u516c\u5171\u6267\u884c\u65b9\u5f0f\u6700\u5feb\u5230\u8fbe\u76ee\u6807\uff1f",
@@ -6996,7 +6997,7 @@
         }
       ],
       "runs": [],
-      "status": "running",
+      "status": "closed",
       "study_id": "TL-EXEC-v6",
       "summary": "CPU native\u627f\u8f7d\u591a\u6570TIDE\uff1bNPU\u627f\u8f7dTransformer\u4e0e\u4e24\u6761TIDE\u89c2\u5bdf\u3002",
       "title": "\u6709\u9650\u6267\u884c\u9009\u578b\u4e0e\u53ef\u4fe1\u8bad\u7ec3\u63a5\u5165",
@@ -17487,6 +17488,7 @@
     {
       "budget": "\u5171\u4eab48h\u81f32026-11-17 17:43:08+08\uff1b12NPU\u69fd\uff1b64GiB\u76ee\u6807/96GiB\u505c\u6b62\uff0c\u786c\u4f59\u91cf200GiB\u3002",
       "decision": "\u4fdd\u7559\u72ec\u7acb\u9a8c\u6536\u8f74\uff1b\u672a\u8fbe\u7aef\u70b9\u4e0d\u8bb0\u6210\u529f\uff0c\u4e0d\u7531\u5b8c\u6210\u81ea\u52a8\u63a8\u5bfc\u79d1\u5b66\u652f\u6301\u3002",
+      "execution_note": "\u5386\u53f2\u6279\u6b21\u73b0\u65e0\u6d3b\u52a8\u8fdb\u7a0b\uff0c\u539f\u6210\u529f/\u5931\u8d25\u4ee5\u65e2\u6709\u5ba1\u9605\u4e3a\u51c6\uff1b\u539f\u59cb\u8fd0\u884c\u4ea7\u7269\u5df2\u6309\u7528\u6237\u8981\u6c42\u9000\u5f79\u3002",
       "id": "V11-CONFIRM",
       "kind": "experiment",
       "lens_group": "TL-CAPACITY-CONFIRM-v11",
@@ -17745,7 +17747,7 @@
           "status": "unchecked"
         }
       ],
-      "status": "running",
+      "status": "closed",
       "study_id": "TL-CAPACITY-CONFIRM-v11",
       "summary": "24\u9879\u5b8c\u6210\u30012\u9879HB\u7236\u5931\u8d25\u4e0d\u5408\u683c\u30012\u9879\u5f85\u7236\u7ec8\u70b9\uff1b\u65b0\u786e\u8ba4\u4e0d\u53c2\u4e0e\u914d\u65b9\u9009\u62e9\u3002",
       "title": "v11\u65b0\u72ec\u7acb262K\u786e\u8ba4",
@@ -20463,8 +20465,8 @@
       "y": 4240
     },
     {
-      "budget": "\u5171\u4eab48h\u81f311/19 17:44+08\uff0c16\u5f20\u5171\u4eab\u5361\u5019\u9009\uff0c12sum+4\u6761\u4ef6qry\uff1b128Mi/<=200M\uff1b\u8d26\u53f7700GiB\u53ca\u6574\u76d8\u5199\u5165\u4fdd\u62a4\u3002",
-      "decision": "\u5b8c\u6210\u65e2\u5b9a128Mi\u4e0e\u65b0\u786e\u8ba4\uff1b\u4e0d\u65b0\u589e\u5019\u9009\u6216\u66dd\u5149\uff0c\u4e0d\u91cd\u542f\u65e7\u5931\u8d25\u3002",
+      "budget": "2026-11-18\u7528\u6237\u505c\u6b62\u5e76\u6e05\u7406\uff0c\u65e748h\u622a\u6b62\u4e0d\u518d\u6267\u884c\u3002\u5386\u53f2\u6743\u91cd/\u539f\u59cb\u8bb0\u5f55\u5df2\u9000\u5f79\uff0c\u6e90\u7801/\u914d\u7f6e/\u56fa\u5b9a\u6570\u636e\u548c\u6458\u8981\u4fdd\u7559\u3002",
+      "decision": "\u672c\u6279\u5173\u95ed\uff1b\u4fdd\u7559\u9650\u5b9a\u7ed3\u679c\uff0c\u540e\u7eed\u9700\u53e6\u5b9a\u65b0\u7814\u7a76\u8868\u4e0e\u8fd0\u884c\u8eab\u4efd\u3002",
       "id": "V13-MEM-Q10-S",
       "kind": "experiment",
       "lens_group": "TL-HB-MEM-SUMQRY",
@@ -20493,41 +20495,55 @@
         {
           "label": "\u540c\u96c6\u9010\u94fe\u8eab\u4efd\u3001\u53c2\u6570\u53caLens",
           "path": "docs/evidence/hb-mem-v13-progress-20261118.json"
+        },
+        {
+          "label": "\u5b9e\u9a8c\u5173\u95ed\u3001\u4ea7\u7269\u5df2\u9000\u5f79",
+          "path": "docs/studies/hb-mem-v13-closed-20261118.md"
         }
       ],
       "runs": [
         {
+          "artifact_state": "retired",
+          "closure_reason": "completed128Mi",
           "config": "configs/studies/language/hb-mem-v13/configs/q10-s-sum-s11.json",
           "device": 12,
           "id": "job:v13-main-q10-s-sum-s11",
+          "last_exposure_tokens": 134217728,
           "lens_destination_name": "tl-v13-main-q10-s-sum-s11-projection-a0efa501bc77",
           "lens_destination_run_id": "401d2259af7a4d6586f99448106a16cc",
           "lens_record": "runs/v13-main-q10-s-sum-s11/train/projection.json",
           "lens_run_id": "tl-v13-main-q10-s-sum-s11",
+          "lens_state": "deleted",
           "record": "runs/v13-main-q10-s-sum-s11-worker/state.json",
           "source_commit": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
           "stage": "diagnostic",
           "status": "completed"
         },
         {
+          "artifact_state": "retired",
+          "closure_reason": "completed128Mi",
           "config": "configs/studies/language/hb-mem-v13/configs/q10-s-sum-s22.json",
           "device": 15,
           "id": "job:v13-main-q10-s-sum-s22",
+          "last_exposure_tokens": 134217728,
           "lens_destination_name": "tl-v13-main-q10-s-sum-s22-projection-1362f5ca28bb",
           "lens_destination_run_id": "331acdbfb9e041228c08072f71e074b8",
           "lens_record": "runs/v13-main-q10-s-sum-s22/train/projection.json",
           "lens_run_id": "tl-v13-main-q10-s-sum-s22",
+          "lens_state": "deleted",
           "record": "runs/v13-main-q10-s-sum-s22-worker/state.json",
           "source_commit": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
           "stage": "diagnostic",
           "status": "completed"
         },
         {
+          "artifact_state": "retired",
           "config": "configs/studies/language/hb-v12/configs/base-q10-s11.json",
           "evaluation_source_commit": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
           "id": "tl-v13-reuse-q10-s-qry-s11",
           "lens_record": "runs/v13-reuse-q10-s-qry-s11/projection.json",
           "lens_run_id": "tl-v13-reuse-q10-s-qry-s11",
+          "lens_state": "deleted",
           "record": "runs/v13-reuse-q10-s-qry-s11/result.json",
           "source_commit": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
           "stage": "confirmation",
@@ -20535,11 +20551,13 @@
           "training_source_commit": "62e32602b23e371eb1669f7b99409db626a1c4f8"
         },
         {
+          "artifact_state": "retired",
           "config": "configs/studies/language/hb-v12/configs/base-q10-s22.json",
           "evaluation_source_commit": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
           "id": "tl-v13-reuse-q10-s-qry-s22",
           "lens_record": "runs/v13-reuse-q10-s-qry-s22/projection.json",
           "lens_run_id": "tl-v13-reuse-q10-s-qry-s22",
+          "lens_state": "deleted",
           "record": "runs/v13-reuse-q10-s-qry-s22/result.json",
           "source_commit": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
           "stage": "confirmation",
@@ -20548,7 +20566,7 @@
         }
       ],
       "status": "completed",
-      "summary": "\u4e24sum\u53ca\u4e24qry\u5747\u6709\u540c\u4e00\u65b0\u786e\u8ba4\u7ec8\u70b9\uff0c\u8bad\u7ec3/\u8eab\u4efd/\u6062\u590d/Lens\u5df2\u6838\u9a8c\uff1b\u79d1\u5b66\u8303\u56f4\u89c1\u5bf9\u5e94\u7ed3\u679c\u3002",
+      "summary": "\u53ccseed\u7ec8\u70b9\u5df2\u5ba1\u9605\uff0c\u539f\u59cb\u6743\u91cd/\u65e5\u5fd7\u53caLens\u5386\u53f2\u73b0\u5df2\u9000\u5f79\u3002",
       "title": "d64/R28\uff0c10%\u6d3b\u52a8\uff1asum/qry",
       "track": "A",
       "view_group": "current",
@@ -20556,10 +20574,10 @@
       "y": 280
     },
     {
-      "budget": "\u5171\u4eab48h\u81f311/19 17:44+08\uff0c16\u5f20\u5171\u4eab\u5361\u5019\u9009\uff0c12sum+4\u6761\u4ef6qry\uff1b128Mi/<=200M\uff1b\u8d26\u53f7700GiB\u53ca\u6574\u76d8\u5199\u5165\u4fdd\u62a4\u3002",
+      "budget": "2026-11-18\u7528\u6237\u505c\u6b62\u5e76\u6e05\u7406\uff0c\u65e748h\u622a\u6b62\u4e0d\u518d\u6267\u884c\u3002\u5386\u53f2\u6743\u91cd/\u539f\u59cb\u8bb0\u5f55\u5df2\u9000\u5f79\uff0c\u6e90\u7801/\u914d\u7f6e/\u56fa\u5b9a\u6570\u636e\u548c\u6458\u8981\u4fdd\u7559\u3002",
       "comparisons": "d64/R28\uff0csum\u2212qry\u4e24seed\u22120.028652/\u22120.061110\uff1b\u603b\u53c2\u657022.236/20.515M\uff0cFull\u7ea610%\u3002",
       "counterevidence": "qry\u4fdd\u7559\u65e7\u8bad\u7ec3/\u4fee\u590d\u8c31\u7cfb\uff0c\u7269\u7406batch32\u5bf916\uff1b\u975e\u540c\u6e90\u7801\u540c\u7d2f\u79ef\u8f68\u8ff9\u3002sum\u5f53\u524d\u672a\u5151\u73b0\u541e\u5410\u6536\u76ca\u3002",
-      "decision": "\u4fdd\u7559sum\u7684\u9650\u5b9a\u8d28\u91cf/\u53c2\u6570\u6536\u76ca\uff0c\u7b49\u5f85\u65e2\u5b9a\u56db\u7ec4\uff1b\u4e0d\u636e\u6b64\u81ea\u52a8\u6269\u89c4\u6a21\u6216\u66dd\u5149\u3002",
+      "decision": "\u672c\u6279\u5173\u95ed\uff0c\u4e0d\u81ea\u52a8\u8865\u8dd1\u6216\u6269\u5c55\uff1b\u539f\u59cb\u6a21\u578b\u4e0e\u8bb0\u5f55\u4e0d\u53ef\u6062\u590d\uff0c\u7ed3\u8bba\u4ec5\u4fdd\u7559\u5386\u53f2\u9650\u5b9a\u8303\u56f4\u3002",
       "id": "RV13-MEM-Q10-S",
       "kind": "result",
       "question": "\u5728\u540c\u66dd\u5149\u3001\u540c\u6d3b\u52a8\u89c4\u5219\u4e0b\uff0cMem.sum\u662f\u5426\u4fdd\u6301\u8bed\u8a00\u8d28\u91cf\u4e0e\u5bb9\u91cf\u6536\u76ca\uff1b\u5b9e\u9645Read\u6210\u672c\u600e\u6837\u53d8\u5316\uff1f",
@@ -20587,6 +20605,10 @@
         {
           "label": "\u540c\u96c6\u9010\u94fe\u8eab\u4efd\u3001\u53c2\u6570\u53caLens",
           "path": "docs/evidence/hb-mem-v13-progress-20261118.json"
+        },
+        {
+          "label": "\u5b9e\u9a8c\u5173\u95ed\u3001\u4ea7\u7269\u5df2\u9000\u5f79",
+          "path": "docs/studies/hb-mem-v13-closed-20261118.md"
         }
       ],
       "scope": "\u76f4\u63a5\u5b9e\u73b0\u3001\u8bcd\u88684096/L256/global64\u3001128Mi\u3001seed11/22\uff0c\u540c\u4e00v13\u65b0262K\u786e\u8ba4\uff1b\u4e0d\u662f\u516c\u5171\u6267\u884c\u6838\u5fc3\u8ba4\u8bc1\u3002",
@@ -20607,8 +20629,8 @@
       "y": 280
     },
     {
-      "budget": "\u5171\u4eab48h\u81f311/19 17:44+08\uff0c16\u5f20\u5171\u4eab\u5361\u5019\u9009\uff0c12sum+4\u6761\u4ef6qry\uff1b128Mi/<=200M\uff1b\u8d26\u53f7700GiB\u53ca\u6574\u76d8\u5199\u5165\u4fdd\u62a4\u3002",
-      "decision": "\u5b8c\u6210\u65e2\u5b9a128Mi\u4e0e\u65b0\u786e\u8ba4\uff1b\u4e0d\u65b0\u589e\u5019\u9009\u6216\u66dd\u5149\uff0c\u4e0d\u91cd\u542f\u65e7\u5931\u8d25\u3002",
+      "budget": "2026-11-18\u7528\u6237\u505c\u6b62\u5e76\u6e05\u7406\uff0c\u65e748h\u622a\u6b62\u4e0d\u518d\u6267\u884c\u3002\u5386\u53f2\u6743\u91cd/\u539f\u59cb\u8bb0\u5f55\u5df2\u9000\u5f79\uff0c\u6e90\u7801/\u914d\u7f6e/\u56fa\u5b9a\u6570\u636e\u548c\u6458\u8981\u4fdd\u7559\u3002",
+      "decision": "\u672c\u6279\u5173\u95ed\uff1b\u4fdd\u7559\u9650\u5b9a\u7ed3\u679c\uff0c\u540e\u7eed\u9700\u53e6\u5b9a\u65b0\u7814\u7a76\u8868\u4e0e\u8fd0\u884c\u8eab\u4efd\u3002",
       "id": "V13-MEM-Q3-S",
       "kind": "experiment",
       "lens_group": "TL-HB-MEM-SUMQRY",
@@ -20637,41 +20659,55 @@
         {
           "label": "\u540c\u96c6\u9010\u94fe\u8eab\u4efd\u3001\u53c2\u6570\u53caLens",
           "path": "docs/evidence/hb-mem-v13-progress-20261118.json"
+        },
+        {
+          "label": "\u5b9e\u9a8c\u5173\u95ed\u3001\u4ea7\u7269\u5df2\u9000\u5f79",
+          "path": "docs/studies/hb-mem-v13-closed-20261118.md"
         }
       ],
       "runs": [
         {
+          "artifact_state": "retired",
+          "closure_reason": "completed128Mi",
           "config": "configs/studies/language/hb-mem-v13/configs/q3-s-sum-s11.json",
           "device": 6,
           "id": "job:v13-main-q3-s-sum-s11",
+          "last_exposure_tokens": 134217728,
           "lens_destination_name": "tl-v13-main-q3-s-sum-s11-projection-a8bcee64b178",
           "lens_destination_run_id": "08d56a59090e4efd86fde592fe926e29",
           "lens_record": "runs/v13-main-q3-s-sum-s11/train/projection.json",
           "lens_run_id": "tl-v13-main-q3-s-sum-s11",
+          "lens_state": "deleted",
           "record": "runs/v13-main-q3-s-sum-s11-worker/state.json",
           "source_commit": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
-          "stage": "train",
-          "status": "running"
+          "stage": "diagnostic",
+          "status": "completed"
         },
         {
+          "artifact_state": "retired",
+          "closure_reason": "user_cancelled_for_retirement",
           "config": "configs/studies/language/hb-mem-v13/configs/q3-s-sum-s22.json",
           "device": 14,
           "id": "job:v13-main-q3-s-sum-s22",
+          "last_exposure_tokens": 128562308,
           "lens_destination_name": "tl-v13-main-q3-s-sum-s22-projection-e82661bfdd48",
           "lens_destination_run_id": "13dbf44091c74254b1f68bb04ec63cde",
           "lens_record": "runs/v13-main-q3-s-sum-s22/train/projection.json",
           "lens_run_id": "tl-v13-main-q3-s-sum-s22",
+          "lens_state": "deleted",
           "record": "runs/v13-main-q3-s-sum-s22-worker/state.json",
           "source_commit": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
           "stage": "train",
-          "status": "running"
+          "status": "cancelled"
         },
         {
+          "artifact_state": "retired",
           "config": "configs/studies/language/hb-v12/configs/base-q3-s11.json",
           "evaluation_source_commit": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
           "id": "tl-v13-reuse-q3-s-qry-s11",
           "lens_record": "runs/v13-reuse-q3-s-qry-s11/projection.json",
           "lens_run_id": "tl-v13-reuse-q3-s-qry-s11",
+          "lens_state": "deleted",
           "record": "runs/v13-reuse-q3-s-qry-s11/result.json",
           "source_commit": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
           "stage": "confirmation",
@@ -20679,11 +20715,13 @@
           "training_source_commit": "5147701447dd15a092cc4b052f828b037ed98df4"
         },
         {
+          "artifact_state": "retired",
           "config": "configs/studies/language/hb-v12/configs/base-q3-s22.json",
           "evaluation_source_commit": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
           "id": "tl-v13-reuse-q3-s-qry-s22",
           "lens_record": "runs/v13-reuse-q3-s-qry-s22/projection.json",
           "lens_run_id": "tl-v13-reuse-q3-s-qry-s22",
+          "lens_state": "deleted",
           "record": "runs/v13-reuse-q3-s-qry-s22/result.json",
           "source_commit": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
           "stage": "confirmation",
@@ -20691,8 +20729,8 @@
           "training_source_commit": "62e32602b23e371eb1669f7b99409db626a1c4f8"
         }
       ],
-      "status": "running",
-      "summary": "\u65b0\u94fe\u5747\u5df2\u901a\u8fc7\u53d7\u8bad\u6062\u590d\uff0c\u7ee7\u7eed\u539f128Mi\uff1bqry\u590d\u7528\u786e\u8ba4\u5df2\u5b8c\u6210\u6216pool\u65b0qry\u4ecd\u8bad\u7ec3\u3002\u5b8c\u6574\u914d\u5bf9\u5f85\u6536\u9f50\u3002",
+      "status": "cancelled",
+      "summary": "\u539f128Mi\u914d\u5bf9\u672a\u6536\u9f50\uff0c\u5269\u4f59\u8bad\u7ec3\u7531\u7528\u6237\u53d6\u6d88\uff1b\u4e0d\u8865\u8dd1\uff0c\u65e7\u6743\u91cd\u5df2\u9000\u5f79\u3002",
       "title": "d64/R64\uff0c3%\u6d3b\u52a8\uff1asum/qry",
       "track": "A",
       "view_group": "current",
@@ -20700,8 +20738,8 @@
       "y": 460
     },
     {
-      "budget": "\u5171\u4eab48h\u81f311/19 17:44+08\uff0c16\u5f20\u5171\u4eab\u5361\u5019\u9009\uff0c12sum+4\u6761\u4ef6qry\uff1b128Mi/<=200M\uff1b\u8d26\u53f7700GiB\u53ca\u6574\u76d8\u5199\u5165\u4fdd\u62a4\u3002",
-      "decision": "\u6309\u540c\u96c6NLL\u3001\u4e24seed\u548c\u5b9e\u9645\u6d3b\u52a8\u89e3\u91ca\uff1b\u4e0d\u4ee5\u9000\u51fa\u7801\u751f\u6210\u652f\u6301\u5173\u7cfb\u3002",
+      "budget": "2026-11-18\u7528\u6237\u505c\u6b62\u5e76\u6e05\u7406\uff0c\u65e748h\u622a\u6b62\u4e0d\u518d\u6267\u884c\u3002\u5386\u53f2\u6743\u91cd/\u539f\u59cb\u8bb0\u5f55\u5df2\u9000\u5f79\uff0c\u6e90\u7801/\u914d\u7f6e/\u56fa\u5b9a\u6570\u636e\u548c\u6458\u8981\u4fdd\u7559\u3002",
+      "decision": "\u672c\u6279\u5173\u95ed\uff0c\u4e0d\u81ea\u52a8\u8865\u8dd1\u6216\u6269\u5c55\uff1b\u539f\u59cb\u6a21\u578b\u4e0e\u8bb0\u5f55\u4e0d\u53ef\u6062\u590d\uff0c\u7ed3\u8bba\u4ec5\u4fdd\u7559\u5386\u53f2\u9650\u5b9a\u8303\u56f4\u3002",
       "id": "RV13-MEM-Q3-S",
       "kind": "result",
       "question": "\u5728\u540c\u66dd\u5149\u3001\u540c\u6d3b\u52a8\u89c4\u5219\u4e0b\uff0cMem.sum\u662f\u5426\u4fdd\u6301\u8bed\u8a00\u8d28\u91cf\u4e0e\u5bb9\u91cf\u6536\u76ca\uff1b\u5b9e\u9645Read\u6210\u672c\u600e\u6837\u53d8\u5316\uff1f",
@@ -20729,19 +20767,23 @@
         {
           "label": "\u540c\u96c6\u9010\u94fe\u8eab\u4efd\u3001\u53c2\u6570\u53caLens",
           "path": "docs/evidence/hb-mem-v13-progress-20261118.json"
+        },
+        {
+          "label": "\u5b9e\u9a8c\u5173\u95ed\u3001\u4ea7\u7269\u5df2\u9000\u5f79",
+          "path": "docs/studies/hb-mem-v13-closed-20261118.md"
         }
       ],
       "status": "awaiting",
-      "summary": "128Mi sum/qry\u4e24seed\u914d\u5bf9\u5c1a\u672a\u6536\u9f50\uff1b\u4e0d\u4ee532Mi\u4e2d\u9014\u6392\u5e8f\u6216\u5916\u5c42\u9000\u51fa\u72b6\u6001\u751f\u6210\u7ed3\u8bba\u3002",
-      "title": "d64/R64\uff0c3%\u6d3b\u52a8\uff1a\u914d\u5bf9\u7ed3\u679c\u5f85\u5ba1",
+      "summary": "seed11 qry/sum\u4e3a4.133703/4.165167\uff1bseed22\u4e8e122.607Mi\u88ab\u7528\u6237\u53d6\u6d88\uff0c\u4e0d\u80fd\u5f62\u6210\u5b8c\u6574\u914d\u5bf9\u7ed3\u8bba\u3002",
+      "title": "\u53ccseed\u672a\u5b8c\u6210\uff0c\u5355seed\u6709\u8d1f\u9762\u89c2\u5bdf",
       "track": "A",
       "view_group": "current",
       "x": 915,
       "y": 460
     },
     {
-      "budget": "\u5171\u4eab48h\u81f311/19 17:44+08\uff0c16\u5f20\u5171\u4eab\u5361\u5019\u9009\uff0c12sum+4\u6761\u4ef6qry\uff1b128Mi/<=200M\uff1b\u8d26\u53f7700GiB\u53ca\u6574\u76d8\u5199\u5165\u4fdd\u62a4\u3002",
-      "decision": "\u5b8c\u6210\u65e2\u5b9a128Mi\u4e0e\u65b0\u786e\u8ba4\uff1b\u4e0d\u65b0\u589e\u5019\u9009\u6216\u66dd\u5149\uff0c\u4e0d\u91cd\u542f\u65e7\u5931\u8d25\u3002",
+      "budget": "2026-11-18\u7528\u6237\u505c\u6b62\u5e76\u6e05\u7406\uff0c\u65e748h\u622a\u6b62\u4e0d\u518d\u6267\u884c\u3002\u5386\u53f2\u6743\u91cd/\u539f\u59cb\u8bb0\u5f55\u5df2\u9000\u5f79\uff0c\u6e90\u7801/\u914d\u7f6e/\u56fa\u5b9a\u6570\u636e\u548c\u6458\u8981\u4fdd\u7559\u3002",
+      "decision": "\u672c\u6279\u5173\u95ed\uff1b\u4fdd\u7559\u9650\u5b9a\u7ed3\u679c\uff0c\u540e\u7eed\u9700\u53e6\u5b9a\u65b0\u7814\u7a76\u8868\u4e0e\u8fd0\u884c\u8eab\u4efd\u3002",
       "id": "V13-MEM-Q10-L",
       "kind": "experiment",
       "lens_group": "TL-HB-MEM-SUMQRY",
@@ -20770,56 +20812,76 @@
         {
           "label": "\u540c\u96c6\u9010\u94fe\u8eab\u4efd\u3001\u53c2\u6570\u53caLens",
           "path": "docs/evidence/hb-mem-v13-progress-20261118.json"
+        },
+        {
+          "label": "\u5b9e\u9a8c\u5173\u95ed\u3001\u4ea7\u7269\u5df2\u9000\u5f79",
+          "path": "docs/studies/hb-mem-v13-closed-20261118.md"
         }
       ],
       "runs": [
         {
+          "artifact_state": "retired",
+          "closure_reason": "completed128Mi",
           "config": "configs/studies/language/hb-mem-v13/configs/q10-l-sum-s11.json",
           "device": 2,
           "id": "job:v13-main-q10-l-sum-s11",
+          "last_exposure_tokens": 134217728,
           "lens_destination_name": "tl-v13-main-q10-l-sum-s11-projection-2f2d623898a4",
           "lens_destination_run_id": "c6e68dbf21444e97a6fd78fb06d1c2c5",
           "lens_record": "runs/v13-main-q10-l-sum-s11/train/projection.json",
           "lens_run_id": "tl-v13-main-q10-l-sum-s11",
+          "lens_state": "deleted",
           "record": "runs/v13-main-q10-l-sum-s11-worker/state.json",
           "source_commit": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
           "stage": "diagnostic",
           "status": "completed"
         },
         {
+          "artifact_state": "retired",
+          "closure_reason": "completed128Mi",
           "config": "configs/studies/language/hb-mem-v13/configs/q10-l-sum-s22.json",
           "device": 5,
           "id": "job:v13-main-q10-l-sum-s22",
+          "last_exposure_tokens": 134217728,
           "lens_destination_name": "tl-v13-main-q10-l-sum-s22-projection-ace57163f2b9",
           "lens_destination_run_id": "8a85c6a48b434417b8a3ec3828ba24e9",
           "lens_record": "runs/v13-main-q10-l-sum-s22/train/projection.json",
           "lens_run_id": "tl-v13-main-q10-l-sum-s22",
+          "lens_state": "deleted",
           "record": "runs/v13-main-q10-l-sum-s22-worker/state.json",
           "source_commit": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
           "stage": "diagnostic",
           "status": "completed"
         },
         {
+          "artifact_state": "retired",
+          "closure_reason": "completed128Mi",
           "config": "configs/studies/language/hb-mem-v13/configs/q10-l-qry-s11.json",
           "device": 4,
           "id": "job:v13-main-q10-l-qry-s11",
+          "last_exposure_tokens": 134217728,
           "lens_destination_name": "tl-v13-main-q10-l-qry-s11-projection-31ca8abf8df2",
           "lens_destination_run_id": "79bce0355dd24c2488ec7b1b802fc893",
           "lens_record": "runs/v13-main-q10-l-qry-s11/train/projection.json",
           "lens_run_id": "tl-v13-main-q10-l-qry-s11",
+          "lens_state": "deleted",
           "record": "runs/v13-main-q10-l-qry-s11-worker/state.json",
           "source_commit": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
           "stage": "diagnostic",
           "status": "completed"
         },
         {
+          "artifact_state": "retired",
+          "closure_reason": "completed128Mi",
           "config": "configs/studies/language/hb-mem-v13/configs/q10-l-qry-s22.json",
           "device": 0,
           "id": "job:v13-main-q10-l-qry-s22",
+          "last_exposure_tokens": 134217728,
           "lens_destination_name": "tl-v13-main-q10-l-qry-s22-projection-5a4292fc74b9",
           "lens_destination_run_id": "6ff721704248496ea00236becf754a93",
           "lens_record": "runs/v13-main-q10-l-qry-s22/train/projection.json",
           "lens_run_id": "tl-v13-main-q10-l-qry-s22",
+          "lens_state": "deleted",
           "record": "runs/v13-main-q10-l-qry-s22-worker/state.json",
           "source_commit": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
           "stage": "diagnostic",
@@ -20827,7 +20889,7 @@
         }
       ],
       "status": "completed",
-      "summary": "\u4e24sum\u53ca\u4e24qry\u5747\u6709\u540c\u4e00\u65b0\u786e\u8ba4\u7ec8\u70b9\uff0c\u8bad\u7ec3/\u8eab\u4efd/\u6062\u590d/Lens\u5df2\u6838\u9a8c\uff1b\u79d1\u5b66\u8303\u56f4\u89c1\u5bf9\u5e94\u7ed3\u679c\u3002",
+      "summary": "\u53ccseed\u7ec8\u70b9\u5df2\u5ba1\u9605\uff0c\u539f\u59cb\u6743\u91cd/\u65e5\u5fd7\u53caLens\u5386\u53f2\u73b0\u5df2\u9000\u5f79\u3002",
       "title": "d128/R28\uff0c10%\u6d3b\u52a8\uff1asum/qry",
       "track": "A",
       "view_group": "current",
@@ -20835,10 +20897,10 @@
       "y": 640
     },
     {
-      "budget": "\u5171\u4eab48h\u81f311/19 17:44+08\uff0c16\u5f20\u5171\u4eab\u5361\u5019\u9009\uff0c12sum+4\u6761\u4ef6qry\uff1b128Mi/<=200M\uff1b\u8d26\u53f7700GiB\u53ca\u6574\u76d8\u5199\u5165\u4fdd\u62a4\u3002",
+      "budget": "2026-11-18\u7528\u6237\u505c\u6b62\u5e76\u6e05\u7406\uff0c\u65e748h\u622a\u6b62\u4e0d\u518d\u6267\u884c\u3002\u5386\u53f2\u6743\u91cd/\u539f\u59cb\u8bb0\u5f55\u5df2\u9000\u5f79\uff0c\u6e90\u7801/\u914d\u7f6e/\u56fa\u5b9a\u6570\u636e\u548c\u6458\u8981\u4fdd\u7559\u3002",
       "comparisons": "d128/R28\u3001micro8/global64\uff1bsum\u2212qry\u4e24seed\u22120.038016/\u22120.071871\uff0c\u603b\u53c2\u657075.541/72.100M\u3002",
       "counterevidence": "\u8d28\u91cf\u6536\u76ca\u672a\u8f6c\u5316\u4e3a\u901f\u5ea6\u6536\u76ca\uff1b512\u6bb5\u7a97\u53e3\u7684\u6709\u6548\u8282\u70b9\u4ecd\u7ea66/28\u3002\u4e0d\u80fd\u62ff\u4e0d\u540c\u786e\u8ba4\u96c6\u7684TF/MoE\u7edd\u5bf9NLL\u6392\u540d\u3002",
-      "decision": "\u4fdd\u7559sum\u7684\u9650\u5b9a\u8d28\u91cf/\u53c2\u6570\u6536\u76ca\uff0c\u7b49\u5f85\u65e2\u5b9a\u56db\u7ec4\uff1b\u4e0d\u636e\u6b64\u81ea\u52a8\u6269\u89c4\u6a21\u6216\u66dd\u5149\u3002",
+      "decision": "\u672c\u6279\u5173\u95ed\uff0c\u4e0d\u81ea\u52a8\u8865\u8dd1\u6216\u6269\u5c55\uff1b\u539f\u59cb\u6a21\u578b\u4e0e\u8bb0\u5f55\u4e0d\u53ef\u6062\u590d\uff0c\u7ed3\u8bba\u4ec5\u4fdd\u7559\u5386\u53f2\u9650\u5b9a\u8303\u56f4\u3002",
       "id": "RV13-MEM-Q10-L",
       "kind": "result",
       "question": "\u5728\u540c\u66dd\u5149\u3001\u540c\u6d3b\u52a8\u89c4\u5219\u4e0b\uff0cMem.sum\u662f\u5426\u4fdd\u6301\u8bed\u8a00\u8d28\u91cf\u4e0e\u5bb9\u91cf\u6536\u76ca\uff1b\u5b9e\u9645Read\u6210\u672c\u600e\u6837\u53d8\u5316\uff1f",
@@ -20866,6 +20928,10 @@
         {
           "label": "\u540c\u96c6\u9010\u94fe\u8eab\u4efd\u3001\u53c2\u6570\u53caLens",
           "path": "docs/evidence/hb-mem-v13-progress-20261118.json"
+        },
+        {
+          "label": "\u5b9e\u9a8c\u5173\u95ed\u3001\u4ea7\u7269\u5df2\u9000\u5f79",
+          "path": "docs/studies/hb-mem-v13-closed-20261118.md"
         }
       ],
       "scope": "\u76f4\u63a5\u5b9e\u73b0\u3001\u8bcd\u88684096/L256/global64\u3001128Mi\u3001seed11/22\uff0c\u540c\u4e00v13\u65b0262K\u786e\u8ba4\uff1b\u4e0d\u662f\u516c\u5171\u6267\u884c\u6838\u5fc3\u8ba4\u8bc1\u3002",
@@ -20886,8 +20952,8 @@
       "y": 640
     },
     {
-      "budget": "\u5171\u4eab48h\u81f311/19 17:44+08\uff0c16\u5f20\u5171\u4eab\u5361\u5019\u9009\uff0c12sum+4\u6761\u4ef6qry\uff1b128Mi/<=200M\uff1b\u8d26\u53f7700GiB\u53ca\u6574\u76d8\u5199\u5165\u4fdd\u62a4\u3002",
-      "decision": "\u5b8c\u6210\u65e2\u5b9a128Mi\u4e0e\u65b0\u786e\u8ba4\uff1b\u4e0d\u65b0\u589e\u5019\u9009\u6216\u66dd\u5149\uff0c\u4e0d\u91cd\u542f\u65e7\u5931\u8d25\u3002",
+      "budget": "2026-11-18\u7528\u6237\u505c\u6b62\u5e76\u6e05\u7406\uff0c\u65e748h\u622a\u6b62\u4e0d\u518d\u6267\u884c\u3002\u5386\u53f2\u6743\u91cd/\u539f\u59cb\u8bb0\u5f55\u5df2\u9000\u5f79\uff0c\u6e90\u7801/\u914d\u7f6e/\u56fa\u5b9a\u6570\u636e\u548c\u6458\u8981\u4fdd\u7559\u3002",
+      "decision": "\u672c\u6279\u5173\u95ed\uff1b\u4fdd\u7559\u9650\u5b9a\u7ed3\u679c\uff0c\u540e\u7eed\u9700\u53e6\u5b9a\u65b0\u7814\u7a76\u8868\u4e0e\u8fd0\u884c\u8eab\u4efd\u3002",
       "id": "V13-MEM-Q3-L",
       "kind": "experiment",
       "lens_group": "TL-HB-MEM-SUMQRY",
@@ -20916,41 +20982,55 @@
         {
           "label": "\u540c\u96c6\u9010\u94fe\u8eab\u4efd\u3001\u53c2\u6570\u53caLens",
           "path": "docs/evidence/hb-mem-v13-progress-20261118.json"
+        },
+        {
+          "label": "\u5b9e\u9a8c\u5173\u95ed\u3001\u4ea7\u7269\u5df2\u9000\u5f79",
+          "path": "docs/studies/hb-mem-v13-closed-20261118.md"
         }
       ],
       "runs": [
         {
+          "artifact_state": "retired",
+          "closure_reason": "user_cancelled_for_retirement",
           "config": "configs/studies/language/hb-mem-v13/configs/q3-l-sum-s11.json",
           "device": 10,
           "id": "job:v13-main-q3-l-sum-s11",
+          "last_exposure_tokens": 112101192,
           "lens_destination_name": "tl-v13-main-q3-l-sum-s11-projection-fe6bce50087c",
           "lens_destination_run_id": "380f72257b834e10b9982059ba6893bd",
           "lens_record": "runs/v13-main-q3-l-sum-s11/train/projection.json",
           "lens_run_id": "tl-v13-main-q3-l-sum-s11",
+          "lens_state": "deleted",
           "record": "runs/v13-main-q3-l-sum-s11-worker/state.json",
           "source_commit": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
           "stage": "train",
-          "status": "running"
+          "status": "cancelled"
         },
         {
+          "artifact_state": "retired",
+          "closure_reason": "user_cancelled_for_retirement",
           "config": "configs/studies/language/hb-mem-v13/configs/q3-l-sum-s22.json",
           "device": 8,
           "id": "job:v13-main-q3-l-sum-s22",
+          "last_exposure_tokens": 79238067,
           "lens_destination_name": "tl-v13-main-q3-l-sum-s22-projection-cff6b2e3655b",
           "lens_destination_run_id": "a3e7c042f40d46d9919b3a8be7bc8149",
           "lens_record": "runs/v13-main-q3-l-sum-s22/train/projection.json",
           "lens_run_id": "tl-v13-main-q3-l-sum-s22",
+          "lens_state": "deleted",
           "record": "runs/v13-main-q3-l-sum-s22-worker/state.json",
           "source_commit": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
           "stage": "train",
-          "status": "running"
+          "status": "cancelled"
         },
         {
+          "artifact_state": "retired",
           "config": "configs/studies/language/hb-v12/configs/base128-q3-s11.json",
           "evaluation_source_commit": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
           "id": "tl-v13-reuse-q3-l-qry-s11",
           "lens_record": "runs/v13-reuse-q3-l-qry-s11/projection.json",
           "lens_run_id": "tl-v13-reuse-q3-l-qry-s11",
+          "lens_state": "deleted",
           "record": "runs/v13-reuse-q3-l-qry-s11/result.json",
           "source_commit": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
           "stage": "confirmation",
@@ -20958,11 +21038,13 @@
           "training_source_commit": "62e32602b23e371eb1669f7b99409db626a1c4f8"
         },
         {
+          "artifact_state": "retired",
           "config": "configs/studies/language/hb-v12/configs/base128-q3-s22.json",
           "evaluation_source_commit": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
           "id": "tl-v13-reuse-q3-l-qry-s22",
           "lens_record": "runs/v13-reuse-q3-l-qry-s22/projection.json",
           "lens_run_id": "tl-v13-reuse-q3-l-qry-s22",
+          "lens_state": "deleted",
           "record": "runs/v13-reuse-q3-l-qry-s22/result.json",
           "source_commit": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
           "stage": "confirmation",
@@ -20970,8 +21052,8 @@
           "training_source_commit": "62e32602b23e371eb1669f7b99409db626a1c4f8"
         }
       ],
-      "status": "running",
-      "summary": "\u65b0\u94fe\u5747\u5df2\u901a\u8fc7\u53d7\u8bad\u6062\u590d\uff0c\u7ee7\u7eed\u539f128Mi\uff1bqry\u590d\u7528\u786e\u8ba4\u5df2\u5b8c\u6210\u6216pool\u65b0qry\u4ecd\u8bad\u7ec3\u3002\u5b8c\u6574\u914d\u5bf9\u5f85\u6536\u9f50\u3002",
+      "status": "cancelled",
+      "summary": "\u539f128Mi\u914d\u5bf9\u672a\u6536\u9f50\uff0c\u5269\u4f59\u8bad\u7ec3\u7531\u7528\u6237\u53d6\u6d88\uff1b\u4e0d\u8865\u8dd1\uff0c\u65e7\u6743\u91cd\u5df2\u9000\u5f79\u3002",
       "title": "d128/R64\uff0c3%\u6d3b\u52a8\uff1asum/qry",
       "track": "A",
       "view_group": "current",
@@ -20979,8 +21061,8 @@
       "y": 820
     },
     {
-      "budget": "\u5171\u4eab48h\u81f311/19 17:44+08\uff0c16\u5f20\u5171\u4eab\u5361\u5019\u9009\uff0c12sum+4\u6761\u4ef6qry\uff1b128Mi/<=200M\uff1b\u8d26\u53f7700GiB\u53ca\u6574\u76d8\u5199\u5165\u4fdd\u62a4\u3002",
-      "decision": "\u6309\u540c\u96c6NLL\u3001\u4e24seed\u548c\u5b9e\u9645\u6d3b\u52a8\u89e3\u91ca\uff1b\u4e0d\u4ee5\u9000\u51fa\u7801\u751f\u6210\u652f\u6301\u5173\u7cfb\u3002",
+      "budget": "2026-11-18\u7528\u6237\u505c\u6b62\u5e76\u6e05\u7406\uff0c\u65e748h\u622a\u6b62\u4e0d\u518d\u6267\u884c\u3002\u5386\u53f2\u6743\u91cd/\u539f\u59cb\u8bb0\u5f55\u5df2\u9000\u5f79\uff0c\u6e90\u7801/\u914d\u7f6e/\u56fa\u5b9a\u6570\u636e\u548c\u6458\u8981\u4fdd\u7559\u3002",
+      "decision": "\u672c\u6279\u5173\u95ed\uff0c\u4e0d\u81ea\u52a8\u8865\u8dd1\u6216\u6269\u5c55\uff1b\u539f\u59cb\u6a21\u578b\u4e0e\u8bb0\u5f55\u4e0d\u53ef\u6062\u590d\uff0c\u7ed3\u8bba\u4ec5\u4fdd\u7559\u5386\u53f2\u9650\u5b9a\u8303\u56f4\u3002",
       "id": "RV13-MEM-Q3-L",
       "kind": "result",
       "question": "\u5728\u540c\u66dd\u5149\u3001\u540c\u6d3b\u52a8\u89c4\u5219\u4e0b\uff0cMem.sum\u662f\u5426\u4fdd\u6301\u8bed\u8a00\u8d28\u91cf\u4e0e\u5bb9\u91cf\u6536\u76ca\uff1b\u5b9e\u9645Read\u6210\u672c\u600e\u6837\u53d8\u5316\uff1f",
@@ -21008,19 +21090,23 @@
         {
           "label": "\u540c\u96c6\u9010\u94fe\u8eab\u4efd\u3001\u53c2\u6570\u53caLens",
           "path": "docs/evidence/hb-mem-v13-progress-20261118.json"
+        },
+        {
+          "label": "\u5b9e\u9a8c\u5173\u95ed\u3001\u4ea7\u7269\u5df2\u9000\u5f79",
+          "path": "docs/studies/hb-mem-v13-closed-20261118.md"
         }
       ],
       "status": "awaiting",
-      "summary": "128Mi sum/qry\u4e24seed\u914d\u5bf9\u5c1a\u672a\u6536\u9f50\uff1b\u4e0d\u4ee532Mi\u4e2d\u9014\u6392\u5e8f\u6216\u5916\u5c42\u9000\u51fa\u72b6\u6001\u751f\u6210\u7ed3\u8bba\u3002",
-      "title": "d128/R64\uff0c3%\u6d3b\u52a8\uff1a\u914d\u5bf9\u7ed3\u679c\u5f85\u5ba1",
+      "summary": "\u6240\u9700128Mi\u65b0\u914d\u5bf9\u672a\u6536\u9f50\uff0c\u5269\u4f59\u8bad\u7ec3\u7531\u7528\u6237\u53d6\u6d88\uff1b\u4e0d\u628a\u53d6\u6d88\u89e3\u91ca\u4e3a\u8d28\u91cf\u5931\u8d25\u3002",
+      "title": "\u6bd4\u8f83\u5df2\u53d6\u6d88\uff0c\u7ec8\u70b9\u7ed3\u8bba\u672a\u5f62\u6210",
       "track": "A",
       "view_group": "current",
       "x": 915,
       "y": 820
     },
     {
-      "budget": "\u5171\u4eab48h\u81f311/19 17:44+08\uff0c16\u5f20\u5171\u4eab\u5361\u5019\u9009\uff0c12sum+4\u6761\u4ef6qry\uff1b128Mi/<=200M\uff1b\u8d26\u53f7700GiB\u53ca\u6574\u76d8\u5199\u5165\u4fdd\u62a4\u3002",
-      "decision": "\u5b8c\u6210\u65e2\u5b9a128Mi\u4e0e\u65b0\u786e\u8ba4\uff1b\u4e0d\u65b0\u589e\u5019\u9009\u6216\u66dd\u5149\uff0c\u4e0d\u91cd\u542f\u65e7\u5931\u8d25\u3002",
+      "budget": "2026-11-18\u7528\u6237\u505c\u6b62\u5e76\u6e05\u7406\uff0c\u65e748h\u622a\u6b62\u4e0d\u518d\u6267\u884c\u3002\u5386\u53f2\u6743\u91cd/\u539f\u59cb\u8bb0\u5f55\u5df2\u9000\u5f79\uff0c\u6e90\u7801/\u914d\u7f6e/\u56fa\u5b9a\u6570\u636e\u548c\u6458\u8981\u4fdd\u7559\u3002",
+      "decision": "\u672c\u6279\u5173\u95ed\uff1b\u4fdd\u7559\u9650\u5b9a\u7ed3\u679c\uff0c\u540e\u7eed\u9700\u53e6\u5b9a\u65b0\u7814\u7a76\u8868\u4e0e\u8fd0\u884c\u8eab\u4efd\u3002",
       "id": "V13-MEM-POOL-L",
       "kind": "experiment",
       "lens_group": "TL-HB-MEM-SUMQRY",
@@ -21049,64 +21135,84 @@
         {
           "label": "\u540c\u96c6\u9010\u94fe\u8eab\u4efd\u3001\u53c2\u6570\u53caLens",
           "path": "docs/evidence/hb-mem-v13-progress-20261118.json"
+        },
+        {
+          "label": "\u5b9e\u9a8c\u5173\u95ed\u3001\u4ea7\u7269\u5df2\u9000\u5f79",
+          "path": "docs/studies/hb-mem-v13-closed-20261118.md"
         }
       ],
       "runs": [
         {
+          "artifact_state": "retired",
+          "closure_reason": "user_cancelled_for_retirement",
           "config": "configs/studies/language/hb-mem-v13/configs/pool-l-sum-s11.json",
           "device": 9,
           "id": "job:v13-main-pool-l-sum-s11",
+          "last_exposure_tokens": 93790134,
           "lens_destination_name": "tl-v13-main-pool-l-sum-s11-projection-e60f39d87482",
           "lens_destination_run_id": "360e155a16874a6cb37de007a6d0199b",
           "lens_record": "runs/v13-main-pool-l-sum-s11/train/projection.json",
           "lens_run_id": "tl-v13-main-pool-l-sum-s11",
+          "lens_state": "deleted",
           "record": "runs/v13-main-pool-l-sum-s11-worker/state.json",
           "source_commit": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
           "stage": "train",
-          "status": "running"
+          "status": "cancelled"
         },
         {
+          "artifact_state": "retired",
+          "closure_reason": "user_cancelled_for_retirement",
           "config": "configs/studies/language/hb-mem-v13/configs/pool-l-sum-s22.json",
           "device": 11,
           "id": "job:v13-main-pool-l-sum-s22",
+          "last_exposure_tokens": 93385177,
           "lens_destination_name": "tl-v13-main-pool-l-sum-s22-projection-adcf93fc0ac5",
           "lens_destination_run_id": "04de1da0238d4b1face0cf310b0b8c21",
           "lens_record": "runs/v13-main-pool-l-sum-s22/train/projection.json",
           "lens_run_id": "tl-v13-main-pool-l-sum-s22",
+          "lens_state": "deleted",
           "record": "runs/v13-main-pool-l-sum-s22-worker/state.json",
           "source_commit": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
           "stage": "train",
-          "status": "running"
+          "status": "cancelled"
         },
         {
+          "artifact_state": "retired",
+          "closure_reason": "user_cancelled_for_retirement",
           "config": "configs/studies/language/hb-mem-v13/configs/pool-l-qry-s11.json",
           "device": 0,
           "id": "job:v13-main-pool-l-qry-s11",
+          "last_exposure_tokens": 124606154,
           "lens_destination_name": "tl-v13-main-pool-l-qry-s11-projection-412aaa7166c4",
           "lens_destination_run_id": "0e1d9e849f3c42719cf4b7658fe18ea4",
           "lens_record": "runs/v13-main-pool-l-qry-s11/train/projection.json",
           "lens_run_id": "tl-v13-main-pool-l-qry-s11",
+          "lens_state": "deleted",
           "record": "runs/v13-main-pool-l-qry-s11-worker/state.json",
           "source_commit": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
           "stage": "train",
-          "status": "running"
+          "status": "cancelled"
         },
         {
+          "artifact_state": "retired",
+          "closure_reason": "user_cancelled_for_retirement",
           "config": "configs/studies/language/hb-mem-v13/configs/pool-l-qry-s22.json",
           "device": 1,
           "id": "job:v13-main-pool-l-qry-s22",
+          "last_exposure_tokens": 112576034,
           "lens_destination_name": "tl-v13-main-pool-l-qry-s22-projection-04833d17549a",
           "lens_destination_run_id": "74cc0d1145d94407add00c6a65dc6732",
           "lens_record": "runs/v13-main-pool-l-qry-s22/train/projection.json",
           "lens_run_id": "tl-v13-main-pool-l-qry-s22",
+          "lens_state": "deleted",
           "record": "runs/v13-main-pool-l-qry-s22-worker/state.json",
           "source_commit": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
           "stage": "train",
-          "status": "running"
+          "status": "cancelled"
         }
       ],
-      "status": "running",
-      "summary": "\u65b0\u94fe\u5747\u5df2\u901a\u8fc7\u53d7\u8bad\u6062\u590d\uff0c\u7ee7\u7eed\u539f128Mi\uff1bqry\u590d\u7528\u786e\u8ba4\u5df2\u5b8c\u6210\u6216pool\u65b0qry\u4ecd\u8bad\u7ec3\u3002\u5b8c\u6574\u914d\u5bf9\u5f85\u6536\u9f50\u3002",
+      "status": "cancelled",
+      "summary": "\u539f128Mi\u914d\u5bf9\u672a\u6536\u9f50\uff0c\u5269\u4f59\u8bad\u7ec3\u7531\u7528\u6237\u53d6\u6d88\uff1b\u4e0d\u8865\u8dd1\uff0c\u65e7\u6743\u91cd\u5df2\u9000\u5f79\u3002",
       "title": "d128/R64\uff0c\u5168\u6d3b\u52a8pool\uff1asum/qry",
       "track": "A",
       "view_group": "current",
@@ -21114,8 +21220,8 @@
       "y": 1000
     },
     {
-      "budget": "\u5171\u4eab48h\u81f311/19 17:44+08\uff0c16\u5f20\u5171\u4eab\u5361\u5019\u9009\uff0c12sum+4\u6761\u4ef6qry\uff1b128Mi/<=200M\uff1b\u8d26\u53f7700GiB\u53ca\u6574\u76d8\u5199\u5165\u4fdd\u62a4\u3002",
-      "decision": "\u6309\u540c\u96c6NLL\u3001\u4e24seed\u548c\u5b9e\u9645\u6d3b\u52a8\u89e3\u91ca\uff1b\u4e0d\u4ee5\u9000\u51fa\u7801\u751f\u6210\u652f\u6301\u5173\u7cfb\u3002",
+      "budget": "2026-11-18\u7528\u6237\u505c\u6b62\u5e76\u6e05\u7406\uff0c\u65e748h\u622a\u6b62\u4e0d\u518d\u6267\u884c\u3002\u5386\u53f2\u6743\u91cd/\u539f\u59cb\u8bb0\u5f55\u5df2\u9000\u5f79\uff0c\u6e90\u7801/\u914d\u7f6e/\u56fa\u5b9a\u6570\u636e\u548c\u6458\u8981\u4fdd\u7559\u3002",
+      "decision": "\u672c\u6279\u5173\u95ed\uff0c\u4e0d\u81ea\u52a8\u8865\u8dd1\u6216\u6269\u5c55\uff1b\u539f\u59cb\u6a21\u578b\u4e0e\u8bb0\u5f55\u4e0d\u53ef\u6062\u590d\uff0c\u7ed3\u8bba\u4ec5\u4fdd\u7559\u5386\u53f2\u9650\u5b9a\u8303\u56f4\u3002",
       "id": "RV13-MEM-POOL-L",
       "kind": "result",
       "question": "\u5728\u540c\u66dd\u5149\u3001\u540c\u6d3b\u52a8\u89c4\u5219\u4e0b\uff0cMem.sum\u662f\u5426\u4fdd\u6301\u8bed\u8a00\u8d28\u91cf\u4e0e\u5bb9\u91cf\u6536\u76ca\uff1b\u5b9e\u9645Read\u6210\u672c\u600e\u6837\u53d8\u5316\uff1f",
@@ -21143,19 +21249,23 @@
         {
           "label": "\u540c\u96c6\u9010\u94fe\u8eab\u4efd\u3001\u53c2\u6570\u53caLens",
           "path": "docs/evidence/hb-mem-v13-progress-20261118.json"
+        },
+        {
+          "label": "\u5b9e\u9a8c\u5173\u95ed\u3001\u4ea7\u7269\u5df2\u9000\u5f79",
+          "path": "docs/studies/hb-mem-v13-closed-20261118.md"
         }
       ],
       "status": "awaiting",
-      "summary": "128Mi sum/qry\u4e24seed\u914d\u5bf9\u5c1a\u672a\u6536\u9f50\uff1b\u4e0d\u4ee532Mi\u4e2d\u9014\u6392\u5e8f\u6216\u5916\u5c42\u9000\u51fa\u72b6\u6001\u751f\u6210\u7ed3\u8bba\u3002",
-      "title": "d128/R64\uff0c\u5168\u6d3b\u52a8pool\uff1a\u914d\u5bf9\u7ed3\u679c\u5f85\u5ba1",
+      "summary": "\u6240\u9700128Mi\u65b0\u914d\u5bf9\u672a\u6536\u9f50\uff0c\u5269\u4f59\u8bad\u7ec3\u7531\u7528\u6237\u53d6\u6d88\uff1b\u4e0d\u628a\u53d6\u6d88\u89e3\u91ca\u4e3a\u8d28\u91cf\u5931\u8d25\u3002",
+      "title": "\u6bd4\u8f83\u5df2\u53d6\u6d88\uff0c\u7ec8\u70b9\u7ed3\u8bba\u672a\u5f62\u6210",
       "track": "A",
       "view_group": "current",
       "x": 915,
       "y": 1000
     },
     {
-      "budget": "\u5171\u4eab48h\u81f311/19 17:44+08\uff0c16\u5f20\u5171\u4eab\u5361\u5019\u9009\uff0c12sum+4\u6761\u4ef6qry\uff1b128Mi/<=200M\uff1b\u8d26\u53f7700GiB\u53ca\u6574\u76d8\u5199\u5165\u4fdd\u62a4\u3002",
-      "decision": "\u5b8c\u6210\u65e2\u5b9a128Mi\u4e0e\u65b0\u786e\u8ba4\uff1b\u4e0d\u65b0\u589e\u5019\u9009\u6216\u66dd\u5149\uff0c\u4e0d\u91cd\u542f\u65e7\u5931\u8d25\u3002",
+      "budget": "2026-11-18\u7528\u6237\u505c\u6b62\u5e76\u6e05\u7406\uff0c\u65e748h\u622a\u6b62\u4e0d\u518d\u6267\u884c\u3002\u5386\u53f2\u6743\u91cd/\u539f\u59cb\u8bb0\u5f55\u5df2\u9000\u5f79\uff0c\u6e90\u7801/\u914d\u7f6e/\u56fa\u5b9a\u6570\u636e\u548c\u6458\u8981\u4fdd\u7559\u3002",
+      "decision": "\u672c\u6279\u5173\u95ed\uff1b\u4fdd\u7559\u9650\u5b9a\u7ed3\u679c\uff0c\u540e\u7eed\u9700\u53e6\u5b9a\u65b0\u7814\u7a76\u8868\u4e0e\u8fd0\u884c\u8eab\u4efd\u3002",
       "id": "V13-MEM-CONTENT-S",
       "kind": "experiment",
       "lens_group": "TL-HB-MEM-SUMQRY",
@@ -21184,41 +21294,55 @@
         {
           "label": "\u540c\u96c6\u9010\u94fe\u8eab\u4efd\u3001\u53c2\u6570\u53caLens",
           "path": "docs/evidence/hb-mem-v13-progress-20261118.json"
+        },
+        {
+          "label": "\u5b9e\u9a8c\u5173\u95ed\u3001\u4ea7\u7269\u5df2\u9000\u5f79",
+          "path": "docs/studies/hb-mem-v13-closed-20261118.md"
         }
       ],
       "runs": [
         {
+          "artifact_state": "retired",
+          "closure_reason": "completed128Mi",
           "config": "configs/studies/language/hb-mem-v13/configs/content-s-sum-s11.json",
           "device": 7,
           "id": "job:v13-main-content-s-sum-s11",
+          "last_exposure_tokens": 134217728,
           "lens_destination_name": "tl-v13-main-content-s-sum-s11-projection-37d324de8de4",
           "lens_destination_run_id": "a259af58bc9c4cbeaf5dcc7240cdaa38",
           "lens_record": "runs/v13-main-content-s-sum-s11/train/projection.json",
           "lens_run_id": "tl-v13-main-content-s-sum-s11",
+          "lens_state": "deleted",
           "record": "runs/v13-main-content-s-sum-s11-worker/state.json",
           "source_commit": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
-          "stage": "train",
-          "status": "running"
+          "stage": "diagnostic",
+          "status": "completed"
         },
         {
+          "artifact_state": "retired",
+          "closure_reason": "completed128Mi",
           "config": "configs/studies/language/hb-mem-v13/configs/content-s-sum-s22.json",
           "device": 3,
           "id": "job:v13-main-content-s-sum-s22",
+          "last_exposure_tokens": 134217728,
           "lens_destination_name": "tl-v13-main-content-s-sum-s22-projection-24cb7c5f62f8",
           "lens_destination_run_id": "299a7c1d32d7441c917d3fcd695a3f13",
           "lens_record": "runs/v13-main-content-s-sum-s22/train/projection.json",
           "lens_run_id": "tl-v13-main-content-s-sum-s22",
+          "lens_state": "deleted",
           "record": "runs/v13-main-content-s-sum-s22-worker/state.json",
           "source_commit": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
-          "stage": "train",
-          "status": "running"
+          "stage": "diagnostic",
+          "status": "completed"
         },
         {
+          "artifact_state": "retired",
           "config": "configs/studies/language/hb-v12/configs/readcontent-q3-s11.json",
           "evaluation_source_commit": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
           "id": "tl-v13-reuse-content-s-qry-s11",
           "lens_record": "runs/v13-reuse-content-s-qry-s11/projection.json",
           "lens_run_id": "tl-v13-reuse-content-s-qry-s11",
+          "lens_state": "deleted",
           "record": "runs/v13-reuse-content-s-qry-s11/result.json",
           "source_commit": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
           "stage": "confirmation",
@@ -21226,11 +21350,13 @@
           "training_source_commit": "62e32602b23e371eb1669f7b99409db626a1c4f8"
         },
         {
+          "artifact_state": "retired",
           "config": "configs/studies/language/hb-v12/configs/readcontent-q3-s22.json",
           "evaluation_source_commit": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
           "id": "tl-v13-reuse-content-s-qry-s22",
           "lens_record": "runs/v13-reuse-content-s-qry-s22/projection.json",
           "lens_run_id": "tl-v13-reuse-content-s-qry-s22",
+          "lens_state": "deleted",
           "record": "runs/v13-reuse-content-s-qry-s22/result.json",
           "source_commit": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
           "stage": "confirmation",
@@ -21238,8 +21364,8 @@
           "training_source_commit": "62e32602b23e371eb1669f7b99409db626a1c4f8"
         }
       ],
-      "status": "running",
-      "summary": "\u65b0\u94fe\u5747\u5df2\u901a\u8fc7\u53d7\u8bad\u6062\u590d\uff0c\u7ee7\u7eed\u539f128Mi\uff1bqry\u590d\u7528\u786e\u8ba4\u5df2\u5b8c\u6210\u6216pool\u65b0qry\u4ecd\u8bad\u7ec3\u3002\u5b8c\u6574\u914d\u5bf9\u5f85\u6536\u9f50\u3002",
+      "status": "completed",
+      "summary": "\u53ccseed\u7ec8\u70b9\u5df2\u5ba1\u9605\uff0c\u539f\u59cb\u6743\u91cd/\u65e5\u5fd7\u53caLens\u5386\u53f2\u73b0\u5df2\u9000\u5f79\u3002",
       "title": "d64/R64\uff0cRead\u76f4\u8fbe\u5185\u5bb9.1\uff1asum/qry",
       "track": "A",
       "view_group": "current",
@@ -21247,8 +21373,10 @@
       "y": 1180
     },
     {
-      "budget": "\u5171\u4eab48h\u81f311/19 17:44+08\uff0c16\u5f20\u5171\u4eab\u5361\u5019\u9009\uff0c12sum+4\u6761\u4ef6qry\uff1b128Mi/<=200M\uff1b\u8d26\u53f7700GiB\u53ca\u6574\u76d8\u5199\u5165\u4fdd\u62a4\u3002",
-      "decision": "\u6309\u540c\u96c6NLL\u3001\u4e24seed\u548c\u5b9e\u9645\u6d3b\u52a8\u89e3\u91ca\uff1b\u4e0d\u4ee5\u9000\u51fa\u7801\u751f\u6210\u652f\u6301\u5173\u7cfb\u3002",
+      "budget": "2026-11-18\u7528\u6237\u505c\u6b62\u5e76\u6e05\u7406\uff0c\u65e748h\u622a\u6b62\u4e0d\u518d\u6267\u884c\u3002\u5386\u53f2\u6743\u91cd/\u539f\u59cb\u8bb0\u5f55\u5df2\u9000\u5f79\uff0c\u6e90\u7801/\u914d\u7f6e/\u56fa\u5b9a\u6570\u636e\u548c\u6458\u8981\u4fdd\u7559\u3002",
+      "comparisons": "sum\u2212qry\u4e24seed\u22120.094656/\u22120.008387\uff1b\u603b\u53c2\u657052.946\u219249.013M\uff0cFull\u7ea63.13%\u3002",
+      "counterevidence": "\u65e0\u5185\u5bb9\u76f4\u8fbeQ3-S\u4ec5\u5b8c\u6210seed11\uff0csum\u53cd\u800c\u5dee0.031464\uff1b\u8be5\u53ccseed\u672a\u6536\u9f50\u3002\u672a\u5151\u73b0sum\u541e\u5410\u4f18\u52bf\u3002",
+      "decision": "\u672c\u6279\u5173\u95ed\uff0c\u4e0d\u81ea\u52a8\u8865\u8dd1\u6216\u6269\u5c55\uff1b\u539f\u59cb\u6a21\u578b\u4e0e\u8bb0\u5f55\u4e0d\u53ef\u6062\u590d\uff0c\u7ed3\u8bba\u4ec5\u4fdd\u7559\u5386\u53f2\u9650\u5b9a\u8303\u56f4\u3002",
       "id": "RV13-MEM-CONTENT-S",
       "kind": "result",
       "question": "\u5728\u540c\u66dd\u5149\u3001\u540c\u6d3b\u52a8\u89c4\u5219\u4e0b\uff0cMem.sum\u662f\u5426\u4fdd\u6301\u8bed\u8a00\u8d28\u91cf\u4e0e\u5bb9\u91cf\u6536\u76ca\uff1b\u5b9e\u9645Read\u6210\u672c\u600e\u6837\u53d8\u5316\uff1f",
@@ -21276,18 +21404,31 @@
         {
           "label": "\u540c\u96c6\u9010\u94fe\u8eab\u4efd\u3001\u53c2\u6570\u53caLens",
           "path": "docs/evidence/hb-mem-v13-progress-20261118.json"
+        },
+        {
+          "label": "\u5b9e\u9a8c\u5173\u95ed\u3001\u4ea7\u7269\u5df2\u9000\u5f79",
+          "path": "docs/studies/hb-mem-v13-closed-20261118.md"
         }
       ],
-      "status": "awaiting",
-      "summary": "128Mi sum/qry\u4e24seed\u914d\u5bf9\u5c1a\u672a\u6536\u9f50\uff1b\u4e0d\u4ee532Mi\u4e2d\u9014\u6392\u5e8f\u6216\u5916\u5c42\u9000\u51fa\u72b6\u6001\u751f\u6210\u7ed3\u8bba\u3002",
-      "title": "d64/R64\uff0cRead\u76f4\u8fbe\u5185\u5bb9.1\uff1a\u914d\u5bf9\u7ed3\u679c\u5f85\u5ba1",
+      "scope": "\u76f4\u63a5\u5b9e\u73b0d64/R64\u3001Read\u5185\u5bb9\u76f4\u8fbe.1\u3001128Mi\u3001seed11/22\u3001\u540c\u4e00v13\u65b0262K\u786e\u8ba4\uff1bqry\u4e3a\u539f\u53d7\u8bad\u7ec8\u70b9\u91cd\u8bc4\u3002",
+      "sources": [
+        {
+          "label": "\u5173\u95ed\u524d\u5b8c\u6574\u540c\u96c6\u5ba1\u9605",
+          "url": "https://github.com/ZichaoLong/tide/blob/tide-learning-lab/docs/evidence/hb-mem-v13-final-before-retirement-20261118.json"
+        }
+      ],
+      "status": "scoped",
+      "summary": "128Mi qry/sum\u5747\u503c3.972885/3.921363\uff1b\u6d3b\u8dc33.775/3.120M\uff0c\u4e24seed\u6536\u76ca\u5927\u5c0f\u4e0d\u540c\u3002",
+      "title": "Read\u76f4\u8fbe3%\u7ec4\uff1asum\u53ccseed\u5c0f\u5e45\u6539\u5584",
       "track": "A",
+      "transfer_conditions": "\u4ec5\u5bf9\u5f53\u524dRead\u76f4\u8fbe.1\u548c128Mi\u914d\u65b9\u6709\u6548\uff1b\u4fdd\u7559\u539f\u6570\u503c\u5931\u8d25\uff0c\u4e0d\u5916\u63a8\u516c\u5171\u6267\u884c\u6216B\u8def\u7ebf\u3002",
+      "unresolved": "\u6536\u76ca\u5e45\u5ea6\u53d7\u79cd\u5b50\u5f71\u54cd\uff0c\u4fe1\u606f/\u68af\u5ea6/\u6b63\u5219\u5316\u4f5c\u7528\u5c1a\u672a\u533a\u5206\uff1b\u4e0d\u662f\u6240\u67093%\u6a21\u578b\u7684\u666e\u904d\u7ed3\u8bba\u3002",
       "view_group": "current",
       "x": 915,
       "y": 1180
     },
     {
-      "budget": "\u5171\u4eab48h\u81f311/19 17:44+08\uff0c16\u5f20\u5171\u4eab\u5361\u5019\u9009\uff0c12sum+4\u6761\u4ef6qry\uff1b128Mi/<=200M\uff1b\u8d26\u53f7700GiB\u53ca\u6574\u76d8\u5199\u5165\u4fdd\u62a4\u3002",
+      "budget": "2026-11-18\u7528\u6237\u505c\u6b62\u5e76\u6e05\u7406\uff0c\u65e748h\u622a\u6b62\u4e0d\u518d\u6267\u884c\u3002\u5386\u53f2\u6743\u91cd/\u539f\u59cb\u8bb0\u5f55\u5df2\u9000\u5f79\uff0c\u6e90\u7801/\u914d\u7f6e/\u56fa\u5b9a\u6570\u636e\u548c\u6458\u8981\u4fdd\u7559\u3002",
       "decision": "\u6309\u5df2\u5b8c\u6210\u5c0fbatch\u4e0e\u673a\u5236\u68c0\u67e5\u8fdb\u5165\u63a2\u7d22\uff1b\u9010\u94fe\u6062\u590d\u53e6\u9a8c\u3002",
       "id": "V13-CHECK",
       "kind": "experiment",
@@ -21320,6 +21461,10 @@
         {
           "label": "\u540c\u96c6\u9010\u94fe\u8eab\u4efd\u3001\u53c2\u6570\u53caLens",
           "path": "docs/evidence/hb-mem-v13-progress-20261118.json"
+        },
+        {
+          "label": "\u5b9e\u9a8c\u5173\u95ed\u3001\u4ea7\u7269\u5df2\u9000\u5f79",
+          "path": "docs/studies/hb-mem-v13-closed-20261118.md"
         }
       ],
       "status": "completed",
@@ -21331,7 +21476,7 @@
       "y": 100
     },
     {
-      "budget": "\u5171\u4eab48h\u81f311/19 17:44+08\uff0c16\u5f20\u5171\u4eab\u5361\u5019\u9009\uff0c12sum+4\u6761\u4ef6qry\uff1b128Mi/<=200M\uff1b\u8d26\u53f7700GiB\u53ca\u6574\u76d8\u5199\u5165\u4fdd\u62a4\u3002",
+      "budget": "2026-11-18\u7528\u6237\u505c\u6b62\u5e76\u6e05\u7406\uff0c\u65e748h\u622a\u6b62\u4e0d\u518d\u6267\u884c\u3002\u5386\u53f2\u6743\u91cd/\u539f\u59cb\u8bb0\u5f55\u5df2\u9000\u5f79\uff0c\u6e90\u7801/\u914d\u7f6e/\u56fa\u5b9a\u6570\u636e\u548c\u6458\u8981\u4fdd\u7559\u3002",
       "comparisons": "matrix/blocked\u5171\u4eab\u65f6\u95f4\u7b97\u5b50\uff1bsum/qry\u4e0d\u540c\u6a21\u578b\u51fd\u6570\uff0c\u5f53\u524dsum\u6ca1\u6709\u5151\u73b0\u66f4\u9ad8\u541e\u5410\u3002",
       "counterevidence": "\u4e25\u683cVJP\u5931\u8d25\u4ecd\u5728\uff1b\u5171\u4eab\u5360\u7528\u548c\u66f4\u5927batch\u66feOOM\u3002",
       "decision": "\u4fdd\u7559\u539f\u9608\u503c\u548c\u672a\u77e5\u539f\u56e0\uff0c\u4e0d\u628a\u6d88\u9664\u5168\u90e8\u6d6e\u70b9\u5dee\u5f02\u4f5c\u4e3a\u8bad\u7ec3\u524d\u63d0\u3002",
@@ -21362,6 +21507,10 @@
         {
           "label": "\u540c\u96c6\u9010\u94fe\u8eab\u4efd\u3001\u53c2\u6570\u53caLens",
           "path": "docs/evidence/hb-mem-v13-progress-20261118.json"
+        },
+        {
+          "label": "\u5b9e\u9a8c\u5173\u95ed\u3001\u4ea7\u7269\u5df2\u9000\u5f79",
+          "path": "docs/studies/hb-mem-v13-closed-20261118.md"
         }
       ],
       "scope": "\u6709\u9650\u5386\u53f2\u3001\u68af\u5ea6\u548c\u65e7qry\u56de\u5f52\uff1b\u4e0d\u5305\u542b\u65b0\u8bad\u7ec3\u8d28\u91cf\u3002",
@@ -21382,11 +21531,24 @@
       "y": 100
     }
   ],
-  "notice": "20\u4e2aHB/TF\u914d\u7f6e\u5230128Mi\uff0c7\u4e2a256Mi\u7ec8\u70b9\u53ca\u72ec\u7acb\u786e\u8ba4\u5b8c\u6210\uff1bMoE66\u9636\u6bb5\u5b8c\u6210\u3002\u65e0\u6d3b\u52a8\u4f5c\u4e1a\uff0c3\u539fpool\u5931\u8d25\u4e0e1\u53ef\u884c\u6027\u5931\u8d25\u4fdd\u7559\uff1b\u4e0d\u81ea\u52a8\u6269\u5c55\u3002",
+  "notice": "2026-11-18\uff1a\u5168\u90e8\u4efb\u52a1\u5df2\u505c\u6b62\uff0c\u5386\u53f2\u6743\u91cd\u3001\u539f\u59cb\u8bb0\u5f55\u53caLens\u8fd0\u884c\u5df2\u9000\u5f79\u3002\u914d\u7f6e/\u7ed3\u8bba/\u56fa\u5b9a\u6570\u636e\u4fdd\u7559\uff1b\u65e7\u6a21\u578b\u4e0d\u53ef\u7eed\u8bad\u6216\u91cd\u8bc4\u3002\u7528\u6237\u53d6\u6d88\u4e0d\u5c5e\u4e8e\u79d1\u5b66\u5931\u8d25\u3002",
+  "retirement": {
+    "at": "2026-11-18T02:19:16.465492+00:00",
+    "report": "docs/studies/project-retirement-20261118.md",
+    "retained_prefixes": [
+      "runs/v9-data-r3/",
+      "runs/v11-confirmation-data/",
+      "runs/v12-data/",
+      "runs/v13-data/",
+      "artifacts/setup/",
+      "artifacts/wheels/"
+    ],
+    "state": "completed"
+  },
   "schema": "tide-research-map-prototype-v1",
-  "subtitle": "\u5f53\u524d\uff1a\u516d\u7ec4Mem.sum/qry\u5df2\u63d0\u4ea4\uff1bv12\u768438\u4e2a128Mi\u7ec8\u70b9\u5b8c\u6210\u9650\u5b9a\u5ba1\u9605\uff0c\u65e7\u5931\u8d25\u72ec\u7acb\u4fdd\u7559\u3002",
+  "subtitle": "\u7814\u7a76\u76ee\u6807\u4e0e\u9650\u5b9a\u7ed3\u8bba\u4fdd\u7559\uff1b\u5f53\u524d\u65e0\u6d3b\u52a8\u4efb\u52a1\u3002v13\u5173\u95ed\uff1a9\u6761\u5b8c\u6210\u30017\u6761\u7528\u6237\u53d6\u6d88\uff0c\u540e\u7eed\u5f85\u65b0\u6279\u6b21\u51b3\u7b56\u3002",
   "title": "TIDE \u7814\u7a76\u56fe",
-  "updated_at": "2026-11-18T00:25:21.859355+00:00",
+  "updated_at": "2026-11-18T02:19:16.465492+00:00",
   "view_groups": [
     {
       "height": 12640,

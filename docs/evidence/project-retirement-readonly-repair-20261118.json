@@ -1,0 +1,13 @@
+{
+  "observed_at": "2026-11-18T02:16:21.903360+00:00",
+  "original_error": "PermissionError(13, 'Permission denied')",
+  "original_execution_sha256": "cce8a74bd3305a1ff791b9d7201e5828c1ec7a263718053cadf5c506e44a300e",
+  "preserved": {
+    "content_sha256": "587aed4d82de2559edf4d2dbb16ef902582ea8b84230a35e5a05fc759120ddec",
+    "files": 11287
+  },
+  "reason": "readonly project data cache prevents unlink",
+  "retained_original_inputs_unchanged": true,
+  "schema": "tide-retirement-bounded-permission-repair-v1",
+  "scope": "Only owner-writable permission on directories inside the already authorized remaining deletion targets; no new targets, no shared/public directory changes"
+}

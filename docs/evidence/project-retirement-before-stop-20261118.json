@@ -1,0 +1,1112 @@
+{
+  "authorization": "2026-11-18 user approved stop all project tasks and retire experiment history; preserve code/configs/summaries/fixed data",
+  "git_common_dir": "/mi/data2T/zlong/home/llm/graph-execution-foundation/.git",
+  "git_head": "ebb084a2dad5c3a6bae2495926aacec2054d500f",
+  "live": {
+    "budget": {
+      "account_checkpoint_reserve_gib": 32,
+      "account_hard_limit_gib": 700,
+      "aggregate_compute_cap": null,
+      "authorized": "2026-11-17 user approval of hb-sum-qry-proposal",
+      "deadline": "2026-11-19T17:44:00+08:00",
+      "deadline_epoch": 1795081440.0,
+      "disk_revision_reason": "16 resolved chains include4 conditional qry controls; simultaneous trained recovery retains pilot optimizer+8Mi weights+3 recovery states (52bytes/parameter), then temporary states retired after exact pass",
+      "filesystem_low_water_gib": 32,
+      "max_conditional_qry_chains": 4,
+      "max_new_concurrent_npus": 16,
+      "max_parameters": 200000000,
+      "max_sum_chains": 12,
+      "no_automatic_retry": true,
+      "original_feasibility_threshold": 2e-05,
+      "planned_new_disk_gib": 80,
+      "schema": "tide-hb-mem-v13-budget-v1",
+      "start": "2026-11-17T17:44:00+08:00",
+      "target_tokens": 134217728
+    },
+    "counts": {
+      "completed": 9,
+      "running": 7
+    },
+    "new_training": [
+      {
+        "config": "configs/studies/language/hb-mem-v13/configs/q10-s-sum-s11.json",
+        "confirmation": "completed",
+        "device": 12,
+        "error": null,
+        "execution": "completed",
+        "global_batch": 64,
+        "group": "q10-s",
+        "id": "q10-s-sum-s11",
+        "job": "v13-main-q10-s-sum-s11",
+        "lens": "verified",
+        "lens_name": "tl-v13-diag-q10-s-sum-s11-projection-29d7cd393e97",
+        "mem": "sum",
+        "parameters": 20515384,
+        "physical_batch": 16,
+        "recovery": "passed",
+        "seed": 11,
+        "source": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
+        "stage": "diagnostic",
+        "stage_state": "completed",
+        "terminated": true,
+        "tokens": null
+      },
+      {
+        "config": "configs/studies/language/hb-mem-v13/configs/q10-s-sum-s22.json",
+        "confirmation": "completed",
+        "device": 15,
+        "error": null,
+        "execution": "completed",
+        "global_batch": 64,
+        "group": "q10-s",
+        "id": "q10-s-sum-s22",
+        "job": "v13-main-q10-s-sum-s22",
+        "lens": "verified",
+        "lens_name": "tl-v13-diag-q10-s-sum-s22-projection-6d8faf1674e0",
+        "mem": "sum",
+        "parameters": 20515384,
+        "physical_batch": 16,
+        "recovery": "passed",
+        "seed": 22,
+        "source": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
+        "stage": "diagnostic",
+        "stage_state": "completed",
+        "terminated": true,
+        "tokens": null
+      },
+      {
+        "config": "configs/studies/language/hb-mem-v13/configs/q3-s-sum-s11.json",
+        "confirmation": "completed",
+        "device": 6,
+        "error": null,
+        "execution": "completed",
+        "global_batch": 64,
+        "group": "q3-s",
+        "id": "q3-s-sum-s11",
+        "job": "v13-main-q3-s-sum-s11",
+        "lens": "verified",
+        "lens_name": "tl-v13-diag-q3-s-sum-s11-projection-08a0525b3654",
+        "mem": "sum",
+        "parameters": 46391968,
+        "physical_batch": 8,
+        "recovery": "passed",
+        "seed": 11,
+        "source": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
+        "stage": "diagnostic",
+        "stage_state": "completed",
+        "terminated": true,
+        "tokens": null
+      },
+      {
+        "config": "configs/studies/language/hb-mem-v13/configs/q3-s-sum-s22.json",
+        "confirmation": null,
+        "device": 14,
+        "error": null,
+        "execution": "running",
+        "global_batch": 64,
+        "group": "q3-s",
+        "id": "q3-s-sum-s22",
+        "job": "v13-main-q3-s-sum-s22",
+        "lens": "recording",
+        "lens_name": "tl-v13-main-q3-s-sum-s22-projection-e82661bfdd48",
+        "mem": "sum",
+        "parameters": 46391968,
+        "physical_batch": 8,
+        "recovery": "passed",
+        "seed": 22,
+        "source": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
+        "stage": "train",
+        "stage_state": "running",
+        "terminated": false,
+        "tokens": 128482799
+      },
+      {
+        "config": "configs/studies/language/hb-mem-v13/configs/q10-l-sum-s11.json",
+        "confirmation": "completed",
+        "device": 2,
+        "error": null,
+        "execution": "completed",
+        "global_batch": 64,
+        "group": "q10-l",
+        "id": "q10-l-sum-s11",
+        "job": "v13-main-q10-l-sum-s11",
+        "lens": "verified",
+        "lens_name": "tl-v13-diag-q10-l-sum-s11-projection-6c2cb2edb9ac",
+        "mem": "sum",
+        "parameters": 72100408,
+        "physical_batch": 8,
+        "recovery": "passed",
+        "seed": 11,
+        "source": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
+        "stage": "diagnostic",
+        "stage_state": "completed",
+        "terminated": true,
+        "tokens": null
+      },
+      {
+        "config": "configs/studies/language/hb-mem-v13/configs/q10-l-sum-s22.json",
+        "confirmation": "completed",
+        "device": 5,
+        "error": null,
+        "execution": "completed",
+        "global_batch": 64,
+        "group": "q10-l",
+        "id": "q10-l-sum-s22",
+        "job": "v13-main-q10-l-sum-s22",
+        "lens": "verified",
+        "lens_name": "tl-v13-diag-q10-l-sum-s22-projection-f47a2916714a",
+        "mem": "sum",
+        "parameters": 72100408,
+        "physical_batch": 8,
+        "recovery": "passed",
+        "seed": 22,
+        "source": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
+        "stage": "diagnostic",
+        "stage_state": "completed",
+        "terminated": true,
+        "tokens": null
+      },
+      {
+        "config": "configs/studies/language/hb-mem-v13/configs/q3-l-sum-s11.json",
+        "confirmation": null,
+        "device": 10,
+        "error": null,
+        "execution": "running",
+        "global_batch": 64,
+        "group": "q3-l",
+        "id": "q3-l-sum-s11",
+        "job": "v13-main-q3-l-sum-s11",
+        "lens": "recording",
+        "lens_name": "tl-v13-main-q3-l-sum-s11-projection-fe6bce50087c",
+        "mem": "sum",
+        "parameters": 163594912,
+        "physical_batch": 8,
+        "recovery": "passed",
+        "seed": 11,
+        "source": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
+        "stage": "train",
+        "stage_state": "running",
+        "terminated": false,
+        "tokens": 112005127
+      },
+      {
+        "config": "configs/studies/language/hb-mem-v13/configs/q3-l-sum-s22.json",
+        "confirmation": null,
+        "device": 8,
+        "error": null,
+        "execution": "running",
+        "global_batch": 64,
+        "group": "q3-l",
+        "id": "q3-l-sum-s22",
+        "job": "v13-main-q3-l-sum-s22",
+        "lens": "recording",
+        "lens_name": "tl-v13-main-q3-l-sum-s22-projection-cff6b2e3655b",
+        "mem": "sum",
+        "parameters": 163594912,
+        "physical_batch": 8,
+        "recovery": "passed",
+        "seed": 22,
+        "source": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
+        "stage": "train",
+        "stage_state": "running",
+        "terminated": false,
+        "tokens": 79190772
+      },
+      {
+        "config": "configs/studies/language/hb-mem-v13/configs/pool-l-sum-s11.json",
+        "confirmation": null,
+        "device": 9,
+        "error": null,
+        "execution": "running",
+        "global_batch": 64,
+        "group": "pool-l",
+        "id": "pool-l-sum-s11",
+        "job": "v13-main-pool-l-sum-s11",
+        "lens": "recording",
+        "lens_name": "tl-v13-main-pool-l-sum-s11-projection-e60f39d87482",
+        "mem": "sum",
+        "parameters": 163594912,
+        "physical_batch": 4,
+        "recovery": "passed",
+        "seed": 11,
+        "source": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
+        "stage": "train",
+        "stage_state": "running",
+        "terminated": false,
+        "tokens": 93725469
+      },
+      {
+        "config": "configs/studies/language/hb-mem-v13/configs/pool-l-sum-s22.json",
+        "confirmation": null,
+        "device": 11,
+        "error": null,
+        "execution": "running",
+        "global_batch": 64,
+        "group": "pool-l",
+        "id": "pool-l-sum-s22",
+        "job": "v13-main-pool-l-sum-s22",
+        "lens": "recording",
+        "lens_name": "tl-v13-main-pool-l-sum-s22-projection-adcf93fc0ac5",
+        "mem": "sum",
+        "parameters": 163594912,
+        "physical_batch": 4,
+        "recovery": "passed",
+        "seed": 22,
+        "source": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
+        "stage": "train",
+        "stage_state": "running",
+        "terminated": false,
+        "tokens": 93288749
+      },
+      {
+        "config": "configs/studies/language/hb-mem-v13/configs/content-s-sum-s11.json",
+        "confirmation": "completed",
+        "device": 7,
+        "error": null,
+        "execution": "completed",
+        "global_batch": 64,
+        "group": "content-s",
+        "id": "content-s-sum-s11",
+        "job": "v13-main-content-s-sum-s11",
+        "lens": "verified",
+        "lens_name": "tl-v13-diag-content-s-sum-s11-projection-4aef835e2c8f",
+        "mem": "sum",
+        "parameters": 49013408,
+        "physical_batch": 8,
+        "recovery": "passed",
+        "seed": 11,
+        "source": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
+        "stage": "diagnostic",
+        "stage_state": "completed",
+        "terminated": true,
+        "tokens": null
+      },
+      {
+        "config": "configs/studies/language/hb-mem-v13/configs/content-s-sum-s22.json",
+        "confirmation": "completed",
+        "device": 3,
+        "error": null,
+        "execution": "completed",
+        "global_batch": 64,
+        "group": "content-s",
+        "id": "content-s-sum-s22",
+        "job": "v13-main-content-s-sum-s22",
+        "lens": "verified",
+        "lens_name": "tl-v13-diag-content-s-sum-s22-projection-6122fe130217",
+        "mem": "sum",
+        "parameters": 49013408,
+        "physical_batch": 8,
+        "recovery": "passed",
+        "seed": 22,
+        "source": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
+        "stage": "diagnostic",
+        "stage_state": "completed",
+        "terminated": true,
+        "tokens": null
+      },
+      {
+        "config": "configs/studies/language/hb-mem-v13/configs/q10-l-qry-s11.json",
+        "confirmation": "completed",
+        "device": 4,
+        "error": null,
+        "execution": "completed",
+        "global_batch": 64,
+        "group": "q10-l",
+        "id": "q10-l-qry-s11",
+        "job": "v13-main-q10-l-qry-s11",
+        "lens": "verified",
+        "lens_name": "tl-v13-diag-q10-l-qry-s11-projection-e6629f2c4e13",
+        "mem": "qry",
+        "parameters": 75541048,
+        "physical_batch": 8,
+        "recovery": "passed",
+        "seed": 11,
+        "source": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
+        "stage": "diagnostic",
+        "stage_state": "completed",
+        "terminated": true,
+        "tokens": null
+      },
+      {
+        "config": "configs/studies/language/hb-mem-v13/configs/q10-l-qry-s22.json",
+        "confirmation": "completed",
+        "device": 0,
+        "error": null,
+        "execution": "completed",
+        "global_batch": 64,
+        "group": "q10-l",
+        "id": "q10-l-qry-s22",
+        "job": "v13-main-q10-l-qry-s22",
+        "lens": "verified",
+        "lens_name": "tl-v13-diag-q10-l-qry-s22-projection-248e40b5d2ed",
+        "mem": "qry",
+        "parameters": 75541048,
+        "physical_batch": 8,
+        "recovery": "passed",
+        "seed": 22,
+        "source": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
+        "stage": "diagnostic",
+        "stage_state": "completed",
+        "terminated": true,
+        "tokens": null
+      },
+      {
+        "config": "configs/studies/language/hb-mem-v13/configs/pool-l-qry-s11.json",
+        "confirmation": null,
+        "device": 0,
+        "error": null,
+        "execution": "running",
+        "global_batch": 64,
+        "group": "pool-l",
+        "id": "pool-l-qry-s11",
+        "job": "v13-main-pool-l-qry-s11",
+        "lens": "recording",
+        "lens_name": "tl-v13-main-pool-l-qry-s11-projection-412aaa7166c4",
+        "mem": "qry",
+        "parameters": 171459232,
+        "physical_batch": 8,
+        "recovery": "passed",
+        "seed": 11,
+        "source": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
+        "stage": "train",
+        "stage_state": "running",
+        "terminated": false,
+        "tokens": 124462358
+      },
+      {
+        "config": "configs/studies/language/hb-mem-v13/configs/pool-l-qry-s22.json",
+        "confirmation": null,
+        "device": 1,
+        "error": null,
+        "execution": "running",
+        "global_batch": 64,
+        "group": "pool-l",
+        "id": "pool-l-qry-s22",
+        "job": "v13-main-pool-l-qry-s22",
+        "lens": "recording",
+        "lens_name": "tl-v13-main-pool-l-qry-s22-projection-04833d17549a",
+        "mem": "qry",
+        "parameters": 171459232,
+        "physical_batch": 8,
+        "recovery": "passed",
+        "seed": 22,
+        "source": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
+        "stage": "train",
+        "stage_state": "running",
+        "terminated": false,
+        "tokens": 112495706
+      }
+    ],
+    "observed_at": "2026-11-18T02:08:43.419978+00:00",
+    "reused_qry_confirmation": [
+      {
+        "device": 1,
+        "error": null,
+        "execution": "completed",
+        "id": "q10-s-qry-s11",
+        "job": "v13-reuse-q10-s-qry-s11",
+        "nll": 3.9508297341599246,
+        "state": "completed",
+        "terminated": true
+      },
+      {
+        "device": 0,
+        "error": null,
+        "execution": "completed",
+        "id": "q10-s-qry-s22",
+        "job": "v13-reuse-q10-s-qry-s22",
+        "nll": 3.9579283345156,
+        "state": "completed",
+        "terminated": true
+      },
+      {
+        "device": 15,
+        "error": null,
+        "execution": "completed",
+        "id": "q3-s-qry-s11",
+        "job": "v13-reuse-q3-s-qry-s11",
+        "nll": 4.1337029224669095,
+        "state": "completed",
+        "terminated": true
+      },
+      {
+        "device": 0,
+        "error": null,
+        "execution": "completed",
+        "id": "q3-s-qry-s22",
+        "job": "v13-reuse-q3-s-qry-s22",
+        "nll": 4.157562333974056,
+        "state": "completed",
+        "terminated": true
+      },
+      {
+        "device": 1,
+        "error": null,
+        "execution": "completed",
+        "id": "q3-l-qry-s11",
+        "job": "v13-reuse-q3-l-qry-s11",
+        "nll": 3.6607526867155684,
+        "state": "completed",
+        "terminated": true
+      },
+      {
+        "device": 12,
+        "error": null,
+        "execution": "completed",
+        "id": "q3-l-qry-s22",
+        "job": "v13-reuse-q3-l-qry-s22",
+        "nll": 3.8314415856293635,
+        "state": "completed",
+        "terminated": true
+      },
+      {
+        "device": 1,
+        "error": null,
+        "execution": "completed",
+        "id": "content-s-qry-s11",
+        "job": "v13-reuse-content-s-qry-s11",
+        "nll": 4.008173054971849,
+        "state": "completed",
+        "terminated": true
+      },
+      {
+        "device": 1,
+        "error": null,
+        "execution": "completed",
+        "id": "content-s-qry-s22",
+        "job": "v13-reuse-content-s-qry-s22",
+        "nll": 3.937596967225545,
+        "state": "completed",
+        "terminated": true
+      }
+    ],
+    "schema": "tide-hb-mem-v13-review-v1",
+    "scientific_state": "awaiting terminal paired review; execution is not strict numerical or quality acceptance"
+  },
+  "observed_at": "2026-11-18T02:08:44.168606+00:00",
+  "quota": {
+    "file_grace_expires_epoch": 0,
+    "file_hard": 0,
+    "file_soft": 0,
+    "files": 768150,
+    "filesystem": "/dev/mapper/ascend_data-data",
+    "grace_expires_epoch": 1795294591,
+    "hard_gib": 700.0,
+    "hard_quota_headroom_gib": 348.4332046508789,
+    "query_returncode": 1,
+    "soft_exceeded": true,
+    "soft_gib": 300.0,
+    "used_gib": 351.5667953491211
+  },
+  "schema": "tide-project-retirement-before-stop-v1",
+  "services": [
+    {
+      "properties": "MainPID=0\nExecStart={ path=/usr/bin/python3.9 ; argv[]=/usr/bin/python3.9 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-first-a/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/audit-cpu-a/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-audit-cpu-a.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-audit-cpu-a.service\n",
+      "unit": "tide-lab-audit-cpu-a.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/usr/bin/python3.9 ; argv[]=/usr/bin/python3.9 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-first-a/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/audit-npu-a/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-audit-npu-a.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-audit-npu-a.service\n",
+      "unit": "tide-lab-audit-npu-a.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/usr/bin/python3.9 ; argv[]=/usr/bin/python3.9 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-language-depth-v5/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/lm-a-controls-v5/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-lm-a-controls-v5.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-lm-a-controls-v5.service\n",
+      "unit": "tide-lab-lm-a-controls-v5.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/usr/bin/python3.9 ; argv[]=/usr/bin/python3.9 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-language-depth-cpu-v5/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/lm-a-fc16-v5/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-lm-a-fc16-v5.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-lm-a-fc16-v5.service\n",
+      "unit": "tide-lab-lm-a-fc16-v5.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/usr/bin/python3.9 ; argv[]=/usr/bin/python3.9 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-language-depth-cpu-v5/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/lm-a-hb16-v5/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-lm-a-hb16-v5.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-lm-a-hb16-v5.service\n",
+      "unit": "tide-lab-lm-a-hb16-v5.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/usr/bin/python3.9 ; argv[]=/usr/bin/python3.9 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-language-depth-cpu-v5/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/lm-a-hb40-v5/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-lm-a-hb40-v5.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-lm-a-hb40-v5.service\n",
+      "unit": "tide-lab-lm-a-hb40-v5.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/usr/bin/python3.9 ; argv[]=/usr/bin/python3.9 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-language-routes-v1/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/lm-a-language-v1/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-lm-a-language-v1.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-lm-a-language-v1.service\n",
+      "unit": "tide-lab-lm-a-language-v1.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/usr/bin/python3.9 ; argv[]=/usr/bin/python3.9 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-language-routes-v2/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/lm-a-language-v2/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-lm-a-language-v2.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-lm-a-language-v2.service\n",
+      "unit": "tide-lab-lm-a-language-v2.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/usr/bin/python3.9 ; argv[]=/usr/bin/python3.9 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-language-depth-v5/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/lm-b-fc8-v5/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-lm-b-fc8-v5.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-lm-b-fc8-v5.service\n",
+      "unit": "tide-lab-lm-b-fc8-v5.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/usr/bin/python3.9 ; argv[]=/usr/bin/python3.9 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-language-routes-v1/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/lm-b-language-v1/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-lm-b-language-v1.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-lm-b-language-v1.service\n",
+      "unit": "tide-lab-lm-b-language-v1.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/usr/bin/python3.9 ; argv[]=/usr/bin/python3.9 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-language-routes-v2/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/lm-b-language-v2/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-lm-b-language-v2.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-lm-b-language-v2.service\n",
+      "unit": "tide-lab-lm-b-language-v2.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/usr/bin/python3.9 ; argv[]=/usr/bin/python3.9 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-language-admission-v1/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/lm-cpu-admission-v1/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-lm-cpu-admission-v1.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-lm-cpu-admission-v1.service\n",
+      "unit": "tide-lab-lm-cpu-admission-v1.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/usr/bin/python3.9 ; argv[]=/usr/bin/python3.9 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-language-admission-v2/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/lm-cpu-admission-v2/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-lm-cpu-admission-v2.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-lm-cpu-admission-v2.service\n",
+      "unit": "tide-lab-lm-cpu-admission-v2.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/usr/bin/python3.9 ; argv[]=/usr/bin/python3.9 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-moe-execution-v1/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/moe-controller/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-moe-controller.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-moe-controller.service\n",
+      "unit": "tide-lab-moe-controller.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/usr/bin/python3.9 ; argv[]=/usr/bin/python3.9 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-second-batch/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/s2-frozen-growth/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-s2-frozen-growth.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-s2-frozen-growth.service\n",
+      "unit": "tide-lab-s2-frozen-growth.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/usr/bin/python3.9 ; argv[]=/usr/bin/python3.9 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-second-batch/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/s2-npu-sampling/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-s2-npu-sampling.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-s2-npu-sampling.service\n",
+      "unit": "tide-lab-s2-npu-sampling.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/usr/bin/python3.9 ; argv[]=/usr/bin/python3.9 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-third-batch/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/s3-growth/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-s3-growth.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-s3-growth.service\n",
+      "unit": "tide-lab-s3-growth.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/usr/bin/python3.9 ; argv[]=/usr/bin/python3.9 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-fourth-batch/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/s4-capability/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-s4-capability.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-s4-capability.service\n",
+      "unit": "tide-lab-s4-capability.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/usr/bin/python3.9 ; argv[]=/usr/bin/python3.9 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-first-a/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/stop-check-a/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-stop-check-a.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-stop-check-a.service\n",
+      "unit": "tide-lab-stop-check-a.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/bin/python3.12 ; argv[]=/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/bin/python3.12 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v10-final-calibration/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v10-profile/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-v10-profile.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v10-profile.service\n",
+      "unit": "tide-lab-v10-profile.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/usr/bin/python3.9 ; argv[]=/usr/bin/python3.9 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-capacity-v11-diagnostics/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v11-confirmation-data/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-v11-confirmation-data.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v11-confirmation-data.service\n",
+      "unit": "tide-lab-v11-confirmation-data.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/usr/bin/python3.9 ; argv[]=/usr/bin/python3.9 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-capacity-v11-hb/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v11-hb-hb-d64-r64-q3-bias0.001-s11/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-v11-hb-hb-d64-r64-q3-bias0.001-s11.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v11-hb-hb-d64-r64-q3-bias0.001-s11.service\n",
+      "unit": "tide-lab-v11-hb-hb-d64-r64-q3-bias0.001-s11.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/usr/bin/python3.9 ; argv[]=/usr/bin/python3.9 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-capacity-v11-hb/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v11-hb-hb-d64-r64-q3-bias0.001-s22/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-v11-hb-hb-d64-r64-q3-bias0.001-s22.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v11-hb-hb-d64-r64-q3-bias0.001-s22.service\n",
+      "unit": "tide-lab-v11-hb-hb-d64-r64-q3-bias0.001-s22.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/usr/bin/python3.9 ; argv[]=/usr/bin/python3.9 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-capacity-v11-hb/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v11-hb-hb-d64-r64-q3-bias0.01-s11/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-v11-hb-hb-d64-r64-q3-bias0.01-s11.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v11-hb-hb-d64-r64-q3-bias0.01-s11.service\n",
+      "unit": "tide-lab-v11-hb-hb-d64-r64-q3-bias0.01-s11.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/usr/bin/python3.9 ; argv[]=/usr/bin/python3.9 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-capacity-v11-hb/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v11-hb-hb-d64-r64-q3-bias0.01-s22/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-v11-hb-hb-d64-r64-q3-bias0.01-s22.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v11-hb-hb-d64-r64-q3-bias0.01-s22.service\n",
+      "unit": "tide-lab-v11-hb-hb-d64-r64-q3-bias0.01-s22.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/usr/bin/python3.9 ; argv[]=/usr/bin/python3.9 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v12-all-fullshare8-q3-s22/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-v12-all-fullshare8-q3-s22.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v12-all-fullshare8-q3-s22.service\n",
+      "unit": "tide-lab-v12-all-fullshare8-q3-s22.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/usr/bin/python3.9 ; argv[]=/usr/bin/python3.9 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v12-all-residual-q3-s11/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-v12-all-residual-q3-s11.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v12-all-residual-q3-s11.service\n",
+      "unit": "tide-lab-v12-all-residual-q3-s11.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/usr/bin/python3.9 ; argv[]=/usr/bin/python3.9 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v12-all-share8-d128-q3-s11/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-v12-all-share8-d128-q3-s11.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v12-all-share8-d128-q3-s11.service\n",
+      "unit": "tide-lab-v12-all-share8-d128-q3-s11.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/usr/bin/python3.9 ; argv[]=/usr/bin/python3.9 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v12-all-share8-d128-q3-s22/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-v12-all-share8-d128-q3-s22.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v12-all-share8-d128-q3-s22.service\n",
+      "unit": "tide-lab-v12-all-share8-d128-q3-s22.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/usr/bin/python3.9 ; argv[]=/usr/bin/python3.9 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v12-all-share8-d192-q3-s11/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-v12-all-share8-d192-q3-s11.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v12-all-share8-d192-q3-s11.service\n",
+      "unit": "tide-lab-v12-all-share8-d192-q3-s11.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/usr/bin/python3.9 ; argv[]=/usr/bin/python3.9 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-cal/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v12-data/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-v12-data.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v12-data.service\n",
+      "unit": "tide-lab-v12-data.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/usr/bin/python3.9 ; argv[]=/usr/bin/python3.9 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v12-four-base-q10-s22/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-v12-four-base-q10-s22.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v12-four-base-q10-s22.service\n",
+      "unit": "tide-lab-v12-four-base-q10-s22.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/usr/bin/python3.9 ; argv[]=/usr/bin/python3.9 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v12-four-base128-q3-s11/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-v12-four-base128-q3-s11.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v12-four-base128-q3-s11.service\n",
+      "unit": "tide-lab-v12-four-base128-q3-s11.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/usr/bin/python3.9 ; argv[]=/usr/bin/python3.9 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v12-four-fullshare8-q3-s11/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-v12-four-fullshare8-q3-s11.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v12-four-fullshare8-q3-s11.service\n",
+      "unit": "tide-lab-v12-four-fullshare8-q3-s11.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/usr/bin/python3.9 ; argv[]=/usr/bin/python3.9 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v12-four-fullshare8-q3-s22/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-v12-four-fullshare8-q3-s22.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v12-four-fullshare8-q3-s22.service\n",
+      "unit": "tide-lab-v12-four-fullshare8-q3-s22.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/usr/bin/python3.9 ; argv[]=/usr/bin/python3.9 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-four-card/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v12-four-hardware/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-v12-four-hardware.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v12-four-hardware.service\n",
+      "unit": "tide-lab-v12-four-hardware.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/usr/bin/python3.9 ; argv[]=/usr/bin/python3.9 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v12-four-ports4-q3-s22/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-v12-four-ports4-q3-s22.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v12-four-ports4-q3-s22.service\n",
+      "unit": "tide-lab-v12-four-ports4-q3-s22.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/usr/bin/python3.9 ; argv[]=/usr/bin/python3.9 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v12-four-readcontent-q3-s11/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-v12-four-readcontent-q3-s11.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v12-four-readcontent-q3-s11.service\n",
+      "unit": "tide-lab-v12-four-readcontent-q3-s11.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/usr/bin/python3.9 ; argv[]=/usr/bin/python3.9 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v12-four-readcontent-q3-s22/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-v12-four-readcontent-q3-s22.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v12-four-readcontent-q3-s22.service\n",
+      "unit": "tide-lab-v12-four-readcontent-q3-s22.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/usr/bin/python3.9 ; argv[]=/usr/bin/python3.9 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v12-four-residual-q3-s11/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-v12-four-residual-q3-s11.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v12-four-residual-q3-s11.service\n",
+      "unit": "tide-lab-v12-four-residual-q3-s11.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/usr/bin/python3.9 ; argv[]=/usr/bin/python3.9 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v12-four-share0-q3-s11/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-v12-four-share0-q3-s11.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v12-four-share0-q3-s11.service\n",
+      "unit": "tide-lab-v12-four-share0-q3-s11.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/usr/bin/python3.9 ; argv[]=/usr/bin/python3.9 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v12-four-share8-d128-q3-s11/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-v12-four-share8-d128-q3-s11.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v12-four-share8-d128-q3-s11.service\n",
+      "unit": "tide-lab-v12-four-share8-d128-q3-s11.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/usr/bin/python3.9 ; argv[]=/usr/bin/python3.9 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v12-four-share8-d128-q3-s22/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-v12-four-share8-d128-q3-s22.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v12-four-share8-d128-q3-s22.service\n",
+      "unit": "tide-lab-v12-four-share8-d128-q3-s22.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/usr/bin/python3.9 ; argv[]=/usr/bin/python3.9 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v12-four-share8-d192-q3-s11/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-v12-four-share8-d192-q3-s11.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v12-four-share8-d192-q3-s11.service\n",
+      "unit": "tide-lab-v12-four-share8-d192-q3-s11.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/usr/bin/python3.9 ; argv[]=/usr/bin/python3.9 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v12-four-share8-d192-q3-s22/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-v12-four-share8-d192-q3-s22.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v12-four-share8-d192-q3-s22.service\n",
+      "unit": "tide-lab-v12-four-share8-d192-q3-s22.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/usr/bin/python3.9 ; argv[]=/usr/bin/python3.9 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v12-four-top2-q3-s11/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-v12-four-top2-q3-s11.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v12-four-top2-q3-s11.service\n",
+      "unit": "tide-lab-v12-four-top2-q3-s11.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/usr/bin/python3.9 ; argv[]=/usr/bin/python3.9 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v12-four-untied-q3-s22/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-v12-four-untied-q3-s22.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v12-four-untied-q3-s22.service\n",
+      "unit": "tide-lab-v12-four-untied-q3-s22.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/usr/bin/python3.9 ; argv[]=/usr/bin/python3.9 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-main/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v12-main-base-q10-s11/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-v12-main-base-q10-s11.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v12-main-base-q10-s11.service\n",
+      "unit": "tide-lab-v12-main-base-q10-s11.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/usr/bin/python3.9 ; argv[]=/usr/bin/python3.9 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-main/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v12-main-base-q10-s22/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-v12-main-base-q10-s22.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v12-main-base-q10-s22.service\n",
+      "unit": "tide-lab-v12-main-base-q10-s22.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/usr/bin/python3.9 ; argv[]=/usr/bin/python3.9 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-main/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v12-main-base-q3-s22/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-v12-main-base-q3-s22.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v12-main-base-q3-s22.service\n",
+      "unit": "tide-lab-v12-main-base-q3-s22.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/usr/bin/python3.9 ; argv[]=/usr/bin/python3.9 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-main/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v12-main-base128-q3-s11/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-v12-main-base128-q3-s11.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v12-main-base128-q3-s11.service\n",
+      "unit": "tide-lab-v12-main-base128-q3-s11.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/usr/bin/python3.9 ; argv[]=/usr/bin/python3.9 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-main/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v12-main-base128-q3-s22/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-v12-main-base128-q3-s22.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v12-main-base128-q3-s22.service\n",
+      "unit": "tide-lab-v12-main-base128-q3-s22.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/usr/bin/python3.9 ; argv[]=/usr/bin/python3.9 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-main/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v12-main-fullshare8-q3-s11/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-v12-main-fullshare8-q3-s11.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v12-main-fullshare8-q3-s11.service\n",
+      "unit": "tide-lab-v12-main-fullshare8-q3-s11.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/usr/bin/python3.9 ; argv[]=/usr/bin/python3.9 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-main/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v12-main-fullshare8-q3-s22/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-v12-main-fullshare8-q3-s22.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v12-main-fullshare8-q3-s22.service\n",
+      "unit": "tide-lab-v12-main-fullshare8-q3-s22.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/usr/bin/python3.9 ; argv[]=/usr/bin/python3.9 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-main/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v12-main-ports4-q3-s11/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-v12-main-ports4-q3-s11.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v12-main-ports4-q3-s11.service\n",
+      "unit": "tide-lab-v12-main-ports4-q3-s11.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/usr/bin/python3.9 ; argv[]=/usr/bin/python3.9 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-main/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v12-main-ports4-q3-s22/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-v12-main-ports4-q3-s22.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v12-main-ports4-q3-s22.service\n",
+      "unit": "tide-lab-v12-main-ports4-q3-s22.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/usr/bin/python3.9 ; argv[]=/usr/bin/python3.9 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-main/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v12-main-position-q3-s11/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-v12-main-position-q3-s11.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v12-main-position-q3-s11.service\n",
+      "unit": "tide-lab-v12-main-position-q3-s11.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/usr/bin/python3.9 ; argv[]=/usr/bin/python3.9 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-main/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v12-main-position-q3-s22/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-v12-main-position-q3-s22.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v12-main-position-q3-s22.service\n",
+      "unit": "tide-lab-v12-main-position-q3-s22.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/usr/bin/python3.9 ; argv[]=/usr/bin/python3.9 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-main/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v12-main-readcontent-q3-s11/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-v12-main-readcontent-q3-s11.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v12-main-readcontent-q3-s11.service\n",
+      "unit": "tide-lab-v12-main-readcontent-q3-s11.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/usr/bin/python3.9 ; argv[]=/usr/bin/python3.9 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-main/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v12-main-readcontent-q3-s22/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-v12-main-readcontent-q3-s22.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v12-main-readcontent-q3-s22.service\n",
+      "unit": "tide-lab-v12-main-readcontent-q3-s22.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/usr/bin/python3.9 ; argv[]=/usr/bin/python3.9 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-main/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v12-main-residual-q3-s11/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-v12-main-residual-q3-s11.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v12-main-residual-q3-s11.service\n",
+      "unit": "tide-lab-v12-main-residual-q3-s11.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/usr/bin/python3.9 ; argv[]=/usr/bin/python3.9 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-main/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v12-main-residual-q3-s22/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-v12-main-residual-q3-s22.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v12-main-residual-q3-s22.service\n",
+      "unit": "tide-lab-v12-main-residual-q3-s22.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/usr/bin/python3.9 ; argv[]=/usr/bin/python3.9 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-main/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v12-main-share0-q3-s11/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-v12-main-share0-q3-s11.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v12-main-share0-q3-s11.service\n",
+      "unit": "tide-lab-v12-main-share0-q3-s11.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/usr/bin/python3.9 ; argv[]=/usr/bin/python3.9 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-main/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v12-main-share0-q3-s22/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-v12-main-share0-q3-s22.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v12-main-share0-q3-s22.service\n",
+      "unit": "tide-lab-v12-main-share0-q3-s22.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/usr/bin/python3.9 ; argv[]=/usr/bin/python3.9 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-main/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v12-main-share8-d128-q3-s11/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-v12-main-share8-d128-q3-s11.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v12-main-share8-d128-q3-s11.service\n",
+      "unit": "tide-lab-v12-main-share8-d128-q3-s11.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/usr/bin/python3.9 ; argv[]=/usr/bin/python3.9 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-main/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v12-main-share8-d128-q3-s22/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-v12-main-share8-d128-q3-s22.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v12-main-share8-d128-q3-s22.service\n",
+      "unit": "tide-lab-v12-main-share8-d128-q3-s22.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/usr/bin/python3.9 ; argv[]=/usr/bin/python3.9 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-main/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v12-main-share8-d192-q3-s11/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-v12-main-share8-d192-q3-s11.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v12-main-share8-d192-q3-s11.service\n",
+      "unit": "tide-lab-v12-main-share8-d192-q3-s11.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/usr/bin/python3.9 ; argv[]=/usr/bin/python3.9 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-main/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v12-main-share8-d192-q3-s22/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-v12-main-share8-d192-q3-s22.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v12-main-share8-d192-q3-s22.service\n",
+      "unit": "tide-lab-v12-main-share8-d192-q3-s22.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/usr/bin/python3.9 ; argv[]=/usr/bin/python3.9 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-main/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v12-main-share8-lr3-q3-s11/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-v12-main-share8-lr3-q3-s11.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v12-main-share8-lr3-q3-s11.service\n",
+      "unit": "tide-lab-v12-main-share8-lr3-q3-s11.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/usr/bin/python3.9 ; argv[]=/usr/bin/python3.9 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-main/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v12-main-share8-lr3-q3-s22/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-v12-main-share8-lr3-q3-s22.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v12-main-share8-lr3-q3-s22.service\n",
+      "unit": "tide-lab-v12-main-share8-lr3-q3-s22.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/usr/bin/python3.9 ; argv[]=/usr/bin/python3.9 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-main/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v12-main-share8-q10-s11/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-v12-main-share8-q10-s11.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v12-main-share8-q10-s11.service\n",
+      "unit": "tide-lab-v12-main-share8-q10-s11.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/usr/bin/python3.9 ; argv[]=/usr/bin/python3.9 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-main/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v12-main-share8-q3-s11/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-v12-main-share8-q3-s11.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v12-main-share8-q3-s11.service\n",
+      "unit": "tide-lab-v12-main-share8-q3-s11.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/usr/bin/python3.9 ; argv[]=/usr/bin/python3.9 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-main/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v12-main-share8-q3-s22/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-v12-main-share8-q3-s22.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v12-main-share8-q3-s22.service\n",
+      "unit": "tide-lab-v12-main-share8-q3-s22.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/usr/bin/python3.9 ; argv[]=/usr/bin/python3.9 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-main/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v12-main-top2-q3-s11/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-v12-main-top2-q3-s11.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v12-main-top2-q3-s11.service\n",
+      "unit": "tide-lab-v12-main-top2-q3-s11.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/usr/bin/python3.9 ; argv[]=/usr/bin/python3.9 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-main/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v12-main-untied-q3-s22/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-v12-main-untied-q3-s22.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v12-main-untied-q3-s22.service\n",
+      "unit": "tide-lab-v12-main-untied-q3-s22.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/bin/python3.12 ; argv[]=/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/bin/python3.12 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v12-repair-base-q10-s22/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-v12-repair-base-q10-s22.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v12-repair-base-q10-s22.service\n",
+      "unit": "tide-lab-v12-repair-base-q10-s22.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/bin/python3.12 ; argv[]=/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/bin/python3.12 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v12-repair-base128-q3-s11/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-v12-repair-base128-q3-s11.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v12-repair-base128-q3-s11.service\n",
+      "unit": "tide-lab-v12-repair-base128-q3-s11.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/usr/bin/python3.9 ; argv[]=/usr/bin/python3.9 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v12-repair-controller/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-v12-repair-controller.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v12-repair-controller.service\n",
+      "unit": "tide-lab-v12-repair-controller.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/bin/python3.12 ; argv[]=/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/bin/python3.12 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v12-repair-fullshare8-q3-s11/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-v12-repair-fullshare8-q3-s11.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v12-repair-fullshare8-q3-s11.service\n",
+      "unit": "tide-lab-v12-repair-fullshare8-q3-s11.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/bin/python3.12 ; argv[]=/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/bin/python3.12 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v12-repair-fullshare8-q3-s22/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-v12-repair-fullshare8-q3-s22.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v12-repair-fullshare8-q3-s22.service\n",
+      "unit": "tide-lab-v12-repair-fullshare8-q3-s22.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/usr/bin/python3.9 ; argv[]=/usr/bin/python3.9 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v12-repair-hardware/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-v12-repair-hardware.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v12-repair-hardware.service\n",
+      "unit": "tide-lab-v12-repair-hardware.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/bin/python3.12 ; argv[]=/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/bin/python3.12 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v12-repair-ports4-q3-s22/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-v12-repair-ports4-q3-s22.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v12-repair-ports4-q3-s22.service\n",
+      "unit": "tide-lab-v12-repair-ports4-q3-s22.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/bin/python3.12 ; argv[]=/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/bin/python3.12 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v12-repair-position-q3-s11/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-v12-repair-position-q3-s11.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v12-repair-position-q3-s11.service\n",
+      "unit": "tide-lab-v12-repair-position-q3-s11.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/bin/python3.12 ; argv[]=/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/bin/python3.12 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v12-repair-readcontent-q3-s11/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-v12-repair-readcontent-q3-s11.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v12-repair-readcontent-q3-s11.service\n",
+      "unit": "tide-lab-v12-repair-readcontent-q3-s11.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/bin/python3.12 ; argv[]=/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/bin/python3.12 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v12-repair-readcontent-q3-s22/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-v12-repair-readcontent-q3-s22.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v12-repair-readcontent-q3-s22.service\n",
+      "unit": "tide-lab-v12-repair-readcontent-q3-s22.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/bin/python3.12 ; argv[]=/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/bin/python3.12 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v12-repair-residual-q3-s11/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-v12-repair-residual-q3-s11.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v12-repair-residual-q3-s11.service\n",
+      "unit": "tide-lab-v12-repair-residual-q3-s11.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/bin/python3.12 ; argv[]=/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/bin/python3.12 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v12-repair-share0-q3-s11/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-v12-repair-share0-q3-s11.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v12-repair-share0-q3-s11.service\n",
+      "unit": "tide-lab-v12-repair-share0-q3-s11.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/bin/python3.12 ; argv[]=/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/bin/python3.12 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v12-repair-share8-d128-q3-s11/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-v12-repair-share8-d128-q3-s11.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v12-repair-share8-d128-q3-s11.service\n",
+      "unit": "tide-lab-v12-repair-share8-d128-q3-s11.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/bin/python3.12 ; argv[]=/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/bin/python3.12 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v12-repair-share8-d128-q3-s22/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-v12-repair-share8-d128-q3-s22.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v12-repair-share8-d128-q3-s22.service\n",
+      "unit": "tide-lab-v12-repair-share8-d128-q3-s22.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/bin/python3.12 ; argv[]=/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/bin/python3.12 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v12-repair-share8-d192-q3-s11/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-v12-repair-share8-d192-q3-s11.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v12-repair-share8-d192-q3-s11.service\n",
+      "unit": "tide-lab-v12-repair-share8-d192-q3-s11.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/bin/python3.12 ; argv[]=/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/bin/python3.12 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v12-repair-share8-d192-q3-s22/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-v12-repair-share8-d192-q3-s22.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v12-repair-share8-d192-q3-s22.service\n",
+      "unit": "tide-lab-v12-repair-share8-d192-q3-s22.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/bin/python3.12 ; argv[]=/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/bin/python3.12 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v12-repair-top2-q3-s11/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-v12-repair-top2-q3-s11.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v12-repair-top2-q3-s11.service\n",
+      "unit": "tide-lab-v12-repair-top2-q3-s11.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/bin/python3.12 ; argv[]=/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/bin/python3.12 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v12-repair-untied-q3-s22/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-v12-repair-untied-q3-s22.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v12-repair-untied-q3-s22.service\n",
+      "unit": "tide-lab-v12-repair-untied-q3-s22.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/usr/bin/python3.9 ; argv[]=/usr/bin/python3.9 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v12-six-base-q10-s22/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-v12-six-base-q10-s22.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v12-six-base-q10-s22.service\n",
+      "unit": "tide-lab-v12-six-base-q10-s22.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/usr/bin/python3.9 ; argv[]=/usr/bin/python3.9 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v12-six-base128-q3-s11/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-v12-six-base128-q3-s11.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v12-six-base128-q3-s11.service\n",
+      "unit": "tide-lab-v12-six-base128-q3-s11.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/usr/bin/python3.9 ; argv[]=/usr/bin/python3.9 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v12-six-fullshare8-q3-s11/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-v12-six-fullshare8-q3-s11.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v12-six-fullshare8-q3-s11.service\n",
+      "unit": "tide-lab-v12-six-fullshare8-q3-s11.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/usr/bin/python3.9 ; argv[]=/usr/bin/python3.9 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v12-six-fullshare8-q3-s22/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-v12-six-fullshare8-q3-s22.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v12-six-fullshare8-q3-s22.service\n",
+      "unit": "tide-lab-v12-six-fullshare8-q3-s22.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/usr/bin/python3.9 ; argv[]=/usr/bin/python3.9 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-six-card/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v12-six-hardware/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-v12-six-hardware.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v12-six-hardware.service\n",
+      "unit": "tide-lab-v12-six-hardware.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/usr/bin/python3.9 ; argv[]=/usr/bin/python3.9 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v12-six-ports4-q3-s22/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-v12-six-ports4-q3-s22.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v12-six-ports4-q3-s22.service\n",
+      "unit": "tide-lab-v12-six-ports4-q3-s22.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/usr/bin/python3.9 ; argv[]=/usr/bin/python3.9 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v12-six-position-q3-s11/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-v12-six-position-q3-s11.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v12-six-position-q3-s11.service\n",
+      "unit": "tide-lab-v12-six-position-q3-s11.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/usr/bin/python3.9 ; argv[]=/usr/bin/python3.9 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v12-six-readcontent-q3-s11/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-v12-six-readcontent-q3-s11.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v12-six-readcontent-q3-s11.service\n",
+      "unit": "tide-lab-v12-six-readcontent-q3-s11.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/usr/bin/python3.9 ; argv[]=/usr/bin/python3.9 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v12-six-readcontent-q3-s22/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-v12-six-readcontent-q3-s22.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v12-six-readcontent-q3-s22.service\n",
+      "unit": "tide-lab-v12-six-readcontent-q3-s22.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/usr/bin/python3.9 ; argv[]=/usr/bin/python3.9 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v12-six-residual-q3-s11/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-v12-six-residual-q3-s11.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v12-six-residual-q3-s11.service\n",
+      "unit": "tide-lab-v12-six-residual-q3-s11.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/usr/bin/python3.9 ; argv[]=/usr/bin/python3.9 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v12-six-share0-q3-s11/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-v12-six-share0-q3-s11.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v12-six-share0-q3-s11.service\n",
+      "unit": "tide-lab-v12-six-share0-q3-s11.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/usr/bin/python3.9 ; argv[]=/usr/bin/python3.9 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v12-six-share8-d192-q3-s11/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-v12-six-share8-d192-q3-s11.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v12-six-share8-d192-q3-s11.service\n",
+      "unit": "tide-lab-v12-six-share8-d192-q3-s11.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/usr/bin/python3.9 ; argv[]=/usr/bin/python3.9 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v12-six-share8-d192-q3-s22/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-v12-six-share8-d192-q3-s22.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v12-six-share8-d192-q3-s22.service\n",
+      "unit": "tide-lab-v12-six-share8-d192-q3-s22.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/usr/bin/python3.9 ; argv[]=/usr/bin/python3.9 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v12-six-top2-q3-s11/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-v12-six-top2-q3-s11.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v12-six-top2-q3-s11.service\n",
+      "unit": "tide-lab-v12-six-top2-q3-s11.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/usr/bin/python3.9 ; argv[]=/usr/bin/python3.9 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-v12-repair-v2/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v12-six-untied-q3-s22/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-v12-six-untied-q3-s22.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v12-six-untied-q3-s22.service\n",
+      "unit": "tide-lab-v12-six-untied-q3-s22.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/bin/python3.12 ; argv[]=/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/bin/python3.12 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-mem-v13-cal/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v13-cal-pool-l/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-v13-cal-pool-l.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v13-cal-pool-l.service\n",
+      "unit": "tide-lab-v13-cal-pool-l.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/bin/python3.12 ; argv[]=/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/bin/python3.12 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-mem-v13-cal/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v13-cal-q10-l/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-v13-cal-q10-l.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v13-cal-q10-l.service\n",
+      "unit": "tide-lab-v13-cal-q10-l.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/bin/python3.12 ; argv[]=/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/bin/python3.12 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-mem-v13-cal/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v13-cal-q3-l/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-v13-cal-q3-l.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v13-cal-q3-l.service\n",
+      "unit": "tide-lab-v13-cal-q3-l.service"
+    },
+    {
+      "properties": "MainPID=4117601\nExecStart={ path=/usr/bin/python3.9 ; argv[]=/usr/bin/python3.9 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-mem-v13-main/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v13-hardware/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=/user.slice/user-1003.slice/user@1003.service/background.slice/tide-lab-v13-hardware.service\nId=tide-lab-v13-hardware.service\nActiveState=active\nSubState=running\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v13-hardware.service\n",
+      "unit": "tide-lab-v13-hardware.service"
+    },
+    {
+      "properties": "MainPID=4114854\nExecStart={ path=/usr/bin/python3.9 ; argv[]=/usr/bin/python3.9 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-mem-v13-main/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v13-main-pool-l-qry-s11/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=/user.slice/user-1003.slice/user@1003.service/background.slice/tide-lab-v13-main-pool-l-qry-s11.service\nId=tide-lab-v13-main-pool-l-qry-s11.service\nActiveState=active\nSubState=running\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v13-main-pool-l-qry-s11.service\n",
+      "unit": "tide-lab-v13-main-pool-l-qry-s11.service"
+    },
+    {
+      "properties": "MainPID=4114954\nExecStart={ path=/usr/bin/python3.9 ; argv[]=/usr/bin/python3.9 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-mem-v13-main/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v13-main-pool-l-qry-s22/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=/user.slice/user-1003.slice/user@1003.service/background.slice/tide-lab-v13-main-pool-l-qry-s22.service\nId=tide-lab-v13-main-pool-l-qry-s22.service\nActiveState=active\nSubState=running\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v13-main-pool-l-qry-s22.service\n",
+      "unit": "tide-lab-v13-main-pool-l-qry-s22.service"
+    },
+    {
+      "properties": "MainPID=4114267\nExecStart={ path=/usr/bin/python3.9 ; argv[]=/usr/bin/python3.9 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-mem-v13-main/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v13-main-pool-l-sum-s11/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=/user.slice/user-1003.slice/user@1003.service/background.slice/tide-lab-v13-main-pool-l-sum-s11.service\nId=tide-lab-v13-main-pool-l-sum-s11.service\nActiveState=active\nSubState=running\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v13-main-pool-l-sum-s11.service\n",
+      "unit": "tide-lab-v13-main-pool-l-sum-s11.service"
+    },
+    {
+      "properties": "MainPID=4114304\nExecStart={ path=/usr/bin/python3.9 ; argv[]=/usr/bin/python3.9 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-mem-v13-main/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v13-main-pool-l-sum-s22/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=/user.slice/user-1003.slice/user@1003.service/background.slice/tide-lab-v13-main-pool-l-sum-s22.service\nId=tide-lab-v13-main-pool-l-sum-s22.service\nActiveState=active\nSubState=running\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v13-main-pool-l-sum-s22.service\n",
+      "unit": "tide-lab-v13-main-pool-l-sum-s22.service"
+    },
+    {
+      "properties": "MainPID=4114371\nExecStart={ path=/usr/bin/python3.9 ; argv[]=/usr/bin/python3.9 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-mem-v13-main/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v13-main-q3-l-sum-s11/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=/user.slice/user-1003.slice/user@1003.service/background.slice/tide-lab-v13-main-q3-l-sum-s11.service\nId=tide-lab-v13-main-q3-l-sum-s11.service\nActiveState=active\nSubState=running\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v13-main-q3-l-sum-s11.service\n",
+      "unit": "tide-lab-v13-main-q3-l-sum-s11.service"
+    },
+    {
+      "properties": "MainPID=4114424\nExecStart={ path=/usr/bin/python3.9 ; argv[]=/usr/bin/python3.9 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-mem-v13-main/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v13-main-q3-l-sum-s22/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=/user.slice/user-1003.slice/user@1003.service/background.slice/tide-lab-v13-main-q3-l-sum-s22.service\nId=tide-lab-v13-main-q3-l-sum-s22.service\nActiveState=active\nSubState=running\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v13-main-q3-l-sum-s22.service\n",
+      "unit": "tide-lab-v13-main-q3-l-sum-s22.service"
+    },
+    {
+      "properties": "MainPID=4114603\nExecStart={ path=/usr/bin/python3.9 ; argv[]=/usr/bin/python3.9 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-hb-mem-v13-main/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v13-main-q3-s-sum-s22/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=/user.slice/user-1003.slice/user@1003.service/background.slice/tide-lab-v13-main-q3-s-sum-s22.service\nId=tide-lab-v13-main-q3-s-sum-s22.service\nActiveState=active\nSubState=running\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v13-main-q3-s-sum-s22.service\n",
+      "unit": "tide-lab-v13-main-q3-s-sum-s22.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/usr/bin/python3.9 ; argv[]=/usr/bin/python3.9 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v6-calibration/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v6-cal-native-kv-cpu-b8/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-v6-cal-native-kv-cpu-b8.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v6-cal-native-kv-cpu-b8.service\n",
+      "unit": "tide-lab-v6-cal-native-kv-cpu-b8.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/usr/bin/python3.9 ; argv[]=/usr/bin/python3.9 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v6-calibration/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v6-cal-native-kv-npu-b32/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-v6-cal-native-kv-npu-b32.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v6-cal-native-kv-npu-b32.service\n",
+      "unit": "tide-lab-v6-cal-native-kv-npu-b32.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/usr/bin/python3.9 ; argv[]=/usr/bin/python3.9 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v6-calibration/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v6-cal-native-kv-npu-b8/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-v6-cal-native-kv-npu-b8.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v6-cal-native-kv-npu-b8.service\n",
+      "unit": "tide-lab-v6-cal-native-kv-npu-b8.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/usr/bin/python3.9 ; argv[]=/usr/bin/python3.9 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v6-runtime/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v6-cal-native2-kv-npu-b32/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-v6-cal-native2-kv-npu-b32.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v6-cal-native2-kv-npu-b32.service\n",
+      "unit": "tide-lab-v6-cal-native2-kv-npu-b32.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/usr/bin/python3.9 ; argv[]=/usr/bin/python3.9 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v6-launch/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v6-cover-transformer-fc-budget/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-v6-cover-transformer-fc-budget.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v6-cover-transformer-fc-budget.service\n",
+      "unit": "tide-lab-v6-cover-transformer-fc-budget.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/usr/bin/python3.9 ; argv[]=/usr/bin/python3.9 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v6-launch/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v6-cover-transformer-hb-budget/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-v6-cover-transformer-hb-budget.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v6-cover-transformer-hb-budget.service\n",
+      "unit": "tide-lab-v6-cover-transformer-hb-budget.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/usr/bin/python3.9 ; argv[]=/usr/bin/python3.9 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v6-runtime/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v6-data-range1/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-v6-data-range1.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v6-data-range1.service\n",
+      "unit": "tide-lab-v6-data-range1.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/usr/bin/python3.9 ; argv[]=/usr/bin/python3.9 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v6-calibration/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v6-data-resume1/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-v6-data-resume1.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v6-data-resume1.service\n",
+      "unit": "tide-lab-v6-data-resume1.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/usr/bin/python3.9 ; argv[]=/usr/bin/python3.9 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v6-data/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v6-data/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-v6-data.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v6-data.service\n",
+      "unit": "tide-lab-v6-data.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/usr/bin/python3.9 ; argv[]=/usr/bin/python3.9 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v6-launch/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v6-scale-fc16-gdn-quad/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-v6-scale-fc16-gdn-quad.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v6-scale-fc16-gdn-quad.service\n",
+      "unit": "tide-lab-v6-scale-fc16-gdn-quad.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/usr/bin/python3.9 ; argv[]=/usr/bin/python3.9 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v6-launch/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v6-scale-fc16-kv-quad-npu/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-v6-scale-fc16-kv-quad-npu.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v6-scale-fc16-kv-quad-npu.service\n",
+      "unit": "tide-lab-v6-scale-fc16-kv-quad-npu.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/usr/bin/python3.9 ; argv[]=/usr/bin/python3.9 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v6-launch/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v6-scale-fc16-kv-quad/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-v6-scale-fc16-kv-quad.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v6-scale-fc16-kv-quad.service\n",
+      "unit": "tide-lab-v6-scale-fc16-kv-quad.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/usr/bin/python3.9 ; argv[]=/usr/bin/python3.9 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v6-launch/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v6-scale-fc16-shannon/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-v6-scale-fc16-shannon.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v6-scale-fc16-shannon.service\n",
+      "unit": "tide-lab-v6-scale-fc16-shannon.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/usr/bin/python3.9 ; argv[]=/usr/bin/python3.9 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v6-launch/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v6-scale-fc16-ssd-quad-npu/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-v6-scale-fc16-ssd-quad-npu.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v6-scale-fc16-ssd-quad-npu.service\n",
+      "unit": "tide-lab-v6-scale-fc16-ssd-quad-npu.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/usr/bin/python3.9 ; argv[]=/usr/bin/python3.9 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v6-launch/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v6-scale-fc16-ssd-quad/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-v6-scale-fc16-ssd-quad.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v6-scale-fc16-ssd-quad.service\n",
+      "unit": "tide-lab-v6-scale-fc16-ssd-quad.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/usr/bin/python3.9 ; argv[]=/usr/bin/python3.9 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v6-launch/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v6-scale-fc32-kv-quad/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-v6-scale-fc32-kv-quad.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v6-scale-fc32-kv-quad.service\n",
+      "unit": "tide-lab-v6-scale-fc32-kv-quad.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/usr/bin/python3.9 ; argv[]=/usr/bin/python3.9 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v6-launch/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v6-scale-fc32-shannon/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-v6-scale-fc32-shannon.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v6-scale-fc32-shannon.service\n",
+      "unit": "tide-lab-v6-scale-fc32-shannon.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/usr/bin/python3.9 ; argv[]=/usr/bin/python3.9 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v6-launch/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v6-scale-fc32-ssd-quad/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-v6-scale-fc32-ssd-quad.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v6-scale-fc32-ssd-quad.service\n",
+      "unit": "tide-lab-v6-scale-fc32-ssd-quad.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/usr/bin/python3.9 ; argv[]=/usr/bin/python3.9 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v6-launch/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v6-scale-fc64-kv-quad/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-v6-scale-fc64-kv-quad.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v6-scale-fc64-kv-quad.service\n",
+      "unit": "tide-lab-v6-scale-fc64-kv-quad.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/usr/bin/python3.9 ; argv[]=/usr/bin/python3.9 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v6-launch/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v6-scale-hb40-kv-quad/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-v6-scale-hb40-kv-quad.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v6-scale-hb40-kv-quad.service\n",
+      "unit": "tide-lab-v6-scale-hb40-kv-quad.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/usr/bin/python3.9 ; argv[]=/usr/bin/python3.9 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v6-launch/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v6-scale-hb40-shannon/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-v6-scale-hb40-shannon.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v6-scale-hb40-shannon.service\n",
+      "unit": "tide-lab-v6-scale-hb40-shannon.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/usr/bin/python3.9 ; argv[]=/usr/bin/python3.9 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v6-launch/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v6-scale-hb88-kv-quad/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-v6-scale-hb88-kv-quad.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v6-scale-hb88-kv-quad.service\n",
+      "unit": "tide-lab-v6-scale-hb88-kv-quad.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/usr/bin/python3.9 ; argv[]=/usr/bin/python3.9 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v6-launch/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v6-scale-transformer-10m/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-v6-scale-transformer-10m.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v6-scale-transformer-10m.service\n",
+      "unit": "tide-lab-v6-scale-transformer-10m.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/usr/bin/python3.9 ; argv[]=/usr/bin/python3.9 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v6-launch/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v6-scale-transformer-19m/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-v6-scale-transformer-19m.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v6-scale-transformer-19m.service\n",
+      "unit": "tide-lab-v6-scale-transformer-19m.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/usr/bin/python3.9 ; argv[]=/usr/bin/python3.9 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v6-launch/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v6-scale-transformer-5m/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-v6-scale-transformer-5m.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v6-scale-transformer-5m.service\n",
+      "unit": "tide-lab-v6-scale-transformer-5m.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/usr/bin/python3.9 ; argv[]=/usr/bin/python3.9 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v7-cal/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v7-budget/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-v7-budget.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v7-budget.service\n",
+      "unit": "tide-lab-v7-budget.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/usr/bin/python3.9 ; argv[]=/usr/bin/python3.9 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v9-execution/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v9-controller/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-v9-controller.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v9-controller.service\n",
+      "unit": "tide-lab-v9-controller.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/usr/bin/python3.9 ; argv[]=/usr/bin/python3.9 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v9-data/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v9-data-r2/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-v9-data-r2.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v9-data-r2.service\n",
+      "unit": "tide-lab-v9-data-r2.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/usr/bin/python3.9 ; argv[]=/usr/bin/python3.9 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v9-data/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v9-data/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-v9-data.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v9-data.service\n",
+      "unit": "tide-lab-v9-data.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/bin/python3.12 ; argv[]=/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/bin/python3.12 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v9-execution/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v9-main-w4/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-v9-main-w4.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v9-main-w4.service\n",
+      "unit": "tide-lab-v9-main-w4.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/bin/python3.12 ; argv[]=/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/bin/python3.12 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v9-execution/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v9-main-w5/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-v9-main-w5.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v9-main-w5.service\n",
+      "unit": "tide-lab-v9-main-w5.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/bin/python3.12 ; argv[]=/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/bin/python3.12 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v9-execution/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v9-main-w6/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-v9-main-w6.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v9-main-w6.service\n",
+      "unit": "tide-lab-v9-main-w6.service"
+    },
+    {
+      "properties": "MainPID=0\nExecStart={ path=/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/bin/python3.12 ; argv[]=/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/bin/python3.12 /mi/data2T/zlong/home/llm/tide-learning-lab/.local/source-v9-execution/tide_lab/supervisor.py run --record /mi/data2T/zlong/home/llm/tide-learning-lab/artifacts/jobs/v9-main-w7/job.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nControlGroup=\nId=tide-lab-v9-main-w7.service\nActiveState=failed\nSubState=failed\nFragmentPath=/run/user/1003/systemd/transient/tide-lab-v9-main-w7.service\n",
+      "unit": "tide-lab-v9-main-w7.service"
+    }
+  ]
+}

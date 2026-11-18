@@ -1,0 +1,5419 @@
+{
+  "authorization": "user approved cleanup and stopping all project jobs2026-11-18",
+  "endpoint_evidence": "docs/evidence/hb-mem-v13-final-before-retirement-20261118.json",
+  "historical_job_count": 794,
+  "historical_jobs": [
+    {
+      "id": "a1-npu-explore",
+      "source": "0494d208e2a561ac66da9d1fa3d72672af6809e8",
+      "state": "completed",
+      "unit": "tide-lab-a1-npu-explore.service"
+    },
+    {
+      "id": "a2-hb-dense-pilot",
+      "source": "aff03eee27960113694c7c3d3b7a5c4cc82f8434",
+      "state": "completed",
+      "unit": "tide-lab-a2-hb-dense-pilot.service"
+    },
+    {
+      "id": "a2-hb-prepare",
+      "source": "aff03eee27960113694c7c3d3b7a5c4cc82f8434",
+      "state": "completed",
+      "unit": "tide-lab-a2-hb-prepare.service"
+    },
+    {
+      "id": "a2-hb-sparse-pilot",
+      "source": "aff03eee27960113694c7c3d3b7a5c4cc82f8434",
+      "state": "completed",
+      "unit": "tide-lab-a2-hb-sparse-pilot.service"
+    },
+    {
+      "id": "audit-cpu-a",
+      "source": "0d7ec5bdaa34556df9c93886e95f55fa5c9876ab",
+      "state": "failed",
+      "unit": "tide-lab-audit-cpu-a.service"
+    },
+    {
+      "id": "audit-npu-a",
+      "source": "0d7ec5bdaa34556df9c93886e95f55fa5c9876ab",
+      "state": "failed",
+      "unit": "tide-lab-audit-npu-a.service"
+    },
+    {
+      "id": "calibrate-b",
+      "source": "0d7ec5bdaa34556df9c93886e95f55fa5c9876ab",
+      "state": "completed",
+      "unit": "tide-lab-calibrate-b.service"
+    },
+    {
+      "id": "confirm-a-s11",
+      "source": "0d7ec5bdaa34556df9c93886e95f55fa5c9876ab",
+      "state": "completed",
+      "unit": "tide-lab-confirm-a-s11.service"
+    },
+    {
+      "id": "confirm-a-s22",
+      "source": "0d7ec5bdaa34556df9c93886e95f55fa5c9876ab",
+      "state": "completed",
+      "unit": "tide-lab-confirm-a-s22.service"
+    },
+    {
+      "id": "confirm-a-s33",
+      "source": "0d7ec5bdaa34556df9c93886e95f55fa5c9876ab",
+      "state": "completed",
+      "unit": "tide-lab-confirm-a-s33.service"
+    },
+    {
+      "id": "core5-actual-a",
+      "source": "0d7ec5bdaa34556df9c93886e95f55fa5c9876ab",
+      "state": "completed",
+      "unit": "tide-lab-core5-actual-a.service"
+    },
+    {
+      "id": "growth-cpu-explore-b",
+      "source": "0d7ec5bdaa34556df9c93886e95f55fa5c9876ab",
+      "state": "completed",
+      "unit": "tide-lab-growth-cpu-explore-b.service"
+    },
+    {
+      "id": "hb-cost-20261111-cpu-eight",
+      "source": "b2e85cb972e43bffc23c6da6286c147f1b06e96c",
+      "state": "completed",
+      "unit": "tide-lab-hb-cost-20261111-cpu-eight.service"
+    },
+    {
+      "id": "hb-cost-20261111-cpu-main",
+      "source": "b2e85cb972e43bffc23c6da6286c147f1b06e96c",
+      "state": "completed",
+      "unit": "tide-lab-hb-cost-20261111-cpu-main.service"
+    },
+    {
+      "id": "hb-cost-20261111-npu-main",
+      "source": "b2e85cb972e43bffc23c6da6286c147f1b06e96c",
+      "state": "completed",
+      "unit": "tide-lab-hb-cost-20261111-npu-main.service"
+    },
+    {
+      "id": "hb-gradient-20261111",
+      "source": "8bb7ab955f29939bfa65b670fa974aedb85968ee",
+      "state": "completed",
+      "unit": "tide-lab-hb-gradient-20261111.service"
+    },
+    {
+      "id": "lifecycle-a",
+      "source": "0d7ec5bdaa34556df9c93886e95f55fa5c9876ab",
+      "state": "completed",
+      "unit": "tide-lab-lifecycle-a.service"
+    },
+    {
+      "id": "lm-a-controls-v5",
+      "source": "100b4507b0c4a9bb359e3238f5f6fe1ecb7c0f59",
+      "state": "failed",
+      "unit": "tide-lab-lm-a-controls-v5.service"
+    },
+    {
+      "id": "lm-a-fc16-v5",
+      "source": "aa76da565a4612b8d009a7abedbbd1187ef0c95a",
+      "state": "failed",
+      "unit": "tide-lab-lm-a-fc16-v5.service"
+    },
+    {
+      "id": "lm-a-hb16-sparse-v5",
+      "source": "4a1a5890485b06ddd5b94197ab5c58e83596c47b",
+      "state": "completed",
+      "unit": "tide-lab-lm-a-hb16-sparse-v5.service"
+    },
+    {
+      "id": "lm-a-hb16-v5",
+      "source": "aa76da565a4612b8d009a7abedbbd1187ef0c95a",
+      "state": "failed",
+      "unit": "tide-lab-lm-a-hb16-v5.service"
+    },
+    {
+      "id": "lm-a-hb40-v5",
+      "source": "aa76da565a4612b8d009a7abedbbd1187ef0c95a",
+      "state": "failed",
+      "unit": "tide-lab-lm-a-hb40-v5.service"
+    },
+    {
+      "id": "lm-a-language-v1",
+      "source": "64493f6c996e7b6dd47d03a4b59cb524dbf44215",
+      "state": "failed",
+      "unit": "tide-lab-lm-a-language-v1.service"
+    },
+    {
+      "id": "lm-a-language-v2",
+      "source": "7d1a95f16a3a390e7bbf60d18f25d2928ca849f0",
+      "state": "failed",
+      "unit": "tide-lab-lm-a-language-v2.service"
+    },
+    {
+      "id": "lm-a-language-v3",
+      "source": "6cd4f856df02e9c90645198cf5998a27a877b4ec",
+      "state": "completed",
+      "unit": "tide-lab-lm-a-language-v3.service"
+    },
+    {
+      "id": "lm-a-language-v4",
+      "source": "069275628eefc1011e2b69526a28126e2bc25985",
+      "state": "completed",
+      "unit": "tide-lab-lm-a-language-v4.service"
+    },
+    {
+      "id": "lm-a-reference-v5",
+      "source": "8626ab2bcfea2f091341bf00e511c2b93d512bfb",
+      "state": "completed",
+      "unit": "tide-lab-lm-a-reference-v5.service"
+    },
+    {
+      "id": "lm-a-transformer-cpu-v5",
+      "source": "4a1a5890485b06ddd5b94197ab5c58e83596c47b",
+      "state": "completed",
+      "unit": "tide-lab-lm-a-transformer-cpu-v5.service"
+    },
+    {
+      "id": "lm-b-cpu-cal-v5",
+      "source": "4a1a5890485b06ddd5b94197ab5c58e83596c47b",
+      "state": "completed",
+      "unit": "tide-lab-lm-b-cpu-cal-v5.service"
+    },
+    {
+      "id": "lm-b-fc8-v5",
+      "source": "100b4507b0c4a9bb359e3238f5f6fe1ecb7c0f59",
+      "state": "failed",
+      "unit": "tide-lab-lm-b-fc8-v5.service"
+    },
+    {
+      "id": "lm-b-fc8-v5-budget2",
+      "source": "8626ab2bcfea2f091341bf00e511c2b93d512bfb",
+      "state": "completed",
+      "unit": "tide-lab-lm-b-fc8-v5-budget2.service"
+    },
+    {
+      "id": "lm-b-language-v1",
+      "source": "64493f6c996e7b6dd47d03a4b59cb524dbf44215",
+      "state": "failed",
+      "unit": "tide-lab-lm-b-language-v1.service"
+    },
+    {
+      "id": "lm-b-language-v2",
+      "source": "7d1a95f16a3a390e7bbf60d18f25d2928ca849f0",
+      "state": "failed",
+      "unit": "tide-lab-lm-b-language-v2.service"
+    },
+    {
+      "id": "lm-b-language-v3",
+      "source": "6cd4f856df02e9c90645198cf5998a27a877b4ec",
+      "state": "completed",
+      "unit": "tide-lab-lm-b-language-v3.service"
+    },
+    {
+      "id": "lm-b-language-v4",
+      "source": "069275628eefc1011e2b69526a28126e2bc25985",
+      "state": "completed",
+      "unit": "tide-lab-lm-b-language-v4.service"
+    },
+    {
+      "id": "lm-b-reference-v5",
+      "source": "8626ab2bcfea2f091341bf00e511c2b93d512bfb",
+      "state": "completed",
+      "unit": "tide-lab-lm-b-reference-v5.service"
+    },
+    {
+      "id": "lm-complete-fc16-sparse-v5",
+      "source": "0e409967641d6963e82942e3d13223900b0afba6",
+      "state": "completed",
+      "unit": "tide-lab-lm-complete-fc16-sparse-v5.service"
+    },
+    {
+      "id": "lm-complete-hb16-dense-v5",
+      "source": "0e409967641d6963e82942e3d13223900b0afba6",
+      "state": "completed",
+      "unit": "tide-lab-lm-complete-hb16-dense-v5.service"
+    },
+    {
+      "id": "lm-complete-hb40-dense-v5",
+      "source": "0e409967641d6963e82942e3d13223900b0afba6",
+      "state": "completed",
+      "unit": "tide-lab-lm-complete-hb40-dense-v5.service"
+    },
+    {
+      "id": "lm-complete-hb40-sparse-v5",
+      "source": "0e409967641d6963e82942e3d13223900b0afba6",
+      "state": "completed",
+      "unit": "tide-lab-lm-complete-hb40-sparse-v5.service"
+    },
+    {
+      "id": "lm-complete-references-v5",
+      "source": "0e409967641d6963e82942e3d13223900b0afba6",
+      "state": "completed",
+      "unit": "tide-lab-lm-complete-references-v5.service"
+    },
+    {
+      "id": "lm-complete-wide-cal-cpu-v5",
+      "source": "0e409967641d6963e82942e3d13223900b0afba6",
+      "state": "completed",
+      "unit": "tide-lab-lm-complete-wide-cal-cpu-v5.service"
+    },
+    {
+      "id": "lm-complete-wide-cal-npu-v5",
+      "source": "0e409967641d6963e82942e3d13223900b0afba6",
+      "state": "completed",
+      "unit": "tide-lab-lm-complete-wide-cal-npu-v5.service"
+    },
+    {
+      "id": "lm-complete-wide-dense-v5",
+      "source": "0e409967641d6963e82942e3d13223900b0afba6",
+      "state": "completed",
+      "unit": "tide-lab-lm-complete-wide-dense-v5.service"
+    },
+    {
+      "id": "lm-completion-budget-v5",
+      "source": "0e409967641d6963e82942e3d13223900b0afba6",
+      "state": "completed",
+      "unit": "tide-lab-lm-completion-budget-v5.service"
+    },
+    {
+      "id": "lm-confirmation-data-v4",
+      "source": "069275628eefc1011e2b69526a28126e2bc25985",
+      "state": "completed",
+      "unit": "tide-lab-lm-confirmation-data-v4.service"
+    },
+    {
+      "id": "lm-cpu-admission-v1",
+      "source": "d1f0870ac1a39f8ac82eb4693911675c24c3804d",
+      "state": "failed",
+      "unit": "tide-lab-lm-cpu-admission-v1.service"
+    },
+    {
+      "id": "lm-cpu-admission-v2",
+      "source": "41b3242a5b13cde21aa8806bd618bb7bafd6eb1d",
+      "state": "failed",
+      "unit": "tide-lab-lm-cpu-admission-v2.service"
+    },
+    {
+      "id": "lm-cpu-admission-v3",
+      "source": "ca13a4d5916bb416e5886b9f327b0b52433f87c5",
+      "state": "completed",
+      "unit": "tide-lab-lm-cpu-admission-v3.service"
+    },
+    {
+      "id": "lm-data-v1",
+      "source": "492f46da2d37beff37296a1d51fc273ffb5906c7",
+      "state": "completed",
+      "unit": "tide-lab-lm-data-v1.service"
+    },
+    {
+      "id": "lm-depth-budget-diagnosis-v5",
+      "source": "9ebbc63784a29f2c785bb7568ddb9da63b63dd55",
+      "state": "completed",
+      "unit": "tide-lab-lm-depth-budget-diagnosis-v5.service"
+    },
+    {
+      "id": "lm-depth-budget-parallel-v5",
+      "source": "4a1a5890485b06ddd5b94197ab5c58e83596c47b",
+      "state": "completed",
+      "unit": "tide-lab-lm-depth-budget-parallel-v5.service"
+    },
+    {
+      "id": "lm-depth-budget-v5",
+      "source": "8626ab2bcfea2f091341bf00e511c2b93d512bfb",
+      "state": "completed",
+      "unit": "tide-lab-lm-depth-budget-v5.service"
+    },
+    {
+      "id": "lm-depth-cal-cpu-v5",
+      "source": "100b4507b0c4a9bb359e3238f5f6fe1ecb7c0f59",
+      "state": "completed",
+      "unit": "tide-lab-lm-depth-cal-cpu-v5.service"
+    },
+    {
+      "id": "lm-depth-cal-npu-v5",
+      "source": "100b4507b0c4a9bb359e3238f5f6fe1ecb7c0f59",
+      "state": "completed",
+      "unit": "tide-lab-lm-depth-cal-npu-v5.service"
+    },
+    {
+      "id": "lm-depth-data-v5",
+      "source": "100b4507b0c4a9bb359e3238f5f6fe1ecb7c0f59",
+      "state": "completed",
+      "unit": "tide-lab-lm-depth-data-v5.service"
+    },
+    {
+      "id": "lm-hb16-underflow-v5",
+      "source": "9ebbc63784a29f2c785bb7568ddb9da63b63dd55",
+      "state": "completed",
+      "unit": "tide-lab-lm-hb16-underflow-v5.service"
+    },
+    {
+      "id": "moe-batch-large-dense",
+      "source": "0a79e70f247bf297f4448240344ac6ae2fd9bf6f",
+      "state": "completed",
+      "unit": "tide-lab-moe-batch-large-dense.service"
+    },
+    {
+      "id": "moe-batch-large-e20",
+      "source": "0a79e70f247bf297f4448240344ac6ae2fd9bf6f",
+      "state": "completed",
+      "unit": "tide-lab-moe-batch-large-e20.service"
+    },
+    {
+      "id": "moe-batch-large-e64",
+      "source": "0a79e70f247bf297f4448240344ac6ae2fd9bf6f",
+      "state": "completed",
+      "unit": "tide-lab-moe-batch-large-e64.service"
+    },
+    {
+      "id": "moe-batch-small-dense",
+      "source": "0a79e70f247bf297f4448240344ac6ae2fd9bf6f",
+      "state": "completed",
+      "unit": "tide-lab-moe-batch-small-dense.service"
+    },
+    {
+      "id": "moe-batch-small-e20",
+      "source": "0a79e70f247bf297f4448240344ac6ae2fd9bf6f",
+      "state": "completed",
+      "unit": "tide-lab-moe-batch-small-e20.service"
+    },
+    {
+      "id": "moe-batch-small-e64",
+      "source": "0a79e70f247bf297f4448240344ac6ae2fd9bf6f",
+      "state": "completed",
+      "unit": "tide-lab-moe-batch-small-e64.service"
+    },
+    {
+      "id": "moe-causal-diagnosis",
+      "source": "cea76cbb8451e2892f28e1e4f2d914e3a583c5d5",
+      "state": "completed",
+      "unit": "tide-lab-moe-causal-diagnosis.service"
+    },
+    {
+      "id": "moe-controller",
+      "source": "2f96d745695fdc5f7815a8bebc484256f355d92a",
+      "state": "interrupted",
+      "unit": "tide-lab-moe-controller.service"
+    },
+    {
+      "id": "moe-controller-r2",
+      "source": "8bd33dd160ac65238fe7bd4eac3450251fe57c32",
+      "state": "completed",
+      "unit": "tide-lab-moe-controller-r2.service"
+    },
+    {
+      "id": "moe-kernel-v1",
+      "source": "7f2e62fadce3e0b89da2ff5abea908240c15be89",
+      "state": "completed",
+      "unit": "tide-lab-moe-kernel-v1.service"
+    },
+    {
+      "id": "moe-r2-confirm-large-dense-lr0.001-s11",
+      "source": "8bd33dd160ac65238fe7bd4eac3450251fe57c32",
+      "state": "completed",
+      "unit": "tide-lab-moe-r2-confirm-large-dense-lr0.001-s11.service"
+    },
+    {
+      "id": "moe-r2-confirm-large-dense-lr0.001-s22",
+      "source": "8bd33dd160ac65238fe7bd4eac3450251fe57c32",
+      "state": "completed",
+      "unit": "tide-lab-moe-r2-confirm-large-dense-lr0.001-s22.service"
+    },
+    {
+      "id": "moe-r2-confirm-large-e20-lr0.001-b0.01-s11",
+      "source": "8bd33dd160ac65238fe7bd4eac3450251fe57c32",
+      "state": "completed",
+      "unit": "tide-lab-moe-r2-confirm-large-e20-lr0.001-b0.01-s11.service"
+    },
+    {
+      "id": "moe-r2-confirm-large-e20-lr0.001-b0.01-s22",
+      "source": "8bd33dd160ac65238fe7bd4eac3450251fe57c32",
+      "state": "completed",
+      "unit": "tide-lab-moe-r2-confirm-large-e20-lr0.001-b0.01-s22.service"
+    },
+    {
+      "id": "moe-r2-confirm-large-e64-lr0.001-b0.01-s11",
+      "source": "8bd33dd160ac65238fe7bd4eac3450251fe57c32",
+      "state": "completed",
+      "unit": "tide-lab-moe-r2-confirm-large-e64-lr0.001-b0.01-s11.service"
+    },
+    {
+      "id": "moe-r2-confirm-large-e64-lr0.001-b0.01-s22",
+      "source": "8bd33dd160ac65238fe7bd4eac3450251fe57c32",
+      "state": "completed",
+      "unit": "tide-lab-moe-r2-confirm-large-e64-lr0.001-b0.01-s22.service"
+    },
+    {
+      "id": "moe-r2-confirm-small-dense-lr0.003-s11",
+      "source": "8bd33dd160ac65238fe7bd4eac3450251fe57c32",
+      "state": "completed",
+      "unit": "tide-lab-moe-r2-confirm-small-dense-lr0.003-s11.service"
+    },
+    {
+      "id": "moe-r2-confirm-small-dense-lr0.003-s22",
+      "source": "8bd33dd160ac65238fe7bd4eac3450251fe57c32",
+      "state": "completed",
+      "unit": "tide-lab-moe-r2-confirm-small-dense-lr0.003-s22.service"
+    },
+    {
+      "id": "moe-r2-confirm-small-e20-lr0.003-b0.01-s11",
+      "source": "8bd33dd160ac65238fe7bd4eac3450251fe57c32",
+      "state": "completed",
+      "unit": "tide-lab-moe-r2-confirm-small-e20-lr0.003-b0.01-s11.service"
+    },
+    {
+      "id": "moe-r2-confirm-small-e20-lr0.003-b0.01-s22",
+      "source": "8bd33dd160ac65238fe7bd4eac3450251fe57c32",
+      "state": "completed",
+      "unit": "tide-lab-moe-r2-confirm-small-e20-lr0.003-b0.01-s22.service"
+    },
+    {
+      "id": "moe-r2-confirm-small-e64-lr0.003-b0.001-s11",
+      "source": "8bd33dd160ac65238fe7bd4eac3450251fe57c32",
+      "state": "completed",
+      "unit": "tide-lab-moe-r2-confirm-small-e64-lr0.003-b0.001-s11.service"
+    },
+    {
+      "id": "moe-r2-confirm-small-e64-lr0.003-b0.001-s22",
+      "source": "8bd33dd160ac65238fe7bd4eac3450251fe57c32",
+      "state": "completed",
+      "unit": "tide-lab-moe-r2-confirm-small-e64-lr0.003-b0.001-s22.service"
+    },
+    {
+      "id": "moe-r2-main128-large-dense-lr0.001-s11",
+      "source": "8bd33dd160ac65238fe7bd4eac3450251fe57c32",
+      "state": "completed",
+      "unit": "tide-lab-moe-r2-main128-large-dense-lr0.001-s11.service"
+    },
+    {
+      "id": "moe-r2-main128-large-dense-lr0.001-s22",
+      "source": "8bd33dd160ac65238fe7bd4eac3450251fe57c32",
+      "state": "completed",
+      "unit": "tide-lab-moe-r2-main128-large-dense-lr0.001-s22.service"
+    },
+    {
+      "id": "moe-r2-main128-large-e20-lr0.001-b0.01-s11",
+      "source": "8bd33dd160ac65238fe7bd4eac3450251fe57c32",
+      "state": "completed",
+      "unit": "tide-lab-moe-r2-main128-large-e20-lr0.001-b0.01-s11.service"
+    },
+    {
+      "id": "moe-r2-main128-large-e20-lr0.001-b0.01-s22",
+      "source": "8bd33dd160ac65238fe7bd4eac3450251fe57c32",
+      "state": "completed",
+      "unit": "tide-lab-moe-r2-main128-large-e20-lr0.001-b0.01-s22.service"
+    },
+    {
+      "id": "moe-r2-main128-large-e64-lr0.001-b0.01-s11",
+      "source": "8bd33dd160ac65238fe7bd4eac3450251fe57c32",
+      "state": "completed",
+      "unit": "tide-lab-moe-r2-main128-large-e64-lr0.001-b0.01-s11.service"
+    },
+    {
+      "id": "moe-r2-main128-large-e64-lr0.001-b0.01-s22",
+      "source": "8bd33dd160ac65238fe7bd4eac3450251fe57c32",
+      "state": "completed",
+      "unit": "tide-lab-moe-r2-main128-large-e64-lr0.001-b0.01-s22.service"
+    },
+    {
+      "id": "moe-r2-main128-small-dense-lr0.003-s11",
+      "source": "8bd33dd160ac65238fe7bd4eac3450251fe57c32",
+      "state": "completed",
+      "unit": "tide-lab-moe-r2-main128-small-dense-lr0.003-s11.service"
+    },
+    {
+      "id": "moe-r2-main128-small-dense-lr0.003-s22",
+      "source": "8bd33dd160ac65238fe7bd4eac3450251fe57c32",
+      "state": "completed",
+      "unit": "tide-lab-moe-r2-main128-small-dense-lr0.003-s22.service"
+    },
+    {
+      "id": "moe-r2-main128-small-e20-lr0.003-b0.01-s11",
+      "source": "8bd33dd160ac65238fe7bd4eac3450251fe57c32",
+      "state": "completed",
+      "unit": "tide-lab-moe-r2-main128-small-e20-lr0.003-b0.01-s11.service"
+    },
+    {
+      "id": "moe-r2-main128-small-e20-lr0.003-b0.01-s22",
+      "source": "8bd33dd160ac65238fe7bd4eac3450251fe57c32",
+      "state": "completed",
+      "unit": "tide-lab-moe-r2-main128-small-e20-lr0.003-b0.01-s22.service"
+    },
+    {
+      "id": "moe-r2-main128-small-e64-lr0.003-b0.001-s11",
+      "source": "8bd33dd160ac65238fe7bd4eac3450251fe57c32",
+      "state": "completed",
+      "unit": "tide-lab-moe-r2-main128-small-e64-lr0.003-b0.001-s11.service"
+    },
+    {
+      "id": "moe-r2-main128-small-e64-lr0.003-b0.001-s22",
+      "source": "8bd33dd160ac65238fe7bd4eac3450251fe57c32",
+      "state": "completed",
+      "unit": "tide-lab-moe-r2-main128-small-e64-lr0.003-b0.001-s22.service"
+    },
+    {
+      "id": "moe-r2-screen32-large-dense-lr0.0003-s33",
+      "source": "2f96d745695fdc5f7815a8bebc484256f355d92a",
+      "state": "completed",
+      "unit": "tide-lab-moe-r2-screen32-large-dense-lr0.0003-s33.service"
+    },
+    {
+      "id": "moe-r2-screen32-large-dense-lr0.001-s33",
+      "source": "8bd33dd160ac65238fe7bd4eac3450251fe57c32",
+      "state": "completed",
+      "unit": "tide-lab-moe-r2-screen32-large-dense-lr0.001-s33.service"
+    },
+    {
+      "id": "moe-r2-screen32-large-e20-lr0.001-b0.001-s33",
+      "source": "8bd33dd160ac65238fe7bd4eac3450251fe57c32",
+      "state": "completed",
+      "unit": "tide-lab-moe-r2-screen32-large-e20-lr0.001-b0.001-s33.service"
+    },
+    {
+      "id": "moe-r2-screen32-large-e20-lr0.001-b0.01-s33",
+      "source": "8bd33dd160ac65238fe7bd4eac3450251fe57c32",
+      "state": "completed",
+      "unit": "tide-lab-moe-r2-screen32-large-e20-lr0.001-b0.01-s33.service"
+    },
+    {
+      "id": "moe-r2-screen32-large-e64-lr0.001-b0.001-s33",
+      "source": "8bd33dd160ac65238fe7bd4eac3450251fe57c32",
+      "state": "completed",
+      "unit": "tide-lab-moe-r2-screen32-large-e64-lr0.001-b0.001-s33.service"
+    },
+    {
+      "id": "moe-r2-screen32-large-e64-lr0.001-b0.01-s33",
+      "source": "8bd33dd160ac65238fe7bd4eac3450251fe57c32",
+      "state": "completed",
+      "unit": "tide-lab-moe-r2-screen32-large-e64-lr0.001-b0.01-s33.service"
+    },
+    {
+      "id": "moe-r2-screen32-small-dense-lr0.001-s33",
+      "source": "2f96d745695fdc5f7815a8bebc484256f355d92a",
+      "state": "completed",
+      "unit": "tide-lab-moe-r2-screen32-small-dense-lr0.001-s33.service"
+    },
+    {
+      "id": "moe-r2-screen32-small-dense-lr0.003-s33",
+      "source": "8bd33dd160ac65238fe7bd4eac3450251fe57c32",
+      "state": "completed",
+      "unit": "tide-lab-moe-r2-screen32-small-dense-lr0.003-s33.service"
+    },
+    {
+      "id": "moe-r2-screen32-small-e20-lr0.003-b0.001-s33",
+      "source": "8bd33dd160ac65238fe7bd4eac3450251fe57c32",
+      "state": "completed",
+      "unit": "tide-lab-moe-r2-screen32-small-e20-lr0.003-b0.001-s33.service"
+    },
+    {
+      "id": "moe-r2-screen32-small-e20-lr0.003-b0.01-s33",
+      "source": "8bd33dd160ac65238fe7bd4eac3450251fe57c32",
+      "state": "completed",
+      "unit": "tide-lab-moe-r2-screen32-small-e20-lr0.003-b0.01-s33.service"
+    },
+    {
+      "id": "moe-r2-screen32-small-e64-lr0.003-b0.001-s33",
+      "source": "8bd33dd160ac65238fe7bd4eac3450251fe57c32",
+      "state": "completed",
+      "unit": "tide-lab-moe-r2-screen32-small-e64-lr0.003-b0.001-s33.service"
+    },
+    {
+      "id": "moe-r2-screen32-small-e64-lr0.003-b0.01-s33",
+      "source": "8bd33dd160ac65238fe7bd4eac3450251fe57c32",
+      "state": "completed",
+      "unit": "tide-lab-moe-r2-screen32-small-e64-lr0.003-b0.01-s33.service"
+    },
+    {
+      "id": "moe-r2-screen8-large-dense-lr0.001-s33",
+      "source": "8bd33dd160ac65238fe7bd4eac3450251fe57c32",
+      "state": "completed",
+      "unit": "tide-lab-moe-r2-screen8-large-dense-lr0.001-s33.service"
+    },
+    {
+      "id": "moe-r2-screen8-large-e20-lr0.0001-b0.001-s33",
+      "source": "8bd33dd160ac65238fe7bd4eac3450251fe57c32",
+      "state": "completed",
+      "unit": "tide-lab-moe-r2-screen8-large-e20-lr0.0001-b0.001-s33.service"
+    },
+    {
+      "id": "moe-r2-screen8-large-e20-lr0.0001-b0.01-s33",
+      "source": "8bd33dd160ac65238fe7bd4eac3450251fe57c32",
+      "state": "completed",
+      "unit": "tide-lab-moe-r2-screen8-large-e20-lr0.0001-b0.01-s33.service"
+    },
+    {
+      "id": "moe-r2-screen8-large-e20-lr0.0003-b0.001-s33",
+      "source": "8bd33dd160ac65238fe7bd4eac3450251fe57c32",
+      "state": "completed",
+      "unit": "tide-lab-moe-r2-screen8-large-e20-lr0.0003-b0.001-s33.service"
+    },
+    {
+      "id": "moe-r2-screen8-large-e20-lr0.0003-b0.01-s33",
+      "source": "8bd33dd160ac65238fe7bd4eac3450251fe57c32",
+      "state": "completed",
+      "unit": "tide-lab-moe-r2-screen8-large-e20-lr0.0003-b0.01-s33.service"
+    },
+    {
+      "id": "moe-r2-screen8-large-e20-lr0.001-b0.001-s33",
+      "source": "8bd33dd160ac65238fe7bd4eac3450251fe57c32",
+      "state": "completed",
+      "unit": "tide-lab-moe-r2-screen8-large-e20-lr0.001-b0.001-s33.service"
+    },
+    {
+      "id": "moe-r2-screen8-large-e20-lr0.001-b0.01-s33",
+      "source": "8bd33dd160ac65238fe7bd4eac3450251fe57c32",
+      "state": "completed",
+      "unit": "tide-lab-moe-r2-screen8-large-e20-lr0.001-b0.01-s33.service"
+    },
+    {
+      "id": "moe-r2-screen8-large-e64-lr0.0001-b0.001-s33",
+      "source": "8bd33dd160ac65238fe7bd4eac3450251fe57c32",
+      "state": "completed",
+      "unit": "tide-lab-moe-r2-screen8-large-e64-lr0.0001-b0.001-s33.service"
+    },
+    {
+      "id": "moe-r2-screen8-large-e64-lr0.0001-b0.01-s33",
+      "source": "8bd33dd160ac65238fe7bd4eac3450251fe57c32",
+      "state": "completed",
+      "unit": "tide-lab-moe-r2-screen8-large-e64-lr0.0001-b0.01-s33.service"
+    },
+    {
+      "id": "moe-r2-screen8-large-e64-lr0.0003-b0.001-s33",
+      "source": "8bd33dd160ac65238fe7bd4eac3450251fe57c32",
+      "state": "completed",
+      "unit": "tide-lab-moe-r2-screen8-large-e64-lr0.0003-b0.001-s33.service"
+    },
+    {
+      "id": "moe-r2-screen8-large-e64-lr0.0003-b0.01-s33",
+      "source": "8bd33dd160ac65238fe7bd4eac3450251fe57c32",
+      "state": "completed",
+      "unit": "tide-lab-moe-r2-screen8-large-e64-lr0.0003-b0.01-s33.service"
+    },
+    {
+      "id": "moe-r2-screen8-large-e64-lr0.001-b0.001-s33",
+      "source": "8bd33dd160ac65238fe7bd4eac3450251fe57c32",
+      "state": "completed",
+      "unit": "tide-lab-moe-r2-screen8-large-e64-lr0.001-b0.001-s33.service"
+    },
+    {
+      "id": "moe-r2-screen8-large-e64-lr0.001-b0.01-s33",
+      "source": "8bd33dd160ac65238fe7bd4eac3450251fe57c32",
+      "state": "completed",
+      "unit": "tide-lab-moe-r2-screen8-large-e64-lr0.001-b0.01-s33.service"
+    },
+    {
+      "id": "moe-r2-screen8-small-dense-lr0.003-s33",
+      "source": "8bd33dd160ac65238fe7bd4eac3450251fe57c32",
+      "state": "completed",
+      "unit": "tide-lab-moe-r2-screen8-small-dense-lr0.003-s33.service"
+    },
+    {
+      "id": "moe-r2-screen8-small-e20-lr0.0003-b0.001-s33",
+      "source": "8bd33dd160ac65238fe7bd4eac3450251fe57c32",
+      "state": "completed",
+      "unit": "tide-lab-moe-r2-screen8-small-e20-lr0.0003-b0.001-s33.service"
+    },
+    {
+      "id": "moe-r2-screen8-small-e20-lr0.0003-b0.01-s33",
+      "source": "8bd33dd160ac65238fe7bd4eac3450251fe57c32",
+      "state": "completed",
+      "unit": "tide-lab-moe-r2-screen8-small-e20-lr0.0003-b0.01-s33.service"
+    },
+    {
+      "id": "moe-r2-screen8-small-e20-lr0.001-b0.001-s33",
+      "source": "8bd33dd160ac65238fe7bd4eac3450251fe57c32",
+      "state": "completed",
+      "unit": "tide-lab-moe-r2-screen8-small-e20-lr0.001-b0.001-s33.service"
+    },
+    {
+      "id": "moe-r2-screen8-small-e20-lr0.001-b0.01-s33",
+      "source": "8bd33dd160ac65238fe7bd4eac3450251fe57c32",
+      "state": "completed",
+      "unit": "tide-lab-moe-r2-screen8-small-e20-lr0.001-b0.01-s33.service"
+    },
+    {
+      "id": "moe-r2-screen8-small-e20-lr0.003-b0.001-s33",
+      "source": "8bd33dd160ac65238fe7bd4eac3450251fe57c32",
+      "state": "completed",
+      "unit": "tide-lab-moe-r2-screen8-small-e20-lr0.003-b0.001-s33.service"
+    },
+    {
+      "id": "moe-r2-screen8-small-e20-lr0.003-b0.01-s33",
+      "source": "8bd33dd160ac65238fe7bd4eac3450251fe57c32",
+      "state": "completed",
+      "unit": "tide-lab-moe-r2-screen8-small-e20-lr0.003-b0.01-s33.service"
+    },
+    {
+      "id": "moe-r2-screen8-small-e64-lr0.0003-b0.001-s33",
+      "source": "8bd33dd160ac65238fe7bd4eac3450251fe57c32",
+      "state": "completed",
+      "unit": "tide-lab-moe-r2-screen8-small-e64-lr0.0003-b0.001-s33.service"
+    },
+    {
+      "id": "moe-r2-screen8-small-e64-lr0.0003-b0.01-s33",
+      "source": "8bd33dd160ac65238fe7bd4eac3450251fe57c32",
+      "state": "completed",
+      "unit": "tide-lab-moe-r2-screen8-small-e64-lr0.0003-b0.01-s33.service"
+    },
+    {
+      "id": "moe-r2-screen8-small-e64-lr0.001-b0.001-s33",
+      "source": "8bd33dd160ac65238fe7bd4eac3450251fe57c32",
+      "state": "completed",
+      "unit": "tide-lab-moe-r2-screen8-small-e64-lr0.001-b0.001-s33.service"
+    },
+    {
+      "id": "moe-r2-screen8-small-e64-lr0.001-b0.01-s33",
+      "source": "8bd33dd160ac65238fe7bd4eac3450251fe57c32",
+      "state": "completed",
+      "unit": "tide-lab-moe-r2-screen8-small-e64-lr0.001-b0.01-s33.service"
+    },
+    {
+      "id": "moe-r2-screen8-small-e64-lr0.003-b0.001-s33",
+      "source": "8bd33dd160ac65238fe7bd4eac3450251fe57c32",
+      "state": "completed",
+      "unit": "tide-lab-moe-r2-screen8-small-e64-lr0.003-b0.001-s33.service"
+    },
+    {
+      "id": "moe-r2-screen8-small-e64-lr0.003-b0.01-s33",
+      "source": "8bd33dd160ac65238fe7bd4eac3450251fe57c32",
+      "state": "completed",
+      "unit": "tide-lab-moe-r2-screen8-small-e64-lr0.003-b0.01-s33.service"
+    },
+    {
+      "id": "moe-screen8-large-dense-lr0.0001-s33",
+      "source": "2f96d745695fdc5f7815a8bebc484256f355d92a",
+      "state": "completed",
+      "unit": "tide-lab-moe-screen8-large-dense-lr0.0001-s33.service"
+    },
+    {
+      "id": "moe-screen8-large-dense-lr0.0003-s33",
+      "source": "2f96d745695fdc5f7815a8bebc484256f355d92a",
+      "state": "completed",
+      "unit": "tide-lab-moe-screen8-large-dense-lr0.0003-s33.service"
+    },
+    {
+      "id": "moe-screen8-large-e20-lr0.0001-b0.001-s33",
+      "source": "2f96d745695fdc5f7815a8bebc484256f355d92a",
+      "state": "completed",
+      "unit": "tide-lab-moe-screen8-large-e20-lr0.0001-b0.001-s33.service"
+    },
+    {
+      "id": "moe-screen8-large-e20-lr0.0001-b0.01-s33",
+      "source": "2f96d745695fdc5f7815a8bebc484256f355d92a",
+      "state": "completed",
+      "unit": "tide-lab-moe-screen8-large-e20-lr0.0001-b0.01-s33.service"
+    },
+    {
+      "id": "moe-screen8-large-e20-lr0.0003-b0.001-s33",
+      "source": "2f96d745695fdc5f7815a8bebc484256f355d92a",
+      "state": "completed",
+      "unit": "tide-lab-moe-screen8-large-e20-lr0.0003-b0.001-s33.service"
+    },
+    {
+      "id": "moe-screen8-large-e64-lr0.0001-b0.001-s33",
+      "source": "2f96d745695fdc5f7815a8bebc484256f355d92a",
+      "state": "completed",
+      "unit": "tide-lab-moe-screen8-large-e64-lr0.0001-b0.001-s33.service"
+    },
+    {
+      "id": "moe-screen8-large-e64-lr0.0001-b0.01-s33",
+      "source": "2f96d745695fdc5f7815a8bebc484256f355d92a",
+      "state": "completed",
+      "unit": "tide-lab-moe-screen8-large-e64-lr0.0001-b0.01-s33.service"
+    },
+    {
+      "id": "moe-screen8-large-e64-lr0.0003-b0.001-s33",
+      "source": "2f96d745695fdc5f7815a8bebc484256f355d92a",
+      "state": "completed",
+      "unit": "tide-lab-moe-screen8-large-e64-lr0.0003-b0.001-s33.service"
+    },
+    {
+      "id": "moe-screen8-small-dense-lr0.0003-s33",
+      "source": "2f96d745695fdc5f7815a8bebc484256f355d92a",
+      "state": "completed",
+      "unit": "tide-lab-moe-screen8-small-dense-lr0.0003-s33.service"
+    },
+    {
+      "id": "moe-screen8-small-dense-lr0.001-s33",
+      "source": "2f96d745695fdc5f7815a8bebc484256f355d92a",
+      "state": "completed",
+      "unit": "tide-lab-moe-screen8-small-dense-lr0.001-s33.service"
+    },
+    {
+      "id": "moe-screen8-small-e20-lr0.0003-b0.001-s33",
+      "source": "2f96d745695fdc5f7815a8bebc484256f355d92a",
+      "state": "completed",
+      "unit": "tide-lab-moe-screen8-small-e20-lr0.0003-b0.001-s33.service"
+    },
+    {
+      "id": "moe-screen8-small-e20-lr0.0003-b0.01-s33",
+      "source": "2f96d745695fdc5f7815a8bebc484256f355d92a",
+      "state": "completed",
+      "unit": "tide-lab-moe-screen8-small-e20-lr0.0003-b0.01-s33.service"
+    },
+    {
+      "id": "moe-screen8-small-e20-lr0.001-b0.001-s33",
+      "source": "2f96d745695fdc5f7815a8bebc484256f355d92a",
+      "state": "completed",
+      "unit": "tide-lab-moe-screen8-small-e20-lr0.001-b0.001-s33.service"
+    },
+    {
+      "id": "moe-screen8-small-e64-lr0.0003-b0.001-s33",
+      "source": "2f96d745695fdc5f7815a8bebc484256f355d92a",
+      "state": "completed",
+      "unit": "tide-lab-moe-screen8-small-e64-lr0.0003-b0.001-s33.service"
+    },
+    {
+      "id": "moe-screen8-small-e64-lr0.0003-b0.01-s33",
+      "source": "2f96d745695fdc5f7815a8bebc484256f355d92a",
+      "state": "completed",
+      "unit": "tide-lab-moe-screen8-small-e64-lr0.0003-b0.01-s33.service"
+    },
+    {
+      "id": "moe-screen8-small-e64-lr0.001-b0.001-s33",
+      "source": "2f96d745695fdc5f7815a8bebc484256f355d92a",
+      "state": "completed",
+      "unit": "tide-lab-moe-screen8-small-e64-lr0.001-b0.001-s33.service"
+    },
+    {
+      "id": "moe-sort2-large-e64",
+      "source": "269c2eaf6866de146585ba685c1139a5798a53c7",
+      "state": "completed",
+      "unit": "tide-lab-moe-sort2-large-e64.service"
+    },
+    {
+      "id": "moe-sort2-small-e64",
+      "source": "269c2eaf6866de146585ba685c1139a5798a53c7",
+      "state": "completed",
+      "unit": "tide-lab-moe-sort2-small-e64.service"
+    },
+    {
+      "id": "pilot-a",
+      "source": "0d7ec5bdaa34556df9c93886e95f55fa5c9876ab",
+      "state": "completed",
+      "unit": "tide-lab-pilot-a.service"
+    },
+    {
+      "id": "pilot-b",
+      "source": "0d7ec5bdaa34556df9c93886e95f55fa5c9876ab",
+      "state": "completed",
+      "unit": "tide-lab-pilot-b.service"
+    },
+    {
+      "id": "retire-archives-20261112",
+      "source": "81024fca8d5eddf82c514b355eb0a2af5f3bf041",
+      "state": "completed",
+      "unit": "tide-lab-retire-archives-20261112.service"
+    },
+    {
+      "id": "retire-priority-20261111",
+      "source": "c8285e5d090477653bb09120745fcde2ada4ce4b",
+      "state": "completed",
+      "unit": "tide-lab-retire-priority-20261111.service"
+    },
+    {
+      "id": "s2-fc-mechanisms",
+      "source": "94bf712f8bd2e4007f0f56d1fea4799c99833dcd",
+      "state": "completed",
+      "unit": "tide-lab-s2-fc-mechanisms.service"
+    },
+    {
+      "id": "s2-frozen-growth",
+      "source": "94bf712f8bd2e4007f0f56d1fea4799c99833dcd",
+      "state": "timed_out",
+      "unit": "tide-lab-s2-frozen-growth.service"
+    },
+    {
+      "id": "s2-hb-dense",
+      "source": "94bf712f8bd2e4007f0f56d1fea4799c99833dcd",
+      "state": "completed",
+      "unit": "tide-lab-s2-hb-dense.service"
+    },
+    {
+      "id": "s2-hb-sparse",
+      "source": "94bf712f8bd2e4007f0f56d1fea4799c99833dcd",
+      "state": "completed",
+      "unit": "tide-lab-s2-hb-sparse.service"
+    },
+    {
+      "id": "s2-npu-sampling",
+      "source": "94bf712f8bd2e4007f0f56d1fea4799c99833dcd",
+      "state": "timed_out",
+      "unit": "tide-lab-s2-npu-sampling.service"
+    },
+    {
+      "id": "s3-growth",
+      "source": "1c6cb44197cb603cdab1e89b1be1a96bf692c789",
+      "state": "failed",
+      "unit": "tide-lab-s3-growth.service"
+    },
+    {
+      "id": "s3-growth-tide-repair1",
+      "source": "1c6cb44197cb603cdab1e89b1be1a96bf692c789",
+      "state": "completed",
+      "unit": "tide-lab-s3-growth-tide-repair1.service"
+    },
+    {
+      "id": "s3-hb-dense-s22",
+      "source": "1c6cb44197cb603cdab1e89b1be1a96bf692c789",
+      "state": "completed",
+      "unit": "tide-lab-s3-hb-dense-s22.service"
+    },
+    {
+      "id": "s3-hb-dense-s33",
+      "source": "1c6cb44197cb603cdab1e89b1be1a96bf692c789",
+      "state": "completed",
+      "unit": "tide-lab-s3-hb-dense-s33.service"
+    },
+    {
+      "id": "s3-hb-evaluation",
+      "source": "1c6cb44197cb603cdab1e89b1be1a96bf692c789",
+      "state": "completed",
+      "unit": "tide-lab-s3-hb-evaluation.service"
+    },
+    {
+      "id": "s3-hb-sparse-s22",
+      "source": "1c6cb44197cb603cdab1e89b1be1a96bf692c789",
+      "state": "completed",
+      "unit": "tide-lab-s3-hb-sparse-s22.service"
+    },
+    {
+      "id": "s3-hb-sparse-s33",
+      "source": "1c6cb44197cb603cdab1e89b1be1a96bf692c789",
+      "state": "completed",
+      "unit": "tide-lab-s3-hb-sparse-s33.service"
+    },
+    {
+      "id": "s3-npu-sampling",
+      "source": "1c6cb44197cb603cdab1e89b1be1a96bf692c789",
+      "state": "completed",
+      "unit": "tide-lab-s3-npu-sampling.service"
+    },
+    {
+      "id": "s4-capability",
+      "source": "1ec3f737cf4767dd3f807b5892e0dc2b7c60e29a",
+      "state": "failed",
+      "unit": "tide-lab-s4-capability.service"
+    },
+    {
+      "id": "s4-capability-completion",
+      "source": "4502d073e78876bca2abe88947bda9aeb7dbdc98",
+      "state": "completed",
+      "unit": "tide-lab-s4-capability-completion.service"
+    },
+    {
+      "id": "stage-public-models-20261111",
+      "source": "c8285e5d090477653bb09120745fcde2ada4ce4b",
+      "state": "completed",
+      "unit": "tide-lab-stage-public-models-20261111.service"
+    },
+    {
+      "id": "stop-check-a",
+      "source": "0d7ec5bdaa34556df9c93886e95f55fa5c9876ab",
+      "state": "stopped",
+      "unit": "tide-lab-stop-check-a.service"
+    },
+    {
+      "id": "support-v1-cpu",
+      "source": "fc781722b278a0180f46e5200bef63a34d613a82",
+      "state": "completed",
+      "unit": "tide-lab-support-v1-cpu.service"
+    },
+    {
+      "id": "support-v1-npu",
+      "source": "fc781722b278a0180f46e5200bef63a34d613a82",
+      "state": "completed",
+      "unit": "tide-lab-support-v1-npu.service"
+    },
+    {
+      "id": "v10-admission-aligned",
+      "source": "6125c751361a9f8eac9c90f8079c2ebfbe83dc6a",
+      "state": "completed",
+      "unit": "tide-lab-v10-admission-aligned.service"
+    },
+    {
+      "id": "v10-benchmark-d128",
+      "source": "89217ec328e9df89b27390da6f0423cf265406de",
+      "state": "completed",
+      "unit": "tide-lab-v10-benchmark-d128.service"
+    },
+    {
+      "id": "v10-benchmark-d64",
+      "source": "89217ec328e9df89b27390da6f0423cf265406de",
+      "state": "completed",
+      "unit": "tide-lab-v10-benchmark-d64.service"
+    },
+    {
+      "id": "v10-cal-controls",
+      "source": "5e07d8a2791d5cb6fa3235085778d0b8f23505d9",
+      "state": "completed",
+      "unit": "tide-lab-v10-cal-controls.service"
+    },
+    {
+      "id": "v10-cal-hb-d128-r20",
+      "source": "f263f0cc3d0bf0ddd206e90b4b349879535dc27c",
+      "state": "completed",
+      "unit": "tide-lab-v10-cal-hb-d128-r20.service"
+    },
+    {
+      "id": "v10-cal-hb-d128-r24",
+      "source": "f263f0cc3d0bf0ddd206e90b4b349879535dc27c",
+      "state": "completed",
+      "unit": "tide-lab-v10-cal-hb-d128-r24.service"
+    },
+    {
+      "id": "v10-cal-hb-d128-r28",
+      "source": "f263f0cc3d0bf0ddd206e90b4b349879535dc27c",
+      "state": "completed",
+      "unit": "tide-lab-v10-cal-hb-d128-r28.service"
+    },
+    {
+      "id": "v10-cal-hb-d128-r28-tau2",
+      "source": "456a79c6b98174c95bf1dd198cef7111ea4873b9",
+      "state": "completed",
+      "unit": "tide-lab-v10-cal-hb-d128-r28-tau2.service"
+    },
+    {
+      "id": "v10-cal-hb-d128-r64",
+      "source": "f263f0cc3d0bf0ddd206e90b4b349879535dc27c",
+      "state": "completed",
+      "unit": "tide-lab-v10-cal-hb-d128-r64.service"
+    },
+    {
+      "id": "v10-cal-hb-d64-r20",
+      "source": "f263f0cc3d0bf0ddd206e90b4b349879535dc27c",
+      "state": "completed",
+      "unit": "tide-lab-v10-cal-hb-d64-r20.service"
+    },
+    {
+      "id": "v10-cal-hb-d64-r24",
+      "source": "f263f0cc3d0bf0ddd206e90b4b349879535dc27c",
+      "state": "completed",
+      "unit": "tide-lab-v10-cal-hb-d64-r24.service"
+    },
+    {
+      "id": "v10-cal-hb-d64-r28",
+      "source": "f263f0cc3d0bf0ddd206e90b4b349879535dc27c",
+      "state": "completed",
+      "unit": "tide-lab-v10-cal-hb-d64-r28.service"
+    },
+    {
+      "id": "v10-cal-hb-d64-r28-tau2",
+      "source": "456a79c6b98174c95bf1dd198cef7111ea4873b9",
+      "state": "completed",
+      "unit": "tide-lab-v10-cal-hb-d64-r28-tau2.service"
+    },
+    {
+      "id": "v10-cal-hb-d64-r64",
+      "source": "f263f0cc3d0bf0ddd206e90b4b349879535dc27c",
+      "state": "completed",
+      "unit": "tide-lab-v10-cal-hb-d64-r64.service"
+    },
+    {
+      "id": "v10-cal-tf-d192-fan-in-depth-lr0.0003",
+      "source": "f263f0cc3d0bf0ddd206e90b4b349879535dc27c",
+      "state": "completed",
+      "unit": "tide-lab-v10-cal-tf-d192-fan-in-depth-lr0.0003.service"
+    },
+    {
+      "id": "v10-cal-tf-d192-fan-in-depth-lr0.001",
+      "source": "f263f0cc3d0bf0ddd206e90b4b349879535dc27c",
+      "state": "completed",
+      "unit": "tide-lab-v10-cal-tf-d192-fan-in-depth-lr0.001.service"
+    },
+    {
+      "id": "v10-cal-tf-d192-fan-in-depth-lr0.003",
+      "source": "f263f0cc3d0bf0ddd206e90b4b349879535dc27c",
+      "state": "completed",
+      "unit": "tide-lab-v10-cal-tf-d192-fan-in-depth-lr0.003.service"
+    },
+    {
+      "id": "v10-cal-tf-d192-gpt2-lr0.0003",
+      "source": "f263f0cc3d0bf0ddd206e90b4b349879535dc27c",
+      "state": "completed",
+      "unit": "tide-lab-v10-cal-tf-d192-gpt2-lr0.0003.service"
+    },
+    {
+      "id": "v10-cal-tf-d192-gpt2-lr0.001",
+      "source": "f263f0cc3d0bf0ddd206e90b4b349879535dc27c",
+      "state": "completed",
+      "unit": "tide-lab-v10-cal-tf-d192-gpt2-lr0.001.service"
+    },
+    {
+      "id": "v10-cal-tf-d192-gpt2-lr0.003",
+      "source": "f263f0cc3d0bf0ddd206e90b4b349879535dc27c",
+      "state": "completed",
+      "unit": "tide-lab-v10-cal-tf-d192-gpt2-lr0.003.service"
+    },
+    {
+      "id": "v10-cal-tf-d256-fan-in-depth-lr0.0003",
+      "source": "f263f0cc3d0bf0ddd206e90b4b349879535dc27c",
+      "state": "completed",
+      "unit": "tide-lab-v10-cal-tf-d256-fan-in-depth-lr0.0003.service"
+    },
+    {
+      "id": "v10-cal-tf-d256-fan-in-depth-lr0.001",
+      "source": "f263f0cc3d0bf0ddd206e90b4b349879535dc27c",
+      "state": "completed",
+      "unit": "tide-lab-v10-cal-tf-d256-fan-in-depth-lr0.001.service"
+    },
+    {
+      "id": "v10-cal-tf-d256-fan-in-depth-lr0.003",
+      "source": "f263f0cc3d0bf0ddd206e90b4b349879535dc27c",
+      "state": "completed",
+      "unit": "tide-lab-v10-cal-tf-d256-fan-in-depth-lr0.003.service"
+    },
+    {
+      "id": "v10-cal-tf-d256-gpt2-lr0.0003",
+      "source": "f263f0cc3d0bf0ddd206e90b4b349879535dc27c",
+      "state": "completed",
+      "unit": "tide-lab-v10-cal-tf-d256-gpt2-lr0.0003.service"
+    },
+    {
+      "id": "v10-cal-tf-d256-gpt2-lr0.001",
+      "source": "f263f0cc3d0bf0ddd206e90b4b349879535dc27c",
+      "state": "completed",
+      "unit": "tide-lab-v10-cal-tf-d256-gpt2-lr0.001.service"
+    },
+    {
+      "id": "v10-cal-tf-d256-gpt2-lr0.003",
+      "source": "f263f0cc3d0bf0ddd206e90b4b349879535dc27c",
+      "state": "completed",
+      "unit": "tide-lab-v10-cal-tf-d256-gpt2-lr0.003.service"
+    },
+    {
+      "id": "v10-confirm-extend-hb-d64-r28-q10-s22",
+      "source": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+      "state": "completed",
+      "unit": "tide-lab-v10-confirm-extend-hb-d64-r28-q10-s22.service"
+    },
+    {
+      "id": "v10-confirm-extend-hb-d64-r4-dense-match-s11",
+      "source": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+      "state": "completed",
+      "unit": "tide-lab-v10-confirm-extend-hb-d64-r4-dense-match-s11.service"
+    },
+    {
+      "id": "v10-confirm-extend-hb-d64-r4-dense-match-s22",
+      "source": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+      "state": "completed",
+      "unit": "tide-lab-v10-confirm-extend-hb-d64-r4-dense-match-s22.service"
+    },
+    {
+      "id": "v10-confirm-extend-hb-d64-r64-q3-s11",
+      "source": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+      "state": "completed",
+      "unit": "tide-lab-v10-confirm-extend-hb-d64-r64-q3-s11.service"
+    },
+    {
+      "id": "v10-confirm-extend-hb-d64-r64-q3-s22",
+      "source": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+      "state": "completed",
+      "unit": "tide-lab-v10-confirm-extend-hb-d64-r64-q3-s22.service"
+    },
+    {
+      "id": "v10-confirm-extend-tf-d192-l6-s11",
+      "source": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+      "state": "completed",
+      "unit": "tide-lab-v10-confirm-extend-tf-d192-l6-s11.service"
+    },
+    {
+      "id": "v10-confirm-extend-tf-d192-l6-s22",
+      "source": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+      "state": "completed",
+      "unit": "tide-lab-v10-confirm-extend-tf-d192-l6-s22.service"
+    },
+    {
+      "id": "v10-confirm-main-hb-d128-r28-pool-s11",
+      "source": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+      "state": "completed",
+      "unit": "tide-lab-v10-confirm-main-hb-d128-r28-pool-s11.service"
+    },
+    {
+      "id": "v10-confirm-main-hb-d128-r28-q10-s11",
+      "source": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+      "state": "completed",
+      "unit": "tide-lab-v10-confirm-main-hb-d128-r28-q10-s11.service"
+    },
+    {
+      "id": "v10-confirm-main-hb-d128-r28-q10-s22",
+      "source": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+      "state": "completed",
+      "unit": "tide-lab-v10-confirm-main-hb-d128-r28-q10-s22.service"
+    },
+    {
+      "id": "v10-confirm-main-hb-d128-r3-dense-match-s11",
+      "source": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+      "state": "completed",
+      "unit": "tide-lab-v10-confirm-main-hb-d128-r3-dense-match-s11.service"
+    },
+    {
+      "id": "v10-confirm-main-hb-d128-r3-dense-match-s22",
+      "source": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+      "state": "completed",
+      "unit": "tide-lab-v10-confirm-main-hb-d128-r3-dense-match-s22.service"
+    },
+    {
+      "id": "v10-confirm-main-hb-d128-r64-q3-s11",
+      "source": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+      "state": "completed",
+      "unit": "tide-lab-v10-confirm-main-hb-d128-r64-q3-s11.service"
+    },
+    {
+      "id": "v10-confirm-main-hb-d128-r64-q3-s22",
+      "source": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+      "state": "completed",
+      "unit": "tide-lab-v10-confirm-main-hb-d128-r64-q3-s22.service"
+    },
+    {
+      "id": "v10-confirm-main-hb-d64-r28-q10-s11",
+      "source": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+      "state": "completed",
+      "unit": "tide-lab-v10-confirm-main-hb-d64-r28-q10-s11.service"
+    },
+    {
+      "id": "v10-confirm-main-hb-d64-r28-q10-s22",
+      "source": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+      "state": "completed",
+      "unit": "tide-lab-v10-confirm-main-hb-d64-r28-q10-s22.service"
+    },
+    {
+      "id": "v10-confirm-main-hb-d64-r4-dense-match-s11",
+      "source": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+      "state": "completed",
+      "unit": "tide-lab-v10-confirm-main-hb-d64-r4-dense-match-s11.service"
+    },
+    {
+      "id": "v10-confirm-main-hb-d64-r4-dense-match-s22",
+      "source": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+      "state": "completed",
+      "unit": "tide-lab-v10-confirm-main-hb-d64-r4-dense-match-s22.service"
+    },
+    {
+      "id": "v10-confirm-main-hb-d64-r64-q3-s11",
+      "source": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+      "state": "completed",
+      "unit": "tide-lab-v10-confirm-main-hb-d64-r64-q3-s11.service"
+    },
+    {
+      "id": "v10-confirm-main-hb-d64-r64-q3-s22",
+      "source": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+      "state": "completed",
+      "unit": "tide-lab-v10-confirm-main-hb-d64-r64-q3-s22.service"
+    },
+    {
+      "id": "v10-confirm-main-tf-d192-l6-s11",
+      "source": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+      "state": "completed",
+      "unit": "tide-lab-v10-confirm-main-tf-d192-l6-s11.service"
+    },
+    {
+      "id": "v10-confirm-main-tf-d192-l6-s22",
+      "source": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+      "state": "completed",
+      "unit": "tide-lab-v10-confirm-main-tf-d192-l6-s22.service"
+    },
+    {
+      "id": "v10-confirm-main-tf-d256-l12-s11",
+      "source": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+      "state": "completed",
+      "unit": "tide-lab-v10-confirm-main-tf-d256-l12-s11.service"
+    },
+    {
+      "id": "v10-confirm-main-tf-d256-l12-s22",
+      "source": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+      "state": "completed",
+      "unit": "tide-lab-v10-confirm-main-tf-d256-l12-s22.service"
+    },
+    {
+      "id": "v10-controller",
+      "source": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+      "state": "completed",
+      "unit": "tide-lab-v10-controller.service"
+    },
+    {
+      "id": "v10-diag-hb-d128-r28-pool-s22",
+      "source": "95bce59a3c1d5c9532915309132455a279cd7eee",
+      "state": "completed",
+      "unit": "tide-lab-v10-diag-hb-d128-r28-pool-s22.service"
+    },
+    {
+      "id": "v10-diag-hb-d128-r64-pool-s11",
+      "source": "95bce59a3c1d5c9532915309132455a279cd7eee",
+      "state": "completed",
+      "unit": "tide-lab-v10-diag-hb-d128-r64-pool-s11.service"
+    },
+    {
+      "id": "v10-diag-hb-d128-r64-pool-s22",
+      "source": "95bce59a3c1d5c9532915309132455a279cd7eee",
+      "state": "completed",
+      "unit": "tide-lab-v10-diag-hb-d128-r64-pool-s22.service"
+    },
+    {
+      "id": "v10-diag-quick-r28-s22",
+      "source": "a8669103cd87932eb8beb38ecabaadb7d774505f",
+      "state": "completed",
+      "unit": "tide-lab-v10-diag-quick-r28-s22.service"
+    },
+    {
+      "id": "v10-divprobe-npu-scalar",
+      "source": "a8669103cd87932eb8beb38ecabaadb7d774505f",
+      "state": "completed",
+      "unit": "tide-lab-v10-divprobe-npu-scalar.service"
+    },
+    {
+      "id": "v10-extend-hb-d64-r28-q10-s11",
+      "source": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+      "state": "completed",
+      "unit": "tide-lab-v10-extend-hb-d64-r28-q10-s11.service"
+    },
+    {
+      "id": "v10-extend-hb-d64-r28-q10-s22",
+      "source": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+      "state": "completed",
+      "unit": "tide-lab-v10-extend-hb-d64-r28-q10-s22.service"
+    },
+    {
+      "id": "v10-extend-hb-d64-r4-dense-match-s11",
+      "source": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+      "state": "completed",
+      "unit": "tide-lab-v10-extend-hb-d64-r4-dense-match-s11.service"
+    },
+    {
+      "id": "v10-extend-hb-d64-r4-dense-match-s22",
+      "source": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+      "state": "completed",
+      "unit": "tide-lab-v10-extend-hb-d64-r4-dense-match-s22.service"
+    },
+    {
+      "id": "v10-extend-hb-d64-r64-q3-s11",
+      "source": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+      "state": "completed",
+      "unit": "tide-lab-v10-extend-hb-d64-r64-q3-s11.service"
+    },
+    {
+      "id": "v10-extend-hb-d64-r64-q3-s22",
+      "source": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+      "state": "completed",
+      "unit": "tide-lab-v10-extend-hb-d64-r64-q3-s22.service"
+    },
+    {
+      "id": "v10-extend-tf-d192-l6-s11",
+      "source": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+      "state": "completed",
+      "unit": "tide-lab-v10-extend-tf-d192-l6-s11.service"
+    },
+    {
+      "id": "v10-extend-tf-d192-l6-s22",
+      "source": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+      "state": "completed",
+      "unit": "tide-lab-v10-extend-tf-d192-l6-s22.service"
+    },
+    {
+      "id": "v10-fixcheck-hb-d128-r28-pool-s22",
+      "source": "a8669103cd87932eb8beb38ecabaadb7d774505f",
+      "state": "completed",
+      "unit": "tide-lab-v10-fixcheck-hb-d128-r28-pool-s22.service"
+    },
+    {
+      "id": "v10-fixcheck-hb-d128-r64-pool-s11",
+      "source": "a8669103cd87932eb8beb38ecabaadb7d774505f",
+      "state": "completed",
+      "unit": "tide-lab-v10-fixcheck-hb-d128-r64-pool-s11.service"
+    },
+    {
+      "id": "v10-fixcheck-hb-d128-r64-pool-s22",
+      "source": "a8669103cd87932eb8beb38ecabaadb7d774505f",
+      "state": "completed",
+      "unit": "tide-lab-v10-fixcheck-hb-d128-r64-pool-s22.service"
+    },
+    {
+      "id": "v10-fusion-probe",
+      "source": "6c927b326dd6643754abe27ebfaac374d62e6164",
+      "state": "completed",
+      "unit": "tide-lab-v10-fusion-probe.service"
+    },
+    {
+      "id": "v10-main-hb-d128-r28-pool-s11",
+      "source": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+      "state": "completed",
+      "unit": "tide-lab-v10-main-hb-d128-r28-pool-s11.service"
+    },
+    {
+      "id": "v10-main-hb-d128-r28-pool-s22",
+      "source": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+      "state": "completed",
+      "unit": "tide-lab-v10-main-hb-d128-r28-pool-s22.service"
+    },
+    {
+      "id": "v10-main-hb-d128-r28-q10-s11",
+      "source": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+      "state": "completed",
+      "unit": "tide-lab-v10-main-hb-d128-r28-q10-s11.service"
+    },
+    {
+      "id": "v10-main-hb-d128-r28-q10-s22",
+      "source": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+      "state": "completed",
+      "unit": "tide-lab-v10-main-hb-d128-r28-q10-s22.service"
+    },
+    {
+      "id": "v10-main-hb-d128-r3-dense-match-s11",
+      "source": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+      "state": "completed",
+      "unit": "tide-lab-v10-main-hb-d128-r3-dense-match-s11.service"
+    },
+    {
+      "id": "v10-main-hb-d128-r3-dense-match-s22",
+      "source": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+      "state": "completed",
+      "unit": "tide-lab-v10-main-hb-d128-r3-dense-match-s22.service"
+    },
+    {
+      "id": "v10-main-hb-d128-r64-pool-s11",
+      "source": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+      "state": "completed",
+      "unit": "tide-lab-v10-main-hb-d128-r64-pool-s11.service"
+    },
+    {
+      "id": "v10-main-hb-d128-r64-pool-s22",
+      "source": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+      "state": "completed",
+      "unit": "tide-lab-v10-main-hb-d128-r64-pool-s22.service"
+    },
+    {
+      "id": "v10-main-hb-d128-r64-q3-s11",
+      "source": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+      "state": "completed",
+      "unit": "tide-lab-v10-main-hb-d128-r64-q3-s11.service"
+    },
+    {
+      "id": "v10-main-hb-d128-r64-q3-s22",
+      "source": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+      "state": "completed",
+      "unit": "tide-lab-v10-main-hb-d128-r64-q3-s22.service"
+    },
+    {
+      "id": "v10-main-hb-d64-r28-q10-s11",
+      "source": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+      "state": "completed",
+      "unit": "tide-lab-v10-main-hb-d64-r28-q10-s11.service"
+    },
+    {
+      "id": "v10-main-hb-d64-r28-q10-s22",
+      "source": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+      "state": "completed",
+      "unit": "tide-lab-v10-main-hb-d64-r28-q10-s22.service"
+    },
+    {
+      "id": "v10-main-hb-d64-r4-dense-match-s11",
+      "source": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+      "state": "completed",
+      "unit": "tide-lab-v10-main-hb-d64-r4-dense-match-s11.service"
+    },
+    {
+      "id": "v10-main-hb-d64-r4-dense-match-s22",
+      "source": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+      "state": "completed",
+      "unit": "tide-lab-v10-main-hb-d64-r4-dense-match-s22.service"
+    },
+    {
+      "id": "v10-main-hb-d64-r64-q3-s11",
+      "source": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+      "state": "completed",
+      "unit": "tide-lab-v10-main-hb-d64-r64-q3-s11.service"
+    },
+    {
+      "id": "v10-main-hb-d64-r64-q3-s22",
+      "source": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+      "state": "completed",
+      "unit": "tide-lab-v10-main-hb-d64-r64-q3-s22.service"
+    },
+    {
+      "id": "v10-main-tf-d192-l6-s11",
+      "source": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+      "state": "completed",
+      "unit": "tide-lab-v10-main-tf-d192-l6-s11.service"
+    },
+    {
+      "id": "v10-main-tf-d192-l6-s22",
+      "source": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+      "state": "completed",
+      "unit": "tide-lab-v10-main-tf-d192-l6-s22.service"
+    },
+    {
+      "id": "v10-main-tf-d256-l12-s11",
+      "source": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+      "state": "completed",
+      "unit": "tide-lab-v10-main-tf-d256-l12-s11.service"
+    },
+    {
+      "id": "v10-main-tf-d256-l12-s22",
+      "source": "0ea05d610df82df5b55663cbcd2fa4bcc92c3a6d",
+      "state": "completed",
+      "unit": "tide-lab-v10-main-tf-d256-l12-s22.service"
+    },
+    {
+      "id": "v10-preflight",
+      "source": "f263f0cc3d0bf0ddd206e90b4b349879535dc27c",
+      "state": "completed",
+      "unit": "tide-lab-v10-preflight.service"
+    },
+    {
+      "id": "v10-profile",
+      "source": "456a79c6b98174c95bf1dd198cef7111ea4873b9",
+      "state": "failed",
+      "unit": "tide-lab-v10-profile.service"
+    },
+    {
+      "id": "v10-repair-hb-d128-r28-pool-s22",
+      "source": "d089dd0556798df55a0440ef471ffe254f8054e5",
+      "state": "completed",
+      "unit": "tide-lab-v10-repair-hb-d128-r28-pool-s22.service"
+    },
+    {
+      "id": "v10-repair-hb-d128-r64-pool-s11",
+      "source": "d089dd0556798df55a0440ef471ffe254f8054e5",
+      "state": "completed",
+      "unit": "tide-lab-v10-repair-hb-d128-r64-pool-s11.service"
+    },
+    {
+      "id": "v10-repair-hb-d128-r64-pool-s22",
+      "source": "d089dd0556798df55a0440ef471ffe254f8054e5",
+      "state": "completed",
+      "unit": "tide-lab-v10-repair-hb-d128-r64-pool-s22.service"
+    },
+    {
+      "id": "v11-confirm-seen-small-e64-lr0.003-b0.01-s11",
+      "source": "8bd33dd160ac65238fe7bd4eac3450251fe57c32",
+      "state": "completed",
+      "unit": "tide-lab-v11-confirm-seen-small-e64-lr0.003-b0.01-s11.service"
+    },
+    {
+      "id": "v11-confirm-seen-small-e64-lr0.003-b0.01-s22",
+      "source": "8bd33dd160ac65238fe7bd4eac3450251fe57c32",
+      "state": "completed",
+      "unit": "tide-lab-v11-confirm-seen-small-e64-lr0.003-b0.01-s22.service"
+    },
+    {
+      "id": "v11-confirmation-data",
+      "source": "36dec66a72a1466e5caa76452040d8b0b6ca696c",
+      "state": "failed",
+      "unit": "tide-lab-v11-confirmation-data.service"
+    },
+    {
+      "id": "v11-confirmation-data-r2",
+      "source": "36dec66a72a1466e5caa76452040d8b0b6ca696c",
+      "state": "completed",
+      "unit": "tide-lab-v11-confirmation-data-r2.service"
+    },
+    {
+      "id": "v11-diag-hb-d128-r28-pool-s11",
+      "source": "36dec66a72a1466e5caa76452040d8b0b6ca696c",
+      "state": "completed",
+      "unit": "tide-lab-v11-diag-hb-d128-r28-pool-s11.service"
+    },
+    {
+      "id": "v11-diag-hb-d128-r28-q10-s11",
+      "source": "36dec66a72a1466e5caa76452040d8b0b6ca696c",
+      "state": "completed",
+      "unit": "tide-lab-v11-diag-hb-d128-r28-q10-s11.service"
+    },
+    {
+      "id": "v11-diag-hb-d128-r3-dense-match-s11",
+      "source": "36dec66a72a1466e5caa76452040d8b0b6ca696c",
+      "state": "completed",
+      "unit": "tide-lab-v11-diag-hb-d128-r3-dense-match-s11.service"
+    },
+    {
+      "id": "v11-diag-hb-d128-r64-pool-s11",
+      "source": "36dec66a72a1466e5caa76452040d8b0b6ca696c",
+      "state": "completed",
+      "unit": "tide-lab-v11-diag-hb-d128-r64-pool-s11.service"
+    },
+    {
+      "id": "v11-diag-hb-d128-r64-q3-s11",
+      "source": "36dec66a72a1466e5caa76452040d8b0b6ca696c",
+      "state": "completed",
+      "unit": "tide-lab-v11-diag-hb-d128-r64-q3-s11.service"
+    },
+    {
+      "id": "v11-diag-hb-d128-r64-q3-s22",
+      "source": "36dec66a72a1466e5caa76452040d8b0b6ca696c",
+      "state": "completed",
+      "unit": "tide-lab-v11-diag-hb-d128-r64-q3-s22.service"
+    },
+    {
+      "id": "v11-diag-hb-d64-r28-q10-s11",
+      "source": "36dec66a72a1466e5caa76452040d8b0b6ca696c",
+      "state": "completed",
+      "unit": "tide-lab-v11-diag-hb-d64-r28-q10-s11.service"
+    },
+    {
+      "id": "v11-diag-hb-d64-r4-dense-match-s11",
+      "source": "36dec66a72a1466e5caa76452040d8b0b6ca696c",
+      "state": "completed",
+      "unit": "tide-lab-v11-diag-hb-d64-r4-dense-match-s11.service"
+    },
+    {
+      "id": "v11-diag-hb-d64-r64-q3-s11",
+      "source": "36dec66a72a1466e5caa76452040d8b0b6ca696c",
+      "state": "completed",
+      "unit": "tide-lab-v11-diag-hb-d64-r64-q3-s11.service"
+    },
+    {
+      "id": "v11-diag-large-dense-lr0.001-s11",
+      "source": "36dec66a72a1466e5caa76452040d8b0b6ca696c",
+      "state": "completed",
+      "unit": "tide-lab-v11-diag-large-dense-lr0.001-s11.service"
+    },
+    {
+      "id": "v11-diag-large-e20-lr0.001-b0.01-s11",
+      "source": "36dec66a72a1466e5caa76452040d8b0b6ca696c",
+      "state": "completed",
+      "unit": "tide-lab-v11-diag-large-e20-lr0.001-b0.01-s11.service"
+    },
+    {
+      "id": "v11-diag-large-e64-lr0.001-b0.01-s11",
+      "source": "36dec66a72a1466e5caa76452040d8b0b6ca696c",
+      "state": "completed",
+      "unit": "tide-lab-v11-diag-large-e64-lr0.001-b0.01-s11.service"
+    },
+    {
+      "id": "v11-diag-small-dense-lr0.003-s11",
+      "source": "36dec66a72a1466e5caa76452040d8b0b6ca696c",
+      "state": "completed",
+      "unit": "tide-lab-v11-diag-small-dense-lr0.003-s11.service"
+    },
+    {
+      "id": "v11-diag-small-e20-lr0.003-b0.01-s11",
+      "source": "36dec66a72a1466e5caa76452040d8b0b6ca696c",
+      "state": "completed",
+      "unit": "tide-lab-v11-diag-small-e20-lr0.003-b0.01-s11.service"
+    },
+    {
+      "id": "v11-diag-small-e64-lr0.003-b0.001-s11",
+      "source": "36dec66a72a1466e5caa76452040d8b0b6ca696c",
+      "state": "completed",
+      "unit": "tide-lab-v11-diag-small-e64-lr0.003-b0.001-s11.service"
+    },
+    {
+      "id": "v11-diag-small-e64-lr0.003-b0.001-s22",
+      "source": "36dec66a72a1466e5caa76452040d8b0b6ca696c",
+      "state": "completed",
+      "unit": "tide-lab-v11-diag-small-e64-lr0.003-b0.001-s22.service"
+    },
+    {
+      "id": "v11-extend-r2-large-dense-lr0.001-s11",
+      "source": "e3b2ab38c711c7302f2bef6478237da43cacef69",
+      "state": "completed",
+      "unit": "tide-lab-v11-extend-r2-large-dense-lr0.001-s11.service"
+    },
+    {
+      "id": "v11-extend-r2-large-dense-lr0.001-s22",
+      "source": "e3b2ab38c711c7302f2bef6478237da43cacef69",
+      "state": "completed",
+      "unit": "tide-lab-v11-extend-r2-large-dense-lr0.001-s22.service"
+    },
+    {
+      "id": "v11-extend-r2-large-e20-lr0.001-b0.01-s11",
+      "source": "e3b2ab38c711c7302f2bef6478237da43cacef69",
+      "state": "completed",
+      "unit": "tide-lab-v11-extend-r2-large-e20-lr0.001-b0.01-s11.service"
+    },
+    {
+      "id": "v11-extend-r2-large-e20-lr0.001-b0.01-s22",
+      "source": "e3b2ab38c711c7302f2bef6478237da43cacef69",
+      "state": "completed",
+      "unit": "tide-lab-v11-extend-r2-large-e20-lr0.001-b0.01-s22.service"
+    },
+    {
+      "id": "v11-extend-r2-large-e64-lr0.001-b0.01-s11",
+      "source": "e3b2ab38c711c7302f2bef6478237da43cacef69",
+      "state": "completed",
+      "unit": "tide-lab-v11-extend-r2-large-e64-lr0.001-b0.01-s11.service"
+    },
+    {
+      "id": "v11-extend-r2-large-e64-lr0.001-b0.01-s22",
+      "source": "e3b2ab38c711c7302f2bef6478237da43cacef69",
+      "state": "completed",
+      "unit": "tide-lab-v11-extend-r2-large-e64-lr0.001-b0.01-s22.service"
+    },
+    {
+      "id": "v11-fresh-balance128-small-e64-lr0.003-b0.01-s11",
+      "source": "159190c3154193e4cff72cabf6e2bb23fd498b0a",
+      "state": "completed",
+      "unit": "tide-lab-v11-fresh-balance128-small-e64-lr0.003-b0.01-s11.service"
+    },
+    {
+      "id": "v11-fresh-balance128-small-e64-lr0.003-b0.01-s22",
+      "source": "159190c3154193e4cff72cabf6e2bb23fd498b0a",
+      "state": "completed",
+      "unit": "tide-lab-v11-fresh-balance128-small-e64-lr0.003-b0.01-s22.service"
+    },
+    {
+      "id": "v11-fresh-controller",
+      "source": "159190c3154193e4cff72cabf6e2bb23fd498b0a",
+      "state": "completed",
+      "unit": "tide-lab-v11-fresh-controller.service"
+    },
+    {
+      "id": "v11-fresh-extend256-large-dense-lr0.001-s11",
+      "source": "159190c3154193e4cff72cabf6e2bb23fd498b0a",
+      "state": "completed",
+      "unit": "tide-lab-v11-fresh-extend256-large-dense-lr0.001-s11.service"
+    },
+    {
+      "id": "v11-fresh-extend256-large-dense-lr0.001-s22",
+      "source": "159190c3154193e4cff72cabf6e2bb23fd498b0a",
+      "state": "completed",
+      "unit": "tide-lab-v11-fresh-extend256-large-dense-lr0.001-s22.service"
+    },
+    {
+      "id": "v11-fresh-extend256-large-e20-lr0.001-b0.01-s11",
+      "source": "159190c3154193e4cff72cabf6e2bb23fd498b0a",
+      "state": "completed",
+      "unit": "tide-lab-v11-fresh-extend256-large-e20-lr0.001-b0.01-s11.service"
+    },
+    {
+      "id": "v11-fresh-extend256-large-e20-lr0.001-b0.01-s22",
+      "source": "159190c3154193e4cff72cabf6e2bb23fd498b0a",
+      "state": "completed",
+      "unit": "tide-lab-v11-fresh-extend256-large-e20-lr0.001-b0.01-s22.service"
+    },
+    {
+      "id": "v11-fresh-extend256-large-e64-lr0.001-b0.01-s11",
+      "source": "159190c3154193e4cff72cabf6e2bb23fd498b0a",
+      "state": "completed",
+      "unit": "tide-lab-v11-fresh-extend256-large-e64-lr0.001-b0.01-s11.service"
+    },
+    {
+      "id": "v11-fresh-extend256-large-e64-lr0.001-b0.01-s22",
+      "source": "159190c3154193e4cff72cabf6e2bb23fd498b0a",
+      "state": "completed",
+      "unit": "tide-lab-v11-fresh-extend256-large-e64-lr0.001-b0.01-s22.service"
+    },
+    {
+      "id": "v11-fresh-parent128-hb-d64-r4-dense-match-s11",
+      "source": "159190c3154193e4cff72cabf6e2bb23fd498b0a",
+      "state": "completed",
+      "unit": "tide-lab-v11-fresh-parent128-hb-d64-r4-dense-match-s11.service"
+    },
+    {
+      "id": "v11-fresh-parent128-hb-d64-r4-dense-match-s22",
+      "source": "159190c3154193e4cff72cabf6e2bb23fd498b0a",
+      "state": "completed",
+      "unit": "tide-lab-v11-fresh-parent128-hb-d64-r4-dense-match-s22.service"
+    },
+    {
+      "id": "v11-fresh-parent128-hb-d64-r64-q3-s11",
+      "source": "159190c3154193e4cff72cabf6e2bb23fd498b0a",
+      "state": "completed",
+      "unit": "tide-lab-v11-fresh-parent128-hb-d64-r64-q3-s11.service"
+    },
+    {
+      "id": "v11-fresh-parent128-hb-d64-r64-q3-s22",
+      "source": "159190c3154193e4cff72cabf6e2bb23fd498b0a",
+      "state": "completed",
+      "unit": "tide-lab-v11-fresh-parent128-hb-d64-r64-q3-s22.service"
+    },
+    {
+      "id": "v11-fresh-parent128-large-dense-lr0.001-s11",
+      "source": "159190c3154193e4cff72cabf6e2bb23fd498b0a",
+      "state": "completed",
+      "unit": "tide-lab-v11-fresh-parent128-large-dense-lr0.001-s11.service"
+    },
+    {
+      "id": "v11-fresh-parent128-large-dense-lr0.001-s22",
+      "source": "159190c3154193e4cff72cabf6e2bb23fd498b0a",
+      "state": "completed",
+      "unit": "tide-lab-v11-fresh-parent128-large-dense-lr0.001-s22.service"
+    },
+    {
+      "id": "v11-fresh-parent128-large-e20-lr0.001-b0.01-s11",
+      "source": "159190c3154193e4cff72cabf6e2bb23fd498b0a",
+      "state": "completed",
+      "unit": "tide-lab-v11-fresh-parent128-large-e20-lr0.001-b0.01-s11.service"
+    },
+    {
+      "id": "v11-fresh-parent128-large-e20-lr0.001-b0.01-s22",
+      "source": "159190c3154193e4cff72cabf6e2bb23fd498b0a",
+      "state": "completed",
+      "unit": "tide-lab-v11-fresh-parent128-large-e20-lr0.001-b0.01-s22.service"
+    },
+    {
+      "id": "v11-fresh-parent128-large-e64-lr0.001-b0.01-s11",
+      "source": "159190c3154193e4cff72cabf6e2bb23fd498b0a",
+      "state": "completed",
+      "unit": "tide-lab-v11-fresh-parent128-large-e64-lr0.001-b0.01-s11.service"
+    },
+    {
+      "id": "v11-fresh-parent128-large-e64-lr0.001-b0.01-s22",
+      "source": "159190c3154193e4cff72cabf6e2bb23fd498b0a",
+      "state": "completed",
+      "unit": "tide-lab-v11-fresh-parent128-large-e64-lr0.001-b0.01-s22.service"
+    },
+    {
+      "id": "v11-fresh-parent128-small-dense-lr0.003-s11",
+      "source": "159190c3154193e4cff72cabf6e2bb23fd498b0a",
+      "state": "completed",
+      "unit": "tide-lab-v11-fresh-parent128-small-dense-lr0.003-s11.service"
+    },
+    {
+      "id": "v11-fresh-parent128-small-dense-lr0.003-s22",
+      "source": "159190c3154193e4cff72cabf6e2bb23fd498b0a",
+      "state": "completed",
+      "unit": "tide-lab-v11-fresh-parent128-small-dense-lr0.003-s22.service"
+    },
+    {
+      "id": "v11-fresh-parent128-small-e20-lr0.003-b0.01-s11",
+      "source": "159190c3154193e4cff72cabf6e2bb23fd498b0a",
+      "state": "completed",
+      "unit": "tide-lab-v11-fresh-parent128-small-e20-lr0.003-b0.01-s11.service"
+    },
+    {
+      "id": "v11-fresh-parent128-small-e20-lr0.003-b0.01-s22",
+      "source": "159190c3154193e4cff72cabf6e2bb23fd498b0a",
+      "state": "completed",
+      "unit": "tide-lab-v11-fresh-parent128-small-e20-lr0.003-b0.01-s22.service"
+    },
+    {
+      "id": "v11-fresh-parent128-small-e64-lr0.003-b0.001-s11",
+      "source": "159190c3154193e4cff72cabf6e2bb23fd498b0a",
+      "state": "completed",
+      "unit": "tide-lab-v11-fresh-parent128-small-e64-lr0.003-b0.001-s11.service"
+    },
+    {
+      "id": "v11-fresh-parent128-small-e64-lr0.003-b0.001-s22",
+      "source": "159190c3154193e4cff72cabf6e2bb23fd498b0a",
+      "state": "completed",
+      "unit": "tide-lab-v11-fresh-parent128-small-e64-lr0.003-b0.001-s22.service"
+    },
+    {
+      "id": "v11-hb-hb-d64-r64-q3-bias0.001-s11",
+      "source": "159190c3154193e4cff72cabf6e2bb23fd498b0a",
+      "state": "failed",
+      "unit": "tide-lab-v11-hb-hb-d64-r64-q3-bias0.001-s11.service"
+    },
+    {
+      "id": "v11-hb-hb-d64-r64-q3-bias0.001-s22",
+      "source": "159190c3154193e4cff72cabf6e2bb23fd498b0a",
+      "state": "failed",
+      "unit": "tide-lab-v11-hb-hb-d64-r64-q3-bias0.001-s22.service"
+    },
+    {
+      "id": "v11-hb-hb-d64-r64-q3-bias0.01-s11",
+      "source": "159190c3154193e4cff72cabf6e2bb23fd498b0a",
+      "state": "failed",
+      "unit": "tide-lab-v11-hb-hb-d64-r64-q3-bias0.01-s11.service"
+    },
+    {
+      "id": "v11-hb-hb-d64-r64-q3-bias0.01-s22",
+      "source": "159190c3154193e4cff72cabf6e2bb23fd498b0a",
+      "state": "failed",
+      "unit": "tide-lab-v11-hb-hb-d64-r64-q3-bias0.01-s22.service"
+    },
+    {
+      "id": "v11-moe-balance-small-e64-lr0.003-b0.01-s11",
+      "source": "8bd33dd160ac65238fe7bd4eac3450251fe57c32",
+      "state": "completed",
+      "unit": "tide-lab-v11-moe-balance-small-e64-lr0.003-b0.01-s11.service"
+    },
+    {
+      "id": "v11-moe-balance-small-e64-lr0.003-b0.01-s22",
+      "source": "8bd33dd160ac65238fe7bd4eac3450251fe57c32",
+      "state": "completed",
+      "unit": "tide-lab-v11-moe-balance-small-e64-lr0.003-b0.01-s22.service"
+    },
+    {
+      "id": "v11-moe-controller",
+      "source": "ecb1b1f2e759e67e4f4ac57da9a99d5afd52f942",
+      "state": "completed",
+      "unit": "tide-lab-v11-moe-controller.service"
+    },
+    {
+      "id": "v11-moe-extend-large-dense-lr0.001-s11",
+      "source": "8bd33dd160ac65238fe7bd4eac3450251fe57c32",
+      "state": "completed",
+      "unit": "tide-lab-v11-moe-extend-large-dense-lr0.001-s11.service"
+    },
+    {
+      "id": "v11-moe-extend-large-dense-lr0.001-s22",
+      "source": "8bd33dd160ac65238fe7bd4eac3450251fe57c32",
+      "state": "completed",
+      "unit": "tide-lab-v11-moe-extend-large-dense-lr0.001-s22.service"
+    },
+    {
+      "id": "v11-moe-extend-large-e20-lr0.001-b0.01-s11",
+      "source": "8bd33dd160ac65238fe7bd4eac3450251fe57c32",
+      "state": "completed",
+      "unit": "tide-lab-v11-moe-extend-large-e20-lr0.001-b0.01-s11.service"
+    },
+    {
+      "id": "v11-moe-extend-large-e20-lr0.001-b0.01-s22",
+      "source": "8bd33dd160ac65238fe7bd4eac3450251fe57c32",
+      "state": "completed",
+      "unit": "tide-lab-v11-moe-extend-large-e20-lr0.001-b0.01-s22.service"
+    },
+    {
+      "id": "v11-moe-extend-large-e64-lr0.001-b0.01-s11",
+      "source": "8bd33dd160ac65238fe7bd4eac3450251fe57c32",
+      "state": "completed",
+      "unit": "tide-lab-v11-moe-extend-large-e64-lr0.001-b0.01-s11.service"
+    },
+    {
+      "id": "v11-moe-extend-large-e64-lr0.001-b0.01-s22",
+      "source": "8bd33dd160ac65238fe7bd4eac3450251fe57c32",
+      "state": "completed",
+      "unit": "tide-lab-v11-moe-extend-large-e64-lr0.001-b0.01-s22.service"
+    },
+    {
+      "id": "v12-all-base-q10-s22",
+      "source": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+      "state": "completed",
+      "unit": "tide-lab-v12-all-base-q10-s22.service"
+    },
+    {
+      "id": "v12-all-fullshare8-q3-s11",
+      "source": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+      "state": "completed",
+      "unit": "tide-lab-v12-all-fullshare8-q3-s11.service"
+    },
+    {
+      "id": "v12-all-fullshare8-q3-s22",
+      "source": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+      "state": "failed",
+      "unit": "tide-lab-v12-all-fullshare8-q3-s22.service"
+    },
+    {
+      "id": "v12-all-hardware",
+      "source": "711e96befa6ad1aae3e244e2939c0c084532020b",
+      "state": "completed",
+      "unit": "tide-lab-v12-all-hardware.service"
+    },
+    {
+      "id": "v12-all-ports4-q3-s22",
+      "source": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+      "state": "completed",
+      "unit": "tide-lab-v12-all-ports4-q3-s22.service"
+    },
+    {
+      "id": "v12-all-readcontent-q3-s11",
+      "source": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+      "state": "completed",
+      "unit": "tide-lab-v12-all-readcontent-q3-s11.service"
+    },
+    {
+      "id": "v12-all-residual-q3-s11",
+      "source": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+      "state": "failed",
+      "unit": "tide-lab-v12-all-residual-q3-s11.service"
+    },
+    {
+      "id": "v12-all-share0-q3-s11",
+      "source": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+      "state": "completed",
+      "unit": "tide-lab-v12-all-share0-q3-s11.service"
+    },
+    {
+      "id": "v12-all-share8-d128-q3-s11",
+      "source": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+      "state": "failed",
+      "unit": "tide-lab-v12-all-share8-d128-q3-s11.service"
+    },
+    {
+      "id": "v12-all-share8-d128-q3-s22",
+      "source": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+      "state": "failed",
+      "unit": "tide-lab-v12-all-share8-d128-q3-s22.service"
+    },
+    {
+      "id": "v12-all-share8-d192-q3-s11",
+      "source": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+      "state": "failed",
+      "unit": "tide-lab-v12-all-share8-d192-q3-s11.service"
+    },
+    {
+      "id": "v12-all-top2-q3-s11",
+      "source": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+      "state": "completed",
+      "unit": "tide-lab-v12-all-top2-q3-s11.service"
+    },
+    {
+      "id": "v12-all-untied-q3-s22",
+      "source": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+      "state": "completed",
+      "unit": "tide-lab-v12-all-untied-q3-s22.service"
+    },
+    {
+      "id": "v12-cal-base-q10",
+      "source": "8e085be3a5dd85bc8d5f15a3561e956244176e65",
+      "state": "completed",
+      "unit": "tide-lab-v12-cal-base-q10.service"
+    },
+    {
+      "id": "v12-cal-base-q3",
+      "source": "8e085be3a5dd85bc8d5f15a3561e956244176e65",
+      "state": "completed",
+      "unit": "tide-lab-v12-cal-base-q3.service"
+    },
+    {
+      "id": "v12-cal-base128-q3",
+      "source": "8e085be3a5dd85bc8d5f15a3561e956244176e65",
+      "state": "completed",
+      "unit": "tide-lab-v12-cal-base128-q3.service"
+    },
+    {
+      "id": "v12-cal-ports4-q3",
+      "source": "8e085be3a5dd85bc8d5f15a3561e956244176e65",
+      "state": "completed",
+      "unit": "tide-lab-v12-cal-ports4-q3.service"
+    },
+    {
+      "id": "v12-cal-share8-d128-q3",
+      "source": "8e085be3a5dd85bc8d5f15a3561e956244176e65",
+      "state": "completed",
+      "unit": "tide-lab-v12-cal-share8-d128-q3.service"
+    },
+    {
+      "id": "v12-cal-share8-d192-q3",
+      "source": "8e085be3a5dd85bc8d5f15a3561e956244176e65",
+      "state": "completed",
+      "unit": "tide-lab-v12-cal-share8-d192-q3.service"
+    },
+    {
+      "id": "v12-cal-share8-q3",
+      "source": "8e085be3a5dd85bc8d5f15a3561e956244176e65",
+      "state": "completed",
+      "unit": "tide-lab-v12-cal-share8-q3.service"
+    },
+    {
+      "id": "v12-cal-top2-q3",
+      "source": "8e085be3a5dd85bc8d5f15a3561e956244176e65",
+      "state": "completed",
+      "unit": "tide-lab-v12-cal-top2-q3.service"
+    },
+    {
+      "id": "v12-controls",
+      "source": "5147701447dd15a092cc4b052f828b037ed98df4",
+      "state": "completed",
+      "unit": "tide-lab-v12-controls.service"
+    },
+    {
+      "id": "v12-data",
+      "source": "8e085be3a5dd85bc8d5f15a3561e956244176e65",
+      "state": "failed",
+      "unit": "tide-lab-v12-data.service"
+    },
+    {
+      "id": "v12-data-r2",
+      "source": "8e085be3a5dd85bc8d5f15a3561e956244176e65",
+      "state": "completed",
+      "unit": "tide-lab-v12-data-r2.service"
+    },
+    {
+      "id": "v12-four-base-q10-s22",
+      "source": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+      "state": "stopped",
+      "unit": "tide-lab-v12-four-base-q10-s22.service"
+    },
+    {
+      "id": "v12-four-base128-q3-s11",
+      "source": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+      "state": "failed",
+      "unit": "tide-lab-v12-four-base128-q3-s11.service"
+    },
+    {
+      "id": "v12-four-fullshare8-q3-s11",
+      "source": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+      "state": "stopped",
+      "unit": "tide-lab-v12-four-fullshare8-q3-s11.service"
+    },
+    {
+      "id": "v12-four-fullshare8-q3-s22",
+      "source": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+      "state": "stopped",
+      "unit": "tide-lab-v12-four-fullshare8-q3-s22.service"
+    },
+    {
+      "id": "v12-four-hardware",
+      "source": "79259e55e8c858b7df04f43fba836b53f3c591e5",
+      "state": "stopped",
+      "unit": "tide-lab-v12-four-hardware.service"
+    },
+    {
+      "id": "v12-four-ports4-q3-s22",
+      "source": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+      "state": "stopped",
+      "unit": "tide-lab-v12-four-ports4-q3-s22.service"
+    },
+    {
+      "id": "v12-four-position-q3-s11",
+      "source": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+      "state": "completed",
+      "unit": "tide-lab-v12-four-position-q3-s11.service"
+    },
+    {
+      "id": "v12-four-readcontent-q3-s11",
+      "source": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+      "state": "stopped",
+      "unit": "tide-lab-v12-four-readcontent-q3-s11.service"
+    },
+    {
+      "id": "v12-four-readcontent-q3-s22",
+      "source": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+      "state": "failed",
+      "unit": "tide-lab-v12-four-readcontent-q3-s22.service"
+    },
+    {
+      "id": "v12-four-residual-q3-s11",
+      "source": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+      "state": "stopped",
+      "unit": "tide-lab-v12-four-residual-q3-s11.service"
+    },
+    {
+      "id": "v12-four-share0-q3-s11",
+      "source": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+      "state": "stopped",
+      "unit": "tide-lab-v12-four-share0-q3-s11.service"
+    },
+    {
+      "id": "v12-four-share8-d128-q3-s11",
+      "source": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+      "state": "stopped",
+      "unit": "tide-lab-v12-four-share8-d128-q3-s11.service"
+    },
+    {
+      "id": "v12-four-share8-d128-q3-s22",
+      "source": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+      "state": "stopped",
+      "unit": "tide-lab-v12-four-share8-d128-q3-s22.service"
+    },
+    {
+      "id": "v12-four-share8-d192-q3-s11",
+      "source": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+      "state": "stopped",
+      "unit": "tide-lab-v12-four-share8-d192-q3-s11.service"
+    },
+    {
+      "id": "v12-four-share8-d192-q3-s22",
+      "source": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+      "state": "failed",
+      "unit": "tide-lab-v12-four-share8-d192-q3-s22.service"
+    },
+    {
+      "id": "v12-four-top2-q3-s11",
+      "source": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+      "state": "stopped",
+      "unit": "tide-lab-v12-four-top2-q3-s11.service"
+    },
+    {
+      "id": "v12-four-untied-q3-s22",
+      "source": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+      "state": "stopped",
+      "unit": "tide-lab-v12-four-untied-q3-s22.service"
+    },
+    {
+      "id": "v12-hardware",
+      "source": "5147701447dd15a092cc4b052f828b037ed98df4",
+      "state": "completed",
+      "unit": "tide-lab-v12-hardware.service"
+    },
+    {
+      "id": "v12-main-base-q10-s11",
+      "source": "5147701447dd15a092cc4b052f828b037ed98df4",
+      "state": "failed",
+      "unit": "tide-lab-v12-main-base-q10-s11.service"
+    },
+    {
+      "id": "v12-main-base-q10-s22",
+      "source": "5147701447dd15a092cc4b052f828b037ed98df4",
+      "state": "failed",
+      "unit": "tide-lab-v12-main-base-q10-s22.service"
+    },
+    {
+      "id": "v12-main-base-q3-s11",
+      "source": "5147701447dd15a092cc4b052f828b037ed98df4",
+      "state": "completed",
+      "unit": "tide-lab-v12-main-base-q3-s11.service"
+    },
+    {
+      "id": "v12-main-base-q3-s22",
+      "source": "5147701447dd15a092cc4b052f828b037ed98df4",
+      "state": "failed",
+      "unit": "tide-lab-v12-main-base-q3-s22.service"
+    },
+    {
+      "id": "v12-main-base128-q3-s11",
+      "source": "5147701447dd15a092cc4b052f828b037ed98df4",
+      "state": "failed",
+      "unit": "tide-lab-v12-main-base128-q3-s11.service"
+    },
+    {
+      "id": "v12-main-base128-q3-s22",
+      "source": "5147701447dd15a092cc4b052f828b037ed98df4",
+      "state": "failed",
+      "unit": "tide-lab-v12-main-base128-q3-s22.service"
+    },
+    {
+      "id": "v12-main-budget0-q3-s11",
+      "source": "5147701447dd15a092cc4b052f828b037ed98df4",
+      "state": "completed",
+      "unit": "tide-lab-v12-main-budget0-q3-s11.service"
+    },
+    {
+      "id": "v12-main-budget0-q3-s22",
+      "source": "5147701447dd15a092cc4b052f828b037ed98df4",
+      "state": "completed",
+      "unit": "tide-lab-v12-main-budget0-q3-s22.service"
+    },
+    {
+      "id": "v12-main-fullshare8-q3-s11",
+      "source": "5147701447dd15a092cc4b052f828b037ed98df4",
+      "state": "failed",
+      "unit": "tide-lab-v12-main-fullshare8-q3-s11.service"
+    },
+    {
+      "id": "v12-main-fullshare8-q3-s22",
+      "source": "5147701447dd15a092cc4b052f828b037ed98df4",
+      "state": "failed",
+      "unit": "tide-lab-v12-main-fullshare8-q3-s22.service"
+    },
+    {
+      "id": "v12-main-ports4-q3-s11",
+      "source": "5147701447dd15a092cc4b052f828b037ed98df4",
+      "state": "failed",
+      "unit": "tide-lab-v12-main-ports4-q3-s11.service"
+    },
+    {
+      "id": "v12-main-ports4-q3-s22",
+      "source": "5147701447dd15a092cc4b052f828b037ed98df4",
+      "state": "failed",
+      "unit": "tide-lab-v12-main-ports4-q3-s22.service"
+    },
+    {
+      "id": "v12-main-position-q3-s11",
+      "source": "5147701447dd15a092cc4b052f828b037ed98df4",
+      "state": "failed",
+      "unit": "tide-lab-v12-main-position-q3-s11.service"
+    },
+    {
+      "id": "v12-main-position-q3-s22",
+      "source": "5147701447dd15a092cc4b052f828b037ed98df4",
+      "state": "failed",
+      "unit": "tide-lab-v12-main-position-q3-s22.service"
+    },
+    {
+      "id": "v12-main-readcontent-q3-s11",
+      "source": "5147701447dd15a092cc4b052f828b037ed98df4",
+      "state": "failed",
+      "unit": "tide-lab-v12-main-readcontent-q3-s11.service"
+    },
+    {
+      "id": "v12-main-readcontent-q3-s22",
+      "source": "5147701447dd15a092cc4b052f828b037ed98df4",
+      "state": "failed",
+      "unit": "tide-lab-v12-main-readcontent-q3-s22.service"
+    },
+    {
+      "id": "v12-main-residual-q3-s11",
+      "source": "5147701447dd15a092cc4b052f828b037ed98df4",
+      "state": "failed",
+      "unit": "tide-lab-v12-main-residual-q3-s11.service"
+    },
+    {
+      "id": "v12-main-residual-q3-s22",
+      "source": "5147701447dd15a092cc4b052f828b037ed98df4",
+      "state": "failed",
+      "unit": "tide-lab-v12-main-residual-q3-s22.service"
+    },
+    {
+      "id": "v12-main-share0-q3-s11",
+      "source": "5147701447dd15a092cc4b052f828b037ed98df4",
+      "state": "failed",
+      "unit": "tide-lab-v12-main-share0-q3-s11.service"
+    },
+    {
+      "id": "v12-main-share0-q3-s22",
+      "source": "5147701447dd15a092cc4b052f828b037ed98df4",
+      "state": "failed",
+      "unit": "tide-lab-v12-main-share0-q3-s22.service"
+    },
+    {
+      "id": "v12-main-share8-budget0-q3-s11",
+      "source": "5147701447dd15a092cc4b052f828b037ed98df4",
+      "state": "completed",
+      "unit": "tide-lab-v12-main-share8-budget0-q3-s11.service"
+    },
+    {
+      "id": "v12-main-share8-budget0-q3-s22",
+      "source": "5147701447dd15a092cc4b052f828b037ed98df4",
+      "state": "completed",
+      "unit": "tide-lab-v12-main-share8-budget0-q3-s22.service"
+    },
+    {
+      "id": "v12-main-share8-d128-q3-s11",
+      "source": "5147701447dd15a092cc4b052f828b037ed98df4",
+      "state": "failed",
+      "unit": "tide-lab-v12-main-share8-d128-q3-s11.service"
+    },
+    {
+      "id": "v12-main-share8-d128-q3-s22",
+      "source": "5147701447dd15a092cc4b052f828b037ed98df4",
+      "state": "failed",
+      "unit": "tide-lab-v12-main-share8-d128-q3-s22.service"
+    },
+    {
+      "id": "v12-main-share8-d192-q3-s11",
+      "source": "5147701447dd15a092cc4b052f828b037ed98df4",
+      "state": "failed",
+      "unit": "tide-lab-v12-main-share8-d192-q3-s11.service"
+    },
+    {
+      "id": "v12-main-share8-d192-q3-s22",
+      "source": "5147701447dd15a092cc4b052f828b037ed98df4",
+      "state": "failed",
+      "unit": "tide-lab-v12-main-share8-d192-q3-s22.service"
+    },
+    {
+      "id": "v12-main-share8-lr3-q3-s11",
+      "source": "5147701447dd15a092cc4b052f828b037ed98df4",
+      "state": "failed",
+      "unit": "tide-lab-v12-main-share8-lr3-q3-s11.service"
+    },
+    {
+      "id": "v12-main-share8-lr3-q3-s22",
+      "source": "5147701447dd15a092cc4b052f828b037ed98df4",
+      "state": "failed",
+      "unit": "tide-lab-v12-main-share8-lr3-q3-s22.service"
+    },
+    {
+      "id": "v12-main-share8-q10-s11",
+      "source": "5147701447dd15a092cc4b052f828b037ed98df4",
+      "state": "failed",
+      "unit": "tide-lab-v12-main-share8-q10-s11.service"
+    },
+    {
+      "id": "v12-main-share8-q10-s22",
+      "source": "5147701447dd15a092cc4b052f828b037ed98df4",
+      "state": "completed",
+      "unit": "tide-lab-v12-main-share8-q10-s22.service"
+    },
+    {
+      "id": "v12-main-share8-q3-s11",
+      "source": "5147701447dd15a092cc4b052f828b037ed98df4",
+      "state": "failed",
+      "unit": "tide-lab-v12-main-share8-q3-s11.service"
+    },
+    {
+      "id": "v12-main-share8-q3-s22",
+      "source": "5147701447dd15a092cc4b052f828b037ed98df4",
+      "state": "failed",
+      "unit": "tide-lab-v12-main-share8-q3-s22.service"
+    },
+    {
+      "id": "v12-main-share8-top2-q3-s11",
+      "source": "5147701447dd15a092cc4b052f828b037ed98df4",
+      "state": "completed",
+      "unit": "tide-lab-v12-main-share8-top2-q3-s11.service"
+    },
+    {
+      "id": "v12-main-share8-top2-q3-s22",
+      "source": "5147701447dd15a092cc4b052f828b037ed98df4",
+      "state": "completed",
+      "unit": "tide-lab-v12-main-share8-top2-q3-s22.service"
+    },
+    {
+      "id": "v12-main-top2-q3-s11",
+      "source": "5147701447dd15a092cc4b052f828b037ed98df4",
+      "state": "failed",
+      "unit": "tide-lab-v12-main-top2-q3-s11.service"
+    },
+    {
+      "id": "v12-main-top2-q3-s22",
+      "source": "5147701447dd15a092cc4b052f828b037ed98df4",
+      "state": "completed",
+      "unit": "tide-lab-v12-main-top2-q3-s22.service"
+    },
+    {
+      "id": "v12-main-untied-q3-s11",
+      "source": "5147701447dd15a092cc4b052f828b037ed98df4",
+      "state": "completed",
+      "unit": "tide-lab-v12-main-untied-q3-s11.service"
+    },
+    {
+      "id": "v12-main-untied-q3-s22",
+      "source": "5147701447dd15a092cc4b052f828b037ed98df4",
+      "state": "failed",
+      "unit": "tide-lab-v12-main-untied-q3-s22.service"
+    },
+    {
+      "id": "v12-quad-replay",
+      "source": "8e085be3a5dd85bc8d5f15a3561e956244176e65",
+      "state": "completed",
+      "unit": "tide-lab-v12-quad-replay.service"
+    },
+    {
+      "id": "v12-quad-stress",
+      "source": "8e085be3a5dd85bc8d5f15a3561e956244176e65",
+      "state": "completed",
+      "unit": "tide-lab-v12-quad-stress.service"
+    },
+    {
+      "id": "v12-repair-base-q10-s11",
+      "source": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+      "state": "completed",
+      "unit": "tide-lab-v12-repair-base-q10-s11.service"
+    },
+    {
+      "id": "v12-repair-base-q10-s22",
+      "source": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+      "state": "stopped",
+      "unit": "tide-lab-v12-repair-base-q10-s22.service"
+    },
+    {
+      "id": "v12-repair-base-q3-s22",
+      "source": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+      "state": "completed",
+      "unit": "tide-lab-v12-repair-base-q3-s22.service"
+    },
+    {
+      "id": "v12-repair-base128-q3-s11",
+      "source": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+      "state": "failed",
+      "unit": "tide-lab-v12-repair-base128-q3-s11.service"
+    },
+    {
+      "id": "v12-repair-base128-q3-s22",
+      "source": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+      "state": "completed",
+      "unit": "tide-lab-v12-repair-base128-q3-s22.service"
+    },
+    {
+      "id": "v12-repair-controller",
+      "source": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+      "state": "stopped",
+      "unit": "tide-lab-v12-repair-controller.service"
+    },
+    {
+      "id": "v12-repair-fullshare8-q3-s11",
+      "source": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+      "state": "stopped",
+      "unit": "tide-lab-v12-repair-fullshare8-q3-s11.service"
+    },
+    {
+      "id": "v12-repair-fullshare8-q3-s22",
+      "source": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+      "state": "failed",
+      "unit": "tide-lab-v12-repair-fullshare8-q3-s22.service"
+    },
+    {
+      "id": "v12-repair-hardware",
+      "source": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+      "state": "stopped",
+      "unit": "tide-lab-v12-repair-hardware.service"
+    },
+    {
+      "id": "v12-repair-ports4-q3-s11",
+      "source": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+      "state": "completed",
+      "unit": "tide-lab-v12-repair-ports4-q3-s11.service"
+    },
+    {
+      "id": "v12-repair-ports4-q3-s22",
+      "source": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+      "state": "stopped",
+      "unit": "tide-lab-v12-repair-ports4-q3-s22.service"
+    },
+    {
+      "id": "v12-repair-position-q3-s11",
+      "source": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+      "state": "stopped",
+      "unit": "tide-lab-v12-repair-position-q3-s11.service"
+    },
+    {
+      "id": "v12-repair-position-q3-s22",
+      "source": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+      "state": "completed",
+      "unit": "tide-lab-v12-repair-position-q3-s22.service"
+    },
+    {
+      "id": "v12-repair-qualification-cpu",
+      "source": "555a68637ded4fb83ef5a8aa1c768fdab78545c1",
+      "state": "completed",
+      "unit": "tide-lab-v12-repair-qualification-cpu.service"
+    },
+    {
+      "id": "v12-repair-qualification-npu",
+      "source": "555a68637ded4fb83ef5a8aa1c768fdab78545c1",
+      "state": "completed",
+      "unit": "tide-lab-v12-repair-qualification-npu.service"
+    },
+    {
+      "id": "v12-repair-readcontent-q3-s11",
+      "source": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+      "state": "stopped",
+      "unit": "tide-lab-v12-repair-readcontent-q3-s11.service"
+    },
+    {
+      "id": "v12-repair-readcontent-q3-s22",
+      "source": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+      "state": "failed",
+      "unit": "tide-lab-v12-repair-readcontent-q3-s22.service"
+    },
+    {
+      "id": "v12-repair-residual-q3-s11",
+      "source": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+      "state": "failed",
+      "unit": "tide-lab-v12-repair-residual-q3-s11.service"
+    },
+    {
+      "id": "v12-repair-residual-q3-s22",
+      "source": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+      "state": "completed",
+      "unit": "tide-lab-v12-repair-residual-q3-s22.service"
+    },
+    {
+      "id": "v12-repair-share0-q3-s11",
+      "source": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+      "state": "stopped",
+      "unit": "tide-lab-v12-repair-share0-q3-s11.service"
+    },
+    {
+      "id": "v12-repair-share0-q3-s22",
+      "source": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+      "state": "completed",
+      "unit": "tide-lab-v12-repair-share0-q3-s22.service"
+    },
+    {
+      "id": "v12-repair-share8-d128-q3-s11",
+      "source": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+      "state": "failed",
+      "unit": "tide-lab-v12-repair-share8-d128-q3-s11.service"
+    },
+    {
+      "id": "v12-repair-share8-d128-q3-s22",
+      "source": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+      "state": "failed",
+      "unit": "tide-lab-v12-repair-share8-d128-q3-s22.service"
+    },
+    {
+      "id": "v12-repair-share8-d192-q3-s11",
+      "source": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+      "state": "failed",
+      "unit": "tide-lab-v12-repair-share8-d192-q3-s11.service"
+    },
+    {
+      "id": "v12-repair-share8-d192-q3-s22",
+      "source": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+      "state": "failed",
+      "unit": "tide-lab-v12-repair-share8-d192-q3-s22.service"
+    },
+    {
+      "id": "v12-repair-share8-lr3-q3-s11",
+      "source": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+      "state": "completed",
+      "unit": "tide-lab-v12-repair-share8-lr3-q3-s11.service"
+    },
+    {
+      "id": "v12-repair-share8-lr3-q3-s22",
+      "source": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+      "state": "completed",
+      "unit": "tide-lab-v12-repair-share8-lr3-q3-s22.service"
+    },
+    {
+      "id": "v12-repair-share8-q10-s11",
+      "source": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+      "state": "completed",
+      "unit": "tide-lab-v12-repair-share8-q10-s11.service"
+    },
+    {
+      "id": "v12-repair-share8-q3-s11",
+      "source": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+      "state": "completed",
+      "unit": "tide-lab-v12-repair-share8-q3-s11.service"
+    },
+    {
+      "id": "v12-repair-share8-q3-s22",
+      "source": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+      "state": "completed",
+      "unit": "tide-lab-v12-repair-share8-q3-s22.service"
+    },
+    {
+      "id": "v12-repair-top2-q3-s11",
+      "source": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+      "state": "stopped",
+      "unit": "tide-lab-v12-repair-top2-q3-s11.service"
+    },
+    {
+      "id": "v12-repair-untied-q3-s22",
+      "source": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+      "state": "stopped",
+      "unit": "tide-lab-v12-repair-untied-q3-s22.service"
+    },
+    {
+      "id": "v12-six-base-q10-s22",
+      "source": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+      "state": "stopped",
+      "unit": "tide-lab-v12-six-base-q10-s22.service"
+    },
+    {
+      "id": "v12-six-base128-q3-s11",
+      "source": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+      "state": "stopped",
+      "unit": "tide-lab-v12-six-base128-q3-s11.service"
+    },
+    {
+      "id": "v12-six-fullshare8-q3-s11",
+      "source": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+      "state": "stopped",
+      "unit": "tide-lab-v12-six-fullshare8-q3-s11.service"
+    },
+    {
+      "id": "v12-six-fullshare8-q3-s22",
+      "source": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+      "state": "stopped",
+      "unit": "tide-lab-v12-six-fullshare8-q3-s22.service"
+    },
+    {
+      "id": "v12-six-hardware",
+      "source": "a9a63245977df487bed91eb53cc8ad7f8ef8e21d",
+      "state": "stopped",
+      "unit": "tide-lab-v12-six-hardware.service"
+    },
+    {
+      "id": "v12-six-ports4-q3-s22",
+      "source": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+      "state": "stopped",
+      "unit": "tide-lab-v12-six-ports4-q3-s22.service"
+    },
+    {
+      "id": "v12-six-position-q3-s11",
+      "source": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+      "state": "stopped",
+      "unit": "tide-lab-v12-six-position-q3-s11.service"
+    },
+    {
+      "id": "v12-six-readcontent-q3-s11",
+      "source": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+      "state": "stopped",
+      "unit": "tide-lab-v12-six-readcontent-q3-s11.service"
+    },
+    {
+      "id": "v12-six-readcontent-q3-s22",
+      "source": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+      "state": "stopped",
+      "unit": "tide-lab-v12-six-readcontent-q3-s22.service"
+    },
+    {
+      "id": "v12-six-residual-q3-s11",
+      "source": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+      "state": "stopped",
+      "unit": "tide-lab-v12-six-residual-q3-s11.service"
+    },
+    {
+      "id": "v12-six-share0-q3-s11",
+      "source": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+      "state": "stopped",
+      "unit": "tide-lab-v12-six-share0-q3-s11.service"
+    },
+    {
+      "id": "v12-six-share8-d192-q3-s11",
+      "source": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+      "state": "stopped",
+      "unit": "tide-lab-v12-six-share8-d192-q3-s11.service"
+    },
+    {
+      "id": "v12-six-share8-d192-q3-s22",
+      "source": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+      "state": "stopped",
+      "unit": "tide-lab-v12-six-share8-d192-q3-s22.service"
+    },
+    {
+      "id": "v12-six-top2-q3-s11",
+      "source": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+      "state": "stopped",
+      "unit": "tide-lab-v12-six-top2-q3-s11.service"
+    },
+    {
+      "id": "v12-six-untied-q3-s22",
+      "source": "62e32602b23e371eb1669f7b99409db626a1c4f8",
+      "state": "stopped",
+      "unit": "tide-lab-v12-six-untied-q3-s22.service"
+    },
+    {
+      "id": "v13-cal-content-s",
+      "source": "2da4fd943acd4cee906b6d4802a043af53958250",
+      "state": "completed",
+      "unit": "tide-lab-v13-cal-content-s.service"
+    },
+    {
+      "id": "v13-cal-pool-l",
+      "source": "2da4fd943acd4cee906b6d4802a043af53958250",
+      "state": "failed",
+      "unit": "tide-lab-v13-cal-pool-l.service"
+    },
+    {
+      "id": "v13-cal-q10-l",
+      "source": "2da4fd943acd4cee906b6d4802a043af53958250",
+      "state": "failed",
+      "unit": "tide-lab-v13-cal-q10-l.service"
+    },
+    {
+      "id": "v13-cal-q10-s",
+      "source": "2da4fd943acd4cee906b6d4802a043af53958250",
+      "state": "completed",
+      "unit": "tide-lab-v13-cal-q10-s.service"
+    },
+    {
+      "id": "v13-cal-q3-l",
+      "source": "2da4fd943acd4cee906b6d4802a043af53958250",
+      "state": "failed",
+      "unit": "tide-lab-v13-cal-q3-l.service"
+    },
+    {
+      "id": "v13-cal-q3-s",
+      "source": "2da4fd943acd4cee906b6d4802a043af53958250",
+      "state": "completed",
+      "unit": "tide-lab-v13-cal-q3-s.service"
+    },
+    {
+      "id": "v13-cal-r2-pool-l",
+      "source": "6b98e64cba18bdb6d854d3e825b15fafeb21032f",
+      "state": "completed",
+      "unit": "tide-lab-v13-cal-r2-pool-l.service"
+    },
+    {
+      "id": "v13-cal-r2-q10-l",
+      "source": "6b98e64cba18bdb6d854d3e825b15fafeb21032f",
+      "state": "completed",
+      "unit": "tide-lab-v13-cal-r2-q10-l.service"
+    },
+    {
+      "id": "v13-check-cpu",
+      "source": "2da4fd943acd4cee906b6d4802a043af53958250",
+      "state": "completed",
+      "unit": "tide-lab-v13-check-cpu.service"
+    },
+    {
+      "id": "v13-check-npu",
+      "source": "2da4fd943acd4cee906b6d4802a043af53958250",
+      "state": "completed",
+      "unit": "tide-lab-v13-check-npu.service"
+    },
+    {
+      "id": "v13-data",
+      "source": "2da4fd943acd4cee906b6d4802a043af53958250",
+      "state": "completed",
+      "unit": "tide-lab-v13-data.service"
+    },
+    {
+      "id": "v13-hardware",
+      "source": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
+      "state": "interrupted",
+      "unit": "tide-lab-v13-hardware.service"
+    },
+    {
+      "id": "v13-main-content-s-sum-s11",
+      "source": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
+      "state": "completed",
+      "unit": "tide-lab-v13-main-content-s-sum-s11.service"
+    },
+    {
+      "id": "v13-main-content-s-sum-s22",
+      "source": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
+      "state": "completed",
+      "unit": "tide-lab-v13-main-content-s-sum-s22.service"
+    },
+    {
+      "id": "v13-main-pool-l-qry-s11",
+      "source": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
+      "state": "failed",
+      "unit": "tide-lab-v13-main-pool-l-qry-s11.service"
+    },
+    {
+      "id": "v13-main-pool-l-qry-s22",
+      "source": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
+      "state": "failed",
+      "unit": "tide-lab-v13-main-pool-l-qry-s22.service"
+    },
+    {
+      "id": "v13-main-pool-l-sum-s11",
+      "source": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
+      "state": "failed",
+      "unit": "tide-lab-v13-main-pool-l-sum-s11.service"
+    },
+    {
+      "id": "v13-main-pool-l-sum-s22",
+      "source": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
+      "state": "failed",
+      "unit": "tide-lab-v13-main-pool-l-sum-s22.service"
+    },
+    {
+      "id": "v13-main-q10-l-qry-s11",
+      "source": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
+      "state": "completed",
+      "unit": "tide-lab-v13-main-q10-l-qry-s11.service"
+    },
+    {
+      "id": "v13-main-q10-l-qry-s22",
+      "source": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
+      "state": "completed",
+      "unit": "tide-lab-v13-main-q10-l-qry-s22.service"
+    },
+    {
+      "id": "v13-main-q10-l-sum-s11",
+      "source": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
+      "state": "completed",
+      "unit": "tide-lab-v13-main-q10-l-sum-s11.service"
+    },
+    {
+      "id": "v13-main-q10-l-sum-s22",
+      "source": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
+      "state": "completed",
+      "unit": "tide-lab-v13-main-q10-l-sum-s22.service"
+    },
+    {
+      "id": "v13-main-q10-s-sum-s11",
+      "source": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
+      "state": "completed",
+      "unit": "tide-lab-v13-main-q10-s-sum-s11.service"
+    },
+    {
+      "id": "v13-main-q10-s-sum-s22",
+      "source": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
+      "state": "completed",
+      "unit": "tide-lab-v13-main-q10-s-sum-s22.service"
+    },
+    {
+      "id": "v13-main-q3-l-sum-s11",
+      "source": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
+      "state": "failed",
+      "unit": "tide-lab-v13-main-q3-l-sum-s11.service"
+    },
+    {
+      "id": "v13-main-q3-l-sum-s22",
+      "source": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
+      "state": "failed",
+      "unit": "tide-lab-v13-main-q3-l-sum-s22.service"
+    },
+    {
+      "id": "v13-main-q3-s-sum-s11",
+      "source": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
+      "state": "completed",
+      "unit": "tide-lab-v13-main-q3-s-sum-s11.service"
+    },
+    {
+      "id": "v13-main-q3-s-sum-s22",
+      "source": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
+      "state": "interrupted",
+      "unit": "tide-lab-v13-main-q3-s-sum-s22.service"
+    },
+    {
+      "id": "v13-numeric-triage",
+      "source": "a1746f20e030859251089f723d2ccc647560bcd1",
+      "state": "completed",
+      "unit": "tide-lab-v13-numeric-triage.service"
+    },
+    {
+      "id": "v13-reuse-content-s-qry-s11",
+      "source": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
+      "state": "completed",
+      "unit": "tide-lab-v13-reuse-content-s-qry-s11.service"
+    },
+    {
+      "id": "v13-reuse-content-s-qry-s22",
+      "source": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
+      "state": "completed",
+      "unit": "tide-lab-v13-reuse-content-s-qry-s22.service"
+    },
+    {
+      "id": "v13-reuse-q10-s-qry-s11",
+      "source": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
+      "state": "completed",
+      "unit": "tide-lab-v13-reuse-q10-s-qry-s11.service"
+    },
+    {
+      "id": "v13-reuse-q10-s-qry-s22",
+      "source": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
+      "state": "completed",
+      "unit": "tide-lab-v13-reuse-q10-s-qry-s22.service"
+    },
+    {
+      "id": "v13-reuse-q3-l-qry-s11",
+      "source": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
+      "state": "completed",
+      "unit": "tide-lab-v13-reuse-q3-l-qry-s11.service"
+    },
+    {
+      "id": "v13-reuse-q3-l-qry-s22",
+      "source": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
+      "state": "completed",
+      "unit": "tide-lab-v13-reuse-q3-l-qry-s22.service"
+    },
+    {
+      "id": "v13-reuse-q3-s-qry-s11",
+      "source": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
+      "state": "completed",
+      "unit": "tide-lab-v13-reuse-q3-s-qry-s11.service"
+    },
+    {
+      "id": "v13-reuse-q3-s-qry-s22",
+      "source": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
+      "state": "completed",
+      "unit": "tide-lab-v13-reuse-q3-s-qry-s22.service"
+    },
+    {
+      "id": "v6-budget",
+      "source": "f53e422027f30c87e13f767d7dcd6a8902319b55",
+      "state": "completed",
+      "unit": "tide-lab-v6-budget.service"
+    },
+    {
+      "id": "v6-budget-v2",
+      "source": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+      "state": "completed",
+      "unit": "tide-lab-v6-budget-v2.service"
+    },
+    {
+      "id": "v6-cal-gdn-npu-b8",
+      "source": "5fa3ddbe2f3b19f615b5bd87e4c0871f567d1f05",
+      "state": "completed",
+      "unit": "tide-lab-v6-cal-gdn-npu-b8.service"
+    },
+    {
+      "id": "v6-cal-kv-cpu-b32",
+      "source": "5fa3ddbe2f3b19f615b5bd87e4c0871f567d1f05",
+      "state": "completed",
+      "unit": "tide-lab-v6-cal-kv-cpu-b32.service"
+    },
+    {
+      "id": "v6-cal-kv-cpu-b8",
+      "source": "5fa3ddbe2f3b19f615b5bd87e4c0871f567d1f05",
+      "state": "completed",
+      "unit": "tide-lab-v6-cal-kv-cpu-b8.service"
+    },
+    {
+      "id": "v6-cal-kv-npu-b32",
+      "source": "5fa3ddbe2f3b19f615b5bd87e4c0871f567d1f05",
+      "state": "completed",
+      "unit": "tide-lab-v6-cal-kv-npu-b32.service"
+    },
+    {
+      "id": "v6-cal-kv-npu-b8",
+      "source": "5fa3ddbe2f3b19f615b5bd87e4c0871f567d1f05",
+      "state": "completed",
+      "unit": "tide-lab-v6-cal-kv-npu-b8.service"
+    },
+    {
+      "id": "v6-cal-native-kv-cpu-b8",
+      "source": "5fa3ddbe2f3b19f615b5bd87e4c0871f567d1f05",
+      "state": "failed",
+      "unit": "tide-lab-v6-cal-native-kv-cpu-b8.service"
+    },
+    {
+      "id": "v6-cal-native-kv-npu-b32",
+      "source": "5fa3ddbe2f3b19f615b5bd87e4c0871f567d1f05",
+      "state": "failed",
+      "unit": "tide-lab-v6-cal-native-kv-npu-b32.service"
+    },
+    {
+      "id": "v6-cal-native-kv-npu-b8",
+      "source": "5fa3ddbe2f3b19f615b5bd87e4c0871f567d1f05",
+      "state": "failed",
+      "unit": "tide-lab-v6-cal-native-kv-npu-b8.service"
+    },
+    {
+      "id": "v6-cal-native2-kv-cpu-b8",
+      "source": "f53e422027f30c87e13f767d7dcd6a8902319b55",
+      "state": "completed",
+      "unit": "tide-lab-v6-cal-native2-kv-cpu-b8.service"
+    },
+    {
+      "id": "v6-cal-native2-kv-npu-b32",
+      "source": "f53e422027f30c87e13f767d7dcd6a8902319b55",
+      "state": "timed_out",
+      "unit": "tide-lab-v6-cal-native2-kv-npu-b32.service"
+    },
+    {
+      "id": "v6-cal-native2-kv-npu-b8",
+      "source": "f53e422027f30c87e13f767d7dcd6a8902319b55",
+      "state": "completed",
+      "unit": "tide-lab-v6-cal-native2-kv-npu-b8.service"
+    },
+    {
+      "id": "v6-cal-python-kv-cpu-l128",
+      "source": "f53e422027f30c87e13f767d7dcd6a8902319b55",
+      "state": "completed",
+      "unit": "tide-lab-v6-cal-python-kv-cpu-l128.service"
+    },
+    {
+      "id": "v6-cal-ssd-npu-b8",
+      "source": "5fa3ddbe2f3b19f615b5bd87e4c0871f567d1f05",
+      "state": "completed",
+      "unit": "tide-lab-v6-cal-ssd-npu-b8.service"
+    },
+    {
+      "id": "v6-cal-transformer-cpu-b32",
+      "source": "5fa3ddbe2f3b19f615b5bd87e4c0871f567d1f05",
+      "state": "completed",
+      "unit": "tide-lab-v6-cal-transformer-cpu-b32.service"
+    },
+    {
+      "id": "v6-cal-transformer-npu-b128",
+      "source": "5fa3ddbe2f3b19f615b5bd87e4c0871f567d1f05",
+      "state": "completed",
+      "unit": "tide-lab-v6-cal-transformer-npu-b128.service"
+    },
+    {
+      "id": "v6-cover-fc-send-regional_total-ent1-retry1",
+      "source": "4087310162338e4f4e90102989cd2c9b98db62b9",
+      "state": "completed",
+      "unit": "tide-lab-v6-cover-fc-send-regional_total-ent1-retry1.service"
+    },
+    {
+      "id": "v6-cover-hb-send-regional_total-ent1-retry1",
+      "source": "4087310162338e4f4e90102989cd2c9b98db62b9",
+      "state": "completed",
+      "unit": "tide-lab-v6-cover-hb-send-regional_total-ent1-retry1.service"
+    },
+    {
+      "id": "v6-cover-transformer-fc-budget",
+      "source": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+      "state": "failed",
+      "unit": "tide-lab-v6-cover-transformer-fc-budget.service"
+    },
+    {
+      "id": "v6-cover-transformer-fc-budget-retry1",
+      "source": "4087310162338e4f4e90102989cd2c9b98db62b9",
+      "state": "completed",
+      "unit": "tide-lab-v6-cover-transformer-fc-budget-retry1.service"
+    },
+    {
+      "id": "v6-cover-transformer-hb-budget",
+      "source": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+      "state": "failed",
+      "unit": "tide-lab-v6-cover-transformer-hb-budget.service"
+    },
+    {
+      "id": "v6-cover-transformer-hb-budget-retry1",
+      "source": "4087310162338e4f4e90102989cd2c9b98db62b9",
+      "state": "completed",
+      "unit": "tide-lab-v6-cover-transformer-hb-budget-retry1.service"
+    },
+    {
+      "id": "v6-cover-worker-000",
+      "source": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+      "state": "completed",
+      "unit": "tide-lab-v6-cover-worker-000.service"
+    },
+    {
+      "id": "v6-cover-worker-001",
+      "source": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+      "state": "completed",
+      "unit": "tide-lab-v6-cover-worker-001.service"
+    },
+    {
+      "id": "v6-cover-worker-002",
+      "source": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+      "state": "completed",
+      "unit": "tide-lab-v6-cover-worker-002.service"
+    },
+    {
+      "id": "v6-cover-worker-003",
+      "source": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+      "state": "completed",
+      "unit": "tide-lab-v6-cover-worker-003.service"
+    },
+    {
+      "id": "v6-cover-worker-004",
+      "source": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+      "state": "completed",
+      "unit": "tide-lab-v6-cover-worker-004.service"
+    },
+    {
+      "id": "v6-cover-worker-005",
+      "source": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+      "state": "completed",
+      "unit": "tide-lab-v6-cover-worker-005.service"
+    },
+    {
+      "id": "v6-cover-worker-006",
+      "source": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+      "state": "completed",
+      "unit": "tide-lab-v6-cover-worker-006.service"
+    },
+    {
+      "id": "v6-cover-worker-007",
+      "source": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+      "state": "completed",
+      "unit": "tide-lab-v6-cover-worker-007.service"
+    },
+    {
+      "id": "v6-cover-worker-008",
+      "source": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+      "state": "completed",
+      "unit": "tide-lab-v6-cover-worker-008.service"
+    },
+    {
+      "id": "v6-cover-worker-009",
+      "source": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+      "state": "completed",
+      "unit": "tide-lab-v6-cover-worker-009.service"
+    },
+    {
+      "id": "v6-cover-worker-010",
+      "source": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+      "state": "completed",
+      "unit": "tide-lab-v6-cover-worker-010.service"
+    },
+    {
+      "id": "v6-cover-worker-011",
+      "source": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+      "state": "completed",
+      "unit": "tide-lab-v6-cover-worker-011.service"
+    },
+    {
+      "id": "v6-cover-worker-012",
+      "source": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+      "state": "completed",
+      "unit": "tide-lab-v6-cover-worker-012.service"
+    },
+    {
+      "id": "v6-cover-worker-013",
+      "source": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+      "state": "completed",
+      "unit": "tide-lab-v6-cover-worker-013.service"
+    },
+    {
+      "id": "v6-cover-worker-014",
+      "source": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+      "state": "completed",
+      "unit": "tide-lab-v6-cover-worker-014.service"
+    },
+    {
+      "id": "v6-cover-worker-015",
+      "source": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+      "state": "completed",
+      "unit": "tide-lab-v6-cover-worker-015.service"
+    },
+    {
+      "id": "v6-cover-worker-016",
+      "source": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+      "state": "completed",
+      "unit": "tide-lab-v6-cover-worker-016.service"
+    },
+    {
+      "id": "v6-cover-worker-017",
+      "source": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+      "state": "completed",
+      "unit": "tide-lab-v6-cover-worker-017.service"
+    },
+    {
+      "id": "v6-cover-worker-018",
+      "source": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+      "state": "completed",
+      "unit": "tide-lab-v6-cover-worker-018.service"
+    },
+    {
+      "id": "v6-cover-worker-019",
+      "source": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+      "state": "completed",
+      "unit": "tide-lab-v6-cover-worker-019.service"
+    },
+    {
+      "id": "v6-cover-worker-020",
+      "source": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+      "state": "completed",
+      "unit": "tide-lab-v6-cover-worker-020.service"
+    },
+    {
+      "id": "v6-cover-worker-021",
+      "source": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+      "state": "completed",
+      "unit": "tide-lab-v6-cover-worker-021.service"
+    },
+    {
+      "id": "v6-cover-worker-022",
+      "source": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+      "state": "completed",
+      "unit": "tide-lab-v6-cover-worker-022.service"
+    },
+    {
+      "id": "v6-cover-worker-023",
+      "source": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+      "state": "completed",
+      "unit": "tide-lab-v6-cover-worker-023.service"
+    },
+    {
+      "id": "v6-cover-worker-024",
+      "source": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+      "state": "completed",
+      "unit": "tide-lab-v6-cover-worker-024.service"
+    },
+    {
+      "id": "v6-cover-worker-025",
+      "source": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+      "state": "completed",
+      "unit": "tide-lab-v6-cover-worker-025.service"
+    },
+    {
+      "id": "v6-cover-worker-026",
+      "source": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+      "state": "completed",
+      "unit": "tide-lab-v6-cover-worker-026.service"
+    },
+    {
+      "id": "v6-cover-worker-027",
+      "source": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+      "state": "completed",
+      "unit": "tide-lab-v6-cover-worker-027.service"
+    },
+    {
+      "id": "v6-cover-worker-028",
+      "source": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+      "state": "completed",
+      "unit": "tide-lab-v6-cover-worker-028.service"
+    },
+    {
+      "id": "v6-cover-worker-029",
+      "source": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+      "state": "completed",
+      "unit": "tide-lab-v6-cover-worker-029.service"
+    },
+    {
+      "id": "v6-cover-worker-030",
+      "source": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+      "state": "completed",
+      "unit": "tide-lab-v6-cover-worker-030.service"
+    },
+    {
+      "id": "v6-cover-worker-031",
+      "source": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+      "state": "completed",
+      "unit": "tide-lab-v6-cover-worker-031.service"
+    },
+    {
+      "id": "v6-cover-worker-032",
+      "source": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+      "state": "completed",
+      "unit": "tide-lab-v6-cover-worker-032.service"
+    },
+    {
+      "id": "v6-cover-worker-033",
+      "source": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+      "state": "completed",
+      "unit": "tide-lab-v6-cover-worker-033.service"
+    },
+    {
+      "id": "v6-cover-worker-034",
+      "source": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+      "state": "completed",
+      "unit": "tide-lab-v6-cover-worker-034.service"
+    },
+    {
+      "id": "v6-cover-worker-035",
+      "source": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+      "state": "completed",
+      "unit": "tide-lab-v6-cover-worker-035.service"
+    },
+    {
+      "id": "v6-cover-worker-036",
+      "source": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+      "state": "completed",
+      "unit": "tide-lab-v6-cover-worker-036.service"
+    },
+    {
+      "id": "v6-cover-worker-037",
+      "source": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+      "state": "completed",
+      "unit": "tide-lab-v6-cover-worker-037.service"
+    },
+    {
+      "id": "v6-cover-worker-038",
+      "source": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+      "state": "completed",
+      "unit": "tide-lab-v6-cover-worker-038.service"
+    },
+    {
+      "id": "v6-cover-worker-039",
+      "source": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+      "state": "completed",
+      "unit": "tide-lab-v6-cover-worker-039.service"
+    },
+    {
+      "id": "v6-cover-worker-040",
+      "source": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+      "state": "completed",
+      "unit": "tide-lab-v6-cover-worker-040.service"
+    },
+    {
+      "id": "v6-cover-worker-041",
+      "source": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+      "state": "completed",
+      "unit": "tide-lab-v6-cover-worker-041.service"
+    },
+    {
+      "id": "v6-cover-worker-042",
+      "source": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+      "state": "completed",
+      "unit": "tide-lab-v6-cover-worker-042.service"
+    },
+    {
+      "id": "v6-cover-worker-043",
+      "source": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+      "state": "completed",
+      "unit": "tide-lab-v6-cover-worker-043.service"
+    },
+    {
+      "id": "v6-cover-worker-044",
+      "source": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+      "state": "completed",
+      "unit": "tide-lab-v6-cover-worker-044.service"
+    },
+    {
+      "id": "v6-cover-worker-045",
+      "source": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+      "state": "completed",
+      "unit": "tide-lab-v6-cover-worker-045.service"
+    },
+    {
+      "id": "v6-cover-worker-046",
+      "source": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+      "state": "completed",
+      "unit": "tide-lab-v6-cover-worker-046.service"
+    },
+    {
+      "id": "v6-cover-worker-047",
+      "source": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+      "state": "completed",
+      "unit": "tide-lab-v6-cover-worker-047.service"
+    },
+    {
+      "id": "v6-cover-worker-048",
+      "source": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+      "state": "completed",
+      "unit": "tide-lab-v6-cover-worker-048.service"
+    },
+    {
+      "id": "v6-cover-worker-049",
+      "source": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+      "state": "completed",
+      "unit": "tide-lab-v6-cover-worker-049.service"
+    },
+    {
+      "id": "v6-cover-worker-050",
+      "source": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+      "state": "completed",
+      "unit": "tide-lab-v6-cover-worker-050.service"
+    },
+    {
+      "id": "v6-cover-worker-051",
+      "source": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+      "state": "completed",
+      "unit": "tide-lab-v6-cover-worker-051.service"
+    },
+    {
+      "id": "v6-cover-worker-052",
+      "source": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+      "state": "completed",
+      "unit": "tide-lab-v6-cover-worker-052.service"
+    },
+    {
+      "id": "v6-cover-worker-053",
+      "source": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+      "state": "completed",
+      "unit": "tide-lab-v6-cover-worker-053.service"
+    },
+    {
+      "id": "v6-cover-worker-054",
+      "source": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+      "state": "completed",
+      "unit": "tide-lab-v6-cover-worker-054.service"
+    },
+    {
+      "id": "v6-cover-worker-055",
+      "source": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+      "state": "completed",
+      "unit": "tide-lab-v6-cover-worker-055.service"
+    },
+    {
+      "id": "v6-cover-worker-056",
+      "source": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+      "state": "completed",
+      "unit": "tide-lab-v6-cover-worker-056.service"
+    },
+    {
+      "id": "v6-cover-worker-057",
+      "source": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+      "state": "completed",
+      "unit": "tide-lab-v6-cover-worker-057.service"
+    },
+    {
+      "id": "v6-cover-worker-058",
+      "source": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+      "state": "completed",
+      "unit": "tide-lab-v6-cover-worker-058.service"
+    },
+    {
+      "id": "v6-cover-worker-059",
+      "source": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+      "state": "completed",
+      "unit": "tide-lab-v6-cover-worker-059.service"
+    },
+    {
+      "id": "v6-cover-worker-060",
+      "source": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+      "state": "completed",
+      "unit": "tide-lab-v6-cover-worker-060.service"
+    },
+    {
+      "id": "v6-cover-worker-061",
+      "source": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+      "state": "completed",
+      "unit": "tide-lab-v6-cover-worker-061.service"
+    },
+    {
+      "id": "v6-cover-worker-062",
+      "source": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+      "state": "completed",
+      "unit": "tide-lab-v6-cover-worker-062.service"
+    },
+    {
+      "id": "v6-cover-worker-063",
+      "source": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+      "state": "completed",
+      "unit": "tide-lab-v6-cover-worker-063.service"
+    },
+    {
+      "id": "v6-cover-worker-064",
+      "source": "4087310162338e4f4e90102989cd2c9b98db62b9",
+      "state": "completed",
+      "unit": "tide-lab-v6-cover-worker-064.service"
+    },
+    {
+      "id": "v6-cover-worker-065",
+      "source": "4087310162338e4f4e90102989cd2c9b98db62b9",
+      "state": "completed",
+      "unit": "tide-lab-v6-cover-worker-065.service"
+    },
+    {
+      "id": "v6-cover-worker-066",
+      "source": "4087310162338e4f4e90102989cd2c9b98db62b9",
+      "state": "completed",
+      "unit": "tide-lab-v6-cover-worker-066.service"
+    },
+    {
+      "id": "v6-cover-worker-067",
+      "source": "4087310162338e4f4e90102989cd2c9b98db62b9",
+      "state": "completed",
+      "unit": "tide-lab-v6-cover-worker-067.service"
+    },
+    {
+      "id": "v6-cover-worker-068",
+      "source": "4087310162338e4f4e90102989cd2c9b98db62b9",
+      "state": "completed",
+      "unit": "tide-lab-v6-cover-worker-068.service"
+    },
+    {
+      "id": "v6-cover-worker-069",
+      "source": "4087310162338e4f4e90102989cd2c9b98db62b9",
+      "state": "completed",
+      "unit": "tide-lab-v6-cover-worker-069.service"
+    },
+    {
+      "id": "v6-cover-worker-070",
+      "source": "4087310162338e4f4e90102989cd2c9b98db62b9",
+      "state": "completed",
+      "unit": "tide-lab-v6-cover-worker-070.service"
+    },
+    {
+      "id": "v6-cover-worker-071",
+      "source": "4087310162338e4f4e90102989cd2c9b98db62b9",
+      "state": "completed",
+      "unit": "tide-lab-v6-cover-worker-071.service"
+    },
+    {
+      "id": "v6-cover-worker-072",
+      "source": "4087310162338e4f4e90102989cd2c9b98db62b9",
+      "state": "completed",
+      "unit": "tide-lab-v6-cover-worker-072.service"
+    },
+    {
+      "id": "v6-cover-worker-073",
+      "source": "4087310162338e4f4e90102989cd2c9b98db62b9",
+      "state": "completed",
+      "unit": "tide-lab-v6-cover-worker-073.service"
+    },
+    {
+      "id": "v6-cover-worker-074",
+      "source": "4087310162338e4f4e90102989cd2c9b98db62b9",
+      "state": "completed",
+      "unit": "tide-lab-v6-cover-worker-074.service"
+    },
+    {
+      "id": "v6-cover-worker-075",
+      "source": "4087310162338e4f4e90102989cd2c9b98db62b9",
+      "state": "completed",
+      "unit": "tide-lab-v6-cover-worker-075.service"
+    },
+    {
+      "id": "v6-cover-worker-076",
+      "source": "4087310162338e4f4e90102989cd2c9b98db62b9",
+      "state": "completed",
+      "unit": "tide-lab-v6-cover-worker-076.service"
+    },
+    {
+      "id": "v6-cover-worker-077",
+      "source": "4087310162338e4f4e90102989cd2c9b98db62b9",
+      "state": "completed",
+      "unit": "tide-lab-v6-cover-worker-077.service"
+    },
+    {
+      "id": "v6-cover-worker-078",
+      "source": "4087310162338e4f4e90102989cd2c9b98db62b9",
+      "state": "completed",
+      "unit": "tide-lab-v6-cover-worker-078.service"
+    },
+    {
+      "id": "v6-cover-worker-079",
+      "source": "4087310162338e4f4e90102989cd2c9b98db62b9",
+      "state": "completed",
+      "unit": "tide-lab-v6-cover-worker-079.service"
+    },
+    {
+      "id": "v6-cover-worker-080",
+      "source": "4087310162338e4f4e90102989cd2c9b98db62b9",
+      "state": "completed",
+      "unit": "tide-lab-v6-cover-worker-080.service"
+    },
+    {
+      "id": "v6-cover-worker-081",
+      "source": "4087310162338e4f4e90102989cd2c9b98db62b9",
+      "state": "completed",
+      "unit": "tide-lab-v6-cover-worker-081.service"
+    },
+    {
+      "id": "v6-cover-worker-082",
+      "source": "4087310162338e4f4e90102989cd2c9b98db62b9",
+      "state": "completed",
+      "unit": "tide-lab-v6-cover-worker-082.service"
+    },
+    {
+      "id": "v6-cover-worker-083",
+      "source": "4087310162338e4f4e90102989cd2c9b98db62b9",
+      "state": "completed",
+      "unit": "tide-lab-v6-cover-worker-083.service"
+    },
+    {
+      "id": "v6-cover-worker-084",
+      "source": "4087310162338e4f4e90102989cd2c9b98db62b9",
+      "state": "completed",
+      "unit": "tide-lab-v6-cover-worker-084.service"
+    },
+    {
+      "id": "v6-cover-worker-085",
+      "source": "4087310162338e4f4e90102989cd2c9b98db62b9",
+      "state": "completed",
+      "unit": "tide-lab-v6-cover-worker-085.service"
+    },
+    {
+      "id": "v6-cover-worker-086",
+      "source": "4087310162338e4f4e90102989cd2c9b98db62b9",
+      "state": "completed",
+      "unit": "tide-lab-v6-cover-worker-086.service"
+    },
+    {
+      "id": "v6-cover-worker-087",
+      "source": "4087310162338e4f4e90102989cd2c9b98db62b9",
+      "state": "completed",
+      "unit": "tide-lab-v6-cover-worker-087.service"
+    },
+    {
+      "id": "v6-cover-worker-088",
+      "source": "4087310162338e4f4e90102989cd2c9b98db62b9",
+      "state": "completed",
+      "unit": "tide-lab-v6-cover-worker-088.service"
+    },
+    {
+      "id": "v6-cover-worker-089",
+      "source": "4087310162338e4f4e90102989cd2c9b98db62b9",
+      "state": "completed",
+      "unit": "tide-lab-v6-cover-worker-089.service"
+    },
+    {
+      "id": "v6-cover-worker-090",
+      "source": "4087310162338e4f4e90102989cd2c9b98db62b9",
+      "state": "completed",
+      "unit": "tide-lab-v6-cover-worker-090.service"
+    },
+    {
+      "id": "v6-cover-worker-091",
+      "source": "4087310162338e4f4e90102989cd2c9b98db62b9",
+      "state": "completed",
+      "unit": "tide-lab-v6-cover-worker-091.service"
+    },
+    {
+      "id": "v6-cover-worker-092",
+      "source": "4087310162338e4f4e90102989cd2c9b98db62b9",
+      "state": "completed",
+      "unit": "tide-lab-v6-cover-worker-092.service"
+    },
+    {
+      "id": "v6-cover-worker-093",
+      "source": "4087310162338e4f4e90102989cd2c9b98db62b9",
+      "state": "completed",
+      "unit": "tide-lab-v6-cover-worker-093.service"
+    },
+    {
+      "id": "v6-cover-worker-094",
+      "source": "4087310162338e4f4e90102989cd2c9b98db62b9",
+      "state": "completed",
+      "unit": "tide-lab-v6-cover-worker-094.service"
+    },
+    {
+      "id": "v6-cover-worker-095",
+      "source": "4087310162338e4f4e90102989cd2c9b98db62b9",
+      "state": "completed",
+      "unit": "tide-lab-v6-cover-worker-095.service"
+    },
+    {
+      "id": "v6-data",
+      "source": "f62a332724c484ef5f255bc6bb3bbac0680fb88c",
+      "state": "failed",
+      "unit": "tide-lab-v6-data.service"
+    },
+    {
+      "id": "v6-data-final",
+      "source": "3786de02ec47f0b86b8f7b80a2c9ce2a8ae02867",
+      "state": "completed",
+      "unit": "tide-lab-v6-data-final.service"
+    },
+    {
+      "id": "v6-data-range1",
+      "source": "f53e422027f30c87e13f767d7dcd6a8902319b55",
+      "state": "failed",
+      "unit": "tide-lab-v6-data-range1.service"
+    },
+    {
+      "id": "v6-data-resume1",
+      "source": "5fa3ddbe2f3b19f615b5bd87e4c0871f567d1f05",
+      "state": "failed",
+      "unit": "tide-lab-v6-data-resume1.service"
+    },
+    {
+      "id": "v6-diag-native-cpu-full",
+      "source": "d90e733cd1b1d2d13f5da578450f17392f4f49a0",
+      "state": "completed",
+      "unit": "tide-lab-v6-diag-native-cpu-full.service"
+    },
+    {
+      "id": "v6-diag-native-cpu-small",
+      "source": "d90e733cd1b1d2d13f5da578450f17392f4f49a0",
+      "state": "completed",
+      "unit": "tide-lab-v6-diag-native-cpu-small.service"
+    },
+    {
+      "id": "v6-diag-native-cpu-width128",
+      "source": "b4bc62bda4f1424604c4eb0d1736dbe2dea7b735",
+      "state": "completed",
+      "unit": "tide-lab-v6-diag-native-cpu-width128.service"
+    },
+    {
+      "id": "v6-diag-native-cpu-width256",
+      "source": "b4bc62bda4f1424604c4eb0d1736dbe2dea7b735",
+      "state": "completed",
+      "unit": "tide-lab-v6-diag-native-cpu-width256.service"
+    },
+    {
+      "id": "v6-diag-native-cpu-width512",
+      "source": "b4bc62bda4f1424604c4eb0d1736dbe2dea7b735",
+      "state": "completed",
+      "unit": "tide-lab-v6-diag-native-cpu-width512.service"
+    },
+    {
+      "id": "v6-diag-native-npu-device-profile",
+      "source": "d90e733cd1b1d2d13f5da578450f17392f4f49a0",
+      "state": "completed",
+      "unit": "tide-lab-v6-diag-native-npu-device-profile.service"
+    },
+    {
+      "id": "v6-diag-native-npu-full",
+      "source": "d90e733cd1b1d2d13f5da578450f17392f4f49a0",
+      "state": "completed",
+      "unit": "tide-lab-v6-diag-native-npu-full.service"
+    },
+    {
+      "id": "v6-diag-native-npu-small",
+      "source": "d90e733cd1b1d2d13f5da578450f17392f4f49a0",
+      "state": "completed",
+      "unit": "tide-lab-v6-diag-native-npu-small.service"
+    },
+    {
+      "id": "v6-diag-python-npu-small",
+      "source": "d90e733cd1b1d2d13f5da578450f17392f4f49a0",
+      "state": "completed",
+      "unit": "tide-lab-v6-diag-python-npu-small.service"
+    },
+    {
+      "id": "v6-diag-variants",
+      "source": "b4bc62bda4f1424604c4eb0d1736dbe2dea7b735",
+      "state": "completed",
+      "unit": "tide-lab-v6-diag-variants.service"
+    },
+    {
+      "id": "v6-harness-native-worker",
+      "source": "f53e422027f30c87e13f767d7dcd6a8902319b55",
+      "state": "completed",
+      "unit": "tide-lab-v6-harness-native-worker.service"
+    },
+    {
+      "id": "v6-harness-npu-worker",
+      "source": "f53e422027f30c87e13f767d7dcd6a8902319b55",
+      "state": "completed",
+      "unit": "tide-lab-v6-harness-npu-worker.service"
+    },
+    {
+      "id": "v6-harness-worker",
+      "source": "f53e422027f30c87e13f767d7dcd6a8902319b55",
+      "state": "completed",
+      "unit": "tide-lab-v6-harness-worker.service"
+    },
+    {
+      "id": "v6-native-build",
+      "source": "5fa3ddbe2f3b19f615b5bd87e4c0871f567d1f05",
+      "state": "completed",
+      "unit": "tide-lab-v6-native-build.service"
+    },
+    {
+      "id": "v6-positive-constrained-bern",
+      "source": "a87bc3019f407fbc3a88ac96fcc60ba35a0d2f95",
+      "state": "completed",
+      "unit": "tide-lab-v6-positive-constrained-bern.service"
+    },
+    {
+      "id": "v6-positive-direct-boundary-context",
+      "source": "7e1142df5225efc3fd5f1e9b3648e80544079d60",
+      "state": "completed",
+      "unit": "tide-lab-v6-positive-direct-boundary-context.service"
+    },
+    {
+      "id": "v6-positive-direct-received",
+      "source": "a87bc3019f407fbc3a88ac96fcc60ba35a0d2f95",
+      "state": "completed",
+      "unit": "tide-lab-v6-positive-direct-received.service"
+    },
+    {
+      "id": "v6-positive-regional-total-bern",
+      "source": "a87bc3019f407fbc3a88ac96fcc60ba35a0d2f95",
+      "state": "completed",
+      "unit": "tide-lab-v6-positive-regional-total-bern.service"
+    },
+    {
+      "id": "v6-scale-fc16-gdn-quad",
+      "source": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+      "state": "failed",
+      "unit": "tide-lab-v6-scale-fc16-gdn-quad.service"
+    },
+    {
+      "id": "v6-scale-fc16-gdn-quad-retry1",
+      "source": "4087310162338e4f4e90102989cd2c9b98db62b9",
+      "state": "completed",
+      "unit": "tide-lab-v6-scale-fc16-gdn-quad-retry1.service"
+    },
+    {
+      "id": "v6-scale-fc16-kv-quad",
+      "source": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+      "state": "failed",
+      "unit": "tide-lab-v6-scale-fc16-kv-quad.service"
+    },
+    {
+      "id": "v6-scale-fc16-kv-quad-npu",
+      "source": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+      "state": "failed",
+      "unit": "tide-lab-v6-scale-fc16-kv-quad-npu.service"
+    },
+    {
+      "id": "v6-scale-fc16-kv-quad-npu-retry1",
+      "source": "4087310162338e4f4e90102989cd2c9b98db62b9",
+      "state": "completed",
+      "unit": "tide-lab-v6-scale-fc16-kv-quad-npu-retry1.service"
+    },
+    {
+      "id": "v6-scale-fc16-kv-quad-retry1",
+      "source": "4087310162338e4f4e90102989cd2c9b98db62b9",
+      "state": "completed",
+      "unit": "tide-lab-v6-scale-fc16-kv-quad-retry1.service"
+    },
+    {
+      "id": "v6-scale-fc16-shannon",
+      "source": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+      "state": "failed",
+      "unit": "tide-lab-v6-scale-fc16-shannon.service"
+    },
+    {
+      "id": "v6-scale-fc16-shannon-retry1",
+      "source": "4087310162338e4f4e90102989cd2c9b98db62b9",
+      "state": "completed",
+      "unit": "tide-lab-v6-scale-fc16-shannon-retry1.service"
+    },
+    {
+      "id": "v6-scale-fc16-ssd-quad",
+      "source": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+      "state": "failed",
+      "unit": "tide-lab-v6-scale-fc16-ssd-quad.service"
+    },
+    {
+      "id": "v6-scale-fc16-ssd-quad-npu",
+      "source": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+      "state": "failed",
+      "unit": "tide-lab-v6-scale-fc16-ssd-quad-npu.service"
+    },
+    {
+      "id": "v6-scale-fc16-ssd-quad-npu-retry1",
+      "source": "4087310162338e4f4e90102989cd2c9b98db62b9",
+      "state": "completed",
+      "unit": "tide-lab-v6-scale-fc16-ssd-quad-npu-retry1.service"
+    },
+    {
+      "id": "v6-scale-fc16-ssd-quad-retry1",
+      "source": "4087310162338e4f4e90102989cd2c9b98db62b9",
+      "state": "completed",
+      "unit": "tide-lab-v6-scale-fc16-ssd-quad-retry1.service"
+    },
+    {
+      "id": "v6-scale-fc32-kv-quad",
+      "source": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+      "state": "failed",
+      "unit": "tide-lab-v6-scale-fc32-kv-quad.service"
+    },
+    {
+      "id": "v6-scale-fc32-kv-quad-retry1",
+      "source": "4087310162338e4f4e90102989cd2c9b98db62b9",
+      "state": "completed",
+      "unit": "tide-lab-v6-scale-fc32-kv-quad-retry1.service"
+    },
+    {
+      "id": "v6-scale-fc32-shannon",
+      "source": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+      "state": "failed",
+      "unit": "tide-lab-v6-scale-fc32-shannon.service"
+    },
+    {
+      "id": "v6-scale-fc32-shannon-retry1",
+      "source": "4087310162338e4f4e90102989cd2c9b98db62b9",
+      "state": "completed",
+      "unit": "tide-lab-v6-scale-fc32-shannon-retry1.service"
+    },
+    {
+      "id": "v6-scale-fc32-ssd-quad",
+      "source": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+      "state": "failed",
+      "unit": "tide-lab-v6-scale-fc32-ssd-quad.service"
+    },
+    {
+      "id": "v6-scale-fc32-ssd-quad-retry1",
+      "source": "4087310162338e4f4e90102989cd2c9b98db62b9",
+      "state": "completed",
+      "unit": "tide-lab-v6-scale-fc32-ssd-quad-retry1.service"
+    },
+    {
+      "id": "v6-scale-fc64-kv-quad",
+      "source": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+      "state": "failed",
+      "unit": "tide-lab-v6-scale-fc64-kv-quad.service"
+    },
+    {
+      "id": "v6-scale-fc64-kv-quad-retry1",
+      "source": "4087310162338e4f4e90102989cd2c9b98db62b9",
+      "state": "completed",
+      "unit": "tide-lab-v6-scale-fc64-kv-quad-retry1.service"
+    },
+    {
+      "id": "v6-scale-hb40-kv-quad",
+      "source": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+      "state": "failed",
+      "unit": "tide-lab-v6-scale-hb40-kv-quad.service"
+    },
+    {
+      "id": "v6-scale-hb40-kv-quad-retry1",
+      "source": "4087310162338e4f4e90102989cd2c9b98db62b9",
+      "state": "completed",
+      "unit": "tide-lab-v6-scale-hb40-kv-quad-retry1.service"
+    },
+    {
+      "id": "v6-scale-hb40-shannon",
+      "source": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+      "state": "failed",
+      "unit": "tide-lab-v6-scale-hb40-shannon.service"
+    },
+    {
+      "id": "v6-scale-hb40-shannon-retry1",
+      "source": "4087310162338e4f4e90102989cd2c9b98db62b9",
+      "state": "completed",
+      "unit": "tide-lab-v6-scale-hb40-shannon-retry1.service"
+    },
+    {
+      "id": "v6-scale-hb88-kv-quad",
+      "source": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+      "state": "failed",
+      "unit": "tide-lab-v6-scale-hb88-kv-quad.service"
+    },
+    {
+      "id": "v6-scale-hb88-kv-quad-memory2",
+      "source": "4b3e88a42c3b343c6ce077251a7ab095fa82c21a",
+      "state": "completed",
+      "unit": "tide-lab-v6-scale-hb88-kv-quad-memory2.service"
+    },
+    {
+      "id": "v6-scale-hb88-kv-quad-retry1",
+      "source": "4087310162338e4f4e90102989cd2c9b98db62b9",
+      "state": "completed",
+      "unit": "tide-lab-v6-scale-hb88-kv-quad-retry1.service"
+    },
+    {
+      "id": "v6-scale-transformer-10m",
+      "source": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+      "state": "failed",
+      "unit": "tide-lab-v6-scale-transformer-10m.service"
+    },
+    {
+      "id": "v6-scale-transformer-10m-retry1",
+      "source": "4087310162338e4f4e90102989cd2c9b98db62b9",
+      "state": "completed",
+      "unit": "tide-lab-v6-scale-transformer-10m-retry1.service"
+    },
+    {
+      "id": "v6-scale-transformer-19m",
+      "source": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+      "state": "failed",
+      "unit": "tide-lab-v6-scale-transformer-19m.service"
+    },
+    {
+      "id": "v6-scale-transformer-19m-retry1",
+      "source": "4087310162338e4f4e90102989cd2c9b98db62b9",
+      "state": "completed",
+      "unit": "tide-lab-v6-scale-transformer-19m-retry1.service"
+    },
+    {
+      "id": "v6-scale-transformer-5m",
+      "source": "c4585715b3ffe3aa7e7bd88043ad26897ed76df5",
+      "state": "failed",
+      "unit": "tide-lab-v6-scale-transformer-5m.service"
+    },
+    {
+      "id": "v6-scale-transformer-5m-retry1",
+      "source": "4087310162338e4f4e90102989cd2c9b98db62b9",
+      "state": "completed",
+      "unit": "tide-lab-v6-scale-transformer-5m-retry1.service"
+    },
+    {
+      "id": "v7-budget",
+      "source": "3455c7a189e779784de915e615e7d29b3a0c4e43",
+      "state": "stopped",
+      "unit": "tide-lab-v7-budget.service"
+    },
+    {
+      "id": "v7-budget-v2",
+      "source": "d30559c8bce74d5b6ea392bb18f53e8ba3b90cf1",
+      "state": "completed",
+      "unit": "tide-lab-v7-budget-v2.service"
+    },
+    {
+      "id": "v7-cal-cpu",
+      "source": "3455c7a189e779784de915e615e7d29b3a0c4e43",
+      "state": "completed",
+      "unit": "tide-lab-v7-cal-cpu.service"
+    },
+    {
+      "id": "v7-cal-npu",
+      "source": "3455c7a189e779784de915e615e7d29b3a0c4e43",
+      "state": "completed",
+      "unit": "tide-lab-v7-cal-npu.service"
+    },
+    {
+      "id": "v7-controller",
+      "source": "d30559c8bce74d5b6ea392bb18f53e8ba3b90cf1",
+      "state": "completed",
+      "unit": "tide-lab-v7-controller.service"
+    },
+    {
+      "id": "v7-count-controls",
+      "source": "bc58befd49bcaf2aa0ef13a075801d6277f394c8",
+      "state": "completed",
+      "unit": "tide-lab-v7-count-controls.service"
+    },
+    {
+      "id": "v7-count-controls-r2",
+      "source": "b463f8093d17dcb8d7a870d286aa43f89c02c038",
+      "state": "completed",
+      "unit": "tide-lab-v7-count-controls-r2.service"
+    },
+    {
+      "id": "v7-main-w0",
+      "source": "d30559c8bce74d5b6ea392bb18f53e8ba3b90cf1",
+      "state": "completed",
+      "unit": "tide-lab-v7-main-w0.service"
+    },
+    {
+      "id": "v7-main-w1",
+      "source": "d30559c8bce74d5b6ea392bb18f53e8ba3b90cf1",
+      "state": "completed",
+      "unit": "tide-lab-v7-main-w1.service"
+    },
+    {
+      "id": "v7-main-w2",
+      "source": "d30559c8bce74d5b6ea392bb18f53e8ba3b90cf1",
+      "state": "completed",
+      "unit": "tide-lab-v7-main-w2.service"
+    },
+    {
+      "id": "v7-main-w3",
+      "source": "d30559c8bce74d5b6ea392bb18f53e8ba3b90cf1",
+      "state": "completed",
+      "unit": "tide-lab-v7-main-w3.service"
+    },
+    {
+      "id": "v7-screen-w0",
+      "source": "d30559c8bce74d5b6ea392bb18f53e8ba3b90cf1",
+      "state": "completed",
+      "unit": "tide-lab-v7-screen-w0.service"
+    },
+    {
+      "id": "v7-screen-w1",
+      "source": "d30559c8bce74d5b6ea392bb18f53e8ba3b90cf1",
+      "state": "completed",
+      "unit": "tide-lab-v7-screen-w1.service"
+    },
+    {
+      "id": "v7-screen-w2",
+      "source": "d30559c8bce74d5b6ea392bb18f53e8ba3b90cf1",
+      "state": "completed",
+      "unit": "tide-lab-v7-screen-w2.service"
+    },
+    {
+      "id": "v7-screen-w3",
+      "source": "d30559c8bce74d5b6ea392bb18f53e8ba3b90cf1",
+      "state": "completed",
+      "unit": "tide-lab-v7-screen-w3.service"
+    },
+    {
+      "id": "v8-anchor-w0",
+      "source": "778f9e967f670af5242dd232dcd60de62adb5c40",
+      "state": "completed",
+      "unit": "tide-lab-v8-anchor-w0.service"
+    },
+    {
+      "id": "v8-anchor-w1",
+      "source": "778f9e967f670af5242dd232dcd60de62adb5c40",
+      "state": "completed",
+      "unit": "tide-lab-v8-anchor-w1.service"
+    },
+    {
+      "id": "v8-budget",
+      "source": "2702d91a826bdae54693d0e51ed13e406e0c0eca",
+      "state": "completed",
+      "unit": "tide-lab-v8-budget.service"
+    },
+    {
+      "id": "v8-cal-cpu1",
+      "source": "778f9e967f670af5242dd232dcd60de62adb5c40",
+      "state": "completed",
+      "unit": "tide-lab-v8-cal-cpu1.service"
+    },
+    {
+      "id": "v8-cal-npu",
+      "source": "778f9e967f670af5242dd232dcd60de62adb5c40",
+      "state": "completed",
+      "unit": "tide-lab-v8-cal-npu.service"
+    },
+    {
+      "id": "v8-confirm-w0",
+      "source": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+      "state": "completed",
+      "unit": "tide-lab-v8-confirm-w0.service"
+    },
+    {
+      "id": "v8-confirm-w1",
+      "source": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+      "state": "completed",
+      "unit": "tide-lab-v8-confirm-w1.service"
+    },
+    {
+      "id": "v8-confirm-w2",
+      "source": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+      "state": "completed",
+      "unit": "tide-lab-v8-confirm-w2.service"
+    },
+    {
+      "id": "v8-confirm-w3",
+      "source": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+      "state": "completed",
+      "unit": "tide-lab-v8-confirm-w3.service"
+    },
+    {
+      "id": "v8-confirm-w4",
+      "source": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+      "state": "completed",
+      "unit": "tide-lab-v8-confirm-w4.service"
+    },
+    {
+      "id": "v8-confirm-w5",
+      "source": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+      "state": "completed",
+      "unit": "tide-lab-v8-confirm-w5.service"
+    },
+    {
+      "id": "v8-confirm-w6",
+      "source": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+      "state": "completed",
+      "unit": "tide-lab-v8-confirm-w6.service"
+    },
+    {
+      "id": "v8-confirm-w7",
+      "source": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+      "state": "completed",
+      "unit": "tide-lab-v8-confirm-w7.service"
+    },
+    {
+      "id": "v8-confirm-w8",
+      "source": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+      "state": "completed",
+      "unit": "tide-lab-v8-confirm-w8.service"
+    },
+    {
+      "id": "v8-confirm-w9",
+      "source": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+      "state": "completed",
+      "unit": "tide-lab-v8-confirm-w9.service"
+    },
+    {
+      "id": "v8-confirmation-controller",
+      "source": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+      "state": "completed",
+      "unit": "tide-lab-v8-confirmation-controller.service"
+    },
+    {
+      "id": "v8-cover-w0",
+      "source": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+      "state": "completed",
+      "unit": "tide-lab-v8-cover-w0.service"
+    },
+    {
+      "id": "v8-cover-w1",
+      "source": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+      "state": "completed",
+      "unit": "tide-lab-v8-cover-w1.service"
+    },
+    {
+      "id": "v8-cover-w2",
+      "source": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+      "state": "completed",
+      "unit": "tide-lab-v8-cover-w2.service"
+    },
+    {
+      "id": "v8-cover-w3",
+      "source": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+      "state": "completed",
+      "unit": "tide-lab-v8-cover-w3.service"
+    },
+    {
+      "id": "v8-cover-w4",
+      "source": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+      "state": "completed",
+      "unit": "tide-lab-v8-cover-w4.service"
+    },
+    {
+      "id": "v8-cover-w5",
+      "source": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+      "state": "completed",
+      "unit": "tide-lab-v8-cover-w5.service"
+    },
+    {
+      "id": "v8-cover-w6",
+      "source": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+      "state": "completed",
+      "unit": "tide-lab-v8-cover-w6.service"
+    },
+    {
+      "id": "v8-cover-w7",
+      "source": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+      "state": "completed",
+      "unit": "tide-lab-v8-cover-w7.service"
+    },
+    {
+      "id": "v8-cover-w8",
+      "source": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+      "state": "completed",
+      "unit": "tide-lab-v8-cover-w8.service"
+    },
+    {
+      "id": "v8-cover-w9",
+      "source": "5db28ae6a4b00f645034a08fe46e6c6d8640e604",
+      "state": "completed",
+      "unit": "tide-lab-v8-cover-w9.service"
+    },
+    {
+      "id": "v8-implementation-check",
+      "source": "778f9e967f670af5242dd232dcd60de62adb5c40",
+      "state": "completed",
+      "unit": "tide-lab-v8-implementation-check.service"
+    },
+    {
+      "id": "v8-repair-w0",
+      "source": "cd85637afaa5e3c5b5fe1f73a82a0d5ae0f4c7fb",
+      "state": "completed",
+      "unit": "tide-lab-v8-repair-w0.service"
+    },
+    {
+      "id": "v8-tf-confirm-w0",
+      "source": "2702d91a826bdae54693d0e51ed13e406e0c0eca",
+      "state": "completed",
+      "unit": "tide-lab-v8-tf-confirm-w0.service"
+    },
+    {
+      "id": "v8-tf-confirm-w1",
+      "source": "2702d91a826bdae54693d0e51ed13e406e0c0eca",
+      "state": "completed",
+      "unit": "tide-lab-v8-tf-confirm-w1.service"
+    },
+    {
+      "id": "v8-tf-confirm-w2",
+      "source": "2702d91a826bdae54693d0e51ed13e406e0c0eca",
+      "state": "completed",
+      "unit": "tide-lab-v8-tf-confirm-w2.service"
+    },
+    {
+      "id": "v8-tf-confirm-w3",
+      "source": "2702d91a826bdae54693d0e51ed13e406e0c0eca",
+      "state": "completed",
+      "unit": "tide-lab-v8-tf-confirm-w3.service"
+    },
+    {
+      "id": "v8-tf-w0",
+      "source": "2702d91a826bdae54693d0e51ed13e406e0c0eca",
+      "state": "completed",
+      "unit": "tide-lab-v8-tf-w0.service"
+    },
+    {
+      "id": "v8-tf-w1",
+      "source": "2702d91a826bdae54693d0e51ed13e406e0c0eca",
+      "state": "completed",
+      "unit": "tide-lab-v8-tf-w1.service"
+    },
+    {
+      "id": "v8-tf-w2",
+      "source": "2702d91a826bdae54693d0e51ed13e406e0c0eca",
+      "state": "completed",
+      "unit": "tide-lab-v8-tf-w2.service"
+    },
+    {
+      "id": "v8-tf-w3",
+      "source": "2702d91a826bdae54693d0e51ed13e406e0c0eca",
+      "state": "completed",
+      "unit": "tide-lab-v8-tf-w3.service"
+    },
+    {
+      "id": "v8-tf-w4",
+      "source": "2702d91a826bdae54693d0e51ed13e406e0c0eca",
+      "state": "completed",
+      "unit": "tide-lab-v8-tf-w4.service"
+    },
+    {
+      "id": "v8-tf-w5",
+      "source": "2702d91a826bdae54693d0e51ed13e406e0c0eca",
+      "state": "completed",
+      "unit": "tide-lab-v8-tf-w5.service"
+    },
+    {
+      "id": "v8-tf-w6",
+      "source": "2702d91a826bdae54693d0e51ed13e406e0c0eca",
+      "state": "completed",
+      "unit": "tide-lab-v8-tf-w6.service"
+    },
+    {
+      "id": "v8-tf-w7",
+      "source": "2702d91a826bdae54693d0e51ed13e406e0c0eca",
+      "state": "completed",
+      "unit": "tide-lab-v8-tf-w7.service"
+    },
+    {
+      "id": "v9-batch-direct-16-128-512",
+      "source": "6e7bd49eb5e35c15445826cac3a9b6ddda75aff4",
+      "state": "completed",
+      "unit": "tide-lab-v9-batch-direct-16-128-512.service"
+    },
+    {
+      "id": "v9-batch-direct-184-128-512",
+      "source": "6e7bd49eb5e35c15445826cac3a9b6ddda75aff4",
+      "state": "completed",
+      "unit": "tide-lab-v9-batch-direct-184-128-512.service"
+    },
+    {
+      "id": "v9-batch-direct-32-128-512",
+      "source": "6e7bd49eb5e35c15445826cac3a9b6ddda75aff4",
+      "state": "completed",
+      "unit": "tide-lab-v9-batch-direct-32-128-512.service"
+    },
+    {
+      "id": "v9-batch-direct-320-64-256",
+      "source": "6e7bd49eb5e35c15445826cac3a9b6ddda75aff4",
+      "state": "completed",
+      "unit": "tide-lab-v9-batch-direct-320-64-256.service"
+    },
+    {
+      "id": "v9-batch-direct-341-64-256",
+      "source": "6e7bd49eb5e35c15445826cac3a9b6ddda75aff4",
+      "state": "completed",
+      "unit": "tide-lab-v9-batch-direct-341-64-256.service"
+    },
+    {
+      "id": "v9-batch-direct-40-128-512",
+      "source": "6e7bd49eb5e35c15445826cac3a9b6ddda75aff4",
+      "state": "completed",
+      "unit": "tide-lab-v9-batch-direct-40-128-512.service"
+    },
+    {
+      "id": "v9-batch-direct-40-192-768",
+      "source": "6e7bd49eb5e35c15445826cac3a9b6ddda75aff4",
+      "state": "completed",
+      "unit": "tide-lab-v9-batch-direct-40-192-768.service"
+    },
+    {
+      "id": "v9-batch-direct-40-256-1280",
+      "source": "6e7bd49eb5e35c15445826cac3a9b6ddda75aff4",
+      "state": "completed",
+      "unit": "tide-lab-v9-batch-direct-40-256-1280.service"
+    },
+    {
+      "id": "v9-batch-direct-64-128-512",
+      "source": "6e7bd49eb5e35c15445826cac3a9b6ddda75aff4",
+      "state": "completed",
+      "unit": "tide-lab-v9-batch-direct-64-128-512.service"
+    },
+    {
+      "id": "v9-batch-direct-640-64-256",
+      "source": "6e7bd49eb5e35c15445826cac3a9b6ddda75aff4",
+      "state": "completed",
+      "unit": "tide-lab-v9-batch-direct-640-64-256.service"
+    },
+    {
+      "id": "v9-batch-direct-661-64-256",
+      "source": "6e7bd49eb5e35c15445826cac3a9b6ddda75aff4",
+      "state": "completed",
+      "unit": "tide-lab-v9-batch-direct-661-64-256.service"
+    },
+    {
+      "id": "v9-batch-direct-704-64-256",
+      "source": "6e7bd49eb5e35c15445826cac3a9b6ddda75aff4",
+      "state": "completed",
+      "unit": "tide-lab-v9-batch-direct-704-64-256.service"
+    },
+    {
+      "id": "v9-batch-direct-88-128-512",
+      "source": "6e7bd49eb5e35c15445826cac3a9b6ddda75aff4",
+      "state": "completed",
+      "unit": "tide-lab-v9-batch-direct-88-128-512.service"
+    },
+    {
+      "id": "v9-batch-tf-240-6",
+      "source": "6e7bd49eb5e35c15445826cac3a9b6ddda75aff4",
+      "state": "completed",
+      "unit": "tide-lab-v9-batch-tf-240-6.service"
+    },
+    {
+      "id": "v9-batch-tf-336-6",
+      "source": "6e7bd49eb5e35c15445826cac3a9b6ddda75aff4",
+      "state": "completed",
+      "unit": "tide-lab-v9-batch-tf-336-6.service"
+    },
+    {
+      "id": "v9-batch-tf-384-6",
+      "source": "6e7bd49eb5e35c15445826cac3a9b6ddda75aff4",
+      "state": "completed",
+      "unit": "tide-lab-v9-batch-tf-384-6.service"
+    },
+    {
+      "id": "v9-batch-tf-400-12",
+      "source": "6e7bd49eb5e35c15445826cac3a9b6ddda75aff4",
+      "state": "completed",
+      "unit": "tide-lab-v9-batch-tf-400-12.service"
+    },
+    {
+      "id": "v9-batch-tf-416-8",
+      "source": "6e7bd49eb5e35c15445826cac3a9b6ddda75aff4",
+      "state": "completed",
+      "unit": "tide-lab-v9-batch-tf-416-8.service"
+    },
+    {
+      "id": "v9-batch-tf-512-16",
+      "source": "6e7bd49eb5e35c15445826cac3a9b6ddda75aff4",
+      "state": "completed",
+      "unit": "tide-lab-v9-batch-tf-512-16.service"
+    },
+    {
+      "id": "v9-controller",
+      "source": "6e7bd49eb5e35c15445826cac3a9b6ddda75aff4",
+      "state": "failed",
+      "unit": "tide-lab-v9-controller.service"
+    },
+    {
+      "id": "v9-data",
+      "source": "bd666d9a240cfce7a8c16da4b92f5530b273f951",
+      "state": "failed",
+      "unit": "tide-lab-v9-data.service"
+    },
+    {
+      "id": "v9-data-r2",
+      "source": "bd666d9a240cfce7a8c16da4b92f5530b273f951",
+      "state": "failed",
+      "unit": "tide-lab-v9-data-r2.service"
+    },
+    {
+      "id": "v9-data-r3",
+      "source": "bd666d9a240cfce7a8c16da4b92f5530b273f951",
+      "state": "completed",
+      "unit": "tide-lab-v9-data-r3.service"
+    },
+    {
+      "id": "v9-main-w0",
+      "source": "6e7bd49eb5e35c15445826cac3a9b6ddda75aff4",
+      "state": "completed",
+      "unit": "tide-lab-v9-main-w0.service"
+    },
+    {
+      "id": "v9-main-w1",
+      "source": "6e7bd49eb5e35c15445826cac3a9b6ddda75aff4",
+      "state": "completed",
+      "unit": "tide-lab-v9-main-w1.service"
+    },
+    {
+      "id": "v9-main-w10",
+      "source": "6e7bd49eb5e35c15445826cac3a9b6ddda75aff4",
+      "state": "completed",
+      "unit": "tide-lab-v9-main-w10.service"
+    },
+    {
+      "id": "v9-main-w11",
+      "source": "6e7bd49eb5e35c15445826cac3a9b6ddda75aff4",
+      "state": "completed",
+      "unit": "tide-lab-v9-main-w11.service"
+    },
+    {
+      "id": "v9-main-w2",
+      "source": "6e7bd49eb5e35c15445826cac3a9b6ddda75aff4",
+      "state": "completed",
+      "unit": "tide-lab-v9-main-w2.service"
+    },
+    {
+      "id": "v9-main-w3",
+      "source": "6e7bd49eb5e35c15445826cac3a9b6ddda75aff4",
+      "state": "completed",
+      "unit": "tide-lab-v9-main-w3.service"
+    },
+    {
+      "id": "v9-main-w4",
+      "source": "6e7bd49eb5e35c15445826cac3a9b6ddda75aff4",
+      "state": "stopped",
+      "unit": "tide-lab-v9-main-w4.service"
+    },
+    {
+      "id": "v9-main-w5",
+      "source": "6e7bd49eb5e35c15445826cac3a9b6ddda75aff4",
+      "state": "stopped",
+      "unit": "tide-lab-v9-main-w5.service"
+    },
+    {
+      "id": "v9-main-w6",
+      "source": "6e7bd49eb5e35c15445826cac3a9b6ddda75aff4",
+      "state": "stopped",
+      "unit": "tide-lab-v9-main-w6.service"
+    },
+    {
+      "id": "v9-main-w7",
+      "source": "6e7bd49eb5e35c15445826cac3a9b6ddda75aff4",
+      "state": "stopped",
+      "unit": "tide-lab-v9-main-w7.service"
+    },
+    {
+      "id": "v9-main-w8",
+      "source": "6e7bd49eb5e35c15445826cac3a9b6ddda75aff4",
+      "state": "completed",
+      "unit": "tide-lab-v9-main-w8.service"
+    },
+    {
+      "id": "v9-main-w9",
+      "source": "6e7bd49eb5e35c15445826cac3a9b6ddda75aff4",
+      "state": "completed",
+      "unit": "tide-lab-v9-main-w9.service"
+    },
+    {
+      "id": "v9-recover-extend-w0",
+      "source": "6e7bd49eb5e35c15445826cac3a9b6ddda75aff4",
+      "state": "completed",
+      "unit": "tide-lab-v9-recover-extend-w0.service"
+    },
+    {
+      "id": "v9-recover-extend-w1",
+      "source": "6e7bd49eb5e35c15445826cac3a9b6ddda75aff4",
+      "state": "completed",
+      "unit": "tide-lab-v9-recover-extend-w1.service"
+    },
+    {
+      "id": "v9-recover-extend-w10",
+      "source": "6e7bd49eb5e35c15445826cac3a9b6ddda75aff4",
+      "state": "completed",
+      "unit": "tide-lab-v9-recover-extend-w10.service"
+    },
+    {
+      "id": "v9-recover-extend-w11",
+      "source": "6e7bd49eb5e35c15445826cac3a9b6ddda75aff4",
+      "state": "completed",
+      "unit": "tide-lab-v9-recover-extend-w11.service"
+    },
+    {
+      "id": "v9-recover-extend-w2",
+      "source": "6e7bd49eb5e35c15445826cac3a9b6ddda75aff4",
+      "state": "completed",
+      "unit": "tide-lab-v9-recover-extend-w2.service"
+    },
+    {
+      "id": "v9-recover-extend-w3",
+      "source": "6e7bd49eb5e35c15445826cac3a9b6ddda75aff4",
+      "state": "completed",
+      "unit": "tide-lab-v9-recover-extend-w3.service"
+    },
+    {
+      "id": "v9-recover-extend-w4",
+      "source": "6e7bd49eb5e35c15445826cac3a9b6ddda75aff4",
+      "state": "completed",
+      "unit": "tide-lab-v9-recover-extend-w4.service"
+    },
+    {
+      "id": "v9-recover-extend-w5",
+      "source": "6e7bd49eb5e35c15445826cac3a9b6ddda75aff4",
+      "state": "completed",
+      "unit": "tide-lab-v9-recover-extend-w5.service"
+    },
+    {
+      "id": "v9-recover-extend-w6",
+      "source": "6e7bd49eb5e35c15445826cac3a9b6ddda75aff4",
+      "state": "completed",
+      "unit": "tide-lab-v9-recover-extend-w6.service"
+    },
+    {
+      "id": "v9-recover-extend-w7",
+      "source": "6e7bd49eb5e35c15445826cac3a9b6ddda75aff4",
+      "state": "completed",
+      "unit": "tide-lab-v9-recover-extend-w7.service"
+    },
+    {
+      "id": "v9-recover-extend-w8",
+      "source": "6e7bd49eb5e35c15445826cac3a9b6ddda75aff4",
+      "state": "completed",
+      "unit": "tide-lab-v9-recover-extend-w8.service"
+    },
+    {
+      "id": "v9-recover-extend-w9",
+      "source": "6e7bd49eb5e35c15445826cac3a9b6ddda75aff4",
+      "state": "completed",
+      "unit": "tide-lab-v9-recover-extend-w9.service"
+    },
+    {
+      "id": "v9-recover-main-w0",
+      "source": "6e7bd49eb5e35c15445826cac3a9b6ddda75aff4",
+      "state": "completed",
+      "unit": "tide-lab-v9-recover-main-w0.service"
+    },
+    {
+      "id": "v9-recover-main-w1",
+      "source": "6e7bd49eb5e35c15445826cac3a9b6ddda75aff4",
+      "state": "completed",
+      "unit": "tide-lab-v9-recover-main-w1.service"
+    },
+    {
+      "id": "v9-recover-main-w10",
+      "source": "6e7bd49eb5e35c15445826cac3a9b6ddda75aff4",
+      "state": "completed",
+      "unit": "tide-lab-v9-recover-main-w10.service"
+    },
+    {
+      "id": "v9-recover-main-w11",
+      "source": "6e7bd49eb5e35c15445826cac3a9b6ddda75aff4",
+      "state": "completed",
+      "unit": "tide-lab-v9-recover-main-w11.service"
+    },
+    {
+      "id": "v9-recover-main-w2",
+      "source": "6e7bd49eb5e35c15445826cac3a9b6ddda75aff4",
+      "state": "completed",
+      "unit": "tide-lab-v9-recover-main-w2.service"
+    },
+    {
+      "id": "v9-recover-main-w3",
+      "source": "6e7bd49eb5e35c15445826cac3a9b6ddda75aff4",
+      "state": "completed",
+      "unit": "tide-lab-v9-recover-main-w3.service"
+    },
+    {
+      "id": "v9-recover-main-w4",
+      "source": "6e7bd49eb5e35c15445826cac3a9b6ddda75aff4",
+      "state": "completed",
+      "unit": "tide-lab-v9-recover-main-w4.service"
+    },
+    {
+      "id": "v9-recover-main-w5",
+      "source": "6e7bd49eb5e35c15445826cac3a9b6ddda75aff4",
+      "state": "completed",
+      "unit": "tide-lab-v9-recover-main-w5.service"
+    },
+    {
+      "id": "v9-recover-main-w6",
+      "source": "6e7bd49eb5e35c15445826cac3a9b6ddda75aff4",
+      "state": "completed",
+      "unit": "tide-lab-v9-recover-main-w6.service"
+    },
+    {
+      "id": "v9-recover-main-w7",
+      "source": "6e7bd49eb5e35c15445826cac3a9b6ddda75aff4",
+      "state": "completed",
+      "unit": "tide-lab-v9-recover-main-w7.service"
+    },
+    {
+      "id": "v9-recover-main-w8",
+      "source": "6e7bd49eb5e35c15445826cac3a9b6ddda75aff4",
+      "state": "completed",
+      "unit": "tide-lab-v9-recover-main-w8.service"
+    },
+    {
+      "id": "v9-recover-main-w9",
+      "source": "6e7bd49eb5e35c15445826cac3a9b6ddda75aff4",
+      "state": "completed",
+      "unit": "tide-lab-v9-recover-main-w9.service"
+    },
+    {
+      "id": "v9-recovery-controller",
+      "source": "1809009ad59a7e6f7f27af06a0e20c1f74f4155c",
+      "state": "completed",
+      "unit": "tide-lab-v9-recovery-controller.service"
+    },
+    {
+      "id": "v9-screen-w0",
+      "source": "6e7bd49eb5e35c15445826cac3a9b6ddda75aff4",
+      "state": "completed",
+      "unit": "tide-lab-v9-screen-w0.service"
+    },
+    {
+      "id": "v9-screen-w1",
+      "source": "6e7bd49eb5e35c15445826cac3a9b6ddda75aff4",
+      "state": "completed",
+      "unit": "tide-lab-v9-screen-w1.service"
+    },
+    {
+      "id": "v9-screen-w10",
+      "source": "6e7bd49eb5e35c15445826cac3a9b6ddda75aff4",
+      "state": "completed",
+      "unit": "tide-lab-v9-screen-w10.service"
+    },
+    {
+      "id": "v9-screen-w11",
+      "source": "6e7bd49eb5e35c15445826cac3a9b6ddda75aff4",
+      "state": "completed",
+      "unit": "tide-lab-v9-screen-w11.service"
+    },
+    {
+      "id": "v9-screen-w2",
+      "source": "6e7bd49eb5e35c15445826cac3a9b6ddda75aff4",
+      "state": "completed",
+      "unit": "tide-lab-v9-screen-w2.service"
+    },
+    {
+      "id": "v9-screen-w3",
+      "source": "6e7bd49eb5e35c15445826cac3a9b6ddda75aff4",
+      "state": "completed",
+      "unit": "tide-lab-v9-screen-w3.service"
+    },
+    {
+      "id": "v9-screen-w4",
+      "source": "6e7bd49eb5e35c15445826cac3a9b6ddda75aff4",
+      "state": "completed",
+      "unit": "tide-lab-v9-screen-w4.service"
+    },
+    {
+      "id": "v9-screen-w5",
+      "source": "6e7bd49eb5e35c15445826cac3a9b6ddda75aff4",
+      "state": "completed",
+      "unit": "tide-lab-v9-screen-w5.service"
+    },
+    {
+      "id": "v9-screen-w6",
+      "source": "6e7bd49eb5e35c15445826cac3a9b6ddda75aff4",
+      "state": "completed",
+      "unit": "tide-lab-v9-screen-w6.service"
+    },
+    {
+      "id": "v9-screen-w7",
+      "source": "6e7bd49eb5e35c15445826cac3a9b6ddda75aff4",
+      "state": "completed",
+      "unit": "tide-lab-v9-screen-w7.service"
+    },
+    {
+      "id": "v9-screen-w8",
+      "source": "6e7bd49eb5e35c15445826cac3a9b6ddda75aff4",
+      "state": "completed",
+      "unit": "tide-lab-v9-screen-w8.service"
+    },
+    {
+      "id": "v9-screen-w9",
+      "source": "6e7bd49eb5e35c15445826cac3a9b6ddda75aff4",
+      "state": "completed",
+      "unit": "tide-lab-v9-screen-w9.service"
+    }
+  ],
+  "new_training": [
+    {
+      "artifact_state": "retired",
+      "checkpoint_sha256": "814d12c96e1f8e629f2b8a1e85a0e8f3410bc90106671b8bee0144de1e1afdb2",
+      "classification": "completed128Mi",
+      "config": "configs/studies/language/hb-mem-v13/configs/q10-s-sum-s11.json",
+      "id": "q10-s-sum-s11",
+      "identity": {
+        "config_sha256": "8de3c03ce8487b1cdb4ca70fe50d5c16dac3c46a636be59c55690de448e76433",
+        "data_lock_sha256": "40b7c0ebb9650d11aa0c0080532c884e2ca3846db578155f3df7068b82191d2f",
+        "device": "npu:0",
+        "dtype": "float32",
+        "installation": {
+          "foundation_commit": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+          "foundation_lock_sha256": "ba5464d7e23fe6b8c7453a52bfc7b961f040c92d0b80786c18132e40d90308b7",
+          "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+          "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+          "tidegraph": "0.3.0",
+          "tidegraph_source_sha256": "cfe2168a2c87565a568fb8944429b6b38401f92cf24972fba59c47b7592a7847",
+          "torch": "2.12.0+cpu",
+          "torch_npu": "2.12.0.post3",
+          "transformers": null
+        },
+        "mode": "train",
+        "source_commit": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
+        "source_sha256": "bb5a375a0236250197612aec5b27d19140993a68f14c18423db2c37bc7450a5d",
+        "threads": 2
+      },
+      "last_observed_tokens": 134217728,
+      "physical_device": 12,
+      "raw_error": null,
+      "raw_inner": "completed",
+      "raw_outer": "completed",
+      "resume_available": false,
+      "saved_checkpoint_tokens": 134217728,
+      "source": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
+      "stop_signal": null,
+      "unit": "tide-lab-v13-main-q10-s-sum-s11.service"
+    },
+    {
+      "artifact_state": "retired",
+      "checkpoint_sha256": "b43b3fa40310a6388f4ca75459e6aad5b5d18c3759f9d2d9f54c2a6494ccc0cd",
+      "classification": "completed128Mi",
+      "config": "configs/studies/language/hb-mem-v13/configs/q10-s-sum-s22.json",
+      "id": "q10-s-sum-s22",
+      "identity": {
+        "config_sha256": "b032b7b14b3f93c965e3117db0c0af488bf83212d2b08fb4ca864c3b92cec82c",
+        "data_lock_sha256": "40b7c0ebb9650d11aa0c0080532c884e2ca3846db578155f3df7068b82191d2f",
+        "device": "npu:0",
+        "dtype": "float32",
+        "installation": {
+          "foundation_commit": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+          "foundation_lock_sha256": "ba5464d7e23fe6b8c7453a52bfc7b961f040c92d0b80786c18132e40d90308b7",
+          "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+          "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+          "tidegraph": "0.3.0",
+          "tidegraph_source_sha256": "cfe2168a2c87565a568fb8944429b6b38401f92cf24972fba59c47b7592a7847",
+          "torch": "2.12.0+cpu",
+          "torch_npu": "2.12.0.post3",
+          "transformers": null
+        },
+        "mode": "train",
+        "source_commit": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
+        "source_sha256": "bb5a375a0236250197612aec5b27d19140993a68f14c18423db2c37bc7450a5d",
+        "threads": 2
+      },
+      "last_observed_tokens": 134217728,
+      "physical_device": 15,
+      "raw_error": null,
+      "raw_inner": "completed",
+      "raw_outer": "completed",
+      "resume_available": false,
+      "saved_checkpoint_tokens": 134217728,
+      "source": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
+      "stop_signal": null,
+      "unit": "tide-lab-v13-main-q10-s-sum-s22.service"
+    },
+    {
+      "artifact_state": "retired",
+      "checkpoint_sha256": "1863f422197b639d622b411cf3e63945a40d6bc86b3d87499448e4f4001a69db",
+      "classification": "completed128Mi",
+      "config": "configs/studies/language/hb-mem-v13/configs/q3-s-sum-s11.json",
+      "id": "q3-s-sum-s11",
+      "identity": {
+        "config_sha256": "d8d389be8ff87a23463d88a114d836305a89d4e2329bcf2ffc10d50781d0dcf4",
+        "data_lock_sha256": "40b7c0ebb9650d11aa0c0080532c884e2ca3846db578155f3df7068b82191d2f",
+        "device": "npu:0",
+        "dtype": "float32",
+        "installation": {
+          "foundation_commit": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+          "foundation_lock_sha256": "ba5464d7e23fe6b8c7453a52bfc7b961f040c92d0b80786c18132e40d90308b7",
+          "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+          "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+          "tidegraph": "0.3.0",
+          "tidegraph_source_sha256": "cfe2168a2c87565a568fb8944429b6b38401f92cf24972fba59c47b7592a7847",
+          "torch": "2.12.0+cpu",
+          "torch_npu": "2.12.0.post3",
+          "transformers": null
+        },
+        "mode": "train",
+        "source_commit": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
+        "source_sha256": "bb5a375a0236250197612aec5b27d19140993a68f14c18423db2c37bc7450a5d",
+        "threads": 2
+      },
+      "last_observed_tokens": 134217728,
+      "physical_device": 6,
+      "raw_error": null,
+      "raw_inner": "completed",
+      "raw_outer": "completed",
+      "resume_available": false,
+      "saved_checkpoint_tokens": 134217728,
+      "source": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
+      "stop_signal": null,
+      "unit": "tide-lab-v13-main-q3-s-sum-s11.service"
+    },
+    {
+      "artifact_state": "retired",
+      "checkpoint_sha256": "7bd700db2e465b65244eaab3ba80c627f32285ae3e511d51b51a177713430507",
+      "classification": "user_cancelled_for_retirement",
+      "config": "configs/studies/language/hb-mem-v13/configs/q3-s-sum-s22.json",
+      "id": "q3-s-sum-s22",
+      "identity": {
+        "config_sha256": "b08a5b8b7551ff2a4d1d447141e03a3d2e4483e59fedac6e5dd1eef352ad28e4",
+        "data_lock_sha256": "40b7c0ebb9650d11aa0c0080532c884e2ca3846db578155f3df7068b82191d2f",
+        "device": "npu:0",
+        "dtype": "float32",
+        "installation": {
+          "foundation_commit": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+          "foundation_lock_sha256": "ba5464d7e23fe6b8c7453a52bfc7b961f040c92d0b80786c18132e40d90308b7",
+          "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+          "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+          "tidegraph": "0.3.0",
+          "tidegraph_source_sha256": "cfe2168a2c87565a568fb8944429b6b38401f92cf24972fba59c47b7592a7847",
+          "torch": "2.12.0+cpu",
+          "torch_npu": "2.12.0.post3",
+          "transformers": null
+        },
+        "mode": "train",
+        "source_commit": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
+        "source_sha256": "bb5a375a0236250197612aec5b27d19140993a68f14c18423db2c37bc7450a5d",
+        "threads": 2
+      },
+      "last_observed_tokens": 128562308,
+      "physical_device": 14,
+      "raw_error": null,
+      "raw_inner": "budget_truncated",
+      "raw_outer": "interrupted",
+      "resume_available": false,
+      "saved_checkpoint_tokens": 128562308,
+      "source": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
+      "stop_signal": [
+        15,
+        15
+      ],
+      "unit": "tide-lab-v13-main-q3-s-sum-s22.service"
+    },
+    {
+      "artifact_state": "retired",
+      "checkpoint_sha256": "040a5697250ca96468cacf4ce61953197e67800d2d993ef5a2b83e0da6c65118",
+      "classification": "completed128Mi",
+      "config": "configs/studies/language/hb-mem-v13/configs/q10-l-sum-s11.json",
+      "id": "q10-l-sum-s11",
+      "identity": {
+        "config_sha256": "be24204a723b7ddb06ef1f058113f4f9250e1dce2a5161371f710fd437ab6369",
+        "data_lock_sha256": "40b7c0ebb9650d11aa0c0080532c884e2ca3846db578155f3df7068b82191d2f",
+        "device": "npu:0",
+        "dtype": "float32",
+        "installation": {
+          "foundation_commit": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+          "foundation_lock_sha256": "ba5464d7e23fe6b8c7453a52bfc7b961f040c92d0b80786c18132e40d90308b7",
+          "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+          "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+          "tidegraph": "0.3.0",
+          "tidegraph_source_sha256": "cfe2168a2c87565a568fb8944429b6b38401f92cf24972fba59c47b7592a7847",
+          "torch": "2.12.0+cpu",
+          "torch_npu": "2.12.0.post3",
+          "transformers": null
+        },
+        "mode": "train",
+        "source_commit": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
+        "source_sha256": "bb5a375a0236250197612aec5b27d19140993a68f14c18423db2c37bc7450a5d",
+        "threads": 2
+      },
+      "last_observed_tokens": 134217728,
+      "physical_device": 2,
+      "raw_error": null,
+      "raw_inner": "completed",
+      "raw_outer": "completed",
+      "resume_available": false,
+      "saved_checkpoint_tokens": 134217728,
+      "source": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
+      "stop_signal": null,
+      "unit": "tide-lab-v13-main-q10-l-sum-s11.service"
+    },
+    {
+      "artifact_state": "retired",
+      "checkpoint_sha256": "9cbaefd83510e95a4896091fb42a887ff9e9162334162b94e249f4618743f4af",
+      "classification": "completed128Mi",
+      "config": "configs/studies/language/hb-mem-v13/configs/q10-l-sum-s22.json",
+      "id": "q10-l-sum-s22",
+      "identity": {
+        "config_sha256": "c5daa15ca99f14ccc3e066edf6ee9a9bfe3f95a6c242c10fcb9dc5f31a093d79",
+        "data_lock_sha256": "40b7c0ebb9650d11aa0c0080532c884e2ca3846db578155f3df7068b82191d2f",
+        "device": "npu:0",
+        "dtype": "float32",
+        "installation": {
+          "foundation_commit": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+          "foundation_lock_sha256": "ba5464d7e23fe6b8c7453a52bfc7b961f040c92d0b80786c18132e40d90308b7",
+          "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+          "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+          "tidegraph": "0.3.0",
+          "tidegraph_source_sha256": "cfe2168a2c87565a568fb8944429b6b38401f92cf24972fba59c47b7592a7847",
+          "torch": "2.12.0+cpu",
+          "torch_npu": "2.12.0.post3",
+          "transformers": null
+        },
+        "mode": "train",
+        "source_commit": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
+        "source_sha256": "bb5a375a0236250197612aec5b27d19140993a68f14c18423db2c37bc7450a5d",
+        "threads": 2
+      },
+      "last_observed_tokens": 134217728,
+      "physical_device": 5,
+      "raw_error": null,
+      "raw_inner": "completed",
+      "raw_outer": "completed",
+      "resume_available": false,
+      "saved_checkpoint_tokens": 134217728,
+      "source": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
+      "stop_signal": null,
+      "unit": "tide-lab-v13-main-q10-l-sum-s22.service"
+    },
+    {
+      "artifact_state": "retired",
+      "checkpoint_sha256": "3508345d73634400ca2d0c73428b2614f3318c83403134f85387234b18b4e948",
+      "classification": "user_cancelled_for_retirement",
+      "config": "configs/studies/language/hb-mem-v13/configs/q3-l-sum-s11.json",
+      "id": "q3-l-sum-s11",
+      "identity": {
+        "config_sha256": "dfe1661407c77ce0db36cf862ed641f62ddb0c51aa69227f57c5a8db927d20fd",
+        "data_lock_sha256": "40b7c0ebb9650d11aa0c0080532c884e2ca3846db578155f3df7068b82191d2f",
+        "device": "npu:0",
+        "dtype": "float32",
+        "installation": {
+          "foundation_commit": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+          "foundation_lock_sha256": "ba5464d7e23fe6b8c7453a52bfc7b961f040c92d0b80786c18132e40d90308b7",
+          "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+          "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+          "tidegraph": "0.3.0",
+          "tidegraph_source_sha256": "cfe2168a2c87565a568fb8944429b6b38401f92cf24972fba59c47b7592a7847",
+          "torch": "2.12.0+cpu",
+          "torch_npu": "2.12.0.post3",
+          "transformers": null
+        },
+        "mode": "train",
+        "source_commit": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
+        "source_sha256": "bb5a375a0236250197612aec5b27d19140993a68f14c18423db2c37bc7450a5d",
+        "threads": 2
+      },
+      "last_observed_tokens": 112101192,
+      "physical_device": 10,
+      "raw_error": null,
+      "raw_inner": "budget_truncated",
+      "raw_outer": "failed",
+      "resume_available": false,
+      "saved_checkpoint_tokens": 112101192,
+      "source": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
+      "stop_signal": [
+        15,
+        15
+      ],
+      "unit": "tide-lab-v13-main-q3-l-sum-s11.service"
+    },
+    {
+      "artifact_state": "retired",
+      "checkpoint_sha256": "d67d5ced41ab021d66881ee6d561480ff9118499af33fc3ba16caf594b7fa727",
+      "classification": "user_cancelled_for_retirement",
+      "config": "configs/studies/language/hb-mem-v13/configs/q3-l-sum-s22.json",
+      "id": "q3-l-sum-s22",
+      "identity": {
+        "config_sha256": "b10793dcb48794563fb01b637b0e8d668f494122655c6ec1505575c10e869b12",
+        "data_lock_sha256": "40b7c0ebb9650d11aa0c0080532c884e2ca3846db578155f3df7068b82191d2f",
+        "device": "npu:0",
+        "dtype": "float32",
+        "installation": {
+          "foundation_commit": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+          "foundation_lock_sha256": "ba5464d7e23fe6b8c7453a52bfc7b961f040c92d0b80786c18132e40d90308b7",
+          "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+          "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+          "tidegraph": "0.3.0",
+          "tidegraph_source_sha256": "cfe2168a2c87565a568fb8944429b6b38401f92cf24972fba59c47b7592a7847",
+          "torch": "2.12.0+cpu",
+          "torch_npu": "2.12.0.post3",
+          "transformers": null
+        },
+        "mode": "train",
+        "source_commit": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
+        "source_sha256": "bb5a375a0236250197612aec5b27d19140993a68f14c18423db2c37bc7450a5d",
+        "threads": 2
+      },
+      "last_observed_tokens": 79238067,
+      "physical_device": 8,
+      "raw_error": null,
+      "raw_inner": "budget_truncated",
+      "raw_outer": "failed",
+      "resume_available": false,
+      "saved_checkpoint_tokens": 79238067,
+      "source": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
+      "stop_signal": [
+        15,
+        15,
+        15
+      ],
+      "unit": "tide-lab-v13-main-q3-l-sum-s22.service"
+    },
+    {
+      "artifact_state": "retired",
+      "checkpoint_sha256": "0f3274733a572823912d6c749050cb68b56205805e424181174edd5761a172ed",
+      "classification": "user_cancelled_for_retirement",
+      "config": "configs/studies/language/hb-mem-v13/configs/pool-l-sum-s11.json",
+      "id": "pool-l-sum-s11",
+      "identity": {
+        "config_sha256": "4a45c0c28ad2d0a27159e097d4704f6514c89584893488e0f09a94a99dc70e20",
+        "data_lock_sha256": "40b7c0ebb9650d11aa0c0080532c884e2ca3846db578155f3df7068b82191d2f",
+        "device": "npu:0",
+        "dtype": "float32",
+        "installation": {
+          "foundation_commit": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+          "foundation_lock_sha256": "ba5464d7e23fe6b8c7453a52bfc7b961f040c92d0b80786c18132e40d90308b7",
+          "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+          "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+          "tidegraph": "0.3.0",
+          "tidegraph_source_sha256": "cfe2168a2c87565a568fb8944429b6b38401f92cf24972fba59c47b7592a7847",
+          "torch": "2.12.0+cpu",
+          "torch_npu": "2.12.0.post3",
+          "transformers": null
+        },
+        "mode": "train",
+        "source_commit": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
+        "source_sha256": "bb5a375a0236250197612aec5b27d19140993a68f14c18423db2c37bc7450a5d",
+        "threads": 2
+      },
+      "last_observed_tokens": 93790134,
+      "physical_device": 9,
+      "raw_error": null,
+      "raw_inner": "budget_truncated",
+      "raw_outer": "failed",
+      "resume_available": false,
+      "saved_checkpoint_tokens": 93790134,
+      "source": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
+      "stop_signal": [
+        15,
+        15,
+        15
+      ],
+      "unit": "tide-lab-v13-main-pool-l-sum-s11.service"
+    },
+    {
+      "artifact_state": "retired",
+      "checkpoint_sha256": "ae4b96b93975740e760122a89d039467a33ad947e1c9998febb33bedf78a70ee",
+      "classification": "user_cancelled_for_retirement",
+      "config": "configs/studies/language/hb-mem-v13/configs/pool-l-sum-s22.json",
+      "id": "pool-l-sum-s22",
+      "identity": {
+        "config_sha256": "10c8039fce8ffabe865f5e1a9628ebd5a7ea917b774ece91fc94d5f5d110431c",
+        "data_lock_sha256": "40b7c0ebb9650d11aa0c0080532c884e2ca3846db578155f3df7068b82191d2f",
+        "device": "npu:0",
+        "dtype": "float32",
+        "installation": {
+          "foundation_commit": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+          "foundation_lock_sha256": "ba5464d7e23fe6b8c7453a52bfc7b961f040c92d0b80786c18132e40d90308b7",
+          "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+          "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+          "tidegraph": "0.3.0",
+          "tidegraph_source_sha256": "cfe2168a2c87565a568fb8944429b6b38401f92cf24972fba59c47b7592a7847",
+          "torch": "2.12.0+cpu",
+          "torch_npu": "2.12.0.post3",
+          "transformers": null
+        },
+        "mode": "train",
+        "source_commit": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
+        "source_sha256": "bb5a375a0236250197612aec5b27d19140993a68f14c18423db2c37bc7450a5d",
+        "threads": 2
+      },
+      "last_observed_tokens": 93385177,
+      "physical_device": 11,
+      "raw_error": null,
+      "raw_inner": "budget_truncated",
+      "raw_outer": "failed",
+      "resume_available": false,
+      "saved_checkpoint_tokens": 93385177,
+      "source": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
+      "stop_signal": [
+        15,
+        15,
+        15
+      ],
+      "unit": "tide-lab-v13-main-pool-l-sum-s22.service"
+    },
+    {
+      "artifact_state": "retired",
+      "checkpoint_sha256": "10eb1caf1385f5502c8d968cb7764fba7eabd59074fa0d0ce83f2588e7ddd5fd",
+      "classification": "completed128Mi",
+      "config": "configs/studies/language/hb-mem-v13/configs/content-s-sum-s11.json",
+      "id": "content-s-sum-s11",
+      "identity": {
+        "config_sha256": "5f995064786146a4a24cc31d54b867c95481eef3340cedf1dff2e664a077a646",
+        "data_lock_sha256": "40b7c0ebb9650d11aa0c0080532c884e2ca3846db578155f3df7068b82191d2f",
+        "device": "npu:0",
+        "dtype": "float32",
+        "installation": {
+          "foundation_commit": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+          "foundation_lock_sha256": "ba5464d7e23fe6b8c7453a52bfc7b961f040c92d0b80786c18132e40d90308b7",
+          "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+          "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+          "tidegraph": "0.3.0",
+          "tidegraph_source_sha256": "cfe2168a2c87565a568fb8944429b6b38401f92cf24972fba59c47b7592a7847",
+          "torch": "2.12.0+cpu",
+          "torch_npu": "2.12.0.post3",
+          "transformers": null
+        },
+        "mode": "train",
+        "source_commit": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
+        "source_sha256": "bb5a375a0236250197612aec5b27d19140993a68f14c18423db2c37bc7450a5d",
+        "threads": 2
+      },
+      "last_observed_tokens": 134217728,
+      "physical_device": 7,
+      "raw_error": null,
+      "raw_inner": "completed",
+      "raw_outer": "completed",
+      "resume_available": false,
+      "saved_checkpoint_tokens": 134217728,
+      "source": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
+      "stop_signal": null,
+      "unit": "tide-lab-v13-main-content-s-sum-s11.service"
+    },
+    {
+      "artifact_state": "retired",
+      "checkpoint_sha256": "0f5692b797a3b5d57c60912a74fd73543af3515f654b94864860048fb864ceb4",
+      "classification": "completed128Mi",
+      "config": "configs/studies/language/hb-mem-v13/configs/content-s-sum-s22.json",
+      "id": "content-s-sum-s22",
+      "identity": {
+        "config_sha256": "97e187f645e6dda1f5d2350a78e15caf5482c27404c300184ef05a281b53191d",
+        "data_lock_sha256": "40b7c0ebb9650d11aa0c0080532c884e2ca3846db578155f3df7068b82191d2f",
+        "device": "npu:0",
+        "dtype": "float32",
+        "installation": {
+          "foundation_commit": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+          "foundation_lock_sha256": "ba5464d7e23fe6b8c7453a52bfc7b961f040c92d0b80786c18132e40d90308b7",
+          "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+          "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+          "tidegraph": "0.3.0",
+          "tidegraph_source_sha256": "cfe2168a2c87565a568fb8944429b6b38401f92cf24972fba59c47b7592a7847",
+          "torch": "2.12.0+cpu",
+          "torch_npu": "2.12.0.post3",
+          "transformers": null
+        },
+        "mode": "train",
+        "source_commit": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
+        "source_sha256": "bb5a375a0236250197612aec5b27d19140993a68f14c18423db2c37bc7450a5d",
+        "threads": 2
+      },
+      "last_observed_tokens": 134217728,
+      "physical_device": 3,
+      "raw_error": null,
+      "raw_inner": "completed",
+      "raw_outer": "completed",
+      "resume_available": false,
+      "saved_checkpoint_tokens": 134217728,
+      "source": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
+      "stop_signal": null,
+      "unit": "tide-lab-v13-main-content-s-sum-s22.service"
+    },
+    {
+      "artifact_state": "retired",
+      "checkpoint_sha256": "fb28591bb3434682cc07fcaa652b862e03ec5e38481982f57a10c068d3e9e776",
+      "classification": "completed128Mi",
+      "config": "configs/studies/language/hb-mem-v13/configs/q10-l-qry-s11.json",
+      "id": "q10-l-qry-s11",
+      "identity": {
+        "config_sha256": "e426e9e1d17e076c749b8517d6ea01be5201a35a71563bfe80a2a9c9ff80acf4",
+        "data_lock_sha256": "40b7c0ebb9650d11aa0c0080532c884e2ca3846db578155f3df7068b82191d2f",
+        "device": "npu:0",
+        "dtype": "float32",
+        "installation": {
+          "foundation_commit": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+          "foundation_lock_sha256": "ba5464d7e23fe6b8c7453a52bfc7b961f040c92d0b80786c18132e40d90308b7",
+          "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+          "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+          "tidegraph": "0.3.0",
+          "tidegraph_source_sha256": "cfe2168a2c87565a568fb8944429b6b38401f92cf24972fba59c47b7592a7847",
+          "torch": "2.12.0+cpu",
+          "torch_npu": "2.12.0.post3",
+          "transformers": null
+        },
+        "mode": "train",
+        "source_commit": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
+        "source_sha256": "bb5a375a0236250197612aec5b27d19140993a68f14c18423db2c37bc7450a5d",
+        "threads": 2
+      },
+      "last_observed_tokens": 134217728,
+      "physical_device": 4,
+      "raw_error": null,
+      "raw_inner": "completed",
+      "raw_outer": "completed",
+      "resume_available": false,
+      "saved_checkpoint_tokens": 134217728,
+      "source": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
+      "stop_signal": null,
+      "unit": "tide-lab-v13-main-q10-l-qry-s11.service"
+    },
+    {
+      "artifact_state": "retired",
+      "checkpoint_sha256": "311e4a29852125897725582977b3b4949392f6b1ae16c2a708af00cd05e4d5b9",
+      "classification": "completed128Mi",
+      "config": "configs/studies/language/hb-mem-v13/configs/q10-l-qry-s22.json",
+      "id": "q10-l-qry-s22",
+      "identity": {
+        "config_sha256": "e7aaa62cf1d50af2654181f3b85068bae66f0ffb3d15b49cf7023f34475753e9",
+        "data_lock_sha256": "40b7c0ebb9650d11aa0c0080532c884e2ca3846db578155f3df7068b82191d2f",
+        "device": "npu:0",
+        "dtype": "float32",
+        "installation": {
+          "foundation_commit": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+          "foundation_lock_sha256": "ba5464d7e23fe6b8c7453a52bfc7b961f040c92d0b80786c18132e40d90308b7",
+          "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+          "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+          "tidegraph": "0.3.0",
+          "tidegraph_source_sha256": "cfe2168a2c87565a568fb8944429b6b38401f92cf24972fba59c47b7592a7847",
+          "torch": "2.12.0+cpu",
+          "torch_npu": "2.12.0.post3",
+          "transformers": null
+        },
+        "mode": "train",
+        "source_commit": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
+        "source_sha256": "bb5a375a0236250197612aec5b27d19140993a68f14c18423db2c37bc7450a5d",
+        "threads": 2
+      },
+      "last_observed_tokens": 134217728,
+      "physical_device": 0,
+      "raw_error": null,
+      "raw_inner": "completed",
+      "raw_outer": "completed",
+      "resume_available": false,
+      "saved_checkpoint_tokens": 134217728,
+      "source": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
+      "stop_signal": null,
+      "unit": "tide-lab-v13-main-q10-l-qry-s22.service"
+    },
+    {
+      "artifact_state": "retired",
+      "checkpoint_sha256": "7775524a7b4c8ed95a08d19236354a4889a34040f16b96508033e33912919674",
+      "classification": "user_cancelled_for_retirement",
+      "config": "configs/studies/language/hb-mem-v13/configs/pool-l-qry-s11.json",
+      "id": "pool-l-qry-s11",
+      "identity": {
+        "config_sha256": "cc22d04c8caea718cc61911a35ec396c8469197b5be5143c6727564141c833a7",
+        "data_lock_sha256": "40b7c0ebb9650d11aa0c0080532c884e2ca3846db578155f3df7068b82191d2f",
+        "device": "npu:0",
+        "dtype": "float32",
+        "installation": {
+          "foundation_commit": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+          "foundation_lock_sha256": "ba5464d7e23fe6b8c7453a52bfc7b961f040c92d0b80786c18132e40d90308b7",
+          "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+          "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+          "tidegraph": "0.3.0",
+          "tidegraph_source_sha256": "cfe2168a2c87565a568fb8944429b6b38401f92cf24972fba59c47b7592a7847",
+          "torch": "2.12.0+cpu",
+          "torch_npu": "2.12.0.post3",
+          "transformers": null
+        },
+        "mode": "train",
+        "source_commit": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
+        "source_sha256": "bb5a375a0236250197612aec5b27d19140993a68f14c18423db2c37bc7450a5d",
+        "threads": 2
+      },
+      "last_observed_tokens": 124606154,
+      "physical_device": 0,
+      "raw_error": null,
+      "raw_inner": "budget_truncated",
+      "raw_outer": "failed",
+      "resume_available": false,
+      "saved_checkpoint_tokens": 124606154,
+      "source": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
+      "stop_signal": [
+        15,
+        15,
+        15,
+        15
+      ],
+      "unit": "tide-lab-v13-main-pool-l-qry-s11.service"
+    },
+    {
+      "artifact_state": "retired",
+      "checkpoint_sha256": "cedfb7e70c78b6eda2fdd8e80b5d2f74f7e4e5a00436eb04f8a0a87a6760af29",
+      "classification": "user_cancelled_for_retirement",
+      "config": "configs/studies/language/hb-mem-v13/configs/pool-l-qry-s22.json",
+      "id": "pool-l-qry-s22",
+      "identity": {
+        "config_sha256": "8ad795388b94922d722850580e0803660f3ec56bf3477590eac828a723324df3",
+        "data_lock_sha256": "40b7c0ebb9650d11aa0c0080532c884e2ca3846db578155f3df7068b82191d2f",
+        "device": "npu:0",
+        "dtype": "float32",
+        "installation": {
+          "foundation_commit": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+          "foundation_lock_sha256": "ba5464d7e23fe6b8c7453a52bfc7b961f040c92d0b80786c18132e40d90308b7",
+          "mathematics": "0770593838a37c790a568226930567ed60f99b83",
+          "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+          "tidegraph": "0.3.0",
+          "tidegraph_source_sha256": "cfe2168a2c87565a568fb8944429b6b38401f92cf24972fba59c47b7592a7847",
+          "torch": "2.12.0+cpu",
+          "torch_npu": "2.12.0.post3",
+          "transformers": null
+        },
+        "mode": "train",
+        "source_commit": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
+        "source_sha256": "bb5a375a0236250197612aec5b27d19140993a68f14c18423db2c37bc7450a5d",
+        "threads": 2
+      },
+      "last_observed_tokens": 112576034,
+      "physical_device": 1,
+      "raw_error": null,
+      "raw_inner": "budget_truncated",
+      "raw_outer": "failed",
+      "resume_available": false,
+      "saved_checkpoint_tokens": 112576034,
+      "source": "efa97b91c6d0a5dbe1727b7b5fd1bd2ede43998f",
+      "stop_signal": [
+        15,
+        15,
+        15
+      ],
+      "unit": "tide-lab-v13-main-pool-l-qry-s22.service"
+    }
+  ],
+  "note": "Raw outer failed/interrupted after the requested stop is administrative cancellation; original independent numerical failures retain their prior meaning. Checkpoints will not remain available.",
+  "observed_at": "2026-11-18T02:13:01.371612+00:00",
+  "planned_retained_data": [
+    "runs/v9-data-r3",
+    "runs/v11-confirmation-data",
+    "runs/v12-data",
+    "runs/v13-data"
+  ],
+  "retirement_receipt": "docs/evidence/project-retirement-completed-20261118.json",
+  "schema": "tide-project-retirement-final-summary-v1",
+  "status": "closed_artifacts_retired"
+}

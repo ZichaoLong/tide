@@ -1,0 +1,494 @@
+{
+  "checks": [
+    {
+      "cgroup_members": [],
+      "properties": {
+        "ActiveState": "failed",
+        "ControlGroup": "",
+        "MainPID": "0",
+        "SubState": "failed"
+      },
+      "unit": "tide-lab-v13-hardware.service"
+    },
+    {
+      "cgroup_members": [],
+      "properties": {
+        "ActiveState": "failed",
+        "ControlGroup": "",
+        "MainPID": "0",
+        "SubState": "failed"
+      },
+      "unit": "tide-lab-v13-main-pool-l-qry-s11.service"
+    },
+    {
+      "cgroup_members": [
+        320374
+      ],
+      "properties": {
+        "ActiveState": "failed",
+        "ControlGroup": "/user.slice/user-1003.slice/user@1003.service/background.slice/tide-lab-v13-main-pool-l-qry-s22.service",
+        "MainPID": "0",
+        "SubState": "failed"
+      },
+      "unit": "tide-lab-v13-main-pool-l-qry-s22.service"
+    },
+    {
+      "cgroup_members": [],
+      "properties": {
+        "ActiveState": "failed",
+        "ControlGroup": "",
+        "MainPID": "0",
+        "SubState": "failed"
+      },
+      "unit": "tide-lab-v13-main-pool-l-sum-s11.service"
+    },
+    {
+      "cgroup_members": [
+        525126
+      ],
+      "properties": {
+        "ActiveState": "failed",
+        "ControlGroup": "/user.slice/user-1003.slice/user@1003.service/background.slice/tide-lab-v13-main-pool-l-sum-s22.service",
+        "MainPID": "0",
+        "SubState": "failed"
+      },
+      "unit": "tide-lab-v13-main-pool-l-sum-s22.service"
+    },
+    {
+      "cgroup_members": [],
+      "properties": {
+        "ActiveState": "failed",
+        "ControlGroup": "",
+        "MainPID": "0",
+        "SubState": "failed"
+      },
+      "unit": "tide-lab-v13-main-q3-l-sum-s11.service"
+    },
+    {
+      "cgroup_members": [],
+      "properties": {
+        "ActiveState": "failed",
+        "ControlGroup": "",
+        "MainPID": "0",
+        "SubState": "failed"
+      },
+      "unit": "tide-lab-v13-main-q3-l-sum-s22.service"
+    },
+    {
+      "cgroup_members": [],
+      "properties": {
+        "ActiveState": "failed",
+        "ControlGroup": "",
+        "MainPID": "0",
+        "SubState": "failed"
+      },
+      "unit": "tide-lab-v13-main-q3-s-sum-s22.service"
+    }
+  ],
+  "command_returncode": 0,
+  "command_stderr": "",
+  "final_checks": [
+    {
+      "live_processes": null,
+      "raw_state": "interrupted",
+      "terminated": true,
+      "unit": "tide-lab-v13-hardware.service",
+      "unit_info": null
+    },
+    {
+      "live_processes": null,
+      "raw_state": "failed",
+      "terminated": true,
+      "unit": "tide-lab-v13-main-pool-l-qry-s11.service",
+      "unit_info": null
+    },
+    {
+      "live_processes": null,
+      "raw_state": "failed",
+      "terminated": true,
+      "unit": "tide-lab-v13-main-pool-l-qry-s22.service",
+      "unit_info": null
+    },
+    {
+      "live_processes": null,
+      "raw_state": "failed",
+      "terminated": true,
+      "unit": "tide-lab-v13-main-pool-l-sum-s11.service",
+      "unit_info": null
+    },
+    {
+      "live_processes": null,
+      "raw_state": "failed",
+      "terminated": true,
+      "unit": "tide-lab-v13-main-pool-l-sum-s22.service",
+      "unit_info": null
+    },
+    {
+      "live_processes": null,
+      "raw_state": "failed",
+      "terminated": true,
+      "unit": "tide-lab-v13-main-q3-l-sum-s11.service",
+      "unit_info": null
+    },
+    {
+      "live_processes": null,
+      "raw_state": "failed",
+      "terminated": true,
+      "unit": "tide-lab-v13-main-q3-l-sum-s22.service",
+      "unit_info": null
+    },
+    {
+      "live_processes": null,
+      "raw_state": "interrupted",
+      "terminated": true,
+      "unit": "tide-lab-v13-main-q3-s-sum-s22.service",
+      "unit_info": null
+    }
+  ],
+  "initial_termination_check": {
+    "checks": [
+      {
+        "cgroup_members": [],
+        "properties": {
+          "ActiveState": "failed",
+          "ControlGroup": "",
+          "MainPID": "0",
+          "SubState": "failed"
+        },
+        "unit": "tide-lab-v13-hardware.service"
+      },
+      {
+        "cgroup_members": [],
+        "properties": {
+          "ActiveState": "failed",
+          "ControlGroup": "",
+          "MainPID": "0",
+          "SubState": "failed"
+        },
+        "unit": "tide-lab-v13-main-pool-l-qry-s11.service"
+      },
+      {
+        "cgroup_members": [
+          320374
+        ],
+        "properties": {
+          "ActiveState": "failed",
+          "ControlGroup": "/user.slice/user-1003.slice/user@1003.service/background.slice/tide-lab-v13-main-pool-l-qry-s22.service",
+          "MainPID": "0",
+          "SubState": "failed"
+        },
+        "unit": "tide-lab-v13-main-pool-l-qry-s22.service"
+      },
+      {
+        "cgroup_members": [],
+        "properties": {
+          "ActiveState": "failed",
+          "ControlGroup": "",
+          "MainPID": "0",
+          "SubState": "failed"
+        },
+        "unit": "tide-lab-v13-main-pool-l-sum-s11.service"
+      },
+      {
+        "cgroup_members": [
+          525126
+        ],
+        "properties": {
+          "ActiveState": "failed",
+          "ControlGroup": "/user.slice/user-1003.slice/user@1003.service/background.slice/tide-lab-v13-main-pool-l-sum-s22.service",
+          "MainPID": "0",
+          "SubState": "failed"
+        },
+        "unit": "tide-lab-v13-main-pool-l-sum-s22.service"
+      },
+      {
+        "cgroup_members": [],
+        "properties": {
+          "ActiveState": "failed",
+          "ControlGroup": "",
+          "MainPID": "0",
+          "SubState": "failed"
+        },
+        "unit": "tide-lab-v13-main-q3-l-sum-s11.service"
+      },
+      {
+        "cgroup_members": [],
+        "properties": {
+          "ActiveState": "failed",
+          "ControlGroup": "",
+          "MainPID": "0",
+          "SubState": "failed"
+        },
+        "unit": "tide-lab-v13-main-q3-l-sum-s22.service"
+      },
+      {
+        "cgroup_members": [],
+        "properties": {
+          "ActiveState": "failed",
+          "ControlGroup": "",
+          "MainPID": "0",
+          "SubState": "failed"
+        },
+        "unit": "tide-lab-v13-main-q3-s-sum-s22.service"
+      }
+    ],
+    "observed_at": "2026-11-18T02:10:12.109203+00:00",
+    "state": "termination_pending",
+    "survivors": [
+      {
+        "pid": 320374,
+        "start_ticks": 2249917740,
+        "unit": "tide-lab-v13-main-pool-l-qry-s22.service"
+      },
+      {
+        "pid": 525126,
+        "start_ticks": 2250095852,
+        "unit": "tide-lab-v13-main-pool-l-sum-s22.service"
+      }
+    ]
+  },
+  "observed_at": "2026-11-18T02:10:50.697304+00:00",
+  "processes": [
+    {
+      "pid": 1625,
+      "start_ticks": 2249664914,
+      "unit": "tide-lab-v13-main-pool-l-qry-s22.service"
+    },
+    {
+      "pid": 1634,
+      "start_ticks": 2249664918,
+      "unit": "tide-lab-v13-main-pool-l-qry-s22.service"
+    },
+    {
+      "pid": 320374,
+      "start_ticks": 2249917740,
+      "unit": "tide-lab-v13-main-pool-l-qry-s22.service"
+    },
+    {
+      "pid": 321624,
+      "start_ticks": 2249918862,
+      "unit": "tide-lab-v13-main-pool-l-qry-s22.service"
+    },
+    {
+      "pid": 407957,
+      "start_ticks": 2249994346,
+      "unit": "tide-lab-v13-main-q3-s-sum-s22.service"
+    },
+    {
+      "pid": 409047,
+      "start_ticks": 2249995029,
+      "unit": "tide-lab-v13-main-q3-s-sum-s22.service"
+    },
+    {
+      "pid": 524485,
+      "start_ticks": 2250095166,
+      "unit": "tide-lab-v13-main-q3-l-sum-s11.service"
+    },
+    {
+      "pid": 525126,
+      "start_ticks": 2250095852,
+      "unit": "tide-lab-v13-main-pool-l-sum-s22.service"
+    },
+    {
+      "pid": 525256,
+      "start_ticks": 2250096070,
+      "unit": "tide-lab-v13-main-q3-l-sum-s11.service"
+    },
+    {
+      "pid": 526343,
+      "start_ticks": 2250096973,
+      "unit": "tide-lab-v13-main-pool-l-sum-s22.service"
+    },
+    {
+      "pid": 568770,
+      "start_ticks": 2250131137,
+      "unit": "tide-lab-v13-main-pool-l-sum-s11.service"
+    },
+    {
+      "pid": 569853,
+      "start_ticks": 2250132264,
+      "unit": "tide-lab-v13-main-pool-l-sum-s11.service"
+    },
+    {
+      "pid": 738080,
+      "start_ticks": 2250275470,
+      "unit": "tide-lab-v13-main-q3-l-sum-s22.service"
+    },
+    {
+      "pid": 739397,
+      "start_ticks": 2250276622,
+      "unit": "tide-lab-v13-main-q3-l-sum-s22.service"
+    },
+    {
+      "pid": 3555872,
+      "start_ticks": 2251946590,
+      "unit": "tide-lab-v13-main-pool-l-qry-s11.service"
+    },
+    {
+      "pid": 3556294,
+      "start_ticks": 2251946595,
+      "unit": "tide-lab-v13-main-pool-l-qry-s11.service"
+    },
+    {
+      "pid": 3789800,
+      "start_ticks": 2252193639,
+      "unit": "tide-lab-v13-main-pool-l-qry-s11.service"
+    },
+    {
+      "pid": 3790226,
+      "start_ticks": 2252194535,
+      "unit": "tide-lab-v13-main-pool-l-qry-s11.service"
+    },
+    {
+      "pid": 4114267,
+      "start_ticks": 2249624676,
+      "unit": "tide-lab-v13-main-pool-l-sum-s11.service"
+    },
+    {
+      "pid": 4114288,
+      "start_ticks": 2249624704,
+      "unit": "tide-lab-v13-main-pool-l-sum-s11.service"
+    },
+    {
+      "pid": 4114304,
+      "start_ticks": 2249624708,
+      "unit": "tide-lab-v13-main-pool-l-sum-s22.service"
+    },
+    {
+      "pid": 4114349,
+      "start_ticks": 2249624735,
+      "unit": "tide-lab-v13-main-pool-l-sum-s22.service"
+    },
+    {
+      "pid": 4114371,
+      "start_ticks": 2249624740,
+      "unit": "tide-lab-v13-main-q3-l-sum-s11.service"
+    },
+    {
+      "pid": 4114409,
+      "start_ticks": 2249624767,
+      "unit": "tide-lab-v13-main-q3-l-sum-s11.service"
+    },
+    {
+      "pid": 4114424,
+      "start_ticks": 2249624771,
+      "unit": "tide-lab-v13-main-q3-l-sum-s22.service"
+    },
+    {
+      "pid": 4114481,
+      "start_ticks": 2249624799,
+      "unit": "tide-lab-v13-main-q3-l-sum-s22.service"
+    },
+    {
+      "pid": 4114603,
+      "start_ticks": 2249624834,
+      "unit": "tide-lab-v13-main-q3-s-sum-s22.service"
+    },
+    {
+      "pid": 4114666,
+      "start_ticks": 2249624862,
+      "unit": "tide-lab-v13-main-q3-s-sum-s22.service"
+    },
+    {
+      "pid": 4114854,
+      "start_ticks": 2249624927,
+      "unit": "tide-lab-v13-main-pool-l-qry-s11.service"
+    },
+    {
+      "pid": 4114940,
+      "start_ticks": 2249624955,
+      "unit": "tide-lab-v13-main-pool-l-qry-s11.service"
+    },
+    {
+      "pid": 4114954,
+      "start_ticks": 2249624958,
+      "unit": "tide-lab-v13-main-pool-l-qry-s22.service"
+    },
+    {
+      "pid": 4115026,
+      "start_ticks": 2249624987,
+      "unit": "tide-lab-v13-main-pool-l-qry-s22.service"
+    },
+    {
+      "pid": 4116378,
+      "start_ticks": 2249625439,
+      "unit": "tide-lab-v13-main-pool-l-sum-s11.service"
+    },
+    {
+      "pid": 4116413,
+      "start_ticks": 2249625443,
+      "unit": "tide-lab-v13-main-pool-l-sum-s11.service"
+    },
+    {
+      "pid": 4116475,
+      "start_ticks": 2249625459,
+      "unit": "tide-lab-v13-main-pool-l-sum-s22.service"
+    },
+    {
+      "pid": 4116490,
+      "start_ticks": 2249625464,
+      "unit": "tide-lab-v13-main-pool-l-sum-s22.service"
+    },
+    {
+      "pid": 4116662,
+      "start_ticks": 2249625506,
+      "unit": "tide-lab-v13-main-q3-l-sum-s11.service"
+    },
+    {
+      "pid": 4116667,
+      "start_ticks": 2249625511,
+      "unit": "tide-lab-v13-main-q3-l-sum-s11.service"
+    },
+    {
+      "pid": 4116702,
+      "start_ticks": 2249625524,
+      "unit": "tide-lab-v13-main-q3-l-sum-s22.service"
+    },
+    {
+      "pid": 4116705,
+      "start_ticks": 2249625529,
+      "unit": "tide-lab-v13-main-q3-l-sum-s22.service"
+    },
+    {
+      "pid": 4116921,
+      "start_ticks": 2249625601,
+      "unit": "tide-lab-v13-main-q3-s-sum-s22.service"
+    },
+    {
+      "pid": 4116924,
+      "start_ticks": 2249625606,
+      "unit": "tide-lab-v13-main-q3-s-sum-s22.service"
+    },
+    {
+      "pid": 4117601,
+      "start_ticks": 2249625977,
+      "unit": "tide-lab-v13-hardware.service"
+    },
+    {
+      "pid": 4117684,
+      "start_ticks": 2249626004,
+      "unit": "tide-lab-v13-hardware.service"
+    },
+    {
+      "pid": 4117702,
+      "start_ticks": 2249626016,
+      "unit": "tide-lab-v13-hardware.service"
+    }
+  ],
+  "reason": "user requested cleanup; administrative cancellation, not scientific failure",
+  "requested_at": "2026-11-18T02:09:18.641854+00:00",
+  "schema": "tide-project-retirement-stop-v1",
+  "state": "stopped_verified",
+  "stop_returned_at": "2026-11-18T02:10:12.071592+00:00",
+  "surviving_recorded_processes": [],
+  "units": [
+    "tide-lab-v13-hardware.service",
+    "tide-lab-v13-main-pool-l-qry-s11.service",
+    "tide-lab-v13-main-pool-l-qry-s22.service",
+    "tide-lab-v13-main-pool-l-sum-s11.service",
+    "tide-lab-v13-main-pool-l-sum-s22.service",
+    "tide-lab-v13-main-q3-l-sum-s11.service",
+    "tide-lab-v13-main-q3-l-sum-s22.service",
+    "tide-lab-v13-main-q3-s-sum-s22.service"
+  ]
+}

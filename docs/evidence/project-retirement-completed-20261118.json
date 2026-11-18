@@ -1,0 +1,94 @@
+{
+  "authorization": "2026-11-18-user-approved-project-history-retirement",
+  "completed_at": "2026-11-18T02:19:16.465492+00:00",
+  "filesystem_available_gib": 1320.2209587097168,
+  "filesystem_retirement": {
+    "all_original_targets_absent": true,
+    "completion_attempt": {
+      "completed_targets": 179,
+      "directory_permission_adjustments": 2522,
+      "receipt_sha256": "9061d1c456b6eafd657fee52c1ff99321702726a688cd681dd06949b9806bde1",
+      "state": "completed"
+    },
+    "entries": 134715,
+    "files": 124314,
+    "first_attempt": {
+      "completed_targets": 1621,
+      "error": "PermissionError(13, 'Permission denied')",
+      "receipt_sha256": "cce8a74bd3305a1ff791b9d7201e5828c1ec7a263718053cadf5c506e44a300e",
+      "state": "failed"
+    },
+    "original_plan_sha256": "8b5733e33c524d9144f2d2beddf0a3987c155d4ae5651a278229b029e5fd5da0",
+    "remaining_plan_sha256": "99dc61a10f30ad356d6f403f71b4d58aae2e0562a88eaf2070ba60314d68ac89",
+    "retained_content_verified_after_completion": true,
+    "retained_entries": 11287,
+    "retained_original_content_verified_after_partial_deletion": true,
+    "source_sha256": "20caa1998ff2343b5e52385a5d6f781ffbbadcaa5a5ee2b51a885d202dc0b62e",
+    "target_roots": 1800,
+    "unique_allocated_bytes": 327952990208
+  },
+  "lens": {
+    "allocated_bytes_retired": 405061632,
+    "completed_at": "2026-11-18T02:18:16.570711+00:00",
+    "logical_run_ids": 1395,
+    "method": "installed official trackio.delete_project(project,force=True), with project lock after recorders stopped",
+    "other_data_files_checked": 14,
+    "other_data_files_unchanged": true,
+    "private_destination_info_omitted": true,
+    "project": "tide-learning-lab",
+    "row_counts": {
+      "configs": 1395,
+      "metrics": 97222,
+      "system_metrics": 0
+    },
+    "schema": "tide-lens-project-retirement-v1",
+    "sdk_version": "0.44.0",
+    "state": "completed",
+    "viewer_active": "active",
+    "viewer_service_unchanged": true
+  },
+  "no_original_descendants_alive": true,
+  "note": "No shared Git, public models, other project data or Lens authentication/service policy modified. Account-wide change can also include concurrent user cleanup.",
+  "obsolete_project_failed_units_cleared": 152,
+  "original_stop_processes": 45,
+  "quota": {
+    "file_grace_expires_epoch": 0,
+    "file_hard": 0,
+    "file_soft": 0,
+    "files": 633568,
+    "filesystem": "/dev/mapper/ascend_data-data",
+    "grace_expires_epoch": 0,
+    "hard_gib": 700.0,
+    "hard_quota_headroom_gib": 654.2358932495117,
+    "query_returncode": 0,
+    "soft_exceeded": false,
+    "soft_gib": 300.0,
+    "used_gib": 45.76410675048828
+  },
+  "raw_artifact_availability": "retired; old checkpoint evaluation/resume unavailable; recorded historical outcomes stay scoped",
+  "retained_data": [
+    "v11-confirmation-data",
+    "v12-data",
+    "v13-data",
+    "v9-data-r3"
+  ],
+  "retained_environments": [
+    ".venv",
+    ".venv-positive-floor-v1",
+    ".local/language-data-venv"
+  ],
+  "schema": "tide-project-retirement-completion-v1",
+  "state": "completed",
+  "stopped_services": [
+    "tide-lab-v13-hardware.service",
+    "tide-lab-v13-main-pool-l-qry-s11.service",
+    "tide-lab-v13-main-pool-l-qry-s22.service",
+    "tide-lab-v13-main-pool-l-sum-s11.service",
+    "tide-lab-v13-main-pool-l-sum-s22.service",
+    "tide-lab-v13-main-q3-l-sum-s11.service",
+    "tide-lab-v13-main-q3-l-sum-s22.service",
+    "tide-lab-v13-main-q3-s-sum-s22.service"
+  ],
+  "total_allocated_bytes_retired": 328358051840,
+  "total_gib_retired": 305.80726623535156
+}

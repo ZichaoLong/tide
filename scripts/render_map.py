@@ -9,7 +9,7 @@ from urllib.parse import urlparse
 
 ROOT = Path(__file__).resolve().parents[1]
 KINDS = {'goal', 'baseline', 'experiment', 'result', 'evidence'}
-RUN_STATUSES = {'planned', 'queued', 'running', 'completed', 'failed', 'unchecked'}
+RUN_STATUSES = {'planned', 'queued', 'running', 'completed', 'failed', 'cancelled', 'closed', 'unchecked'}
 STATUSES = {'target', 'unselected', 'documented', 'awaiting', 'scoped'} | RUN_STATUSES
 RELATIONS = {'decomposes', 'precondition', 'variant', 'produces', 'comparison',
              'transfer', 'informs', 'evaluates', 'supports', 'challenges'}
@@ -40,6 +40,10 @@ def public_source(value, location):
 def validate(data):
     if data.get('schema') != 'tide-research-map-prototype-v1':
         raise ValueError('schema: unsupported research map')
+    if data.get('retirement'):
+        relative_reference(data['retirement']['report'], 'retirement.report')
+        for path in data['retirement'].get('retained_prefixes', []):
+            relative_reference(path, 'retirement.retained_prefixes')
     groups = {}
     for group in data.get('view_groups', []):
         key = group.get('id')

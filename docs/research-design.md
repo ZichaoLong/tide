@@ -1,4 +1,11 @@
-# 当前执行设计：固定六组Mem.sum/qry
+# 清理后的设计边界
+
+2026-11-18全部实验批次已关闭，历史权重、原始运行记录及Lens历史已退役；
+源码、配置、限定结论与固定数据保留，详见[清理结果](studies/project-retirement-20261118.md)。
+下文保留研究设计沿革，不构成当前提交或恢复计划；后续需要新的有限研究表与运行身份。
+长期目标仍以[研究章程](RESEARCH_CHARTER.md)为准，当前状态以[STATUS](STATUS.md)为准。
+
+# 历史执行设计：固定六组Mem.sum/qry
 
 [执行表](studies/hb-sum-qry-proposal.md)只比较历史信息形式：同图、Full注意力、组内路由与训练规则，
 Mem.qry与Mem.sum分别训练/评价；sum减少Read投影参数，如实记录，不为等参加宽。

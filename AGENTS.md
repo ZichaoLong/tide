@@ -1,5 +1,22 @@
 # Working on tide-learning-lab
 
+- CURRENT2026-11-18: user approved stopping ALL project jobs and deleting
+  experiment history. Cleanup is complete; NO queued/running/resumable work.
+  Read `docs/studies/project-retirement-20261118.md` and
+  `docs/studies/hb-mem-v13-closed-20261118.md` first. 305.807GiB retired;
+  v13 ended with9 completed new chains and7 USER-CANCELLED chains. This is
+  not seven new scientific failures. All model checkpoints, raw run logs,
+  old frozen sources and the Lens project's1395 runs are gone. Historical
+  reviews/configs/source remain; old recovery success does not imply current
+  checkpoint availability. Do not run old submit/resume/review commands as
+  if their inputs still exist; use the retained closure evidence instead.
+  Keep runs/v9-data-r3, v11-confirmation-data, v12-data and v13-data (~1.095GiB),
+  private environments, install wheels, current code/configs and summaries.
+  Lens service/auth and other projects were unchanged. User is independently
+  cleaning the foundation worktree; do not restore it if it disappears.
+  Earlier retain-all-artifacts/deadline/queued-work notes below are HISTORY,
+  superseded by this cleanup; they do not authorize restarting a batch.
+
 - V13 progress reviewed2026-11-18 08:25+08:6 new chains completed all stages,
   10 still training, no new formal failures;16 trained recoveries and8 reused
   qry fresh confirmations passed. Q10-S/Q10-L paired128Mi means qry/sum are

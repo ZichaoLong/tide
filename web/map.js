@@ -3,8 +3,8 @@ const data = JSON.parse(document.getElementById('research-data').textContent);
 const $ = id => document.getElementById(id);
 const svg = $('map'), NS = 'http://www.w3.org/2000/svg', W = 250, H = 118;
 const kinds = {goal:'目标',baseline:'起点',experiment:'实验',result:'结果',evidence:'已有证据'};
-const statuses = {target:'研究目标',unselected:'待选定',documented:'已固定',planned:'计划',queued:'排队',running:'运行中',completed:'执行完成',failed:'失败',unchecked:'未检查',awaiting:'结论待填',scoped:'已审阅 · 限定'};
-const lifecycle = ['planned','queued','running','completed','failed','unchecked'];
+const statuses = {target:'研究目标',unselected:'待选定',documented:'已固定',planned:'计划',queued:'排队',running:'运行中',completed:'执行完成',failed:'失败',cancelled:'用户取消',closed:'已结束',unchecked:'未检查',awaiting:'结论未形成',scoped:'已审阅 · 限定'};
+const lifecycle = ['planned','queued','running','completed','failed','cancelled','closed','unchecked'];
 const edgeNames = {decomposes:'分解',precondition:'前提',variant:'改造',produces:'产出',comparison:'对照',transfer:'迁移待验',informs:'参考',evaluates:'检验目标',supports:'支持',challenges:'反证'};
 const nodes = new Map(data.nodes.map(n => [n.id,n]));
 const nodeElements = new Map(), edgeElements = new Map(), groupElements = new Map();
@@ -83,6 +83,10 @@ function section(parent, title, value) {
   if(!value)return;
   parent.append(html('h3',title),html('p',value));
 }
+function retiredRecord(path) {
+  return data.retirement?.state==='completed' && ['runs/','artifacts/','.local/'].some(p=>path.startsWith(p))
+    && !data.retirement.retained_prefixes.some(p=>path.startsWith(p));
+}
 function showNode(node) {
   if($('range').value!=='all'&&$('range').value!==node.view_group){
     $('range').value=node.view_group;setRange();
@@ -102,11 +106,13 @@ function showNode(node) {
   section(body,'迁移条件',node.transfer_conditions);
   section(body,'资源',node.budget);
   if(node.study_id){
-    section(body,'研究与查看身份',`${node.study_id} · Lens 项目 tide-learning-lab。项目记录为权威，查看副本按相同运行 ID 关联；私有入口见本机交接。`);
+    section(body,'研究与查看身份',data.retirement?.state==='completed'
+      ? `${node.study_id} · 历史 Lens 项目 tide-learning-lab 已清空；运行身份仅用于关联保留摘要。`
+      : `${node.study_id} · Lens 项目 tide-learning-lab。项目记录为权威，查看副本按相同运行 ID 关联；私有入口见本机交接。`);
   }
   if(node.references?.length){
     body.append(html('h3','配置与项目记录'));
-    for(const reference of node.references){const a=html('a',reference.label);a.href='../'+reference.path;body.append(a,html('br'));}
+    for(const reference of node.references){const retired=retiredRecord(reference.path);const a=html('a',reference.label+(retired?'（已退役，查看摘要）':''));a.href='../'+(retired?data.retirement.report:reference.path);body.append(a,html('br'));}
   }
   if(node.runs?.length){
     body.append(html('h3','关联运行（记录时状态）'));
@@ -114,8 +120,9 @@ function showNode(node) {
       const row=html('div',undefined,'run-record');
       row.append(html('p',`${run.id} · ${statuses[run.status]}${run.seed===undefined?'':` · seed ${run.seed}`}`));
       if(run.source_commit)row.append(html('p',`源码 ${run.source_commit.slice(0,12)}`));
-      for(const [field,label] of [['config','配置'],['record','权威记录']]){const a=html('a',label);a.href='../'+run[field];row.append(a,document.createTextNode(' '));}
-      if(run.lens_record){const a=html('a','Lens 运行映射');a.href='../'+run.lens_record;row.append(a);}
+      for(const [field,label] of [['config','配置'],['record','权威记录']]){const retired=retiredRecord(run[field]);const a=html('a',retired?'原始记录已退役 · 查看摘要':label);a.href='../'+(retired?data.retirement.report:run[field]);row.append(a,document.createTextNode(' '));}
+      if(data.retirement?.state==='completed')row.append(html('p','旧权重不可恢复或重评；Lens 历史已清空。'));
+      else if(run.lens_record){const a=html('a','Lens 运行映射');a.href='../'+run.lens_record;row.append(a);}
       body.append(row);
     }
     section(body,'状态边界','这里不是实时队列；最新状态、日志、停止和恢复以 STATUS 与作业记录为准。执行完成不表示独立正确性或学习效果通过。');
