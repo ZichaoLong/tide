@@ -28,6 +28,13 @@ function interactive(el, action) {
 svg.setAttribute('viewBox',`0 0 ${data.width} ${data.height}`);
 $('notice').textContent = data.notice;
 document.querySelector('.lead').textContent = data.subtitle;
+for (const group of data.view_groups) {
+  $('range').add(new Option(group.label, group.id, group.id === 'current', group.id === 'current'));
+}
+if (data.view_groups.length > 1) $('range').add(new Option('全部已载入范围', 'all'));
+for (const track of new Set(data.nodes.map(n => n.track).filter(Boolean))) {
+  $('track').add(new Option(data.track_labels?.[track] || track, track));
+}
 const defs=element('defs'),marker=element('marker',{id:'arrow',markerWidth:8,markerHeight:8,refX:7,refY:4,orient:'auto'});
 marker.append(element('path',{d:'M 0 1 L 7 4 L 0 7',fill:'none',stroke:'#82959e'}));defs.append(marker);svg.append(defs);
 for (const group of data.view_groups) {

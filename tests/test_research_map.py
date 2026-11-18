@@ -12,7 +12,32 @@ from render_map import RUN_STATUSES, validate
 
 class ResearchEvidenceTests(unittest.TestCase):
     def setUp(self):
-        self.data = json.loads((ROOT/'research/map.json').read_text())
+        # Synthetic examples keep validation independent of live research
+        # decisions. Never load archived evidence just to run these checks.
+        source = [{'label': 'Synthetic source', 'url': 'https://example.org/fixture'}]
+        def node(key, kind, status, *, group='current', y=100):
+            value = dict(id=key, kind=kind, status=status, view_group=group,
+                         x=30, y=y, title=key, summary='Synthetic fixture',
+                         question='Fixture?', decision='No scientific decision.',
+                         budget='Not executable.')
+            if status == 'scoped':
+                value.update(scope='Synthetic fixture only.', sources=copy.deepcopy(source))
+                if kind == 'result':
+                    value.update(comparisons='Fixture.', counterevidence='Fixture.',
+                                 unresolved='Fixture.', transfer_conditions='Fixture.')
+            return value
+        self.data = dict(
+            schema='tide-research-map-prototype-v1', width=600, height=700,
+            view_groups=[dict(id='current', y=0, height=320),
+                         dict(id='history', y=350, height=350)],
+            nodes=[node('G0', 'goal', 'target'), node('B0', 'baseline', 'unselected'),
+                   node('E0', 'experiment', 'planned'), node('E3', 'experiment', 'planned'),
+                   node('F0', 'evidence', 'scoped'), node('R2', 'result', 'awaiting'),
+                   node('R17', 'result', 'scoped', group='history', y=400)],
+            edges=[dict(id='prerequisite', source='B0', target='E0',
+                        kind='precondition', status='planned'),
+                   dict(id='future-transfer', source='R2', target='G0',
+                        kind='transfer', status='planned')])
 
     def pending_result(self):
         # Real studies can finish. Keep a hypothetical pending fixture rather
@@ -118,11 +143,8 @@ class ResearchEvidenceTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'repository-relative path'):
             validate(self.data)
 
-    def test_first_batch_studies_have_explicit_two_routes(self):
-        studies = {n.get('study_id') for n in self.data['nodes'] if n.get('study_id')}
-        self.assertTrue({'TL-A0','TL-A1','TL-A2','TL-B0','TL-B1','TL-C'} <= studies)
-        titles = {n['title'] for n in self.data['nodes']}
-        self.assertTrue({'从零训练完整 TIDE','预训练模型生长'} <= titles)
+    def test_current_map_is_valid_without_loading_an_archive(self):
+        validate(json.loads((ROOT/'research/map.json').read_text()))
 
 
 if __name__ == '__main__':

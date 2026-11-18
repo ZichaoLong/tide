@@ -54,8 +54,8 @@ def validate(data):
                 or group['y'] + group['height'] > data['height']):
             raise ValueError('view_groups: outside canvas')
         groups[key] = group
-    if set(groups) != {'current', 'history'}:
-        raise ValueError('view_groups: current and history required')
+    if 'current' not in groups:
+        raise ValueError('view_groups: current required')
     nodes, studies, runs = {}, set(), {}
     for node in data['nodes']:
         key = node['id']
