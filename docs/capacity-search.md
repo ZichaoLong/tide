@@ -188,3 +188,34 @@ slots before/after, actual input and clock advance, finite scans, state detach a
 sampled parameter changes. Timed operator dtypes are not invasively audited here.
 Completion does not prove equality with an original owner: the existing
 `continuous.checkpoint_resume` paired numerical comparison remains separate.
+
+## Same-device finite execution candidates
+
+`benchmarks.variants` is a serial wrapper around the existing normal benchmark
+and explicit separate ledger children. Submit it inside one durable launcher to
+keep the inherited device mapping fixed for all candidates:
+
+```sh
+python -m benchmarks.variants --config configs/hb-multiscale-x-timed.json \
+  --device npu:0 --precision bf16 --mode train --batch 4 --length 256 \
+  --threads 4 --warmup 2 --steps 5 --rss-gib 56 --device-budget-gib 52 \
+  --seconds 10800 --child-timeout 1200 --ledger-variants baseline combined \
+  --output-dir NEW_VARIANTS
+```
+
+The default five named candidates are baseline; local reception/regional math
+Attention; region batches of four; regional recomputation; and their combination.
+Each config explicitly fixes all three execution choices and preserves the input
+mathematical config. Every normal child uses the same seed/B/L and five timed
+samples by default. Parameter/input hashes, raw samples and initial/final work
+summaries remain separate. The optional `--ledger-variants` children run only
+after all normal children; no ledger hook is active during performance samples.
+`--plan-only` freezes the exact configs/commands without constructing models.
+
+This is a fixed-shape candidate comparison, not another full capacity matrix.
+The summary reports candidate/baseline elapsed and peak ratios with initial hash
+pairing; work-summary equality is not proof of support or full trajectory equality.
+Same-card sequential observations can still drift with time/host contention, and
+every child retains resource/timeout/failure identity. CPU RSS includes the normal
+worker's initial audit; its timed device peak is reset after warmup. Ledger phases
+remain intrusive diagnostics and cannot replace normal measured peaks.
