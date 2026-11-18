@@ -1,19 +1,28 @@
-# Current navigation
+# Current documentation map
 
-The current implementation is the instance rewrite at `src/tide`, with tests in
-`tests`, comparison programs in `benchmarks`, configurations in `configs`, and
-fixed mathematics in `math`.
+Start with [project scope](project-scope.md), [STATUS](STATUS.md), and [ROADMAP](ROADMAP.md).
+They answer enduring product decisions, current facts, and the next work respectively.
+The current source is `src/tide`, tests `tests`, comparisons `benchmarks`, configurations
+`configs`, and fixed mathematical source `math`.
 
-- [Use/configure/train/continue](instances.md)
-- [Current work](STATUS.md) and [remaining work](ROADMAP.md)
-- [Scope](semantics.md), [code navigation](architecture.md), [mathematical entry points](semantic-map.md)
-- [Development](development.md) and [execution](execution-flows.md)
-- [FP32 implementation, validation and measurements](evidence/instances-fp32-20261118.md)
-- [Current measured performance lessons](performance-lessons-instances.md)
-- [Historical performance lessons](performance-lessons.md)
+| Question/change | Owning document(s) |
+|---|---|
+| Product route, selected cycle, architecture freedom | [project scope](project-scope.md) |
+| Work in progress, blockers, jobs, next command | [STATUS](STATUS.md) |
+| Accepted work, stages, acceptance and stopping | [ROADMAP](ROADMAP.md) |
+| Adopted mathematics / where implemented | [semantics](semantics.md), [semantic map](semantic-map.md), [architecture](architecture.md) |
+| Public API, configuration, training, state | [instances](instances.md) |
+| Requested precision and numerical policy | [precision](precision.md) |
+| Four joint matches, work counts and timing | [benchmark contract](benchmark-contract.md) |
+| Environment, checks, durable execution | [development](development.md), [verification](verification.md), [execution](execution-flows.md) |
+| Measured results and applicable experience | [evidence](evidence/README.md), [performance lessons](performance-lessons.md) |
+| Downstream requests and acceptance | [collaboration](downstream-contract.md) |
+| Artifact lifecycle and cleanup | [retention](artifact-retention.md) |
+| Start the agreed next thread | [user prompt template](next-thread.md) |
 
-Other pre-rewrite documents and evidence retain their original source identities
-for historical reference. They are not requirements, public interfaces or
-qualification of this rewrite. In particular the old generic graph, resident,
-mixed-a/b/c and backend matrices do not define the new delivery. Consult them
-only for a relevant lesson; do not recover or reuse the retired implementation.
+When a semantic/API/precision/timing contract changes, update its owning page and
+relevant checks; record the actual verified result separately. Keep plans and
+qualifications distinct. Skills link these contracts instead of duplicating them.
+
+The working tree contains this cycle. Old APIs, matrices and evidence remain in Git;
+[history](history.md) is for user-requested historical lookup, not ordinary startup.

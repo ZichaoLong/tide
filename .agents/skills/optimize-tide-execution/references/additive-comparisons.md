@@ -1,62 +1,48 @@
-# Additive and subtractive comparisons
+# Additive and subtractive diagnosis
 
-For a new high-frequency numerical, state, autograd or interface feature,
-consider three levels together: compact mathematical computation, its public
-batch-module boundary, and a small real producer/consumer composition. Thin
-wrappers can reuse existing references. Depth follows risk and expected use;
-do not require a second implementation for every helper.
+Use this method when a substantial performance gap is unclear, or a new
+high-frequency module/interface needs an attainable baseline. The depth of the
+investigation follows its risk and expected use.
 
-Start an additive investigation with a compact executable in a checked domain.
-It is a measured attainable reference, not proof of optimality or zero redundant
-work. Inspect its own algorithm (history expansion and quadratic sequence
-workspace are common traps). Preserve independent formulas/schedules when
-promoting code into production; do not turn the reference into a second framework.
+Start with a compact implementation of the selected function in a declared
+domain. Batch both samples and sequence positions where the mathematics allows
+it. Inspect this baseline too: a Python batch loop, repeated history expansion
+or quadratic saved workspace can make a supposedly direct implementation slow.
+Its measured time is attainable evidence, not proof of optimality.
 
-Add responsibilities deliberately: nonzero left state, sharing, real backward,
-optimizer, continuation/checkpoint, public module boundaries, composition and
-default scheduling. Hold mathematics, inputs, parameters, return requirements,
-precision and timing boundaries constant where possible. Measure the increment
-at each meaningful boundary. Separate a new mathematical obligation from extra
-work implementing the same obligation through an interface.
+Add meaningful duties in controlled steps: initial state, shared parameters,
+actual backward, optimizer, continuation and public composition. Keep inputs,
+weights, precision, return scope and timing boundaries fixed for same-function
+comparisons. This distinguishes mathematical work from the cost of expressing
+that work through an interface. A useful direct implementation can become the
+production path after appropriate independent checks; it need not remain a
+permanent duplicate.
 
-Ordinary output training and complete records/intermediate gradient roots have
-different duties. Label projected equivalence, complete-record equivalence and
-different-function comparisons. Transformer/Mamba comparisons illuminate shared
-operations but cannot certify the whole Tide function. An eliminated dependency
-with numeric derivative zero is not automatically equivalent to connected zero.
+Use subtraction to test specific explanations: no-grad versus grad-enabled
+forward, forward versus complete training, selected versus padded rows, or one
+layout versus another. These differences identify where to look; they do not
+alone isolate a single cause. Stage timing, device traces and autograd inspection
+are optional instruments chosen for the unresolved question.
 
-Specify both batch and sequence axes, causal/ragged dependencies, ownership and
-materialization, block adjoints and validation granularity in module interfaces.
-A compact formula that cannot fit naturally is evidence for redesign, not a
-reason to silently bypass general graph semantics or hard-code a benchmark shape.
-Capability dispatch must retain legal PDG/TimedDAG/SettleGraph fallback and expose
-the effective path. Keep expensive compatibility outside the default computation.
+Static inspection complements measurements. Follow both implementations' actual
+loops over layers, regions, nodes, samples, positions, memory chunks and solver
+iterations. Distinguish setup from each invocation and host metadata iteration
+from tensor arithmetic. Record where B/L axes remain batched and where an
+interface creates copies, gathers or repeated dispatch.
 
-Combine incremental measurements with subtraction: no-grad versus graph-building
-forward versus true backward/full training, operator submissions, autograd nodes,
-bytes, synchronization and actual work. Use these to choose the next experiment,
-not an endless mandatory profile matrix. A baseline can be useful even when it
-is not promoted; record why, the remaining gap and a concrete reopening condition.
+Count meaningful operations with an explicit unit: contractions, gathers, bytes,
+autograd nodes or kernel submissions. Use expressions or bounds where runtime
+support or iteration count decides the work. A Tensor API call, ATen dispatch
+and device kernel are different quantities. Fewer calls can still mean more
+padding, memory traffic or arithmetic.
 
-When the gap is unclear, inspect both implementations statically before choosing
-another optimization. Describe their input/output and observation contracts,
-then expand the relevant call paths: loops over regions, nodes, physical atoms,
-samples, positions, fields, parameter owners and solver iterations. Separate
-construction from each invocation, metadata iteration from tensor work, and
-forward from explicit/nested backward. Record where the batch axes survive and
-where an interface forces gather, copies, materialization or separate calls.
+Classify the remaining gap as mathematical work, duplicated/padded work,
+interface or autograd overhead, or unresolved cost. If compact computation fits
+poorly, redesign the affected boundary around the current instance requirements.
+The separately scoped general foundation creates no fallback obligation here.
 
-Count meaningful operations with a declared vocabulary (matrix contractions,
-normalization, source transforms, solver calls, gathers or bytes). Include loops
-and branches: exact counts where static, expressions or bounds where actual
-support, ragged lengths or convergence decide them. A Tensor API call, an ATen
-dispatch, an autograd node and a device kernel are different units. Do not invent
-one exact kernel total from source syntax, or rank algorithms by call count alone;
-padding, redundant arithmetic, memory traffic, concurrency and synchronization
-can outweigh fewer calls. Use measurements to test the static explanation.
-
-Classify the resulting differences as required mathematical work, required public
-observations, avoidable recomputation, or an explicit layout/algorithm tradeoff.
-Show the smallest alternative boundary that would carry the compact computation
-with the needed semantics. Reuse the analysis for later module replacements;
-do not turn it into a mandatory full-repository census for each small edit.
+Finish a bounded investigation with an adopted change, a rejected approach, or
+a concrete remaining opportunity and reopening condition. New evidence can
+justify another investigation; routine edits do not require a complete census
+or a new direct baseline. Comparison definitions and scope are owned by the
+[benchmark contract](../../../../docs/benchmark-contract.md).

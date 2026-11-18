@@ -1,35 +1,95 @@
-# Follow-up after the current instance delivery
+# 当前语义周期：五类完善工作
 
-The agreed fresh FC/HB implementation and finite CPU/NPU FP32 delivery are
-complete at the scope in [semantics](semantics.md), with measured qualifications
-and limits in [the report](evidence/instances-fp32-20261118.md). No job is active.
-These are remaining limits/opportunities, not an instruction to restart a broad
-rewrite or resume old P1–P6.
+产品范围见 [project-scope](project-scope.md)，当前事实见 [STATUS](STATUS.md)。
+本计划已由用户对齐，等待治理交付后的新线程启动；治理不提前启动模型优化或性能实验。
+当前模型源 `c17c613f178dd076d963da98017abdea8c09db16` 是活跃起点，可以按证据重设计。
 
-1. Preserve four whole-model NPU finite-deviation records. Their support,
-   metadata, gradient connectivity, finite updates and exact restore passed;
-   the worst case has a bounded FP64 explanation. Strict elementwise passage
-   of every FP32 state/value remains unclaimed. Revisit if a consumer's actual
-   scale, learning behavior or numerical requirement makes it material.
-   Actual resumed FP32 AdamW updates also retain small common-bias parameter
-   deviations despite exact saved data/forward; bitwise optimizer replay is
-   not promised. Their attempts and thresholds remain in the same report.
-2. FC Full packing currently processes 2.02× selected rows in the measured case;
-   consider query buckets/ragged operators. Lattice's factor is only 1.07×.
-   Head-query and gate/up packing, short Attention backend choice and Shannon
-   iteration cost are other concrete candidates, to prioritize from actual need.
-   KV time ordering currently invokes device AiCPU Argsort; consider stable
-   compaction while retaining int64 time semantics.
-3. Larger/longer configurations and billion-parameter capacity/performance are
-   unmeasured. Choose useful downstream configurations, with real activity and
-   padding counters; do not infer 3% Full from k/n or exhaust all combinations.
-4. Native/LibTorch kernels may be added for demonstrated benefit. CUDA,
-   multi-device, exclusive NPU timings and resident scheduling are not qualified
-   by this delivery and are not inherited from historical implementations.
+## 1. 比较设施、代表配置与规模
 
-All current models/configuration candidates remain available in PyTorch. No
-FP16/BF16 work, old teaching binding, LH-DAG/PDG or arbitrary graph engine is
-required. New downstream work starts from the current public API/configuration,
-fixed mathematical source and observed needs. Relevant checks and portable
-commands are in the report; [measured lessons](performance-lessons-instances.md)
-explain successful changes and remaining costs.
+交付 [benchmark-contract](benchmark-contract.md) 的四类联合匹配：近节点/block 总数
+或近层数/深度，分别同时匹配近总参数或声明的实际活跃参数。
+调整 Transformer 合理宽度/头/FFN，报告两个维度的实际偏差；旧单轴结果保持原身份。
+
+- 实现唯一参数、教材活跃代理、实际触及参数及工作量统计；覆盖准备、接收、区域和 Full，
+  明确共享与时间去重，用独立小型枚举核验。Timed 报告每输入的多次作用。
+- 补齐现有七点：FC-K、FC-S、Lattice-K、Exchange-X、Multiscale-X Settle/Timed、
+  FC-K d512；FP32/BF16、推理/含梯度前向/完整训练，CPU/单 NPU。
+- FC-S 保留 SSD 对照；直接同函数对照按问题需要添加。基线也需合理批量化与缓存。
+- 选择小范围组合覆盖其他接收、分配和共享候选。形状组区分扩大 B、L 和节点数。
+- 稀疏组使用合法 quad 参数/输入，目标含约 3%、约 10% 与高活跃；以实测为准。
+  构造方式公开，和常规初始化分开；Shannon/pool 的正支持保持其数学函数。
+- 规模组从上游合法尺寸选近 0.5B/1B 的 FC/HB，近 9B/17B 的一个 HB 扩展系列及对照。
+  先预算各模式实际内存。BF16 master/optimizer 可能仍为 FP32，不能简单将训练容量减半。
+
+验收：生成器、命令和结果能从干净源码重建；统计有独立见证；主表明确四类匹配与未测项。
+不做组合笛卡尔积，也不为参数凑数引入不计算的权重。
+
+## 2. 已定位成本与性能解释
+
+先处理有证据的热点，顺序可随测量调整：
+
+| 热点 | 实验方向与数学边界 |
+|---|---|
+| FC Full packing | 查询分桶/紧凑索引；当前处理行数约为选中行的 2.02 倍 |
+| 投影与参数组 | 相容 head-query、gate/up 合并；逐头适配器、共享梯度及私有状态保持 |
+| 三类 Attention | 历史 KV、接收、区域分别选择融合/普通批量/分块；两种精度各自验证 |
+| KV 时间排序 | 稳定合并/压紧等替代设备 AiCPU Argsort；保留 int64、原始窗口与位置 |
+| 分配 | quad 边界稳定性与成本、Shannon 有限迭代；VJP 是求解映射的一阶导数 |
+
+B×L 张量贯穿接收、准备、分配、Full 和发布。允许为此改接口和重写局部实现。
+结合静态循环/形状/拷贝审视、紧凑直接计算和阶段/算子/autograd 观察。
+每个热点先试少量有依据的候选，相关语义检查后集成，再做代表端到端对照。
+
+验收：解释数学必要工作、重复/填充工作、调度/计算图成本和未判定差距。
+候选有采用、否决或延期依据；未获收益不自动触发无止境融合开发。
+
+## 3. 连续使用与完整时间边界
+
+增加带状态的初始/分块 prefill、B1/批量 decode、跨 KV 窗口、Timed pending/flush、
+checkpoint 和恢复后实际更新。Transformer 必须使用真实增量 KV cache。
+分别给 prefill 吞吐、首主干输出时延、稳定 decode 时延/吞吐、输入加 flush 总耗时、
+状态和峰值内存。没有任务头时不能称完整语言模型服务 TTFT。
+
+小型检查跨窗口完整反向；截断反向另声明 optimizer/detach 边界。
+训练计时包括必要准备、packing、loss、反向、通信、optimizer 和同步。
+验收：连续运行与整段的相关值/梯度/状态有检查，计时与恢复边界可复现。
+
+## 4. FP32/BF16 数值与正确性
+
+保留原 FP32 四项 NPU 有限超差、恢复后 AdamW 偏差；不重标为通过。
+BF16 正式加入推理、含梯度前向、完整训练、多步、续接及恢复后更新，见
+[precision](precision.md)。FP64 是有限 CPU 诊断，不是隐式运行替换。
+
+覆盖值、支持、状态、输入/参数梯度、共享贡献、断开梯度、分配边界、零/微小正消息、
+长历史及反复更新。独立公式/求解、方向导数、小型 FP64 各说明验证范围。
+优先修复稳定公式、归约、适当累加精度等可修复问题，记录误差、支持、速度及内存变化。
+额外追踪有限多步误差、路由变化及非有限值，不开展训练配方或模型效果搜索。
+
+验收：实现错误修复；不可消除的有限舍入经过有界调查后有明确记录与适用域。
+阈值、失败和精度策略透明；不靠裁剪数学支持或隐藏升精度制造通过。
+
+## 5. 执行路径与硬件
+
+| 路径 | 本轮范围 |
+|---|---|
+| CPU/单 NPU | 必做，覆盖上述代表点及 FP32/BF16、连续运行 |
+| 原生算子/自定义 Autograd/LibTorch | 具体热点表明收益时实施小候选，有收益再集成 |
+| 多 NPU | 大规模容量或节点并行需要时，先做两卡 HB，验收通信、共享梯度、统一更新与恢复 |
+| CPU–NPU 混合 | 按容量/性能需要比较，明确搬运与实际执行位置 |
+| resident | 主机控制仍为主要瓶颈时做代表试验；设备决定选择和推进，非预先给定轨迹 |
+| CUDA | 源码、构建、真机分开；缺 GPU 不阻塞本机可完成工作 |
+
+条件任务未触发或无收益时交付决定和重启条件，不称该路径已实现/验证。
+容量失败保留具体预算、实际边界和可行替代，未运行不计作通过。
+
+## 执行、验收与收束
+
+先统计/比较设施，再当前规模 FP32/BF16 与稳定性、热点优化、连续运行、大规模及必要后端。
+正确性贯穿各阶段。旧有效证据复用；改变实现或口径后才作相关配对复测。
+长任务按 [execution-flows](execution-flows.md)，资源按当前用户授权协调。
+CPU 做有限线程校准，正式计时避免自身重任务干扰，shared NPU 仍标为共享结果。
+
+实现固定提交后记录资格证据，阶段汇报后继续；仅真实数学歧义、实质范围变更或额外
+授权才停下说明。结束时报告四类匹配下的速度/内存、BF16 收益与修复、实际工作量与
+差距归因、有效和无效优化、功能/后端待验及复现命令。没有绝对加速门槛，也不以不断
+局部改进替代交付结论。五类都有结果或具体边界后完成本轮。

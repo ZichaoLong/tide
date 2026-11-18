@@ -2,8 +2,10 @@
 
 Install `tide-instances` from this checkout; import `tide`. Mathematics is fixed
 at the revision in [upstream.json](upstream.json). No retired executor is used.
-Models and benchmarks use FP32. CPU FP64 is available for accuracy verification;
-FP16/BF16 are outside this delivery.
+Current FP32 CPU/single-NPU observations have the scope and finite deviations in
+[the report](evidence/instances-fp32-20261118.md). CPU FP64 supports accuracy checks.
+BF16 is planned in [ROADMAP](ROADMAP.md), not yet qualified;
+see [precision](precision.md). FP16 is outside the current cycle.
 
 ```python
 import torch

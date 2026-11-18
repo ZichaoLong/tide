@@ -68,7 +68,8 @@ retaining the original scale and native Q/K backward. Visible trainable zero
 priors need the weighted quotient's right derivative: the tiled/custom backward
 preserves it, whereas silently taking log(0) or dropping that derivative does not.
 Tiled math recomputes 64-query/256-key blocks in backward rather than retaining a
-full score matrix. No FP16/BF16 implementation or validation is required here.
+full score matrix. These observations qualified FP32 only. The new BF16 work and policy are in
+[ROADMAP](ROADMAP.md) and [precision](precision.md).
 
 CANN's null-PSE mode is an actual backend contract: no PSE tensor requires the
 default pse_type. Both the original runtime failure and the fixed 10-case NPU

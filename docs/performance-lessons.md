@@ -1,209 +1,79 @@
-# 性能经验与适用条件
-
-当前重写首先看[FC/HB 实例的实测经验](performance-lessons-instances.md)和
-[FP32 交付报告](evidence/instances-fp32-20261118.md)。下列历史记录按需查阅。
-
-本页按问题机制导航，详细观察保留原源码、配置、结果和失败身份。
-当前工作安排只在[ROADMAP](ROADMAP.md)，当前交接只在[STATUS](STATUS.md)。
-历史提交定位见[迁移映射](history-migration.md)，具体复现见[reproduction](reproduction.md)。
-
-## 如何使用经验
-
-以层级、计算粒度和接口管理组合复杂度。已有依据的局部优化在适用条件成立、相关语义与
-模块检查通过后即可采用，不要求每个辅助函数先做完整模型benchmark或遍历配置组合。
-端到端对照检查集成效果与实际收益；计时结论限于测量范围。遇到具体反例时修正适用条件。
-
-这些方法同时用于上层调度、局部模块、状态、反向、检查、搬运、结果发布和优化器。
-接口可为性能、通用性和模块替换而重新设计；保持数学与必要公共能力，版本化迁移历史调用形式。
-不同函数、不同返回范围和不同计时边界的对照分别解释，不能把全部差距当作可消除开销。
-完整方法见[仓库优化技能](../.agents/skills/optimize-tide-execution/SKILL.md)。
-
-| 正在调查的问题 | 详细观察 |
-| --- | --- |
-| GEMV/GEMM/BMM、计算共享、packing、元数据及完整返回 | [批量与数据搬运](performance-lessons-batching.md) |
-| typed 状态、KV/区域/消息列贯穿、默认 B×L 输入与 raw 恢复 | [跨模块张量交接](performance-lessons-prefill.md#从模块批量到跨模块张量交接) |
-| B×L窗口、KV前缀、查询/区域VJP、结果发布 | [prefill与KV布局](performance-lessons-prefill.md) |
-| 归一化、近零梯度、共享归约、独立公式与舍入 | [数值与梯度](performance-lessons-numerics.md) |
-| 缓存所有权、设备工作区、多卡、checkpoint与恢复 | [状态与设备](performance-lessons-state-devices.md) |
-| 配置身份、安装、计时分母、归档与失败复现 | [测量与证据](performance-lessons-evidence.md) |
-| 外部Transformer/MoE、真实模型入口及计时范围 | [外部模型对照](performance-lessons-external-models.md) |
-
-新近机制：[直接样板的批量粒度](performance-lessons-prefill.md#直接样板也要检查批量粒度)、[共享历史与显式观察](performance-lessons-prefill.md#共享历史与显式观察边界)、[连续存储与独立根](performance-lessons-prefill.md#连续存储借用与独立梯度根)、[外层图与跨阶段实际工作](performance-lessons-prefill.md#外层图缩小与跨阶段实际工作)、[设备调用组合与资源生命周期](performance-lessons-state-devices.md#设备调用组合与资源生命周期)、
-[独立求和参考自身精度](performance-lessons-numerics.md#独立求和也要核对参考自身精度)、
-[矩形容量与实际吞吐分母](performance-lessons-evidence.md#矩形容量与实际吞吐分母)、
-[区域均值与真实共享传输](performance-lessons-batching.md#区域均值与传输必须保留真实共享身份)、
-[动态执行与静态控制图](performance-lessons-state-devices.md#动态执行次数与静态控制图大小分别预算)、
-[来源列与精确计算复用](performance-lessons-batching.md#来源变换也要跨物理边保留张量粒度)、
-[跨过批量接口的静态形状审阅](performance-lessons-state-devices.md#静态形状审阅要越过批量接口)、
-[旋转的整数域与原值守卫](performance-lessons-batching.md#旋转恒等式需要整数域与原值守卫)、
-[单bank矩阵与服务任务容量](performance-lessons-state-devices.md#单bank矩阵与服务任务容量是两类问题)、
-[相容节点、真实成员与固定值检查](performance-lessons-prefill.md#相容节点实际成员与固定值检查)、
-[设备flow与反向算子归因](performance-lessons-evidence.md#从设备利用率追到实际反向算子)、
-[精度迁移与默认调用链](performance-lessons-numerics.md#精度迁移需要覆盖默认调用链)、
-[跨设备共享列伴随](performance-lessons-numerics.md#跨设备共享列的反向到达顺序)、
-[公共任务边界与卷积转置](performance-lessons-prefill.md#公共任务边界与卷积转置)、
-[区域列伴随与结构支持](performance-lessons-prefill.md#区域列伴随与结构支持)、
-[隐藏前缀bank与块伴随](performance-lessons-prefill.md#隐藏前缀bank与块伴随)、
-[外层批、状态块与实际算子](performance-lessons-prefill.md#从外层批到状态块和实际算子)、
-[并行与临时存储](performance-lessons-evidence.md#并行临时存储与真实算子归因)、
-[紧凑公式与共享bank的正负结果](performance-lessons-prefill.md#从紧凑公式到共享bank矩阵)、
-[Describe列与按用途裁剪](performance-lessons-prefill.md#describe列与按用途裁剪)、
-[局部首次借用计费](performance-lessons-state-devices.md#局部首次借用与全局存储余额)。
-
-每条新经验给出观察、机制、改动、正负结果、适用条件、反例/测试以及来源链接。
-采用局部改进的依据与宣称端到端加速的依据分别记录；必要数学工作、重复计算、可摊薄的
-执行开销和未判定成本分别识别。完整记录等价、指定投影等价与不同函数比较不混称。
-经验本身不能代替正确性门禁，也不要求重跑已有有效证据。
-
-## 已有章节入口
-
-以下标题保留原链接锚点；每节详细内容已按机制归位，旧证据无需改写。
-
-## 本仓库 core-3
-
-[详细观察](performance-lessons-batching.md#本仓库-core-3)。
-
-## 参考仓库
-
-[详细观察](performance-lessons-batching.md#参考仓库)。
-
-## Core-5 已有观察
-
-[详细观察](performance-lessons-batching.md#core-5-已有观察)。
-
-## 本轮迁移与负结果
-
-[详细观察](performance-lessons-batching.md#本轮迁移与负结果)。
-
-## 实际私有矩阵批与数值修复后的观察
-
-[详细观察](performance-lessons-batching.md#实际私有矩阵批与数值修复后的观察)。
-
-## 局部数值修复与全部 eager 低秩
-
-[详细观察](performance-lessons-batching.md#局部数值修复与全部-eager-低秩)。
-
-## 共享准备顺序、训练观测和显式精度
-
-[详细观察](performance-lessons-numerics.md#共享准备顺序训练观测和显式精度)。
-
-## 近零梯度与归一化反向的工程经验
-
-[详细观察](performance-lessons-numerics.md#近零梯度与归一化反向的工程经验)。
-
-## D64算术边界与跨步误差
-
-[详细观察](performance-lessons-numerics.md#d64算术边界与跨步误差)。
-
-## 外层汇合精度和默认异步的有限退出证据
-
-[详细观察](performance-lessons-numerics.md#外层汇合精度和默认异步的有限退出证据)。
-
-## 独立输入矩阵批的覆盖与完整成本
-
-[详细观察](performance-lessons-batching.md#独立输入矩阵批的覆盖与完整成本)。
-
-## 连续局部算术与完整桥接的停止依据
-
-[详细观察](performance-lessons-numerics.md#连续局部算术与完整桥接的停止依据)。
-
-## 单行VJP、异形传输与常驻反向的实测边界
-
-[详细观察](performance-lessons-state-devices.md#单行vjp异形传输与常驻反向的实测边界)。
-
-## 紧凑局部纤维与执行资源数量
-
-[详细观察](performance-lessons-batching.md#紧凑局部纤维与执行资源数量)。
-
-## 自然维度、区域合批和大文件
-
-[详细观察](performance-lessons-batching.md#自然维度区域合批和大文件)。
-
-## 配置覆盖与证据的校验
-
-[详细观察](performance-lessons-evidence.md#配置覆盖与证据的校验)。
-
-## 下游安装与恢复的验证边界
-
-[详细观察](performance-lessons-evidence.md#下游安装与恢复的验证边界)。
-
-## 失败经验与临时产物的生命周期
-
-[详细观察](performance-lessons-evidence.md#失败经验与临时产物的生命周期)。
-
-## CUDA 真机迁移的限定经验
-
-[详细观察](performance-lessons-state-devices.md#cuda-真机迁移的限定经验)。
-
-## GPU 推理批次与完整返回
-
-[详细观察](performance-lessons-batching.md#gpu-推理批次与完整返回)。
-
-## 三平台B128/B512与诊断开销
-
-[详细观察](performance-lessons-batching.md#三平台b128b512与诊断开销)。
-
-## 同模型放置与通信的实际边界
-
-[详细观察](performance-lessons-state-devices.md#同模型放置与通信的实际边界)。
-
-## 本轮三平台六项打包处置
-
-[详细观察](performance-lessons-batching.md#本轮三平台六项打包处置)。
-
-## 完整checkpoint与恢复的成本
-
-[详细观察](performance-lessons-state-devices.md#完整checkpoint与恢复的成本)。
-
-## 八卡终态补充
-
-[详细观察](performance-lessons-state-devices.md#八卡终态补充)。
-
-## 终态产物与源码保全
-
-[详细观察](performance-lessons-evidence.md#终态产物与源码保全)。
-
-## 外部语言模型吞吐的可比性
-
-[详细观察](performance-lessons-evidence.md#外部语言模型吞吐的可比性)。
-
-## 外部Dense/MoE入口的初始实测经验（2026-11-02）
-
-[详细观察](performance-lessons-external-models.md#外部densemoe入口的初始实测经验2026-11-02)。
-
-## Dense/MoE后继的有限诊断（2026-11-03）
-
-[详细观察](performance-lessons-external-models.md#densemoe后继的有限诊断2026-11-03)。
-
-## Dense/MoE后继终态的正负经验（2026-11-04）
-
-[详细观察](performance-lessons-external-models.md#densemoe后继终态的正负经验2026-11-04)。
-
-## 正支持数值模式与有限域
-
-[详细观察](performance-lessons-numerics.md#正支持数值模式与有限域)。
-
-## 公共基线迁移与资格边界
-
-[详细观察](performance-lessons-state-devices.md#公共基线迁移与资格边界)。
-
-## TL-REQ-004密集查询与异形记忆分离
-
-[详细观察](performance-lessons-batching.md#tl-req-004密集查询与异形记忆分离)。
-
-## 联合KV准备的实际收益与剩余边界
-
-[详细观察](performance-lessons-batching.md#联合kv准备的实际收益与剩余边界)。
-
-## 张量窗口跨owner的语义边界
-
-[详细观察](performance-lessons-state-devices.md#张量窗口跨owner的语义边界)。
-
-## 相容数值块与设备控制图的两个尺度
-
-[6011d599固定证据](evidence/tensor-kernels-20261112.md)把KV Read/Describe/Full从逐节点小算术
-改为G×B×Q/K算术，共享真实矩阵、QK并保留独立伴随。FC16 NPU训练到0.3636秒，
-但LH仍有逐接收节点装配和模块边界往返；局部成功不能覆盖这些另一层级的成本。
-另一负例：resident分组GEMM独立组件通过，bank×logR备选体组合后在录入阶段触发
-EE1019。数值workspace减少不等于控制任务数减少；静态图的循环体复用与数据分组同样需要
-小型真实组合验证。后继设备循环及optimizer计费源码未由该报告认证。
+# Applicable performance experience
+
+Use these mechanisms where their preconditions hold. They apply to scheduling,
+local math, state, autograd, checks and publication. They are tools for choosing work,
+not a required sequence or a permanent obligation to reproduce old implementations.
+The current [instance observations](performance-lessons-instances.md) and their
+[fixed report](evidence/instances-fp32-20261118.md) supply current numbers.
+
+## Tensor granularity and ownership
+
+- Preserve B/L and compatible-node batches across producer/consumer boundaries.
+  A contiguous buffer alone does not create a GEMM batch. Inspect loops, gathers,
+  copies, actual matrix shapes and selected-versus-padded work.
+- Shared bases can use flattened GEMM; independent/private adapters may use BMM.
+  Share computation only for the same parameters and inputs. Sum every use's
+  gradient while keeping node state private; a shared weight reduces capacity,
+  not necessarily per-token arithmetic.
+- Pack selected queries once, borrow a uniquely owned KV bank, and avoid copying
+  whole history per query. Only pad the operation requiring rectangular shape.
+  A direct baseline itself may still contain B/L loops and repeated history work.
+- Indexing/sparse operators and custom Autograd can reduce graph construction.
+  Count real computation and inner graphs as well as the visible autograd graph;
+  fewer outer nodes or submissions do not alone imply faster training.
+- Borrowed/cache storage needs clear ownership, version and lifetime. Do not
+  mutate tensors required by backward. Check repeated owners, empty rows, ragged
+  lengths, final state and actual restored updates.
+
+## Mathematics, precision and hardware
+
+Treat KV, reception and regional Attention separately. Native fusion, ordinary
+batched operations and tiled/recomputed backward compete by shape, device, dtype
+and weighted-prior derivatives; a fast API name does not prove a fused kernel.
+
+Near-null gradients can amplify in AdamW. Check updates and optimizer state as well
+as local gradient error. Stable algebra/reduction order can help without changing
+epsilon; promoting only the final reduction cannot recover prior rounded inputs.
+An FP64/summed independent witness may show the low-precision reference is itself
+inaccurate. Preserve original deviations and the scope of any explanation.
+
+Logical support is separate from floating underflow. Positive-weight normalization,
+attention and allocation derivatives must be considered together. A small local
+stabilization does not establish stability of all compositions or scales.
+
+CPU threads, acceleration and shared memory have shape-dependent costs. Count
+synchronization, host/device movement, padding, forward/backward, optimizer and
+allocator peaks. Workspace size and captured device-control task counts are
+separate resource limits. Communication/weight sharing does not by itself fix
+asynchronous event ownership or deterministic gradient accumulation.
+
+## Additive and subtractive investigation
+
+A compact same-function computation estimates an attainable point; it is not proof
+of optimality. Add needed state, sharing and interface responsibilities deliberately,
+and measure meaningful increments. Combine this with static code inspection and
+stage/operator diagnostics. Distinguish changed mathematics from extra work for
+the same function. Transformer/SSD provide different-function compute references.
+
+Use local evidence to adopt a well-scoped optimization, then representative complete
+calls to assess integration. Stop a finite investigation with an adopted change,
+a rejected candidate or a concrete remaining opportunity. Avoid both compulsory
+second implementations and indefinite local improvement without a useful conclusion.
+
+## Historical observations retained as summaries
+
+The following source identifiers are provenance, not prompts to retrieve retired code.
+Original pages remain in the pre-governance commit `728d19a470d16d392d5dd6a2452161d1a3e9959e`.
+
+| Observation | Scope and lesson | Original report path |
+|---|---|---|
+| Core-3 batched Full VJP reduced grad-forward 110.439→10.499 ms/sample-token | 9.468B Add, CPU56; grad-forward is not full training | docs/evidence/full-batched-autograd.md |
+| Aggregate batching improved small complete Add 1.442→1.048 s and Attention 5.477→4.985 s | Local batching can help training, but the different large-mode results cannot be combined | docs/evidence/aggregate-batched-autograd.md |
+| Direct FC removed its B loop: CPU training 1.365→1.044 s, NPU .674→.291 s | Old FC16 B8/L128; inspect the baseline's own granularity. SDPA alone added no gain | docs/evidence/fc-batch-full-20261112.md |
+| LH custom batching/indexing used packed history and grouped backward | Its activation clock/selector differ from current Tide; transfer the storage/graph lesson, not its semantics | docs/performance-lessons-batching.md, fixed LH a10fdb1883fccd63ec21e36cc9cffa294c63c9e2 |
+| Widening only an outer reduction did not resolve the whole FP32 discrepancy | Follow the arithmetic chain; higher precision is a diagnostic, not a universal fix | docs/evidence/core5-nongpu-boundaries-20261029.md |
+| Shared-use gradient arrival order affected repeated updates | Explicitly aggregating known users stabilized that witness, not every asynchronous backend | docs/evidence/column-placement-20261111.md |
+
+Record new experience with observation, mechanism, applicability, positive/negative
+outcome and source. Measured gains certify only their configuration. Old gates, APIs,
+standalone/resident matrices and full-record duties do not accompany these lessons.

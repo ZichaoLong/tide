@@ -1,96 +1,44 @@
-# 历史产物与可重建边界
+# Project artifact lifecycle
 
-2026-10-12 用户确认：旧实验默认不必复核，保留必要记录即可。
-本规则替代过去“所有被报告引用的外部文件长期在线保留”的要求。
-不改变已经发生的通过、失败、取消、编译或设备验证结论。
+The current worktree contains active source, fixed mathematics, useful contracts,
+small reviewed evidence and curated lessons. Retired implementation cycles and
+necessary unique historical source are preserved in Git, not in standing duplicate
+checkouts. See [project scope](project-scope.md) and [history](history.md).
 
-## 必要记录
+## Before retirement
 
-Git 保留源码、测试、构建/验证/测量入口、固定教材快照，以及已审阅的报告。
-退役记录另外保存旧运行的配置/结果、源码身份、共享资源观察、任务终态和
-可用的失败诊断。历史绝对路径作为来源标签保留，不是新线程的依赖路径。
-必要记录应可由仓库取得；大型原始 trace、缓存、二进制和重复源码副本无需常驻。
+Inventory actual project-owned paths, allocated disk/tmpfs bytes, Git worktrees,
+user modifications, running services/processes and downstream installation paths.
+Check quota/grace/hard limits as well as filesystem free space. Follow symlinks only
+to identify dependencies; do not delete external targets by following a link.
 
-2026-10-12的退役归档约38.5MiB，2026-10-30起仅在冻结的`graph-execution-foundation-old`保存，
-不再随新基座检出；[迁移规则](history-migration.md)给出固定取回地址和旧→新提交映射。
-索引、SHA256与数量见[退役凭据](evidence/artifact-retirement-20261012.json)。635个旧工作副本的基线
-代码仍由映射定位，431份相对HEAD的补丁和5,049个未跟踪源码文件在旧分支归档中
-按原字节保留（包括构建模板），不必保留重复 checkout。
-配置/结果小记录保留原文，大结果保存明确标记的摘要及原文件哈希，日志只保留尾部。
-原始张量、完整 profiler 时间线和构建二进制不在归档保证范围；旧报告中的
-逐项观察量不一定可从摘要展开，需要时应重新生成并验证。
+Retain source/dirty patches and unique untracked source, configuration, source/input
+identities, small results, terminal job facts, and minimal unresolved reproducers.
+Raw tensors, repetitive frozen sources, large profiler timelines, binaries and
+rebuildable environments do not need permanent online storage. A former absolute
+path or content hash is an identity, not an availability promise.
 
-旧 CPU/NPU 性能只是当时源码与环境下的观测。共享资源争用不可原样重放；
-即使同源码重新编译，也不保证二进制哈希、内存峰值或浮点轨迹逐位相同。
-新结果使用新配置/环境/源码身份，不改写旧通过数或严格失败。
+Use an explicit dry-run inventory with preservation and ownership decisions. Remove
+registered experimental worktrees through Git after unique source is preserved and
+HEAD reachability is checked. Protect the main/downstream worktrees and dependencies,
+public software, reference repositories, unrelated caches and all user changes.
+Unclear ownership or a live dependency is a per-path exception, not permission to
+remove it or a reason to stop independent cleanup.
 
-## 按需读取旧记录
+## Records and rebuilding
 
-正常接续无需读取归档。按[迁移规则](history-migration.md)另存原归档到仓库外后，在仓库根目录执行：
+Preserve historical failures as failures; a stale running record is not converted
+into a successful job because no process remains. Save actual terminal properties
+before releasing retired project-only service records. Never stop another project.
+Do not import old queues or replay old experiments merely to reconstruct context.
 
-```sh
-python scripts/read_retired_record.py --archive /path/to/retired-records-20261012.jsonl.gz \
-  --list-prefix /mi/data2T/zlong/tide-accelerator/sources/native-dev01
-python scripts/read_retired_record.py --archive /path/to/retired-records-20261012.jsonl.gz \
-  --path /mi/data2T/zlong/tide-accelerator/sources/native-dev01:git-diff-HEAD \
-  --output /tmp/gef-retired-native-dev01.patch
-```
+Small preservation bundles may be committed in a temporary historical commit and
+removed from the final tree in the next commit. Report what bytes were retained,
+what can be regenerated and what was deliberately retired. Do not move hundreds of
+GiB elsewhere and count that as released storage, or place raw model data in Git.
 
-工具先校验整个归档；`--path` 单独使用只显示元数据，`--output` 校验并提取
-一个记录，拒绝覆盖已有文件。不执行旧脚本，也不向归档中的绝对路径写回。
-源码复现需要相应 Git 基线、补丁、未跟踪文件和匹配依赖；先审阅并在新目录组装。
-历史绝对路径是查询标签，不能直接当作本机现在存在的输入。
-
-## 重建
-
-- 普通开发从 [development](development.md) 和固定 Git 提交开始，重建本机库。
-- 构建 manifest 由新构建生成；删除旧库后，loader 应拒绝缺失或不匹配的显式路径。
-- CPU/NPU/GPU 的工具链、驱动和 environment modules 是外部软件依赖，未纳入产物清理。
-- 工作负载由 `prepare_execution_flow.py` 等仓库入口及声明的配置生成；
-  新实验使用新目录和有限预算，不依赖旧 launcher 的绝对路径。
-- 原始 LH 对照是额外门禁，需按 [LH selector](lh-selector.md) 从原仓库建立固定快照；
-  普通 Tide 开发不需要原始 LH。只读参考仓库不在本次清理范围。
-
-## 当前保留原则
-
-2026-10-31用户再次授权彻底收束到`.git`和Git跟踪内容；[本次记录](evidence/artifact-cleanup-tracked-only-20261031.md)
-保留三平台小型证据、41份任务终态及未提交源码保全身份，退役新一轮环境/构建/原始checkpoint/项目tmpfs。
-远端dirty-dev与两份早期patch移到仓库外受保护目录待分析，不随原始运行删除；旧报告的保留路径不再是在线承诺。
-
-2026-10-30用户授权将本仓库收束为`.git`与Git跟踪文件；环境、构建、原始运行材料均按需重建。
-本轮实际删除22.379GiB及新CPU开发链见[清理凭据](evidence/artifact-cleanup-tracked-only-20261030.md)；当前接续见[STATUS](STATUS.md)。
-此前两轮保留的构建、28份未采用差异的本地归档、任务源码快照和原始见证均已在本轮退役。
-28份差异不宣称均已合并；其路径/基线/hash仍见[第二轮凭据](evidence/artifact-cleanup-round2-20261030.json)，
-归档字节不再保证可恢复。不另存一份22GiB副本到其他目录。
-
-主要失败结论与重启条件已在Git中；本轮以[复现导航](reproduction.md)连接正式脚本、输入生成器和证据，
-两份实际分配失败行作为小型测试输入保留，未解决问题的原严格断言保持。
-[旧任务摘要](evidence/retired-jobs-20261030.json)保留520份终态和身份；原始日志、完整profile和精确checkpoint不永久在线。
-必要的复现入口与输入应能从Git取得或按声明生成；大型才出现的问题可保留有预算的生成方案，不承诺低成本重演。
-
-先检查任务状态、实际目录、用户修改、输入依赖和dry run，再删除明确的项目产物。
-保留活动任务输入；正在调查的新问题先保存必要记录，终态后按授权退役。
-不能用外层passed推断所有内部case通过，也不能把删除原始材料称为修复失败。
-`scripts/clean_artifacts.py`仅覆盖旧平铺作业布局，不作为当前整仓清理入口。
-
-工作树干净不证明忽略目录没有有价值数据。另核对提交归属、未提交实验改动及使用中的文件/进程。
-工作树用Git管理登记；历史引用是来源标签，不是永久在线依赖。清理不得跟随符号链接删除公共工具链或参考仓库。
-`.git`、跟踪文件和下游自己的安装物不属于原始实验产物。
-
-<a id="本机保留构建"></a>
-
-## 从源码恢复开发链
-
-旧“本机保留构建”链接指向本节；此前保留的本机库已在本轮退役。
-
-新clone或清理后的目录没有`.local/venv-core5`、预编译库和旧jobs是正常状态。
-按[development](development.md)重建所需环境/库，按[verification](verification.md)执行必要检查；
-使用新构建manifest及二进制身份，不冒用退役构建的资格。不同Torch/CANN/架构分别构建。
-CPU从干净源码通过不能认证NPU/GPU，硬件和数值边界仍由ROADMAP管理。
-
-[第一轮](evidence/artifact-cleanup-20261030.md)和[第二轮](evidence/artifact-cleanup-round2-20261030.md)
-记载的是当时完成与当时保留，不代表今天原始路径仍存在。
-2026-10-12的[历史记录归档](evidence/artifact-retirement-20261012.md)在冻结旧分支保留；
-新分支不含该大文件及其历史对象，不把新的完整运行归档追加进去。
-同日后续[历史发布/新检出/最终清理](evidence/history-publication-20261030.md)将日常检出降至约39MiB；
-旧本地检出与本轮临时环境/构建/日志已退役。旧分支保留在远端，普通全分支clone仍会下载旧归档。
+After cleanup, [development](development.md) rebuilds a private environment from the
+published stack. Verify a clean installed smoke without retired absolute paths.
+Record project allocated bytes and actual exceptions; filesystem free-space changes
+may also reflect other users. Temporary validation output is retired after the
+reviewed result is committed. Git history and user-owned files remain intact.

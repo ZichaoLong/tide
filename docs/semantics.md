@@ -14,8 +14,9 @@ Correctness tests target actual values, support, parameter gradients and statefu
 continuation. Full action journals and generic intermediate decoding are omitted.
 The rewrite intentionally has a new public API and state representation.
 
-Execution and performance use FP32. FP64 is available for CPU accuracy checks;
-FP16/BF16 are outside the requested implementation and validation scope.
+Current measured execution is FP32. BF16 is an agreed next delivery target;
+CPU FP64 supports accuracy checks. See [precision](precision.md) for the requested
+policy and [STATUS](STATUS.md) for actual qualification. FP16 is outside this cycle.
 
 Zero reception performs no KV/SSD write, including its first-order boundary:
 an absent padded write has zero derivative. This is separate from the reusable

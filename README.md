@@ -1,22 +1,21 @@
 # Tide instances
 
-This branch implements the current instances from the fixed Tide mathematics at
-`4f5b9f20a4030d68ee66ae2d26e34659a5e37234`.
+Efficient, trainable implementations of selected Tide FC/HB bindings. The active
+mathematical revision is `4f5b9f20a4030d68ee66ae2d26e34659a5e37234` in `math/`.
+Semantic correctness comes first, performance second.
 
-The immediate product is efficient, trainable FC and HB instance implementations.
-Semantic correctness comes first, performance second. General graph execution,
-legacy APIs, old teaching bindings and LH-DAG/PDG are outside this delivery.
-No retired model implementation or test is reused.
+The instance product is a continuing route; the general graph foundation is a
+separate future direction. [Project scope](docs/project-scope.md) records that
+agreement and how semantic cycles change.
 
-- [Current work](docs/STATUS.md) / [remaining work](docs/ROADMAP.md)
-- [Use/configure/train/continue](docs/instances.md) / [current navigation](docs/README.md)
-- [Scope and mathematical choices](docs/semantics.md)
-- [Development](docs/development.md) / [execution](docs/execution-flows.md)
-- [CPU/NPU FP32 results and limits](docs/evidence/instances-fp32-20261118.md)
-- [Current performance lessons](docs/performance-lessons-instances.md)
-- [Performance experience](docs/performance-lessons.md): historical observations,
-  not compatibility requirements or qualifications of the new models.
-- [Fixed mathematical source](math/instances/backbone-comparison.md)
+- [Current status](docs/STATUS.md) / [next work programme](docs/ROADMAP.md)
+- [Use, train and continue](docs/instances.md) / [clean development](docs/development.md)
+- [Documentation map](docs/README.md) / [architecture](docs/architecture.md)
+- [Adopted semantics](docs/semantics.md) / [precision](docs/precision.md)
+- [Four joint Transformer comparisons](docs/benchmark-contract.md)
+- [Measured FP32 results](docs/evidence/instances-fp32-20261118.md)
+- [Applicable performance experience](docs/performance-lessons.md)
 
-The former implementation is retained in Git at `9afe84773afb72214e80b615cc704667945f0ccb`.
-The new package is `tide-instances`, imported as `tide`; old consumers must migrate.
+The package is `tide-instances`, imported as `tide`. FP32 CPU/single-NPU evidence
+exists; BF16 is an agreed next delivery target, not yet a qualification claim.
+Retired implementation cycles are available only through explicit [historical lookup](docs/history.md).

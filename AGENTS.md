@@ -1,54 +1,62 @@
 # Working on Tide instances
 
 ## Re-entry
+
 1. Run `git status --short --branch` and `python scripts/status.py`.
-2. Read docs/STATUS.md and docs/ROADMAP.md. Do not resume retired P1–P6 plans.
-3. Mathematics is the immutable snapshot in math/; identity is docs/upstream.json.
-   Run `python scripts/check_upstream.py`. Do not follow mutable upstream HEAD.
+2. Read [STATUS](docs/STATUS.md), [project scope](docs/project-scope.md), and
+   [ROADMAP](docs/ROADMAP.md). Scope is the enduring agreement; status is fact;
+   roadmap is this cycle's plan, not a declaration of implemented capability.
+3. Use [architecture](docs/architecture.md) and [semantic map](docs/semantic-map.md)
+   to locate current code and math. Run `python scripts/check_upstream.py`.
+   `docs/upstream.json` pins `math/`; adopt a new revision only for a user task.
 
-## Current purpose and priorities
-Semantic correctness first, performance second. Deliver the current FC and HB
-main bindings. General graph foundations are a long-term possibility, not a
-short-term requirement. Old teaching bindings and LH-DAG/PDG are excluded.
-Execution and performance use FP32. FP64 may be used for accuracy verification;
-FP16/BF16 implementation and validation are not part of this task.
-The user authorized a complete rewrite without consulting or reusing the retired
-implementation/tests. Git preserves that history. Preserve user untracked files.
+## Product and implementation
 
-Production code need not expose mathematical action records, dependency traces,
-independent internal gradient roots or universal state decoding. Check model
-values, selection, parameter gradients and necessary continuation directly.
-Do not build generic frameworks or compatibility wrappers before useful models.
+The instance product route can continue indefinitely. The general graph foundation
+is a separate future route, activated explicitly; it adds no current API, graph or
+backend obligations. The active FC/HB source is `src/tide`. The next cycle work
+includes FP32/BF16; actual precision qualification is in STATUS and evidence.
 
-## Work
-Use the relevant repository skill for development, optimization or maintenance.
-User instructions override historical skill/doc requirements. Share code where
-useful; separate instance/backend implementations are allowed. Tensor batches
-should cross computation boundaries without per-event tensor reconstruction.
-Three Attention families need separate shape/device/performance decisions.
-Choose serial tools, concurrent calls or agents by expected benefit; coordinate
-edits/resources, review and integrate one coherent result.
+Semantic correctness comes first, performance second. Interfaces serve tensor flow,
+clear ownership and replaceable implementations; instance/backend specialization
+and API redesign are allowed. Task heads, data, losses and training recipes belong
+to downstream experiments. See [semantics](docs/semantics.md) before changing behavior.
 
-Only edit the authorized branch. Reference repositories and public software are
-read-only. Do not send downstream messages without authorization. Keep data,
-task heads, losses and model-quality research in downstream experiments.
+Retired cycles live in Git. Look up their implementation/history only when the user
+explicitly requests historical investigation, using [history](docs/history.md).
+Curated [performance lessons](docs/performance-lessons.md) are available directly;
+they are observations with applicability, not inherited task requirements.
 
-## Verification and execution
-Write new small formula tests from the fixed mathematics. Test all candidates
-and useful combinations, not their Cartesian product. Keep meaningful gradient,
-multiple-update and continuation checks. Finite rounding discrepancies get
-bounded diagnosis; do not disguise support, causal or state errors as rounding.
-Record actual dtype/operator/device, elapsed time, throughput denominator and
-peak memory. Grad-enabled forward is not training. Count real candidates/Fulls
-when explaining sparse performance. Use optimized external comparisons.
+## Work and maintenance
 
-Long builds/tests/benchmarks use frozen source in detached background.slice
-user services, bounded memory/time and durable logs. Available CPUs/memory and
-idle NPUs may all be used; coordinate jobs instead of imposing a thread cap.
-Shared NPU use follows current conversation authorization, never a new-session
-default. Never stop other projects' jobs. Public toolchains remain unchanged.
+Use the relevant repository skill: develop-tide-foundation, optimize-tide-execution,
+or maintain-tide-foundation. Their names are discovery identifiers, not a mandate to
+build the long-term foundation. User instructions override repository guidance.
+Choose serial tools, parallel calls or sub-agents by benefit; separate edits/job
+inputs, coordinate resources, review results and integrate one coherent change.
 
-STATUS is the current handoff and ROADMAP is the backlog. Keep brief configuration,
-run/result and useful performance notes; no exhaustive traceability ledger.
-Update handoffs atomically, commit tested increments, and keep implementation and
-measured claims distinct. Push only under task authorization (granted here).
+Work on the authorized branch and preserve user changes/untracked files. Reference
+repositories and public toolchains remain read-only unless explicitly included in
+the task. Downstream delivery and downstream acceptance are separate facts; follow
+[the current collaboration contract](docs/downstream-contract.md).
+
+## Checks, execution and records
+
+Use independent small formulas, meaningful gradient/update/continuation checks and
+useful candidate combinations. [Verification](docs/verification.md) defines scope;
+[precision](docs/precision.md) separates numerical policy from qualification.
+Four jointly matched Transformer comparisons follow [benchmark contract](docs/benchmark-contract.md).
+Record actual dtype, operator/device, timing boundary, workload and memory.
+
+Long work uses frozen inputs, detached `background.slice` services, finite resource
+and time bounds, and durable logs per [execution](docs/execution-flows.md).
+Available CPUs/memory/idle NPUs may be used fully with coordination. Shared NPU use
+requires current-conversation authorization, not a repository default.
+
+Keep STATUS as the current handoff and ROADMAP as the backlog. Update handoffs via
+fsynced staging and atomic replacement (the current `scripts/job.py:atomic` helper
+handles JSON records; use the same staged protocol for text).
+Commit coherent checked changes; fix implementation identity before qualification
+and record evidence separately. Push when the user task authorizes it.
+Retire project-only artifacts after dependency/dirty-state review according to
+[artifact retention](docs/artifact-retention.md); protect downstream installations.

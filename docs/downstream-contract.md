@@ -1,171 +1,39 @@
-# 实验仓库与基座的协作规范
+# Downstream collaboration for Tide instances
 
-协议 `tide-downstream-contract-v1`。适用于以本仓库为依赖的多个实验仓库；每个实验固定采用的协议提交。
-目标是让使用终端的研究者、另一位开发者或无会话历史的AI，只读仓库便能找到安装、依赖、配置、运行、需求与验收。
-本规范不授予跨仓库修改/推送权限；按用户已有授权与目标仓库规则行动，已授权的常规工作无需反复确认。
+Current protocol: `tide-instances-collaboration-v2`. This replaces the old foundation
+CLI/plugin protocol for new instance consumers. Existing requests and dependency
+locks retain their original adopted revision; rewriting this page does not migrate
+or accept any downstream installation.
 
-## 先接入，再反馈
+Install a fixed `tide-instances` source/wheel in the consumer's private environment.
+Start from [instances](instances.md), [development](development.md), and the installed
+`examples/train.py` mechanism example. The public entry is `tide`, not a benchmark
+script. Keep the source commit, package/wheel identity, math revision, complete model
+configuration, actual device/dtype and environment with the experiment dependency lock.
 
-1. 在私有环境安装固定源码构建的包/库，保存来源记录及实际安装锁；执行环境探测。
-2. 用小型配置运行独立基座检查，再运行下游自己的数据/head/loss接入检查。
-3. 保存配置与预算，启动推理/训练；用公共命令查看日志、停止、恢复及比较结果。
-4. 遇到问题时提出唯一编号的需求，附现象/目的、版本/配置、可获得的证据与验收条件。
-5. 基座确认范围，将接受的工作链接到唯一待办[ROADMAP](ROADMAP.md)，给出实现、验证和交付回复。
-6. 实验在独立候选安装中复验，记录接受或仍有问题；通过后显式更新依赖锁，保留旧运行身份。
+| Responsibility | Owner |
+|---|---|
+| Input data, task head/loss, recipe, model quality | Experiment repository |
+| Selected model semantics, modules, gradients and state mechanisms | This repository |
+| Full application checkpoint (data/RNG/scheduler as needed) | Consumer, composing the model checkpoint API |
+| Mathematical changes | Explicit upstream proposal and a newly adopted fixed version |
+| General performance experience | Curated here, with applicable scope and measured evidence |
 
-“上游已交付”与“下游已验收”是两个事实。上游相关检查通过不证明真实实验已通过，模型效果改善也不代替数学正确性。
-一个需求可以关联多个实验仓库；复用同一根因修复与回归，分别记录各消费者的验收。
-数值策略升级（例如 [TL-REQ-003正支持模式](positive-support-policy.md)）也须明确新运行/图身份；
-默认严格失败与跨模式转换不冒称精确恢复，先在新私有安装接入，再决定更新实验依赖锁。
-暂缓项保留原因、现有替代方案（若有）及具体重启条件；不阻塞其他独立任务，也不自动恢复旧实验队列。
+A request stays in its originating repository with a stable ID, fixed dependency,
+actual configuration, observed problem, available evidence/reproducer, and acceptance
+conditions. Unknowns can be stated; a full performance matrix is not required to ask.
+Accepted foundation work enters ROADMAP and current activity STATUS. Delivery gives
+implementation/evidence commits, API/state changes, exact verified scope and a
+consumer reproduction command. Each consumer records its own acceptance before
+changing its lock. Upstream delivery never implies downstream acceptance.
 
-## 所有权与扩展
+Freeze installations used by active experiments. Upgrade in a separate installation,
+check affected inference/gradients/updates/state and then adopt explicitly. Source
+identity, exact checkpoint data, tolerant numeric replay and bitwise optimizer replay
+are separate claims. Public API redesign is allowed; expensive compatibility is
+replaced by a documented migration when appropriate.
 
-| 内容 | 维护方与要求 |
-| --- | --- |
-| 数据、任务头、loss、训练配方、搜索/效果 | 实验仓库；下游的任务验收由下游定义 |
-| 图/局部模块、公共配置、执行、梯度/优化器机制、图续接 | 基座；独立数学证据和按后端划分的实现资格 |
-| 应用checkpoint | 实验定义完整状态；公共任务运行器可统一保存已注册的图、任务module、optimizer与task state。数据进度/RNG/scheduler等须由任务显式提供；基座不会推断遗漏的应用状态 |
-| 新模块原型/局部优化 | 可先在实验侧通过明确扩展点实现；单列名称、语义/参数/状态/VJP、适用域和源码，成熟后贡献通用实现 |
-| 数学含义变更 | 提交独立语义提案，链接固定教材条目与反例；不借同名配置静默更换函数或改上游可变HEAD |
-| 通用性能经验 | 基座[performance-lessons](performance-lessons.md)；记录正负结果与适用条件，任务数据/训练配方经验留实验侧 |
-
-公共接入从[weighted绑定](weighted-message.md)、[planning与配置](core5-study.md)、[库契约](library.md)进入。
-Python/native/standalone LibTorch的构建与证据分别记录；CPU、mixed、resident及dtype均显式选择。
-本规范不要求每个实验实现全部后端。实验指定的组合必须真实验证或明确记录待验/失败，不静默替换执行方式。
-benchmark脚本及内部调度实现不是下游训练接口；需要新增可复用入口时提交接口需求。
-
-已安装的人类入口是`tidegraph`，完整命令见[操作手册](human-workflow.md)。
-下游用`task.plugin={module,factory,options}`声明自己的已安装Python任务包；候选与独立参考有不同任务实例，
-输入方法接收原始输入结构和窗口编号，不接收参考动作轨迹。可学习head通过显式`module`登记，
-统一optimizer必须覆盖且仅覆盖声明的唯一参数；数据/RNG/进度由`state_dict/load_state_dict`提供。
-接口与可复制示例见[配置驱动消费者](../examples/consumer_core5/configured/README.md)。
-Python任务插件不在standalone C++进程中执行；C++任务应使用公共库接口并单列任务实现及交付身份。
-resident任务VJP和普通eager autograd是不同接入边界，不能把一个Python head配置当成所有客户端的实现。
-
-插件默认保留完整中间记录。仅使用输出的任务可显式声明
-`task.plugin.observations="outputs"`，配合`execution.return_mode="outputs"`或`"metrics"`
-让host eager省去trace/messages并使用可用的整序列VJP；原始continuation仍完整。
-`observations="complete"`或省略字段保持完整观察；独立参考和显式complete诊断也保留完整根。
-声明属于任务身份，改变声明不能直接精确续接旧任务。容量估计与执行使用同一观察契约，
-manifest报告实际内部记录；旧冻结selected-boundary-v1执行不会自动采用新插件声明。
-
-## 依赖锁与每次运行
-
-采用[依赖锁模板](../templates/downstream/foundation.lock.example.json)。示例中的null是待填字段，不能作为运行锁。
-锁连接以下身份，运行记录引用锁的SHA256，不复制一套互相竞争的默认配置：
-
-- 基座仓库和完整Git提交、是否开发脏源、包版本、wheel hash和实际安装内容hash。
-- 固定数学提交、协议版本/提交；native或resident使用时补对应构建源码、manifest与binary hash。
-- 实际Python/Torch/ABI/架构及适用的厂商栈环境；环境变更要重新验证，不能只更换路径。
-
-包版本如`0.2.0`不足以定位实现。复用较早native二进制必须证明C++源hash与依赖实现匹配；不能仅按提交日期推断。
-开发补丁须保留可复现内容（补丁/源归档及hash），并标记dirty；正式交付先固定实现提交，再独立提交证据。
-wheel/source对应关系由构建记录证明。安装内容与wheel字节一致只证明材料相符，不证明Git来源、数学正确性或设备资格。
-同一版本不同目标的锁可分别存放；运行记录必须明确选择哪份。运行期间冻结安装物/checkout，升级采用新环境或独立目录。
-
-新CLI的`tidegraph lock create/verify`生成、检查`tide-experiment-lock-v1`：实际已安装包、选择的
-native/resident/standalone构建及环境身份。它不猜测Git来源，也不是上述`tide-foundation-lock-v1`的同名替代。
-下游保留来源/数学/协议记录，并通过可选`installation_lock`字段引用CLI安装锁的schema、路径提示与SHA256；
-旧锁不增加必填字段。对应构建记录证明来源关系，`lock verify`证明当前材料仍相符，两者各自保留。
-插件包、数据和下游代码也须固定：保留任务wheel/源码完整hash及下游提交，不能仅凭工厂单文件hash认证多文件包。
-更换任务源码、loss、数据或配方会改变实际任务，必须另存配置/身份，即使模型及基座未变。
-
-2026-10-30历史清理后，新接入只克隆`graph-execution-foundation`，见[迁移与提交号映射](history-migration.md)。
-既有锁、运行和checkpoint中的旧源码身份保持；映射用于查代码，不能改写成“已在新提交复验”。
-升级明确保存新锁与新安装/构建身份，并由实验侧验收；不要将旧历史合并回新基座。
-
-实验每次运行还记录自己的源码（含实际修改）、任务配置、输入/数据版本、基座model_id、实际工作负载身份、
-execution_id及请求/生效配置。已有planning身份可复用；改变数据/头/loss后的实验不能冒用基座benchmark的workload_id。
-外部路径只是可迁移的位置提示；证据带来源提交及内容hash。大数据/日志留产物存储，小配置与复现代码进Git。
-
-## 人类操作顺序
-
-从[配置驱动示例](../examples/consumer_core5/configured/README.md)复制任务包、模型与目标平台配置，
-按[操作手册](human-workflow.md)安装并填写`site.json`中的本地构建路径。以下目录必须是新目录：
-
-```sh
-tidegraph lock verify installation.lock.json --site site.json
-tidegraph plan run.json --site site.json --format json --output resolved.json
-tidegraph check base-check.json --site site.json --scope related --output-dir checks/base-new
-tidegraph check run.json --site site.json --scope related --output-dir checks/task-new
-tidegraph run run.json --site site.json --output-dir runs/first
-tidegraph run run.json --site site.json --resume runs/first/checkpoints --output-dir runs/resumed
-tidegraph results runs --format html --output results.html
-```
-
-`base-check.json`采用不带插件的小模型，检查基础机制；`run.json`用实际任务插件的小型配置，
-检查任务head/输入根/共享梯度/optimizer及续接。后者仍不代替真实数据质量、任务效果或大规模资格。
-smoke/related/full各自覆盖结果中列出的有限范围，不是全平台认证。先验小型检查不要求正式训练每一步再跑CPU参考。
-长任务用`job start/status/logs/stop/resume`，站点选择systemd或容器执行机制；停止须有终态和无存活后代记录。
-用户无需导入内部benchmark，也无需由AI解释任务状态。
-
-返回契约分为完整诊断`complete`和实际实验`outputs/metrics`。完整记录独立验收、完整checkpoint解码仍保留；
-按需返回的成本不能与旧完整返回混算加速比。结果分别保存执行、数值、离散语义、checkpoint/精确续接与计时口径。
-`validation=none`是未检查；`explore`只显式接纳有限数值超差，原严格失败保留，不能吞掉非有限、非法配置、求解器或通信错误。
-路由/工作量不同须单列，不能称为严格等价加速。未运行的模板、成功构建或外层矩阵结束都不构成目标设备通过。
-
-## 提交需求
-
-使用[请求模板](../templates/downstream/request.md)，编号为稳定项目标识加本地编号，如`experiment-a/REQ-001`。
-请求原文由提出方维护，引用其仓库、固定提交和相对路径；后续补充使用同一编号并更新版本引用。
-初次反馈不要求已找到根因/算法，也不要求为了填表先跑完整矩阵；明确未知项即可。
-
-| 类型 | 最低有效材料 | 可执行的验收例 |
-| --- | --- | --- |
-| 错误/数值/恢复 | 失败现象、预期依据、配置/输入及可用日志；尽可能缩小复现 | 原反例通过完整状态/梯度/恢复检查，原严格断言保留 |
-| 能力/新模块 | 希望的调用、输入输出/参数/状态和适用环境；现有能力为何不足 | 新公共入口能运行给定配置，并有定义对应和相关测试 |
-| 性能/容量 | 实际工作负载、完整计时范围/资源/工作量，已有profile或已知缺项 | 同材料完整正确性通过后，有限测量回答明确选型问题 |
-| API/工具/文档 | 当前步骤、困难和希望的用户流程 | 仓库外安装消费者能按文档完成流程，拒绝及身份可追溯 |
-
-大型才出现的问题可以提交有时限/内存预算的原复现、最近正常边界及已完成的缩小尝试，不要求先缩成小模型。
-性能需求先指出实验收益与测到的成本，不预设必须融合/专用核或必须超过CPU。
-近似算法、放宽容差、改变loss/输入、改变dtype分别作为新配置；不能把新配置通过称为原失败修复。
-
-## 交付、验收与唯一状态
-
-基座接受后，ROADMAP仅记录本仓库工作及请求引用；当前活动任务仍只在STATUS。
-原始需求、基座交付、下游验收各有一个权威位置，通过同一编号互链，不复制第二套待办或逐日会话日志。
-若使用issue/PR平台，可作为同一条权威记录；本规范不自动授权向他人发消息或建立外部issue。
-
-基座用[交付模板](../templates/downstream/delivery.md)回复：接受/部分接受/暂缓/不采纳及理由，
-实现提交、API/配置/checkpoint变化、实际验证的客户端/设备/dtype、失败/待验、复验命令和证据。
-多个需求可引用一份交付，多个实验分别填写[验收模板](../templates/downstream/acceptance.md)。
-交付记录可留在对应证据报告/PR中；无测试或源码仅编译不能写成真实设备通过。
-
-实验验收先做受影响的小型接入检查，再做必要的真实规模/目标设备检查。训练任务检查完整返回、梯度、
-共享参数汇总、optimizer和应用恢复；仅有前向通过不足。独立参考、公式/根测试、实际训练和性能各说明自己的证明范围。
-API兼容、配置身份、图/checkpoint格式及同栈精确恢复分别判断。修改实现后不能默认旧checkpoint逐值续接；
-内置weighted批量张量的[只读发布迁移](tensor-publication.md)要求消费者原地修改前先clone；
-数学值和独立梯度根保持，不再以逐字段独立存储作为默认接口保证。
-迁移需要明确验证，无法精确恢复时可选择另声明的权重初始化/新运行，并保留旧依赖以复现旧运行。
-升级记录旧→新提交、采用的交付编号、实际检查结果，再原子更新锁。失败则保留原运行和原锁，标记本次未验收。
-
-## 人类与新线程从哪里进入
-
-实验AGENTS采用[接续片段](../templates/downstream/AGENTS.fragment.md)，指向依赖锁、所固定的协议文档、
-本仓库STATUS/ROADMAP、相关需求/交付/验收及实际运行身份；不要求阅读旧会话或寻找旧运行目录。
-基座AGENTS要求收到下游反馈时先核对请求版本与现有证据，在授权范围内处理。
-模板不创建真实需求或假通过记录。实验仓库尚未提供时只交付可复制材料，不修改其他仓库。
-
-首次接入可复制[配置驱动任务](../examples/consumer_core5/configured/README.md)，使用CPU/CUDA/NPU显式配置，
-按公共CLI完成推理、训练、恢复与查看结果；设备通过范围必须引用本次实际结果。
-[原core-5起步目录](../examples/consumer_core5/README.md)继续示范应用自行组合checkpoint的小型CPU PyTorch/native训练，
-其独立参考、原子应用checkpoint和新进程精确恢复不替代NPU/resident/standalone或实验真实规模资格。
-[固定源码资格](evidence/downstream-contract-20261030.md)列出8组实际安装配置及保留的workers2恢复失败，不能由示例默认配置外推全部执行设置。
-[验证契约](verification.md)说明长任务和固定源码资格；修改本规范同步模板/示例、相关检查和[导航](core5-study.md)。
-
-## 协议演进
-
-可选说明和新增模板可在v1内演进，采用方仍固定文档提交；必填字段或字段含义不兼容时增加协议/schema版本。
-本次人类流程、CLI安装锁引用及任务包记录是兼容扩展，协议仍为v1；公共实验配置、安装锁与任务state分别带自己的schema。
-升级不能改写历史请求/运行的采用版本。Git保存已替代文档，不积累多份改名旧规范；旧记录引用其固定提交。
-
-checkpoint成本观测与`resources.storage_medium`是dba2a5e起的兼容可选扩展，旧配置默认不变；
-`measurement.observation="checkpoint"`与tmpfs准入要求锁定含该能力的实际包内容，不能只看`0.3.0`版本号。
-模板采用者需要时同步更新依赖锁并单独复验；tmpfs完整文件与磁盘跨重启耐久是两个事实，见[人类手册](human-workflow.md)。
-
-36baeb7起的`measurement.checkpoint_interval`同样是兼容可选配置，默认1保持旧行为；
-显式N只改变已发布恢复边界，不改变训练/optimizer窗口，最终窗仍发布。standalone明确拒绝非1值。
-采用者在交付/验收模板的配置变化和恢复条件中记录N、丢失未发布窗口的取舍及实际安装锁；
-旧协议/锁schema仍为v1，不能由包版本号推断已具有这个选项，详见[人类手册](human-workflow.md)。
+Repository access or a request file does not grant cross-repository write/push or
+message-sending authority. Preserve downstream worktrees, installations and model
+paths during foundation cleanup. Old protocol details are retrievable from their
+adopted commits only when historical investigation is requested.

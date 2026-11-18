@@ -1,0 +1,13 @@
+{
+  "verified": {
+    "dirty_worktrees": 27,
+    "untracked_files": 145,
+    "bundle_bytes": 41954,
+    "summary_only": 1055,
+    "summary_duplicate": 192,
+    "bundle_duplicate": 34782,
+    "reachable_git_blob": 469345,
+    "symlink": 116
+  },
+  "credential_like_candidates": 0
+}
