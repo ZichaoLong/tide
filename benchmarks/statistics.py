@@ -37,7 +37,7 @@ class RuntimeAudit(TorchDispatchMode):
         result = func(*args, **(kwargs or {}))
         name = str(func)
         tensors = [x for x in tree_flatten(result)[0] if isinstance(x, torch.Tensor)]
-        if any(token in name for token in ("mm.", "bmm.", "addmm.", "attention", "convolution")):
+        if any(token in name for token in ("mm.", "bmm.", "addmm.", "matmul.", "linear.", "attention", "convolution")):
             inputs = [x for x in tree_flatten((args, kwargs))[0] if isinstance(x, torch.Tensor)]
             before = tuple(sorted({str(x.device)+":"+str(x.dtype) for x in inputs}))
             after = tuple(sorted({str(x.device)+":"+str(x.dtype) for x in tensors}))

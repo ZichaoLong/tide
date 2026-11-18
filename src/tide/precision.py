@@ -69,7 +69,7 @@ class ArithmeticAudit(TorchDispatchMode):
     def __torch_dispatch__(self, func, types, args=(), kwargs=None):
         result = func(*args, **(kwargs or {}))
         name = str(func)
-        if any(part in name for part in ("mm.", "bmm.", "addmm.", "attention", "convolution")):
+        if any(part in name for part in ("mm.", "bmm.", "addmm.", "matmul.", "linear.", "attention", "convolution")):
             inputs = [x for x in tree_flatten((args, kwargs))[0] if isinstance(x, torch.Tensor)]
             outputs = [x for x in tree_flatten(result)[0] if isinstance(x, torch.Tensor)]
             ins = tuple(sorted({f"{x.device.type}:{str(x.dtype).removeprefix('torch.')}" for x in inputs}))
