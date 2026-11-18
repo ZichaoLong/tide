@@ -85,6 +85,23 @@ def test_continuous_harness_full_training_boundary(precision, family):
     assert state_memory(state)["retained_storage_bytes"] >= state_memory(state)["payload_bytes"]
 
 
+def test_training_state_checks_nonempty_slots_and_saturated_history():
+    from tide import ClockConfig
+    from benchmarks.continuous import training_state_observation
+    model = TideModel(ModelConfig(topology=TopologyConfig(n=1, layers=1), d=64,
+                                  clock=ClockConfig(kv_window=9)))
+    optimizer = torch.optim.AdamW(model.parameters(), lr=1e-4)
+    x = torch.randn(1, 5, 64)
+    _, state, _ = run_stream(model, x, 5, 5, mode="train", optimizer=optimizer)
+    _, state, _ = run_stream(model, x, 5, 5, mode="train", optimizer=optimizer, state=state)
+    record = training_state_observation(model, optimizer, state)
+    assert record["optimizer_step_min"] == record["optimizer_step_max"] == 2
+    assert record["kv_retained_slot_min"] == record["kv_retained_slot_max"] == 3
+    assert record["private_state_detached"] and record["private_state_finite"] and record["optimizer_finite"]
+    next(iter(optimizer.state.values()))["exp_avg"].flatten()[0] = torch.nan
+    assert not training_state_observation(model, optimizer, state)["optimizer_finite"]
+
+
 def _tensor_leaves(value):
     if isinstance(value, torch.Tensor):
         yield value

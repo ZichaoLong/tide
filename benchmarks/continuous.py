@@ -6,6 +6,7 @@ Every chunk advances real private state; Transformer uses its incremental cache.
 import argparse
 from dataclasses import fields, is_dataclass
 import json
+import math
 import os
 from pathlib import Path
 import resource
@@ -53,6 +54,41 @@ def state_memory(state):
     return dict(payload_bytes=sum(t.numel()*t.element_size() for t in tensors),
                 retained_storage_bytes=sum(stores.values()),
                 dtypes=sorted({str(t.dtype) for t in tensors}), tensor_count=len(tensors))
+
+
+def training_state_observation(model, optimizer, state):
+    """Untimed continuation invariants, including actual retained KV history.
+
+    The largest slot count is capacity, not a count of valid writes. Distinct
+    original timestamps and positive weights remain in the saved state.
+    """
+    from tide.kv import KVState
+    slots = []
+    def visit(value):
+        if isinstance(value, KVState):
+            slots.append(value.times.shape[-1])
+        elif is_dataclass(value):
+            for field in fields(value):
+                visit(getattr(value, field.name))
+        elif isinstance(value, dict):
+            for item in value.values():
+                visit(item)
+        elif isinstance(value, (tuple, list)):
+            for item in value:
+                visit(item)
+    visit(state)
+    steps = [] if optimizer is None else [float(slot["step"]) for slot in optimizer.state.values()
+                                         if "step" in slot]
+    tensors = [] if optimizer is None else list(_tensors(optimizer.state))
+    return dict(private_state_finite=all(not t.is_floating_point() or bool(torch.isfinite(t).all())
+                                        for t in _tensors(state)),
+                private_state_detached=all(not t.requires_grad for t in _tensors(state)),
+                optimizer_finite=all(not t.is_floating_point() or bool(torch.isfinite(t).all()) for t in tensors),
+                optimizer_parameter_owners=0 if optimizer is None else len(optimizer.state),
+                optimizer_step_min=min(steps) if steps else None, optimizer_step_max=max(steps) if steps else None,
+                kv_retained_slot_min=min(slots) if slots else None, kv_retained_slot_max=max(slots) if slots else None,
+                kv_slot_limits={kind: memory.slots for kind, memory in getattr(model, "memories", {}).items()
+                                if hasattr(memory, "slots")})
 
 
 def nested_comparison(actual, expected, *, atol=1e-6, rtol=2e-3):
@@ -354,11 +390,16 @@ def main():
     parser.add_argument("--warmup", type=int, default=1)
     parser.add_argument("--threads", type=int, default=4)
     parser.add_argument("--seed", type=int, default=751)
+    parser.add_argument("--optimizer-foreach", action=argparse.BooleanOptionalAction, default=True)
+    parser.add_argument("--device-budget-gib", type=float,
+                        help="sampled allocated peak limit; not a hard allocator cap")
     parser.add_argument("--checkpoint", type=Path)
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
     if min(args.batch, args.prefill, args.prefill_chunk, args.updates, args.threads) < 1 or min(args.decode, args.warmup) < 0:
         parser.error("counts must be positive; decode/warmup can be zero")
+    if args.device_budget_gib is not None and (not math.isfinite(args.device_budget_gib) or args.device_budget_gib <= 0):
+        parser.error("device budget must be finite and positive")
     if args.output.exists() or args.checkpoint is not None and args.checkpoint.exists():
         parser.error("choose new output/checkpoint identities")
     if args.checkpoint is not None and (args.subject != "tide" or args.mode != "train"):
@@ -381,6 +422,7 @@ def main():
                   arguments={k: str(v) if isinstance(v, Path) else v for k, v in vars(args).items()},
                   precision=precision_policy(args.device, args.precision),
                   physical_devices=os.environ.get("ASCEND_RT_VISIBLE_DEVICES"), torch=str(torch.__version__),
+                  resource_identity=os.environ.get("TIDE_RESOURCE_IDENTITY", "unspecified"),
                   cpu_affinity=sorted(os.sched_getaffinity(0)), host_load_before=os.getloadavg(),
                   timing="input transfer/construction/initial matching audit/warmup/checkpoint excluded; full stream train includes concatenation/loss/backward/AdamW/sync",
                   training_boundary="full BPTT within prefill+decode+flush; detach after each optimizer update is included in complete time",
@@ -432,17 +474,21 @@ def main():
         record.update(state="execution_failed", error=repr(error))
         _persist(args.output, record)
         return 1
-    model = model.to(args.device)
-    model.train(args.mode != "inference")
-    x = x_cpu.to(args.device)
-    # Warmup is a separate inference owner state and does not update parameters.
-    for _ in range(args.warmup):
-        run_stream(model, x, args.prefill, args.prefill_chunk, precision=args.precision)
-    optimizer = torch.optim.AdamW(model.parameters(), lr=1e-4, foreach=True) if args.mode == "train" else None
-    state = None
+    from benchmarks.run import check_memory, DeviceBudgetExceeded, _device_memory
+    device = torch.device(args.device)
     failed = False
     try:
+        model = model.to(args.device)
+        model.train(args.mode != "inference")
+        x = x_cpu.to(args.device)
+        # Warmup is a separate inference owner state and does not update parameters.
+        for _ in range(args.warmup):
+            run_stream(model, x, args.prefill, args.prefill_chunk, precision=args.precision)
+            check_memory(device, args.device_budget_gib)
+        optimizer = torch.optim.AdamW(model.parameters(), lr=1e-4, foreach=args.optimizer_foreach) if args.mode == "train" else None
+        state = None
         for step in range(args.updates):
+            record["last_stage"] = f"update_{step}"
             device = torch.device(args.device)
             if device.type == "npu":
                 torch.npu.reset_peak_memory_stats()
@@ -455,20 +501,29 @@ def main():
                        peak_device_bytes=torch.npu.max_memory_allocated() if device.type == "npu" else
                        torch.cuda.max_memory_allocated(device) if device.type == "cuda" else None,
                        process_peak_rss_kib=resource.getrusage(resource.RUSAGE_SELF).ru_maxrss)
+            row["device_memory"] = _device_memory(device)
+            record["observations"].append(row)
+            check_memory(device, args.device_budget_gib)
+            row["continuation"] = training_state_observation(model, optimizer, state)
             if not (row["finite_output"] and row["finite_parameters"] and row["finite_gradients"]):
                 raise ArithmeticError("nonfinite continuous stream")
-            record["observations"].append(row)
+            if not all(row["continuation"][key] for key in ("private_state_finite", "private_state_detached", "optimizer_finite")):
+                raise ArithmeticError("invalid detached state or nonfinite optimizer in continued stream")
             _persist(args.output, record)
             del value
         if args.checkpoint is not None:
+            record["last_stage"] = "checkpoint_and_paired_update"
             record["checkpoint"] = checkpoint_resume(model, optimizer, state, x[:, :min(args.prefill_chunk, x.shape[1])],
                                                       args.precision, args.checkpoint)
             failed |= record["checkpoint"]["state"] in {"nonfinite", "structural_failed"}
+            record["checkpoint_device_memory"] = check_memory(device, args.device_budget_gib)
         record["state"] = "failed" if failed else "completed"
     except Exception as error:
         import traceback
         traceback.print_exc()
-        record.update(state="execution_failed", error=repr(error))
+        record.update(state="execution_failed", error=repr(error),
+                      failure_kind="device_budget_exceeded" if isinstance(error, DeviceBudgetExceeded) else "execution_failed")
+        record["failure_device_memory"] = _device_memory(device)
         failed = True
     _persist(args.output, record)
     print(json.dumps(record), flush=True)
