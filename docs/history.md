@@ -25,3 +25,7 @@ before disk retirement at `9efc86e2aad143434ce526b021f41927f5c8eb50`, under
 `retirement-preservation/`. Its README defines exact bytes, Git-blob references,
 log tails and numerical summaries. The bundle is absent from the active tree;
 retrieve it only for an explicit historical request. Raw large results were retired.
+
+The explicitly requested [2026-11-19 CPU LH throughput lookup](evidence/lh-cpu-history-20261119.md)
+records the old user-reported B512 figures and their later CPU measurements. It
+retains their original timing/model identities and adds no current qualification.
