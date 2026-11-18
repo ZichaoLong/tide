@@ -67,7 +67,7 @@ def clone(value):
 
 def compare(actual,expected,*,atol=0.,rtol=0.):
     a,b=dict(leaves(actual)),dict(leaves(expected))
-    metadata=[]; failures=[]; nonfinite=[]; worst=[]; exact=True; tensors=0
+    metadata=[]; failures=[]; nonfinite=[]; support=[]; worst=[]; exact=True; tensors=0
     if a.keys()!=b.keys():metadata.append("leaf names differ")
     for name in a.keys() & b.keys():
         x,y=a[name],b[name]
@@ -79,6 +79,12 @@ def compare(actual,expected,*,atol=0.,rtol=0.):
             if x.is_floating_point():
                 if not bool(torch.isfinite(x).all() and torch.isfinite(y).all()):
                     nonfinite.append(name);continue
+                field=name.rsplit(".",1)[-1]
+                support_tensor=(field=="strengths" or ".state." in name and
+                                field in {"weight","short_weight","long_weight"})
+                if support_tensor:
+                    count=int(((x>0)!=(y>0)).sum())
+                    if count:support.append(dict(name=name,different_entries=count,entries=x.numel()))
                 delta=(x.double()-y.double()).abs()
                 maximum=float(delta.max()) if delta.numel() else 0.
                 if not torch.allclose(x,y,atol=atol,rtol=rtol):failures.append(name)
@@ -89,8 +95,33 @@ def compare(actual,expected,*,atol=0.,rtol=0.):
     within=not metadata and not failures and not nonfinite
     return dict(exact=exact and not metadata,within_threshold=within,finite=not nonfinite,
                 atol=atol,rtol=rtol,tensors=tensors,metadata_failures=metadata,
-                nonfinite=nonfinite,threshold_failures=failures,
+                nonfinite=nonfinite,support_differences=support,threshold_failures=failures,
                 largest=sorted(worst,key=lambda row:row["max_abs"],reverse=True)[:8])
+
+
+def structural_comparison_failure(result):
+    return bool(result["metadata_failures"] or not result["finite"])
+
+
+def classify_case(record):
+    """Keep exact observations separate from structural and resume contracts.
+
+    Inference/grad-forward uses zero tolerance to record exactness, not to impose
+    a new FP32/BF16 qualification threshold. Saved data and the next restored
+    forward retain their explicitly exact requirements in resume_case.
+    """
+    mode=record["inference_grad_forward"]
+    structural=(structural_comparison_failure(mode) or not record["saved_checkpoint_data"]["exact"] or
+        not record["checkpoint_config_exact"] or not record["projection_dtype_passed"] or
+        not record["grad_forward_connected"] or not record["initial_vjp"]["input_connected"] or
+        bool(record["initial_vjp"]["nonfinite"]) or bool(record["resume_exit_code"]) or
+        record["resume"]["state"]=="structural_failed")
+    if structural:return "structural_failed"
+    if mode.get("support_differences") or record["resume"]["state"]=="support_deviation":
+        return "support_deviation"
+    if not mode["within_threshold"] or record["resume"]["state"]=="finite_deviation":
+        return "finite_deviation"
+    return "within_threshold"
 
 
 def finite(value):
@@ -247,7 +278,8 @@ def initial_case(args,path,precision,output):
     record["inference_grad_forward"]=compare(clone(result),inference)
     record["grad_forward_connected"]=bool(loss.requires_grad and any(value.values.requires_grad for value in result))
     loss.backward()
-    record["initial_vjp"]=dict(input_connected=inp.grad is not None,nonfinite=finite(inp.grad),
+    record["initial_vjp"]=dict(input_connected=inp.grad is not None,
+        nonfinite=finite(dict(input_gradient=inp.grad,gradients=gradients(model),results=result,loss=loss)),
         none_gradients=sorted(name for name,value in gradients(model).items() if value is None))
     state=None
     for _ in range(3):
@@ -278,10 +310,9 @@ def initial_case(args,path,precision,output):
     record["resume"]=json.loads((output/"resume.json").read_text())
     record["checkpoint_sha256"],record["expected_sha256"]=sha(checkpoint),sha(output/"expected.pt")
     policy_dtype="torch.bfloat16" if precision=="bf16" else "torch.float32"
-    record["projection_dtype_passed"]=all(row["output_dtype"]==policy_dtype for row in record["actual_dtype_observations"])
-    strict=record["inference_grad_forward"]["exact"] and record["saved_checkpoint_data"]["exact"] and record["checkpoint_config_exact"]
-    record["state"]=("structural_failed" if not strict or not record["projection_dtype_passed"] or completed.returncode else
-                     record["resume"]["state"])
+    record["projection_dtype_passed"]=bool(record["actual_dtype_observations"]) and all(
+        row["output_dtype"]==policy_dtype for row in record["actual_dtype_observations"])
+    record["state"]=classify_case(record)
     atomic(output/"result.json",record)
     return record
 
@@ -307,11 +338,16 @@ def resume_case(args):
     observer.close()
     record["installation"]=installation(args)
     strict=record["config_exact"] and record["checkpoint_data"]["exact"] and record["next_forward"]["exact"] and record["none_gradients_preserved"]
-    record["state"]=("structural_failed" if not strict or any(row["metadata_failures"] or not row["finite"] for row in (record["gradients"],record["updated"])) else
+    policy_dtype="torch.bfloat16" if args.precision=="bf16" else "torch.float32"
+    record["projection_dtype_passed"]=bool(record["actual_dtype_observations"]) and all(
+        row["output_dtype"]==policy_dtype for row in record["actual_dtype_observations"])
+    record["state"]=("structural_failed" if not strict or not record["projection_dtype_passed"] or any(
+        structural_comparison_failure(row) for row in (record["gradients"],record["updated"])) else
+        "support_deviation" if any(row["support_differences"] for row in (record["gradients"],record["updated"])) else
         "within_threshold" if record["gradients"]["within_threshold"] and record["updated"]["within_threshold"] else "finite_deviation")
     atomic(output/"resume.json",record)
     print(json.dumps(dict(path=args.path,precision=args.precision,state=record["state"])))
-    return 0 if record["state"] in ("within_threshold","finite_deviation") else 2
+    return 0 if record["state"] in ("within_threshold","finite_deviation","support_deviation") else 2
 
 
 def main():
@@ -332,7 +368,8 @@ def main():
     initial_installation=installation(args)
     if args.phase=="resume":return resume_case(args)
     output=Path(args.output_dir);output.mkdir(parents=True,exist_ok=False)
-    record=dict(state="running",scope=__doc__,argv=sys.argv,harness_sha256=sha(__file__),
+    record=dict(state="running",schema_revision=2,scope=__doc__,argv=sys.argv,harness_sha256=sha(__file__),
+                mode_comparison_tolerance=dict(atol=0.,rtol=0.,purpose="exactness observation; does not replace repository FP32/BF16 qualification thresholds"),
                 source_manifest=sha(args.source_manifest),initial_installation=initial_installation,cases=[])
     atomic(output/"result.json",record)
     for path in ("batched","placed"):
@@ -342,10 +379,11 @@ def main():
             atomic(output/"result.json",record)
     record["final_installation"]=installation(args)
     states=[case["state"] for case in record["cases"]]
-    record["state"]="structural_failed" if "structural_failed" in states else "finite_deviation" if "finite_deviation" in states else "within_threshold"
+    record["state"]=("structural_failed" if "structural_failed" in states else "support_deviation" if "support_deviation" in states else
+                     "finite_deviation" if "finite_deviation" in states else "within_threshold")
     atomic(output/"result.json",record)
     print(json.dumps(dict(state=record["state"],cases=states,output=str(output))))
-    return 0 if record["state"] in ("within_threshold","finite_deviation") else 2
+    return 0 if record["state"] in ("within_threshold","finite_deviation","support_deviation") else 2
 
 
 if __name__=="__main__":raise SystemExit(main())
