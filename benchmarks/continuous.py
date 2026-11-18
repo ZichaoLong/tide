@@ -298,6 +298,10 @@ def run_stream(model, x, prefill, prefill_chunk, *, state=None, mode="inference"
         update_end = time.perf_counter()
         backward_seconds, update_seconds = after_backward-before, update_end-after_backward
         state = detach_state(state)  # Required update boundary belongs to complete time.
+    else:
+        # The final concatenation is asynchronous too. Phase synchronizations
+        # precede it, so forward-only complete time needs its own ready boundary.
+        synchronize(x.device)
     total_end = time.perf_counter()
     # Checks and state accounting are excluded from the measured stream.
     first = next((row["output_ready_seconds"] for row, support in zip(observations, availability)

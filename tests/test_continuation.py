@@ -102,6 +102,32 @@ def test_training_state_checks_nonempty_slots_and_saturated_history():
     assert not training_state_observation(model, optimizer, state)["optimizer_finite"]
 
 
+@pytest.mark.parametrize("mode", ["inference", "grad_forward"])
+def test_forward_only_complete_time_waits_for_async_output_assembly(monkeypatch, mode):
+    from benchmarks import continuous
+    clock, pending = [0.0], [False]
+    original_cat = torch.cat
+    def concatenate(*args, **kwargs):
+        result = original_cat(*args, **kwargs)
+        pending[0] = True
+        return result
+    def synchronize(device):
+        if pending[0]:
+            clock[0] += .25
+            pending[0] = False
+    def now():
+        clock[0] += .01
+        return clock[0]
+    monkeypatch.setattr(continuous, "forward_state", lambda model, x, state: (x*2, None, None))
+    monkeypatch.setattr(continuous, "synchronize", synchronize)
+    monkeypatch.setattr(continuous.time, "perf_counter", now)
+    monkeypatch.setattr(torch, "cat", concatenate)
+    output, _, measured = run_stream(torch.nn.Identity(), torch.ones(1, 2, 4), 1, 1, mode=mode)
+    assert torch.equal(output, torch.full((1, 2, 4), 2.0))
+    assert not pending[0]
+    assert measured["complete_seconds"] >= measured["input_plus_flush_seconds"]+.25
+
+
 def _tensor_leaves(value):
     if isinstance(value, torch.Tensor):
         yield value
