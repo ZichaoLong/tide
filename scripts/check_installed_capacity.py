@@ -255,6 +255,7 @@ def make_config(path, execution_variant="whole_region"):
         aggregation="incoming_light_64" if reception else "source_residual",
         reception_qkv_backend="fused" if reception else "separate",
         reception_mask_padding=reception,
+        parameter_indexing="static_view" if reception else "gather",
         local_attention_backend="math" if execution_variant=="whole_region" else None)
 
 
