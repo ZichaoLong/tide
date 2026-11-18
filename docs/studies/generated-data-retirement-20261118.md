@@ -9,19 +9,22 @@
 
 ## 公开数据交接
 
-用户随后指定最终公共根目录为`/mi/data2T/public`，权限和迁移由用户处理。
-当前已按中性、可扩展布局整理到本账户的`~/public/`：
+原先按中性、可扩展布局准备在`~/public/`，用户现已迁入`/mi/data2T/public/huggingface/`。
+本次已将其中7个目录设为2775、5个普通文件设为0664，目录带setgid以便继承所属组。
+文件内容核验不变；所有者/组未修改，用户后续统一`chown -R root:devusers`。
+[权限设置凭据](../evidence/public-data-permissions-20261118.json)。当前布局：
 
 ```text
-public/
-  README.md
-  huggingface/datasets/Salesforce/wikitext/revisions/
-    b08601e04326c79dfdd32d625aee71d232d685c3/
-      manifest.json
-      SHA256SUMS
-      wikitext-103-raw-v1/
-        train-00000-of-00002.parquet
-        train-00001-of-00002.parquet
+/mi/data2T/public/
+  huggingface/
+    README.md
+    datasets/Salesforce/wikitext/revisions/
+      b08601e04326c79dfdd32d625aee71d232d685c3/
+        manifest.json
+        SHA256SUMS
+        wikitext-103-raw-v1/
+          train-00000-of-00002.parquet
+          train-00001-of-00002.parquet
 ```
 
 目录和附带元数据中没有TIDE、账户名或本机home路径。原带项目名的暂存目录已移除。
@@ -29,9 +32,9 @@ public/
 每个版本清单只列实际下载的原始文件；新版本另设目录。
 只含公开的`Salesforce/wikitext`原始train两分片，固定版本
 `b08601e04326c79dfdd32d625aee71d232d685c3`、子集`wikitext-103-raw-v1`。
-用户后续可将`~/public/`的内容合并到`/mi/data2T/public/`；本次未修改公共位置。
+权限操作仅涉及`huggingface`子树，未改父目录`/mi/data2T/public`的权限、所有者/组或其他公共资源。
 
-每个版本目录包含`manifest.json`和`SHA256SUMS`，根目录含通用`README.md`，记录下载URL、版本、字节数、SHA-256及上游
+每个版本目录包含`manifest.json`和`SHA256SUMS`，`huggingface/`内含通用`README.md`，记录下载URL、版本、字节数、SHA-256及上游
 CC-BY-SA-3.0/GFDL许可声明。两份原始文件移动前后均与旧数据锁中的SHA-256相符，
 独立执行`sha256sum -c SHA256SUMS`也通过。移动使用同文件系统rename，没有再复制300MiB。
 [新布局核验](../evidence/public-data-layout-20261118.json)保留实际相对路径和文件身份。

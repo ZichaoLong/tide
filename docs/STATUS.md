@@ -12,8 +12,9 @@
 三套私有环境、一次性清理清单/脚本/日志和`.local/LENS.md`已删除；
 先注销了三个Lens writer注册，未修改Lens服务、访问策略或公共环境。
 [环境删除凭据](evidence/private-environment-retirement-20261118.json)保留；安装锁只表示历史身份。
-两份原始WikiText-103文件已验证并暂存于`~/public/huggingface/datasets/Salesforce/wikitext/revisions/`。
-公开目录名和清单已去除项目/账户身份；最终根目录为`/mi/data2T/public`，待用户处理权限与迁移。
+两份原始WikiText-103文件已由用户迁至`/mi/data2T/public/huggingface/datasets/Salesforce/wikitext/revisions/`。
+公开目录名和清单无项目/账户身份；7个目录已设2775，5个文件已设0664，文件内容核验不变。
+所有者/组保持原状，用户后续统一`chown -R root:devusers`；见[权限设置凭据](evidence/public-data-permissions-20261118.json)。
 随后单独授权的账号级`~/.local`首批清理又释放6.563GiB，可读取占用约10.25→3.68GiB；
 Lens/FOCUS/netpath服务进程身份未变。临时执行材料已移除，第二批维护候选未处理。
 [账号级清理凭据](evidence/account-local-cleanup-20261118.json) ·

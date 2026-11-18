@@ -11,10 +11,11 @@
   checkpoint availability. Do not run old submit/resume/review commands as
   if their inputs still exist; use the retained closure evidence instead.
   Subsequent2026-11-18 user instruction separated downloaded public data:
-  the two original WikiText-103 shards (~300MiB) are verified and staged
-  under ~/public/huggingface/datasets/Salesforce/wikitext/revisions/.
-  The intended shared root is /mi/data2T/public; the user will handle
-  permissions/migration. Public names/metadata contain no project/account
+  the two original WikiText-103 shards (~300MiB) were moved by the user to
+  /mi/data2T/public/huggingface/datasets/Salesforce/wikitext/revisions/.
+  All7 directories now have mode2775 and5 regular files mode0664; bytes
+  verified unchanged. User will separately chown root:devusers; ownership
+  has not been changed here. Public names/metadata contain no project/account
   identity. The earlier tide-public-data-20261118 staging root is retired.
   runs/ is now EMPTY: generated text/token arrays and full data/split locks
   were deleted, freeing another821.883MiB. See

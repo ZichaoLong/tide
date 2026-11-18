@@ -21536,7 +21536,7 @@
     "at": "2026-11-18T02:19:16.465492+00:00",
     "generated_data_retirement": {
       "at": "2026-11-18T02:35:21.781300+00:00",
-      "public_raw_data": "Original public downloads staged under ~/public in provider/type/repository/revision layout; intended shared root /mi/data2T/public.",
+      "public_raw_data": "Original public downloads now under /mi/data2T/public/huggingface in provider/type/repository/revision layout.",
       "report": "docs/studies/generated-data-retirement-20261118.md",
       "runs_empty": true
     },
@@ -21552,10 +21552,14 @@
       "state": "completed"
     },
     "public_data_layout": {
-      "intended_public_root": "/mi/data2T/public",
+      "directory_mode": "2775",
+      "file_mode": "0664",
+      "ownership_change": "User to perform root:devusers chown; current ownership unchanged",
+      "previous_staging_root": "~/public",
+      "public_root": "/mi/data2T/public",
       "report": "docs/studies/generated-data-retirement-20261118.md",
       "revision_relative_path": "huggingface/datasets/Salesforce/wikitext/revisions/b08601e04326c79dfdd32d625aee71d232d685c3",
-      "staging_root": "~/public"
+      "state": "moved_permissions_set"
     },
     "report": "docs/studies/project-retirement-20261118.md",
     "retained_prefixes": [
@@ -21567,7 +21571,7 @@
   "schema": "tide-research-map-prototype-v1",
   "subtitle": "\u7814\u7a76\u76ee\u6807\u4e0e\u9650\u5b9a\u7ed3\u8bba\u4fdd\u7559\uff1b\u5f53\u524d\u65e0\u6d3b\u52a8\u4efb\u52a1\u3002v13\u5173\u95ed\uff1a9\u6761\u5b8c\u6210\u30017\u6761\u7528\u6237\u53d6\u6d88\uff0c\u540e\u7eed\u5f85\u65b0\u6279\u6b21\u51b3\u7b56\u3002",
   "title": "TIDE \u7814\u7a76\u56fe",
-  "updated_at": "2026-11-18T02:56:09.949993+00:00",
+  "updated_at": "2026-11-18T03:05:25.527347+00:00",
   "view_groups": [
     {
       "height": 12640,

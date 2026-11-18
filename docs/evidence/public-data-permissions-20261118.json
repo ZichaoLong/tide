@@ -1,0 +1,133 @@
+{
+  "authorization": "User moved the public data and authorized permission-mode changes before their own root:devusers chown",
+  "completed_at": "2026-11-18T03:05:25.527347+00:00",
+  "directories_mode": "2775",
+  "directory_count": 7,
+  "entries": [
+    {
+      "gid_before": 1005,
+      "inode": 62390354,
+      "kind": "directory",
+      "mode_before": "0755",
+      "mode_requested": "2775",
+      "path": ".",
+      "uid_before": 1003
+    },
+    {
+      "gid_before": 1005,
+      "inode": 62390371,
+      "kind": "file",
+      "mode_before": "0644",
+      "mode_requested": "0664",
+      "path": "README.md",
+      "uid_before": 1003
+    },
+    {
+      "gid_before": 1005,
+      "inode": 62390363,
+      "kind": "directory",
+      "mode_before": "0755",
+      "mode_requested": "2775",
+      "path": "datasets",
+      "uid_before": 1003
+    },
+    {
+      "gid_before": 1005,
+      "inode": 62390364,
+      "kind": "directory",
+      "mode_before": "0755",
+      "mode_requested": "2775",
+      "path": "datasets/Salesforce",
+      "uid_before": 1003
+    },
+    {
+      "gid_before": 1005,
+      "inode": 62390365,
+      "kind": "directory",
+      "mode_before": "0755",
+      "mode_requested": "2775",
+      "path": "datasets/Salesforce/wikitext",
+      "uid_before": 1003
+    },
+    {
+      "gid_before": 1005,
+      "inode": 62390366,
+      "kind": "directory",
+      "mode_before": "0755",
+      "mode_requested": "2775",
+      "path": "datasets/Salesforce/wikitext/revisions",
+      "uid_before": 1003
+    },
+    {
+      "gid_before": 1005,
+      "inode": 62390368,
+      "kind": "directory",
+      "mode_before": "0755",
+      "mode_requested": "2775",
+      "path": "datasets/Salesforce/wikitext/revisions/b08601e04326c79dfdd32d625aee71d232d685c3",
+      "uid_before": 1003
+    },
+    {
+      "gid_before": 1005,
+      "inode": 62390370,
+      "kind": "file",
+      "mode_before": "0644",
+      "mode_requested": "0664",
+      "path": "datasets/Salesforce/wikitext/revisions/b08601e04326c79dfdd32d625aee71d232d685c3/SHA256SUMS",
+      "uid_before": 1003
+    },
+    {
+      "gid_before": 1005,
+      "inode": 62390369,
+      "kind": "file",
+      "mode_before": "0644",
+      "mode_requested": "0664",
+      "path": "datasets/Salesforce/wikitext/revisions/b08601e04326c79dfdd32d625aee71d232d685c3/manifest.json",
+      "uid_before": 1003
+    },
+    {
+      "gid_before": 1005,
+      "inode": 62070984,
+      "kind": "directory",
+      "mode_before": "0755",
+      "mode_requested": "2775",
+      "path": "datasets/Salesforce/wikitext/revisions/b08601e04326c79dfdd32d625aee71d232d685c3/wikitext-103-raw-v1",
+      "uid_before": 1003
+    },
+    {
+      "gid_before": 1005,
+      "inode": 62033116,
+      "kind": "file",
+      "mode_before": "0444",
+      "mode_requested": "0664",
+      "path": "datasets/Salesforce/wikitext/revisions/b08601e04326c79dfdd32d625aee71d232d685c3/wikitext-103-raw-v1/train-00000-of-00002.parquet",
+      "uid_before": 1003
+    },
+    {
+      "gid_before": 1005,
+      "inode": 62033166,
+      "kind": "file",
+      "mode_before": "0444",
+      "mode_requested": "0664",
+      "path": "datasets/Salesforce/wikitext/revisions/b08601e04326c79dfdd32d625aee71d232d685c3/wikitext-103-raw-v1/train-00001-of-00002.parquet",
+      "uid_before": 1003
+    }
+  ],
+  "file_contents_unchanged": true,
+  "file_count": 5,
+  "file_sha256": {
+    "README.md": "5e98a7f69ee1d252088120082463f040e54f95f920e307224f430ab191935834",
+    "datasets/Salesforce/wikitext/revisions/b08601e04326c79dfdd32d625aee71d232d685c3/SHA256SUMS": "9ee220e201ee54b277cf1a3d561c1c807035b5f3a3245b65634e16bf3ce0a012",
+    "datasets/Salesforce/wikitext/revisions/b08601e04326c79dfdd32d625aee71d232d685c3/manifest.json": "1be6e0cab1624e886e2834f348d7758b3944174005266a0d4a685d6d691b38c5",
+    "datasets/Salesforce/wikitext/revisions/b08601e04326c79dfdd32d625aee71d232d685c3/wikitext-103-raw-v1/train-00000-of-00002.parquet": "74da360f23826045b3e6ac6375411fdb15f003030aa74f2596ed08b857cb9212",
+    "datasets/Salesforce/wikitext/revisions/b08601e04326c79dfdd32d625aee71d232d685c3/wikitext-103-raw-v1/train-00001-of-00002.parquet": "ba090ac30dbf5461e8dcbdd1a1b8e6f3cf9c2c756d64f0c1220450acd514f720"
+  },
+  "files_mode": "0664",
+  "ownership_action": "unchanged; root:devusers chown to be performed by user",
+  "ownership_unchanged": true,
+  "parent_directory_unchanged": true,
+  "root": "/mi/data2T/public/huggingface",
+  "schema": "public-data-permissions-review-v1",
+  "started_at": "2026-11-18T03:05:25.213752+00:00",
+  "state": "completed"
+}
