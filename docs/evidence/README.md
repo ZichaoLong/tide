@@ -1,5 +1,10 @@
 # Current evidence
 
+The subsequent [fixed 32/48-layer Transformer and Tide batch/multi-device measurements](transformer-depth-batch-20261118.md)
+add twelve FP32 short-request points on source `237cc8d4`. They retain the original A-D
+and B1 identities; larger batch throughput and four-device memory savings are separate
+from per-request latency and per-device efficiency.
+
 The Reception, FP32 training and resident-inference cycle is recorded in:
 
 - [Starting cost and SSD measurements](reception-start-20261118.md).

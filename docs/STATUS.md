@@ -6,16 +6,27 @@
 生产 `src/tide` tree 为 `539c5eb15176827ca14a19c7de82f08df5b6c1d1`。
 实现、测量与后续文档分别保留源码身份，不用整理 HEAD 追认旧测量。
 
-## 当前补充测量：Transformer 深度与 Tide batch/多卡
+## 追加测量已完成：Transformer深度与Tide batch/多卡
 
-用户在交付后追加询问约9B/17B的32/48层Transformer decode，以及Tide较大batch/多卡吞吐。
-本次有限矩阵为四个固定层数近总参数Transformer、Tide两种规模各B2/B4，以及17B B4四卡。
-统一FP32、prompt128/chunk32/decode16、warmup2/samples5；9B单卡、17B默认双卡。
-四卡点只改变放置设备数。保留原A–D和B1的源码、物理卡及样本身份，补充比较不改写其定义。
-preflight在`artifacts/depth-batch-preflight-20261118/preflight.json`：配额152/300GiB，
-固定数学通过，四份用户文件哈希已保存；入口与原推理回归20项通过。
-新作业按`depth-`、`batch-`前缀命名，冻结提交、队列准入、48/56GiB allocated/reserved
-采样预算、有限RSS/时间，终态后再汇总。当前为准备提交，不是已获得性能结果。
+用户追加的约9B/17B固定32/48层Transformer及Tide batch/多卡问题已完成有限补测。
+源码冻结 `237cc8d4`，生产树不变；入口及原推理回归20项通过，12个作业全部passed，
+60个正常样本。全部FP32、prompt128/chunk32/decode16、warmup2/samples5；
+原B1/C保留旧源码、物理卡和样本身份。[完整证据及命令](evidence/transformer-depth-batch-20261118.md)。
+
+Transformer固定32/48层、近总参数的decode分别为：9B单卡20.29/15.41位置/s；
+17B双卡8.79/9.52。形状及头宽随近参数匹配变化，不把胜负归因为纯层数影响。
+Tide 9B单卡B2/B4/B8为5.19/7.98/12.34位置/s；17B双卡为3.76/6.31/10.07。
+17B四卡B4/B8为4.46/8.52，低于同batch双卡，但每卡峰allocated降至19.52/22.93GiB。
+9B单卡B8、17B双卡B8峰allocated分别46.83/47.32GiB，接近本轮48GiB采样预算。
+总吞吐提高伴随单步时延增加；短请求与有限batch阶梯不认证最大吞吐或长上下文容量。
+
+17B B4两卡/四卡Full相差1且输出支持摘要不同；B8的工作、实际触及、支持、时间摘要
+一致，但packing仍不同。远程静态计划条目16→54，不能当作实测通信耗时比例。
+没有新增四卡训练/恢复或副本并行资格。A–D定义与训练预设保持原定位。
+
+`artifacts/depth-batch-preflight-20261118`保留preflight、扩展容量依据、提交与汇总；
+终态/冻结源、68份原始文件指纹和用户文件保护核对已并入证据JSON。
+本次没有待运行作业；所有MainPID与已记录PID/start后代均已终态。
 
 ## 已集成与核验
 

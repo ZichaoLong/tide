@@ -187,3 +187,9 @@ support/work in that small comparison, but do not promise a bitwise optimizer
 trajectory. The five [100-update FP32 runs](evidence/reception-training-20261118.md)
 are finite with paired restored updates within their original threshold; they
 are training-shape observations and do not erase any of these cross-path failures.
+
+The [subsequent four-device inference observations](evidence/transformer-depth-batch-20261118.md)
+retain a B4 Full/output-support difference against two-device placement. The B8 pair has
+matching work, effective-parameter, support and time summaries, with different packing.
+Neither finite inference nor matching aggregate summaries establishes value/gradient
+identity or adds four-device training and restored-update qualification.

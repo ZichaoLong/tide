@@ -170,3 +170,25 @@ These results and their negative candidates are scoped in
 [Reception/SSD costs](evidence/reception-performance-20261118.md),
 [parameter indexing](parameter-indexing.md), [resident inference](evidence/reception-inference-20261118.md)
 and the separate [continuous training](evidence/reception-training-20261118.md) record.
+
+## Fixed Transformer depth and inference batch, 2026-11-18
+
+The [supplementary measurements](evidence/transformer-depth-batch-20261118.md) retain
+FP32, prompt128/chunk32/decode16 and five normal samples per new point. Fixed total
+parameters at 32/48 layers change width, head width and FFN allocation: 9B L32 was
+faster than the older five-layer C, while 17B L48 was faster than L32. Nearest parameter
+matching is not an optimization over Transformer throughput or a pure depth experiment.
+
+Increasing Tide's input batch to eight improved aggregate throughput to 12.34 positions/s
+on 9B/one NPU and 10.07 on 17B/two NPUs, with higher per-step latency and allocated peaks
+near the chosen 48 GiB budget. Actual touched parameters per input changed little in the
+B2/B4 records, while packing overhead increased; lower activity did not explain the gain.
+These short-request shapes do not establish long-history capacity or the optimal batch.
+
+At 17B B4/B8, four-device region placement was slower than two devices, despite roughly
+halving per-device peaks. B4 K calls rose from 300 to 480 and S calls from 160 to 320;
+static remote predecessor-plan entries rose from 16 to 54. Count these as grouping/transport
+work indicators, not a measured communication percentage. B4 had one Full/support change;
+B8 work/support/time summaries matched but packing differed. Device count, parameter balance
+and a per-device thread policy alone do not establish efficient scaling. Replicas, transfer
+paths, communication-aware partitions and CPU scheduling require their own finite comparisons.

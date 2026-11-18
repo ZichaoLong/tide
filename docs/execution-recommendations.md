@@ -72,8 +72,18 @@ Inference returns backbone readouts, without a task head, token sampling or serv
 | First backbone output | Use B1 and a smaller prefill chunk where the first partial output is useful. The 9B short-prefix point uses chunk32; compare complete prompt latency separately. |
 | Complete prompt readiness | Larger chunks can amortize scheduling. The 9B 512-position prompt uses chunk128; Timed readiness includes graph-depth delay and may require later calls or the final drain. |
 | Single-request cached inference | B1, actual KV/SSD continuation; doubling uses the direct one-position SSD recurrence. The 256-call points report first increment, steady rate and p95 separately. Optional static_view gave about 9.5% higher measured 9B B1 decode throughput, with essentially unchanged allocated peak; it remains explicit. |
-| Batched inference / offline stream | Try sample batch2/4 and 128-position stream chunks within the measured memory budget. There are representative 1B B2 and Timed B4 points, plus a completed 9B B2 point (16 decode calls, not the 256-call sustained point). |
-| Large multi-device inference | Use whole-region placement when required by capacity; compare region batch1/4 and serial/per_device on the same model. The 17B table separates these choices and reports activity differences. |
+| Batched inference / offline stream | Short cached requests have B2/4/8 measurements: 9B on one NPU and 17B on two. Larger batches increase total throughput and step latency. For 128-position streams, use the separately recorded 1B B2 and Timed B4 points; short B8 results do not qualify longer streams. |
+| Large multi-device inference | Whole-region placement provides capacity. The 17B short-request B4/B8 follow-up was faster on two devices than four; four devices roughly halved per-device allocated peaks. Keep batching, placement, concurrency and replicas as separate choices. |
+
+The [fixed-depth and batch follow-up](evidence/transformer-depth-batch-20261118.md) uses FP32,
+prompt128/chunk32/decode16. Tide 9B B8 reached 12.34 positions/s at 46.83/48.63 GiB
+allocated/reserved on one NPU; 17B B8 reached 10.07 positions/s at 47.32/50.85 GiB per-card
+peaks on two NPUs. Both allocated peaks approach the 48 GiB sampled budget; B4 retains
+more room for longer history or downstream additions. B1 remains the lower-latency measured
+choice. Four-card 17B B8 reached 8.52 positions/s at 22.93/24.75 GiB, trading throughput
+for capacity in this comparison. The B4 placement pair retained a Full/support difference;
+B8 work/support/time summaries matched while packing differed. This is not four-card
+training/restore qualification, a maximum-throughput search, or a replica-parallel measurement.
 
 `benchmarks.inference` keeps real state across prefill, decode and stream chunks, consumes/releases
 one output at a time, and drains Timed only once at the finite stream end. In contrast, the training

@@ -26,7 +26,7 @@ prefill 后 flush。返回 readout 在所属设备上完成，所有参与设备
 时延在完整调用边界采样；不能据此宣称逐 tick 的更细首输出时间。
 `prompt_output_ready_seconds` 是保守的终端路径就绪边界，没有把后续记忆影响归因到
 某个输入；原始 int64 返回时间在独立诊断中逐调用核对。无任务头，以上都不是语言
-模型服务 TTFT。所有吞吐以实际 `B × 输入位置` 为分母，逻辑 ticks、padding 和
+模型服务 TTFT。所有吞吐的分子为实际 `B × 输入位置`，逻辑 ticks、padding 和
 drain 返回槽均不算新输入。
 
 多个 subjects 在同一进程顺序运行时，后面的 `cold` 可能复用此前编译/进程缓存。
@@ -79,6 +79,8 @@ B、精度、seed 和实际 Tide 源码哈希不匹配时拒绝复用。输入�
 batch/seed/精度及共同输入前缀；不会重建或重新认证旧 Tide。每个作业只构造一个
 Transformer，记录实际宽度、FFN、头宽、参数误差、设备与样本。默认两次热身、
 五次正常样本，不测 cold；正式 NPU 使用仍需冻结与准入。
+引用目标reference时，当前入口要求Transformer宽度至少覆盖Tide的完整输入前缀；
+仅以`--parameters`给定目标时没有这一前缀要求。
 
 `--devices npu:0,npu:1 --placement layer` 使用 Tide 连续层放置；`--placement region`
 按实际参数字节平衡完整区域，可加 `--region-concurrency per_device`。实际 admitted
