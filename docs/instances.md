@@ -49,6 +49,28 @@ candidates; qualification and measured recommendations retain their source scope
 The [Reception execution guide](reception-execution.md) gives the formula,
 mask/gradient domain, full-Reception timing and integrated path-check commands.
 
+`ssd_scan_backend` selects the SSD matrix recurrence independently of the vector
+summary backend and is saved in checkpoints. Its default `"block"` retains the
+existing bounded block products. `"incremental"` uses a direct batched recurrence
+only when the memory call has one logical position; longer calls retain block.
+This particularly targets single-position Settle continuation: Timed input
+positions can expand to several logical ticks. `"doubling"` also uses the direct
+single-position path, and otherwise replaces block cumulative products with
+multiplication at doubling offsets. It is an NPU candidate for avoiding a costly
+Cumprod path, not an automatic hardware selection. All paths preserve zero-decay
+derivatives and keep full backward connectivity across state continuations.
+
+Each scan block remains at most 32 positions. Doubling avoids a matrix state per
+position, but backward can retain `O(q² log q)` product elements per head per
+block for block size `q`, compared with the original cumulative-product path's
+`O(q²)` products. Measure throughput and peak memory for the intended shape;
+neither candidate is a general memory reduction. Use
+`python -m benchmarks.ssd_scan_candidates` for a frozen-input primitive comparison
+and `python -m scripts.check_training_paths --candidate-overrides` with
+`{"scan":{"ssd_scan_backend":"doubling"}}` for full-path checks. Primitive
+timings do not qualify whole-model performance, finite numerical agreement or
+restored updates; record the actual source and device evidence separately.
+
 The [training entry and recommendations](execution-recommendations.md) provide
 loadable presets, explicit overrides, three modes and actual resume. Use
 [training path checks](training-path-checks.md) for fixed nonempty state/AdamW,

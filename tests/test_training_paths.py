@@ -1,5 +1,6 @@
 """Frozen optimizer ownership, bounded difference witnesses, actual continuation."""
 import copy
+from dataclasses import replace
 
 import pytest
 import torch
@@ -8,6 +9,7 @@ from tide import ModelConfig, TopologyConfig, TideModel, place_model, placement_
 from scripts.check_training_paths import (THRESHOLDS, VARIANTS, canonical_optimizer, compare,
     checked_optimizer_step, first_differences, first_path_witness, load_canonical_optimizer,
     resolve_variants, run, screen, training_data, validate_restore_record)
+from scripts.job import atomic
 
 
 def tiny_config(*, hb=False, timing="settle"):
@@ -177,10 +179,12 @@ def test_time_witness_keeps_int64_above_float_exact_range():
 
 def test_named_execution_candidates_preserve_builtin_and_semantic_meanings():
     variants = resolve_variants({"reception":{"checkpoint_reception":True},
-                                 "prefix":{"ssd_summary_backend":"prefix"}})
+                                 "prefix":{"ssd_summary_backend":"prefix"},
+                                 "scan":{"ssd_scan_backend":"doubling"}})
     assert variants["baseline"] == VARIANTS["baseline"]
     assert variants["combined"] == VARIANTS["combined"]
     assert variants["reception"] == dict(region_batch_size=1,checkpoint_regions=False,checkpoint_reception=True)
+    assert variants["scan"]["ssd_scan_backend"] == "doubling"
     with pytest.raises(ValueError,match="built-in meanings"):
         resolve_variants({"baseline":{"checkpoint_regions":True}})
     with pytest.raises(ValueError,match="execution-option"):
@@ -224,6 +228,45 @@ def test_fresh_process_restores_the_same_frozen_model_and_really_updates(tmp_pat
     assert "auxiliary harness modules" in restore["source_identity_scope"]
     assert restore["optimizer_update"]["active_original_parameters"]
     assert restore["optimizer_update"]["checked"]
+
+
+@pytest.mark.parametrize("precision", ["fp64", "fp32"])
+def test_ssd_overrides_compare_all_gradients_from_nonempty_anchor_and_restore(tmp_path, precision):
+    config = replace(tiny_config(), memory="S", ssd_summary_backend="prefix")
+    result = run(config, device="cpu", precision=precision,
+        candidates=["baseline", "incremental", "doubling"],
+        candidate_overrides={name: {"ssd_scan_backend": name} for name in ("incremental", "doubling")},
+        batch=1, length=4, steps=2, chunk=3, directory=tmp_path, new_process=False, witness=False)
+    atomic(tmp_path/"result.json", result)
+    if precision == "fp64":
+        assert result["state"] == "within_threshold", result
+    else:
+        # Small FP32 gradient changes can be amplified by AdamW. The original
+        # threshold failures stay in result.json; completion is not equivalence.
+        assert result["state"] in {"within_threshold", "finite_deviation"}, result
+    assert result["anchor_optimizer"]["parameter_states"] > 0
+    assert result["anchor_optimizer"]["steps"] == [1]
+    for case in result["candidates"]:
+        assert case["checks"]["fixed_start"]["comparison"]["exact"]
+        assert case["checks"]["start_unchanged_after_vjp"]["comparison"]["exact"]
+        assert case["checks"]["same_owner_vjp_repeat"]["comparison"]["exact"]
+        assert len(case["updates"]) == 2
+        assert case["restore"]["actual_update"] and case["restore"]["config_exact"]
+        assert case["restore"]["checks"]["saved_data"]["comparison"]["exact"]
+        assert case["restore"]["checks"]["next_forward"]["comparison"]["exact"]
+        for update in case["updates"]:
+            if "vs_baseline" in update:
+                check = update["vs_baseline"]["comparison"]
+                assert not check["metadata_failures"] and not check["support_differences"]
+                assert not check["nonfinite"]
+        if case["name"] != "baseline":
+            assert case["config"]["ssd_scan_backend"] == case["name"]
+            check = case["checks"]["vjp1_vs_baseline"]["comparison"]
+            assert not check["metadata_failures"] and not check["support_differences"]
+            assert not check["threshold_failures"]
+    saved = torch.load(tmp_path/"doubling/restore-input.pt", weights_only=False)
+    assert saved["saved"]["state"].position == 12
+    assert saved["updated"]["state"].position == 16
 
 
 def test_logical_cpu_placement_uses_the_common_nonempty_optimizer(tmp_path):

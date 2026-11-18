@@ -54,7 +54,7 @@ def package_identity():
 def resolve_variants(extra=None):
     variants = {name: dict(options) for name, options in VARIANTS.items()}
     allowed = {"region_batch_size", "checkpoint_regions", "checkpoint_reception",
-               "ssd_summary_backend", "local_attention_backend", "reception_qkv_backend",
+               "ssd_summary_backend", "ssd_scan_backend", "local_attention_backend", "reception_qkv_backend",
                "reception_mask_padding"}
     if extra is not None and not isinstance(extra, dict):
         raise ValueError("candidate overrides must be a name-to-options JSON object")
