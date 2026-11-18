@@ -142,9 +142,10 @@ transport. Both current choices are visible in `placement_report`.
 Pass `region_partitions` to the same API to assign complete mathematical regions
 within one layer to different devices. Omit it to retain the original contiguous
 layer behavior. It is mutually exclusive with `layer_partitions`; every device
-must own at least one complete region. The first implementation submits regions
-serially, preserving layer dependencies. It establishes an ownership/transport
-path, not simultaneous region execution or native cross-NPU event qualification.
+must own at least one complete region. The default submits regions serially,
+preserving layer dependencies. `region_concurrency="per_device"` selects the
+bounded same-layer candidate described below. Each policy needs its own hardware
+qualification; neither establishes native cross-NPU event support.
 
 ```python
 from benchmarks.capacity import placement_budget
@@ -202,6 +203,8 @@ regional memories and compact pending banks. Loading decodes on CPU, reconstruct
 the same logical region layout, rebuilds static transport indexes, and remaps
 saved partitions through `placement_devices`. The partition count and region
 assignment remain fixed; arbitrary optimizer-state resharding is not implemented.
+The checkpoint also retains `region_concurrency`; older manifests without that
+field restore as `serial`. Remapping to one device collapses concurrent groups.
 The same `placement_adamw` hook preserves original Parameter None-versus-zero,
 weight decay, moment and step-counter meaning when only some shards have gradients.
 
@@ -224,6 +227,64 @@ restored updates. Development tests retain finite FP32/BF16 trajectory deviation
 passing these mechanism tests does not turn those numerical failures into passes.
 The existing direct/synchronized NPU event failures remain in the current evidence;
 this implementation introduces no hardware qualification by itself.
+
+## Optional same-layer device concurrency
+
+`place_model(..., region_partitions=owners, region_concurrency="per_device")`
+uses one task per distinct destination device in a layer, and evaluates that
+device's regions serially. Repeated accelerator aliases resolve to one device.
+The pool lives for one forward or flush and has no more workers than the maximum
+number of participating devices in any layer. Layers join before any dependent
+transport or computation. A one-device layer stays on the caller. Projection,
+predecessor packing/transport, publication and work-counter aggregation stay on
+the caller. Parameter/private-state ownership and optimizer rules are unchanged.
+Pool creation and joins are part of complete execution timing.
+
+The caller initializes each accelerator through its public interface and captures
+its current stream before workers run. A worker enters that device and the same
+captured stream; this path introduces no additional device streams or event
+protocol. Worker contexts preserve the caller's grad, inference and backend
+autocast state, including dtype and cache policy. Backward uses Torch's ordinary
+autograd engine; there is no separate threaded backward scheduler here. Static
+owner dispatch is prepared before the pool, and each shard's local metadata is
+used only by its device task. Concurrent external forward calls, parameter edits
+or checkpoint loads on the same model are outside this finite execution contract.
+
+CPU names `cpu:0` and `cpu:1` explicitly simulate two logical device tasks, although
+their tensors reside on the same CPU. Repeated `cpu` names collapse into one task.
+These checks exercise overlap, thread state, gradients and ownership; they do not
+measure accelerator concurrency or prove a speedup. `placement_report` records
+the requested policy, maximum participating devices/workers and stream ownership.
+
+```sh
+python -m scripts.check_placement --partition-kind region \
+  --region-concurrency per_device --devices cpu:0 cpu:1 \
+  --precision bf16 --output NEW-concurrent-cpu.json
+# Inside a separately admitted two-device job:
+python -m scripts.check_placement --partition-kind region \
+  --region-concurrency per_device --devices npu:0 npu:1 \
+  --transport host_stage --precision bf16 --output NEW-concurrent-npu.json
+```
+
+`record_work=True` returns each region's counters through its task and aggregates
+them on the caller in original region order. Intrusive instrumentation has a
+different boundary. Caller `TorchDispatchMode`/`TorchFunctionMode` instances are
+not implicitly copied into workers; a concurrent request with an active mode
+fails explicitly. For RuntimeAudit, ArithmeticAudit, saved-tensor hooks or a
+caller-thread profiler, use `with serial_region_audit(model) as execution:` and
+retain `execution` in the witness record. The CLI does this for its operator
+witness and records requested `per_device` versus effective `serial`; timed runs
+retain the requested policy. This serial witness does not profile concurrent
+scheduling. Saved-tensor hooks/profilers are not detected or propagated by the
+thread adapter and must use that context. WorkAudit's shared hooks and mutable
+region counters are not thread safe, and its dense parameter inventory does not
+support placed shards; the serial context does not add that missing support.
+
+`tests/test_region_concurrency.py` and `tests/test_region_placement.py` cover actual
+CPU worker overlap, same-device order, TLS, joined failure cleanup, explicit audit
+identity, exact initial values/work, FP64 VJPs and continued updates, Timed compact
+tails, checkpoint policy/remapping and FP32/BF16 restored updates. Existing finite
+precision failures remain separate from these mechanism checks.
 
 ## Exact region and shared-group planning
 

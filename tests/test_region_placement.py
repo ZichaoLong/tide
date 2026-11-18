@@ -40,10 +40,12 @@ def full(model, x, state=None):
 @pytest.mark.parametrize("sharing,timing,partition", [
     ("independent", "settle", "group"), ("region_shared", "settle", "mixed"),
     ("independent", "timed", "singleton"), ("region_shared", "timed", "group")])
-def test_region_placement_whole_split_vjp_state_and_flush(sharing, timing, partition):
+@pytest.mark.parametrize("concurrency", ["serial", "per_device"])
+def test_region_placement_whole_split_vjp_state_and_flush(sharing, timing, partition, concurrency):
     torch.manual_seed(1405)
     reference = TideModel(config(sharing, timing, partition)).double()
-    placed = place_model(copy.deepcopy(reference), ["cpu", "cpu"], region_partitions=layout(reference))
+    placed = place_model(copy.deepcopy(reference), ["cpu:0", "cpu:1"], region_partitions=layout(reference),
+                         region_concurrency=concurrency)
     assert placement_report(placed)["kind"] == "hb-region-shards-1"
     torch.testing.assert_close(canonical_state_dict(placed), reference.state_dict(), atol=0, rtol=0)
     x = torch.randn(2, 4, 64, dtype=torch.float64, requires_grad=True)
@@ -64,6 +66,10 @@ def test_region_placement_whole_split_vjp_state_and_flush(sharing, timing, parti
     assert nested_comparison(canonical_state(placed, second.state), expected.state, atol=2e-9, rtol=2e-9)["within_threshold"]
     if timing == "timed":
         assert all(isinstance(bank, RegionLayerOutput) for bank in actual.state.pending)
+        for bank in actual.state.pending:
+            for chunk in bank.regions:
+                for tensor in (chunk.values, chunk.strengths):
+                    assert tensor.untyped_storage().nbytes() == tensor.numel()*tensor.element_size()
         a, b = reference.flush(expected.state), placed.flush(second.state)
         torch.testing.assert_close(a.values, b.values, atol=2e-9, rtol=2e-9)
         assert nested_comparison(canonical_state(placed, b.state), a.state, atol=2e-9, rtol=2e-9)["within_threshold"]
@@ -101,10 +107,12 @@ def test_regions_share_one_input_projection_and_deduplicate_source_nodes():
 
 
 @pytest.mark.parametrize("precision", ["fp32", "bf16"])
-def test_region_three_updates_checkpoint_and_actual_restored_timed_update(tmp_path, precision):
+@pytest.mark.parametrize("concurrency", ["serial", "per_device"])
+def test_region_three_updates_checkpoint_and_actual_restored_timed_update(tmp_path, precision, concurrency):
     torch.manual_seed(63)
     reference = TideModel(config("region_shared", "timed", recompute=True))
-    placed = place_model(copy.deepcopy(reference), ["cpu", "cpu"], region_partitions=layout(reference))
+    placed = place_model(copy.deepcopy(reference), ["cpu:0", "cpu:1"], region_partitions=layout(reference),
+                         region_concurrency=concurrency)
     optimizers = [torch.optim.AdamW(reference.parameters(), lr=1e-4, foreach=False),
                   placement_adamw(placed, lr=1e-4, foreach=False)]
     states = [None, None]
@@ -130,9 +138,11 @@ def test_region_three_updates_checkpoint_and_actual_restored_timed_update(tmp_pa
            state="within_threshold" if all(row["within_threshold"] for row in trajectory) else "finite_deviation"))
     path = tmp_path/"regions.pt"
     save_checkpoint(path, placed, state=states[1], optimizer=optimizers[1])
-    restored, state, slots = load_checkpoint(path, placement_devices=["cpu", "cpu"])
+    restored, state, slots = load_checkpoint(path, placement_devices=["cpu:1", "cpu:0"])
     resumed = placement_adamw(restored, lr=1e-4, foreach=False); resumed.load_state_dict(slots)
     assert placement_report(restored)["region_partitions"] == layout(reference)
+    assert placement_report(restored)["region_concurrency"] == concurrency
+    assert placement_report(restored)["devices"] == ["cpu:1", "cpu:0"]
     assert nested_comparison(restored.state_dict(), placed.state_dict(), atol=0, rtol=0)["exact"]
     assert nested_comparison(state, states[1], atol=0, rtol=0)["exact"]
     assert nested_comparison(resumed.state_dict(), optimizers[1].state_dict(), atol=0, rtol=0)["exact"]
@@ -183,7 +193,8 @@ def test_region_adamw_original_parameter_none_zero_decay_semantics():
 
 
 @pytest.mark.parametrize("mode", ["qualify", "inference", "train"])
-def test_region_cli_uses_existing_record_and_execution_modes(tmp_path, monkeypatch, mode):
+@pytest.mark.parametrize("concurrency", ["serial", "per_device"])
+def test_region_cli_uses_existing_record_and_execution_modes(tmp_path, monkeypatch, mode, concurrency):
     import json
     import sys
     from scripts import check_placement
@@ -193,6 +204,7 @@ def test_region_cli_uses_existing_record_and_execution_modes(tmp_path, monkeypat
     config_file.write_text(json.dumps(c.to_dict()))
     output = tmp_path/"observation.json"
     monkeypatch.setattr(sys, "argv", ["check_placement", "--partition-kind", "region", "--mode", mode,
+        "--region-concurrency", concurrency, "--devices", "cpu:0", "cpu:1",
         "--config", str(config_file), "--output", str(output), "--batch", "1", "--length", "2",
         "--steps", "1", "--warmup", "0", "--threads", "1"])
     assert check_placement.main() == 0
@@ -202,6 +214,9 @@ def test_region_cli_uses_existing_record_and_execution_modes(tmp_path, monkeypat
     assert row["placement"]["kind"] == "hb-region-shards-1"
     assert row["state"] in {"completed", "within_threshold", "finite_deviation"}
     assert row["placement"]["predecessor_transport"]
+    assert row["placement"]["region_concurrency"] == concurrency
+    assert row["operator_witness"]["execution"]["requested_region_concurrency"] == concurrency
+    assert row["operator_witness"]["execution"]["effective_region_concurrency"] == "serial"
     if mode == "qualify":
         assert row["comparisons"]["checkpoint_data"]["exact"]
         assert not row["comparisons"]["whole_result"]["metadata_mismatches"]

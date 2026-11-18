@@ -110,10 +110,8 @@ class _ShardedOwners(nn.Module):
         self._maps.setdefault(leaf, []).append(tuple(indices))
         self._shapes[leaf] = tuple(parameter.shape)
 
-    def _local(self, owners):
-        if not isinstance(owners, NodeOwners):
-            raise TypeError("placed owner modules require static NodeOwners")
-        possible = owners.possible_ids
+    def _prepare_dispatch(self, possible):
+        """Prepare static routing on the caller before any regional workers."""
         if possible not in self._dispatch:
             partitions = {self.partitions[index] for index in possible}
             if len(partitions) != 1:
@@ -123,7 +121,12 @@ class _ShardedOwners(nn.Module):
             local = tuple(i for i, owner in enumerate(
                 index for index, part in enumerate(self.partitions) if part == partition) if owner in possible)
             self._dispatch[possible] = shard_index, local
-        index, possible_local = self._dispatch[possible]
+        return self._dispatch[possible]
+
+    def _local(self, owners):
+        if not isinstance(owners, NodeOwners):
+            raise TypeError("placed owner modules require static NodeOwners")
+        index, possible_local = self._prepare_dispatch(owners.possible_ids)
         shard = self.shards[index]
         ids = owner_ids(owners)
         if ids.device != shard.owner_lookup.device:
@@ -263,17 +266,24 @@ def _resolve_transport(devices, requested):
     return requested
 
 
-def place_model(model, devices, *, layer_partitions=None, region_partitions=None, transport="auto"):
+def place_model(model, devices, *, layer_partitions=None, region_partitions=None, transport="auto",
+                region_concurrency="serial"):
     """Place complete HB layers (default) or complete mathematical regions.
 
     A region layout permits different owners within one layer, without splitting
     any region or duplicating a shared base. Input projections have one owner
     (partition zero); the final region's owner gathers the public Result.
-    CPU devices may repeat for logical-partition checks. Construct the optimizer
-    after placement with ``placement_adamw``.
+    ``region_concurrency="per_device"`` optionally runs one task per device in
+    a layer; the default is serial. Repeated devices share a task; distinct CPU
+    indices explicitly simulate device groups. Construct the optimizer after
+    placement with ``placement_adamw``.
     """
     if hasattr(model, "_placement_spec"):
         raise ValueError("model is already placed; restore into a new owner to change placement")
+    if region_concurrency not in {"serial", "per_device"}:
+        raise ValueError("region_concurrency must be serial or per_device")
+    if region_concurrency != "serial" and region_partitions is None:
+        raise ValueError("region_concurrency=per_device requires region_partitions")
     if model.graph.config.kind not in {"lattice", "exchange", "multiscale"}:
         raise ValueError("placement currently supports the strictly layered HB instances")
     devices = tuple(torch.device(device) for device in devices)
@@ -281,6 +291,10 @@ def place_model(model, devices, *, layer_partitions=None, region_partitions=None
         raise ValueError("placement needs explicit CPU, NPU or CUDA devices")
     if len({device.type for device in devices}) != 1:
         raise ValueError("mixed CPU/accelerator model placement is not implemented")
+    # Resolve indexless accelerator aliases once: two aliases of one real
+    # device must never acquire separate concurrent region tasks.
+    devices = tuple(torch.device(device.type, getattr(torch, device.type).current_device())
+                    if device.type != "cpu" and device.index is None else device for device in devices)
     requested_transport = transport
     transport = _resolve_transport(devices, requested_transport)
     if region_partitions is not None:
@@ -347,6 +361,7 @@ def place_model(model, devices, *, layer_partitions=None, region_partitions=None
         model._placement_spec["layer_partitions"] = list(partitions)
     else:
         model._placement_spec["region_partitions"] = list(regions)
+        model._placement_spec["region_concurrency"] = region_concurrency
         from .region_placement import build_region_transfer_plan
         build_region_transfer_plan(model)
     return model
@@ -419,9 +434,10 @@ def placement_report(model):
     report = dict(**model._placement_spec, actual_devices=devices,
                   total_unique_parameters=sum(parameter.numel() for parameter in model.parameters()))
     if model._placement_spec["kind"] == "hb-region-shards-1":
+        from .region_execution import execution_report
         report["predecessor_transport"] = list(model._region_transfer_summary)
         report["pending_layout"] = "private regional compact last-tick tensors; no window-sized pending views"
-        report["execution"] = "serial region submissions with layer dependencies; no region concurrency qualification"
+        report["execution"] = execution_report(model)
     return report
 
 

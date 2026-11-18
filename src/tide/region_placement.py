@@ -1,8 +1,9 @@
-"""Serial whole-region placement using the ordinary regional tensor evaluator.
+"""Whole-region placement using the ordinary regional tensor evaluator.
 
 A layer bank keeps each region on its owner. Only the predecessor nodes needed
 by a destination partition are packed and transported, once per source owner.
-This is not a concurrent scheduler, replica implementation, or peer-DMA claim.
+Optional per-device tasks join at each layer; transport remains caller-owned.
+This is not a general graph scheduler, replica implementation or peer-DMA claim.
 """
 from dataclasses import dataclass
 
@@ -140,6 +141,22 @@ def build_region_transfer_plan(model):
     model._region_last_use = tuple(last_use)
     model._region_transfers, model._region_routes = tuple(transfers), routes
     model._region_transfer_summary = summary
+    # Wrappers are shared Python objects, but every tensor shard belongs to one
+    # task. Populate their shared dispatch dictionary before workers start.
+    # Each shard's uniform-group cache is touched only by its device task.
+    for region, members in enumerate(model.graph.regions):
+        for name, wrapper in model._shard_registry.items():
+            if name.startswith("receive."):
+                possible = members
+            elif name.startswith("describe."):
+                possible = tuple(model.description_ids[node] for node in members
+                                 if node in model.description_ids)
+            else:
+                kind = name.split(".")[1]
+                possible = tuple(model.memory_ids[kind][node] for node in members
+                                 if node in model.memory_ids[kind])
+            if possible:
+                wrapper._prepare_dispatch(tuple(possible))
 
 
 def _transport_bank(bank, plan, device, transport):
@@ -190,37 +207,41 @@ def run_region_model(model, x, state=None, *, record_work=False, inject=True):
         embedded = {role: value.new_zeros((batch, length, model.config.d)).index_copy(1, loc, value)
                     for role, value in embedded.items()}
     layers, memories, work, pending_tails = [], [], [], []
-    for layer, regions in enumerate(model.layer_regions):
-        inputs = _layer_inputs(model, layer, layers, state, embedded)
-        chunks = []
-        for region in regions:
-            partition = model._region_partitions[region]
-            device = model._placement_devices[partition]
-            banks, pending, projected = inputs[partition]
-            contents, masses, classes = model._incoming(region, banks, pending, projected, batch, length,
-                                                        device, inject, routes=model._region_routes[region])
-            base = torch.arange(length, device=device, dtype=torch.int64)
-            time = ((base+start)*model.graph.period+layer+1 if model.settle else base+start*model.graph.period+1)
-            old = None if state is None else state.memories[region]
-            args = (region, contents, masses, classes, time, old, record_work)
-            if model.config.checkpoint_regions and torch.is_grad_enabled():
-                from torch.utils.checkpoint import checkpoint
-                full, control, saved, measured = checkpoint(model._evaluate_region, *args, use_reentrant=False)
-            else:
-                full, control, saved, measured = model._evaluate_region(*args)
-            chunks.append(LayerOutput(full, control)); memories.append(saved)
-            if measured is not None:
-                work.append(measured)
-        bank = RegionLayerOutput(tuple(chunks))
-        layers.append(bank)
-        if not model.settle:
-            pending_tails.append(RegionLayerOutput(tuple(LayerOutput(
-                chunk.values[:, :, -1:].clone(), chunk.strengths[:, :, -1:].clone()) for chunk in chunks)))
-        # This releases Python-owned banks after their final consumer. Autograd
-        # still owns any saved tensors needed by backward; clones do not detach.
-        for origin, last_use in enumerate(model._region_last_use[:layer+1]):
-            if last_use == layer and origin != len(model.layer_regions)-1:
-                layers[origin] = None
+    from .region_execution import RegionExecutor
+    with RegionExecutor(model) as executor:
+        for layer, regions in enumerate(model.layer_regions):
+            inputs = _layer_inputs(model, layer, layers, state, embedded)
+            def evaluate(region):
+                partition = model._region_partitions[region]
+                device = model._placement_devices[partition]
+                banks, pending, projected = inputs[partition]
+                contents, masses, classes = model._incoming(region, banks, pending, projected, batch, length,
+                                                            device, inject, routes=model._region_routes[region])
+                base = torch.arange(length, device=device, dtype=torch.int64)
+                time = ((base+start)*model.graph.period+layer+1 if model.settle else base+start*model.graph.period+1)
+                old = None if state is None else state.memories[region]
+                args = (region, contents, masses, classes, time, old, record_work)
+                if model.config.checkpoint_regions and torch.is_grad_enabled():
+                    from torch.utils.checkpoint import checkpoint
+                    full, control, saved, measured = checkpoint(model._evaluate_region, *args, use_reentrant=False)
+                else:
+                    full, control, saved, measured = model._evaluate_region(*args)
+                return LayerOutput(full, control), saved, measured, time
+            chunks = []
+            for chunk, saved, measured, time in executor.map(regions, evaluate):
+                chunks.append(chunk); memories.append(saved)
+                if measured is not None:
+                    work.append(measured)
+            bank = RegionLayerOutput(tuple(chunks))
+            layers.append(bank)
+            if not model.settle:
+                pending_tails.append(RegionLayerOutput(tuple(LayerOutput(
+                    chunk.values[:, :, -1:].clone(), chunk.strengths[:, :, -1:].clone()) for chunk in chunks)))
+            # Python-owned banks expire after their final consumer; autograd
+            # keeps saved tensors. The compact tails remain differentiable.
+            for origin, last_use in enumerate(model._region_last_use[:layer+1]):
+                if last_use == layer and origin != len(model.layer_regions)-1:
+                    layers[origin] = None
     pending = tuple(pending_tails)
     output_device = model._placement_devices[model._placement_spec["output_partition"]]
     final = _gather_outputs(model, bank, output_device, transport)

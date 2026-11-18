@@ -61,6 +61,7 @@ def load_checkpoint(path, *, device="cpu", placement_devices=None):
             raise ValueError("restored placement must preserve the saved number of partitions")
         place_model(model,devices,layer_partitions=placement.get("layer_partitions"),
                     region_partitions=placement.get("region_partitions"),
+                    region_concurrency=placement.get("region_concurrency","serial"),
                     transport=placement.get("requested_transport",placement.get("transport","direct")))
         model.load_state_dict(payload["parameters"])
         state = place_state(model,payload["state"])
