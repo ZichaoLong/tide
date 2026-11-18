@@ -135,9 +135,14 @@ Allocator-minus-visible-union is measured at the same phase boundary and labelle
 unclassified live allocation. Operator scratch is **unmeasured**; the foreach
 parameter-size allowance is declared separately as a planning quantity. Peaks at
 different times, saved graph storage, private state and persistent owner payload
-overlap and cannot be summed. Hooks, work auditing, runtime auditing and retained
+overlap and cannot be summed. Hooks, runtime auditing and retained
 diagnostic outputs can change allocation lifetime, so compare these diagnostics
 with the independent normal-time memory measurements instead of replacing them.
+Semantic `WorkAudit` is deliberately absent from the ledger pass: its CPU support
+copies would contaminate runtime/allocator observations, and checkpoint backward
+recomputation could be counted again as semantic work. Use the separate normal
+benchmark's initial/final semantic audit; `actual_work` stays explicitly unmeasured
+in the ledger. `input_positions` is the declared real B×L denominator only.
 
 `search_report` verifies the recorded raw result/audit/calibration/frozen-config
 hashes before rendering the two tables. Failed/limited children and noisy or

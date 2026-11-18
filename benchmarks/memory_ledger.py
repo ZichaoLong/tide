@@ -6,7 +6,6 @@ Unclassified allocator memory is not relabelled as measured operator scratch.
 """
 import argparse
 from collections import Counter
-from contextlib import nullcontext
 import gc
 import json
 import os
@@ -22,7 +21,7 @@ from benchmarks.baselines import TransformerBaseline, parameter_count
 from benchmarks.continuous import _tensors, forward_state
 from benchmarks.references import file_identity, load_reference
 from benchmarks.run import _device_memory, _loss, check_memory, synchronize
-from benchmarks.statistics import RuntimeAudit, WorkAudit
+from benchmarks.statistics import RuntimeAudit
 from benchmarks.workloads import activity_fixture, paired_input, parameter_hash, tensor_hash
 from scripts.job import atomic
 
@@ -180,8 +179,10 @@ def diagnose(model, inputs, *, mode, precision, optimizer=None, state=None, chun
     saved = SavedStorageAudit(existing)
     phases = {"boundary": snapshot(model, optimizer, inputs, state, [], None, device)}
     _device_memory(device, reset=True)
-    work = WorkAudit(model) if isinstance(model, TideModel) else None
-    with saved, RuntimeAudit() as runtime, work if work is not None else nullcontext():
+    # WorkAudit copies support to CPU and may re-enter regions during checkpoint
+    # recomputation. It belongs to a separate semantic observation, not this
+    # storage/runtime pass: its allocations and repeated counts are intrusive.
+    with saved, RuntimeAudit() as runtime:
         with torch.set_grad_enabled(mode != "inference"), precision_context(device, precision):
             values, state = forward_window(model, inputs, state, chunk=chunk, decode=decode)
             loss = _loss(values) if optimizer is not None else None
@@ -212,7 +213,10 @@ def diagnose(model, inputs, *, mode, precision, optimizer=None, state=None, chun
     synchronize(device)
     phases["released_outputs_and_graph"] = snapshot(model, optimizer, inputs, state, [], saved, device)
     return state, dict(phases=phases, saved_for_backward=saved.report(), runtime=runtime.report(),
-                       actual_work=None if work is None else work.report(), loss=loss_value, finite=True,
+                       actual_work=None,
+                       work_measurement="not observed in this ledger; use a separate semantic WorkAudit pass/reference",
+                       input_positions=inputs.shape[0]*inputs.shape[1],
+                       loss=loss_value, finite=True,
                        state_position=state.position, measurement="intrusive diagnostic; no normal timing/throughput result")
 
 

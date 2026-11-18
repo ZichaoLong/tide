@@ -66,7 +66,8 @@ def test_small_real_ledger_keeps_optimizer_state_and_saved_graph_separate(precis
     assert state.position == 2
     assert row["saved_for_backward"]["peak_live_unique_storage_bytes"] > 0
     assert row["saved_for_backward"]["current_live_unique_storage_bytes"] == 0
-    assert row["actual_work"]["input_positions"] == 2
+    assert row["input_positions"] == 2
+    assert row["actual_work"] is None
     assert row["finite"]
     released = row["phases"]["released_outputs_and_graph"]["categories"]
     parameter_bytes = sum(p.numel()*p.element_size() for p in model.parameters())
@@ -91,7 +92,8 @@ def test_timed_diagnostic_continues_detached_state_and_retains_view_storage():
     state, second = diagnose(model, inputs, mode="grad_forward", precision="fp32", state=state, chunk=1, decode=1)
     assert state.position == 8
     for row in (first, second):
-        assert row["actual_work"]["input_positions"] == 3
+        assert row["input_positions"] == 3
+        assert row["actual_work"] is None
         assert row["saved_for_backward"]["current_live_unique_storage_bytes"] == 0
         private = row["phases"]["released_outputs_and_graph"]["categories"]["private_state"]
         assert private["unique_storage_bytes"] >= private["payload_bytes"]
