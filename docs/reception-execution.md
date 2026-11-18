@@ -106,8 +106,14 @@ python -m scripts.check_training_paths --config INCOMING-CONFIG.json \
 The CPU tests include independent literal formulas and every input/parameter
 VJP, genuine zero-prior directional derivatives, FP64 multi-update equivalence,
 FP32/BF16 real restore/update checks, and inventory/placed-fallback checks.
-These scopes are distinct. Early FP32 cross-candidate multi-update checks had
-finite optimizer-coordinate deviations without support/time differences; they
-are not certified as numerically equivalent by the FP64 or self-restore tests.
-Formal device/path qualification and performance recommendations belong to the
-current source-scoped evidence. Long experiments follow [execution](execution-flows.md).
+These scopes are distinct. The [FP32 Reception path evidence](evidence/reception-numerics-20261118.md)
+covers all three incoming profiles on a compact-9 Settle NPU fixture: inference,
+grad-enabled forward, repeated VJPs, three continuing updates and nine actual
+new-process restored updates. Eight of nine candidates retain `finite_deviation`
+under the original thresholds; no recorded support, integer-time or gradient
+connectivity difference was observed. All nine candidate-local restored updates
+are within threshold, which does not erase cross-candidate training deviations.
+The internal NPU witness hit its capture bound, so an earliest causal divergence
+was not established. CPU formula and bounded AdamW/thread witnesses support their
+own local conclusions only. Performance recommendations retain their separate
+source and workload scope. Long experiments follow [execution](execution-flows.md).

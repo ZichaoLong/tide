@@ -48,6 +48,11 @@ accepts `--aggregation`, `--reception-qkv-backend`, and
 candidates; qualification and measured recommendations retain their source scope.
 The [Reception execution guide](reception-execution.md) gives the formula,
 mask/gradient domain, full-Reception timing and integrated path-check commands.
+The [FP32 Reception evidence](evidence/reception-numerics-20261118.md) records
+three incoming profiles on a small NPU Settle fixture: eight of nine candidates
+retain finite cross-mode/training deviations; all nine candidate-local fresh-process
+restored updates are within the original threshold. The first internal NPU causal
+divergence remains unresolved, and these results do not qualify every scale or mode.
 
 `ssd_scan_backend` selects the SSD matrix recurrence independently of the vector
 summary backend and is saved in checkpoints. Its default `"block"` retains the
