@@ -136,7 +136,9 @@ def fingerprint(value):
         result.update(name.encode())
         result.update(str(tuple(item.shape)).encode())
         result.update(str(item.dtype).encode())
-        result.update(item.detach().cpu().contiguous().view(torch.uint8).numpy().tobytes())
+        # AdamW step counters are scalar tensors. Flattening keeps every
+        # existing payload byte unchanged while permitting dtype byte views.
+        result.update(item.detach().cpu().contiguous().reshape(-1).view(torch.uint8).numpy().tobytes())
     return result.hexdigest()
 
 

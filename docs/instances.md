@@ -46,6 +46,8 @@ They do not switch `source_residual` into self-Attention. The training entry
 accepts `--aggregation`, `--reception-qkv-backend`, and
 `--[no-]reception-mask-padding` as explicit overrides. These are implementation
 candidates; qualification and measured recommendations retain their source scope.
+The [Reception execution guide](reception-execution.md) gives the formula,
+mask/gradient domain, full-Reception timing and integrated path-check commands.
 
 The [training entry and recommendations](execution-recommendations.md) provide
 loadable presets, explicit overrides, three modes and actual resume. Use
