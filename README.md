@@ -12,6 +12,7 @@
 源码、配置和研究结论保留；旧检查点不能恢复或重新评价。
 后续[数据清理](docs/studies/generated-data-retirement-20261118.md)已将公开原始语料单独整理，
 删除可再生成的数据并清空`runs/`，另释放821.883MiB；旧token/划分数据已不可直接使用。
+公开原始数据暂存于`~/public`，按来源、类型、仓库和固定版本组织；计划由用户迁入`/mi/data2T/public`。
 两个`.venv`与整个项目`.local`也已删除，另释放325.922MiB；当前工作目录约103MiB。
 [清理结果与保留范围](docs/studies/project-retirement-20261118.md) ·
 [最后一批关闭摘要](docs/studies/hb-mem-v13-closed-20261118.md)。v13为9条新链完成、7条用户取消，后续没有自动任务。

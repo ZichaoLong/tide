@@ -12,7 +12,12 @@
 三套私有环境、一次性清理清单/脚本/日志和`.local/LENS.md`已删除；
 先注销了三个Lens writer注册，未修改Lens服务、访问策略或公共环境。
 [环境删除凭据](evidence/private-environment-retirement-20261118.json)保留；安装锁只表示历史身份。
-两份原始WikiText-103文件已验证并暂存于`../tide-public-data-20261118/`，等待用户移入公共目录。
+两份原始WikiText-103文件已验证并暂存于`~/public/huggingface/datasets/Salesforce/wikitext/revisions/`。
+公开目录名和清单已去除项目/账户身份；最终根目录为`/mi/data2T/public`，待用户处理权限与迁移。
+随后单独授权的账号级`~/.local`首批清理又释放6.563GiB，可读取占用约10.25→3.68GiB；
+Lens/FOCUS/netpath服务进程身份未变。临时执行材料已移除，第二批维护候选未处理。
+[账号级清理凭据](evidence/account-local-cleanup-20261118.json) ·
+[公开数据中性布局](evidence/public-data-layout-20261118.json)。
 旧review/submit/resume命令不能当当前入口；历史恢复通过不表示权重仍可加载。
 
 v13最终9条新链完成128Mi和独立确认，7条由用户取消，8个复用qry新确认完成。

@@ -1,0 +1,31 @@
+{
+  "at": "2026-11-18T02:56:09.612732+00:00",
+  "authorization": "User selected /mi/data2T/public and requested neutral extensible naming; prepare under this account until permissions are handled",
+  "completed_at": "2026-11-18T02:56:09.949993+00:00",
+  "files": [
+    {
+      "download_url": "https://huggingface.co/datasets/Salesforce/wikitext/resolve/b08601e04326c79dfdd32d625aee71d232d685c3/wikitext-103-raw-v1/train-00000-of-00002.parquet",
+      "path": "wikitext-103-raw-v1/train-00000-of-00002.parquet",
+      "sha256": "74da360f23826045b3e6ac6375411fdb15f003030aa74f2596ed08b857cb9212",
+      "size_bytes": 156987808
+    },
+    {
+      "download_url": "https://huggingface.co/datasets/Salesforce/wikitext/resolve/b08601e04326c79dfdd32d625aee71d232d685c3/wikitext-103-raw-v1/train-00001-of-00002.parquet",
+      "path": "wikitext-103-raw-v1/train-00001-of-00002.parquet",
+      "sha256": "ba090ac30dbf5461e8dcbdd1a1b8e6f3cf9c2c756d64f0c1220450acd514f720",
+      "size_bytes": 157088770
+    }
+  ],
+  "intended_public_root": "/mi/data2T/public",
+  "manifest_sha256": "1be6e0cab1624e886e2834f348d7758b3944174005266a0d4a685d6d691b38c5",
+  "method": "same-filesystem rename of original downloaded shards; regenerate only neutral metadata",
+  "neutral_metadata_verified": true,
+  "old_staging_directory_removed": true,
+  "original_file_bytes": 314076578,
+  "original_sha256_verified": true,
+  "public_destination_modified": false,
+  "revision_relative_path": "huggingface/datasets/Salesforce/wikitext/revisions/b08601e04326c79dfdd32d625aee71d232d685c3",
+  "schema": "public-data-staging-layout-review-v1",
+  "staging_root": "~/public",
+  "state": "completed"
+}

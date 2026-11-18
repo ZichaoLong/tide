@@ -9,14 +9,32 @@
 
 ## 公开数据交接
 
-暂存目录：`/mi/data2T/zlong/home/llm/tide-public-data-20261118/`。
+用户随后指定最终公共根目录为`/mi/data2T/public`，权限和迁移由用户处理。
+当前已按中性、可扩展布局整理到本账户的`~/public/`：
+
+```text
+public/
+  README.md
+  huggingface/datasets/Salesforce/wikitext/revisions/
+    b08601e04326c79dfdd32d625aee71d232d685c3/
+      manifest.json
+      SHA256SUMS
+      wikitext-103-raw-v1/
+        train-00000-of-00002.parquet
+        train-00001-of-00002.parquet
+```
+
+目录和附带元数据中没有TIDE、账户名或本机home路径。原带项目名的暂存目录已移除。
+后续同类下载沿用`<来源>/<资源类型>/<命名空间>/<仓库>/revisions/<固定版本>/`，
+每个版本清单只列实际下载的原始文件；新版本另设目录。
 只含公开的`Salesforce/wikitext`原始train两分片，固定版本
 `b08601e04326c79dfdd32d625aee71d232d685c3`、子集`wikitext-103-raw-v1`。
-用户可以将整个暂存目录移入后续选定的公共数据目录；本次未自动安装到公共位置。
+用户后续可将`~/public/`的内容合并到`/mi/data2T/public/`；本次未修改公共位置。
 
-目录包含`manifest.json`、`SHA256SUMS`和`README.md`，记录下载URL、版本、字节数、SHA-256及上游
+每个版本目录包含`manifest.json`和`SHA256SUMS`，根目录含通用`README.md`，记录下载URL、版本、字节数、SHA-256及上游
 CC-BY-SA-3.0/GFDL许可声明。两份原始文件移动前后均与旧数据锁中的SHA-256相符，
 独立执行`sha256sum -c SHA256SUMS`也通过。移动使用同文件系统rename，没有再复制300MiB。
+[新布局核验](../evidence/public-data-layout-20261118.json)保留实际相对路径和文件身份。
 
 删除的内容包括展开文本、训练/验证/确认/test token数组、各轮完整数据锁与划分记录及准备状态。
 数据来源与文件hash保留在小型清理凭据和暂存清单中；这不能替代原来的完整划分与排除列表。
@@ -38,7 +56,32 @@ CC-BY-SA-3.0/GFDL许可声明。两份原始文件移动前后均与旧数据锁
 任务结束后不再需要，已一并删除；主要清理结果及失败说明仍在Git中。
 私有`.local/LENS.md`也按授权删除，其内容未写入公开记录。
 [环境及.local删除凭据](../evidence/private-environment-retirement-20261118.json)记录范围和核验。
-没有改动账号级`~/.local`、共享`/opt`环境、Lens服务/访问策略或公开数据暂存目录。
+上述项目内环境清理未涉及账号级`~/.local`、共享`/opt`环境或Lens服务/访问策略。
+后续单独授权的账号级清理见下一节。
 
 源码、配置、依赖身份、安装wheel和审阅结论继续保留；不承诺公共基线或包源未来不变。
 旧安装锁是当时的记录，环境重建后须重新确认实际安装与来源。
+
+## 后续授权的账号级.local首批清理
+
+只读调查后，用户同意优先推荐的首批范围，现已删除以下6个目录，按实际分配块去重释放6.563GiB：
+
+- `~/.local/state/trackio-lens/packaged-skill`
+- `~/.local/state/trackio-lens/managed-acceptance`
+- `~/.local/state/trackio-lens/managed-acceptance-repeat`
+- `~/.local/state/trackio-lens/fresh-install-check`
+- `~/.local/state/trackio-lens/compatibility-tools`
+- `~/.local/share/focus/_global/web-updates/2edf24dec15f2561477889843dbb5623`
+
+旧SDK测试解释器先经官方CLI注销writer注册。FOCUS升级状态为succeeded，升级作业已退出；
+当前安装是独立副本。Lens/FOCUS/netpath的主PID和启动身份、注销后的Lens配置均未改变。
+当前正式服务安装、Node/Codex、公共数据、Ascend和netpath的第二批维护候选保留。
+
+第一次预检将所有硬链接一概拒绝，未删除任何目标。定位到8个esbuild inode的两份路径均在
+各自固定删除目录内后，新固定r2检查完整的目录内链接计数并去重统计，随后完成删除；
+没有放行跨删除边界的硬链接。两次工作均在background.slice，2核/768MiB/每次600秒上限。
+同账户进程巡检有47个FD权限不可读的进程，这一可见性限制仍记录；候选中未见可访问的活动使用者。
+
+账号级`.local`可读取占用约10.25→3.68GiB。普通目录扫描仍有4处容器层权限不可读，
+该值不是跨权限的完整统计。临时执行器、日志和回执在确认服务结束并写入
+[小型清理凭据](../evidence/account-local-cleanup-20261118.json)后移除，没有新建持久的cleanup目录。

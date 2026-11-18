@@ -1,0 +1,95 @@
+{
+  "all_targets_absent": true,
+  "allocated_bytes_retired": 7047151616,
+  "authorization": "2026-11-18 user accepted the first recommended 6.56GiB batch",
+  "cleanup_services_terminated": true,
+  "completed_at": "2026-11-18T02:58:42.884468+00:00",
+  "execution": {
+    "cpu_quota_percent": 200,
+    "final_execution_seconds": 18.571953,
+    "final_source_sha256": "7e27e82109b6fd465d49d9d4ad2013895eb8a8aa40ad3deae710b34db0992572",
+    "memory_max_mib": 768,
+    "runtime_max_seconds_per_attempt": 600,
+    "slice": "background.slice"
+  },
+  "gib_retired": 6.56317138671875,
+  "guard": {
+    "fd_inaccessible_processes": 47,
+    "focus_update_succeeded_and_stopped": true,
+    "old_writer_unregistered": true,
+    "visible_candidate_users": []
+  },
+  "initial_preflight": {
+    "deleted_targets": 0,
+    "raw_error": "AssertionError()",
+    "resolved_reason": "Initial check rejected all hard links. Eight esbuild inodes had two aliases each, all inside their respective approved deletion roots. r2 checks complete internal link accounting and deduplicates allocated blocks; no external hard links admitted.",
+    "source_sha256": "3b8848ff3b8750c17437a190a1d1cad47052aad2ae93dd286f7cacd6fa568d36",
+    "state": "failed_before_deletion"
+  },
+  "lens_configuration_unchanged_after_writer_unregister": true,
+  "lens_test_writer_unregistered": true,
+  "private_instance_details_omitted": true,
+  "protected_service_identities_unchanged": true,
+  "remaining_candidates": "Ascend maintenance and old netpath maintenance artifacts were outside this first batch and remain; active runtimes and public data are preserved.",
+  "schema": "account-local-cleanup-review-v1",
+  "size_scan_permission_denied_count": 4,
+  "state": "completed",
+  "targets": [
+    {
+      "allocated_bytes": 1825112064,
+      "entries": 66208,
+      "files": 59685,
+      "internal_hardlinked_inodes": 2,
+      "metadata_sha256": "de18cccfadaf0941dd6821b2ed38c9b58c60ded13c625d068c541eaa8903fa05",
+      "path": ".local/state/trackio-lens/packaged-skill",
+      "symlinks": 86
+    },
+    {
+      "allocated_bytes": 1623302144,
+      "entries": 58932,
+      "files": 53526,
+      "internal_hardlinked_inodes": 2,
+      "metadata_sha256": "0475882aab7e49987967c0fa09971cc14139fc102e3a9c3c0e3edfb8a25d38c1",
+      "path": ".local/state/trackio-lens/managed-acceptance",
+      "symlinks": 81
+    },
+    {
+      "allocated_bytes": 1623474176,
+      "entries": 58941,
+      "files": 53531,
+      "internal_hardlinked_inodes": 2,
+      "metadata_sha256": "0322e2ff5ab370d4aedc6a5db8bac5f411217626d0566c17e8fd86de15a03c78",
+      "path": ".local/state/trackio-lens/managed-acceptance-repeat",
+      "symlinks": 82
+    },
+    {
+      "allocated_bytes": 1004699648,
+      "entries": 33046,
+      "files": 30061,
+      "internal_hardlinked_inodes": 1,
+      "metadata_sha256": "17a0a9fdb6dc7a9fdf7d5843a8ea8898292ed842123209b571dbb6f7f3668ff0",
+      "path": ".local/state/trackio-lens/fresh-install-check",
+      "symlinks": 43
+    },
+    {
+      "allocated_bytes": 208916480,
+      "entries": 7167,
+      "files": 6459,
+      "internal_hardlinked_inodes": 0,
+      "metadata_sha256": "26f8dc3cc8712fca41942ae88aed590e60c7f77ab22afbade20cae4c1148d4fd",
+      "path": ".local/state/trackio-lens/compatibility-tools",
+      "symlinks": 4
+    },
+    {
+      "allocated_bytes": 761647104,
+      "entries": 46353,
+      "files": 43952,
+      "internal_hardlinked_inodes": 1,
+      "metadata_sha256": "bc356df746e324b0ed12ff970682303784f9b6bdfaf4ba142c33f5648765940f",
+      "path": ".local/share/focus/_global/web-updates/2edf24dec15f2561477889843dbb5623",
+      "symlinks": 27
+    }
+  ],
+  "temporary_execution_files_removed": true,
+  "visible_account_local_gib_after": 3.6825485229492188
+}

@@ -11,8 +11,11 @@
   checkpoint availability. Do not run old submit/resume/review commands as
   if their inputs still exist; use the retained closure evidence instead.
   Subsequent2026-11-18 user instruction separated downloaded public data:
-  the two original WikiText-103 shards (~300MiB) are verified and staged at
-  ../tide-public-data-20261118 for the user to move into shared storage.
+  the two original WikiText-103 shards (~300MiB) are verified and staged
+  under ~/public/huggingface/datasets/Salesforce/wikitext/revisions/.
+  The intended shared root is /mi/data2T/public; the user will handle
+  permissions/migration. Public names/metadata contain no project/account
+  identity. The earlier tide-public-data-20261118 staging root is retired.
   runs/ is now EMPTY: generated text/token arrays and full data/split locks
   were deleted, freeing another821.883MiB. See
   docs/studies/generated-data-retirement-20261118.md. Do not use the old
@@ -25,6 +28,12 @@
   Old installation locks are historical; no current private installation
   or recovery environment exists. Do not recreate retired directories.
   Keep install wheels, current code/configs and summaries.
+  A separately approved first account-level cleanup also retired6.563GiB
+  of old Lens acceptance environments and completed FOCUS update staging.
+  Live Lens/FOCUS/netpath runtimes were preserved; the obsolete test writer
+  was unregistered. No temporary cleanup directory remains. See
+  docs/evidence/account-local-cleanup-20261118.json. The secondary Ascend
+  and netpath maintenance candidates were not part of this first batch.
   Lens service/auth and other projects were unchanged. User is independently
   cleaning the foundation worktree; do not restore it if it disappears.
   Earlier retain-all-artifacts/deadline/queued-work notes below are HISTORY,
