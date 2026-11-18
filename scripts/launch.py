@@ -6,6 +6,7 @@ Relative output arguments are relative to the immutable source; prefer an
 absolute output under the new run directory, or the literal {run} placeholder.
 """
 import argparse
+import hashlib
 import io
 import os
 from pathlib import Path
@@ -68,14 +69,26 @@ def main():
                   "--source", source, "--max-rss-gib", str(args.rss_gib), "--"] + command
     launcher = run / "run.sh"
     lines = ["#!/bin/bash", "set -eo pipefail", "source /usr/share/Modules/init/bash",
-             "module purge", "module load ascend/dev-workspace-9.2.0",
+             "module purge", "unset PYTHONPATH", "module load ascend/dev-workspace-9.2.0",
              "source " + shlex.quote(str(root / ".venv-instances/bin/activate"))]
-    environment = {"PYTHONPATH": str(frozen / "src"), "TIDE_SOURCE_COMMIT": source,
+    environment = {"TIDE_SOURCE_COMMIT": source,
                    "TIDE_HARNESS_COMMIT": source, "TORCH_DEVICE_BACKEND_AUTOLOAD": "0" if not args.npu_count else "1",
                    "TIDE_RESOURCE_IDENTITY": "exclusive_cooperative_queue; external jobs not controlled" if args.npu_count else "pinned_cpu; shared host",
                    "OMP_NUM_THREADS": str(args.threads), "MKL_NUM_THREADS": str(args.threads),
                    "OPENBLAS_NUM_THREADS": str(args.threads)}
     lines += ["export " + key + "=" + shlex.quote(value) for key, value in environment.items()]
+    # The selected module supplies CANN's TBE Python packages. Replacing its
+    # search path breaks lazy operator compilation even when eager ops work.
+    # Prepend our frozen package without inheriting a different caller stack.
+    lines += ["export PYTHONPATH=" + shlex.quote(str(frozen / "src")) + '"${PYTHONPATH:+:$PYTHONPATH}"']
+    environment_record = "\n".join([
+        "import importlib.util, os, sys",
+        "from scripts.job import atomic",
+        "names = ('PYTHONPATH', 'PATH', 'LD_LIBRARY_PATH', 'ASCEND_HOME_PATH', 'ASCEND_OPP_PATH', 'LOADEDMODULES', 'VIRTUAL_ENV', 'TORCH_DEVICE_BACKEND_AUTOLOAD')",
+        "modules = {name: importlib.util.find_spec(name) for name in ('tide', 'tbe')}",
+        "atomic(sys.argv[1], dict(executable=sys.executable, sys_path=sys.path, environment={name: os.environ.get(name) for name in names}, module_origins={name: None if spec is None else spec.origin for name, spec in modules.items()}))",
+    ])
+    lines += [shlex.join([python, "-c", environment_record, str(run / "environment.json")])]
     lines += ["exec " + shlex.join(supervised), ""]
     launcher.write_text("\n".join(lines))
     unit = "tide-" + args.name
@@ -87,6 +100,9 @@ def main():
               "--property=StandardError=append:" + str(run / "stderr.log"), "/bin/bash", str(launcher)]
     record = dict(source=source, source_path=str(frozen), run=str(run), unit=unit, arguments=vars(args),
                   launch=launch, command=command, environment=environment, state="prepared",
+                  pythonpath_policy=dict(prepend=str(frozen / "src"), inherit="selected baseline module only; caller PYTHONPATH cleared before module load"),
+                  actual_environment_path=str(run / "environment.json"),
+                  launcher_sha256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
                   resource_enforcement="process affinity; sampled process-tree RSS, not cgroup hard memory",
                   device_policy="exclusive cooperative whole-group queue" if args.npu_count else "cpu")
     atomic(run / "launch.json", record)

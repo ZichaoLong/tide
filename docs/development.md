@@ -10,6 +10,7 @@ Published environment-module baseline: `ascend/dev-workspace-9.2.0`
 in a fresh shell if `module` is not already defined. Then, from the checkout:
 
 ```sh
+source /usr/share/Modules/init/bash
 module load ascend/dev-workspace-9.2.0
 python -m venv --system-site-packages .venv-instances
 source .venv-instances/bin/activate
@@ -26,15 +27,41 @@ private Torch environment; do not infer device qualification from installation.
 
 CPU entry points disable vendor autoload. NPU jobs use the local Ascend admission
 workflow and an explicitly selected device; loading a module is not allocation.
+For frozen jobs, prepend the selected Tide `src` to the module-provided
+`PYTHONPATH` while preserving its other entries, including CANN's TBE Python
+paths. Replacing the entire path can hide installed compiler modules; that is a
+launcher environment defect, not evidence that the public baseline needs changes.
+Record the effective launch environment with each run. The CPU installed-wheel
+smoke intentionally removes `PYTHONPATH` to verify package isolation; it does not
+qualify an accelerator compiler environment.
 Standalone C++ is optional future work: the published matching SDK module is
 `libtorch-npu/2.12.0-cann9.2.0`, loaded in its own shell when needed.
+
+## Installed-package validation
+
+The wheel contains `tide`; `benchmarks`, `scripts` and `examples` are checkout
+tools. A source-tree import is not evidence that the wheel was installed correctly.
+Build a copy of the frozen source with `pip wheel --no-deps --no-build-isolation`,
+install that wheel with `--no-deps` into a new private venv, and run the public API
+outside the checkout with `PYTHONPATH` removed and Python `-I`. Check that loaded
+`tide` modules resolve inside the new venv and match the wheel contents.
+Use project artifact directories for build/install outputs; keep the frozen input
+unchanged and the shared baseline read-only.
+
+The [clean installed-wheel report](evidence/roadmap-installed-20261118.md) provides
+the exact offline build/install commands and reconstructible harness at `0992b467`.
+It covers CPU FP32/BF16 inference, three updates, checkpoint restore and a real
+next update; its FP32 finite restored-update errors remain recorded. The separate
+current CPU suite is in the same report. Neither installation nor test completion
+extends hardware or numerical qualification beyond those observations.
 
 ## Run and resume
 
 See [instances](instances.md) for the API. From an installed source checkout:
 
 ```sh
-TORCH_DEVICE_BACKEND_AUTOLOAD=0 python examples/train.py --checkpoint NEW.pt
+TORCH_DEVICE_BACKEND_AUTOLOAD=0 python examples/train.py --precision fp32 --checkpoint NEW-fp32.pt
+TORCH_DEVICE_BACKEND_AUTOLOAD=0 python examples/train.py --precision bf16 --checkpoint NEW-bf16.pt
 TORCH_DEVICE_BACKEND_AUTOLOAD=0 python -m benchmarks.run --config configs/fc-k.json --device cpu --precision bf16 --threads 8 --output NEW.json
 ```
 
@@ -43,9 +70,18 @@ updates, and reports finite numeric deviations separately. Use
 `python -m benchmarks.continuous --help` for real cached prefill/decode and
 complete stream training, and `python -m scripts.qualify_precision --help` for
 the explicit FP32/BF16 policy and fixed-fixture comparisons. Source qualification
-remains scoped to recorded evidence in [STATUS](STATUS.md).
+remains scoped to [fixed numerical evidence](evidence/roadmap-numerics-followup-20261118.md)
+and [STATUS](STATUS.md). `scripts.check_continuation` owns the bounded whole/chunk
+full-backward witnesses; `scripts.diagnose_restore` separates same-owner backward
+variability from restored-owner comparisons. These diagnostics preserve thresholds
+and do not prescribe a downstream training recipe.
 `benchmarks.run` fixes four joint Transformer matches from each mode's initial
 work audit. The [comparison guide](benchmarking.md) defines effective touches,
 synthetic support fixtures, timing/memory boundaries and finite suite commands.
 Long work follows [execution](execution-flows.md); checks follow [verification](verification.md).
-Cleanup may remove private environments and outputs; these steps rebuild them.
+Optional multi-NPU use follows [placement](placement.md); its host-staged path,
+direct transport failure and finite comparisons have separate evidence. CUDA
+hardware and resident execution remain unqualified; see the
+[bounded TorchAir result](evidence/roadmap-resident-20261118.md).
+Retire private environments and outputs only after the ownership/dependency checks
+in [artifact retention](artifact-retention.md); these setup steps rebuild them.

@@ -25,6 +25,13 @@ without holding idle NPU locks while another CPU timing programme finishes.
 The overall service time bound includes waiting. Neither the waiter nor the
 queue stops or rewrites the predecessor or another project's workload.
 
+The launcher clears caller `PYTHONPATH` before loading the selected module, then
+prepends the frozen Tide package to that module's Python paths. CANN's TBE
+compiler paths must remain visible for lazy operator compilation. Each new run
+records the actual selected paths and module origins in `environment.json`,
+plus the launcher file hash. Earlier jobs retain their original environments;
+a later launcher fix does not rewrite their qualification identity.
+
 Only minimal configuration, commands/results and reusable lessons are maintained.
 No obligation to produce full action/dependency records or universal decoders.
 
