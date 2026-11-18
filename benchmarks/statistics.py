@@ -147,9 +147,9 @@ class ParameterInventory:
 
 class WorkAudit:
     """Observe one model in an exclusive Python context, outside any timing."""
-    def __init__(self, model):
+    def __init__(self, model, *, inventory=None):
         self.model = model
-        self.inventory = ParameterInventory(model)
+        self.inventory = ParameterInventory(model) if inventory is None else inventory
         self.events = defaultdict(lambda: defaultdict(set))
         self.domain = set()
         self.work = defaultdict(int)
