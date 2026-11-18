@@ -66,6 +66,7 @@ def main():
              "source " + shlex.quote(str(root / ".venv-instances/bin/activate"))]
     environment = {"PYTHONPATH": str(frozen / "src"), "TIDE_SOURCE_COMMIT": source,
                    "TIDE_HARNESS_COMMIT": source, "TORCH_DEVICE_BACKEND_AUTOLOAD": "0" if not args.npu_count else "1",
+                   "TIDE_RESOURCE_IDENTITY": "exclusive_cooperative_queue; external jobs not controlled" if args.npu_count else "pinned_cpu; shared host",
                    "OMP_NUM_THREADS": str(args.threads), "MKL_NUM_THREADS": str(args.threads),
                    "OPENBLAS_NUM_THREADS": str(args.threads)}
     lines += ["export " + key + "=" + shlex.quote(value) for key, value in environment.items()]

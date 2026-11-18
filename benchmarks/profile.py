@@ -20,6 +20,7 @@ import time
 
 import torch
 from tide import ModelConfig, TideModel
+from tide.precision import precision_context, precision_policy
 
 
 STAGES = ("Reception", "KV.prepare", "KV.finish", "SSD.prepare", "SSD.finish",
@@ -91,7 +92,7 @@ def stage_observation(model, device, observations, layouts):
                 delattr(owner, attribute)
 
 
-def step(model, inputs, optimizer, mode, device, stages=None, layouts=None):
+def step(model, inputs, optimizer, mode, device, stages=None, layouts=None, precision="fp32"):
     phases = {}
 
     def timed(name, operation):
@@ -106,7 +107,7 @@ def step(model, inputs, optimizer, mode, device, stages=None, layouts=None):
     start = time.perf_counter()
     if optimizer is not None:
         timed("zero_grad", lambda: optimizer.zero_grad(set_to_none=True))
-    with torch.set_grad_enabled(mode != "inference"):
+    with torch.set_grad_enabled(mode != "inference"), precision_context(device, precision):
         if stages is None:
             result = timed("forward", lambda: model(inputs))
         else:
@@ -150,6 +151,7 @@ def main():
     parser.add_argument("--length", type=int, default=128)
     parser.add_argument("--threads", type=int, default=32)
     parser.add_argument("--mode", choices=("inference", "grad_forward", "train"), default="train")
+    parser.add_argument("--precision", choices=("fp32", "bf16"), default="fp32")
     parser.add_argument("--cpu-operators", action="store_true")
     parser.add_argument("--seed", type=int, default=1107)
     parser.add_argument("--output", required=True)
@@ -181,7 +183,7 @@ def main():
     source = os.environ.get("TIDE_SOURCE_COMMIT") or subprocess.check_output(["git", "rev-parse", "HEAD"], text=True).strip()
     record = dict(state="running", source=source, harness_source=os.environ.get("TIDE_HARNESS_COMMIT",source),
                   arguments=vars(args), config=config.to_dict(),
-                  torch=str(torch.__version__), precision="fp32", device=str(device),
+                  torch=str(torch.__version__), precision=precision_policy(device,args.precision), device=str(device),
                   physical_devices=os.environ.get("ASCEND_RT_VISIBLE_DEVICES"),
                   timing="intrusive synchronized wall time; prefill from zero through returned window",
                   device_kernel_times=False, warmup_steps=1, observed_steps=1,
@@ -194,10 +196,10 @@ def main():
         record["allow_hf32"] = {"matmul":torch.npu.matmul.allow_hf32,"conv":torch.npu.conv.allow_hf32}
     persist(output, record)
     try:
-        step(model, inputs, optimizer, args.mode, device)
+        step(model, inputs, optimizer, args.mode, device, precision=args.precision)
         stages = {label: dict(calls=0, seconds=0.0) for label in STAGES}
         layouts = {}
-        observation = step(model, inputs, optimizer, args.mode, device, stages, layouts)
+        observation = step(model, inputs, optimizer, args.mode, device, stages, layouts, args.precision)
         observation["stages"] = stages
         observation["selected_query_packing"] = layouts
         observation["forward_unattributed_seconds"] = (observation["phases_seconds"]["forward"]
@@ -206,7 +208,7 @@ def main():
         persist(output, record)
         if args.cpu_operators:
             with torch.profiler.profile(activities=[torch.profiler.ProfilerActivity.CPU], record_shapes=True) as profile:
-                step(model, inputs, optimizer, args.mode, device)
+                step(model, inputs, optimizer, args.mode, device, precision=args.precision)
             groups = [dict(operator=event.key, count=event.count, input_shapes=event.input_shapes,
                            self_cpu_time_us=event.self_cpu_time_total,cpu_time_us=event.cpu_time_total)
                       for event in profile.key_averages(group_by_input_shape=True)]

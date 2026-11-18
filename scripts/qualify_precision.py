@@ -9,6 +9,7 @@ from contextlib import nullcontext
 from dataclasses import fields, is_dataclass
 import hashlib
 import json
+import math
 import os
 from pathlib import Path
 import subprocess
@@ -144,34 +145,63 @@ def fields_of(result):
             "readout": result.readout(), "state": result.state}
 
 
-def primitive_fixture():
-    """Independent FP64 weighted quotient, including explicit zero-prior VJP."""
+def _primitive_fixture(prior):
+    """Independent scalar quotient/VJP; no CPU autograd in device processes."""
     q = (torch.arange(24).reshape(1, 2, 3, 4) % 7 - 3).double() / 4
     k = (torch.arange(32).reshape(1, 2, 4, 4) % 9 - 4).double() / 4
     v = (torch.arange(32).reshape(1, 2, 4, 4) % 5 - 2).double() / 2
-    w = torch.tensor([[0., 2**-12, .5, 1.]], dtype=torch.float64)
-    q, k, v, w = [x.requires_grad_() for x in (q, k, v, w)]
+    w = torch.tensor([prior], dtype=torch.float64)
     mask = torch.tensor([[True, True, False, True], [True, True, True, False], [True]*4])
-    terms = (q @ k.transpose(-1, -2) / 2).exp() * w[:, None, None] * mask
-    value = terms @ v / terms.sum(-1, keepdim=True)
-    seed = (torch.arange(24).reshape_as(value) % 3 - 1).double()
-    grads = torch.autograd.grad((value * seed).sum(), (q, k, v, w))
+    seed = (torch.arange(24).reshape_as(q) % 3 - 1).double()
+    value, dq, dk, dv, dw = [torch.zeros_like(x) for x in (q, q, k, v, w)]
+    # Deliberately independent small scalar enumeration: no tensor matmul,
+    # softmax or autograd is used to construct the expected result/VJP.
+    for h in range(2):
+        for query in range(3):
+            terms = [math.exp(sum(float(q[0, h, query, d]) * float(k[0, h, key, d])
+                                 for d in range(4)) / 2) if mask[query, key] else 0. for key in range(4)]
+            mass = sum(terms[key] * prior[key] for key in range(4))
+            if mass == 0:
+                continue  # Declared all-zero-row VJP.
+            probabilities = [terms[key] * prior[key] / mass for key in range(4)]
+            for d in range(4):
+                value[0, h, query, d] = sum(probabilities[key] * float(v[0, h, key, d]) for key in range(4))
+            for key in range(4):
+                centered = sum(float(seed[0, h, query, d]) *
+                               (float(v[0, h, key, d]) - float(value[0, h, query, d])) for d in range(4))
+                dl = probabilities[key] * centered
+                dw[0, key] += terms[key] / mass * centered
+                for d in range(4):
+                    dq[0, h, query, d] += dl * float(k[0, h, key, d]) / 2
+                    dk[0, h, key, d] += dl * float(q[0, h, query, d]) / 2
+                    dv[0, h, key, d] += probabilities[key] * float(seed[0, h, query, d])
+    grads = (dq, dk, dv, dw)
     return cpu_tree({"inputs": [q, k, v, w], "mask": mask, "seed": seed,
                      "expected": {"value": value, "gradients": grads}})
+
+
+def primitive_fixture():
+    return {"format": "tide-precision-primitives-2", "oracle": "independent_scalar_quotient_and_analytic_vjp",
+            "cases": {"positive_prior": _primitive_fixture([.25, 2**-12, .5, 1.]),
+                      "zero_prior": _primitive_fixture([0., 2**-12, .5, 1.]),
+                      "empty": _primitive_fixture([0., 0., 0., 0.])}}
 
 
 def primitive_checks(fixture, device, precision):
     dtype = {"bf16": torch.bfloat16, "fp32": torch.float32, "fp64": torch.float64}[precision]
     rows = []
-    for backend in ("math", "tiled", "auto"):
-        q, k, v = [x.to(device=device, dtype=dtype).requires_grad_() for x in fixture["inputs"][:3]]
-        wdtype = torch.float64 if precision == "fp64" else torch.float32
-        w = fixture["inputs"][3].to(device=device, dtype=wdtype).requires_grad_()
-        out = weighted_attention(q, k, v, w, fixture["mask"].to(device), backend)
-        seed = fixture["seed"].to(device=device, dtype=dtype)
-        grad = torch.autograd.grad((out * seed).sum(), (q, k, v, w))
-        rows.append({"backend": backend, **comparison({"value": out, "gradients": grad},
-                                                       fixture["expected"], THRESHOLDS[precision])})
+    cases = fixture["cases"] if "format" in fixture else {"legacy_zero_prior": fixture}
+    for case, data in cases.items():
+        for backend in ("math", "tiled", "auto"):
+            q, k, v = [x.to(device=device, dtype=dtype).requires_grad_() for x in data["inputs"][:3]]
+            wdtype = torch.float64 if precision == "fp64" else torch.float32
+            w = data["inputs"][3].to(device=device, dtype=wdtype).requires_grad_()
+            with ArithmeticAudit() as audit:
+                out = weighted_attention(q, k, v, w, data["mask"].to(device), backend)
+            seed = data["seed"].to(device=device, dtype=dtype)
+            grad = torch.autograd.grad((out * seed).sum(), (q, k, v, w))
+            rows.append({"case": case, "backend": backend, "arithmetic": audit.report(),
+                         **comparison({"value": out, "gradients": grad}, data["expected"], THRESHOLDS[precision])})
     return rows
 
 
@@ -206,6 +236,7 @@ def main():
     parser.add_argument("--steps", type=int, default=3)
     parser.add_argument("--threads", type=int, default=4)
     parser.add_argument("--checkpoint", action="store_true", help="check exact saved data and an actual resumed AdamW update")
+    parser.add_argument("--primitives-only", action="store_true", help="fixed independent scalar formula/VJP witnesses only")
     parser.add_argument("--reference", type=Path, help="directory of trusted CPU fixture .pt files")
     parser.add_argument("--save-tensors", type=Path, help="new directory for optional diagnostic fixtures")
     parser.add_argument("--output", type=Path, required=True)
@@ -219,7 +250,7 @@ def main():
     if min(args.batch, args.length, args.steps, args.threads) < 1 or args.width < 0:
         parser.error("batch, length, steps and threads must be positive; width must be nonnegative")
     if args.device.startswith("npu"):
-        if args.reference is None:
+        if args.reference is None and not args.primitives_only:
             parser.error("NPU qualification requires a separately generated CPU --reference")
         import torch_npu
         torch.npu.matmul.allow_hf32 = False
@@ -251,7 +282,14 @@ def main():
         record["independent_attention_error"] = repr(exc)
         atomic(args.output, record)
         raise
+    record["primitive_fixture"] = fixture.get("format", "legacy_zero_prior_v1")
+    primitive_failed = any(r["nonfinite"] or r["metadata_failures"] for r in record["independent_attention"])
+    record["independent_attention_state"] = ("failed" if primitive_failed else
+        "finite_deviation" if any(r["threshold_failures"] for r in record["independent_attention"]) else "within_threshold")
     atomic(args.output, record)
+    if args.primitives_only:
+        print(json.dumps({"independent_attention_state": record["independent_attention_state"]}), flush=True)
+        return int(primitive_failed)
     context = (lambda: nullcontext()) if args.precision == "fp64" else (lambda: precision_context(device, args.precision))
     dtype = torch.float64 if args.precision == "fp64" else torch.float32
     for index, name in enumerate(args.configs):
