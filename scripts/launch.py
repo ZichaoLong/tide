@@ -27,6 +27,8 @@ def main():
     parser.add_argument("--seconds", type=int, default=3600)
     parser.add_argument("--rss-gib", type=float, default=64)
     parser.add_argument("--queue-seconds", type=int, default=600)
+    parser.add_argument("--after-unit", action="append", default=[],
+                        help="wait for this user unit to become inactive before CPU work/device admission")
     parser.add_argument("command", nargs=argparse.REMAINDER)
     args = parser.parse_args()
     if not args.name or any(c not in "abcdefghijklmnopqrstuvwxyz0123456789-" for c in args.name):
@@ -58,6 +60,10 @@ def main():
         if args.candidate_ids:
             admission += ["--candidate-ids", args.candidate_ids]
         command = admission + ["--"] + command
+    if args.after_unit:
+        command = [python, str(frozen / "scripts/wait_units.py"),
+                   "--status", str(run / "dependency.json"), "--seconds", str(args.seconds),
+                   *[item for unit in args.after_unit for item in ("--unit", unit)], "--", *command]
     supervised = [python, str(frozen / "scripts/job.py"), "--status", str(run / "status.json"),
                   "--source", source, "--max-rss-gib", str(args.rss_gib), "--"] + command
     launcher = run / "run.sh"
