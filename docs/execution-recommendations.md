@@ -30,14 +30,16 @@ optimizer settings and device are not fields of `ModelConfig`.
 | Preset | Model | Current runtime identity |
 | --- | --- | --- |
 | `default` | FC-K, n8, 4 layers, d64 | Safe CPU FP32, B2/L8, 3 updates, 1 thread |
-| `fc-k` | FC-K, n8, 4 layers, d128 | CPU template; hardware recommendation pending measurement |
-| `hb-settle` | HB X, compact-9, n8/hubs4, d128, region sharing, Settle | CPU template; hardware recommendation pending measurement |
-| `hb-timed` | Same HB geometry, Timed | CPU template; flush is included in every finite window |
+| `fc-k` | FC-K, n8, 4 layers, d128 | CPU FP32, B2/L8, 3 updates, 1 thread |
+| `hb-settle` | HB X, compact-9, n8/hubs4, d128, region sharing, Settle | CPU FP32, B2/L8, 3 updates, 1 thread |
+| `hb-timed` | Same HB geometry, Timed | Same small CPU runtime; flush is included in every finite window |
 
 Templates are representative choices, not an exhaustive configuration menu or a
 claim that these values maximize throughput. A measured recommendation must name
 its geometry, mode, precision, hardware, B/L, memory boundary and evidence.
 The small CPU entry stays separate from capacity-oriented device recommendations.
+The `npu-*` presets below have `execution.device=null`, which requires an explicit
+`--device` even for dry run. Selecting a preset never discovers or chooses a card.
 
 Resolution order is:
 
@@ -47,7 +49,12 @@ Resolution order is:
 3. `--config /path/to/model.json` replaces the **entire model configuration** and
    retains the selected preset's runtime settings.
 4. Explicit CLI flags replace their individual model or runtime values, including
-   `--no-checkpoint-regions` and `--no-foreach`.
+   `--no-checkpoint-regions`, `--no-checkpoint-reception` and `--no-foreach`.
+
+`--checkpoint-reception` controls reception recomputation independently of
+`--checkpoint-regions`. `--ssd-summary-backend block|prefix` selects the SSD
+summary implementation. Both are model options, printed in the resolved config,
+saved in checkpoints and checked against explicit model flags during resume.
 
 The entry prints the final full `ModelConfig`, resolved topology and clock,
 requested runtime, actual parameter dtypes/devices, optimizer group settings,
@@ -60,7 +67,8 @@ the checkpoint's model authoritative.
 
 ```sh
 python examples/train.py --preset hb-settle --config configs/hb-multiscale-x-settle.json \
-  --region-batch-size 4 --checkpoint-regions --batch 2 --length 8 --steps 3
+  --region-batch-size 4 --checkpoint-reception --ssd-summary-backend prefix \
+  --batch 2 --length 8 --steps 3
 python examples/train.py --preset fc-k --mode grad_forward --batch 1 --length 16
 python examples/train.py --preset hb-timed --mode inference --precision bf16
 ```
@@ -78,6 +86,91 @@ include explicit empty drain periods; they do not represent a stream with no
 inter-window gap. Settle has no flush. For prefill/chunk/decode measurements with
 the specified timing boundary, use [`benchmarks.continuous`](../benchmarks/continuous.py)
 and the [benchmark contract](benchmark-contract.md).
+
+## Measured NPU training choices
+
+The [training search](evidence/training-search-20261118.md),
+[20-update records](evidence/training-continuous-20261118.md),
+[fixed-start numerical checks](evidence/training-paths-20261118.md) and
+[validation record](evidence/training-validation-20261118.md) own these choices.
+They are finite observations on this host's 64 GiB NPUs under a 48 GiB sampled
+allocated-memory budget. It excludes reserved memory and allocations outside
+Torch, and does not provide hard memory isolation. Records identify
+`exclusive_cooperative_queue; external jobs not controlled`; they are not a claim
+that external workloads could not contend. Each preset retains the producing
+source, record SHA256, checkpoint hash, qualification and resource identity.
+
+| Preset | B/L | Steady input positions/s | Peak allocated/reserved GiB | Selection and paired restore |
+| --- | --- | ---: | ---: | --- |
+| `npu-fc-k-bf16` | 128/256 | 38,248.5 | 25.692 / 29.936 | FC choice; restored update retains finite deviation |
+| `npu-hb-settle-fp32` | 24/256 | 2,074.5 | 38.285 / 42.998 | Settle choice; restored update within original threshold |
+| `npu-hb-timed-fp32` | 12/128 | 317.4 | 41.653 / 46.387 | Timed choice; restored update within original threshold |
+| `npu-hb-0p5b-fp32` | 1/128 | 96.08 | 15.372 / 16.506 | Scale choice; restored update within original threshold |
+| `npu-hb-settle-bf16` | 32/256 | 2,078.2 | 41.835 / 50.625 | Alternative; similar throughput with a higher peak at this B |
+| `npu-hb-0p5b-bf16` | 1/128 | 90.61 | 13.180 / 14.641 | Alternative; lower peak and lower throughput than scale FP32 |
+
+Preflight observed about 2.8–3.3 GiB of idle-device usage outside Torch. That is
+an admission snapshot, not a measured running HBM peak; do not infer free HBM
+from allocated peak alone. Settle BF16 B32's 50.625 GiB reserved peak makes it a
+less conservative choice than selected FP32 B24. Adding downstream task heads
+and data storage requires checking the actual remaining device memory again.
+
+FC-K retains its original computation options: n8, 4 layers, d128, independent
+parameters, `region_batch_size=1`, both recomputation options false and SSD
+summary `block`. The selected small HB models are X, compact-9, n8/hubs4, d128
+with region sharing. The scale model is X, profile 9, n32/hubs4, d128 with
+independent parameters, totaling 494,110,704 parameters.
+
+All five HB presets use `region_batch_size=4`, `checkpoint_reception=true`,
+`ssd_summary_backend="prefix"`, `checkpoint_regions=false`, Attention `auto` and
+`local_attention_backend=null`. The CPU examples and other execution candidates
+remain available. Timed BF16 prefix retains structural path differences in the
+fixed-start checks and is not selected as a default. The FP32 path checks also
+retain finite deviations; a recommendation does not establish full numerical
+equivalence. [Cost attribution](evidence/training-costs-20261118.md) and
+[other-mode observations](evidence/training-modes-20261118.md) have separate scopes.
+
+The table uses total input positions divided by total `complete_seconds` for
+updates 3–20 (`observations[2:20]`). Allocated and reserved peaks are each their
+maximum across all 20 updates. Timed
+flush is included in forward, loss, backward and clock advancement. Complete
+time includes AdamW, synchronization and detached continuation; initialization,
+input construction/transfer, warmup, intrusive audits and checkpoint work are
+outside that timing boundary. All 20 updates recorded finite output, parameters,
+gradients, optimizer and private state, with detached continuation and optimizer
+steps reaching 20. These finite checks do not replace the retained comparisons.
+
+All six records have exact saved data and exact next readout/state checks. FC-K BF16 still
+has a paired restored-update `finite_deviation` at the unchanged
+`atol=1e-6, rtol=2e-3`; the other five paired updates are within that threshold at
+these saved points. Six separate restore processes subsequently completed finite
+updates with optimizer steps 20→21 and no increment errors. Those single-owner
+processes have no original-owner comparator and do not establish trajectory
+equivalence. Provenance uses the actual continuous producer source and checkpoint
+hash; the evidence records corrections to the checkpoint-source CLI labels in
+the three small-HB restore records without rewriting those raw files.
+
+After device admission, resolve a named choice and run it inside the existing
+bounded launcher:
+
+```sh
+python examples/train.py --preset npu-hb-settle-fp32 --device npu:0 --dry-run
+python examples/train.py --preset npu-hb-settle-fp32 --device npu:0
+python examples/train.py --preset npu-hb-timed-fp32 --device npu:0 \
+  --checkpoint artifacts/NEW-timed-training.pt
+python examples/train.py --preset npu-hb-timed-fp32 --device npu:0 \
+  --resume artifacts/NEW-timed-training.pt --steps 3
+```
+
+These named presets select 20 updates, four ATen threads, AdamW lr1e-4/foreach and
+seed 751. They transfer the measured model/runtime choices to the public example.
+The example has its own fresh synthetic sequence, loss normalization and finite
+diagnostic checks; its elapsed time or trajectory is not the recorded benchmark.
+Use the frozen commands in the continuous evidence to reproduce the table.
+`--checkpoint` additionally creates two model owners for the paired check; its
+cost and memory are outside the table's update boundary. The example does not
+enforce the measured 48 GiB budget itself. Explicit overrides remain available
+and need matching evidence for a new performance or numerical claim.
 
 ## Save, verify and resume
 
@@ -123,9 +216,10 @@ requires FP32 parameter storage for both FP32 and BF16 execution, following
 
 ## Device and performance boundaries
 
-Device selection is explicit. Presets default to CPU and the entry never chooses
-an idle NPU. After device admission under the [execution contract](execution-flows.md),
-an explicitly selected NPU uses the same entry and disables HF32:
+Device selection is explicit. The small presets default to CPU, the measured
+NPU presets require `--device`, and the entry never chooses an idle NPU. After
+device admission under the [execution contract](execution-flows.md), an explicitly
+selected NPU uses the same entry and disables HF32:
 
 ```sh
 python examples/train.py --preset hb-settle --device npu:0 --precision bf16 \
@@ -139,15 +233,16 @@ recommendations must include actual allocated/reserved peaks, update timing,
 continuation/restore outcomes and any sharing/contending workloads. CPU settings
 cannot establish CUDA or NPU qualification. CUDA remains unqualified by this entry.
 
-The two combinations below are different candidates and must remain distinct in
+These combinations are different candidates and must remain distinct in
 commands, preset provenance and performance evidence:
 
 | Candidate | Explicit model options |
 | --- | --- |
 | Regional batching plus checkpointing | `region_batch_size=4`, `checkpoint_regions=true`; retain the chosen Attention backend |
 | Historical three-option `combined` | The same two options **plus** `local_attention_backend="math"` |
+| Selected HB training combination | `region_batch_size=4`, `checkpoint_reception=true`, `ssd_summary_backend="prefix"`; region checkpointing stays false and local Attention is inherited |
 
-The third option can change arithmetic and device kernel dispatch. A result for
+Local math Attention can change arithmetic and device kernel dispatch. A result for
 `combined` cannot be attributed to just batching plus checkpointing. Inference,
 grad-enabled forward and complete training need their own matched observations;
 reducing peak memory may permit a larger batch while changing per-step cost.

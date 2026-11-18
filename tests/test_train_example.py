@@ -52,6 +52,40 @@ def test_preset_model_replacement_and_explicit_false_flags(tmp_path):
         assert resolved["execution"]["device"] == "cpu"
 
 
+def test_reception_and_ssd_cli_overrides_are_saved_model_options(tmp_path):
+    config = model_config(checkpoint_reception=True, ssd_summary_backend="prefix")
+    args = arguments(tmp_path, "--no-checkpoint-reception", "--ssd-summary-backend", "block", config=config)
+    settings = train.resolve(args)
+    assert settings["config"] == replace(config, checkpoint_reception=False, ssd_summary_backend="block")
+    assert settings["source"]["explicit_overrides"]["checkpoint_reception"] is False
+    args = arguments(tmp_path, "--checkpoint-reception", "--ssd-summary-backend", "prefix")
+    assert train.resolve(args)["config"] == config
+
+
+@pytest.mark.parametrize("name,precision,batch,length", [
+    ("npu-fc-k-bf16", "bf16", 128, 256),
+    ("npu-hb-settle-fp32", "fp32", 24, 256),
+    ("npu-hb-timed-fp32", "fp32", 12, 128),
+    ("npu-hb-0p5b-fp32", "fp32", 1, 128),
+    ("npu-hb-settle-bf16", "bf16", 32, 256),
+    ("npu-hb-0p5b-bf16", "bf16", 1, 128),
+])
+def test_measured_presets_require_explicit_device_and_retain_qualification(name, precision, batch, length):
+    with pytest.raises(ValueError, match="requires an explicit --device"):
+        train.resolve(train.parser().parse_args(["--preset", name]))
+    settings = train.resolve(train.parser().parse_args(["--preset", name, "--device", "npu:3", "--dry-run"]))
+    assert settings["execution"] == dict(train.EXECUTION_DEFAULTS, device="npu:3", precision=precision,
+                                        batch=batch, length=length, steps=20, threads=4, seed=751)
+    qualification = settings["recommendation"]["qualification"]
+    assert qualification["full_numerical_equivalence"] is False
+    assert qualification["paired_restore"] == ("finite_deviation" if name == "npu-fc-k-bf16" else "within_threshold")
+    assert settings["recommendation"]["fresh_process_restore"]["optimizer_step_after"] == 21
+    if name != "npu-fc-k-bf16":
+        assert settings["config"].region_batch_size == 4
+        assert settings["config"].checkpoint_reception and settings["config"].ssd_summary_backend == "prefix"
+        assert not settings["config"].checkpoint_regions and settings["config"].local_attention_backend is None
+
+
 @pytest.mark.parametrize("options,message", [
     (["--batch", "0"], "batch"), (["--length", "-1"], "length"),
     (["--steps", "0"], "steps"), (["--threads", "0"], "threads"),
@@ -93,7 +127,7 @@ def test_list_and_npu_dry_run_do_not_construct_models_or_import_vendor(monkeypat
     monkeypatch.setattr(tide, "TideModel", unexpected)
     assert train.main(["--list-presets"]) == 0
     assert {row["name"] for row in records(capsys)[0]["presets"]} >= {"default", "fc-k", "hb-settle", "hb-timed"}
-    assert train.main(["--preset", "hb-timed", "--device", "npu:3", "--dry-run"]) == 0
+    assert train.main(["--preset", "npu-hb-timed-fp32", "--device", "npu:3", "--dry-run"]) == 0
     plan = records(capsys)[0]
     assert plan["device_initialized"] is False and plan["execution"]["device"] == "npu:3"
 
@@ -116,7 +150,8 @@ def test_modes_own_graph_and_optimizer_boundaries(tmp_path, capsys, mode):
 @pytest.mark.parametrize("precision", ["fp32", "bf16"])
 def test_timed_training_flushes_and_restores_actual_updates(tmp_path, capsys, monkeypatch, precision):
     path = tmp_path/"saved.pt"
-    config = model_config(True, region_batch_size=4, checkpoint_regions=True, local_attention_backend="math")
+    config = model_config(True, region_batch_size=4, checkpoint_regions=True, local_attention_backend="math",
+                          checkpoint_reception=True, ssd_summary_backend="prefix")
     args = arguments(tmp_path, "--checkpoint", path, "--precision", precision, config=config)
     original = TideModel.flush
     gradient_norms = []

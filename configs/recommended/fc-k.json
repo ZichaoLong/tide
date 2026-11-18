@@ -12,8 +12,8 @@
     "learning_rate": 0.0001, "foreach": true, "seed": 17
   },
   "recommendation": {
-    "status": "candidate_pending_measurement",
+    "status": "cpu_example",
     "evidence": [],
-    "scope": "FC-K template with explicit model and runtime settings; hardware recommendations require shape-, mode- and precision-specific evidence."
+    "scope": "Small CPU FC-K example; the separate npu-fc-k-bf16 preset records the measured NPU training choice and its retained deviations."
   }
 }

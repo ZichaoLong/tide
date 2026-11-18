@@ -15,8 +15,8 @@ import re
 PRESETS = Path(__file__).resolve().parents[1]/"configs/recommended"
 EXECUTION_DEFAULTS = dict(mode="train", device="cpu", precision="fp32", batch=2, length=8,
                           steps=3, threads=1, learning_rate=1e-4, foreach=True, seed=17)
-MODEL_OPTIONS = ("memory", "region_batch_size", "checkpoint_regions", "attention_backend",
-                 "local_attention_backend")
+MODEL_OPTIONS = ("memory", "region_batch_size", "checkpoint_regions", "checkpoint_reception",
+                 "ssd_summary_backend", "attention_backend", "local_attention_backend")
 UPDATE_TOLERANCE = dict(atol=1e-6, rtol=2e-3)
 
 
@@ -40,6 +40,8 @@ def parser():
     result.add_argument("--memory", choices=("K", "S", "X"))
     result.add_argument("--region-batch-size", type=int)
     result.add_argument("--checkpoint-regions", action=argparse.BooleanOptionalAction, default=None)
+    result.add_argument("--checkpoint-reception", action=argparse.BooleanOptionalAction, default=None)
+    result.add_argument("--ssd-summary-backend", choices=("block", "prefix"))
     for name in ("attention-backend", "local-attention-backend"):
         result.add_argument("--"+name, choices=("auto", "math", "sdpa", "tiled", "npu_fusion"))
     result.add_argument("--checkpoint", type=Path,
@@ -69,6 +71,8 @@ def resolve(args):
         raise ValueError("unknown or invalid preset execution setting")
     execution.update(chosen)
     execution.update({key:getattr(args, key) for key in execution if getattr(args, key) is not None})
+    if execution["device"] is None:
+        raise ValueError("this preset requires an explicit --device; select an admitted npu:N for NPU training")
     model_data, config_source = preset.get("model"), None
     if args.config is not None:
         model_data, config_source = read_json(args.config)
@@ -279,8 +283,12 @@ def main(argv=None):
     args = cli.parse_args(argv)
     try:
         if args.list_presets:
-            emit("presets", directory=str(PRESETS), presets=[dict(name=path.stem, **read_json(path)[0])
-                                                           for path in sorted(PRESETS.glob("*.json"))])
+            presets = []
+            for path in sorted(PRESETS.glob("*.json")):
+                value, _ = read_json(path)
+                presets.append(dict(name=path.stem, description=value.get("description"),
+                                    execution=value.get("execution"), status=value.get("recommendation", {}).get("status")))
+            emit("presets", directory=str(PRESETS), presets=presets)
             return 0
         settings = resolve(args)
         if args.dry_run:

@@ -12,8 +12,8 @@
     "learning_rate": 0.0001, "foreach": true, "seed": 17
   },
   "recommendation": {
-    "status": "candidate_pending_measurement",
+    "status": "cpu_example",
     "evidence": [],
-    "scope": "HB Settle template; regional batching, recomputation and device choices need matched complete-training measurements."
+    "scope": "Small CPU HB Settle example; measured NPU training choices and their qualification are separate named presets."
   }
 }
