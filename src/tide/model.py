@@ -152,9 +152,9 @@ class TideModel(nn.Module):
             routes.append((classes,banks))
         return routes
 
-    def _incoming(self,region,layers,pending,embedded,b,length,device,inject=True):
+    def _incoming(self,region,layers,pending,embedded,b,length,device,inject=True,*,routes=None):
         nodes = self.graph.regions[region]
-        classes,banks = self._routes[region]
+        classes,banks = self._routes[region] if routes is None else routes
         if self.graph.nodes[nodes[0]].layer==0:
             content = torch.stack([embedded[self.graph.nodes[v].role] for v in nodes])[:,:,:,None,:]
             mass = content.new_ones((len(nodes),b,length,1))
@@ -259,7 +259,8 @@ class TideModel(nn.Module):
         if self.settle or state is None or not state.pending:
             raise ValueError("flush requires a continued Timed stream")
         periods = (len(self.layer_nodes)-1+self.graph.period-1)//self.graph.period
-        sample = state.pending[0].values
+        bank = state.pending[0]
+        sample = bank.values if isinstance(bank, LayerOutput) else bank.regions[0].values
         x = sample.new_zeros((sample.shape[1],periods,self.config.input_dim or self.config.d))
         return self._run(x,state,record_work=record_work,inject=False)
 
@@ -269,6 +270,9 @@ class TideModel(nn.Module):
         if x.ndim!=3 or x.shape[-1]!=(self.config.input_dim or self.config.d) or x.shape[1]==0:
             raise ValueError("input must be nonempty [B,L,input_dim]")
         placed = hasattr(self,"_placement_spec")
+        if placed and self._placement_spec["kind"] == "hb-region-shards-1":
+            from .region_placement import run_region_model
+            return run_region_model(self, x, state, record_work=record_work, inject=inject)
         if placed:
             from .placement import move_tensors
             transport = self._placement_spec.get("transport","direct")

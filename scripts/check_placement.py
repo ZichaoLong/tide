@@ -20,13 +20,31 @@ import time
 
 import torch
 
-from tide import (ModelConfig, TopologyConfig, TideModel, canonical_state_dict, detach_state,
+from tide import (ModelConfig, TopologyConfig, TideModel, canonical_state_dict, canonical_state, detach_state,
                   load_checkpoint, place_model, placement_adamw, placement_report, save_checkpoint)
 from tide.placement import move_tensors
 from tide.precision import precision_context, precision_policy
 from benchmarks.statistics import RuntimeAudit
 from benchmarks.continuous import nested_comparison, state_memory, synchronize
 from scripts.job import atomic
+
+
+def _place(model, devices, transport, partition_kind="layer", region_partitions=None):
+    if partition_kind == "region":
+        from tide.placement_ownership import balanced_region_partitions
+        regions = (balanced_region_partitions(model, len(devices))
+                   if region_partitions is None else region_partitions)
+        return place_model(model, devices, region_partitions=regions, transport=transport)
+    if partition_kind != "layer" or region_partitions is not None:
+        raise ValueError("explicit region partitions require partition_kind=region")
+    return place_model(model, devices, transport=transport)
+
+
+def _canonical_result(model, result):
+    if result is None:
+        return None
+    from dataclasses import replace
+    return replace(result, state=canonical_state(model, result.state))
 
 
 def _sync(devices):
@@ -172,7 +190,7 @@ def _capacity_update(model, optimizer, x, state, precision, devices, *, mark, la
 
 
 def capacity_train(config, devices, precision, batch=1, length=8, steps=2, *, progress=None,
-                   transport="auto", foreach=True, phase_sync=False):
+                   transport="auto", foreach=True, phase_sync=False, partition_kind="layer", region_partitions=None):
     """One placed model, continued real updates, no duplicate model/checkpoint."""
     if min(batch, length, steps) < 1:
         raise ValueError("positive capacity training batch, length and steps required")
@@ -213,7 +231,7 @@ def capacity_train(config, devices, precision, batch=1, length=8, steps=2, *, pr
     costs["parameter_identity"] = time.perf_counter()-started
     mark("construction.placement")
     started = time.perf_counter()
-    model = place_model(model, devices, transport=transport)
+    model = _place(model, devices, transport, partition_kind, region_partitions)
     _sync(devices)
     costs["placement_transfer"] = time.perf_counter()-started
     record["placement"] = placement_report(model)
@@ -312,7 +330,7 @@ def _train(model, optimizer, x, state, precision, devices, *, progress=None, lab
 
 
 def qualify(config, devices, precision, checkpoint, batch, length, steps, *, progress=None,
-            transport="auto", phase_sync=False):
+            transport="auto", phase_sync=False, partition_kind="layer", region_partitions=None):
     torch.manual_seed(807)
     source = TideModel(config)
     fingerprint = hashlib.sha256()
@@ -330,7 +348,7 @@ def qualify(config, devices, precision, checkpoint, batch, length, steps, *, pro
         print(json.dumps(dict(stage=name)), flush=True)
     mark("construction")
     reference = copy.deepcopy(source).to(devices[0])
-    candidate = place_model(source, devices, transport=transport)
+    candidate = _place(source, devices, transport, partition_kind, region_partitions)
     record["placement"] = placement_report(candidate)
     x_cpu = torch.randn(batch, length, config.input_dim or config.d)
     record["input_sha256"] = hashlib.sha256(x_cpu.numpy().tobytes()).hexdigest()
@@ -350,8 +368,8 @@ def qualify(config, devices, precision, checkpoint, batch, length, steps, *, pro
     mark("initial_placed_backward")
     candidate_loss.backward(); _sync(devices)
     mark("initial_comparisons")
-    comparisons["whole_result"] = nested_comparison(actual, expected)
-    comparisons["flush_result"] = nested_comparison(actual_tail, expected_tail)
+    comparisons["whole_result"] = nested_comparison(_canonical_result(candidate, actual), _canonical_result(reference, expected))
+    comparisons["flush_result"] = nested_comparison(_canonical_result(candidate, actual_tail), _canonical_result(reference, expected_tail))
     comparisons["input_gradient"] = nested_comparison(y.grad, x.grad, rtol=1e-2)
     comparisons["parameter_gradients"] = nested_comparison(canonical_state_dict(candidate, gradients=True),
         OrderedDict((name, None if p.grad is None else p.grad.detach().cpu())
@@ -372,7 +390,7 @@ def qualify(config, devices, precision, checkpoint, batch, length, steps, *, pro
             joined, following = first.readout(), first.state
             reference_joined, reference_following = reference_first.readout(), reference_first.state
         comparisons["continued_single_vs_placed"] = nested_comparison(joined, reference_joined)
-        comparisons["continued_single_vs_placed_state"] = nested_comparison(following, reference_following)
+        comparisons["continued_single_vs_placed_state"] = nested_comparison(canonical_state(candidate, following), reference_following)
         comparisons["reference_whole_vs_continued"] = nested_comparison(reference_joined, expected.readout())
         comparisons["continued_readout"] = nested_comparison(joined, actual.readout())
         comparisons["continued_state"] = nested_comparison(following, actual.state)
@@ -436,10 +454,11 @@ def qualify(config, devices, precision, checkpoint, batch, length, steps, *, pro
     return record
 
 
-def inference(config, devices, precision, batch, length, steps, warmup, *, transport="auto"):
+def inference(config, devices, precision, batch, length, steps, warmup, *, transport="auto",
+              partition_kind="layer", region_partitions=None):
     torch.manual_seed(807)
     started = time.perf_counter()
-    model = place_model(TideModel(config), devices, transport=transport)
+    model = _place(TideModel(config), devices, transport, partition_kind, region_partitions)
     x_cpu = torch.randn(batch, length, config.input_dim or config.d)
     x = x_cpu.to(devices[0])
     _sync(devices)
@@ -478,6 +497,8 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--devices", nargs="+", default=["cpu", "cpu"])
     parser.add_argument("--precision", choices=("fp32", "bf16"), default="fp32")
+    parser.add_argument("--partition-kind", choices=("layer", "region"), default="layer")
+    parser.add_argument("--region-partitions", type=int, nargs="+", help="one partition per region; otherwise exact-parameter greedy balance")
     parser.add_argument("--transport", choices=("auto", "direct", "host_stage", "synchronized"), default="auto")
     parser.add_argument("--phase-sync", action="store_true", help="diagnostic synchronization between forward/backward/update")
     parser.add_argument("--mode", choices=("qualify", "inference", "train"), default="qualify")
@@ -495,6 +516,8 @@ def main():
             setattr(args, name, training if args.mode == "train" else usual)
     if args.warmup is None:
         args.warmup = 1 if args.mode == "inference" else 0
+    if args.region_partitions is not None and args.partition_kind != "region":
+        parser.error("--region-partitions requires --partition-kind region")
     if args.no_foreach and args.mode != "train":
         parser.error("--no-foreach is only supported in capacity --mode train")
     if args.mode == "train" and args.warmup:
@@ -511,10 +534,12 @@ def main():
     torch.set_num_threads(args.threads)
     configs = [ModelConfig.from_dict(json.loads(args.config.read_text()))] if args.config else [
         ModelConfig(topology=TopologyConfig(kind="exchange", n=2, depth=1, hubs=1), d=64,
-                    memory="X", sharing="layer_shared", aggregation="incoming_light_64"),
+                    memory="X", sharing="independent" if args.partition_kind == "region" else "layer_shared", aggregation="incoming_light_64"),
         ModelConfig(topology=TopologyConfig(kind="multiscale", n=2, profile="compact-5-dd4", hubs=1,
                     timing="timed"), d=64, memory="X", sharing="region_shared"),
     ]
+    placement_options = ({} if args.partition_kind == "layer" else
+                         dict(partition_kind="region", region_partitions=args.region_partitions))
     source = os.environ.get("TIDE_SOURCE_COMMIT") or subprocess.check_output(["git", "rev-parse", "HEAD"], text=True).strip()
     record = dict(source=source, arguments={k: str(v) if isinstance(v, Path) else v for k, v in vars(args).items()},
                   physical_devices=os.environ.get("ASCEND_RT_VISIBLE_DEVICES"),
@@ -532,14 +557,14 @@ def main():
             if args.mode == "qualify":
                 with tempfile.TemporaryDirectory(prefix="placement-", dir=args.output.parent) as directory:
                     row = qualify(config, args.devices, args.precision, Path(directory)/"checkpoint.pt",
-                                  args.batch, args.length, args.steps, progress=progress, transport=args.transport, phase_sync=args.phase_sync)
+                                  args.batch, args.length, args.steps, progress=progress, transport=args.transport, phase_sync=args.phase_sync, **placement_options)
             elif args.mode == "train":
                 row = capacity_train(config, args.devices, args.precision, args.batch, args.length, args.steps,
                                      progress=progress, transport=args.transport, foreach=not args.no_foreach,
-                                     phase_sync=args.phase_sync)
+                                     phase_sync=args.phase_sync, **placement_options)
             else:
                 row = inference(config, args.devices, args.precision, args.batch, args.length, args.steps, args.warmup,
-                                transport=args.transport)
+                                transport=args.transport, **placement_options)
         except Exception as error:
             import traceback
             traceback.print_exc()

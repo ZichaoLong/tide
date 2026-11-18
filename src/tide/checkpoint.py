@@ -36,9 +36,9 @@ def save_checkpoint(path, model, *, state=None, optimizer=None):
 
 
 def load_checkpoint(path, *, device="cpu", placement_devices=None):
-    """Load a trusted checkpoint, optionally remapping its layer shard devices.
+    """Load a trusted checkpoint, optionally remapping its layer/region shard devices.
 
-    Sharded checkpoints keep the saved layer/parameter/optimizer layout. Supply
+    Sharded checkpoints keep the saved layer-or-region/parameter/optimizer layout. Supply
     ``placement_devices`` for each saved partition, then construct the returned
     model's optimizer with ``placement_adamw`` before loading its slots. Without
     an explicit mapping every partition is placed on ``device`` (CPU by default).
@@ -54,12 +54,13 @@ def load_checkpoint(path, *, device="cpu", placement_devices=None):
     placement = payload.get("placement")
     if placement is not None:
         from .placement import place_model, place_state
-        if placement["kind"] != "hb-layer-shards-1":
+        if placement["kind"] not in {"hb-layer-shards-1", "hb-region-shards-1"}:
             raise ValueError("unknown checkpoint placement layout")
         devices = ([device]*len(placement["devices"]) if placement_devices is None else placement_devices)
         if len(devices) != len(placement["devices"]):
             raise ValueError("restored placement must preserve the saved number of partitions")
-        place_model(model,devices,layer_partitions=placement["layer_partitions"],
+        place_model(model,devices,layer_partitions=placement.get("layer_partitions"),
+                    region_partitions=placement.get("region_partitions"),
                     transport=placement.get("requested_transport",placement.get("transport","direct")))
         model.load_state_dict(payload["parameters"])
         state = place_state(model,payload["state"])

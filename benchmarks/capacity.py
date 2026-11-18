@@ -8,9 +8,9 @@ import subprocess
 import torch
 
 from tide import ModelConfig, TideModel
-from tide.parameters import NodeLinear, NodeVector
-from tide.reception import SourceEmbedding
 from tide.placement import _default_partitions
+from tide.placement_ownership import (parameter_ownership, row_partitions, region_parameter_units,
+                                      balanced_region_partitions)
 from benchmarks.matching import parameter_memory_budget, match_transformers
 from scripts.job import atomic
 
@@ -55,90 +55,58 @@ def _private_state_budget(model, batch, length, precision, *, steady=False):
                 pending_retained_storage_upper_per_node=pending_retained)
 
 
-def _partition_budget(model, batch, length, precision, mode, partitions, layer_partitions, capacity_bytes):
+def _partition_budget(model, batch, length, precision, mode, partitions, layer_partitions, capacity_bytes,
+                      *, region_partitions=None, partition_kind="layer"):
     if model.graph.config.kind not in {"lattice", "exchange", "multiscale"}:
-        raise ValueError("partition capacity planning supports HB layer placement")
+        raise ValueError("partition capacity planning supports HB layer/region placement")
     if type(partitions) is not int or partitions < 1 or capacity_bytes <= 0:
         raise ValueError("positive partition count and device capacity required")
-    layout = _default_partitions(model, partitions) if layer_partitions is None else tuple(layer_partitions)
-    if (len(layout) != len(model.layer_nodes) or any(type(index) is not int for index in layout)
-            or tuple(sorted(layout)) != layout or
-            set(layout) != set(range(partitions))):
-        raise ValueError("invalid contiguous layer partition")
-    node_partition = tuple(layout[node.layer] for node in model.graph.nodes)
-    domains = {"receive": tuple(range(len(model.graph.nodes))),
-               "describe": tuple(node for node, _ in sorted(model.description_ids.items(), key=lambda row: row[1]))}
-    domains.update({"memories."+kind: tuple(node for node, _ in sorted(owners.items(), key=lambda row: row[1]))
-                    for kind, owners in model.memory_ids.items()})
+    if partition_kind not in {"layer", "region"}:
+        raise ValueError("partition_kind must be layer or region")
+    if region_partitions is not None:
+        if layer_partitions is not None:
+            raise ValueError("layer_partitions and region_partitions are mutually exclusive")
+        partition_kind = "region"
+    records = parameter_ownership(model)
+    if partition_kind == "region":
+        if layer_partitions is not None:
+            raise ValueError("layer_partitions cannot be used for region planning")
+        region_layout = (balanced_region_partitions(model, partitions, records=records)
+                         if region_partitions is None else tuple(region_partitions))
+        if (len(region_layout) != len(model.graph.regions) or
+                any(type(index) is not int for index in region_layout) or
+                set(region_layout) != set(range(partitions))):
+            raise ValueError("invalid whole-region partition")
+        layout, input_partition = None, 0
+    else:
+        layout = _default_partitions(model, partitions) if layer_partitions is None else tuple(layer_partitions)
+        if (len(layout) != len(model.layer_nodes) or any(type(index) is not int for index in layout)
+                or tuple(sorted(layout)) != layout or set(layout) != set(range(partitions))):
+            raise ValueError("invalid contiguous layer partition")
+        region_layout = tuple(layout[model.graph.nodes[nodes[0]].layer] for nodes in model.graph.regions)
+        input_partition = layout[0]
+    node_partition = tuple(region_layout[node.region] for node in model.graph.nodes)
     counts, largest, components = [0]*partitions, [0]*partitions, [{} for _ in range(partitions)]
-    handled = set()
-    def add(name, parameter, owners_by_row):
-        if id(parameter) in handled:
-            raise ValueError("unexpected parameter alias across independently partitioned modules")
-        handled.add(id(parameter))
-        rows = [0]*partitions
-        for partition in owners_by_row:
-            rows[partition] += 1
-        row_size = parameter.numel()//max(1, parameter.shape[0])
-        if sum(rows) != parameter.shape[0]:
-            raise AssertionError("static row ownership does not cover the actual Parameter")
-        for partition, number in enumerate(rows):
-            size = number*row_size
+    tensor_counts = [0]*partitions
+    for record in records:
+        sizes = [0]*partitions
+        for owner in row_partitions(record, region_layout, input_partition):
+            sizes[owner] += record.row_elements
+        for partition, size in enumerate(sizes):
             counts[partition] += size
-            largest[partition] = max(largest[partition], size*parameter.element_size())
+            largest[partition] = max(largest[partition], size*record.parameter.element_size())
             if size:
-                components[partition][name] = size
-    source_classes = [set(model.graph.edges[edge].source_class for edge in model.graph.incoming[node.id]) |
-                      ({"ext"} if node.layer == 0 else set()) for node in model.graph.nodes]
-    for path, module in model.named_modules():
-        prefix = next((name for name in domains if path.startswith(name+".")), None)
-        if isinstance(module, (NodeLinear, NodeVector)):
-            nodes = domains[prefix]
-            private_partitions = [node_partition[node] for node in nodes]
-            groups = module._host_groups  # Construction-owned CPU metadata, even with meta weights.
-            group_partitions = {}
-            for group, partition in zip(groups, private_partitions):
-                if group_partitions.setdefault(group, partition) != partition:
-                    raise ValueError("shared base crosses proposed partition")
-            ordered_groups = [group_partitions[group] for group in range(len(group_partitions))]
-            for leaf, parameter in module.named_parameters(recurse=False):
-                add(path+"."+leaf, parameter,
-                    private_partitions if leaf in {"left", "right"} else ordered_groups)
-        elif isinstance(module, SourceEmbedding):
-            # Reconstruct only source-class slot metadata. Its lookup tensor can
-            # be meta, and no floating payload or .to(cpu) is needed to inspect it.
-            rows = {}
-            receive_groups = model.receive.a._host_groups
-            for node, names in enumerate(source_classes):
-                for name in sorted(names):
-                    key = receive_groups[node], name
-                    partition = node_partition[node]
-                    if rows.setdefault(key, partition) != partition:
-                        raise ValueError("source embedding row crosses proposed partition")
-            add(path+".weight", module.weight, list(rows.values()))
-    regional = {}
-    for region, group in enumerate(model.region_group):
-        if group >= 0:
-            partition = node_partition[model.graph.regions[region][0]]
-            if regional.setdefault(group, partition) != partition:
-                raise ValueError("regional network crosses proposed partition")
-    for name, parameter in model.named_parameters():
-        if id(parameter) in handled:
-            continue
-        if name.startswith("inputs."):
-            partition = layout[0]
-        elif name.startswith("regional."):
-            partition = regional[int(name.split(".")[1])]
-        else:
-            raise ValueError("unclassified placed parameter: "+name)
-        handled.add(id(parameter))
-        counts[partition] += parameter.numel()
-        largest[partition] = max(largest[partition], parameter.numel()*parameter.element_size())
-        components[partition][name] = parameter.numel()
+                tensor_counts[partition] += 1
+                components[partition][record.name] = size
     total = sum(parameter.numel() for parameter in model.parameters())
     if sum(counts) != total:
         raise AssertionError("partition count differs from unique meta Parameters")
     cold, steady = (_private_state_budget(model, batch, length, precision, steady=kind) for kind in (False, True))
+    if partition_kind == "region":
+        # Region placement stores differentiable compact Timed tails rather
+        # than views retaining the complete output window.
+        for state in (cold, steady):
+            state["pending_retained_storage_upper_per_node"] = state["pending_payload_per_node"]
     rows = []
     for partition, parameters in enumerate(counts):
         nodes = [node.id for node in model.graph.nodes if node_partition[node.id] == partition]
@@ -150,8 +118,11 @@ def _partition_budget(model, batch, length, precision, mode, partitions, layer_p
         payload_pending = len(nodes)*steady["pending_payload_per_node"]
         steady_retained = state_steady+retained_pending-payload_pending
         floor = memory["persistent_parameter_floor_bytes"]
-        rows.append(dict(partition=partition, layers=[i for i, owner in enumerate(layout) if owner == partition],
+        rows.append(dict(partition=partition, layers=sorted({model.graph.nodes[node].layer for node in nodes}),
+                         regions=[region for region, owner in enumerate(region_layout) if owner == partition],
                          nodes=len(nodes), memory_nodes=kinds, unique_parameters=parameters,
+                         parameter_tensors=tensor_counts[partition],
+                         adamw_cpu_step_scalar_upper_bytes=4*tensor_counts[partition] if mode == "train" else 0,
                          parameter_bytes=4*parameters, largest_parameter_shard_bytes=largest[partition],
                          memory=memory, cold_state_payload_bytes=state_cold,
                          steady_state_payload_bytes=state_steady,
@@ -161,19 +132,48 @@ def _partition_budget(model, batch, length, precision, mode, partitions, layer_p
                          headroom_after_parameter_floor_and_steady_state_bytes=capacity_bytes-floor-steady_retained,
                          parameter_components=components[partition]))
     return dict(scope="static exact unique parameter partition; state planning bounds; no tensor payload allocation or execution qualification",
-                layer_partitions=list(layout), unique_parameters=total, precision=precision, mode=mode,
+                partition_kind=partition_kind,
+                layer_partitions=None if layout is None else list(layout), region_partitions=list(region_layout),
+                ownership=(_region_ownership(model, records) if partition_kind == "region" else None),
+                input_partition=input_partition, unique_parameters=total, precision=precision, mode=mode,
                 batch=batch, input_length=length, partitions=rows,
                 state_layout=dict(cold=cold, steady=steady),
                 unbudgeted=["autograd/activations", "temporary prepared/history banks", "parameter gather/cast workspaces",
-                            "allocator overhead", "cross-partition copies", "checkpoint host staging"],
+                            "allocator overhead", "static integer topology/owner/route buffers", "cross-partition copies", "checkpoint host staging"],
                 initialization="construct full CPU master model then slice/copy shards; host capacity is separately required")
 
 
-def placement_budget(config, batch=1, length=8, precision="bf16", mode="inference", *, partitions=2,
-                     layer_partitions=None, capacity_bytes=60*2**30):
+def _region_ownership(model, records=None):
+    records = parameter_ownership(model) if records is None else records
+    units = region_parameter_units(model, records)
+    exclusive = {unit["regions"][0]: unit["unique_parameters"] for unit in units if len(unit["regions"]) == 1}
+    return dict(
+        scope="exact unique parameter rows; shared groups counted once, with no replicas or device allocation",
+        unique_parameters=sum(record.parameter.numel() for record in records),
+        input_projection_parameters=sum(unit["unique_parameters"] for unit in units if not unit["regions"]),
+        regions=[dict(region=region, layer=model.graph.nodes[nodes[0]].layer, nodes=len(nodes),
+                      memory_nodes={kind: sum(model.kinds[node] == kind for node in nodes) for kind in ("K", "S")},
+                      exclusive_parameters=exclusive.get(region, 0),
+                      shared_groups=[index for index, unit in enumerate(units)
+                                     if len(unit["regions"]) > 1 and region in unit["regions"]])
+                 for region, nodes in enumerate(model.graph.regions)],
+        parameter_groups=units,
+        cross_partition_rule="all regions using one shared group must have the same owner; input projection stays on partition zero")
+
+
+def region_ownership(config):
+    """Inspect individual-region and shared-group storage before choosing cards."""
     with torch.device("meta"):
         model = TideModel(config)
-    return _partition_budget(model, batch, length, precision, mode, partitions, layer_partitions, capacity_bytes)
+    return _region_ownership(model)
+
+
+def placement_budget(config, batch=1, length=8, precision="bf16", mode="inference", *, partitions=2,
+                     layer_partitions=None, region_partitions=None, partition_kind="layer", capacity_bytes=60*2**30):
+    with torch.device("meta"):
+        model = TideModel(config)
+    return _partition_budget(model, batch, length, precision, mode, partitions, layer_partitions, capacity_bytes,
+                             region_partitions=region_partitions, partition_kind=partition_kind)
 
 
 def budget(config, batch, length, precision, mode, *, placement_partitions=0):

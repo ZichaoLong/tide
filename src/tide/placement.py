@@ -1,8 +1,8 @@
-"""Finite layer placement for the current strictly layered HB instances.
+"""Finite whole-layer or whole-region placement for strictly layered HB instances.
 
 This is a single-process split of parameter ownership and private state. It is
 not a general graph scheduler or distributed replica implementation. Shared bases
-never span these layer partitions. Cross-partition tensor copies retain autograd.
+never span owner partitions. Cross-partition tensor copies retain autograd.
 """
 from collections import OrderedDict
 from dataclasses import fields, is_dataclass
@@ -117,7 +117,7 @@ class _ShardedOwners(nn.Module):
         if possible not in self._dispatch:
             partitions = {self.partitions[index] for index in possible}
             if len(partitions) != 1:
-                raise ValueError("one region call cannot span layer partitions")
+                raise ValueError("one region call cannot span owner partitions")
             partition = next(iter(partitions))
             shard_index = self._live_partitions.index(partition)
             local = tuple(i for i, owner in enumerate(
@@ -127,7 +127,7 @@ class _ShardedOwners(nn.Module):
         shard = self.shards[index]
         ids = owner_ids(owners)
         if ids.device != shard.owner_lookup.device:
-            raise ValueError("owner IDs must be on their layer partition device")
+            raise ValueError("owner IDs must be on their partition device")
         return shard, NodeOwners(shard.owner_lookup[ids], possible_local)
 
     def canonical(self, *, gradients=False, device="cpu"):
@@ -212,7 +212,7 @@ class _ShardedEmbedding(_ShardedOwners):
         for owner, rows in enumerate(lookup.tolist()):
             for row in rows:
                 if row >= 0 and ownership.setdefault(row, partitions[owner]) != partitions[owner]:
-                    raise ValueError("a source embedding parameter cannot span layer partitions")
+                    raise ValueError("a source embedding parameter cannot span owner partitions")
         for partition in range(len(devices)):
             owners = tuple(i for i, part in enumerate(partitions) if part == partition)
             if not owners:
@@ -235,7 +235,7 @@ def _check_group_ownership(groups, partitions):
     ownership = {}
     for group, partition in zip(groups, partitions):
         if ownership.setdefault(group, partition) != partition:
-            raise ValueError("shared parameter base cannot span layer partitions")
+            raise ValueError("shared parameter base cannot span owner partitions")
 
 
 def _default_partitions(model, count):
@@ -263,45 +263,62 @@ def _resolve_transport(devices, requested):
     return requested
 
 
-def place_model(model, devices, *, layer_partitions=None, transport="auto"):
-    """Split HB parameters in place, before optimizer construction.
+def place_model(model, devices, *, layer_partitions=None, region_partitions=None, transport="auto"):
+    """Place complete HB layers (default) or complete mathematical regions.
 
-    ``devices`` can repeat CPU for logical-partition formula checks. Real devices
-    must share one backend type. Returned outputs live on the last layer's device;
-    private state stays on each owner's device. Use ``placement_adamw`` so zero
-    gradient rows retain the original unsplit Parameter's update semantics.
+    A region layout permits different owners within one layer, without splitting
+    any region or duplicating a shared base. Input projections have one owner
+    (partition zero); the final region's owner gathers the public Result.
+    CPU devices may repeat for logical-partition checks. Construct the optimizer
+    after placement with ``placement_adamw``.
     """
     if hasattr(model, "_placement_spec"):
         raise ValueError("model is already placed; restore into a new owner to change placement")
-    requested_transport = transport
     if model.graph.config.kind not in {"lattice", "exchange", "multiscale"}:
-        raise ValueError("layer placement currently supports the strictly layered HB instances")
+        raise ValueError("placement currently supports the strictly layered HB instances")
     devices = tuple(torch.device(device) for device in devices)
     if not devices or any(device.type not in {"cpu", "npu", "cuda"} for device in devices):
         raise ValueError("placement needs explicit CPU, NPU or CUDA devices")
     if len({device.type for device in devices}) != 1:
         raise ValueError("mixed CPU/accelerator model placement is not implemented")
-    transport = _resolve_transport(devices,requested_transport)
-    partitions = _default_partitions(model, len(devices)) if layer_partitions is None else tuple(layer_partitions)
-    if (len(partitions) != len(model.layer_nodes) or any(type(index) is not int for index in partitions)
-            or tuple(sorted(partitions)) != partitions or set(partitions) != set(range(len(devices)))):
-        raise ValueError("layer_partitions must assign every device a contiguous nonempty layer interval")
-    if any(parameter.grad is not None for parameter in model.parameters()):
-        raise ValueError("place a fresh model before computing gradients/constructing the optimizer")
+    requested_transport = transport
+    transport = _resolve_transport(devices, requested_transport)
+    if region_partitions is not None:
+        if getattr(model.config, "region_batch_size", 1) != 1:
+            raise ValueError("region placement currently requires region_batch_size=1")
+        if layer_partitions is not None:
+            raise ValueError("layer_partitions and region_partitions are mutually exclusive")
+        regions = tuple(region_partitions)
+        if (len(regions) != len(model.graph.regions) or any(type(index) is not int for index in regions)
+                or set(regions) != set(range(len(devices)))):
+            raise ValueError("region_partitions must assign every whole region and use every partition")
+        partitions, input_partition = None, 0
+        # Reject all crossing bases before mutating any module or allocating
+        # shards; private adapters do not make their shared base independent.
+        from .placement_ownership import parameter_ownership, row_partitions
+        for record in parameter_ownership(model):
+            row_partitions(record, regions, input_partition)
+    else:
+        partitions = _default_partitions(model, len(devices)) if layer_partitions is None else tuple(layer_partitions)
+        if (len(partitions) != len(model.layer_nodes) or any(type(index) is not int for index in partitions)
+                or tuple(sorted(partitions)) != partitions or set(partitions) != set(range(len(devices)))):
+            raise ValueError("layer_partitions must assign every device a contiguous nonempty layer interval")
+        regions = tuple(partitions[model.graph.nodes[nodes[0]].layer] for nodes in model.graph.regions)
+        input_partition = partitions[0]
     registry = {}
+    wrappers = {NodeLinear: _ShardedLinear, NodeVector: _ShardedVector, SourceEmbedding: _ShardedEmbedding}
+
     def replace(module, owner_partitions, prefix):
         for name, child in list(module.named_children()):
             path = prefix+"."+name
-            wrapper = (_ShardedLinear if isinstance(child, NodeLinear) else
-                       _ShardedVector if isinstance(child, NodeVector) else
-                       _ShardedEmbedding if isinstance(child, SourceEmbedding) else None)
+            wrapper = wrappers.get(type(child))
             if wrapper is not None:
                 replacement = wrapper(child, owner_partitions, devices)
                 setattr(module, name, replacement)
                 registry[path] = replacement
             else:
                 replace(child, owner_partitions, path)
-    node_partitions = tuple(partitions[node.layer] for node in model.graph.nodes)
+    node_partitions = tuple(regions[node.region] for node in model.graph.nodes)
     replace(model.receive, node_partitions, "receive")
     described = [node for node, _ in sorted(model.description_ids.items(), key=lambda row: row[1])]
     replace(model.describe, tuple(node_partitions[node] for node in described), "describe")
@@ -310,21 +327,28 @@ def place_model(model, devices, *, layer_partitions=None, transport="auto"):
         replace(memory, tuple(node_partitions[node] for node in owners), "memories."+kind)
     regional_partitions = {}
     for region, group in enumerate(model.region_group):
-        if group < 0:
-            continue
-        partition = partitions[model.graph.nodes[model.graph.regions[region][0]].layer]
-        if regional_partitions.setdefault(group, partition) != partition:
-            raise ValueError("regional sharing cannot span layer partitions")
+        if group >= 0 and regional_partitions.setdefault(group, regions[region]) != regions[region]:
+            raise ValueError("regional sharing cannot span partitions")
     for group, partition in regional_partitions.items():
         model.regional[group].to(devices[partition])
-    model.inputs.to(devices[partitions[0]])
-    model._placement_devices, model._layer_partitions = devices, partitions
+    model.inputs.to(devices[input_partition])
+    model._placement_devices, model._region_partitions = devices, regions
     model._shard_registry = registry
-    model._placement_spec = dict(kind="hb-layer-shards-1", devices=[str(device) for device in devices],
-                                 layer_partitions=list(partitions), requested_transport=requested_transport,
-                                 transport=transport,
-                                 optimizer="placement_adamw; align disconnected shards per original Parameter before step",
-                                 communication="single-process autograd tensor.to copies of actual predecessor banks; no HCCL replicas")
+    model._placement_spec = dict(
+        kind="hb-layer-shards-1" if partitions is not None else "hb-region-shards-1",
+        devices=[str(device) for device in devices], requested_transport=requested_transport,
+        transport=transport, input_partition=input_partition, output_partition=regions[-1],
+        optimizer="placement_adamw; align disconnected shards per original Parameter before step",
+        communication=("single-process autograd tensor.to copies of actual predecessor banks; no HCCL replicas"
+                       if partitions is not None else
+                       "single-process deduplicated predecessor-node transport per destination partition; no replicas"))
+    if partitions is not None:
+        model._layer_partitions = partitions
+        model._placement_spec["layer_partitions"] = list(partitions)
+    else:
+        model._placement_spec["region_partitions"] = list(regions)
+        from .region_placement import build_region_transfer_plan
+        build_region_transfer_plan(model)
     return model
 
 
@@ -370,6 +394,9 @@ def canonical_state_dict(model, *, gradients=False, device="cpu"):
 def place_state(model, state):
     if state is None or not hasattr(model, "_placement_spec"):
         return state
+    if model._placement_spec["kind"] == "hb-region-shards-1":
+        from .region_placement import place_region_state
+        return place_region_state(model, state)
     from .model import ModelState
     memories = tuple(move_tensors(memory, model._placement_devices[
         model._layer_partitions[model.graph.nodes[model.graph.regions[region][0]].layer]],
@@ -389,5 +416,25 @@ def placement_report(model):
         row = devices.setdefault(str(parameter.device), dict(parameters=0, parameter_bytes=0))
         row["parameters"] += parameter.numel()
         row["parameter_bytes"] += parameter.numel()*parameter.element_size()
-    return dict(**model._placement_spec, actual_devices=devices,
-                total_unique_parameters=sum(parameter.numel() for parameter in model.parameters()))
+    report = dict(**model._placement_spec, actual_devices=devices,
+                  total_unique_parameters=sum(parameter.numel() for parameter in model.parameters()))
+    if model._placement_spec["kind"] == "hb-region-shards-1":
+        report["predecessor_transport"] = list(model._region_transfer_summary)
+        report["pending_layout"] = "private regional compact last-tick tensors; no window-sized pending views"
+        report["execution"] = "serial region submissions with layer dependencies; no region concurrency qualification"
+    return report
+
+
+def canonical_state(model, state, *, device="cpu"):
+    """Gather a private state for comparison, outside capacity-timed execution.
+
+    Regional pending banks become the original dense per-layer representation.
+    Tensor copies retain autograd; callers detach at their declared boundary.
+    """
+    if state is None:
+        return None
+    from .region_placement import RegionLayerOutput, gather_region_bank
+    from .model import ModelState
+    pending = tuple(gather_region_bank(bank, device) if isinstance(bank, RegionLayerOutput)
+                    else move_tensors(bank, device) for bank in state.pending)
+    return ModelState(state.position, move_tensors(state.memories, device), pending)
