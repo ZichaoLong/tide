@@ -239,19 +239,23 @@ def update(model,optimizer,state,x,precision,observer):
         optimizer_step_counts=dict(Counter(str(int(value["step"])) for value in optimizer.state.values() if "step" in value)))
 
 
-def make_config(path):
+def make_config(path, execution_variant="whole_region"):
     from tide import ClockConfig,ModelConfig,TopologyConfig
     return ModelConfig(topology=TopologyConfig(kind="multiscale",profile="compact-9",n=2,hubs=2,
         timing="timed",period=3,terminal_hubs=True),d=64,memory="X",sharing="region_shared",
         clock=ClockConfig(position_period=7,position_origin="absolute",kv_window=11,short_decay=.09,ssd_stride=3),
         hub_allocation="fixed_pass" if path=="batched" else "bounded",
-        region_batch_size=4 if path=="batched" else 1,checkpoint_regions=True,local_attention_backend="math")
+        region_batch_size=4 if path=="batched" else 1,
+        checkpoint_regions=execution_variant=="whole_region",
+        checkpoint_reception=execution_variant=="training",
+        ssd_summary_backend="prefix" if execution_variant=="training" else "block",
+        local_attention_backend="math" if execution_variant=="whole_region" else None)
 
 
 def initial_case(args,path,precision,output):
     from tide import TideModel,place_model,placement_report,save_checkpoint
     torch.manual_seed(1631)
-    config=make_config(path);model=TideModel(config)
+    config=make_config(path,args.execution_variant);model=TideModel(config)
     if path=="placed":
         partitions=[(model.graph.nodes[nodes[0]].position+model.graph.nodes[nodes[0]].layer)%2 for nodes in model.graph.regions]
         model=place_model(model,["cpu:0","cpu:1"],region_partitions=partitions,region_concurrency="per_device")
@@ -259,7 +263,8 @@ def initial_case(args,path,precision,output):
     observer=DtypeObserver(model)
     generator=torch.Generator().manual_seed(1632)
     x=torch.randn(1,4,64,generator=generator)
-    record=dict(path=path,precision=precision,config=config.to_dict(),parameter_count=sum(p.numel() for p in model.parameters()),
+    record=dict(path=path,precision=precision,execution_variant=args.execution_variant,
+                config=config.to_dict(),parameter_count=sum(p.numel() for p in model.parameters()),
                 placement=None if path=="batched" else placement_report(model),updates=[],state="running")
     record["input_sha256"]=hashlib.sha256(x.numpy().tobytes()).hexdigest()
     digest=hashlib.sha256()
@@ -301,7 +306,7 @@ def initial_case(args,path,precision,output):
                     none_gradients=last["none_gradients"],config=config.to_dict()),output/"expected.pt")
     command=[sys.executable,"-I",str(Path(__file__).resolve()),"--phase","resume","--path",path,
         "--precision",precision,"--output-dir",str(output),"--wheel",args.wheel,"--venv",args.venv,
-        "--source-manifest",args.source_manifest]
+        "--source-manifest",args.source_manifest,"--execution-variant",args.execution_variant]
     completed=subprocess.run(command,cwd="/",env={k:v for k,v in os.environ.items() if k!="PYTHONPATH"},
                              text=True,stdout=subprocess.PIPE,stderr=subprocess.STDOUT,timeout=120)
     (output/"resume.log").write_text(completed.stdout)
@@ -355,6 +360,8 @@ def main():
     parser.add_argument("--phase",choices=("initial","resume"),default="initial")
     parser.add_argument("--path",choices=("batched","placed"))
     parser.add_argument("--precision",choices=("fp32","bf16"))
+    parser.add_argument("--execution-variant",choices=("whole_region","training"),default="whole_region",
+        help="training uses prefix summaries and Reception-only recomputation, with auto local Attention")
     parser.add_argument("--output-dir",required=True)
     parser.add_argument("--wheel",required=True)
     parser.add_argument("--venv",required=True)
