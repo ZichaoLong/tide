@@ -8,6 +8,18 @@ from tide import ModelConfig, TopologyConfig, TideModel, detach_state, save_chec
 from tide.precision import precision_context
 
 
+def test_detached_timed_pending_owns_only_last_tick_storage():
+    model = TideModel(ModelConfig(topology=TopologyConfig(kind="multiscale", profile="compact-5-dd4",
+                                 n=2, hubs=1, timing="timed"), d=64, memory="X"))
+    with torch.no_grad():
+        state = detach_state(model(torch.randn(2, 13, 64)).state)
+    assert state.pending
+    for layer in state.pending:
+        for tensor in (layer.values, layer.strengths):
+            assert tensor.shape[2] == 1
+            assert tensor.untyped_storage().nbytes() == tensor.numel()*tensor.element_size()
+
+
 @pytest.mark.parametrize("memory,timing,precision", [
     ("K", "settle", "fp32"), ("S", "settle", "bf16"),
     ("X", "timed", "fp32"), ("X", "timed", "bf16"),

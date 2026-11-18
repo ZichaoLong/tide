@@ -111,6 +111,14 @@ class TideModel(nn.Module):
         self.layer_regions = [tuple(r for r,vs in enumerate(graph.regions) if graph.nodes[vs[0]].layer==l)
                               for l in range(len(graph.widths))]
         self._routes = self._make_routes()
+        last_use = list(range(len(self.layer_nodes)))
+        for region, (_, banks) in enumerate(self._routes):
+            consumer = self.graph.nodes[self.graph.regions[region][0]].layer
+            for origin in banks:
+                last_use[origin] = max(last_use[origin], consumer)
+        self._release_layers = [tuple(origin for origin, last in enumerate(last_use)
+                                      if last == layer and origin != len(last_use)-1)
+                                for layer in range(len(last_use))]
 
     def _make_routes(self):
         routes = []
@@ -256,7 +264,7 @@ class TideModel(nn.Module):
             loc = torch.arange(positions,device=x.device)*self.graph.period
             embedded = {role:value.new_zeros((b,length,self.config.d)).index_copy(1,loc,value)
                         for role,value in embedded.items()}
-        layers,newmem = [],[]
+        layers,newmem,pending = [],[],[]
         work = []
         for layer,regions in enumerate(self.layer_regions):
             device = self._placement_devices[self._layer_partitions[layer]] if placed else x.device
@@ -293,9 +301,16 @@ class TideModel(nn.Module):
                     work.append(measured)
                 values.append(full); controls.append(control); newmem.append(saved)
             layers.append(LayerOutput(torch.cat(values,0),torch.cat(controls,0)))
-        pending = tuple(LayerOutput(v.values[:,:,-1:],v.strengths[:,:,-1:]) for v in layers) if not self.settle else ()
+            if not self.settle:
+                # A detached view would keep the entire window's storage alive.
+                # Clone retains the gradient edge while owning only one tick.
+                current = layers[-1]
+                pending.append(LayerOutput(current.values[:,:,-1:].clone(),
+                                           current.strengths[:,:,-1:].clone()))
+            for origin in self._release_layers[layer]:
+                layers[origin] = None
         final = layers[-1]
-        nextstate = ModelState(start+positions,tuple(newmem),pending)
+        nextstate = ModelState(start+positions,tuple(newmem),tuple(pending))
         measured = None
         if record_work:
             measured = dict(zip(("candidates", "full", "positive_messages", "candidate_slots"),
