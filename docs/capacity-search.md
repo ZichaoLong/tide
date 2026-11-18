@@ -94,3 +94,52 @@ within-segment full BPTT, explicit detach boundaries and checkpoint/resumed upda
 Do not turn accumulated stream positions into one prefill/backward length. Its
 checkpoint memory and intrusive diagnostics require separate budgets; the search
 does not claim continuation or restore qualification from prefill completion.
+
+## Separate memory-lifetime diagnostics and reports
+
+Use `python -m benchmarks.memory_ledger` only for selected points under a separate
+launcher identity. It is intrusive and produces no throughput result. For example:
+
+```sh
+python -m benchmarks.memory_ledger --config RESOLVED_CONFIG.json \
+  --device npu:0 --precision bf16 --mode train --batch 4 --length 128 \
+  --device-budget-gib 52 --warmup 1 --output NEW_MEMORY.json
+
+python -m benchmarks.memory_ledger --config RESOLVED_CONFIG.json \
+  --device cpu --precision fp32 --mode grad_forward --batch 1 --length 128 \
+  --prefill-chunk 64 --decode 8 --continue-state --segments 3 \
+  --output NEW_CONTINUED_MEMORY.json
+
+python -m benchmarks.search_report --inputs COMMON/search.json CAPACITY/search.json \
+  --output NEW_REPORT.md
+```
+
+The ledger uses the normal model, loss, optional complete Timed flush and AdamW.
+Normal mode warmup is the selected mode and changes training parameters; continued
+state diagnostics instead warm up independent zero-state inference. Every measured
+diagnostic segment explicitly detaches state before the next one. Neither path
+certifies restored updates. Transformers use `--subject transformer_A` (etc.) with
+the actual `--calibration-record`; the constructor and calibration hash are retained.
+
+Each phase separates visible payload and unique retained storage for parameters,
+gradients, optimizer, private state, inputs, outputs and saved-for-backward storage.
+An ordered exclusive attribution and overall storage union avoid adding aliases
+twice. Saved storage is retained until the packed autograd object is destroyed:
+an unpack with `retain_graph=True` does not mean it was released. The extra saved
+storage metric excludes storage already owned at the incoming segment boundary.
+Outer saved-tensor hooks may not see nested hook overrides or opaque backend
+allocations, including some checkpoint internals. Actual allocator and RSS values
+remain separate; the ledger is not a complete physical-memory accounting oracle.
+
+Allocator-minus-visible-union is measured at the same phase boundary and labelled
+unclassified live allocation. Operator scratch is **unmeasured**; the foreach
+parameter-size allowance is declared separately as a planning quantity. Peaks at
+different times, saved graph storage, private state and persistent owner payload
+overlap and cannot be summed. Hooks, work auditing, runtime auditing and retained
+diagnostic outputs can change allocation lifetime, so compare these diagnostics
+with the independent normal-time memory measurements instead of replacing them.
+
+`search_report` verifies the recorded raw result/audit/calibration/frozen-config
+hashes before rendering the two tables. Failed/limited children and noisy or
+unmeasured cells stay visible. It performs no model or device work, and writes via
+fsynced staging and atomic replacement.

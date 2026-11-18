@@ -77,10 +77,10 @@ def summarize_child(child, *, subject, mode, batch, length, maximum_noise):
     activity["initial_minus_calibration"] = (None if initial is None or calibration is None else active(initial)-active(calibration))
     if initial is not None:
         activity["initial_work"] = initial.get("work")
-        activity["initial_packing"] = initial.get("packing")
+        activity["initial_packing"] = initial.get("query_packing")
     if after is not None:
         activity["post_update_work"] = after.get("work")
-        activity["post_update_packing"] = after.get("packing")
+        activity["post_update_packing"] = after.get("query_packing")
     result.update(admitted=True, stable=row["sample_range_over_median"] <= maximum_noise,
                   sample_range_over_median=row["sample_range_over_median"],
                   median_seconds=row["median_seconds"], input_positions_per_second=row["input_positions_per_second"],

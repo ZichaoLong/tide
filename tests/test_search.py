@@ -11,6 +11,7 @@ from tide import ModelConfig
 from benchmarks.programme import run_child
 from benchmarks.references import load_reference
 from benchmarks.search import ThroughputStop, axis_values, best_observation, common_comparisons
+from benchmarks.search_report import verify_metric_files, render, write_text_atomic
 
 
 def test_single_axis_is_bounded_even_when_the_requested_maximum_is_huge():
@@ -98,6 +99,7 @@ def test_cpu_search_executes_independent_children_and_keeps_calibration_fixed(tm
     assert len({row["pid"] for row in report["children"]}) == 6
     metrics = [r for line in report["lines"] for r in line["observations"]]
     assert all(r["admitted"] and len(r["seconds"]) == 2 for r in metrics)
+    assert all(r["activity"]["initial_packing"] is not None for r in metrics)
     model_hashes = {r["initial_parameter_sha256"] for r in metrics if r["subject"] == "tide"}
     assert len(model_hashes) == 1
     if table == "common":
@@ -109,3 +111,13 @@ def test_cpu_search_executes_independent_children_and_keeps_calibration_fixed(tm
         assert baselines[0]["initial_parameter_sha256"] == baselines[1]["initial_parameter_sha256"]
         assert all(r["best"] is not None for r in report["capacity_table"])
         assert all(r["activity"]["initial_minus_calibration"] is not None for r in metrics)
+    assert verify_metric_files(report) == 7
+    text = render([(dict(path=str(output/"search.json"), sha256="test"), report)])
+    rendered = tmp_path/"report.md"
+    write_text_atomic(rendered, text)
+    assert rendered.read_text() == text
+    assert "common-shape" in text and "capacity" in text
+    first = Path(metrics[0]["result_file"]["path"])
+    first.write_text(first.read_text()+" ")
+    with pytest.raises(ValueError, match="identity changed"):
+        verify_metric_files(report)
