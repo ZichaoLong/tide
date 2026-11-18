@@ -1,5 +1,10 @@
 """Bounded mode capture, actual dispatch observation and independent row oracle."""
 import importlib
+import os
+from pathlib import Path
+import subprocess
+import sys
+import textwrap
 
 import pytest
 import torch
@@ -72,3 +77,50 @@ def test_call_capture_bound_stops_before_the_operator():
     q = torch.zeros(1, 1, 2, 4)
     with calls.install(), pytest.raises(CaptureLimit, match="input/output elements"):
         calls.call("test", (q, q, q, None, None), "math")
+
+
+def test_cold_site_import_and_fault_injection_restore_every_alias():
+    # An isolated interpreter is required: the suite has already imported the
+    # diagnostic, and deleting live modules would itself corrupt class identity.
+    script = textwrap.dedent('''
+        import importlib
+        import sys
+        from unittest.mock import patch
+        import torch
+        torch.set_num_threads(1)
+        assert "tide.region_batch" not in sys.modules
+        from scripts.diagnose_attention_modes import Calls, CaptureLimit
+        names = ("attention", "reception", "kv", "region", "region_batch")
+        attention = importlib.import_module("tide.attention")
+        original = attention.weighted_attention
+        # Do not import missing sites here: that would hide the cold-import bug
+        # by prewarming aliases in the test instead of in the diagnostic.
+        originals = {name: getattr(sys.modules.get("tide."+name), "weighted_attention", original)
+                     for name in names}
+        def faulty(*args, **kwargs):
+            return original(*args, **kwargs) + .01
+        q = torch.zeros(1, 1, 2, 4, requires_grad=True)
+        v = torch.ones_like(q)
+        with patch.object(attention, "weighted_attention", faulty):
+            with Calls("cpu", elements=1000, max_calls=10).install():
+                for name in names:
+                    owner = importlib.import_module("tide."+name)
+                    output = owner.weighted_attention(q, q, v, backend="math")
+                    torch.testing.assert_close(output, torch.full_like(output, 1.01))
+        sites = {name: sys.modules["tide."+name] for name in names}
+        assert all(owner.weighted_attention is originals[name] for name, owner in sites.items())
+        try:
+            with Calls("cpu", elements=1, max_calls=1).install():
+                sites["region_batch"].weighted_attention(q, q, v, backend="math")
+        except CaptureLimit:
+            pass
+        else:
+            raise AssertionError("capture bound did not stop the call")
+        assert all(owner.weighted_attention is originals[name] for name, owner in sites.items())
+    ''')
+    root = Path(__file__).resolve().parents[1]
+    environment = dict(os.environ)
+    environment["PYTHONPATH"] = str(root/"src")+os.pathsep+environment.get("PYTHONPATH", "")
+    completed = subprocess.run([sys.executable, "-c", script], cwd=root, env=environment,
+                               capture_output=True, text=True, timeout=30)
+    assert completed.returncode == 0, completed.stdout+completed.stderr

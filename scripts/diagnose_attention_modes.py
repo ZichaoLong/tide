@@ -30,6 +30,12 @@ from scripts.qualify_precision import atomic_tensor, file_sha256
 
 
 NAMES = ("q", "k", "v", "weights", "mask")
+# Resolve every site's imported function alias before installing observation
+# wrappers or a caller's subsequent fault injection. A lazy site import while
+# attention.weighted_attention is patched would permanently bind that wrapper
+# as the site's "original", even after every patch context exits normally.
+ATTENTION_SITES = tuple((name, importlib.import_module("tide."+name))
+                       for name in ("attention", "reception", "kv", "region", "region_batch"))
 
 
 def describe(value):
@@ -118,11 +124,9 @@ class Calls:
 
     @contextmanager
     def install(self):
-        module = importlib.import_module("tide.attention")
-        self.original = module.weighted_attention
+        self.original = ATTENTION_SITES[0][1].weighted_attention
         with ExitStack() as stack:
-            for site in ("attention", "reception", "kv", "region", "region_batch"):
-                owner = importlib.import_module("tide."+site)
+            for site, owner in ATTENTION_SITES:
                 def wrapped(q, k, v, weights=None, mask=None, backend="auto", *, _site=site):
                     return self.call(_site, (q, k, v, weights, mask), backend)
                 stack.enter_context(patch.object(owner, "weighted_attention", wrapped))
