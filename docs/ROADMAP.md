@@ -1,35 +1,40 @@
-# 当前实例路线：本轮结果与后续待办
+# 当前实例路线：容量、吞吐与区域执行
 
-产品范围由 [project-scope](project-scope.md) 维护；当前实现、数值边界与复现入口在
-[STATUS](STATUS.md) 和 [固定证据](evidence/README.md)。数学仍固定为
-`4f5b9f20a4030d68ee66ae2d26e34659a5e37234`。主实例路线持续有效，通用基座未启动。
+用户已确认本阶段计划。产品范围见 [project-scope](project-scope.md)，当前事实见
+[STATUS](STATUS.md)，上一阶段五类结果见 [证据索引](evidence/README.md)。
+数学固定为 `4f5b9f20a4030d68ee66ae2d26e34659a5e37234`；持续实例路线，通用基座未启动。
 
-## 本轮五类工作
+## 必交付与有限候选
 
-本轮以实际结果或已调查的具体边界收束；执行成功、数值等价和性能收益分别记录。
-所有原始超差、运行失败和阈值保留，没有将预算、计划或未运行路径重标为通过。
-
-| 工作 | 已交付范围与证据 | 适用边界 |
+| 阶段 | 工作 | 验收与退出 |
 |---|---|---|
-| 比较设施、配置和规模 | [A–D 设施](benchmarking.md)、[CPU/NPU 七点主矩阵](evidence/roadmap-representative-20261118.md)、[稀疏/形状/组合](evidence/roadmap-supplementary-20261118.md)、[0.5B/1B](evidence/roadmap-scale-small-20261118.md)、[9B/17B](evidence/roadmap-scale-large-20261118.md) | 四类同时匹配两个约束；活跃触及、教材代理和重复工作分开。大规模只资格化实测的模式、B/L 和设备。 |
-| 热点和差距解释 | [有限候选](evidence/roadmap-hotspots-20261118.md)、[三类 Attention](evidence/roadmap-attention-20261118.md) | 采用 NPU KV 压紧和兼容 head-query 融合；CPU 保留原路径。Full 分桶回退、额外 gate/up 无明确收益。实际工作变化与未解释差距均保留。 |
-| 连续运行和完整计时 | [连续矩阵](evidence/roadmap-continuous-20261118.md)、[whole/chunk VJP](evidence/roadmap-numerics-followup-20261118.md)、[放置恢复](evidence/roadmap-placement-20261118.md) | 真增量 KV、B1/B4、跨窗、Timed flush、三段续接及恢复后实际更新；恢复一致性与性能计时各有边界。 |
-| FP32/BF16 数值 | [明确精度策略](precision.md)、[初始调查](evidence/roadmap-numerics-initial-20261118.md)、[后续调查](evidence/roadmap-numerics-followup-20261118.md)、[安装和 CPU 套件](evidence/roadmap-installed-20261118.md) | 修复 BF16 模式依赖的 Attention 表示；保留跨精度支持差异、有限分块/梯度/AdamW 超差。CPU FP64 是诊断。 |
-| 执行路径和硬件 | [host-stage 与事件失败](evidence/roadmap-placement-20261118.md)、[实际大容量](evidence/roadmap-scale-large-20261118.md)、[TorchAir 有限探测](evidence/roadmap-resident-20261118.md) | CPU/单 NPU 与必要多 NPU 已实测；CANN 路径覆盖错误已修复。直接/同步 NPU 传输仍有事件失败；没有 resident 或 CUDA 真机资格。 |
+| 1 配置与验证 | 主绑定支持目录；Group Hub 固定通过；严格时间对照的显式时钟/窗口/衰减/SSD stride；terminal_hubs 单列可选绑定 | 区分可表达、实际执行、数值、性能；合法/非法及值/支持/梯度/状态/恢复检查 |
+| 2 容量与吞吐 | 有界单轴 B/L 搜索；持久参数/梯度/AdamW、私有状态、保存张量、临时量和底层 storage 账本 | 冻结输入，逐卡预算，最多8–12候选/方向，时间和容量界限；正常计时与诊断分开 |
+| 3 内存与算子 | Timed 尾部存储、KV mask/时间差、重复准备；接收/区域按有效轴分块；选择性重算；小 Attention math 候选 | 保持完整 BPTT、int64 时间、零先验导数、精度/路由；同负载与扩大负载收益分别记录 |
+| 4 区域批量与 C++ | 同层相容区域合批；Python 串行、相同布局 C++ 串行与2/4任务并发有限对照 | 保持各区评分/预算/私有状态及共享梯度；采用/拒绝/具体边界，不要求第二套完整模型 |
+| 5 同层多设备 | independent/region_shared 完整区域归属、运输去重、统一更新和checkpoint；精确9B/17B区域预算 | 小型Settle/Timed值、VJP、多步和恢复后更新；双卡机制及性能，收益成立再扩大 |
+| 6 集成比较与续接 | 共同B/L的A–D；固定L/卡数/内存预算下寻优吞吐；0.5B/1B长输入和恢复，预算允许再扩9B/17B | 三模式、两精度、实际活跃/完整计时/峰值；新增错误先修复，有限超差保留原阈值 |
 
-## 后续工作及重启依据
+## 实验顺序与边界
 
-以下是可按实际需求选择的待办，不自动启动新实验或继承本线程的共享 NPU 授权。
-实施前重新核对 HEAD、活动任务、配额和资源；已有有效证据沿用原身份。
+首轮代表为 FC-K、FC-S、HB Settle、Timed 和 HB1B，自然路由为主，补低/高活跃、
+高padding及incoming-wide压力。小模型分别扩大B（8/16/32等）和L（128/256/512/1024等）；
+1B由L8/32/128逐步扩大，不把全部轴展开为全组合。设备预算随准入确定并留余量；
+首次容量失败停止该方向，只允许一次有依据的边界细化；连续两次扩大无超过噪声的吞吐收益则停止。
 
-| 候选工作 | 已知依据 | 何时继续及必要检查 |
-|---|---|---|
-| BF16 支持稳定性及重复反向/恢复更新 | 真正的舍入边界跨越与同 owner 反向变动已有独立见证 | 需要更严格轨迹一致性或下游复现时，针对评分链/归约/贡献汇总做有限候选；保持原阈值和支持语义。 |
-| 小接收/区域 Attention 的普通 math 路径 | NPU 已测小型形状的 post-projection 局部见证快于 native/tiled；尚未形成整网采用证据，CPU 无稳健排名 | 先覆盖零/微小正 prior、VJP、共享梯度及两精度模式一致性，再测完整训练/续接。 |
-| 高 padding Full 的更低调用成本布局 | 旧分桶减少部分 padding 却增加调度和反向图，整网回退 | 出现更高 padding 的实际负载或可批量化索引方案时再比较，避免仅按行数预测收益。 |
-| 更大规模、长窗口与层内切分 | 9B 四卡容量已实测；17B 最宽层的 FP32-master AdamW 持久预算约 83.8 GiB | 如需 17B NPU 训练或更大 B/L，先预算层内分片/通信/临时张量，并验证统一更新和真实恢复；不能用总卡数消除单层瓶颈。 |
-| 原生传输、resident 与 CUDA | host_stage 可用；原生事件生命周期仍失败；TorchAir 在静态 role guard 前端停止；本机无 CUDA GPU | 有必要吞吐或硬件条件时启动独立有限试验。先去除可静态处理的 guard，再观察实际 backend 调用和动态选择；编译成功不等于 resident。 |
-| 更精确的短时性能比较 | CPU 短基线及不同 NPU/时段有可见波动；同构基线也会漂移 | 只有结论依赖细小时间差时，设置交错/随机顺序的配对样本、记录频率与争用；不为微小排名无界复测。 |
+增加输入L、扩大逻辑历史窗口、改变chunk和改变每次更新跨度是不同工作；分别声明。
+当前固定窗口下的长输入优先，真正扩窗属于显式绑定配置。连续训练保持声明的detach边界、
+Timed flush和真实恢复后更新。用输入位置数计吞吐，不能用padding或逻辑tick替代。
 
-数据、任务头、loss、训练配方和模型质量归下游实验。本轮交付不代替任何下游依赖升级或验收；
-按 [协作契约](downstream-contract.md) 分别记录。后续更换上游数学或启动通用基座需要明确的新任务。
+A–D严格遵循 [benchmark-contract](benchmark-contract.md)：block/深度与总/实际活跃参数
+四类联合匹配。共同B/L按该点建立匹配；预算搜索先冻结校准模型、记录活动变化，需要声称
+寻优点仍匹配活跃量时重新匹配复测。Transformer有同等调优机会，资源产能与同负载加速分表。
+
+FP32/BF16按 [precision](precision.md) 与 [verification](verification.md) 执行；
+CPU FP64用于有限诊断。原有超差、失败和阈值保留，修复实现错误，不承诺所有后端位级一致。
+C++不自动解决设备事件问题；多卡收益包含通信、所有设备同步、逐卡峰值和每卡吞吐。
+17B完整训练持久量约249GiB，仅区域切分并不保证任意卡数可行。
+
+长作业使用冻结提交、独立输出、有限资源与时间、background.slice及持久记录。
+主代理统一准入和集成，参考、公共环境、下游不变更。分阶段提交实现后才做正式资格，
+证据另提交并正常推送授权分支。每个候选收束为采用、容量选项、拒绝或明确待解问题。
