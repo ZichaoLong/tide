@@ -20,7 +20,8 @@ class TopologyConfig:
     ``depth`` means binary expansion h for Lattice, m for Exchange. Exchange R
     defaults to m. Multiscale profiles are 5/5-dd4/7/9/13/15/17/25/33 and
     compact-5-dd4/7/9/9-two-inputs/15. Only Multiscale has a Timed binding,
-    arbitrary nonterminal hub masks, or the three partition choices.
+    arbitrary Hub masks, or the three partition choices. Terminal Hubs require
+    the explicit ``terminal_hubs`` option on Exchange/Multiscale.
     ``layers=None`` resolves to FC4, Lattice7, Exchange10 or Multiscale9.
     """
 
@@ -36,6 +37,7 @@ class TopologyConfig:
     hub_mask: HubMask = "all"
     period: int | None = None
     probes: tuple[int, int, int] | None = None
+    terminal_hubs: bool = False
 
 
 @dataclass(frozen=True, slots=True)
@@ -90,6 +92,10 @@ def _resolve(config):
         raise ValueError(f"unknown topology kind: {c.kind!r}")
     _integer("n", c.n)
     _integer("hubs", c.hubs, 0)
+    if type(c.terminal_hubs) is not bool:
+        raise ValueError("terminal_hubs must be boolean")
+    if c.terminal_hubs and (c.kind not in ("exchange", "multiscale") or not c.hubs):
+        raise ValueError("terminal_hubs requires Exchange/Multiscale with hubs")
     for name in ("layers", "depth", "rounds", "period"):
         if (value := getattr(c, name)) is not None:
             _integer(name, value)
@@ -164,7 +170,7 @@ def _hub_presence(config, widths):
     if isinstance(mask, str):
         if mask not in ("all", "none", "checkerboard"):
             raise ValueError(f"unknown hub mask: {mask!r}")
-        return tuple(tuple(bool(config.hubs) and l < len(widths) - 1 and
+        return tuple(tuple(bool(config.hubs) and (config.terminal_hubs or l < len(widths) - 1) and
                            (mask == "all" or mask == "checkerboard" and (l + p) % 2 == 0)
                            for p in range(width)) for l, width in enumerate(widths))
     if not isinstance(mask, tuple) or len(mask) != len(widths):
@@ -172,7 +178,7 @@ def _hub_presence(config, widths):
     if any(not isinstance(row, tuple) or len(row) != width or
            any(type(value) is not bool for value in row) for row, width in zip(mask, widths)):
         raise ValueError("hub mask rows must contain one bool per position")
-    if any(mask[-1]):
+    if any(mask[-1]) and not config.terminal_hubs:
         raise ValueError("the current binding has no terminal hubs")
     if not config.hubs and any(any(row) for row in mask):
         raise ValueError("a nonempty hub mask requires hubs > 0")

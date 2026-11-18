@@ -30,7 +30,8 @@ class SSDState:
 
 
 class SSDMemory(nn.Module):
-    def __init__(self, nodes, d, groups, rank, period, settle=True, backend="auto", chunk=128):
+    def __init__(self, nodes, d, groups, rank, period, settle=True, backend="auto", chunk=128,
+                 *, short_decay=None, conv_stride=None):
         super().__init__()
         if d < 32 or d % 32:
             raise ValueError("SSD width must be a positive multiple of 32")
@@ -40,6 +41,9 @@ class SSDMemory(nn.Module):
             raise ValueError("SSD chunk must be a positive integer")
         self.d, self.heads, self.period = d, d // 32, period
         self.stride, self.chunk = period if settle else 1, min(chunk, 32)
+        if conv_stride is not None:
+            self.stride = conv_stride
+        self.short_decay = math.log(2)/(8*period) if short_decay is None else short_decay
         self.backend = backend
         self.input = NodeLinear(nodes, d, 2*d + 64 + self.heads, groups, rank)
         self.summary = NodeLinear(nodes, d, d//4, groups, rank)
@@ -65,7 +69,7 @@ class SSDMemory(nn.Module):
     def _summaries(self, features, weight, times, state):
         previous = torch.cat((state.times[..., None], times[..., :-1]), dim=-1)
         elapsed = (times - previous).clamp_min(0).to(features.dtype)
-        short_decay = torch.exp(elapsed * (-math.log(2)/(8*self.period)))
+        short_decay = torch.exp(elapsed * -self.short_decay)
         decay = torch.stack((short_decay, torch.ones_like(short_decay)), dim=-1)
         writes = torch.cat((features * weight[..., None], weight[..., None]), dim=-1)
         writes = writes.unsqueeze(-2).expand(*writes.shape[:-1], 2, writes.shape[-1])

@@ -32,7 +32,7 @@ def literal(module, u, mass, times, owners, state, control):
     Matrix weights are materialized independently, including node adapters.
     """
     descriptions, outputs, states, caches = [], [], [], []
-    beta = math.log(2) / (8 * module.period)
+    beta = module.short_decay
     for node in range(u.shape[0]):
         node_desc, node_out, node_state, node_cache = [], [], [], []
         owner = int(owners[node])
@@ -95,10 +95,10 @@ def literal(module, u, mass, times, owners, state, control):
             torch.stack(outputs), tuple(torch.stack([node[j] for node in states]) for j in range(6)), caches)
 
 
-def fixture(shared=False, settle=True):
+def fixture(shared=False, settle=True, **clock):
     torch.manual_seed(417)
     module = SSDMemory(3, 64, [0, 0, 1] if shared else None, 3, 2,
-                       settle=settle, chunk=3).double()
+                       settle=settle, chunk=3, **clock).double()
     with torch.no_grad():
         for parameter in (module.a_log.value, module.dt_bias.value, module.skip.value, module.rho.value):
             parameter.add_(torch.randn_like(parameter) * .2)

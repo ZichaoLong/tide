@@ -60,12 +60,16 @@ def cache_order(keep, times):
 
 
 class KVMemory(nn.Module):
-    def __init__(self, nodes, d, groups, rank, period, settle=True, backend="auto", chunk=128, kv_groups=None):
+    def __init__(self, nodes, d, groups, rank, period, settle=True, backend="auto", chunk=128, kv_groups=None,
+                 *, position_period=None, window=None, short_decay=None):
         super().__init__()
         self.d, self.period, self.backend, self.chunk = d, period, backend, chunk
         self.unit_weights = False
-        self.window = 128 * period
-        self.slots = 128 if settle else self.window
+        self.position_period = period if position_period is None else position_period
+        self.window = 128 * period if window is None else window
+        self.short_decay = math.log(2)/(8*period) if short_decay is None else short_decay
+        # Settle writes are period-spaced; Timed can write at every logical tick.
+        self.slots = (self.window + period - 1)//period if settle else self.window
         self.kv = NodeLinear(nodes, d, 2*d, groups if kv_groups is None else kv_groups, rank)
         self.summary = NodeLinear(nodes, d, d//4, groups, rank)
         self.query = HeadQuery(nodes, d, groups, rank)
@@ -96,7 +100,7 @@ class KVMemory(nn.Module):
             delta = times[:, :, start:end, None] - bank.times[:, :, None, lo:hi]
             visible = (delta >= 0) & (delta < self.window)
             weight = bank.weight[:, :, None, lo:hi] * visible
-            decay = torch.exp(delta.clamp_min(0).to(accumulation_dtype) * (-math.log(2)/(8*self.period)))
+            decay = torch.exp(delta.clamp_min(0).to(accumulation_dtype) * -self.short_decay)
             for weights, outputs, amounts in ((weight, long, wl), (weight*decay, short, ws)):
                 amount = weights.sum(-1)
                 denominator = torch.where(amount <= 1, torch.ones_like(amount), amount)
@@ -136,11 +140,11 @@ class KVMemory(nn.Module):
         n, b, qlen, d = packed.data.shape
         queries = self.query(norm(packed.data), ids).reshape(n,b,qlen,d//32,32).transpose(2,3)
         anchor = packed.positions[:,:,:1]
-        queries = rope(queries, packed.positions-anchor, self.period)
+        queries = rope(queries, packed.positions-anchor, self.position_period)
         keys = bank.keys[packed.nodes, :, lo:hi].reshape(n,b,-1,d//32,32).transpose(2,3)
         values = bank.values[packed.nodes, :, lo:hi].reshape(n,b,-1,d//32,32).transpose(2,3)
         key_times = bank.times[packed.nodes, :, lo:hi]
-        keys = rope(keys, key_times-anchor, self.period)
+        keys = rope(keys, key_times-anchor, self.position_period)
         delta = packed.positions[..., None] - key_times[:, :, None, :]
         visible = (delta >= 0) & (delta < self.window) & packed.valid[..., None]
         w = bank.weight[packed.nodes, :, lo:hi]

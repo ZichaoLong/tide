@@ -64,6 +64,10 @@ class TideModel(nn.Module):
         self.graph = graph = build_topology(config.topology)
         n,d = len(graph.nodes),config.d
         self.settle = graph.config.timing == "settle"
+        self.clock = config.clock.resolve(graph.period, self.settle)
+        self.fixed_regions = tuple(all(graph.nodes[v].role=="H" for v in nodes) and
+                                   (graph.config.partition=="singleton" or config.hub_allocation=="fixed_pass")
+                                   for nodes in graph.regions)
         self.kinds = ["S" if config.memory=="S" or config.memory=="X" and node.role=="H" else "K"
                       for node in graph.nodes]
         gkeys = [(node.layer,node.role,self.kinds[node.id]) for node in graph.nodes]
@@ -74,7 +78,7 @@ class TideModel(nn.Module):
                    ({"ext"} if v.layer==0 else set()) for v in graph.nodes]
         local_backend = config.local_attention_backend or config.attention_backend
         self.receive = Reception(sources,d,config.aggregation,groups,config.adapter_rank,local_backend)
-        scored = [v.id for v in graph.nodes if not (v.role=="H" and graph.config.partition=="singleton")]
+        scored = [v.id for v in graph.nodes if not self.fixed_regions[v.region]]
         self.description_ids = {v:i for i,v in enumerate(scored)}
         self.describe = Description(len(scored),d,None if groups is None else _number([gkeys[v] for v in scored]),config.adapter_rank)
         self.memories = nn.ModuleDict()
@@ -92,15 +96,17 @@ class TideModel(nn.Module):
                           else (graph.nodes[v].layer,tuple(sorted(set(graph.nodes[u].role for u in graph.regions[graph.nodes[v].region]))))
                           for v in members]
                 kv_groups = None if groups is None else _number(kvkeys)
-                self.memories[kind] = KVMemory(*args,**kwargs,kv_groups=kv_groups)
+                self.memories[kind] = KVMemory(*args,**kwargs,kv_groups=kv_groups,
+                                              position_period=self.clock.position_period,
+                                              window=self.clock.kv_window,short_decay=self.clock.short_decay)
                 self.memories[kind].unit_weights = graph.config.kind=="fc"
             else:
                 from .ssd_memory import SSDMemory
-                self.memories[kind] = SSDMemory(*args,**kwargs)
+                self.memories[kind] = SSDMemory(*args,**kwargs,short_decay=self.clock.short_decay,
+                                               conv_stride=self.clock.ssd_stride)
         rkeys = [(graph.region_ranks[r],tuple(sorted(set(graph.nodes[v].role for v in nodes))))
                  for r,nodes in enumerate(graph.regions)]
-        fixed = [all(graph.nodes[v].role=="H" for v in nodes) and graph.config.partition=="singleton"
-                 for nodes in graph.regions]
+        fixed = self.fixed_regions
         region_keys = [rkeys[r] if config.sharing=="layer_shared" else r for r in range(len(graph.regions)) if not fixed[r]]
         labels = _number(region_keys)
         iterator = iter(labels)
@@ -206,7 +212,7 @@ class TideModel(nn.Module):
             contexts[kind] = (sub,context)
             saved[kind] = updated
         roles = torch.tensor([self.graph.nodes[v].role=="H" for v in members],device=device)
-        if bool(roles.all()) and self.graph.config.partition=="singleton":
+        if self.fixed_regions[region]:
             control = torch.where(received>=0.5,torch.ones_like(received),2*received)
         else:
             possible = tuple(self.description_ids[v] for v in members)
@@ -350,6 +356,16 @@ class TideModel(nn.Module):
             for origin in self._release_layers[layer]:
                 layers[origin] = None
         final = layers[-1]
+        if self.graph.config.terminal_hubs:
+            # H-only terminal regions have no output path: preserve None gradients.
+            port_values, port_controls = [], []
+            for region in self.layer_regions[-1]:
+                value, control = values[region], controls[region]
+                ports = [i for i,v in enumerate(self.graph.regions[region]) if self.graph.nodes[v].role=="D"]
+                if ports:
+                    port_values.append(value if len(ports)==len(value) else value[ports])
+                    port_controls.append(control if len(ports)==len(control) else control[ports])
+            final = LayerOutput(torch.cat(port_values,0),torch.cat(port_controls,0))
         nextstate = ModelState(start+positions,tuple(newmem),tuple(pending))
         measured = None
         if record_work:

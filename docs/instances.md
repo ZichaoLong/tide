@@ -81,6 +81,11 @@ singleton Hubs pass their bound directly. K/S/X and all other main choices are
 composable within these restrictions. The tests cover individual choices and
 selected interactions, not all combinations or scales.
 
+Optional group-Hub fixed pass, explicit local clocks/strict edge-delay pairs and
+terminal Hubs are documented in [optional bindings](optional-bindings.md).
+`python -m scripts.support_catalog` checks the complete main menu's metadata;
+its output separates expression from execution, numerical and performance qualification.
+
 Three Attention sites are separate calls with different shapes: historical KV,
 same-tick incoming messages and regional candidates. `auto` selects implemented
 native/fused or tiled math based on dtype/device/prior semantics. Trainable

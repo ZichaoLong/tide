@@ -25,7 +25,7 @@ def fixed_capacity():
 CAPACITY = fixed_capacity()
 
 
-def reference_nodes(profile, n, hubs):
+def reference_nodes(profile, n, hubs, terminal_hubs=False):
     spec = CAPACITY.PROFILES[profile]
     widths = spec["widths"]
     if spec["family"] == "fc":
@@ -34,9 +34,11 @@ def reference_nodes(profile, n, hubs):
         return nodes, sources
     if spec["family"] == "multiscale":
         graph = CAPACITY.ms.construct(widths, n=n, h=4, probes=CAPACITY.ms.probes_for(n),
-                                      placement="all" if hubs else "none", add_dd4=spec["add_dd4"])
+                                      placement="all" if hubs else "none", add_dd4=spec["add_dd4"],
+                                      terminal_hubs=terminal_hubs)
     else:
-        graph = CAPACITY.st.construct(widths, n=n, h=hubs, exchange=spec["family"] == "exchange")
+        graph = CAPACITY.st.construct(widths, n=n, h=hubs, exchange=spec["family"] == "exchange",
+                                      terminal_hubs=terminal_hubs)
     nodes, _, _, incoming, _, _ = graph
     sources = [{kind for _, kind in parents} | ({"ext"} if node[0] == 0 else set())
                for node, parents in zip(nodes, incoming)]
@@ -50,7 +52,7 @@ def independent_inventory(profile, config):
     also used to apply the written mixed KV exception and singleton omission.
     """
     topology = config.topology
-    nodes, sources = reference_nodes(profile, topology.n, topology.hubs)
+    nodes, sources = reference_nodes(profile, topology.n, topology.hubs, topology.terminal_hubs)
     region_nodes = defaultdict(list)
     regions = []
     for i, (layer, position, role, local) in enumerate(nodes):
@@ -66,7 +68,7 @@ def independent_inventory(profile, config):
     source_width = agg["agg_hidden_width"] + (config.d if agg["agg_attention_width"] else 0)
     for i, (layer, position, role, local) in enumerate(nodes):
         kind = "S" if config.memory == "S" or config.memory == "X" and role == "h" else "K"
-        scored = not (topology.partition == "singleton" and role == "h")
+        scored = not (role == "h" and (topology.partition == "singleton" or config.hub_allocation == "fixed_pass"))
         group = (i,) if config.sharing == "independent" else (layer, role, kind)
         if config.sharing == "region_shared":
             group = (regions[i], *group)
@@ -87,7 +89,7 @@ def independent_inventory(profile, config):
         embedding_slots.update((group, source) for source in sources[i])
     region_groups = set()
     for region, members in region_nodes.items():
-        if topology.partition == "singleton" and region_types[region] == ("h",):
+        if region_types[region] == ("h",) and (topology.partition == "singleton" or config.hub_allocation == "fixed_pass"):
             continue
         owner = (nodes[members[0]][0], region_types[region]) if config.sharing == "layer_shared" else region
         region_groups.add(owner)

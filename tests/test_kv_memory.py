@@ -49,7 +49,7 @@ def formula(module, u, mass, times, owners, initial, control, queries=None):
         visible = (delta >= 0) & (delta < module.window) & (bw[:, None, :] > 0)
         long_weight = torch.where(visible, bw[:, None, :], 0)
         short_weight = long_weight * torch.exp(delta.clamp_min(0).to(u.dtype)
-                                              * (-math.log(2)/(8*module.period)))
+                                              * -module.short_decay)
         ws, wl = short_weight.sum(-1), long_weight.sum(-1)
         ms = short_weight @ bp / torch.where(ws > 1, ws, 1)[..., None]
         ml = long_weight @ bp / torch.where(wl > 1, wl, 1)[..., None]
@@ -65,7 +65,7 @@ def formula(module, u, mass, times, owners, initial, control, queries=None):
                 weight = bw[batch, keep]
                 assert weight.numel()  # Selected fixture rows have positive reception.
                 key = bk[batch, keep].reshape(-1, module.d//32, 16, 2)
-                relative = (bt[batch, keep]-times[node, batch, i]).to(u.dtype) / module.period
+                relative = (bt[batch, keep]-times[node, batch, i]).to(u.dtype) / module.position_period
                 phase = relative[:, None] * frequencies
                 real = key[..., 0]*phase.cos()[:, None] - key[..., 1]*phase.sin()[:, None]
                 imag = key[..., 0]*phase.sin()[:, None] + key[..., 1]*phase.cos()[:, None]
@@ -120,9 +120,9 @@ def loss(result):
     return sum(x.square().sum() for x in tensors)
 
 
-def fixture(dtype=torch.float64, shared=True):
+def fixture(dtype=torch.float64, shared=True, **clock):
     torch.manual_seed(651)
-    module = KVMemory(3, 64, [0, 1, 0] if shared else None, 4, 4, chunk=3).to(dtype)
+    module = KVMemory(3, 64, [0, 1, 0] if shared else None, 4, 4, chunk=3, **clock).to(dtype)
     u = torch.randn(2, 2, 7, 64, dtype=dtype, requires_grad=True)
     weights = torch.full((2, 2, 7), .17, dtype=dtype, requires_grad=True)
     present = torch.tensor([[[1, 0, 1, 1, 0, 1, 0], [1, 1, 0, 0, 1, 0, 0]],

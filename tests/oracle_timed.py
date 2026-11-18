@@ -7,6 +7,7 @@ and region controls use independently enumerated quadratic active faces.
 """
 from dataclasses import dataclass
 from itertools import product
+import math
 
 import torch
 
@@ -50,9 +51,10 @@ def _aggregate(parameters, node, slots, messages):
     return total, sum(values) / total
 
 
-def _describe(parameters, node, descriptor, content, mass, cache, time, period):
+def _describe(parameters, node, descriptor, content, mass, cache, time, period, short_decay=None):
     current = _linear(parameters, "memories.K.summary", node, _normal(content))
-    short = [entry.weight * 2 ** (-(time - entry.time) / (8 * period)) for entry in cache]
+    beta = math.log(2)/(8*period) if short_decay is None else short_decay
+    short = [entry.weight * math.exp(-beta*(time-entry.time)) for entry in cache]
     long = [entry.weight for entry in cache]
     ws, wl = sum(short), sum(long)
     ms = sum(w * entry.feature for w, entry in zip(short, cache)) / _at_least_one(ws)
@@ -109,17 +111,20 @@ def _bounded_quad(score, received, roles, budget):
     raise AssertionError("no feasible stationary face for the small role allocation")
 
 
-def evaluate(parameters, inputs, graph, state=None, *, inject=True):
+def evaluate(parameters, inputs, graph, state=None, *, inject=True, fixed_hubs=False, clock=None):
     """Advance the tensor's duration; inject=False adds no external atoms."""
     assert graph.config.timing == "timed"
     batches, positions, width = inputs.shape
     start = 0 if state is None else state.position
     stop = (start + positions) * graph.period
+    clock = clock or {}
+    window = clock.get("kv_window") or 128*graph.period
+    position_period = clock.get("position_period") or graph.period
     slots = _source_slots(graph)
-    scored = [v.id for v in graph.nodes if not (v.role == "H" and graph.config.partition == "singleton")]
+    scored = [v.id for v in graph.nodes if not (v.role == "H" and (fixed_hubs or graph.config.partition == "singleton"))]
     descriptor = {node: index for index, node in enumerate(scored)}
     fixed_regions = {r for r, members in enumerate(graph.regions)
-                     if graph.config.partition == "singleton" and all(graph.nodes[v].role == "H" for v in members)}
+                     if (fixed_hubs or graph.config.partition == "singleton") and all(graph.nodes[v].role == "H" for v in members)}
     network = {r: index for index, r in enumerate(r for r in range(len(graph.regions)) if r not in fixed_regions)}
     caches = ([[[] for _ in graph.nodes] for _ in range(batches)] if state is None else
               [[list(entries) for entries in batch] for batch in state.caches])
@@ -154,12 +159,13 @@ def evaluate(parameters, inputs, graph, state=None, *, inject=True):
                     normal = _normal(content)
                     kv = _linear(parameters, "memories.K.kv", node, normal)
                     feature = _linear(parameters, "memories.K.summary", node, normal)
-                    cache = [entry for entry in caches[batch][node] if time - entry.time < 128 * graph.period]
+                    cache = [entry for entry in caches[batch][node] if time - entry.time < window]
                     cache.append(Entry(time, kv[:width], kv[width:], feature, _at_most_one(mass)))
                     caches[batch][node] = cache
                     contents.append(content); received.append(mass)
                     if region not in fixed_regions:
-                        z, score = _describe(parameters, node, descriptor[node], content, mass, cache, time, graph.period)
+                        z, score = _describe(parameters, node, descriptor[node], content, mass, cache, time,
+                                             graph.period, clock.get("short_decay"))
                         encodings.append(z); scores.append(score)
                 if region in fixed_regions:
                     controls = torch.stack([_at_most_one(2 * mass) for mass in received])
@@ -174,7 +180,8 @@ def evaluate(parameters, inputs, graph, state=None, *, inject=True):
                     if bool(control <= 0):
                         continue
                     # Timed position is (theta-1)/period, independent of layer.
-                    full = _full(parameters, node, content, caches[batch][node], time, 1, graph.period)
+                    origin = 0 if clock.get("position_origin") == "absolute" else 1
+                    full = _full(parameters, node, content, caches[batch][node], time, origin, position_period)
                     for eid in graph.outgoing[node]:
                         edge = graph.edges[eid]
                         delivery = Delivery(time + edge.delay, eid, control, full)
