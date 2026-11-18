@@ -234,8 +234,8 @@ def weighted_attention(q: Tensor, k: Tensor, v: Tensor, weights: Tensor | None =
         raise ValueError("q, k, v require head, sequence and feature axes")
     if any(x.dtype != q.dtype or x.device != q.device for x in (k, v)):
         raise ValueError("q, k, v must have the same dtype and device")
-    if q.dtype not in {torch.float64, torch.float32}:
-        raise TypeError("attention supports FP32 and FP64 only")
+    if q.dtype not in {torch.float64, torch.float32, torch.bfloat16}:
+        raise TypeError("attention supports BF16, FP32 and FP64 only")
     if q.shape[-1] != k.shape[-1] or k.shape[-2] != v.shape[-2] or q.shape[-1] == 0:
         raise ValueError("incompatible attention feature/key dimensions")
     batch_heads = torch.broadcast_shapes(q.shape[:-2], k.shape[:-2], v.shape[:-2])
@@ -244,8 +244,9 @@ def weighted_attention(q: Tensor, k: Tensor, v: Tensor, weights: Tensor | None =
     unit_prior, no_mask = weights is None, mask is None
     if weights is None:
         weights = q.new_ones(())
-    elif weights.device != q.device or weights.dtype != q.dtype:
-        raise ValueError("weights must share q's dtype and device")
+    elif weights.device != q.device or not (weights.dtype == q.dtype or
+            q.dtype == torch.bfloat16 and weights.dtype == torch.float32):
+        raise ValueError("weights must share q's dtype/device, or be FP32 with BF16 q/k/v")
     if not unit_prior and bool((~torch.isfinite(weights) | (weights < 0)).any()):
         raise ValueError("weights must be finite and nonnegative")
     if mask is None:
@@ -262,7 +263,7 @@ def weighted_attention(q: Tensor, k: Tensor, v: Tensor, weights: Tensor | None =
         backend = ("tiled" if zero_prior_grad else "npu_fusion" if npu_ok
                    else "sdpa" if q.device.type in {"cpu", "cuda"} else "tiled")
     if backend == "npu_fusion" and not npu_ok:
-        raise ValueError("npu_fusion requires NPU FP32 and equal head widths <=768")
+        raise ValueError("npu_fusion requires NPU FP32/BF16 and equal head widths <=768")
     if backend == "sdpa" and q.device.type not in {"cpu", "cuda"}:
         raise ValueError("sdpa is implemented for CPU/CUDA; select an NPU backend explicitly")
     if q.shape[-2] == 0 or k.shape[-2] == 0:

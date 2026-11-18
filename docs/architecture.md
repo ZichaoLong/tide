@@ -14,7 +14,9 @@ separate responsibilities but no compulsory universal intermediate representatio
 | three weighted Attention sites | attention.py | test_attention.py, device_attention.py |
 | layer windows, Timed pending/flush | model.py | oracle_timed.py, test_timed_reference.py |
 | training state/checkpoint | checkpoint.py | test_models.py |
+| explicit matrix/accumulation policy | precision.py | test_precision.py |
 | non-equivalent compute comparisons | benchmarks/baselines.py | test_baselines.py |
+| real incremental baseline KV and continuous timing | benchmarks/continuous.py | test_continuation.py |
 
 Implementation paths in the table are relative to src/tide unless qualified;
 test paths are relative to tests. A whole B×L window passes through each region:
@@ -47,3 +49,7 @@ the selected face from its remaining mass. Exact endpoints preserve zero
 senders. Ill-conditioned rows retain the safeguarded bisection fallback;
 Shannon uses that iterative solver. Both use the declared solution-mapping
 first-order VJP, not differentiation through solver iterations.
+
+KV cache entries already follow original time. A stable prefix-count partition
+compacts valid entries without sorting int64 timestamps; invalid padding stays
+first, preserving the previous stable ordering and finite-window retention.

@@ -1,10 +1,28 @@
 # Precision: requested policy and measured capability
 
-Current model qualification is FP32 on CPU/single NPU, with finite numerical
+Original model qualification is FP32 on CPU/single NPU, with finite numerical
 deviations recorded in [the report](evidence/instances-fp32-20261118.md).
-The user has added BF16 to the next [work programme](ROADMAP.md). It is a target,
-not a claim that current `.to(bfloat16)` or autocast use is supported/qualified.
+The current implementation adds the explicit BF16 arithmetic policy below.
+New device qualification and finite deviations belong to [STATUS](STATUS.md);
+the implementation alone does not establish numerical equivalence.
 CPU FP64 is available for bounded accuracy diagnosis. FP16 is outside this cycle.
+
+## Implemented arithmetic policy
+
+Keep model parameters and floating inputs in FP32 and use
+`with tide.precision.precision_context(device, "bf16"):` around forward/loss;
+run backward and AdamW outside that context. `"fp32"` explicitly disables outer
+autocast. Bare `model.to(bfloat16)` is not this policy. Matrix projections use
+actual BF16 operations, while mass, allocation, sensitive scalar score contraction,
+KV summaries and SSD recurrence/state use FP32. KV keys/values use BF16; original
+times remain int64. Parameter gradients and AdamW moments remain FP32, with the
+parameters themselves serving as master weights. Autocast's cast cache is disabled.
+
+`precision_policy` serializes this policy and `ArithmeticAudit` observes actual
+operator/input/output dtypes in a separate intrusive call. Neither certifies an
+unobserved hardware accumulator or kernel. `scripts/qualify_precision.py` compares
+independent attention formulas and frozen integrated CPU fixtures, retaining
+metadata, support, connectivity, nonfinite and numerical outcomes separately.
 
 ## BF16 delivery contract
 

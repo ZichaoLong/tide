@@ -76,7 +76,10 @@ class NodeLinear(_OwnerGroups):
         super().__init__()
         self.nodes, self.in_features, self.out_features = nodes, in_features, out_features
         self.shared = groups is not None
-        indices = torch.arange(nodes) if groups is None else torch.as_tensor(groups, dtype=torch.long)
+        # Ownership is construction metadata, even during a meta-device capacity
+        # plan. Do not call item()/tolist() on a meta tensor to discover it.
+        indices = (torch.arange(nodes, device="cpu") if groups is None else
+                   torch.as_tensor(groups, dtype=torch.long, device="cpu"))
         self._set_groups(indices)
         count = int(indices.max()) + 1 if nodes else 0
         self.weight = nn.Parameter(torch.empty(count, out_features, in_features))
@@ -128,7 +131,8 @@ class NodeLinear(_OwnerGroups):
 class NodeVector(_OwnerGroups):
     def __init__(self, nodes, width, groups=None, value=0.0):
         super().__init__()
-        indices = torch.arange(nodes) if groups is None else torch.as_tensor(groups, dtype=torch.long)
+        indices = (torch.arange(nodes, device="cpu") if groups is None else
+                   torch.as_tensor(groups, dtype=torch.long, device="cpu"))
         self._set_groups(indices)
         count = int(indices.max()) + 1 if nodes else 0
         self.value = nn.Parameter(torch.full((count, width), float(value)))

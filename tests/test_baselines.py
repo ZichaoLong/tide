@@ -28,20 +28,21 @@ def transformer_formula(model, x):
     """Dense whole-sequence attention, independent of production tile layout."""
     batch, length, d = x.shape
     positions = torch.arange(length)
-    frequencies = x.new_tensor([10000**(-2*i/32) for i in range(16)])
+    head_dim = model.head_dim
+    frequencies = x.new_tensor([10000**(-2*i/head_dim) for i in range(head_dim//2)])
     phase = positions.to(x.dtype)[:, None] * frequencies
     mask = ((positions[:, None] - positions[None, :]) >= 0)
     mask = mask & ((positions[:, None] - positions[None, :]) < model.window)
     for block in model.blocks:
         parts = affine(rms(x, block.attention_norm), block.qkv).chunk(3, -1)
-        q, k, v = [part.reshape(batch, length, d//32, 32).permute(0, 2, 1, 3) for part in parts]
+        q, k, v = [part.reshape(batch, length, d//head_dim, head_dim).permute(0, 2, 1, 3) for part in parts]
         rotated = []
         for tensor in (q, k):
-            pairs = tensor.reshape(batch, d//32, length, 16, 2)
+            pairs = tensor.reshape(batch, d//head_dim, length, head_dim//2, 2)
             real = pairs[..., 0]*phase.cos() - pairs[..., 1]*phase.sin()
             imag = pairs[..., 0]*phase.sin() + pairs[..., 1]*phase.cos()
             rotated.append(torch.stack((real, imag), -1).flatten(-2))
-        logits = (rotated[0] @ rotated[1].transpose(-1, -2)) / math.sqrt(32)
+        logits = (rotated[0] @ rotated[1].transpose(-1, -2)) / math.sqrt(head_dim)
         attention = logits.masked_fill(~mask, -torch.inf).softmax(-1) @ v
         x = x + affine(attention.transpose(1, 2).reshape(batch, length, d), block.output)
         x = x + feedforward(rms(x, block.ffn_norm), block.ffn)
@@ -162,3 +163,94 @@ def test_reported_counts_include_norms_and_only_enabled_ffn_parameters():
 def test_invalid_baseline_shape_fails(constructor, kwargs):
     with pytest.raises(ValueError):
         constructor(**kwargs)
+
+
+@pytest.mark.parametrize("batch,head_dim,window", [(1, 32, 4), (3, 16, 5), (2, 64, 1)])
+def test_transformer_incremental_cache_crosses_window_with_full_gradients(batch, head_dim, window):
+    torch.manual_seed(752)
+    model = TransformerBaseline(64, 2, window=window, chunk=3,
+                                head_dim=head_dim, ffn_width=152).double()
+    x = torch.randn(batch, 13, 64, dtype=torch.float64, requires_grad=True)
+    # Independent dense formula checks the values and derivatives, not a second
+    # application of the incremental implementation's schedule.
+    expected = transformer_formula(model, x)
+    whole, whole_state = model(x, return_state=True)
+    state, outputs = None, []
+    projected_lengths = []
+    hook = model.blocks[0].qkv.register_forward_pre_hook(
+        lambda module, args: projected_lengths.append(args[0].shape[1]))
+    for start, stop in ((0, 3), (3, 8), (8, 9), (9, 10), (10, 13)):
+        value, state = model(x[:, start:stop], state, return_state=True)
+        outputs.append(value)
+    hook.remove()
+    assert projected_lengths == [3, 5, 1, 1, 3]  # No full-prefix recomputation.
+    continued = torch.cat(outputs, 1)
+    for value in (whole, continued):
+        torch.testing.assert_close(value, expected, atol=3e-12, rtol=3e-12)
+    assert state.position == whole_state.position == 13
+    assert all(t.shape[-2] == window-1 for t in (*state.keys, *state.values))
+    for a, b in zip((*state.keys, *state.values), (*whole_state.keys, *whole_state.values)):
+        torch.testing.assert_close(a, b, atol=3e-12, rtol=3e-12)
+        assert a.untyped_storage().nbytes() == a.numel()*a.element_size()
+    root = torch.cos(torch.arange(expected.numel(), dtype=x.dtype)).reshape_as(expected)
+    inputs = (x, *model.parameters())
+    actual_grad = torch.autograd.grad(continued, inputs, root, retain_graph=True)
+    expected_grad = torch.autograd.grad(expected, inputs, root)
+    for a, b in zip(actual_grad, expected_grad):
+        torch.testing.assert_close(a, b, atol=6e-11, rtol=6e-11)
+
+
+def test_transformer_cache_ownership_and_shape_validation():
+    model = TransformerBaseline(32, 2, window=4)
+    x = torch.randn(2, 3, 32)
+    _, state = model(x, return_state=True)
+    originals = [t.clone() for t in (*state.keys, *state.values)]
+    _, following = model(x[:, :1], state, return_state=True)
+    assert following.position == 4 and state.position == 3
+    for a, b in zip((*state.keys, *state.values), originals):
+        torch.testing.assert_close(a, b, atol=0, rtol=0)
+    with pytest.raises(ValueError, match="cache shape"):
+        model(x[:1, :1], state)
+    other = TransformerBaseline(32, 1, window=4)
+    with pytest.raises(ValueError, match="layer count"):
+        other(x, state)
+
+
+def test_transformer_adjustable_width_count_and_bfloat16_cache():
+    model = TransformerBaseline(64, 2, head_dim=16, ffn_width=136, window=4)
+    assert parameter_count(model) == 2*(4*64**2+3*64*136+2*64)+64
+    x = torch.randn(2, 7, 64)
+    with torch.autocast("cpu", dtype=torch.bfloat16):
+        whole = model(x)
+        first, state = model(x[:, :3], return_state=True)
+        second, state = model(x[:, 3:], state, return_state=True)
+    assert state.keys[0].dtype == state.values[0].dtype == torch.bfloat16
+    torch.testing.assert_close(torch.cat((first, second), 1), whole, atol=.04, rtol=.04)
+    torch.cat((first, second), 1).square().mean().backward()
+    assert all(p.grad is not None and torch.isfinite(p.grad).all() for p in model.parameters())
+
+
+@pytest.mark.parametrize("ffn", [False, True])
+def test_ssd_bfloat16_matrix_arithmetic_with_float32_recurrence(ffn):
+    from tide.precision import ArithmeticAudit, precision_context
+    torch.manual_seed(381)
+    model = SSDBaseline(32, 2, ffn=ffn, state_dim=7)
+    x = torch.randn(2, 11, 32, requires_grad=True)
+    expected = model(x)
+    audit = ArithmeticAudit()
+    with audit, precision_context("cpu", "bf16"):
+        actual = model(x)
+    torch.testing.assert_close(actual, expected, atol=.035, rtol=.035)
+    actual.square().mean().backward()
+    assert all(p.grad is not None and torch.isfinite(p.grad).all() for p in model.parameters())
+    assert any("cpu:bfloat16" in row["outputs"] for row in audit.report())
+
+
+@pytest.mark.parametrize("dtype", [torch.float32, torch.bfloat16])
+def test_transformer_empty_cache_can_continue_under_requested_arithmetic(dtype):
+    model = TransformerBaseline(32, 1)
+    with torch.autocast("cpu", dtype=dtype, enabled=dtype == torch.bfloat16):
+        empty, state = model(torch.empty(2, 0, 32), return_state=True)
+        actual, state = model(torch.randn(2, 1, 32), state, return_state=True)
+    assert empty.shape == (2, 0, 32) and actual.shape == (2, 1, 32)
+    assert state.position == 1 and state.keys[0].dtype == dtype

@@ -36,6 +36,21 @@ def _take(x, order):
     return x.gather(2, index)
 
 
+def chronological_compaction(keep):
+    """Stable partition of a chronological bank, without sorting timestamps.
+
+    Valid entries in incoming state and new writes already follow int64 time.
+    Keep invalid entries first in their original order, exactly like the old
+    stable timestamp sort; callers retain the final finite-window slots.
+    No timestamp is converted to floating point, including times above 2**53.
+    """
+    count = keep.to(torch.int64).cumsum(2)
+    position = torch.arange(keep.shape[2], device=keep.device).expand_as(count)
+    invalid = keep.shape[2] - count[:, :, -1:]
+    destination = torch.where(keep, invalid + count - 1, position - count)
+    return torch.empty_like(position).scatter(2, destination, position)
+
+
 class KVMemory(nn.Module):
     def __init__(self, nodes, d, groups, rank, period, settle=True, backend="auto", chunk=128, kv_groups=None):
         super().__init__()
@@ -51,13 +66,15 @@ class KVMemory(nn.Module):
 
     def prepare(self, u, mass, times, owners, state=None):
         n, b, length, d = u.shape
+        accumulation_dtype = torch.float64 if u.dtype == torch.float64 else torch.float32
         # No reception means no write, including at the first-order boundary.
         # A padding slot must not become a differentiable key prior in a whole
         # window while disappearing from the saved continuation state.
-        mass = torch.where(mass>0,mass,torch.zeros_like(mass))
+        mass = torch.where(mass>0,mass,torch.zeros_like(mass)).to(accumulation_dtype)
         normal = norm(u)
         keys, values = self.kv(normal, owners).split(d, -1)
-        features = self.summary(normal, owners)
+        # BF16 projection is genuine; recurrent weighted sums retain FP32.
+        features = self.summary(normal, owners).to(accumulation_dtype)
         if state is None:
             state = KVState(times[:, :, :0], mass[:, :, :0], keys[:, :, :0], values[:, :, :0], features[:, :, :0])
         old = state.times.shape[2]
@@ -71,15 +88,16 @@ class KVMemory(nn.Module):
             delta = times[:, :, start:end, None] - bank.times[:, :, None, lo:hi]
             visible = (delta >= 0) & (delta < self.window)
             weight = bank.weight[:, :, None, lo:hi] * visible
-            decay = torch.exp(delta.clamp_min(0).to(u.dtype) * (-math.log(2)/(8*self.period)))
+            decay = torch.exp(delta.clamp_min(0).to(accumulation_dtype) * (-math.log(2)/(8*self.period)))
             for weights, outputs, amounts in ((weight, long, wl), (weight*decay, short, ws)):
                 amount = weights.sum(-1)
                 denominator = torch.where(amount <= 1, torch.ones_like(amount), amount)
-                outputs.append(torch.matmul(weights, bank.features[:, :, lo:hi]) / denominator[..., None])
+                with torch.autocast(u.device.type, enabled=False):
+                    outputs.append(torch.matmul(weights, bank.features[:, :, lo:hi]) / denominator[..., None])
                 amounts.append(amount)
         last = torch.where(bank.weight > 0, bank.times, torch.zeros_like(bank.times)).amax(2, keepdim=True)
         keep = (bank.weight > 0) & ((last-bank.times) < self.window)
-        order = torch.where(keep, bank.times, -torch.ones_like(bank.times)).argsort(dim=2, stable=True)
+        order = chronological_compaction(keep)
         order = order[:, :, -min(self.slots, order.shape[2]):]
         newstate = KVState(_take(bank.times, order), _take(bank.weight*keep, order),
                            _take(bank.keys, order), _take(bank.values, order), _take(bank.features, order))

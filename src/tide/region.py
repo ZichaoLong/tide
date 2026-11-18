@@ -50,8 +50,13 @@ class RegionNetwork(nn.Module):
         delta = self.o(read.transpose(-3,-2).flatten(-2))
         hidden = torch.nn.functional.silu(self.first(norm(x+delta)))
         # The final vector has only a scalar consumer: contract W2 with readout.
-        correction = delta @ self.readout + hidden @ (self.second.weight.T @ self.readout)
-        correction = correction + self.second.bias @ self.readout
+        # Regional scores decide exact support. Keep these scalar contractions
+        # in the parameter dtype instead of rounding the whole score to BF16.
+        # Projection/FFN matrices above still execute through BF16 autocast.
+        with torch.autocast(x.device.type, enabled=False):
+            correction = delta.to(self.readout.dtype) @ self.readout
+            correction = correction + hidden.to(self.readout.dtype) @ (self.second.weight.T @ self.readout)
+            correction = correction + self.second.bias @ self.readout
         return score + torch.where(w>0,correction.permute(2,0,1),torch.zeros_like(score))
 
 

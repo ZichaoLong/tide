@@ -39,8 +39,10 @@ TORCH_DEVICE_BACKEND_AUTOLOAD=0 python -m benchmarks.run --config configs/fc-k.j
 ```
 
 Use new output identities. The example checks mechanism, including restored
-updates, and reports finite numeric deviations separately. The current benchmark
-measures FP32 fresh prefill; BF16, joint matching and stateful measurement are
-planned in [ROADMAP](ROADMAP.md), not implicit command capabilities.
+updates, and reports finite numeric deviations separately. Use
+`python -m benchmarks.continuous --help` for real cached prefill/decode and
+complete stream training, and `python -m scripts.qualify_precision --help` for
+the explicit FP32/BF16 policy and fixed-fixture comparisons. Source qualification
+remains scoped to recorded evidence in [STATUS](STATUS.md).
 Long work follows [execution](execution-flows.md); checks follow [verification](verification.md).
 Cleanup may remove private environments and outputs; these steps rebuild them.
