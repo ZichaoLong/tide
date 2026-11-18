@@ -109,8 +109,10 @@ def main():
         torch.npu.conv.allow_hf32 = False
     torch.set_num_threads(args.threads)
     source = os.environ.get("TIDE_SOURCE_COMMIT") or subprocess.check_output(["git", "rev-parse", "HEAD"], text=True).strip()
+    policy = (dict(requested="fp64", device="cpu", purpose="finite diagnostic", arithmetic="float64", autocast=False)
+              if args.precision == "fp64" else precision_policy(args.device, args.precision))
     report = dict(source=source, arguments={k: str(v) if isinstance(v, Path) else v for k,v in vars(args).items()},
-                  precision=precision_policy(args.device, args.precision), torch=str(torch.__version__),
+                  precision=policy, torch=str(torch.__version__),
                   physical_devices=os.environ.get("ASCEND_RT_VISIBLE_DEVICES"), cpu_affinity=sorted(os.sched_getaffinity(0)),
                   scope="paired whole/chunk schedule; full BPTT; no detach or optimizer; complete Timed flush in both losses",
                   rows=[])
