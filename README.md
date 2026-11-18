@@ -12,6 +12,7 @@ agreement and how semantic cycles change.
 - [Use, train and continue](docs/instances.md) / [clean development](docs/development.md)
 - [Named training presets and mode-specific recommendations](docs/execution-recommendations.md) (FP32 first for training)
 - [Throughput by scale/topology and the mathematical computation flow](docs/computation-and-throughput.md)
+- [Reception self-Attention candidates](docs/reception-execution.md) / [resident prefill, decode and continuous streams](docs/inference-benchmark.md)
 - [Documentation map](docs/README.md) / [architecture](docs/architecture.md)
 - [Adopted semantics](docs/semantics.md) / [precision](docs/precision.md)
 - [Four joint Transformer comparisons](docs/benchmark-contract.md)

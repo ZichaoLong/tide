@@ -8,7 +8,7 @@ separate responsibilities but no compulsory universal intermediate representatio
 | Responsibility | Implementation | Independent checks |
 |---|---|---|
 | legal configuration, clocks and optional bindings | config.py, topology.py, topology_hb.py; scripts/support_catalog.py | test_topology.py, test_optional_bindings.py |
-| exact parameter binding | parameters.py, model.py construction | test_parameter_binding.py |
+| exact parameter binding and optional static row views | parameters.py, model.py construction | test_parameter_binding.py, test_parameter_views.py |
 | incoming message processing | reception.py | test_reception.py |
 | KV history and selected Full | kv.py, layout.py | oracle_fc.py, test_fc_reference.py |
 | SSD recurrence/convolution | ssd.py, ssd_memory.py | test_ssd.py, test_ssd_memory.py |
@@ -23,6 +23,7 @@ separate responsibilities but no compulsory universal intermediate representatio
 | non-equivalent compute comparisons | benchmarks/baselines.py | test_baselines.py |
 | four joint matches and actual touched-parameter accounting | benchmarks/matching.py, benchmarks/statistics.py | test_benchmark_contract.py |
 | real incremental KV, continuation and fresh-process restored timing | benchmarks/continuous.py, benchmarks/restore.py | test_continuation.py, test_restore_benchmark.py |
+| complete resident inference schedules, bounded activity and matched layer placement | benchmarks/inference.py, benchmarks/streaming_audit.py, benchmarks/transformer_placement.py | test_inference_benchmark.py |
 | bounded common/budget searches and separate memory lifetime ledger | benchmarks/search.py, benchmarks/variants.py, benchmarks/memory_ledger.py | test_search.py, test_variants.py, test_memory_ledger.py |
 | restored-anchor training cost, actual device trace and baseline candidates | benchmarks/costs.py, benchmarks/stages.py, benchmarks/cost_report.py | test_costs.py |
 | fixed nonempty training-state path comparisons and first Attention mode witness | scripts/check_training_paths.py, scripts/diagnose_attention_modes.py | test_training_paths.py, test_attention_mode_diagnosis.py |
@@ -75,10 +76,24 @@ default block implementation and the separate SSD matrix state scan remain
 available. [Training measurements](evidence/training-search-20261118.md) select
 these options in named HB presets; ModelConfig defaults stay explicit and general.
 
+`ssd_scan_backend="incremental"` directly evaluates a single-position matrix
+recurrence; `"doubling"` additionally replaces the short block's sequential
+Cumprod with pairwise products. Both preserve the original block candidate.
+Doubling can retain more backward intermediates, so its speed and memory are
+separate observations. Reception's fused QKV and structural padding mask are
+also explicit candidates; see [Reception execution](reception-execution.md).
+
 Region membership supplies static owner metadata. When every possible owner
 uses the same base matrix, NodeLinear flattens node/B/position rows into one
 GEMM; private adapters still use node BMMs. Mixed groups retain independent
 BMMs. This dispatch does not inspect device owner values on the host.
+
+Optional [static parameter views](parameter-indexing.md) carry a stronger exact
+owner order from static region construction. Only consecutive parameter rows
+use slices; dynamic Full selection drops that metadata and retains true gathers.
+Placed wrappers map the static order to local rows without device-to-host reads.
+Caches contain metadata rather than projected weights and are safe to initialize
+under inference before switching to training. The default remains `gather`.
 
 Quad allocation sorts its clipped-linear response breakpoints, then rebuilds
 the selected face from its remaining mass. Exact endpoints preserve zero
