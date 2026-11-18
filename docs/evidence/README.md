@@ -2,6 +2,7 @@
 
 The five-workstream implementation has separate source-scoped records:
 
+- [Seven-point CPU/NPU four-class representative matrix](roadmap-representative-20261118.md).
 - [Measured hotspot choices](roadmap-hotspots-20261118.md).
 - [Three Attention families and actual operator witnesses](roadmap-attention-20261118.md).
 - [Sparse, shape and useful-combination comparisons](roadmap-supplementary-20261118.md).
