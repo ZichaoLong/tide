@@ -241,14 +241,20 @@ def update(model,optimizer,state,x,precision,observer):
 
 def make_config(path, execution_variant="whole_region"):
     from tide import ClockConfig,ModelConfig,TopologyConfig
+    reception = execution_variant == "reception"
+    training = execution_variant in ("training", "reception")
     return ModelConfig(topology=TopologyConfig(kind="multiscale",profile="compact-9",n=2,hubs=2,
         timing="timed",period=3,terminal_hubs=True),d=64,memory="X",sharing="region_shared",
         clock=ClockConfig(position_period=7,position_origin="absolute",kv_window=11,short_decay=.09,ssd_stride=3),
         hub_allocation="fixed_pass" if path=="batched" else "bounded",
-        region_batch_size=4 if path=="batched" else 1,
+        region_batch_size=4 if path=="batched" or reception else 1,
         checkpoint_regions=execution_variant=="whole_region",
-        checkpoint_reception=execution_variant=="training",
-        ssd_summary_backend="prefix" if execution_variant=="training" else "block",
+        checkpoint_reception=training,
+        ssd_summary_backend="prefix" if training else "block",
+        ssd_scan_backend="doubling" if reception else "block",
+        aggregation="incoming_light_64" if reception else "source_residual",
+        reception_qkv_backend="fused" if reception else "separate",
+        reception_mask_padding=reception,
         local_attention_backend="math" if execution_variant=="whole_region" else None)
 
 
@@ -360,8 +366,8 @@ def main():
     parser.add_argument("--phase",choices=("initial","resume"),default="initial")
     parser.add_argument("--path",choices=("batched","placed"))
     parser.add_argument("--precision",choices=("fp32","bf16"))
-    parser.add_argument("--execution-variant",choices=("whole_region","training"),default="whole_region",
-        help="training uses prefix summaries and Reception-only recomputation, with auto local Attention")
+    parser.add_argument("--execution-variant",choices=("whole_region","training","reception"),default="whole_region",
+        help="training uses prefix summaries and Reception recomputation; reception adds incoming light64, fused QKV, padding mask, doubling scan and placed batches")
     parser.add_argument("--output-dir",required=True)
     parser.add_argument("--wheel",required=True)
     parser.add_argument("--venv",required=True)

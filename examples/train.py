@@ -16,7 +16,7 @@ PRESETS = Path(__file__).resolve().parents[1]/"configs/recommended"
 EXECUTION_DEFAULTS = dict(mode="train", device="cpu", precision="fp32", batch=2, length=8,
                           steps=3, threads=1, learning_rate=1e-4, foreach=True, seed=17)
 MODEL_OPTIONS = ("memory", "region_batch_size", "checkpoint_regions", "checkpoint_reception",
-                 "ssd_summary_backend", "attention_backend", "local_attention_backend",
+                 "ssd_summary_backend", "ssd_scan_backend", "attention_backend", "local_attention_backend",
                  "aggregation", "reception_qkv_backend", "reception_mask_padding")
 UPDATE_TOLERANCE = dict(atol=1e-6, rtol=2e-3)
 
@@ -46,6 +46,7 @@ def parser():
     result.add_argument("--reception-qkv-backend", choices=("separate", "fused"))
     result.add_argument("--reception-mask-padding", action=argparse.BooleanOptionalAction, default=None)
     result.add_argument("--ssd-summary-backend", choices=("block", "prefix"))
+    result.add_argument("--ssd-scan-backend", choices=("block", "incremental", "doubling"))
     for name in ("attention-backend", "local-attention-backend"):
         result.add_argument("--"+name, choices=("auto", "math", "sdpa", "tiled", "npu_fusion"))
     result.add_argument("--checkpoint", type=Path,

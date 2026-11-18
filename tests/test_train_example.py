@@ -53,12 +53,13 @@ def test_preset_model_replacement_and_explicit_false_flags(tmp_path):
 
 
 def test_reception_and_ssd_cli_overrides_are_saved_model_options(tmp_path):
-    config = model_config(checkpoint_reception=True, ssd_summary_backend="prefix")
-    args = arguments(tmp_path, "--no-checkpoint-reception", "--ssd-summary-backend", "block", config=config)
+    config = model_config(checkpoint_reception=True, ssd_summary_backend="prefix", ssd_scan_backend="doubling")
+    args = arguments(tmp_path, "--no-checkpoint-reception", "--ssd-summary-backend", "block",
+                     "--ssd-scan-backend", "incremental", config=config)
     settings = train.resolve(args)
-    assert settings["config"] == replace(config, checkpoint_reception=False, ssd_summary_backend="block")
+    assert settings["config"] == replace(config, checkpoint_reception=False, ssd_summary_backend="block", ssd_scan_backend="incremental")
     assert settings["source"]["explicit_overrides"]["checkpoint_reception"] is False
-    args = arguments(tmp_path, "--checkpoint-reception", "--ssd-summary-backend", "prefix")
+    args = arguments(tmp_path, "--checkpoint-reception", "--ssd-summary-backend", "prefix", "--ssd-scan-backend", "doubling")
     assert train.resolve(args)["config"] == config
 
 
