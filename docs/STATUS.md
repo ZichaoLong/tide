@@ -7,12 +7,27 @@
 
 ## 当前工作
 
-- 根代理统一集成、资源和测量；检查 placed 同卡区域合批、packing及正式FP32成本。
-- `codex/agg-inference-reception`：接收 Attention QKV/结构掩码/执行候选及独立验证。
-- `codex/agg-inference-streaming`：真正连续的推理、prompt/增量边界、A–D与大模型放置设施。
-- `codex/agg-inference-ssd`：完整矩阵SSD与单位置递推候选、独立公式和梯度。
-- 三条支线均在 `artifacts/worktrees/agg-inference-*`，开发根为本轮起点；它们的开发
-  检查不自动构成主分支或硬件资格。NPU/长期作业由根代理统一调度。
+已提交并冻结：`d845674b` 放置分区内相容区域合批；`57eb12c3` SSD block/
+incremental/doubling；`b4cf1514` 接收融合QKV与结构padding掩码；`d635a982`
+完整Reception微基准。默认数学及旧执行候选保留。CPU开发检查已通过相关公式/VJP、
+多步与恢复；正式主分支完整CPU套件正在运行，不能提前称全套通过。
+
+[起点测量](evidence/reception-start-20261118.md)记录source/light64 FP32完整训练及
+SSD微测的四个已完成冻结作业。L256矩阵scan微测有明显收益且原阈值通过；整图收益、
+长期更新和推荐仍待各自结果，不从局部加速外推。
+
+当前根代理管理的持久作业（逐次查artifacts终态，不重复提交）：
+- `agg-integration-cpu-v1`：冻结 `b4cf1514` 完整CPU套件，CPU56–63。
+- `agg-cost-doubling-fp32-v1`：source B8/L256新scan完整成本/trace，CPU80–83。
+- `agg-light64-variants-fp32-v1`：6个接收/重算/scan组合，CPU84–87。
+- `agg-fc-capacity-fp32-v1`：FC FP32 B32/64/128有限训练搜寻，CPU88–91。
+- `agg-reception-sites-fp32-v1`：3种接收、真实零质量/padding、4候选，CPU92–95。
+
+`codex/agg-inference-streaming`正在完成独立持续推理入口与实际负载A–D审计；
+`codex/agg-inference-ssd`补新候选的非空状态路径资格；`codex/agg-inference-reception`
+做有界有限超差解释。工作树在`artifacts/worktrees/agg-inference-*`；根统一集成与NPU调度。
+下一步：接入持续推理入口、正式路径/恢复检查，根据候选数据选择100更新主测和
+0.5B/1B/9B/17B推理矩阵。所有训练优先FP32。阶段汇报后继续。
 
 [起步记录](../artifacts/agg-inference-preflight-20261118/preflight.json)保存实际账户、
 工作区、服务、资源和四份用户文档SHA。配额约125GiB/300GiB软限、700GiB硬限；
