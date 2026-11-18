@@ -1,5 +1,15 @@
 # Working on tide-learning-lab
 
+- V13 progress reviewed2026-11-18 08:25+08:6 new chains completed all stages,
+  10 still training, no new formal failures;16 trained recoveries and8 reused
+  qry fresh confirmations passed. Q10-S/Q10-L paired128Mi means qry/sum are
+  3.954379/3.909498 and3.538859/3.483915 on the SAME v13 confirmation.
+  Logical active parameters are3.753/3.188M and10.208/9.441M; large sum main
+  update time is about1.55x qry on shared cards. Q3/pool/content results remain
+  awaiting. See `docs/studies/hb-mem-v13-progress-20261118.md` and read-only
+  `scripts/review_hb_mem_v13_results.py`. Do not mix absolute v12/v13 NLL,
+  relabel finite numerical failures, edit frozen inputs, or extend this batch.
+
 - V13 Mem comparisons are now submitted with frozenefa97b91 at
   `.local/source-hb-mem-v13-main`:12 sum plus4 conditional fresh qry128Mi
   chains, and8 reused qry endpoints on a new262K confirmation. Deadline
