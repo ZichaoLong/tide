@@ -104,16 +104,16 @@ worker、CPUQuota400%、RuntimeMax600s、MemoryMax16GiB及14GiB采样进程树RS
 1.171GiB，外层exit0且内部所有数值结果分别列出。终态均MainPID0、无剩余cgroup。
 这些时间包含构建/安装或侵入式诊断，不能充当正常模型延迟或吞吐。
 
-复现原失败时，从 `8a22530d` 冻结源码，并取 `9b220bb5` 的
-`scripts/check_installed_capacity.py`。在新输出目录用
+复现原失败时，从 `8a22530d` 冻结源码，并取主分支 `8fa6690e` 的
+`scripts/check_installed_capacity.py`（与原工作树 `9b220bb5` 文件逐字节相同）。在新输出目录用
 `pip wheel --no-deps --no-build-isolation --no-index --no-cache-dir` 构建副本、
 `python -m venv --system-site-packages` 建新环境，`pip install --no-deps --no-index`
 安装所构建wheel；再从 `/` 移除 `PYTHONPATH` 并以 `python -I` 调用harness，传入
 `--wheel`、`--venv`、冻结文件SHA256的 `--source-manifest` 和新 `--output-dir`。
 原完整shell与manifest身份在JSON；新工作使用修复后的harness，保持原失败记录独立。
 
-限定诊断driver在JSON的 `reproducer_files.diagnostic_driver`；把它与 `cd131fc2`
-的harness复制到新的冻结输入目录，使用相同已安装解释器从 `/`、`-I` 调用：
+限定诊断driver在JSON的 `reproducer_files.diagnostic_driver`；把它与主分支 `22bc86af`
+的harness（原工作树 `cd131fc2` 的相同文件）复制到新的冻结输入目录，使用相同已安装解释器从 `/`、`-I` 调用：
 `diagnose.py --input ORIGINAL_INSTALL_JOB --output NEW_RESULT.json`。
 `--input` 依赖原 `dist/`、`env/`、manifest和placed BF16 checkpoint/expected数据；
 退休这些产物前需先重建对应输入。每次新执行重新核对配额、活动任务与资源，并按

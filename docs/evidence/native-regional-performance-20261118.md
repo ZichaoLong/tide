@@ -85,3 +85,7 @@ BF16 projection/FFN dtype 由执行 guard 检查；参数/梯度/AdamW、Attenti
 冻结 driver 为 `artifacts/native-performance-driver-v1.py`、`artifacts/native-performance-inner4-driver-v1.py`，其完整字节另随本证据提交到
 `native-regional-performance-driver-v1.py` 与 `native-regional-performance-inner4-driver-v1.py`；运行时必须位于记录源码根并由 launcher 传入新输出。
 同 stream/pool 的逐案例命令、日志、输入和对照位置在相应 JSON 中，CPU只读末步参数检查不构成新模型资格。
+
+复现源码映射：原工作树 `89ce08ff` 的13个改动文件与主分支 `062a8ab6` 逐字节相同，
+可从后者取得native切片及检查入口；构建仍会记录新实际提交/二进制身份。
+完整文件清单见[集成身份核对](capacity-validation-20261118.md)。这不改写原二进制的构建身份。

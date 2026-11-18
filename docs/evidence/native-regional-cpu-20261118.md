@@ -79,3 +79,7 @@ local helper was renamed before the fixed implementation commit. It is not a
 device or numerical failure. Reproduction commands are in
 [native-regional](../native-regional.md); rebuild from the recorded source and
 use new output paths plus current resource admission.
+
+复现源码映射：原工作树 `89ce08ff` 的13个改动文件与主分支 `062a8ab6` 逐字节相同，
+可从后者取得native切片及检查入口；构建仍会记录新实际提交/二进制身份。
+完整文件清单见[集成身份核对](capacity-validation-20261118.md)。这不改写原二进制的构建身份。
