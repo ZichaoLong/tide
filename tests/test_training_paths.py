@@ -6,7 +6,8 @@ import torch
 
 from tide import ModelConfig, TopologyConfig, TideModel, place_model, placement_adamw
 from scripts.check_training_paths import (THRESHOLDS, VARIANTS, canonical_optimizer, compare,
-    first_differences, load_canonical_optimizer, resolve_variants, run, screen)
+    checked_optimizer_step, first_differences, load_canonical_optimizer, resolve_variants, run, screen,
+    validate_restore_record)
 
 
 def tiny_config(*, hb=False, timing="settle"):
@@ -40,6 +41,86 @@ def test_optimizer_row_mapping_keeps_distinct_slots_and_steps():
     restored.state[parameter]["step"] += 1
     with pytest.raises(ValueError, match="inconsistent optimizer scalar"):
         canonical_optimizer(placed, restored)
+    restored.state[parameter]["step"] -= 1
+    valid = restored.state[parameter]["step"].clone()
+    for changed in (valid.double(), valid.reshape(1), int(valid)):
+        restored.state[parameter]["step"] = changed
+        with pytest.raises(ValueError, match="inconsistent optimizer slot (type|dtype/shape)"):
+            canonical_optimizer(placed, restored)
+    restored.state[parameter]["step"] = valid
+
+
+@pytest.mark.parametrize("corruption", ["missing", "duplicate", "foreign"])
+def test_optimizer_group_membership_cannot_be_hidden_by_stale_slots(corruption):
+    model = torch.nn.Linear(2, 1)
+    optimizer = torch.optim.AdamW(model.parameters(), foreach=False)
+    for parameter in model.parameters():
+        parameter.grad = torch.ones_like(parameter)
+    optimizer.step()
+    frozen = canonical_optimizer(model, optimizer)
+    parameters = optimizer.param_groups[0]["params"]
+    if corruption == "missing":
+        removed = parameters.pop()
+        assert removed in optimizer.state
+    elif corruption == "duplicate":
+        parameters.append(parameters[0])
+    else:
+        parameters[-1] = torch.nn.Parameter(torch.zeros_like(parameters[-1]))
+    for action in (lambda: canonical_optimizer(model, optimizer),
+                   lambda: load_canonical_optimizer(model, optimizer, frozen)):
+        with pytest.raises(ValueError, match="optimizer group"):
+            action()
+
+
+def test_checked_optimizer_step_counts_only_participating_parameters():
+    model = torch.nn.Linear(2, 1)
+    optimizer = torch.optim.AdamW(model.parameters(), foreach=False)
+    for parameter in model.parameters():
+        parameter.grad = torch.ones_like(parameter)
+    first = checked_optimizer_step(model, optimizer, ["cpu"])
+    assert first["checked"] and first["before"] == {"weight": 0, "bias": 0}
+    assert first["after"] == {"weight": 1, "bias": 1}
+    model.bias.grad = None
+    second = checked_optimizer_step(model, optimizer, ["cpu"])
+    assert second["active_original_parameters"] == ["weight"]
+    assert second["before"] == first["after"]
+    assert second["after"] == {"weight": 2, "bias": 1}
+
+
+@pytest.mark.parametrize("fault", ["no_step", "double_step", "clear_gradients", "no_parameter_gradient"])
+def test_claimed_updates_require_gradient_participation_and_one_real_step(monkeypatch, fault):
+    model = torch.nn.Linear(2, 1)
+    optimizer = torch.optim.AdamW(model.parameters(), foreach=False)
+    for parameter in model.parameters():
+        parameter.grad = torch.ones_like(parameter)
+    if fault == "no_step":
+        monkeypatch.setattr(optimizer, "step", lambda: None)
+    elif fault == "double_step":
+        original = optimizer.step
+        monkeypatch.setattr(optimizer, "step", lambda: (original(), original()))
+    elif fault == "clear_gradients":
+        monkeypatch.setattr(optimizer, "step", lambda: optimizer.zero_grad(set_to_none=True))
+    else:
+        optimizer.zero_grad(set_to_none=True)
+    with pytest.raises(RuntimeError, match="(did not advance exactly once|connected model Parameter gradient)"):
+        checked_optimizer_step(model, optimizer, ["cpu"])
+
+
+def test_restore_record_requires_the_current_bundle_and_consistent_process_exit():
+    record = dict(state="within_threshold", checks={}, bundle_sha256="current", pid=200)
+    validate_restore_record(record, "current", exit_code=0, original_pid=100)
+    # Numerical failure is retained as a failure, with the worker's defined exit 2.
+    failed = dict(record, state="exact_contract_failed")
+    validate_restore_record(failed, "current", exit_code=2, original_pid=100)
+    for current, code in ((record, 17), (failed, 0)):
+        with pytest.raises(RuntimeError, match="exit code"):
+            validate_restore_record(current, "current", exit_code=code, original_pid=100)
+    with pytest.raises(RuntimeError, match="current input bundle"):
+        validate_restore_record(record, "different", exit_code=0, original_pid=100)
+    with pytest.raises(RuntimeError, match="distinct child process"):
+        validate_restore_record(record, "current", exit_code=0, original_pid=200)
+    with pytest.raises(RuntimeError, match="unknown completion state"):
+        validate_restore_record(dict(record, state="running"), "current", exit_code=2, original_pid=100)
 
 
 def test_support_time_none_and_finite_rounding_have_distinct_witnesses():
@@ -95,6 +176,8 @@ def test_real_anchor_repeat_update_continuation_and_restore(tmp_path):
     result = run(tiny_config(), device="cpu", precision="fp64", candidates=["baseline", "recompute"],
                  batch=1, length=2, steps=2, chunk=1, directory=tmp_path, new_process=False, witness=False)
     assert result["state"] in {"within_threshold", "finite_deviation"}
+    assert result["anchor_optimizer"]["parameter_states"] > 0
+    assert result["anchor_optimizer"]["steps"] == [1]
     assert len(result["candidates"]) == 2
     for case in result["candidates"]:
         assert case["checks"]["fixed_start"]["comparison"]["exact"]
@@ -123,6 +206,9 @@ def test_fresh_process_restores_the_same_frozen_model_and_really_updates(tmp_pat
     assert restore["checks"]["next_forward"]["comparison"]["exact"]
     assert restore["actual_update"] and restore["config_exact"]
     assert restore["source_exact"]
+    assert "auxiliary harness modules" in restore["source_identity_scope"]
+    assert restore["optimizer_update"]["active_original_parameters"]
+    assert restore["optimizer_update"]["checked"]
 
 
 def test_logical_cpu_placement_uses_the_common_nonempty_optimizer(tmp_path):

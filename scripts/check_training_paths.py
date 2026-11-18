@@ -12,6 +12,7 @@ from contextlib import nullcontext
 from dataclasses import fields, is_dataclass, replace
 import hashlib
 import json
+import math
 import os
 from pathlib import Path
 import subprocess
@@ -204,8 +205,25 @@ def _parameter_parts(model):
     return ordinary
 
 
+def optimizer_parameters(model, optimizer):
+    """Check the actual update group, independently of retained slot entries."""
+    if len(optimizer.param_groups) != 1:
+        raise ValueError("this finite diagnostic uses exactly one AdamW group")
+    named = dict(model.named_parameters())
+    expected = {id(parameter) for parameter in named.values()}
+    actual = [id(parameter) for parameter in optimizer.param_groups[0]["params"]]
+    if len(actual) != len(set(actual)):
+        raise ValueError("optimizer group Parameters must be unique")
+    if set(actual) != expected:
+        raise ValueError("optimizer group must contain exactly the model Parameters")
+    if any(id(parameter) not in expected for parameter in optimizer.state):
+        raise ValueError("optimizer slots contain a Parameter outside the model")
+    return named
+
+
 def canonical_optimizer(model, optimizer):
     """Gather optimizer rows explicitly; reject inconsistent shard slot meaning."""
+    optimizer_parameters(model, optimizer)
     grouped = {}
     for name, parameter, indices, shape in _parameter_parts(model):
         grouped.setdefault(name, []).append((parameter, indices, shape))
@@ -219,6 +237,16 @@ def canonical_optimizer(model, optimizer):
         assembled = {}
         for key in slots[0]:
             values = [slot[key] for slot in slots]
+            if any(type(value) is not type(values[0]) for value in values):
+                raise ValueError("inconsistent optimizer slot type for "+name+"."+key)
+            if isinstance(values[0], torch.Tensor):
+                if any(value.dtype != values[0].dtype or value.ndim != values[0].ndim for value in values):
+                    raise ValueError("inconsistent optimizer slot dtype/shape for "+name+"."+key)
+                if key == "step" and values[0].ndim != 0:
+                    raise ValueError("optimizer step must be scalar for "+name)
+                if values[0].ndim and any(value.shape != parameter.shape
+                        for (parameter, _, _), value in zip(parts, values)):
+                    raise ValueError("optimizer tensor slot shape differs from Parameter "+name+"."+key)
             if isinstance(values[0], torch.Tensor) and values[0].ndim:
                 value = torch.zeros(parts[0][2], dtype=values[0].dtype)
                 for (_, indices, _), part in zip(parts, values):
@@ -234,14 +262,15 @@ def canonical_optimizer(model, optimizer):
                     raise ValueError("inconsistent optimizer scalar slot for "+name+"."+key)
                 assembled[key] = cpu_tree(values[0])
         state[name] = assembled
-    if len(optimizer.param_groups) != 1:
-        raise ValueError("this finite diagnostic uses exactly one AdamW group")
     group = {key: value for key, value in optimizer.param_groups[0].items() if key != "params"}
     return dict(state=state, group=group, parameter_names=sorted(grouped))
 
 
 def load_canonical_optimizer(model, optimizer, canonical):
     """Install one frozen optimizer point using original parameter-row indices."""
+    optimizer_parameters(model, optimizer)
+    if "params" in canonical["group"]:
+        raise ValueError("canonical optimizer options cannot replace the Parameter group")
     actual_names = {name for name, _, _, _ in _parameter_parts(model)}
     if actual_names != set(canonical["parameter_names"]):
         raise ValueError("canonical optimizer parameter identities differ")
@@ -287,7 +316,53 @@ def forward(model, value, state, chunk, *, trace=None):
     return results, loss
 
 
+def optimizer_step_count(slot, name):
+    if not slot:
+        return 0
+    if "step" not in slot:
+        raise RuntimeError("AdamW slots have no step counter for "+name)
+    value = slot["step"]
+    if isinstance(value, torch.Tensor):
+        if value.ndim != 0:
+            raise RuntimeError("AdamW step must be scalar for "+name)
+        value = value.item()
+    if type(value) not in (int, float) or not math.isfinite(value) or value < 0 or value != int(value):
+        raise RuntimeError("AdamW step must be a finite nonnegative integer for "+name)
+    return int(value)
+
+
+def checked_optimizer_step(model, optimizer, devices):
+    """Require one actual AdamW step per active original Parameter, including its shards."""
+    named = optimizer_parameters(model, optimizer)
+    parts = _parameter_parts(model)
+    active = {name for name, parameter, _, _ in parts if parameter.grad is not None}
+    if not active:
+        raise RuntimeError("optimizer update requires a connected model Parameter gradient")
+    expected_active = {id(parameter) for name, parameter, _, _ in parts if name in active}
+    before = {id(parameter): optimizer_step_count(optimizer.state.get(parameter, {}), name)
+              for name, parameter in named.items()}
+    optimizer.step(); _sync(devices)
+    after = {id(parameter): optimizer_step_count(optimizer.state.get(parameter, {}), name)
+             for name, parameter in named.items()}
+    for name, parameter in named.items():
+        key = id(parameter)
+        if after[key] != before[key]+int(key in expected_active):
+            raise RuntimeError("AdamW step did not advance exactly once for active Parameters or stay unchanged for inactive Parameters: "+name)
+    def original_counts(counts):
+        result = {}
+        for name, parameter, _, _ in parts:
+            value = counts[id(parameter)]
+            if name in result and result[name] != value:
+                raise RuntimeError("inconsistent AdamW step across original Parameter shards: "+name)
+            result[name] = value
+        return result
+    return dict(checked=True, active_original_parameters=sorted(active),
+                before=original_counts(before), after=original_counts(after))
+
+
 def observe(model, optimizer, state, value, precision, devices, chunk, *, grad=True, update=False):
+    if update and not grad:
+        raise ValueError("an optimizer update requires backward")
     optimizer.zero_grad(set_to_none=True)
     initial_state = screen(cpu_tree(canonical_state(model, state)))["sha256"]
     x = value.detach().clone().to(devices[0]).requires_grad_(grad)
@@ -302,7 +377,7 @@ def observe(model, optimizer, state, value, precision, devices, chunk, *, grad=T
         output.update(input_gradient=x.grad, gradients=canonical_state_dict(model, gradients=True))
     output = cpu_tree(output)
     if update:
-        optimizer.step(); _sync(devices)
+        output["optimizer_update"] = checked_optimizer_step(model, optimizer, devices)
     following = detach_state(results[-1].state)
     if update:
         output.update(training_data(model, optimizer, following))
@@ -362,17 +437,35 @@ def restore_worker(bundle_path, output):
     checks["actual_update"] = compare(updated, bundle["updated"], tolerance)
     record = dict(state=summarize(list(checks.values()), [checks["saved_data"], checks["next_forward"]]),
         pid=os.getpid(), checks=checks, work=work, precision=options["precision"],
-        config_exact=model.config.to_dict() == bundle["config"], actual_update=True,
+        config_exact=model.config.to_dict() == bundle["config"], actual_update=updated["optimizer_update"]["checked"],
+        optimizer_update=updated["optimizer_update"],
         deterministic_algorithms=torch.are_deterministic_algorithms_enabled(), tolerance=tolerance,
         package_identity=package_identity(), harness_sha256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
         source=os.environ.get("TIDE_SOURCE_COMMIT") or subprocess.check_output(["git", "rev-parse", "HEAD"], text=True).strip(),
-        bundle_sha256=hashlib.sha256(Path(bundle_path).read_bytes()).hexdigest())
+        bundle_sha256=hashlib.sha256(Path(bundle_path).read_bytes()).hexdigest(),
+        source_identity_scope="source_exact compares Tide Python package files and this entry script; auxiliary harness modules and external toolchains are outside that comparison")
     record["source_exact"] = (record["package_identity"]["sha256"] == bundle["package_identity"]["sha256"] and
                               record["harness_sha256"] == bundle["harness_sha256"])
     if not record["config_exact"] or not record["source_exact"]:
         record["state"] = "exact_contract_failed"
     atomic(output, record)
     return record
+
+
+def validate_restore_record(record, bundle_sha256, *, exit_code=None, original_pid=None):
+    if "checks" not in record:
+        raise RuntimeError("restore execution failed: "+str(record.get("error", record)))
+    successful = {"within_threshold", "finite_deviation"}
+    if record.get("state") not in successful | {"nonfinite", "exact_contract_failed", "structural_failed"}:
+        raise RuntimeError("restore execution returned an unknown completion state")
+    if record.get("bundle_sha256") != bundle_sha256:
+        raise RuntimeError("restore record does not identify the current input bundle")
+    if exit_code is not None:
+        expected_exit = 0 if record["state"] in successful else 2
+        if exit_code != expected_exit:
+            raise RuntimeError(f"fresh-process restore exit code {exit_code} disagrees with recorded state {record.get('state')}")
+        if type(record.get("pid")) is not int or record["pid"] <= 0 or record["pid"] == original_pid:
+            raise RuntimeError("fresh-process restore did not identify a distinct child process")
 
 
 def check_restore(model, optimizer, state, value, options, directory, *, new_process=True):
@@ -385,6 +478,7 @@ def check_restore(model, optimizer, state, value, options, directory, *, new_pro
         input=value, next_forward=prediction, updated=updated, options=options, config=model.config.to_dict(),
         package_identity=package_identity(), harness_sha256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest())
     path = directory/"restore-input.pt"; atomic_tensor(path, bundle)
+    bundle_sha256 = hashlib.sha256(path.read_bytes()).hexdigest()
     output = directory/"restore.json"
     if new_process:
         command = [sys.executable, "-m", "scripts.check_training_paths", "--resume-bundle", str(path.resolve()),
@@ -401,8 +495,10 @@ def check_restore(model, optimizer, state, value, options, directory, *, new_pro
         record = json.loads(output.read_text()); record.update(command=command, exit_code=completed.returncode,
             package_source_prepend=package_parent,
             environment_policy="prepend the actual parent Tide source and preserve existing compiler Python paths")
+        validate_restore_record(record, bundle_sha256, exit_code=completed.returncode, original_pid=os.getpid())
     else:
         record = restore_worker(path, output)
+        validate_restore_record(record, bundle_sha256)
     record.update(new_process=new_process, original_process_pid=os.getpid(), original_update_work=work,
                   checkpoint_sha256=hashlib.sha256(checkpoint.read_bytes()).hexdigest())
     return record
@@ -435,12 +531,16 @@ def run(config, *, device, precision, candidates, batch, length, steps, chunk, d
     inputs = [paired_input(batch, length, config.input_dim or config.d, 1702+i).to(dtype) for i in range(steps+2)]
     warmup, state, warmup_work = observe(model, optimizer, None, inputs[0], precision, [device], chunk, update=True)
     anchor = training_data(model, optimizer, state)
+    anchor_steps = {optimizer_step_count(slot, name) for name, slot in anchor["optimizer"]["state"].items()}
+    if not anchor["optimizer"]["state"] or anchor_steps != {1}:
+        raise RuntimeError("baseline anchor requires nonempty AdamW slots from exactly one real update")
     atomic_tensor(directory/"anchor.pt", dict(anchor=anchor, inputs=inputs, config=base.to_dict()))
     record = dict(schema="tide-training-paths-v1", state="running", tolerance=THRESHOLDS[precision],
         restore_tolerance=THRESHOLDS["fp64"] if precision == "fp64" else RESTORE_TOLERANCE,
         deterministic_requested=deterministic, deterministic_algorithms=torch.are_deterministic_algorithms_enabled(),
         resolved_candidates={name: variants[name] for name in candidates},
         fixed_start=screen(anchor), input_hashes=[tensor_hash(x) for x in inputs],
+        anchor_optimizer=dict(parameter_states=len(anchor["optimizer"]["state"]), steps=sorted(anchor_steps)),
         anchor_update_work=warmup_work, warmup_summary=screen(warmup), candidates=[],
         boundary="one real baseline anchor update; same fixed nonempty state/AdamW for each path; no detach between chunks, detach after each complete update/flush",
         observation="intrusive same-precision correctness checks; no performance timing",
