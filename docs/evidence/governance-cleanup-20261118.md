@@ -56,9 +56,13 @@ remain with those aliases. Reference repositories, downstream installations,
 public software/models and unrelated caches were not cleaned. The old private
 development environment was retired; [development](../development.md) rebuilds it.
 
-After the main cleanup the repository occupied about 113.3 MiB including Git.
-The 97.1 MiB temporary governance/validation directory is the last cleanup item;
-its reviewed result is committed before that directory is removed.
+Final accounting before the last evidence commit: 113.4 MiB including Git,
+with about 3.5 MiB of working content and no ignored leftover files. The 97.1 MiB
+temporary governance/validation directory was also removed after its reviewed
+result was committed at `9437783fe69661d446a3586cfd717a0e9c171628`.
+All 43 retired roots are absent; exactly the main/downstream worktrees remain.
+No foundation job is active. Separate downstream jobs were observed running and
+were left untouched; future resource allocation must inspect their current use.
 Account quota changed from approximately 507 GiB to 352 GiB used, with a 300 GiB
 soft limit, 700 GiB hard limit and three-day grace observed. Remaining usage is
 outside the project cleanup. Check quota and grace before new large writes;

@@ -1623,9 +1623,40 @@
   },
   "control_directory": {
     "path": "/mi/data2T/zlong/home/llm/gef-governance-20261118",
-    "retired": false
+    "retired": true,
+    "allocated_bytes_before_removal": 101826560,
+    "removed_at": "2026-11-18T01:50:17.594211+00:00",
+    "evidence_committed_before_removal": "9437783fe69661d446a3586cfd717a0e9c171628",
+    "active_owned_process_dependencies": []
   },
   "quota_before": "507G used /300G soft /700G hard,3days grace",
   "quota_after_observed": "352G used /300G soft /700G hard,3days grace",
-  "quota_scope": "Remaining account usage is outside project cleanup; soft quota remains exceeded."
+  "quota_scope": "Remaining account usage is outside project cleanup; soft quota remains exceeded.",
+  "final_accounting": {
+    "observed_at": "2026-11-18T01:50:37.760797+00:00",
+    "repository_allocated_bytes_including_git": 118861824,
+    "git_allocated_bytes": 115159040,
+    "working_tree_allocated_bytes_excluding_git": 3702784,
+    "ignored_files": [],
+    "remaining_worktree_count": 2,
+    "protected_user_hashes_match": true,
+    "downstream_head_and_status_match": true,
+    "model_aliases_unchanged_and_targets_exist": true,
+    "all_43_retired_roots_absent": true,
+    "quota_exit_code": 1,
+    "quota_output": "Disk quotas for user zlong (uid 1003): \n     Filesystem   space   quota   limit   grace   files   quota   limit   grace\n/dev/mapper/ascend_data-data\n                   352G*   300G    700G   3days    775k       0       0        \n",
+    "filesystem_output": "Filesystem                       1B-blocks          Used     Available Use% Mounted on\n/dev/mapper/ascend_data-data 5410121490432 4298999455744 1089115070464  80% /mi/data2T\ntmpfs                         429496729600     372989952  429123739648   1% /dev/shm\n",
+    "note": "Measured before final evidence accounting commit; small Git/record size changes are expected.",
+    "active_foundation_service_units": [],
+    "active_downstream_service_units_observed_untouched": [
+      "tide-lab-v13-hardware.service",
+      "tide-lab-v13-main-pool-l-qry-s11.service",
+      "tide-lab-v13-main-pool-l-qry-s22.service",
+      "tide-lab-v13-main-pool-l-sum-s11.service",
+      "tide-lab-v13-main-pool-l-sum-s22.service",
+      "tide-lab-v13-main-q3-l-sum-s11.service",
+      "tide-lab-v13-main-q3-l-sum-s22.service",
+      "tide-lab-v13-main-q3-s-sum-s22.service"
+    ]
+  }
 }
