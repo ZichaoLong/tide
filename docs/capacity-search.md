@@ -148,3 +148,43 @@ in the ledger. `input_positions` is the declared real B×L denominator only.
 hashes before rendering the two tables. Failed/limited children and noisy or
 unmeasured cells stay visible. It performs no model or device work, and writes via
 fsynced staging and atomic replacement.
+
+## First update after restoration
+
+`benchmarks.restore` is a separate fresh-process observation for an existing
+trusted training checkpoint. It creates one model, loads its saved optimizer
+groups/slots, then performs one real next update, including the complete Timed
+flush. It requires saved FP32 master parameters and initialized AdamW slots.
+Use the checkpoint's producing record to choose the same batch and precision;
+the checkpoint format does not itself encode the arithmetic policy or source.
+
+```sh
+python -m benchmarks.restore --checkpoint EXISTING_TRAINING.pt \
+  --checkpoint-source PRODUCING_COMMIT --expected-checkpoint-sha256 RECORDED_SHA \
+  --device npu:0 --precision bf16 --batch 1 --length 128 --threads 4 \
+  --device-budget-gib 52 --output NEW_RESTORE.json
+```
+
+Actual long/device use belongs in `scripts/launch.py` with frozen source, admission,
+time and host RSS limits. `--placement-devices` can explicitly remap a saved layer
+placement; every declared device is synchronized and sampled. Each phase stops on
+an allocator-budget breach. The checkpoint is read-only, and no second reference
+model or replacement checkpoint is created. Serialized CPU tensors can coexist
+temporarily with restored model/slots, so host memory admission is still required.
+
+The record separates model/state load, optimizer restore, next forward/loss/flush,
+backward, update and detach. Complete load/update wall time includes the allocator
+phase probes and Python bookkeeping between phases; phase operation seconds
+exclude those probes. All device synchronization is included. Input generation,
+transfer/hash, finite/slot/storage checks and checkpoint SHA hashing are outside
+the two complete intervals. Checkpoint hashing streams bounded blocks after load,
+so it neither materializes the file again nor deliberately prewarms the measured
+load. Filesystem cache is uncontrolled; a fresh process does not mean a cold cache.
+
+There is no update warmup: the first resumed update includes fresh-process kernel
+initialization/compilation effects. This is one first-update observation, not
+steady training throughput. Records include phase/combined peaks, checkpoint hash,
+slots before/after, actual input and clock advance, finite scans, state detach and
+sampled parameter changes. Timed operator dtypes are not invasively audited here.
+Completion does not prove equality with an original owner: the existing
+`continuous.checkpoint_resume` paired numerical comparison remains separate.
