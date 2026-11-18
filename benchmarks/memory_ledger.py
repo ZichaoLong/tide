@@ -212,7 +212,15 @@ def diagnose(model, inputs, *, mode, precision, optimizer=None, state=None, chun
     gc.collect()
     synchronize(device)
     phases["released_outputs_and_graph"] = snapshot(model, optimizer, inputs, state, [], saved, device)
-    return state, dict(phases=phases, saved_for_backward=saved.report(), runtime=runtime.report(),
+    runtime_report = runtime.report()
+    covered = "forward/readout/loss/backward/optimizer" if optimizer is not None else "forward/readout"
+    runtime_report["instrumentation"] = (f"intrusive {mode} diagnostic covering {covered}; with saved_tensors_hooks, "
+                                         "without semantic WorkAudit hooks; not normal throughput timing")
+    return state, dict(phases=phases,
+                       phase_allocator_peak_scope="boundary is sampled before reset and includes prior work/warmup; "
+                                                  "the reset follows boundary, so later phase peaks are cumulative "
+                                                  "within this diagnostic segment, not per-phase increments",
+                       saved_for_backward=saved.report(), runtime=runtime_report,
                        actual_work=None,
                        work_measurement="not observed in this ledger; use a separate semantic WorkAudit pass/reference",
                        input_positions=inputs.shape[0]*inputs.shape[1],
