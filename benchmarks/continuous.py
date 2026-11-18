@@ -261,6 +261,7 @@ def run_stream(model, x, prefill, prefill_chunk, *, state=None, mode="inference"
         optimizer.step(); synchronize(x.device)
         update_end = time.perf_counter()
         backward_seconds, update_seconds = after_backward-before, update_end-after_backward
+        state = detach_state(state)  # Required update boundary belongs to complete time.
     total_end = time.perf_counter()
     # Checks and state accounting are excluded from the measured stream.
     first = next((row["output_ready_seconds"] for row, support in zip(observations, availability)
@@ -283,8 +284,6 @@ def run_stream(model, x, prefill, prefill_chunk, *, state=None, mode="inference"
     phases["finite_output"] = bool(torch.isfinite(joined).all())
     phases["finite_parameters"] = all(bool(torch.isfinite(p).all()) for p in model.parameters())
     phases["finite_gradients"] = all(p.grad is None or bool(torch.isfinite(p.grad).all()) for p in model.parameters())
-    if optimizer is not None:
-        state = detach_state(state)
     return joined, state, phases
 
 
@@ -384,7 +383,10 @@ def main():
                   physical_devices=os.environ.get("ASCEND_RT_VISIBLE_DEVICES"), torch=str(torch.__version__),
                   cpu_affinity=sorted(os.sched_getaffinity(0)), host_load_before=os.getloadavg(),
                   timing="input transfer/construction/initial matching audit/warmup/checkpoint excluded; full stream train includes concatenation/loss/backward/AdamW/sync",
-                  training_boundary="full BPTT within prefill+decode+flush; detach after each optimizer update",
+                  training_boundary="full BPTT within prefill+decode+flush; detach after each optimizer update is included in complete time",
+                  grad_forward_boundary="state detached between measured observations; graph retained across every chunk within each segment",
+                  segment_boundary="Timed flush ends each measured segment and advances its clock; the next segment resumes that flushed state",
+                  objective="mechanism-only mean squared readout over every returned window and flush slot",
                   initial_state="zero; subsequent measured streams continue previous private state",
                   first_output="first available backbone output, no task head or language-model TTFT",
                   input_pairing="feature-wise seeded CPU inputs; the shared feature prefix is identical at different model widths",
