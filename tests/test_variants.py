@@ -43,3 +43,21 @@ def test_small_normal_variants_use_five_samples_and_a_separate_ledger_process(tm
     assert all(not row["numerical_equivalence_qualification"] for row in record["summaries"])
     ledger = json.loads(Path(record["children"][-1]["output"]).read_text())
     assert ledger["observations"][0]["actual_work"] is None
+
+
+def test_explicit_candidates_freeze_exact_overrides_without_resetting_input_options(tmp_path):
+    original = dict(topology=dict(kind="fc", n=2, layers=2), d=64,
+                    checkpoint_reception=True, region_batch_size=4)
+    config = tmp_path/"model.json"
+    config.write_text(json.dumps(original))
+    definitions = dict(baseline={}, no_recompute=dict(checkpoint_reception=False))
+    args = Namespace(config=str(config), variants=list(definitions), candidate_overrides=definitions,
+                     ledger_variants=[], device="cpu", precision="fp32", batch=1, length=2,
+                     threads=1, seed=1107, warmup=1, activity="natural", optimizer_foreach=True,
+                     device_budget_gib=None, mode="train", steps=3, ledger_segments=1,
+                     child_timeout=30, rss_gib=4)
+    plan = build_plan(args, tmp_path)
+    for row in plan:
+        resolved = json.loads(Path(row["config_file"]["path"]).read_text())
+        assert resolved == original | definitions[row["variant"]]
+        assert row["config_file"]["sha256"]

@@ -377,6 +377,8 @@ def _persist(path, record):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--config", required=True)
+    parser.add_argument("--config-overrides", type=json.loads, default={},
+                        help="JSON top-level config overrides, included in the resolved Tide spec")
     parser.add_argument("--subject", choices=("tide", "transformer"), default="tide")
     parser.add_argument("--joint-match", choices=("A", "B", "C", "D"))
     parser.add_argument("--transformer-width", type=int)
@@ -401,6 +403,8 @@ def main():
     parser.add_argument("--checkpoint", type=Path)
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
+    if not isinstance(args.config_overrides, dict):
+        parser.error("config overrides must be a JSON object")
     if min(args.batch, args.prefill, args.prefill_chunk, args.updates, args.threads, args.transformer_chunk) < 1 or min(args.decode, args.warmup) < 0:
         parser.error("counts must be positive; decode/warmup can be zero")
     if args.device_budget_gib is not None and (not math.isfinite(args.device_budget_gib) or args.device_budget_gib <= 0):
@@ -421,7 +425,7 @@ def main():
         torch.npu.conv.allow_hf32 = False
     torch.set_num_threads(args.threads)
     torch.manual_seed(args.seed)
-    config = ModelConfig.from_dict(json.loads(Path(args.config).read_text()))
+    config = ModelConfig.from_dict(json.loads(Path(args.config).read_text()) | args.config_overrides)
     source = os.environ.get("TIDE_SOURCE_COMMIT") or subprocess.check_output(["git", "rev-parse", "HEAD"], text=True).strip()
     record = dict(source=source, harness_source=os.environ.get("TIDE_HARNESS_COMMIT", source),
                   arguments={k: str(v) if isinstance(v, Path) else v for k, v in vars(args).items()},

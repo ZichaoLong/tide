@@ -285,6 +285,8 @@ def observe(model, inputs, optimizer, args, device, row, persist, trace_path, an
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--config", required=True)
+    parser.add_argument("--config-overrides", type=json.loads, default={},
+                        help="JSON top-level config overrides, included in the resolved record")
     parser.add_argument("--device", default="cpu")
     parser.add_argument("--precision", choices=("fp32", "bf16"), default="fp32")
     parser.add_argument("--batch", type=int, default=1)
@@ -305,6 +307,8 @@ def main(argv=None):
     parser.add_argument("--device-budget-gib", type=float)
     parser.add_argument("--output", required=True)
     args = parser.parse_args(argv)
+    if not isinstance(args.config_overrides, dict):
+        parser.error("config overrides must be a JSON object")
     if min(args.batch, args.length, args.threads, args.steps) < 1 or args.warmup < 0:
         parser.error("counts must be positive; warmup may be zero")
     if args.device_budget_gib is not None and not 0 < args.device_budget_gib < float("inf"):
@@ -325,7 +329,7 @@ def main(argv=None):
     if device.type == "npu":
         torch.npu.set_device(device)
     torch.set_num_threads(args.threads)
-    config = ModelConfig.from_dict(json.loads(Path(args.config).read_text()))
+    config = ModelConfig.from_dict(json.loads(Path(args.config).read_text()) | args.config_overrides)
     source = os.environ.get("TIDE_SOURCE_COMMIT") or subprocess.check_output(["git", "rev-parse", "HEAD"], text=True).strip()
     record = dict(schema="tide-training-costs-v1", state="running", source=source,
                   harness_source=os.environ.get("TIDE_HARNESS_COMMIT", source), arguments=vars(args),

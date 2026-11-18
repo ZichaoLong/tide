@@ -8,6 +8,7 @@ import json
 import math
 import os
 from pathlib import Path
+import re
 import signal
 import subprocess
 import sys
@@ -39,11 +40,12 @@ VARIANTS = {name: {"checkpoint_reception": False, "ssd_summary_backend": "block"
 
 def build_plan(args, output):
     config = json.loads(Path(args.config).read_text())
+    definitions = VARIANTS | getattr(args, "candidate_overrides", {})
     directory = output/"configs"
     directory.mkdir()
     plan = []
     for name in args.variants:
-        resolved = dict(config, **VARIANTS[name])
+        resolved = dict(config, **definitions[name])
         path = directory/(name+".json")
         atomic(path, resolved)
     for kind, names in (("normal", args.variants), ("ledger", args.ledger_variants)):
@@ -97,8 +99,10 @@ def summary(children, mode):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--config", required=True)
-    parser.add_argument("--variants", nargs="+", choices=VARIANTS, default=DEFAULT_VARIANTS)
-    parser.add_argument("--ledger-variants", nargs="*", choices=VARIANTS, default=[])
+    parser.add_argument("--variants", nargs="+", default=DEFAULT_VARIANTS)
+    parser.add_argument("--ledger-variants", nargs="*", default=[])
+    parser.add_argument("--candidate-overrides", type=json.loads, default={},
+                        help="JSON name -> top-level config overrides; replaces that named preset, empty object uses the input config unchanged")
     parser.add_argument("--ledger-segments", type=int, default=1)
     parser.add_argument("--device", default="cpu")
     parser.add_argument("--precision", choices=("fp32", "bf16"), default="fp32")
@@ -118,6 +122,14 @@ def main():
     parser.add_argument("--output-dir", type=Path, required=True)
     parser.add_argument("--plan-only", action="store_true")
     args = parser.parse_args()
+    if (not isinstance(args.candidate_overrides, dict) or
+            any(not re.fullmatch(r"[a-z][a-z0-9_]*", name) or not isinstance(options, dict)
+                for name, options in args.candidate_overrides.items())):
+        parser.error("candidate overrides must map safe lower-case names to JSON objects")
+    if not set(args.variants+args.ledger_variants) <= set(VARIANTS) | set(args.candidate_overrides):
+        parser.error("unknown candidate; declare its config overrides")
+    if not 1 <= len(args.variants) <= 12:
+        parser.error("select 1..12 finite candidates")
     positive = [args.batch, args.length, args.threads, args.steps, args.ledger_segments, args.rss_gib, args.seconds, args.child_timeout]
     if args.device_budget_gib is not None:
         positive.append(args.device_budget_gib)
