@@ -14,6 +14,7 @@ separate responsibilities but no compulsory universal intermediate representatio
 | three weighted Attention sites | attention.py | test_attention.py, device_attention.py |
 | layer windows, Timed pending/flush | model.py | oracle_timed.py, test_timed_reference.py |
 | training state/checkpoint | checkpoint.py | test_models.py |
+| optional contiguous HB layer shards | placement.py | test_placement.py |
 | explicit matrix/accumulation policy | precision.py | test_precision.py |
 | non-equivalent compute comparisons | benchmarks/baselines.py | test_baselines.py |
 | real incremental baseline KV and continuous timing | benchmarks/continuous.py | test_continuation.py |

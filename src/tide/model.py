@@ -149,7 +149,8 @@ class TideModel(nn.Module):
                 valid = torch.arange(length,device=device)%self.graph.period==0
                 mass = mass*valid[None,None,:,None]
             return content,mass,classes.to(device)
-        content = embedded["D"].new_zeros((len(nodes),b,length,classes.shape[1],self.config.d))
+        content = torch.zeros((len(nodes),b,length,classes.shape[1],self.config.d),
+                              device=device,dtype=embedded["D"].dtype)
         mass = content[...,0]*0
         for layer,(indices,mask) in banks.items():
             source = layers[layer]
@@ -187,6 +188,10 @@ class TideModel(nn.Module):
             raise TypeError("models use FP32; FP64 is available for accuracy verification")
         if x.ndim!=3 or x.shape[-1]!=(self.config.input_dim or self.config.d) or x.shape[1]==0:
             raise ValueError("input must be nonempty [B,L,input_dim]")
+        placed = hasattr(self,"_placement_spec")
+        if placed:
+            from .placement import move_tensors
+            x = x.to(self._placement_devices[self._layer_partitions[0]])
         b,positions,_ = x.shape
         start = 0 if state is None else state.position
         if type(start) is not int or start < 0:
@@ -204,18 +209,31 @@ class TideModel(nn.Module):
         layers,newmem = [],[]
         work = []
         for layer,regions in enumerate(self.layer_regions):
+            device = self._placement_devices[self._layer_partitions[layer]] if placed else x.device
+            source_layers = layers
+            source_pending = () if state is None else state.pending
+            if placed:
+                # Copy each actual predecessor bank once per destination layer,
+                # retaining its autograd edges. No unrelated earlier layer moves.
+                dependencies = {origin for region in regions for origin in self._routes[region][1]}
+                source_layers = list(layers)
+                source_pending = list(source_pending)
+                for origin in dependencies:
+                    source_layers[origin] = move_tensors(layers[origin],device)
+                    if source_pending:
+                        source_pending[origin] = move_tensors(source_pending[origin],device)
             values,controls = [],[]
             for region in regions:
                 members = self.graph.regions[region]
-                owners = NodeOwners(torch.tensor(members,device=x.device),members)
-                contents,masses,classes = self._incoming(region,layers,() if state is None else state.pending,
-                                                         embedded,b,length,x.device,inject)
+                owners = NodeOwners(torch.tensor(members,device=device),members)
+                contents,masses,classes = self._incoming(region,source_layers,source_pending,
+                                                         embedded,b,length,device,inject)
                 received,u = self.receive(contents,masses,classes,owners)
                 # Unit FC ingress and the received lower budget imply every
                 # node writes unit weight. Use that exact reachable-state identity.
                 mass = (torch.ones_like(received) if self.graph.config.kind=="fc" else
                         torch.where(received>=1,torch.ones_like(received),received.clamp_min(0)))
-                base = torch.arange(length,device=x.device,dtype=torch.int64)
+                base = torch.arange(length,device=device,dtype=torch.int64)
                 time = ((base+start)*self.graph.period+layer+1 if self.settle else
                         base+start*self.graph.period+1)
                 times = time[None,None].expand(len(members),b,length)
@@ -226,20 +244,22 @@ class TideModel(nn.Module):
                     idx = [i for i,v in enumerate(members) if self.kinds[v]==kind]
                     if not idx:
                         continue
-                    sub = torch.tensor(idx,device=x.device)
+                    sub = torch.tensor(idx,device=device)
                     possible = tuple(self.memory_ids[kind][members[i]] for i in idx)
-                    mids = NodeOwners(torch.tensor(possible,device=x.device),possible)
+                    mids = NodeOwners(torch.tensor(possible,device=device),possible)
                     old = None if state is None else state.memories[region][kind]
+                    if placed and old is not None:
+                        old = move_tensors(old,device)
                     parts,context,updated = self.memories[kind].prepare(u[sub],mass[sub],times[sub],mids,old)
                     desc = [a.index_copy(0,sub,z.to(a.dtype)) for a,z in zip(desc,parts)]
                     contexts[kind] = (sub,context)
                     saved[kind] = updated
-                roles = torch.tensor([self.graph.nodes[v].role=="H" for v in members],device=x.device)
+                roles = torch.tensor([self.graph.nodes[v].role=="H" for v in members],device=device)
                 if bool(roles.all()) and self.graph.config.partition=="singleton":
                     control = torch.where(received>=0.5,torch.ones_like(received),2*received)
                 else:
                     possible = tuple(self.description_ids[v] for v in members)
-                    description_owners = NodeOwners(torch.tensor(possible,device=x.device),possible)
+                    description_owners = NodeOwners(torch.tensor(possible,device=device),possible)
                     z,score = self.describe(u,received,desc,description_owners)
                     score = self.regional[self.region_group[region]](z,score,mass)
                     control = region_control(score,received,roles,self.config.budget or max(1,self.graph.config.n//32),
@@ -247,7 +267,7 @@ class TideModel(nn.Module):
                 full = torch.zeros_like(u)
                 if record_work:
                     work.append(torch.stack(((received>0).sum(),(control>0).sum(),(masses>0).sum(),
-                                             torch.as_tensor(received.numel(),device=x.device))))
+                                             torch.as_tensor(received.numel(),device=device))))
                 for kind,(sub,context) in contexts.items():
                     full = full.index_copy(0,sub,self.memories[kind].finish(context,control[sub]).to(full.dtype))
                 values.append(full); controls.append(control); newmem.append(saved)
@@ -258,5 +278,5 @@ class TideModel(nn.Module):
         measured = None
         if record_work:
             measured = dict(zip(("candidates", "full", "positive_messages", "candidate_slots"),
-                                torch.stack(work).sum(0).tolist()))
+                                torch.stack([value.to(time.device) for value in work]).sum(0).tolist()))
         return Result(final.values,final.strengths,time,nextstate,measured)
