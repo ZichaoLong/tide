@@ -72,7 +72,8 @@ class TideModel(nn.Module):
         groups = None if config.sharing=="independent" else _number(gkeys)
         sources = [set(graph.edges[e].source_class for e in graph.incoming[v.id]) |
                    ({"ext"} if v.layer==0 else set()) for v in graph.nodes]
-        self.receive = Reception(sources,d,config.aggregation,groups,config.adapter_rank,config.attention_backend)
+        local_backend = config.local_attention_backend or config.attention_backend
+        self.receive = Reception(sources,d,config.aggregation,groups,config.adapter_rank,local_backend)
         scored = [v.id for v in graph.nodes if not (v.role=="H" and graph.config.partition=="singleton")]
         self.description_ids = {v:i for i,v in enumerate(scored)}
         self.describe = Description(len(scored),d,None if groups is None else _number([gkeys[v] for v in scored]),config.adapter_rank)
@@ -104,7 +105,7 @@ class TideModel(nn.Module):
         labels = _number(region_keys)
         iterator = iter(labels)
         self.region_group = [-1 if skip else next(iterator) for skip in fixed]
-        self.regional = nn.ModuleList(RegionNetwork(d,config.attention_backend) for _ in set(labels))
+        self.regional = nn.ModuleList(RegionNetwork(d,local_backend) for _ in set(labels))
         self.inputs = nn.ModuleDict({role:nn.Linear(config.input_dim or d,d,bias=False)
                                     for role in sorted(set(graph.nodes[v].role for v in graph.input_nodes))})
         self.layer_nodes = [tuple(v.id for v in graph.nodes if v.layer==l) for l in range(len(graph.widths))]
@@ -223,6 +224,22 @@ class TideModel(nn.Module):
             full = full.index_copy(0,sub,self.memories[kind].finish(context,control[sub]).to(full.dtype))
         return full, control, saved, measured
 
+    def _score_regions(self, regions, z, score, mass):
+        from .region_batch import regional_scores
+        return regional_scores([self.regional[self.region_group[r]] for r in regions], z, score, mass)
+
+    def _region_batches(self, regions, state):
+        from .region_batch import state_signature
+        buckets = {}
+        for region in regions:
+            members = self.graph.regions[region]
+            key = (tuple((self.graph.nodes[v].role, self.kinds[v]) for v in members),
+                   self._routes[region][0].shape[1], self.region_group[region] < 0,
+                   state_signature(None if state is None else state.memories[region]))
+            buckets.setdefault(key, []).append(region)
+        return [tuple(group[i:i+self.config.region_batch_size]) for group in buckets.values()
+                for i in range(0, len(group), self.config.region_batch_size)]
+
     def forward(self,x,state=None,*,record_work=False):
         return self._run(x,state,record_work=record_work)
 
@@ -283,8 +300,29 @@ class TideModel(nn.Module):
             base = torch.arange(length,device=device,dtype=torch.int64)
             time = ((base+start)*self.graph.period+layer+1 if self.settle else
                     base+start*self.graph.period+1)
-            values,controls = [],[]
-            for region in regions:
+            values,controls,saved_regions = {},{},{}
+            batches = self._region_batches(regions, state) if self.config.region_batch_size > 1 else [(r,) for r in regions]
+            for batch_regions in batches:
+                if len(batch_regions) > 1:
+                    from .region_batch import evaluate_regions
+                    incoming = [self._incoming(r,source_layers,source_pending,embedded,b,length,device,inject)
+                                for r in batch_regions]
+                    contents,masses,classes = (torch.cat([row[i] for row in incoming],0) for i in range(3))
+                    old = None if state is None else [state.memories[r] for r in batch_regions]
+                    if placed and old is not None:
+                        old = move_tensors(old,device,transport)
+                    arguments = (self, batch_regions, contents, masses, classes, time, old, record_work)
+                    if self.config.checkpoint_regions and torch.is_grad_enabled():
+                        from torch.utils.checkpoint import checkpoint
+                        fulls,ctrls,saves,measured = checkpoint(evaluate_regions,*arguments,use_reentrant=False)
+                    else:
+                        fulls,ctrls,saves,measured = evaluate_regions(*arguments)
+                    for region, full, control, saved in zip(batch_regions,fulls,ctrls,saves):
+                        values[region],controls[region],saved_regions[region] = full,control,saved
+                    if measured is not None:
+                        work.append(measured)
+                    continue
+                region = batch_regions[0]
                 contents,masses,classes = self._incoming(region,source_layers,source_pending,
                                                          embedded,b,length,device,inject)
                 old = None if state is None else state.memories[region]
@@ -299,8 +337,10 @@ class TideModel(nn.Module):
                     full, control, saved, measured = self._evaluate_region(*arguments)
                 if measured is not None:
                     work.append(measured)
-                values.append(full); controls.append(control); newmem.append(saved)
-            layers.append(LayerOutput(torch.cat(values,0),torch.cat(controls,0)))
+                values[region],controls[region],saved_regions[region] = full,control,saved
+            newmem.extend(saved_regions[r] for r in regions)
+            layers.append(LayerOutput(torch.cat([values[r] for r in regions],0),
+                                      torch.cat([controls[r] for r in regions],0)))
             if not self.settle:
                 # A detached view would keep the entire window's storage alive.
                 # Clone retains the gradient edge while owning only one tick.

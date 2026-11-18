@@ -8,6 +8,16 @@ Use the explicit [precision policy](precision.md): FP32 parameters with BF16
 matrix arithmetic under `precision_context`, rather than casting the whole model.
 CPU FP64 supports bounded accuracy diagnosis. FP16 is outside this cycle.
 
+Execution candidates are explicit `ModelConfig` options: `region_batch_size`
+(default 1) batches compatible regions within a layer, `checkpoint_regions`
+(default false) recomputes regional activations during backward, and
+`local_attention_backend` (default null) overrides only reception/regional
+Attention while KV retains `attention_backend`. They are saved in checkpoints.
+These choices preserve region budgets and private state; they are not assertions
+of a universal speed or memory improvement. Compare them with the
+[bounded search](capacity-search.md), and use `scripts.check_execution` for
+same-function values, gradients, multiple updates and restored-update checks.
+
 ```python
 import torch
 from tide import ModelConfig, TopologyConfig, TideModel, detach_state

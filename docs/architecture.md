@@ -47,6 +47,20 @@ KV query adapters. Full packs selected queries once and publishes once. This
 does not imply zero padding or zero host scheduling; timing/profiling must
 identify their cost before claiming efficient execution at every graph size.
 
+Optional `region_batch_size > 1` groups same-layer regions with compatible node
+roles/memory, edge padding and private-state shapes. `region_batch.py` batches
+reception, preparation, selected Full and regional projections, retaining a
+separate region axis for Attention and allocation. Publication restores original
+node/region order. Shared bases and private adapters retain their original owners;
+the ordinary one-region path remains an explicit comparison candidate.
+
+`checkpoint_regions=True` uses non-reentrant activation recomputation of the
+pure `_evaluate_region`/batched call. It retains grad/autocast mode and does not
+detach cross-window state. This saves internal activations at the cost of repeated
+work; regional input messages remain saved inputs. Static last consumers release
+unused layer references; Timed pending owns a compact last-tick copy instead of
+keeping full-window storage through a view. Autograd may retain other tensors.
+
 Region membership supplies static owner metadata. When every possible owner
 uses the same base matrix, NodeLinear flattens node/B/position rows into one
 GEMM; private adapters still use node BMMs. Mixed groups retain independent

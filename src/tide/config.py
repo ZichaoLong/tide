@@ -17,10 +17,14 @@ class ModelConfig:
     attention_chunk: int = 128
     input_dim: int | None = None
     checkpoint_regions: bool = False
+    region_batch_size: int = 1
+    local_attention_backend: str | None = None
 
     def __post_init__(self):
         if type(self.checkpoint_regions) is not bool:
             raise ValueError("checkpoint_regions must be boolean")
+        if type(self.region_batch_size) is not int or self.region_batch_size < 1:
+            raise ValueError("region_batch_size must be positive")
         if self.d not in (64, 128, 192, 256, 384, 512, 768):
             raise ValueError("d must be a registered main-instance width")
         if self.memory not in ("K", "S", "X"):
@@ -38,6 +42,8 @@ class ModelConfig:
             raise ValueError("ordinary budget must be a registered power of two <= min(n,64)")
         if self.attention_backend not in ("auto", "math", "sdpa", "tiled", "npu_fusion"):
             raise ValueError("unknown Attention backend")
+        if self.local_attention_backend not in (None, "auto", "math", "sdpa", "tiled", "npu_fusion"):
+            raise ValueError("unknown local Attention backend")
         if type(self.attention_chunk) is not int or self.attention_chunk < 1:
             raise ValueError("attention_chunk must be positive")
         if self.input_dim is not None and (type(self.input_dim) is not int or self.input_dim < 1):

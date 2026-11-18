@@ -223,12 +223,20 @@ class WorkAudit:
         return original(u, received, memories, owners)
 
     def _regional(self, number, original, z, score, weight):
+        self._regional_work(number, weight)
+        return original(z, score, weight)
+
+    def _regional_work(self, number, weight):
         support = weight.detach().cpu() > 0
         atoms = self.inventory.whole("regional."+str(number))
         for sample, tick in support.any(0).nonzero().tolist():
             self._add("regional", (sample, self.tick_start+tick), atoms)
         self._work("regional_attention_positive_pairs", support.sum(0).square()*self.model.regional[number].heads)
-        return original(z, score, weight)
+
+    def _regional_batch(self, original, regions, z, score, weight):
+        for i, region in enumerate(regions):
+            self._regional_work(self.model.region_group[region], weight[i])
+        return original(regions, z, score, weight)
 
     def _prepare(self, kind, original, u, mass, times, owners, state=None):
         names = (["kv", "summary"] if kind == "K" else
@@ -284,6 +292,7 @@ class WorkAudit:
         self._wrap(self.model, "_run", self._run)
         self._wrap(self.model.receive, "forward", self._receive)
         self._wrap(self.model.describe, "forward", self._describe)
+        self._wrap(self.model, "_score_regions", self._regional_batch)
         for i, region in enumerate(self.model.regional):
             self._wrap(region, "forward", partial(self._regional, i))
         for kind, memory in self.model.memories.items():
