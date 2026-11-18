@@ -18,7 +18,7 @@ import torch
 from torch.utils._python_dispatch import TorchDispatchMode
 from torch.utils._pytree import tree_flatten
 
-from tide.parameters import NodeLinear, NodeVector, owner_ids
+from tide.parameters import HeadQuery, NodeLinear, NodeVector, owner_ids
 from tide.reception import SourceEmbedding
 
 
@@ -271,6 +271,14 @@ class WorkAudit:
             rank = module.left.shape[-1]
             record["dense_multiply_adds"] += rows * rank * (module.in_features+module.out_features)
 
+    def _head_matrix(self, path, module, inputs, output):
+        if not module.uses_fused_projection(inputs[0]):
+            return
+        # Child NodeLinear.forward hooks do not run in the fused contraction.
+        # Count its complete mathematical matrices/adapters once, including pad.
+        for index, head in enumerate(module.heads):
+            self._matrix(path+f".heads.{index}",head,inputs,output)
+
     def __enter__(self):
         from functools import partial
         self._wrap(self.model, "_run", self._run)
@@ -286,6 +294,8 @@ class WorkAudit:
         for path, module in self.model.named_modules():
             if isinstance(module, NodeLinear):
                 self._handles.append(module.register_forward_hook(partial(self._matrix, path)))
+            elif isinstance(module, HeadQuery):
+                self._handles.append(module.register_forward_hook(partial(self._head_matrix,path)))
         return self
 
     def __exit__(self, *exc):

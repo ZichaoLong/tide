@@ -18,6 +18,14 @@ KV summaries and SSD recurrence/state use FP32. KV keys/values use BF16; origina
 times remain int64. Parameter gradients and AdamW moments remain FP32, with the
 parameters themselves serving as master weights. Autocast's cast cache is disabled.
 
+BF16 `auto` Attention uses tiled math whenever a visible key prior is zero,
+with or without a recorded gradient. Positive explicit NPU priors use the same
+rank-one encoding in inference and training; omitted unit priors retain the
+native unit path. This avoids changing the arithmetic representation merely by
+enabling gradients. Explicit backend choices remain separately declared paths;
+FP32 retains its previous dispatch. Cross-precision routing may still change
+when rounded scores cross a true allocation boundary.
+
 `precision_policy` serializes this policy and `ArithmeticAudit` observes actual
 operator/input/output dtypes in a separate intrusive call. Neither certifies an
 unobserved hardware accumulator or kernel. `scripts/qualify_precision.py` compares

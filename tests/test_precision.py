@@ -1,6 +1,8 @@
 """BF16 arithmetic witnesses, independent derivatives, and owned state."""
 import pytest
 import torch
+import sys
+from types import SimpleNamespace
 
 from tide import ModelConfig, TopologyConfig, TideModel, detach_state, load_checkpoint, save_checkpoint
 from tide.attention import weighted_attention
@@ -111,3 +113,58 @@ def test_qualification_comparison_checks_clock_none_and_actual_support():
     assert "root.position" in result["metadata_failures"]
     assert "root.gradient.type" in result["metadata_failures"]
     assert [x["tensor"] for x in result["support_differences"]] == ["root.state.weight"]
+
+
+def test_bf16_auto_zero_prior_has_mode_invariant_forward(monkeypatch):
+    import tide.attention as attention
+    def unexpected_native(*args, **kwargs):
+        raise AssertionError("BF16 auto visible-zero priors must use tiled in both modes")
+    monkeypatch.setattr(attention, "_native_attention", unexpected_native)
+    torch.manual_seed(61)
+    q, k, v = [torch.randn(*shape).bfloat16().requires_grad_()
+               for shape in ((1, 2, 3, 4), (1, 2, 4, 4), (1, 2, 4, 4))]
+    w = torch.tensor([[0., .25, .5, 1.]], requires_grad=True)
+    trained = weighted_attention(q, k, v, w)
+    with torch.no_grad():
+        inferred = weighted_attention(q, k, v, w.detach())
+    torch.testing.assert_close(trained, inferred, atol=0, rtol=0)
+    gradient = torch.autograd.grad(trained.float().square().sum(), w)[0]
+    assert torch.isfinite(gradient).all() and gradient[0, 0] != 0
+
+
+@pytest.mark.parametrize("all_one", [False, True])
+def test_bf16_npu_prior_representation_is_independent_of_grad_mode(monkeypatch, all_one):
+    from tide.attention import _native_attention
+    seen = []
+    def fake(q, k, v, heads, layout, **kwargs):
+        seen.append((q.shape, kwargs["pse"]))
+        assert kwargs["pse"] is None
+        mask = None if kwargs["atten_mask"] is None else ~kwargs["atten_mask"]
+        return (torch.nn.functional.scaled_dot_product_attention(q, k, v, attn_mask=mask, scale=kwargs["scale"]),)
+    monkeypatch.setitem(sys.modules, "torch_npu", SimpleNamespace(npu_fusion_attention_v2=fake))
+    torch.manual_seed(12)
+    q, k, v = [torch.randn(*shape).bfloat16().requires_grad_()
+               for shape in ((1, 2, 3, 4), (1, 2, 4, 4), (1, 2, 4, 4))]
+    w = torch.ones(1, 1, 1, 4) if all_one else torch.tensor([[[[.25, .5, .75, 1.]]]])
+    mask = torch.ones(1, 1, 3, 4, dtype=torch.bool)
+    trained = _native_attention(q, k, v, w.requires_grad_(), mask, "npu_fusion")
+    with torch.no_grad():
+        inferred = _native_attention(q, k, v, w.detach(), mask, "npu_fusion")
+    torch.testing.assert_close(trained, inferred, atol=0, rtol=0)
+    assert seen[0][0] == seen[1][0] == (1, 2, 3, 16)
+    with torch.no_grad():
+        _native_attention(q, k, v, q.new_ones(()), mask, "npu_fusion", unit_prior=True)
+    assert seen[-1][0] == (1, 2, 3, 4)
+
+
+def test_bf16_timed_mode_invariant_values_and_state():
+    from scripts.qualify_precision import comparison, fields_of
+    torch.manual_seed(73)
+    model = TideModel(ModelConfig(topology=TopologyConfig(kind="multiscale", n=8, profile="compact-5-dd4",
+                                  hubs=4, timing="timed"), d=64, memory="X", sharing="region_shared"))
+    x = torch.randn(1, 3, 64)
+    with precision_context("cpu", "bf16"):
+        trained = model(x)
+    with torch.no_grad(), precision_context("cpu", "bf16"):
+        inferred = model(x)
+    assert comparison(fields_of(inferred), fields_of(trained), {"atol": 0, "rtol": 0})["exact"]

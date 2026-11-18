@@ -33,6 +33,9 @@ def precision_policy(device, precision="fp32"):
         "master_weights": "parameters_are_fp32_masters; no_separate_copy",
         "adamw_moments": "float32",
         "attention": "native_by_shape_and_prior; math/tiled_accumulate_float32",
+        "attention_mode_selection": (
+            "visible_zero_prior_auto_tiled_in_all_modes; NPU_explicit_key_priors_rank_one_in_all_modes"
+            if precision == "bf16" else "established_fp32_gradient_dependent_prior_dispatch"),
         "loss": "float32",
         "autocast_cache": False,
     }

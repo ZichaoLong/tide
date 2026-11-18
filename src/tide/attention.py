@@ -87,7 +87,11 @@ def _auxiliary(value: Tensor, shape: tuple, key_prior: bool) -> Tensor:
 
 def _native_attention(q, k, v, weights, mask, backend, *, unit_prior=False, no_mask=False):
     """Keep native fused autograd, including trainable positive key priors."""
-    unit = unit_prior or (not weights.requires_grad and bool((weights == 1).all()))
+    # BF16 needs the same forward arithmetic in inference and grad-enabled
+    # calls. An explicit all-one prior therefore retains its prior path, and
+    # NPU key priors always use the same rank-one representation below.
+    stable_bf16_prior = q.dtype == torch.bfloat16 and not unit_prior
+    unit = unit_prior or (not stable_bf16_prior and not weights.requires_grad and bool((weights == 1).all()))
     visible = mask if unit else mask & (weights > 0)
     log_weights = None if unit else torch.where(weights > 0, weights, 1).log()
     if backend == "sdpa":
@@ -103,7 +107,7 @@ def _native_attention(q, k, v, weights, mask, backend, *, unit_prior=False, no_m
         heads, queries, width = q.shape[-3:]
         keys, value_width, scale = k.shape[-2], v.shape[-1], width ** -0.5
         pse = None
-        if weights.requires_grad:
+        if weights.requires_grad or stable_bf16_prior:
             # PSE-gradient support differs between vendor releases. Encode a
             # positive key prior as one Q/K feature and use native Q/K VJPs.
             prior = log_weights.expand(q.shape[:-2] + (1, keys)).squeeze(-2).to(q.dtype)
@@ -227,6 +231,11 @@ def weighted_attention(q: Tensor, k: Tensor, v: Tensor, weights: Tensor | None =
     retain the original scaling. Native fused backward remains in use.
     Query-dependent trainable NPU priors require math/tiled. Tiled uses 64
     queries by 256 keys in forward and analytical first-order backward.
+    BF16 auto sends any visible zero prior to tiled, in inference and training.
+    Its native explicit key priors use one representation independent of grad
+    mode (rank-one NPU Q/K extension, including explicit all-one priors).
+    Query-dependent BF16 NPU priors therefore use math/tiled. None still means
+    the native unit-prior path. FP32 keeps its established selection policy.
     """
     if backend not in {"auto", "math", "sdpa", "tiled", "npu_fusion"}:
         raise ValueError(f"unknown attention backend: {backend}")
@@ -254,13 +263,17 @@ def weighted_attention(q: Tensor, k: Tensor, v: Tensor, weights: Tensor | None =
     elif mask.dtype != torch.bool or mask.device != q.device:
         raise ValueError("mask must be boolean and on q's device")
     weights, mask = _auxiliary(weights, shape, True), _auxiliary(mask, shape, False)
-    zero_prior_grad = weights.requires_grad and bool(((weights == 0) & mask).any())
-    npu_prior_ok = not weights.requires_grad or weights.shape[-2] == 1
-    npu_width = q.shape[-1] + int(weights.requires_grad)
+    need_zero_check = weights.requires_grad or (q.dtype == torch.bfloat16 and backend == "auto" and not unit_prior)
+    visible_zero_prior = need_zero_check and bool(((weights == 0) & mask).any())
+    zero_prior_grad = weights.requires_grad and visible_zero_prior
+    auto_must_tiled = zero_prior_grad or (q.dtype == torch.bfloat16 and visible_zero_prior)
+    npu_prior_feature = weights.requires_grad or (q.dtype == torch.bfloat16 and not unit_prior)
+    npu_prior_ok = not npu_prior_feature or weights.shape[-2] == 1
+    npu_width = q.shape[-1] + int(npu_prior_feature)
     npu_ok = (q.device.type == "npu" and q.dtype != torch.float64
               and q.shape[-1] == v.shape[-1] and npu_width <= 768 and npu_prior_ok)
     if backend == "auto":
-        backend = ("tiled" if zero_prior_grad else "npu_fusion" if npu_ok
+        backend = ("tiled" if auto_must_tiled else "npu_fusion" if npu_ok
                    else "sdpa" if q.device.type in {"cpu", "cuda"} else "tiled")
     if backend == "npu_fusion" and not npu_ok:
         raise ValueError("npu_fusion requires NPU FP32/BF16 and equal head widths <=768")

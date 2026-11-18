@@ -20,51 +20,9 @@ from types import MethodType
 
 import torch
 
-from tide.parameters import FeedForward, HeadQuery, NodeOwners, norm, owner_ids
+from tide.parameters import FeedForward, HeadQuery, NodeOwners, norm, fused_node_linears
 from tide.precision import ArithmeticAudit, precision_context, precision_policy
 from scripts.job import atomic
-
-
-def fused_node_linears(layers, x, owners=None):
-    """Concatenate compatible projections, preserving all private adapters.
-
-    The head/branch axis is batched only for the private adapter's second
-    contraction. No adapter is shared or collapsed into a dense base matrix.
-    """
-    first = layers[0]
-    if any(layer.in_features != first.in_features or layer.out_features != first.out_features or
-           layer._host_groups != first._host_groups or layer.shared != first.shared or
-           (layer.bias is None) != (first.bias is None) for layer in layers):
-        raise ValueError("fused node projections require compatible dimensions and ownership")
-    if owners is None:
-        owners = torch.arange(first.nodes, device=first.groups.device)
-    ids, uniform = owner_ids(owners), first._uniform_group(owners)
-    n, branches, width = len(ids), len(layers), first.out_features
-    flat = x.reshape(n, -1, first.in_features)
-    if uniform is None:
-        groups = first.groups[ids]
-        weights = torch.cat([layer.weight[groups] for layer in layers], 1)
-        output = torch.bmm(flat, weights.transpose(1, 2))
-    else:
-        weights = torch.cat([layer.weight[uniform] for layer in layers], 0)
-        output = torch.mm(flat.reshape(-1, first.in_features), weights.T)
-        output = output.reshape(n, -1, branches * width)
-    if first.shared:
-        rank = first.right.shape[1]
-        if any(layer.right.shape[1] != rank for layer in layers):
-            raise ValueError("adapter ranks must agree")
-        right = torch.cat([layer.right[ids] for layer in layers], 1)
-        low = torch.bmm(flat, right.transpose(1, 2))
-        low = low.reshape(n, -1, branches, rank).transpose(1, 2).reshape(n * branches, -1, rank)
-        left = torch.stack([layer.left[ids] for layer in layers], 1).reshape(n * branches, width, rank)
-        private = torch.bmm(low, left.transpose(1, 2))
-        private = private.reshape(n, branches, -1, width).transpose(1, 2).reshape(n, -1, branches * width)
-        output = output + private
-    if first.bias is not None:
-        bias = (torch.cat([layer.bias[groups] for layer in layers], 1)[:, None] if uniform is None else
-                torch.cat([layer.bias[uniform] for layer in layers], 0))
-        output = output + bias
-    return output.reshape(*x.shape[:-1], branches * width)
 
 
 def _head_forward(self, x, owners=None):

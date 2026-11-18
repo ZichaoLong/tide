@@ -140,6 +140,14 @@ def fingerprint(value):
     return result.hexdigest()
 
 
+def file_sha256(path):
+    result = hashlib.sha256()
+    with Path(path).open("rb") as stream:
+        for chunk in iter(lambda: stream.read(1024*1024), b""):
+            result.update(chunk)
+    return result.hexdigest()
+
+
 def fields_of(result):
     return {"values": result.values, "strengths": result.strengths, "times": result.times,
             "readout": result.readout(), "state": result.state}
@@ -272,9 +280,27 @@ def main():
     if device.type == "npu":
         record["torch_npu"] = str(torch_npu.__version__)
         record["allow_hf32"] = {"matmul": bool(torch.npu.matmul.allow_hf32), "conv": bool(torch.npu.conv.allow_hf32)}
+    if args.reference:
+        manifest_path = args.reference / "manifest.json"
+        record["reference_identity"] = {
+            "directory": str(args.reference),
+            "manifest": json.loads(manifest_path.read_text()) if manifest_path.exists() else None,
+            "manifest_sha256": file_sha256(manifest_path) if manifest_path.exists() else None,
+            "legacy_without_manifest": not manifest_path.exists(),
+            "attention_fixture_sha256": file_sha256(args.reference / "attention.pt"),
+        }
+        saved_manifest = record["reference_identity"]["manifest"]
+        if saved_manifest is not None and saved_manifest.get("files", {}).get("attention.pt", {}).get("sha256") != record["reference_identity"]["attention_fixture_sha256"]:
+            raise ValueError("reference attention fixture does not match its manifest hash")
+    manifest = {"format": "tide-precision-fixtures-1", "source": source, "policy": record["policy"],
+                "torch": str(torch.__version__), "files": {}}
+    def register_fixture(path):
+        manifest["files"][path.name] = {"sha256": file_sha256(path), "bytes": path.stat().st_size}
+        atomic(args.save_tensors / "manifest.json", manifest)
     fixture = (torch.load(args.reference / "attention.pt", weights_only=False) if args.reference else primitive_fixture())
     if args.save_tensors:
         atomic_tensor(args.save_tensors / "attention.pt", fixture)
+        register_fixture(args.save_tensors / "attention.pt")
     atomic(args.output, record)
     try:
         record["independent_attention"] = primitive_checks(fixture, device, args.precision)
@@ -353,13 +379,20 @@ def main():
                         "updates": steps, "final_parameters": cpu_tree(model.state_dict()), "final_state": cpu_tree(state),
                         "none_gradients": row["none_gradients"]}
             if args.reference:
-                reference = torch.load(args.reference / (path.stem + ".pt"), weights_only=False)
+                reference_path = args.reference / (path.stem + ".pt")
+                row["reference_fixture_sha256"] = file_sha256(reference_path)
+                saved_manifest = record["reference_identity"]["manifest"]
+                if saved_manifest is not None and saved_manifest.get("files", {}).get(reference_path.name, {}).get("sha256") != row["reference_fixture_sha256"]:
+                    raise ValueError("reference case fixture does not match its manifest hash")
+                reference = torch.load(reference_path, weights_only=False)
                 if snapshot["identity"] != reference["identity"]:
                     raise ValueError("reference fixture config/input/initial parameters differ")
                 row["reference_comparison"] = comparison(snapshot, reference, THRESHOLDS[args.precision])
                 row["gradient_connectivity_difference"] = sorted(set(snapshot["none_gradients"]) ^ set(reference["none_gradients"]))
             if args.save_tensors:
-                atomic_tensor(args.save_tensors / (path.stem + ".pt"), snapshot)
+                fixture_path = args.save_tensors / (path.stem + ".pt")
+                atomic_tensor(fixture_path, snapshot)
+                register_fixture(fixture_path)
             if args.checkpoint:
                 from benchmarks.continuous import checkpoint_resume
                 with tempfile.TemporaryDirectory(prefix="tide-precision-checkpoint-") as temporary:

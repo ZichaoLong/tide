@@ -51,6 +51,9 @@ senders. Ill-conditioned rows retain the safeguarded bisection fallback;
 Shannon uses that iterative solver. Both use the declared solution-mapping
 first-order VJP, not differentiation through solver iterations.
 
-KV cache entries already follow original time. A stable prefix-count partition
-compacts valid entries without sorting int64 timestamps; invalid padding stays
-first, preserving the previous stable ordering and finite-window retention.
+KV cache entries already follow original time. On NPU a stable prefix-count
+partition compacts valid entries without sorting int64 timestamps; invalid
+padding stays first, preserving stable ordering and finite-window retention.
+CPU retains its measured stable timestamp-sort path. NPU KV queries with at least
+four heads batch compatible projections while preserving the private adapter of
+each head. CPU and placed wrappers retain the original projection path.

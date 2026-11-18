@@ -29,11 +29,13 @@ def sorted_compaction(keep):
 
 @contextmanager
 def candidate(model, name):
-    original_order = kv.chronological_compaction
+    original_order = kv.cache_order
     originals = []
     try:
         if name == "argsort":
-            kv.chronological_compaction = sorted_compaction
+            kv.cache_order = lambda keep, times: sorted_compaction(keep)
+        else:
+            kv.cache_order = lambda keep, times: kv.chronological_compaction(keep)
         if name == "bucketed":
             for memory in model.memories.values():
                 if not isinstance(memory, kv.KVMemory):
@@ -58,7 +60,7 @@ def candidate(model, name):
         with projection_candidate(model, projection):
             yield
     finally:
-        kv.chronological_compaction = original_order
+        kv.cache_order = original_order
         for memory, original in originals:
             memory._finish_tile = original
 

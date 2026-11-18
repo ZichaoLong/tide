@@ -51,6 +51,14 @@ def chronological_compaction(keep):
     return torch.empty_like(position).scatter(2, destination, position)
 
 
+def cache_order(keep, times):
+    # Avoid the device AiCPU timestamp sort on NPU. CPU end-to-end witnesses
+    # favored the existing stable sort, so its implementation stays separate.
+    if keep.device.type == "npu":
+        return chronological_compaction(keep)
+    return torch.where(keep, times, -torch.ones_like(times)).argsort(dim=2, stable=True)
+
+
 class KVMemory(nn.Module):
     def __init__(self, nodes, d, groups, rank, period, settle=True, backend="auto", chunk=128, kv_groups=None):
         super().__init__()
@@ -97,7 +105,7 @@ class KVMemory(nn.Module):
                 amounts.append(amount)
         last = torch.where(bank.weight > 0, bank.times, torch.zeros_like(bank.times)).amax(2, keepdim=True)
         keep = (bank.weight > 0) & ((last-bank.times) < self.window)
-        order = chronological_compaction(keep)
+        order = cache_order(keep, bank.times)
         order = order[:, :, -min(self.slots, order.shape[2]):]
         newstate = KVState(_take(bank.times, order), _take(bank.weight*keep, order),
                            _take(bank.keys, order), _take(bank.values, order), _take(bank.features, order))
