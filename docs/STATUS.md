@@ -6,6 +6,17 @@
 生产 `src/tide` tree 为 `539c5eb15176827ca14a19c7de82f08df5b6c1d1`。
 实现、测量与后续文档分别保留源码身份，不用整理 HEAD 追认旧测量。
 
+## 当前补充测量：Transformer 深度与 Tide batch/多卡
+
+用户在交付后追加询问约9B/17B的32/48层Transformer decode，以及Tide较大batch/多卡吞吐。
+本次有限矩阵为四个固定层数近总参数Transformer、Tide两种规模各B2/B4，以及17B B4四卡。
+统一FP32、prompt128/chunk32/decode16、warmup2/samples5；9B单卡、17B默认双卡。
+四卡点只改变放置设备数。保留原A–D和B1的源码、物理卡及样本身份，补充比较不改写其定义。
+preflight在`artifacts/depth-batch-preflight-20261118/preflight.json`：配额152/300GiB，
+固定数学通过，四份用户文件哈希已保存；入口与原推理回归20项通过。
+新作业按`depth-`、`batch-`前缀命名，冻结提交、队列准入、48/56GiB allocated/reserved
+采样预算、有限RSS/时间，终态后再汇总。当前为准备提交，不是已获得性能结果。
+
 ## 已集成与核验
 
 三种 incoming 接收 self-attention 已完成正式路径；保留原 source_residual 数学选择。

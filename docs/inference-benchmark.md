@@ -72,6 +72,14 @@ B、精度、seed 和实际 Tide 源码哈希不匹配时拒绝复用。输入�
 
 ## 大模型放置与审计内存
 
+固定其他层数的补充对照使用 `python -m benchmarks.transformer_depth`，例如
+`--parameters 8778358224 --layers 32 --devices npu:0`。它沿用同一 Transformer、
+近参数搜索、真实缓存请求、诊断和计时函数，明确标记为辅助比较，不替代 A–D。
+`--target-reference` 可引用原 Tide 的 reference，核对总参数目标、完整请求调度、
+batch/seed/精度及共同输入前缀；不会重建或重新认证旧 Tide。每个作业只构造一个
+Transformer，记录实际宽度、FFN、头宽、参数误差、设备与样本。默认两次热身、
+五次正常样本，不测 cold；正式 NPU 使用仍需冻结与准入。
+
 `--devices npu:0,npu:1 --placement layer` 使用 Tide 连续层放置；`--placement region`
 按实际参数字节平衡完整区域，可加 `--region-concurrency per_device`。实际 admitted
 设备由启动者提供。Transformer 使用连续 block 所有权，每层 KV 留在该层设备，
