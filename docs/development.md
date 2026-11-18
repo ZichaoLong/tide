@@ -34,8 +34,11 @@ launcher environment defect, not evidence that the public baseline needs changes
 Record the effective launch environment with each run. The CPU installed-wheel
 smoke intentionally removes `PYTHONPATH` to verify package isolation; it does not
 qualify an accelerator compiler environment.
-Standalone C++ is optional future work: the published matching SDK module is
-`libtorch-npu/2.12.0-cann9.2.0`, loaded in its own shell when needed.
+The optional [standalone regional scoring slice](native-regional.md) uses the
+published matching SDK module `libtorch-npu/2.12.0-cann9.2.0` in its own shell.
+It is a measured subpath experiment, not a complete native Tide backend.
+Its [CPU/NPU checks and performance](evidence/native-regional-performance-20261118.md)
+retain finite failures and distinguish outer workers from ATen intra-op threads.
 
 ## Installed-package validation
 

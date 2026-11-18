@@ -111,3 +111,21 @@ an exact next forward or a later within-threshold observation does not erase the
 Performance compares FP32 with FP32 and BF16 with BF16 first, then reports the
 speed/memory/numerical tradeoff of changing policy. BF16 AdamW memory includes
 actual FP32 masters/slots where used; it is not assumed to halve total memory.
+
+## Regional batching and concurrent execution observations
+
+The [current rounding investigation](evidence/capacity-rounding-20261118.md)
+separates a corrected implementation error from finite layout changes. Adding an
+FP32 bias after a BF16 regional matrix result promoted the activation; this was
+fixed in `231f56eb`. Its zero-weight witness checks that special case and dtype,
+not every Linear decomposition. CPU noncontiguous Linear can use BF16 bmm then
+BF16 add, while baddbmm rounds the combined operation. The NPU witnesses instead
+observe neighbouring BF16 values from addmm/baddbmm and mm/bmm near a rounding
+midpoint. Independent Decimal allocation reproduces selected support changes.
+The original support, timestamp and numerical failures remain recorded.
+
+The [native slice](evidence/native-regional-performance-20261118.md) has separate
+small checks and larger performance-shape comparisons; four BF16 five-update
+comparisons and the original four-worker restored gradient remain outside their
+strict thresholds. Successful forward values or exact checkpoint decoding do not
+certify an identical subsequent gradient/optimizer trajectory.

@@ -77,3 +77,26 @@ Original pages remain in the pre-governance commit `728d19a470d16d392d5dd6a24521
 Record new experience with observation, mechanism, applicability, positive/negative
 outcome and source. Measured gains certify only their configuration. Old gates, APIs,
 standalone/resident matrices and full-record duties do not accompany these lessons.
+
+## Capacity and region execution, 2026-11-18
+
+- Compatible region batching must retain independent Attention/allocation axes,
+  owner sharing and private memory shapes. Measured Settle/Timed training time
+  ratios were 0.695–0.792, with slightly higher peaks; activity changes prevent a
+  universal same-trajectory speedup claim. See [execution evidence](evidence/capacity-execution-20261118.md).
+- Non-reentrant regional recomputation reduced measured peaks to 0.148–0.202 of
+  baseline but increased same-shape time to 1.738–1.813. Combined batching and
+  recomputation fit B64 in the selected 32 GiB search; its best observed throughput
+  was 0.9364 of baseline B16. Saving memory is not by itself a throughput gain.
+- A Timed last-tick view can retain a whole window's storage. Clone compact tails
+  and release banks after their last consumer without detaching BPTT. State payload,
+  autograd saved tensors and allocator peaks overlap; never add separate phase peaks.
+- BF16 layout changes can alter Linear decomposition or matrix reduction and
+  cross a real allocation boundary. A zero-weight bias probe establishes only
+  that case; use actual inputs plus an independent scalar/allocation witness.
+  [The bounded investigation](evidence/capacity-rounding-20261118.md) preserves
+  both implementation fixes and unresolved finite differences.
+- Compare language overhead, outer workers and intra-op threads separately.
+  [The standalone regional slice](evidence/native-regional-performance-20261118.md)
+  helped small NPU dispatch-heavy shapes; larger shapes did not benefit uniformly
+  from C++ workers. It does not justify a second complete model implementation.

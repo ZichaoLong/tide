@@ -58,8 +58,9 @@ def regional_scores(networks, z, score, weight):
         if layers[0].bias is None:
             result = torch.bmm(flat, matrices.transpose(1, 2))
         else:
-            # Match Linear's autocast boundary: bias belongs to the matrix
-            # epilogue, before the result is rounded to the compute dtype.
+            # Keep the bias inside the selected compute dtype; a separate
+            # FP32 addition would promote the activation. Layout-dependent
+            # Linear decompositions can still round differently (precision.md).
             result = torch.baddbmm(torch.stack([layer.bias for layer in layers])[:, None],
                                   flat, matrices.transpose(1, 2))
         return result.reshape(*values.shape[:-1], matrices.shape[1])
