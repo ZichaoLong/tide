@@ -1,4 +1,4 @@
-"""Restore the exact bytes of a losslessly archived experiment JSON record.
+"""Restore the exact bytes of a losslessly archived JSON evidence record.
 
 This does not recreate retired tensor payloads or alter qualification results.
 Use a new explicit output path; existing files are never overwritten.
@@ -16,8 +16,9 @@ def _relative(root, name):
     relative = PurePosixPath(name)
     if relative.is_absolute() or '..' in relative.parts or str(relative) != name:
         raise ValueError('archive paths must be normalized repository-relative paths')
-    if not relative.parts or relative.parts[0] != 'artifacts':
-        raise ValueError('archive is outside artifacts')
+    if not (relative.parts and (relative.parts[0] == 'artifacts'
+            or relative.parts[:2] == ('docs', 'evidence'))):
+        raise ValueError('archive is outside artifacts or docs/evidence')
     current = root
     for part in relative.parts:
         current = current / part

@@ -7,14 +7,15 @@ import pytest
 from scripts.materialize_record import materialize
 
 
-def fixture(tmp_path, payload=b'{\n  "state": "failed", "value": 0.125\n}\n'):
+def fixture(tmp_path, payload=b'{\n  "state": "failed", "value": 0.125\n}\n',
+            directory_name='artifacts/run'):
     root = tmp_path / 'repo'
-    directory = root / 'artifacts' / 'run'
+    directory = root / directory_name
     directory.mkdir(parents=True)
     data = gzip.compress(payload, mtime=0)
     archive = directory / 'result.json.gz'
     archive.write_bytes(data)
-    row = dict(path='artifacts/run/result.json', archive_path='artifacts/run/result.json.gz',
+    row = dict(path=f'{directory_name}/result.json', archive_path=f'{directory_name}/result.json.gz',
                original_bytes=len(payload), original_sha256=hashlib.sha256(payload).hexdigest(),
                archive_sha256=hashlib.sha256(data).hexdigest())
     index = root / 'index.json'
@@ -24,8 +25,9 @@ def fixture(tmp_path, payload=b'{\n  "state": "failed", "value": 0.125\n}\n'):
     return root, archive, index, row, payload, update
 
 
-def test_exact_bytes_and_no_overwrite(tmp_path):
-    root, archive, index, row, payload, _ = fixture(tmp_path)
+@pytest.mark.parametrize('directory_name', ['artifacts/run', 'docs/evidence'])
+def test_exact_bytes_and_no_overwrite(tmp_path, directory_name):
+    root, archive, index, row, payload, _ = fixture(tmp_path, directory_name=directory_name)
     output = tmp_path / 'restored.json'
     result = materialize(index, row['path'], output, root=root)
     assert output.read_bytes() == payload
@@ -33,6 +35,14 @@ def test_exact_bytes_and_no_overwrite(tmp_path):
     with pytest.raises(FileExistsError):
         materialize(index, row['path'], output, root=root)
     assert output.read_bytes() == payload
+
+
+def test_other_repository_paths_are_rejected(tmp_path):
+    root, _, index, row, _, _ = fixture(tmp_path, directory_name='src')
+    output = tmp_path / 'bad.json'
+    with pytest.raises(ValueError, match='outside artifacts or docs/evidence'):
+        materialize(index, row['path'], output, root=root)
+    assert not output.exists()
 
 
 @pytest.mark.parametrize('field', ['archive_sha256', 'original_sha256', 'original_bytes'])
