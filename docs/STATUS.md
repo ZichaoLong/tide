@@ -6,7 +6,10 @@
 四份用户未跟踪文档原字节已记录在 `artifacts/memory-candidates-20261119/preflight.json`。
 
 新范围、局部公式/形状/归属见 [memory candidates](memory-candidates.md)；计划见 [ROADMAP](ROADMAP.md)。
-新增资格尚未完成，五文件草稿的旧74项CPU通过不构成本轮资格。旧固定深度和容量搜索已完成，不重启旧矩阵。
+实现已提交并正常推送 `64db3141`，生产树身份由该提交固定。定向开发检查通过；正式资格尚未完成。
+冻结完整CPU、小尺度CPU FP32、NPU FP32/BF16资格已在 `background.slice` 运行，目录分别为
+`artifacts/memory-cpu-suite-v1`、`memory-cpu-qual-v1`、`memory-npu-qual-fp32-v1`、`memory-npu-qual-bf16-v1`。
+首次准入物理卡为9和1，均协作队列独占准入；没有使用共享占用卡。旧74项不构成本轮资格，旧完成矩阵不重启。
 初次资源检查：无本项目运行服务，配额约155/300GiB，多张空闲NPU；每次大任务仍重新准入。
 本轮准备记录在 `artifacts/memory-candidates-20261119`；旧 `memory-mix-20261119` 只保留暂停前准备身份。
 
