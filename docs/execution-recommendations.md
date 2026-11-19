@@ -73,7 +73,7 @@ of mode, batching, precision or placement produces a different trajectory.
 | Narrow KV memory family | Medium training uses d192/KV32, with B8/B16 continuing training and paired restore evidence. The d768/KV128 7.268B instance has local formula/VJP and inference evidence, but no complete 9B-topology training/restore qualification. FFN-adjusted near-parameter variants also have inference-only evidence. |
 | FFN grouped weights / power2 packing | Optional W/P/WP reduce measured medium NPU peak memory, but have no same-batch throughput gain and retain forward/update failures. CPU packing recovery did not finish within the artifact budget; medium NPU W qualification did not begin. Keep gather/rectangular as the training default. |
 | BF16 | Some fixed HB workloads train and restore within threshold. Other cases retain support, memory-time, gradient and update differences, including FC/placed restore failures. BF16 is secondary and is not certified as a drop-in FP32 replacement. |
-| Memory-only sharing | Small/medium training and candidate-local restore have evidence. The 9B region-batch1/4 inference pair changes support; keep the measured size4 setting for that instance, without claiming 9B training equivalence. |
+| Memory-only sharing | Small/medium training and candidate-local restore have evidence. The original 9B region-batch1/4 support failure was localized and repaired in 97c52960; the fixed pair matches support but retains finite scalar deviations. Keep size4 as the existing measured configuration, without claiming new throughput or 9B training qualification. |
 | Timed and placement | The older Timed FP32 preset has its own 100-update evidence. New memory-candidate Timed/multi-device combinations lack qualification; Timed BF16 and some two-device restores retain failures. Four-device inference does not qualify four-device training. Direct NPU transport retains a backward failure; host-staged transport is a separate path. |
 | Exact training resumption | Public checkpoints retain model/configuration, AdamW and private state. The example does not save RNG, sampler, scheduler or data-stream position; downstream training must preserve its own recipe state. Placed checkpoints use the placement API. |
 
@@ -81,6 +81,12 @@ See the [training-impact review and duplicate-code retirement](evidence/code-ret
 for source-scoped failures, fixed defects and cleanup decisions. Useful memory-saving candidates,
 reference paths and diagnosis entry points remain available; removing duplicate frozen checkouts
 changes storage availability, not the implementation or qualification of these paths.
+
+The [cleanup and numerical follow-up](evidence/cleanup-numerics-20261119.md) adds
+an actual quad solver fix: the previous wrong face could also erase the score VJP.
+It separately explains selected FP32 AdamW update amplification using real adjacent
+updates, and retains the BF16 upstream boundary crossing. Applying this fix is
+recommended; it does not certify cross-path equality or erase other qualification gaps.
 
 ## Mode-specific choices
 
@@ -156,9 +162,13 @@ used more memory than X, so select it by the intended workload. Memory-only
 rank8 sharing mainly reduces parameter storage (6.936B with fixed FFN); it
 retains private histories and independent FFNs, and did not improve medium
 training throughput. Cross-region batching still repeats shared bases in BMMs.
-Keep the measured `region_batch_size=4`: `region_batch_size=1` was slower at
-the same B8 and introduced a 9B FP32 output-support difference, so the pair
-is not strictly equivalent.
+Keep `region_batch_size=4` as the existing measured configuration. On the original
+source, size1 was slower at the same B8 and the pair changed output support.
+[The subsequent repair](evidence/cleanup-numerics-20261119.md) fixes a wrong quad
+face that lost a tiny positive control; use production commit 97c52960 or a
+continuation containing that fix. Its post-fix 9B pair matches support/time but
+retains finite scalar deviations, and its throughput has not been remeasured.
+The old size4 timing therefore remains evidence for its original source only.
 
 The report separately lists common B1/B8, each candidate's finite budget-best
 batch, first backbone output, prefill, independent request throughput and

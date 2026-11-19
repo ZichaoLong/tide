@@ -41,6 +41,14 @@ Logical support is separate from floating underflow. Positive-weight normalizati
 attention and allocation derivatives must be considered together. A small local
 stabilization does not establish stability of all compositions or scales.
 
+A constrained solver can satisfy total mass on the wrong active face. The
+[shared9B witness](evidence/cleanup-numerics-20261119.md) lost a representable positive
+control after breakpoint-prefix cancellation; the lost score VJP was substantial.
+Keep the actual batch shape and stride in a replay, check optimality bounds as well
+as mass, and distinguish a solver error on identical rounded inputs from upstream
+scores crossing a true boundary. Added checks/fallbacks need new whole-path timing;
+a corrected local formula does not inherit old throughput.
+
 CPU threads, acceleration and shared memory have shape-dependent costs. Count
 synchronization, host/device movement, padding, forward/backward, optimizer and
 allocator peaks. Workspace size and captured device-control task counts are

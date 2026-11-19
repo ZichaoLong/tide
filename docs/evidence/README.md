@@ -1,5 +1,11 @@
 # Current evidence
 
+The [cleanup, bounded numerical diagnosis and quad repair](cleanup-numerics-20261119.md)
+records further retired payloads/profilers, exact regeneration after update2 deletion,
+actual-training local VJP and AdamW witnesses, and the fixed wrong-face allocator.
+Post-fix NPU support/VJP, small training/recovery and shared9B routing have separate
+scopes; original failures and remaining finite deviations stay explicit.
+
 The [training-impact review and duplicate-source retirement](code-retirement-training-impact-20261119.md)
 separates usable fixed-path training from unresolved gradient/support/restore qualifications.
 It retires 312 byte-verified frozen source copies, preserves active implementations and raw failure evidence,
@@ -8,7 +14,7 @@ and records reconstruction from the original pushed commits.
 The [priority artifact retirement and remaining read-only inventory](disk-cleanup-20261119.md)
 records 90 retired tensor payloads, preserved failures and the isolated CPU installation smoke.
 Historical paths retain their measurement identities; the exact retired payload list is no longer
-available for direct loading. Remaining cleanup candidates have not been removed.
+available for direct loading. Later retirement decisions are recorded in the cleanup/numerics follow-up above.
 
 The [FFN interventions and CPU/NPU comparison](ffn-execution-devices-20261119.md)
 records direct weight-bank access, effective-row packing and their interaction.

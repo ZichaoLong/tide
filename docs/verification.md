@@ -11,6 +11,13 @@ reverse binding, jointly narrowed Q/K/V width and memory-only regional sharing.
 It keeps the frozen 886-test CPU result, actual-width formula/VJP checks,
 installed recovery, continuous training and retained numerical failures separate.
 
+The [quad repair and cleanup follow-up](evidence/cleanup-numerics-20261119.md) fixes
+production commit `97c52960` before qualification: 1043 CPU tests pass with one
+existing strict xfail. Original-shape NPU allocation values/score VJPs, small
+FP32 three-update training with actual fresh-process recovery, and shared9B
+inference have separate recorded outcomes. Finite cross-path deviations remain;
+these results do not certify 9B training or reuse old throughput for the new source.
+
 | Change | Relevant independent checks |
 |---|---|
 | Topology/configuration | topology/parameter-binding tests, legal/illegal combinations |

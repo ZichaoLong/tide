@@ -204,11 +204,23 @@ d768 narrow-KV formula/VJPs and medium FP32 continuous runs have separate scopes
 Successful inference does not qualify the FFN-adjusted near-parameter candidates
 for training, nor new Timed or multi-device combinations.
 
-The 9B FP32 memory-shared `region_batch_size=1/4` inference pair adds a separate
-discrete failure: identical parameter/input hashes and physical NPU, but different
-output-support hashes and a net increase of one in the aggregate Full count with
-size1. Original output times and availability agree. This pair is not strictly trajectory-equivalent;
-the small-model FP32 checks do not erase it, and the cause is not established as
-rounding. Per-time work/control values were not retained, so the changed event
-locations and count are unknown. Keep the measured size4 setting and the failure
-in the evidence.
+The original 9B FP32 memory-shared `region_batch_size=1/4` inference pair retains
+its discrete failure: identical parameter/input hashes and physical NPU, but
+different output-support hashes and one extra Full action with size1. The
+[bounded diagnosis and repair](evidence/cleanup-numerics-20261119.md) reproduced
+that observation and located a wrong sorted-quad face after prefix cancellation.
+The original complete-shape replay lost a positive control despite a zero total
+residual. Commit `97c52960` checks the final face's KKT bounds and sends rejected
+faces through the existing same-device, same-dtype fallback; no support epsilon
+or production FP64 substitution was added.
+
+The retained NPU value/support and independent score-VJP witness passes after the
+repair. The post-fix 9B pair has matching internal support, output support and
+original times, with Full 180209 on both paths; 298 internal scalar element
+comparisons still exceed the original value threshold. Small FP32 training retains
+1/1/8 failed cross-path fields over three updates, while each path's actual
+fresh-process restored update is within threshold. These source-scoped checks do
+not relabel old failures, certify every boundary, or transfer old throughput to
+the repaired production source. BF16's selected third-update witness instead
+crosses a true support boundary in the upstream rounded scores; its full upstream
+cause remains unresolved.
