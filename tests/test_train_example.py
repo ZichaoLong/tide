@@ -63,6 +63,21 @@ def test_reception_and_ssd_cli_overrides_are_saved_model_options(tmp_path):
     assert train.resolve(args)["config"] == config
 
 
+def test_memory_binding_cli_preserves_serialized_shapes_and_other_ownership(tmp_path):
+    original = replace(model_config(timed=True), sharing="independent")
+    args = arguments(tmp_path, "--memory", "X_reverse", "--kv-width", "32",
+                     "--ffn-width", "288", "--memory-sharing", "region_shared", config=original)
+    settings = train.resolve(args)
+    expected = replace(original, memory="X_reverse", kv_width=32, ffn_width=288,
+                       memory_sharing="region_shared")
+    assert settings["config"] == ModelConfig.from_dict(expected.to_dict())
+    assert settings["model_overrides"] == dict(memory="X_reverse", kv_width=32,
+                                              ffn_width=288, memory_sharing="region_shared")
+    model = TideModel(settings["config"])
+    assert all(memory.ffn.up.out_features == 288 and not memory.ffn.up.shared
+               for memory in model.memories.values())
+
+
 @pytest.mark.parametrize("name,precision,batch,length", [
     ("npu-fc-k-fp32", "fp32", 128, 256),
     ("npu-fc-k-bf16", "bf16", 128, 256),

@@ -199,6 +199,7 @@ class _ShardedLinear(_ShardedOwners):
 class _ShardedVector(_ShardedOwners):
     def __init__(self, source, partitions, devices):
         super().__init__(source, partitions, devices)
+        self.shared = source.shared
         groups = source._host_groups
         _check_group_ownership(groups, partitions)
         for partition in range(len(devices)):
@@ -208,6 +209,7 @@ class _ShardedVector(_ShardedOwners):
             original_groups = tuple(sorted({groups[i] for i in owners}))
             mapping = {group: i for i, group in enumerate(original_groups)}
             shard = self._new_shard(NodeVector, partition, owners)
+            shard.shared = source.shared
             shard._set_groups(torch.tensor([mapping[groups[i]] for i in owners], dtype=torch.int64))
             shard.groups = shard.groups.to(devices[partition])
             self._slice(source, shard, "value", original_groups, partition)

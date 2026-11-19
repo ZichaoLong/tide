@@ -46,13 +46,16 @@ def _private_state_budget(model, batch, length, precision, *, steady=False):
     conv_slots = 3*model.memories["S"].stride+1 if "S" in model.memories else 0
     if not steady:
         conv_slots = min(conv_slots, ticks)
-    kv = batch*kv_slots*(8+4+2*d*(2 if precision == "bf16" else 4)+(d//4)*4)
+    kv_width = model.memories["K"].kv_width if "K" in model.memories else 0
+    kv = batch*kv_slots*(8+4+2*kv_width*(2 if precision == "bf16" else 4)+(d//4)*4)
     ssd = batch*(8+4*(d*32+2*(d//4)+2)+conv_slots*(8+4*(d+64)))
     pending_payload = 0 if model.settle else batch*(d+1)*4
     # Dense, layer-placed and region-placed paths all clone the last tick.
     # This is only the retained state's storage, not autograd's saved tensors.
     pending_retained = pending_payload
     return dict(K=kv, S=ssd, kv_slots=kv_slots, convolution_slots=conv_slots,
+                content_width=d, summary_width=d//4, kv_payload_width=kv_width,
+                kv_heads=kv_width//32,
                 pending_payload_per_node=pending_payload,
                 pending_retained_storage_upper_per_node=pending_retained)
 

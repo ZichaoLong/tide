@@ -6,6 +6,9 @@ import torch
 from torch import nn
 
 
+_INHERIT_GROUPS = object()
+
+
 def norm(x, eps=1e-5):
     work = x.float() if x.dtype in (torch.float16,torch.bfloat16) else x
     return (work * torch.rsqrt(work.square().mean(-1,keepdim=True)+eps)).to(x.dtype)
@@ -173,6 +176,7 @@ class NodeLinear(_OwnerGroups):
 class NodeVector(_OwnerGroups):
     def __init__(self, nodes, width, groups=None, value=0.0):
         super().__init__()
+        self.shared = groups is not None
         indices = (torch.arange(nodes, device="cpu") if groups is None else
                    torch.as_tensor(groups, dtype=torch.long, device="cpu"))
         self._set_groups(indices)
@@ -234,9 +238,12 @@ def fused_node_linears(layers, x, owners=None):
 
 class HeadQuery(nn.Module):
     """KV query adapters belong to each mathematical head, not the packed matrix."""
-    def __init__(self, nodes, d, groups=None, rank=8):
+    def __init__(self, nodes, d, groups=None, rank=8, *, out_features=None):
         super().__init__()
-        self.heads = nn.ModuleList(NodeLinear(nodes, d, 32, groups, rank) for _ in range(d // 32))
+        width = d if out_features is None else out_features
+        if type(width) is not int or width < 1 or width % 32:
+            raise ValueError("query width must be a positive multiple of 32")
+        self.heads = nn.ModuleList(NodeLinear(nodes, d, 32, groups, rank) for _ in range(width // 32))
 
     def uses_fused_projection(self, x):
         # Fixed NPU witnesses showed fewer launches and 3–6% complete training
@@ -251,11 +258,14 @@ class HeadQuery(nn.Module):
 
 
 class FeedForward(nn.Module):
-    def __init__(self, nodes, d, groups=None, rank=8):
+    def __init__(self, nodes, d, groups=None, rank=8, *, hidden_features=None):
         super().__init__()
-        self.gate = NodeLinear(nodes, d, 4*d, groups, rank)
-        self.up = NodeLinear(nodes, d, 4*d, groups, rank)
-        self.down = NodeLinear(nodes, 4*d, d, groups, rank)
+        width = 4*d if hidden_features is None else hidden_features
+        if type(width) is not int or width < 1 or width % 16:
+            raise ValueError("FFN width must be a positive multiple of 16")
+        self.gate = NodeLinear(nodes, d, width, groups, rank)
+        self.up = NodeLinear(nodes, d, width, groups, rank)
+        self.down = NodeLinear(nodes, width, d, groups, rank)
 
     def forward(self, x, owners=None):
         z = norm(x)

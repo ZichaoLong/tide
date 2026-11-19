@@ -122,7 +122,10 @@ The finite choices in `ModelConfig` are:
 
 | Field | Main choices |
 |---|---|
-| memory | K: KV; S: SSD; X: ordinary KV and Hub SSD |
+| memory | K: KV; S: SSD; X: D/KV and H/SSD; X_reverse: D/SSD and H/KV |
+| kv_width | null uses d; positive multiple of 32 <= d; total Q/K/V width together, requires K nodes |
+| ffn_width | null uses 4d; positive multiple of 16; Full FFN only |
+| memory_sharing | null inherits sharing; region_shared overrides memory ownership only |
 | aggregation | source_residual, incoming_light_64, incoming_light_128, incoming_wide |
 | allocation | quad, shannon, pool |
 | sharing | independent, region_shared, layer_shared |
@@ -130,6 +133,10 @@ The finite choices in `ModelConfig` are:
 | adapter_rank | 4,8,16 |
 | budget | 1,2,4,8,16,32,64 up to n; default max(1,n/32); pool ignores it |
 | attention_backend | auto, math, tiled, sdpa, npu_fusion |
+
+Reverse, narrow-memory and memory-only sharing are explicit
+[instance extensions](memory-candidates.md), with formulas and ownership defined
+there. They do not replace existing defaults or inherit old numerical qualification.
 
 `TopologyConfig.kind` selects fc, lattice, exchange or multiscale. `n` is ordinary
 nodes per region. FC uses `layers`; Lattice uses expansion `depth`; Exchange

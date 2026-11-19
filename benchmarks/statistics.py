@@ -31,6 +31,7 @@ class RuntimeAudit(TorchDispatchMode):
     """
     def __init__(self):
         self.operators = defaultdict(int)
+        self.matrix_shapes = defaultdict(int)
         self.movement = defaultdict(lambda: dict(calls=0, output_bytes=0))
 
     def __torch_dispatch__(self, func, types, args=(), kwargs=None):
@@ -42,6 +43,8 @@ class RuntimeAudit(TorchDispatchMode):
             before = tuple(sorted({str(x.device)+":"+str(x.dtype) for x in inputs}))
             after = tuple(sorted({str(x.device)+":"+str(x.dtype) for x in tensors}))
             self.operators[name, before, after] += 1
+            if any(name.startswith("aten."+op+".") for op in ("mm", "bmm", "addmm")):
+                self.matrix_shapes[name, tuple(tuple(x.shape) for x in inputs)] += 1
         if any(name.startswith("aten."+token+".") for token in
                ("_to_copy", "copy_", "clone", "contiguous", "cat", "index", "index_put", "index_put_",
                 "index_select", "gather", "scatter", "scatter_", "index_copy", "index_copy_")):
@@ -54,6 +57,8 @@ class RuntimeAudit(TorchDispatchMode):
         return dict(operators=[dict(operator=op, inputs=list(before), outputs=list(after), calls=count)
                                for (op, before, after), count in sorted(self.operators.items())],
                     materializations=dict(self.movement),
+                    matrix_shapes=[dict(operator=op, inputs=[list(shape) for shape in shapes], calls=count)
+                                   for (op, shapes), count in sorted(self.matrix_shapes.items())],
                     materialization_definition="logical output bytes from dispatched copy/index/concatenate operations; not hardware bus traffic, bandwidth or all operand loads",
                     instrumentation="separate ordinary forward without semantic counting hooks; excluded from timing",
                     bf16_matrix_observed=any("bfloat16" in dtype for (_, _, after) in self.operators for dtype in after))
@@ -83,7 +88,7 @@ class ParameterInventory:
                     name = self.names[id(parameter)]
                     private = (leaf in {"left", "right"} or path == "describe.offset" or
                                isinstance(module, NodeLinear) and not module.shared or
-                               isinstance(module, NodeVector) and model.config.sharing == "independent")
+                               isinstance(module, NodeVector) and not module.shared)
                     indices = list(range(len(owners))) if leaf in {"left", "right"} else groups
                     for owner, index in enumerate(indices):
                         classification = graph.nodes[owners[owner]].role if private else "base"
@@ -155,6 +160,8 @@ class WorkAudit:
         self.work = defaultdict(int)
         self.work_events = defaultdict(lambda: defaultdict(int))
         self.matrices = defaultdict(lambda: dict(calls=0, rows=0, dense_multiply_adds=0))
+        self.matrix_dispatch = defaultdict(lambda: dict(calls=0, base_weight_rows=0,
+                                                       unique_base_weight_rows=0, repeated_base_weight_rows=0))
         self.packing = defaultdict(lambda: dict(calls=0, selected_rows=0, executed_rows=0))
         self.batch_inputs = 0
         self._originals = []
@@ -223,7 +230,10 @@ class WorkAudit:
             # Fused projections bypass child NodeLinear.forward hooks. Count
             # the unchanged mathematical matrices/adapters and padded rows.
             for name in ("q", "k", "v"):
-                self._matrix("receive."+name, getattr(self.model.receive, name), (content, owners), result)
+                self._matrix("receive."+name, getattr(self.model.receive, name), (content, owners), result,
+                             record_dispatch=False)
+            self._base_matrix_dispatch("receive.fused_qkv", self.model.receive.q, (content, owners),
+                                       out_features=3*self.model.receive.q.out_features)
         return result
 
     def _describe(self, original, u, received, memories, owners):
@@ -264,7 +274,7 @@ class WorkAudit:
             for start in range(0, times.shape[-1], 64):
                 delta = times[..., start:start+64, None]-key_times[..., None, :]
                 mask = (delta >= 0) & (delta < window) & (key_weight[..., None, :] > 0) & active[..., start:start+64, None]
-                self._work("kv_attention_effective_pairs", mask.sum((0, 3))*(self.model.config.d//32), offset=start)
+                self._work("kv_attention_effective_pairs", mask.sum((0, 3))*self.model.memories[kind].heads, offset=start)
         return original(context, control)
 
     def _packed(self, kind, original, *args, **kwargs):
@@ -276,7 +286,7 @@ class WorkAudit:
             record["executed_rows"] += result.data.numel() // result.data.shape[-1]
         return result
 
-    def _matrix(self, path, module, inputs, output):
+    def _matrix(self, path, module, inputs, output, *, record_dispatch=True):
         x = inputs[0]
         rows = x.numel() // module.in_features
         record = self.matrices[path]
@@ -286,6 +296,33 @@ class WorkAudit:
         if module.shared:
             rank = module.left.shape[-1]
             record["dense_multiply_adds"] += rows * rank * (module.in_features+module.out_features)
+        if record_dispatch:
+            self._base_matrix_dispatch(path, module, inputs)
+
+    def _base_matrix_dispatch(self, path, module, inputs, *, out_features=None):
+        x = inputs[0]
+        rows = x.numel()//module.in_features
+        owners = inputs[1] if len(inputs) > 1 else None
+        uniform = module._uniform_group(owners)
+        n = x.shape[0]
+        if uniform is None:
+            ids = (range(module.nodes) if owners is None else owner_ids(owners).detach().cpu().tolist())
+            unique = len({module._host_groups[index] for index in ids})
+            weight_rows, operator = n, "bmm"
+        else:
+            weight_rows, unique, operator = 1, 1, "mm"
+        width = module.out_features if out_features is None else out_features
+        key = (path, operator, n, rows//n, module.in_features, width)
+        dispatch = self.matrix_dispatch[key]
+        dispatch["calls"] += 1
+        dispatch["base_weight_rows"] += weight_rows
+        dispatch["unique_base_weight_rows"] += unique
+        dispatch["repeated_base_weight_rows"] += weight_rows-unique
+
+    def _matrix_dispatch_report(self):
+        return [dict(path=path, base_operator=operator, node_rows=nodes, rows_per_node=rows,
+                     in_features=inputs, out_features=outputs, **counts)
+                for (path, operator, nodes, rows, inputs, outputs), counts in sorted(self.matrix_dispatch.items())]
 
     def _head_matrix(self, path, module, inputs, output):
         if not module.uses_fused_projection(inputs[0]):
@@ -293,7 +330,9 @@ class WorkAudit:
         # Child NodeLinear.forward hooks do not run in the fused contraction.
         # Count its complete mathematical matrices/adapters once, including pad.
         for index, head in enumerate(module.heads):
-            self._matrix(path+f".heads.{index}",head,inputs,output)
+            self._matrix(path+f".heads.{index}",head,inputs,output,record_dispatch=False)
+        self._base_matrix_dispatch(path+".fused_heads", module.heads[0], inputs,
+                                   out_features=sum(head.out_features for head in module.heads))
 
     def __enter__(self):
         from functools import partial
@@ -346,6 +385,8 @@ class WorkAudit:
                     work_by_sample_time=[dict(sample=b, time=t, **self.work_events[b, t]) for b, t in sorted(self.domain)],
                     query_packing=dict(self.packing),
                     node_matrices=dict(self.matrices),
+                    node_matrix_dispatch=self._matrix_dispatch_report(),
+                    matrix_dispatch_definition="executed NodeLinear base contractions and weight rows per call; repeated rows describe BMM operands, not peak storage or measured bus traffic; private adapter contractions remain separate in matrix cost",
                     matrix_cost_definition="multiply-add pairs for actually executed NodeLinear rows, including padding/adapters; excludes attention/normalization/non-NodeLinear ops; not complete FLOPs")
 
     def _summary(self, events):

@@ -9,7 +9,7 @@ from collections import defaultdict
 import copy
 import hashlib
 import json
-from threading import Lock
+from threading import RLock
 
 from benchmarks.statistics import ParameterInventory, WorkAudit
 
@@ -53,7 +53,7 @@ class StreamingWorkAudit(WorkAudit):
         self._slots = self._calls = self._peak_slots = self._peak_bytes = 0
         self._previous_end = self._batch = None
         self._digest = hashlib.sha256()
-        self._lock = Lock()
+        self._lock = RLock()
 
     def _add(self, stage, key, atoms):
         bits = 0
@@ -79,9 +79,13 @@ class StreamingWorkAudit(WorkAudit):
             row["executed_rows"] += executed
         return result
 
-    def _matrix(self, path, module, inputs, output):
+    def _matrix(self, path, module, inputs, output, *, record_dispatch=True):
         with self._lock:
-            super()._matrix(path, module, inputs, output)
+            super()._matrix(path, module, inputs, output, record_dispatch=record_dispatch)
+
+    def _base_matrix_dispatch(self, path, module, inputs, *, out_features=None):
+        with self._lock:
+            super()._base_matrix_dispatch(path, module, inputs, out_features=out_features)
 
     def _count(self, bits):
         count = 0
@@ -152,6 +156,8 @@ class StreamingWorkAudit(WorkAudit):
                     logical_axis="input_step" if self.model.settle else "tick", work=dict(self.work),
                     work_per_input_position={k: v/self.batch_inputs for k, v in self.work.items()} if self.batch_inputs else {},
                     query_packing=dict(self.packing), node_matrices=dict(self.matrices),
+                    node_matrix_dispatch=self._matrix_dispatch_report(),
+                    matrix_dispatch_definition="executed NodeLinear base contractions and weight rows per call; repeated rows describe BMM operands, not peak storage or measured bus traffic; private adapter contractions remain separate in matrix cost",
                     matrix_cost_definition="multiply-add pairs of executed NodeLinear rows including padding/adapters; not complete FLOPs",
                     retention=dict(kind="one-call semantic-atom bitsets and scalar stream aggregates; no scalar-parameter axis",
                                    calls=self._calls, peak_sample_time_slots=self._peak_slots,

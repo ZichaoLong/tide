@@ -12,6 +12,11 @@ regional self-attention and the chosen role quad/Shannon or ordinary pool.
 Three sharing profiles preserve private node state. Original logical times govern
 KV windows, positions and SSD convolution. k bounds mass, not active node count.
 
+The explicit [memory binding extensions](memory-candidates.md) define X_reverse
+(D/SSD, H/KV), total Q/K/V internal-width narrowing, Full FFN width, and
+memory-only regional sharing. These are selected instance changes, not equivalent
+optimizations of the fixed snapshot; `math/` stays byte-for-byte fixed.
+
 Correctness tests target actual values, support, parameter gradients and stateful
 continuation. Full action journals and generic intermediate decoding are omitted.
 The [public API and private state](instances.md) belong to the active instance

@@ -7,5 +7,6 @@
 - SSD: ../math/local-semantics/weighted-message/recurrent-memory/ssd-learning-note.md
 - Region scoring/allocation: ../math/local-semantics/weighted-message/region-allocation-learning-note.md
 - Graphs: ../math/topologies/
+- Explicit local instance extensions: [memory candidates](memory-candidates.md)
 
 This small index is navigation, not a full traceability or observation requirement.

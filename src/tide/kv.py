@@ -7,7 +7,7 @@ from torch import nn
 
 from .attention import weighted_attention
 from .layout import select_queries
-from .parameters import FeedForward, HeadQuery, NodeLinear, norm, select_owners
+from .parameters import FeedForward, HeadQuery, NodeLinear, _INHERIT_GROUPS, norm, select_owners
 
 
 @dataclass
@@ -61,20 +61,26 @@ def cache_order(keep, times):
 
 class KVMemory(nn.Module):
     def __init__(self, nodes, d, groups, rank, period, settle=True, backend="auto", chunk=128, kv_groups=None,
-                 *, position_period=None, window=None, short_decay=None):
+                 *, position_period=None, window=None, short_decay=None, kv_width=None, ffn_width=None,
+                 ffn_groups=_INHERIT_GROUPS):
         super().__init__()
         self.d, self.period, self.backend, self.chunk = d, period, backend, chunk
+        self.kv_width = d if kv_width is None else kv_width
+        if type(self.kv_width) is not int or not 0 < self.kv_width <= d or self.kv_width % 32:
+            raise ValueError("kv_width must be a positive multiple of 32 <= d")
+        self.heads = self.kv_width // 32
         self.unit_weights = False
         self.position_period = period if position_period is None else position_period
         self.window = 128 * period if window is None else window
         self.short_decay = math.log(2)/(8*period) if short_decay is None else short_decay
         # Settle writes are period-spaced; Timed can write at every logical tick.
         self.slots = (self.window + period - 1)//period if settle else self.window
-        self.kv = NodeLinear(nodes, d, 2*d, groups if kv_groups is None else kv_groups, rank)
+        self.kv = NodeLinear(nodes, d, 2*self.kv_width, groups if kv_groups is None else kv_groups, rank)
         self.summary = NodeLinear(nodes, d, d//4, groups, rank)
-        self.query = HeadQuery(nodes, d, groups, rank)
-        self.output = NodeLinear(nodes, d, d, groups, rank)
-        self.ffn = FeedForward(nodes, d, groups, rank)
+        self.query = HeadQuery(nodes, d, groups, rank, out_features=self.kv_width)
+        self.output = NodeLinear(nodes, self.kv_width, d, groups, rank)
+        self.ffn = FeedForward(nodes, d, groups if ffn_groups is _INHERIT_GROUPS else ffn_groups,
+                               rank, hidden_features=ffn_width)
 
     def prepare(self, u, mass, times, owners, state=None):
         n, b, length, d = u.shape
@@ -84,7 +90,7 @@ class KVMemory(nn.Module):
         # window while disappearing from the saved continuation state.
         mass = torch.where(mass>0,mass,torch.zeros_like(mass)).to(accumulation_dtype)
         normal = norm(u)
-        keys, values = self.kv(normal, owners).split(d, -1)
+        keys, values = self.kv(normal, owners).split(self.kv_width, -1)
         # BF16 projection is genuine; recurrent weighted sums retain FP32.
         features = self.summary(normal, owners).to(accumulation_dtype)
         if state is None:
@@ -138,11 +144,11 @@ class KVMemory(nn.Module):
             return torch.zeros_like(u)
         ids = select_owners(owners, packed.nodes)
         n, b, qlen, d = packed.data.shape
-        queries = self.query(norm(packed.data), ids).reshape(n,b,qlen,d//32,32).transpose(2,3)
+        queries = self.query(norm(packed.data), ids).reshape(n,b,qlen,self.heads,32).transpose(2,3)
         anchor = packed.positions[:,:,:1]
         queries = rope(queries, packed.positions-anchor, self.position_period)
-        keys = bank.keys[packed.nodes, :, lo:hi].reshape(n,b,-1,d//32,32).transpose(2,3)
-        values = bank.values[packed.nodes, :, lo:hi].reshape(n,b,-1,d//32,32).transpose(2,3)
+        keys = bank.keys[packed.nodes, :, lo:hi].reshape(n,b,-1,self.heads,32).transpose(2,3)
+        values = bank.values[packed.nodes, :, lo:hi].reshape(n,b,-1,self.heads,32).transpose(2,3)
         key_times = bank.times[packed.nodes, :, lo:hi]
         keys = rope(keys, key_times-anchor, self.position_period)
         delta = packed.positions[..., None] - key_times[:, :, None, :]
@@ -152,6 +158,6 @@ class KVMemory(nn.Module):
                                   weights=None if self.unit_weights else w,
                                   mask=visible[:, :, None], backend=self.backend)
         amount = (visible*w[:, :, None]).sum(-1).clamp(max=1)
-        read = read.transpose(2,3).reshape(n,b,qlen,d) * amount[...,None]
+        read = read.transpose(2,3).reshape(n,b,qlen,self.kv_width) * amount[...,None]
         x = packed.data + self.output(read, ids)
         return packed.publish(self.ffn(x, ids))

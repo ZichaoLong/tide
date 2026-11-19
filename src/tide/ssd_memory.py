@@ -12,7 +12,7 @@ from torch import nn
 from torch.nn import functional as F
 
 from .layout import select_queries
-from .parameters import FeedForward, NodeLinear, NodeVector, norm, owner_ids, select_owners
+from .parameters import FeedForward, NodeLinear, NodeVector, _INHERIT_GROUPS, norm, owner_ids, select_owners
 from .ssd import ConvState, affine_prefix, logical_conv, ssd_scan
 
 
@@ -31,7 +31,8 @@ class SSDState:
 
 class SSDMemory(nn.Module):
     def __init__(self, nodes, d, groups, rank, period, settle=True, backend="auto", chunk=128,
-                 *, short_decay=None, conv_stride=None, summary_backend="block", scan_backend="block"):
+                 *, short_decay=None, conv_stride=None, summary_backend="block", scan_backend="block",
+                 ffn_width=None, ffn_groups=_INHERIT_GROUPS):
         super().__init__()
         if d < 32 or d % 32:
             raise ValueError("SSD width must be a positive multiple of 32")
@@ -55,7 +56,8 @@ class SSDMemory(nn.Module):
         self.summary = NodeLinear(nodes, d, d//4, groups, rank)
         self.read = NodeLinear(nodes, d, d//4, groups, rank)
         self.output = NodeLinear(nodes, d, d, groups, rank)
-        self.ffn = FeedForward(nodes, d, groups, rank)
+        self.ffn = FeedForward(nodes, d, groups if ffn_groups is _INHERIT_GROUPS else ffn_groups,
+                               rank, hidden_features=ffn_width)
         self.a_log = NodeVector(nodes, self.heads, groups)
         self.dt_bias = NodeVector(nodes, self.heads, groups, value=-2)
         self.skip = NodeVector(nodes, self.heads, groups, value=1)

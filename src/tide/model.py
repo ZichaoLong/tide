@@ -68,12 +68,19 @@ class TideModel(nn.Module):
         self.fixed_regions = tuple(all(graph.nodes[v].role=="H" for v in nodes) and
                                    (graph.config.partition=="singleton" or config.hub_allocation=="fixed_pass")
                                    for nodes in graph.regions)
-        self.kinds = ["S" if config.memory=="S" or config.memory=="X" and node.role=="H" else "K"
-                      for node in graph.nodes]
+        ordinary_kind, hub_kind = {"K": ("K", "K"), "S": ("S", "S"),
+                                   "X": ("K", "S"), "X_reverse": ("S", "K")}[config.memory]
+        self.kinds = [hub_kind if node.role=="H" else ordinary_kind for node in graph.nodes]
+        if config.kv_width is not None and "K" not in self.kinds:
+            raise ValueError("kv_width is unused by a graph without K-memory nodes")
         gkeys = [(node.layer,node.role,self.kinds[node.id]) for node in graph.nodes]
         if config.sharing=="region_shared":
             gkeys = [(node.region,key) for node,key in zip(graph.nodes,gkeys)]
         groups = None if config.sharing=="independent" else _number(gkeys)
+        memory_sharing = config.memory_sharing or config.sharing
+        memory_keys = [(node.layer,node.role,self.kinds[node.id]) for node in graph.nodes]
+        if memory_sharing=="region_shared":
+            memory_keys = [(node.region,key) for node,key in zip(graph.nodes,memory_keys)]
         sources = [set(graph.edges[e].source_class for e in graph.incoming[v.id]) |
                    ({"ext"} if v.layer==0 else set()) for v in graph.nodes]
         local_backend = config.local_attention_backend or config.attention_backend
@@ -89,17 +96,20 @@ class TideModel(nn.Module):
             if not members:
                 continue
             self.memory_ids[kind] = {v:i for i,v in enumerate(members)}
-            kgroups = None if groups is None else _number([gkeys[v] for v in members])
-            args = (len(members),d,kgroups,config.adapter_rank,graph.period)
-            kwargs = dict(settle=self.settle,backend=config.attention_backend,chunk=config.attention_chunk)
+            ffn_groups = None if groups is None else _number([gkeys[v] for v in members])
+            memory_groups = None if memory_sharing=="independent" else _number([memory_keys[v] for v in members])
+            args = (len(members),d,memory_groups,config.adapter_rank,graph.period)
+            kwargs = dict(settle=self.settle,backend=config.attention_backend,chunk=config.attention_chunk,
+                          ffn_width=config.ffn_width,ffn_groups=ffn_groups)
             if kind=="K":
-                kvkeys = [(graph.nodes[v].layer,graph.nodes[v].region) if config.sharing=="region_shared"
+                kvkeys = [(graph.nodes[v].layer,graph.nodes[v].region) if memory_sharing=="region_shared"
                           else (graph.nodes[v].layer,tuple(sorted(set(graph.nodes[u].role for u in graph.regions[graph.nodes[v].region]))))
                           for v in members]
-                kv_groups = None if groups is None else _number(kvkeys)
+                kv_groups = None if memory_sharing=="independent" else _number(kvkeys)
                 self.memories[kind] = KVMemory(*args,**kwargs,kv_groups=kv_groups,
                                               position_period=self.clock.position_period,
-                                              window=self.clock.kv_window,short_decay=self.clock.short_decay)
+                                              window=self.clock.kv_window,short_decay=self.clock.short_decay,
+                                              kv_width=config.kv_width)
                 self.memories[kind].unit_weights = graph.config.kind=="fc"
             else:
                 from .ssd_memory import SSDMemory

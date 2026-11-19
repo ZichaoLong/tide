@@ -2,6 +2,10 @@
 
 Active model package: [src/tide](../src/tide). Fixed mathematics: [math](../math).
 Current independent checks: [tests](../tests).
+[Memory binding extensions](memory-candidates.md) separate content, KV and Full FFN
+widths and memory-only ownership. The FFN remains registered within each memory
+object but receives its own original sharing groups; NodeVector records actual
+ownership for both ordinary and placed statistics.
 Topology generation, batched local math, instance evaluation and benchmarks have
 separate responsibilities but no compulsory universal intermediate representation.
 

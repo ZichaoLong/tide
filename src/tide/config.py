@@ -65,6 +65,12 @@ class ModelConfig:
     local_attention_backend: str | None = None
     hub_allocation: str = "bounded"
     clock: ClockConfig = field(default_factory=ClockConfig)
+    # Explicit instance extensions: content/summary widths stay unchanged.
+    kv_width: int | None = None
+    ffn_width: int | None = None
+    # None preserves the selected whole-node profile. The explicit extension
+    # overrides memory parameters only; FFN/reception/description retain sharing.
+    memory_sharing: str | None = None
 
     def __post_init__(self):
         if type(self.checkpoint_regions) is not bool:
@@ -93,14 +99,24 @@ class ModelConfig:
             raise ValueError("fixed_pass requires an HB group partition with hubs")
         if self.d not in (64, 128, 192, 256, 384, 512, 768):
             raise ValueError("d must be a registered main-instance width")
-        if self.memory not in ("K", "S", "X"):
-            raise ValueError("memory must be K, S or X")
+        if self.memory not in ("K", "S", "X", "X_reverse"):
+            raise ValueError("memory must be K, S, X or X_reverse")
+        if self.kv_width is not None:
+            if type(self.kv_width) is not int or not 0 < self.kv_width <= self.d or self.kv_width % 32:
+                raise ValueError("kv_width must be a positive multiple of 32 <= d")
+            if self.memory == "S":
+                raise ValueError("kv_width is unused by all-SSD memory")
+        if self.ffn_width is not None and (type(self.ffn_width) is not int or
+                                          self.ffn_width < 1 or self.ffn_width % 16):
+            raise ValueError("ffn_width must be a positive multiple of 16")
         if self.aggregation not in ("source_residual", "incoming_light_64", "incoming_light_128", "incoming_wide"):
             raise ValueError("unknown reception profile")
         if self.allocation not in ("quad", "shannon", "pool"):
             raise ValueError("unknown allocation profile")
         if self.sharing not in ("independent", "region_shared", "layer_shared"):
             raise ValueError("unknown sharing profile")
+        if self.memory_sharing not in (None, "region_shared"):
+            raise ValueError("memory_sharing must be None or region_shared")
         if self.adapter_rank not in (4, 8, 16):
             raise ValueError("adapter_rank must be 4, 8 or 16")
         if self.budget is not None and (type(self.budget) is not int or
