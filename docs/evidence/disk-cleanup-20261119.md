@@ -42,7 +42,8 @@ CPU入口删除PYTHONPATH、禁用vendor autoload，以python -I从/运行。
 
 服务tide-cleanup-installed-20261119-v1位于实际background.slice，180秒时限、
 4 GiB采样进程树RSS界限、256 MiB临时产物界限。10.06秒完成，峰RSS约0.830 GiB，
-9个记录后代与监督进程均已终态。约40.875 MiB新临时环境/构建/检查点在结果提交后退休；
+9个记录后代与监督进程均已终态。结果提交62191885之后，已删除约40.875 MiB新临时环境/构建/检查点，
+并退休可由固定提交重建的smoke archive与runner副本。原362个.pt再次核对未变；
 最终处置见JSON的temporary_smoke_retirement字段。
 
 ## 剩余占用与真正的收尾事项

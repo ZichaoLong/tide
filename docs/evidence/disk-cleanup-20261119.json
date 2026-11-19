@@ -6380,9 +6380,33 @@
     }
   },
   "temporary_smoke_retirement": {
-    "state": "pending_after_result_commit",
-    "path": "artifacts/disk-cleanup-20261119/scratch",
-    "allocated_bytes": 42860544
+    "state": "completed",
+    "evidence_commit_before_retirement": "62191885280b4ae91e0c4b298735c04d349a9115",
+    "scratch_path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/disk-cleanup-20261119/scratch",
+    "regular_files": 969,
+    "regular_allocated_bytes": 42860544,
+    "symlink_policy": "shutil.rmtree removes symlinks, never follows external targets",
+    "auxiliary_removed": [
+      {
+        "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/disk-cleanup-20261119/smoke-source.tar",
+        "bytes": 286720,
+        "allocated_bytes": 286720,
+        "sha256": "e496d1f853d12406a1e43118a632a62bfb8bc7c44e723ece18802a34e3e6dac4"
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/disk-cleanup-20261119/frozen-job.py",
+        "bytes": 10068,
+        "allocated_bytes": 12288,
+        "sha256": "428214c2901eb41f5764193720f96228d0f8530a5f578f2c5894bd7135337e56"
+      }
+    ],
+    "retained_original_pt_metadata_unchanged": 362,
+    "storage": {
+      "timestamp": "2026-11-19T09:30:59.129661+00:00",
+      "repository_du": "111855624192\t/mi/data2T/zlong/home/llm/graph-execution-foundation",
+      "artifacts_du": "111628181504\t/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts",
+      "quota": "Disk quotas for user zlong (uid 1003): \n     Filesystem  blocks   quota   limit   grace   files   quota   limit   grace\n/dev/mapper/ascend_data-data 151125644  314572800 734003200          587818       0       0"
+    }
   },
   "remaining_investigation": {
     "no_pending_experiment_matrix": true,
@@ -6445,5 +6469,13 @@
       "Execution-v3 BF16 bias epilogue defect has a recorded fix; superseded/cancelled local_math should be archived without replay.",
       "CPU thread-fixture exactness issue has a recorded fixture correction and subsequent scoped passes; retain original failure."
     ]
+  },
+  "final_source_tree_unchanged": true,
+  "final_verification": {
+    "original_retired_payloads_absent": true,
+    "old_pt_metadata_unchanged": 362,
+    "user_file_sha256_unchanged": true,
+    "old_reviewed_evidence_sha256_unchanged": true,
+    "mathematics_files_verified": 108
   }
 }
