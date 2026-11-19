@@ -1,0 +1,1374 @@
+{
+  "schema": "tide-compact-repository-evidence-v1",
+  "state": "retirement_and_validation_completed",
+  "initial_head": "611e8d453160181c97d822674b99527af49548f5",
+  "materializer_source": "bef26abb2458cfff003c84f376f93bc18a0b4106",
+  "production_source": "97c52960358e6d5414fc987dc3861b1e85d997a9",
+  "math_revision": "4f5b9f20a4030d68ee66ae2d26e34659a5e37234",
+  "target_allocated_bytes": 200000000,
+  "repository_allocated_bytes_before": 2431021056,
+  "retirement": {
+    "state": "completed_with_separate_postcheck",
+    "retirement_service_state": "failed",
+    "postcheck_state": "passed",
+    "reason": "Deletion completed; final downstream status equality failed on concurrent untracked additions. No downstream path was in the mutation scope.",
+    "artifact_roots_retired": 426,
+    "artifact_files_retired": 19994,
+    "artifacts_allocated_bytes_retired": 2200645632,
+    "preservation_commit": "9b270280227f22190510767da50d643a049daa49",
+    "preservation_pushed": false,
+    "downstream_head_unchanged": true,
+    "downstream_tracked_tree_unchanged": true,
+    "downstream_untracked_observation": "?? configs/pilot-round1/\n?? pilotlab/\n?? tests/test_pilot_data.py\n?? tests/test_pilot_models.py\n?? tests/test_pilot_scheduler.py\n?? tests/test_pilot_worker.py\n",
+    "all_original_branch_refs_retained": true,
+    "user_docs_unchanged": true,
+    "production_unchanged": true,
+    "upstream": "{\"state\": \"passed\", \"revision\": \"4f5b9f20a4030d68ee66ae2d26e34659a5e37234\", \"files\": 108}\n",
+    "worktrees": "worktree /mi/data2T/zlong/home/llm/graph-execution-foundation\nHEAD 12261bf8b5bca82d2a292fa9bf50f966704ee93b\nbranch refs/heads/graph-execution-foundation\n\nworktree /mi/data2T/zlong/home/llm/tide-learning-lab\nHEAD 5f30ed2a32d7648f5011f5bfde5c6cae086a463c\nbranch refs/heads/tide-learning-lab\n\n"
+  },
+  "evidence_compression": {
+    "state": "completed",
+    "index_sha256": "45be965716121c5c7515b223d81e6222c6b0b3ac763656d470c5d54f13832dc1",
+    "files": 47,
+    "original_bytes": 67962999,
+    "archive_bytes": 6594104
+  },
+  "reviewed_evidence_verification": {
+    "state": "passed",
+    "checks": [
+      {
+        "path": "docs/evidence/capacity-continuous-20261118.json",
+        "sha256": "164c2f161323f622398a6a227cb1bbc959bca89c73e99b2669c2cebd4eb6f565",
+        "bytes": 720765,
+        "disk_decompression_and_git_original_exact": true
+      },
+      {
+        "path": "docs/evidence/capacity-execution-20261118.json",
+        "sha256": "84fd53108d7b05431f79bf69f565b5cb9988134bcefc9e0a1944783e6d734c4e",
+        "bytes": 1664671,
+        "disk_decompression_and_git_original_exact": true
+      },
+      {
+        "path": "docs/evidence/capacity-installed-20261118.json",
+        "sha256": "aae71a23f9de3938c9a16feaf220785f3d45b25d692d44d807e125d6f037a4c0",
+        "bytes": 370585,
+        "disk_decompression_and_git_original_exact": true
+      },
+      {
+        "path": "docs/evidence/capacity-rounding-20261118.json",
+        "sha256": "65841676d55331f4b46b0541ad1639030ec5c8daecf4c0acab6786bc0c4bfb8e",
+        "bytes": 62025,
+        "disk_decompression_and_git_original_exact": true
+      },
+      {
+        "path": "docs/evidence/capacity-search-20261118.json",
+        "sha256": "162b1255f3f8572de7eeb20b9566eb093e45b2d94cc9e3748ae18f1a4660f135",
+        "bytes": 697524,
+        "disk_decompression_and_git_original_exact": true
+      },
+      {
+        "path": "docs/evidence/capacity-validation-20261118.json",
+        "sha256": "ba9d929444a44a4d0da4f7bf56ef966c096c10fecd70593a4ff9db65f983a310",
+        "bytes": 87461,
+        "disk_decompression_and_git_original_exact": true
+      },
+      {
+        "path": "docs/evidence/cleanup-followup-20261118.json",
+        "sha256": "c0ec1051671d654bf09b63a81525129ef58e909398c20542cfbae05dd3f0e4ab",
+        "bytes": 30302,
+        "disk_decompression_and_git_original_exact": true
+      },
+      {
+        "path": "docs/evidence/cleanup-numerics-20261119.json",
+        "sha256": "1da181929235864e07cce92f686d7ce177b736bd1304a0cb5a067fe06426655c",
+        "bytes": 179255,
+        "disk_decompression_and_git_original_exact": true
+      },
+      {
+        "path": "docs/evidence/code-retirement-training-impact-20261119.json",
+        "sha256": "0ea1595a6c8b405c0aeba8cf5262b120a328fd7ebb57d2febe7576964f155b8e",
+        "bytes": 192783,
+        "disk_decompression_and_git_original_exact": true
+      },
+      {
+        "path": "docs/evidence/decode-capacity-20261118.json",
+        "sha256": "67e5500850d5d98d5d94e35615d40be36d1f7e87e57b30404bd19fb200825d4f",
+        "bytes": 11449916,
+        "disk_decompression_and_git_original_exact": true
+      },
+      {
+        "path": "docs/evidence/disk-cleanup-20261119.json",
+        "sha256": "10509dcc7c39ff83da6b5ec64dbc57d158de71057f124aea4f9bedbfef9104c9",
+        "bytes": 257936,
+        "disk_decompression_and_git_original_exact": true
+      },
+      {
+        "path": "docs/evidence/ffn-execution-devices-20261119.json",
+        "sha256": "f9656366314fc66e59909a42dcf80a68456568e190a6445f9b2c8e78a23ea5ef",
+        "bytes": 1788518,
+        "disk_decompression_and_git_original_exact": true
+      },
+      {
+        "path": "docs/evidence/governance-cleanup-20261118.json",
+        "sha256": "9df2c919d451b03e086941ad28c667e5687beb1993310111d67893609811b726",
+        "bytes": 69608,
+        "disk_decompression_and_git_original_exact": true
+      },
+      {
+        "path": "docs/evidence/instances-fp32-20261118.json",
+        "sha256": "cd4d80a354c22dacfe35588a79e5ea238f5dad12547af7606f45685a79553de4",
+        "bytes": 534276,
+        "disk_decompression_and_git_original_exact": true
+      },
+      {
+        "path": "docs/evidence/kv128-transformer-breakdown-20261119.json",
+        "sha256": "32563873a0d06ac05104ad843a0b7025bb83a60d8a60a324410fb62fb82d54d2",
+        "bytes": 955872,
+        "disk_decompression_and_git_original_exact": true
+      },
+      {
+        "path": "docs/evidence/memory-candidates-20261119.json",
+        "sha256": "f141b30d1d2ae18e30fb31857af6a13dd93df303098aed18e88b372aec5cd289",
+        "bytes": 13308983,
+        "disk_decompression_and_git_original_exact": true
+      },
+      {
+        "path": "docs/evidence/native-regional-cpu-20261118.json",
+        "sha256": "2b835555e6bf658c320e61b80cedc1073126e0c82cd201ab84d8dbd4b66242ff",
+        "bytes": 18139,
+        "disk_decompression_and_git_original_exact": true
+      },
+      {
+        "path": "docs/evidence/native-regional-performance-20261118.json",
+        "sha256": "2e56fcb348b15482dcb17ff5878de1774e5c2e631e7d5426b39fbe7470c71eeb",
+        "bytes": 1620830,
+        "disk_decompression_and_git_original_exact": true
+      },
+      {
+        "path": "docs/evidence/reception-inference-20261118.json",
+        "sha256": "d89845eaddff0695e4f0823c26f7ce9a1d29035cabccd9b33c7963ac4ca55e6e",
+        "bytes": 721414,
+        "disk_decompression_and_git_original_exact": true
+      },
+      {
+        "path": "docs/evidence/reception-numerics-20261118.json",
+        "sha256": "1202b925767c4596279cb1b6e2980dced0d4bde24950d5bb227acc7e85b4ca9a",
+        "bytes": 106781,
+        "disk_decompression_and_git_original_exact": true
+      },
+      {
+        "path": "docs/evidence/reception-performance-20261118.json",
+        "sha256": "f7e91ba380d70a533578730c9930aefc41aaa442f634647116f2bec68e8e23ae",
+        "bytes": 240496,
+        "disk_decompression_and_git_original_exact": true
+      },
+      {
+        "path": "docs/evidence/reception-start-20261118.json",
+        "sha256": "3537ac7d46f6f288fd225619bda3057b5b83f2361d2b259525f503a582ec702e",
+        "bytes": 174328,
+        "disk_decompression_and_git_original_exact": true
+      },
+      {
+        "path": "docs/evidence/reception-training-20261118.json",
+        "sha256": "883a351a9b4f005393bc9e7ba61f7125c0d97a8a5db4718f10cb42a252957856",
+        "bytes": 305546,
+        "disk_decompression_and_git_original_exact": true
+      },
+      {
+        "path": "docs/evidence/reception-validation-20261118.json",
+        "sha256": "940f527af50e5ee670c6c3e29272fd1a9f9ab7151c002faf37d77662ee8fd950",
+        "bytes": 307426,
+        "disk_decompression_and_git_original_exact": true
+      },
+      {
+        "path": "docs/evidence/region-capacity-20261118.json",
+        "sha256": "da1f4554c18c1020e790ab71ec67533617ebe2c0c61447ff2ae0f6c6a6271386",
+        "bytes": 2135228,
+        "disk_decompression_and_git_original_exact": true
+      },
+      {
+        "path": "docs/evidence/roadmap-attention-20261118.json",
+        "sha256": "0043f341b713e9c9b3a60e836f9a50aba7125ee0c335879cb5003338f2f112a7",
+        "bytes": 895520,
+        "disk_decompression_and_git_original_exact": true
+      },
+      {
+        "path": "docs/evidence/roadmap-continuous-20261118.json",
+        "sha256": "159dc3b3191fcdf50cdc1b7f7ade57f07054476e3b16aac63c72b7663513ed1a",
+        "bytes": 10697087,
+        "disk_decompression_and_git_original_exact": true
+      },
+      {
+        "path": "docs/evidence/roadmap-hotspots-20261118.json",
+        "sha256": "0fefa7d0e489716513da13967d0eb2642c3c76e0df09cac765369e45468684fc",
+        "bytes": 257494,
+        "disk_decompression_and_git_original_exact": true
+      },
+      {
+        "path": "docs/evidence/roadmap-installed-20261118.json",
+        "sha256": "f2d004071750a76817ce0f92770fc3b020c5fa3b16cf29616e07bcc607584fbb",
+        "bytes": 58186,
+        "disk_decompression_and_git_original_exact": true
+      },
+      {
+        "path": "docs/evidence/roadmap-numerics-followup-20261118.json",
+        "sha256": "4035be2ba3406cced1b0ce28f1226cf5b5381f269c5c5bd7e9bd5f642b59771b",
+        "bytes": 727674,
+        "disk_decompression_and_git_original_exact": true
+      },
+      {
+        "path": "docs/evidence/roadmap-numerics-initial-20261118.json",
+        "sha256": "21b5e29f00698d5285a1cbede5049165fabf0cad682511febf07b290445e7b94",
+        "bytes": 464121,
+        "disk_decompression_and_git_original_exact": true
+      },
+      {
+        "path": "docs/evidence/roadmap-placement-20261118.json",
+        "sha256": "59a8aad9e333aed5a66bb2ab89b36bcf26f64fe873ad98d922efca9b20b6a198",
+        "bytes": 520760,
+        "disk_decompression_and_git_original_exact": true
+      },
+      {
+        "path": "docs/evidence/roadmap-representative-20261118.json",
+        "sha256": "4d95575081087eb670700043e8b9d00772542fafe95049be279e5cfa213e4fc0",
+        "bytes": 5258226,
+        "disk_decompression_and_git_original_exact": true
+      },
+      {
+        "path": "docs/evidence/roadmap-resident-20261118.json",
+        "sha256": "23a779f8a9316ec494389f195138693bf7f229d20c0b4edbf551bfbdeca70e6d",
+        "bytes": 31011,
+        "disk_decompression_and_git_original_exact": true
+      },
+      {
+        "path": "docs/evidence/roadmap-retirement-20261118.json",
+        "sha256": "84da61278e6a66b04953b172ccf005aae25b7e28d052c95d5c5bae2162ed7b49",
+        "bytes": 144401,
+        "disk_decompression_and_git_original_exact": true
+      },
+      {
+        "path": "docs/evidence/roadmap-scale-large-20261118.json",
+        "sha256": "3b91497f4dea418537fa2138fcd59fb88ee187e907a84f154a97fa8002d71b14",
+        "bytes": 1510978,
+        "disk_decompression_and_git_original_exact": true
+      },
+      {
+        "path": "docs/evidence/roadmap-scale-small-20261118.json",
+        "sha256": "4ec305d07d6f0339e507f33d3124e4fb34aa47a008f92f94a39cf93c26bc535a",
+        "bytes": 443770,
+        "disk_decompression_and_git_original_exact": true
+      },
+      {
+        "path": "docs/evidence/roadmap-supplementary-20261118.json",
+        "sha256": "0ff51c4d855caa04089a70dafc7b72c3f815480d4d2f02444b922d7789331474",
+        "bytes": 930692,
+        "disk_decompression_and_git_original_exact": true
+      },
+      {
+        "path": "docs/evidence/storage-archive-index-20261119.json",
+        "sha256": "ad57f8f29a1842baca47d8a43fa979976fcd6e6a835c7db0607f477dc1818100",
+        "bytes": 303650,
+        "disk_decompression_and_git_original_exact": true
+      },
+      {
+        "path": "docs/evidence/storage-finalization-20261119.json",
+        "sha256": "38a7be2e0e7cb32db1135160bb6843b4e1944b0a15f25052dfe9849a44c5a987",
+        "bytes": 106945,
+        "disk_decompression_and_git_original_exact": true
+      },
+      {
+        "path": "docs/evidence/training-continuous-20261118.json",
+        "sha256": "dc0248cffe126b987e7a470dfcf3818b5b3b4589c8a4699843aebc151f10868a",
+        "bytes": 526501,
+        "disk_decompression_and_git_original_exact": true
+      },
+      {
+        "path": "docs/evidence/training-costs-20261118.json",
+        "sha256": "3d6dd11e886d358d23a5ee8465099fd4dc63855cd7b9a25cad1346ac36fbf098",
+        "bytes": 1122036,
+        "disk_decompression_and_git_original_exact": true
+      },
+      {
+        "path": "docs/evidence/training-modes-20261118.json",
+        "sha256": "da6eec0a2819889fe0d6d5833896e52f6f4f45e561bf7569c4fcb4930b9ece2f",
+        "bytes": 1447535,
+        "disk_decompression_and_git_original_exact": true
+      },
+      {
+        "path": "docs/evidence/training-paths-20261118.json",
+        "sha256": "0fd25c57b8027234a4f90f45717b98775565c6d571a6062b317be3e1c943cac3",
+        "bytes": 1940754,
+        "disk_decompression_and_git_original_exact": true
+      },
+      {
+        "path": "docs/evidence/training-search-20261118.json",
+        "sha256": "acf9e4ccf88ed24f55551627662b8a5e5544eda55ac9897df44086b88c8ee299",
+        "bytes": 209002,
+        "disk_decompression_and_git_original_exact": true
+      },
+      {
+        "path": "docs/evidence/training-validation-20261118.json",
+        "sha256": "3010463eb0371a6e58b4c8fb9bf234bf325ce4f91c06f8b55b6bbad426c85470",
+        "bytes": 947801,
+        "disk_decompression_and_git_original_exact": true
+      },
+      {
+        "path": "docs/evidence/transformer-depth-batch-20261118.json",
+        "sha256": "99459e9920d33779fa8536fe744054109cc192ae64a8b9d460fe71f9d6e71125",
+        "bytes": 1418187,
+        "disk_decompression_and_git_original_exact": true
+      }
+    ],
+    "actual_materialization": {
+      "path": "docs/evidence/memory-candidates-20261119.json",
+      "output": "artifacts/compact-repository-20261119/record-smoke/largest.json",
+      "bytes": 13308983,
+      "sha256": "f141b30d1d2ae18e30fb31857af6a13dd93df303098aed18e88b372aec5cd289"
+    },
+    "boundary": "Full on-disk decompression and Git original comparison after compression, before committing compressed representation or retiring old artifacts."
+  },
+  "installed_smoke": {
+    "state": "passed",
+    "source": "97c52960358e6d5414fc987dc3861b1e85d997a9",
+    "wheel_sha256": "888d4d972556135c86e93c417d2da6307b0c27d41c776d8c48eb0be631d46cf8",
+    "wheel_files": {
+      "tide/__init__.py": "bd8d669f813aa282dc1835a53656550468f40eac46a730c4339635580d8e4195",
+      "tide/allocation.py": "b4d0e130c1a87391606e6abedfb2a9b0ab870bfb9027dc31b8c91135bdacd4ca",
+      "tide/attention.py": "0a8231713a2801ed397cee093c5d1112867a2057fc20804717fd39fd9e1609e8",
+      "tide/checkpoint.py": "7e188773786f5cd7e3b06fcf3ef4ca9efa256933a9c21a8225f359687337c49f",
+      "tide/config.py": "2b890c0ae9eac381aa3ab9726eb386339345f62dc7b3e27433ecd5a0b1c0299f",
+      "tide/ffn_packing.py": "66f0138cf4eb306fdc8513407d70ef5c96df37b6466f714c26b1fc211b25b449",
+      "tide/grouped_linear.py": "5c0d8cb76df405d108e6eee77d42de8a1d83cbc99ff0537b0af973f108b52fe1",
+      "tide/kv.py": "789cc6b7543bc156ba0f650791194c716454f1bda422d59c791ce8231c69b4f2",
+      "tide/layout.py": "4aee0573beb2448dd90ca307b9065f2ed4cd0f7eb93bfcd92c4b46550f889aa0",
+      "tide/model.py": "1911afe3b66b199eb7e066ea57c5900fead1e390ebb5894818d423284850255e",
+      "tide/parameters.py": "84ead5924469a5a36810e01151f6ff1824ed9df063619aa53be8e84ae8d701fc",
+      "tide/placement.py": "0f77def73da20f467756e5dc1f701f25942565f762e82be5d23218ecee39d05f",
+      "tide/placement_ownership.py": "95431e5a2240b81a16df4cba08dfef541d777735220a212a28324f9c63661c13",
+      "tide/precision.py": "5e94f06892dc89451750b4e5b1fd2e105d440f633875f31a883880e6a6ca480a",
+      "tide/reception.py": "bae0d61c805b68fcf97800f40baa17ff549d90c3e2a47763cfc9f687a7c752f1",
+      "tide/region.py": "3d0ee3fa13e344ddb0fff5ce15af62cee4e0b1a7c4984df523e70a4cbfc41ec2",
+      "tide/region_batch.py": "514ee30c5077d416c02cec81380280eb45509f20922a0f812657b93d2d8b7e80",
+      "tide/region_execution.py": "0d62975ca47b37299cbdc80a4805375fef35c346dfe77ee2fe999e373ebf0950",
+      "tide/region_placement.py": "fd082f035185d04af6bc3ba27b949a8f065ccdf62f8b32a1b442accbfa6f2b6d",
+      "tide/ssd.py": "42e0e9c2de11f7c266af93c7bf43bf3e53e63efd6ed1eb5b86ef18aa1c982af3",
+      "tide/ssd_memory.py": "d2683d58828bd705ca0f67dc5728a75fe01dda2ddfb4f53448d14b74b69b1cd2",
+      "tide/topology.py": "8cdf58d0b3089e16a079ad46c3be7ca0c953fcea0023d276c9582901e1712dbf",
+      "tide/topology_hb.py": "5fb7b1a959f0b88a097e95959b52a1f10cf5180eaea7b688cbef086946abea06"
+    },
+    "device": "cpu",
+    "precision": "fp32",
+    "threads": 1,
+    "affinity": [
+      176,
+      177
+    ],
+    "training_records": [
+      {
+        "kind": "resolved_settings",
+        "model": {
+          "topology": {
+            "kind": "fc",
+            "n": 8,
+            "layers": 4,
+            "depth": null,
+            "rounds": null,
+            "profile": null,
+            "hubs": 0,
+            "partition": "group",
+            "timing": "settle",
+            "hub_mask": "all",
+            "period": null,
+            "probes": null,
+            "terminal_hubs": false
+          },
+          "d": 64,
+          "memory": "K",
+          "aggregation": "source_residual",
+          "allocation": "quad",
+          "sharing": "independent",
+          "adapter_rank": 8,
+          "budget": null,
+          "attention_backend": "auto",
+          "attention_chunk": 128,
+          "input_dim": null,
+          "checkpoint_regions": false,
+          "checkpoint_reception": false,
+          "reception_qkv_backend": "separate",
+          "reception_mask_padding": false,
+          "parameter_indexing": "gather",
+          "ffn_packing": "rectangular",
+          "ffn_weight_access": "gather",
+          "ssd_summary_backend": "block",
+          "ssd_scan_backend": "block",
+          "region_batch_size": 1,
+          "local_attention_backend": null,
+          "hub_allocation": "bounded",
+          "clock": {
+            "position_period": null,
+            "position_origin": "binding",
+            "kv_window": null,
+            "short_decay": null,
+            "ssd_stride": null
+          },
+          "kv_width": null,
+          "ffn_width": null,
+          "memory_sharing": null
+        },
+        "topology": {
+          "kind": "fc",
+          "n": 8,
+          "layers": 4,
+          "depth": null,
+          "rounds": null,
+          "profile": null,
+          "hubs": 0,
+          "partition": "group",
+          "timing": "settle",
+          "hub_mask": "all",
+          "period": 6,
+          "probes": null,
+          "terminal_hubs": false
+        },
+        "clock": {
+          "position_period": 6,
+          "position_origin": "binding",
+          "kv_window": 768,
+          "short_decay": 0.014440566261665526,
+          "ssd_stride": 6
+        },
+        "execution": {
+          "mode": "train",
+          "device": "cpu",
+          "precision": "fp32",
+          "batch": 2,
+          "length": 8,
+          "steps": 1,
+          "threads": 1,
+          "learning_rate": 0.0001,
+          "foreach": true,
+          "seed": 17
+        },
+        "source": {
+          "preset": {
+            "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/compact-repository-20261119/smoke-scratch/build-copy/configs/recommended/default.json",
+            "sha256": "7c8fee821d7c30f3ad07b22030ba2ad28b783f5719e93d6f033993306a9a7f5b"
+          },
+          "config": null,
+          "explicit_overrides": {
+            "steps": 1,
+            "threads": 1
+          }
+        },
+        "recommendation": {
+          "status": "safe_example",
+          "evidence": [],
+          "scope": "Short CPU entry for discovering training and continuation; not a throughput optimum or downstream recipe."
+        },
+        "precision": {
+          "name": "fp32",
+          "device": "cpu",
+          "parameters": "float32",
+          "input": "float32",
+          "matrix_arithmetic": "float32",
+          "normalization_mass_allocation": "float32",
+          "kv_keys_values": "float32",
+          "kv_summary_and_ssd_state": "float32",
+          "logical_time_indices": "int64",
+          "parameter_gradients": "float32",
+          "master_weights": "parameters_are_fp32_masters; no_separate_copy",
+          "adamw_moments": "float32",
+          "attention": "native_by_shape_and_prior; math/tiled_accumulate_float32",
+          "attention_mode_selection": "established_fp32_gradient_dependent_prior_dispatch",
+          "loss": "float32",
+          "autocast_cache": false
+        },
+        "parameters": 2336544,
+        "actual_parameter_devices": [
+          "cpu"
+        ],
+        "actual_parameter_dtypes": [
+          "torch.float32"
+        ],
+        "optimizer": {
+          "lr": 0.0001,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "eps": 1e-08,
+          "weight_decay": 0.01,
+          "amsgrad": false,
+          "maximize": false,
+          "foreach": true,
+          "capturable": false,
+          "differentiable": false,
+          "fused": null,
+          "decoupled_weight_decay": true
+        },
+        "resume": null,
+        "state_position": 0,
+        "data": "fresh synthetic inputs from this invocation's seed; no RNG/data-stream restore",
+        "boundary": "each finite Timed window includes flush in the objective and advances the saved clock; detach between windows",
+        "purpose": "mechanism example; grad_forward performs no backward/update; no downstream recipe or performance claim"
+      },
+      {
+        "kind": "step",
+        "index": 0,
+        "mode": "train",
+        "objective": 3.6647207736968994,
+        "state_before_position": 0,
+        "state_position": 8,
+        "flushed": false,
+        "forward_requires_grad": true,
+        "optimizer_updated": true
+      },
+      {
+        "kind": "restore_check",
+        "checkpoint": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/compact-repository-20261119/smoke-scratch/checkpoint.pt",
+        "checkpoint_data": "exact",
+        "next_forward": "exact",
+        "restored_state_position": 16,
+        "paired_real_updates": 2,
+        "next_optimizer_update": "within_threshold",
+        "update_threshold": {
+          "atol": 1e-06,
+          "rtol": 0.002
+        },
+        "parameter_max_abs": 0.0,
+        "parameter_threshold_failures": [],
+        "optimizer_difference": null,
+        "saved_boundary": "checkpoint remains before the two verification updates"
+      },
+      {
+        "kind": "installed_identity",
+        "package_root": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/compact-repository-20261119/smoke-scratch/venv/lib/python3.12/site-packages/tide",
+        "isolated": 1,
+        "files": {
+          "tide/ssd.py": "42e0e9c2de11f7c266af93c7bf43bf3e53e63efd6ed1eb5b86ef18aa1c982af3",
+          "tide/placement.py": "0f77def73da20f467756e5dc1f701f25942565f762e82be5d23218ecee39d05f",
+          "tide/region_execution.py": "0d62975ca47b37299cbdc80a4805375fef35c346dfe77ee2fe999e373ebf0950",
+          "tide/__init__.py": "bd8d669f813aa282dc1835a53656550468f40eac46a730c4339635580d8e4195",
+          "tide/region_placement.py": "fd082f035185d04af6bc3ba27b949a8f065ccdf62f8b32a1b442accbfa6f2b6d",
+          "tide/region_batch.py": "514ee30c5077d416c02cec81380280eb45509f20922a0f812657b93d2d8b7e80",
+          "tide/grouped_linear.py": "5c0d8cb76df405d108e6eee77d42de8a1d83cbc99ff0537b0af973f108b52fe1",
+          "tide/region.py": "3d0ee3fa13e344ddb0fff5ce15af62cee4e0b1a7c4984df523e70a4cbfc41ec2",
+          "tide/ffn_packing.py": "66f0138cf4eb306fdc8513407d70ef5c96df37b6466f714c26b1fc211b25b449",
+          "tide/attention.py": "0a8231713a2801ed397cee093c5d1112867a2057fc20804717fd39fd9e1609e8",
+          "tide/reception.py": "bae0d61c805b68fcf97800f40baa17ff549d90c3e2a47763cfc9f687a7c752f1",
+          "tide/topology.py": "8cdf58d0b3089e16a079ad46c3be7ca0c953fcea0023d276c9582901e1712dbf",
+          "tide/ssd_memory.py": "d2683d58828bd705ca0f67dc5728a75fe01dda2ddfb4f53448d14b74b69b1cd2",
+          "tide/checkpoint.py": "7e188773786f5cd7e3b06fcf3ef4ca9efa256933a9c21a8225f359687337c49f",
+          "tide/layout.py": "4aee0573beb2448dd90ca307b9065f2ed4cd0f7eb93bfcd92c4b46550f889aa0",
+          "tide/config.py": "2b890c0ae9eac381aa3ab9726eb386339345f62dc7b3e27433ecd5a0b1c0299f",
+          "tide/topology_hb.py": "5fb7b1a959f0b88a097e95959b52a1f10cf5180eaea7b688cbef086946abea06",
+          "tide/allocation.py": "b4d0e130c1a87391606e6abedfb2a9b0ab870bfb9027dc31b8c91135bdacd4ca",
+          "tide/parameters.py": "84ead5924469a5a36810e01151f6ff1824ed9df063619aa53be8e84ae8d701fc",
+          "tide/precision.py": "5e94f06892dc89451750b4e5b1fd2e105d440f633875f31a883880e6a6ca480a",
+          "tide/model.py": "1911afe3b66b199eb7e066ea57c5900fead1e390ebb5894818d423284850255e",
+          "tide/kv.py": "789cc6b7543bc156ba0f650791194c716454f1bda422d59c791ce8231c69b4f2",
+          "tide/placement_ownership.py": "95431e5a2240b81a16df4cba08dfef541d777735220a212a28324f9c63661c13"
+        },
+        "vendor_imported": false
+      }
+    ],
+    "fresh_process_records": [
+      {
+        "kind": "resolved_settings",
+        "model": {
+          "topology": {
+            "kind": "fc",
+            "n": 8,
+            "layers": 4,
+            "depth": null,
+            "rounds": null,
+            "profile": null,
+            "hubs": 0,
+            "partition": "group",
+            "timing": "settle",
+            "hub_mask": "all",
+            "period": null,
+            "probes": null,
+            "terminal_hubs": false
+          },
+          "d": 64,
+          "memory": "K",
+          "aggregation": "source_residual",
+          "allocation": "quad",
+          "sharing": "independent",
+          "adapter_rank": 8,
+          "budget": null,
+          "attention_backend": "auto",
+          "attention_chunk": 128,
+          "input_dim": null,
+          "checkpoint_regions": false,
+          "checkpoint_reception": false,
+          "reception_qkv_backend": "separate",
+          "reception_mask_padding": false,
+          "parameter_indexing": "gather",
+          "ffn_packing": "rectangular",
+          "ffn_weight_access": "gather",
+          "ssd_summary_backend": "block",
+          "ssd_scan_backend": "block",
+          "region_batch_size": 1,
+          "local_attention_backend": null,
+          "hub_allocation": "bounded",
+          "clock": {
+            "position_period": null,
+            "position_origin": "binding",
+            "kv_window": null,
+            "short_decay": null,
+            "ssd_stride": null
+          },
+          "kv_width": null,
+          "ffn_width": null,
+          "memory_sharing": null
+        },
+        "topology": {
+          "kind": "fc",
+          "n": 8,
+          "layers": 4,
+          "depth": null,
+          "rounds": null,
+          "profile": null,
+          "hubs": 0,
+          "partition": "group",
+          "timing": "settle",
+          "hub_mask": "all",
+          "period": 6,
+          "probes": null,
+          "terminal_hubs": false
+        },
+        "clock": {
+          "position_period": 6,
+          "position_origin": "binding",
+          "kv_window": 768,
+          "short_decay": 0.014440566261665526,
+          "ssd_stride": 6
+        },
+        "execution": {
+          "mode": "train",
+          "device": "cpu",
+          "precision": "fp32",
+          "batch": 2,
+          "length": 8,
+          "steps": 1,
+          "threads": 1,
+          "learning_rate": 0.0001,
+          "foreach": true,
+          "seed": 17
+        },
+        "source": {
+          "preset": {
+            "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/compact-repository-20261119/smoke-scratch/build-copy/configs/recommended/default.json",
+            "sha256": "7c8fee821d7c30f3ad07b22030ba2ad28b783f5719e93d6f033993306a9a7f5b"
+          },
+          "config": null,
+          "explicit_overrides": {
+            "steps": 1,
+            "threads": 1
+          }
+        },
+        "recommendation": {
+          "status": "safe_example",
+          "evidence": [],
+          "scope": "Short CPU entry for discovering training and continuation; not a throughput optimum or downstream recipe."
+        },
+        "precision": {
+          "name": "fp32",
+          "device": "cpu",
+          "parameters": "float32",
+          "input": "float32",
+          "matrix_arithmetic": "float32",
+          "normalization_mass_allocation": "float32",
+          "kv_keys_values": "float32",
+          "kv_summary_and_ssd_state": "float32",
+          "logical_time_indices": "int64",
+          "parameter_gradients": "float32",
+          "master_weights": "parameters_are_fp32_masters; no_separate_copy",
+          "adamw_moments": "float32",
+          "attention": "native_by_shape_and_prior; math/tiled_accumulate_float32",
+          "attention_mode_selection": "established_fp32_gradient_dependent_prior_dispatch",
+          "loss": "float32",
+          "autocast_cache": false
+        },
+        "parameters": 2336544,
+        "actual_parameter_devices": [
+          "cpu"
+        ],
+        "actual_parameter_dtypes": [
+          "torch.float32"
+        ],
+        "optimizer": {
+          "lr": 0.0001,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "eps": 1e-08,
+          "weight_decay": 0.01,
+          "amsgrad": false,
+          "maximize": false,
+          "foreach": true,
+          "capturable": false,
+          "differentiable": false,
+          "fused": null,
+          "decoupled_weight_decay": true
+        },
+        "resume": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/compact-repository-20261119/smoke-scratch/checkpoint.pt",
+        "state_position": 8,
+        "data": "fresh synthetic inputs from this invocation's seed; no RNG/data-stream restore",
+        "boundary": "each finite Timed window includes flush in the objective and advances the saved clock; detach between windows",
+        "purpose": "mechanism example; grad_forward performs no backward/update; no downstream recipe or performance claim"
+      },
+      {
+        "kind": "step",
+        "index": 0,
+        "mode": "train",
+        "objective": 2.6208672523498535,
+        "state_before_position": 8,
+        "state_position": 16,
+        "flushed": false,
+        "forward_requires_grad": true,
+        "optimizer_updated": true
+      },
+      {
+        "kind": "installed_identity",
+        "package_root": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/compact-repository-20261119/smoke-scratch/venv/lib/python3.12/site-packages/tide",
+        "isolated": 1,
+        "files": {
+          "tide/ssd.py": "42e0e9c2de11f7c266af93c7bf43bf3e53e63efd6ed1eb5b86ef18aa1c982af3",
+          "tide/placement.py": "0f77def73da20f467756e5dc1f701f25942565f762e82be5d23218ecee39d05f",
+          "tide/region_execution.py": "0d62975ca47b37299cbdc80a4805375fef35c346dfe77ee2fe999e373ebf0950",
+          "tide/__init__.py": "bd8d669f813aa282dc1835a53656550468f40eac46a730c4339635580d8e4195",
+          "tide/region_placement.py": "fd082f035185d04af6bc3ba27b949a8f065ccdf62f8b32a1b442accbfa6f2b6d",
+          "tide/region_batch.py": "514ee30c5077d416c02cec81380280eb45509f20922a0f812657b93d2d8b7e80",
+          "tide/grouped_linear.py": "5c0d8cb76df405d108e6eee77d42de8a1d83cbc99ff0537b0af973f108b52fe1",
+          "tide/region.py": "3d0ee3fa13e344ddb0fff5ce15af62cee4e0b1a7c4984df523e70a4cbfc41ec2",
+          "tide/ffn_packing.py": "66f0138cf4eb306fdc8513407d70ef5c96df37b6466f714c26b1fc211b25b449",
+          "tide/attention.py": "0a8231713a2801ed397cee093c5d1112867a2057fc20804717fd39fd9e1609e8",
+          "tide/reception.py": "bae0d61c805b68fcf97800f40baa17ff549d90c3e2a47763cfc9f687a7c752f1",
+          "tide/topology.py": "8cdf58d0b3089e16a079ad46c3be7ca0c953fcea0023d276c9582901e1712dbf",
+          "tide/ssd_memory.py": "d2683d58828bd705ca0f67dc5728a75fe01dda2ddfb4f53448d14b74b69b1cd2",
+          "tide/checkpoint.py": "7e188773786f5cd7e3b06fcf3ef4ca9efa256933a9c21a8225f359687337c49f",
+          "tide/layout.py": "4aee0573beb2448dd90ca307b9065f2ed4cd0f7eb93bfcd92c4b46550f889aa0",
+          "tide/config.py": "2b890c0ae9eac381aa3ab9726eb386339345f62dc7b3e27433ecd5a0b1c0299f",
+          "tide/topology_hb.py": "5fb7b1a959f0b88a097e95959b52a1f10cf5180eaea7b688cbef086946abea06",
+          "tide/allocation.py": "b4d0e130c1a87391606e6abedfb2a9b0ab870bfb9027dc31b8c91135bdacd4ca",
+          "tide/parameters.py": "84ead5924469a5a36810e01151f6ff1824ed9df063619aa53be8e84ae8d701fc",
+          "tide/precision.py": "5e94f06892dc89451750b4e5b1fd2e105d440f633875f31a883880e6a6ca480a",
+          "tide/model.py": "1911afe3b66b199eb7e066ea57c5900fead1e390ebb5894818d423284850255e",
+          "tide/kv.py": "789cc6b7543bc156ba0f650791194c716454f1bda422d59c791ce8231c69b4f2",
+          "tide/placement_ownership.py": "95431e5a2240b81a16df4cba08dfef541d777735220a212a28324f9c63661c13"
+        },
+        "vendor_imported": false
+      }
+    ],
+    "scope": "isolated public entry and local recovery smoke; no broad numerical or task-quality qualification"
+  },
+  "unit_tests": {
+    "command": "env TORCH_DEVICE_BACKEND_AUTOLOAD=0 .venv-instances/bin/python -m pytest -q tests/test_materialize_record.py",
+    "passed": 10
+  },
+  "preservation": {
+    "commit": "9b270280227f22190510767da50d643a049daa49",
+    "clean_tree_commit": "077b583d69d0550935388d914bc72f130e102d7f",
+    "experimental_worktrees": 18,
+    "extra_source_config_and_small_records": 6171,
+    "manifest_path_in_commit": "retired-inputs/manifest.json",
+    "old_experimental_branch_refs_retained": true
+  },
+  "maintenance_bundle": {
+    "path": "docs/evidence/compact-repository-20261119-records.tar.gz",
+    "sha256": "2b99e5be2f9cffc52b3fd1acf96bf689a1b56a8b7879a219856561b72c7fce09",
+    "members": [
+      {
+        "name": "close.py",
+        "bytes": 8632,
+        "sha256": "cc6a47569c1511a32df9f04c3b172f1b17aabf27f1a204eef7ad55d71d5248bc"
+      },
+      {
+        "name": "compact-before-local.py",
+        "bytes": 14319,
+        "sha256": "ac73c5ffc532aee27049e344034f894fe3b72d04ec8611db981743c8b1a83ec5"
+      },
+      {
+        "name": "compact-retire-v1.py",
+        "bytes": 15298,
+        "sha256": "efbe4a714d780f16ee2ed760ea6d77df83b8ed14f7cbfda793407591c193cee5"
+      },
+      {
+        "name": "compact.py",
+        "bytes": 15290,
+        "sha256": "4ad1a4439c3b62b266fe95263b0b25ec2f4b618106219cde2314ac8925b79e7b"
+      },
+      {
+        "name": "compress-launch.json",
+        "bytes": 2656,
+        "sha256": "e028236b964b4cff15c33281d0af3617fcb3585d8428def41119426f8b89cdc8"
+      },
+      {
+        "name": "compress-status.json",
+        "bytes": 819,
+        "sha256": "d66f883c01af9d3b910d694c452ea6f6677d1f2583b93b630a867a615a976b61"
+      },
+      {
+        "name": "compress.log",
+        "bytes": 186,
+        "sha256": "62867bb26691858b11cd32a5200f8448958d8c5c44f9c9ae116e6f605f714ff8"
+      },
+      {
+        "name": "dependency-audit.json",
+        "bytes": 1647731,
+        "sha256": "7b6ea58238925259c237bbbd0be1e9bd487f3a74e19c19193020af8b77ea270f"
+      },
+      {
+        "name": "evidence-compression.json",
+        "bytes": 186,
+        "sha256": "62867bb26691858b11cd32a5200f8448958d8c5c44f9c9ae116e6f605f714ff8"
+      },
+      {
+        "name": "frozen-job.py",
+        "bytes": 10068,
+        "sha256": "428214c2901eb41f5764193720f96228d0f8530a5f578f2c5894bd7135337e56"
+      },
+      {
+        "name": "frozen-materialize-record.py",
+        "bytes": 4489,
+        "sha256": "8e286560e3a05afcfc81d508403bae0cf3e0a08fd11685308458766cd617a71a"
+      },
+      {
+        "name": "installed-smoke.json",
+        "bytes": 18157,
+        "sha256": "35eccb157802072bf226a541ccef330ed29c998714c93ecfdc0d1eba30cff330"
+      },
+      {
+        "name": "installed_smoke.py",
+        "bytes": 4428,
+        "sha256": "5b8271f20b4b111ea0a2a44f209ecf791301a44997607754e03bfcefa776aaea"
+      },
+      {
+        "name": "live-pre-retirement.json",
+        "bytes": 492,
+        "sha256": "074f41a3887f52b6c637cc6722894e9725232f46b46e2d4933ed0af0f42e7319"
+      },
+      {
+        "name": "migrate_links.py",
+        "bytes": 2713,
+        "sha256": "d41eea4e79b12739c44d92c49b4bb7ae72fa3b3bb60cda03ab88e9ac0359c47f"
+      },
+      {
+        "name": "navigation-migration.json",
+        "bytes": 6699,
+        "sha256": "b3ea48dd9028d174d8d2f353738df0509a7faa0d9c7d66ee8d13a5b504b0238e"
+      },
+      {
+        "name": "network_push.py",
+        "bytes": 2119,
+        "sha256": "f2836702e3298349c7157f713b841af9bf8867d217c37709df2d60bec2045914"
+      },
+      {
+        "name": "network_push_443.py",
+        "bytes": 1928,
+        "sha256": "14d126c6e51b3658a2e9684ec595a4a44092bac0aff3fdb2b7be0d42b31b51c7"
+      },
+      {
+        "name": "pack_git.py",
+        "bytes": 1961,
+        "sha256": "3f7cc7e9e695394afcf5ec1512b46276b78e2cfb0840c0a4a78921cddefcd609"
+      },
+      {
+        "name": "plan.json",
+        "bytes": 9002344,
+        "sha256": "2fcdd8bbde11d1bf7b48ba846470505b9984301b64e33c396ef433be1130e222"
+      },
+      {
+        "name": "preservation.json",
+        "bytes": 2349758,
+        "sha256": "f9dc5e569af7af3ecd042c376ad1d16a45ba944b9d0c9be09b9ccab7256469fc"
+      },
+      {
+        "name": "preserve-extra.json",
+        "bytes": 505298,
+        "sha256": "65eb06eeffcb2a7a97cfec7fb741abe125a1ea7515046341de2265ea13148ef6"
+      },
+      {
+        "name": "preserve-launch.json",
+        "bytes": 3027,
+        "sha256": "eb6d8fd3ebb000343e6c318cd12174bef6bc34d0255b326d7da5304a64dd5488"
+      },
+      {
+        "name": "preserve-status.json",
+        "bytes": 1023,
+        "sha256": "5ca6211cce3d0641e742f23b1efd1354e1900e94956d46db9cc69331dbc48bb1"
+      },
+      {
+        "name": "preserve.log",
+        "bytes": 163,
+        "sha256": "b91316ab32c98825af8b3e36e2f6ecbf52df871db60923513f7b2ee8e22fd835"
+      },
+      {
+        "name": "push-launch.json",
+        "bytes": 2285,
+        "sha256": "6552fe98d226a17f232aa617ae8365adccddf0d128dc492186fd0e158afa6434"
+      },
+      {
+        "name": "push-status.json",
+        "bytes": 1079,
+        "sha256": "80c8c7cf5133e153b38ea3c8fbfe80093fdfcceb830da4448dbfe94ec04b4a9e"
+      },
+      {
+        "name": "push.log",
+        "bytes": 216,
+        "sha256": "8c1470a141d84e977fcfe82fcca19acbdb0e16823c88ed19847b9d2ad07f084e"
+      },
+      {
+        "name": "push22-launch.json",
+        "bytes": 2351,
+        "sha256": "992a49a67574530f5d221b897ee63179a74fe553739215ec501df443b0cb87a7"
+      },
+      {
+        "name": "push22-status.json",
+        "bytes": 1167,
+        "sha256": "396ee398fd96026da5f830ea27dd6d8b0e4a5922fd446e4ea7e02e4c650dcf22"
+      },
+      {
+        "name": "push22.log",
+        "bytes": 7687,
+        "sha256": "38b1952d005d1c0bb24929baf305a4ee393ca7724ad44c4af25cbd81887de940"
+      },
+      {
+        "name": "retire-attempt1-launch.json",
+        "bytes": 2886,
+        "sha256": "0aa59dc83503196217823b9c5f150bcdfd8358ff942f248bf09685d9ea32d314"
+      },
+      {
+        "name": "retire-attempt1-status.json",
+        "bytes": 934,
+        "sha256": "f71aaac000f1c4ff6983400c4e25d771e3523e1e6672066cfa6d05287e4166f7"
+      },
+      {
+        "name": "retire-attempt1.log",
+        "bytes": 1851,
+        "sha256": "bc69e97d099f0417c114b8d4b63405299555fc965ed6c1c7a57f86d5d53d17a2"
+      },
+      {
+        "name": "retire-launch.json",
+        "bytes": 2886,
+        "sha256": "325b5971357e9b0b24be8e3e6852fef89e4ecd4d6cb4f2e516b720419eb6b97d"
+      },
+      {
+        "name": "retire-status.json",
+        "bytes": 940,
+        "sha256": "e2da537cce5aec7d1ae9610d89a0d014bafe5542f8d3eb068f5d39f51acc3e0a"
+      },
+      {
+        "name": "retire.log",
+        "bytes": 434,
+        "sha256": "788d4481f2c44a1d6805393be2b17d166c17a65e65a72fe32f050237e739032e"
+      },
+      {
+        "name": "retirement-receipts.jsonl",
+        "bytes": 41278,
+        "sha256": "67be8949eb04f30040f636c315ffb9bbdbdc76c1a7f0190bb1654beb8d89ba7e"
+      },
+      {
+        "name": "retirement-result.json",
+        "bytes": 1331,
+        "sha256": "947075c98020b9791a154f778595c2600bd672e0da836ea92ea0f95a131699bd"
+      },
+      {
+        "name": "reviewed-evidence-verification.json",
+        "bytes": 11801,
+        "sha256": "275657db8baa4bb7eacb251ebb8cf5354bf7cbd1712c1048d30284b2644ab35e"
+      },
+      {
+        "name": "smoke-build.log",
+        "bytes": 763,
+        "sha256": "5662dbaba3e17cdeb7cedb2c45aebe29d5414de16e49e4ca9229c462900d07ac"
+      },
+      {
+        "name": "smoke-install.log",
+        "bytes": 250,
+        "sha256": "fd513f3e166b84654876f6d2f7de1c93a92a5c0a9a884ccbab139cfb0690e0fd"
+      },
+      {
+        "name": "smoke-launch.json",
+        "bytes": 2827,
+        "sha256": "e76cbdd1123e114e35c0d4fa3bddf7e94b774b0823dcc73c7987d6059c8d1c1a"
+      },
+      {
+        "name": "smoke-resume.log",
+        "bytes": 6010,
+        "sha256": "95f058a52d10f1d036110d95cf3359ab617e668e6241c41ecaf1c574e2ea647a"
+      },
+      {
+        "name": "smoke-status.json",
+        "bytes": 1276,
+        "sha256": "0c83c6e078deef94322cdaf43c65ed8dc22fddd284776bb7fce6bba5a00659a1"
+      },
+      {
+        "name": "smoke-train.log",
+        "bytes": 6430,
+        "sha256": "51c47bd9e96756519335772ead2faaf9e90311f510860fe93cec1f4890f2ac4a"
+      },
+      {
+        "name": "smoke-venv.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "name": "smoke.log",
+        "bytes": 95,
+        "sha256": "a20c9b3478ca27eddbf385af6baa3934ea00bb8fe46010cdde680698f8b951f6"
+      },
+      {
+        "name": "submit-before-local.py",
+        "bytes": 2440,
+        "sha256": "42f6ec22c6b29636d098d3e0081d7ef857fe0c48a000899275481ceec960dfed"
+      },
+      {
+        "name": "submit-retire-v1.py",
+        "bytes": 2469,
+        "sha256": "f3b967002860ed527103946a920f34b6a6db27cca5ade0b811f0c219e73ccc98"
+      },
+      {
+        "name": "submit.py",
+        "bytes": 2502,
+        "sha256": "a3a000cfbd93090a9760bad7e83d93ec54f7478f6e4fbcea6f1c3d8492dc4a59"
+      },
+      {
+        "name": "terminal-and-launch-records.json",
+        "bytes": 5056912,
+        "sha256": "88b8d983a663cd5703a0d94eb824499194f4e1900d8032d58e50bf62ef767cf6"
+      }
+    ]
+  },
+  "user_docs": {
+    "docs/tide-learning-lab-TL-REQ-004-handoff.md": "69607cba0a7e87a260929ed5741d996103cef804c51f3fa2c02b3bd7a454a220",
+    "docs/tide-learning-lab-TL-REQ-005-handoff.md": "83bec6f6eaa476ae9d7c859fe168333ac2ee564433297f36ab9aa1ef33c38732",
+    "docs/tide-learning-lab-TL-REQ-006-handoff.md": "8706f0477c8f31d0c8337e55ba7f8f5b28bb9a455656586fa1585c82ec58b4df",
+    "docs/upstream-lh-semantics-discussion-20261113.md": "3118419cb014570395323baf887ffe5a7e797f97049e85eacef26ecb1fd81c07"
+  },
+  "services": [
+    {
+      "unit": "tide-compact-repository-compress-v1",
+      "status": {
+        "state": "passed",
+        "source": "bef26abb2458cfff003c84f376f93bc18a0b4106",
+        "command": [
+          "/usr/bin/python3",
+          "-B",
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/compact-repository-20261119/compact.py",
+          "compress"
+        ],
+        "pid": 3004501,
+        "started": "2026-11-19T11:33:53.664043+00:00",
+        "max_rss_bytes": 17179869184,
+        "peak_rss_bytes": 65974272,
+        "max_processes": 1,
+        "rss_sample_count": 3,
+        "poll_interval": 0.25,
+        "descendant_supervision": "Linux child subreaper; retained PID/start identities across nested sessions",
+        "child_pid": 3004505,
+        "process_group": 3004505,
+        "descendant_identities": [
+          {
+            "pid": 3004505,
+            "start_ticks": 2267420437
+          }
+        ],
+        "exit_code": 0,
+        "elapsed": 1.4018799662590027,
+        "finished": "2026-11-19T11:33:55.065924+00:00"
+      },
+      "properties": "MainPID=0\nResult=success\nExecMainStatus=0\nControlGroup=\nActiveState=inactive\nSubState=dead\n",
+      "all_recorded_descendants_terminal": true
+    },
+    {
+      "unit": "tide-compact-repository-preserve-v1",
+      "status": {
+        "state": "passed",
+        "source": "bef26abb2458cfff003c84f376f93bc18a0b4106",
+        "command": [
+          "/usr/bin/python3",
+          "-B",
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/compact-repository-20261119/compact.py",
+          "preserve",
+          "--extra-file",
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/compact-repository-20261119/preserve-extra.json"
+        ],
+        "pid": 3002385,
+        "started": "2026-11-19T11:33:03.789040+00:00",
+        "max_rss_bytes": 17179869184,
+        "peak_rss_bytes": 53919744,
+        "max_processes": 2,
+        "rss_sample_count": 5,
+        "poll_interval": 0.25,
+        "descendant_supervision": "Linux child subreaper; retained PID/start identities across nested sessions",
+        "child_pid": 3002389,
+        "process_group": 3002389,
+        "elapsed": 2.226585391908884,
+        "descendant_identities": [
+          {
+            "pid": 3002389,
+            "start_ticks": 2267415449
+          },
+          {
+            "pid": 3002462,
+            "start_ticks": 2267415526
+          }
+        ],
+        "exit_code": 0,
+        "finished": "2026-11-19T11:33:06.015626+00:00"
+      },
+      "properties": "MainPID=0\nResult=success\nExecMainStatus=0\nControlGroup=\nActiveState=inactive\nSubState=dead\n",
+      "all_recorded_descendants_terminal": true
+    },
+    {
+      "unit": "tide-compact-repository-push-v1",
+      "status": {
+        "state": "failed",
+        "source": "12261bf8b5bca82d2a292fa9bf50f966704ee93b",
+        "command": [
+          "/home/zlong/.local/share/netpath/skills/use-netpath-network/scripts/netpath",
+          "exec",
+          "--entry",
+          "cdn-vps",
+          "--",
+          "/usr/bin/python3",
+          "-B",
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/compact-repository-20261119/network_push.py"
+        ],
+        "pid": 3029488,
+        "started": "2026-11-19T11:38:55.046996+00:00",
+        "max_rss_bytes": 4294967296,
+        "peak_rss_bytes": 20000768,
+        "max_processes": 3,
+        "rss_sample_count": 59,
+        "poll_interval": 0.25,
+        "descendant_supervision": "Linux child subreaper; retained PID/start identities across nested sessions",
+        "child_pid": 3029491,
+        "process_group": 3029491,
+        "elapsed": 25.254476729780436,
+        "descendant_identities": [
+          {
+            "pid": 3029491,
+            "start_ticks": 2267450575
+          },
+          {
+            "pid": 3029507,
+            "start_ticks": 2267450590
+          },
+          {
+            "pid": 3029508,
+            "start_ticks": 2267450590
+          }
+        ],
+        "exit_code": 128,
+        "finished": "2026-11-19T11:39:20.301473+00:00"
+      },
+      "properties": "MainPID=0\nResult=exit-code\nExecMainStatus=128\nControlGroup=\nActiveState=failed\nSubState=failed\n",
+      "all_recorded_descendants_terminal": true
+    },
+    {
+      "unit": "tide-compact-repository-push22-v1",
+      "status": {
+        "state": "failed",
+        "source": "12261bf8b5bca82d2a292fa9bf50f966704ee93b",
+        "command": [
+          "/home/zlong/.local/share/netpath/skills/use-netpath-network/scripts/netpath",
+          "exec",
+          "--entry",
+          "c28",
+          "--",
+          "/usr/bin/python3",
+          "-B",
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/compact-repository-20261119/network_push.py",
+          "--port",
+          "22"
+        ],
+        "pid": 3033884,
+        "started": "2026-11-19T11:40:40.213760+00:00",
+        "max_rss_bytes": 4294967296,
+        "peak_rss_bytes": 45088768,
+        "max_processes": 4,
+        "rss_sample_count": 240,
+        "poll_interval": 0.25,
+        "descendant_supervision": "Linux child subreaper; retained PID/start identities across nested sessions",
+        "child_pid": 3033897,
+        "process_group": 3033897,
+        "elapsed": 101.72696007043123,
+        "descendant_identities": [
+          {
+            "pid": 3033897,
+            "start_ticks": 2267461092
+          },
+          {
+            "pid": 3033910,
+            "start_ticks": 2267461107
+          },
+          {
+            "pid": 3033911,
+            "start_ticks": 2267461107
+          },
+          {
+            "pid": 3035750,
+            "start_ticks": 2267463074
+          }
+        ],
+        "exit_code": 128,
+        "finished": "2026-11-19T11:42:21.940720+00:00"
+      },
+      "properties": "MainPID=0\nResult=exit-code\nExecMainStatus=128\nControlGroup=\nActiveState=failed\nSubState=failed\n",
+      "all_recorded_descendants_terminal": true
+    },
+    {
+      "unit": "tide-compact-repository-retire-v1",
+      "status": {
+        "state": "failed",
+        "source": "bef26abb2458cfff003c84f376f93bc18a0b4106",
+        "command": [
+          "/usr/bin/python3",
+          "-B",
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/compact-repository-20261119/compact.py",
+          "retire",
+          "--plan-sha",
+          "2fcdd8bbde11d1bf7b48ba846470505b9984301b64e33c396ef433be1130e222",
+          "--allow-local-preservation"
+        ],
+        "pid": 3041435,
+        "started": "2026-11-19T11:43:23.111735+00:00",
+        "max_rss_bytes": 17179869184,
+        "peak_rss_bytes": 0,
+        "max_processes": 0,
+        "rss_sample_count": 1,
+        "poll_interval": 0.25,
+        "descendant_supervision": "Linux child subreaper; retained PID/start identities across nested sessions",
+        "child_pid": 3041439,
+        "process_group": 3041439,
+        "descendant_identities": [
+          {
+            "pid": 3041439,
+            "start_ticks": 2267477382
+          }
+        ],
+        "exit_code": 1,
+        "elapsed": 0.6132438443601131,
+        "finished": "2026-11-19T11:43:23.724979+00:00"
+      },
+      "properties": "MainPID=0\nResult=exit-code\nExecMainStatus=1\nControlGroup=\nActiveState=failed\nSubState=failed\n",
+      "all_recorded_descendants_terminal": true
+    },
+    {
+      "unit": "tide-compact-repository-retire-v2",
+      "status": {
+        "state": "failed",
+        "source": "bef26abb2458cfff003c84f376f93bc18a0b4106",
+        "command": [
+          "/usr/bin/python3",
+          "-B",
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/compact-repository-20261119/compact.py",
+          "retire",
+          "--plan-sha",
+          "2fcdd8bbde11d1bf7b48ba846470505b9984301b64e33c396ef433be1130e222",
+          "--allow-local-preservation"
+        ],
+        "pid": 3043765,
+        "started": "2026-11-19T11:44:17.635764+00:00",
+        "max_rss_bytes": 17179869184,
+        "peak_rss_bytes": 73334784,
+        "max_processes": 1,
+        "rss_sample_count": 8,
+        "poll_interval": 0.25,
+        "descendant_supervision": "Linux child subreaper; retained PID/start identities across nested sessions",
+        "child_pid": 3043771,
+        "process_group": 3043771,
+        "elapsed": 3.589854020625353,
+        "descendant_identities": [
+          {
+            "pid": 3043771,
+            "start_ticks": 2267482834
+          }
+        ],
+        "exit_code": 1,
+        "finished": "2026-11-19T11:44:21.225618+00:00"
+      },
+      "properties": "MainPID=0\nResult=exit-code\nExecMainStatus=1\nControlGroup=\nActiveState=failed\nSubState=failed\n",
+      "all_recorded_descendants_terminal": true
+    },
+    {
+      "unit": "tide-compact-repository-smoke-v1",
+      "status": {
+        "state": "passed",
+        "source": "bef26abb2458cfff003c84f376f93bc18a0b4106",
+        "command": [
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+          "-B",
+          "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/compact-repository-20261119/installed_smoke.py"
+        ],
+        "pid": 3047929,
+        "started": "2026-11-19T11:45:41.111069+00:00",
+        "max_rss_bytes": 4294967296,
+        "peak_rss_bytes": 487186432,
+        "max_processes": 3,
+        "rss_sample_count": 19,
+        "poll_interval": 0.25,
+        "descendant_supervision": "Linux child subreaper; retained PID/start identities across nested sessions",
+        "child_pid": 3047933,
+        "process_group": 3047933,
+        "elapsed": 7.975137356668711,
+        "descendant_identities": [
+          {
+            "pid": 3047933,
+            "start_ticks": 2267491182
+          },
+          {
+            "pid": 3047936,
+            "start_ticks": 2267491188
+          },
+          {
+            "pid": 3047969,
+            "start_ticks": 2267491220
+          },
+          {
+            "pid": 3047994,
+            "start_ticks": 2267491281
+          },
+          {
+            "pid": 3048020,
+            "start_ticks": 2267491297
+          },
+          {
+            "pid": 3048105,
+            "start_ticks": 2267491345
+          },
+          {
+            "pid": 3048224,
+            "start_ticks": 2267491668
+          }
+        ],
+        "exit_code": 0,
+        "finished": "2026-11-19T11:45:49.086206+00:00"
+      },
+      "properties": "MainPID=0\nResult=success\nExecMainStatus=0\nControlGroup=\nActiveState=inactive\nSubState=dead\n",
+      "all_recorded_descendants_terminal": true
+    }
+  ],
+  "extra_git_repack_executed": false,
+  "extra_git_repack_note": "Repository already meets the target; no extra repack was run after concurrent downstream work was observed. Normal Git commands may pack objects automatically.",
+  "push": {
+    "state": "pending_after_network_failures",
+    "last_confirmed_origin": "611e8d453160181c97d822674b99527af49548f5",
+    "scope": "Local Git contains the complete preservation history; no force push or global route/credential change."
+  },
+  "temporary_outputs": "Retained until this reviewed result is committed; then removed separately.",
+  "availability": {
+    "old_artifacts_online": false,
+    "old_tensor_replay_promised": false,
+    "reviewed_evidence_exact_bytes": true,
+    "historical_source_in_git": true,
+    "downstream_runtime_requires_old_artifacts": false
+  },
+  "qualification": "Original numerical failures, thresholds and measurement identities remain unchanged. Only storage, installed CPU FP32 entry and local recovery were checked."
+}
