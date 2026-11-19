@@ -1,5 +1,10 @@
 # Current evidence
 
+The [priority artifact retirement and remaining read-only inventory](disk-cleanup-20261119.md)
+records 90 retired tensor payloads, preserved failures and the isolated CPU installation smoke.
+Historical paths retain their measurement identities; the exact retired payload list is no longer
+available for direct loading. Remaining cleanup candidates have not been removed.
+
 The [FFN interventions and CPU/NPU comparison](ffn-execution-devices-20261119.md)
 records direct weight-bank access, effective-row packing and their interaction.
 It separates repeated normal training/inference from synchronized stage/operator
