@@ -4,6 +4,7 @@
 `4f5b9f20a4030d68ee66ae2d26e34659a5e37234`，`math/` 原字节不变。
 反向混合、窄 KV、分模块共享改变函数或参数化，不是旧数学的等价实现优化。
 资格从 [STATUS](STATUS.md) 和固定源码证据读取；现有默认和有价值实现保留，默认入口主要服务训练。
+本轮实现、数值、训练恢复与有限设备比较见[五类候选证据](evidence/memory-candidates-20261119.md)。
 
 ## 五类与形状
 
@@ -112,4 +113,6 @@ FFN15208、68个64维头、window128；它不替代 [A–D](benchmark-contract.m
 --devices npu:0 --precision fp32 --batch 8 --prefill 128 --prefill-chunk 32 --decode 16
 --warmup 2 --samples 5 --allocated-budget-gib 48 --reserved-budget-gib 56 --output NEW.json`。
 正式长任务经 [执行契约](execution-flows.md) 冻结、准入并持久运行。
+`benchmarks.memory_decode_costs` 对真实prefill后的decode分别观察阶段及算子形状，
+默认FP32 B8、prompt128/chunk32/decode16，参数不更新；它不提供普通吞吐。
 不同数学候选不做逐值相等断言；同一候选的不同执行路径才比较值/VJP、梯度与恢复更新。

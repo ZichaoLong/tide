@@ -6,6 +6,11 @@ Use [development](development.md) for a clean environment and [execution](execut
 for frozen long jobs. [ROADMAP](ROADMAP.md) owns the cycle's work; completed
 qualification is recorded in the linked evidence, not inferred from the plan.
 
+The [memory-candidate record](evidence/memory-candidates-20261119.md) adds explicit
+reverse binding, jointly narrowed Q/K/V width and memory-only regional sharing.
+It keeps the frozen 886-test CPU result, actual-width formula/VJP checks,
+installed recovery, continuous training and retained numerical failures separate.
+
 | Change | Relevant independent checks |
 |---|---|
 | Topology/configuration | topology/parameter-binding tests, legal/illegal combinations |

@@ -1,5 +1,10 @@
 # Current evidence
 
+The [five memory and parameter-binding families](memory-candidates-20261119.md)
+separate fixed-graph/FFN comparisons from two FFN-adjusted near-parameter points.
+The record includes small numerical qualification and retained failures, medium
+continuing training and recovery, large FP32 inference, memory and execution costs.
+
 The subsequent [fixed-budget FP32 decode batch search](decode-capacity-20261118.md)
 completes twelve Tide/Transformer series across one, two and four NPUs. It separates
 same-batch comparisons from independently selected budget-best points, retains

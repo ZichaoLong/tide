@@ -31,6 +31,7 @@ separate responsibilities but no compulsory universal intermediate representatio
 | independent KV eviction, original-time and SSD/Conv metadata observer | benchmarks/cache_metadata.py, scripts/check_inference_cache.py | test_inference_cache.py |
 | bounded common/budget searches and separate memory lifetime ledger | benchmarks/search.py, benchmarks/variants.py, benchmarks/memory_ledger.py | test_search.py, test_variants.py, test_memory_ledger.py |
 | restored-anchor training cost, actual device trace and baseline candidates | benchmarks/costs.py, benchmarks/stages.py, benchmarks/cost_report.py | test_costs.py |
+| intrusive decode stages/shapes after independently replayed real history | benchmarks/memory_decode_costs.py | test_memory_decode_costs.py |
 | fixed nonempty training-state path comparisons and first Attention mode witness | scripts/check_training_paths.py, scripts/diagnose_attention_modes.py | test_training_paths.py, test_attention_mode_diagnosis.py |
 | named training settings, public-API example and actual resume | configs/recommended, examples/train.py | test_train_example.py |
 | optional standalone regional scoring slice | native/regional | test_native_region.py; scripts/check_native_region.py |

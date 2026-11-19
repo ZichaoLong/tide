@@ -218,3 +218,42 @@ An adjacent refused batch is a finite stopping observation, not proof that every
 larger batch fails. Larger-batch holes, other prefill chunks and allocator choices
 were not exhaustively searched. Final private-state storage is an all-device
 snapshot and cannot replace the measured whole-request per-device peaks.
+
+## Memory width and ownership, 2026-11-19
+
+The [five-family evidence](evidence/memory-candidates-20261119.md) holds graph,
+content, summary and FFN dimensions fixed before a separate near-parameter comparison.
+Narrowing total Q/K/V width changes the memory function and parameter count; it
+is neither GQA nor an equivalent execution optimization. Actual head counts must
+drive capacity, attention work and fused-query accounting.
+
+With 848 nodes, d768 and FFN3072, independent Full FFNs alone contain 6.002B
+parameters. Memory-only regional sharing lowers total parameters to 6.936B but
+retains those FFNs, private histories and their activations. The measured medium
+shared case saves weights/AdamW storage without improving continuous training
+throughput; parameter savings alone do not establish a useful training speedup.
+
+Shared storage needs a compatible execution grouping to become a larger GEMM.
+The measured region-batch4 shared case executes 120 base BMMs and no base MM
+across all NodeLinear modules in its zero-state training work audit. Shared
+memory matrices account for 48 of those BMMs and 752 repeated base rows. Per-head query
+adapters also remain distinct after projection fusion. Inspect real operands,
+packing and dispatch before attributing a gain to weight reuse.
+
+At 9B B8, reducing the shared region group from four to one eliminates repeated
+base rows but increases calls and lowers measured decode throughput from 12.288
+to 7.948 positions/s. It also changes output support despite matching parameter
+and input hashes; the cause is unlocated. Less padding and a true base MM do not
+by themselves establish whole-model speed or numerical equivalence.
+
+The real-history X/KV128 decode diagnostics both perform 128 KV compactions and
+640 field gathers. Narrowing lowers their payload, while summary width and int64
+window handling stay fixed. State joining materializes another substantial set
+of banks. Repeated logical output bytes characterize this work; they are not
+measured device traffic, peak memory or a bandwidth estimate.
+
+All-SSD improves the measured large cached decode yet is slower and larger in
+the medium zero-state whole-window training point. SSD preparation includes its
+convolution, state scan and descriptor reads before Full selection. Historical
+KV handling, query padding and workload boundaries can reverse the ranking;
+zero-state timing and continued chunked training are separate observations.

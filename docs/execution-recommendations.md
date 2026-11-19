@@ -108,6 +108,41 @@ mathematical models; parameter matching does not match FLOPs, padding, schedulin
 The inference report preserves exact schedules, active targets, operator policy, device mapping,
 samples and memory rather than ranking unmatched B/L or precision points together.
 
+## Memory-binding candidates
+
+The [five-family comparison](evidence/memory-candidates-20261119.md) adds explicit
+model choices; it leaves the training entry and existing presets unchanged.
+For the 9B graph (768 D, 80 H, d768, summary192, FFN3072), start downstream
+quality trials with FP32 `9b-kv128.json` or the less narrow `9b-kv256.json` in
+[`configs/memory-candidates`](../configs/memory-candidates). These jointly narrow
+Q/K/V total width, not GQA. At B8/prompt128/chunk32/decode16 they reached
+18.400/16.736 positions/s and 33.492/36.152 GiB allocated, versus X's
+11.713 positions/s and 46.828 GiB. Parameters and mathematical functions differ.
+
+For continuous medium training (d192, FFN768), the corresponding KV32/KV64
+B16 points reached 949.08/890.78 positions/s in 20-update runs, measured over
+updates 3–20, with paired
+restored updates within threshold. B8 also has actual fresh-process updates;
+B16 does not add that separate process check. These finite points provide a
+starting batch, not a maximum-capacity or general optimum claim. They do not
+qualify 9B training or the FFN3840/4016 near-parameter variants for training.
+
+Full SSD is a useful lower-state inference candidate: B8 decode128 reached
+16.539 positions/s. Its zero-state medium training diagnostic was slower and
+used more memory than X, so select it by the intended workload. Memory-only
+rank8 sharing mainly reduces parameter storage (6.936B with fixed FFN); it
+retains private histories and independent FFNs, and did not improve medium
+training throughput. Cross-region batching still repeats shared bases in BMMs.
+Keep the measured `region_batch_size=4`: `region_batch_size=1` was slower at
+the same B8 and introduced a 9B FP32 output-support difference, so the pair
+is not strictly equivalent.
+
+The report separately lists common B1/B8, each candidate's finite budget-best
+batch, first backbone output, prefill, independent request throughput and
+normal/cold memory. Small FP32 tolerance failures and BF16 support failures
+remain. Use FP32 first, keep room for downstream state and heads, and validate
+task quality before adopting a new binding.
+
 ## Retained execution candidates
 
 | Model option | Meaning / selection limit |

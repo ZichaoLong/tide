@@ -193,3 +193,22 @@ retain a B4 Full/output-support difference against two-device placement. The B8 
 matching work, effective-parameter, support and time summaries, with different packing.
 Neither finite inference nor matching aggregate summaries establishes value/gradient
 identity or adds four-device training and restored-update qualification.
+
+## Explicit memory-binding candidates
+
+The [five-family record](evidence/memory-candidates-20261119.md) preserves the
+original FP32/BF16 thresholds. Small CPU/NPU FP32 comparisons retain finite
+cross-path deviations; BF16 X and half-width KV each retain an output-support
+difference after the third update. Candidate-local restored updates, actual
+d768 narrow-KV formula/VJPs and medium FP32 continuous runs have separate scopes.
+Successful inference does not qualify the FFN-adjusted near-parameter candidates
+for training, nor new Timed or multi-device combinations.
+
+The 9B FP32 memory-shared `region_batch_size=1/4` inference pair adds a separate
+discrete failure: identical parameter/input hashes and physical NPU, but different
+output-support hashes and a net increase of one in the aggregate Full count with
+size1. Original output times and availability agree. This pair is not strictly trajectory-equivalent;
+the small-model FP32 checks do not erase it, and the cause is not established as
+rounding. Per-time work/control values were not retained, so the changed event
+locations and count are unknown. Keep the measured size4 setting and the failure
+in the evidence.
