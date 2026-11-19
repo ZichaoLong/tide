@@ -1,5 +1,10 @@
 # Current evidence
 
+The [KV128 / fixed32 Transformer breakdown](kv128-transformer-breakdown-20261119.md)
+separates ordinary medium continuing training and large inference from intrusive
+stage/operator diagnostics. It includes weight indexing, actual packing, backward
+costs, restored-update checks and their limits; it adds no 9B training qualification.
+
 The [five memory and parameter-binding families](memory-candidates-20261119.md)
 separate fixed-graph/FFN comparisons from two FFN-adjusted near-parameter points.
 The record includes small numerical qualification and retained failures, medium

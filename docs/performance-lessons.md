@@ -257,3 +257,24 @@ the medium zero-state whole-window training point. SSD preparation includes its
 convolution, state scan and descriptor reads before Full selection. Historical
 KV handling, query padding and workload boundaries can reverse the ranking;
 zero-state timing and continued chunked training are separate observations.
+
+
+## Narrow KV paired cost diagnosis, 2026-11-19
+
+The [paired diagnosis](evidence/kv128-transformer-breakdown-20261119.md) separates
+ordinary timing, synchronized modules and synchronized dispatches. Fixed-FFN KV128
+still holds 6.002B independent FFN parameters. In the large B8 decode operator pass,
+FFN weight indexing takes much more observed time than its BMMs; narrowing memory
+does not remove those indexed weight copies. Actual publish indices and FFN operands
+show about 5x executed/selected KV rows in that pass, with separate prefill/training ratios.
+Storage sharing, mathematical sparsity and actual rectangular work remain different facts.
+
+The medium continuing-training gap is mostly forward and backward, with a small
+AdamW difference. Its backward includes many index writes, gather backwards,
+tensor creations and pointwise operations; matrices are not the only cost.
+Unscoped autograd operators cannot be assigned to forward modules from shape alone.
+Entry synchronization must finish before a child timer starts; parent remainders
+still include unwrapped work and waiting. These diagnostics perturb scheduling,
+so neither their shares nor their logical output bytes identify ordinary wall-time
+shares, bus traffic or recoverable speedup. Optimization requires a new full-path
+measurement and unchanged numerical/continuation checks at the intended scale.
