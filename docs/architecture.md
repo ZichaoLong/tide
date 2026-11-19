@@ -14,11 +14,11 @@ separate responsibilities but no compulsory universal intermediate representatio
 | legal configuration, clocks and optional bindings | config.py, topology.py, topology_hb.py; scripts/support_catalog.py | test_topology.py, test_optional_bindings.py |
 | exact parameter binding and optional static row views | parameters.py, model.py construction | test_parameter_binding.py, test_parameter_views.py |
 | optional direct FFN bank access and owner-row packing | grouped_linear.py, ffn_packing.py, parameters.py | test_grouped_weights.py, test_ffn_packing.py |
-| incoming message processing | reception.py | test_reception.py |
+| incoming message processing and stable mass reduction | reception.py, weighted_mean.py | test_reception.py, test_stable_reception.py |
 | KV history and selected Full | kv.py, layout.py | oracle_fc.py, test_fc_reference.py |
 | SSD recurrence/convolution | ssd.py, ssd_memory.py | test_ssd.py, test_ssd_memory.py |
 | encoded regional scores, role allocation | region.py, allocation.py | oracle_fc.py, test_allocation.py |
-| three weighted Attention sites | attention.py | test_attention.py, device_attention.py |
+| three weighted Attention sites and mass-scaled KV Full | attention.py | test_attention.py, test_mass_scaled_attention.py, device_attention.py |
 | layer windows, Timed pending/flush | model.py | oracle_timed.py, test_timed_reference.py |
 | training state/checkpoint | checkpoint.py, benchmarks/continuous.py | test_models.py, test_continuation.py |
 | HB layer/whole-region ownership, transport and AdamW | placement.py, placement_ownership.py, region_placement.py | test_placement.py, test_region_placement.py |

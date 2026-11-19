@@ -158,8 +158,11 @@ class KVMemory(nn.Module):
         w = bank.weight[packed.nodes, :, lo:hi]
         read = weighted_attention(queries, keys, values,
                                   weights=None if self.unit_weights else w,
-                                  mask=visible[:, :, None], backend=self.backend)
-        amount = (visible*w[:, :, None]).sum(-1).clamp(max=1)
-        read = read.transpose(2,3).reshape(n,b,qlen,self.kv_width) * amount[...,None]
+                                  mask=visible[:, :, None], backend=self.backend,
+                                  mass_scaled=not self.unit_weights)
+        read = read.transpose(2,3).reshape(n,b,qlen,self.kv_width)
+        if self.unit_weights:
+            amount = (visible*w[:, :, None]).sum(-1).clamp(max=1)
+            read = read * amount[...,None]
         x = packed.data + self.output(read, ids)
         return packed.publish(selected_ffn(self.ffn, x, packed, ids, packing=self.ffn_packing))

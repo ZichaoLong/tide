@@ -13,6 +13,11 @@ policies, thresholds or the qualification of existing records.
 
 ## Implemented arithmetic policy
 
+[Stable mass reductions](stable-mass.md) document Reception's scaled mean and
+centered composite VJP, and KV's mass-scaled Attention. Execution thresholds do
+not alter positive support. Their source/device qualification is recorded
+separately; neither a log-space formula nor a dtype label certifies all ranges.
+
 Keep model parameters and floating inputs in FP32, import `precision_context`
 from `tide.precision`, and use `with precision_context(device, "bf16"):` around
 forward/loss; run backward and AdamW outside that context. `"fp32"` explicitly disables outer

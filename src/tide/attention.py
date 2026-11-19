@@ -1,8 +1,8 @@
 """Normalized weighted attention, with zero rows and weight right derivatives.
 
-The Full/Read amplitude min(1, sum(weights)) belongs to the caller.  All paths
-implement first-order VJPs; a zero-weight key in a nonempty row retains its
-right derivative.  At an entirely zero row we choose the zero VJP.
+The optional mass_scaled entry fuses the Full/Read amplitude min(1,sum(weights)).
+All paths implement first-order VJPs; a zero-weight key in a nonempty row retains
+its right derivative. At an entirely zero row we choose the zero VJP.
 """
 
 from __future__ import annotations
@@ -212,8 +212,242 @@ class _TiledAttention(torch.autograd.Function):
                 None if dw is None else dw.to(weights.dtype), None)
 
 
+def _signed_exp_product(log_scale, value):
+    """Form exp(log_scale)*value without an unrepresentable separate scale.
+
+    This is used inside a first-order VJP, not as an autograd decomposition.
+    An exact zero cotangent remains zero even if the separate exponential would
+    overflow. Final underflow remains a limitation of the requested dtype.
+    """
+    nonzero = value != 0
+    exponent = log_scale + torch.where(nonzero, value.abs(), 1).log()
+    combined = value.sign() * torch.where(nonzero, exponent, -torch.inf).exp()
+    # Avoid taking log/exp of the cotangent in the ordinary scale range: those
+    # extra round trips needlessly lose precision, especially for tiny roots.
+    info = torch.finfo(value.dtype)
+    ordinary = (log_scale >= math.log(info.tiny)) & (log_scale <= math.log(info.max)-1)
+    safe_scale = torch.where(ordinary, log_scale, 0).exp()
+    return torch.where(ordinary, safe_scale*value, combined)
+
+
+def _finite_mass_attention(*values):
+    if not bool(torch.stack([torch.isfinite(value).all() for value in values]).all()):
+        raise ArithmeticError("mass-scaled attention exceeds the arithmetic range; no clipping is applied")
+
+
+def _log_ratio(numerator, denominator):
+    """Take a ratio before log when representable, retaining an extreme tail."""
+    ratio = numerator / denominator
+    direct = (ratio > 0) & torch.isfinite(ratio)
+    return torch.where(direct, torch.where(direct, ratio, 1).log(),
+                       torch.where(numerator > 0, numerator, 1).log() - denominator.log())
+
+
+def _range_product(*values):
+    """Multiply finite factors before restoring their combined binary scale.
+
+    This keeps alpha*p*root*feature together without a lossy log(root) round
+    trip or an early alpha*root underflow. Terms are restored before reduction;
+    arbitrary cancellation between individually unrepresentable terms remains
+    outside this helper's range. frexp/ldexp must execute on the selected device.
+    """
+    fraction, exponent = torch.frexp(values[0])
+    for value in values[1:]:
+        part, shift = torch.frexp(value)
+        fraction, exponent = fraction * part, exponent + shift
+    return torch.ldexp(fraction, exponent)
+
+
+def _scaled_weighted_terms(logits, weight, mask, prior_scale, peak):
+    """Avoid log(weight)->exp round trips after removing a common prior scale."""
+    relative = weight / prior_scale
+    shift = logits - torch.where(torch.isfinite(peak), peak, 0)
+    direct = _signed_exp_product(shift, relative)
+    # A ratio too small/large to store can still become visible after the
+    # logit shift. Retain the original log ratio for precisely those entries.
+    lost = (relative == 0) | ~torch.isfinite(relative)
+    terms = torch.where(lost, (shift+_log_ratio(weight, prior_scale)).exp(), direct)
+    return torch.where(mask & (weight > 0), terms, 0)
+
+
+class _MassScaledAttention(torch.autograd.Function):
+    """Bounded explicit composite VJP for a*sum(p*v), a=min(sum(mask*w),1).
+
+    Given the *unscaled* output cotangent g, the prior derivative is
+    a*exp(logit-logZ)*(g dot (v-mean)) + 1[M<=1]*(g dot mean).
+    Fusing the first product avoids both a huge standalone prior derivative
+    and underflow of a*g before that derivative is applied. Weak Q/K/V products
+    combine their binary scale before materialization. No positive prior floor
+    is introduced. The M=1 derivative is the original clamp(max=1) branch.
+
+    Weak priors use 16-query/64-key tiles (including a feature axis), trading
+    extra work for range. Ordinary/zero priors retain 64-query/256-key matrix
+    contractions and still fuse the prior VJP. Logit products, mean
+    reduction, centered dot products and final sums still have finite range;
+    this is not an arbitrary-real-arithmetic implementation.
+    """
+    @staticmethod
+    @_without_autocast
+    def forward(ctx, q, k, v, weights, mask, tiled, weak):
+        ctx.weak = weak
+        dtype = torch.float64 if q.dtype == torch.float64 else torch.float32
+        qw, kw, vw = q.to(dtype), k.to(dtype), v.to(dtype)
+        shape = q.shape[:-1] + (k.shape[-2],)
+        w, m = weights.to(dtype).expand(shape), mask.expand(shape)
+        if weak:
+            # Finding the scale must not materialize an extra full Q-by-K
+            # tensor on the path whose declared workspace is bounded by tiles.
+            scales = []
+            for start in range(0, q.shape[-2], 16):
+                block = slice(start, start + 16)
+                maximum = torch.zeros_like(w[..., block, :1])
+                for offset in range(0, k.shape[-2], 64):
+                    kb = slice(offset, offset + 64)
+                    maximum = torch.maximum(maximum, torch.where(m[..., block, kb], w[..., block, kb], 0).amax(-1, keepdim=True))
+                scales.append(maximum)
+            prior_scale = torch.cat(scales, -2)
+        else:
+            prior_scale = torch.ones_like(w[..., :1])
+        prior_scale = torch.where(prior_scale > 0, prior_scale, 1)
+        if not tiled:
+            logits = qw @ kw.transpose(-2, -1) * q.shape[-1] ** -0.5
+            positive = m & (w > 0)
+            scores = torch.where(positive, logits + _log_ratio(w, prior_scale), -torch.inf)
+            nonempty = positive.any(-1, keepdim=True)
+            safe = torch.where(nonempty, scores, 0)
+            log_z = torch.logsumexp(safe, -1, keepdim=True)
+            p = torch.where(nonempty, (safe-log_z).exp(), 0)
+            mean = p @ vw
+            log_z = torch.where(nonempty, log_z, -torch.inf)
+            peak, denominator = torch.zeros_like(log_z), torch.ones_like(log_z)
+            if weak:
+                peak = scores.amax(-1, keepdim=True)
+                terms = _scaled_weighted_terms(logits, w, m, prior_scale, peak)
+                denominator = terms.sum(-1, keepdim=True)
+                denominator = torch.where(denominator > 0, denominator, 1)
+                mean = (terms @ vw) / denominator
+                log_z = peak + denominator.log()
+            total = torch.where(m, w, 0).sum(-1, keepdim=True)
+        else:
+            means, normalizers, totals, peaks, denominators = [], [], [], [], []
+            query_tile, key_tile = (16, 64) if weak else (64, 256)
+            for start in range(0, q.shape[-2], query_tile):
+                block = slice(start, start + query_tile)
+                qb = qw[..., block, :]
+                peak = qb.new_full(qb.shape[:-1] + (1,), -torch.inf)
+                denominator, total = torch.zeros_like(peak), torch.zeros_like(peak)
+                numerator = qb.new_zeros(qb.shape[:-1] + (v.shape[-1],))
+                for offset in range(0, k.shape[-2], key_tile):
+                    kb = slice(offset, offset + key_tile)
+                    wb, mb = w[..., block, kb], m[..., block, kb]
+                    logits = qb @ kw[..., kb, :].transpose(-2, -1) * q.shape[-1] ** -0.5
+                    scores = torch.where(mb & (wb > 0), logits + _log_ratio(wb, prior_scale[..., block, :]), -torch.inf)
+                    next_peak = torch.maximum(peak, scores.amax(-1, keepdim=True))
+                    safe_peak = torch.where(torch.isfinite(next_peak), next_peak, 0)
+                    previous = (peak-safe_peak).exp()
+                    terms = (_scaled_weighted_terms(logits, wb, mb, prior_scale[..., block, :], next_peak)
+                             if weak else (scores-safe_peak).exp())
+                    denominator = denominator*previous + terms.sum(-1, keepdim=True)
+                    numerator = numerator*previous + terms @ vw[..., kb, :]
+                    total = total + torch.where(mb, wb, 0).sum(-1, keepdim=True)
+                    peak = next_peak
+                safe_denominator = torch.where(denominator > 0, denominator, 1)
+                means.append(numerator / safe_denominator)
+                normalizers.append(peak + safe_denominator.log())
+                totals.append(total)
+                peaks.append(peak)
+                denominators.append(safe_denominator)
+            mean, log_z, total = (torch.cat(parts, -2) for parts in (means, normalizers, totals))
+            peak, denominator = (torch.cat(parts, -2) for parts in (peaks, denominators))
+        alpha = total.clamp(max=1)
+        output = alpha * mean
+        _finite_mass_attention(mean, output)
+        ctx.save_for_backward(q, k, v, weights, mask, mean, log_z, total, prior_scale, peak, denominator)
+        # Mass/state arithmetic is FP32 for BF16 payloads. Do not first round
+        # the weak scaled result back to BF16 before the caller consumes it.
+        return output
+
+    @staticmethod
+    @once_differentiable
+    @_without_autocast
+    def backward(ctx, grad):
+        q, k, v, weights, mask, mean, log_z, total, prior_scale, peak, denominator = ctx.saved_tensors
+        dtype = torch.float64 if q.dtype == torch.float64 else torch.float32
+        qw, kw, vw, go = (x.to(dtype) for x in (q, k, v, grad))
+        _finite_mass_attention(go)
+        needs = ctx.needs_input_grad[:4]
+        dq, dk, dv = (torch.zeros_like(value) if need else None
+                      for value, need in zip((qw, kw, vw), needs[:3]))
+        dw = torch.zeros_like(weights, dtype=dtype) if needs[3] else None
+        shape = q.shape[:-1] + (k.shape[-2],)
+        w, m = weights.to(dtype).expand(shape), mask.expand(shape)
+        scale = q.shape[-1] ** -0.5
+        anchor = vw[..., :1, :]
+        query_tile, key_tile = (16, 64) if ctx.weak else (64, 256)
+        for start in range(0, q.shape[-2], query_tile):
+            block = slice(start, start + query_tile)
+            qb, gb = qw[..., block, :], go[..., block, :]
+            normalizer, amount = log_z[..., block, :], total[..., block, :]
+            nonempty = torch.isfinite(normalizer)
+            alpha = amount.clamp(max=1)
+            log_alpha = torch.where(amount > 0, alpha.log(), -torch.inf)
+            log_amplitude_ratio = _log_ratio(alpha, prior_scale[..., block, :])
+            # A constant offset in every value should not manufacture a prior
+            # gradient by subtracting two large, nearly equal dot products.
+            need_center = needs[0] or needs[1] or needs[3]
+            if need_center:
+                center_mean = (gb * (mean[..., block, :] - anchor)).sum(-1, keepdim=True)
+            if needs[3]:
+                mass_bar = (gb * mean[..., block, :]).sum(-1, keepdim=True)
+                mass_bar = torch.where(nonempty & (amount <= 1), mass_bar, 0)
+            for offset in range(0, k.shape[-2], key_tile):
+                kb = slice(offset, offset + key_tile)
+                wb, mb = w[..., block, kb], m[..., block, kb]
+                keys, values = kw[..., kb, :], vw[..., kb, :]
+                logits = qb @ keys.transpose(-2, -1) * scale
+                if need_center:
+                    centered = gb @ (values-anchor).transpose(-2, -1) - center_mean
+                valid = mb & nonempty
+                relative_weight = _log_ratio(wb, prior_scale[..., block, :])
+                log_p = torch.where(valid & (wb > 0), logits + relative_weight - normalizer, -torch.inf)
+                log_mass = log_alpha + log_p
+                if ctx.weak:
+                    terms = _scaled_weighted_terms(logits, wb, mb, prior_scale[..., block, :], peak[..., block, :])
+                    probability = (terms / denominator[..., block, :])[..., None]
+                    amplitude = alpha[..., None]
+                    if needs[0]:
+                        dq[..., block, :].add_(_range_product(amplitude, probability, centered[..., None],
+                                                            keys.unsqueeze(-3)*scale).sum(-2))
+                    if needs[1]:
+                        dk[..., kb, :].add_(_range_product(amplitude, probability, centered[..., None],
+                                                         qb.unsqueeze(-2)*scale).sum(-3))
+                    if needs[2]:
+                        dv[..., kb, :].add_(_range_product(amplitude, probability, gb.unsqueeze(-2)).sum(-3))
+                else:
+                    if needs[0] or needs[1]:
+                        dl = _signed_exp_product(log_mass, centered)
+                    if needs[0]:
+                        dq[..., block, :].add_(dl @ keys * scale)
+                    if needs[1]:
+                        dk[..., kb, :].add_(dl.transpose(-2, -1) @ qb * scale)
+                    if needs[2]:
+                        dv[..., kb, :].add_(log_mass.exp().transpose(-2, -1) @ gb)
+                if needs[3]:
+                    log_ratio = torch.where(valid, logits + (log_amplitude_ratio-normalizer), -torch.inf)
+                    contribution = _signed_exp_product(log_ratio, centered) + mass_bar
+                    contribution = torch.where(valid, contribution, 0)
+                    qs = slice(None) if weights.shape[-2] == 1 else block
+                    ks = slice(None) if weights.shape[-1] == 1 else kb
+                    target = dw[..., qs, ks]
+                    target.add_(contribution.sum_to_size(target.shape))
+        result = tuple(value.to(source.dtype) if value is not None else None
+                       for value, source in zip((dq, dk, dv, dw), (q, k, v, weights)))
+        _finite_mass_attention(*(value for value in result if value is not None))
+        return (*result, None, None, None)
+
+
 def weighted_attention(q: Tensor, k: Tensor, v: Tensor, weights: Tensor | None = None,
-                       mask: Tensor | None = None, backend: str = "auto") -> Tensor:
+                       mask: Tensor | None = None, backend: str = "auto", *, mass_scaled: bool = False) -> Tensor:
     """Compute sum(w exp(qk/sqrt(D)) v) / sum(w exp(qk/sqrt(D))).
 
     q/k/v have [..., H, Q/K, D/Dv]; batch axes and singleton heads broadcast.
@@ -236,6 +470,15 @@ def weighted_attention(q: Tensor, k: Tensor, v: Tensor, weights: Tensor | None =
     mode (rank-one NPU Q/K extension, including explicit all-one priors).
     Query-dependent BF16 NPU priors therefore use math/tiled. None still means
     the native unit-prior path. FP32 keeps its established selection policy.
+
+    mass_scaled=True returns min(sum(mask*weights),1) times the mean, in FP32
+    (FP64 for FP64 inputs). math/tiled fuse its first-order VJP. For auto, a
+    visible positive prior below sqrt(accumulation_dtype.tiny) selects that
+    bounded tiled path in both inference and training. This threshold selects
+    execution only; it never clips priors or changes support. Explicit native
+    requests reject that weak-prior range. Ordinary native calls retain their
+    fused kernel and the external amplitude multiply: extreme logits or
+    cotangents outside this bounded admission rule are not globally protected.
     """
     if backend not in {"auto", "math", "sdpa", "tiled", "npu_fusion"}:
         raise ValueError(f"unknown attention backend: {backend}")
@@ -263,10 +506,16 @@ def weighted_attention(q: Tensor, k: Tensor, v: Tensor, weights: Tensor | None =
     elif mask.dtype != torch.bool or mask.device != q.device:
         raise ValueError("mask must be boolean and on q's device")
     weights, mask = _auxiliary(weights, shape, True), _auxiliary(mask, shape, False)
+    weak_mass = False
+    if mass_scaled and not unit_prior:
+        accumulation_dtype = torch.float64 if q.dtype == torch.float64 else torch.float32
+        threshold = math.sqrt(torch.finfo(accumulation_dtype).tiny)
+        weak = (weights > 0) & (weights < threshold)
+        weak_mass = bool(weak.any()) and bool((weak & mask).any())
     need_zero_check = weights.requires_grad or (q.dtype == torch.bfloat16 and backend == "auto" and not unit_prior)
     visible_zero_prior = need_zero_check and bool(((weights == 0) & mask).any())
     zero_prior_grad = weights.requires_grad and visible_zero_prior
-    auto_must_tiled = zero_prior_grad or (q.dtype == torch.bfloat16 and visible_zero_prior)
+    auto_must_tiled = weak_mass or zero_prior_grad or (q.dtype == torch.bfloat16 and visible_zero_prior)
     npu_prior_feature = weights.requires_grad or (q.dtype == torch.bfloat16 and not unit_prior)
     npu_prior_ok = not npu_prior_feature or weights.shape[-2] == 1
     npu_width = q.shape[-1] + int(npu_prior_feature)
@@ -280,14 +529,24 @@ def weighted_attention(q: Tensor, k: Tensor, v: Tensor, weights: Tensor | None =
     if backend == "sdpa" and q.device.type not in {"cpu", "cuda"}:
         raise ValueError("sdpa is implemented for CPU/CUDA; select an NPU backend explicitly")
     if q.shape[-2] == 0 or k.shape[-2] == 0:
-        zero = (q.sum() + k.sum() + v.sum() + weights.sum()) * 0
-        return q.new_zeros(q.shape[:-1] + (v.shape[-1],)) + zero
+        zero = (q*0).sum() + (k*0).sum() + (v*0).sum() + (weights*0).sum()
+        dtype = torch.float64 if q.dtype == torch.float64 else torch.float32 if mass_scaled else q.dtype
+        return q.new_zeros(q.shape[:-1] + (v.shape[-1],), dtype=dtype) + zero
     if backend in {"sdpa", "npu_fusion"}:
+        if weak_mass:
+            raise ValueError("weak mass-scaled priors require auto, math or tiled; native VJP range is not qualified")
         if zero_prior_grad:
             raise ValueError("zero trainable priors require auto, math or tiled for their right derivative")
         with torch.autocast(q.device.type, enabled=False):
-            return _native_attention(q, k, v, weights, mask, backend,
-                                     unit_prior=unit_prior, no_mask=no_mask)
+            output = _native_attention(q, k, v, weights, mask, backend,
+                                       unit_prior=unit_prior, no_mask=no_mask)
+            if mass_scaled:
+                dtype = torch.float64 if q.dtype == torch.float64 else torch.float32
+                amount = torch.where(mask, weights.to(dtype), 0).expand(shape).sum(-1, keepdim=True).clamp(max=1)
+                output = output.to(dtype) * amount
+            return output
+    if mass_scaled:
+        return _MassScaledAttention.apply(q, k, v, weights, mask, backend == "tiled", weak_mass)
     if backend == "tiled":
         return _TiledAttention.apply(q, k, v, weights, mask)
     with torch.autocast(q.device.type, enabled=False):

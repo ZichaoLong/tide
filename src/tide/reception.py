@@ -4,6 +4,7 @@ from torch import nn
 
 from .attention import weighted_attention
 from .parameters import NodeLinear, fused_node_linears, norm, owner_ids
+from .weighted_mean import stable_weighted_mean
 
 
 class SourceEmbedding(nn.Module):
@@ -93,6 +94,6 @@ class Reception(nn.Module):
             y = y + self.o(read,owners)
         hidden = self.a(norm(y),owners) + self.embedding(owners,classes)[:,None,None]
         value = y + self.b(torch.nn.functional.silu(hidden),owners)
-        den = torch.where(total>0,total,torch.ones_like(total))
-        aggregate = (value*mass[...,None]).sum(-2)/den[...,None]
+        aggregate = stable_weighted_mean(mass, value,
+                                         None if edge_mask is None else edge_mask[:, None, None])
         return total, aggregate
