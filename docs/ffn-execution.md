@@ -101,3 +101,10 @@ Representative configs are in `configs/ffn-execution/`. Use
 and `python -m scripts.check_execution_candidates --help` for qualification.
 The existing paired breakdown runners provide independent synchronized replays.
 All long runs use the frozen-source launcher in [execution](execution-flows.md).
+
+The [finite CPU/NPU comparison](evidence/ffn-execution-devices-20261119.md)
+records the implemented options, retained formula/update failures and actual
+fresh-process restores. The measured medium NPU training candidates saved memory
+without improving throughput; W/P/WP were not extended to large inference.
+Keep the default gather/rectangular path unless a separately qualified workload
+provides a reason to select another option.

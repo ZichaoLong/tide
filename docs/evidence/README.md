@@ -1,5 +1,12 @@
 # Current evidence
 
+The [FFN interventions and CPU/NPU comparison](ffn-execution-devices-20261119.md)
+records direct weight-bank access, effective-row packing and their interaction.
+It separates repeated normal training/inference from synchronized stage/operator
+diagnostics, retains numerical failures and actual restored-update scope, and
+compares the fixed32 reference on CPU and NPU without claiming a causal percentage
+for organization versus arithmetic. Default FFN execution remains unchanged.
+
 The [KV128 / fixed32 Transformer breakdown](kv128-transformer-breakdown-20261119.md)
 separates ordinary medium continuing training and large inference from intrusive
 stage/operator diagnostics. It includes weight indexing, actual packing, backward

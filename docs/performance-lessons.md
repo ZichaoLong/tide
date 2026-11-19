@@ -278,3 +278,34 @@ still include unwrapped work and waiting. These diagnostics perturb scheduling,
 so neither their shares nor their logical output bytes identify ordinary wall-time
 shares, bus traffic or recoverable speedup. Optimization requires a new full-path
 measurement and unchanged numerical/continuation checks at the intended scale.
+
+## FFN interventions and CPU/NPU comparison, 2026-11-19
+
+The [finite execution comparison](evidence/ffn-execution-devices-20261119.md)
+keeps declared FFN formulas and ownership while separating direct bank access W,
+owner-row packing P and their combination. Three paired medium NPU training
+repeats gave throughput ratios 0.991/0.854/0.813, despite lower allocated peaks.
+P reduced KV FFN executed rows about 51% but increased calls 28→131; it retained
+the same logical parameter-gather output bytes across more calls. Reduced padded
+arithmetic alone did not pay for bucket construction, indexing and dispatch.
+
+W borrows weight views but still organizes activations, builds owner counts and
+assembles gradients. One owner plan serves three ordinary FFN projections; placed
+wrappers currently rebuild it. Power2 buckets can also span many empty weight
+groups. A single ragged grouped contraction with reused owner metadata is a future
+candidate, not an observed speedup. Original numerical failures remain, and W/P/WP
+were not extended to 9B; same-candidate restoration cannot qualify another path.
+
+The large same-B CPU decode gap is smaller than the NPU gap while both absolute
+CPU throughputs are lower. CPU/NPU parameter and input hashes match, but allocation
+fallback work and attention backends differ. CPU NUMA3 diagnostic updates also
+differ substantially from NUMA6 normal timing; later frequency/local-page snapshots
+do not explain past latency. Do not label these ratios a pure hardware effect.
+
+Synchronized NPU medium allocation requested 324 fallback rows while executing 49,152.
+Compacting only requested rows is a bounded opportunity if thresholds, solution
+faces and VJPs remain valid. Large inference separately exposes KV compaction,
+field gathers, pre-Full SSD preparation and state joins. These stages mix necessary
+math with organization; no unique additive percentage separates "unstructured"
+from "complex arithmetic". Parent remainders and logical bytes do not establish
+recoverable wall time or hardware bandwidth.
