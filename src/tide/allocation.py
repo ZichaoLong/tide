@@ -46,6 +46,34 @@ def _save_solution(ctx, c, scores, mu, lower, upper, low_active, high_active, ki
     return c
 
 
+def _quad_face_bounds(shifted, lower, upper, target, c):
+    """Check the final clamped face's multiplier bounds, in the input dtype.
+
+    For interior set I and remaining mass R, lambda solves
+    sum_I(shifted-lambda)=R. Lower faces require lambda>=L=max(shifted-lower),
+    upper faces lambda<=U=min(shifted-upper). Compare the corresponding sums
+    with R directly: constructing and rounding lambda can erase a tiny gap.
+    Fixed coordinates constrain mass, not lambda; an empty I needs L<=U.
+
+    This supplements the total-residual check. It neither adds a support epsilon
+    nor certifies arbitrary floating-point boundary cases; a rejected face uses
+    the existing same-device safeguarded solver.
+    """
+    free = lower < upper
+    inside = (c > lower) & (c < upper)
+    low_face = free & (c <= lower)
+    high_face = free & ~low_face & (c >= upper)
+    low = torch.where(low_face, shifted - lower, -torch.inf).amax(-1, keepdim=True)
+    high = torch.where(high_face, shifted - upper, torch.inf).amin(-1, keepdim=True)
+    has_low, has_high = low_face.any(-1, keepdim=True), high_face.any(-1, keepdim=True)
+    remainder = target - torch.where(inside, 0, c).sum(-1, keepdim=True)
+    # Finite dummy origins avoid inf-inf for absent boundary sets.
+    at_low = torch.where(inside, shifted - torch.where(has_low, low, 0), 0).sum(-1, keepdim=True)
+    at_high = torch.where(inside, shifted - torch.where(has_high, high, 0), 0).sum(-1, keepdim=True)
+    feasible = (~has_low | (at_low >= remainder)) & (~has_high | (at_high <= remainder))
+    return torch.where(inside.any(-1, keepdim=True), feasible, low <= high)
+
+
 def _quad_sorted(shifted, lower, upper, target):
     """Finite breakpoint solve: S(lambda)=intercept-count*lambda per interval.
 
@@ -93,6 +121,7 @@ def _quad_sorted(shifted, lower, upper, target):
     # Its lost mass may hide inside a large total's residual tolerance.
     resolved = (~free | (torch.isfinite(enter) & torch.isfinite(leave) & (enter < leave))).all(-1, keepdim=True)
     valid = (resolved & intervals.any(-1, keepdim=True) & torch.isfinite(c).all(-1, keepdim=True)
+             & _quad_face_bounds(shifted, lower, upper, target, c)
              & ((c.sum(-1, keepdim=True) - target).abs() <= tolerance))
     return c, valid
 

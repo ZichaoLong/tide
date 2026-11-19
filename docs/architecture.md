@@ -111,7 +111,9 @@ different backend implementations, with qualification recorded separately.
 
 Quad allocation sorts its clipped-linear response breakpoints, then rebuilds
 the selected face from its remaining mass. Exact endpoints preserve zero
-senders. Ill-conditioned rows retain the safeguarded bisection fallback;
+senders. The final face also checks its lower/upper multiplier bounds: a
+satisfied total alone can hide a wrong face after prefix cancellation. Rejected
+faces retain the same-device, same-dtype safeguarded bisection fallback;
 Shannon uses that iterative solver. Both use the declared solution-mapping
 first-order VJP, not differentiation through solver iterations.
 
