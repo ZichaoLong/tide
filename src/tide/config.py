@@ -59,6 +59,9 @@ class ModelConfig:
     reception_qkv_backend: str = "separate"
     reception_mask_padding: bool = False
     parameter_indexing: str = "gather"
+    # Execution-only: compact valid rows within each Full FFN owner.
+    ffn_packing: str = "rectangular"
+    ffn_weight_access: str = "gather"
     ssd_summary_backend: str = "block"
     ssd_scan_backend: str = "block"
     region_batch_size: int = 1
@@ -83,6 +86,10 @@ class ModelConfig:
             raise ValueError("reception_mask_padding must be boolean")
         if self.parameter_indexing not in ("gather", "static_view"):
             raise ValueError("parameter_indexing must be gather or static_view")
+        if self.ffn_packing not in ("rectangular", "power2"):
+            raise ValueError("ffn_packing must be rectangular or power2")
+        if self.ffn_weight_access not in ("gather", "grouped"):
+            raise ValueError("ffn_weight_access must be gather or grouped")
         if self.ssd_summary_backend not in ("block", "prefix"):
             raise ValueError("ssd_summary_backend must be block or prefix")
         if self.ssd_scan_backend not in ("block", "incremental", "doubling"):

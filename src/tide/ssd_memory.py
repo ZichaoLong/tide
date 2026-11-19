@@ -11,6 +11,7 @@ import torch
 from torch import nn
 from torch.nn import functional as F
 
+from .ffn_packing import selected_ffn, validate_ffn_packing
 from .layout import select_queries
 from .parameters import FeedForward, NodeLinear, NodeVector, _INHERIT_GROUPS, norm, owner_ids, select_owners
 from .ssd import ConvState, affine_prefix, logical_conv, ssd_scan
@@ -32,8 +33,9 @@ class SSDState:
 class SSDMemory(nn.Module):
     def __init__(self, nodes, d, groups, rank, period, settle=True, backend="auto", chunk=128,
                  *, short_decay=None, conv_stride=None, summary_backend="block", scan_backend="block",
-                 ffn_width=None, ffn_groups=_INHERIT_GROUPS):
+                 ffn_width=None, ffn_groups=_INHERIT_GROUPS, ffn_packing="rectangular", ffn_weight_access="gather"):
         super().__init__()
+        self.ffn_packing = validate_ffn_packing(ffn_packing)
         if d < 32 or d % 32:
             raise ValueError("SSD width must be a positive multiple of 32")
         if not isinstance(period, int) or period < 1:
@@ -57,7 +59,7 @@ class SSDMemory(nn.Module):
         self.read = NodeLinear(nodes, d, d//4, groups, rank)
         self.output = NodeLinear(nodes, d, d, groups, rank)
         self.ffn = FeedForward(nodes, d, groups if ffn_groups is _INHERIT_GROUPS else ffn_groups,
-                               rank, hidden_features=ffn_width)
+                               rank, hidden_features=ffn_width, weight_access=ffn_weight_access)
         self.a_log = NodeVector(nodes, self.heads, groups)
         self.dt_bias = NodeVector(nodes, self.heads, groups, value=-2)
         self.skip = NodeVector(nodes, self.heads, groups, value=1)
@@ -172,4 +174,5 @@ class SSDMemory(nn.Module):
         skip = self.skip(ids).repeat_interleave(32, dim=-1)[:, None, None, :]
         gated = (read + skip * value) * F.silu(output_gate)
         mix = self.output(norm(gated) * self.rho(ids)[:, None, None, :], ids)
-        return packed.publish(self.ffn(packed.data + mix, ids))
+        return packed.publish(selected_ffn(self.ffn, packed.data + mix, packed, ids,
+                                           packing=self.ffn_packing))

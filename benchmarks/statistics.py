@@ -161,7 +161,8 @@ class WorkAudit:
         self.work_events = defaultdict(lambda: defaultdict(int))
         self.matrices = defaultdict(lambda: dict(calls=0, rows=0, dense_multiply_adds=0))
         self.matrix_dispatch = defaultdict(lambda: dict(calls=0, base_weight_rows=0,
-                                                       unique_base_weight_rows=0, repeated_base_weight_rows=0))
+                                                       unique_base_weight_rows=0, repeated_base_weight_rows=0,
+                                                       bank_view_span_rows=0))
         self.packing = defaultdict(lambda: dict(calls=0, selected_rows=0, executed_rows=0))
         self.batch_inputs = 0
         self._originals = []
@@ -306,11 +307,19 @@ class WorkAudit:
         uniform = module._uniform_group(owners)
         n = x.shape[0]
         if uniform is None:
-            ids = (range(module.nodes) if owners is None else owner_ids(owners).detach().cpu().tolist())
+            ids = list(range(module.nodes)) if owners is None else owner_ids(owners).detach().cpu().tolist()
             unique = len({module._host_groups[index] for index in ids})
             weight_rows, operator = n, "bmm"
+            bank_span = 0
+            if module.weight_access == "grouped":
+                possible = getattr(owners, "possible_ids", tuple(range(module.nodes)))
+                groups = [module._host_groups[index] for index in possible]
+                bank_span = max(groups)-min(groups)+1 if groups else module.weight.shape[0]
+                weight_rows = unique
+                operator = "npu_grouped_matmul" if x.device.type == "npu" else "cpu_segmented_mm"
         else:
             weight_rows, unique, operator = 1, 1, "mm"
+            bank_span = 0
         width = module.out_features if out_features is None else out_features
         key = (path, operator, n, rows//n, module.in_features, width)
         dispatch = self.matrix_dispatch[key]
@@ -318,11 +327,27 @@ class WorkAudit:
         dispatch["base_weight_rows"] += weight_rows
         dispatch["unique_base_weight_rows"] += unique
         dispatch["repeated_base_weight_rows"] += weight_rows-unique
+        dispatch["bank_view_span_rows"] += bank_span
 
     def _matrix_dispatch_report(self):
         return [dict(path=path, base_operator=operator, node_rows=nodes, rows_per_node=rows,
                      in_features=inputs, out_features=outputs, **counts)
                 for (path, operator, nodes, rows, inputs, outputs), counts in sorted(self.matrix_dispatch.items())]
+
+    def _ffn_packing_report(self):
+        # Query packing still describes the unchanged Attention layout. The
+        # actual FFN gate operands may instead use compacted owner buckets.
+        result = {}
+        for kind, packed in self.packing.items():
+            prefix = "memories."+kind+".ffn.gate"
+            matrices = [row for name, row in self.matrices.items()
+                        if name == prefix or name.startswith(prefix+".shards.")]
+            result[kind] = dict(selected_rows=packed["selected_rows"],
+                                executed_rows=sum(row["rows"] for row in matrices),
+                                calls=sum(row["calls"] for row in matrices),
+                                query_rectangular_rows=packed["executed_rows"],
+                                policy=self.model.config.ffn_packing)
+        return result
 
     def _head_matrix(self, path, module, inputs, output):
         if not module.uses_fused_projection(inputs[0]):
@@ -384,9 +409,10 @@ class WorkAudit:
                     work_per_input_position={name: count/self.batch_inputs for name, count in self.work.items()} if self.batch_inputs else {},
                     work_by_sample_time=[dict(sample=b, time=t, **self.work_events[b, t]) for b, t in sorted(self.domain)],
                     query_packing=dict(self.packing),
+                    ffn_packing=self._ffn_packing_report(),
                     node_matrices=dict(self.matrices),
                     node_matrix_dispatch=self._matrix_dispatch_report(),
-                    matrix_dispatch_definition="executed NodeLinear base contractions and weight rows per call; repeated rows describe BMM operands, not peak storage or measured bus traffic; private adapter contractions remain separate in matrix cost",
+                    matrix_dispatch_definition="NodeLinear base dispatch; gather rows describe BMM operands, grouped rows count nonempty unique groups with separate bank-view span including empty groups; neither is copied bytes or bus traffic; private adapters remain separate in matrix cost",
                     matrix_cost_definition="multiply-add pairs for actually executed NodeLinear rows, including padding/adapters; excludes attention/normalization/non-NodeLinear ops; not complete FLOPs")
 
     def _summary(self, events):

@@ -172,6 +172,7 @@ class _ShardedLinear(_ShardedOwners):
         super().__init__(source, partitions, devices)
         self.nodes, self.in_features, self.out_features = source.nodes, source.in_features, source.out_features
         self.shared = source.shared
+        self.weight_access = source.weight_access
         groups = source._host_groups
         _check_group_ownership(groups, partitions)
         for partition in range(len(devices)):
@@ -183,6 +184,7 @@ class _ShardedLinear(_ShardedOwners):
             shard = self._new_shard(NodeLinear, partition, owners)
             shard.nodes, shard.in_features, shard.out_features = len(owners), source.in_features, source.out_features
             shard.shared = source.shared
+            shard.weight_access = source.weight_access
             shard._set_groups(torch.tensor([mapping[groups[i]] for i in owners], dtype=torch.int64))
             shard.groups = shard.groups.to(devices[partition])
             self._slice(source, shard, "weight", original_groups, partition)

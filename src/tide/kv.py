@@ -6,6 +6,7 @@ import torch
 from torch import nn
 
 from .attention import weighted_attention
+from .ffn_packing import selected_ffn, validate_ffn_packing
 from .layout import select_queries
 from .parameters import FeedForward, HeadQuery, NodeLinear, _INHERIT_GROUPS, norm, select_owners
 
@@ -62,9 +63,10 @@ def cache_order(keep, times):
 class KVMemory(nn.Module):
     def __init__(self, nodes, d, groups, rank, period, settle=True, backend="auto", chunk=128, kv_groups=None,
                  *, position_period=None, window=None, short_decay=None, kv_width=None, ffn_width=None,
-                 ffn_groups=_INHERIT_GROUPS):
+                 ffn_groups=_INHERIT_GROUPS, ffn_packing="rectangular", ffn_weight_access="gather"):
         super().__init__()
         self.d, self.period, self.backend, self.chunk = d, period, backend, chunk
+        self.ffn_packing = validate_ffn_packing(ffn_packing)
         self.kv_width = d if kv_width is None else kv_width
         if type(self.kv_width) is not int or not 0 < self.kv_width <= d or self.kv_width % 32:
             raise ValueError("kv_width must be a positive multiple of 32 <= d")
@@ -80,7 +82,7 @@ class KVMemory(nn.Module):
         self.query = HeadQuery(nodes, d, groups, rank, out_features=self.kv_width)
         self.output = NodeLinear(nodes, self.kv_width, d, groups, rank)
         self.ffn = FeedForward(nodes, d, groups if ffn_groups is _INHERIT_GROUPS else ffn_groups,
-                               rank, hidden_features=ffn_width)
+                               rank, hidden_features=ffn_width, weight_access=ffn_weight_access)
 
     def prepare(self, u, mass, times, owners, state=None):
         n, b, length, d = u.shape
@@ -160,4 +162,4 @@ class KVMemory(nn.Module):
         amount = (visible*w[:, :, None]).sum(-1).clamp(max=1)
         read = read.transpose(2,3).reshape(n,b,qlen,self.kv_width) * amount[...,None]
         x = packed.data + self.output(read, ids)
-        return packed.publish(self.ffn(x, ids))
+        return packed.publish(selected_ffn(self.ffn, x, packed, ids, packing=self.ffn_packing))

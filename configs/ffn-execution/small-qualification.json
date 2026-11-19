@@ -1,0 +1,22 @@
+{
+  "topology": {
+    "kind": "multiscale",
+    "profile": "compact-5-dd4",
+    "n": 2,
+    "hubs": 1,
+    "timing": "settle"
+  },
+  "d": 64,
+  "memory": "X",
+  "kv_width": 32,
+  "sharing": "independent",
+  "aggregation": "source_residual",
+  "allocation": "quad",
+  "region_batch_size": 4,
+  "ssd_scan_backend": "doubling",
+  "ssd_summary_backend": "prefix",
+  "checkpoint_reception": true,
+  "clock": {
+    "kv_window": 5
+  }
+}

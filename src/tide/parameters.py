@@ -5,6 +5,8 @@ import math
 import torch
 from torch import nn
 
+from .grouped_linear import GroupedPlan, check_grouped_policy, make_grouped_plan
+
 
 _INHERIT_GROUPS = object()
 
@@ -50,6 +52,15 @@ class NodeOwners:
         ordered = tuple(ordered_ids)
         possible = ordered if possible_ids is None else tuple(possible_ids)
         return cls(torch.tensor(ordered, dtype=torch.int64, device=device), possible, ordered)
+
+
+@dataclass(frozen=True, slots=True)
+class _GroupedOwners(NodeOwners):
+    """A single FFN invocation reuses only its discrete owner plan."""
+    parameter_groups: tuple[int, ...] = ()
+    base_plan: GroupedPlan | None = None
+    private_plan: GroupedPlan | None = None
+    rows_per_owner: int = 0
 
 
 def owner_ids(owners):
@@ -116,8 +127,11 @@ class NodeLinear(_OwnerGroups):
     row by row. Adapters remain two projections, not materialized dense weights.
     """
 
-    def __init__(self, nodes, in_features, out_features, groups=None, rank=8, bias=False):
+    def __init__(self, nodes, in_features, out_features, groups=None, rank=8, bias=False, *, weight_access="gather"):
         super().__init__()
+        if weight_access not in {"gather", "grouped"}:
+            raise ValueError("weight_access must be gather or grouped")
+        self.weight_access = weight_access
         self.nodes, self.in_features, self.out_features = nodes, in_features, out_features
         self.shared = groups is not None
         # Ownership is construction metadata, even during a meta-device capacity
@@ -139,6 +153,8 @@ class NodeLinear(_OwnerGroups):
     def forward(self, x, owners=None):
         if owners is None:
             owners = torch.arange(self.nodes, device=self.groups.device)
+        if self.weight_access == "grouped":
+            return self._grouped_forward(x, self._grouped_owners(x, owners))
         ids, uniform = owner_ids(owners), self._uniform_group(owners)
         shape = x.shape
         flat = x.reshape(len(ids), -1, self.in_features)
@@ -155,6 +171,38 @@ class NodeLinear(_OwnerGroups):
         if self.bias is not None:
             out = out + (self.bias[groups, None, :] if uniform is None else self.bias[uniform])
         return out.reshape(*shape[:-1], self.out_features)
+
+    def _grouped_owners(self, x, owners):
+        """Only local per-call plans are reused; parameter reloads cannot stale them."""
+        check_grouped_policy(x, self.weight)
+        rows = math.prod(x.shape[1:-1])
+        if (isinstance(owners, _GroupedOwners) and owners.parameter_groups == self._host_groups
+                and owners.rows_per_owner == rows and self.shared == (owners.private_plan is not None)):
+            return owners
+        ids = owner_ids(owners)
+        possible = owners.possible_ids if isinstance(owners, NodeOwners) else tuple(range(self.nodes))
+        exact = owners.exact_ids if isinstance(owners, NodeOwners) else None
+        annotated = NodeOwners(ids, possible, exact)
+        base = (None if self._uniform_group(annotated) is not None else
+                make_grouped_plan(ids, self.groups, self._host_groups, possible, rows, self.weight.shape[0]))
+        private = (make_grouped_plan(ids, None, (), possible, rows, self.nodes) if self.shared else None)
+        return _GroupedOwners(ids, possible, exact, self._host_groups, base, private, rows)
+
+    def _grouped_forward(self, x, owners):
+        ids = owners.ids
+        flat = x.reshape(len(ids), owners.rows_per_owner, self.in_features)
+        if owners.base_plan is None:
+            uniform = self._uniform_group(owners)
+            out = torch.mm(flat.reshape(-1, self.in_features), self.weight[uniform].T)
+            out = out.reshape(len(ids), owners.rows_per_owner, self.out_features)
+        else:
+            out = owners.base_plan.apply(flat, self.weight)
+        if self.shared:
+            low = owners.private_plan.apply(flat, self.right)
+            out = out + owners.private_plan.apply(low, self.left)
+        if self.bias is not None:
+            out = out + self.bias[self.groups[ids], None, :]
+        return out.reshape(*x.shape[:-1], self.out_features)
 
     def selected(self, x, owners):
         """Convenience for irregular rows; pack once outside repeated projections."""
@@ -200,6 +248,8 @@ def fused_node_linears(layers, x, owners=None):
     contraction. No adapter is shared or collapsed into a dense base matrix.
     """
     first = layers[0]
+    if any(layer.weight_access != "gather" for layer in layers):
+        raise ValueError("fused node projections currently require gather weight access")
     if any(layer.in_features != first.in_features or layer.out_features != first.out_features or
            layer._host_groups != first._host_groups or layer.shared != first.shared or
            (layer.bias is None) != (first.bias is None) for layer in layers):
@@ -258,15 +308,20 @@ class HeadQuery(nn.Module):
 
 
 class FeedForward(nn.Module):
-    def __init__(self, nodes, d, groups=None, rank=8, *, hidden_features=None):
+    def __init__(self, nodes, d, groups=None, rank=8, *, hidden_features=None, weight_access="gather"):
         super().__init__()
         width = 4*d if hidden_features is None else hidden_features
         if type(width) is not int or width < 1 or width % 16:
             raise ValueError("FFN width must be a positive multiple of 16")
-        self.gate = NodeLinear(nodes, d, width, groups, rank)
-        self.up = NodeLinear(nodes, d, width, groups, rank)
-        self.down = NodeLinear(nodes, width, d, groups, rank)
+        self.weight_access = weight_access
+        self.gate = NodeLinear(nodes, d, width, groups, rank, weight_access=weight_access)
+        self.up = NodeLinear(nodes, d, width, groups, rank, weight_access=weight_access)
+        self.down = NodeLinear(nodes, width, d, groups, rank, weight_access=weight_access)
 
     def forward(self, x, owners=None):
         z = norm(x)
+        if self.weight_access == "grouped" and all(isinstance(layer, NodeLinear) for layer in (self.gate, self.up, self.down)):
+            if owners is None:
+                owners = torch.arange(self.gate.nodes, device=x.device)
+            owners = self.gate._grouped_owners(z, owners)
         return x + self.down(torch.nn.functional.silu(self.gate(z, owners)) * self.up(z, owners), owners)

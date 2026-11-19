@@ -12,6 +12,7 @@ from functools import wraps
 import importlib
 import time
 
+import torch
 from torch import nn
 from torch.utils._python_dispatch import TorchDispatchMode
 
@@ -31,6 +32,7 @@ perturb the execution and can remain in the parent.
     def __init__(self, device, *, clock=time.perf_counter, sync=synchronize):
         super().__init__(device, clock=clock, sync=sync)
         self.boundary_failures = []
+        self.allocation_work = []
 
     @contextmanager
     def scope(self, name):
@@ -75,6 +77,7 @@ perturb the execution and can remain in the parent.
         return dict(
             rows=[dict(path=path, **row) for path, row in sorted(self.rows.items())],
             boundary_failures=list(self.boundary_failures),
+            allocation_work=list(self.allocation_work),
             boundary="entry synchronize completes before the timer starts; completion synchronize is inside elapsed time",
             interpretation="separate intrusive stage pass; inclusive rows overlap and must not be summed; exclusive rows partition only this observation, not normal wall time or kernel time; a nested entry wait for prior unwrapped work stays in its parent; Python, synchronization and hook overhead perturb execution",
         )
@@ -98,7 +101,7 @@ not call a module's forward. No tensors or computation are replaced.
         seen = {(id(module), "forward") for _, module in modules
                 if module.forward != before[id(module)]}
 
-        def wrap(obj, name, label):
+        def wrap(obj, name, label, facts=None):
             key = id(obj), name
             if key in seen:
                 return
@@ -108,7 +111,14 @@ not call a module's forward. No tensors or computation are replaced.
             @wraps(original)
             def run(*args, **kwargs):
                 with observer.scope(label):
-                    return original(*args, **kwargs)
+                    result = original(*args, **kwargs)
+                if facts is not None:
+                    # Data-dependent counts require reads and perturb this
+                    # replay. They are outside the solver interval and under
+                    # their own path in operator/stage reports.
+                    with observer.scope("observation.metadata"):
+                        observer.allocation_work.append(facts(args, kwargs, result))
+                return result
 
             originals.append((obj, name, original, owned))
             setattr(obj, name, run)
@@ -132,6 +142,34 @@ not call a module's forward. No tensors or computation are replaced.
                     wrap(module, "forward", label)
 
             if hasattr(model, "graph"):
+                allocation = importlib.import_module("tide.allocation")
+                def sorted_facts(args, kwargs, result):
+                    _, valid = result
+                    return dict(kind="quad_sorted", rows=valid.numel(),
+                                invalid_rows=int((~valid).sum()),
+                                note="invalid sorted rows include inactive rows; actual fallback rows are recorded at bisect")
+
+                def bisect_facts(args, kwargs, result):
+                    shifted, _, _, _, solve, kind = args
+                    return dict(kind="bisect", profile=kind,
+                                requested_rows=int(solve.sum()), executed_rows=solve.numel(),
+                                candidates=shifted.shape[-1],
+                                bisection_iterations=64 if shifted.dtype == torch.float64 else 40,
+                                correction_iterations=3,
+                                note="current solver evaluates all rows when any requested row needs recovery")
+
+                wrap(allocation, "_quad_sorted", "allocation.sorted", sorted_facts)
+                wrap(allocation, "_bisect", "allocation.bisect", bisect_facts)
+                wrap(allocation, "_save_solution", "allocation.save_face")
+                wrap(importlib.import_module("tide.region"), "allocate", "allocation.validate_solve")
+                packing = importlib.import_module("tide.ffn_packing")
+                wrap(packing, "power2_buckets", "ffn.rows.bucket")
+                grouped = importlib.import_module("tide.grouped_linear")
+                wrap(grouped.GroupedPlan, "apply", "ffn.grouped.projection")
+                wrap(grouped, "_native", "ffn.grouped.matmul")
+                wrap(importlib.import_module("tide.parameters"), "make_grouped_plan", "ffn.grouped.plan")
+                for module_name in ("tide.kv", "tide.ssd_memory"):
+                    wrap(importlib.import_module(module_name), "selected_ffn", "ffn.rows.apply")
                 for module_name in ("tide.parameters", "tide.reception"):
                     wrap(importlib.import_module(module_name), "fused_node_linears", "node_linears.fused")
                 for module_name in ("tide.parameters", "tide.kv", "tide.ssd_memory",
@@ -172,6 +210,7 @@ retained, never tensor payloads. Non-tensor argument values are not grouping key
         self.device, self.clock, self.sync = device, clock, sync
         self.groups = defaultdict(lambda: dict(calls=0, seconds=0.))
         self.failures = []
+        self.allocation_work = []
 
     def __torch_dispatch__(self, func, types, args=(), kwargs=None):
         kwargs = {} if kwargs is None else kwargs
@@ -206,6 +245,10 @@ retained, never tensor payloads. Non-tensor argument values are not grouping key
             operator_seconds=sum(row["seconds"] for row in rows),
             failed_calls=len(self.failures),
             failures=list(self.failures),
+            allocation_work=list(self.allocation_work),
+            scalar_host_reads=sum(row["calls"] for row in rows
+                                  if "_local_scalar_dense" in row["operator"] and
+                                  "observation.metadata" not in row["path"]),
             boundary="entry synchronize completes before the operator timer starts; dispatch and completion synchronize are timed; descriptor collection and aggregation are excluded",
             interpretation="separate intrusive operator pass on the selected device; rows group tensor shapes, strides, dtypes and devices, not scalar argument values; totals include completed dispatches only and exclude Python gaps, descriptor bookkeeping and entry waits; summed seconds are neither normal wall time nor hardware kernel time; dispatcher operations can contain multiple native kernels or no device kernel",
         )

@@ -13,6 +13,7 @@ separate responsibilities but no compulsory universal intermediate representatio
 |---|---|---|
 | legal configuration, clocks and optional bindings | config.py, topology.py, topology_hb.py; scripts/support_catalog.py | test_topology.py, test_optional_bindings.py |
 | exact parameter binding and optional static row views | parameters.py, model.py construction | test_parameter_binding.py, test_parameter_views.py |
+| optional direct FFN bank access and owner-row packing | grouped_linear.py, ffn_packing.py, parameters.py | test_grouped_weights.py, test_ffn_packing.py |
 | incoming message processing | reception.py | test_reception.py |
 | KV history and selected Full | kv.py, layout.py | oracle_fc.py, test_fc_reference.py |
 | SSD recurrence/convolution | ssd.py, ssd_memory.py | test_ssd.py, test_ssd_memory.py |
@@ -101,6 +102,12 @@ use slices; dynamic Full selection drops that metadata and retains true gathers.
 Placed wrappers map the static order to local rows without device-to-host reads.
 Caches contain metadata rather than projected weights and are safe to initialize
 under inference before switching to training. The default remains `gather`.
+
+Independent [Full FFN execution options](ffn-execution.md) add grouped bank
+contractions and same-owner power-of-two row buckets. They retain the original
+Attention/history layout and parameter ownership; default execution is unchanged.
+CPU segmented MM and NPU grouped matmul with explicit first-order adjoints are
+different backend implementations, with qualification recorded separately.
 
 Quad allocation sorts its clipped-linear response breakpoints, then rebuilds
 the selected face from its remaining mass. Exact endpoints preserve zero

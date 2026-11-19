@@ -100,7 +100,8 @@ class TideModel(nn.Module):
             memory_groups = None if memory_sharing=="independent" else _number([memory_keys[v] for v in members])
             args = (len(members),d,memory_groups,config.adapter_rank,graph.period)
             kwargs = dict(settle=self.settle,backend=config.attention_backend,chunk=config.attention_chunk,
-                          ffn_width=config.ffn_width,ffn_groups=ffn_groups)
+                          ffn_width=config.ffn_width,ffn_groups=ffn_groups,
+                          ffn_packing=config.ffn_packing,ffn_weight_access=config.ffn_weight_access)
             if kind=="K":
                 kvkeys = [(graph.nodes[v].layer,graph.nodes[v].region) if memory_sharing=="region_shared"
                           else (graph.nodes[v].layer,tuple(sorted(set(graph.nodes[u].role for u in graph.regions[graph.nodes[v].region]))))
