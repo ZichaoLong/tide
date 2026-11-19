@@ -1,5 +1,10 @@
 # Current evidence
 
+The [training-impact review and duplicate-source retirement](code-retirement-training-impact-20261119.md)
+separates usable fixed-path training from unresolved gradient/support/restore qualifications.
+It retires 312 byte-verified frozen source copies, preserves active implementations and raw failure evidence,
+and records reconstruction from the original pushed commits.
+
 The [priority artifact retirement and remaining read-only inventory](disk-cleanup-20261119.md)
 records 90 retired tensor payloads, preserved failures and the isolated CPU installation smoke.
 Historical paths retain their measurement identities; the exact retired payload list is no longer

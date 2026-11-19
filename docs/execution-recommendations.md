@@ -59,6 +59,29 @@ a within-threshold next update and bitwise future optimizer trajectories are dif
 [Cross-path finite deviations](evidence/reception-numerics-20261118.md) remain; BF16/placed
 qualification is [separate](evidence/reception-validation-20261118.md).
 
+## Training qualification boundaries
+
+Training execution, numerical equivalence and downstream learning quality are separate claims.
+Some retained failures involve gradients, updated parameters or discrete support; they have not
+all been explained as rounding. A fixed path can complete training and restore while a change
+of mode, batching, precision or placement produces a different trajectory.
+
+| Path / setting | Evidence and practical boundary |
+|---|---|
+| Default CPU example | FP32 FC-K, gather/rectangular FFN and one thread have public training/restore checks. This is a small mechanism example, not large-model or task-quality qualification. |
+| Recommended single-NPU FP32 presets | The five fixed-source/configuration 100-update runs above have paired actual restored updates within their original thresholds. Cross-path and inference/grad-forward differences remain, including baseline observations; keep measured settings fixed. |
+| Narrow KV memory family | Medium training uses d192/KV32, with B8/B16 continuing training and paired restore evidence. The d768/KV128 7.268B instance has local formula/VJP and inference evidence, but no complete 9B-topology training/restore qualification. FFN-adjusted near-parameter variants also have inference-only evidence. |
+| FFN grouped weights / power2 packing | Optional W/P/WP reduce measured medium NPU peak memory, but have no same-batch throughput gain and retain forward/update failures. CPU packing recovery did not finish within the artifact budget; medium NPU W qualification did not begin. Keep gather/rectangular as the training default. |
+| BF16 | Some fixed HB workloads train and restore within threshold. Other cases retain support, memory-time, gradient and update differences, including FC/placed restore failures. BF16 is secondary and is not certified as a drop-in FP32 replacement. |
+| Memory-only sharing | Small/medium training and candidate-local restore have evidence. The 9B region-batch1/4 inference pair changes support; keep the measured size4 setting for that instance, without claiming 9B training equivalence. |
+| Timed and placement | The older Timed FP32 preset has its own 100-update evidence. New memory-candidate Timed/multi-device combinations lack qualification; Timed BF16 and some two-device restores retain failures. Four-device inference does not qualify four-device training. Direct NPU transport retains a backward failure; host-staged transport is a separate path. |
+| Exact training resumption | Public checkpoints retain model/configuration, AdamW and private state. The example does not save RNG, sampler, scheduler or data-stream position; downstream training must preserve its own recipe state. Placed checkpoints use the placement API. |
+
+See the [training-impact review and duplicate-code retirement](evidence/code-retirement-training-impact-20261119.md)
+for source-scoped failures, fixed defects and cleanup decisions. Useful memory-saving candidates,
+reference paths and diagnosis entry points remain available; removing duplicate frozen checkouts
+changes storage availability, not the implementation or qualification of these paths.
+
 ## Mode-specific choices
 
 Use the [resident inference measurements](evidence/reception-inference-20261118.md) and
