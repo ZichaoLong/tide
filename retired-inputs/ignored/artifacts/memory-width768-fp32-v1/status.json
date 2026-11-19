@@ -1,0 +1,71 @@
+{
+  "state": "passed",
+  "source": "87fb94b369d40a55b5fa62f67a6565a721645bb9",
+  "command": [
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "/mi/data2T/zlong/home/.agents/skills/use-local-ascend/scripts/run_on_free_npu.py",
+    "--job-id",
+    "memory-width768-fp32-v1",
+    "--project",
+    "tide-instances",
+    "--priority",
+    "0",
+    "--npu-count",
+    "1",
+    "--max-wait-seconds",
+    "600",
+    "--state-file",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-width768-fp32-v1/queue.json",
+    "--",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "-m",
+    "scripts.memory_candidate_formulas",
+    "--device",
+    "npu:0",
+    "--d",
+    "768",
+    "--widths",
+    "384",
+    "256",
+    "128",
+    "--threads",
+    "4",
+    "--output",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-width768-fp32-v1/formulas.json"
+  ],
+  "pid": 1076852,
+  "started": "2026-11-19T02:27:13.883249+00:00",
+  "max_rss_bytes": 34359738368,
+  "peak_rss_bytes": 2394591232,
+  "max_processes": 2,
+  "rss_sample_count": 68,
+  "poll_interval": 0.25,
+  "descendant_supervision": "Linux child subreaper; retained PID/start identities across nested sessions",
+  "child_pid": 1076883,
+  "process_group": 1076883,
+  "elapsed": 28.47640038281679,
+  "descendant_identities": [
+    {
+      "pid": 1076883,
+      "start_ticks": 2264140459
+    },
+    {
+      "pid": 1076894,
+      "start_ticks": 2264140465
+    },
+    {
+      "pid": 1076975,
+      "start_ticks": 2264140521
+    },
+    {
+      "pid": 1077328,
+      "start_ticks": 2264140994
+    },
+    {
+      "pid": 1077453,
+      "start_ticks": 2264141168
+    }
+  ],
+  "exit_code": 0,
+  "finished": "2026-11-19T02:27:42.359650+00:00"
+}

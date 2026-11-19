@@ -1,0 +1,74 @@
+{
+  "state": "failed",
+  "source": "778c65fb2961624bb416343eb3ad0f6f031deff7",
+  "command": [
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "/mi/data2T/zlong/home/.agents/skills/use-local-ascend/scripts/run_on_free_npu.py",
+    "--job-id",
+    "qualification-npu-bf16-v5",
+    "--project",
+    "tide-instances",
+    "--priority",
+    "0",
+    "--npu-count",
+    "1",
+    "--max-wait-seconds",
+    "600",
+    "--state-file",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/qualification-npu-bf16-v5/queue.json",
+    "--",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "-m",
+    "scripts.qualify_precision",
+    "--device",
+    "npu:0",
+    "--precision",
+    "bf16",
+    "--width",
+    "0",
+    "--threads",
+    "4",
+    "--steps",
+    "3",
+    "--checkpoint",
+    "--reference",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/qualification-cpu-fp32-v1/tensors",
+    "--output",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/qualification-npu-bf16-v5/result.json"
+  ],
+  "pid": 3441709,
+  "started": "2026-11-18T04:07:08.959815+00:00",
+  "max_rss_bytes": 68719476736,
+  "peak_rss_bytes": 8612474880,
+  "max_processes": 2,
+  "rss_sample_count": 299,
+  "poll_interval": 0.25,
+  "descendant_supervision": "Linux child subreaper; retained PID/start identities across nested sessions",
+  "child_pid": 3441775,
+  "process_group": 3441775,
+  "elapsed": 127.50440537557006,
+  "descendant_identities": [
+    {
+      "pid": 3441775,
+      "start_ticks": 2256099966
+    },
+    {
+      "pid": 3441776,
+      "start_ticks": 2256099972
+    },
+    {
+      "pid": 3444562,
+      "start_ticks": 2256104715
+    },
+    {
+      "pid": 3444780,
+      "start_ticks": 2256105205
+    },
+    {
+      "pid": 3444908,
+      "start_ticks": 2256105426
+    }
+  ],
+  "exit_code": 1,
+  "finished": "2026-11-18T04:09:16.464221+00:00"
+}

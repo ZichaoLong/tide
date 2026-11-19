@@ -1,0 +1,1114 @@
+{
+  "state": "retired",
+  "reviewed_commit": "dee2c84d118e15899433141aef8181ba64544863",
+  "files": [
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/venv",
+      "bytes": 4096,
+      "allocated_bytes": 4096,
+      "mode": 16877
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/wheel",
+      "bytes": 4096,
+      "allocated_bytes": 4096,
+      "mode": 16877
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/build-copy",
+      "bytes": 4096,
+      "allocated_bytes": 4096,
+      "mode": 16877
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/checkpoint.pt",
+      "bytes": 28414683,
+      "allocated_bytes": 28418048,
+      "mode": 33152,
+      "sha256": "070d961a10f9f16a18061f88d44c92d4bb7cc72f9a768f15ef5a0dbd09f0a757"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/worker.py",
+      "bytes": 710,
+      "allocated_bytes": 4096,
+      "mode": 33188,
+      "sha256": "a77ffd0e7b29d6dfe86ae9ec0701a979b8c913dd6b424349565f3e123e224c55"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/venv/include",
+      "bytes": 4096,
+      "allocated_bytes": 4096,
+      "mode": 16877
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/venv/lib64",
+      "bytes": 3,
+      "allocated_bytes": 0,
+      "mode": 41471,
+      "symlink_target": "lib"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/venv/bin",
+      "bytes": 4096,
+      "allocated_bytes": 4096,
+      "mode": 16877
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/venv/lib",
+      "bytes": 4096,
+      "allocated_bytes": 4096,
+      "mode": 16877
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/venv/pyvenv.cfg",
+      "bytes": 480,
+      "allocated_bytes": 4096,
+      "mode": 33188,
+      "sha256": "7367b00f5eb111a60367f60571c06c241c09badba3befc4902eb61c9f7828b93"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/venv/include/python3.12",
+      "bytes": 4096,
+      "allocated_bytes": 4096,
+      "mode": 16877
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/venv/bin/activate",
+      "bytes": 2342,
+      "allocated_bytes": 4096,
+      "mode": 33188,
+      "sha256": "0e757883a5f7ca56990438efce869e0190d8d09e2b192374e187a0ca204f512a"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/venv/bin/python",
+      "bytes": 10,
+      "allocated_bytes": 0,
+      "mode": 41471,
+      "symlink_target": "python3.12"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/venv/bin/Activate.ps1",
+      "bytes": 9033,
+      "allocated_bytes": 12288,
+      "mode": 33188,
+      "sha256": "3795a060dea7d621320d6d841deb37591fadf7f5592c5cb2286f9867af0e91df"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/venv/bin/activate.fish",
+      "bytes": 2282,
+      "allocated_bytes": 4096,
+      "mode": 33188,
+      "sha256": "dd1556a84216befb11c4f5a11fe624e5f9abdb1b48f84917b755b89f78708f50"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/venv/bin/python3.12",
+      "bytes": 84,
+      "allocated_bytes": 4096,
+      "mode": 41471,
+      "symlink_target": "/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/bin/python3.12"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/venv/bin/activate.csh",
+      "bytes": 1007,
+      "allocated_bytes": 4096,
+      "mode": 33188,
+      "sha256": "16a9ca2a0155ab167f6f5ef4669ff8c57835ae1f2e721a365479707b8dc1b3c9"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/venv/bin/python3",
+      "bytes": 10,
+      "allocated_bytes": 0,
+      "mode": 41471,
+      "symlink_target": "python3.12"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/venv/lib/python3.12",
+      "bytes": 4096,
+      "allocated_bytes": 4096,
+      "mode": 16877
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/venv/lib/python3.12/site-packages",
+      "bytes": 4096,
+      "allocated_bytes": 4096,
+      "mode": 16877
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/venv/lib/python3.12/site-packages/tide_instances-0.1.0.dist-info",
+      "bytes": 4096,
+      "allocated_bytes": 4096,
+      "mode": 16877
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/venv/lib/python3.12/site-packages/tide",
+      "bytes": 4096,
+      "allocated_bytes": 4096,
+      "mode": 16877
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/venv/lib/python3.12/site-packages/tide_instances-0.1.0.dist-info/RECORD",
+      "bytes": 3436,
+      "allocated_bytes": 4096,
+      "mode": 33188,
+      "sha256": "fe152f4e58184e3707817884c94ae292548cf19ee1a4ca1f13317d7b8c73b76a"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/venv/lib/python3.12/site-packages/tide_instances-0.1.0.dist-info/top_level.txt",
+      "bytes": 5,
+      "allocated_bytes": 4096,
+      "mode": 33188,
+      "sha256": "556145c09f4919b2613510bb7b03c5d868c41de20cbfe6e70d6728ed73fbc4c7"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/venv/lib/python3.12/site-packages/tide_instances-0.1.0.dist-info/INSTALLER",
+      "bytes": 4,
+      "allocated_bytes": 4096,
+      "mode": 33188,
+      "sha256": "ceebae7b8927a3227e5303cf5e0f1f7b34bb542ad7250ac03fbcde36ec2f1508"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/venv/lib/python3.12/site-packages/tide_instances-0.1.0.dist-info/WHEEL",
+      "bytes": 91,
+      "allocated_bytes": 4096,
+      "mode": 33188,
+      "sha256": "60b2577585d0d8543452a9f627eea21080bede239ecbc947df10adbc52e477c4"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/venv/lib/python3.12/site-packages/tide_instances-0.1.0.dist-info/REQUESTED",
+      "bytes": 0,
+      "allocated_bytes": 0,
+      "mode": 33188,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/venv/lib/python3.12/site-packages/tide_instances-0.1.0.dist-info/METADATA",
+      "bytes": 246,
+      "allocated_bytes": 4096,
+      "mode": 33188,
+      "sha256": "a17c5ac5aa0768ea7aae5063336e32e3cabb98782ae8c28931b56dfb3b035f82"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/venv/lib/python3.12/site-packages/tide_instances-0.1.0.dist-info/direct_url.json",
+      "bytes": 359,
+      "allocated_bytes": 4096,
+      "mode": 33188,
+      "sha256": "3088a2094ac3e9bb969bd7ef94fff797b946ceb1a6413fab14ee71feecabc0a1"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/venv/lib/python3.12/site-packages/tide/__pycache__",
+      "bytes": 4096,
+      "allocated_bytes": 4096,
+      "mode": 16877
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/venv/lib/python3.12/site-packages/tide/ssd.py",
+      "bytes": 12466,
+      "allocated_bytes": 16384,
+      "mode": 33188,
+      "sha256": "42e0e9c2de11f7c266af93c7bf43bf3e53e63efd6ed1eb5b86ef18aa1c982af3"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/venv/lib/python3.12/site-packages/tide/placement.py",
+      "bytes": 24247,
+      "allocated_bytes": 24576,
+      "mode": 33188,
+      "sha256": "0f77def73da20f467756e5dc1f701f25942565f762e82be5d23218ecee39d05f"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/venv/lib/python3.12/site-packages/tide/region_execution.py",
+      "bytes": 6144,
+      "allocated_bytes": 8192,
+      "mode": 33188,
+      "sha256": "0d62975ca47b37299cbdc80a4805375fef35c346dfe77ee2fe999e373ebf0950"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/venv/lib/python3.12/site-packages/tide/__init__.py",
+      "bytes": 805,
+      "allocated_bytes": 4096,
+      "mode": 33188,
+      "sha256": "bd8d669f813aa282dc1835a53656550468f40eac46a730c4339635580d8e4195"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/venv/lib/python3.12/site-packages/tide/region_placement.py",
+      "bytes": 16586,
+      "allocated_bytes": 20480,
+      "mode": 33188,
+      "sha256": "fd082f035185d04af6bc3ba27b949a8f065ccdf62f8b32a1b442accbfa6f2b6d"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/venv/lib/python3.12/site-packages/tide/region_batch.py",
+      "bytes": 7509,
+      "allocated_bytes": 8192,
+      "mode": 33188,
+      "sha256": "514ee30c5077d416c02cec81380280eb45509f20922a0f812657b93d2d8b7e80"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/venv/lib/python3.12/site-packages/tide/grouped_linear.py",
+      "bytes": 6143,
+      "allocated_bytes": 8192,
+      "mode": 33188,
+      "sha256": "5c0d8cb76df405d108e6eee77d42de8a1d83cbc99ff0537b0af973f108b52fe1"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/venv/lib/python3.12/site-packages/tide/region.py",
+      "bytes": 3805,
+      "allocated_bytes": 4096,
+      "mode": 33188,
+      "sha256": "3d0ee3fa13e344ddb0fff5ce15af62cee4e0b1a7c4984df523e70a4cbfc41ec2"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/venv/lib/python3.12/site-packages/tide/ffn_packing.py",
+      "bytes": 3257,
+      "allocated_bytes": 4096,
+      "mode": 33188,
+      "sha256": "66f0138cf4eb306fdc8513407d70ef5c96df37b6466f714c26b1fc211b25b449"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/venv/lib/python3.12/site-packages/tide/attention.py",
+      "bytes": 16221,
+      "allocated_bytes": 16384,
+      "mode": 33188,
+      "sha256": "0a8231713a2801ed397cee093c5d1112867a2057fc20804717fd39fd9e1609e8"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/venv/lib/python3.12/site-packages/tide/reception.py",
+      "bytes": 4822,
+      "allocated_bytes": 8192,
+      "mode": 33188,
+      "sha256": "bae0d61c805b68fcf97800f40baa17ff549d90c3e2a47763cfc9f687a7c752f1"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/venv/lib/python3.12/site-packages/tide/topology.py",
+      "bytes": 11283,
+      "allocated_bytes": 12288,
+      "mode": 33188,
+      "sha256": "8cdf58d0b3089e16a079ad46c3be7ca0c953fcea0023d276c9582901e1712dbf"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/venv/lib/python3.12/site-packages/tide/ssd_memory.py",
+      "bytes": 10412,
+      "allocated_bytes": 12288,
+      "mode": 33188,
+      "sha256": "d2683d58828bd705ca0f67dc5728a75fe01dda2ddfb4f53448d14b74b69b1cd2"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/venv/lib/python3.12/site-packages/tide/checkpoint.py",
+      "bytes": 3864,
+      "allocated_bytes": 4096,
+      "mode": 33188,
+      "sha256": "7e188773786f5cd7e3b06fcf3ef4ca9efa256933a9c21a8225f359687337c49f"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/venv/lib/python3.12/site-packages/tide/layout.py",
+      "bytes": 1392,
+      "allocated_bytes": 4096,
+      "mode": 33188,
+      "sha256": "4aee0573beb2448dd90ca307b9065f2ed4cd0f7eb93bfcd92c4b46550f889aa0"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/venv/lib/python3.12/site-packages/tide/config.py",
+      "bytes": 9677,
+      "allocated_bytes": 12288,
+      "mode": 33188,
+      "sha256": "2b890c0ae9eac381aa3ab9726eb386339345f62dc7b3e27433ecd5a0b1c0299f"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/venv/lib/python3.12/site-packages/tide/topology_hb.py",
+      "bytes": 6204,
+      "allocated_bytes": 8192,
+      "mode": 33188,
+      "sha256": "5fb7b1a959f0b88a097e95959b52a1f10cf5180eaea7b688cbef086946abea06"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/venv/lib/python3.12/site-packages/tide/allocation.py",
+      "bytes": 16290,
+      "allocated_bytes": 16384,
+      "mode": 33188,
+      "sha256": "b4d0e130c1a87391606e6abedfb2a9b0ab870bfb9027dc31b8c91135bdacd4ca"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/venv/lib/python3.12/site-packages/tide/parameters.py",
+      "bytes": 16680,
+      "allocated_bytes": 20480,
+      "mode": 33188,
+      "sha256": "84ead5924469a5a36810e01151f6ff1824ed9df063619aa53be8e84ae8d701fc"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/venv/lib/python3.12/site-packages/tide/precision.py",
+      "bytes": 3825,
+      "allocated_bytes": 4096,
+      "mode": 33188,
+      "sha256": "5e94f06892dc89451750b4e5b1fd2e105d440f633875f31a883880e6a6ca480a"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/venv/lib/python3.12/site-packages/tide/model.py",
+      "bytes": 26054,
+      "allocated_bytes": 28672,
+      "mode": 33188,
+      "sha256": "1911afe3b66b199eb7e066ea57c5900fead1e390ebb5894818d423284850255e"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/venv/lib/python3.12/site-packages/tide/kv.py",
+      "bytes": 9270,
+      "allocated_bytes": 12288,
+      "mode": 33188,
+      "sha256": "789cc6b7543bc156ba0f650791194c716454f1bda422d59c791ce8231c69b4f2"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/venv/lib/python3.12/site-packages/tide/placement_ownership.py",
+      "bytes": 7434,
+      "allocated_bytes": 8192,
+      "mode": 33188,
+      "sha256": "95431e5a2240b81a16df4cba08dfef541d777735220a212a28324f9c63661c13"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/venv/lib/python3.12/site-packages/tide/__pycache__/topology.cpython-312.pyc",
+      "bytes": 19510,
+      "allocated_bytes": 20480,
+      "mode": 33188,
+      "sha256": "ad27bae7e17ccc31e9c421d160a05ccf7162248fbdc807bd4f73f3d8714db8a1"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/venv/lib/python3.12/site-packages/tide/__pycache__/ssd_memory.cpython-312.pyc",
+      "bytes": 16897,
+      "allocated_bytes": 20480,
+      "mode": 33188,
+      "sha256": "d35133a588bfcad1292c0011820563c3c8abb416e6cd982077ae3861f12b6606"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/venv/lib/python3.12/site-packages/tide/__pycache__/model.cpython-312.pyc",
+      "bytes": 43537,
+      "allocated_bytes": 45056,
+      "mode": 33188,
+      "sha256": "dd21471252a322e966dc8242c37c01315f2269ea9ed6da69ec0d8b43864f220c"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/venv/lib/python3.12/site-packages/tide/__pycache__/region_batch.cpython-312.pyc",
+      "bytes": 16393,
+      "allocated_bytes": 20480,
+      "mode": 33188,
+      "sha256": "3e666d3f36dd65dad8602c07fab6155788722a7fdc200c55806c11c679719bbd"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/venv/lib/python3.12/site-packages/tide/__pycache__/reception.cpython-312.pyc",
+      "bytes": 8564,
+      "allocated_bytes": 12288,
+      "mode": 33188,
+      "sha256": "b6e36f1f87ef5480503b81c77f9f5654f36be5a1ea87ba78522bdcf5f86d0eed"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/venv/lib/python3.12/site-packages/tide/__pycache__/region.cpython-312.pyc",
+      "bytes": 7854,
+      "allocated_bytes": 8192,
+      "mode": 33188,
+      "sha256": "185c751012f9a5e893d4161d7657a6dc75336640ce349cb3993a09462af8058a"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/venv/lib/python3.12/site-packages/tide/__pycache__/attention.cpython-312.pyc",
+      "bytes": 26257,
+      "allocated_bytes": 28672,
+      "mode": 33188,
+      "sha256": "0f722d7d8553613481c5579e3c908f1c9e97ff2f7f65400248fb2554e43a39d0"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/venv/lib/python3.12/site-packages/tide/__pycache__/config.cpython-312.pyc",
+      "bytes": 12931,
+      "allocated_bytes": 16384,
+      "mode": 33188,
+      "sha256": "09229ee75684faca69595d273ce656ea2f3a5a1a6a1ac01cbfc08ccb89fffe13"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/venv/lib/python3.12/site-packages/tide/__pycache__/layout.cpython-312.pyc",
+      "bytes": 3084,
+      "allocated_bytes": 4096,
+      "mode": 33188,
+      "sha256": "49b67a4a778b634166d3a9a10947a6168ff00cd1e90a27923637672817d76ddd"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/venv/lib/python3.12/site-packages/tide/__pycache__/region_placement.cpython-312.pyc",
+      "bytes": 24972,
+      "allocated_bytes": 28672,
+      "mode": 33188,
+      "sha256": "0cc1d1d6bc1daafa3b4cd1855c3079d6e421a92213739aae506dae0654a3e952"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/venv/lib/python3.12/site-packages/tide/__pycache__/grouped_linear.cpython-312.pyc",
+      "bytes": 9828,
+      "allocated_bytes": 12288,
+      "mode": 33188,
+      "sha256": "3051d814df1f0d427674dc75e556692a10f8f85a2d39296e54b861cfbea38bb0"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/venv/lib/python3.12/site-packages/tide/__pycache__/placement_ownership.cpython-312.pyc",
+      "bytes": 13549,
+      "allocated_bytes": 16384,
+      "mode": 33188,
+      "sha256": "4c7ccd0ae8f4e57144bcc41984e1cb5e8db236c7c2417e026b34fefc0452e272"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/venv/lib/python3.12/site-packages/tide/__pycache__/topology_hb.cpython-312.pyc",
+      "bytes": 8553,
+      "allocated_bytes": 12288,
+      "mode": 33188,
+      "sha256": "e4fad4389d13ab44889cc05747ac6b00c4cafd0a315a156137dd665f273e917a"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/venv/lib/python3.12/site-packages/tide/__pycache__/ffn_packing.cpython-312.pyc",
+      "bytes": 5361,
+      "allocated_bytes": 8192,
+      "mode": 33188,
+      "sha256": "60e2acd2921b9a3c7865a829536ad5bc979449c06ba75224b3af05e3f391f774"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/venv/lib/python3.12/site-packages/tide/__pycache__/ssd.cpython-312.pyc",
+      "bytes": 17575,
+      "allocated_bytes": 20480,
+      "mode": 33188,
+      "sha256": "15e628c64fae2c19399897a9cc95312505b65dd72818a2c42de4c6447f9e3e2c"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/venv/lib/python3.12/site-packages/tide/__pycache__/checkpoint.cpython-312.pyc",
+      "bytes": 5781,
+      "allocated_bytes": 8192,
+      "mode": 33188,
+      "sha256": "f18cac6a812f7055f06ad7ae1135197507bfe87a5706adaa92d3967748914940"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/venv/lib/python3.12/site-packages/tide/__pycache__/allocation.cpython-312.pyc",
+      "bytes": 23571,
+      "allocated_bytes": 24576,
+      "mode": 33188,
+      "sha256": "8fdb79e091eb0dbcd0324d84f302d4bf6abfdb4b990ff6058166b5df57d7d9bf"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/venv/lib/python3.12/site-packages/tide/__pycache__/region_execution.cpython-312.pyc",
+      "bytes": 9092,
+      "allocated_bytes": 12288,
+      "mode": 33188,
+      "sha256": "43696f5fb6bf854af798ef8be2ff27fb52acbc10155cf2caed15782e62c07d71"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/venv/lib/python3.12/site-packages/tide/__pycache__/parameters.cpython-312.pyc",
+      "bytes": 29198,
+      "allocated_bytes": 32768,
+      "mode": 33188,
+      "sha256": "a6136cf18531b4efdb9fa6b0a50a83eb4b6c2f2f0e3721f0af22b5b14fee1241"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/venv/lib/python3.12/site-packages/tide/__pycache__/placement.cpython-312.pyc",
+      "bytes": 40496,
+      "allocated_bytes": 40960,
+      "mode": 33188,
+      "sha256": "4aaf88d1b930b5b3382e522bff3ad9c2004de91e5a76a082c8d9ac26c6e5f8f9"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/venv/lib/python3.12/site-packages/tide/__pycache__/kv.cpython-312.pyc",
+      "bytes": 15560,
+      "allocated_bytes": 16384,
+      "mode": 33188,
+      "sha256": "5401d2df4d5ee711a22b55de3d7b8326c0f141b1843ca87c7a4a5da17882e22c"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/venv/lib/python3.12/site-packages/tide/__pycache__/precision.cpython-312.pyc",
+      "bytes": 6191,
+      "allocated_bytes": 8192,
+      "mode": 33188,
+      "sha256": "253ac341cdb0d2871d5366b1f4e1a48fa4cdbd080cda6c4ac210ffb2397047f6"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/venv/lib/python3.12/site-packages/tide/__pycache__/__init__.cpython-312.pyc",
+      "bytes": 1027,
+      "allocated_bytes": 4096,
+      "mode": 33188,
+      "sha256": "fe4953f6bfafddb96e9b6f287ca8b93812ee59184c24c830c4f5944da69e0075"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/wheel/tide_instances-0.1.0-py3-none-any.whl",
+      "bytes": 72799,
+      "allocated_bytes": 73728,
+      "mode": 33188,
+      "sha256": "84e5e1b5039d4b1736e2787b0f81437f2ac98eff939651209814595378f384a1"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/build-copy/build",
+      "bytes": 4096,
+      "allocated_bytes": 4096,
+      "mode": 16877
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/build-copy/configs",
+      "bytes": 4096,
+      "allocated_bytes": 4096,
+      "mode": 16877
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/build-copy/examples",
+      "bytes": 4096,
+      "allocated_bytes": 4096,
+      "mode": 16877
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/build-copy/src",
+      "bytes": 4096,
+      "allocated_bytes": 4096,
+      "mode": 16877
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/build-copy/pyproject.toml",
+      "bytes": 451,
+      "allocated_bytes": 4096,
+      "mode": 33188,
+      "sha256": "8b320df6500dd9e3ef7351b87a7ba5d23eb4db8e0f54f304e44c7e5118189f8e"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/build-copy/build/bdist.linux-aarch64",
+      "bytes": 4096,
+      "allocated_bytes": 4096,
+      "mode": 16877
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/build-copy/build/lib",
+      "bytes": 4096,
+      "allocated_bytes": 4096,
+      "mode": 16877
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/build-copy/build/lib/tide",
+      "bytes": 4096,
+      "allocated_bytes": 4096,
+      "mode": 16877
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/build-copy/build/lib/tide/ssd.py",
+      "bytes": 12466,
+      "allocated_bytes": 16384,
+      "mode": 33188,
+      "sha256": "42e0e9c2de11f7c266af93c7bf43bf3e53e63efd6ed1eb5b86ef18aa1c982af3"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/build-copy/build/lib/tide/placement.py",
+      "bytes": 24247,
+      "allocated_bytes": 24576,
+      "mode": 33188,
+      "sha256": "0f77def73da20f467756e5dc1f701f25942565f762e82be5d23218ecee39d05f"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/build-copy/build/lib/tide/region_execution.py",
+      "bytes": 6144,
+      "allocated_bytes": 8192,
+      "mode": 33188,
+      "sha256": "0d62975ca47b37299cbdc80a4805375fef35c346dfe77ee2fe999e373ebf0950"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/build-copy/build/lib/tide/__init__.py",
+      "bytes": 805,
+      "allocated_bytes": 4096,
+      "mode": 33188,
+      "sha256": "bd8d669f813aa282dc1835a53656550468f40eac46a730c4339635580d8e4195"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/build-copy/build/lib/tide/region_placement.py",
+      "bytes": 16586,
+      "allocated_bytes": 20480,
+      "mode": 33188,
+      "sha256": "fd082f035185d04af6bc3ba27b949a8f065ccdf62f8b32a1b442accbfa6f2b6d"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/build-copy/build/lib/tide/region_batch.py",
+      "bytes": 7509,
+      "allocated_bytes": 8192,
+      "mode": 33188,
+      "sha256": "514ee30c5077d416c02cec81380280eb45509f20922a0f812657b93d2d8b7e80"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/build-copy/build/lib/tide/grouped_linear.py",
+      "bytes": 6143,
+      "allocated_bytes": 8192,
+      "mode": 33188,
+      "sha256": "5c0d8cb76df405d108e6eee77d42de8a1d83cbc99ff0537b0af973f108b52fe1"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/build-copy/build/lib/tide/region.py",
+      "bytes": 3805,
+      "allocated_bytes": 4096,
+      "mode": 33188,
+      "sha256": "3d0ee3fa13e344ddb0fff5ce15af62cee4e0b1a7c4984df523e70a4cbfc41ec2"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/build-copy/build/lib/tide/ffn_packing.py",
+      "bytes": 3257,
+      "allocated_bytes": 4096,
+      "mode": 33188,
+      "sha256": "66f0138cf4eb306fdc8513407d70ef5c96df37b6466f714c26b1fc211b25b449"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/build-copy/build/lib/tide/attention.py",
+      "bytes": 16221,
+      "allocated_bytes": 16384,
+      "mode": 33188,
+      "sha256": "0a8231713a2801ed397cee093c5d1112867a2057fc20804717fd39fd9e1609e8"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/build-copy/build/lib/tide/reception.py",
+      "bytes": 4822,
+      "allocated_bytes": 8192,
+      "mode": 33188,
+      "sha256": "bae0d61c805b68fcf97800f40baa17ff549d90c3e2a47763cfc9f687a7c752f1"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/build-copy/build/lib/tide/topology.py",
+      "bytes": 11283,
+      "allocated_bytes": 12288,
+      "mode": 33188,
+      "sha256": "8cdf58d0b3089e16a079ad46c3be7ca0c953fcea0023d276c9582901e1712dbf"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/build-copy/build/lib/tide/ssd_memory.py",
+      "bytes": 10412,
+      "allocated_bytes": 12288,
+      "mode": 33188,
+      "sha256": "d2683d58828bd705ca0f67dc5728a75fe01dda2ddfb4f53448d14b74b69b1cd2"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/build-copy/build/lib/tide/checkpoint.py",
+      "bytes": 3864,
+      "allocated_bytes": 4096,
+      "mode": 33188,
+      "sha256": "7e188773786f5cd7e3b06fcf3ef4ca9efa256933a9c21a8225f359687337c49f"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/build-copy/build/lib/tide/layout.py",
+      "bytes": 1392,
+      "allocated_bytes": 4096,
+      "mode": 33188,
+      "sha256": "4aee0573beb2448dd90ca307b9065f2ed4cd0f7eb93bfcd92c4b46550f889aa0"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/build-copy/build/lib/tide/config.py",
+      "bytes": 9677,
+      "allocated_bytes": 12288,
+      "mode": 33188,
+      "sha256": "2b890c0ae9eac381aa3ab9726eb386339345f62dc7b3e27433ecd5a0b1c0299f"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/build-copy/build/lib/tide/topology_hb.py",
+      "bytes": 6204,
+      "allocated_bytes": 8192,
+      "mode": 33188,
+      "sha256": "5fb7b1a959f0b88a097e95959b52a1f10cf5180eaea7b688cbef086946abea06"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/build-copy/build/lib/tide/allocation.py",
+      "bytes": 16290,
+      "allocated_bytes": 16384,
+      "mode": 33188,
+      "sha256": "b4d0e130c1a87391606e6abedfb2a9b0ab870bfb9027dc31b8c91135bdacd4ca"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/build-copy/build/lib/tide/parameters.py",
+      "bytes": 16680,
+      "allocated_bytes": 20480,
+      "mode": 33188,
+      "sha256": "84ead5924469a5a36810e01151f6ff1824ed9df063619aa53be8e84ae8d701fc"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/build-copy/build/lib/tide/precision.py",
+      "bytes": 3825,
+      "allocated_bytes": 4096,
+      "mode": 33188,
+      "sha256": "5e94f06892dc89451750b4e5b1fd2e105d440f633875f31a883880e6a6ca480a"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/build-copy/build/lib/tide/model.py",
+      "bytes": 26054,
+      "allocated_bytes": 28672,
+      "mode": 33188,
+      "sha256": "1911afe3b66b199eb7e066ea57c5900fead1e390ebb5894818d423284850255e"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/build-copy/build/lib/tide/kv.py",
+      "bytes": 9270,
+      "allocated_bytes": 12288,
+      "mode": 33188,
+      "sha256": "789cc6b7543bc156ba0f650791194c716454f1bda422d59c791ce8231c69b4f2"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/build-copy/build/lib/tide/placement_ownership.py",
+      "bytes": 7434,
+      "allocated_bytes": 8192,
+      "mode": 33188,
+      "sha256": "95431e5a2240b81a16df4cba08dfef541d777735220a212a28324f9c63661c13"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/build-copy/configs/recommended",
+      "bytes": 4096,
+      "allocated_bytes": 4096,
+      "mode": 16877
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/build-copy/configs/recommended/hb-settle.json",
+      "bytes": 747,
+      "allocated_bytes": 4096,
+      "mode": 33188,
+      "sha256": "9cd253f9ff8d95da7f7cef000fb2d9d00355e73aecb1f6c38e6849e0a85e898d"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/build-copy/configs/recommended/fc-k.json",
+      "bytes": 791,
+      "allocated_bytes": 4096,
+      "mode": 33188,
+      "sha256": "70534eee543b2c4f0ee9ba112adeca395d623fa12fd3a4a9d4dfd176e2b6d65c"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/build-copy/configs/recommended/npu-hb-settle-fp32.json",
+      "bytes": 4350,
+      "allocated_bytes": 8192,
+      "mode": 33188,
+      "sha256": "83d8b27f5cb709c91ef35a362edf3b9d3ea5fa01296e286cef4d3c95f3a6f7dc"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/build-copy/configs/recommended/default.json",
+      "bytes": 697,
+      "allocated_bytes": 4096,
+      "mode": 33188,
+      "sha256": "7c8fee821d7c30f3ad07b22030ba2ad28b783f5719e93d6f033993306a9a7f5b"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/build-copy/configs/recommended/npu-hb-timed-fp32.json",
+      "bytes": 4347,
+      "allocated_bytes": 8192,
+      "mode": 33188,
+      "sha256": "66cda125b11fca90d22f283c7fcea5f8dfee9baeefae6b530fa4d5f634455f23"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/build-copy/configs/recommended/npu-hb-0p5b-bf16.json",
+      "bytes": 3986,
+      "allocated_bytes": 4096,
+      "mode": 33188,
+      "sha256": "cf290517e53712daa7bc41e4c240ccd860025131ce28ed6c8bcbfada8c6c1ed8"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/build-copy/configs/recommended/npu-hb-light64-fp32.json",
+      "bytes": 4354,
+      "allocated_bytes": 8192,
+      "mode": 33188,
+      "sha256": "a853369e797e09d1652d233e7c60106ab1dbf47a4fa13af53df0299db9a9fd5e"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/build-copy/configs/recommended/npu-fc-k-bf16.json",
+      "bytes": 3994,
+      "allocated_bytes": 4096,
+      "mode": 33188,
+      "sha256": "2e6f797b5a8b1a0dda6dcf4571f57c6a73de4186105d91b7c0903d83b07799b1"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/build-copy/configs/recommended/npu-hb-0p5b-fp32.json",
+      "bytes": 4332,
+      "allocated_bytes": 8192,
+      "mode": 33188,
+      "sha256": "15080d264201b06daa9371a2014974978e16ef7d0cf7f365ac8cb4e77535e1e3"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/build-copy/configs/recommended/hb-timed.json",
+      "bytes": 812,
+      "allocated_bytes": 4096,
+      "mode": 33188,
+      "sha256": "9b5e4be55b7919636ca2be8049205de74b78e6b8d492729126938411945ad46e"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/build-copy/configs/recommended/npu-fc-k-fp32.json",
+      "bytes": 4314,
+      "allocated_bytes": 8192,
+      "mode": 33188,
+      "sha256": "1101523409ff9aaa05bd6a317426a0ba7e93ad86a3882597b412f597589c11b6"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/build-copy/configs/recommended/npu-hb-settle-bf16.json",
+      "bytes": 4004,
+      "allocated_bytes": 4096,
+      "mode": 33188,
+      "sha256": "9b258a3c0404e975cec4e9f95a48873a01969f948fbbd4ca912aadf0986ca291"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/build-copy/examples/train.py",
+      "bytes": 18530,
+      "allocated_bytes": 20480,
+      "mode": 33188,
+      "sha256": "fbe1939657db99be73dc105f703199eedea1d80452bf38164b33765c6a8f7721"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/build-copy/src/tide",
+      "bytes": 4096,
+      "allocated_bytes": 4096,
+      "mode": 16877
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/build-copy/src/tide_instances.egg-info",
+      "bytes": 4096,
+      "allocated_bytes": 4096,
+      "mode": 16877
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/build-copy/src/tide/ssd.py",
+      "bytes": 12466,
+      "allocated_bytes": 16384,
+      "mode": 33188,
+      "sha256": "42e0e9c2de11f7c266af93c7bf43bf3e53e63efd6ed1eb5b86ef18aa1c982af3"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/build-copy/src/tide/placement.py",
+      "bytes": 24247,
+      "allocated_bytes": 24576,
+      "mode": 33188,
+      "sha256": "0f77def73da20f467756e5dc1f701f25942565f762e82be5d23218ecee39d05f"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/build-copy/src/tide/region_execution.py",
+      "bytes": 6144,
+      "allocated_bytes": 8192,
+      "mode": 33188,
+      "sha256": "0d62975ca47b37299cbdc80a4805375fef35c346dfe77ee2fe999e373ebf0950"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/build-copy/src/tide/__init__.py",
+      "bytes": 805,
+      "allocated_bytes": 4096,
+      "mode": 33188,
+      "sha256": "bd8d669f813aa282dc1835a53656550468f40eac46a730c4339635580d8e4195"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/build-copy/src/tide/region_placement.py",
+      "bytes": 16586,
+      "allocated_bytes": 20480,
+      "mode": 33188,
+      "sha256": "fd082f035185d04af6bc3ba27b949a8f065ccdf62f8b32a1b442accbfa6f2b6d"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/build-copy/src/tide/region_batch.py",
+      "bytes": 7509,
+      "allocated_bytes": 8192,
+      "mode": 33188,
+      "sha256": "514ee30c5077d416c02cec81380280eb45509f20922a0f812657b93d2d8b7e80"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/build-copy/src/tide/grouped_linear.py",
+      "bytes": 6143,
+      "allocated_bytes": 8192,
+      "mode": 33188,
+      "sha256": "5c0d8cb76df405d108e6eee77d42de8a1d83cbc99ff0537b0af973f108b52fe1"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/build-copy/src/tide/region.py",
+      "bytes": 3805,
+      "allocated_bytes": 4096,
+      "mode": 33188,
+      "sha256": "3d0ee3fa13e344ddb0fff5ce15af62cee4e0b1a7c4984df523e70a4cbfc41ec2"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/build-copy/src/tide/ffn_packing.py",
+      "bytes": 3257,
+      "allocated_bytes": 4096,
+      "mode": 33188,
+      "sha256": "66f0138cf4eb306fdc8513407d70ef5c96df37b6466f714c26b1fc211b25b449"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/build-copy/src/tide/attention.py",
+      "bytes": 16221,
+      "allocated_bytes": 16384,
+      "mode": 33188,
+      "sha256": "0a8231713a2801ed397cee093c5d1112867a2057fc20804717fd39fd9e1609e8"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/build-copy/src/tide/reception.py",
+      "bytes": 4822,
+      "allocated_bytes": 8192,
+      "mode": 33188,
+      "sha256": "bae0d61c805b68fcf97800f40baa17ff549d90c3e2a47763cfc9f687a7c752f1"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/build-copy/src/tide/topology.py",
+      "bytes": 11283,
+      "allocated_bytes": 12288,
+      "mode": 33188,
+      "sha256": "8cdf58d0b3089e16a079ad46c3be7ca0c953fcea0023d276c9582901e1712dbf"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/build-copy/src/tide/ssd_memory.py",
+      "bytes": 10412,
+      "allocated_bytes": 12288,
+      "mode": 33188,
+      "sha256": "d2683d58828bd705ca0f67dc5728a75fe01dda2ddfb4f53448d14b74b69b1cd2"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/build-copy/src/tide/checkpoint.py",
+      "bytes": 3864,
+      "allocated_bytes": 4096,
+      "mode": 33188,
+      "sha256": "7e188773786f5cd7e3b06fcf3ef4ca9efa256933a9c21a8225f359687337c49f"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/build-copy/src/tide/layout.py",
+      "bytes": 1392,
+      "allocated_bytes": 4096,
+      "mode": 33188,
+      "sha256": "4aee0573beb2448dd90ca307b9065f2ed4cd0f7eb93bfcd92c4b46550f889aa0"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/build-copy/src/tide/config.py",
+      "bytes": 9677,
+      "allocated_bytes": 12288,
+      "mode": 33188,
+      "sha256": "2b890c0ae9eac381aa3ab9726eb386339345f62dc7b3e27433ecd5a0b1c0299f"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/build-copy/src/tide/topology_hb.py",
+      "bytes": 6204,
+      "allocated_bytes": 8192,
+      "mode": 33188,
+      "sha256": "5fb7b1a959f0b88a097e95959b52a1f10cf5180eaea7b688cbef086946abea06"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/build-copy/src/tide/allocation.py",
+      "bytes": 16290,
+      "allocated_bytes": 16384,
+      "mode": 33188,
+      "sha256": "b4d0e130c1a87391606e6abedfb2a9b0ab870bfb9027dc31b8c91135bdacd4ca"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/build-copy/src/tide/parameters.py",
+      "bytes": 16680,
+      "allocated_bytes": 20480,
+      "mode": 33188,
+      "sha256": "84ead5924469a5a36810e01151f6ff1824ed9df063619aa53be8e84ae8d701fc"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/build-copy/src/tide/precision.py",
+      "bytes": 3825,
+      "allocated_bytes": 4096,
+      "mode": 33188,
+      "sha256": "5e94f06892dc89451750b4e5b1fd2e105d440f633875f31a883880e6a6ca480a"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/build-copy/src/tide/model.py",
+      "bytes": 26054,
+      "allocated_bytes": 28672,
+      "mode": 33188,
+      "sha256": "1911afe3b66b199eb7e066ea57c5900fead1e390ebb5894818d423284850255e"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/build-copy/src/tide/kv.py",
+      "bytes": 9270,
+      "allocated_bytes": 12288,
+      "mode": 33188,
+      "sha256": "789cc6b7543bc156ba0f650791194c716454f1bda422d59c791ce8231c69b4f2"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/build-copy/src/tide/placement_ownership.py",
+      "bytes": 7434,
+      "allocated_bytes": 8192,
+      "mode": 33188,
+      "sha256": "95431e5a2240b81a16df4cba08dfef541d777735220a212a28324f9c63661c13"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/build-copy/src/tide_instances.egg-info/top_level.txt",
+      "bytes": 5,
+      "allocated_bytes": 4096,
+      "mode": 33188,
+      "sha256": "556145c09f4919b2613510bb7b03c5d868c41de20cbfe6e70d6728ed73fbc4c7"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/build-copy/src/tide_instances.egg-info/PKG-INFO",
+      "bytes": 246,
+      "allocated_bytes": 4096,
+      "mode": 33188,
+      "sha256": "a17c5ac5aa0768ea7aae5063336e32e3cabb98782ae8c28931b56dfb3b035f82"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/build-copy/src/tide_instances.egg-info/dependency_links.txt",
+      "bytes": 1,
+      "allocated_bytes": 4096,
+      "mode": 33188,
+      "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/build-copy/src/tide_instances.egg-info/SOURCES.txt",
+      "bytes": 741,
+      "allocated_bytes": 4096,
+      "mode": 33188,
+      "sha256": "30f1beeb6fa7574cea9b83e8b2bef178ae501613f23f56835312d5de8ce6b7bf"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/smoke-scratch/build-copy/src/tide_instances.egg-info/requires.txt",
+      "bytes": 29,
+      "allocated_bytes": 4096,
+      "mode": 33188,
+      "sha256": "e7c5dac45728934504a44d9d45cdf1ab4d1c25f4713507ea50afeeb2289156ce"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/record-smoke/1.json",
+      "bytes": 1107492,
+      "allocated_bytes": 1110016,
+      "mode": 33152,
+      "sha256": "19b6f0231eacf5b723cb0d9c72471f03e8f6c295ae54f8d3b617b0ede1ffeb99"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/record-smoke/0.json",
+      "bytes": 141189151,
+      "allocated_bytes": 141193216,
+      "mode": 33152,
+      "sha256": "12ff9a49e614ce0bc7e223ca88f05eea4ea6a030953c5b473cbad7f4942614ef"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/record-smoke-v2/1.json",
+      "bytes": 1107492,
+      "allocated_bytes": 1110016,
+      "mode": 33152,
+      "sha256": "19b6f0231eacf5b723cb0d9c72471f03e8f6c295ae54f8d3b617b0ede1ffeb99"
+    },
+    {
+      "path": "artifacts/storage-finalization-20261119/record-smoke-v2/0.json",
+      "bytes": 141189151,
+      "allocated_bytes": 141197312,
+      "mode": 33152,
+      "sha256": "12ff9a49e614ce0bc7e223ca88f05eea4ea6a030953c5b473cbad7f4942614ef"
+    }
+  ],
+  "allocated_bytes": 314601472,
+  "live_observation": {
+    "observed_utc": "2026-11-19T11:13:28.472314+00:00",
+    "hits": [],
+    "restricted_processes": [
+      {
+        "pid": 1213453,
+        "name": "sshd-session"
+      },
+      {
+        "pid": 2907799,
+        "name": "(sd-pam)"
+      },
+      {
+        "pid": 2908938,
+        "name": "sshd-session"
+      },
+      {
+        "pid": 2908943,
+        "name": "sshd-session"
+      },
+      {
+        "pid": 3361186,
+        "name": "sshd-session"
+      },
+      {
+        "pid": 3361883,
+        "name": "sshd-session"
+      }
+    ],
+    "inspected": 22
+  },
+  "paths": [
+    "artifacts/storage-finalization-20261119/smoke-scratch",
+    "artifacts/storage-finalization-20261119/record-smoke",
+    "artifacts/storage-finalization-20261119/record-smoke-v2"
+  ],
+  "finished_utc": "2026-11-19T11:13:28.545743+00:00"
+}

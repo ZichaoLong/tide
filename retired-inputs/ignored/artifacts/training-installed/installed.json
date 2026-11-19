@@ -1,0 +1,248 @@
+{
+  "source": "32ab13a5a530c5e1166c31d0d68c0c6bffe6bdf3",
+  "driver_sha256": "f8d0065fe8749c444085169ac60888ab5e894eb7a745368f610ee4acb1e99f34",
+  "commands": [
+    {
+      "label": "build-wheel",
+      "argv": [
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+        "-m",
+        "pip",
+        "wheel",
+        "--no-deps",
+        "--no-build-isolation",
+        "--no-index",
+        "--no-cache-dir",
+        "-w",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/training-installed/dist",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/training-installed/build"
+      ],
+      "cwd": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/training-installed",
+      "exit_code": 0,
+      "stdout": "build-wheel.stdout",
+      "stderr": "build-wheel.stderr"
+    },
+    {
+      "label": "new-venv",
+      "argv": [
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+        "-m",
+        "venv",
+        "--system-site-packages",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/training-installed/env"
+      ],
+      "cwd": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/training-installed",
+      "exit_code": 0,
+      "stdout": "new-venv.stdout",
+      "stderr": "new-venv.stderr"
+    },
+    {
+      "label": "install-wheel",
+      "argv": [
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/training-installed/env/bin/python",
+        "-m",
+        "pip",
+        "install",
+        "--no-deps",
+        "--no-index",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/training-installed/dist/tide_instances-0.1.0-py3-none-any.whl"
+      ],
+      "cwd": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/training-installed",
+      "exit_code": 0,
+      "stdout": "install-wheel.stdout",
+      "stderr": "install-wheel.stderr"
+    },
+    {
+      "label": "installed-check",
+      "argv": [
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/training-installed/env/bin/python",
+        "-I",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/training-installed/source/scripts/check_installed_capacity.py",
+        "--execution-variant",
+        "training",
+        "--wheel",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/training-installed/dist/tide_instances-0.1.0-py3-none-any.whl",
+        "--venv",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/training-installed/env",
+        "--source-manifest",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/training-installed/source-manifest.json",
+        "--output-dir",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/training-installed/results"
+      ],
+      "cwd": "/",
+      "exit_code": 0,
+      "stdout": "installed-check.stdout",
+      "stderr": "installed-check.stderr"
+    },
+    {
+      "label": "entry-default",
+      "argv": [
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/training-installed/env/bin/python",
+        "-I",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/training-installed/source/examples/train.py"
+      ],
+      "cwd": "/",
+      "exit_code": 0,
+      "stdout": "entry-default.stdout",
+      "stderr": "entry-default.stderr"
+    },
+    {
+      "label": "dry-npu-fc-k-bf16",
+      "argv": [
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/training-installed/env/bin/python",
+        "-I",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/training-installed/source/examples/train.py",
+        "--preset",
+        "npu-fc-k-bf16",
+        "--device",
+        "npu:0",
+        "--dry-run"
+      ],
+      "cwd": "/",
+      "exit_code": 0,
+      "stdout": "dry-npu-fc-k-bf16.stdout",
+      "stderr": "dry-npu-fc-k-bf16.stderr"
+    },
+    {
+      "label": "dry-npu-hb-0p5b-bf16",
+      "argv": [
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/training-installed/env/bin/python",
+        "-I",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/training-installed/source/examples/train.py",
+        "--preset",
+        "npu-hb-0p5b-bf16",
+        "--device",
+        "npu:0",
+        "--dry-run"
+      ],
+      "cwd": "/",
+      "exit_code": 0,
+      "stdout": "dry-npu-hb-0p5b-bf16.stdout",
+      "stderr": "dry-npu-hb-0p5b-bf16.stderr"
+    },
+    {
+      "label": "dry-npu-hb-0p5b-fp32",
+      "argv": [
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/training-installed/env/bin/python",
+        "-I",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/training-installed/source/examples/train.py",
+        "--preset",
+        "npu-hb-0p5b-fp32",
+        "--device",
+        "npu:0",
+        "--dry-run"
+      ],
+      "cwd": "/",
+      "exit_code": 0,
+      "stdout": "dry-npu-hb-0p5b-fp32.stdout",
+      "stderr": "dry-npu-hb-0p5b-fp32.stderr"
+    },
+    {
+      "label": "dry-npu-hb-settle-bf16",
+      "argv": [
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/training-installed/env/bin/python",
+        "-I",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/training-installed/source/examples/train.py",
+        "--preset",
+        "npu-hb-settle-bf16",
+        "--device",
+        "npu:0",
+        "--dry-run"
+      ],
+      "cwd": "/",
+      "exit_code": 0,
+      "stdout": "dry-npu-hb-settle-bf16.stdout",
+      "stderr": "dry-npu-hb-settle-bf16.stderr"
+    },
+    {
+      "label": "dry-npu-hb-settle-fp32",
+      "argv": [
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/training-installed/env/bin/python",
+        "-I",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/training-installed/source/examples/train.py",
+        "--preset",
+        "npu-hb-settle-fp32",
+        "--device",
+        "npu:0",
+        "--dry-run"
+      ],
+      "cwd": "/",
+      "exit_code": 0,
+      "stdout": "dry-npu-hb-settle-fp32.stdout",
+      "stderr": "dry-npu-hb-settle-fp32.stderr"
+    },
+    {
+      "label": "dry-npu-hb-timed-fp32",
+      "argv": [
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/training-installed/env/bin/python",
+        "-I",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/training-installed/source/examples/train.py",
+        "--preset",
+        "npu-hb-timed-fp32",
+        "--device",
+        "npu:0",
+        "--dry-run"
+      ],
+      "cwd": "/",
+      "exit_code": 0,
+      "stdout": "dry-npu-hb-timed-fp32.stdout",
+      "stderr": "dry-npu-hb-timed-fp32.stderr"
+    },
+    {
+      "label": "entry-training",
+      "argv": [
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/training-installed/env/bin/python",
+        "-I",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/training-installed/source/examples/train.py",
+        "--preset",
+        "hb-settle",
+        "--batch",
+        "1",
+        "--length",
+        "4",
+        "--steps",
+        "2",
+        "--checkpoint-reception",
+        "--ssd-summary-backend",
+        "prefix",
+        "--region-batch-size",
+        "4",
+        "--checkpoint",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/training-installed/entry-checkpoint.pt"
+      ],
+      "cwd": "/",
+      "exit_code": 0,
+      "stdout": "entry-training.stdout",
+      "stderr": "entry-training.stderr"
+    },
+    {
+      "label": "entry-resume",
+      "argv": [
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/training-installed/env/bin/python",
+        "-I",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/training-installed/source/examples/train.py",
+        "--resume",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/training-installed/entry-checkpoint.pt",
+        "--batch",
+        "1",
+        "--length",
+        "4",
+        "--steps",
+        "1"
+      ],
+      "cwd": "/",
+      "exit_code": 0,
+      "stdout": "entry-resume.stdout",
+      "stderr": "entry-resume.stderr"
+    }
+  ],
+  "state": "completed",
+  "installed_result": "finite_deviation",
+  "wheel": {
+    "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/training-installed/dist/tide_instances-0.1.0-py3-none-any.whl",
+    "sha256": "5fafa17e72d4ccfeca45cfd78e317faadcad5e6faacb524ec355bf4094c29399"
+  },
+  "source_unchanged": true,
+  "source_files": 355,
+  "checkpoint_sha256": "3cc8fed71f5c0ed48e5e49d760193a7ce8968381618e342feea194100a3250d6"
+}

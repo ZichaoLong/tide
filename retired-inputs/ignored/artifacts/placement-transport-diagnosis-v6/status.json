@@ -1,0 +1,71 @@
+{
+  "state": "failed",
+  "source": "7bcb0df17f0613793d82511d9517e37e1870850a",
+  "command": [
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "/mi/data2T/zlong/home/.agents/skills/use-local-ascend/scripts/run_on_free_npu.py",
+    "--job-id",
+    "placement-transport-diagnosis-v6",
+    "--project",
+    "tide-instances",
+    "--priority",
+    "0",
+    "--npu-count",
+    "2",
+    "--max-wait-seconds",
+    "600",
+    "--state-file",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/placement-transport-diagnosis-v6/queue.json",
+    "--",
+    "/bin/bash",
+    "-c",
+    "tide_failed=0\nfor tide_transport in direct host_stage synchronized; do\n python -m scripts.check_placement --devices npu:0 npu:1 --precision fp32 --transport ${tide_transport} --output /mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/placement-transport-diagnosis-v6/${tide_transport}.json || tide_failed=1\ndone\nexit ${tide_failed}"
+  ],
+  "pid": 3454051,
+  "started": "2026-11-18T04:11:27.510727+00:00",
+  "max_rss_bytes": 68719476736,
+  "peak_rss_bytes": 2512596992,
+  "max_processes": 3,
+  "rss_sample_count": 159,
+  "poll_interval": 0.25,
+  "descendant_supervision": "Linux child subreaper; retained PID/start identities across nested sessions",
+  "child_pid": 3454074,
+  "process_group": 3454074,
+  "elapsed": 65.44213935360312,
+  "descendant_identities": [
+    {
+      "pid": 3454074,
+      "start_ticks": 2256125822
+    },
+    {
+      "pid": 3454075,
+      "start_ticks": 2256125828
+    },
+    {
+      "pid": 3454132,
+      "start_ticks": 2256125887
+    },
+    {
+      "pid": 3454331,
+      "start_ticks": 2256126368
+    },
+    {
+      "pid": 3454501,
+      "start_ticks": 2256126563
+    },
+    {
+      "pid": 3454502,
+      "start_ticks": 2256126563
+    },
+    {
+      "pid": 3455393,
+      "start_ticks": 2256127844
+    },
+    {
+      "pid": 3456355,
+      "start_ticks": 2256130592
+    }
+  ],
+  "exit_code": 1,
+  "finished": "2026-11-18T04:12:32.952867+00:00"
+}

@@ -1,0 +1,30 @@
+{
+  "state": "passed",
+  "source": "45cb5dad1f2d14e06f65b71e6db5461de3a41e72",
+  "command": [
+    "/usr/bin/python3",
+    "-B",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/storage-finalization-20261119/cleanup.py",
+    "--execute-sha",
+    "942f91ac39ff7da7457bc470cf7e64df8320a6cb5c72f0643343093d45b46593"
+  ],
+  "pid": 2951433,
+  "started": "2026-11-19T11:10:48.160901+00:00",
+  "max_rss_bytes": 17179869184,
+  "peak_rss_bytes": 157302784,
+  "max_processes": 1,
+  "rss_sample_count": 67,
+  "poll_interval": 0.25,
+  "descendant_supervision": "Linux child subreaper; retained PID/start identities across nested sessions",
+  "child_pid": 2951435,
+  "process_group": 2951435,
+  "elapsed": 30.322020087391138,
+  "descendant_identities": [
+    {
+      "pid": 2951435,
+      "start_ticks": 2267281887
+    }
+  ],
+  "exit_code": 0,
+  "finished": "2026-11-19T11:11:18.482922+00:00"
+}

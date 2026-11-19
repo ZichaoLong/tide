@@ -1,0 +1,135 @@
+{
+  "state": "passed",
+  "source": "1fbe15c9b0ce900bfffbf5c148ca61c81cb34046",
+  "command": [
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "/mi/data2T/zlong/home/.agents/skills/use-local-ascend/scripts/run_on_free_npu.py",
+    "--job-id",
+    "agg-restore-half-fp32-100-v1",
+    "--project",
+    "tide-instances",
+    "--priority",
+    "0",
+    "--npu-count",
+    "1",
+    "--max-wait-seconds",
+    "4500",
+    "--state-file",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-restore-half-fp32-100-v1/queue.json",
+    "--",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "-m",
+    "benchmarks.restore",
+    "--checkpoint",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-train-half-fp32-100-v1/state.pt",
+    "--checkpoint-source",
+    "6570d0610e389c42f548c0afffa281b536df01db",
+    "--expected-checkpoint-sha256",
+    "b98db421399ac3976a0f02b21780581fa526d18d35e1b64fc990691259da1c89",
+    "--device",
+    "npu:0",
+    "--precision",
+    "fp32",
+    "--batch",
+    "4",
+    "--length",
+    "128",
+    "--threads",
+    "4",
+    "--device-budget-gib",
+    "48",
+    "--output",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-restore-half-fp32-100-v1/restore.json"
+  ],
+  "pid": 2534450,
+  "started": "2026-11-18T12:57:28.203252+00:00",
+  "max_rss_bytes": 103079215104,
+  "peak_rss_bytes": 10811117568,
+  "max_processes": 2,
+  "rss_sample_count": 1808,
+  "poll_interval": 0.25,
+  "descendant_supervision": "Linux child subreaper; retained PID/start identities across nested sessions",
+  "child_pid": 2534472,
+  "process_group": 2534472,
+  "elapsed": 786.9691837541759,
+  "descendant_identities": [
+    {
+      "pid": 2534472,
+      "start_ticks": 2259281891
+    },
+    {
+      "pid": 2534474,
+      "start_ticks": 2259281897
+    },
+    {
+      "pid": 2572144,
+      "start_ticks": 2259333019
+    },
+    {
+      "pid": 2573112,
+      "start_ticks": 2259334701
+    },
+    {
+      "pid": 2574274,
+      "start_ticks": 2259336383
+    },
+    {
+      "pid": 2576647,
+      "start_ticks": 2259338069
+    },
+    {
+      "pid": 2578072,
+      "start_ticks": 2259339787
+    },
+    {
+      "pid": 2579228,
+      "start_ticks": 2259341471
+    },
+    {
+      "pid": 2580843,
+      "start_ticks": 2259343158
+    },
+    {
+      "pid": 2582183,
+      "start_ticks": 2259344843
+    },
+    {
+      "pid": 2583094,
+      "start_ticks": 2259346524
+    },
+    {
+      "pid": 2584234,
+      "start_ticks": 2259348204
+    },
+    {
+      "pid": 2585859,
+      "start_ticks": 2259349884
+    },
+    {
+      "pid": 2587162,
+      "start_ticks": 2259351568
+    },
+    {
+      "pid": 2588099,
+      "start_ticks": 2259353250
+    },
+    {
+      "pid": 2589564,
+      "start_ticks": 2259354932
+    },
+    {
+      "pid": 2590915,
+      "start_ticks": 2259356616
+    },
+    {
+      "pid": 2591268,
+      "start_ticks": 2259357093
+    },
+    {
+      "pid": 2591405,
+      "start_ticks": 2259357279
+    }
+  ],
+  "exit_code": 0,
+  "finished": "2026-11-18T13:10:35.172435+00:00"
+}

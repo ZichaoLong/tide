@@ -1,0 +1,28 @@
+{
+  "state": "passed",
+  "source": "7b77457d594662e50acf0a002ca18d0a241e0ce3",
+  "command": [
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "-c",
+    "from benchmarks.capacity import placement_budget,scale_configs\nfrom scripts.job import atomic\nimport os\nrows=[]\nfor name,count in ((\"hb-9b\",4),(\"hb-17b\",5),(\"hb-17b\",6),(\"hb-17b\",2)):\n for precision in (\"fp32\",\"bf16\"):\n  rows.append(dict(name=name,parts=count,precision=precision,budget=placement_budget(scale_configs()[name],batch=1,length=8,precision=precision,mode=\"train\",partitions=count,partition_kind=\"region\")))\natomic(\"/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/capacity-region-budgets-v1/budgets.json\",dict(source=os.environ[\"TIDE_SOURCE_COMMIT\"],rows=rows))\n"
+  ],
+  "pid": 1071163,
+  "started": "2026-11-18T07:43:37.339396+00:00",
+  "max_rss_bytes": 8589934592,
+  "peak_rss_bytes": 320581632,
+  "max_processes": 1,
+  "rss_sample_count": 23,
+  "poll_interval": 0.25,
+  "descendant_supervision": "Linux child subreaper; retained PID/start identities across nested sessions",
+  "child_pid": 1071211,
+  "process_group": 1071211,
+  "elapsed": 9.790844488888979,
+  "descendant_identities": [
+    {
+      "pid": 1071211,
+      "start_ticks": 2257398804
+    }
+  ],
+  "exit_code": 0,
+  "finished": "2026-11-18T07:43:47.130240+00:00"
+}

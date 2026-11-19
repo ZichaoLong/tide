@@ -1,0 +1,71 @@
+{
+  "state": "failed",
+  "source": "8a22530d",
+  "command": [
+    "/bin/bash",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/installed-check/artifacts/capacity-installed-8a22530d-v1/run.sh"
+  ],
+  "pid": 1146726,
+  "started": "2026-11-18T08:04:30.077065+00:00",
+  "max_rss_bytes": 15032385536,
+  "peak_rss_bytes": 1628610560,
+  "max_processes": 4,
+  "rss_sample_count": 243,
+  "poll_interval": 0.25,
+  "descendant_supervision": "Linux child subreaper; retained PID/start identities across nested sessions",
+  "child_pid": 1146727,
+  "process_group": 1146727,
+  "elapsed": 103.1210898347199,
+  "descendant_identities": [
+    {
+      "pid": 1146727,
+      "start_ticks": 2257524078
+    },
+    {
+      "pid": 1146742,
+      "start_ticks": 2257524085
+    },
+    {
+      "pid": 1146805,
+      "start_ticks": 2257524154
+    },
+    {
+      "pid": 1146806,
+      "start_ticks": 2257524190
+    },
+    {
+      "pid": 1146807,
+      "start_ticks": 2257524193
+    },
+    {
+      "pid": 1146813,
+      "start_ticks": 2257524198
+    },
+    {
+      "pid": 1147051,
+      "start_ticks": 2257524447
+    },
+    {
+      "pid": 1147147,
+      "start_ticks": 2257524493
+    },
+    {
+      "pid": 1147996,
+      "start_ticks": 2257525789
+    },
+    {
+      "pid": 1148757,
+      "start_ticks": 2257527576
+    },
+    {
+      "pid": 1149803,
+      "start_ticks": 2257530263
+    },
+    {
+      "pid": 1152079,
+      "start_ticks": 2257533393
+    }
+  ],
+  "exit_code": 2,
+  "finished": "2026-11-18T08:06:13.198156+00:00"
+}

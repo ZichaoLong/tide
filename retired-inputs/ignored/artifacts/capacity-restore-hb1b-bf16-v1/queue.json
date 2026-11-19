@@ -1,0 +1,19 @@
+{
+  "elapsed_seconds": 64.7910192720592,
+  "job_id": "capacity-restore-hb1b-bf16-v1",
+  "logical_device": "npu:0",
+  "logical_devices": [
+    "npu:0"
+  ],
+  "npu_count": 1,
+  "physical_id": 1,
+  "physical_ids": [
+    1
+  ],
+  "priority": 0,
+  "project": "tide-instances",
+  "return_code": 0,
+  "schema_version": 1,
+  "status": "completed",
+  "timestamp": "2026-11-18T07:41:30.921307+00:00"
+}

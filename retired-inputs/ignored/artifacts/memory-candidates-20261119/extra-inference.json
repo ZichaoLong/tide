@@ -1,0 +1,37 @@
+[
+  {
+    "label": "near-kv128 B1",
+    "path": "artifacts/memory-near-kv128-b1-v1/inference.json",
+    "scope": "Near total parameters; changed Full FFN width; not fixed-FFN workload or separately qualified training recipe"
+  },
+  {
+    "label": "near-shared B1",
+    "path": "artifacts/memory-near-shared-b1-v1/inference.json",
+    "scope": "Near total parameters; changed Full FFN width; not fixed-FFN workload or separately qualified training recipe"
+  },
+  {
+    "label": "all-ssd sustained B8 decode128",
+    "path": "artifacts/memory-long-ssd-b8-v1/inference.json",
+    "scope": "FP32 fixed FFN; prompt128/chunk32/decode128, warmup1/samples3; sustained request distinct from decode16"
+  },
+  {
+    "label": "kv128 sustained B8 decode128",
+    "path": "artifacts/memory-long-kv128-b8-v1/inference.json",
+    "scope": "FP32 fixed FFN; prompt128/chunk32/decode128, warmup1/samples3; sustained request distinct from decode16"
+  },
+  {
+    "label": "shared region_batch_size1 B8",
+    "path": "artifacts/memory-shared-region1-b8-v1/inference.json",
+    "scope": "Same memory-shared model with execution grouping1 instead of4; independent sample batch remains8; inspect actual work/support/matrix dispatch before attribution"
+  },
+  {
+    "label": "near-kv128 B8",
+    "path": "artifacts/memory-near-kv128-b8-v1/inference.json",
+    "scope": "Near total parameters; changed Full FFN width; not fixed-FFN workload or separately qualified training recipe"
+  },
+  {
+    "label": "near-shared B8",
+    "path": "artifacts/memory-near-shared-b8-v1/inference.json",
+    "scope": "Near total parameters; changed Full FFN width; not fixed-FFN workload or separately qualified training recipe"
+  }
+]

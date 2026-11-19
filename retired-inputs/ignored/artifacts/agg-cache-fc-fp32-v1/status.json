@@ -1,0 +1,86 @@
+{
+  "state": "passed",
+  "source": "db00c3cde44abfc1f582da010f7593e8930a5647",
+  "command": [
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "/mi/data2T/zlong/home/.agents/skills/use-local-ascend/scripts/run_on_free_npu.py",
+    "--job-id",
+    "agg-cache-fc-fp32-v1",
+    "--project",
+    "tide-instances",
+    "--priority",
+    "0",
+    "--npu-count",
+    "1",
+    "--max-wait-seconds",
+    "4500",
+    "--state-file",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-cache-fc-fp32-v1/queue.json",
+    "--",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "-m",
+    "scripts.check_inference_cache",
+    "--config",
+    "configs/fc-k.json",
+    "--prefill",
+    "128",
+    "--prefill-chunk",
+    "32",
+    "--decode",
+    "256",
+    "--sample-every",
+    "64",
+    "--require-kv-eviction",
+    "--device",
+    "npu:0",
+    "--precision",
+    "fp32",
+    "--threads",
+    "4",
+    "--output",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-cache-fc-fp32-v1/cache.json"
+  ],
+  "pid": 2543711,
+  "started": "2026-11-18T12:59:26.363961+00:00",
+  "max_rss_bytes": 34359738368,
+  "peak_rss_bytes": 2144575488,
+  "max_processes": 4,
+  "rss_sample_count": 1644,
+  "poll_interval": 0.25,
+  "descendant_supervision": "Linux child subreaper; retained PID/start identities across nested sessions",
+  "child_pid": 2543749,
+  "process_group": 2543749,
+  "elapsed": 696.7548657357693,
+  "descendant_identities": [
+    {
+      "pid": 2543749,
+      "start_ticks": 2259293707
+    },
+    {
+      "pid": 2543758,
+      "start_ticks": 2259293713
+    },
+    {
+      "pid": 2592928,
+      "start_ticks": 2259359665
+    },
+    {
+      "pid": 2592935,
+      "start_ticks": 2259359666
+    },
+    {
+      "pid": 2592936,
+      "start_ticks": 2259359666
+    },
+    {
+      "pid": 2593300,
+      "start_ticks": 2259360149
+    },
+    {
+      "pid": 2593521,
+      "start_ticks": 2259360323
+    }
+  ],
+  "exit_code": 0,
+  "finished": "2026-11-18T13:11:03.118826+00:00"
+}

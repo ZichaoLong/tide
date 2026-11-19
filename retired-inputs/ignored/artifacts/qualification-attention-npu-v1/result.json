@@ -1,0 +1,1007 @@
+{
+  "scope": "weighted_attention forward and first-order VJP; no model or performance claim",
+  "run_state": "completed",
+  "started": "2026-11-18T03:52:21.743785+00:00",
+  "device": "npu:0",
+  "device_name": "Ascend910_9392",
+  "torch": "2.12.0+cpu",
+  "torch_npu": "2.12.0.post3",
+  "allow_hf32": {
+    "matmul": false,
+    "conv": false
+  },
+  "python": "3.12.13",
+  "source_head": "050dafa305d45162b2c86e736253455d7b476d27",
+  "attention_sha256": "7d78a3e0fab815403d737c91231d1f2e8e9d7c3068ae5c84258bc6d005ce2a85",
+  "harness_sha256": "084c8736ee5cb16045037d3be41501fa1b5c8c0ba95eb73d5548de91c1a55eab",
+  "results": [
+    {
+      "case": "unit",
+      "shape_name": "short",
+      "shape_BHQKD": [
+        2,
+        2,
+        9,
+        13,
+        32
+      ],
+      "dtype": "float32",
+      "atol": 3e-05,
+      "rtol": 0.0003,
+      "state": "within_tolerance",
+      "requested_backend": "npu_fusion",
+      "q_dtype": "float32",
+      "weights_dtype": null,
+      "input_policy": "CPU FP32 reference receives the exact quantized device inputs and VJP seed",
+      "autograd_node_types": {
+        "AccumulateGrad": 3,
+        "AliasBackward0": 1,
+        "ExpandBackward0": 3,
+        "NpuFusionAttentionV2Backward0": 1,
+        "ViewBackward0": 4,
+        "WhereBackward0": 1
+      },
+      "fields": {
+        "forward": {
+          "shape": [
+            2,
+            2,
+            9,
+            32
+          ],
+          "elements": 1152,
+          "nonfinite": 0,
+          "outside_tolerance": 0,
+          "max_abs": 8.940696716308594e-08,
+          "rms_abs": 1.3141179274435842e-08,
+          "max_tolerance_ratio": 0.0007545421328029896,
+          "within_tolerance": true
+        },
+        "vjp_q": {
+          "shape": [
+            2,
+            2,
+            9,
+            32
+          ],
+          "elements": 1152,
+          "nonfinite": 0,
+          "outside_tolerance": 0,
+          "max_abs": 8.195638656616211e-08,
+          "rms_abs": 1.1593780668201682e-08,
+          "max_tolerance_ratio": 0.001971441875793681,
+          "within_tolerance": true
+        },
+        "vjp_k": {
+          "shape": [
+            2,
+            2,
+            13,
+            32
+          ],
+          "elements": 1664,
+          "nonfinite": 0,
+          "outside_tolerance": 0,
+          "max_abs": 7.450580596923828e-08,
+          "rms_abs": 9.15777360653476e-09,
+          "max_tolerance_ratio": 0.0016492114634577833,
+          "within_tolerance": true
+        },
+        "vjp_v": {
+          "shape": [
+            2,
+            2,
+            13,
+            32
+          ],
+          "elements": 1664,
+          "nonfinite": 0,
+          "outside_tolerance": 0,
+          "max_abs": 2.384185791015625e-07,
+          "rms_abs": 3.050511604181161e-08,
+          "max_tolerance_ratio": 0.0016850570300450507,
+          "within_tolerance": true
+        }
+      }
+    },
+    {
+      "case": "positive_prior",
+      "shape_name": "short",
+      "shape_BHQKD": [
+        2,
+        2,
+        9,
+        13,
+        32
+      ],
+      "dtype": "float32",
+      "atol": 3e-05,
+      "rtol": 0.0003,
+      "state": "within_tolerance",
+      "requested_backend": "npu_fusion",
+      "q_dtype": "float32",
+      "weights_dtype": "torch.float32",
+      "input_policy": "CPU FP32 reference receives the exact quantized device inputs and VJP seed",
+      "autograd_node_types": {
+        "AccumulateGrad": 4,
+        "CatBackward0": 2,
+        "ConstantPadNdBackward0": 3,
+        "ExpandBackward0": 4,
+        "LogBackward0": 1,
+        "NpuFusionAttentionV2Backward0": 1,
+        "SliceBackward0": 1,
+        "SqueezeBackward1": 1,
+        "UnsqueezeBackward0": 1,
+        "ViewBackward0": 6,
+        "WhereBackward0": 2
+      },
+      "fields": {
+        "forward": {
+          "shape": [
+            2,
+            2,
+            9,
+            32
+          ],
+          "elements": 1152,
+          "nonfinite": 0,
+          "outside_tolerance": 0,
+          "max_abs": 8.940696716308594e-08,
+          "rms_abs": 1.5474197808291702e-08,
+          "max_tolerance_ratio": 0.0007880913531340427,
+          "within_tolerance": true
+        },
+        "vjp_q": {
+          "shape": [
+            2,
+            2,
+            9,
+            32
+          ],
+          "elements": 1152,
+          "nonfinite": 0,
+          "outside_tolerance": 0,
+          "max_abs": 8.381903171539307e-08,
+          "rms_abs": 1.1681610196796685e-08,
+          "max_tolerance_ratio": 0.0024113694255062813,
+          "within_tolerance": true
+        },
+        "vjp_k": {
+          "shape": [
+            2,
+            2,
+            13,
+            32
+          ],
+          "elements": 1664,
+          "nonfinite": 0,
+          "outside_tolerance": 0,
+          "max_abs": 7.450580596923828e-08,
+          "rms_abs": 9.633976771178132e-09,
+          "max_tolerance_ratio": 0.0015809462361305504,
+          "within_tolerance": true
+        },
+        "vjp_v": {
+          "shape": [
+            2,
+            2,
+            13,
+            32
+          ],
+          "elements": 1664,
+          "nonfinite": 0,
+          "outside_tolerance": 0,
+          "max_abs": 2.384185791015625e-07,
+          "rms_abs": 3.5679217626447904e-08,
+          "max_tolerance_ratio": 0.002636609737516536,
+          "within_tolerance": true
+        },
+        "vjp_weights": {
+          "shape": [
+            2,
+            13
+          ],
+          "elements": 26,
+          "nonfinite": 0,
+          "outside_tolerance": 0,
+          "max_abs": 1.430511474609375e-06,
+          "rms_abs": 4.2381498330569134e-07,
+          "max_tolerance_ratio": 0.009384267807577795,
+          "within_tolerance": true
+        }
+      }
+    },
+    {
+      "case": "frozen_prior",
+      "shape_name": "short",
+      "shape_BHQKD": [
+        2,
+        2,
+        9,
+        13,
+        32
+      ],
+      "dtype": "float32",
+      "atol": 3e-05,
+      "rtol": 0.0003,
+      "state": "within_tolerance",
+      "requested_backend": "npu_fusion",
+      "q_dtype": "float32",
+      "weights_dtype": "torch.float32",
+      "input_policy": "CPU FP32 reference receives the exact quantized device inputs and VJP seed",
+      "autograd_node_types": {
+        "AccumulateGrad": 3,
+        "AliasBackward0": 1,
+        "ExpandBackward0": 3,
+        "NpuFusionAttentionV2Backward0": 1,
+        "ViewBackward0": 4,
+        "WhereBackward0": 1
+      },
+      "fields": {
+        "forward": {
+          "shape": [
+            2,
+            2,
+            9,
+            32
+          ],
+          "elements": 1152,
+          "nonfinite": 0,
+          "outside_tolerance": 0,
+          "max_abs": 8.940696716308594e-08,
+          "rms_abs": 1.5797917762875195e-08,
+          "max_tolerance_ratio": 0.0009660526558645405,
+          "within_tolerance": true
+        },
+        "vjp_q": {
+          "shape": [
+            2,
+            2,
+            9,
+            32
+          ],
+          "elements": 1152,
+          "nonfinite": 0,
+          "outside_tolerance": 0,
+          "max_abs": 8.381903171539307e-08,
+          "rms_abs": 1.1823751004817601e-08,
+          "max_tolerance_ratio": 0.0024113694255062813,
+          "within_tolerance": true
+        },
+        "vjp_k": {
+          "shape": [
+            2,
+            2,
+            13,
+            32
+          ],
+          "elements": 1664,
+          "nonfinite": 0,
+          "outside_tolerance": 0,
+          "max_abs": 8.940696716308594e-08,
+          "rms_abs": 1.0476884908843591e-08,
+          "max_tolerance_ratio": 0.002056996445497744,
+          "within_tolerance": true
+        },
+        "vjp_v": {
+          "shape": [
+            2,
+            2,
+            13,
+            32
+          ],
+          "elements": 1664,
+          "nonfinite": 0,
+          "outside_tolerance": 0,
+          "max_abs": 2.384185791015625e-07,
+          "rms_abs": 3.412971910964216e-08,
+          "max_tolerance_ratio": 0.0026829151686073426,
+          "within_tolerance": true
+        }
+      }
+    },
+    {
+      "case": "masked_zero",
+      "shape_name": "short",
+      "shape_BHQKD": [
+        2,
+        2,
+        9,
+        13,
+        32
+      ],
+      "dtype": "float32",
+      "atol": 3e-05,
+      "rtol": 0.0003,
+      "state": "within_tolerance",
+      "requested_backend": "npu_fusion",
+      "q_dtype": "float32",
+      "weights_dtype": "torch.float32",
+      "input_policy": "CPU FP32 reference receives the exact quantized device inputs and VJP seed",
+      "autograd_node_types": {
+        "AccumulateGrad": 4,
+        "CatBackward0": 2,
+        "ConstantPadNdBackward0": 3,
+        "ExpandBackward0": 4,
+        "LogBackward0": 1,
+        "NpuFusionAttentionV2Backward0": 1,
+        "SliceBackward0": 1,
+        "SqueezeBackward1": 1,
+        "UnsqueezeBackward0": 1,
+        "ViewBackward0": 6,
+        "WhereBackward0": 2
+      },
+      "fields": {
+        "forward": {
+          "shape": [
+            2,
+            2,
+            9,
+            32
+          ],
+          "elements": 1152,
+          "nonfinite": 0,
+          "outside_tolerance": 0,
+          "max_abs": 5.960464477539063e-08,
+          "rms_abs": 1.6398236743978768e-08,
+          "max_tolerance_ratio": 0.0010348529023088667,
+          "within_tolerance": true
+        },
+        "vjp_q": {
+          "shape": [
+            2,
+            2,
+            9,
+            32
+          ],
+          "elements": 1152,
+          "nonfinite": 0,
+          "outside_tolerance": 0,
+          "max_abs": 7.450580596923828e-08,
+          "rms_abs": 1.1849914446244334e-08,
+          "max_tolerance_ratio": 0.0017971382442484119,
+          "within_tolerance": true
+        },
+        "vjp_k": {
+          "shape": [
+            2,
+            2,
+            13,
+            32
+          ],
+          "elements": 1664,
+          "nonfinite": 0,
+          "outside_tolerance": 0,
+          "max_abs": 7.450580596923828e-08,
+          "rms_abs": 9.621148441215523e-09,
+          "max_tolerance_ratio": 0.0013425147523441826,
+          "within_tolerance": true
+        },
+        "vjp_v": {
+          "shape": [
+            2,
+            2,
+            13,
+            32
+          ],
+          "elements": 1664,
+          "nonfinite": 0,
+          "outside_tolerance": 0,
+          "max_abs": 2.384185791015625e-07,
+          "rms_abs": 3.915153664040522e-08,
+          "max_tolerance_ratio": 0.0024071304185758185,
+          "within_tolerance": true
+        },
+        "vjp_weights": {
+          "shape": [
+            2,
+            13
+          ],
+          "elements": 26,
+          "nonfinite": 0,
+          "outside_tolerance": 0,
+          "max_abs": 7.152557373046875e-07,
+          "rms_abs": 2.201597351085573e-07,
+          "max_tolerance_ratio": 0.004838193395362843,
+          "within_tolerance": true
+        }
+      }
+    },
+    {
+      "case": "visible_zero",
+      "shape_name": "short",
+      "shape_BHQKD": [
+        2,
+        2,
+        9,
+        13,
+        32
+      ],
+      "dtype": "float32",
+      "atol": 3e-05,
+      "rtol": 0.0003,
+      "state": "within_tolerance",
+      "requested_backend": "auto",
+      "q_dtype": "float32",
+      "weights_dtype": "torch.float32",
+      "input_policy": "CPU FP32 reference receives the exact quantized device inputs and VJP seed",
+      "autograd_node_types": {
+        "AccumulateGrad": 4,
+        "ExpandBackward0": 3,
+        "ViewBackward0": 2,
+        "_TiledAttentionBackward": 1
+      },
+      "fields": {
+        "forward": {
+          "shape": [
+            2,
+            2,
+            9,
+            32
+          ],
+          "elements": 1152,
+          "nonfinite": 0,
+          "outside_tolerance": 0,
+          "max_abs": 5.960464477539063e-08,
+          "rms_abs": 1.6406930230825547e-08,
+          "max_tolerance_ratio": 0.0010061069883558428,
+          "within_tolerance": true
+        },
+        "vjp_q": {
+          "shape": [
+            2,
+            2,
+            9,
+            32
+          ],
+          "elements": 1152,
+          "nonfinite": 0,
+          "outside_tolerance": 0,
+          "max_abs": 1.8533319234848022e-07,
+          "rms_abs": 1.397148529214587e-08,
+          "max_tolerance_ratio": 0.005418638212993327,
+          "within_tolerance": true
+        },
+        "vjp_k": {
+          "shape": [
+            2,
+            2,
+            13,
+            32
+          ],
+          "elements": 1664,
+          "nonfinite": 0,
+          "outside_tolerance": 0,
+          "max_abs": 1.2665987014770508e-07,
+          "rms_abs": 1.3039697235801393e-08,
+          "max_tolerance_ratio": 0.0035849293836337903,
+          "within_tolerance": true
+        },
+        "vjp_v": {
+          "shape": [
+            2,
+            2,
+            13,
+            32
+          ],
+          "elements": 1664,
+          "nonfinite": 0,
+          "outside_tolerance": 0,
+          "max_abs": 4.76837158203125e-07,
+          "rms_abs": 4.719874940424342e-08,
+          "max_tolerance_ratio": 0.004876736209910528,
+          "within_tolerance": true
+        },
+        "vjp_weights": {
+          "shape": [
+            2,
+            13
+          ],
+          "elements": 26,
+          "nonfinite": 0,
+          "outside_tolerance": 0,
+          "max_abs": 1.1920928955078125e-06,
+          "rms_abs": 3.937084576640118e-07,
+          "max_tolerance_ratio": 0.01160193743672453,
+          "within_tolerance": true
+        }
+      }
+    },
+    {
+      "case": "unit",
+      "shape_name": "long",
+      "shape_BHQKD": [
+        1,
+        2,
+        67,
+        259,
+        32
+      ],
+      "dtype": "float32",
+      "atol": 3e-05,
+      "rtol": 0.0003,
+      "state": "within_tolerance",
+      "requested_backend": "npu_fusion",
+      "q_dtype": "float32",
+      "weights_dtype": null,
+      "input_policy": "CPU FP32 reference receives the exact quantized device inputs and VJP seed",
+      "autograd_node_types": {
+        "AccumulateGrad": 3,
+        "AliasBackward0": 1,
+        "ExpandBackward0": 3,
+        "NpuFusionAttentionV2Backward0": 1,
+        "ViewBackward0": 4,
+        "WhereBackward0": 1
+      },
+      "fields": {
+        "forward": {
+          "shape": [
+            1,
+            2,
+            67,
+            32
+          ],
+          "elements": 4288,
+          "nonfinite": 0,
+          "outside_tolerance": 0,
+          "max_abs": 7.450580596923828e-08,
+          "rms_abs": 9.546032360866236e-09,
+          "max_tolerance_ratio": 0.0013362599326316538,
+          "within_tolerance": true
+        },
+        "vjp_q": {
+          "shape": [
+            1,
+            2,
+            67,
+            32
+          ],
+          "elements": 4288,
+          "nonfinite": 0,
+          "outside_tolerance": 0,
+          "max_abs": 5.960464477539063e-08,
+          "rms_abs": 5.547579096434888e-09,
+          "max_tolerance_ratio": 0.0010026914209698625,
+          "within_tolerance": true
+        },
+        "vjp_k": {
+          "shape": [
+            1,
+            2,
+            259,
+            32
+          ],
+          "elements": 16576,
+          "nonfinite": 0,
+          "outside_tolerance": 0,
+          "max_abs": 8.940696716308594e-08,
+          "rms_abs": 3.2516502544281407e-09,
+          "max_tolerance_ratio": 0.0011428948877771651,
+          "within_tolerance": true
+        },
+        "vjp_v": {
+          "shape": [
+            1,
+            2,
+            259,
+            32
+          ],
+          "elements": 16576,
+          "nonfinite": 0,
+          "outside_tolerance": 0,
+          "max_abs": 4.76837158203125e-07,
+          "rms_abs": 1.749424254924448e-08,
+          "max_tolerance_ratio": 0.0023847398344911523,
+          "within_tolerance": true
+        }
+      }
+    },
+    {
+      "case": "positive_prior",
+      "shape_name": "long",
+      "shape_BHQKD": [
+        1,
+        2,
+        67,
+        259,
+        32
+      ],
+      "dtype": "float32",
+      "atol": 3e-05,
+      "rtol": 0.0003,
+      "state": "within_tolerance",
+      "requested_backend": "npu_fusion",
+      "q_dtype": "float32",
+      "weights_dtype": "torch.float32",
+      "input_policy": "CPU FP32 reference receives the exact quantized device inputs and VJP seed",
+      "autograd_node_types": {
+        "AccumulateGrad": 4,
+        "CatBackward0": 2,
+        "ConstantPadNdBackward0": 3,
+        "ExpandBackward0": 4,
+        "LogBackward0": 1,
+        "NpuFusionAttentionV2Backward0": 1,
+        "SliceBackward0": 1,
+        "SqueezeBackward1": 1,
+        "UnsqueezeBackward0": 1,
+        "ViewBackward0": 6,
+        "WhereBackward0": 2
+      },
+      "fields": {
+        "forward": {
+          "shape": [
+            1,
+            2,
+            67,
+            32
+          ],
+          "elements": 4288,
+          "nonfinite": 0,
+          "outside_tolerance": 0,
+          "max_abs": 7.450580596923828e-08,
+          "rms_abs": 9.964231965351203e-09,
+          "max_tolerance_ratio": 0.0011385874367163496,
+          "within_tolerance": true
+        },
+        "vjp_q": {
+          "shape": [
+            1,
+            2,
+            67,
+            32
+          ],
+          "elements": 4288,
+          "nonfinite": 0,
+          "outside_tolerance": 0,
+          "max_abs": 5.960464477539063e-08,
+          "rms_abs": 6.056060364659008e-09,
+          "max_tolerance_ratio": 0.0011886790876148303,
+          "within_tolerance": true
+        },
+        "vjp_k": {
+          "shape": [
+            1,
+            2,
+            259,
+            32
+          ],
+          "elements": 16576,
+          "nonfinite": 0,
+          "outside_tolerance": 0,
+          "max_abs": 5.960464477539063e-08,
+          "rms_abs": 3.2204094973658883e-09,
+          "max_tolerance_ratio": 0.0010750882717351833,
+          "within_tolerance": true
+        },
+        "vjp_v": {
+          "shape": [
+            1,
+            2,
+            259,
+            32
+          ],
+          "elements": 16576,
+          "nonfinite": 0,
+          "outside_tolerance": 0,
+          "max_abs": 4.172325134277344e-07,
+          "rms_abs": 1.7000249378528446e-08,
+          "max_tolerance_ratio": 0.001796507003184663,
+          "within_tolerance": true
+        },
+        "vjp_weights": {
+          "shape": [
+            1,
+            259
+          ],
+          "elements": 259,
+          "nonfinite": 0,
+          "outside_tolerance": 0,
+          "max_abs": 4.76837158203125e-07,
+          "rms_abs": 5.088954914317347e-08,
+          "max_tolerance_ratio": 0.0025002269205953134,
+          "within_tolerance": true
+        }
+      }
+    },
+    {
+      "case": "frozen_prior",
+      "shape_name": "long",
+      "shape_BHQKD": [
+        1,
+        2,
+        67,
+        259,
+        32
+      ],
+      "dtype": "float32",
+      "atol": 3e-05,
+      "rtol": 0.0003,
+      "state": "within_tolerance",
+      "requested_backend": "npu_fusion",
+      "q_dtype": "float32",
+      "weights_dtype": "torch.float32",
+      "input_policy": "CPU FP32 reference receives the exact quantized device inputs and VJP seed",
+      "autograd_node_types": {
+        "AccumulateGrad": 3,
+        "AliasBackward0": 1,
+        "ExpandBackward0": 3,
+        "NpuFusionAttentionV2Backward0": 1,
+        "ViewBackward0": 4,
+        "WhereBackward0": 1
+      },
+      "fields": {
+        "forward": {
+          "shape": [
+            1,
+            2,
+            67,
+            32
+          ],
+          "elements": 4288,
+          "nonfinite": 0,
+          "outside_tolerance": 0,
+          "max_abs": 7.450580596923828e-08,
+          "rms_abs": 9.970700258897866e-09,
+          "max_tolerance_ratio": 0.0012334697231093789,
+          "within_tolerance": true
+        },
+        "vjp_q": {
+          "shape": [
+            1,
+            2,
+            67,
+            32
+          ],
+          "elements": 4288,
+          "nonfinite": 0,
+          "outside_tolerance": 0,
+          "max_abs": 5.960464477539063e-08,
+          "rms_abs": 6.023058107863222e-09,
+          "max_tolerance_ratio": 0.0013018866197686237,
+          "within_tolerance": true
+        },
+        "vjp_k": {
+          "shape": [
+            1,
+            2,
+            259,
+            32
+          ],
+          "elements": 16576,
+          "nonfinite": 0,
+          "outside_tolerance": 0,
+          "max_abs": 5.960464477539063e-08,
+          "rms_abs": 3.1746275061906853e-09,
+          "max_tolerance_ratio": 0.0010260510672182883,
+          "within_tolerance": true
+        },
+        "vjp_v": {
+          "shape": [
+            1,
+            2,
+            259,
+            32
+          ],
+          "elements": 16576,
+          "nonfinite": 0,
+          "outside_tolerance": 0,
+          "max_abs": 4.172325134277344e-07,
+          "rms_abs": 1.6910263580233797e-08,
+          "max_tolerance_ratio": 0.0019623052156973746,
+          "within_tolerance": true
+        }
+      }
+    },
+    {
+      "case": "masked_zero",
+      "shape_name": "long",
+      "shape_BHQKD": [
+        1,
+        2,
+        67,
+        259,
+        32
+      ],
+      "dtype": "float32",
+      "atol": 3e-05,
+      "rtol": 0.0003,
+      "state": "within_tolerance",
+      "requested_backend": "npu_fusion",
+      "q_dtype": "float32",
+      "weights_dtype": "torch.float32",
+      "input_policy": "CPU FP32 reference receives the exact quantized device inputs and VJP seed",
+      "autograd_node_types": {
+        "AccumulateGrad": 4,
+        "CatBackward0": 2,
+        "ConstantPadNdBackward0": 3,
+        "ExpandBackward0": 4,
+        "LogBackward0": 1,
+        "NpuFusionAttentionV2Backward0": 1,
+        "SliceBackward0": 1,
+        "SqueezeBackward1": 1,
+        "UnsqueezeBackward0": 1,
+        "ViewBackward0": 6,
+        "WhereBackward0": 2
+      },
+      "fields": {
+        "forward": {
+          "shape": [
+            1,
+            2,
+            67,
+            32
+          ],
+          "elements": 4288,
+          "nonfinite": 0,
+          "outside_tolerance": 0,
+          "max_abs": 8.940696716308594e-08,
+          "rms_abs": 1.0693475032502053e-08,
+          "max_tolerance_ratio": 0.001258008598052658,
+          "within_tolerance": true
+        },
+        "vjp_q": {
+          "shape": [
+            1,
+            2,
+            67,
+            32
+          ],
+          "elements": 4288,
+          "nonfinite": 0,
+          "outside_tolerance": 0,
+          "max_abs": 5.21540641784668e-08,
+          "rms_abs": 6.241749596936006e-09,
+          "max_tolerance_ratio": 0.0008948981605296718,
+          "within_tolerance": true
+        },
+        "vjp_k": {
+          "shape": [
+            1,
+            2,
+            259,
+            32
+          ],
+          "elements": 16576,
+          "nonfinite": 0,
+          "outside_tolerance": 0,
+          "max_abs": 8.940696716308594e-08,
+          "rms_abs": 3.492892805835731e-09,
+          "max_tolerance_ratio": 0.001043062237374996,
+          "within_tolerance": true
+        },
+        "vjp_v": {
+          "shape": [
+            1,
+            2,
+            259,
+            32
+          ],
+          "elements": 16576,
+          "nonfinite": 0,
+          "outside_tolerance": 0,
+          "max_abs": 5.960464477539062e-07,
+          "rms_abs": 1.8143442965247732e-08,
+          "max_tolerance_ratio": 0.0018685967567003139,
+          "within_tolerance": true
+        },
+        "vjp_weights": {
+          "shape": [
+            1,
+            259
+          ],
+          "elements": 259,
+          "nonfinite": 0,
+          "outside_tolerance": 0,
+          "max_abs": 7.152557373046875e-07,
+          "rms_abs": 6.199142217726556e-08,
+          "max_tolerance_ratio": 0.003620378713706183,
+          "within_tolerance": true
+        }
+      }
+    },
+    {
+      "case": "visible_zero",
+      "shape_name": "long",
+      "shape_BHQKD": [
+        1,
+        2,
+        67,
+        259,
+        32
+      ],
+      "dtype": "float32",
+      "atol": 3e-05,
+      "rtol": 0.0003,
+      "state": "within_tolerance",
+      "requested_backend": "auto",
+      "q_dtype": "float32",
+      "weights_dtype": "torch.float32",
+      "input_policy": "CPU FP32 reference receives the exact quantized device inputs and VJP seed",
+      "autograd_node_types": {
+        "AccumulateGrad": 4,
+        "ExpandBackward0": 3,
+        "ViewBackward0": 2,
+        "_TiledAttentionBackward": 1
+      },
+      "fields": {
+        "forward": {
+          "shape": [
+            1,
+            2,
+            67,
+            32
+          ],
+          "elements": 4288,
+          "nonfinite": 0,
+          "outside_tolerance": 0,
+          "max_abs": 8.940696716308594e-08,
+          "rms_abs": 1.0695706026383783e-08,
+          "max_tolerance_ratio": 0.00139778733116962,
+          "within_tolerance": true
+        },
+        "vjp_q": {
+          "shape": [
+            1,
+            2,
+            67,
+            32
+          ],
+          "elements": 4288,
+          "nonfinite": 0,
+          "outside_tolerance": 0,
+          "max_abs": 5.960464477539063e-08,
+          "rms_abs": 6.892673841123704e-09,
+          "max_tolerance_ratio": 0.0008900301346911593,
+          "within_tolerance": true
+        },
+        "vjp_k": {
+          "shape": [
+            1,
+            2,
+            259,
+            32
+          ],
+          "elements": 16576,
+          "nonfinite": 0,
+          "outside_tolerance": 0,
+          "max_abs": 5.960464477539063e-08,
+          "rms_abs": 3.800233441115624e-09,
+          "max_tolerance_ratio": 0.0011920711284285669,
+          "within_tolerance": true
+        },
+        "vjp_v": {
+          "shape": [
+            1,
+            2,
+            259,
+            32
+          ],
+          "elements": 16576,
+          "nonfinite": 0,
+          "outside_tolerance": 0,
+          "max_abs": 4.76837158203125e-07,
+          "rms_abs": 2.1243831003022346e-08,
+          "max_tolerance_ratio": 0.003316071242002944,
+          "within_tolerance": true
+        },
+        "vjp_weights": {
+          "shape": [
+            1,
+            259
+          ],
+          "elements": 259,
+          "nonfinite": 0,
+          "outside_tolerance": 0,
+          "max_abs": 4.172325134277344e-07,
+          "rms_abs": 7.915980397087684e-08,
+          "max_tolerance_ratio": 0.002720713670947169,
+          "within_tolerance": true
+        }
+      }
+    }
+  ],
+  "finished": "2026-11-18T03:52:22.579654+00:00",
+  "counts": {
+    "within_tolerance": 10
+  }
+}

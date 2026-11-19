@@ -1,0 +1,76 @@
+{
+  "source": "0992b467584c1f603314ed04d8efe8596a14f576",
+  "source_path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/attention-sites-cpu-v16/source",
+  "run": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/attention-sites-cpu-v16",
+  "unit": "tide-attention-sites-cpu-v16",
+  "arguments": {
+    "name": "attention-sites-cpu-v16",
+    "revision": "0992b467",
+    "threads": 32,
+    "affinity": "280-311",
+    "npu_count": 0,
+    "candidate_ids": null,
+    "seconds": 18000,
+    "rss_gib": 48.0,
+    "queue_seconds": 600,
+    "after_unit": [
+      "tide-continuous-cpu-v16.service"
+    ],
+    "command": [
+      "--",
+      "numactl",
+      "--membind=7",
+      "--physcpubind=280-311",
+      "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+      "-c",
+      "import os,pathlib,subprocess\nfrom scripts.job import atomic\nroot=pathlib.Path(\"{run}\")\ncommand=['/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python', '-m', 'benchmarks.attention_sites', '--device', 'cpu', '--cases', 'kv-unit', 'kv-zero', 'reception-positive', 'reception-zero', 'region-positive', 'region-zero', '--threads', '32', '--warmup', '2', '--steps', '5', '--output', '{run}/result.json']\natomic(root/\"numa-policy.json\",dict(policy='--membind=7',affinity=sorted(os.sched_getaffinity(0)),maps=pathlib.Path(\"/proc/self/numa_maps\").read_text(),status=pathlib.Path(\"/proc/self/status\").read_text(),numactl=subprocess.check_output([\"numactl\",\"--show\"],text=True),supersedes='attention-sites-cpu-v14'))\nos.execv(command[0],command)"
+    ]
+  },
+  "launch": [
+    "systemd-run",
+    "--user",
+    "--unit=tide-attention-sites-cpu-v16",
+    "--service-type=exec",
+    "--slice=background.slice",
+    "--working-directory=/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/attention-sites-cpu-v16/source",
+    "--property=KillMode=control-group",
+    "--property=RuntimeMaxSec=18000",
+    "--property=TimeoutStopSec=30",
+    "--property=CPUAffinity=280-311",
+    "--property=StandardOutput=append:/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/attention-sites-cpu-v16/stdout.log",
+    "--property=StandardError=append:/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/attention-sites-cpu-v16/stderr.log",
+    "/bin/bash",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/attention-sites-cpu-v16/run.sh"
+  ],
+  "command": [
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/attention-sites-cpu-v16/source/scripts/wait_units.py",
+    "--status",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/attention-sites-cpu-v16/dependency.json",
+    "--seconds",
+    "18000",
+    "--unit",
+    "tide-continuous-cpu-v16.service",
+    "--",
+    "numactl",
+    "--membind=7",
+    "--physcpubind=280-311",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "-c",
+    "import os,pathlib,subprocess\nfrom scripts.job import atomic\nroot=pathlib.Path(\"/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/attention-sites-cpu-v16\")\ncommand=['/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python', '-m', 'benchmarks.attention_sites', '--device', 'cpu', '--cases', 'kv-unit', 'kv-zero', 'reception-positive', 'reception-zero', 'region-positive', 'region-zero', '--threads', '32', '--warmup', '2', '--steps', '5', '--output', '/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/attention-sites-cpu-v16/result.json']\natomic(root/\"numa-policy.json\",dict(policy='--membind=7',affinity=sorted(os.sched_getaffinity(0)),maps=pathlib.Path(\"/proc/self/numa_maps\").read_text(),status=pathlib.Path(\"/proc/self/status\").read_text(),numactl=subprocess.check_output([\"numactl\",\"--show\"],text=True),supersedes='attention-sites-cpu-v14'))\nos.execv(command[0],command)"
+  ],
+  "environment": {
+    "PYTHONPATH": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/attention-sites-cpu-v16/source/src",
+    "TIDE_SOURCE_COMMIT": "0992b467584c1f603314ed04d8efe8596a14f576",
+    "TIDE_HARNESS_COMMIT": "0992b467584c1f603314ed04d8efe8596a14f576",
+    "TORCH_DEVICE_BACKEND_AUTOLOAD": "0",
+    "TIDE_RESOURCE_IDENTITY": "pinned_cpu; shared host",
+    "OMP_NUM_THREADS": "32",
+    "MKL_NUM_THREADS": "32",
+    "OPENBLAS_NUM_THREADS": "32"
+  },
+  "state": "submitted",
+  "resource_enforcement": "process affinity; sampled process-tree RSS, not cgroup hard memory",
+  "device_policy": "cpu",
+  "unit_observation": "MainPID=3581652\nSlice=background.slice\nControlGroup=/user.slice/user-1003.slice/user@1003.service/background.slice/tide-attention-sites-cpu-v16.service\nId=tide-attention-sites-cpu-v16.service\nActiveState=active\nSubState=running\n"
+}

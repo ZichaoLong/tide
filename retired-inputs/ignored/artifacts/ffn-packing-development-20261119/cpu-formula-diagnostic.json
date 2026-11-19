@@ -1,0 +1,478 @@
+{
+  "state": "completed_bounded_development_diagnostic",
+  "formal_qualification": false,
+  "device": "cpu",
+  "dtype": "float32",
+  "diagnostic_dtype": "float64",
+  "threads": 1,
+  "torch_version": "2.12.0+cpu",
+  "python_version": "3.12.13",
+  "seed": 901,
+  "threshold": {
+    "atol": 1e-06,
+    "rtol": 0.002
+  },
+  "fixture": {
+    "nodes": 7,
+    "content": 64,
+    "ffn": 128,
+    "rank": 4,
+    "groups": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "owner_order": [
+      6,
+      1,
+      1,
+      3,
+      0,
+      2
+    ],
+    "selected_rows": 20,
+    "rectangular_rows": 60,
+    "power2_rows": 27
+  },
+  "comparisons": {
+    "rectangular_vs_literal_fp32": {
+      "output": {
+        "within_threshold": true,
+        "violations": 0,
+        "max_abs": 2.1457672119140625e-06,
+        "finite": true,
+        "exceedances": []
+      },
+      "gradients": {
+        "input": {
+          "within_threshold": true,
+          "violations": 0,
+          "max_abs": 3.0994415283203125e-06,
+          "finite": true,
+          "exceedances": []
+        },
+        "gate.weight": {
+          "within_threshold": true,
+          "violations": 0,
+          "max_abs": 5.7220458984375e-06,
+          "finite": true,
+          "exceedances": []
+        },
+        "gate.left": {
+          "within_threshold": true,
+          "violations": 0,
+          "max_abs": 7.62939453125e-06,
+          "finite": true,
+          "exceedances": []
+        },
+        "gate.right": {
+          "within_threshold": true,
+          "violations": 0,
+          "max_abs": 2.384185791015625e-07,
+          "finite": true,
+          "exceedances": []
+        },
+        "up.weight": {
+          "within_threshold": false,
+          "violations": 1,
+          "max_abs": 6.67572021484375e-06,
+          "finite": true,
+          "exceedances": [
+            {
+              "index": [
+                0,
+                20,
+                27
+              ],
+              "actual": -0.00022621624520979822,
+              "reference": -0.00022784527391195297,
+              "absolute_error": 1.6290287021547556e-06,
+              "allowed_error": 1.455690547823906e-06
+            }
+          ]
+        },
+        "up.left": {
+          "within_threshold": true,
+          "violations": 0,
+          "max_abs": 2.1457672119140625e-06,
+          "finite": true,
+          "exceedances": []
+        },
+        "up.right": {
+          "within_threshold": true,
+          "violations": 0,
+          "max_abs": 2.086162567138672e-07,
+          "finite": true,
+          "exceedances": []
+        },
+        "down.weight": {
+          "within_threshold": true,
+          "violations": 0,
+          "max_abs": 1.1444091796875e-05,
+          "finite": true,
+          "exceedances": []
+        },
+        "down.left": {
+          "within_threshold": true,
+          "violations": 0,
+          "max_abs": 3.814697265625e-06,
+          "finite": true,
+          "exceedances": []
+        },
+        "down.right": {
+          "within_threshold": true,
+          "violations": 0,
+          "max_abs": 2.980232238769531e-07,
+          "finite": true,
+          "exceedances": []
+        }
+      }
+    },
+    "power2_vs_literal_fp32": {
+      "output": {
+        "within_threshold": true,
+        "violations": 0,
+        "max_abs": 2.1457672119140625e-06,
+        "finite": true,
+        "exceedances": []
+      },
+      "gradients": {
+        "input": {
+          "within_threshold": true,
+          "violations": 0,
+          "max_abs": 3.0994415283203125e-06,
+          "finite": true,
+          "exceedances": []
+        },
+        "gate.weight": {
+          "within_threshold": true,
+          "violations": 0,
+          "max_abs": 6.67572021484375e-06,
+          "finite": true,
+          "exceedances": []
+        },
+        "gate.left": {
+          "within_threshold": true,
+          "violations": 0,
+          "max_abs": 7.62939453125e-06,
+          "finite": true,
+          "exceedances": []
+        },
+        "gate.right": {
+          "within_threshold": true,
+          "violations": 0,
+          "max_abs": 2.384185791015625e-07,
+          "finite": true,
+          "exceedances": []
+        },
+        "up.weight": {
+          "within_threshold": false,
+          "violations": 1,
+          "max_abs": 6.67572021484375e-06,
+          "finite": true,
+          "exceedances": [
+            {
+              "index": [
+                0,
+                20,
+                27
+              ],
+              "actual": -0.00022599613294005394,
+              "reference": -0.00022784527391195297,
+              "absolute_error": 1.8491409718990326e-06,
+              "allowed_error": 1.455690547823906e-06
+            }
+          ]
+        },
+        "up.left": {
+          "within_threshold": true,
+          "violations": 0,
+          "max_abs": 2.1457672119140625e-06,
+          "finite": true,
+          "exceedances": []
+        },
+        "up.right": {
+          "within_threshold": true,
+          "violations": 0,
+          "max_abs": 2.086162567138672e-07,
+          "finite": true,
+          "exceedances": []
+        },
+        "down.weight": {
+          "within_threshold": true,
+          "violations": 0,
+          "max_abs": 7.62939453125e-06,
+          "finite": true,
+          "exceedances": []
+        },
+        "down.left": {
+          "within_threshold": true,
+          "violations": 0,
+          "max_abs": 3.814697265625e-06,
+          "finite": true,
+          "exceedances": []
+        },
+        "down.right": {
+          "within_threshold": true,
+          "violations": 0,
+          "max_abs": 2.980232238769531e-07,
+          "finite": true,
+          "exceedances": []
+        }
+      }
+    },
+    "power2_vs_rectangular": {
+      "output": {
+        "within_threshold": true,
+        "violations": 0,
+        "max_abs": 1.1920928955078125e-07,
+        "finite": true,
+        "exceedances": []
+      },
+      "gradients": {
+        "input": {
+          "within_threshold": true,
+          "violations": 0,
+          "max_abs": 7.152557373046875e-07,
+          "finite": true,
+          "exceedances": []
+        },
+        "gate.weight": {
+          "within_threshold": true,
+          "violations": 0,
+          "max_abs": 2.384185791015625e-06,
+          "finite": true,
+          "exceedances": []
+        },
+        "gate.left": {
+          "within_threshold": true,
+          "violations": 0,
+          "max_abs": 7.152557373046875e-07,
+          "finite": true,
+          "exceedances": []
+        },
+        "gate.right": {
+          "within_threshold": true,
+          "violations": 0,
+          "max_abs": 8.940696716308594e-08,
+          "finite": true,
+          "exceedances": []
+        },
+        "up.weight": {
+          "within_threshold": true,
+          "violations": 0,
+          "max_abs": 1.9073486328125e-06,
+          "finite": true,
+          "exceedances": []
+        },
+        "up.left": {
+          "within_threshold": true,
+          "violations": 0,
+          "max_abs": 1.430511474609375e-06,
+          "finite": true,
+          "exceedances": []
+        },
+        "up.right": {
+          "within_threshold": true,
+          "violations": 0,
+          "max_abs": 1.0803341865539551e-07,
+          "finite": true,
+          "exceedances": []
+        },
+        "down.weight": {
+          "within_threshold": true,
+          "violations": 0,
+          "max_abs": 3.814697265625e-06,
+          "finite": true,
+          "exceedances": []
+        },
+        "down.left": {
+          "within_threshold": true,
+          "violations": 0,
+          "max_abs": 0.0,
+          "finite": true,
+          "exceedances": []
+        },
+        "down.right": {
+          "within_threshold": true,
+          "violations": 0,
+          "max_abs": 1.862645149230957e-09,
+          "finite": true,
+          "exceedances": []
+        }
+      }
+    },
+    "rectangular_vs_literal_fp64": {
+      "output": {
+        "within_threshold": true,
+        "violations": 0,
+        "max_abs": 1.097324192400606e-06,
+        "finite": true,
+        "exceedances": []
+      },
+      "gradients": {
+        "input": {
+          "within_threshold": true,
+          "violations": 0,
+          "max_abs": 1.8328683863977346e-06,
+          "finite": true,
+          "exceedances": []
+        },
+        "gate.weight": {
+          "within_threshold": true,
+          "violations": 0,
+          "max_abs": 5.8101933806398165e-06,
+          "finite": true,
+          "exceedances": []
+        },
+        "gate.left": {
+          "within_threshold": true,
+          "violations": 0,
+          "max_abs": 4.111332046363714e-06,
+          "finite": true,
+          "exceedances": []
+        },
+        "gate.right": {
+          "within_threshold": true,
+          "violations": 0,
+          "max_abs": 2.364405092547539e-07,
+          "finite": true,
+          "exceedances": []
+        },
+        "up.weight": {
+          "within_threshold": true,
+          "violations": 0,
+          "max_abs": 3.078478641782567e-06,
+          "finite": true,
+          "exceedances": []
+        },
+        "up.left": {
+          "within_threshold": true,
+          "violations": 0,
+          "max_abs": 1.7529205766919631e-06,
+          "finite": true,
+          "exceedances": []
+        },
+        "up.right": {
+          "within_threshold": true,
+          "violations": 0,
+          "max_abs": 1.593188241610921e-07,
+          "finite": true,
+          "exceedances": []
+        },
+        "down.weight": {
+          "within_threshold": true,
+          "violations": 0,
+          "max_abs": 8.04260792008904e-06,
+          "finite": true,
+          "exceedances": []
+        },
+        "down.left": {
+          "within_threshold": true,
+          "violations": 0,
+          "max_abs": 2.2431557242796885e-06,
+          "finite": true,
+          "exceedances": []
+        },
+        "down.right": {
+          "within_threshold": true,
+          "violations": 0,
+          "max_abs": 2.990948650971603e-07,
+          "finite": true,
+          "exceedances": []
+        }
+      }
+    },
+    "power2_vs_literal_fp64": {
+      "output": {
+        "within_threshold": true,
+        "violations": 0,
+        "max_abs": 1.097324192400606e-06,
+        "finite": true,
+        "exceedances": []
+      },
+      "gradients": {
+        "input": {
+          "within_threshold": true,
+          "violations": 0,
+          "max_abs": 1.8328683863977346e-06,
+          "finite": true,
+          "exceedances": []
+        },
+        "gate.weight": {
+          "within_threshold": true,
+          "violations": 0,
+          "max_abs": 4.800883786515442e-06,
+          "finite": true,
+          "exceedances": []
+        },
+        "gate.left": {
+          "within_threshold": true,
+          "violations": 0,
+          "max_abs": 4.111332046363714e-06,
+          "finite": true,
+          "exceedances": []
+        },
+        "gate.right": {
+          "within_threshold": true,
+          "violations": 0,
+          "max_abs": 2.364405092547539e-07,
+          "finite": true,
+          "exceedances": []
+        },
+        "up.weight": {
+          "within_threshold": true,
+          "violations": 0,
+          "max_abs": 3.8530980077666754e-06,
+          "finite": true,
+          "exceedances": []
+        },
+        "up.left": {
+          "within_threshold": true,
+          "violations": 0,
+          "max_abs": 1.7529205766919631e-06,
+          "finite": true,
+          "exceedances": []
+        },
+        "up.right": {
+          "within_threshold": true,
+          "violations": 0,
+          "max_abs": 1.593188241610921e-07,
+          "finite": true,
+          "exceedances": []
+        },
+        "down.weight": {
+          "within_threshold": true,
+          "violations": 0,
+          "max_abs": 7.139846168513486e-06,
+          "finite": true,
+          "exceedances": []
+        },
+        "down.left": {
+          "within_threshold": true,
+          "violations": 0,
+          "max_abs": 2.2431557242796885e-06,
+          "finite": true,
+          "exceedances": []
+        },
+        "down.right": {
+          "within_threshold": true,
+          "violations": 0,
+          "max_abs": 2.990948650971603e-07,
+          "finite": true,
+          "exceedances": []
+        }
+      }
+    }
+  },
+  "source_files": {
+    "src/tide/ffn_packing.py": "66f0138cf4eb306fdc8513407d70ef5c96df37b6466f714c26b1fc211b25b449",
+    "src/tide/parameters.py": "d69081721b3e4362094949ba85c09455af88be72454008dd69882ddc61dff541",
+    "tests/test_ffn_packing.py": "0e53ded0e8931b104f488396802aac2fe7251636cc51a73530ef62d7f88d5eb0"
+  },
+  "interpretation": "Both production execution paths retain one strict FP32 independent dense-effective formula gradient exceedance. Same-function power2 versus rectangular and both paths versus the FP64 independent formula are within unchanged thresholds. No cause has been established for every finite difference."
+}

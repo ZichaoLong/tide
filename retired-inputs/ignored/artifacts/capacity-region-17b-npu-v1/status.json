@@ -1,0 +1,182 @@
+{
+  "state": "passed",
+  "source": "8a22530dae69d9f1fa5ead4a01d1798fd1dfe0ee",
+  "command": [
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/capacity-region-17b-npu-v1/source/scripts/wait_units.py",
+    "--status",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/capacity-region-17b-npu-v1/dependency.json",
+    "--seconds",
+    "4200",
+    "--unit",
+    "tide-native-regional-perf-npu-v1.service",
+    "--unit",
+    "tide-execution-perf-timed-bf16-v1.service",
+    "--",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "/mi/data2T/zlong/home/.agents/skills/use-local-ascend/scripts/run_on_free_npu.py",
+    "--job-id",
+    "capacity-region-17b-npu-v1",
+    "--project",
+    "tide-instances",
+    "--priority",
+    "0",
+    "--npu-count",
+    "6",
+    "--max-wait-seconds",
+    "1200",
+    "--state-file",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/capacity-region-17b-npu-v1/queue.json",
+    "--",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "-c",
+    "import os,sys,subprocess\nfrom pathlib import Path\nfrom scripts.job import atomic\nout=Path(\"/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/capacity-region-17b-npu-v1\"); rows=[]\nfor precision in (\"fp32\",\"bf16\"):\n command=[sys.executable,\"-m\",\"scripts.check_placement\",\"--config\",\"configs/scale/hb-17b.json\",\"--devices\",\"npu:0\",\"npu:1\",\"npu:2\",\"npu:3\",\"npu:4\",\"npu:5\",\"--partition-kind\",\"region\",\"--mode\",\"train\",\"--precision\",precision,\"--batch\",\"1\",\"--length\",\"8\",\"--steps\",\"2\",\"--no-foreach\",\"--threads\",\"8\",\"--output\",str(out/(precision+\".json\"))]\n with (out/(precision+\".log\")).open(\"w\") as log:\n  result=subprocess.run(command,stdout=log,stderr=subprocess.STDOUT,timeout=1500)\n rows.append(dict(precision=precision,command=command,exit_code=result.returncode));atomic(out/\"children.json\",dict(source=os.environ[\"TIDE_SOURCE_COMMIT\"],children=rows))\n if result.returncode: break\nsys.exit(any(r[\"exit_code\"] for r in rows))\n"
+  ],
+  "pid": 1102777,
+  "started": "2026-11-18T07:52:13.853883+00:00",
+  "max_rss_bytes": 274877906944,
+  "peak_rss_bytes": 69046722560,
+  "max_processes": 4,
+  "rss_sample_count": 2854,
+  "poll_interval": 0.25,
+  "descendant_supervision": "Linux child subreaper; retained PID/start identities across nested sessions",
+  "child_pid": 1102800,
+  "process_group": 1102800,
+  "elapsed": 1204.644749879837,
+  "descendant_identities": [
+    {
+      "pid": 1102800,
+      "start_ticks": 2257450456
+    },
+    {
+      "pid": 1124310,
+      "start_ticks": 2257484131
+    },
+    {
+      "pid": 1124351,
+      "start_ticks": 2257484189
+    },
+    {
+      "pid": 1125093,
+      "start_ticks": 2257485920
+    },
+    {
+      "pid": 1126378,
+      "start_ticks": 2257487602
+    },
+    {
+      "pid": 1128384,
+      "start_ticks": 2257489308
+    },
+    {
+      "pid": 1128391,
+      "start_ticks": 2257489308
+    },
+    {
+      "pid": 1128392,
+      "start_ticks": 2257489308
+    },
+    {
+      "pid": 1129319,
+      "start_ticks": 2257490991
+    },
+    {
+      "pid": 1130501,
+      "start_ticks": 2257492676
+    },
+    {
+      "pid": 1131191,
+      "start_ticks": 2257494357
+    },
+    {
+      "pid": 1132358,
+      "start_ticks": 2257496052
+    },
+    {
+      "pid": 1133090,
+      "start_ticks": 2257497735
+    },
+    {
+      "pid": 1133724,
+      "start_ticks": 2257499418
+    },
+    {
+      "pid": 1135138,
+      "start_ticks": 2257501097
+    },
+    {
+      "pid": 1135147,
+      "start_ticks": 2257501098
+    },
+    {
+      "pid": 1135149,
+      "start_ticks": 2257501098
+    },
+    {
+      "pid": 1135878,
+      "start_ticks": 2257502786
+    },
+    {
+      "pid": 1136552,
+      "start_ticks": 2257504474
+    },
+    {
+      "pid": 1137162,
+      "start_ticks": 2257506161
+    },
+    {
+      "pid": 1138558,
+      "start_ticks": 2257507846
+    },
+    {
+      "pid": 1139275,
+      "start_ticks": 2257509524
+    },
+    {
+      "pid": 1139843,
+      "start_ticks": 2257511211
+    },
+    {
+      "pid": 1140905,
+      "start_ticks": 2257512894
+    },
+    {
+      "pid": 1141975,
+      "start_ticks": 2257514578
+    },
+    {
+      "pid": 1142555,
+      "start_ticks": 2257516265
+    },
+    {
+      "pid": 1143143,
+      "start_ticks": 2257517947
+    },
+    {
+      "pid": 1144375,
+      "start_ticks": 2257519629
+    },
+    {
+      "pid": 1145312,
+      "start_ticks": 2257521312
+    },
+    {
+      "pid": 1145490,
+      "start_ticks": 2257521793
+    },
+    {
+      "pid": 1145563,
+      "start_ticks": 2257521968
+    },
+    {
+      "pid": 1145566,
+      "start_ticks": 2257521972
+    },
+    {
+      "pid": 1158969,
+      "start_ticks": 2257546458
+    }
+  ],
+  "exit_code": 0,
+  "finished": "2026-11-18T08:12:18.498632+00:00"
+}

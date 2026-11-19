@@ -1,0 +1,34 @@
+{
+  "state": "passed",
+  "source": "0e0023ff773f56920da78374e26ded6f10ceac06",
+  "command": [
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "-m",
+    "scripts.check_continuation",
+    "--device",
+    "cpu",
+    "--precision",
+    "fp64",
+    "--output",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/continuation-fp64-cpu-v10/result.json"
+  ],
+  "pid": 3491919,
+  "started": "2026-11-18T04:23:26.828174+00:00",
+  "max_rss_bytes": 34359738368,
+  "peak_rss_bytes": 393879552,
+  "max_processes": 1,
+  "rss_sample_count": 9,
+  "poll_interval": 0.25,
+  "descendant_supervision": "Linux child subreaper; retained PID/start identities across nested sessions",
+  "child_pid": 3491939,
+  "process_group": 3491939,
+  "elapsed": 4.012588407844305,
+  "descendant_identities": [
+    {
+      "pid": 3491939,
+      "start_ticks": 2256197753
+    }
+  ],
+  "exit_code": 0,
+  "finished": "2026-11-18T04:23:30.840762+00:00"
+}

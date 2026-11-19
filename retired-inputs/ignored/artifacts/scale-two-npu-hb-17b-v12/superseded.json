@@ -1,0 +1,49 @@
+{
+  "state": "superseded_before_computation",
+  "timestamp": "2026-11-18T04:51:48.227424+00:00",
+  "reason": "reassign unused CPU/memory NUMA domains; no device admission or workload occurred; stop exits are retained",
+  "dependency_before": {
+    "state": "waiting",
+    "started": "2026-11-18T04:28:43.539655+00:00",
+    "units": [
+      "tide-representative-cpu-v5.service"
+    ],
+    "command": [
+      "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+      "/mi/data2T/zlong/home/.agents/skills/use-local-ascend/scripts/run_on_free_npu.py",
+      "--job-id",
+      "scale-two-npu-hb-17b-v12",
+      "--project",
+      "tide-instances",
+      "--priority",
+      "0",
+      "--npu-count",
+      "2",
+      "--max-wait-seconds",
+      "1200",
+      "--state-file",
+      "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/scale-two-npu-hb-17b-v12/queue.json",
+      "--",
+      "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+      "-c",
+      "import subprocess,sys; codes=[subprocess.call([sys.executable,\"-m\",\"scripts.check_placement\",\"--devices\",\"npu:0\",\"npu:1\",\"--mode\",\"inference\",\"--config\",\"configs/scale/hb-17b.json\",\"--precision\",p,\"--threads\",\"16\",\"--batch\",\"1\",\"--length\",\"8\",\"--warmup\",\"1\",\"--steps\",\"3\",\"--output\",\"/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/scale-two-npu-hb-17b-v12/\"+p+\".json\"]) for p in (\"fp32\",\"bf16\")]; sys.exit(int(any(codes)))"
+    ],
+    "boundary": "resource sequencing only; prior success not required",
+    "observations": {
+      "tide-representative-cpu-v5.service": {
+        "MainPID": "3441299",
+        "Result": "success",
+        "LoadState": "loaded",
+        "ActiveState": "active",
+        "SubState": "running"
+      }
+    },
+    "busy": [
+      "tide-representative-cpu-v5.service"
+    ],
+    "elapsed_seconds": 0.006455313414335251
+  },
+  "unit_before": "MainPID=3513245\nControlGroup=/user.slice/user-1003.slice/user@1003.service/background.slice/tide-scale-two-npu-hb-17b-v12.service\nActiveState=active\n",
+  "unit_after": "MainPID=0\nResult=exit-code\nExecMainStatus=143\nControlGroup=\nActiveState=failed\n",
+  "cgroup_remaining_pids": []
+}

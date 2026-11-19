@@ -1,0 +1,19 @@
+{
+  "elapsed_seconds": 70.85125098004937,
+  "job_id": "region-placement-npu-serial-v1",
+  "logical_devices": [
+    "npu:0",
+    "npu:1"
+  ],
+  "npu_count": 2,
+  "physical_ids": [
+    5,
+    7
+  ],
+  "priority": 0,
+  "project": "tide-instances",
+  "return_code": 0,
+  "schema_version": 1,
+  "status": "completed",
+  "timestamp": "2026-11-18T07:43:18.963504+00:00"
+}

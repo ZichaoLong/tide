@@ -1,0 +1,19 @@
+{
+  "elapsed_seconds": 562.9162009544671,
+  "job_id": "agg-placement-light64-fp32-v1",
+  "logical_devices": [
+    "npu:0",
+    "npu:1"
+  ],
+  "npu_count": 2,
+  "physical_ids": [
+    1,
+    14
+  ],
+  "priority": 0,
+  "project": "tide-instances",
+  "return_code": 0,
+  "schema_version": 1,
+  "status": "completed",
+  "timestamp": "2026-11-18T12:50:44.660038+00:00"
+}

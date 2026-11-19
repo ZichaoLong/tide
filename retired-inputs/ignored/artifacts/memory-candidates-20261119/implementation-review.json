@@ -1,0 +1,1265 @@
+{
+  "schema": "tide-memory-implementation-review-1",
+  "reviewed_at": "2026-11-19T02:33:24.368533+00:00",
+  "head": "87fb94b369d40a55b5fa62f67a6565a721645bb9",
+  "production_tree": "5dba5b15c0c71ce729ff82c054e9468916acd7e5",
+  "review_kind": "read-only source/contract/test-evidence review plus CPU meta construction and CLI parse/resolve; no new device qualification",
+  "state": "passed",
+  "production_source_modified": false,
+  "new_npu_work_started": false,
+  "public_entry": {
+    "package": "tide-instances",
+    "imports": "tide.ModelConfig, TideModel, save_checkpoint, load_checkpoint, place_model",
+    "training_cli": "examples/train.py",
+    "default_mode": "train",
+    "cases": [
+      {
+        "config": "configs/memory-candidates/small-x.json",
+        "parse_resolve_exact": true,
+        "default_mode": "train",
+        "model_weights_constructed": false
+      },
+      {
+        "config": "configs/memory-candidates/small-all-ssd.json",
+        "parse_resolve_exact": true,
+        "default_mode": "train",
+        "model_weights_constructed": false
+      },
+      {
+        "config": "configs/memory-candidates/small-reverse.json",
+        "parse_resolve_exact": true,
+        "default_mode": "train",
+        "model_weights_constructed": false
+      },
+      {
+        "config": "configs/memory-candidates/small-kv128.json",
+        "parse_resolve_exact": true,
+        "default_mode": "train",
+        "model_weights_constructed": false
+      },
+      {
+        "config": "configs/memory-candidates/small-memory-shared.json",
+        "parse_resolve_exact": true,
+        "default_mode": "train",
+        "model_weights_constructed": false
+      }
+    ],
+    "all_extension_flag_overrides_resolve": true,
+    "serialization": "all 25 configs roundtrip through JSON and ModelConfig exactly; checkpoint embeds config and installed recovery checks decoded config/data exactly"
+  },
+  "configurations": [
+    {
+      "path": "configs/memory-candidates/9b-all-ssd.json",
+      "sha256": "51dc7ea468f43f8310d936b0fe024c1104b3ff697ad218b6a5785894517442cd",
+      "roundtrip_exact": true,
+      "parameters": 8494364112,
+      "ordinary": 768,
+      "hubs": 80,
+      "regions": 44,
+      "content_width": 768,
+      "summary_width": 192,
+      "kv_width": null,
+      "ffn_width": 3072,
+      "memory": "S",
+      "memory_sharing": null,
+      "nonmemory_sharing": "independent",
+      "region_batch_size": 4,
+      "memories": {
+        "S": {
+          "nodes": 848,
+          "memory_parameter_modules": 10,
+          "summary_width": 192,
+          "ffn_width": 3072,
+          "heads": 24,
+          "memory_shared": false
+        }
+      },
+      "whole_region_placement_ownership": "two partitions valid; no base duplicated or crossing partitions"
+    },
+    {
+      "path": "configs/memory-candidates/9b-kv128.json",
+      "sha256": "631b6ffc265a17eabcb08340b70e9f675010fd3b346224bd2f7437374a82e822",
+      "roundtrip_exact": true,
+      "parameters": 7268408784,
+      "ordinary": 768,
+      "hubs": 80,
+      "regions": 44,
+      "content_width": 768,
+      "summary_width": 192,
+      "kv_width": 128,
+      "ffn_width": 3072,
+      "memory": "X",
+      "memory_sharing": null,
+      "nonmemory_sharing": "independent",
+      "region_batch_size": 4,
+      "memories": {
+        "K": {
+          "nodes": 768,
+          "memory_parameter_modules": 7,
+          "summary_width": 192,
+          "ffn_width": 3072,
+          "heads": 4,
+          "memory_shared": false
+        },
+        "S": {
+          "nodes": 80,
+          "memory_parameter_modules": 10,
+          "summary_width": 192,
+          "ffn_width": 3072,
+          "heads": 24,
+          "memory_shared": false
+        }
+      },
+      "whole_region_placement_ownership": "two partitions valid; no base duplicated or crossing partitions"
+    },
+    {
+      "path": "configs/memory-candidates/9b-kv256.json",
+      "sha256": "786d14be9ce7978cc44a3b454ed7c1a298138b4257bb8fc507bfdcbdab10495b",
+      "roundtrip_exact": true,
+      "parameters": 7570398672,
+      "ordinary": 768,
+      "hubs": 80,
+      "regions": 44,
+      "content_width": 768,
+      "summary_width": 192,
+      "kv_width": 256,
+      "ffn_width": 3072,
+      "memory": "X",
+      "memory_sharing": null,
+      "nonmemory_sharing": "independent",
+      "region_batch_size": 4,
+      "memories": {
+        "K": {
+          "nodes": 768,
+          "memory_parameter_modules": 11,
+          "summary_width": 192,
+          "ffn_width": 3072,
+          "heads": 8,
+          "memory_shared": false
+        },
+        "S": {
+          "nodes": 80,
+          "memory_parameter_modules": 10,
+          "summary_width": 192,
+          "ffn_width": 3072,
+          "heads": 24,
+          "memory_shared": false
+        }
+      },
+      "whole_region_placement_ownership": "two partitions valid; no base duplicated or crossing partitions"
+    },
+    {
+      "path": "configs/memory-candidates/9b-kv384.json",
+      "sha256": "99a055f1175b3d8fa764b46ec94b16e53e6df47110c517663e5d4869f49255cc",
+      "roundtrip_exact": true,
+      "parameters": 7872388560,
+      "ordinary": 768,
+      "hubs": 80,
+      "regions": 44,
+      "content_width": 768,
+      "summary_width": 192,
+      "kv_width": 384,
+      "ffn_width": 3072,
+      "memory": "X",
+      "memory_sharing": null,
+      "nonmemory_sharing": "independent",
+      "region_batch_size": 4,
+      "memories": {
+        "K": {
+          "nodes": 768,
+          "memory_parameter_modules": 15,
+          "summary_width": 192,
+          "ffn_width": 3072,
+          "heads": 12,
+          "memory_shared": false
+        },
+        "S": {
+          "nodes": 80,
+          "memory_parameter_modules": 10,
+          "summary_width": 192,
+          "ffn_width": 3072,
+          "heads": 24,
+          "memory_shared": false
+        }
+      },
+      "whole_region_placement_ownership": "two partitions valid; no base duplicated or crossing partitions"
+    },
+    {
+      "path": "configs/memory-candidates/9b-memory-shared-batch1.json",
+      "sha256": "b9f86765890f906dc5fc8ce00bf1a7820917ddf2bd0e82c6b714a9114bbc656d",
+      "roundtrip_exact": true,
+      "parameters": 6936315376,
+      "ordinary": 768,
+      "hubs": 80,
+      "regions": 44,
+      "content_width": 768,
+      "summary_width": 192,
+      "kv_width": 768,
+      "ffn_width": 3072,
+      "memory": "X",
+      "memory_sharing": "region_shared",
+      "nonmemory_sharing": "independent",
+      "region_batch_size": 1,
+      "memories": {
+        "K": {
+          "nodes": 768,
+          "memory_parameter_modules": 27,
+          "summary_width": 192,
+          "ffn_width": 3072,
+          "heads": 24,
+          "memory_shared": true
+        },
+        "S": {
+          "nodes": 80,
+          "memory_parameter_modules": 10,
+          "summary_width": 192,
+          "ffn_width": 3072,
+          "heads": 24,
+          "memory_shared": true
+        }
+      },
+      "whole_region_placement_ownership": "two partitions valid; no base duplicated or crossing partitions"
+    },
+    {
+      "path": "configs/memory-candidates/9b-memory-shared.json",
+      "sha256": "f01a704ea4cb70122bd7af879f3d4afad6d2bae17d1330f78e4065260a992920",
+      "roundtrip_exact": true,
+      "parameters": 6936315376,
+      "ordinary": 768,
+      "hubs": 80,
+      "regions": 44,
+      "content_width": 768,
+      "summary_width": 192,
+      "kv_width": 768,
+      "ffn_width": 3072,
+      "memory": "X",
+      "memory_sharing": "region_shared",
+      "nonmemory_sharing": "independent",
+      "region_batch_size": 4,
+      "memories": {
+        "K": {
+          "nodes": 768,
+          "memory_parameter_modules": 27,
+          "summary_width": 192,
+          "ffn_width": 3072,
+          "heads": 24,
+          "memory_shared": true
+        },
+        "S": {
+          "nodes": 80,
+          "memory_parameter_modules": 10,
+          "summary_width": 192,
+          "ffn_width": 3072,
+          "heads": 24,
+          "memory_shared": true
+        }
+      },
+      "whole_region_placement_ownership": "two partitions valid; no base duplicated or crossing partitions"
+    },
+    {
+      "path": "configs/memory-candidates/9b-near-kv128.json",
+      "sha256": "98a19d6b1773e7c2d03e6b13ba235b704f7fe4fa06f7cd334ef03518e4fd1bcb",
+      "roundtrip_exact": true,
+      "parameters": 8768921040,
+      "ordinary": 768,
+      "hubs": 80,
+      "regions": 44,
+      "content_width": 768,
+      "summary_width": 192,
+      "kv_width": 128,
+      "ffn_width": 3840,
+      "memory": "X",
+      "memory_sharing": null,
+      "nonmemory_sharing": "independent",
+      "region_batch_size": 4,
+      "memories": {
+        "K": {
+          "nodes": 768,
+          "memory_parameter_modules": 7,
+          "summary_width": 192,
+          "ffn_width": 3840,
+          "heads": 4,
+          "memory_shared": false
+        },
+        "S": {
+          "nodes": 80,
+          "memory_parameter_modules": 10,
+          "summary_width": 192,
+          "ffn_width": 3840,
+          "heads": 24,
+          "memory_shared": false
+        }
+      },
+      "whole_region_placement_ownership": "two partitions valid; no base duplicated or crossing partitions"
+    },
+    {
+      "path": "configs/memory-candidates/9b-near-memory-shared.json",
+      "sha256": "1cef1a9222cb2f82f1f2612f207bbbe6da0affefe5e3c835989ed3b383dba2d3",
+      "roundtrip_exact": true,
+      "parameters": 8780695024,
+      "ordinary": 768,
+      "hubs": 80,
+      "regions": 44,
+      "content_width": 768,
+      "summary_width": 192,
+      "kv_width": 768,
+      "ffn_width": 4016,
+      "memory": "X",
+      "memory_sharing": "region_shared",
+      "nonmemory_sharing": "independent",
+      "region_batch_size": 4,
+      "memories": {
+        "K": {
+          "nodes": 768,
+          "memory_parameter_modules": 27,
+          "summary_width": 192,
+          "ffn_width": 4016,
+          "heads": 24,
+          "memory_shared": true
+        },
+        "S": {
+          "nodes": 80,
+          "memory_parameter_modules": 10,
+          "summary_width": 192,
+          "ffn_width": 4016,
+          "heads": 24,
+          "memory_shared": true
+        }
+      },
+      "whole_region_placement_ownership": "two partitions valid; no base duplicated or crossing partitions"
+    },
+    {
+      "path": "configs/memory-candidates/9b-reverse.json",
+      "sha256": "5f52db0b841780082f1df641b17a42f21f55eecde10046620d2d92fc02aa23a6",
+      "roundtrip_exact": true,
+      "parameters": 8523946832,
+      "ordinary": 768,
+      "hubs": 80,
+      "regions": 44,
+      "content_width": 768,
+      "summary_width": 192,
+      "kv_width": 768,
+      "ffn_width": 3072,
+      "memory": "X_reverse",
+      "memory_sharing": null,
+      "nonmemory_sharing": "independent",
+      "region_batch_size": 4,
+      "memories": {
+        "K": {
+          "nodes": 80,
+          "memory_parameter_modules": 27,
+          "summary_width": 192,
+          "ffn_width": 3072,
+          "heads": 24,
+          "memory_shared": false
+        },
+        "S": {
+          "nodes": 768,
+          "memory_parameter_modules": 10,
+          "summary_width": 192,
+          "ffn_width": 3072,
+          "heads": 24,
+          "memory_shared": false
+        }
+      },
+      "whole_region_placement_ownership": "two partitions valid; no base duplicated or crossing partitions"
+    },
+    {
+      "path": "configs/memory-candidates/9b-x.json",
+      "sha256": "247fdd75d50223656b6ec05816bf86aadf043fe4359020e3350fda3885a9623f",
+      "roundtrip_exact": true,
+      "parameters": 8778358224,
+      "ordinary": 768,
+      "hubs": 80,
+      "regions": 44,
+      "content_width": 768,
+      "summary_width": 192,
+      "kv_width": 768,
+      "ffn_width": 3072,
+      "memory": "X",
+      "memory_sharing": null,
+      "nonmemory_sharing": "independent",
+      "region_batch_size": 4,
+      "memories": {
+        "K": {
+          "nodes": 768,
+          "memory_parameter_modules": 27,
+          "summary_width": 192,
+          "ffn_width": 3072,
+          "heads": 24,
+          "memory_shared": false
+        },
+        "S": {
+          "nodes": 80,
+          "memory_parameter_modules": 10,
+          "summary_width": 192,
+          "ffn_width": 3072,
+          "heads": 24,
+          "memory_shared": false
+        }
+      },
+      "whole_region_placement_ownership": "two partitions valid; no base duplicated or crossing partitions"
+    },
+    {
+      "path": "configs/memory-candidates/medium-all-ssd.json",
+      "sha256": "74d18ea6acf714ccdcc7fd381dcc443cf9280f670a82550231d99f1ddc14c1d9",
+      "roundtrip_exact": true,
+      "parameters": 150176568,
+      "ordinary": 192,
+      "hubs": 40,
+      "regions": 44,
+      "content_width": 192,
+      "summary_width": 48,
+      "kv_width": null,
+      "ffn_width": 768,
+      "memory": "S",
+      "memory_sharing": null,
+      "nonmemory_sharing": "independent",
+      "region_batch_size": 4,
+      "memories": {
+        "S": {
+          "nodes": 232,
+          "memory_parameter_modules": 10,
+          "summary_width": 48,
+          "ffn_width": 768,
+          "heads": 6,
+          "memory_shared": false
+        }
+      },
+      "whole_region_placement_ownership": "two partitions valid; no base duplicated or crossing partitions"
+    },
+    {
+      "path": "configs/memory-candidates/medium-kv128.json",
+      "sha256": "a94469693e7473c85bc2c0ec41aaf056a0298f730be2d2fde2ed426b9d330f4d",
+      "roundtrip_exact": true,
+      "parameters": 129025464,
+      "ordinary": 192,
+      "hubs": 40,
+      "regions": 44,
+      "content_width": 192,
+      "summary_width": 48,
+      "kv_width": 32,
+      "ffn_width": 768,
+      "memory": "X",
+      "memory_sharing": null,
+      "nonmemory_sharing": "independent",
+      "region_batch_size": 4,
+      "memories": {
+        "K": {
+          "nodes": 192,
+          "memory_parameter_modules": 4,
+          "summary_width": 48,
+          "ffn_width": 768,
+          "heads": 1,
+          "memory_shared": false
+        },
+        "S": {
+          "nodes": 40,
+          "memory_parameter_modules": 10,
+          "summary_width": 48,
+          "ffn_width": 768,
+          "heads": 6,
+          "memory_shared": false
+        }
+      },
+      "whole_region_placement_ownership": "two partitions valid; no base duplicated or crossing partitions"
+    },
+    {
+      "path": "configs/memory-candidates/medium-kv256.json",
+      "sha256": "895d7e9b7db1971cd491576c336e601f0b8b4a241365a1a30e039ba0eb51e6cb",
+      "roundtrip_exact": true,
+      "parameters": 133744056,
+      "ordinary": 192,
+      "hubs": 40,
+      "regions": 44,
+      "content_width": 192,
+      "summary_width": 48,
+      "kv_width": 64,
+      "ffn_width": 768,
+      "memory": "X",
+      "memory_sharing": null,
+      "nonmemory_sharing": "independent",
+      "region_batch_size": 4,
+      "memories": {
+        "K": {
+          "nodes": 192,
+          "memory_parameter_modules": 5,
+          "summary_width": 48,
+          "ffn_width": 768,
+          "heads": 2,
+          "memory_shared": false
+        },
+        "S": {
+          "nodes": 40,
+          "memory_parameter_modules": 10,
+          "summary_width": 48,
+          "ffn_width": 768,
+          "heads": 6,
+          "memory_shared": false
+        }
+      },
+      "whole_region_placement_ownership": "two partitions valid; no base duplicated or crossing partitions"
+    },
+    {
+      "path": "configs/memory-candidates/medium-kv384.json",
+      "sha256": "9dc86e21fdc942cdcb31290946fd2c5fcce329cb16397c4bec065c48f0eeee40",
+      "roundtrip_exact": true,
+      "parameters": 138462648,
+      "ordinary": 192,
+      "hubs": 40,
+      "regions": 44,
+      "content_width": 192,
+      "summary_width": 48,
+      "kv_width": 96,
+      "ffn_width": 768,
+      "memory": "X",
+      "memory_sharing": null,
+      "nonmemory_sharing": "independent",
+      "region_batch_size": 4,
+      "memories": {
+        "K": {
+          "nodes": 192,
+          "memory_parameter_modules": 6,
+          "summary_width": 48,
+          "ffn_width": 768,
+          "heads": 3,
+          "memory_shared": false
+        },
+        "S": {
+          "nodes": 40,
+          "memory_parameter_modules": 10,
+          "summary_width": 48,
+          "ffn_width": 768,
+          "heads": 6,
+          "memory_shared": false
+        }
+      },
+      "whole_region_placement_ownership": "two partitions valid; no base duplicated or crossing partitions"
+    },
+    {
+      "path": "configs/memory-candidates/medium-memory-shared.json",
+      "sha256": "805161ed6e7ca6ca1265df3d1f8978b18d460be25ea8f99f8cb6edbbb60163a4",
+      "roundtrip_exact": true,
+      "parameters": 127809232,
+      "ordinary": 192,
+      "hubs": 40,
+      "regions": 44,
+      "content_width": 192,
+      "summary_width": 48,
+      "kv_width": 192,
+      "ffn_width": 768,
+      "memory": "X",
+      "memory_sharing": "region_shared",
+      "nonmemory_sharing": "independent",
+      "region_batch_size": 4,
+      "memories": {
+        "K": {
+          "nodes": 192,
+          "memory_parameter_modules": 9,
+          "summary_width": 48,
+          "ffn_width": 768,
+          "heads": 6,
+          "memory_shared": true
+        },
+        "S": {
+          "nodes": 40,
+          "memory_parameter_modules": 10,
+          "summary_width": 48,
+          "ffn_width": 768,
+          "heads": 6,
+          "memory_shared": true
+        }
+      },
+      "whole_region_placement_ownership": "two partitions valid; no base duplicated or crossing partitions"
+    },
+    {
+      "path": "configs/memory-candidates/medium-reverse.json",
+      "sha256": "a44503e75618dc2cf8bed1203acfc794ae770401008aaccfe4b8f152907ae1a7",
+      "roundtrip_exact": true,
+      "parameters": 150685288,
+      "ordinary": 192,
+      "hubs": 40,
+      "regions": 44,
+      "content_width": 192,
+      "summary_width": 48,
+      "kv_width": 192,
+      "ffn_width": 768,
+      "memory": "X_reverse",
+      "memory_sharing": null,
+      "nonmemory_sharing": "independent",
+      "region_batch_size": 4,
+      "memories": {
+        "K": {
+          "nodes": 40,
+          "memory_parameter_modules": 9,
+          "summary_width": 48,
+          "ffn_width": 768,
+          "heads": 6,
+          "memory_shared": false
+        },
+        "S": {
+          "nodes": 192,
+          "memory_parameter_modules": 10,
+          "summary_width": 48,
+          "ffn_width": 768,
+          "heads": 6,
+          "memory_shared": false
+        }
+      },
+      "whole_region_placement_ownership": "two partitions valid; no base duplicated or crossing partitions"
+    },
+    {
+      "path": "configs/memory-candidates/medium-x.json",
+      "sha256": "d0fb584d61a46b284caaa83fb996e0ffe5be54cd0a62deaa7c202b559105ff24",
+      "roundtrip_exact": true,
+      "parameters": 152618424,
+      "ordinary": 192,
+      "hubs": 40,
+      "regions": 44,
+      "content_width": 192,
+      "summary_width": 48,
+      "kv_width": 192,
+      "ffn_width": 768,
+      "memory": "X",
+      "memory_sharing": null,
+      "nonmemory_sharing": "independent",
+      "region_batch_size": 4,
+      "memories": {
+        "K": {
+          "nodes": 192,
+          "memory_parameter_modules": 9,
+          "summary_width": 48,
+          "ffn_width": 768,
+          "heads": 6,
+          "memory_shared": false
+        },
+        "S": {
+          "nodes": 40,
+          "memory_parameter_modules": 10,
+          "summary_width": 48,
+          "ffn_width": 768,
+          "heads": 6,
+          "memory_shared": false
+        }
+      },
+      "whole_region_placement_ownership": "two partitions valid; no base duplicated or crossing partitions"
+    },
+    {
+      "path": "configs/memory-candidates/qualification.json",
+      "sha256": "9982c1ca7eb96252d269c1824a85794036efea0dd31638c37c0c4ff84a7316f9",
+      "roundtrip_exact": true,
+      "parameters": 11801691,
+      "ordinary": 12,
+      "hubs": 5,
+      "regions": 11,
+      "content_width": 192,
+      "summary_width": 48,
+      "kv_width": 192,
+      "ffn_width": 768,
+      "memory": "X",
+      "memory_sharing": null,
+      "nonmemory_sharing": "independent",
+      "region_batch_size": 4,
+      "memories": {
+        "K": {
+          "nodes": 12,
+          "memory_parameter_modules": 9,
+          "summary_width": 48,
+          "ffn_width": 768,
+          "heads": 6,
+          "memory_shared": false
+        },
+        "S": {
+          "nodes": 5,
+          "memory_parameter_modules": 10,
+          "summary_width": 48,
+          "ffn_width": 768,
+          "heads": 6,
+          "memory_shared": false
+        }
+      },
+      "whole_region_placement_ownership": "two partitions valid; no base duplicated or crossing partitions"
+    },
+    {
+      "path": "configs/memory-candidates/small-all-ssd.json",
+      "sha256": "19e7f790300469d82654d89db41fa973cb2665bc90d48ee2426c59a8bb150b32",
+      "roundtrip_exact": true,
+      "parameters": 11649075,
+      "ordinary": 12,
+      "hubs": 5,
+      "regions": 11,
+      "content_width": 192,
+      "summary_width": 48,
+      "kv_width": null,
+      "ffn_width": 768,
+      "memory": "S",
+      "memory_sharing": null,
+      "nonmemory_sharing": "independent",
+      "region_batch_size": 4,
+      "memories": {
+        "S": {
+          "nodes": 17,
+          "memory_parameter_modules": 10,
+          "summary_width": 48,
+          "ffn_width": 768,
+          "heads": 6,
+          "memory_shared": false
+        }
+      },
+      "whole_region_placement_ownership": "two partitions valid; no base duplicated or crossing partitions"
+    },
+    {
+      "path": "configs/memory-candidates/small-kv128.json",
+      "sha256": "9a36921d944d3c1a868c7e48a248b1aaaa8e5145588652530535f4590a7d726f",
+      "roundtrip_exact": true,
+      "parameters": 10327131,
+      "ordinary": 12,
+      "hubs": 5,
+      "regions": 11,
+      "content_width": 192,
+      "summary_width": 48,
+      "kv_width": 32,
+      "ffn_width": 768,
+      "memory": "X",
+      "memory_sharing": null,
+      "nonmemory_sharing": "independent",
+      "region_batch_size": 4,
+      "memories": {
+        "K": {
+          "nodes": 12,
+          "memory_parameter_modules": 4,
+          "summary_width": 48,
+          "ffn_width": 768,
+          "heads": 1,
+          "memory_shared": false
+        },
+        "S": {
+          "nodes": 5,
+          "memory_parameter_modules": 10,
+          "summary_width": 48,
+          "ffn_width": 768,
+          "heads": 6,
+          "memory_shared": false
+        }
+      },
+      "whole_region_placement_ownership": "two partitions valid; no base duplicated or crossing partitions"
+    },
+    {
+      "path": "configs/memory-candidates/small-kv256.json",
+      "sha256": "027ffb868995c1d8db79be8204579012776c0cda07db1ae1ad88b1ecb395cc0a",
+      "roundtrip_exact": true,
+      "parameters": 10622043,
+      "ordinary": 12,
+      "hubs": 5,
+      "regions": 11,
+      "content_width": 192,
+      "summary_width": 48,
+      "kv_width": 64,
+      "ffn_width": 768,
+      "memory": "X",
+      "memory_sharing": null,
+      "nonmemory_sharing": "independent",
+      "region_batch_size": 4,
+      "memories": {
+        "K": {
+          "nodes": 12,
+          "memory_parameter_modules": 5,
+          "summary_width": 48,
+          "ffn_width": 768,
+          "heads": 2,
+          "memory_shared": false
+        },
+        "S": {
+          "nodes": 5,
+          "memory_parameter_modules": 10,
+          "summary_width": 48,
+          "ffn_width": 768,
+          "heads": 6,
+          "memory_shared": false
+        }
+      },
+      "whole_region_placement_ownership": "two partitions valid; no base duplicated or crossing partitions"
+    },
+    {
+      "path": "configs/memory-candidates/small-kv384.json",
+      "sha256": "73880bb7c9e493df5bbdcbd1a7eb6a9a9153de272b6ca385ca4c07995f723433",
+      "roundtrip_exact": true,
+      "parameters": 10916955,
+      "ordinary": 12,
+      "hubs": 5,
+      "regions": 11,
+      "content_width": 192,
+      "summary_width": 48,
+      "kv_width": 96,
+      "ffn_width": 768,
+      "memory": "X",
+      "memory_sharing": null,
+      "nonmemory_sharing": "independent",
+      "region_batch_size": 4,
+      "memories": {
+        "K": {
+          "nodes": 12,
+          "memory_parameter_modules": 6,
+          "summary_width": 48,
+          "ffn_width": 768,
+          "heads": 3,
+          "memory_shared": false
+        },
+        "S": {
+          "nodes": 5,
+          "memory_parameter_modules": 10,
+          "summary_width": 48,
+          "ffn_width": 768,
+          "heads": 6,
+          "memory_shared": false
+        }
+      },
+      "whole_region_placement_ownership": "two partitions valid; no base duplicated or crossing partitions"
+    },
+    {
+      "path": "configs/memory-candidates/small-memory-shared.json",
+      "sha256": "8f181b4e718dcb87d893b6082c593c500ca28c2985a2806fb2093382b11bed38",
+      "roundtrip_exact": true,
+      "parameters": 11166283,
+      "ordinary": 12,
+      "hubs": 5,
+      "regions": 11,
+      "content_width": 192,
+      "summary_width": 48,
+      "kv_width": 192,
+      "ffn_width": 768,
+      "memory": "X",
+      "memory_sharing": "region_shared",
+      "nonmemory_sharing": "independent",
+      "region_batch_size": 4,
+      "memories": {
+        "K": {
+          "nodes": 12,
+          "memory_parameter_modules": 9,
+          "summary_width": 48,
+          "ffn_width": 768,
+          "heads": 6,
+          "memory_shared": true
+        },
+        "S": {
+          "nodes": 5,
+          "memory_parameter_modules": 10,
+          "summary_width": 48,
+          "ffn_width": 768,
+          "heads": 6,
+          "memory_shared": true
+        }
+      },
+      "whole_region_placement_ownership": "two partitions valid; no base duplicated or crossing partitions"
+    },
+    {
+      "path": "configs/memory-candidates/small-reverse.json",
+      "sha256": "e957ae5267542c2ab2a623c543655cb6d3c1db37da0c14b9ddc0b97c5bc04dd9",
+      "roundtrip_exact": true,
+      "parameters": 11712665,
+      "ordinary": 12,
+      "hubs": 5,
+      "regions": 11,
+      "content_width": 192,
+      "summary_width": 48,
+      "kv_width": 192,
+      "ffn_width": 768,
+      "memory": "X_reverse",
+      "memory_sharing": null,
+      "nonmemory_sharing": "independent",
+      "region_batch_size": 4,
+      "memories": {
+        "K": {
+          "nodes": 5,
+          "memory_parameter_modules": 9,
+          "summary_width": 48,
+          "ffn_width": 768,
+          "heads": 6,
+          "memory_shared": false
+        },
+        "S": {
+          "nodes": 12,
+          "memory_parameter_modules": 10,
+          "summary_width": 48,
+          "ffn_width": 768,
+          "heads": 6,
+          "memory_shared": false
+        }
+      },
+      "whole_region_placement_ownership": "two partitions valid; no base duplicated or crossing partitions"
+    },
+    {
+      "path": "configs/memory-candidates/small-x.json",
+      "sha256": "742cfd83915ccd0157ac0da8a41f9f6ef4d33abe8ebfceabe76443531e7ef811",
+      "roundtrip_exact": true,
+      "parameters": 11801691,
+      "ordinary": 12,
+      "hubs": 5,
+      "regions": 11,
+      "content_width": 192,
+      "summary_width": 48,
+      "kv_width": 192,
+      "ffn_width": 768,
+      "memory": "X",
+      "memory_sharing": null,
+      "nonmemory_sharing": "independent",
+      "region_batch_size": 4,
+      "memories": {
+        "K": {
+          "nodes": 12,
+          "memory_parameter_modules": 9,
+          "summary_width": 48,
+          "ffn_width": 768,
+          "heads": 6,
+          "memory_shared": false
+        },
+        "S": {
+          "nodes": 5,
+          "memory_parameter_modules": 10,
+          "summary_width": 48,
+          "ffn_width": 768,
+          "heads": 6,
+          "memory_shared": false
+        }
+      },
+      "whole_region_placement_ownership": "two partitions valid; no base duplicated or crossing partitions"
+    }
+  ],
+  "near_total": [
+    {
+      "path": "configs/memory-candidates/9b-near-kv128.json",
+      "only_change_from_fixed_ffn_counterpart": {
+        "ffn_width": [
+          null,
+          3840
+        ]
+      },
+      "parameters": 8768921040,
+      "delta_from_original_X": -9437184,
+      "relative_delta": -0.0010750511381728274,
+      "interpretation": "near total parameters; changed Full FFN dimensions and module proportions"
+    },
+    {
+      "path": "configs/memory-candidates/9b-near-memory-shared.json",
+      "only_change_from_fixed_ffn_counterpart": {
+        "ffn_width": [
+          null,
+          4016
+        ]
+      },
+      "parameters": 8780695024,
+      "delta_from_original_X": 2336800,
+      "relative_delta": 0.0002662001185610308,
+      "interpretation": "near total parameters; changed Full FFN dimensions and module proportions"
+    }
+  ],
+  "ownership": {
+    "memory_override": "None inherits sharing; region_shared overrides memory matrices and vectors only",
+    "memory_matrices": "region/role/kind base plus private per-node rank8 adapters; K/V projection keeps mixed-region compatible-role exception",
+    "query": "each 32-wide mathematical head has its own adapter",
+    "ssd_gate": "part of input matrix: gate d, convolution input d+64, dt heads; shares base plus private adapter",
+    "ssd_small_vectors": [
+      "a_log",
+      "dt_bias",
+      "skip",
+      "rho"
+    ],
+    "ssd_convolution_parameters": [
+      "conv_kernel",
+      "conv_bias"
+    ],
+    "ssd_vectors_policy": "same memory group as input; fully shared, no adapters; original nonlinear constraints unchanged",
+    "other_modules": "Full FFN, reception, source embeddings, description, scoring, regional network and boundary retain original sharing; all provided candidates use independent ownership outside memory",
+    "private_state": "KV keys/values/features/weights/times; SSD matrix/summaries/weights/times; convolution and pending remain node and sample private"
+  },
+  "placement": {
+    "construction": "all configuration ownership rows counted exactly; balanced two whole-region partitions legal, each non-global parameter row owns at most one region",
+    "implementation": "NodeLinear/NodeVector wrappers propagate actual shared metadata and slice each base once; placement_ownership rejects crossing shared rows before mutation",
+    "evidence_scope": "CPU logical placement value/VJP, private state and actual recovery; no new NPU placement claim"
+  },
+  "gradient_coverage": {
+    "memory_projection": "independent dense effective-matrix leaves, per-use gradients, analytical sum into shared W and private L/R; includes repeated owner1, owner0 sharing its base, and another region; every K and S projection checked in FP32",
+    "shared_vectors": "all six SSD vector/convolution parameter gradients independently summed over repeated owners",
+    "private_state": "perturb owner1 history leaves owner0 exact; owner0 state roots have zero derivatives to owner1 input/mass; true zero write derivatives and raw int64 times checked",
+    "continuation": "narrow direct formula/whole-chunk including eviction; integrated cache ledger and actual checkpoint updates; installed five fresh interpreters exact"
+  },
+  "test_evidence": {
+    "source": "64db31414df561e0c3468c3c62542e6612475bf6",
+    "production_tree": "5dba5b15c0c71ce729ff82c054e9468916acd7e5",
+    "passed": 886,
+    "warning_count": 1,
+    "result_path": "artifacts/memory-cpu-suite-v1/pytest.xml",
+    "result_sha256": "8281977ee9f065d16009d0af30efee4f5ad28fff5cc209f7b6cabb0df490b191",
+    "coverage": [
+      {
+        "path": "tests/test_memory_sharing.py",
+        "frozen_suite_source": "64db31414df561e0c3468c3c62542e6612475bf6",
+        "frozen_suite_test_sha256": "e535d373e05cfd11d1a47541c9463dab7ef0c293150f69916506cd2458c64c6e",
+        "current_sha256": "e535d373e05cfd11d1a47541c9463dab7ef0c293150f69916506cd2458c64c6e",
+        "unchanged_since_suite": true,
+        "passed_cases": 20,
+        "test_names": [
+          "test_memory_override_leaves_every_other_parameter_owner_unchanged[independent-X-group]",
+          "test_memory_override_leaves_every_other_parameter_owner_unchanged[independent-S-group]",
+          "test_memory_override_leaves_every_other_parameter_owner_unchanged[independent-X_reverse-group]",
+          "test_memory_override_leaves_every_other_parameter_owner_unchanged[independent-K-mixed]",
+          "test_memory_override_leaves_every_other_parameter_owner_unchanged[layer_shared-X-group]",
+          "test_memory_override_leaves_every_other_parameter_owner_unchanged[layer_shared-S-group]",
+          "test_memory_override_leaves_every_other_parameter_owner_unchanged[layer_shared-X_reverse-group]",
+          "test_memory_override_leaves_every_other_parameter_owner_unchanged[layer_shared-K-mixed]",
+          "test_unknown_memory_override_is_not_silently_accepted[independent]",
+          "test_unknown_memory_override_is_not_silently_accepted[layer_shared]",
+          "test_unknown_memory_override_is_not_silently_accepted[global]",
+          "test_unknown_memory_override_is_not_silently_accepted[False]",
+          "test_memory_projection_values_and_vjp_sum_every_shared_and_repeated_owner_use[K]",
+          "test_memory_projection_values_and_vjp_sum_every_shared_and_repeated_owner_use[S]",
+          "test_shared_memory_never_shares_history_and_zero_writes_have_no_cross_node_derivative[K]",
+          "test_shared_memory_never_shares_history_and_zero_writes_have_no_cross_node_derivative[S]",
+          "test_memory_only_sharing_bounded_fp64_placement_three_updates_checkpoint_and_actual_restore",
+          "test_memory_only_sharing_fp32_cpu_placement_value_and_vjp",
+          "test_memory_only_sharing_fp32_checkpoint_restores_optimizer_and_actual_next_update[False]",
+          "test_memory_only_sharing_fp32_checkpoint_restores_optimizer_and_actual_next_update[True]"
+        ]
+      },
+      {
+        "path": "tests/test_memory_candidates.py",
+        "frozen_suite_source": "64db31414df561e0c3468c3c62542e6612475bf6",
+        "frozen_suite_test_sha256": "351a01a1c3a782c48c887687bfc98163ebd0c3d4ac89fa5e2248bc0a6c362fdd",
+        "current_sha256": "5fffca37a786e0012a850286226e445788af76830d8ed736e5b9d9be3ab6b483",
+        "unchanged_since_suite": false,
+        "passed_cases": 32,
+        "test_names": [
+          "test_narrow_qkv_keeps_content_summary_ffn_and_independent_value_vjp[96]",
+          "test_narrow_qkv_keeps_content_summary_ffn_and_independent_value_vjp[64]",
+          "test_narrow_qkv_keeps_content_summary_ffn_and_independent_value_vjp[32]",
+          "test_narrow_fp32_formula_and_private_adapter_gradient_sum",
+          "test_narrow_huge_time_translation_and_zero_write_idle_state",
+          "test_candidate_role_width_binding_and_roundtrip[x]",
+          "test_candidate_role_width_binding_and_roundtrip[all_ssd]",
+          "test_candidate_role_width_binding_and_roundtrip[reverse]",
+          "test_candidate_role_width_binding_and_roundtrip[kv_half]",
+          "test_candidate_role_width_binding_and_roundtrip[kv_third]",
+          "test_candidate_role_width_binding_and_roundtrip[kv_sixth]",
+          "test_candidate_role_width_binding_and_roundtrip[memory_shared]",
+          "test_invalid_extension_dimensions_and_ownership_rejected[options0]",
+          "test_invalid_extension_dimensions_and_ownership_rejected[options1]",
+          "test_invalid_extension_dimensions_and_ownership_rejected[options2]",
+          "test_invalid_extension_dimensions_and_ownership_rejected[options3]",
+          "test_invalid_extension_dimensions_and_ownership_rejected[options4]",
+          "test_invalid_extension_dimensions_and_ownership_rejected[options5]",
+          "test_invalid_extension_dimensions_and_ownership_rejected[options6]",
+          "test_invalid_extension_dimensions_and_ownership_rejected[options7]",
+          "test_no_kv_graph_rejects_unused_kv_width",
+          "test_fixed_ffn_alternative_width_is_serialized_and_both_memories_use_it",
+          "test_integrated_cache_ledger_checks_real_writes_eviction_and_ssd_clocks[reverse]",
+          "test_integrated_cache_ledger_checks_real_writes_eviction_and_ssd_clocks[memory_shared]",
+          "test_integrated_cache_ledger_checks_real_writes_eviction_and_ssd_clocks[all_ssd]",
+          "test_integrated_cache_ledger_checks_real_writes_eviction_and_ssd_clocks[kv_sixth]",
+          "test_larger_window_does_not_claim_eviction_from_a_short_continuation",
+          "test_diagnostic_aggregate_retains_support_metadata_dtype_and_nan_failures[actual0-expected0-support_failed]",
+          "test_diagnostic_aggregate_retains_support_metadata_dtype_and_nan_failures[actual1-expected1-metadata_failed]",
+          "test_diagnostic_aggregate_retains_support_metadata_dtype_and_nan_failures[actual2-expected2-structural_failed]",
+          "test_diagnostic_aggregate_retains_support_metadata_dtype_and_nan_failures[actual3-expected3-nonfinite]",
+          "test_diagnostic_aggregate_rejects_unknown_or_unfinished_states"
+        ]
+      },
+      {
+        "path": "tests/test_memory_accounting.py",
+        "frozen_suite_source": "64db31414df561e0c3468c3c62542e6612475bf6",
+        "frozen_suite_test_sha256": "c877017ce479baff4a20aaf294a31cee1b47518659886c9d3eaca71852b0df54",
+        "current_sha256": "c877017ce479baff4a20aaf294a31cee1b47518659886c9d3eaca71852b0df54",
+        "unchanged_since_suite": true,
+        "passed_cases": 21,
+        "test_names": [
+          "test_memory_parameter_shapes_match_independent_formulas[X]",
+          "test_memory_parameter_shapes_match_independent_formulas[S]",
+          "test_memory_parameter_shapes_match_independent_formulas[X_reverse]",
+          "test_narrow_reverse_planned_state_equals_actual_payload[None-fp32]",
+          "test_narrow_reverse_planned_state_equals_actual_payload[None-bf16]",
+          "test_narrow_reverse_planned_state_equals_actual_payload[layer-fp32]",
+          "test_narrow_reverse_planned_state_equals_actual_payload[layer-bf16]",
+          "test_narrow_reverse_planned_state_equals_actual_payload[region-fp32]",
+          "test_narrow_reverse_planned_state_equals_actual_payload[region-bf16]",
+          "test_narrow_attention_work_counts_actual_qkv_heads",
+          "test_memory_shared_full_touch_keeps_independent_ffn",
+          "test_memory_vector_classification_uses_its_own_ownership",
+          "test_matrix_audit_separates_uniform_gemm_from_repeated_group_bmm",
+          "test_fused_projections_keep_logical_cost_but_count_one_base_contraction",
+          "test_reference_9b_actual_constructor_counts_without_payload[change0-8778358224]",
+          "test_reference_9b_actual_constructor_counts_without_payload[change1-8494364112]",
+          "test_reference_9b_actual_constructor_counts_without_payload[change2-8523946832]",
+          "test_reference_9b_actual_constructor_counts_without_payload[change3-7872388560]",
+          "test_reference_9b_actual_constructor_counts_without_payload[change4-7570398672]",
+          "test_reference_9b_actual_constructor_counts_without_payload[change5-7268408784]",
+          "test_reference_9b_actual_constructor_counts_without_payload[change6-6936315376]"
+        ]
+      },
+      {
+        "path": "tests/test_train_example.py",
+        "frozen_suite_source": "64db31414df561e0c3468c3c62542e6612475bf6",
+        "frozen_suite_test_sha256": "2d228ba85583452748dc3d20413078a4a7517562e45922b96a88a9f33aa4d092",
+        "current_sha256": "2d228ba85583452748dc3d20413078a4a7517562e45922b96a88a9f33aa4d092",
+        "unchanged_since_suite": true,
+        "passed_cases": 35,
+        "test_names": [
+          "test_preset_model_replacement_and_explicit_false_flags",
+          "test_reception_and_ssd_cli_overrides_are_saved_model_options",
+          "test_memory_binding_cli_preserves_serialized_shapes_and_other_ownership",
+          "test_measured_presets_require_explicit_device_and_retain_qualification[npu-fc-k-fp32-fp32-128-256]",
+          "test_measured_presets_require_explicit_device_and_retain_qualification[npu-fc-k-bf16-bf16-128-256]",
+          "test_measured_presets_require_explicit_device_and_retain_qualification[npu-hb-settle-fp32-fp32-24-256]",
+          "test_measured_presets_require_explicit_device_and_retain_qualification[npu-hb-timed-fp32-fp32-12-128]",
+          "test_measured_presets_require_explicit_device_and_retain_qualification[npu-hb-0p5b-fp32-fp32-4-128]",
+          "test_measured_presets_require_explicit_device_and_retain_qualification[npu-hb-light64-fp32-fp32-24-256]",
+          "test_measured_presets_require_explicit_device_and_retain_qualification[npu-hb-settle-bf16-bf16-32-256]",
+          "test_measured_presets_require_explicit_device_and_retain_qualification[npu-hb-0p5b-bf16-bf16-1-128]",
+          "test_invalid_runtime_settings[options0-batch]",
+          "test_invalid_runtime_settings[options1-length]",
+          "test_invalid_runtime_settings[options2-steps]",
+          "test_invalid_runtime_settings[options3-threads]",
+          "test_invalid_runtime_settings[options4-seed]",
+          "test_invalid_runtime_settings[options5-learning_rate]",
+          "test_invalid_runtime_settings[options6-explicit]",
+          "test_invalid_runtime_settings[options7-require --mode train]",
+          "test_invalid_runtime_settings[options8-require --mode train]",
+          "test_invalid_runtime_settings[options9-require --mode train]",
+          "test_invalid_preset_fields_are_rejected[change0]",
+          "test_invalid_preset_fields_are_rejected[change1]",
+          "test_invalid_preset_fields_are_rejected[change2]",
+          "test_invalid_preset_fields_are_rejected[change3]",
+          "test_invalid_preset_fields_are_rejected[change4]",
+          "test_list_and_npu_dry_run_do_not_construct_models_or_import_vendor",
+          "test_modes_own_graph_and_optimizer_boundaries[train]",
+          "test_modes_own_graph_and_optimizer_boundaries[grad_forward]",
+          "test_modes_own_graph_and_optimizer_boundaries[inference]",
+          "test_timed_training_flushes_and_restores_actual_updates[fp32]",
+          "test_timed_training_flushes_and_restores_actual_updates[bf16]",
+          "test_separate_resume_preserves_saved_model_and_optimizer_and_uses_current_runtime",
+          "test_resume_rejects_missing_or_wrong_optimizer_and_existing_save",
+          "test_restore_keeps_finite_update_deviation_and_rejects_nonfinite"
+        ]
+      },
+      {
+        "path": "tests/test_region_placement.py",
+        "frozen_suite_source": "64db31414df561e0c3468c3c62542e6612475bf6",
+        "frozen_suite_test_sha256": "a5b1a3c9ad343bd3f834a3fae61e4ca9a2f6137502f3e2dad54ca573c0ddbf9f",
+        "current_sha256": "a5b1a3c9ad343bd3f834a3fae61e4ca9a2f6137502f3e2dad54ca573c0ddbf9f",
+        "unchanged_since_suite": true,
+        "passed_cases": 22,
+        "test_names": [
+          "test_region_placement_whole_split_vjp_state_and_flush[serial-independent-settle-group]",
+          "test_region_placement_whole_split_vjp_state_and_flush[serial-region_shared-settle-mixed]",
+          "test_region_placement_whole_split_vjp_state_and_flush[serial-independent-timed-singleton]",
+          "test_region_placement_whole_split_vjp_state_and_flush[serial-region_shared-timed-group]",
+          "test_region_placement_whole_split_vjp_state_and_flush[per_device-independent-settle-group]",
+          "test_region_placement_whole_split_vjp_state_and_flush[per_device-region_shared-settle-mixed]",
+          "test_region_placement_whole_split_vjp_state_and_flush[per_device-independent-timed-singleton]",
+          "test_region_placement_whole_split_vjp_state_and_flush[per_device-region_shared-timed-group]",
+          "test_regions_share_one_input_projection_and_deduplicate_source_nodes",
+          "test_region_three_updates_checkpoint_and_actual_restored_timed_update[serial-fp32]",
+          "test_region_three_updates_checkpoint_and_actual_restored_timed_update[serial-bf16]",
+          "test_region_three_updates_checkpoint_and_actual_restored_timed_update[per_device-fp32]",
+          "test_region_three_updates_checkpoint_and_actual_restored_timed_update[per_device-bf16]",
+          "test_region_shared_crossing_rejected_before_any_mutation",
+          "test_region_adamw_original_parameter_none_zero_decay_semantics",
+          "test_region_cli_uses_existing_record_and_execution_modes[serial-qualify]",
+          "test_region_cli_uses_existing_record_and_execution_modes[serial-inference]",
+          "test_region_cli_uses_existing_record_and_execution_modes[serial-train]",
+          "test_region_cli_uses_existing_record_and_execution_modes[per_device-qualify]",
+          "test_region_cli_uses_existing_record_and_execution_modes[per_device-inference]",
+          "test_region_cli_uses_existing_record_and_execution_modes[per_device-train]",
+          "test_terminal_nonoutput_region_stays_disconnected_from_readout"
+        ]
+      },
+      {
+        "path": "tests/test_parameter_binding.py",
+        "frozen_suite_source": "64db31414df561e0c3468c3c62542e6612475bf6",
+        "frozen_suite_test_sha256": "c0d48797a9cfeacc8e2ef5c157b6b7c08857aa1ef95f9e997ec793463dea2b40",
+        "current_sha256": "c0d48797a9cfeacc8e2ef5c157b6b7c08857aa1ef95f9e997ec793463dea2b40",
+        "unchanged_since_suite": true,
+        "passed_cases": 21,
+        "test_names": [
+          "test_registered_parameter_count_matches_fixed_capacity[fc-4-topology0-K-source_residual-independent-8-64]",
+          "test_registered_parameter_count_matches_fixed_capacity[fc-4-topology1-S-incoming_light_64-region_shared-8-64]",
+          "test_registered_parameter_count_matches_fixed_capacity[fc-4-topology2-X-incoming_light_128-layer_shared-4-64]",
+          "test_registered_parameter_count_matches_fixed_capacity[fc-4-topology3-K-incoming_wide-region_shared-16-128]",
+          "test_registered_parameter_count_matches_fixed_capacity[lattice-3-topology4-S-incoming_wide-independent-8-64]",
+          "test_registered_parameter_count_matches_fixed_capacity[lattice-3-topology5-X-source_residual-region_shared-16-128]",
+          "test_registered_parameter_count_matches_fixed_capacity[lattice-3-topology6-K-incoming_light_64-layer_shared-8-64]",
+          "test_registered_parameter_count_matches_fixed_capacity[exchange-4-topology7-K-incoming_light_128-independent-8-64]",
+          "test_registered_parameter_count_matches_fixed_capacity[exchange-4-topology8-S-source_residual-region_shared-4-64]",
+          "test_registered_parameter_count_matches_fixed_capacity[exchange-4-topology9-X-incoming_wide-layer_shared-16-64]",
+          "test_registered_parameter_count_matches_fixed_capacity[multiscale-compact-5-dd4-topology10-K-incoming_light_64-region_shared-8-64]",
+          "test_registered_parameter_count_matches_fixed_capacity[multiscale-compact-5-dd4-topology11-S-incoming_light_128-layer_shared-4-64]",
+          "test_registered_parameter_count_matches_fixed_capacity[multiscale-compact-5-dd4-topology12-X-source_residual-independent-8-64]",
+          "test_mixed_kv_base_exception_and_singleton_omission[mixed-K-independent]",
+          "test_mixed_kv_base_exception_and_singleton_omission[mixed-K-region_shared]",
+          "test_mixed_kv_base_exception_and_singleton_omission[mixed-K-layer_shared]",
+          "test_mixed_kv_base_exception_and_singleton_omission[mixed-S-region_shared]",
+          "test_mixed_kv_base_exception_and_singleton_omission[mixed-X-layer_shared]",
+          "test_mixed_kv_base_exception_and_singleton_omission[singleton-S-independent]",
+          "test_mixed_kv_base_exception_and_singleton_omission[singleton-X-region_shared]",
+          "test_mixed_kv_base_exception_and_singleton_omission[singleton-K-layer_shared]"
+        ]
+      }
+    ],
+    "qualification_note": "The 886 result remains at its frozen source. Later added tests are not relabelled as part of that suite."
+  },
+  "installed_evidence": {
+    "path": "artifacts/memory-candidates-20261119/installed-review.json",
+    "sha256": "7f920275dccb6a68716ce139cbbad96a002dcd480b086862e506b71b9ccfda68",
+    "source": "301a327569aa75aefddd03cac9ca839589db5672",
+    "production_tree": "5dba5b15c0c71ce729ff82c054e9468916acd7e5",
+    "five_fresh_process_updates_exact": true
+  },
+  "documentation": {
+    "files": [
+      {
+        "path": "docs/memory-candidates.md",
+        "sha256": "975998eea7db644da14700428c1c99758a42d743312fa242e5d58a21e0dbe470"
+      },
+      {
+        "path": "configs/memory-candidates/README.md",
+        "sha256": "2e3a5dddb5bc6608a31b0ecd82a0dcdecb4ec115a5f842d36a7dc8a0b6cb1951"
+      },
+      {
+        "path": "README.md",
+        "sha256": "3d67fae2cefbcd9731a3564b050556f0c9c43b4c34b06568c806eb6098b7e49c"
+      },
+      {
+        "path": "docs/instances.md",
+        "sha256": "8c125a52084d199a140d939aa45dd9fc58eb4e334dd658cb86baf81fdf7ead6a"
+      },
+      {
+        "path": "docs/semantics.md",
+        "sha256": "af65a6ba1d92500fdd1130f17ad5a7b50ac50850477d2dd228b8a4c92e75c2ad"
+      }
+    ],
+    "formula_shape_ownership_agree": true,
+    "qualification_command_arguments_valid": true,
+    "inference_command_arguments_valid": true,
+    "referenced_config_exists": true,
+    "npu_command_interpretation": "worker command requires explicit device admission and frozen durable launcher as stated immediately below; review did not execute it",
+    "readme": "configuration README graph sizes, 96/64/32 fractions, near FFN3840/4016 counts and region_batch_size1 interpretation agree with actual constructors; root README routes through instances/semantics",
+    "nonblocking_navigation_suggestion": "A direct memory-candidates link in root README could improve discovery; existing instances/semantics links already reach it."
+  },
+  "retained_limits": [
+    "Regional sharing can flatten one common base to MM, but mixed-base cross-region batching still gathers repeated base weights into BMM.",
+    "Earlier FP32 dense-versus-placed multi-update finite deviations remain at original thresholds; installed single-path exact recovery does not erase them.",
+    "Near-total configurations alter Full FFN only relative to their fixed-FFN counterparts; this review verifies shape/count, not near-total training or performance.",
+    "Five candidates change mathematics/parameterization and are not expected to match outputs across candidates.",
+    "No downstream model-quality or acceptance claim."
+  ],
+  "findings": [],
+  "upstream_check": {
+    "state": "passed",
+    "revision": "4f5b9f20a4030d68ee66ae2d26e34659a5e37234",
+    "files": 108,
+    "command": "python scripts/check_upstream.py"
+  },
+  "final_identity_recheck": {
+    "head": "87fb94b369d40a55b5fa62f67a6565a721645bb9",
+    "production_tree": "5dba5b15c0c71ce729ff82c054e9468916acd7e5",
+    "git_diff_src_tide_exit_code": 0
+  }
+}

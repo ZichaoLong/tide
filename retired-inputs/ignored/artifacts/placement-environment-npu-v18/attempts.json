@@ -1,0 +1,69 @@
+{
+  "state": "completed",
+  "rows": [
+    {
+      "transport": "auto",
+      "precision": "bf16",
+      "command": [
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+        "-m",
+        "scripts.check_placement",
+        "--devices",
+        "npu:0",
+        "npu:1",
+        "--precision",
+        "bf16",
+        "--transport",
+        "auto",
+        "--threads",
+        "4",
+        "--output",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/placement-environment-npu-v18/auto-bf16.json"
+      ],
+      "exit_code": 0
+    },
+    {
+      "transport": "synchronized",
+      "precision": "fp32",
+      "command": [
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+        "-m",
+        "scripts.check_placement",
+        "--devices",
+        "npu:0",
+        "npu:1",
+        "--precision",
+        "fp32",
+        "--transport",
+        "synchronized",
+        "--threads",
+        "4",
+        "--output",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/placement-environment-npu-v18/synchronized-fp32.json"
+      ],
+      "exit_code": 1
+    },
+    {
+      "transport": "direct",
+      "precision": "fp32",
+      "command": [
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+        "-m",
+        "scripts.check_placement",
+        "--devices",
+        "npu:0",
+        "npu:1",
+        "--precision",
+        "fp32",
+        "--transport",
+        "direct",
+        "--threads",
+        "4",
+        "--output",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/placement-environment-npu-v18/direct-fp32.json"
+      ],
+      "exit_code": 1
+    }
+  ],
+  "scope": "fresh processes after CANN Python path correction; original failures retained"
+}

@@ -1,0 +1,86 @@
+{
+  "state": "passed",
+  "source": "1fbe15c9b0ce900bfffbf5c148ca61c81cb34046",
+  "command": [
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "-c",
+    "import hashlib,json,os,pathlib,shutil,subprocess,sys\nfrom scripts.job import atomic\nsource,run=map(pathlib.Path,sys.argv[1:]); build=run/'build';shutil.copytree(source,build)\nmanifest=dict(source=os.environ['TIDE_SOURCE_COMMIT'],files={str(p.relative_to(source)):hashlib.sha256(p.read_bytes()).hexdigest() for p in sorted((source/'src/tide').glob('*.py'))})\natomic(run/'source-manifest.json',manifest)\ncommands=[]\ndef execute(argv,**kw):\n commands.append(argv);atomic(run/'commands.json',commands);subprocess.run(argv,check=True,**kw)\nexecute([sys.executable,'-m','pip','wheel','--no-deps','--no-build-isolation','--no-index',str(build),'-w',str(run/'wheels')])\nexecute([sys.executable,'-m','venv','--system-site-packages',str(run/'venv')])\npython=str(run/'venv/bin/python');wheel=next((run/'wheels').glob('*.whl'))\nexecute([python,'-m','pip','install','--no-deps','--no-index',str(wheel)])\nenv={k:v for k,v in os.environ.items() if k!='PYTHONPATH'}\nexecute([python,'-I',str(source/'scripts/check_installed_capacity.py'),'--execution-variant','reception','--output-dir',str(run/'installed'),'--wheel',str(wheel),'--venv',str(run/'venv'),'--source-manifest',str(run/'source-manifest.json')],cwd='/',env=env)\nexecute([python,'-I',str(source/'examples/train.py'),'--config',str(source/'configs/agg-inference/settle-incoming_light_64-optimized.json'),'--parameter-indexing','static_view','--ssd-scan-backend','doubling','--batch','1','--length','2','--steps','3','--checkpoint',str(run/'example.pt')],cwd='/',env=env)\nexecute([python,'-I',str(source/'examples/train.py'),'--resume',str(run/'example.pt'),'--parameter-indexing','static_view','--batch','1','--length','2','--steps','1'],cwd='/',env=env)\natomic(run/'installation-complete.json',dict(state='completed',source=manifest['source'],wheel=str(wheel),wheel_sha256=hashlib.sha256(wheel.read_bytes()).hexdigest(),commands=commands))\n",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-installed-final-v1/source",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-installed-final-v1"
+  ],
+  "pid": 2480962,
+  "started": "2026-11-18T12:46:13.343241+00:00",
+  "max_rss_bytes": 34359738368,
+  "peak_rss_bytes": 1748316160,
+  "max_processes": 4,
+  "rss_sample_count": 285,
+  "poll_interval": 0.25,
+  "descendant_supervision": "Linux child subreaper; retained PID/start identities across nested sessions",
+  "child_pid": 2480997,
+  "process_group": 2480997,
+  "elapsed": 123.27901973947883,
+  "descendant_identities": [
+    {
+      "pid": 2480997,
+      "start_ticks": 2259214405
+    },
+    {
+      "pid": 2481000,
+      "start_ticks": 2259214417
+    },
+    {
+      "pid": 2481034,
+      "start_ticks": 2259214450
+    },
+    {
+      "pid": 2481056,
+      "start_ticks": 2259214475
+    },
+    {
+      "pid": 2481069,
+      "start_ticks": 2259214511
+    },
+    {
+      "pid": 2481070,
+      "start_ticks": 2259214514
+    },
+    {
+      "pid": 2481074,
+      "start_ticks": 2259214519
+    },
+    {
+      "pid": 2481219,
+      "start_ticks": 2259214768
+    },
+    {
+      "pid": 2481281,
+      "start_ticks": 2259214815
+    },
+    {
+      "pid": 2482434,
+      "start_ticks": 2259216439
+    },
+    {
+      "pid": 2484501,
+      "start_ticks": 2259218557
+    },
+    {
+      "pid": 2486806,
+      "start_ticks": 2259221079
+    },
+    {
+      "pid": 2490584,
+      "start_ticks": 2259224052
+    },
+    {
+      "pid": 2491242,
+      "start_ticks": 2259225010
+    },
+    {
+      "pid": 2491759,
+      "start_ticks": 2259226256
+    }
+  ],
+  "exit_code": 0,
+  "finished": "2026-11-18T12:48:16.622261+00:00"
+}

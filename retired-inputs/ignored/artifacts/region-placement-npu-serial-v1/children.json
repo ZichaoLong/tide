@@ -1,0 +1,45 @@
+{
+  "source": "062a8ab6d6ba0faa191d8900420b697711b7d21d",
+  "children": [
+    {
+      "precision": "fp32",
+      "command": [
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+        "-m",
+        "scripts.check_placement",
+        "--devices",
+        "npu:0",
+        "npu:1",
+        "--partition-kind",
+        "region",
+        "--precision",
+        "fp32",
+        "--threads",
+        "4",
+        "--output",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/region-placement-npu-serial-v1/fp32.json"
+      ],
+      "exit_code": 0
+    },
+    {
+      "precision": "bf16",
+      "command": [
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+        "-m",
+        "scripts.check_placement",
+        "--devices",
+        "npu:0",
+        "npu:1",
+        "--partition-kind",
+        "region",
+        "--precision",
+        "bf16",
+        "--threads",
+        "4",
+        "--output",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/region-placement-npu-serial-v1/bf16.json"
+      ],
+      "exit_code": 0
+    }
+  ]
+}

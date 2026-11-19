@@ -1,0 +1,113 @@
+{
+  "state": "passed",
+  "source": "feb88703f98475c86593c0a4778a0dc51d7f18b3",
+  "command": [
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "/mi/data2T/zlong/home/.agents/skills/use-local-ascend/scripts/run_on_free_npu.py",
+    "--job-id",
+    "training-refine-settle-batch",
+    "--project",
+    "tide-instances",
+    "--priority",
+    "0",
+    "--npu-count",
+    "1",
+    "--max-wait-seconds",
+    "600",
+    "--state-file",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/training-refine-settle-batch/queue.json",
+    "--",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "-m",
+    "benchmarks.search",
+    "--config",
+    "configs/hb-multiscale-x-settle.json",
+    "--config-overrides",
+    "{\"region_batch_size\":4}",
+    "--table",
+    "capacity",
+    "--batch",
+    "24",
+    "--length",
+    "256",
+    "--max-axis-value",
+    "24",
+    "--max-points",
+    "1",
+    "--subjects",
+    "tide",
+    "--device",
+    "npu:0",
+    "--precision",
+    "bf16",
+    "--mode",
+    "train",
+    "--threads",
+    "4",
+    "--warmup",
+    "2",
+    "--steps",
+    "5",
+    "--device-budget-gib",
+    "48",
+    "--rss-gib",
+    "90",
+    "--seconds",
+    "1100",
+    "--child-timeout",
+    "500",
+    "--output-dir",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/training-refine-settle-batch/search"
+  ],
+  "pid": 1517715,
+  "started": "2026-11-18T09:29:47.812291+00:00",
+  "max_rss_bytes": 107374182400,
+  "peak_rss_bytes": 4772823040,
+  "max_processes": 4,
+  "rss_sample_count": 390,
+  "poll_interval": 0.25,
+  "descendant_supervision": "Linux child subreaper; retained PID/start identities across nested sessions",
+  "child_pid": 1517749,
+  "process_group": 1517749,
+  "elapsed": 160.89740937575698,
+  "descendant_identities": [
+    {
+      "pid": 1517749,
+      "start_ticks": 2258035852
+    },
+    {
+      "pid": 1517761,
+      "start_ticks": 2258035857
+    },
+    {
+      "pid": 1518392,
+      "start_ticks": 2258036565
+    },
+    {
+      "pid": 1518776,
+      "start_ticks": 2258037037
+    },
+    {
+      "pid": 1518783,
+      "start_ticks": 2258037038
+    },
+    {
+      "pid": 1518784,
+      "start_ticks": 2258037038
+    },
+    {
+      "pid": 1518896,
+      "start_ticks": 2258037218
+    },
+    {
+      "pid": 1518924,
+      "start_ticks": 2258037224
+    },
+    {
+      "pid": 1523406,
+      "start_ticks": 2258043313
+    }
+  ],
+  "exit_code": 0,
+  "finished": "2026-11-18T09:32:28.709701+00:00"
+}

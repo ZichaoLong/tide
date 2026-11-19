@@ -1,0 +1,108 @@
+{
+  "state": "passed",
+  "source": "32ab13a5a530c5e1166c31d0d68c0c6bffe6bdf3",
+  "command": [
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/training-report-tools/install_validate.py",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/training-installed"
+  ],
+  "pid": 1683829,
+  "started": "2026-11-18T10:06:39.558584+00:00",
+  "max_rss_bytes": 25769803776,
+  "peak_rss_bytes": 1614225408,
+  "max_processes": 4,
+  "rss_sample_count": 245,
+  "poll_interval": 0.25,
+  "descendant_supervision": "Linux child subreaper; retained PID/start identities across nested sessions",
+  "child_pid": 1683868,
+  "process_group": 1683868,
+  "elapsed": 101.35822508856654,
+  "descendant_identities": [
+    {
+      "pid": 1683868,
+      "start_ticks": 2258257026
+    },
+    {
+      "pid": 1683871,
+      "start_ticks": 2258257044
+    },
+    {
+      "pid": 1683950,
+      "start_ticks": 2258257100
+    },
+    {
+      "pid": 1683952,
+      "start_ticks": 2258257136
+    },
+    {
+      "pid": 1683953,
+      "start_ticks": 2258257139
+    },
+    {
+      "pid": 1683954,
+      "start_ticks": 2258257144
+    },
+    {
+      "pid": 1684176,
+      "start_ticks": 2258257397
+    },
+    {
+      "pid": 1684223,
+      "start_ticks": 2258257444
+    },
+    {
+      "pid": 1684908,
+      "start_ticks": 2258258405
+    },
+    {
+      "pid": 1685713,
+      "start_ticks": 2258259783
+    },
+    {
+      "pid": 1686881,
+      "start_ticks": 2258261639
+    },
+    {
+      "pid": 1688787,
+      "start_ticks": 2258263812
+    },
+    {
+      "pid": 1689324,
+      "start_ticks": 2258264615
+    },
+    {
+      "pid": 1689501,
+      "start_ticks": 2258264917
+    },
+    {
+      "pid": 1689566,
+      "start_ticks": 2258265069
+    },
+    {
+      "pid": 1689642,
+      "start_ticks": 2258265226
+    },
+    {
+      "pid": 1689740,
+      "start_ticks": 2258265383
+    },
+    {
+      "pid": 1689826,
+      "start_ticks": 2258265539
+    },
+    {
+      "pid": 1689915,
+      "start_ticks": 2258265696
+    },
+    {
+      "pid": 1690043,
+      "start_ticks": 2258265853
+    },
+    {
+      "pid": 1690429,
+      "start_ticks": 2258266721
+    }
+  ],
+  "exit_code": 0,
+  "finished": "2026-11-18T10:08:20.916809+00:00"
+}

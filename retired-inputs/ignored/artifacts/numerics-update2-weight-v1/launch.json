@@ -1,0 +1,91 @@
+{
+  "source": "aab9a4d2ef6595269b2521e8632cbfad0a5a6648",
+  "source_path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/numerics-update2-weight-v1/source",
+  "run": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/numerics-update2-weight-v1",
+  "unit": "tide-numerics-update2-weight-v1",
+  "arguments": {
+    "name": "numerics-update2-weight-v1",
+    "revision": "aab9a4d2",
+    "threads": 32,
+    "affinity": "240-271",
+    "npu_count": 0,
+    "candidate_ids": null,
+    "seconds": 1800,
+    "rss_gib": 128.0,
+    "queue_seconds": 600,
+    "after_unit": [
+      "tide-numerics-update2-baseline-v1.service"
+    ],
+    "command": [
+      "--",
+      "python",
+      "-m",
+      "scripts.replay_saved_training_update",
+      "--qualification-dir",
+      "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/ffn-medium-cpu-qualification-v1/qualification",
+      "--verified-inputs",
+      "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/numerics-saved-update-v1/diagnosis/result.json",
+      "--owner",
+      "weight_access",
+      "--output",
+      "{run}/replay.json"
+    ]
+  },
+  "launch": [
+    "systemd-run",
+    "--user",
+    "--unit=tide-numerics-update2-weight-v1",
+    "--service-type=exec",
+    "--slice=background.slice",
+    "--working-directory=/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/numerics-update2-weight-v1/source",
+    "--property=KillMode=control-group",
+    "--property=RuntimeMaxSec=1800",
+    "--property=TimeoutStopSec=30",
+    "--property=CPUAffinity=240-271",
+    "--property=StandardOutput=append:/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/numerics-update2-weight-v1/stdout.log",
+    "--property=StandardError=append:/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/numerics-update2-weight-v1/stderr.log",
+    "/bin/bash",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/numerics-update2-weight-v1/run.sh"
+  ],
+  "command": [
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/numerics-update2-weight-v1/source/scripts/wait_units.py",
+    "--status",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/numerics-update2-weight-v1/dependency.json",
+    "--seconds",
+    "1800",
+    "--unit",
+    "tide-numerics-update2-baseline-v1.service",
+    "--",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "-m",
+    "scripts.replay_saved_training_update",
+    "--qualification-dir",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/ffn-medium-cpu-qualification-v1/qualification",
+    "--verified-inputs",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/numerics-saved-update-v1/diagnosis/result.json",
+    "--owner",
+    "weight_access",
+    "--output",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/numerics-update2-weight-v1/replay.json"
+  ],
+  "environment": {
+    "TIDE_SOURCE_COMMIT": "aab9a4d2ef6595269b2521e8632cbfad0a5a6648",
+    "TIDE_HARNESS_COMMIT": "aab9a4d2ef6595269b2521e8632cbfad0a5a6648",
+    "TORCH_DEVICE_BACKEND_AUTOLOAD": "0",
+    "TIDE_RESOURCE_IDENTITY": "pinned_cpu; shared host",
+    "OMP_NUM_THREADS": "32",
+    "MKL_NUM_THREADS": "32",
+    "OPENBLAS_NUM_THREADS": "32"
+  },
+  "state": "submitted",
+  "pythonpath_policy": {
+    "prepend": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/numerics-update2-weight-v1/source/src",
+    "inherit": "selected baseline module only; caller PYTHONPATH cleared before module load"
+  },
+  "actual_environment_path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/numerics-update2-weight-v1/environment.json",
+  "launcher_sha256": "dd30ed684b9a7d7edfe46e97110a3e2afbd55f27c000344bc13ce53d0365d81d",
+  "resource_enforcement": "process affinity; sampled process-tree RSS, not cgroup hard memory",
+  "device_policy": "cpu",
+  "unit_observation": "MainPID=2752865\nSlice=background.slice\nControlGroup=/user.slice/user-1003.slice/user@1003.service/background.slice/tide-numerics-update2-weight-v1.service\nId=tide-numerics-update2-weight-v1.service\nActiveState=active\nSubState=running\n"
+}

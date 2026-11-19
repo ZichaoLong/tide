@@ -1,0 +1,100 @@
+{
+  "base_commit": "8b76f7ba8edc092b401a6bdc94f40631f2dbd5d1",
+  "math": "4f5b9f20a4030d68ee66ae2d26e34659a5e37234",
+  "created": "2026-11-19T12:52:27+0800",
+  "protected_sha256": {
+    "docs/tide-learning-lab-TL-REQ-004-handoff.md": "69607cba0a7e87a260929ed5741d996103cef804c51f3fa2c02b3bd7a454a220",
+    "docs/tide-learning-lab-TL-REQ-005-handoff.md": "83bec6f6eaa476ae9d7c859fe168333ac2ee564433297f36ab9aa1ef33c38732",
+    "docs/tide-learning-lab-TL-REQ-006-handoff.md": "8706f0477c8f31d0c8337e55ba7f8f5b28bb9a455656586fa1585c82ec58b4df",
+    "docs/upstream-lh-semantics-discussion-20261113.md": "3118419cb014570395323baf887ffe5a7e797f97049e85eacef26ecb1fd81c07"
+  },
+  "budget": {
+    "npu_device_hours": 8,
+    "cpu_job_hours": 12,
+    "max_cpu_threads": 32,
+    "max_rss_gib": 192,
+    "max_hbm_gib": 56,
+    "new_artifacts_gib": 64,
+    "ordinary_seconds": 7200,
+    "large_cpu_seconds": 10800
+  },
+  "scope": [
+    "FP32 KV128 FFN dynamic weight access",
+    "owner-compacted power2 FFN packing",
+    "small/medium numerical and fresh-process checkpoint update",
+    "medium B16 L128 chunk32 continuing training",
+    "large B8 prompt128 chunk32 decode16 and NPU-only decode256",
+    "CPU 16/32 thread calibration; same-thread primary comparison"
+  ],
+  "device_policy": "one exclusive idle admitted NPU at a time; no shared NPU authorization",
+  "state": "completed_and_pushed",
+  "implementation_commit": "05e8338bf62569100d194848689d545f1140afbc",
+  "production_tree": "89f2707e71d989340c12de310797a4c7f4c99f64",
+  "jobs": [
+    "ffn-cpu-suite-v1",
+    "ffn-cpu16-calibration-v1",
+    "ffn-cpu32-calibration-v1",
+    "ffn-grouped-probe-v1",
+    "ffn-infer-cpu-stages-baseline-v1",
+    "ffn-infer-cpu-stages-transformer-v1",
+    "ffn-infer-cpu-stages-transformer-v2",
+    "ffn-infer-npu-stages-baseline-v1",
+    "ffn-infer-npu-stages-transformer-v1",
+    "ffn-infer-npu-stages-transformer-v2",
+    "ffn-large-cpu-timing-v1",
+    "ffn-large-npu-timing-v1",
+    "ffn-local-diagnosis-v1",
+    "ffn-local-npu-v1",
+    "ffn-long-npu-timing-v1",
+    "ffn-long-npu-timing-v2",
+    "ffn-medium-cpu-qualification-v1",
+    "ffn-medium-cpu-timing-v1",
+    "ffn-medium-npu-qualification-v1",
+    "ffn-medium-npu-recovery-v1",
+    "ffn-medium-npu-timing-v1",
+    "ffn-small-cpu-v1",
+    "ffn-small-npu-v1",
+    "ffn-train-cpu-stages-baseline-v1",
+    "ffn-train-cpu-stages-transformer-v1",
+    "ffn-train-stages-baseline-v1",
+    "ffn-train-stages-packing-v1",
+    "ffn-train-stages-transformer-v1",
+    "ffn-train-stages-weight-v1"
+  ],
+  "observed": "2026-11-19T06:54:50.277934+00:00",
+  "head": "97ff1e1950fe78de4dea3acbe7a9efc99435092b",
+  "decisions": [
+    {
+      "kind": "large_candidate_gate",
+      "decision": "baseline KV128 and common Transformer32 only; W/P/WP not extended",
+      "reason": "original d768 formula threshold failure retained for W; P/WP small continued-update failures; medium baseline inference-grad finite failure and artifact-budget refusal preserved"
+    },
+    {
+      "kind": "cpu_threads",
+      "decision": "32 threads common primary; single-NUMA first-touch without hard membind",
+      "calibration": "16 threads Tide85.0388/TF208.5006; 32 threads Tide94.5557/TF187.6574 positions/s; each calibration one repeat, not a global best",
+      "timing_affinity": "medium240-271 NUMA6; large0-31 NUMA0 on a different socket, simultaneous independent jobs; shared host",
+      "large_samples": "3 paired repeats; 1 warmup and 2 measured zero-state requests per subject per repeat; 10800s service"
+    },
+    {
+      "kind": "medium_npu_qualification",
+      "decision": "retain execution_failed due20GiB artifact bound; W not started; no requalification claimed",
+      "followup": "reuse existing baseline public checkpoint in bounded new-process update; new explicitly seeded reference anchor, original gradient/RNG not claimed"
+    },
+    {
+      "kind": "supervision",
+      "decision": "job.py watchdogs moved to228-231 after workers/waiters were spawned; worker affinities unchanged; per-run supervisor-affinity.json retains timing of changes"
+    }
+  ],
+  "tool_followup_commit": "46317a8d",
+  "checks_followup": "tests/test_checkpoint_update.py and tests/test_execution_candidate_qualification.py:19 passed in20.86s; production tree unchanged",
+  "remaining_scope": "none; finite plan complete; follow-up opportunities only in ROADMAP",
+  "medium_cpu_qualification": "execution_failed:32GiB reserve; baseline/W local restore exact, cross-path failures retained; P no durable first-update result or recovery",
+  "submission_correction": "Transformer inference_breakdown rejects --config: CPU v1 failed before raw/model; pending NPU Transformer v1 and dependent long v1 stopped before queue. Correct explicit Transformer v2 and long v2 launched; no normal performance evidence replaced.",
+  "final_evidence": [
+    "docs/evidence/ffn-execution-devices-20261119.md",
+    "docs/evidence/ffn-execution-devices-20261119.json"
+  ],
+  "evidence_commit": "97ff1e1950fe78de4dea3acbe7a9efc99435092b",
+  "protected_files_rechecked": true
+}

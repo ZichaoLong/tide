@@ -1,0 +1,29 @@
+{
+  "schema": "tide-memory-decode-development-check-v1",
+  "source": "1f6b0861b54e36423b3027d73f2e29cdf50e4cc5",
+  "production_tree": "5dba5b15c0c71ce729ff82c054e9468916acd7e5",
+  "tests": {
+    "command": "TORCH_DEVICE_BACKEND_AUTOLOAD=0 .venv-instances/bin/python -m pytest -q tests/test_memory_decode_costs.py",
+    "state": "passed",
+    "passed": 2,
+    "seconds": 2.01,
+    "scope": "actual prefix/eviction/capture boundaries and explicit reserved-budget refusal; not new numerical model qualification",
+    "source_scope": "test invocation after final two harness corrections, before commit; committed files match tested working-tree files"
+  },
+  "cli": {
+    "path": "artifacts/memory-candidates-20261119/decode-cost-cpu-cli.json",
+    "original_path": "/mi/data2T/zlong/.tmp/tide-memory-decode-cpu-ppt93yu2/decode.json",
+    "sha256": "5ccd975947e6adfffb869555a2eafa16148fe6ff38e559d7a2e9efc09cabed4e",
+    "state": "completed_finite",
+    "reported_source": {
+      "source_commit": "87fb94b369d40a55b5fa62f67a6565a721645bb9",
+      "harness_commit": "87fb94b369d40a55b5fa62f67a6565a721645bb9",
+      "tide_content_sha256": "7bc4f743a47f1f208f11850314c6a61ea5bb795085a7503b1b9337a051476d38",
+      "harness_content_sha256": "e79a5f2e39d1117d7ab1e1e0ba8a5bfc42b71d9ed51450ae60566be485ad000b",
+      "tide_path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/src/tide",
+      "harness_path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/benchmarks"
+    },
+    "identity_scope": "development working-tree harness before final report-wording and budget-error classification corrections; not frozen1f6 qualification"
+  },
+  "initial_environment_attempt": "CPU pytest with automatic TorchNPU loading failed before checks; corrected by explicit TORCH_DEVICE_BACKEND_AUTOLOAD=0; no NPU workload was run"
+}

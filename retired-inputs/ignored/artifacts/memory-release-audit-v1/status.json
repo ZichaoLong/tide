@@ -1,0 +1,27 @@
+{
+  "state": "passed",
+  "source": "1f6b0861b54e36423b3027d73f2e29cdf50e4cc5",
+  "command": [
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-candidates-20261119/release_audit.py"
+  ],
+  "pid": 1222261,
+  "started": "2026-11-19T03:04:28.812828+00:00",
+  "max_rss_bytes": 8589934592,
+  "peak_rss_bytes": 94609408,
+  "max_processes": 1,
+  "rss_sample_count": 17,
+  "poll_interval": 0.25,
+  "descendant_supervision": "Linux child subreaper; retained PID/start identities across nested sessions",
+  "child_pid": 1222300,
+  "process_group": 1222300,
+  "elapsed": 7.0629388354718685,
+  "descendant_identities": [
+    {
+      "pid": 1222300,
+      "start_ticks": 2264363952
+    }
+  ],
+  "exit_code": 0,
+  "finished": "2026-11-19T03:04:35.875768+00:00"
+}

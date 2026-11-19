@@ -1,0 +1,96 @@
+{
+  "state": "passed",
+  "source": "301a327569aa75aefddd03cac9ca839589db5672",
+  "command": [
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "/mi/data2T/zlong/home/.agents/skills/use-local-ascend/scripts/run_on_free_npu.py",
+    "--job-id",
+    "memory-ad-all-ssd-v1",
+    "--project",
+    "tide-instances",
+    "--priority",
+    "0",
+    "--npu-count",
+    "1",
+    "--max-wait-seconds",
+    "600",
+    "--state-file",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-ad-all-ssd-v1/queue.json",
+    "--",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "-m",
+    "benchmarks.programme",
+    "--suite",
+    "scale",
+    "--configs",
+    "configs/memory-candidates/small-all-ssd.json",
+    "--device",
+    "npu:0",
+    "--precision",
+    "fp32",
+    "--threads",
+    "4",
+    "--batch",
+    "8",
+    "--length",
+    "128",
+    "--modes",
+    "inference",
+    "grad_forward",
+    "train",
+    "--warmup",
+    "2",
+    "--steps",
+    "5",
+    "--stop-on-failure",
+    "--output-dir",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-ad-all-ssd-v1/results"
+  ],
+  "pid": 1033604,
+  "started": "2026-11-19T02:17:08.665598+00:00",
+  "max_rss_bytes": 34359738368,
+  "peak_rss_bytes": 2405568512,
+  "max_processes": 4,
+  "rss_sample_count": 172,
+  "poll_interval": 0.25,
+  "descendant_supervision": "Linux child subreaper; retained PID/start identities across nested sessions",
+  "child_pid": 1033633,
+  "process_group": 1033633,
+  "elapsed": 76.98895046114922,
+  "descendant_identities": [
+    {
+      "pid": 1033633,
+      "start_ticks": 2264079937
+    },
+    {
+      "pid": 1033640,
+      "start_ticks": 2264079943
+    },
+    {
+      "pid": 1034033,
+      "start_ticks": 2264080615
+    },
+    {
+      "pid": 1034369,
+      "start_ticks": 2264081220
+    },
+    {
+      "pid": 1034376,
+      "start_ticks": 2264081221
+    },
+    {
+      "pid": 1034377,
+      "start_ticks": 2264081221
+    },
+    {
+      "pid": 1034590,
+      "start_ticks": 2264081563
+    },
+    {
+      "pid": 1034592,
+      "start_ticks": 2264081569
+    }
+  ],
+  "exit_code": 0,
+  "finished": "2026-11-19T02:18:25.654549+00:00"
+}

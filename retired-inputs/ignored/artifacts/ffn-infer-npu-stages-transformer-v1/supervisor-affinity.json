@@ -1,0 +1,17 @@
+{
+  "observed": "2026-11-19T05:35:38.615896+00:00",
+  "pid": 1854500,
+  "old_affinity": [
+    224,
+    225,
+    226,
+    227
+  ],
+  "new_affinity": [
+    228,
+    229,
+    230,
+    231
+  ],
+  "scope": "job.py watchdog only; already-spawned waiter/worker affinity unchanged"
+}

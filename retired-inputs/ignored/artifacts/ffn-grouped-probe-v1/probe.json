@@ -1,0 +1,647 @@
+{
+  "schema": "tide-grouped-ffn-capability-probe-v1",
+  "state": "completed_probe",
+  "observed": "2026-11-19T04:55:19.874184+00:00",
+  "arguments": {
+    "output": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/ffn-grouped-probe-v1/probe.json",
+    "device": "npu:0",
+    "threads": 4,
+    "seed": 751,
+    "reference_only": false
+  },
+  "source": "6efbfed26212feb95f9b9094e22475dddd2ff011",
+  "script_sha256": "fa2eeab2bcab324ebdbf29fbe14940fe24e6bb0919a03d44c6e2dd3de5072aa7",
+  "physical_devices": "9",
+  "cases": [
+    {
+      "label": "repeated_shared_owner_zero_middle",
+      "owners": [
+        2,
+        0,
+        2,
+        3,
+        0,
+        2,
+        3,
+        2,
+        0,
+        2
+      ],
+      "sort_order": [
+        1,
+        4,
+        8,
+        0,
+        2,
+        5,
+        7,
+        9,
+        3,
+        6
+      ],
+      "counts": [
+        3,
+        0,
+        5,
+        2
+      ],
+      "group_list": [
+        3,
+        3,
+        8,
+        10
+      ],
+      "inputs": {
+        "x": {
+          "shape": [
+            10,
+            32
+          ],
+          "stride": [
+            32,
+            1
+          ],
+          "dtype": "torch.float32",
+          "device": "cpu",
+          "sha256": "80c983346b6ff9066a0f521337acd1f02ab876f0d6562a67050e6f75f8f413d6"
+        },
+        "weight": {
+          "shape": [
+            4,
+            48,
+            32
+          ],
+          "stride": [
+            1536,
+            32,
+            1
+          ],
+          "dtype": "torch.float32",
+          "device": "cpu",
+          "sha256": "6520123766cad5d663903a3cce38c246637b29566db0b809a79ffab68eea91f6"
+        },
+        "dy": {
+          "shape": [
+            10,
+            48
+          ],
+          "stride": [
+            48,
+            1
+          ],
+          "dtype": "torch.float32",
+          "device": "cpu",
+          "sha256": "b225f1dcc46aa724b530bbf98536bafa775d916089e1045dfd3fe80f939bf727"
+        },
+        "ends": {
+          "shape": [
+            4
+          ],
+          "stride": [
+            1
+          ],
+          "dtype": "torch.int64",
+          "device": "cpu",
+          "sha256": "f2211cce68f864cf32c0d905148b1c582212bdfe3a8efc8027a6766166949a6f"
+        }
+      },
+      "cpu_formula_check": {
+        "output": {
+          "state": "within_threshold",
+          "finite": true,
+          "atol": 2e-06,
+          "rtol": 2e-06,
+          "max_abs": 0.0,
+          "max_scaled": 0.0,
+          "exact": true
+        },
+        "input_gradient": {
+          "state": "within_threshold",
+          "finite": true,
+          "atol": 6e-06,
+          "rtol": 6e-06,
+          "max_abs": 0.0,
+          "max_scaled": 0.0,
+          "exact": true
+        },
+        "weight_gradient": {
+          "state": "within_threshold",
+          "finite": true,
+          "atol": 6e-06,
+          "rtol": 6e-06,
+          "max_abs": 7.450580596923828e-09,
+          "max_scaled": 0.0011811834992840886,
+          "exact": false
+        }
+      },
+      "operations": {
+        "forward_group0": {
+          "state": "within_threshold",
+          "boundary": "explicit device synchronization before and after this operation; no throughput claim",
+          "operation_seconds": 0.019522976130247116,
+          "outputs": [
+            {
+              "shape": [
+                10,
+                48
+              ],
+              "stride": [
+                48,
+                1
+              ],
+              "dtype": "torch.float32",
+              "device": "npu:0",
+              "sha256": "13f17fb6f54ed6ecee887d48ab8142f76907464eaca747ef97a80ccaa063eae3"
+            }
+          ],
+          "comparisons": [
+            {
+              "state": "within_threshold",
+              "finite": true,
+              "atol": 2e-06,
+              "rtol": 2e-06,
+              "max_abs": 2.9802322387695312e-08,
+              "max_scaled": 0.013137965463101864,
+              "exact": false
+            }
+          ],
+          "native_device_outputs": true,
+          "warnings": []
+        },
+        "input_adjoint_group0": {
+          "state": "within_threshold",
+          "boundary": "explicit device synchronization before and after this operation; no throughput claim",
+          "operation_seconds": 0.0004014931619167328,
+          "outputs": [
+            {
+              "shape": [
+                10,
+                32
+              ],
+              "stride": [
+                32,
+                1
+              ],
+              "dtype": "torch.float32",
+              "device": "npu:0",
+              "sha256": "b2edd7fa296d78653959c06b4552f86d932b7497bdfdd8d2ba17f408c3128008"
+            }
+          ],
+          "comparisons": [
+            {
+              "state": "within_threshold",
+              "finite": true,
+              "atol": 6e-06,
+              "rtol": 6e-06,
+              "max_abs": 3.725290298461914e-08,
+              "max_scaled": 0.005625895690172911,
+              "exact": false
+            }
+          ],
+          "native_device_outputs": true,
+          "warnings": []
+        },
+        "weight_adjoint_group2": {
+          "state": "within_threshold",
+          "boundary": "explicit device synchronization before and after this operation; no throughput claim",
+          "operation_seconds": 0.0003800392150878906,
+          "outputs": [
+            {
+              "shape": [
+                4,
+                48,
+                32
+              ],
+              "stride": [
+                1536,
+                32,
+                1
+              ],
+              "dtype": "torch.float32",
+              "device": "npu:0",
+              "sha256": "4ac2cc3c3df77774b31ed10cfd45ae37046e1e58786dec2770bc76d29d6dc14c"
+            }
+          ],
+          "comparisons": [
+            {
+              "state": "within_threshold",
+              "finite": true,
+              "atol": 6e-06,
+              "rtol": 6e-06,
+              "max_abs": 7.450580596923828e-09,
+              "max_scaled": 0.0012065573828294873,
+              "exact": false
+            }
+          ],
+          "native_device_outputs": true,
+          "warnings": []
+        },
+        "native_autograd": {
+          "state": "operation_failed",
+          "boundary": "explicit device synchronization before and after this operation; no throughput claim",
+          "error_type": "RuntimeError",
+          "error": "One of the differentiated Tensors appears to not have been used in the graph. Set allow_unused=True if this is the desired behavior.",
+          "traceback": "Traceback (most recent call last):\n  File \"/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/ffn-grouped-probe-v1/source/scripts/probe_grouped_ffn.py\", line 107, in observe\n    output = operation()\n             ^^^^^^^^^^^\n  File \"/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/ffn-grouped-probe-v1/source/scripts/probe_grouped_ffn.py\", line 206, in native_autograd\n    return torch.autograd.grad(output, (left, bank), dy)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/lib/python3.12/site-packages/torch/autograd/__init__.py\", line 530, in grad\n    result = _engine_run_backward(\n             ^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/lib/python3.12/site-packages/torch/autograd/graph.py\", line 882, in _engine_run_backward\n    return Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nRuntimeError: One of the differentiated Tensors appears to not have been used in the graph. Set allow_unused=True if this is the desired behavior.\n",
+          "synchronization_after_error": "completed",
+          "warnings": []
+        }
+      },
+      "device_inputs": {
+        "x": {
+          "shape": [
+            10,
+            32
+          ],
+          "stride": [
+            32,
+            1
+          ],
+          "dtype": "torch.float32",
+          "device": "npu:0",
+          "sha256": "80c983346b6ff9066a0f521337acd1f02ab876f0d6562a67050e6f75f8f413d6"
+        },
+        "weight": {
+          "shape": [
+            4,
+            48,
+            32
+          ],
+          "stride": [
+            1536,
+            32,
+            1
+          ],
+          "dtype": "torch.float32",
+          "device": "npu:0",
+          "sha256": "6520123766cad5d663903a3cce38c246637b29566db0b809a79ffab68eea91f6"
+        },
+        "weight_transpose_view": {
+          "shape": [
+            4,
+            32,
+            48
+          ],
+          "stride": [
+            1536,
+            1,
+            32
+          ],
+          "dtype": "torch.float32",
+          "device": "npu:0",
+          "sha256": "c75b26b5065c07772b79d293262885f710ddb13930bba1acc6c287ad861c9b81"
+        },
+        "dy": {
+          "shape": [
+            10,
+            48
+          ],
+          "stride": [
+            48,
+            1
+          ],
+          "dtype": "torch.float32",
+          "device": "npu:0",
+          "sha256": "b225f1dcc46aa724b530bbf98536bafa775d916089e1045dfd3fe80f939bf727"
+        },
+        "group_list": {
+          "shape": [
+            4
+          ],
+          "stride": [
+            1
+          ],
+          "dtype": "torch.int64",
+          "device": "npu:0",
+          "sha256": "f2211cce68f864cf32c0d905148b1c582212bdfe3a8efc8027a6766166949a6f"
+        }
+      },
+      "weight_transpose_shares_storage": true,
+      "native_output_requires_grad": true,
+      "native_output_grad_fn": "CppFunction"
+    },
+    {
+      "label": "singleton_with_zero_prefix_and_tail",
+      "owners": [
+        1
+      ],
+      "sort_order": [
+        0
+      ],
+      "counts": [
+        0,
+        1,
+        0,
+        0
+      ],
+      "group_list": [
+        0,
+        1,
+        1,
+        1
+      ],
+      "inputs": {
+        "x": {
+          "shape": [
+            1,
+            32
+          ],
+          "stride": [
+            32,
+            1
+          ],
+          "dtype": "torch.float32",
+          "device": "cpu",
+          "sha256": "9418554f9082ed518f6fab7fe3a7e86ad8e6a628fa778e36d85f51db59f4176b"
+        },
+        "weight": {
+          "shape": [
+            4,
+            48,
+            32
+          ],
+          "stride": [
+            1536,
+            32,
+            1
+          ],
+          "dtype": "torch.float32",
+          "device": "cpu",
+          "sha256": "4ee99717fffcc94c1bf117a27fe0280f2d53a5191bf4189f0495fc68f19b1484"
+        },
+        "dy": {
+          "shape": [
+            1,
+            48
+          ],
+          "stride": [
+            48,
+            1
+          ],
+          "dtype": "torch.float32",
+          "device": "cpu",
+          "sha256": "a4af9c85f9985ae30de466144ed974ff9b2b283749eab12b383fddda9e73820f"
+        },
+        "ends": {
+          "shape": [
+            4
+          ],
+          "stride": [
+            1
+          ],
+          "dtype": "torch.int64",
+          "device": "cpu",
+          "sha256": "97e2b8b640d13af1681608bb897c3ada8d220e80e2e023623f1021f958c6345b"
+        }
+      },
+      "cpu_formula_check": {
+        "output": {
+          "state": "within_threshold",
+          "finite": true,
+          "atol": 2e-06,
+          "rtol": 2e-06,
+          "max_abs": 0.0,
+          "max_scaled": 0.0,
+          "exact": true
+        },
+        "input_gradient": {
+          "state": "within_threshold",
+          "finite": true,
+          "atol": 6e-06,
+          "rtol": 6e-06,
+          "max_abs": 0.0,
+          "max_scaled": 0.0,
+          "exact": true
+        },
+        "weight_gradient": {
+          "state": "within_threshold",
+          "finite": true,
+          "atol": 6e-06,
+          "rtol": 6e-06,
+          "max_abs": 0.0,
+          "max_scaled": 0.0,
+          "exact": true
+        }
+      },
+      "operations": {
+        "forward_group0": {
+          "state": "within_threshold",
+          "boundary": "explicit device synchronization before and after this operation; no throughput claim",
+          "operation_seconds": 0.0003370232880115509,
+          "outputs": [
+            {
+              "shape": [
+                1,
+                48
+              ],
+              "stride": [
+                48,
+                1
+              ],
+              "dtype": "torch.float32",
+              "device": "npu:0",
+              "sha256": "cb5b43e55e17833ccd6db61e71f2473712cd1666db37e5e1ff963748cf344236"
+            }
+          ],
+          "comparisons": [
+            {
+              "state": "within_threshold",
+              "finite": true,
+              "atol": 2e-06,
+              "rtol": 2e-06,
+              "max_abs": 1.4901161193847656e-08,
+              "max_scaled": 0.0070109982043504715,
+              "exact": false
+            }
+          ],
+          "native_device_outputs": true,
+          "warnings": []
+        },
+        "input_adjoint_group0": {
+          "state": "within_threshold",
+          "boundary": "explicit device synchronization before and after this operation; no throughput claim",
+          "operation_seconds": 0.00032035261392593384,
+          "outputs": [
+            {
+              "shape": [
+                1,
+                32
+              ],
+              "stride": [
+                32,
+                1
+              ],
+              "dtype": "torch.float32",
+              "device": "npu:0",
+              "sha256": "8020a9c3e5b971546cb6eaded147d49587be8f2dcd9ea1015015089c572f5f0c"
+            }
+          ],
+          "comparisons": [
+            {
+              "state": "within_threshold",
+              "finite": true,
+              "atol": 6e-06,
+              "rtol": 6e-06,
+              "max_abs": 2.9802322387695312e-08,
+              "max_scaled": 0.004628428258001804,
+              "exact": false
+            }
+          ],
+          "native_device_outputs": true,
+          "warnings": []
+        },
+        "weight_adjoint_group2": {
+          "state": "within_threshold",
+          "boundary": "explicit device synchronization before and after this operation; no throughput claim",
+          "operation_seconds": 0.00032843276858329773,
+          "outputs": [
+            {
+              "shape": [
+                4,
+                48,
+                32
+              ],
+              "stride": [
+                1536,
+                32,
+                1
+              ],
+              "dtype": "torch.float32",
+              "device": "npu:0",
+              "sha256": "a291041e107012451094650589ac4a209178ba9fe87dd900940a26b56bf26715"
+            }
+          ],
+          "comparisons": [
+            {
+              "state": "within_threshold",
+              "finite": true,
+              "atol": 6e-06,
+              "rtol": 6e-06,
+              "max_abs": 0.0,
+              "max_scaled": 0.0,
+              "exact": true
+            }
+          ],
+          "native_device_outputs": true,
+          "warnings": []
+        },
+        "native_autograd": {
+          "state": "operation_failed",
+          "boundary": "explicit device synchronization before and after this operation; no throughput claim",
+          "error_type": "RuntimeError",
+          "error": "One of the differentiated Tensors appears to not have been used in the graph. Set allow_unused=True if this is the desired behavior.",
+          "traceback": "Traceback (most recent call last):\n  File \"/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/ffn-grouped-probe-v1/source/scripts/probe_grouped_ffn.py\", line 107, in observe\n    output = operation()\n             ^^^^^^^^^^^\n  File \"/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/ffn-grouped-probe-v1/source/scripts/probe_grouped_ffn.py\", line 206, in native_autograd\n    return torch.autograd.grad(output, (left, bank), dy)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/lib/python3.12/site-packages/torch/autograd/__init__.py\", line 530, in grad\n    result = _engine_run_backward(\n             ^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/lib/python3.12/site-packages/torch/autograd/graph.py\", line 882, in _engine_run_backward\n    return Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nRuntimeError: One of the differentiated Tensors appears to not have been used in the graph. Set allow_unused=True if this is the desired behavior.\n",
+          "synchronization_after_error": "completed",
+          "warnings": []
+        }
+      },
+      "device_inputs": {
+        "x": {
+          "shape": [
+            1,
+            32
+          ],
+          "stride": [
+            32,
+            1
+          ],
+          "dtype": "torch.float32",
+          "device": "npu:0",
+          "sha256": "9418554f9082ed518f6fab7fe3a7e86ad8e6a628fa778e36d85f51db59f4176b"
+        },
+        "weight": {
+          "shape": [
+            4,
+            48,
+            32
+          ],
+          "stride": [
+            1536,
+            32,
+            1
+          ],
+          "dtype": "torch.float32",
+          "device": "npu:0",
+          "sha256": "4ee99717fffcc94c1bf117a27fe0280f2d53a5191bf4189f0495fc68f19b1484"
+        },
+        "weight_transpose_view": {
+          "shape": [
+            4,
+            32,
+            48
+          ],
+          "stride": [
+            1536,
+            1,
+            32
+          ],
+          "dtype": "torch.float32",
+          "device": "npu:0",
+          "sha256": "0263bbeba34b5baaf2ff668159a47e94993c37f67ba3bafbaaa372bf3c3f7b0b"
+        },
+        "dy": {
+          "shape": [
+            1,
+            48
+          ],
+          "stride": [
+            48,
+            1
+          ],
+          "dtype": "torch.float32",
+          "device": "npu:0",
+          "sha256": "a4af9c85f9985ae30de466144ed974ff9b2b283749eab12b383fddda9e73820f"
+        },
+        "group_list": {
+          "shape": [
+            4
+          ],
+          "stride": [
+            1
+          ],
+          "dtype": "torch.int64",
+          "device": "npu:0",
+          "sha256": "97e2b8b640d13af1681608bb897c3ada8d220e80e2e023623f1021f958c6345b"
+        }
+      },
+      "weight_transpose_shares_storage": true,
+      "native_output_requires_grad": true,
+      "native_output_grad_fn": "CppFunction"
+    }
+  ],
+  "limits": [
+    "Capability probe only, no normal timing or whole-model performance qualification.",
+    "Dispatch placement and output device do not by themselves exclude an internal vendor fallback.",
+    "Native autograd and explicit grouped adjoint operations are tested independently.",
+    "No owner-indexed weight tensor, dense adapter, or weight contiguous copy is created.",
+    "Thresholds retain NodeLinear local FP32 value 2e-6 and gradient 6e-6 atol/rtol."
+  ],
+  "torch": "2.12.0+cpu",
+  "torch_npu": "2.12.0.post3",
+  "device": "npu:0",
+  "device_name": "Ascend910_9392",
+  "precision": {
+    "input": "float32",
+    "weight": "float32",
+    "output": "float32",
+    "autocast": false,
+    "matmul_allow_hf32": false,
+    "conv_allow_hf32": false
+  },
+  "schema_default": "npu::npu_grouped_matmul(Tensor[] x, Tensor[] weight, *, Tensor[]? bias=None, Tensor[]? scale=None, Tensor[]? offset=None, Tensor[]? antiquant_scale=None, Tensor[]? antiquant_offset=None, Tensor[]? per_token_scale=None, Tensor? group_list=None, Tensor[]? activation_input=None, Tensor[]? activation_quant_scale=None, Tensor[]? activation_quant_offset=None, int? split_item=0, int? group_type=None, int? group_list_type=0, int? act_type=0, int[]? tuning_config=None, int? output_dtype=None, int? x_dtype=None, int? weight_dtype=None, int? scale_dtype=None, int? per_token_scale_dtype=None) -> Tensor[]",
+  "schema_list": "npu::npu_grouped_matmul.List(Tensor[] x, Tensor[] weight, *, Tensor[]? bias=None, Tensor[]? scale=None, Tensor[]? offset=None, Tensor[]? antiquant_scale=None, Tensor[]? antiquant_offset=None, Tensor[]? per_token_scale=None, int[]? group_list=None, Tensor[]? activation_input=None, Tensor[]? activation_quant_scale=None, Tensor[]? activation_quant_offset=None, int? split_item=0, int? group_type=None, int? group_list_type=0, int? act_type=0, ScalarType? output_dtype=None) -> Tensor[]",
+  "dispatch_registration": "PrivateUse1: registered at ../torch_npu/csrc/aten/CustomRegisterSchema.cpp:10705 [kernel]\nMeta: registered at /opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/lib/python3.12/site-packages/torch_npu/op_plugin/meta/_meta_registrations.py:21 [kernel]\nSparsePrivateUse1: registered at ../torch_npu/csrc/aten/VariableFallbackKernel.cpp:277 [backend fallback]\nBackendSelect: fallthrough registered at /pytorch/aten/src/ATen/core/BackendSelectFallbackKernel.cpp:3 [backend fallback]\nPython: registered at /pytorch/aten/src/ATen/core/PythonFallbackKernel.cpp:198 [backend fallback]\nFuncTorchDynamicLayerBackMode: registered at /pytorch/aten/src/ATen/functorch/DynamicLayer.cpp:479 [backend fallback]\nFunctionalize: registered at /pytorch/aten/src/ATen/FunctionalizeFallbackKernel.cpp:409 [backend fallback]\nNamed: registered at /pytorch/aten/src/ATen/core/NamedRegistrations.cpp:5 [backend fallback]\nConjugate: registered at /pytorch/aten/src/ATen/ConjugateFallback.cpp:17 [backend fallback]\nNegative: registered at /pytorch/aten/src/ATen/native/NegateFallback.cpp:18 [backend fallback]\nZeroTensor: registered at /pytorch/aten/src/ATen/ZeroTensorFallback.cpp:115 [backend fallback]\nADInplaceOrView: fallthrough registered at /pytorch/aten/src/ATen/core/VariableFallbackKernel.cpp:103 [backend fallback]\nAutogradOther: registered at /pytorch/aten/src/ATen/core/VariableFallbackKernel.cpp:62 [backend fallback]\nAutogradCPU: registered at /pytorch/aten/src/ATen/core/VariableFallbackKernel.cpp:66 [backend fallback]\nAutogradCUDA: registered at /pytorch/aten/src/ATen/core/VariableFallbackKernel.cpp:74 [backend fallback]\nAutogradXLA: registered at /pytorch/aten/src/ATen/core/VariableFallbackKernel.cpp:86 [backend fallback]\nAutogradMPS: registered at /pytorch/aten/src/ATen/core/VariableFallbackKernel.cpp:94 [backend fallback]\nAutogradXPU: registered at /pytorch/aten/src/ATen/core/VariableFallbackKernel.cpp:70 [backend fallback]\nAutogradHPU: registered at /pytorch/aten/src/ATen/core/VariableFallbackKernel.cpp:107 [backend fallback]\nAutogradLazy: registered at /pytorch/aten/src/ATen/core/VariableFallbackKernel.cpp:90 [backend fallback]\nAutogradMTIA: registered at /pytorch/aten/src/ATen/core/VariableFallbackKernel.cpp:78 [backend fallback]\nAutogradMAIA: registered at /pytorch/aten/src/ATen/core/VariableFallbackKernel.cpp:82 [backend fallback]\nAutogradPrivateUse1: registered at ../torch_npu/csrc/aten/VariableFallbackKernel.cpp:234 [backend fallback]\nAutogradMeta: registered at /pytorch/aten/src/ATen/core/VariableFallbackKernel.cpp:98 [backend fallback]\nTracer: registered at /pytorch/torch/csrc/autograd/TraceTypeManual.cpp:296 [backend fallback]\nAutocastCPU: fallthrough registered at /pytorch/aten/src/ATen/autocast_mode.cpp:336 [backend fallback]\nAutocastMTIA: fallthrough registered at /pytorch/aten/src/ATen/autocast_mode.cpp:480 [backend fallback]\nAutocastMAIA: fallthrough registered at /pytorch/aten/src/ATen/autocast_mode.cpp:518 [backend fallback]\nAutocastXPU: fallthrough registered at /pytorch/aten/src/ATen/autocast_mode.cpp:556 [backend fallback]\nAutocastMPS: fallthrough registered at /pytorch/aten/src/ATen/autocast_mode.cpp:221 [backend fallback]\nAutocastCUDA: fallthrough registered at /pytorch/aten/src/ATen/autocast_mode.cpp:177 [backend fallback]\nAutocastPrivateUse1: fallthrough registered at ../torch_npu/csrc/aten/AutoCastOps.cpp:20 [backend fallback]\nFuncTorchBatched: registered at /pytorch/aten/src/ATen/functorch/LegacyBatchingRegistrations.cpp:729 [backend fallback]\nBatchedNestedTensor: registered at /pytorch/aten/src/ATen/functorch/LegacyBatchingRegistrations.cpp:756 [backend fallback]\nFuncTorchVmapMode: fallthrough registered at /pytorch/aten/src/ATen/functorch/VmapModeRegistrations.cpp:22 [backend fallback]\nBatched: registered at /pytorch/aten/src/ATen/LegacyBatchingRegistrations.cpp:1072 [backend fallback]\nVmapMode: fallthrough registered at /pytorch/aten/src/ATen/VmapModeRegistrations.cpp:32 [backend fallback]\nFuncTorchGradWrapper: registered at /pytorch/aten/src/ATen/functorch/TensorWrapper.cpp:210 [backend fallback]\nPythonTLSSnapshot: registered at /pytorch/aten/src/ATen/core/PythonFallbackKernel.cpp:206 [backend fallback]\nFuncTorchDynamicLayerFrontMode: registered at /pytorch/aten/src/ATen/functorch/DynamicLayer.cpp:475 [backend fallback]\nPreDispatch: registered at /pytorch/aten/src/ATen/core/PythonFallbackKernel.cpp:210 [backend fallback]\nPythonDispatcher: registered at /pytorch/aten/src/ATen/core/PythonFallbackKernel.cpp:202 [backend fallback]\n",
+  "operation_states": {
+    "repeated_shared_owner_zero_middle": {
+      "forward_group0": "within_threshold",
+      "input_adjoint_group0": "within_threshold",
+      "weight_adjoint_group2": "within_threshold",
+      "native_autograd": "operation_failed"
+    },
+    "singleton_with_zero_prefix_and_tail": {
+      "forward_group0": "within_threshold",
+      "input_adjoint_group0": "within_threshold",
+      "weight_adjoint_group2": "within_threshold",
+      "native_autograd": "operation_failed"
+    }
+  }
+}

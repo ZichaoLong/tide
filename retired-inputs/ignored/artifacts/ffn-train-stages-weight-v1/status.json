@@ -1,0 +1,102 @@
+{
+  "state": "passed",
+  "source": "a58536608f7276a771c56703b48e23ea82d2ca65",
+  "command": [
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/ffn-train-stages-weight-v1/source/scripts/wait_units.py",
+    "--status",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/ffn-train-stages-weight-v1/dependency.json",
+    "--seconds",
+    "7200",
+    "--unit",
+    "tide-ffn-train-stages-baseline-v1.service",
+    "--",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "/mi/data2T/zlong/home/.agents/skills/use-local-ascend/scripts/run_on_free_npu.py",
+    "--job-id",
+    "ffn-train-stages-weight-v1",
+    "--project",
+    "tide-instances",
+    "--priority",
+    "0",
+    "--npu-count",
+    "1",
+    "--max-wait-seconds",
+    "600",
+    "--state-file",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/ffn-train-stages-weight-v1/queue.json",
+    "--candidate-ids",
+    "9",
+    "--",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "-m",
+    "benchmarks.training_breakdown",
+    "--subject",
+    "tide",
+    "--config",
+    "configs/ffn-execution/medium-weight-access.json",
+    "--device",
+    "npu:0",
+    "--batch",
+    "16",
+    "--length",
+    "128",
+    "--chunk",
+    "32",
+    "--warmup",
+    "2",
+    "--samples",
+    "1",
+    "--threads",
+    "4",
+    "--allocated-budget-gib",
+    "56",
+    "--reserved-budget-gib",
+    "56",
+    "--output",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/ffn-train-stages-weight-v1/breakdown.json"
+  ],
+  "pid": 1787352,
+  "started": "2026-11-19T05:18:09.218094+00:00",
+  "max_rss_bytes": 137438953472,
+  "peak_rss_bytes": 10565259264,
+  "max_processes": 2,
+  "rss_sample_count": 697,
+  "poll_interval": 0.25,
+  "descendant_supervision": "Linux child subreaper; retained PID/start identities across nested sessions",
+  "child_pid": 1787372,
+  "process_group": 1787372,
+  "elapsed": 315.4477442279458,
+  "descendant_identities": [
+    {
+      "pid": 1787372,
+      "start_ticks": 2265165992
+    },
+    {
+      "pid": 1788225,
+      "start_ticks": 2265167499
+    },
+    {
+      "pid": 1788966,
+      "start_ticks": 2265168506
+    },
+    {
+      "pid": 1803978,
+      "start_ticks": 2265191560
+    },
+    {
+      "pid": 1804018,
+      "start_ticks": 2265191616
+    },
+    {
+      "pid": 1804390,
+      "start_ticks": 2265192090
+    },
+    {
+      "pid": 1804493,
+      "start_ticks": 2265192261
+    }
+  ],
+  "exit_code": 0,
+  "finished": "2026-11-19T05:23:24.665838+00:00"
+}

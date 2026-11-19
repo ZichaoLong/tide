@@ -1,0 +1,54 @@
+{
+  "partial": [
+    {
+      "path": "artifacts/training-budget-settle-recompute/search/.archive-eh899kpl",
+      "bytes": 2466300,
+      "allocated": 2469888,
+      "mtime_ns": 1795086578662197811
+    },
+    {
+      "path": "artifacts/training-joint-fc-bf16/.archive-mdesktuo",
+      "bytes": 1432733,
+      "allocated": 1433600,
+      "mtime_ns": 1795086578666197850
+    },
+    {
+      "path": "artifacts/training-other-modes-fc/.archive-0181b7i8",
+      "bytes": 518349,
+      "allocated": 520192,
+      "mtime_ns": 1795086578666197850
+    },
+    {
+      "path": "artifacts/training-paths-timed-bf16/results/.archive-6u2y3l9z",
+      "bytes": 508320,
+      "allocated": 512000,
+      "mtime_ns": 1795086578658197773
+    },
+    {
+      "path": "artifacts/training-refine-settle-base/search/.archive-ipaqisy2",
+      "bytes": 0,
+      "allocated": 0,
+      "mtime_ns": 1795086578646197657
+    },
+    {
+      "path": "artifacts/training-refine-settle-base/search/.archive-1h5j9hz3",
+      "bytes": 0,
+      "allocated": 0,
+      "mtime_ns": 1795086578654197734
+    },
+    {
+      "path": "artifacts/training-refine-settle-batch/search/.archive-0d0h7iv2",
+      "bytes": 0,
+      "allocated": 0,
+      "mtime_ns": 1795086578658197773
+    },
+    {
+      "path": "artifacts/training-refine-settle-batch/search/.archive-853yog6q",
+      "bytes": 0,
+      "allocated": 0,
+      "mtime_ns": 1795086578666197850
+    }
+  ],
+  "all_originals_unchanged": true,
+  "descendants_terminal": true
+}

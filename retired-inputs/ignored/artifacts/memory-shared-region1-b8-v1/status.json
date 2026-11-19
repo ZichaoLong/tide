@@ -1,0 +1,120 @@
+{
+  "state": "passed",
+  "source": "301a327569aa75aefddd03cac9ca839589db5672",
+  "command": [
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-shared-region1-b8-v1/source/scripts/wait_units.py",
+    "--status",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-shared-region1-b8-v1/dependency.json",
+    "--seconds",
+    "5400",
+    "--unit",
+    "tide-memory-infer-memory-shared-v1.service",
+    "--",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "/mi/data2T/zlong/home/.agents/skills/use-local-ascend/scripts/run_on_free_npu.py",
+    "--job-id",
+    "memory-shared-region1-b8-v1",
+    "--project",
+    "tide-instances",
+    "--priority",
+    "0",
+    "--npu-count",
+    "1",
+    "--max-wait-seconds",
+    "600",
+    "--state-file",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-shared-region1-b8-v1/queue.json",
+    "--",
+    "timeout",
+    "--signal=TERM",
+    "--kill-after=30",
+    "1800",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "-m",
+    "benchmarks.inference",
+    "--config",
+    "configs/memory-candidates/9b-memory-shared-batch1.json",
+    "--subjects",
+    "tide",
+    "--devices",
+    "npu:0",
+    "--precision",
+    "fp32",
+    "--threads",
+    "4",
+    "--batch",
+    "8",
+    "--prefill",
+    "128",
+    "--prefill-chunk",
+    "32",
+    "--decode",
+    "16",
+    "--stream-positions",
+    "0",
+    "--warmup",
+    "2",
+    "--samples",
+    "5",
+    "--audit",
+    "full",
+    "--allocated-budget-gib",
+    "48",
+    "--reserved-budget-gib",
+    "56",
+    "--output",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-shared-region1-b8-v1/inference.json"
+  ],
+  "pid": 1144826,
+  "started": "2026-11-19T02:44:30.612177+00:00",
+  "max_rss_bytes": 103079215104,
+  "peak_rss_bytes": 29767045120,
+  "max_processes": 3,
+  "rss_sample_count": 2780,
+  "poll_interval": 0.25,
+  "descendant_supervision": "Linux child subreaper; retained PID/start identities across nested sessions",
+  "child_pid": 1144849,
+  "process_group": 1144849,
+  "elapsed": 1153.7633626647294,
+  "descendant_identities": [
+    {
+      "pid": 1144849,
+      "start_ticks": 2264244132
+    },
+    {
+      "pid": 1148718,
+      "start_ticks": 2264249655
+    },
+    {
+      "pid": 1170006,
+      "start_ticks": 2264280231
+    },
+    {
+      "pid": 1182168,
+      "start_ticks": 2264299281
+    },
+    {
+      "pid": 1194250,
+      "start_ticks": 2264318826
+    },
+    {
+      "pid": 1194307,
+      "start_ticks": 2264318883
+    },
+    {
+      "pid": 1194554,
+      "start_ticks": 2264319363
+    },
+    {
+      "pid": 1194697,
+      "start_ticks": 2264319576
+    },
+    {
+      "pid": 1194698,
+      "start_ticks": 2264319576
+    }
+  ],
+  "exit_code": 0,
+  "finished": "2026-11-19T03:03:44.375539+00:00"
+}

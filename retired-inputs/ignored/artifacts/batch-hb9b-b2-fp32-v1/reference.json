@@ -1,0 +1,673 @@
+{
+  "schema": "tide-inference-reference-1",
+  "config": {
+    "topology": {
+      "kind": "multiscale",
+      "n": 32,
+      "layers": null,
+      "depth": null,
+      "rounds": null,
+      "profile": "5-dd4",
+      "hubs": 4,
+      "partition": "group",
+      "timing": "settle",
+      "hub_mask": "all",
+      "period": null,
+      "probes": null,
+      "terminal_hubs": false
+    },
+    "d": 768,
+    "memory": "X",
+    "aggregation": "source_residual",
+    "allocation": "quad",
+    "sharing": "independent",
+    "adapter_rank": 8,
+    "budget": null,
+    "attention_backend": "auto",
+    "attention_chunk": 128,
+    "input_dim": null,
+    "checkpoint_regions": false,
+    "checkpoint_reception": false,
+    "reception_qkv_backend": "separate",
+    "reception_mask_padding": false,
+    "parameter_indexing": "gather",
+    "ssd_summary_backend": "prefix",
+    "ssd_scan_backend": "doubling",
+    "region_batch_size": 4,
+    "local_attention_backend": null,
+    "hub_allocation": "bounded",
+    "clock": {
+      "position_period": null,
+      "position_origin": "binding",
+      "kv_window": null,
+      "short_decay": null,
+      "ssd_stride": null
+    }
+  },
+  "schedule": {
+    "prefill": 128,
+    "prefill_chunk": 32,
+    "decode_steps": 16,
+    "stream_positions": 0,
+    "stream_chunk": 128
+  },
+  "batch": 2,
+  "seed": 751,
+  "precision": "fp32",
+  "mode": "inference",
+  "source": {
+    "source_commit": "237cc8d4579c22370fec2d160249a8564264998a",
+    "harness_commit": "237cc8d4579c22370fec2d160249a8564264998a",
+    "tide_content_sha256": "27f33247c3d8c5930a36d4e00f6b73aea0038bb17ccad991172ce95e9ac93620",
+    "harness_content_sha256": "3be5309adfcb6956673c9f7edc74d765dc24878ed02edd99b92308b08b2ba710",
+    "tide_path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/batch-hb9b-b2-fp32-v1/source/src/tide",
+    "harness_path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/batch-hb9b-b2-fp32-v1/source/benchmarks"
+  },
+  "tide_parameters": {
+    "sha256": "7a3d2f5e036e8817331a09479a263daa1da23a0abf5eef4fd1f93335e89e02cc",
+    "finite": true,
+    "host_copy_chunk_bytes": 8388608,
+    "scope": "dense initial named Parameters before ownership placement; shape/name/raw contiguous bytes"
+  },
+  "tide_input_sha256": "c95a0a69a0498ee6d27830a68fc52f17acd375ec76b4b27f85d846a1376535f8",
+  "tide_input_width": 768,
+  "placement": {
+    "kind": "single",
+    "devices": [
+      "npu:0"
+    ]
+  },
+  "diagnostics": {
+    "finite_outputs": true,
+    "finite_private_state": true,
+    "output_available_by_call": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "output_support_sha256": "273e64ed6eca1274e061c3348aeb5d8fb0d398b3c4007cb49b8fe0a87a65fcbe",
+    "original_output_times_sha256": "b3a53ff805c94b7a2f8b027b9c2e2c9d7b3c4a3401c1f6afd00cb4641d7a4ff9",
+    "original_time_bounds": [
+      {
+        "phase": "prefill",
+        "first_original_time": 5,
+        "last_original_time": 191,
+        "returned_time_slots": 32
+      },
+      {
+        "phase": "prefill",
+        "first_original_time": 197,
+        "last_original_time": 383,
+        "returned_time_slots": 32
+      },
+      {
+        "phase": "prefill",
+        "first_original_time": 389,
+        "last_original_time": 575,
+        "returned_time_slots": 32
+      },
+      {
+        "phase": "prefill",
+        "first_original_time": 581,
+        "last_original_time": 767,
+        "returned_time_slots": 32
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 773,
+        "last_original_time": 773,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 779,
+        "last_original_time": 779,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 785,
+        "last_original_time": 785,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 791,
+        "last_original_time": 791,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 797,
+        "last_original_time": 797,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 803,
+        "last_original_time": 803,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 809,
+        "last_original_time": 809,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 815,
+        "last_original_time": 815,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 821,
+        "last_original_time": 821,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 827,
+        "last_original_time": 827,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 833,
+        "last_original_time": 833,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 839,
+        "last_original_time": 839,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 845,
+        "last_original_time": 845,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 851,
+        "last_original_time": 851,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 857,
+        "last_original_time": 857,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 863,
+        "last_original_time": 863,
+        "returned_time_slots": 1
+      }
+    ],
+    "state_memory": {
+      "payload_bytes": 1387432192,
+      "retained_storage_bytes": 1387432192,
+      "dtypes": [
+        "torch.float32",
+        "torch.int64"
+      ],
+      "tensor_count": 280
+    },
+    "final_state_position": 144,
+    "private_state_detached": true,
+    "readout_dtypes": [
+      "torch.float32"
+    ],
+    "returned_value_dtypes": [
+      "torch.float32"
+    ],
+    "returned_strength_dtypes": [
+      "torch.float32"
+    ],
+    "output_devices": [
+      "npu:0"
+    ],
+    "retention": "one output window at a time; only hashes/scalars retained; separate from normal timing",
+    "execution": {
+      "requested_region_concurrency": "serial",
+      "effective_region_concurrency": "serial",
+      "hooks": "ordinary Python method/module hooks with locked counters; no thread-local dispatch mode"
+    }
+  },
+  "audit": {
+    "parameters": {
+      "unique_parameters": 8778358224,
+      "scope": "all unique trainable backbone parameters including enabled ingress projections; no task head",
+      "ingress_parameters": 1179648,
+      "textbook": {
+        "base": 51972096,
+        "private_D": 7928863488,
+        "private_H": 796342992,
+        "total_excluding_ingress": 8777178576,
+        "active_proxy": 1096092072.0,
+        "D_fraction": 0.03125,
+        "is_actual_touched": false,
+        "assumption": "all regions receive; all H act; D private scaled by k/n only for quad"
+      }
+    },
+    "effective_touched": {
+      "sum": 722971413586,
+      "mean": 2510317408.2847223,
+      "min": 2252114507,
+      "max": 2840723560,
+      "unique_across_time_and_batch": 8761842864,
+      "cumulative_per_input_position": 2510317408.2847223
+    },
+    "stages": {
+      "ingress": {
+        "sum": 339738624,
+        "mean": 1179648.0,
+        "min": 1179648,
+        "max": 1179648
+      },
+      "reception": {
+        "sum": 24524254272,
+        "mean": 85153660.66666667,
+        "min": 76896960,
+        "max": 95641440
+      },
+      "memory_prepare": {
+        "sum": 225565728768,
+        "mean": 783214336.0,
+        "min": 708961024,
+        "max": 877503232
+      },
+      "regional": {
+        "sum": 113293496338,
+        "mean": 393380195.6180556,
+        "min": 360271241,
+        "max": 435422856
+      },
+      "full": {
+        "sum": 359248195584,
+        "mean": 1247389568.0,
+        "min": 1084159872,
+        "max": 1455748992
+      }
+    },
+    "definition": "unique Parameter scalars in effective owner/group/source slices; not gradients or physical loads",
+    "deduplication": "within sample/input step across settled layers",
+    "input_positions": 288,
+    "sample_time_slots": 288,
+    "logical_axis": "input_step",
+    "work": {
+      "positive_messages": 318318,
+      "message_slots": 1857024,
+      "candidate_updates": 166162,
+      "candidate_slots": 244224,
+      "regional_attention_positive_pairs": 40317480,
+      "full_actions": 45149,
+      "kv_attention_effective_pairs": 27764136
+    },
+    "work_per_input_position": {
+      "positive_messages": 1105.2708333333333,
+      "message_slots": 6448.0,
+      "candidate_updates": 576.9513888888889,
+      "candidate_slots": 848.0,
+      "regional_attention_positive_pairs": 139991.25,
+      "full_actions": 156.76736111111111,
+      "kv_attention_effective_pairs": 96403.25
+    },
+    "query_packing": {
+      "K": {
+        "calls": 160,
+        "selected_rows": 22109,
+        "executed_rows": 102986
+      },
+      "S": {
+        "calls": 100,
+        "selected_rows": 23040,
+        "executed_rows": 23040
+      }
+    },
+    "node_matrices": {
+      "receive.a": {
+        "calls": 260,
+        "rows": 1857024,
+        "dense_multiply_adds": 136914665472
+      },
+      "receive.b": {
+        "calls": 260,
+        "rows": 1857024,
+        "dense_multiply_adds": 136914665472
+      },
+      "memories.K.kv": {
+        "calls": 160,
+        "rows": 221184,
+        "dense_multiply_adds": 260919263232
+      },
+      "memories.K.summary": {
+        "calls": 160,
+        "rows": 221184,
+        "dense_multiply_adds": 32614907904
+      },
+      "describe.encode": {
+        "calls": 260,
+        "rows": 244224,
+        "dense_multiply_adds": 144330522624
+      },
+      "memories.K.query.heads.0": {
+        "calls": 160,
+        "rows": 102986,
+        "dense_multiply_adds": 2530983936
+      },
+      "memories.K.query.heads.1": {
+        "calls": 160,
+        "rows": 102986,
+        "dense_multiply_adds": 2530983936
+      },
+      "memories.K.query.heads.2": {
+        "calls": 160,
+        "rows": 102986,
+        "dense_multiply_adds": 2530983936
+      },
+      "memories.K.query.heads.3": {
+        "calls": 160,
+        "rows": 102986,
+        "dense_multiply_adds": 2530983936
+      },
+      "memories.K.query.heads.4": {
+        "calls": 160,
+        "rows": 102986,
+        "dense_multiply_adds": 2530983936
+      },
+      "memories.K.query.heads.5": {
+        "calls": 160,
+        "rows": 102986,
+        "dense_multiply_adds": 2530983936
+      },
+      "memories.K.query.heads.6": {
+        "calls": 160,
+        "rows": 102986,
+        "dense_multiply_adds": 2530983936
+      },
+      "memories.K.query.heads.7": {
+        "calls": 160,
+        "rows": 102986,
+        "dense_multiply_adds": 2530983936
+      },
+      "memories.K.query.heads.8": {
+        "calls": 160,
+        "rows": 102986,
+        "dense_multiply_adds": 2530983936
+      },
+      "memories.K.query.heads.9": {
+        "calls": 160,
+        "rows": 102986,
+        "dense_multiply_adds": 2530983936
+      },
+      "memories.K.query.heads.10": {
+        "calls": 160,
+        "rows": 102986,
+        "dense_multiply_adds": 2530983936
+      },
+      "memories.K.query.heads.11": {
+        "calls": 160,
+        "rows": 102986,
+        "dense_multiply_adds": 2530983936
+      },
+      "memories.K.query.heads.12": {
+        "calls": 160,
+        "rows": 102986,
+        "dense_multiply_adds": 2530983936
+      },
+      "memories.K.query.heads.13": {
+        "calls": 160,
+        "rows": 102986,
+        "dense_multiply_adds": 2530983936
+      },
+      "memories.K.query.heads.14": {
+        "calls": 160,
+        "rows": 102986,
+        "dense_multiply_adds": 2530983936
+      },
+      "memories.K.query.heads.15": {
+        "calls": 160,
+        "rows": 102986,
+        "dense_multiply_adds": 2530983936
+      },
+      "memories.K.query.heads.16": {
+        "calls": 160,
+        "rows": 102986,
+        "dense_multiply_adds": 2530983936
+      },
+      "memories.K.query.heads.17": {
+        "calls": 160,
+        "rows": 102986,
+        "dense_multiply_adds": 2530983936
+      },
+      "memories.K.query.heads.18": {
+        "calls": 160,
+        "rows": 102986,
+        "dense_multiply_adds": 2530983936
+      },
+      "memories.K.query.heads.19": {
+        "calls": 160,
+        "rows": 102986,
+        "dense_multiply_adds": 2530983936
+      },
+      "memories.K.query.heads.20": {
+        "calls": 160,
+        "rows": 102986,
+        "dense_multiply_adds": 2530983936
+      },
+      "memories.K.query.heads.21": {
+        "calls": 160,
+        "rows": 102986,
+        "dense_multiply_adds": 2530983936
+      },
+      "memories.K.query.heads.22": {
+        "calls": 160,
+        "rows": 102986,
+        "dense_multiply_adds": 2530983936
+      },
+      "memories.K.query.heads.23": {
+        "calls": 160,
+        "rows": 102986,
+        "dense_multiply_adds": 2530983936
+      },
+      "memories.K.output": {
+        "calls": 160,
+        "rows": 102986,
+        "dense_multiply_adds": 60743614464
+      },
+      "memories.K.ffn.gate": {
+        "calls": 160,
+        "rows": 102986,
+        "dense_multiply_adds": 242974457856
+      },
+      "memories.K.ffn.up": {
+        "calls": 160,
+        "rows": 102986,
+        "dense_multiply_adds": 242974457856
+      },
+      "memories.K.ffn.down": {
+        "calls": 160,
+        "rows": 102986,
+        "dense_multiply_adds": 242974457856
+      },
+      "memories.S.input": {
+        "calls": 100,
+        "rows": 23040,
+        "dense_multiply_adds": 28736225280
+      },
+      "memories.S.summary": {
+        "calls": 100,
+        "rows": 23040,
+        "dense_multiply_adds": 3397386240
+      },
+      "memories.S.read": {
+        "calls": 100,
+        "rows": 23040,
+        "dense_multiply_adds": 3397386240
+      },
+      "memories.S.output": {
+        "calls": 100,
+        "rows": 23040,
+        "dense_multiply_adds": 13589544960
+      },
+      "memories.S.ffn.gate": {
+        "calls": 100,
+        "rows": 23040,
+        "dense_multiply_adds": 54358179840
+      },
+      "memories.S.ffn.up": {
+        "calls": 100,
+        "rows": 23040,
+        "dense_multiply_adds": 54358179840
+      },
+      "memories.S.ffn.down": {
+        "calls": 100,
+        "rows": 23040,
+        "dense_multiply_adds": 54358179840
+      }
+    },
+    "matrix_cost_definition": "multiply-add pairs of executed NodeLinear rows including padding/adapters; not complete FLOPs",
+    "retention": {
+      "kind": "one-call semantic-atom bitsets and scalar stream aggregates; no scalar-parameter axis",
+      "calls": 20,
+      "peak_sample_time_slots": 64,
+      "peak_event_bitset_payload_bytes": 1023744,
+      "per_time_parameter_counts_sha256": "551dcf77e45d67882d5a8c37d5201e47185da592ac4bb3d6f0e859021d88c73b",
+      "digest_definition": "ordered newline JSON [sample,logical_time,unique_parameters] per actual call; total combined only",
+      "per_time_rows_retained": false,
+      "dense_parameter_references_retained": false
+    }
+  },
+  "matches": {
+    "A": {
+      "constructor": {
+        "d": 720,
+        "layers": 848,
+        "ffn_width": 3832,
+        "head_dim": 16,
+        "window": 128
+      },
+      "targets": {
+        "blocks": 848,
+        "parameters": 8778358224
+      },
+      "actual": {
+        "blocks": 848,
+        "parameters": 8778632400
+      },
+      "relative_deviation": {
+        "blocks": 0.0,
+        "parameters": 3.1233175156876576e-05
+      },
+      "selection_rule": "exact block count; nearest parameters over d=16*j >= 32, FFN=8*j in [2d,6d]; ties prefer FFN=4d",
+      "parameter_scope": "main blocks and final RMSNorm; no embedding, task head or artificial unused weights",
+      "joint_class": "A",
+      "block_target_kind": "nodes",
+      "parameter_target_kind": "total"
+    },
+    "B": {
+      "constructor": {
+        "d": 544,
+        "layers": 848,
+        "ffn_width": 1088,
+        "head_dim": 32,
+        "window": 128
+      },
+      "targets": {
+        "blocks": 848,
+        "parameters": 2510317408.2847223
+      },
+      "actual": {
+        "blocks": 848,
+        "parameters": 2510460448
+      },
+      "relative_deviation": {
+        "blocks": 0.0,
+        "parameters": 5.698072873398491e-05
+      },
+      "selection_rule": "exact block count; nearest parameters over d=16*j >= 32, FFN=8*j in [2d,6d]; ties prefer FFN=4d",
+      "parameter_scope": "main blocks and final RMSNorm; no embedding, task head or artificial unused weights",
+      "joint_class": "B",
+      "block_target_kind": "nodes",
+      "parameter_target_kind": "effective_touched"
+    },
+    "C": {
+      "constructor": {
+        "d": 11408,
+        "layers": 5,
+        "ffn_width": 36088,
+        "head_dim": 16,
+        "window": 128
+      },
+      "targets": {
+        "blocks": 5,
+        "parameters": 8778358224
+      },
+      "actual": {
+        "blocks": 5,
+        "parameters": 8778353328
+      },
+      "relative_deviation": {
+        "blocks": 0.0,
+        "parameters": -5.577352706585103e-07
+      },
+      "selection_rule": "exact block count; nearest parameters over d=16*j >= 32, FFN=8*j in [2d,6d]; ties prefer FFN=4d",
+      "parameter_scope": "main blocks and final RMSNorm; no embedding, task head or artificial unused weights",
+      "joint_class": "C",
+      "block_target_kind": "depth",
+      "parameter_target_kind": "total"
+    },
+    "D": {
+      "constructor": {
+        "d": 6512,
+        "layers": 5,
+        "ffn_width": 17016,
+        "head_dim": 16,
+        "window": 128
+      },
+      "targets": {
+        "blocks": 5,
+        "parameters": 2510317408.2847223
+      },
+      "actual": {
+        "blocks": 5,
+        "parameters": 2510317392
+      },
+      "relative_deviation": {
+        "blocks": 0.0,
+        "parameters": -6.487116838070785e-09
+      },
+      "selection_rule": "exact block count; nearest parameters over d=16*j >= 32, FFN=8*j in [2d,6d]; ties prefer FFN=4d",
+      "parameter_scope": "main blocks and final RMSNorm; no embedding, task head or artificial unused weights",
+      "joint_class": "D",
+      "block_target_kind": "depth",
+      "parameter_target_kind": "effective_touched"
+    }
+  },
+  "matching_boundary": "zero initial state; actual prefill/decode/chunked schedule and sole final Timed drain; frozen constructors for every later timed sample",
+  "comparisons_equivalent": false,
+  "reference_sha256": "ea9a9311a9df6c31f68701d6c273a55608c858512f34e3f98840a06702b92466"
+}

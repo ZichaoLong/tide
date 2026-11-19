@@ -1,0 +1,67 @@
+{
+  "state": "passed",
+  "source": "8a22530dae69d9f1fa5ead4a01d1798fd1dfe0ee",
+  "command": [
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "/mi/data2T/zlong/home/.agents/skills/use-local-ascend/scripts/run_on_free_npu.py",
+    "--job-id",
+    "regional-rounding-npu-v1",
+    "--project",
+    "tide-instances",
+    "--priority",
+    "0",
+    "--npu-count",
+    "1",
+    "--max-wait-seconds",
+    "600",
+    "--state-file",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/regional-rounding-npu-v1/queue.json",
+    "--",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "-c",
+    "import os,sys,subprocess\nfrom pathlib import Path\nfrom scripts.job import atomic\nout=Path(\"/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/regional-rounding-npu-v1\");rows=[]\nfor kind in (\"settle\",\"timed\"):\n command=[sys.executable,\"-m\",\"scripts.diagnose_region_batch\",\"--config\",\"configs/hb-multiscale-x-\"+kind+\".json\",\"--device\",\"npu:0\",\"--precision\",\"bf16\",\"--threads\",\"1\",\"--output-dir\",str(out/kind)]\n with (out/(kind+\".log\")).open(\"w\") as log:\n  result=subprocess.run(command,stdout=log,stderr=subprocess.STDOUT,timeout=600)\n rows.append(dict(kind=kind,command=command,exit_code=result.returncode));atomic(out/\"children.json\",dict(source=os.environ[\"TIDE_SOURCE_COMMIT\"],children=rows))\nsys.exit(any(r[\"exit_code\"] for r in rows))\n"
+  ],
+  "pid": 1099161,
+  "started": "2026-11-18T07:51:24.015996+00:00",
+  "max_rss_bytes": 34359738368,
+  "peak_rss_bytes": 2452856832,
+  "max_processes": 3,
+  "rss_sample_count": 66,
+  "poll_interval": 0.25,
+  "descendant_supervision": "Linux child subreaper; retained PID/start identities across nested sessions",
+  "child_pid": 1099199,
+  "process_group": 1099199,
+  "elapsed": 28.319768719375134,
+  "descendant_identities": [
+    {
+      "pid": 1099199,
+      "start_ticks": 2257445472
+    },
+    {
+      "pid": 1099201,
+      "start_ticks": 2257445478
+    },
+    {
+      "pid": 1099313,
+      "start_ticks": 2257445537
+    },
+    {
+      "pid": 1099667,
+      "start_ticks": 2257446022
+    },
+    {
+      "pid": 1099795,
+      "start_ticks": 2257446203
+    },
+    {
+      "pid": 1099805,
+      "start_ticks": 2257446207
+    },
+    {
+      "pid": 1100901,
+      "start_ticks": 2257447240
+    }
+  ],
+  "exit_code": 0,
+  "finished": "2026-11-18T07:51:52.335764+00:00"
+}

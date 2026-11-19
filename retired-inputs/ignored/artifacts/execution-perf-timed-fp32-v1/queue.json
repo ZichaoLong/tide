@@ -1,0 +1,19 @@
+{
+  "elapsed_seconds": 502.8775616772473,
+  "job_id": "execution-perf-timed-fp32-v1",
+  "logical_device": "npu:0",
+  "logical_devices": [
+    "npu:0"
+  ],
+  "npu_count": 1,
+  "physical_id": 2,
+  "physical_ids": [
+    2
+  ],
+  "priority": 0,
+  "project": "tide-instances",
+  "return_code": 0,
+  "schema_version": 1,
+  "status": "completed",
+  "timestamp": "2026-11-18T07:53:06.539706+00:00"
+}

@@ -1,0 +1,91 @@
+{
+  "state": "passed",
+  "source": "301a327569aa75aefddd03cac9ca839589db5672",
+  "command": [
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "/mi/data2T/zlong/home/.agents/skills/use-local-ascend/scripts/run_on_free_npu.py",
+    "--job-id",
+    "memory-train-kv128-v1",
+    "--project",
+    "tide-instances",
+    "--priority",
+    "0",
+    "--npu-count",
+    "1",
+    "--max-wait-seconds",
+    "600",
+    "--state-file",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-train-kv128-v1/queue.json",
+    "--",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "-m",
+    "benchmarks.memory_candidate_suite",
+    "--phase",
+    "train",
+    "--config",
+    "configs/memory-candidates/medium-kv128.json",
+    "--train-batch",
+    "8",
+    "--device",
+    "npu:0",
+    "--threads",
+    "4",
+    "--output-dir",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-train-kv128-v1/results"
+  ],
+  "pid": 1042527,
+  "started": "2026-11-19T02:19:13.638789+00:00",
+  "max_rss_bytes": 68719476736,
+  "peak_rss_bytes": 5048639488,
+  "max_processes": 4,
+  "rss_sample_count": 328,
+  "poll_interval": 0.25,
+  "descendant_supervision": "Linux child subreaper; retained PID/start identities across nested sessions",
+  "child_pid": 1042558,
+  "process_group": 1042558,
+  "elapsed": 140.42459970340133,
+  "descendant_identities": [
+    {
+      "pid": 1042558,
+      "start_ticks": 2264092434
+    },
+    {
+      "pid": 1042560,
+      "start_ticks": 2264092440
+    },
+    {
+      "pid": 1043482,
+      "start_ticks": 2264093830
+    },
+    {
+      "pid": 1043817,
+      "start_ticks": 2264094308
+    },
+    {
+      "pid": 1043824,
+      "start_ticks": 2264094309
+    },
+    {
+      "pid": 1043825,
+      "start_ticks": 2264094309
+    },
+    {
+      "pid": 1044160,
+      "start_ticks": 2264094521
+    },
+    {
+      "pid": 1044174,
+      "start_ticks": 2264094528
+    },
+    {
+      "pid": 1049575,
+      "start_ticks": 2264102525
+    },
+    {
+      "pid": 1050545,
+      "start_ticks": 2264103886
+    }
+  ],
+  "exit_code": 0,
+  "finished": "2026-11-19T02:21:34.063389+00:00"
+}

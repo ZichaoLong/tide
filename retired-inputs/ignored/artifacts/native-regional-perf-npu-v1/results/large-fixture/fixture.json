@@ -1,0 +1,15 @@
+{
+  "schema": 1,
+  "seed": 1729,
+  "width": 128,
+  "nodes": 16,
+  "batch": 16,
+  "positions": 128,
+  "tasks": 4,
+  "prior_cases": [
+    "positive",
+    "visible_zero",
+    "empty",
+    "mixed"
+  ]
+}

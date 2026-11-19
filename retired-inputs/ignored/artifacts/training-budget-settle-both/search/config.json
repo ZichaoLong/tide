@@ -1,0 +1,16 @@
+{
+  "topology": {
+    "kind": "multiscale",
+    "profile": "compact-9",
+    "n": 8,
+    "hubs": 4,
+    "timing": "settle"
+  },
+  "d": 128,
+  "memory": "X",
+  "aggregation": "source_residual",
+  "allocation": "quad",
+  "sharing": "region_shared",
+  "region_batch_size": 4,
+  "checkpoint_regions": true
+}

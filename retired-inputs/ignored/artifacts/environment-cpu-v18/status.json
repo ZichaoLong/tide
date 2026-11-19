@@ -1,0 +1,28 @@
+{
+  "state": "passed",
+  "source": "ca6199d427ea452492422bb7be21c03ce45aab5c",
+  "command": [
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "-c",
+    "import importlib.util,json,os,pathlib,sys\nimport tbe,tide\nfrom scripts.job import atomic\nroot=pathlib.Path(\"/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/environment-cpu-v18\")\nexpected=root/\"source/src/tide/__init__.py\"\nassert pathlib.Path(tide.__file__)==expected\nassert importlib.util.find_spec(\"tbe\") is not None\nassert \"/opt/software/ascend-runtime/9.2.0-r1/python\" in os.environ[\"PYTHONPATH\"].split(\":\")\natomic(root/\"result.json\",dict(state=\"passed\",tide=tide.__file__,tbe=tbe.__file__,python=sys.executable,pythonpath=os.environ[\"PYTHONPATH\"],scope=\"actual generated service environment; CPU import only, no accelerator qualification\"))\n"
+  ],
+  "pid": 490660,
+  "started": "2026-11-18T05:02:49.768105+00:00",
+  "max_rss_bytes": 4294967296,
+  "peak_rss_bytes": 578732032,
+  "max_processes": 1,
+  "rss_sample_count": 8,
+  "poll_interval": 0.25,
+  "descendant_supervision": "Linux child subreaper; retained PID/start identities across nested sessions",
+  "child_pid": 490681,
+  "process_group": 490681,
+  "elapsed": 5.06401152163744,
+  "descendant_identities": [
+    {
+      "pid": 490681,
+      "start_ticks": 2256434047
+    }
+  ],
+  "exit_code": 0,
+  "finished": "2026-11-18T05:02:54.832118+00:00"
+}

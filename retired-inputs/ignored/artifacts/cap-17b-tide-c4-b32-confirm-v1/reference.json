@@ -1,0 +1,1986 @@
+{
+  "schema": "tide-inference-reference-1",
+  "config": {
+    "topology": {
+      "kind": "multiscale",
+      "n": 64,
+      "layers": null,
+      "depth": null,
+      "rounds": null,
+      "profile": "5-dd4",
+      "hubs": 4,
+      "partition": "group",
+      "timing": "settle",
+      "hub_mask": "all",
+      "period": null,
+      "probes": null,
+      "terminal_hubs": false
+    },
+    "d": 768,
+    "memory": "X",
+    "aggregation": "source_residual",
+    "allocation": "quad",
+    "sharing": "independent",
+    "adapter_rank": 8,
+    "budget": null,
+    "attention_backend": "auto",
+    "attention_chunk": 128,
+    "input_dim": null,
+    "checkpoint_regions": false,
+    "checkpoint_reception": false,
+    "reception_qkv_backend": "separate",
+    "reception_mask_padding": false,
+    "parameter_indexing": "gather",
+    "ssd_summary_backend": "prefix",
+    "ssd_scan_backend": "doubling",
+    "region_batch_size": 4,
+    "local_attention_backend": null,
+    "hub_allocation": "bounded",
+    "clock": {
+      "position_period": null,
+      "position_origin": "binding",
+      "kv_window": null,
+      "short_decay": null,
+      "ssd_stride": null
+    }
+  },
+  "schedule": {
+    "prefill": 128,
+    "prefill_chunk": 32,
+    "decode_steps": 16,
+    "stream_positions": 0,
+    "stream_chunk": 128
+  },
+  "batch": 32,
+  "seed": 751,
+  "precision": "fp32",
+  "mode": "inference",
+  "source": {
+    "source_commit": "98210ae3a1758de99c0740dfe6f9fe04b07cefc6",
+    "harness_commit": "98210ae3a1758de99c0740dfe6f9fe04b07cefc6",
+    "tide_content_sha256": "27f33247c3d8c5930a36d4e00f6b73aea0038bb17ccad991172ce95e9ac93620",
+    "harness_content_sha256": "3be5309adfcb6956673c9f7edc74d765dc24878ed02edd99b92308b08b2ba710",
+    "tide_path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/cap-17b-tide-c4-b32-confirm-v1/source/src/tide",
+    "harness_path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/cap-17b-tide-c4-b32-confirm-v1/source/benchmarks"
+  },
+  "tide_parameters": {
+    "sha256": "6151ed622f89ff965930ffabfc20d821d3af1184ba2c95a9df02dcd875c9d20d",
+    "finite": true,
+    "host_copy_chunk_bytes": 8388608,
+    "scope": "dense initial named Parameters before ownership placement; shape/name/raw contiguous bytes"
+  },
+  "tide_input_sha256": "9f772c2361b7363806c83d83d19f6cb96a921051cacb66b9264ccc64cb66b275",
+  "tide_input_width": 768,
+  "placement": {
+    "kind": "hb-region-shards-1",
+    "devices": [
+      "npu:0",
+      "npu:1",
+      "npu:2",
+      "npu:3"
+    ],
+    "requested_transport": "host_stage",
+    "transport": "host_stage",
+    "input_partition": 0,
+    "output_partition": 0,
+    "optimizer": "placement_adamw; align disconnected shards per original Parameter before step",
+    "communication": "single-process deduplicated predecessor-node transport per destination partition; no replicas",
+    "region_partitions": [
+      1,
+      1,
+      2,
+      2,
+      3,
+      3,
+      0,
+      0,
+      1,
+      1,
+      2,
+      2,
+      3,
+      3,
+      0,
+      0,
+      1,
+      1,
+      2,
+      2,
+      3,
+      3,
+      0,
+      0,
+      1,
+      1,
+      2,
+      2,
+      3,
+      3,
+      0,
+      0,
+      1,
+      1,
+      2,
+      2,
+      3,
+      3,
+      0,
+      0,
+      1,
+      2,
+      3,
+      0
+    ],
+    "region_concurrency": "per_device",
+    "actual_devices": {
+      "npu:0": {
+        "parameters": 4177689780,
+        "parameter_bytes": 16710759120
+      },
+      "npu:1": {
+        "parameters": 4176510132,
+        "parameter_bytes": 16706040528
+      },
+      "npu:2": {
+        "parameters": 4176510132,
+        "parameter_bytes": 16706040528
+      },
+      "npu:3": {
+        "parameters": 4176510132,
+        "parameter_bytes": 16706040528
+      }
+    },
+    "total_unique_parameters": 16707220176,
+    "predecessor_transport": [
+      {
+        "layer": 1,
+        "origin": 0,
+        "source_partition": 0,
+        "destination_partition": 1,
+        "unique_source_nodes": 64,
+        "remote": true
+      },
+      {
+        "layer": 1,
+        "origin": 0,
+        "source_partition": 1,
+        "destination_partition": 1,
+        "unique_source_nodes": 68,
+        "remote": false
+      },
+      {
+        "layer": 1,
+        "origin": 0,
+        "source_partition": 2,
+        "destination_partition": 1,
+        "unique_source_nodes": 4,
+        "remote": true
+      },
+      {
+        "layer": 1,
+        "origin": 0,
+        "source_partition": 1,
+        "destination_partition": 2,
+        "unique_source_nodes": 68,
+        "remote": true
+      },
+      {
+        "layer": 1,
+        "origin": 0,
+        "source_partition": 2,
+        "destination_partition": 2,
+        "unique_source_nodes": 68,
+        "remote": false
+      },
+      {
+        "layer": 1,
+        "origin": 0,
+        "source_partition": 0,
+        "destination_partition": 3,
+        "unique_source_nodes": 4,
+        "remote": true
+      },
+      {
+        "layer": 1,
+        "origin": 0,
+        "source_partition": 2,
+        "destination_partition": 3,
+        "unique_source_nodes": 64,
+        "remote": true
+      },
+      {
+        "layer": 1,
+        "origin": 0,
+        "source_partition": 3,
+        "destination_partition": 3,
+        "unique_source_nodes": 68,
+        "remote": false
+      },
+      {
+        "layer": 1,
+        "origin": 0,
+        "source_partition": 0,
+        "destination_partition": 0,
+        "unique_source_nodes": 68,
+        "remote": false
+      },
+      {
+        "layer": 1,
+        "origin": 0,
+        "source_partition": 3,
+        "destination_partition": 0,
+        "unique_source_nodes": 68,
+        "remote": true
+      },
+      {
+        "layer": 2,
+        "origin": 0,
+        "source_partition": 1,
+        "destination_partition": 1,
+        "unique_source_nodes": 68,
+        "remote": false
+      },
+      {
+        "layer": 2,
+        "origin": 0,
+        "source_partition": 3,
+        "destination_partition": 1,
+        "unique_source_nodes": 68,
+        "remote": true
+      },
+      {
+        "layer": 2,
+        "origin": 1,
+        "source_partition": 0,
+        "destination_partition": 1,
+        "unique_source_nodes": 64,
+        "remote": true
+      },
+      {
+        "layer": 2,
+        "origin": 1,
+        "source_partition": 1,
+        "destination_partition": 1,
+        "unique_source_nodes": 68,
+        "remote": false
+      },
+      {
+        "layer": 2,
+        "origin": 1,
+        "source_partition": 2,
+        "destination_partition": 1,
+        "unique_source_nodes": 64,
+        "remote": true
+      },
+      {
+        "layer": 2,
+        "origin": 1,
+        "source_partition": 3,
+        "destination_partition": 1,
+        "unique_source_nodes": 68,
+        "remote": true
+      },
+      {
+        "layer": 2,
+        "origin": 0,
+        "source_partition": 1,
+        "destination_partition": 2,
+        "unique_source_nodes": 68,
+        "remote": true
+      },
+      {
+        "layer": 2,
+        "origin": 0,
+        "source_partition": 3,
+        "destination_partition": 2,
+        "unique_source_nodes": 68,
+        "remote": true
+      },
+      {
+        "layer": 2,
+        "origin": 1,
+        "source_partition": 0,
+        "destination_partition": 2,
+        "unique_source_nodes": 64,
+        "remote": true
+      },
+      {
+        "layer": 2,
+        "origin": 1,
+        "source_partition": 1,
+        "destination_partition": 2,
+        "unique_source_nodes": 68,
+        "remote": true
+      },
+      {
+        "layer": 2,
+        "origin": 1,
+        "source_partition": 2,
+        "destination_partition": 2,
+        "unique_source_nodes": 64,
+        "remote": false
+      },
+      {
+        "layer": 2,
+        "origin": 1,
+        "source_partition": 3,
+        "destination_partition": 2,
+        "unique_source_nodes": 68,
+        "remote": true
+      },
+      {
+        "layer": 2,
+        "origin": 0,
+        "source_partition": 0,
+        "destination_partition": 3,
+        "unique_source_nodes": 68,
+        "remote": true
+      },
+      {
+        "layer": 2,
+        "origin": 0,
+        "source_partition": 2,
+        "destination_partition": 3,
+        "unique_source_nodes": 68,
+        "remote": true
+      },
+      {
+        "layer": 2,
+        "origin": 1,
+        "source_partition": 0,
+        "destination_partition": 3,
+        "unique_source_nodes": 68,
+        "remote": true
+      },
+      {
+        "layer": 2,
+        "origin": 1,
+        "source_partition": 1,
+        "destination_partition": 3,
+        "unique_source_nodes": 64,
+        "remote": true
+      },
+      {
+        "layer": 2,
+        "origin": 1,
+        "source_partition": 2,
+        "destination_partition": 3,
+        "unique_source_nodes": 68,
+        "remote": true
+      },
+      {
+        "layer": 2,
+        "origin": 1,
+        "source_partition": 3,
+        "destination_partition": 3,
+        "unique_source_nodes": 64,
+        "remote": false
+      },
+      {
+        "layer": 2,
+        "origin": 0,
+        "source_partition": 0,
+        "destination_partition": 0,
+        "unique_source_nodes": 68,
+        "remote": false
+      },
+      {
+        "layer": 2,
+        "origin": 0,
+        "source_partition": 2,
+        "destination_partition": 0,
+        "unique_source_nodes": 68,
+        "remote": true
+      },
+      {
+        "layer": 2,
+        "origin": 1,
+        "source_partition": 0,
+        "destination_partition": 0,
+        "unique_source_nodes": 68,
+        "remote": false
+      },
+      {
+        "layer": 2,
+        "origin": 1,
+        "source_partition": 1,
+        "destination_partition": 0,
+        "unique_source_nodes": 64,
+        "remote": true
+      },
+      {
+        "layer": 2,
+        "origin": 1,
+        "source_partition": 2,
+        "destination_partition": 0,
+        "unique_source_nodes": 68,
+        "remote": true
+      },
+      {
+        "layer": 2,
+        "origin": 1,
+        "source_partition": 3,
+        "destination_partition": 0,
+        "unique_source_nodes": 64,
+        "remote": true
+      },
+      {
+        "layer": 3,
+        "origin": 1,
+        "source_partition": 1,
+        "destination_partition": 1,
+        "unique_source_nodes": 4,
+        "remote": false
+      },
+      {
+        "layer": 3,
+        "origin": 1,
+        "source_partition": 2,
+        "destination_partition": 1,
+        "unique_source_nodes": 68,
+        "remote": true
+      },
+      {
+        "layer": 3,
+        "origin": 2,
+        "source_partition": 0,
+        "destination_partition": 1,
+        "unique_source_nodes": 68,
+        "remote": true
+      },
+      {
+        "layer": 3,
+        "origin": 2,
+        "source_partition": 1,
+        "destination_partition": 1,
+        "unique_source_nodes": 68,
+        "remote": false
+      },
+      {
+        "layer": 3,
+        "origin": 2,
+        "source_partition": 2,
+        "destination_partition": 1,
+        "unique_source_nodes": 68,
+        "remote": true
+      },
+      {
+        "layer": 3,
+        "origin": 2,
+        "source_partition": 3,
+        "destination_partition": 1,
+        "unique_source_nodes": 68,
+        "remote": true
+      },
+      {
+        "layer": 3,
+        "origin": 1,
+        "source_partition": 1,
+        "destination_partition": 2,
+        "unique_source_nodes": 68,
+        "remote": true
+      },
+      {
+        "layer": 3,
+        "origin": 1,
+        "source_partition": 2,
+        "destination_partition": 2,
+        "unique_source_nodes": 4,
+        "remote": false
+      },
+      {
+        "layer": 3,
+        "origin": 2,
+        "source_partition": 0,
+        "destination_partition": 2,
+        "unique_source_nodes": 68,
+        "remote": true
+      },
+      {
+        "layer": 3,
+        "origin": 2,
+        "source_partition": 1,
+        "destination_partition": 2,
+        "unique_source_nodes": 68,
+        "remote": true
+      },
+      {
+        "layer": 3,
+        "origin": 2,
+        "source_partition": 2,
+        "destination_partition": 2,
+        "unique_source_nodes": 68,
+        "remote": false
+      },
+      {
+        "layer": 3,
+        "origin": 2,
+        "source_partition": 3,
+        "destination_partition": 2,
+        "unique_source_nodes": 68,
+        "remote": true
+      },
+      {
+        "layer": 3,
+        "origin": 1,
+        "source_partition": 0,
+        "destination_partition": 3,
+        "unique_source_nodes": 68,
+        "remote": true
+      },
+      {
+        "layer": 3,
+        "origin": 1,
+        "source_partition": 3,
+        "destination_partition": 3,
+        "unique_source_nodes": 4,
+        "remote": false
+      },
+      {
+        "layer": 3,
+        "origin": 2,
+        "source_partition": 0,
+        "destination_partition": 3,
+        "unique_source_nodes": 68,
+        "remote": true
+      },
+      {
+        "layer": 3,
+        "origin": 2,
+        "source_partition": 1,
+        "destination_partition": 3,
+        "unique_source_nodes": 68,
+        "remote": true
+      },
+      {
+        "layer": 3,
+        "origin": 2,
+        "source_partition": 2,
+        "destination_partition": 3,
+        "unique_source_nodes": 68,
+        "remote": true
+      },
+      {
+        "layer": 3,
+        "origin": 2,
+        "source_partition": 3,
+        "destination_partition": 3,
+        "unique_source_nodes": 68,
+        "remote": false
+      },
+      {
+        "layer": 3,
+        "origin": 1,
+        "source_partition": 0,
+        "destination_partition": 0,
+        "unique_source_nodes": 4,
+        "remote": false
+      },
+      {
+        "layer": 3,
+        "origin": 1,
+        "source_partition": 3,
+        "destination_partition": 0,
+        "unique_source_nodes": 68,
+        "remote": true
+      },
+      {
+        "layer": 3,
+        "origin": 2,
+        "source_partition": 0,
+        "destination_partition": 0,
+        "unique_source_nodes": 68,
+        "remote": false
+      },
+      {
+        "layer": 3,
+        "origin": 2,
+        "source_partition": 1,
+        "destination_partition": 0,
+        "unique_source_nodes": 68,
+        "remote": true
+      },
+      {
+        "layer": 3,
+        "origin": 2,
+        "source_partition": 2,
+        "destination_partition": 0,
+        "unique_source_nodes": 68,
+        "remote": true
+      },
+      {
+        "layer": 3,
+        "origin": 2,
+        "source_partition": 3,
+        "destination_partition": 0,
+        "unique_source_nodes": 68,
+        "remote": true
+      },
+      {
+        "layer": 4,
+        "origin": 0,
+        "source_partition": 2,
+        "destination_partition": 1,
+        "unique_source_nodes": 68,
+        "remote": true
+      },
+      {
+        "layer": 4,
+        "origin": 2,
+        "source_partition": 1,
+        "destination_partition": 1,
+        "unique_source_nodes": 68,
+        "remote": false
+      },
+      {
+        "layer": 4,
+        "origin": 2,
+        "source_partition": 2,
+        "destination_partition": 1,
+        "unique_source_nodes": 68,
+        "remote": true
+      },
+      {
+        "layer": 4,
+        "origin": 3,
+        "source_partition": 0,
+        "destination_partition": 1,
+        "unique_source_nodes": 64,
+        "remote": true
+      },
+      {
+        "layer": 4,
+        "origin": 3,
+        "source_partition": 1,
+        "destination_partition": 1,
+        "unique_source_nodes": 68,
+        "remote": false
+      },
+      {
+        "layer": 4,
+        "origin": 0,
+        "source_partition": 1,
+        "destination_partition": 2,
+        "unique_source_nodes": 68,
+        "remote": true
+      },
+      {
+        "layer": 4,
+        "origin": 2,
+        "source_partition": 0,
+        "destination_partition": 2,
+        "unique_source_nodes": 68,
+        "remote": true
+      },
+      {
+        "layer": 4,
+        "origin": 2,
+        "source_partition": 3,
+        "destination_partition": 2,
+        "unique_source_nodes": 68,
+        "remote": true
+      },
+      {
+        "layer": 4,
+        "origin": 3,
+        "source_partition": 1,
+        "destination_partition": 2,
+        "unique_source_nodes": 64,
+        "remote": true
+      },
+      {
+        "layer": 4,
+        "origin": 3,
+        "source_partition": 2,
+        "destination_partition": 2,
+        "unique_source_nodes": 68,
+        "remote": false
+      },
+      {
+        "layer": 4,
+        "origin": 0,
+        "source_partition": 0,
+        "destination_partition": 3,
+        "unique_source_nodes": 68,
+        "remote": true
+      },
+      {
+        "layer": 4,
+        "origin": 2,
+        "source_partition": 1,
+        "destination_partition": 3,
+        "unique_source_nodes": 68,
+        "remote": true
+      },
+      {
+        "layer": 4,
+        "origin": 2,
+        "source_partition": 2,
+        "destination_partition": 3,
+        "unique_source_nodes": 68,
+        "remote": true
+      },
+      {
+        "layer": 4,
+        "origin": 3,
+        "source_partition": 2,
+        "destination_partition": 3,
+        "unique_source_nodes": 64,
+        "remote": true
+      },
+      {
+        "layer": 4,
+        "origin": 3,
+        "source_partition": 3,
+        "destination_partition": 3,
+        "unique_source_nodes": 68,
+        "remote": false
+      },
+      {
+        "layer": 4,
+        "origin": 0,
+        "source_partition": 3,
+        "destination_partition": 0,
+        "unique_source_nodes": 68,
+        "remote": true
+      },
+      {
+        "layer": 4,
+        "origin": 2,
+        "source_partition": 0,
+        "destination_partition": 0,
+        "unique_source_nodes": 68,
+        "remote": false
+      },
+      {
+        "layer": 4,
+        "origin": 2,
+        "source_partition": 3,
+        "destination_partition": 0,
+        "unique_source_nodes": 68,
+        "remote": true
+      },
+      {
+        "layer": 4,
+        "origin": 3,
+        "source_partition": 0,
+        "destination_partition": 0,
+        "unique_source_nodes": 68,
+        "remote": false
+      },
+      {
+        "layer": 4,
+        "origin": 3,
+        "source_partition": 3,
+        "destination_partition": 0,
+        "unique_source_nodes": 64,
+        "remote": true
+      }
+    ],
+    "pending_layout": "private regional compact last-tick tensors; no window-sized pending views",
+    "execution": {
+      "policy": "per_device",
+      "maximum_layer_devices": 4,
+      "maximum_workers": 4,
+      "device_identity": "CPU indices are logical simulation groups; repeated devices share one task",
+      "region_batch_size": 4,
+      "ownership": "caller projects and transports; compatible regions batch within each parameter partition; one task per device; join each layer",
+      "streams": "caller current stream per accelerator, captured before worker creation; no extra streams",
+      "backward": "ordinary autograd engine, without a separate region thread scheduler",
+      "instrumentation": "record_work aggregates returned per-region counters; caller dispatch/function modes require explicit serial_region_audit; hooks/profilers are not propagated"
+    }
+  },
+  "diagnostics": {
+    "finite_outputs": true,
+    "finite_private_state": true,
+    "output_available_by_call": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "output_support_sha256": "347d29f16c6361e7b4e11a4596436b5af26ba701a7d00a3d407bfa0a1441a8c9",
+    "original_output_times_sha256": "b3a53ff805c94b7a2f8b027b9c2e2c9d7b3c4a3401c1f6afd00cb4641d7a4ff9",
+    "original_time_bounds": [
+      {
+        "phase": "prefill",
+        "first_original_time": 5,
+        "last_original_time": 191,
+        "returned_time_slots": 32
+      },
+      {
+        "phase": "prefill",
+        "first_original_time": 197,
+        "last_original_time": 383,
+        "returned_time_slots": 32
+      },
+      {
+        "phase": "prefill",
+        "first_original_time": 389,
+        "last_original_time": 575,
+        "returned_time_slots": 32
+      },
+      {
+        "phase": "prefill",
+        "first_original_time": 581,
+        "last_original_time": 767,
+        "returned_time_slots": 32
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 773,
+        "last_original_time": 773,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 779,
+        "last_original_time": 779,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 785,
+        "last_original_time": 785,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 791,
+        "last_original_time": 791,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 797,
+        "last_original_time": 797,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 803,
+        "last_original_time": 803,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 809,
+        "last_original_time": 809,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 815,
+        "last_original_time": 815,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 821,
+        "last_original_time": 821,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 827,
+        "last_original_time": 827,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 833,
+        "last_original_time": 833,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 839,
+        "last_original_time": 839,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 845,
+        "last_original_time": 845,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 851,
+        "last_original_time": 851,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 857,
+        "last_original_time": 857,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 863,
+        "last_original_time": 863,
+        "returned_time_slots": 1
+      }
+    ],
+    "state_memory": {
+      "payload_bytes": 43979935744,
+      "retained_storage_bytes": 43979935744,
+      "dtypes": [
+        "torch.float32",
+        "torch.int64"
+      ],
+      "tensor_count": 280
+    },
+    "final_state_position": 144,
+    "private_state_detached": true,
+    "readout_dtypes": [
+      "torch.float32"
+    ],
+    "returned_value_dtypes": [
+      "torch.float32"
+    ],
+    "returned_strength_dtypes": [
+      "torch.float32"
+    ],
+    "output_devices": [
+      "npu:0"
+    ],
+    "retention": "one output window at a time; only hashes/scalars retained; separate from normal timing",
+    "execution": {
+      "requested_region_concurrency": "per_device",
+      "effective_region_concurrency": "per_device",
+      "hooks": "ordinary Python method/module hooks with locked counters; no thread-local dispatch mode"
+    }
+  },
+  "audit": {
+    "parameters": {
+      "unique_parameters": 16707220176,
+      "scope": "all unique trainable backbone parameters including enabled ingress projections; no task head",
+      "ingress_parameters": 1179648,
+      "textbook": {
+        "base": 51972096,
+        "private_D": 15857725440,
+        "private_H": 796342992,
+        "total_excluding_ingress": 16706040528,
+        "active_proxy": 1343869008.0,
+        "D_fraction": 0.03125,
+        "is_actual_touched": false,
+        "assumption": "all regions receive; all H act; D private scaled by k/n only for quad"
+      }
+    },
+    "effective_touched": {
+      "sum": 18156737161556,
+      "mean": 3940264140.9626737,
+      "min": 3456472638,
+      "max": 4435431028,
+      "unique_across_time_and_batch": 16707220176,
+      "cumulative_per_input_position": 3940264140.9626737
+    },
+    "stages": {
+      "ingress": {
+        "sum": 5435817984,
+        "mean": 1179648.0,
+        "min": 1179648,
+        "max": 1179648
+      },
+      "reception": {
+        "sum": 697575162912,
+        "mean": 151383498.89583334,
+        "min": 136662816,
+        "max": 168247680
+      },
+      "memory_prepare": {
+        "sum": 6353486807040,
+        "mean": 1378794880.0,
+        "min": 1246438144,
+        "max": 1530438400
+      },
+      "regional": {
+        "sum": 3036417500468,
+        "mean": 658944770.0668403,
+        "min": 599927966,
+        "max": 726561396
+      },
+      "full": {
+        "sum": 8063821873152,
+        "mean": 1749961344.0,
+        "min": 1472264064,
+        "max": 2066806656
+      }
+    },
+    "definition": "unique Parameter scalars in effective owner/group/source slices; not gradients or physical loads",
+    "deduplication": "within sample/input step across settled layers",
+    "input_positions": 4608,
+    "sample_time_slots": 4608,
+    "logical_axis": "input_step",
+    "work": {
+      "positive_messages": 8333618,
+      "message_slots": 58171392,
+      "candidate_updates": 4726580,
+      "candidate_slots": 7446528,
+      "regional_attention_positive_pairs": 2317446408,
+      "full_actions": 1002837,
+      "kv_attention_effective_pairs": 795085056
+    },
+    "work_per_input_position": {
+      "positive_messages": 1808.5108506944443,
+      "message_slots": 12624.0,
+      "candidate_updates": 1025.7335069444443,
+      "candidate_slots": 1616.0,
+      "regional_attention_positive_pairs": 502918.0572916667,
+      "full_actions": 217.62955729166666,
+      "kv_attention_effective_pairs": 172544.5
+    },
+    "query_packing": {
+      "K": {
+        "calls": 480,
+        "selected_rows": 634197,
+        "executed_rows": 4379424
+      },
+      "S": {
+        "calls": 320,
+        "selected_rows": 368640,
+        "executed_rows": 368640
+      }
+    },
+    "node_matrices": {
+      "receive.a.shards.1": {
+        "calls": 200,
+        "rows": 14469120,
+        "dense_multiply_adds": 1066779279360
+      },
+      "receive.b.shards.1": {
+        "calls": 200,
+        "rows": 14469120,
+        "dense_multiply_adds": 1066779279360
+      },
+      "memories.K.kv.shards.1": {
+        "calls": 120,
+        "rows": 1769472,
+        "dense_multiply_adds": 2087354105856
+      },
+      "memories.K.summary.shards.1": {
+        "calls": 120,
+        "rows": 1769472,
+        "dense_multiply_adds": 260919263232
+      },
+      "describe.encode.shards.1": {
+        "calls": 200,
+        "rows": 1861632,
+        "dense_multiply_adds": 1100179832832
+      },
+      "receive.a.shards.0": {
+        "calls": 200,
+        "rows": 14174208,
+        "dense_multiply_adds": 1045036007424
+      },
+      "receive.b.shards.0": {
+        "calls": 200,
+        "rows": 14174208,
+        "dense_multiply_adds": 1045036007424
+      },
+      "memories.K.kv.shards.0": {
+        "calls": 120,
+        "rows": 1769472,
+        "dense_multiply_adds": 2087354105856
+      },
+      "memories.K.summary.shards.0": {
+        "calls": 120,
+        "rows": 1769472,
+        "dense_multiply_adds": 260919263232
+      },
+      "receive.a.shards.3": {
+        "calls": 200,
+        "rows": 14764032,
+        "dense_multiply_adds": 1088522551296
+      },
+      "receive.b.shards.3": {
+        "calls": 200,
+        "rows": 14764032,
+        "dense_multiply_adds": 1088522551296
+      },
+      "receive.a.shards.2": {
+        "calls": 200,
+        "rows": 14764032,
+        "dense_multiply_adds": 1088522551296
+      },
+      "receive.b.shards.2": {
+        "calls": 200,
+        "rows": 14764032,
+        "dense_multiply_adds": 1088522551296
+      },
+      "describe.encode.shards.0": {
+        "calls": 200,
+        "rows": 1861632,
+        "dense_multiply_adds": 1100179832832
+      },
+      "memories.K.kv.shards.3": {
+        "calls": 120,
+        "rows": 1769472,
+        "dense_multiply_adds": 2087354105856
+      },
+      "memories.K.summary.shards.3": {
+        "calls": 120,
+        "rows": 1769472,
+        "dense_multiply_adds": 260919263232
+      },
+      "memories.K.kv.shards.2": {
+        "calls": 120,
+        "rows": 1769472,
+        "dense_multiply_adds": 2087354105856
+      },
+      "memories.K.summary.shards.2": {
+        "calls": 120,
+        "rows": 1769472,
+        "dense_multiply_adds": 260919263232
+      },
+      "describe.encode.shards.3": {
+        "calls": 200,
+        "rows": 1861632,
+        "dense_multiply_adds": 1100179832832
+      },
+      "describe.encode.shards.2": {
+        "calls": 200,
+        "rows": 1861632,
+        "dense_multiply_adds": 1100179832832
+      },
+      "memories.K.query.heads.0.shards.0": {
+        "calls": 120,
+        "rows": 1092576,
+        "dense_multiply_adds": 26851147776
+      },
+      "memories.K.query.heads.1.shards.0": {
+        "calls": 120,
+        "rows": 1092576,
+        "dense_multiply_adds": 26851147776
+      },
+      "memories.K.query.heads.2.shards.0": {
+        "calls": 120,
+        "rows": 1092576,
+        "dense_multiply_adds": 26851147776
+      },
+      "memories.K.query.heads.3.shards.0": {
+        "calls": 120,
+        "rows": 1092576,
+        "dense_multiply_adds": 26851147776
+      },
+      "memories.K.query.heads.4.shards.0": {
+        "calls": 120,
+        "rows": 1092576,
+        "dense_multiply_adds": 26851147776
+      },
+      "memories.K.query.heads.5.shards.0": {
+        "calls": 120,
+        "rows": 1092576,
+        "dense_multiply_adds": 26851147776
+      },
+      "memories.K.query.heads.6.shards.0": {
+        "calls": 120,
+        "rows": 1092576,
+        "dense_multiply_adds": 26851147776
+      },
+      "memories.K.query.heads.7.shards.0": {
+        "calls": 120,
+        "rows": 1092576,
+        "dense_multiply_adds": 26851147776
+      },
+      "memories.K.query.heads.8.shards.0": {
+        "calls": 120,
+        "rows": 1092576,
+        "dense_multiply_adds": 26851147776
+      },
+      "memories.K.query.heads.9.shards.0": {
+        "calls": 120,
+        "rows": 1092576,
+        "dense_multiply_adds": 26851147776
+      },
+      "memories.K.query.heads.10.shards.0": {
+        "calls": 120,
+        "rows": 1092576,
+        "dense_multiply_adds": 26851147776
+      },
+      "memories.K.query.heads.11.shards.0": {
+        "calls": 120,
+        "rows": 1092576,
+        "dense_multiply_adds": 26851147776
+      },
+      "memories.K.query.heads.12.shards.0": {
+        "calls": 120,
+        "rows": 1092576,
+        "dense_multiply_adds": 26851147776
+      },
+      "memories.K.query.heads.13.shards.0": {
+        "calls": 120,
+        "rows": 1092576,
+        "dense_multiply_adds": 26851147776
+      },
+      "memories.K.query.heads.14.shards.0": {
+        "calls": 120,
+        "rows": 1092576,
+        "dense_multiply_adds": 26851147776
+      },
+      "memories.K.query.heads.15.shards.0": {
+        "calls": 120,
+        "rows": 1092576,
+        "dense_multiply_adds": 26851147776
+      },
+      "memories.K.query.heads.16.shards.0": {
+        "calls": 120,
+        "rows": 1092576,
+        "dense_multiply_adds": 26851147776
+      },
+      "memories.K.query.heads.17.shards.0": {
+        "calls": 120,
+        "rows": 1092576,
+        "dense_multiply_adds": 26851147776
+      },
+      "memories.K.query.heads.18.shards.0": {
+        "calls": 120,
+        "rows": 1092576,
+        "dense_multiply_adds": 26851147776
+      },
+      "memories.K.query.heads.19.shards.0": {
+        "calls": 120,
+        "rows": 1092576,
+        "dense_multiply_adds": 26851147776
+      },
+      "memories.K.query.heads.20.shards.0": {
+        "calls": 120,
+        "rows": 1092576,
+        "dense_multiply_adds": 26851147776
+      },
+      "memories.K.query.heads.21.shards.0": {
+        "calls": 120,
+        "rows": 1092576,
+        "dense_multiply_adds": 26851147776
+      },
+      "memories.K.query.heads.22.shards.0": {
+        "calls": 120,
+        "rows": 1092576,
+        "dense_multiply_adds": 26851147776
+      },
+      "memories.K.query.heads.23.shards.0": {
+        "calls": 120,
+        "rows": 1092576,
+        "dense_multiply_adds": 26851147776
+      },
+      "memories.K.query.heads.0.shards.1": {
+        "calls": 120,
+        "rows": 1091968,
+        "dense_multiply_adds": 26836205568
+      },
+      "memories.K.query.heads.1.shards.1": {
+        "calls": 120,
+        "rows": 1091968,
+        "dense_multiply_adds": 26836205568
+      },
+      "memories.K.query.heads.2.shards.1": {
+        "calls": 120,
+        "rows": 1091968,
+        "dense_multiply_adds": 26836205568
+      },
+      "memories.K.query.heads.3.shards.1": {
+        "calls": 120,
+        "rows": 1091968,
+        "dense_multiply_adds": 26836205568
+      },
+      "memories.K.query.heads.4.shards.1": {
+        "calls": 120,
+        "rows": 1091968,
+        "dense_multiply_adds": 26836205568
+      },
+      "memories.K.query.heads.5.shards.1": {
+        "calls": 120,
+        "rows": 1091968,
+        "dense_multiply_adds": 26836205568
+      },
+      "memories.K.query.heads.6.shards.1": {
+        "calls": 120,
+        "rows": 1091968,
+        "dense_multiply_adds": 26836205568
+      },
+      "memories.K.query.heads.7.shards.1": {
+        "calls": 120,
+        "rows": 1091968,
+        "dense_multiply_adds": 26836205568
+      },
+      "memories.K.query.heads.8.shards.1": {
+        "calls": 120,
+        "rows": 1091968,
+        "dense_multiply_adds": 26836205568
+      },
+      "memories.K.query.heads.9.shards.1": {
+        "calls": 120,
+        "rows": 1091968,
+        "dense_multiply_adds": 26836205568
+      },
+      "memories.K.query.heads.10.shards.1": {
+        "calls": 120,
+        "rows": 1091968,
+        "dense_multiply_adds": 26836205568
+      },
+      "memories.K.query.heads.11.shards.1": {
+        "calls": 120,
+        "rows": 1091968,
+        "dense_multiply_adds": 26836205568
+      },
+      "memories.K.query.heads.12.shards.1": {
+        "calls": 120,
+        "rows": 1091968,
+        "dense_multiply_adds": 26836205568
+      },
+      "memories.K.query.heads.13.shards.1": {
+        "calls": 120,
+        "rows": 1091968,
+        "dense_multiply_adds": 26836205568
+      },
+      "memories.K.query.heads.14.shards.1": {
+        "calls": 120,
+        "rows": 1091968,
+        "dense_multiply_adds": 26836205568
+      },
+      "memories.K.query.heads.15.shards.1": {
+        "calls": 120,
+        "rows": 1091968,
+        "dense_multiply_adds": 26836205568
+      },
+      "memories.K.query.heads.16.shards.1": {
+        "calls": 120,
+        "rows": 1091968,
+        "dense_multiply_adds": 26836205568
+      },
+      "memories.K.query.heads.17.shards.1": {
+        "calls": 120,
+        "rows": 1091968,
+        "dense_multiply_adds": 26836205568
+      },
+      "memories.K.query.heads.18.shards.1": {
+        "calls": 120,
+        "rows": 1091968,
+        "dense_multiply_adds": 26836205568
+      },
+      "memories.K.query.heads.19.shards.1": {
+        "calls": 120,
+        "rows": 1091968,
+        "dense_multiply_adds": 26836205568
+      },
+      "memories.K.query.heads.20.shards.1": {
+        "calls": 120,
+        "rows": 1091968,
+        "dense_multiply_adds": 26836205568
+      },
+      "memories.K.query.heads.21.shards.1": {
+        "calls": 120,
+        "rows": 1091968,
+        "dense_multiply_adds": 26836205568
+      },
+      "memories.K.query.heads.22.shards.1": {
+        "calls": 120,
+        "rows": 1091968,
+        "dense_multiply_adds": 26836205568
+      },
+      "memories.K.query.heads.23.shards.1": {
+        "calls": 120,
+        "rows": 1091968,
+        "dense_multiply_adds": 26836205568
+      },
+      "memories.K.output.shards.0": {
+        "calls": 120,
+        "rows": 1092576,
+        "dense_multiply_adds": 644427546624
+      },
+      "memories.K.output.shards.1": {
+        "calls": 120,
+        "rows": 1091968,
+        "dense_multiply_adds": 644068933632
+      },
+      "memories.K.query.heads.0.shards.2": {
+        "calls": 120,
+        "rows": 1065888,
+        "dense_multiply_adds": 26195263488
+      },
+      "memories.K.query.heads.0.shards.3": {
+        "calls": 120,
+        "rows": 1128992,
+        "dense_multiply_adds": 27746107392
+      },
+      "memories.K.query.heads.1.shards.2": {
+        "calls": 120,
+        "rows": 1065888,
+        "dense_multiply_adds": 26195263488
+      },
+      "memories.K.query.heads.1.shards.3": {
+        "calls": 120,
+        "rows": 1128992,
+        "dense_multiply_adds": 27746107392
+      },
+      "memories.K.query.heads.2.shards.2": {
+        "calls": 120,
+        "rows": 1065888,
+        "dense_multiply_adds": 26195263488
+      },
+      "memories.K.query.heads.2.shards.3": {
+        "calls": 120,
+        "rows": 1128992,
+        "dense_multiply_adds": 27746107392
+      },
+      "memories.K.query.heads.3.shards.3": {
+        "calls": 120,
+        "rows": 1128992,
+        "dense_multiply_adds": 27746107392
+      },
+      "memories.K.query.heads.4.shards.3": {
+        "calls": 120,
+        "rows": 1128992,
+        "dense_multiply_adds": 27746107392
+      },
+      "memories.K.query.heads.5.shards.3": {
+        "calls": 120,
+        "rows": 1128992,
+        "dense_multiply_adds": 27746107392
+      },
+      "memories.K.query.heads.6.shards.3": {
+        "calls": 120,
+        "rows": 1128992,
+        "dense_multiply_adds": 27746107392
+      },
+      "memories.K.query.heads.7.shards.3": {
+        "calls": 120,
+        "rows": 1128992,
+        "dense_multiply_adds": 27746107392
+      },
+      "memories.K.query.heads.8.shards.3": {
+        "calls": 120,
+        "rows": 1128992,
+        "dense_multiply_adds": 27746107392
+      },
+      "memories.K.query.heads.9.shards.3": {
+        "calls": 120,
+        "rows": 1128992,
+        "dense_multiply_adds": 27746107392
+      },
+      "memories.K.query.heads.10.shards.3": {
+        "calls": 120,
+        "rows": 1128992,
+        "dense_multiply_adds": 27746107392
+      },
+      "memories.K.query.heads.11.shards.3": {
+        "calls": 120,
+        "rows": 1128992,
+        "dense_multiply_adds": 27746107392
+      },
+      "memories.K.query.heads.12.shards.3": {
+        "calls": 120,
+        "rows": 1128992,
+        "dense_multiply_adds": 27746107392
+      },
+      "memories.K.query.heads.13.shards.3": {
+        "calls": 120,
+        "rows": 1128992,
+        "dense_multiply_adds": 27746107392
+      },
+      "memories.K.query.heads.3.shards.2": {
+        "calls": 120,
+        "rows": 1065888,
+        "dense_multiply_adds": 26195263488
+      },
+      "memories.K.query.heads.4.shards.2": {
+        "calls": 120,
+        "rows": 1065888,
+        "dense_multiply_adds": 26195263488
+      },
+      "memories.K.query.heads.14.shards.3": {
+        "calls": 120,
+        "rows": 1128992,
+        "dense_multiply_adds": 27746107392
+      },
+      "memories.K.query.heads.5.shards.2": {
+        "calls": 120,
+        "rows": 1065888,
+        "dense_multiply_adds": 26195263488
+      },
+      "memories.K.query.heads.15.shards.3": {
+        "calls": 120,
+        "rows": 1128992,
+        "dense_multiply_adds": 27746107392
+      },
+      "memories.K.query.heads.16.shards.3": {
+        "calls": 120,
+        "rows": 1128992,
+        "dense_multiply_adds": 27746107392
+      },
+      "memories.K.query.heads.6.shards.2": {
+        "calls": 120,
+        "rows": 1065888,
+        "dense_multiply_adds": 26195263488
+      },
+      "memories.K.query.heads.17.shards.3": {
+        "calls": 120,
+        "rows": 1128992,
+        "dense_multiply_adds": 27746107392
+      },
+      "memories.K.query.heads.7.shards.2": {
+        "calls": 120,
+        "rows": 1065888,
+        "dense_multiply_adds": 26195263488
+      },
+      "memories.K.query.heads.8.shards.2": {
+        "calls": 120,
+        "rows": 1065888,
+        "dense_multiply_adds": 26195263488
+      },
+      "memories.K.query.heads.9.shards.2": {
+        "calls": 120,
+        "rows": 1065888,
+        "dense_multiply_adds": 26195263488
+      },
+      "memories.K.query.heads.10.shards.2": {
+        "calls": 120,
+        "rows": 1065888,
+        "dense_multiply_adds": 26195263488
+      },
+      "memories.K.query.heads.11.shards.2": {
+        "calls": 120,
+        "rows": 1065888,
+        "dense_multiply_adds": 26195263488
+      },
+      "memories.K.query.heads.12.shards.2": {
+        "calls": 120,
+        "rows": 1065888,
+        "dense_multiply_adds": 26195263488
+      },
+      "memories.K.query.heads.13.shards.2": {
+        "calls": 120,
+        "rows": 1065888,
+        "dense_multiply_adds": 26195263488
+      },
+      "memories.K.query.heads.14.shards.2": {
+        "calls": 120,
+        "rows": 1065888,
+        "dense_multiply_adds": 26195263488
+      },
+      "memories.K.query.heads.15.shards.2": {
+        "calls": 120,
+        "rows": 1065888,
+        "dense_multiply_adds": 26195263488
+      },
+      "memories.K.query.heads.16.shards.2": {
+        "calls": 120,
+        "rows": 1065888,
+        "dense_multiply_adds": 26195263488
+      },
+      "memories.K.query.heads.17.shards.2": {
+        "calls": 120,
+        "rows": 1065888,
+        "dense_multiply_adds": 26195263488
+      },
+      "memories.K.query.heads.18.shards.2": {
+        "calls": 120,
+        "rows": 1065888,
+        "dense_multiply_adds": 26195263488
+      },
+      "memories.K.query.heads.19.shards.2": {
+        "calls": 120,
+        "rows": 1065888,
+        "dense_multiply_adds": 26195263488
+      },
+      "memories.K.query.heads.20.shards.2": {
+        "calls": 120,
+        "rows": 1065888,
+        "dense_multiply_adds": 26195263488
+      },
+      "memories.K.query.heads.21.shards.2": {
+        "calls": 120,
+        "rows": 1065888,
+        "dense_multiply_adds": 26195263488
+      },
+      "memories.K.query.heads.22.shards.2": {
+        "calls": 120,
+        "rows": 1065888,
+        "dense_multiply_adds": 26195263488
+      },
+      "memories.K.query.heads.23.shards.2": {
+        "calls": 120,
+        "rows": 1065888,
+        "dense_multiply_adds": 26195263488
+      },
+      "memories.K.query.heads.18.shards.3": {
+        "calls": 120,
+        "rows": 1128992,
+        "dense_multiply_adds": 27746107392
+      },
+      "memories.K.query.heads.19.shards.3": {
+        "calls": 120,
+        "rows": 1128992,
+        "dense_multiply_adds": 27746107392
+      },
+      "memories.K.query.heads.20.shards.3": {
+        "calls": 120,
+        "rows": 1128992,
+        "dense_multiply_adds": 27746107392
+      },
+      "memories.K.query.heads.21.shards.3": {
+        "calls": 120,
+        "rows": 1128992,
+        "dense_multiply_adds": 27746107392
+      },
+      "memories.K.query.heads.22.shards.3": {
+        "calls": 120,
+        "rows": 1128992,
+        "dense_multiply_adds": 27746107392
+      },
+      "memories.K.query.heads.23.shards.3": {
+        "calls": 120,
+        "rows": 1128992,
+        "dense_multiply_adds": 27746107392
+      },
+      "memories.K.ffn.gate.shards.0": {
+        "calls": 120,
+        "rows": 1092576,
+        "dense_multiply_adds": 2577710186496
+      },
+      "memories.K.ffn.gate.shards.1": {
+        "calls": 120,
+        "rows": 1091968,
+        "dense_multiply_adds": 2576275734528
+      },
+      "memories.K.ffn.up.shards.0": {
+        "calls": 120,
+        "rows": 1092576,
+        "dense_multiply_adds": 2577710186496
+      },
+      "memories.K.ffn.down.shards.0": {
+        "calls": 120,
+        "rows": 1092576,
+        "dense_multiply_adds": 2577710186496
+      },
+      "memories.K.ffn.up.shards.1": {
+        "calls": 120,
+        "rows": 1091968,
+        "dense_multiply_adds": 2576275734528
+      },
+      "memories.K.ffn.down.shards.1": {
+        "calls": 120,
+        "rows": 1091968,
+        "dense_multiply_adds": 2576275734528
+      },
+      "memories.K.output.shards.3": {
+        "calls": 120,
+        "rows": 1128992,
+        "dense_multiply_adds": 665906577408
+      },
+      "memories.K.output.shards.2": {
+        "calls": 120,
+        "rows": 1065888,
+        "dense_multiply_adds": 628686323712
+      },
+      "memories.K.ffn.gate.shards.2": {
+        "calls": 120,
+        "rows": 1065888,
+        "dense_multiply_adds": 2514745294848
+      },
+      "memories.K.ffn.up.shards.2": {
+        "calls": 120,
+        "rows": 1065888,
+        "dense_multiply_adds": 2514745294848
+      },
+      "memories.K.ffn.gate.shards.3": {
+        "calls": 120,
+        "rows": 1128992,
+        "dense_multiply_adds": 2663626309632
+      },
+      "memories.K.ffn.down.shards.2": {
+        "calls": 120,
+        "rows": 1065888,
+        "dense_multiply_adds": 2514745294848
+      },
+      "memories.K.ffn.up.shards.3": {
+        "calls": 120,
+        "rows": 1128992,
+        "dense_multiply_adds": 2663626309632
+      },
+      "memories.K.ffn.down.shards.3": {
+        "calls": 120,
+        "rows": 1128992,
+        "dense_multiply_adds": 2663626309632
+      },
+      "memories.S.input.shards.0": {
+        "calls": 80,
+        "rows": 92160,
+        "dense_multiply_adds": 114944901120
+      },
+      "memories.S.summary.shards.0": {
+        "calls": 80,
+        "rows": 92160,
+        "dense_multiply_adds": 13589544960
+      },
+      "memories.S.input.shards.1": {
+        "calls": 80,
+        "rows": 92160,
+        "dense_multiply_adds": 114944901120
+      },
+      "memories.S.summary.shards.1": {
+        "calls": 80,
+        "rows": 92160,
+        "dense_multiply_adds": 13589544960
+      },
+      "memories.S.input.shards.2": {
+        "calls": 80,
+        "rows": 92160,
+        "dense_multiply_adds": 114944901120
+      },
+      "memories.S.summary.shards.2": {
+        "calls": 80,
+        "rows": 92160,
+        "dense_multiply_adds": 13589544960
+      },
+      "memories.S.input.shards.3": {
+        "calls": 80,
+        "rows": 92160,
+        "dense_multiply_adds": 114944901120
+      },
+      "memories.S.summary.shards.3": {
+        "calls": 80,
+        "rows": 92160,
+        "dense_multiply_adds": 13589544960
+      },
+      "memories.S.read.shards.1": {
+        "calls": 80,
+        "rows": 92160,
+        "dense_multiply_adds": 13589544960
+      },
+      "memories.S.read.shards.0": {
+        "calls": 80,
+        "rows": 92160,
+        "dense_multiply_adds": 13589544960
+      },
+      "memories.S.read.shards.2": {
+        "calls": 80,
+        "rows": 92160,
+        "dense_multiply_adds": 13589544960
+      },
+      "memories.S.read.shards.3": {
+        "calls": 80,
+        "rows": 92160,
+        "dense_multiply_adds": 13589544960
+      },
+      "memories.S.output.shards.0": {
+        "calls": 80,
+        "rows": 92160,
+        "dense_multiply_adds": 54358179840
+      },
+      "memories.S.output.shards.1": {
+        "calls": 80,
+        "rows": 92160,
+        "dense_multiply_adds": 54358179840
+      },
+      "memories.S.ffn.gate.shards.0": {
+        "calls": 80,
+        "rows": 92160,
+        "dense_multiply_adds": 217432719360
+      },
+      "memories.S.ffn.up.shards.0": {
+        "calls": 80,
+        "rows": 92160,
+        "dense_multiply_adds": 217432719360
+      },
+      "memories.S.ffn.gate.shards.1": {
+        "calls": 80,
+        "rows": 92160,
+        "dense_multiply_adds": 217432719360
+      },
+      "memories.S.ffn.up.shards.1": {
+        "calls": 80,
+        "rows": 92160,
+        "dense_multiply_adds": 217432719360
+      },
+      "memories.S.ffn.down.shards.0": {
+        "calls": 80,
+        "rows": 92160,
+        "dense_multiply_adds": 217432719360
+      },
+      "memories.S.ffn.down.shards.1": {
+        "calls": 80,
+        "rows": 92160,
+        "dense_multiply_adds": 217432719360
+      },
+      "memories.S.output.shards.2": {
+        "calls": 80,
+        "rows": 92160,
+        "dense_multiply_adds": 54358179840
+      },
+      "memories.S.ffn.gate.shards.2": {
+        "calls": 80,
+        "rows": 92160,
+        "dense_multiply_adds": 217432719360
+      },
+      "memories.S.ffn.up.shards.2": {
+        "calls": 80,
+        "rows": 92160,
+        "dense_multiply_adds": 217432719360
+      },
+      "memories.S.ffn.down.shards.2": {
+        "calls": 80,
+        "rows": 92160,
+        "dense_multiply_adds": 217432719360
+      },
+      "memories.S.output.shards.3": {
+        "calls": 80,
+        "rows": 92160,
+        "dense_multiply_adds": 54358179840
+      },
+      "memories.S.ffn.gate.shards.3": {
+        "calls": 80,
+        "rows": 92160,
+        "dense_multiply_adds": 217432719360
+      },
+      "memories.S.ffn.up.shards.3": {
+        "calls": 80,
+        "rows": 92160,
+        "dense_multiply_adds": 217432719360
+      },
+      "memories.S.ffn.down.shards.3": {
+        "calls": 80,
+        "rows": 92160,
+        "dense_multiply_adds": 217432719360
+      }
+    },
+    "matrix_cost_definition": "multiply-add pairs of executed NodeLinear rows including padding/adapters; not complete FLOPs",
+    "retention": {
+      "kind": "one-call semantic-atom bitsets and scalar stream aggregates; no scalar-parameter axis",
+      "calls": 20,
+      "peak_sample_time_slots": 1024,
+      "peak_event_bitset_payload_bytes": 31746048,
+      "per_time_parameter_counts_sha256": "82c41fcfa36fb1bd173bbc999db4cd5d914a32c307ada0709356a2ec2f56077a",
+      "digest_definition": "ordered newline JSON [sample,logical_time,unique_parameters] per actual call; total combined only",
+      "per_time_rows_retained": false,
+      "dense_parameter_references_retained": false
+    }
+  },
+  "matches": {
+    "A": {
+      "constructor": {
+        "d": 832,
+        "layers": 1616,
+        "ffn_width": 3032,
+        "head_dim": 64,
+        "window": 128
+      },
+      "targets": {
+        "blocks": 1616,
+        "parameters": 16707220176
+      },
+      "actual": {
+        "blocks": 1616,
+        "parameters": 16706906944
+      },
+      "relative_deviation": {
+        "blocks": 0.0,
+        "parameters": -1.8748301434966378e-05
+      },
+      "selection_rule": "exact block count; nearest parameters over d=16*j >= 32, FFN=8*j in [2d,6d]; ties prefer FFN=4d",
+      "parameter_scope": "main blocks and final RMSNorm; no embedding, task head or artificial unused weights",
+      "joint_class": "A",
+      "block_target_kind": "nodes",
+      "parameter_target_kind": "total"
+    },
+    "B": {
+      "constructor": {
+        "d": 448,
+        "layers": 1616,
+        "ffn_width": 1216,
+        "head_dim": 64,
+        "window": 128
+      },
+      "targets": {
+        "blocks": 1616,
+        "parameters": 3940264140.9626737
+      },
+      "actual": {
+        "blocks": 1616,
+        "parameters": 3939834304
+      },
+      "relative_deviation": {
+        "blocks": 0.0,
+        "parameters": -0.0001090883624285776
+      },
+      "selection_rule": "exact block count; nearest parameters over d=16*j >= 32, FFN=8*j in [2d,6d]; ties prefer FFN=4d",
+      "parameter_scope": "main blocks and final RMSNorm; no embedding, task head or artificial unused weights",
+      "joint_class": "B",
+      "block_target_kind": "nodes",
+      "parameter_target_kind": "effective_touched"
+    },
+    "C": {
+      "constructor": {
+        "d": 17936,
+        "layers": 5,
+        "ffn_width": 38184,
+        "head_dim": 16,
+        "window": 128
+      },
+      "targets": {
+        "blocks": 5,
+        "parameters": 16707220176
+      },
+      "actual": {
+        "blocks": 5,
+        "parameters": 16707222576
+      },
+      "relative_deviation": {
+        "blocks": 0.0,
+        "parameters": 1.436504681639146e-07
+      },
+      "selection_rule": "exact block count; nearest parameters over d=16*j >= 32, FFN=8*j in [2d,6d]; ties prefer FFN=4d",
+      "parameter_scope": "main blocks and final RMSNorm; no embedding, task head or artificial unused weights",
+      "joint_class": "C",
+      "block_target_kind": "depth",
+      "parameter_target_kind": "total"
+    },
+    "D": {
+      "constructor": {
+        "d": 7520,
+        "layers": 5,
+        "ffn_width": 24904,
+        "head_dim": 32,
+        "window": 128
+      },
+      "targets": {
+        "blocks": 5,
+        "parameters": 3940264140.9626737
+      },
+      "actual": {
+        "blocks": 5,
+        "parameters": 3940261920
+      },
+      "relative_deviation": {
+        "blocks": 0.0,
+        "parameters": -5.636583219320607e-07
+      },
+      "selection_rule": "exact block count; nearest parameters over d=16*j >= 32, FFN=8*j in [2d,6d]; ties prefer FFN=4d",
+      "parameter_scope": "main blocks and final RMSNorm; no embedding, task head or artificial unused weights",
+      "joint_class": "D",
+      "block_target_kind": "depth",
+      "parameter_target_kind": "effective_touched"
+    }
+  },
+  "matching_boundary": "zero initial state; actual prefill/decode/chunked schedule and sole final Timed drain; frozen constructors for every later timed sample",
+  "comparisons_equivalent": false,
+  "reference_sha256": "15d252fcd71cf5c7a965d2171f940b06c52c2710e2fcfd60ff2d10c4eeb69575"
+}

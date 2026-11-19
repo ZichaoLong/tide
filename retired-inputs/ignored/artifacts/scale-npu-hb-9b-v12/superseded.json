@@ -1,0 +1,74 @@
+{
+  "state": "superseded_before_computation",
+  "timestamp": "2026-11-18T04:51:49.451900+00:00",
+  "reason": "reassign unused CPU/memory NUMA domains; no device admission or workload occurred; stop exits are retained",
+  "dependency_before": {
+    "state": "waiting",
+    "started": "2026-11-18T04:28:43.356116+00:00",
+    "units": [
+      "tide-representative-cpu-v5.service"
+    ],
+    "command": [
+      "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+      "/mi/data2T/zlong/home/.agents/skills/use-local-ascend/scripts/run_on_free_npu.py",
+      "--job-id",
+      "scale-npu-hb-9b-v12",
+      "--project",
+      "tide-instances",
+      "--priority",
+      "0",
+      "--npu-count",
+      "1",
+      "--max-wait-seconds",
+      "1200",
+      "--state-file",
+      "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/scale-npu-hb-9b-v12/queue.json",
+      "--",
+      "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+      "-m",
+      "benchmarks.programme",
+      "--suite",
+      "scale",
+      "--configs",
+      "configs/scale/hb-9b.json",
+      "--device",
+      "npu:0",
+      "--precision",
+      "fp32",
+      "bf16",
+      "--modes",
+      "inference",
+      "--threads",
+      "16",
+      "--batch",
+      "1",
+      "--length",
+      "8",
+      "--warmup",
+      "1",
+      "--steps",
+      "3",
+      "--child-timeout",
+      "2400",
+      "--output-dir",
+      "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/scale-npu-hb-9b-v12/results"
+    ],
+    "boundary": "resource sequencing only; prior success not required",
+    "observations": {
+      "tide-representative-cpu-v5.service": {
+        "MainPID": "3441299",
+        "Result": "success",
+        "LoadState": "loaded",
+        "ActiveState": "active",
+        "SubState": "running"
+      }
+    },
+    "busy": [
+      "tide-representative-cpu-v5.service"
+    ],
+    "elapsed_seconds": 0.006549999117851257
+  },
+  "unit_before": "MainPID=3513208\nControlGroup=/user.slice/user-1003.slice/user@1003.service/background.slice/tide-scale-npu-hb-9b-v12.service\nActiveState=active\n",
+  "unit_after": "MainPID=0\nResult=exit-code\nExecMainStatus=143\nControlGroup=\nActiveState=failed\n",
+  "cgroup_remaining_pids": []
+}

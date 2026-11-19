@@ -1,0 +1,53 @@
+tide-regional-tensors-v1 little-endian float32
+grad.0.score 3 16 16 128 9e444f63cc9266a7
+grad.0.w 3 16 16 128 9e424a2777d5ca79
+grad.0.z 4 16 16 128 128 184f8bcf3664ab1e
+grad.1.score 3 16 16 128 b66154afba73c5a5
+grad.1.w 3 16 16 128 42a52b7ef1173e95
+grad.1.z 4 16 16 128 128 70ac01e7e56751b2
+grad.2.score 3 16 16 128 6a41b241d9d05d9f
+grad.2.w 3 16 16 128 c74b47c8c74a2325
+grad.2.z 4 16 16 128 128 f195bf0618222325
+grad.3.score 3 16 16 128 b4edd6bcc44ccc39
+grad.3.w 3 16 16 128 b22f625a0f101822
+grad.3.z 4 16 16 128 128 1be4fb6617b4c171
+grad.parameter.first_bias 1 256 bc8499b25d549b3c
+grad.parameter.first_weight 2 256 128 87c8b6e185fd44f9
+grad.parameter.k_weight 2 128 128 64f61aa76498c243
+grad.parameter.o_weight 2 128 128 774b28ab0207cc8f
+grad.parameter.q_weight 2 128 128 6c84fc84304d384f
+grad.parameter.readout 1 128 22eccc1a9b8fc02f
+grad.parameter.second_bias 1 128 446af719332c48b9
+grad.parameter.second_weight 2 128 256 a3cd0471ae7202b3
+grad.parameter.v_weight 2 128 128 97b7425e4ed81ffb
+moment1.first_bias 1 256 bc43500814eb8765
+moment1.first_weight 2 256 128 0ff55ca6d64be3c9
+moment1.k_weight 2 128 128 7fd1318205fd205c
+moment1.o_weight 2 128 128 9e417a5544c327fd
+moment1.q_weight 2 128 128 2e2fe58328f73327
+moment1.readout 1 128 ad6c8123522faae3
+moment1.second_bias 1 128 b7747219d8c0a27f
+moment1.second_weight 2 128 256 bd30089261a1cc03
+moment1.v_weight 2 128 128 a3a9c2de88cc55c5
+moment2.first_bias 1 256 c58872429bf688a3
+moment2.first_weight 2 256 128 a6b9606d5f097a6c
+moment2.k_weight 2 128 128 310259fcbc51a9da
+moment2.o_weight 2 128 128 56204a89bb28cceb
+moment2.q_weight 2 128 128 304fb25f84244d6d
+moment2.readout 1 128 852150852761df38
+moment2.second_bias 1 128 f83139b630eb40cb
+moment2.second_weight 2 128 256 0cd4fc573e6ce2dd
+moment2.v_weight 2 128 128 228ea8ecd67f6a1d
+output.0 3 16 16 128 4e3517980f8e1830
+output.1 3 16 16 128 199c22a494141c76
+output.2 3 16 16 128 52900c8fab86d493
+output.3 3 16 16 128 a987dc7dbfdf3e6f
+parameter.first_bias 1 256 730e8a039c723325
+parameter.first_weight 2 256 128 8199d6bcd23cb52a
+parameter.k_weight 2 128 128 a009a994752b9ac7
+parameter.o_weight 2 128 128 8f9b9abaff06d913
+parameter.q_weight 2 128 128 a4928637d4687e3d
+parameter.readout 1 128 86c2490c033893c9
+parameter.second_bias 1 128 5ad2edaab0ba355a
+parameter.second_weight 2 128 256 c700d3406c5a7c2d
+parameter.v_weight 2 128 128 bbbe153dfc6b81b6

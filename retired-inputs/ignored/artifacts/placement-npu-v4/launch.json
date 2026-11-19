@@ -1,0 +1,73 @@
+{
+  "source": "bdcb81de615e9aa4b21e7443871d33149b4f1553",
+  "source_path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/placement-npu-v4/source",
+  "run": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/placement-npu-v4",
+  "unit": "tide-placement-npu-v4",
+  "arguments": {
+    "name": "placement-npu-v4",
+    "revision": "bdcb81de",
+    "threads": 4,
+    "affinity": "72-75",
+    "npu_count": 2,
+    "candidate_ids": null,
+    "seconds": 1200,
+    "rss_gib": 48.0,
+    "queue_seconds": 600,
+    "command": [
+      "--",
+      "/bin/bash",
+      "-c",
+      "for tide_precision in fp32 bf16; do\n python -m scripts.check_placement --devices npu:0 npu:1 --precision ${tide_precision} --output {run}/${tide_precision}.json || exit\ndone"
+    ]
+  },
+  "launch": [
+    "systemd-run",
+    "--user",
+    "--unit=tide-placement-npu-v4",
+    "--service-type=exec",
+    "--slice=background.slice",
+    "--working-directory=/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/placement-npu-v4/source",
+    "--property=KillMode=control-group",
+    "--property=RuntimeMaxSec=1200",
+    "--property=TimeoutStopSec=30",
+    "--property=CPUAffinity=72-75",
+    "--property=StandardOutput=append:/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/placement-npu-v4/stdout.log",
+    "--property=StandardError=append:/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/placement-npu-v4/stderr.log",
+    "/bin/bash",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/placement-npu-v4/run.sh"
+  ],
+  "command": [
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "/mi/data2T/zlong/home/.agents/skills/use-local-ascend/scripts/run_on_free_npu.py",
+    "--job-id",
+    "placement-npu-v4",
+    "--project",
+    "tide-instances",
+    "--priority",
+    "0",
+    "--npu-count",
+    "2",
+    "--max-wait-seconds",
+    "600",
+    "--state-file",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/placement-npu-v4/queue.json",
+    "--",
+    "/bin/bash",
+    "-c",
+    "for tide_precision in fp32 bf16; do\n python -m scripts.check_placement --devices npu:0 npu:1 --precision ${tide_precision} --output /mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/placement-npu-v4/${tide_precision}.json || exit\ndone"
+  ],
+  "environment": {
+    "PYTHONPATH": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/placement-npu-v4/source/src",
+    "TIDE_SOURCE_COMMIT": "bdcb81de615e9aa4b21e7443871d33149b4f1553",
+    "TIDE_HARNESS_COMMIT": "bdcb81de615e9aa4b21e7443871d33149b4f1553",
+    "TORCH_DEVICE_BACKEND_AUTOLOAD": "1",
+    "TIDE_RESOURCE_IDENTITY": "exclusive_cooperative_queue; external jobs not controlled",
+    "OMP_NUM_THREADS": "4",
+    "MKL_NUM_THREADS": "4",
+    "OPENBLAS_NUM_THREADS": "4"
+  },
+  "state": "submitted",
+  "resource_enforcement": "process affinity; sampled process-tree RSS, not cgroup hard memory",
+  "device_policy": "exclusive cooperative whole-group queue",
+  "unit_observation": "MainPID=3428233\nSlice=background.slice\nControlGroup=/user.slice/user-1003.slice/user@1003.service/background.slice/tide-placement-npu-v4.service\nId=tide-placement-npu-v4.service\nActiveState=active\nSubState=running\n"
+}

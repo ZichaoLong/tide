@@ -1,0 +1,302 @@
+{
+  "schema_version": 1,
+  "definitions_revision": "6517ac525bce57bd20ea8f22753407d2fc331982",
+  "rendering": {
+    "python": "3.14.4",
+    "Pillow": "12.1.1",
+    "CairoSVG": "2.8.2",
+    "cairo": "1.18.4",
+    "canvas": [
+      2400,
+      1350
+    ],
+    "fonts": [
+      {
+        "path": "/usr/share/fonts/opentype/noto/NotoSansCJK-Regular.ttc",
+        "sha256": "b76b0433203017ca80401b2ee0dd69350349871c4b19d504c34dbdd80541690a",
+        "face_index": 2
+      },
+      {
+        "path": "/usr/share/fonts/opentype/noto/NotoSansCJK-Bold.ttc",
+        "sha256": "faa5f3656a78b2e2d450d27fe8382c778bc2b6bb5ea29c986664a6a435056ceb",
+        "face_index": 2
+      },
+      {
+        "path": "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",
+        "sha256": "b4c632e3cdf9acc7f28758fb5a323c8524d7fc6660d46904d9b6cbe2809c419c",
+        "face_index": 0
+      }
+    ]
+  },
+  "generators": {
+    "render.py": "d1744890017ab8f00339c25dba7c364188b4738eb8d919c2cdbe593709eee67b",
+    "requirements.txt": "a0efff13b3d16e374fbb614e0e06bba27f8d5a9a7fb6231dcaa9234ef80e4734",
+    "src/catalog.py": "a5114ed3a1ded2bc6e65652f969ae2b0df8e98f7d2b3f96e99c4ef950265384f",
+    "src/control_time_figures.py": "2735f98adc858a4e36bc0ebab95050b61afea24bdffa37a1768c312ef9b1d91e",
+    "src/drawing.py": "4977002240ad3cf672e61aac54fbf9cdf0df660e653eb641a245f009b91bb951",
+    "src/local_figures.py": "0a2714a1fb1bac81a252a3d6b64c4c24f94e272a6647b41a134d8046d91da9cd",
+    "src/memory_figures.py": "8efdfaf52d55582acd9562f178124953d2a7b2f4d60c0acc4505a27f51a16bbc",
+    "src/provenance.py": "598f7dbed3a9d13c92200d7720834f6094943c7959426332eeb11ac43e7f1a52"
+  },
+  "figures": {
+    "weighted-message-flow": {
+      "title": "带权消息的一次处理",
+      "purpose": "把消息强度、内容、接收更新、描述、区域控制和同值广播接到同一次计算。",
+      "assumptions": [
+        "采用 Read+，Mem 与 Full 使用新状态；所有候选保留接收后的状态。",
+        "同值广播属于带权消息支线的 Full 绑定，正典的一般 Full 可逐边返回不同载荷。"
+      ],
+      "generator": "src/local_figures.py",
+      "function": "weighted_message_flow",
+      "definitions": [
+        {
+          "reference": "../local-semantics/weighted-message/architecture-learning-note.md#2-接收聚合",
+          "sha256": "1d19912a9f5c8f4d665cb7ae9f7c19c0bc7f8c9c3c210194fd540b9747e602f9"
+        },
+        {
+          "reference": "../local-semantics/weighted-message/architecture-learning-note.md#3-状态与记忆描述",
+          "sha256": "1d19912a9f5c8f4d665cb7ae9f7c19c0bc7f8c9c3c210194fd540b9747e602f9"
+        },
+        {
+          "reference": "../local-semantics/weighted-message/architecture-learning-note.md#4-分配完整计算与发送",
+          "sha256": "1d19912a9f5c8f4d665cb7ae9f7c19c0bc7f8c9c3c210194fd540b9747e602f9"
+        }
+      ],
+      "artifacts": {
+        "weighted-message-flow.svg": "0df51766def4263c4587b86f52b6c63c05b7a519f42c36be521cc0d36a0e5f2e",
+        "weighted-message-flow.png": "1a629941501064368b5af84e5c2a6debbef83712f846e866bae36d17d6567ee3"
+      }
+    },
+    "region-allocation": {
+      "title": "区域怎样分配发送强度",
+      "purpose": "使用教材的指定总量算例，区分节点上限、评分、总发送强度和激活数量。",
+      "assumptions": [
+        "w=μmax=(1,1,0)，s=(2,1,100)，区域证据=(-1/2,-1/2,0)。",
+        "γmax=2，k=2，区域头给出 ρ=0.4，指定 B=1.4；quad，τ_sel=2。"
+      ],
+      "generator": "src/local_figures.py",
+      "function": "region_allocation",
+      "definitions": [
+        {
+          "reference": "../local-semantics/weighted-message/region-allocation-learning-note.md#2-指定总量的一次分配",
+          "sha256": "3d86bdce6bcf7825d5b15f6d3908b4b65d8a52f8f66ce1635b992b752abdfaaf"
+        },
+        {
+          "reference": "../local-semantics/weighted-message/architecture-learning-note.md#45-一组贯穿例子",
+          "sha256": "1d19912a9f5c8f4d665cb7ae9f7c19c0bc7f8c9c3c210194fd540b9747e602f9"
+        }
+      ],
+      "artifacts": {
+        "region-allocation.svg": "1b3c2bdc2007a1da06458a7119de1bf586889b784c7998a8763ff863bf471ec5",
+        "region-allocation.png": "644bd79d3a195cb3327dbf6aded5f8f76ea129c174f00fb176fd4460656433f7"
+      }
+    },
+    "remember-before-send": {
+      "title": "收到时记住，激活时发送",
+      "purpose": "沿用两个接收时刻的 KV 算例，展示未激活时的写入如何影响之后的选择和内容。",
+      "assumptions": [
+        "沿用 KV §5.1 的标量投影与 Full；Read+、sum 描述、单位权重，T≥4。",
+        "节点增益与固定阈值硬选择：γ=1，k=1，η=0；s_a=0.5，s_b=0.75−M_long(new)。",
+        "两节点在时间 1、4 收到 (1,+1)、(1,−1)；Attention 匹配相等，内容残差尺度 1，前馈尺度 0。"
+      ],
+      "generator": "src/local_figures.py",
+      "function": "remember_before_send",
+      "definitions": [
+        {
+          "reference": "../local-semantics/weighted-message/kv-memory-learning-note.md#52-未激活时保留的记忆",
+          "sha256": "a83d9ac4f112b612321025c5458ec9107d9b57c7a95352764fde5fddf77089d1"
+        }
+      ],
+      "artifacts": {
+        "remember-before-send.svg": "1ae7718ccbbc076abf0c94fce310173ddecaeff72ccc951194ca8d7078805fa1",
+        "remember-before-send.png": "dff06d1ddaef1807e210e5bb2b36ed520b114b01572669b23c4506a108e77e19"
+      }
+    },
+    "kv-memory": {
+      "title": "KV：保存条目，再按当前内容读取",
+      "purpose": "把条目保存、时间窗口、区域描述和激活后的 Attention 读取分开。",
+      "assumptions": [
+        "图中 Mem 采用 Read+；sum 与 qry 是组成模型时选择的两个候选。",
+        "条目使用示意符号；完整状态、投影和带权 Attention 以教材定义为准。"
+      ],
+      "generator": "src/memory_figures.py",
+      "function": "kv_memory",
+      "definitions": [
+        {
+          "reference": "../local-semantics/weighted-message/kv-memory-learning-note.md#1-状态与接收写入",
+          "sha256": "a83d9ac4f112b612321025c5458ec9107d9b57c7a95352764fde5fddf77089d1"
+        },
+        {
+          "reference": "../local-semantics/weighted-message/kv-memory-learning-note.md#3-记忆描述",
+          "sha256": "a83d9ac4f112b612321025c5458ec9107d9b57c7a95352764fde5fddf77089d1"
+        },
+        {
+          "reference": "../local-semantics/weighted-message/kv-memory-learning-note.md#4-激活后的内容读取",
+          "sha256": "a83d9ac4f112b612321025c5458ec9107d9b57c7a95352764fde5fddf77089d1"
+        }
+      ],
+      "artifacts": {
+        "kv-memory.svg": "a077de8be9b5c300dace914431c2ff9808d183699d6a4cf9bd7a5948e14bb318",
+        "kv-memory.png": "bc17fd46a9b9fa57b3d2843710685ffaa76c51b7fc870f96f838be40f8dba293"
+      }
+    },
+    "affine-delta-memory": {
+      "title": "循环矩阵：叠加与误差修正",
+      "purpose": "对照仿射写入与 Delta 写入，保留两个时间尺度及共同读取接口。",
+      "assumptions": [
+        "中心省略时间尺度下标；同一种更新分别作用于 short 与 long 矩阵。",
+        "Mem 绘出 state 候选并采用 Read+；sum 候选改为读取独立摘要。"
+      ],
+      "generator": "src/memory_figures.py",
+      "function": "affine_delta_memory",
+      "definitions": [
+        {
+          "reference": "../local-semantics/weighted-message/recurrent-memory/affine-delta-learning-note.md#1-状态与逻辑时间",
+          "sha256": "c578ab1a4022fb6a498fa907d74c2a0ea6ad801c7bbda6d929cede664e8041d8"
+        },
+        {
+          "reference": "../local-semantics/weighted-message/recurrent-memory/affine-delta-learning-note.md#2-接收更新",
+          "sha256": "c578ab1a4022fb6a498fa907d74c2a0ea6ad801c7bbda6d929cede664e8041d8"
+        },
+        {
+          "reference": "../local-semantics/weighted-message/recurrent-memory/affine-delta-learning-note.md#3-描述与完整内容",
+          "sha256": "c578ab1a4022fb6a498fa907d74c2a0ea6ad801c7bbda6d929cede664e8041d8"
+        }
+      ],
+      "artifacts": {
+        "affine-delta-memory.svg": "7f52cf071efe9cd31cf658b90d2e2713ff1d601835fa122dd749cd761627a183",
+        "affine-delta-memory.png": "3e12f3d8ab8e5dc1706e292adb89195e5b7f0b40938837783ae0055796b81c3a"
+      }
+    },
+    "gated-delta-memory": {
+      "title": "Gated DeltaNet：让写入修正预测误差",
+      "purpose": "展示投影历史、接收门、矩阵误差修正和每头先归一化再乘输出门的完整内容路径。",
+      "assumptions": [
+        "图中省略头下标，逐头使用同一形式；被动衰减包含在 H− 中。",
+        "Mem 绘出 state 候选并采用 Read+；sum 候选使用两个时间摘要。"
+      ],
+      "generator": "src/memory_figures.py",
+      "function": "gated_delta_memory",
+      "definitions": [
+        {
+          "reference": "../local-semantics/weighted-message/recurrent-memory/gated-delta-learning-note.md#2-投影与接收更新",
+          "sha256": "a9f1844170d253eb25b77f793fc97689177aa1a4f62995eef680e798688015f7"
+        },
+        {
+          "reference": "../local-semantics/weighted-message/recurrent-memory/gated-delta-learning-note.md#3-矩阵读取记忆描述与完整内容",
+          "sha256": "a9f1844170d253eb25b77f793fc97689177aa1a4f62995eef680e798688015f7"
+        }
+      ],
+      "artifacts": {
+        "gated-delta-memory.svg": "b7dd2c77e7c6f33d6cbf1b134c802b6c86ba6b5c9dee87039517f63afd8796bb",
+        "gated-delta-memory.png": "9938186a6c83fd1763c33ba75ea3ac724bb7edbd22c588ef12bcafa545ea5f0a"
+      }
+    },
+    "ssd-memory": {
+      "title": "SSD：用输入步长控制保留与写入",
+      "purpose": "展示输入步长、共享 B/C、多头状态和先乘输出门再全宽归一化的内容路径。",
+      "assumptions": [
+        "图中省略头与组下标；每头有独立矩阵，同组共享 B、C。",
+        "Mem 绘出 state 候选并采用 Read+；输出按教材的 Mamba2Simple 形状排列。"
+      ],
+      "generator": "src/memory_figures.py",
+      "function": "ssd_memory",
+      "definitions": [
+        {
+          "reference": "../local-semantics/weighted-message/recurrent-memory/ssd-learning-note.md#2-投影门与写入",
+          "sha256": "1b77eeef82ae851fda8ec0b271ced1ec07ea51494384f2002324c79d0f42ba2f"
+        },
+        {
+          "reference": "../local-semantics/weighted-message/recurrent-memory/ssd-learning-note.md#3-矩阵读取记忆描述与完整内容",
+          "sha256": "1b77eeef82ae851fda8ec0b271ced1ec07ea51494384f2002324c79d0f42ba2f"
+        }
+      ],
+      "artifacts": {
+        "ssd-memory.svg": "ce53ebe930cc5724a5ac62cff56d06bf1f51ebe0dbd5058f8fa7155b53a2b702",
+        "ssd-memory.png": "883288431412d750c4d34f305ca87657829ba4e76754633c8c7c51839a959146"
+      }
+    },
+    "logical-time-slots": {
+      "title": "历史按逻辑时间对齐",
+      "purpose": "用教材的三抽头算例展示固定时间槽、缺失补零与弱历史的连续消失。",
+      "assumptions": [
+        "标量卷积，L_conv=3，δ_conv=2，系数 (1,2,3)，偏置为零。",
+        "时间 0 写入 (w,z)=(1,4)，时间 2 写入 (ε,5)，时间 4 当前投影为 6；0<ε≤1。",
+        "第二行删去时间 2 的接收事件，其余输入与查询时间保持。"
+      ],
+      "generator": "src/control_time_figures.py",
+      "function": "logical_time_slots",
+      "definitions": [
+        {
+          "reference": "../local-semantics/weighted-message/recurrent-memory/causal-convolution-learning-note.md#1-缓存卷积与写入",
+          "sha256": "51a8948874cbfe58ecbbb855488c123593901adcfb2c0a72de316c3aa2140418"
+        },
+        {
+          "reference": "../local-semantics/weighted-message/recurrent-memory/causal-convolution-learning-note.md#22-与通常短卷积的对应",
+          "sha256": "51a8948874cbfe58ecbbb855488c123593901adcfb2c0a72de316c3aa2140418"
+        },
+        {
+          "reference": "../local-semantics/weighted-message/recurrent-memory/causal-convolution-learning-note.md#3-弱接收与固定时间",
+          "sha256": "51a8948874cbfe58ecbbb855488c123593901adcfb2c0a72de316c3aa2140418"
+        }
+      ],
+      "artifacts": {
+        "logical-time-slots.svg": "bf9449ecdae060de10af359bd0262a0526f72b7f7878b1b3bb57d6f899e2f5d8",
+        "logical-time-slots.png": "5a888a225b9c749553a4aef8a8969e2b0511e78dbcc9341475fa91c39120b3b0"
+      }
+    },
+    "sending-rules": {
+      "title": "发送强度的几种形成方式",
+      "purpose": "区分约束分配的总量与上限，以及 Attention 份额到发送强度的三种绑定。",
+      "assumptions": [
+        "图中仅比较标出的六种发送规则；比例分配与零温配对函数见教材。",
+        "Attention 的 a 是基权重；Z>0 时 p 的总和为 1，Z=0 时 p=0。",
+        "右侧 μ 用于增益与份额，只有直接 Attention 保证各 c_v≤μ_v。"
+      ],
+      "generator": "src/control_time_figures.py",
+      "function": "sending_rules",
+      "definitions": [
+        {
+          "reference": "../local-semantics/weighted-message/region-allocation-learning-note.md#24-按评分分配并返回",
+          "sha256": "3d86bdce6bcf7825d5b15f6d3908b4b65d8a52f8f66ce1635b992b752abdfaaf"
+        },
+        {
+          "reference": "../local-semantics/weighted-message/region-allocation-learning-note.md#41-约束分配",
+          "sha256": "3d86bdce6bcf7825d5b15f6d3908b4b65d8a52f8f66ce1635b992b752abdfaaf"
+        },
+        {
+          "reference": "../local-semantics/weighted-message/region-allocation-learning-note.md#42-通过-attention-份额分配",
+          "sha256": "3d86bdce6bcf7825d5b15f6d3908b4b65d8a52f8f66ce1635b992b752abdfaaf"
+        }
+      ],
+      "artifacts": {
+        "sending-rules.svg": "4dc1b8496949abfc696a31d739635d31e8a20b04fa5d007e56e2dbe276c0666b",
+        "sending-rules.png": "5b7e7dac5dae7a7a80231c016b2005b32fb1d0016e91e1be6d259e3ddc8bb73b"
+      }
+    },
+    "temperature-support": {
+      "title": "温度改变分配与激活数量",
+      "purpose": "沿用四候选算例，以共同纵轴展示分配、饱和与精确零。",
+      "assumptions": [
+        "采用节点增益与固定阈值分配，quad，μ=(1,1,1,1)，调整后评分 t=(4,3,2,1)，k=2。",
+        "三个温度分别为 5、2、0.4；本例各自达到总量上界 2。"
+      ],
+      "generator": "src/control_time_figures.py",
+      "function": "temperature_support",
+      "definitions": [
+        {
+          "reference": "../local-semantics/weighted-message/region-allocation-learning-note.md#55-分配与饱和",
+          "sha256": "3d86bdce6bcf7825d5b15f6d3908b4b65d8a52f8f66ce1635b992b752abdfaaf"
+        },
+        {
+          "reference": "../local-semantics/weighted-message/region-allocation-learning-note.md#414-发送总量与激活数量",
+          "sha256": "3d86bdce6bcf7825d5b15f6d3908b4b65d8a52f8f66ce1635b992b752abdfaaf"
+        }
+      ],
+      "artifacts": {
+        "temperature-support.svg": "6f1bf3be9057acb2b164a9cfd921648b628d894a57fc1b521ed9ef9fc672d097",
+        "temperature-support.png": "b524e69589f4a9cc037332324f193e9368b245fe6d9cd305694c760a940cae2b"
+      }
+    }
+  }
+}

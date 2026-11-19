@@ -1,0 +1,50 @@
+{
+  "observed": "2026-11-19T06:54:01.471834+00:00",
+  "state": "passed",
+  "scope": "read-only source-record fingerprints and document/schema checks; no new numerical model qualification",
+  "normal_results": 49,
+  "fingerprinted_input_files": 75,
+  "input_bytes_checked": 256578327,
+  "local_links_checked": 87,
+  "original_math_revision": "4f5b9f20a4030d68ee66ae2d26e34659a5e37234",
+  "math_files": 108,
+  "production_tree": "89f2707e71d989340c12de310797a4c7f4c99f64",
+  "protected_user_files": 4,
+  "documents": [
+    {
+      "path": "docs/evidence/ffn-execution-devices-20261119.md",
+      "bytes": 29173,
+      "sha256": "6076421d0913d1b68f57d0e3508c33405d22d78c472b3f8989d7f3108588338a"
+    },
+    {
+      "path": "docs/evidence/ffn-execution-devices-20261119.json",
+      "bytes": 1788518,
+      "sha256": "f9656366314fc66e59909a42dcf80a68456568e190a6445f9b2c8e78a23ea5ef"
+    },
+    {
+      "path": "docs/STATUS.md",
+      "bytes": 11021,
+      "sha256": "1e3455a473f11187e8d60093323f6cf9c7799a1bdab1f2b02dad9a9cb90b83b3"
+    },
+    {
+      "path": "docs/ROADMAP.md",
+      "bytes": 2785,
+      "sha256": "b0976e38d30303c598741c87446210d81c43b39204a4d2af1f983f687127b1f2"
+    },
+    {
+      "path": "docs/evidence/README.md",
+      "bytes": 7397,
+      "sha256": "51e47742dc27cdc96390a16ef3c0174fbc6e85c870d0a62e3b2a5f0a514af53c"
+    },
+    {
+      "path": "docs/ffn-execution.md",
+      "bytes": 6026,
+      "sha256": "c0d4f554d1b8c482c3c4167710ad567288d0cbf0f09ef2b7c01e747180f7fbdf"
+    },
+    {
+      "path": "docs/performance-lessons.md",
+      "bytes": 21206,
+      "sha256": "a33a351022a5cf911a1f451591d53c884d6f2cff38199cb7357d8844d47ba545"
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "observed": "2026-11-19T05:19:10.656266+00:00",
+  "pid": 1787307,
+  "old_affinity": [
+    224,
+    225,
+    226,
+    227
+  ],
+  "new_affinity": [
+    228,
+    229,
+    230,
+    231
+  ],
+  "scope": "project job.py watchdog only; already-spawned workload/waiter affinity unchanged; process-tree polling separated from measured worker cores"
+}

@@ -1,0 +1,94 @@
+{
+  "state": "passed",
+  "source": "301a327569aa75aefddd03cac9ca839589db5672",
+  "command": [
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-infer-memory-shared-v1/source/scripts/wait_units.py",
+    "--status",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-infer-memory-shared-v1/dependency.json",
+    "--seconds",
+    "5400",
+    "--unit",
+    "tide-memory-infer-x-v1.service",
+    "--",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "/mi/data2T/zlong/home/.agents/skills/use-local-ascend/scripts/run_on_free_npu.py",
+    "--job-id",
+    "memory-infer-memory-shared-v1",
+    "--project",
+    "tide-instances",
+    "--priority",
+    "0",
+    "--npu-count",
+    "1",
+    "--max-wait-seconds",
+    "600",
+    "--state-file",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-infer-memory-shared-v1/queue.json",
+    "--",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "-m",
+    "benchmarks.memory_candidate_suite",
+    "--phase",
+    "inference",
+    "--config",
+    "configs/memory-candidates/9b-memory-shared.json",
+    "--device",
+    "npu:0",
+    "--threads",
+    "4",
+    "--output-dir",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-infer-memory-shared-v1/results"
+  ],
+  "pid": 1095852,
+  "started": "2026-11-19T02:31:50.341410+00:00",
+  "max_rss_bytes": 103079215104,
+  "peak_rss_bytes": 29797568512,
+  "max_processes": 3,
+  "rss_sample_count": 3631,
+  "poll_interval": 0.25,
+  "descendant_supervision": "Linux child subreaper; retained PID/start identities across nested sessions",
+  "child_pid": 1095877,
+  "process_group": 1095877,
+  "elapsed": 1506.567854464054,
+  "descendant_identities": [
+    {
+      "pid": 1095877,
+      "start_ticks": 2264168105
+    },
+    {
+      "pid": 1107658,
+      "start_ticks": 2264187152
+    },
+    {
+      "pid": 1107699,
+      "start_ticks": 2264187209
+    },
+    {
+      "pid": 1107921,
+      "start_ticks": 2264187684
+    },
+    {
+      "pid": 1108063,
+      "start_ticks": 2264187860
+    },
+    {
+      "pid": 1108072,
+      "start_ticks": 2264187867
+    },
+    {
+      "pid": 1121577,
+      "start_ticks": 2264208296
+    },
+    {
+      "pid": 1143498,
+      "start_ticks": 2264241875
+    },
+    {
+      "pid": 1167579,
+      "start_ticks": 2264275787
+    }
+  ],
+  "exit_code": 0,
+  "finished": "2026-11-19T02:56:56.909262+00:00"
+}

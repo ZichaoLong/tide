@@ -1,0 +1,5 @@
+{
+  "topology": {"kind": "exchange", "n": 8, "depth": 1, "rounds": 2, "hubs": 4},
+  "d": 128, "memory": "X", "aggregation": "source_residual",
+  "allocation": "quad", "sharing": "region_shared"
+}

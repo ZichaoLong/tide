@@ -1,0 +1,756 @@
+{
+  "schema": "tide-capacity-search-v1",
+  "source": "f3e6661c1b126bdddc66167d4a79c6471acee285",
+  "harness_source": "f3e6661c1b126bdddc66167d4a79c6471acee285",
+  "state": "completed",
+  "arguments": {
+    "config": "configs/agg-inference/settle-incoming_light_64-optimized.json",
+    "config_overrides": {},
+    "table": "capacity",
+    "axis": "batch",
+    "batch": 12,
+    "length": 256,
+    "max_axis_value": 24,
+    "max_points": 2,
+    "subjects": [
+      "tide"
+    ],
+    "device": "npu:0",
+    "precision": "fp32",
+    "mode": "train",
+    "activity": "natural",
+    "threads": 4,
+    "seed": 1107,
+    "warmup": 2,
+    "steps": 5,
+    "optimizer_foreach": true,
+    "device_budget_gib": 48.0,
+    "rss_gib": 60.0,
+    "seconds": 1600.0,
+    "child_timeout": 500.0,
+    "minimum_gain": 0.03,
+    "flat_patience": 2,
+    "maximum_noise": 0.25,
+    "plan_only": false,
+    "output_dir": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-light64-capacity-fp32-v1/search"
+  },
+  "config_file": {
+    "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-light64-capacity-fp32-v1/source/configs/agg-inference/settle-incoming_light_64-optimized.json",
+    "sha256": "e5936b58faddbf85a04ebe4c5bdc0c543f69ad60c92591b17a5a86cf184b1973",
+    "bytes": 446
+  },
+  "frozen_config": {
+    "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-light64-capacity-fp32-v1/search/config.json",
+    "sha256": "e5936b58faddbf85a04ebe4c5bdc0c543f69ad60c92591b17a5a86cf184b1973",
+    "bytes": 446
+  },
+  "axis_values": [
+    12,
+    24
+  ],
+  "cpu_affinity": [
+    136,
+    137,
+    138,
+    139
+  ],
+  "physical_devices": "5",
+  "resource_identity": "exclusive_cooperative_queue; external jobs not controlled",
+  "fixed_history": "Transformer window 128; Tide adopted logical-time KV window unchanged; L is workload extent, not a new history contract",
+  "measurement": "one subject/mode per process; normal prefill timing excludes audits; complete AdamW and required Timed flush included",
+  "budget_scope": "sampled child process-tree RSS; device allocator peak checked after synchronization at construction/audit/warmup/sample; not hard allocation isolation",
+  "search_scope": "finite measured candidates; best stable admissible throughput, not proof of maximum feasible B/L or global optimum",
+  "matching_scope": "models frozen at common initial calibration B/L; independent best B at fixed L; not a same-workload speedup",
+  "children": [
+    {
+      "identity": "000-b12-l256-audit",
+      "command": [
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+        "-u",
+        "-m",
+        "benchmarks.run",
+        "--config",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-light64-capacity-fp32-v1/search/config.json",
+        "--device",
+        "npu:0",
+        "--precision",
+        "fp32",
+        "--threads",
+        "4",
+        "--batch",
+        "12",
+        "--length",
+        "256",
+        "--modes",
+        "train",
+        "--subjects",
+        "tide",
+        "--activity",
+        "natural",
+        "--seed",
+        "1107",
+        "--warmup",
+        "2",
+        "--steps",
+        "5",
+        "--output",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-light64-capacity-fp32-v1/search/000-b12-l256-audit.json",
+        "--optimizer-foreach",
+        "--audit-only",
+        "--device-budget-gib",
+        "48.0"
+      ],
+      "output": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-light64-capacity-fp32-v1/search/000-b12-l256-audit.json",
+      "log": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-light64-capacity-fp32-v1/search/000-b12-l256-audit.log",
+      "batch": 12,
+      "length": 256,
+      "subject": "audit",
+      "state": "completed",
+      "timeout_seconds": 500.0,
+      "max_rss_bytes": 64424509440,
+      "started": "2026-11-18T12:36:27.797165+00:00",
+      "pid": 2432614,
+      "sampled_process_tree_peak_rss_bytes": 3987759104,
+      "exit_code": 0,
+      "inner_state": "audit_complete",
+      "result_sha256": "37a394384462bc55b1e4fe3c15f8536dcdca64df23e703f327f999436995585e",
+      "descendant_identities": [
+        {
+          "pid": 2432614,
+          "start_ticks": 2259155850
+        }
+      ],
+      "ended": "2026-11-18T12:37:18.725503+00:00",
+      "elapsed_seconds": 50.92641795426607
+    },
+    {
+      "identity": "001-b12-l256-tide",
+      "command": [
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+        "-u",
+        "-m",
+        "benchmarks.run",
+        "--config",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-light64-capacity-fp32-v1/search/config.json",
+        "--device",
+        "npu:0",
+        "--precision",
+        "fp32",
+        "--threads",
+        "4",
+        "--batch",
+        "12",
+        "--length",
+        "256",
+        "--modes",
+        "train",
+        "--subjects",
+        "tide",
+        "--activity",
+        "natural",
+        "--seed",
+        "1107",
+        "--warmup",
+        "2",
+        "--steps",
+        "5",
+        "--output",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-light64-capacity-fp32-v1/search/001-b12-l256-tide.json",
+        "--optimizer-foreach",
+        "--reference-record",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-light64-capacity-fp32-v1/search/000-b12-l256-audit.json",
+        "--calibration-record",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-light64-capacity-fp32-v1/search/000-b12-l256-audit.json",
+        "--device-budget-gib",
+        "48.0"
+      ],
+      "output": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-light64-capacity-fp32-v1/search/001-b12-l256-tide.json",
+      "log": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-light64-capacity-fp32-v1/search/001-b12-l256-tide.log",
+      "batch": 12,
+      "length": 256,
+      "subject": "tide",
+      "state": "completed",
+      "timeout_seconds": 500.0,
+      "max_rss_bytes": 64424509440,
+      "preflight_persistent_floor_bytes": 286087424,
+      "started": "2026-11-18T12:37:18.759387+00:00",
+      "pid": 2436448,
+      "sampled_process_tree_peak_rss_bytes": 4161875968,
+      "exit_code": 0,
+      "inner_state": "completed_finite",
+      "result_sha256": "3d9c939c63cc07f15dbe7b3ff84324d6afb0dc25223c5ad18d154a68f424ef53",
+      "descendant_identities": [
+        {
+          "pid": 2436448,
+          "start_ticks": 2259160946
+        }
+      ],
+      "ended": "2026-11-18T12:38:28.852360+00:00",
+      "elapsed_seconds": 70.09067793563008
+    },
+    {
+      "identity": "002-b24-l256-audit",
+      "command": [
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+        "-u",
+        "-m",
+        "benchmarks.run",
+        "--config",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-light64-capacity-fp32-v1/search/config.json",
+        "--device",
+        "npu:0",
+        "--precision",
+        "fp32",
+        "--threads",
+        "4",
+        "--batch",
+        "24",
+        "--length",
+        "256",
+        "--modes",
+        "train",
+        "--subjects",
+        "tide",
+        "--activity",
+        "natural",
+        "--seed",
+        "1107",
+        "--warmup",
+        "2",
+        "--steps",
+        "5",
+        "--output",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-light64-capacity-fp32-v1/search/002-b24-l256-audit.json",
+        "--optimizer-foreach",
+        "--audit-only",
+        "--device-budget-gib",
+        "48.0"
+      ],
+      "output": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-light64-capacity-fp32-v1/search/002-b24-l256-audit.json",
+      "log": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-light64-capacity-fp32-v1/search/002-b24-l256-audit.log",
+      "batch": 24,
+      "length": 256,
+      "subject": "audit",
+      "state": "completed",
+      "timeout_seconds": 500.0,
+      "max_rss_bytes": 64424509440,
+      "started": "2026-11-18T12:38:28.939358+00:00",
+      "pid": 2441965,
+      "sampled_process_tree_peak_rss_bytes": 5663182848,
+      "exit_code": 0,
+      "inner_state": "audit_complete",
+      "result_sha256": "24ba5546ab4e9d18ea595f8d2496805541cd30bab731cb81330b790cacae1bdd",
+      "descendant_identities": [
+        {
+          "pid": 2441965,
+          "start_ticks": 2259167964
+        }
+      ],
+      "ended": "2026-11-18T12:40:08.880260+00:00",
+      "elapsed_seconds": 99.93864998593926
+    },
+    {
+      "identity": "003-b24-l256-tide",
+      "command": [
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+        "-u",
+        "-m",
+        "benchmarks.run",
+        "--config",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-light64-capacity-fp32-v1/search/config.json",
+        "--device",
+        "npu:0",
+        "--precision",
+        "fp32",
+        "--threads",
+        "4",
+        "--batch",
+        "24",
+        "--length",
+        "256",
+        "--modes",
+        "train",
+        "--subjects",
+        "tide",
+        "--activity",
+        "natural",
+        "--seed",
+        "1107",
+        "--warmup",
+        "2",
+        "--steps",
+        "5",
+        "--output",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-light64-capacity-fp32-v1/search/003-b24-l256-tide.json",
+        "--optimizer-foreach",
+        "--reference-record",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-light64-capacity-fp32-v1/search/002-b24-l256-audit.json",
+        "--calibration-record",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-light64-capacity-fp32-v1/search/000-b12-l256-audit.json",
+        "--device-budget-gib",
+        "48.0"
+      ],
+      "output": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-light64-capacity-fp32-v1/search/003-b24-l256-tide.json",
+      "log": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-light64-capacity-fp32-v1/search/003-b24-l256-tide.log",
+      "batch": 24,
+      "length": 256,
+      "subject": "tide",
+      "state": "completed",
+      "timeout_seconds": 500.0,
+      "max_rss_bytes": 64424509440,
+      "preflight_persistent_floor_bytes": 286087424,
+      "started": "2026-11-18T12:40:08.914636+00:00",
+      "pid": 2449370,
+      "sampled_process_tree_peak_rss_bytes": 5833281536,
+      "exit_code": 0,
+      "inner_state": "completed_finite",
+      "result_sha256": "67be883610e61fa03cf96ac438d747836de9119f32c85171530dacad388aa5e3",
+      "descendant_identities": [
+        {
+          "pid": 2449370,
+          "start_ticks": 2259177962
+        }
+      ],
+      "ended": "2026-11-18T12:42:14.012401+00:00",
+      "elapsed_seconds": 125.09505912289023
+    }
+  ],
+  "audits": [
+    {
+      "batch": 12,
+      "length": 256,
+      "child": "000-b12-l256-audit",
+      "state": "completed",
+      "result_file": {
+        "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-light64-capacity-fp32-v1/search/000-b12-l256-audit.json",
+        "sha256": "37a394384462bc55b1e4fe3c15f8536dcdca64df23e703f327f999436995585e",
+        "bytes": 3379381
+      }
+    },
+    {
+      "batch": 24,
+      "length": 256,
+      "child": "002-b24-l256-audit",
+      "state": "completed",
+      "result_file": {
+        "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-light64-capacity-fp32-v1/search/002-b24-l256-audit.json",
+        "sha256": "24ba5546ab4e9d18ea595f8d2496805541cd30bab731cb81330b790cacae1bdd",
+        "bytes": 6758741
+      }
+    }
+  ],
+  "lines": [
+    {
+      "subject": "tide",
+      "observations": [
+        {
+          "subject": "tide",
+          "batch": 12,
+          "length": 256,
+          "state": "completed",
+          "admitted": true,
+          "stable": true,
+          "child": "001-b12-l256-tide",
+          "sampled_process_tree_peak_rss_bytes": 4161875968,
+          "result_file": {
+            "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-light64-capacity-fp32-v1/search/001-b12-l256-tide.json",
+            "sha256": "3d9c939c63cc07f15dbe7b3ff84324d6afb0dc25223c5ad18d154a68f424ef53",
+            "bytes": 10381628
+          },
+          "row_state": "completed_finite",
+          "error": null,
+          "failure_kind": null,
+          "seconds": [
+            2.1576212495565414,
+            2.135138515383005,
+            2.144267860800028,
+            2.1317984648048878,
+            2.142679665237665
+          ],
+          "parameters": 17880464,
+          "initial_parameter_sha256": "f1d965dd97a9a00bf1af3fd4918d5ada1e1cfa586620c2dd4fdff0cb2083bf79",
+          "input_sha256": "e367452d4de692737f34f7bc1f157610a9e924449c69fd3e0f4bf92c13c8aa5e",
+          "reference_record": {
+            "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-light64-capacity-fp32-v1/search/000-b12-l256-audit.json",
+            "sha256": "37a394384462bc55b1e4fe3c15f8536dcdca64df23e703f327f999436995585e",
+            "bytes": 3379381
+          },
+          "calibration_record": {
+            "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-light64-capacity-fp32-v1/search/000-b12-l256-audit.json",
+            "sha256": "37a394384462bc55b1e4fe3c15f8536dcdca64df23e703f327f999436995585e",
+            "bytes": 3379381
+          },
+          "initial_audit_scope": "this exact initial workload; frozen external child",
+          "sample_range_over_median": 0.012051631035005608,
+          "median_seconds": 2.142679665237665,
+          "input_positions_per_second": 1433.7187447285803,
+          "timed_peak_device_bytes": 19560618496,
+          "device_memory_by_device": {
+            "npu:0": {
+              "allocated_bytes": 296208896,
+              "reserved_bytes": 21911044096,
+              "peak_allocated_bytes": 19560618496,
+              "peak_reserved_bytes": 21911044096
+            }
+          },
+          "process_lifetime_peak_rss_kib": 4064332,
+          "actual_storage": {
+            "parameters": {
+              "npu:0:torch.float32": {
+                "elements": 17880464,
+                "bytes": 71521856
+              }
+            },
+            "gradients": {
+              "npu:0:torch.float32": {
+                "elements": 17880464,
+                "bytes": 71521856
+              }
+            },
+            "optimizer": {
+              "cpu:torch.float32": {
+                "elements": 364,
+                "bytes": 1456
+              },
+              "npu:0:torch.float32": {
+                "elements": 35760928,
+                "bytes": 143043712
+              }
+            }
+          },
+          "activity": {
+            "calibration_effective_touched_mean": 16654581.60546875,
+            "initial_effective_touched_mean": 16654581.60546875,
+            "post_update_effective_touched_mean": 16606137.427083334,
+            "initial_minus_calibration": 0.0,
+            "initial_work": {
+              "positive_messages": 2947713,
+              "message_slots": 4276224,
+              "candidate_updates": 576996,
+              "candidate_slots": 577536,
+              "reception_attention_positive_pairs": 38357470,
+              "regional_attention_positive_pairs": 7749816,
+              "full_actions": 410739,
+              "kv_attention_effective_pairs": 87466008
+            },
+            "initial_packing": {
+              "K": {
+                "calls": 22,
+                "selected_rows": 226419,
+                "executed_rows": 297696
+              },
+              "S": {
+                "calls": 8,
+                "selected_rows": 184320,
+                "executed_rows": 184320
+              }
+            },
+            "post_update_work": {
+              "positive_messages": 2897893,
+              "message_slots": 4276224,
+              "candidate_updates": 577056,
+              "candidate_slots": 577536,
+              "reception_attention_positive_pairs": 37165318,
+              "regional_attention_positive_pairs": 7751620,
+              "full_actions": 404092,
+              "kv_attention_effective_pairs": 85007200
+            },
+            "post_update_packing": {
+              "K": {
+                "calls": 22,
+                "selected_rows": 219772,
+                "executed_rows": 309600
+              },
+              "S": {
+                "calls": 8,
+                "selected_rows": 184320,
+                "executed_rows": 184320
+              }
+            }
+          },
+          "joint_match": null
+        },
+        {
+          "subject": "tide",
+          "batch": 24,
+          "length": 256,
+          "state": "completed",
+          "admitted": true,
+          "stable": true,
+          "child": "003-b24-l256-tide",
+          "sampled_process_tree_peak_rss_bytes": 5833281536,
+          "result_file": {
+            "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-light64-capacity-fp32-v1/search/003-b24-l256-tide.json",
+            "sha256": "67be883610e61fa03cf96ac438d747836de9119f32c85171530dacad388aa5e3",
+            "bytes": 17397935
+          },
+          "row_state": "completed_finite",
+          "error": null,
+          "failure_kind": null,
+          "seconds": [
+            3.7338183596730232,
+            3.70600463822484,
+            3.7305654771625996,
+            3.7211291044950485,
+            3.6924304626882076
+          ],
+          "parameters": 17880464,
+          "initial_parameter_sha256": "f1d965dd97a9a00bf1af3fd4918d5ada1e1cfa586620c2dd4fdff0cb2083bf79",
+          "input_sha256": "dc704d2b016d0d70773d3b6c581dc9fde9c9cf9c20781f3e21444aa712aeb504",
+          "reference_record": {
+            "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-light64-capacity-fp32-v1/search/002-b24-l256-audit.json",
+            "sha256": "24ba5546ab4e9d18ea595f8d2496805541cd30bab731cb81330b790cacae1bdd",
+            "bytes": 6758741
+          },
+          "calibration_record": {
+            "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-light64-capacity-fp32-v1/search/000-b12-l256-audit.json",
+            "sha256": "37a394384462bc55b1e4fe3c15f8536dcdca64df23e703f327f999436995585e",
+            "bytes": 3379381
+          },
+          "initial_audit_scope": "this exact initial workload; frozen external child",
+          "sample_range_over_median": 0.011122402857460618,
+          "median_seconds": 3.7211291044950485,
+          "input_positions_per_second": 1651.1117533057836,
+          "timed_peak_device_bytes": 38623380480,
+          "device_memory_by_device": {
+            "npu:0": {
+              "allocated_bytes": 296493056,
+              "reserved_bytes": 42804969472,
+              "peak_allocated_bytes": 38623380480,
+              "peak_reserved_bytes": 42804969472
+            }
+          },
+          "process_lifetime_peak_rss_kib": 5696564,
+          "actual_storage": {
+            "parameters": {
+              "npu:0:torch.float32": {
+                "elements": 17880464,
+                "bytes": 71521856
+              }
+            },
+            "gradients": {
+              "npu:0:torch.float32": {
+                "elements": 17880464,
+                "bytes": 71521856
+              }
+            },
+            "optimizer": {
+              "cpu:torch.float32": {
+                "elements": 364,
+                "bytes": 1456
+              },
+              "npu:0:torch.float32": {
+                "elements": 35760928,
+                "bytes": 143043712
+              }
+            }
+          },
+          "activity": {
+            "calibration_effective_touched_mean": 16654581.60546875,
+            "initial_effective_touched_mean": 16656700.044596354,
+            "post_update_effective_touched_mean": 16600441.215983072,
+            "initial_minus_calibration": 2118.439127603546,
+            "initial_work": {
+              "positive_messages": 5898679,
+              "message_slots": 8552448,
+              "candidate_updates": 1154018,
+              "candidate_slots": 1155072,
+              "reception_attention_positive_pairs": 76780270,
+              "regional_attention_positive_pairs": 15500412,
+              "full_actions": 822038,
+              "kv_attention_effective_pairs": 175226204
+            },
+            "initial_packing": {
+              "K": {
+                "calls": 22,
+                "selected_rows": 453398,
+                "executed_rows": 610368
+              },
+              "S": {
+                "calls": 8,
+                "selected_rows": 368640,
+                "executed_rows": 368640
+              }
+            },
+            "post_update_work": {
+              "positive_messages": 5778265,
+              "message_slots": 8552448,
+              "candidate_updates": 1154183,
+              "candidate_slots": 1155072,
+              "reception_attention_positive_pairs": 73981366,
+              "regional_attention_positive_pairs": 15505370,
+              "full_actions": 806582,
+              "kv_attention_effective_pairs": 169235896
+            },
+            "post_update_packing": {
+              "K": {
+                "calls": 22,
+                "selected_rows": 437942,
+                "executed_rows": 629952
+              },
+              "S": {
+                "calls": 8,
+                "selected_rows": 368640,
+                "executed_rows": 368640
+              }
+            }
+          },
+          "joint_match": null
+        }
+      ],
+      "stop_reason": "candidate_limit"
+    }
+  ],
+  "common_shape_table": [],
+  "capacity_table": [
+    {
+      "subject": "tide",
+      "best": {
+        "subject": "tide",
+        "batch": 24,
+        "length": 256,
+        "state": "completed",
+        "admitted": true,
+        "stable": true,
+        "child": "003-b24-l256-tide",
+        "sampled_process_tree_peak_rss_bytes": 5833281536,
+        "result_file": {
+          "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-light64-capacity-fp32-v1/search/003-b24-l256-tide.json",
+          "sha256": "67be883610e61fa03cf96ac438d747836de9119f32c85171530dacad388aa5e3",
+          "bytes": 17397935
+        },
+        "row_state": "completed_finite",
+        "error": null,
+        "failure_kind": null,
+        "seconds": [
+          3.7338183596730232,
+          3.70600463822484,
+          3.7305654771625996,
+          3.7211291044950485,
+          3.6924304626882076
+        ],
+        "parameters": 17880464,
+        "initial_parameter_sha256": "f1d965dd97a9a00bf1af3fd4918d5ada1e1cfa586620c2dd4fdff0cb2083bf79",
+        "input_sha256": "dc704d2b016d0d70773d3b6c581dc9fde9c9cf9c20781f3e21444aa712aeb504",
+        "reference_record": {
+          "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-light64-capacity-fp32-v1/search/002-b24-l256-audit.json",
+          "sha256": "24ba5546ab4e9d18ea595f8d2496805541cd30bab731cb81330b790cacae1bdd",
+          "bytes": 6758741
+        },
+        "calibration_record": {
+          "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-light64-capacity-fp32-v1/search/000-b12-l256-audit.json",
+          "sha256": "37a394384462bc55b1e4fe3c15f8536dcdca64df23e703f327f999436995585e",
+          "bytes": 3379381
+        },
+        "initial_audit_scope": "this exact initial workload; frozen external child",
+        "sample_range_over_median": 0.011122402857460618,
+        "median_seconds": 3.7211291044950485,
+        "input_positions_per_second": 1651.1117533057836,
+        "timed_peak_device_bytes": 38623380480,
+        "device_memory_by_device": {
+          "npu:0": {
+            "allocated_bytes": 296493056,
+            "reserved_bytes": 42804969472,
+            "peak_allocated_bytes": 38623380480,
+            "peak_reserved_bytes": 42804969472
+          }
+        },
+        "process_lifetime_peak_rss_kib": 5696564,
+        "actual_storage": {
+          "parameters": {
+            "npu:0:torch.float32": {
+              "elements": 17880464,
+              "bytes": 71521856
+            }
+          },
+          "gradients": {
+            "npu:0:torch.float32": {
+              "elements": 17880464,
+              "bytes": 71521856
+            }
+          },
+          "optimizer": {
+            "cpu:torch.float32": {
+              "elements": 364,
+              "bytes": 1456
+            },
+            "npu:0:torch.float32": {
+              "elements": 35760928,
+              "bytes": 143043712
+            }
+          }
+        },
+        "activity": {
+          "calibration_effective_touched_mean": 16654581.60546875,
+          "initial_effective_touched_mean": 16656700.044596354,
+          "post_update_effective_touched_mean": 16600441.215983072,
+          "initial_minus_calibration": 2118.439127603546,
+          "initial_work": {
+            "positive_messages": 5898679,
+            "message_slots": 8552448,
+            "candidate_updates": 1154018,
+            "candidate_slots": 1155072,
+            "reception_attention_positive_pairs": 76780270,
+            "regional_attention_positive_pairs": 15500412,
+            "full_actions": 822038,
+            "kv_attention_effective_pairs": 175226204
+          },
+          "initial_packing": {
+            "K": {
+              "calls": 22,
+              "selected_rows": 453398,
+              "executed_rows": 610368
+            },
+            "S": {
+              "calls": 8,
+              "selected_rows": 368640,
+              "executed_rows": 368640
+            }
+          },
+          "post_update_work": {
+            "positive_messages": 5778265,
+            "message_slots": 8552448,
+            "candidate_updates": 1154183,
+            "candidate_slots": 1155072,
+            "reception_attention_positive_pairs": 73981366,
+            "regional_attention_positive_pairs": 15505370,
+            "full_actions": 806582,
+            "kv_attention_effective_pairs": 169235896
+          },
+          "post_update_packing": {
+            "K": {
+              "calls": 22,
+              "selected_rows": 437942,
+              "executed_rows": 629952
+            },
+            "S": {
+              "calls": 8,
+              "selected_rows": 368640,
+              "executed_rows": 368640
+            }
+          }
+        },
+        "joint_match": null
+      },
+      "stop_reason": "candidate_limit",
+      "fixed_length": 256,
+      "calibration_record": {
+        "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-light64-capacity-fp32-v1/search/000-b12-l256-audit.json",
+        "sha256": "37a394384462bc55b1e4fe3c15f8536dcdca64df23e703f327f999436995585e",
+        "bytes": 3379381
+      },
+      "ratio_scope": "independent load optimum under the same declared budget; not a same-B comparison"
+    }
+  ],
+  "started": "2026-11-18T12:36:27.795113+00:00",
+  "calibration_record": {
+    "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-light64-capacity-fp32-v1/search/000-b12-l256-audit.json",
+    "sha256": "37a394384462bc55b1e4fe3c15f8536dcdca64df23e703f327f999436995585e",
+    "bytes": 3379381
+  },
+  "ended": "2026-11-18T12:42:14.155652+00:00",
+  "child_states": {
+    "completed": 4
+  },
+  "completion_scope": "search controller terminal; failed/limited children remain separate and are not measured passes"
+}

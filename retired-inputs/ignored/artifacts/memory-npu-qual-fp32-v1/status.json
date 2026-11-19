@@ -1,0 +1,125 @@
+{
+  "state": "passed",
+  "source": "64db31414df561e0c3468c3c62542e6612475bf6",
+  "command": [
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "/mi/data2T/zlong/home/.agents/skills/use-local-ascend/scripts/run_on_free_npu.py",
+    "--job-id",
+    "memory-npu-qual-fp32-v1",
+    "--project",
+    "tide-instances",
+    "--priority",
+    "0",
+    "--npu-count",
+    "1",
+    "--max-wait-seconds",
+    "600",
+    "--state-file",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-npu-qual-fp32-v1/queue.json",
+    "--",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "-m",
+    "scripts.check_memory_candidates",
+    "--config",
+    "configs/memory-candidates/qualification.json",
+    "--device",
+    "npu:0",
+    "--precision",
+    "fp32",
+    "--threads",
+    "4",
+    "--output",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-npu-qual-fp32-v1/qualification.json"
+  ],
+  "pid": 1014631,
+  "started": "2026-11-19T02:12:34.934957+00:00",
+  "max_rss_bytes": 51539607552,
+  "peak_rss_bytes": 7969492992,
+  "max_processes": 3,
+  "rss_sample_count": 1018,
+  "poll_interval": 0.25,
+  "descendant_supervision": "Linux child subreaper; retained PID/start identities across nested sessions",
+  "child_pid": 1014679,
+  "process_group": 1014679,
+  "elapsed": 434.21069194749,
+  "descendant_identities": [
+    {
+      "pid": 1014679,
+      "start_ticks": 2264052564
+    },
+    {
+      "pid": 1014681,
+      "start_ticks": 2264052570
+    },
+    {
+      "pid": 1014803,
+      "start_ticks": 2264052626
+    },
+    {
+      "pid": 1015325,
+      "start_ticks": 2264053098
+    },
+    {
+      "pid": 1015452,
+      "start_ticks": 2264053270
+    },
+    {
+      "pid": 1017012,
+      "start_ticks": 2264055925
+    },
+    {
+      "pid": 1018974,
+      "start_ticks": 2264058926
+    },
+    {
+      "pid": 1021303,
+      "start_ticks": 2264061924
+    },
+    {
+      "pid": 1023400,
+      "start_ticks": 2264064922
+    },
+    {
+      "pid": 1025369,
+      "start_ticks": 2264067825
+    },
+    {
+      "pid": 1027498,
+      "start_ticks": 2264070730
+    },
+    {
+      "pid": 1029379,
+      "start_ticks": 2264073521
+    },
+    {
+      "pid": 1031143,
+      "start_ticks": 2264076419
+    },
+    {
+      "pid": 1033165,
+      "start_ticks": 2264079227
+    },
+    {
+      "pid": 1035418,
+      "start_ticks": 2264082620
+    },
+    {
+      "pid": 1037500,
+      "start_ticks": 2264085423
+    },
+    {
+      "pid": 1039228,
+      "start_ticks": 2264088319
+    },
+    {
+      "pid": 1041670,
+      "start_ticks": 2264091233
+    },
+    {
+      "pid": 1043871,
+      "start_ticks": 2264094351
+    }
+  ],
+  "exit_code": 0,
+  "finished": "2026-11-19T02:19:49.145648+00:00"
+}

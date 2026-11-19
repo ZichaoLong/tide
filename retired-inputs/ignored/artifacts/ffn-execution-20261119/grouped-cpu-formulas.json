@@ -1,0 +1,257 @@
+{
+  "schema": "tide-grouped-ffn-capability-probe-v1",
+  "state": "completed_reference_only",
+  "observed": "2026-11-19T04:54:51.805168+00:00",
+  "arguments": {
+    "output": "artifacts/ffn-execution-20261119/grouped-cpu-formulas.json",
+    "device": "npu:0",
+    "threads": 4,
+    "seed": 751,
+    "reference_only": true
+  },
+  "source": null,
+  "script_sha256": "813d3f9c720a992f1274b3df44b5b09004ad3ebb8778c5e6222608a7ef2fb724",
+  "physical_devices": null,
+  "cases": [
+    {
+      "label": "repeated_shared_owner_zero_middle",
+      "owners": [
+        2,
+        0,
+        2,
+        3,
+        0,
+        2,
+        3,
+        2,
+        0,
+        2
+      ],
+      "sort_order": [
+        1,
+        4,
+        8,
+        0,
+        2,
+        5,
+        7,
+        9,
+        3,
+        6
+      ],
+      "counts": [
+        3,
+        0,
+        5,
+        2
+      ],
+      "group_list": [
+        3,
+        3,
+        8,
+        10
+      ],
+      "inputs": {
+        "x": {
+          "shape": [
+            10,
+            32
+          ],
+          "stride": [
+            32,
+            1
+          ],
+          "dtype": "torch.float32",
+          "device": "cpu",
+          "sha256": "80c983346b6ff9066a0f521337acd1f02ab876f0d6562a67050e6f75f8f413d6"
+        },
+        "weight": {
+          "shape": [
+            4,
+            48,
+            32
+          ],
+          "stride": [
+            1536,
+            32,
+            1
+          ],
+          "dtype": "torch.float32",
+          "device": "cpu",
+          "sha256": "6520123766cad5d663903a3cce38c246637b29566db0b809a79ffab68eea91f6"
+        },
+        "dy": {
+          "shape": [
+            10,
+            48
+          ],
+          "stride": [
+            48,
+            1
+          ],
+          "dtype": "torch.float32",
+          "device": "cpu",
+          "sha256": "b225f1dcc46aa724b530bbf98536bafa775d916089e1045dfd3fe80f939bf727"
+        },
+        "ends": {
+          "shape": [
+            4
+          ],
+          "stride": [
+            1
+          ],
+          "dtype": "torch.int64",
+          "device": "cpu",
+          "sha256": "f2211cce68f864cf32c0d905148b1c582212bdfe3a8efc8027a6766166949a6f"
+        }
+      },
+      "cpu_formula_check": {
+        "output": {
+          "state": "within_threshold",
+          "finite": true,
+          "atol": 2e-06,
+          "rtol": 2e-06,
+          "max_abs": 0.0,
+          "max_scaled": 0.0,
+          "exact": true
+        },
+        "input_gradient": {
+          "state": "within_threshold",
+          "finite": true,
+          "atol": 6e-06,
+          "rtol": 6e-06,
+          "max_abs": 0.0,
+          "max_scaled": 0.0,
+          "exact": true
+        },
+        "weight_gradient": {
+          "state": "within_threshold",
+          "finite": true,
+          "atol": 6e-06,
+          "rtol": 6e-06,
+          "max_abs": 7.450580596923828e-09,
+          "max_scaled": 0.0011811834992840886,
+          "exact": false
+        }
+      },
+      "operations": {}
+    },
+    {
+      "label": "singleton_with_zero_prefix_and_tail",
+      "owners": [
+        1
+      ],
+      "sort_order": [
+        0
+      ],
+      "counts": [
+        0,
+        1,
+        0,
+        0
+      ],
+      "group_list": [
+        0,
+        1,
+        1,
+        1
+      ],
+      "inputs": {
+        "x": {
+          "shape": [
+            1,
+            32
+          ],
+          "stride": [
+            32,
+            1
+          ],
+          "dtype": "torch.float32",
+          "device": "cpu",
+          "sha256": "9418554f9082ed518f6fab7fe3a7e86ad8e6a628fa778e36d85f51db59f4176b"
+        },
+        "weight": {
+          "shape": [
+            4,
+            48,
+            32
+          ],
+          "stride": [
+            1536,
+            32,
+            1
+          ],
+          "dtype": "torch.float32",
+          "device": "cpu",
+          "sha256": "4ee99717fffcc94c1bf117a27fe0280f2d53a5191bf4189f0495fc68f19b1484"
+        },
+        "dy": {
+          "shape": [
+            1,
+            48
+          ],
+          "stride": [
+            48,
+            1
+          ],
+          "dtype": "torch.float32",
+          "device": "cpu",
+          "sha256": "a4af9c85f9985ae30de466144ed974ff9b2b283749eab12b383fddda9e73820f"
+        },
+        "ends": {
+          "shape": [
+            4
+          ],
+          "stride": [
+            1
+          ],
+          "dtype": "torch.int64",
+          "device": "cpu",
+          "sha256": "97e2b8b640d13af1681608bb897c3ada8d220e80e2e023623f1021f958c6345b"
+        }
+      },
+      "cpu_formula_check": {
+        "output": {
+          "state": "within_threshold",
+          "finite": true,
+          "atol": 2e-06,
+          "rtol": 2e-06,
+          "max_abs": 0.0,
+          "max_scaled": 0.0,
+          "exact": true
+        },
+        "input_gradient": {
+          "state": "within_threshold",
+          "finite": true,
+          "atol": 6e-06,
+          "rtol": 6e-06,
+          "max_abs": 0.0,
+          "max_scaled": 0.0,
+          "exact": true
+        },
+        "weight_gradient": {
+          "state": "within_threshold",
+          "finite": true,
+          "atol": 6e-06,
+          "rtol": 6e-06,
+          "max_abs": 0.0,
+          "max_scaled": 0.0,
+          "exact": true
+        }
+      },
+      "operations": {}
+    }
+  ],
+  "limits": [
+    "Capability probe only, no normal timing or whole-model performance qualification.",
+    "Dispatch placement and output device do not by themselves exclude an internal vendor fallback.",
+    "Native autograd and explicit grouped adjoint operations are tested independently.",
+    "No owner-indexed weight tensor, dense adapter, or weight contiguous copy is created.",
+    "Thresholds retain NodeLinear local FP32 value 2e-6 and gradient 6e-6 atol/rtol."
+  ],
+  "torch": "2.12.0+cpu",
+  "operation_states": {
+    "repeated_shared_owner_zero_middle": {},
+    "singleton_with_zero_prefix_and_tail": {}
+  }
+}

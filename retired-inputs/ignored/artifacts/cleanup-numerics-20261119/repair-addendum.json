@@ -1,0 +1,24 @@
+{
+  "state": "authorized_bounded_followup",
+  "created_utc": "2026-11-19T10:22:35.859188+00:00",
+  "reason": "Original-shape same-input replay proves sorted quad accepted an infeasible face and lost a representable positive control; fixed-math KKT validation repairs this implementation defect.",
+  "implementation": "97c52960",
+  "fixed_math_unchanged": true,
+  "extra_work": [
+    "frozen complete CPU suite",
+    "original complete NPU allocation submissions and score VJPs",
+    "small FP32 X baseline/combined 3 continuing updates plus actual fresh-process checkpoint recovery",
+    "one post-fix shared9B region1/4 inference pair, no performance claim"
+  ],
+  "total_budget_unchanged": "4 CPU-service hours, 2 NPU-card service hours, one NPU at a time, <=128GiB RSS, <=4GiB new outputs",
+  "checkpoint_allowance_gib": 1,
+  "checkpoint_retention": "retire successful new restore payloads after preserving reviewed results and terminal facts",
+  "additional_cleanup": "two original update2 payloads retired only after full exact replay; verify no-tensor reproduction from anchor/update1+exact-proof under 72c1a9d0",
+  "scope_exclusions": [
+    "no 9B training",
+    "no new throughput search",
+    "no shared-card use",
+    "no BF16 full qualification matrix",
+    "no threshold or math snapshot changes"
+  ]
+}

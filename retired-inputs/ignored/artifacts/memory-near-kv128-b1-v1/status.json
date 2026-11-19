@@ -1,0 +1,116 @@
+{
+  "state": "passed",
+  "source": "301a327569aa75aefddd03cac9ca839589db5672",
+  "command": [
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-near-kv128-b1-v1/source/scripts/wait_units.py",
+    "--status",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-near-kv128-b1-v1/dependency.json",
+    "--seconds",
+    "5400",
+    "--unit",
+    "tide-memory-infer-kv256-v1.service",
+    "--",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "/mi/data2T/zlong/home/.agents/skills/use-local-ascend/scripts/run_on_free_npu.py",
+    "--job-id",
+    "memory-near-kv128-b1-v1",
+    "--project",
+    "tide-instances",
+    "--priority",
+    "0",
+    "--npu-count",
+    "1",
+    "--max-wait-seconds",
+    "600",
+    "--state-file",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-near-kv128-b1-v1/queue.json",
+    "--",
+    "timeout",
+    "--signal=TERM",
+    "--kill-after=30",
+    "1800",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "-m",
+    "benchmarks.inference",
+    "--config",
+    "configs/memory-candidates/9b-near-kv128.json",
+    "--subjects",
+    "tide",
+    "--devices",
+    "npu:0",
+    "--precision",
+    "fp32",
+    "--threads",
+    "4",
+    "--batch",
+    "1",
+    "--prefill",
+    "128",
+    "--prefill-chunk",
+    "32",
+    "--decode",
+    "16",
+    "--stream-positions",
+    "0",
+    "--warmup",
+    "2",
+    "--samples",
+    "5",
+    "--audit",
+    "full",
+    "--allocated-budget-gib",
+    "48",
+    "--reserved-budget-gib",
+    "56",
+    "--output",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-near-kv128-b1-v1/inference.json"
+  ],
+  "pid": 1108023,
+  "started": "2026-11-19T02:35:07.725806+00:00",
+  "max_rss_bytes": 103079215104,
+  "peak_rss_bytes": 37016248320,
+  "max_processes": 4,
+  "rss_sample_count": 2603,
+  "poll_interval": 0.25,
+  "descendant_supervision": "Linux child subreaper; retained PID/start identities across nested sessions",
+  "child_pid": 1108053,
+  "process_group": 1108053,
+  "elapsed": 1078.573015127331,
+  "descendant_identities": [
+    {
+      "pid": 1108053,
+      "start_ticks": 2264187843
+    },
+    {
+      "pid": 1166133,
+      "start_ticks": 2264274044
+    },
+    {
+      "pid": 1166140,
+      "start_ticks": 2264274045
+    },
+    {
+      "pid": 1166141,
+      "start_ticks": 2264274045
+    },
+    {
+      "pid": 1166160,
+      "start_ticks": 2264274103
+    },
+    {
+      "pid": 1166604,
+      "start_ticks": 2264274575
+    },
+    {
+      "pid": 1166861,
+      "start_ticks": 2264274756
+    },
+    {
+      "pid": 1166862,
+      "start_ticks": 2264274756
+    }
+  ],
+  "exit_code": 0,
+  "finished": "2026-11-19T02:53:06.298820+00:00"
+}

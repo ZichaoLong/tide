@@ -1,0 +1,70 @@
+{
+  "state": "passed",
+  "source": "2b8851a71bf0e3ff155fb802dacbd39034ccf008",
+  "command": [
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/ffn-cpu16-calibration-v1/source/scripts/wait_units.py",
+    "--status",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/ffn-cpu16-calibration-v1/dependency.json",
+    "--seconds",
+    "7200",
+    "--unit",
+    "tide-ffn-cpu-suite-v1.service",
+    "--",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "-m",
+    "benchmarks.execution_suite",
+    "--config",
+    "configs/memory-candidates/medium-kv128.json",
+    "--output-dir",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/ffn-cpu16-calibration-v1/results",
+    "--variants",
+    "baseline",
+    "--include-transformer",
+    "--mode",
+    "train",
+    "--device",
+    "cpu",
+    "--batch",
+    "16",
+    "--threads",
+    "16",
+    "--repeats",
+    "1",
+    "--samples",
+    "5",
+    "--warmup",
+    "2",
+    "--child-timeout",
+    "3000",
+    "--total-seconds",
+    "6600"
+  ],
+  "pid": 1744391,
+  "started": "2026-11-19T05:08:06.911069+00:00",
+  "max_rss_bytes": 206158430208,
+  "peak_rss_bytes": 30030123008,
+  "max_processes": 2,
+  "rss_sample_count": 1460,
+  "poll_interval": 0.25,
+  "descendant_supervision": "Linux child subreaper; retained PID/start identities across nested sessions",
+  "child_pid": 1744413,
+  "process_group": 1744413,
+  "elapsed": 611.816226053983,
+  "descendant_identities": [
+    {
+      "pid": 1744413,
+      "start_ticks": 2265105762
+    },
+    {
+      "pid": 1769974,
+      "start_ticks": 2265141828
+    },
+    {
+      "pid": 1782513,
+      "start_ticks": 2265159443
+    }
+  ],
+  "exit_code": 0,
+  "finished": "2026-11-19T05:18:18.727294+00:00"
+}

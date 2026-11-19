@@ -1,0 +1,63 @@
+{
+  "state": "released",
+  "started": "2026-11-19T10:26:37.868298+00:00",
+  "units": [
+    "tide-numerics-quad-training-npu-v1.service"
+  ],
+  "command": [
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "/mi/data2T/zlong/home/.agents/skills/use-local-ascend/scripts/run_on_free_npu.py",
+    "--job-id",
+    "numerics-quad-shared9b-npu-v1",
+    "--project",
+    "tide-instances",
+    "--priority",
+    "0",
+    "--npu-count",
+    "1",
+    "--max-wait-seconds",
+    "600",
+    "--state-file",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/numerics-quad-shared9b-npu-v1/queue.json",
+    "--",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "-m",
+    "scripts.diagnose_routing_divergence",
+    "--config",
+    "configs/memory-candidates/9b-memory-shared.json",
+    "--device",
+    "npu:0",
+    "--precision",
+    "fp32",
+    "--batch",
+    "8",
+    "--prefill",
+    "128",
+    "--prefill-chunk",
+    "32",
+    "--decode",
+    "16",
+    "--threads",
+    "4",
+    "--capture-mib",
+    "64",
+    "--historical-results",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-shared-region1-b8-v1/inference.json",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-infer-memory-shared-v1/results/common-b8.json",
+    "--output",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/numerics-quad-shared9b-npu-v1/routing.json"
+  ],
+  "boundary": "resource sequencing only; prior success not required",
+  "observations": {
+    "tide-numerics-quad-training-npu-v1.service": {
+      "MainPID": "0",
+      "Result": "success",
+      "LoadState": "not-found",
+      "ActiveState": "inactive",
+      "SubState": "dead"
+    }
+  },
+  "busy": [],
+  "elapsed_seconds": 0.006613079458475113,
+  "finished": "2026-11-19T10:26:37.874911+00:00"
+}

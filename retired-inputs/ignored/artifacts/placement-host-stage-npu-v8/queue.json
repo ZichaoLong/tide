@@ -1,0 +1,19 @@
+{
+  "elapsed_seconds": 66.64928136393428,
+  "job_id": "placement-host-stage-npu-v8",
+  "logical_devices": [
+    "npu:0",
+    "npu:1"
+  ],
+  "npu_count": 2,
+  "physical_ids": [
+    6,
+    8
+  ],
+  "priority": 0,
+  "project": "tide-instances",
+  "return_code": 0,
+  "schema_version": 1,
+  "status": "completed",
+  "timestamp": "2026-11-18T04:19:20.819074+00:00"
+}

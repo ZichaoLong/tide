@@ -1,0 +1,59 @@
+{
+  "state": "passed",
+  "source": "062a8ab6d6ba0faa191d8900420b697711b7d21d",
+  "command": [
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "/mi/data2T/zlong/home/.agents/skills/use-local-ascend/scripts/run_on_free_npu.py",
+    "--job-id",
+    "regional-bf16-epilogue-npu-v1",
+    "--project",
+    "tide-instances",
+    "--priority",
+    "0",
+    "--npu-count",
+    "1",
+    "--max-wait-seconds",
+    "600",
+    "--state-file",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/regional-bf16-epilogue-npu-v1/queue.json",
+    "--",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "-c",
+    "import os,torch,json\nimport torch_npu\nfrom tide.precision import precision_context\nfrom scripts.job import atomic\ntorch.npu.set_device(\"npu:0\"); torch.npu.matmul.allow_hf32=False; torch.set_num_threads(1)\nx=torch.zeros(2,6,32,device=\"npu:0\"); w=torch.zeros(2,128,32,device=\"npu:0\"); b=torch.full((2,128),1.001,device=\"npu:0\")\nwith precision_context(\"npu:0\",\"bf16\"):\n serial=torch.stack([torch.nn.functional.linear(x[i],w[i],b[i]) for i in range(2)])\n batched=torch.baddbmm(b[:,None],x,w.transpose(1,2))\n separate=torch.bmm(x,w.transpose(1,2))+b[:,None]\ntorch.npu.synchronize()\nrecord=dict(source=os.environ[\"TIDE_SOURCE_COMMIT\"],physical_devices=os.environ.get(\"ASCEND_RT_VISIBLE_DEVICES\"),\nserial_dtype=str(serial.dtype),baddbmm_dtype=str(batched.dtype),separate_dtype=str(separate.dtype),\nserial_value=float(serial.flatten()[0]),baddbmm_value=float(batched.flatten()[0]),separate_value=float(separate.flatten()[0]),\nmax_abs=float((serial-batched).abs().max()))\natomic(\"/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/regional-bf16-epilogue-npu-v1/probe.json\",record)\nprint(json.dumps(record)); assert record[\"serial_dtype\"]==record[\"baddbmm_dtype\"]==\"torch.bfloat16\" and record[\"max_abs\"]==0\n"
+  ],
+  "pid": 1057568,
+  "started": "2026-11-18T07:40:23.806176+00:00",
+  "max_rss_bytes": 8589934592,
+  "peak_rss_bytes": 1842470912,
+  "max_processes": 2,
+  "rss_sample_count": 82,
+  "poll_interval": 0.25,
+  "descendant_supervision": "Linux child subreaper; retained PID/start identities across nested sessions",
+  "child_pid": 1057617,
+  "process_group": 1057617,
+  "elapsed": 34.57751804217696,
+  "descendant_identities": [
+    {
+      "pid": 1057617,
+      "start_ticks": 2257379451
+    },
+    {
+      "pid": 1057619,
+      "start_ticks": 2257379457
+    },
+    {
+      "pid": 1057722,
+      "start_ticks": 2257379514
+    },
+    {
+      "pid": 1058275,
+      "start_ticks": 2257379988
+    },
+    {
+      "pid": 1058487,
+      "start_ticks": 2257380167
+    }
+  ],
+  "exit_code": 0,
+  "finished": "2026-11-18T07:40:58.383695+00:00"
+}

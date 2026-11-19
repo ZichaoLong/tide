@@ -1,0 +1,80 @@
+{
+  "scope": "bounded diagnostic of original FP32 test failure; no threshold changes; current implementation package hashes below",
+  "source_report": "/mi/data2T/zlong/.tmp/pytest-of-zlong/pytest-821/test_ssd_overrides_compare_all0/result.json",
+  "package_identity": {
+    "root": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/agg-inference-ssd/src/tide",
+    "files": {
+      "__init__.py": "bd8d669f813aa282dc1835a53656550468f40eac46a730c4339635580d8e4195",
+      "allocation.py": "ff7f4e26c05006e5fb1a68c50f783670c20c33baf56528b5dac55fa2ffab66cc",
+      "attention.py": "0a8231713a2801ed397cee093c5d1112867a2057fc20804717fd39fd9e1609e8",
+      "checkpoint.py": "7e188773786f5cd7e3b06fcf3ef4ca9efa256933a9c21a8225f359687337c49f",
+      "config.py": "c37239940777caf483e2a3c5c355440e5f8ce5f48f81fae07176489373fe173b",
+      "kv.py": "7310fcbc79a1641a495316c100e409a43e8d59ac6b6ae5f77669a9a9a4849caa",
+      "layout.py": "4aee0573beb2448dd90ca307b9065f2ed4cd0f7eb93bfcd92c4b46550f889aa0",
+      "model.py": "fd95c4e5424ce14526f49e514e2cf2800dbc4c599d5ab51b8b9bff747719a75c",
+      "parameters.py": "67d6ee7829448fa7431a3350a3a15ea5070aa4038d2276017d844714dceecfa7",
+      "placement.py": "c58ef4574d5be7fad6e422e658f5972a815e95aed9bb6d55155e62777c2f8a27",
+      "placement_ownership.py": "95431e5a2240b81a16df4cba08dfef541d777735220a212a28324f9c63661c13",
+      "precision.py": "5e94f06892dc89451750b4e5b1fd2e105d440f633875f31a883880e6a6ca480a",
+      "reception.py": "67768494c96a697480c13713e246b1a943940e7faeb96d24bd0732aad3f7cd98",
+      "region.py": "3d0ee3fa13e344ddb0fff5ce15af62cee4e0b1a7c4984df523e70a4cbfc41ec2",
+      "region_batch.py": "75845fbc4fe796d91918ae90f17846163c4e2aad38ecf42c93b05d636bdbf558",
+      "region_execution.py": "75dcce33905dbcecc62e3eaaf93f2c1d087dfa9608043e561f59d93e2d0dd7d1",
+      "region_placement.py": "d2dfc2b65ff14430423aa1532fe5fd7cc378b7581c207f1938e5f4ab1c34c459",
+      "ssd.py": "42e0e9c2de11f7c266af93c7bf43bf3e53e63efd6ed1eb5b86ef18aa1c982af3",
+      "ssd_memory.py": "ac6f2446deab50230e59a859c69f0053f598237c0c9f95f1ff17d867c3c077a1",
+      "topology.py": "8cdf58d0b3089e16a079ad46c3be7ca0c953fcea0023d276c9582901e1712dbf",
+      "topology_hb.py": "5fb7b1a959f0b88a097e95959b52a1f10cf5180eaea7b688cbef086946abea06"
+    },
+    "sha256": "b468d7004597441e32515017bf8731f6b961b43b19a13d84b54aedc22a22530f"
+  },
+  "field": "regional.1.second.bias",
+  "index": 17,
+  "original_threshold": {
+    "atol": 1e-06,
+    "rtol": 0.002
+  },
+  "scaled_error": 9.926483154296875,
+  "before_parameter": 0.0004448326653800905,
+  "optimizer_group": {
+    "lr": 0.0001,
+    "betas": [
+      0.9,
+      0.999
+    ],
+    "eps": 1e-08,
+    "weight_decay": 0.01,
+    "amsgrad": false,
+    "maximize": false,
+    "foreach": false,
+    "capturable": false,
+    "differentiable": false,
+    "fused": null,
+    "decoupled_weight_decay": true
+  },
+  "rows": [
+    {
+      "candidate": "baseline",
+      "gradient": 2.911852980957974e-09,
+      "exp_avg": 3.86515930372866e-10,
+      "exp_avg_sq": 9.599732315678357e-21,
+      "step": 2,
+      "actual_parameter": 0.0004281459259800613,
+      "fp64_from_actual_slots": 0.0004281459244585279,
+      "formula_absolute_error": 1.521533387564139e-12
+    },
+    {
+      "candidate": "incremental",
+      "gradient": -1.323569587263762e-09,
+      "exp_avg": -3.7026336857648445e-11,
+      "exp_avg_sq": 2.872680935381066e-21,
+      "step": 2,
+      "actual_parameter": 0.0004465723759494722,
+      "fp64_from_actual_slots": 0.00044657237047735534,
+      "formula_absolute_error": 5.472116846021863e-12
+    }
+  ],
+  "observed_parameter_difference": 1.8426449969410896e-05,
+  "fp64_formula_difference": 1.8426446018827438e-05,
+  "interpretation": "This coordinate explains update amplification from the actual small-gradient moments; it does not identify every origin of floating-point gradient differences."
+}

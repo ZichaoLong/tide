@@ -1,0 +1,898 @@
+{
+  "source": "7bcb0df17f0613793d82511d9517e37e1870850a",
+  "arguments": {
+    "devices": [
+      "npu:0",
+      "npu:1"
+    ],
+    "precision": "fp32",
+    "transport": "synchronized",
+    "mode": "qualify",
+    "config": null,
+    "batch": 2,
+    "length": 5,
+    "steps": 3,
+    "warmup": 1,
+    "threads": 4,
+    "output": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/placement-transport-diagnosis-v6/synchronized.json"
+  },
+  "physical_devices": "1,9",
+  "cpu_affinity": [
+    116,
+    117,
+    118,
+    119
+  ],
+  "torch": "2.12.0+cpu",
+  "exit_policy": "finite_deviation retained; nonfinite/structural/execution failures exit nonzero",
+  "observations": [
+    {
+      "config": {
+        "topology": {
+          "kind": "exchange",
+          "n": 2,
+          "layers": null,
+          "depth": 1,
+          "rounds": null,
+          "profile": null,
+          "hubs": 1,
+          "partition": "group",
+          "timing": "settle",
+          "hub_mask": "all",
+          "period": null,
+          "probes": null
+        },
+        "d": 64,
+        "memory": "X",
+        "aggregation": "incoming_light_64",
+        "allocation": "quad",
+        "sharing": "layer_shared",
+        "adapter_rank": 8,
+        "budget": null,
+        "attention_backend": "auto",
+        "attention_chunk": 128,
+        "input_dim": null
+      },
+      "precision": {
+        "name": "fp32",
+        "device": "npu:0",
+        "parameters": "float32",
+        "input": "float32",
+        "matrix_arithmetic": "float32",
+        "normalization_mass_allocation": "float32",
+        "kv_keys_values": "float32",
+        "kv_summary_and_ssd_state": "float32",
+        "logical_time_indices": "int64",
+        "parameter_gradients": "float32",
+        "master_weights": "parameters_are_fp32_masters; no_separate_copy",
+        "adamw_moments": "float32",
+        "attention": "native_by_shape_and_prior; math/tiled_accumulate_float32",
+        "attention_mode_selection": "established_fp32_gradient_dependent_prior_dispatch",
+        "loss": "float32",
+        "autocast_cache": false
+      },
+      "initial_parameter_sha256": "a579d4eb13b221ee1ea67a3a9491df59fa5d353a4e9b9d0492a5c40cf5c3eaab",
+      "reference": "one-device ordinary model with identical initial CPU parameters and inputs",
+      "state": "finite_deviation",
+      "progress": [
+        {
+          "stage": "construction",
+          "monotonic_seconds": 22561309.32289091
+        },
+        {
+          "stage": "initial_forward",
+          "monotonic_seconds": 22561309.628066804
+        },
+        {
+          "stage": "initial_reference_backward",
+          "monotonic_seconds": 22561311.008389506
+        },
+        {
+          "stage": "initial_placed_backward",
+          "monotonic_seconds": 22561311.290877625
+        },
+        {
+          "stage": "initial_comparisons",
+          "monotonic_seconds": 22561311.498218432
+        },
+        {
+          "stage": "continuation_and_operator_audit",
+          "monotonic_seconds": 22561311.557938863
+        },
+        {
+          "stage": "update.0.reference.forward",
+          "monotonic_seconds": 22561313.525776464
+        },
+        {
+          "stage": "update.0.reference.backward",
+          "monotonic_seconds": 22561313.74782468
+        },
+        {
+          "stage": "update.0.reference.optimizer",
+          "monotonic_seconds": 22561313.922739837
+        },
+        {
+          "stage": "update.0.placed.forward",
+          "monotonic_seconds": 22561314.210376427
+        },
+        {
+          "stage": "update.0.placed.backward",
+          "monotonic_seconds": 22561314.456288803
+        },
+        {
+          "stage": "update.0.placed.optimizer",
+          "monotonic_seconds": 22561314.637542464
+        },
+        {
+          "stage": "update.0.complete",
+          "monotonic_seconds": 22561314.762252755
+        },
+        {
+          "stage": "update.1.reference.forward",
+          "monotonic_seconds": 22561314.76529907
+        },
+        {
+          "stage": "update.1.reference.backward",
+          "monotonic_seconds": 22561314.956900567
+        },
+        {
+          "stage": "update.1.reference.optimizer",
+          "monotonic_seconds": 22561315.13345312
+        },
+        {
+          "stage": "update.1.placed.forward",
+          "monotonic_seconds": 22561315.165909223
+        },
+        {
+          "stage": "update.1.placed.backward",
+          "monotonic_seconds": 22561315.414087348
+        },
+        {
+          "stage": "update.1.placed.optimizer",
+          "monotonic_seconds": 22561315.60349526
+        },
+        {
+          "stage": "update.1.complete",
+          "monotonic_seconds": 22561315.703455776
+        },
+        {
+          "stage": "update.2.reference.forward",
+          "monotonic_seconds": 22561315.706684917
+        },
+        {
+          "stage": "update.2.reference.backward",
+          "monotonic_seconds": 22561315.896788854
+        },
+        {
+          "stage": "update.2.reference.optimizer",
+          "monotonic_seconds": 22561316.120652217
+        },
+        {
+          "stage": "update.2.placed.forward",
+          "monotonic_seconds": 22561316.154062785
+        },
+        {
+          "stage": "update.2.placed.backward",
+          "monotonic_seconds": 22561316.414345454
+        },
+        {
+          "stage": "update.2.placed.optimizer",
+          "monotonic_seconds": 22561316.591217473
+        },
+        {
+          "stage": "update.2.complete",
+          "monotonic_seconds": 22561316.710171703
+        },
+        {
+          "stage": "checkpoint.save",
+          "monotonic_seconds": 22561316.7131296
+        },
+        {
+          "stage": "checkpoint.load",
+          "monotonic_seconds": 22561316.87750722
+        },
+        {
+          "stage": "checkpoint.next_forward",
+          "monotonic_seconds": 22561317.193614237
+        },
+        {
+          "stage": "checkpoint.original_update.forward",
+          "monotonic_seconds": 22561317.66011513
+        },
+        {
+          "stage": "checkpoint.original_update.backward",
+          "monotonic_seconds": 22561317.925036203
+        },
+        {
+          "stage": "checkpoint.original_update.optimizer",
+          "monotonic_seconds": 22561318.103612617
+        },
+        {
+          "stage": "checkpoint.restored_update.forward",
+          "monotonic_seconds": 22561318.154195864
+        },
+        {
+          "stage": "checkpoint.restored_update.backward",
+          "monotonic_seconds": 22561318.419670865
+        },
+        {
+          "stage": "checkpoint.restored_update.optimizer",
+          "monotonic_seconds": 22561318.59667121
+        },
+        {
+          "stage": "completed",
+          "monotonic_seconds": 22561318.842743356
+        }
+      ],
+      "last_stage": "completed",
+      "placement": {
+        "kind": "hb-layer-shards-1",
+        "devices": [
+          "npu:0",
+          "npu:1"
+        ],
+        "layer_partitions": [
+          0,
+          0,
+          1,
+          1
+        ],
+        "transport": "synchronized",
+        "optimizer": "placement_adamw; align disconnected shards per original Parameter before step",
+        "communication": "single-process autograd tensor.to copies of actual predecessor banks; no HCCL replicas",
+        "actual_devices": {
+          "npu:0": {
+            "parameters": 568141,
+            "parameter_bytes": 2272564
+          },
+          "npu:1": {
+            "parameters": 442942,
+            "parameter_bytes": 1771768
+          }
+        },
+        "total_unique_parameters": 1011083
+      },
+      "input_sha256": "181ded23538fa0b36cc06e42e13afd333c994c47f85f5150d9c82c435241cffe",
+      "comparisons": {
+        "whole_result": {
+          "exact": true,
+          "finite": true,
+          "metadata_mismatches": [],
+          "support_mismatches": [],
+          "numerical_failures": [],
+          "max_abs": 0.0,
+          "max_scaled_error": 0.0,
+          "atol": 1e-06,
+          "rtol": 0.002,
+          "floating_tensors": 56,
+          "within_threshold": true
+        },
+        "flush_result": {
+          "exact": true,
+          "finite": true,
+          "metadata_mismatches": [],
+          "support_mismatches": [],
+          "numerical_failures": [],
+          "max_abs": 0.0,
+          "max_scaled_error": 0.0,
+          "atol": 1e-06,
+          "rtol": 0.002,
+          "floating_tensors": 0,
+          "within_threshold": true
+        },
+        "input_gradient": {
+          "exact": true,
+          "finite": true,
+          "metadata_mismatches": [],
+          "support_mismatches": [],
+          "numerical_failures": [],
+          "max_abs": 0.0,
+          "max_scaled_error": 0.0,
+          "atol": 1e-06,
+          "rtol": 0.01,
+          "floating_tensors": 1,
+          "within_threshold": true
+        },
+        "parameter_gradients": {
+          "exact": false,
+          "finite": true,
+          "metadata_mismatches": [],
+          "support_mismatches": [],
+          "numerical_failures": [],
+          "max_abs": 9.313225746154785e-10,
+          "max_scaled_error": 0.00011133653919980249,
+          "atol": 1e-06,
+          "rtol": 0.002,
+          "floating_tensors": 142,
+          "within_threshold": true
+        },
+        "continued_single_vs_placed": {
+          "exact": true,
+          "finite": true,
+          "metadata_mismatches": [],
+          "support_mismatches": [],
+          "numerical_failures": [],
+          "max_abs": 0.0,
+          "max_scaled_error": 0.0,
+          "atol": 1e-06,
+          "rtol": 0.002,
+          "floating_tensors": 1,
+          "within_threshold": true
+        },
+        "continued_single_vs_placed_state": {
+          "exact": true,
+          "finite": true,
+          "metadata_mismatches": [],
+          "support_mismatches": [],
+          "numerical_failures": [],
+          "max_abs": 0.0,
+          "max_scaled_error": 0.0,
+          "atol": 1e-06,
+          "rtol": 0.002,
+          "floating_tensors": 54,
+          "within_threshold": true
+        },
+        "reference_whole_vs_continued": {
+          "exact": false,
+          "finite": true,
+          "metadata_mismatches": [],
+          "support_mismatches": [],
+          "numerical_failures": [],
+          "max_abs": 1.9073486328125e-06,
+          "max_scaled_error": 0.01041273632470618,
+          "atol": 1e-06,
+          "rtol": 0.002,
+          "floating_tensors": 1,
+          "within_threshold": true
+        },
+        "continued_readout": {
+          "exact": false,
+          "finite": true,
+          "metadata_mismatches": [],
+          "support_mismatches": [],
+          "numerical_failures": [],
+          "max_abs": 1.9073486328125e-06,
+          "max_scaled_error": 0.01041273632470618,
+          "atol": 1e-06,
+          "rtol": 0.002,
+          "floating_tensors": 1,
+          "within_threshold": true
+        },
+        "continued_state": {
+          "exact": false,
+          "finite": true,
+          "metadata_mismatches": [],
+          "support_mismatches": [],
+          "numerical_failures": [],
+          "max_abs": 1.6689300537109375e-06,
+          "max_scaled_error": 0.1322738993517494,
+          "atol": 1e-06,
+          "rtol": 0.002,
+          "floating_tensors": 54,
+          "within_threshold": true
+        },
+        "checkpoint_data": {
+          "exact": true,
+          "finite": true,
+          "metadata_mismatches": [],
+          "support_mismatches": [],
+          "numerical_failures": [],
+          "max_abs": 0.0,
+          "max_scaled_error": 0.0,
+          "atol": 0,
+          "rtol": 0,
+          "floating_tensors": 930,
+          "within_threshold": true
+        },
+        "checkpoint_next_result": {
+          "exact": true,
+          "finite": true,
+          "metadata_mismatches": [],
+          "support_mismatches": [],
+          "numerical_failures": [],
+          "max_abs": 0.0,
+          "max_scaled_error": 0.0,
+          "atol": 0,
+          "rtol": 0,
+          "floating_tensors": 56,
+          "within_threshold": true
+        },
+        "restored_updated_parameters": {
+          "exact": false,
+          "finite": true,
+          "metadata_mismatches": [],
+          "support_mismatches": [],
+          "numerical_failures": [],
+          "max_abs": 2.9103830456733704e-11,
+          "max_scaled_error": 1.718154949119916e-05,
+          "atol": 1e-06,
+          "rtol": 0.002,
+          "floating_tensors": 219,
+          "within_threshold": true
+        },
+        "restored_updated_optimizer": {
+          "exact": false,
+          "finite": true,
+          "metadata_mismatches": [],
+          "support_mismatches": [],
+          "numerical_failures": [],
+          "max_abs": 1.1641532182693481e-10,
+          "max_scaled_error": 3.77432003039998e-05,
+          "atol": 1e-06,
+          "rtol": 0.002,
+          "floating_tensors": 657,
+          "within_threshold": true
+        },
+        "restored_updated_state": {
+          "exact": true,
+          "finite": true,
+          "metadata_mismatches": [],
+          "support_mismatches": [],
+          "numerical_failures": [],
+          "max_abs": 0.0,
+          "max_scaled_error": 0.0,
+          "atol": 1e-06,
+          "rtol": 0.002,
+          "floating_tensors": 54,
+          "within_threshold": true
+        }
+      },
+      "work": {
+        "candidates": 170,
+        "full": 161,
+        "positive_messages": 536,
+        "candidate_slots": 170
+      },
+      "operator_witness": {
+        "operators": [
+          {
+            "operator": "aten.addmm.default",
+            "inputs": [
+              "npu:0:torch.float32"
+            ],
+            "outputs": [
+              "npu:0:torch.float32"
+            ],
+            "calls": 6
+          },
+          {
+            "operator": "aten.addmm.default",
+            "inputs": [
+              "npu:1:torch.float32"
+            ],
+            "outputs": [
+              "npu:1:torch.float32"
+            ],
+            "calls": 5
+          },
+          {
+            "operator": "aten.bmm.default",
+            "inputs": [
+              "npu:0:torch.float32"
+            ],
+            "outputs": [
+              "npu:0:torch.float32"
+            ],
+            "calls": 174
+          },
+          {
+            "operator": "aten.bmm.default",
+            "inputs": [
+              "npu:1:torch.float32"
+            ],
+            "outputs": [
+              "npu:1:torch.float32"
+            ],
+            "calls": 146
+          },
+          {
+            "operator": "aten.mm.default",
+            "inputs": [
+              "npu:0:torch.float32"
+            ],
+            "outputs": [
+              "npu:0:torch.float32"
+            ],
+            "calls": 87
+          },
+          {
+            "operator": "aten.mm.default",
+            "inputs": [
+              "npu:1:torch.float32"
+            ],
+            "outputs": [
+              "npu:1:torch.float32"
+            ],
+            "calls": 73
+          },
+          {
+            "operator": "npu.npu_fusion_attention_v2.default",
+            "inputs": [
+              "npu:0:torch.bool",
+              "npu:0:torch.float32"
+            ],
+            "outputs": [
+              "npu:0:torch.float32"
+            ],
+            "calls": 5
+          },
+          {
+            "operator": "npu.npu_fusion_attention_v2.default",
+            "inputs": [
+              "npu:0:torch.float32"
+            ],
+            "outputs": [
+              "npu:0:torch.float32"
+            ],
+            "calls": 10
+          },
+          {
+            "operator": "npu.npu_fusion_attention_v2.default",
+            "inputs": [
+              "npu:1:torch.bool",
+              "npu:1:torch.float32"
+            ],
+            "outputs": [
+              "npu:1:torch.float32"
+            ],
+            "calls": 7
+          },
+          {
+            "operator": "npu.npu_fusion_attention_v2.default",
+            "inputs": [
+              "npu:1:torch.float32"
+            ],
+            "outputs": [
+              "npu:1:torch.float32"
+            ],
+            "calls": 6
+          }
+        ],
+        "materializations": {
+          "aten._to_copy.default": {
+            "calls": 100,
+            "output_bytes": 5476
+          },
+          "aten.index.Tensor": {
+            "calls": 815,
+            "output_bytes": 1382610
+          },
+          "aten.cat.default": {
+            "calls": 147,
+            "output_bytes": 69682
+          },
+          "aten.scatter.src": {
+            "calls": 6,
+            "output_bytes": 192
+          },
+          "aten.gather.default": {
+            "calls": 82,
+            "output_bytes": 36512
+          },
+          "aten.index_copy.default": {
+            "calls": 66,
+            "output_bytes": 15504
+          },
+          "aten.index_put.default": {
+            "calls": 27,
+            "output_bytes": 25088
+          },
+          "aten.index_put_.default": {
+            "calls": 11,
+            "output_bytes": 272
+          },
+          "aten.clone.default": {
+            "calls": 51,
+            "output_bytes": 124256
+          }
+        },
+        "materialization_definition": "logical output bytes from dispatched copy/index/concatenate operations; not hardware bus traffic, bandwidth or all operand loads",
+        "instrumentation": "separate ordinary forward without semantic counting hooks; excluded from timing",
+        "bf16_matrix_observed": false
+      },
+      "updates": [
+        {
+          "index": 0,
+          "observations": [
+            {
+              "owner": "reference",
+              "loss": 0.005140495486557484,
+              "complete_seconds": 0.647463008761406,
+              "finite": true,
+              "phase_seconds": {
+                "forward_loss": 0.21836945787072182,
+                "backward": 0.17208070307970047,
+                "optimizer": 0.25701284781098366
+              },
+              "timing": "sum of synchronized phases; diagnostic stage record IO excluded",
+              "output_positive_strengths": 20,
+              "flush_output_positive_strengths": 0
+            },
+            {
+              "owner": "placed",
+              "loss": 0.005140495486557484,
+              "complete_seconds": 0.44627004489302635,
+              "finite": true,
+              "phase_seconds": {
+                "forward_loss": 0.24121033400297165,
+                "backward": 0.17790508642792702,
+                "optimizer": 0.027154624462127686
+              },
+              "timing": "sum of synchronized phases; diagnostic stage record IO excluded",
+              "output_positive_strengths": 20,
+              "flush_output_positive_strengths": 0
+            }
+          ],
+          "parameters": {
+            "exact": false,
+            "finite": true,
+            "metadata_mismatches": [],
+            "support_mismatches": [],
+            "numerical_failures": [],
+            "max_abs": 1.4551915228366852e-11,
+            "max_scaled_error": 1.2126692396049074e-05,
+            "atol": 1e-06,
+            "rtol": 0.002,
+            "floating_tensors": 142,
+            "within_threshold": true
+          }
+        },
+        {
+          "index": 1,
+          "observations": [
+            {
+              "owner": "reference",
+              "loss": -0.05578821524977684,
+              "complete_seconds": 0.36827728897333145,
+              "finite": true,
+              "phase_seconds": {
+                "forward_loss": 0.1878267489373684,
+                "backward": 0.17342974245548248,
+                "optimizer": 0.0070207975804805756
+              },
+              "timing": "sum of synchronized phases; diagnostic stage record IO excluded",
+              "output_positive_strengths": 20,
+              "flush_output_positive_strengths": 0
+            },
+            {
+              "owner": "placed",
+              "loss": -0.05578821524977684,
+              "complete_seconds": 0.43357912078499794,
+              "finite": true,
+              "phase_seconds": {
+                "forward_loss": 0.2435339316725731,
+                "backward": 0.1804812215268612,
+                "optimizer": 0.00956396758556366
+              },
+              "timing": "sum of synchronized phases; diagnostic stage record IO excluded",
+              "output_positive_strengths": 20,
+              "flush_output_positive_strengths": 0
+            }
+          ],
+          "parameters": {
+            "exact": false,
+            "finite": true,
+            "metadata_mismatches": [],
+            "support_mismatches": [],
+            "numerical_failures": [],
+            "max_abs": 2.9103830456733704e-11,
+            "max_scaled_error": 2.205107628845992e-05,
+            "atol": 1e-06,
+            "rtol": 0.002,
+            "floating_tensors": 142,
+            "within_threshold": true
+          }
+        },
+        {
+          "index": 2,
+          "observations": [
+            {
+              "owner": "reference",
+              "loss": -0.11114189773797989,
+              "complete_seconds": 0.41453034803271294,
+              "finite": true,
+              "phase_seconds": {
+                "forward_loss": 0.18737025186419487,
+                "backward": 0.22095785662531853,
+                "optimizer": 0.006202239543199539
+              },
+              "timing": "sum of synchronized phases; diagnostic stage record IO excluded",
+              "output_positive_strengths": 20,
+              "flush_output_positive_strengths": 0
+            },
+            {
+              "owner": "placed",
+              "loss": -0.11114189773797989,
+              "complete_seconds": 0.4386504404246807,
+              "finite": true,
+              "phase_seconds": {
+                "forward_loss": 0.2549888715147972,
+                "backward": 0.17364895716309547,
+                "optimizer": 0.010012611746788025
+              },
+              "timing": "sum of synchronized phases; diagnostic stage record IO excluded",
+              "output_positive_strengths": 20,
+              "flush_output_positive_strengths": 0
+            }
+          ],
+          "parameters": {
+            "exact": false,
+            "finite": true,
+            "metadata_mismatches": [],
+            "support_mismatches": [],
+            "numerical_failures": [
+              {
+                "path": "root.receive.k.left",
+                "max_abs": 3.49339097738266e-06,
+                "scaled_error": 1.3702755895508163
+              },
+              {
+                "path": "root.receive.k.weight",
+                "max_abs": 4.388391971588135e-06,
+                "scaled_error": 1.336746209313219
+              },
+              {
+                "path": "root.receive.q.left",
+                "max_abs": 3.4892000257968903e-06,
+                "scaled_error": 1.9982287588641168
+              },
+              {
+                "path": "root.receive.q.weight",
+                "max_abs": 4.263594746589661e-06,
+                "scaled_error": 1.476808078399029
+              }
+            ],
+            "max_abs": 4.388391971588135e-06,
+            "max_scaled_error": 1.9982287588641168,
+            "atol": 1e-06,
+            "rtol": 0.002,
+            "floating_tensors": 142,
+            "within_threshold": false
+          }
+        }
+      ],
+      "restored_updates": [
+        {
+          "loss": -0.1517123430967331,
+          "complete_seconds": 0.44677208364009857,
+          "finite": true,
+          "phase_seconds": {
+            "forward_loss": 0.26146840304136276,
+            "backward": 0.17507682740688324,
+            "optimizer": 0.01022685319185257
+          },
+          "timing": "sum of synchronized phases; diagnostic stage record IO excluded",
+          "output_positive_strengths": 20,
+          "flush_output_positive_strengths": 0
+        },
+        {
+          "loss": -0.1517123430967331,
+          "complete_seconds": 0.4426148571074009,
+          "finite": true,
+          "phase_seconds": {
+            "forward_loss": 0.2606318034231663,
+            "backward": 0.1737520769238472,
+            "optimizer": 0.00823097676038742
+          },
+          "timing": "sum of synchronized phases; diagnostic stage record IO excluded",
+          "output_positive_strengths": 20,
+          "flush_output_positive_strengths": 0
+        }
+      ],
+      "state_memory": {
+        "payload_bytes": 448800,
+        "retained_storage_bytes": 448800,
+        "dtypes": [
+          "torch.float32",
+          "torch.int64"
+        ],
+        "tensor_count": 70
+      },
+      "peak_device_memory": {
+        "npu:0": {
+          "allocated_bytes": 88071168,
+          "reserved_bytes": 184549376
+        },
+        "npu:1": {
+          "allocated_bytes": 68809216,
+          "reserved_bytes": 163577856
+        }
+      },
+      "process_peak_rss_kib": 2379084
+    },
+    {
+      "config": {
+        "topology": {
+          "kind": "multiscale",
+          "n": 2,
+          "layers": null,
+          "depth": null,
+          "rounds": null,
+          "profile": "compact-5-dd4",
+          "hubs": 1,
+          "partition": "group",
+          "timing": "timed",
+          "hub_mask": "all",
+          "period": null,
+          "probes": null
+        },
+        "d": 64,
+        "memory": "X",
+        "aggregation": "source_residual",
+        "allocation": "quad",
+        "sharing": "region_shared",
+        "adapter_rank": 8,
+        "budget": null,
+        "attention_backend": "auto",
+        "attention_chunk": 128,
+        "input_dim": null
+      },
+      "precision": {
+        "name": "fp32",
+        "device": "npu:0",
+        "parameters": "float32",
+        "input": "float32",
+        "matrix_arithmetic": "float32",
+        "normalization_mass_allocation": "float32",
+        "kv_keys_values": "float32",
+        "kv_summary_and_ssd_state": "float32",
+        "logical_time_indices": "int64",
+        "parameter_gradients": "float32",
+        "master_weights": "parameters_are_fp32_masters; no_separate_copy",
+        "adamw_moments": "float32",
+        "attention": "native_by_shape_and_prior; math/tiled_accumulate_float32",
+        "attention_mode_selection": "established_fp32_gradient_dependent_prior_dispatch",
+        "loss": "float32",
+        "autocast_cache": false
+      },
+      "initial_parameter_sha256": "a515bb496c8b54826cedd0334e69ac5a27c572dc4afe0496892ce3579f0bfaf3",
+      "reference": "one-device ordinary model with identical initial CPU parameters and inputs",
+      "state": "execution_failed",
+      "progress": [
+        {
+          "stage": "construction",
+          "monotonic_seconds": 22561318.88737245
+        },
+        {
+          "stage": "initial_forward",
+          "monotonic_seconds": 22561318.945740413
+        }
+      ],
+      "last_stage": "initial_forward",
+      "placement": {
+        "kind": "hb-layer-shards-1",
+        "devices": [
+          "npu:0",
+          "npu:1"
+        ],
+        "layer_partitions": [
+          0,
+          0,
+          0,
+          1,
+          1
+        ],
+        "transport": "synchronized",
+        "optimizer": "placement_adamw; align disconnected shards per original Parameter before step",
+        "communication": "single-process autograd tensor.to copies of actual predecessor banks; no HCCL replicas",
+        "actual_devices": {
+          "npu:0": {
+            "parameters": 834084,
+            "parameter_bytes": 3336336
+          },
+          "npu:1": {
+            "parameters": 316443,
+            "parameter_bytes": 1265772
+          }
+        },
+        "total_unique_parameters": 1150527
+      },
+      "input_sha256": "d1bdba429979d1db4a4b49d20cbf28a53ac5d9a413e1225d0b7b897ca147ef85",
+      "comparisons": {},
+      "error": "RuntimeError(\"SetPrecisionMode:../torch_npu/csrc/framework/LazyInitAclops.cpp:223 NPU function error: at_npu::native::AclSetCompileopt(aclCompileOpt::ACL_PRECISION_MODE, precision_mode), error code is 500001\\n[ERROR] 2026-11-18-12:12:29 (PID:3456355, Device:0, RankID:-1) ERR00100 PTA call acl api failed\\n[Error]: The internal ACL of the system is incorrect.\\n        Rectify the fault based on the error information in the ascend log.\\n[PID: 3456355] 2026-11-18-12:12:29.281.522 Environment_Error_Import_Python_Module_Failed(EC0010): Failed to import Python module ModuleNotFoundError: No module named 'tbe'.\\n        Solution: Check that all required components are properly installed and the specified Python path matches the Python installation directory. If the path does not match the directory, run set_env.sh in the installation package.\\nTraceBack (most recent call last):\\n        AOE failed to call InitCannKB.[FUNC:Initialize][FILE:python_adapter_manager.cc][LINE:50]\\n        Failed to initialize TeConfigInfo.[FUNC:TeInnerErrMessageReport][FILE:common_utils.cc][LINE:374]\\n        [GraphOpt][InitializeInner][InitTbeFunc] Failed to init tbe.[FUNC:InitializeTeFusion][FILE:tbe_op_store_adapter.cc][LINE:1983]\\n        [GraphOpt][InitializeInner][InitTeFusion]: Failed to initialize TeFusion.[FUNC:InitializeInner][FILE:tbe_op_store_adapter.cc][LINE:1950]\\n        [SubGraphOpt][PreCompileOp][InitAdapter] InitializeAdapter adapter [tbe_op_adapter] failed! Ret [4294967295][FUNC:InitializeAdapter][FILE:op_store_adapter_manager.cc][LINE:80]\\n        [SubGraphOpt][PreCompileOp][Init] Initialize op store adapter failed, OpsStoreName[tbe-custom].[FUNC:Initialize][FILE:op_store_adapter_manager.cc][LINE:121]\\n        [FusionMngr][Init] Op store adapter manager init failed.[FUNC:Initialize][FILE:fusion_manager.cc][LINE:119]\\n        PluginManager InvokeAll failed.[FUNC:Initialize][FILE:ops_kernel_manager.cc][LINE:98]\\n        OpsManager initialize failed.[FUNC:InnerInitialize][FILE:gelib.cc][LINE:225]\\n        GELib::InnerInitialize failed.[FUNC:Initialize][FILE:gelib.cc][LINE:163]\\n        GEInitializeV2 failed.[FUNC:GEInitializeV2][FILE:ge_api_v2.cc][LINE:379]\\n        GEInitializeV2 initialize failed.[FUNC:GEInitialize][FILE:ge_api.cc][LINE:221]\\n        [Initialize][Ge]GEInitialize failed. ge result = 4294967295[FUNC:ReportCallError][FILE:log_inner.cpp][LINE:138]\\n        [Init][Compiler]Init compiler failed[FUNC:ReportInnerError][FILE:log_inner.cpp][LINE:123]\\n        [Set][Options]OpCompileProcessor init failed![FUNC:ReportInnerError][FILE:log_inner.cpp][LINE:123]\\n\")",
+      "process_peak_rss_kib": 2461280
+    }
+  ],
+  "state": "failed",
+  "not_run_after_execution_failure": []
+}

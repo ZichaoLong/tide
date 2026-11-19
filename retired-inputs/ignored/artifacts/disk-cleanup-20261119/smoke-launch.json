@@ -1,0 +1,31 @@
+{
+  "unit": "tide-cleanup-installed-20261119-v1.service",
+  "argv": [
+    "systemd-run",
+    "--user",
+    "--unit=tide-cleanup-installed-20261119-v1",
+    "--service-type=exec",
+    "--slice=background.slice",
+    "--working-directory=/",
+    "--property=KillMode=control-group",
+    "--property=RuntimeMaxSec=180",
+    "--property=TimeoutStopSec=15",
+    "--property=CPUAffinity=176 177",
+    "--property=StandardOutput=append:/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/disk-cleanup-20261119/smoke.log",
+    "--property=StandardError=append:/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/disk-cleanup-20261119/smoke.log",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "-B",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/disk-cleanup-20261119/frozen-job.py",
+    "--status",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/disk-cleanup-20261119/smoke-status.json",
+    "--source",
+    "97ff1e1950fe78de4dea3acbe7a9efc99435092b",
+    "--max-rss-gib",
+    "4",
+    "--",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "-B",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/disk-cleanup-20261119/run_installed_smoke.py"
+  ],
+  "source": "97ff1e1950fe78de4dea3acbe7a9efc99435092b"
+}

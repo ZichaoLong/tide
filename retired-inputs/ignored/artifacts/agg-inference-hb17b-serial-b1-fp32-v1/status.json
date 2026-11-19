@@ -1,0 +1,120 @@
+{
+  "state": "passed",
+  "source": "28941994880a277495b315f0fec3213239ef0b49",
+  "command": [
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "/mi/data2T/zlong/home/.agents/skills/use-local-ascend/scripts/run_on_free_npu.py",
+    "--job-id",
+    "agg-inference-hb17b-serial-b1-fp32-v1",
+    "--project",
+    "tide-instances",
+    "--priority",
+    "0",
+    "--npu-count",
+    "2",
+    "--max-wait-seconds",
+    "4500",
+    "--state-file",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-inference-hb17b-serial-b1-fp32-v1/queue.json",
+    "--",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "-m",
+    "benchmarks.inference",
+    "--config",
+    "configs/scale/hb-17b.json",
+    "--config-overrides",
+    "{\"region_batch_size\": 1, \"ssd_scan_backend\": \"doubling\", \"ssd_summary_backend\": \"prefix\"}",
+    "--subjects",
+    "tide",
+    "--devices",
+    "npu:0,npu:1",
+    "--placement",
+    "region",
+    "--region-concurrency",
+    "serial",
+    "--precision",
+    "fp32",
+    "--batch",
+    "1",
+    "--prefill",
+    "128",
+    "--prefill-chunk",
+    "32",
+    "--decode",
+    "16",
+    "--samples",
+    "2",
+    "--warmup",
+    "1",
+    "--no-cold",
+    "--threads",
+    "4",
+    "--allocated-budget-gib",
+    "48",
+    "--reserved-budget-gib",
+    "56",
+    "--reference-output",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-inference-hb17b-serial-b1-fp32-v1/reference.json",
+    "--output",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-inference-hb17b-serial-b1-fp32-v1/inference.json"
+  ],
+  "pid": 2466084,
+  "started": "2026-11-18T12:43:24.148482+00:00",
+  "max_rss_bytes": 206158430208,
+  "peak_rss_bytes": 70874267648,
+  "max_processes": 4,
+  "rss_sample_count": 2014,
+  "poll_interval": 0.25,
+  "descendant_supervision": "Linux child subreaper; retained PID/start identities across nested sessions",
+  "child_pid": 2466105,
+  "process_group": 2466105,
+  "elapsed": 885.6809584312141,
+  "descendant_identities": [
+    {
+      "pid": 2466105,
+      "start_ticks": 2259197485
+    },
+    {
+      "pid": 2466120,
+      "start_ticks": 2259197491
+    },
+    {
+      "pid": 2505448,
+      "start_ticks": 2259243871
+    },
+    {
+      "pid": 2506632,
+      "start_ticks": 2259245549
+    },
+    {
+      "pid": 2508256,
+      "start_ticks": 2259247222
+    },
+    {
+      "pid": 2508263,
+      "start_ticks": 2259247223
+    },
+    {
+      "pid": 2508264,
+      "start_ticks": 2259247223
+    },
+    {
+      "pid": 2509466,
+      "start_ticks": 2259248896
+    },
+    {
+      "pid": 2510432,
+      "start_ticks": 2259250570
+    },
+    {
+      "pid": 2510677,
+      "start_ticks": 2259251044
+    },
+    {
+      "pid": 2510844,
+      "start_ticks": 2259251218
+    }
+  ],
+  "exit_code": 0,
+  "finished": "2026-11-18T12:58:09.829442+00:00"
+}

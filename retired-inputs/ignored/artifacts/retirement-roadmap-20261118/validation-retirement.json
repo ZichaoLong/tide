@@ -1,0 +1,29 @@
+{
+  "state": "completed",
+  "started": "2026-11-18T05:38:48.134177+00:00",
+  "reviewed_evidence_commit": "4ddaec87976a484d91b98e83565f63b153dac5ba",
+  "scope": "Only the post-cleanup validation venv/tmp/two checkpoints, after their complete result was committed. No public/consumer path or retained witness.",
+  "no_active_candidate_users": [],
+  "removed": [
+    {
+      "path": "artifacts/retirement-roadmap-20261118/post-cleanup-venv",
+      "allocated_bytes": 13963264
+    },
+    {
+      "path": "artifacts/retirement-roadmap-20261118/post-cleanup-tmp",
+      "allocated_bytes": 8192
+    },
+    {
+      "path": "artifacts/retirement-roadmap-20261118/fp32-checkpoint.pt",
+      "allocated_bytes": 29020160,
+      "sha256": "c62c443041dafbaae0e550029dead4849a6e4b2f90dc1d878d3757165049d2c9"
+    },
+    {
+      "path": "artifacts/retirement-roadmap-20261118/bf16-checkpoint.pt",
+      "allocated_bytes": 28626944,
+      "sha256": "1487534a72d1fea5f7b4fef1f21fb51235e3f79d04217c510925956106c31fc6"
+    }
+  ],
+  "finished": "2026-11-18T05:38:48.259339+00:00",
+  "removed_allocated_bytes": 71618560
+}

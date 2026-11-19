@@ -1,0 +1,56 @@
+{
+  "state": "passed",
+  "source": "45cb5dad1f2d14e06f65b71e6db5461de3a41e72",
+  "command": [
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "-B",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/storage-finalization-20261119/installed_smoke.py"
+  ],
+  "pid": 2953163,
+  "started": "2026-11-19T11:11:35.609143+00:00",
+  "max_rss_bytes": 4294967296,
+  "peak_rss_bytes": 484253696,
+  "max_processes": 3,
+  "rss_sample_count": 19,
+  "poll_interval": 0.25,
+  "descendant_supervision": "Linux child subreaper; retained PID/start identities across nested sessions",
+  "child_pid": 2953165,
+  "process_group": 2953165,
+  "elapsed": 7.856968227773905,
+  "descendant_identities": [
+    {
+      "pid": 2953165,
+      "start_ticks": 2267286631
+    },
+    {
+      "pid": 2953181,
+      "start_ticks": 2267286638
+    },
+    {
+      "pid": 2953231,
+      "start_ticks": 2267286671
+    },
+    {
+      "pid": 2953258,
+      "start_ticks": 2267286695
+    },
+    {
+      "pid": 2953299,
+      "start_ticks": 2267286733
+    },
+    {
+      "pid": 2953313,
+      "start_ticks": 2267286749
+    },
+    {
+      "pid": 2953408,
+      "start_ticks": 2267286798
+    },
+    {
+      "pid": 2953576,
+      "start_ticks": 2267287123
+    }
+  ],
+  "exit_code": 0,
+  "finished": "2026-11-19T11:11:43.466110+00:00"
+}

@@ -1,0 +1,47 @@
+{
+  "recorded_at_utc": "2026-11-18T18:08:02.068785+00:00",
+  "active_source": "98210ae3a1758de99c0740dfe6f9fe04b07cefc6",
+  "active_submission_owner": "none; all70 model jobs, the controller and frozen CPU audit service are terminal",
+  "budget_deadline_utc": "2026-11-18T19:12:09.655498+00:00",
+  "progress": "All12 series finished;58 within-budget jobs,12 sampled-budget refusals;47 input reconstruction groups;581 raw-file fingerprints verified.",
+  "known_controller_guards": "If a formal point is budget-refused it may propose same confirm again; manager prevents it and controller exits. Review manually if this occurs. Controller cutoff120s does not itself ensure2700s children finish before deadline; primary monitors.",
+  "owned_document_changes_already_present": [
+    "docs/STATUS.md",
+    "docs/history.md",
+    "docs/evidence/lh-cpu-history-20261119.md"
+  ],
+  "report_notes": "write_report.py now includes per-mode latency table and explicit observed nonmonotonic reserved example(17B two-card48 layers B32/B49). It distinguishes best observed/confirmed from a global maximum. Current production source untouched; prior20 harness tests reused, no new model-suite rerun required.",
+  "history": "User explicitly requested oldCPU LH. Independent historical lookup is copied to docs/evidence/lh-cpu-history-20261119.md, linked from docs/history.md. OldB512 reported303/s is1.6896s per sequence step, not3.3ms latency; do not mix with current models.",
+  "auditor_frozen_ready": {
+    "original": "artifacts/decode-capacity-20261118/audit.py",
+    "frozen": "artifacts/decode-capacity-audit-frozen-20261118/audit.py",
+    "sha256": "12d7490f017e10913ea8c756f61b54bf39e089e71cdaeb1a64cd5cae614d9c88",
+    "bytes": 34599,
+    "input_threads": 4,
+    "input_max_gib": 8,
+    "device_scope": "CPU input reconstruction only; TORCH_DEVICE_BACKEND_AUTOLOAD=0; no models or NPU workloads",
+    "next": "launch cap-evidence-audit-v1 only after all controller series and model jobs finish"
+  },
+  "state": "complete",
+  "completed_workflow": [
+    "Wait all12 series finished and controller passed; do not relabel budget refusals as execution passes.",
+    "Frozen auditor ALREADY EXISTS at artifacts/decode-capacity-audit-frozen-20261118/audit.py (do not overwrite). After all models/controller finish, launch CPU-only cap-evidence-audit-v1 through scripts/launch.py revision98210ae3, threads4/affinity92-95, RSS16GiB, seconds1800, npu-count0. Pass --submissions original absolute manifest --output original absolute audit.json --inputs --input-threads4 --input-max-gib8.",
+    "After CPU audit succeeds: python artifacts/decode-capacity-20261118/summarize.py (official output).",
+    "Then python artifacts/decode-capacity-20261118/release.py; it expects model units plus cap-search-controller-v1 and cap-evidence-audit-v1 terminal. It checks archive files, hashes, quota, math, users, concurrency and wall budget.",
+    "Then write_report.py --check-only, then write_report.py; publishes docs/evidence/decode-capacity-20261118.{md,json}.",
+    "Then update_navigation.py once. It atomically updates STATUS/ROADMAP/evidence README/execution recommendations/performance lessons.",
+    "Review actual evidence/tables/links/JSON, git diff --check, fixed upstream. Commit explicit owned docs only and push current branch normally; preserve4 protected untracked user files."
+  ],
+  "next": "No remaining work or active experiments in this approved finite search. Do not restart it from the retained workflow.",
+  "completion": {
+    "head": "5e8a015e106d62f088d906a3aab4c0ebcbb0024c",
+    "commits": [
+      "0b252e15",
+      "5e8a015e"
+    ],
+    "pushed_branch": "graph-execution-foundation",
+    "evidence": "docs/evidence/decode-capacity-20261118.md",
+    "history": "docs/evidence/lh-cpu-history-20261119.md",
+    "postprocessing_notes": "release/report gate and label fixes are recorded in postprocessing-fixes.json; raw experiment results and frozen auditor unchanged."
+  }
+}

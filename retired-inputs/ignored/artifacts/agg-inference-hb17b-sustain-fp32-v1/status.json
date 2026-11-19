@@ -1,0 +1,108 @@
+{
+  "state": "passed",
+  "source": "28941994880a277495b315f0fec3213239ef0b49",
+  "command": [
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "/mi/data2T/zlong/home/.agents/skills/use-local-ascend/scripts/run_on_free_npu.py",
+    "--job-id",
+    "agg-inference-hb17b-sustain-fp32-v1",
+    "--project",
+    "tide-instances",
+    "--priority",
+    "0",
+    "--npu-count",
+    "2",
+    "--max-wait-seconds",
+    "4500",
+    "--state-file",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-inference-hb17b-sustain-fp32-v1/queue.json",
+    "--",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "-m",
+    "benchmarks.inference",
+    "--config",
+    "configs/scale/hb-17b.json",
+    "--config-overrides",
+    "{\"region_batch_size\": 4, \"ssd_scan_backend\": \"doubling\", \"ssd_summary_backend\": \"prefix\"}",
+    "--subjects",
+    "tide",
+    "--devices",
+    "npu:0,npu:1",
+    "--placement",
+    "region",
+    "--region-concurrency",
+    "per_device",
+    "--precision",
+    "fp32",
+    "--batch",
+    "1",
+    "--prefill",
+    "512",
+    "--prefill-chunk",
+    "128",
+    "--decode",
+    "256",
+    "--samples",
+    "2",
+    "--warmup",
+    "1",
+    "--no-cold",
+    "--threads",
+    "4",
+    "--allocated-budget-gib",
+    "48",
+    "--reserved-budget-gib",
+    "56",
+    "--reference-output",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-inference-hb17b-sustain-fp32-v1/reference.json",
+    "--output",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-inference-hb17b-sustain-fp32-v1/inference.json"
+  ],
+  "pid": 2466220,
+  "started": "2026-11-18T12:43:24.853854+00:00",
+  "max_rss_bytes": 206158430208,
+  "peak_rss_bytes": 70867701760,
+  "max_processes": 2,
+  "rss_sample_count": 4200,
+  "poll_interval": 0.25,
+  "descendant_supervision": "Linux child subreaper; retained PID/start identities across nested sessions",
+  "child_pid": 2466261,
+  "process_group": 2466261,
+  "elapsed": 1835.9967413172126,
+  "descendant_identities": [
+    {
+      "pid": 2466261,
+      "start_ticks": 2259197556
+    },
+    {
+      "pid": 2466271,
+      "start_ticks": 2259197562
+    },
+    {
+      "pid": 2535040,
+      "start_ticks": 2259282457
+    },
+    {
+      "pid": 2536655,
+      "start_ticks": 2259284139
+    },
+    {
+      "pid": 2537832,
+      "start_ticks": 2259285825
+    },
+    {
+      "pid": 2538867,
+      "start_ticks": 2259287507
+    },
+    {
+      "pid": 2539176,
+      "start_ticks": 2259287986
+    },
+    {
+      "pid": 2539315,
+      "start_ticks": 2259288174
+    }
+  ],
+  "exit_code": 0,
+  "finished": "2026-11-18T13:14:00.850596+00:00"
+}

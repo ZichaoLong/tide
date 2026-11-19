@@ -1,0 +1,1504 @@
+{
+  "source": "22527cf472fc4d6ea9ca7ce22528b7e4ca9cc96a",
+  "harness_source": "22527cf472fc4d6ea9ca7ce22528b7e4ca9cc96a",
+  "arguments": {
+    "config": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/training-selected-settle-bf16/search/config.json",
+    "subject": "tide",
+    "joint_match": null,
+    "transformer_width": null,
+    "transformer_layers": null,
+    "ffn_width": null,
+    "head_dim": null,
+    "transformer_chunk": 128,
+    "device": "npu:0",
+    "precision": "bf16",
+    "mode": "train",
+    "batch": 32,
+    "prefill": 256,
+    "prefill_chunk": 256,
+    "decode": 0,
+    "updates": 20,
+    "warmup": 1,
+    "threads": 4,
+    "seed": 751,
+    "optimizer_foreach": true,
+    "device_budget_gib": 48.0,
+    "checkpoint": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/training-continuous-settle-bf16/checkpoint.pt",
+    "output": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/training-continuous-settle-bf16/continuous.json"
+  },
+  "precision": {
+    "name": "bf16",
+    "device": "npu:0",
+    "parameters": "float32",
+    "input": "float32",
+    "matrix_arithmetic": "bfloat16_autocast",
+    "normalization_mass_allocation": "float32",
+    "kv_keys_values": "bfloat16",
+    "kv_summary_and_ssd_state": "float32",
+    "logical_time_indices": "int64",
+    "parameter_gradients": "float32",
+    "master_weights": "parameters_are_fp32_masters; no_separate_copy",
+    "adamw_moments": "float32",
+    "attention": "native_by_shape_and_prior; math/tiled_accumulate_float32",
+    "attention_mode_selection": "visible_zero_prior_auto_tiled_in_all_modes; NPU_explicit_key_priors_rank_one_in_all_modes",
+    "loss": "float32",
+    "autocast_cache": false
+  },
+  "physical_devices": "5",
+  "torch": "2.12.0+cpu",
+  "resource_identity": "exclusive_cooperative_queue; external jobs not controlled",
+  "cpu_affinity": [
+    112,
+    113,
+    114,
+    115
+  ],
+  "host_load_before": [
+    44.61,
+    49.13,
+    48.01
+  ],
+  "timing": "input transfer/construction/initial matching audit/warmup/checkpoint excluded; full stream train includes concatenation/loss/backward/AdamW/sync",
+  "training_boundary": "full BPTT within prefill+decode+flush; detach after each optimizer update is included in complete time",
+  "grad_forward_boundary": "state detached between measured observations; graph retained across every chunk within each segment",
+  "segment_boundary": "Timed flush ends each measured segment and advances its clock; the next segment resumes that flushed state",
+  "objective": "mechanism-only mean squared readout over every returned window and flush slot",
+  "initial_state": "zero; subsequent measured streams continue previous private state",
+  "first_output": "first available backbone output, no task head or language-model TTFT",
+  "input_pairing": "feature-wise seeded CPU inputs; the shared feature prefix is identical at different model widths",
+  "process_peak_rss_scope": "cumulative process high-water including construction and initial Tide matching audit; not isolated baseline peak",
+  "observations": [
+    {
+      "prefill_seconds": 2.5674067698419094,
+      "prefill_positions_per_second": 3190.768247644852,
+      "first_backbone_output_seconds": 2.567666720598936,
+      "decode_seconds": [],
+      "stable_decode_median_seconds": null,
+      "stable_decode_positions_per_second": null,
+      "stable_decode_rule": "omit first decode when at least two are present",
+      "input_window_seconds": 2.5676778480410576,
+      "flush_seconds": 0,
+      "input_plus_flush_seconds": 2.5676798671483994,
+      "backward_seconds": 1.9028827995061874,
+      "optimizer_seconds": 0.2762119472026825,
+      "complete_seconds": 4.747482419013977,
+      "input_positions": 8192,
+      "output_slots": 8192,
+      "calls": [
+        {
+          "phase": "prefill",
+          "inputs": 256,
+          "seconds": 2.5674067698419094,
+          "output_ready_seconds": 2.567666720598936
+        }
+      ],
+      "state_memory": {
+        "payload_bytes": 420002816,
+        "retained_storage_bytes": 420002816,
+        "dtypes": [
+          "torch.bfloat16",
+          "torch.float32",
+          "torch.int64"
+        ],
+        "tensor_count": 200
+      },
+      "loss": 2.4849565029144287,
+      "finite_output": true,
+      "finite_parameters": true,
+      "finite_gradients": true,
+      "index": 0,
+      "state_position": 256,
+      "peak_device_bytes": 41744749056,
+      "process_peak_rss_kib": 2656660,
+      "device_memory": {
+        "allocated_bytes": 694507520,
+        "reserved_bytes": 52653195264,
+        "peak_allocated_bytes": 41744749056,
+        "peak_reserved_bytes": 52653195264
+      },
+      "continuation": {
+        "private_state_finite": true,
+        "private_state_detached": true,
+        "optimizer_finite": true,
+        "optimizer_parameter_owners": 351,
+        "optimizer_step_min": 1.0,
+        "optimizer_step_max": 1.0,
+        "kv_retained_slot_min": 128,
+        "kv_retained_slot_max": 128,
+        "kv_slot_limits": {
+          "K": 128
+        }
+      }
+    },
+    {
+      "prefill_seconds": 2.1003843061625957,
+      "prefill_positions_per_second": 3900.2386258383317,
+      "first_backbone_output_seconds": 2.1012870483100414,
+      "decode_seconds": [],
+      "stable_decode_median_seconds": null,
+      "stable_decode_positions_per_second": null,
+      "stable_decode_rule": "omit first decode when at least two are present",
+      "input_window_seconds": 2.1012986786663532,
+      "flush_seconds": 0,
+      "input_plus_flush_seconds": 2.1012991704046726,
+      "backward_seconds": 1.7896705009043217,
+      "optimizer_seconds": 0.01434725895524025,
+      "complete_seconds": 3.9058712869882584,
+      "input_positions": 8192,
+      "output_slots": 8192,
+      "calls": [
+        {
+          "phase": "prefill",
+          "inputs": 256,
+          "seconds": 2.1003843061625957,
+          "output_ready_seconds": 2.1012870483100414
+        }
+      ],
+      "state_memory": {
+        "payload_bytes": 420002816,
+        "retained_storage_bytes": 420002816,
+        "dtypes": [
+          "torch.bfloat16",
+          "torch.float32",
+          "torch.int64"
+        ],
+        "tensor_count": 200
+      },
+      "loss": 2.281219959259033,
+      "finite_output": true,
+      "finite_parameters": true,
+      "finite_gradients": true,
+      "index": 1,
+      "state_position": 512,
+      "peak_device_bytes": 43736457216,
+      "process_peak_rss_kib": 2656660,
+      "device_memory": {
+        "allocated_bytes": 691481088,
+        "reserved_bytes": 54347694080,
+        "peak_allocated_bytes": 43736457216,
+        "peak_reserved_bytes": 54347694080
+      },
+      "continuation": {
+        "private_state_finite": true,
+        "private_state_detached": true,
+        "optimizer_finite": true,
+        "optimizer_parameter_owners": 351,
+        "optimizer_step_min": 2.0,
+        "optimizer_step_max": 2.0,
+        "kv_retained_slot_min": 128,
+        "kv_retained_slot_max": 128,
+        "kv_slot_limits": {
+          "K": 128
+        }
+      }
+    },
+    {
+      "prefill_seconds": 2.100132327526808,
+      "prefill_positions_per_second": 3900.7065853070303,
+      "first_backbone_output_seconds": 2.101113073527813,
+      "decode_seconds": [],
+      "stable_decode_median_seconds": null,
+      "stable_decode_positions_per_second": null,
+      "stable_decode_rule": "omit first decode when at least two are present",
+      "input_window_seconds": 2.1011208333075047,
+      "flush_seconds": 0,
+      "input_plus_flush_seconds": 2.101121384650469,
+      "backward_seconds": 1.7535696029663086,
+      "optimizer_seconds": 0.013782888650894165,
+      "complete_seconds": 3.8690149150788784,
+      "input_positions": 8192,
+      "output_slots": 8192,
+      "calls": [
+        {
+          "phase": "prefill",
+          "inputs": 256,
+          "seconds": 2.100132327526808,
+          "output_ready_seconds": 2.101113073527813
+        }
+      ],
+      "state_memory": {
+        "payload_bytes": 420002816,
+        "retained_storage_bytes": 420002816,
+        "dtypes": [
+          "torch.bfloat16",
+          "torch.float32",
+          "torch.int64"
+        ],
+        "tensor_count": 200
+      },
+      "loss": 2.133854866027832,
+      "finite_output": true,
+      "finite_parameters": true,
+      "finite_gradients": true,
+      "index": 2,
+      "state_position": 768,
+      "peak_device_bytes": 43925020672,
+      "process_peak_rss_kib": 2656660,
+      "device_memory": {
+        "allocated_bytes": 693649408,
+        "reserved_bytes": 54349791232,
+        "peak_allocated_bytes": 43925020672,
+        "peak_reserved_bytes": 54349791232
+      },
+      "continuation": {
+        "private_state_finite": true,
+        "private_state_detached": true,
+        "optimizer_finite": true,
+        "optimizer_parameter_owners": 351,
+        "optimizer_step_min": 3.0,
+        "optimizer_step_max": 3.0,
+        "kv_retained_slot_min": 128,
+        "kv_retained_slot_max": 128,
+        "kv_slot_limits": {
+          "K": 128
+        }
+      }
+    },
+    {
+      "prefill_seconds": 2.0968086645007133,
+      "prefill_positions_per_second": 3906.889616917268,
+      "first_backbone_output_seconds": 2.097772393375635,
+      "decode_seconds": [],
+      "stable_decode_median_seconds": null,
+      "stable_decode_positions_per_second": null,
+      "stable_decode_rule": "omit first decode when at least two are present",
+      "input_window_seconds": 2.0977808088064194,
+      "flush_seconds": 0,
+      "input_plus_flush_seconds": 2.0977813825011253,
+      "backward_seconds": 1.7753912396728992,
+      "optimizer_seconds": 0.013814236968755722,
+      "complete_seconds": 3.8875178657472134,
+      "input_positions": 8192,
+      "output_slots": 8192,
+      "calls": [
+        {
+          "phase": "prefill",
+          "inputs": 256,
+          "seconds": 2.0968086645007133,
+          "output_ready_seconds": 2.097772393375635
+        }
+      ],
+      "state_memory": {
+        "payload_bytes": 420002816,
+        "retained_storage_bytes": 420002816,
+        "dtypes": [
+          "torch.bfloat16",
+          "torch.float32",
+          "torch.int64"
+        ],
+        "tensor_count": 200
+      },
+      "loss": 2.016115665435791,
+      "finite_output": true,
+      "finite_parameters": true,
+      "finite_gradients": true,
+      "index": 3,
+      "state_position": 1024,
+      "peak_device_bytes": 43923287552,
+      "process_peak_rss_kib": 2656660,
+      "device_memory": {
+        "allocated_bytes": 695548416,
+        "reserved_bytes": 54351888384,
+        "peak_allocated_bytes": 43923287552,
+        "peak_reserved_bytes": 54351888384
+      },
+      "continuation": {
+        "private_state_finite": true,
+        "private_state_detached": true,
+        "optimizer_finite": true,
+        "optimizer_parameter_owners": 351,
+        "optimizer_step_min": 4.0,
+        "optimizer_step_max": 4.0,
+        "kv_retained_slot_min": 128,
+        "kv_retained_slot_max": 128,
+        "kv_slot_limits": {
+          "K": 128
+        }
+      }
+    },
+    {
+      "prefill_seconds": 2.098674774169922,
+      "prefill_positions_per_second": 3903.4156701293273,
+      "first_backbone_output_seconds": 2.099601376801729,
+      "decode_seconds": [],
+      "stable_decode_median_seconds": null,
+      "stable_decode_positions_per_second": null,
+      "stable_decode_rule": "omit first decode when at least two are present",
+      "input_window_seconds": 2.099611170589924,
+      "flush_seconds": 0,
+      "input_plus_flush_seconds": 2.0996116884052753,
+      "backward_seconds": 1.7555610351264477,
+      "optimizer_seconds": 0.01551247388124466,
+      "complete_seconds": 3.8712278939783573,
+      "input_positions": 8192,
+      "output_slots": 8192,
+      "calls": [
+        {
+          "phase": "prefill",
+          "inputs": 256,
+          "seconds": 2.098674774169922,
+          "output_ready_seconds": 2.099601376801729
+        }
+      ],
+      "state_memory": {
+        "payload_bytes": 420002816,
+        "retained_storage_bytes": 420002816,
+        "dtypes": [
+          "torch.bfloat16",
+          "torch.float32",
+          "torch.int64"
+        ],
+        "tensor_count": 200
+      },
+      "loss": 1.919558048248291,
+      "finite_output": true,
+      "finite_parameters": true,
+      "finite_gradients": true,
+      "index": 4,
+      "state_position": 1280,
+      "peak_device_bytes": 44118896128,
+      "process_peak_rss_kib": 2656660,
+      "device_memory": {
+        "allocated_bytes": 697073664,
+        "reserved_bytes": 54351888384,
+        "peak_allocated_bytes": 44118896128,
+        "peak_reserved_bytes": 54351888384
+      },
+      "continuation": {
+        "private_state_finite": true,
+        "private_state_detached": true,
+        "optimizer_finite": true,
+        "optimizer_parameter_owners": 351,
+        "optimizer_step_min": 5.0,
+        "optimizer_step_max": 5.0,
+        "kv_retained_slot_min": 128,
+        "kv_retained_slot_max": 128,
+        "kv_slot_limits": {
+          "K": 128
+        }
+      }
+    },
+    {
+      "prefill_seconds": 2.1262321546673775,
+      "prefill_positions_per_second": 3852.8248112593974,
+      "first_backbone_output_seconds": 2.127220444381237,
+      "decode_seconds": [],
+      "stable_decode_median_seconds": null,
+      "stable_decode_positions_per_second": null,
+      "stable_decode_rule": "omit first decode when at least two are present",
+      "input_window_seconds": 2.127228043973446,
+      "flush_seconds": 0,
+      "input_plus_flush_seconds": 2.1272286847233772,
+      "backward_seconds": 1.7909887991845608,
+      "optimizer_seconds": 0.013731647282838821,
+      "complete_seconds": 3.9324819184839725,
+      "input_positions": 8192,
+      "output_slots": 8192,
+      "calls": [
+        {
+          "phase": "prefill",
+          "inputs": 256,
+          "seconds": 2.1262321546673775,
+          "output_ready_seconds": 2.127220444381237
+        }
+      ],
+      "state_memory": {
+        "payload_bytes": 420002816,
+        "retained_storage_bytes": 420002816,
+        "dtypes": [
+          "torch.bfloat16",
+          "torch.float32",
+          "torch.int64"
+        ],
+        "tensor_count": 200
+      },
+      "loss": 1.8352429866790771,
+      "finite_output": true,
+      "finite_parameters": true,
+      "finite_gradients": true,
+      "index": 5,
+      "state_position": 1536,
+      "peak_device_bytes": 44075313664,
+      "process_peak_rss_kib": 2656660,
+      "device_memory": {
+        "allocated_bytes": 692201472,
+        "reserved_bytes": 54353985536,
+        "peak_allocated_bytes": 44075313664,
+        "peak_reserved_bytes": 54353985536
+      },
+      "continuation": {
+        "private_state_finite": true,
+        "private_state_detached": true,
+        "optimizer_finite": true,
+        "optimizer_parameter_owners": 351,
+        "optimizer_step_min": 6.0,
+        "optimizer_step_max": 6.0,
+        "kv_retained_slot_min": 128,
+        "kv_retained_slot_max": 128,
+        "kv_slot_limits": {
+          "K": 128
+        }
+      }
+    },
+    {
+      "prefill_seconds": 2.110206987708807,
+      "prefill_positions_per_second": 3882.0836286276367,
+      "first_backbone_output_seconds": 2.1111322939395905,
+      "decode_seconds": [],
+      "stable_decode_median_seconds": null,
+      "stable_decode_positions_per_second": null,
+      "stable_decode_rule": "omit first decode when at least two are present",
+      "input_window_seconds": 2.111140575259924,
+      "flush_seconds": 0,
+      "input_plus_flush_seconds": 2.1111410669982433,
+      "backward_seconds": 1.7999372705817223,
+      "optimizer_seconds": 0.013683319091796875,
+      "complete_seconds": 3.9253041967749596,
+      "input_positions": 8192,
+      "output_slots": 8192,
+      "calls": [
+        {
+          "phase": "prefill",
+          "inputs": 256,
+          "seconds": 2.110206987708807,
+          "output_ready_seconds": 2.1111322939395905
+        }
+      ],
+      "state_memory": {
+        "payload_bytes": 420002816,
+        "retained_storage_bytes": 420002816,
+        "dtypes": [
+          "torch.bfloat16",
+          "torch.float32",
+          "torch.int64"
+        ],
+        "tensor_count": 200
+      },
+      "loss": 1.7629908323287964,
+      "finite_output": true,
+      "finite_parameters": true,
+      "finite_gradients": true,
+      "index": 6,
+      "state_position": 1792,
+      "peak_device_bytes": 44070053888,
+      "process_peak_rss_kib": 2656660,
+      "device_memory": {
+        "allocated_bytes": 695758336,
+        "reserved_bytes": 54356082688,
+        "peak_allocated_bytes": 44070053888,
+        "peak_reserved_bytes": 54356082688
+      },
+      "continuation": {
+        "private_state_finite": true,
+        "private_state_detached": true,
+        "optimizer_finite": true,
+        "optimizer_parameter_owners": 351,
+        "optimizer_step_min": 7.0,
+        "optimizer_step_max": 7.0,
+        "kv_retained_slot_min": 128,
+        "kv_retained_slot_max": 128,
+        "kv_slot_limits": {
+          "K": 128
+        }
+      }
+    },
+    {
+      "prefill_seconds": 2.102622576057911,
+      "prefill_positions_per_second": 3896.0867695802644,
+      "first_backbone_output_seconds": 2.1035692244768143,
+      "decode_seconds": [],
+      "stable_decode_median_seconds": null,
+      "stable_decode_positions_per_second": null,
+      "stable_decode_rule": "omit first decode when at least two are present",
+      "input_window_seconds": 2.103577744215727,
+      "flush_seconds": 0,
+      "input_plus_flush_seconds": 2.103578481823206,
+      "backward_seconds": 1.801065120846033,
+      "optimizer_seconds": 0.013918336480855942,
+      "complete_seconds": 3.919112965464592,
+      "input_positions": 8192,
+      "output_slots": 8192,
+      "calls": [
+        {
+          "phase": "prefill",
+          "inputs": 256,
+          "seconds": 2.102622576057911,
+          "output_ready_seconds": 2.1035692244768143
+        }
+      ],
+      "state_memory": {
+        "payload_bytes": 420002816,
+        "retained_storage_bytes": 420002816,
+        "dtypes": [
+          "torch.bfloat16",
+          "torch.float32",
+          "torch.int64"
+        ],
+        "tensor_count": 200
+      },
+      "loss": 1.6953551769256592,
+      "finite_output": true,
+      "finite_parameters": true,
+      "finite_gradients": true,
+      "index": 7,
+      "state_position": 2048,
+      "peak_device_bytes": 44082762240,
+      "process_peak_rss_kib": 2656660,
+      "device_memory": {
+        "allocated_bytes": 696804864,
+        "reserved_bytes": 54356082688,
+        "peak_allocated_bytes": 44082762240,
+        "peak_reserved_bytes": 54356082688
+      },
+      "continuation": {
+        "private_state_finite": true,
+        "private_state_detached": true,
+        "optimizer_finite": true,
+        "optimizer_parameter_owners": 351,
+        "optimizer_step_min": 8.0,
+        "optimizer_step_max": 8.0,
+        "kv_retained_slot_min": 128,
+        "kv_retained_slot_max": 128,
+        "kv_slot_limits": {
+          "K": 128
+        }
+      }
+    },
+    {
+      "prefill_seconds": 2.1297895796597004,
+      "prefill_positions_per_second": 3846.389370216059,
+      "first_backbone_output_seconds": 2.1307221800088882,
+      "decode_seconds": [],
+      "stable_decode_median_seconds": null,
+      "stable_decode_positions_per_second": null,
+      "stable_decode_rule": "omit first decode when at least two are present",
+      "input_window_seconds": 2.1307305991649628,
+      "flush_seconds": 0,
+      "input_plus_flush_seconds": 2.130731139332056,
+      "backward_seconds": 1.8088419064879417,
+      "optimizer_seconds": 0.013951878994703293,
+      "complete_seconds": 3.9540542662143707,
+      "input_positions": 8192,
+      "output_slots": 8192,
+      "calls": [
+        {
+          "phase": "prefill",
+          "inputs": 256,
+          "seconds": 2.1297895796597004,
+          "output_ready_seconds": 2.1307221800088882
+        }
+      ],
+      "state_memory": {
+        "payload_bytes": 420002816,
+        "retained_storage_bytes": 420002816,
+        "dtypes": [
+          "torch.bfloat16",
+          "torch.float32",
+          "torch.int64"
+        ],
+        "tensor_count": 200
+      },
+      "loss": 1.634440302848816,
+      "finite_output": true,
+      "finite_parameters": true,
+      "finite_gradients": true,
+      "index": 8,
+      "state_position": 2304,
+      "peak_device_bytes": 44195982848,
+      "process_peak_rss_kib": 2656660,
+      "device_memory": {
+        "allocated_bytes": 694759424,
+        "reserved_bytes": 54358179840,
+        "peak_allocated_bytes": 44195982848,
+        "peak_reserved_bytes": 54358179840
+      },
+      "continuation": {
+        "private_state_finite": true,
+        "private_state_detached": true,
+        "optimizer_finite": true,
+        "optimizer_parameter_owners": 351,
+        "optimizer_step_min": 9.0,
+        "optimizer_step_max": 9.0,
+        "kv_retained_slot_min": 128,
+        "kv_retained_slot_max": 128,
+        "kv_slot_limits": {
+          "K": 128
+        }
+      }
+    },
+    {
+      "prefill_seconds": 2.1244579665362835,
+      "prefill_positions_per_second": 3856.042401891452,
+      "first_backbone_output_seconds": 2.1254132091999054,
+      "decode_seconds": [],
+      "stable_decode_median_seconds": null,
+      "stable_decode_positions_per_second": null,
+      "stable_decode_rule": "omit first decode when at least two are present",
+      "input_window_seconds": 2.1254232078790665,
+      "flush_seconds": 0,
+      "input_plus_flush_seconds": 2.1254237554967403,
+      "backward_seconds": 1.8127273246645927,
+      "optimizer_seconds": 0.015792090445756912,
+      "complete_seconds": 3.954491712152958,
+      "input_positions": 8192,
+      "output_slots": 8192,
+      "calls": [
+        {
+          "phase": "prefill",
+          "inputs": 256,
+          "seconds": 2.1244579665362835,
+          "output_ready_seconds": 2.1254132091999054
+        }
+      ],
+      "state_memory": {
+        "payload_bytes": 420002816,
+        "retained_storage_bytes": 420002816,
+        "dtypes": [
+          "torch.bfloat16",
+          "torch.float32",
+          "torch.int64"
+        ],
+        "tensor_count": 200
+      },
+      "loss": 1.577745795249939,
+      "finite_output": true,
+      "finite_parameters": true,
+      "finite_gradients": true,
+      "index": 9,
+      "state_position": 2560,
+      "peak_device_bytes": 44345566720,
+      "process_peak_rss_kib": 2656660,
+      "device_memory": {
+        "allocated_bytes": 692967936,
+        "reserved_bytes": 54358179840,
+        "peak_allocated_bytes": 44345566720,
+        "peak_reserved_bytes": 54358179840
+      },
+      "continuation": {
+        "private_state_finite": true,
+        "private_state_detached": true,
+        "optimizer_finite": true,
+        "optimizer_parameter_owners": 351,
+        "optimizer_step_min": 10.0,
+        "optimizer_step_max": 10.0,
+        "kv_retained_slot_min": 128,
+        "kv_retained_slot_max": 128,
+        "kv_slot_limits": {
+          "K": 128
+        }
+      }
+    },
+    {
+      "prefill_seconds": 2.135989837348461,
+      "prefill_positions_per_second": 3835.2242397226223,
+      "first_backbone_output_seconds": 2.136929590255022,
+      "decode_seconds": [],
+      "stable_decode_median_seconds": null,
+      "stable_decode_positions_per_second": null,
+      "stable_decode_rule": "omit first decode when at least two are present",
+      "input_window_seconds": 2.1369387805461884,
+      "flush_seconds": 0,
+      "input_plus_flush_seconds": 2.136939439922571,
+      "backward_seconds": 1.8146635070443153,
+      "optimizer_seconds": 0.016779251396656036,
+      "complete_seconds": 3.968955036252737,
+      "input_positions": 8192,
+      "output_slots": 8192,
+      "calls": [
+        {
+          "phase": "prefill",
+          "inputs": 256,
+          "seconds": 2.135989837348461,
+          "output_ready_seconds": 2.136929590255022
+        }
+      ],
+      "state_memory": {
+        "payload_bytes": 420002816,
+        "retained_storage_bytes": 420002816,
+        "dtypes": [
+          "torch.bfloat16",
+          "torch.float32",
+          "torch.int64"
+        ],
+        "tensor_count": 200
+      },
+      "loss": 1.5269968509674072,
+      "finite_output": true,
+      "finite_parameters": true,
+      "finite_gradients": true,
+      "index": 10,
+      "state_position": 2816,
+      "peak_device_bytes": 44399558144,
+      "process_peak_rss_kib": 2656660,
+      "device_memory": {
+        "allocated_bytes": 692716032,
+        "reserved_bytes": 54358179840,
+        "peak_allocated_bytes": 44399558144,
+        "peak_reserved_bytes": 54358179840
+      },
+      "continuation": {
+        "private_state_finite": true,
+        "private_state_detached": true,
+        "optimizer_finite": true,
+        "optimizer_parameter_owners": 351,
+        "optimizer_step_min": 11.0,
+        "optimizer_step_max": 11.0,
+        "kv_retained_slot_min": 128,
+        "kv_retained_slot_max": 128,
+        "kv_slot_limits": {
+          "K": 128
+        }
+      }
+    },
+    {
+      "prefill_seconds": 2.1239676736295223,
+      "prefill_positions_per_second": 3856.9325238369456,
+      "first_backbone_output_seconds": 2.1249811612069607,
+      "decode_seconds": [],
+      "stable_decode_median_seconds": null,
+      "stable_decode_positions_per_second": null,
+      "stable_decode_rule": "omit first decode when at least two are present",
+      "input_window_seconds": 2.1249899193644524,
+      "flush_seconds": 0,
+      "input_plus_flush_seconds": 2.1249904334545135,
+      "backward_seconds": 1.8136047907173634,
+      "optimizer_seconds": 0.015790175646543503,
+      "complete_seconds": 3.9549593776464462,
+      "input_positions": 8192,
+      "output_slots": 8192,
+      "calls": [
+        {
+          "phase": "prefill",
+          "inputs": 256,
+          "seconds": 2.1239676736295223,
+          "output_ready_seconds": 2.1249811612069607
+        }
+      ],
+      "state_memory": {
+        "payload_bytes": 420002816,
+        "retained_storage_bytes": 420002816,
+        "dtypes": [
+          "torch.bfloat16",
+          "torch.float32",
+          "torch.int64"
+        ],
+        "tensor_count": 200
+      },
+      "loss": 1.4791285991668701,
+      "finite_output": true,
+      "finite_parameters": true,
+      "finite_gradients": true,
+      "index": 11,
+      "state_position": 3072,
+      "peak_device_bytes": 44494353920,
+      "process_peak_rss_kib": 2656660,
+      "device_memory": {
+        "allocated_bytes": 693069312,
+        "reserved_bytes": 54358179840,
+        "peak_allocated_bytes": 44494353920,
+        "peak_reserved_bytes": 54358179840
+      },
+      "continuation": {
+        "private_state_finite": true,
+        "private_state_detached": true,
+        "optimizer_finite": true,
+        "optimizer_parameter_owners": 351,
+        "optimizer_step_min": 12.0,
+        "optimizer_step_max": 12.0,
+        "kv_retained_slot_min": 128,
+        "kv_retained_slot_max": 128,
+        "kv_slot_limits": {
+          "K": 128
+        }
+      }
+    },
+    {
+      "prefill_seconds": 2.1037914119660854,
+      "prefill_positions_per_second": 3893.9221604409045,
+      "first_backbone_output_seconds": 2.104757111519575,
+      "decode_seconds": [],
+      "stable_decode_median_seconds": null,
+      "stable_decode_positions_per_second": null,
+      "stable_decode_rule": "omit first decode when at least two are present",
+      "input_window_seconds": 2.1047652065753937,
+      "flush_seconds": 0,
+      "input_plus_flush_seconds": 2.104765746742487,
+      "backward_seconds": 1.816031590104103,
+      "optimizer_seconds": 0.016516070812940598,
+      "complete_seconds": 3.937888130545616,
+      "input_positions": 8192,
+      "output_slots": 8192,
+      "calls": [
+        {
+          "phase": "prefill",
+          "inputs": 256,
+          "seconds": 2.1037914119660854,
+          "output_ready_seconds": 2.104757111519575
+        }
+      ],
+      "state_memory": {
+        "payload_bytes": 420002816,
+        "retained_storage_bytes": 420002816,
+        "dtypes": [
+          "torch.bfloat16",
+          "torch.float32",
+          "torch.int64"
+        ],
+        "tensor_count": 200
+      },
+      "loss": 1.4337494373321533,
+      "finite_output": true,
+      "finite_parameters": true,
+      "finite_gradients": true,
+      "index": 12,
+      "state_position": 3328,
+      "peak_device_bytes": 44564054016,
+      "process_peak_rss_kib": 2656660,
+      "device_memory": {
+        "allocated_bytes": 693454336,
+        "reserved_bytes": 54358179840,
+        "peak_allocated_bytes": 44564054016,
+        "peak_reserved_bytes": 54358179840
+      },
+      "continuation": {
+        "private_state_finite": true,
+        "private_state_detached": true,
+        "optimizer_finite": true,
+        "optimizer_parameter_owners": 351,
+        "optimizer_step_min": 13.0,
+        "optimizer_step_max": 13.0,
+        "kv_retained_slot_min": 128,
+        "kv_retained_slot_max": 128,
+        "kv_slot_limits": {
+          "K": 128
+        }
+      }
+    },
+    {
+      "prefill_seconds": 2.105053134262562,
+      "prefill_positions_per_second": 3891.5882296100835,
+      "first_backbone_output_seconds": 2.1060304641723633,
+      "decode_seconds": [],
+      "stable_decode_median_seconds": null,
+      "stable_decode_positions_per_second": null,
+      "stable_decode_rule": "omit first decode when at least two are present",
+      "input_window_seconds": 2.106041770428419,
+      "flush_seconds": 0,
+      "input_plus_flush_seconds": 2.106042344123125,
+      "backward_seconds": 1.815911766141653,
+      "optimizer_seconds": 0.015689127147197723,
+      "complete_seconds": 3.938186552375555,
+      "input_positions": 8192,
+      "output_slots": 8192,
+      "calls": [
+        {
+          "phase": "prefill",
+          "inputs": 256,
+          "seconds": 2.105053134262562,
+          "output_ready_seconds": 2.1060304641723633
+        }
+      ],
+      "state_memory": {
+        "payload_bytes": 420002816,
+        "retained_storage_bytes": 420002816,
+        "dtypes": [
+          "torch.bfloat16",
+          "torch.float32",
+          "torch.int64"
+        ],
+        "tensor_count": 200
+      },
+      "loss": 1.3908838033676147,
+      "finite_output": true,
+      "finite_parameters": true,
+      "finite_gradients": true,
+      "index": 13,
+      "state_position": 3584,
+      "peak_device_bytes": 44638332416,
+      "process_peak_rss_kib": 2656660,
+      "device_memory": {
+        "allocated_bytes": 692078080,
+        "reserved_bytes": 54358179840,
+        "peak_allocated_bytes": 44638332416,
+        "peak_reserved_bytes": 54358179840
+      },
+      "continuation": {
+        "private_state_finite": true,
+        "private_state_detached": true,
+        "optimizer_finite": true,
+        "optimizer_parameter_owners": 351,
+        "optimizer_step_min": 14.0,
+        "optimizer_step_max": 14.0,
+        "kv_retained_slot_min": 128,
+        "kv_retained_slot_max": 128,
+        "kv_slot_limits": {
+          "K": 128
+        }
+      }
+    },
+    {
+      "prefill_seconds": 2.124412678182125,
+      "prefill_positions_per_second": 3856.124605229692,
+      "first_backbone_output_seconds": 2.1253762990236282,
+      "decode_seconds": [],
+      "stable_decode_median_seconds": null,
+      "stable_decode_positions_per_second": null,
+      "stable_decode_rule": "omit first decode when at least two are present",
+      "input_window_seconds": 2.1253862977027893,
+      "flush_seconds": 0,
+      "input_plus_flush_seconds": 2.125386904925108,
+      "backward_seconds": 1.8172045350074768,
+      "optimizer_seconds": 0.016202200204133987,
+      "complete_seconds": 3.959316737949848,
+      "input_positions": 8192,
+      "output_slots": 8192,
+      "calls": [
+        {
+          "phase": "prefill",
+          "inputs": 256,
+          "seconds": 2.124412678182125,
+          "output_ready_seconds": 2.1253762990236282
+        }
+      ],
+      "state_memory": {
+        "payload_bytes": 420002816,
+        "retained_storage_bytes": 420002816,
+        "dtypes": [
+          "torch.bfloat16",
+          "torch.float32",
+          "torch.int64"
+        ],
+        "tensor_count": 200
+      },
+      "loss": 1.3497202396392822,
+      "finite_output": true,
+      "finite_parameters": true,
+      "finite_gradients": true,
+      "index": 14,
+      "state_position": 3840,
+      "peak_device_bytes": 44767122944,
+      "process_peak_rss_kib": 2656660,
+      "device_memory": {
+        "allocated_bytes": 698174464,
+        "reserved_bytes": 54358179840,
+        "peak_allocated_bytes": 44767122944,
+        "peak_reserved_bytes": 54358179840
+      },
+      "continuation": {
+        "private_state_finite": true,
+        "private_state_detached": true,
+        "optimizer_finite": true,
+        "optimizer_parameter_owners": 351,
+        "optimizer_step_min": 15.0,
+        "optimizer_step_max": 15.0,
+        "kv_retained_slot_min": 128,
+        "kv_retained_slot_max": 128,
+        "kv_slot_limits": {
+          "K": 128
+        }
+      }
+    },
+    {
+      "prefill_seconds": 2.214205212891102,
+      "prefill_positions_per_second": 3699.7474092763305,
+      "first_backbone_output_seconds": 2.2151756808161736,
+      "decode_seconds": [],
+      "stable_decode_median_seconds": null,
+      "stable_decode_positions_per_second": null,
+      "stable_decode_rule": "omit first decode when at least two are present",
+      "input_window_seconds": 2.2151856310665607,
+      "flush_seconds": 0,
+      "input_plus_flush_seconds": 2.2151862643659115,
+      "backward_seconds": 1.8160756155848503,
+      "optimizer_seconds": 0.01588333398103714,
+      "complete_seconds": 4.047719765454531,
+      "input_positions": 8192,
+      "output_slots": 8192,
+      "calls": [
+        {
+          "phase": "prefill",
+          "inputs": 256,
+          "seconds": 2.214205212891102,
+          "output_ready_seconds": 2.2151756808161736
+        }
+      ],
+      "state_memory": {
+        "payload_bytes": 420002816,
+        "retained_storage_bytes": 420002816,
+        "dtypes": [
+          "torch.bfloat16",
+          "torch.float32",
+          "torch.int64"
+        ],
+        "tensor_count": 200
+      },
+      "loss": 1.3097739219665527,
+      "finite_output": true,
+      "finite_parameters": true,
+      "finite_gradients": true,
+      "index": 15,
+      "state_position": 4096,
+      "peak_device_bytes": 44803240448,
+      "process_peak_rss_kib": 2656660,
+      "device_memory": {
+        "allocated_bytes": 694836224,
+        "reserved_bytes": 54358179840,
+        "peak_allocated_bytes": 44803240448,
+        "peak_reserved_bytes": 54358179840
+      },
+      "continuation": {
+        "private_state_finite": true,
+        "private_state_detached": true,
+        "optimizer_finite": true,
+        "optimizer_parameter_owners": 351,
+        "optimizer_step_min": 16.0,
+        "optimizer_step_max": 16.0,
+        "kv_retained_slot_min": 128,
+        "kv_retained_slot_max": 128,
+        "kv_slot_limits": {
+          "K": 128
+        }
+      }
+    },
+    {
+      "prefill_seconds": 2.11105165630579,
+      "prefill_positions_per_second": 3880.530339241198,
+      "first_backbone_output_seconds": 2.1120315231382847,
+      "decode_seconds": [],
+      "stable_decode_median_seconds": null,
+      "stable_decode_positions_per_second": null,
+      "stable_decode_rule": "omit first decode when at least two are present",
+      "input_window_seconds": 2.112041249871254,
+      "flush_seconds": 0,
+      "input_plus_flush_seconds": 2.112041849642992,
+      "backward_seconds": 1.8198410533368587,
+      "optimizer_seconds": 0.016666296869516373,
+      "complete_seconds": 3.949114602059126,
+      "input_positions": 8192,
+      "output_slots": 8192,
+      "calls": [
+        {
+          "phase": "prefill",
+          "inputs": 256,
+          "seconds": 2.11105165630579,
+          "output_ready_seconds": 2.1120315231382847
+        }
+      ],
+      "state_memory": {
+        "payload_bytes": 420002816,
+        "retained_storage_bytes": 420002816,
+        "dtypes": [
+          "torch.bfloat16",
+          "torch.float32",
+          "torch.int64"
+        ],
+        "tensor_count": 200
+      },
+      "loss": 1.2718002796173096,
+      "finite_output": true,
+      "finite_parameters": true,
+      "finite_gradients": true,
+      "index": 16,
+      "state_position": 4352,
+      "peak_device_bytes": 44877019136,
+      "process_peak_rss_kib": 2656660,
+      "device_memory": {
+        "allocated_bytes": 695867392,
+        "reserved_bytes": 54358179840,
+        "peak_allocated_bytes": 44877019136,
+        "peak_reserved_bytes": 54358179840
+      },
+      "continuation": {
+        "private_state_finite": true,
+        "private_state_detached": true,
+        "optimizer_finite": true,
+        "optimizer_parameter_owners": 351,
+        "optimizer_step_min": 17.0,
+        "optimizer_step_max": 17.0,
+        "kv_retained_slot_min": 128,
+        "kv_retained_slot_max": 128,
+        "kv_slot_limits": {
+          "K": 128
+        }
+      }
+    },
+    {
+      "prefill_seconds": 2.131359949707985,
+      "prefill_positions_per_second": 3843.5553793353283,
+      "first_backbone_output_seconds": 2.132317792624235,
+      "decode_seconds": [],
+      "stable_decode_median_seconds": null,
+      "stable_decode_positions_per_second": null,
+      "stable_decode_rule": "omit first decode when at least two are present",
+      "input_window_seconds": 2.132327016443014,
+      "flush_seconds": 0,
+      "input_plus_flush_seconds": 2.1323274970054626,
+      "backward_seconds": 1.8219327107071877,
+      "optimizer_seconds": 0.016699697822332382,
+      "complete_seconds": 3.9715304635465145,
+      "input_positions": 8192,
+      "output_slots": 8192,
+      "calls": [
+        {
+          "phase": "prefill",
+          "inputs": 256,
+          "seconds": 2.131359949707985,
+          "output_ready_seconds": 2.132317792624235
+        }
+      ],
+      "state_memory": {
+        "payload_bytes": 420002816,
+        "retained_storage_bytes": 420002816,
+        "dtypes": [
+          "torch.bfloat16",
+          "torch.float32",
+          "torch.int64"
+        ],
+        "tensor_count": 200
+      },
+      "loss": 1.235534429550171,
+      "finite_output": true,
+      "finite_parameters": true,
+      "finite_gradients": true,
+      "index": 17,
+      "state_position": 4608,
+      "peak_device_bytes": 44874938368,
+      "process_peak_rss_kib": 2656660,
+      "device_memory": {
+        "allocated_bytes": 692871680,
+        "reserved_bytes": 54358179840,
+        "peak_allocated_bytes": 44874938368,
+        "peak_reserved_bytes": 54358179840
+      },
+      "continuation": {
+        "private_state_finite": true,
+        "private_state_detached": true,
+        "optimizer_finite": true,
+        "optimizer_parameter_owners": 351,
+        "optimizer_step_min": 18.0,
+        "optimizer_step_max": 18.0,
+        "kv_retained_slot_min": 128,
+        "kv_retained_slot_max": 128,
+        "kv_slot_limits": {
+          "K": 128
+        }
+      }
+    },
+    {
+      "prefill_seconds": 2.1083040051162243,
+      "prefill_positions_per_second": 3885.5876477587967,
+      "first_backbone_output_seconds": 2.1093863658607006,
+      "decode_seconds": [],
+      "stable_decode_median_seconds": null,
+      "stable_decode_positions_per_second": null,
+      "stable_decode_rule": "omit first decode when at least two are present",
+      "input_window_seconds": 2.109394285827875,
+      "flush_seconds": 0,
+      "input_plus_flush_seconds": 2.109394833445549,
+      "backward_seconds": 1.8194774314761162,
+      "optimizer_seconds": 0.016000896692276,
+      "complete_seconds": 3.9453905262053013,
+      "input_positions": 8192,
+      "output_slots": 8192,
+      "calls": [
+        {
+          "phase": "prefill",
+          "inputs": 256,
+          "seconds": 2.1083040051162243,
+          "output_ready_seconds": 2.1093863658607006
+        }
+      ],
+      "state_memory": {
+        "payload_bytes": 420002816,
+        "retained_storage_bytes": 420002816,
+        "dtypes": [
+          "torch.bfloat16",
+          "torch.float32",
+          "torch.int64"
+        ],
+        "tensor_count": 200
+      },
+      "loss": 1.2006046772003174,
+      "finite_output": true,
+      "finite_parameters": true,
+      "finite_gradients": true,
+      "index": 18,
+      "state_position": 4864,
+      "peak_device_bytes": 44892409344,
+      "process_peak_rss_kib": 2656660,
+      "device_memory": {
+        "allocated_bytes": 692541952,
+        "reserved_bytes": 54358179840,
+        "peak_allocated_bytes": 44892409344,
+        "peak_reserved_bytes": 54358179840
+      },
+      "continuation": {
+        "private_state_finite": true,
+        "private_state_detached": true,
+        "optimizer_finite": true,
+        "optimizer_parameter_owners": 351,
+        "optimizer_step_min": 19.0,
+        "optimizer_step_max": 19.0,
+        "kv_retained_slot_min": 128,
+        "kv_retained_slot_max": 128,
+        "kv_slot_limits": {
+          "K": 128
+        }
+      }
+    },
+    {
+      "prefill_seconds": 2.1318953298032284,
+      "prefill_positions_per_second": 3842.590152282998,
+      "first_backbone_output_seconds": 2.1328328773379326,
+      "decode_seconds": [],
+      "stable_decode_median_seconds": null,
+      "stable_decode_positions_per_second": null,
+      "stable_decode_rule": "omit first decode when at least two are present",
+      "input_window_seconds": 2.1328412778675556,
+      "flush_seconds": 0,
+      "input_plus_flush_seconds": 2.1328417770564556,
+      "backward_seconds": 1.8179684020578861,
+      "optimizer_seconds": 0.015787623822689056,
+      "complete_seconds": 3.9671646989881992,
+      "input_positions": 8192,
+      "output_slots": 8192,
+      "calls": [
+        {
+          "phase": "prefill",
+          "inputs": 256,
+          "seconds": 2.1318953298032284,
+          "output_ready_seconds": 2.1328328773379326
+        }
+      ],
+      "state_memory": {
+        "payload_bytes": 420002816,
+        "retained_storage_bytes": 420002816,
+        "dtypes": [
+          "torch.bfloat16",
+          "torch.float32",
+          "torch.int64"
+        ],
+        "tensor_count": 200
+      },
+      "loss": 1.1667935848236084,
+      "finite_output": true,
+      "finite_parameters": true,
+      "finite_gradients": true,
+      "index": 19,
+      "state_position": 5120,
+      "peak_device_bytes": 44919996928,
+      "process_peak_rss_kib": 2656660,
+      "device_memory": {
+        "allocated_bytes": 692204032,
+        "reserved_bytes": 54358179840,
+        "peak_allocated_bytes": 44919996928,
+        "peak_reserved_bytes": 54358179840
+      },
+      "continuation": {
+        "private_state_finite": true,
+        "private_state_detached": true,
+        "optimizer_finite": true,
+        "optimizer_parameter_owners": 351,
+        "optimizer_step_min": 20.0,
+        "optimizer_step_max": 20.0,
+        "kv_retained_slot_min": 128,
+        "kv_retained_slot_max": 128,
+        "kv_slot_limits": {
+          "K": 128
+        }
+      }
+    }
+  ],
+  "state": "completed",
+  "last_stage": "checkpoint_and_paired_update",
+  "spec": {
+    "topology": {
+      "kind": "multiscale",
+      "n": 8,
+      "layers": null,
+      "depth": null,
+      "rounds": null,
+      "profile": "compact-9",
+      "hubs": 4,
+      "partition": "group",
+      "timing": "settle",
+      "hub_mask": "all",
+      "period": null,
+      "probes": null,
+      "terminal_hubs": false
+    },
+    "d": 128,
+    "memory": "X",
+    "aggregation": "source_residual",
+    "allocation": "quad",
+    "sharing": "region_shared",
+    "adapter_rank": 8,
+    "budget": null,
+    "attention_backend": "auto",
+    "attention_chunk": 128,
+    "input_dim": null,
+    "checkpoint_regions": false,
+    "checkpoint_reception": true,
+    "ssd_summary_backend": "prefix",
+    "region_batch_size": 4,
+    "local_attention_backend": null,
+    "hub_allocation": "bounded",
+    "clock": {
+      "position_period": null,
+      "position_origin": "binding",
+      "kv_window": null,
+      "short_decay": null,
+      "ssd_stride": null
+    }
+  },
+  "parameters": 15694224,
+  "comparison": {
+    "kind": "tide",
+    "comparisons_equivalent": false,
+    "audit_source": null,
+    "shared_input_prefix_width": 128,
+    "shared_input_prefix_sha256": "150d8ac0ff8b30b9bfc0eb88232bb9dbb3d48f88527a38fd71132111bd2b77ee"
+  },
+  "initial_parameters_sha256": "293670d35accb4327d05d2ea06289cf723024a4bc941919b49270acf4a3ab464",
+  "input_sha256": "150d8ac0ff8b30b9bfc0eb88232bb9dbb3d48f88527a38fd71132111bd2b77ee",
+  "input_shape": [
+    32,
+    256,
+    128
+  ],
+  "checkpoint": {
+    "save_seconds": 2.4132919795811176,
+    "load_seconds": 0.5201558321714401,
+    "file_bytes": 609039239,
+    "boundary": "state detached before checkpoint; complete next window plus required Timed flush contributes to one loss/backward/AdamW on each owner",
+    "saved_data": {
+      "exact": true,
+      "finite": true,
+      "metadata_mismatches": [],
+      "support_mismatches": [],
+      "numerical_failures": [],
+      "max_abs": 0.0,
+      "max_scaled_error": 0.0,
+      "atol": 0,
+      "rtol": 0,
+      "floating_tensors": 1558,
+      "within_threshold": true
+    },
+    "next_forward": {
+      "exact": true,
+      "finite": true,
+      "metadata_mismatches": [],
+      "support_mismatches": [],
+      "numerical_failures": [],
+      "max_abs": 0.0,
+      "max_scaled_error": 0.0,
+      "atol": 0,
+      "rtol": 0,
+      "floating_tensors": 1,
+      "within_threshold": true
+    },
+    "next_state": {
+      "exact": true,
+      "finite": true,
+      "metadata_mismatches": [],
+      "support_mismatches": [],
+      "numerical_failures": [],
+      "max_abs": 0.0,
+      "max_scaled_error": 0.0,
+      "atol": 0,
+      "rtol": 0,
+      "floating_tensors": 154,
+      "within_threshold": true
+    },
+    "losses": [
+      1.1342761516571045,
+      1.1342761516571045
+    ],
+    "update_windows": [
+      {
+        "input_positions": 8192,
+        "window_output_slots": 8192,
+        "flush_output_slots": 0,
+        "final_state_position": 5376
+      },
+      {
+        "input_positions": 8192,
+        "window_output_slots": 8192,
+        "flush_output_slots": 0,
+        "final_state_position": 5376
+      }
+    ],
+    "input_gradients": {
+      "exact": true,
+      "finite": true,
+      "metadata_mismatches": [],
+      "support_mismatches": [],
+      "numerical_failures": [],
+      "max_abs": 0.0,
+      "max_scaled_error": 0.0,
+      "atol": 1e-06,
+      "rtol": 0.01,
+      "floating_tensors": 1,
+      "within_threshold": true
+    },
+    "parameter_gradients": {
+      "exact": false,
+      "finite": true,
+      "metadata_mismatches": [],
+      "support_mismatches": [],
+      "numerical_failures": [],
+      "max_abs": 9.313225746154785e-10,
+      "max_scaled_error": 0.0003993843453572958,
+      "atol": 1e-06,
+      "rtol": 0.002,
+      "floating_tensors": 351,
+      "within_threshold": true
+    },
+    "updated_parameters": {
+      "exact": false,
+      "finite": true,
+      "metadata_mismatches": [],
+      "support_mismatches": [],
+      "numerical_failures": [],
+      "max_abs": 1.1641532182693481e-10,
+      "max_scaled_error": 2.9658065702179187e-05,
+      "atol": 1e-06,
+      "rtol": 0.002,
+      "floating_tensors": 351,
+      "within_threshold": true
+    },
+    "updated_optimizer": {
+      "exact": false,
+      "finite": true,
+      "metadata_mismatches": [],
+      "support_mismatches": [],
+      "numerical_failures": [],
+      "max_abs": 2.3283064365386963e-10,
+      "max_scaled_error": 7.717871305340628e-05,
+      "atol": 1e-06,
+      "rtol": 0.002,
+      "floating_tensors": 1053,
+      "within_threshold": true
+    },
+    "updated_state": {
+      "exact": true,
+      "finite": true,
+      "metadata_mismatches": [],
+      "support_mismatches": [],
+      "numerical_failures": [],
+      "max_abs": 0.0,
+      "max_scaled_error": 0.0,
+      "atol": 1e-06,
+      "rtol": 0.002,
+      "floating_tensors": 154,
+      "within_threshold": true
+    },
+    "state": "within_threshold"
+  },
+  "checkpoint_device_memory": {
+    "allocated_bytes": 688620544,
+    "reserved_bytes": 54496591872,
+    "peak_allocated_bytes": 47820045824,
+    "peak_reserved_bytes": 54496591872
+  }
+}

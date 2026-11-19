@@ -1,0 +1,309 @@
+{
+  "state": "within_threshold",
+  "checkpoint_data_exact": true,
+  "config_exact": true,
+  "checkpoint_sha256": "6e8a18f0c0a3aeb2b98890932a5dd832a0098cd75666fb0efdbb4d4f63b2856b",
+  "completed_update": 4,
+  "input_sha256": "717c0b26ed95aa5af1f04b39263b7503b848123636c73f216adbbefe5190dfba",
+  "update": {
+    "loss": 1.006822943687439,
+    "nonzero_parameter_gradient_fields": 79,
+    "input_gradient_max": 0.10057485848665237,
+    "position": 9007199254741025,
+    "time_first": 54043195528446131,
+    "time_last": 54043195528446149,
+    "private_int64_fields": 16
+  },
+  "comparisons": {
+    "values": {
+      "exact": true,
+      "finite": true,
+      "metadata_failures": [],
+      "support_failures": [],
+      "numerical_failures": [],
+      "max_abs": 0.0,
+      "atol": 1e-06,
+      "rtol": 0.002,
+      "within_threshold": true
+    },
+    "strengths": {
+      "exact": true,
+      "finite": true,
+      "metadata_failures": [],
+      "support_failures": [],
+      "numerical_failures": [],
+      "max_abs": 0.0,
+      "atol": 1e-06,
+      "rtol": 0.002,
+      "within_threshold": true
+    },
+    "times": {
+      "exact": true,
+      "finite": true,
+      "metadata_failures": [],
+      "support_failures": [],
+      "numerical_failures": [],
+      "max_abs": 0.0,
+      "atol": 1e-06,
+      "rtol": 0.002,
+      "within_threshold": true
+    },
+    "input_gradient": {
+      "exact": true,
+      "finite": true,
+      "metadata_failures": [],
+      "support_failures": [],
+      "numerical_failures": [],
+      "max_abs": 0.0,
+      "atol": 1e-06,
+      "rtol": 0.002,
+      "within_threshold": true
+    },
+    "parameter_gradients": {
+      "exact": true,
+      "finite": true,
+      "metadata_failures": [],
+      "support_failures": [],
+      "numerical_failures": [],
+      "max_abs": 0.0,
+      "atol": 1e-06,
+      "rtol": 0.002,
+      "within_threshold": true
+    },
+    "parameters": {
+      "exact": true,
+      "finite": true,
+      "metadata_failures": [],
+      "support_failures": [],
+      "numerical_failures": [],
+      "max_abs": 0.0,
+      "atol": 1e-06,
+      "rtol": 0.002,
+      "within_threshold": true
+    },
+    "optimizer": {
+      "exact": true,
+      "finite": true,
+      "metadata_failures": [],
+      "support_failures": [],
+      "numerical_failures": [],
+      "max_abs": 0.0,
+      "atol": 1e-06,
+      "rtol": 0.002,
+      "within_threshold": true
+    },
+    "state": {
+      "exact": true,
+      "finite": true,
+      "metadata_failures": [],
+      "support_failures": [],
+      "numerical_failures": [],
+      "max_abs": 0.0,
+      "atol": 1e-06,
+      "rtol": 0.002,
+      "within_threshold": true
+    }
+  },
+  "binding": {
+    "widths": {
+      "content": 192,
+      "summary": 48,
+      "ffn": 768,
+      "kv": 32
+    },
+    "memory_ownership": {
+      "K.kv": {
+        "shared": false,
+        "bases": 12
+      },
+      "K.summary": {
+        "shared": false,
+        "bases": 12
+      },
+      "K.query.heads.0": {
+        "shared": false,
+        "bases": 12
+      },
+      "K.output": {
+        "shared": false,
+        "bases": 12
+      },
+      "S.input": {
+        "shared": false,
+        "bases": 5
+      },
+      "S.summary": {
+        "shared": false,
+        "bases": 5
+      },
+      "S.read": {
+        "shared": false,
+        "bases": 5
+      },
+      "S.output": {
+        "shared": false,
+        "bases": 5
+      },
+      "S.a_log": {
+        "shared": false,
+        "bases": 5
+      },
+      "S.dt_bias": {
+        "shared": false,
+        "bases": 5
+      },
+      "S.skip": {
+        "shared": false,
+        "bases": 5
+      },
+      "S.rho": {
+        "shared": false,
+        "bases": 5
+      },
+      "S.conv_kernel": {
+        "shared": false,
+        "bases": 5
+      },
+      "S.conv_bias": {
+        "shared": false,
+        "bases": 5
+      }
+    },
+    "parameter_dtypes": [
+      "torch.float32"
+    ]
+  },
+  "installation": {
+    "package_root": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-installed-v1/venv/lib/python3.12/site-packages/tide",
+    "expected_root": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-installed-v1/venv",
+    "loaded_modules": [
+      {
+        "module": "tide",
+        "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-installed-v1/venv/lib/python3.12/site-packages/tide/__init__.py",
+        "sha256": "bd8d669f813aa282dc1835a53656550468f40eac46a730c4339635580d8e4195"
+      },
+      {
+        "module": "tide.allocation",
+        "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-installed-v1/venv/lib/python3.12/site-packages/tide/allocation.py",
+        "sha256": "ff7f4e26c05006e5fb1a68c50f783670c20c33baf56528b5dac55fa2ffab66cc"
+      },
+      {
+        "module": "tide.attention",
+        "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-installed-v1/venv/lib/python3.12/site-packages/tide/attention.py",
+        "sha256": "0a8231713a2801ed397cee093c5d1112867a2057fc20804717fd39fd9e1609e8"
+      },
+      {
+        "module": "tide.checkpoint",
+        "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-installed-v1/venv/lib/python3.12/site-packages/tide/checkpoint.py",
+        "sha256": "7e188773786f5cd7e3b06fcf3ef4ca9efa256933a9c21a8225f359687337c49f"
+      },
+      {
+        "module": "tide.config",
+        "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-installed-v1/venv/lib/python3.12/site-packages/tide/config.py",
+        "sha256": "813474436175c0781ff2832f8546ca7a1066438305afc49dd5cceb074c4250a8"
+      },
+      {
+        "module": "tide.kv",
+        "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-installed-v1/venv/lib/python3.12/site-packages/tide/kv.py",
+        "sha256": "67f7ef425ac016efcc1b71c8e2be389a87d3f6819331cc14c7791595703e1262"
+      },
+      {
+        "module": "tide.layout",
+        "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-installed-v1/venv/lib/python3.12/site-packages/tide/layout.py",
+        "sha256": "4aee0573beb2448dd90ca307b9065f2ed4cd0f7eb93bfcd92c4b46550f889aa0"
+      },
+      {
+        "module": "tide.model",
+        "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-installed-v1/venv/lib/python3.12/site-packages/tide/model.py",
+        "sha256": "2a931d9fb228d6b0b7c57c531db858929491d607a52c3320e938acc33f7a580c"
+      },
+      {
+        "module": "tide.parameters",
+        "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-installed-v1/venv/lib/python3.12/site-packages/tide/parameters.py",
+        "sha256": "d69081721b3e4362094949ba85c09455af88be72454008dd69882ddc61dff541"
+      },
+      {
+        "module": "tide.placement",
+        "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-installed-v1/venv/lib/python3.12/site-packages/tide/placement.py",
+        "sha256": "4bfcd44a59403ad966993d94b625637a14514f309f2a41d43cd26f2c2cc5abc8"
+      },
+      {
+        "module": "tide.precision",
+        "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-installed-v1/venv/lib/python3.12/site-packages/tide/precision.py",
+        "sha256": "5e94f06892dc89451750b4e5b1fd2e105d440f633875f31a883880e6a6ca480a"
+      },
+      {
+        "module": "tide.reception",
+        "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-installed-v1/venv/lib/python3.12/site-packages/tide/reception.py",
+        "sha256": "bae0d61c805b68fcf97800f40baa17ff549d90c3e2a47763cfc9f687a7c752f1"
+      },
+      {
+        "module": "tide.region",
+        "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-installed-v1/venv/lib/python3.12/site-packages/tide/region.py",
+        "sha256": "3d0ee3fa13e344ddb0fff5ce15af62cee4e0b1a7c4984df523e70a4cbfc41ec2"
+      },
+      {
+        "module": "tide.region_batch",
+        "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-installed-v1/venv/lib/python3.12/site-packages/tide/region_batch.py",
+        "sha256": "514ee30c5077d416c02cec81380280eb45509f20922a0f812657b93d2d8b7e80"
+      },
+      {
+        "module": "tide.region_execution",
+        "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-installed-v1/venv/lib/python3.12/site-packages/tide/region_execution.py",
+        "sha256": "0d62975ca47b37299cbdc80a4805375fef35c346dfe77ee2fe999e373ebf0950"
+      },
+      {
+        "module": "tide.ssd",
+        "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-installed-v1/venv/lib/python3.12/site-packages/tide/ssd.py",
+        "sha256": "42e0e9c2de11f7c266af93c7bf43bf3e53e63efd6ed1eb5b86ef18aa1c982af3"
+      },
+      {
+        "module": "tide.ssd_memory",
+        "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-installed-v1/venv/lib/python3.12/site-packages/tide/ssd_memory.py",
+        "sha256": "f7dc3f37b6fbcc25523c50793d4c468ea9aabb961349a049a9edf2bfd559fdac"
+      },
+      {
+        "module": "tide.topology",
+        "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-installed-v1/venv/lib/python3.12/site-packages/tide/topology.py",
+        "sha256": "8cdf58d0b3089e16a079ad46c3be7ca0c953fcea0023d276c9582901e1712dbf"
+      },
+      {
+        "module": "tide.topology_hb",
+        "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-installed-v1/venv/lib/python3.12/site-packages/tide/topology_hb.py",
+        "sha256": "5fb7b1a959f0b88a097e95959b52a1f10cf5180eaea7b688cbef086946abea06"
+      }
+    ],
+    "package_files": {
+      "__init__.py": "bd8d669f813aa282dc1835a53656550468f40eac46a730c4339635580d8e4195",
+      "allocation.py": "ff7f4e26c05006e5fb1a68c50f783670c20c33baf56528b5dac55fa2ffab66cc",
+      "attention.py": "0a8231713a2801ed397cee093c5d1112867a2057fc20804717fd39fd9e1609e8",
+      "checkpoint.py": "7e188773786f5cd7e3b06fcf3ef4ca9efa256933a9c21a8225f359687337c49f",
+      "config.py": "813474436175c0781ff2832f8546ca7a1066438305afc49dd5cceb074c4250a8",
+      "kv.py": "67f7ef425ac016efcc1b71c8e2be389a87d3f6819331cc14c7791595703e1262",
+      "layout.py": "4aee0573beb2448dd90ca307b9065f2ed4cd0f7eb93bfcd92c4b46550f889aa0",
+      "model.py": "2a931d9fb228d6b0b7c57c531db858929491d607a52c3320e938acc33f7a580c",
+      "parameters.py": "d69081721b3e4362094949ba85c09455af88be72454008dd69882ddc61dff541",
+      "placement.py": "4bfcd44a59403ad966993d94b625637a14514f309f2a41d43cd26f2c2cc5abc8",
+      "placement_ownership.py": "95431e5a2240b81a16df4cba08dfef541d777735220a212a28324f9c63661c13",
+      "precision.py": "5e94f06892dc89451750b4e5b1fd2e105d440f633875f31a883880e6a6ca480a",
+      "reception.py": "bae0d61c805b68fcf97800f40baa17ff549d90c3e2a47763cfc9f687a7c752f1",
+      "region.py": "3d0ee3fa13e344ddb0fff5ce15af62cee4e0b1a7c4984df523e70a4cbfc41ec2",
+      "region_batch.py": "514ee30c5077d416c02cec81380280eb45509f20922a0f812657b93d2d8b7e80",
+      "region_execution.py": "0d62975ca47b37299cbdc80a4805375fef35c346dfe77ee2fe999e373ebf0950",
+      "region_placement.py": "fd082f035185d04af6bc3ba27b949a8f065ccdf62f8b32a1b442accbfa6f2b6d",
+      "ssd.py": "42e0e9c2de11f7c266af93c7bf43bf3e53e63efd6ed1eb5b86ef18aa1c982af3",
+      "ssd_memory.py": "f7dc3f37b6fbcc25523c50793d4c468ea9aabb961349a049a9edf2bfd559fdac",
+      "topology.py": "8cdf58d0b3089e16a079ad46c3be7ca0c953fcea0023d276c9582901e1712dbf",
+      "topology_hb.py": "5fb7b1a959f0b88a097e95959b52a1f10cf5180eaea7b688cbef086946abea06"
+    },
+    "python": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-installed-v1/venv/bin/python",
+    "prefix": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-installed-v1/venv",
+    "torch_version": "2.12.0+cpu",
+    "isolated": 1,
+    "cwd": "/",
+    "threads": 1,
+    "vendor_imported": false,
+    "precision": "fp32",
+    "device": "cpu"
+  }
+}

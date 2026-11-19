@@ -1,0 +1,26 @@
+{
+  "topology": {
+    "kind": "fc",
+    "n": 16,
+    "layers": 24,
+    "depth": null,
+    "rounds": null,
+    "profile": null,
+    "hubs": 0,
+    "partition": "group",
+    "timing": "settle",
+    "hub_mask": "all",
+    "period": null,
+    "probes": null
+  },
+  "d": 384,
+  "memory": "K",
+  "aggregation": "source_residual",
+  "allocation": "quad",
+  "sharing": "independent",
+  "adapter_rank": 8,
+  "budget": null,
+  "attention_backend": "auto",
+  "attention_chunk": 128,
+  "input_dim": null
+}

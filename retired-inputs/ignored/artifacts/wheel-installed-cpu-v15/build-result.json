@@ -1,0 +1,127 @@
+{
+  "state": "passed",
+  "source": "0992b467584c1f603314ed04d8efe8596a14f576",
+  "source_path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/wheel-installed-cpu-v15/source",
+  "driver_sha256": "31a119d96784cfb81440fc6e2c6910f1d133c5c9cf787a51cb6d5960a4f260dd",
+  "smoke_sha256": "ebc190070bb913db9d4841d44baca313c25aaa78d7f29ea28c0e0259a3533d88",
+  "cpu_affinity": [
+    224,
+    225,
+    226,
+    227
+  ],
+  "commands": [
+    {
+      "command": [
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+        "-I",
+        "-m",
+        "pip",
+        "wheel",
+        "--no-deps",
+        "--no-build-isolation",
+        "--no-index",
+        "--no-cache-dir",
+        "--wheel-dir",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/wheel-installed-cpu-v15/wheelhouse",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/wheel-installed-cpu-v15/build-copy"
+      ],
+      "cwd": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/wheel-installed-cpu-v15",
+      "log": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/wheel-installed-cpu-v15/wheel-build.log",
+      "exit_code": 0,
+      "elapsed_seconds": 0.8895497918128967
+    },
+    {
+      "command": [
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+        "-I",
+        "-m",
+        "venv",
+        "--system-site-packages",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/wheel-installed-cpu-v15/installed-venv"
+      ],
+      "cwd": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/wheel-installed-cpu-v15",
+      "log": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/wheel-installed-cpu-v15/venv-create.log",
+      "exit_code": 0,
+      "elapsed_seconds": 2.567770291119814
+    },
+    {
+      "command": [
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/wheel-installed-cpu-v15/installed-venv/bin/python",
+        "-I",
+        "-m",
+        "pip",
+        "install",
+        "--ignore-installed",
+        "--no-deps",
+        "--no-index",
+        "--no-cache-dir",
+        "--no-compile",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/wheel-installed-cpu-v15/wheelhouse/tide_instances-0.1.0-py3-none-any.whl"
+      ],
+      "cwd": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/wheel-installed-cpu-v15",
+      "log": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/wheel-installed-cpu-v15/wheel-install.log",
+      "exit_code": 0,
+      "elapsed_seconds": 0.39459453523159027
+    },
+    {
+      "command": [
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/wheel-installed-cpu-v15/installed-venv/bin/python",
+        "-I",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/wheel-installed-cpu-v15-inputs/smoke.py",
+        "--output",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/wheel-installed-cpu-v15/smoke-result.json",
+        "--example",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/wheel-installed-cpu-v15/source/examples/train.py",
+        "--wheel",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/wheel-installed-cpu-v15/wheelhouse/tide_instances-0.1.0-py3-none-any.whl",
+        "--source",
+        "0992b467584c1f603314ed04d8efe8596a14f576"
+      ],
+      "cwd": "/",
+      "log": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/wheel-installed-cpu-v15/installed-smoke.log",
+      "exit_code": 0,
+      "elapsed_seconds": 4.942445170134306
+    }
+  ],
+  "wheel": {
+    "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/wheel-installed-cpu-v15/wheelhouse/tide_instances-0.1.0-py3-none-any.whl",
+    "sha256": "1b3349526257e87daf1177d88c5a97ea30484b402f88080d00a72b4f521eb0e4",
+    "bytes": 47165,
+    "package_file_sha256": {
+      "tide/__init__.py": "7d3ebd98765b12db41384135c3b00e12c47e55e77701bd67e55c2857680edb32",
+      "tide/allocation.py": "ff7f4e26c05006e5fb1a68c50f783670c20c33baf56528b5dac55fa2ffab66cc",
+      "tide/attention.py": "0a8231713a2801ed397cee093c5d1112867a2057fc20804717fd39fd9e1609e8",
+      "tide/checkpoint.py": "f4ce80ca7ae4c82d55af76c6af9562cf933e79ee9e12157d1d485b5c2e552c9a",
+      "tide/config.py": "e010d80909f41ecdd8ea2953139001c2647dde4382a4f2315eee812142b99d2b",
+      "tide/kv.py": "a7e46154bab172bcd016b8c7d612393bb57c73b2f03681605ef2a49262172445",
+      "tide/layout.py": "4aee0573beb2448dd90ca307b9065f2ed4cd0f7eb93bfcd92c4b46550f889aa0",
+      "tide/model.py": "a0b43b63a2ae196e90dc17b0b1db3af89dd003b8890bd5f6354e2733a6bc6f9c",
+      "tide/parameters.py": "67d6ee7829448fa7431a3350a3a15ea5070aa4038d2276017d844714dceecfa7",
+      "tide/placement.py": "a8f8984231b1c7246a132cad38ab209ecb0081e1e2992e62f2af41d478187f2d",
+      "tide/precision.py": "5e94f06892dc89451750b4e5b1fd2e105d440f633875f31a883880e6a6ca480a",
+      "tide/reception.py": "67768494c96a697480c13713e246b1a943940e7faeb96d24bd0732aad3f7cd98",
+      "tide/region.py": "3d0ee3fa13e344ddb0fff5ce15af62cee4e0b1a7c4984df523e70a4cbfc41ec2",
+      "tide/ssd.py": "03132ab3f3a8b49f8eb6f0c0b29000e1647280fb243d0105a5e7f220ccac0954",
+      "tide/ssd_memory.py": "93d3f1e53f79446f0e46ea14475f2f9e5a24bff3babba68b394e8f52d244e4e6",
+      "tide/topology.py": "8041813f6eb79985dab4bbde6116b1ab6827e1233dd4899536450ad32f48ecb5",
+      "tide/topology_hb.py": "5fb7b1a959f0b88a097e95959b52a1f10cf5180eaea7b688cbef086946abea06"
+    }
+  },
+  "venv_config": "home = /opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/bin\ninclude-system-site-packages = true\nversion = 3.12.13\nexecutable = /opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/bin/python3.12\ncommand = /mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python -m venv --system-site-packages /mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/wheel-installed-cpu-v15/installed-venv\n",
+  "clean_environment": {
+    "PYTHONPATH": null,
+    "PYTHONNOUSERSITE": "1",
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "TORCH_DEVICE_BACKEND_AUTOLOAD": "0",
+    "OMP_NUM_THREADS": "4",
+    "MKL_NUM_THREADS": "4",
+    "OPENBLAS_NUM_THREADS": "4",
+    "PIP_CONFIG_FILE": "/dev/null",
+    "TMPDIR": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/wheel-installed-cpu-v15/tmp",
+    "VIRTUAL_ENV": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/wheel-installed-cpu-v15/installed-venv"
+  },
+  "frozen_source_unchanged": true,
+  "frozen_source_file_count": 253,
+  "elapsed_seconds": 8.893913097679615
+}

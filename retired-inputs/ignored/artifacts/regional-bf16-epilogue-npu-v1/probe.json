@@ -1,0 +1,11 @@
+{
+  "source": "062a8ab6d6ba0faa191d8900420b697711b7d21d",
+  "physical_devices": "1",
+  "serial_dtype": "torch.bfloat16",
+  "baddbmm_dtype": "torch.bfloat16",
+  "separate_dtype": "torch.float32",
+  "serial_value": 1.0,
+  "baddbmm_value": 1.0,
+  "separate_value": 1.0010000467300415,
+  "max_abs": 0.0
+}

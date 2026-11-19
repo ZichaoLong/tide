@@ -1,0 +1,1102 @@
+{
+  "tide/standard": {
+    "trace": {
+      "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-cost-source-fp32-v1/costs-tide-standard-trace.json",
+      "sha256": "4a42ea479e37ae7b1e664c5ca95b794894355923b655a70f9ad456b449167151",
+      "bytes": 142493940
+    },
+    "sha256_verified": true,
+    "event_count": 767588,
+    "categories": {
+      "cpu_op": 207880,
+      "dequeue": 37943,
+      "enqueue": 37943,
+      "unspecified": 163314
+    },
+    "process_names": {
+      "2240564": "Python",
+      "2294338017": "AI Core Freq",
+      "2294338529": "Overlap Analysis",
+      "2294337985": "Ascend Hardware"
+    },
+    "hardware_processes": {
+      "2294337985": "Ascend Hardware"
+    },
+    "host_cpu_op_events": 207880,
+    "host_cpu_op_inclusive_duration_sum_seconds": 3.9002881499999438,
+    "hardware_events": 54803,
+    "hardware_duration_sum_seconds": 1.29953825,
+    "hardware_interval_union_seconds": 1.15766275,
+    "hardware_span_seconds": 1.72198175,
+    "kernel_events": 54256,
+    "kernel_duration_sum_seconds": 1.15751525,
+    "kernel_interval_union_seconds": 1.15683725,
+    "top_hardware_tasks": [
+      {
+        "name": "aclnnCumprod_Cumprod_Cumprod",
+        "task_type": "KERNEL_AICPU",
+        "calls": 128,
+        "duration_sum_ms": 233.06246399999998
+      },
+      {
+        "name": "EVENT WAIT",
+        "task_type": "EVENT WAIT",
+        "calls": 76,
+        "duration_sum_ms": 141.715124
+      },
+      {
+        "name": "aclnnIndex_IndexAiCore_Index",
+        "task_type": "KERNEL_AIVEC",
+        "calls": 1786,
+        "duration_sum_ms": 75.4061879999999
+      },
+      {
+        "name": "aclnnMul_MulAiCore_Mul",
+        "task_type": "KERNEL_AIVEC",
+        "calls": 3527,
+        "duration_sum_ms": 71.10775200000013
+      },
+      {
+        "name": "aclnnScatterAdd_ScatterElements_ScatterElementsV2",
+        "task_type": "KERNEL_MIX_AIV",
+        "calls": 8,
+        "duration_sum_ms": 63.888160000000006
+      },
+      {
+        "name": "aclnnBatchMatMul_BatchMatMulNd_BatchMatMulV2",
+        "task_type": "KERNEL_AICORE",
+        "calls": 2007,
+        "duration_sum_ms": 61.61670000000009
+      },
+      {
+        "name": "aclnnAdd_AddAiCore_Add",
+        "task_type": "KERNEL_AIVEC",
+        "calls": 4592,
+        "duration_sum_ms": 57.85579200000005
+      },
+      {
+        "name": "aclnnInplaceCopy_ViewCopyAiCore_ViewCopy",
+        "task_type": "KERNEL_AIVEC",
+        "calls": 864,
+        "duration_sum_ms": 37.73696799999996
+      },
+      {
+        "name": "aclnnFlashAttentionScoreGradV2_FlashAttentionScoreGrad_FlashAttentionScoreGrad",
+        "task_type": "KERNEL_MIX_AIC",
+        "calls": 38,
+        "duration_sum_ms": 35.539168000000004
+      },
+      {
+        "name": "aclnnIndexPutImpl_IndexPutV2_IndexPutV2",
+        "task_type": "KERNEL_AIVEC",
+        "calls": 1216,
+        "duration_sum_ms": 33.98103999999998
+      },
+      {
+        "name": "aclnnReduceSum_ReduceSumOpAiCore_ReduceSum",
+        "task_type": "KERNEL_MIX_AIV",
+        "calls": 1642,
+        "duration_sum_ms": 27.186691999999976
+      },
+      {
+        "name": "aclnnIndexPutImpl_TransposeAiCore_Transpose",
+        "task_type": "KERNEL_AIVEC",
+        "calls": 885,
+        "duration_sum_ms": 18.07442399999998
+      },
+      {
+        "name": "aclnnIndex_SliceAiCore_Slice",
+        "task_type": "KERNEL_AIVEC",
+        "calls": 1274,
+        "duration_sum_ms": 17.265012000000006
+      },
+      {
+        "name": "aclnnInplaceZero_ZerosLikeAiCore_ZerosLike",
+        "task_type": "KERNEL_AIVEC",
+        "calls": 2696,
+        "duration_sum_ms": 16.032336000000054
+      },
+      {
+        "name": "aclnnMul_TransposeAiCore_Transpose",
+        "task_type": "KERNEL_AIVEC",
+        "calls": 540,
+        "duration_sum_ms": 14.919468000000002
+      },
+      {
+        "name": "aclnnSWhere_SelectV2AiCore_SelectV2",
+        "task_type": "KERNEL_AIVEC",
+        "calls": 2482,
+        "duration_sum_ms": 14.706116000000025
+      },
+      {
+        "name": "aclnnSWhere_TransposeAiCore_Transpose",
+        "task_type": "KERNEL_AIVEC",
+        "calls": 860,
+        "duration_sum_ms": 14.422436000000003
+      },
+      {
+        "name": "aclnnIndexPutImpl_SliceAiCore_Slice",
+        "task_type": "KERNEL_AIVEC",
+        "calls": 1316,
+        "duration_sum_ms": 12.889031999999983
+      },
+      {
+        "name": "aclnnInplaceCopy_TransposeAiCore_Transpose",
+        "task_type": "KERNEL_AIVEC",
+        "calls": 591,
+        "duration_sum_ms": 12.284764000000006
+      },
+      {
+        "name": "aclnnFlashAttentionScoreV2_FlashAttentionScore_FlashAttentionScore",
+        "task_type": "KERNEL_MIX_AIC",
+        "calls": 38,
+        "duration_sum_ms": 11.589352000000002
+      }
+    ],
+    "cumprod_hardware_tasks": [
+      {
+        "name": "aclnnCumprod_Cumprod_Cumprod",
+        "task_type": "KERNEL_AICPU",
+        "calls": 128,
+        "duration_sum_ms": 233.06246399999998
+      },
+      {
+        "name": "aclnnCumprod_TransposeAiCore_Transpose",
+        "task_type": "KERNEL_AIVEC",
+        "calls": 64,
+        "duration_sum_ms": 0.7908679999999999
+      },
+      {
+        "name": "aclnnCumprod_SliceAiCore_Slice",
+        "task_type": "KERNEL_AIVEC",
+        "calls": 64,
+        "duration_sum_ms": 0.20868799999999996
+      }
+    ],
+    "index_hardware_tasks": [
+      {
+        "name": "aclnnIndex_IndexAiCore_Index",
+        "task_type": "KERNEL_AIVEC",
+        "calls": 1786,
+        "duration_sum_ms": 75.4061879999999
+      },
+      {
+        "name": "aclnnScatterAdd_ScatterElements_ScatterElementsV2",
+        "task_type": "KERNEL_MIX_AIV",
+        "calls": 8,
+        "duration_sum_ms": 63.888160000000006
+      },
+      {
+        "name": "aclnnIndexPutImpl_IndexPutV2_IndexPutV2",
+        "task_type": "KERNEL_AIVEC",
+        "calls": 1216,
+        "duration_sum_ms": 33.98103999999998
+      },
+      {
+        "name": "aclnnIndexPutImpl_TransposeAiCore_Transpose",
+        "task_type": "KERNEL_AIVEC",
+        "calls": 885,
+        "duration_sum_ms": 18.07442399999998
+      },
+      {
+        "name": "aclnnIndex_SliceAiCore_Slice",
+        "task_type": "KERNEL_AIVEC",
+        "calls": 1274,
+        "duration_sum_ms": 17.265012000000006
+      },
+      {
+        "name": "aclnnIndexPutImpl_SliceAiCore_Slice",
+        "task_type": "KERNEL_AIVEC",
+        "calls": 1316,
+        "duration_sum_ms": 12.889031999999983
+      },
+      {
+        "name": "aclnnIndex_IndexCheck_IndexCheck",
+        "task_type": "KERNEL_AIVEC",
+        "calls": 1820,
+        "duration_sum_ms": 10.594435999999993
+      },
+      {
+        "name": "aclnnIndexPutImpl_IndexPut_IndexPut",
+        "task_type": "KERNEL_AICPU",
+        "calls": 30,
+        "duration_sum_ms": 9.403828
+      },
+      {
+        "name": "aclnnIndexPutImpl_IndexCheck_IndexCheck",
+        "task_type": "KERNEL_AIVEC",
+        "calls": 1251,
+        "duration_sum_ms": 7.772544000000009
+      },
+      {
+        "name": "aclnnIndex_IndexAiCpu_Index",
+        "task_type": "KERNEL_AICPU",
+        "calls": 34,
+        "duration_sum_ms": 6.645167999999999
+      },
+      {
+        "name": "aclnnIndexCopy_ScatterUpdateAiCore_ScatterUpdate",
+        "task_type": "KERNEL_AIVEC",
+        "calls": 114,
+        "duration_sum_ms": 4.4009399999999985
+      },
+      {
+        "name": "aclnnScatterAdd_TransposeAiCore_Transpose",
+        "task_type": "KERNEL_AIVEC",
+        "calls": 32,
+        "duration_sum_ms": 4.3045
+      },
+      {
+        "name": "aclnnScatter_ScatterElements_ScatterElements",
+        "task_type": "KERNEL_AICPU",
+        "calls": 11,
+        "duration_sum_ms": 4.246632
+      },
+      {
+        "name": "aclnnIndexSelect_GatherV3AiCore_GatherV3",
+        "task_type": "KERNEL_AIVEC",
+        "calls": 112,
+        "duration_sum_ms": 0.9918959999999999
+      },
+      {
+        "name": "aclnnIndexCopy_TensorMoveAiCore_TensorMove",
+        "task_type": "KERNEL_AIVEC",
+        "calls": 76,
+        "duration_sum_ms": 0.9709399999999999
+      },
+      {
+        "name": "aclnnIndexPutImpl_IndexPutWithSort_IndexPutWithSort",
+        "task_type": "KERNEL_MIX_AIV",
+        "calls": 5,
+        "duration_sum_ms": 0.536188
+      },
+      {
+        "name": "aclnnScatterAdd_BroadcastToAiCore_BroadcastTo",
+        "task_type": "KERNEL_AIVEC",
+        "calls": 8,
+        "duration_sum_ms": 0.526064
+      },
+      {
+        "name": "aclnnScatterAdd_LinearIndex_LinearIndex",
+        "task_type": "KERNEL_AIVEC",
+        "calls": 8,
+        "duration_sum_ms": 0.5011880000000001
+      },
+      {
+        "name": "aclnnIndexPutImpl_SortAiCore_Sort",
+        "task_type": "KERNEL_MIX_AIV",
+        "calls": 5,
+        "duration_sum_ms": 0.22064799999999998
+      },
+      {
+        "name": "aclnnIndexCopy_StridedSliceAiCore_StridedSlice",
+        "task_type": "KERNEL_AIVEC",
+        "calls": 16,
+        "duration_sum_ms": 0.21380800000000003
+      },
+      {
+        "name": "aclnnIndex_BroadcastToAiCore_BroadcastTo",
+        "task_type": "KERNEL_AIVEC",
+        "calls": 19,
+        "duration_sum_ms": 0.14305199999999998
+      },
+      {
+        "name": "aclnnIndex_TransposeAiCore_Transpose",
+        "task_type": "KERNEL_AIVEC",
+        "calls": 11,
+        "duration_sum_ms": 0.140424
+      },
+      {
+        "name": "aclnnIndexPutImpl_LinearIndexV2_LinearIndexV2",
+        "task_type": "KERNEL_MIX_AIV",
+        "calls": 5,
+        "duration_sum_ms": 0.11406000000000001
+      },
+      {
+        "name": "aclnnScatter_BroadcastToAiCore_BroadcastTo",
+        "task_type": "KERNEL_AIVEC",
+        "calls": 11,
+        "duration_sum_ms": 0.040619999999999996
+      }
+    ],
+    "task_types": {
+      "KERNEL_AICORE": {
+        "calls": 3514,
+        "duration_sum_ms": 81.63784000000017
+      },
+      "KERNEL_AIVEC": {
+        "calls": 47614,
+        "duration_sum_ms": 647.379148000003
+      },
+      "KERNEL_MIX_AIV": {
+        "calls": 2653,
+        "duration_sum_ms": 108.5593960000001
+      },
+      "KERNEL_AICPU": {
+        "calls": 284,
+        "duration_sum_ms": 268.44403199999994
+      },
+      "KERNEL_MIX_AIC": {
+        "calls": 191,
+        "duration_sum_ms": 51.52451200000001
+      },
+      "EVENT WAIT": {
+        "calls": 76,
+        "duration_sum_ms": 141.715124
+      },
+      "EVENT RECORD": {
+        "calls": 76,
+        "duration_sum_ms": 0.001500000000000001
+      },
+      "PLACE_HOLDER_SQE": {
+        "calls": 1,
+        "duration_sum_ms": 2e-05
+      },
+      "SDMA_SQE": {
+        "calls": 394,
+        "duration_sum_ms": 0.31107600000000024
+      }
+    },
+    "interpretation": "metadata process_name selects Ascend Hardware, Task Type prefix KERNEL selects kernels; raw timestamps union separately; nested CPU inclusive and concurrent device sums are not additive or normal-time fractions"
+  },
+  "transformer_A/standard": {
+    "trace": {
+      "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-cost-source-fp32-v1/costs-transformer_A-standard-trace.json",
+      "sha256": "54807470256464f90ba6665905204670dcf448b3bc56809aab7b65d515e67d87",
+      "bytes": 121042721
+    },
+    "sha256_verified": true,
+    "event_count": 637247,
+    "categories": {
+      "cpu_op": 207174,
+      "dequeue": 32051,
+      "enqueue": 32051,
+      "unspecified": 113451
+    },
+    "process_names": {
+      "2240564": "Python",
+      "2294338017": "AI Core Freq",
+      "2294338529": "Overlap Analysis",
+      "2294337985": "Ascend Hardware"
+    },
+    "hardware_processes": {
+      "2294337985": "Ascend Hardware"
+    },
+    "host_cpu_op_events": 207174,
+    "host_cpu_op_inclusive_duration_sum_seconds": 2.3449041399999597,
+    "hardware_events": 38820,
+    "hardware_duration_sum_seconds": 0.4589825,
+    "hardware_interval_union_seconds": 0.415785,
+    "hardware_span_seconds": 1.17497825,
+    "kernel_events": 37316,
+    "kernel_duration_sum_seconds": 0.41447325,
+    "kernel_interval_union_seconds": 0.41414475,
+    "top_hardware_tasks": [
+      {
+        "name": "aclnnMul_StridedSliceAiCore_StridedSlice",
+        "task_type": "KERNEL_AIVEC",
+        "calls": 2632,
+        "duration_sum_ms": 63.75093999999992
+      },
+      {
+        "name": "EVENT WAIT",
+        "task_type": "EVENT WAIT",
+        "calls": 752,
+        "duration_sum_ms": 44.509380000000064
+      },
+      {
+        "name": "aclnnMatmul_MatMulCommon_MatMulV2",
+        "task_type": "KERNEL_AICORE",
+        "calls": 2256,
+        "duration_sum_ms": 43.9631759999999
+      },
+      {
+        "name": "aclnnMul_MulAiCore_Mul",
+        "task_type": "KERNEL_AIVEC",
+        "calls": 6584,
+        "duration_sum_ms": 43.77931600000013
+      },
+      {
+        "name": "aclnnInplaceCopy_ViewCopyAiCore_ViewCopy",
+        "task_type": "KERNEL_AIVEC",
+        "calls": 1880,
+        "duration_sum_ms": 35.92985600000005
+      },
+      {
+        "name": "aclnnInplaceCopy_TransposeAiCore_Transpose",
+        "task_type": "KERNEL_AIVEC",
+        "calls": 1880,
+        "duration_sum_ms": 27.353068000000007
+      },
+      {
+        "name": "aclnnFlashAttentionScoreGradV2_FlashAttentionScoreGrad_FlashAttentionScoreGrad",
+        "task_type": "KERNEL_MIX_AIC",
+        "calls": 376,
+        "duration_sum_ms": 24.149603999999986
+      },
+      {
+        "name": "aclnnMul_TransposeAiCore_Transpose",
+        "task_type": "KERNEL_AIVEC",
+        "calls": 1504,
+        "duration_sum_ms": 21.99881200000003
+      },
+      {
+        "name": "aclnnFlashAttentionScoreV2_FlashAttentionScore_FlashAttentionScore",
+        "task_type": "KERNEL_MIX_AIC",
+        "calls": 376,
+        "duration_sum_ms": 17.463272
+      },
+      {
+        "name": "aclnnAdd_AddAiCore_Add",
+        "task_type": "KERNEL_AIVEC",
+        "calls": 3195,
+        "duration_sum_ms": 15.69104799999997
+      },
+      {
+        "name": "aclnnSWhere_SelectV2AiCore_SelectV2",
+        "task_type": "KERNEL_AIVEC",
+        "calls": 752,
+        "duration_sum_ms": 13.782100000000005
+      },
+      {
+        "name": "aclnnReduceSum_ReduceSumOpAiCore_ReduceSum",
+        "task_type": "KERNEL_MIX_AIV",
+        "calls": 754,
+        "duration_sum_ms": 13.391412000000008
+      },
+      {
+        "name": "aclnnInplaceZero_ZerosLikeAiCore_ZerosLike",
+        "task_type": "KERNEL_AIVEC",
+        "calls": 1880,
+        "duration_sum_ms": 9.387083999999998
+      },
+      {
+        "name": "aclnnPowTensorScalar_PowsAiCore_Pows",
+        "task_type": "KERNEL_AIVEC",
+        "calls": 754,
+        "duration_sum_ms": 7.371375999999993
+      },
+      {
+        "name": "aclnnCat_ConcatD_ConcatD",
+        "task_type": "KERNEL_AIVEC",
+        "calls": 564,
+        "duration_sum_ms": 5.477871999999997
+      },
+      {
+        "name": "aclnnMean_ReduceMeanAiCore_ReduceMean",
+        "task_type": "KERNEL_MIX_AIV",
+        "calls": 377,
+        "duration_sum_ms": 5.237007999999993
+      },
+      {
+        "name": "aclnnSWhere_TransposeAiCore_Transpose",
+        "task_type": "KERNEL_AIVEC",
+        "calls": 376,
+        "duration_sum_ms": 5.007728000000004
+      },
+      {
+        "name": "aclnnInplaceCopy_CastAiCore_Cast",
+        "task_type": "KERNEL_AIVEC",
+        "calls": 752,
+        "duration_sum_ms": 4.809092000000013
+      },
+      {
+        "name": "aclnnInplaceCopy_SliceAiCore_Slice",
+        "task_type": "KERNEL_AIVEC",
+        "calls": 1128,
+        "duration_sum_ms": 4.1503280000000045
+      },
+      {
+        "name": "aclnnNeg_StridedSliceAiCore_StridedSlice",
+        "task_type": "KERNEL_AIVEC",
+        "calls": 376,
+        "duration_sum_ms": 3.940988000000001
+      }
+    ],
+    "cumprod_hardware_tasks": [],
+    "index_hardware_tasks": [],
+    "task_types": {
+      "KERNEL_AIVEC": {
+        "calls": 32801,
+        "duration_sum_ms": 306.39436400000255
+      },
+      "KERNEL_MIX_AIV": {
+        "calls": 1507,
+        "duration_sum_ms": 22.47074799999996
+      },
+      "KERNEL_AICORE": {
+        "calls": 2256,
+        "duration_sum_ms": 43.9631759999999
+      },
+      "KERNEL_MIX_AIC": {
+        "calls": 752,
+        "duration_sum_ms": 41.61287599999998
+      },
+      "EVENT RECORD": {
+        "calls": 752,
+        "duration_sum_ms": 0.014983999999999786
+      },
+      "EVENT WAIT": {
+        "calls": 752,
+        "duration_sum_ms": 44.509380000000064
+      }
+    },
+    "interpretation": "metadata process_name selects Ascend Hardware, Task Type prefix KERNEL selects kernels; raw timestamps union separately; nested CPU inclusive and concurrent device sums are not additive or normal-time fractions"
+  },
+  "transformer_A/chunk256": {
+    "trace": {
+      "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-cost-source-fp32-v1/costs-transformer_A-chunk256-trace.json",
+      "sha256": "4710d1d88517e06a57f922cb20682ecb0358ebf24b1e0548d64a31b214570883",
+      "bytes": 94890507
+    },
+    "sha256_verified": true,
+    "event_count": 504144,
+    "categories": {
+      "cpu_op": 159046,
+      "dequeue": 25283,
+      "enqueue": 25283,
+      "unspecified": 92396
+    },
+    "process_names": {
+      "2240564": "Python",
+      "2294338017": "AI Core Freq",
+      "2294338529": "Overlap Analysis",
+      "2294337985": "Ascend Hardware"
+    },
+    "hardware_processes": {
+      "2294337985": "Ascend Hardware"
+    },
+    "host_cpu_op_events": 159046,
+    "host_cpu_op_inclusive_duration_sum_seconds": 1.9020687600000081,
+    "hardware_events": 31301,
+    "hardware_duration_sum_seconds": 0.4047465,
+    "hardware_interval_union_seconds": 0.3618875,
+    "hardware_span_seconds": 0.94517725,
+    "kernel_events": 30548,
+    "kernel_duration_sum_seconds": 0.36118775,
+    "kernel_interval_union_seconds": 0.36087,
+    "top_hardware_tasks": [
+      {
+        "name": "aclnnMul_StridedSliceAiCore_StridedSlice",
+        "task_type": "KERNEL_AIVEC",
+        "calls": 2632,
+        "duration_sum_ms": 63.96916000000006
+      },
+      {
+        "name": "aclnnMul_MulAiCore_Mul",
+        "task_type": "KERNEL_AIVEC",
+        "calls": 6584,
+        "duration_sum_ms": 43.849611999999794
+      },
+      {
+        "name": "EVENT WAIT",
+        "task_type": "EVENT WAIT",
+        "calls": 376,
+        "duration_sum_ms": 43.55818000000001
+      },
+      {
+        "name": "aclnnMatmul_MatMulCommon_MatMulV2",
+        "task_type": "KERNEL_AICORE",
+        "calls": 2256,
+        "duration_sum_ms": 42.99653199999988
+      },
+      {
+        "name": "aclnnInplaceCopy_TransposeAiCore_Transpose",
+        "task_type": "KERNEL_AIVEC",
+        "calls": 1692,
+        "duration_sum_ms": 26.223772000000018
+      },
+      {
+        "name": "aclnnInplaceCopy_ViewCopyAiCore_ViewCopy",
+        "task_type": "KERNEL_AIVEC",
+        "calls": 752,
+        "duration_sum_ms": 25.663459999999993
+      },
+      {
+        "name": "aclnnMul_TransposeAiCore_Transpose",
+        "task_type": "KERNEL_AIVEC",
+        "calls": 1504,
+        "duration_sum_ms": 22.36235200000006
+      },
+      {
+        "name": "aclnnFlashAttentionScoreGradV2_FlashAttentionScoreGrad_FlashAttentionScoreGrad",
+        "task_type": "KERNEL_MIX_AIC",
+        "calls": 188,
+        "duration_sum_ms": 15.132064000000002
+      },
+      {
+        "name": "aclnnReduceSum_ReduceSumOpAiCore_ReduceSum",
+        "task_type": "KERNEL_MIX_AIV",
+        "calls": 754,
+        "duration_sum_ms": 13.189728000000002
+      },
+      {
+        "name": "aclnnAdd_AddAiCore_Add",
+        "task_type": "KERNEL_AIVEC",
+        "calls": 2631,
+        "duration_sum_ms": 13.145459999999963
+      },
+      {
+        "name": "aclnnFlashAttentionScoreV2_FlashAttentionScore_FlashAttentionScore",
+        "task_type": "KERNEL_MIX_AIC",
+        "calls": 188,
+        "duration_sum_ms": 10.592096000000005
+      },
+      {
+        "name": "aclnnPowTensorScalar_PowsAiCore_Pows",
+        "task_type": "KERNEL_AIVEC",
+        "calls": 754,
+        "duration_sum_ms": 7.32940399999999
+      },
+      {
+        "name": "aclnnSWhere_SelectV2AiCore_SelectV2",
+        "task_type": "KERNEL_AIVEC",
+        "calls": 376,
+        "duration_sum_ms": 7.116335999999996
+      },
+      {
+        "name": "aclnnMean_ReduceMeanAiCore_ReduceMean",
+        "task_type": "KERNEL_MIX_AIV",
+        "calls": 377,
+        "duration_sum_ms": 5.203503999999997
+      },
+      {
+        "name": "aclnnNeg_StridedSliceAiCore_StridedSlice",
+        "task_type": "KERNEL_AIVEC",
+        "calls": 376,
+        "duration_sum_ms": 3.980312000000001
+      },
+      {
+        "name": "aclnnInplaceZero_ZerosLikeAiCore_ZerosLike",
+        "task_type": "KERNEL_AIVEC",
+        "calls": 752,
+        "duration_sum_ms": 3.950616000000016
+      },
+      {
+        "name": "aclnnAddcdiv_AddcdivAiCore_Addcdiv",
+        "task_type": "KERNEL_AIVEC",
+        "calls": 1129,
+        "duration_sum_ms": 3.912320000000007
+      },
+      {
+        "name": "aclnnDivs_BroadcastToAiCore_BroadcastTo",
+        "task_type": "KERNEL_AIVEC",
+        "calls": 376,
+        "duration_sum_ms": 3.674376000000001
+      },
+      {
+        "name": "aclnnCat_ConcatD_ConcatD",
+        "task_type": "KERNEL_AIVEC",
+        "calls": 376,
+        "duration_sum_ms": 3.5693919999999997
+      },
+      {
+        "name": "aclnnMuls_MulAiCore_Mul",
+        "task_type": "KERNEL_AIVEC",
+        "calls": 753,
+        "duration_sum_ms": 3.3521239999999963
+      }
+    ],
+    "cumprod_hardware_tasks": [],
+    "index_hardware_tasks": [],
+    "task_types": {
+      "KERNEL_AIVEC": {
+        "calls": 26597,
+        "duration_sum_ms": 270.75075599999946
+      },
+      "KERNEL_MIX_AIV": {
+        "calls": 1319,
+        "duration_sum_ms": 21.653039999999987
+      },
+      "KERNEL_AICORE": {
+        "calls": 2256,
+        "duration_sum_ms": 42.99653199999988
+      },
+      "KERNEL_MIX_AIC": {
+        "calls": 376,
+        "duration_sum_ms": 25.724160000000023
+      },
+      "EVENT WAIT": {
+        "calls": 376,
+        "duration_sum_ms": 43.55818000000001
+      },
+      "EVENT RECORD": {
+        "calls": 376,
+        "duration_sum_ms": 0.007523999999999941
+      },
+      "PLACE_HOLDER_SQE": {
+        "calls": 1,
+        "duration_sum_ms": 2e-05
+      }
+    },
+    "interpretation": "metadata process_name selects Ascend Hardware, Task Type prefix KERNEL selects kernels; raw timestamps union separately; nested CPU inclusive and concurrent device sums are not additive or normal-time fractions"
+  },
+  "transformer_C/standard": {
+    "trace": {
+      "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-cost-source-fp32-v1/costs-transformer_C-standard-trace.json",
+      "sha256": "96f031f74d45dd9a3f59d19bc3ae3221b0191645a1854653405b423b4fbf506d",
+      "bytes": 5869332
+    },
+    "sha256_verified": true,
+    "event_count": 30910,
+    "categories": {
+      "cpu_op": 10030,
+      "dequeue": 1556,
+      "enqueue": 1556,
+      "unspecified": 5498
+    },
+    "process_names": {
+      "2240564": "Python",
+      "2294338017": "AI Core Freq",
+      "2294338529": "Overlap Analysis",
+      "2294337985": "Ascend Hardware"
+    },
+    "hardware_processes": {
+      "2294337985": "Ascend Hardware"
+    },
+    "host_cpu_op_events": 10030,
+    "host_cpu_op_inclusive_duration_sum_seconds": 0.1158103800000003,
+    "hardware_events": 1881,
+    "hardware_duration_sum_seconds": 0.0583005,
+    "hardware_interval_union_seconds": 0.0390435,
+    "hardware_span_seconds": 0.060001,
+    "kernel_events": 1809,
+    "kernel_duration_sum_seconds": 0.038888,
+    "kernel_interval_union_seconds": 0.038863,
+    "top_hardware_tasks": [
+      {
+        "name": "EVENT WAIT",
+        "task_type": "EVENT WAIT",
+        "calls": 36,
+        "duration_sum_ms": 19.413184
+      },
+      {
+        "name": "aclnnMul_StridedSliceAiCore_StridedSlice",
+        "task_type": "KERNEL_AIVEC",
+        "calls": 126,
+        "duration_sum_ms": 9.323088
+      },
+      {
+        "name": "aclnnMatmul_MatMulCommon_MatMulV2",
+        "task_type": "KERNEL_AICORE",
+        "calls": 108,
+        "duration_sum_ms": 5.132479999999999
+      },
+      {
+        "name": "aclnnInplaceCopy_ViewCopyAiCore_ViewCopy",
+        "task_type": "KERNEL_AIVEC",
+        "calls": 90,
+        "duration_sum_ms": 4.867176
+      },
+      {
+        "name": "aclnnMul_MulAiCore_Mul",
+        "task_type": "KERNEL_AIVEC",
+        "calls": 319,
+        "duration_sum_ms": 3.258795999999999
+      },
+      {
+        "name": "aclnnFlashAttentionScoreGradV2_FlashAttentionScoreGrad_FlashAttentionScoreGrad",
+        "task_type": "KERNEL_MIX_AIC",
+        "calls": 18,
+        "duration_sum_ms": 2.296708
+      },
+      {
+        "name": "aclnnInplaceCopy_TransposeAiCore_Transpose",
+        "task_type": "KERNEL_AIVEC",
+        "calls": 90,
+        "duration_sum_ms": 1.9374999999999998
+      },
+      {
+        "name": "aclnnFlashAttentionScoreV2_FlashAttentionScore_FlashAttentionScore",
+        "task_type": "KERNEL_MIX_AIC",
+        "calls": 18,
+        "duration_sum_ms": 1.6066760000000002
+      },
+      {
+        "name": "aclnnMul_TransposeAiCore_Transpose",
+        "task_type": "KERNEL_AIVEC",
+        "calls": 72,
+        "duration_sum_ms": 1.5426
+      },
+      {
+        "name": "aclnnAdd_AddAiCore_Add",
+        "task_type": "KERNEL_AIVEC",
+        "calls": 152,
+        "duration_sum_ms": 0.9696599999999997
+      },
+      {
+        "name": "aclnnReduceSum_ReduceSumOpAiCore_ReduceSum",
+        "task_type": "KERNEL_MIX_AIV",
+        "calls": 38,
+        "duration_sum_ms": 0.860236
+      },
+      {
+        "name": "aclnnSWhere_SelectV2AiCore_SelectV2",
+        "task_type": "KERNEL_AIVEC",
+        "calls": 36,
+        "duration_sum_ms": 0.649852
+      },
+      {
+        "name": "aclnnAddcdiv_AddcdivAiCore_Addcdiv",
+        "task_type": "KERNEL_AIVEC",
+        "calls": 55,
+        "duration_sum_ms": 0.492988
+      },
+      {
+        "name": "aclnnInplaceZero_ZerosLikeAiCore_ZerosLike",
+        "task_type": "KERNEL_AIVEC",
+        "calls": 90,
+        "duration_sum_ms": 0.476088
+      },
+      {
+        "name": "aclnnCat_ConcatD_ConcatD",
+        "task_type": "KERNEL_AIVEC",
+        "calls": 27,
+        "duration_sum_ms": 0.38415999999999995
+      },
+      {
+        "name": "aclnnPowTensorScalar_PowsAiCore_Pows",
+        "task_type": "KERNEL_AIVEC",
+        "calls": 38,
+        "duration_sum_ms": 0.345952
+      },
+      {
+        "name": "aclnnSWhere_TransposeAiCore_Transpose",
+        "task_type": "KERNEL_AIVEC",
+        "calls": 18,
+        "duration_sum_ms": 0.34326799999999996
+      },
+      {
+        "name": "aclnnInplaceCopy_SliceAiCore_Slice",
+        "task_type": "KERNEL_AIVEC",
+        "calls": 54,
+        "duration_sum_ms": 0.308432
+      },
+      {
+        "name": "aclnnMean_ReduceMeanAiCore_ReduceMean",
+        "task_type": "KERNEL_MIX_AIV",
+        "calls": 19,
+        "duration_sum_ms": 0.30152799999999996
+      },
+      {
+        "name": "aclnnMul_SliceAiCore_Slice",
+        "task_type": "KERNEL_AIVEC",
+        "calls": 18,
+        "duration_sum_ms": 0.28766
+      }
+    ],
+    "cumprod_hardware_tasks": [],
+    "index_hardware_tasks": [],
+    "task_types": {
+      "KERNEL_AIVEC": {
+        "calls": 1590,
+        "duration_sum_ms": 28.51034800000002
+      },
+      "KERNEL_MIX_AIV": {
+        "calls": 75,
+        "duration_sum_ms": 1.344208
+      },
+      "KERNEL_AICORE": {
+        "calls": 108,
+        "duration_sum_ms": 5.132479999999999
+      },
+      "KERNEL_MIX_AIC": {
+        "calls": 36,
+        "duration_sum_ms": 3.9033839999999995
+      },
+      "EVENT WAIT": {
+        "calls": 36,
+        "duration_sum_ms": 19.413184
+      },
+      "EVENT RECORD": {
+        "calls": 36,
+        "duration_sum_ms": 0.0007120000000000003
+      }
+    },
+    "interpretation": "metadata process_name selects Ascend Hardware, Task Type prefix KERNEL selects kernels; raw timestamps union separately; nested CPU inclusive and concurrent device sums are not additive or normal-time fractions"
+  },
+  "transformer_C/chunk256": {
+    "trace": {
+      "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-cost-source-fp32-v1/costs-transformer_C-chunk256-trace.json",
+      "sha256": "0890bc39ff1bdc1097b854bedb885b810504215784c9226072aff4fc729173a5",
+      "bytes": 4612617
+    },
+    "sha256_verified": true,
+    "event_count": 24538,
+    "categories": {
+      "cpu_op": 7726,
+      "dequeue": 1232,
+      "enqueue": 1232,
+      "unspecified": 4490
+    },
+    "process_names": {
+      "2240564": "Python",
+      "2294338017": "AI Core Freq",
+      "2294338529": "Overlap Analysis",
+      "2294337985": "Ascend Hardware"
+    },
+    "hardware_processes": {
+      "2294337985": "Ascend Hardware"
+    },
+    "host_cpu_op_events": 7726,
+    "host_cpu_op_inclusive_duration_sum_seconds": 0.0910870700000002,
+    "hardware_events": 1521,
+    "hardware_duration_sum_seconds": 0.05318675,
+    "hardware_interval_union_seconds": 0.0358725,
+    "hardware_span_seconds": 0.0468045,
+    "kernel_events": 1485,
+    "kernel_duration_sum_seconds": 0.03576075,
+    "kernel_interval_union_seconds": 0.0357335,
+    "top_hardware_tasks": [
+      {
+        "name": "EVENT WAIT",
+        "task_type": "EVENT WAIT",
+        "calls": 18,
+        "duration_sum_ms": 17.425948
+      },
+      {
+        "name": "aclnnMul_StridedSliceAiCore_StridedSlice",
+        "task_type": "KERNEL_AIVEC",
+        "calls": 126,
+        "duration_sum_ms": 9.337712000000003
+      },
+      {
+        "name": "aclnnMatmul_MatMulCommon_MatMulV2",
+        "task_type": "KERNEL_AICORE",
+        "calls": 108,
+        "duration_sum_ms": 5.138227999999999
+      },
+      {
+        "name": "aclnnInplaceCopy_ViewCopyAiCore_ViewCopy",
+        "task_type": "KERNEL_AIVEC",
+        "calls": 36,
+        "duration_sum_ms": 4.404896
+      },
+      {
+        "name": "aclnnMul_MulAiCore_Mul",
+        "task_type": "KERNEL_AIVEC",
+        "calls": 319,
+        "duration_sum_ms": 3.334159999999998
+      },
+      {
+        "name": "aclnnInplaceCopy_TransposeAiCore_Transpose",
+        "task_type": "KERNEL_AIVEC",
+        "calls": 81,
+        "duration_sum_ms": 1.7129679999999998
+      },
+      {
+        "name": "aclnnMul_TransposeAiCore_Transpose",
+        "task_type": "KERNEL_AIVEC",
+        "calls": 72,
+        "duration_sum_ms": 1.503256
+      },
+      {
+        "name": "aclnnFlashAttentionScoreGradV2_FlashAttentionScoreGrad_FlashAttentionScoreGrad",
+        "task_type": "KERNEL_MIX_AIC",
+        "calls": 9,
+        "duration_sum_ms": 1.4486719999999997
+      },
+      {
+        "name": "aclnnFlashAttentionScoreV2_FlashAttentionScore_FlashAttentionScore",
+        "task_type": "KERNEL_MIX_AIC",
+        "calls": 9,
+        "duration_sum_ms": 1.120364
+      },
+      {
+        "name": "aclnnReduceSum_ReduceSumOpAiCore_ReduceSum",
+        "task_type": "KERNEL_MIX_AIV",
+        "calls": 38,
+        "duration_sum_ms": 0.8599520000000002
+      },
+      {
+        "name": "aclnnAdd_AddAiCore_Add",
+        "task_type": "KERNEL_AIVEC",
+        "calls": 125,
+        "duration_sum_ms": 0.8577880000000006
+      },
+      {
+        "name": "aclnnAddcdiv_AddcdivAiCore_Addcdiv",
+        "task_type": "KERNEL_AIVEC",
+        "calls": 55,
+        "duration_sum_ms": 0.4950719999999999
+      },
+      {
+        "name": "aclnnSWhere_SelectV2AiCore_SelectV2",
+        "task_type": "KERNEL_AIVEC",
+        "calls": 18,
+        "duration_sum_ms": 0.46553200000000006
+      },
+      {
+        "name": "aclnnPowTensorScalar_PowsAiCore_Pows",
+        "task_type": "KERNEL_AIVEC",
+        "calls": 38,
+        "duration_sum_ms": 0.343552
+      },
+      {
+        "name": "aclnnMean_ReduceMeanAiCore_ReduceMean",
+        "task_type": "KERNEL_MIX_AIV",
+        "calls": 19,
+        "duration_sum_ms": 0.31672
+      },
+      {
+        "name": "aclnnMul_SliceAiCore_Slice",
+        "task_type": "KERNEL_AIVEC",
+        "calls": 18,
+        "duration_sum_ms": 0.30854400000000004
+      },
+      {
+        "name": "aclnnCat_ConcatD_ConcatD",
+        "task_type": "KERNEL_AIVEC",
+        "calls": 18,
+        "duration_sum_ms": 0.274524
+      },
+      {
+        "name": "aclnnForeachLerpScalar_ForeachLerpScalar_ForeachLerpScalar",
+        "task_type": "KERNEL_AIVEC",
+        "calls": 3,
+        "duration_sum_ms": 0.23332799999999998
+      },
+      {
+        "name": "aclnnForeachMulScalarV2_ForeachMulScalarV2_ForeachMulScalar",
+        "task_type": "KERNEL_AIVEC",
+        "calls": 4,
+        "duration_sum_ms": 0.22025999999999998
+      },
+      {
+        "name": "aclnnInplaceZero_ZerosLikeAiCore_ZerosLike",
+        "task_type": "KERNEL_AIVEC",
+        "calls": 36,
+        "duration_sum_ms": 0.21035200000000004
+      }
+    ],
+    "cumprod_hardware_tasks": [],
+    "index_hardware_tasks": [],
+    "task_types": {
+      "KERNEL_AIVEC": {
+        "calls": 1293,
+        "duration_sum_ms": 26.72202800000005
+      },
+      "KERNEL_MIX_AIV": {
+        "calls": 66,
+        "duration_sum_ms": 1.3297360000000003
+      },
+      "KERNEL_AICORE": {
+        "calls": 108,
+        "duration_sum_ms": 5.138227999999999
+      },
+      "EVENT WAIT": {
+        "calls": 18,
+        "duration_sum_ms": 17.425948
+      },
+      "KERNEL_MIX_AIC": {
+        "calls": 18,
+        "duration_sum_ms": 2.569036
+      },
+      "EVENT RECORD": {
+        "calls": 18,
+        "duration_sum_ms": 0.00036400000000000007
+      }
+    },
+    "interpretation": "metadata process_name selects Ascend Hardware, Task Type prefix KERNEL selects kernels; raw timestamps union separately; nested CPU inclusive and concurrent device sums are not additive or normal-time fractions"
+  }
+}

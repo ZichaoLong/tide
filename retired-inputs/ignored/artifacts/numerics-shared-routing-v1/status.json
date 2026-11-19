@@ -1,0 +1,90 @@
+{
+  "state": "passed",
+  "source": "2360728d364f34967b8e46491406f0430c103ac1",
+  "command": [
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "/mi/data2T/zlong/home/.agents/skills/use-local-ascend/scripts/run_on_free_npu.py",
+    "--job-id",
+    "numerics-shared-routing-v1",
+    "--project",
+    "tide-instances",
+    "--priority",
+    "0",
+    "--npu-count",
+    "1",
+    "--max-wait-seconds",
+    "600",
+    "--state-file",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/numerics-shared-routing-v1/queue.json",
+    "--",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "-m",
+    "scripts.diagnose_routing_divergence",
+    "--config",
+    "configs/memory-candidates/9b-memory-shared.json",
+    "--device",
+    "npu:0",
+    "--precision",
+    "fp32",
+    "--batch",
+    "8",
+    "--prefill",
+    "128",
+    "--prefill-chunk",
+    "32",
+    "--decode",
+    "16",
+    "--threads",
+    "4",
+    "--capture-mib",
+    "64",
+    "--historical-results",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-shared-region1-b8-v1/inference.json",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-infer-memory-shared-v1/results/common-b8.json",
+    "--output",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/numerics-shared-routing-v1/routing.json"
+  ],
+  "pid": 2734264,
+  "started": "2026-11-19T10:09:48.859275+00:00",
+  "max_rss_bytes": 137438953472,
+  "peak_rss_bytes": 29743599616,
+  "max_processes": 4,
+  "rss_sample_count": 365,
+  "poll_interval": 0.25,
+  "descendant_supervision": "Linux child subreaper; retained PID/start identities across nested sessions",
+  "child_pid": 2734294,
+  "process_group": 2734294,
+  "elapsed": 151.0914149172604,
+  "descendant_identities": [
+    {
+      "pid": 2734294,
+      "start_ticks": 2266915956
+    },
+    {
+      "pid": 2734300,
+      "start_ticks": 2266915962
+    },
+    {
+      "pid": 2734345,
+      "start_ticks": 2266916019
+    },
+    {
+      "pid": 2734567,
+      "start_ticks": 2266916492
+    },
+    {
+      "pid": 2734580,
+      "start_ticks": 2266916493
+    },
+    {
+      "pid": 2734581,
+      "start_ticks": 2266916493
+    },
+    {
+      "pid": 2734685,
+      "start_ticks": 2266916664
+    }
+  ],
+  "exit_code": 0,
+  "finished": "2026-11-19T10:12:19.950690+00:00"
+}

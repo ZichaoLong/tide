@@ -1,0 +1,82 @@
+{
+  "state": "passed",
+  "started": "2026-11-18T05:36:39.475277+00:00",
+  "source": "0992b467584c1f603314ed04d8efe8596a14f576",
+  "scope": "post-retirement installed-public-API dependency smoke, not new numerical qualification",
+  "cwd": "/mi/data2T/zlong/home/llm/graph-execution-foundation",
+  "affinity": [
+    224,
+    225,
+    226,
+    227
+  ],
+  "commands": [
+    {
+      "command": [
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+        "-I",
+        "-m",
+        "venv",
+        "--system-site-packages",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/retirement-roadmap-20261118/post-cleanup-venv"
+      ],
+      "cwd": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/retirement-roadmap-20261118",
+      "log": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/retirement-roadmap-20261118/post-cleanup-venv-create.log",
+      "exit_code": 0,
+      "elapsed_seconds": 2.5667381398379803
+    },
+    {
+      "command": [
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/retirement-roadmap-20261118/post-cleanup-venv/bin/python",
+        "-I",
+        "-m",
+        "pip",
+        "install",
+        "--ignore-installed",
+        "--no-deps",
+        "--no-index",
+        "--no-cache-dir",
+        "--no-compile",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/wheel-installed-cpu-v15/wheelhouse/tide_instances-0.1.0-py3-none-any.whl"
+      ],
+      "cwd": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/retirement-roadmap-20261118",
+      "log": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/retirement-roadmap-20261118/post-cleanup-wheel-install.log",
+      "exit_code": 0,
+      "elapsed_seconds": 0.4142676144838333
+    },
+    {
+      "command": [
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/retirement-roadmap-20261118/post-cleanup-venv/bin/python",
+        "-I",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/wheel-installed-cpu-v15-inputs/smoke.py",
+        "--output",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/retirement-roadmap-20261118/post-cleanup-smoke-result.json",
+        "--example",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/retirement-roadmap-20261118/train.py",
+        "--wheel",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/wheel-installed-cpu-v15/wheelhouse/tide_instances-0.1.0-py3-none-any.whl",
+        "--source",
+        "0992b467584c1f603314ed04d8efe8596a14f576"
+      ],
+      "cwd": "/",
+      "log": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/retirement-roadmap-20261118/post-cleanup-installed-smoke.log",
+      "exit_code": 0,
+      "elapsed_seconds": 4.469527114182711
+    }
+  ],
+  "preflight": {
+    "quota": "Disk quotas for user zlong (uid 1003): \n     Filesystem   space   quota   limit   grace   files   quota   limit   grace\n/dev/mapper/ascend_data-data\n                 39736M    300G    700G            357k       0       0        \n",
+    "memory": "               total        used        free      shared  buff/cache   available\nMem:           2.0Ti       112Gi       988Gi       6.4Gi       909Gi       1.8Ti\nSwap:             0B          0B          0B\n",
+    "units": "  UNIT LOAD ACTIVE SUB DESCRIPTION\n0 loaded units listed.\n"
+  },
+  "retired_candidates_absent": 118,
+  "input_hashes": {
+    "artifacts/retirement-roadmap-20261118/post-cleanup.py": "263fa9d80bbc99cb61cb97a498cc4705e2eddce86f1365ae3bcc63d7fac42213",
+    "artifacts/wheel-installed-cpu-v15-inputs/smoke.py": "ebc190070bb913db9d4841d44baca313c25aaa78d7f29ea28c0e0259a3533d88",
+    "artifacts/retirement-roadmap-20261118/train.py": "8843b1579af7d49ad52657b0dd54578bd147bbe49f4a8301f709d08500dc6316",
+    "artifacts/wheel-installed-cpu-v15/wheelhouse/tide_instances-0.1.0-py3-none-any.whl": "1b3349526257e87daf1177d88c5a97ea30484b402f88080d00a72b4f521eb0e4"
+  },
+  "venv_config": "home = /opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/bin\ninclude-system-site-packages = true\nversion = 3.12.13\nexecutable = /opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/bin/python3.12\ncommand = /mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python -m venv --system-site-packages /mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/retirement-roadmap-20261118/post-cleanup-venv\n",
+  "elapsed_seconds": 7.470528554171324,
+  "finished": "2026-11-18T05:36:46.965085+00:00"
+}

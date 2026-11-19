@@ -1,0 +1,271 @@
+{
+  "state": "passed",
+  "source": "1fbe15c9b0ce900bfffbf5c148ca61c81cb34046",
+  "command": [
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "-m",
+    "pytest",
+    "-q",
+    "--junitxml",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-integration-cpu-final-v1/tests.xml"
+  ],
+  "pid": 2476149,
+  "started": "2026-11-18T12:45:21.769118+00:00",
+  "max_rss_bytes": 68719476736,
+  "peak_rss_bytes": 1389932544,
+  "max_processes": 5,
+  "rss_sample_count": 1178,
+  "poll_interval": 0.25,
+  "descendant_supervision": "Linux child subreaper; retained PID/start identities across nested sessions",
+  "child_pid": 2476170,
+  "process_group": 2476170,
+  "elapsed": 503.44306833669543,
+  "descendant_identities": [
+    {
+      "pid": 2476170,
+      "start_ticks": 2259209247
+    },
+    {
+      "pid": 2476562,
+      "start_ticks": 2259209742
+    },
+    {
+      "pid": 2480568,
+      "start_ticks": 2259213841
+    },
+    {
+      "pid": 2480572,
+      "start_ticks": 2259213845
+    },
+    {
+      "pid": 2480608,
+      "start_ticks": 2259213897
+    },
+    {
+      "pid": 2480610,
+      "start_ticks": 2259213901
+    },
+    {
+      "pid": 2480624,
+      "start_ticks": 2259213952
+    },
+    {
+      "pid": 2480626,
+      "start_ticks": 2259213957
+    },
+    {
+      "pid": 2480690,
+      "start_ticks": 2259214093
+    },
+    {
+      "pid": 2480702,
+      "start_ticks": 2259214097
+    },
+    {
+      "pid": 2480707,
+      "start_ticks": 2259214100
+    },
+    {
+      "pid": 2480760,
+      "start_ticks": 2259214230
+    },
+    {
+      "pid": 2480762,
+      "start_ticks": 2259214235
+    },
+    {
+      "pid": 2480763,
+      "start_ticks": 2259214237
+    },
+    {
+      "pid": 2480930,
+      "start_ticks": 2259214371
+    },
+    {
+      "pid": 2480932,
+      "start_ticks": 2259214375
+    },
+    {
+      "pid": 2480943,
+      "start_ticks": 2259214378
+    },
+    {
+      "pid": 2481072,
+      "start_ticks": 2259214516
+    },
+    {
+      "pid": 2481073,
+      "start_ticks": 2259214516
+    },
+    {
+      "pid": 2481076,
+      "start_ticks": 2259214520
+    },
+    {
+      "pid": 2481077,
+      "start_ticks": 2259214523
+    },
+    {
+      "pid": 2481646,
+      "start_ticks": 2259215385
+    },
+    {
+      "pid": 2491614,
+      "start_ticks": 2259225817
+    },
+    {
+      "pid": 2491639,
+      "start_ticks": 2259225869
+    },
+    {
+      "pid": 2501359,
+      "start_ticks": 2259239083
+    },
+    {
+      "pid": 2501427,
+      "start_ticks": 2259239212
+    },
+    {
+      "pid": 2501428,
+      "start_ticks": 2259239213
+    },
+    {
+      "pid": 2501433,
+      "start_ticks": 2259239217
+    },
+    {
+      "pid": 2501434,
+      "start_ticks": 2259239219
+    },
+    {
+      "pid": 2501575,
+      "start_ticks": 2259239399
+    },
+    {
+      "pid": 2501576,
+      "start_ticks": 2259239399
+    },
+    {
+      "pid": 2501579,
+      "start_ticks": 2259239403
+    },
+    {
+      "pid": 2501580,
+      "start_ticks": 2259239406
+    },
+    {
+      "pid": 2501700,
+      "start_ticks": 2259239560
+    },
+    {
+      "pid": 2502103,
+      "start_ticks": 2259240041
+    },
+    {
+      "pid": 2502361,
+      "start_ticks": 2259240323
+    },
+    {
+      "pid": 2502725,
+      "start_ticks": 2259240602
+    },
+    {
+      "pid": 2503047,
+      "start_ticks": 2259240863
+    },
+    {
+      "pid": 2503226,
+      "start_ticks": 2259241010
+    },
+    {
+      "pid": 2503228,
+      "start_ticks": 2259241015
+    },
+    {
+      "pid": 2503496,
+      "start_ticks": 2259241338
+    },
+    {
+      "pid": 2503697,
+      "start_ticks": 2259241576
+    },
+    {
+      "pid": 2503906,
+      "start_ticks": 2259241893
+    },
+    {
+      "pid": 2504109,
+      "start_ticks": 2259242185
+    },
+    {
+      "pid": 2504291,
+      "start_ticks": 2259242418
+    },
+    {
+      "pid": 2504571,
+      "start_ticks": 2259242713
+    },
+    {
+      "pid": 2504574,
+      "start_ticks": 2259242718
+    },
+    {
+      "pid": 2504858,
+      "start_ticks": 2259243039
+    },
+    {
+      "pid": 2505047,
+      "start_ticks": 2259243355
+    },
+    {
+      "pid": 2505274,
+      "start_ticks": 2259243674
+    },
+    {
+      "pid": 2505540,
+      "start_ticks": 2259243992
+    },
+    {
+      "pid": 2505724,
+      "start_ticks": 2259244284
+    },
+    {
+      "pid": 2506143,
+      "start_ticks": 2259244902
+    },
+    {
+      "pid": 2510939,
+      "start_ticks": 2259251349
+    },
+    {
+      "pid": 2515632,
+      "start_ticks": 2259257410
+    },
+    {
+      "pid": 2515641,
+      "start_ticks": 2259257415
+    },
+    {
+      "pid": 2515933,
+      "start_ticks": 2259257755
+    },
+    {
+      "pid": 2516181,
+      "start_ticks": 2259258094
+    },
+    {
+      "pid": 2516465,
+      "start_ticks": 2259258436
+    },
+    {
+      "pid": 2516984,
+      "start_ticks": 2259258810
+    },
+    {
+      "pid": 2517348,
+      "start_ticks": 2259259183
+    }
+  ],
+  "exit_code": 0,
+  "finished": "2026-11-18T12:53:45.212188+00:00"
+}

@@ -1,0 +1,2252 @@
+{
+  "schema": "tide-inference-reference-1",
+  "config": {
+    "topology": {
+      "kind": "fc",
+      "n": 16,
+      "layers": 24,
+      "depth": null,
+      "rounds": null,
+      "profile": null,
+      "hubs": 0,
+      "partition": "group",
+      "timing": "settle",
+      "hub_mask": "all",
+      "period": null,
+      "probes": null,
+      "terminal_hubs": false
+    },
+    "d": 384,
+    "memory": "K",
+    "aggregation": "source_residual",
+    "allocation": "quad",
+    "sharing": "independent",
+    "adapter_rank": 8,
+    "budget": null,
+    "attention_backend": "auto",
+    "attention_chunk": 128,
+    "input_dim": null,
+    "checkpoint_regions": false,
+    "checkpoint_reception": false,
+    "reception_qkv_backend": "separate",
+    "reception_mask_padding": false,
+    "ssd_summary_backend": "block",
+    "ssd_scan_backend": "block",
+    "region_batch_size": 1,
+    "local_attention_backend": null,
+    "hub_allocation": "bounded",
+    "clock": {
+      "position_period": null,
+      "position_origin": "binding",
+      "kv_window": null,
+      "short_decay": null,
+      "ssd_stride": null
+    }
+  },
+  "schedule": {
+    "prefill": 512,
+    "prefill_chunk": 128,
+    "decode_steps": 256,
+    "stream_positions": 0,
+    "stream_chunk": 128
+  },
+  "batch": 1,
+  "seed": 751,
+  "precision": "fp32",
+  "mode": "inference",
+  "source": {
+    "source_commit": "1553b301bf960ec6337fbc38e8e3cada26205eb2",
+    "harness_commit": "1553b301bf960ec6337fbc38e8e3cada26205eb2",
+    "tide_content_sha256": "70345a7dcd997b22d7fec25543572f1311b1c0571efc119ab510e2a1b92c7e0a",
+    "harness_content_sha256": "379d8761f537b071aac9f87440115b3522ddb3b49e8077bbf41072054be387f6",
+    "tide_path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-inference-fc1b-sustain-fp32-v1/source/src/tide",
+    "harness_path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-inference-fc1b-sustain-fp32-v1/source/benchmarks"
+  },
+  "tide_parameters": {
+    "sha256": "3bb8b000e82028e6553928d4353fab3a0c2acb02e1892669ea2ada5a03ec84a3",
+    "finite": true,
+    "host_copy_chunk_bytes": 8388608,
+    "scope": "dense initial named Parameters before ownership placement; shape/name/raw contiguous bytes"
+  },
+  "tide_input_sha256": "c35428d3cca5d5f1e6ef3dbd55e145b6a60998329df8b94e0b8899d277c8f962",
+  "tide_input_width": 384,
+  "placement": {
+    "kind": "single",
+    "devices": [
+      "npu:0"
+    ]
+  },
+  "diagnostics": {
+    "finite_outputs": true,
+    "finite_private_state": true,
+    "output_available_by_call": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "output_support_sha256": "b9545764fd8492f61f4f80cd4ef516b42d62a8646a1bd91cda61527dd74ad2ba",
+    "original_output_times_sha256": "0e60e8da37eec2036169191346dece81d59fe9a45bf9e69ce9cfe13f8ffc1a59",
+    "original_time_bounds": [
+      {
+        "phase": "prefill",
+        "first_original_time": 24,
+        "last_original_time": 3326,
+        "returned_time_slots": 128
+      },
+      {
+        "phase": "prefill",
+        "first_original_time": 3352,
+        "last_original_time": 6654,
+        "returned_time_slots": 128
+      },
+      {
+        "phase": "prefill",
+        "first_original_time": 6680,
+        "last_original_time": 9982,
+        "returned_time_slots": 128
+      },
+      {
+        "phase": "prefill",
+        "first_original_time": 10008,
+        "last_original_time": 13310,
+        "returned_time_slots": 128
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 13336,
+        "last_original_time": 13336,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 13362,
+        "last_original_time": 13362,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 13388,
+        "last_original_time": 13388,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 13414,
+        "last_original_time": 13414,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 13440,
+        "last_original_time": 13440,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 13466,
+        "last_original_time": 13466,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 13492,
+        "last_original_time": 13492,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 13518,
+        "last_original_time": 13518,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 13544,
+        "last_original_time": 13544,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 13570,
+        "last_original_time": 13570,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 13596,
+        "last_original_time": 13596,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 13622,
+        "last_original_time": 13622,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 13648,
+        "last_original_time": 13648,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 13674,
+        "last_original_time": 13674,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 13700,
+        "last_original_time": 13700,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 13726,
+        "last_original_time": 13726,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 13752,
+        "last_original_time": 13752,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 13778,
+        "last_original_time": 13778,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 13804,
+        "last_original_time": 13804,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 13830,
+        "last_original_time": 13830,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 13856,
+        "last_original_time": 13856,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 13882,
+        "last_original_time": 13882,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 13908,
+        "last_original_time": 13908,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 13934,
+        "last_original_time": 13934,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 13960,
+        "last_original_time": 13960,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 13986,
+        "last_original_time": 13986,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 14012,
+        "last_original_time": 14012,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 14038,
+        "last_original_time": 14038,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 14064,
+        "last_original_time": 14064,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 14090,
+        "last_original_time": 14090,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 14116,
+        "last_original_time": 14116,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 14142,
+        "last_original_time": 14142,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 14168,
+        "last_original_time": 14168,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 14194,
+        "last_original_time": 14194,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 14220,
+        "last_original_time": 14220,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 14246,
+        "last_original_time": 14246,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 14272,
+        "last_original_time": 14272,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 14298,
+        "last_original_time": 14298,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 14324,
+        "last_original_time": 14324,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 14350,
+        "last_original_time": 14350,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 14376,
+        "last_original_time": 14376,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 14402,
+        "last_original_time": 14402,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 14428,
+        "last_original_time": 14428,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 14454,
+        "last_original_time": 14454,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 14480,
+        "last_original_time": 14480,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 14506,
+        "last_original_time": 14506,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 14532,
+        "last_original_time": 14532,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 14558,
+        "last_original_time": 14558,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 14584,
+        "last_original_time": 14584,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 14610,
+        "last_original_time": 14610,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 14636,
+        "last_original_time": 14636,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 14662,
+        "last_original_time": 14662,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 14688,
+        "last_original_time": 14688,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 14714,
+        "last_original_time": 14714,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 14740,
+        "last_original_time": 14740,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 14766,
+        "last_original_time": 14766,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 14792,
+        "last_original_time": 14792,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 14818,
+        "last_original_time": 14818,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 14844,
+        "last_original_time": 14844,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 14870,
+        "last_original_time": 14870,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 14896,
+        "last_original_time": 14896,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 14922,
+        "last_original_time": 14922,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 14948,
+        "last_original_time": 14948,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 14974,
+        "last_original_time": 14974,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 15000,
+        "last_original_time": 15000,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 15026,
+        "last_original_time": 15026,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 15052,
+        "last_original_time": 15052,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 15078,
+        "last_original_time": 15078,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 15104,
+        "last_original_time": 15104,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 15130,
+        "last_original_time": 15130,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 15156,
+        "last_original_time": 15156,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 15182,
+        "last_original_time": 15182,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 15208,
+        "last_original_time": 15208,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 15234,
+        "last_original_time": 15234,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 15260,
+        "last_original_time": 15260,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 15286,
+        "last_original_time": 15286,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 15312,
+        "last_original_time": 15312,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 15338,
+        "last_original_time": 15338,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 15364,
+        "last_original_time": 15364,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 15390,
+        "last_original_time": 15390,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 15416,
+        "last_original_time": 15416,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 15442,
+        "last_original_time": 15442,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 15468,
+        "last_original_time": 15468,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 15494,
+        "last_original_time": 15494,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 15520,
+        "last_original_time": 15520,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 15546,
+        "last_original_time": 15546,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 15572,
+        "last_original_time": 15572,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 15598,
+        "last_original_time": 15598,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 15624,
+        "last_original_time": 15624,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 15650,
+        "last_original_time": 15650,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 15676,
+        "last_original_time": 15676,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 15702,
+        "last_original_time": 15702,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 15728,
+        "last_original_time": 15728,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 15754,
+        "last_original_time": 15754,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 15780,
+        "last_original_time": 15780,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 15806,
+        "last_original_time": 15806,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 15832,
+        "last_original_time": 15832,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 15858,
+        "last_original_time": 15858,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 15884,
+        "last_original_time": 15884,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 15910,
+        "last_original_time": 15910,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 15936,
+        "last_original_time": 15936,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 15962,
+        "last_original_time": 15962,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 15988,
+        "last_original_time": 15988,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 16014,
+        "last_original_time": 16014,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 16040,
+        "last_original_time": 16040,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 16066,
+        "last_original_time": 16066,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 16092,
+        "last_original_time": 16092,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 16118,
+        "last_original_time": 16118,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 16144,
+        "last_original_time": 16144,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 16170,
+        "last_original_time": 16170,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 16196,
+        "last_original_time": 16196,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 16222,
+        "last_original_time": 16222,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 16248,
+        "last_original_time": 16248,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 16274,
+        "last_original_time": 16274,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 16300,
+        "last_original_time": 16300,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 16326,
+        "last_original_time": 16326,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 16352,
+        "last_original_time": 16352,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 16378,
+        "last_original_time": 16378,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 16404,
+        "last_original_time": 16404,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 16430,
+        "last_original_time": 16430,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 16456,
+        "last_original_time": 16456,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 16482,
+        "last_original_time": 16482,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 16508,
+        "last_original_time": 16508,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 16534,
+        "last_original_time": 16534,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 16560,
+        "last_original_time": 16560,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 16586,
+        "last_original_time": 16586,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 16612,
+        "last_original_time": 16612,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 16638,
+        "last_original_time": 16638,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 16664,
+        "last_original_time": 16664,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 16690,
+        "last_original_time": 16690,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 16716,
+        "last_original_time": 16716,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 16742,
+        "last_original_time": 16742,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 16768,
+        "last_original_time": 16768,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 16794,
+        "last_original_time": 16794,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 16820,
+        "last_original_time": 16820,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 16846,
+        "last_original_time": 16846,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 16872,
+        "last_original_time": 16872,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 16898,
+        "last_original_time": 16898,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 16924,
+        "last_original_time": 16924,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 16950,
+        "last_original_time": 16950,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 16976,
+        "last_original_time": 16976,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 17002,
+        "last_original_time": 17002,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 17028,
+        "last_original_time": 17028,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 17054,
+        "last_original_time": 17054,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 17080,
+        "last_original_time": 17080,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 17106,
+        "last_original_time": 17106,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 17132,
+        "last_original_time": 17132,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 17158,
+        "last_original_time": 17158,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 17184,
+        "last_original_time": 17184,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 17210,
+        "last_original_time": 17210,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 17236,
+        "last_original_time": 17236,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 17262,
+        "last_original_time": 17262,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 17288,
+        "last_original_time": 17288,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 17314,
+        "last_original_time": 17314,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 17340,
+        "last_original_time": 17340,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 17366,
+        "last_original_time": 17366,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 17392,
+        "last_original_time": 17392,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 17418,
+        "last_original_time": 17418,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 17444,
+        "last_original_time": 17444,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 17470,
+        "last_original_time": 17470,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 17496,
+        "last_original_time": 17496,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 17522,
+        "last_original_time": 17522,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 17548,
+        "last_original_time": 17548,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 17574,
+        "last_original_time": 17574,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 17600,
+        "last_original_time": 17600,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 17626,
+        "last_original_time": 17626,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 17652,
+        "last_original_time": 17652,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 17678,
+        "last_original_time": 17678,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 17704,
+        "last_original_time": 17704,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 17730,
+        "last_original_time": 17730,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 17756,
+        "last_original_time": 17756,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 17782,
+        "last_original_time": 17782,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 17808,
+        "last_original_time": 17808,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 17834,
+        "last_original_time": 17834,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 17860,
+        "last_original_time": 17860,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 17886,
+        "last_original_time": 17886,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 17912,
+        "last_original_time": 17912,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 17938,
+        "last_original_time": 17938,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 17964,
+        "last_original_time": 17964,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 17990,
+        "last_original_time": 17990,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 18016,
+        "last_original_time": 18016,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 18042,
+        "last_original_time": 18042,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 18068,
+        "last_original_time": 18068,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 18094,
+        "last_original_time": 18094,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 18120,
+        "last_original_time": 18120,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 18146,
+        "last_original_time": 18146,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 18172,
+        "last_original_time": 18172,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 18198,
+        "last_original_time": 18198,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 18224,
+        "last_original_time": 18224,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 18250,
+        "last_original_time": 18250,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 18276,
+        "last_original_time": 18276,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 18302,
+        "last_original_time": 18302,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 18328,
+        "last_original_time": 18328,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 18354,
+        "last_original_time": 18354,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 18380,
+        "last_original_time": 18380,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 18406,
+        "last_original_time": 18406,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 18432,
+        "last_original_time": 18432,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 18458,
+        "last_original_time": 18458,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 18484,
+        "last_original_time": 18484,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 18510,
+        "last_original_time": 18510,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 18536,
+        "last_original_time": 18536,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 18562,
+        "last_original_time": 18562,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 18588,
+        "last_original_time": 18588,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 18614,
+        "last_original_time": 18614,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 18640,
+        "last_original_time": 18640,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 18666,
+        "last_original_time": 18666,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 18692,
+        "last_original_time": 18692,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 18718,
+        "last_original_time": 18718,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 18744,
+        "last_original_time": 18744,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 18770,
+        "last_original_time": 18770,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 18796,
+        "last_original_time": 18796,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 18822,
+        "last_original_time": 18822,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 18848,
+        "last_original_time": 18848,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 18874,
+        "last_original_time": 18874,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 18900,
+        "last_original_time": 18900,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 18926,
+        "last_original_time": 18926,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 18952,
+        "last_original_time": 18952,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 18978,
+        "last_original_time": 18978,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 19004,
+        "last_original_time": 19004,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 19030,
+        "last_original_time": 19030,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 19056,
+        "last_original_time": 19056,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 19082,
+        "last_original_time": 19082,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 19108,
+        "last_original_time": 19108,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 19134,
+        "last_original_time": 19134,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 19160,
+        "last_original_time": 19160,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 19186,
+        "last_original_time": 19186,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 19212,
+        "last_original_time": 19212,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 19238,
+        "last_original_time": 19238,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 19264,
+        "last_original_time": 19264,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 19290,
+        "last_original_time": 19290,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 19316,
+        "last_original_time": 19316,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 19342,
+        "last_original_time": 19342,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 19368,
+        "last_original_time": 19368,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 19394,
+        "last_original_time": 19394,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 19420,
+        "last_original_time": 19420,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 19446,
+        "last_original_time": 19446,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 19472,
+        "last_original_time": 19472,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 19498,
+        "last_original_time": 19498,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 19524,
+        "last_original_time": 19524,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 19550,
+        "last_original_time": 19550,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 19576,
+        "last_original_time": 19576,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 19602,
+        "last_original_time": 19602,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 19628,
+        "last_original_time": 19628,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 19654,
+        "last_original_time": 19654,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 19680,
+        "last_original_time": 19680,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 19706,
+        "last_original_time": 19706,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 19732,
+        "last_original_time": 19732,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 19758,
+        "last_original_time": 19758,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 19784,
+        "last_original_time": 19784,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 19810,
+        "last_original_time": 19810,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 19836,
+        "last_original_time": 19836,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 19862,
+        "last_original_time": 19862,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 19888,
+        "last_original_time": 19888,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 19914,
+        "last_original_time": 19914,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 19940,
+        "last_original_time": 19940,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 19966,
+        "last_original_time": 19966,
+        "returned_time_slots": 1
+      }
+    ],
+    "state_memory": {
+      "payload_bytes": 170459136,
+      "retained_storage_bytes": 170459136,
+      "dtypes": [
+        "torch.float32",
+        "torch.int64"
+      ],
+      "tensor_count": 120
+    },
+    "final_state_position": 768,
+    "private_state_detached": true,
+    "readout_dtypes": [
+      "torch.float32"
+    ],
+    "returned_value_dtypes": [
+      "torch.float32"
+    ],
+    "returned_strength_dtypes": [
+      "torch.float32"
+    ],
+    "output_devices": [
+      "npu:0"
+    ],
+    "retention": "one output window at a time; only hashes/scalars retained; separate from normal timing",
+    "execution": {
+      "requested_region_concurrency": "serial",
+      "effective_region_concurrency": "serial",
+      "hooks": "ordinary Python method/module hooks with locked counters; no thread-local dispatch mode"
+    }
+  },
+  "audit": {
+    "parameters": {
+      "unique_parameters": 998535552,
+      "scope": "all unique trainable backbone parameters including enabled ingress projections; no task head",
+      "ingress_parameters": 147456,
+      "textbook": {
+        "base": 7096320,
+        "private_D": 991291776,
+        "private_H": 0,
+        "total_excluding_ingress": 998388096,
+        "active_proxy": 69052056.0,
+        "D_fraction": 0.0625,
+        "is_actual_touched": false,
+        "assumption": "all regions receive; all H act; D private scaled by k/n only for quad"
+      }
+    },
+    "effective_touched": {
+      "sum": 258974908416,
+      "mean": 337206912.0,
+      "min": 304902528,
+      "max": 370962816,
+      "unique_across_time_and_batch": 998535552,
+      "cumulative_per_input_position": 337206912.0
+    },
+    "stages": {
+      "ingress": {
+        "sum": 113246208,
+        "mean": 147456.0,
+        "min": 147456,
+        "max": 147456
+      },
+      "reception": {
+        "sum": 10885791744,
+        "mean": 14174208.0,
+        "min": 14174208,
+        "max": 14174208
+      },
+      "memory_prepare": {
+        "sum": 97844723712,
+        "mean": 127401984.0,
+        "min": 127401984,
+        "max": 127401984
+      },
+      "regional": {
+        "sum": 49219928064,
+        "mean": 64088448.0,
+        "min": 64088448,
+        "max": 64088448
+      },
+      "full": {
+        "sum": 100911218688,
+        "mean": 131394816.0,
+        "min": 99090432,
+        "max": 165150720
+      }
+    },
+    "definition": "unique Parameter scalars in effective owner/group/source slices; not gradients or physical loads",
+    "deduplication": "within sample/input step across settled layers",
+    "input_positions": 768,
+    "sample_time_slots": 768,
+    "logical_axis": "input_step",
+    "work": {
+      "positive_messages": 761568,
+      "message_slots": 4534272,
+      "candidate_updates": 294912,
+      "candidate_slots": 294912,
+      "regional_attention_positive_pairs": 28311552,
+      "full_actions": 48882,
+      "kv_attention_effective_pairs": 68885676
+    },
+    "work_per_input_position": {
+      "positive_messages": 991.625,
+      "message_slots": 5904.0,
+      "candidate_updates": 384.0,
+      "candidate_slots": 384.0,
+      "regional_attention_positive_pairs": 36864.0,
+      "full_actions": 63.6484375,
+      "kv_attention_effective_pairs": 89694.890625
+    },
+    "query_packing": {
+      "K": {
+        "calls": 6240,
+        "selected_rows": 48882,
+        "executed_rows": 99984
+      }
+    },
+    "node_matrices": {
+      "receive.a": {
+        "calls": 6240,
+        "rows": 4534272,
+        "dense_multiply_adds": 83575701504
+      },
+      "receive.b": {
+        "calls": 6240,
+        "rows": 4534272,
+        "dense_multiply_adds": 83575701504
+      },
+      "memories.K.kv": {
+        "calls": 6240,
+        "rows": 294912,
+        "dense_multiply_adds": 86973087744
+      },
+      "memories.K.summary": {
+        "calls": 6240,
+        "rows": 294912,
+        "dense_multiply_adds": 10871635968
+      },
+      "describe.encode": {
+        "calls": 6240,
+        "rows": 294912,
+        "dense_multiply_adds": 43656413184
+      },
+      "memories.K.query.heads.0": {
+        "calls": 6240,
+        "rows": 99984,
+        "dense_multiply_adds": 1228603392
+      },
+      "memories.K.query.heads.1": {
+        "calls": 6240,
+        "rows": 99984,
+        "dense_multiply_adds": 1228603392
+      },
+      "memories.K.query.heads.2": {
+        "calls": 6240,
+        "rows": 99984,
+        "dense_multiply_adds": 1228603392
+      },
+      "memories.K.query.heads.3": {
+        "calls": 6240,
+        "rows": 99984,
+        "dense_multiply_adds": 1228603392
+      },
+      "memories.K.query.heads.4": {
+        "calls": 6240,
+        "rows": 99984,
+        "dense_multiply_adds": 1228603392
+      },
+      "memories.K.query.heads.5": {
+        "calls": 6240,
+        "rows": 99984,
+        "dense_multiply_adds": 1228603392
+      },
+      "memories.K.query.heads.6": {
+        "calls": 6240,
+        "rows": 99984,
+        "dense_multiply_adds": 1228603392
+      },
+      "memories.K.query.heads.7": {
+        "calls": 6240,
+        "rows": 99984,
+        "dense_multiply_adds": 1228603392
+      },
+      "memories.K.query.heads.8": {
+        "calls": 6240,
+        "rows": 99984,
+        "dense_multiply_adds": 1228603392
+      },
+      "memories.K.query.heads.9": {
+        "calls": 6240,
+        "rows": 99984,
+        "dense_multiply_adds": 1228603392
+      },
+      "memories.K.query.heads.10": {
+        "calls": 6240,
+        "rows": 99984,
+        "dense_multiply_adds": 1228603392
+      },
+      "memories.K.query.heads.11": {
+        "calls": 6240,
+        "rows": 99984,
+        "dense_multiply_adds": 1228603392
+      },
+      "memories.K.output": {
+        "calls": 6240,
+        "rows": 99984,
+        "dense_multiply_adds": 14743240704
+      },
+      "memories.K.ffn.gate": {
+        "calls": 6240,
+        "rows": 99984,
+        "dense_multiply_adds": 58972962816
+      },
+      "memories.K.ffn.up": {
+        "calls": 6240,
+        "rows": 99984,
+        "dense_multiply_adds": 58972962816
+      },
+      "memories.K.ffn.down": {
+        "calls": 6240,
+        "rows": 99984,
+        "dense_multiply_adds": 58972962816
+      }
+    },
+    "matrix_cost_definition": "multiply-add pairs of executed NodeLinear rows including padding/adapters; not complete FLOPs",
+    "retention": {
+      "kind": "one-call semantic-atom bitsets and scalar stream aggregates; no scalar-parameter axis",
+      "calls": 260,
+      "peak_sample_time_slots": 128,
+      "peak_event_bitset_payload_bytes": 541555,
+      "per_time_parameter_counts_sha256": "480204ee6a9f83b3ae863fe0359a10dead671472c150000769e762c172e31a00",
+      "digest_definition": "ordered newline JSON [sample,logical_time,unique_parameters] per actual call; total combined only",
+      "per_time_rows_retained": false,
+      "dense_parameter_references_retained": false
+    }
+  },
+  "matches": {
+    "A": {
+      "constructor": {
+        "d": 368,
+        "layers": 384,
+        "ffn_width": 1864,
+        "head_dim": 16,
+        "window": 128
+      },
+      "targets": {
+        "blocks": 384,
+        "parameters": 998535552
+      },
+      "actual": {
+        "blocks": 384,
+        "parameters": 998510960
+      },
+      "relative_deviation": {
+        "blocks": 0.0,
+        "parameters": -2.4628066522763127e-05
+      },
+      "selection_rule": "exact block count; nearest parameters over d=16*j >= 32, FFN=8*j in [2d,6d]; ties prefer FFN=4d",
+      "parameter_scope": "main blocks and final RMSNorm; no embedding, task head or artificial unused weights",
+      "joint_class": "A",
+      "block_target_kind": "nodes",
+      "parameter_target_kind": "total"
+    },
+    "B": {
+      "constructor": {
+        "d": 288,
+        "layers": 384,
+        "ffn_width": 632,
+        "head_dim": 32,
+        "window": 128
+      },
+      "targets": {
+        "blocks": 384,
+        "parameters": 337206912.0
+      },
+      "actual": {
+        "blocks": 384,
+        "parameters": 337305888
+      },
+      "relative_deviation": {
+        "blocks": 0.0,
+        "parameters": 0.0002935171150940109
+      },
+      "selection_rule": "exact block count; nearest parameters over d=16*j >= 32, FFN=8*j in [2d,6d]; ties prefer FFN=4d",
+      "parameter_scope": "main blocks and final RMSNorm; no embedding, task head or artificial unused weights",
+      "joint_class": "B",
+      "block_target_kind": "nodes",
+      "parameter_target_kind": "effective_touched"
+    },
+    "C": {
+      "constructor": {
+        "d": 1424,
+        "layers": 24,
+        "ffn_width": 7840,
+        "head_dim": 16,
+        "window": 128
+      },
+      "targets": {
+        "blocks": 24,
+        "parameters": 998535552
+      },
+      "actual": {
+        "blocks": 24,
+        "parameters": 998555792
+      },
+      "relative_deviation": {
+        "blocks": 0.0,
+        "parameters": 2.0269683898045124e-05
+      },
+      "selection_rule": "exact block count; nearest parameters over d=16*j >= 32, FFN=8*j in [2d,6d]; ties prefer FFN=4d",
+      "parameter_scope": "main blocks and final RMSNorm; no embedding, task head or artificial unused weights",
+      "joint_class": "C",
+      "block_target_kind": "depth",
+      "parameter_target_kind": "total"
+    },
+    "D": {
+      "constructor": {
+        "d": 896,
+        "layers": 24,
+        "ffn_width": 4032,
+        "head_dim": 64,
+        "window": 128
+      },
+      "targets": {
+        "blocks": 24,
+        "parameters": 337206912.0
+      },
+      "actual": {
+        "blocks": 24,
+        "parameters": 337226624
+      },
+      "relative_deviation": {
+        "blocks": 0.0,
+        "parameters": 5.845669023534132e-05
+      },
+      "selection_rule": "exact block count; nearest parameters over d=16*j >= 32, FFN=8*j in [2d,6d]; ties prefer FFN=4d",
+      "parameter_scope": "main blocks and final RMSNorm; no embedding, task head or artificial unused weights",
+      "joint_class": "D",
+      "block_target_kind": "depth",
+      "parameter_target_kind": "effective_touched"
+    }
+  },
+  "matching_boundary": "zero initial state; actual prefill/decode/chunked schedule and sole final Timed drain; frozen constructors for every later timed sample",
+  "comparisons_equivalent": false,
+  "reference_sha256": "fff3e2aaa39316d0b21b9d947e08ce350d141ef73a39c44112f4a969b2bc9bee"
+}

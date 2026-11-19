@@ -1,0 +1,809 @@
+{
+  "source": "0992b467584c1f603314ed04d8efe8596a14f576",
+  "arguments": {
+    "devices": [
+      "cpu"
+    ],
+    "precision": "bf16",
+    "transport": "auto",
+    "phase_sync": false,
+    "mode": "train",
+    "config": "configs/scale/hb-17b.json",
+    "batch": 1,
+    "length": 8,
+    "steps": 2,
+    "warmup": 0,
+    "no_foreach": true,
+    "threads": 40,
+    "output": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/scale-cpu-hb-17b-train-v20/training-bf16.json"
+  },
+  "physical_devices": null,
+  "cpu_affinity": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38,
+    39
+  ],
+  "torch": "2.12.0+cpu",
+  "exit_policy": "finite_deviation retained; nonfinite/structural/execution failures exit nonzero",
+  "observations": [
+    {
+      "config": {
+        "topology": {
+          "kind": "multiscale",
+          "n": 64,
+          "layers": null,
+          "depth": null,
+          "rounds": null,
+          "profile": "5-dd4",
+          "hubs": 4,
+          "partition": "group",
+          "timing": "settle",
+          "hub_mask": "all",
+          "period": null,
+          "probes": null
+        },
+        "d": 768,
+        "memory": "X",
+        "aggregation": "source_residual",
+        "allocation": "quad",
+        "sharing": "independent",
+        "adapter_rank": 8,
+        "budget": null,
+        "attention_backend": "auto",
+        "attention_chunk": 128,
+        "input_dim": null
+      },
+      "precision": {
+        "name": "bf16",
+        "device": "cpu",
+        "parameters": "float32",
+        "input": "float32",
+        "matrix_arithmetic": "bfloat16_autocast",
+        "normalization_mass_allocation": "float32",
+        "kv_keys_values": "bfloat16",
+        "kv_summary_and_ssd_state": "float32",
+        "logical_time_indices": "int64",
+        "parameter_gradients": "float32",
+        "master_weights": "parameters_are_fp32_masters; no_separate_copy",
+        "adamw_moments": "float32",
+        "attention": "native_by_shape_and_prior; math/tiled_accumulate_float32",
+        "attention_mode_selection": "visible_zero_prior_auto_tiled_in_all_modes; NPU_explicit_key_priors_rank_one_in_all_modes",
+        "loss": "float32",
+        "autocast_cache": false
+      },
+      "mode": "capacity_train",
+      "state": "completed",
+      "seed": 807,
+      "batch": 1,
+      "length": 8,
+      "requested_updates": 2,
+      "updates": [
+        {
+          "index": 0,
+          "state_before_position": 0,
+          "work": {
+            "input": {
+              "candidates": 8339,
+              "full": 1776,
+              "positive_messages": 14673,
+              "candidate_slots": 12928
+            },
+            "flush": null
+          },
+          "work_audit_seconds": 4.780837718397379,
+          "operator_audit_seconds": 5.263278275728226,
+          "complete_seconds": 143.39269164204597,
+          "phase_seconds": {
+            "zero_grad_forward_loss": 3.5239604748785496,
+            "backward": 101.73730221018195,
+            "optimizer_detach_sync": 38.12555545195937
+          },
+          "between_phase_host_seconds": 0.005873505026102066,
+          "peak_device_memory": {},
+          "state_position": 8,
+          "actual_storage": {
+            "parameters": {
+              "by_device": {
+                "cpu": {
+                  "payload_bytes": 66828880704,
+                  "retained_storage_bytes": 66828880704,
+                  "tensor_count": 448,
+                  "elements": 16707220176,
+                  "dtypes": {
+                    "torch.float32": {
+                      "tensor_count": 448,
+                      "elements": 16707220176,
+                      "payload_bytes": 66828880704
+                    }
+                  }
+                }
+              },
+              "payload_bytes": 66828880704,
+              "retained_storage_bytes": 66828880704,
+              "tensor_count": 448,
+              "elements": 16707220176
+            },
+            "gradients": {
+              "by_device": {
+                "cpu": {
+                  "payload_bytes": 66828880704,
+                  "retained_storage_bytes": 66828880704,
+                  "tensor_count": 448,
+                  "elements": 16707220176,
+                  "dtypes": {
+                    "torch.float32": {
+                      "tensor_count": 448,
+                      "elements": 16707220176,
+                      "payload_bytes": 66828880704
+                    }
+                  }
+                }
+              },
+              "payload_bytes": 66828880704,
+              "retained_storage_bytes": 66828880704,
+              "tensor_count": 448,
+              "elements": 16707220176
+            },
+            "optimizer_slots": {
+              "by_device": {
+                "cpu": {
+                  "payload_bytes": 133657763200,
+                  "retained_storage_bytes": 133657763200,
+                  "tensor_count": 1344,
+                  "elements": 33414440800,
+                  "dtypes": {
+                    "torch.float32": {
+                      "tensor_count": 1344,
+                      "elements": 33414440800,
+                      "payload_bytes": 133657763200
+                    }
+                  }
+                }
+              },
+              "payload_bytes": 133657763200,
+              "retained_storage_bytes": 133657763200,
+              "tensor_count": 1344,
+              "elements": 33414440800
+            },
+            "buffers": {
+              "by_device": {
+                "cpu": {
+                  "payload_bytes": 1025408,
+                  "retained_storage_bytes": 1025408,
+                  "tensor_count": 98,
+                  "elements": 128176,
+                  "dtypes": {
+                    "torch.int64": {
+                      "tensor_count": 98,
+                      "elements": 128176,
+                      "payload_bytes": 1025408
+                    }
+                  }
+                }
+              },
+              "payload_bytes": 1025408,
+              "retained_storage_bytes": 1025408,
+              "tensor_count": 98,
+              "elements": 128176
+            },
+            "private_state": {
+              "by_device": {
+                "cpu": {
+                  "payload_bytes": 57456896,
+                  "retained_storage_bytes": 57456896,
+                  "tensor_count": 280,
+                  "elements": 23788400,
+                  "dtypes": {
+                    "torch.int64": {
+                      "tensor_count": 64,
+                      "elements": 13008,
+                      "payload_bytes": 104064
+                    },
+                    "torch.float32": {
+                      "tensor_count": 168,
+                      "elements": 4901024,
+                      "payload_bytes": 19604096
+                    },
+                    "torch.bfloat16": {
+                      "tensor_count": 48,
+                      "elements": 18874368,
+                      "payload_bytes": 37748736
+                    }
+                  }
+                }
+              },
+              "payload_bytes": 57456896,
+              "retained_storage_bytes": 57456896,
+              "tensor_count": 280,
+              "elements": 23788400
+            },
+            "combined": {
+              "by_device": {
+                "cpu": {
+                  "payload_bytes": 267374006912,
+                  "retained_storage_bytes": 267374006912,
+                  "tensor_count": 2618,
+                  "elements": 66852797728,
+                  "dtypes": {
+                    "torch.float32": {
+                      "tensor_count": 2408,
+                      "elements": 66833782176,
+                      "payload_bytes": 267335128704
+                    },
+                    "torch.int64": {
+                      "tensor_count": 162,
+                      "elements": 141184,
+                      "payload_bytes": 1129472
+                    },
+                    "torch.bfloat16": {
+                      "tensor_count": 48,
+                      "elements": 18874368,
+                      "payload_bytes": 37748736
+                    }
+                  }
+                }
+              },
+              "payload_bytes": 267374006912,
+              "retained_storage_bytes": 267374006912,
+              "tensor_count": 2618,
+              "elements": 66852797728
+            }
+          },
+          "finite_checks": {
+            "parameters": {
+              "finite": true,
+              "nonfinite_tensors": [],
+              "floating_tensors": 448,
+              "floating_elements": 16707220176,
+              "chunk_elements": 1048576
+            },
+            "gradients": {
+              "finite": true,
+              "nonfinite_tensors": [],
+              "floating_tensors": 448,
+              "floating_elements": 16707220176,
+              "chunk_elements": 1048576
+            },
+            "optimizer_slots": {
+              "finite": true,
+              "nonfinite_tensors": [],
+              "floating_tensors": 1344,
+              "floating_elements": 33414440800,
+              "chunk_elements": 1048576
+            },
+            "buffers": {
+              "finite": true,
+              "nonfinite_tensors": [],
+              "floating_tensors": 0,
+              "floating_elements": 0,
+              "chunk_elements": 1048576
+            },
+            "private_state": {
+              "finite": true,
+              "nonfinite_tensors": [],
+              "floating_tensors": 216,
+              "floating_elements": 23775392,
+              "chunk_elements": 1048576
+            },
+            "outputs": {
+              "finite": true,
+              "nonfinite_tensors": [],
+              "floating_tensors": 3,
+              "floating_elements": 1574913,
+              "chunk_elements": 1048576
+            }
+          },
+          "finite": true,
+          "loss": 0.005961906630545855,
+          "output_positive_strengths": 200,
+          "flush_output_positive_strengths": 0,
+          "private_state_requires_grad_tensors": 0,
+          "optimizer_step_counters": {
+            "count": 448,
+            "minimum": 1.0,
+            "maximum": 1.0
+          },
+          "parameter_update_witness": {
+            "sampled_parameters": 448,
+            "sampled_elements": 7168,
+            "changed_elements": 7161,
+            "max_abs": 0.00010204315185546875,
+            "scope": "first up to 16 scalars of every actual Parameter; not a full-parameter trajectory comparison"
+          },
+          "checks_seconds": 31.860722597688437
+        },
+        {
+          "index": 1,
+          "state_before_position": 8,
+          "work": {
+            "input": {
+              "candidates": 7501,
+              "full": 1488,
+              "positive_messages": 12549,
+              "candidate_slots": 12928
+            },
+            "flush": null
+          },
+          "work_audit_seconds": 5.492861647158861,
+          "complete_seconds": 125.44643672555685,
+          "phase_seconds": {
+            "zero_grad_forward_loss": 6.311587747186422,
+            "backward": 94.62623056024313,
+            "optimizer_detach_sync": 24.501170430332422
+          },
+          "between_phase_host_seconds": 0.007447987794876099,
+          "peak_device_memory": {},
+          "state_position": 16,
+          "actual_storage": {
+            "parameters": {
+              "by_device": {
+                "cpu": {
+                  "payload_bytes": 66828880704,
+                  "retained_storage_bytes": 66828880704,
+                  "tensor_count": 448,
+                  "elements": 16707220176,
+                  "dtypes": {
+                    "torch.float32": {
+                      "tensor_count": 448,
+                      "elements": 16707220176,
+                      "payload_bytes": 66828880704
+                    }
+                  }
+                }
+              },
+              "payload_bytes": 66828880704,
+              "retained_storage_bytes": 66828880704,
+              "tensor_count": 448,
+              "elements": 16707220176
+            },
+            "gradients": {
+              "by_device": {
+                "cpu": {
+                  "payload_bytes": 66828880704,
+                  "retained_storage_bytes": 66828880704,
+                  "tensor_count": 448,
+                  "elements": 16707220176,
+                  "dtypes": {
+                    "torch.float32": {
+                      "tensor_count": 448,
+                      "elements": 16707220176,
+                      "payload_bytes": 66828880704
+                    }
+                  }
+                }
+              },
+              "payload_bytes": 66828880704,
+              "retained_storage_bytes": 66828880704,
+              "tensor_count": 448,
+              "elements": 16707220176
+            },
+            "optimizer_slots": {
+              "by_device": {
+                "cpu": {
+                  "payload_bytes": 133657763200,
+                  "retained_storage_bytes": 133657763200,
+                  "tensor_count": 1344,
+                  "elements": 33414440800,
+                  "dtypes": {
+                    "torch.float32": {
+                      "tensor_count": 1344,
+                      "elements": 33414440800,
+                      "payload_bytes": 133657763200
+                    }
+                  }
+                }
+              },
+              "payload_bytes": 133657763200,
+              "retained_storage_bytes": 133657763200,
+              "tensor_count": 1344,
+              "elements": 33414440800
+            },
+            "buffers": {
+              "by_device": {
+                "cpu": {
+                  "payload_bytes": 1025408,
+                  "retained_storage_bytes": 1025408,
+                  "tensor_count": 98,
+                  "elements": 128176,
+                  "dtypes": {
+                    "torch.int64": {
+                      "tensor_count": 98,
+                      "elements": 128176,
+                      "payload_bytes": 1025408
+                    }
+                  }
+                }
+              },
+              "payload_bytes": 1025408,
+              "retained_storage_bytes": 1025408,
+              "tensor_count": 98,
+              "elements": 128176
+            },
+            "private_state": {
+              "by_device": {
+                "cpu": {
+                  "payload_bytes": 106925312,
+                  "retained_storage_bytes": 106925312,
+                  "tensor_count": 280,
+                  "elements": 45579760,
+                  "dtypes": {
+                    "torch.int64": {
+                      "tensor_count": 64,
+                      "elements": 25936,
+                      "payload_bytes": 207488
+                    },
+                    "torch.float32": {
+                      "tensor_count": 168,
+                      "elements": 7805088,
+                      "payload_bytes": 31220352
+                    },
+                    "torch.bfloat16": {
+                      "tensor_count": 48,
+                      "elements": 37748736,
+                      "payload_bytes": 75497472
+                    }
+                  }
+                }
+              },
+              "payload_bytes": 106925312,
+              "retained_storage_bytes": 106925312,
+              "tensor_count": 280,
+              "elements": 45579760
+            },
+            "combined": {
+              "by_device": {
+                "cpu": {
+                  "payload_bytes": 267423475328,
+                  "retained_storage_bytes": 267423475328,
+                  "tensor_count": 2618,
+                  "elements": 66874589088,
+                  "dtypes": {
+                    "torch.float32": {
+                      "tensor_count": 2408,
+                      "elements": 66836686240,
+                      "payload_bytes": 267346744960
+                    },
+                    "torch.int64": {
+                      "tensor_count": 162,
+                      "elements": 154112,
+                      "payload_bytes": 1232896
+                    },
+                    "torch.bfloat16": {
+                      "tensor_count": 48,
+                      "elements": 37748736,
+                      "payload_bytes": 75497472
+                    }
+                  }
+                }
+              },
+              "payload_bytes": 267423475328,
+              "retained_storage_bytes": 267423475328,
+              "tensor_count": 2618,
+              "elements": 66874589088
+            }
+          },
+          "finite_checks": {
+            "parameters": {
+              "finite": true,
+              "nonfinite_tensors": [],
+              "floating_tensors": 448,
+              "floating_elements": 16707220176,
+              "chunk_elements": 1048576
+            },
+            "gradients": {
+              "finite": true,
+              "nonfinite_tensors": [],
+              "floating_tensors": 448,
+              "floating_elements": 16707220176,
+              "chunk_elements": 1048576
+            },
+            "optimizer_slots": {
+              "finite": true,
+              "nonfinite_tensors": [],
+              "floating_tensors": 1344,
+              "floating_elements": 33414440800,
+              "chunk_elements": 1048576
+            },
+            "buffers": {
+              "finite": true,
+              "nonfinite_tensors": [],
+              "floating_tensors": 0,
+              "floating_elements": 0,
+              "chunk_elements": 1048576
+            },
+            "private_state": {
+              "finite": true,
+              "nonfinite_tensors": [],
+              "floating_tensors": 216,
+              "floating_elements": 45553824,
+              "chunk_elements": 1048576
+            },
+            "outputs": {
+              "finite": true,
+              "nonfinite_tensors": [],
+              "floating_tensors": 3,
+              "floating_elements": 1574913,
+              "chunk_elements": 1048576
+            }
+          },
+          "finite": true,
+          "loss": -0.06428428739309311,
+          "output_positive_strengths": 157,
+          "flush_output_positive_strengths": 0,
+          "private_state_requires_grad_tensors": 0,
+          "optimizer_step_counters": {
+            "count": 448,
+            "minimum": 2.0,
+            "maximum": 2.0
+          },
+          "parameter_update_witness": {
+            "sampled_parameters": 448,
+            "sampled_elements": 7168,
+            "changed_elements": 7161,
+            "max_abs": 0.00010216236114501953,
+            "scope": "first up to 16 scalars of every actual Parameter; not a full-parameter trajectory comparison"
+          },
+          "checks_seconds": 31.176987688988447
+        }
+      ],
+      "progress": [
+        {
+          "stage": "construction.cpu",
+          "monotonic_seconds": 22565182.58572934
+        },
+        {
+          "stage": "construction.parameter_identity",
+          "monotonic_seconds": 22565340.764930923
+        },
+        {
+          "stage": "construction.placement",
+          "monotonic_seconds": 22565378.957464974
+        },
+        {
+          "stage": "construction.optimizer_input",
+          "monotonic_seconds": 22565390.257535543
+        },
+        {
+          "stage": "update.0.placed.work_audit",
+          "monotonic_seconds": 22565391.106009353
+        },
+        {
+          "stage": "update.0.placed.operator_audit",
+          "monotonic_seconds": 22565395.889699344
+        },
+        {
+          "stage": "update.0.placed.forward",
+          "monotonic_seconds": 22565401.160994433
+        },
+        {
+          "stage": "update.0.placed.backward",
+          "monotonic_seconds": 22565404.692881547
+        },
+        {
+          "stage": "update.0.placed.optimizer",
+          "monotonic_seconds": 22565506.43281973
+        },
+        {
+          "stage": "update.0.placed.finite_storage_checks",
+          "monotonic_seconds": 22565544.561633512
+        },
+        {
+          "stage": "update.0.placed.complete",
+          "monotonic_seconds": 22565576.443105295
+        },
+        {
+          "stage": "update.1.placed.work_audit",
+          "monotonic_seconds": 22565576.451754957
+        },
+        {
+          "stage": "update.1.placed.forward",
+          "monotonic_seconds": 22565581.947409287
+        },
+        {
+          "stage": "update.1.placed.backward",
+          "monotonic_seconds": 22565588.268596675
+        },
+        {
+          "stage": "update.1.placed.optimizer",
+          "monotonic_seconds": 22565682.898503527
+        },
+        {
+          "stage": "update.1.placed.finite_storage_checks",
+          "monotonic_seconds": 22565707.412927583
+        },
+        {
+          "stage": "update.1.placed.complete",
+          "monotonic_seconds": 22565738.618450712
+        },
+        {
+          "stage": "completed",
+          "monotonic_seconds": 22565738.629035607
+        }
+      ],
+      "phase_synchronization": false,
+      "comparison": "capacity training execution only; no one-device equivalence reference or checkpoint",
+      "optimizer": {
+        "kind": "placement_adamw",
+        "learning_rate": 0.0001,
+        "foreach": false
+      },
+      "continuation": "carry detached private state into the next update; Timed flush contributes to loss and advances the resumed clock",
+      "timing": "complete wall time includes zero_grad, forward/readout/necessary flush/loss, backward, cross-device transport, AdamW, detach, final all-device sync and intervening diagnostic stage record IO; individual host phases exclude stage IO and measure device latency only with phase_sync",
+      "timing_exclusions": [
+        "CPU construction",
+        "parameter identity hash",
+        "placement and input transfer",
+        "optimizer construction",
+        "work/operator audits",
+        "finite/storage/update-witness scans"
+      ],
+      "audit_scope": "separate graph-enabled forwards at each update's identical parameters, input and private state; no update or detach of the timed state",
+      "memory_scope": "timed allocator peaks reset after audit graphs are released; reserved bytes can retain construction/audit caches; process RSS covers the whole process",
+      "preparation_seconds": {
+        "cpu_model": 158.17717155441642,
+        "parameter_identity": 38.189778093248606,
+        "placement_transfer": 11.294641487300396,
+        "optimizer_input_transfer": 0.838600791990757
+      },
+      "last_stage": "completed",
+      "initial_parameter_sha256": "42d5e937f0dffebb597d72eef5ee98b4bca6c0a27898bc3555383ef9a014ff03",
+      "initial_parameter_hash_format": "sha256 of ordered name, shape, dtype and contiguous CPU bytes; zero-copy memoryview",
+      "placement": {
+        "kind": "hb-layer-shards-1",
+        "devices": [
+          "cpu"
+        ],
+        "layer_partitions": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "requested_transport": "auto",
+        "transport": "direct",
+        "optimizer": "placement_adamw; align disconnected shards per original Parameter before step",
+        "communication": "single-process autograd tensor.to copies of actual predecessor banks; no HCCL replicas",
+        "actual_devices": {
+          "cpu": {
+            "parameters": 16707220176,
+            "parameter_bytes": 66828880704
+          }
+        },
+        "total_unique_parameters": 16707220176
+      },
+      "input_sha256": "1d86548cea43e3a62e96cc70c12c95187db5c97fde81c6a46a97b79164c7e092",
+      "construction_transfer_seconds": 170.31041383370757,
+      "construction_peak_device_memory": {},
+      "operator_witness": {
+        "operators": [
+          {
+            "operator": "aten.bmm.default",
+            "inputs": [
+              "cpu:torch.bfloat16"
+            ],
+            "outputs": [
+              "cpu:torch.bfloat16"
+            ],
+            "calls": 992
+          },
+          {
+            "operator": "aten.bmm.default",
+            "inputs": [
+              "cpu:torch.float32"
+            ],
+            "outputs": [
+              "cpu:torch.float32"
+            ],
+            "calls": 344
+          },
+          {
+            "operator": "aten.mm.default",
+            "inputs": [
+              "cpu:torch.bfloat16"
+            ],
+            "outputs": [
+              "cpu:torch.bfloat16"
+            ],
+            "calls": 222
+          }
+        ],
+        "materializations": {
+          "aten._to_copy.default": {
+            "calls": 3334,
+            "output_bytes": 20183161504
+          },
+          "aten.index.Tensor": {
+            "calls": 4660,
+            "output_bytes": 39665452496
+          },
+          "aten.cat.default": {
+            "calls": 700,
+            "output_bytes": 225594368
+          },
+          "aten.gather.default": {
+            "calls": 364,
+            "output_bytes": 56096832
+          },
+          "aten.index_copy.default": {
+            "calls": 264,
+            "output_bytes": 69604352
+          },
+          "aten.clone.default": {
+            "calls": 660,
+            "output_bytes": 174397440
+          },
+          "aten.index_put.default": {
+            "calls": 108,
+            "output_bytes": 56524800
+          },
+          "aten.index_put_.default": {
+            "calls": 44,
+            "output_bytes": 28416
+          }
+        },
+        "materialization_definition": "logical output bytes from dispatched copy/index/concatenate operations; not hardware bus traffic, bandwidth or all operand loads",
+        "instrumentation": "separate ordinary forward without semantic counting hooks; excluded from timing",
+        "bf16_matrix_observed": true,
+        "update_index": 0,
+        "state_position": 0
+      },
+      "completed_updates": 2,
+      "seconds": [
+        143.39269164204597,
+        125.44643672555685
+      ],
+      "median_seconds": 134.4195641838014,
+      "input_positions_per_second": 0.05951514609183699,
+      "state_memory": {
+        "payload_bytes": 106925312,
+        "retained_storage_bytes": 106925312,
+        "dtypes": [
+          "torch.bfloat16",
+          "torch.float32",
+          "torch.int64"
+        ],
+        "tensor_count": 280
+      },
+      "process_peak_rss_kib": 344387004
+    }
+  ],
+  "state": "completed"
+}

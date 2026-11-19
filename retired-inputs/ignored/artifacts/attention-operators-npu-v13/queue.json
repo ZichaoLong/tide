@@ -1,0 +1,19 @@
+{
+  "elapsed_seconds": 17.643737588077784,
+  "job_id": "attention-operators-npu-v13",
+  "logical_device": "npu:0",
+  "logical_devices": [
+    "npu:0"
+  ],
+  "npu_count": 1,
+  "physical_id": 9,
+  "physical_ids": [
+    9
+  ],
+  "priority": 0,
+  "project": "tide-instances",
+  "return_code": 0,
+  "schema_version": 1,
+  "status": "completed",
+  "timestamp": "2026-11-18T04:35:00.185192+00:00"
+}

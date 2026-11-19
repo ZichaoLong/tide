@@ -1,0 +1,112 @@
+{
+  "state": "passed",
+  "source": "1553b301bf960ec6337fbc38e8e3cada26205eb2",
+  "command": [
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "/mi/data2T/zlong/home/.agents/skills/use-local-ascend/scripts/run_on_free_npu.py",
+    "--job-id",
+    "agg-inference-fc1b-sustain-fp32-v1",
+    "--project",
+    "tide-instances",
+    "--priority",
+    "0",
+    "--npu-count",
+    "1",
+    "--max-wait-seconds",
+    "2400",
+    "--state-file",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-inference-fc1b-sustain-fp32-v1/queue.json",
+    "--",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "-m",
+    "benchmarks.inference",
+    "--config",
+    "configs/scale/fc-1b.json",
+    "--subjects",
+    "tide",
+    "A",
+    "B",
+    "C",
+    "D",
+    "--devices",
+    "npu:0",
+    "--precision",
+    "fp32",
+    "--batch",
+    "1",
+    "--prefill",
+    "512",
+    "--prefill-chunk",
+    "128",
+    "--decode",
+    "256",
+    "--samples",
+    "2",
+    "--warmup",
+    "1",
+    "--no-cold",
+    "--threads",
+    "4",
+    "--transformer-chunk",
+    "256",
+    "--allocated-budget-gib",
+    "48",
+    "--reserved-budget-gib",
+    "56",
+    "--reference-output",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-inference-fc1b-sustain-fp32-v1/reference.json",
+    "--output",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-inference-fc1b-sustain-fp32-v1/inference.json"
+  ],
+  "pid": 2450428,
+  "started": "2026-11-18T12:40:18.214343+00:00",
+  "max_rss_bytes": 85899345920,
+  "peak_rss_bytes": 6838005760,
+  "max_processes": 4,
+  "rss_sample_count": 3514,
+  "poll_interval": 0.25,
+  "descendant_supervision": "Linux child subreaper; retained PID/start identities across nested sessions",
+  "child_pid": 2450463,
+  "process_group": 2450463,
+  "elapsed": 1534.4918416067958,
+  "descendant_identities": [
+    {
+      "pid": 2450463,
+      "start_ticks": 2259178892
+    },
+    {
+      "pid": 2450466,
+      "start_ticks": 2259178898
+    },
+    {
+      "pid": 2463662,
+      "start_ticks": 2259193984
+    },
+    {
+      "pid": 2463669,
+      "start_ticks": 2259193985
+    },
+    {
+      "pid": 2463670,
+      "start_ticks": 2259193985
+    },
+    {
+      "pid": 2464012,
+      "start_ticks": 2259194462
+    },
+    {
+      "pid": 2464019,
+      "start_ticks": 2259194462
+    },
+    {
+      "pid": 2464020,
+      "start_ticks": 2259194463
+    },
+    {
+      "pid": 2464184,
+      "start_ticks": 2259194637
+    }
+  ],
+  "exit_code": 0,
+  "finished": "2026-11-18T13:05:52.706185+00:00"
+}

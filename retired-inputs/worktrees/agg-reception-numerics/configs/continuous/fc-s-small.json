@@ -1,0 +1,12 @@
+{
+  "topology": {
+    "kind": "fc",
+    "n": 2,
+    "layers": 2
+  },
+  "d": 64,
+  "memory": "S",
+  "aggregation": "source_residual",
+  "allocation": "quad",
+  "sharing": "independent"
+}

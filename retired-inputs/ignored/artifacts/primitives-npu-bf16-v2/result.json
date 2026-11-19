@@ -1,0 +1,750 @@
+{
+  "source": "3b9f919b560d829fbed70302749ba4c9584bbd9b",
+  "arguments": {
+    "device": "npu:0",
+    "precision": "bf16",
+    "configs": [
+      "fc-k",
+      "fc-s",
+      "hb-lattice-k",
+      "hb-exchange-x",
+      "hb-multiscale-x-settle",
+      "hb-multiscale-x-timed",
+      "fc-k-149m"
+    ],
+    "width": 64,
+    "batch": 2,
+    "length": 5,
+    "steps": 3,
+    "threads": 4,
+    "checkpoint": false,
+    "primitives_only": true,
+    "reference": null,
+    "save_tensors": null,
+    "output": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/primitives-npu-bf16-v2/result.json"
+  },
+  "torch": "2.12.0+cpu",
+  "physical_devices": "9",
+  "policy": {
+    "name": "bf16",
+    "device": "npu:0",
+    "parameters": "float32",
+    "input": "float32",
+    "matrix_arithmetic": "bfloat16_autocast",
+    "normalization_mass_allocation": "float32",
+    "kv_keys_values": "bfloat16",
+    "kv_summary_and_ssd_state": "float32",
+    "logical_time_indices": "int64",
+    "parameter_gradients": "float32",
+    "master_weights": "parameters_are_fp32_masters; no_separate_copy",
+    "adamw_moments": "float32",
+    "attention": "native_by_shape_and_prior; math/tiled_accumulate_float32",
+    "loss": "float32",
+    "autocast_cache": false
+  },
+  "thresholds": {
+    "fp32": {
+      "atol": 1e-06,
+      "rtol": 0.002
+    },
+    "bf16": {
+      "atol": 0.002,
+      "rtol": 0.05
+    },
+    "fp64": {
+      "atol": 1e-10,
+      "rtol": 1e-08
+    }
+  },
+  "old_deviations": "Original FP32 report remains unchanged; no relabeling.",
+  "exit_policy": "nonfinite, execution and metadata errors fail; finite tolerance/support differences remain explicit",
+  "rows": [],
+  "torch_npu": "2.12.0.post3",
+  "allow_hf32": {
+    "matmul": false,
+    "conv": false
+  },
+  "independent_attention": [
+    {
+      "case": "positive_prior",
+      "backend": "math",
+      "arithmetic": [],
+      "tolerance": {
+        "atol": 0.002,
+        "rtol": 0.05
+      },
+      "metadata_failures": [],
+      "dtype_differences": [
+        {
+          "tensor": "root.gradients.0",
+          "actual": "torch.bfloat16",
+          "reference": "torch.float64"
+        },
+        {
+          "tensor": "root.gradients.1",
+          "actual": "torch.bfloat16",
+          "reference": "torch.float64"
+        },
+        {
+          "tensor": "root.gradients.2",
+          "actual": "torch.bfloat16",
+          "reference": "torch.float64"
+        },
+        {
+          "tensor": "root.gradients.3",
+          "actual": "torch.float32",
+          "reference": "torch.float64"
+        },
+        {
+          "tensor": "root.value",
+          "actual": "torch.bfloat16",
+          "reference": "torch.float64"
+        }
+      ],
+      "nonfinite": [],
+      "support_differences": [],
+      "threshold_failures": [],
+      "work_differences": [],
+      "exact": false,
+      "largest_errors": [
+        {
+          "tensor": "root.gradients.0",
+          "max_abs": 0.0016719303007879383,
+          "scaled_error": 0.05994092925397083,
+          "relative_l2": 0.0019433374296845898
+        },
+        {
+          "tensor": "root.gradients.2",
+          "max_abs": 0.0018964153236240566,
+          "scaled_error": 0.05929391503016775,
+          "relative_l2": 0.0019786124094059747
+        },
+        {
+          "tensor": "root.value",
+          "max_abs": 0.0017429332399342412,
+          "scaled_error": 0.052901889243886,
+          "relative_l2": 0.001710222851301954
+        },
+        {
+          "tensor": "root.gradients.1",
+          "max_abs": 0.000718737467671704,
+          "scaled_error": 0.0453999172032133,
+          "relative_l2": 0.0017509251076956744
+        },
+        {
+          "tensor": "root.gradients.3",
+          "max_abs": 3.836216637687073e-07,
+          "scaled_error": 3.5891352127781267e-06,
+          "relative_l2": 1.2795730466592037e-07
+        }
+      ]
+    },
+    {
+      "case": "positive_prior",
+      "backend": "tiled",
+      "arithmetic": [],
+      "tolerance": {
+        "atol": 0.002,
+        "rtol": 0.05
+      },
+      "metadata_failures": [],
+      "dtype_differences": [
+        {
+          "tensor": "root.gradients.0",
+          "actual": "torch.bfloat16",
+          "reference": "torch.float64"
+        },
+        {
+          "tensor": "root.gradients.1",
+          "actual": "torch.bfloat16",
+          "reference": "torch.float64"
+        },
+        {
+          "tensor": "root.gradients.2",
+          "actual": "torch.bfloat16",
+          "reference": "torch.float64"
+        },
+        {
+          "tensor": "root.gradients.3",
+          "actual": "torch.float32",
+          "reference": "torch.float64"
+        },
+        {
+          "tensor": "root.value",
+          "actual": "torch.bfloat16",
+          "reference": "torch.float64"
+        }
+      ],
+      "nonfinite": [],
+      "support_differences": [],
+      "threshold_failures": [],
+      "work_differences": [],
+      "exact": false,
+      "largest_errors": [
+        {
+          "tensor": "root.gradients.0",
+          "max_abs": 0.0016719303007879383,
+          "scaled_error": 0.05994092925397083,
+          "relative_l2": 0.0019433374296845898
+        },
+        {
+          "tensor": "root.gradients.2",
+          "max_abs": 0.0018964153236240566,
+          "scaled_error": 0.05929391503016775,
+          "relative_l2": 0.0019786124094059747
+        },
+        {
+          "tensor": "root.value",
+          "max_abs": 0.0017429332399342412,
+          "scaled_error": 0.052901889243886,
+          "relative_l2": 0.001710222851301954
+        },
+        {
+          "tensor": "root.gradients.1",
+          "max_abs": 0.000718737467671704,
+          "scaled_error": 0.0453999172032133,
+          "relative_l2": 0.0017509251076956744
+        },
+        {
+          "tensor": "root.gradients.3",
+          "max_abs": 3.836216637687073e-07,
+          "scaled_error": 3.5891352127781267e-06,
+          "relative_l2": 1.2795730466592037e-07
+        }
+      ]
+    },
+    {
+      "case": "positive_prior",
+      "backend": "auto",
+      "arithmetic": [
+        {
+          "operator": "npu.npu_fusion_attention_v2.default",
+          "inputs": [
+            "npu:bfloat16",
+            "npu:bool"
+          ],
+          "outputs": [
+            "npu:bfloat16",
+            "npu:float32"
+          ],
+          "calls": 1
+        }
+      ],
+      "tolerance": {
+        "atol": 0.002,
+        "rtol": 0.05
+      },
+      "metadata_failures": [],
+      "dtype_differences": [
+        {
+          "tensor": "root.gradients.0",
+          "actual": "torch.bfloat16",
+          "reference": "torch.float64"
+        },
+        {
+          "tensor": "root.gradients.1",
+          "actual": "torch.bfloat16",
+          "reference": "torch.float64"
+        },
+        {
+          "tensor": "root.gradients.2",
+          "actual": "torch.bfloat16",
+          "reference": "torch.float64"
+        },
+        {
+          "tensor": "root.gradients.3",
+          "actual": "torch.float32",
+          "reference": "torch.float64"
+        },
+        {
+          "tensor": "root.value",
+          "actual": "torch.bfloat16",
+          "reference": "torch.float64"
+        }
+      ],
+      "nonfinite": [],
+      "support_differences": [],
+      "threshold_failures": [],
+      "work_differences": [],
+      "exact": false,
+      "largest_errors": [
+        {
+          "tensor": "root.gradients.0",
+          "max_abs": 0.0016719303007879383,
+          "scaled_error": 0.4520416259765625,
+          "relative_l2": 0.0026103559636105494
+        },
+        {
+          "tensor": "root.value",
+          "max_abs": 0.0022532035547109253,
+          "scaled_error": 0.41388716650580526,
+          "relative_l2": 0.002366673599098965
+        },
+        {
+          "tensor": "root.gradients.2",
+          "max_abs": 0.002975269213062348,
+          "scaled_error": 0.35170903759140903,
+          "relative_l2": 0.004277153641243118
+        },
+        {
+          "tensor": "root.gradients.3",
+          "max_abs": 0.013419722602916906,
+          "scaled_error": 0.22541979605762788,
+          "relative_l2": 0.004520330851305704
+        },
+        {
+          "tensor": "root.gradients.1",
+          "max_abs": 0.0009773865939760318,
+          "scaled_error": 0.1688230742713819,
+          "relative_l2": 0.0034392773391280027
+        }
+      ]
+    },
+    {
+      "case": "zero_prior",
+      "backend": "math",
+      "arithmetic": [],
+      "tolerance": {
+        "atol": 0.002,
+        "rtol": 0.05
+      },
+      "metadata_failures": [],
+      "dtype_differences": [
+        {
+          "tensor": "root.gradients.0",
+          "actual": "torch.bfloat16",
+          "reference": "torch.float64"
+        },
+        {
+          "tensor": "root.gradients.1",
+          "actual": "torch.bfloat16",
+          "reference": "torch.float64"
+        },
+        {
+          "tensor": "root.gradients.2",
+          "actual": "torch.bfloat16",
+          "reference": "torch.float64"
+        },
+        {
+          "tensor": "root.gradients.3",
+          "actual": "torch.float32",
+          "reference": "torch.float64"
+        },
+        {
+          "tensor": "root.value",
+          "actual": "torch.bfloat16",
+          "reference": "torch.float64"
+        }
+      ],
+      "nonfinite": [],
+      "support_differences": [],
+      "threshold_failures": [],
+      "work_differences": [],
+      "exact": false,
+      "largest_errors": [
+        {
+          "tensor": "root.value",
+          "max_abs": 0.0017815534396843358,
+          "scaled_error": 0.05047278156137048,
+          "relative_l2": 0.0010399884763577895
+        },
+        {
+          "tensor": "root.gradients.2",
+          "max_abs": 0.0015757556825717334,
+          "scaled_error": 0.04082033279101165,
+          "relative_l2": 0.0008967646434322132
+        },
+        {
+          "tensor": "root.gradients.1",
+          "max_abs": 0.0004744955048710253,
+          "scaled_error": 0.034774775787100906,
+          "relative_l2": 0.0015312811508882958
+        },
+        {
+          "tensor": "root.gradients.0",
+          "max_abs": 0.00029198173532829497,
+          "scaled_error": 0.013631906628628619,
+          "relative_l2": 0.0007139704125053339
+        },
+        {
+          "tensor": "root.gradients.3",
+          "max_abs": 1.6829026749931586e-07,
+          "scaled_error": 3.196816534919533e-06,
+          "relative_l2": 4.450821660747331e-08
+        }
+      ]
+    },
+    {
+      "case": "zero_prior",
+      "backend": "tiled",
+      "arithmetic": [],
+      "tolerance": {
+        "atol": 0.002,
+        "rtol": 0.05
+      },
+      "metadata_failures": [],
+      "dtype_differences": [
+        {
+          "tensor": "root.gradients.0",
+          "actual": "torch.bfloat16",
+          "reference": "torch.float64"
+        },
+        {
+          "tensor": "root.gradients.1",
+          "actual": "torch.bfloat16",
+          "reference": "torch.float64"
+        },
+        {
+          "tensor": "root.gradients.2",
+          "actual": "torch.bfloat16",
+          "reference": "torch.float64"
+        },
+        {
+          "tensor": "root.gradients.3",
+          "actual": "torch.float32",
+          "reference": "torch.float64"
+        },
+        {
+          "tensor": "root.value",
+          "actual": "torch.bfloat16",
+          "reference": "torch.float64"
+        }
+      ],
+      "nonfinite": [],
+      "support_differences": [],
+      "threshold_failures": [],
+      "work_differences": [],
+      "exact": false,
+      "largest_errors": [
+        {
+          "tensor": "root.value",
+          "max_abs": 0.0017815534396843358,
+          "scaled_error": 0.05047278156137048,
+          "relative_l2": 0.0010399884763577895
+        },
+        {
+          "tensor": "root.gradients.2",
+          "max_abs": 0.0015757556825717334,
+          "scaled_error": 0.04082033279101165,
+          "relative_l2": 0.0008967646434322132
+        },
+        {
+          "tensor": "root.gradients.1",
+          "max_abs": 0.0004744955048710253,
+          "scaled_error": 0.034774775787100906,
+          "relative_l2": 0.0015312811508882958
+        },
+        {
+          "tensor": "root.gradients.0",
+          "max_abs": 0.00029198173532829497,
+          "scaled_error": 0.013631906628628619,
+          "relative_l2": 0.0007139704156293814
+        },
+        {
+          "tensor": "root.gradients.3",
+          "max_abs": 1.456413223355213e-07,
+          "scaled_error": 3.835051523941805e-06,
+          "relative_l2": 3.215087348660631e-08
+        }
+      ]
+    },
+    {
+      "case": "zero_prior",
+      "backend": "auto",
+      "arithmetic": [],
+      "tolerance": {
+        "atol": 0.002,
+        "rtol": 0.05
+      },
+      "metadata_failures": [],
+      "dtype_differences": [
+        {
+          "tensor": "root.gradients.0",
+          "actual": "torch.bfloat16",
+          "reference": "torch.float64"
+        },
+        {
+          "tensor": "root.gradients.1",
+          "actual": "torch.bfloat16",
+          "reference": "torch.float64"
+        },
+        {
+          "tensor": "root.gradients.2",
+          "actual": "torch.bfloat16",
+          "reference": "torch.float64"
+        },
+        {
+          "tensor": "root.gradients.3",
+          "actual": "torch.float32",
+          "reference": "torch.float64"
+        },
+        {
+          "tensor": "root.value",
+          "actual": "torch.bfloat16",
+          "reference": "torch.float64"
+        }
+      ],
+      "nonfinite": [],
+      "support_differences": [],
+      "threshold_failures": [],
+      "work_differences": [],
+      "exact": false,
+      "largest_errors": [
+        {
+          "tensor": "root.value",
+          "max_abs": 0.0017815534396843358,
+          "scaled_error": 0.05047278156137048,
+          "relative_l2": 0.0010399884763577895
+        },
+        {
+          "tensor": "root.gradients.2",
+          "max_abs": 0.0015757556825717334,
+          "scaled_error": 0.04082033279101165,
+          "relative_l2": 0.0008967646434322132
+        },
+        {
+          "tensor": "root.gradients.1",
+          "max_abs": 0.0004744955048710253,
+          "scaled_error": 0.034774775787100906,
+          "relative_l2": 0.0015312811508882958
+        },
+        {
+          "tensor": "root.gradients.0",
+          "max_abs": 0.00029198173532829497,
+          "scaled_error": 0.013631906628628619,
+          "relative_l2": 0.0007139704156293814
+        },
+        {
+          "tensor": "root.gradients.3",
+          "max_abs": 1.456413223355213e-07,
+          "scaled_error": 3.835051523941805e-06,
+          "relative_l2": 3.215087348660631e-08
+        }
+      ]
+    },
+    {
+      "case": "empty",
+      "backend": "math",
+      "arithmetic": [],
+      "tolerance": {
+        "atol": 0.002,
+        "rtol": 0.05
+      },
+      "metadata_failures": [],
+      "dtype_differences": [
+        {
+          "tensor": "root.gradients.0",
+          "actual": "torch.bfloat16",
+          "reference": "torch.float64"
+        },
+        {
+          "tensor": "root.gradients.1",
+          "actual": "torch.bfloat16",
+          "reference": "torch.float64"
+        },
+        {
+          "tensor": "root.gradients.2",
+          "actual": "torch.bfloat16",
+          "reference": "torch.float64"
+        },
+        {
+          "tensor": "root.gradients.3",
+          "actual": "torch.float32",
+          "reference": "torch.float64"
+        },
+        {
+          "tensor": "root.value",
+          "actual": "torch.bfloat16",
+          "reference": "torch.float64"
+        }
+      ],
+      "nonfinite": [],
+      "support_differences": [],
+      "threshold_failures": [],
+      "work_differences": [],
+      "exact": false,
+      "largest_errors": [
+        {
+          "tensor": "root.gradients.0",
+          "max_abs": 0.0,
+          "scaled_error": 0.0,
+          "relative_l2": 0.0
+        },
+        {
+          "tensor": "root.gradients.1",
+          "max_abs": 0.0,
+          "scaled_error": 0.0,
+          "relative_l2": 0.0
+        },
+        {
+          "tensor": "root.gradients.2",
+          "max_abs": 0.0,
+          "scaled_error": 0.0,
+          "relative_l2": 0.0
+        },
+        {
+          "tensor": "root.gradients.3",
+          "max_abs": 0.0,
+          "scaled_error": 0.0,
+          "relative_l2": 0.0
+        },
+        {
+          "tensor": "root.value",
+          "max_abs": 0.0,
+          "scaled_error": 0.0,
+          "relative_l2": 0.0
+        }
+      ]
+    },
+    {
+      "case": "empty",
+      "backend": "tiled",
+      "arithmetic": [],
+      "tolerance": {
+        "atol": 0.002,
+        "rtol": 0.05
+      },
+      "metadata_failures": [],
+      "dtype_differences": [
+        {
+          "tensor": "root.gradients.0",
+          "actual": "torch.bfloat16",
+          "reference": "torch.float64"
+        },
+        {
+          "tensor": "root.gradients.1",
+          "actual": "torch.bfloat16",
+          "reference": "torch.float64"
+        },
+        {
+          "tensor": "root.gradients.2",
+          "actual": "torch.bfloat16",
+          "reference": "torch.float64"
+        },
+        {
+          "tensor": "root.gradients.3",
+          "actual": "torch.float32",
+          "reference": "torch.float64"
+        },
+        {
+          "tensor": "root.value",
+          "actual": "torch.bfloat16",
+          "reference": "torch.float64"
+        }
+      ],
+      "nonfinite": [],
+      "support_differences": [],
+      "threshold_failures": [],
+      "work_differences": [],
+      "exact": false,
+      "largest_errors": [
+        {
+          "tensor": "root.gradients.0",
+          "max_abs": 0.0,
+          "scaled_error": 0.0,
+          "relative_l2": 0.0
+        },
+        {
+          "tensor": "root.gradients.1",
+          "max_abs": 0.0,
+          "scaled_error": 0.0,
+          "relative_l2": 0.0
+        },
+        {
+          "tensor": "root.gradients.2",
+          "max_abs": 0.0,
+          "scaled_error": 0.0,
+          "relative_l2": 0.0
+        },
+        {
+          "tensor": "root.gradients.3",
+          "max_abs": 0.0,
+          "scaled_error": 0.0,
+          "relative_l2": 0.0
+        },
+        {
+          "tensor": "root.value",
+          "max_abs": 0.0,
+          "scaled_error": 0.0,
+          "relative_l2": 0.0
+        }
+      ]
+    },
+    {
+      "case": "empty",
+      "backend": "auto",
+      "arithmetic": [],
+      "tolerance": {
+        "atol": 0.002,
+        "rtol": 0.05
+      },
+      "metadata_failures": [],
+      "dtype_differences": [
+        {
+          "tensor": "root.gradients.0",
+          "actual": "torch.bfloat16",
+          "reference": "torch.float64"
+        },
+        {
+          "tensor": "root.gradients.1",
+          "actual": "torch.bfloat16",
+          "reference": "torch.float64"
+        },
+        {
+          "tensor": "root.gradients.2",
+          "actual": "torch.bfloat16",
+          "reference": "torch.float64"
+        },
+        {
+          "tensor": "root.gradients.3",
+          "actual": "torch.float32",
+          "reference": "torch.float64"
+        },
+        {
+          "tensor": "root.value",
+          "actual": "torch.bfloat16",
+          "reference": "torch.float64"
+        }
+      ],
+      "nonfinite": [],
+      "support_differences": [],
+      "threshold_failures": [],
+      "work_differences": [],
+      "exact": false,
+      "largest_errors": [
+        {
+          "tensor": "root.gradients.0",
+          "max_abs": 0.0,
+          "scaled_error": 0.0,
+          "relative_l2": 0.0
+        },
+        {
+          "tensor": "root.gradients.1",
+          "max_abs": 0.0,
+          "scaled_error": 0.0,
+          "relative_l2": 0.0
+        },
+        {
+          "tensor": "root.gradients.2",
+          "max_abs": 0.0,
+          "scaled_error": 0.0,
+          "relative_l2": 0.0
+        },
+        {
+          "tensor": "root.gradients.3",
+          "max_abs": 0.0,
+          "scaled_error": 0.0,
+          "relative_l2": 0.0
+        },
+        {
+          "tensor": "root.value",
+          "max_abs": 0.0,
+          "scaled_error": 0.0,
+          "relative_l2": 0.0
+        }
+      ]
+    }
+  ],
+  "primitive_fixture": "tide-precision-primitives-2",
+  "independent_attention_state": "within_threshold"
+}

@@ -1,0 +1,19 @@
+{
+  "elapsed_seconds": 308.8056100718677,
+  "job_id": "batch-hb9b-b8-fp32-v1",
+  "logical_device": "npu:0",
+  "logical_devices": [
+    "npu:0"
+  ],
+  "npu_count": 1,
+  "physical_id": 5,
+  "physical_ids": [
+    5
+  ],
+  "priority": 0,
+  "project": "tide-instances",
+  "return_code": 0,
+  "schema_version": 1,
+  "status": "completed",
+  "timestamp": "2026-11-18T14:40:57.367060+00:00"
+}

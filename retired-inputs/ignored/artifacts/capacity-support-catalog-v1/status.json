@@ -1,0 +1,30 @@
+{
+  "state": "passed",
+  "source": "7b77457d594662e50acf0a002ca18d0a241e0ce3",
+  "command": [
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "-m",
+    "scripts.support_catalog",
+    "--output",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/capacity-support-catalog-v1/catalog.json"
+  ],
+  "pid": 1071062,
+  "started": "2026-11-18T07:43:37.057543+00:00",
+  "max_rss_bytes": 8589934592,
+  "peak_rss_bytes": 22085632,
+  "max_processes": 1,
+  "rss_sample_count": 10,
+  "poll_interval": 0.25,
+  "descendant_supervision": "Linux child subreaper; retained PID/start identities across nested sessions",
+  "child_pid": 1071154,
+  "process_group": 1071154,
+  "elapsed": 4.301605347543955,
+  "descendant_identities": [
+    {
+      "pid": 1071154,
+      "start_ticks": 2257398776
+    }
+  ],
+  "exit_code": 0,
+  "finished": "2026-11-18T07:43:41.359148+00:00"
+}

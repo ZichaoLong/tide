@@ -1,0 +1,19 @@
+{
+  "elapsed_seconds": 703.1162540763617,
+  "job_id": "agg-inference-hb9b-sustain-fp32-v1",
+  "logical_device": "npu:0",
+  "logical_devices": [
+    "npu:0"
+  ],
+  "npu_count": 1,
+  "physical_id": 0,
+  "physical_ids": [
+    0
+  ],
+  "priority": 0,
+  "project": "tide-instances",
+  "return_code": 0,
+  "schema_version": 1,
+  "status": "completed",
+  "timestamp": "2026-11-18T12:52:02.305473+00:00"
+}

@@ -1,0 +1,41 @@
+{
+  "recovery_date": "2026-10-27",
+  "source": "Original drawing calls and patches from the current conversation, 2026-10-12/13",
+  "figures": [
+    {
+      "figure": "tide-structure.png",
+      "script": "src/legacy/tide_structure.py",
+      "saved_png_sha256": "5ece045dafe495cf77b7033941c3377c219d9ec8ef01feacc81743fe598674da",
+      "recovered_source_sha256": "2b0abf516c6891467d709e749c4a5b23f5a089d4826b4c11ea3f23b21ce06a50",
+      "patch_calls": 4,
+      "pixel_equal": true,
+      "byte_equal": true
+    },
+    {
+      "figure": "PSUF-complete.png",
+      "script": "src/legacy/psuf_complete.py",
+      "saved_png_sha256": "aa74cdc5855997c1dab2e55ee431084e1e07905213d72dc066976831cd376c94",
+      "recovered_source_sha256": "a60216561760cf4468207b402e31bdc69fdb32829762e0de501fa7443733ebfe",
+      "patch_calls": 2,
+      "pixel_equal": true,
+      "byte_equal": true
+    },
+    {
+      "figure": "PSUF-simple.png",
+      "script": "src/legacy/psuf_simple.py",
+      "saved_png_sha256": "5eb45f6112619dd61c6c67b5d70b3d786d38b768e307b8436162a7032379ea82",
+      "recovered_source_sha256": "96b2208d91cd1974e657315474bcd4ac9d450d8d8d312c28078e0169fd862f1f",
+      "patch_calls": 1,
+      "pixel_equal": true,
+      "byte_equal": true
+    }
+  ],
+  "renderer": {
+    "Pillow": "12.1.1",
+    "font_collection_index": 2,
+    "fonts": {
+      "NotoSansCJK-Regular.ttc": "b76b0433203017ca80401b2ee0dd69350349871c4b19d504c34dbdd80541690a",
+      "NotoSansCJK-Bold.ttc": "faa5f3656a78b2e2d450d27fe8382c778bc2b6bb5ea29c986664a6a435056ceb"
+    }
+  }
+}

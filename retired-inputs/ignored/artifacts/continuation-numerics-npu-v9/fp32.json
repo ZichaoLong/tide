@@ -1,0 +1,811 @@
+{
+  "source": "5185dc0d1d3ae4c570e0712a42826e3974161bed",
+  "arguments": {
+    "device": "npu:0",
+    "precision": "fp32",
+    "cases": [
+      "fc-k-window",
+      "fc-s-window",
+      "hb-exchange",
+      "hb-timed"
+    ],
+    "attention_backend": "auto",
+    "threads": 4,
+    "output": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/continuation-numerics-npu-v9/fp32.json"
+  },
+  "precision": {
+    "name": "fp32",
+    "device": "npu:0",
+    "parameters": "float32",
+    "input": "float32",
+    "matrix_arithmetic": "float32",
+    "normalization_mass_allocation": "float32",
+    "kv_keys_values": "float32",
+    "kv_summary_and_ssd_state": "float32",
+    "logical_time_indices": "int64",
+    "parameter_gradients": "float32",
+    "master_weights": "parameters_are_fp32_masters; no_separate_copy",
+    "adamw_moments": "float32",
+    "attention": "native_by_shape_and_prior; math/tiled_accumulate_float32",
+    "attention_mode_selection": "established_fp32_gradient_dependent_prior_dispatch",
+    "loss": "float32",
+    "autocast_cache": false
+  },
+  "torch": "2.12.0+cpu",
+  "physical_devices": "5",
+  "cpu_affinity": [
+    152,
+    153,
+    154,
+    155
+  ],
+  "scope": "paired whole/chunk schedule; full BPTT; no detach or optimizer; complete Timed flush in both losses",
+  "rows": [
+    {
+      "case": "fc-k-window",
+      "state": "within_threshold",
+      "config": {
+        "topology": {
+          "kind": "fc",
+          "n": 1,
+          "layers": 1,
+          "depth": null,
+          "rounds": null,
+          "profile": null,
+          "hubs": 0,
+          "partition": "group",
+          "timing": "settle",
+          "hub_mask": "all",
+          "period": null,
+          "probes": null
+        },
+        "d": 64,
+        "memory": "K",
+        "aggregation": "source_residual",
+        "allocation": "quad",
+        "sharing": "independent",
+        "adapter_rank": 8,
+        "budget": null,
+        "attention_backend": "auto",
+        "attention_chunk": 32,
+        "input_dim": null
+      },
+      "identity": {
+        "parameters": "7354f5bf1e9cdfba4b92cc986d1e4faf27945a9a68bebf003f4145b7b21168ba",
+        "input": "b505a9eeae24e3ce9077548a5942daec18e0f18d5b2788f09fa990276d711461"
+      },
+      "seed": 807,
+      "chunk_lengths": [
+        65,
+        64,
+        2
+      ],
+      "input_positions": 262,
+      "output_slots": 262,
+      "final_position": 131,
+      "checks": {
+        "values_support_state": {
+          "tolerance": {
+            "atol": 1e-06,
+            "rtol": 0.002
+          },
+          "metadata_failures": [],
+          "dtype_differences": [],
+          "nonfinite": [],
+          "support_differences": [],
+          "threshold_failures": [],
+          "work_differences": [],
+          "exact": false,
+          "largest_errors": [
+            {
+              "tensor": "root.readout",
+              "max_abs": 9.5367431640625e-07,
+              "scaled_error": 0.09815720963395999,
+              "relative_l2": 1.2432073389110873e-07
+            },
+            {
+              "tensor": "root.state.memories.0.K.features",
+              "max_abs": 0.0,
+              "scaled_error": 0.0,
+              "relative_l2": 0.0
+            },
+            {
+              "tensor": "root.state.memories.0.K.keys",
+              "max_abs": 0.0,
+              "scaled_error": 0.0,
+              "relative_l2": 0.0
+            },
+            {
+              "tensor": "root.state.memories.0.K.values",
+              "max_abs": 0.0,
+              "scaled_error": 0.0,
+              "relative_l2": 0.0
+            },
+            {
+              "tensor": "root.state.memories.0.K.weight",
+              "max_abs": 0.0,
+              "scaled_error": 0.0,
+              "relative_l2": 0.0
+            },
+            {
+              "tensor": "root.strengths",
+              "max_abs": 0.0,
+              "scaled_error": 0.0,
+              "relative_l2": 0.0
+            }
+          ]
+        },
+        "input_gradient": {
+          "tolerance": {
+            "atol": 1e-06,
+            "rtol": 0.002
+          },
+          "metadata_failures": [],
+          "dtype_differences": [],
+          "nonfinite": [],
+          "support_differences": [],
+          "threshold_failures": [],
+          "work_differences": [],
+          "exact": false,
+          "largest_errors": [
+            {
+              "tensor": "root",
+              "max_abs": 8.003553375601768e-11,
+              "scaled_error": 7.024430606668057e-05,
+              "relative_l2": 2.1618129445392896e-07
+            }
+          ]
+        },
+        "parameter_gradients": {
+          "tolerance": {
+            "atol": 1e-06,
+            "rtol": 0.002
+          },
+          "metadata_failures": [],
+          "dtype_differences": [],
+          "nonfinite": [],
+          "support_differences": [],
+          "threshold_failures": [],
+          "work_differences": [],
+          "exact": false,
+          "largest_errors": [
+            {
+              "tensor": "root.receive.a.weight",
+              "max_abs": 2.3283064365386963e-09,
+              "scaled_error": 0.0015057277221329649,
+              "relative_l2": 2.7106785850613455e-07
+            },
+            {
+              "tensor": "root.inputs.D.weight",
+              "max_abs": 2.7939677238464355e-09,
+              "scaled_error": 0.0013553574694053542,
+              "relative_l2": 2.7496002805515594e-07
+            },
+            {
+              "tensor": "root.receive.embedding.weight",
+              "max_abs": 9.313225746154785e-10,
+              "scaled_error": 0.0003758123651466754,
+              "relative_l2": 2.769024573272314e-07
+            },
+            {
+              "tensor": "root.memories.K.ffn.down.weight",
+              "max_abs": 4.0745362639427185e-10,
+              "scaled_error": 0.0003043608798868994,
+              "relative_l2": 2.2259312874916308e-07
+            },
+            {
+              "tensor": "root.receive.b.weight",
+              "max_abs": 4.0745362639427185e-10,
+              "scaled_error": 0.0003018883301689261,
+              "relative_l2": 2.662011894417382e-07
+            },
+            {
+              "tensor": "root.memories.K.kv.weight",
+              "max_abs": 6.984919309616089e-10,
+              "scaled_error": 0.0002642053146504435,
+              "relative_l2": 3.258374526485096e-07
+            },
+            {
+              "tensor": "root.memories.K.query.heads.1.weight",
+              "max_abs": 3.2014213502407074e-10,
+              "scaled_error": 0.0002487469894111829,
+              "relative_l2": 3.0521051024302907e-07
+            },
+            {
+              "tensor": "root.memories.K.ffn.gate.weight",
+              "max_abs": 2.9103830456733704e-10,
+              "scaled_error": 0.00022871691626445391,
+              "relative_l2": 1.928038943578729e-07
+            }
+          ]
+        }
+      },
+      "disconnected_differences": [],
+      "whole_input_gradient_nonzeros": 16768,
+      "chunked_input_gradient_nonzeros": 16768
+    },
+    {
+      "case": "fc-s-window",
+      "state": "within_threshold",
+      "config": {
+        "topology": {
+          "kind": "fc",
+          "n": 1,
+          "layers": 1,
+          "depth": null,
+          "rounds": null,
+          "profile": null,
+          "hubs": 0,
+          "partition": "group",
+          "timing": "settle",
+          "hub_mask": "all",
+          "period": null,
+          "probes": null
+        },
+        "d": 64,
+        "memory": "S",
+        "aggregation": "source_residual",
+        "allocation": "quad",
+        "sharing": "independent",
+        "adapter_rank": 8,
+        "budget": null,
+        "attention_backend": "auto",
+        "attention_chunk": 32,
+        "input_dim": null
+      },
+      "identity": {
+        "parameters": "2b5ed0eab87a2f9fce657da327022192ff1313c28242c21367f7769aabab6ab0",
+        "input": "1498763b63a2fdbfea797245fbc963b91db0a7c62b933faf886b0b825db49672"
+      },
+      "seed": 807,
+      "chunk_lengths": [
+        65,
+        64,
+        2
+      ],
+      "input_positions": 262,
+      "output_slots": 262,
+      "final_position": 131,
+      "checks": {
+        "values_support_state": {
+          "tolerance": {
+            "atol": 1e-06,
+            "rtol": 0.002
+          },
+          "metadata_failures": [],
+          "dtype_differences": [],
+          "nonfinite": [],
+          "support_differences": [],
+          "threshold_failures": [],
+          "work_differences": [],
+          "exact": false,
+          "largest_errors": [
+            {
+              "tensor": "root.readout",
+              "max_abs": 1.1920928955078125e-06,
+              "scaled_error": 0.21418516408686478,
+              "relative_l2": 1.0330620530817024e-07
+            },
+            {
+              "tensor": "root.state.memories.0.S.matrix",
+              "max_abs": 2.384185791015625e-07,
+              "scaled_error": 0.010578667499193693,
+              "relative_l2": 7.34699043706385e-08
+            },
+            {
+              "tensor": "root.state.memories.0.S.short",
+              "max_abs": 4.76837158203125e-07,
+              "scaled_error": 0.0030015192970316946,
+              "relative_l2": 8.686892197321109e-08
+            },
+            {
+              "tensor": "root.state.memories.0.S.long",
+              "max_abs": 3.814697265625e-06,
+              "scaled_error": 0.0006237869514572747,
+              "relative_l2": 5.876728178484551e-08
+            },
+            {
+              "tensor": "root.state.memories.0.S.short_weight",
+              "max_abs": 9.5367431640625e-07,
+              "scaled_error": 3.95743782332825e-05,
+              "relative_l2": 7.915204101848731e-08
+            },
+            {
+              "tensor": "root.state.memories.0.S.conv.1",
+              "max_abs": 0.0,
+              "scaled_error": 0.0,
+              "relative_l2": 0.0
+            },
+            {
+              "tensor": "root.state.memories.0.S.long_weight",
+              "max_abs": 0.0,
+              "scaled_error": 0.0,
+              "relative_l2": 0.0
+            },
+            {
+              "tensor": "root.strengths",
+              "max_abs": 0.0,
+              "scaled_error": 0.0,
+              "relative_l2": 0.0
+            }
+          ]
+        },
+        "input_gradient": {
+          "tolerance": {
+            "atol": 1e-06,
+            "rtol": 0.002
+          },
+          "metadata_failures": [],
+          "dtype_differences": [],
+          "nonfinite": [],
+          "support_differences": [],
+          "threshold_failures": [],
+          "work_differences": [],
+          "exact": false,
+          "largest_errors": [
+            {
+              "tensor": "root",
+              "max_abs": 1.6007106751203537e-10,
+              "scaled_error": 0.00013832627609903166,
+              "relative_l2": 2.7622583411835703e-07
+            }
+          ]
+        },
+        "parameter_gradients": {
+          "tolerance": {
+            "atol": 1e-06,
+            "rtol": 0.002
+          },
+          "metadata_failures": [],
+          "dtype_differences": [],
+          "nonfinite": [],
+          "support_differences": [],
+          "threshold_failures": [],
+          "work_differences": [],
+          "exact": false,
+          "largest_errors": [
+            {
+              "tensor": "root.receive.a.weight",
+              "max_abs": 3.4924596548080444e-09,
+              "scaled_error": 0.002245358593340665,
+              "relative_l2": 3.375907264589485e-07
+            },
+            {
+              "tensor": "root.inputs.D.weight",
+              "max_abs": 4.190951585769653e-09,
+              "scaled_error": 0.002084246250891462,
+              "relative_l2": 3.163664548512405e-07
+            },
+            {
+              "tensor": "root.receive.embedding.weight",
+              "max_abs": 1.862645149230957e-09,
+              "scaled_error": 0.0010165915626695235,
+              "relative_l2": 4.751813627801346e-07
+            },
+            {
+              "tensor": "root.memories.S.input.weight",
+              "max_abs": 1.6880221664905548e-09,
+              "scaled_error": 0.0008115545306343305,
+              "relative_l2": 2.7227573981457856e-07
+            },
+            {
+              "tensor": "root.memories.S.output.weight",
+              "max_abs": 1.1641532182693481e-09,
+              "scaled_error": 0.0005588788404276435,
+              "relative_l2": 2.3131405843133845e-07
+            },
+            {
+              "tensor": "root.receive.b.weight",
+              "max_abs": 9.313225746154785e-10,
+              "scaled_error": 0.0005190006853352786,
+              "relative_l2": 3.252670118116661e-07
+            },
+            {
+              "tensor": "root.memories.S.conv_bias.value",
+              "max_abs": 1.0477378964424133e-09,
+              "scaled_error": 0.0004626449903562833,
+              "relative_l2": 2.776786076133891e-07
+            },
+            {
+              "tensor": "root.memories.S.ffn.up.weight",
+              "max_abs": 4.220055416226387e-10,
+              "scaled_error": 0.0003976229783764326,
+              "relative_l2": 2.109467622604256e-07
+            }
+          ]
+        }
+      },
+      "disconnected_differences": [],
+      "whole_input_gradient_nonzeros": 16768,
+      "chunked_input_gradient_nonzeros": 16768
+    },
+    {
+      "case": "hb-exchange",
+      "state": "within_threshold",
+      "config": {
+        "topology": {
+          "kind": "exchange",
+          "n": 2,
+          "layers": null,
+          "depth": 1,
+          "rounds": null,
+          "profile": null,
+          "hubs": 1,
+          "partition": "group",
+          "timing": "settle",
+          "hub_mask": "all",
+          "period": null,
+          "probes": null
+        },
+        "d": 64,
+        "memory": "X",
+        "aggregation": "incoming_light_64",
+        "allocation": "quad",
+        "sharing": "layer_shared",
+        "adapter_rank": 8,
+        "budget": null,
+        "attention_backend": "auto",
+        "attention_chunk": 128,
+        "input_dim": null
+      },
+      "identity": {
+        "parameters": "8f81cda1d42f111970003dd89963ab5b8db3ba94293377d371000aad76ba4e69",
+        "input": "e664ce3e51a8ee96599aa88361a1c18bf29f1e7512921b8b60bcca6201c70fd9"
+      },
+      "seed": 807,
+      "chunk_lengths": [
+        2,
+        3
+      ],
+      "input_positions": 10,
+      "output_slots": 10,
+      "final_position": 5,
+      "checks": {
+        "values_support_state": {
+          "tolerance": {
+            "atol": 1e-06,
+            "rtol": 0.002
+          },
+          "metadata_failures": [],
+          "dtype_differences": [],
+          "nonfinite": [],
+          "support_differences": [],
+          "threshold_failures": [],
+          "work_differences": [],
+          "exact": false,
+          "largest_errors": [
+            {
+              "tensor": "root.state.memories.6.K.keys",
+              "max_abs": 7.152557373046875e-07,
+              "scaled_error": 0.16751620202139325,
+              "relative_l2": 1.949820041041878e-07
+            },
+            {
+              "tensor": "root.state.memories.6.K.values",
+              "max_abs": 9.5367431640625e-07,
+              "scaled_error": 0.1276013691344323,
+              "relative_l2": 1.7706730170709322e-07
+            },
+            {
+              "tensor": "root.state.memories.8.K.keys",
+              "max_abs": 8.344650268554688e-07,
+              "scaled_error": 0.11656637380372918,
+              "relative_l2": 1.9884538777102887e-07
+            },
+            {
+              "tensor": "root.state.memories.10.K.values",
+              "max_abs": 8.344650268554688e-07,
+              "scaled_error": 0.09760853648789913,
+              "relative_l2": 2.3032666710913477e-07
+            },
+            {
+              "tensor": "root.state.memories.10.K.keys",
+              "max_abs": 9.5367431640625e-07,
+              "scaled_error": 0.09715321744219278,
+              "relative_l2": 2.3504225481397266e-07
+            },
+            {
+              "tensor": "root.state.memories.9.S.conv.1",
+              "max_abs": 8.344650268554688e-07,
+              "scaled_error": 0.07581474292999245,
+              "relative_l2": 2.153070968455152e-07
+            },
+            {
+              "tensor": "root.state.memories.7.S.conv.1",
+              "max_abs": 9.238719940185547e-07,
+              "scaled_error": 0.06904697571142558,
+              "relative_l2": 2.1715725244605563e-07
+            },
+            {
+              "tensor": "root.state.memories.4.K.keys",
+              "max_abs": 7.152557373046875e-07,
+              "scaled_error": 0.06072977673327707,
+              "relative_l2": 1.3385418033604136e-07
+            }
+          ]
+        },
+        "input_gradient": {
+          "tolerance": {
+            "atol": 1e-06,
+            "rtol": 0.002
+          },
+          "metadata_failures": [],
+          "dtype_differences": [],
+          "nonfinite": [],
+          "support_differences": [],
+          "threshold_failures": [],
+          "work_differences": [],
+          "exact": false,
+          "largest_errors": [
+            {
+              "tensor": "root",
+              "max_abs": 6.984919309616089e-09,
+              "scaled_error": 0.0025590377271316415,
+              "relative_l2": 4.6723620567320023e-07
+            }
+          ]
+        },
+        "parameter_gradients": {
+          "tolerance": {
+            "atol": 1e-06,
+            "rtol": 0.002
+          },
+          "metadata_failures": [],
+          "dtype_differences": [],
+          "nonfinite": [],
+          "support_differences": [],
+          "threshold_failures": [],
+          "work_differences": [],
+          "exact": false,
+          "largest_errors": [
+            {
+              "tensor": "root.inputs.D.weight",
+              "max_abs": 4.761386662721634e-08,
+              "scaled_error": 0.028288688963430866,
+              "relative_l2": 4.53534365361462e-07
+            },
+            {
+              "tensor": "root.inputs.H.weight",
+              "max_abs": 3.3527612686157227e-08,
+              "scaled_error": 0.01252898053538449,
+              "relative_l2": 4.0169287515596285e-07
+            },
+            {
+              "tensor": "root.describe.readout.value",
+              "max_abs": 1.862645149230957e-08,
+              "scaled_error": 0.00939818005142995,
+              "relative_l2": 6.322285402769647e-07
+            },
+            {
+              "tensor": "root.receive.v.weight",
+              "max_abs": 2.0256265997886658e-08,
+              "scaled_error": 0.008872314648968167,
+              "relative_l2": 3.908767639774869e-07
+            },
+            {
+              "tensor": "root.receive.q.weight",
+              "max_abs": 6.655879514205765e-09,
+              "scaled_error": 0.006655855069201557,
+              "relative_l2": 7.895777217349319e-07
+            },
+            {
+              "tensor": "root.receive.o.left",
+              "max_abs": 1.0244548320770264e-08,
+              "scaled_error": 0.00628107505745206,
+              "relative_l2": 4.3505622552129917e-07
+            },
+            {
+              "tensor": "root.memories.S.output.weight",
+              "max_abs": 1.0710209608078003e-08,
+              "scaled_error": 0.006154708573548294,
+              "relative_l2": 4.4252808565407696e-07
+            },
+            {
+              "tensor": "root.receive.o.weight",
+              "max_abs": 2.0489096641540527e-08,
+              "scaled_error": 0.006094309255797896,
+              "relative_l2": 3.790794993159472e-07
+            }
+          ]
+        }
+      },
+      "disconnected_differences": [],
+      "whole_input_gradient_nonzeros": 640,
+      "chunked_input_gradient_nonzeros": 640
+    },
+    {
+      "case": "hb-timed",
+      "state": "within_threshold",
+      "config": {
+        "topology": {
+          "kind": "multiscale",
+          "n": 2,
+          "layers": null,
+          "depth": null,
+          "rounds": null,
+          "profile": "compact-5-dd4",
+          "hubs": 1,
+          "partition": "group",
+          "timing": "timed",
+          "hub_mask": "all",
+          "period": null,
+          "probes": null
+        },
+        "d": 64,
+        "memory": "X",
+        "aggregation": "source_residual",
+        "allocation": "quad",
+        "sharing": "region_shared",
+        "adapter_rank": 8,
+        "budget": null,
+        "attention_backend": "auto",
+        "attention_chunk": 128,
+        "input_dim": null
+      },
+      "identity": {
+        "parameters": "d4e208fffc0c9335369d6ecaca88f53c7470dec7fb8f88550eb3cd58eb46622a",
+        "input": "4af40be38fda571ca252029bcc89bdff480a656d0e6ec6701254557ed53d53fc"
+      },
+      "seed": 807,
+      "chunk_lengths": [
+        2,
+        3
+      ],
+      "input_positions": 10,
+      "output_slots": 48,
+      "final_position": 6,
+      "checks": {
+        "values_support_state": {
+          "tolerance": {
+            "atol": 1e-06,
+            "rtol": 0.002
+          },
+          "metadata_failures": [],
+          "dtype_differences": [],
+          "nonfinite": [],
+          "support_differences": [],
+          "threshold_failures": [],
+          "work_differences": [],
+          "exact": false,
+          "largest_errors": [
+            {
+              "tensor": "root.state.memories.10.K.keys",
+              "max_abs": 1.4007091522216797e-06,
+              "scaled_error": 0.3397925025737833,
+              "relative_l2": 2.2333256088228725e-07
+            },
+            {
+              "tensor": "root.state.memories.8.K.values",
+              "max_abs": 1.2218952178955078e-06,
+              "scaled_error": 0.2293330762480861,
+              "relative_l2": 2.1641764616617194e-07
+            },
+            {
+              "tensor": "root.state.memories.4.K.values",
+              "max_abs": 1.0728836059570312e-06,
+              "scaled_error": 0.20869885174234834,
+              "relative_l2": 1.9484204100230907e-07
+            },
+            {
+              "tensor": "root.readout",
+              "max_abs": 1.9669532775878906e-06,
+              "scaled_error": 0.10911959032210847,
+              "relative_l2": 2.570273774509259e-07
+            },
+            {
+              "tensor": "root.state.memories.10.K.values",
+              "max_abs": 1.4230608940124512e-06,
+              "scaled_error": 0.10747140272934966,
+              "relative_l2": 2.305774391111937e-07
+            },
+            {
+              "tensor": "root.state.memories.9.S.conv.1",
+              "max_abs": 1.0728836059570312e-06,
+              "scaled_error": 0.08037689169680956,
+              "relative_l2": 3.2531778960021705e-07
+            },
+            {
+              "tensor": "root.state.memories.9.S.matrix",
+              "max_abs": 1.6689300537109375e-06,
+              "scaled_error": 0.05139861319667611,
+              "relative_l2": 5.15719590249732e-07
+            },
+            {
+              "tensor": "root.state.memories.6.K.values",
+              "max_abs": 1.2516975402832031e-06,
+              "scaled_error": 0.05132368443557511,
+              "relative_l2": 1.9247689180157492e-07
+            }
+          ]
+        },
+        "input_gradient": {
+          "tolerance": {
+            "atol": 1e-06,
+            "rtol": 0.002
+          },
+          "metadata_failures": [],
+          "dtype_differences": [],
+          "nonfinite": [],
+          "support_differences": [],
+          "threshold_failures": [],
+          "work_differences": [],
+          "exact": false,
+          "largest_errors": [
+            {
+              "tensor": "root",
+              "max_abs": 3.958120942115784e-09,
+              "scaled_error": 0.0017114406377833884,
+              "relative_l2": 7.041818728063312e-07
+            }
+          ]
+        },
+        "parameter_gradients": {
+          "tolerance": {
+            "atol": 1e-06,
+            "rtol": 0.002
+          },
+          "metadata_failures": [],
+          "dtype_differences": [],
+          "nonfinite": [],
+          "support_differences": [],
+          "threshold_failures": [],
+          "work_differences": [],
+          "exact": false,
+          "largest_errors": [
+            {
+              "tensor": "root.memories.S.output.weight",
+              "max_abs": 1.6680132830515504e-08,
+              "scaled_error": 0.015288269969521203,
+              "relative_l2": 5.91128898201748e-07
+            },
+            {
+              "tensor": "root.inputs.H.weight",
+              "max_abs": 2.514570951461792e-08,
+              "scaled_error": 0.013176412597321774,
+              "relative_l2": 6.981821545051725e-07
+            },
+            {
+              "tensor": "root.inputs.D.weight",
+              "max_abs": 1.955777406692505e-08,
+              "scaled_error": 0.008175270768722744,
+              "relative_l2": 6.624861540579223e-07
+            },
+            {
+              "tensor": "root.receive.a.weight",
+              "max_abs": 2.0489096641540527e-08,
+              "scaled_error": 0.008131929042949104,
+              "relative_l2": 6.199065508761165e-07
+            },
+            {
+              "tensor": "root.describe.encode.weight",
+              "max_abs": 1.0244548320770264e-08,
+              "scaled_error": 0.005638777790882491,
+              "relative_l2": 8.009488651866934e-07
+            },
+            {
+              "tensor": "root.memories.S.input.weight",
+              "max_abs": 1.1641532182693481e-08,
+              "scaled_error": 0.0055224000216360526,
+              "relative_l2": 5.927491540278632e-07
+            },
+            {
+              "tensor": "root.memories.K.ffn.down.weight",
+              "max_abs": 1.1641532182693481e-08,
+              "scaled_error": 0.004773182677079658,
+              "relative_l2": 5.739159519420722e-07
+            },
+            {
+              "tensor": "root.memories.K.kv.weight",
+              "max_abs": 5.820766091346741e-09,
+              "scaled_error": 0.004640014249867866,
+              "relative_l2": 6.161955576510652e-07
+            }
+          ]
+        }
+      },
+      "disconnected_differences": [],
+      "whole_input_gradient_nonzeros": 640,
+      "chunked_input_gradient_nonzeros": 640
+    }
+  ]
+}

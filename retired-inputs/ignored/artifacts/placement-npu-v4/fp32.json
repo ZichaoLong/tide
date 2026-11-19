@@ -1,0 +1,92 @@
+{
+  "source": "bdcb81de615e9aa4b21e7443871d33149b4f1553",
+  "arguments": {
+    "devices": [
+      "npu:0",
+      "npu:1"
+    ],
+    "precision": "fp32",
+    "mode": "qualify",
+    "config": null,
+    "batch": 2,
+    "length": 5,
+    "steps": 3,
+    "warmup": 1,
+    "threads": 4,
+    "output": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/placement-npu-v4/fp32.json"
+  },
+  "physical_devices": "1,9",
+  "cpu_affinity": [
+    72,
+    73,
+    74,
+    75
+  ],
+  "torch": "2.12.0+cpu",
+  "exit_policy": "finite_deviation retained; nonfinite/structural/execution failures exit nonzero",
+  "observations": [
+    {
+      "config": {
+        "topology": {
+          "kind": "exchange",
+          "n": 2,
+          "layers": null,
+          "depth": 1,
+          "rounds": null,
+          "profile": null,
+          "hubs": 1,
+          "partition": "group",
+          "timing": "settle",
+          "hub_mask": "all",
+          "period": null,
+          "probes": null
+        },
+        "d": 64,
+        "memory": "X",
+        "aggregation": "incoming_light_64",
+        "allocation": "quad",
+        "sharing": "layer_shared",
+        "adapter_rank": 8,
+        "budget": null,
+        "attention_backend": "auto",
+        "attention_chunk": 128,
+        "input_dim": null
+      },
+      "state": "execution_failed",
+      "error": "RuntimeError('The Inner error is reported as above. The process exits for this inner error, and the current working event is 0xfffe8437f208.\\nSince the operator is called asynchronously, the stacktrace may be inaccurate. If you want to get the accurate stacktrace, please set the environment variable ASCEND_LAUNCH_BLOCKING=1.\\nNote: ASCEND_LAUNCH_BLOCKING=1 will force ops to run in synchronous mode, resulting in performance degradation. Please unset ASCEND_LAUNCH_BLOCKING in time after debugging.\\n[ERROR] 2026-11-18-12:02:41 (PID:3428667, Device:0, RankID:-1) ERR00100 PTA call acl api failed.\\n[PID: 3428667] 2026-11-18-12:02:41.406.934 Invalid_Argument(EE1017): Object validation failed. Parameter event is invalid. Reason: 1. The event handle has been destroyed. 2. The handle type must be event.\\nTraceBack (most recent call last):\\n        rtStreamWaitEvent failed. Parameter handle is invalid. Reason: 1. The handle has been destroyed. 2. The handle type is not the expected one.\\n')",
+      "process_peak_rss_kib": 2382532
+    },
+    {
+      "config": {
+        "topology": {
+          "kind": "multiscale",
+          "n": 2,
+          "layers": null,
+          "depth": null,
+          "rounds": null,
+          "profile": "compact-5-dd4",
+          "hubs": 1,
+          "partition": "group",
+          "timing": "timed",
+          "hub_mask": "all",
+          "period": null,
+          "probes": null
+        },
+        "d": 64,
+        "memory": "X",
+        "aggregation": "source_residual",
+        "allocation": "quad",
+        "sharing": "region_shared",
+        "adapter_rank": 8,
+        "budget": null,
+        "attention_backend": "auto",
+        "attention_chunk": 128,
+        "input_dim": null
+      },
+      "state": "execution_failed",
+      "error": "ValueError('weights must be finite and nonnegative')",
+      "process_peak_rss_kib": 2382532
+    }
+  ],
+  "state": "failed"
+}

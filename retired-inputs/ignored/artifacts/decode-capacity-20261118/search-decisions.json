@@ -1,0 +1,7 @@
+[
+  {
+    "recorded_at_utc": "2026-11-18T15:20:16.021291+00:00",
+    "decision": "Use existing --audit none for subsequent Tide performance screens; retain output/support/time/private-state finite diagnostics. Formal confirmations keep full work/parameter audit and matching references.",
+    "reason": "Initial full Tide workload audit lasts several minutes and is outside timed inference; preserve all three already running full-audit points unchanged. This changes only untimed screen accounting, not model/timing/samples/budgets."
+  }
+]

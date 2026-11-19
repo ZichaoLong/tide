@@ -1,0 +1,30 @@
+{
+  "schema": 1,
+  "state": "completed",
+  "client": "Python matching operator layout",
+  "device": "cpu",
+  "dtype": "bfloat16",
+  "mode": "inference",
+  "repeats": 5,
+  "warmup": 2,
+  "samples_ms": [
+    1716.7215421795845,
+    1712.4323584139347,
+    1716.341782361269,
+    1714.5171277225018,
+    1714.7863619029522
+  ],
+  "workers": 1,
+  "intra_threads": 1,
+  "interop_threads": 1,
+  "torch_version": "2.12.0+cpu",
+  "torch_file": "/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/lib/python3.12/site-packages/torch/__init__.py",
+  "cpu_affinity": [
+    76,
+    77,
+    78,
+    79
+  ],
+  "sample_policy": "fixed inputs; train parameters and AdamW continue; discarded warmup owner",
+  "timing_boundary": "region tasks; train includes zero_grad, backward, AdamW; excludes fixture/model load and serialization"
+}

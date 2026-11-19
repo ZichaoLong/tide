@@ -1,0 +1,36 @@
+{
+  "state": "passed",
+  "source": "98210ae3a1758de99c0740dfe6f9fe04b07cefc6",
+  "command": [
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/decode-capacity-audit-frozen-20261118/audit.py",
+    "--submissions",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/decode-capacity-20261118/submissions.json",
+    "--output",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/decode-capacity-20261118/audit.json",
+    "--inputs",
+    "--input-threads",
+    "4",
+    "--input-max-gib",
+    "8"
+  ],
+  "pid": 3608574,
+  "started": "2026-11-18T18:02:14.495781+00:00",
+  "max_rss_bytes": 17179869184,
+  "peak_rss_bytes": 4383457280,
+  "max_processes": 1,
+  "rss_sample_count": 183,
+  "poll_interval": 0.25,
+  "descendant_supervision": "Linux child subreaper; retained PID/start identities across nested sessions",
+  "child_pid": 3608594,
+  "process_group": 3608594,
+  "elapsed": 75.52749614417553,
+  "descendant_identities": [
+    {
+      "pid": 3608594,
+      "start_ticks": 2261110520
+    }
+  ],
+  "exit_code": 0,
+  "finished": "2026-11-18T18:03:30.023278+00:00"
+}

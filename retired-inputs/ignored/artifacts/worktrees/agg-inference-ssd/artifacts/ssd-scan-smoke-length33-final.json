@@ -1,0 +1,1147 @@
+{
+  "schema": 1,
+  "completed": true,
+  "source": {
+    "commit": "df2a0f18ec0efe321b2064f60ce0ea4d9d78c9ac",
+    "working_tree": [
+      " M src/tide/config.py",
+      " M src/tide/model.py",
+      " M src/tide/ssd.py",
+      " M src/tide/ssd_memory.py",
+      " M tests/test_ssd.py",
+      " M tests/test_ssd_memory.py",
+      " M tests/test_training_optimizations.py",
+      "?? benchmarks/ssd_scan_candidates.py"
+    ],
+    "implementation_path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/agg-inference-ssd/src/tide/ssd.py",
+    "implementation_sha256": "42e0e9c2de11f7c266af93c7bf43bf3e53e63efd6ed1eb5b86ef18aa1c982af3"
+  },
+  "arguments": {
+    "device": "cpu",
+    "backends": [
+      "block",
+      "incremental",
+      "doubling"
+    ],
+    "modes": [
+      "inference",
+      "grad_forward",
+      "backward"
+    ],
+    "nodes": 2,
+    "batch": 2,
+    "length": 33,
+    "heads": 2,
+    "value_width": 4,
+    "state_width": 4,
+    "chunk": 32,
+    "threads": 8,
+    "warmup": 0,
+    "steps": 1,
+    "seed": 1911,
+    "atol": 3e-05,
+    "rtol": 3e-05,
+    "output": "artifacts/ssd-scan-smoke-length33-final.json"
+  },
+  "torch": "2.12.0+cpu",
+  "dtype": "float32; autocast disabled",
+  "python_executable": "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+  "device_name": "cpu",
+  "torch_npu": null,
+  "reduced_precision_matmul": "NPU HF32 and CUDA TF32 disabled when applicable",
+  "cpu_affinity": [
+    48,
+    49,
+    50,
+    51,
+    52,
+    53,
+    54,
+    55
+  ],
+  "host_load_before": [
+    41.76,
+    40.45,
+    39.01
+  ],
+  "physical_devices": null,
+  "resource_identity": "unspecified; admission belongs to launcher",
+  "fixture": [
+    {
+      "name": "decay",
+      "shape": [
+        2,
+        2,
+        33,
+        2
+      ],
+      "sha256": "e53ebeacf17e593f9f95e9283cd860946488a81cc985f8535835680bf9ac839f"
+    },
+    {
+      "name": "write_value",
+      "shape": [
+        2,
+        2,
+        33,
+        2,
+        4
+      ],
+      "sha256": "f4db432fb52b8cc8687c55e252733ba3d6fe773c9cc172156a1ace18d224e13a"
+    },
+    {
+      "name": "B_group",
+      "shape": [
+        2,
+        2,
+        33,
+        1,
+        4
+      ],
+      "sha256": "fff972455dddcd7df819d8fc7cc36319385be0f4e4f8035c8b06d1c90d05ec0a"
+    },
+    {
+      "name": "C_group",
+      "shape": [
+        2,
+        2,
+        33,
+        1,
+        4
+      ],
+      "sha256": "409de1e740abad6f8f492d0cfeeb8ac63d042ae208393d600f2402c8d237f00d"
+    },
+    {
+      "name": "initial_matrix",
+      "shape": [
+        2,
+        2,
+        2,
+        4,
+        4
+      ],
+      "sha256": "83760bf8c20cc7259343e6ab24215a649d67a669d7ad54af6689168cddc6aef4"
+    }
+  ],
+  "cotangent_sha256": [
+    "0a5e9bf5e84b49f8da40161b455dfe4c283bacd0b5c4e0ef389cb0140a7b3be4",
+    "8014cf3fa500cff4d9f0b12042f4e59689dc183ab803574282dd0bf08e055a11"
+  ],
+  "scan_argument_strides": [
+    [
+      132,
+      66,
+      2,
+      1
+    ],
+    [
+      528,
+      264,
+      8,
+      4,
+      1
+    ],
+    [
+      264,
+      132,
+      4,
+      0,
+      1
+    ],
+    [
+      264,
+      132,
+      4,
+      0,
+      1
+    ],
+    [
+      64,
+      32,
+      16,
+      4,
+      1
+    ]
+  ],
+  "resident_input_and_cotangent_bytes": 14752,
+  "analytical_storage_components": {
+    "one_pairwise_tile_bytes": 32768,
+    "one_boundary_state_bytes": 512,
+    "max_doubling_stages": 5,
+    "blocks": 2,
+    "interpretation": "components, not total peak; doubling backward can retain a tile per stage per block; L=1 incremental/doubling omits pairwise tiles"
+  },
+  "bounded_reference_shapes": [
+    [
+      1,
+      1,
+      33,
+      2
+    ],
+    [
+      1,
+      1,
+      33,
+      2,
+      4
+    ],
+    [
+      1,
+      1,
+      33,
+      1,
+      4
+    ],
+    [
+      1,
+      1,
+      33,
+      1,
+      4
+    ],
+    [
+      1,
+      1,
+      2,
+      4,
+      4
+    ]
+  ],
+  "boundary": "resident frozen inputs and cotangents; scan plus synchronization; backward includes all five root VJPs, no optimizer; destruction of returned graph/results included",
+  "operator_observation": "separate intrusive forward and VJP; dispatch operators/dtypes do not certify AICore/AICPU kernel placement",
+  "candidates": [
+    {
+      "backend": "block",
+      "same_fixture_vs_block": {
+        "atol": 3e-05,
+        "rtol": 3e-05,
+        "all_finite": true,
+        "within_threshold": true,
+        "tensors": [
+          {
+            "name": "reads",
+            "shape": [
+              2,
+              2,
+              33,
+              2,
+              4
+            ],
+            "finite": true,
+            "exact": true,
+            "max_absolute": 0.0,
+            "relative_l2": 0.0,
+            "within_threshold": true
+          },
+          {
+            "name": "final_matrix",
+            "shape": [
+              2,
+              2,
+              2,
+              4,
+              4
+            ],
+            "finite": true,
+            "exact": true,
+            "max_absolute": 0.0,
+            "relative_l2": 0.0,
+            "within_threshold": true
+          },
+          {
+            "name": "decay",
+            "shape": [
+              2,
+              2,
+              33,
+              2
+            ],
+            "finite": true,
+            "exact": true,
+            "max_absolute": 0.0,
+            "relative_l2": 0.0,
+            "within_threshold": true
+          },
+          {
+            "name": "write_value",
+            "shape": [
+              2,
+              2,
+              33,
+              2,
+              4
+            ],
+            "finite": true,
+            "exact": true,
+            "max_absolute": 0.0,
+            "relative_l2": 0.0,
+            "within_threshold": true
+          },
+          {
+            "name": "B_group",
+            "shape": [
+              2,
+              2,
+              33,
+              1,
+              4
+            ],
+            "finite": true,
+            "exact": true,
+            "max_absolute": 0.0,
+            "relative_l2": 0.0,
+            "within_threshold": true
+          },
+          {
+            "name": "C_group",
+            "shape": [
+              2,
+              2,
+              33,
+              1,
+              4
+            ],
+            "finite": true,
+            "exact": true,
+            "max_absolute": 0.0,
+            "relative_l2": 0.0,
+            "within_threshold": true
+          },
+          {
+            "name": "initial_matrix",
+            "shape": [
+              2,
+              2,
+              2,
+              4,
+              4
+            ],
+            "finite": true,
+            "exact": true,
+            "max_absolute": 0.0,
+            "relative_l2": 0.0,
+            "within_threshold": true
+          }
+        ]
+      },
+      "bounded_vs_literal_fp64": {
+        "atol": 3e-05,
+        "rtol": 3e-05,
+        "all_finite": true,
+        "within_threshold": true,
+        "tensors": [
+          {
+            "name": "reads",
+            "shape": [
+              1,
+              1,
+              33,
+              2,
+              4
+            ],
+            "finite": true,
+            "exact": false,
+            "max_absolute": 3.699038145232869e-09,
+            "relative_l2": 7.619272797719689e-08,
+            "within_threshold": true
+          },
+          {
+            "name": "final_matrix",
+            "shape": [
+              1,
+              1,
+              2,
+              4,
+              4
+            ],
+            "finite": true,
+            "exact": false,
+            "max_absolute": 4.474560423572971e-09,
+            "relative_l2": 8.834168926181045e-08,
+            "within_threshold": true
+          },
+          {
+            "name": "decay",
+            "shape": [
+              1,
+              1,
+              33,
+              2
+            ],
+            "finite": true,
+            "exact": false,
+            "max_absolute": 1.4261456182662613e-08,
+            "relative_l2": 1.1118792978174804e-07,
+            "within_threshold": true
+          },
+          {
+            "name": "write_value",
+            "shape": [
+              1,
+              1,
+              33,
+              2,
+              4
+            ],
+            "finite": true,
+            "exact": false,
+            "max_absolute": 5.7360677208073696e-08,
+            "relative_l2": 8.048568255399e-08,
+            "within_threshold": true
+          },
+          {
+            "name": "B_group",
+            "shape": [
+              1,
+              1,
+              33,
+              1,
+              4
+            ],
+            "finite": true,
+            "exact": false,
+            "max_absolute": 5.135264813382889e-08,
+            "relative_l2": 6.378428159951377e-08,
+            "within_threshold": true
+          },
+          {
+            "name": "C_group",
+            "shape": [
+              1,
+              1,
+              33,
+              1,
+              4
+            ],
+            "finite": true,
+            "exact": false,
+            "max_absolute": 6.085323911442231e-08,
+            "relative_l2": 9.8831169615371e-08,
+            "within_threshold": true
+          },
+          {
+            "name": "initial_matrix",
+            "shape": [
+              1,
+              1,
+              2,
+              4,
+              4
+            ],
+            "finite": true,
+            "exact": false,
+            "max_absolute": 1.1923292436710753e-08,
+            "relative_l2": 4.196322601016069e-08,
+            "within_threshold": true
+          }
+        ]
+      },
+      "operators": {
+        "aten._unsafe_view.default": 21,
+        "aten.add.Tensor": 22,
+        "aten.arange.default": 2,
+        "aten.bitwise_and_.Tensor": 2,
+        "aten.bitwise_not.default": 8,
+        "aten.bmm.default": 24,
+        "aten.cat.default": 1,
+        "aten.clone.default": 13,
+        "aten.cumprod.default": 6,
+        "aten.cumsum.default": 4,
+        "aten.detach.default": 8,
+        "aten.div.Tensor": 2,
+        "aten.eq.Scalar": 8,
+        "aten.expand.default": 18,
+        "aten.flip.default": 4,
+        "aten.gather.default": 2,
+        "aten.ge.Tensor": 2,
+        "aten.gt.Tensor": 2,
+        "aten.logical_and_.default": 2,
+        "aten.masked_fill.Scalar": 10,
+        "aten.masked_fill_.Scalar": 2,
+        "aten.max.dim": 2,
+        "aten.mul.Tensor": 30,
+        "aten.ne.Scalar": 2,
+        "aten.relu_.default": 2,
+        "aten.scalar_tensor.default": 4,
+        "aten.scatter_.value": 2,
+        "aten.select.int": 4,
+        "aten.select_backward.default": 4,
+        "aten.slice.Tensor": 10,
+        "aten.slice_backward.default": 8,
+        "aten.squeeze.dim": 10,
+        "aten.sub.Scalar": 2,
+        "aten.sum.dim_IntList": 11,
+        "aten.transpose.int": 40,
+        "aten.unsqueeze.default": 18,
+        "aten.view.default": 27,
+        "aten.where.self": 8,
+        "aten.zeros.default": 2,
+        "aten.zeros_like.default": 2
+      },
+      "arithmetic": [
+        {
+          "operator": "aten.bmm.default",
+          "inputs": [
+            "cpu:float32"
+          ],
+          "outputs": [
+            "cpu:float32"
+          ],
+          "calls": 24
+        }
+      ]
+    },
+    {
+      "backend": "incremental",
+      "same_fixture_vs_block": {
+        "atol": 3e-05,
+        "rtol": 3e-05,
+        "all_finite": true,
+        "within_threshold": true,
+        "tensors": [
+          {
+            "name": "reads",
+            "shape": [
+              2,
+              2,
+              33,
+              2,
+              4
+            ],
+            "finite": true,
+            "exact": true,
+            "max_absolute": 0.0,
+            "relative_l2": 0.0,
+            "within_threshold": true
+          },
+          {
+            "name": "final_matrix",
+            "shape": [
+              2,
+              2,
+              2,
+              4,
+              4
+            ],
+            "finite": true,
+            "exact": true,
+            "max_absolute": 0.0,
+            "relative_l2": 0.0,
+            "within_threshold": true
+          },
+          {
+            "name": "decay",
+            "shape": [
+              2,
+              2,
+              33,
+              2
+            ],
+            "finite": true,
+            "exact": true,
+            "max_absolute": 0.0,
+            "relative_l2": 0.0,
+            "within_threshold": true
+          },
+          {
+            "name": "write_value",
+            "shape": [
+              2,
+              2,
+              33,
+              2,
+              4
+            ],
+            "finite": true,
+            "exact": true,
+            "max_absolute": 0.0,
+            "relative_l2": 0.0,
+            "within_threshold": true
+          },
+          {
+            "name": "B_group",
+            "shape": [
+              2,
+              2,
+              33,
+              1,
+              4
+            ],
+            "finite": true,
+            "exact": true,
+            "max_absolute": 0.0,
+            "relative_l2": 0.0,
+            "within_threshold": true
+          },
+          {
+            "name": "C_group",
+            "shape": [
+              2,
+              2,
+              33,
+              1,
+              4
+            ],
+            "finite": true,
+            "exact": true,
+            "max_absolute": 0.0,
+            "relative_l2": 0.0,
+            "within_threshold": true
+          },
+          {
+            "name": "initial_matrix",
+            "shape": [
+              2,
+              2,
+              2,
+              4,
+              4
+            ],
+            "finite": true,
+            "exact": true,
+            "max_absolute": 0.0,
+            "relative_l2": 0.0,
+            "within_threshold": true
+          }
+        ]
+      },
+      "bounded_vs_literal_fp64": {
+        "atol": 3e-05,
+        "rtol": 3e-05,
+        "all_finite": true,
+        "within_threshold": true,
+        "tensors": [
+          {
+            "name": "reads",
+            "shape": [
+              1,
+              1,
+              33,
+              2,
+              4
+            ],
+            "finite": true,
+            "exact": false,
+            "max_absolute": 3.699038145232869e-09,
+            "relative_l2": 7.619272797719689e-08,
+            "within_threshold": true
+          },
+          {
+            "name": "final_matrix",
+            "shape": [
+              1,
+              1,
+              2,
+              4,
+              4
+            ],
+            "finite": true,
+            "exact": false,
+            "max_absolute": 4.474560423572971e-09,
+            "relative_l2": 8.834168926181045e-08,
+            "within_threshold": true
+          },
+          {
+            "name": "decay",
+            "shape": [
+              1,
+              1,
+              33,
+              2
+            ],
+            "finite": true,
+            "exact": false,
+            "max_absolute": 1.4261456182662613e-08,
+            "relative_l2": 1.1118792978174804e-07,
+            "within_threshold": true
+          },
+          {
+            "name": "write_value",
+            "shape": [
+              1,
+              1,
+              33,
+              2,
+              4
+            ],
+            "finite": true,
+            "exact": false,
+            "max_absolute": 5.7360677208073696e-08,
+            "relative_l2": 8.048568255399e-08,
+            "within_threshold": true
+          },
+          {
+            "name": "B_group",
+            "shape": [
+              1,
+              1,
+              33,
+              1,
+              4
+            ],
+            "finite": true,
+            "exact": false,
+            "max_absolute": 5.135264813382889e-08,
+            "relative_l2": 6.378428159951377e-08,
+            "within_threshold": true
+          },
+          {
+            "name": "C_group",
+            "shape": [
+              1,
+              1,
+              33,
+              1,
+              4
+            ],
+            "finite": true,
+            "exact": false,
+            "max_absolute": 6.085323911442231e-08,
+            "relative_l2": 9.8831169615371e-08,
+            "within_threshold": true
+          },
+          {
+            "name": "initial_matrix",
+            "shape": [
+              1,
+              1,
+              2,
+              4,
+              4
+            ],
+            "finite": true,
+            "exact": false,
+            "max_absolute": 1.1923292436710753e-08,
+            "relative_l2": 4.196322601016069e-08,
+            "within_threshold": true
+          }
+        ]
+      },
+      "operators": {
+        "aten._unsafe_view.default": 21,
+        "aten.add.Tensor": 22,
+        "aten.arange.default": 2,
+        "aten.bitwise_and_.Tensor": 2,
+        "aten.bitwise_not.default": 8,
+        "aten.bmm.default": 24,
+        "aten.cat.default": 1,
+        "aten.clone.default": 13,
+        "aten.cumprod.default": 6,
+        "aten.cumsum.default": 4,
+        "aten.detach.default": 8,
+        "aten.div.Tensor": 2,
+        "aten.eq.Scalar": 8,
+        "aten.expand.default": 18,
+        "aten.flip.default": 4,
+        "aten.gather.default": 2,
+        "aten.ge.Tensor": 2,
+        "aten.gt.Tensor": 2,
+        "aten.logical_and_.default": 2,
+        "aten.masked_fill.Scalar": 10,
+        "aten.masked_fill_.Scalar": 2,
+        "aten.max.dim": 2,
+        "aten.mul.Tensor": 30,
+        "aten.ne.Scalar": 2,
+        "aten.relu_.default": 2,
+        "aten.scalar_tensor.default": 4,
+        "aten.scatter_.value": 2,
+        "aten.select.int": 4,
+        "aten.select_backward.default": 4,
+        "aten.slice.Tensor": 10,
+        "aten.slice_backward.default": 8,
+        "aten.squeeze.dim": 10,
+        "aten.sub.Scalar": 2,
+        "aten.sum.dim_IntList": 11,
+        "aten.transpose.int": 40,
+        "aten.unsqueeze.default": 18,
+        "aten.view.default": 27,
+        "aten.where.self": 8,
+        "aten.zeros.default": 2,
+        "aten.zeros_like.default": 2
+      },
+      "arithmetic": [
+        {
+          "operator": "aten.bmm.default",
+          "inputs": [
+            "cpu:float32"
+          ],
+          "outputs": [
+            "cpu:float32"
+          ],
+          "calls": 24
+        }
+      ]
+    },
+    {
+      "backend": "doubling",
+      "same_fixture_vs_block": {
+        "atol": 3e-05,
+        "rtol": 3e-05,
+        "all_finite": true,
+        "within_threshold": true,
+        "tensors": [
+          {
+            "name": "reads",
+            "shape": [
+              2,
+              2,
+              33,
+              2,
+              4
+            ],
+            "finite": true,
+            "exact": false,
+            "max_absolute": 1.862645149230957e-09,
+            "relative_l2": 3.705835390149113e-08,
+            "within_threshold": true
+          },
+          {
+            "name": "final_matrix",
+            "shape": [
+              2,
+              2,
+              2,
+              4,
+              4
+            ],
+            "finite": true,
+            "exact": false,
+            "max_absolute": 7.450580596923828e-09,
+            "relative_l2": 6.805650365368918e-08,
+            "within_threshold": true
+          },
+          {
+            "name": "decay",
+            "shape": [
+              2,
+              2,
+              33,
+              2
+            ],
+            "finite": true,
+            "exact": false,
+            "max_absolute": 2.9802322387695312e-08,
+            "relative_l2": 1.0299334947683475e-07,
+            "within_threshold": true
+          },
+          {
+            "name": "write_value",
+            "shape": [
+              2,
+              2,
+              33,
+              2,
+              4
+            ],
+            "finite": true,
+            "exact": false,
+            "max_absolute": 5.960464477539063e-08,
+            "relative_l2": 5.660677577528915e-08,
+            "within_threshold": true
+          },
+          {
+            "name": "B_group",
+            "shape": [
+              2,
+              2,
+              33,
+              1,
+              4
+            ],
+            "finite": true,
+            "exact": false,
+            "max_absolute": 2.9802322387695312e-08,
+            "relative_l2": 4.547372462115851e-08,
+            "within_threshold": true
+          },
+          {
+            "name": "C_group",
+            "shape": [
+              2,
+              2,
+              33,
+              1,
+              4
+            ],
+            "finite": true,
+            "exact": false,
+            "max_absolute": 1.862645149230957e-08,
+            "relative_l2": 3.6683505935729384e-08,
+            "within_threshold": true
+          },
+          {
+            "name": "initial_matrix",
+            "shape": [
+              2,
+              2,
+              2,
+              4,
+              4
+            ],
+            "finite": true,
+            "exact": true,
+            "max_absolute": 0.0,
+            "relative_l2": 0.0,
+            "within_threshold": true
+          }
+        ]
+      },
+      "bounded_vs_literal_fp64": {
+        "atol": 3e-05,
+        "rtol": 3e-05,
+        "all_finite": true,
+        "within_threshold": true,
+        "tensors": [
+          {
+            "name": "reads",
+            "shape": [
+              1,
+              1,
+              33,
+              2,
+              4
+            ],
+            "finite": true,
+            "exact": false,
+            "max_absolute": 3.699038145232869e-09,
+            "relative_l2": 7.994313969479376e-08,
+            "within_threshold": true
+          },
+          {
+            "name": "final_matrix",
+            "shape": [
+              1,
+              1,
+              2,
+              4,
+              4
+            ],
+            "finite": true,
+            "exact": false,
+            "max_absolute": 4.474560423572971e-09,
+            "relative_l2": 8.947525007257376e-08,
+            "within_threshold": true
+          },
+          {
+            "name": "decay",
+            "shape": [
+              1,
+              1,
+              33,
+              2
+            ],
+            "finite": true,
+            "exact": false,
+            "max_absolute": 1.992008369366971e-08,
+            "relative_l2": 1.1794276914161158e-07,
+            "within_threshold": true
+          },
+          {
+            "name": "write_value",
+            "shape": [
+              1,
+              1,
+              33,
+              2,
+              4
+            ],
+            "finite": true,
+            "exact": false,
+            "max_absolute": 5.7360677208073696e-08,
+            "relative_l2": 9.274235183859778e-08,
+            "within_threshold": true
+          },
+          {
+            "name": "B_group",
+            "shape": [
+              1,
+              1,
+              33,
+              1,
+              4
+            ],
+            "finite": true,
+            "exact": false,
+            "max_absolute": 5.135264813382889e-08,
+            "relative_l2": 6.58533071993333e-08,
+            "within_threshold": true
+          },
+          {
+            "name": "C_group",
+            "shape": [
+              1,
+              1,
+              33,
+              1,
+              4
+            ],
+            "finite": true,
+            "exact": false,
+            "max_absolute": 6.085323911442231e-08,
+            "relative_l2": 9.851966040409874e-08,
+            "within_threshold": true
+          },
+          {
+            "name": "initial_matrix",
+            "shape": [
+              1,
+              1,
+              2,
+              4,
+              4
+            ],
+            "finite": true,
+            "exact": false,
+            "max_absolute": 1.1923292436710753e-08,
+            "relative_l2": 4.196322601016069e-08,
+            "within_threshold": true
+          }
+        ]
+      },
+      "operators": {
+        "aten._unsafe_view.default": 21,
+        "aten.add.Tensor": 34,
+        "aten.alias.default": 1,
+        "aten.arange.default": 2,
+        "aten.bitwise_not.default": 2,
+        "aten.bmm.default": 24,
+        "aten.cat.default": 6,
+        "aten.clone.default": 13,
+        "aten.expand.default": 18,
+        "aten.ge.Tensor": 2,
+        "aten.gt.Tensor": 2,
+        "aten.masked_fill.Scalar": 4,
+        "aten.mul.Tensor": 45,
+        "aten.scalar_tensor.default": 4,
+        "aten.select.int": 6,
+        "aten.select_backward.default": 6,
+        "aten.slice.Tensor": 36,
+        "aten.slice_backward.default": 24,
+        "aten.squeeze.dim": 10,
+        "aten.sum.dim_IntList": 10,
+        "aten.transpose.int": 40,
+        "aten.unsqueeze.default": 18,
+        "aten.view.default": 27,
+        "aten.where.self": 4
+      },
+      "arithmetic": [
+        {
+          "operator": "aten.bmm.default",
+          "inputs": [
+            "cpu:float32"
+          ],
+          "outputs": [
+            "cpu:float32"
+          ],
+          "calls": 24
+        }
+      ]
+    }
+  ],
+  "rows": [
+    {
+      "backend": "block",
+      "mode": "inference",
+      "seconds": [
+        0.0014400668442249298
+      ],
+      "median_seconds": 0.0014400668442249298,
+      "memory_before": null,
+      "memory_after": null,
+      "process_peak_rss_kib_cumulative": 319892
+    },
+    {
+      "backend": "block",
+      "mode": "grad_forward",
+      "seconds": [
+        0.001701749861240387
+      ],
+      "median_seconds": 0.001701749861240387,
+      "memory_before": null,
+      "memory_after": null,
+      "process_peak_rss_kib_cumulative": 319892
+    },
+    {
+      "backend": "block",
+      "mode": "backward",
+      "seconds": [
+        0.004381075501441956
+      ],
+      "median_seconds": 0.004381075501441956,
+      "memory_before": null,
+      "memory_after": null,
+      "process_peak_rss_kib_cumulative": 319892
+    },
+    {
+      "backend": "incremental",
+      "mode": "inference",
+      "seconds": [
+        0.0015535429120063782
+      ],
+      "median_seconds": 0.0015535429120063782,
+      "memory_before": null,
+      "memory_after": null,
+      "process_peak_rss_kib_cumulative": 320424
+    },
+    {
+      "backend": "incremental",
+      "mode": "grad_forward",
+      "seconds": [
+        0.0017734579741954803
+      ],
+      "median_seconds": 0.0017734579741954803,
+      "memory_before": null,
+      "memory_after": null,
+      "process_peak_rss_kib_cumulative": 320424
+    },
+    {
+      "backend": "incremental",
+      "mode": "backward",
+      "seconds": [
+        0.004201799631118774
+      ],
+      "median_seconds": 0.004201799631118774,
+      "memory_before": null,
+      "memory_after": null,
+      "process_peak_rss_kib_cumulative": 320424
+    },
+    {
+      "backend": "doubling",
+      "mode": "inference",
+      "seconds": [
+        0.0016835816204547882
+      ],
+      "median_seconds": 0.0016835816204547882,
+      "memory_before": null,
+      "memory_after": null,
+      "process_peak_rss_kib_cumulative": 320912
+    },
+    {
+      "backend": "doubling",
+      "mode": "grad_forward",
+      "seconds": [
+        0.0018669404089450836
+      ],
+      "median_seconds": 0.0018669404089450836,
+      "memory_before": null,
+      "memory_after": null,
+      "process_peak_rss_kib_cumulative": 320912
+    },
+    {
+      "backend": "doubling",
+      "mode": "backward",
+      "seconds": [
+        0.004276830703020096
+      ],
+      "median_seconds": 0.004276830703020096,
+      "memory_before": null,
+      "memory_after": null,
+      "process_peak_rss_kib_cumulative": 320912
+    }
+  ],
+  "within_threshold": true,
+  "host_load_after": [
+    41.54,
+    40.43,
+    39.01
+  ]
+}

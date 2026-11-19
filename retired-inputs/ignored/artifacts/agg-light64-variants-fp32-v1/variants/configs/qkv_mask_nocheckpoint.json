@@ -1,0 +1,19 @@
+{
+  "topology": {
+    "kind": "multiscale",
+    "profile": "compact-9",
+    "n": 8,
+    "hubs": 4,
+    "timing": "settle"
+  },
+  "d": 128,
+  "memory": "X",
+  "aggregation": "incoming_light_64",
+  "allocation": "quad",
+  "sharing": "region_shared",
+  "region_batch_size": 4,
+  "checkpoint_reception": false,
+  "ssd_summary_backend": "prefix",
+  "reception_qkv_backend": "fused",
+  "reception_mask_padding": true
+}

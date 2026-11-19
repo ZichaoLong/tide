@@ -1,0 +1,1446 @@
+{
+  "schema": "tide-inference-results-1",
+  "source": {
+    "source_commit": "98210ae3a1758de99c0740dfe6f9fe04b07cefc6",
+    "harness_commit": "98210ae3a1758de99c0740dfe6f9fe04b07cefc6",
+    "tide_content_sha256": "27f33247c3d8c5930a36d4e00f6b73aea0038bb17ccad991172ce95e9ac93620",
+    "harness_content_sha256": "3be5309adfcb6956673c9f7edc74d765dc24878ed02edd99b92308b08b2ba710",
+    "tide_path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/cap-17b-tide-c4-b35-screen-v1/source/src/tide",
+    "harness_path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/cap-17b-tide-c4-b35-screen-v1/source/benchmarks"
+  },
+  "arguments": {
+    "config": "configs/scale/hb-17b.json",
+    "config_overrides": {
+      "region_batch_size": 4,
+      "ssd_scan_backend": "doubling",
+      "ssd_summary_backend": "prefix"
+    },
+    "subjects": [
+      "tide"
+    ],
+    "reference": null,
+    "reference_output": null,
+    "audit": "none",
+    "audit_only": false,
+    "devices": "npu:0,npu:1,npu:2,npu:3",
+    "placement": "region",
+    "transport": "host_stage",
+    "region_concurrency": "per_device",
+    "precision": "fp32",
+    "batch": 35,
+    "prefill": 128,
+    "prefill_chunk": 32,
+    "decode": 16,
+    "stream_positions": 0,
+    "stream_chunk": 128,
+    "samples": 2,
+    "warmup": 1,
+    "cold": false,
+    "transformer_chunk": 128,
+    "transformer_backend": "auto",
+    "transformer_contiguous_qkv": false,
+    "threads": 4,
+    "seed": 751,
+    "allocated_budget_gib": 48.0,
+    "reserved_budget_gib": 56.0,
+    "output": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/cap-17b-tide-c4-b35-screen-v1/inference.json"
+  },
+  "config": {
+    "topology": {
+      "kind": "multiscale",
+      "n": 64,
+      "layers": null,
+      "depth": null,
+      "rounds": null,
+      "profile": "5-dd4",
+      "hubs": 4,
+      "partition": "group",
+      "timing": "settle",
+      "hub_mask": "all",
+      "period": null,
+      "probes": null,
+      "terminal_hubs": false
+    },
+    "d": 768,
+    "memory": "X",
+    "aggregation": "source_residual",
+    "allocation": "quad",
+    "sharing": "independent",
+    "adapter_rank": 8,
+    "budget": null,
+    "attention_backend": "auto",
+    "attention_chunk": 128,
+    "input_dim": null,
+    "checkpoint_regions": false,
+    "checkpoint_reception": false,
+    "reception_qkv_backend": "separate",
+    "reception_mask_padding": false,
+    "parameter_indexing": "gather",
+    "ssd_summary_backend": "prefix",
+    "ssd_scan_backend": "doubling",
+    "region_batch_size": 4,
+    "local_attention_backend": null,
+    "hub_allocation": "bounded",
+    "clock": {
+      "position_period": null,
+      "position_origin": "binding",
+      "kv_window": null,
+      "short_decay": null,
+      "ssd_stride": null
+    }
+  },
+  "schedule": {
+    "prefill": 128,
+    "prefill_chunk": 32,
+    "decode_steps": 16,
+    "stream_positions": 0,
+    "stream_chunk": 128
+  },
+  "precision": {
+    "name": "fp32",
+    "device": "npu:0",
+    "parameters": "float32",
+    "input": "float32",
+    "matrix_arithmetic": "float32",
+    "normalization_mass_allocation": "float32",
+    "kv_keys_values": "float32",
+    "kv_summary_and_ssd_state": "float32",
+    "logical_time_indices": "int64",
+    "parameter_gradients": "float32",
+    "master_weights": "parameters_are_fp32_masters; no_separate_copy",
+    "adamw_moments": "float32",
+    "attention": "native_by_shape_and_prior; math/tiled_accumulate_float32",
+    "attention_mode_selection": "established_fp32_gradient_dependent_prior_dispatch",
+    "loss": "float32",
+    "autocast_cache": false
+  },
+  "resource_identity": "exclusive_cooperative_queue; external jobs not controlled",
+  "physical_devices": "0,1,5,7",
+  "torch": "2.12.0+cpu",
+  "cpu_affinity": [
+    80,
+    81,
+    82,
+    83
+  ],
+  "torch_threads": 4,
+  "host_load_before": [
+    39.86,
+    41.53,
+    40.77
+  ],
+  "model_lifetime": "construct/hash/place one subject; release all state/weights before constructing next; no simultaneous dense Tide and Transformer",
+  "request_boundary": "zero state for cold, diagnostic, every warmup and every sample; real continued private state inside each finite request; only one final Timed drain",
+  "allocator_boundary": "discard diagnostic free blocks before independent warmup; keep warmup cache for normal samples; reset peaks separately per cold/sample",
+  "cold_boundary": "first invocation of this subject before its workload audit/warmup; preceding subjects can warm process/kernel caches; fresh-process comparisons require separate one-subject launches; excludes import/construction/hash/initial weight and input transfer",
+  "state": "failed",
+  "last_stage": "tide:sample:0",
+  "subjects": {
+    "tide": {
+      "state": "failed",
+      "observations": [
+        {
+          "calls": [
+            {
+              "phase": "prefill",
+              "start": 0,
+              "stop": 32,
+              "input_positions": 1120,
+              "state_before": 0,
+              "state_after": 32,
+              "output_slots": 1120,
+              "seconds": 2.2562374100089073,
+              "forward_readout_sync_seconds": 2.256145019084215,
+              "ready_seconds": 2.2562374100089073
+            },
+            {
+              "phase": "prefill",
+              "start": 32,
+              "stop": 64,
+              "input_positions": 1120,
+              "state_before": 32,
+              "state_after": 64,
+              "output_slots": 1120,
+              "seconds": 2.355556432157755,
+              "forward_readout_sync_seconds": 2.355541840195656,
+              "ready_seconds": 4.611793842166662
+            },
+            {
+              "phase": "prefill",
+              "start": 64,
+              "stop": 96,
+              "input_positions": 1120,
+              "state_before": 64,
+              "state_after": 96,
+              "output_slots": 1120,
+              "seconds": 2.4796780571341515,
+              "forward_readout_sync_seconds": 2.479668214917183,
+              "ready_seconds": 7.091471899300814
+            },
+            {
+              "phase": "prefill",
+              "start": 96,
+              "stop": 128,
+              "input_positions": 1120,
+              "state_before": 96,
+              "state_after": 128,
+              "output_slots": 1120,
+              "seconds": 2.458503123372793,
+              "forward_readout_sync_seconds": 2.45849322527647,
+              "ready_seconds": 9.549975022673607
+            },
+            {
+              "phase": "decode",
+              "start": 128,
+              "stop": 129,
+              "input_positions": 35,
+              "state_before": 128,
+              "state_after": 129,
+              "output_slots": 35,
+              "seconds": 1.3610207922756672,
+              "forward_readout_sync_seconds": 1.3609859235584736,
+              "ready_seconds": 10.910995814949274
+            },
+            {
+              "phase": "decode",
+              "start": 129,
+              "stop": 130,
+              "input_positions": 35,
+              "state_before": 129,
+              "state_after": 130,
+              "output_slots": 35,
+              "seconds": 1.4057445377111435,
+              "forward_readout_sync_seconds": 1.4057379104197025,
+              "ready_seconds": 12.316740352660418
+            },
+            {
+              "phase": "decode",
+              "start": 130,
+              "stop": 131,
+              "input_positions": 35,
+              "state_before": 130,
+              "state_after": 131,
+              "output_slots": 35,
+              "seconds": 1.4405031874775887,
+              "forward_readout_sync_seconds": 1.4404959306120872,
+              "ready_seconds": 13.757243540138006
+            },
+            {
+              "phase": "decode",
+              "start": 131,
+              "stop": 132,
+              "input_positions": 35,
+              "state_before": 131,
+              "state_after": 132,
+              "output_slots": 35,
+              "seconds": 1.4204482212662697,
+              "forward_readout_sync_seconds": 1.4204411283135414,
+              "ready_seconds": 15.177691761404276
+            },
+            {
+              "phase": "decode",
+              "start": 132,
+              "stop": 133,
+              "input_positions": 35,
+              "state_before": 132,
+              "state_after": 133,
+              "output_slots": 35,
+              "seconds": 1.4166390933096409,
+              "forward_readout_sync_seconds": 1.4166328720748425,
+              "ready_seconds": 16.594330854713917
+            },
+            {
+              "phase": "decode",
+              "start": 133,
+              "stop": 134,
+              "input_positions": 35,
+              "state_before": 133,
+              "state_after": 134,
+              "output_slots": 35,
+              "seconds": 1.3933751322329044,
+              "forward_readout_sync_seconds": 1.393367599695921,
+              "ready_seconds": 17.98770598694682
+            },
+            {
+              "phase": "decode",
+              "start": 134,
+              "stop": 135,
+              "input_positions": 35,
+              "state_before": 134,
+              "state_after": 135,
+              "output_slots": 35,
+              "seconds": 1.399938926100731,
+              "forward_readout_sync_seconds": 1.3999267145991325,
+              "ready_seconds": 19.387644913047552
+            },
+            {
+              "phase": "decode",
+              "start": 135,
+              "stop": 136,
+              "input_positions": 35,
+              "state_before": 135,
+              "state_after": 136,
+              "output_slots": 35,
+              "seconds": 1.4141496568918228,
+              "forward_readout_sync_seconds": 1.4141427353024483,
+              "ready_seconds": 20.801794569939375
+            },
+            {
+              "phase": "decode",
+              "start": 136,
+              "stop": 137,
+              "input_positions": 35,
+              "state_before": 136,
+              "state_after": 137,
+              "output_slots": 35,
+              "seconds": 1.4158647060394287,
+              "forward_readout_sync_seconds": 1.4158566854894161,
+              "ready_seconds": 22.217659275978804
+            },
+            {
+              "phase": "decode",
+              "start": 137,
+              "stop": 138,
+              "input_positions": 35,
+              "state_before": 137,
+              "state_after": 138,
+              "output_slots": 35,
+              "seconds": 1.38225769251585,
+              "forward_readout_sync_seconds": 1.382246520370245,
+              "ready_seconds": 23.599916968494654
+            },
+            {
+              "phase": "decode",
+              "start": 138,
+              "stop": 139,
+              "input_positions": 35,
+              "state_before": 138,
+              "state_after": 139,
+              "output_slots": 35,
+              "seconds": 1.4040070287883282,
+              "forward_readout_sync_seconds": 1.4039998091757298,
+              "ready_seconds": 25.003923997282982
+            },
+            {
+              "phase": "decode",
+              "start": 139,
+              "stop": 140,
+              "input_positions": 35,
+              "state_before": 139,
+              "state_after": 140,
+              "output_slots": 35,
+              "seconds": 1.3981130197644234,
+              "forward_readout_sync_seconds": 1.398106399923563,
+              "ready_seconds": 26.402037017047405
+            },
+            {
+              "phase": "decode",
+              "start": 140,
+              "stop": 141,
+              "input_positions": 35,
+              "state_before": 140,
+              "state_after": 141,
+              "output_slots": 35,
+              "seconds": 1.4333221204578876,
+              "forward_readout_sync_seconds": 1.4333063662052155,
+              "ready_seconds": 27.835359137505293
+            },
+            {
+              "phase": "decode",
+              "start": 141,
+              "stop": 142,
+              "input_positions": 35,
+              "state_before": 141,
+              "state_after": 142,
+              "output_slots": 35,
+              "seconds": 1.4430800303816795,
+              "forward_readout_sync_seconds": 1.4430670887231827,
+              "ready_seconds": 29.278439167886972
+            },
+            {
+              "phase": "decode",
+              "start": 142,
+              "stop": 143,
+              "input_positions": 35,
+              "state_before": 142,
+              "state_after": 143,
+              "output_slots": 35,
+              "seconds": 1.3956814259290695,
+              "forward_readout_sync_seconds": 1.3956755585968494,
+              "ready_seconds": 30.674120593816042
+            },
+            {
+              "phase": "decode",
+              "start": 143,
+              "stop": 144,
+              "input_positions": 35,
+              "state_before": 143,
+              "state_after": 144,
+              "output_slots": 35,
+              "seconds": 1.3663599006831646,
+              "forward_readout_sync_seconds": 1.3663537725806236,
+              "ready_seconds": 32.04048049449921
+            }
+          ],
+          "complete_seconds": 32.0406128205359,
+          "input_positions": 5040,
+          "complete_positions_per_second": 157.30036214443737,
+          "output_slots": 5040,
+          "final_state_position": 144,
+          "prompt_ingested_seconds": 9.549975022673607,
+          "prompt_output_ready_seconds": 9.549975022673607,
+          "prompt_output_ready_definition": "first completed call whose returned logical window covers last prompt injection plus full graph-depth delay; conservative terminal-path boundary, not memory causal attribution or language-model TTFT",
+          "first_incremental_call_seconds": 1.3610207922756672,
+          "first_any_backbone_output_seconds": 2.2562374100089073,
+          "prefill": {
+            "calls": 4,
+            "seconds": 9.549975022673607,
+            "input_positions": 4480,
+            "positions_per_second": 469.11117456993946,
+            "median_call_seconds": 2.407029777765274,
+            "p95_call_seconds": 2.4796780571341515
+          },
+          "decode": {
+            "calls": 16,
+            "seconds": 22.4905054718256,
+            "input_positions": 560,
+            "positions_per_second": 24.899395911822683,
+            "median_call_seconds": 1.4048757832497358,
+            "p95_call_seconds": 1.4430800303816795
+          },
+          "stable_decode": {
+            "calls": 15,
+            "seconds": 21.129484679549932,
+            "input_positions": 525,
+            "positions_per_second": 24.846796216857985,
+            "median_call_seconds": 1.4057445377111435,
+            "p95_call_seconds": 1.4430800303816795
+          },
+          "stable_decode_rule": "omit first incremental call; no stable sample when fewer than two decode calls",
+          "chunked_stream": {
+            "calls": 0,
+            "seconds": 0,
+            "input_positions": 0,
+            "positions_per_second": null,
+            "median_call_seconds": null,
+            "p95_call_seconds": null
+          },
+          "drain_seconds": 0,
+          "input_window_seconds": 32.04048049449921,
+          "state_memory": {
+            "payload_bytes": 48103054720,
+            "retained_storage_bytes": 48103054720,
+            "dtypes": [
+              "torch.float32",
+              "torch.int64"
+            ],
+            "tensor_count": 280
+          },
+          "synchronized_devices": [
+            "npu:0",
+            "npu:1",
+            "npu:2",
+            "npu:3"
+          ],
+          "diagnostic_checks_in_timing": false,
+          "consumer": "materialize backbone readout; synchronize every owner; release each output; no concatenation, task head, checksum reduction or D2H return",
+          "timing_boundary": "resident-input first call through final drain/readout/output release/context exit and all-owner synchronization; phase intervals include Python scheduling since prior ready boundary",
+          "allocator": {
+            "npu:0": {
+              "allocated_bytes": 28783437824,
+              "reserved_bytes": 58755907584,
+              "peak_allocated_bytes": 49064686592,
+              "peak_reserved_bytes": 58755907584
+            },
+            "npu:1": {
+              "allocated_bytes": 28763152384,
+              "reserved_bytes": 58265174016,
+              "peak_allocated_bytes": 49282538496,
+              "peak_reserved_bytes": 58265174016
+            },
+            "npu:2": {
+              "allocated_bytes": 28764169728,
+              "reserved_bytes": 58124664832,
+              "peak_allocated_bytes": 49284287488,
+              "peak_reserved_bytes": 58124664832
+            },
+            "npu:3": {
+              "allocated_bytes": 28763361792,
+              "reserved_bytes": 60496543744,
+              "peak_allocated_bytes": 49297010688,
+              "peak_reserved_bytes": 60496543744
+            }
+          },
+          "availability_source": "separate full-schedule diagnostic at identical parameters/input/precision/execution policy; not a timed support capture"
+        }
+      ],
+      "comparison": {
+        "kind": "tide",
+        "mathematical_equivalence_to_transformer": false
+      },
+      "initial_parameters": {
+        "sha256": "6151ed622f89ff965930ffabfc20d821d3af1184ba2c95a9df02dcd875c9d20d",
+        "finite": true,
+        "host_copy_chunk_bytes": 8388608,
+        "scope": "dense initial named Parameters before ownership placement; shape/name/raw contiguous bytes"
+      },
+      "parameters": 16707220176,
+      "placement": {
+        "kind": "hb-region-shards-1",
+        "devices": [
+          "npu:0",
+          "npu:1",
+          "npu:2",
+          "npu:3"
+        ],
+        "requested_transport": "host_stage",
+        "transport": "host_stage",
+        "input_partition": 0,
+        "output_partition": 0,
+        "optimizer": "placement_adamw; align disconnected shards per original Parameter before step",
+        "communication": "single-process deduplicated predecessor-node transport per destination partition; no replicas",
+        "region_partitions": [
+          1,
+          1,
+          2,
+          2,
+          3,
+          3,
+          0,
+          0,
+          1,
+          1,
+          2,
+          2,
+          3,
+          3,
+          0,
+          0,
+          1,
+          1,
+          2,
+          2,
+          3,
+          3,
+          0,
+          0,
+          1,
+          1,
+          2,
+          2,
+          3,
+          3,
+          0,
+          0,
+          1,
+          1,
+          2,
+          2,
+          3,
+          3,
+          0,
+          0,
+          1,
+          2,
+          3,
+          0
+        ],
+        "region_concurrency": "per_device",
+        "actual_devices": {
+          "npu:0": {
+            "parameters": 4177689780,
+            "parameter_bytes": 16710759120
+          },
+          "npu:1": {
+            "parameters": 4176510132,
+            "parameter_bytes": 16706040528
+          },
+          "npu:2": {
+            "parameters": 4176510132,
+            "parameter_bytes": 16706040528
+          },
+          "npu:3": {
+            "parameters": 4176510132,
+            "parameter_bytes": 16706040528
+          }
+        },
+        "total_unique_parameters": 16707220176,
+        "predecessor_transport": [
+          {
+            "layer": 1,
+            "origin": 0,
+            "source_partition": 0,
+            "destination_partition": 1,
+            "unique_source_nodes": 64,
+            "remote": true
+          },
+          {
+            "layer": 1,
+            "origin": 0,
+            "source_partition": 1,
+            "destination_partition": 1,
+            "unique_source_nodes": 68,
+            "remote": false
+          },
+          {
+            "layer": 1,
+            "origin": 0,
+            "source_partition": 2,
+            "destination_partition": 1,
+            "unique_source_nodes": 4,
+            "remote": true
+          },
+          {
+            "layer": 1,
+            "origin": 0,
+            "source_partition": 1,
+            "destination_partition": 2,
+            "unique_source_nodes": 68,
+            "remote": true
+          },
+          {
+            "layer": 1,
+            "origin": 0,
+            "source_partition": 2,
+            "destination_partition": 2,
+            "unique_source_nodes": 68,
+            "remote": false
+          },
+          {
+            "layer": 1,
+            "origin": 0,
+            "source_partition": 0,
+            "destination_partition": 3,
+            "unique_source_nodes": 4,
+            "remote": true
+          },
+          {
+            "layer": 1,
+            "origin": 0,
+            "source_partition": 2,
+            "destination_partition": 3,
+            "unique_source_nodes": 64,
+            "remote": true
+          },
+          {
+            "layer": 1,
+            "origin": 0,
+            "source_partition": 3,
+            "destination_partition": 3,
+            "unique_source_nodes": 68,
+            "remote": false
+          },
+          {
+            "layer": 1,
+            "origin": 0,
+            "source_partition": 0,
+            "destination_partition": 0,
+            "unique_source_nodes": 68,
+            "remote": false
+          },
+          {
+            "layer": 1,
+            "origin": 0,
+            "source_partition": 3,
+            "destination_partition": 0,
+            "unique_source_nodes": 68,
+            "remote": true
+          },
+          {
+            "layer": 2,
+            "origin": 0,
+            "source_partition": 1,
+            "destination_partition": 1,
+            "unique_source_nodes": 68,
+            "remote": false
+          },
+          {
+            "layer": 2,
+            "origin": 0,
+            "source_partition": 3,
+            "destination_partition": 1,
+            "unique_source_nodes": 68,
+            "remote": true
+          },
+          {
+            "layer": 2,
+            "origin": 1,
+            "source_partition": 0,
+            "destination_partition": 1,
+            "unique_source_nodes": 64,
+            "remote": true
+          },
+          {
+            "layer": 2,
+            "origin": 1,
+            "source_partition": 1,
+            "destination_partition": 1,
+            "unique_source_nodes": 68,
+            "remote": false
+          },
+          {
+            "layer": 2,
+            "origin": 1,
+            "source_partition": 2,
+            "destination_partition": 1,
+            "unique_source_nodes": 64,
+            "remote": true
+          },
+          {
+            "layer": 2,
+            "origin": 1,
+            "source_partition": 3,
+            "destination_partition": 1,
+            "unique_source_nodes": 68,
+            "remote": true
+          },
+          {
+            "layer": 2,
+            "origin": 0,
+            "source_partition": 1,
+            "destination_partition": 2,
+            "unique_source_nodes": 68,
+            "remote": true
+          },
+          {
+            "layer": 2,
+            "origin": 0,
+            "source_partition": 3,
+            "destination_partition": 2,
+            "unique_source_nodes": 68,
+            "remote": true
+          },
+          {
+            "layer": 2,
+            "origin": 1,
+            "source_partition": 0,
+            "destination_partition": 2,
+            "unique_source_nodes": 64,
+            "remote": true
+          },
+          {
+            "layer": 2,
+            "origin": 1,
+            "source_partition": 1,
+            "destination_partition": 2,
+            "unique_source_nodes": 68,
+            "remote": true
+          },
+          {
+            "layer": 2,
+            "origin": 1,
+            "source_partition": 2,
+            "destination_partition": 2,
+            "unique_source_nodes": 64,
+            "remote": false
+          },
+          {
+            "layer": 2,
+            "origin": 1,
+            "source_partition": 3,
+            "destination_partition": 2,
+            "unique_source_nodes": 68,
+            "remote": true
+          },
+          {
+            "layer": 2,
+            "origin": 0,
+            "source_partition": 0,
+            "destination_partition": 3,
+            "unique_source_nodes": 68,
+            "remote": true
+          },
+          {
+            "layer": 2,
+            "origin": 0,
+            "source_partition": 2,
+            "destination_partition": 3,
+            "unique_source_nodes": 68,
+            "remote": true
+          },
+          {
+            "layer": 2,
+            "origin": 1,
+            "source_partition": 0,
+            "destination_partition": 3,
+            "unique_source_nodes": 68,
+            "remote": true
+          },
+          {
+            "layer": 2,
+            "origin": 1,
+            "source_partition": 1,
+            "destination_partition": 3,
+            "unique_source_nodes": 64,
+            "remote": true
+          },
+          {
+            "layer": 2,
+            "origin": 1,
+            "source_partition": 2,
+            "destination_partition": 3,
+            "unique_source_nodes": 68,
+            "remote": true
+          },
+          {
+            "layer": 2,
+            "origin": 1,
+            "source_partition": 3,
+            "destination_partition": 3,
+            "unique_source_nodes": 64,
+            "remote": false
+          },
+          {
+            "layer": 2,
+            "origin": 0,
+            "source_partition": 0,
+            "destination_partition": 0,
+            "unique_source_nodes": 68,
+            "remote": false
+          },
+          {
+            "layer": 2,
+            "origin": 0,
+            "source_partition": 2,
+            "destination_partition": 0,
+            "unique_source_nodes": 68,
+            "remote": true
+          },
+          {
+            "layer": 2,
+            "origin": 1,
+            "source_partition": 0,
+            "destination_partition": 0,
+            "unique_source_nodes": 68,
+            "remote": false
+          },
+          {
+            "layer": 2,
+            "origin": 1,
+            "source_partition": 1,
+            "destination_partition": 0,
+            "unique_source_nodes": 64,
+            "remote": true
+          },
+          {
+            "layer": 2,
+            "origin": 1,
+            "source_partition": 2,
+            "destination_partition": 0,
+            "unique_source_nodes": 68,
+            "remote": true
+          },
+          {
+            "layer": 2,
+            "origin": 1,
+            "source_partition": 3,
+            "destination_partition": 0,
+            "unique_source_nodes": 64,
+            "remote": true
+          },
+          {
+            "layer": 3,
+            "origin": 1,
+            "source_partition": 1,
+            "destination_partition": 1,
+            "unique_source_nodes": 4,
+            "remote": false
+          },
+          {
+            "layer": 3,
+            "origin": 1,
+            "source_partition": 2,
+            "destination_partition": 1,
+            "unique_source_nodes": 68,
+            "remote": true
+          },
+          {
+            "layer": 3,
+            "origin": 2,
+            "source_partition": 0,
+            "destination_partition": 1,
+            "unique_source_nodes": 68,
+            "remote": true
+          },
+          {
+            "layer": 3,
+            "origin": 2,
+            "source_partition": 1,
+            "destination_partition": 1,
+            "unique_source_nodes": 68,
+            "remote": false
+          },
+          {
+            "layer": 3,
+            "origin": 2,
+            "source_partition": 2,
+            "destination_partition": 1,
+            "unique_source_nodes": 68,
+            "remote": true
+          },
+          {
+            "layer": 3,
+            "origin": 2,
+            "source_partition": 3,
+            "destination_partition": 1,
+            "unique_source_nodes": 68,
+            "remote": true
+          },
+          {
+            "layer": 3,
+            "origin": 1,
+            "source_partition": 1,
+            "destination_partition": 2,
+            "unique_source_nodes": 68,
+            "remote": true
+          },
+          {
+            "layer": 3,
+            "origin": 1,
+            "source_partition": 2,
+            "destination_partition": 2,
+            "unique_source_nodes": 4,
+            "remote": false
+          },
+          {
+            "layer": 3,
+            "origin": 2,
+            "source_partition": 0,
+            "destination_partition": 2,
+            "unique_source_nodes": 68,
+            "remote": true
+          },
+          {
+            "layer": 3,
+            "origin": 2,
+            "source_partition": 1,
+            "destination_partition": 2,
+            "unique_source_nodes": 68,
+            "remote": true
+          },
+          {
+            "layer": 3,
+            "origin": 2,
+            "source_partition": 2,
+            "destination_partition": 2,
+            "unique_source_nodes": 68,
+            "remote": false
+          },
+          {
+            "layer": 3,
+            "origin": 2,
+            "source_partition": 3,
+            "destination_partition": 2,
+            "unique_source_nodes": 68,
+            "remote": true
+          },
+          {
+            "layer": 3,
+            "origin": 1,
+            "source_partition": 0,
+            "destination_partition": 3,
+            "unique_source_nodes": 68,
+            "remote": true
+          },
+          {
+            "layer": 3,
+            "origin": 1,
+            "source_partition": 3,
+            "destination_partition": 3,
+            "unique_source_nodes": 4,
+            "remote": false
+          },
+          {
+            "layer": 3,
+            "origin": 2,
+            "source_partition": 0,
+            "destination_partition": 3,
+            "unique_source_nodes": 68,
+            "remote": true
+          },
+          {
+            "layer": 3,
+            "origin": 2,
+            "source_partition": 1,
+            "destination_partition": 3,
+            "unique_source_nodes": 68,
+            "remote": true
+          },
+          {
+            "layer": 3,
+            "origin": 2,
+            "source_partition": 2,
+            "destination_partition": 3,
+            "unique_source_nodes": 68,
+            "remote": true
+          },
+          {
+            "layer": 3,
+            "origin": 2,
+            "source_partition": 3,
+            "destination_partition": 3,
+            "unique_source_nodes": 68,
+            "remote": false
+          },
+          {
+            "layer": 3,
+            "origin": 1,
+            "source_partition": 0,
+            "destination_partition": 0,
+            "unique_source_nodes": 4,
+            "remote": false
+          },
+          {
+            "layer": 3,
+            "origin": 1,
+            "source_partition": 3,
+            "destination_partition": 0,
+            "unique_source_nodes": 68,
+            "remote": true
+          },
+          {
+            "layer": 3,
+            "origin": 2,
+            "source_partition": 0,
+            "destination_partition": 0,
+            "unique_source_nodes": 68,
+            "remote": false
+          },
+          {
+            "layer": 3,
+            "origin": 2,
+            "source_partition": 1,
+            "destination_partition": 0,
+            "unique_source_nodes": 68,
+            "remote": true
+          },
+          {
+            "layer": 3,
+            "origin": 2,
+            "source_partition": 2,
+            "destination_partition": 0,
+            "unique_source_nodes": 68,
+            "remote": true
+          },
+          {
+            "layer": 3,
+            "origin": 2,
+            "source_partition": 3,
+            "destination_partition": 0,
+            "unique_source_nodes": 68,
+            "remote": true
+          },
+          {
+            "layer": 4,
+            "origin": 0,
+            "source_partition": 2,
+            "destination_partition": 1,
+            "unique_source_nodes": 68,
+            "remote": true
+          },
+          {
+            "layer": 4,
+            "origin": 2,
+            "source_partition": 1,
+            "destination_partition": 1,
+            "unique_source_nodes": 68,
+            "remote": false
+          },
+          {
+            "layer": 4,
+            "origin": 2,
+            "source_partition": 2,
+            "destination_partition": 1,
+            "unique_source_nodes": 68,
+            "remote": true
+          },
+          {
+            "layer": 4,
+            "origin": 3,
+            "source_partition": 0,
+            "destination_partition": 1,
+            "unique_source_nodes": 64,
+            "remote": true
+          },
+          {
+            "layer": 4,
+            "origin": 3,
+            "source_partition": 1,
+            "destination_partition": 1,
+            "unique_source_nodes": 68,
+            "remote": false
+          },
+          {
+            "layer": 4,
+            "origin": 0,
+            "source_partition": 1,
+            "destination_partition": 2,
+            "unique_source_nodes": 68,
+            "remote": true
+          },
+          {
+            "layer": 4,
+            "origin": 2,
+            "source_partition": 0,
+            "destination_partition": 2,
+            "unique_source_nodes": 68,
+            "remote": true
+          },
+          {
+            "layer": 4,
+            "origin": 2,
+            "source_partition": 3,
+            "destination_partition": 2,
+            "unique_source_nodes": 68,
+            "remote": true
+          },
+          {
+            "layer": 4,
+            "origin": 3,
+            "source_partition": 1,
+            "destination_partition": 2,
+            "unique_source_nodes": 64,
+            "remote": true
+          },
+          {
+            "layer": 4,
+            "origin": 3,
+            "source_partition": 2,
+            "destination_partition": 2,
+            "unique_source_nodes": 68,
+            "remote": false
+          },
+          {
+            "layer": 4,
+            "origin": 0,
+            "source_partition": 0,
+            "destination_partition": 3,
+            "unique_source_nodes": 68,
+            "remote": true
+          },
+          {
+            "layer": 4,
+            "origin": 2,
+            "source_partition": 1,
+            "destination_partition": 3,
+            "unique_source_nodes": 68,
+            "remote": true
+          },
+          {
+            "layer": 4,
+            "origin": 2,
+            "source_partition": 2,
+            "destination_partition": 3,
+            "unique_source_nodes": 68,
+            "remote": true
+          },
+          {
+            "layer": 4,
+            "origin": 3,
+            "source_partition": 2,
+            "destination_partition": 3,
+            "unique_source_nodes": 64,
+            "remote": true
+          },
+          {
+            "layer": 4,
+            "origin": 3,
+            "source_partition": 3,
+            "destination_partition": 3,
+            "unique_source_nodes": 68,
+            "remote": false
+          },
+          {
+            "layer": 4,
+            "origin": 0,
+            "source_partition": 3,
+            "destination_partition": 0,
+            "unique_source_nodes": 68,
+            "remote": true
+          },
+          {
+            "layer": 4,
+            "origin": 2,
+            "source_partition": 0,
+            "destination_partition": 0,
+            "unique_source_nodes": 68,
+            "remote": false
+          },
+          {
+            "layer": 4,
+            "origin": 2,
+            "source_partition": 3,
+            "destination_partition": 0,
+            "unique_source_nodes": 68,
+            "remote": true
+          },
+          {
+            "layer": 4,
+            "origin": 3,
+            "source_partition": 0,
+            "destination_partition": 0,
+            "unique_source_nodes": 68,
+            "remote": false
+          },
+          {
+            "layer": 4,
+            "origin": 3,
+            "source_partition": 3,
+            "destination_partition": 0,
+            "unique_source_nodes": 64,
+            "remote": true
+          }
+        ],
+        "pending_layout": "private regional compact last-tick tensors; no window-sized pending views",
+        "execution": {
+          "policy": "per_device",
+          "maximum_layer_devices": 4,
+          "maximum_workers": 4,
+          "device_identity": "CPU indices are logical simulation groups; repeated devices share one task",
+          "region_batch_size": 4,
+          "ownership": "caller projects and transports; compatible regions batch within each parameter partition; one task per device; join each layer",
+          "streams": "caller current stream per accelerator, captured before worker creation; no extra streams",
+          "backward": "ordinary autograd engine, without a separate region thread scheduler",
+          "instrumentation": "record_work aggregates returned per-region counters; caller dispatch/function modes require explicit serial_region_audit; hooks/profilers are not propagated"
+        }
+      },
+      "spec": {
+        "topology": {
+          "kind": "multiscale",
+          "n": 64,
+          "layers": null,
+          "depth": null,
+          "rounds": null,
+          "profile": "5-dd4",
+          "hubs": 4,
+          "partition": "group",
+          "timing": "settle",
+          "hub_mask": "all",
+          "period": null,
+          "probes": null,
+          "terminal_hubs": false
+        },
+        "d": 768,
+        "memory": "X",
+        "aggregation": "source_residual",
+        "allocation": "quad",
+        "sharing": "independent",
+        "adapter_rank": 8,
+        "budget": null,
+        "attention_backend": "auto",
+        "attention_chunk": 128,
+        "input_dim": null,
+        "checkpoint_regions": false,
+        "checkpoint_reception": false,
+        "reception_qkv_backend": "separate",
+        "reception_mask_padding": false,
+        "parameter_indexing": "gather",
+        "ssd_summary_backend": "prefix",
+        "ssd_scan_backend": "doubling",
+        "region_batch_size": 4,
+        "local_attention_backend": null,
+        "hub_allocation": "bounded",
+        "clock": {
+          "position_period": null,
+          "position_origin": "binding",
+          "kv_window": null,
+          "short_decay": null,
+          "ssd_stride": null
+        }
+      },
+      "input_sha256": "a6fe170fa565df4265cf3cbad04f6b8087e206ae2c7db0fa947736ba49cef2fc",
+      "input_shape": [
+        35,
+        144,
+        768
+      ],
+      "shared_input_prefix": {
+        "width": 768,
+        "sha256": "a6fe170fa565df4265cf3cbad04f6b8087e206ae2c7db0fa947736ba49cef2fc",
+        "rule": "feature-wise seeded CPU generation, same sample/position/feature prefix at different widths"
+      },
+      "diagnostics": {
+        "finite_outputs": true,
+        "finite_private_state": true,
+        "output_available_by_call": [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        "output_support_sha256": "bfe62e68cb1a1d4b6ccc4e783af3bacc9d7793f3e7aa8660034108eba0392c00",
+        "original_output_times_sha256": "b3a53ff805c94b7a2f8b027b9c2e2c9d7b3c4a3401c1f6afd00cb4641d7a4ff9",
+        "original_time_bounds": [
+          {
+            "phase": "prefill",
+            "first_original_time": 5,
+            "last_original_time": 191,
+            "returned_time_slots": 32
+          },
+          {
+            "phase": "prefill",
+            "first_original_time": 197,
+            "last_original_time": 383,
+            "returned_time_slots": 32
+          },
+          {
+            "phase": "prefill",
+            "first_original_time": 389,
+            "last_original_time": 575,
+            "returned_time_slots": 32
+          },
+          {
+            "phase": "prefill",
+            "first_original_time": 581,
+            "last_original_time": 767,
+            "returned_time_slots": 32
+          },
+          {
+            "phase": "decode",
+            "first_original_time": 773,
+            "last_original_time": 773,
+            "returned_time_slots": 1
+          },
+          {
+            "phase": "decode",
+            "first_original_time": 779,
+            "last_original_time": 779,
+            "returned_time_slots": 1
+          },
+          {
+            "phase": "decode",
+            "first_original_time": 785,
+            "last_original_time": 785,
+            "returned_time_slots": 1
+          },
+          {
+            "phase": "decode",
+            "first_original_time": 791,
+            "last_original_time": 791,
+            "returned_time_slots": 1
+          },
+          {
+            "phase": "decode",
+            "first_original_time": 797,
+            "last_original_time": 797,
+            "returned_time_slots": 1
+          },
+          {
+            "phase": "decode",
+            "first_original_time": 803,
+            "last_original_time": 803,
+            "returned_time_slots": 1
+          },
+          {
+            "phase": "decode",
+            "first_original_time": 809,
+            "last_original_time": 809,
+            "returned_time_slots": 1
+          },
+          {
+            "phase": "decode",
+            "first_original_time": 815,
+            "last_original_time": 815,
+            "returned_time_slots": 1
+          },
+          {
+            "phase": "decode",
+            "first_original_time": 821,
+            "last_original_time": 821,
+            "returned_time_slots": 1
+          },
+          {
+            "phase": "decode",
+            "first_original_time": 827,
+            "last_original_time": 827,
+            "returned_time_slots": 1
+          },
+          {
+            "phase": "decode",
+            "first_original_time": 833,
+            "last_original_time": 833,
+            "returned_time_slots": 1
+          },
+          {
+            "phase": "decode",
+            "first_original_time": 839,
+            "last_original_time": 839,
+            "returned_time_slots": 1
+          },
+          {
+            "phase": "decode",
+            "first_original_time": 845,
+            "last_original_time": 845,
+            "returned_time_slots": 1
+          },
+          {
+            "phase": "decode",
+            "first_original_time": 851,
+            "last_original_time": 851,
+            "returned_time_slots": 1
+          },
+          {
+            "phase": "decode",
+            "first_original_time": 857,
+            "last_original_time": 857,
+            "returned_time_slots": 1
+          },
+          {
+            "phase": "decode",
+            "first_original_time": 863,
+            "last_original_time": 863,
+            "returned_time_slots": 1
+          }
+        ],
+        "state_memory": {
+          "payload_bytes": 48103054720,
+          "retained_storage_bytes": 48103054720,
+          "dtypes": [
+            "torch.float32",
+            "torch.int64"
+          ],
+          "tensor_count": 280
+        },
+        "final_state_position": 144,
+        "private_state_detached": true,
+        "readout_dtypes": [
+          "torch.float32"
+        ],
+        "returned_value_dtypes": [
+          "torch.float32"
+        ],
+        "returned_strength_dtypes": [
+          "torch.float32"
+        ],
+        "output_devices": [
+          "npu:0"
+        ],
+        "retention": "one output window at a time; only hashes/scalars retained; separate from normal timing",
+        "execution": {
+          "requested_region_concurrency": "per_device",
+          "effective_region_concurrency": "per_device",
+          "hooks": "ordinary Python method/module hooks with locked counters; no thread-local dispatch mode"
+        }
+      },
+      "error": "MemoryError: npu:3 observed reserved peak exceeds 56.0 GiB sampled budget"
+    }
+  },
+  "error": "MemoryError: npu:3 observed reserved peak exceeds 56.0 GiB sampled budget",
+  "process_peak_rss_kib": 67398720
+}

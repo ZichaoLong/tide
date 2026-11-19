@@ -1,0 +1,80 @@
+{
+  "source": "36c42a7a3ef765fe6257c42c7c1404d28857b77c",
+  "source_path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/native-regional-perf-cpu-v1/source",
+  "run": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/native-regional-perf-cpu-v1",
+  "unit": "tide-native-regional-perf-cpu-v1",
+  "arguments": {
+    "name": "native-regional-perf-cpu-v1",
+    "revision": "36c42a7a",
+    "threads": 1,
+    "affinity": "76-79",
+    "npu_count": 0,
+    "candidate_ids": null,
+    "seconds": 2400,
+    "rss_gib": 24.0,
+    "queue_seconds": 600,
+    "after_unit": [],
+    "command": [
+      "--",
+      "python",
+      "-c",
+      "import runpy;runpy.run_path(\"/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/native-performance-driver-v1.py\",run_name=\"__main__\")",
+      "--binary",
+      "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/capacity-bindings/artifacts/native-89ce08ff-cpu/build-CPU/tide-regional",
+      "--native-launcher",
+      "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/native-sdk-launcher-89ce08ff.sh",
+      "--device",
+      "cpu",
+      "--output",
+      "{run}/results"
+    ]
+  },
+  "launch": [
+    "systemd-run",
+    "--user",
+    "--unit=tide-native-regional-perf-cpu-v1",
+    "--service-type=exec",
+    "--slice=background.slice",
+    "--working-directory=/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/native-regional-perf-cpu-v1/source",
+    "--property=KillMode=control-group",
+    "--property=RuntimeMaxSec=2400",
+    "--property=TimeoutStopSec=30",
+    "--property=CPUAffinity=76-79",
+    "--property=StandardOutput=append:/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/native-regional-perf-cpu-v1/stdout.log",
+    "--property=StandardError=append:/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/native-regional-perf-cpu-v1/stderr.log",
+    "/bin/bash",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/native-regional-perf-cpu-v1/run.sh"
+  ],
+  "command": [
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "-c",
+    "import runpy;runpy.run_path(\"/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/native-performance-driver-v1.py\",run_name=\"__main__\")",
+    "--binary",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/capacity-bindings/artifacts/native-89ce08ff-cpu/build-CPU/tide-regional",
+    "--native-launcher",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/native-sdk-launcher-89ce08ff.sh",
+    "--device",
+    "cpu",
+    "--output",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/native-regional-perf-cpu-v1/results"
+  ],
+  "environment": {
+    "TIDE_SOURCE_COMMIT": "36c42a7a3ef765fe6257c42c7c1404d28857b77c",
+    "TIDE_HARNESS_COMMIT": "36c42a7a3ef765fe6257c42c7c1404d28857b77c",
+    "TORCH_DEVICE_BACKEND_AUTOLOAD": "0",
+    "TIDE_RESOURCE_IDENTITY": "pinned_cpu; shared host",
+    "OMP_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1"
+  },
+  "state": "submitted",
+  "pythonpath_policy": {
+    "prepend": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/native-regional-perf-cpu-v1/source/src",
+    "inherit": "selected baseline module only; caller PYTHONPATH cleared before module load"
+  },
+  "actual_environment_path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/native-regional-perf-cpu-v1/environment.json",
+  "launcher_sha256": "dd30ed684b9a7d7edfe46e97110a3e2afbd55f27c000344bc13ce53d0365d81d",
+  "resource_enforcement": "process affinity; sampled process-tree RSS, not cgroup hard memory",
+  "device_policy": "cpu",
+  "unit_observation": "MainPID=1080426\nSlice=background.slice\nControlGroup=/user.slice/user-1003.slice/user@1003.service/background.slice/tide-native-regional-perf-cpu-v1.service\nId=tide-native-regional-perf-cpu-v1.service\nActiveState=active\nSubState=running\n"
+}

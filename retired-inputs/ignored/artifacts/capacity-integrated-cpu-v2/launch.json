@@ -1,0 +1,66 @@
+{
+  "source": "8a22530dae69d9f1fa5ead4a01d1798fd1dfe0ee",
+  "source_path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/capacity-integrated-cpu-v2/source",
+  "run": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/capacity-integrated-cpu-v2",
+  "unit": "tide-capacity-integrated-cpu-v2",
+  "arguments": {
+    "name": "capacity-integrated-cpu-v2",
+    "revision": "8a22530d",
+    "threads": 4,
+    "affinity": "64-71",
+    "npu_count": 0,
+    "candidate_ids": null,
+    "seconds": 1800,
+    "rss_gib": 32.0,
+    "queue_seconds": 600,
+    "after_unit": [],
+    "command": [
+      "--",
+      "python",
+      "-m",
+      "pytest",
+      "-q"
+    ]
+  },
+  "launch": [
+    "systemd-run",
+    "--user",
+    "--unit=tide-capacity-integrated-cpu-v2",
+    "--service-type=exec",
+    "--slice=background.slice",
+    "--working-directory=/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/capacity-integrated-cpu-v2/source",
+    "--property=KillMode=control-group",
+    "--property=RuntimeMaxSec=1800",
+    "--property=TimeoutStopSec=30",
+    "--property=CPUAffinity=64-71",
+    "--property=StandardOutput=append:/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/capacity-integrated-cpu-v2/stdout.log",
+    "--property=StandardError=append:/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/capacity-integrated-cpu-v2/stderr.log",
+    "/bin/bash",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/capacity-integrated-cpu-v2/run.sh"
+  ],
+  "command": [
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "-m",
+    "pytest",
+    "-q"
+  ],
+  "environment": {
+    "TIDE_SOURCE_COMMIT": "8a22530dae69d9f1fa5ead4a01d1798fd1dfe0ee",
+    "TIDE_HARNESS_COMMIT": "8a22530dae69d9f1fa5ead4a01d1798fd1dfe0ee",
+    "TORCH_DEVICE_BACKEND_AUTOLOAD": "0",
+    "TIDE_RESOURCE_IDENTITY": "pinned_cpu; shared host",
+    "OMP_NUM_THREADS": "4",
+    "MKL_NUM_THREADS": "4",
+    "OPENBLAS_NUM_THREADS": "4"
+  },
+  "state": "submitted",
+  "pythonpath_policy": {
+    "prepend": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/capacity-integrated-cpu-v2/source/src",
+    "inherit": "selected baseline module only; caller PYTHONPATH cleared before module load"
+  },
+  "actual_environment_path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/capacity-integrated-cpu-v2/environment.json",
+  "launcher_sha256": "dd30ed684b9a7d7edfe46e97110a3e2afbd55f27c000344bc13ce53d0365d81d",
+  "resource_enforcement": "process affinity; sampled process-tree RSS, not cgroup hard memory",
+  "device_policy": "cpu",
+  "unit_observation": "MainPID=1099260\nSlice=background.slice\nControlGroup=/user.slice/user-1003.slice/user@1003.service/background.slice/tide-capacity-integrated-cpu-v2.service\nId=tide-capacity-integrated-cpu-v2.service\nActiveState=active\nSubState=running\n"
+}

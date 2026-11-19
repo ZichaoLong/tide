@@ -1,0 +1,19 @@
+{
+  "elapsed_seconds": 213.0026206150651,
+  "job_id": "capacity-fcs-length-bf16-v2",
+  "logical_device": "npu:0",
+  "logical_devices": [
+    "npu:0"
+  ],
+  "npu_count": 1,
+  "physical_id": 7,
+  "physical_ids": [
+    7
+  ],
+  "priority": 0,
+  "project": "tide-instances",
+  "return_code": 0,
+  "schema_version": 1,
+  "status": "completed",
+  "timestamp": "2026-11-18T07:26:40.072232+00:00"
+}

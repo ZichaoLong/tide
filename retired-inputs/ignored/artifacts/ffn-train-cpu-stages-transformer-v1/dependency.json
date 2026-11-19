@@ -1,0 +1,45 @@
+{
+  "state": "released",
+  "started": "2026-11-19T05:28:41.509353+00:00",
+  "units": [
+    "tide-ffn-train-cpu-stages-baseline-v1.service"
+  ],
+  "command": [
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "-m",
+    "benchmarks.training_breakdown",
+    "--subject",
+    "transformer",
+    "--config",
+    "configs/memory-candidates/medium-kv128.json",
+    "--device",
+    "cpu",
+    "--batch",
+    "16",
+    "--length",
+    "128",
+    "--chunk",
+    "32",
+    "--warmup",
+    "2",
+    "--samples",
+    "1",
+    "--threads",
+    "32",
+    "--output",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/ffn-train-cpu-stages-transformer-v1/breakdown.json"
+  ],
+  "boundary": "resource sequencing only; prior success not required",
+  "observations": {
+    "tide-ffn-train-cpu-stages-baseline-v1.service": {
+      "MainPID": "0",
+      "Result": "success",
+      "LoadState": "not-found",
+      "ActiveState": "inactive",
+      "SubState": "dead"
+    }
+  },
+  "busy": [],
+  "elapsed_seconds": 120.38469778746367,
+  "finished": "2026-11-19T05:30:41.894055+00:00"
+}

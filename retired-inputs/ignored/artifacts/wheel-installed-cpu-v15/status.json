@@ -1,0 +1,62 @@
+{
+  "state": "passed",
+  "source": "0992b467584c1f603314ed04d8efe8596a14f576",
+  "command": [
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "-I",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/wheel-installed-cpu-v15-inputs/driver.py",
+    "--source",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/wheel-installed-cpu-v15/source",
+    "--run",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/wheel-installed-cpu-v15",
+    "--smoke",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/wheel-installed-cpu-v15-inputs/smoke.py"
+  ],
+  "pid": 3551941,
+  "started": "2026-11-18T04:42:01.553455+00:00",
+  "max_rss_bytes": 8589934592,
+  "peak_rss_bytes": 547110912,
+  "max_processes": 4,
+  "rss_sample_count": 22,
+  "poll_interval": 0.25,
+  "descendant_supervision": "Linux child subreaper; retained PID/start identities across nested sessions",
+  "child_pid": 3551957,
+  "process_group": 3551957,
+  "elapsed": 9.258625004440546,
+  "descendant_identities": [
+    {
+      "pid": 3551957,
+      "start_ticks": 2256309226
+    },
+    {
+      "pid": 3551958,
+      "start_ticks": 2256309236
+    },
+    {
+      "pid": 3551983,
+      "start_ticks": 2256309268
+    },
+    {
+      "pid": 3552012,
+      "start_ticks": 2256309326
+    },
+    {
+      "pid": 3552024,
+      "start_ticks": 2256309329
+    },
+    {
+      "pid": 3552025,
+      "start_ticks": 2256309334
+    },
+    {
+      "pid": 3552137,
+      "start_ticks": 2256309583
+    },
+    {
+      "pid": 3552178,
+      "start_ticks": 2256309623
+    }
+  ],
+  "exit_code": 0,
+  "finished": "2026-11-18T04:42:10.812080+00:00"
+}

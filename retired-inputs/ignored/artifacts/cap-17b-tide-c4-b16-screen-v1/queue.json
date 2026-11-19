@@ -1,0 +1,23 @@
+{
+  "elapsed_seconds": 627.2365330681205,
+  "job_id": "cap-17b-tide-c4-b16-screen-v1",
+  "logical_devices": [
+    "npu:0",
+    "npu:1",
+    "npu:2",
+    "npu:3"
+  ],
+  "npu_count": 4,
+  "physical_ids": [
+    0,
+    1,
+    5,
+    7
+  ],
+  "priority": 0,
+  "project": "tide-instances",
+  "return_code": 0,
+  "schema_version": 1,
+  "status": "completed",
+  "timestamp": "2026-11-18T15:23:14.824603+00:00"
+}

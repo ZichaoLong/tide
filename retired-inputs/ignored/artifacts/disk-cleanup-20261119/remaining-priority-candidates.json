@@ -1,0 +1,1004 @@
+{
+  "state": "read_only_recommendation_not_executed",
+  "count": 70,
+  "allocated_bytes": 31598239744,
+  "files": [
+    {
+      "path": "artifacts/training-paths-placed-bf16/results/baseline/restore-input.pt",
+      "bytes": 478231942,
+      "allocated_bytes": 478236672,
+      "device": 64768,
+      "inode": 62307566,
+      "mtime_ns": 1794995344923952641,
+      "group": "training_restore"
+    },
+    {
+      "path": "artifacts/training-paths-placed-fp32/results/baseline/restore-input.pt",
+      "bytes": 496057158,
+      "allocated_bytes": 496062464,
+      "device": 64768,
+      "inode": 62307437,
+      "mtime_ns": 1794995285915373994,
+      "group": "training_restore"
+    },
+    {
+      "path": "artifacts/training-paths-placed-fp32/results/placement_per_device/restore-input.pt",
+      "bytes": 496012003,
+      "allocated_bytes": 496017408,
+      "device": 64768,
+      "inode": 62307611,
+      "mtime_ns": 1794995410432594849,
+      "group": "training_restore"
+    },
+    {
+      "path": "artifacts/training-paths-prefix-fp64/results/baseline/restore-input.pt",
+      "bytes": 960669702,
+      "allocated_bytes": 960675840,
+      "device": 64768,
+      "inode": 62303956,
+      "mtime_ns": 1794995010300669169,
+      "group": "training_restore"
+    },
+    {
+      "path": "artifacts/training-paths-prefix-fp64/results/prefix/restore-input.pt",
+      "bytes": 960669702,
+      "allocated_bytes": 960675840,
+      "device": 64768,
+      "inode": 62301728,
+      "mtime_ns": 1794995056437122189,
+      "group": "training_restore"
+    },
+    {
+      "path": "artifacts/training-paths-prefix-fp64/results/reception/restore-input.pt",
+      "bytes": 960669702,
+      "allocated_bytes": 960675840,
+      "device": 64768,
+      "inode": 62304794,
+      "mtime_ns": 1794995100537555124,
+      "group": "training_restore"
+    },
+    {
+      "path": "artifacts/training-paths-settle-bf16/results/baseline/restore-input.pt",
+      "bytes": 469616262,
+      "allocated_bytes": 469622784,
+      "device": 64768,
+      "inode": 62304062,
+      "mtime_ns": 1794995018148746237,
+      "group": "training_restore"
+    },
+    {
+      "path": "artifacts/training-paths-settle-bf16/results/batch4/restore-input.pt",
+      "bytes": 469616262,
+      "allocated_bytes": 469622784,
+      "device": 64768,
+      "inode": 62304781,
+      "mtime_ns": 1794995063281189384,
+      "group": "training_restore"
+    },
+    {
+      "path": "artifacts/training-paths-settle-bf16/results/batch_prefix/restore-input.pt",
+      "bytes": 469616262,
+      "allocated_bytes": 469622784,
+      "device": 64768,
+      "inode": 62306692,
+      "mtime_ns": 1794995252803049221,
+      "group": "training_restore"
+    },
+    {
+      "path": "artifacts/training-paths-settle-bf16/results/batch_prefix_reception/restore-input.pt",
+      "bytes": 469616262,
+      "allocated_bytes": 469622784,
+      "device": 64768,
+      "inode": 62307464,
+      "mtime_ns": 1794995297847491014,
+      "group": "training_restore"
+    },
+    {
+      "path": "artifacts/training-paths-settle-bf16/results/batch_reception/restore-input.pt",
+      "bytes": 469616262,
+      "allocated_bytes": 469622784,
+      "device": 64768,
+      "inode": 62307410,
+      "mtime_ns": 1794995210462633864,
+      "group": "training_restore"
+    },
+    {
+      "path": "artifacts/training-paths-settle-bf16/results/combined/restore-input.pt",
+      "bytes": 469616262,
+      "allocated_bytes": 469622784,
+      "device": 64768,
+      "inode": 62306679,
+      "mtime_ns": 1794995164854186357,
+      "group": "training_restore"
+    },
+    {
+      "path": "artifacts/training-paths-settle-bf16/results/recompute/restore-input.pt",
+      "bytes": 469616262,
+      "allocated_bytes": 469622784,
+      "device": 64768,
+      "inode": 62304797,
+      "mtime_ns": 1794995115561702595,
+      "group": "training_restore"
+    },
+    {
+      "path": "artifacts/training-paths-settle-fp32/results/baseline/restore-input.pt",
+      "bytes": 481150022,
+      "allocated_bytes": 481157120,
+      "device": 64768,
+      "inode": 62304863,
+      "mtime_ns": 1794995109537643466,
+      "group": "training_restore"
+    },
+    {
+      "path": "artifacts/training-paths-settle-fp32/results/batch4/restore-input.pt",
+      "bytes": 481150022,
+      "allocated_bytes": 481157120,
+      "device": 64768,
+      "inode": 62306005,
+      "mtime_ns": 1794995154282082611,
+      "group": "training_restore"
+    },
+    {
+      "path": "artifacts/training-paths-settle-fp32/results/batch_prefix/restore-input.pt",
+      "bytes": 481150022,
+      "allocated_bytes": 481157120,
+      "device": 64768,
+      "inode": 62306230,
+      "mtime_ns": 1794995237710901177,
+      "group": "training_restore"
+    },
+    {
+      "path": "artifacts/training-paths-settle-fp32/results/batch_prefix_reception/restore-input.pt",
+      "bytes": 481150022,
+      "allocated_bytes": 481157120,
+      "device": 64768,
+      "inode": 62307467,
+      "mtime_ns": 1794995281315328878,
+      "group": "training_restore"
+    },
+    {
+      "path": "artifacts/training-paths-settle-fp32/results/batch_reception/restore-input.pt",
+      "bytes": 481150022,
+      "allocated_bytes": 481157120,
+      "device": 64768,
+      "inode": 62306231,
+      "mtime_ns": 1794995195818490187,
+      "group": "training_restore"
+    },
+    {
+      "path": "artifacts/training-paths-timed-bf16/results/baseline/restore-input.pt",
+      "bytes": 549703008,
+      "allocated_bytes": 549707776,
+      "device": 64768,
+      "inode": 62304898,
+      "mtime_ns": 1794995134781891238,
+      "group": "training_restore"
+    },
+    {
+      "path": "artifacts/training-paths-timed-bf16/results/batch4/restore-input.pt",
+      "bytes": 549703008,
+      "allocated_bytes": 549707776,
+      "device": 64768,
+      "inode": 62306695,
+      "mtime_ns": 1794995192802460595,
+      "group": "training_restore"
+    },
+    {
+      "path": "artifacts/training-paths-timed-bf16/results/batch_prefix/restore-input.pt",
+      "bytes": 549703008,
+      "allocated_bytes": 549707776,
+      "device": 64768,
+      "inode": 62307471,
+      "mtime_ns": 1794995306611576962,
+      "group": "training_restore"
+    },
+    {
+      "path": "artifacts/training-paths-timed-bf16/results/batch_prefix_reception/restore-input.pt",
+      "bytes": 549703008,
+      "allocated_bytes": 549707776,
+      "device": 64768,
+      "inode": 62307562,
+      "mtime_ns": 1794995364376143359,
+      "group": "training_restore"
+    },
+    {
+      "path": "artifacts/training-paths-timed-bf16/results/batch_reception/restore-input.pt",
+      "bytes": 549703008,
+      "allocated_bytes": 549707776,
+      "device": 64768,
+      "inode": 62307423,
+      "mtime_ns": 1794995249531017125,
+      "group": "training_restore"
+    },
+    {
+      "path": "artifacts/training-paths-timed-fp32/results/baseline/restore-input.pt",
+      "bytes": 626772576,
+      "allocated_bytes": 626778112,
+      "device": 64768,
+      "inode": 62306078,
+      "mtime_ns": 1794995148226023179,
+      "group": "training_restore"
+    },
+    {
+      "path": "artifacts/training-paths-timed-fp32/results/batch4/restore-input.pt",
+      "bytes": 626772576,
+      "allocated_bytes": 626778112,
+      "device": 64768,
+      "inode": 62306704,
+      "mtime_ns": 1794995204802578333,
+      "group": "training_restore"
+    },
+    {
+      "path": "artifacts/training-paths-timed-fp32/results/batch_prefix_reception/restore-input.pt",
+      "bytes": 626772576,
+      "allocated_bytes": 626778112,
+      "device": 64768,
+      "inode": 62307417,
+      "mtime_ns": 1794995262471144053,
+      "group": "training_restore"
+    },
+    {
+      "path": "artifacts/training-paths-timed-prefix-isolated/results/baseline/restore-input.pt",
+      "bytes": 549703072,
+      "allocated_bytes": 549707776,
+      "device": 64768,
+      "inode": 62309724,
+      "mtime_ns": 1794995691763350767,
+      "group": "training_restore"
+    },
+    {
+      "path": "artifacts/training-paths-timed-prefix-isolated/results/prefix/restore-input.pt",
+      "bytes": 549703072,
+      "allocated_bytes": 549707776,
+      "device": 64768,
+      "inode": 62309694,
+      "mtime_ns": 1794995752495945275,
+      "group": "training_restore"
+    },
+    {
+      "path": "artifacts/agg-paths-light128-fp32-v1/paths/baseline/restore-input.pt",
+      "bytes": 569256007,
+      "allocated_bytes": 569262080,
+      "device": 64768,
+      "inode": 62797639,
+      "mtime_ns": 1795005137368842866,
+      "group": "reception_restore"
+    },
+    {
+      "path": "artifacts/agg-paths-light128-fp32-v1/paths/optimized/restore-input.pt",
+      "bytes": 569256007,
+      "allocated_bytes": 569262080,
+      "device": 64768,
+      "inode": 62800359,
+      "mtime_ns": 1795005257242024378,
+      "group": "reception_restore"
+    },
+    {
+      "path": "artifacts/agg-paths-light128-fp32-v1/paths/qkv_mask/restore-input.pt",
+      "bytes": 569256007,
+      "allocated_bytes": 569262080,
+      "device": 64768,
+      "inode": 62798876,
+      "mtime_ns": 1795005198009440554,
+      "group": "reception_restore"
+    },
+    {
+      "path": "artifacts/agg-paths-light64-bf16-v1/paths/baseline/restore-input.pt",
+      "bytes": 522693255,
+      "allocated_bytes": 522698752,
+      "device": 64768,
+      "inode": 62925029,
+      "mtime_ns": 1795005978637135857,
+      "group": "reception_restore"
+    },
+    {
+      "path": "artifacts/agg-paths-light64-bf16-v1/paths/optimized/restore-input.pt",
+      "bytes": 522693255,
+      "allocated_bytes": 522698752,
+      "device": 64768,
+      "inode": 62926264,
+      "mtime_ns": 1795006033873680452,
+      "group": "reception_restore"
+    },
+    {
+      "path": "artifacts/agg-paths-light64-fp32-v1/paths/baseline/restore-input.pt",
+      "bytes": 530032711,
+      "allocated_bytes": 530038784,
+      "device": 64768,
+      "inode": 62797607,
+      "mtime_ns": 1795005129876769023,
+      "group": "reception_restore"
+    },
+    {
+      "path": "artifacts/agg-paths-light64-fp32-v1/paths/optimized/restore-input.pt",
+      "bytes": 530032711,
+      "allocated_bytes": 530038784,
+      "device": 64768,
+      "inode": 62800357,
+      "mtime_ns": 1795005243917893048,
+      "group": "reception_restore"
+    },
+    {
+      "path": "artifacts/agg-paths-light64-fp32-v1/paths/qkv_mask/restore-input.pt",
+      "bytes": 530032711,
+      "allocated_bytes": 530038784,
+      "device": 64768,
+      "inode": 62798067,
+      "mtime_ns": 1795005190125362846,
+      "group": "reception_restore"
+    },
+    {
+      "path": "artifacts/agg-paths-static-fp32-v1/paths/baseline/restore-input.pt",
+      "bytes": 530032711,
+      "allocated_bytes": 530038784,
+      "device": 64768,
+      "inode": 62929862,
+      "mtime_ns": 1795007050731607202,
+      "group": "reception_restore"
+    },
+    {
+      "path": "artifacts/agg-paths-static-fp32-v1/paths/views/restore-input.pt",
+      "bytes": 530032775,
+      "allocated_bytes": 530038784,
+      "device": 64768,
+      "inode": 62929025,
+      "mtime_ns": 1795007107236155458,
+      "group": "reception_restore"
+    },
+    {
+      "path": "artifacts/agg-paths-wide-fp32-v1/paths/baseline/restore-input.pt",
+      "bytes": 603952775,
+      "allocated_bytes": 603959296,
+      "device": 64768,
+      "inode": 62798874,
+      "mtime_ns": 1795005227857734751,
+      "group": "reception_restore"
+    },
+    {
+      "path": "artifacts/agg-paths-wide-fp32-v1/paths/optimized/restore-input.pt",
+      "bytes": 603952775,
+      "allocated_bytes": 603959296,
+      "device": 64768,
+      "inode": 62800405,
+      "mtime_ns": 1795005345902898289,
+      "group": "reception_restore"
+    },
+    {
+      "path": "artifacts/agg-paths-wide-fp32-v1/paths/qkv_mask/restore-input.pt",
+      "bytes": 603952775,
+      "allocated_bytes": 603959296,
+      "device": 64768,
+      "inode": 62800375,
+      "mtime_ns": 1795005290350350716,
+      "group": "reception_restore"
+    },
+    {
+      "path": "artifacts/training-paths-prefix-fp64/results/anchor.pt",
+      "bytes": 382316402,
+      "allocated_bytes": 382320640,
+      "device": 64768,
+      "inode": 62304000,
+      "mtime_ns": 1794994987408444349,
+      "group": "fp64_remaining"
+    },
+    {
+      "path": "artifacts/training-paths-prefix-fp64/results/baseline/checkpoint.pt",
+      "bytes": 388514870,
+      "allocated_bytes": 388521984,
+      "device": 64768,
+      "inode": 62303921,
+      "mtime_ns": 1794995004832615470,
+      "group": "fp64_remaining"
+    },
+    {
+      "path": "artifacts/training-paths-prefix-fp64/results/prefix/checkpoint.pt",
+      "bytes": 388514870,
+      "allocated_bytes": 388521984,
+      "device": 64768,
+      "inode": 62304065,
+      "mtime_ns": 1794995050641065283,
+      "group": "fp64_remaining"
+    },
+    {
+      "path": "artifacts/training-paths-prefix-fp64/results/reception/checkpoint.pt",
+      "bytes": 388514870,
+      "allocated_bytes": 388521984,
+      "device": 64768,
+      "inode": 62301634,
+      "mtime_ns": 1794995094893499721,
+      "group": "fp64_remaining"
+    },
+    {
+      "path": "artifacts/training-continuous-timed-fp32/checkpoint.pt",
+      "bytes": 1119842869,
+      "allocated_bytes": 1119850496,
+      "device": 64768,
+      "inode": 62312335,
+      "mtime_ns": 1794995782112235133,
+      "group": "continuous"
+    },
+    {
+      "path": "artifacts/training-continuous-settle-fp32/checkpoint.pt",
+      "bytes": 705364871,
+      "allocated_bytes": 705372160,
+      "device": 64768,
+      "inode": 62310818,
+      "mtime_ns": 1794995729395719166,
+      "group": "continuous"
+    },
+    {
+      "path": "artifacts/training-continuous-settle-bf16/checkpoint.pt",
+      "bytes": 609039239,
+      "allocated_bytes": 609046528,
+      "device": 64768,
+      "inode": 62310905,
+      "mtime_ns": 1794995756143980980,
+      "group": "continuous"
+    },
+    {
+      "path": "artifacts/agg-train-timed-fp32-100-v1/state.pt",
+      "bytes": 1119842997,
+      "allocated_bytes": 1119850496,
+      "device": 64768,
+      "inode": 62814219,
+      "mtime_ns": 1795005728158666439,
+      "group": "continuous"
+    },
+    {
+      "path": "artifacts/agg-train-light64-fp32-100-v1/state.pt",
+      "bytes": 731644878,
+      "allocated_bytes": 731652096,
+      "device": 64768,
+      "inode": 62921747,
+      "mtime_ns": 1795006625911487983,
+      "group": "continuous"
+    },
+    {
+      "path": "artifacts/agg-train-fc-fp32-100-v1/state.pt",
+      "bytes": 722395015,
+      "allocated_bytes": 722399232,
+      "device": 64768,
+      "inode": 62796315,
+      "mtime_ns": 1795005007375561672,
+      "group": "continuous"
+    },
+    {
+      "path": "artifacts/agg-train-settle-fp32-100-v1/state.pt",
+      "bytes": 705364999,
+      "allocated_bytes": 705372160,
+      "device": 64768,
+      "inode": 62797646,
+      "mtime_ns": 1795005152108988147,
+      "group": "continuous"
+    },
+    {
+      "path": "artifacts/training-installed/results/batched-fp32/checkpoint.pt",
+      "bytes": 39982031,
+      "allocated_bytes": 39989248,
+      "device": 64768,
+      "inode": 62422818,
+      "mtime_ns": 1794996411110383385,
+      "group": "installed"
+    },
+    {
+      "path": "artifacts/training-installed/results/batched-fp32/expected.pt",
+      "bytes": 95134941,
+      "allocated_bytes": 95141888,
+      "device": 64768,
+      "inode": 62422817,
+      "mtime_ns": 1794996413342405177,
+      "group": "installed"
+    },
+    {
+      "path": "artifacts/training-installed/results/batched-bf16/checkpoint.pt",
+      "bytes": 39892047,
+      "allocated_bytes": 39895040,
+      "device": 64768,
+      "inode": 62422816,
+      "mtime_ns": 1794996424642515501,
+      "group": "installed"
+    },
+    {
+      "path": "artifacts/training-installed/results/batched-bf16/expected.pt",
+      "bytes": 94684893,
+      "allocated_bytes": 94691328,
+      "device": 64768,
+      "inode": 62422592,
+      "mtime_ns": 1794996427126539752,
+      "group": "installed"
+    },
+    {
+      "path": "artifacts/training-installed/results/placed-fp32/checkpoint.pt",
+      "bytes": 43734894,
+      "allocated_bytes": 43737088,
+      "device": 64768,
+      "inode": 62422823,
+      "mtime_ns": 1794996441842683420,
+      "group": "installed"
+    },
+    {
+      "path": "artifacts/training-installed/results/placed-fp32/expected.pt",
+      "bytes": 103928029,
+      "allocated_bytes": 103936000,
+      "device": 64768,
+      "inode": 62421143,
+      "mtime_ns": 1794996445682720908,
+      "group": "installed"
+    },
+    {
+      "path": "artifacts/agg-installed-final-v1/installed/batched-fp32/checkpoint.pt",
+      "bytes": 49538054,
+      "allocated_bytes": 49541120,
+      "device": 64768,
+      "inode": 62925457,
+      "mtime_ns": 1795005990029248174,
+      "group": "installed"
+    },
+    {
+      "path": "artifacts/agg-installed-final-v1/installed/batched-fp32/expected.pt",
+      "bytes": 117427933,
+      "allocated_bytes": 117432320,
+      "device": 64768,
+      "inode": 62923222,
+      "mtime_ns": 1795005993677284141,
+      "group": "installed"
+    },
+    {
+      "path": "artifacts/agg-installed-final-v1/installed/batched-bf16/checkpoint.pt",
+      "bytes": 49448070,
+      "allocated_bytes": 49451008,
+      "device": 64768,
+      "inode": 62926211,
+      "mtime_ns": 1795006010829453250,
+      "group": "installed"
+    },
+    {
+      "path": "artifacts/agg-installed-final-v1/installed/batched-bf16/expected.pt",
+      "bytes": 116977885,
+      "allocated_bytes": 116981760,
+      "device": 64768,
+      "inode": 62926261,
+      "mtime_ns": 1795006014865493043,
+      "group": "installed"
+    },
+    {
+      "path": "artifacts/agg-installed-final-v1/installed/placed-fp32/checkpoint.pt",
+      "bytes": 53311308,
+      "allocated_bytes": 53313536,
+      "device": 64768,
+      "inode": 62926399,
+      "mtime_ns": 1795006035033691889,
+      "group": "installed"
+    },
+    {
+      "path": "artifacts/agg-installed-final-v1/installed/placed-fp32/expected.pt",
+      "bytes": 126274717,
+      "allocated_bytes": 126275584,
+      "device": 64768,
+      "inode": 62926387,
+      "mtime_ns": 1795006040077741620,
+      "group": "installed"
+    },
+    {
+      "path": "artifacts/worktrees/installed-check/artifacts/capacity-installed-8a22530d-v1/results/batched-fp32/checkpoint.pt",
+      "bytes": 39981967,
+      "allocated_bytes": 39985152,
+      "device": 64768,
+      "inode": 62415075,
+      "mtime_ns": 1794989084283842209,
+      "group": "installed"
+    },
+    {
+      "path": "artifacts/worktrees/installed-check/artifacts/capacity-installed-8a22530d-v1/results/batched-fp32/expected.pt",
+      "bytes": 95134877,
+      "allocated_bytes": 95141888,
+      "device": 64768,
+      "inode": 62415356,
+      "mtime_ns": 1794989087183869940,
+      "group": "installed"
+    },
+    {
+      "path": "artifacts/worktrees/installed-check/artifacts/capacity-installed-8a22530d-v1/results/batched-bf16/checkpoint.pt",
+      "bytes": 39891983,
+      "allocated_bytes": 39895040,
+      "device": 64768,
+      "inode": 62415388,
+      "mtime_ns": 1794989101796009658,
+      "group": "installed"
+    },
+    {
+      "path": "artifacts/worktrees/installed-check/artifacts/capacity-installed-8a22530d-v1/results/batched-bf16/expected.pt",
+      "bytes": 94684829,
+      "allocated_bytes": 94691328,
+      "device": 64768,
+      "inode": 62415391,
+      "mtime_ns": 1794989105052040791,
+      "group": "installed"
+    },
+    {
+      "path": "artifacts/worktrees/installed-check/artifacts/capacity-installed-8a22530d-v1/results/placed-fp32/checkpoint.pt",
+      "bytes": 43734830,
+      "allocated_bytes": 43741184,
+      "device": 64768,
+      "inode": 62415389,
+      "mtime_ns": 1794989126416245055,
+      "group": "installed"
+    },
+    {
+      "path": "artifacts/worktrees/installed-check/artifacts/capacity-installed-8a22530d-v1/results/placed-fp32/expected.pt",
+      "bytes": 103927965,
+      "allocated_bytes": 103936000,
+      "device": 64768,
+      "inode": 62415397,
+      "mtime_ns": 1794989131920297676,
+      "group": "installed"
+    }
+  ],
+  "groups": {
+    "training_restore": {
+      "count": 28,
+      "allocated_bytes": 15773777920
+    },
+    "reception_restore": {
+      "count": 13,
+      "allocated_bytes": 7215255552
+    },
+    "fp64_remaining": {
+      "count": 4,
+      "allocated_bytes": 1547886592
+    },
+    "continuous": {
+      "count": 7,
+      "allocated_bytes": 5713543168
+    },
+    "installed": {
+      "count": 18,
+      "allocated_bytes": 1347776512
+    }
+  },
+  "checked_result_records": [
+    {
+      "path": "artifacts/training-paths-placed-bf16/results/baseline/restore.json",
+      "sha256": "bf9c568b7b9dba685b7567e982f42ab8c6831e7be60a44560fd6a1b20e8b7698",
+      "bytes": 185075,
+      "state": "within_threshold"
+    },
+    {
+      "path": "artifacts/training-paths-placed-fp32/results/baseline/restore.json",
+      "sha256": "eec6e00f326c7dd33f4bdcf3dc96dbff214eba9829d2c07729efbcd7f9cce3b6",
+      "bytes": 184835,
+      "state": "within_threshold"
+    },
+    {
+      "path": "artifacts/training-paths-placed-fp32/results/placement_per_device/restore.json",
+      "sha256": "630fad4d1b47fb7113d80d83dbf6e1a2595064d2436386b4a4c416a0851f07ec",
+      "bytes": 184964,
+      "state": "within_threshold"
+    },
+    {
+      "path": "artifacts/training-paths-prefix-fp64/results/baseline/restore.json",
+      "sha256": "34640f3fc33461ddbcd3531155b8b198fd4b82c077d56dc0671b362627af21f8",
+      "bytes": 183341,
+      "state": "within_threshold"
+    },
+    {
+      "path": "artifacts/training-paths-prefix-fp64/results/prefix/restore.json",
+      "sha256": "a5670e7506fdaf05f1fd94410fb1b8499a23acf44ed40134e7a07af755c8128e",
+      "bytes": 183341,
+      "state": "within_threshold"
+    },
+    {
+      "path": "artifacts/training-paths-prefix-fp64/results/reception/restore.json",
+      "sha256": "acefbfc581abcdcd32911406d09a5a5604b5123a543031e110698f551bbcb163",
+      "bytes": 183341,
+      "state": "within_threshold"
+    },
+    {
+      "path": "artifacts/training-paths-settle-bf16/results/baseline/restore.json",
+      "sha256": "52cafa206d8bf1c294de523234f698e35a2d2a7e558c4365ddcb266035d61fd4",
+      "bytes": 185064,
+      "state": "within_threshold"
+    },
+    {
+      "path": "artifacts/training-paths-settle-bf16/results/batch4/restore.json",
+      "sha256": "2e238f303ef68c66178da0ef30d485443117c5e0af820e0db9ecddc6bddb20ba",
+      "bytes": 185264,
+      "state": "within_threshold"
+    },
+    {
+      "path": "artifacts/training-paths-settle-bf16/results/batch_prefix/restore.json",
+      "sha256": "9adb9b3f0f7eed6f291bfb237e38b5e90d59601f1d58ca98d08aa33cc7263081",
+      "bytes": 185258,
+      "state": "within_threshold"
+    },
+    {
+      "path": "artifacts/training-paths-settle-bf16/results/batch_prefix_reception/restore.json",
+      "sha256": "9384dcdc84dd49e689708c95475d1be0221e34b5173087d56e260325da5773db",
+      "bytes": 185268,
+      "state": "within_threshold"
+    },
+    {
+      "path": "artifacts/training-paths-settle-bf16/results/batch_reception/restore.json",
+      "sha256": "8d9887cfbf03c4a03e0ae011d3bbb7e92ddbc4e972722522e4ca615a7b0e447d",
+      "bytes": 185258,
+      "state": "within_threshold"
+    },
+    {
+      "path": "artifacts/training-paths-settle-bf16/results/combined/restore.json",
+      "sha256": "70a9503261ca1009409985457e757161b1f411e218cc411a388c9df84d5ce328",
+      "bytes": 185265,
+      "state": "within_threshold"
+    },
+    {
+      "path": "artifacts/training-paths-settle-bf16/results/recompute/restore.json",
+      "sha256": "9a5ea00e05d0826bf193c7719cff83758d0bb2fe9212ae23fceded0beb4f3370",
+      "bytes": 185059,
+      "state": "within_threshold"
+    },
+    {
+      "path": "artifacts/training-paths-settle-fp32/results/baseline/restore.json",
+      "sha256": "23143cfb0b1f45a819f3164119b54c4af170aba5940c3f350dcef21baa8c8687",
+      "bytes": 184849,
+      "state": "within_threshold"
+    },
+    {
+      "path": "artifacts/training-paths-settle-fp32/results/batch4/restore.json",
+      "sha256": "35c3eda2295695c286a7db83642f483d28470c611e4b97e8cf79557723665f8a",
+      "bytes": 184998,
+      "state": "within_threshold"
+    },
+    {
+      "path": "artifacts/training-paths-settle-fp32/results/batch_prefix/restore.json",
+      "sha256": "3a20b3a4cf74abf7ed12119e48ff80d9ee29942ea4cab57d65b0c544eec709c0",
+      "bytes": 184995,
+      "state": "within_threshold"
+    },
+    {
+      "path": "artifacts/training-paths-settle-fp32/results/batch_prefix_reception/restore.json",
+      "sha256": "9ae6eb4b6b8ddbf2056346665b4f95d24834b8d67678fd4789d0f2a2671a3c58",
+      "bytes": 184996,
+      "state": "within_threshold"
+    },
+    {
+      "path": "artifacts/training-paths-settle-fp32/results/batch_reception/restore.json",
+      "sha256": "fdd8b0290fb5822a1346e59879568c613158bd0285fe31816792a50b324365a7",
+      "bytes": 185001,
+      "state": "within_threshold"
+    },
+    {
+      "path": "artifacts/training-paths-timed-bf16/results/baseline/restore.json",
+      "sha256": "df93f954efcbfc655a830e80089769b9209a4fa96e501fc3320740fcb3336066",
+      "bytes": 266292,
+      "state": "within_threshold"
+    },
+    {
+      "path": "artifacts/training-paths-timed-bf16/results/batch4/restore.json",
+      "sha256": "8cd938de73d6e02e370528c8c48bd6a3beab7a9aa316d4431cbefd2d00a24e39",
+      "bytes": 266466,
+      "state": "within_threshold"
+    },
+    {
+      "path": "artifacts/training-paths-timed-bf16/results/batch_prefix/restore.json",
+      "sha256": "817591f7c672e01d13fd19fd1ab930ba9f15e3f39ef4dc8561fe6c35d4999274",
+      "bytes": 266477,
+      "state": "within_threshold"
+    },
+    {
+      "path": "artifacts/training-paths-timed-bf16/results/batch_prefix_reception/restore.json",
+      "sha256": "d681a5988f231bccf2c64ae6dc2cc4b16ef7b225ca3e7c0cf12a330d065a3bde",
+      "bytes": 266485,
+      "state": "within_threshold"
+    },
+    {
+      "path": "artifacts/training-paths-timed-bf16/results/batch_reception/restore.json",
+      "sha256": "14354cd8b003656a2684d52819a7af0e674ee3f2f2190838487d9da3a449c20b",
+      "bytes": 266471,
+      "state": "within_threshold"
+    },
+    {
+      "path": "artifacts/training-paths-timed-fp32/results/baseline/restore.json",
+      "sha256": "fb0cb4b01d010d9963be9f1004ba99ea228e742866b906f9b6abfa2da48cba81",
+      "bytes": 266056,
+      "state": "within_threshold"
+    },
+    {
+      "path": "artifacts/training-paths-timed-fp32/results/batch4/restore.json",
+      "sha256": "a8720b45e2b6f3c6b0a57076c6cddcd404130c351b3f553c6fc82950d6d36225",
+      "bytes": 266224,
+      "state": "within_threshold"
+    },
+    {
+      "path": "artifacts/training-paths-timed-fp32/results/batch_prefix_reception/restore.json",
+      "sha256": "f18fdf6a9b7cf8b5b8bf51d3a6c54937cfacbe1a56bc6622905eb3e757470e99",
+      "bytes": 266212,
+      "state": "within_threshold"
+    },
+    {
+      "path": "artifacts/training-paths-timed-prefix-isolated/results/baseline/restore.json",
+      "sha256": "579b298d3060870cc03f1df66b393a62f9e53be494ffbd6b65a30d41fc4595fd",
+      "bytes": 266301,
+      "state": "within_threshold"
+    },
+    {
+      "path": "artifacts/training-paths-timed-prefix-isolated/results/prefix/restore.json",
+      "sha256": "2aec07888df0ea368467d09f9e607e459b8f91fd0b5a9e99b73888e985c03bce",
+      "bytes": 266297,
+      "state": "within_threshold"
+    },
+    {
+      "path": "artifacts/agg-paths-light128-fp32-v1/paths/baseline/restore.json",
+      "sha256": "583ab964de35e748b1ec5d6bce00534824d44e76e47303df64462633eb8e87bc",
+      "bytes": 186147,
+      "state": "within_threshold"
+    },
+    {
+      "path": "artifacts/agg-paths-light128-fp32-v1/paths/optimized/restore.json",
+      "sha256": "a4e04d54d6ceafdc087b0f7a067db6e198e04bfb38b25c5c242a017182fbb862",
+      "bytes": 186082,
+      "state": "within_threshold"
+    },
+    {
+      "path": "artifacts/agg-paths-light128-fp32-v1/paths/qkv_mask/restore.json",
+      "sha256": "faa2fbdf5c9c9ad5848c26cfcebba3d1a7ea97cef903a1d1d2c29547adbbe24e",
+      "bytes": 186150,
+      "state": "within_threshold"
+    },
+    {
+      "path": "artifacts/agg-paths-light64-bf16-v1/paths/baseline/restore.json",
+      "sha256": "31acc993cf20f3ff2e19ad6cdd9e1ed2616f3511f83146ff58db5c33b35b96cf",
+      "bytes": 186400,
+      "state": "within_threshold"
+    },
+    {
+      "path": "artifacts/agg-paths-light64-bf16-v1/paths/optimized/restore.json",
+      "sha256": "c82e3cafec1a247fccdf8e56b7f0513e42ba3164418a737fb46a2077e70ea9ad",
+      "bytes": 186301,
+      "state": "within_threshold"
+    },
+    {
+      "path": "artifacts/agg-paths-light64-fp32-v1/paths/baseline/restore.json",
+      "sha256": "710455e862600d8c19d09a2cfc648d020dd99e81b300d1fbf70d948f396843fb",
+      "bytes": 186156,
+      "state": "within_threshold"
+    },
+    {
+      "path": "artifacts/agg-paths-light64-fp32-v1/paths/optimized/restore.json",
+      "sha256": "ee746c82d5a4282e6f59c48dac048197775026305df5eafe13c9f9fa1e7720ee",
+      "bytes": 186057,
+      "state": "within_threshold"
+    },
+    {
+      "path": "artifacts/agg-paths-light64-fp32-v1/paths/qkv_mask/restore.json",
+      "sha256": "6ad7be757de5ecf5f5932e4a7315042d986b16f8b4ce076f8512bc1d7299ab7f",
+      "bytes": 186160,
+      "state": "within_threshold"
+    },
+    {
+      "path": "artifacts/agg-paths-static-fp32-v1/paths/baseline/restore.json",
+      "sha256": "f217aafe14dc7e78b2753a849b6a810f98b0758e29ea4eb4bcf2b4b53cacd5e1",
+      "bytes": 186146,
+      "state": "within_threshold"
+    },
+    {
+      "path": "artifacts/agg-paths-static-fp32-v1/paths/views/restore.json",
+      "sha256": "487183677b64014933d62be4902f56f2b31e55ca6f7a32491caaaf950895fc64",
+      "bytes": 186152,
+      "state": "within_threshold"
+    },
+    {
+      "path": "artifacts/agg-paths-wide-fp32-v1/paths/baseline/restore.json",
+      "sha256": "9d603525f7bd5a6b008cc3cc3c7829e858a2d7eacebbc209dde2e2fea61dffce",
+      "bytes": 186150,
+      "state": "within_threshold"
+    },
+    {
+      "path": "artifacts/agg-paths-wide-fp32-v1/paths/optimized/restore.json",
+      "sha256": "74f4def49b03201bcecd02a79e1be40b7279b93dbc35db7e96a1e5ccdd3c57ef",
+      "bytes": 186041,
+      "state": "within_threshold"
+    },
+    {
+      "path": "artifacts/agg-paths-wide-fp32-v1/paths/qkv_mask/restore.json",
+      "sha256": "c7b3185bdf0a3adef6041e07513e20b9fcc28dc9e0098b524f58971ba0a1e745",
+      "bytes": 186148,
+      "state": "within_threshold"
+    },
+    {
+      "path": "artifacts/training-continuous-timed-fp32/continuous.json",
+      "sha256": "d8e733af47a18c59cc801206da5f574777419a1d8b1f8bc0dd81d867c0028b75",
+      "bytes": 52047,
+      "state": "completed"
+    },
+    {
+      "path": "artifacts/training-continuous-settle-fp32/continuous.json",
+      "sha256": "7012011d7d4da80ada9068b2bd8e4b5e497f5112c23da0fc5d57fec90fef6200",
+      "bytes": 47512,
+      "state": "completed"
+    },
+    {
+      "path": "artifacts/training-continuous-settle-bf16/continuous.json",
+      "sha256": "dd13aa94a2928521b10130b48d8f1ca287d437c014144ae11df9aaaf0232996c",
+      "bytes": 48110,
+      "state": "completed"
+    },
+    {
+      "path": "artifacts/agg-train-timed-fp32-100-v1/continuous.json",
+      "sha256": "a49b9d6ba4528c97bb6300c77b88226dddb07660d68f231fa48aec2fbbcf775e",
+      "bytes": 226725,
+      "state": "completed"
+    },
+    {
+      "path": "artifacts/agg-train-light64-fp32-100-v1/continuous.json",
+      "sha256": "06bb4a6a1f1fc990714391fef65c0f40fed60c26e492b2342ac0f33a065d1b77",
+      "bytes": 204975,
+      "state": "completed"
+    },
+    {
+      "path": "artifacts/agg-train-fc-fp32-100-v1/continuous.json",
+      "sha256": "3900727777b432f797619413e748236781f7361ab81f4ced011411b2c7e10433",
+      "bytes": 205324,
+      "state": "completed"
+    },
+    {
+      "path": "artifacts/agg-train-settle-fp32-100-v1/continuous.json",
+      "sha256": "cfc4885d1bbc9f63f063913aca295b7b53e145317b8921da9dc29356a339f548",
+      "bytes": 205078,
+      "state": "completed"
+    },
+    {
+      "path": "artifacts/training-installed/results/batched-fp32/resume.json",
+      "sha256": "3778ab8165bcc7db5746d8b9f993965f59431399228a865b83e8b1de89fc6fde",
+      "bytes": 31071,
+      "state": "within_threshold"
+    },
+    {
+      "path": "artifacts/training-installed/results/batched-bf16/resume.json",
+      "sha256": "4ef2994b8d90bc1385f73d8ea8647b6653afd573b93c2167a07426d634c1d0e1",
+      "bytes": 31046,
+      "state": "within_threshold"
+    },
+    {
+      "path": "artifacts/training-installed/results/placed-fp32/resume.json",
+      "sha256": "2a7703bcf0a3e08c6ed44e3b5556bc6357de3077c24e64a67b1e5471ebef1aae",
+      "bytes": 91454,
+      "state": "within_threshold"
+    },
+    {
+      "path": "artifacts/agg-installed-final-v1/installed/batched-fp32/resume.json",
+      "sha256": "26b6ee634006023342c89b011497c1d0fdb612700b91bab9aa2d184ed336c8a7",
+      "bytes": 31267,
+      "state": "within_threshold"
+    },
+    {
+      "path": "artifacts/agg-installed-final-v1/installed/batched-bf16/resume.json",
+      "sha256": "fbe1773ecf4ecd725313c2abf51b7b731adb448f222f312c918d95639d26ef9e",
+      "bytes": 31252,
+      "state": "within_threshold"
+    },
+    {
+      "path": "artifacts/agg-installed-final-v1/installed/placed-fp32/resume.json",
+      "sha256": "0ff425e911541944c4fc1b8793743151718d29d5449d47015f86b825f24a6f1c",
+      "bytes": 74916,
+      "state": "within_threshold"
+    },
+    {
+      "path": "artifacts/worktrees/installed-check/artifacts/capacity-installed-8a22530d-v1/results/batched-fp32/resume.json",
+      "sha256": "d2c7ae0c8116be512ae3872ebff227f19bd94ccb9997fb9b902b5deb3dce0388",
+      "bytes": 32984,
+      "state": "within_threshold"
+    },
+    {
+      "path": "artifacts/worktrees/installed-check/artifacts/capacity-installed-8a22530d-v1/results/batched-bf16/resume.json",
+      "sha256": "fd30c6be772584adf2e9674dac4c3cb7056b20c2e14ef29e056db427a45be690",
+      "bytes": 32983,
+      "state": "within_threshold"
+    },
+    {
+      "path": "artifacts/worktrees/installed-check/artifacts/capacity-installed-8a22530d-v1/results/placed-fp32/resume.json",
+      "sha256": "d7c8baf91f2f3fc0b2241396ed9fa8c5c994ea287ea20d2b0046fca6cd00f17d",
+      "bytes": 118559,
+      "state": "within_threshold"
+    }
+  ],
+  "qualification_note": "Successful local restore does not erase cross-path numerical/support/int64 failures. Original failed results and requisite anchors remain protected."
+}

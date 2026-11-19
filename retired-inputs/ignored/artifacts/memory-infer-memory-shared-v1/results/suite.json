@@ -1,0 +1,812 @@
+{
+  "schema": "tide-memory-candidate-suite-v1",
+  "source": "301a327569aa75aefddd03cac9ca839589db5672",
+  "state": "completed",
+  "started": "2026-11-19T02:35:07.960847+00:00",
+  "arguments": {
+    "phase": "inference",
+    "config": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-infer-memory-shared-v1/source/configs/memory-candidates/9b-memory-shared.json",
+    "output_dir": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-infer-memory-shared-v1/results",
+    "device": "npu:0",
+    "threads": 4,
+    "train_batch": 8,
+    "plan_only": false
+  },
+  "config_file": {
+    "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-infer-memory-shared-v1/source/configs/memory-candidates/9b-memory-shared.json",
+    "sha256": "f01a704ea4cb70122bd7af879f3d4afad6d2bae17d1330f78e4065260a992920"
+  },
+  "config": {
+    "topology": {
+      "kind": "multiscale",
+      "n": 32,
+      "layers": null,
+      "depth": null,
+      "rounds": null,
+      "profile": "5-dd4",
+      "hubs": 4,
+      "partition": "group",
+      "timing": "settle",
+      "hub_mask": "all",
+      "period": null,
+      "probes": null
+    },
+    "d": 768,
+    "memory": "X",
+    "aggregation": "source_residual",
+    "allocation": "quad",
+    "sharing": "independent",
+    "adapter_rank": 8,
+    "budget": null,
+    "attention_backend": "auto",
+    "attention_chunk": 128,
+    "input_dim": null,
+    "region_batch_size": 4,
+    "ssd_scan_backend": "doubling",
+    "ssd_summary_backend": "prefix",
+    "parameter_indexing": "gather",
+    "kv_width": null,
+    "ffn_width": null,
+    "memory_sharing": "region_shared",
+    "checkpoint_reception": false
+  },
+  "cwd": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-infer-memory-shared-v1/source",
+  "executable": "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+  "cpu_affinity": [
+    48,
+    49,
+    50,
+    51
+  ],
+  "physical_devices": "11",
+  "resource_identity": "exclusive_cooperative_queue; external jobs not controlled",
+  "scope": "finite one-candidate FP32 study; completion is not model-quality or strict numerical-equivalence qualification",
+  "policy": {
+    "child_timeout_seconds": 1800,
+    "child_sampled_rss_gib": 96,
+    "allocated_gib": 48,
+    "inference_reserved_gib": 56,
+    "common_batches": [
+      1,
+      8
+    ],
+    "screen_ladder": [
+      12,
+      16,
+      24,
+      32,
+      48,
+      64
+    ],
+    "common_budget_fallback": "only a sampled B8 refusal after successful B1 permits one formal B4; no further screening",
+    "max_screen_measurements": 3,
+    "minimum_relative_gain": 0.03,
+    "selection": "highest observed median stable-decode throughput; formal confirmation kept distinct; finite measured best, not global optimum",
+    "training": "20 continuous updates, same-batch fresh-process restored update, two continuing memory-ledger segments; B8 may fall back to B4 only after explicit sampled device budget refusal"
+  },
+  "children": [
+    {
+      "identity": "common-b1",
+      "state": "completed",
+      "command": [
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+        "-u",
+        "-m",
+        "benchmarks.inference",
+        "--config",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-infer-memory-shared-v1/source/configs/memory-candidates/9b-memory-shared.json",
+        "--subjects",
+        "tide",
+        "--devices",
+        "npu:0",
+        "--precision",
+        "fp32",
+        "--threads",
+        "4",
+        "--batch",
+        "1",
+        "--prefill",
+        "128",
+        "--prefill-chunk",
+        "32",
+        "--decode",
+        "16",
+        "--stream-positions",
+        "0",
+        "--warmup",
+        "2",
+        "--samples",
+        "5",
+        "--audit",
+        "full",
+        "--allocated-budget-gib",
+        "48",
+        "--reserved-budget-gib",
+        "56",
+        "--output",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-infer-memory-shared-v1/results/common-b1.json"
+      ],
+      "output": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-infer-memory-shared-v1/results/common-b1.json",
+      "log": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-infer-memory-shared-v1/results/common-b1.log",
+      "timeout_seconds": 1800,
+      "max_rss_bytes": 103079215104,
+      "phase": "inference",
+      "batch": 1,
+      "formal": true,
+      "warmup": 2,
+      "samples": 5,
+      "started": "2026-11-19T02:35:07.963397+00:00",
+      "pid": 1108072,
+      "sampled_process_tree_peak_rss_bytes": 29745283072,
+      "exit_code": 0,
+      "inner_state": "completed",
+      "result_sha256": "43bf0d99282273addd51d738029928b2f795a872b2797f05ba8fac51fdf9f992",
+      "descendant_identities": [
+        {
+          "pid": 1108072,
+          "start_ticks": 2264187867
+        }
+      ],
+      "ended": "2026-11-19T02:38:32.242131+00:00",
+      "elapsed_seconds": 204.2767630405724,
+      "terminal_review": {
+        "checked": "2026-11-19T02:38:32.245111+00:00",
+        "live": [],
+        "all_recorded_descendants_terminal": true
+      },
+      "outcome": "completed",
+      "review_state": "passed"
+    },
+    {
+      "identity": "common-b8",
+      "state": "completed",
+      "command": [
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+        "-u",
+        "-m",
+        "benchmarks.inference",
+        "--config",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-infer-memory-shared-v1/source/configs/memory-candidates/9b-memory-shared.json",
+        "--subjects",
+        "tide",
+        "--devices",
+        "npu:0",
+        "--precision",
+        "fp32",
+        "--threads",
+        "4",
+        "--batch",
+        "8",
+        "--prefill",
+        "128",
+        "--prefill-chunk",
+        "32",
+        "--decode",
+        "16",
+        "--stream-positions",
+        "0",
+        "--warmup",
+        "2",
+        "--samples",
+        "5",
+        "--audit",
+        "full",
+        "--allocated-budget-gib",
+        "48",
+        "--reserved-budget-gib",
+        "56",
+        "--output",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-infer-memory-shared-v1/results/common-b8.json"
+      ],
+      "output": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-infer-memory-shared-v1/results/common-b8.json",
+      "log": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-infer-memory-shared-v1/results/common-b8.log",
+      "timeout_seconds": 1800,
+      "max_rss_bytes": 103079215104,
+      "phase": "inference",
+      "batch": 8,
+      "formal": true,
+      "warmup": 2,
+      "samples": 5,
+      "started": "2026-11-19T02:38:32.253108+00:00",
+      "pid": 1121577,
+      "sampled_process_tree_peak_rss_bytes": 29750185984,
+      "exit_code": 0,
+      "inner_state": "completed",
+      "result_sha256": "dbdd708f371a78e86c90b90603c1dc2e5218dd67badbf83ad860606c59af4630",
+      "descendant_identities": [
+        {
+          "pid": 1121577,
+          "start_ticks": 2264208296
+        }
+      ],
+      "ended": "2026-11-19T02:44:08.031698+00:00",
+      "elapsed_seconds": 335.77650739997625,
+      "terminal_review": {
+        "checked": "2026-11-19T02:44:08.034104+00:00",
+        "live": [],
+        "all_recorded_descendants_terminal": true
+      },
+      "outcome": "completed",
+      "review_state": "passed"
+    },
+    {
+      "identity": "screen-b12",
+      "state": "completed",
+      "command": [
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+        "-u",
+        "-m",
+        "benchmarks.inference",
+        "--config",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-infer-memory-shared-v1/source/configs/memory-candidates/9b-memory-shared.json",
+        "--subjects",
+        "tide",
+        "--devices",
+        "npu:0",
+        "--precision",
+        "fp32",
+        "--threads",
+        "4",
+        "--batch",
+        "12",
+        "--prefill",
+        "128",
+        "--prefill-chunk",
+        "32",
+        "--decode",
+        "16",
+        "--stream-positions",
+        "0",
+        "--warmup",
+        "1",
+        "--samples",
+        "2",
+        "--audit",
+        "full",
+        "--allocated-budget-gib",
+        "48",
+        "--reserved-budget-gib",
+        "56",
+        "--output",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-infer-memory-shared-v1/results/screen-b12.json"
+      ],
+      "output": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-infer-memory-shared-v1/results/screen-b12.json",
+      "log": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-infer-memory-shared-v1/results/screen-b12.log",
+      "timeout_seconds": 1800,
+      "max_rss_bytes": 103079215104,
+      "phase": "inference",
+      "batch": 12,
+      "formal": false,
+      "warmup": 1,
+      "samples": 2,
+      "started": "2026-11-19T02:44:08.044858+00:00",
+      "pid": 1143498,
+      "sampled_process_tree_peak_rss_bytes": 29754888192,
+      "exit_code": 0,
+      "inner_state": "completed",
+      "result_sha256": "01acc0894274c0cb1489abf931cd6dbfb225cf0e2275339b92bcb61c491dc378",
+      "descendant_identities": [
+        {
+          "pid": 1143498,
+          "start_ticks": 2264241875
+        }
+      ],
+      "ended": "2026-11-19T02:49:47.145139+00:00",
+      "elapsed_seconds": 339.098013561219,
+      "terminal_review": {
+        "checked": "2026-11-19T02:49:47.148417+00:00",
+        "live": [],
+        "all_recorded_descendants_terminal": true
+      },
+      "outcome": "completed",
+      "review_state": "passed"
+    },
+    {
+      "identity": "confirm-b12",
+      "state": "completed",
+      "command": [
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+        "-u",
+        "-m",
+        "benchmarks.inference",
+        "--config",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-infer-memory-shared-v1/source/configs/memory-candidates/9b-memory-shared.json",
+        "--subjects",
+        "tide",
+        "--devices",
+        "npu:0",
+        "--precision",
+        "fp32",
+        "--threads",
+        "4",
+        "--batch",
+        "12",
+        "--prefill",
+        "128",
+        "--prefill-chunk",
+        "32",
+        "--decode",
+        "16",
+        "--stream-positions",
+        "0",
+        "--warmup",
+        "2",
+        "--samples",
+        "5",
+        "--audit",
+        "full",
+        "--allocated-budget-gib",
+        "48",
+        "--reserved-budget-gib",
+        "56",
+        "--output",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-infer-memory-shared-v1/results/confirm-b12.json"
+      ],
+      "output": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-infer-memory-shared-v1/results/confirm-b12.json",
+      "log": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-infer-memory-shared-v1/results/confirm-b12.log",
+      "timeout_seconds": 1800,
+      "max_rss_bytes": 103079215104,
+      "phase": "inference",
+      "batch": 12,
+      "formal": true,
+      "warmup": 2,
+      "samples": 5,
+      "started": "2026-11-19T02:49:47.160231+00:00",
+      "pid": 1167579,
+      "sampled_process_tree_peak_rss_bytes": 29751218176,
+      "exit_code": 0,
+      "inner_state": "completed",
+      "result_sha256": "6ca63ea2243d132323eaf7762ab0051c087e68c1f58d577694fb1ee05034a1af",
+      "descendant_identities": [
+        {
+          "pid": 1167579,
+          "start_ticks": 2264275787
+        }
+      ],
+      "ended": "2026-11-19T02:56:56.437522+00:00",
+      "elapsed_seconds": 429.27445278316736,
+      "terminal_review": {
+        "checked": "2026-11-19T02:56:56.441222+00:00",
+        "live": [],
+        "all_recorded_descendants_terminal": true
+      },
+      "outcome": "completed",
+      "review_state": "passed"
+    }
+  ],
+  "decisions": [
+    {
+      "kind": "screen_selection",
+      "measurement_opportunity": 1,
+      "predictions": [
+        {
+          "state": "projected_fit",
+          "batch": 12,
+          "anchor_batch": 8,
+          "source_identities": [
+            "common-b1",
+            "common-b8"
+          ],
+          "predicted_peak_bytes": {
+            "allocated": 50598350368,
+            "reserved": 54924440608
+          },
+          "slope_bytes_per_batch": {
+            "allocated": 1904424072.0,
+            "reserved": 2264931592.0
+          },
+          "method": "largest observed nonnegative adjacent slope or anchor excess over FP32 weights per batch, whichever is greater; not a hardware/allocator fit guarantee"
+        },
+        {
+          "state": "projected_budget_refusal",
+          "batch": 16,
+          "anchor_batch": 8,
+          "source_identities": [
+            "common-b1",
+            "common-b8"
+          ],
+          "predicted_peak_bytes": {
+            "allocated": 58216046656,
+            "reserved": 63984166976
+          },
+          "slope_bytes_per_batch": {
+            "allocated": 1904424072.0,
+            "reserved": 2264931592.0
+          },
+          "method": "largest observed nonnegative adjacent slope or anchor excess over FP32 weights per batch, whichever is greater; not a hardware/allocator fit guarantee"
+        }
+      ],
+      "selected_batch": 12
+    },
+    {
+      "kind": "measured_gain",
+      "identity": "screen-b12",
+      "previous": "common-b8",
+      "relative_gain": 0.16821870345293277,
+      "stop_below": 0.03
+    },
+    {
+      "kind": "screen_selection",
+      "measurement_opportunity": 2,
+      "predictions": [
+        {
+          "state": "projected_budget_refusal",
+          "batch": 16,
+          "anchor_batch": 12,
+          "source_identities": [
+            "common-b1",
+            "common-b8",
+            "screen-b12"
+          ],
+          "predicted_peak_bytes": {
+            "allocated": 57588398102,
+            "reserved": 64722305024
+          },
+          "slope_bytes_per_batch": {
+            "allocated": 1865196037.3333333,
+            "reserved": 2357198848.0
+          },
+          "method": "largest observed nonnegative adjacent slope or anchor excess over FP32 weights per batch, whichever is greater; not a hardware/allocator fit guarantee"
+        },
+        {
+          "state": "projected_budget_refusal",
+          "batch": 24,
+          "anchor_batch": 12,
+          "source_identities": [
+            "common-b1",
+            "common-b8",
+            "screen-b12"
+          ],
+          "predicted_peak_bytes": {
+            "allocated": 72509966400,
+            "reserved": 83579895808
+          },
+          "slope_bytes_per_batch": {
+            "allocated": 1865196037.3333333,
+            "reserved": 2357198848.0
+          },
+          "method": "largest observed nonnegative adjacent slope or anchor excess over FP32 weights per batch, whichever is greater; not a hardware/allocator fit guarantee"
+        }
+      ],
+      "selected_batch": null
+    }
+  ],
+  "measurements": [
+    {
+      "identity": "common-b1",
+      "batch": 1,
+      "formal": true,
+      "samples": 5,
+      "warmup": 2,
+      "within_budget": true,
+      "stable_decode_positions_per_second": 3.0689712149064325,
+      "stable_decode_samples": [
+        3.0478542841026206,
+        3.0135764997185857,
+        3.0689712149064325,
+        3.0700458298215647,
+        3.073743923810142
+      ],
+      "first_backbone_output_seconds": 0.4964355640113354,
+      "prefill_positions_per_second": 63.569761080447286,
+      "complete_positions_per_second": 19.871744978953362,
+      "peak_bytes": {
+        "allocated": 30454758400,
+        "reserved": 31744589824
+      },
+      "normal_peak_bytes": {
+        "allocated": 30454758400,
+        "reserved": 31744589824
+      },
+      "cold_peak_bytes": {
+        "allocated": 30453444096,
+        "reserved": 31744589824
+      },
+      "parameters": 6936315376,
+      "parameter_bytes": 27745261504,
+      "final_private_state": {
+        "payload_bytes": 693716096,
+        "retained_storage_bytes": 693716096,
+        "dtypes": [
+          "torch.float32",
+          "torch.int64"
+        ],
+        "tensor_count": 280
+      },
+      "output": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-infer-memory-shared-v1/results/common-b1.json",
+      "result_sha256": "43bf0d99282273addd51d738029928b2f795a872b2797f05ba8fac51fdf9f992",
+      "source": {
+        "source_commit": "301a327569aa75aefddd03cac9ca839589db5672",
+        "harness_commit": "301a327569aa75aefddd03cac9ca839589db5672",
+        "tide_content_sha256": "7bc4f743a47f1f208f11850314c6a61ea5bb795085a7503b1b9337a051476d38",
+        "harness_content_sha256": "6aa2a7d116ffc3e581848644c95f5c459adbcfbe2454319f141b76ac099e2d5b",
+        "tide_path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-infer-memory-shared-v1/source/src/tide",
+        "harness_path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-infer-memory-shared-v1/source/benchmarks"
+      },
+      "physical_devices": "11",
+      "input_sha256": "c5f402fae8e34bc660ddb615875cf6bbd1a7d7dabe9792928544df4bc0149564",
+      "initial_parameters": {
+        "sha256": "ce157fc8345bdfa1b788efb239a5fb0a3b706b7655e305c182f145be8d4553fa",
+        "finite": true,
+        "host_copy_chunk_bytes": 8388608,
+        "scope": "dense initial named Parameters before ownership placement; shape/name/raw contiguous bytes"
+      },
+      "work": {
+        "positive_messages": 157344,
+        "message_slots": 928512,
+        "candidate_updates": 82138,
+        "candidate_slots": 122112,
+        "regional_attention_positive_pairs": 19771728,
+        "full_actions": 22357,
+        "kv_attention_effective_pairs": 13456968
+      },
+      "query_packing": {
+        "K": {
+          "calls": 160,
+          "selected_rows": 10837,
+          "executed_rows": 39604
+        },
+        "S": {
+          "calls": 100,
+          "selected_rows": 11520,
+          "executed_rows": 11520
+        }
+      },
+      "audit_location": "matching_reference.audit in output; includes parameter touches, actual matrices/dispatch and retained stream identity",
+      "timing_scope": "median of independent zero-state normal requests; prefill128/chunk32/decode16; stable decode omits first incremental call; no task head"
+    },
+    {
+      "identity": "common-b8",
+      "batch": 8,
+      "formal": true,
+      "samples": 5,
+      "warmup": 2,
+      "within_budget": true,
+      "stable_decode_positions_per_second": 12.287568530775735,
+      "stable_decode_samples": [
+        12.26200828823896,
+        12.287568530775735,
+        12.257176141176132,
+        12.344773573353466,
+        12.334210448994314
+      ],
+      "first_backbone_output_seconds": 0.9029500782489777,
+      "prefill_positions_per_second": 264.65936951734847,
+      "complete_positions_per_second": 80.59775848733426,
+      "peak_bytes": {
+        "allocated": 42980654080,
+        "reserved": 45864714240
+      },
+      "normal_peak_bytes": {
+        "allocated": 42979145216,
+        "reserved": 45864714240
+      },
+      "cold_peak_bytes": {
+        "allocated": 42980654080,
+        "reserved": 45829062656
+      },
+      "parameters": 6936315376,
+      "parameter_bytes": 27745261504,
+      "final_private_state": {
+        "payload_bytes": 5549728768,
+        "retained_storage_bytes": 5549728768,
+        "dtypes": [
+          "torch.float32",
+          "torch.int64"
+        ],
+        "tensor_count": 280
+      },
+      "output": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-infer-memory-shared-v1/results/common-b8.json",
+      "result_sha256": "dbdd708f371a78e86c90b90603c1dc2e5218dd67badbf83ad860606c59af4630",
+      "source": {
+        "source_commit": "301a327569aa75aefddd03cac9ca839589db5672",
+        "harness_commit": "301a327569aa75aefddd03cac9ca839589db5672",
+        "tide_content_sha256": "7bc4f743a47f1f208f11850314c6a61ea5bb795085a7503b1b9337a051476d38",
+        "harness_content_sha256": "6aa2a7d116ffc3e581848644c95f5c459adbcfbe2454319f141b76ac099e2d5b",
+        "tide_path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-infer-memory-shared-v1/source/src/tide",
+        "harness_path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-infer-memory-shared-v1/source/benchmarks"
+      },
+      "physical_devices": "11",
+      "input_sha256": "0d113ed21f9aa2a0edec2ddadd3f210e03f626ce97cffab507c3e1729f8d2f0a",
+      "initial_parameters": {
+        "sha256": "ce157fc8345bdfa1b788efb239a5fb0a3b706b7655e305c182f145be8d4553fa",
+        "finite": true,
+        "host_copy_chunk_bytes": 8388608,
+        "scope": "dense initial named Parameters before ownership placement; shape/name/raw contiguous bytes"
+      },
+      "work": {
+        "positive_messages": 1270019,
+        "message_slots": 7428096,
+        "candidate_updates": 660861,
+        "candidate_slots": 976896,
+        "regional_attention_positive_pairs": 159657012,
+        "full_actions": 180208,
+        "kv_attention_effective_pairs": 109804440
+      },
+      "query_packing": {
+        "K": {
+          "calls": 160,
+          "selected_rows": 88048,
+          "executed_rows": 483336
+        },
+        "S": {
+          "calls": 100,
+          "selected_rows": 92160,
+          "executed_rows": 92160
+        }
+      },
+      "audit_location": "matching_reference.audit in output; includes parameter touches, actual matrices/dispatch and retained stream identity",
+      "timing_scope": "median of independent zero-state normal requests; prefill128/chunk32/decode16; stable decode omits first incremental call; no task head"
+    },
+    {
+      "identity": "screen-b12",
+      "batch": 12,
+      "formal": false,
+      "samples": 2,
+      "warmup": 1,
+      "within_budget": true,
+      "stable_decode_positions_per_second": 14.354567377611886,
+      "stable_decode_samples": [
+        14.420287554292456,
+        14.288847200931318
+      ],
+      "first_backbone_output_seconds": 1.176229178905487,
+      "prefill_positions_per_second": 302.722973821578,
+      "complete_positions_per_second": 93.6947503114609,
+      "peak_bytes": {
+        "allocated": 50127613952,
+        "reserved": 55293509632
+      },
+      "normal_peak_bytes": {
+        "allocated": 50125615616,
+        "reserved": 55293509632
+      },
+      "cold_peak_bytes": {
+        "allocated": 50127613952,
+        "reserved": 54460940288
+      },
+      "parameters": 6936315376,
+      "parameter_bytes": 27745261504,
+      "final_private_state": {
+        "payload_bytes": 8324593152,
+        "retained_storage_bytes": 8324593152,
+        "dtypes": [
+          "torch.float32",
+          "torch.int64"
+        ],
+        "tensor_count": 280
+      },
+      "output": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-infer-memory-shared-v1/results/screen-b12.json",
+      "result_sha256": "01acc0894274c0cb1489abf931cd6dbfb225cf0e2275339b92bcb61c491dc378",
+      "source": {
+        "source_commit": "301a327569aa75aefddd03cac9ca839589db5672",
+        "harness_commit": "301a327569aa75aefddd03cac9ca839589db5672",
+        "tide_content_sha256": "7bc4f743a47f1f208f11850314c6a61ea5bb795085a7503b1b9337a051476d38",
+        "harness_content_sha256": "6aa2a7d116ffc3e581848644c95f5c459adbcfbe2454319f141b76ac099e2d5b",
+        "tide_path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-infer-memory-shared-v1/source/src/tide",
+        "harness_path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-infer-memory-shared-v1/source/benchmarks"
+      },
+      "physical_devices": "11",
+      "input_sha256": "3c05fe41504cd235eae06dc0c750dbbf825da33f7d00f0a409308220e5feb6b6",
+      "initial_parameters": {
+        "sha256": "ce157fc8345bdfa1b788efb239a5fb0a3b706b7655e305c182f145be8d4553fa",
+        "finite": true,
+        "host_copy_chunk_bytes": 8388608,
+        "scope": "dense initial named Parameters before ownership placement; shape/name/raw contiguous bytes"
+      },
+      "work": {
+        "positive_messages": 1903437,
+        "message_slots": 11142144,
+        "candidate_updates": 990516,
+        "candidate_slots": 1465344,
+        "regional_attention_positive_pairs": 239174616,
+        "full_actions": 270173,
+        "kv_attention_effective_pairs": 164708784
+      },
+      "query_packing": {
+        "K": {
+          "calls": 160,
+          "selected_rows": 131933,
+          "executed_rows": 770172
+        },
+        "S": {
+          "calls": 100,
+          "selected_rows": 138240,
+          "executed_rows": 138240
+        }
+      },
+      "audit_location": "matching_reference.audit in output; includes parameter touches, actual matrices/dispatch and retained stream identity",
+      "timing_scope": "median of independent zero-state normal requests; prefill128/chunk32/decode16; stable decode omits first incremental call; no task head"
+    },
+    {
+      "identity": "confirm-b12",
+      "batch": 12,
+      "formal": true,
+      "samples": 5,
+      "warmup": 2,
+      "within_budget": true,
+      "stable_decode_positions_per_second": 14.780756151197446,
+      "stable_decode_samples": [
+        14.780756151197446,
+        14.988170805827867,
+        14.61930848389323,
+        14.66610780692381,
+        14.82551335820582
+      ],
+      "first_backbone_output_seconds": 1.1353984996676445,
+      "prefill_positions_per_second": 306.5024063439464,
+      "complete_positions_per_second": 96.01389138216732,
+      "peak_bytes": {
+        "allocated": 50127613952,
+        "reserved": 55293509632
+      },
+      "normal_peak_bytes": {
+        "allocated": 50125615616,
+        "reserved": 55293509632
+      },
+      "cold_peak_bytes": {
+        "allocated": 50127613952,
+        "reserved": 54460940288
+      },
+      "parameters": 6936315376,
+      "parameter_bytes": 27745261504,
+      "final_private_state": {
+        "payload_bytes": 8324593152,
+        "retained_storage_bytes": 8324593152,
+        "dtypes": [
+          "torch.float32",
+          "torch.int64"
+        ],
+        "tensor_count": 280
+      },
+      "output": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-infer-memory-shared-v1/results/confirm-b12.json",
+      "result_sha256": "6ca63ea2243d132323eaf7762ab0051c087e68c1f58d577694fb1ee05034a1af",
+      "source": {
+        "source_commit": "301a327569aa75aefddd03cac9ca839589db5672",
+        "harness_commit": "301a327569aa75aefddd03cac9ca839589db5672",
+        "tide_content_sha256": "7bc4f743a47f1f208f11850314c6a61ea5bb795085a7503b1b9337a051476d38",
+        "harness_content_sha256": "6aa2a7d116ffc3e581848644c95f5c459adbcfbe2454319f141b76ac099e2d5b",
+        "tide_path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-infer-memory-shared-v1/source/src/tide",
+        "harness_path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-infer-memory-shared-v1/source/benchmarks"
+      },
+      "physical_devices": "11",
+      "input_sha256": "3c05fe41504cd235eae06dc0c750dbbf825da33f7d00f0a409308220e5feb6b6",
+      "initial_parameters": {
+        "sha256": "ce157fc8345bdfa1b788efb239a5fb0a3b706b7655e305c182f145be8d4553fa",
+        "finite": true,
+        "host_copy_chunk_bytes": 8388608,
+        "scope": "dense initial named Parameters before ownership placement; shape/name/raw contiguous bytes"
+      },
+      "work": {
+        "positive_messages": 1903437,
+        "message_slots": 11142144,
+        "candidate_updates": 990516,
+        "candidate_slots": 1465344,
+        "regional_attention_positive_pairs": 239174616,
+        "full_actions": 270173,
+        "kv_attention_effective_pairs": 164708784
+      },
+      "query_packing": {
+        "K": {
+          "calls": 160,
+          "selected_rows": 131933,
+          "executed_rows": 770172
+        },
+        "S": {
+          "calls": 100,
+          "selected_rows": 138240,
+          "executed_rows": 138240
+        }
+      },
+      "audit_location": "matching_reference.audit in output; includes parameter touches, actual matrices/dispatch and retained stream identity",
+      "timing_scope": "median of independent zero-state normal requests; prefill128/chunk32/decode16; stable decode omits first incremental call; no task head",
+      "confirms_screen_identity": "screen-b12"
+    }
+  ],
+  "descendant_supervision": "Linux child subreaper; run_child PID/start tracking and per-child terminal identity review",
+  "stop_reason": "no larger ladder point with projected budget fit",
+  "best_common_or_screen": "screen-b12",
+  "best_formal_measured": "confirm-b12",
+  "ended": "2026-11-19T02:56:56.451913+00:00",
+  "all_executed_children_successful": true
+}

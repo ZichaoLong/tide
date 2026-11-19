@@ -1,0 +1,19 @@
+{
+  "elapsed_seconds": 25.028924614191055,
+  "job_id": "agg-reception-sites-fp32-v1",
+  "logical_device": "npu:0",
+  "logical_devices": [
+    "npu:0"
+  ],
+  "npu_count": 1,
+  "physical_id": 1,
+  "physical_ids": [
+    1
+  ],
+  "priority": 0,
+  "project": "tide-instances",
+  "return_code": 0,
+  "schema_version": 1,
+  "status": "completed",
+  "timestamp": "2026-11-18T12:25:05.551631+00:00"
+}

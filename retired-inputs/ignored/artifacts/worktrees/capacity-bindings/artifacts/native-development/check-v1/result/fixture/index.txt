@@ -1,0 +1,14 @@
+tide-regional-tensors-v1 little-endian float32
+first_bias 1 64 ee60d2f49d4def21
+first_weight 2 64 32 8a28ec99f0b25307
+k_weight 2 32 32 476997489d287544
+o_weight 2 32 32 bd4a1c3a6208a98c
+q_weight 2 32 32 f9556d04c4c0fe38
+readout 1 32 eefa2fbbaacd3c0c
+score 4 4 5 2 3 49f7b2e1c0ccdbb7
+second_bias 1 32 d3907a2ef8908790
+second_weight 2 32 64 6a93a5747f7a5957
+target 4 4 5 2 3 117de7d546428a20
+v_weight 2 32 32 6438c5bc6d0e31c0
+w 4 4 5 2 3 0cd6bce067f92590
+z 5 4 5 2 3 32 dadedc530a85f0d6

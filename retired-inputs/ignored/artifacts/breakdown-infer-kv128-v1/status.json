@@ -1,0 +1,91 @@
+{
+  "state": "passed",
+  "source": "7196fcabd7ab3b401c1ebdb6107442450a99996c",
+  "command": [
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "/mi/data2T/zlong/home/.agents/skills/use-local-ascend/scripts/run_on_free_npu.py",
+    "--job-id",
+    "breakdown-infer-kv128-v1",
+    "--project",
+    "tide-instances",
+    "--priority",
+    "0",
+    "--npu-count",
+    "1",
+    "--max-wait-seconds",
+    "600",
+    "--state-file",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/breakdown-infer-kv128-v1/queue.json",
+    "--candidate-ids",
+    "9",
+    "--",
+    "timeout",
+    "--signal=TERM",
+    "--kill-after=30",
+    "1800",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "-m",
+    "benchmarks.inference_breakdown",
+    "--subject",
+    "tide",
+    "--config",
+    "configs/memory-candidates/9b-kv128.json",
+    "--device",
+    "npu:0",
+    "--batch",
+    "8",
+    "--prefill",
+    "128",
+    "--prefill-chunk",
+    "32",
+    "--decode",
+    "16",
+    "--warmup",
+    "2",
+    "--samples",
+    "5",
+    "--threads",
+    "4",
+    "--output",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/breakdown-infer-kv128-v1/breakdown.json"
+  ],
+  "pid": 1443070,
+  "started": "2026-11-19T03:52:14.178331+00:00",
+  "max_rss_bytes": 137438953472,
+  "peak_rss_bytes": 31010684928,
+  "max_processes": 3,
+  "rss_sample_count": 990,
+  "poll_interval": 0.25,
+  "descendant_supervision": "Linux child subreaper; retained PID/start identities across nested sessions",
+  "child_pid": 1443096,
+  "process_group": 1443096,
+  "elapsed": 401.70744850859046,
+  "descendant_identities": [
+    {
+      "pid": 1443096,
+      "start_ticks": 2264650488
+    },
+    {
+      "pid": 1443102,
+      "start_ticks": 2264650494
+    },
+    {
+      "pid": 1443196,
+      "start_ticks": 2264650551
+    },
+    {
+      "pid": 1443519,
+      "start_ticks": 2264651023
+    },
+    {
+      "pid": 1443630,
+      "start_ticks": 2264651195
+    },
+    {
+      "pid": 1443631,
+      "start_ticks": 2264651195
+    }
+  ],
+  "exit_code": 0,
+  "finished": "2026-11-19T03:58:55.885779+00:00"
+}

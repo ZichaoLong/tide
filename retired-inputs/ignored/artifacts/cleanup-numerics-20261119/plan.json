@@ -1,0 +1,95 @@
+{
+  "schema": 1,
+  "created_utc": "2026-11-19T10:03:10.563442+00:00",
+  "state": "authorized_preparation",
+  "base_commit": "c5bfebaf219f4910965a3d5da0db483b686b25b2",
+  "production_tree": "89f2707e71d989340c12de310797a4c7f4c99f64",
+  "math_revision": "4f5b9f20a4030d68ee66ae2d26e34659a5e37234",
+  "objective": "Retire reviewed completed-use payloads and successful raw profilers, then bounded numerical localization without weakening thresholds.",
+  "cleanup": {
+    "pt_count": 70,
+    "pt_allocated_bytes": 31598239744,
+    "manifest": "artifacts/disk-cleanup-20261119/remaining-priority-candidates.json",
+    "profiler_runs": [
+      "agg-cost-doubling-fp32-v1",
+      "agg-cost-half-fp32-v1",
+      "agg-cost-source-fp32-v1",
+      "training-cost-candidate-trace",
+      "memory-cost-shared-v1",
+      "memory-cost-x-v1"
+    ],
+    "requires": "reviewed per-file immutable manifest, successful relevant results, no live dependency, preserved small results and terminal facts; no whole-worktree removal"
+  },
+  "diagnostics": [
+    {
+      "id": "saved-updates",
+      "device": "cpu",
+      "inputs": "retained FFN medium anchor, baseline/W vjp1 and update1/2",
+      "questions": [
+        "original failures and first-step gradient differences",
+        "independent scalar Decimal AdamW replay from real update1",
+        "sequential counterfactual propagation of parameter/moment/gradient differences; no unique causal fraction"
+      ],
+      "max_result_mib": 64
+    },
+    {
+      "id": "fp32-local",
+      "device": "cpu first; idle NPU only if needed",
+      "questions": [
+        "selected meaningful same-input value/VJP and gradient ownership checks",
+        "first differing upstream boundary if saved gradients alone do not explain cause"
+      ],
+      "scope": "one or two bounded witnesses, no full-path dump matrix"
+    },
+    {
+      "id": "routing",
+      "device": "one idle NPU",
+      "inputs": "fixed original shared9B seed751/input752, B8 prompt128/chunk32/decode16, region_batch1/4",
+      "questions": [
+        "strict parameter/input identity",
+        "first received/score/support/int64 difference in canonical node coordinates",
+        "same-input allocation replay and independent scalar formula"
+      ],
+      "max_result_mib": 256
+    },
+    {
+      "id": "bf16-small",
+      "device": "cpu or one idle NPU",
+      "scope": "at most one original X or narrow-KV third-update witness if practical; no whole failed matrix"
+    }
+  ],
+  "budgets": {
+    "cpu_concurrent_jobs_max": 2,
+    "threads_per_cpu_job_max": 32,
+    "cpu_total_service_hours_max": 4,
+    "rss_per_job_gib_max": 128,
+    "npu_concurrent_devices_max": 1,
+    "npu_total_service_hours_max": 2,
+    "npu_max_single_job_seconds": 2700,
+    "npu_queue_seconds": 600,
+    "new_artifacts_gib_max": 4,
+    "new_checkpoint_gib_max": 0,
+    "stop_conditions": [
+      "resource/time/output cap",
+      "first concrete localized mechanism or bounded unresolved witness",
+      "no shared-card admission",
+      "no 9B training or performance search"
+    ]
+  },
+  "preserve": {
+    "user_files_sha256": {
+      "docs/tide-learning-lab-TL-REQ-004-handoff.md": "69607cba0a7e87a260929ed5741d996103cef804c51f3fa2c02b3bd7a454a220",
+      "docs/tide-learning-lab-TL-REQ-005-handoff.md": "83bec6f6eaa476ae9d7c859fe168333ac2ee564433297f36ab9aa1ef33c38732",
+      "docs/tide-learning-lab-TL-REQ-006-handoff.md": "8706f0477c8f31d0c8337e55ba7f8f5b28bb9a455656586fa1585c82ec58b4df",
+      "docs/upstream-lh-semantics-discussion-20261113.md": "3118419cb014570395323baf887ffe5a7e797f97049e85eacef26ecb1fd81c07"
+    },
+    "other": [
+      "all unresolved failure inputs until validated smaller reproducer exists",
+      "fixed math original bytes",
+      "main .git and downstream shared worktree/dependencies",
+      "unique untracked experiment source",
+      "original tolerance failures and previously observed support/time differences"
+    ]
+  },
+  "lifecycle": "commit tools before formal run; git archive frozen source; background.slice finite jobs with persistent logs; inspect tracked descendants; evidence separate commit; normal push only"
+}

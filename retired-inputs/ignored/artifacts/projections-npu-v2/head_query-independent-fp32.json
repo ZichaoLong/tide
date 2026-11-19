@@ -1,0 +1,105 @@
+{
+  "source": "3b9f919b560d829fbed70302749ba4c9584bbd9b",
+  "arguments": {
+    "device": "npu:0",
+    "precision": "fp32",
+    "kind": "head_query",
+    "sharing": "independent",
+    "mode": "train",
+    "d": 128,
+    "nodes": 8,
+    "batch": 8,
+    "length": 128,
+    "threads": 4,
+    "steps": 5,
+    "warmup": 2,
+    "output": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/projections-npu-v2/head_query-independent-fp32.json"
+  },
+  "policy": {
+    "name": "fp32",
+    "device": "npu:0",
+    "parameters": "float32",
+    "input": "float32",
+    "matrix_arithmetic": "float32",
+    "normalization_mass_allocation": "float32",
+    "kv_keys_values": "float32",
+    "kv_summary_and_ssd_state": "float32",
+    "logical_time_indices": "int64",
+    "parameter_gradients": "float32",
+    "master_weights": "parameters_are_fp32_masters; no_separate_copy",
+    "adamw_moments": "float32",
+    "attention": "native_by_shape_and_prior; math/tiled_accumulate_float32",
+    "loss": "float32",
+    "autocast_cache": false
+  },
+  "parameters": 131072,
+  "torch": "2.12.0+cpu",
+  "cpu_affinity": [
+    56,
+    57,
+    58,
+    59
+  ],
+  "host_load_before": [
+    41.77,
+    39.12,
+    37.09
+  ],
+  "input_sha256": "827b6e9def9eaaf1c137aba6fae74fd0f6f4575476e4983c0e7336e47324d77d",
+  "physical_devices": "1",
+  "boundary": "resident input; projection concat/copy included; train includes loss/backward/AdamW/sync",
+  "rows": [
+    {
+      "candidate": "native",
+      "seconds": [
+        0.001955140382051468,
+        0.00193743035197258,
+        0.002017199993133545,
+        0.0019472911953926086,
+        0.001889556646347046
+      ],
+      "median_seconds": 0.0019472911953926086,
+      "peak_device_bytes": 31604224,
+      "process_peak_rss_kib_cumulative": 1902132,
+      "finite": true,
+      "arithmetic": [
+        {
+          "operator": "aten.bmm.default",
+          "inputs": [
+            "npu:float32"
+          ],
+          "outputs": [
+            "npu:float32"
+          ],
+          "calls": 4
+        }
+      ]
+    },
+    {
+      "candidate": "both",
+      "seconds": [
+        0.001531556248664856,
+        0.0015097707509994507,
+        0.001541081815958023,
+        0.0015572570264339447,
+        0.0014901645481586456
+      ],
+      "median_seconds": 0.001531556248664856,
+      "peak_device_bytes": 32131584,
+      "process_peak_rss_kib_cumulative": 1902132,
+      "finite": true,
+      "arithmetic": [
+        {
+          "operator": "aten.bmm.default",
+          "inputs": [
+            "npu:float32"
+          ],
+          "outputs": [
+            "npu:float32"
+          ],
+          "calls": 1
+        }
+      ]
+    }
+  ]
+}

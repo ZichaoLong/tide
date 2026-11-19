@@ -1,0 +1,220 @@
+{
+  "batched-fp32": {
+    "parameters": {
+      "tensor_counts": {
+        "torch.float32": 210,
+        "torch.int64": 27
+      },
+      "elements": {
+        "torch.float32": 3301216,
+        "torch.int64": 1536
+      },
+      "none_fields": []
+    },
+    "gradients": {
+      "tensor_counts": {
+        "torch.float32": 204
+      },
+      "elements": {
+        "torch.float32": 3227488
+      },
+      "none_fields": [
+        "root.memories.S.summary.weight",
+        "root.memories.S.summary.left",
+        "root.memories.S.summary.right",
+        "root.memories.S.read.weight",
+        "root.memories.S.read.left",
+        "root.memories.S.read.right"
+      ]
+    },
+    "optimizer": {
+      "tensor_counts": {
+        "torch.float32": 612
+      },
+      "elements": {
+        "torch.float32": 6455180
+      },
+      "none_fields": [
+        "root.param_groups.0.fused"
+      ]
+    },
+    "private_state": {
+      "tensor_counts": {
+        "torch.int64": 48,
+        "torch.float32": 178
+      },
+      "elements": {
+        "torch.int64": 704,
+        "torch.float32": 162784
+      },
+      "none_fields": []
+    },
+    "nonfinite": []
+  },
+  "batched-bf16": {
+    "parameters": {
+      "tensor_counts": {
+        "torch.float32": 210,
+        "torch.int64": 27
+      },
+      "elements": {
+        "torch.float32": 3301216,
+        "torch.int64": 1536
+      },
+      "none_fields": []
+    },
+    "gradients": {
+      "tensor_counts": {
+        "torch.float32": 204
+      },
+      "elements": {
+        "torch.float32": 3227488
+      },
+      "none_fields": [
+        "root.memories.S.summary.weight",
+        "root.memories.S.summary.left",
+        "root.memories.S.summary.right",
+        "root.memories.S.read.weight",
+        "root.memories.S.read.left",
+        "root.memories.S.read.right"
+      ]
+    },
+    "optimizer": {
+      "tensor_counts": {
+        "torch.float32": 612
+      },
+      "elements": {
+        "torch.float32": 6455180
+      },
+      "none_fields": [
+        "root.param_groups.0.fused"
+      ]
+    },
+    "private_state": {
+      "tensor_counts": {
+        "torch.int64": 48,
+        "torch.float32": 146,
+        "torch.bfloat16": 32
+      },
+      "elements": {
+        "torch.int64": 704,
+        "torch.float32": 117728,
+        "torch.bfloat16": 45056
+      },
+      "none_fields": []
+    },
+    "nonfinite": []
+  },
+  "placed-fp32": {
+    "parameters": {
+      "tensor_counts": {
+        "torch.float32": 418,
+        "torch.int64": 108
+      },
+      "elements": {
+        "torch.float32": 3544192,
+        "torch.int64": 3744
+      },
+      "none_fields": []
+    },
+    "gradients": {
+      "tensor_counts": {
+        "torch.float32": 409
+      },
+      "elements": {
+        "torch.float32": 3535872
+      },
+      "none_fields": [
+        "root.regional.31.readout",
+        "root.regional.31.q.weight",
+        "root.regional.31.k.weight",
+        "root.regional.31.v.weight",
+        "root.regional.31.o.weight",
+        "root.regional.31.first.weight",
+        "root.regional.31.first.bias",
+        "root.regional.31.second.weight",
+        "root.regional.31.second.bias"
+      ]
+    },
+    "optimizer": {
+      "tensor_counts": {
+        "torch.float32": 1227
+      },
+      "elements": {
+        "torch.float32": 7072153
+      },
+      "none_fields": [
+        "root.param_groups.0.fused"
+      ]
+    },
+    "private_state": {
+      "tensor_counts": {
+        "torch.int64": 48,
+        "torch.float32": 224
+      },
+      "elements": {
+        "torch.int64": 704,
+        "torch.float32": 162784
+      },
+      "none_fields": []
+    },
+    "nonfinite": []
+  },
+  "placed-bf16": {
+    "parameters": {
+      "tensor_counts": {
+        "torch.float32": 418,
+        "torch.int64": 108
+      },
+      "elements": {
+        "torch.float32": 3544192,
+        "torch.int64": 3744
+      },
+      "none_fields": []
+    },
+    "gradients": {
+      "tensor_counts": {
+        "torch.float32": 409
+      },
+      "elements": {
+        "torch.float32": 3535872
+      },
+      "none_fields": [
+        "root.regional.31.readout",
+        "root.regional.31.q.weight",
+        "root.regional.31.k.weight",
+        "root.regional.31.v.weight",
+        "root.regional.31.o.weight",
+        "root.regional.31.first.weight",
+        "root.regional.31.first.bias",
+        "root.regional.31.second.weight",
+        "root.regional.31.second.bias"
+      ]
+    },
+    "optimizer": {
+      "tensor_counts": {
+        "torch.float32": 1227
+      },
+      "elements": {
+        "torch.float32": 7072153
+      },
+      "none_fields": [
+        "root.param_groups.0.fused"
+      ]
+    },
+    "private_state": {
+      "tensor_counts": {
+        "torch.int64": 48,
+        "torch.float32": 192,
+        "torch.bfloat16": 32
+      },
+      "elements": {
+        "torch.int64": 704,
+        "torch.float32": 117728,
+        "torch.bfloat16": 45056
+      },
+      "none_fields": []
+    },
+    "nonfinite": []
+  }
+}

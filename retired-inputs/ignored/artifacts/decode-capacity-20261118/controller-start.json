@@ -1,0 +1,28 @@
+{
+  "recorded_at_utc": "2026-11-18T15:56:31.191716+00:00",
+  "inputs": [
+    {
+      "path": "artifacts/decode-capacity-20261118/continue_search.py",
+      "bytes": 9134,
+      "sha256": "51c385606e653e8d2da54e89c6653a24b239c81a95b97b385617766b4e5c10be"
+    },
+    {
+      "path": "artifacts/decode-capacity-20261118/manage.py",
+      "bytes": 6774,
+      "sha256": "0ab0c7d3a684c56240c4ef2fef7332684a4320013f14eb45e6fbd2bc75b61777"
+    },
+    {
+      "path": "artifacts/decode-capacity-20261118/preflight.json",
+      "bytes": 13757,
+      "sha256": "eadc14c294a845ce58ac08d1130c6c049c8e7c4ac85e9f1f17fe97ce582b494a"
+    }
+  ],
+  "submission_owner": "continue_search.py; main agent monitors and reviews; no concurrent manual submissions",
+  "slots": {
+    "0": "four devices",
+    "1": "two devices",
+    "2": "one device"
+  },
+  "source": "98210ae3a1758de99c0740dfe6f9fe04b07cefc6",
+  "unchanged_scope": "remaining preflight series;48/56GiB;maximum8screens/2confirmations;complete source unchanged"
+}

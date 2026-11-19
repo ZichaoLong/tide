@@ -1,0 +1,91 @@
+{
+  "state": "passed",
+  "source": "8a22530dae69d9f1fa5ead4a01d1798fd1dfe0ee",
+  "command": [
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "/mi/data2T/zlong/home/.agents/skills/use-local-ascend/scripts/run_on_free_npu.py",
+    "--job-id",
+    "native-regional-npu-pool-v1",
+    "--project",
+    "tide-instances",
+    "--priority",
+    "0",
+    "--npu-count",
+    "1",
+    "--max-wait-seconds",
+    "1200",
+    "--state-file",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/native-regional-npu-pool-v1/queue.json",
+    "--",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "-c",
+    "import os,sys,importlib.util\nfrom pathlib import Path\nfrom scripts.job import atomic,enable_subreaper\nfrom benchmarks.programme import run_child\nroot=Path(\"/mi/data2T/zlong/home/llm/graph-execution-foundation\");out=Path(\"/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/native-regional-npu-pool-v1\")\nspec=importlib.util.spec_from_file_location(\"native_reference\",Path.cwd()/\"native/regional/reference.py\")\nref=importlib.util.module_from_spec(spec);spec.loader.exec_module(ref)\ncheck=root/\"artifacts/native-regional-npu-same-v1/checks\"\nbinary=root/\"artifacts/worktrees/capacity-bindings/artifacts/native-89ce08ff-cpu/build-NPU/tide-regional\"\nlauncher=root/\"artifacts/native-sdk-launcher-89ce08ff.sh\"\nrecord=dict(source=os.environ[\"TIDE_SOURCE_COMMIT\"],state=\"running\",physical_devices=os.environ.get(\"ASCEND_RT_VISIBLE_DEVICES\"),children=[])\npersist=lambda:atomic(out/\"programme.json\",record)\nenable_subreaper()\nfor dtype in (\"float32\",\"bfloat16\"):\n for workers in (2,4):\n  for resumed in (False,True):\n   name=f\"{dtype}-w{workers}-\"+(\"restored\" if resumed else \"train\")\n   path=out/name\n   command=[str(launcher),str(binary),\"--device\",\"npu:0\",\"--dtype\",dtype,\"--mode\",\"train\",\"--workers\",str(workers),\"--inner-threads\",\"1\",\"--streams\",\"pool\",\"--warmup\",\"1\",\"--repeats\",\"1\" if resumed else \"3\",\"--input-dir\",str(check/\"fixture\"),\"--output-dir\",str(path)]\n   if resumed:command+=[\"--resume\",str(out/f\"{dtype}-w{workers}-train\"/\"checkpoint.pt\")]\n   row=dict(identity=name,command=command,output=str(path/\"result.json\"),log=str(out/(name+\".log\")),timeout_seconds=120,max_rss_bytes=12*2**30)\n   record[\"children\"].append(row);persist();run_child(row,persist,supervisor_pid=os.getpid())\n   if row[\"state\"]!=\"completed\":\n    record[\"state\"]=\"execution_failed\";persist();sys.exit(1)\n   reference=check/(f\"native-{dtype}-restored-w1\" if resumed else f\"python-{dtype}-train\")/\"tensors\"\n   row[\"reference\"]=str(reference)\n   row[\"comparison\"]=ref.compare(ref.read_bundle(path/\"tensors\"),ref.read_bundle(reference),rtol=2e-5,atol=2e-6)\n   persist()\nrecord[\"state\"]=\"passed\" if all(r[\"comparison\"][\"state\"]==\"passed\" for r in record[\"children\"]) else \"failed\"\npersist();sys.exit(record[\"state\"]!=\"passed\")\n"
+  ],
+  "pid": 1123491,
+  "started": "2026-11-18T07:57:38.533186+00:00",
+  "max_rss_bytes": 17179869184,
+  "peak_rss_bytes": 2861801472,
+  "max_processes": 3,
+  "rss_sample_count": 119,
+  "poll_interval": 0.25,
+  "descendant_supervision": "Linux child subreaper; retained PID/start identities across nested sessions",
+  "child_pid": 1123533,
+  "process_group": 1123533,
+  "elapsed": 59.30911812931299,
+  "descendant_identities": [
+    {
+      "pid": 1123533,
+      "start_ticks": 2257482924
+    },
+    {
+      "pid": 1123534,
+      "start_ticks": 2257482930
+    },
+    {
+      "pid": 1123607,
+      "start_ticks": 2257482987
+    },
+    {
+      "pid": 1123860,
+      "start_ticks": 2257483472
+    },
+    {
+      "pid": 1123982,
+      "start_ticks": 2257483649
+    },
+    {
+      "pid": 1124002,
+      "start_ticks": 2257483728
+    },
+    {
+      "pid": 1124845,
+      "start_ticks": 2257485221
+    },
+    {
+      "pid": 1125353,
+      "start_ticks": 2257486196
+    },
+    {
+      "pid": 1125872,
+      "start_ticks": 2257486573
+    },
+    {
+      "pid": 1126055,
+      "start_ticks": 2257486950
+    },
+    {
+      "pid": 1126272,
+      "start_ticks": 2257487409
+    },
+    {
+      "pid": 1126539,
+      "start_ticks": 2257487885
+    },
+    {
+      "pid": 1126959,
+      "start_ticks": 2257488254
+    }
+  ],
+  "exit_code": 0,
+  "finished": "2026-11-18T07:58:37.842304+00:00"
+}

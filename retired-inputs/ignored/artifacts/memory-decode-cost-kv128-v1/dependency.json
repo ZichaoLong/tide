@@ -1,0 +1,50 @@
+{
+  "state": "released",
+  "started": "2026-11-19T02:49:19.162636+00:00",
+  "units": [
+    "tide-memory-decode-cost-x-v1.service"
+  ],
+  "command": [
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "/mi/data2T/zlong/home/.agents/skills/use-local-ascend/scripts/run_on_free_npu.py",
+    "--job-id",
+    "memory-decode-cost-kv128-v1",
+    "--project",
+    "tide-instances",
+    "--priority",
+    "0",
+    "--npu-count",
+    "1",
+    "--max-wait-seconds",
+    "600",
+    "--state-file",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-decode-cost-kv128-v1/queue.json",
+    "--",
+    "timeout",
+    "--signal=TERM",
+    "--kill-after=30",
+    "900",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "-m",
+    "benchmarks.memory_decode_costs",
+    "--config",
+    "configs/memory-candidates/9b-kv128.json",
+    "--device",
+    "npu:0",
+    "--output",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-decode-cost-kv128-v1/costs.json"
+  ],
+  "boundary": "resource sequencing only; prior success not required",
+  "observations": {
+    "tide-memory-decode-cost-x-v1.service": {
+      "MainPID": "0",
+      "Result": "success",
+      "LoadState": "not-found",
+      "ActiveState": "inactive",
+      "SubState": "dead"
+    }
+  },
+  "busy": [],
+  "elapsed_seconds": 470.9070947058499,
+  "finished": "2026-11-19T02:57:10.069735+00:00"
+}

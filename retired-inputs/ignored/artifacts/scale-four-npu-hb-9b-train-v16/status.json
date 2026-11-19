@@ -1,0 +1,79 @@
+{
+  "state": "passed",
+  "source": "0992b467584c1f603314ed04d8efe8596a14f576",
+  "command": [
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/scale-four-npu-hb-9b-train-v16/source/scripts/wait_units.py",
+    "--status",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/scale-four-npu-hb-9b-train-v16/dependency.json",
+    "--seconds",
+    "14400",
+    "--unit",
+    "tide-scale-two-npu-hb-17b-v16.service",
+    "--",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "/mi/data2T/zlong/home/.agents/skills/use-local-ascend/scripts/run_on_free_npu.py",
+    "--job-id",
+    "scale-four-npu-hb-9b-train-v16",
+    "--project",
+    "tide-instances",
+    "--priority",
+    "0",
+    "--npu-count",
+    "4",
+    "--max-wait-seconds",
+    "1800",
+    "--state-file",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/scale-four-npu-hb-9b-train-v16/queue.json",
+    "--",
+    "numactl",
+    "--membind=5",
+    "--physcpubind=208-223",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "-c",
+    "import os,pathlib,subprocess\nfrom scripts.job import atomic\nroot=pathlib.Path(\"/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/scale-four-npu-hb-9b-train-v16\")\ncommand=['/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python', '-c', 'import subprocess,sys; codes=[subprocess.call([sys.executable,\"-m\",\"scripts.check_placement\",\"--devices\",\"npu:0\",\"npu:1\",\"npu:2\",\"npu:3\",\"--mode\",\"train\",\"--config\",\"configs/scale/hb-9b.json\",\"--precision\",p,\"--threads\",\"16\",\"--batch\",\"1\",\"--length\",\"8\",\"--steps\",\"2\",\"--no-foreach\",\"--output\",\"/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/scale-four-npu-hb-9b-train-v16/\"+p+\".json\"]) for p in (\"fp32\",\"bf16\")]; sys.exit(int(any(codes)))']\natomic(root/\"numa-policy.json\",dict(policy='--membind=5',affinity=sorted(os.sched_getaffinity(0)),maps=pathlib.Path(\"/proc/self/numa_maps\").read_text(),status=pathlib.Path(\"/proc/self/status\").read_text(),numactl=subprocess.check_output([\"numactl\",\"--show\"],text=True),supersedes='scale-four-npu-hb-9b-train-v14'))\nos.execv(command[0],command)"
+  ],
+  "pid": 3581791,
+  "started": "2026-11-18T04:52:19.894148+00:00",
+  "max_rss_bytes": 171798691840,
+  "peak_rss_bytes": 37235249152,
+  "max_processes": 3,
+  "rss_sample_count": 1543,
+  "poll_interval": 0.25,
+  "descendant_supervision": "Linux child subreaper; retained PID/start identities across nested sessions",
+  "child_pid": 3581820,
+  "process_group": 3581820,
+  "elapsed": 668.4086751528084,
+  "descendant_identities": [
+    {
+      "pid": 478173,
+      "start_ticks": 2256409639
+    },
+    {
+      "pid": 478229,
+      "start_ticks": 2256409698
+    },
+    {
+      "pid": 478679,
+      "start_ticks": 2256410174
+    },
+    {
+      "pid": 478776,
+      "start_ticks": 2256410347
+    },
+    {
+      "pid": 478778,
+      "start_ticks": 2256410353
+    },
+    {
+      "pid": 485608,
+      "start_ticks": 2256424089
+    },
+    {
+      "pid": 3581820,
+      "start_ticks": 2256371060
+    }
+  ],
+  "exit_code": 0,
+  "finished": "2026-11-18T05:03:28.302825+00:00"
+}

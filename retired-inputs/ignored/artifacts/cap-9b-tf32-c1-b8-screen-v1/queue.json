@@ -1,0 +1,19 @@
+{
+  "elapsed_seconds": 83.69789450988173,
+  "job_id": "cap-9b-tf32-c1-b8-screen-v1",
+  "logical_device": "npu:0",
+  "logical_devices": [
+    "npu:0"
+  ],
+  "npu_count": 1,
+  "physical_id": 4,
+  "physical_ids": [
+    4
+  ],
+  "priority": 0,
+  "project": "tide-instances",
+  "return_code": 0,
+  "schema_version": 1,
+  "status": "completed",
+  "timestamp": "2026-11-18T15:42:48.057408+00:00"
+}

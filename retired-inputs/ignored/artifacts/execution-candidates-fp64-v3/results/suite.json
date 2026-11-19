@@ -1,0 +1,337 @@
+{
+  "schema": "tide-execution-suite-v1",
+  "source": "efca7198570e8ee7a21ddccd81165eb36bdb269a",
+  "state": "completed",
+  "physical_devices": null,
+  "scope": "independent numerical children; execution status and finite deviations are separate",
+  "children": [
+    {
+      "identity": "hb-multiscale-x-settle-fp64-recompute",
+      "state": "completed",
+      "output": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/execution-candidates-fp64-v3/results/hb-multiscale-x-settle-fp64-recompute.json",
+      "log": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/execution-candidates-fp64-v3/results/hb-multiscale-x-settle-fp64-recompute.log",
+      "timeout_seconds": 180.0,
+      "max_rss_bytes": 51539607552,
+      "command": [
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+        "-m",
+        "scripts.check_execution",
+        "--config",
+        "configs/hb-multiscale-x-settle.json",
+        "--overrides",
+        "{\"checkpoint_regions\": true}",
+        "--device",
+        "cpu",
+        "--precision",
+        "fp64",
+        "--length",
+        "8",
+        "--threads",
+        "4",
+        "--output",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/execution-candidates-fp64-v3/results/hb-multiscale-x-settle-fp64-recompute.json"
+      ],
+      "started": "2026-11-18T07:28:26.203584+00:00",
+      "pid": 1008052,
+      "sampled_process_tree_peak_rss_bytes": 2782863360,
+      "exit_code": 0,
+      "inner_state": "within_threshold",
+      "result_sha256": "2f01ea955ebd49fe1af79417e06a6b4c37b3562f5c5e6ce399f3a78f4794fb15",
+      "descendant_identities": [
+        {
+          "pid": 1008052,
+          "start_ticks": 2257307691
+        }
+      ],
+      "ended": "2026-11-18T07:29:32.243201+00:00",
+      "elapsed_seconds": 66.03757134824991
+    },
+    {
+      "identity": "hb-multiscale-x-settle-fp64-local_math",
+      "state": "completed",
+      "output": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/execution-candidates-fp64-v3/results/hb-multiscale-x-settle-fp64-local_math.json",
+      "log": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/execution-candidates-fp64-v3/results/hb-multiscale-x-settle-fp64-local_math.log",
+      "timeout_seconds": 180.0,
+      "max_rss_bytes": 51539607552,
+      "command": [
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+        "-m",
+        "scripts.check_execution",
+        "--config",
+        "configs/hb-multiscale-x-settle.json",
+        "--overrides",
+        "{\"local_attention_backend\": \"math\"}",
+        "--device",
+        "cpu",
+        "--precision",
+        "fp64",
+        "--length",
+        "8",
+        "--threads",
+        "4",
+        "--output",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/execution-candidates-fp64-v3/results/hb-multiscale-x-settle-fp64-local_math.json"
+      ],
+      "started": "2026-11-18T07:29:32.245735+00:00",
+      "pid": 1013256,
+      "sampled_process_tree_peak_rss_bytes": 2778439680,
+      "exit_code": 0,
+      "inner_state": "within_threshold",
+      "result_sha256": "afbd7fdfd1578e384c77252b938654d64132065c133c70f59d24127da3fcc073",
+      "descendant_identities": [
+        {
+          "pid": 1013256,
+          "start_ticks": 2257314295
+        }
+      ],
+      "ended": "2026-11-18T07:30:25.983572+00:00",
+      "elapsed_seconds": 53.735806200653315
+    },
+    {
+      "identity": "hb-multiscale-x-settle-fp64-batch4",
+      "state": "completed",
+      "output": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/execution-candidates-fp64-v3/results/hb-multiscale-x-settle-fp64-batch4.json",
+      "log": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/execution-candidates-fp64-v3/results/hb-multiscale-x-settle-fp64-batch4.log",
+      "timeout_seconds": 180.0,
+      "max_rss_bytes": 51539607552,
+      "command": [
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+        "-m",
+        "scripts.check_execution",
+        "--config",
+        "configs/hb-multiscale-x-settle.json",
+        "--overrides",
+        "{\"region_batch_size\": 4}",
+        "--device",
+        "cpu",
+        "--precision",
+        "fp64",
+        "--length",
+        "8",
+        "--threads",
+        "4",
+        "--output",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/execution-candidates-fp64-v3/results/hb-multiscale-x-settle-fp64-batch4.json"
+      ],
+      "started": "2026-11-18T07:30:25.985982+00:00",
+      "pid": 1017193,
+      "sampled_process_tree_peak_rss_bytes": 3038887936,
+      "exit_code": 0,
+      "inner_state": "within_threshold",
+      "result_sha256": "de9fb04be1b749b06c9d5155e3aaa1e9e8d0d4f599ea70e88420b3fac40e6e11",
+      "descendant_identities": [
+        {
+          "pid": 1017193,
+          "start_ticks": 2257319669
+        }
+      ],
+      "ended": "2026-11-18T07:31:12.909900+00:00",
+      "elapsed_seconds": 46.92204248905182
+    },
+    {
+      "identity": "hb-multiscale-x-settle-fp64-combined",
+      "state": "completed",
+      "output": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/execution-candidates-fp64-v3/results/hb-multiscale-x-settle-fp64-combined.json",
+      "log": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/execution-candidates-fp64-v3/results/hb-multiscale-x-settle-fp64-combined.log",
+      "timeout_seconds": 180.0,
+      "max_rss_bytes": 51539607552,
+      "command": [
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+        "-m",
+        "scripts.check_execution",
+        "--config",
+        "configs/hb-multiscale-x-settle.json",
+        "--overrides",
+        "{\"checkpoint_regions\": true, \"region_batch_size\": 4, \"local_attention_backend\": \"math\"}",
+        "--device",
+        "cpu",
+        "--precision",
+        "fp64",
+        "--length",
+        "8",
+        "--threads",
+        "4",
+        "--output",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/execution-candidates-fp64-v3/results/hb-multiscale-x-settle-fp64-combined.json"
+      ],
+      "started": "2026-11-18T07:31:12.912268+00:00",
+      "pid": 1020811,
+      "sampled_process_tree_peak_rss_bytes": 2775040000,
+      "exit_code": 0,
+      "inner_state": "within_threshold",
+      "result_sha256": "beb946bcd0f3867f22aacbfa49397d5b541542b544eac1f2ed0a6e4be2b7b7b4",
+      "descendant_identities": [
+        {
+          "pid": 1020811,
+          "start_ticks": 2257324362
+        }
+      ],
+      "ended": "2026-11-18T07:32:05.514776+00:00",
+      "elapsed_seconds": 52.599851336330175
+    },
+    {
+      "identity": "hb-multiscale-x-timed-fp64-recompute",
+      "state": "completed",
+      "output": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/execution-candidates-fp64-v3/results/hb-multiscale-x-timed-fp64-recompute.json",
+      "log": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/execution-candidates-fp64-v3/results/hb-multiscale-x-timed-fp64-recompute.log",
+      "timeout_seconds": 180.0,
+      "max_rss_bytes": 51539607552,
+      "command": [
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+        "-m",
+        "scripts.check_execution",
+        "--config",
+        "configs/hb-multiscale-x-timed.json",
+        "--overrides",
+        "{\"checkpoint_regions\": true}",
+        "--device",
+        "cpu",
+        "--precision",
+        "fp64",
+        "--length",
+        "8",
+        "--threads",
+        "4",
+        "--output",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/execution-candidates-fp64-v3/results/hb-multiscale-x-timed-fp64-recompute.json"
+      ],
+      "started": "2026-11-18T07:32:05.518257+00:00",
+      "pid": 1024263,
+      "sampled_process_tree_peak_rss_bytes": 3046752256,
+      "exit_code": 0,
+      "inner_state": "within_threshold",
+      "result_sha256": "ac0001917d36e9bb0f60e981b269d2b83dccb17cc1878f15b34deb91b38a1303",
+      "descendant_identities": [
+        {
+          "pid": 1024263,
+          "start_ticks": 2257329622
+        }
+      ],
+      "ended": "2026-11-18T07:33:54.314421+00:00",
+      "elapsed_seconds": 108.79402738437057
+    },
+    {
+      "identity": "hb-multiscale-x-timed-fp64-local_math",
+      "state": "completed",
+      "output": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/execution-candidates-fp64-v3/results/hb-multiscale-x-timed-fp64-local_math.json",
+      "log": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/execution-candidates-fp64-v3/results/hb-multiscale-x-timed-fp64-local_math.log",
+      "timeout_seconds": 180.0,
+      "max_rss_bytes": 51539607552,
+      "command": [
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+        "-m",
+        "scripts.check_execution",
+        "--config",
+        "configs/hb-multiscale-x-timed.json",
+        "--overrides",
+        "{\"local_attention_backend\": \"math\"}",
+        "--device",
+        "cpu",
+        "--precision",
+        "fp64",
+        "--length",
+        "8",
+        "--threads",
+        "4",
+        "--output",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/execution-candidates-fp64-v3/results/hb-multiscale-x-timed-fp64-local_math.json"
+      ],
+      "started": "2026-11-18T07:33:54.486228+00:00",
+      "pid": 1030915,
+      "sampled_process_tree_peak_rss_bytes": 3292160000,
+      "exit_code": 0,
+      "inner_state": "within_threshold",
+      "result_sha256": "d697717786e0c3ecabfa12f85f0577e3631022d2f16d8a00b978e77c38a8a930",
+      "descendant_identities": [
+        {
+          "pid": 1030915,
+          "start_ticks": 2257340521
+        }
+      ],
+      "ended": "2026-11-18T07:35:27.098199+00:00",
+      "elapsed_seconds": 92.58777668327093
+    },
+    {
+      "identity": "hb-multiscale-x-timed-fp64-batch4",
+      "state": "completed",
+      "output": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/execution-candidates-fp64-v3/results/hb-multiscale-x-timed-fp64-batch4.json",
+      "log": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/execution-candidates-fp64-v3/results/hb-multiscale-x-timed-fp64-batch4.log",
+      "timeout_seconds": 180.0,
+      "max_rss_bytes": 51539607552,
+      "command": [
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+        "-m",
+        "scripts.check_execution",
+        "--config",
+        "configs/hb-multiscale-x-timed.json",
+        "--overrides",
+        "{\"region_batch_size\": 4}",
+        "--device",
+        "cpu",
+        "--precision",
+        "fp64",
+        "--length",
+        "8",
+        "--threads",
+        "4",
+        "--output",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/execution-candidates-fp64-v3/results/hb-multiscale-x-timed-fp64-batch4.json"
+      ],
+      "started": "2026-11-18T07:35:27.100968+00:00",
+      "pid": 1037668,
+      "sampled_process_tree_peak_rss_bytes": 4068044800,
+      "exit_code": 0,
+      "inner_state": "within_threshold",
+      "result_sha256": "a1386a7611e0abd97b4677d8a1a8cdf35380d1a9fcf4e9f408731b1e18e67583",
+      "descendant_identities": [
+        {
+          "pid": 1037668,
+          "start_ticks": 2257349781
+        }
+      ],
+      "ended": "2026-11-18T07:36:52.057989+00:00",
+      "elapsed_seconds": 84.95436003804207
+    },
+    {
+      "identity": "hb-multiscale-x-timed-fp64-combined",
+      "state": "completed",
+      "output": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/execution-candidates-fp64-v3/results/hb-multiscale-x-timed-fp64-combined.json",
+      "log": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/execution-candidates-fp64-v3/results/hb-multiscale-x-timed-fp64-combined.log",
+      "timeout_seconds": 180.0,
+      "max_rss_bytes": 51539607552,
+      "command": [
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+        "-m",
+        "scripts.check_execution",
+        "--config",
+        "configs/hb-multiscale-x-timed.json",
+        "--overrides",
+        "{\"checkpoint_regions\": true, \"region_batch_size\": 4, \"local_attention_backend\": \"math\"}",
+        "--device",
+        "cpu",
+        "--precision",
+        "fp64",
+        "--length",
+        "8",
+        "--threads",
+        "4",
+        "--output",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/execution-candidates-fp64-v3/results/hb-multiscale-x-timed-fp64-combined.json"
+      ],
+      "started": "2026-11-18T07:36:52.060728+00:00",
+      "pid": 1043667,
+      "sampled_process_tree_peak_rss_bytes": 3044757504,
+      "exit_code": 0,
+      "inner_state": "within_threshold",
+      "result_sha256": "1a372a72d9920248de14091fc92588208892e9071bd699e761d73a4d55ec5f2b",
+      "descendant_identities": [
+        {
+          "pid": 1043667,
+          "start_ticks": 2257358277
+        }
+      ],
+      "ended": "2026-11-18T07:38:23.563209+00:00",
+      "elapsed_seconds": 91.50036365166306
+    }
+  ]
+}

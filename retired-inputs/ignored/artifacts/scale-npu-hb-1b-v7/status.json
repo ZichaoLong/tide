@@ -1,0 +1,90 @@
+{
+  "state": "passed",
+  "source": "e2a4d39104a006feec4525e534eadae4a94cde0d",
+  "command": [
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "/mi/data2T/zlong/home/.agents/skills/use-local-ascend/scripts/run_on_free_npu.py",
+    "--job-id",
+    "scale-npu-hb-1b-v7",
+    "--project",
+    "tide-instances",
+    "--priority",
+    "0",
+    "--npu-count",
+    "1",
+    "--max-wait-seconds",
+    "600",
+    "--state-file",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/scale-npu-hb-1b-v7/queue.json",
+    "--",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "-m",
+    "benchmarks.programme",
+    "--suite",
+    "scale",
+    "--configs",
+    "configs/scale/hb-1b.json",
+    "--device",
+    "npu:0",
+    "--precision",
+    "fp32",
+    "bf16",
+    "--threads",
+    "4",
+    "--batch",
+    "1",
+    "--length",
+    "8",
+    "--warmup",
+    "1",
+    "--steps",
+    "3",
+    "--child-timeout",
+    "1500",
+    "--output-dir",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/scale-npu-hb-1b-v7/results"
+  ],
+  "pid": 3467343,
+  "started": "2026-11-18T04:16:25.239005+00:00",
+  "max_rss_bytes": 85899345920,
+  "peak_rss_bytes": 10911043584,
+  "max_processes": 3,
+  "rss_sample_count": 1055,
+  "poll_interval": 0.25,
+  "descendant_supervision": "Linux child subreaper; retained PID/start identities across nested sessions",
+  "child_pid": 3467402,
+  "process_group": 3467402,
+  "elapsed": 458.3730139769614,
+  "descendant_identities": [
+    {
+      "pid": 3467402,
+      "start_ticks": 2256155594
+    },
+    {
+      "pid": 3467403,
+      "start_ticks": 2256155600
+    },
+    {
+      "pid": 3469134,
+      "start_ticks": 2256158310
+    },
+    {
+      "pid": 3469513,
+      "start_ticks": 2256158799
+    },
+    {
+      "pid": 3469615,
+      "start_ticks": 2256159021
+    },
+    {
+      "pid": 3469625,
+      "start_ticks": 2256159027
+    },
+    {
+      "pid": 3481353,
+      "start_ticks": 2256179969
+    }
+  ],
+  "exit_code": 0,
+  "finished": "2026-11-18T04:24:03.612020+00:00"
+}

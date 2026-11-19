@@ -1,0 +1,125 @@
+{
+  "source": "3b9f919b560d829fbed70302749ba4c9584bbd9b",
+  "arguments": {
+    "device": "npu:0",
+    "precision": "fp32",
+    "kind": "ffn",
+    "sharing": "shared",
+    "mode": "train",
+    "d": 128,
+    "nodes": 8,
+    "batch": 8,
+    "length": 128,
+    "threads": 4,
+    "steps": 5,
+    "warmup": 2,
+    "output": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/projections-npu-v2/ffn-shared-fp32.json"
+  },
+  "policy": {
+    "name": "fp32",
+    "device": "npu:0",
+    "parameters": "float32",
+    "input": "float32",
+    "matrix_arithmetic": "float32",
+    "normalization_mass_allocation": "float32",
+    "kv_keys_values": "float32",
+    "kv_summary_and_ssd_state": "float32",
+    "logical_time_indices": "int64",
+    "parameter_gradients": "float32",
+    "master_weights": "parameters_are_fp32_masters; no_separate_copy",
+    "adamw_moments": "float32",
+    "attention": "native_by_shape_and_prior; math/tiled_accumulate_float32",
+    "loss": "float32",
+    "autocast_cache": false
+  },
+  "parameters": 319488,
+  "torch": "2.12.0+cpu",
+  "cpu_affinity": [
+    56,
+    57,
+    58,
+    59
+  ],
+  "host_load_before": [
+    43.85,
+    39.97,
+    37.46
+  ],
+  "input_sha256": "1e5ac3b554a4f62292854312c0f904fdcf5f646dde8e4fd868cc2ec503781c0b",
+  "physical_devices": "1",
+  "boundary": "resident input; projection concat/copy included; train includes loss/backward/AdamW/sync",
+  "rows": [
+    {
+      "candidate": "native",
+      "seconds": [
+        0.0032599791884422302,
+        0.003137819468975067,
+        0.0031512193381786346,
+        0.00313582643866539,
+        0.0030902065336704254
+      ],
+      "median_seconds": 0.003137819468975067,
+      "peak_device_bytes": 122513408,
+      "process_peak_rss_kib_cumulative": 1907040,
+      "finite": true,
+      "arithmetic": [
+        {
+          "operator": "aten.bmm.default",
+          "inputs": [
+            "npu:float32"
+          ],
+          "outputs": [
+            "npu:float32"
+          ],
+          "calls": 6
+        },
+        {
+          "operator": "aten.mm.default",
+          "inputs": [
+            "npu:float32"
+          ],
+          "outputs": [
+            "npu:float32"
+          ],
+          "calls": 3
+        }
+      ]
+    },
+    {
+      "candidate": "both",
+      "seconds": [
+        0.003314979374408722,
+        0.0031425803899765015,
+        0.0030580759048461914,
+        0.003100309520959854,
+        0.0031145699322223663
+      ],
+      "median_seconds": 0.0031145699322223663,
+      "peak_device_bytes": 139289088,
+      "process_peak_rss_kib_cumulative": 1929204,
+      "finite": true,
+      "arithmetic": [
+        {
+          "operator": "aten.bmm.default",
+          "inputs": [
+            "npu:float32"
+          ],
+          "outputs": [
+            "npu:float32"
+          ],
+          "calls": 4
+        },
+        {
+          "operator": "aten.mm.default",
+          "inputs": [
+            "npu:float32"
+          ],
+          "outputs": [
+            "npu:float32"
+          ],
+          "calls": 2
+        }
+      ]
+    }
+  ]
+}

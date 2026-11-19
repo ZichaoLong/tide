@@ -1,0 +1,67 @@
+{
+  "state": "passed",
+  "source": "97c52960358e6d5414fc987dc3861b1e85d997a9",
+  "command": [
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "/mi/data2T/zlong/home/.agents/skills/use-local-ascend/scripts/run_on_free_npu.py",
+    "--job-id",
+    "numerics-quad-face-npu-v1",
+    "--project",
+    "tide-instances",
+    "--priority",
+    "0",
+    "--npu-count",
+    "1",
+    "--max-wait-seconds",
+    "600",
+    "--state-file",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/numerics-quad-face-npu-v1/queue.json",
+    "--",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "-m",
+    "scripts.check_allocation_face_witness",
+    "--witness",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/numerics-shared-routing-v1/routing.data/allocation-witnesses.pt",
+    "--device",
+    "npu:0",
+    "--threads",
+    "4",
+    "--output",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/numerics-quad-face-npu-v1/qualification.json"
+  ],
+  "pid": 2773361,
+  "started": "2026-11-19T10:22:52.541960+00:00",
+  "max_rss_bytes": 34359738368,
+  "peak_rss_bytes": 1859379200,
+  "max_processes": 2,
+  "rss_sample_count": 46,
+  "poll_interval": 0.25,
+  "descendant_supervision": "Linux child subreaper; retained PID/start identities across nested sessions",
+  "child_pid": 2773380,
+  "process_group": 2773380,
+  "elapsed": 19.44674376770854,
+  "descendant_identities": [
+    {
+      "pid": 2773380,
+      "start_ticks": 2266994325
+    },
+    {
+      "pid": 2773384,
+      "start_ticks": 2266994330
+    },
+    {
+      "pid": 2773449,
+      "start_ticks": 2266994387
+    },
+    {
+      "pid": 2773740,
+      "start_ticks": 2266994868
+    },
+    {
+      "pid": 2773840,
+      "start_ticks": 2266995040
+    }
+  ],
+  "exit_code": 0,
+  "finished": "2026-11-19T10:23:11.988704+00:00"
+}

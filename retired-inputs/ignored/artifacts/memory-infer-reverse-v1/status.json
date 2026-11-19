@@ -1,0 +1,93 @@
+{
+  "state": "passed",
+  "source": "301a327569aa75aefddd03cac9ca839589db5672",
+  "command": [
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "/mi/data2T/zlong/home/.agents/skills/use-local-ascend/scripts/run_on_free_npu.py",
+    "--job-id",
+    "memory-infer-reverse-v1",
+    "--project",
+    "tide-instances",
+    "--priority",
+    "0",
+    "--npu-count",
+    "1",
+    "--max-wait-seconds",
+    "600",
+    "--state-file",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-infer-reverse-v1/queue.json",
+    "--",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "-m",
+    "benchmarks.memory_candidate_suite",
+    "--phase",
+    "inference",
+    "--config",
+    "configs/memory-candidates/9b-reverse.json",
+    "--device",
+    "npu:0",
+    "--threads",
+    "4",
+    "--output-dir",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-infer-reverse-v1/results"
+  ],
+  "pid": 1076986,
+  "started": "2026-11-19T02:27:14.701582+00:00",
+  "max_rss_bytes": 103079215104,
+  "peak_rss_bytes": 36080066560,
+  "max_processes": 4,
+  "rss_sample_count": 2970,
+  "poll_interval": 0.25,
+  "descendant_supervision": "Linux child subreaper; retained PID/start identities across nested sessions",
+  "child_pid": 1077023,
+  "process_group": 1077023,
+  "elapsed": 1234.32576803118,
+  "descendant_identities": [
+    {
+      "pid": 1077023,
+      "start_ticks": 2264140541
+    },
+    {
+      "pid": 1077031,
+      "start_ticks": 2264140546
+    },
+    {
+      "pid": 1077892,
+      "start_ticks": 2264141825
+    },
+    {
+      "pid": 1078289,
+      "start_ticks": 2264142302
+    },
+    {
+      "pid": 1078297,
+      "start_ticks": 2264142303
+    },
+    {
+      "pid": 1078298,
+      "start_ticks": 2264142303
+    },
+    {
+      "pid": 1078655,
+      "start_ticks": 2264142588
+    },
+    {
+      "pid": 1078672,
+      "start_ticks": 2264142595
+    },
+    {
+      "pid": 1092974,
+      "start_ticks": 2264164229
+    },
+    {
+      "pid": 1112606,
+      "start_ticks": 2264194700
+    },
+    {
+      "pid": 1133389,
+      "start_ticks": 2264226217
+    }
+  ],
+  "exit_code": 0,
+  "finished": "2026-11-19T02:47:49.027349+00:00"
+}

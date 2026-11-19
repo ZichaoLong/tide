@@ -1,0 +1,58 @@
+{
+  "source": "c09e5d7cf18de19d73c242a6e461c14e5dba1101",
+  "source_path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/routing-analysis-v3/source",
+  "run": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/routing-analysis-v3",
+  "unit": "tide-routing-analysis-v3",
+  "arguments": {
+    "name": "routing-analysis-v3",
+    "revision": "c09e5d7c",
+    "threads": 4,
+    "affinity": "248-251",
+    "npu_count": 0,
+    "candidate_ids": null,
+    "seconds": 600,
+    "rss_gib": 16.0,
+    "queue_seconds": 600,
+    "command": [
+      "--",
+      "/bin/bash",
+      "-c",
+      "for tide_case in hb-lattice-k hb-exchange-x hb-multiscale-x-timed; do\n python -m scripts.diagnose_bf16 analyze --trace /mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/routing-npu-v3/${tide_case}.pt --output {run}/${tide_case}.json || exit\ndone"
+    ]
+  },
+  "launch": [
+    "systemd-run",
+    "--user",
+    "--unit=tide-routing-analysis-v3",
+    "--service-type=exec",
+    "--slice=background.slice",
+    "--working-directory=/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/routing-analysis-v3/source",
+    "--property=KillMode=control-group",
+    "--property=RuntimeMaxSec=600",
+    "--property=TimeoutStopSec=30",
+    "--property=CPUAffinity=248-251",
+    "--property=StandardOutput=append:/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/routing-analysis-v3/stdout.log",
+    "--property=StandardError=append:/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/routing-analysis-v3/stderr.log",
+    "/bin/bash",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/routing-analysis-v3/run.sh"
+  ],
+  "command": [
+    "/bin/bash",
+    "-c",
+    "for tide_case in hb-lattice-k hb-exchange-x hb-multiscale-x-timed; do\n python -m scripts.diagnose_bf16 analyze --trace /mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/routing-npu-v3/${tide_case}.pt --output /mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/routing-analysis-v3/${tide_case}.json || exit\ndone"
+  ],
+  "environment": {
+    "PYTHONPATH": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/routing-analysis-v3/source/src",
+    "TIDE_SOURCE_COMMIT": "c09e5d7cf18de19d73c242a6e461c14e5dba1101",
+    "TIDE_HARNESS_COMMIT": "c09e5d7cf18de19d73c242a6e461c14e5dba1101",
+    "TORCH_DEVICE_BACKEND_AUTOLOAD": "0",
+    "TIDE_RESOURCE_IDENTITY": "pinned_cpu; shared host",
+    "OMP_NUM_THREADS": "4",
+    "MKL_NUM_THREADS": "4",
+    "OPENBLAS_NUM_THREADS": "4"
+  },
+  "state": "submitted",
+  "resource_enforcement": "process affinity; sampled process-tree RSS, not cgroup hard memory",
+  "device_policy": "cpu",
+  "unit_observation": "MainPID=3427320\nSlice=background.slice\nControlGroup=/user.slice/user-1003.slice/user@1003.service/background.slice/tide-routing-analysis-v3.service\nId=tide-routing-analysis-v3.service\nActiveState=active\nSubState=running\n"
+}

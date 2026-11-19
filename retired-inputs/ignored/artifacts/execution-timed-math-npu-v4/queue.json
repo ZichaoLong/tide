@@ -1,0 +1,19 @@
+{
+  "elapsed_seconds": 111.71084167063236,
+  "job_id": "execution-timed-math-npu-v4",
+  "logical_device": "npu:0",
+  "logical_devices": [
+    "npu:0"
+  ],
+  "npu_count": 1,
+  "physical_id": 0,
+  "physical_ids": [
+    0
+  ],
+  "priority": 0,
+  "project": "tide-instances",
+  "return_code": 1,
+  "schema_version": 1,
+  "status": "failed",
+  "timestamp": "2026-11-18T07:35:55.954361+00:00"
+}

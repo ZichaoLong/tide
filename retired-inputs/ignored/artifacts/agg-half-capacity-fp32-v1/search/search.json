@@ -1,0 +1,1018 @@
+{
+  "schema": "tide-capacity-search-v1",
+  "source": "f3e6661c1b126bdddc66167d4a79c6471acee285",
+  "harness_source": "f3e6661c1b126bdddc66167d4a79c6471acee285",
+  "state": "completed",
+  "arguments": {
+    "config": "configs/scale/hb-0p5b.json",
+    "config_overrides": {
+      "region_batch_size": 4,
+      "checkpoint_reception": true,
+      "ssd_scan_backend": "doubling",
+      "ssd_summary_backend": "prefix"
+    },
+    "table": "capacity",
+    "axis": "batch",
+    "batch": 1,
+    "length": 128,
+    "max_axis_value": 4,
+    "max_points": 3,
+    "subjects": [
+      "tide"
+    ],
+    "device": "npu:0",
+    "precision": "fp32",
+    "mode": "train",
+    "activity": "natural",
+    "threads": 4,
+    "seed": 1107,
+    "warmup": 2,
+    "steps": 5,
+    "optimizer_foreach": true,
+    "device_budget_gib": 48.0,
+    "rss_gib": 90.0,
+    "seconds": 1800.0,
+    "child_timeout": 600.0,
+    "minimum_gain": 0.03,
+    "flat_patience": 2,
+    "maximum_noise": 0.25,
+    "plan_only": false,
+    "output_dir": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-half-capacity-fp32-v1/search"
+  },
+  "config_file": {
+    "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-half-capacity-fp32-v1/source/configs/scale/hb-0p5b.json",
+    "sha256": "983ce3ab0849e7d437125e3ce05c24df8aeaf8c7216f3e3a4842889b1ac00b1d",
+    "bytes": 503
+  },
+  "frozen_config": {
+    "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-half-capacity-fp32-v1/search/config.json",
+    "sha256": "cd441e1fcc3f42e074353fe8ed55dd65816234b6c4e7cd8129a0547a0fa4c8f1",
+    "bytes": 630
+  },
+  "axis_values": [
+    1,
+    2,
+    4
+  ],
+  "cpu_affinity": [
+    144,
+    145,
+    146,
+    147
+  ],
+  "physical_devices": "0",
+  "resource_identity": "exclusive_cooperative_queue; external jobs not controlled",
+  "fixed_history": "Transformer window 128; Tide adopted logical-time KV window unchanged; L is workload extent, not a new history contract",
+  "measurement": "one subject/mode per process; normal prefill timing excludes audits; complete AdamW and required Timed flush included",
+  "budget_scope": "sampled child process-tree RSS; device allocator peak checked after synchronization at construction/audit/warmup/sample; not hard allocation isolation",
+  "search_scope": "finite measured candidates; best stable admissible throughput, not proof of maximum feasible B/L or global optimum",
+  "matching_scope": "models frozen at common initial calibration B/L; independent best B at fixed L; not a same-workload speedup",
+  "children": [
+    {
+      "identity": "000-b1-l128-audit",
+      "command": [
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+        "-u",
+        "-m",
+        "benchmarks.run",
+        "--config",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-half-capacity-fp32-v1/search/config.json",
+        "--device",
+        "npu:0",
+        "--precision",
+        "fp32",
+        "--threads",
+        "4",
+        "--batch",
+        "1",
+        "--length",
+        "128",
+        "--modes",
+        "train",
+        "--subjects",
+        "tide",
+        "--activity",
+        "natural",
+        "--seed",
+        "1107",
+        "--warmup",
+        "2",
+        "--steps",
+        "5",
+        "--output",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-half-capacity-fp32-v1/search/000-b1-l128-audit.json",
+        "--optimizer-foreach",
+        "--audit-only",
+        "--device-budget-gib",
+        "48.0"
+      ],
+      "output": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-half-capacity-fp32-v1/search/000-b1-l128-audit.json",
+      "log": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-half-capacity-fp32-v1/search/000-b1-l128-audit.log",
+      "batch": 1,
+      "length": 128,
+      "subject": "audit",
+      "state": "completed",
+      "timeout_seconds": 600.0,
+      "max_rss_bytes": 96636764160,
+      "started": "2026-11-18T12:39:31.014169+00:00",
+      "pid": 2446179,
+      "sampled_process_tree_peak_rss_bytes": 4173299712,
+      "exit_code": 0,
+      "inner_state": "audit_complete",
+      "result_sha256": "457208fbd6a770ca7ded60955c570f21203213c4606b16f2b8b7a50686e99398",
+      "descendant_identities": [
+        {
+          "pid": 2446179,
+          "start_ticks": 2259174173
+        }
+      ],
+      "ended": "2026-11-18T12:39:52.826636+00:00",
+      "elapsed_seconds": 21.798605747520924
+    },
+    {
+      "identity": "001-b1-l128-tide",
+      "command": [
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+        "-u",
+        "-m",
+        "benchmarks.run",
+        "--config",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-half-capacity-fp32-v1/search/config.json",
+        "--device",
+        "npu:0",
+        "--precision",
+        "fp32",
+        "--threads",
+        "4",
+        "--batch",
+        "1",
+        "--length",
+        "128",
+        "--modes",
+        "train",
+        "--subjects",
+        "tide",
+        "--activity",
+        "natural",
+        "--seed",
+        "1107",
+        "--warmup",
+        "2",
+        "--steps",
+        "5",
+        "--output",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-half-capacity-fp32-v1/search/001-b1-l128-tide.json",
+        "--optimizer-foreach",
+        "--reference-record",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-half-capacity-fp32-v1/search/000-b1-l128-audit.json",
+        "--calibration-record",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-half-capacity-fp32-v1/search/000-b1-l128-audit.json",
+        "--device-budget-gib",
+        "48.0"
+      ],
+      "output": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-half-capacity-fp32-v1/search/001-b1-l128-tide.json",
+      "log": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-half-capacity-fp32-v1/search/001-b1-l128-tide.log",
+      "batch": 1,
+      "length": 128,
+      "subject": "tide",
+      "state": "completed",
+      "timeout_seconds": 600.0,
+      "max_rss_bytes": 96636764160,
+      "preflight_persistent_floor_bytes": 7905771264,
+      "started": "2026-11-18T12:39:52.832855+00:00",
+      "pid": 2448200,
+      "sampled_process_tree_peak_rss_bytes": 4176506880,
+      "exit_code": 0,
+      "inner_state": "completed_finite",
+      "result_sha256": "23dcabff18ad9eb4eb5aa035dd6e5bd173e1649b007a22dec81695f5f4f39bb0",
+      "descendant_identities": [
+        {
+          "pid": 2448200,
+          "start_ticks": 2259176354
+        }
+      ],
+      "ended": "2026-11-18T12:40:23.725161+00:00",
+      "elapsed_seconds": 30.890201333910227
+    },
+    {
+      "identity": "002-b2-l128-audit",
+      "command": [
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+        "-u",
+        "-m",
+        "benchmarks.run",
+        "--config",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-half-capacity-fp32-v1/search/config.json",
+        "--device",
+        "npu:0",
+        "--precision",
+        "fp32",
+        "--threads",
+        "4",
+        "--batch",
+        "2",
+        "--length",
+        "128",
+        "--modes",
+        "train",
+        "--subjects",
+        "tide",
+        "--activity",
+        "natural",
+        "--seed",
+        "1107",
+        "--warmup",
+        "2",
+        "--steps",
+        "5",
+        "--output",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-half-capacity-fp32-v1/search/002-b2-l128-audit.json",
+        "--optimizer-foreach",
+        "--audit-only",
+        "--device-budget-gib",
+        "48.0"
+      ],
+      "output": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-half-capacity-fp32-v1/search/002-b2-l128-audit.json",
+      "log": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-half-capacity-fp32-v1/search/002-b2-l128-audit.log",
+      "batch": 2,
+      "length": 128,
+      "subject": "audit",
+      "state": "completed",
+      "timeout_seconds": 600.0,
+      "max_rss_bytes": 96636764160,
+      "started": "2026-11-18T12:40:23.734808+00:00",
+      "pid": 2450935,
+      "sampled_process_tree_peak_rss_bytes": 4172173312,
+      "exit_code": 0,
+      "inner_state": "audit_complete",
+      "result_sha256": "1b94e4395fc23632dabd0509dcff24c91ed24d88d5888870dc10a4d901250520",
+      "descendant_identities": [
+        {
+          "pid": 2450935,
+          "start_ticks": 2259179444
+        }
+      ],
+      "ended": "2026-11-18T12:40:48.406135+00:00",
+      "elapsed_seconds": 24.669130690395832
+    },
+    {
+      "identity": "003-b2-l128-tide",
+      "command": [
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+        "-u",
+        "-m",
+        "benchmarks.run",
+        "--config",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-half-capacity-fp32-v1/search/config.json",
+        "--device",
+        "npu:0",
+        "--precision",
+        "fp32",
+        "--threads",
+        "4",
+        "--batch",
+        "2",
+        "--length",
+        "128",
+        "--modes",
+        "train",
+        "--subjects",
+        "tide",
+        "--activity",
+        "natural",
+        "--seed",
+        "1107",
+        "--warmup",
+        "2",
+        "--steps",
+        "5",
+        "--output",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-half-capacity-fp32-v1/search/003-b2-l128-tide.json",
+        "--optimizer-foreach",
+        "--reference-record",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-half-capacity-fp32-v1/search/002-b2-l128-audit.json",
+        "--calibration-record",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-half-capacity-fp32-v1/search/000-b1-l128-audit.json",
+        "--device-budget-gib",
+        "48.0"
+      ],
+      "output": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-half-capacity-fp32-v1/search/003-b2-l128-tide.json",
+      "log": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-half-capacity-fp32-v1/search/003-b2-l128-tide.log",
+      "batch": 2,
+      "length": 128,
+      "subject": "tide",
+      "state": "completed",
+      "timeout_seconds": 600.0,
+      "max_rss_bytes": 96636764160,
+      "preflight_persistent_floor_bytes": 7905771264,
+      "started": "2026-11-18T12:40:48.412817+00:00",
+      "pid": 2453519,
+      "sampled_process_tree_peak_rss_bytes": 4171067392,
+      "exit_code": 0,
+      "inner_state": "completed_finite",
+      "result_sha256": "4051fa4a6434875963766639a110f5f0e5a343acffc63d330e884c6d5d8dd4a4",
+      "descendant_identities": [
+        {
+          "pid": 2453519,
+          "start_ticks": 2259181912
+        }
+      ],
+      "ended": "2026-11-18T12:41:22.030178+00:00",
+      "elapsed_seconds": 33.61503918096423
+    },
+    {
+      "identity": "004-b4-l128-audit",
+      "command": [
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+        "-u",
+        "-m",
+        "benchmarks.run",
+        "--config",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-half-capacity-fp32-v1/search/config.json",
+        "--device",
+        "npu:0",
+        "--precision",
+        "fp32",
+        "--threads",
+        "4",
+        "--batch",
+        "4",
+        "--length",
+        "128",
+        "--modes",
+        "train",
+        "--subjects",
+        "tide",
+        "--activity",
+        "natural",
+        "--seed",
+        "1107",
+        "--warmup",
+        "2",
+        "--steps",
+        "5",
+        "--output",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-half-capacity-fp32-v1/search/004-b4-l128-audit.json",
+        "--optimizer-foreach",
+        "--audit-only",
+        "--device-budget-gib",
+        "48.0"
+      ],
+      "output": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-half-capacity-fp32-v1/search/004-b4-l128-audit.json",
+      "log": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-half-capacity-fp32-v1/search/004-b4-l128-audit.log",
+      "batch": 4,
+      "length": 128,
+      "subject": "audit",
+      "state": "completed",
+      "timeout_seconds": 600.0,
+      "max_rss_bytes": 96636764160,
+      "started": "2026-11-18T12:41:22.051422+00:00",
+      "pid": 2456088,
+      "sampled_process_tree_peak_rss_bytes": 4171423744,
+      "exit_code": 0,
+      "inner_state": "audit_complete",
+      "result_sha256": "f3b942060ce0e0772d7688e6b66d4e1240d8729d7b22404c51e7658a508fa8c4",
+      "descendant_identities": [
+        {
+          "pid": 2456088,
+          "start_ticks": 2259185276
+        }
+      ],
+      "ended": "2026-11-18T12:41:54.095894+00:00",
+      "elapsed_seconds": 32.04202402755618
+    },
+    {
+      "identity": "005-b4-l128-tide",
+      "command": [
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+        "-u",
+        "-m",
+        "benchmarks.run",
+        "--config",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-half-capacity-fp32-v1/search/config.json",
+        "--device",
+        "npu:0",
+        "--precision",
+        "fp32",
+        "--threads",
+        "4",
+        "--batch",
+        "4",
+        "--length",
+        "128",
+        "--modes",
+        "train",
+        "--subjects",
+        "tide",
+        "--activity",
+        "natural",
+        "--seed",
+        "1107",
+        "--warmup",
+        "2",
+        "--steps",
+        "5",
+        "--output",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-half-capacity-fp32-v1/search/005-b4-l128-tide.json",
+        "--optimizer-foreach",
+        "--reference-record",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-half-capacity-fp32-v1/search/004-b4-l128-audit.json",
+        "--calibration-record",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-half-capacity-fp32-v1/search/000-b1-l128-audit.json",
+        "--device-budget-gib",
+        "48.0"
+      ],
+      "output": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-half-capacity-fp32-v1/search/005-b4-l128-tide.json",
+      "log": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-half-capacity-fp32-v1/search/005-b4-l128-tide.log",
+      "batch": 4,
+      "length": 128,
+      "subject": "tide",
+      "state": "completed",
+      "timeout_seconds": 600.0,
+      "max_rss_bytes": 96636764160,
+      "preflight_persistent_floor_bytes": 7905771264,
+      "started": "2026-11-18T12:41:54.103320+00:00",
+      "pid": 2458975,
+      "sampled_process_tree_peak_rss_bytes": 4172472320,
+      "exit_code": 0,
+      "inner_state": "completed_finite",
+      "result_sha256": "565fbeaa1c29c8572c5b0324fbbb3aa5c74304b50e840442abcbf1792bc65668",
+      "descendant_identities": [
+        {
+          "pid": 2458975,
+          "start_ticks": 2259188481
+        }
+      ],
+      "ended": "2026-11-18T12:42:36.891710+00:00",
+      "elapsed_seconds": 42.7858814522624
+    }
+  ],
+  "audits": [
+    {
+      "batch": 1,
+      "length": 128,
+      "child": "000-b1-l128-audit",
+      "state": "completed",
+      "result_file": {
+        "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-half-capacity-fp32-v1/search/000-b1-l128-audit.json",
+        "sha256": "457208fbd6a770ca7ded60955c570f21203213c4606b16f2b8b7a50686e99398",
+        "bytes": 150706
+      }
+    },
+    {
+      "batch": 2,
+      "length": 128,
+      "child": "002-b2-l128-audit",
+      "state": "completed",
+      "result_file": {
+        "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-half-capacity-fp32-v1/search/002-b2-l128-audit.json",
+        "sha256": "1b94e4395fc23632dabd0509dcff24c91ed24d88d5888870dc10a4d901250520",
+        "bytes": 284364
+      }
+    },
+    {
+      "batch": 4,
+      "length": 128,
+      "child": "004-b4-l128-audit",
+      "state": "completed",
+      "result_file": {
+        "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-half-capacity-fp32-v1/search/004-b4-l128-audit.json",
+        "sha256": "f3b942060ce0e0772d7688e6b66d4e1240d8729d7b22404c51e7658a508fa8c4",
+        "bytes": 551603
+      }
+    }
+  ],
+  "lines": [
+    {
+      "subject": "tide",
+      "observations": [
+        {
+          "subject": "tide",
+          "batch": 1,
+          "length": 128,
+          "state": "completed",
+          "admitted": true,
+          "stable": true,
+          "child": "001-b1-l128-tide",
+          "sampled_process_tree_peak_rss_bytes": 4176506880,
+          "result_file": {
+            "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-half-capacity-fp32-v1/search/001-b1-l128-tide.json",
+            "sha256": "23dcabff18ad9eb4eb5aa035dd6e5bd173e1649b007a22dec81695f5f4f39bb0",
+            "bytes": 448771
+          },
+          "row_state": "completed_finite",
+          "error": null,
+          "failure_kind": null,
+          "seconds": [
+            1.347231950610876,
+            1.3235872387886047,
+            1.3275139890611172,
+            1.3530740402638912,
+            1.327617958188057
+          ],
+          "parameters": 494110704,
+          "initial_parameter_sha256": "59fac8141f6482e6b369417e925ca031652c1d7a64aec40c52932242154a8e56",
+          "input_sha256": "28cf478b284f4c4301999426dc2504bd5ccccb514dcdee0f6b25f5c5811472ea",
+          "reference_record": {
+            "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-half-capacity-fp32-v1/search/000-b1-l128-audit.json",
+            "sha256": "457208fbd6a770ca7ded60955c570f21203213c4606b16f2b8b7a50686e99398",
+            "bytes": 150706
+          },
+          "calibration_record": {
+            "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-half-capacity-fp32-v1/search/000-b1-l128-audit.json",
+            "sha256": "457208fbd6a770ca7ded60955c570f21203213c4606b16f2b8b7a50686e99398",
+            "bytes": 150706
+          },
+          "initial_audit_scope": "this exact initial workload; frozen external child",
+          "sample_range_over_median": 0.022210306280829685,
+          "median_seconds": 1.327617958188057,
+          "input_positions_per_second": 96.4132785418897,
+          "timed_peak_device_bytes": 15388690944,
+          "device_memory_by_device": {
+            "npu:0": {
+              "allocated_bytes": 7916515328,
+              "reserved_bytes": 16965959680,
+              "peak_allocated_bytes": 15388690944,
+              "peak_reserved_bytes": 16965959680
+            }
+          },
+          "process_lifetime_peak_rss_kib": 4078620,
+          "actual_storage": {
+            "parameters": {
+              "npu:0:torch.float32": {
+                "elements": 494110704,
+                "bytes": 1976442816
+              }
+            },
+            "gradients": {
+              "npu:0:torch.float32": {
+                "elements": 494110704,
+                "bytes": 1976442816
+              }
+            },
+            "optimizer": {
+              "cpu:torch.float32": {
+                "elements": 860,
+                "bytes": 3440
+              },
+              "npu:0:torch.float32": {
+                "elements": 988221408,
+                "bytes": 3952885632
+              }
+            }
+          },
+          "activity": {
+            "calibration_effective_touched_mean": 145753318.1875,
+            "initial_effective_touched_mean": 145753318.1875,
+            "post_update_effective_touched_mean": 137458994.1328125,
+            "initial_minus_calibration": 0.0,
+            "initial_work": {
+              "positive_messages": 339983,
+              "message_slots": 1714176,
+              "candidate_updates": 149416,
+              "candidate_slots": 219136,
+              "regional_attention_positive_pairs": 5794360,
+              "full_actions": 42286,
+              "kv_attention_effective_pairs": 3951804
+            },
+            "initial_packing": {
+              "K": {
+                "calls": 17,
+                "selected_rows": 19758,
+                "executed_rows": 98233
+              },
+              "S": {
+                "calls": 11,
+                "selected_rows": 22528,
+                "executed_rows": 22528
+              }
+            },
+            "post_update_work": {
+              "positive_messages": 317860,
+              "message_slots": 1714176,
+              "candidate_updates": 142385,
+              "candidate_slots": 219136,
+              "regional_attention_positive_pairs": 5283966,
+              "full_actions": 39426,
+              "kv_attention_effective_pairs": 3464704
+            },
+            "post_update_packing": {
+              "K": {
+                "calls": 17,
+                "selected_rows": 16898,
+                "executed_rows": 92835
+              },
+              "S": {
+                "calls": 11,
+                "selected_rows": 22528,
+                "executed_rows": 22528
+              }
+            }
+          },
+          "joint_match": null
+        },
+        {
+          "subject": "tide",
+          "batch": 2,
+          "length": 128,
+          "state": "completed",
+          "admitted": true,
+          "stable": true,
+          "child": "003-b2-l128-tide",
+          "sampled_process_tree_peak_rss_bytes": 4171067392,
+          "result_file": {
+            "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-half-capacity-fp32-v1/search/003-b2-l128-tide.json",
+            "sha256": "4051fa4a6434875963766639a110f5f0e5a343acffc63d330e884c6d5d8dd4a4",
+            "bytes": 726538
+          },
+          "row_state": "completed_finite",
+          "error": null,
+          "failure_kind": null,
+          "seconds": [
+            1.3862562477588654,
+            1.3652081079781055,
+            1.373764593154192,
+            1.3739994317293167,
+            1.4202102795243263
+          ],
+          "parameters": 494110704,
+          "initial_parameter_sha256": "59fac8141f6482e6b369417e925ca031652c1d7a64aec40c52932242154a8e56",
+          "input_sha256": "38933b3bd1d3e8a13254e9fb9465b176f875635e0f36217b71422e746a0a80db",
+          "reference_record": {
+            "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-half-capacity-fp32-v1/search/002-b2-l128-audit.json",
+            "sha256": "1b94e4395fc23632dabd0509dcff24c91ed24d88d5888870dc10a4d901250520",
+            "bytes": 284364
+          },
+          "calibration_record": {
+            "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-half-capacity-fp32-v1/search/000-b1-l128-audit.json",
+            "sha256": "457208fbd6a770ca7ded60955c570f21203213c4606b16f2b8b7a50686e99398",
+            "bytes": 150706
+          },
+          "initial_audit_scope": "this exact initial workload; frozen external child",
+          "sample_range_over_median": 0.04003070909352197,
+          "median_seconds": 1.3739994317293167,
+          "input_positions_per_second": 186.31739874724562,
+          "timed_peak_device_bytes": 20885316608,
+          "device_memory_by_device": {
+            "npu:0": {
+              "allocated_bytes": 7916674048,
+              "reserved_bytes": 22485663744,
+              "peak_allocated_bytes": 20885316608,
+              "peak_reserved_bytes": 22485663744
+            }
+          },
+          "process_lifetime_peak_rss_kib": 4073308,
+          "actual_storage": {
+            "parameters": {
+              "npu:0:torch.float32": {
+                "elements": 494110704,
+                "bytes": 1976442816
+              }
+            },
+            "gradients": {
+              "npu:0:torch.float32": {
+                "elements": 494110704,
+                "bytes": 1976442816
+              }
+            },
+            "optimizer": {
+              "cpu:torch.float32": {
+                "elements": 860,
+                "bytes": 3440
+              },
+              "npu:0:torch.float32": {
+                "elements": 988221408,
+                "bytes": 3952885632
+              }
+            }
+          },
+          "activity": {
+            "calibration_effective_touched_mean": 145753318.1875,
+            "initial_effective_touched_mean": 145520474.08984375,
+            "post_update_effective_touched_mean": 138827433.0625,
+            "initial_minus_calibration": -232844.09765625,
+            "initial_work": {
+              "positive_messages": 678908,
+              "message_slots": 3428352,
+              "candidate_updates": 298423,
+              "candidate_slots": 438272,
+              "regional_attention_positive_pairs": 11558422,
+              "full_actions": 84415,
+              "kv_attention_effective_pairs": 7878896
+            },
+            "initial_packing": {
+              "K": {
+                "calls": 17,
+                "selected_rows": 39359,
+                "executed_rows": 215102
+              },
+              "S": {
+                "calls": 11,
+                "selected_rows": 45056,
+                "executed_rows": 45056
+              }
+            },
+            "post_update_work": {
+              "positive_messages": 642377,
+              "message_slots": 3428352,
+              "candidate_updates": 287248,
+              "candidate_slots": 438272,
+              "regional_attention_positive_pairs": 10726488,
+              "full_actions": 79756,
+              "kv_attention_effective_pairs": 7082088
+            },
+            "post_update_packing": {
+              "K": {
+                "calls": 17,
+                "selected_rows": 34700,
+                "executed_rows": 209914
+              },
+              "S": {
+                "calls": 11,
+                "selected_rows": 45056,
+                "executed_rows": 45056
+              }
+            }
+          },
+          "joint_match": null
+        },
+        {
+          "subject": "tide",
+          "batch": 4,
+          "length": 128,
+          "state": "completed",
+          "admitted": true,
+          "stable": true,
+          "child": "005-b4-l128-tide",
+          "sampled_process_tree_peak_rss_bytes": 4172472320,
+          "result_file": {
+            "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-half-capacity-fp32-v1/search/005-b4-l128-tide.json",
+            "sha256": "565fbeaa1c29c8572c5b0324fbbb3aa5c74304b50e840442abcbf1792bc65668",
+            "bytes": 1282020
+          },
+          "row_state": "completed_finite",
+          "error": null,
+          "failure_kind": null,
+          "seconds": [
+            1.7560173980891705,
+            1.8772276155650616,
+            1.7312169894576073,
+            1.891389686614275,
+            1.87110148742795
+          ],
+          "parameters": 494110704,
+          "initial_parameter_sha256": "59fac8141f6482e6b369417e925ca031652c1d7a64aec40c52932242154a8e56",
+          "input_sha256": "037aa7166692966a265970f997f7512d07c5ad47b295f94e30d48c04eec49949",
+          "reference_record": {
+            "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-half-capacity-fp32-v1/search/004-b4-l128-audit.json",
+            "sha256": "f3b942060ce0e0772d7688e6b66d4e1240d8729d7b22404c51e7658a508fa8c4",
+            "bytes": 551603
+          },
+          "calibration_record": {
+            "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-half-capacity-fp32-v1/search/000-b1-l128-audit.json",
+            "sha256": "457208fbd6a770ca7ded60955c570f21203213c4606b16f2b8b7a50686e99398",
+            "bytes": 150706
+          },
+          "initial_audit_scope": "this exact initial workload; frozen external child",
+          "sample_range_over_median": 0.08560342570025103,
+          "median_seconds": 1.87110148742795,
+          "input_positions_per_second": 273.63561166519327,
+          "timed_peak_device_bytes": 31709807104,
+          "device_memory_by_device": {
+            "npu:0": {
+              "allocated_bytes": 7913923072,
+              "reserved_bytes": 34546384896,
+              "peak_allocated_bytes": 31709807104,
+              "peak_reserved_bytes": 34546384896
+            }
+          },
+          "process_lifetime_peak_rss_kib": 4074680,
+          "actual_storage": {
+            "parameters": {
+              "npu:0:torch.float32": {
+                "elements": 494110704,
+                "bytes": 1976442816
+              }
+            },
+            "gradients": {
+              "npu:0:torch.float32": {
+                "elements": 494110704,
+                "bytes": 1976442816
+              }
+            },
+            "optimizer": {
+              "cpu:torch.float32": {
+                "elements": 860,
+                "bytes": 3440
+              },
+              "npu:0:torch.float32": {
+                "elements": 988221408,
+                "bytes": 3952885632
+              }
+            }
+          },
+          "activity": {
+            "calibration_effective_touched_mean": 145753318.1875,
+            "initial_effective_touched_mean": 145359984.51171875,
+            "post_update_effective_touched_mean": 140746423.41210938,
+            "initial_minus_calibration": -393333.67578125,
+            "initial_work": {
+              "positive_messages": 1355692,
+              "message_slots": 6856704,
+              "candidate_updates": 596038,
+              "candidate_slots": 876544,
+              "regional_attention_positive_pairs": 23053940,
+              "full_actions": 168675,
+              "kv_attention_effective_pairs": 15700296
+            },
+            "initial_packing": {
+              "K": {
+                "calls": 17,
+                "selected_rows": 78563,
+                "executed_rows": 451104
+              },
+              "S": {
+                "calls": 11,
+                "selected_rows": 90112,
+                "executed_rows": 90112
+              }
+            },
+            "post_update_work": {
+              "positive_messages": 1305589,
+              "message_slots": 6856704,
+              "candidate_updates": 580803,
+              "candidate_slots": 876544,
+              "regional_attention_positive_pairs": 21910626,
+              "full_actions": 162209,
+              "kv_attention_effective_pairs": 14708976
+            },
+            "post_update_packing": {
+              "K": {
+                "calls": 17,
+                "selected_rows": 72097,
+                "executed_rows": 430076
+              },
+              "S": {
+                "calls": 11,
+                "selected_rows": 90112,
+                "executed_rows": 90112
+              }
+            }
+          },
+          "joint_match": null
+        }
+      ],
+      "stop_reason": "candidate_limit"
+    }
+  ],
+  "common_shape_table": [],
+  "capacity_table": [
+    {
+      "subject": "tide",
+      "best": {
+        "subject": "tide",
+        "batch": 4,
+        "length": 128,
+        "state": "completed",
+        "admitted": true,
+        "stable": true,
+        "child": "005-b4-l128-tide",
+        "sampled_process_tree_peak_rss_bytes": 4172472320,
+        "result_file": {
+          "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-half-capacity-fp32-v1/search/005-b4-l128-tide.json",
+          "sha256": "565fbeaa1c29c8572c5b0324fbbb3aa5c74304b50e840442abcbf1792bc65668",
+          "bytes": 1282020
+        },
+        "row_state": "completed_finite",
+        "error": null,
+        "failure_kind": null,
+        "seconds": [
+          1.7560173980891705,
+          1.8772276155650616,
+          1.7312169894576073,
+          1.891389686614275,
+          1.87110148742795
+        ],
+        "parameters": 494110704,
+        "initial_parameter_sha256": "59fac8141f6482e6b369417e925ca031652c1d7a64aec40c52932242154a8e56",
+        "input_sha256": "037aa7166692966a265970f997f7512d07c5ad47b295f94e30d48c04eec49949",
+        "reference_record": {
+          "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-half-capacity-fp32-v1/search/004-b4-l128-audit.json",
+          "sha256": "f3b942060ce0e0772d7688e6b66d4e1240d8729d7b22404c51e7658a508fa8c4",
+          "bytes": 551603
+        },
+        "calibration_record": {
+          "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-half-capacity-fp32-v1/search/000-b1-l128-audit.json",
+          "sha256": "457208fbd6a770ca7ded60955c570f21203213c4606b16f2b8b7a50686e99398",
+          "bytes": 150706
+        },
+        "initial_audit_scope": "this exact initial workload; frozen external child",
+        "sample_range_over_median": 0.08560342570025103,
+        "median_seconds": 1.87110148742795,
+        "input_positions_per_second": 273.63561166519327,
+        "timed_peak_device_bytes": 31709807104,
+        "device_memory_by_device": {
+          "npu:0": {
+            "allocated_bytes": 7913923072,
+            "reserved_bytes": 34546384896,
+            "peak_allocated_bytes": 31709807104,
+            "peak_reserved_bytes": 34546384896
+          }
+        },
+        "process_lifetime_peak_rss_kib": 4074680,
+        "actual_storage": {
+          "parameters": {
+            "npu:0:torch.float32": {
+              "elements": 494110704,
+              "bytes": 1976442816
+            }
+          },
+          "gradients": {
+            "npu:0:torch.float32": {
+              "elements": 494110704,
+              "bytes": 1976442816
+            }
+          },
+          "optimizer": {
+            "cpu:torch.float32": {
+              "elements": 860,
+              "bytes": 3440
+            },
+            "npu:0:torch.float32": {
+              "elements": 988221408,
+              "bytes": 3952885632
+            }
+          }
+        },
+        "activity": {
+          "calibration_effective_touched_mean": 145753318.1875,
+          "initial_effective_touched_mean": 145359984.51171875,
+          "post_update_effective_touched_mean": 140746423.41210938,
+          "initial_minus_calibration": -393333.67578125,
+          "initial_work": {
+            "positive_messages": 1355692,
+            "message_slots": 6856704,
+            "candidate_updates": 596038,
+            "candidate_slots": 876544,
+            "regional_attention_positive_pairs": 23053940,
+            "full_actions": 168675,
+            "kv_attention_effective_pairs": 15700296
+          },
+          "initial_packing": {
+            "K": {
+              "calls": 17,
+              "selected_rows": 78563,
+              "executed_rows": 451104
+            },
+            "S": {
+              "calls": 11,
+              "selected_rows": 90112,
+              "executed_rows": 90112
+            }
+          },
+          "post_update_work": {
+            "positive_messages": 1305589,
+            "message_slots": 6856704,
+            "candidate_updates": 580803,
+            "candidate_slots": 876544,
+            "regional_attention_positive_pairs": 21910626,
+            "full_actions": 162209,
+            "kv_attention_effective_pairs": 14708976
+          },
+          "post_update_packing": {
+            "K": {
+              "calls": 17,
+              "selected_rows": 72097,
+              "executed_rows": 430076
+            },
+            "S": {
+              "calls": 11,
+              "selected_rows": 90112,
+              "executed_rows": 90112
+            }
+          }
+        },
+        "joint_match": null
+      },
+      "stop_reason": "candidate_limit",
+      "fixed_length": 128,
+      "calibration_record": {
+        "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-half-capacity-fp32-v1/search/000-b1-l128-audit.json",
+        "sha256": "457208fbd6a770ca7ded60955c570f21203213c4606b16f2b8b7a50686e99398",
+        "bytes": 150706
+      },
+      "ratio_scope": "independent load optimum under the same declared budget; not a same-B comparison"
+    }
+  ],
+  "started": "2026-11-18T12:39:30.978127+00:00",
+  "calibration_record": {
+    "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-half-capacity-fp32-v1/search/000-b1-l128-audit.json",
+    "sha256": "457208fbd6a770ca7ded60955c570f21203213c4606b16f2b8b7a50686e99398",
+    "bytes": 150706
+  },
+  "ended": "2026-11-18T12:42:36.909752+00:00",
+  "child_states": {
+    "completed": 6
+  },
+  "completion_scope": "search controller terminal; failed/limited children remain separate and are not measured passes"
+}

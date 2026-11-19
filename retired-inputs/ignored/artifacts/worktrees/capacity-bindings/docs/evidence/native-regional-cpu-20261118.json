@@ -1,0 +1,561 @@
+{
+  "schema": 1,
+  "source_commit": "89ce08ff858724648152790502f8c65d8d8b1222",
+  "source_dirty": false,
+  "scope": "standalone regional Attention+FFN scoring subpath; no graph, reception, memory or allocation implementation",
+  "fixed_math": "4f5b9f20a4030d68ee66ae2d26e34659a5e37234",
+  "upstream_files": 108,
+  "state": "passed",
+  "artifact_root": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/capacity-bindings/artifacts/native-89ce08ff-cpu",
+  "artifacts": {
+    "status.json": {
+      "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/capacity-bindings/artifacts/native-89ce08ff-cpu/status.json",
+      "sha256": "35bf01824f5ad58184df437e47ed15e7b3e64b49ab40c78efac9d294ade2c493"
+    },
+    "checks/status.json": {
+      "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/capacity-bindings/artifacts/native-89ce08ff-cpu/checks/status.json",
+      "sha256": "ec6dce8ab78bad776bb280da88264792e037ea4fc36e8ccd40e9bcb19d2232e1"
+    },
+    "run.log": {
+      "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/capacity-bindings/artifacts/native-89ce08ff-cpu/run.log",
+      "sha256": "8cfc0ba96bd497f1d263b01ad7bfe7cfa7e6bd8d94d92a1ded3afa360a1bc174"
+    },
+    "source-sha256.json": {
+      "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/capacity-bindings/artifacts/native-89ce08ff-cpu/source-sha256.json",
+      "sha256": "fafb026c1ee3f1d7313f86852f744985a43f1c12eaeab27f81d580b19e359399"
+    },
+    "loader-CPU.txt": {
+      "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/capacity-bindings/artifacts/native-89ce08ff-cpu/loader-CPU.txt",
+      "sha256": "ad5759f2cdedb1e0d4e41e992f3cfe0f40948e2bf5da8c9c8a7dcf6ad062d27f"
+    },
+    "loader-NPU.txt": {
+      "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/capacity-bindings/artifacts/native-89ce08ff-cpu/loader-NPU.txt",
+      "sha256": "3e42af66a33f2a22b2911948b9e0ee949339dac28233f5955e0d850598714497"
+    },
+    "sdk-inspection.json": {
+      "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/capacity-bindings/artifacts/native-89ce08ff-cpu/sdk-inspection.json",
+      "sha256": "7db629086ea50c7cfdf67c1ca0db7112d33e585e152c43c07ecc52fb0407cf69"
+    },
+    "sdk-build-manifest.json": {
+      "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/capacity-bindings/artifacts/native-89ce08ff-cpu/sdk-build-manifest.json",
+      "sha256": "01373be8fef9de81a0a32e04a508cda1a96dafd91ad1833b9ae22ee5a39bc905"
+    },
+    "sdk-qualification.json": {
+      "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/capacity-bindings/artifacts/native-89ce08ff-cpu/sdk-qualification.json",
+      "sha256": "69502c04d0129ecdaafd7062f311fc5c8332cd627906791b81879468c7f3784d"
+    },
+    "run.sh": {
+      "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/capacity-bindings/artifacts/native-89ce08ff-cpu/run.sh",
+      "sha256": "70b179cb14d1161d182e5fcc4fd5775f82a5203f216d6a57b54d591d4c2cddb4"
+    }
+  },
+  "binaries": {
+    "CPU": {
+      "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/capacity-bindings/artifacts/native-89ce08ff-cpu/build-CPU/tide-regional",
+      "sha256": "7de3f6d26ee3c1d6e57a21e886e5cd9bf1c34269f60fddc39c86fca56300c148"
+    },
+    "NPU": {
+      "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/capacity-bindings/artifacts/native-89ce08ff-cpu/build-NPU/tide-regional",
+      "sha256": "98b8358ef8e066bc28961e8490e6f7a8657081397f2cf73952cd7bcc51e6d908"
+    }
+  },
+  "runtime_libraries_sha256": {
+    "/opt/software/libtorch-npu/2.12.0-cann9.2.0-aarch64-abi1/sdk/lib/libtorch_npu.so": "9a851accc1f4c7063d7e3c3cf76186329c063000a00a4d48c45a30ca1e8e3c18",
+    "/opt/software/libtorch/2.12.0-cpu-aarch64-abi1/lib/libarm_compute.so": "7a9cea7ea2910ee947f6af1acc69cac8496b111ee4d0614376e396d1c2b8cb47",
+    "/opt/software/libtorch/2.12.0-cpu-aarch64-abi1/lib/libarm_compute_graph.so": "c13e3b7d7e9fba243b3f6e7c3df9e3ad62a9703ad1763a8f8402d99c04d980b0",
+    "/opt/software/libtorch/2.12.0-cpu-aarch64-abi1/lib/libc10.so": "fa843366784bfce035e912360601c4ca098ce536b20f0c4a8ee50c3f00294e37",
+    "/opt/software/libtorch/2.12.0-cpu-aarch64-abi1/lib/libgfortran.so.5": "36f49edf8de93b5ad7e3324598b921f0229e0841eea3902a4d6fc9f949c77e94",
+    "/opt/software/libtorch/2.12.0-cpu-aarch64-abi1/lib/libopenblas-24fd393f.so.0": "11b29501710c0a6a1bc4bdc8efff12550248abd605829227a1aa970224eede6c",
+    "/opt/software/libtorch/2.12.0-cpu-aarch64-abi1/lib/libtorch.so": "5d864dc3a979f6f8cf572e752caa583182324399c29a79b9143efe175f67d72e",
+    "/opt/software/libtorch/2.12.0-cpu-aarch64-abi1/lib/libtorch_cpu.so": "cb4931abca15245de366da71e361174afc9e411651d4c50046cfb7a2dac6c4f5",
+    "/usr/lib64/libstdc++.so.6": "4c7553ebab5f78493bd5ce9c8b72df0037b828a4744ffab8243c76978f739065"
+  },
+  "build": {
+    "compiler": "GNU 10.3.1",
+    "build_type": "Release",
+    "arch": "aarch64",
+    "cxx11_abi": 1,
+    "torch_version": "2.12.0",
+    "torch_cmake": "/opt/software/libtorch/2.12.0-cpu-aarch64-abi1/share/cmake/Torch"
+  },
+  "sdk": {
+    "prefix": "/opt/software/libtorch-npu/2.12.0-cann9.2.0-aarch64-abi1/sdk",
+    "classification": "standalone-sdk-candidate",
+    "source_commit": "6b88d20d143ef15243c44f3582f37c480e786f2e",
+    "cann": "9.2.0",
+    "public_manifests_preserved": true,
+    "loader_ready": true,
+    "loader_missing": [],
+    "loader_stubs": {},
+    "no_python_runtime_dependency": true,
+    "cmake_findings": [
+      "CMAKE_NO_IMPORTED_TARGET",
+      "CMAKE_CXX_FALGS_TYPO"
+    ]
+  },
+  "resources": {
+    "cpu_affinity": [
+      72,
+      73,
+      74,
+      75,
+      76,
+      77,
+      78,
+      79
+    ],
+    "service": "tide-regional-89ce08ff-cpu.service",
+    "slice": "background.slice",
+    "cpu_quota_percent": 400,
+    "service_memory_max_gib": 16,
+    "sampled_rss_limit_gib": 14,
+    "timeout_s": 600,
+    "peak_process_tree_rss_bytes": 2405048320,
+    "elapsed_s": 97.59484142810106
+  },
+  "fixture": {
+    "shape": [
+      4,
+      5,
+      2,
+      3,
+      32
+    ],
+    "parameters": 8320,
+    "priors": [
+      "positive",
+      "visible zero",
+      "all zero",
+      "mixed"
+    ],
+    "seed": 1729
+  },
+  "checks": {
+    "native_cases": 29,
+    "native_executions": 25,
+    "rejection_cases": 4,
+    "ctest_per_build": 3,
+    "independent_python_tests": 5,
+    "python_test_seconds": 0.38,
+    "rtol": 2e-05,
+    "atol": 2e-06,
+    "cases": [
+      {
+        "name": "native-float32-inference-w1",
+        "state": "passed",
+        "returncode": 0,
+        "tensors": 13,
+        "exact": 13,
+        "max_abs": 0.0,
+        "worst": "output.0",
+        "progress_before": 0,
+        "progress_after": 0,
+        "workers": 1,
+        "mode": "inference",
+        "dtype": "float32"
+      },
+      {
+        "name": "native-float32-inference-w2",
+        "state": "passed",
+        "returncode": 0,
+        "tensors": 13,
+        "exact": 13,
+        "max_abs": 0.0,
+        "worst": "output.0",
+        "progress_before": 0,
+        "progress_after": 0,
+        "workers": 2,
+        "mode": "inference",
+        "dtype": "float32"
+      },
+      {
+        "name": "native-float32-inference-w4",
+        "state": "passed",
+        "returncode": 0,
+        "tensors": 13,
+        "exact": 13,
+        "max_abs": 0.0,
+        "worst": "output.0",
+        "progress_before": 0,
+        "progress_after": 0,
+        "workers": 4,
+        "mode": "inference",
+        "dtype": "float32"
+      },
+      {
+        "name": "native-float32-grad_forward-w1",
+        "state": "passed",
+        "returncode": 0,
+        "tensors": 13,
+        "exact": 13,
+        "max_abs": 0.0,
+        "worst": "output.0",
+        "progress_before": 0,
+        "progress_after": 0,
+        "workers": 1,
+        "mode": "grad_forward",
+        "dtype": "float32"
+      },
+      {
+        "name": "native-float32-grad_forward-w2",
+        "state": "passed",
+        "returncode": 0,
+        "tensors": 13,
+        "exact": 13,
+        "max_abs": 0.0,
+        "worst": "output.0",
+        "progress_before": 0,
+        "progress_after": 0,
+        "workers": 2,
+        "mode": "grad_forward",
+        "dtype": "float32"
+      },
+      {
+        "name": "native-float32-grad_forward-w4",
+        "state": "passed",
+        "returncode": 0,
+        "tensors": 13,
+        "exact": 13,
+        "max_abs": 0.0,
+        "worst": "output.0",
+        "progress_before": 0,
+        "progress_after": 0,
+        "workers": 4,
+        "mode": "grad_forward",
+        "dtype": "float32"
+      },
+      {
+        "name": "native-float32-train-w1",
+        "state": "passed",
+        "returncode": 0,
+        "zero_prior_right_vjp_nonzero": true,
+        "empty_prior_vjp_zero": true,
+        "tensors": 52,
+        "exact": 9,
+        "max_abs": 1.1920928955078125e-07,
+        "worst": "output.0",
+        "progress_before": 0,
+        "progress_after": 3,
+        "workers": 1,
+        "mode": "train",
+        "dtype": "float32"
+      },
+      {
+        "name": "native-float32-train-w2",
+        "state": "passed",
+        "returncode": 0,
+        "zero_prior_right_vjp_nonzero": true,
+        "empty_prior_vjp_zero": true,
+        "tensors": 52,
+        "exact": 9,
+        "max_abs": 1.1920928955078125e-07,
+        "worst": "output.0",
+        "progress_before": 0,
+        "progress_after": 3,
+        "workers": 2,
+        "mode": "train",
+        "dtype": "float32"
+      },
+      {
+        "name": "native-float32-train-w4",
+        "state": "passed",
+        "returncode": 0,
+        "zero_prior_right_vjp_nonzero": true,
+        "empty_prior_vjp_zero": true,
+        "tensors": 52,
+        "exact": 7,
+        "max_abs": 2.384185791015625e-07,
+        "worst": "output.3",
+        "progress_before": 0,
+        "progress_after": 3,
+        "workers": 4,
+        "mode": "train",
+        "dtype": "float32"
+      },
+      {
+        "name": "native-float32-restored-w1",
+        "state": "passed",
+        "returncode": 0,
+        "progress_preserved": true,
+        "tensors": 52,
+        "exact": 7,
+        "max_abs": 1.7881393432617188e-07,
+        "worst": "output.0",
+        "progress_before": 3,
+        "progress_after": 4,
+        "workers": 1,
+        "mode": "train",
+        "dtype": "float32"
+      },
+      {
+        "name": "native-float32-restored-w2",
+        "state": "passed",
+        "returncode": 0,
+        "progress_preserved": true,
+        "tensors": 52,
+        "exact": 7,
+        "max_abs": 1.7881393432617188e-07,
+        "worst": "output.0",
+        "progress_before": 3,
+        "progress_after": 4,
+        "workers": 2,
+        "mode": "train",
+        "dtype": "float32"
+      },
+      {
+        "name": "native-float32-restored-w4",
+        "state": "passed",
+        "returncode": 0,
+        "progress_preserved": true,
+        "tensors": 52,
+        "exact": 7,
+        "max_abs": 1.1920928955078125e-07,
+        "worst": "output.0",
+        "progress_before": 3,
+        "progress_after": 4,
+        "workers": 4,
+        "mode": "train",
+        "dtype": "float32"
+      },
+      {
+        "name": "native-bfloat16-inference-w1",
+        "state": "passed",
+        "returncode": 0,
+        "tensors": 13,
+        "exact": 13,
+        "max_abs": 0.0,
+        "worst": "output.0",
+        "progress_before": 0,
+        "progress_after": 0,
+        "workers": 1,
+        "mode": "inference",
+        "dtype": "bfloat16"
+      },
+      {
+        "name": "native-bfloat16-inference-w2",
+        "state": "passed",
+        "returncode": 0,
+        "tensors": 13,
+        "exact": 13,
+        "max_abs": 0.0,
+        "worst": "output.0",
+        "progress_before": 0,
+        "progress_after": 0,
+        "workers": 2,
+        "mode": "inference",
+        "dtype": "bfloat16"
+      },
+      {
+        "name": "native-bfloat16-inference-w4",
+        "state": "passed",
+        "returncode": 0,
+        "tensors": 13,
+        "exact": 13,
+        "max_abs": 0.0,
+        "worst": "output.0",
+        "progress_before": 0,
+        "progress_after": 0,
+        "workers": 4,
+        "mode": "inference",
+        "dtype": "bfloat16"
+      },
+      {
+        "name": "native-bfloat16-grad_forward-w1",
+        "state": "passed",
+        "returncode": 0,
+        "tensors": 13,
+        "exact": 13,
+        "max_abs": 0.0,
+        "worst": "output.0",
+        "progress_before": 0,
+        "progress_after": 0,
+        "workers": 1,
+        "mode": "grad_forward",
+        "dtype": "bfloat16"
+      },
+      {
+        "name": "native-bfloat16-grad_forward-w2",
+        "state": "passed",
+        "returncode": 0,
+        "tensors": 13,
+        "exact": 13,
+        "max_abs": 0.0,
+        "worst": "output.0",
+        "progress_before": 0,
+        "progress_after": 0,
+        "workers": 2,
+        "mode": "grad_forward",
+        "dtype": "bfloat16"
+      },
+      {
+        "name": "native-bfloat16-grad_forward-w4",
+        "state": "passed",
+        "returncode": 0,
+        "tensors": 13,
+        "exact": 13,
+        "max_abs": 0.0,
+        "worst": "output.0",
+        "progress_before": 0,
+        "progress_after": 0,
+        "workers": 4,
+        "mode": "grad_forward",
+        "dtype": "bfloat16"
+      },
+      {
+        "name": "native-bfloat16-train-w1",
+        "state": "passed",
+        "returncode": 0,
+        "zero_prior_right_vjp_nonzero": true,
+        "empty_prior_vjp_zero": true,
+        "tensors": 52,
+        "exact": 35,
+        "max_abs": 2.9802322387695312e-08,
+        "worst": "parameter.first_weight",
+        "progress_before": 0,
+        "progress_after": 3,
+        "workers": 1,
+        "mode": "train",
+        "dtype": "bfloat16"
+      },
+      {
+        "name": "native-bfloat16-train-w2",
+        "state": "passed",
+        "returncode": 0,
+        "zero_prior_right_vjp_nonzero": true,
+        "empty_prior_vjp_zero": true,
+        "tensors": 52,
+        "exact": 35,
+        "max_abs": 2.9802322387695312e-08,
+        "worst": "parameter.first_weight",
+        "progress_before": 0,
+        "progress_after": 3,
+        "workers": 2,
+        "mode": "train",
+        "dtype": "bfloat16"
+      },
+      {
+        "name": "native-bfloat16-train-w4",
+        "state": "passed",
+        "returncode": 0,
+        "zero_prior_right_vjp_nonzero": true,
+        "empty_prior_vjp_zero": true,
+        "tensors": 52,
+        "exact": 28,
+        "max_abs": 1.1920928955078125e-07,
+        "worst": "output.0",
+        "progress_before": 0,
+        "progress_after": 3,
+        "workers": 4,
+        "mode": "train",
+        "dtype": "bfloat16"
+      },
+      {
+        "name": "native-bfloat16-restored-w1",
+        "state": "passed",
+        "returncode": 0,
+        "progress_preserved": true,
+        "tensors": 52,
+        "exact": 31,
+        "max_abs": 5.960464477539063e-08,
+        "worst": "output.0",
+        "progress_before": 3,
+        "progress_after": 4,
+        "workers": 1,
+        "mode": "train",
+        "dtype": "bfloat16"
+      },
+      {
+        "name": "native-bfloat16-restored-w2",
+        "state": "passed",
+        "returncode": 0,
+        "progress_preserved": true,
+        "tensors": 52,
+        "exact": 31,
+        "max_abs": 5.960464477539063e-08,
+        "worst": "output.0",
+        "progress_before": 3,
+        "progress_after": 4,
+        "workers": 2,
+        "mode": "train",
+        "dtype": "bfloat16"
+      },
+      {
+        "name": "native-bfloat16-restored-w4",
+        "state": "passed",
+        "returncode": 0,
+        "progress_preserved": true,
+        "tensors": 52,
+        "exact": 26,
+        "max_abs": 1.1920928955078125e-07,
+        "worst": "output.0",
+        "progress_before": 3,
+        "progress_after": 4,
+        "workers": 4,
+        "mode": "train",
+        "dtype": "bfloat16"
+      },
+      {
+        "name": "native-bias-rounding",
+        "state": "passed",
+        "returncode": 0,
+        "tensors": 52,
+        "exact": 52,
+        "max_abs": 0.0,
+        "worst": "grad.0.score",
+        "progress_before": 0,
+        "progress_after": 1,
+        "workers": 2,
+        "mode": "train",
+        "dtype": "bfloat16"
+      },
+      {
+        "name": "reject-corrupt",
+        "state": "passed",
+        "returncode": 1,
+        "expected": "nonzero rejection before model execution"
+      },
+      {
+        "name": "reject-overwrite",
+        "state": "passed",
+        "returncode": 1,
+        "expected": "nonzero rejection before model execution"
+      },
+      {
+        "name": "reject-bad_workers",
+        "state": "passed",
+        "returncode": 1,
+        "expected": "nonzero rejection before model execution"
+      },
+      {
+        "name": "reject-bad_device",
+        "state": "passed",
+        "returncode": 1,
+        "expected": "nonzero rejection before model execution"
+      }
+    ]
+  },
+  "arithmetic": {
+    "parameter_gradient_optimizer": "float32",
+    "projection": "float32",
+    "attention_products_normalization_scalar_readout": "float32",
+    "autocast_cache": false
+  },
+  "qualification": {
+    "cpu_execution": "passed",
+    "cpu_python_same_layout_numerics": "passed",
+    "cpu_outer_task_concurrency": "passed",
+    "cpu_checkpoint_fourth_update": "passed",
+    "npu_build_and_loader": "passed",
+    "npu_device_execution": "not_run",
+    "npu_operator_placement": "not_profiled",
+    "npu_concurrency": "not_run",
+    "formal_performance": "not_run",
+    "cuda": "no_adapter"
+  },
+  "retained_development_failure": {
+    "kind": "C++ ambiguous norm overload due to ATen argument-dependent lookup",
+    "resolution": "rename local RMS helper; corrected before implementation commit",
+    "log": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/capacity-bindings/artifacts/native-development/build-v1/build.log",
+    "status": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/capacity-bindings/artifacts/native-development/build-v1/status.json"
+  }
+}

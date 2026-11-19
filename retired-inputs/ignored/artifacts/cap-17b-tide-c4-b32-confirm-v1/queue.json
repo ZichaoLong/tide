@@ -1,0 +1,23 @@
+{
+  "elapsed_seconds": 1068.656962312758,
+  "job_id": "cap-17b-tide-c4-b32-confirm-v1",
+  "logical_devices": [
+    "npu:0",
+    "npu:1",
+    "npu:2",
+    "npu:3"
+  ],
+  "npu_count": 4,
+  "physical_ids": [
+    0,
+    4,
+    5,
+    14
+  ],
+  "priority": 0,
+  "project": "tide-instances",
+  "return_code": 0,
+  "schema_version": 1,
+  "status": "completed",
+  "timestamp": "2026-11-18T16:20:50.213563+00:00"
+}

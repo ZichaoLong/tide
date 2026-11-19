@@ -1,0 +1,119 @@
+{
+  "state": "passed",
+  "source": "10739fa8501e823a91434f034f37e699f46da824",
+  "command": [
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "/mi/data2T/zlong/home/.agents/skills/use-local-ascend/scripts/run_on_free_npu.py",
+    "--job-id",
+    "training-budget-timed-batch",
+    "--project",
+    "tide-instances",
+    "--priority",
+    "0",
+    "--npu-count",
+    "1",
+    "--max-wait-seconds",
+    "600",
+    "--state-file",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/training-budget-timed-batch/queue.json",
+    "--",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "-m",
+    "benchmarks.search",
+    "--config",
+    "configs/hb-multiscale-x-timed.json",
+    "--config-overrides",
+    "{\"region_batch_size\":4}",
+    "--table",
+    "capacity",
+    "--axis",
+    "batch",
+    "--batch",
+    "4",
+    "--length",
+    "128",
+    "--max-axis-value",
+    "16",
+    "--max-points",
+    "3",
+    "--subjects",
+    "tide",
+    "--device",
+    "npu:0",
+    "--precision",
+    "bf16",
+    "--mode",
+    "train",
+    "--threads",
+    "4",
+    "--warmup",
+    "2",
+    "--steps",
+    "5",
+    "--device-budget-gib",
+    "48",
+    "--rss-gib",
+    "90",
+    "--seconds",
+    "2400",
+    "--child-timeout",
+    "600",
+    "--output-dir",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/training-budget-timed-batch/search"
+  ],
+  "pid": 1502299,
+  "started": "2026-11-18T09:26:18.648358+00:00",
+  "max_rss_bytes": 107374182400,
+  "peak_rss_bytes": 5139111936,
+  "max_processes": 3,
+  "rss_sample_count": 606,
+  "poll_interval": 0.25,
+  "descendant_supervision": "Linux child subreaper; retained PID/start identities across nested sessions",
+  "child_pid": 1502332,
+  "process_group": 1502332,
+  "elapsed": 250.69872782751918,
+  "descendant_identities": [
+    {
+      "pid": 1502332,
+      "start_ticks": 2258014935
+    },
+    {
+      "pid": 1502334,
+      "start_ticks": 2258014941
+    },
+    {
+      "pid": 1502405,
+      "start_ticks": 2258014998
+    },
+    {
+      "pid": 1502716,
+      "start_ticks": 2258015473
+    },
+    {
+      "pid": 1502809,
+      "start_ticks": 2258015648
+    },
+    {
+      "pid": 1502810,
+      "start_ticks": 2258015655
+    },
+    {
+      "pid": 1505386,
+      "start_ticks": 2258018709
+    },
+    {
+      "pid": 1508536,
+      "start_ticks": 2258023403
+    },
+    {
+      "pid": 1511301,
+      "start_ticks": 2258027203
+    },
+    {
+      "pid": 1515775,
+      "start_ticks": 2258033589
+    }
+  ],
+  "exit_code": 0,
+  "finished": "2026-11-18T09:30:29.347086+00:00"
+}

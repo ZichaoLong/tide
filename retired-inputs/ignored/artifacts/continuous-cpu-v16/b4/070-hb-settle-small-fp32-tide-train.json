@@ -1,0 +1,567 @@
+{
+  "source": "0992b467584c1f603314ed04d8efe8596a14f576",
+  "harness_source": "0992b467584c1f603314ed04d8efe8596a14f576",
+  "arguments": {
+    "config": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/continuous-cpu-v16/source/configs/continuous/hb-settle-small.json",
+    "subject": "tide",
+    "joint_match": null,
+    "transformer_width": null,
+    "transformer_layers": null,
+    "ffn_width": null,
+    "head_dim": null,
+    "device": "cpu",
+    "precision": "fp32",
+    "mode": "train",
+    "batch": 4,
+    "prefill": 128,
+    "prefill_chunk": 64,
+    "decode": 8,
+    "updates": 3,
+    "warmup": 1,
+    "threads": 16,
+    "seed": 751,
+    "checkpoint": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/continuous-cpu-v16/b4/070-hb-settle-small-fp32-tide-train.pt",
+    "output": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/continuous-cpu-v16/b4/070-hb-settle-small-fp32-tide-train.json"
+  },
+  "precision": {
+    "name": "fp32",
+    "device": "cpu",
+    "parameters": "float32",
+    "input": "float32",
+    "matrix_arithmetic": "float32",
+    "normalization_mass_allocation": "float32",
+    "kv_keys_values": "float32",
+    "kv_summary_and_ssd_state": "float32",
+    "logical_time_indices": "int64",
+    "parameter_gradients": "float32",
+    "master_weights": "parameters_are_fp32_masters; no_separate_copy",
+    "adamw_moments": "float32",
+    "attention": "native_by_shape_and_prior; math/tiled_accumulate_float32",
+    "attention_mode_selection": "established_fp32_gradient_dependent_prior_dispatch",
+    "loss": "float32",
+    "autocast_cache": false
+  },
+  "physical_devices": null,
+  "torch": "2.12.0+cpu",
+  "cpu_affinity": [
+    280,
+    281,
+    282,
+    283,
+    284,
+    285,
+    286,
+    287,
+    288,
+    289,
+    290,
+    291,
+    292,
+    293,
+    294,
+    295
+  ],
+  "host_load_before": [
+    78.82,
+    73.23,
+    69.1
+  ],
+  "timing": "input transfer/construction/initial matching audit/warmup/checkpoint excluded; full stream train includes concatenation/loss/backward/AdamW/sync",
+  "training_boundary": "full BPTT within prefill+decode+flush; detach after each optimizer update is included in complete time",
+  "grad_forward_boundary": "state detached between measured observations; graph retained across every chunk within each segment",
+  "segment_boundary": "Timed flush ends each measured segment and advances its clock; the next segment resumes that flushed state",
+  "objective": "mechanism-only mean squared readout over every returned window and flush slot",
+  "initial_state": "zero; subsequent measured streams continue previous private state",
+  "first_output": "first available backbone output, no task head or language-model TTFT",
+  "input_pairing": "feature-wise seeded CPU inputs; the shared feature prefix is identical at different model widths",
+  "process_peak_rss_scope": "cumulative process high-water including construction and initial Tide matching audit; not isolated baseline peak",
+  "observations": [
+    {
+      "prefill_seconds": 0.6404331475496292,
+      "prefill_positions_per_second": 799.4589317541898,
+      "first_backbone_output_seconds": 0.3097520098090172,
+      "decode_seconds": [
+        0.2349662184715271,
+        0.27057748660445213,
+        0.25097620859742165,
+        0.2593313716351986,
+        0.22983527928590775,
+        0.28928079828619957,
+        0.23440681770443916,
+        0.27917585149407387
+      ],
+      "stable_decode_median_seconds": 0.2593313716351986,
+      "stable_decode_positions_per_second": 15.439043836799952,
+      "stable_decode_rule": "omit first decode when at least two are present",
+      "input_window_seconds": 2.6893215365707874,
+      "flush_seconds": 0,
+      "input_plus_flush_seconds": 2.6893229484558105,
+      "backward_seconds": 2.738295454531908,
+      "optimizer_seconds": 0.010863333940505981,
+      "complete_seconds": 5.439466290175915,
+      "input_positions": 544,
+      "output_slots": 544,
+      "calls": [
+        {
+          "phase": "prefill",
+          "inputs": 64,
+          "seconds": 0.3095170110464096,
+          "output_ready_seconds": 0.3097520098090172
+        },
+        {
+          "phase": "prefill",
+          "inputs": 64,
+          "seconds": 0.3309161365032196,
+          "output_ready_seconds": 0.6406801268458366
+        },
+        {
+          "phase": "decode",
+          "inputs": 1,
+          "seconds": 0.2349662184715271,
+          "output_ready_seconds": 0.8756565451622009
+        },
+        {
+          "phase": "decode",
+          "inputs": 1,
+          "seconds": 0.27057748660445213,
+          "output_ready_seconds": 1.1462438628077507
+        },
+        {
+          "phase": "decode",
+          "inputs": 1,
+          "seconds": 0.25097620859742165,
+          "output_ready_seconds": 1.3972298577427864
+        },
+        {
+          "phase": "decode",
+          "inputs": 1,
+          "seconds": 0.2593313716351986,
+          "output_ready_seconds": 1.6565720178186893
+        },
+        {
+          "phase": "decode",
+          "inputs": 1,
+          "seconds": 0.22983527928590775,
+          "output_ready_seconds": 1.8864175900816917
+        },
+        {
+          "phase": "decode",
+          "inputs": 1,
+          "seconds": 0.28928079828619957,
+          "output_ready_seconds": 2.1757085882127285
+        },
+        {
+          "phase": "decode",
+          "inputs": 1,
+          "seconds": 0.23440681770443916,
+          "output_ready_seconds": 2.410126283764839
+        },
+        {
+          "phase": "decode",
+          "inputs": 1,
+          "seconds": 0.27917585149407387,
+          "output_ready_seconds": 2.689311735332012
+        }
+      ],
+      "state_memory": {
+        "payload_bytes": 3976992,
+        "retained_storage_bytes": 3976992,
+        "dtypes": [
+          "torch.float32",
+          "torch.int64"
+        ],
+        "tensor_count": 70
+      },
+      "loss": 1.8880938291549683,
+      "finite_output": true,
+      "finite_parameters": true,
+      "finite_gradients": true,
+      "index": 0,
+      "state_position": 136,
+      "peak_device_bytes": null,
+      "process_peak_rss_kib": 727992
+    },
+    {
+      "prefill_seconds": 0.8134894371032715,
+      "prefill_positions_per_second": 629.3873978538239,
+      "first_backbone_output_seconds": 0.4335644617676735,
+      "decode_seconds": [
+        0.21959558129310608,
+        0.22780318558216095,
+        0.2481881007552147,
+        0.3730258643627167,
+        0.22959177941083908,
+        0.2848151661455631,
+        0.2972823940217495,
+        0.3245511017739773
+      ],
+      "stable_decode_median_seconds": 0.2848151661455631,
+      "stable_decode_positions_per_second": 14.103963189510106,
+      "stable_decode_rule": "omit first decode when at least two are present",
+      "input_window_seconds": 3.018757149577141,
+      "flush_seconds": 0,
+      "input_plus_flush_seconds": 3.0187580697238445,
+      "backward_seconds": 2.4761951826512814,
+      "optimizer_seconds": 0.008254293352365494,
+      "complete_seconds": 5.503929939121008,
+      "input_positions": 544,
+      "output_slots": 544,
+      "calls": [
+        {
+          "phase": "prefill",
+          "inputs": 64,
+          "seconds": 0.43325112015008926,
+          "output_ready_seconds": 0.4335644617676735
+        },
+        {
+          "phase": "prefill",
+          "inputs": 64,
+          "seconds": 0.3802383169531822,
+          "output_ready_seconds": 0.813813891261816
+        },
+        {
+          "phase": "decode",
+          "inputs": 1,
+          "seconds": 0.21959558129310608,
+          "output_ready_seconds": 1.0334198102355003
+        },
+        {
+          "phase": "decode",
+          "inputs": 1,
+          "seconds": 0.22780318558216095,
+          "output_ready_seconds": 1.2612336426973343
+        },
+        {
+          "phase": "decode",
+          "inputs": 1,
+          "seconds": 0.2481881007552147,
+          "output_ready_seconds": 1.509432002902031
+        },
+        {
+          "phase": "decode",
+          "inputs": 1,
+          "seconds": 0.3730258643627167,
+          "output_ready_seconds": 1.8824678473174572
+        },
+        {
+          "phase": "decode",
+          "inputs": 1,
+          "seconds": 0.22959177941083908,
+          "output_ready_seconds": 2.1120694540441036
+        },
+        {
+          "phase": "decode",
+          "inputs": 1,
+          "seconds": 0.2848151661455631,
+          "output_ready_seconds": 2.3968945518136024
+        },
+        {
+          "phase": "decode",
+          "inputs": 1,
+          "seconds": 0.2972823940217495,
+          "output_ready_seconds": 2.6941865384578705
+        },
+        {
+          "phase": "decode",
+          "inputs": 1,
+          "seconds": 0.3245511017739773,
+          "output_ready_seconds": 3.0187475122511387
+        }
+      ],
+      "state_memory": {
+        "payload_bytes": 3976992,
+        "retained_storage_bytes": 3976992,
+        "dtypes": [
+          "torch.float32",
+          "torch.int64"
+        ],
+        "tensor_count": 70
+      },
+      "loss": 1.669975996017456,
+      "finite_output": true,
+      "finite_parameters": true,
+      "finite_gradients": true,
+      "index": 1,
+      "state_position": 272,
+      "peak_device_bytes": null,
+      "process_peak_rss_kib": 769960
+    },
+    {
+      "prefill_seconds": 0.7392004355788231,
+      "prefill_positions_per_second": 692.640284497511,
+      "first_backbone_output_seconds": 0.4468180686235428,
+      "decode_seconds": [
+        0.31252969801425934,
+        0.20795345306396484,
+        0.24672278761863708,
+        0.23439127206802368,
+        0.26779885962605476,
+        0.23683981597423553,
+        0.3307291455566883,
+        0.2420816347002983
+      ],
+      "stable_decode_median_seconds": 0.2420816347002983,
+      "stable_decode_positions_per_second": 15.850399683432025,
+      "stable_decode_rule": "omit first decode when at least two are present",
+      "input_window_seconds": 2.8192824348807335,
+      "flush_seconds": 0,
+      "input_plus_flush_seconds": 2.81928338855505,
+      "backward_seconds": 2.6794660203158855,
+      "optimizer_seconds": 0.034597598016262054,
+      "complete_seconds": 5.533721756190062,
+      "input_positions": 544,
+      "output_slots": 544,
+      "calls": [
+        {
+          "phase": "prefill",
+          "inputs": 64,
+          "seconds": 0.44588272273540497,
+          "output_ready_seconds": 0.4468180686235428
+        },
+        {
+          "phase": "prefill",
+          "inputs": 64,
+          "seconds": 0.2933177128434181,
+          "output_ready_seconds": 0.7401455864310265
+        },
+        {
+          "phase": "decode",
+          "inputs": 1,
+          "seconds": 0.31252969801425934,
+          "output_ready_seconds": 1.0526861660182476
+        },
+        {
+          "phase": "decode",
+          "inputs": 1,
+          "seconds": 0.20795345306396484,
+          "output_ready_seconds": 1.2606492787599564
+        },
+        {
+          "phase": "decode",
+          "inputs": 1,
+          "seconds": 0.24672278761863708,
+          "output_ready_seconds": 1.5073815658688545
+        },
+        {
+          "phase": "decode",
+          "inputs": 1,
+          "seconds": 0.23439127206802368,
+          "output_ready_seconds": 1.741783481091261
+        },
+        {
+          "phase": "decode",
+          "inputs": 1,
+          "seconds": 0.26779885962605476,
+          "output_ready_seconds": 2.009592290967703
+        },
+        {
+          "phase": "decode",
+          "inputs": 1,
+          "seconds": 0.23683981597423553,
+          "output_ready_seconds": 2.2464419566094875
+        },
+        {
+          "phase": "decode",
+          "inputs": 1,
+          "seconds": 0.3307291455566883,
+          "output_ready_seconds": 2.577180601656437
+        },
+        {
+          "phase": "decode",
+          "inputs": 1,
+          "seconds": 0.2420816347002983,
+          "output_ready_seconds": 2.8192730955779552
+        }
+      ],
+      "state_memory": {
+        "payload_bytes": 3976992,
+        "retained_storage_bytes": 3976992,
+        "dtypes": [
+          "torch.float32",
+          "torch.int64"
+        ],
+        "tensor_count": 70
+      },
+      "loss": 1.5844703912734985,
+      "finite_output": true,
+      "finite_parameters": true,
+      "finite_gradients": true,
+      "index": 2,
+      "state_position": 408,
+      "peak_device_bytes": null,
+      "process_peak_rss_kib": 769960
+    }
+  ],
+  "state": "completed",
+  "last_stage": "warmup",
+  "spec": {
+    "topology": {
+      "kind": "multiscale",
+      "n": 2,
+      "layers": null,
+      "depth": null,
+      "rounds": null,
+      "profile": "compact-5-dd4",
+      "hubs": 1,
+      "partition": "group",
+      "timing": "settle",
+      "hub_mask": "all",
+      "period": null,
+      "probes": null
+    },
+    "d": 64,
+    "memory": "X",
+    "aggregation": "source_residual",
+    "allocation": "quad",
+    "sharing": "region_shared",
+    "adapter_rank": 8,
+    "budget": null,
+    "attention_backend": "auto",
+    "attention_chunk": 128,
+    "input_dim": null
+  },
+  "parameters": 1150527,
+  "comparison": {
+    "kind": "tide",
+    "comparisons_equivalent": false,
+    "audit_source": null,
+    "shared_input_prefix_width": 64,
+    "shared_input_prefix_sha256": "093f86434539cb055576ae689f0939ac3573f59f4688cceac0d64a6f64ac9271"
+  },
+  "initial_parameters_sha256": "c60ce134b3f2a886eab9fb7df088d37b30ae5e5654dffbeb889d30f1dfc4074d",
+  "input_sha256": "093f86434539cb055576ae689f0939ac3573f59f4688cceac0d64a6f64ac9271",
+  "input_shape": [
+    4,
+    136,
+    64
+  ],
+  "checkpoint": {
+    "save_seconds": 0.07914655283093452,
+    "load_seconds": 0.07266595587134361,
+    "file_bytes": 18001749,
+    "boundary": "state detached before checkpoint; complete next window plus required Timed flush contributes to one loss/backward/AdamW on each owner",
+    "saved_data": {
+      "exact": true,
+      "finite": true,
+      "metadata_mismatches": [],
+      "support_mismatches": [],
+      "numerical_failures": [],
+      "max_abs": 0.0,
+      "max_scaled_error": 0.0,
+      "atol": 0,
+      "rtol": 0,
+      "floating_tensors": 714,
+      "within_threshold": true
+    },
+    "next_forward": {
+      "exact": true,
+      "finite": true,
+      "metadata_mismatches": [],
+      "support_mismatches": [],
+      "numerical_failures": [],
+      "max_abs": 0.0,
+      "max_scaled_error": 0.0,
+      "atol": 0,
+      "rtol": 0,
+      "floating_tensors": 1,
+      "within_threshold": true
+    },
+    "next_state": {
+      "exact": true,
+      "finite": true,
+      "metadata_mismatches": [],
+      "support_mismatches": [],
+      "numerical_failures": [],
+      "max_abs": 0.0,
+      "max_scaled_error": 0.0,
+      "atol": 0,
+      "rtol": 0,
+      "floating_tensors": 54,
+      "within_threshold": true
+    },
+    "losses": [
+      1.5329440832138062,
+      1.5329440832138062
+    ],
+    "update_windows": [
+      {
+        "input_positions": 256,
+        "window_output_slots": 256,
+        "flush_output_slots": 0,
+        "final_state_position": 472
+      },
+      {
+        "input_positions": 256,
+        "window_output_slots": 256,
+        "flush_output_slots": 0,
+        "final_state_position": 472
+      }
+    ],
+    "input_gradients": {
+      "exact": true,
+      "finite": true,
+      "metadata_mismatches": [],
+      "support_mismatches": [],
+      "numerical_failures": [],
+      "max_abs": 0.0,
+      "max_scaled_error": 0.0,
+      "atol": 1e-06,
+      "rtol": 0.01,
+      "floating_tensors": 1,
+      "within_threshold": true
+    },
+    "parameter_gradients": {
+      "exact": true,
+      "finite": true,
+      "metadata_mismatches": [],
+      "support_mismatches": [],
+      "numerical_failures": [],
+      "max_abs": 0.0,
+      "max_scaled_error": 0.0,
+      "atol": 1e-06,
+      "rtol": 0.002,
+      "floating_tensors": 165,
+      "within_threshold": true
+    },
+    "updated_parameters": {
+      "exact": true,
+      "finite": true,
+      "metadata_mismatches": [],
+      "support_mismatches": [],
+      "numerical_failures": [],
+      "max_abs": 0.0,
+      "max_scaled_error": 0.0,
+      "atol": 1e-06,
+      "rtol": 0.002,
+      "floating_tensors": 165,
+      "within_threshold": true
+    },
+    "updated_optimizer": {
+      "exact": true,
+      "finite": true,
+      "metadata_mismatches": [],
+      "support_mismatches": [],
+      "numerical_failures": [],
+      "max_abs": 0.0,
+      "max_scaled_error": 0.0,
+      "atol": 1e-06,
+      "rtol": 0.002,
+      "floating_tensors": 495,
+      "within_threshold": true
+    },
+    "updated_state": {
+      "exact": true,
+      "finite": true,
+      "metadata_mismatches": [],
+      "support_mismatches": [],
+      "numerical_failures": [],
+      "max_abs": 0.0,
+      "max_scaled_error": 0.0,
+      "atol": 1e-06,
+      "rtol": 0.002,
+      "floating_tensors": 54,
+      "within_threshold": true
+    },
+    "state": "within_threshold"
+  }
+}

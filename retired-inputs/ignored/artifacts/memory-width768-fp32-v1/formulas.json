@@ -1,0 +1,1093 @@
+{
+  "schema": "tide-memory-width-formulas-v1",
+  "state": "within_threshold",
+  "source": "87fb94b369d40a55b5fa62f67a6565a721645bb9",
+  "harness_sha256": "e9427ef654194f1cede086a3534acdfa3c31c72ff60e5f93261d8373681ab265",
+  "arguments": {
+    "device": "npu:0",
+    "d": 768,
+    "widths": [
+      384,
+      256,
+      128
+    ],
+    "batch": 1,
+    "shared": false,
+    "precision": "fp32",
+    "threads": 4,
+    "output": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-width768-fp32-v1/formulas.json"
+  },
+  "physical_devices": "9",
+  "torch": "2.12.0+cpu",
+  "cpu_affinity": [
+    40,
+    41,
+    42,
+    43
+  ],
+  "precision": {
+    "name": "fp32",
+    "device": "npu:0",
+    "parameters": "float32",
+    "input": "float32",
+    "matrix_arithmetic": "float32",
+    "normalization_mass_allocation": "float32",
+    "kv_keys_values": "float32",
+    "kv_summary_and_ssd_state": "float32",
+    "logical_time_indices": "int64",
+    "parameter_gradients": "float32",
+    "master_weights": "parameters_are_fp32_masters; no_separate_copy",
+    "adamw_moments": "float32",
+    "attention": "native_by_shape_and_prior; math/tiled_accumulate_float32",
+    "attention_mode_selection": "established_fp32_gradient_dependent_prior_dispatch",
+    "loss": "float32",
+    "autocast_cache": false
+  },
+  "thresholds": {
+    "atol": 1e-06,
+    "rtol": 0.002
+  },
+  "rows": [
+    {
+      "width": 384,
+      "d": 768,
+      "summary_width": 192,
+      "ffn_width": 3072,
+      "heads": 12,
+      "head_width": 32,
+      "batch": 1,
+      "input_shape": [
+        2,
+        1,
+        7,
+        768
+      ],
+      "sharing": "independent",
+      "state": "within_threshold",
+      "scope": "FP32 or bounded CPU FP64 literal formula, private adapters and node state, int64 translation, zero write, window eviction, full VJP",
+      "query_dispatch": {
+        "selected_fused_projection": true,
+        "fused_base_projection_observed": true,
+        "operators": [
+          {
+            "operator": "aten.bmm.default",
+            "inputs": [
+              "npu:0:torch.float32"
+            ],
+            "outputs": [
+              "npu:0:torch.float32"
+            ],
+            "calls": 3
+          }
+        ],
+        "materializations": {
+          "aten.index.Tensor": {
+            "calls": 39,
+            "output_bytes": 3538968
+          },
+          "aten.cat.default": {
+            "calls": 3,
+            "output_bytes": 3538944
+          }
+        },
+        "matrix_shapes": [
+          {
+            "operator": "aten.bmm.default",
+            "inputs": [
+              [
+                1,
+                1,
+                768
+              ],
+              [
+                1,
+                768,
+                384
+              ]
+            ],
+            "calls": 3
+          }
+        ],
+        "materialization_definition": "logical output bytes from dispatched copy/index/concatenate operations; not hardware bus traffic, bandwidth or all operand loads",
+        "instrumentation": "separate ordinary forward without semantic counting hooks; excluded from timing",
+        "bf16_matrix_observed": false
+      },
+      "identity": {
+        "parameters": "c62938a7c75b2ad546b4e91da9d20f3845ae07e6e8cd6c6a952b21535ce234b5",
+        "input": "4445b46d4846d43e6d011a480fa3bca8cafa904b433a0e3f45aa9ca5517c6f55",
+        "mass": "a781cbf319e6e9216f8ac2e20c5bf8ea8d2338efdb494d38907f4a1d66e5a1c6",
+        "times": "73b2831525e222828de97a0f00d4b6ccd9c723d735829a54b45c5bec8c7ba65a"
+      },
+      "zero_mass_gradient_nonzeros": [
+        0,
+        0,
+        0
+      ],
+      "first_time": 36028797018963987,
+      "retained_times": [
+        [
+          [
+            36028797018963999,
+            36028797018964007,
+            36028797018964011
+          ]
+        ],
+        [
+          [
+            36028797018963999,
+            36028797018964003,
+            36028797018964007
+          ]
+        ]
+      ],
+      "checks": {
+        "value_formula": {
+          "tolerance": {
+            "atol": 1e-06,
+            "rtol": 0.002
+          },
+          "metadata_failures": [],
+          "dtype_differences": [],
+          "nonfinite": [],
+          "support_differences": [],
+          "threshold_failures": [],
+          "work_differences": [],
+          "exact": false,
+          "largest_errors": [
+            {
+              "tensor": "root.full",
+              "max_abs": 2.0265579223632812e-06,
+              "scaled_error": 0.1845616675161425,
+              "relative_l2": 3.712798660700945e-07
+            },
+            {
+              "tensor": "root.state.0.0.36028797018964011.1",
+              "max_abs": 3.337860107421875e-06,
+              "scaled_error": 0.07745973664855775,
+              "relative_l2": 3.542746065704739e-07
+            },
+            {
+              "tensor": "root.state.0.0.36028797018963999.2",
+              "max_abs": 1.6689300537109375e-06,
+              "scaled_error": 0.07402131266653766,
+              "relative_l2": 3.313017504619208e-07
+            },
+            {
+              "tensor": "root.state.1.0.36028797018963999.2",
+              "max_abs": 1.6689300537109375e-06,
+              "scaled_error": 0.06184474851803074,
+              "relative_l2": 3.498494595108829e-07
+            },
+            {
+              "tensor": "root.state.1.0.36028797018964007.2",
+              "max_abs": 1.1920928955078125e-06,
+              "scaled_error": 0.06047067722610469,
+              "relative_l2": 3.167223992355546e-07
+            },
+            {
+              "tensor": "root.description.0",
+              "max_abs": 7.152557373046875e-07,
+              "scaled_error": 0.05974332042919548,
+              "relative_l2": 1.4080898303126406e-07
+            },
+            {
+              "tensor": "root.state.1.0.36028797018964003.3",
+              "max_abs": 7.152557373046875e-07,
+              "scaled_error": 0.05974332042919548,
+              "relative_l2": 1.6266068236091588e-07
+            },
+            {
+              "tensor": "root.description.1",
+              "max_abs": 2.384185791015625e-07,
+              "scaled_error": 0.036497402794444696,
+              "relative_l2": 1.3436617721362878e-07
+            }
+          ]
+        },
+        "vjp_formula": {
+          "tolerance": {
+            "atol": 1e-06,
+            "rtol": 0.002
+          },
+          "metadata_failures": [],
+          "dtype_differences": [],
+          "nonfinite": [],
+          "support_differences": [],
+          "threshold_failures": [],
+          "work_differences": [],
+          "exact": false,
+          "largest_errors": [
+            {
+              "tensor": "root.summary.weight",
+              "max_abs": 5.587935447692871e-09,
+              "scaled_error": 0.002730276866188838,
+              "relative_l2": 8.989082693318485e-08
+            },
+            {
+              "tensor": "root.input",
+              "max_abs": 3.259629011154175e-09,
+              "scaled_error": 0.0015958125413193848,
+              "relative_l2": 2.427877582744282e-07
+            },
+            {
+              "tensor": "root.kv.weight",
+              "max_abs": 2.3283064365386963e-09,
+              "scaled_error": 0.001229747132677102,
+              "relative_l2": 6.457875166870216e-08
+            },
+            {
+              "tensor": "root.query.heads.1.weight",
+              "max_abs": 7.566995918750763e-10,
+              "scaled_error": 0.000495568531447187,
+              "relative_l2": 1.420615868639612e-06
+            },
+            {
+              "tensor": "root.query.heads.5.weight",
+              "max_abs": 4.1109160520136356e-10,
+              "scaled_error": 0.0003719639819074415,
+              "relative_l2": 1.756129979733488e-06
+            },
+            {
+              "tensor": "root.query.heads.6.weight",
+              "max_abs": 8.731149137020111e-10,
+              "scaled_error": 0.00036636965727920905,
+              "relative_l2": 9.012792948371164e-07
+            },
+            {
+              "tensor": "root.output.weight",
+              "max_abs": 4.94765117764473e-10,
+              "scaled_error": 0.00035794275114710267,
+              "relative_l2": 5.775312065640482e-07
+            },
+            {
+              "tensor": "root.query.heads.9.weight",
+              "max_abs": 4.3655745685100555e-10,
+              "scaled_error": 0.00033084165987360347,
+              "relative_l2": 8.810137062475392e-07
+            }
+          ]
+        },
+        "value_continuation": {
+          "tolerance": {
+            "atol": 1e-06,
+            "rtol": 0.002
+          },
+          "metadata_failures": [],
+          "dtype_differences": [],
+          "nonfinite": [],
+          "support_differences": [],
+          "threshold_failures": [],
+          "work_differences": [],
+          "exact": false,
+          "largest_errors": [
+            {
+              "tensor": "root.full",
+              "max_abs": 2.0265579223632812e-06,
+              "scaled_error": 0.12283247579887563,
+              "relative_l2": 3.003219019014435e-07
+            },
+            {
+              "tensor": "root.description.2",
+              "max_abs": 1.1920928955078125e-07,
+              "scaled_error": 0.0032645028131755723,
+              "relative_l2": 1.5801016985860716e-08
+            },
+            {
+              "tensor": "root.description.1",
+              "max_abs": 1.1920928955078125e-07,
+              "scaled_error": 0.0003063707640412794,
+              "relative_l2": 1.4629463662339875e-08
+            },
+            {
+              "tensor": "root.description.4",
+              "max_abs": 5.960464477539063e-08,
+              "scaled_error": 3.3095303946823996e-05,
+              "relative_l2": 2.6497495777961055e-08
+            },
+            {
+              "tensor": "root.description.0",
+              "max_abs": 0.0,
+              "scaled_error": 0.0,
+              "relative_l2": 0.0
+            },
+            {
+              "tensor": "root.description.3",
+              "max_abs": 0.0,
+              "scaled_error": 0.0,
+              "relative_l2": 0.0
+            },
+            {
+              "tensor": "root.state.0.0.36028797018963999.0",
+              "max_abs": 0.0,
+              "scaled_error": 0.0,
+              "relative_l2": 0.0
+            },
+            {
+              "tensor": "root.state.0.0.36028797018963999.1",
+              "max_abs": 0.0,
+              "scaled_error": 0.0,
+              "relative_l2": 0.0
+            }
+          ]
+        },
+        "vjp_continuation": {
+          "tolerance": {
+            "atol": 1e-06,
+            "rtol": 0.002
+          },
+          "metadata_failures": [],
+          "dtype_differences": [],
+          "nonfinite": [],
+          "support_differences": [],
+          "threshold_failures": [],
+          "work_differences": [],
+          "exact": false,
+          "largest_errors": [
+            {
+              "tensor": "root.summary.weight",
+              "max_abs": 5.587935447692871e-09,
+              "scaled_error": 0.0022578263021797128,
+              "relative_l2": 8.035866703623359e-08
+            },
+            {
+              "tensor": "root.input",
+              "max_abs": 1.862645149230957e-09,
+              "scaled_error": 0.0008892615573927891,
+              "relative_l2": 1.1695302014138381e-07
+            },
+            {
+              "tensor": "root.kv.weight",
+              "max_abs": 1.862645149230957e-09,
+              "scaled_error": 0.0008701974292108411,
+              "relative_l2": 4.647971566035992e-08
+            },
+            {
+              "tensor": "root.query.heads.6.weight",
+              "max_abs": 5.238689482212067e-10,
+              "scaled_error": 0.00027973514484326843,
+              "relative_l2": 8.202307644995871e-07
+            },
+            {
+              "tensor": "root.ffn.gate.weight",
+              "max_abs": 3.2014213502407074e-10,
+              "scaled_error": 0.0002401913266214616,
+              "relative_l2": 3.4914114878946636e-07
+            },
+            {
+              "tensor": "root.output.weight",
+              "max_abs": 2.546585164964199e-10,
+              "scaled_error": 0.00023404250948572244,
+              "relative_l2": 4.430891806890661e-07
+            },
+            {
+              "tensor": "root.ffn.down.weight",
+              "max_abs": 3.4924596548080444e-10,
+              "scaled_error": 0.00023226301081318284,
+              "relative_l2": 4.1999576850499236e-07
+            },
+            {
+              "tensor": "root.query.heads.1.weight",
+              "max_abs": 3.055902197957039e-10,
+              "scaled_error": 0.00021238672398171966,
+              "relative_l2": 5.711394810845977e-07
+            }
+          ]
+        }
+      }
+    },
+    {
+      "width": 256,
+      "d": 768,
+      "summary_width": 192,
+      "ffn_width": 3072,
+      "heads": 8,
+      "head_width": 32,
+      "batch": 1,
+      "input_shape": [
+        2,
+        1,
+        7,
+        768
+      ],
+      "sharing": "independent",
+      "state": "within_threshold",
+      "scope": "FP32 or bounded CPU FP64 literal formula, private adapters and node state, int64 translation, zero write, window eviction, full VJP",
+      "query_dispatch": {
+        "selected_fused_projection": true,
+        "fused_base_projection_observed": true,
+        "operators": [
+          {
+            "operator": "aten.bmm.default",
+            "inputs": [
+              "npu:0:torch.float32"
+            ],
+            "outputs": [
+              "npu:0:torch.float32"
+            ],
+            "calls": 3
+          }
+        ],
+        "materializations": {
+          "aten.index.Tensor": {
+            "calls": 27,
+            "output_bytes": 2359320
+          },
+          "aten.cat.default": {
+            "calls": 3,
+            "output_bytes": 2359296
+          }
+        },
+        "matrix_shapes": [
+          {
+            "operator": "aten.bmm.default",
+            "inputs": [
+              [
+                1,
+                1,
+                768
+              ],
+              [
+                1,
+                768,
+                256
+              ]
+            ],
+            "calls": 3
+          }
+        ],
+        "materialization_definition": "logical output bytes from dispatched copy/index/concatenate operations; not hardware bus traffic, bandwidth or all operand loads",
+        "instrumentation": "separate ordinary forward without semantic counting hooks; excluded from timing",
+        "bf16_matrix_observed": false
+      },
+      "identity": {
+        "parameters": "e3d385b268a99afc68d0e3b142dff2701db3e9627172ae2097345c54df88370c",
+        "input": "4445b46d4846d43e6d011a480fa3bca8cafa904b433a0e3f45aa9ca5517c6f55",
+        "mass": "a781cbf319e6e9216f8ac2e20c5bf8ea8d2338efdb494d38907f4a1d66e5a1c6",
+        "times": "73b2831525e222828de97a0f00d4b6ccd9c723d735829a54b45c5bec8c7ba65a"
+      },
+      "zero_mass_gradient_nonzeros": [
+        0,
+        0,
+        0
+      ],
+      "first_time": 36028797018963987,
+      "retained_times": [
+        [
+          [
+            36028797018963999,
+            36028797018964007,
+            36028797018964011
+          ]
+        ],
+        [
+          [
+            36028797018963999,
+            36028797018964003,
+            36028797018964007
+          ]
+        ]
+      ],
+      "checks": {
+        "value_formula": {
+          "tolerance": {
+            "atol": 1e-06,
+            "rtol": 0.002
+          },
+          "metadata_failures": [],
+          "dtype_differences": [],
+          "nonfinite": [],
+          "support_differences": [],
+          "threshold_failures": [],
+          "work_differences": [],
+          "exact": false,
+          "largest_errors": [
+            {
+              "tensor": "root.full",
+              "max_abs": 1.5497207641601562e-06,
+              "scaled_error": 0.12639439561182925,
+              "relative_l2": 3.3122193334968585e-07
+            },
+            {
+              "tensor": "root.state.1.0.36028797018964007.2",
+              "max_abs": 1.1920928955078125e-06,
+              "scaled_error": 0.03651800637680348,
+              "relative_l2": 2.9006902436690715e-07
+            },
+            {
+              "tensor": "root.description.0",
+              "max_abs": 7.152557373046875e-07,
+              "scaled_error": 0.03245247601506234,
+              "relative_l2": 1.40643776413572e-07
+            },
+            {
+              "tensor": "root.state.0.0.36028797018963999.1",
+              "max_abs": 1.9073486328125e-06,
+              "scaled_error": 0.02821008910599568,
+              "relative_l2": 3.182974808200215e-07
+            },
+            {
+              "tensor": "root.state.0.0.36028797018964007.1",
+              "max_abs": 1.1920928955078125e-06,
+              "scaled_error": 0.021543971174047962,
+              "relative_l2": 3.0218024556048357e-07
+            },
+            {
+              "tensor": "root.description.2",
+              "max_abs": 2.086162567138672e-07,
+              "scaled_error": 0.020462789944913167,
+              "relative_l2": 1.2245817358442747e-07
+            },
+            {
+              "tensor": "root.state.0.0.36028797018963999.2",
+              "max_abs": 1.3113021850585938e-06,
+              "scaled_error": 0.018988498964173723,
+              "relative_l2": 2.6443957254562754e-07
+            },
+            {
+              "tensor": "root.state.0.0.36028797018964007.2",
+              "max_abs": 1.1920928955078125e-06,
+              "scaled_error": 0.01872008307983005,
+              "relative_l2": 2.646694135665245e-07
+            }
+          ]
+        },
+        "vjp_formula": {
+          "tolerance": {
+            "atol": 1e-06,
+            "rtol": 0.002
+          },
+          "metadata_failures": [],
+          "dtype_differences": [],
+          "nonfinite": [],
+          "support_differences": [],
+          "threshold_failures": [],
+          "work_differences": [],
+          "exact": false,
+          "largest_errors": [
+            {
+              "tensor": "root.summary.weight",
+              "max_abs": 5.587935447692871e-09,
+              "scaled_error": 0.002730276866188838,
+              "relative_l2": 8.989082693318485e-08
+            },
+            {
+              "tensor": "root.input",
+              "max_abs": 4.6566128730773926e-09,
+              "scaled_error": 0.0016509347728610904,
+              "relative_l2": 2.2480710519561447e-07
+            },
+            {
+              "tensor": "root.kv.weight",
+              "max_abs": 2.7939677238464355e-09,
+              "scaled_error": 0.0014349290183175358,
+              "relative_l2": 6.04584935570649e-08
+            },
+            {
+              "tensor": "root.query.heads.0.weight",
+              "max_abs": 5.675246939063072e-10,
+              "scaled_error": 0.00047724782932689403,
+              "relative_l2": 4.81055026789162e-06
+            },
+            {
+              "tensor": "root.ffn.up.weight",
+              "max_abs": 5.820766091346741e-10,
+              "scaled_error": 0.00026988186515956365,
+              "relative_l2": 4.2403619078068187e-07
+            },
+            {
+              "tensor": "root.query.heads.4.weight",
+              "max_abs": 3.2741809263825417e-10,
+              "scaled_error": 0.000264495724207122,
+              "relative_l2": 1.3044383764098285e-06
+            },
+            {
+              "tensor": "root.query.heads.5.weight",
+              "max_abs": 5.820766091346741e-10,
+              "scaled_error": 0.0002552164913641221,
+              "relative_l2": 6.411377802106183e-07
+            },
+            {
+              "tensor": "root.ffn.down.weight",
+              "max_abs": 4.0745362639427185e-10,
+              "scaled_error": 0.00024821896523851913,
+              "relative_l2": 4.641859942765076e-07
+            }
+          ]
+        },
+        "value_continuation": {
+          "tolerance": {
+            "atol": 1e-06,
+            "rtol": 0.002
+          },
+          "metadata_failures": [],
+          "dtype_differences": [],
+          "nonfinite": [],
+          "support_differences": [],
+          "threshold_failures": [],
+          "work_differences": [],
+          "exact": false,
+          "largest_errors": [
+            {
+              "tensor": "root.full",
+              "max_abs": 1.9073486328125e-06,
+              "scaled_error": 0.10114108382178577,
+              "relative_l2": 3.095074841263789e-07
+            },
+            {
+              "tensor": "root.description.2",
+              "max_abs": 1.1920928955078125e-07,
+              "scaled_error": 0.0020538585772969537,
+              "relative_l2": 1.574396660055175e-08
+            },
+            {
+              "tensor": "root.description.1",
+              "max_abs": 1.1920928955078125e-07,
+              "scaled_error": 0.0003516589105046971,
+              "relative_l2": 1.5189175138390732e-08
+            },
+            {
+              "tensor": "root.description.4",
+              "max_abs": 5.960464477539063e-08,
+              "scaled_error": 3.3095303946823996e-05,
+              "relative_l2": 2.6497495777961055e-08
+            },
+            {
+              "tensor": "root.description.0",
+              "max_abs": 0.0,
+              "scaled_error": 0.0,
+              "relative_l2": 0.0
+            },
+            {
+              "tensor": "root.description.3",
+              "max_abs": 0.0,
+              "scaled_error": 0.0,
+              "relative_l2": 0.0
+            },
+            {
+              "tensor": "root.state.0.0.36028797018963999.0",
+              "max_abs": 0.0,
+              "scaled_error": 0.0,
+              "relative_l2": 0.0
+            },
+            {
+              "tensor": "root.state.0.0.36028797018963999.1",
+              "max_abs": 0.0,
+              "scaled_error": 0.0,
+              "relative_l2": 0.0
+            }
+          ]
+        },
+        "vjp_continuation": {
+          "tolerance": {
+            "atol": 1e-06,
+            "rtol": 0.002
+          },
+          "metadata_failures": [],
+          "dtype_differences": [],
+          "nonfinite": [],
+          "support_differences": [],
+          "threshold_failures": [],
+          "work_differences": [],
+          "exact": false,
+          "largest_errors": [
+            {
+              "tensor": "root.summary.weight",
+              "max_abs": 5.587935447692871e-09,
+              "scaled_error": 0.0022578263021797128,
+              "relative_l2": 8.035866703623359e-08
+            },
+            {
+              "tensor": "root.input",
+              "max_abs": 1.4842953532934189e-09,
+              "scaled_error": 0.000854825455961793,
+              "relative_l2": 1.0066502139842419e-07
+            },
+            {
+              "tensor": "root.kv.weight",
+              "max_abs": 1.862645149230957e-09,
+              "scaled_error": 0.000728598982799887,
+              "relative_l2": 4.308269524443438e-08
+            },
+            {
+              "tensor": "root.output.weight",
+              "max_abs": 2.9103830456733704e-10,
+              "scaled_error": 0.00024851241210419825,
+              "relative_l2": 4.00819480738802e-07
+            },
+            {
+              "tensor": "root.ffn.down.weight",
+              "max_abs": 3.7834979593753815e-10,
+              "scaled_error": 0.00024837622909164205,
+              "relative_l2": 4.179804367405176e-07
+            },
+            {
+              "tensor": "root.ffn.up.weight",
+              "max_abs": 3.7834979593753815e-10,
+              "scaled_error": 0.0002309095430158955,
+              "relative_l2": 3.2353476115079706e-07
+            },
+            {
+              "tensor": "root.query.heads.5.weight",
+              "max_abs": 5.238689482212067e-10,
+              "scaled_error": 0.00022161006854384057,
+              "relative_l2": 6.383678780689824e-07
+            },
+            {
+              "tensor": "root.query.heads.4.weight",
+              "max_abs": 2.6193447411060333e-10,
+              "scaled_error": 0.0002108717663215408,
+              "relative_l2": 1.052702729937644e-06
+            }
+          ]
+        }
+      }
+    },
+    {
+      "width": 128,
+      "d": 768,
+      "summary_width": 192,
+      "ffn_width": 3072,
+      "heads": 4,
+      "head_width": 32,
+      "batch": 1,
+      "input_shape": [
+        2,
+        1,
+        7,
+        768
+      ],
+      "sharing": "independent",
+      "state": "within_threshold",
+      "scope": "FP32 or bounded CPU FP64 literal formula, private adapters and node state, int64 translation, zero write, window eviction, full VJP",
+      "query_dispatch": {
+        "selected_fused_projection": true,
+        "fused_base_projection_observed": true,
+        "operators": [
+          {
+            "operator": "aten.bmm.default",
+            "inputs": [
+              "npu:0:torch.float32"
+            ],
+            "outputs": [
+              "npu:0:torch.float32"
+            ],
+            "calls": 3
+          }
+        ],
+        "materializations": {
+          "aten.index.Tensor": {
+            "calls": 15,
+            "output_bytes": 1179672
+          },
+          "aten.cat.default": {
+            "calls": 3,
+            "output_bytes": 1179648
+          }
+        },
+        "matrix_shapes": [
+          {
+            "operator": "aten.bmm.default",
+            "inputs": [
+              [
+                1,
+                1,
+                768
+              ],
+              [
+                1,
+                768,
+                128
+              ]
+            ],
+            "calls": 3
+          }
+        ],
+        "materialization_definition": "logical output bytes from dispatched copy/index/concatenate operations; not hardware bus traffic, bandwidth or all operand loads",
+        "instrumentation": "separate ordinary forward without semantic counting hooks; excluded from timing",
+        "bf16_matrix_observed": false
+      },
+      "identity": {
+        "parameters": "428070f5d510d86536f05d3204cfd1c43df69ad7932c844cf90166ece035b9a3",
+        "input": "4445b46d4846d43e6d011a480fa3bca8cafa904b433a0e3f45aa9ca5517c6f55",
+        "mass": "a781cbf319e6e9216f8ac2e20c5bf8ea8d2338efdb494d38907f4a1d66e5a1c6",
+        "times": "73b2831525e222828de97a0f00d4b6ccd9c723d735829a54b45c5bec8c7ba65a"
+      },
+      "zero_mass_gradient_nonzeros": [
+        0,
+        0,
+        0
+      ],
+      "first_time": 36028797018963987,
+      "retained_times": [
+        [
+          [
+            36028797018963999,
+            36028797018964007,
+            36028797018964011
+          ]
+        ],
+        [
+          [
+            36028797018963999,
+            36028797018964003,
+            36028797018964007
+          ]
+        ]
+      ],
+      "checks": {
+        "value_formula": {
+          "tolerance": {
+            "atol": 1e-06,
+            "rtol": 0.002
+          },
+          "metadata_failures": [],
+          "dtype_differences": [],
+          "nonfinite": [],
+          "support_differences": [],
+          "threshold_failures": [],
+          "work_differences": [],
+          "exact": false,
+          "largest_errors": [
+            {
+              "tensor": "root.description.0",
+              "max_abs": 9.5367431640625e-07,
+              "scaled_error": 0.17214937473360695,
+              "relative_l2": 1.3939395416958497e-07
+            },
+            {
+              "tensor": "root.full",
+              "max_abs": 2.1457672119140625e-06,
+              "scaled_error": 0.0692624856646444,
+              "relative_l2": 3.696803783823667e-07
+            },
+            {
+              "tensor": "root.state.0.0.36028797018964011.3",
+              "max_abs": 5.960464477539062e-07,
+              "scaled_error": 0.06762505629114879,
+              "relative_l2": 1.7110445207611988e-07
+            },
+            {
+              "tensor": "root.state.0.0.36028797018964007.3",
+              "max_abs": 2.384185791015625e-07,
+              "scaled_error": 0.044477875972228055,
+              "relative_l2": 6.205502293558946e-08
+            },
+            {
+              "tensor": "root.description.2",
+              "max_abs": 2.384185791015625e-07,
+              "scaled_error": 0.03467080929974606,
+              "relative_l2": 1.303031857185613e-07
+            },
+            {
+              "tensor": "root.description.1",
+              "max_abs": 2.384185791015625e-07,
+              "scaled_error": 0.03286386515958754,
+              "relative_l2": 1.304783368882304e-07
+            },
+            {
+              "tensor": "root.state.1.0.36028797018964007.2",
+              "max_abs": 1.9073486328125e-06,
+              "scaled_error": 0.01889906785916506,
+              "relative_l2": 3.169041543999324e-07
+            },
+            {
+              "tensor": "root.state.0.0.36028797018963999.1",
+              "max_abs": 1.7881393432617188e-06,
+              "scaled_error": 0.01548553282865555,
+              "relative_l2": 2.8447882416831126e-07
+            }
+          ]
+        },
+        "vjp_formula": {
+          "tolerance": {
+            "atol": 1e-06,
+            "rtol": 0.002
+          },
+          "metadata_failures": [],
+          "dtype_differences": [],
+          "nonfinite": [],
+          "support_differences": [],
+          "threshold_failures": [],
+          "work_differences": [],
+          "exact": false,
+          "largest_errors": [
+            {
+              "tensor": "root.kv.weight",
+              "max_abs": 5.587935447692871e-09,
+              "scaled_error": 0.0028071403938063457,
+              "relative_l2": 6.034450713991666e-08
+            },
+            {
+              "tensor": "root.summary.weight",
+              "max_abs": 5.587935447692871e-09,
+              "scaled_error": 0.002730276866188838,
+              "relative_l2": 8.989082693318485e-08
+            },
+            {
+              "tensor": "root.query.heads.0.weight",
+              "max_abs": 9.604264050722122e-10,
+              "scaled_error": 0.0006553310107509473,
+              "relative_l2": 1.7904747675057768e-06
+            },
+            {
+              "tensor": "root.input",
+              "max_abs": 2.7939677238464355e-09,
+              "scaled_error": 0.0006337647606989272,
+              "relative_l2": 1.0538609196928899e-07
+            },
+            {
+              "tensor": "root.query.heads.2.weight",
+              "max_abs": 8.731149137020111e-10,
+              "scaled_error": 0.0004413332323600558,
+              "relative_l2": 1.12339496686421e-06
+            },
+            {
+              "tensor": "root.query.heads.1.weight",
+              "max_abs": 8.149072527885437e-10,
+              "scaled_error": 0.00035168031815038515,
+              "relative_l2": 6.958846829083432e-07
+            },
+            {
+              "tensor": "root.ffn.down.weight",
+              "max_abs": 4.94765117764473e-10,
+              "scaled_error": 0.0002599447110492856,
+              "relative_l2": 5.021118077843404e-07
+            },
+            {
+              "tensor": "root.ffn.gate.weight",
+              "max_abs": 3.4924596548080444e-10,
+              "scaled_error": 0.00023619759465543966,
+              "relative_l2": 4.858359485159072e-07
+            }
+          ]
+        },
+        "value_continuation": {
+          "tolerance": {
+            "atol": 1e-06,
+            "rtol": 0.002
+          },
+          "metadata_failures": [],
+          "dtype_differences": [],
+          "nonfinite": [],
+          "support_differences": [],
+          "threshold_failures": [],
+          "work_differences": [],
+          "exact": false,
+          "largest_errors": [
+            {
+              "tensor": "root.full",
+              "max_abs": 2.562999725341797e-06,
+              "scaled_error": 0.11542148734951477,
+              "relative_l2": 2.86161228259553e-07
+            },
+            {
+              "tensor": "root.description.2",
+              "max_abs": 1.1920928955078125e-07,
+              "scaled_error": 0.0011332656159152913,
+              "relative_l2": 1.9196612723574694e-08
+            },
+            {
+              "tensor": "root.description.1",
+              "max_abs": 5.960464477539063e-08,
+              "scaled_error": 0.0006033991732625506,
+              "relative_l2": 1.539244932987892e-08
+            },
+            {
+              "tensor": "root.description.4",
+              "max_abs": 5.960464477539063e-08,
+              "scaled_error": 3.3095303946823996e-05,
+              "relative_l2": 2.6497495777961055e-08
+            },
+            {
+              "tensor": "root.description.0",
+              "max_abs": 0.0,
+              "scaled_error": 0.0,
+              "relative_l2": 0.0
+            },
+            {
+              "tensor": "root.description.3",
+              "max_abs": 0.0,
+              "scaled_error": 0.0,
+              "relative_l2": 0.0
+            },
+            {
+              "tensor": "root.state.0.0.36028797018963999.0",
+              "max_abs": 0.0,
+              "scaled_error": 0.0,
+              "relative_l2": 0.0
+            },
+            {
+              "tensor": "root.state.0.0.36028797018963999.1",
+              "max_abs": 0.0,
+              "scaled_error": 0.0,
+              "relative_l2": 0.0
+            }
+          ]
+        },
+        "vjp_continuation": {
+          "tolerance": {
+            "atol": 1e-06,
+            "rtol": 0.002
+          },
+          "metadata_failures": [],
+          "dtype_differences": [],
+          "nonfinite": [],
+          "support_differences": [],
+          "threshold_failures": [],
+          "work_differences": [],
+          "exact": false,
+          "largest_errors": [
+            {
+              "tensor": "root.summary.weight",
+              "max_abs": 5.587935447692871e-09,
+              "scaled_error": 0.0022578263021797128,
+              "relative_l2": 8.035866703623359e-08
+            },
+            {
+              "tensor": "root.kv.weight",
+              "max_abs": 3.725290298461914e-09,
+              "scaled_error": 0.002197652308051002,
+              "relative_l2": 4.213511166633522e-08
+            },
+            {
+              "tensor": "root.input",
+              "max_abs": 1.862645149230957e-09,
+              "scaled_error": 0.0007279484213097268,
+              "relative_l2": 9.010614380479381e-08
+            },
+            {
+              "tensor": "root.ffn.down.weight",
+              "max_abs": 4.94765117764473e-10,
+              "scaled_error": 0.00027919678004742184,
+              "relative_l2": 4.109788644064279e-07
+            },
+            {
+              "tensor": "root.query.heads.1.weight",
+              "max_abs": 5.238689482212067e-10,
+              "scaled_error": 0.00024106805793201383,
+              "relative_l2": 6.029141240533043e-07
+            },
+            {
+              "tensor": "root.output.weight",
+              "max_abs": 2.4010660126805305e-10,
+              "scaled_error": 0.00022359999347671276,
+              "relative_l2": 3.827364192323169e-07
+            },
+            {
+              "tensor": "root.query.heads.0.weight",
+              "max_abs": 4.0745362639427185e-10,
+              "scaled_error": 0.0002207363917238643,
+              "relative_l2": 8.135715724629267e-07
+            },
+            {
+              "tensor": "root.ffn.gate.weight",
+              "max_abs": 3.2014213502407074e-10,
+              "scaled_error": 0.00020757016550921944,
+              "relative_l2": 3.0187330751275173e-07
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

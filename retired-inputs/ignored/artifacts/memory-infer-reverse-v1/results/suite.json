@@ -1,0 +1,812 @@
+{
+  "schema": "tide-memory-candidate-suite-v1",
+  "source": "301a327569aa75aefddd03cac9ca839589db5672",
+  "state": "completed",
+  "started": "2026-11-19T02:27:35.240012+00:00",
+  "arguments": {
+    "phase": "inference",
+    "config": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-infer-reverse-v1/source/configs/memory-candidates/9b-reverse.json",
+    "output_dir": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-infer-reverse-v1/results",
+    "device": "npu:0",
+    "threads": 4,
+    "train_batch": 8,
+    "plan_only": false
+  },
+  "config_file": {
+    "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-infer-reverse-v1/source/configs/memory-candidates/9b-reverse.json",
+    "sha256": "5f52db0b841780082f1df641b17a42f21f55eecde10046620d2d92fc02aa23a6"
+  },
+  "config": {
+    "topology": {
+      "kind": "multiscale",
+      "n": 32,
+      "layers": null,
+      "depth": null,
+      "rounds": null,
+      "profile": "5-dd4",
+      "hubs": 4,
+      "partition": "group",
+      "timing": "settle",
+      "hub_mask": "all",
+      "period": null,
+      "probes": null
+    },
+    "d": 768,
+    "memory": "X_reverse",
+    "aggregation": "source_residual",
+    "allocation": "quad",
+    "sharing": "independent",
+    "adapter_rank": 8,
+    "budget": null,
+    "attention_backend": "auto",
+    "attention_chunk": 128,
+    "input_dim": null,
+    "region_batch_size": 4,
+    "ssd_scan_backend": "doubling",
+    "ssd_summary_backend": "prefix",
+    "parameter_indexing": "gather",
+    "kv_width": null,
+    "ffn_width": null,
+    "memory_sharing": null,
+    "checkpoint_reception": false
+  },
+  "cwd": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-infer-reverse-v1/source",
+  "executable": "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+  "cpu_affinity": [
+    56,
+    57,
+    58,
+    59
+  ],
+  "physical_devices": "5",
+  "resource_identity": "exclusive_cooperative_queue; external jobs not controlled",
+  "scope": "finite one-candidate FP32 study; completion is not model-quality or strict numerical-equivalence qualification",
+  "policy": {
+    "child_timeout_seconds": 1800,
+    "child_sampled_rss_gib": 96,
+    "allocated_gib": 48,
+    "inference_reserved_gib": 56,
+    "common_batches": [
+      1,
+      8
+    ],
+    "screen_ladder": [
+      12,
+      16,
+      24,
+      32,
+      48,
+      64
+    ],
+    "common_budget_fallback": "only a sampled B8 refusal after successful B1 permits one formal B4; no further screening",
+    "max_screen_measurements": 3,
+    "minimum_relative_gain": 0.03,
+    "selection": "highest observed median stable-decode throughput; formal confirmation kept distinct; finite measured best, not global optimum",
+    "training": "20 continuous updates, same-batch fresh-process restored update, two continuing memory-ledger segments; B8 may fall back to B4 only after explicit sampled device budget refusal"
+  },
+  "children": [
+    {
+      "identity": "common-b1",
+      "state": "completed",
+      "command": [
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+        "-u",
+        "-m",
+        "benchmarks.inference",
+        "--config",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-infer-reverse-v1/source/configs/memory-candidates/9b-reverse.json",
+        "--subjects",
+        "tide",
+        "--devices",
+        "npu:0",
+        "--precision",
+        "fp32",
+        "--threads",
+        "4",
+        "--batch",
+        "1",
+        "--prefill",
+        "128",
+        "--prefill-chunk",
+        "32",
+        "--decode",
+        "16",
+        "--stream-positions",
+        "0",
+        "--warmup",
+        "2",
+        "--samples",
+        "5",
+        "--audit",
+        "full",
+        "--allocated-budget-gib",
+        "48",
+        "--reserved-budget-gib",
+        "56",
+        "--output",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-infer-reverse-v1/results/common-b1.json"
+      ],
+      "output": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-infer-reverse-v1/results/common-b1.json",
+      "log": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-infer-reverse-v1/results/common-b1.log",
+      "timeout_seconds": 1800,
+      "max_rss_bytes": 103079215104,
+      "phase": "inference",
+      "batch": 1,
+      "formal": true,
+      "warmup": 2,
+      "samples": 5,
+      "started": "2026-11-19T02:27:35.242718+00:00",
+      "pid": 1078672,
+      "sampled_process_tree_peak_rss_bytes": 36031909888,
+      "exit_code": 0,
+      "inner_state": "completed",
+      "result_sha256": "610565dab68eb04d0d5ac45ffc7304df5ecdb39f858137b5a6043fc32e09a2cb",
+      "descendant_identities": [
+        {
+          "pid": 1078672,
+          "start_ticks": 2264142595
+        }
+      ],
+      "ended": "2026-11-19T02:31:11.554011+00:00",
+      "elapsed_seconds": 216.30936210602522,
+      "terminal_review": {
+        "checked": "2026-11-19T02:31:11.562498+00:00",
+        "live": [],
+        "all_recorded_descendants_terminal": true
+      },
+      "outcome": "completed",
+      "review_state": "passed"
+    },
+    {
+      "identity": "common-b8",
+      "state": "completed",
+      "command": [
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+        "-u",
+        "-m",
+        "benchmarks.inference",
+        "--config",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-infer-reverse-v1/source/configs/memory-candidates/9b-reverse.json",
+        "--subjects",
+        "tide",
+        "--devices",
+        "npu:0",
+        "--precision",
+        "fp32",
+        "--threads",
+        "4",
+        "--batch",
+        "8",
+        "--prefill",
+        "128",
+        "--prefill-chunk",
+        "32",
+        "--decode",
+        "16",
+        "--stream-positions",
+        "0",
+        "--warmup",
+        "2",
+        "--samples",
+        "5",
+        "--audit",
+        "full",
+        "--allocated-budget-gib",
+        "48",
+        "--reserved-budget-gib",
+        "56",
+        "--output",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-infer-reverse-v1/results/common-b8.json"
+      ],
+      "output": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-infer-reverse-v1/results/common-b8.json",
+      "log": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-infer-reverse-v1/results/common-b8.log",
+      "timeout_seconds": 1800,
+      "max_rss_bytes": 103079215104,
+      "phase": "inference",
+      "batch": 8,
+      "formal": true,
+      "warmup": 2,
+      "samples": 5,
+      "started": "2026-11-19T02:31:11.580935+00:00",
+      "pid": 1092974,
+      "sampled_process_tree_peak_rss_bytes": 36026130432,
+      "exit_code": 0,
+      "inner_state": "completed",
+      "result_sha256": "d87ebddfe7c6f8e11bbbafed1a22398682fea3560bfcfa26f85c1d421333a5d1",
+      "descendant_identities": [
+        {
+          "pid": 1092974,
+          "start_ticks": 2264164229
+        }
+      ],
+      "ended": "2026-11-19T02:36:16.282348+00:00",
+      "elapsed_seconds": 304.69949769973755,
+      "terminal_review": {
+        "checked": "2026-11-19T02:36:16.284838+00:00",
+        "live": [],
+        "all_recorded_descendants_terminal": true
+      },
+      "outcome": "completed",
+      "review_state": "passed"
+    },
+    {
+      "identity": "screen-b16",
+      "state": "completed",
+      "command": [
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+        "-u",
+        "-m",
+        "benchmarks.inference",
+        "--config",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-infer-reverse-v1/source/configs/memory-candidates/9b-reverse.json",
+        "--subjects",
+        "tide",
+        "--devices",
+        "npu:0",
+        "--precision",
+        "fp32",
+        "--threads",
+        "4",
+        "--batch",
+        "16",
+        "--prefill",
+        "128",
+        "--prefill-chunk",
+        "32",
+        "--decode",
+        "16",
+        "--stream-positions",
+        "0",
+        "--warmup",
+        "1",
+        "--samples",
+        "2",
+        "--audit",
+        "full",
+        "--allocated-budget-gib",
+        "48",
+        "--reserved-budget-gib",
+        "56",
+        "--output",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-infer-reverse-v1/results/screen-b16.json"
+      ],
+      "output": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-infer-reverse-v1/results/screen-b16.json",
+      "log": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-infer-reverse-v1/results/screen-b16.log",
+      "timeout_seconds": 1800,
+      "max_rss_bytes": 103079215104,
+      "phase": "inference",
+      "batch": 16,
+      "formal": false,
+      "warmup": 1,
+      "samples": 2,
+      "started": "2026-11-19T02:36:16.295749+00:00",
+      "pid": 1112606,
+      "sampled_process_tree_peak_rss_bytes": 35726041088,
+      "exit_code": 0,
+      "inner_state": "completed",
+      "result_sha256": "470a4ba43cd961e90cf53e93e41fafbe5822a7d6dc035f00bd05174ad21c0864",
+      "descendant_identities": [
+        {
+          "pid": 1112606,
+          "start_ticks": 2264194700
+        }
+      ],
+      "ended": "2026-11-19T02:41:31.450761+00:00",
+      "elapsed_seconds": 315.15274945646524,
+      "terminal_review": {
+        "checked": "2026-11-19T02:41:31.453776+00:00",
+        "live": [],
+        "all_recorded_descendants_terminal": true
+      },
+      "outcome": "completed",
+      "review_state": "passed"
+    },
+    {
+      "identity": "confirm-b16",
+      "state": "completed",
+      "command": [
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+        "-u",
+        "-m",
+        "benchmarks.inference",
+        "--config",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-infer-reverse-v1/source/configs/memory-candidates/9b-reverse.json",
+        "--subjects",
+        "tide",
+        "--devices",
+        "npu:0",
+        "--precision",
+        "fp32",
+        "--threads",
+        "4",
+        "--batch",
+        "16",
+        "--prefill",
+        "128",
+        "--prefill-chunk",
+        "32",
+        "--decode",
+        "16",
+        "--stream-positions",
+        "0",
+        "--warmup",
+        "2",
+        "--samples",
+        "5",
+        "--audit",
+        "full",
+        "--allocated-budget-gib",
+        "48",
+        "--reserved-budget-gib",
+        "56",
+        "--output",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-infer-reverse-v1/results/confirm-b16.json"
+      ],
+      "output": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-infer-reverse-v1/results/confirm-b16.json",
+      "log": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-infer-reverse-v1/results/confirm-b16.log",
+      "timeout_seconds": 1800,
+      "max_rss_bytes": 103079215104,
+      "phase": "inference",
+      "batch": 16,
+      "formal": true,
+      "warmup": 2,
+      "samples": 5,
+      "started": "2026-11-19T02:41:31.465554+00:00",
+      "pid": 1133389,
+      "sampled_process_tree_peak_rss_bytes": 36038545408,
+      "exit_code": 0,
+      "inner_state": "completed",
+      "result_sha256": "3209433dcf6df7a25746e19f696e2390c6e223e51eac5b67280e8caded97fb56",
+      "descendant_identities": [
+        {
+          "pid": 1133389,
+          "start_ticks": 2264226217
+        }
+      ],
+      "ended": "2026-11-19T02:47:48.828819+00:00",
+      "elapsed_seconds": 377.3605260513723,
+      "terminal_review": {
+        "checked": "2026-11-19T02:47:48.832266+00:00",
+        "live": [],
+        "all_recorded_descendants_terminal": true
+      },
+      "outcome": "completed",
+      "review_state": "passed"
+    }
+  ],
+  "decisions": [
+    {
+      "kind": "screen_selection",
+      "measurement_opportunity": 1,
+      "predictions": [
+        {
+          "state": "projected_fit",
+          "batch": 12,
+          "anchor_batch": 8,
+          "source_identities": [
+            "common-b1",
+            "common-b8"
+          ],
+          "predicted_peak_bytes": {
+            "allocated": 45467759456,
+            "reserved": 50044193120
+          },
+          "slope_bytes_per_batch": {
+            "allocated": 947664344.0,
+            "reserved": 1329033816.0
+          },
+          "method": "largest observed nonnegative adjacent slope or anchor excess over FP32 weights per batch, whichever is greater; not a hardware/allocator fit guarantee"
+        },
+        {
+          "state": "projected_fit",
+          "batch": 16,
+          "anchor_batch": 8,
+          "source_identities": [
+            "common-b1",
+            "common-b8"
+          ],
+          "predicted_peak_bytes": {
+            "allocated": 49258416832,
+            "reserved": 55360328384
+          },
+          "slope_bytes_per_batch": {
+            "allocated": 947664344.0,
+            "reserved": 1329033816.0
+          },
+          "method": "largest observed nonnegative adjacent slope or anchor excess over FP32 weights per batch, whichever is greater; not a hardware/allocator fit guarantee"
+        }
+      ],
+      "selected_batch": 16
+    },
+    {
+      "kind": "measured_gain",
+      "identity": "screen-b16",
+      "previous": "common-b8",
+      "relative_gain": 0.5089990189019162,
+      "stop_below": 0.03
+    },
+    {
+      "kind": "screen_selection",
+      "measurement_opportunity": 2,
+      "predictions": [
+        {
+          "state": "projected_budget_refusal",
+          "batch": 24,
+          "anchor_batch": 16,
+          "source_identities": [
+            "common-b1",
+            "common-b8",
+            "screen-b16"
+          ],
+          "predicted_peak_bytes": {
+            "allocated": 55312313696,
+            "reserved": 71122812928
+          },
+          "slope_bytes_per_batch": {
+            "allocated": 884021932.0,
+            "reserved": 1649672192.0
+          },
+          "method": "largest observed nonnegative adjacent slope or anchor excess over FP32 weights per batch, whichever is greater; not a hardware/allocator fit guarantee"
+        },
+        {
+          "state": "projected_budget_refusal",
+          "batch": 32,
+          "anchor_batch": 16,
+          "source_identities": [
+            "common-b1",
+            "common-b8",
+            "screen-b16"
+          ],
+          "predicted_peak_bytes": {
+            "allocated": 62384489152,
+            "reserved": 84320190464
+          },
+          "slope_bytes_per_batch": {
+            "allocated": 884021932.0,
+            "reserved": 1649672192.0
+          },
+          "method": "largest observed nonnegative adjacent slope or anchor excess over FP32 weights per batch, whichever is greater; not a hardware/allocator fit guarantee"
+        }
+      ],
+      "selected_batch": null
+    }
+  ],
+  "measurements": [
+    {
+      "identity": "common-b1",
+      "batch": 1,
+      "formal": true,
+      "samples": 5,
+      "warmup": 2,
+      "within_budget": true,
+      "stable_decode_positions_per_second": 3.1916687149120255,
+      "stable_decode_samples": [
+        3.1892584779926714,
+        3.187607600499169,
+        3.197561765231489,
+        3.193191488519395,
+        3.1916687149120255
+      ],
+      "first_backbone_output_seconds": 0.4918226823210716,
+      "prefill_positions_per_second": 64.72429993788454,
+      "complete_positions_per_second": 20.63241702489016,
+      "peak_bytes": {
+        "allocated": 35932079104,
+        "reserved": 37142659072
+      },
+      "normal_peak_bytes": {
+        "allocated": 35932079104,
+        "reserved": 37142659072
+      },
+      "cold_peak_bytes": {
+        "allocated": 35930223616,
+        "reserved": 37142659072
+      },
+      "parameters": 8523946832,
+      "parameter_bytes": 34095787328,
+      "final_private_state": {
+        "payload_bytes": 196270080,
+        "retained_storage_bytes": 196270080,
+        "dtypes": [
+          "torch.float32",
+          "torch.int64"
+        ],
+        "tensor_count": 292
+      },
+      "output": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-infer-reverse-v1/results/common-b1.json",
+      "result_sha256": "610565dab68eb04d0d5ac45ffc7304df5ecdb39f858137b5a6043fc32e09a2cb",
+      "source": {
+        "source_commit": "301a327569aa75aefddd03cac9ca839589db5672",
+        "harness_commit": "301a327569aa75aefddd03cac9ca839589db5672",
+        "tide_content_sha256": "7bc4f743a47f1f208f11850314c6a61ea5bb795085a7503b1b9337a051476d38",
+        "harness_content_sha256": "6aa2a7d116ffc3e581848644c95f5c459adbcfbe2454319f141b76ac099e2d5b",
+        "tide_path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-infer-reverse-v1/source/src/tide",
+        "harness_path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-infer-reverse-v1/source/benchmarks"
+      },
+      "physical_devices": "5",
+      "input_sha256": "c5f402fae8e34bc660ddb615875cf6bbd1a7d7dabe9792928544df4bc0149564",
+      "initial_parameters": {
+        "sha256": "90e9d5373858ac184222a87b1903532346b0851f9048c3566b3969c7f4ce840f",
+        "finite": true,
+        "host_copy_chunk_bytes": 8388608,
+        "scope": "dense initial named Parameters before ownership placement; shape/name/raw contiguous bytes"
+      },
+      "work": {
+        "positive_messages": 157670,
+        "message_slots": 928512,
+        "candidate_updates": 82457,
+        "candidate_slots": 122112,
+        "regional_attention_positive_pairs": 19863132,
+        "full_actions": 22458,
+        "kv_attention_effective_pairs": 19783680
+      },
+      "query_packing": {
+        "S": {
+          "calls": 160,
+          "selected_rows": 10938,
+          "executed_rows": 41709
+        },
+        "K": {
+          "calls": 100,
+          "selected_rows": 11520,
+          "executed_rows": 11520
+        }
+      },
+      "audit_location": "matching_reference.audit in output; includes parameter touches, actual matrices/dispatch and retained stream identity",
+      "timing_scope": "median of independent zero-state normal requests; prefill128/chunk32/decode16; stable decode omits first incremental call; no task head"
+    },
+    {
+      "identity": "common-b8",
+      "batch": 8,
+      "formal": true,
+      "samples": 5,
+      "warmup": 2,
+      "within_budget": true,
+      "stable_decode_positions_per_second": 15.25603873741122,
+      "stable_decode_samples": [
+        15.150885533777354,
+        15.507736720122047,
+        15.435006604896257,
+        14.904151356406642,
+        15.25603873741122
+      ],
+      "first_backbone_output_seconds": 0.9567593522369862,
+      "prefill_positions_per_second": 261.9155213104925,
+      "complete_positions_per_second": 93.51656372975206,
+      "peak_bytes": {
+        "allocated": 41677102080,
+        "reserved": 44728057856
+      },
+      "normal_peak_bytes": {
+        "allocated": 41676967424,
+        "reserved": 44728057856
+      },
+      "cold_peak_bytes": {
+        "allocated": 41677102080,
+        "reserved": 44728057856
+      },
+      "parameters": 8523946832,
+      "parameter_bytes": 34095787328,
+      "final_private_state": {
+        "payload_bytes": 1570160640,
+        "retained_storage_bytes": 1570160640,
+        "dtypes": [
+          "torch.float32",
+          "torch.int64"
+        ],
+        "tensor_count": 292
+      },
+      "output": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-infer-reverse-v1/results/common-b8.json",
+      "result_sha256": "d87ebddfe7c6f8e11bbbafed1a22398682fea3560bfcfa26f85c1d421333a5d1",
+      "source": {
+        "source_commit": "301a327569aa75aefddd03cac9ca839589db5672",
+        "harness_commit": "301a327569aa75aefddd03cac9ca839589db5672",
+        "tide_content_sha256": "7bc4f743a47f1f208f11850314c6a61ea5bb795085a7503b1b9337a051476d38",
+        "harness_content_sha256": "6aa2a7d116ffc3e581848644c95f5c459adbcfbe2454319f141b76ac099e2d5b",
+        "tide_path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-infer-reverse-v1/source/src/tide",
+        "harness_path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-infer-reverse-v1/source/benchmarks"
+      },
+      "physical_devices": "5",
+      "input_sha256": "0d113ed21f9aa2a0edec2ddadd3f210e03f626ce97cffab507c3e1729f8d2f0a",
+      "initial_parameters": {
+        "sha256": "90e9d5373858ac184222a87b1903532346b0851f9048c3566b3969c7f4ce840f",
+        "finite": true,
+        "host_copy_chunk_bytes": 8388608,
+        "scope": "dense initial named Parameters before ownership placement; shape/name/raw contiguous bytes"
+      },
+      "work": {
+        "positive_messages": 1267220,
+        "message_slots": 7428096,
+        "candidate_updates": 661142,
+        "candidate_slots": 976896,
+        "regional_attention_positive_pairs": 159670512,
+        "full_actions": 179997,
+        "kv_attention_effective_pairs": 158269440
+      },
+      "query_packing": {
+        "S": {
+          "calls": 160,
+          "selected_rows": 87837,
+          "executed_rows": 525224
+        },
+        "K": {
+          "calls": 100,
+          "selected_rows": 92160,
+          "executed_rows": 92160
+        }
+      },
+      "audit_location": "matching_reference.audit in output; includes parameter touches, actual matrices/dispatch and retained stream identity",
+      "timing_scope": "median of independent zero-state normal requests; prefill128/chunk32/decode16; stable decode omits first incremental call; no task head"
+    },
+    {
+      "identity": "screen-b16",
+      "batch": 16,
+      "formal": false,
+      "samples": 2,
+      "warmup": 1,
+      "within_budget": true,
+      "stable_decode_positions_per_second": 23.021347487083162,
+      "stable_decode_samples": [
+        22.98783297384305,
+        23.054862000323272
+      ],
+      "first_backbone_output_seconds": 1.55199483782053,
+      "prefill_positions_per_second": 328.91064425755496,
+      "complete_positions_per_second": 132.82623223158123,
+      "peak_bytes": {
+        "allocated": 48240138240,
+        "reserved": 57925435392
+      },
+      "normal_peak_bytes": {
+        "allocated": 48238966784,
+        "reserved": 56199479296
+      },
+      "cold_peak_bytes": {
+        "allocated": 48240138240,
+        "reserved": 57925435392
+      },
+      "parameters": 8523946832,
+      "parameter_bytes": 34095787328,
+      "final_private_state": {
+        "payload_bytes": 3140321280,
+        "retained_storage_bytes": 3140321280,
+        "dtypes": [
+          "torch.float32",
+          "torch.int64"
+        ],
+        "tensor_count": 292
+      },
+      "output": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-infer-reverse-v1/results/screen-b16.json",
+      "result_sha256": "470a4ba43cd961e90cf53e93e41fafbe5822a7d6dc035f00bd05174ad21c0864",
+      "source": {
+        "source_commit": "301a327569aa75aefddd03cac9ca839589db5672",
+        "harness_commit": "301a327569aa75aefddd03cac9ca839589db5672",
+        "tide_content_sha256": "7bc4f743a47f1f208f11850314c6a61ea5bb795085a7503b1b9337a051476d38",
+        "harness_content_sha256": "6aa2a7d116ffc3e581848644c95f5c459adbcfbe2454319f141b76ac099e2d5b",
+        "tide_path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-infer-reverse-v1/source/src/tide",
+        "harness_path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-infer-reverse-v1/source/benchmarks"
+      },
+      "physical_devices": "5",
+      "input_sha256": "51b8dd0149c4de00741ae972e18bba9d723e8e04e48a847c86bdd124c1c6a143",
+      "initial_parameters": {
+        "sha256": "90e9d5373858ac184222a87b1903532346b0851f9048c3566b3969c7f4ce840f",
+        "finite": true,
+        "host_copy_chunk_bytes": 8388608,
+        "scope": "dense initial named Parameters before ownership placement; shape/name/raw contiguous bytes"
+      },
+      "work": {
+        "positive_messages": 2532113,
+        "message_slots": 14856192,
+        "candidate_updates": 1320748,
+        "candidate_slots": 1953792,
+        "regional_attention_positive_pairs": 318721920,
+        "full_actions": 359799,
+        "kv_attention_effective_pairs": 316538880
+      },
+      "query_packing": {
+        "S": {
+          "calls": 160,
+          "selected_rows": 175479,
+          "executed_rows": 1123056
+        },
+        "K": {
+          "calls": 100,
+          "selected_rows": 184320,
+          "executed_rows": 184320
+        }
+      },
+      "audit_location": "matching_reference.audit in output; includes parameter touches, actual matrices/dispatch and retained stream identity",
+      "timing_scope": "median of independent zero-state normal requests; prefill128/chunk32/decode16; stable decode omits first incremental call; no task head"
+    },
+    {
+      "identity": "confirm-b16",
+      "batch": 16,
+      "formal": true,
+      "samples": 5,
+      "warmup": 2,
+      "within_budget": true,
+      "stable_decode_positions_per_second": 23.26302301513662,
+      "stable_decode_samples": [
+        22.955746462234647,
+        23.26302301513662,
+        23.08593244689032,
+        23.300712429924413,
+        23.264532406448527
+      ],
+      "first_backbone_output_seconds": 1.5163299664855003,
+      "prefill_positions_per_second": 328.8122059704576,
+      "complete_positions_per_second": 133.05395214610363,
+      "peak_bytes": {
+        "allocated": 48240138240,
+        "reserved": 57925435392
+      },
+      "normal_peak_bytes": {
+        "allocated": 48240010752,
+        "reserved": 55102668800
+      },
+      "cold_peak_bytes": {
+        "allocated": 48240138240,
+        "reserved": 57925435392
+      },
+      "parameters": 8523946832,
+      "parameter_bytes": 34095787328,
+      "final_private_state": {
+        "payload_bytes": 3140321280,
+        "retained_storage_bytes": 3140321280,
+        "dtypes": [
+          "torch.float32",
+          "torch.int64"
+        ],
+        "tensor_count": 292
+      },
+      "output": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-infer-reverse-v1/results/confirm-b16.json",
+      "result_sha256": "3209433dcf6df7a25746e19f696e2390c6e223e51eac5b67280e8caded97fb56",
+      "source": {
+        "source_commit": "301a327569aa75aefddd03cac9ca839589db5672",
+        "harness_commit": "301a327569aa75aefddd03cac9ca839589db5672",
+        "tide_content_sha256": "7bc4f743a47f1f208f11850314c6a61ea5bb795085a7503b1b9337a051476d38",
+        "harness_content_sha256": "6aa2a7d116ffc3e581848644c95f5c459adbcfbe2454319f141b76ac099e2d5b",
+        "tide_path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-infer-reverse-v1/source/src/tide",
+        "harness_path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-infer-reverse-v1/source/benchmarks"
+      },
+      "physical_devices": "5",
+      "input_sha256": "51b8dd0149c4de00741ae972e18bba9d723e8e04e48a847c86bdd124c1c6a143",
+      "initial_parameters": {
+        "sha256": "90e9d5373858ac184222a87b1903532346b0851f9048c3566b3969c7f4ce840f",
+        "finite": true,
+        "host_copy_chunk_bytes": 8388608,
+        "scope": "dense initial named Parameters before ownership placement; shape/name/raw contiguous bytes"
+      },
+      "work": {
+        "positive_messages": 2532113,
+        "message_slots": 14856192,
+        "candidate_updates": 1320748,
+        "candidate_slots": 1953792,
+        "regional_attention_positive_pairs": 318721920,
+        "full_actions": 359799,
+        "kv_attention_effective_pairs": 316538880
+      },
+      "query_packing": {
+        "S": {
+          "calls": 160,
+          "selected_rows": 175479,
+          "executed_rows": 1123056
+        },
+        "K": {
+          "calls": 100,
+          "selected_rows": 184320,
+          "executed_rows": 184320
+        }
+      },
+      "audit_location": "matching_reference.audit in output; includes parameter touches, actual matrices/dispatch and retained stream identity",
+      "timing_scope": "median of independent zero-state normal requests; prefill128/chunk32/decode16; stable decode omits first incremental call; no task head",
+      "confirms_screen_identity": "screen-b16"
+    }
+  ],
+  "descendant_supervision": "Linux child subreaper; run_child PID/start tracking and per-child terminal identity review",
+  "stop_reason": "no larger ladder point with projected budget fit",
+  "best_common_or_screen": "screen-b16",
+  "best_formal_measured": "confirm-b16",
+  "ended": "2026-11-19T02:47:48.842002+00:00",
+  "all_executed_children_successful": true
+}

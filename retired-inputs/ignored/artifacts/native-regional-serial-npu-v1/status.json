@@ -1,0 +1,86 @@
+{
+  "state": "passed",
+  "source": "062a8ab6d6ba0faa191d8900420b697711b7d21d",
+  "command": [
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "/mi/data2T/zlong/home/.agents/skills/use-local-ascend/scripts/run_on_free_npu.py",
+    "--job-id",
+    "native-regional-serial-npu-v1",
+    "--project",
+    "tide-instances",
+    "--priority",
+    "0",
+    "--npu-count",
+    "1",
+    "--max-wait-seconds",
+    "600",
+    "--state-file",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/native-regional-serial-npu-v1/queue.json",
+    "--",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/native-sdk-launcher-89ce08ff.sh",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/capacity-bindings/artifacts/native-89ce08ff-cpu/build-NPU/tide-regional",
+    "--device",
+    "npu:0",
+    "--dtype",
+    "bfloat16",
+    "--mode",
+    "train",
+    "--workers",
+    "1",
+    "--inner-threads",
+    "1",
+    "--repeats",
+    "3",
+    "--warmup",
+    "1",
+    "--streams",
+    "same",
+    "--input-dir",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/capacity-bindings/artifacts/native-89ce08ff-cpu/checks/fixture",
+    "--output-dir",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/native-regional-serial-npu-v1/native"
+  ],
+  "pid": 1060557,
+  "started": "2026-11-18T07:40:53.494574+00:00",
+  "max_rss_bytes": 12884901888,
+  "peak_rss_bytes": 1736503296,
+  "max_processes": 4,
+  "rss_sample_count": 35,
+  "poll_interval": 0.25,
+  "descendant_supervision": "Linux child subreaper; retained PID/start identities across nested sessions",
+  "child_pid": 1060590,
+  "process_group": 1060590,
+  "elapsed": 14.865266136825085,
+  "descendant_identities": [
+    {
+      "pid": 1060590,
+      "start_ticks": 2257382420
+    },
+    {
+      "pid": 1060595,
+      "start_ticks": 2257382426
+    },
+    {
+      "pid": 1060956,
+      "start_ticks": 2257382886
+    },
+    {
+      "pid": 1060963,
+      "start_ticks": 2257382887
+    },
+    {
+      "pid": 1060964,
+      "start_ticks": 2257382887
+    },
+    {
+      "pid": 1061213,
+      "start_ticks": 2257383358
+    },
+    {
+      "pid": 1061405,
+      "start_ticks": 2257383533
+    }
+  ],
+  "exit_code": 0,
+  "finished": "2026-11-18T07:41:08.359840+00:00"
+}

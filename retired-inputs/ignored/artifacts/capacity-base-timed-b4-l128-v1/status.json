@@ -1,0 +1,77 @@
+{
+  "state": "passed",
+  "source": "b9182abf324d14128a45cd24c26315680f30e573",
+  "command": [
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "/mi/data2T/zlong/home/.agents/skills/use-local-ascend/scripts/run_on_free_npu.py",
+    "--job-id",
+    "capacity-base-timed-b4-l128-v1",
+    "--project",
+    "tide-instances",
+    "--priority",
+    "0",
+    "--npu-count",
+    "1",
+    "--max-wait-seconds",
+    "600",
+    "--state-file",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/capacity-base-timed-b4-l128-v1/queue.json",
+    "--",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "-m",
+    "benchmarks.run",
+    "--config",
+    "configs/hb-multiscale-x-timed.json",
+    "--device",
+    "npu:0",
+    "--precision",
+    "fp32",
+    "--batch",
+    "4",
+    "--length",
+    "128",
+    "--subjects",
+    "tide",
+    "--warmup",
+    "1",
+    "--steps",
+    "3",
+    "--output",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/capacity-base-timed-b4-l128-v1/result.json"
+  ],
+  "pid": 955192,
+  "started": "2026-11-18T07:15:58.368865+00:00",
+  "max_rss_bytes": 103079215104,
+  "peak_rss_bytes": 3052036096,
+  "max_processes": 2,
+  "rss_sample_count": 397,
+  "poll_interval": 0.25,
+  "descendant_supervision": "Linux child subreaper; retained PID/start identities across nested sessions",
+  "child_pid": 955237,
+  "process_group": 955237,
+  "elapsed": 164.61782840639353,
+  "descendant_identities": [
+    {
+      "pid": 955237,
+      "start_ticks": 2257232907
+    },
+    {
+      "pid": 955251,
+      "start_ticks": 2257232913
+    },
+    {
+      "pid": 956089,
+      "start_ticks": 2257234235
+    },
+    {
+      "pid": 956470,
+      "start_ticks": 2257234762
+    },
+    {
+      "pid": 956630,
+      "start_ticks": 2257234986
+    }
+  ],
+  "exit_code": 0,
+  "finished": "2026-11-18T07:18:42.986693+00:00"
+}

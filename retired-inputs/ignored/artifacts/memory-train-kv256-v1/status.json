@@ -1,0 +1,83 @@
+{
+  "state": "passed",
+  "source": "301a327569aa75aefddd03cac9ca839589db5672",
+  "command": [
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "/mi/data2T/zlong/home/.agents/skills/use-local-ascend/scripts/run_on_free_npu.py",
+    "--job-id",
+    "memory-train-kv256-v1",
+    "--project",
+    "tide-instances",
+    "--priority",
+    "0",
+    "--npu-count",
+    "1",
+    "--max-wait-seconds",
+    "600",
+    "--state-file",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-train-kv256-v1/queue.json",
+    "--",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "-m",
+    "benchmarks.memory_candidate_suite",
+    "--phase",
+    "train",
+    "--config",
+    "configs/memory-candidates/medium-kv256.json",
+    "--train-batch",
+    "8",
+    "--device",
+    "npu:0",
+    "--threads",
+    "4",
+    "--output-dir",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-train-kv256-v1/results"
+  ],
+  "pid": 1042442,
+  "started": "2026-11-19T02:19:13.274741+00:00",
+  "max_rss_bytes": 68719476736,
+  "peak_rss_bytes": 5030096896,
+  "max_processes": 3,
+  "rss_sample_count": 346,
+  "poll_interval": 0.25,
+  "descendant_supervision": "Linux child subreaper; retained PID/start identities across nested sessions",
+  "child_pid": 1042487,
+  "process_group": 1042487,
+  "elapsed": 148.08965899050236,
+  "descendant_identities": [
+    {
+      "pid": 1042487,
+      "start_ticks": 2264092399
+    },
+    {
+      "pid": 1042499,
+      "start_ticks": 2264092405
+    },
+    {
+      "pid": 1044163,
+      "start_ticks": 2264094522
+    },
+    {
+      "pid": 1044800,
+      "start_ticks": 2264095009
+    },
+    {
+      "pid": 1044936,
+      "start_ticks": 2264095189
+    },
+    {
+      "pid": 1044937,
+      "start_ticks": 2264095196
+    },
+    {
+      "pid": 1050146,
+      "start_ticks": 2264103260
+    },
+    {
+      "pid": 1050946,
+      "start_ticks": 2264104631
+    }
+  ],
+  "exit_code": 0,
+  "finished": "2026-11-19T02:21:41.364400+00:00"
+}

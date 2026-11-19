@@ -1,0 +1,53 @@
+{
+  "state": "waiting",
+  "started": "2026-11-18T04:37:13.569076+00:00",
+  "units": [
+    "tide-representative-cpu-v5.service",
+    "tide-scale-npu-hb-9b-v12.service",
+    "tide-scale-two-npu-hb-17b-v12.service",
+    "tide-scale-four-npu-hb-9b-train-v14.service"
+  ],
+  "command": [
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "-c",
+    "import json,math,pathlib,statistics,subprocess,sys\nfrom scripts.job import atomic\nroot=pathlib.Path(\"/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/continuous-cpu-v14\")\nrows=[]\nscores={}\nfor threads in (4,8,16):\n    latencies=[]\n    for label,mode in ((\"fc-k-small\",\"inference\"),(\"hb-timed-small\",\"train\")):\n        path=root/(\"calibration-\"+str(threads)+\"-\"+label+\".json\")\n        command=[sys.executable,\"-m\",\"benchmarks.continuous\",\"--config\",\"configs/continuous/\"+label+\".json\",\"--device\",\"cpu\",\"--precision\",\"fp32\",\"--subject\",\"tide\",\"--mode\",mode,\"--threads\",str(threads),\"--batch\",\"1\",\"--prefill\",\"128\",\"--prefill-chunk\",\"64\",\"--decode\",\"8\",\"--warmup\",\"1\",\"--updates\",\"3\",\"--output\",str(path)]\n        code=subprocess.call(command)\n        row=dict(threads=threads,label=label,command=command,exit_code=code)\n        if code: raise RuntimeError(row)\n        result=json.loads(path.read_text())\n        latency=statistics.median([entry[\"complete_seconds\"] for entry in result[\"observations\"]])\n        row[\"median_complete_seconds\"]=latency\n        latencies.append(latency)\n        rows.append(row)\n        atomic(root/\"calibration.json\",dict(state=\"running\",rows=rows))\n    scores[threads]=math.exp(sum(map(math.log,latencies))/len(latencies))\nselected=min(scores,key=scores.get)\natomic(root/\"calibration.json\",dict(state=\"completed\",rows=rows,geometric_scores=scores,selected_threads=selected,scope=\"finite compact CPU continuous schedule; same seed and three stateful segments, not a universal thread optimum\"))\nconfigs=[\"configs/continuous/\"+name+\".json\" for name in (\"fc-k-small\",\"fc-s-small\",\"hb-settle-small\",\"hb-timed-small\")]\ncodes=[]\nfor batch in (1,4):\n    command=[sys.executable,\"-m\",\"benchmarks.programme\",\"--suite\",\"continuous\",\"--configs\",*configs,\"--device\",\"cpu\",\"--precision\",\"fp32\",\"bf16\",\"--threads\",str(selected),\"--batch\",str(batch),\"--length\",\"128\",\"--prefill-chunk\",\"64\",\"--decode\",\"8\",\"--warmup\",\"1\",\"--steps\",\"3\",\"--continuous-joint\",\"A\",\"B\",\"C\",\"D\",\"--checkpoints\",\"--child-timeout\",\"600\",\"--output-dir\",str(root/(\"b\"+str(batch)))]\n    codes.append(subprocess.call(command))\nsys.exit(int(any(codes)))"
+  ],
+  "boundary": "resource sequencing only; prior success not required",
+  "observations": {
+    "tide-representative-cpu-v5.service": {
+      "MainPID": "3441299",
+      "Result": "success",
+      "LoadState": "loaded",
+      "ActiveState": "active",
+      "SubState": "running"
+    },
+    "tide-scale-npu-hb-9b-v12.service": {
+      "MainPID": "3513208",
+      "Result": "success",
+      "LoadState": "loaded",
+      "ActiveState": "active",
+      "SubState": "running"
+    },
+    "tide-scale-two-npu-hb-17b-v12.service": {
+      "MainPID": "3513245",
+      "Result": "success",
+      "LoadState": "loaded",
+      "ActiveState": "active",
+      "SubState": "running"
+    },
+    "tide-scale-four-npu-hb-9b-train-v14.service": {
+      "MainPID": "3538270",
+      "Result": "success",
+      "LoadState": "loaded",
+      "ActiveState": "active",
+      "SubState": "running"
+    }
+  },
+  "busy": [
+    "tide-representative-cpu-v5.service",
+    "tide-scale-npu-hb-9b-v12.service",
+    "tide-scale-two-npu-hb-17b-v12.service",
+    "tide-scale-four-npu-hb-9b-train-v14.service"
+  ],
+  "elapsed_seconds": 0.027863163501024246
+}

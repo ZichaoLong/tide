@@ -1,0 +1,1662 @@
+{
+  "governance_source": "9efc86e2aad143434ce526b021f41927f5c8eb50",
+  "model_source": "c17c613f178dd076d963da98017abdea8c09db16",
+  "upstream": "4f5b9f20a4030d68ee66ae2d26e34659a5e37234",
+  "retired_tracked_documents": 1017,
+  "runtime_tests_benchmarks_configs_math_unchanged": true,
+  "current_fp32_evidence_original_bytes_unchanged": true,
+  "source_preservation": {
+    "commit": "9efc86e2aad143434ce526b021f41927f5c8eb50",
+    "path": "retirement-preservation",
+    "dirty_worktrees": 27,
+    "unique_untracked_files": 145,
+    "bundle_validation": {
+      "verified": {
+        "dirty_worktrees": 27,
+        "untracked_files": 145,
+        "bundle_bytes": 41954,
+        "summary_only": 1055,
+        "summary_duplicate": 192,
+        "bundle_duplicate": 34782,
+        "reachable_git_blob": 469345,
+        "symlink": 116
+      },
+      "credential_like_candidates": 0
+    },
+    "bundles": {
+      "dirty-worktrees.jsonl.gz": {
+        "bytes": 620147,
+        "sha256": "5ac5695989d536968768eb1eb8cc8752b9ae5bd9a8d642beee0bfbe2d6689a8d"
+      },
+      "small-records.jsonl.gz": {
+        "bytes": 54090684,
+        "sha256": "ca139831077fa466ace2cdf97a8991e7ccd1c996c85594ed8b51b5fa40cf28a7"
+      }
+    },
+    "curation": {
+      "exact_bundle_bytes": 152234182,
+      "exact_unique_files": 41954,
+      "records": 547444,
+      "json_summarized": 1055,
+      "raw_json_bytes_retired": 385867258
+    },
+    "large_json_not_byte_retained": 170,
+    "all_candidate_heads_reachable_from": "728d19a470d16d392d5dd6a2452161d1a3e9959e"
+  },
+  "cleanup": {
+    "removed_roots": [
+      {
+        "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts",
+        "device": 64768,
+        "inode": 62142359,
+        "allocated_bytes": 163631513600,
+        "decision": "retire after preservation; project-owned terminal material"
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/.local",
+        "device": 64768,
+        "inode": 62426631,
+        "allocated_bytes": 157470720,
+        "decision": "retire after preservation; project-owned terminal material"
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances",
+        "device": 64768,
+        "inode": 68124806,
+        "allocated_bytes": 13537280,
+        "decision": "retire after preservation; project-owned terminal material"
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/.pytest_cache",
+        "device": 64768,
+        "inode": 62148156,
+        "allocated_bytes": 331776,
+        "decision": "retire after preservation; project-owned terminal material"
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/python",
+        "device": 64768,
+        "inode": 62027079,
+        "allocated_bytes": 2981888,
+        "decision": "retire after preservation; project-owned terminal material"
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/cpp",
+        "device": 64768,
+        "inode": 62025948,
+        "allocated_bytes": 49152,
+        "decision": "retire after preservation; project-owned terminal material"
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/cmake",
+        "device": 64768,
+        "inode": 62025945,
+        "allocated_bytes": 4096,
+        "decision": "retire after preservation; project-owned terminal material"
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/tools",
+        "device": 64768,
+        "inode": 62027758,
+        "allocated_bytes": 118784,
+        "decision": "retire after preservation; project-owned terminal material"
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/templates",
+        "device": 64768,
+        "inode": 62027401,
+        "allocated_bytes": 8192,
+        "decision": "retire after preservation; project-owned terminal material"
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/.torch-portability",
+        "device": 64768,
+        "inode": 62025936,
+        "allocated_bytes": 4096,
+        "decision": "retire after preservation; project-owned terminal material"
+      },
+      {
+        "path": "/dev/shm/gef-aggregate-tensor-development-20261112",
+        "device": 25,
+        "inode": 62292602,
+        "allocated_bytes": 15998976,
+        "decision": "retire after preservation; project-owned terminal material"
+      },
+      {
+        "path": "/dev/shm/gef-column-scale-20261111",
+        "device": 25,
+        "inode": 61095614,
+        "allocated_bytes": 96172232704,
+        "decision": "retire after preservation; project-owned terminal material"
+      },
+      {
+        "path": "/dev/shm/gef-fc-batch-full-20261112",
+        "device": 25,
+        "inode": 63397463,
+        "allocated_bytes": 130195456,
+        "decision": "retire after preservation; project-owned terminal material"
+      },
+      {
+        "path": "/dev/shm/gef-kv-prepare-development-20261112",
+        "device": 25,
+        "inode": 62292582,
+        "allocated_bytes": 29552640,
+        "decision": "retire after preservation; project-owned terminal material"
+      },
+      {
+        "path": "/dev/shm/gef-kv-tensor-development-20261112",
+        "device": 25,
+        "inode": 62118484,
+        "allocated_bytes": 25681920,
+        "decision": "retire after preservation; project-owned terminal material"
+      },
+      {
+        "path": "/dev/shm/gef-p1p6-20261112",
+        "device": 25,
+        "inode": 61313758,
+        "allocated_bytes": 13994979328,
+        "decision": "retire after preservation; project-owned terminal material"
+      },
+      {
+        "path": "/dev/shm/gef-read-region-owner-20261112",
+        "device": 25,
+        "inode": 63195590,
+        "allocated_bytes": 254177280,
+        "decision": "retire after preservation; project-owned terminal material"
+      },
+      {
+        "path": "/dev/shm/gef-region-tensor-20261112",
+        "device": 25,
+        "inode": 62292608,
+        "allocated_bytes": 4051750912,
+        "decision": "retire after preservation; project-owned terminal material"
+      },
+      {
+        "path": "/dev/shm/gef-region-transport-development-20261112",
+        "device": 25,
+        "inode": 63007310,
+        "allocated_bytes": 20717568,
+        "decision": "retire after preservation; project-owned terminal material"
+      },
+      {
+        "path": "/dev/shm/gef-resident-kv-owner-20261112",
+        "device": 25,
+        "inode": 63201728,
+        "allocated_bytes": 2987831296,
+        "decision": "retire after preservation; project-owned terminal material"
+      },
+      {
+        "path": "/dev/shm/gef-resident-resources-20261112",
+        "device": 25,
+        "inode": 63017037,
+        "allocated_bytes": 2584961024,
+        "decision": "retire after preservation; project-owned terminal material"
+      },
+      {
+        "path": "/dev/shm/gef-resident-services-20261112",
+        "device": 25,
+        "inode": 62769904,
+        "allocated_bytes": 3869806592,
+        "decision": "retire after preservation; project-owned terminal material"
+      },
+      {
+        "path": "/dev/shm/gef-resident-services-context-20261112",
+        "device": 25,
+        "inode": 63007320,
+        "allocated_bytes": 62832640,
+        "decision": "retire after preservation; project-owned terminal material"
+      },
+      {
+        "path": "/dev/shm/gef-resident-tile-20261112",
+        "device": 25,
+        "inode": 62532501,
+        "allocated_bytes": 3867385856,
+        "decision": "retire after preservation; project-owned terminal material"
+      },
+      {
+        "path": "/dev/shm/gef-rewrite-20261112",
+        "device": 25,
+        "inode": 61101209,
+        "allocated_bytes": 3118059520,
+        "decision": "retire after preservation; project-owned terminal material"
+      },
+      {
+        "path": "/dev/shm/gef-source-bank-20261112",
+        "device": 25,
+        "inode": 63010924,
+        "allocated_bytes": 252432384,
+        "decision": "retire after preservation; project-owned terminal material"
+      },
+      {
+        "path": "/dev/shm/gef-source-planning-20261112",
+        "device": 25,
+        "inode": 63189473,
+        "allocated_bytes": 252616704,
+        "decision": "retire after preservation; project-owned terminal material"
+      },
+      {
+        "path": "/dev/shm/gef-standalone-block-adapter-20261112",
+        "device": 25,
+        "inode": 61948762,
+        "allocated_bytes": 20049920,
+        "decision": "retire after preservation; project-owned terminal material"
+      },
+      {
+        "path": "/dev/shm/gef-tensor-rewrite-20261112",
+        "device": 25,
+        "inode": 62118524,
+        "allocated_bytes": 2806427648,
+        "decision": "retire after preservation; project-owned terminal material"
+      },
+      {
+        "path": "/dev/shm/zlong-gef-block-206bc9b",
+        "device": 25,
+        "inode": 61088239,
+        "allocated_bytes": 53932032,
+        "decision": "retire after preservation; project-owned terminal material"
+      },
+      {
+        "path": "/dev/shm/zlong-gef-block-26ab27d",
+        "device": 25,
+        "inode": 61083986,
+        "allocated_bytes": 53903360,
+        "decision": "retire after preservation; project-owned terminal material"
+      },
+      {
+        "path": "/dev/shm/zlong-gef-block-5ff3ce2",
+        "device": 25,
+        "inode": 61080140,
+        "allocated_bytes": 55844864,
+        "decision": "retire after preservation; project-owned terminal material"
+      },
+      {
+        "path": "/dev/shm/zlong-gef-block-dev-20261111",
+        "device": 25,
+        "inode": 61076876,
+        "allocated_bytes": 53878784,
+        "decision": "retire after preservation; project-owned terminal material"
+      },
+      {
+        "path": "/dev/shm/zlong-gef-block-profiles",
+        "device": 25,
+        "inode": 61087224,
+        "allocated_bytes": 1177411584,
+        "decision": "retire after preservation; project-owned terminal material"
+      },
+      {
+        "path": "/dev/shm/zlong-gef-fc-20261111-15d391f",
+        "device": 25,
+        "inode": 61065876,
+        "allocated_bytes": 994942976,
+        "decision": "retire after preservation; project-owned terminal material"
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102/source",
+        "device": 64768,
+        "inode": 62029066,
+        "allocated_bytes": 508690432,
+        "decision": "retire after preservation; project-owned terminal material"
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102/engines",
+        "device": 64768,
+        "inode": 62405779,
+        "allocated_bytes": 280240128,
+        "decision": "retire after preservation; project-owned terminal material"
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102/env",
+        "device": 64768,
+        "inode": 62139523,
+        "allocated_bytes": 365514752,
+        "decision": "retire after preservation; project-owned terminal material"
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102/install",
+        "device": 64768,
+        "inode": 62151390,
+        "allocated_bytes": 3452928,
+        "decision": "retire after preservation; project-owned terminal material"
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102/jobs",
+        "device": 64768,
+        "inode": 62139516,
+        "allocated_bytes": 720896,
+        "decision": "retire after preservation; project-owned terminal material"
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102/recovery",
+        "device": 64768,
+        "inode": 62405781,
+        "allocated_bytes": 61067264,
+        "decision": "retire after preservation; project-owned terminal material"
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102/runs",
+        "device": 64768,
+        "inode": 62152159,
+        "allocated_bytes": 517681152,
+        "decision": "retire after preservation; project-owned terminal material"
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102/site",
+        "device": 64768,
+        "inode": 62148196,
+        "allocated_bytes": 45056,
+        "decision": "retire after preservation; project-owned terminal material"
+      }
+    ],
+    "allocated_bytes_by_storage": {
+      "disk": 165543432192,
+      "shm": 136907603968
+    },
+    "removed_worktree_count": 131,
+    "remaining_worktrees": [
+      {
+        "worktree": "/mi/data2T/zlong/home/llm/graph-execution-foundation",
+        "HEAD": "9efc86e2aad143434ce526b021f41927f5c8eb50",
+        "branch": "refs/heads/graph-execution-foundation"
+      },
+      {
+        "worktree": "/mi/data2T/zlong/home/llm/tide-learning-lab",
+        "HEAD": "ebb084a2dad5c3a6bae2495926aacec2054d500f",
+        "branch": "refs/heads/tide-learning-lab"
+      }
+    ],
+    "released_failed_transient_units": [
+      "core5-arithmetic-qualified-20261029.service",
+      "core5-async-boundaries-20261029.service",
+      "core5-async-full-20261029.service",
+      "core5-async-stock-20261028.service",
+      "core5-benchmark-dev1-20261029.service",
+      "core5-benchmark-dev2-npu-check-20261029.service",
+      "core5-benchmark-dev2-sdk-20261029.service",
+      "core5-benchmark-precision-dev-20261028.service",
+      "core5-boundary-bridge-20261029.service",
+      "core5-boundary-cpu-diagnostics-20261029.service",
+      "core5-boundary-diagnostic-cpu-20261029.service",
+      "core5-boundary-native-dev-20261029.service",
+      "core5-boundary-pynative-dev-20261029.service",
+      "core5-boundary-pynative-dev-v2-20261029.service",
+      "core5-boundary-pynative-dev-v3-20261029.service",
+      "core5-boundary-python-npu-dev-20261029.service",
+      "core5-boundary-sdk-dev-20261029.service",
+      "core5-checkpoint-sdk-20261029.service",
+      "core5-checkpoint-sdk-v2-20261029.service",
+      "core5-compact-fiber-python-20261029.service",
+      "core5-compact-fiber-sdk-20261029.service",
+      "core5-compact-fiber-study-20261029.service",
+      "core5-contribution-20261029.service",
+      "core5-d64-adjoint-trace-20261028.service",
+      "core5-d64-bmm-probe-20261028.service",
+      "core5-d64-full-shape-probe-20261028.service",
+      "core5-d64-local-vjp-probe-20261028.service",
+      "core5-d64-precision-stage1-20261029.service",
+      "core5-d64-precision-stage2-20261029.service",
+      "core5-d64-products-training-20261028.service",
+      "core5-diagnostics-qualified-20261029.service",
+      "core5-feedback-current-20261029.service",
+      "core5-gdn-fp32-baseline-20261028.service",
+      "core5-gdn-fp32-witness-20261028.service",
+      "core5-half-native-20261028.service",
+      "core5-half-python-20261028.service",
+      "core5-independent-dev-20261029.service",
+      "core5-independent-dev-tests-20261029.service",
+      "core5-independent-npu-20261029.service",
+      "core5-independent-pynative-npu-20261029.service",
+      "core5-join-aadd3b4-20261029.service",
+      "core5-peer-aadd3b4-20261029.service",
+      "core5-performance-cuda-dev2-20261028.service",
+      "core5-performance-npu-dev2-20261028.service",
+      "core5-performance-study-cpu-20261028.service",
+      "core5-performance-study-npu-20261028.service",
+      "core5-private-dev-20261028.service",
+      "core5-private-study-cpu-20261028.service",
+      "core5-private-study-npu-20261028.service",
+      "core5-remaining-numeric-20261029.service",
+      "core5-stable-order-regression-dev-20261028.service",
+      "core5-stable-preparation-qualify-20261028.service",
+      "core5-stock-peer-20261028.service",
+      "core5-storage-reference-dev-sdk-20261029.service",
+      "core5-study-v1-python-20261029.service",
+      "core5-study-v1-python-v2-20261029.service",
+      "core5-wide-adjoint-20261029.service",
+      "core5-wide-adjoint-v2-20261029.service",
+      "core5-wide-adjoint-v3-20261029.service",
+      "core5-workload-diagnostics-20261028.service",
+      "gef-additive-measure.service",
+      "gef-additive-qualify.service",
+      "gef-cann92-migration-a.service",
+      "gef-cann92-migration-b.service",
+      "gef-cann92-recovery-c.service",
+      "gef-capacity-periodic-beaf34e.service",
+      "gef-checkpoint-check-36baeb7.service",
+      "gef-checkpoint-check-compute-6c6eaa2.service",
+      "gef-checkpoint-npu-0f9254a.service",
+      "gef-column-chain-dev1.service",
+      "gef-column-chain-dev2.service",
+      "gef-column-chain-dev4.service",
+      "gef-column-consumer-dev1.service",
+      "gef-column-consumer-dev2.service",
+      "gef-column-consumer-npu.service",
+      "gef-column-half-owners-blocking.service",
+      "gef-column-half-owners-npu.service",
+      "gef-column-half-task-qualify.service",
+      "gef-column-owners-host-npu.service",
+      "gef-column-owners-npu.service",
+      "gef-column-placement-npu.service",
+      "gef-column-recurrent-dev1.service",
+      "gef-columns-dev1.service",
+      "gef-columns-dev2.service",
+      "gef-fc16-attribution-anchors.service",
+      "gef-fc16-attribution-packed.service",
+      "gef-history-publish-20261030.service",
+      "gef-history-publish02-20261030.service",
+      "gef-interface-bank.service",
+      "gef-interface-bankfix.service",
+      "gef-interface-batch.service",
+      "gef-interface-heads-measure.service",
+      "gef-interface-heads-rest.service",
+      "gef-interface-heads.service",
+      "gef-joint-prefill-boundary-sdk.service",
+      "gef-joint-prefill-closure.service",
+      "gef-joint-prefill-deployment-dual.service",
+      "gef-joint-prefill-deployment-resident.service",
+      "gef-joint-prefill-fixed-window-b.service",
+      "gef-joint-prefill-fixed-window.service",
+      "gef-joint-prefill-layer-anchor.service",
+      "gef-joint-prefill-roots-fixed.service",
+      "gef-joint-prefill-seq-a.service",
+      "gef-joint-prefill-window-a.service",
+      "gef-joint-prefill-window-b.service",
+      "gef-joint-prefill-window-sdk.service",
+      "gef-kvblock-build-dev.service",
+      "gef-kvblock-build-profile.service",
+      "gef-kvblock-cpu.service",
+      "gef-kvblock-final-build.service",
+      "gef-lm-assets-moe-20261103-c.service",
+      "gef-lm-assets-moe-20261103-d.service",
+      "gef-lm-assets-moe-20261104-g.service",
+      "gef-lm-assets-small-20261103-c.service",
+      "gef-lm-assets-small-20261103-d.service",
+      "gef-lm-assets1-20261102-a.service",
+      "gef-lm-assets2-20261102-a.service",
+      "gef-lm-assets2-20261102-b.service",
+      "gef-lm-cpu-20261102-a.service",
+      "gef-lm-dispatch-20261104-g.service",
+      "gef-lm-llama-20261103-f.service",
+      "gef-lm-npu-20261102-a.service",
+      "gef-lm-npu-20261102-b.service",
+      "gef-lm-olmoe-recovery-20261102-b.service",
+      "gef-multicard-roots-844eb9b.service",
+      "gef-npu-compute-followup-4485697.service",
+      "gef-npu-resume-immediate-61571c4.service",
+      "gef-npu-root-progress-4485697.service",
+      "gef-p1p6-core-55-sdk.service",
+      "gef-p1p6-core-a605-native.service",
+      "gef-p1p6-core-a605-sdk.service",
+      "gef-p1p6-core-dev-sdk.service",
+      "gef-p1p6-flow-844-build.service",
+      "gef-p1p6-flow-fb-device.service",
+      "gef-p1p6-lifecycle-55-npu.service",
+      "gef-p1p6-lifecycle-rope-npu.service",
+      "gef-p1p6-peer-55.service",
+      "gef-p1p6-resident-v2-installed.service",
+      "gef-p1p6-resident-v2-sdk-device.service",
+      "gef-p1p6-resident-v3-scale.service",
+      "gef-p1p6-resident-v3-sdk-build.service",
+      "gef-p1p6-session-v1-device-02.service",
+      "gef-p1p6-session-v1-device.service",
+      "gef-p1p6-source-v2-native.service",
+      "gef-p1p6-source-v2-sdk.service",
+      "gef-platform-build-local-de999c2-r1.service",
+      "gef-platform-build-local-de999c2.service",
+      "gef-platform-final-1e33b4a.service",
+      "gef-platform-next-stages-bd2ff2e.service",
+      "gef-platform-npu-build-eca070f.service",
+      "gef-platform-npu-checks-eca070f.service",
+      "gef-platform-npu-eager-1b3e39f.service",
+      "gef-platform-npu-scale-1b3e39f.service",
+      "gef-platform-sharded-3e4f6b2.service",
+      "gef-prefill-default-build-a.service",
+      "gef-prefill-default-check-b.service",
+      "gef-prefill-default-check-c.service",
+      "gef-prefill-default-qualify-local.service",
+      "gef-prefill-default-qualify.service",
+      "gef-resident-phase-trace.service",
+      "gef-resident-shared-client.service",
+      "gef-resident-shared-final.service",
+      "gef-resident-shared-qualified.service",
+      "gef-resident-stop-qualified.service",
+      "gef-resume-layout-61571c4.service",
+      "gef-rewrite-block-build.service",
+      "gef-rewrite-diagnostic-3f99-npu.service",
+      "gef-rewrite-diagnostic-cpu.service",
+      "gef-rewrite-diagnostic-f681-cpu.service",
+      "gef-rewrite-floor-7d5.service",
+      "gef-rewrite-groups-device.service",
+      "gef-rewrite-groups.service",
+      "gef-rewrite-req006-a.service",
+      "gef-rewrite-req006-b.service",
+      "gef-rewrite-shared-qual.service",
+      "gef-scaled-training-1a6b08f.service",
+      "gef-scaled-training-compute-6c6eaa2.service",
+      "gef-tensor-rewrite-cpu-20261112.service",
+      "gef-tensor-rewrite-resident-sdk-20261112.service",
+      "gef-tl-req-003-cpu-a.service",
+      "read-region-owner-cpu-directed.service",
+      "region-tensor-resident-sdk.service",
+      "region-tensor-resident-trace.service",
+      "resident-services-cpu-directed.service",
+      "resident-services-resident-sdk.service",
+      "resident-tile-components.service",
+      "resident-tile-flowtrace.service",
+      "resident-tile-resident-sdk.service",
+      "source-bank-cpu-directed.service",
+      "tide-core5-bootstrap-20261027.service",
+      "tide-core5-cuda-eager-qualify-20261027.service",
+      "tide-core5-cuda-eager-tools-qualify-20261027.service",
+      "tide-core5-half-clocks-dev-20261027.service",
+      "tide-core5-half-flow-cuda-qualify-20261028.service",
+      "tide-core5-half-flow-npu-qualify-20261028.service",
+      "tide-core5-half-flow-npu-qualify2-20261028.service",
+      "tide-core5-half-math-npu-qualify-20261028.service",
+      "tide-core5-half-normalization-dev-20261027.service",
+      "tide-core5-query-dev-20261027.service",
+      "tide-core5-query-heads-dev-20261027.service",
+      "tide-core5-raw-half-cuda-qualify-20261028.service",
+      "tide-core5-raw-half-cuda-qualify2-20261028.service",
+      "tide-core5-raw-half-npu-qualify-20261028.service",
+      "tide-core5-raw-half-npu-qualify2-20261028.service",
+      "tide-core5-recurrent-build-20261027.service",
+      "tide-core5-recurrent-dev-20261027.service",
+      "tide-core5-region-dev-20261027.service",
+      "tide-core5-region2-dev-20261027.service",
+      "tide-core5-region3-dev-20261027.service",
+      "tide-core5-region4-dev-20261027.service",
+      "tide-core5-resident-allocation-build2-dev-20261027.service",
+      "tide-core5-resident-allocation-build3-dev-20261027.service",
+      "tide-core5-resident-allocation-dev-20261027.service",
+      "tide-core5-resident-allocation-runtime-dev-20261027.service",
+      "tide-core5-resident-convolution-dev-20261027.service",
+      "tide-core5-resident-head-dev-20261027.service",
+      "tide-core5-resident-head-layout-dev-20261027.service",
+      "tide-core5-resident-pool-dev-20261027.service",
+      "tide-core5-resident-pool-dev2-20261027.service",
+      "tide-core5-resident-pool-dev3-20261027.service",
+      "tide-core5-resident-raw-dev-20261027.service",
+      "tide-core5-resident-raw-dev2-20261027.service",
+      "tide-core5-resident-recurrent-dev-20261028.service",
+      "tide-core5-resident-recurrent-dev2-20261028.service",
+      "tide-core5-resident-recurrent-dev3-20261028.service",
+      "tide-core5-resident-recurrent-dev4-20261028.service",
+      "tide-core5-resident-rotary-dev-20261027.service",
+      "tide-core5-resident-rotary-dev2-20261027.service",
+      "tide-core5-resident-sending-dev-20261027.service",
+      "tide-core5-review-fixes-cuda-components-dev-20261028.service",
+      "tide-core5-review-fixes-npu-components-dev-20261028.service",
+      "tide-core5-review-fixes-npu-components-dev2-20261028.service",
+      "tide-core5-review-fixes-npu-qualify-20261028.service",
+      "tide-core5-sdk-affine-diagnostic-20261027.service",
+      "tide-core5-sdk-affine-drift-20261027.service",
+      "tide-core5-sdk-affine-mixed-a-20261027.service",
+      "tide-core5-source-dev-20261027.service",
+      "tide-core5-source2-dev-20261027.service",
+      "tide-core5-structured-dev-20261027.service",
+      "tide-core5-weighted-benchmark-python-profile-20261028.service",
+      "tide-core5-weighted-binding-dev-20261028.service",
+      "tide-core5-weighted-binding-dso-dev-20261028.service",
+      "tide-core5-weighted-flow-cuda-dev-20261028.service",
+      "tide-core5-weighted-flow-dev-20261028.service",
+      "tide-core5-weighted-flow-dev2-20261028.service",
+      "tide-core5-weighted-flow-dev3-20261028.service",
+      "tide-core5-weighted-flow-dev4-20261028.service",
+      "tide-core5-weighted-flow-dev5-20261028.service",
+      "tide-core5-weighted-flow-dev6-20261028.service",
+      "tide-core5-weighted-flow-dev7-20261028.service",
+      "tide-core5-weighted-flow-dev8-20261028.service",
+      "tide-core5-weighted-flow-installed-dev-20261028.service",
+      "tide-core5-weighted-flow-python-dev-20261028.service",
+      "tide-core5-weighted-flow-python-dev2-20261028.service",
+      "tide-core5-weighted-flow-python-dev3-20261028.service",
+      "tide-core5-weighted-kv-dev-20261027.service",
+      "tide-core5-weighted-node-check-cuda-qualify-20261028.service",
+      "tide-core5-weighted-node-check-npu-qualify-20261028.service",
+      "tide-core5-weighted-node-entry-npu-qualify-20261028.service",
+      "tide-core5-weighted-node-placement-npu-qualify-20261028.service",
+      "tide-core5-weighted-node-refusal-cuda-qualify-20261028.service",
+      "tide-core5-weighted-node-refusal-npu-qualify-20261028.service",
+      "tide-core5-weighted-node-training-npu-qualify-20261028.service",
+      "tide-core5-weighted-node-window-npu-qualify-20261028.service",
+      "tide-core5-weighted-peer-npu-qualify-20261028.service",
+      "tide-core5-weighted-performance-cpu-20261028.service",
+      "tide-core5-weighted-route-cuda-qualify-20261028.service",
+      "tide-core5-weighted-sdk-dev-20261027.service",
+      "tide-core5-weighted-sdk-qualify-20261027.service",
+      "tide-core5-weighted-stage-dev-20261028.service",
+      "tide-core5-weighted-stage-dev2-20261028.service",
+      "tide-core5-weighted-stage-dev4-20261028.service",
+      "tide-core5-weighted-window-dev-20261028.service",
+      "tide-core5-weighted-window-dev2-20261028.service",
+      "tide-core5-weighted-window-dev3-20261028.service",
+      "tide-instances-npu-first.service",
+      "tide-instances-npu-qualified.service"
+    ],
+    "failures_preserved_in_historical_inventory": true,
+    "python_cache_cleanup": [
+      {
+        "path": "benchmarks/__pycache__",
+        "file_allocated_bytes": 57344
+      },
+      {
+        "path": "examples/consumer_core5/__pycache__",
+        "file_allocated_bytes": 32768
+      },
+      {
+        "path": "examples/consumer_core5/configured/src/tidegraph_consumer_core5/__pycache__",
+        "file_allocated_bytes": 32768
+      },
+      {
+        "path": "math/reference/backbones/__pycache__",
+        "file_allocated_bytes": 49152
+      },
+      {
+        "path": "scripts/__pycache__",
+        "file_allocated_bytes": 626688
+      },
+      {
+        "path": "src/tide/__pycache__",
+        "file_allocated_bytes": 217088
+      },
+      {
+        "path": "tests/__pycache__",
+        "file_allocated_bytes": 3653632
+      }
+    ],
+    "wheel_cache_cleanup": {
+      "removed": [
+        {
+          "path": "/mi/data2T/zlong/home/.cache/pip/wheels/9b/c9/35/09005b2faa46296c7eb566608859d65acae18e6ebae5beff48",
+          "origin": {
+            "dir_info": {},
+            "url": "file:///mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/qualified-chain"
+          },
+          "files": [
+            {
+              "name": "origin.json",
+              "bytes": 129,
+              "allocated_bytes": 4096,
+              "sha256": "11a22fadc142fb6b1ff1fda8b1430009d2daabf7ebaf93fd4148e565857262a1"
+            },
+            {
+              "name": "tidegraph-0.3.0-py3-none-any.whl",
+              "bytes": 511292,
+              "allocated_bytes": 512000,
+              "sha256": "316cde33fbb3c5e0b7faf0614af389eda3e7023343c0d494a6514070b850bc50"
+            }
+          ]
+        },
+        {
+          "path": "/mi/data2T/zlong/home/.cache/pip/wheels/bc/53/cc/4423e40997400628541a24b3e639d2bd2a35eb22f55e761a3c",
+          "origin": {
+            "dir_info": {},
+            "url": "file:///mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/qualified-recurrent"
+          },
+          "files": [
+            {
+              "name": "origin.json",
+              "bytes": 133,
+              "allocated_bytes": 4096,
+              "sha256": "053f6cd555dc91e319e8bddbb195707e96957fb6155277942111ec2855c47efd"
+            },
+            {
+              "name": "tidegraph-0.3.0-py3-none-any.whl",
+              "bytes": 512663,
+              "allocated_bytes": 516096,
+              "sha256": "26a067b398d0c37c6ddb9c2c60004ab3781dfda41024df52ca14e8ef066c0e57"
+            }
+          ]
+        },
+        {
+          "path": "/mi/data2T/zlong/home/.cache/pip/wheels/e6/19/3f/f9fe46400d81bb5bae6727c7e51786fcfb0856d66059714512",
+          "origin": {
+            "dir_info": {},
+            "url": "file:///mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/platform-matrix/package-stage-1b3e39f"
+          },
+          "files": [
+            {
+              "name": "origin.json",
+              "bytes": 134,
+              "allocated_bytes": 4096,
+              "sha256": "145bcc44204e15d571b3b6fb1049e6061daa57f3749ee4ffd92ffdd6183227c2"
+            },
+            {
+              "name": "tidegraph-0.3.0-py3-none-any.whl",
+              "bytes": 366192,
+              "allocated_bytes": 368640,
+              "sha256": "5deb7602c6c2f753a5e3069797937b6ac580d471f71445bff26ceed8a518203f"
+            }
+          ]
+        },
+        {
+          "path": "/mi/data2T/zlong/home/.cache/pip/wheels/6a/de/8d/f2f4c1e8d31b15c23e37b4776121add6929b10505d618f9ff6",
+          "origin": {
+            "dir_info": {},
+            "url": "file:///dev/shm/gef-rewrite-20261112/group-source"
+          },
+          "files": [
+            {
+              "name": "origin.json",
+              "bytes": 76,
+              "allocated_bytes": 4096,
+              "sha256": "f5a51d86c0e39664986a078e6b0bab89ff8bfc9d604ee75376d08cf9d69951b4"
+            },
+            {
+              "name": "tidegraph-0.3.0-py3-none-any.whl",
+              "bytes": 523617,
+              "allocated_bytes": 524288,
+              "sha256": "d855be517433e23388239cc68c433cac2ff9767552b8af8c31bb43f291721f7c"
+            }
+          ]
+        },
+        {
+          "path": "/mi/data2T/zlong/home/.cache/pip/wheels/6a/09/d1/beb65b2a13a05abf4f4d8552945a2077dcc0061404dda0a358",
+          "origin": {
+            "dir_info": {},
+            "url": "file:///mi/data2T/zlong/gef-maintenance-20261012/fresh-clone"
+          },
+          "files": [
+            {
+              "name": "origin.json",
+              "bytes": 87,
+              "allocated_bytes": 4096,
+              "sha256": "d2d84fc92c438ba48030caa885040e1c639573a48ba2699898ddc7ef1e9644ad"
+            },
+            {
+              "name": "tidegraph-0.2.0-py3-none-any.whl",
+              "bytes": 137895,
+              "allocated_bytes": 139264,
+              "sha256": "c97d03e2d69912ffd08d03e9e5e3df021970a7bc494173072dc3e30536f483f8"
+            }
+          ]
+        },
+        {
+          "path": "/mi/data2T/zlong/home/.cache/pip/wheels/24/e2/3f/751e8b60f1b6036c0c0c0b370bb7df257a656de32d54cfddd3",
+          "origin": {
+            "dir_info": {},
+            "url": "file:///mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/platform-matrix/source-1b46dc5"
+          },
+          "files": [
+            {
+              "name": "origin.json",
+              "bytes": 127,
+              "allocated_bytes": 4096,
+              "sha256": "dcd265c355a3cefb878f5553fbc02246cb61f733b3067b50f434faf9cff474bf"
+            },
+            {
+              "name": "tidegraph-0.3.0-py3-none-any.whl",
+              "bytes": 371913,
+              "allocated_bytes": 372736,
+              "sha256": "a2aecd11e03a15c28aaeb0fab174620c74543bbe2f815d59487cc7d11f36efa6"
+            }
+          ]
+        },
+        {
+          "path": "/mi/data2T/zlong/home/.cache/pip/wheels/87/d4/75/c022eb3237e98a8116047edcedf77ed8352ead756429b852ce",
+          "origin": {
+            "dir_info": {},
+            "url": "file:///mi/data2T/zlong/home/llm/gef-governance-20261118/frozen-current"
+          },
+          "files": [
+            {
+              "name": "origin.json",
+              "bytes": 98,
+              "allocated_bytes": 4096,
+              "sha256": "9ebbd9f0b7cc4122f4a366665b8b81bdaac6c8f57bd4247890377f269957be0c"
+            },
+            {
+              "name": "tide_instances-0.1.0-py3-none-any.whl",
+              "bytes": 37145,
+              "allocated_bytes": 40960,
+              "sha256": "298d198820236a8ae5b566fb58c6fb2652f87151a04fa1c9b26518cd98dad40a"
+            }
+          ]
+        },
+        {
+          "path": "/mi/data2T/zlong/home/.cache/pip/wheels/1d/b6/93/a609a2ebc346a9828b8a5bd88a08441772c45d403e836d5bc5",
+          "origin": {
+            "dir_info": {},
+            "url": "file:///mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/joint-prefill/fixed-record-capacity"
+          },
+          "files": [
+            {
+              "name": "origin.json",
+              "bytes": 132,
+              "allocated_bytes": 4096,
+              "sha256": "5247186a32261ccfa6f727cafcc116af17815fa0b19496b3278dd09d9f583b7b"
+            },
+            {
+              "name": "tidegraph-0.3.0-py3-none-any.whl",
+              "bytes": 455718,
+              "allocated_bytes": 458752,
+              "sha256": "f01f235a70b044da60fef5d755dce51afef957c6a379e002f0e0ab49a4d1d312"
+            }
+          ]
+        },
+        {
+          "path": "/mi/data2T/zlong/home/.cache/pip/wheels/19/18/ca/d71b8cbaee1df0da8c2c2249403524eb61f6c24834766007d4",
+          "origin": {
+            "dir_info": {},
+            "url": "file:///mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/platform-matrix/package-stage-de93246"
+          },
+          "files": [
+            {
+              "name": "origin.json",
+              "bytes": 134,
+              "allocated_bytes": 4096,
+              "sha256": "3fd66f44b2c49a1d8869171439dadfed08969714851343a4737eec9b18ce2960"
+            },
+            {
+              "name": "tidegraph-0.3.0-py3-none-any.whl",
+              "bytes": 367478,
+              "allocated_bytes": 368640,
+              "sha256": "e547d2e60206e26e522f44ac19f1b6e6bfe6c3e60cbd9ea23bd23b41db074049"
+            }
+          ]
+        },
+        {
+          "path": "/mi/data2T/zlong/home/.cache/pip/wheels/8e/b8/3c/b9543edb5457bc5a6a54b8ac760d16a6ed3c16dd9e4a7921bc",
+          "origin": {
+            "dir_info": {},
+            "url": "file:///mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/qualified-consumer"
+          },
+          "files": [
+            {
+              "name": "origin.json",
+              "bytes": 132,
+              "allocated_bytes": 4096,
+              "sha256": "bdfb0c4d3a286b878fa90e2259af6bc4d23f3ca7ecadb42b06912b32eef4655a"
+            },
+            {
+              "name": "tidegraph-0.3.0-py3-none-any.whl",
+              "bytes": 515820,
+              "allocated_bytes": 516096,
+              "sha256": "ad45fa0f65ee7fe3743c971680b6e116c8cd5dfd2c2fd0c30e39b01b88a4c967"
+            }
+          ]
+        },
+        {
+          "path": "/mi/data2T/zlong/home/.cache/pip/wheels/ff/86/05/2fce5ddd23612546db12017624fb202973ebff6aea925bac94",
+          "origin": {
+            "dir_info": {},
+            "url": "file:///mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/platform-matrix/source-14ce784"
+          },
+          "files": [
+            {
+              "name": "origin.json",
+              "bytes": 127,
+              "allocated_bytes": 4096,
+              "sha256": "d76bdacb3b9de567301170abf5dee6a23af91a85d0303f0d7f222a5ea222b233"
+            },
+            {
+              "name": "tidegraph-0.3.0-py3-none-any.whl",
+              "bytes": 365217,
+              "allocated_bytes": 368640,
+              "sha256": "aade03161dbf3b7a7983fbf6784ef4db614612e7ea2a102b1dab57de6fcae122"
+            }
+          ]
+        },
+        {
+          "path": "/mi/data2T/zlong/home/.cache/pip/wheels/ee/1d/36/afefb6250f70af530036f30c8d7daa71dfb9e5e19bc7e779e4",
+          "origin": {
+            "dir_info": {},
+            "url": "file:///mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/platform-matrix/package-stage-bd2ff2e"
+          },
+          "files": [
+            {
+              "name": "origin.json",
+              "bytes": 134,
+              "allocated_bytes": 4096,
+              "sha256": "97fb24ea530ebd17cc5124307d7b1e825b6da78eed5f69b2c9e5a5c2dba70b8a"
+            },
+            {
+              "name": "tidegraph-0.3.0-py3-none-any.whl",
+              "bytes": 369104,
+              "allocated_bytes": 372736,
+              "sha256": "3841bdc6ad50414a0fbc7707f2b17be75e54a01d5b2d5adec992ae6d34ac86ee"
+            }
+          ]
+        },
+        {
+          "path": "/mi/data2T/zlong/home/.cache/pip/wheels/bb/a2/99/cf3b0b31d4a74b9abc71a8b0de5165cab56a0aeabffab05004",
+          "origin": {
+            "dir_info": {},
+            "url": "file:///mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/platform-matrix/source-finite-localization"
+          },
+          "files": [
+            {
+              "name": "origin.json",
+              "bytes": 139,
+              "allocated_bytes": 4096,
+              "sha256": "a7d9d8bc130cbbd322c7d680e1b623ebbbccace184408045e336d0e6049d0aff"
+            },
+            {
+              "name": "tidegraph-0.3.0-py3-none-any.whl",
+              "bytes": 369247,
+              "allocated_bytes": 372736,
+              "sha256": "674c4f3038ed916508c80a0ca57819253498492f80fd83dbecabcbf1159acdce"
+            }
+          ]
+        },
+        {
+          "path": "/mi/data2T/zlong/home/.cache/pip/wheels/c1/3e/0b/98b57c5031de72ffbecc3c3ff572fb616f688ee0f721023a2e",
+          "origin": {
+            "dir_info": {},
+            "url": "file:///dev/shm/gef-p1p6-20261112/core-55a3074a"
+          },
+          "files": [
+            {
+              "name": "origin.json",
+              "bytes": 74,
+              "allocated_bytes": 4096,
+              "sha256": "58a2238eb2df1778fe1425a2e6a632e10eb0531b13a183f6081bb842fe4a9fe9"
+            },
+            {
+              "name": "tidegraph-0.3.0-py3-none-any.whl",
+              "bytes": 538932,
+              "allocated_bytes": 540672,
+              "sha256": "738343644244411fdf9b16b8e0236381523dafb53ab440b2ab2bac682222bacd"
+            }
+          ]
+        },
+        {
+          "path": "/mi/data2T/zlong/home/.cache/pip/wheels/a3/8b/b2/21540510e0b562be06bfb2697948f30b2c83f0b78f69bcec42",
+          "origin": {
+            "dir_info": {},
+            "url": "file:///dev/shm/gef-rewrite-20261112/batched-source"
+          },
+          "files": [
+            {
+              "name": "origin.json",
+              "bytes": 78,
+              "allocated_bytes": 4096,
+              "sha256": "0dfdb09bdef0be969fb6509fe625cd466650ed8cdb08df9851a63d4701a95730"
+            },
+            {
+              "name": "tidegraph-0.3.0-py3-none-any.whl",
+              "bytes": 531156,
+              "allocated_bytes": 532480,
+              "sha256": "ad18ea2bfbf0aea7ba3ab56f90b89cfeb11b2d0e15ddc11ae4b1baeb1a06b4f1"
+            }
+          ]
+        },
+        {
+          "path": "/mi/data2T/zlong/home/.cache/pip/wheels/94/36/b3/da432e500617773f8d175b8ca0d0ec8916387bd9b1ce0dcd5b",
+          "origin": {
+            "dir_info": {},
+            "url": "file:///mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/qualified-position"
+          },
+          "files": [
+            {
+              "name": "origin.json",
+              "bytes": 132,
+              "allocated_bytes": 4096,
+              "sha256": "9c533672e985fbfba97286c60d40cb2f6ab28e9e19ad1d1c426227a674109a7f"
+            },
+            {
+              "name": "tidegraph-0.3.0-py3-none-any.whl",
+              "bytes": 512433,
+              "allocated_bytes": 516096,
+              "sha256": "65e99af6dd8c1cd6df61526ba978378b3751cac490b10eaaa66bbcc98dbfc8bf"
+            }
+          ]
+        },
+        {
+          "path": "/mi/data2T/zlong/home/.cache/pip/wheels/99/45/15/1b436bde95745b8e11558ca457cf5d5734a5406fd6e29873e4",
+          "origin": {
+            "dir_info": {},
+            "url": "file:///mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/qualified-taps"
+          },
+          "files": [
+            {
+              "name": "origin.json",
+              "bytes": 128,
+              "allocated_bytes": 4096,
+              "sha256": "35bd9fd08c4995700d2b50072815cf9963b25b66184b269e9360fdc12c8af86c"
+            },
+            {
+              "name": "tidegraph-0.3.0-py3-none-any.whl",
+              "bytes": 517050,
+              "allocated_bytes": 520192,
+              "sha256": "e16eb999721d2c09980baa8c3fe62df3530d544df09ca578f9a2c3a4a09b3774"
+            }
+          ]
+        },
+        {
+          "path": "/mi/data2T/zlong/home/.cache/pip/wheels/27/de/55/d9f2e657f958f4040363e7ae0c656f19822dddeb1acbb4ff61",
+          "origin": {
+            "dir_info": {},
+            "url": "file:///dev/shm/gef-p1p6-20261112/core-rope"
+          },
+          "files": [
+            {
+              "name": "origin.json",
+              "bytes": 70,
+              "allocated_bytes": 4096,
+              "sha256": "f5e419e93ef9965ebf5311de8675da40e60a18493f35595c825530657c994fca"
+            },
+            {
+              "name": "tidegraph-0.3.0-py3-none-any.whl",
+              "bytes": 542178,
+              "allocated_bytes": 544768,
+              "sha256": "b37c75f7fd6e1f9acd310ff40151e304a02d19eba7754e60cf0d69140e6f2a93"
+            }
+          ]
+        },
+        {
+          "path": "/mi/data2T/zlong/home/.cache/pip/wheels/a6/c0/6c/be002c0dbef0f49c8101508d6efaab75395f370e6d9283e5f8",
+          "origin": {
+            "dir_info": {},
+            "url": "file:///dev/shm/gef-p1p6-20261112/resident-v3-source"
+          },
+          "files": [
+            {
+              "name": "origin.json",
+              "bytes": 79,
+              "allocated_bytes": 4096,
+              "sha256": "79c12c8d0ba969ef0d8ab287fc56c45a9a67452218f01d3337aefcd3584c2a9c"
+            },
+            {
+              "name": "tidegraph-0.3.0-py3-none-any.whl",
+              "bytes": 561570,
+              "allocated_bytes": 565248,
+              "sha256": "38883f797eaf889eb0bb39ad27154fbb7874d0637fd8a8792f1c94c402acf044"
+            }
+          ]
+        },
+        {
+          "path": "/mi/data2T/zlong/home/.cache/pip/wheels/00/e4/77/cfb98eb6c28fc137a5061bcead4bf0dfaa81d5cbf3326e99a9",
+          "origin": {
+            "dir_info": {},
+            "url": "file:///mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/qualified-half-task"
+          },
+          "files": [
+            {
+              "name": "origin.json",
+              "bytes": 133,
+              "allocated_bytes": 4096,
+              "sha256": "fdbd4f0be8d42e55d2cb6b17710da05b6cc91850a1a34d63e86409c14a17bc69"
+            },
+            {
+              "name": "tidegraph-0.3.0-py3-none-any.whl",
+              "bytes": 521612,
+              "allocated_bytes": 524288,
+              "sha256": "27af82edf3b59cc90a2a0fd602695d0e4a8d97df61d099ec0ef3a427855b83a7"
+            }
+          ]
+        },
+        {
+          "path": "/mi/data2T/zlong/home/.cache/pip/wheels/00/aa/01/964402fbb324f8efa7cae895a88539ad7697b9b930c0a1a2ec",
+          "origin": {
+            "dir_info": {},
+            "url": "file:///mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/platform-matrix/package-stage-b3dc53c"
+          },
+          "files": [
+            {
+              "name": "origin.json",
+              "bytes": 134,
+              "allocated_bytes": 4096,
+              "sha256": "439af26d1261f67af863a449acfbf6b7548d1dee835549d9301a2579dbf79877"
+            },
+            {
+              "name": "tidegraph-0.3.0-py3-none-any.whl",
+              "bytes": 372465,
+              "allocated_bytes": 372736,
+              "sha256": "8d4ab1173f10bd5d5d552133187c0eedfe7b280aff2b5313efe8b05614fe9c6d"
+            }
+          ]
+        },
+        {
+          "path": "/mi/data2T/zlong/home/.cache/pip/wheels/9d/bc/4a/438e6e214cc96fa2843a929bcf3ab155252580d3b16fb75e47",
+          "origin": {
+            "dir_info": {},
+            "url": "file:///mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/qualified-half"
+          },
+          "files": [
+            {
+              "name": "origin.json",
+              "bytes": 128,
+              "allocated_bytes": 4096,
+              "sha256": "5ed7f19e3e5326308fb7ca31eb7da42ba06c3064fb661e0574850a704aa2785d"
+            },
+            {
+              "name": "tidegraph-0.3.0-py3-none-any.whl",
+              "bytes": 521442,
+              "allocated_bytes": 524288,
+              "sha256": "10c53da72d153e5254baec3be0799ff108bab59b136a431d26078024a3e27a13"
+            }
+          ]
+        },
+        {
+          "path": "/mi/data2T/zlong/home/.cache/pip/wheels/cf/57/b1/cdd5412d6b58637b366301a8b75c2cce5042cbeb6469a99217",
+          "origin": {
+            "dir_info": {},
+            "url": "file:///mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/platform-matrix/source-eca070f"
+          },
+          "files": [
+            {
+              "name": "origin.json",
+              "bytes": 127,
+              "allocated_bytes": 4096,
+              "sha256": "4e4e7d18a33edc7cfb9b72b375b46ef1d4bbe5d36fcb93590089755f9792b2a4"
+            },
+            {
+              "name": "tidegraph-0.3.0-py3-none-any.whl",
+              "bytes": 365261,
+              "allocated_bytes": 368640,
+              "sha256": "0c6a0c2c5d01a49c2256b99360097290837b09f0eb95619485a2c38fd368e2aa"
+            }
+          ]
+        },
+        {
+          "path": "/mi/data2T/zlong/home/.cache/pip/wheels/03/91/a3/fe8a52c02c4523349fc415f7edc67d03f01dee4d42c85fbd08",
+          "origin": {
+            "dir_info": {},
+            "url": "file:///mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/qualified-shared"
+          },
+          "files": [
+            {
+              "name": "origin.json",
+              "bytes": 130,
+              "allocated_bytes": 4096,
+              "sha256": "0391fbbf16a61205865e080f96c2f75283c8b41645bb199827136c9c7126cf32"
+            },
+            {
+              "name": "tidegraph-0.3.0-py3-none-any.whl",
+              "bytes": 520022,
+              "allocated_bytes": 520192,
+              "sha256": "fe0221e0aef0790fa874615430a27db17665177f313796e4421296f255946b28"
+            }
+          ]
+        },
+        {
+          "path": "/mi/data2T/zlong/home/.cache/pip/wheels/04/48/5e/56222c2ca45d3614986e15028a02fcead4c24505bc109a352b",
+          "origin": {
+            "dir_info": {},
+            "url": "file:///mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/instances/source-c17c613f"
+          },
+          "files": [
+            {
+              "name": "origin.json",
+              "bytes": 122,
+              "allocated_bytes": 4096,
+              "sha256": "32fe16259acedbaf65555577920124a975c1e12077a930da845a1c8b7b07996d"
+            },
+            {
+              "name": "tide_instances-0.1.0-py3-none-any.whl",
+              "bytes": 37145,
+              "allocated_bytes": 40960,
+              "sha256": "88abed59b945c1fcb266e61201c8e0f6095361f954e8f5fcf1ccf47d620caf9c"
+            }
+          ]
+        },
+        {
+          "path": "/mi/data2T/zlong/home/.cache/pip/wheels/4f/02/3a/2496ea2f4d07d4f4c5c3eba5fe349e0a1713f3e629370d6c1c",
+          "origin": {
+            "dir_info": {},
+            "url": "file:///dev/shm/gef-rewrite-20261112/aligned-source"
+          },
+          "files": [
+            {
+              "name": "origin.json",
+              "bytes": 78,
+              "allocated_bytes": 4096,
+              "sha256": "5620fa1178c72be1ac6ca6938d4a23b96bfc930759e6b2e87ea859253f156897"
+            },
+            {
+              "name": "tidegraph-0.3.0-py3-none-any.whl",
+              "bytes": 521831,
+              "allocated_bytes": 524288,
+              "sha256": "940c09ed3ddbad00d5cd34f38d0fc5dbae7ba42eb50505b2844def702f479088"
+            }
+          ]
+        },
+        {
+          "path": "/mi/data2T/zlong/home/.cache/pip/wheels/20/7a/6b/2af70db2bce8cfc3bc51e4abd311879f1f87c45a7562eb2e8a",
+          "origin": {
+            "dir_info": {},
+            "url": "file:///mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/platform-matrix/source-checkpoint-cost"
+          },
+          "files": [
+            {
+              "name": "origin.json",
+              "bytes": 135,
+              "allocated_bytes": 4096,
+              "sha256": "3379cc19ba9b88270ea3454dff1dca4a8b50b52a621384d5c2eba746cbdcb98d"
+            },
+            {
+              "name": "tidegraph-0.3.0-py3-none-any.whl",
+              "bytes": 375018,
+              "allocated_bytes": 376832,
+              "sha256": "4d588155c8eea1b393a5890917875e3bf20b9ecba6768e55a31e7a700a715c33"
+            }
+          ]
+        },
+        {
+          "path": "/mi/data2T/zlong/home/.cache/pip/wheels/0b/e3/b5/31168e571277314fd3406361c389322b195caec68677d07a83",
+          "origin": {
+            "dir_info": {},
+            "url": "file:///mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/platform-matrix/package-stage-972032f"
+          },
+          "files": [
+            {
+              "name": "origin.json",
+              "bytes": 134,
+              "allocated_bytes": 4096,
+              "sha256": "b8ebb65cdebe0f22ed1ce2022dc5ea53a55697a90e40a447790d54f06e6c40bc"
+            },
+            {
+              "name": "tidegraph-0.3.0-py3-none-any.whl",
+              "bytes": 365669,
+              "allocated_bytes": 368640,
+              "sha256": "1cb3e791408ec237751372fa11a7d6c0a9a65cf459ea51a89adf7828951a9e84"
+            }
+          ]
+        },
+        {
+          "path": "/mi/data2T/zlong/home/.cache/pip/wheels/83/0b/26/193030affaab926c72057b579c53db706aee86c7c79d339a93",
+          "origin": {
+            "dir_info": {},
+            "url": "file:///mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/qualified-placement"
+          },
+          "files": [
+            {
+              "name": "origin.json",
+              "bytes": 133,
+              "allocated_bytes": 4096,
+              "sha256": "1a56289c54875c780b274b73d9b32ec9bd13c67f4a2c391de2f81982a60463aa"
+            },
+            {
+              "name": "tidegraph-0.3.0-py3-none-any.whl",
+              "bytes": 518804,
+              "allocated_bytes": 520192,
+              "sha256": "ae13d9453691f2c6f9cabb5db9bbf3fd8ca37f39fbff2119e8be1d3394256bbf"
+            }
+          ]
+        },
+        {
+          "path": "/mi/data2T/zlong/home/.cache/pip/wheels/8d/64/a2/bbbcd8f493f7f9f51a1e6a55b832db4fdd645522c751ea584d",
+          "origin": {
+            "dir_info": {},
+            "url": "file:///mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/tl-req-004/source-c"
+          },
+          "files": [
+            {
+              "name": "origin.json",
+              "bytes": 116,
+              "allocated_bytes": 4096,
+              "sha256": "3947c08f3a671342b5a01d384160f5f494a50bd79cc80efac425a500168bc971"
+            },
+            {
+              "name": "tidegraph-0.3.0-py3-none-any.whl",
+              "bytes": 438938,
+              "allocated_bytes": 442368,
+              "sha256": "b4d11023ccfb3d27f9ae2675c236b376f30966cb519c21223bbaa3b8392e7526"
+            }
+          ]
+        },
+        {
+          "path": "/mi/data2T/zlong/home/.cache/pip/wheels/9e/a7/1d/5378a8bb63f40743e9956f24c229d15f5a0f3766836183d515",
+          "origin": {
+            "dir_info": {},
+            "url": "file:///mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/platform-matrix/source-root-progress-4485697"
+          },
+          "files": [
+            {
+              "name": "origin.json",
+              "bytes": 141,
+              "allocated_bytes": 4096,
+              "sha256": "f104c6d01baab95ddfa932f98b9890318836e8e0e3bf67050428d3ddb35f2c88"
+            },
+            {
+              "name": "tidegraph-0.3.0-py3-none-any.whl",
+              "bytes": 376921,
+              "allocated_bytes": 380928,
+              "sha256": "3c03a5da1df19a0251d24e3c40a2dde6e2cd4f7ac44759a074637038088e6c5b"
+            }
+          ]
+        },
+        {
+          "path": "/mi/data2T/zlong/home/.cache/pip/wheels/7d/c6/ed/049f82981c6618fa021d2a2aa191ed72c0b221f5f4da801ed2",
+          "origin": {
+            "dir_info": {},
+            "url": "file:///mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/platform-matrix/source-checkpoint-optimized"
+          },
+          "files": [
+            {
+              "name": "origin.json",
+              "bytes": 140,
+              "allocated_bytes": 4096,
+              "sha256": "33e71b2dfe728166604b07871dd56b25bb6b8cda71b2a9cd5ddb0b6640a14485"
+            },
+            {
+              "name": "tidegraph-0.3.0-py3-none-any.whl",
+              "bytes": 376284,
+              "allocated_bytes": 376832,
+              "sha256": "7b5f71c545568b2389f0eeb97914787b16c4ab5378c220c71826ffea534e12d9"
+            }
+          ]
+        },
+        {
+          "path": "/mi/data2T/zlong/home/.cache/pip/wheels/98/10/72/907dad9cee8882ee3ab1ef225012a0a5d43a68ce6f8c83e4b4",
+          "origin": {
+            "dir_info": {},
+            "url": "file:///mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/columns-20261111/qualified-owners"
+          },
+          "files": [
+            {
+              "name": "origin.json",
+              "bytes": 130,
+              "allocated_bytes": 4096,
+              "sha256": "1857a6798eee294a23954ece050852bf860cefd6b8cbcc4c108aabb1d40e0e87"
+            },
+            {
+              "name": "tidegraph-0.3.0-py3-none-any.whl",
+              "bytes": 521059,
+              "allocated_bytes": 524288,
+              "sha256": "39c2d2ef1ab0f3ddca1891abc68eda5bf0d7eca6dc354b9f4c5376ba3aad7238"
+            }
+          ]
+        },
+        {
+          "path": "/mi/data2T/zlong/home/.cache/pip/wheels/70/0a/65/366e7a602fea1a3561600c6337076a9ada8c0fb65713c7d48d",
+          "origin": {
+            "dir_info": {},
+            "url": "file:///dev/shm/gef-p1p6-20261112/core-source-v2"
+          },
+          "files": [
+            {
+              "name": "origin.json",
+              "bytes": 75,
+              "allocated_bytes": 4096,
+              "sha256": "3876c997e2932032b938d2df06e58d21eed7ef69e353e6b5bac6e4ee845b7d9f"
+            },
+            {
+              "name": "tidegraph-0.3.0-py3-none-any.whl",
+              "bytes": 549799,
+              "allocated_bytes": 552960,
+              "sha256": "370f9e728d72d87cc8fba9fb9ca299b11f24dd950e954133ced7f25503a71357"
+            }
+          ]
+        },
+        {
+          "path": "/mi/data2T/zlong/home/.cache/pip/wheels/49/42/c9/91f9a1450c7db087468ffca414f2547b9829d89697a58c9199",
+          "origin": {
+            "dir_info": {},
+            "url": "file:///mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/tl-req-003/source-a"
+          },
+          "files": [
+            {
+              "name": "origin.json",
+              "bytes": 116,
+              "allocated_bytes": 4096,
+              "sha256": "124690f67c8c9a3262e2aa06601b7d151df2872c3a1334223b74ff51c4e1ec5a"
+            },
+            {
+              "name": "tidegraph-0.3.0-py3-none-any.whl",
+              "bytes": 436068,
+              "allocated_bytes": 438272,
+              "sha256": "3864acb62703b4b8e58d0e7946270f9816fb2f0f5d222f915364997dd2e29ae3"
+            }
+          ]
+        }
+      ],
+      "remaining_origins": [
+        "/mi/data2T/zlong/home/.cache/pip/wheels/db/c9/c5/d27f7dae5d1970a65e81213e1de42df97be0a153e527c468c8/origin.json",
+        "/mi/data2T/zlong/home/.cache/pip/wheels/7a/4c/26/bbdae2c197c24776bd5fc422de9a457c46b1aa37733e74d20a/origin.json",
+        "/mi/data2T/zlong/home/.cache/pip/wheels/37/8f/42/4bc7428b5046c94ead163ab6bb1859bf05cf1135b007886439/origin.json",
+        "/mi/data2T/zlong/home/.cache/pip/wheels/6e/e0/62/b900d9bde063b831f34b16ef30d7f65fe179466cf7d83418dc/origin.json"
+      ]
+    }
+  },
+  "protected": {
+    "user_files_sha256": {
+      "/mi/data2T/zlong/home/llm/graph-execution-foundation/docs/tide-learning-lab-TL-REQ-004-handoff.md": "69607cba0a7e87a260929ed5741d996103cef804c51f3fa2c02b3bd7a454a220",
+      "/mi/data2T/zlong/home/llm/graph-execution-foundation/docs/tide-learning-lab-TL-REQ-005-handoff.md": "83bec6f6eaa476ae9d7c859fe168333ac2ee564433297f36ab9aa1ef33c38732",
+      "/mi/data2T/zlong/home/llm/graph-execution-foundation/docs/tide-learning-lab-TL-REQ-006-handoff.md": "8706f0477c8f31d0c8337e55ba7f8f5b28bb9a455656586fa1585c82ec58b4df",
+      "/mi/data2T/zlong/home/llm/graph-execution-foundation/docs/upstream-lh-semantics-discussion-20261113.md": "3118419cb014570395323baf887ffe5a7e797f97049e85eacef26ecb1fd81c07"
+    },
+    "downstream_head": "ebb084a2dad5c3a6bae2495926aacec2054d500f",
+    "downstream_status_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "model_aliases": {
+      "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102/models/qwen15-989aa7980e4cf806f80c7fef2b1adb7bc71aa306": "/mi/data2T/models/huggingface/Qwen/Qwen2.5-1.5B-Instruct/989aa7980e4cf806f80c7fef2b1adb7bc71aa306",
+      "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102/models/qwen05-7ae557604adf67be50417f59c2c2f167def9a775": "/mi/data2T/models/huggingface/Qwen/Qwen2.5-0.5B-Instruct/7ae557604adf67be50417f59c2c2f167def9a775",
+      "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102/models/qwen7-a09a35458c702b33eeacc393d103063234e8bc28": "/mi/data2T/models/huggingface/Qwen/Qwen2.5-7B-Instruct/a09a35458c702b33eeacc393d103063234e8bc28",
+      "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102/models/qwenmoe-0d7cf23991f47feeb3a57ecb4c9cee8ea4a17bfe": "/mi/data2T/models/huggingface/Qwen/Qwen3-30B-A3B-Instruct-2507/0d7cf23991f47feeb3a57ecb4c9cee8ea4a17bfe",
+      "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102/models/qwen3-aa8e72537993ba99e69dfaafa59ed015b17504d1": "/mi/data2T/models/huggingface/Qwen/Qwen2.5-3B-Instruct/aa8e72537993ba99e69dfaafa59ed015b17504d1",
+      "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102/models/olmoe-b89a7c4bc24fb9e55ce2543c9458ce0ca5c4650e": "/mi/data2T/models/huggingface/allenai/OLMoE-1B-7B-0125-Instruct/b89a7c4bc24fb9e55ce2543c9458ce0ca5c4650e"
+    },
+    "external_small_provenance_retained": "gef-lm-experiments/RETIREMENT-20261112.md and 20261102/{asset-stage1.json,stage2-download*.json,compute.lock}",
+    "reference_repositories_public_software_and_unrelated_caches": "untouched"
+  },
+  "services": {
+    "preserve": {
+      "unit": "gef-governance-preserve-20261118.service",
+      "durable_status": {
+        "state": "passed",
+        "source": "728d19a470d16d392d5dd6a2452161d1a3e9959e",
+        "command": [
+          "/usr/bin/python3",
+          "/mi/data2T/zlong/home/llm/gef-governance-20261118/retire.py",
+          "scan"
+        ],
+        "pid": 1714917,
+        "started": "2026-11-18T01:33:43.774711+00:00",
+        "max_rss_bytes": 4294967296,
+        "peak_rss_bytes": 54845440,
+        "max_processes": 2,
+        "rss_sample_count": 483,
+        "poll_interval": 0.25,
+        "child_pid": 1714924,
+        "process_group": 1714924,
+        "elapsed": 207.64153873175383,
+        "exit_code": 0,
+        "finished": "2026-11-18T01:37:11.416277+00:00"
+      },
+      "terminal_unit": {
+        "MainPID": "0",
+        "Result": "success",
+        "ActiveState": "inactive",
+        "SubState": "dead"
+      }
+    },
+    "curate": {
+      "unit": "gef-governance-curate-20261118.service",
+      "durable_status": {
+        "state": "passed",
+        "source": "728d19a470d16d392d5dd6a2452161d1a3e9959e",
+        "command": [
+          "/usr/bin/python3",
+          "/mi/data2T/zlong/home/llm/gef-governance-20261118/curate.py"
+        ],
+        "pid": 1734332,
+        "started": "2026-11-18T01:37:55.565112+00:00",
+        "max_rss_bytes": 4294967296,
+        "peak_rss_bytes": 37744640,
+        "max_processes": 1,
+        "rss_sample_count": 60,
+        "poll_interval": 0.25,
+        "child_pid": 1734337,
+        "process_group": 1734337,
+        "elapsed": 25.3487384095788,
+        "exit_code": 0,
+        "finished": "2026-11-18T01:38:20.913881+00:00"
+      },
+      "terminal_unit": {
+        "MainPID": "0",
+        "Result": "success",
+        "ActiveState": "inactive",
+        "SubState": "dead"
+      }
+    },
+    "delete": {
+      "unit": "gef-governance-delete-20261118.service",
+      "durable_status": {
+        "state": "passed",
+        "source": "9efc86e2aad143434ce526b021f41927f5c8eb50",
+        "command": [
+          "/usr/bin/python3",
+          "/mi/data2T/zlong/home/llm/gef-governance-20261118/delete.py",
+          "remove"
+        ],
+        "pid": 1747418,
+        "started": "2026-11-18T01:41:07.041867+00:00",
+        "max_rss_bytes": 4294967296,
+        "peak_rss_bytes": 108707840,
+        "max_processes": 2,
+        "rss_sample_count": 216,
+        "poll_interval": 0.25,
+        "child_pid": 1747422,
+        "process_group": 1747422,
+        "elapsed": 93.93429322913289,
+        "exit_code": 0,
+        "finished": "2026-11-18T01:42:40.976214+00:00"
+      },
+      "terminal_unit": {
+        "MainPID": "0",
+        "Result": "success",
+        "ActiveState": "inactive",
+        "SubState": "dead"
+      }
+    },
+    "validate": {
+      "unit": "gef-governance-validate-20261118.service",
+      "durable_status": {
+        "state": "passed",
+        "source": "9efc86e2aad143434ce526b021f41927f5c8eb50",
+        "command": [
+          "/bin/bash",
+          "/mi/data2T/zlong/home/llm/gef-governance-20261118/validate.sh"
+        ],
+        "pid": 1754627,
+        "started": "2026-11-18T01:42:54.208396+00:00",
+        "max_rss_bytes": 8589934592,
+        "peak_rss_bytes": 484478976,
+        "max_processes": 4,
+        "rss_sample_count": 98,
+        "poll_interval": 0.25,
+        "child_pid": 1754633,
+        "process_group": 1754633,
+        "elapsed": 43.05036758631468,
+        "exit_code": 0,
+        "finished": "2026-11-18T01:43:37.258785+00:00"
+      },
+      "terminal_unit": {
+        "MainPID": "0",
+        "Result": "success",
+        "ActiveState": "inactive",
+        "SubState": "dead"
+      }
+    }
+  },
+  "validation": {
+    "install": {
+      "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:17:02) [GCC 14.4.0]",
+      "executable": "/mi/data2T/zlong/home/llm/gef-governance-20261118/clean-env/bin/python",
+      "torch": "2.12.0+cpu",
+      "torch_npu_distribution": "2.12.0.post3",
+      "tide": "/mi/data2T/zlong/home/llm/gef-governance-20261118/clean-env/lib/python3.12/site-packages/tide/__init__.py",
+      "package": "0.1.0",
+      "vendor_autoload_disabled": true,
+      "installed_source_bytes_match": true
+    },
+    "steps": [
+      {
+        "step": 0,
+        "loss": 3.301395893096924
+      },
+      {
+        "step": 1,
+        "loss": 2.4176340103149414
+      },
+      {
+        "step": 2,
+        "loss": 2.309516429901123
+      }
+    ],
+    "resumed_update": {
+      "checkpoint": "/mi/data2T/zlong/home/llm/gef-governance-20261118/installed-smoke.pt",
+      "restored_optimizer": true,
+      "continuation": "exact",
+      "next_optimizer_update": "finite_deviation",
+      "update_threshold": {
+        "atol": 1e-06,
+        "rtol": 0.002
+      },
+      "parameter_max_abs": 2.771615982055664e-05,
+      "parameter_threshold_failures": [
+        {
+          "parameter": "regional.1.second.bias",
+          "max_abs": 2.771615982055664e-05
+        }
+      ],
+      "optimizer_difference": null
+    },
+    "installed_source_match": true,
+    "frozen_files_unchanged": 196,
+    "math_files_verified": 108,
+    "new_bf16_or_performance_qualification": false,
+    "launch_script": "#!/usr/bin/env bash\nset -euo pipefail\nsource /usr/share/Modules/init/bash\nmodule load ascend/dev-workspace-9.2.0\nexport TORCH_DEVICE_BACKEND_AUTOLOAD=0\ntask_control=/mi/data2T/zlong/home/llm/gef-governance-20261118\ntask_source=\"$task_control/frozen-current\"\npython -m venv --system-site-packages \"$task_control/clean-env\"\n\"$task_control/clean-env/bin/python\" -m pip install --no-deps --no-build-isolation \"$task_source\"\n\"$task_control/clean-env/bin/python\" -I \"$task_control/install_probe.py\"\n\"$task_control/clean-env/bin/python\" -I \"$task_source/examples/train.py\" --threads 4 --checkpoint \"$task_control/installed-smoke.pt\"\n\"$task_control/clean-env/bin/python\" \"$task_source/scripts/check_upstream.py\"\ncd \"$task_source\"\n\"$task_control/clean-env/bin/python\" -m benchmarks.run --help\n",
+    "installation_probe_source": "import hashlib\nimport importlib.metadata\nimport json\nfrom pathlib import Path\nimport sys\n\nimport torch\nimport tide\n\ncontrol=Path(__file__).resolve().parent\ninstalled=Path(tide.__file__).resolve()\nassert installed.is_relative_to(control/'clean-env')\nsource=control/'frozen-current/src/tide'\nfor p in source.glob('*.py'):\n    assert hashlib.sha256(p.read_bytes()).digest()==hashlib.sha256((installed.parent/p.name).read_bytes()).digest()\nresult={'python':sys.version,'executable':sys.executable,'torch':torch.__version__,\n        'torch_npu_distribution':importlib.metadata.version('torch-npu'),\n        'tide':str(installed),'package':importlib.metadata.version('tide-instances'),\n        'vendor_autoload_disabled':True,'installed_source_bytes_match':True}\n(control/'install-probe.json').write_text(json.dumps(result,indent=2)+'\\n')\nprint(json.dumps(result),flush=True)\n",
+    "launch_script_sha256": "24563a51c6bce30c37928368caab6e006ce2845b597276c7b1e21ced34dd1aed",
+    "installation_probe_sha256": "86ccfd0a3729a4ab699f2e3f316745b03af84a2e99cbd69b8ab041072ca5a662",
+    "fresh_context_review": "no blocking contradiction; 139 local links across28 pages checked; broader FP32 wording narrowed",
+    "skills": "three quick_validate passes",
+    "final_governance_document_checks": {
+      "pages": 30,
+      "local_links": 155,
+      "broken_links": 0,
+      "git_diff_check": "passed",
+      "runtime_and_original_fp32_evidence_unchanged_from": "728d19a470d16d392d5dd6a2452161d1a3e9959e"
+    }
+  },
+  "control_directory": {
+    "path": "/mi/data2T/zlong/home/llm/gef-governance-20261118",
+    "retired": true,
+    "allocated_bytes_before_removal": 101826560,
+    "removed_at": "2026-11-18T01:50:17.594211+00:00",
+    "evidence_committed_before_removal": "9437783fe69661d446a3586cfd717a0e9c171628",
+    "active_owned_process_dependencies": []
+  },
+  "quota_before": "507G used /300G soft /700G hard,3days grace",
+  "quota_after_observed": "352G used /300G soft /700G hard,3days grace",
+  "quota_scope": "Remaining account usage is outside project cleanup; soft quota remains exceeded.",
+  "final_accounting": {
+    "observed_at": "2026-11-18T01:50:37.760797+00:00",
+    "repository_allocated_bytes_including_git": 118861824,
+    "git_allocated_bytes": 115159040,
+    "working_tree_allocated_bytes_excluding_git": 3702784,
+    "ignored_files": [],
+    "remaining_worktree_count": 2,
+    "protected_user_hashes_match": true,
+    "downstream_head_and_status_match": true,
+    "model_aliases_unchanged_and_targets_exist": true,
+    "all_43_retired_roots_absent": true,
+    "quota_exit_code": 1,
+    "quota_output": "Disk quotas for user zlong (uid 1003): \n     Filesystem   space   quota   limit   grace   files   quota   limit   grace\n/dev/mapper/ascend_data-data\n                   352G*   300G    700G   3days    775k       0       0        \n",
+    "filesystem_output": "Filesystem                       1B-blocks          Used     Available Use% Mounted on\n/dev/mapper/ascend_data-data 5410121490432 4298999455744 1089115070464  80% /mi/data2T\ntmpfs                         429496729600     372989952  429123739648   1% /dev/shm\n",
+    "note": "Measured before final evidence accounting commit; small Git/record size changes are expected.",
+    "active_foundation_service_units": [],
+    "active_downstream_service_units_observed_untouched": [
+      "tide-lab-v13-hardware.service",
+      "tide-lab-v13-main-pool-l-qry-s11.service",
+      "tide-lab-v13-main-pool-l-qry-s22.service",
+      "tide-lab-v13-main-pool-l-sum-s11.service",
+      "tide-lab-v13-main-pool-l-sum-s22.service",
+      "tide-lab-v13-main-q3-l-sum-s11.service",
+      "tide-lab-v13-main-q3-l-sum-s22.service",
+      "tide-lab-v13-main-q3-s-sum-s22.service"
+    ]
+  }
+}

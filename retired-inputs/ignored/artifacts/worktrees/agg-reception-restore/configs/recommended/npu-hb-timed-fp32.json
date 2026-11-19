@@ -1,0 +1,106 @@
+{
+  "schema": "tide-example-preset-1",
+  "description": "HB Timed FP32 choice; BF16 prefix retains structural path differences and is not the default.",
+  "model": {
+    "topology": {
+      "kind": "multiscale",
+      "n": 8,
+      "layers": null,
+      "depth": null,
+      "rounds": null,
+      "profile": "compact-9",
+      "hubs": 4,
+      "partition": "group",
+      "timing": "timed",
+      "hub_mask": "all",
+      "period": null,
+      "probes": null,
+      "terminal_hubs": false
+    },
+    "d": 128,
+    "memory": "X",
+    "aggregation": "source_residual",
+    "allocation": "quad",
+    "sharing": "region_shared",
+    "adapter_rank": 8,
+    "budget": null,
+    "attention_backend": "auto",
+    "attention_chunk": 128,
+    "input_dim": null,
+    "checkpoint_regions": false,
+    "checkpoint_reception": true,
+    "ssd_summary_backend": "prefix",
+    "region_batch_size": 4,
+    "local_attention_backend": null,
+    "hub_allocation": "bounded",
+    "clock": {
+      "position_period": null,
+      "position_origin": "binding",
+      "kv_window": null,
+      "short_decay": null,
+      "ssd_stride": null
+    }
+  },
+  "execution": {
+    "mode": "train",
+    "device": null,
+    "precision": "fp32",
+    "batch": 12,
+    "length": 128,
+    "steps": 20,
+    "threads": 4,
+    "learning_rate": 0.0001,
+    "foreach": true,
+    "seed": 751
+  },
+  "recommendation": {
+    "status": "selected_training_shape",
+    "scope": "HB Timed FP32 choice; BF16 prefix retains structural path differences and is not the default.",
+    "evidence": [
+      "docs/evidence/training-search-20261118.md",
+      "docs/evidence/training-continuous-20261118.md",
+      "docs/evidence/training-paths-20261118.md",
+      "docs/evidence/training-validation-20261118.md"
+    ],
+    "device": "Explicit admitted NPU required; null device has no runtime default.",
+    "hardware": {
+      "device_capacity_gib": 64,
+      "sampled_budget_gib": 48,
+      "budget_is_hard_isolation": false,
+      "sampled_budget_scope": "allocated only; reserved memory and non-Torch allocations are excluded",
+      "resource_identity": "exclusive_cooperative_queue; external jobs not controlled"
+    },
+    "measurement": {
+      "source": "22527cf472fc4d6ea9ca7ce22528b7e4ca9cc96a",
+      "record": "artifacts/training-continuous-timed-fp32/continuous.json",
+      "record_sha256": "d8e733af47a18c59cc801206da5f574777419a1d8b1f8bc0dd81d867c0028b75",
+      "parameters": 15694224,
+      "updates": 20,
+      "steady_rule": "sum(input_positions) / sum(complete_seconds), observations[2:20]",
+      "steady_input_positions_per_second": 317.402,
+      "peak_allocated_gib": 41.652821,
+      "peak_reserved_gib": 46.386719,
+      "timing": "input transfer/construction/initial matching audit/warmup/checkpoint excluded; full stream train includes concatenation/loss/backward/AdamW/sync"
+    },
+    "qualification": {
+      "paired_restore": "within_threshold",
+      "saved_data_exact": true,
+      "next_forward_exact": true,
+      "cross_path": "finite deviations retained; see training-paths evidence",
+      "full_numerical_equivalence": false
+    },
+    "fresh_process_restore": {
+      "state": "completed_finite",
+      "record": "artifacts/training-restore-timed-fp32/restore.json",
+      "record_sha256": "90f06ba2ef727099c52607461d819f8b2d461dd3549f607e1762bb04e1ce349f",
+      "source": "22527cf472fc4d6ea9ca7ce22528b7e4ca9cc96a",
+      "checkpoint_producer_source": "22527cf472fc4d6ea9ca7ce22528b7e4ca9cc96a",
+      "checkpoint_sha256": "6577735fb2a8285238fd852dd4aa652ee600aa9d153a6e3903739f19f001b67b",
+      "optimizer_step_before": 20,
+      "optimizer_step_after": 21,
+      "optimizer_step_increment_errors": [],
+      "numerical_equivalence_qualification": false
+    },
+    "entry_boundary": "Preset carries model and runtime choices. The example has its own synthetic sequence, loss normalization and diagnostic checks; use the recorded benchmark command to reproduce timings."
+  }
+}

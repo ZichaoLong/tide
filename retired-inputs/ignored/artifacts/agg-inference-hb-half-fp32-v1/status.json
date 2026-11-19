@@ -1,0 +1,93 @@
+{
+  "state": "passed",
+  "source": "8ce51410de272400c226d736996cf0a83593504e",
+  "command": [
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "/mi/data2T/zlong/home/.agents/skills/use-local-ascend/scripts/run_on_free_npu.py",
+    "--job-id",
+    "agg-inference-hb-half-fp32-v1",
+    "--project",
+    "tide-instances",
+    "--priority",
+    "0",
+    "--npu-count",
+    "1",
+    "--max-wait-seconds",
+    "600",
+    "--state-file",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-inference-hb-half-fp32-v1/queue.json",
+    "--",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "-m",
+    "benchmarks.inference",
+    "--config",
+    "configs/scale/hb-0p5b.json",
+    "--config-overrides",
+    "{\"region_batch_size\":4,\"ssd_scan_backend\":\"doubling\",\"ssd_summary_backend\":\"prefix\"}",
+    "--subjects",
+    "tide",
+    "A",
+    "B",
+    "C",
+    "D",
+    "--devices",
+    "npu:0",
+    "--prefill",
+    "128",
+    "--prefill-chunk",
+    "128",
+    "--decode",
+    "16",
+    "--samples",
+    "2",
+    "--warmup",
+    "1",
+    "--threads",
+    "4",
+    "--transformer-chunk",
+    "256",
+    "--allocated-budget-gib",
+    "48",
+    "--reserved-budget-gib",
+    "56",
+    "--output",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-inference-hb-half-fp32-v1/inference.json",
+    "--reference-output",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-inference-hb-half-fp32-v1/reference.json"
+  ],
+  "pid": 2297374,
+  "started": "2026-11-18T12:28:03.086904+00:00",
+  "max_rss_bytes": 103079215104,
+  "peak_rss_bytes": 5083631616,
+  "max_processes": 2,
+  "rss_sample_count": 1055,
+  "poll_interval": 0.25,
+  "descendant_supervision": "Linux child subreaper; retained PID/start identities across nested sessions",
+  "child_pid": 2297419,
+  "process_group": 2297419,
+  "elapsed": 453.9233894459903,
+  "descendant_identities": [
+    {
+      "pid": 2297419,
+      "start_ticks": 2259105379
+    },
+    {
+      "pid": 2297422,
+      "start_ticks": 2259105385
+    },
+    {
+      "pid": 2298873,
+      "start_ticks": 2259107445
+    },
+    {
+      "pid": 2299288,
+      "start_ticks": 2259107932
+    },
+    {
+      "pid": 2299443,
+      "start_ticks": 2259108119
+    }
+  ],
+  "exit_code": 0,
+  "finished": "2026-11-18T12:35:37.010294+00:00"
+}

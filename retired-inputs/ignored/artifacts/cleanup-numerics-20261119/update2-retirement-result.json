@@ -1,0 +1,73 @@
+{
+  "state": "completed",
+  "plan_sha256": "15d45f0db4f49549b0885b41806ccbaccc01447e75303727d7997da94cd109a2",
+  "live_refs": [],
+  "restricted_system_processes": [
+    {
+      "pid": 1213453,
+      "name": "sshd-session",
+      "state": "S (sleeping)"
+    },
+    {
+      "pid": 1689868,
+      "name": "sshd-session",
+      "state": "S (sleeping)"
+    },
+    {
+      "pid": 2132296,
+      "name": "sshd-session",
+      "state": "S (sleeping)"
+    },
+    {
+      "pid": 2351299,
+      "name": "sshd-session",
+      "state": "S (sleeping)"
+    },
+    {
+      "pid": 2361531,
+      "name": "git",
+      "state": "Z (zombie)"
+    },
+    {
+      "pid": 2634173,
+      "name": "ssh",
+      "state": "Z (zombie)"
+    },
+    {
+      "pid": 2741509,
+      "name": "ssh",
+      "state": "Z (zombie)"
+    },
+    {
+      "pid": 2907799,
+      "name": "(sd-pam)",
+      "state": "S (sleeping)"
+    },
+    {
+      "pid": 2908938,
+      "name": "sshd-session",
+      "state": "S (sleeping)"
+    },
+    {
+      "pid": 2908943,
+      "name": "sshd-session",
+      "state": "S (sleeping)"
+    },
+    {
+      "pid": 3361186,
+      "name": "sshd-session",
+      "state": "S (sleeping)"
+    },
+    {
+      "pid": 3361883,
+      "name": "sshd-session",
+      "state": "S (sleeping)"
+    }
+  ],
+  "removed": [
+    "artifacts/ffn-medium-cpu-qualification-v1/qualification/baseline/update-2.pt",
+    "artifacts/ffn-medium-cpu-qualification-v1/qualification/weight_access/update-2.pt"
+  ],
+  "allocated_bytes": 6329466880,
+  "finished_utc": "2026-11-19T10:20:57.162550+00:00"
+}

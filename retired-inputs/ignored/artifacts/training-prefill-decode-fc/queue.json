@@ -1,0 +1,19 @@
+{
+  "elapsed_seconds": 20.137089535593987,
+  "job_id": "training-prefill-decode-fc",
+  "logical_device": "npu:0",
+  "logical_devices": [
+    "npu:0"
+  ],
+  "npu_count": 1,
+  "physical_id": 1,
+  "physical_ids": [
+    1
+  ],
+  "priority": 0,
+  "project": "tide-instances",
+  "return_code": 2,
+  "schema_version": 1,
+  "status": "failed",
+  "timestamp": "2026-11-18T09:56:26.414974+00:00"
+}

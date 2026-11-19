@@ -1,0 +1,701 @@
+{
+  "schema": "tide-inference-reference-1",
+  "config": {
+    "topology": {
+      "kind": "multiscale",
+      "n": 32,
+      "layers": null,
+      "depth": null,
+      "rounds": null,
+      "profile": "5-dd4",
+      "hubs": 4,
+      "partition": "group",
+      "timing": "settle",
+      "hub_mask": "all",
+      "period": null,
+      "probes": null,
+      "terminal_hubs": false
+    },
+    "d": 768,
+    "memory": "X",
+    "aggregation": "source_residual",
+    "allocation": "quad",
+    "sharing": "independent",
+    "adapter_rank": 8,
+    "budget": null,
+    "attention_backend": "auto",
+    "attention_chunk": 128,
+    "input_dim": null,
+    "checkpoint_regions": false,
+    "checkpoint_reception": false,
+    "reception_qkv_backend": "separate",
+    "reception_mask_padding": false,
+    "parameter_indexing": "gather",
+    "ssd_summary_backend": "prefix",
+    "ssd_scan_backend": "doubling",
+    "region_batch_size": 4,
+    "local_attention_backend": null,
+    "hub_allocation": "bounded",
+    "clock": {
+      "position_period": null,
+      "position_origin": "binding",
+      "kv_window": null,
+      "short_decay": null,
+      "ssd_stride": null
+    }
+  },
+  "schedule": {
+    "prefill": 512,
+    "prefill_chunk": 128,
+    "decode_steps": 16,
+    "stream_positions": 512,
+    "stream_chunk": 128
+  },
+  "batch": 2,
+  "seed": 751,
+  "precision": "fp32",
+  "mode": "inference",
+  "source": {
+    "source_commit": "1fbe15c9b0ce900bfffbf5c148ca61c81cb34046",
+    "harness_commit": "1fbe15c9b0ce900bfffbf5c148ca61c81cb34046",
+    "tide_content_sha256": "27f33247c3d8c5930a36d4e00f6b73aea0038bb17ccad991172ce95e9ac93620",
+    "harness_content_sha256": "306dd95e5292a4ce6aa7b7c63df93b529cdfe3f3a04bebc03bb3dc14ec7b3b26",
+    "tide_path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-inference-hb9b-batch2-fp32-v1/source/src/tide",
+    "harness_path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-inference-hb9b-batch2-fp32-v1/source/benchmarks"
+  },
+  "tide_parameters": {
+    "sha256": "7a3d2f5e036e8817331a09479a263daa1da23a0abf5eef4fd1f93335e89e02cc",
+    "finite": true,
+    "host_copy_chunk_bytes": 8388608,
+    "scope": "dense initial named Parameters before ownership placement; shape/name/raw contiguous bytes"
+  },
+  "tide_input_sha256": "4bcc7863d5f1c20577aae75b17aa68ede26d2b398cde5b18ea40af28e39472bb",
+  "tide_input_width": 768,
+  "placement": {
+    "kind": "single",
+    "devices": [
+      "npu:0"
+    ]
+  },
+  "diagnostics": {
+    "finite_outputs": true,
+    "finite_private_state": true,
+    "output_available_by_call": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "output_support_sha256": "f73ce2c207859f629ede71092a029222ca62c3b7289ba7b42b86413acd8d3087",
+    "original_output_times_sha256": "ca44d44e5c30a986b7cead5d2e37792f84d4c13d7bf68784aa56a677c49fc708",
+    "original_time_bounds": [
+      {
+        "phase": "prefill",
+        "first_original_time": 5,
+        "last_original_time": 767,
+        "returned_time_slots": 128
+      },
+      {
+        "phase": "prefill",
+        "first_original_time": 773,
+        "last_original_time": 1535,
+        "returned_time_slots": 128
+      },
+      {
+        "phase": "prefill",
+        "first_original_time": 1541,
+        "last_original_time": 2303,
+        "returned_time_slots": 128
+      },
+      {
+        "phase": "prefill",
+        "first_original_time": 2309,
+        "last_original_time": 3071,
+        "returned_time_slots": 128
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 3077,
+        "last_original_time": 3077,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 3083,
+        "last_original_time": 3083,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 3089,
+        "last_original_time": 3089,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 3095,
+        "last_original_time": 3095,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 3101,
+        "last_original_time": 3101,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 3107,
+        "last_original_time": 3107,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 3113,
+        "last_original_time": 3113,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 3119,
+        "last_original_time": 3119,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 3125,
+        "last_original_time": 3125,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 3131,
+        "last_original_time": 3131,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 3137,
+        "last_original_time": 3137,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 3143,
+        "last_original_time": 3143,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 3149,
+        "last_original_time": 3149,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 3155,
+        "last_original_time": 3155,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 3161,
+        "last_original_time": 3161,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "decode",
+        "first_original_time": 3167,
+        "last_original_time": 3167,
+        "returned_time_slots": 1
+      },
+      {
+        "phase": "stream",
+        "first_original_time": 3173,
+        "last_original_time": 3935,
+        "returned_time_slots": 128
+      },
+      {
+        "phase": "stream",
+        "first_original_time": 3941,
+        "last_original_time": 4703,
+        "returned_time_slots": 128
+      },
+      {
+        "phase": "stream",
+        "first_original_time": 4709,
+        "last_original_time": 5471,
+        "returned_time_slots": 128
+      },
+      {
+        "phase": "stream",
+        "first_original_time": 5477,
+        "last_original_time": 6239,
+        "returned_time_slots": 128
+      }
+    ],
+    "state_memory": {
+      "payload_bytes": 1387432192,
+      "retained_storage_bytes": 1387432192,
+      "dtypes": [
+        "torch.float32",
+        "torch.int64"
+      ],
+      "tensor_count": 280
+    },
+    "final_state_position": 1040,
+    "private_state_detached": true,
+    "readout_dtypes": [
+      "torch.float32"
+    ],
+    "returned_value_dtypes": [
+      "torch.float32"
+    ],
+    "returned_strength_dtypes": [
+      "torch.float32"
+    ],
+    "output_devices": [
+      "npu:0"
+    ],
+    "retention": "one output window at a time; only hashes/scalars retained; separate from normal timing",
+    "execution": {
+      "requested_region_concurrency": "serial",
+      "effective_region_concurrency": "serial",
+      "hooks": "ordinary Python method/module hooks with locked counters; no thread-local dispatch mode"
+    }
+  },
+  "audit": {
+    "parameters": {
+      "unique_parameters": 8778358224,
+      "scope": "all unique trainable backbone parameters including enabled ingress projections; no task head",
+      "ingress_parameters": 1179648,
+      "textbook": {
+        "base": 51972096,
+        "private_D": 7928863488,
+        "private_H": 796342992,
+        "total_excluding_ingress": 8777178576,
+        "active_proxy": 1096092072.0,
+        "D_fraction": 0.03125,
+        "is_actual_touched": false,
+        "assumption": "all regions receive; all H act; D private scaled by k/n only for quad"
+      }
+    },
+    "effective_touched": {
+      "sum": 5203220690711,
+      "mean": 2501548408.995673,
+      "min": 2146799708,
+      "max": 2844848774,
+      "unique_across_time_and_batch": 8778358224,
+      "cumulative_per_input_position": 2501548408.995673
+    },
+    "stages": {
+      "ingress": {
+        "sum": 2453667840,
+        "mean": 1179648.0,
+        "min": 1179648,
+        "max": 1179648
+      },
+      "reception": {
+        "sum": 176679745152,
+        "mean": 84942185.16923077,
+        "min": 74238144,
+        "max": 96673344
+      },
+      "memory_prepare": {
+        "sum": 1625131196416,
+        "mean": 781313075.2,
+        "min": 685073152,
+        "max": 886792960
+      },
+      "regional": {
+        "sum": 816467472535,
+        "mean": 392532438.71875,
+        "min": 349619831,
+        "max": 439565071
+      },
+      "full": {
+        "sum": 2582488608768,
+        "mean": 1241581061.9076922,
+        "min": 1018099584,
+        "max": 1447491456
+      }
+    },
+    "definition": "unique Parameter scalars in effective owner/group/source slices; not gradients or physical loads",
+    "deduplication": "within sample/input step across settled layers",
+    "input_positions": 2080,
+    "sample_time_slots": 2080,
+    "logical_axis": "input_step",
+    "work": {
+      "positive_messages": 2289355,
+      "message_slots": 13411840,
+      "candidate_updates": 1197079,
+      "candidate_slots": 1763840,
+      "regional_attention_positive_pairs": 289842108,
+      "full_actions": 324613,
+      "kv_attention_effective_pairs": 331269456
+    },
+    "work_per_input_position": {
+      "positive_messages": 1100.6514423076924,
+      "message_slots": 6448.0,
+      "candidate_updates": 575.51875,
+      "candidate_slots": 848.0,
+      "regional_attention_positive_pairs": 139347.16730769232,
+      "full_actions": 156.06394230769232,
+      "kv_attention_effective_pairs": 159264.16153846154
+    },
+    "query_packing": {
+      "K": {
+        "calls": 192,
+        "selected_rows": 158213,
+        "executed_rows": 756628
+      },
+      "S": {
+        "calls": 120,
+        "selected_rows": 166400,
+        "executed_rows": 166400
+      }
+    },
+    "node_matrices": {
+      "receive.a": {
+        "calls": 312,
+        "rows": 13411840,
+        "dense_multiply_adds": 988828139520
+      },
+      "receive.b": {
+        "calls": 312,
+        "rows": 13411840,
+        "dense_multiply_adds": 988828139520
+      },
+      "memories.K.kv": {
+        "calls": 192,
+        "rows": 1597440,
+        "dense_multiply_adds": 1884416901120
+      },
+      "memories.K.summary": {
+        "calls": 192,
+        "rows": 1597440,
+        "dense_multiply_adds": 235552112640
+      },
+      "describe.encode": {
+        "calls": 312,
+        "rows": 1763840,
+        "dense_multiply_adds": 1042387107840
+      },
+      "memories.K.query.heads.0": {
+        "calls": 192,
+        "rows": 756628,
+        "dense_multiply_adds": 18594889728
+      },
+      "memories.K.query.heads.1": {
+        "calls": 192,
+        "rows": 756628,
+        "dense_multiply_adds": 18594889728
+      },
+      "memories.K.query.heads.2": {
+        "calls": 192,
+        "rows": 756628,
+        "dense_multiply_adds": 18594889728
+      },
+      "memories.K.query.heads.3": {
+        "calls": 192,
+        "rows": 756628,
+        "dense_multiply_adds": 18594889728
+      },
+      "memories.K.query.heads.4": {
+        "calls": 192,
+        "rows": 756628,
+        "dense_multiply_adds": 18594889728
+      },
+      "memories.K.query.heads.5": {
+        "calls": 192,
+        "rows": 756628,
+        "dense_multiply_adds": 18594889728
+      },
+      "memories.K.query.heads.6": {
+        "calls": 192,
+        "rows": 756628,
+        "dense_multiply_adds": 18594889728
+      },
+      "memories.K.query.heads.7": {
+        "calls": 192,
+        "rows": 756628,
+        "dense_multiply_adds": 18594889728
+      },
+      "memories.K.query.heads.8": {
+        "calls": 192,
+        "rows": 756628,
+        "dense_multiply_adds": 18594889728
+      },
+      "memories.K.query.heads.9": {
+        "calls": 192,
+        "rows": 756628,
+        "dense_multiply_adds": 18594889728
+      },
+      "memories.K.query.heads.10": {
+        "calls": 192,
+        "rows": 756628,
+        "dense_multiply_adds": 18594889728
+      },
+      "memories.K.query.heads.11": {
+        "calls": 192,
+        "rows": 756628,
+        "dense_multiply_adds": 18594889728
+      },
+      "memories.K.query.heads.12": {
+        "calls": 192,
+        "rows": 756628,
+        "dense_multiply_adds": 18594889728
+      },
+      "memories.K.query.heads.13": {
+        "calls": 192,
+        "rows": 756628,
+        "dense_multiply_adds": 18594889728
+      },
+      "memories.K.query.heads.14": {
+        "calls": 192,
+        "rows": 756628,
+        "dense_multiply_adds": 18594889728
+      },
+      "memories.K.query.heads.15": {
+        "calls": 192,
+        "rows": 756628,
+        "dense_multiply_adds": 18594889728
+      },
+      "memories.K.query.heads.16": {
+        "calls": 192,
+        "rows": 756628,
+        "dense_multiply_adds": 18594889728
+      },
+      "memories.K.query.heads.17": {
+        "calls": 192,
+        "rows": 756628,
+        "dense_multiply_adds": 18594889728
+      },
+      "memories.K.query.heads.18": {
+        "calls": 192,
+        "rows": 756628,
+        "dense_multiply_adds": 18594889728
+      },
+      "memories.K.query.heads.19": {
+        "calls": 192,
+        "rows": 756628,
+        "dense_multiply_adds": 18594889728
+      },
+      "memories.K.query.heads.20": {
+        "calls": 192,
+        "rows": 756628,
+        "dense_multiply_adds": 18594889728
+      },
+      "memories.K.query.heads.21": {
+        "calls": 192,
+        "rows": 756628,
+        "dense_multiply_adds": 18594889728
+      },
+      "memories.K.query.heads.22": {
+        "calls": 192,
+        "rows": 756628,
+        "dense_multiply_adds": 18594889728
+      },
+      "memories.K.query.heads.23": {
+        "calls": 192,
+        "rows": 756628,
+        "dense_multiply_adds": 18594889728
+      },
+      "memories.K.output": {
+        "calls": 192,
+        "rows": 756628,
+        "dense_multiply_adds": 446277353472
+      },
+      "memories.K.ffn.gate": {
+        "calls": 192,
+        "rows": 756628,
+        "dense_multiply_adds": 1785109413888
+      },
+      "memories.K.ffn.up": {
+        "calls": 192,
+        "rows": 756628,
+        "dense_multiply_adds": 1785109413888
+      },
+      "memories.K.ffn.down": {
+        "calls": 192,
+        "rows": 756628,
+        "dense_multiply_adds": 1785109413888
+      },
+      "memories.S.input": {
+        "calls": 120,
+        "rows": 166400,
+        "dense_multiply_adds": 207539404800
+      },
+      "memories.S.summary": {
+        "calls": 120,
+        "rows": 166400,
+        "dense_multiply_adds": 24536678400
+      },
+      "memories.S.read": {
+        "calls": 120,
+        "rows": 166400,
+        "dense_multiply_adds": 24536678400
+      },
+      "memories.S.output": {
+        "calls": 120,
+        "rows": 166400,
+        "dense_multiply_adds": 98146713600
+      },
+      "memories.S.ffn.gate": {
+        "calls": 120,
+        "rows": 166400,
+        "dense_multiply_adds": 392586854400
+      },
+      "memories.S.ffn.up": {
+        "calls": 120,
+        "rows": 166400,
+        "dense_multiply_adds": 392586854400
+      },
+      "memories.S.ffn.down": {
+        "calls": 120,
+        "rows": 166400,
+        "dense_multiply_adds": 392586854400
+      }
+    },
+    "matrix_cost_definition": "multiply-add pairs of executed NodeLinear rows including padding/adapters; not complete FLOPs",
+    "retention": {
+      "kind": "one-call semantic-atom bitsets and scalar stream aggregates; no scalar-parameter axis",
+      "calls": 24,
+      "peak_sample_time_slots": 256,
+      "peak_event_bitset_payload_bytes": 4094976,
+      "per_time_parameter_counts_sha256": "d561f89bc4585bcd1714739a04285eaa5ecda3a15aec0facc4c48df79dd0131b",
+      "digest_definition": "ordered newline JSON [sample,logical_time,unique_parameters] per actual call; total combined only",
+      "per_time_rows_retained": false,
+      "dense_parameter_references_retained": false
+    }
+  },
+  "matches": {
+    "A": {
+      "constructor": {
+        "d": 720,
+        "layers": 848,
+        "ffn_width": 3832,
+        "head_dim": 16,
+        "window": 128
+      },
+      "targets": {
+        "blocks": 848,
+        "parameters": 8778358224
+      },
+      "actual": {
+        "blocks": 848,
+        "parameters": 8778632400
+      },
+      "relative_deviation": {
+        "blocks": 0.0,
+        "parameters": 3.1233175156876576e-05
+      },
+      "selection_rule": "exact block count; nearest parameters over d=16*j >= 32, FFN=8*j in [2d,6d]; ties prefer FFN=4d",
+      "parameter_scope": "main blocks and final RMSNorm; no embedding, task head or artificial unused weights",
+      "joint_class": "A",
+      "block_target_kind": "nodes",
+      "parameter_target_kind": "total"
+    },
+    "B": {
+      "constructor": {
+        "d": 384,
+        "layers": 848,
+        "ffn_width": 2048,
+        "head_dim": 64,
+        "window": 128
+      },
+      "targets": {
+        "blocks": 848,
+        "parameters": 2501548408.995673
+      },
+      "actual": {
+        "blocks": 848,
+        "parameters": 2501505408
+      },
+      "relative_deviation": {
+        "blocks": 0.0,
+        "parameters": -1.7189751562890502e-05
+      },
+      "selection_rule": "exact block count; nearest parameters over d=16*j >= 32, FFN=8*j in [2d,6d]; ties prefer FFN=4d",
+      "parameter_scope": "main blocks and final RMSNorm; no embedding, task head or artificial unused weights",
+      "joint_class": "B",
+      "block_target_kind": "nodes",
+      "parameter_target_kind": "effective_touched"
+    },
+    "C": {
+      "constructor": {
+        "d": 11408,
+        "layers": 5,
+        "ffn_width": 36088,
+        "head_dim": 16,
+        "window": 128
+      },
+      "targets": {
+        "blocks": 5,
+        "parameters": 8778358224
+      },
+      "actual": {
+        "blocks": 5,
+        "parameters": 8778353328
+      },
+      "relative_deviation": {
+        "blocks": 0.0,
+        "parameters": -5.577352706585103e-07
+      },
+      "selection_rule": "exact block count; nearest parameters over d=16*j >= 32, FFN=8*j in [2d,6d]; ties prefer FFN=4d",
+      "parameter_scope": "main blocks and final RMSNorm; no embedding, task head or artificial unused weights",
+      "joint_class": "C",
+      "block_target_kind": "depth",
+      "parameter_target_kind": "total"
+    },
+    "D": {
+      "constructor": {
+        "d": 6736,
+        "layers": 5,
+        "ffn_width": 15776,
+        "head_dim": 16,
+        "window": 128
+      },
+      "targets": {
+        "blocks": 5,
+        "parameters": 2501548408.995673
+      },
+      "actual": {
+        "blocks": 5,
+        "parameters": 2501555056
+      },
+      "relative_deviation": {
+        "blocks": 0.0,
+        "parameters": 2.6571559850360947e-06
+      },
+      "selection_rule": "exact block count; nearest parameters over d=16*j >= 32, FFN=8*j in [2d,6d]; ties prefer FFN=4d",
+      "parameter_scope": "main blocks and final RMSNorm; no embedding, task head or artificial unused weights",
+      "joint_class": "D",
+      "block_target_kind": "depth",
+      "parameter_target_kind": "effective_touched"
+    }
+  },
+  "matching_boundary": "zero initial state; actual prefill/decode/chunked schedule and sole final Timed drain; frozen constructors for every later timed sample",
+  "comparisons_equivalent": false,
+  "reference_sha256": "1238b6ba9f0534a9b3a04be8eee080edfd9e0fa04c154a022d24e0def8e07924"
+}

@@ -1,0 +1,19 @@
+{
+  "elapsed_seconds": 457.50395372882485,
+  "job_id": "scale-npu-hb-1b-v7",
+  "logical_device": "npu:0",
+  "logical_devices": [
+    "npu:0"
+  ],
+  "npu_count": 1,
+  "physical_id": 7,
+  "physical_ids": [
+    7
+  ],
+  "priority": 0,
+  "project": "tide-instances",
+  "return_code": 0,
+  "schema_version": 1,
+  "status": "completed",
+  "timestamp": "2026-11-18T04:24:03.375415+00:00"
+}

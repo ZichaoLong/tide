@@ -1,0 +1,71 @@
+{
+  "source": "36c42a7a3ef765fe6257c42c7c1404d28857b77c",
+  "children": [
+    {
+      "precision": "fp32",
+      "command": [
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+        "-m",
+        "scripts.check_placement",
+        "--config",
+        "configs/scale/hb-9b.json",
+        "--devices",
+        "npu:0",
+        "npu:1",
+        "npu:2",
+        "npu:3",
+        "--partition-kind",
+        "region",
+        "--mode",
+        "train",
+        "--precision",
+        "fp32",
+        "--batch",
+        "1",
+        "--length",
+        "8",
+        "--steps",
+        "2",
+        "--no-foreach",
+        "--threads",
+        "8",
+        "--output",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/capacity-region-9b-npu-v1/fp32.json"
+      ],
+      "exit_code": 0
+    },
+    {
+      "precision": "bf16",
+      "command": [
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+        "-m",
+        "scripts.check_placement",
+        "--config",
+        "configs/scale/hb-9b.json",
+        "--devices",
+        "npu:0",
+        "npu:1",
+        "npu:2",
+        "npu:3",
+        "--partition-kind",
+        "region",
+        "--mode",
+        "train",
+        "--precision",
+        "bf16",
+        "--batch",
+        "1",
+        "--length",
+        "8",
+        "--steps",
+        "2",
+        "--no-foreach",
+        "--threads",
+        "8",
+        "--output",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/capacity-region-9b-npu-v1/bf16.json"
+      ],
+      "exit_code": 0
+    }
+  ]
+}

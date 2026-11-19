@@ -1,0 +1,6 @@
+{
+  "before_cache_release": {},
+  "after_cache_release": {},
+  "cache_release_requested": false,
+  "scope": "parent-process device allocator immediately before spawning recovery; peaks are cumulative and not reset; empty_cache releases only inactive cached blocks; model, gradients, optimizer and private state remain resident; not normal-training memory"
+}

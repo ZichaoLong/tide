@@ -1,0 +1,207 @@
+{
+  "state": "passed",
+  "source": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/capacity-bindings/artifacts/native-development/build-v2/source-sha256.json",
+  "command": [
+    "/bin/bash",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/capacity-bindings/artifacts/native-development/build-v2/build.sh"
+  ],
+  "pid": 1029707,
+  "started": "2026-11-18T07:33:37.583059+00:00",
+  "max_rss_bytes": 15032385536,
+  "peak_rss_bytes": 2424029184,
+  "max_processes": 9,
+  "rss_sample_count": 120,
+  "poll_interval": 0.25,
+  "descendant_supervision": "Linux child subreaper; retained PID/start identities across nested sessions",
+  "child_pid": 1029732,
+  "process_group": 1029732,
+  "elapsed": 59.76486102119088,
+  "descendant_identities": [
+    {
+      "pid": 1029732,
+      "start_ticks": 2257338829
+    },
+    {
+      "pid": 1029746,
+      "start_ticks": 2257338836
+    },
+    {
+      "pid": 1029798,
+      "start_ticks": 2257338857
+    },
+    {
+      "pid": 1029799,
+      "start_ticks": 2257338857
+    },
+    {
+      "pid": 1029830,
+      "start_ticks": 2257338879
+    },
+    {
+      "pid": 1029831,
+      "start_ticks": 2257338879
+    },
+    {
+      "pid": 1029834,
+      "start_ticks": 2257338881
+    },
+    {
+      "pid": 1029837,
+      "start_ticks": 2257338882
+    },
+    {
+      "pid": 1029840,
+      "start_ticks": 2257338883
+    },
+    {
+      "pid": 1029841,
+      "start_ticks": 2257338883
+    },
+    {
+      "pid": 1029842,
+      "start_ticks": 2257338883
+    },
+    {
+      "pid": 1029843,
+      "start_ticks": 2257338883
+    },
+    {
+      "pid": 1030795,
+      "start_ticks": 2257340330
+    },
+    {
+      "pid": 1030796,
+      "start_ticks": 2257340331
+    },
+    {
+      "pid": 1030843,
+      "start_ticks": 2257340432
+    },
+    {
+      "pid": 1030844,
+      "start_ticks": 2257340432
+    },
+    {
+      "pid": 1031702,
+      "start_ticks": 2257341447
+    },
+    {
+      "pid": 1031756,
+      "start_ticks": 2257341518
+    },
+    {
+      "pid": 1031757,
+      "start_ticks": 2257341520
+    },
+    {
+      "pid": 1031798,
+      "start_ticks": 2257341571
+    },
+    {
+      "pid": 1031906,
+      "start_ticks": 2257341716
+    },
+    {
+      "pid": 1032063,
+      "start_ticks": 2257341928
+    },
+    {
+      "pid": 1032064,
+      "start_ticks": 2257341928
+    },
+    {
+      "pid": 1032066,
+      "start_ticks": 2257341929
+    },
+    {
+      "pid": 1032067,
+      "start_ticks": 2257341930
+    },
+    {
+      "pid": 1032109,
+      "start_ticks": 2257342026
+    },
+    {
+      "pid": 1032110,
+      "start_ticks": 2257342027
+    },
+    {
+      "pid": 1032113,
+      "start_ticks": 2257342029
+    },
+    {
+      "pid": 1032116,
+      "start_ticks": 2257342030
+    },
+    {
+      "pid": 1032119,
+      "start_ticks": 2257342031
+    },
+    {
+      "pid": 1032120,
+      "start_ticks": 2257342031
+    },
+    {
+      "pid": 1032121,
+      "start_ticks": 2257342031
+    },
+    {
+      "pid": 1032122,
+      "start_ticks": 2257342031
+    },
+    {
+      "pid": 1033092,
+      "start_ticks": 2257343366
+    },
+    {
+      "pid": 1033126,
+      "start_ticks": 2257343371
+    },
+    {
+      "pid": 1033127,
+      "start_ticks": 2257343371
+    },
+    {
+      "pid": 1033243,
+      "start_ticks": 2257343523
+    },
+    {
+      "pid": 1033244,
+      "start_ticks": 2257343523
+    },
+    {
+      "pid": 1033904,
+      "start_ticks": 2257344436
+    },
+    {
+      "pid": 1033905,
+      "start_ticks": 2257344437
+    },
+    {
+      "pid": 1033906,
+      "start_ticks": 2257344437
+    },
+    {
+      "pid": 1033907,
+      "start_ticks": 2257344437
+    },
+    {
+      "pid": 1033947,
+      "start_ticks": 2257344483
+    },
+    {
+      "pid": 1033948,
+      "start_ticks": 2257344483
+    },
+    {
+      "pid": 1034087,
+      "start_ticks": 2257344585
+    },
+    {
+      "pid": 1034198,
+      "start_ticks": 2257344683
+    }
+  ],
+  "exit_code": 0,
+  "finished": "2026-11-18T07:34:37.347921+00:00"
+}

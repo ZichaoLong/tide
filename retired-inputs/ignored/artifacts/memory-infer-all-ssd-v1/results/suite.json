@@ -1,0 +1,788 @@
+{
+  "schema": "tide-memory-candidate-suite-v1",
+  "source": "301a327569aa75aefddd03cac9ca839589db5672",
+  "state": "completed",
+  "started": "2026-11-19T02:25:02.689378+00:00",
+  "arguments": {
+    "phase": "inference",
+    "config": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-infer-all-ssd-v1/source/configs/memory-candidates/9b-all-ssd.json",
+    "output_dir": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-infer-all-ssd-v1/results",
+    "device": "npu:0",
+    "threads": 4,
+    "train_batch": 8,
+    "plan_only": false
+  },
+  "config_file": {
+    "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-infer-all-ssd-v1/source/configs/memory-candidates/9b-all-ssd.json",
+    "sha256": "51dc7ea468f43f8310d936b0fe024c1104b3ff697ad218b6a5785894517442cd"
+  },
+  "config": {
+    "topology": {
+      "kind": "multiscale",
+      "n": 32,
+      "layers": null,
+      "depth": null,
+      "rounds": null,
+      "profile": "5-dd4",
+      "hubs": 4,
+      "partition": "group",
+      "timing": "settle",
+      "hub_mask": "all",
+      "period": null,
+      "probes": null
+    },
+    "d": 768,
+    "memory": "S",
+    "aggregation": "source_residual",
+    "allocation": "quad",
+    "sharing": "independent",
+    "adapter_rank": 8,
+    "budget": null,
+    "attention_backend": "auto",
+    "attention_chunk": 128,
+    "input_dim": null,
+    "region_batch_size": 4,
+    "ssd_scan_backend": "doubling",
+    "ssd_summary_backend": "prefix",
+    "parameter_indexing": "gather",
+    "kv_width": null,
+    "ffn_width": null,
+    "memory_sharing": null,
+    "checkpoint_reception": false
+  },
+  "cwd": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-infer-all-ssd-v1/source",
+  "executable": "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+  "cpu_affinity": [
+    52,
+    53,
+    54,
+    55
+  ],
+  "physical_devices": "7",
+  "resource_identity": "exclusive_cooperative_queue; external jobs not controlled",
+  "scope": "finite one-candidate FP32 study; completion is not model-quality or strict numerical-equivalence qualification",
+  "policy": {
+    "child_timeout_seconds": 1800,
+    "child_sampled_rss_gib": 96,
+    "allocated_gib": 48,
+    "inference_reserved_gib": 56,
+    "common_batches": [
+      1,
+      8
+    ],
+    "screen_ladder": [
+      12,
+      16,
+      24,
+      32,
+      48,
+      64
+    ],
+    "common_budget_fallback": "only a sampled B8 refusal after successful B1 permits one formal B4; no further screening",
+    "max_screen_measurements": 3,
+    "minimum_relative_gain": 0.03,
+    "selection": "highest observed median stable-decode throughput; formal confirmation kept distinct; finite measured best, not global optimum",
+    "training": "20 continuous updates, same-batch fresh-process restored update, two continuing memory-ledger segments; B8 may fall back to B4 only after explicit sampled device budget refusal"
+  },
+  "children": [
+    {
+      "identity": "common-b1",
+      "state": "completed",
+      "command": [
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+        "-u",
+        "-m",
+        "benchmarks.inference",
+        "--config",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-infer-all-ssd-v1/source/configs/memory-candidates/9b-all-ssd.json",
+        "--subjects",
+        "tide",
+        "--devices",
+        "npu:0",
+        "--precision",
+        "fp32",
+        "--threads",
+        "4",
+        "--batch",
+        "1",
+        "--prefill",
+        "128",
+        "--prefill-chunk",
+        "32",
+        "--decode",
+        "16",
+        "--stream-positions",
+        "0",
+        "--warmup",
+        "2",
+        "--samples",
+        "5",
+        "--audit",
+        "full",
+        "--allocated-budget-gib",
+        "48",
+        "--reserved-budget-gib",
+        "56",
+        "--output",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-infer-all-ssd-v1/results/common-b1.json"
+      ],
+      "output": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-infer-all-ssd-v1/results/common-b1.json",
+      "log": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-infer-all-ssd-v1/results/common-b1.log",
+      "timeout_seconds": 1800,
+      "max_rss_bytes": 103079215104,
+      "phase": "inference",
+      "batch": 1,
+      "formal": true,
+      "warmup": 2,
+      "samples": 5,
+      "started": "2026-11-19T02:25:02.692208+00:00",
+      "pid": 1067707,
+      "sampled_process_tree_peak_rss_bytes": 35870670848,
+      "exit_code": 0,
+      "inner_state": "completed",
+      "result_sha256": "cbeba3af93a3eba6e4fd07be1d6f77dc8248a7f0e5b6dd068bd40e16050b0557",
+      "descendant_identities": [
+        {
+          "pid": 1067707,
+          "start_ticks": 2264127340
+        }
+      ],
+      "ended": "2026-11-19T02:28:40.832124+00:00",
+      "elapsed_seconds": 218.13799906522036,
+      "terminal_review": {
+        "checked": "2026-11-19T02:28:40.834617+00:00",
+        "live": [],
+        "all_recorded_descendants_terminal": true
+      },
+      "outcome": "completed",
+      "review_state": "passed"
+    },
+    {
+      "identity": "common-b8",
+      "state": "completed",
+      "command": [
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+        "-u",
+        "-m",
+        "benchmarks.inference",
+        "--config",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-infer-all-ssd-v1/source/configs/memory-candidates/9b-all-ssd.json",
+        "--subjects",
+        "tide",
+        "--devices",
+        "npu:0",
+        "--precision",
+        "fp32",
+        "--threads",
+        "4",
+        "--batch",
+        "8",
+        "--prefill",
+        "128",
+        "--prefill-chunk",
+        "32",
+        "--decode",
+        "16",
+        "--stream-positions",
+        "0",
+        "--warmup",
+        "2",
+        "--samples",
+        "5",
+        "--audit",
+        "full",
+        "--allocated-budget-gib",
+        "48",
+        "--reserved-budget-gib",
+        "56",
+        "--output",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-infer-all-ssd-v1/results/common-b8.json"
+      ],
+      "output": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-infer-all-ssd-v1/results/common-b8.json",
+      "log": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-infer-all-ssd-v1/results/common-b8.log",
+      "timeout_seconds": 1800,
+      "max_rss_bytes": 103079215104,
+      "phase": "inference",
+      "batch": 8,
+      "formal": true,
+      "warmup": 2,
+      "samples": 5,
+      "started": "2026-11-19T02:28:40.842308+00:00",
+      "pid": 1083133,
+      "sampled_process_tree_peak_rss_bytes": 35874099200,
+      "exit_code": 0,
+      "inner_state": "completed",
+      "result_sha256": "9cdda28239a79e382be017a37700b78cd286005ba6be008ca7c0ab895125e4fa",
+      "descendant_identities": [
+        {
+          "pid": 1083133,
+          "start_ticks": 2264149155
+        }
+      ],
+      "ended": "2026-11-19T02:33:40.140512+00:00",
+      "elapsed_seconds": 299.2963152565062,
+      "terminal_review": {
+        "checked": "2026-11-19T02:33:40.143544+00:00",
+        "live": [],
+        "all_recorded_descendants_terminal": true
+      },
+      "outcome": "completed",
+      "review_state": "passed"
+    },
+    {
+      "identity": "screen-b16",
+      "state": "completed",
+      "command": [
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+        "-u",
+        "-m",
+        "benchmarks.inference",
+        "--config",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-infer-all-ssd-v1/source/configs/memory-candidates/9b-all-ssd.json",
+        "--subjects",
+        "tide",
+        "--devices",
+        "npu:0",
+        "--precision",
+        "fp32",
+        "--threads",
+        "4",
+        "--batch",
+        "16",
+        "--prefill",
+        "128",
+        "--prefill-chunk",
+        "32",
+        "--decode",
+        "16",
+        "--stream-positions",
+        "0",
+        "--warmup",
+        "1",
+        "--samples",
+        "2",
+        "--audit",
+        "full",
+        "--allocated-budget-gib",
+        "48",
+        "--reserved-budget-gib",
+        "56",
+        "--output",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-infer-all-ssd-v1/results/screen-b16.json"
+      ],
+      "output": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-infer-all-ssd-v1/results/screen-b16.json",
+      "log": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-infer-all-ssd-v1/results/screen-b16.log",
+      "timeout_seconds": 1800,
+      "max_rss_bytes": 103079215104,
+      "phase": "inference",
+      "batch": 16,
+      "formal": false,
+      "warmup": 1,
+      "samples": 2,
+      "started": "2026-11-19T02:33:40.154866+00:00",
+      "pid": 1102594,
+      "sampled_process_tree_peak_rss_bytes": 35883601920,
+      "exit_code": 0,
+      "inner_state": "completed",
+      "result_sha256": "81405456379092c5c41ca72d91567f2219c326c0c2754d98ab873bf1d1c1ae08",
+      "descendant_identities": [
+        {
+          "pid": 1102594,
+          "start_ticks": 2264179086
+        }
+      ],
+      "ended": "2026-11-19T02:39:23.489714+00:00",
+      "elapsed_seconds": 343.3322334550321,
+      "terminal_review": {
+        "checked": "2026-11-19T02:39:23.492844+00:00",
+        "live": [],
+        "all_recorded_descendants_terminal": true
+      },
+      "outcome": "completed",
+      "review_state": "passed"
+    },
+    {
+      "identity": "confirm-b16",
+      "state": "completed",
+      "command": [
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+        "-u",
+        "-m",
+        "benchmarks.inference",
+        "--config",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-infer-all-ssd-v1/source/configs/memory-candidates/9b-all-ssd.json",
+        "--subjects",
+        "tide",
+        "--devices",
+        "npu:0",
+        "--precision",
+        "fp32",
+        "--threads",
+        "4",
+        "--batch",
+        "16",
+        "--prefill",
+        "128",
+        "--prefill-chunk",
+        "32",
+        "--decode",
+        "16",
+        "--stream-positions",
+        "0",
+        "--warmup",
+        "2",
+        "--samples",
+        "5",
+        "--audit",
+        "full",
+        "--allocated-budget-gib",
+        "48",
+        "--reserved-budget-gib",
+        "56",
+        "--output",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-infer-all-ssd-v1/results/confirm-b16.json"
+      ],
+      "output": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-infer-all-ssd-v1/results/confirm-b16.json",
+      "log": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-infer-all-ssd-v1/results/confirm-b16.log",
+      "timeout_seconds": 1800,
+      "max_rss_bytes": 103079215104,
+      "phase": "inference",
+      "batch": 16,
+      "formal": true,
+      "warmup": 2,
+      "samples": 5,
+      "started": "2026-11-19T02:39:23.503844+00:00",
+      "pid": 1124903,
+      "sampled_process_tree_peak_rss_bytes": 35881766912,
+      "exit_code": 0,
+      "inner_state": "completed",
+      "result_sha256": "480fb2613c5e634c2ce5024a7acf3e9cac0d06faf12eebe76ef2292aef89e503",
+      "descendant_identities": [
+        {
+          "pid": 1124903,
+          "start_ticks": 2264213421
+        }
+      ],
+      "ended": "2026-11-19T02:45:38.955921+00:00",
+      "elapsed_seconds": 375.4492577649653,
+      "terminal_review": {
+        "checked": "2026-11-19T02:45:38.959223+00:00",
+        "live": [],
+        "all_recorded_descendants_terminal": true
+      },
+      "outcome": "completed",
+      "review_state": "passed"
+    }
+  ],
+  "decisions": [
+    {
+      "kind": "screen_selection",
+      "measurement_opportunity": 1,
+      "predictions": [
+        {
+          "state": "projected_fit",
+          "batch": 12,
+          "anchor_batch": 8,
+          "source_identities": [
+            "common-b1",
+            "common-b8"
+          ],
+          "predicted_peak_bytes": {
+            "allocated": 44301312864,
+            "reserved": 49949217888
+          },
+          "slope_bytes_per_batch": {
+            "allocated": 860321368.0,
+            "reserved": 1330980120.0
+          },
+          "method": "largest observed nonnegative adjacent slope or anchor excess over FP32 weights per batch, whichever is greater; not a hardware/allocator fit guarantee"
+        },
+        {
+          "state": "projected_fit",
+          "batch": 16,
+          "anchor_batch": 8,
+          "source_identities": [
+            "common-b1",
+            "common-b8"
+          ],
+          "predicted_peak_bytes": {
+            "allocated": 47742598336,
+            "reserved": 55273138368
+          },
+          "slope_bytes_per_batch": {
+            "allocated": 860321368.0,
+            "reserved": 1330980120.0
+          },
+          "method": "largest observed nonnegative adjacent slope or anchor excess over FP32 weights per batch, whichever is greater; not a hardware/allocator fit guarantee"
+        }
+      ],
+      "selected_batch": 16
+    },
+    {
+      "kind": "measured_gain",
+      "identity": "screen-b16",
+      "previous": "common-b8",
+      "relative_gain": 0.601514289123616,
+      "stop_below": 0.03
+    },
+    {
+      "kind": "screen_selection",
+      "measurement_opportunity": 2,
+      "predictions": [
+        {
+          "state": "projected_budget_refusal",
+          "batch": 24,
+          "anchor_batch": 16,
+          "source_identities": [
+            "common-b1",
+            "common-b8",
+            "screen-b16"
+          ],
+          "predicted_peak_bytes": {
+            "allocated": 52802414688,
+            "reserved": 64306320480
+          },
+          "slope_bytes_per_batch": {
+            "allocated": 784373260.0,
+            "reserved": 1263702668.0
+          },
+          "method": "largest observed nonnegative adjacent slope or anchor excess over FP32 weights per batch, whichever is greater; not a hardware/allocator fit guarantee"
+        },
+        {
+          "state": "projected_budget_refusal",
+          "batch": 32,
+          "anchor_batch": 16,
+          "source_identities": [
+            "common-b1",
+            "common-b8",
+            "screen-b16"
+          ],
+          "predicted_peak_bytes": {
+            "allocated": 59077400768,
+            "reserved": 74415941824
+          },
+          "slope_bytes_per_batch": {
+            "allocated": 784373260.0,
+            "reserved": 1263702668.0
+          },
+          "method": "largest observed nonnegative adjacent slope or anchor excess over FP32 weights per batch, whichever is greater; not a hardware/allocator fit guarantee"
+        }
+      ],
+      "selected_batch": null
+    }
+  ],
+  "measurements": [
+    {
+      "identity": "common-b1",
+      "batch": 1,
+      "formal": true,
+      "samples": 5,
+      "warmup": 2,
+      "within_budget": true,
+      "stable_decode_positions_per_second": 3.2852106767081426,
+      "stable_decode_samples": [
+        3.2525578746092316,
+        3.2852106767081426,
+        3.26381597800867,
+        3.317177700371023,
+        3.299525787283101
+      ],
+      "first_backbone_output_seconds": 0.4945969879627228,
+      "prefill_positions_per_second": 64.03110477345774,
+      "complete_positions_per_second": 20.972691908328127,
+      "peak_bytes": {
+        "allocated": 35835264000,
+        "reserved": 39103496192
+      },
+      "normal_peak_bytes": {
+        "allocated": 35835264000,
+        "reserved": 39103496192
+      },
+      "cold_peak_bytes": {
+        "allocated": 35833433600,
+        "reserved": 39103496192
+      },
+      "parameters": 8494364112,
+      "parameter_bytes": 33977456448,
+      "final_private_state": {
+        "payload_bytes": 138427520,
+        "retained_storage_bytes": 138427520,
+        "dtypes": [
+          "torch.float32",
+          "torch.int64"
+        ],
+        "tensor_count": 352
+      },
+      "output": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-infer-all-ssd-v1/results/common-b1.json",
+      "result_sha256": "cbeba3af93a3eba6e4fd07be1d6f77dc8248a7f0e5b6dd068bd40e16050b0557",
+      "source": {
+        "source_commit": "301a327569aa75aefddd03cac9ca839589db5672",
+        "harness_commit": "301a327569aa75aefddd03cac9ca839589db5672",
+        "tide_content_sha256": "7bc4f743a47f1f208f11850314c6a61ea5bb795085a7503b1b9337a051476d38",
+        "harness_content_sha256": "6aa2a7d116ffc3e581848644c95f5c459adbcfbe2454319f141b76ac099e2d5b",
+        "tide_path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-infer-all-ssd-v1/source/src/tide",
+        "harness_path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-infer-all-ssd-v1/source/benchmarks"
+      },
+      "physical_devices": "7",
+      "input_sha256": "c5f402fae8e34bc660ddb615875cf6bbd1a7d7dabe9792928544df4bc0149564",
+      "initial_parameters": {
+        "sha256": "854e980df7f907dc465292af1684cc8810db66349566ed83cadd13bf7de1a8a1",
+        "finite": true,
+        "host_copy_chunk_bytes": 8388608,
+        "scope": "dense initial named Parameters before ownership placement; shape/name/raw contiguous bytes"
+      },
+      "work": {
+        "positive_messages": 158559,
+        "message_slots": 928512,
+        "candidate_updates": 82470,
+        "candidate_slots": 122112,
+        "regional_attention_positive_pairs": 19906608,
+        "full_actions": 22494
+      },
+      "query_packing": {
+        "S": {
+          "calls": 260,
+          "selected_rows": 22494,
+          "executed_rows": 53541
+        }
+      },
+      "audit_location": "matching_reference.audit in output; includes parameter touches, actual matrices/dispatch and retained stream identity",
+      "timing_scope": "median of independent zero-state normal requests; prefill128/chunk32/decode16; stable decode omits first incremental call; no task head"
+    },
+    {
+      "identity": "common-b8",
+      "batch": 8,
+      "formal": true,
+      "samples": 5,
+      "warmup": 2,
+      "within_budget": true,
+      "stable_decode_positions_per_second": 15.069676765231378,
+      "stable_decode_samples": [
+        15.069676765231378,
+        15.376571876211317,
+        15.105062626439304,
+        14.76056987013822,
+        14.919706682275587
+      ],
+      "first_backbone_output_seconds": 0.9844343289732933,
+      "prefill_positions_per_second": 253.67550363412815,
+      "complete_positions_per_second": 91.71425129893596,
+      "peak_bytes": {
+        "allocated": 40860027392,
+        "reserved": 44625297408
+      },
+      "normal_peak_bytes": {
+        "allocated": 40859079168,
+        "reserved": 44625297408
+      },
+      "cold_peak_bytes": {
+        "allocated": 40860027392,
+        "reserved": 43918557184
+      },
+      "parameters": 8494364112,
+      "parameter_bytes": 33977456448,
+      "final_private_state": {
+        "payload_bytes": 1107420160,
+        "retained_storage_bytes": 1107420160,
+        "dtypes": [
+          "torch.float32",
+          "torch.int64"
+        ],
+        "tensor_count": 352
+      },
+      "output": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-infer-all-ssd-v1/results/common-b8.json",
+      "result_sha256": "9cdda28239a79e382be017a37700b78cd286005ba6be008ca7c0ab895125e4fa",
+      "source": {
+        "source_commit": "301a327569aa75aefddd03cac9ca839589db5672",
+        "harness_commit": "301a327569aa75aefddd03cac9ca839589db5672",
+        "tide_content_sha256": "7bc4f743a47f1f208f11850314c6a61ea5bb795085a7503b1b9337a051476d38",
+        "harness_content_sha256": "6aa2a7d116ffc3e581848644c95f5c459adbcfbe2454319f141b76ac099e2d5b",
+        "tide_path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-infer-all-ssd-v1/source/src/tide",
+        "harness_path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-infer-all-ssd-v1/source/benchmarks"
+      },
+      "physical_devices": "7",
+      "input_sha256": "0d113ed21f9aa2a0edec2ddadd3f210e03f626ce97cffab507c3e1729f8d2f0a",
+      "initial_parameters": {
+        "sha256": "854e980df7f907dc465292af1684cc8810db66349566ed83cadd13bf7de1a8a1",
+        "finite": true,
+        "host_copy_chunk_bytes": 8388608,
+        "scope": "dense initial named Parameters before ownership placement; shape/name/raw contiguous bytes"
+      },
+      "work": {
+        "positive_messages": 1268200,
+        "message_slots": 7428096,
+        "candidate_updates": 660206,
+        "candidate_slots": 976896,
+        "regional_attention_positive_pairs": 159369216,
+        "full_actions": 180029
+      },
+      "query_packing": {
+        "S": {
+          "calls": 260,
+          "selected_rows": 180029,
+          "executed_rows": 600480
+        }
+      },
+      "audit_location": "matching_reference.audit in output; includes parameter touches, actual matrices/dispatch and retained stream identity",
+      "timing_scope": "median of independent zero-state normal requests; prefill128/chunk32/decode16; stable decode omits first incremental call; no task head"
+    },
+    {
+      "identity": "screen-b16",
+      "batch": 16,
+      "formal": false,
+      "samples": 2,
+      "warmup": 1,
+      "within_budget": true,
+      "stable_decode_positions_per_second": 24.134302671992206,
+      "stable_decode_samples": [
+        23.91466155696184,
+        24.353943787022573
+      ],
+      "first_backbone_output_seconds": 1.54706297442317,
+      "prefill_positions_per_second": 327.06850743761885,
+      "complete_positions_per_second": 136.5134486218128,
+      "peak_bytes": {
+        "allocated": 46527428608,
+        "reserved": 54196699136
+      },
+      "normal_peak_bytes": {
+        "allocated": 46527428608,
+        "reserved": 54196699136
+      },
+      "cold_peak_bytes": {
+        "allocated": 46526840320,
+        "reserved": 54146367488
+      },
+      "parameters": 8494364112,
+      "parameter_bytes": 33977456448,
+      "final_private_state": {
+        "payload_bytes": 2214840320,
+        "retained_storage_bytes": 2214840320,
+        "dtypes": [
+          "torch.float32",
+          "torch.int64"
+        ],
+        "tensor_count": 352
+      },
+      "output": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-infer-all-ssd-v1/results/screen-b16.json",
+      "result_sha256": "81405456379092c5c41ca72d91567f2219c326c0c2754d98ab873bf1d1c1ae08",
+      "source": {
+        "source_commit": "301a327569aa75aefddd03cac9ca839589db5672",
+        "harness_commit": "301a327569aa75aefddd03cac9ca839589db5672",
+        "tide_content_sha256": "7bc4f743a47f1f208f11850314c6a61ea5bb795085a7503b1b9337a051476d38",
+        "harness_content_sha256": "6aa2a7d116ffc3e581848644c95f5c459adbcfbe2454319f141b76ac099e2d5b",
+        "tide_path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-infer-all-ssd-v1/source/src/tide",
+        "harness_path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-infer-all-ssd-v1/source/benchmarks"
+      },
+      "physical_devices": "7",
+      "input_sha256": "51b8dd0149c4de00741ae972e18bba9d723e8e04e48a847c86bdd124c1c6a143",
+      "initial_parameters": {
+        "sha256": "854e980df7f907dc465292af1684cc8810db66349566ed83cadd13bf7de1a8a1",
+        "finite": true,
+        "host_copy_chunk_bytes": 8388608,
+        "scope": "dense initial named Parameters before ownership placement; shape/name/raw contiguous bytes"
+      },
+      "work": {
+        "positive_messages": 2535427,
+        "message_slots": 14856192,
+        "candidate_updates": 1320760,
+        "candidate_slots": 1953792,
+        "regional_attention_positive_pairs": 318897744,
+        "full_actions": 360086
+      },
+      "query_packing": {
+        "S": {
+          "calls": 260,
+          "selected_rows": 360086,
+          "executed_rows": 1275376
+        }
+      },
+      "audit_location": "matching_reference.audit in output; includes parameter touches, actual matrices/dispatch and retained stream identity",
+      "timing_scope": "median of independent zero-state normal requests; prefill128/chunk32/decode16; stable decode omits first incremental call; no task head"
+    },
+    {
+      "identity": "confirm-b16",
+      "batch": 16,
+      "formal": true,
+      "samples": 5,
+      "warmup": 2,
+      "within_budget": true,
+      "stable_decode_positions_per_second": 23.516835861651167,
+      "stable_decode_samples": [
+        23.724279426732746,
+        23.38733154940174,
+        23.516835861651167,
+        24.159370619621736,
+        23.39887481379788
+      ],
+      "first_backbone_output_seconds": 1.5555929765105247,
+      "prefill_positions_per_second": 322.8600691306953,
+      "complete_positions_per_second": 133.72838068173542,
+      "peak_bytes": {
+        "allocated": 46527428608,
+        "reserved": 54196699136
+      },
+      "normal_peak_bytes": {
+        "allocated": 46527428608,
+        "reserved": 54196699136
+      },
+      "cold_peak_bytes": {
+        "allocated": 46526840320,
+        "reserved": 54146367488
+      },
+      "parameters": 8494364112,
+      "parameter_bytes": 33977456448,
+      "final_private_state": {
+        "payload_bytes": 2214840320,
+        "retained_storage_bytes": 2214840320,
+        "dtypes": [
+          "torch.float32",
+          "torch.int64"
+        ],
+        "tensor_count": 352
+      },
+      "output": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-infer-all-ssd-v1/results/confirm-b16.json",
+      "result_sha256": "480fb2613c5e634c2ce5024a7acf3e9cac0d06faf12eebe76ef2292aef89e503",
+      "source": {
+        "source_commit": "301a327569aa75aefddd03cac9ca839589db5672",
+        "harness_commit": "301a327569aa75aefddd03cac9ca839589db5672",
+        "tide_content_sha256": "7bc4f743a47f1f208f11850314c6a61ea5bb795085a7503b1b9337a051476d38",
+        "harness_content_sha256": "6aa2a7d116ffc3e581848644c95f5c459adbcfbe2454319f141b76ac099e2d5b",
+        "tide_path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-infer-all-ssd-v1/source/src/tide",
+        "harness_path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-infer-all-ssd-v1/source/benchmarks"
+      },
+      "physical_devices": "7",
+      "input_sha256": "51b8dd0149c4de00741ae972e18bba9d723e8e04e48a847c86bdd124c1c6a143",
+      "initial_parameters": {
+        "sha256": "854e980df7f907dc465292af1684cc8810db66349566ed83cadd13bf7de1a8a1",
+        "finite": true,
+        "host_copy_chunk_bytes": 8388608,
+        "scope": "dense initial named Parameters before ownership placement; shape/name/raw contiguous bytes"
+      },
+      "work": {
+        "positive_messages": 2535427,
+        "message_slots": 14856192,
+        "candidate_updates": 1320760,
+        "candidate_slots": 1953792,
+        "regional_attention_positive_pairs": 318897744,
+        "full_actions": 360086
+      },
+      "query_packing": {
+        "S": {
+          "calls": 260,
+          "selected_rows": 360086,
+          "executed_rows": 1275376
+        }
+      },
+      "audit_location": "matching_reference.audit in output; includes parameter touches, actual matrices/dispatch and retained stream identity",
+      "timing_scope": "median of independent zero-state normal requests; prefill128/chunk32/decode16; stable decode omits first incremental call; no task head",
+      "confirms_screen_identity": "screen-b16"
+    }
+  ],
+  "descendant_supervision": "Linux child subreaper; run_child PID/start tracking and per-child terminal identity review",
+  "stop_reason": "no larger ladder point with projected budget fit",
+  "best_common_or_screen": "screen-b16",
+  "best_formal_measured": "confirm-b16",
+  "ended": "2026-11-19T02:45:38.969041+00:00",
+  "all_executed_children_successful": true
+}

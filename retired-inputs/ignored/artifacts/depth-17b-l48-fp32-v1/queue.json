@@ -1,0 +1,19 @@
+{
+  "elapsed_seconds": 184.82251311466098,
+  "job_id": "depth-17b-l48-fp32-v1",
+  "logical_devices": [
+    "npu:0",
+    "npu:1"
+  ],
+  "npu_count": 2,
+  "physical_ids": [
+    0,
+    4
+  ],
+  "priority": 0,
+  "project": "tide-instances",
+  "return_code": 0,
+  "schema_version": 1,
+  "status": "completed",
+  "timestamp": "2026-11-18T14:27:49.027565+00:00"
+}

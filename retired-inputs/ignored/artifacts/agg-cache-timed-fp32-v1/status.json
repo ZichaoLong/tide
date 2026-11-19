@@ -1,0 +1,78 @@
+{
+  "state": "passed",
+  "source": "db00c3cde44abfc1f582da010f7593e8930a5647",
+  "command": [
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "/mi/data2T/zlong/home/.agents/skills/use-local-ascend/scripts/run_on_free_npu.py",
+    "--job-id",
+    "agg-cache-timed-fp32-v1",
+    "--project",
+    "tide-instances",
+    "--priority",
+    "0",
+    "--npu-count",
+    "1",
+    "--max-wait-seconds",
+    "4500",
+    "--state-file",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-cache-timed-fp32-v1/queue.json",
+    "--",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "-m",
+    "scripts.check_inference_cache",
+    "--config",
+    "configs/agg-inference/timed-incoming_light_64-optimized.json",
+    "--prefill",
+    "128",
+    "--prefill-chunk",
+    "32",
+    "--decode",
+    "256",
+    "--sample-every",
+    "64",
+    "--require-kv-eviction",
+    "--device",
+    "npu:0",
+    "--precision",
+    "fp32",
+    "--threads",
+    "4",
+    "--output",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-cache-timed-fp32-v1/cache.json"
+  ],
+  "pid": 2543836,
+  "started": "2026-11-18T12:59:27.076329+00:00",
+  "max_rss_bytes": 34359738368,
+  "peak_rss_bytes": 2168573952,
+  "max_processes": 2,
+  "rss_sample_count": 1878,
+  "poll_interval": 0.25,
+  "descendant_supervision": "Linux child subreaper; retained PID/start identities across nested sessions",
+  "child_pid": 2543866,
+  "process_group": 2543866,
+  "elapsed": 795.46247638762,
+  "descendant_identities": [
+    {
+      "pid": 2543866,
+      "start_ticks": 2259293778
+    },
+    {
+      "pid": 2543868,
+      "start_ticks": 2259293784
+    },
+    {
+      "pid": 2595904,
+      "start_ticks": 2259362714
+    },
+    {
+      "pid": 2596235,
+      "start_ticks": 2259363191
+    },
+    {
+      "pid": 2596352,
+      "start_ticks": 2259363366
+    }
+  ],
+  "exit_code": 0,
+  "finished": "2026-11-18T13:12:42.538806+00:00"
+}

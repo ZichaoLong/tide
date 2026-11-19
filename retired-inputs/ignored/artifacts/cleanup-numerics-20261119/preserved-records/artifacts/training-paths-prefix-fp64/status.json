@@ -1,0 +1,64 @@
+{
+  "state": "passed",
+  "source": "ae247dee82c60b63495e9abea7f703abd84ac3c7",
+  "command": [
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "-m",
+    "scripts.check_training_paths",
+    "--config",
+    "configs/hb-multiscale-x-settle.json",
+    "--device",
+    "cpu",
+    "--precision",
+    "fp64",
+    "--candidates",
+    "baseline",
+    "prefix",
+    "reception",
+    "--candidate-overrides",
+    "{\"prefix\":{\"ssd_summary_backend\":\"prefix\"},\"reception\":{\"checkpoint_reception\":true}}",
+    "--batch",
+    "1",
+    "--length",
+    "8",
+    "--chunk",
+    "4",
+    "--steps",
+    "2",
+    "--threads",
+    "1",
+    "--output-dir",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/training-paths-prefix-fp64/results"
+  ],
+  "pid": 1572718,
+  "started": "2026-11-18T09:43:01.640482+00:00",
+  "max_rss_bytes": 51539607552,
+  "peak_rss_bytes": 10570842112,
+  "max_processes": 2,
+  "rss_sample_count": 299,
+  "poll_interval": 0.25,
+  "descendant_supervision": "Linux child subreaper; retained PID/start identities across nested sessions",
+  "child_pid": 1572746,
+  "process_group": 1572746,
+  "elapsed": 135.26630334183574,
+  "descendant_identities": [
+    {
+      "pid": 1572746,
+      "start_ticks": 2258115235
+    },
+    {
+      "pid": 1574635,
+      "start_ticks": 2258118317
+    },
+    {
+      "pid": 1578293,
+      "start_ticks": 2258123021
+    },
+    {
+      "pid": 1581831,
+      "start_ticks": 2258127422
+    }
+  ],
+  "exit_code": 0,
+  "finished": "2026-11-18T09:45:16.906784+00:00"
+}

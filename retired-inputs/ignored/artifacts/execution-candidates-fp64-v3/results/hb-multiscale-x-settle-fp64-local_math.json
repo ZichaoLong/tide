@@ -1,0 +1,459 @@
+{
+  "schema": "tide-execution-qualification-v1",
+  "state": "within_threshold",
+  "source": "efca7198570e8ee7a21ddccd81165eb36bdb269a",
+  "arguments": {
+    "config": "configs/hb-multiscale-x-settle.json",
+    "overrides": {
+      "local_attention_backend": "math"
+    },
+    "device": "cpu",
+    "precision": "fp64",
+    "batch": 1,
+    "length": 8,
+    "steps": 3,
+    "threads": 4,
+    "output": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/execution-candidates-fp64-v3/results/hb-multiscale-x-settle-fp64-local_math.json"
+  },
+  "physical_devices": null,
+  "resource_identity": "pinned_cpu; shared host",
+  "precision": "fp64",
+  "torch": "2.12.0+cpu",
+  "qualification": "same-function execution candidate; finite deviations retain original thresholds; no performance timing",
+  "result": {
+    "config": {
+      "topology": {
+        "kind": "multiscale",
+        "n": 8,
+        "layers": null,
+        "depth": null,
+        "rounds": null,
+        "profile": "compact-9",
+        "hubs": 4,
+        "partition": "group",
+        "timing": "settle",
+        "hub_mask": "all",
+        "period": null,
+        "probes": null,
+        "terminal_hubs": false
+      },
+      "d": 128,
+      "memory": "X",
+      "aggregation": "source_residual",
+      "allocation": "quad",
+      "sharing": "region_shared",
+      "adapter_rank": 8,
+      "budget": null,
+      "attention_backend": "auto",
+      "attention_chunk": 128,
+      "input_dim": null,
+      "checkpoint_regions": false,
+      "region_batch_size": 1,
+      "local_attention_backend": null,
+      "hub_allocation": "bounded",
+      "clock": {
+        "position_period": null,
+        "position_origin": "binding",
+        "kv_window": null,
+        "short_decay": null,
+        "ssd_stride": null
+      }
+    },
+    "overrides": {
+      "local_attention_backend": "math"
+    },
+    "parameter_sha256": "45c4f3e846fd0c766f127463b77c7f54e37b799e93441ed93e376833447e9a03",
+    "checks": {
+      "inference": {
+        "tolerance": {
+          "atol": 1e-10,
+          "rtol": 1e-08
+        },
+        "metadata_failures": [],
+        "dtype_differences": [],
+        "nonfinite": [],
+        "support_differences": [],
+        "threshold_failures": [],
+        "work_differences": [],
+        "exact": false,
+        "largest_errors": [
+          {
+            "tensor": "root.result.state.memories.24.K.features",
+            "max_abs": 4.043120005459144e-14,
+            "scaled_error": 0.00017927001541559568,
+            "relative_l2": 5.417815779003879e-15
+          },
+          {
+            "tensor": "root.result.state.memories.24.K.values",
+            "max_abs": 3.758104938356155e-14,
+            "scaled_error": 0.00017859234068002685,
+            "relative_l2": 5.307789322942691e-15
+          },
+          {
+            "tensor": "root.result.state.memories.16.K.features",
+            "max_abs": 3.186340080674199e-14,
+            "scaled_error": 0.00017214251973493032,
+            "relative_l2": 4.820220225630259e-15
+          },
+          {
+            "tensor": "root.result.state.memories.20.K.values",
+            "max_abs": 4.6629367034256575e-14,
+            "scaled_error": 0.00016932975689578516,
+            "relative_l2": 4.530673199804404e-15
+          },
+          {
+            "tensor": "root.result.state.memories.26.K.values",
+            "max_abs": 3.200217868482014e-14,
+            "scaled_error": 0.0001544156636118147,
+            "relative_l2": 4.735528205154469e-15
+          },
+          {
+            "tensor": "root.result.state.memories.18.K.values",
+            "max_abs": 5.98965321785272e-14,
+            "scaled_error": 0.000152745181939371,
+            "relative_l2": 4.818322014394357e-15
+          },
+          {
+            "tensor": "root.result.state.memories.20.K.keys",
+            "max_abs": 4.107825191113079e-14,
+            "scaled_error": 0.00014909794130924369,
+            "relative_l2": 4.636729359496094e-15
+          },
+          {
+            "tensor": "root.result.state.memories.24.K.keys",
+            "max_abs": 4.6407322429331543e-14,
+            "scaled_error": 0.00014561734330829215,
+            "relative_l2": 5.207119589010537e-15
+          }
+        ]
+      },
+      "grad_forward": {
+        "tolerance": {
+          "atol": 1e-10,
+          "rtol": 1e-08
+        },
+        "metadata_failures": [],
+        "dtype_differences": [],
+        "nonfinite": [],
+        "support_differences": [],
+        "threshold_failures": [],
+        "work_differences": [],
+        "exact": false,
+        "largest_errors": [
+          {
+            "tensor": "root.result.state.memories.24.K.features",
+            "max_abs": 4.043120005459144e-14,
+            "scaled_error": 0.00017927001541559568,
+            "relative_l2": 5.417815779003879e-15
+          },
+          {
+            "tensor": "root.result.state.memories.24.K.values",
+            "max_abs": 3.758104938356155e-14,
+            "scaled_error": 0.00017859234068002685,
+            "relative_l2": 5.307789322942691e-15
+          },
+          {
+            "tensor": "root.result.state.memories.16.K.features",
+            "max_abs": 3.186340080674199e-14,
+            "scaled_error": 0.00017214251973493032,
+            "relative_l2": 4.820220225630259e-15
+          },
+          {
+            "tensor": "root.result.state.memories.20.K.values",
+            "max_abs": 4.6629367034256575e-14,
+            "scaled_error": 0.00016932975689578516,
+            "relative_l2": 4.530673199804404e-15
+          },
+          {
+            "tensor": "root.result.state.memories.26.K.values",
+            "max_abs": 3.200217868482014e-14,
+            "scaled_error": 0.0001544156636118147,
+            "relative_l2": 4.735528205154469e-15
+          },
+          {
+            "tensor": "root.result.state.memories.18.K.values",
+            "max_abs": 5.98965321785272e-14,
+            "scaled_error": 0.000152745181939371,
+            "relative_l2": 4.818322014394357e-15
+          },
+          {
+            "tensor": "root.result.state.memories.20.K.keys",
+            "max_abs": 4.107825191113079e-14,
+            "scaled_error": 0.00014909794130924369,
+            "relative_l2": 4.636729359496094e-15
+          },
+          {
+            "tensor": "root.result.state.memories.24.K.keys",
+            "max_abs": 4.6407322429331543e-14,
+            "scaled_error": 0.00014561734330829215,
+            "relative_l2": 5.207119589010537e-15
+          }
+        ]
+      },
+      "gradients": {
+        "tolerance": {
+          "atol": 1e-10,
+          "rtol": 1e-08
+        },
+        "metadata_failures": [],
+        "dtype_differences": [],
+        "nonfinite": [],
+        "support_differences": [],
+        "threshold_failures": [],
+        "work_differences": [],
+        "exact": false,
+        "largest_errors": [
+          {
+            "tensor": "root.parameters.describe.readout.value",
+            "max_abs": 2.5743296383495817e-15,
+            "scaled_error": 1.93310333417128e-05,
+            "relative_l2": 2.2076434376631776e-14
+          },
+          {
+            "tensor": "root.parameters.memories.K.summary.left",
+            "max_abs": 1.547373340571312e-15,
+            "scaled_error": 1.3933448647075156e-05,
+            "relative_l2": 1.976790007667609e-14
+          },
+          {
+            "tensor": "root.parameters.describe.offset.value",
+            "max_abs": 2.3071822230491534e-15,
+            "scaled_error": 1.2531841742164163e-05,
+            "relative_l2": 3.006919062205561e-14
+          },
+          {
+            "tensor": "root.parameters.receive.a.weight",
+            "max_abs": 1.790234627208065e-15,
+            "scaled_error": 1.2324387938103446e-05,
+            "relative_l2": 1.8177218048858407e-14
+          },
+          {
+            "tensor": "root.parameters.inputs.H.weight",
+            "max_abs": 1.6792123247455493e-15,
+            "scaled_error": 1.134490617949963e-05,
+            "relative_l2": 1.557809232209148e-14
+          },
+          {
+            "tensor": "root.parameters.receive.a.left",
+            "max_abs": 3.0531133177191805e-15,
+            "scaled_error": 1.1070924259850308e-05,
+            "relative_l2": 1.9137527054039144e-14
+          },
+          {
+            "tensor": "root.parameters.describe.encode.left",
+            "max_abs": 1.5404344466674047e-15,
+            "scaled_error": 9.188591108280378e-06,
+            "relative_l2": 2.0778516730240004e-14
+          },
+          {
+            "tensor": "root.parameters.describe.encode.weight",
+            "max_abs": 1.366962099069724e-15,
+            "scaled_error": 9.104988339548679e-06,
+            "relative_l2": 2.3662635037884694e-14
+          }
+        ]
+      }
+    },
+    "updates": [
+      {
+        "tolerance": {
+          "atol": 1e-10,
+          "rtol": 1e-08
+        },
+        "metadata_failures": [],
+        "dtype_differences": [],
+        "nonfinite": [],
+        "support_differences": [],
+        "threshold_failures": [],
+        "work_differences": [],
+        "exact": false,
+        "largest_errors": [
+          {
+            "tensor": "root.parameters.regional.0.second.bias",
+            "max_abs": 7.649740216275625e-14,
+            "scaled_error": 0.0006357120762199625,
+            "relative_l2": 4.887881290701061e-13
+          },
+          {
+            "tensor": "root.parameters.memories.K.ffn.gate.weight",
+            "max_abs": 1.2779013958130747e-13,
+            "scaled_error": 0.0005823025572548077,
+            "relative_l2": 2.056292542313517e-15
+          },
+          {
+            "tensor": "root.parameters.memories.S.ffn.down.weight",
+            "max_abs": 8.134378587376645e-14,
+            "scaled_error": 0.0005506889331817115,
+            "relative_l2": 3.7212307351163126e-15
+          },
+          {
+            "tensor": "root.parameters.memories.S.input.weight",
+            "max_abs": 1.6601303665098044e-13,
+            "scaled_error": 0.0005476151872558713,
+            "relative_l2": 2.8927865104891206e-15
+          },
+          {
+            "tensor": "root.parameters.memories.K.summary.weight",
+            "max_abs": 3.410882687404637e-13,
+            "scaled_error": 0.0005078801198766344,
+            "relative_l2": 1.578531388496981e-14
+          },
+          {
+            "tensor": "root.parameters.memories.K.ffn.down.weight",
+            "max_abs": 8.140363383368765e-14,
+            "scaled_error": 0.0005050494080568579,
+            "relative_l2": 3.998692855379856e-15
+          },
+          {
+            "tensor": "root.parameters.memories.K.ffn.gate.left",
+            "max_abs": 4.848018145785227e-14,
+            "scaled_error": 0.0004810054087940215,
+            "relative_l2": 1.4463484532956974e-14
+          },
+          {
+            "tensor": "root.parameters.memories.S.ffn.up.weight",
+            "max_abs": 2.916486496751247e-13,
+            "scaled_error": 0.00046829691561290834,
+            "relative_l2": 3.5569739470652504e-15
+          }
+        ]
+      },
+      {
+        "tolerance": {
+          "atol": 1e-10,
+          "rtol": 1e-08
+        },
+        "metadata_failures": [],
+        "dtype_differences": [],
+        "nonfinite": [],
+        "support_differences": [],
+        "threshold_failures": [],
+        "work_differences": [],
+        "exact": false,
+        "largest_errors": [
+          {
+            "tensor": "root.result.state.memories.22.K.keys",
+            "max_abs": 6.230571614196379e-13,
+            "scaled_error": 0.004003968703589016,
+            "relative_l2": 5.544212441093543e-14
+          },
+          {
+            "tensor": "root.state.memories.22.K.keys",
+            "max_abs": 6.230571614196379e-13,
+            "scaled_error": 0.004003968703589016,
+            "relative_l2": 5.544212441093543e-14
+          },
+          {
+            "tensor": "root.result.state.memories.24.K.keys",
+            "max_abs": 6.400435736964027e-13,
+            "scaled_error": 0.003587177791110004,
+            "relative_l2": 5.99109681914052e-14
+          },
+          {
+            "tensor": "root.state.memories.24.K.keys",
+            "max_abs": 6.400435736964027e-13,
+            "scaled_error": 0.003587177791110004,
+            "relative_l2": 5.99109681914052e-14
+          },
+          {
+            "tensor": "root.result.state.memories.26.K.values",
+            "max_abs": 4.923839114212569e-13,
+            "scaled_error": 0.003321632410469904,
+            "relative_l2": 5.247497429766347e-14
+          },
+          {
+            "tensor": "root.state.memories.26.K.values",
+            "max_abs": 4.923839114212569e-13,
+            "scaled_error": 0.003321632410469904,
+            "relative_l2": 5.247497429766347e-14
+          },
+          {
+            "tensor": "root.parameters.regional.6.second.bias",
+            "max_abs": 6.017408793468348e-13,
+            "scaled_error": 0.0032038584561702985,
+            "relative_l2": 4.419386980283101e-12
+          },
+          {
+            "tensor": "root.result.state.memories.14.K.features",
+            "max_abs": 4.831690603168681e-13,
+            "scaled_error": 0.0031725474994004368,
+            "relative_l2": 5.221746449306007e-14
+          }
+        ]
+      },
+      {
+        "tolerance": {
+          "atol": 1e-10,
+          "rtol": 1e-08
+        },
+        "metadata_failures": [],
+        "dtype_differences": [],
+        "nonfinite": [],
+        "support_differences": [],
+        "threshold_failures": [],
+        "work_differences": [],
+        "exact": false,
+        "largest_errors": [
+          {
+            "tensor": "root.result.state.memories.18.K.values",
+            "max_abs": 1.089476599214212e-12,
+            "scaled_error": 0.008437903905484016,
+            "relative_l2": 7.482700407695883e-14
+          },
+          {
+            "tensor": "root.state.memories.18.K.values",
+            "max_abs": 1.089476599214212e-12,
+            "scaled_error": 0.008437903905484016,
+            "relative_l2": 7.482700407695883e-14
+          },
+          {
+            "tensor": "root.result.state.memories.10.K.values",
+            "max_abs": 9.661160760288112e-13,
+            "scaled_error": 0.006563173957815317,
+            "relative_l2": 6.027557886110258e-14
+          },
+          {
+            "tensor": "root.state.memories.10.K.values",
+            "max_abs": 9.661160760288112e-13,
+            "scaled_error": 0.006563173957815317,
+            "relative_l2": 6.027557886110258e-14
+          },
+          {
+            "tensor": "root.result.state.memories.20.K.values",
+            "max_abs": 1.0173528686152622e-12,
+            "scaled_error": 0.006074501898423532,
+            "relative_l2": 8.218029279678575e-14
+          },
+          {
+            "tensor": "root.state.memories.20.K.values",
+            "max_abs": 1.0173528686152622e-12,
+            "scaled_error": 0.006074501898423532,
+            "relative_l2": 8.218029279678575e-14
+          },
+          {
+            "tensor": "root.parameters.regional.2.second.bias",
+            "max_abs": 1.351849188147014e-12,
+            "scaled_error": 0.005280472928125518,
+            "relative_l2": 9.847049045557274e-12
+          },
+          {
+            "tensor": "root.result.state.memories.7.S.short",
+            "max_abs": 7.37632177560954e-13,
+            "scaled_error": 0.005224671656739173,
+            "relative_l2": 6.19077599324916e-14
+          }
+        ]
+      }
+    ],
+    "tolerance": {
+      "atol": 1e-10,
+      "rtol": 1e-08
+    },
+    "state": "within_threshold",
+    "input_sha256": "d41efe64ba1762cb1e94b2d8b44fda61fd9f40f045276ebb18941bdf37e7208e",
+    "restore": {
+      "state": "not_requested",
+      "reason": "FP64 is a bounded arithmetic diagnostic"
+    }
+  }
+}

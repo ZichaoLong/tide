@@ -1,0 +1,20 @@
+{
+  "state": "completed",
+  "return_code": 0,
+  "timed_out": false,
+  "cleanup_complete": true,
+  "sent_sigkill": false,
+  "stdout": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/resident-npu-v11/result-attempts/hb-lattice-k-dynamic_outputs.stdout.log",
+  "stderr": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/resident-npu-v11/result-attempts/hb-lattice-k-dynamic_outputs.stderr.log",
+  "peak_rss_bytes": 2167902208,
+  "max_processes": 1,
+  "descendant_supervision": "retained PID/start identities; Linux subreaper",
+  "pid": 3511822,
+  "descendant_identities": [
+    {
+      "pid": 3511822,
+      "start_ticks": 2256227554
+    }
+  ],
+  "elapsed_seconds": 10.661783538758755
+}

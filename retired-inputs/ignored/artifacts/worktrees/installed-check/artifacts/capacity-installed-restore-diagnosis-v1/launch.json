@@ -1,0 +1,31 @@
+{
+  "source": "8a22530dae69d9f1fa5ead4a01d1798fd1dfe0ee",
+  "harness_revision": "cd131fc2",
+  "scope": "one installed CPU BF16 placed checkpoint; four per_device backwards across two owners and two same-owner serial backwards, then actual AdamW updates; no qualification matrix rerun",
+  "source_run": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/installed-check/artifacts/capacity-installed-8a22530d-v1",
+  "service": "tide-capacity-installed-restore-diagnosis-v1.service",
+  "cpu_affinity": [
+    80,
+    81,
+    82,
+    83
+  ],
+  "threads": 1,
+  "timeout_seconds": 600,
+  "sampled_rss_limit_gib": 14,
+  "memory_max_gib": 16,
+  "cpu_quota_percent": 400,
+  "quota_preflight": "83,216 MiB used / 300 GiB soft / 700 GiB hard; approximately 1.8 TiB host available",
+  "input_hashes": {
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/installed-check/artifacts/capacity-installed-8a22530d-v1/results/placed-bf16/checkpoint.pt": "62b6d242c7b7e4937557b2397dc25e9f5b5e5de4a14bbd603b828b1f0c893887",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/installed-check/artifacts/capacity-installed-8a22530d-v1/results/placed-bf16/expected.pt": "20512edb1e337a4ba11e316922e2361153f77eae459231420ff2e86c8f9b58c3",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/installed-check/artifacts/capacity-installed-8a22530d-v1/dist/tide_instances-0.1.0-py3-none-any.whl": "72e3eba6bb3d572c2fec9a3afe16617331f37c2fa2c616bffc36b3c5100f0e27",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/installed-check/artifacts/capacity-installed-8a22530d-v1/source-manifest.json": "6186d95dcae5380735c4d0ade87005b46060cbbcbb95d369a49d789827b49071"
+  },
+  "frozen_files": {
+    "job.py": "428214c2901eb41f5764193720f96228d0f8530a5f578f2c5894bd7135337e56",
+    "harness.py": "7e23af192e2b2bfee052896462b39dc25182df43e02c2838ea98c5870ed12f37",
+    "diagnose.py": "e8bb9c1fa73d8e265a342e5cf6a22f3ccf94bff52e449bd1ad35c5d4e9d01658",
+    "run.sh": "115365644b2b6d473117ab7c03657649b074d59335ad83f8096bc432d33554b2"
+  }
+}

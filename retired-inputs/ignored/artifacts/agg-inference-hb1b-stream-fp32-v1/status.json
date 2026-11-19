@@ -1,0 +1,122 @@
+{
+  "state": "passed",
+  "source": "1553b301bf960ec6337fbc38e8e3cada26205eb2",
+  "command": [
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "/mi/data2T/zlong/home/.agents/skills/use-local-ascend/scripts/run_on_free_npu.py",
+    "--job-id",
+    "agg-inference-hb1b-stream-fp32-v1",
+    "--project",
+    "tide-instances",
+    "--priority",
+    "0",
+    "--npu-count",
+    "1",
+    "--max-wait-seconds",
+    "3000",
+    "--state-file",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-inference-hb1b-stream-fp32-v1/queue.json",
+    "--",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "-m",
+    "benchmarks.inference",
+    "--config",
+    "configs/scale/hb-1b.json",
+    "--config-overrides",
+    "{\"region_batch_size\": 4, \"ssd_scan_backend\": \"doubling\", \"ssd_summary_backend\": \"prefix\"}",
+    "--subjects",
+    "tide",
+    "A",
+    "B",
+    "C",
+    "D",
+    "--devices",
+    "npu:0",
+    "--precision",
+    "fp32",
+    "--batch",
+    "2",
+    "--prefill",
+    "512",
+    "--prefill-chunk",
+    "128",
+    "--decode",
+    "256",
+    "--stream-positions",
+    "1024",
+    "--stream-chunk",
+    "128",
+    "--samples",
+    "2",
+    "--warmup",
+    "1",
+    "--no-cold",
+    "--transformer-chunk",
+    "256",
+    "--threads",
+    "4",
+    "--allocated-budget-gib",
+    "48",
+    "--reserved-budget-gib",
+    "56",
+    "--reference-output",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-inference-hb1b-stream-fp32-v1/reference.json",
+    "--output",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-inference-hb1b-stream-fp32-v1/inference.json"
+  ],
+  "pid": 2455740,
+  "started": "2026-11-18T12:41:20.038255+00:00",
+  "max_rss_bytes": 137438953472,
+  "peak_rss_bytes": 6904078336,
+  "max_processes": 2,
+  "rss_sample_count": 11318,
+  "poll_interval": 0.25,
+  "descendant_supervision": "Linux child subreaper; retained PID/start identities across nested sessions",
+  "child_pid": 2455768,
+  "process_group": 2455768,
+  "elapsed": 4740.93134021014,
+  "descendant_identities": [
+    {
+      "pid": 2455768,
+      "start_ticks": 2259185074
+    },
+    {
+      "pid": 2455782,
+      "start_ticks": 2259185080
+    },
+    {
+      "pid": 2464658,
+      "start_ticks": 2259195336
+    },
+    {
+      "pid": 2465809,
+      "start_ticks": 2259197059
+    },
+    {
+      "pid": 2467380,
+      "start_ticks": 2259198745
+    },
+    {
+      "pid": 2468714,
+      "start_ticks": 2259200426
+    },
+    {
+      "pid": 2470021,
+      "start_ticks": 2259202115
+    },
+    {
+      "pid": 2471088,
+      "start_ticks": 2259203799
+    },
+    {
+      "pid": 2471490,
+      "start_ticks": 2259204279
+    },
+    {
+      "pid": 2472592,
+      "start_ticks": 2259204476
+    }
+  ],
+  "exit_code": 0,
+  "finished": "2026-11-18T14:00:20.969596+00:00"
+}

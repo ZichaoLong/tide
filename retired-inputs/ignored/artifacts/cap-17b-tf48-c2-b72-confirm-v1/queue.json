@@ -1,0 +1,19 @@
+{
+  "elapsed_seconds": 224.57685057073832,
+  "job_id": "cap-17b-tf48-c2-b72-confirm-v1",
+  "logical_devices": [
+    "npu:0",
+    "npu:1"
+  ],
+  "npu_count": 2,
+  "physical_ids": [
+    1,
+    7
+  ],
+  "priority": 0,
+  "project": "tide-instances",
+  "return_code": 0,
+  "schema_version": 1,
+  "status": "completed",
+  "timestamp": "2026-11-18T16:41:45.262947+00:00"
+}

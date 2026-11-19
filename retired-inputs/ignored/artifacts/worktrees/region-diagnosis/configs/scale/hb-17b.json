@@ -1,0 +1,26 @@
+{
+  "topology": {
+    "kind": "multiscale",
+    "n": 64,
+    "layers": null,
+    "depth": null,
+    "rounds": null,
+    "profile": "5-dd4",
+    "hubs": 4,
+    "partition": "group",
+    "timing": "settle",
+    "hub_mask": "all",
+    "period": null,
+    "probes": null
+  },
+  "d": 768,
+  "memory": "X",
+  "aggregation": "source_residual",
+  "allocation": "quad",
+  "sharing": "independent",
+  "adapter_rank": 8,
+  "budget": null,
+  "attention_backend": "auto",
+  "attention_chunk": 128,
+  "input_dim": null
+}

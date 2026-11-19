@@ -1,0 +1,190 @@
+{
+  "state": "passed",
+  "source": "f3e6661c1b126bdddc66167d4a79c6471acee285",
+  "command": [
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "/mi/data2T/zlong/home/.agents/skills/use-local-ascend/scripts/run_on_free_npu.py",
+    "--job-id",
+    "agg-cost-half-fp32-v1",
+    "--project",
+    "tide-instances",
+    "--priority",
+    "0",
+    "--npu-count",
+    "1",
+    "--max-wait-seconds",
+    "1200",
+    "--state-file",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-cost-half-fp32-v1/queue.json",
+    "--",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "-m",
+    "benchmarks.costs",
+    "--config",
+    "configs/scale/hb-0p5b.json",
+    "--config-overrides",
+    "{\"region_batch_size\":4,\"checkpoint_reception\":true,\"ssd_scan_backend\":\"doubling\",\"ssd_summary_backend\":\"prefix\"}",
+    "--device",
+    "npu:0",
+    "--precision",
+    "fp32",
+    "--batch",
+    "1",
+    "--length",
+    "128",
+    "--threads",
+    "4",
+    "--warmup",
+    "2",
+    "--steps",
+    "5",
+    "--subjects",
+    "tide",
+    "transformer_A",
+    "transformer_C",
+    "--diagnostics",
+    "stages",
+    "runtime",
+    "work",
+    "trace",
+    "--device-budget-gib",
+    "48",
+    "--output",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-cost-half-fp32-v1/costs.json"
+  ],
+  "pid": 2344520,
+  "started": "2026-11-18T12:32:55.936030+00:00",
+  "max_rss_bytes": 137438953472,
+  "peak_rss_bytes": 92554670080,
+  "max_processes": 8,
+  "rss_sample_count": 1399,
+  "poll_interval": 0.25,
+  "descendant_supervision": "Linux child subreaper; retained PID/start identities across nested sessions",
+  "child_pid": 2344538,
+  "process_group": 2344538,
+  "elapsed": 609.1864217109978,
+  "descendant_identities": [
+    {
+      "pid": 2344538,
+      "start_ticks": 2259134664
+    },
+    {
+      "pid": 2344545,
+      "start_ticks": 2259134670
+    },
+    {
+      "pid": 2424499,
+      "start_ticks": 2259145305
+    },
+    {
+      "pid": 2424861,
+      "start_ticks": 2259145791
+    },
+    {
+      "pid": 2424968,
+      "start_ticks": 2259145978
+    },
+    {
+      "pid": 2431929,
+      "start_ticks": 2259155025
+    },
+    {
+      "pid": 2431946,
+      "start_ticks": 2259155043
+    },
+    {
+      "pid": 2431957,
+      "start_ticks": 2259155044
+    },
+    {
+      "pid": 2431960,
+      "start_ticks": 2259155045
+    },
+    {
+      "pid": 2431982,
+      "start_ticks": 2259155074
+    },
+    {
+      "pid": 2432240,
+      "start_ticks": 2259155282
+    },
+    {
+      "pid": 2432524,
+      "start_ticks": 2259155745
+    },
+    {
+      "pid": 2432534,
+      "start_ticks": 2259155768
+    },
+    {
+      "pid": 2432645,
+      "start_ticks": 2259155869
+    },
+    {
+      "pid": 2451556,
+      "start_ticks": 2259180173
+    },
+    {
+      "pid": 2451575,
+      "start_ticks": 2259180181
+    },
+    {
+      "pid": 2451579,
+      "start_ticks": 2259180182
+    },
+    {
+      "pid": 2451581,
+      "start_ticks": 2259180183
+    },
+    {
+      "pid": 2451599,
+      "start_ticks": 2259180208
+    },
+    {
+      "pid": 2452997,
+      "start_ticks": 2259181302
+    },
+    {
+      "pid": 2454865,
+      "start_ticks": 2259183683
+    },
+    {
+      "pid": 2454908,
+      "start_ticks": 2259183766
+    },
+    {
+      "pid": 2455139,
+      "start_ticks": 2259184132
+    },
+    {
+      "pid": 2462631,
+      "start_ticks": 2259192950
+    },
+    {
+      "pid": 2462672,
+      "start_ticks": 2259192959
+    },
+    {
+      "pid": 2462674,
+      "start_ticks": 2259192959
+    },
+    {
+      "pid": 2462677,
+      "start_ticks": 2259192960
+    },
+    {
+      "pid": 2462686,
+      "start_ticks": 2259192970
+    },
+    {
+      "pid": 2462839,
+      "start_ticks": 2259193060
+    },
+    {
+      "pid": 2462887,
+      "start_ticks": 2259193096
+    }
+  ],
+  "exit_code": 0,
+  "finished": "2026-11-18T12:43:05.122453+00:00"
+}

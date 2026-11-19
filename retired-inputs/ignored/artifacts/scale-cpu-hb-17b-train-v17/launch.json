@@ -1,0 +1,79 @@
+{
+  "source": "0992b467584c1f603314ed04d8efe8596a14f576",
+  "source_path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/scale-cpu-hb-17b-train-v17/source",
+  "run": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/scale-cpu-hb-17b-train-v17",
+  "unit": "tide-scale-cpu-hb-17b-train-v17",
+  "arguments": {
+    "name": "scale-cpu-hb-17b-train-v17",
+    "revision": "0992b467",
+    "threads": 40,
+    "affinity": "240-279",
+    "npu_count": 0,
+    "candidate_ids": null,
+    "seconds": 25200,
+    "rss_gib": 384.0,
+    "queue_seconds": 600,
+    "after_unit": [
+      "tide-scale-cpu-hb-17b-inference-v17.service",
+      "tide-attention-sites-cpu-v16.service"
+    ],
+    "command": [
+      "--",
+      "numactl",
+      "--interleave=6,7",
+      "--physcpubind=240-279",
+      "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+      "-c",
+      "import os,pathlib,subprocess\nfrom scripts.job import atomic\nroot=pathlib.Path(\"{run}\")\ncommand=['/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python', '-c', '\\nimport hashlib,json,pathlib,subprocess,sys\\nfrom scripts.job import atomic\\nroot=pathlib.Path(\"{run}\")\\n\\ndef node_admission(label,nodes,required_gib):\\n    readings={}\\n    for node in nodes:\\n        raw=pathlib.Path(\\'/sys/devices/system/node/node\\'+str(node)+\\'/meminfo\\').read_text()\\n        values={s.split()[2].rstrip(\\':\\'):int(s.split()[3])*1024 for s in raw.splitlines()}\\n        capacity=sum(values[k] for k in (\\'MemFree\\',\\'Active(file)\\',\\'Inactive(file)\\',\\'SReclaimable\\'))\\n        readings[node]=dict(raw=raw,free_plus_reclaimable_bytes=capacity)\\n    atomic(root/(label+\\'-numa-admission.json\\'),dict(nodes=readings,required_per_node_bytes=required_gib*2**30,scope=\\'free plus file LRU plus reclaimable slab; margin, not reservation\\'))\\n    if any(x[\\'free_plus_reclaimable_bytes\\']<required_gib*2**30 for x in readings.values()):\\n        raise RuntimeError(\\'NUMA capacity admission failed\\')\\n\\ncalibration_path=pathlib.Path(\\'/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/scale-cpu-hb-17b-inference-v17/calibration.json\\')\\npayload=calibration_path.read_bytes()\\ncalibration=json.loads(payload)\\nif calibration[\\'state\\']!=\\'completed\\': raise RuntimeError(\\'inference calibration did not complete\\')\\nselected=calibration[\\'selected_threads\\']\\natomic(root/\\'thread-selection.json\\',dict(source_path=str(calibration_path),sha256=hashlib.sha256(payload).hexdigest(),selected_threads=selected,scope=\\'reuse finite 1B inference/training CPU thread calibration on NUMA6; training memory interleaves6/7\\'))\\nmem=pathlib.Path(\\'/proc/meminfo\\').read_text()\\navailable=int(next(s.split()[1] for s in mem.splitlines() if s.startswith(\\'MemAvailable:\\')))*1024\\natomic(root/\\'resource-preflight.json\\',dict(meminfo=mem,available_bytes=available,required_available_bytes=700*2**30,quota=subprocess.check_output([\\'quota\\',\\'-s\\'],text=True)))\\nif available<700*2**30: raise RuntimeError(\\'CPU training global RAM margin is not available\\')\\nnode_admission(\\'training\\',(6,7),210)\\ncommand=[sys.executable,\\'-m\\',\\'scripts.check_placement\\',\\'--mode\\',\\'train\\',\\'--devices\\',\\'cpu\\',\\'--no-foreach\\',\\'--config\\',\\'configs/scale/hb-17b.json\\',\\'--precision\\',\\'bf16\\',\\'--threads\\',str(selected),\\'--batch\\',\\'1\\',\\'--length\\',\\'8\\',\\'--steps\\',\\'2\\',\\'--output\\',str(root/\\'training-bf16.json\\')]\\nsys.exit(subprocess.call(command))\\n']\natomic(root/\"numa-policy.json\",dict(policy='--interleave=6,7',affinity=sorted(os.sched_getaffinity(0)),maps=pathlib.Path(\"/proc/self/numa_maps\").read_text(),numactl=subprocess.check_output([\"numactl\",\"--show\"],text=True),supersedes=\"scale-cpu-hb-17b-v16\"))\nos.execv(command[0],command)"
+    ]
+  },
+  "launch": [
+    "systemd-run",
+    "--user",
+    "--unit=tide-scale-cpu-hb-17b-train-v17",
+    "--service-type=exec",
+    "--slice=background.slice",
+    "--working-directory=/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/scale-cpu-hb-17b-train-v17/source",
+    "--property=KillMode=control-group",
+    "--property=RuntimeMaxSec=25200",
+    "--property=TimeoutStopSec=30",
+    "--property=CPUAffinity=240-279",
+    "--property=StandardOutput=append:/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/scale-cpu-hb-17b-train-v17/stdout.log",
+    "--property=StandardError=append:/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/scale-cpu-hb-17b-train-v17/stderr.log",
+    "/bin/bash",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/scale-cpu-hb-17b-train-v17/run.sh"
+  ],
+  "command": [
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/scale-cpu-hb-17b-train-v17/source/scripts/wait_units.py",
+    "--status",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/scale-cpu-hb-17b-train-v17/dependency.json",
+    "--seconds",
+    "25200",
+    "--unit",
+    "tide-scale-cpu-hb-17b-inference-v17.service",
+    "--unit",
+    "tide-attention-sites-cpu-v16.service",
+    "--",
+    "numactl",
+    "--interleave=6,7",
+    "--physcpubind=240-279",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "-c",
+    "import os,pathlib,subprocess\nfrom scripts.job import atomic\nroot=pathlib.Path(\"/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/scale-cpu-hb-17b-train-v17\")\ncommand=['/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python', '-c', '\\nimport hashlib,json,pathlib,subprocess,sys\\nfrom scripts.job import atomic\\nroot=pathlib.Path(\"/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/scale-cpu-hb-17b-train-v17\")\\n\\ndef node_admission(label,nodes,required_gib):\\n    readings={}\\n    for node in nodes:\\n        raw=pathlib.Path(\\'/sys/devices/system/node/node\\'+str(node)+\\'/meminfo\\').read_text()\\n        values={s.split()[2].rstrip(\\':\\'):int(s.split()[3])*1024 for s in raw.splitlines()}\\n        capacity=sum(values[k] for k in (\\'MemFree\\',\\'Active(file)\\',\\'Inactive(file)\\',\\'SReclaimable\\'))\\n        readings[node]=dict(raw=raw,free_plus_reclaimable_bytes=capacity)\\n    atomic(root/(label+\\'-numa-admission.json\\'),dict(nodes=readings,required_per_node_bytes=required_gib*2**30,scope=\\'free plus file LRU plus reclaimable slab; margin, not reservation\\'))\\n    if any(x[\\'free_plus_reclaimable_bytes\\']<required_gib*2**30 for x in readings.values()):\\n        raise RuntimeError(\\'NUMA capacity admission failed\\')\\n\\ncalibration_path=pathlib.Path(\\'/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/scale-cpu-hb-17b-inference-v17/calibration.json\\')\\npayload=calibration_path.read_bytes()\\ncalibration=json.loads(payload)\\nif calibration[\\'state\\']!=\\'completed\\': raise RuntimeError(\\'inference calibration did not complete\\')\\nselected=calibration[\\'selected_threads\\']\\natomic(root/\\'thread-selection.json\\',dict(source_path=str(calibration_path),sha256=hashlib.sha256(payload).hexdigest(),selected_threads=selected,scope=\\'reuse finite 1B inference/training CPU thread calibration on NUMA6; training memory interleaves6/7\\'))\\nmem=pathlib.Path(\\'/proc/meminfo\\').read_text()\\navailable=int(next(s.split()[1] for s in mem.splitlines() if s.startswith(\\'MemAvailable:\\')))*1024\\natomic(root/\\'resource-preflight.json\\',dict(meminfo=mem,available_bytes=available,required_available_bytes=700*2**30,quota=subprocess.check_output([\\'quota\\',\\'-s\\'],text=True)))\\nif available<700*2**30: raise RuntimeError(\\'CPU training global RAM margin is not available\\')\\nnode_admission(\\'training\\',(6,7),210)\\ncommand=[sys.executable,\\'-m\\',\\'scripts.check_placement\\',\\'--mode\\',\\'train\\',\\'--devices\\',\\'cpu\\',\\'--no-foreach\\',\\'--config\\',\\'configs/scale/hb-17b.json\\',\\'--precision\\',\\'bf16\\',\\'--threads\\',str(selected),\\'--batch\\',\\'1\\',\\'--length\\',\\'8\\',\\'--steps\\',\\'2\\',\\'--output\\',str(root/\\'training-bf16.json\\')]\\nsys.exit(subprocess.call(command))\\n']\natomic(root/\"numa-policy.json\",dict(policy='--interleave=6,7',affinity=sorted(os.sched_getaffinity(0)),maps=pathlib.Path(\"/proc/self/numa_maps\").read_text(),numactl=subprocess.check_output([\"numactl\",\"--show\"],text=True),supersedes=\"scale-cpu-hb-17b-v16\"))\nos.execv(command[0],command)"
+  ],
+  "environment": {
+    "PYTHONPATH": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/scale-cpu-hb-17b-train-v17/source/src",
+    "TIDE_SOURCE_COMMIT": "0992b467584c1f603314ed04d8efe8596a14f576",
+    "TIDE_HARNESS_COMMIT": "0992b467584c1f603314ed04d8efe8596a14f576",
+    "TORCH_DEVICE_BACKEND_AUTOLOAD": "0",
+    "TIDE_RESOURCE_IDENTITY": "pinned_cpu; shared host",
+    "OMP_NUM_THREADS": "40",
+    "MKL_NUM_THREADS": "40",
+    "OPENBLAS_NUM_THREADS": "40"
+  },
+  "state": "submitted",
+  "resource_enforcement": "process affinity; sampled process-tree RSS, not cgroup hard memory",
+  "device_policy": "cpu",
+  "unit_observation": "MainPID=4056486\nSlice=background.slice\nControlGroup=/user.slice/user-1003.slice/user@1003.service/background.slice/tide-scale-cpu-hb-17b-train-v17.service\nId=tide-scale-cpu-hb-17b-train-v17.service\nActiveState=active\nSubState=running\n"
+}

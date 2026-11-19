@@ -1,0 +1,30 @@
+{
+  "topology": {
+    "kind": "multiscale",
+    "n": 32,
+    "layers": null,
+    "depth": null,
+    "rounds": null,
+    "profile": "9",
+    "hubs": 4,
+    "partition": "group",
+    "timing": "settle",
+    "hub_mask": "all",
+    "period": null,
+    "probes": null
+  },
+  "d": 128,
+  "memory": "X",
+  "aggregation": "source_residual",
+  "allocation": "quad",
+  "sharing": "independent",
+  "adapter_rank": 8,
+  "budget": null,
+  "attention_backend": "auto",
+  "attention_chunk": 128,
+  "input_dim": null,
+  "region_batch_size": 4,
+  "checkpoint_reception": true,
+  "ssd_scan_backend": "doubling",
+  "ssd_summary_backend": "prefix"
+}

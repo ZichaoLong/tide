@@ -1,0 +1,393 @@
+{
+  "schema": "tide-grouped-ffn-device-trace-read-review-v1",
+  "observed": "2026-11-19T05:08:45.287768+00:00",
+  "source": {
+    "source_commit": "05e8338bf62569100d194848689d545f1140afbc",
+    "harness_commit": "05e8338bf62569100d194848689d545f1140afbc",
+    "tide_content_sha256": "492122d8430115f902c3751ff2f88f5fe23e39ca9c7479bf56d2570e1ff54f14",
+    "harness_content_sha256": "bd22f1dec3fa25dee3949bf55567afbba41927246e2d479b74f434e8049af934",
+    "tide_path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/ffn-local-npu-v1/source/src/tide",
+    "harness_path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/ffn-local-npu-v1/source/benchmarks"
+  },
+  "files": [
+    {
+      "path": "artifacts/ffn-local-npu-v1/qualification.json",
+      "bytes": 233835,
+      "sha256": "70f5fef9ca96d115feb564780367aa4ff78c71b1b25172336e8f0100861751bb"
+    },
+    {
+      "path": "artifacts/ffn-local-npu-v1/qualification.trace.json",
+      "bytes": 529049,
+      "sha256": "1a3750479c2750b91851579f3141b3ae6122169a88f541e3297235ba6323a338"
+    },
+    {
+      "path": "artifacts/ffn-local-npu-v1/stderr.log",
+      "bytes": 539,
+      "sha256": "34c7116be48d5221fad77eaa5e6ec5ac4eca49f68bb55d760879e8e3c607f5d7"
+    }
+  ],
+  "state": "completed_read_review",
+  "normal_timing": false,
+  "scope": "reference/shared local FFN trace; other cases retain their separate dispatch observations",
+  "device_tracks": [
+    {
+      "pid": 1767616969,
+      "name": "Ascend Hardware"
+    }
+  ],
+  "operations": {
+    "grouped_matmul": {
+      "calls": 27,
+      "summed_device_event_us": 625.2480000000002,
+      "task_types": {
+        "KERNEL_MIX_AIC": 27
+      },
+      "examples": [
+        {
+          "name": "aclnnGroupedMatmulV5_GroupedMatmul_GroupedMatmul",
+          "pid": 1767616969,
+          "tid": 515,
+          "ts": "1795064670613251.118",
+          "dur": 28.024,
+          "ph": "X",
+          "args": {
+            "Model Id": 4294967295,
+            "Task Type": "KERNEL_MIX_AIC",
+            "Physic Stream Id": 515,
+            "Task Id": 1040,
+            "Batch Id": 0,
+            "Subtask Id": 0,
+            "connection_id": 284
+          }
+        },
+        {
+          "name": "aclnnGroupedMatmulV5_GroupedMatmul_GroupedMatmul",
+          "pid": 1767616969,
+          "tid": 515,
+          "ts": "1795064670613485.502",
+          "dur": 8.616,
+          "ph": "X",
+          "args": {
+            "Model Id": 4294967295,
+            "Task Type": "KERNEL_MIX_AIC",
+            "Physic Stream Id": 515,
+            "Task Id": 1043,
+            "Batch Id": 0,
+            "Subtask Id": 0,
+            "connection_id": 297
+          }
+        }
+      ]
+    },
+    "int64_sort": {
+      "calls": 2,
+      "summed_device_event_us": 82.88,
+      "task_types": {
+        "KERNEL_AICPU": 2
+      },
+      "examples": [
+        {
+          "name": "aclnnSort_SortAiCpu_Sort",
+          "pid": 1767616969,
+          "tid": 515,
+          "ts": "1795064670612005.382",
+          "dur": 56.096,
+          "ph": "X",
+          "args": {
+            "Model Id": 4294967295,
+            "Task Type": "KERNEL_AICPU",
+            "Physic Stream Id": 515,
+            "Task Id": 1020,
+            "Batch Id": 0,
+            "Subtask Id": 4294967295,
+            "connection_id": 181
+          }
+        },
+        {
+          "name": "aclnnSort_SortAiCpu_Sort",
+          "pid": 1767616969,
+          "tid": 515,
+          "ts": "1795064670612811.718",
+          "dur": 26.784,
+          "ph": "X",
+          "args": {
+            "Model Id": 4294967295,
+            "Task Type": "KERNEL_AICPU",
+            "Physic Stream Id": 515,
+            "Task Id": 1030,
+            "Batch Id": 0,
+            "Subtask Id": 4294967295,
+            "connection_id": 237
+          }
+        }
+      ]
+    },
+    "int64_cumsum": {
+      "calls": 2,
+      "summed_device_event_us": 66.384,
+      "task_types": {
+        "KERNEL_AICPU": 2
+      },
+      "examples": [
+        {
+          "name": "aclnnCumsum_CumsumAiCpu_Cumsum",
+          "pid": 1767616969,
+          "tid": 515,
+          "ts": "1795064670612776.158",
+          "dur": 32.824,
+          "ph": "X",
+          "args": {
+            "Model Id": 4294967295,
+            "Task Type": "KERNEL_AICPU",
+            "Physic Stream Id": 515,
+            "Task Id": 1028,
+            "Batch Id": 0,
+            "Subtask Id": 4294967295,
+            "connection_id": 229
+          }
+        },
+        {
+          "name": "aclnnCumsum_CumsumAiCpu_Cumsum",
+          "pid": 1767616969,
+          "tid": 515,
+          "ts": "1795064670613066.622",
+          "dur": 33.56,
+          "ph": "X",
+          "args": {
+            "Model Id": 4294967295,
+            "Task Type": "KERNEL_AICPU",
+            "Physic Stream Id": 515,
+            "Task Id": 1038,
+            "Batch Id": 0,
+            "Subtask Id": 4294967295,
+            "connection_id": 276
+          }
+        }
+      ]
+    },
+    "sdma": {
+      "calls": 9,
+      "summed_device_event_us": 8.104,
+      "task_types": {
+        "SDMA_SQE": 9
+      },
+      "examples": [
+        {
+          "name": "MEMCPY_ASYNC",
+          "pid": 1767616969,
+          "tid": 515,
+          "ts": "1795064670612343.678",
+          "dur": 0.584,
+          "ph": "X",
+          "args": {
+            "Model Id": 4294967295,
+            "Task Type": "SDMA_SQE",
+            "Physic Stream Id": 515,
+            "Task Id": 1026,
+            "Batch Id": 0,
+            "Subtask Id": 4294967295,
+            "connection_id": 208
+          }
+        },
+        {
+          "name": "MEMCPY_ASYNC",
+          "pid": 1767616969,
+          "tid": 515,
+          "ts": "1795064670612970.382",
+          "dur": 0.6,
+          "ph": "X",
+          "args": {
+            "Model Id": 4294967295,
+            "Task Type": "SDMA_SQE",
+            "Physic Stream Id": 515,
+            "Task Id": 1036,
+            "Batch Id": 0,
+            "Subtask Id": 4294967295,
+            "connection_id": 267
+          }
+        }
+      ]
+    },
+    "tensor_move": {
+      "calls": 3,
+      "summed_device_event_us": 37.248,
+      "task_types": {
+        "KERNEL_AIVEC": 3
+      },
+      "examples": [
+        {
+          "name": "aclnnInplaceCopy_TensorMoveAiCore_TensorMove",
+          "pid": 1767616969,
+          "tid": 515,
+          "ts": "1795064670623560.718",
+          "dur": 13.584,
+          "ph": "X",
+          "args": {
+            "Model Id": 4294967295,
+            "Task Type": "KERNEL_AIVEC",
+            "Physic Stream Id": 515,
+            "Task Id": 1093,
+            "Batch Id": 0,
+            "Subtask Id": 4294967295,
+            "connection_id": 621
+          }
+        },
+        {
+          "name": "aclnnInplaceCopy_TensorMoveAiCore_TensorMove",
+          "pid": 1767616969,
+          "tid": 515,
+          "ts": "1795064670624103.798",
+          "dur": 12.344,
+          "ph": "X",
+          "args": {
+            "Model Id": 4294967295,
+            "Task Type": "KERNEL_AIVEC",
+            "Physic Stream Id": 515,
+            "Task Id": 1120,
+            "Batch Id": 0,
+            "Subtask Id": 4294967295,
+            "connection_id": 740
+          }
+        }
+      ]
+    }
+  },
+  "per_case": [
+    {
+      "shape": "medium",
+      "sharing": "independent",
+      "grouped_type_counts": {
+        "0": 6,
+        "2": 3
+      },
+      "all_group0_read_parameter_bank_views": true,
+      "grouped_parameter_gather_bytes": 0,
+      "grouped_ATen_parameter_layout_copies": [],
+      "gather_parameter_gather_bytes": 7077888,
+      "output_comparisons": {
+        "gather": {
+          "state": "within_threshold",
+          "finite": true,
+          "atol": 2e-06,
+          "rtol": 2e-06,
+          "max_abs": 1.8477439880371094e-06,
+          "max_scaled": 0.5153534412384033,
+          "exact": false
+        },
+        "grouped": {
+          "state": "within_threshold",
+          "finite": true,
+          "atol": 2e-06,
+          "rtol": 2e-06,
+          "max_abs": 1.7881393432617188e-06,
+          "max_scaled": 0.5328506827354431,
+          "exact": false
+        }
+      }
+    },
+    {
+      "shape": "medium",
+      "sharing": "region_shared",
+      "grouped_type_counts": {
+        "0": 18,
+        "2": 9
+      },
+      "all_group0_read_parameter_bank_views": true,
+      "grouped_parameter_gather_bytes": 0,
+      "grouped_ATen_parameter_layout_copies": [],
+      "gather_parameter_gather_bytes": 7446528,
+      "output_comparisons": {
+        "gather": {
+          "state": "within_threshold",
+          "finite": true,
+          "atol": 2e-06,
+          "rtol": 2e-06,
+          "max_abs": 2.384185791015625e-06,
+          "max_scaled": 0.6212067604064941,
+          "exact": false
+        },
+        "grouped": {
+          "state": "within_threshold",
+          "finite": true,
+          "atol": 2e-06,
+          "rtol": 2e-06,
+          "max_abs": 1.9073486328125e-06,
+          "max_scaled": 0.6450784802436829,
+          "exact": false
+        }
+      }
+    },
+    {
+      "shape": "reference",
+      "sharing": "independent",
+      "grouped_type_counts": {
+        "0": 6,
+        "2": 3
+      },
+      "all_group0_read_parameter_bank_views": true,
+      "grouped_parameter_gather_bytes": 0,
+      "grouped_ATen_parameter_layout_copies": [],
+      "gather_parameter_gather_bytes": 113246208,
+      "output_comparisons": {
+        "gather": {
+          "state": "outside_threshold",
+          "finite": true,
+          "atol": 2e-06,
+          "rtol": 2e-06,
+          "max_abs": 4.172325134277344e-06,
+          "max_scaled": 1.2400808334350586,
+          "exact": false
+        },
+        "grouped": {
+          "state": "outside_threshold",
+          "finite": true,
+          "atol": 2e-06,
+          "rtol": 2e-06,
+          "max_abs": 5.245208740234375e-06,
+          "max_scaled": 1.4212106466293335,
+          "exact": false
+        }
+      }
+    },
+    {
+      "shape": "reference",
+      "sharing": "region_shared",
+      "grouped_type_counts": {
+        "0": 18,
+        "2": 9
+      },
+      "all_group0_read_parameter_bank_views": true,
+      "grouped_parameter_gather_bytes": 0,
+      "grouped_ATen_parameter_layout_copies": [],
+      "gather_parameter_gather_bytes": 114720768,
+      "output_comparisons": {
+        "gather": {
+          "state": "outside_threshold",
+          "finite": true,
+          "atol": 2e-06,
+          "rtol": 2e-06,
+          "max_abs": 4.410743713378906e-06,
+          "max_scaled": 1.3687258958816528,
+          "exact": false
+        },
+        "grouped": {
+          "state": "outside_threshold",
+          "finite": true,
+          "atol": 2e-06,
+          "rtol": 2e-06,
+          "max_abs": 4.410743713378906e-06,
+          "max_scaled": 1.1317704916000366,
+          "exact": false
+        }
+      }
+    }
+  ],
+  "conclusions": [
+    "Trace has 27 native GroupedMatmul tasks on the Ascend Hardware process, stream515, all KERNEL_MIX_AIC; the separate dispatch pass records18 group0 plus9 group2 for this same reference/shared workload. Together these witness device execution beyond output-device metadata.",
+    "Two int64 sorts and two int64 cumsums use KERNEL_AICPU on the Ascend device; they are not host CPU execution, but remain organization cost.",
+    "Every observed group0 weight operand aliases an original Parameter bank/view; grouped FFN has zero ATen Parameter advanced-index bytes and no observed ATen Parameter clone/_to_copy/contiguous calls.",
+    "stderr retains a CANN/SoC32-padding allocation warning. The trace has SDMA/TensorMove events without operand identities; it cannot certify zero vendor-internal allocation, padding or data movement.",
+    "Host and device events overlap and instrumentation changes execution; these sums are not normal latency shares, bandwidth, or recoverable speedup.",
+    "Raw qualification preserves four original d768 output threshold failures; same-device output equivalence cannot be inferred from separate comparisons with a CPU oracle or distinct SHA values."
+  ]
+}

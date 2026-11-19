@@ -1,0 +1,90 @@
+{
+  "state": "passed",
+  "source": "e2a4d39104a006feec4525e534eadae4a94cde0d",
+  "command": [
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "/mi/data2T/zlong/home/.agents/skills/use-local-ascend/scripts/run_on_free_npu.py",
+    "--job-id",
+    "scale-npu-fc-0p5b-v7",
+    "--project",
+    "tide-instances",
+    "--priority",
+    "0",
+    "--npu-count",
+    "1",
+    "--max-wait-seconds",
+    "600",
+    "--state-file",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/scale-npu-fc-0p5b-v7/queue.json",
+    "--",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "-m",
+    "benchmarks.programme",
+    "--suite",
+    "scale",
+    "--configs",
+    "configs/scale/fc-0p5b.json",
+    "--device",
+    "npu:0",
+    "--precision",
+    "fp32",
+    "bf16",
+    "--threads",
+    "4",
+    "--batch",
+    "1",
+    "--length",
+    "8",
+    "--warmup",
+    "1",
+    "--steps",
+    "3",
+    "--child-timeout",
+    "1500",
+    "--output-dir",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/scale-npu-fc-0p5b-v7/results"
+  ],
+  "pid": 3467207,
+  "started": "2026-11-18T04:16:24.681872+00:00",
+  "max_rss_bytes": 85899345920,
+  "peak_rss_bytes": 6800949248,
+  "max_processes": 3,
+  "rss_sample_count": 449,
+  "poll_interval": 0.25,
+  "descendant_supervision": "Linux child subreaper; retained PID/start identities across nested sessions",
+  "child_pid": 3467244,
+  "process_group": 3467244,
+  "elapsed": 188.95934059470892,
+  "descendant_identities": [
+    {
+      "pid": 3467244,
+      "start_ticks": 2256155539
+    },
+    {
+      "pid": 3467245,
+      "start_ticks": 2256155544
+    },
+    {
+      "pid": 3467697,
+      "start_ticks": 2256156241
+    },
+    {
+      "pid": 3468127,
+      "start_ticks": 2256156726
+    },
+    {
+      "pid": 3468306,
+      "start_ticks": 2256156910
+    },
+    {
+      "pid": 3468327,
+      "start_ticks": 2256156916
+    },
+    {
+      "pid": 3472732,
+      "start_ticks": 2256165121
+    }
+  ],
+  "exit_code": 0,
+  "finished": "2026-11-18T04:19:33.641212+00:00"
+}

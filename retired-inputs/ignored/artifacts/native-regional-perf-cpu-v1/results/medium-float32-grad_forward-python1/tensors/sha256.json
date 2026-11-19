@@ -1,0 +1,16 @@
+{
+  "output.0.f32": "7623e70f82996e1b219f8d5b2ed84eee10d547c2fce18658ca28db71f2fe0313",
+  "output.1.f32": "abae8473ee53685a5b6a64d4e599aca30ef301b888eec96a69b907940a44f7ec",
+  "output.2.f32": "e6bd58ff15c16db13b2fe4c4141cee1bb68604ffbd8224293ed515244d10f89f",
+  "output.3.f32": "494da0fecf9a67d2bc05916916e4444676a9f51f7230b83951756ad000a24ce2",
+  "parameter.first_bias.f32": "37600a55fa1aa46d33ca2f149db82d1ad4bff23c80174d2ea0ca60bfd560190d",
+  "parameter.first_weight.f32": "97f16ef552485b78e09b22c630e5eae4af8210580e3764e7e589d271ca75f7e5",
+  "parameter.k_weight.f32": "77adfaaee379244c7db36d568bc346194ba27e415bdb6788755ba7b6adffc675",
+  "parameter.o_weight.f32": "b578a640936678e6e5c216308433f8471cac855e4bf881bdd72bd888fcc7fb98",
+  "parameter.q_weight.f32": "b0896913c86fc99aaef31efd1f50e136f38e8bf38964efa470e195f896a287d5",
+  "parameter.readout.f32": "eccc5d3890f30b0d4b3e3885b7b44972d3d66b7b5888ed6e92f7f2f8dc5d371d",
+  "parameter.second_bias.f32": "e13491636034c7cdcdd4c86e985c41bb139a3ec9aae12647948f189f92fc6a78",
+  "parameter.second_weight.f32": "52d52abc122d5854faa416bc34c61ba4ac53def73b4c26001ba70ade268bcec0",
+  "parameter.v_weight.f32": "960ee11b2889224e5f9c56c49bc8bf65115ca4c7ce398adae88c4c3c72520fd0",
+  "index.txt": "a9d2c00cb88503fdafddaf798bc67cfad31aec1d65358a518b16cddde4c41a82"
+}

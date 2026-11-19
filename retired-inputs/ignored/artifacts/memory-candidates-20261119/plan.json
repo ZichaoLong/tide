@@ -1,0 +1,482 @@
+{
+  "state": "finite_campaign_completed_with_retained_numerical_failures",
+  "initial_head": "5e8a015e106d62f088d906a3aab4c0ebcbb0024c",
+  "mathematics": "4f5b9f20a4030d68ee66ae2d26e34659a5e37234",
+  "families": [
+    "X",
+    "S",
+    "X_reverse",
+    "X kv_width384/256/128 QKV total narrowing (not GQA)",
+    "X memory_sharing region_shared adapter_rank8; other ownership independent"
+  ],
+  "bounds": {
+    "wall_hours": 6,
+    "parallel_npu_limit": 6,
+    "per_job_seconds": 1800,
+    "per_job_rss_gib": 128,
+    "per_device_allocated_gib": 48,
+    "per_device_reserved_gib": 56,
+    "new_artifact_gib": 80,
+    "max_npu_benchmark_processes": 96,
+    "max_npu_qualification_resume_processes": 40,
+    "dependency_service_seconds_up_to": 7200,
+    "direct_extra_workload_timeout_seconds": 1800,
+    "dependency_explanation": "Bounded service budget includes upstream wait and idle-device admission; direct supplemental inference uses timeout1800 after dependency and admission. Suite children use1800. Cost services use5400 including dependency wait, no inner timeout; three normal steps and five selected diagnostics only."
+  },
+  "stages": [
+    "review formulas and core, accounting, independent tests",
+    "commit and push implementation before qualification",
+    "frozen full CPU; small FP32/BF16 device multistep/restore and bounded equivalence diagnostics",
+    "medium FP32 continuing training and actual fresh-process resume",
+    "9B fixed graph/content/FFN seven variants at common B1/B8",
+    "finite own-budget batch ladder; two near-total FFN-adjusted representatives",
+    "selected sustained decode, device work/shape/memory diagnostics and strict small A-D comparisons",
+    "review evidence, terminal descendants, atomic STATUS/ROADMAP, separate evidence commit and push"
+  ],
+  "stopping": "No Cartesian expansion. Batch steps stop on budget refusal, finite cap or flattening; normal samples warmup2/samples5, screens warmup1/samples2. Preserve failed attempts. Known semantic/state/shared-gradient errors block affected path; finite tolerances get bounded diagnosis. Larger task or occupied-card need is separately decided.",
+  "jobs": [
+    {
+      "name": "memory-ad-all-ssd-v1",
+      "unit": "tide-memory-ad-all-ssd-v1",
+      "source": "301a327569aa75aefddd03cac9ca839589db5672",
+      "run": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-ad-all-ssd-v1",
+      "last_observed_state": "passed",
+      "dependency_state": null,
+      "all_processes_terminal": true
+    },
+    {
+      "name": "memory-ad-kv128-v1",
+      "unit": "tide-memory-ad-kv128-v1",
+      "source": "301a327569aa75aefddd03cac9ca839589db5672",
+      "run": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-ad-kv128-v1",
+      "last_observed_state": "passed",
+      "dependency_state": null,
+      "all_processes_terminal": true
+    },
+    {
+      "name": "memory-ad-memory-shared-v1",
+      "unit": "tide-memory-ad-memory-shared-v1",
+      "source": "301a327569aa75aefddd03cac9ca839589db5672",
+      "run": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-ad-memory-shared-v1",
+      "last_observed_state": "passed",
+      "dependency_state": null,
+      "all_processes_terminal": true
+    },
+    {
+      "name": "memory-ad-reverse-v1",
+      "unit": "tide-memory-ad-reverse-v1",
+      "source": "301a327569aa75aefddd03cac9ca839589db5672",
+      "run": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-ad-reverse-v1",
+      "last_observed_state": "passed",
+      "dependency_state": null,
+      "all_processes_terminal": true
+    },
+    {
+      "name": "memory-ad-x-v1",
+      "unit": "tide-memory-ad-x-v1",
+      "source": "301a327569aa75aefddd03cac9ca839589db5672",
+      "run": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-ad-x-v1",
+      "last_observed_state": "passed",
+      "dependency_state": null,
+      "all_processes_terminal": true
+    },
+    {
+      "name": "memory-cost-kv128-v1",
+      "unit": "tide-memory-cost-kv128-v1",
+      "source": "301a327569aa75aefddd03cac9ca839589db5672",
+      "run": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-cost-kv128-v1",
+      "last_observed_state": "passed",
+      "dependency_state": "released",
+      "all_processes_terminal": true
+    },
+    {
+      "name": "memory-cost-shared-v1",
+      "unit": "tide-memory-cost-shared-v1",
+      "source": "301a327569aa75aefddd03cac9ca839589db5672",
+      "run": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-cost-shared-v1",
+      "last_observed_state": "passed",
+      "dependency_state": "released",
+      "all_processes_terminal": true
+    },
+    {
+      "name": "memory-cost-ssd-v1",
+      "unit": "tide-memory-cost-ssd-v1",
+      "source": "301a327569aa75aefddd03cac9ca839589db5672",
+      "run": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-cost-ssd-v1",
+      "last_observed_state": "passed",
+      "dependency_state": "released",
+      "all_processes_terminal": true
+    },
+    {
+      "name": "memory-cost-x-v1",
+      "unit": "tide-memory-cost-x-v1",
+      "source": "301a327569aa75aefddd03cac9ca839589db5672",
+      "run": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-cost-x-v1",
+      "last_observed_state": "passed",
+      "dependency_state": "released",
+      "all_processes_terminal": true
+    },
+    {
+      "name": "memory-cpu-qual-v1",
+      "unit": "tide-memory-cpu-qual-v1",
+      "source": "64db31414df561e0c3468c3c62542e6612475bf6",
+      "run": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-cpu-qual-v1",
+      "last_observed_state": "passed",
+      "dependency_state": null,
+      "all_processes_terminal": true
+    },
+    {
+      "name": "memory-cpu-suite-v1",
+      "unit": "tide-memory-cpu-suite-v1",
+      "source": "64db31414df561e0c3468c3c62542e6612475bf6",
+      "run": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-cpu-suite-v1",
+      "last_observed_state": "passed",
+      "dependency_state": null,
+      "all_processes_terminal": true
+    },
+    {
+      "name": "memory-decode-cost-kv128-v1",
+      "unit": "tide-memory-decode-cost-kv128-v1",
+      "source": "1f6b0861b54e36423b3027d73f2e29cdf50e4cc5",
+      "run": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-decode-cost-kv128-v1",
+      "last_observed_state": "passed",
+      "dependency_state": "released",
+      "all_processes_terminal": true
+    },
+    {
+      "name": "memory-decode-cost-x-v1",
+      "unit": "tide-memory-decode-cost-x-v1",
+      "source": "1f6b0861b54e36423b3027d73f2e29cdf50e4cc5",
+      "run": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-decode-cost-x-v1",
+      "last_observed_state": "passed",
+      "dependency_state": "released",
+      "all_processes_terminal": true
+    },
+    {
+      "name": "memory-infer-all-ssd-v1",
+      "unit": "tide-memory-infer-all-ssd-v1",
+      "source": "301a327569aa75aefddd03cac9ca839589db5672",
+      "run": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-infer-all-ssd-v1",
+      "last_observed_state": "passed",
+      "dependency_state": null,
+      "all_processes_terminal": true
+    },
+    {
+      "name": "memory-infer-kv128-v1",
+      "unit": "tide-memory-infer-kv128-v1",
+      "source": "301a327569aa75aefddd03cac9ca839589db5672",
+      "run": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-infer-kv128-v1",
+      "last_observed_state": "passed",
+      "dependency_state": null,
+      "all_processes_terminal": true
+    },
+    {
+      "name": "memory-infer-kv256-v1",
+      "unit": "tide-memory-infer-kv256-v1",
+      "source": "301a327569aa75aefddd03cac9ca839589db5672",
+      "run": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-infer-kv256-v1",
+      "last_observed_state": "passed",
+      "dependency_state": null,
+      "all_processes_terminal": true
+    },
+    {
+      "name": "memory-infer-kv384-v1",
+      "unit": "tide-memory-infer-kv384-v1",
+      "source": "301a327569aa75aefddd03cac9ca839589db5672",
+      "run": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-infer-kv384-v1",
+      "last_observed_state": "passed",
+      "dependency_state": null,
+      "all_processes_terminal": true
+    },
+    {
+      "name": "memory-infer-memory-shared-v1",
+      "unit": "tide-memory-infer-memory-shared-v1",
+      "source": "301a327569aa75aefddd03cac9ca839589db5672",
+      "run": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-infer-memory-shared-v1",
+      "last_observed_state": "passed",
+      "dependency_state": "released",
+      "all_processes_terminal": true
+    },
+    {
+      "name": "memory-infer-reverse-v1",
+      "unit": "tide-memory-infer-reverse-v1",
+      "source": "301a327569aa75aefddd03cac9ca839589db5672",
+      "run": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-infer-reverse-v1",
+      "last_observed_state": "passed",
+      "dependency_state": null,
+      "all_processes_terminal": true
+    },
+    {
+      "name": "memory-infer-x-v1",
+      "unit": "tide-memory-infer-x-v1",
+      "source": "301a327569aa75aefddd03cac9ca839589db5672",
+      "run": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-infer-x-v1",
+      "last_observed_state": "passed",
+      "dependency_state": null,
+      "all_processes_terminal": true
+    },
+    {
+      "name": "memory-installed-v1",
+      "unit": "tide-memory-installed-v1",
+      "source": "301a327569aa75aefddd03cac9ca839589db5672",
+      "run": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-installed-v1",
+      "last_observed_state": "passed",
+      "dependency_state": null,
+      "all_processes_terminal": true
+    },
+    {
+      "name": "memory-long-kv128-b8-v1",
+      "unit": "tide-memory-long-kv128-b8-v1",
+      "source": "301a327569aa75aefddd03cac9ca839589db5672",
+      "run": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-long-kv128-b8-v1",
+      "last_observed_state": "passed",
+      "dependency_state": "released",
+      "all_processes_terminal": true
+    },
+    {
+      "name": "memory-long-ssd-b8-v1",
+      "unit": "tide-memory-long-ssd-b8-v1",
+      "source": "301a327569aa75aefddd03cac9ca839589db5672",
+      "run": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-long-ssd-b8-v1",
+      "last_observed_state": "passed",
+      "dependency_state": "released",
+      "all_processes_terminal": true
+    },
+    {
+      "name": "memory-near-kv128-b1-v1",
+      "unit": "tide-memory-near-kv128-b1-v1",
+      "source": "301a327569aa75aefddd03cac9ca839589db5672",
+      "run": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-near-kv128-b1-v1",
+      "last_observed_state": "passed",
+      "dependency_state": "released",
+      "all_processes_terminal": true
+    },
+    {
+      "name": "memory-near-kv128-b8-v1",
+      "unit": "tide-memory-near-kv128-b8-v1",
+      "source": "301a327569aa75aefddd03cac9ca839589db5672",
+      "run": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-near-kv128-b8-v1",
+      "last_observed_state": "passed",
+      "dependency_state": "released",
+      "all_processes_terminal": true
+    },
+    {
+      "name": "memory-near-shared-b1-v1",
+      "unit": "tide-memory-near-shared-b1-v1",
+      "source": "301a327569aa75aefddd03cac9ca839589db5672",
+      "run": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-near-shared-b1-v1",
+      "last_observed_state": "passed",
+      "dependency_state": "released",
+      "all_processes_terminal": true
+    },
+    {
+      "name": "memory-near-shared-b8-v1",
+      "unit": "tide-memory-near-shared-b8-v1",
+      "source": "301a327569aa75aefddd03cac9ca839589db5672",
+      "run": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-near-shared-b8-v1",
+      "last_observed_state": "passed",
+      "dependency_state": "released",
+      "all_processes_terminal": true
+    },
+    {
+      "name": "memory-npu-qual-bf16-v1",
+      "unit": "tide-memory-npu-qual-bf16-v1",
+      "source": "64db31414df561e0c3468c3c62542e6612475bf6",
+      "run": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-npu-qual-bf16-v1",
+      "last_observed_state": "failed",
+      "dependency_state": null,
+      "all_processes_terminal": true
+    },
+    {
+      "name": "memory-npu-qual-fp32-v1",
+      "unit": "tide-memory-npu-qual-fp32-v1",
+      "source": "64db31414df561e0c3468c3c62542e6612475bf6",
+      "run": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-npu-qual-fp32-v1",
+      "last_observed_state": "passed",
+      "dependency_state": null,
+      "all_processes_terminal": true
+    },
+    {
+      "name": "memory-shared-region1-b8-v1",
+      "unit": "tide-memory-shared-region1-b8-v1",
+      "source": "301a327569aa75aefddd03cac9ca839589db5672",
+      "run": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-shared-region1-b8-v1",
+      "last_observed_state": "passed",
+      "dependency_state": "released",
+      "all_processes_terminal": true
+    },
+    {
+      "name": "memory-train-all-ssd-b16-v1",
+      "unit": "tide-memory-train-all-ssd-b16-v1",
+      "source": "301a327569aa75aefddd03cac9ca839589db5672",
+      "run": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-train-all-ssd-b16-v1",
+      "last_observed_state": "passed",
+      "dependency_state": null,
+      "all_processes_terminal": true
+    },
+    {
+      "name": "memory-train-all-ssd-v1",
+      "unit": "tide-memory-train-all-ssd-v1",
+      "source": "301a327569aa75aefddd03cac9ca839589db5672",
+      "run": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-train-all-ssd-v1",
+      "last_observed_state": "passed",
+      "dependency_state": null,
+      "all_processes_terminal": true
+    },
+    {
+      "name": "memory-train-kv128-b16-v1",
+      "unit": "tide-memory-train-kv128-b16-v1",
+      "source": "301a327569aa75aefddd03cac9ca839589db5672",
+      "run": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-train-kv128-b16-v1",
+      "last_observed_state": "passed",
+      "dependency_state": null,
+      "all_processes_terminal": true
+    },
+    {
+      "name": "memory-train-kv128-v1",
+      "unit": "tide-memory-train-kv128-v1",
+      "source": "301a327569aa75aefddd03cac9ca839589db5672",
+      "run": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-train-kv128-v1",
+      "last_observed_state": "passed",
+      "dependency_state": null,
+      "all_processes_terminal": true
+    },
+    {
+      "name": "memory-train-kv256-b16-v1",
+      "unit": "tide-memory-train-kv256-b16-v1",
+      "source": "301a327569aa75aefddd03cac9ca839589db5672",
+      "run": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-train-kv256-b16-v1",
+      "last_observed_state": "passed",
+      "dependency_state": null,
+      "all_processes_terminal": true
+    },
+    {
+      "name": "memory-train-kv256-v1",
+      "unit": "tide-memory-train-kv256-v1",
+      "source": "301a327569aa75aefddd03cac9ca839589db5672",
+      "run": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-train-kv256-v1",
+      "last_observed_state": "passed",
+      "dependency_state": null,
+      "all_processes_terminal": true
+    },
+    {
+      "name": "memory-train-kv384-b16-v1",
+      "unit": "tide-memory-train-kv384-b16-v1",
+      "source": "301a327569aa75aefddd03cac9ca839589db5672",
+      "run": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-train-kv384-b16-v1",
+      "last_observed_state": "passed",
+      "dependency_state": null,
+      "all_processes_terminal": true
+    },
+    {
+      "name": "memory-train-kv384-v1",
+      "unit": "tide-memory-train-kv384-v1",
+      "source": "301a327569aa75aefddd03cac9ca839589db5672",
+      "run": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-train-kv384-v1",
+      "last_observed_state": "passed",
+      "dependency_state": null,
+      "all_processes_terminal": true
+    },
+    {
+      "name": "memory-train-memory-shared-b16-v1",
+      "unit": "tide-memory-train-memory-shared-b16-v1",
+      "source": "301a327569aa75aefddd03cac9ca839589db5672",
+      "run": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-train-memory-shared-b16-v1",
+      "last_observed_state": "passed",
+      "dependency_state": null,
+      "all_processes_terminal": true
+    },
+    {
+      "name": "memory-train-memory-shared-v1",
+      "unit": "tide-memory-train-memory-shared-v1",
+      "source": "301a327569aa75aefddd03cac9ca839589db5672",
+      "run": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-train-memory-shared-v1",
+      "last_observed_state": "passed",
+      "dependency_state": null,
+      "all_processes_terminal": true
+    },
+    {
+      "name": "memory-train-reverse-b16-v1",
+      "unit": "tide-memory-train-reverse-b16-v1",
+      "source": "301a327569aa75aefddd03cac9ca839589db5672",
+      "run": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-train-reverse-b16-v1",
+      "last_observed_state": "passed",
+      "dependency_state": null,
+      "all_processes_terminal": true
+    },
+    {
+      "name": "memory-train-reverse-v1",
+      "unit": "tide-memory-train-reverse-v1",
+      "source": "301a327569aa75aefddd03cac9ca839589db5672",
+      "run": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-train-reverse-v1",
+      "last_observed_state": "passed",
+      "dependency_state": null,
+      "all_processes_terminal": true
+    },
+    {
+      "name": "memory-train-x-b16-v1",
+      "unit": "tide-memory-train-x-b16-v1",
+      "source": "301a327569aa75aefddd03cac9ca839589db5672",
+      "run": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-train-x-b16-v1",
+      "last_observed_state": "passed",
+      "dependency_state": null,
+      "all_processes_terminal": true
+    },
+    {
+      "name": "memory-train-x-v1",
+      "unit": "tide-memory-train-x-v1",
+      "source": "301a327569aa75aefddd03cac9ca839589db5672",
+      "run": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-train-x-v1",
+      "last_observed_state": "passed",
+      "dependency_state": null,
+      "all_processes_terminal": true
+    },
+    {
+      "name": "memory-width768-fp32-v1",
+      "unit": "tide-memory-width768-fp32-v1",
+      "source": "87fb94b369d40a55b5fa62f67a6565a721645bb9",
+      "run": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-width768-fp32-v1",
+      "last_observed_state": "passed",
+      "dependency_state": null,
+      "all_processes_terminal": true
+    }
+  ],
+  "implementation_source": "64db31414df561e0c3468c3c62542e6612475bf6",
+  "train_batch": 8,
+  "train_batch_reason": "152.6M parameter medium graph; measured X/S calibration first, finite estimated headroom, downshift if budget refuses",
+  "budget_accounting": "96 finite measurement/training workload processes plus at most40 qualification resume processes; includes seven measured-headroom B16 training points and one actual-d768 primitive witness; no new mathematical candidates",
+  "training_batch_points": [
+    8,
+    16
+  ],
+  "suite_source": "301a327569aa75aefddd03cac9ca839589db5672",
+  "updated": "2026-11-19T03:10:33.466179+00:00",
+  "remaining_finite_points": [],
+  "decode_cost_harness": "1f6b0861b54e36423b3027d73f2e29cdf50e4cc5",
+  "completed_supplementary_scope": {
+    "near_total": "kv128 FFN3840 and memory_shared FFN4016, formal B1/B8 only",
+    "sharing_execution": "memory_shared region_batch_size1 at B8 against size4",
+    "sustained": "two representative candidates, prompt128/chunk32/decode128, bounded selection from new evidence",
+    "costs": "medium X/S/kv128/memory_shared B8 L128 FP32, normal3 plus separate stages/runtime/work/saved; traces X/shared",
+    "decode_costs": "Two actual9B X/kv128 FP32 B8 prefill128/chunk32 then decode16; stages/runtime separate intrusive replays; no normal timing claim; each900s and48/56GiB, no search."
+  },
+  "completion": {
+    "experiment_services": 45,
+    "service_states": {
+      "passed": 44,
+      "failed": 1
+    },
+    "recorded_descendant_identities": 439,
+    "final_cpu_audit_terminal": true,
+    "raw_observation_file_fingerprints": 689,
+    "workload_processes": 75,
+    "workload_limit": 96,
+    "qualification_restore_processes": "separate bound; retains CPU/NPU records and original outcomes",
+    "artifact_allocated_gib": 50.75332260131836,
+    "artifact_limit_gib": 80,
+    "first_experiment_service_started": "2026-11-19T02:12:34.101637+00:00",
+    "last_experiment_service_finished": "2026-11-19T03:03:44.375539+00:00",
+    "service_execution_span_hours": 0.8528538616666667,
+    "delivery": "source and harness commits pushed; final evidence commit follows; no new measurement pending"
+  }
+}

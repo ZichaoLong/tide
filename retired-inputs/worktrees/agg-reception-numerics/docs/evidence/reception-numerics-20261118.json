@@ -1,0 +1,2817 @@
+{
+  "schema": "tide-reception-numerics-20261118-v1",
+  "math": "4f5b9f20a4030d68ee66ae2d26e34659a5e37234",
+  "scope": "FP32 NPU compact-9 Settle incoming_light_64/128/wide, fixed nonempty optimizer/private-state anchor, three continued updates and candidate-local fresh-process restored update",
+  "method": "read-only reduction of the original JSON; full field lists and coordinate witnesses remain in the hashed originals",
+  "field_count_definition": "tensor-field occurrences, not scalar errors or independent bugs; segment and continued-state fields can repeat related quantities",
+  "largest_scaled_row_definition": "one tensor ranked by max(abs(actual-reference)/(atol+rtol*abs(reference))); its max_abs is not asserted to be the global maximum absolute error",
+  "tolerance": {
+    "atol": 1e-06,
+    "rtol": 0.002
+  },
+  "restore_tolerance": {
+    "atol": 1e-06,
+    "rtol": 0.002
+  },
+  "execution_state_is_not_numerical_state": "outer status passed/exit 0 accepts finite_deviation; candidate and comparison states below retain it",
+  "aggregate": {
+    "profile_count": 3,
+    "candidate_count": 9,
+    "candidate_states": {
+      "finite_deviation": 8,
+      "within_threshold": 1
+    },
+    "restored_states": {
+      "within_threshold": 9
+    },
+    "comparison_count": 99,
+    "exact_comparison_count": 39,
+    "threshold_failed_comparison_count": 41,
+    "threshold_failed_field_occurrences": 1459,
+    "structural_flag_occurrences": {
+      "metadata_failures": 0,
+      "dtype_differences": 0,
+      "nonfinite": 0,
+      "support_differences": 0,
+      "work_differences": 0
+    },
+    "none_mismatch_checks": 0,
+    "unequal_discrete_hash_checks": 0,
+    "unequal_support_hash_checks": 0,
+    "all_recorded_mode_work_equal": true,
+    "all_recorded_update_work_equal": true,
+    "internal_witness_states": {
+      "not_collected": 6,
+      "capture_limit": 3
+    }
+  },
+  "runs": [
+    {
+      "profile": "light64",
+      "name": "agg-paths-light64-fp32-v1",
+      "source": "28941994880a277495b315f0fec3213239ef0b49",
+      "source_dirty": true,
+      "package_sha256": "9cd45f321a7d700021d1fb8a0d31a5c55ebde47c8fa248d7866c6a3c3682cf62",
+      "harness_sha256": "b5c999082dd18310df4f4eebe3d0e857d6953d2b05426aeefe35d740a5114b5b",
+      "byte_verification": {
+        "package_python_files": 21,
+        "package_record_and_frozen_files_match_commit": true,
+        "main_harness_matches_commit": true,
+        "config_matches_commit": true,
+        "limitation": "Tide Python files, main checker and selected config; not all auxiliary harness files or external toolchains"
+      },
+      "originals": {
+        "result": {
+          "path": "artifacts/agg-paths-light64-fp32-v1/paths/result.json",
+          "sha256": "dc8da065ec0e2d1ff2a990ee2e75f3ca29809367d3889ee62125091765703b92",
+          "bytes": 2765811
+        },
+        "launch": {
+          "path": "artifacts/agg-paths-light64-fp32-v1/launch.json",
+          "sha256": "88c82eed721cc111f93a2916491b83b2d17fed2a38e886a1ad4b3567d71fdfa9",
+          "bytes": 5109
+        },
+        "status": {
+          "path": "artifacts/agg-paths-light64-fp32-v1/status.json",
+          "sha256": "8f9d65ab69ef882c2366ab72c6f7f3c503ca71165ca49de90fe0fe34995fc0fa",
+          "bytes": 2726
+        },
+        "environment": {
+          "path": "artifacts/agg-paths-light64-fp32-v1/environment.json",
+          "sha256": "5fa3fa32f088c97ea2f76cfad56d2ae68bb02b9e0ab1a13bc8d5ea6eeab3f5b6",
+          "bytes": 2548
+        },
+        "queue": {
+          "path": "artifacts/agg-paths-light64-fp32-v1/queue.json",
+          "sha256": "b9fb9ed44ecafd43a8a9aefc689846b686be25184d84dbdbc92058ede0826b04",
+          "bytes": 390
+        }
+      },
+      "config": {
+        "path": "artifacts/agg-paths-light64-fp32-v1/source/configs/agg-inference/settle-incoming_light_64.json",
+        "sha256": "fa9b5377d80d5d5e9aa3f251cec593155f0b479b9da4416538692a274fc8c8cb",
+        "bytes": 342
+      },
+      "command": [
+        "--",
+        "python",
+        "-m",
+        "scripts.check_training_paths",
+        "--config",
+        "configs/agg-inference/settle-incoming_light_64.json",
+        "--device",
+        "npu:0",
+        "--precision",
+        "fp32",
+        "--candidates",
+        "baseline",
+        "qkv_mask",
+        "optimized",
+        "--candidate-overrides",
+        "{\"qkv_mask\":{\"reception_qkv_backend\":\"fused\",\"reception_mask_padding\":true},\"optimized\":{\"region_batch_size\":4,\"reception_qkv_backend\":\"fused\",\"reception_mask_padding\":true,\"ssd_scan_backend\":\"doubling\"}}",
+        "--batch",
+        "1",
+        "--length",
+        "4",
+        "--chunk",
+        "2",
+        "--steps",
+        "3",
+        "--threads",
+        "4",
+        "--max-parameters",
+        "80000000",
+        "--restore-mode",
+        "new_process",
+        "--witness-elements",
+        "262144",
+        "--output-dir",
+        "{run}/paths"
+      ],
+      "lifecycle": {
+        "state": "passed",
+        "exit_code": 0,
+        "started": "2026-11-18T12:31:23.064323+00:00",
+        "finished": "2026-11-18T12:34:27.344235+00:00",
+        "elapsed_seconds": 184.27991219237447,
+        "sampled_peak_rss_bytes": 10415181824
+      },
+      "resources": {
+        "physical_ids": [
+          1
+        ],
+        "logical_device": "npu:0",
+        "threads": 4,
+        "cpu_affinity": [
+          112,
+          113,
+          114,
+          115
+        ],
+        "identity": "exclusive_cooperative_queue; external jobs not controlled",
+        "admission": "exclusive cooperative queue; external uncoordinated users not controlled; shared host"
+      },
+      "precision_policy": {
+        "name": "fp32",
+        "device": "npu:0",
+        "parameters": "float32",
+        "input": "float32",
+        "matrix_arithmetic": "float32",
+        "normalization_mass_allocation": "float32",
+        "kv_keys_values": "float32",
+        "kv_summary_and_ssd_state": "float32",
+        "logical_time_indices": "int64",
+        "parameter_gradients": "float32",
+        "master_weights": "parameters_are_fp32_masters; no_separate_copy",
+        "adamw_moments": "float32",
+        "attention": "native_by_shape_and_prior; math/tiled_accumulate_float32",
+        "attention_mode_selection": "established_fp32_gradient_dependent_prior_dispatch",
+        "loss": "float32",
+        "autocast_cache": false
+      },
+      "torch": "2.12.0+cpu",
+      "state": "finite_deviation",
+      "baseline_config": {
+        "topology": {
+          "kind": "multiscale",
+          "n": 8,
+          "layers": null,
+          "depth": null,
+          "rounds": null,
+          "profile": "compact-9",
+          "hubs": 4,
+          "partition": "group",
+          "timing": "settle",
+          "hub_mask": "all",
+          "period": null,
+          "probes": null,
+          "terminal_hubs": false
+        },
+        "d": 128,
+        "memory": "X",
+        "aggregation": "incoming_light_64",
+        "allocation": "quad",
+        "sharing": "region_shared",
+        "adapter_rank": 8,
+        "budget": null,
+        "attention_backend": "auto",
+        "attention_chunk": 128,
+        "input_dim": null,
+        "checkpoint_regions": false,
+        "checkpoint_reception": true,
+        "reception_qkv_backend": "separate",
+        "reception_mask_padding": false,
+        "ssd_summary_backend": "prefix",
+        "ssd_scan_backend": "block",
+        "region_batch_size": 1,
+        "local_attention_backend": null,
+        "hub_allocation": "bounded",
+        "clock": {
+          "position_period": null,
+          "position_origin": "binding",
+          "kv_window": null,
+          "short_decay": null,
+          "ssd_stride": null
+        }
+      },
+      "resolved_candidates": {
+        "baseline": {
+          "region_batch_size": 1,
+          "checkpoint_regions": false
+        },
+        "qkv_mask": {
+          "region_batch_size": 1,
+          "checkpoint_regions": false,
+          "reception_qkv_backend": "fused",
+          "reception_mask_padding": true
+        },
+        "optimized": {
+          "region_batch_size": 4,
+          "checkpoint_regions": false,
+          "reception_qkv_backend": "fused",
+          "reception_mask_padding": true,
+          "ssd_scan_backend": "doubling"
+        }
+      },
+      "workload": {
+        "batch": 1,
+        "length": 4,
+        "chunk": 2,
+        "steps_after_anchor": 3,
+        "input_hashes": [
+          "4ccbc0180803a89f869a9c7f0ecf76319d7a0f71cf7f080257ca86c982552e8d",
+          "5af2ea97ee6a956be649330b7b0fcc552a9f9c7f8c42110a79886ae13c96b9c6",
+          "b0633424fea8ec438f57ace347fce831a38a65c641eecfe383e57c344cacdfc4",
+          "57ae3b809a7be0fb661cbf3ff21bc15c5541d467cdb4aecfba489cd3655c1c97",
+          "6c2b694aad3d2445f8827414b64cc571f16bf16f08cbecc9827b13d2f30421c4"
+        ],
+        "anchor_optimizer": {
+          "parameter_states": 364,
+          "steps": [
+            1
+          ]
+        },
+        "fixed_start_sha256": "ed3ec47c903a8f661332dfbd82e990af30072c247eee593e12789dfe3ab75afc",
+        "boundary": "one real baseline anchor update; same fixed nonempty state/AdamW for each path; no detach between chunks, detach after each complete update/flush"
+      },
+      "candidates": [
+        {
+          "name": "baseline",
+          "state": "finite_deviation",
+          "checks": {
+            "fixed_start": {
+              "exact": true,
+              "threshold_failed_fields": 0
+            },
+            "same_owner_vjp_repeat": {
+              "exact": false,
+              "threshold_failed_fields": 0,
+              "max_scaled_error": 0.0016432227112173404,
+              "failure_families": {},
+              "first_returned_fields": {
+                "numeric": "root.gradients.receive.embedding.weight"
+              },
+              "largest_scaled_row": {
+                "tensor": "root.gradients.receive.sa_embedding.weight",
+                "max_abs": 7.450580596923828e-09,
+                "scaled_error": 0.0016432227112173404,
+                "relative_l2": 9.108339012088368e-08
+              },
+              "threshold_failure_fields": []
+            },
+            "inference_vs_grad_forward": {
+              "exact": false,
+              "threshold_failed_fields": 4,
+              "max_scaled_error": 1.6482216723116583,
+              "failure_families": {
+                "forward_state": 4
+              },
+              "first_returned_fields": {
+                "numeric": "root.segments.0.state.memories.10.K.features"
+              },
+              "largest_scaled_row": {
+                "tensor": "root.segments.0.state.memories.26.K.keys",
+                "max_abs": 4.947185516357422e-06,
+                "scaled_error": 1.6482216723116583,
+                "relative_l2": 4.6811630104469323e-07
+              },
+              "threshold_failure_fields": [
+                "root.segments.0.state.memories.10.K.values",
+                "root.segments.0.state.memories.26.K.keys",
+                "root.segments.1.state.memories.10.K.values",
+                "root.segments.1.state.memories.26.K.keys"
+              ]
+            },
+            "start_unchanged_after_vjp": {
+              "exact": true,
+              "threshold_failed_fields": 0
+            }
+          },
+          "updates": [
+            {
+              "index": 1,
+              "comparison": null
+            },
+            {
+              "index": 2,
+              "comparison": null
+            },
+            {
+              "index": 3,
+              "comparison": null
+            }
+          ],
+          "actual_none_parameter_counts": {
+            "vjp1": 0,
+            "vjp2": 0
+          },
+          "baseline_work_equal_by_mode": {
+            "inference": true,
+            "vjp1": true,
+            "vjp2": true
+          },
+          "baseline_work_equal_by_update": [
+            true,
+            true,
+            true
+          ],
+          "first_internal_witness": {
+            "state": "not_collected",
+            "reason": "the finite checker attempts only its first cross-candidate internal witness; no causal inference from absence"
+          },
+          "restore": {
+            "state": "within_threshold",
+            "actual_update": true,
+            "new_process": true,
+            "config_exact": true,
+            "source_exact": true,
+            "exit_code": 0,
+            "checkpoint_sha256": "6bc285d90b1b8ae649478f606aa64a70025688d57ed41585a3a18e7e12a2e7d4",
+            "bundle_sha256": "3a80632be4c848e1f99fff225b7243864debc65786e86fac0e21420fcc3a30d6",
+            "optimizer_update": {
+              "checked": true,
+              "active_parameter_count": 364,
+              "before_steps": [
+                4
+              ],
+              "after_steps": [
+                5
+              ]
+            },
+            "original_update_work_equal": true,
+            "checks": {
+              "saved_data": {
+                "exact": true,
+                "threshold_failed_fields": 0
+              },
+              "next_forward": {
+                "exact": true,
+                "threshold_failed_fields": 0
+              },
+              "actual_update": {
+                "exact": false,
+                "threshold_failed_fields": 0,
+                "max_scaled_error": 0.0019247921794184714,
+                "failure_families": {},
+                "first_returned_fields": {
+                  "numeric": "root.gradients.receive.embedding.weight"
+                },
+                "largest_scaled_row": {
+                  "tensor": "root.gradients.receive.embedding.weight",
+                  "max_abs": 2.7939677238464355e-09,
+                  "scaled_error": 0.0019247921794184714,
+                  "relative_l2": 5.3868439416347254e-08
+                },
+                "threshold_failure_fields": []
+              }
+            }
+          }
+        },
+        {
+          "name": "qkv_mask",
+          "state": "finite_deviation",
+          "checks": {
+            "fixed_start": {
+              "exact": true,
+              "threshold_failed_fields": 0
+            },
+            "inference_vs_baseline": {
+              "exact": true,
+              "threshold_failed_fields": 0
+            },
+            "vjp1_vs_baseline": {
+              "exact": false,
+              "threshold_failed_fields": 3,
+              "max_scaled_error": 2.5974052364148417,
+              "failure_families": {
+                "forward_state": 3
+              },
+              "first_returned_fields": {
+                "numeric": "root.forward.segments.0.state.memories.10.K.features"
+              },
+              "largest_scaled_row": {
+                "tensor": "root.forward.segments.1.state.memories.16.K.keys",
+                "max_abs": 3.395136445760727e-06,
+                "scaled_error": 2.5974052364148417,
+                "relative_l2": 4.1534615150450107e-07
+              },
+              "threshold_failure_fields": [
+                "root.forward.segments.0.state.memories.26.K.keys",
+                "root.forward.segments.1.state.memories.16.K.keys",
+                "root.forward.segments.1.state.memories.26.K.keys"
+              ]
+            },
+            "vjp2_vs_baseline": {
+              "exact": false,
+              "threshold_failed_fields": 3,
+              "max_scaled_error": 2.5974052364148417,
+              "failure_families": {
+                "forward_state": 3
+              },
+              "first_returned_fields": {
+                "numeric": "root.forward.segments.0.state.memories.10.K.features"
+              },
+              "largest_scaled_row": {
+                "tensor": "root.forward.segments.1.state.memories.16.K.keys",
+                "max_abs": 3.395136445760727e-06,
+                "scaled_error": 2.5974052364148417,
+                "relative_l2": 4.1534615150450107e-07
+              },
+              "threshold_failure_fields": [
+                "root.forward.segments.0.state.memories.26.K.keys",
+                "root.forward.segments.1.state.memories.16.K.keys",
+                "root.forward.segments.1.state.memories.26.K.keys"
+              ]
+            },
+            "same_owner_vjp_repeat": {
+              "exact": false,
+              "threshold_failed_fields": 0,
+              "max_scaled_error": 0.0017196955581222177,
+              "failure_families": {},
+              "first_returned_fields": {
+                "numeric": "root.gradients.receive.embedding.weight"
+              },
+              "largest_scaled_row": {
+                "tensor": "root.gradients.receive.sa_embedding.weight",
+                "max_abs": 5.587935447692871e-09,
+                "scaled_error": 0.0017196955581222177,
+                "relative_l2": 6.321857795713024e-08
+              },
+              "threshold_failure_fields": []
+            },
+            "inference_vs_grad_forward": {
+              "exact": false,
+              "threshold_failed_fields": 3,
+              "max_scaled_error": 3.1055805437505204,
+              "failure_families": {
+                "forward_state": 3
+              },
+              "first_returned_fields": {
+                "numeric": "root.segments.0.state.memories.10.K.features"
+              },
+              "largest_scaled_row": {
+                "tensor": "root.segments.1.state.memories.16.K.keys",
+                "max_abs": 6.42240047454834e-06,
+                "scaled_error": 3.1055805437505204,
+                "relative_l2": 4.894894234874598e-07
+              },
+              "threshold_failure_fields": [
+                "root.segments.0.state.memories.10.K.values",
+                "root.segments.1.state.memories.10.K.values",
+                "root.segments.1.state.memories.16.K.keys"
+              ]
+            },
+            "start_unchanged_after_vjp": {
+              "exact": true,
+              "threshold_failed_fields": 0
+            }
+          },
+          "updates": [
+            {
+              "index": 1,
+              "comparison": {
+                "exact": false,
+                "threshold_failed_fields": 18,
+                "max_scaled_error": 35.21610729394891,
+                "failure_families": {
+                  "forward_state": 3,
+                  "updated_parameter": 13,
+                  "continued_state": 2
+                },
+                "first_returned_fields": {
+                  "numeric": "root.forward.segments.0.state.memories.10.K.features"
+                },
+                "largest_scaled_row": {
+                  "tensor": "root.parameters.receive.q.left",
+                  "max_abs": 5.308561958372593e-05,
+                  "scaled_error": 35.21610729394891,
+                  "relative_l2": 0.00027411330272729563
+                },
+                "threshold_field_list_sha256": "29cc8ae984cc440bd47358dd7077b1ee7cf898aab7d9c18413c4a7a0fd33ac46"
+              }
+            },
+            {
+              "index": 2,
+              "comparison": {
+                "exact": false,
+                "threshold_failed_fields": 49,
+                "max_scaled_error": 57.981931188088474,
+                "failure_families": {
+                  "forward_state": 17,
+                  "updated_parameter": 19,
+                  "continued_state": 13
+                },
+                "first_returned_fields": {
+                  "numeric": "root.forward.segments.0.state.memories.0.K.features"
+                },
+                "largest_scaled_row": {
+                  "tensor": "root.parameters.receive.q.left",
+                  "max_abs": 8.937809616327286e-05,
+                  "scaled_error": 57.981931188088474,
+                  "relative_l2": 0.0004639882922789089
+                },
+                "threshold_field_list_sha256": "1e191f61407e23562aa47c4019342dae5c0da61a9d5a833c81aa01b362d2d372"
+              }
+            },
+            {
+              "index": 3,
+              "comparison": {
+                "exact": false,
+                "threshold_failed_fields": 209,
+                "max_scaled_error": 76.42294683507437,
+                "failure_families": {
+                  "forward_state": 89,
+                  "forward_output": 2,
+                  "parameter_gradient": 26,
+                  "input_gradient": 1,
+                  "updated_parameter": 21,
+                  "continued_state": 70
+                },
+                "first_returned_fields": {
+                  "numeric": "root.forward.segments.0.state.memories.0.K.features"
+                },
+                "largest_scaled_row": {
+                  "tensor": "root.parameters.receive.q.left",
+                  "max_abs": 0.00011631776578724384,
+                  "scaled_error": 76.42294683507437,
+                  "relative_l2": 0.0006260054743271183
+                },
+                "threshold_field_list_sha256": "d998d9ba6323a8c312a5fcb4caa9cefc3dab9608cb00c57f22a94b8f2b222139"
+              }
+            }
+          ],
+          "actual_none_parameter_counts": {
+            "vjp1": 0,
+            "vjp2": 0
+          },
+          "baseline_work_equal_by_mode": {
+            "inference": true,
+            "vjp1": true,
+            "vjp2": true
+          },
+          "baseline_work_equal_by_update": [
+            true,
+            true,
+            true
+          ],
+          "first_internal_witness": {
+            "state": "capture_limit",
+            "reason": "262,144 captured elements per path",
+            "attribution": "not established; returned-field first differences remain recorded"
+          },
+          "restore": {
+            "state": "within_threshold",
+            "actual_update": true,
+            "new_process": true,
+            "config_exact": true,
+            "source_exact": true,
+            "exit_code": 0,
+            "checkpoint_sha256": "babea00f14f9b45f1f860d21569f310a6679fff3fd20197d01b2da6a79d7ccc5",
+            "bundle_sha256": "f402306476942b611aeecd614fb039b9004ab3e9421a634cd78cde4493d3eb2f",
+            "optimizer_update": {
+              "checked": true,
+              "active_parameter_count": 364,
+              "before_steps": [
+                4
+              ],
+              "after_steps": [
+                5
+              ]
+            },
+            "original_update_work_equal": true,
+            "checks": {
+              "saved_data": {
+                "exact": true,
+                "threshold_failed_fields": 0
+              },
+              "next_forward": {
+                "exact": true,
+                "threshold_failed_fields": 0
+              },
+              "actual_update": {
+                "exact": false,
+                "threshold_failed_fields": 0,
+                "max_scaled_error": 0.001039731834893772,
+                "failure_families": {},
+                "first_returned_fields": {
+                  "numeric": "root.gradients.receive.embedding.weight"
+                },
+                "largest_scaled_row": {
+                  "tensor": "root.gradients.receive.sa_embedding.weight",
+                  "max_abs": 3.725290298461914e-09,
+                  "scaled_error": 0.001039731834893772,
+                  "relative_l2": 5.0611927952163557e-08
+                },
+                "threshold_failure_fields": []
+              }
+            }
+          }
+        },
+        {
+          "name": "optimized",
+          "state": "finite_deviation",
+          "checks": {
+            "fixed_start": {
+              "exact": true,
+              "threshold_failed_fields": 0
+            },
+            "inference_vs_baseline": {
+              "exact": false,
+              "threshold_failed_fields": 1,
+              "max_scaled_error": 1.4617940138674246,
+              "failure_families": {
+                "forward_state": 1
+              },
+              "first_returned_fields": {
+                "numeric": "root.forward.segments.0.state.memories.10.K.features"
+              },
+              "largest_scaled_row": {
+                "tensor": "root.forward.segments.1.state.memories.16.K.keys",
+                "max_abs": 1.9371509552001953e-06,
+                "scaled_error": 1.4617940138674246,
+                "relative_l2": 3.1710746679845474e-07
+              },
+              "threshold_failure_fields": [
+                "root.forward.segments.1.state.memories.16.K.keys"
+              ]
+            },
+            "vjp1_vs_baseline": {
+              "exact": false,
+              "threshold_failed_fields": 4,
+              "max_scaled_error": 1.7158444339547918,
+              "failure_families": {
+                "forward_state": 4
+              },
+              "first_returned_fields": {
+                "numeric": "root.forward.segments.0.state.memories.10.K.features"
+              },
+              "largest_scaled_row": {
+                "tensor": "root.forward.segments.0.state.memories.26.K.keys",
+                "max_abs": 8.58306884765625e-06,
+                "scaled_error": 1.7158444339547918,
+                "relative_l2": 6.273759165340316e-07
+              },
+              "threshold_failure_fields": [
+                "root.forward.segments.0.state.memories.26.K.keys",
+                "root.forward.segments.0.state.memories.30.K.values",
+                "root.forward.segments.1.state.memories.26.K.keys",
+                "root.forward.segments.1.state.memories.30.K.values"
+              ]
+            },
+            "vjp2_vs_baseline": {
+              "exact": false,
+              "threshold_failed_fields": 4,
+              "max_scaled_error": 1.7158444339547918,
+              "failure_families": {
+                "forward_state": 4
+              },
+              "first_returned_fields": {
+                "numeric": "root.forward.segments.0.state.memories.10.K.features"
+              },
+              "largest_scaled_row": {
+                "tensor": "root.forward.segments.0.state.memories.26.K.keys",
+                "max_abs": 8.58306884765625e-06,
+                "scaled_error": 1.7158444339547918,
+                "relative_l2": 6.273759165340316e-07
+              },
+              "threshold_failure_fields": [
+                "root.forward.segments.0.state.memories.26.K.keys",
+                "root.forward.segments.0.state.memories.30.K.values",
+                "root.forward.segments.1.state.memories.26.K.keys",
+                "root.forward.segments.1.state.memories.30.K.values"
+              ]
+            },
+            "same_owner_vjp_repeat": {
+              "exact": false,
+              "threshold_failed_fields": 0,
+              "max_scaled_error": 0.003971930134600514,
+              "failure_families": {},
+              "first_returned_fields": {
+                "numeric": "root.gradients.describe.encode.bias"
+              },
+              "largest_scaled_row": {
+                "tensor": "root.gradients.describe.encode.weight",
+                "max_abs": 8.381903171539307e-09,
+                "scaled_error": 0.003971930134600514,
+                "relative_l2": 3.6589003786952644e-08
+              },
+              "threshold_failure_fields": []
+            },
+            "inference_vs_grad_forward": {
+              "exact": false,
+              "threshold_failed_fields": 2,
+              "max_scaled_error": 2.4133717380445443,
+              "failure_families": {
+                "forward_state": 2
+              },
+              "first_returned_fields": {
+                "numeric": "root.segments.0.state.memories.10.K.features"
+              },
+              "largest_scaled_row": {
+                "tensor": "root.segments.1.state.memories.16.K.keys",
+                "max_abs": 4.895031452178955e-06,
+                "scaled_error": 2.4133717380445443,
+                "relative_l2": 4.266093357258856e-07
+              },
+              "threshold_failure_fields": [
+                "root.segments.1.state.memories.10.K.keys",
+                "root.segments.1.state.memories.16.K.keys"
+              ]
+            },
+            "start_unchanged_after_vjp": {
+              "exact": true,
+              "threshold_failed_fields": 0
+            }
+          },
+          "updates": [
+            {
+              "index": 1,
+              "comparison": {
+                "exact": false,
+                "threshold_failed_fields": 22,
+                "max_scaled_error": 61.34388376152976,
+                "failure_families": {
+                  "forward_state": 4,
+                  "updated_parameter": 16,
+                  "continued_state": 2
+                },
+                "first_returned_fields": {
+                  "numeric": "root.forward.segments.0.state.memories.10.K.features"
+                },
+                "largest_scaled_row": {
+                  "tensor": "root.parameters.receive.k.left",
+                  "max_abs": 0.00010830862447619438,
+                  "scaled_error": 61.34388376152976,
+                  "relative_l2": 0.00033065413729147875
+                },
+                "threshold_field_list_sha256": "0df142cf5e9d55edad6be8d3bd621a89abdf5c815adcf163e078a9b2d5e05713"
+              }
+            },
+            {
+              "index": 2,
+              "comparison": {
+                "exact": false,
+                "threshold_failed_fields": 53,
+                "max_scaled_error": 99.37347063643304,
+                "failure_families": {
+                  "forward_state": 19,
+                  "updated_parameter": 21,
+                  "continued_state": 13
+                },
+                "first_returned_fields": {
+                  "numeric": "root.forward.segments.0.state.memories.0.K.features"
+                },
+                "largest_scaled_row": {
+                  "tensor": "root.parameters.receive.k.left",
+                  "max_abs": 0.00017860159277915955,
+                  "scaled_error": 99.37347063643304,
+                  "relative_l2": 0.0005499322832723604
+                },
+                "threshold_field_list_sha256": "5a7a31d97ab100d6f860c5af7903a69486c9beaac8c1c61852548c3a227fe29d"
+              }
+            },
+            {
+              "index": 3,
+              "comparison": {
+                "exact": false,
+                "threshold_failed_fields": 161,
+                "max_scaled_error": 125.26921780304001,
+                "failure_families": {
+                  "forward_state": 78,
+                  "forward_output": 2,
+                  "parameter_gradient": 3,
+                  "updated_parameter": 22,
+                  "continued_state": 56
+                },
+                "first_returned_fields": {
+                  "numeric": "root.forward.segments.0.state.memories.0.K.features"
+                },
+                "largest_scaled_row": {
+                  "tensor": "root.parameters.receive.k.left",
+                  "max_abs": 0.00022960826754570007,
+                  "scaled_error": 125.26921780304001,
+                  "relative_l2": 0.000737482009335137
+                },
+                "threshold_field_list_sha256": "41245c9bb54f4d20a2ac0443770539c90532072388e7fece039735639537868a"
+              }
+            }
+          ],
+          "actual_none_parameter_counts": {
+            "vjp1": 0,
+            "vjp2": 0
+          },
+          "baseline_work_equal_by_mode": {
+            "inference": true,
+            "vjp1": true,
+            "vjp2": true
+          },
+          "baseline_work_equal_by_update": [
+            true,
+            true,
+            true
+          ],
+          "first_internal_witness": {
+            "state": "not_collected",
+            "reason": "the finite checker attempts only its first cross-candidate internal witness; no causal inference from absence"
+          },
+          "restore": {
+            "state": "within_threshold",
+            "actual_update": true,
+            "new_process": true,
+            "config_exact": true,
+            "source_exact": true,
+            "exit_code": 0,
+            "checkpoint_sha256": "32f54afa670fc96f34ba0e9ecf26b967579fe34f3aab67f2bcae27db59a62ead",
+            "bundle_sha256": "cb6f8441b057ef13740ea5ebe0ffb5049beb46739ab254a4351b9ec2a4a87f12",
+            "optimizer_update": {
+              "checked": true,
+              "active_parameter_count": 364,
+              "before_steps": [
+                4
+              ],
+              "after_steps": [
+                5
+              ]
+            },
+            "original_update_work_equal": true,
+            "checks": {
+              "saved_data": {
+                "exact": true,
+                "threshold_failed_fields": 0
+              },
+              "next_forward": {
+                "exact": true,
+                "threshold_failed_fields": 0
+              },
+              "actual_update": {
+                "exact": false,
+                "threshold_failed_fields": 0,
+                "max_scaled_error": 0.003120360756839358,
+                "failure_families": {},
+                "first_returned_fields": {
+                  "numeric": "root.gradients.describe.encode.bias"
+                },
+                "largest_scaled_row": {
+                  "tensor": "root.gradients.describe.encode.weight",
+                  "max_abs": 1.1175870895385742e-08,
+                  "scaled_error": 0.003120360756839358,
+                  "relative_l2": 3.812139263908673e-08
+                },
+                "threshold_failure_fields": []
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "profile": "light128",
+      "name": "agg-paths-light128-fp32-v1",
+      "source": "28941994880a277495b315f0fec3213239ef0b49",
+      "source_dirty": true,
+      "package_sha256": "9cd45f321a7d700021d1fb8a0d31a5c55ebde47c8fa248d7866c6a3c3682cf62",
+      "harness_sha256": "b5c999082dd18310df4f4eebe3d0e857d6953d2b05426aeefe35d740a5114b5b",
+      "byte_verification": {
+        "package_python_files": 21,
+        "package_record_and_frozen_files_match_commit": true,
+        "main_harness_matches_commit": true,
+        "config_matches_commit": true,
+        "limitation": "Tide Python files, main checker and selected config; not all auxiliary harness files or external toolchains"
+      },
+      "originals": {
+        "result": {
+          "path": "artifacts/agg-paths-light128-fp32-v1/paths/result.json",
+          "sha256": "68b7e08e3fdb902d35a97ea17e274fc6dcf5a43efee79a0376482fbdffa44e8f",
+          "bytes": 2770318
+        },
+        "launch": {
+          "path": "artifacts/agg-paths-light128-fp32-v1/launch.json",
+          "sha256": "379e3f44036e2c7c3ff387b54f06c3a2237f4b306a4d82fdbfa36c210293afb1",
+          "bytes": 5127
+        },
+        "status": {
+          "path": "artifacts/agg-paths-light128-fp32-v1/status.json",
+          "sha256": "624b6f27247bc8e0c82fe07108a9e6211ea31e7f064baa6e7c6c0bcd5fbb1200",
+          "bytes": 2596
+        },
+        "environment": {
+          "path": "artifacts/agg-paths-light128-fp32-v1/environment.json",
+          "sha256": "1eb2dabf4a375fa4fb4423496579f4dc694fb979584d6f885fe5ce1e40c8d243",
+          "bytes": 2551
+        },
+        "queue": {
+          "path": "artifacts/agg-paths-light128-fp32-v1/queue.json",
+          "sha256": "7aab8aa69832f65103aa1019cb34f749799477cc479c2ffece820b00a98178a2",
+          "bytes": 390
+        }
+      },
+      "config": {
+        "path": "artifacts/agg-paths-light128-fp32-v1/source/configs/agg-inference/settle-incoming_light_128.json",
+        "sha256": "9f30ff6bee132d2f56c1b74d0c4d65ab1d1d870f7e66373a9de7ded387dee8c3",
+        "bytes": 343
+      },
+      "command": [
+        "--",
+        "python",
+        "-m",
+        "scripts.check_training_paths",
+        "--config",
+        "configs/agg-inference/settle-incoming_light_128.json",
+        "--device",
+        "npu:0",
+        "--precision",
+        "fp32",
+        "--candidates",
+        "baseline",
+        "qkv_mask",
+        "optimized",
+        "--candidate-overrides",
+        "{\"qkv_mask\":{\"reception_qkv_backend\":\"fused\",\"reception_mask_padding\":true},\"optimized\":{\"region_batch_size\":4,\"reception_qkv_backend\":\"fused\",\"reception_mask_padding\":true,\"ssd_scan_backend\":\"doubling\"}}",
+        "--batch",
+        "1",
+        "--length",
+        "4",
+        "--chunk",
+        "2",
+        "--steps",
+        "3",
+        "--threads",
+        "4",
+        "--max-parameters",
+        "80000000",
+        "--restore-mode",
+        "new_process",
+        "--witness-elements",
+        "262144",
+        "--output-dir",
+        "{run}/paths"
+      ],
+      "lifecycle": {
+        "state": "passed",
+        "exit_code": 0,
+        "started": "2026-11-18T12:31:23.409235+00:00",
+        "finished": "2026-11-18T12:34:51.400708+00:00",
+        "elapsed_seconds": 207.99147300049663,
+        "sampled_peak_rss_bytes": 10877853696
+      },
+      "resources": {
+        "physical_ids": [
+          7
+        ],
+        "logical_device": "npu:0",
+        "threads": 4,
+        "cpu_affinity": [
+          116,
+          117,
+          118,
+          119
+        ],
+        "identity": "exclusive_cooperative_queue; external jobs not controlled",
+        "admission": "exclusive cooperative queue; external uncoordinated users not controlled; shared host"
+      },
+      "precision_policy": {
+        "name": "fp32",
+        "device": "npu:0",
+        "parameters": "float32",
+        "input": "float32",
+        "matrix_arithmetic": "float32",
+        "normalization_mass_allocation": "float32",
+        "kv_keys_values": "float32",
+        "kv_summary_and_ssd_state": "float32",
+        "logical_time_indices": "int64",
+        "parameter_gradients": "float32",
+        "master_weights": "parameters_are_fp32_masters; no_separate_copy",
+        "adamw_moments": "float32",
+        "attention": "native_by_shape_and_prior; math/tiled_accumulate_float32",
+        "attention_mode_selection": "established_fp32_gradient_dependent_prior_dispatch",
+        "loss": "float32",
+        "autocast_cache": false
+      },
+      "torch": "2.12.0+cpu",
+      "state": "finite_deviation",
+      "baseline_config": {
+        "topology": {
+          "kind": "multiscale",
+          "n": 8,
+          "layers": null,
+          "depth": null,
+          "rounds": null,
+          "profile": "compact-9",
+          "hubs": 4,
+          "partition": "group",
+          "timing": "settle",
+          "hub_mask": "all",
+          "period": null,
+          "probes": null,
+          "terminal_hubs": false
+        },
+        "d": 128,
+        "memory": "X",
+        "aggregation": "incoming_light_128",
+        "allocation": "quad",
+        "sharing": "region_shared",
+        "adapter_rank": 8,
+        "budget": null,
+        "attention_backend": "auto",
+        "attention_chunk": 128,
+        "input_dim": null,
+        "checkpoint_regions": false,
+        "checkpoint_reception": true,
+        "reception_qkv_backend": "separate",
+        "reception_mask_padding": false,
+        "ssd_summary_backend": "prefix",
+        "ssd_scan_backend": "block",
+        "region_batch_size": 1,
+        "local_attention_backend": null,
+        "hub_allocation": "bounded",
+        "clock": {
+          "position_period": null,
+          "position_origin": "binding",
+          "kv_window": null,
+          "short_decay": null,
+          "ssd_stride": null
+        }
+      },
+      "resolved_candidates": {
+        "baseline": {
+          "region_batch_size": 1,
+          "checkpoint_regions": false
+        },
+        "qkv_mask": {
+          "region_batch_size": 1,
+          "checkpoint_regions": false,
+          "reception_qkv_backend": "fused",
+          "reception_mask_padding": true
+        },
+        "optimized": {
+          "region_batch_size": 4,
+          "checkpoint_regions": false,
+          "reception_qkv_backend": "fused",
+          "reception_mask_padding": true,
+          "ssd_scan_backend": "doubling"
+        }
+      },
+      "workload": {
+        "batch": 1,
+        "length": 4,
+        "chunk": 2,
+        "steps_after_anchor": 3,
+        "input_hashes": [
+          "4ccbc0180803a89f869a9c7f0ecf76319d7a0f71cf7f080257ca86c982552e8d",
+          "5af2ea97ee6a956be649330b7b0fcc552a9f9c7f8c42110a79886ae13c96b9c6",
+          "b0633424fea8ec438f57ace347fce831a38a65c641eecfe383e57c344cacdfc4",
+          "57ae3b809a7be0fb661cbf3ff21bc15c5541d467cdb4aecfba489cd3655c1c97",
+          "6c2b694aad3d2445f8827414b64cc571f16bf16f08cbecc9827b13d2f30421c4"
+        ],
+        "anchor_optimizer": {
+          "parameter_states": 364,
+          "steps": [
+            1
+          ]
+        },
+        "fixed_start_sha256": "09d580468bd196be040458bd65ef4a187cfe966bb0f5170b8339fb6a0fc24220",
+        "boundary": "one real baseline anchor update; same fixed nonempty state/AdamW for each path; no detach between chunks, detach after each complete update/flush"
+      },
+      "candidates": [
+        {
+          "name": "baseline",
+          "state": "finite_deviation",
+          "checks": {
+            "fixed_start": {
+              "exact": true,
+              "threshold_failed_fields": 0
+            },
+            "same_owner_vjp_repeat": {
+              "exact": false,
+              "threshold_failed_fields": 0,
+              "max_scaled_error": 0.0009282155060026512,
+              "failure_families": {},
+              "first_returned_fields": {
+                "numeric": "root.gradients.receive.embedding.weight"
+              },
+              "largest_scaled_row": {
+                "tensor": "root.gradients.receive.sa_embedding.weight",
+                "max_abs": 3.725290298461914e-09,
+                "scaled_error": 0.0009282155060026512,
+                "relative_l2": 4.304617539778761e-08
+              },
+              "threshold_failure_fields": []
+            },
+            "inference_vs_grad_forward": {
+              "exact": false,
+              "threshold_failed_fields": 4,
+              "max_scaled_error": 1.1357913440799419,
+              "failure_families": {
+                "forward_state": 4
+              },
+              "first_returned_fields": {
+                "numeric": "root.segments.0.state.memories.10.K.features"
+              },
+              "largest_scaled_row": {
+                "tensor": "root.segments.1.state.memories.16.K.keys",
+                "max_abs": 4.887580871582031e-06,
+                "scaled_error": 1.1357913440799419,
+                "relative_l2": 4.96370198527189e-07
+              },
+              "threshold_failure_fields": [
+                "root.segments.0.state.memories.14.K.values",
+                "root.segments.1.state.memories.14.K.values",
+                "root.segments.1.state.memories.16.K.keys",
+                "root.segments.1.state.memories.22.K.keys"
+              ]
+            },
+            "start_unchanged_after_vjp": {
+              "exact": true,
+              "threshold_failed_fields": 0
+            }
+          },
+          "updates": [
+            {
+              "index": 1,
+              "comparison": null
+            },
+            {
+              "index": 2,
+              "comparison": null
+            },
+            {
+              "index": 3,
+              "comparison": null
+            }
+          ],
+          "actual_none_parameter_counts": {
+            "vjp1": 0,
+            "vjp2": 0
+          },
+          "baseline_work_equal_by_mode": {
+            "inference": true,
+            "vjp1": true,
+            "vjp2": true
+          },
+          "baseline_work_equal_by_update": [
+            true,
+            true,
+            true
+          ],
+          "first_internal_witness": {
+            "state": "not_collected",
+            "reason": "the finite checker attempts only its first cross-candidate internal witness; no causal inference from absence"
+          },
+          "restore": {
+            "state": "within_threshold",
+            "actual_update": true,
+            "new_process": true,
+            "config_exact": true,
+            "source_exact": true,
+            "exit_code": 0,
+            "checkpoint_sha256": "f6c353ed0341e45d4f01e689946976764945dff5d7c067f581050816a4cc2cbf",
+            "bundle_sha256": "f36a4c3507aab7c10847be172c9147ec6f31b11d536173426e76bb5faa3cd92d",
+            "optimizer_update": {
+              "checked": true,
+              "active_parameter_count": 364,
+              "before_steps": [
+                4
+              ],
+              "after_steps": [
+                5
+              ]
+            },
+            "original_update_work_equal": true,
+            "checks": {
+              "saved_data": {
+                "exact": true,
+                "threshold_failed_fields": 0
+              },
+              "next_forward": {
+                "exact": true,
+                "threshold_failed_fields": 0
+              },
+              "actual_update": {
+                "exact": false,
+                "threshold_failed_fields": 0,
+                "max_scaled_error": 0.0006586610980429354,
+                "failure_families": {},
+                "first_returned_fields": {
+                  "numeric": "root.gradients.receive.embedding.weight"
+                },
+                "largest_scaled_row": {
+                  "tensor": "root.gradients.receive.sa_embedding.weight",
+                  "max_abs": 7.450580596923828e-09,
+                  "scaled_error": 0.0006586610980429354,
+                  "relative_l2": 6.481849844174125e-08
+                },
+                "threshold_failure_fields": []
+              }
+            }
+          }
+        },
+        {
+          "name": "qkv_mask",
+          "state": "finite_deviation",
+          "checks": {
+            "fixed_start": {
+              "exact": true,
+              "threshold_failed_fields": 0
+            },
+            "inference_vs_baseline": {
+              "exact": true,
+              "threshold_failed_fields": 0
+            },
+            "vjp1_vs_baseline": {
+              "exact": false,
+              "threshold_failed_fields": 4,
+              "max_scaled_error": 1.6890316439382362,
+              "failure_families": {
+                "forward_state": 4
+              },
+              "first_returned_fields": {
+                "numeric": "root.forward.segments.0.state.memories.10.K.features"
+              },
+              "largest_scaled_row": {
+                "tensor": "root.forward.segments.1.state.memories.16.K.keys",
+                "max_abs": 3.516674041748047e-06,
+                "scaled_error": 1.6890316439382362,
+                "relative_l2": 4.915375653381879e-07
+              },
+              "threshold_failure_fields": [
+                "root.forward.segments.0.state.memories.14.K.values",
+                "root.forward.segments.1.state.memories.14.K.values",
+                "root.forward.segments.1.state.memories.16.K.keys",
+                "root.forward.segments.1.state.memories.24.K.values"
+              ]
+            },
+            "vjp2_vs_baseline": {
+              "exact": false,
+              "threshold_failed_fields": 4,
+              "max_scaled_error": 1.6890316439382362,
+              "failure_families": {
+                "forward_state": 4
+              },
+              "first_returned_fields": {
+                "numeric": "root.forward.segments.0.state.memories.10.K.features"
+              },
+              "largest_scaled_row": {
+                "tensor": "root.forward.segments.1.state.memories.16.K.keys",
+                "max_abs": 3.516674041748047e-06,
+                "scaled_error": 1.6890316439382362,
+                "relative_l2": 4.915375653381879e-07
+              },
+              "threshold_failure_fields": [
+                "root.forward.segments.0.state.memories.14.K.values",
+                "root.forward.segments.1.state.memories.14.K.values",
+                "root.forward.segments.1.state.memories.16.K.keys",
+                "root.forward.segments.1.state.memories.24.K.values"
+              ]
+            },
+            "same_owner_vjp_repeat": {
+              "exact": false,
+              "threshold_failed_fields": 0,
+              "max_scaled_error": 0.0005593671429333318,
+              "failure_families": {},
+              "first_returned_fields": {
+                "numeric": "root.gradients.receive.embedding.weight"
+              },
+              "largest_scaled_row": {
+                "tensor": "root.gradients.receive.sa_embedding.weight",
+                "max_abs": 3.725290298461914e-09,
+                "scaled_error": 0.0005593671429333318,
+                "relative_l2": 4.6515397008799e-08
+              },
+              "threshold_failure_fields": []
+            },
+            "inference_vs_grad_forward": {
+              "exact": false,
+              "threshold_failed_fields": 4,
+              "max_scaled_error": 1.17178680488091,
+              "failure_families": {
+                "forward_state": 4
+              },
+              "first_returned_fields": {
+                "numeric": "root.segments.0.state.memories.10.K.features"
+              },
+              "largest_scaled_row": {
+                "tensor": "root.segments.1.state.memories.8.K.features",
+                "max_abs": 5.364418029785156e-06,
+                "scaled_error": 1.17178680488091,
+                "relative_l2": 4.512362693711533e-07
+              },
+              "threshold_failure_fields": [
+                "root.segments.0.state.memories.26.K.keys",
+                "root.segments.1.state.memories.12.K.values",
+                "root.segments.1.state.memories.26.K.keys",
+                "root.segments.1.state.memories.8.K.features"
+              ]
+            },
+            "start_unchanged_after_vjp": {
+              "exact": true,
+              "threshold_failed_fields": 0
+            }
+          },
+          "updates": [
+            {
+              "index": 1,
+              "comparison": {
+                "exact": false,
+                "threshold_failed_fields": 18,
+                "max_scaled_error": 24.197516127277833,
+                "failure_families": {
+                  "forward_state": 4,
+                  "updated_parameter": 11,
+                  "continued_state": 3
+                },
+                "first_returned_fields": {
+                  "numeric": "root.forward.segments.0.state.memories.10.K.features"
+                },
+                "largest_scaled_row": {
+                  "tensor": "root.parameters.receive.k.weight",
+                  "max_abs": 5.846656858921051e-05,
+                  "scaled_error": 24.197516127277833,
+                  "relative_l2": 2.700200168503347e-05
+                },
+                "threshold_field_list_sha256": "95d2f384e95c1d713d9d2a6575f7ffdafe7d5519281116c7346e248efe48fa07"
+              }
+            },
+            {
+              "index": 2,
+              "comparison": {
+                "exact": false,
+                "threshold_failed_fields": 81,
+                "max_scaled_error": 50.0140461540175,
+                "failure_families": {
+                  "forward_state": 35,
+                  "parameter_gradient": 8,
+                  "updated_parameter": 14,
+                  "continued_state": 24
+                },
+                "first_returned_fields": {
+                  "numeric": "root.forward.segments.0.state.memories.0.K.features"
+                },
+                "largest_scaled_row": {
+                  "tensor": "root.parameters.receive.k.left",
+                  "max_abs": 5.3091906011104584e-05,
+                  "scaled_error": 50.0140461540175,
+                  "relative_l2": 0.00023556144387488646
+                },
+                "threshold_field_list_sha256": "5b9f971e75c0c7da2cd9333d5a365bc65811edf1ef28f7d523600d7561d3d1bb"
+              }
+            },
+            {
+              "index": 3,
+              "comparison": {
+                "exact": false,
+                "threshold_failed_fields": 141,
+                "max_scaled_error": 72.11465456979654,
+                "failure_families": {
+                  "forward_state": 77,
+                  "forward_output": 1,
+                  "updated_parameter": 17,
+                  "continued_state": 46
+                },
+                "first_returned_fields": {
+                  "numeric": "root.forward.segments.0.state.memories.0.K.features"
+                },
+                "largest_scaled_row": {
+                  "tensor": "root.parameters.receive.k.left",
+                  "max_abs": 7.392977113340748e-05,
+                  "scaled_error": 72.11465456979654,
+                  "relative_l2": 0.0003365237480468929
+                },
+                "threshold_field_list_sha256": "4674e2cc4b5b2cf20dcca678529cbf14084e49996a141cb8f3ed5391a416dbdf"
+              }
+            }
+          ],
+          "actual_none_parameter_counts": {
+            "vjp1": 0,
+            "vjp2": 0
+          },
+          "baseline_work_equal_by_mode": {
+            "inference": true,
+            "vjp1": true,
+            "vjp2": true
+          },
+          "baseline_work_equal_by_update": [
+            true,
+            true,
+            true
+          ],
+          "first_internal_witness": {
+            "state": "capture_limit",
+            "reason": "262,144 captured elements per path",
+            "attribution": "not established; returned-field first differences remain recorded"
+          },
+          "restore": {
+            "state": "within_threshold",
+            "actual_update": true,
+            "new_process": true,
+            "config_exact": true,
+            "source_exact": true,
+            "exit_code": 0,
+            "checkpoint_sha256": "04269a31b39da5fab99228815b189bb0e0f1b79e000a5a4f15645dba3a697df6",
+            "bundle_sha256": "44225faccd7c245998226a64edf285d6e5c0dccfdf3a0c3083df03d692d06df9",
+            "optimizer_update": {
+              "checked": true,
+              "active_parameter_count": 364,
+              "before_steps": [
+                4
+              ],
+              "after_steps": [
+                5
+              ]
+            },
+            "original_update_work_equal": true,
+            "checks": {
+              "saved_data": {
+                "exact": true,
+                "threshold_failed_fields": 0
+              },
+              "next_forward": {
+                "exact": true,
+                "threshold_failed_fields": 0
+              },
+              "actual_update": {
+                "exact": false,
+                "threshold_failed_fields": 0,
+                "max_scaled_error": 0.0007635223169464637,
+                "failure_families": {},
+                "first_returned_fields": {
+                  "numeric": "root.gradients.receive.embedding.weight"
+                },
+                "largest_scaled_row": {
+                  "tensor": "root.gradients.receive.embedding.weight",
+                  "max_abs": 3.725290298461914e-09,
+                  "scaled_error": 0.0007635223169464637,
+                  "relative_l2": 6.351416923615093e-08
+                },
+                "threshold_failure_fields": []
+              }
+            }
+          }
+        },
+        {
+          "name": "optimized",
+          "state": "finite_deviation",
+          "checks": {
+            "fixed_start": {
+              "exact": true,
+              "threshold_failed_fields": 0
+            },
+            "inference_vs_baseline": {
+              "exact": false,
+              "threshold_failed_fields": 4,
+              "max_scaled_error": 1.3506425221658054,
+              "failure_families": {
+                "forward_state": 4
+              },
+              "first_returned_fields": {
+                "numeric": "root.forward.segments.0.state.memories.10.K.features"
+              },
+              "largest_scaled_row": {
+                "tensor": "root.forward.segments.0.state.memories.28.K.values",
+                "max_abs": 6.9141387939453125e-06,
+                "scaled_error": 1.3506425221658054,
+                "relative_l2": 6.304780600357132e-07
+              },
+              "threshold_failure_fields": [
+                "root.forward.segments.0.state.memories.14.K.keys",
+                "root.forward.segments.0.state.memories.28.K.values",
+                "root.forward.segments.1.state.memories.14.K.keys",
+                "root.forward.segments.1.state.memories.28.K.values"
+              ]
+            },
+            "vjp1_vs_baseline": {
+              "exact": false,
+              "threshold_failed_fields": 3,
+              "max_scaled_error": 3.766430650690904,
+              "failure_families": {
+                "forward_state": 3
+              },
+              "first_returned_fields": {
+                "numeric": "root.forward.segments.0.state.memories.10.K.features"
+              },
+              "largest_scaled_row": {
+                "tensor": "root.forward.segments.1.state.memories.16.K.keys",
+                "max_abs": 6.198883056640625e-06,
+                "scaled_error": 3.766430650690904,
+                "relative_l2": 6.293433214543754e-07
+              },
+              "threshold_failure_fields": [
+                "root.forward.segments.1.state.memories.16.K.keys",
+                "root.forward.segments.1.state.memories.22.K.keys",
+                "root.forward.segments.1.state.memories.24.K.values"
+              ]
+            },
+            "vjp2_vs_baseline": {
+              "exact": false,
+              "threshold_failed_fields": 3,
+              "max_scaled_error": 3.766430650690904,
+              "failure_families": {
+                "forward_state": 3
+              },
+              "first_returned_fields": {
+                "numeric": "root.forward.segments.0.state.memories.10.K.features"
+              },
+              "largest_scaled_row": {
+                "tensor": "root.forward.segments.1.state.memories.16.K.keys",
+                "max_abs": 6.198883056640625e-06,
+                "scaled_error": 3.766430650690904,
+                "relative_l2": 6.293433214543754e-07
+              },
+              "threshold_failure_fields": [
+                "root.forward.segments.1.state.memories.16.K.keys",
+                "root.forward.segments.1.state.memories.22.K.keys",
+                "root.forward.segments.1.state.memories.24.K.values"
+              ]
+            },
+            "same_owner_vjp_repeat": {
+              "exact": false,
+              "threshold_failed_fields": 0,
+              "max_scaled_error": 0.001817443565996425,
+              "failure_families": {},
+              "first_returned_fields": {
+                "numeric": "root.gradients.describe.encode.bias"
+              },
+              "largest_scaled_row": {
+                "tensor": "root.gradients.memories.K.summary.weight",
+                "max_abs": 3.725290298461914e-09,
+                "scaled_error": 0.001817443565996425,
+                "relative_l2": 4.1533140966104965e-08
+              },
+              "threshold_failure_fields": []
+            },
+            "inference_vs_grad_forward": {
+              "exact": false,
+              "threshold_failed_fields": 2,
+              "max_scaled_error": 3.0843750337786133,
+              "failure_families": {
+                "forward_state": 2
+              },
+              "first_returned_fields": {
+                "numeric": "root.segments.0.state.memories.10.K.features"
+              },
+              "largest_scaled_row": {
+                "tensor": "root.segments.1.state.memories.16.K.keys",
+                "max_abs": 3.5762786865234375e-06,
+                "scaled_error": 3.0843750337786133,
+                "relative_l2": 4.770994809928487e-07
+              },
+              "threshold_failure_fields": [
+                "root.segments.1.state.memories.16.K.keys",
+                "root.segments.1.state.memories.18.K.values"
+              ]
+            },
+            "start_unchanged_after_vjp": {
+              "exact": true,
+              "threshold_failed_fields": 0
+            }
+          },
+          "updates": [
+            {
+              "index": 1,
+              "comparison": {
+                "exact": false,
+                "threshold_failed_fields": 14,
+                "max_scaled_error": 34.28623061312296,
+                "failure_families": {
+                  "forward_state": 3,
+                  "updated_parameter": 8,
+                  "continued_state": 3
+                },
+                "first_returned_fields": {
+                  "numeric": "root.forward.segments.0.state.memories.10.K.features"
+                },
+                "largest_scaled_row": {
+                  "tensor": "root.parameters.receive.q.weight",
+                  "max_abs": 6.574392318725586e-05,
+                  "scaled_error": 34.28623061312296,
+                  "relative_l2": 3.305569722517217e-05
+                },
+                "threshold_field_list_sha256": "77a60d04a3130f5454b72cb6545abc1a47006ca102cbff3a98027241361aacb3"
+              }
+            },
+            {
+              "index": 2,
+              "comparison": {
+                "exact": false,
+                "threshold_failed_fields": 136,
+                "max_scaled_error": 60.12022685097411,
+                "failure_families": {
+                  "forward_state": 58,
+                  "parameter_gradient": 25,
+                  "updated_parameter": 14,
+                  "continued_state": 39
+                },
+                "first_returned_fields": {
+                  "numeric": "root.forward.segments.0.state.memories.0.K.features"
+                },
+                "largest_scaled_row": {
+                  "tensor": "root.parameters.receive.q.weight",
+                  "max_abs": 0.00012034177780151367,
+                  "scaled_error": 60.12022685097411,
+                  "relative_l2": 5.9372442779459866e-05
+                },
+                "threshold_field_list_sha256": "9333f1f56be8018eb467422314972f9d16a03d57659cd9fc2fd94fc29b85cce6"
+              }
+            },
+            {
+              "index": 3,
+              "comparison": {
+                "exact": false,
+                "threshold_failed_fields": 179,
+                "max_scaled_error": 83.34596194561277,
+                "failure_families": {
+                  "forward_state": 100,
+                  "forward_output": 1,
+                  "parameter_gradient": 3,
+                  "updated_parameter": 15,
+                  "continued_state": 60
+                },
+                "first_returned_fields": {
+                  "numeric": "root.forward.segments.0.state.memories.0.K.features"
+                },
+                "largest_scaled_row": {
+                  "tensor": "root.parameters.receive.q.weight",
+                  "max_abs": 0.0001633092761039734,
+                  "scaled_error": 83.34596194561277,
+                  "relative_l2": 8.207670074560018e-05
+                },
+                "threshold_field_list_sha256": "d21d5292a5caef55d3433a7a5fea1680f95a6e75641d506aa7b91b82df1e19fc"
+              }
+            }
+          ],
+          "actual_none_parameter_counts": {
+            "vjp1": 0,
+            "vjp2": 0
+          },
+          "baseline_work_equal_by_mode": {
+            "inference": true,
+            "vjp1": true,
+            "vjp2": true
+          },
+          "baseline_work_equal_by_update": [
+            true,
+            true,
+            true
+          ],
+          "first_internal_witness": {
+            "state": "not_collected",
+            "reason": "the finite checker attempts only its first cross-candidate internal witness; no causal inference from absence"
+          },
+          "restore": {
+            "state": "within_threshold",
+            "actual_update": true,
+            "new_process": true,
+            "config_exact": true,
+            "source_exact": true,
+            "exit_code": 0,
+            "checkpoint_sha256": "ee5326b56a04377139df0458f5537f788233a33fef070bd348b8e98cc9dab7e8",
+            "bundle_sha256": "842237aa645736e6493f2d212fbf55cd3e4bf1ece684a5a9d0336b944f677a37",
+            "optimizer_update": {
+              "checked": true,
+              "active_parameter_count": 364,
+              "before_steps": [
+                4
+              ],
+              "after_steps": [
+                5
+              ]
+            },
+            "original_update_work_equal": true,
+            "checks": {
+              "saved_data": {
+                "exact": true,
+                "threshold_failed_fields": 0
+              },
+              "next_forward": {
+                "exact": true,
+                "threshold_failed_fields": 0
+              },
+              "actual_update": {
+                "exact": false,
+                "threshold_failed_fields": 0,
+                "max_scaled_error": 0.0022618557397555304,
+                "failure_families": {},
+                "first_returned_fields": {
+                  "numeric": "root.gradients.describe.encode.bias"
+                },
+                "largest_scaled_row": {
+                  "tensor": "root.gradients.describe.encode.weight",
+                  "max_abs": 3.259629011154175e-09,
+                  "scaled_error": 0.0022618557397555304,
+                  "relative_l2": 1.1249176654175955e-08
+                },
+                "threshold_failure_fields": []
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "profile": "wide",
+      "name": "agg-paths-wide-fp32-v1",
+      "source": "28941994880a277495b315f0fec3213239ef0b49",
+      "source_dirty": true,
+      "package_sha256": "9cd45f321a7d700021d1fb8a0d31a5c55ebde47c8fa248d7866c6a3c3682cf62",
+      "harness_sha256": "b5c999082dd18310df4f4eebe3d0e857d6953d2b05426aeefe35d740a5114b5b",
+      "byte_verification": {
+        "package_python_files": 21,
+        "package_record_and_frozen_files_match_commit": true,
+        "main_harness_matches_commit": true,
+        "config_matches_commit": true,
+        "limitation": "Tide Python files, main checker and selected config; not all auxiliary harness files or external toolchains"
+      },
+      "originals": {
+        "result": {
+          "path": "artifacts/agg-paths-wide-fp32-v1/paths/result.json",
+          "sha256": "4abbaa8eeeca98bfedfbe147ed3ef0956cb6f1049d0d932cd2e55a3d6866afdd",
+          "bytes": 2753047
+        },
+        "launch": {
+          "path": "artifacts/agg-paths-wide-fp32-v1/launch.json",
+          "sha256": "d322da02294caaaf59b21e3834a486326ecf7a7921a680c05c9634fae2519b31",
+          "bytes": 5053
+        },
+        "status": {
+          "path": "artifacts/agg-paths-wide-fp32-v1/status.json",
+          "sha256": "17786f3ef6fd9cc69f86ec408b0f5c13145a699ba920e6e98831cd5c33ea5918",
+          "bytes": 3048
+        },
+        "environment": {
+          "path": "artifacts/agg-paths-wide-fp32-v1/environment.json",
+          "sha256": "27de0311f706b36536f135ec61712e91d4884b29effd0752dc1edb4bc671d8e7",
+          "bytes": 2539
+        },
+        "queue": {
+          "path": "artifacts/agg-paths-wide-fp32-v1/queue.json",
+          "sha256": "608212ce441959a0f9d96d01cd2888cc178f2f2f3dbbc5c29b99a65b6da1ab53",
+          "bytes": 387
+        }
+      },
+      "config": {
+        "path": "artifacts/agg-paths-wide-fp32-v1/source/configs/agg-inference/settle-incoming_wide.json",
+        "sha256": "d20cda3c1ffbc09311d524b890032537520832bbf880186e35d27a51ed68752b",
+        "bytes": 338
+      },
+      "command": [
+        "--",
+        "python",
+        "-m",
+        "scripts.check_training_paths",
+        "--config",
+        "configs/agg-inference/settle-incoming_wide.json",
+        "--device",
+        "npu:0",
+        "--precision",
+        "fp32",
+        "--candidates",
+        "baseline",
+        "qkv_mask",
+        "optimized",
+        "--candidate-overrides",
+        "{\"qkv_mask\":{\"reception_qkv_backend\":\"fused\",\"reception_mask_padding\":true},\"optimized\":{\"region_batch_size\":4,\"reception_qkv_backend\":\"fused\",\"reception_mask_padding\":true,\"ssd_scan_backend\":\"doubling\"}}",
+        "--batch",
+        "1",
+        "--length",
+        "4",
+        "--chunk",
+        "2",
+        "--steps",
+        "3",
+        "--threads",
+        "4",
+        "--max-parameters",
+        "80000000",
+        "--restore-mode",
+        "new_process",
+        "--witness-elements",
+        "262144",
+        "--output-dir",
+        "{run}/paths"
+      ],
+      "lifecycle": {
+        "state": "passed",
+        "exit_code": 0,
+        "started": "2026-11-18T12:31:23.765543+00:00",
+        "finished": "2026-11-18T12:36:08.803999+00:00",
+        "elapsed_seconds": 285.03845601156354,
+        "sampled_peak_rss_bytes": 11207008256
+      },
+      "resources": {
+        "physical_ids": [
+          5
+        ],
+        "logical_device": "npu:0",
+        "threads": 4,
+        "cpu_affinity": [
+          120,
+          121,
+          122,
+          123
+        ],
+        "identity": "exclusive_cooperative_queue; external jobs not controlled",
+        "admission": "exclusive cooperative queue; external uncoordinated users not controlled; shared host"
+      },
+      "precision_policy": {
+        "name": "fp32",
+        "device": "npu:0",
+        "parameters": "float32",
+        "input": "float32",
+        "matrix_arithmetic": "float32",
+        "normalization_mass_allocation": "float32",
+        "kv_keys_values": "float32",
+        "kv_summary_and_ssd_state": "float32",
+        "logical_time_indices": "int64",
+        "parameter_gradients": "float32",
+        "master_weights": "parameters_are_fp32_masters; no_separate_copy",
+        "adamw_moments": "float32",
+        "attention": "native_by_shape_and_prior; math/tiled_accumulate_float32",
+        "attention_mode_selection": "established_fp32_gradient_dependent_prior_dispatch",
+        "loss": "float32",
+        "autocast_cache": false
+      },
+      "torch": "2.12.0+cpu",
+      "state": "finite_deviation",
+      "baseline_config": {
+        "topology": {
+          "kind": "multiscale",
+          "n": 8,
+          "layers": null,
+          "depth": null,
+          "rounds": null,
+          "profile": "compact-9",
+          "hubs": 4,
+          "partition": "group",
+          "timing": "settle",
+          "hub_mask": "all",
+          "period": null,
+          "probes": null,
+          "terminal_hubs": false
+        },
+        "d": 128,
+        "memory": "X",
+        "aggregation": "incoming_wide",
+        "allocation": "quad",
+        "sharing": "region_shared",
+        "adapter_rank": 8,
+        "budget": null,
+        "attention_backend": "auto",
+        "attention_chunk": 128,
+        "input_dim": null,
+        "checkpoint_regions": false,
+        "checkpoint_reception": true,
+        "reception_qkv_backend": "separate",
+        "reception_mask_padding": false,
+        "ssd_summary_backend": "prefix",
+        "ssd_scan_backend": "block",
+        "region_batch_size": 1,
+        "local_attention_backend": null,
+        "hub_allocation": "bounded",
+        "clock": {
+          "position_period": null,
+          "position_origin": "binding",
+          "kv_window": null,
+          "short_decay": null,
+          "ssd_stride": null
+        }
+      },
+      "resolved_candidates": {
+        "baseline": {
+          "region_batch_size": 1,
+          "checkpoint_regions": false
+        },
+        "qkv_mask": {
+          "region_batch_size": 1,
+          "checkpoint_regions": false,
+          "reception_qkv_backend": "fused",
+          "reception_mask_padding": true
+        },
+        "optimized": {
+          "region_batch_size": 4,
+          "checkpoint_regions": false,
+          "reception_qkv_backend": "fused",
+          "reception_mask_padding": true,
+          "ssd_scan_backend": "doubling"
+        }
+      },
+      "workload": {
+        "batch": 1,
+        "length": 4,
+        "chunk": 2,
+        "steps_after_anchor": 3,
+        "input_hashes": [
+          "4ccbc0180803a89f869a9c7f0ecf76319d7a0f71cf7f080257ca86c982552e8d",
+          "5af2ea97ee6a956be649330b7b0fcc552a9f9c7f8c42110a79886ae13c96b9c6",
+          "b0633424fea8ec438f57ace347fce831a38a65c641eecfe383e57c344cacdfc4",
+          "57ae3b809a7be0fb661cbf3ff21bc15c5541d467cdb4aecfba489cd3655c1c97",
+          "6c2b694aad3d2445f8827414b64cc571f16bf16f08cbecc9827b13d2f30421c4"
+        ],
+        "anchor_optimizer": {
+          "parameter_states": 364,
+          "steps": [
+            1
+          ]
+        },
+        "fixed_start_sha256": "407008b1b56961ba9d1ffedb8ddda28456285c18e66a919efbdf7921daf47553",
+        "boundary": "one real baseline anchor update; same fixed nonempty state/AdamW for each path; no detach between chunks, detach after each complete update/flush"
+      },
+      "candidates": [
+        {
+          "name": "baseline",
+          "state": "within_threshold",
+          "checks": {
+            "fixed_start": {
+              "exact": true,
+              "threshold_failed_fields": 0
+            },
+            "same_owner_vjp_repeat": {
+              "exact": false,
+              "threshold_failed_fields": 0,
+              "max_scaled_error": 0.0019646791707598464,
+              "failure_families": {},
+              "first_returned_fields": {
+                "numeric": "root.gradients.receive.embedding.weight"
+              },
+              "largest_scaled_row": {
+                "tensor": "root.gradients.receive.embedding.weight",
+                "max_abs": 7.450580596923828e-09,
+                "scaled_error": 0.0019646791707598464,
+                "relative_l2": 4.0447953520022876e-08
+              },
+              "threshold_failure_fields": []
+            },
+            "inference_vs_grad_forward": {
+              "exact": false,
+              "threshold_failed_fields": 0,
+              "max_scaled_error": 0.730673569990879,
+              "failure_families": {},
+              "first_returned_fields": {
+                "numeric": "root.segments.0.state.memories.10.K.features"
+              },
+              "largest_scaled_row": {
+                "tensor": "root.segments.0.state.memories.22.K.values",
+                "max_abs": 2.3245811462402344e-06,
+                "scaled_error": 0.730673569990879,
+                "relative_l2": 2.876260826914897e-07
+              },
+              "threshold_failure_fields": []
+            },
+            "start_unchanged_after_vjp": {
+              "exact": true,
+              "threshold_failed_fields": 0
+            }
+          },
+          "updates": [
+            {
+              "index": 1,
+              "comparison": null
+            },
+            {
+              "index": 2,
+              "comparison": null
+            },
+            {
+              "index": 3,
+              "comparison": null
+            }
+          ],
+          "actual_none_parameter_counts": {
+            "vjp1": 0,
+            "vjp2": 0
+          },
+          "baseline_work_equal_by_mode": {
+            "inference": true,
+            "vjp1": true,
+            "vjp2": true
+          },
+          "baseline_work_equal_by_update": [
+            true,
+            true,
+            true
+          ],
+          "first_internal_witness": {
+            "state": "not_collected",
+            "reason": "the finite checker attempts only its first cross-candidate internal witness; no causal inference from absence"
+          },
+          "restore": {
+            "state": "within_threshold",
+            "actual_update": true,
+            "new_process": true,
+            "config_exact": true,
+            "source_exact": true,
+            "exit_code": 0,
+            "checkpoint_sha256": "f8b6d6711cef5c0ee1cb0881e426261a7091a0c97521d1058458559d4d616d2f",
+            "bundle_sha256": "7f8f7bf038460999a47d7ca8ac8e469bf59a85ffe2e889ce884fac98397650e7",
+            "optimizer_update": {
+              "checked": true,
+              "active_parameter_count": 364,
+              "before_steps": [
+                4
+              ],
+              "after_steps": [
+                5
+              ]
+            },
+            "original_update_work_equal": true,
+            "checks": {
+              "saved_data": {
+                "exact": true,
+                "threshold_failed_fields": 0
+              },
+              "next_forward": {
+                "exact": true,
+                "threshold_failed_fields": 0
+              },
+              "actual_update": {
+                "exact": false,
+                "threshold_failed_fields": 0,
+                "max_scaled_error": 0.0015356568865454432,
+                "failure_families": {},
+                "first_returned_fields": {
+                  "numeric": "root.gradients.receive.embedding.weight"
+                },
+                "largest_scaled_row": {
+                  "tensor": "root.gradients.receive.sa_embedding.weight",
+                  "max_abs": 7.450580596923828e-09,
+                  "scaled_error": 0.0015356568865454432,
+                  "relative_l2": 5.826764768479082e-08
+                },
+                "threshold_failure_fields": []
+              }
+            }
+          }
+        },
+        {
+          "name": "qkv_mask",
+          "state": "finite_deviation",
+          "checks": {
+            "fixed_start": {
+              "exact": true,
+              "threshold_failed_fields": 0
+            },
+            "inference_vs_baseline": {
+              "exact": true,
+              "threshold_failed_fields": 0
+            },
+            "vjp1_vs_baseline": {
+              "exact": false,
+              "threshold_failed_fields": 1,
+              "max_scaled_error": 1.2051761489907535,
+              "failure_families": {
+                "forward_state": 1
+              },
+              "first_returned_fields": {
+                "numeric": "root.forward.segments.0.state.memories.10.K.features"
+              },
+              "largest_scaled_row": {
+                "tensor": "root.forward.segments.1.state.memories.14.K.keys",
+                "max_abs": 2.2649765014648438e-06,
+                "scaled_error": 1.2051761489907535,
+                "relative_l2": 3.3471145028723674e-07
+              },
+              "threshold_failure_fields": [
+                "root.forward.segments.1.state.memories.14.K.keys"
+              ]
+            },
+            "vjp2_vs_baseline": {
+              "exact": false,
+              "threshold_failed_fields": 1,
+              "max_scaled_error": 1.2051761489907535,
+              "failure_families": {
+                "forward_state": 1
+              },
+              "first_returned_fields": {
+                "numeric": "root.forward.segments.0.state.memories.10.K.features"
+              },
+              "largest_scaled_row": {
+                "tensor": "root.forward.segments.1.state.memories.14.K.keys",
+                "max_abs": 2.2649765014648438e-06,
+                "scaled_error": 1.2051761489907535,
+                "relative_l2": 3.3471145028723674e-07
+              },
+              "threshold_failure_fields": [
+                "root.forward.segments.1.state.memories.14.K.keys"
+              ]
+            },
+            "same_owner_vjp_repeat": {
+              "exact": false,
+              "threshold_failed_fields": 0,
+              "max_scaled_error": 0.0020259711018399433,
+              "failure_families": {},
+              "first_returned_fields": {
+                "numeric": "root.gradients.receive.embedding.weight"
+              },
+              "largest_scaled_row": {
+                "tensor": "root.gradients.receive.embedding.weight",
+                "max_abs": 7.450580596923828e-09,
+                "scaled_error": 0.0020259711018399433,
+                "relative_l2": 4.0796693117532005e-08
+              },
+              "threshold_failure_fields": []
+            },
+            "inference_vs_grad_forward": {
+              "exact": false,
+              "threshold_failed_fields": 1,
+              "max_scaled_error": 1.0067520167544837,
+              "failure_families": {
+                "forward_state": 1
+              },
+              "first_returned_fields": {
+                "numeric": "root.segments.0.state.memories.10.K.features"
+              },
+              "largest_scaled_row": {
+                "tensor": "root.segments.1.state.memories.14.K.keys",
+                "max_abs": 2.9802322387695312e-06,
+                "scaled_error": 1.0067520167544837,
+                "relative_l2": 4.2851441924368085e-07
+              },
+              "threshold_failure_fields": [
+                "root.segments.1.state.memories.14.K.keys"
+              ]
+            },
+            "start_unchanged_after_vjp": {
+              "exact": true,
+              "threshold_failed_fields": 0
+            }
+          },
+          "updates": [
+            {
+              "index": 1,
+              "comparison": {
+                "exact": false,
+                "threshold_failed_fields": 13,
+                "max_scaled_error": 66.30784149289497,
+                "failure_families": {
+                  "forward_state": 1,
+                  "updated_parameter": 11,
+                  "continued_state": 1
+                },
+                "first_returned_fields": {
+                  "numeric": "root.forward.segments.0.state.memories.10.K.features"
+                },
+                "largest_scaled_row": {
+                  "tensor": "root.parameters.receive.q.left",
+                  "max_abs": 8.287570744869299e-05,
+                  "scaled_error": 66.30784149289497,
+                  "relative_l2": 0.0002488902044966808
+                },
+                "threshold_field_list_sha256": "917c75995258291754b17ebf03606dbb01c9310158f67e9f10818fe1080d2f54"
+              }
+            },
+            {
+              "index": 2,
+              "comparison": {
+                "exact": false,
+                "threshold_failed_fields": 62,
+                "max_scaled_error": 108.46628011512479,
+                "failure_families": {
+                  "forward_state": 28,
+                  "parameter_gradient": 1,
+                  "updated_parameter": 12,
+                  "continued_state": 21
+                },
+                "first_returned_fields": {
+                  "numeric": "root.forward.segments.0.state.memories.0.K.features"
+                },
+                "largest_scaled_row": {
+                  "tensor": "root.parameters.receive.q.left",
+                  "max_abs": 0.00014106248272582889,
+                  "scaled_error": 108.46628011512479,
+                  "relative_l2": 0.00042989392658144307
+                },
+                "threshold_field_list_sha256": "8c2dcfe61e93263fd4b42b33c0153dbc19c9a896f2366c80ccfb9bc4805edfe2"
+              }
+            },
+            {
+              "index": 3,
+              "comparison": {
+                "exact": false,
+                "threshold_failed_fields": 81,
+                "max_scaled_error": 137.664093578345,
+                "failure_families": {
+                  "forward_state": 44,
+                  "updated_parameter": 14,
+                  "continued_state": 23
+                },
+                "first_returned_fields": {
+                  "numeric": "root.forward.segments.0.state.memories.0.K.features"
+                },
+                "largest_scaled_row": {
+                  "tensor": "root.parameters.receive.q.left",
+                  "max_abs": 0.00018420087326376233,
+                  "scaled_error": 137.664093578345,
+                  "relative_l2": 0.000573056878019941
+                },
+                "threshold_field_list_sha256": "483458e8d2c9ef313692fe8f9074bfc26210e9fb67970a1f05b6e9a0849c80da"
+              }
+            }
+          ],
+          "actual_none_parameter_counts": {
+            "vjp1": 0,
+            "vjp2": 0
+          },
+          "baseline_work_equal_by_mode": {
+            "inference": true,
+            "vjp1": true,
+            "vjp2": true
+          },
+          "baseline_work_equal_by_update": [
+            true,
+            true,
+            true
+          ],
+          "first_internal_witness": {
+            "state": "capture_limit",
+            "reason": "262,144 captured elements per path",
+            "attribution": "not established; returned-field first differences remain recorded"
+          },
+          "restore": {
+            "state": "within_threshold",
+            "actual_update": true,
+            "new_process": true,
+            "config_exact": true,
+            "source_exact": true,
+            "exit_code": 0,
+            "checkpoint_sha256": "b031310d62409f423415e22c8e241a075701cb5314ef53486b9b2af87a30ec11",
+            "bundle_sha256": "74e0ea37d51885c473a69dfe5ad2bd6a8af82513ba9f25195a325f10a892ca61",
+            "optimizer_update": {
+              "checked": true,
+              "active_parameter_count": 364,
+              "before_steps": [
+                4
+              ],
+              "after_steps": [
+                5
+              ]
+            },
+            "original_update_work_equal": true,
+            "checks": {
+              "saved_data": {
+                "exact": true,
+                "threshold_failed_fields": 0
+              },
+              "next_forward": {
+                "exact": true,
+                "threshold_failed_fields": 0
+              },
+              "actual_update": {
+                "exact": false,
+                "threshold_failed_fields": 0,
+                "max_scaled_error": 0.0024569619744791134,
+                "failure_families": {},
+                "first_returned_fields": {
+                  "numeric": "root.gradients.receive.embedding.weight"
+                },
+                "largest_scaled_row": {
+                  "tensor": "root.gradients.receive.sa_embedding.weight",
+                  "max_abs": 4.6566128730773926e-09,
+                  "scaled_error": 0.0024569619744791134,
+                  "relative_l2": 5.594010044956199e-08
+                },
+                "threshold_failure_fields": []
+              }
+            }
+          }
+        },
+        {
+          "name": "optimized",
+          "state": "finite_deviation",
+          "checks": {
+            "fixed_start": {
+              "exact": true,
+              "threshold_failed_fields": 0
+            },
+            "inference_vs_baseline": {
+              "exact": false,
+              "threshold_failed_fields": 2,
+              "max_scaled_error": 1.1545695409013463,
+              "failure_families": {
+                "forward_state": 2
+              },
+              "first_returned_fields": {
+                "numeric": "root.forward.segments.0.state.memories.10.K.features"
+              },
+              "largest_scaled_row": {
+                "tensor": "root.forward.segments.0.state.memories.24.K.keys",
+                "max_abs": 4.26173210144043e-06,
+                "scaled_error": 1.1545695409013463,
+                "relative_l2": 4.444592356002048e-07
+              },
+              "threshold_failure_fields": [
+                "root.forward.segments.0.state.memories.24.K.keys",
+                "root.forward.segments.1.state.memories.24.K.keys"
+              ]
+            },
+            "vjp1_vs_baseline": {
+              "exact": false,
+              "threshold_failed_fields": 2,
+              "max_scaled_error": 1.1584843033498509,
+              "failure_families": {
+                "forward_state": 2
+              },
+              "first_returned_fields": {
+                "numeric": "root.forward.segments.0.state.memories.10.K.features"
+              },
+              "largest_scaled_row": {
+                "tensor": "root.forward.segments.0.state.memories.22.K.values",
+                "max_abs": 3.337860107421875e-06,
+                "scaled_error": 1.1584843033498509,
+                "relative_l2": 3.17740410831593e-07
+              },
+              "threshold_failure_fields": [
+                "root.forward.segments.0.state.memories.22.K.values",
+                "root.forward.segments.1.state.memories.22.K.values"
+              ]
+            },
+            "vjp2_vs_baseline": {
+              "exact": false,
+              "threshold_failed_fields": 2,
+              "max_scaled_error": 1.1584843033498509,
+              "failure_families": {
+                "forward_state": 2
+              },
+              "first_returned_fields": {
+                "numeric": "root.forward.segments.0.state.memories.10.K.features"
+              },
+              "largest_scaled_row": {
+                "tensor": "root.forward.segments.0.state.memories.22.K.values",
+                "max_abs": 3.337860107421875e-06,
+                "scaled_error": 1.1584843033498509,
+                "relative_l2": 3.17740410831593e-07
+              },
+              "threshold_failure_fields": [
+                "root.forward.segments.0.state.memories.22.K.values",
+                "root.forward.segments.1.state.memories.22.K.values"
+              ]
+            },
+            "same_owner_vjp_repeat": {
+              "exact": false,
+              "threshold_failed_fields": 0,
+              "max_scaled_error": 0.0021346836307794734,
+              "failure_families": {},
+              "first_returned_fields": {
+                "numeric": "root.gradients.describe.encode.bias"
+              },
+              "largest_scaled_row": {
+                "tensor": "root.gradients.describe.encode.weight",
+                "max_abs": 3.725290298461914e-09,
+                "scaled_error": 0.0021346836307794734,
+                "relative_l2": 4.023438934739102e-09
+              },
+              "threshold_failure_fields": []
+            },
+            "inference_vs_grad_forward": {
+              "exact": false,
+              "threshold_failed_fields": 2,
+              "max_scaled_error": 1.180707106350643,
+              "failure_families": {
+                "forward_state": 2
+              },
+              "first_returned_fields": {
+                "numeric": "root.segments.0.state.memories.10.K.features"
+              },
+              "largest_scaled_row": {
+                "tensor": "root.segments.0.state.memories.24.K.keys",
+                "max_abs": 3.7848949432373047e-06,
+                "scaled_error": 1.180707106350643,
+                "relative_l2": 4.34082293978466e-07
+              },
+              "threshold_failure_fields": [
+                "root.segments.0.state.memories.24.K.keys",
+                "root.segments.1.state.memories.24.K.keys"
+              ]
+            },
+            "start_unchanged_after_vjp": {
+              "exact": true,
+              "threshold_failed_fields": 0
+            }
+          },
+          "updates": [
+            {
+              "index": 1,
+              "comparison": {
+                "exact": false,
+                "threshold_failed_fields": 14,
+                "max_scaled_error": 69.30342296345766,
+                "failure_families": {
+                  "forward_state": 2,
+                  "updated_parameter": 11,
+                  "continued_state": 1
+                },
+                "first_returned_fields": {
+                  "numeric": "root.forward.segments.0.state.memories.10.K.features"
+                },
+                "largest_scaled_row": {
+                  "tensor": "root.parameters.receive.q.left",
+                  "max_abs": 0.0001090620644390583,
+                  "scaled_error": 69.30342296345766,
+                  "relative_l2": 0.00028738952084365356
+                },
+                "threshold_field_list_sha256": "165dafa42b9cb3d3f25fb8833364420d91f2131241f6249ccd58fccf686dc692"
+              }
+            },
+            {
+              "index": 2,
+              "comparison": {
+                "exact": false,
+                "threshold_failed_fields": 58,
+                "max_scaled_error": 114.19542179295937,
+                "failure_families": {
+                  "forward_state": 25,
+                  "forward_output": 2,
+                  "updated_parameter": 15,
+                  "continued_state": 16
+                },
+                "first_returned_fields": {
+                  "numeric": "root.forward.segments.0.state.memories.0.K.features"
+                },
+                "largest_scaled_row": {
+                  "tensor": "root.parameters.receive.q.left",
+                  "max_abs": 0.00019175559282302856,
+                  "scaled_error": 114.19542179295937,
+                  "relative_l2": 0.0004964812858563612
+                },
+                "threshold_field_list_sha256": "c639f25a68853b2e21b0e8d4d65173c8466c7b194a7b4572555c66f43d976cab"
+              }
+            },
+            {
+              "index": 3,
+              "comparison": {
+                "exact": false,
+                "threshold_failed_fields": 87,
+                "max_scaled_error": 149.8083591676832,
+                "failure_families": {
+                  "forward_state": 44,
+                  "forward_output": 1,
+                  "updated_parameter": 18,
+                  "continued_state": 24
+                },
+                "first_returned_fields": {
+                  "numeric": "root.forward.segments.0.state.memories.0.K.features"
+                },
+                "largest_scaled_row": {
+                  "tensor": "root.parameters.receive.q.left",
+                  "max_abs": 0.0002561293076723814,
+                  "scaled_error": 149.8083591676832,
+                  "relative_l2": 0.0006614443487216928
+                },
+                "threshold_field_list_sha256": "2d802b83c1ad25e686efc224f4c6e818c467a150ecb71302f7fd6f89f1e553f6"
+              }
+            }
+          ],
+          "actual_none_parameter_counts": {
+            "vjp1": 0,
+            "vjp2": 0
+          },
+          "baseline_work_equal_by_mode": {
+            "inference": true,
+            "vjp1": true,
+            "vjp2": true
+          },
+          "baseline_work_equal_by_update": [
+            true,
+            true,
+            true
+          ],
+          "first_internal_witness": {
+            "state": "not_collected",
+            "reason": "the finite checker attempts only its first cross-candidate internal witness; no causal inference from absence"
+          },
+          "restore": {
+            "state": "within_threshold",
+            "actual_update": true,
+            "new_process": true,
+            "config_exact": true,
+            "source_exact": true,
+            "exit_code": 0,
+            "checkpoint_sha256": "06f23c517bc608c564048be7cc9481c6d9d28be1727919d78957e06bb8398814",
+            "bundle_sha256": "9be64066202c388d71f7fd4700dca95c832f12c53d45845e4a1da96a2772d6df",
+            "optimizer_update": {
+              "checked": true,
+              "active_parameter_count": 364,
+              "before_steps": [
+                4
+              ],
+              "after_steps": [
+                5
+              ]
+            },
+            "original_update_work_equal": true,
+            "checks": {
+              "saved_data": {
+                "exact": true,
+                "threshold_failed_fields": 0
+              },
+              "next_forward": {
+                "exact": true,
+                "threshold_failed_fields": 0
+              },
+              "actual_update": {
+                "exact": false,
+                "threshold_failed_fields": 0,
+                "max_scaled_error": 0.002440778266037209,
+                "failure_families": {},
+                "first_returned_fields": {
+                  "numeric": "root.gradients.describe.encode.bias"
+                },
+                "largest_scaled_row": {
+                  "tensor": "root.gradients.receive.b.weight",
+                  "max_abs": 4.6566128730773926e-09,
+                  "scaled_error": 0.002440778266037209,
+                  "relative_l2": 1.5421844780810423e-08
+                },
+                "threshold_failure_fields": []
+              }
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "bounded_explanations": [
+    "Same-profile inference, grad-enabled forward, continued training and restored update are separate claims. A successful candidate-local restore does not erase cross-candidate divergence.",
+    "Fixed-start and inference equality do not require subsequent gradients, moments or optimizer trajectories to be bitwise equal.",
+    "FP32 attention auto permits gradient-dependent prior representations. This is a plausible site to inspect, but these records do not capture actual per-call dispatch, and no NPU root cause is asserted.",
+    "The optimized variant combines compatible region batching, fused QKV/static mask, and SSD doubling. Its differences are not attributable to any one component from this combined comparison.",
+    "First returned fields are deterministic lexicographic tree-order witnesses, not earliest execution or causal boundaries. Internal capture-limit records establish no internal first divergence.",
+    "Threshold-failure counts count tensor-field occurrences; repeated segments and forward/continued state can repeat related quantities. They are not counts of wrong nodes, scalars or independent bugs.",
+    "No new support, integer-time/index, dtype, None-connectivity or nonfinite difference in these records is a finite-scope observation, not a universal correctness proof."
+  ],
+  "cpu_context": {
+    "independent_formula": {
+      "source": "6907f3d5",
+      "tests": "tests/test_reception.py",
+      "passed": 40,
+      "dtype": "CPU FP64",
+      "scope": "all four profiles, separate/fused QKV, repeated/shared owners, values/all-root VJPs, structural deletion, real zero-mass right derivatives; small explicit fixtures",
+      "limitation": "not an integrated NPU trajectory proof; CPU FP64 is diagnostic"
+    },
+    "decimal_adamw": {
+      "original": {
+        "path": "artifacts/worktrees/agg-inference-reception/artifacts/reception-fp32-adamw-witness.json",
+        "sha256": "51ef4ecd7d18b9ee13be765be5e4e17870c92deef2003d309e373877ec2bf88b",
+        "bytes": 53959
+      },
+      "source": "9330df178deef8a53b97ac9a174147b3dfa3a5b1",
+      "production_tree": "3f6782dd2bc5e0c143144e58da39f9331b8031b1",
+      "harness_sha256": "5dc2ed93502460ba55aa38f99040bb1c45946bc63c1c3a790abbcef421a1c706",
+      "configs": [
+        {
+          "topology": {
+            "kind": "multiscale",
+            "n": 2,
+            "layers": null,
+            "depth": null,
+            "rounds": null,
+            "profile": "compact-5-dd4",
+            "hubs": 1,
+            "partition": "mixed",
+            "timing": "settle",
+            "hub_mask": "all",
+            "period": null,
+            "probes": null,
+            "terminal_hubs": false
+          },
+          "d": 64,
+          "memory": "X",
+          "aggregation": "incoming_light_64",
+          "allocation": "quad",
+          "sharing": "layer_shared",
+          "adapter_rank": 8,
+          "budget": null,
+          "attention_backend": "math",
+          "attention_chunk": 128,
+          "input_dim": null,
+          "checkpoint_regions": false,
+          "checkpoint_reception": false,
+          "reception_qkv_backend": "separate",
+          "reception_mask_padding": false,
+          "ssd_summary_backend": "block",
+          "region_batch_size": 4,
+          "local_attention_backend": null,
+          "hub_allocation": "bounded",
+          "clock": {
+            "position_period": null,
+            "position_origin": "binding",
+            "kv_window": null,
+            "short_decay": null,
+            "ssd_stride": null
+          }
+        },
+        {
+          "topology": {
+            "kind": "multiscale",
+            "n": 2,
+            "layers": null,
+            "depth": null,
+            "rounds": null,
+            "profile": "compact-5-dd4",
+            "hubs": 1,
+            "partition": "mixed",
+            "timing": "settle",
+            "hub_mask": "all",
+            "period": null,
+            "probes": null,
+            "terminal_hubs": false
+          },
+          "d": 64,
+          "memory": "X",
+          "aggregation": "incoming_light_64",
+          "allocation": "quad",
+          "sharing": "layer_shared",
+          "adapter_rank": 8,
+          "budget": null,
+          "attention_backend": "math",
+          "attention_chunk": 128,
+          "input_dim": null,
+          "checkpoint_regions": false,
+          "checkpoint_reception": true,
+          "reception_qkv_backend": "fused",
+          "reception_mask_padding": true,
+          "ssd_summary_backend": "block",
+          "region_batch_size": 4,
+          "local_attention_backend": null,
+          "hub_allocation": "bounded",
+          "clock": {
+            "position_period": null,
+            "position_origin": "binding",
+            "kv_window": null,
+            "short_decay": null,
+            "ssd_stride": null
+          }
+        }
+      ],
+      "target_parameter": "regional.4.second.bias",
+      "threshold": {
+        "atol": 1e-06,
+        "rtol": 0.002
+      },
+      "updates": [
+        {
+          "step": 1,
+          "coordinate": 0,
+          "original_within_threshold": true,
+          "selected_coordinate_gradients": [
+            1.567494745113862e-10,
+            1.567494745113862e-10
+          ],
+          "actual_delta": 0.0,
+          "decimal_predicted_delta": 0.0,
+          "delta_absolute_error": 0.0
+        },
+        {
+          "step": 2,
+          "coordinate": 20,
+          "original_within_threshold": false,
+          "selected_coordinate_gradients": [
+            1.953090800199675e-09,
+            -2.527529296969533e-09
+          ],
+          "actual_delta": 2.0191073417663574e-05,
+          "decimal_predicted_delta": 2.0195122628671736e-05,
+          "delta_absolute_error": 4.0492110081613575e-09
+        },
+        {
+          "step": 3,
+          "coordinate": 20,
+          "original_within_threshold": false,
+          "selected_coordinate_gradients": [
+            -2.7577069516837582e-09,
+            -2.7577069516837582e-09
+          ],
+          "actual_delta": 3.2335519790649414e-05,
+          "decimal_predicted_delta": 3.2339617189916514e-05,
+          "delta_absolute_error": 4.097399267100066e-09
+        }
+      ],
+      "limitation": "explains only the selected CPU regional bias coordinates; none of the NPU receive.q/k maximum-failure coordinates was replayed"
+    },
+    "thread_restore": {
+      "original": {
+        "path": "artifacts/worktrees/agg-reception-restore/artifacts/restore-threads-b4/report.json",
+        "sha256": "873fcc2b1b21b13a65a6a6e6f91e0fc810eb04e237e9ed2a27da9b09c362e4be",
+        "bytes": 24622
+      },
+      "source": "b4cf1514fb1e79d0bbebf7ab03595bcbacbf2160",
+      "production_tree": "92e3d8a6c18c01cddde3b6c56068698cbbbffa43",
+      "harness_sha256": "fc746c4ced9982fcead093abff71d26ce06d55074db0291b42df1cc91ba2029b",
+      "cpu_affinity": [
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39
+      ],
+      "seed": 520,
+      "original_suite": {
+        "path": "artifacts/agg-integration-cpu-v1/pytest.xml",
+        "sha256": "7a0edc18030367c0308242bd1035be2109d0500f72ddd9326adb0b94d9189ccd",
+        "bytes": 124085
+      },
+      "original_suite_result": "715 passed / 11 failed; ten diagnostic-alias failures handled separately; one Reception restore exact failure retained",
+      "minimal_reproduction": {
+        "path": "artifacts/worktrees/agg-reception-restore/artifacts/thread-leak-original.xml",
+        "sha256": "c00f42b1086bdc81d1ff5219d9e67bb8a7b47ad63f9aa978160bf11a0575bb8e",
+        "bytes": 2342
+      },
+      "fixed_directed_tests": {
+        "path": "artifacts/worktrees/agg-reception-restore/artifacts/thread-isolation-fixed.xml",
+        "sha256": "228ba90eec172c397071339585f993a5e7406c019964c48815f1332151d14f1c",
+        "bytes": 2439
+      },
+      "test_fix_commit": "1553b301",
+      "test_fix_scope": "restore Torch thread count between tests; exact assertion and production behavior unchanged; 14 directed tests passed",
+      "observations": [
+        {
+          "threads": 4,
+          "saved_exact": true,
+          "restored_update_exact": false,
+          "restored_update_within_threshold": true,
+          "restored_update_max_abs": 7.450580596923828e-09,
+          "restored_update_differing_fields": [
+            "root.gradients.receive.k.weight",
+            "root.gradients.receive.o.weight",
+            "root.gradients.receive.q.weight",
+            "root.gradients.receive.v.weight",
+            "root.optimizer.state.11.exp_avg",
+            "root.optimizer.state.11.exp_avg_sq",
+            "root.optimizer.state.14.exp_avg",
+            "root.optimizer.state.14.exp_avg_sq",
+            "root.optimizer.state.17.exp_avg",
+            "root.optimizer.state.17.exp_avg_sq",
+            "root.optimizer.state.8.exp_avg",
+            "root.optimizer.state.8.exp_avg_sq",
+            "root.parameters.receive.o.weight"
+          ],
+          "same_owner_repeat_exact": false,
+          "same_owner_repeat_within_threshold": true
+        },
+        {
+          "threads": 4,
+          "saved_exact": true,
+          "restored_update_exact": false,
+          "restored_update_within_threshold": true,
+          "restored_update_max_abs": 1.862645149230957e-09,
+          "restored_update_differing_fields": [
+            "root.gradients.receive.k.weight",
+            "root.gradients.receive.o.weight",
+            "root.gradients.receive.q.weight",
+            "root.gradients.receive.v.weight",
+            "root.optimizer.state.11.exp_avg",
+            "root.optimizer.state.11.exp_avg_sq",
+            "root.optimizer.state.14.exp_avg",
+            "root.optimizer.state.14.exp_avg_sq",
+            "root.optimizer.state.17.exp_avg",
+            "root.optimizer.state.17.exp_avg_sq",
+            "root.optimizer.state.8.exp_avg",
+            "root.optimizer.state.8.exp_avg_sq",
+            "root.parameters.receive.o.weight",
+            "root.parameters.receive.v.weight"
+          ],
+          "same_owner_repeat_exact": false,
+          "same_owner_repeat_within_threshold": true
+        },
+        {
+          "threads": 1,
+          "saved_exact": true,
+          "restored_update_exact": true,
+          "restored_update_within_threshold": true,
+          "restored_update_max_abs": 0.0,
+          "restored_update_differing_fields": [],
+          "same_owner_repeat_exact": true,
+          "same_owner_repeat_within_threshold": true
+        }
+      ],
+      "limitation": "CPU Timed restore/repeated-backward witness; does not identify the NPU embedding-gradient repeat mechanism"
+    }
+  },
+  "unresolved": [
+    "All three first cross-candidate internal witnesses hit 262144 captured elements; no internal NPU causal first divergence was established.",
+    "The first returned field in sorted tree order is not the earliest execution boundary.",
+    "No component-isolating or scalar NPU replay was run to assign the qkv_mask or combined optimized differences to one operator.",
+    "Nine candidate-local restored updates within tolerance do not make cross-candidate continued training equivalent.",
+    "No additional BF16, Timed NPU, large-batch, long-sequence, CUDA or task-quality qualification follows from this page."
+  ]
+}

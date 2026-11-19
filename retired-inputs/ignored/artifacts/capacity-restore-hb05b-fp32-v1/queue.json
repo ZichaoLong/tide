@@ -1,0 +1,19 @@
+{
+  "elapsed_seconds": 73.42297531291842,
+  "job_id": "capacity-restore-hb05b-fp32-v1",
+  "logical_device": "npu:0",
+  "logical_devices": [
+    "npu:0"
+  ],
+  "npu_count": 1,
+  "physical_id": 5,
+  "physical_ids": [
+    5
+  ],
+  "priority": 0,
+  "project": "tide-instances",
+  "return_code": 0,
+  "schema_version": 1,
+  "status": "completed",
+  "timestamp": "2026-11-18T07:41:39.830727+00:00"
+}

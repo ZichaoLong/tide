@@ -1,0 +1,65 @@
+{
+  "source": "0992b467584c1f603314ed04d8efe8596a14f576",
+  "source_path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/scale-cpu-hb-17b-inference-v17/source",
+  "run": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/scale-cpu-hb-17b-inference-v17",
+  "unit": "tide-scale-cpu-hb-17b-inference-v17",
+  "arguments": {
+    "name": "scale-cpu-hb-17b-inference-v17",
+    "revision": "0992b467",
+    "threads": 40,
+    "affinity": "240-279",
+    "npu_count": 0,
+    "candidate_ids": null,
+    "seconds": 18000,
+    "rss_gib": 192.0,
+    "queue_seconds": 600,
+    "after_unit": [],
+    "command": [
+      "--",
+      "numactl",
+      "--membind=6",
+      "--physcpubind=240-279",
+      "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+      "-c",
+      "import os,pathlib,subprocess\nfrom scripts.job import atomic\nroot=pathlib.Path(\"{run}\")\ncommand=['/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python', '-c', 'import json,math,pathlib,statistics,subprocess,sys\\nfrom scripts.job import atomic\\nroot=pathlib.Path(\"{run}\")\\n\\ndef node_admission(label,nodes,required_gib):\\n    readings={}\\n    for node in nodes:\\n        raw=pathlib.Path(\\'/sys/devices/system/node/node\\'+str(node)+\\'/meminfo\\').read_text()\\n        values={s.split()[2].rstrip(\\':\\'):int(s.split()[3])*1024 for s in raw.splitlines()}\\n        capacity=sum(values[k] for k in (\\'MemFree\\',\\'Active(file)\\',\\'Inactive(file)\\',\\'SReclaimable\\'))\\n        readings[node]=dict(raw=raw,free_plus_reclaimable_bytes=capacity)\\n    atomic(root/(label+\\'-numa-admission.json\\'),dict(nodes=readings,required_per_node_bytes=required_gib*2**30,scope=\\'free plus file LRU plus reclaimable slab; margin, not reservation\\'))\\n    if any(x[\\'free_plus_reclaimable_bytes\\']<required_gib*2**30 for x in readings.values()):\\n        raise RuntimeError(\\'NUMA capacity admission failed\\')\\n\\nresource=dict(meminfo=pathlib.Path(\"/proc/meminfo\").read_text(),quota=subprocess.check_output([\"quota\",\"-s\"],text=True),units=subprocess.check_output([\"systemctl\",\"--user\",\"list-units\",\"tide-*\",\"--state=running\",\"--no-pager\"],text=True))\\natomic(root/\"resource-preflight.json\",resource)\\navailable=int(next(line.split()[1] for line in resource[\"meminfo\"].splitlines() if line.startswith(\"MemAvailable:\")))*1024\\nif available<700*2**30: raise RuntimeError(\"large CPU programme needs at least 700 GiB currently available; observed \"+str(available))\\nnode_admission(\"initial\", (6,), 160)\\nscores={}\\nrows=[]\\nfor threads in (16,32,40):\\n    path=root/(\"calibration-\"+str(threads)+\".json\")\\n    command=[sys.executable,\"-m\",\"benchmarks.run\",\"--config\",\"configs/scale/hb-1b.json\",\"--device\",\"cpu\",\"--precision\",\"fp32\",\"--threads\",str(threads),\"--batch\",\"1\",\"--length\",\"8\",\"--warmup\",\"1\",\"--steps\",\"2\",\"--modes\",\"inference\",\"train\",\"--subjects\",\"tide\",\"--output\",str(path)]\\n    code=subprocess.call(command)\\n    if code: raise RuntimeError(\"large workload thread calibration failed: \"+str(threads))\\n    data=json.loads(path.read_text())\\n    seconds=[row[\"median_seconds\"] for row in data[\"observations\"]]\\n    scores[threads]=math.exp(sum(map(math.log,seconds))/len(seconds))\\n    rows.append(dict(threads=threads,command=command,latencies=seconds,score=scores[threads]))\\n    atomic(root/\"calibration.json\",dict(state=\"running\",rows=rows))\\nselected=min(scores,key=scores.get)\\natomic(root/\"calibration.json\",dict(state=\"completed\",rows=rows,selected_threads=selected,scope=\"finite B1/L8 HB1B inference/training calibration for larger CPU capacity work; no universal thread optimum\"))\\ncommand=[sys.executable,\"-m\",\"benchmarks.programme\",\"--suite\",\"scale\",\"--configs\",\"configs/scale/hb-17b.json\",\"--device\",\"cpu\",\"--precision\",\"fp32\",\"bf16\",\"--modes\",\"inference\",\"--threads\",str(selected),\"--batch\",\"1\",\"--length\",\"8\",\"--warmup\",\"1\",\"--steps\",\"3\",\"--child-timeout\",\"3600\",\"--output-dir\",str(root/\"comparison\")]\\na=subprocess.call(command)\\n\\nsys.exit(int(bool(a)))\\n']\natomic(root/\"numa-policy.json\",dict(policy='--membind=6',affinity=sorted(os.sched_getaffinity(0)),maps=pathlib.Path(\"/proc/self/numa_maps\").read_text(),numactl=subprocess.check_output([\"numactl\",\"--show\"],text=True),supersedes=\"scale-cpu-hb-17b-v16\"))\nos.execv(command[0],command)"
+    ]
+  },
+  "launch": [
+    "systemd-run",
+    "--user",
+    "--unit=tide-scale-cpu-hb-17b-inference-v17",
+    "--service-type=exec",
+    "--slice=background.slice",
+    "--working-directory=/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/scale-cpu-hb-17b-inference-v17/source",
+    "--property=KillMode=control-group",
+    "--property=RuntimeMaxSec=18000",
+    "--property=TimeoutStopSec=30",
+    "--property=CPUAffinity=240-279",
+    "--property=StandardOutput=append:/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/scale-cpu-hb-17b-inference-v17/stdout.log",
+    "--property=StandardError=append:/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/scale-cpu-hb-17b-inference-v17/stderr.log",
+    "/bin/bash",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/scale-cpu-hb-17b-inference-v17/run.sh"
+  ],
+  "command": [
+    "numactl",
+    "--membind=6",
+    "--physcpubind=240-279",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "-c",
+    "import os,pathlib,subprocess\nfrom scripts.job import atomic\nroot=pathlib.Path(\"/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/scale-cpu-hb-17b-inference-v17\")\ncommand=['/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python', '-c', 'import json,math,pathlib,statistics,subprocess,sys\\nfrom scripts.job import atomic\\nroot=pathlib.Path(\"/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/scale-cpu-hb-17b-inference-v17\")\\n\\ndef node_admission(label,nodes,required_gib):\\n    readings={}\\n    for node in nodes:\\n        raw=pathlib.Path(\\'/sys/devices/system/node/node\\'+str(node)+\\'/meminfo\\').read_text()\\n        values={s.split()[2].rstrip(\\':\\'):int(s.split()[3])*1024 for s in raw.splitlines()}\\n        capacity=sum(values[k] for k in (\\'MemFree\\',\\'Active(file)\\',\\'Inactive(file)\\',\\'SReclaimable\\'))\\n        readings[node]=dict(raw=raw,free_plus_reclaimable_bytes=capacity)\\n    atomic(root/(label+\\'-numa-admission.json\\'),dict(nodes=readings,required_per_node_bytes=required_gib*2**30,scope=\\'free plus file LRU plus reclaimable slab; margin, not reservation\\'))\\n    if any(x[\\'free_plus_reclaimable_bytes\\']<required_gib*2**30 for x in readings.values()):\\n        raise RuntimeError(\\'NUMA capacity admission failed\\')\\n\\nresource=dict(meminfo=pathlib.Path(\"/proc/meminfo\").read_text(),quota=subprocess.check_output([\"quota\",\"-s\"],text=True),units=subprocess.check_output([\"systemctl\",\"--user\",\"list-units\",\"tide-*\",\"--state=running\",\"--no-pager\"],text=True))\\natomic(root/\"resource-preflight.json\",resource)\\navailable=int(next(line.split()[1] for line in resource[\"meminfo\"].splitlines() if line.startswith(\"MemAvailable:\")))*1024\\nif available<700*2**30: raise RuntimeError(\"large CPU programme needs at least 700 GiB currently available; observed \"+str(available))\\nnode_admission(\"initial\", (6,), 160)\\nscores={}\\nrows=[]\\nfor threads in (16,32,40):\\n    path=root/(\"calibration-\"+str(threads)+\".json\")\\n    command=[sys.executable,\"-m\",\"benchmarks.run\",\"--config\",\"configs/scale/hb-1b.json\",\"--device\",\"cpu\",\"--precision\",\"fp32\",\"--threads\",str(threads),\"--batch\",\"1\",\"--length\",\"8\",\"--warmup\",\"1\",\"--steps\",\"2\",\"--modes\",\"inference\",\"train\",\"--subjects\",\"tide\",\"--output\",str(path)]\\n    code=subprocess.call(command)\\n    if code: raise RuntimeError(\"large workload thread calibration failed: \"+str(threads))\\n    data=json.loads(path.read_text())\\n    seconds=[row[\"median_seconds\"] for row in data[\"observations\"]]\\n    scores[threads]=math.exp(sum(map(math.log,seconds))/len(seconds))\\n    rows.append(dict(threads=threads,command=command,latencies=seconds,score=scores[threads]))\\n    atomic(root/\"calibration.json\",dict(state=\"running\",rows=rows))\\nselected=min(scores,key=scores.get)\\natomic(root/\"calibration.json\",dict(state=\"completed\",rows=rows,selected_threads=selected,scope=\"finite B1/L8 HB1B inference/training calibration for larger CPU capacity work; no universal thread optimum\"))\\ncommand=[sys.executable,\"-m\",\"benchmarks.programme\",\"--suite\",\"scale\",\"--configs\",\"configs/scale/hb-17b.json\",\"--device\",\"cpu\",\"--precision\",\"fp32\",\"bf16\",\"--modes\",\"inference\",\"--threads\",str(selected),\"--batch\",\"1\",\"--length\",\"8\",\"--warmup\",\"1\",\"--steps\",\"3\",\"--child-timeout\",\"3600\",\"--output-dir\",str(root/\"comparison\")]\\na=subprocess.call(command)\\n\\nsys.exit(int(bool(a)))\\n']\natomic(root/\"numa-policy.json\",dict(policy='--membind=6',affinity=sorted(os.sched_getaffinity(0)),maps=pathlib.Path(\"/proc/self/numa_maps\").read_text(),numactl=subprocess.check_output([\"numactl\",\"--show\"],text=True),supersedes=\"scale-cpu-hb-17b-v16\"))\nos.execv(command[0],command)"
+  ],
+  "environment": {
+    "PYTHONPATH": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/scale-cpu-hb-17b-inference-v17/source/src",
+    "TIDE_SOURCE_COMMIT": "0992b467584c1f603314ed04d8efe8596a14f576",
+    "TIDE_HARNESS_COMMIT": "0992b467584c1f603314ed04d8efe8596a14f576",
+    "TORCH_DEVICE_BACKEND_AUTOLOAD": "0",
+    "TIDE_RESOURCE_IDENTITY": "pinned_cpu; shared host",
+    "OMP_NUM_THREADS": "40",
+    "MKL_NUM_THREADS": "40",
+    "OPENBLAS_NUM_THREADS": "40"
+  },
+  "state": "submitted",
+  "resource_enforcement": "process affinity; sampled process-tree RSS, not cgroup hard memory",
+  "device_policy": "cpu",
+  "unit_observation": "MainPID=4056455\nSlice=background.slice\nControlGroup=/user.slice/user-1003.slice/user@1003.service/background.slice/tide-scale-cpu-hb-17b-inference-v17.service\nId=tide-scale-cpu-hb-17b-inference-v17.service\nActiveState=active\nSubState=running\n"
+}

@@ -1,0 +1,48 @@
+{
+  "state": "released",
+  "started": "2026-11-18T07:52:13.895394+00:00",
+  "units": [
+    "tide-native-regional-perf-npu-v1.service",
+    "tide-execution-perf-timed-bf16-v1.service"
+  ],
+  "command": [
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "/mi/data2T/zlong/home/.agents/skills/use-local-ascend/scripts/run_on_free_npu.py",
+    "--job-id",
+    "capacity-region-17b-npu-v1",
+    "--project",
+    "tide-instances",
+    "--priority",
+    "0",
+    "--npu-count",
+    "6",
+    "--max-wait-seconds",
+    "1200",
+    "--state-file",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/capacity-region-17b-npu-v1/queue.json",
+    "--",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "-c",
+    "import os,sys,subprocess\nfrom pathlib import Path\nfrom scripts.job import atomic\nout=Path(\"/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/capacity-region-17b-npu-v1\"); rows=[]\nfor precision in (\"fp32\",\"bf16\"):\n command=[sys.executable,\"-m\",\"scripts.check_placement\",\"--config\",\"configs/scale/hb-17b.json\",\"--devices\",\"npu:0\",\"npu:1\",\"npu:2\",\"npu:3\",\"npu:4\",\"npu:5\",\"--partition-kind\",\"region\",\"--mode\",\"train\",\"--precision\",precision,\"--batch\",\"1\",\"--length\",\"8\",\"--steps\",\"2\",\"--no-foreach\",\"--threads\",\"8\",\"--output\",str(out/(precision+\".json\"))]\n with (out/(precision+\".log\")).open(\"w\") as log:\n  result=subprocess.run(command,stdout=log,stderr=subprocess.STDOUT,timeout=1500)\n rows.append(dict(precision=precision,command=command,exit_code=result.returncode));atomic(out/\"children.json\",dict(source=os.environ[\"TIDE_SOURCE_COMMIT\"],children=rows))\n if result.returncode: break\nsys.exit(any(r[\"exit_code\"] for r in rows))\n"
+  ],
+  "boundary": "resource sequencing only; prior success not required",
+  "observations": {
+    "tide-native-regional-perf-npu-v1.service": {
+      "MainPID": "0",
+      "Result": "success",
+      "LoadState": "not-found",
+      "ActiveState": "inactive",
+      "SubState": "dead"
+    },
+    "tide-execution-perf-timed-bf16-v1.service": {
+      "MainPID": "0",
+      "Result": "success",
+      "LoadState": "not-found",
+      "ActiveState": "inactive",
+      "SubState": "dead"
+    }
+  },
+  "busy": [],
+  "elapsed_seconds": 336.04743883386254,
+  "finished": "2026-11-18T07:57:49.942837+00:00"
+}

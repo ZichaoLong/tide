@@ -1,0 +1,73 @@
+{
+  "source": "c09e5d7cf18de19d73c242a6e461c14e5dba1101",
+  "source_path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/routing-npu-v3/source",
+  "run": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/routing-npu-v3",
+  "unit": "tide-routing-npu-v3",
+  "arguments": {
+    "name": "routing-npu-v3",
+    "revision": "HEAD",
+    "threads": 4,
+    "affinity": "64-67",
+    "npu_count": 1,
+    "candidate_ids": null,
+    "seconds": 1200,
+    "rss_gib": 32.0,
+    "queue_seconds": 600,
+    "command": [
+      "--",
+      "/bin/bash",
+      "-c",
+      "for tide_case in hb-lattice-k hb-exchange-x hb-multiscale-x-timed; do\n python -m scripts.diagnose_bf16 capture --device npu:0 --config configs/${tide_case}.json --tiled --trace {run}/${tide_case}.pt --output {run}/${tide_case}.json || exit\ndone"
+    ]
+  },
+  "launch": [
+    "systemd-run",
+    "--user",
+    "--unit=tide-routing-npu-v3",
+    "--service-type=exec",
+    "--slice=background.slice",
+    "--working-directory=/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/routing-npu-v3/source",
+    "--property=KillMode=control-group",
+    "--property=RuntimeMaxSec=1200",
+    "--property=TimeoutStopSec=30",
+    "--property=CPUAffinity=64-67",
+    "--property=StandardOutput=append:/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/routing-npu-v3/stdout.log",
+    "--property=StandardError=append:/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/routing-npu-v3/stderr.log",
+    "/bin/bash",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/routing-npu-v3/run.sh"
+  ],
+  "command": [
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "/mi/data2T/zlong/home/.agents/skills/use-local-ascend/scripts/run_on_free_npu.py",
+    "--job-id",
+    "routing-npu-v3",
+    "--project",
+    "tide-instances",
+    "--priority",
+    "0",
+    "--npu-count",
+    "1",
+    "--max-wait-seconds",
+    "600",
+    "--state-file",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/routing-npu-v3/queue.json",
+    "--",
+    "/bin/bash",
+    "-c",
+    "for tide_case in hb-lattice-k hb-exchange-x hb-multiscale-x-timed; do\n python -m scripts.diagnose_bf16 capture --device npu:0 --config configs/${tide_case}.json --tiled --trace /mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/routing-npu-v3/${tide_case}.pt --output /mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/routing-npu-v3/${tide_case}.json || exit\ndone"
+  ],
+  "environment": {
+    "PYTHONPATH": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/routing-npu-v3/source/src",
+    "TIDE_SOURCE_COMMIT": "c09e5d7cf18de19d73c242a6e461c14e5dba1101",
+    "TIDE_HARNESS_COMMIT": "c09e5d7cf18de19d73c242a6e461c14e5dba1101",
+    "TORCH_DEVICE_BACKEND_AUTOLOAD": "1",
+    "TIDE_RESOURCE_IDENTITY": "exclusive_cooperative_queue; external jobs not controlled",
+    "OMP_NUM_THREADS": "4",
+    "MKL_NUM_THREADS": "4",
+    "OPENBLAS_NUM_THREADS": "4"
+  },
+  "state": "submitted",
+  "resource_enforcement": "process affinity; sampled process-tree RSS, not cgroup hard memory",
+  "device_policy": "exclusive cooperative whole-group queue",
+  "unit_observation": "MainPID=3421147\nSlice=background.slice\nControlGroup=/user.slice/user-1003.slice/user@1003.service/background.slice/tide-routing-npu-v3.service\nId=tide-routing-npu-v3.service\nActiveState=active\nSubState=running\n"
+}

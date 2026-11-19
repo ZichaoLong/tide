@@ -1,0 +1,794 @@
+{
+  "state": "completed",
+  "source": "d211032804b087fd901295e87a0668168f603b05",
+  "authorized_scope": "User confirmed no dependent projects and authorized cleanup of the residual source copies, their wheel caches, old aliases/provenance and empty temporary directories. Git worktree association and user documents remain.",
+  "source_preservation": [
+    {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/foundation-src-74e7bbd",
+      "commit": "74e7bbd62341d2ccd382194a2c52ad4fea033665",
+      "ancestor_of_current_head": true,
+      "matched_git_blobs": 2947,
+      "generated_files": 256,
+      "changed_or_extra_source": 0,
+      "missing_tracked_files": 0
+    },
+    {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/foundation-src-85d161d",
+      "commit": "85d161d5c9148eac2b164f89a0ba4204b4331898",
+      "ancestor_of_current_head": true,
+      "matched_git_blobs": 2934,
+      "generated_files": 254,
+      "changed_or_extra_source": 0,
+      "missing_tracked_files": 0
+    }
+  ],
+  "wheel_cache": [
+    {
+      "path": "/mi/data2T/zlong/home/.cache/pip/wheels/7a/4c/26/bbdae2c197c24776bd5fc422de9a457c46b1aa37733e74d20a",
+      "origin": {
+        "dir_info": {},
+        "url": "file:///mi/data2T/zlong/home/llm/tide-learning-lab/.local/foundation-src-74e7bbd"
+      },
+      "files": [
+        {
+          "name": "origin.json",
+          "bytes": 107,
+          "sha256": "e7f5b3db8a6aa0574ae9b9a8139f69bed383b34cb4a99eb89f69309971a0553e"
+        },
+        {
+          "name": "tidegraph-0.3.0-py3-none-any.whl",
+          "bytes": 436068,
+          "sha256": "210f6c1f92d365b38def9718cbca0726abcb5da65bda14a8819a585add7e16f9"
+        }
+      ]
+    },
+    {
+      "path": "/mi/data2T/zlong/home/.cache/pip/wheels/db/c9/c5/d27f7dae5d1970a65e81213e1de42df97be0a153e527c468c8",
+      "origin": {
+        "dir_info": {},
+        "url": "file:///mi/data2T/zlong/home/llm/tide-learning-lab/.local/foundation-src-85d161d"
+      },
+      "files": [
+        {
+          "name": "origin.json",
+          "bytes": 107,
+          "sha256": "41be7ac5fb6e2dcdcf6836d8c39a5aeab034e8888c1acb0660d1845ef2f04719"
+        },
+        {
+          "name": "tidegraph-0.3.0-py3-none-any.whl",
+          "bytes": 430694,
+          "sha256": "c40ba439d036f8b9d4149153aea8b89358fcebc2ac019c23b5c1e5b09587e075"
+        }
+      ]
+    }
+  ],
+  "provenance_retained_here": [
+    {
+      "path": "RETIREMENT-20261112.md",
+      "bytes": 557,
+      "sha256": "8797af1f01a962d99e78649499d95e5d110d767be9ad13bcd3ba3068061ab1b7",
+      "text": "# 2026-11-12 历史产物退役\n\n经用户批准，14个已完成benchmark/恢复状态文件已退役，共0.5955GiB。\n10项原结果及恢复passed记录仍在，但原状态字节不再可直接重放。\n源码、环境、配置、日志、原始profiler及六个公开模型别名均保留。\n\n完整路径/SHA256/退役时间见：\n`/mi/data2T/zlong/home/llm/tide-learning-lab/docs/evidence/checkpoint-retirement-execution-20261112.json`\n\n说明与复核：\n`/mi/data2T/zlong/home/llm/tide-learning-lab/docs/studies/checkpoint-retirement-20261112.md`\n"
+    },
+    {
+      "path": "20261102/asset-stage1.json",
+      "bytes": 328,
+      "sha256": "9f7b184a7d0290439e744ccc96f265608cc8e1c944a3a9700e36262a19f38c5a",
+      "text": "{\n  \"updated\": \"2026-11-02T09:57:40.379989+00:00\",\n  \"models\": {\n    \"qwen05\": {\n      \"state\": \"failed\",\n      \"error\": \"asset connection URLError: .gitattributes\"\n    },\n    \"qwen15\": {\n      \"state\": \"complete\"\n    },\n    \"olmoe\": {\n      \"state\": \"failed\",\n      \"error\": \"asset ended before its published size\"\n    }\n  }\n}\n"
+    },
+    {
+      "path": "20261102/compute.lock",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "text": ""
+    },
+    {
+      "path": "20261102/stage2-download-b.json",
+      "bytes": 1305,
+      "sha256": "a0d758104f34c53ac3eb89c6f0b94dd1953bf136155dc3537b6dfd1883274213",
+      "text": "{\n  \"state\": \"completed\",\n  \"started\": \"2026-11-02T09:54:03.562254+00:00\",\n  \"condition\": \"stage1 terminal and a completed qwen15 main point with finite logits\",\n  \"calibration_witnesses\": [\n    \"/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102/runs/cpu-b/main-qwen15-cpu-b1-l512/run/result.json\"\n  ],\n  \"results\": [\n    {\n      \"model\": \"qwen3\",\n      \"state\": \"complete\"\n    },\n    {\n      \"model\": \"qwen7\",\n      \"state\": \"failed\",\n      \"error\": \"asset ended before its published size\"\n    },\n    {\n      \"model\": \"qwenmoe\",\n      \"state\": \"failed\",\n      \"error\": \"asset ended before its published size\"\n    }\n  ],\n  \"compute_submissions\": [\n    {\n      \"backend\": \"cpu\",\n      \"exit_code\": 0,\n      \"stdout\": \"{\\\"unit\\\": \\\"gef-lm-cpu-stage2-20261102-b.service\\\", \\\"source\\\": \\\"6bbc7e2240c2a20958c1bb5206030f4d2ade2ac4\\\", \\\"output\\\": \\\"/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102/jobs/cpu-stage2-b\\\"}\\n\",\n      \"stderr\": \"\"\n    },\n    {\n      \"backend\": \"npu\",\n      \"exit_code\": 0,\n      \"stdout\": \"{\\\"unit\\\": \\\"gef-lm-npu-stage2-20261102-b.service\\\", \\\"source\\\": \\\"6bbc7e2240c2a20958c1bb5206030f4d2ade2ac4\\\", \\\"output\\\": \\\"/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102/jobs/npu-stage2-b\\\"}\\n\",\n      \"stderr\": \"\"\n    }\n  ],\n  \"finished\": \"2026-11-02T12:02:48.914737+00:00\"\n}\n"
+    },
+    {
+      "path": "20261102/stage2-download.json",
+      "bytes": 161,
+      "sha256": "db43cb4c926a8a6c5c89f9611817c28dcea6139ee6f14f70ec6338681ad4cee3",
+      "text": "{\n  \"state\": \"waiting\",\n  \"started\": \"2026-11-02T09:46:55.635144+00:00\",\n  \"condition\": \"stage1 terminal and a completed qwen15 main point with finite logits\"\n}\n"
+    }
+  ],
+  "public_model_targets_preserved": [
+    {
+      "alias": "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102/models/qwen15-989aa7980e4cf806f80c7fef2b1adb7bc71aa306",
+      "target": "/mi/data2T/models/huggingface/Qwen/Qwen2.5-1.5B-Instruct/989aa7980e4cf806f80c7fef2b1adb7bc71aa306",
+      "device": 64768,
+      "inode": 62139527
+    },
+    {
+      "alias": "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102/models/qwen05-7ae557604adf67be50417f59c2c2f167def9a775",
+      "target": "/mi/data2T/models/huggingface/Qwen/Qwen2.5-0.5B-Instruct/7ae557604adf67be50417f59c2c2f167def9a775",
+      "device": 64768,
+      "inode": 62139525
+    },
+    {
+      "alias": "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102/models/qwen7-a09a35458c702b33eeacc393d103063234e8bc28",
+      "target": "/mi/data2T/models/huggingface/Qwen/Qwen2.5-7B-Instruct/a09a35458c702b33eeacc393d103063234e8bc28",
+      "device": 64768,
+      "inode": 62158784
+    },
+    {
+      "alias": "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102/models/qwenmoe-0d7cf23991f47feeb3a57ecb4c9cee8ea4a17bfe",
+      "target": "/mi/data2T/models/huggingface/Qwen/Qwen3-30B-A3B-Instruct-2507/0d7cf23991f47feeb3a57ecb4c9cee8ea4a17bfe",
+      "device": 64768,
+      "inode": 62158816
+    },
+    {
+      "alias": "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102/models/qwen3-aa8e72537993ba99e69dfaafa59ed015b17504d1",
+      "target": "/mi/data2T/models/huggingface/Qwen/Qwen2.5-3B-Instruct/aa8e72537993ba99e69dfaafa59ed015b17504d1",
+      "device": 64768,
+      "inode": 62155512
+    },
+    {
+      "alias": "/mi/data2T/zlong/home/llm/gef-lm-experiments/20261102/models/olmoe-b89a7c4bc24fb9e55ce2543c9458ce0ca5c4650e",
+      "target": "/mi/data2T/models/huggingface/allenai/OLMoE-1B-7B-0125-Instruct/b89a7c4bc24fb9e55ce2543c9458ce0ca5c4650e",
+      "device": 64768,
+      "inode": 62148168
+    }
+  ],
+  "owned_processes_checked": 113,
+  "active_dependencies": [],
+  "targets": [
+    {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/foundation-src-74e7bbd",
+      "kind": "historical_source_copy",
+      "device": 64768,
+      "inode": 61792520,
+      "allocated_bytes": 48807936,
+      "tree_identity": "321aed0d8896e262689c2cc6bdb1910584b89aba130708c665ffdebe366c556b",
+      "removed": true
+    },
+    {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/foundation-src-85d161d",
+      "kind": "historical_source_copy",
+      "device": 64768,
+      "inode": 61775884,
+      "allocated_bytes": 48685056,
+      "tree_identity": "0999ebc2bf6f6abe097715641b85258d9de8c37ca3e70ef8e6524fb7e3fa284e",
+      "removed": true
+    },
+    {
+      "path": "/mi/data2T/zlong/home/.cache/pip/wheels/7a/4c/26/bbdae2c197c24776bd5fc422de9a457c46b1aa37733e74d20a",
+      "kind": "wheel_cache",
+      "device": 64768,
+      "inode": 62431415,
+      "allocated_bytes": 446464,
+      "tree_identity": "fa880dda6b25393c3ab5fda3744397d754be18f58771e520551487d06d45a7f6",
+      "removed": true
+    },
+    {
+      "path": "/mi/data2T/zlong/home/.cache/pip/wheels/db/c9/c5/d27f7dae5d1970a65e81213e1de42df97be0a153e527c468c8",
+      "kind": "wheel_cache",
+      "device": 64768,
+      "inode": 62431318,
+      "allocated_bytes": 442368,
+      "tree_identity": "9da9629450ae64ba0d45082cdd4a71af86edac88e0b87dc81b09457cf6989460",
+      "removed": true
+    },
+    {
+      "path": "/mi/data2T/zlong/home/llm/gef-lm-experiments",
+      "kind": "retired_aliases_and_provenance",
+      "device": 64768,
+      "inode": 62029064,
+      "allocated_bytes": 53248,
+      "tree_identity": "4fa6a257ce0563adb195f57aba3e64672c34f1188c5793a62f936904b6bcbc23",
+      "removed": true
+    },
+    {
+      "path": "/tmp/tide-build-npu",
+      "kind": "empty_temporary_directories",
+      "device": 45,
+      "inode": 848756,
+      "allocated_bytes": 0,
+      "tree_identity": "5734f41f4e77ca7f467eb977b1d81c13cb691844215fddb988b950ff65374119",
+      "removed": true
+    },
+    {
+      "path": "/tmp/tide-libtorch-module-check.hDbzJz",
+      "kind": "empty_temporary_directories",
+      "device": 45,
+      "inode": 844164,
+      "allocated_bytes": 0,
+      "tree_identity": "95c4c2285fe6f88138960d0888a6147490c7b725535214cb25ed9748cad9e1d2",
+      "removed": true
+    },
+    {
+      "path": "/tmp/tide-libtorch-module-check2.pPHwXg",
+      "kind": "empty_temporary_directories",
+      "device": 45,
+      "inode": 844990,
+      "allocated_bytes": 0,
+      "tree_identity": "7807ed7c04a8e12b85b02913f552d8f4eba4846d4fe45e287ede9a1db1bd30dd",
+      "removed": true
+    },
+    {
+      "path": "/tmp/tide-npu-libtorch-probe",
+      "kind": "empty_temporary_directories",
+      "device": 45,
+      "inode": 844575,
+      "allocated_bytes": 0,
+      "tree_identity": "30d6b0ab956bb66fd9aad73f3180a0e105f20b07839812879bc24216bd94e85e",
+      "removed": true
+    },
+    {
+      "path": "/tmp/tide-qualify-_6h_328j",
+      "kind": "empty_temporary_directories",
+      "device": 45,
+      "inode": 1461730,
+      "allocated_bytes": 0,
+      "tree_identity": "4b9997b5c63be2587defaba7f2618da7e9930ab9d181ee1415b11e3a56e96bc7",
+      "removed": true
+    },
+    {
+      "path": "/tmp/tide-runner-audit.5ogMkt",
+      "kind": "empty_temporary_directories",
+      "device": 45,
+      "inode": 1117343,
+      "allocated_bytes": 0,
+      "tree_identity": "2e0cd5966adcabcdaca18f9335a9f6f460a589b81187af25a4e91f3039882a03",
+      "removed": true
+    },
+    {
+      "path": "/tmp/tide-runner-audit.OR7kMp",
+      "kind": "empty_temporary_directories",
+      "device": 45,
+      "inode": 1117338,
+      "allocated_bytes": 0,
+      "tree_identity": "04b4ea358374ba2bb6d6f38ad274624576bc2a0f33677b9a9117fb32b6fc4013",
+      "removed": true
+    },
+    {
+      "path": "/tmp/tide-runner-exception-fixed.woCY7I",
+      "kind": "empty_temporary_directories",
+      "device": 45,
+      "inode": 1118048,
+      "allocated_bytes": 0,
+      "tree_identity": "b47b793d3c920949c74a7f5230f150298bcb67bb6c41c37c7dd92bec4c348c77",
+      "removed": true
+    },
+    {
+      "path": "/tmp/tide-runner-failure-audit.4w433mue",
+      "kind": "empty_temporary_directories",
+      "device": 45,
+      "inode": 1117357,
+      "allocated_bytes": 0,
+      "tree_identity": "99d1175f191de563d617d348c6e295c1d4e0b4b93edfdc9609dcec28a5b04748",
+      "removed": true
+    },
+    {
+      "path": "/tmp/tide-runner-fixed.WfjfSi",
+      "kind": "empty_temporary_directories",
+      "device": 45,
+      "inode": 1117698,
+      "allocated_bytes": 0,
+      "tree_identity": "e62da711c86ef77c50c24333a486e0ce13df4dca8f4ffdd007dd0fe2cea8a6d0",
+      "removed": true
+    }
+  ],
+  "protected_user_hashes": {
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/docs/tide-learning-lab-TL-REQ-004-handoff.md": "69607cba0a7e87a260929ed5741d996103cef804c51f3fa2c02b3bd7a454a220",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/docs/tide-learning-lab-TL-REQ-005-handoff.md": "83bec6f6eaa476ae9d7c859fe168333ac2ee564433297f36ab9aa1ef33c38732",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/docs/tide-learning-lab-TL-REQ-006-handoff.md": "8706f0477c8f31d0c8337e55ba7f8f5b28bb9a455656586fa1585c82ec58b4df",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/docs/upstream-lh-semantics-discussion-20261113.md": "3118419cb014570395323baf887ffe5a7e797f97049e85eacef26ecb1fd81c07"
+  },
+  "downstream_head": "ebb084a2dad5c3a6bae2495926aacec2054d500f",
+  "downstream_status_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "audited_at": "2026-11-18T02:04:37.578046+00:00",
+  "attempts": [
+    {
+      "state": "failed",
+      "error": "PermissionError(13, 'Permission denied')",
+      "reason": "The first historical snapshot has owner-read-only directories. No target was removed; full pre-delete identities still match."
+    },
+    {
+      "state": "completed",
+      "remedy": "Enabled owner write on authorized retired directories only; retried explicit removals."
+    }
+  ],
+  "owner_write_enabled_directories": [
+    {
+      "root": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/foundation-src-74e7bbd",
+      "relative": ".",
+      "before": "0o555",
+      "after": "0o755"
+    },
+    {
+      "root": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/foundation-src-74e7bbd",
+      "relative": "tools",
+      "before": "0o555",
+      "after": "0o755"
+    },
+    {
+      "root": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/foundation-src-74e7bbd",
+      "relative": "tools/weighted_benchmark",
+      "before": "0o555",
+      "after": "0o755"
+    },
+    {
+      "root": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/foundation-src-74e7bbd",
+      "relative": "tools/resident_consumer",
+      "before": "0o555",
+      "after": "0o755"
+    },
+    {
+      "root": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/foundation-src-74e7bbd",
+      "relative": "tools/lh_repro",
+      "before": "0o555",
+      "after": "0o755"
+    },
+    {
+      "root": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/foundation-src-74e7bbd",
+      "relative": "tools/device_online",
+      "before": "0o555",
+      "after": "0o755"
+    },
+    {
+      "root": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/foundation-src-74e7bbd",
+      "relative": "tools/device_online/include",
+      "before": "0o555",
+      "after": "0o755"
+    },
+    {
+      "root": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/foundation-src-74e7bbd",
+      "relative": "tools/device_online/include/tide",
+      "before": "0o555",
+      "after": "0o755"
+    },
+    {
+      "root": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/foundation-src-74e7bbd",
+      "relative": "tools/device_online/ascendc",
+      "before": "0o555",
+      "after": "0o755"
+    },
+    {
+      "root": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/foundation-src-74e7bbd",
+      "relative": "tools/device_online/cuda",
+      "before": "0o555",
+      "after": "0o755"
+    },
+    {
+      "root": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/foundation-src-74e7bbd",
+      "relative": "tools/device_online/cuda/contracts",
+      "before": "0o555",
+      "after": "0o755"
+    },
+    {
+      "root": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/foundation-src-74e7bbd",
+      "relative": "tools/accelerator_scale",
+      "before": "0o555",
+      "after": "0o755"
+    },
+    {
+      "root": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/foundation-src-74e7bbd",
+      "relative": "tools/online_bench",
+      "before": "0o555",
+      "after": "0o755"
+    },
+    {
+      "root": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/foundation-src-74e7bbd",
+      "relative": "tools/cpu_compare",
+      "before": "0o555",
+      "after": "0o755"
+    },
+    {
+      "root": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/foundation-src-74e7bbd",
+      "relative": "tools/weighted_resident_consumer",
+      "before": "0o555",
+      "after": "0o755"
+    },
+    {
+      "root": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/foundation-src-74e7bbd",
+      "relative": "scripts",
+      "before": "0o555",
+      "after": "0o755"
+    },
+    {
+      "root": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/foundation-src-74e7bbd",
+      "relative": "tests",
+      "before": "0o555",
+      "after": "0o755"
+    },
+    {
+      "root": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/foundation-src-74e7bbd",
+      "relative": "tests/data",
+      "before": "0o555",
+      "after": "0o755"
+    },
+    {
+      "root": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/foundation-src-74e7bbd",
+      "relative": "tests/fixtures",
+      "before": "0o555",
+      "after": "0o755"
+    },
+    {
+      "root": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/foundation-src-74e7bbd",
+      "relative": "tests/fixtures/allocation",
+      "before": "0o555",
+      "after": "0o755"
+    },
+    {
+      "root": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/foundation-src-74e7bbd",
+      "relative": "tests/lh_oracle",
+      "before": "0o555",
+      "after": "0o755"
+    },
+    {
+      "root": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/foundation-src-74e7bbd",
+      "relative": "python",
+      "before": "0o555",
+      "after": "0o755"
+    },
+    {
+      "root": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/foundation-src-74e7bbd",
+      "relative": "python/tidegraph",
+      "before": "0o555",
+      "after": "0o755"
+    },
+    {
+      "root": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/foundation-src-74e7bbd",
+      "relative": "python/tidegraph/weighted",
+      "before": "0o555",
+      "after": "0o755"
+    },
+    {
+      "root": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/foundation-src-74e7bbd",
+      "relative": "python/tidegraph/planning",
+      "before": "0o555",
+      "after": "0o755"
+    },
+    {
+      "root": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/foundation-src-74e7bbd",
+      "relative": "python/tidegraph/experiment",
+      "before": "0o555",
+      "after": "0o755"
+    },
+    {
+      "root": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/foundation-src-74e7bbd",
+      "relative": "python/tidegraph/lm",
+      "before": "0o555",
+      "after": "0o755"
+    },
+    {
+      "root": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/foundation-src-74e7bbd",
+      "relative": "python/tidegraph.egg-info",
+      "before": "0o555",
+      "after": "0o755"
+    },
+    {
+      "root": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/foundation-src-74e7bbd",
+      "relative": "templates",
+      "before": "0o555",
+      "after": "0o755"
+    },
+    {
+      "root": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/foundation-src-74e7bbd",
+      "relative": "templates/downstream",
+      "before": "0o555",
+      "after": "0o755"
+    },
+    {
+      "root": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/foundation-src-74e7bbd",
+      "relative": "build",
+      "before": "0o555",
+      "after": "0o755"
+    },
+    {
+      "root": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/foundation-src-74e7bbd",
+      "relative": "build/bdist.linux-aarch64",
+      "before": "0o555",
+      "after": "0o755"
+    },
+    {
+      "root": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/foundation-src-74e7bbd",
+      "relative": "build/lib",
+      "before": "0o555",
+      "after": "0o755"
+    },
+    {
+      "root": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/foundation-src-74e7bbd",
+      "relative": "build/lib/tidegraph",
+      "before": "0o555",
+      "after": "0o755"
+    },
+    {
+      "root": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/foundation-src-74e7bbd",
+      "relative": "build/lib/tidegraph/weighted",
+      "before": "0o555",
+      "after": "0o755"
+    },
+    {
+      "root": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/foundation-src-74e7bbd",
+      "relative": "build/lib/tidegraph/planning",
+      "before": "0o555",
+      "after": "0o755"
+    },
+    {
+      "root": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/foundation-src-74e7bbd",
+      "relative": "build/lib/tidegraph/experiment",
+      "before": "0o555",
+      "after": "0o755"
+    },
+    {
+      "root": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/foundation-src-74e7bbd",
+      "relative": "build/lib/tidegraph/lm",
+      "before": "0o555",
+      "after": "0o755"
+    },
+    {
+      "root": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/foundation-src-74e7bbd",
+      "relative": "benchmarks",
+      "before": "0o555",
+      "after": "0o755"
+    },
+    {
+      "root": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/foundation-src-74e7bbd",
+      "relative": "docs",
+      "before": "0o555",
+      "after": "0o755"
+    },
+    {
+      "root": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/foundation-src-74e7bbd",
+      "relative": "docs/evidence",
+      "before": "0o555",
+      "after": "0o755"
+    },
+    {
+      "root": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/foundation-src-74e7bbd",
+      "relative": "docs/history",
+      "before": "0o555",
+      "after": "0o755"
+    },
+    {
+      "root": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/foundation-src-74e7bbd",
+      "relative": "docs/upstream",
+      "before": "0o555",
+      "after": "0o755"
+    },
+    {
+      "root": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/foundation-src-74e7bbd",
+      "relative": "docs/upstream/tide-core-3",
+      "before": "0o555",
+      "after": "0o755"
+    },
+    {
+      "root": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/foundation-src-74e7bbd",
+      "relative": "docs/upstream/tide-core-5",
+      "before": "0o555",
+      "after": "0o755"
+    },
+    {
+      "root": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/foundation-src-74e7bbd",
+      "relative": "docs/upstream/tide-core-5/local-semantics",
+      "before": "0o555",
+      "after": "0o755"
+    },
+    {
+      "root": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/foundation-src-74e7bbd",
+      "relative": "docs/upstream/tide-core-5/local-semantics/weighted-message",
+      "before": "0o555",
+      "after": "0o755"
+    },
+    {
+      "root": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/foundation-src-74e7bbd",
+      "relative": "docs/upstream/tide-core-5/local-semantics/weighted-message/recurrent-memory",
+      "before": "0o555",
+      "after": "0o755"
+    },
+    {
+      "root": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/foundation-src-74e7bbd",
+      "relative": "docs/upstream/tide-core-5/reference",
+      "before": "0o555",
+      "after": "0o755"
+    },
+    {
+      "root": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/foundation-src-74e7bbd",
+      "relative": "docs/upstream/tide-core-5/instances",
+      "before": "0o555",
+      "after": "0o755"
+    },
+    {
+      "root": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/foundation-src-74e7bbd",
+      "relative": "docs/upstream/tide-core-5/records",
+      "before": "0o555",
+      "after": "0o755"
+    },
+    {
+      "root": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/foundation-src-74e7bbd",
+      "relative": "docs/upstream/tide-core-5/topologies",
+      "before": "0o555",
+      "after": "0o755"
+    },
+    {
+      "root": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/foundation-src-74e7bbd",
+      "relative": "cmake",
+      "before": "0o555",
+      "after": "0o755"
+    },
+    {
+      "root": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/foundation-src-74e7bbd",
+      "relative": "configs",
+      "before": "0o555",
+      "after": "0o755"
+    },
+    {
+      "root": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/foundation-src-74e7bbd",
+      "relative": "configs/sites",
+      "before": "0o555",
+      "after": "0o755"
+    },
+    {
+      "root": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/foundation-src-74e7bbd",
+      "relative": "configs/checkpoint-cost",
+      "before": "0o555",
+      "after": "0o755"
+    },
+    {
+      "root": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/foundation-src-74e7bbd",
+      "relative": "configs/capacity-training",
+      "before": "0o555",
+      "after": "0o755"
+    },
+    {
+      "root": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/foundation-src-74e7bbd",
+      "relative": "configs/matrices",
+      "before": "0o555",
+      "after": "0o755"
+    },
+    {
+      "root": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/foundation-src-74e7bbd",
+      "relative": "configs/checks",
+      "before": "0o555",
+      "after": "0o755"
+    },
+    {
+      "root": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/foundation-src-74e7bbd",
+      "relative": "cpp",
+      "before": "0o555",
+      "after": "0o755"
+    },
+    {
+      "root": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/foundation-src-74e7bbd",
+      "relative": "cpp/scale",
+      "before": "0o555",
+      "after": "0o755"
+    },
+    {
+      "root": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/foundation-src-74e7bbd",
+      "relative": "cpp/include",
+      "before": "0o555",
+      "after": "0o755"
+    },
+    {
+      "root": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/foundation-src-74e7bbd",
+      "relative": "cpp/include/tide",
+      "before": "0o555",
+      "after": "0o755"
+    },
+    {
+      "root": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/foundation-src-74e7bbd",
+      "relative": "cpp/include/portable_torch",
+      "before": "0o555",
+      "after": "0o755"
+    },
+    {
+      "root": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/foundation-src-74e7bbd",
+      "relative": "cpp/test",
+      "before": "0o555",
+      "after": "0o755"
+    },
+    {
+      "root": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/foundation-src-74e7bbd",
+      "relative": "cpp/lh_bench",
+      "before": "0o555",
+      "after": "0o755"
+    },
+    {
+      "root": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/foundation-src-74e7bbd",
+      "relative": "cpp/bench",
+      "before": "0o555",
+      "after": "0o755"
+    },
+    {
+      "root": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/foundation-src-74e7bbd",
+      "relative": "cpp/src",
+      "before": "0o555",
+      "after": "0o755"
+    },
+    {
+      "root": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/foundation-src-74e7bbd",
+      "relative": "cpp/lh_original",
+      "before": "0o555",
+      "after": "0o755"
+    },
+    {
+      "root": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/foundation-src-74e7bbd",
+      "relative": ".torch-portability",
+      "before": "0o555",
+      "after": "0o755"
+    },
+    {
+      "root": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/foundation-src-74e7bbd",
+      "relative": "examples",
+      "before": "0o555",
+      "after": "0o755"
+    },
+    {
+      "root": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/foundation-src-74e7bbd",
+      "relative": "examples/consumer_core5",
+      "before": "0o555",
+      "after": "0o755"
+    },
+    {
+      "root": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/foundation-src-74e7bbd",
+      "relative": "examples/consumer_core5/configured",
+      "before": "0o555",
+      "after": "0o755"
+    },
+    {
+      "root": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/foundation-src-74e7bbd",
+      "relative": "examples/consumer_core5/configured/src",
+      "before": "0o555",
+      "after": "0o755"
+    },
+    {
+      "root": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/foundation-src-74e7bbd",
+      "relative": "examples/consumer_core5/configured/src/tidegraph_consumer_core5",
+      "before": "0o555",
+      "after": "0o755"
+    },
+    {
+      "root": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/foundation-src-74e7bbd",
+      "relative": "examples/consumer",
+      "before": "0o555",
+      "after": "0o755"
+    },
+    {
+      "root": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/foundation-src-74e7bbd",
+      "relative": "examples/consumer_cpp",
+      "before": "0o555",
+      "after": "0o755"
+    },
+    {
+      "root": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/foundation-src-74e7bbd",
+      "relative": "examples/external_lm",
+      "before": "0o555",
+      "after": "0o755"
+    },
+    {
+      "root": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/foundation-src-74e7bbd",
+      "relative": "examples/external_lm/llama",
+      "before": "0o555",
+      "after": "0o755"
+    }
+  ],
+  "removed_root_count": 15,
+  "released_allocated_bytes": 98435072,
+  "public_model_targets_unchanged": true,
+  "user_documents_unchanged": true,
+  "downstream_tracked_state_unchanged": true,
+  "remaining_worktree_count": 2,
+  "finished_at": "2026-11-18T02:05:31.636002+00:00",
+  "quota_after": {
+    "exit_code": 1,
+    "output": "Disk quotas for user zlong (uid 1003): \n     Filesystem   space   quota   limit   grace   files   quota   limit   grace\n/dev/mapper/ascend_data-data\n                   352G*   300G    700G   3days    769k       0       0        \n"
+  },
+  "ignored_files_after": [],
+  "validation": {
+    "removed_roots_verified": 15,
+    "protected_user_documents_verified": 4,
+    "public_model_targets_verified": 6,
+    "fixed_math_files_verified": 108,
+    "model_config_test_math_scripts_and_skills_unchanged_from": "d211032804b087fd901295e87a0668168f603b05",
+    "current_runnable_source_references_to_removed_targets": 0,
+    "markdown_pages": 31,
+    "local_links": 160,
+    "broken_links": 0,
+    "git_diff_check": "passed"
+  }
+}

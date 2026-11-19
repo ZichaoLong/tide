@@ -1,0 +1,19 @@
+{
+  "elapsed_seconds": 27.314768724143505,
+  "job_id": "regional-rounding-npu-v1",
+  "logical_device": "npu:0",
+  "logical_devices": [
+    "npu:0"
+  ],
+  "npu_count": 1,
+  "physical_id": 5,
+  "physical_ids": [
+    5
+  ],
+  "priority": 0,
+  "project": "tide-instances",
+  "return_code": 0,
+  "schema_version": 1,
+  "status": "completed",
+  "timestamp": "2026-11-18T07:51:51.981432+00:00"
+}

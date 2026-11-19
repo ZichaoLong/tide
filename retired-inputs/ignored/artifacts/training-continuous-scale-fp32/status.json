@@ -1,0 +1,95 @@
+{
+  "state": "passed",
+  "source": "ae247dee82c60b63495e9abea7f703abd84ac3c7",
+  "command": [
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "/mi/data2T/zlong/home/.agents/skills/use-local-ascend/scripts/run_on_free_npu.py",
+    "--job-id",
+    "training-continuous-scale-fp32",
+    "--project",
+    "tide-instances",
+    "--priority",
+    "0",
+    "--npu-count",
+    "1",
+    "--max-wait-seconds",
+    "1800",
+    "--state-file",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/training-continuous-scale-fp32/queue.json",
+    "--",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "-m",
+    "benchmarks.continuous",
+    "--config",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/training-preflight-20261118/hb-0p5b-training.json",
+    "--device",
+    "npu:0",
+    "--precision",
+    "fp32",
+    "--mode",
+    "train",
+    "--batch",
+    "1",
+    "--prefill",
+    "128",
+    "--prefill-chunk",
+    "128",
+    "--decode",
+    "0",
+    "--updates",
+    "20",
+    "--warmup",
+    "1",
+    "--threads",
+    "4",
+    "--device-budget-gib",
+    "48",
+    "--checkpoint",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/training-continuous-scale-fp32/checkpoint.pt",
+    "--output",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/training-continuous-scale-fp32/continuous.json"
+  ],
+  "pid": 1587552,
+  "started": "2026-11-18T09:46:15.752803+00:00",
+  "max_rss_bytes": 107374182400,
+  "peak_rss_bytes": 10713862144,
+  "max_processes": 2,
+  "rss_sample_count": 973,
+  "poll_interval": 0.25,
+  "descendant_supervision": "Linux child subreaper; retained PID/start identities across nested sessions",
+  "child_pid": 1587572,
+  "process_group": 1587572,
+  "elapsed": 429.8469076342881,
+  "descendant_identities": [
+    {
+      "pid": 1587572,
+      "start_ticks": 2258134646
+    },
+    {
+      "pid": 1587582,
+      "start_ticks": 2258134651
+    },
+    {
+      "pid": 1608225,
+      "start_ticks": 2258163039
+    },
+    {
+      "pid": 1610049,
+      "start_ticks": 2258164715
+    },
+    {
+      "pid": 1611196,
+      "start_ticks": 2258166397
+    },
+    {
+      "pid": 1611789,
+      "start_ticks": 2258166872
+    },
+    {
+      "pid": 1611957,
+      "start_ticks": 2258167045
+    }
+  ],
+  "exit_code": 0,
+  "finished": "2026-11-18T09:53:25.599711+00:00"
+}

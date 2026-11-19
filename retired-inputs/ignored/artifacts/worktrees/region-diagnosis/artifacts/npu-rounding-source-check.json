@@ -1,0 +1,121 @@
+{
+  "declared_revision": "8a22530dae69d9f1fa5ead4a01d1798fd1dfe0ee",
+  "source_path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/regional-rounding-npu-v1/source",
+  "files": [
+    {
+      "path": "scripts/diagnose_bf16.py",
+      "match": true,
+      "sha256": "376978924d7714acc13d3dbecfcea9d266fccea35bcc1a5757937d7da5ab2d47"
+    },
+    {
+      "path": "scripts/diagnose_region_batch.py",
+      "match": true,
+      "sha256": "4661cab1994db9a0f617f264ba56bb7a5a7cc36416e004cbf20babf6f85fe0be"
+    },
+    {
+      "path": "src/tide/__init__.py",
+      "match": true,
+      "sha256": "bd8d669f813aa282dc1835a53656550468f40eac46a730c4339635580d8e4195"
+    },
+    {
+      "path": "src/tide/allocation.py",
+      "match": true,
+      "sha256": "ff7f4e26c05006e5fb1a68c50f783670c20c33baf56528b5dac55fa2ffab66cc"
+    },
+    {
+      "path": "src/tide/attention.py",
+      "match": true,
+      "sha256": "0a8231713a2801ed397cee093c5d1112867a2057fc20804717fd39fd9e1609e8"
+    },
+    {
+      "path": "src/tide/checkpoint.py",
+      "match": true,
+      "sha256": "7e188773786f5cd7e3b06fcf3ef4ca9efa256933a9c21a8225f359687337c49f"
+    },
+    {
+      "path": "src/tide/config.py",
+      "match": true,
+      "sha256": "bddea1a60912ea21803869a8e25a2f7f303311d3a1bfbf52719f9cda5d4bdf54"
+    },
+    {
+      "path": "src/tide/kv.py",
+      "match": true,
+      "sha256": "7310fcbc79a1641a495316c100e409a43e8d59ac6b6ae5f77669a9a9a4849caa"
+    },
+    {
+      "path": "src/tide/layout.py",
+      "match": true,
+      "sha256": "4aee0573beb2448dd90ca307b9065f2ed4cd0f7eb93bfcd92c4b46550f889aa0"
+    },
+    {
+      "path": "src/tide/model.py",
+      "match": true,
+      "sha256": "3897868991e1ff2b241c74efc1f1166e509f401018f2df89f1c45a17ae17b161"
+    },
+    {
+      "path": "src/tide/parameters.py",
+      "match": true,
+      "sha256": "67d6ee7829448fa7431a3350a3a15ea5070aa4038d2276017d844714dceecfa7"
+    },
+    {
+      "path": "src/tide/placement.py",
+      "match": true,
+      "sha256": "c58ef4574d5be7fad6e422e658f5972a815e95aed9bb6d55155e62777c2f8a27"
+    },
+    {
+      "path": "src/tide/placement_ownership.py",
+      "match": true,
+      "sha256": "95431e5a2240b81a16df4cba08dfef541d777735220a212a28324f9c63661c13"
+    },
+    {
+      "path": "src/tide/precision.py",
+      "match": true,
+      "sha256": "5e94f06892dc89451750b4e5b1fd2e105d440f633875f31a883880e6a6ca480a"
+    },
+    {
+      "path": "src/tide/reception.py",
+      "match": true,
+      "sha256": "67768494c96a697480c13713e246b1a943940e7faeb96d24bd0732aad3f7cd98"
+    },
+    {
+      "path": "src/tide/region.py",
+      "match": true,
+      "sha256": "3d0ee3fa13e344ddb0fff5ce15af62cee4e0b1a7c4984df523e70a4cbfc41ec2"
+    },
+    {
+      "path": "src/tide/region_batch.py",
+      "match": true,
+      "sha256": "2406168308d26e9ed5d07f7b05ac9f4650161df4929b3c0b2b9042925a313a6a"
+    },
+    {
+      "path": "src/tide/region_execution.py",
+      "match": true,
+      "sha256": "75dcce33905dbcecc62e3eaaf93f2c1d087dfa9608043e561f59d93e2d0dd7d1"
+    },
+    {
+      "path": "src/tide/region_placement.py",
+      "match": true,
+      "sha256": "d2dfc2b65ff14430423aa1532fe5fd7cc378b7581c207f1938e5f4ab1c34c459"
+    },
+    {
+      "path": "src/tide/ssd.py",
+      "match": true,
+      "sha256": "03132ab3f3a8b49f8eb6f0c0b29000e1647280fb243d0105a5e7f220ccac0954"
+    },
+    {
+      "path": "src/tide/ssd_memory.py",
+      "match": true,
+      "sha256": "6479ce755e67396708aab2912d460c4166b69be2ab92b0b592a7b52f93124f81"
+    },
+    {
+      "path": "src/tide/topology.py",
+      "match": true,
+      "sha256": "8cdf58d0b3089e16a079ad46c3be7ca0c953fcea0023d276c9582901e1712dbf"
+    },
+    {
+      "path": "src/tide/topology_hb.py",
+      "match": true,
+      "sha256": "5fb7b1a959f0b88a097e95959b52a1f10cf5180eaea7b688cbef086946abea06"
+    }
+  ]
+}

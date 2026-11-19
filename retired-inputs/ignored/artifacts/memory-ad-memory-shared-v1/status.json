@@ -1,0 +1,96 @@
+{
+  "state": "passed",
+  "source": "301a327569aa75aefddd03cac9ca839589db5672",
+  "command": [
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "/mi/data2T/zlong/home/.agents/skills/use-local-ascend/scripts/run_on_free_npu.py",
+    "--job-id",
+    "memory-ad-memory-shared-v1",
+    "--project",
+    "tide-instances",
+    "--priority",
+    "0",
+    "--npu-count",
+    "1",
+    "--max-wait-seconds",
+    "600",
+    "--state-file",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-ad-memory-shared-v1/queue.json",
+    "--",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "-m",
+    "benchmarks.programme",
+    "--suite",
+    "scale",
+    "--configs",
+    "configs/memory-candidates/small-memory-shared.json",
+    "--device",
+    "npu:0",
+    "--precision",
+    "fp32",
+    "--threads",
+    "4",
+    "--batch",
+    "8",
+    "--length",
+    "128",
+    "--modes",
+    "inference",
+    "grad_forward",
+    "train",
+    "--warmup",
+    "2",
+    "--steps",
+    "5",
+    "--stop-on-failure",
+    "--output-dir",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-ad-memory-shared-v1/results"
+  ],
+  "pid": 1076930,
+  "started": "2026-11-19T02:27:14.293332+00:00",
+  "max_rss_bytes": 34359738368,
+  "peak_rss_bytes": 2406481920,
+  "max_processes": 4,
+  "rss_sample_count": 165,
+  "poll_interval": 0.25,
+  "descendant_supervision": "Linux child subreaper; retained PID/start identities across nested sessions",
+  "child_pid": 1076950,
+  "process_group": 1076950,
+  "elapsed": 69.2533376738429,
+  "descendant_identities": [
+    {
+      "pid": 1076950,
+      "start_ticks": 2264140500
+    },
+    {
+      "pid": 1076952,
+      "start_ticks": 2264140506
+    },
+    {
+      "pid": 1077454,
+      "start_ticks": 2264141169
+    },
+    {
+      "pid": 1077461,
+      "start_ticks": 2264141170
+    },
+    {
+      "pid": 1077462,
+      "start_ticks": 2264141170
+    },
+    {
+      "pid": 1077748,
+      "start_ticks": 2264141643
+    },
+    {
+      "pid": 1077891,
+      "start_ticks": 2264141824
+    },
+    {
+      "pid": 1077906,
+      "start_ticks": 2264141830
+    }
+  ],
+  "exit_code": 0,
+  "finished": "2026-11-19T02:28:23.546669+00:00"
+}

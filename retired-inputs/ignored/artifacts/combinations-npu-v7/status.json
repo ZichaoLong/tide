@@ -1,0 +1,114 @@
+{
+  "state": "passed",
+  "source": "e2a4d39104a006feec4525e534eadae4a94cde0d",
+  "command": [
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "/mi/data2T/zlong/home/.agents/skills/use-local-ascend/scripts/run_on_free_npu.py",
+    "--job-id",
+    "combinations-npu-v7",
+    "--project",
+    "tide-instances",
+    "--priority",
+    "0",
+    "--npu-count",
+    "1",
+    "--max-wait-seconds",
+    "600",
+    "--state-file",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/combinations-npu-v7/queue.json",
+    "--",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "-m",
+    "benchmarks.programme",
+    "--suite",
+    "combinations",
+    "--configs",
+    "configs/hb-lattice-k.json",
+    "--device",
+    "npu:0",
+    "--precision",
+    "fp32",
+    "bf16",
+    "--threads",
+    "4",
+    "--batch",
+    "2",
+    "--length",
+    "16",
+    "--warmup",
+    "1",
+    "--steps",
+    "3",
+    "--child-timeout",
+    "900",
+    "--output-dir",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/combinations-npu-v7/results"
+  ],
+  "pid": 3469295,
+  "started": "2026-11-18T04:16:54.250297+00:00",
+  "max_rss_bytes": 68719476736,
+  "peak_rss_bytes": 2734022656,
+  "max_processes": 3,
+  "rss_sample_count": 554,
+  "poll_interval": 0.25,
+  "descendant_supervision": "Linux child subreaper; retained PID/start identities across nested sessions",
+  "child_pid": 3469334,
+  "process_group": 3469334,
+  "elapsed": 237.28980680182576,
+  "descendant_identities": [
+    {
+      "pid": 3469334,
+      "start_ticks": 2256158495
+    },
+    {
+      "pid": 3469339,
+      "start_ticks": 2256158501
+    },
+    {
+      "pid": 3470292,
+      "start_ticks": 2256160385
+    },
+    {
+      "pid": 3470496,
+      "start_ticks": 2256160876
+    },
+    {
+      "pid": 3470570,
+      "start_ticks": 2256161067
+    },
+    {
+      "pid": 3470572,
+      "start_ticks": 2256161074
+    },
+    {
+      "pid": 3471904,
+      "start_ticks": 2256163373
+    },
+    {
+      "pid": 3473036,
+      "start_ticks": 2256165864
+    },
+    {
+      "pid": 3474247,
+      "start_ticks": 2256168341
+    },
+    {
+      "pid": 3476221,
+      "start_ticks": 2256171026
+    },
+    {
+      "pid": 3477543,
+      "start_ticks": 2256173716
+    },
+    {
+      "pid": 3479579,
+      "start_ticks": 2256176522
+    },
+    {
+      "pid": 3481064,
+      "start_ticks": 2256179587
+    }
+  ],
+  "exit_code": 0,
+  "finished": "2026-11-18T04:20:51.540102+00:00"
+}

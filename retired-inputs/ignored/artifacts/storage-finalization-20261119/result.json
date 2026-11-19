@@ -1,0 +1,49 @@
+{
+  "state": "completed",
+  "finished_utc": "2026-11-19T11:11:18.349639+00:00",
+  "source": "45cb5dad1f2d14e06f65b71e6db5461de3a41e72",
+  "plan_sha256": "942f91ac39ff7da7457bc470cf7e64df8320a6cb5c72f0643343093d45b46593",
+  "retired_files": 6952,
+  "retired_allocated_bytes": 48953257984,
+  "archives": 352,
+  "archive_original_allocated_bytes": 3569012736,
+  "archive_allocated_bytes": 118542336,
+  "archive_savings_allocated_bytes": 3450470400,
+  "total_gross_freed_bytes": 52403728384,
+  "archive_index_sha256": "ad57f8f29a1842baca47d8a43fa979976fcd6e6a835c7db0607f477dc1818100",
+  "retirement_identities_sha256": "1da2441ee66cf7b3efa02dee93d797d4a0a73fe8f36087d830d282263e798b32",
+  "protected_verified": 82,
+  "user_docs_verified": true,
+  "live_inputs": {
+    "observed_utc": "2026-11-19T11:10:58.969743+00:00",
+    "hits": [],
+    "restricted_processes": [
+      {
+        "pid": 1213453,
+        "name": "sshd-session"
+      },
+      {
+        "pid": 2907799,
+        "name": "(sd-pam)"
+      },
+      {
+        "pid": 2908938,
+        "name": "sshd-session"
+      },
+      {
+        "pid": 2908943,
+        "name": "sshd-session"
+      },
+      {
+        "pid": 3361186,
+        "name": "sshd-session"
+      },
+      {
+        "pid": 3361883,
+        "name": "sshd-session"
+      }
+    ],
+    "inspected": 23
+  },
+  "qualification": "Retirement does not turn historical failure into qualification; no promise to regenerate retired full dumps."
+}

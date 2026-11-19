@@ -1,0 +1,207 @@
+{
+  "state": "passed",
+  "source": "36c42a7a3ef765fe6257c42c7c1404d28857b77c",
+  "command": [
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "/mi/data2T/zlong/home/.agents/skills/use-local-ascend/scripts/run_on_free_npu.py",
+    "--job-id",
+    "execution-perf-timed-bf16-v1",
+    "--project",
+    "tide-instances",
+    "--priority",
+    "0",
+    "--npu-count",
+    "1",
+    "--max-wait-seconds",
+    "600",
+    "--state-file",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/execution-perf-timed-bf16-v1/queue.json",
+    "--",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "-m",
+    "benchmarks.variants",
+    "--config",
+    "configs/hb-multiscale-x-timed.json",
+    "--device",
+    "npu:0",
+    "--precision",
+    "bf16",
+    "--mode",
+    "train",
+    "--batch",
+    "4",
+    "--length",
+    "128",
+    "--threads",
+    "4",
+    "--warmup",
+    "2",
+    "--steps",
+    "5",
+    "--rss-gib",
+    "72",
+    "--device-budget-gib",
+    "48",
+    "--seconds",
+    "1800",
+    "--child-timeout",
+    "600",
+    "--ledger-variants",
+    "baseline",
+    "recompute",
+    "combined",
+    "--output-dir",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/execution-perf-timed-bf16-v1/results"
+  ],
+  "pid": 1075410,
+  "started": "2026-11-18T07:44:43.326397+00:00",
+  "max_rss_bytes": 85899345920,
+  "peak_rss_bytes": 3193937920,
+  "max_processes": 4,
+  "rss_sample_count": 1844,
+  "poll_interval": 0.25,
+  "descendant_supervision": "Linux child subreaper; retained PID/start identities across nested sessions",
+  "child_pid": 1075448,
+  "process_group": 1075448,
+  "elapsed": 782.6175708584487,
+  "descendant_identities": [
+    {
+      "pid": 1075448,
+      "start_ticks": 2257405403
+    },
+    {
+      "pid": 1075456,
+      "start_ticks": 2257405409
+    },
+    {
+      "pid": 1076843,
+      "start_ticks": 2257408019
+    },
+    {
+      "pid": 1077572,
+      "start_ticks": 2257409706
+    },
+    {
+      "pid": 1077579,
+      "start_ticks": 2257409707
+    },
+    {
+      "pid": 1077580,
+      "start_ticks": 2257409707
+    },
+    {
+      "pid": 1079182,
+      "start_ticks": 2257411396
+    },
+    {
+      "pid": 1080125,
+      "start_ticks": 2257413121
+    },
+    {
+      "pid": 1080134,
+      "start_ticks": 2257413122
+    },
+    {
+      "pid": 1080141,
+      "start_ticks": 2257413122
+    },
+    {
+      "pid": 1081012,
+      "start_ticks": 2257414812
+    },
+    {
+      "pid": 1081020,
+      "start_ticks": 2257414813
+    },
+    {
+      "pid": 1081021,
+      "start_ticks": 2257414813
+    },
+    {
+      "pid": 1082060,
+      "start_ticks": 2257416499
+    },
+    {
+      "pid": 1083228,
+      "start_ticks": 2257418219
+    },
+    {
+      "pid": 1084112,
+      "start_ticks": 2257419909
+    },
+    {
+      "pid": 1084874,
+      "start_ticks": 2257421622
+    },
+    {
+      "pid": 1086109,
+      "start_ticks": 2257423308
+    },
+    {
+      "pid": 1086968,
+      "start_ticks": 2257424997
+    },
+    {
+      "pid": 1087814,
+      "start_ticks": 2257426686
+    },
+    {
+      "pid": 1088853,
+      "start_ticks": 2257428378
+    },
+    {
+      "pid": 1090075,
+      "start_ticks": 2257430068
+    },
+    {
+      "pid": 1090806,
+      "start_ticks": 2257431757
+    },
+    {
+      "pid": 1091553,
+      "start_ticks": 2257433447
+    },
+    {
+      "pid": 1091817,
+      "start_ticks": 2257433986
+    },
+    {
+      "pid": 1091942,
+      "start_ticks": 2257434171
+    },
+    {
+      "pid": 1091958,
+      "start_ticks": 2257434178
+    },
+    {
+      "pid": 1097184,
+      "start_ticks": 2257441694
+    },
+    {
+      "pid": 1102086,
+      "start_ticks": 2257448977
+    },
+    {
+      "pid": 1105615,
+      "start_ticks": 2257455072
+    },
+    {
+      "pid": 1111990,
+      "start_ticks": 2257464854
+    },
+    {
+      "pid": 1117054,
+      "start_ticks": 2257472560
+    },
+    {
+      "pid": 1119243,
+      "start_ticks": 2257475856
+    },
+    {
+      "pid": 1121780,
+      "start_ticks": 2257480235
+    }
+  ],
+  "exit_code": 0,
+  "finished": "2026-11-18T07:57:45.943966+00:00"
+}

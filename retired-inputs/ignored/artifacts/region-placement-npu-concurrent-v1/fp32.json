@@ -1,0 +1,2019 @@
+{
+  "source": "8a22530dae69d9f1fa5ead4a01d1798fd1dfe0ee",
+  "arguments": {
+    "devices": [
+      "npu:0",
+      "npu:1"
+    ],
+    "precision": "fp32",
+    "partition_kind": "region",
+    "region_partitions": null,
+    "region_concurrency": "per_device",
+    "transport": "host_stage",
+    "phase_sync": false,
+    "mode": "qualify",
+    "config": null,
+    "batch": 2,
+    "length": 5,
+    "steps": 3,
+    "warmup": 0,
+    "no_foreach": false,
+    "threads": 4,
+    "output": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/region-placement-npu-concurrent-v1/fp32.json"
+  },
+  "physical_devices": "0,4",
+  "cpu_affinity": [
+    124,
+    125,
+    126,
+    127
+  ],
+  "torch": "2.12.0+cpu",
+  "exit_policy": "finite_deviation retained; nonfinite/structural/execution failures exit nonzero",
+  "observations": [
+    {
+      "config": {
+        "topology": {
+          "kind": "exchange",
+          "n": 2,
+          "layers": null,
+          "depth": 1,
+          "rounds": null,
+          "profile": null,
+          "hubs": 1,
+          "partition": "group",
+          "timing": "settle",
+          "hub_mask": "all",
+          "period": null,
+          "probes": null,
+          "terminal_hubs": false
+        },
+        "d": 64,
+        "memory": "X",
+        "aggregation": "incoming_light_64",
+        "allocation": "quad",
+        "sharing": "independent",
+        "adapter_rank": 8,
+        "budget": null,
+        "attention_backend": "auto",
+        "attention_chunk": 128,
+        "input_dim": null,
+        "checkpoint_regions": false,
+        "region_batch_size": 1,
+        "local_attention_backend": null,
+        "hub_allocation": "bounded",
+        "clock": {
+          "position_period": null,
+          "position_origin": "binding",
+          "kv_window": null,
+          "short_decay": null,
+          "ssd_stride": null
+        }
+      },
+      "precision": {
+        "name": "fp32",
+        "device": "npu:0",
+        "parameters": "float32",
+        "input": "float32",
+        "matrix_arithmetic": "float32",
+        "normalization_mass_allocation": "float32",
+        "kv_keys_values": "float32",
+        "kv_summary_and_ssd_state": "float32",
+        "logical_time_indices": "int64",
+        "parameter_gradients": "float32",
+        "master_weights": "parameters_are_fp32_masters; no_separate_copy",
+        "adamw_moments": "float32",
+        "attention": "native_by_shape_and_prior; math/tiled_accumulate_float32",
+        "attention_mode_selection": "established_fp32_gradient_dependent_prior_dispatch",
+        "loss": "float32",
+        "autocast_cache": false
+      },
+      "initial_parameter_sha256": "4b768f70d458369eb4b22bca4f15c6cfaf7fbd8d24ea3fda6064fa71a09a14c9",
+      "reference": "one-device ordinary model with identical initial CPU parameters and inputs",
+      "state": "finite_deviation",
+      "progress": [
+        {
+          "stage": "construction",
+          "monotonic_seconds": 22574472.298396572
+        },
+        {
+          "stage": "initial_forward",
+          "monotonic_seconds": 22574472.63996047
+        },
+        {
+          "stage": "initial_reference_backward",
+          "monotonic_seconds": 22574473.914521173
+        },
+        {
+          "stage": "initial_placed_backward",
+          "monotonic_seconds": 22574474.098633457
+        },
+        {
+          "stage": "initial_comparisons",
+          "monotonic_seconds": 22574474.214496806
+        },
+        {
+          "stage": "continuation_and_operator_audit",
+          "monotonic_seconds": 22574474.309917476
+        },
+        {
+          "stage": "update.0.reference.forward",
+          "monotonic_seconds": 22574476.125840887
+        },
+        {
+          "stage": "update.0.reference.backward",
+          "monotonic_seconds": 22574476.296678964
+        },
+        {
+          "stage": "update.0.reference.optimizer",
+          "monotonic_seconds": 22574476.43113081
+        },
+        {
+          "stage": "update.0.placed.forward",
+          "monotonic_seconds": 22574476.71585116
+        },
+        {
+          "stage": "update.0.placed.backward",
+          "monotonic_seconds": 22574476.939308755
+        },
+        {
+          "stage": "update.0.placed.optimizer",
+          "monotonic_seconds": 22574477.058851093
+        },
+        {
+          "stage": "update.0.complete",
+          "monotonic_seconds": 22574477.162191834
+        },
+        {
+          "stage": "update.1.reference.forward",
+          "monotonic_seconds": 22574477.16607924
+        },
+        {
+          "stage": "update.1.reference.backward",
+          "monotonic_seconds": 22574477.337622777
+        },
+        {
+          "stage": "update.1.reference.optimizer",
+          "monotonic_seconds": 22574477.48130308
+        },
+        {
+          "stage": "update.1.placed.forward",
+          "monotonic_seconds": 22574477.51659852
+        },
+        {
+          "stage": "update.1.placed.backward",
+          "monotonic_seconds": 22574477.70942756
+        },
+        {
+          "stage": "update.1.placed.optimizer",
+          "monotonic_seconds": 22574477.847983643
+        },
+        {
+          "stage": "update.1.complete",
+          "monotonic_seconds": 22574477.936568547
+        },
+        {
+          "stage": "update.2.reference.forward",
+          "monotonic_seconds": 22574477.940914348
+        },
+        {
+          "stage": "update.2.reference.backward",
+          "monotonic_seconds": 22574478.11487141
+        },
+        {
+          "stage": "update.2.reference.optimizer",
+          "monotonic_seconds": 22574478.255951464
+        },
+        {
+          "stage": "update.2.placed.forward",
+          "monotonic_seconds": 22574478.286975868
+        },
+        {
+          "stage": "update.2.placed.backward",
+          "monotonic_seconds": 22574478.49315488
+        },
+        {
+          "stage": "update.2.placed.optimizer",
+          "monotonic_seconds": 22574478.607895847
+        },
+        {
+          "stage": "update.2.complete",
+          "monotonic_seconds": 22574478.736947622
+        },
+        {
+          "stage": "checkpoint.save",
+          "monotonic_seconds": 22574478.74078283
+        },
+        {
+          "stage": "checkpoint.load",
+          "monotonic_seconds": 22574478.891926873
+        },
+        {
+          "stage": "checkpoint.next_forward",
+          "monotonic_seconds": 22574479.243583255
+        },
+        {
+          "stage": "checkpoint.original_update.forward",
+          "monotonic_seconds": 22574479.63170834
+        },
+        {
+          "stage": "checkpoint.original_update.backward",
+          "monotonic_seconds": 22574479.82318823
+        },
+        {
+          "stage": "checkpoint.original_update.optimizer",
+          "monotonic_seconds": 22574479.94887675
+        },
+        {
+          "stage": "checkpoint.restored_update.forward",
+          "monotonic_seconds": 22574479.99028919
+        },
+        {
+          "stage": "checkpoint.restored_update.backward",
+          "monotonic_seconds": 22574480.18177435
+        },
+        {
+          "stage": "checkpoint.restored_update.optimizer",
+          "monotonic_seconds": 22574480.297292966
+        },
+        {
+          "stage": "completed",
+          "monotonic_seconds": 22574480.55642469
+        }
+      ],
+      "phase_synchronization": false,
+      "last_stage": "completed",
+      "placement": {
+        "kind": "hb-region-shards-1",
+        "devices": [
+          "npu:0",
+          "npu:1"
+        ],
+        "requested_transport": "host_stage",
+        "transport": "host_stage",
+        "input_partition": 0,
+        "output_partition": 1,
+        "optimizer": "placement_adamw; align disconnected shards per original Parameter before step",
+        "communication": "single-process deduplicated predecessor-node transport per destination partition; no replicas",
+        "region_partitions": [
+          0,
+          1,
+          0,
+          1,
+          1,
+          0,
+          0,
+          1,
+          1,
+          0,
+          1
+        ],
+        "region_concurrency": "per_device",
+        "actual_devices": {
+          "npu:0": {
+            "parameters": 760180,
+            "parameter_bytes": 3040720
+          },
+          "npu:1": {
+            "parameters": 850611,
+            "parameter_bytes": 3402444
+          }
+        },
+        "total_unique_parameters": 1610791,
+        "predecessor_transport": [
+          {
+            "layer": 1,
+            "origin": 0,
+            "source_partition": 0,
+            "destination_partition": 0,
+            "unique_source_nodes": 2,
+            "remote": false
+          },
+          {
+            "layer": 1,
+            "origin": 0,
+            "source_partition": 1,
+            "destination_partition": 0,
+            "unique_source_nodes": 1,
+            "remote": true
+          },
+          {
+            "layer": 1,
+            "origin": 0,
+            "source_partition": 0,
+            "destination_partition": 1,
+            "unique_source_nodes": 2,
+            "remote": true
+          },
+          {
+            "layer": 1,
+            "origin": 0,
+            "source_partition": 1,
+            "destination_partition": 1,
+            "unique_source_nodes": 1,
+            "remote": false
+          },
+          {
+            "layer": 2,
+            "origin": 1,
+            "source_partition": 0,
+            "destination_partition": 0,
+            "unique_source_nodes": 3,
+            "remote": false
+          },
+          {
+            "layer": 2,
+            "origin": 1,
+            "source_partition": 1,
+            "destination_partition": 0,
+            "unique_source_nodes": 3,
+            "remote": true
+          },
+          {
+            "layer": 2,
+            "origin": 1,
+            "source_partition": 0,
+            "destination_partition": 1,
+            "unique_source_nodes": 3,
+            "remote": true
+          },
+          {
+            "layer": 2,
+            "origin": 1,
+            "source_partition": 1,
+            "destination_partition": 1,
+            "unique_source_nodes": 3,
+            "remote": false
+          },
+          {
+            "layer": 3,
+            "origin": 2,
+            "source_partition": 0,
+            "destination_partition": 1,
+            "unique_source_nodes": 3,
+            "remote": true
+          },
+          {
+            "layer": 3,
+            "origin": 2,
+            "source_partition": 1,
+            "destination_partition": 1,
+            "unique_source_nodes": 3,
+            "remote": false
+          }
+        ],
+        "pending_layout": "private regional compact last-tick tensors; no window-sized pending views",
+        "execution": {
+          "policy": "per_device",
+          "maximum_layer_devices": 2,
+          "maximum_workers": 2,
+          "device_identity": "CPU indices are logical simulation groups; repeated devices share one task",
+          "ownership": "caller projects and transports; one serial region task per device; join each layer",
+          "streams": "caller current stream per accelerator, captured before worker creation; no extra streams",
+          "backward": "ordinary autograd engine, without a separate region thread scheduler",
+          "instrumentation": "record_work aggregates returned per-region counters; caller dispatch/function modes require explicit serial_region_audit; hooks/profilers are not propagated"
+        }
+      },
+      "input_sha256": "47191d79f8418a7843df18ae1f6632600ea41013ea89d41181789030cb45ac03",
+      "comparisons": {
+        "whole_result": {
+          "exact": true,
+          "finite": true,
+          "metadata_mismatches": [],
+          "support_mismatches": [],
+          "numerical_failures": [],
+          "max_abs": 0.0,
+          "max_scaled_error": 0.0,
+          "atol": 1e-06,
+          "rtol": 0.002,
+          "floating_tensors": 56,
+          "within_threshold": true
+        },
+        "flush_result": {
+          "exact": true,
+          "finite": true,
+          "metadata_mismatches": [],
+          "support_mismatches": [],
+          "numerical_failures": [],
+          "max_abs": 0.0,
+          "max_scaled_error": 0.0,
+          "atol": 1e-06,
+          "rtol": 0.002,
+          "floating_tensors": 0,
+          "within_threshold": true
+        },
+        "input_gradient": {
+          "exact": false,
+          "finite": true,
+          "metadata_mismatches": [],
+          "support_mismatches": [],
+          "numerical_failures": [],
+          "max_abs": 8.381903171539307e-09,
+          "max_scaled_error": 0.004345192096771214,
+          "atol": 1e-06,
+          "rtol": 0.01,
+          "floating_tensors": 1,
+          "within_threshold": true
+        },
+        "parameter_gradients": {
+          "exact": false,
+          "finite": true,
+          "metadata_mismatches": [],
+          "support_mismatches": [],
+          "numerical_failures": [],
+          "max_abs": 4.190951585769653e-08,
+          "max_scaled_error": 0.020632361850119366,
+          "atol": 1e-06,
+          "rtol": 0.002,
+          "floating_tensors": 134,
+          "within_threshold": true
+        },
+        "continued_single_vs_placed": {
+          "exact": true,
+          "finite": true,
+          "metadata_mismatches": [],
+          "support_mismatches": [],
+          "numerical_failures": [],
+          "max_abs": 0.0,
+          "max_scaled_error": 0.0,
+          "atol": 1e-06,
+          "rtol": 0.002,
+          "floating_tensors": 1,
+          "within_threshold": true
+        },
+        "continued_single_vs_placed_state": {
+          "exact": true,
+          "finite": true,
+          "metadata_mismatches": [],
+          "support_mismatches": [],
+          "numerical_failures": [],
+          "max_abs": 0.0,
+          "max_scaled_error": 0.0,
+          "atol": 1e-06,
+          "rtol": 0.002,
+          "floating_tensors": 54,
+          "within_threshold": true
+        },
+        "reference_whole_vs_continued": {
+          "exact": false,
+          "finite": true,
+          "metadata_mismatches": [],
+          "support_mismatches": [],
+          "numerical_failures": [],
+          "max_abs": 2.1457672119140625e-06,
+          "max_scaled_error": 0.04230409307096533,
+          "atol": 1e-06,
+          "rtol": 0.002,
+          "floating_tensors": 1,
+          "within_threshold": true
+        },
+        "continued_readout": {
+          "exact": false,
+          "finite": true,
+          "metadata_mismatches": [],
+          "support_mismatches": [],
+          "numerical_failures": [],
+          "max_abs": 2.1457672119140625e-06,
+          "max_scaled_error": 0.04230409307096533,
+          "atol": 1e-06,
+          "rtol": 0.002,
+          "floating_tensors": 1,
+          "within_threshold": true
+        },
+        "continued_state": {
+          "exact": false,
+          "finite": true,
+          "metadata_mismatches": [],
+          "support_mismatches": [],
+          "numerical_failures": [],
+          "max_abs": 1.430511474609375e-06,
+          "max_scaled_error": 0.2158934409300511,
+          "atol": 1e-06,
+          "rtol": 0.002,
+          "floating_tensors": 54,
+          "within_threshold": true
+        },
+        "checkpoint_data": {
+          "exact": true,
+          "finite": true,
+          "metadata_mismatches": [],
+          "support_mismatches": [],
+          "numerical_failures": [],
+          "max_abs": 0.0,
+          "max_scaled_error": 0.0,
+          "atol": 0,
+          "rtol": 0,
+          "floating_tensors": 722,
+          "within_threshold": true
+        },
+        "checkpoint_next_result": {
+          "exact": true,
+          "finite": true,
+          "metadata_mismatches": [],
+          "support_mismatches": [],
+          "numerical_failures": [],
+          "max_abs": 0.0,
+          "max_scaled_error": 0.0,
+          "atol": 0,
+          "rtol": 0,
+          "floating_tensors": 56,
+          "within_threshold": true
+        },
+        "restored_updated_parameters": {
+          "exact": false,
+          "finite": true,
+          "metadata_mismatches": [],
+          "support_mismatches": [],
+          "numerical_failures": [],
+          "max_abs": 2.9103830456733704e-11,
+          "max_scaled_error": 1.6465093753081574e-05,
+          "atol": 1e-06,
+          "rtol": 0.002,
+          "floating_tensors": 167,
+          "within_threshold": true
+        },
+        "restored_updated_optimizer": {
+          "exact": false,
+          "finite": true,
+          "metadata_mismatches": [],
+          "support_mismatches": [],
+          "numerical_failures": [],
+          "max_abs": 5.820766091346741e-11,
+          "max_scaled_error": 2.8858961799708098e-05,
+          "atol": 1e-06,
+          "rtol": 0.002,
+          "floating_tensors": 501,
+          "within_threshold": true
+        },
+        "restored_updated_state": {
+          "exact": true,
+          "finite": true,
+          "metadata_mismatches": [],
+          "support_mismatches": [],
+          "numerical_failures": [],
+          "max_abs": 0.0,
+          "max_scaled_error": 0.0,
+          "atol": 1e-06,
+          "rtol": 0.002,
+          "floating_tensors": 54,
+          "within_threshold": true
+        }
+      },
+      "work": {
+        "candidates": 170,
+        "full": 136,
+        "positive_messages": 468,
+        "candidate_slots": 170
+      },
+      "operator_witness": {
+        "operators": [
+          {
+            "operator": "aten.addmm.default",
+            "inputs": [
+              "npu:0:torch.float32"
+            ],
+            "outputs": [
+              "npu:0:torch.float32"
+            ],
+            "calls": 5
+          },
+          {
+            "operator": "aten.addmm.default",
+            "inputs": [
+              "npu:1:torch.float32"
+            ],
+            "outputs": [
+              "npu:1:torch.float32"
+            ],
+            "calls": 6
+          },
+          {
+            "operator": "aten.bmm.default",
+            "inputs": [
+              "npu:0:torch.float32"
+            ],
+            "outputs": [
+              "npu:0:torch.float32"
+            ],
+            "calls": 45
+          },
+          {
+            "operator": "aten.bmm.default",
+            "inputs": [
+              "npu:1:torch.float32"
+            ],
+            "outputs": [
+              "npu:1:torch.float32"
+            ],
+            "calls": 45
+          },
+          {
+            "operator": "aten.matmul.default",
+            "inputs": [
+              "npu:0:torch.float32"
+            ],
+            "outputs": [
+              "npu:0:torch.float32"
+            ],
+            "calls": 64
+          },
+          {
+            "operator": "aten.matmul.default",
+            "inputs": [
+              "npu:1:torch.float32"
+            ],
+            "outputs": [
+              "npu:1:torch.float32"
+            ],
+            "calls": 78
+          },
+          {
+            "operator": "aten.mm.default",
+            "inputs": [
+              "npu:0:torch.float32"
+            ],
+            "outputs": [
+              "npu:0:torch.float32"
+            ],
+            "calls": 28
+          },
+          {
+            "operator": "aten.mm.default",
+            "inputs": [
+              "npu:1:torch.float32"
+            ],
+            "outputs": [
+              "npu:1:torch.float32"
+            ],
+            "calls": 42
+          },
+          {
+            "operator": "npu.npu_fusion_attention_v2.default",
+            "inputs": [
+              "npu:0:torch.bool",
+              "npu:0:torch.float32"
+            ],
+            "outputs": [
+              "npu:0:torch.float32"
+            ],
+            "calls": 7
+          },
+          {
+            "operator": "npu.npu_fusion_attention_v2.default",
+            "inputs": [
+              "npu:0:torch.float32"
+            ],
+            "outputs": [
+              "npu:0:torch.float32"
+            ],
+            "calls": 6
+          },
+          {
+            "operator": "npu.npu_fusion_attention_v2.default",
+            "inputs": [
+              "npu:1:torch.bool",
+              "npu:1:torch.float32"
+            ],
+            "outputs": [
+              "npu:1:torch.float32"
+            ],
+            "calls": 8
+          },
+          {
+            "operator": "npu.npu_fusion_attention_v2.default",
+            "inputs": [
+              "npu:1:torch.float32"
+            ],
+            "outputs": [
+              "npu:1:torch.float32"
+            ],
+            "calls": 7
+          }
+        ],
+        "materializations": {
+          "aten._to_copy.default": {
+            "calls": 93,
+            "output_bytes": 15808
+          },
+          "aten.index.Tensor": {
+            "calls": 693,
+            "output_bytes": 4103144
+          },
+          "aten.cat.default": {
+            "calls": 171,
+            "output_bytes": 86330
+          },
+          "aten.scatter.src": {
+            "calls": 6,
+            "output_bytes": 192
+          },
+          "aten.gather.default": {
+            "calls": 82,
+            "output_bytes": 36512
+          },
+          "aten.index_copy.default": {
+            "calls": 66,
+            "output_bytes": 15504
+          },
+          "aten.index_put.default": {
+            "calls": 27,
+            "output_bytes": 24576
+          },
+          "aten.index_put_.default": {
+            "calls": 11,
+            "output_bytes": 256
+          },
+          "aten.index_select.default": {
+            "calls": 42,
+            "output_bytes": 24960
+          },
+          "aten.clone.default": {
+            "calls": 54,
+            "output_bytes": 124392
+          }
+        },
+        "materialization_definition": "logical output bytes from dispatched copy/index/concatenate operations; not hardware bus traffic, bandwidth or all operand loads",
+        "instrumentation": "separate ordinary forward without semantic counting hooks; excluded from timing",
+        "bf16_matrix_observed": false,
+        "execution": {
+          "requested_region_concurrency": "per_device",
+          "effective_region_concurrency": "serial",
+          "workers": 0,
+          "scope": "caller-thread instrumentation witness; excluded from concurrent timing"
+        }
+      },
+      "updates": [
+        {
+          "index": 0,
+          "observations": [
+            {
+              "owner": "reference",
+              "loss": 0.005786895751953125,
+              "finite": true,
+              "complete_seconds": 0.5631076097488403,
+              "phase_seconds": {
+                "zero_grad_forward_loss": 0.16705548018217087,
+                "backward": 0.13107527419924736,
+                "optimizer_detach_sync": 0.2570164129137993
+              },
+              "between_phase_host_seconds": 0.007960442453622818,
+              "phase_synchronization": false,
+              "timing": "complete wall time through final all-device sync and detach includes intervening stage record IO; individual host phases exclude stage IO and measure device latency only with phase_sync",
+              "output_positive_strengths": 11,
+              "flush_output_positive_strengths": 0
+            },
+            {
+              "owner": "placed",
+              "loss": 0.005786895751953125,
+              "finite": true,
+              "complete_seconds": 0.3635242022573948,
+              "phase_seconds": {
+                "zero_grad_forward_loss": 0.21909958496689796,
+                "backward": 0.11572395265102386,
+                "optimizer_detach_sync": 0.02130977064371109
+              },
+              "between_phase_host_seconds": 0.007390893995761871,
+              "phase_synchronization": false,
+              "timing": "complete wall time through final all-device sync and detach includes intervening stage record IO; individual host phases exclude stage IO and measure device latency only with phase_sync",
+              "output_positive_strengths": 11,
+              "flush_output_positive_strengths": 0
+            }
+          ],
+          "parameters": {
+            "exact": false,
+            "finite": true,
+            "metadata_mismatches": [],
+            "support_mismatches": [],
+            "numerical_failures": [
+              {
+                "path": "root.receive.k.weight",
+                "max_abs": 4.724878817796707e-05,
+                "scaled_error": 20.677433005701683
+              },
+              {
+                "path": "root.receive.q.weight",
+                "max_abs": 5.13419508934021e-05,
+                "scaled_error": 23.12065194014879
+              }
+            ],
+            "max_abs": 5.13419508934021e-05,
+            "max_scaled_error": 23.12065194014879,
+            "atol": 1e-06,
+            "rtol": 0.002,
+            "floating_tensors": 134,
+            "within_threshold": false
+          }
+        },
+        {
+          "index": 1,
+          "observations": [
+            {
+              "owner": "reference",
+              "loss": 0.018494203686714172,
+              "finite": true,
+              "complete_seconds": 0.32775917649269104,
+              "phase_seconds": {
+                "zero_grad_forward_loss": 0.16874805465340614,
+                "backward": 0.14048482477664948,
+                "optimizer_detach_sync": 0.011468064039945602
+              },
+              "between_phase_host_seconds": 0.007058233022689819,
+              "phase_synchronization": false,
+              "timing": "complete wall time through final all-device sync and detach includes intervening stage record IO; individual host phases exclude stage IO and measure device latency only with phase_sync",
+              "output_positive_strengths": 13,
+              "flush_output_positive_strengths": 0
+            },
+            {
+              "owner": "placed",
+              "loss": 0.01849423721432686,
+              "finite": true,
+              "complete_seconds": 0.33843186870217323,
+              "phase_seconds": {
+                "zero_grad_forward_loss": 0.18818367272615433,
+                "backward": 0.13510588556528091,
+                "optimizer_detach_sync": 0.00776415690779686
+              },
+              "between_phase_host_seconds": 0.007378153502941132,
+              "phase_synchronization": false,
+              "timing": "complete wall time through final all-device sync and detach includes intervening stage record IO; individual host phases exclude stage IO and measure device latency only with phase_sync",
+              "output_positive_strengths": 13,
+              "flush_output_positive_strengths": 0
+            }
+          ],
+          "parameters": {
+            "exact": false,
+            "finite": true,
+            "metadata_mismatches": [],
+            "support_mismatches": [],
+            "numerical_failures": [
+              {
+                "path": "root.receive.k.weight",
+                "max_abs": 6.856769323348999e-05,
+                "scaled_error": 30.662248900793013
+              },
+              {
+                "path": "root.receive.q.weight",
+                "max_abs": 8.189678192138672e-05,
+                "scaled_error": 35.24056629180643
+              }
+            ],
+            "max_abs": 8.189678192138672e-05,
+            "max_scaled_error": 35.24056629180643,
+            "atol": 1e-06,
+            "rtol": 0.002,
+            "floating_tensors": 134,
+            "within_threshold": false
+          }
+        },
+        {
+          "index": 2,
+          "observations": [
+            {
+              "owner": "reference",
+              "loss": -0.027579352259635925,
+              "finite": true,
+              "complete_seconds": 0.3221145123243332,
+              "phase_seconds": {
+                "zero_grad_forward_loss": 0.17078612744808197,
+                "backward": 0.13779126107692719,
+                "optimizer_detach_sync": 0.0057607851922512054
+              },
+              "between_phase_host_seconds": 0.00777633860707283,
+              "phase_synchronization": false,
+              "timing": "complete wall time through final all-device sync and detach includes intervening stage record IO; individual host phases exclude stage IO and measure device latency only with phase_sync",
+              "output_positive_strengths": 12,
+              "flush_output_positive_strengths": 0
+            },
+            {
+              "owner": "placed",
+              "loss": -0.027579352259635925,
+              "finite": true,
+              "complete_seconds": 0.3306668773293495,
+              "phase_seconds": {
+                "zero_grad_forward_loss": 0.20161382108926773,
+                "backward": 0.11106918379664421,
+                "optimizer_detach_sync": 0.010108187794685364
+              },
+              "between_phase_host_seconds": 0.007875684648752213,
+              "phase_synchronization": false,
+              "timing": "complete wall time through final all-device sync and detach includes intervening stage record IO; individual host phases exclude stage IO and measure device latency only with phase_sync",
+              "output_positive_strengths": 12,
+              "flush_output_positive_strengths": 0
+            }
+          ],
+          "parameters": {
+            "exact": false,
+            "finite": true,
+            "metadata_mismatches": [],
+            "support_mismatches": [],
+            "numerical_failures": [
+              {
+                "path": "root.receive.k.weight",
+                "max_abs": 8.229352533817291e-05,
+                "scaled_error": 33.86378190948537
+              },
+              {
+                "path": "root.receive.q.weight",
+                "max_abs": 9.651482105255127e-05,
+                "scaled_error": 35.9286183081116
+              },
+              {
+                "path": "root.regional.10.second.bias",
+                "max_abs": 8.171424269676208e-06,
+                "scaled_error": 1.9789755303750105
+              }
+            ],
+            "max_abs": 9.651482105255127e-05,
+            "max_scaled_error": 35.9286183081116,
+            "atol": 1e-06,
+            "rtol": 0.002,
+            "floating_tensors": 134,
+            "within_threshold": false
+          }
+        }
+      ],
+      "restored_updates": [
+        {
+          "loss": -0.0830998346209526,
+          "finite": true,
+          "complete_seconds": 0.3255097046494484,
+          "phase_seconds": {
+            "zero_grad_forward_loss": 0.18795384094119072,
+            "backward": 0.12173635512590408,
+            "optimizer_detach_sync": 0.007946263998746872
+          },
+          "between_phase_host_seconds": 0.00787324458360672,
+          "phase_synchronization": false,
+          "timing": "complete wall time through final all-device sync and detach includes intervening stage record IO; individual host phases exclude stage IO and measure device latency only with phase_sync",
+          "output_positive_strengths": 12,
+          "flush_output_positive_strengths": 0
+        },
+        {
+          "loss": -0.0830998346209526,
+          "finite": true,
+          "complete_seconds": 0.3138287141919136,
+          "phase_seconds": {
+            "zero_grad_forward_loss": 0.188041340559721,
+            "backward": 0.11172618344426155,
+            "optimizer_detach_sync": 0.006355669349431992
+          },
+          "between_phase_host_seconds": 0.007705520838499069,
+          "phase_synchronization": false,
+          "timing": "complete wall time through final all-device sync and detach includes intervening stage record IO; individual host phases exclude stage IO and measure device latency only with phase_sync",
+          "output_positive_strengths": 12,
+          "flush_output_positive_strengths": 0
+        }
+      ],
+      "state_memory": {
+        "payload_bytes": 448800,
+        "retained_storage_bytes": 448800,
+        "dtypes": [
+          "torch.float32",
+          "torch.int64"
+        ],
+        "tensor_count": 70
+      },
+      "peak_device_memory": {
+        "npu:0": {
+          "allocated_bytes": 103473664,
+          "reserved_bytes": 243269632
+        },
+        "npu:1": {
+          "allocated_bytes": 71370752,
+          "reserved_bytes": 169869312
+        }
+      },
+      "process_peak_rss_kib": 2388496
+    },
+    {
+      "config": {
+        "topology": {
+          "kind": "multiscale",
+          "n": 2,
+          "layers": null,
+          "depth": null,
+          "rounds": null,
+          "profile": "compact-5-dd4",
+          "hubs": 1,
+          "partition": "group",
+          "timing": "timed",
+          "hub_mask": "all",
+          "period": null,
+          "probes": null,
+          "terminal_hubs": false
+        },
+        "d": 64,
+        "memory": "X",
+        "aggregation": "source_residual",
+        "allocation": "quad",
+        "sharing": "region_shared",
+        "adapter_rank": 8,
+        "budget": null,
+        "attention_backend": "auto",
+        "attention_chunk": 128,
+        "input_dim": null,
+        "checkpoint_regions": false,
+        "region_batch_size": 1,
+        "local_attention_backend": null,
+        "hub_allocation": "bounded",
+        "clock": {
+          "position_period": null,
+          "position_origin": "binding",
+          "kv_window": null,
+          "short_decay": null,
+          "ssd_stride": null
+        }
+      },
+      "precision": {
+        "name": "fp32",
+        "device": "npu:0",
+        "parameters": "float32",
+        "input": "float32",
+        "matrix_arithmetic": "float32",
+        "normalization_mass_allocation": "float32",
+        "kv_keys_values": "float32",
+        "kv_summary_and_ssd_state": "float32",
+        "logical_time_indices": "int64",
+        "parameter_gradients": "float32",
+        "master_weights": "parameters_are_fp32_masters; no_separate_copy",
+        "adamw_moments": "float32",
+        "attention": "native_by_shape_and_prior; math/tiled_accumulate_float32",
+        "attention_mode_selection": "established_fp32_gradient_dependent_prior_dispatch",
+        "loss": "float32",
+        "autocast_cache": false
+      },
+      "initial_parameter_sha256": "a515bb496c8b54826cedd0334e69ac5a27c572dc4afe0496892ce3579f0bfaf3",
+      "reference": "one-device ordinary model with identical initial CPU parameters and inputs",
+      "state": "within_threshold",
+      "progress": [
+        {
+          "stage": "construction",
+          "monotonic_seconds": 22574480.60127919
+        },
+        {
+          "stage": "initial_forward",
+          "monotonic_seconds": 22574480.671568293
+        },
+        {
+          "stage": "initial_reference_backward",
+          "monotonic_seconds": 22574481.478063654
+        },
+        {
+          "stage": "initial_placed_backward",
+          "monotonic_seconds": 22574481.83197751
+        },
+        {
+          "stage": "initial_comparisons",
+          "monotonic_seconds": 22574482.12943084
+        },
+        {
+          "stage": "continuation_and_operator_audit",
+          "monotonic_seconds": 22574482.21091872
+        },
+        {
+          "stage": "update.0.reference.forward",
+          "monotonic_seconds": 22574483.90078635
+        },
+        {
+          "stage": "update.0.reference.backward",
+          "monotonic_seconds": 22574484.19935424
+        },
+        {
+          "stage": "update.0.reference.optimizer",
+          "monotonic_seconds": 22574484.48493848
+        },
+        {
+          "stage": "update.0.placed.forward",
+          "monotonic_seconds": 22574484.537266105
+        },
+        {
+          "stage": "update.0.placed.backward",
+          "monotonic_seconds": 22574484.92020148
+        },
+        {
+          "stage": "update.0.placed.optimizer",
+          "monotonic_seconds": 22574485.15561821
+        },
+        {
+          "stage": "update.0.complete",
+          "monotonic_seconds": 22574485.29467283
+        },
+        {
+          "stage": "update.1.reference.forward",
+          "monotonic_seconds": 22574485.299584612
+        },
+        {
+          "stage": "update.1.reference.backward",
+          "monotonic_seconds": 22574485.60620231
+        },
+        {
+          "stage": "update.1.reference.optimizer",
+          "monotonic_seconds": 22574485.8918553
+        },
+        {
+          "stage": "update.1.placed.forward",
+          "monotonic_seconds": 22574485.936116897
+        },
+        {
+          "stage": "update.1.placed.backward",
+          "monotonic_seconds": 22574486.360967487
+        },
+        {
+          "stage": "update.1.placed.optimizer",
+          "monotonic_seconds": 22574486.605760865
+        },
+        {
+          "stage": "update.1.complete",
+          "monotonic_seconds": 22574486.730419848
+        },
+        {
+          "stage": "update.2.reference.forward",
+          "monotonic_seconds": 22574486.735410273
+        },
+        {
+          "stage": "update.2.reference.backward",
+          "monotonic_seconds": 22574487.04596109
+        },
+        {
+          "stage": "update.2.reference.optimizer",
+          "monotonic_seconds": 22574487.333644588
+        },
+        {
+          "stage": "update.2.placed.forward",
+          "monotonic_seconds": 22574487.377704993
+        },
+        {
+          "stage": "update.2.placed.backward",
+          "monotonic_seconds": 22574487.78322207
+        },
+        {
+          "stage": "update.2.placed.optimizer",
+          "monotonic_seconds": 22574488.023665085
+        },
+        {
+          "stage": "update.2.complete",
+          "monotonic_seconds": 22574488.178801525
+        },
+        {
+          "stage": "checkpoint.save",
+          "monotonic_seconds": 22574488.184334908
+        },
+        {
+          "stage": "checkpoint.load",
+          "monotonic_seconds": 22574488.355829433
+        },
+        {
+          "stage": "checkpoint.next_forward",
+          "monotonic_seconds": 22574488.722452804
+        },
+        {
+          "stage": "checkpoint.original_update.forward",
+          "monotonic_seconds": 22574489.149320215
+        },
+        {
+          "stage": "checkpoint.original_update.backward",
+          "monotonic_seconds": 22574489.54193584
+        },
+        {
+          "stage": "checkpoint.original_update.optimizer",
+          "monotonic_seconds": 22574489.777880803
+        },
+        {
+          "stage": "checkpoint.restored_update.forward",
+          "monotonic_seconds": 22574489.850046832
+        },
+        {
+          "stage": "checkpoint.restored_update.backward",
+          "monotonic_seconds": 22574490.23326323
+        },
+        {
+          "stage": "checkpoint.restored_update.optimizer",
+          "monotonic_seconds": 22574490.471203543
+        },
+        {
+          "stage": "completed",
+          "monotonic_seconds": 22574490.807150315
+        }
+      ],
+      "phase_synchronization": false,
+      "last_stage": "completed",
+      "placement": {
+        "kind": "hb-region-shards-1",
+        "devices": [
+          "npu:0",
+          "npu:1"
+        ],
+        "requested_transport": "host_stage",
+        "transport": "host_stage",
+        "input_partition": 0,
+        "output_partition": 1,
+        "optimizer": "placement_adamw; align disconnected shards per original Parameter before step",
+        "communication": "single-process deduplicated predecessor-node transport per destination partition; no replicas",
+        "region_partitions": [
+          0,
+          1,
+          1,
+          0,
+          0,
+          1,
+          1,
+          0,
+          0,
+          1,
+          1
+        ],
+        "region_concurrency": "per_device",
+        "actual_devices": {
+          "npu:0": {
+            "parameters": 531076,
+            "parameter_bytes": 2124304
+          },
+          "npu:1": {
+            "parameters": 619451,
+            "parameter_bytes": 2477804
+          }
+        },
+        "total_unique_parameters": 1150527,
+        "predecessor_transport": [
+          {
+            "layer": 1,
+            "origin": 0,
+            "source_partition": 0,
+            "destination_partition": 1,
+            "unique_source_nodes": 2,
+            "remote": true
+          },
+          {
+            "layer": 1,
+            "origin": 0,
+            "source_partition": 1,
+            "destination_partition": 1,
+            "unique_source_nodes": 1,
+            "remote": false
+          },
+          {
+            "layer": 1,
+            "origin": 0,
+            "source_partition": 0,
+            "destination_partition": 0,
+            "unique_source_nodes": 2,
+            "remote": false
+          },
+          {
+            "layer": 1,
+            "origin": 0,
+            "source_partition": 1,
+            "destination_partition": 0,
+            "unique_source_nodes": 1,
+            "remote": true
+          },
+          {
+            "layer": 2,
+            "origin": 0,
+            "source_partition": 0,
+            "destination_partition": 0,
+            "unique_source_nodes": 2,
+            "remote": false
+          },
+          {
+            "layer": 2,
+            "origin": 0,
+            "source_partition": 1,
+            "destination_partition": 0,
+            "unique_source_nodes": 1,
+            "remote": true
+          },
+          {
+            "layer": 2,
+            "origin": 1,
+            "source_partition": 0,
+            "destination_partition": 0,
+            "unique_source_nodes": 1,
+            "remote": false
+          },
+          {
+            "layer": 2,
+            "origin": 1,
+            "source_partition": 1,
+            "destination_partition": 0,
+            "unique_source_nodes": 2,
+            "remote": true
+          },
+          {
+            "layer": 2,
+            "origin": 0,
+            "source_partition": 0,
+            "destination_partition": 1,
+            "unique_source_nodes": 2,
+            "remote": true
+          },
+          {
+            "layer": 2,
+            "origin": 0,
+            "source_partition": 1,
+            "destination_partition": 1,
+            "unique_source_nodes": 1,
+            "remote": false
+          },
+          {
+            "layer": 2,
+            "origin": 1,
+            "source_partition": 0,
+            "destination_partition": 1,
+            "unique_source_nodes": 1,
+            "remote": true
+          },
+          {
+            "layer": 2,
+            "origin": 1,
+            "source_partition": 1,
+            "destination_partition": 1,
+            "unique_source_nodes": 2,
+            "remote": false
+          },
+          {
+            "layer": 3,
+            "origin": 1,
+            "source_partition": 0,
+            "destination_partition": 0,
+            "unique_source_nodes": 1,
+            "remote": false
+          },
+          {
+            "layer": 3,
+            "origin": 1,
+            "source_partition": 1,
+            "destination_partition": 0,
+            "unique_source_nodes": 2,
+            "remote": true
+          },
+          {
+            "layer": 3,
+            "origin": 2,
+            "source_partition": 0,
+            "destination_partition": 0,
+            "unique_source_nodes": 3,
+            "remote": false
+          },
+          {
+            "layer": 3,
+            "origin": 2,
+            "source_partition": 1,
+            "destination_partition": 0,
+            "unique_source_nodes": 3,
+            "remote": true
+          },
+          {
+            "layer": 3,
+            "origin": 1,
+            "source_partition": 0,
+            "destination_partition": 1,
+            "unique_source_nodes": 1,
+            "remote": true
+          },
+          {
+            "layer": 3,
+            "origin": 2,
+            "source_partition": 0,
+            "destination_partition": 1,
+            "unique_source_nodes": 3,
+            "remote": true
+          },
+          {
+            "layer": 3,
+            "origin": 2,
+            "source_partition": 1,
+            "destination_partition": 1,
+            "unique_source_nodes": 3,
+            "remote": false
+          },
+          {
+            "layer": 4,
+            "origin": 0,
+            "source_partition": 0,
+            "destination_partition": 1,
+            "unique_source_nodes": 2,
+            "remote": true
+          },
+          {
+            "layer": 4,
+            "origin": 0,
+            "source_partition": 1,
+            "destination_partition": 1,
+            "unique_source_nodes": 1,
+            "remote": false
+          },
+          {
+            "layer": 4,
+            "origin": 2,
+            "source_partition": 0,
+            "destination_partition": 1,
+            "unique_source_nodes": 3,
+            "remote": true
+          },
+          {
+            "layer": 4,
+            "origin": 2,
+            "source_partition": 1,
+            "destination_partition": 1,
+            "unique_source_nodes": 3,
+            "remote": false
+          },
+          {
+            "layer": 4,
+            "origin": 3,
+            "source_partition": 0,
+            "destination_partition": 1,
+            "unique_source_nodes": 2,
+            "remote": true
+          },
+          {
+            "layer": 4,
+            "origin": 3,
+            "source_partition": 1,
+            "destination_partition": 1,
+            "unique_source_nodes": 1,
+            "remote": false
+          }
+        ],
+        "pending_layout": "private regional compact last-tick tensors; no window-sized pending views",
+        "execution": {
+          "policy": "per_device",
+          "maximum_layer_devices": 2,
+          "maximum_workers": 2,
+          "device_identity": "CPU indices are logical simulation groups; repeated devices share one task",
+          "ownership": "caller projects and transports; one serial region task per device; join each layer",
+          "streams": "caller current stream per accelerator, captured before worker creation; no extra streams",
+          "backward": "ordinary autograd engine, without a separate region thread scheduler",
+          "instrumentation": "record_work aggregates returned per-region counters; caller dispatch/function modes require explicit serial_region_audit; hooks/profilers are not propagated"
+        }
+      },
+      "input_sha256": "d1bdba429979d1db4a4b49d20cbf28a53ac5d9a413e1225d0b7b897ca147ef85",
+      "comparisons": {
+        "whole_result": {
+          "exact": true,
+          "finite": true,
+          "metadata_mismatches": [],
+          "support_mismatches": [],
+          "numerical_failures": [],
+          "max_abs": 0.0,
+          "max_scaled_error": 0.0,
+          "atol": 1e-06,
+          "rtol": 0.002,
+          "floating_tensors": 66,
+          "within_threshold": true
+        },
+        "flush_result": {
+          "exact": true,
+          "finite": true,
+          "metadata_mismatches": [],
+          "support_mismatches": [],
+          "numerical_failures": [],
+          "max_abs": 0.0,
+          "max_scaled_error": 0.0,
+          "atol": 1e-06,
+          "rtol": 0.002,
+          "floating_tensors": 66,
+          "within_threshold": true
+        },
+        "input_gradient": {
+          "exact": false,
+          "finite": true,
+          "metadata_mismatches": [],
+          "support_mismatches": [],
+          "numerical_failures": [],
+          "max_abs": 3.725290298461914e-09,
+          "max_scaled_error": 0.0010314917950952436,
+          "atol": 1e-06,
+          "rtol": 0.01,
+          "floating_tensors": 1,
+          "within_threshold": true
+        },
+        "parameter_gradients": {
+          "exact": false,
+          "finite": true,
+          "metadata_mismatches": [],
+          "support_mismatches": [],
+          "numerical_failures": [],
+          "max_abs": 1.792795956134796e-08,
+          "max_scaled_error": 0.010396176959992587,
+          "atol": 1e-06,
+          "rtol": 0.002,
+          "floating_tensors": 165,
+          "within_threshold": true
+        },
+        "continued_single_vs_placed": {
+          "exact": true,
+          "finite": true,
+          "metadata_mismatches": [],
+          "support_mismatches": [],
+          "numerical_failures": [],
+          "max_abs": 0.0,
+          "max_scaled_error": 0.0,
+          "atol": 1e-06,
+          "rtol": 0.002,
+          "floating_tensors": 1,
+          "within_threshold": true
+        },
+        "continued_single_vs_placed_state": {
+          "exact": true,
+          "finite": true,
+          "metadata_mismatches": [],
+          "support_mismatches": [],
+          "numerical_failures": [],
+          "max_abs": 0.0,
+          "max_scaled_error": 0.0,
+          "atol": 1e-06,
+          "rtol": 0.002,
+          "floating_tensors": 64,
+          "within_threshold": true
+        },
+        "reference_whole_vs_continued": {
+          "exact": false,
+          "finite": true,
+          "metadata_mismatches": [],
+          "support_mismatches": [],
+          "numerical_failures": [],
+          "max_abs": 1.9669532775878906e-06,
+          "max_scaled_error": 0.10911959032210847,
+          "atol": 1e-06,
+          "rtol": 0.002,
+          "floating_tensors": 1,
+          "within_threshold": true
+        },
+        "continued_readout": {
+          "exact": false,
+          "finite": true,
+          "metadata_mismatches": [],
+          "support_mismatches": [],
+          "numerical_failures": [],
+          "max_abs": 1.9669532775878906e-06,
+          "max_scaled_error": 0.10911959032210847,
+          "atol": 1e-06,
+          "rtol": 0.002,
+          "floating_tensors": 1,
+          "within_threshold": true
+        },
+        "continued_state": {
+          "exact": false,
+          "finite": true,
+          "metadata_mismatches": [],
+          "support_mismatches": [],
+          "numerical_failures": [],
+          "max_abs": 2.384185791015625e-06,
+          "max_scaled_error": 0.3397925025737833,
+          "atol": 1e-06,
+          "rtol": 0.002,
+          "floating_tensors": 76,
+          "within_threshold": true
+        },
+        "continued_flush": {
+          "exact": false,
+          "finite": true,
+          "metadata_mismatches": [],
+          "support_mismatches": [],
+          "numerical_failures": [],
+          "max_abs": 2.0265579223632812e-06,
+          "max_scaled_error": 0.3397925025737833,
+          "atol": 1e-06,
+          "rtol": 0.002,
+          "floating_tensors": 78,
+          "within_threshold": true
+        },
+        "checkpoint_data": {
+          "exact": true,
+          "finite": true,
+          "metadata_mismatches": [],
+          "support_mismatches": [],
+          "numerical_failures": [],
+          "max_abs": 0.0,
+          "max_scaled_error": 0.0,
+          "atol": 0,
+          "rtol": 0,
+          "floating_tensors": 992,
+          "within_threshold": true
+        },
+        "checkpoint_next_result": {
+          "exact": true,
+          "finite": true,
+          "metadata_mismatches": [],
+          "support_mismatches": [],
+          "numerical_failures": [],
+          "max_abs": 0.0,
+          "max_scaled_error": 0.0,
+          "atol": 0,
+          "rtol": 0,
+          "floating_tensors": 78,
+          "within_threshold": true
+        },
+        "restored_updated_parameters": {
+          "exact": false,
+          "finite": true,
+          "metadata_mismatches": [],
+          "support_mismatches": [],
+          "numerical_failures": [],
+          "max_abs": 5.289912223815918e-07,
+          "max_scaled_error": 0.05739462742551078,
+          "atol": 1e-06,
+          "rtol": 0.002,
+          "floating_tensors": 229,
+          "within_threshold": true
+        },
+        "restored_updated_optimizer": {
+          "exact": false,
+          "finite": true,
+          "metadata_mismatches": [],
+          "support_mismatches": [],
+          "numerical_failures": [],
+          "max_abs": 9.313225746154785e-10,
+          "max_scaled_error": 0.0002311286734058968,
+          "atol": 1e-06,
+          "rtol": 0.002,
+          "floating_tensors": 687,
+          "within_threshold": true
+        },
+        "restored_updated_state": {
+          "exact": true,
+          "finite": true,
+          "metadata_mismatches": [],
+          "support_mismatches": [],
+          "numerical_failures": [],
+          "max_abs": 0.0,
+          "max_scaled_error": 0.0,
+          "atol": 1e-06,
+          "rtol": 0.002,
+          "floating_tensors": 76,
+          "within_threshold": true
+        }
+      },
+      "work": {
+        "candidates": 316,
+        "full": 302,
+        "positive_messages": 898,
+        "candidate_slots": 680
+      },
+      "operator_witness": {
+        "operators": [
+          {
+            "operator": "aten.addmm.default",
+            "inputs": [
+              "npu:0:torch.float32"
+            ],
+            "outputs": [
+              "npu:0:torch.float32"
+            ],
+            "calls": 5
+          },
+          {
+            "operator": "aten.addmm.default",
+            "inputs": [
+              "npu:1:torch.float32"
+            ],
+            "outputs": [
+              "npu:1:torch.float32"
+            ],
+            "calls": 6
+          },
+          {
+            "operator": "aten.bmm.default",
+            "inputs": [
+              "npu:0:torch.float32"
+            ],
+            "outputs": [
+              "npu:0:torch.float32"
+            ],
+            "calls": 106
+          },
+          {
+            "operator": "aten.bmm.default",
+            "inputs": [
+              "npu:1:torch.float32"
+            ],
+            "outputs": [
+              "npu:1:torch.float32"
+            ],
+            "calls": 126
+          },
+          {
+            "operator": "aten.matmul.default",
+            "inputs": [
+              "npu:0:torch.float32"
+            ],
+            "outputs": [
+              "npu:0:torch.float32"
+            ],
+            "calls": 64
+          },
+          {
+            "operator": "aten.matmul.default",
+            "inputs": [
+              "npu:1:torch.float32"
+            ],
+            "outputs": [
+              "npu:1:torch.float32"
+            ],
+            "calls": 78
+          },
+          {
+            "operator": "aten.mm.default",
+            "inputs": [
+              "npu:0:torch.float32"
+            ],
+            "outputs": [
+              "npu:0:torch.float32"
+            ],
+            "calls": 53
+          },
+          {
+            "operator": "aten.mm.default",
+            "inputs": [
+              "npu:1:torch.float32"
+            ],
+            "outputs": [
+              "npu:1:torch.float32"
+            ],
+            "calls": 63
+          },
+          {
+            "operator": "npu.npu_fusion_attention_v2.default",
+            "inputs": [
+              "npu:0:torch.bool",
+              "npu:0:torch.float32"
+            ],
+            "outputs": [
+              "npu:0:torch.float32"
+            ],
+            "calls": 8
+          },
+          {
+            "operator": "npu.npu_fusion_attention_v2.default",
+            "inputs": [
+              "npu:1:torch.bool",
+              "npu:1:torch.float32"
+            ],
+            "outputs": [
+              "npu:1:torch.float32"
+            ],
+            "calls": 9
+          }
+        ],
+        "materializations": {
+          "aten.index_copy.default": {
+            "calls": 68,
+            "output_bytes": 66112
+          },
+          "aten._to_copy.default": {
+            "calls": 125,
+            "output_bytes": 118384
+          },
+          "aten.index.Tensor": {
+            "calls": 666,
+            "output_bytes": 1463664
+          },
+          "aten.cat.default": {
+            "calls": 251,
+            "output_bytes": 523704
+          },
+          "aten.scatter.src": {
+            "calls": 6,
+            "output_bytes": 768
+          },
+          "aten.gather.default": {
+            "calls": 82,
+            "output_bytes": 141728
+          },
+          "aten.clone.default": {
+            "calls": 44,
+            "output_bytes": 43592
+          },
+          "aten.index_put.default": {
+            "calls": 27,
+            "output_bytes": 62464
+          },
+          "aten.index_put_.default": {
+            "calls": 11,
+            "output_bytes": 480
+          },
+          "aten.index_select.default": {
+            "calls": 88,
+            "output_bytes": 191360
+          }
+        },
+        "materialization_definition": "logical output bytes from dispatched copy/index/concatenate operations; not hardware bus traffic, bandwidth or all operand loads",
+        "instrumentation": "separate ordinary forward without semantic counting hooks; excluded from timing",
+        "bf16_matrix_observed": false,
+        "execution": {
+          "requested_region_concurrency": "per_device",
+          "effective_region_concurrency": "serial",
+          "workers": 0,
+          "scope": "caller-thread instrumentation witness; excluded from concurrent timing"
+        }
+      },
+      "updates": [
+        {
+          "index": 0,
+          "observations": [
+            {
+              "owner": "reference",
+              "loss": -0.05029163509607315,
+              "finite": true,
+              "complete_seconds": 0.601905707269907,
+              "phase_seconds": {
+                "zero_grad_forward_loss": 0.293564323335886,
+                "backward": 0.2805880904197693,
+                "optimizer_detach_sync": 0.015713606029748917
+              },
+              "between_phase_host_seconds": 0.012039687484502792,
+              "phase_synchronization": false,
+              "timing": "complete wall time through final all-device sync and detach includes intervening stage record IO; individual host phases exclude stage IO and measure device latency only with phase_sync",
+              "output_positive_strengths": 74,
+              "flush_output_positive_strengths": 4
+            },
+            {
+              "owner": "placed",
+              "loss": -0.05029163509607315,
+              "finite": true,
+              "complete_seconds": 0.6473900154232979,
+              "phase_seconds": {
+                "zero_grad_forward_loss": 0.3755408152937889,
+                "backward": 0.23044569417834282,
+                "optimizer_detach_sync": 0.031021639704704285
+              },
+              "between_phase_host_seconds": 0.010381866246461868,
+              "phase_synchronization": false,
+              "timing": "complete wall time through final all-device sync and detach includes intervening stage record IO; individual host phases exclude stage IO and measure device latency only with phase_sync",
+              "output_positive_strengths": 74,
+              "flush_output_positive_strengths": 4
+            }
+          ],
+          "parameters": {
+            "exact": false,
+            "finite": true,
+            "metadata_mismatches": [],
+            "support_mismatches": [],
+            "numerical_failures": [],
+            "max_abs": 3.829598426818848e-06,
+            "max_scaled_error": 0.20046072956413732,
+            "atol": 1e-06,
+            "rtol": 0.002,
+            "floating_tensors": 165,
+            "within_threshold": true
+          }
+        },
+        {
+          "index": 1,
+          "observations": [
+            {
+              "owner": "reference",
+              "loss": -0.09170711040496826,
+              "finite": true,
+              "complete_seconds": 0.6015523038804531,
+              "phase_seconds": {
+                "zero_grad_forward_loss": 0.30231308192014694,
+                "backward": 0.2806866317987442,
+                "optimizer_detach_sync": 0.008031323552131653
+              },
+              "between_phase_host_seconds": 0.010521266609430313,
+              "phase_synchronization": false,
+              "timing": "complete wall time through final all-device sync and detach includes intervening stage record IO; individual host phases exclude stage IO and measure device latency only with phase_sync",
+              "output_positive_strengths": 73,
+              "flush_output_positive_strengths": 4
+            },
+            {
+              "owner": "placed",
+              "loss": -0.09170709550380707,
+              "finite": true,
+              "complete_seconds": 0.6766864508390427,
+              "phase_seconds": {
+                "zero_grad_forward_loss": 0.41342395171523094,
+                "backward": 0.23918592184782028,
+                "optimizer_detach_sync": 0.012425854802131653
+              },
+              "between_phase_host_seconds": 0.011650722473859787,
+              "phase_synchronization": false,
+              "timing": "complete wall time through final all-device sync and detach includes intervening stage record IO; individual host phases exclude stage IO and measure device latency only with phase_sync",
+              "output_positive_strengths": 73,
+              "flush_output_positive_strengths": 4
+            }
+          ],
+          "parameters": {
+            "exact": false,
+            "finite": true,
+            "metadata_mismatches": [],
+            "support_mismatches": [],
+            "numerical_failures": [],
+            "max_abs": 4.839152097702026e-06,
+            "max_scaled_error": 0.2401812522725521,
+            "atol": 1e-06,
+            "rtol": 0.002,
+            "floating_tensors": 165,
+            "within_threshold": true
+          }
+        },
+        {
+          "index": 2,
+          "observations": [
+            {
+              "owner": "reference",
+              "loss": -0.1317935585975647,
+              "finite": true,
+              "complete_seconds": 0.6074724346399307,
+              "phase_seconds": {
+                "zero_grad_forward_loss": 0.3058534227311611,
+                "backward": 0.28169235587120056,
+                "optimizer_detach_sync": 0.008119247853755951
+              },
+              "between_phase_host_seconds": 0.011807408183813095,
+              "phase_synchronization": false,
+              "timing": "complete wall time through final all-device sync and detach includes intervening stage record IO; individual host phases exclude stage IO and measure device latency only with phase_sync",
+              "output_positive_strengths": 72,
+              "flush_output_positive_strengths": 4
+            },
+            {
+              "owner": "placed",
+              "loss": -0.1317935287952423,
+              "finite": true,
+              "complete_seconds": 0.6590677835047245,
+              "phase_seconds": {
+                "zero_grad_forward_loss": 0.39893287420272827,
+                "backward": 0.23461942002177238,
+                "optimizer_detach_sync": 0.013802912086248398
+              },
+              "between_phase_host_seconds": 0.011712577193975449,
+              "phase_synchronization": false,
+              "timing": "complete wall time through final all-device sync and detach includes intervening stage record IO; individual host phases exclude stage IO and measure device latency only with phase_sync",
+              "output_positive_strengths": 72,
+              "flush_output_positive_strengths": 4
+            }
+          ],
+          "parameters": {
+            "exact": false,
+            "finite": true,
+            "metadata_mismatches": [],
+            "support_mismatches": [],
+            "numerical_failures": [],
+            "max_abs": 6.802380084991455e-06,
+            "max_scaled_error": 0.685190020148394,
+            "atol": 1e-06,
+            "rtol": 0.002,
+            "floating_tensors": 165,
+            "within_threshold": true
+          }
+        }
+      ],
+      "restored_updates": [
+        {
+          "loss": -0.16171357035636902,
+          "finite": true,
+          "complete_seconds": 0.6430145502090454,
+          "phase_seconds": {
+            "zero_grad_forward_loss": 0.3872227184474468,
+            "backward": 0.22884293273091316,
+            "optimizer_detach_sync": 0.014078076928853989
+          },
+          "between_phase_host_seconds": 0.012870822101831436,
+          "phase_synchronization": false,
+          "timing": "complete wall time through final all-device sync and detach includes intervening stage record IO; individual host phases exclude stage IO and measure device latency only with phase_sync",
+          "output_positive_strengths": 72,
+          "flush_output_positive_strengths": 4
+        },
+        {
+          "loss": -0.16171357035636902,
+          "finite": true,
+          "complete_seconds": 0.6328184343874454,
+          "phase_seconds": {
+            "zero_grad_forward_loss": 0.3776308298110962,
+            "backward": 0.23206885531544685,
+            "optimizer_detach_sync": 0.011798564344644547
+          },
+          "between_phase_host_seconds": 0.011320184916257858,
+          "phase_synchronization": false,
+          "timing": "complete wall time through final all-device sync and detach includes intervening stage record IO; individual host phases exclude stage IO and measure device latency only with phase_sync",
+          "output_positive_strengths": 72,
+          "flush_output_positive_strengths": 4
+        }
+      ],
+      "state_memory": {
+        "payload_bytes": 1467752,
+        "retained_storage_bytes": 1467752,
+        "dtypes": [
+          "torch.float32",
+          "torch.int64"
+        ],
+        "tensor_count": 92
+      },
+      "peak_device_memory": {
+        "npu:0": {
+          "allocated_bytes": 100462592,
+          "reserved_bytes": 243269632
+        },
+        "npu:1": {
+          "allocated_bytes": 83578880,
+          "reserved_bytes": 226492416
+        }
+      },
+      "process_peak_rss_kib": 2440096
+    }
+  ],
+  "state": "completed"
+}

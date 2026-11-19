@@ -1,0 +1,43 @@
+{
+  "state": "waiting",
+  "started": "2026-11-18T04:37:13.750499+00:00",
+  "units": [
+    "tide-continuous-cpu-v14.service"
+  ],
+  "command": [
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "-m",
+    "benchmarks.attention_sites",
+    "--device",
+    "cpu",
+    "--cases",
+    "kv-unit",
+    "kv-zero",
+    "reception-positive",
+    "reception-zero",
+    "region-positive",
+    "region-zero",
+    "--threads",
+    "32",
+    "--warmup",
+    "2",
+    "--steps",
+    "5",
+    "--output",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/attention-sites-cpu-v14/result.json"
+  ],
+  "boundary": "resource sequencing only; prior success not required",
+  "observations": {
+    "tide-continuous-cpu-v14.service": {
+      "MainPID": "3538296",
+      "Result": "success",
+      "LoadState": "loaded",
+      "ActiveState": "active",
+      "SubState": "running"
+    }
+  },
+  "busy": [
+    "tide-continuous-cpu-v14.service"
+  ],
+  "elapsed_seconds": 0.007023792713880539
+}

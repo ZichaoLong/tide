@@ -1,0 +1,107 @@
+{
+  "state": "passed",
+  "source": "8a22530dae69d9f1fa5ead4a01d1798fd1dfe0ee",
+  "command": [
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "/mi/data2T/zlong/home/.agents/skills/use-local-ascend/scripts/run_on_free_npu.py",
+    "--job-id",
+    "region-placement-perf-npu-v1",
+    "--project",
+    "tide-instances",
+    "--priority",
+    "0",
+    "--npu-count",
+    "2",
+    "--max-wait-seconds",
+    "1200",
+    "--state-file",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/region-placement-perf-npu-v1/queue.json",
+    "--",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "-c",
+    "import os,sys,json\nfrom pathlib import Path\nfrom scripts.job import atomic,enable_subreaper\nfrom benchmarks.programme import run_child\nout=Path(\"/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/region-placement-perf-npu-v1\");record=dict(source=os.environ[\"TIDE_SOURCE_COMMIT\"],physical_devices=os.environ.get(\"ASCEND_RT_VISIBLE_DEVICES\"),state=\"running\",children=[])\npersist=lambda:atomic(out/\"programme.json\",record)\nenable_subreaper()\nfor config,batch,length in ((\"settle\",8,256),(\"timed\",4,128)):\n for precision in (\"fp32\",\"bf16\"):\n  for label,devices,policy in ((\"single\",[\"npu:0\",\"npu:0\"],\"serial\"),(\"dual_serial\",[\"npu:0\",\"npu:1\"],\"serial\"),(\"dual_per_device\",[\"npu:0\",\"npu:1\"],\"per_device\")):\n   name=f\"{config}-{precision}-{label}\"\n   command=[sys.executable,\"-m\",\"scripts.check_placement\",\"--config\",\"configs/hb-multiscale-x-\"+config+\".json\",\"--devices\",*devices,\"--partition-kind\",\"region\",\"--region-concurrency\",policy,\"--transport\",\"host_stage\",\"--mode\",\"train\",\"--precision\",precision,\"--batch\",str(batch),\"--length\",str(length),\"--steps\",\"6\",\"--threads\",\"4\",\"--output\",str(out/(name+\".json\"))]\n   row=dict(identity=name,command=command,output=str(out/(name+\".json\")),log=str(out/(name+\".log\")),timeout_seconds=600,max_rss_bytes=80*2**30)\n   record[\"children\"].append(row);persist();run_child(row,persist,supervisor_pid=os.getpid())\nrecord[\"state\"]=\"completed\" if all(r[\"state\"]==\"completed\" for r in record[\"children\"]) else \"failed\"\npersist();sys.exit(record[\"state\"]!=\"completed\")\n"
+  ],
+  "pid": 1108340,
+  "started": "2026-11-18T07:53:44.481199+00:00",
+  "max_rss_bytes": 103079215104,
+  "peak_rss_bytes": 4335116288,
+  "max_processes": 3,
+  "rss_sample_count": 1410,
+  "poll_interval": 0.25,
+  "descendant_supervision": "Linux child subreaper; retained PID/start identities across nested sessions",
+  "child_pid": 1108425,
+  "process_group": 1108425,
+  "elapsed": 603.1294261142612,
+  "descendant_identities": [
+    {
+      "pid": 1108425,
+      "start_ticks": 2257459519
+    },
+    {
+      "pid": 1108437,
+      "start_ticks": 2257459525
+    },
+    {
+      "pid": 1108478,
+      "start_ticks": 2257459583
+    },
+    {
+      "pid": 1108754,
+      "start_ticks": 2257460065
+    },
+    {
+      "pid": 1108910,
+      "start_ticks": 2257460246
+    },
+    {
+      "pid": 1108912,
+      "start_ticks": 2257460251
+    },
+    {
+      "pid": 1110579,
+      "start_ticks": 2257463551
+    },
+    {
+      "pid": 1113606,
+      "start_ticks": 2257467315
+    },
+    {
+      "pid": 1115522,
+      "start_ticks": 2257470601
+    },
+    {
+      "pid": 1118049,
+      "start_ticks": 2257474074
+    },
+    {
+      "pid": 1120711,
+      "start_ticks": 2257477927
+    },
+    {
+      "pid": 1122442,
+      "start_ticks": 2257481525
+    },
+    {
+      "pid": 1126461,
+      "start_ticks": 2257487799
+    },
+    {
+      "pid": 1131497,
+      "start_ticks": 2257494588
+    },
+    {
+      "pid": 1134385,
+      "start_ticks": 2257500428
+    },
+    {
+      "pid": 1137463,
+      "start_ticks": 2257506504
+    },
+    {
+      "pid": 1141364,
+      "start_ticks": 2257513597
+    }
+  ],
+  "exit_code": 0,
+  "finished": "2026-11-18T08:03:47.610625+00:00"
+}

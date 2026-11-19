@@ -1,0 +1,2051 @@
+{
+  "schema": "tide-capacity-validation-1",
+  "recorded_at_utc": "2026-11-18T08:20:37.774909+00:00",
+  "scope": "Source, CPU tests, support metadata, small evidence identities and terminal handoff; no new device performance",
+  "review_source": "5ae060db940e44d447ce541eeb8fada865893b4c",
+  "qualified_source": "8a22530dae69d9f1fa5ead4a01d1798fd1dfe0ee",
+  "upstream": {
+    "state": "passed",
+    "revision": "4f5b9f20a4030d68ee66ae2d26e34659a5e37234",
+    "files": 108
+  },
+  "package": {
+    "files": [
+      {
+        "path": "src/tide/__init__.py",
+        "qualified_sha256": "bd8d669f813aa282dc1835a53656550468f40eac46a730c4339635580d8e4195",
+        "current_sha256": "bd8d669f813aa282dc1835a53656550468f40eac46a730c4339635580d8e4195",
+        "byte_equal": true,
+        "ast_equal": true
+      },
+      {
+        "path": "src/tide/allocation.py",
+        "qualified_sha256": "ff7f4e26c05006e5fb1a68c50f783670c20c33baf56528b5dac55fa2ffab66cc",
+        "current_sha256": "ff7f4e26c05006e5fb1a68c50f783670c20c33baf56528b5dac55fa2ffab66cc",
+        "byte_equal": true,
+        "ast_equal": true
+      },
+      {
+        "path": "src/tide/attention.py",
+        "qualified_sha256": "0a8231713a2801ed397cee093c5d1112867a2057fc20804717fd39fd9e1609e8",
+        "current_sha256": "0a8231713a2801ed397cee093c5d1112867a2057fc20804717fd39fd9e1609e8",
+        "byte_equal": true,
+        "ast_equal": true
+      },
+      {
+        "path": "src/tide/checkpoint.py",
+        "qualified_sha256": "7e188773786f5cd7e3b06fcf3ef4ca9efa256933a9c21a8225f359687337c49f",
+        "current_sha256": "7e188773786f5cd7e3b06fcf3ef4ca9efa256933a9c21a8225f359687337c49f",
+        "byte_equal": true,
+        "ast_equal": true
+      },
+      {
+        "path": "src/tide/config.py",
+        "qualified_sha256": "bddea1a60912ea21803869a8e25a2f7f303311d3a1bfbf52719f9cda5d4bdf54",
+        "current_sha256": "bddea1a60912ea21803869a8e25a2f7f303311d3a1bfbf52719f9cda5d4bdf54",
+        "byte_equal": true,
+        "ast_equal": true
+      },
+      {
+        "path": "src/tide/kv.py",
+        "qualified_sha256": "7310fcbc79a1641a495316c100e409a43e8d59ac6b6ae5f77669a9a9a4849caa",
+        "current_sha256": "7310fcbc79a1641a495316c100e409a43e8d59ac6b6ae5f77669a9a9a4849caa",
+        "byte_equal": true,
+        "ast_equal": true
+      },
+      {
+        "path": "src/tide/layout.py",
+        "qualified_sha256": "4aee0573beb2448dd90ca307b9065f2ed4cd0f7eb93bfcd92c4b46550f889aa0",
+        "current_sha256": "4aee0573beb2448dd90ca307b9065f2ed4cd0f7eb93bfcd92c4b46550f889aa0",
+        "byte_equal": true,
+        "ast_equal": true
+      },
+      {
+        "path": "src/tide/model.py",
+        "qualified_sha256": "3897868991e1ff2b241c74efc1f1166e509f401018f2df89f1c45a17ae17b161",
+        "current_sha256": "3897868991e1ff2b241c74efc1f1166e509f401018f2df89f1c45a17ae17b161",
+        "byte_equal": true,
+        "ast_equal": true
+      },
+      {
+        "path": "src/tide/parameters.py",
+        "qualified_sha256": "67d6ee7829448fa7431a3350a3a15ea5070aa4038d2276017d844714dceecfa7",
+        "current_sha256": "67d6ee7829448fa7431a3350a3a15ea5070aa4038d2276017d844714dceecfa7",
+        "byte_equal": true,
+        "ast_equal": true
+      },
+      {
+        "path": "src/tide/placement.py",
+        "qualified_sha256": "c58ef4574d5be7fad6e422e658f5972a815e95aed9bb6d55155e62777c2f8a27",
+        "current_sha256": "c58ef4574d5be7fad6e422e658f5972a815e95aed9bb6d55155e62777c2f8a27",
+        "byte_equal": true,
+        "ast_equal": true
+      },
+      {
+        "path": "src/tide/placement_ownership.py",
+        "qualified_sha256": "95431e5a2240b81a16df4cba08dfef541d777735220a212a28324f9c63661c13",
+        "current_sha256": "95431e5a2240b81a16df4cba08dfef541d777735220a212a28324f9c63661c13",
+        "byte_equal": true,
+        "ast_equal": true
+      },
+      {
+        "path": "src/tide/precision.py",
+        "qualified_sha256": "5e94f06892dc89451750b4e5b1fd2e105d440f633875f31a883880e6a6ca480a",
+        "current_sha256": "5e94f06892dc89451750b4e5b1fd2e105d440f633875f31a883880e6a6ca480a",
+        "byte_equal": true,
+        "ast_equal": true
+      },
+      {
+        "path": "src/tide/reception.py",
+        "qualified_sha256": "67768494c96a697480c13713e246b1a943940e7faeb96d24bd0732aad3f7cd98",
+        "current_sha256": "67768494c96a697480c13713e246b1a943940e7faeb96d24bd0732aad3f7cd98",
+        "byte_equal": true,
+        "ast_equal": true
+      },
+      {
+        "path": "src/tide/region.py",
+        "qualified_sha256": "3d0ee3fa13e344ddb0fff5ce15af62cee4e0b1a7c4984df523e70a4cbfc41ec2",
+        "current_sha256": "3d0ee3fa13e344ddb0fff5ce15af62cee4e0b1a7c4984df523e70a4cbfc41ec2",
+        "byte_equal": true,
+        "ast_equal": true
+      },
+      {
+        "path": "src/tide/region_batch.py",
+        "qualified_sha256": "2406168308d26e9ed5d07f7b05ac9f4650161df4929b3c0b2b9042925a313a6a",
+        "current_sha256": "33cd714d4b02c8ac262e91ac9374aec035401b1369335890880ab4400c65aa55",
+        "byte_equal": false,
+        "ast_equal": true
+      },
+      {
+        "path": "src/tide/region_execution.py",
+        "qualified_sha256": "75dcce33905dbcecc62e3eaaf93f2c1d087dfa9608043e561f59d93e2d0dd7d1",
+        "current_sha256": "75dcce33905dbcecc62e3eaaf93f2c1d087dfa9608043e561f59d93e2d0dd7d1",
+        "byte_equal": true,
+        "ast_equal": true
+      },
+      {
+        "path": "src/tide/region_placement.py",
+        "qualified_sha256": "d2dfc2b65ff14430423aa1532fe5fd7cc378b7581c207f1938e5f4ab1c34c459",
+        "current_sha256": "d2dfc2b65ff14430423aa1532fe5fd7cc378b7581c207f1938e5f4ab1c34c459",
+        "byte_equal": true,
+        "ast_equal": true
+      },
+      {
+        "path": "src/tide/ssd.py",
+        "qualified_sha256": "03132ab3f3a8b49f8eb6f0c0b29000e1647280fb243d0105a5e7f220ccac0954",
+        "current_sha256": "03132ab3f3a8b49f8eb6f0c0b29000e1647280fb243d0105a5e7f220ccac0954",
+        "byte_equal": true,
+        "ast_equal": true
+      },
+      {
+        "path": "src/tide/ssd_memory.py",
+        "qualified_sha256": "6479ce755e67396708aab2912d460c4166b69be2ab92b0b592a7b52f93124f81",
+        "current_sha256": "6479ce755e67396708aab2912d460c4166b69be2ab92b0b592a7b52f93124f81",
+        "byte_equal": true,
+        "ast_equal": true
+      },
+      {
+        "path": "src/tide/topology.py",
+        "qualified_sha256": "8cdf58d0b3089e16a079ad46c3be7ca0c953fcea0023d276c9582901e1712dbf",
+        "current_sha256": "8cdf58d0b3089e16a079ad46c3be7ca0c953fcea0023d276c9582901e1712dbf",
+        "byte_equal": true,
+        "ast_equal": true
+      },
+      {
+        "path": "src/tide/topology_hb.py",
+        "qualified_sha256": "5fb7b1a959f0b88a097e95959b52a1f10cf5180eaea7b688cbef086946abea06",
+        "current_sha256": "5fb7b1a959f0b88a097e95959b52a1f10cf5180eaea7b688cbef086946abea06",
+        "byte_equal": true,
+        "ast_equal": true
+      }
+    ],
+    "byte_changed": [
+      "src/tide/region_batch.py"
+    ],
+    "all_ast_equal": true,
+    "qualification_limit": "21 package-file ASTs equal, not byte identity or new hardware qualification"
+  },
+  "frozen_archives": [
+    {
+      "run": "capacity-integrated-cpu-v2",
+      "source": "8a22530dae69d9f1fa5ead4a01d1798fd1dfe0ee",
+      "files": 315,
+      "mismatches": []
+    },
+    {
+      "run": "capacity-support-catalog-v1",
+      "source": "7b77457d594662e50acf0a002ca18d0a241e0ce3",
+      "files": 308,
+      "mismatches": []
+    }
+  ],
+  "integrated_cpu": {
+    "state": "passed",
+    "source": "8a22530dae69d9f1fa5ead4a01d1798fd1dfe0ee",
+    "passed": 544,
+    "pytest_seconds": 285.99,
+    "supervisor_seconds": 288.5249071009457,
+    "peak_rss_bytes": 1194754048,
+    "cpu_affinity": "64-71",
+    "torch_threads": "tests/conftest.py selects 1",
+    "resource_identity": "pinned CPU; shared host; no NPU",
+    "records": [
+      {
+        "path": "artifacts/capacity-integrated-cpu-v2/launch.json",
+        "bytes": 2891,
+        "sha256": "b5e66e921d7861b39fb6669683ca7cfba4dfc6ed12ded99e8abbc7040aa69342"
+      },
+      {
+        "path": "artifacts/capacity-integrated-cpu-v2/status.json",
+        "bytes": 4737,
+        "sha256": "5ad6de1661df50a24a0b4b9e215a13564449dd01182df8e1c443a29c544c82ed"
+      },
+      {
+        "path": "artifacts/capacity-integrated-cpu-v2/environment.json",
+        "bytes": 2551,
+        "sha256": "66358fb0bc8a206798856b71c8bdbeb52e76908c763fb797638a711dce419524"
+      },
+      {
+        "path": "artifacts/capacity-integrated-cpu-v2/stdout.log",
+        "bytes": 672,
+        "sha256": "3c918fc56ec4b767b796e0c3f600b0904210537e2d89e540bcaef2ca7e510c5b"
+      },
+      {
+        "path": "artifacts/capacity-integrated-cpu-v2/stderr.log",
+        "bytes": 69,
+        "sha256": "1982ee243f50becd28f5ffe96c8a1028ec2db6f987bb10f36cc7c82a94c75d55"
+      }
+    ],
+    "pytest_log": "........................................................................ [ 13%]\n........................................................................ [ 26%]\n........................................................................ [ 39%]\n........................................................................ [ 52%]\n........................................................................ [ 66%]\n........................................................................ [ 79%]\n........................................................................ [ 92%]\n........................................                                 [100%]\n544 passed in 285.99s (0:04:45)\n",
+    "environment": {
+      "executable": "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+      "sys_path": [
+        "",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/capacity-integrated-cpu-v2/source/src",
+        "/opt/software/ascend-runtime/9.2.0-r1/python",
+        "/opt/ascend/cann/9.2.0/cann-9.2.0/opp/built-in/op_impl/ai_core/tbe",
+        "/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/lib/python312.zip",
+        "/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/lib/python3.12",
+        "/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/lib/python3.12/lib-dynload",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/lib/python3.12/site-packages",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/src",
+        "/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/lib/python3.12/site-packages"
+      ],
+      "environment": {
+        "PYTHONPATH": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/capacity-integrated-cpu-v2/source/src:/opt/software/ascend-runtime/9.2.0-r1/python:/opt/ascend/cann/9.2.0/cann-9.2.0/opp/built-in/op_impl/ai_core/tbe",
+        "PATH": "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin:/opt/miniconda/condabin:/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/bin:/opt/ascend/cann/9.2.0/cann-9.2.0/tools/ccec_compiler/bin:/opt/ascend/cann/9.2.0/cann-9.2.0/bin:/usr/share/Modules/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin",
+        "LD_LIBRARY_PATH": "/opt/miniconda/envs/ascend920-dev-workspace-torch-npu-2.12.0-py312-r1/lib:/usr/local/Ascend/driver/lib64/driver:/usr/local/Ascend/driver/lib64/common:/usr/local/Ascend/driver/lib64:/opt/ascend/cann/9.2.0/cann-9.2.0/opp/built-in/op_impl/ai_core/tbe/op_tiling/lib/linux/aarch64:/opt/ascend/cann/9.2.0/cann-9.2.0/lib64/plugin/nnengine:/opt/ascend/cann/9.2.0/cann-9.2.0/lib64/plugin/opskernel:/opt/ascend/cann/9.2.0/cann-9.2.0/lib64",
+        "ASCEND_HOME_PATH": "/opt/ascend/cann/9.2.0/cann-9.2.0",
+        "ASCEND_OPP_PATH": "/opt/ascend/cann/9.2.0/cann-9.2.0/opp",
+        "LOADEDMODULES": "cann/9.2.0:ascend/dev-workspace-9.2.0",
+        "VIRTUAL_ENV": "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances",
+        "TORCH_DEVICE_BACKEND_AUTOLOAD": "0"
+      },
+      "module_origins": {
+        "tide": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/capacity-integrated-cpu-v2/source/src/tide/__init__.py",
+        "tbe": "/opt/software/ascend-runtime/9.2.0-r1/python/tbe/__init__.py"
+      }
+    }
+  },
+  "targeted": {
+    "source": "5ae060db940e44d447ce541eeb8fada865893b4c",
+    "command": "TORCH_DEVICE_BACKEND_AUTOLOAD=0 .venv-instances/bin/python -m pytest -q tests/test_installed_validation.py tests/test_region_batch.py",
+    "passed": 17,
+    "seconds": 8.89,
+    "record": {
+      "path": "artifacts/capacity-closeout-20261118-targeted.log",
+      "bytes": 99,
+      "sha256": "ff3b1b91ecff30498efd72828a6652a468b181a5ad80e907967f37257ad4ce69"
+    },
+    "log": ".................                                                        [100%]\n17 passed in 8.89s\n",
+    "scope": "9 installed-classification tests and 8 region-batch tests; not a 553-test full-suite rerun"
+  },
+  "help_checks": {
+    "source": "5ae060db940e44d447ce541eeb8fada865893b4c",
+    "record": {
+      "path": "artifacts/capacity-closeout-20261118-help.json",
+      "bytes": 1101,
+      "sha256": "aaa14896ce2589265fc0287bd3e13fc8cd6582d8b30c5d33eb78a879d1fd5c34"
+    },
+    "results": [
+      {
+        "module": "scripts.check_installed_capacity",
+        "exit_code": 0,
+        "usage": "usage: check_installed_capacity.py [-h] [--phase {initial,resume}]",
+        "error": ""
+      },
+      {
+        "module": "scripts.support_catalog",
+        "exit_code": 0,
+        "usage": "usage: support_catalog.py [-h] [--output OUTPUT]",
+        "error": ""
+      },
+      {
+        "module": "benchmarks.search",
+        "exit_code": 0,
+        "usage": "usage: search.py [-h] --config CONFIG [--config-overrides CONFIG_OVERRIDES]",
+        "error": ""
+      },
+      {
+        "module": "benchmarks.variants",
+        "exit_code": 0,
+        "usage": "usage: variants.py [-h] --config CONFIG",
+        "error": ""
+      },
+      {
+        "module": "benchmarks.restore",
+        "exit_code": 0,
+        "usage": "usage: restore.py [-h] --checkpoint CHECKPOINT",
+        "error": ""
+      },
+      {
+        "module": "benchmarks.memory_ledger",
+        "exit_code": 0,
+        "usage": "usage: memory_ledger.py [-h] --config CONFIG",
+        "error": ""
+      },
+      {
+        "module": "scripts.check_placement",
+        "exit_code": 0,
+        "usage": "usage: check_placement.py [-h] [--devices DEVICES [DEVICES ...]]",
+        "error": ""
+      }
+    ]
+  },
+  "support_catalog": {
+    "record": {
+      "path": "artifacts/capacity-support-catalog-v1/catalog.json",
+      "bytes": 26140,
+      "sha256": "bb91c727599277ed37cea6854b065f180234e2015b30c66d7bc8723bac5c7337"
+    },
+    "implementation": {
+      "source_commit": "7b77457d594662e50acf0a002ca18d0a241e0ce3",
+      "source_sha256": "b21e5e94829bce915a2111075c55ba8e54f79eeaf7e8a046cb1ead890ddfd97b",
+      "files": {
+        "src/tide/__init__.py": "0533795b70734ed01c0e8c922c2930c29ca9f5f405a2872556d5b65a7fad9bd4",
+        "src/tide/allocation.py": "ff7f4e26c05006e5fb1a68c50f783670c20c33baf56528b5dac55fa2ffab66cc",
+        "src/tide/attention.py": "0a8231713a2801ed397cee093c5d1112867a2057fc20804717fd39fd9e1609e8",
+        "src/tide/checkpoint.py": "0494d357a1f9e239be967942d2d51fd79eef07176a93765893b6c5bc0e1c20ed",
+        "src/tide/config.py": "bddea1a60912ea21803869a8e25a2f7f303311d3a1bfbf52719f9cda5d4bdf54",
+        "src/tide/kv.py": "7310fcbc79a1641a495316c100e409a43e8d59ac6b6ae5f77669a9a9a4849caa",
+        "src/tide/layout.py": "4aee0573beb2448dd90ca307b9065f2ed4cd0f7eb93bfcd92c4b46550f889aa0",
+        "src/tide/model.py": "3897868991e1ff2b241c74efc1f1166e509f401018f2df89f1c45a17ae17b161",
+        "src/tide/parameters.py": "67d6ee7829448fa7431a3350a3a15ea5070aa4038d2276017d844714dceecfa7",
+        "src/tide/placement.py": "51c6e1c0cf8c0a97bc06eed72d47e00473c6130b40955e19827521a087edce78",
+        "src/tide/placement_ownership.py": "95431e5a2240b81a16df4cba08dfef541d777735220a212a28324f9c63661c13",
+        "src/tide/precision.py": "5e94f06892dc89451750b4e5b1fd2e105d440f633875f31a883880e6a6ca480a",
+        "src/tide/reception.py": "67768494c96a697480c13713e246b1a943940e7faeb96d24bd0732aad3f7cd98",
+        "src/tide/region.py": "3d0ee3fa13e344ddb0fff5ce15af62cee4e0b1a7c4984df523e70a4cbfc41ec2",
+        "src/tide/region_batch.py": "2406168308d26e9ed5d07f7b05ac9f4650161df4929b3c0b2b9042925a313a6a",
+        "src/tide/region_placement.py": "0209a83c6f07cc15d3913d87d474262f84cd763e6c9ea62a3ebb724b662b5ab0",
+        "src/tide/ssd.py": "03132ab3f3a8b49f8eb6f0c0b29000e1647280fb243d0105a5e7f220ccac0954",
+        "src/tide/ssd_memory.py": "6479ce755e67396708aab2912d460c4166b69be2ab92b0b592a7b52f93124f81",
+        "src/tide/topology.py": "8cdf58d0b3089e16a079ad46c3be7ca0c953fcea0023d276c9582901e1712dbf",
+        "src/tide/topology_hb.py": "5fb7b1a959f0b88a097e95959b52a1f10cf5180eaea7b688cbef086946abea06",
+        "scripts/support_catalog.py": "372b38a44386064c21fd3f242b2d818e6a031bfe55d5472a227cf286b918f175"
+      },
+      "source_dirty": false
+    },
+    "main_menu": {
+      "spatial_profiles": 41,
+      "bound_profiles": 55,
+      "geometry_resolutions": 475,
+      "parameter_configs": 225400,
+      "allocation_rows": 676200,
+      "by_variant": {
+        "fc-settle": 9,
+        "lattice-settle": 6,
+        "exchange-settle": 12,
+        "multiscale-timed": 14,
+        "multiscale-settle": 14
+      },
+      "n": [
+        8,
+        16,
+        32,
+        64,
+        128
+      ],
+      "d": [
+        64,
+        128,
+        192,
+        256,
+        384,
+        512,
+        768
+      ],
+      "sharing": [
+        [
+          "independent",
+          0
+        ],
+        [
+          "region_shared",
+          8
+        ],
+        [
+          "region_shared",
+          4
+        ],
+        [
+          "region_shared",
+          16
+        ],
+        [
+          "layer_shared",
+          8
+        ],
+        [
+          "layer_shared",
+          4
+        ],
+        [
+          "layer_shared",
+          16
+        ]
+      ],
+      "reception": [
+        "source_residual",
+        "incoming_light_64",
+        "incoming_light_128",
+        "incoming_wide"
+      ],
+      "allocation": [
+        "quad",
+        "shannon",
+        "pool"
+      ],
+      "budgets": [
+        1,
+        2,
+        4,
+        8,
+        16,
+        32,
+        64
+      ],
+      "independent_rank": "catalog rank=0 is inactive; API rank=8 is ignored",
+      "no_hub_memory": "X equals K; the fixed catalog deduplicates X"
+    },
+    "optional_bindings": [
+      {
+        "name": "group_hub_fixed_pass",
+        "implemented": true,
+        "catalog_member": false,
+        "interface": "ModelConfig.hub_allocation=fixed_pass",
+        "restriction": "HB group with hubs; omit H scoring parameters"
+      },
+      {
+        "name": "explicit_local_clocks",
+        "implemented": true,
+        "catalog_member": false,
+        "interface": "ClockConfig and edge_delay_pair",
+        "restriction": "strict pair requires all local clocks explicit and common input period > depth"
+      },
+      {
+        "name": "terminal_hubs",
+        "implemented": true,
+        "catalog_member": false,
+        "interface": "TopologyConfig.terminal_hubs",
+        "restriction": "Exchange/Multiscale; existing port binding still returns D only"
+      }
+    ],
+    "qualification": {
+      "metadata": {
+        "state": "passed",
+        "geometry_sha256": "2a32ce44a4d6288841b2aea0a17013586c2b3ac85b40a1a0634d89859c1db932",
+        "budget_checks": 5510,
+        "torch_imported": false,
+        "scope": "configuration constructors and width/period/probe metadata only; no model tensors"
+      },
+      "execution": {
+        "state": "not_run_by_catalog",
+        "checks": [
+          "tests/test_optional_bindings.py",
+          "tests/test_models.py"
+        ],
+        "scope": "selected independent witnesses; never the full catalog product"
+      },
+      "numerical": {
+        "state": "not_run_by_catalog",
+        "checks": [
+          "tests/test_kv_memory.py",
+          "tests/test_ssd_memory.py",
+          "tests/test_timed_reference.py"
+        ],
+        "retained_evidence": "docs/evidence/roadmap-numerics-followup-20261118.md",
+        "scope": "existing evidence keeps its recorded source; optional bindings require their own qualification"
+      },
+      "performance": {
+        "state": "not_run_by_catalog",
+        "retained_evidence": "docs/evidence/README.md",
+        "scope": "specific workload/device/precision records only; no inferred optional-binding qualification"
+      }
+    },
+    "excluded": [
+      "old teaching bindings",
+      "LH-DAG/PDG",
+      "arbitrary graph/local-function programs"
+    ],
+    "lifecycle": {
+      "path": "artifacts/capacity-support-catalog-v1/status.json",
+      "bytes": 914,
+      "sha256": "2f1db51865207788ced959e7a92dd5cecb70b15c5a30803e280d4d7001bec587"
+    }
+  },
+  "reviewed_agent_evidence": {
+    "reports": [
+      {
+        "path": "docs/evidence/region-capacity-20261118.json",
+        "bytes": 2135228,
+        "sha256": "da1f4554c18c1020e790ab71ec67533617ebe2c0c61447ff2ae0f6c6a6271386"
+      },
+      {
+        "path": "docs/evidence/capacity-installed-20261118.json",
+        "bytes": 370585,
+        "sha256": "aae71a23f9de3938c9a16feaf220785f3d45b25d692d44d807e125d6f037a4c0"
+      }
+    ],
+    "checked_small_artifacts": [
+      {
+        "path": "artifacts/region-placement-npu-serial-v1/launch.json",
+        "bytes": 5059,
+        "sha256": "4b24a098d40ddbf8fdad115dd21906d09b63f931787ae68c3f23c3f67c12faf3"
+      },
+      {
+        "path": "artifacts/region-placement-npu-serial-v1/status.json",
+        "bytes": 2503,
+        "sha256": "467471d49450a233707f27ed4395c5153e88193d580cf851c57c977def5db848"
+      },
+      {
+        "path": "artifacts/region-placement-npu-serial-v1/queue.json",
+        "bytes": 365,
+        "sha256": "e32eb28f02272f171d33d82c00946881796d2cb867bea6b28e42a37fcb267614"
+      },
+      {
+        "path": "artifacts/region-placement-npu-serial-v1/environment.json",
+        "bytes": 2563,
+        "sha256": "1aa0729bdefd6a1131cd933502d865dc2da85896c7eb5aebf5dda954e1995e4a"
+      },
+      {
+        "path": "artifacts/region-placement-npu-serial-v1/children.json",
+        "bytes": 1153,
+        "sha256": "3b9ecbfa0c6fb3bab0527db8dcfc410fd7d3c27c9063a8d399ffdb1146ba06c6"
+      },
+      {
+        "path": "artifacts/region-placement-npu-serial-v1/bf16.log",
+        "bytes": 9877,
+        "sha256": "2739cf8db5a6803f38322a363d6f72363f41946b04ec7e228a7e51a179dec553"
+      },
+      {
+        "path": "artifacts/region-placement-npu-serial-v1/fp32.log",
+        "bytes": 9877,
+        "sha256": "fd6f82f522531a15576e6ecee52b141ed187081bc7d32edef24f82d797aada01"
+      },
+      {
+        "path": "artifacts/region-placement-npu-serial-v1/stderr.log",
+        "bytes": 69,
+        "sha256": "1982ee243f50becd28f5ffe96c8a1028ec2db6f987bb10f36cc7c82a94c75d55"
+      },
+      {
+        "path": "artifacts/region-placement-npu-serial-v1/stdout.log",
+        "bytes": 665,
+        "sha256": "277badcd11cd0af51a047b8e8005d422123f045ed6678b76263ae5e627a4b47b"
+      },
+      {
+        "path": "artifacts/region-placement-npu-concurrent-v1/launch.json",
+        "bytes": 5239,
+        "sha256": "929df3ce751b5f6dd08ab7b0a017ffeb76d10a83f01d0b141e5b2da7c2685328"
+      },
+      {
+        "path": "artifacts/region-placement-npu-concurrent-v1/status.json",
+        "bytes": 2571,
+        "sha256": "c635fb69310ee0640e1218b7775cbfdef78623235535acb3af4c68eea99df2ba"
+      },
+      {
+        "path": "artifacts/region-placement-npu-concurrent-v1/queue.json",
+        "bytes": 369,
+        "sha256": "e6e3c913de9bb4e6f7262454dfe336f4bee505b993760aefb77fd7e8d4f82ae7"
+      },
+      {
+        "path": "artifacts/region-placement-npu-concurrent-v1/environment.json",
+        "bytes": 2575,
+        "sha256": "238d287480835db9f119cd0bdc51de947077eccf075ede73543ccf4764d6175a"
+      },
+      {
+        "path": "artifacts/region-placement-npu-concurrent-v1/children.json",
+        "bytes": 1359,
+        "sha256": "b142cde9e20ca7cbcde5e1ecf1991d7122a95d64a3b5bec4e688ef026d18698b"
+      },
+      {
+        "path": "artifacts/region-placement-npu-concurrent-v1/bf16.log",
+        "bytes": 11061,
+        "sha256": "cbb5ed150d5cad01f9e327389f137308a03bb38666a6b0216e9e7616e59a9478"
+      },
+      {
+        "path": "artifacts/region-placement-npu-concurrent-v1/fp32.log",
+        "bytes": 11061,
+        "sha256": "83e243e4257adb2b3e1c743218214664808c1a3b68a3e26b8f63b2bd78779d9c"
+      },
+      {
+        "path": "artifacts/region-placement-npu-concurrent-v1/stderr.log",
+        "bytes": 69,
+        "sha256": "1982ee243f50becd28f5ffe96c8a1028ec2db6f987bb10f36cc7c82a94c75d55"
+      },
+      {
+        "path": "artifacts/region-placement-npu-concurrent-v1/stdout.log",
+        "bytes": 673,
+        "sha256": "771350a6a2428d1603d4797d9496954f5e875ced945fcc2edd743a8c5d180689"
+      },
+      {
+        "path": "artifacts/capacity-region-9b-npu-v1/launch.json",
+        "bytes": 5318,
+        "sha256": "e86a694852f2aebc6472c9e3c02dbe9f5f607c3611a7a9fe9d9d167f3d8cd607"
+      },
+      {
+        "path": "artifacts/capacity-region-9b-npu-v1/status.json",
+        "bytes": 2659,
+        "sha256": "49a65d790406a5cad7f4e2eeee5e8d7f81f8729572ca033b8a3ece69e2e96964"
+      },
+      {
+        "path": "artifacts/capacity-region-9b-npu-v1/queue.json",
+        "bytes": 400,
+        "sha256": "122b776a98c5d875a3640d7aa7f41125ecf63d992d6b5070653ae7fb3f822d15"
+      },
+      {
+        "path": "artifacts/capacity-region-9b-npu-v1/environment.json",
+        "bytes": 2548,
+        "sha256": "6dc6d77d8154dcb3c1128d6ff4e5639ab2e409d1e11c59b9015ddf826ac2c52c"
+      },
+      {
+        "path": "artifacts/capacity-region-9b-npu-v1/children.json",
+        "bytes": 1635,
+        "sha256": "3c46f34fbbda74fe413ca3227fe5815312da36bf75efe4d1306d77a5779988ff"
+      },
+      {
+        "path": "artifacts/capacity-region-9b-npu-v1/bf16.log",
+        "bytes": 11859,
+        "sha256": "e676a94f4fb64c48ebdae8fa671bc4bd62e2ef04ae596911f1100ca4f2e87541"
+      },
+      {
+        "path": "artifacts/capacity-region-9b-npu-v1/fp32.log",
+        "bytes": 11859,
+        "sha256": "b0689f7f9d586c1991ebd8c371ab0592ea6b445b7efb376331fa7ac8775f3765"
+      },
+      {
+        "path": "artifacts/capacity-region-9b-npu-v1/stderr.log",
+        "bytes": 69,
+        "sha256": "1982ee243f50becd28f5ffe96c8a1028ec2db6f987bb10f36cc7c82a94c75d55"
+      },
+      {
+        "path": "artifacts/capacity-region-9b-npu-v1/stdout.log",
+        "bytes": 702,
+        "sha256": "67a5e343295f00ed9bb8d3e82d79be2d0a4dbba4da0d22d4e6a2784d07e164f8"
+      },
+      {
+        "path": "artifacts/capacity-region-17b-npu-v1/launch.json",
+        "bytes": 5999,
+        "sha256": "1a496814649137923c8fa621493db50fb249d73a310dbd45de8ea8827ca98458"
+      },
+      {
+        "path": "artifacts/capacity-region-17b-npu-v1/status.json",
+        "bytes": 4938,
+        "sha256": "347df2cd752fc8fd3587e883010a9f1fc821e01b2713e8ad5668091461269aa9"
+      },
+      {
+        "path": "artifacts/capacity-region-17b-npu-v1/queue.json",
+        "bytes": 441,
+        "sha256": "6ecf6f7e40b392dd6c265f3e2b037e76a317aa94252bf5ac84b9041c5221574a"
+      },
+      {
+        "path": "artifacts/capacity-region-17b-npu-v1/environment.json",
+        "bytes": 2551,
+        "sha256": "cad87ef78d93cfdc64e6e8405a111533bc43fea791a4ab93da916320aa91b33d"
+      },
+      {
+        "path": "artifacts/capacity-region-17b-npu-v1/children.json",
+        "bytes": 1707,
+        "sha256": "92ec77be1d547a5d89466e3343b870d09cd61ff52f0eb15fd6072b0ebcc55d83"
+      },
+      {
+        "path": "artifacts/capacity-region-17b-npu-v1/dependency.json",
+        "bytes": 2422,
+        "sha256": "48c4cb1d2aa437d4e2110ad4255a1b29e75a23861ce498f32cd87684cfdde66b"
+      },
+      {
+        "path": "artifacts/capacity-region-17b-npu-v1/bf16.log",
+        "bytes": 22348,
+        "sha256": "2cfa2e027ef492654cc8482fca47973132c19985c53e20d519a60fd810fec878"
+      },
+      {
+        "path": "artifacts/capacity-region-17b-npu-v1/fp32.log",
+        "bytes": 22348,
+        "sha256": "e1eb11fb566dd405d93292f942e6bbbd36a4234aa5843f9cb0a7f4d2c7ed5386"
+      },
+      {
+        "path": "artifacts/capacity-region-17b-npu-v1/stderr.log",
+        "bytes": 69,
+        "sha256": "1982ee243f50becd28f5ffe96c8a1028ec2db6f987bb10f36cc7c82a94c75d55"
+      },
+      {
+        "path": "artifacts/capacity-region-17b-npu-v1/stdout.log",
+        "bytes": 12912,
+        "sha256": "7766371a239c477aed2da2a1f9cbab7e7ec4f79ef86cc82916b58192750a4f64"
+      },
+      {
+        "path": "artifacts/region-placement-perf-npu-v1/launch.json",
+        "bytes": 6645,
+        "sha256": "12ca31928f4a66f1e29cf367de6b58b9433b402f30b6d685a737a1003851f6f6"
+      },
+      {
+        "path": "artifacts/region-placement-perf-npu-v1/status.json",
+        "bytes": 3978,
+        "sha256": "dd29f37996f620e18ca8399e2cd86f68e9ced0fca1071b2f64f57f8981033cd8"
+      },
+      {
+        "path": "artifacts/region-placement-perf-npu-v1/queue.json",
+        "bytes": 363,
+        "sha256": "1b6c69cf807249c0e2076bd58b53d0fd59866f48b0512baf285cc2d46113a685"
+      },
+      {
+        "path": "artifacts/region-placement-perf-npu-v1/environment.json",
+        "bytes": 2557,
+        "sha256": "7e1610eeeb571063281abdf580f9d079b3e6d4bb47208778fb6e8e593b01e496"
+      },
+      {
+        "path": "artifacts/region-placement-perf-npu-v1/programme.json",
+        "bytes": 20673,
+        "sha256": "fd6fe517765d896fe894ef44d564e5b2ce6a387015f04fc8b9b92632379bb07b"
+      },
+      {
+        "path": "artifacts/region-placement-perf-npu-v1/settle-bf16-dual_per_device.log",
+        "bytes": 11022,
+        "sha256": "1f10b8dce0751d77686d361bc3a95548b7d8109a6101bc028fb197b7c4e1abef"
+      },
+      {
+        "path": "artifacts/region-placement-perf-npu-v1/settle-bf16-dual_serial.log",
+        "bytes": 11014,
+        "sha256": "3c2bbd43ccb3e833bc0294f1299fc70dfa13a82edd3420a92db96c0b271c8dc4"
+      },
+      {
+        "path": "artifacts/region-placement-perf-npu-v1/settle-bf16-single.log",
+        "bytes": 10984,
+        "sha256": "7f2e2675c31c89d5e350b599d1a4f1d5d5beaf52177fe7015d78ab123cab29ec"
+      },
+      {
+        "path": "artifacts/region-placement-perf-npu-v1/settle-fp32-dual_per_device.log",
+        "bytes": 11022,
+        "sha256": "b44b6d2d92617644c343a9ddb340e651f98d6e12ec785ee812b1b0f1c3010586"
+      },
+      {
+        "path": "artifacts/region-placement-perf-npu-v1/settle-fp32-dual_serial.log",
+        "bytes": 11014,
+        "sha256": "02c187682eabfd26ec0c829d62c149a829ba3947bb8bb423f724e174e383a5fc"
+      },
+      {
+        "path": "artifacts/region-placement-perf-npu-v1/settle-fp32-single.log",
+        "bytes": 10984,
+        "sha256": "f7d729a5556ec537e68c4033147b2d4633f372349e2faa2c84e54a97d5d0784f"
+      },
+      {
+        "path": "artifacts/region-placement-perf-npu-v1/stderr.log",
+        "bytes": 69,
+        "sha256": "1982ee243f50becd28f5ffe96c8a1028ec2db6f987bb10f36cc7c82a94c75d55"
+      },
+      {
+        "path": "artifacts/region-placement-perf-npu-v1/stdout.log",
+        "bytes": 660,
+        "sha256": "bb1eeede61ca96d9b93f97978c67934074eb1dc507c29b2ea7c46256ee2b9933"
+      },
+      {
+        "path": "artifacts/region-placement-perf-npu-v1/timed-bf16-dual_per_device.log",
+        "bytes": 11421,
+        "sha256": "01e687ca72d628652a38461c9c24a2ed2b445288581d54d33c90c23e96554981"
+      },
+      {
+        "path": "artifacts/region-placement-perf-npu-v1/timed-bf16-dual_serial.log",
+        "bytes": 11413,
+        "sha256": "916004518af2e4d46a0e8eab2554246ff5f1ec96a90a639121fab8a0d1284e94"
+      },
+      {
+        "path": "artifacts/region-placement-perf-npu-v1/timed-bf16-single.log",
+        "bytes": 11383,
+        "sha256": "ac743f6f6651e1a166d2665789a6ed87b342a23ebd668310e9915f92862f1099"
+      },
+      {
+        "path": "artifacts/region-placement-perf-npu-v1/timed-fp32-dual_per_device.log",
+        "bytes": 11421,
+        "sha256": "11023475d057e578ac7a50c84a6b5498a3610fb2d006bc7b6a4aa1445bbd5bef"
+      },
+      {
+        "path": "artifacts/region-placement-perf-npu-v1/timed-fp32-dual_serial.log",
+        "bytes": 11413,
+        "sha256": "220578af1ce1313470eb22e94b852c524b4082f6baa03494a072b8b10d8a021f"
+      },
+      {
+        "path": "artifacts/region-placement-perf-npu-v1/timed-fp32-single.log",
+        "bytes": 11383,
+        "sha256": "a9e1838760c1144e847a9a22a1d2d287595f2a4693af0e599d477e930cc0268f"
+      },
+      {
+        "path": "artifacts/region-placement-npu-serial-v1/fp32.json",
+        "bytes": 63013,
+        "sha256": "2382a0cfd7eb6158bb7afeaa127fd0877acb6fae7112cabc6ab4e1ce1e9cc1f0"
+      },
+      {
+        "path": "artifacts/region-placement-npu-serial-v1/bf16.json",
+        "bytes": 127796,
+        "sha256": "16d1dc47937f981d2a269c95c1e4d021543500fb49e805a22146dc28331839da"
+      },
+      {
+        "path": "artifacts/region-placement-npu-concurrent-v1/fp32.json",
+        "bytes": 65168,
+        "sha256": "7797d4d637a3e7bc8319a71fbf4ccf6dd5dc2aaaa66d4d1dfa37391f0a4ded14"
+      },
+      {
+        "path": "artifacts/region-placement-npu-concurrent-v1/bf16.json",
+        "bytes": 133689,
+        "sha256": "7ed9fae65ba73a19a322b263baa6d0fd10e58f1df8eef36e063ad69817ffb9c1"
+      },
+      {
+        "path": "artifacts/capacity-region-9b-npu-v1/fp32.json",
+        "bytes": 71117,
+        "sha256": "a55f4af5125c7102fa66349bed46528856c4bd90b03a7605361967a2ba202c68"
+      },
+      {
+        "path": "artifacts/capacity-region-9b-npu-v1/bf16.json",
+        "bytes": 75617,
+        "sha256": "951832a83241a9a0760c3a4b181885c71efd8719deffab3b61a42d12644a4249"
+      },
+      {
+        "path": "artifacts/capacity-region-17b-npu-v1/fp32.json",
+        "bytes": 105501,
+        "sha256": "758ef74a02feb9be0cd144b4935cd6cbdb456fbd15b92a1191150260876fca8d"
+      },
+      {
+        "path": "artifacts/capacity-region-17b-npu-v1/bf16.json",
+        "bytes": 112127,
+        "sha256": "41155d6c9ddb74990448a2334f52bce23ec66489a2e926424ea6626626acd8c5"
+      },
+      {
+        "path": "artifacts/region-placement-perf-npu-v1/settle-bf16-dual_per_device.json",
+        "bytes": 108770,
+        "sha256": "1284ac0956982cf0e3f9ec057041ec9a9cbc609c8e2e64b1ee538292ba6820dc"
+      },
+      {
+        "path": "artifacts/region-placement-perf-npu-v1/settle-bf16-dual_serial.json",
+        "bytes": 108755,
+        "sha256": "6ec3645f03ce783021444ae5770317871f2789f1dee7acfe5acf1ae4abb38d1e"
+      },
+      {
+        "path": "artifacts/region-placement-perf-npu-v1/settle-bf16-single.json",
+        "bytes": 84687,
+        "sha256": "9bdc11892f5e443d478f71456c9acb12852e471af44b643730ec6e647e0e716b"
+      },
+      {
+        "path": "artifacts/region-placement-perf-npu-v1/settle-fp32-dual_per_device.json",
+        "bytes": 103332,
+        "sha256": "91da5498b2864e5e7a7e5f8c5125e4c424e78e637123a00559590ab12153dfb8"
+      },
+      {
+        "path": "artifacts/region-placement-perf-npu-v1/settle-fp32-dual_serial.json",
+        "bytes": 103300,
+        "sha256": "aa0ebae6d027cab2faa58fd8d995efbf90553def83eb4a5088e8557dadb1a54f"
+      },
+      {
+        "path": "artifacts/region-placement-perf-npu-v1/settle-fp32-single.json",
+        "bytes": 81932,
+        "sha256": "a722e37df8e627c4c9db5821adc23347f669f0298a6f3b5c31733386df3ca699"
+      },
+      {
+        "path": "artifacts/region-placement-perf-npu-v1/timed-bf16-dual_per_device.json",
+        "bytes": 108464,
+        "sha256": "3ac97a455734bd482ded59ad54219ff9e08dbe27eb9ab636cae0f5af0bd607f9"
+      },
+      {
+        "path": "artifacts/region-placement-perf-npu-v1/timed-bf16-dual_serial.json",
+        "bytes": 108434,
+        "sha256": "ab1e5f3a7b681179db4c88cbec6f33724222bb773f46768ee333da9b4325e7b6"
+      },
+      {
+        "path": "artifacts/region-placement-perf-npu-v1/timed-bf16-single.json",
+        "bytes": 84942,
+        "sha256": "e7ec7f9d223497f84fdcef25741f653d504128b35f5cd5d5724ed8930ac26ff9"
+      },
+      {
+        "path": "artifacts/region-placement-perf-npu-v1/timed-fp32-dual_per_device.json",
+        "bytes": 103792,
+        "sha256": "5b91a919234e701698aa0aee4b331910105664d42a712ceba5c2f99612ec38d4"
+      },
+      {
+        "path": "artifacts/region-placement-perf-npu-v1/timed-fp32-dual_serial.json",
+        "bytes": 103779,
+        "sha256": "5a79fd527315f2b8ea7af94aec798cdca62ac26b2444cfb32f9045e952e2b9ad"
+      },
+      {
+        "path": "artifacts/region-placement-perf-npu-v1/timed-fp32-single.json",
+        "bytes": 82542,
+        "sha256": "35ea34e592b8ae2141af97894559aef97314315812ea35e7b0329844098b3bcf"
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/installed-check/artifacts/capacity-installed-8a22530d-v1/env/lib/python3.12/site-packages/tide/__init__.py",
+        "bytes": 805,
+        "sha256": "bd8d669f813aa282dc1835a53656550468f40eac46a730c4339635580d8e4195"
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/installed-check/artifacts/capacity-installed-8a22530d-v1/env/lib/python3.12/site-packages/tide/allocation.py",
+        "bytes": 14595,
+        "sha256": "ff7f4e26c05006e5fb1a68c50f783670c20c33baf56528b5dac55fa2ffab66cc"
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/installed-check/artifacts/capacity-installed-8a22530d-v1/env/lib/python3.12/site-packages/tide/attention.py",
+        "bytes": 16221,
+        "sha256": "0a8231713a2801ed397cee093c5d1112867a2057fc20804717fd39fd9e1609e8"
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/installed-check/artifacts/capacity-installed-8a22530d-v1/env/lib/python3.12/site-packages/tide/checkpoint.py",
+        "bytes": 3864,
+        "sha256": "7e188773786f5cd7e3b06fcf3ef4ca9efa256933a9c21a8225f359687337c49f"
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/installed-check/artifacts/capacity-installed-8a22530d-v1/env/lib/python3.12/site-packages/tide/config.py",
+        "bytes": 7086,
+        "sha256": "bddea1a60912ea21803869a8e25a2f7f303311d3a1bfbf52719f9cda5d4bdf54"
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/installed-check/artifacts/capacity-installed-8a22530d-v1/env/lib/python3.12/site-packages/tide/kv.py",
+        "bytes": 8446,
+        "sha256": "7310fcbc79a1641a495316c100e409a43e8d59ac6b6ae5f77669a9a9a4849caa"
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/installed-check/artifacts/capacity-installed-8a22530d-v1/env/lib/python3.12/site-packages/tide/layout.py",
+        "bytes": 1392,
+        "sha256": "4aee0573beb2448dd90ca307b9065f2ed4cd0f7eb93bfcd92c4b46550f889aa0"
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/installed-check/artifacts/capacity-installed-8a22530d-v1/env/lib/python3.12/site-packages/tide/model.py",
+        "bytes": 22008,
+        "sha256": "3897868991e1ff2b241c74efc1f1166e509f401018f2df89f1c45a17ae17b161"
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/installed-check/artifacts/capacity-installed-8a22530d-v1/env/lib/python3.12/site-packages/tide/parameters.py",
+        "bytes": 10348,
+        "sha256": "67d6ee7829448fa7431a3350a3a15ea5070aa4038d2276017d844714dceecfa7"
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/installed-check/artifacts/capacity-installed-8a22530d-v1/env/lib/python3.12/site-packages/tide/placement.py",
+        "bytes": 23452,
+        "sha256": "c58ef4574d5be7fad6e422e658f5972a815e95aed9bb6d55155e62777c2f8a27"
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/installed-check/artifacts/capacity-installed-8a22530d-v1/env/lib/python3.12/site-packages/tide/placement_ownership.py",
+        "bytes": 7434,
+        "sha256": "95431e5a2240b81a16df4cba08dfef541d777735220a212a28324f9c63661c13"
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/installed-check/artifacts/capacity-installed-8a22530d-v1/env/lib/python3.12/site-packages/tide/precision.py",
+        "bytes": 3825,
+        "sha256": "5e94f06892dc89451750b4e5b1fd2e105d440f633875f31a883880e6a6ca480a"
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/installed-check/artifacts/capacity-installed-8a22530d-v1/env/lib/python3.12/site-packages/tide/reception.py",
+        "bytes": 3092,
+        "sha256": "67768494c96a697480c13713e246b1a943940e7faeb96d24bd0732aad3f7cd98"
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/installed-check/artifacts/capacity-installed-8a22530d-v1/env/lib/python3.12/site-packages/tide/region.py",
+        "bytes": 3805,
+        "sha256": "3d0ee3fa13e344ddb0fff5ce15af62cee4e0b1a7c4984df523e70a4cbfc41ec2"
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/installed-check/artifacts/capacity-installed-8a22530d-v1/env/lib/python3.12/site-packages/tide/region_batch.py",
+        "bytes": 7484,
+        "sha256": "2406168308d26e9ed5d07f7b05ac9f4650161df4929b3c0b2b9042925a313a6a"
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/installed-check/artifacts/capacity-installed-8a22530d-v1/env/lib/python3.12/site-packages/tide/region_execution.py",
+        "bytes": 6034,
+        "sha256": "75dcce33905dbcecc62e3eaaf93f2c1d087dfa9608043e561f59d93e2d0dd7d1"
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/installed-check/artifacts/capacity-installed-8a22530d-v1/env/lib/python3.12/site-packages/tide/region_placement.py",
+        "bytes": 14343,
+        "sha256": "d2dfc2b65ff14430423aa1532fe5fd7cc378b7581c207f1938e5f4ab1c34c459"
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/installed-check/artifacts/capacity-installed-8a22530d-v1/env/lib/python3.12/site-packages/tide/ssd.py",
+        "bytes": 9421,
+        "sha256": "03132ab3f3a8b49f8eb6f0c0b29000e1647280fb243d0105a5e7f220ccac0954"
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/installed-check/artifacts/capacity-installed-8a22530d-v1/env/lib/python3.12/site-packages/tide/ssd_memory.py",
+        "bytes": 9328,
+        "sha256": "6479ce755e67396708aab2912d460c4166b69be2ab92b0b592a7b52f93124f81"
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/installed-check/artifacts/capacity-installed-8a22530d-v1/env/lib/python3.12/site-packages/tide/topology.py",
+        "bytes": 11283,
+        "sha256": "8cdf58d0b3089e16a079ad46c3be7ca0c953fcea0023d276c9582901e1712dbf"
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/installed-check/artifacts/capacity-installed-8a22530d-v1/env/lib/python3.12/site-packages/tide/topology_hb.py",
+        "bytes": 6204,
+        "sha256": "5fb7b1a959f0b88a097e95959b52a1f10cf5180eaea7b688cbef086946abea06"
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/installed-check/artifacts/capacity-installed-8a22530d-v1/check_installed_capacity.py",
+        "bytes": 19669,
+        "sha256": "823d7427d9e559502a51fbb8b3046940b477bb492195617616b8e256e3e7e5b8"
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/installed-check/artifacts/capacity-installed-8a22530d-v1/dist/tide_instances-0.1.0-py3-none-any.whl",
+        "bytes": 62573,
+        "sha256": "72e3eba6bb3d572c2fec9a3afe16617331f37c2fa2c616bffc36b3c5100f0e27"
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/installed-check/artifacts/capacity-installed-8a22530d-v1/inspect_payloads.py",
+        "bytes": 1144,
+        "sha256": "3f03609e8a35590a6a983f8c2d229032c0501b7b6e51ac827e3495eec13bc700"
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/installed-check/artifacts/capacity-installed-8a22530d-v1/launch.json",
+        "bytes": 1309,
+        "sha256": "31195e8ba7ff99d687cc6ba68fdc841e6d8b0122bd120894ddfb72f9af532a67"
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/installed-check/artifacts/capacity-installed-8a22530d-v1/payload-dtypes.json",
+        "bytes": 4933,
+        "sha256": "eda1ee792886e6988dfe265336d8ae37964c8f0370903bcf38cc79567b673400"
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/installed-check/artifacts/capacity-installed-8a22530d-v1/postflight.json",
+        "bytes": 770,
+        "sha256": "53a5db34480a5e43f13027322fb76c390cfdc27298f5e7218630b11de64d8060"
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/installed-check/artifacts/capacity-installed-8a22530d-v1/results/batched-bf16/result.json",
+        "bytes": 60770,
+        "sha256": "ae70d49b0e89b01ea017b9861e7d785956cc50729cf14ddfedaca039a92cbef9"
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/installed-check/artifacts/capacity-installed-8a22530d-v1/results/batched-bf16/resume.json",
+        "bytes": 32983,
+        "sha256": "fd30c6be772584adf2e9674dac4c3cb7056b20c2e14ef29e056db427a45be690"
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/installed-check/artifacts/capacity-installed-8a22530d-v1/results/batched-bf16/resume.log",
+        "bytes": 70,
+        "sha256": "311fe2d83ad1f7980f240a0af80df5fefc6e45e159cf7347a6b4875a074f79cf"
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/installed-check/artifacts/capacity-installed-8a22530d-v1/results/batched-fp32/result.json",
+        "bytes": 69861,
+        "sha256": "c420ddf19000003687e8cb463dd6d6f0627356a56e83e30f6c0f6ca129d0dc9d"
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/installed-check/artifacts/capacity-installed-8a22530d-v1/results/batched-fp32/resume.json",
+        "bytes": 32984,
+        "sha256": "d2c7ae0c8116be512ae3872ebff227f19bd94ccb9997fb9b902b5deb3dce0388"
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/installed-check/artifacts/capacity-installed-8a22530d-v1/results/batched-fp32/resume.log",
+        "bytes": 70,
+        "sha256": "34f7f46cd01ac9adeda57ff4ae7454499958530891f9c4da5991c106ac44f321"
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/installed-check/artifacts/capacity-installed-8a22530d-v1/results/placed-bf16/result.json",
+        "bytes": 349975,
+        "sha256": "ce5422b43975968d752efde6fc4be0a7fc38a4623e2454f6e5f7993997c1e703"
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/installed-check/artifacts/capacity-installed-8a22530d-v1/results/placed-bf16/resume.json",
+        "bytes": 131393,
+        "sha256": "c9b95b21c42b4b5780df74b5b4c62758bd79daea472104177e4a6fb498925fe6"
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/installed-check/artifacts/capacity-installed-8a22530d-v1/results/placed-bf16/resume.log",
+        "bytes": 69,
+        "sha256": "77f0d5ed7a1064f8758fdf8cf95d5c979d3c7c69bc4f10e6d6453d111da1bbfc"
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/installed-check/artifacts/capacity-installed-8a22530d-v1/results/placed-fp32/result.json",
+        "bytes": 348389,
+        "sha256": "897b8083c7ee5c4c49f02e88e7edb30629710d42dd4eae0dec7a9d1243518816"
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/installed-check/artifacts/capacity-installed-8a22530d-v1/results/placed-fp32/resume.json",
+        "bytes": 118559,
+        "sha256": "d7c8baf91f2f3fc0b2241396ed9fa8c5c994ea287ea20d2b0046fca6cd00f17d"
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/installed-check/artifacts/capacity-installed-8a22530d-v1/results/placed-fp32/resume.log",
+        "bytes": 69,
+        "sha256": "c3f523927b67a277e5e41f878fa7c6beda9f917929adaf2f0f2247e3821ef0bb"
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/installed-check/artifacts/capacity-installed-8a22530d-v1/results/result.json",
+        "bytes": 993422,
+        "sha256": "793e158b00a8e79e65e0da8c1cd347a92feb334f4be3dc623c1723dd859efdf7"
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/installed-check/artifacts/capacity-installed-8a22530d-v1/run.log",
+        "bytes": 1254,
+        "sha256": "63065cf433809e16c9a490567a782b8bc2518690019de84f921e012bc570ec91"
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/installed-check/artifacts/capacity-installed-8a22530d-v1/run.sh",
+        "bytes": 2769,
+        "sha256": "e79a465d16e2537ba1d38032c4094f1573cbb3b093b898e07b7b2a897918cab1"
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/installed-check/artifacts/capacity-installed-8a22530d-v1/source-manifest.json",
+        "bytes": 34855,
+        "sha256": "6186d95dcae5380735c4d0ade87005b46060cbbcbb95d369a49d789827b49071"
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/installed-check/artifacts/capacity-installed-8a22530d-v1/source-unchanged.json",
+        "bytes": 57,
+        "sha256": "ddbdfbc7502d4047973651a4156fc6076f96ce85c6098fdac716f286d2c24e2b"
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/installed-check/artifacts/capacity-installed-8a22530d-v1/status.json",
+        "bytes": 1529,
+        "sha256": "63073a204f5ff2a7b2ae02f9f05958dc1f190ca8616ccb373ed4369ba3ebe3dd"
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/installed-check/artifacts/capacity-installed-restore-diagnosis-v1/diagnose.py",
+        "bytes": 7981,
+        "sha256": "e8bb9c1fa73d8e265a342e5cf6a22f3ccf94bff52e449bd1ad35c5d4e9d01658"
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/installed-check/artifacts/capacity-installed-restore-diagnosis-v1/harness.py",
+        "bytes": 21946,
+        "sha256": "7e23af192e2b2bfee052896462b39dc25182df43e02c2838ea98c5870ed12f37"
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/installed-check/artifacts/capacity-installed-restore-diagnosis-v1/job.py",
+        "bytes": 10068,
+        "sha256": "428214c2901eb41f5764193720f96228d0f8530a5f578f2c5894bd7135337e56"
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/installed-check/artifacts/capacity-installed-restore-diagnosis-v1/launch.json",
+        "bytes": 2129,
+        "sha256": "caef83332fa8fa7c08cf422fa79e1f433f4a95475e7947918ff3cae05d7cf5d1"
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/installed-check/artifacts/capacity-installed-restore-diagnosis-v1/result.json",
+        "bytes": 490880,
+        "sha256": "9a77dfd0eb2db660e95c30c1bcf651b74f090df967e4391769fac29b471117fd"
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/installed-check/artifacts/capacity-installed-restore-diagnosis-v1/run.log",
+        "bytes": 767,
+        "sha256": "280db81442180daa36890c4058c4fc032e508fec92c25cd9d0f01585d84f7430"
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/installed-check/artifacts/capacity-installed-restore-diagnosis-v1/run.sh",
+        "bytes": 844,
+        "sha256": "115365644b2b6d473117ab7c03657649b074d59335ad83f8096bc432d33554b2"
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/installed-check/artifacts/capacity-installed-restore-diagnosis-v1/status.json",
+        "bytes": 885,
+        "sha256": "5d78a911c2baac57bf690cf1c7b5e87c75187cd4703e21f0b975160f030310be"
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/installed-check/artifacts/capacity-installed-restore-diagnosis-v1/submit-command.json",
+        "bytes": 1473,
+        "sha256": "64594be0d14f0200a10f999d5cc1f94b67064acbdcce9f9095c0bff256d70fd7"
+      }
+    ],
+    "checked_git_blobs": [
+      {
+        "path": "configs/hb-multiscale-x-settle.json",
+        "git_blob": "4b86e970946a1fcf555c7daef14f695951c4b152",
+        "sha256": "5e1357102393fc64af2bb737ac16477a9d0c215af33c543951fa96066335ab57"
+      },
+      {
+        "path": "configs/hb-multiscale-x-timed.json",
+        "git_blob": "de89759f745082e72334889ddcafe75651e562db",
+        "sha256": "9c70c00b9610d2873809d7e53561827b2dc3503bcdd5af042d7f6c56ce7e511f"
+      },
+      {
+        "path": "configs/scale/hb-17b.json",
+        "git_blob": "14a1f36ed911beab461d3eb29816aea92f11c285",
+        "sha256": "0f6b5f0fb0d962d4a5be595a02b11372992ee779d0c1ceca390bfe599ee5141e"
+      },
+      {
+        "path": "configs/scale/hb-9b.json",
+        "git_blob": "0c072887b6c4225e64a8e5f21767136e996e1ad4",
+        "sha256": "391d6e7ad114ae67cbc00bb131b2dabbc7a858baa73bf1017abb2509ee407116"
+      },
+      {
+        "path": "scripts/check_placement.py",
+        "git_blob": "15fc5f12f9fbb6cac3c2fca462621561a024b470",
+        "sha256": "7cd02df356b5bff98f56fe60ccb0e7be7ba8b6ef8f3c05db56cbe90536ca6aee"
+      },
+      {
+        "path": "scripts/job.py",
+        "git_blob": "aa4718d6ea7390444fe06bd219a8d9233da12fa1",
+        "sha256": "428214c2901eb41f5764193720f96228d0f8530a5f578f2c5894bd7135337e56"
+      },
+      {
+        "path": "src/tide/__init__.py",
+        "git_blob": "d46bf9262cafceaf92320003c29473a1fcea2f80",
+        "sha256": "0533795b70734ed01c0e8c922c2930c29ca9f5f405a2872556d5b65a7fad9bd4"
+      },
+      {
+        "path": "src/tide/allocation.py",
+        "git_blob": "b9e01074226ca25b16b125376d9cdcf1d11439a4",
+        "sha256": "ff7f4e26c05006e5fb1a68c50f783670c20c33baf56528b5dac55fa2ffab66cc"
+      },
+      {
+        "path": "src/tide/attention.py",
+        "git_blob": "59a5a92a5329d83a8071f1bcfbebf0e20d69e3b9",
+        "sha256": "0a8231713a2801ed397cee093c5d1112867a2057fc20804717fd39fd9e1609e8"
+      },
+      {
+        "path": "src/tide/checkpoint.py",
+        "git_blob": "5dd90e02e59e6093f92118a0ef19fde0f5299c45",
+        "sha256": "0494d357a1f9e239be967942d2d51fd79eef07176a93765893b6c5bc0e1c20ed"
+      },
+      {
+        "path": "src/tide/config.py",
+        "git_blob": "2050b3131d52d3f93a4a9693edfb338f7c0e8735",
+        "sha256": "bddea1a60912ea21803869a8e25a2f7f303311d3a1bfbf52719f9cda5d4bdf54"
+      },
+      {
+        "path": "src/tide/kv.py",
+        "git_blob": "1b9740ad55e7095580b61063a8fe61e758b889fc",
+        "sha256": "7310fcbc79a1641a495316c100e409a43e8d59ac6b6ae5f77669a9a9a4849caa"
+      },
+      {
+        "path": "src/tide/layout.py",
+        "git_blob": "5dc5b13a0d313db2a465f20690b32abe3eddf34b",
+        "sha256": "4aee0573beb2448dd90ca307b9065f2ed4cd0f7eb93bfcd92c4b46550f889aa0"
+      },
+      {
+        "path": "src/tide/model.py",
+        "git_blob": "4d13652066aeff64ea31274ef11f05695ea1c273",
+        "sha256": "3897868991e1ff2b241c74efc1f1166e509f401018f2df89f1c45a17ae17b161"
+      },
+      {
+        "path": "src/tide/parameters.py",
+        "git_blob": "dcff2bc9b402f3cdf3dd6268440538f52e796743",
+        "sha256": "67d6ee7829448fa7431a3350a3a15ea5070aa4038d2276017d844714dceecfa7"
+      },
+      {
+        "path": "src/tide/placement.py",
+        "git_blob": "46f27415aacdccf52ce8bd45c9e313234000e9cc",
+        "sha256": "51c6e1c0cf8c0a97bc06eed72d47e00473c6130b40955e19827521a087edce78"
+      },
+      {
+        "path": "src/tide/placement_ownership.py",
+        "git_blob": "fe3fee69ed466f174312f938a7e579edd11a7665",
+        "sha256": "95431e5a2240b81a16df4cba08dfef541d777735220a212a28324f9c63661c13"
+      },
+      {
+        "path": "src/tide/precision.py",
+        "git_blob": "7c0c2f4ffb946728e38bea2f709997642dde7841",
+        "sha256": "5e94f06892dc89451750b4e5b1fd2e105d440f633875f31a883880e6a6ca480a"
+      },
+      {
+        "path": "src/tide/reception.py",
+        "git_blob": "523a162d59667bd6f1ae6979a14bd4a6cb2d23b1",
+        "sha256": "67768494c96a697480c13713e246b1a943940e7faeb96d24bd0732aad3f7cd98"
+      },
+      {
+        "path": "src/tide/region.py",
+        "git_blob": "86ec827b97cac9f45afe9efcf5e2b85cc7524bb6",
+        "sha256": "3d0ee3fa13e344ddb0fff5ce15af62cee4e0b1a7c4984df523e70a4cbfc41ec2"
+      },
+      {
+        "path": "src/tide/region_batch.py",
+        "git_blob": "0e4da293303b4b7883d47352fa6d3d8c91140f17",
+        "sha256": "2406168308d26e9ed5d07f7b05ac9f4650161df4929b3c0b2b9042925a313a6a"
+      },
+      {
+        "path": "src/tide/region_placement.py",
+        "git_blob": "e0aca2986c18efebe65ef8dde4910c98bf7bdedc",
+        "sha256": "0209a83c6f07cc15d3913d87d474262f84cd763e6c9ea62a3ebb724b662b5ab0"
+      },
+      {
+        "path": "src/tide/ssd.py",
+        "git_blob": "e9bdcc918082f7096e273700df3f09aac607ac00",
+        "sha256": "03132ab3f3a8b49f8eb6f0c0b29000e1647280fb243d0105a5e7f220ccac0954"
+      },
+      {
+        "path": "src/tide/ssd_memory.py",
+        "git_blob": "dfd23a67c21b21753e2e0556034f43ee8ce6920e",
+        "sha256": "6479ce755e67396708aab2912d460c4166b69be2ab92b0b592a7b52f93124f81"
+      },
+      {
+        "path": "src/tide/topology.py",
+        "git_blob": "3f9b7819a8011d4033d305ef6b44bd0e208a4f7b",
+        "sha256": "8cdf58d0b3089e16a079ad46c3be7ca0c953fcea0023d276c9582901e1712dbf"
+      },
+      {
+        "path": "src/tide/topology_hb.py",
+        "git_blob": "a2a646d1041c01fd569d9d10dd4cdcd3e2b46af8",
+        "sha256": "5fb7b1a959f0b88a097e95959b52a1f10cf5180eaea7b688cbef086946abea06"
+      },
+      {
+        "path": "scripts/check_placement.py",
+        "git_blob": "02665aaf60e013f9ee4d63f5b20eefc98a26962f",
+        "sha256": "5942b5eedb4d388219d91015c242826b7ba2426258878c873e5366394a30271d"
+      },
+      {
+        "path": "src/tide/__init__.py",
+        "git_blob": "256103e29bdaca8b68c8d1f5751cfa17c346eb2a",
+        "sha256": "bd8d669f813aa282dc1835a53656550468f40eac46a730c4339635580d8e4195"
+      },
+      {
+        "path": "src/tide/checkpoint.py",
+        "git_blob": "d2881fc10f8eb2165b765c7c451bd7398ada9258",
+        "sha256": "7e188773786f5cd7e3b06fcf3ef4ca9efa256933a9c21a8225f359687337c49f"
+      },
+      {
+        "path": "src/tide/placement.py",
+        "git_blob": "7e5bd215ff54c70a15bd8b0b89adbe667de8584e",
+        "sha256": "c58ef4574d5be7fad6e422e658f5972a815e95aed9bb6d55155e62777c2f8a27"
+      },
+      {
+        "path": "src/tide/region_execution.py",
+        "git_blob": "c873177dcbbb4041ecc9bf4c5164559c2994d780",
+        "sha256": "75dcce33905dbcecc62e3eaaf93f2c1d087dfa9608043e561f59d93e2d0dd7d1"
+      },
+      {
+        "path": "src/tide/region_placement.py",
+        "git_blob": "2ee2ef9dab92315eb09f86512d4a261819e12a8f",
+        "sha256": "d2dfc2b65ff14430423aa1532fe5fd7cc378b7581c207f1938e5f4ab1c34c459"
+      }
+    ],
+    "skipped_payloads": [
+      {
+        "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/installed-check/artifacts/capacity-installed-8a22530d-v1/results/batched-bf16/checkpoint.pt",
+        "bytes": 39891983,
+        "reason": "Large payload identity remains in originating record; no redundant scan"
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/installed-check/artifacts/capacity-installed-8a22530d-v1/results/batched-bf16/expected.pt",
+        "bytes": 94684829,
+        "reason": "Large payload identity remains in originating record; no redundant scan"
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/installed-check/artifacts/capacity-installed-8a22530d-v1/results/batched-fp32/checkpoint.pt",
+        "bytes": 39981967,
+        "reason": "Large payload identity remains in originating record; no redundant scan"
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/installed-check/artifacts/capacity-installed-8a22530d-v1/results/batched-fp32/expected.pt",
+        "bytes": 95134877,
+        "reason": "Large payload identity remains in originating record; no redundant scan"
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/installed-check/artifacts/capacity-installed-8a22530d-v1/results/placed-bf16/checkpoint.pt",
+        "bytes": 43644846,
+        "reason": "Large payload identity remains in originating record; no redundant scan"
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/installed-check/artifacts/capacity-installed-8a22530d-v1/results/placed-bf16/expected.pt",
+        "bytes": 103477917,
+        "reason": "Large payload identity remains in originating record; no redundant scan"
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/installed-check/artifacts/capacity-installed-8a22530d-v1/results/placed-fp32/checkpoint.pt",
+        "bytes": 43734830,
+        "reason": "Large payload identity remains in originating record; no redundant scan"
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/installed-check/artifacts/capacity-installed-8a22530d-v1/results/placed-fp32/expected.pt",
+        "bytes": 103927965,
+        "reason": "Large payload identity remains in originating record; no redundant scan"
+      },
+      {
+        "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/installed-check/artifacts/capacity-installed-restore-diagnosis-v1/result.pt",
+        "bytes": 184493879,
+        "reason": "Large payload identity remains in originating record; no redundant scan"
+      }
+    ]
+  },
+  "lifecycle": {
+    "records": [
+      {
+        "identity": {
+          "path": "artifacts/capacity-base-fck-b32-l128-v1/status.json",
+          "bytes": 1901,
+          "sha256": "ea7b93ff2d8e34da0917a3a1e85480f373541f25f9c794956e99c9bb4797c9d4"
+        },
+        "state": "passed",
+        "exit_code": 0,
+        "source": "b9182abf324d14128a45cd24c26315680f30e573"
+      },
+      {
+        "identity": {
+          "path": "artifacts/capacity-base-settle-b8-l256-v1/status.json",
+          "bytes": 1926,
+          "sha256": "fd4c61e8f1bd9e5020a02525c95bf0b636d26521e8d15be96db6654d68554c00"
+        },
+        "state": "passed",
+        "exit_code": 0,
+        "source": "b9182abf324d14128a45cd24c26315680f30e573"
+      },
+      {
+        "identity": {
+          "path": "artifacts/capacity-base-timed-b4-l128-v1/status.json",
+          "bytes": 1923,
+          "sha256": "5dfd03fa2e948677ac91d909c8ef340751f7700666d863195f5df77d3d12e6b3"
+        },
+        "state": "passed",
+        "exit_code": 0,
+        "source": "b9182abf324d14128a45cd24c26315680f30e573"
+      },
+      {
+        "identity": {
+          "path": "artifacts/capacity-continuous-hb05b-v3/status.json",
+          "bytes": 2546,
+          "sha256": "1e2a5514ddff3c66c48795a7c89edcf56d7634a38923b5815a6eb3d43f4e3295"
+        },
+        "state": "passed",
+        "exit_code": 0,
+        "source": "efca7198570e8ee7a21ddccd81165eb36bdb269a"
+      },
+      {
+        "identity": {
+          "path": "artifacts/capacity-continuous-hb1b-v3/status.json",
+          "bytes": 2541,
+          "sha256": "4171502595cadf80d839aaed07b164a0df75029e6194710dccaf2f2c073d4614"
+        },
+        "state": "passed",
+        "exit_code": 0,
+        "source": "efca7198570e8ee7a21ddccd81165eb36bdb269a"
+      },
+      {
+        "identity": {
+          "path": "artifacts/capacity-fck-budget-bf16-v2/status.json",
+          "bytes": 3774,
+          "sha256": "d3ac01dea4054537251b3d310acb7d07e8417ed0b1443c9288dc4ea891c0fc15"
+        },
+        "state": "passed",
+        "exit_code": 0,
+        "source": "f486a56ed7b6f68e2aff2e7100673bf2a2fe20be"
+      },
+      {
+        "identity": {
+          "path": "artifacts/capacity-fck-length-fp32-v2/status.json",
+          "bytes": 3760,
+          "sha256": "7cd3c1f9e12546a025895efba87ccd8c7c38834a762b76b9194e609ece090e32"
+        },
+        "state": "passed",
+        "exit_code": 0,
+        "source": "f486a56ed7b6f68e2aff2e7100673bf2a2fe20be"
+      },
+      {
+        "identity": {
+          "path": "artifacts/capacity-fcs-length-bf16-v2/status.json",
+          "bytes": 3360,
+          "sha256": "c815cf580af402e96aa9397b70383348cadb508df717b6aca282cf37c86e66b8"
+        },
+        "state": "passed",
+        "exit_code": 0,
+        "source": "f486a56ed7b6f68e2aff2e7100673bf2a2fe20be"
+      },
+      {
+        "identity": {
+          "path": "artifacts/capacity-hb1b-length-fp32-v2/status.json",
+          "bytes": 3378,
+          "sha256": "5fe36eb4d4380bb78c661380ceb6edfd387528bfe585b18dcc0499aab0e57c7a"
+        },
+        "state": "passed",
+        "exit_code": 0,
+        "source": "f486a56ed7b6f68e2aff2e7100673bf2a2fe20be"
+      },
+      {
+        "identity": {
+          "path": "artifacts/capacity-integrated-cpu-v1/status.json",
+          "bytes": 4202,
+          "sha256": "f5b8aafe3bd7a176d0473147015539396c07b694bbcb7e7df4d18b6f764ad885"
+        },
+        "state": "passed",
+        "exit_code": 0,
+        "source": "062a8ab6d6ba0faa191d8900420b697711b7d21d"
+      },
+      {
+        "identity": {
+          "path": "artifacts/capacity-integrated-cpu-v2/status.json",
+          "bytes": 4737,
+          "sha256": "5ad6de1661df50a24a0b4b9e215a13564449dd01182df8e1c443a29c544c82ed"
+        },
+        "state": "passed",
+        "exit_code": 0,
+        "source": "8a22530dae69d9f1fa5ead4a01d1798fd1dfe0ee"
+      },
+      {
+        "identity": {
+          "path": "artifacts/capacity-region-17b-npu-v1/status.json",
+          "bytes": 4938,
+          "sha256": "347df2cd752fc8fd3587e883010a9f1fc821e01b2713e8ad5668091461269aa9"
+        },
+        "state": "passed",
+        "exit_code": 0,
+        "source": "8a22530dae69d9f1fa5ead4a01d1798fd1dfe0ee"
+      },
+      {
+        "identity": {
+          "path": "artifacts/capacity-region-9b-npu-v1/status.json",
+          "bytes": 2659,
+          "sha256": "49a65d790406a5cad7f4e2eeee5e8d7f81f8729572ca033b8a3ece69e2e96964"
+        },
+        "state": "passed",
+        "exit_code": 0,
+        "source": "36c42a7a3ef765fe6257c42c7c1404d28857b77c"
+      },
+      {
+        "identity": {
+          "path": "artifacts/capacity-region-budgets-v1/status.json",
+          "bytes": 1382,
+          "sha256": "94bf800b63a2eb1cf6a6ecf7e2ea049b034a6a7ea512af061a3207398170daec"
+        },
+        "state": "passed",
+        "exit_code": 0,
+        "source": "7b77457d594662e50acf0a002ca18d0a241e0ce3"
+      },
+      {
+        "identity": {
+          "path": "artifacts/capacity-restore-hb05b-bf16-v1/status.json",
+          "bytes": 2153,
+          "sha256": "ebc11413130c8fd5062b453f0da69e11ec80d391a9ad54a655dfc8aef08d0ab3"
+        },
+        "state": "passed",
+        "exit_code": 0,
+        "source": "062a8ab6d6ba0faa191d8900420b697711b7d21d"
+      },
+      {
+        "identity": {
+          "path": "artifacts/capacity-restore-hb05b-fp32-v1/status.json",
+          "bytes": 2287,
+          "sha256": "988d8ef1c8750a87fec113a84326bc9f0d7f6cb70bd0bc71dce340a3ca437f4b"
+        },
+        "state": "passed",
+        "exit_code": 0,
+        "source": "062a8ab6d6ba0faa191d8900420b697711b7d21d"
+      },
+      {
+        "identity": {
+          "path": "artifacts/capacity-restore-hb1b-bf16-v1/status.json",
+          "bytes": 2147,
+          "sha256": "3e936f76a0fb1cbffc73a135ff6c21382c7d321bf3374d600566272feb5db13a"
+        },
+        "state": "passed",
+        "exit_code": 0,
+        "source": "062a8ab6d6ba0faa191d8900420b697711b7d21d"
+      },
+      {
+        "identity": {
+          "path": "artifacts/capacity-restore-hb1b-fp32-v1/status.json",
+          "bytes": 2148,
+          "sha256": "1d1ebb7e5fe3f85867f5247d5b158c3545a113c79d9842543741cc1f53f83392"
+        },
+        "state": "passed",
+        "exit_code": 0,
+        "source": "062a8ab6d6ba0faa191d8900420b697711b7d21d"
+      },
+      {
+        "identity": {
+          "path": "artifacts/capacity-settle-length-fp32-v2/status.json",
+          "bytes": 3392,
+          "sha256": "b87c1c039854b10d0899aea7da85e1fec67cb071bb5ed10cac72b1c60efafb6f"
+        },
+        "state": "passed",
+        "exit_code": 0,
+        "source": "f486a56ed7b6f68e2aff2e7100673bf2a2fe20be"
+      },
+      {
+        "identity": {
+          "path": "artifacts/capacity-support-catalog-v1/status.json",
+          "bytes": 914,
+          "sha256": "2f1db51865207788ced959e7a92dd5cecb70b15c5a30803e280d4d7001bec587"
+        },
+        "state": "passed",
+        "exit_code": 0,
+        "source": "7b77457d594662e50acf0a002ca18d0a241e0ce3"
+      },
+      {
+        "identity": {
+          "path": "artifacts/capacity-timed-length-bf16-v2/status.json",
+          "bytes": 3123,
+          "sha256": "dce7a215420ada5a271c15c2cef87ed31d88e47138ebc09f73874dc2a563a815"
+        },
+        "state": "passed",
+        "exit_code": 0,
+        "source": "f486a56ed7b6f68e2aff2e7100673bf2a2fe20be"
+      },
+      {
+        "identity": {
+          "path": "artifacts/execution-batched-npu-v4/status.json",
+          "bytes": 2371,
+          "sha256": "96ba13814945d07ed87c5a4ac30dadb79a5d99fe7fadf012b94901a9335873e1"
+        },
+        "state": "failed",
+        "exit_code": 1,
+        "source": "231f56ebba3239230afacf467a80c2d27b292d12"
+      },
+      {
+        "identity": {
+          "path": "artifacts/execution-candidates-fp64-v3/status.json",
+          "bytes": 1599,
+          "sha256": "22a4f8ec386e47a0f7f76c59b2f19459604dde5909960807e607ef61ab89cf69"
+        },
+        "state": "passed",
+        "exit_code": 0,
+        "source": "efca7198570e8ee7a21ddccd81165eb36bdb269a"
+      },
+      {
+        "identity": {
+          "path": "artifacts/execution-candidates-npu-v3/status.json",
+          "bytes": 2563,
+          "sha256": "3e0cb94d1dda7a6c1281e90185b5d03cc2dee1b96ae83fe8dd4182fce17d33a3"
+        },
+        "state": "terminated",
+        "exit_code": 143,
+        "source": "efca7198570e8ee7a21ddccd81165eb36bdb269a"
+      },
+      {
+        "identity": {
+          "path": "artifacts/execution-capacity-settle-baseline-v1/status.json",
+          "bytes": 2559,
+          "sha256": "9fdac8b7a43399e366abbe9888049ab9ace0940ea6f1d21535c4dbb6069238c9"
+        },
+        "state": "passed",
+        "exit_code": 0,
+        "source": "8a22530dae69d9f1fa5ead4a01d1798fd1dfe0ee"
+      },
+      {
+        "identity": {
+          "path": "artifacts/execution-capacity-settle-combined-v1/status.json",
+          "bytes": 2783,
+          "sha256": "60eb3ce40bfeb675a066adeedfae249bac22bbb91f0656d4917123b4ca36dc47"
+        },
+        "state": "passed",
+        "exit_code": 0,
+        "source": "8a22530dae69d9f1fa5ead4a01d1798fd1dfe0ee"
+      },
+      {
+        "identity": {
+          "path": "artifacts/execution-perf-settle-bf16-v1/status.json",
+          "bytes": 2691,
+          "sha256": "7ba03f2b10a646c45a4edc26cb78f13361f8d386aef3a4d62596f70a3a7b82f7"
+        },
+        "state": "passed",
+        "exit_code": 0,
+        "source": "36c42a7a3ef765fe6257c42c7c1404d28857b77c"
+      },
+      {
+        "identity": {
+          "path": "artifacts/execution-perf-settle-fp32-v1/status.json",
+          "bytes": 2826,
+          "sha256": "2b42784569b75a62fc14e92c1611f8cca06fca4dede2db51a49618627921eee6"
+        },
+        "state": "passed",
+        "exit_code": 0,
+        "source": "36c42a7a3ef765fe6257c42c7c1404d28857b77c"
+      },
+      {
+        "identity": {
+          "path": "artifacts/execution-perf-timed-bf16-v1/status.json",
+          "bytes": 4096,
+          "sha256": "eff44b7e63dc3556de1c2fd7471eeec7d8897c5246805e2a6bebbaa46b55054f"
+        },
+        "state": "passed",
+        "exit_code": 0,
+        "source": "36c42a7a3ef765fe6257c42c7c1404d28857b77c"
+      },
+      {
+        "identity": {
+          "path": "artifacts/execution-perf-timed-fp32-v1/status.json",
+          "bytes": 2824,
+          "sha256": "e1a8abbec93cad64c209db12f1291a44779b4e72f509be9816ce24ca93d459d5"
+        },
+        "state": "passed",
+        "exit_code": 0,
+        "source": "36c42a7a3ef765fe6257c42c7c1404d28857b77c"
+      },
+      {
+        "identity": {
+          "path": "artifacts/execution-timed-math-npu-v4/status.json",
+          "bytes": 2025,
+          "sha256": "35c7a91cce0e7a2edf5f98caf2282b829442a769b36878c7f7bc1c2848098407"
+        },
+        "state": "failed",
+        "exit_code": 1,
+        "source": "231f56ebba3239230afacf467a80c2d27b292d12"
+      },
+      {
+        "identity": {
+          "path": "artifacts/execution-timed-recompute-npu-v4/status.json",
+          "bytes": 2002,
+          "sha256": "6426feb45856ac763a371b76a8a40dd2538d1669a5bb7119e185add71526e4b2"
+        },
+        "state": "passed",
+        "exit_code": 0,
+        "source": "231f56ebba3239230afacf467a80c2d27b292d12"
+      },
+      {
+        "identity": {
+          "path": "artifacts/native-regional-npu-pool-v1/status.json",
+          "bytes": 4425,
+          "sha256": "6cba3afa4b6795f5e9e0326cb6f2240262e006f4cae2882fcc3a1708f1c5aacd"
+        },
+        "state": "passed",
+        "exit_code": 0,
+        "source": "8a22530dae69d9f1fa5ead4a01d1798fd1dfe0ee"
+      },
+      {
+        "identity": {
+          "path": "artifacts/native-regional-npu-same-v1/status.json",
+          "bytes": 4181,
+          "sha256": "6eb310a794320265d105d970b3292b617c559472eaca32fb1fe85dee3bc1d295"
+        },
+        "state": "failed",
+        "exit_code": 1,
+        "source": "062a8ab6d6ba0faa191d8900420b697711b7d21d"
+      },
+      {
+        "identity": {
+          "path": "artifacts/native-regional-perf-cpu-v1/status.json",
+          "bytes": 4713,
+          "sha256": "7f7c7363cd03b12f0360005a6763438e8a5983aab0b947fac27e9c4a07e38477"
+        },
+        "state": "passed",
+        "exit_code": 0,
+        "source": "36c42a7a3ef765fe6257c42c7c1404d28857b77c"
+      },
+      {
+        "identity": {
+          "path": "artifacts/native-regional-perf-inner4-cpu-v1/status.json",
+          "bytes": 3443,
+          "sha256": "d51f83609ec256da639f45adb179422b7064fe1f54fab905cc5861478dcfce31"
+        },
+        "state": "passed",
+        "exit_code": 0,
+        "source": "8a22530dae69d9f1fa5ead4a01d1798fd1dfe0ee"
+      },
+      {
+        "identity": {
+          "path": "artifacts/native-regional-perf-npu-v1/status.json",
+          "bytes": 5545,
+          "sha256": "6a1705e321e6731e7006d9e1747def474fdc4435c0588e88b80dc709751e4563"
+        },
+        "state": "passed",
+        "exit_code": 0,
+        "source": "36c42a7a3ef765fe6257c42c7c1404d28857b77c"
+      },
+      {
+        "identity": {
+          "path": "artifacts/native-regional-serial-npu-v1/status.json",
+          "bytes": 2333,
+          "sha256": "2df9d9c7b3c350dcb3bb61ad5668a4b3bed40ca2454eb2e277025230eabd5e2f"
+        },
+        "state": "passed",
+        "exit_code": 0,
+        "source": "062a8ab6d6ba0faa191d8900420b697711b7d21d"
+      },
+      {
+        "identity": {
+          "path": "artifacts/region-placement-npu-concurrent-v1/status.json",
+          "bytes": 2571,
+          "sha256": "c635fb69310ee0640e1218b7775cbfdef78623235535acb3af4c68eea99df2ba"
+        },
+        "state": "passed",
+        "exit_code": 0,
+        "source": "8a22530dae69d9f1fa5ead4a01d1798fd1dfe0ee"
+      },
+      {
+        "identity": {
+          "path": "artifacts/region-placement-npu-serial-v1/status.json",
+          "bytes": 2503,
+          "sha256": "467471d49450a233707f27ed4395c5153e88193d580cf851c57c977def5db848"
+        },
+        "state": "passed",
+        "exit_code": 0,
+        "source": "062a8ab6d6ba0faa191d8900420b697711b7d21d"
+      },
+      {
+        "identity": {
+          "path": "artifacts/region-placement-perf-npu-v1/status.json",
+          "bytes": 3978,
+          "sha256": "dd29f37996f620e18ca8399e2cd86f68e9ced0fca1071b2f64f57f8981033cd8"
+        },
+        "state": "passed",
+        "exit_code": 0,
+        "source": "8a22530dae69d9f1fa5ead4a01d1798fd1dfe0ee"
+      },
+      {
+        "identity": {
+          "path": "artifacts/regional-bf16-epilogue-npu-v1/status.json",
+          "bytes": 2786,
+          "sha256": "63f58990a78d981f81a9dfd84b60b9a366310802396b885cc70150917d080c3d"
+        },
+        "state": "passed",
+        "exit_code": 0,
+        "source": "062a8ab6d6ba0faa191d8900420b697711b7d21d"
+      },
+      {
+        "identity": {
+          "path": "artifacts/regional-rounding-npu-v1/status.json",
+          "bytes": 2461,
+          "sha256": "e978005da63a9e5751d037180a5ec77c75dbf0856fcf4bf4546041abdcbb3055"
+        },
+        "state": "passed",
+        "exit_code": 0,
+        "source": "8a22530dae69d9f1fa5ead4a01d1798fd1dfe0ee"
+      },
+      {
+        "identity": {
+          "path": "artifacts/worktrees/installed-check/artifacts/capacity-installed-8a22530d-v1/status.json",
+          "bytes": 1529,
+          "sha256": "63073a204f5ff2a7b2ae02f9f05958dc1f190ca8616ccb373ed4369ba3ebe3dd"
+        },
+        "state": "failed",
+        "exit_code": 2,
+        "source": "8a22530d"
+      },
+      {
+        "identity": {
+          "path": "artifacts/worktrees/installed-check/artifacts/capacity-installed-restore-diagnosis-v1/status.json",
+          "bytes": 885,
+          "sha256": "5d78a911c2baac57bf690cf1c7b5e87c75187cd4703e21f0b975160f030310be"
+        },
+        "state": "passed",
+        "exit_code": 0,
+        "source": "8a22530d+cd131fc2-harness"
+      }
+    ],
+    "state_counts": {
+      "passed": 40,
+      "failed": 4,
+      "terminated": 1
+    },
+    "live_retained_descendants": [],
+    "active_tide_services": [],
+    "interpretation": "Terminal completion does not promote internal numerical failures to passes"
+  },
+  "user_files": [
+    {
+      "path": "docs/tide-learning-lab-TL-REQ-004-handoff.md",
+      "bytes": 11627,
+      "sha256": "69607cba0a7e87a260929ed5741d996103cef804c51f3fa2c02b3bd7a454a220",
+      "matches_prior_sha256": true
+    },
+    {
+      "path": "docs/tide-learning-lab-TL-REQ-005-handoff.md",
+      "bytes": 7415,
+      "sha256": "83bec6f6eaa476ae9d7c859fe168333ac2ee564433297f36ab9aa1ef33c38732",
+      "matches_prior_sha256": true
+    },
+    {
+      "path": "docs/tide-learning-lab-TL-REQ-006-handoff.md",
+      "bytes": 7355,
+      "sha256": "8706f0477c8f31d0c8337e55ba7f8f5b28bb9a455656586fa1585c82ec58b4df",
+      "matches_prior_sha256": true
+    },
+    {
+      "path": "docs/upstream-lh-semantics-discussion-20261113.md",
+      "bytes": 12905,
+      "sha256": "3118419cb014570395323baf887ffe5a7e797f97049e85eacef26ecb1fd81c07",
+      "matches_prior_sha256": true
+    }
+  ],
+  "artifact_policy": "No cleanup: sources, checkpoints, wheel, environments and witness data retained; external/public/consumer paths unchanged",
+  "integrated_commit_file_mappings": [
+    {
+      "original_commit": "9b220bb5c5119f10ca21b4abed14bb6b7d235d8d",
+      "main_branch_commit": "8fa6690e6c26a591e16909f88c0612341642ed36",
+      "changed_files_equal": [
+        {
+          "path": "scripts/check_installed_capacity.py",
+          "sha256": "823d7427d9e559502a51fbb8b3046940b477bb492195617616b8e256e3e7e5b8"
+        }
+      ],
+      "scope": "Only files changed by the original commit are byte-identical; no whole-tree equality claim"
+    },
+    {
+      "original_commit": "cd131fc2f9d83c87ca75a5d7379f143cae9306b8",
+      "main_branch_commit": "22bc86af46e80fdd2ea5d0c60dd8a78f6e97d7bb",
+      "changed_files_equal": [
+        {
+          "path": "scripts/check_installed_capacity.py",
+          "sha256": "7e23af192e2b2bfee052896462b39dc25182df43e02c2838ea98c5870ed12f37"
+        },
+        {
+          "path": "tests/test_installed_validation.py",
+          "sha256": "d54723bc8a0ebe8dea7b2834f7a916764fb5cd667f9990671e87b17d4ac85d59"
+        }
+      ],
+      "scope": "Only files changed by the original commit are byte-identical; no whole-tree equality claim"
+    },
+    {
+      "original_commit": "4f7ea32a878451bcc9ac9511e4bf9904e442d36d",
+      "main_branch_commit": "bf7233f64993185de74704cd51ae740c7185093e",
+      "changed_files_equal": [
+        {
+          "path": "docs/placement.md",
+          "sha256": "caf52ca5923e3b5de9049d104530ff12982ca39d6cec2cbf3c4f94aa85c99edb"
+        },
+        {
+          "path": "scripts/check_placement.py",
+          "sha256": "5942b5eedb4d388219d91015c242826b7ba2426258878c873e5366394a30271d"
+        },
+        {
+          "path": "src/tide/__init__.py",
+          "sha256": "bd8d669f813aa282dc1835a53656550468f40eac46a730c4339635580d8e4195"
+        },
+        {
+          "path": "src/tide/checkpoint.py",
+          "sha256": "7e188773786f5cd7e3b06fcf3ef4ca9efa256933a9c21a8225f359687337c49f"
+        },
+        {
+          "path": "src/tide/placement.py",
+          "sha256": "c58ef4574d5be7fad6e422e658f5972a815e95aed9bb6d55155e62777c2f8a27"
+        },
+        {
+          "path": "src/tide/region_execution.py",
+          "sha256": "75dcce33905dbcecc62e3eaaf93f2c1d087dfa9608043e561f59d93e2d0dd7d1"
+        },
+        {
+          "path": "src/tide/region_placement.py",
+          "sha256": "d2dfc2b65ff14430423aa1532fe5fd7cc378b7581c207f1938e5f4ab1c34c459"
+        },
+        {
+          "path": "tests/test_region_concurrency.py",
+          "sha256": "638b4fcac922c95995081354161ec967b157e1a4bef5e88637920767f4cfbf1b"
+        },
+        {
+          "path": "tests/test_region_placement.py",
+          "sha256": "a5b1a3c9ad343bd3f834a3fae61e4ca9a2f6137502f3e2dad54ca573c0ddbf9f"
+        }
+      ],
+      "scope": "Only files changed by the original commit are byte-identical; no whole-tree equality claim"
+    },
+    {
+      "original_commit": "89ce08ff858724648152790502f8c65d8d8b1222",
+      "main_branch_commit": "062a8ab6d6ba0faa191d8900420b697711b7d21d",
+      "changed_files_equal": [
+        {
+          "path": "docs/native-regional.md",
+          "sha256": "5f3850ecf7ecc7d1e471865480ea4967a7e73f51af9ccd5037e6de71345d89c5"
+        },
+        {
+          "path": "native/regional/CMakeLists.txt",
+          "sha256": "93b87fb05f2224c5c1acb191b046260af94b3492011d61bad92b7588da1c8020"
+        },
+        {
+          "path": "native/regional/build_identity.h.in",
+          "sha256": "085332a5dbfa1b70d104d18a5f42ac43eacc7467a694f2b71d2f17e62d2c4665"
+        },
+        {
+          "path": "native/regional/bundle.cpp",
+          "sha256": "571419a6a1b7ff60af93e92d980a151c6eaa4e2d89e0fca78477a103c8d51a36"
+        },
+        {
+          "path": "native/regional/bundle.h",
+          "sha256": "a9a7e41aaf0be557c0a8177fac0b9f6e1a7423a179b54b6beace1f3c9f5ca16e"
+        },
+        {
+          "path": "native/regional/main.cpp",
+          "sha256": "4b8f0e10ee546dead2bd661cae6adde27df042bfb5bc8476c2415267c7458918"
+        },
+        {
+          "path": "native/regional/reference.py",
+          "sha256": "43d0e983ee9e7edbc3ad415ebd36c6f70da60603ca8204f01f0ef964edb46c24"
+        },
+        {
+          "path": "native/regional/region.cpp",
+          "sha256": "accb154e0038fe6f4c89398aaafb7162d8b4fa7aafece7b6609cdaf434b79088"
+        },
+        {
+          "path": "native/regional/region.h",
+          "sha256": "11466a04fc1773cfe014e6117f93ca66683e40bc88744eff594f72d1f711a8da"
+        },
+        {
+          "path": "native/regional/runtime.cpp",
+          "sha256": "f619602b9977451c49b6cfe2c71e2222d9772be5660bc7d27ef345f32a79de1d"
+        },
+        {
+          "path": "native/regional/runtime.h",
+          "sha256": "cd8ec1fd0c54ca9fbe363d6ccee7215d31be0b6e3938f7e6e9b1d4fa6144249d"
+        },
+        {
+          "path": "scripts/check_native_region.py",
+          "sha256": "5808558af801db17a7c10336f49285485a6cf40a1c98182cb7d4d56263eb79f7"
+        },
+        {
+          "path": "tests/test_native_region.py",
+          "sha256": "e648bf4ac5e32f870852badb98e41d4d4915520901cfcd5c12071acc4d2fc717"
+        }
+      ],
+      "scope": "Only files changed by the original commit are byte-identical; no whole-tree equality claim"
+    },
+    {
+      "original_commit": "a4509760bc21a0378a9289f90058ece351e02168",
+      "main_branch_commit": "8f98ffbc647307ac998ace29b8e75062a0085a07",
+      "changed_files_equal": [
+        {
+          "path": "scripts/diagnose_region_batch.py",
+          "sha256": "4661cab1994db9a0f617f264ba56bb7a5a7cc36416e004cbf20babf6f85fe0be"
+        }
+      ],
+      "scope": "Only files changed by the original commit are byte-identical; no whole-tree equality claim"
+    },
+    {
+      "original_commit": "e45e0d0e7b8ff0df87e90be401968758ee10eeda",
+      "main_branch_commit": "fd54d67e7c2f39bf6a666b2b82ad9997ac712c9b",
+      "changed_files_equal": [
+        {
+          "path": "benchmarks/restore.py",
+          "sha256": "d7f3f12d1e21bd3f3ab0ece54d597c493810508bf9bc791c2e6d9e49c3c62562"
+        },
+        {
+          "path": "docs/capacity-search.md",
+          "sha256": "b3575abe9967313ad9011642b58cc6b04c787c1daf2d2f9a1ce664d14afb0bf6"
+        },
+        {
+          "path": "tests/test_restore_benchmark.py",
+          "sha256": "ffb7734f97c92b1bb2dfe05f6151ff4b6cafd0cfcef42227d2ed597bc342f177"
+        }
+      ],
+      "scope": "Only files changed by the original commit are byte-identical; no whole-tree equality claim"
+    },
+    {
+      "original_commit": "5d96f8ee11adae361d8fceb044260880ef7db291",
+      "main_branch_commit": "36c42a7a3ef765fe6257c42c7c1404d28857b77c",
+      "changed_files_equal": [
+        {
+          "path": "benchmarks/variants.py",
+          "sha256": "b1bdd36fe96737115a9d164b3a53be78885e72f3aa43455b5551f0d30b4a5871"
+        },
+        {
+          "path": "docs/capacity-search.md",
+          "sha256": "f47a2886d0f524eeb123770dd37636a9f88d4e252677341c78a9368d19176fdf"
+        },
+        {
+          "path": "tests/test_variants.py",
+          "sha256": "b0beb6710890a1be78be5bab95e284976b1f39f861933ad3a048bfd6d739c572"
+        }
+      ],
+      "scope": "Only files changed by the original commit are byte-identical; no whole-tree equality claim"
+    },
+    {
+      "original_commit": "3f0075ea8a8e13e90a340f5dacbbe0c65a1f10f7",
+      "main_branch_commit": "3543825aa61618b174efe915c3a36a8246acc6fe",
+      "changed_files_equal": [
+        {
+          "path": "benchmarks/memory_ledger.py",
+          "sha256": "6b331080fc8ed50f27a92679ae3eba15664b2f7a39111a86613f96e91c55bc11"
+        }
+      ],
+      "scope": "Only files changed by the original commit are byte-identical; no whole-tree equality claim"
+    }
+  ]
+}

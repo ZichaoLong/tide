@@ -1,0 +1,602 @@
+{
+  "schema": "tide-grouped-ffn-formula-vjp-v1",
+  "state": "within_threshold",
+  "observed": "2026-11-19T05:02:45.286615+00:00",
+  "source": {
+    "source_commit": "6efbfed26212feb95f9b9094e22475dddd2ff011",
+    "harness_commit": "6efbfed26212feb95f9b9094e22475dddd2ff011",
+    "tide_content_sha256": "7eb2cc0529c25e3c53b54738bca8c042864d6bafe31568b25f79cfb6c8935e49",
+    "harness_content_sha256": "d2433fcf90b1d2dfe2a0652da94f34b2fb37cc58c3df51b343bce11f4b98dd45",
+    "tide_path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/src/tide",
+    "harness_path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/benchmarks"
+  },
+  "arguments": {
+    "output": "artifacts/grouped-ffn-development/formula-tiny.json",
+    "device": "cpu",
+    "shapes": [
+      "tiny"
+    ],
+    "sharing": [
+      "independent",
+      "region_shared"
+    ],
+    "threads": 4,
+    "seed": 467,
+    "trace": false
+  },
+  "torch": "2.12.0+cpu",
+  "physical_devices": null,
+  "precision": {
+    "name": "fp32",
+    "device": "cpu",
+    "parameters": "float32",
+    "input": "float32",
+    "matrix_arithmetic": "float32",
+    "normalization_mass_allocation": "float32",
+    "kv_keys_values": "float32",
+    "kv_summary_and_ssd_state": "float32",
+    "logical_time_indices": "int64",
+    "parameter_gradients": "float32",
+    "master_weights": "parameters_are_fp32_masters; no_separate_copy",
+    "adamw_moments": "float32",
+    "attention": "native_by_shape_and_prior; math/tiled_accumulate_float32",
+    "attention_mode_selection": "established_fp32_gradient_dependent_prior_dispatch",
+    "loss": "float32",
+    "autocast_cache": false
+  },
+  "cases": [
+    {
+      "shape": "tiny",
+      "sharing": "independent",
+      "width": 16,
+      "hidden": 32,
+      "owner_ids": [
+        3,
+        0,
+        3,
+        1
+      ],
+      "groups": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "input": {
+        "shape": [
+          4,
+          1,
+          2,
+          16
+        ],
+        "stride": [
+          32,
+          32,
+          16,
+          1
+        ],
+        "dtype": "torch.float32",
+        "device": "cpu",
+        "sha256": "bd491384ca5c85489a287c1e328b5f6eac523a4ad62c956a1cd36f4a7bab415d"
+      },
+      "initial_parameters_sha256": "6c2cdf53aae502785657f3cf539e4736acdf42c24774b748027a7a3e7402114c",
+      "parameters": 6144,
+      "paths": {
+        "gather": {
+          "output": {
+            "state": "within_threshold",
+            "finite": true,
+            "atol": 2e-06,
+            "rtol": 2e-06,
+            "max_abs": 2.384185791015625e-07,
+            "max_scaled": 0.06881196051836014,
+            "exact": false
+          },
+          "gradients": {
+            "input": {
+              "state": "within_threshold",
+              "finite": true,
+              "atol": 6e-06,
+              "rtol": 6e-06,
+              "max_abs": 3.5762786865234375e-07,
+              "max_scaled": 0.02955523505806923,
+              "exact": false
+            },
+            "gate.weight": {
+              "state": "within_threshold",
+              "finite": true,
+              "atol": 6e-06,
+              "rtol": 6e-06,
+              "max_abs": 5.960464477539063e-08,
+              "max_scaled": 0.007616800256073475,
+              "exact": false
+            },
+            "up.weight": {
+              "state": "within_threshold",
+              "finite": true,
+              "atol": 6e-06,
+              "rtol": 6e-06,
+              "max_abs": 5.960464477539063e-08,
+              "max_scaled": 0.007763565517961979,
+              "exact": false
+            },
+            "down.weight": {
+              "state": "within_threshold",
+              "finite": true,
+              "atol": 6e-06,
+              "rtol": 6e-06,
+              "max_abs": 5.960464477539063e-08,
+              "max_scaled": 0.009403754957020283,
+              "exact": false
+            }
+          },
+          "output_identity": {
+            "shape": [
+              4,
+              1,
+              2,
+              16
+            ],
+            "stride": [
+              32,
+              32,
+              16,
+              1
+            ],
+            "dtype": "torch.float32",
+            "device": "cpu",
+            "sha256": "aeaa28f76175589cfa5dce2051410d55ccc5d580288823385874454cd124783e"
+          },
+          "parameter_gathers": {
+            "parameters": {
+              "gate.weight": {
+                "calls": 1,
+                "output_bytes": 8192
+              },
+              "up.weight": {
+                "calls": 1,
+                "output_bytes": 8192
+              },
+              "down.weight": {
+                "calls": 1,
+                "output_bytes": 8192
+              }
+            },
+            "calls": 3,
+            "output_bytes": 24576,
+            "definition": "logical advanced-index output bytes for operands sharing Parameter storage; not total traffic/FLOPs or measured bandwidth",
+            "boundary": "intrusive untimed witness; no parameter values retained"
+          },
+          "grouped_dispatch": [],
+          "parameter_layout_copies": [],
+          "warnings": []
+        },
+        "grouped": {
+          "output": {
+            "state": "within_threshold",
+            "finite": true,
+            "atol": 2e-06,
+            "rtol": 2e-06,
+            "max_abs": 2.384185791015625e-07,
+            "max_scaled": 0.06881196051836014,
+            "exact": false
+          },
+          "gradients": {
+            "input": {
+              "state": "within_threshold",
+              "finite": true,
+              "atol": 6e-06,
+              "rtol": 6e-06,
+              "max_abs": 3.5762786865234375e-07,
+              "max_scaled": 0.02955523505806923,
+              "exact": false
+            },
+            "gate.weight": {
+              "state": "within_threshold",
+              "finite": true,
+              "atol": 6e-06,
+              "rtol": 6e-06,
+              "max_abs": 5.960464477539063e-08,
+              "max_scaled": 0.007616800256073475,
+              "exact": false
+            },
+            "up.weight": {
+              "state": "within_threshold",
+              "finite": true,
+              "atol": 6e-06,
+              "rtol": 6e-06,
+              "max_abs": 4.470348358154297e-08,
+              "max_scaled": 0.00643764715641737,
+              "exact": false
+            },
+            "down.weight": {
+              "state": "within_threshold",
+              "finite": true,
+              "atol": 6e-06,
+              "rtol": 6e-06,
+              "max_abs": 5.960464477539063e-08,
+              "max_scaled": 0.00881602056324482,
+              "exact": false
+            }
+          },
+          "output_identity": {
+            "shape": [
+              4,
+              1,
+              2,
+              16
+            ],
+            "stride": [
+              32,
+              32,
+              16,
+              1
+            ],
+            "dtype": "torch.float32",
+            "device": "cpu",
+            "sha256": "aeaa28f76175589cfa5dce2051410d55ccc5d580288823385874454cd124783e"
+          },
+          "parameter_gathers": {
+            "parameters": {},
+            "calls": 0,
+            "output_bytes": 0,
+            "definition": "logical advanced-index output bytes for operands sharing Parameter storage; not total traffic/FLOPs or measured bandwidth",
+            "boundary": "intrusive untimed witness; no parameter values retained"
+          },
+          "grouped_dispatch": [],
+          "parameter_layout_copies": [],
+          "warnings": []
+        }
+      }
+    },
+    {
+      "shape": "tiny",
+      "sharing": "region_shared",
+      "width": 16,
+      "hidden": 32,
+      "owner_ids": [
+        3,
+        0,
+        3,
+        1
+      ],
+      "groups": [
+        0,
+        1,
+        0,
+        1
+      ],
+      "input": {
+        "shape": [
+          4,
+          1,
+          2,
+          16
+        ],
+        "stride": [
+          32,
+          32,
+          16,
+          1
+        ],
+        "dtype": "torch.float32",
+        "device": "cpu",
+        "sha256": "684f69a98f2002d91c02b9cf25f1a3d4581feed7f4fc5c0913d2691b59b523ea"
+      },
+      "initial_parameters_sha256": "1a8252616ef1aa2e86ab9cef62718196747359c9f3234583feec090d4ec9c964",
+      "parameters": 7680,
+      "paths": {
+        "gather": {
+          "output": {
+            "state": "within_threshold",
+            "finite": true,
+            "atol": 2e-06,
+            "rtol": 2e-06,
+            "max_abs": 7.152557373046875e-07,
+            "max_scaled": 0.1376958191394806,
+            "exact": false
+          },
+          "gradients": {
+            "input": {
+              "state": "within_threshold",
+              "finite": true,
+              "atol": 6e-06,
+              "rtol": 6e-06,
+              "max_abs": 3.5762786865234375e-07,
+              "max_scaled": 0.036029569804668427,
+              "exact": false
+            },
+            "gate.weight": {
+              "state": "within_threshold",
+              "finite": true,
+              "atol": 6e-06,
+              "rtol": 6e-06,
+              "max_abs": 1.1920928955078125e-07,
+              "max_scaled": 0.015162060968577862,
+              "exact": false
+            },
+            "gate.left": {
+              "state": "within_threshold",
+              "finite": true,
+              "atol": 6e-06,
+              "rtol": 6e-06,
+              "max_abs": 8.940696716308594e-08,
+              "max_scaled": 0.011450234800577164,
+              "exact": false
+            },
+            "gate.right": {
+              "state": "within_threshold",
+              "finite": true,
+              "atol": 6e-06,
+              "rtol": 6e-06,
+              "max_abs": 2.3283064365386963e-09,
+              "max_scaled": 0.00038515496999025345,
+              "exact": false
+            },
+            "up.weight": {
+              "state": "within_threshold",
+              "finite": true,
+              "atol": 6e-06,
+              "rtol": 6e-06,
+              "max_abs": 1.4901161193847656e-07,
+              "max_scaled": 0.019622480496764183,
+              "exact": false
+            },
+            "up.left": {
+              "state": "within_threshold",
+              "finite": true,
+              "atol": 6e-06,
+              "rtol": 6e-06,
+              "max_abs": 8.940696716308594e-08,
+              "max_scaled": 0.012241566553711891,
+              "exact": false
+            },
+            "up.right": {
+              "state": "within_threshold",
+              "finite": true,
+              "atol": 6e-06,
+              "rtol": 6e-06,
+              "max_abs": 1.3969838619232178e-09,
+              "max_scaled": 0.0002323698136024177,
+              "exact": false
+            },
+            "down.weight": {
+              "state": "within_threshold",
+              "finite": true,
+              "atol": 6e-06,
+              "rtol": 6e-06,
+              "max_abs": 8.940696716308594e-08,
+              "max_scaled": 0.012698437087237835,
+              "exact": false
+            },
+            "down.left": {
+              "state": "within_threshold",
+              "finite": true,
+              "atol": 6e-06,
+              "rtol": 6e-06,
+              "max_abs": 5.774199962615967e-08,
+              "max_scaled": 0.009543383494019508,
+              "exact": false
+            },
+            "down.right": {
+              "state": "within_threshold",
+              "finite": true,
+              "atol": 6e-06,
+              "rtol": 6e-06,
+              "max_abs": 5.587935447692871e-09,
+              "max_scaled": 0.0009160306653939188,
+              "exact": false
+            }
+          },
+          "output_identity": {
+            "shape": [
+              4,
+              1,
+              2,
+              16
+            ],
+            "stride": [
+              32,
+              32,
+              16,
+              1
+            ],
+            "dtype": "torch.float32",
+            "device": "cpu",
+            "sha256": "fd965fab695a774174277373e5de36ca27cdad954c69670c797cdd7e2cb11dc9"
+          },
+          "parameter_gathers": {
+            "parameters": {
+              "gate.weight": {
+                "calls": 1,
+                "output_bytes": 8192
+              },
+              "gate.right": {
+                "calls": 1,
+                "output_bytes": 2048
+              },
+              "gate.left": {
+                "calls": 1,
+                "output_bytes": 4096
+              },
+              "up.weight": {
+                "calls": 1,
+                "output_bytes": 8192
+              },
+              "up.right": {
+                "calls": 1,
+                "output_bytes": 2048
+              },
+              "up.left": {
+                "calls": 1,
+                "output_bytes": 4096
+              },
+              "down.weight": {
+                "calls": 1,
+                "output_bytes": 8192
+              },
+              "down.right": {
+                "calls": 1,
+                "output_bytes": 4096
+              },
+              "down.left": {
+                "calls": 1,
+                "output_bytes": 2048
+              }
+            },
+            "calls": 9,
+            "output_bytes": 43008,
+            "definition": "logical advanced-index output bytes for operands sharing Parameter storage; not total traffic/FLOPs or measured bandwidth",
+            "boundary": "intrusive untimed witness; no parameter values retained"
+          },
+          "grouped_dispatch": [],
+          "parameter_layout_copies": [],
+          "warnings": []
+        },
+        "grouped": {
+          "output": {
+            "state": "within_threshold",
+            "finite": true,
+            "atol": 2e-06,
+            "rtol": 2e-06,
+            "max_abs": 7.152557373046875e-07,
+            "max_scaled": 0.1376958191394806,
+            "exact": false
+          },
+          "gradients": {
+            "input": {
+              "state": "within_threshold",
+              "finite": true,
+              "atol": 6e-06,
+              "rtol": 6e-06,
+              "max_abs": 3.5762786865234375e-07,
+              "max_scaled": 0.036029569804668427,
+              "exact": false
+            },
+            "gate.weight": {
+              "state": "within_threshold",
+              "finite": true,
+              "atol": 6e-06,
+              "rtol": 6e-06,
+              "max_abs": 8.940696716308594e-08,
+              "max_scaled": 0.01231637317687273,
+              "exact": false
+            },
+            "gate.left": {
+              "state": "within_threshold",
+              "finite": true,
+              "atol": 6e-06,
+              "rtol": 6e-06,
+              "max_abs": 8.940696716308594e-08,
+              "max_scaled": 0.011450234800577164,
+              "exact": false
+            },
+            "gate.right": {
+              "state": "within_threshold",
+              "finite": true,
+              "atol": 6e-06,
+              "rtol": 6e-06,
+              "max_abs": 1.862645149230957e-09,
+              "max_scaled": 0.0003081239992752671,
+              "exact": false
+            },
+            "up.weight": {
+              "state": "within_threshold",
+              "finite": true,
+              "atol": 6e-06,
+              "rtol": 6e-06,
+              "max_abs": 1.4901161193847656e-07,
+              "max_scaled": 0.019622480496764183,
+              "exact": false
+            },
+            "up.left": {
+              "state": "within_threshold",
+              "finite": true,
+              "atol": 6e-06,
+              "rtol": 6e-06,
+              "max_abs": 8.940696716308594e-08,
+              "max_scaled": 0.011835718527436256,
+              "exact": false
+            },
+            "up.right": {
+              "state": "within_threshold",
+              "finite": true,
+              "atol": 6e-06,
+              "rtol": 6e-06,
+              "max_abs": 1.3969838619232178e-09,
+              "max_scaled": 0.0002323698136024177,
+              "exact": false
+            },
+            "down.weight": {
+              "state": "within_threshold",
+              "finite": true,
+              "atol": 6e-06,
+              "rtol": 6e-06,
+              "max_abs": 1.1920928955078125e-07,
+              "max_scaled": 0.01522521860897541,
+              "exact": false
+            },
+            "down.left": {
+              "state": "within_threshold",
+              "finite": true,
+              "atol": 6e-06,
+              "rtol": 6e-06,
+              "max_abs": 5.774199962615967e-08,
+              "max_scaled": 0.009543383494019508,
+              "exact": false
+            },
+            "down.right": {
+              "state": "within_threshold",
+              "finite": true,
+              "atol": 6e-06,
+              "rtol": 6e-06,
+              "max_abs": 5.587935447692871e-09,
+              "max_scaled": 0.0009160306653939188,
+              "exact": false
+            }
+          },
+          "output_identity": {
+            "shape": [
+              4,
+              1,
+              2,
+              16
+            ],
+            "stride": [
+              32,
+              32,
+              16,
+              1
+            ],
+            "dtype": "torch.float32",
+            "device": "cpu",
+            "sha256": "2a87426fd4af6e026190509700c79179d2945d971ef415235139025da11c8b91"
+          },
+          "parameter_gathers": {
+            "parameters": {},
+            "calls": 0,
+            "output_bytes": 0,
+            "definition": "logical advanced-index output bytes for operands sharing Parameter storage; not total traffic/FLOPs or measured bandwidth",
+            "boundary": "intrusive untimed witness; no parameter values retained"
+          },
+          "grouped_dispatch": [],
+          "parameter_layout_copies": [],
+          "warnings": []
+        }
+      }
+    }
+  ],
+  "failures": [],
+  "scope": "few-owner local FFN, first-order only; not model/private-state/checkpoint or throughput qualification",
+  "thresholds": {
+    "values": {
+      "atol": 2e-06,
+      "rtol": 2e-06
+    },
+    "gradients": {
+      "atol": 6e-06,
+      "rtol": 6e-06
+    }
+  },
+  "trace_scope": "at most one separate full FFN forward/backward replay, no dispatch audit inside the device profiler"
+}

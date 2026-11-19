@@ -1,0 +1,91 @@
+{
+  "state": "passed",
+  "source": "97c52960358e6d5414fc987dc3861b1e85d997a9",
+  "command": [
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "/mi/data2T/zlong/home/.agents/skills/use-local-ascend/scripts/run_on_free_npu.py",
+    "--job-id",
+    "numerics-quad-training-npu-v1",
+    "--project",
+    "tide-instances",
+    "--priority",
+    "0",
+    "--npu-count",
+    "1",
+    "--max-wait-seconds",
+    "600",
+    "--state-file",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/numerics-quad-training-npu-v1/queue.json",
+    "--",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "-m",
+    "scripts.check_training_paths",
+    "--config",
+    "configs/memory-candidates/qualification.json",
+    "--device",
+    "npu:0",
+    "--precision",
+    "fp32",
+    "--candidates",
+    "baseline",
+    "combined",
+    "--batch",
+    "2",
+    "--length",
+    "8",
+    "--steps",
+    "3",
+    "--chunk",
+    "4",
+    "--threads",
+    "4",
+    "--restore-mode",
+    "new_process",
+    "--no-internal-witness",
+    "--output-dir",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/numerics-quad-training-npu-v1/qualification"
+  ],
+  "pid": 2793588,
+  "started": "2026-11-19T10:25:15.629644+00:00",
+  "max_rss_bytes": 103079215104,
+  "peak_rss_bytes": 7911268352,
+  "max_processes": 3,
+  "rss_sample_count": 170,
+  "poll_interval": 0.25,
+  "descendant_supervision": "Linux child subreaper; retained PID/start identities across nested sessions",
+  "child_pid": 2793615,
+  "process_group": 2793615,
+  "elapsed": 72.40174766629934,
+  "descendant_identities": [
+    {
+      "pid": 2793615,
+      "start_ticks": 2267008633
+    },
+    {
+      "pid": 2793616,
+      "start_ticks": 2267008639
+    },
+    {
+      "pid": 2793666,
+      "start_ticks": 2267008695
+    },
+    {
+      "pid": 2793899,
+      "start_ticks": 2267009168
+    },
+    {
+      "pid": 2794020,
+      "start_ticks": 2267009340
+    },
+    {
+      "pid": 2795769,
+      "start_ticks": 2267011011
+    },
+    {
+      "pid": 2797728,
+      "start_ticks": 2267014407
+    }
+  ],
+  "exit_code": 0,
+  "finished": "2026-11-19T10:26:28.031391+00:00"
+}

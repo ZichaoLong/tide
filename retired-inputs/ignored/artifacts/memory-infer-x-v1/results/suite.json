@@ -1,0 +1,452 @@
+{
+  "schema": "tide-memory-candidate-suite-v1",
+  "source": "301a327569aa75aefddd03cac9ca839589db5672",
+  "state": "completed",
+  "started": "2026-11-19T02:24:55.735314+00:00",
+  "arguments": {
+    "phase": "inference",
+    "config": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-infer-x-v1/source/configs/memory-candidates/9b-x.json",
+    "output_dir": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-infer-x-v1/results",
+    "device": "npu:0",
+    "threads": 4,
+    "train_batch": 8,
+    "plan_only": false
+  },
+  "config_file": {
+    "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-infer-x-v1/source/configs/memory-candidates/9b-x.json",
+    "sha256": "247fdd75d50223656b6ec05816bf86aadf043fe4359020e3350fda3885a9623f"
+  },
+  "config": {
+    "topology": {
+      "kind": "multiscale",
+      "n": 32,
+      "layers": null,
+      "depth": null,
+      "rounds": null,
+      "profile": "5-dd4",
+      "hubs": 4,
+      "partition": "group",
+      "timing": "settle",
+      "hub_mask": "all",
+      "period": null,
+      "probes": null
+    },
+    "d": 768,
+    "memory": "X",
+    "aggregation": "source_residual",
+    "allocation": "quad",
+    "sharing": "independent",
+    "adapter_rank": 8,
+    "budget": null,
+    "attention_backend": "auto",
+    "attention_chunk": 128,
+    "input_dim": null,
+    "region_batch_size": 4,
+    "ssd_scan_backend": "doubling",
+    "ssd_summary_backend": "prefix",
+    "parameter_indexing": "gather",
+    "kv_width": null,
+    "ffn_width": null,
+    "memory_sharing": null,
+    "checkpoint_reception": false
+  },
+  "cwd": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-infer-x-v1/source",
+  "executable": "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+  "cpu_affinity": [
+    48,
+    49,
+    50,
+    51
+  ],
+  "physical_devices": "11",
+  "resource_identity": "exclusive_cooperative_queue; external jobs not controlled",
+  "scope": "finite one-candidate FP32 study; completion is not model-quality or strict numerical-equivalence qualification",
+  "policy": {
+    "child_timeout_seconds": 1800,
+    "child_sampled_rss_gib": 96,
+    "allocated_gib": 48,
+    "inference_reserved_gib": 56,
+    "common_batches": [
+      1,
+      8
+    ],
+    "screen_ladder": [
+      12,
+      16,
+      24,
+      32,
+      48,
+      64
+    ],
+    "common_budget_fallback": "only a sampled B8 refusal after successful B1 permits one formal B4; no further screening",
+    "max_screen_measurements": 3,
+    "minimum_relative_gain": 0.03,
+    "selection": "highest observed median stable-decode throughput; formal confirmation kept distinct; finite measured best, not global optimum",
+    "training": "20 continuous updates, same-batch fresh-process restored update, two continuing memory-ledger segments; B8 may fall back to B4 only after explicit sampled device budget refusal"
+  },
+  "children": [
+    {
+      "identity": "common-b1",
+      "state": "completed",
+      "command": [
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+        "-u",
+        "-m",
+        "benchmarks.inference",
+        "--config",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-infer-x-v1/source/configs/memory-candidates/9b-x.json",
+        "--subjects",
+        "tide",
+        "--devices",
+        "npu:0",
+        "--precision",
+        "fp32",
+        "--threads",
+        "4",
+        "--batch",
+        "1",
+        "--prefill",
+        "128",
+        "--prefill-chunk",
+        "32",
+        "--decode",
+        "16",
+        "--stream-positions",
+        "0",
+        "--warmup",
+        "2",
+        "--samples",
+        "5",
+        "--audit",
+        "full",
+        "--allocated-budget-gib",
+        "48",
+        "--reserved-budget-gib",
+        "56",
+        "--output",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-infer-x-v1/results/common-b1.json"
+      ],
+      "output": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-infer-x-v1/results/common-b1.json",
+      "log": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-infer-x-v1/results/common-b1.log",
+      "timeout_seconds": 1800,
+      "max_rss_bytes": 103079215104,
+      "phase": "inference",
+      "batch": 1,
+      "formal": true,
+      "warmup": 2,
+      "samples": 5,
+      "started": "2026-11-19T02:24:55.738137+00:00",
+      "pid": 1067227,
+      "sampled_process_tree_peak_rss_bytes": 37080633344,
+      "exit_code": 0,
+      "inner_state": "completed",
+      "result_sha256": "690bb1dfe9d915c4e5fd83ba619d8c515df43fb4b42ea8b30f91194f0fd875a1",
+      "descendant_identities": [
+        {
+          "pid": 1067227,
+          "start_ticks": 2264126644
+        }
+      ],
+      "ended": "2026-11-19T02:29:26.128501+00:00",
+      "elapsed_seconds": 270.3880810663104,
+      "terminal_review": {
+        "checked": "2026-11-19T02:29:26.131573+00:00",
+        "live": [],
+        "all_recorded_descendants_terminal": true
+      },
+      "outcome": "completed",
+      "review_state": "passed"
+    },
+    {
+      "identity": "common-b8",
+      "state": "completed",
+      "command": [
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+        "-u",
+        "-m",
+        "benchmarks.inference",
+        "--config",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-infer-x-v1/source/configs/memory-candidates/9b-x.json",
+        "--subjects",
+        "tide",
+        "--devices",
+        "npu:0",
+        "--precision",
+        "fp32",
+        "--threads",
+        "4",
+        "--batch",
+        "8",
+        "--prefill",
+        "128",
+        "--prefill-chunk",
+        "32",
+        "--decode",
+        "16",
+        "--stream-positions",
+        "0",
+        "--warmup",
+        "2",
+        "--samples",
+        "5",
+        "--audit",
+        "full",
+        "--allocated-budget-gib",
+        "48",
+        "--reserved-budget-gib",
+        "56",
+        "--output",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-infer-x-v1/results/common-b8.json"
+      ],
+      "output": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-infer-x-v1/results/common-b8.json",
+      "log": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-infer-x-v1/results/common-b8.log",
+      "timeout_seconds": 1800,
+      "max_rss_bytes": 103079215104,
+      "phase": "inference",
+      "batch": 8,
+      "formal": true,
+      "warmup": 2,
+      "samples": 5,
+      "started": "2026-11-19T02:29:26.140228+00:00",
+      "pid": 1085550,
+      "sampled_process_tree_peak_rss_bytes": 36777361408,
+      "exit_code": 0,
+      "inner_state": "completed",
+      "result_sha256": "b9d608cb76cebcea4d1666b8bcca116f0bc937580514af6dfd5208738b5e043e",
+      "descendant_identities": [
+        {
+          "pid": 1085550,
+          "start_ticks": 2264153684
+        }
+      ],
+      "ended": "2026-11-19T02:34:56.895743+00:00",
+      "elapsed_seconds": 330.75344044342637,
+      "terminal_review": {
+        "checked": "2026-11-19T02:34:56.899050+00:00",
+        "live": [],
+        "all_recorded_descendants_terminal": true
+      },
+      "outcome": "completed",
+      "review_state": "passed"
+    }
+  ],
+  "decisions": [
+    {
+      "kind": "screen_selection",
+      "measurement_opportunity": 1,
+      "predictions": [
+        {
+          "state": "projected_budget_refusal",
+          "batch": 12,
+          "anchor_batch": 8,
+          "source_identities": [
+            "common-b1",
+            "common-b8"
+          ],
+          "predicted_peak_bytes": {
+            "allocated": 57865485408,
+            "reserved": 61287810144
+          },
+          "slope_bytes_per_batch": {
+            "allocated": 1896004376.0,
+            "reserved": 2181198104.0
+          },
+          "method": "largest observed nonnegative adjacent slope or anchor excess over FP32 weights per batch, whichever is greater; not a hardware/allocator fit guarantee"
+        },
+        {
+          "state": "projected_budget_refusal",
+          "batch": 16,
+          "anchor_batch": 8,
+          "source_identities": [
+            "common-b1",
+            "common-b8"
+          ],
+          "predicted_peak_bytes": {
+            "allocated": 65449502912,
+            "reserved": 70012602560
+          },
+          "slope_bytes_per_batch": {
+            "allocated": 1896004376.0,
+            "reserved": 2181198104.0
+          },
+          "method": "largest observed nonnegative adjacent slope or anchor excess over FP32 weights per batch, whichever is greater; not a hardware/allocator fit guarantee"
+        }
+      ],
+      "selected_batch": null
+    }
+  ],
+  "measurements": [
+    {
+      "identity": "common-b1",
+      "batch": 1,
+      "formal": true,
+      "samples": 5,
+      "warmup": 2,
+      "within_budget": true,
+      "stable_decode_positions_per_second": 3.0888791460639617,
+      "stable_decode_samples": [
+        3.090065202216189,
+        3.084811161539205,
+        3.134507982150041,
+        3.0888791460639617,
+        3.0533428132792597
+      ],
+      "first_backbone_output_seconds": 0.4807695224881172,
+      "prefill_positions_per_second": 64.77804578693815,
+      "complete_positions_per_second": 20.144915251025147,
+      "peak_bytes": {
+        "allocated": 37840583168,
+        "reserved": 40259026944
+      },
+      "normal_peak_bytes": {
+        "allocated": 37840583168,
+        "reserved": 40259026944
+      },
+      "cold_peak_bytes": {
+        "allocated": 37840188416,
+        "reserved": 40259026944
+      },
+      "parameters": 8778358224,
+      "parameter_bytes": 35113432896,
+      "final_private_state": {
+        "payload_bytes": 693716096,
+        "retained_storage_bytes": 693716096,
+        "dtypes": [
+          "torch.float32",
+          "torch.int64"
+        ],
+        "tensor_count": 280
+      },
+      "output": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-infer-x-v1/results/common-b1.json",
+      "result_sha256": "690bb1dfe9d915c4e5fd83ba619d8c515df43fb4b42ea8b30f91194f0fd875a1",
+      "source": {
+        "source_commit": "301a327569aa75aefddd03cac9ca839589db5672",
+        "harness_commit": "301a327569aa75aefddd03cac9ca839589db5672",
+        "tide_content_sha256": "7bc4f743a47f1f208f11850314c6a61ea5bb795085a7503b1b9337a051476d38",
+        "harness_content_sha256": "6aa2a7d116ffc3e581848644c95f5c459adbcfbe2454319f141b76ac099e2d5b",
+        "tide_path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-infer-x-v1/source/src/tide",
+        "harness_path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-infer-x-v1/source/benchmarks"
+      },
+      "physical_devices": "11",
+      "input_sha256": "c5f402fae8e34bc660ddb615875cf6bbd1a7d7dabe9792928544df4bc0149564",
+      "initial_parameters": {
+        "sha256": "7a3d2f5e036e8817331a09479a263daa1da23a0abf5eef4fd1f93335e89e02cc",
+        "finite": true,
+        "host_copy_chunk_bytes": 8388608,
+        "scope": "dense initial named Parameters before ownership placement; shape/name/raw contiguous bytes"
+      },
+      "work": {
+        "positive_messages": 159029,
+        "message_slots": 928512,
+        "candidate_updates": 83015,
+        "candidate_slots": 122112,
+        "regional_attention_positive_pairs": 20125884,
+        "full_actions": 22561,
+        "kv_attention_effective_pairs": 13803456
+      },
+      "query_packing": {
+        "K": {
+          "calls": 160,
+          "selected_rows": 11041,
+          "executed_rows": 41785
+        },
+        "S": {
+          "calls": 100,
+          "selected_rows": 11520,
+          "executed_rows": 11520
+        }
+      },
+      "audit_location": "matching_reference.audit in output; includes parameter touches, actual matrices/dispatch and retained stream identity",
+      "timing_scope": "median of independent zero-state normal requests; prefill128/chunk32/decode16; stable decode omits first incremental call; no task head"
+    },
+    {
+      "identity": "common-b8",
+      "batch": 8,
+      "formal": true,
+      "samples": 5,
+      "warmup": 2,
+      "within_budget": true,
+      "stable_decode_positions_per_second": 11.713462322847466,
+      "stable_decode_samples": [
+        11.52821316859553,
+        11.496586118567281,
+        11.755170558485164,
+        11.754279720951592,
+        11.713462322847466
+      ],
+      "first_backbone_output_seconds": 0.9306177757680416,
+      "prefill_positions_per_second": 253.95781687151594,
+      "complete_positions_per_second": 76.75429555642937,
+      "peak_bytes": {
+        "allocated": 50281467904,
+        "reserved": 52563017728
+      },
+      "normal_peak_bytes": {
+        "allocated": 50281467904,
+        "reserved": 52221181952
+      },
+      "cold_peak_bytes": {
+        "allocated": 50281172480,
+        "reserved": 52563017728
+      },
+      "parameters": 8778358224,
+      "parameter_bytes": 35113432896,
+      "final_private_state": {
+        "payload_bytes": 5549728768,
+        "retained_storage_bytes": 5549728768,
+        "dtypes": [
+          "torch.float32",
+          "torch.int64"
+        ],
+        "tensor_count": 280
+      },
+      "output": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-infer-x-v1/results/common-b8.json",
+      "result_sha256": "b9d608cb76cebcea4d1666b8bcca116f0bc937580514af6dfd5208738b5e043e",
+      "source": {
+        "source_commit": "301a327569aa75aefddd03cac9ca839589db5672",
+        "harness_commit": "301a327569aa75aefddd03cac9ca839589db5672",
+        "tide_content_sha256": "7bc4f743a47f1f208f11850314c6a61ea5bb795085a7503b1b9337a051476d38",
+        "harness_content_sha256": "6aa2a7d116ffc3e581848644c95f5c459adbcfbe2454319f141b76ac099e2d5b",
+        "tide_path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-infer-x-v1/source/src/tide",
+        "harness_path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-infer-x-v1/source/benchmarks"
+      },
+      "physical_devices": "11",
+      "input_sha256": "0d113ed21f9aa2a0edec2ddadd3f210e03f626ce97cffab507c3e1729f8d2f0a",
+      "initial_parameters": {
+        "sha256": "7a3d2f5e036e8817331a09479a263daa1da23a0abf5eef4fd1f93335e89e02cc",
+        "finite": true,
+        "host_copy_chunk_bytes": 8388608,
+        "scope": "dense initial named Parameters before ownership placement; shape/name/raw contiguous bytes"
+      },
+      "work": {
+        "positive_messages": 1267590,
+        "message_slots": 7428096,
+        "candidate_updates": 663360,
+        "candidate_slots": 976896,
+        "regional_attention_positive_pairs": 160718688,
+        "full_actions": 179918,
+        "kv_attention_effective_pairs": 109647720
+      },
+      "query_packing": {
+        "K": {
+          "calls": 160,
+          "selected_rows": 87758,
+          "executed_rows": 517000
+        },
+        "S": {
+          "calls": 100,
+          "selected_rows": 92160,
+          "executed_rows": 92160
+        }
+      },
+      "audit_location": "matching_reference.audit in output; includes parameter touches, actual matrices/dispatch and retained stream identity",
+      "timing_scope": "median of independent zero-state normal requests; prefill128/chunk32/decode16; stable decode omits first incremental call; no task head"
+    }
+  ],
+  "descendant_supervision": "Linux child subreaper; run_child PID/start tracking and per-child terminal identity review",
+  "stop_reason": "no larger ladder point with projected budget fit",
+  "best_common_or_screen": "common-b8",
+  "best_formal_measured": "common-b8",
+  "ended": "2026-11-19T02:34:56.913017+00:00",
+  "all_executed_children_successful": true
+}

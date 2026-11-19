@@ -1,0 +1,93 @@
+{
+  "source": "c09e5d7cf18de19d73c242a6e461c14e5dba1101",
+  "arguments": {
+    "config": "configs/hb-lattice-k.json",
+    "device": "npu:0",
+    "precision": "fp32",
+    "mode": "train",
+    "batch": 8,
+    "length": 128,
+    "threads": 4,
+    "warmup": 2,
+    "steps": 5,
+    "candidates": [
+      "compact",
+      "head_query",
+      "both"
+    ],
+    "output": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/projections-e2e-npu-v3/hb-lattice-k-fp32-train.json"
+  },
+  "torch": "2.12.0+cpu",
+  "physical_devices": "1",
+  "cpu_affinity": [
+    68,
+    69,
+    70,
+    71
+  ],
+  "host_load": [
+    49.45,
+    43.13,
+    39.14
+  ],
+  "timing": "fresh state; forward and full loss/backward/AdamW/sync for train; no construction or audit",
+  "rows": [
+    {
+      "candidate": "compact",
+      "seconds": [
+        0.34217721968889236,
+        0.3439505100250244,
+        0.33913378417491913,
+        0.33880244195461273,
+        0.33740413561463356
+      ],
+      "median_seconds": 0.33913378417491913,
+      "work": {
+        "candidates": 81827,
+        "full": 76167,
+        "positive_messages": 198514,
+        "candidate_slots": 81920
+      },
+      "finite": true,
+      "peak_device_bytes": 2791258624
+    },
+    {
+      "candidate": "head_query",
+      "seconds": [
+        0.3298303782939911,
+        0.32946672663092613,
+        0.32703614979982376,
+        0.32701508328318596,
+        0.3238398842513561
+      ],
+      "median_seconds": 0.32703614979982376,
+      "work": {
+        "candidates": 81827,
+        "full": 76167,
+        "positive_messages": 198512,
+        "candidate_slots": 81920
+      },
+      "finite": true,
+      "peak_device_bytes": 2796280320
+    },
+    {
+      "candidate": "both",
+      "seconds": [
+        0.33092598617076874,
+        0.3295496068894863,
+        0.32922639325261116,
+        0.33323510736227036,
+        0.3266478329896927
+      ],
+      "median_seconds": 0.3295496068894863,
+      "work": {
+        "candidates": 81830,
+        "full": 76174,
+        "positive_messages": 198522,
+        "candidate_slots": 81920
+      },
+      "finite": true,
+      "peak_device_bytes": 2788282880
+    }
+  ]
+}

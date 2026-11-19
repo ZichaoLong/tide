@@ -1,0 +1,49 @@
+{
+  "state": "released",
+  "started": "2026-11-19T05:21:28.964081+00:00",
+  "units": [
+    "tide-ffn-cpu32-calibration-v1.service"
+  ],
+  "command": [
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "-m",
+    "scripts.check_execution_candidates",
+    "--config",
+    "configs/memory-candidates/medium-kv128.json",
+    "--device",
+    "cpu",
+    "--candidates",
+    "baseline",
+    "weight_access",
+    "packing",
+    "--batch",
+    "16",
+    "--length",
+    "128",
+    "--chunk",
+    "32",
+    "--steps",
+    "3",
+    "--threads",
+    "32",
+    "--artifact-budget-gib",
+    "32",
+    "--restore-timeout-seconds",
+    "1800",
+    "--output-dir",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/ffn-medium-cpu-qualification-v1/qualification"
+  ],
+  "boundary": "resource sequencing only; prior success not required",
+  "observations": {
+    "tide-ffn-cpu32-calibration-v1.service": {
+      "MainPID": "0",
+      "Result": "success",
+      "LoadState": "not-found",
+      "ActiveState": "inactive",
+      "SubState": "dead"
+    }
+  },
+  "busy": [],
+  "elapsed_seconds": 55.11263398081064,
+  "finished": "2026-11-19T05:22:24.076718+00:00"
+}

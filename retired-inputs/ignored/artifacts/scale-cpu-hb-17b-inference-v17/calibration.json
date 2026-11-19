@@ -1,0 +1,115 @@
+{
+  "state": "completed",
+  "rows": [
+    {
+      "threads": 16,
+      "command": [
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+        "-m",
+        "benchmarks.run",
+        "--config",
+        "configs/scale/hb-1b.json",
+        "--device",
+        "cpu",
+        "--precision",
+        "fp32",
+        "--threads",
+        "16",
+        "--batch",
+        "1",
+        "--length",
+        "8",
+        "--warmup",
+        "1",
+        "--steps",
+        "2",
+        "--modes",
+        "inference",
+        "train",
+        "--subjects",
+        "tide",
+        "--output",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/scale-cpu-hb-17b-inference-v17/calibration-16.json"
+      ],
+      "latencies": [
+        1.9055149238556623,
+        9.015504721552134
+      ],
+      "score": 4.144777291122983
+    },
+    {
+      "threads": 32,
+      "command": [
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+        "-m",
+        "benchmarks.run",
+        "--config",
+        "configs/scale/hb-1b.json",
+        "--device",
+        "cpu",
+        "--precision",
+        "fp32",
+        "--threads",
+        "32",
+        "--batch",
+        "1",
+        "--length",
+        "8",
+        "--warmup",
+        "1",
+        "--steps",
+        "2",
+        "--modes",
+        "inference",
+        "train",
+        "--subjects",
+        "tide",
+        "--output",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/scale-cpu-hb-17b-inference-v17/calibration-32.json"
+      ],
+      "latencies": [
+        1.152774054557085,
+        7.214487949386239
+      ],
+      "score": 2.8838645122417255
+    },
+    {
+      "threads": 40,
+      "command": [
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+        "-m",
+        "benchmarks.run",
+        "--config",
+        "configs/scale/hb-1b.json",
+        "--device",
+        "cpu",
+        "--precision",
+        "fp32",
+        "--threads",
+        "40",
+        "--batch",
+        "1",
+        "--length",
+        "8",
+        "--warmup",
+        "1",
+        "--steps",
+        "2",
+        "--modes",
+        "inference",
+        "train",
+        "--subjects",
+        "tide",
+        "--output",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/scale-cpu-hb-17b-inference-v17/calibration-40.json"
+      ],
+      "latencies": [
+        0.8377009816467762,
+        7.503447882831097
+      ],
+      "score": 2.507118995417456
+    }
+  ],
+  "selected_threads": 40,
+  "scope": "finite B1/L8 HB1B inference/training calibration for larger CPU capacity work; no universal thread optimum"
+}

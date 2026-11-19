@@ -1,0 +1,67 @@
+{
+  "state": "passed",
+  "source": "0e0023ff773f56920da78374e26ded6f10ceac06",
+  "command": [
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "/mi/data2T/zlong/home/.agents/skills/use-local-ascend/scripts/run_on_free_npu.py",
+    "--job-id",
+    "continuation-tiled-npu-v10",
+    "--project",
+    "tide-instances",
+    "--priority",
+    "0",
+    "--npu-count",
+    "1",
+    "--max-wait-seconds",
+    "600",
+    "--state-file",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/continuation-tiled-npu-v10/queue.json",
+    "--",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "-m",
+    "scripts.check_continuation",
+    "--device",
+    "npu:0",
+    "--precision",
+    "bf16",
+    "--attention-backend",
+    "tiled",
+    "--output",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/continuation-tiled-npu-v10/result.json"
+  ],
+  "pid": 3491942,
+  "started": "2026-11-18T04:23:27.019610+00:00",
+  "max_rss_bytes": 34359738368,
+  "peak_rss_bytes": 2207035392,
+  "max_processes": 2,
+  "rss_sample_count": 46,
+  "poll_interval": 0.25,
+  "descendant_supervision": "Linux child subreaper; retained PID/start identities across nested sessions",
+  "child_pid": 3491959,
+  "process_group": 3491959,
+  "elapsed": 19.919139325618744,
+  "descendant_identities": [
+    {
+      "pid": 3491959,
+      "start_ticks": 2256197772
+    },
+    {
+      "pid": 3491966,
+      "start_ticks": 2256197778
+    },
+    {
+      "pid": 3492039,
+      "start_ticks": 2256197836
+    },
+    {
+      "pid": 3492323,
+      "start_ticks": 2256198355
+    },
+    {
+      "pid": 3492572,
+      "start_ticks": 2256198604
+    }
+  ],
+  "exit_code": 0,
+  "finished": "2026-11-18T04:23:46.938749+00:00"
+}

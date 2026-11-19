@@ -1,0 +1,19 @@
+{
+  "elapsed_seconds": 183.65413215383887,
+  "job_id": "cap-17b-tf48-c2-b74-screen-v1",
+  "logical_devices": [
+    "npu:0",
+    "npu:1"
+  ],
+  "npu_count": 2,
+  "physical_ids": [
+    1,
+    7
+  ],
+  "priority": 0,
+  "project": "tide-instances",
+  "return_code": 0,
+  "schema_version": 1,
+  "status": "completed",
+  "timestamp": "2026-11-18T16:34:02.159786+00:00"
+}

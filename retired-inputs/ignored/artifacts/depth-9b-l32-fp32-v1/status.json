@@ -1,0 +1,101 @@
+{
+  "state": "passed",
+  "source": "237cc8d4579c22370fec2d160249a8564264998a",
+  "command": [
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "/mi/data2T/zlong/home/.agents/skills/use-local-ascend/scripts/run_on_free_npu.py",
+    "--job-id",
+    "depth-9b-l32-fp32-v1",
+    "--project",
+    "tide-instances",
+    "--priority",
+    "0",
+    "--npu-count",
+    "1",
+    "--max-wait-seconds",
+    "1800",
+    "--state-file",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/depth-9b-l32-fp32-v1/queue.json",
+    "--",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "-m",
+    "benchmarks.transformer_depth",
+    "--parameters",
+    "8778358224",
+    "--layers",
+    "32",
+    "--target-reference",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-inference-hb9b-fp32-v1/reference.json",
+    "--devices",
+    "npu:0",
+    "--transport",
+    "host_stage",
+    "--precision",
+    "fp32",
+    "--batch",
+    "1",
+    "--prefill",
+    "128",
+    "--prefill-chunk",
+    "32",
+    "--decode",
+    "16",
+    "--samples",
+    "5",
+    "--warmup",
+    "2",
+    "--threads",
+    "4",
+    "--chunk",
+    "256",
+    "--allocated-budget-gib",
+    "48",
+    "--reserved-budget-gib",
+    "56",
+    "--output",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/depth-9b-l32-fp32-v1/inference.json"
+  ],
+  "pid": 2879291,
+  "started": "2026-11-18T14:24:43.238827+00:00",
+  "max_rss_bytes": 120259084288,
+  "peak_rss_bytes": 37080752128,
+  "max_processes": 4,
+  "rss_sample_count": 224,
+  "poll_interval": 0.25,
+  "descendant_supervision": "Linux child subreaper; retained PID/start identities across nested sessions",
+  "child_pid": 2879317,
+  "process_group": 2879317,
+  "elapsed": 96.87669436261058,
+  "descendant_identities": [
+    {
+      "pid": 2879317,
+      "start_ticks": 2259805394
+    },
+    {
+      "pid": 2879320,
+      "start_ticks": 2259805400
+    },
+    {
+      "pid": 2880067,
+      "start_ticks": 2259806081
+    },
+    {
+      "pid": 2880074,
+      "start_ticks": 2259806082
+    },
+    {
+      "pid": 2880075,
+      "start_ticks": 2259806082
+    },
+    {
+      "pid": 2880402,
+      "start_ticks": 2259806595
+    },
+    {
+      "pid": 2880482,
+      "start_ticks": 2259806818
+    }
+  ],
+  "exit_code": 0,
+  "finished": "2026-11-18T14:26:20.115522+00:00"
+}

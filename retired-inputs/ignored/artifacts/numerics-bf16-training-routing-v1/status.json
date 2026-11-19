@@ -1,0 +1,71 @@
+{
+  "state": "passed",
+  "source": "e1c6aaa08c177b0a86d5e8fae4e959f83d2920d1",
+  "command": [
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "/mi/data2T/zlong/home/.agents/skills/use-local-ascend/scripts/run_on_free_npu.py",
+    "--job-id",
+    "numerics-bf16-training-routing-v1",
+    "--project",
+    "tide-instances",
+    "--priority",
+    "0",
+    "--npu-count",
+    "1",
+    "--max-wait-seconds",
+    "600",
+    "--state-file",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/numerics-bf16-training-routing-v1/queue.json",
+    "--",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "-m",
+    "scripts.diagnose_training_routing",
+    "--qualification",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-npu-qual-bf16-v1/qualification.json",
+    "--anchor",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/memory-npu-qual-bf16-v1/qualification.data/x/anchor.pt",
+    "--candidate",
+    "x",
+    "--device",
+    "npu:0",
+    "--threads",
+    "4",
+    "--output",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/numerics-bf16-training-routing-v1/routing.json"
+  ],
+  "pid": 2742244,
+  "started": "2026-11-19T10:12:41.419578+00:00",
+  "max_rss_bytes": 103079215104,
+  "peak_rss_bytes": 2925088768,
+  "max_processes": 2,
+  "rss_sample_count": 63,
+  "poll_interval": 0.25,
+  "descendant_supervision": "Linux child subreaper; retained PID/start identities across nested sessions",
+  "child_pid": 2742269,
+  "process_group": 2742269,
+  "elapsed": 25.937828619033098,
+  "descendant_identities": [
+    {
+      "pid": 2742269,
+      "start_ticks": 2266933212
+    },
+    {
+      "pid": 2742271,
+      "start_ticks": 2266933218
+    },
+    {
+      "pid": 2742334,
+      "start_ticks": 2266933276
+    },
+    {
+      "pid": 2742563,
+      "start_ticks": 2266933749
+    },
+    {
+      "pid": 2742643,
+      "start_ticks": 2266933943
+    }
+  ],
+  "exit_code": 0,
+  "finished": "2026-11-19T10:13:07.357406+00:00"
+}

@@ -1,0 +1,1016 @@
+{
+  "schema": "tide-capacity-search-v1",
+  "source": "10739fa8501e823a91434f034f37e699f46da824",
+  "harness_source": "10739fa8501e823a91434f034f37e699f46da824",
+  "state": "completed",
+  "arguments": {
+    "config": "configs/hb-multiscale-x-settle.json",
+    "config_overrides": {
+      "region_batch_size": 4,
+      "checkpoint_regions": true
+    },
+    "table": "capacity",
+    "axis": "batch",
+    "batch": 32,
+    "length": 256,
+    "max_axis_value": 128,
+    "max_points": 3,
+    "subjects": [
+      "tide"
+    ],
+    "device": "npu:0",
+    "precision": "bf16",
+    "mode": "train",
+    "activity": "natural",
+    "threads": 4,
+    "seed": 1107,
+    "warmup": 2,
+    "steps": 5,
+    "optimizer_foreach": true,
+    "device_budget_gib": 48.0,
+    "rss_gib": 90.0,
+    "seconds": 2900.0,
+    "child_timeout": 600.0,
+    "minimum_gain": 0.03,
+    "flat_patience": 2,
+    "maximum_noise": 0.25,
+    "plan_only": false,
+    "output_dir": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/training-budget-settle-both/search"
+  },
+  "config_file": {
+    "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/training-budget-settle-both/source/configs/hb-multiscale-x-settle.json",
+    "sha256": "5e1357102393fc64af2bb737ac16477a9d0c215af33c543951fa96066335ab57",
+    "bytes": 217
+  },
+  "frozen_config": {
+    "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/training-budget-settle-both/search/config.json",
+    "sha256": "615267fcbc2103d4f36333fec30763ce08f5c8a7da09e9ef0d678454c02d009f",
+    "bytes": 303
+  },
+  "axis_values": [
+    32,
+    64,
+    128
+  ],
+  "cpu_affinity": [
+    12,
+    13,
+    14,
+    15
+  ],
+  "physical_devices": "0",
+  "resource_identity": "exclusive_cooperative_queue; external jobs not controlled",
+  "fixed_history": "Transformer window 128; Tide adopted logical-time KV window unchanged; L is workload extent, not a new history contract",
+  "measurement": "one subject/mode per process; normal prefill timing excludes audits; complete AdamW and required Timed flush included",
+  "budget_scope": "sampled child process-tree RSS; device allocator peak checked after synchronization at construction/audit/warmup/sample; not hard allocation isolation",
+  "search_scope": "finite measured candidates; best stable admissible throughput, not proof of maximum feasible B/L or global optimum",
+  "matching_scope": "models frozen at common initial calibration B/L; independent best B at fixed L; not a same-workload speedup",
+  "children": [
+    {
+      "identity": "000-b32-l256-audit",
+      "command": [
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+        "-u",
+        "-m",
+        "benchmarks.run",
+        "--config",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/training-budget-settle-both/search/config.json",
+        "--device",
+        "npu:0",
+        "--precision",
+        "bf16",
+        "--threads",
+        "4",
+        "--batch",
+        "32",
+        "--length",
+        "256",
+        "--modes",
+        "train",
+        "--subjects",
+        "tide",
+        "--activity",
+        "natural",
+        "--seed",
+        "1107",
+        "--warmup",
+        "2",
+        "--steps",
+        "5",
+        "--output",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/training-budget-settle-both/search/000-b32-l256-audit.json",
+        "--optimizer-foreach",
+        "--audit-only",
+        "--device-budget-gib",
+        "48.0"
+      ],
+      "output": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/training-budget-settle-both/search/000-b32-l256-audit.json",
+      "log": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/training-budget-settle-both/search/000-b32-l256-audit.log",
+      "batch": 32,
+      "length": 256,
+      "subject": "audit",
+      "state": "completed",
+      "timeout_seconds": 600.0,
+      "max_rss_bytes": 96636764160,
+      "started": "2026-11-18T09:24:49.899405+00:00",
+      "pid": 1494742,
+      "sampled_process_tree_peak_rss_bytes": 5386633216,
+      "exit_code": 0,
+      "inner_state": "audit_complete",
+      "result_sha256": "f5d330c43cf4ce61a58cd7f3bf1a59f4f853242abed071a92f9dc47e7fafb03a",
+      "descendant_identities": [
+        {
+          "pid": 1494742,
+          "start_ticks": 2258006060
+        }
+      ],
+      "ended": "2026-11-18T09:26:09.681769+00:00",
+      "elapsed_seconds": 79.7804744578898
+    },
+    {
+      "identity": "001-b32-l256-tide",
+      "command": [
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+        "-u",
+        "-m",
+        "benchmarks.run",
+        "--config",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/training-budget-settle-both/search/config.json",
+        "--device",
+        "npu:0",
+        "--precision",
+        "bf16",
+        "--threads",
+        "4",
+        "--batch",
+        "32",
+        "--length",
+        "256",
+        "--modes",
+        "train",
+        "--subjects",
+        "tide",
+        "--activity",
+        "natural",
+        "--seed",
+        "1107",
+        "--warmup",
+        "2",
+        "--steps",
+        "5",
+        "--output",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/training-budget-settle-both/search/001-b32-l256-tide.json",
+        "--optimizer-foreach",
+        "--reference-record",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/training-budget-settle-both/search/000-b32-l256-audit.json",
+        "--calibration-record",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/training-budget-settle-both/search/000-b32-l256-audit.json",
+        "--device-budget-gib",
+        "48.0"
+      ],
+      "output": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/training-budget-settle-both/search/001-b32-l256-tide.json",
+      "log": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/training-budget-settle-both/search/001-b32-l256-tide.log",
+      "batch": 32,
+      "length": 256,
+      "subject": "tide",
+      "state": "completed",
+      "timeout_seconds": 600.0,
+      "max_rss_bytes": 96636764160,
+      "preflight_persistent_floor_bytes": 251107584,
+      "started": "2026-11-18T09:26:09.758176+00:00",
+      "pid": 1501091,
+      "sampled_process_tree_peak_rss_bytes": 5681479680,
+      "exit_code": 0,
+      "inner_state": "completed_finite",
+      "result_sha256": "ee805810bd497677ded459ffbc5adc6fb38e48b36dcbd68c0bb0b149874754ba",
+      "descendant_identities": [
+        {
+          "pid": 1501091,
+          "start_ticks": 2258014046
+        }
+      ],
+      "ended": "2026-11-18T09:28:14.927680+00:00",
+      "elapsed_seconds": 125.1667789965868
+    },
+    {
+      "identity": "002-b64-l256-audit",
+      "command": [
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+        "-u",
+        "-m",
+        "benchmarks.run",
+        "--config",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/training-budget-settle-both/search/config.json",
+        "--device",
+        "npu:0",
+        "--precision",
+        "bf16",
+        "--threads",
+        "4",
+        "--batch",
+        "64",
+        "--length",
+        "256",
+        "--modes",
+        "train",
+        "--subjects",
+        "tide",
+        "--activity",
+        "natural",
+        "--seed",
+        "1107",
+        "--warmup",
+        "2",
+        "--steps",
+        "5",
+        "--output",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/training-budget-settle-both/search/002-b64-l256-audit.json",
+        "--optimizer-foreach",
+        "--audit-only",
+        "--device-budget-gib",
+        "48.0"
+      ],
+      "output": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/training-budget-settle-both/search/002-b64-l256-audit.json",
+      "log": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/training-budget-settle-both/search/002-b64-l256-audit.log",
+      "batch": 64,
+      "length": 256,
+      "subject": "audit",
+      "state": "completed",
+      "timeout_seconds": 600.0,
+      "max_rss_bytes": 96636764160,
+      "started": "2026-11-18T09:28:15.143688+00:00",
+      "pid": 1510927,
+      "sampled_process_tree_peak_rss_bytes": 8391327744,
+      "exit_code": 0,
+      "inner_state": "audit_complete",
+      "result_sha256": "0247ce93955c504db9cb360508b31fc7d2521cf6e7a56cbb42638ebc9fb173f7",
+      "descendant_identities": [
+        {
+          "pid": 1510927,
+          "start_ticks": 2258026585
+        }
+      ],
+      "ended": "2026-11-18T09:30:47.120737+00:00",
+      "elapsed_seconds": 151.97467064484954
+    },
+    {
+      "identity": "003-b64-l256-tide",
+      "command": [
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+        "-u",
+        "-m",
+        "benchmarks.run",
+        "--config",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/training-budget-settle-both/search/config.json",
+        "--device",
+        "npu:0",
+        "--precision",
+        "bf16",
+        "--threads",
+        "4",
+        "--batch",
+        "64",
+        "--length",
+        "256",
+        "--modes",
+        "train",
+        "--subjects",
+        "tide",
+        "--activity",
+        "natural",
+        "--seed",
+        "1107",
+        "--warmup",
+        "2",
+        "--steps",
+        "5",
+        "--output",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/training-budget-settle-both/search/003-b64-l256-tide.json",
+        "--optimizer-foreach",
+        "--reference-record",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/training-budget-settle-both/search/002-b64-l256-audit.json",
+        "--calibration-record",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/training-budget-settle-both/search/000-b32-l256-audit.json",
+        "--device-budget-gib",
+        "48.0"
+      ],
+      "output": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/training-budget-settle-both/search/003-b64-l256-tide.json",
+      "log": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/training-budget-settle-both/search/003-b64-l256-tide.log",
+      "batch": 64,
+      "length": 256,
+      "subject": "tide",
+      "state": "completed",
+      "timeout_seconds": 600.0,
+      "max_rss_bytes": 96636764160,
+      "preflight_persistent_floor_bytes": 251107584,
+      "started": "2026-11-18T09:30:47.198970+00:00",
+      "pid": 1522312,
+      "sampled_process_tree_peak_rss_bytes": 8567332864,
+      "exit_code": 0,
+      "inner_state": "completed_finite",
+      "result_sha256": "f58e70d6e25e05ba096665d43f8edca652902f75defeb130ebbd00f4f8a052c9",
+      "descendant_identities": [
+        {
+          "pid": 1522312,
+          "start_ticks": 2258041790
+        }
+      ],
+      "ended": "2026-11-18T09:34:35.678158+00:00",
+      "elapsed_seconds": 228.47596188262105
+    },
+    {
+      "identity": "004-b128-l256-audit",
+      "command": [
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+        "-u",
+        "-m",
+        "benchmarks.run",
+        "--config",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/training-budget-settle-both/search/config.json",
+        "--device",
+        "npu:0",
+        "--precision",
+        "bf16",
+        "--threads",
+        "4",
+        "--batch",
+        "128",
+        "--length",
+        "256",
+        "--modes",
+        "train",
+        "--subjects",
+        "tide",
+        "--activity",
+        "natural",
+        "--seed",
+        "1107",
+        "--warmup",
+        "2",
+        "--steps",
+        "5",
+        "--output",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/training-budget-settle-both/search/004-b128-l256-audit.json",
+        "--optimizer-foreach",
+        "--audit-only",
+        "--device-budget-gib",
+        "48.0"
+      ],
+      "output": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/training-budget-settle-both/search/004-b128-l256-audit.json",
+      "log": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/training-budget-settle-both/search/004-b128-l256-audit.log",
+      "batch": 128,
+      "length": 256,
+      "subject": "audit",
+      "state": "completed",
+      "timeout_seconds": 600.0,
+      "max_rss_bytes": 96636764160,
+      "started": "2026-11-18T09:34:36.036766+00:00",
+      "pid": 1537615,
+      "sampled_process_tree_peak_rss_bytes": 14483091456,
+      "exit_code": 0,
+      "inner_state": "audit_complete",
+      "result_sha256": "c4058de55441ea8c3c89b983d6581256c79d6bc10a83eeda5eb84fc07f792ac4",
+      "descendant_identities": [
+        {
+          "pid": 1537615,
+          "start_ticks": 2258064674
+        }
+      ],
+      "ended": "2026-11-18T09:39:29.836867+00:00",
+      "elapsed_seconds": 293.7976377606392
+    },
+    {
+      "identity": "005-b128-l256-tide",
+      "command": [
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+        "-u",
+        "-m",
+        "benchmarks.run",
+        "--config",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/training-budget-settle-both/search/config.json",
+        "--device",
+        "npu:0",
+        "--precision",
+        "bf16",
+        "--threads",
+        "4",
+        "--batch",
+        "128",
+        "--length",
+        "256",
+        "--modes",
+        "train",
+        "--subjects",
+        "tide",
+        "--activity",
+        "natural",
+        "--seed",
+        "1107",
+        "--warmup",
+        "2",
+        "--steps",
+        "5",
+        "--output",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/training-budget-settle-both/search/005-b128-l256-tide.json",
+        "--optimizer-foreach",
+        "--reference-record",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/training-budget-settle-both/search/004-b128-l256-audit.json",
+        "--calibration-record",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/training-budget-settle-both/search/000-b32-l256-audit.json",
+        "--device-budget-gib",
+        "48.0"
+      ],
+      "output": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/training-budget-settle-both/search/005-b128-l256-tide.json",
+      "log": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/training-budget-settle-both/search/005-b128-l256-tide.log",
+      "batch": 128,
+      "length": 256,
+      "subject": "tide",
+      "state": "completed",
+      "timeout_seconds": 600.0,
+      "max_rss_bytes": 96636764160,
+      "preflight_persistent_floor_bytes": 251107584,
+      "started": "2026-11-18T09:39:29.935796+00:00",
+      "pid": 1557013,
+      "sampled_process_tree_peak_rss_bytes": 14462623744,
+      "exit_code": 0,
+      "inner_state": "completed_finite",
+      "result_sha256": "a746490a004c1e7e9fe926207229d21d1723fa4b903d395a636f1d722259a08c",
+      "descendant_identities": [
+        {
+          "pid": 1557013,
+          "start_ticks": 2258094064
+        }
+      ],
+      "ended": "2026-11-18T09:47:18.307787+00:00",
+      "elapsed_seconds": 468.36874302849174
+    }
+  ],
+  "audits": [
+    {
+      "batch": 32,
+      "length": 256,
+      "child": "000-b32-l256-audit",
+      "state": "completed",
+      "result_file": {
+        "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/training-budget-settle-both/search/000-b32-l256-audit.json",
+        "sha256": "f5d330c43cf4ce61a58cd7f3bf1a59f4f853242abed071a92f9dc47e7fafb03a",
+        "bytes": 8552728
+      }
+    },
+    {
+      "batch": 64,
+      "length": 256,
+      "child": "002-b64-l256-audit",
+      "state": "completed",
+      "result_file": {
+        "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/training-budget-settle-both/search/002-b64-l256-audit.json",
+        "sha256": "0247ce93955c504db9cb360508b31fc7d2521cf6e7a56cbb42638ebc9fb173f7",
+        "bytes": 17105447
+      }
+    },
+    {
+      "batch": 128,
+      "length": 256,
+      "child": "004-b128-l256-audit",
+      "state": "completed",
+      "result_file": {
+        "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/training-budget-settle-both/search/004-b128-l256-audit.json",
+        "sha256": "c4058de55441ea8c3c89b983d6581256c79d6bc10a83eeda5eb84fc07f792ac4",
+        "bytes": 34261133
+      }
+    }
+  ],
+  "lines": [
+    {
+      "subject": "tide",
+      "observations": [
+        {
+          "subject": "tide",
+          "batch": 32,
+          "length": 256,
+          "state": "completed",
+          "admitted": true,
+          "stable": true,
+          "child": "001-b32-l256-tide",
+          "sampled_process_tree_peak_rss_bytes": 5681479680,
+          "result_file": {
+            "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/training-budget-settle-both/search/001-b32-l256-tide.json",
+            "sha256": "ee805810bd497677ded459ffbc5adc6fb38e48b36dcbd68c0bb0b149874754ba",
+            "bytes": 26313100
+          },
+          "row_state": "completed_finite",
+          "error": null,
+          "failure_kind": null,
+          "seconds": [
+            6.539225727319717,
+            6.4421050772070885,
+            6.416863895952702,
+            6.459117628633976,
+            6.493877571076155
+          ],
+          "parameters": 15694224,
+          "initial_parameter_sha256": "45c4f3e846fd0c766f127463b77c7f54e37b799e93441ed93e376833447e9a03",
+          "input_sha256": "9f4af2bc41902417ddec4fcca697ee414b37a8cbc489f373bee70f1b92ec5aab",
+          "reference_record": {
+            "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/training-budget-settle-both/search/000-b32-l256-audit.json",
+            "sha256": "f5d330c43cf4ce61a58cd7f3bf1a59f4f853242abed071a92f9dc47e7fafb03a",
+            "bytes": 8552728
+          },
+          "calibration_record": {
+            "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/training-budget-settle-both/search/000-b32-l256-audit.json",
+            "sha256": "f5d330c43cf4ce61a58cd7f3bf1a59f4f853242abed071a92f9dc47e7fafb03a",
+            "bytes": 8552728
+          },
+          "initial_audit_scope": "this exact initial workload; frozen external child",
+          "sample_range_over_median": 0.018944047531287003,
+          "median_seconds": 6.459117628633976,
+          "input_positions_per_second": 1268.2846901075104,
+          "timed_peak_device_bytes": 11651314176,
+          "device_memory_by_device": {
+            "npu:0": {
+              "allocated_bytes": 262564864,
+              "reserved_bytes": 17068720128,
+              "peak_allocated_bytes": 11651314176,
+              "peak_reserved_bytes": 17068720128
+            }
+          },
+          "process_lifetime_peak_rss_kib": 5548320,
+          "actual_storage": {
+            "parameters": {
+              "npu:0:torch.float32": {
+                "elements": 15694224,
+                "bytes": 62776896
+              }
+            },
+            "gradients": {
+              "npu:0:torch.float32": {
+                "elements": 15694224,
+                "bytes": 62776896
+              }
+            },
+            "optimizer": {
+              "cpu:torch.float32": {
+                "elements": 351,
+                "bytes": 1404
+              },
+              "npu:0:torch.float32": {
+                "elements": 31388448,
+                "bytes": 125553792
+              }
+            }
+          },
+          "activity": {
+            "calibration_effective_touched_mean": 14463620.02746582,
+            "initial_effective_touched_mean": 14463620.02746582,
+            "post_update_effective_touched_mean": 14344756.319458008,
+            "initial_minus_calibration": 0.0,
+            "initial_work": {
+              "positive_messages": 7875486,
+              "message_slots": 11403264,
+              "candidate_updates": 1539081,
+              "candidate_slots": 1540096,
+              "regional_attention_positive_pairs": 20678926,
+              "full_actions": 1093020,
+              "kv_attention_effective_pairs": 232416600
+            },
+            "initial_packing": {
+              "K": {
+                "calls": 22,
+                "selected_rows": 601500,
+                "executed_rows": 862720
+              },
+              "S": {
+                "calls": 8,
+                "selected_rows": 491520,
+                "executed_rows": 491520
+              }
+            },
+            "post_update_work": {
+              "positive_messages": 7581334,
+              "message_slots": 11403264,
+              "candidate_updates": 1538849,
+              "candidate_slots": 1540096,
+              "regional_attention_positive_pairs": 20671970,
+              "full_actions": 1049892,
+              "kv_attention_effective_pairs": 215198180
+            },
+            "post_update_packing": {
+              "K": {
+                "calls": 22,
+                "selected_rows": 558372,
+                "executed_rows": 900864
+              },
+              "S": {
+                "calls": 8,
+                "selected_rows": 491520,
+                "executed_rows": 491520
+              }
+            }
+          },
+          "joint_match": null
+        },
+        {
+          "subject": "tide",
+          "batch": 64,
+          "length": 256,
+          "state": "completed",
+          "admitted": true,
+          "stable": true,
+          "child": "003-b64-l256-tide",
+          "sampled_process_tree_peak_rss_bytes": 8567332864,
+          "result_file": {
+            "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/training-budget-settle-both/search/003-b64-l256-tide.json",
+            "sha256": "f58e70d6e25e05ba096665d43f8edca652902f75defeb130ebbd00f4f8a052c9",
+            "bytes": 44088812
+          },
+          "row_state": "completed_finite",
+          "error": null,
+          "failure_kind": null,
+          "seconds": [
+            12.030015215277672,
+            11.933124501258135,
+            11.959541704505682,
+            12.01295144483447,
+            12.009390383958817
+          ],
+          "parameters": 15694224,
+          "initial_parameter_sha256": "45c4f3e846fd0c766f127463b77c7f54e37b799e93441ed93e376833447e9a03",
+          "input_sha256": "423c389bea49393cce40675805430b4e4489141fd0de9f564f9f7aec27b5b5d0",
+          "reference_record": {
+            "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/training-budget-settle-both/search/002-b64-l256-audit.json",
+            "sha256": "0247ce93955c504db9cb360508b31fc7d2521cf6e7a56cbb42638ebc9fb173f7",
+            "bytes": 17105447
+          },
+          "calibration_record": {
+            "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/training-budget-settle-both/search/000-b32-l256-audit.json",
+            "sha256": "f5d330c43cf4ce61a58cd7f3bf1a59f4f853242abed071a92f9dc47e7fafb03a",
+            "bytes": 8552728
+          },
+          "initial_audit_scope": "this exact initial workload; frozen external child",
+          "sample_range_over_median": 0.008067912768407948,
+          "median_seconds": 12.009390383958817,
+          "input_positions_per_second": 1364.265751730782,
+          "timed_peak_device_bytes": 23024410624,
+          "device_memory_by_device": {
+            "npu:0": {
+              "allocated_bytes": 268509696,
+              "reserved_bytes": 35035021312,
+              "peak_allocated_bytes": 23024410624,
+              "peak_reserved_bytes": 35035021312
+            }
+          },
+          "process_lifetime_peak_rss_kib": 8366536,
+          "actual_storage": {
+            "parameters": {
+              "npu:0:torch.float32": {
+                "elements": 15694224,
+                "bytes": 62776896
+              }
+            },
+            "gradients": {
+              "npu:0:torch.float32": {
+                "elements": 15694224,
+                "bytes": 62776896
+              }
+            },
+            "optimizer": {
+              "cpu:torch.float32": {
+                "elements": 351,
+                "bytes": 1404
+              },
+              "npu:0:torch.float32": {
+                "elements": 31388448,
+                "bytes": 125553792
+              }
+            }
+          },
+          "activity": {
+            "calibration_effective_touched_mean": 14463620.02746582,
+            "initial_effective_touched_mean": 14460622.63116455,
+            "post_update_effective_touched_mean": 14335343.719238281,
+            "initial_minus_calibration": -2997.3963012695312,
+            "initial_work": {
+              "positive_messages": 15733990,
+              "message_slots": 22806528,
+              "candidate_updates": 3078189,
+              "candidate_slots": 3080192,
+              "regional_attention_positive_pairs": 41358662,
+              "full_actions": 2183849,
+              "kv_attention_effective_pairs": 464151096
+            },
+            "initial_packing": {
+              "K": {
+                "calls": 22,
+                "selected_rows": 1200809,
+                "executed_rows": 1735168
+              },
+              "S": {
+                "calls": 8,
+                "selected_rows": 983040,
+                "executed_rows": 983040
+              }
+            },
+            "post_update_work": {
+              "positive_messages": 15118088,
+              "message_slots": 22806528,
+              "candidate_updates": 3077960,
+              "candidate_slots": 3080192,
+              "regional_attention_positive_pairs": 41351796,
+              "full_actions": 2092831,
+              "kv_attention_effective_pairs": 427549504
+            },
+            "post_update_packing": {
+              "K": {
+                "calls": 22,
+                "selected_rows": 1109791,
+                "executed_rows": 1856000
+              },
+              "S": {
+                "calls": 8,
+                "selected_rows": 983040,
+                "executed_rows": 983040
+              }
+            }
+          },
+          "joint_match": null
+        },
+        {
+          "subject": "tide",
+          "batch": 128,
+          "length": 256,
+          "state": "completed",
+          "admitted": true,
+          "stable": true,
+          "child": "005-b128-l256-tide",
+          "sampled_process_tree_peak_rss_bytes": 14462623744,
+          "result_file": {
+            "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/training-budget-settle-both/search/005-b128-l256-tide.json",
+            "sha256": "a746490a004c1e7e9fe926207229d21d1723fa4b903d395a636f1d722259a08c",
+            "bytes": 79740809
+          },
+          "row_state": "completed_finite",
+          "error": null,
+          "failure_kind": null,
+          "seconds": [
+            23.898556906729937,
+            23.736077696084976,
+            23.771463315933943,
+            23.80162365362048,
+            23.891179252415895
+          ],
+          "parameters": 15694224,
+          "initial_parameter_sha256": "45c4f3e846fd0c766f127463b77c7f54e37b799e93441ed93e376833447e9a03",
+          "input_sha256": "95bbe72efe9257958bb10024f87f36a87930635bb137825742ef587af6745a34",
+          "reference_record": {
+            "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/training-budget-settle-both/search/004-b128-l256-audit.json",
+            "sha256": "c4058de55441ea8c3c89b983d6581256c79d6bc10a83eeda5eb84fc07f792ac4",
+            "bytes": 34261133
+          },
+          "calibration_record": {
+            "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/training-budget-settle-both/search/000-b32-l256-audit.json",
+            "sha256": "f5d330c43cf4ce61a58cd7f3bf1a59f4f853242abed071a92f9dc47e7fafb03a",
+            "bytes": 8552728
+          },
+          "initial_audit_scope": "this exact initial workload; frozen external child",
+          "sample_range_over_median": 0.006826391888615783,
+          "median_seconds": 23.80162365362048,
+          "input_positions_per_second": 1376.7128023224432,
+          "timed_peak_device_bytes": 45892946944,
+          "device_memory_by_device": {
+            "npu:0": {
+              "allocated_bytes": 278584832,
+              "reserved_bytes": 48087695360,
+              "peak_allocated_bytes": 45892946944,
+              "peak_reserved_bytes": 48087695360
+            }
+          },
+          "process_lifetime_peak_rss_kib": 14123656,
+          "actual_storage": {
+            "parameters": {
+              "npu:0:torch.float32": {
+                "elements": 15694224,
+                "bytes": 62776896
+              }
+            },
+            "gradients": {
+              "npu:0:torch.float32": {
+                "elements": 15694224,
+                "bytes": 62776896
+              }
+            },
+            "optimizer": {
+              "cpu:torch.float32": {
+                "elements": 351,
+                "bytes": 1404
+              },
+              "npu:0:torch.float32": {
+                "elements": 31388448,
+                "bytes": 125553792
+              }
+            }
+          },
+          "activity": {
+            "calibration_effective_touched_mean": 14463620.02746582,
+            "initial_effective_touched_mean": 14461301.672271729,
+            "post_update_effective_touched_mean": 14334617.542419434,
+            "initial_minus_calibration": -2318.355194091797,
+            "initial_work": {
+              "positive_messages": 31469558,
+              "message_slots": 45613056,
+              "candidate_updates": 6156309,
+              "candidate_slots": 6160384,
+              "regional_attention_positive_pairs": 82715254,
+              "full_actions": 4368714,
+              "kv_attention_effective_pairs": 929052428
+            },
+            "initial_packing": {
+              "K": {
+                "calls": 22,
+                "selected_rows": 2402634,
+                "executed_rows": 3505152
+              },
+              "S": {
+                "calls": 8,
+                "selected_rows": 1966080,
+                "executed_rows": 1966080
+              }
+            },
+            "post_update_work": {
+              "positive_messages": 30228735,
+              "message_slots": 45613056,
+              "candidate_updates": 6155934,
+              "candidate_slots": 6160384,
+              "regional_attention_positive_pairs": 82704032,
+              "full_actions": 4184600,
+              "kv_attention_effective_pairs": 854687544
+            },
+            "post_update_packing": {
+              "K": {
+                "calls": 22,
+                "selected_rows": 2218520,
+                "executed_rows": 3753984
+              },
+              "S": {
+                "calls": 8,
+                "selected_rows": 1966080,
+                "executed_rows": 1966080
+              }
+            }
+          },
+          "joint_match": null
+        }
+      ],
+      "stop_reason": "candidate_limit"
+    }
+  ],
+  "common_shape_table": [],
+  "capacity_table": [
+    {
+      "subject": "tide",
+      "best": {
+        "subject": "tide",
+        "batch": 128,
+        "length": 256,
+        "state": "completed",
+        "admitted": true,
+        "stable": true,
+        "child": "005-b128-l256-tide",
+        "sampled_process_tree_peak_rss_bytes": 14462623744,
+        "result_file": {
+          "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/training-budget-settle-both/search/005-b128-l256-tide.json",
+          "sha256": "a746490a004c1e7e9fe926207229d21d1723fa4b903d395a636f1d722259a08c",
+          "bytes": 79740809
+        },
+        "row_state": "completed_finite",
+        "error": null,
+        "failure_kind": null,
+        "seconds": [
+          23.898556906729937,
+          23.736077696084976,
+          23.771463315933943,
+          23.80162365362048,
+          23.891179252415895
+        ],
+        "parameters": 15694224,
+        "initial_parameter_sha256": "45c4f3e846fd0c766f127463b77c7f54e37b799e93441ed93e376833447e9a03",
+        "input_sha256": "95bbe72efe9257958bb10024f87f36a87930635bb137825742ef587af6745a34",
+        "reference_record": {
+          "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/training-budget-settle-both/search/004-b128-l256-audit.json",
+          "sha256": "c4058de55441ea8c3c89b983d6581256c79d6bc10a83eeda5eb84fc07f792ac4",
+          "bytes": 34261133
+        },
+        "calibration_record": {
+          "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/training-budget-settle-both/search/000-b32-l256-audit.json",
+          "sha256": "f5d330c43cf4ce61a58cd7f3bf1a59f4f853242abed071a92f9dc47e7fafb03a",
+          "bytes": 8552728
+        },
+        "initial_audit_scope": "this exact initial workload; frozen external child",
+        "sample_range_over_median": 0.006826391888615783,
+        "median_seconds": 23.80162365362048,
+        "input_positions_per_second": 1376.7128023224432,
+        "timed_peak_device_bytes": 45892946944,
+        "device_memory_by_device": {
+          "npu:0": {
+            "allocated_bytes": 278584832,
+            "reserved_bytes": 48087695360,
+            "peak_allocated_bytes": 45892946944,
+            "peak_reserved_bytes": 48087695360
+          }
+        },
+        "process_lifetime_peak_rss_kib": 14123656,
+        "actual_storage": {
+          "parameters": {
+            "npu:0:torch.float32": {
+              "elements": 15694224,
+              "bytes": 62776896
+            }
+          },
+          "gradients": {
+            "npu:0:torch.float32": {
+              "elements": 15694224,
+              "bytes": 62776896
+            }
+          },
+          "optimizer": {
+            "cpu:torch.float32": {
+              "elements": 351,
+              "bytes": 1404
+            },
+            "npu:0:torch.float32": {
+              "elements": 31388448,
+              "bytes": 125553792
+            }
+          }
+        },
+        "activity": {
+          "calibration_effective_touched_mean": 14463620.02746582,
+          "initial_effective_touched_mean": 14461301.672271729,
+          "post_update_effective_touched_mean": 14334617.542419434,
+          "initial_minus_calibration": -2318.355194091797,
+          "initial_work": {
+            "positive_messages": 31469558,
+            "message_slots": 45613056,
+            "candidate_updates": 6156309,
+            "candidate_slots": 6160384,
+            "regional_attention_positive_pairs": 82715254,
+            "full_actions": 4368714,
+            "kv_attention_effective_pairs": 929052428
+          },
+          "initial_packing": {
+            "K": {
+              "calls": 22,
+              "selected_rows": 2402634,
+              "executed_rows": 3505152
+            },
+            "S": {
+              "calls": 8,
+              "selected_rows": 1966080,
+              "executed_rows": 1966080
+            }
+          },
+          "post_update_work": {
+            "positive_messages": 30228735,
+            "message_slots": 45613056,
+            "candidate_updates": 6155934,
+            "candidate_slots": 6160384,
+            "regional_attention_positive_pairs": 82704032,
+            "full_actions": 4184600,
+            "kv_attention_effective_pairs": 854687544
+          },
+          "post_update_packing": {
+            "K": {
+              "calls": 22,
+              "selected_rows": 2218520,
+              "executed_rows": 3753984
+            },
+            "S": {
+              "calls": 8,
+              "selected_rows": 1966080,
+              "executed_rows": 1966080
+            }
+          }
+        },
+        "joint_match": null
+      },
+      "stop_reason": "candidate_limit",
+      "fixed_length": 256,
+      "calibration_record": {
+        "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/training-budget-settle-both/search/000-b32-l256-audit.json",
+        "sha256": "f5d330c43cf4ce61a58cd7f3bf1a59f4f853242abed071a92f9dc47e7fafb03a",
+        "bytes": 8552728
+      },
+      "ratio_scope": "independent load optimum under the same declared budget; not a same-B comparison"
+    }
+  ],
+  "started": "2026-11-18T09:24:49.897294+00:00",
+  "calibration_record": {
+    "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/training-budget-settle-both/search/000-b32-l256-audit.json",
+    "sha256": "f5d330c43cf4ce61a58cd7f3bf1a59f4f853242abed071a92f9dc47e7fafb03a",
+    "bytes": 8552728
+  },
+  "ended": "2026-11-18T09:47:18.949191+00:00",
+  "child_states": {
+    "completed": 6
+  },
+  "completion_scope": "search controller terminal; failed/limited children remain separate and are not measured passes"
+}

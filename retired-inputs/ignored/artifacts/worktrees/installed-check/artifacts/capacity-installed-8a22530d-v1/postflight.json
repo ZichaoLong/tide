@@ -1,0 +1,20 @@
+{
+  "why": "Original shell stopped at harness exit 2; these read-only postflight checks were run separately without rerunning the qualification",
+  "upstream_command": [
+    "python",
+    "scripts/check_upstream.py"
+  ],
+  "upstream_working_directory": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/worktrees/installed-check/artifacts/capacity-installed-8a22530d-v1/frozen-source",
+  "upstream": {
+    "state": "passed",
+    "revision": "4f5b9f20a4030d68ee66ae2d26e34659a5e37234",
+    "files": 108
+  },
+  "source_unchanged": {
+    "state": "passed",
+    "files": 315,
+    "changed": []
+  },
+  "terminal_unit": "MainPID=0\nResult=exit-code\nExecMainStatus=2\nControlGroup=\nActiveState=failed\nSubState=failed\n",
+  "original_harness_unchanged": true
+}

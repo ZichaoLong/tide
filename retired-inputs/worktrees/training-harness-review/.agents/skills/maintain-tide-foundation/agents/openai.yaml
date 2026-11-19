@@ -1,0 +1,4 @@
+interface:
+  display_name: "Maintain Tide Instances"
+  short_description: "Tide instance scope, interfaces and source navigation"
+  default_prompt: "Use $maintain-tide-foundation to maintain current Tide instance scope, navigation and developer usability."

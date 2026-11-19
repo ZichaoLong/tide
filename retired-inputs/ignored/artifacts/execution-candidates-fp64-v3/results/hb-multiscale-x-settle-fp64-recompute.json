@@ -1,0 +1,459 @@
+{
+  "schema": "tide-execution-qualification-v1",
+  "state": "within_threshold",
+  "source": "efca7198570e8ee7a21ddccd81165eb36bdb269a",
+  "arguments": {
+    "config": "configs/hb-multiscale-x-settle.json",
+    "overrides": {
+      "checkpoint_regions": true
+    },
+    "device": "cpu",
+    "precision": "fp64",
+    "batch": 1,
+    "length": 8,
+    "steps": 3,
+    "threads": 4,
+    "output": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/execution-candidates-fp64-v3/results/hb-multiscale-x-settle-fp64-recompute.json"
+  },
+  "physical_devices": null,
+  "resource_identity": "pinned_cpu; shared host",
+  "precision": "fp64",
+  "torch": "2.12.0+cpu",
+  "qualification": "same-function execution candidate; finite deviations retain original thresholds; no performance timing",
+  "result": {
+    "config": {
+      "topology": {
+        "kind": "multiscale",
+        "n": 8,
+        "layers": null,
+        "depth": null,
+        "rounds": null,
+        "profile": "compact-9",
+        "hubs": 4,
+        "partition": "group",
+        "timing": "settle",
+        "hub_mask": "all",
+        "period": null,
+        "probes": null,
+        "terminal_hubs": false
+      },
+      "d": 128,
+      "memory": "X",
+      "aggregation": "source_residual",
+      "allocation": "quad",
+      "sharing": "region_shared",
+      "adapter_rank": 8,
+      "budget": null,
+      "attention_backend": "auto",
+      "attention_chunk": 128,
+      "input_dim": null,
+      "checkpoint_regions": false,
+      "region_batch_size": 1,
+      "local_attention_backend": null,
+      "hub_allocation": "bounded",
+      "clock": {
+        "position_period": null,
+        "position_origin": "binding",
+        "kv_window": null,
+        "short_decay": null,
+        "ssd_stride": null
+      }
+    },
+    "overrides": {
+      "checkpoint_regions": true
+    },
+    "parameter_sha256": "45c4f3e846fd0c766f127463b77c7f54e37b799e93441ed93e376833447e9a03",
+    "checks": {
+      "inference": {
+        "tolerance": {
+          "atol": 1e-10,
+          "rtol": 1e-08
+        },
+        "metadata_failures": [],
+        "dtype_differences": [],
+        "nonfinite": [],
+        "support_differences": [],
+        "threshold_failures": [],
+        "work_differences": [],
+        "exact": true,
+        "largest_errors": [
+          {
+            "tensor": "root.result.state.memories.0.K.features",
+            "max_abs": 0.0,
+            "scaled_error": 0.0,
+            "relative_l2": 0.0
+          },
+          {
+            "tensor": "root.result.state.memories.0.K.keys",
+            "max_abs": 0.0,
+            "scaled_error": 0.0,
+            "relative_l2": 0.0
+          },
+          {
+            "tensor": "root.result.state.memories.0.K.values",
+            "max_abs": 0.0,
+            "scaled_error": 0.0,
+            "relative_l2": 0.0
+          },
+          {
+            "tensor": "root.result.state.memories.0.K.weight",
+            "max_abs": 0.0,
+            "scaled_error": 0.0,
+            "relative_l2": 0.0
+          },
+          {
+            "tensor": "root.result.state.memories.1.S.conv.1",
+            "max_abs": 0.0,
+            "scaled_error": 0.0,
+            "relative_l2": 0.0
+          },
+          {
+            "tensor": "root.result.state.memories.1.S.long",
+            "max_abs": 0.0,
+            "scaled_error": 0.0,
+            "relative_l2": 0.0
+          },
+          {
+            "tensor": "root.result.state.memories.1.S.long_weight",
+            "max_abs": 0.0,
+            "scaled_error": 0.0,
+            "relative_l2": 0.0
+          },
+          {
+            "tensor": "root.result.state.memories.1.S.matrix",
+            "max_abs": 0.0,
+            "scaled_error": 0.0,
+            "relative_l2": 0.0
+          }
+        ]
+      },
+      "grad_forward": {
+        "tolerance": {
+          "atol": 1e-10,
+          "rtol": 1e-08
+        },
+        "metadata_failures": [],
+        "dtype_differences": [],
+        "nonfinite": [],
+        "support_differences": [],
+        "threshold_failures": [],
+        "work_differences": [],
+        "exact": true,
+        "largest_errors": [
+          {
+            "tensor": "root.result.state.memories.0.K.features",
+            "max_abs": 0.0,
+            "scaled_error": 0.0,
+            "relative_l2": 0.0
+          },
+          {
+            "tensor": "root.result.state.memories.0.K.keys",
+            "max_abs": 0.0,
+            "scaled_error": 0.0,
+            "relative_l2": 0.0
+          },
+          {
+            "tensor": "root.result.state.memories.0.K.values",
+            "max_abs": 0.0,
+            "scaled_error": 0.0,
+            "relative_l2": 0.0
+          },
+          {
+            "tensor": "root.result.state.memories.0.K.weight",
+            "max_abs": 0.0,
+            "scaled_error": 0.0,
+            "relative_l2": 0.0
+          },
+          {
+            "tensor": "root.result.state.memories.1.S.conv.1",
+            "max_abs": 0.0,
+            "scaled_error": 0.0,
+            "relative_l2": 0.0
+          },
+          {
+            "tensor": "root.result.state.memories.1.S.long",
+            "max_abs": 0.0,
+            "scaled_error": 0.0,
+            "relative_l2": 0.0
+          },
+          {
+            "tensor": "root.result.state.memories.1.S.long_weight",
+            "max_abs": 0.0,
+            "scaled_error": 0.0,
+            "relative_l2": 0.0
+          },
+          {
+            "tensor": "root.result.state.memories.1.S.matrix",
+            "max_abs": 0.0,
+            "scaled_error": 0.0,
+            "relative_l2": 0.0
+          }
+        ]
+      },
+      "gradients": {
+        "tolerance": {
+          "atol": 1e-10,
+          "rtol": 1e-08
+        },
+        "metadata_failures": [],
+        "dtype_differences": [],
+        "nonfinite": [],
+        "support_differences": [],
+        "threshold_failures": [],
+        "work_differences": [],
+        "exact": true,
+        "largest_errors": [
+          {
+            "tensor": "root.input",
+            "max_abs": 0.0,
+            "scaled_error": 0.0,
+            "relative_l2": 0.0
+          },
+          {
+            "tensor": "root.parameters.describe.encode.bias",
+            "max_abs": 0.0,
+            "scaled_error": 0.0,
+            "relative_l2": 0.0
+          },
+          {
+            "tensor": "root.parameters.describe.encode.left",
+            "max_abs": 0.0,
+            "scaled_error": 0.0,
+            "relative_l2": 0.0
+          },
+          {
+            "tensor": "root.parameters.describe.encode.right",
+            "max_abs": 0.0,
+            "scaled_error": 0.0,
+            "relative_l2": 0.0
+          },
+          {
+            "tensor": "root.parameters.describe.encode.weight",
+            "max_abs": 0.0,
+            "scaled_error": 0.0,
+            "relative_l2": 0.0
+          },
+          {
+            "tensor": "root.parameters.describe.offset.value",
+            "max_abs": 0.0,
+            "scaled_error": 0.0,
+            "relative_l2": 0.0
+          },
+          {
+            "tensor": "root.parameters.describe.readout.value",
+            "max_abs": 0.0,
+            "scaled_error": 0.0,
+            "relative_l2": 0.0
+          },
+          {
+            "tensor": "root.parameters.inputs.D.weight",
+            "max_abs": 0.0,
+            "scaled_error": 0.0,
+            "relative_l2": 0.0
+          }
+        ]
+      }
+    },
+    "updates": [
+      {
+        "tolerance": {
+          "atol": 1e-10,
+          "rtol": 1e-08
+        },
+        "metadata_failures": [],
+        "dtype_differences": [],
+        "nonfinite": [],
+        "support_differences": [],
+        "threshold_failures": [],
+        "work_differences": [],
+        "exact": true,
+        "largest_errors": [
+          {
+            "tensor": "root.loss",
+            "max_abs": 0.0,
+            "scaled_error": 0.0,
+            "relative_l2": 0.0
+          },
+          {
+            "tensor": "root.optimizer.state.0.exp_avg",
+            "max_abs": 0.0,
+            "scaled_error": 0.0,
+            "relative_l2": 0.0
+          },
+          {
+            "tensor": "root.optimizer.state.0.exp_avg_sq",
+            "max_abs": 0.0,
+            "scaled_error": 0.0,
+            "relative_l2": 0.0
+          },
+          {
+            "tensor": "root.optimizer.state.0.step",
+            "max_abs": 0.0,
+            "scaled_error": 0.0,
+            "relative_l2": 0.0
+          },
+          {
+            "tensor": "root.optimizer.state.1.exp_avg",
+            "max_abs": 0.0,
+            "scaled_error": 0.0,
+            "relative_l2": 0.0
+          },
+          {
+            "tensor": "root.optimizer.state.1.exp_avg_sq",
+            "max_abs": 0.0,
+            "scaled_error": 0.0,
+            "relative_l2": 0.0
+          },
+          {
+            "tensor": "root.optimizer.state.1.step",
+            "max_abs": 0.0,
+            "scaled_error": 0.0,
+            "relative_l2": 0.0
+          },
+          {
+            "tensor": "root.optimizer.state.10.exp_avg",
+            "max_abs": 0.0,
+            "scaled_error": 0.0,
+            "relative_l2": 0.0
+          }
+        ]
+      },
+      {
+        "tolerance": {
+          "atol": 1e-10,
+          "rtol": 1e-08
+        },
+        "metadata_failures": [],
+        "dtype_differences": [],
+        "nonfinite": [],
+        "support_differences": [],
+        "threshold_failures": [],
+        "work_differences": [],
+        "exact": true,
+        "largest_errors": [
+          {
+            "tensor": "root.loss",
+            "max_abs": 0.0,
+            "scaled_error": 0.0,
+            "relative_l2": 0.0
+          },
+          {
+            "tensor": "root.optimizer.state.0.exp_avg",
+            "max_abs": 0.0,
+            "scaled_error": 0.0,
+            "relative_l2": 0.0
+          },
+          {
+            "tensor": "root.optimizer.state.0.exp_avg_sq",
+            "max_abs": 0.0,
+            "scaled_error": 0.0,
+            "relative_l2": 0.0
+          },
+          {
+            "tensor": "root.optimizer.state.0.step",
+            "max_abs": 0.0,
+            "scaled_error": 0.0,
+            "relative_l2": 0.0
+          },
+          {
+            "tensor": "root.optimizer.state.1.exp_avg",
+            "max_abs": 0.0,
+            "scaled_error": 0.0,
+            "relative_l2": 0.0
+          },
+          {
+            "tensor": "root.optimizer.state.1.exp_avg_sq",
+            "max_abs": 0.0,
+            "scaled_error": 0.0,
+            "relative_l2": 0.0
+          },
+          {
+            "tensor": "root.optimizer.state.1.step",
+            "max_abs": 0.0,
+            "scaled_error": 0.0,
+            "relative_l2": 0.0
+          },
+          {
+            "tensor": "root.optimizer.state.10.exp_avg",
+            "max_abs": 0.0,
+            "scaled_error": 0.0,
+            "relative_l2": 0.0
+          }
+        ]
+      },
+      {
+        "tolerance": {
+          "atol": 1e-10,
+          "rtol": 1e-08
+        },
+        "metadata_failures": [],
+        "dtype_differences": [],
+        "nonfinite": [],
+        "support_differences": [],
+        "threshold_failures": [],
+        "work_differences": [],
+        "exact": true,
+        "largest_errors": [
+          {
+            "tensor": "root.loss",
+            "max_abs": 0.0,
+            "scaled_error": 0.0,
+            "relative_l2": 0.0
+          },
+          {
+            "tensor": "root.optimizer.state.0.exp_avg",
+            "max_abs": 0.0,
+            "scaled_error": 0.0,
+            "relative_l2": 0.0
+          },
+          {
+            "tensor": "root.optimizer.state.0.exp_avg_sq",
+            "max_abs": 0.0,
+            "scaled_error": 0.0,
+            "relative_l2": 0.0
+          },
+          {
+            "tensor": "root.optimizer.state.0.step",
+            "max_abs": 0.0,
+            "scaled_error": 0.0,
+            "relative_l2": 0.0
+          },
+          {
+            "tensor": "root.optimizer.state.1.exp_avg",
+            "max_abs": 0.0,
+            "scaled_error": 0.0,
+            "relative_l2": 0.0
+          },
+          {
+            "tensor": "root.optimizer.state.1.exp_avg_sq",
+            "max_abs": 0.0,
+            "scaled_error": 0.0,
+            "relative_l2": 0.0
+          },
+          {
+            "tensor": "root.optimizer.state.1.step",
+            "max_abs": 0.0,
+            "scaled_error": 0.0,
+            "relative_l2": 0.0
+          },
+          {
+            "tensor": "root.optimizer.state.10.exp_avg",
+            "max_abs": 0.0,
+            "scaled_error": 0.0,
+            "relative_l2": 0.0
+          }
+        ]
+      }
+    ],
+    "tolerance": {
+      "atol": 1e-10,
+      "rtol": 1e-08
+    },
+    "state": "within_threshold",
+    "input_sha256": "d41efe64ba1762cb1e94b2d8b44fda61fd9f40f045276ebb18941bdf37e7208e",
+    "restore": {
+      "state": "not_requested",
+      "reason": "FP64 is a bounded arithmetic diagnostic"
+    }
+  }
+}

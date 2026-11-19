@@ -1,0 +1,71 @@
+{
+  "source": "0992b467584c1f603314ed04d8efe8596a14f576",
+  "source_path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/wheel-installed-cpu-v15/source",
+  "run": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/wheel-installed-cpu-v15",
+  "unit": "tide-wheel-installed-cpu-v15",
+  "arguments": {
+    "name": "wheel-installed-cpu-v15",
+    "revision": "0992b467584c1f603314ed04d8efe8596a14f576",
+    "threads": 4,
+    "affinity": "224-227",
+    "npu_count": 0,
+    "candidate_ids": null,
+    "seconds": 600,
+    "rss_gib": 8.0,
+    "queue_seconds": 600,
+    "after_unit": [],
+    "command": [
+      "--",
+      "python",
+      "-I",
+      "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/wheel-installed-cpu-v15-inputs/driver.py",
+      "--source",
+      "{source}",
+      "--run",
+      "{run}",
+      "--smoke",
+      "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/wheel-installed-cpu-v15-inputs/smoke.py"
+    ]
+  },
+  "launch": [
+    "systemd-run",
+    "--user",
+    "--unit=tide-wheel-installed-cpu-v15",
+    "--service-type=exec",
+    "--slice=background.slice",
+    "--working-directory=/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/wheel-installed-cpu-v15/source",
+    "--property=KillMode=control-group",
+    "--property=RuntimeMaxSec=600",
+    "--property=TimeoutStopSec=30",
+    "--property=CPUAffinity=224-227",
+    "--property=StandardOutput=append:/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/wheel-installed-cpu-v15/stdout.log",
+    "--property=StandardError=append:/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/wheel-installed-cpu-v15/stderr.log",
+    "/bin/bash",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/wheel-installed-cpu-v15/run.sh"
+  ],
+  "command": [
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "-I",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/wheel-installed-cpu-v15-inputs/driver.py",
+    "--source",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/wheel-installed-cpu-v15/source",
+    "--run",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/wheel-installed-cpu-v15",
+    "--smoke",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/wheel-installed-cpu-v15-inputs/smoke.py"
+  ],
+  "environment": {
+    "PYTHONPATH": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/wheel-installed-cpu-v15/source/src",
+    "TIDE_SOURCE_COMMIT": "0992b467584c1f603314ed04d8efe8596a14f576",
+    "TIDE_HARNESS_COMMIT": "0992b467584c1f603314ed04d8efe8596a14f576",
+    "TORCH_DEVICE_BACKEND_AUTOLOAD": "0",
+    "TIDE_RESOURCE_IDENTITY": "pinned_cpu; shared host",
+    "OMP_NUM_THREADS": "4",
+    "MKL_NUM_THREADS": "4",
+    "OPENBLAS_NUM_THREADS": "4"
+  },
+  "state": "submitted",
+  "resource_enforcement": "process affinity; sampled process-tree RSS, not cgroup hard memory",
+  "device_policy": "cpu",
+  "unit_observation": "MainPID=3551941\nSlice=background.slice\nControlGroup=/user.slice/user-1003.slice/user@1003.service/background.slice/tide-wheel-installed-cpu-v15.service\nId=tide-wheel-installed-cpu-v15.service\nActiveState=active\nSubState=running\n"
+}

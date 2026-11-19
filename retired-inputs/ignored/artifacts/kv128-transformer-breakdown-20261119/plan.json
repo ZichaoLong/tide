@@ -1,0 +1,167 @@
+{
+  "state": "completed_reviewed",
+  "question": "KV128 versus fixed32 Transformer: continuing FP32 training and inference costs",
+  "bounds": {
+    "workloads": 4,
+    "max_parallel_npus": 2,
+    "service_seconds": 3600,
+    "queue_seconds": 600,
+    "rss_gib": 128,
+    "allocated_gib": 48,
+    "reserved_gib": 56,
+    "artifact_gib": 8
+  },
+  "inference": {
+    "config": "configs/memory-candidates/9b-kv128.json",
+    "transformer": {
+      "d": 4352,
+      "ffn": 15208,
+      "layers": 32,
+      "head_dim": 64,
+      "window": 128,
+      "chunk": 256
+    },
+    "batch": 8,
+    "prefill": 128,
+    "chunk": 32,
+    "decode": 16,
+    "warmup": 2,
+    "samples": 5,
+    "diagnostics": [
+      "stages",
+      "operators"
+    ]
+  },
+  "training": {
+    "config": "configs/memory-candidates/medium-kv128.json",
+    "actual_kv_width": 32,
+    "transformer": "fixed32 near actual medium total parameters",
+    "batch": 16,
+    "length": 128,
+    "chunk": 32,
+    "warmup": 2,
+    "samples": 5,
+    "diagnostics": [
+      "stages",
+      "operators"
+    ],
+    "anchor": "first measured update after real continuing warmup; params/AdamW/grads/private state/RNG",
+    "parameters": 129025464,
+    "transformer_constructor": {
+      "d": 496,
+      "ffn_width": 2048,
+      "layers": 32,
+      "head_dim": 16,
+      "window": 128,
+      "chunk": 256
+    },
+    "transformer_parameters": 129039856,
+    "optimizer": {
+      "kind": "AdamW",
+      "lr": 0.0001,
+      "foreach": true
+    }
+  },
+  "stopping": "one finite paired workload per mode; no batch search, unchanged production model; retain numeric differences and failed attempts",
+  "source": "7196fcabd7ab3b401c1ebdb6107442450a99996c",
+  "updated": "2026-11-19T04:10:16.656617+00:00",
+  "jobs": [
+    {
+      "name": "breakdown-infer-kv128-v1",
+      "source": "7196fcabd7ab3b401c1ebdb6107442450a99996c",
+      "unit": "tide-breakdown-infer-kv128-v1",
+      "properties": {
+        "MainPID": "0",
+        "Result": "success",
+        "Slice": "",
+        "ControlGroup": "",
+        "ActiveState": "inactive",
+        "SubState": "dead"
+      },
+      "lifecycle": "passed",
+      "result": "completed_finite",
+      "terminal": true,
+      "recorded_identities": 6,
+      "live_identities": [],
+      "cgroup_processes": {
+        "/user.slice/user-1003.slice/user@1003.service/background.slice/tide-breakdown-infer-kv128-v1.service": []
+      },
+      "frozen_regular_files": 461,
+      "frozen_changes": []
+    },
+    {
+      "name": "breakdown-infer-tf32-v1",
+      "source": "7196fcabd7ab3b401c1ebdb6107442450a99996c",
+      "unit": "tide-breakdown-infer-tf32-v1",
+      "properties": {
+        "MainPID": "0",
+        "Result": "success",
+        "Slice": "",
+        "ControlGroup": "",
+        "ActiveState": "inactive",
+        "SubState": "dead"
+      },
+      "lifecycle": "passed",
+      "result": "completed_finite",
+      "terminal": true,
+      "recorded_identities": 6,
+      "live_identities": [],
+      "cgroup_processes": {
+        "/user.slice/user-1003.slice/user@1003.service/background.slice/tide-breakdown-infer-tf32-v1.service": []
+      },
+      "frozen_regular_files": 461,
+      "frozen_changes": []
+    },
+    {
+      "name": "breakdown-train-kv128-v1",
+      "source": "7196fcabd7ab3b401c1ebdb6107442450a99996c",
+      "unit": "tide-breakdown-train-kv128-v1",
+      "properties": {
+        "MainPID": "0",
+        "Result": "success",
+        "Slice": "",
+        "ControlGroup": "",
+        "ActiveState": "inactive",
+        "SubState": "dead"
+      },
+      "lifecycle": "passed",
+      "result": "completed_finite",
+      "terminal": true,
+      "recorded_identities": 6,
+      "live_identities": [],
+      "cgroup_processes": {
+        "/user.slice/user-1003.slice/user@1003.service/background.slice/tide-breakdown-train-kv128-v1.service": []
+      },
+      "frozen_regular_files": 461,
+      "frozen_changes": []
+    },
+    {
+      "name": "breakdown-train-tf32-v1",
+      "source": "7196fcabd7ab3b401c1ebdb6107442450a99996c",
+      "unit": "tide-breakdown-train-tf32-v1",
+      "properties": {
+        "MainPID": "0",
+        "Result": "success",
+        "Slice": "",
+        "ControlGroup": "",
+        "ActiveState": "inactive",
+        "SubState": "dead"
+      },
+      "lifecycle": "passed",
+      "result": "completed_finite",
+      "terminal": true,
+      "recorded_identities": 8,
+      "live_identities": [],
+      "cgroup_processes": {
+        "/user.slice/user-1003.slice/user@1003.service/background.slice/tide-breakdown-train-tf32-v1.service": []
+      },
+      "frozen_regular_files": 461,
+      "frozen_changes": []
+    }
+  ],
+  "release_audit": {
+    "path": "artifacts/kv128-transformer-breakdown-20261119/release-audit.json",
+    "bytes": 12348,
+    "sha256": "cb8925e547ffb9c300604d7a1e85fb127a758db522bca44ae435c300a9eeb2b6"
+  }
+}

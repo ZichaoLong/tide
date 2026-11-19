@@ -1,0 +1,19 @@
+{
+  "elapsed_seconds": 64.76908045262098,
+  "job_id": "placement-transport-diagnosis-v6",
+  "logical_devices": [
+    "npu:0",
+    "npu:1"
+  ],
+  "npu_count": 2,
+  "physical_ids": [
+    1,
+    9
+  ],
+  "priority": 0,
+  "project": "tide-instances",
+  "return_code": 1,
+  "schema_version": 1,
+  "status": "failed",
+  "timestamp": "2026-11-18T04:12:32.931346+00:00"
+}

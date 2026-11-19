@@ -1,0 +1,50 @@
+{
+  "config": {
+    "topology": {
+      "kind": "multiscale",
+      "n": 2,
+      "layers": null,
+      "depth": null,
+      "rounds": null,
+      "profile": "compact-5-dd4",
+      "hubs": 1,
+      "partition": "group",
+      "timing": "settle",
+      "hub_mask": "all",
+      "period": null,
+      "probes": null,
+      "terminal_hubs": false
+    },
+    "d": 192,
+    "memory": "X_reverse",
+    "aggregation": "source_residual",
+    "allocation": "quad",
+    "sharing": "independent",
+    "adapter_rank": 8,
+    "budget": null,
+    "attention_backend": "math",
+    "attention_chunk": 128,
+    "input_dim": null,
+    "checkpoint_regions": false,
+    "checkpoint_reception": false,
+    "reception_qkv_backend": "separate",
+    "reception_mask_padding": false,
+    "parameter_indexing": "gather",
+    "ssd_summary_backend": "block",
+    "ssd_scan_backend": "block",
+    "region_batch_size": 2,
+    "local_attention_backend": null,
+    "hub_allocation": "bounded",
+    "clock": {
+      "position_period": null,
+      "position_origin": "binding",
+      "kv_window": 8,
+      "short_decay": null,
+      "ssd_stride": null
+    },
+    "kv_width": null,
+    "ffn_width": null,
+    "memory_sharing": null
+  },
+  "snapshot_sha256": "59e7d412ef31c5d7ba0723f58b82350c943323f4170577f97f9f56a34cda648b"
+}

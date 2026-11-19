@@ -1,0 +1,178 @@
+[
+  {
+    "scale": "9b",
+    "layers": 32,
+    "match": {
+      "constructor": {
+        "d": 4352,
+        "layers": 32,
+        "ffn_width": 15208,
+        "head_dim": 64,
+        "window": 128
+      },
+      "targets": {
+        "blocks": 32,
+        "parameters": 8778358224
+      },
+      "actual": {
+        "blocks": 32,
+        "parameters": 8778371328
+      },
+      "relative_deviation": {
+        "blocks": 0.0,
+        "parameters": 1.492762047938954e-06
+      },
+      "selection_rule": "exact block count; nearest parameters over d=16*j >= 32, FFN=8*j in [2d,6d]; ties prefer FFN=4d",
+      "parameter_scope": "main blocks and final RMSNorm; no embedding, task head or artificial unused weights"
+    },
+    "reference": {
+      "path": "artifacts/agg-inference-hb9b-fp32-v1/reference.json",
+      "file_sha256": "0eca3832cd0c207ad57cc8da845781d8ec9d9ee4669c84e88a38db61d5ed8b9b",
+      "reference_sha256": "a28482b02ab81c87999c0cf6db45b00dec740ab4725d35f130d45b7f05fedbb7",
+      "source": {
+        "source_commit": "28941994880a277495b315f0fec3213239ef0b49",
+        "harness_commit": "28941994880a277495b315f0fec3213239ef0b49",
+        "tide_content_sha256": "70345a7dcd997b22d7fec25543572f1311b1c0571efc119ab510e2a1b92c7e0a",
+        "harness_content_sha256": "379d8761f537b071aac9f87440115b3522ddb3b49e8077bbf41072054be387f6",
+        "tide_path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-inference-hb9b-fp32-v1/source/src/tide",
+        "harness_path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-inference-hb9b-fp32-v1/source/benchmarks"
+      },
+      "tide_input_width": 768,
+      "tide_input_sha256": "c5f402fae8e34bc660ddb615875cf6bbd1a7d7dabe9792928544df4bc0149564",
+      "scope": "reuse total parameter target and exact input schedule; no new Tide timing or numerical qualification"
+    },
+    "input_prefix_matches": true
+  },
+  {
+    "scale": "9b",
+    "layers": 48,
+    "match": {
+      "constructor": {
+        "d": 3472,
+        "layers": 48,
+        "ffn_width": 12928,
+        "head_dim": 16,
+        "window": 128
+      },
+      "targets": {
+        "blocks": 48,
+        "parameters": 8778358224
+      },
+      "actual": {
+        "blocks": 48,
+        "parameters": 8778441616
+      },
+      "relative_deviation": {
+        "blocks": 0.0,
+        "parameters": 9.499726244026653e-06
+      },
+      "selection_rule": "exact block count; nearest parameters over d=16*j >= 32, FFN=8*j in [2d,6d]; ties prefer FFN=4d",
+      "parameter_scope": "main blocks and final RMSNorm; no embedding, task head or artificial unused weights"
+    },
+    "reference": {
+      "path": "artifacts/agg-inference-hb9b-fp32-v1/reference.json",
+      "file_sha256": "0eca3832cd0c207ad57cc8da845781d8ec9d9ee4669c84e88a38db61d5ed8b9b",
+      "reference_sha256": "a28482b02ab81c87999c0cf6db45b00dec740ab4725d35f130d45b7f05fedbb7",
+      "source": {
+        "source_commit": "28941994880a277495b315f0fec3213239ef0b49",
+        "harness_commit": "28941994880a277495b315f0fec3213239ef0b49",
+        "tide_content_sha256": "70345a7dcd997b22d7fec25543572f1311b1c0571efc119ab510e2a1b92c7e0a",
+        "harness_content_sha256": "379d8761f537b071aac9f87440115b3522ddb3b49e8077bbf41072054be387f6",
+        "tide_path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-inference-hb9b-fp32-v1/source/src/tide",
+        "harness_path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-inference-hb9b-fp32-v1/source/benchmarks"
+      },
+      "tide_input_width": 768,
+      "tide_input_sha256": "c5f402fae8e34bc660ddb615875cf6bbd1a7d7dabe9792928544df4bc0149564",
+      "scope": "reuse total parameter target and exact input schedule; no new Tide timing or numerical qualification"
+    },
+    "input_prefix_matches": true
+  },
+  {
+    "scale": "17b",
+    "layers": 32,
+    "match": {
+      "constructor": {
+        "d": 7056,
+        "layers": 32,
+        "ffn_width": 15256,
+        "head_dim": 16,
+        "window": 128
+      },
+      "targets": {
+        "blocks": 32,
+        "parameters": 16707220176
+      },
+      "actual": {
+        "blocks": 32,
+        "parameters": 16707260304
+      },
+      "relative_deviation": {
+        "blocks": 0.0,
+        "parameters": 2.4018358277006526e-06
+      },
+      "selection_rule": "exact block count; nearest parameters over d=16*j >= 32, FFN=8*j in [2d,6d]; ties prefer FFN=4d",
+      "parameter_scope": "main blocks and final RMSNorm; no embedding, task head or artificial unused weights"
+    },
+    "reference": {
+      "path": "artifacts/agg-inference-hb17b-fp32-v1/reference.json",
+      "file_sha256": "a173ab8b62e623df83be69f41d2cbdae9d78059dee0904994f96511b4758d1be",
+      "reference_sha256": "f47e8714413773e0bca9a7b31b618b346f6af90fa41f3c800e0461206454043e",
+      "source": {
+        "source_commit": "28941994880a277495b315f0fec3213239ef0b49",
+        "harness_commit": "28941994880a277495b315f0fec3213239ef0b49",
+        "tide_content_sha256": "70345a7dcd997b22d7fec25543572f1311b1c0571efc119ab510e2a1b92c7e0a",
+        "harness_content_sha256": "379d8761f537b071aac9f87440115b3522ddb3b49e8077bbf41072054be387f6",
+        "tide_path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-inference-hb17b-fp32-v1/source/src/tide",
+        "harness_path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-inference-hb17b-fp32-v1/source/benchmarks"
+      },
+      "tide_input_width": 768,
+      "tide_input_sha256": "c5f402fae8e34bc660ddb615875cf6bbd1a7d7dabe9792928544df4bc0149564",
+      "scope": "reuse total parameter target and exact input schedule; no new Tide timing or numerical qualification"
+    },
+    "input_prefix_matches": true
+  },
+  {
+    "scale": "17b",
+    "layers": 48,
+    "match": {
+      "constructor": {
+        "d": 4704,
+        "layers": 48,
+        "ffn_width": 18392,
+        "head_dim": 32,
+        "window": 128
+      },
+      "targets": {
+        "blocks": 48,
+        "parameters": 16707220176
+      },
+      "actual": {
+        "blocks": 48,
+        "parameters": 16707257952
+      },
+      "relative_deviation": {
+        "blocks": 0.0,
+        "parameters": 2.261058368900016e-06
+      },
+      "selection_rule": "exact block count; nearest parameters over d=16*j >= 32, FFN=8*j in [2d,6d]; ties prefer FFN=4d",
+      "parameter_scope": "main blocks and final RMSNorm; no embedding, task head or artificial unused weights"
+    },
+    "reference": {
+      "path": "artifacts/agg-inference-hb17b-fp32-v1/reference.json",
+      "file_sha256": "a173ab8b62e623df83be69f41d2cbdae9d78059dee0904994f96511b4758d1be",
+      "reference_sha256": "f47e8714413773e0bca9a7b31b618b346f6af90fa41f3c800e0461206454043e",
+      "source": {
+        "source_commit": "28941994880a277495b315f0fec3213239ef0b49",
+        "harness_commit": "28941994880a277495b315f0fec3213239ef0b49",
+        "tide_content_sha256": "70345a7dcd997b22d7fec25543572f1311b1c0571efc119ab510e2a1b92c7e0a",
+        "harness_content_sha256": "379d8761f537b071aac9f87440115b3522ddb3b49e8077bbf41072054be387f6",
+        "tide_path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-inference-hb17b-fp32-v1/source/src/tide",
+        "harness_path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-inference-hb17b-fp32-v1/source/benchmarks"
+      },
+      "tide_input_width": 768,
+      "tide_input_sha256": "c5f402fae8e34bc660ddb615875cf6bbd1a7d7dabe9792928544df4bc0149564",
+      "scope": "reuse total parameter target and exact input schedule; no new Tide timing or numerical qualification"
+    },
+    "input_prefix_matches": true
+  }
+]

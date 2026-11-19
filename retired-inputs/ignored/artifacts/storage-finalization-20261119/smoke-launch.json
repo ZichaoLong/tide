@@ -1,0 +1,61 @@
+{
+  "state": "submitted",
+  "source": "45cb5dad1f2d14e06f65b71e6db5461de3a41e72",
+  "unit": "tide-storage-finalization-smoke-v2",
+  "command": [
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "-B",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/storage-finalization-20261119/frozen-job.py",
+    "--status",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/storage-finalization-20261119/smoke-status.json",
+    "--source",
+    "45cb5dad1f2d14e06f65b71e6db5461de3a41e72",
+    "--max-rss-gib",
+    "4",
+    "--",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "-B",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/storage-finalization-20261119/installed_smoke.py"
+  ],
+  "launch": [
+    "systemd-run",
+    "--user",
+    "--unit=tide-storage-finalization-smoke-v2",
+    "--service-type=exec",
+    "--slice=background.slice",
+    "--working-directory=/",
+    "--property=KillMode=control-group",
+    "--property=RuntimeMaxSec=300",
+    "--property=TimeoutStopSec=15",
+    "--property=CPUAffinity=176 177",
+    "--property=MemoryMax=4G",
+    "--property=StandardOutput=append:/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/storage-finalization-20261119/smoke.log",
+    "--property=StandardError=append:/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/storage-finalization-20261119/smoke.log",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "-B",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/storage-finalization-20261119/frozen-job.py",
+    "--status",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/storage-finalization-20261119/smoke-status.json",
+    "--source",
+    "45cb5dad1f2d14e06f65b71e6db5461de3a41e72",
+    "--max-rss-gib",
+    "4",
+    "--",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "-B",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/storage-finalization-20261119/installed_smoke.py"
+  ],
+  "frozen_files": {
+    "installed_smoke.py": "5b8271f20b4b111ea0a2a44f209ecf791301a44997607754e03bfcefa776aaea",
+    "frozen-job.py": "428214c2901eb41f5764193720f96228d0f8530a5f578f2c5894bd7135337e56",
+    "plan.json": "942f91ac39ff7da7457bc470cf7e64df8320a6cb5c72f0643343093d45b46593",
+    "submit.py": "55be4e72322da6ed34f319d7be38e83a38b46552b33d80dbf2c767df1286caa9"
+  },
+  "resources": {
+    "wall_seconds": 300,
+    "max_rss_gib": 4,
+    "cpus": "176 177"
+  },
+  "scope": "CPU isolated installed public training/resume smoke",
+  "unit_observation": "MainPID=2953163\nSlice=background.slice\nControlGroup=/user.slice/user-1003.slice/user@1003.service/background.slice/tide-storage-finalization-smoke-v2.service\nMemoryMax=4294967296\nCPUAffinity=176-177\nActiveState=active\nSubState=running\n"
+}

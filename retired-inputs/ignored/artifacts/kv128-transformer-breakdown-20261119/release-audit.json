@@ -1,0 +1,341 @@
+{
+  "observed": "2026-11-19T04:02:45.320769+00:00",
+  "script_sha256": "f07d3794fffd4752af85a4cb9d32ad52be03bb1df58e5a839408d01f71455150",
+  "helper_sha256": "b345e2303fd6986a81e42ce6767f63a56be0f41bf235476382d5f346d19a0bbb",
+  "jobs": [
+    {
+      "name": "breakdown-infer-kv128-v1",
+      "source": "7196fcabd7ab3b401c1ebdb6107442450a99996c",
+      "unit": "tide-breakdown-infer-kv128-v1",
+      "properties": {
+        "MainPID": "0",
+        "Result": "success",
+        "Slice": "",
+        "ControlGroup": "",
+        "ActiveState": "inactive",
+        "SubState": "dead"
+      },
+      "lifecycle": "passed",
+      "result": "completed_finite",
+      "terminal": true,
+      "recorded_identities": 6,
+      "live_identities": [],
+      "cgroup_processes": {
+        "/user.slice/user-1003.slice/user@1003.service/background.slice/tide-breakdown-infer-kv128-v1.service": []
+      },
+      "frozen_regular_files": 461,
+      "frozen_changes": []
+    },
+    {
+      "name": "breakdown-infer-tf32-v1",
+      "source": "7196fcabd7ab3b401c1ebdb6107442450a99996c",
+      "unit": "tide-breakdown-infer-tf32-v1",
+      "properties": {
+        "MainPID": "0",
+        "Result": "success",
+        "Slice": "",
+        "ControlGroup": "",
+        "ActiveState": "inactive",
+        "SubState": "dead"
+      },
+      "lifecycle": "passed",
+      "result": "completed_finite",
+      "terminal": true,
+      "recorded_identities": 6,
+      "live_identities": [],
+      "cgroup_processes": {
+        "/user.slice/user-1003.slice/user@1003.service/background.slice/tide-breakdown-infer-tf32-v1.service": []
+      },
+      "frozen_regular_files": 461,
+      "frozen_changes": []
+    },
+    {
+      "name": "breakdown-train-kv128-v1",
+      "source": "7196fcabd7ab3b401c1ebdb6107442450a99996c",
+      "unit": "tide-breakdown-train-kv128-v1",
+      "properties": {
+        "MainPID": "0",
+        "Result": "success",
+        "Slice": "",
+        "ControlGroup": "",
+        "ActiveState": "inactive",
+        "SubState": "dead"
+      },
+      "lifecycle": "passed",
+      "result": "completed_finite",
+      "terminal": true,
+      "recorded_identities": 6,
+      "live_identities": [],
+      "cgroup_processes": {
+        "/user.slice/user-1003.slice/user@1003.service/background.slice/tide-breakdown-train-kv128-v1.service": []
+      },
+      "frozen_regular_files": 461,
+      "frozen_changes": []
+    },
+    {
+      "name": "breakdown-train-tf32-v1",
+      "source": "7196fcabd7ab3b401c1ebdb6107442450a99996c",
+      "unit": "tide-breakdown-train-tf32-v1",
+      "properties": {
+        "MainPID": "0",
+        "Result": "success",
+        "Slice": "",
+        "ControlGroup": "",
+        "ActiveState": "inactive",
+        "SubState": "dead"
+      },
+      "lifecycle": "passed",
+      "result": "completed_finite",
+      "terminal": true,
+      "recorded_identities": 8,
+      "live_identities": [],
+      "cgroup_processes": {
+        "/user.slice/user-1003.slice/user@1003.service/background.slice/tide-breakdown-train-tf32-v1.service": []
+      },
+      "frozen_regular_files": 461,
+      "frozen_changes": []
+    }
+  ],
+  "raw_manifest": [
+    {
+      "path": "artifacts/breakdown-infer-kv128-v1/breakdown.json",
+      "bytes": 107530960,
+      "sha256": "cb7dbb8a70424e10ea74925c94c2caaa9a3f91aef45c436759b0b849a218f1a9"
+    },
+    {
+      "path": "artifacts/breakdown-infer-kv128-v1/environment.json",
+      "bytes": 2545,
+      "sha256": "d787da16ace17893ad2f85add6b940ca7e64008715b0519404eb5f409b7adcbe"
+    },
+    {
+      "path": "artifacts/breakdown-infer-kv128-v1/launch.json",
+      "bytes": 4538,
+      "sha256": "17b3aca7296992bfa8acaec6228291761ca33808b8a2b319d29f8a95997559e7"
+    },
+    {
+      "path": "artifacts/breakdown-infer-kv128-v1/queue.json",
+      "bytes": 388,
+      "sha256": "6683c0893ba10e08734e39658903e1a3d1d3bd73285bf155b9f9ee980afe1669"
+    },
+    {
+      "path": "artifacts/breakdown-infer-kv128-v1/run.sh",
+      "bytes": 2722,
+      "sha256": "aa939902e83f7706d9e7bef7ae6f48d6463a29f7560b8a258a88cd0a53aa15d9"
+    },
+    {
+      "path": "artifacts/breakdown-infer-kv128-v1/status.json",
+      "bytes": 2164,
+      "sha256": "68a5158c8fc680cdae47316943e6f283b29d3a0eba93b6e76a7b671fb5b59bc4"
+    },
+    {
+      "path": "artifacts/breakdown-infer-kv128-v1/stderr.log",
+      "bytes": 253,
+      "sha256": "f7807c9a2e5148c0acdf19fd9fcf64b6a2b7d3d4645c1173487be4426bff7a4c"
+    },
+    {
+      "path": "artifacts/breakdown-infer-kv128-v1/stdout.log",
+      "bytes": 864,
+      "sha256": "360cff3bf461e18685736608d0a410aae32230bb3c82b9fc04203a85316eb526"
+    },
+    {
+      "path": "artifacts/breakdown-infer-tf32-v1/breakdown.json",
+      "bytes": 3276945,
+      "sha256": "d6460e4af7395d3593108c95c95f55cda77f9da6f045f10562fd6dd7af62761d"
+    },
+    {
+      "path": "artifacts/breakdown-infer-tf32-v1/dependency.json",
+      "bytes": 1652,
+      "sha256": "d458447bd65552e6e79b4e9f65c81696183aff41c76a30d4f2c7da8c893a4d9e"
+    },
+    {
+      "path": "artifacts/breakdown-infer-tf32-v1/environment.json",
+      "bytes": 2542,
+      "sha256": "be11a62c10ffc29ea713ea6e1c8c4323db73623a622da2da7fe4c353b46aa81d"
+    },
+    {
+      "path": "artifacts/breakdown-infer-tf32-v1/launch.json",
+      "bytes": 4891,
+      "sha256": "555df1a69e56d60befd2b275b1f3933c4f2504049139c9fdd4ff6e5d47481892"
+    },
+    {
+      "path": "artifacts/breakdown-infer-tf32-v1/queue.json",
+      "bytes": 388,
+      "sha256": "1116aab7997dfac331351a5f135337304e590b928f002c658ac0719ed6f62b2a"
+    },
+    {
+      "path": "artifacts/breakdown-infer-tf32-v1/run.sh",
+      "bytes": 3044,
+      "sha256": "64aa2cb4a1f146f06703da349d6affbae6f4c636f09049fe19f99357b93e1791"
+    },
+    {
+      "path": "artifacts/breakdown-infer-tf32-v1/status.json",
+      "bytes": 2539,
+      "sha256": "dbb27e14f176676b68d67fa1cbd445147befbe81001c8f559b3aaa4ebb8eef09"
+    },
+    {
+      "path": "artifacts/breakdown-infer-tf32-v1/stderr.log",
+      "bytes": 253,
+      "sha256": "ccac74f2eeba47ca4b8347bafe8a45d04684921e273782c1d76151ce820d3774"
+    },
+    {
+      "path": "artifacts/breakdown-infer-tf32-v1/stdout.log",
+      "bytes": 2262,
+      "sha256": "a21150e23ed4efe909a387a62825e4db405d3e8b431ce666f53b9bee743113e9"
+    },
+    {
+      "path": "artifacts/breakdown-train-kv128-v1/breakdown.json",
+      "bytes": 10677389,
+      "sha256": "5f7d10a8397c6f1772f51fbd02c2e83aab6f20aed9c1e9a1c75e9ab3e68232c3"
+    },
+    {
+      "path": "artifacts/breakdown-train-kv128-v1/environment.json",
+      "bytes": 2545,
+      "sha256": "c28f78c121e125eaa190f1f66f57d6fdd4f323f2445471ac36a5dfb29af072c4"
+    },
+    {
+      "path": "artifacts/breakdown-train-kv128-v1/launch.json",
+      "bytes": 4474,
+      "sha256": "ffab93e03a79d8746e4c96b34b1ce52754c2ceb2858c6dc21b9f5e4d9bd396ed"
+    },
+    {
+      "path": "artifacts/breakdown-train-kv128-v1/queue.json",
+      "bytes": 390,
+      "sha256": "72ec1ad8627c7fca8272d6ac278ed8bf1b2624f75ab8b006ec10929dbdcc95c7"
+    },
+    {
+      "path": "artifacts/breakdown-train-kv128-v1/run.sh",
+      "bytes": 2706,
+      "sha256": "811be83ef65ebd83cc9c3def3c4e3a6d20ad1c864c7d5bd5fb2addcc35c533de"
+    },
+    {
+      "path": "artifacts/breakdown-train-kv128-v1/status.json",
+      "bytes": 2132,
+      "sha256": "8406022f4db86a9066bd23460f8c2241d67d14a3e04eb71af9296868a3519b5c"
+    },
+    {
+      "path": "artifacts/breakdown-train-kv128-v1/stderr.log",
+      "bytes": 253,
+      "sha256": "b8b9ed3611fd1d29aabdc28cb344dd7da6dc3a6536aaa62f4c48305e2b7c6047"
+    },
+    {
+      "path": "artifacts/breakdown-train-kv128-v1/stdout.log",
+      "bytes": 869,
+      "sha256": "45040152635c099cc225be272d9222064fb9e9edf9b20b9c2bbb15d1bcb8b5a9"
+    },
+    {
+      "path": "artifacts/breakdown-train-tf32-v1/breakdown.json",
+      "bytes": 951803,
+      "sha256": "22ca1db2a77beb6d81bbaf031a973bfa67504feaa49685c962e8dc0d9d599911"
+    },
+    {
+      "path": "artifacts/breakdown-train-tf32-v1/dependency.json",
+      "bytes": 1684,
+      "sha256": "72be29128bad32fc5d3dfa71d4a33c7e50d0e8030546870f8962b2633d85c733"
+    },
+    {
+      "path": "artifacts/breakdown-train-tf32-v1/environment.json",
+      "bytes": 2542,
+      "sha256": "e728961869e97bcaf4f40af71ef24ca9c7810af14175f3ef3ca64590b334cdca"
+    },
+    {
+      "path": "artifacts/breakdown-train-tf32-v1/launch.json",
+      "bytes": 4957,
+      "sha256": "593326c4ce35e86cd7dcab6f2cc6b12f4613e40657b50be03f0078fee79068eb"
+    },
+    {
+      "path": "artifacts/breakdown-train-tf32-v1/queue.json",
+      "bytes": 389,
+      "sha256": "2dc13486eeb5672efeb19ce14e7de9c993c8428ac55850cef909f35c4c0d0769"
+    },
+    {
+      "path": "artifacts/breakdown-train-tf32-v1/run.sh",
+      "bytes": 3077,
+      "sha256": "b66686764f9353e8a6e22f0de2a9029ccfbfbcad5c69381f5b18cf8ab825866a"
+    },
+    {
+      "path": "artifacts/breakdown-train-tf32-v1/status.json",
+      "bytes": 2705,
+      "sha256": "e9e7574eae6c284dcc5600d1e7b1740faa343f51b241db1a15512315a3084425"
+    },
+    {
+      "path": "artifacts/breakdown-train-tf32-v1/stderr.log",
+      "bytes": 253,
+      "sha256": "24848cae42f161402ab8acdc16b807dc2ba7ca5cd17bb4127d1b0da95222413f"
+    },
+    {
+      "path": "artifacts/breakdown-train-tf32-v1/stdout.log",
+      "bytes": 2297,
+      "sha256": "5cd80e0d471415176d22c07441f8bda61b12941736d980a2f654635f38998989"
+    }
+  ],
+  "failures": [],
+  "protected": {
+    "docs/tide-learning-lab-TL-REQ-004-handoff.md": {
+      "original": "69607cba0a7e87a260929ed5741d996103cef804c51f3fa2c02b3bd7a454a220",
+      "current": "69607cba0a7e87a260929ed5741d996103cef804c51f3fa2c02b3bd7a454a220"
+    },
+    "docs/tide-learning-lab-TL-REQ-005-handoff.md": {
+      "original": "83bec6f6eaa476ae9d7c859fe168333ac2ee564433297f36ab9aa1ef33c38732",
+      "current": "83bec6f6eaa476ae9d7c859fe168333ac2ee564433297f36ab9aa1ef33c38732"
+    },
+    "docs/tide-learning-lab-TL-REQ-006-handoff.md": {
+      "original": "8706f0477c8f31d0c8337e55ba7f8f5b28bb9a455656586fa1585c82ec58b4df",
+      "current": "8706f0477c8f31d0c8337e55ba7f8f5b28bb9a455656586fa1585c82ec58b4df"
+    },
+    "docs/upstream-lh-semantics-discussion-20261113.md": {
+      "original": "3118419cb014570395323baf887ffe5a7e797f97049e85eacef26ecb1fd81c07",
+      "current": "3118419cb014570395323baf887ffe5a7e797f97049e85eacef26ecb1fd81c07"
+    }
+  },
+  "checks": [
+    {
+      "argv": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "python",
+        "scripts/check_upstream.py"
+      ],
+      "exit_code": 0,
+      "stdout": "{\"state\": \"passed\", \"revision\": \"4f5b9f20a4030d68ee66ae2d26e34659a5e37234\", \"files\": 108}\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "quota",
+        "-s"
+      ],
+      "exit_code": 0,
+      "stdout": "Disk quotas for user zlong (uid 1003): \n     Filesystem   space   quota   limit   grace   files   quota   limit   grace\n/dev/mapper/ascend_data-data\n                   207G    300G    700G            552k       0       0        \n",
+      "stderr": ""
+    }
+  ],
+  "artifact_usage": {
+    "command": {
+      "argv": [
+        "du",
+        "-s",
+        "-B1",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/breakdown-infer-kv128-v1",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/breakdown-infer-tf32-v1",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/breakdown-train-kv128-v1",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/breakdown-train-tf32-v1",
+        "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/kv128-transformer-breakdown-20261119"
+      ],
+      "exit_code": 0,
+      "stdout": "178102272\t/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/breakdown-infer-kv128-v1\n73814016\t/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/breakdown-infer-tf32-v1\n81252352\t/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/breakdown-train-kv128-v1\n71516160\t/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/breakdown-train-tf32-v1\n34385920\t/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/kv128-transformer-breakdown-20261119\n",
+      "stderr": ""
+    },
+    "allocated_bytes": 439070720,
+    "allocated_gib": 0.4089164733886719,
+    "limit_gib": 8
+  },
+  "state": "passed"
+}

@@ -1,0 +1,19 @@
+{
+  "elapsed_seconds": 237.21439621225,
+  "job_id": "agg-modes-incoming-light-64-fp32-v1",
+  "logical_device": "npu:0",
+  "logical_devices": [
+    "npu:0"
+  ],
+  "npu_count": 1,
+  "physical_id": 4,
+  "physical_ids": [
+    4
+  ],
+  "priority": 0,
+  "project": "tide-instances",
+  "return_code": 0,
+  "schema_version": 1,
+  "status": "completed",
+  "timestamp": "2026-11-18T12:44:15.036092+00:00"
+}

@@ -1,0 +1,10 @@
+{
+  "nodes": {
+    "6": {
+      "raw": "Node 6 MemTotal:       260011776 kB\nNode 6 MemFree:        122475116 kB\nNode 6 MemUsed:        137536660 kB\nNode 6 Active:         69751468 kB\nNode 6 Inactive:       60219920 kB\nNode 6 Active(anon):     760180 kB\nNode 6 Inactive(anon): 30196456 kB\nNode 6 Active(file):   68991288 kB\nNode 6 Inactive(file): 30023464 kB\nNode 6 Unevictable:           0 kB\nNode 6 Mlocked:               0 kB\nNode 6 Dirty:               304 kB\nNode 6 Writeback:             0 kB\nNode 6 FilePages:      100106980 kB\nNode 6 Mapped:           660564 kB\nNode 6 AnonPages:      29114260 kB\nNode 6 Shmem:           1092336 kB\nNode 6 KernelStack:       66640 kB\nNode 6 PageTables:       140180 kB\nNode 6 NFS_Unstable:          0 kB\nNode 6 Bounce:                0 kB\nNode 6 WritebackTmp:          0 kB\nNode 6 KReclaimable:    6179348 kB\nNode 6 Slab:            6821524 kB\nNode 6 SReclaimable:    6179348 kB\nNode 6 SUnreclaim:       642176 kB\nNode 6 AnonHugePages:  26042368 kB\nNode 6 ShmemHugePages:        0 kB\nNode 6 ShmemPmdMapped:        0 kB\nNode 6 FileHugePages:        0 kB\nNode 6 FilePmdMapped:        0 kB\nNode 6 HugePages_Total:     0\nNode 6 HugePages_Free:      0\nNode 6 HugePages_Surp:      0\n",
+      "free_plus_reclaimable_bytes": 233133277184
+    }
+  },
+  "required_per_node_bytes": 171798691840,
+  "scope": "free plus file LRU plus reclaimable slab; margin, not reservation"
+}

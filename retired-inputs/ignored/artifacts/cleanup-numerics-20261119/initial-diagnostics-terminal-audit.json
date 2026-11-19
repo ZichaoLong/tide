@@ -1,0 +1,55 @@
+{
+  "state": "passed",
+  "runs": [
+    {
+      "run": "artifacts/cleanup-numerics-20261119",
+      "state": "passed",
+      "unit": "tide-cleanup-numerics-retire-v1",
+      "unit_properties": "MainPID=0\nResult=success\nExecMainStatus=0\nControlGroup=\nActiveState=inactive\nSubState=dead\n",
+      "recorded_descendants": 1,
+      "live_recorded_descendants": [],
+      "elapsed": 12.477570790797472,
+      "peak_rss_bytes": 45928448
+    },
+    {
+      "run": "artifacts/numerics-saved-update-v1",
+      "state": "passed",
+      "unit": "tide-numerics-saved-update-v1",
+      "unit_properties": "MainPID=0\nResult=success\nExecMainStatus=0\nControlGroup=\nActiveState=inactive\nSubState=dead\n",
+      "recorded_descendants": 1,
+      "live_recorded_descendants": [],
+      "elapsed": 60.161412823945284,
+      "peak_rss_bytes": 6647173120
+    },
+    {
+      "run": "artifacts/numerics-shared-routing-v1",
+      "state": "passed",
+      "unit": "tide-numerics-shared-routing-v1",
+      "unit_properties": "MainPID=0\nResult=success\nExecMainStatus=0\nControlGroup=\nActiveState=inactive\nSubState=dead\n",
+      "recorded_descendants": 7,
+      "live_recorded_descendants": [],
+      "elapsed": 151.0914149172604,
+      "peak_rss_bytes": 29743599616
+    },
+    {
+      "run": "artifacts/numerics-ffn-vjp-v1",
+      "state": "passed",
+      "unit": "tide-numerics-ffn-vjp-v1",
+      "unit_properties": "MainPID=0\nResult=success\nExecMainStatus=0\nControlGroup=\nActiveState=inactive\nSubState=dead\n",
+      "recorded_descendants": 1,
+      "live_recorded_descendants": [],
+      "elapsed": 35.49306605756283,
+      "peak_rss_bytes": 30912393216
+    },
+    {
+      "run": "artifacts/numerics-bf16-training-routing-v1",
+      "state": "passed",
+      "unit": "tide-numerics-bf16-training-routing-v1",
+      "unit_properties": "MainPID=0\nResult=success\nExecMainStatus=0\nControlGroup=\nActiveState=inactive\nSubState=dead\n",
+      "recorded_descendants": 5,
+      "live_recorded_descendants": [],
+      "elapsed": 25.937828619033098,
+      "peak_rss_bytes": 2925088768
+    }
+  ]
+}

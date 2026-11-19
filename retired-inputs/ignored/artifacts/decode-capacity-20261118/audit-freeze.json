@@ -1,0 +1,10 @@
+{
+  "original": "artifacts/decode-capacity-20261118/audit.py",
+  "frozen": "artifacts/decode-capacity-audit-frozen-20261118/audit.py",
+  "sha256": "12d7490f017e10913ea8c756f61b54bf39e089e71cdaeb1a64cd5cae614d9c88",
+  "bytes": 34599,
+  "input_threads": 4,
+  "input_max_gib": 8,
+  "device_scope": "CPU input reconstruction only; TORCH_DEVICE_BACKEND_AUTOLOAD=0; no models or NPU workloads",
+  "next": "launch cap-evidence-audit-v1 only after all controller series and model jobs finish"
+}

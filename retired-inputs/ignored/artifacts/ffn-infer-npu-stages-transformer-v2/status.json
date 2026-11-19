@@ -1,0 +1,112 @@
+{
+  "state": "passed",
+  "source": "46317a8dd73d0611ff0f7b18f4057e97c5baa630",
+  "command": [
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/ffn-infer-npu-stages-transformer-v2/source/scripts/wait_units.py",
+    "--status",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/ffn-infer-npu-stages-transformer-v2/dependency.json",
+    "--seconds",
+    "7200",
+    "--unit",
+    "tide-ffn-infer-npu-stages-baseline-v1.service",
+    "--",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "/mi/data2T/zlong/home/.agents/skills/use-local-ascend/scripts/run_on_free_npu.py",
+    "--job-id",
+    "ffn-infer-npu-stages-transformer-v2",
+    "--project",
+    "tide-instances",
+    "--priority",
+    "0",
+    "--npu-count",
+    "1",
+    "--max-wait-seconds",
+    "600",
+    "--state-file",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/ffn-infer-npu-stages-transformer-v2/queue.json",
+    "--candidate-ids",
+    "9",
+    "--",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "-m",
+    "benchmarks.inference_breakdown",
+    "--subject",
+    "transformer",
+    "--transformer-d",
+    "4352",
+    "--transformer-ffn-width",
+    "15208",
+    "--transformer-layers",
+    "32",
+    "--transformer-head-dim",
+    "64",
+    "--transformer-window",
+    "128",
+    "--device",
+    "npu:0",
+    "--batch",
+    "8",
+    "--prefill",
+    "128",
+    "--prefill-chunk",
+    "32",
+    "--decode",
+    "16",
+    "--warmup",
+    "1",
+    "--samples",
+    "1",
+    "--threads",
+    "4",
+    "--allocated-budget-gib",
+    "56",
+    "--reserved-budget-gib",
+    "56",
+    "--output",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/ffn-infer-npu-stages-transformer-v2/breakdown.json"
+  ],
+  "pid": 1895872,
+  "started": "2026-11-19T05:45:04.004641+00:00",
+  "max_rss_bytes": 137438953472,
+  "peak_rss_bytes": 37085736960,
+  "max_processes": 4,
+  "rss_sample_count": 1833,
+  "poll_interval": 0.25,
+  "descendant_supervision": "Linux child subreaper; retained PID/start identities across nested sessions",
+  "child_pid": 1895924,
+  "process_group": 1895924,
+  "elapsed": 786.2303899414837,
+  "descendant_identities": [
+    {
+      "pid": 1895924,
+      "start_ticks": 2265327471
+    },
+    {
+      "pid": 1935465,
+      "start_ticks": 2265387596
+    },
+    {
+      "pid": 1935472,
+      "start_ticks": 2265387597
+    },
+    {
+      "pid": 1935473,
+      "start_ticks": 2265387597
+    },
+    {
+      "pid": 1935523,
+      "start_ticks": 2265387652
+    },
+    {
+      "pid": 1935780,
+      "start_ticks": 2265388124
+    },
+    {
+      "pid": 1935913,
+      "start_ticks": 2265388300
+    }
+  ],
+  "exit_code": 0,
+  "finished": "2026-11-19T05:58:10.235031+00:00"
+}

@@ -1,0 +1,120 @@
+{
+  "state": "passed",
+  "source": "b4cf1514fb1e79d0bbebf7ab03595bcbacbf2160",
+  "command": [
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "/mi/data2T/zlong/home/.agents/skills/use-local-ascend/scripts/run_on_free_npu.py",
+    "--job-id",
+    "agg-light64-variants-fp32-v1",
+    "--project",
+    "tide-instances",
+    "--priority",
+    "0",
+    "--npu-count",
+    "1",
+    "--max-wait-seconds",
+    "600",
+    "--state-file",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-light64-variants-fp32-v1/queue.json",
+    "--",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "-m",
+    "benchmarks.variants",
+    "--config",
+    "configs/agg-inference/settle-incoming_light_64.json",
+    "--variants",
+    "baseline",
+    "qkv",
+    "mask",
+    "qkv_mask",
+    "qkv_mask_nocheckpoint",
+    "qkv_mask_scan",
+    "--candidate-overrides",
+    "{\"baseline\":{},\"qkv\":{\"reception_qkv_backend\":\"fused\"},\"mask\":{\"reception_mask_padding\":true},\"qkv_mask\":{\"reception_qkv_backend\":\"fused\",\"reception_mask_padding\":true},\"qkv_mask_nocheckpoint\":{\"reception_qkv_backend\":\"fused\",\"reception_mask_padding\":true,\"checkpoint_reception\":false},\"qkv_mask_scan\":{\"reception_qkv_backend\":\"fused\",\"reception_mask_padding\":true,\"ssd_scan_backend\":\"doubling\"}}",
+    "--device",
+    "npu:0",
+    "--precision",
+    "fp32",
+    "--mode",
+    "train",
+    "--batch",
+    "8",
+    "--length",
+    "256",
+    "--threads",
+    "4",
+    "--warmup",
+    "2",
+    "--steps",
+    "5",
+    "--device-budget-gib",
+    "48",
+    "--rss-gib",
+    "60",
+    "--seconds",
+    "1800",
+    "--child-timeout",
+    "400",
+    "--output-dir",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-light64-variants-fp32-v1/variants"
+  ],
+  "pid": 2267474,
+  "started": "2026-11-18T12:22:13.323834+00:00",
+  "max_rss_bytes": 68719476736,
+  "peak_rss_bytes": 3657924608,
+  "max_processes": 3,
+  "rss_sample_count": 1219,
+  "poll_interval": 0.25,
+  "descendant_supervision": "Linux child subreaper; retained PID/start identities across nested sessions",
+  "child_pid": 2267500,
+  "process_group": 2267500,
+  "elapsed": 502.09519366919994,
+  "descendant_identities": [
+    {
+      "pid": 2267500,
+      "start_ticks": 2259070403
+    },
+    {
+      "pid": 2267504,
+      "start_ticks": 2259070409
+    },
+    {
+      "pid": 2268000,
+      "start_ticks": 2259071077
+    },
+    {
+      "pid": 2268961,
+      "start_ticks": 2259071561
+    },
+    {
+      "pid": 2269079,
+      "start_ticks": 2259071742
+    },
+    {
+      "pid": 2269083,
+      "start_ticks": 2259071749
+    },
+    {
+      "pid": 2275799,
+      "start_ticks": 2259079839
+    },
+    {
+      "pid": 2282674,
+      "start_ticks": 2259088237
+    },
+    {
+      "pid": 2289419,
+      "start_ticks": 2259096320
+    },
+    {
+      "pid": 2296149,
+      "start_ticks": 2259104136
+    },
+    {
+      "pid": 2302505,
+      "start_ticks": 2259112423
+    }
+  ],
+  "exit_code": 0,
+  "finished": "2026-11-18T12:30:35.419028+00:00"
+}

@@ -1,0 +1,76 @@
+{
+  "state": "passed",
+  "source": "5059ff8f751a1aeb0e65d6d1346c6a2d461676c0",
+  "command": [
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "/mi/data2T/zlong/home/.agents/skills/use-local-ascend/scripts/run_on_free_npu.py",
+    "--job-id",
+    "attention-operators-npu-v13",
+    "--project",
+    "tide-instances",
+    "--priority",
+    "0",
+    "--npu-count",
+    "1",
+    "--max-wait-seconds",
+    "600",
+    "--state-file",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/attention-operators-npu-v13/queue.json",
+    "--",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "-m",
+    "benchmarks.attention_sites",
+    "--device",
+    "npu:0",
+    "--cases",
+    "kv-unit",
+    "kv-zero",
+    "reception-positive",
+    "reception-zero",
+    "region-positive",
+    "region-zero",
+    "--threads",
+    "4",
+    "--warmup",
+    "0",
+    "--steps",
+    "1",
+    "--output",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/attention-operators-npu-v13/result.json"
+  ],
+  "pid": 3531411,
+  "started": "2026-11-18T04:34:41.921121+00:00",
+  "max_rss_bytes": 51539607552,
+  "peak_rss_bytes": 2604978176,
+  "max_processes": 2,
+  "rss_sample_count": 43,
+  "poll_interval": 0.25,
+  "descendant_supervision": "Linux child subreaper; retained PID/start identities across nested sessions",
+  "child_pid": 3531431,
+  "process_group": 3531431,
+  "elapsed": 18.384146064519882,
+  "descendant_identities": [
+    {
+      "pid": 3531431,
+      "start_ticks": 2256265263
+    },
+    {
+      "pid": 3531432,
+      "start_ticks": 2256265268
+    },
+    {
+      "pid": 3531473,
+      "start_ticks": 2256265325
+    },
+    {
+      "pid": 3531688,
+      "start_ticks": 2256265797
+    },
+    {
+      "pid": 3531796,
+      "start_ticks": 2256265974
+    }
+  ],
+  "exit_code": 0,
+  "finished": "2026-11-18T04:35:00.305267+00:00"
+}

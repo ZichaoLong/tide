@@ -1,0 +1,19 @@
+{
+  "elapsed_seconds": 118.89113107323647,
+  "job_id": "native-regional-npu-same-v1",
+  "logical_device": "npu:0",
+  "logical_devices": [
+    "npu:0"
+  ],
+  "npu_count": 1,
+  "physical_id": 1,
+  "physical_ids": [
+    1
+  ],
+  "priority": 0,
+  "project": "tide-instances",
+  "return_code": 1,
+  "schema_version": 1,
+  "status": "failed",
+  "timestamp": "2026-11-18T07:44:06.730741+00:00"
+}

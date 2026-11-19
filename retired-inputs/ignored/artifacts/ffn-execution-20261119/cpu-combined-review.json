@@ -1,0 +1,588 @@
+{
+  "schema": "tide-cpu-combined-numerical-review-v1",
+  "state": "completed_read_only_review",
+  "qualification_state": "finite_deviation",
+  "qualified": false,
+  "producer_source": {
+    "source_commit": "05e8338bf62569100d194848689d545f1140afbc",
+    "harness_commit": "05e8338bf62569100d194848689d545f1140afbc",
+    "tide_content_sha256": "492122d8430115f902c3751ff2f88f5fe23e39ca9c7479bf56d2570e1ff54f14",
+    "harness_content_sha256": "bd22f1dec3fa25dee3949bf55567afbba41927246e2d479b74f434e8049af934",
+    "tide_path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/ffn-small-cpu-v1/source/src/tide",
+    "harness_path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/ffn-small-cpu-v1/source/benchmarks",
+    "scripts_content_sha256": "461726e419802b53c227c5be1cb31aa3e2f97dec8a7a6697ef3b6cbc98a33427"
+  },
+  "locked_production_tree": "89f2707e71d989340c12de310797a4c7f4c99f64",
+  "current_tool_source": "2b8851a71bf0e3ff155fb802dacbd39034ccf008",
+  "identity_scope": "The producer source in result.json remains 05e8338b. The current tool source is recorded for handoff only and does not relabel this CPU result.",
+  "inputs": [
+    {
+      "path": "artifacts/ffn-small-cpu-v1/qualification/result.json",
+      "bytes": 1625309,
+      "sha256": "d40e61b33b494af1b9f740f5550cbc9a0aa200230f909ffae90daa8e6c7f91a6"
+    },
+    {
+      "path": "artifacts/ffn-small-cpu-v1/qualification/anchor.pt",
+      "bytes": 20093939,
+      "sha256": "93b9dc54e1ca7e5ec92b2b037928fe0e5544b5f30ddcb05d6fe07769c3e2dbd3",
+      "declared_sha256": "93b9dc54e1ca7e5ec92b2b037928fe0e5544b5f30ddcb05d6fe07769c3e2dbd3",
+      "declared_retained": true,
+      "identity_matches": true
+    },
+    {
+      "path": "artifacts/ffn-small-cpu-v1/qualification/baseline/inference.pt",
+      "bytes": 377369,
+      "sha256": "cb9a0ec4d2429f8e47ef1a9db65f4f6151483626384ec1e38f991bb94024bba2",
+      "declared_sha256": "cb9a0ec4d2429f8e47ef1a9db65f4f6151483626384ec1e38f991bb94024bba2",
+      "declared_retained": true,
+      "identity_matches": true
+    },
+    {
+      "path": "artifacts/ffn-small-cpu-v1/qualification/combined/inference.pt",
+      "bytes": 377369,
+      "sha256": "cb9a0ec4d2429f8e47ef1a9db65f4f6151483626384ec1e38f991bb94024bba2",
+      "declared_sha256": "cb9a0ec4d2429f8e47ef1a9db65f4f6151483626384ec1e38f991bb94024bba2",
+      "declared_retained": true,
+      "identity_matches": true
+    },
+    {
+      "path": "artifacts/ffn-small-cpu-v1/qualification/baseline/vjp1.pt",
+      "bytes": 5349271,
+      "sha256": "5be52e0cb7c4167bf47ebd561033c7507d5d44c1bfcf865aeab8f1f58599dcfb",
+      "declared_sha256": "5be52e0cb7c4167bf47ebd561033c7507d5d44c1bfcf865aeab8f1f58599dcfb",
+      "declared_retained": true,
+      "identity_matches": true
+    },
+    {
+      "path": "artifacts/ffn-small-cpu-v1/qualification/combined/vjp1.pt",
+      "bytes": 5349271,
+      "sha256": "0c8229aa176f4a873fa557d4bfcfa04cc5000916e46346d9bb1c9b7f5a648c91",
+      "declared_sha256": "0c8229aa176f4a873fa557d4bfcfa04cc5000916e46346d9bb1c9b7f5a648c91",
+      "declared_retained": true,
+      "identity_matches": true
+    },
+    {
+      "path": "artifacts/ffn-small-cpu-v1/qualification/baseline/update-0.pt",
+      "bytes": 20493271,
+      "sha256": "f205f37326bd60377b8f473a381863ea9c4be57f2347d63d414d7a3bb0c6b997",
+      "declared_sha256": "f205f37326bd60377b8f473a381863ea9c4be57f2347d63d414d7a3bb0c6b997",
+      "declared_retained": true,
+      "identity_matches": true
+    },
+    {
+      "path": "artifacts/ffn-small-cpu-v1/qualification/baseline/update-1.pt",
+      "bytes": 20560151,
+      "sha256": "426697cab5a084b5522f6f9e5bcb3a6bbc25a70f4a1058390dc1efa01e432f7a",
+      "declared_sha256": "426697cab5a084b5522f6f9e5bcb3a6bbc25a70f4a1058390dc1efa01e432f7a",
+      "declared_retained": true,
+      "identity_matches": true
+    },
+    {
+      "path": "artifacts/ffn-small-cpu-v1/qualification/combined/update-1.pt",
+      "bytes": 20560151,
+      "sha256": "fbed476ba10fb3875028f55a4b8359a34b8f0bb28e0bbd79de7f047c50a9aecb",
+      "declared_sha256": "fbed476ba10fb3875028f55a4b8359a34b8f0bb28e0bbd79de7f047c50a9aecb",
+      "declared_retained": true,
+      "identity_matches": true
+    },
+    {
+      "path": "artifacts/ffn-small-cpu-v1/qualification/baseline/update-2.pt",
+      "bytes": 20560151,
+      "sha256": "722a53838856b061df3df28ea71cfb6b1fc9c0dc1b832f195314ab44b16db63a",
+      "declared_sha256": "722a53838856b061df3df28ea71cfb6b1fc9c0dc1b832f195314ab44b16db63a",
+      "declared_retained": true,
+      "identity_matches": true
+    },
+    {
+      "path": "artifacts/ffn-small-cpu-v1/qualification/combined/update-2.pt",
+      "bytes": 20560151,
+      "sha256": "beb1cc707436a19624f3ce4ce98a112327d05c2e012cbb42d64d63e0e87aff69",
+      "declared_sha256": "beb1cc707436a19624f3ce4ce98a112327d05c2e012cbb42d64d63e0e87aff69",
+      "declared_retained": true,
+      "identity_matches": true
+    },
+    {
+      "path": "artifacts/ffn-small-cpu-v1/qualification/combined/checkpoint.pt",
+      "bytes": 15153369,
+      "sha256": "383c1c45e1a49cd7a7b21acc3f201020263eaa203193bde44c7fe586d6e12fcb",
+      "declared_sha256": "383c1c45e1a49cd7a7b21acc3f201020263eaa203193bde44c7fe586d6e12fcb",
+      "declared_retained": true,
+      "identity_matches": true
+    },
+    {
+      "path": "artifacts/ffn-small-cpu-v1/qualification/combined/restore.json",
+      "bytes": 73190,
+      "sha256": "86edfad6ea982a6c30da49bc383eefd4a7179a7a32583941e695b98214a76e52"
+    }
+  ],
+  "threshold": {
+    "atol": 1e-06,
+    "rtol": 0.002
+  },
+  "workload": {
+    "batch": 2,
+    "length": 8,
+    "chunk": 4,
+    "continuing_updates": 3,
+    "seed": 1701
+  },
+  "producer_threads": 4,
+  "review_threads": 1,
+  "review_python": "3.12.13",
+  "review_torch": "2.12.0+cpu",
+  "operations": "Read JSON and existing CPU payloads, hash inputs, compare recorded tensors, and evaluate four scalar AdamW expressions. No model forward/backward/update, new replay, test suite, or device job was run.",
+  "candidate_summary": {
+    "state": "finite_deviation",
+    "counts": {
+      "comparisons": 14,
+      "nonfinite": 0,
+      "metadata": 0,
+      "dtype": 0,
+      "support": 0,
+      "tolerance": 2
+    },
+    "first_comparison_paths": {
+      "nonfinite": [],
+      "metadata": [],
+      "dtype": [],
+      "support": [],
+      "tolerance": [
+        "root.9.comparison",
+        "root.10.comparison"
+      ]
+    },
+    "support_policy": "positive support differs: separate discrete failure, never only a finite-tolerance label"
+  },
+  "checks": {
+    "fixed_start": {
+      "exact": true,
+      "metadata_failures": [],
+      "dtype_differences": [],
+      "nonfinite": [],
+      "support_differences": [],
+      "threshold_failures": [],
+      "work_differences": [],
+      "discrete_sha_equal": true,
+      "support_sha_equal": true,
+      "none_fields_equal": true
+    },
+    "gradient_rng_start": {
+      "exact": true,
+      "metadata_failures": [],
+      "dtype_differences": [],
+      "nonfinite": [],
+      "support_differences": [],
+      "threshold_failures": [],
+      "work_differences": [],
+      "discrete_sha_equal": true,
+      "support_sha_equal": true,
+      "none_fields_equal": true
+    },
+    "inference_vs_baseline": {
+      "exact": true,
+      "metadata_failures": [],
+      "dtype_differences": [],
+      "nonfinite": [],
+      "support_differences": [],
+      "threshold_failures": [],
+      "work_differences": [],
+      "discrete_sha_equal": true,
+      "support_sha_equal": true,
+      "none_fields_equal": true
+    },
+    "vjp1_vs_baseline": {
+      "exact": false,
+      "metadata_failures": [],
+      "dtype_differences": [],
+      "nonfinite": [],
+      "support_differences": [],
+      "threshold_failures": [],
+      "work_differences": [],
+      "discrete_sha_equal": true,
+      "support_sha_equal": true,
+      "none_fields_equal": true
+    },
+    "inference_vs_grad_forward": {
+      "exact": true,
+      "metadata_failures": [],
+      "dtype_differences": [],
+      "nonfinite": [],
+      "support_differences": [],
+      "threshold_failures": [],
+      "work_differences": [],
+      "discrete_sha_equal": true,
+      "support_sha_equal": true,
+      "none_fields_equal": true
+    },
+    "vjp2_vs_baseline": {
+      "exact": false,
+      "metadata_failures": [],
+      "dtype_differences": [],
+      "nonfinite": [],
+      "support_differences": [],
+      "threshold_failures": [],
+      "work_differences": [],
+      "discrete_sha_equal": true,
+      "support_sha_equal": true,
+      "none_fields_equal": true
+    },
+    "same_owner_vjp_repeat": {
+      "exact": true,
+      "metadata_failures": [],
+      "dtype_differences": [],
+      "nonfinite": [],
+      "support_differences": [],
+      "threshold_failures": [],
+      "work_differences": [],
+      "discrete_sha_equal": true,
+      "support_sha_equal": true,
+      "none_fields_equal": true
+    },
+    "parameters_optimizer_state_unchanged_after_vjp": {
+      "exact": true,
+      "metadata_failures": [],
+      "dtype_differences": [],
+      "nonfinite": [],
+      "support_differences": [],
+      "threshold_failures": [],
+      "work_differences": [],
+      "discrete_sha_equal": true,
+      "support_sha_equal": true,
+      "none_fields_equal": true
+    }
+  },
+  "update0": {
+    "exact": false,
+    "metadata_failures": [],
+    "dtype_differences": [],
+    "nonfinite": [],
+    "support_differences": [],
+    "threshold_failures": [],
+    "work_differences": [],
+    "discrete_sha_equal": true,
+    "support_sha_equal": true,
+    "none_fields_equal": true
+  },
+  "failures": [
+    {
+      "update_index": 1,
+      "continuing_update_number": 2,
+      "optimizer_step": 3.0,
+      "state_position": 24,
+      "field": "root.parameters.regional.10.second.bias",
+      "shape": [
+        32
+      ],
+      "field_max_abs": 1.9194558262825012e-05,
+      "field_max_scaled": 2.2913852475877103,
+      "exceedance_coordinates": [
+        {
+          "index": [
+            6
+          ],
+          "actual": 0.0013407495571300387,
+          "reference": 0.0013492241268977523,
+          "absolute_error": 8.474569767713547e-06,
+          "allowed_error": 3.698448253795504e-06,
+          "scaled_error": 2.2913852475877103,
+          "gradient_actual": 1.716264130813272e-09,
+          "gradient_reference": -7.723188200081665e-10,
+          "exp_avg_actual": 6.435813687533098e-11,
+          "exp_avg_reference": -1.8450016514570677e-10,
+          "exp_avg_sq_actual": 3.950756777221043e-21,
+          "exp_avg_sq_reference": 1.6016703653470852e-21
+        }
+      ],
+      "comparison": {
+        "exact": false,
+        "metadata_failures": [],
+        "dtype_differences": [],
+        "nonfinite": [],
+        "support_differences": [],
+        "threshold_failures": [
+          "root.parameters.regional.10.second.bias"
+        ],
+        "work_differences": [],
+        "discrete_sha_equal": true,
+        "support_sha_equal": true,
+        "none_fields_equal": true
+      },
+      "actual_mechanism": {
+        "input_connected": true,
+        "loss_connected": true,
+        "original_state_unchanged": true
+      },
+      "reference_mechanism": {
+        "input_connected": true,
+        "loss_connected": true,
+        "original_state_unchanged": true
+      },
+      "input_gradient_connected": true,
+      "input_gradient_finite": true
+    },
+    {
+      "update_index": 2,
+      "continuing_update_number": 3,
+      "optimizer_step": 4.0,
+      "state_position": 32,
+      "field": "root.parameters.regional.10.second.bias",
+      "shape": [
+        32
+      ],
+      "field_max_abs": 3.4477561712265015e-05,
+      "field_max_scaled": 4.079831167748073,
+      "exceedance_coordinates": [
+        {
+          "index": [
+            5
+          ],
+          "actual": 0.016323715448379517,
+          "reference": 0.01628923788666725,
+          "absolute_error": 3.4477561712265015e-05,
+          "allowed_error": 3.35784757733345e-05,
+          "scaled_error": 1.0267756626298237,
+          "gradient_actual": 1.0858102611477349e-10,
+          "gradient_reference": 6.514861428108532e-10,
+          "exp_avg_actual": -1.3561157752306485e-10,
+          "exp_avg_reference": 4.854831536782456e-10,
+          "exp_avg_sq_actual": 2.5295323687952235e-20,
+          "exp_avg_sq_reference": 1.0678579398426376e-20
+        },
+        {
+          "index": [
+            6
+          ],
+          "actual": 0.0013393297558650374,
+          "reference": 0.0013544615358114243,
+          "absolute_error": 1.5131779946386814e-05,
+          "allowed_error": 3.7089230716228484e-06,
+          "scaled_error": 4.079831167748073,
+          "gradient_actual": -4.2917572273815097e-11,
+          "gradient_reference": -2.575054336428906e-10,
+          "exp_avg_actual": 5.3630565266526986e-11,
+          "exp_avg_reference": -1.9180068644431003e-10,
+          "exp_avg_sq_actual": 3.948648032114529e-21,
+          "exp_avg_sq_reference": 1.666377760259557e-21
+        }
+      ],
+      "comparison": {
+        "exact": false,
+        "metadata_failures": [],
+        "dtype_differences": [],
+        "nonfinite": [],
+        "support_differences": [],
+        "threshold_failures": [
+          "root.parameters.regional.10.second.bias"
+        ],
+        "work_differences": [],
+        "discrete_sha_equal": true,
+        "support_sha_equal": true,
+        "none_fields_equal": true
+      },
+      "actual_mechanism": {
+        "input_connected": true,
+        "loss_connected": true,
+        "original_state_unchanged": true
+      },
+      "reference_mechanism": {
+        "input_connected": true,
+        "loss_connected": true,
+        "original_state_unchanged": true
+      },
+      "input_gradient_connected": true,
+      "input_gradient_finite": true
+    }
+  ],
+  "failed_field_comparisons": 2,
+  "failed_scalar_coordinates": 3,
+  "initial_vjp": {
+    "nonexact_parameter_gradient_tensor_count": 21,
+    "parameter_gradient_tensor_count": 128,
+    "nonexact_parameter_gradient_tensors": [
+      "receive.a.weight",
+      "receive.b.weight",
+      "receive.embedding.weight",
+      "memories.K.kv.weight",
+      "memories.K.output.weight",
+      "memories.K.ffn.gate.weight",
+      "memories.K.ffn.up.weight",
+      "memories.K.ffn.down.weight",
+      "memories.S.input.weight",
+      "memories.S.output.weight",
+      "memories.S.ffn.gate.weight",
+      "memories.S.ffn.up.weight",
+      "memories.S.ffn.down.weight",
+      "memories.S.a_log.value",
+      "memories.S.dt_bias.value",
+      "memories.S.skip.value",
+      "memories.S.rho.value",
+      "memories.S.conv_kernel.value",
+      "memories.S.conv_bias.value",
+      "inputs.D.weight",
+      "inputs.H.weight"
+    ],
+    "input_gradient_exact": false,
+    "target_bias_gradient_exact": true,
+    "forward_exact": true,
+    "all_fields_within_original_threshold": true
+  },
+  "scalar_adamw": {
+    "formula": "p_next = p_prev * (1 - lr * weight_decay) - lr * (m / (1 - beta1**step)) / (sqrt(v / (1 - beta2**step)) + eps)",
+    "scope": "Independent Python double scalar calculation using saved FP32 parameter and post-update AdamW moment values for optimizer step 4; residuals are formula observations, not relaxed acceptance thresholds.",
+    "rows": [
+      {
+        "candidate": "combined",
+        "index": [
+          5
+        ],
+        "optimizer_step": 4.0,
+        "previous_parameter": 0.01632058247923851,
+        "actual_parameter": 0.016323715448379517,
+        "actual_increment": 3.1329691410064697e-06,
+        "exp_avg": -1.3561157752306485e-10,
+        "exp_avg_sq": 2.5295323687952235e-20,
+        "bias_corrected_sqrt_second_moment": 2.5166097387383173e-09,
+        "eps": 1e-08,
+        "lr": 0.0001,
+        "betas": [
+          0.9,
+          0.999
+        ],
+        "weight_decay": 0.01,
+        "scalar_formula_parameter": 0.01632371664702634,
+        "actual_minus_scalar_formula": -1.198646824157601e-09
+      },
+      {
+        "candidate": "combined",
+        "index": [
+          6
+        ],
+        "optimizer_step": 4.0,
+        "previous_parameter": 0.0013407495571300387,
+        "actual_parameter": 0.0013393297558650374,
+        "actual_increment": -1.419801265001297e-06,
+        "exp_avg": 5.3630565266526986e-11,
+        "exp_avg_sq": 3.948648032114529e-21,
+        "bias_corrected_sqrt_second_moment": 9.943057807386178e-10,
+        "eps": 1e-08,
+        "lr": 0.0001,
+        "betas": [
+          0.9,
+          0.999
+        ],
+        "weight_decay": 0.01,
+        "scalar_formula_parameter": 0.001339329771752153,
+        "actual_minus_scalar_formula": -1.5887115624793613e-11
+      },
+      {
+        "candidate": "baseline",
+        "index": [
+          5
+        ],
+        "optimizer_step": 4.0,
+        "previous_parameter": 0.016301387920975685,
+        "actual_parameter": 0.01628923788666725,
+        "actual_increment": -1.2150034308433533e-05,
+        "exp_avg": 4.854831536782456e-10,
+        "exp_avg_sq": 1.0678579398426376e-20,
+        "bias_corrected_sqrt_second_moment": 1.635130776300717e-09,
+        "eps": 1e-08,
+        "lr": 0.0001,
+        "betas": [
+          0.9,
+          0.999
+        ],
+        "weight_decay": 0.01,
+        "scalar_formula_parameter": 0.016289238549130006,
+        "actual_minus_scalar_formula": -6.624627547913153e-10
+      },
+      {
+        "candidate": "baseline",
+        "index": [
+          6
+        ],
+        "optimizer_step": 4.0,
+        "previous_parameter": 0.0013492241268977523,
+        "actual_parameter": 0.0013544615358114243,
+        "actual_increment": 5.23740891367197e-06,
+        "exp_avg": -1.9180068644431003e-10,
+        "exp_avg_sq": 1.666377760259557e-21,
+        "bias_corrected_sqrt_second_moment": 6.459255783203186e-10,
+        "eps": 1e-08,
+        "lr": 0.0001,
+        "betas": [
+          0.9,
+          0.999
+        ],
+        "weight_decay": 0.01,
+        "scalar_formula_parameter": 0.0013544616106851324,
+        "actual_minus_scalar_formula": -7.487370814497629e-11
+      }
+    ],
+    "maximum_absolute_formula_residual": 1.198646824157601e-09
+  },
+  "restore": {
+    "state": "within_threshold",
+    "new_process": true,
+    "original_process_pid": 1725663,
+    "restored_process_pid": 1728822,
+    "source_exact": true,
+    "config_exact": true,
+    "saved_data_exact": true,
+    "actual_update": true,
+    "exit_code": 0,
+    "checks": {
+      "gradient_rng_anchor": {
+        "exact": true,
+        "metadata_failures": [],
+        "dtype_differences": [],
+        "nonfinite": [],
+        "support_differences": [],
+        "threshold_failures": [],
+        "work_differences": [],
+        "discrete_sha_equal": true,
+        "support_sha_equal": true,
+        "none_fields_equal": true
+      },
+      "next_forward": {
+        "exact": true,
+        "metadata_failures": [],
+        "dtype_differences": [],
+        "nonfinite": [],
+        "support_differences": [],
+        "threshold_failures": [],
+        "work_differences": [],
+        "discrete_sha_equal": true,
+        "support_sha_equal": true,
+        "none_fields_equal": true
+      },
+      "actual_update": {
+        "exact": true,
+        "metadata_failures": [],
+        "dtype_differences": [],
+        "nonfinite": [],
+        "support_differences": [],
+        "threshold_failures": [],
+        "work_differences": [],
+        "discrete_sha_equal": true,
+        "support_sha_equal": true,
+        "none_fields_equal": true
+      }
+    },
+    "optimizer_step_before": [
+      4
+    ],
+    "optimizer_step_after": [
+      5
+    ]
+  },
+  "boundaries": [
+    "Only regional.10.second.bias crosses the original threshold: coordinate 6 at continuing update 2 and coordinates 5 and 6 at continuing update 3.",
+    "No recorded nonfinite, dtype, metadata, support, original-int64/discrete, work, None-gradient or input/loss-connectivity failure. Later floating private-state values are nonexact but remain within threshold; exact state equality is not claimed after updates.",
+    "Initial returned inference/grad-forward values and private state match exactly. Initial parameter and input VJPs already contain finite nonexact differences within threshold; the target bias gradient itself still matches exactly at that anchor.",
+    "Saved differing optimizer moments quantitatively account for the observed step-4 parameter increments to the scalar residuals shown. This does not locate the first causal gradient divergence and does not establish rounding as its cause.",
+    "Exact same-candidate recovery and repeated VJP do not certify cross-path exactness or erase the combined finite_deviation.",
+    "Failed update payloads, baseline counterparts, initial VJP payloads and common anchor remain retained. The successful same-owner restore sidecar was already retired by the producer under its recorded policy; this review deletes nothing."
+  ],
+  "minimal_followup": "Only if causal diagnosis is required: replay baseline and combined from the retained common anchor for at most two continuing updates, using frozen 05e8338b inputs and original four-thread scope. Capture the earliest nonexact Full-FFN value/input-VJP boundary and the second-update regional.10 allocation face/bias derivative, then use a single bounded FP64 independent local VJP with the captured operands/root. Do not expand to a full FP64 model, 9B training, new tolerances, altered AdamW epsilon or a repeated experiment matrix."
+}

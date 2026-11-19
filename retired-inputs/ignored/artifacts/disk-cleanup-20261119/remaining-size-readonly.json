@@ -1,0 +1,169 @@
+{
+  "file_allocated_bytes": {
+    "other_files": 198369280,
+    "other_json_records": 4044189696,
+    "frozen_source_and_document_copies": 13968052224,
+    "tensor_payloads": 84986400768,
+    "profiler_raw_and_trace": 5707726848,
+    "raw_f32_fixtures_and_outputs": 1908318208,
+    "other_worktree_files": 726155264
+  },
+  "file_counts": {
+    "other_files": 6467,
+    "other_json_records": 3731,
+    "frozen_source_and_document_copies": 132504,
+    "tensor_payloads": 362,
+    "profiler_raw_and_trace": 1613,
+    "raw_f32_fixtures_and_outputs": 6734,
+    "other_worktree_files": 8893
+  },
+  "total_regular_files_bytes": 111539212288,
+  "top_level_GiB": [
+    [
+      "ffn-medium-cpu-qualification-v1",
+      19.57245635986328
+    ],
+    [
+      "training-paths-settle-bf16",
+      4.538303375244141
+    ],
+    [
+      "ffn-medium-npu-qualification-v1",
+      4.331321716308594
+    ],
+    [
+      "training-paths-prefix-fp64",
+      4.1610260009765625
+    ],
+    [
+      "training-paths-timed-bf16",
+      3.7131805419921875
+    ],
+    [
+      "training-paths-settle-fp32",
+      3.3631439208984375
+    ],
+    [
+      "agg-cost-half-fp32-v1",
+      2.902759552001953
+    ],
+    [
+      "memory-npu-qual-fp32-v1",
+      2.7009963989257812
+    ],
+    [
+      "memory-npu-qual-bf16-v1",
+      2.7005767822265625
+    ],
+    [
+      "memory-cpu-qual-v1",
+      2.699748992919922
+    ],
+    [
+      "agg-paths-wide-fp32-v1",
+      2.6626663208007812
+    ],
+    [
+      "training-paths-timed-fp32",
+      2.5525054931640625
+    ],
+    [
+      "agg-paths-light128-fp32-v1",
+      2.5103416442871094
+    ],
+    [
+      "agg-paths-light64-fp32-v1",
+      2.3381309509277344
+    ],
+    [
+      "training-paths-placed-fp32",
+      2.1522445678710938
+    ],
+    [
+      "training-paths-placed-bf16",
+      2.0947799682617188
+    ],
+    [
+      "execution-candidates-npu-v3",
+      1.8583602905273438
+    ],
+    [
+      "agg-paths-static-fp32-v1",
+      1.6390266418457031
+    ]
+  ],
+  "large_other_json": [
+    [
+      141193216,
+      "artifacts/training-other-modes-fc/modes.json"
+    ],
+    [
+      114778112,
+      "artifacts/ffn-infer-cpu-stages-baseline-v1/breakdown.json"
+    ],
+    [
+      111910912,
+      "artifacts/ffn-infer-npu-stages-baseline-v1/breakdown.json"
+    ],
+    [
+      107536384,
+      "artifacts/breakdown-infer-kv128-v1/breakdown.json"
+    ],
+    [
+      87515136,
+      "artifacts/training-budget-fc-bf16/search/003-b128-l256-tide.json"
+    ],
+    [
+      79740928,
+      "artifacts/training-budget-settle-recompute/search/005-b128-l256-tide.json"
+    ],
+    [
+      79740928,
+      "artifacts/training-budget-settle-both/search/005-b128-l256-tide.json"
+    ],
+    [
+      79044608,
+      "artifacts/agg-fc-capacity-fp32-v1/search/005-b128-l256-tide.json"
+    ],
+    [
+      74788864,
+      "artifacts/capacity-fck-budget-bf16-v2/results/007-b256-l128-tide.json"
+    ],
+    [
+      70610944,
+      "artifacts/training-joint-fc-bf16/joint.json"
+    ],
+    [
+      68075520,
+      "artifacts/training-budget-fc-bf16/search/004-b256-l256-audit.json"
+    ],
+    [
+      52174848,
+      "artifacts/training-budget-fc-bf16/search/001-b64-l256-tide.json"
+    ],
+    [
+      44089344,
+      "artifacts/training-budget-settle-recompute/search/003-b64-l256-tide.json"
+    ],
+    [
+      44089344,
+      "artifacts/training-budget-settle-both/search/003-b64-l256-tide.json"
+    ],
+    [
+      43704320,
+      "artifacts/agg-fc-capacity-fp32-v1/search/003-b64-l256-tide.json"
+    ],
+    [
+      39419904,
+      "artifacts/capacity-fck-budget-bf16-v2/results/005-b128-l128-tide.json"
+    ],
+    [
+      38170624,
+      "artifacts/capacity-fck-budget-bf16-v2/results/023-b256-l128-transformer_D.json"
+    ],
+    [
+      38170624,
+      "artifacts/capacity-fck-budget-bf16-v2/results/019-b256-l128-transformer_C.json"
+    ]
+  ]
+}

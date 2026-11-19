@@ -1,0 +1,27 @@
+{
+  "elapsed_seconds": 867.2640424892306,
+  "job_id": "capacity-region-17b-npu-v1",
+  "logical_devices": [
+    "npu:0",
+    "npu:1",
+    "npu:2",
+    "npu:3",
+    "npu:4",
+    "npu:5"
+  ],
+  "npu_count": 6,
+  "physical_ids": [
+    0,
+    1,
+    2,
+    4,
+    5,
+    7
+  ],
+  "priority": 0,
+  "project": "tide-instances",
+  "return_code": 0,
+  "schema_version": 1,
+  "status": "completed",
+  "timestamp": "2026-11-18T08:12:18.448285+00:00"
+}

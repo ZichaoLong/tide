@@ -1,0 +1,43 @@
+{
+  "state": "passed",
+  "source": "2360728d364f34967b8e46491406f0430c103ac1",
+  "command": [
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "-m",
+    "scripts.diagnose_saved_training",
+    "--qualification-dir",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/ffn-medium-cpu-qualification-v1/qualification",
+    "--output-dir",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/numerics-saved-update-v1/diagnosis",
+    "--threads",
+    "4",
+    "--max-input-gib",
+    "24",
+    "--max-rss-gib",
+    "64",
+    "--seconds",
+    "3500",
+    "--coordinate-limit",
+    "64",
+    "--verify-input-sha256"
+  ],
+  "pid": 2733744,
+  "started": "2026-11-19T10:09:39.210079+00:00",
+  "max_rss_bytes": 68719476736,
+  "peak_rss_bytes": 6647173120,
+  "max_processes": 1,
+  "rss_sample_count": 140,
+  "poll_interval": 0.25,
+  "descendant_supervision": "Linux child subreaper; retained PID/start identities across nested sessions",
+  "child_pid": 2733774,
+  "process_group": 2733774,
+  "elapsed": 60.161412823945284,
+  "descendant_identities": [
+    {
+      "pid": 2733774,
+      "start_ticks": 2266914991
+    }
+  ],
+  "exit_code": 0,
+  "finished": "2026-11-19T10:10:39.371493+00:00"
+}

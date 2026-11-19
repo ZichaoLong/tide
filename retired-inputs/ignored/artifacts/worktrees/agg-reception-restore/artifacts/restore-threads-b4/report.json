@@ -1,0 +1,874 @@
+{
+  "source": "b4cf1514fb1e79d0bbebf7ab03595bcbacbf2160",
+  "production_tree": "92e3d8a6c18c01cddde3b6c56068698cbbbffa43",
+  "harness_sha256": "fc746c4ced9982fcead093abff71d26ce06d55074db0291b42df1cc91ba2029b",
+  "torch": "2.12.0+cpu",
+  "cpu_affinity": [
+    32,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38,
+    39
+  ],
+  "seed": 520,
+  "observations": [
+    {
+      "run": 0,
+      "threads": 4,
+      "input_sha256": "5b751cdbc2da3af6bc79fe403f0877a6d09e62651a9348bede401c44f262c634",
+      "saved": {
+        "exact": true,
+        "finite": true,
+        "metadata_mismatches": [],
+        "support_mismatches": [],
+        "numerical_failures": [],
+        "max_abs": 0.0,
+        "max_scaled_error": 0.0,
+        "atol": 0,
+        "rtol": 0,
+        "floating_tensors": 560,
+        "within_threshold": true
+      },
+      "restored_update_exact": {
+        "exact": false,
+        "finite": true,
+        "metadata_mismatches": [],
+        "support_mismatches": [],
+        "numerical_failures": [
+          {
+            "path": "root.gradients.receive.k.weight",
+            "max_abs": 1.1641532182693481e-10,
+            "scaled_error": null
+          },
+          {
+            "path": "root.gradients.receive.o.weight",
+            "max_abs": 4.656612873077393e-10,
+            "scaled_error": null
+          },
+          {
+            "path": "root.gradients.receive.q.weight",
+            "max_abs": 2.9103830456733704e-11,
+            "scaled_error": null
+          },
+          {
+            "path": "root.gradients.receive.v.weight",
+            "max_abs": 2.3283064365386963e-10,
+            "scaled_error": null
+          },
+          {
+            "path": "root.optimizer.state.11.exp_avg",
+            "max_abs": 1.4551915228366852e-11,
+            "scaled_error": null
+          },
+          {
+            "path": "root.optimizer.state.11.exp_avg_sq",
+            "max_abs": 2.220446049250313e-16,
+            "scaled_error": null
+          },
+          {
+            "path": "root.optimizer.state.14.exp_avg",
+            "max_abs": 5.820766091346741e-11,
+            "scaled_error": null
+          },
+          {
+            "path": "root.optimizer.state.14.exp_avg_sq",
+            "max_abs": 3.552713678800501e-15,
+            "scaled_error": null
+          },
+          {
+            "path": "root.optimizer.state.17.exp_avg",
+            "max_abs": 1.1641532182693481e-10,
+            "scaled_error": null
+          },
+          {
+            "path": "root.optimizer.state.17.exp_avg_sq",
+            "max_abs": 7.105427357601002e-15,
+            "scaled_error": null
+          },
+          {
+            "path": "root.optimizer.state.8.exp_avg",
+            "max_abs": 1.4551915228366852e-11,
+            "scaled_error": null
+          },
+          {
+            "path": "root.optimizer.state.8.exp_avg_sq",
+            "max_abs": 2.7755575615628914e-17,
+            "scaled_error": null
+          },
+          {
+            "path": "root.parameters.receive.o.weight",
+            "max_abs": 7.450580596923828e-09,
+            "scaled_error": null
+          }
+        ],
+        "max_abs": 7.450580596923828e-09,
+        "max_scaled_error": 0.0,
+        "atol": 0,
+        "rtol": 0,
+        "floating_tensors": 883,
+        "within_threshold": false
+      },
+      "restored_update_tolerance": {
+        "exact": false,
+        "finite": true,
+        "metadata_mismatches": [],
+        "support_mismatches": [],
+        "numerical_failures": [],
+        "max_abs": 7.450580596923828e-09,
+        "max_scaled_error": 0.0001865086611444128,
+        "atol": 1e-06,
+        "rtol": 0.002,
+        "floating_tensors": 883,
+        "within_threshold": true
+      },
+      "restored_update_differences": [
+        {
+          "field": "root.gradients.receive.k.weight",
+          "shape": [
+            9,
+            128,
+            64
+          ],
+          "changed": 751,
+          "max_abs": 1.1641532182693481e-10,
+          "max_flat_index": 35252,
+          "actual": -0.0008615045808255672,
+          "expected": -0.0008615044644102454
+        },
+        {
+          "field": "root.gradients.receive.o.weight",
+          "shape": [
+            9,
+            64,
+            128
+          ],
+          "changed": 1333,
+          "max_abs": 4.656612873077393e-10,
+          "max_flat_index": 33262,
+          "actual": -0.003639071946963668,
+          "expected": -0.003639072412624955
+        },
+        {
+          "field": "root.gradients.receive.q.weight",
+          "shape": [
+            9,
+            128,
+            64
+          ],
+          "changed": 391,
+          "max_abs": 2.9103830456733704e-11,
+          "max_flat_index": 34871,
+          "actual": -0.00023860533838160336,
+          "expected": -0.0002386053092777729
+        },
+        {
+          "field": "root.gradients.receive.v.weight",
+          "shape": [
+            9,
+            128,
+            64
+          ],
+          "changed": 580,
+          "max_abs": 2.3283064365386963e-10,
+          "max_flat_index": 33907,
+          "actual": -0.0015128492377698421,
+          "expected": -0.0015128490049391985
+        },
+        {
+          "field": "root.optimizer.state.11.exp_avg",
+          "shape": [
+            9,
+            128,
+            64
+          ],
+          "changed": 214,
+          "max_abs": 1.4551915228366852e-11,
+          "max_flat_index": 35252,
+          "actual": -7.381897739833221e-05,
+          "expected": -7.381896284641698e-05
+        },
+        {
+          "field": "root.optimizer.state.11.exp_avg_sq",
+          "shape": [
+            9,
+            128,
+            64
+          ],
+          "changed": 102,
+          "max_abs": 2.220446049250313e-16,
+          "max_flat_index": 35252,
+          "actual": 8.195792933207713e-10,
+          "expected": 8.195790712761664e-10
+        },
+        {
+          "field": "root.optimizer.state.14.exp_avg",
+          "shape": [
+            9,
+            128,
+            64
+          ],
+          "changed": 239,
+          "max_abs": 5.820766091346741e-11,
+          "max_flat_index": 36101,
+          "actual": -0.0005389393772929907,
+          "expected": -0.0005389394355006516
+        },
+        {
+          "field": "root.optimizer.state.14.exp_avg_sq",
+          "shape": [
+            9,
+            128,
+            64
+          ],
+          "changed": 95,
+          "max_abs": 3.552713678800501e-15,
+          "max_flat_index": 35097,
+          "actual": 3.077821730812502e-08,
+          "expected": 3.07782208608387e-08
+        },
+        {
+          "field": "root.optimizer.state.17.exp_avg",
+          "shape": [
+            9,
+            64,
+            128
+          ],
+          "changed": 612,
+          "max_abs": 1.1641532182693481e-10,
+          "max_flat_index": 33648,
+          "actual": -0.0011137010296806693,
+          "expected": -0.0011137011460959911
+        },
+        {
+          "field": "root.optimizer.state.17.exp_avg_sq",
+          "shape": [
+            9,
+            64,
+            128
+          ],
+          "changed": 309,
+          "max_abs": 7.105427357601002e-15,
+          "max_flat_index": 33648,
+          "actual": 9.896525199337702e-08,
+          "expected": 9.896525909880438e-08
+        },
+        {
+          "field": "root.optimizer.state.8.exp_avg",
+          "shape": [
+            9,
+            128,
+            64
+          ],
+          "changed": 67,
+          "max_abs": 1.4551915228366852e-11,
+          "max_flat_index": 40496,
+          "actual": -0.00015941217134241015,
+          "expected": -0.00015941218589432538
+        },
+        {
+          "field": "root.optimizer.state.8.exp_avg_sq",
+          "shape": [
+            9,
+            128,
+            64
+          ],
+          "changed": 15,
+          "max_abs": 2.7755575615628914e-17,
+          "max_flat_index": 34871,
+          "actual": 3.6175445972119746e-10,
+          "expected": 3.6175443196562185e-10
+        },
+        {
+          "field": "root.parameters.receive.o.weight",
+          "shape": [
+            9,
+            64,
+            128
+          ],
+          "changed": 5,
+          "max_abs": 7.450580596923828e-09,
+          "max_flat_index": 34282,
+          "actual": 0.06769373267889023,
+          "expected": 0.06769372522830963
+        }
+      ],
+      "same_owner_repeat_exact": {
+        "exact": false,
+        "finite": true,
+        "metadata_mismatches": [],
+        "support_mismatches": [],
+        "numerical_failures": [
+          {
+            "path": "root.gradients.receive.k.weight",
+            "max_abs": 5.820766091346741e-11,
+            "scaled_error": null
+          },
+          {
+            "path": "root.gradients.receive.o.weight",
+            "max_abs": 2.3283064365386963e-10,
+            "scaled_error": null
+          },
+          {
+            "path": "root.gradients.receive.q.weight",
+            "max_abs": 2.9103830456733704e-11,
+            "scaled_error": null
+          },
+          {
+            "path": "root.gradients.receive.v.weight",
+            "max_abs": 2.3283064365386963e-10,
+            "scaled_error": null
+          }
+        ],
+        "max_abs": 2.3283064365386963e-10,
+        "max_scaled_error": 0.0,
+        "atol": 0,
+        "rtol": 0,
+        "floating_tensors": 323,
+        "within_threshold": false
+      },
+      "same_owner_repeat_tolerance": {
+        "exact": false,
+        "finite": true,
+        "metadata_mismatches": [],
+        "support_mismatches": [],
+        "numerical_failures": [],
+        "max_abs": 2.3283064365386963e-10,
+        "max_scaled_error": 0.00010945008092222377,
+        "atol": 1e-06,
+        "rtol": 0.002,
+        "floating_tensors": 323,
+        "within_threshold": true
+      },
+      "same_owner_repeat_differences": [
+        {
+          "field": "root.gradients.receive.k.weight",
+          "shape": [
+            9,
+            128,
+            64
+          ],
+          "changed": 973,
+          "max_abs": 5.820766091346741e-11,
+          "max_flat_index": 35021,
+          "actual": 0.0005276061710901558,
+          "expected": 0.0005276062292978168
+        },
+        {
+          "field": "root.gradients.receive.o.weight",
+          "shape": [
+            9,
+            64,
+            128
+          ],
+          "changed": 267,
+          "max_abs": 2.3283064365386963e-10,
+          "max_flat_index": 39206,
+          "actual": -0.0017138341208919883,
+          "expected": -0.0017138338880613446
+        },
+        {
+          "field": "root.gradients.receive.q.weight",
+          "shape": [
+            9,
+            128,
+            64
+          ],
+          "changed": 918,
+          "max_abs": 2.9103830456733704e-11,
+          "max_flat_index": 33091,
+          "actual": -0.00022515440650749952,
+          "expected": -0.00022515443561132997
+        },
+        {
+          "field": "root.gradients.receive.v.weight",
+          "shape": [
+            9,
+            128,
+            64
+          ],
+          "changed": 961,
+          "max_abs": 2.3283064365386963e-10,
+          "max_flat_index": 32820,
+          "actual": -0.0014743499923497438,
+          "expected": -0.0014743497595191002
+        }
+      ]
+    },
+    {
+      "run": 1,
+      "threads": 4,
+      "input_sha256": "5b751cdbc2da3af6bc79fe403f0877a6d09e62651a9348bede401c44f262c634",
+      "saved": {
+        "exact": true,
+        "finite": true,
+        "metadata_mismatches": [],
+        "support_mismatches": [],
+        "numerical_failures": [],
+        "max_abs": 0.0,
+        "max_scaled_error": 0.0,
+        "atol": 0,
+        "rtol": 0,
+        "floating_tensors": 560,
+        "within_threshold": true
+      },
+      "restored_update_exact": {
+        "exact": false,
+        "finite": true,
+        "metadata_mismatches": [],
+        "support_mismatches": [],
+        "numerical_failures": [
+          {
+            "path": "root.gradients.receive.k.weight",
+            "max_abs": 2.9103830456733704e-11,
+            "scaled_error": null
+          },
+          {
+            "path": "root.gradients.receive.o.weight",
+            "max_abs": 6.984919309616089e-10,
+            "scaled_error": null
+          },
+          {
+            "path": "root.gradients.receive.q.weight",
+            "max_abs": 5.820766091346741e-11,
+            "scaled_error": null
+          },
+          {
+            "path": "root.gradients.receive.v.weight",
+            "max_abs": 4.656612873077393e-10,
+            "scaled_error": null
+          },
+          {
+            "path": "root.optimizer.state.11.exp_avg",
+            "max_abs": 7.275957614183426e-12,
+            "scaled_error": null
+          },
+          {
+            "path": "root.optimizer.state.11.exp_avg_sq",
+            "max_abs": 1.1102230246251565e-16,
+            "scaled_error": null
+          },
+          {
+            "path": "root.optimizer.state.14.exp_avg",
+            "max_abs": 5.820766091346741e-11,
+            "scaled_error": null
+          },
+          {
+            "path": "root.optimizer.state.14.exp_avg_sq",
+            "max_abs": 3.552713678800501e-15,
+            "scaled_error": null
+          },
+          {
+            "path": "root.optimizer.state.17.exp_avg",
+            "max_abs": 5.820766091346741e-11,
+            "scaled_error": null
+          },
+          {
+            "path": "root.optimizer.state.17.exp_avg_sq",
+            "max_abs": 7.105427357601002e-15,
+            "scaled_error": null
+          },
+          {
+            "path": "root.optimizer.state.8.exp_avg",
+            "max_abs": 1.4551915228366852e-11,
+            "scaled_error": null
+          },
+          {
+            "path": "root.optimizer.state.8.exp_avg_sq",
+            "max_abs": 5.551115123125783e-17,
+            "scaled_error": null
+          },
+          {
+            "path": "root.parameters.receive.o.weight",
+            "max_abs": 9.313225746154785e-10,
+            "scaled_error": null
+          },
+          {
+            "path": "root.parameters.receive.v.weight",
+            "max_abs": 1.862645149230957e-09,
+            "scaled_error": null
+          }
+        ],
+        "max_abs": 1.862645149230957e-09,
+        "max_scaled_error": 0.0,
+        "atol": 0,
+        "rtol": 0,
+        "floating_tensors": 883,
+        "within_threshold": false
+      },
+      "restored_update_tolerance": {
+        "exact": false,
+        "finite": true,
+        "metadata_mismatches": [],
+        "support_mismatches": [],
+        "numerical_failures": [],
+        "max_abs": 1.862645149230957e-09,
+        "max_scaled_error": 0.00015302636271090025,
+        "atol": 1e-06,
+        "rtol": 0.002,
+        "floating_tensors": 883,
+        "within_threshold": true
+      },
+      "restored_update_differences": [
+        {
+          "field": "root.gradients.receive.k.weight",
+          "shape": [
+            9,
+            128,
+            64
+          ],
+          "changed": 1235,
+          "max_abs": 2.9103830456733704e-11,
+          "max_flat_index": 33747,
+          "actual": -0.00023758811585139483,
+          "expected": -0.00023758808674756438
+        },
+        {
+          "field": "root.gradients.receive.o.weight",
+          "shape": [
+            9,
+            64,
+            128
+          ],
+          "changed": 1333,
+          "max_abs": 6.984919309616089e-10,
+          "max_flat_index": 40164,
+          "actual": 0.0032121939584612846,
+          "expected": 0.0032121946569532156
+        },
+        {
+          "field": "root.gradients.receive.q.weight",
+          "shape": [
+            9,
+            128,
+            64
+          ],
+          "changed": 1053,
+          "max_abs": 5.820766091346741e-11,
+          "max_flat_index": 33114,
+          "actual": -0.00046287168515846133,
+          "expected": -0.0004628716269508004
+        },
+        {
+          "field": "root.gradients.receive.v.weight",
+          "shape": [
+            9,
+            128,
+            64
+          ],
+          "changed": 1297,
+          "max_abs": 4.656612873077393e-10,
+          "max_flat_index": 34769,
+          "actual": -0.002583954017609358,
+          "expected": -0.0025839535519480705
+        },
+        {
+          "field": "root.optimizer.state.11.exp_avg",
+          "shape": [
+            9,
+            128,
+            64
+          ],
+          "changed": 295,
+          "max_abs": 7.275957614183426e-12,
+          "max_flat_index": 33099,
+          "actual": -6.528835365315899e-05,
+          "expected": -6.528834637720138e-05
+        },
+        {
+          "field": "root.optimizer.state.11.exp_avg_sq",
+          "shape": [
+            9,
+            128,
+            64
+          ],
+          "changed": 113,
+          "max_abs": 1.1102230246251565e-16,
+          "max_flat_index": 40571,
+          "actual": 1.2809949767600415e-09,
+          "expected": 1.280994865737739e-09
+        },
+        {
+          "field": "root.optimizer.state.14.exp_avg",
+          "shape": [
+            9,
+            128,
+            64
+          ],
+          "changed": 568,
+          "max_abs": 5.820766091346741e-11,
+          "max_flat_index": 32817,
+          "actual": 0.0005524029256775975,
+          "expected": 0.0005524028674699366
+        },
+        {
+          "field": "root.optimizer.state.14.exp_avg_sq",
+          "shape": [
+            9,
+            128,
+            64
+          ],
+          "changed": 226,
+          "max_abs": 3.552713678800501e-15,
+          "max_flat_index": 34769,
+          "actual": 2.1455907273093544e-08,
+          "expected": 2.1455903720379865e-08
+        },
+        {
+          "field": "root.optimizer.state.17.exp_avg",
+          "shape": [
+            9,
+            64,
+            128
+          ],
+          "changed": 634,
+          "max_abs": 5.820766091346741e-11,
+          "max_flat_index": 33075,
+          "actual": -0.0007390571990981698,
+          "expected": -0.0007390571408905089
+        },
+        {
+          "field": "root.optimizer.state.17.exp_avg_sq",
+          "shape": [
+            9,
+            64,
+            128
+          ],
+          "changed": 273,
+          "max_abs": 7.105427357601002e-15,
+          "max_flat_index": 37364,
+          "actual": 7.00765880878862e-08,
+          "expected": 7.007659519331355e-08
+        },
+        {
+          "field": "root.optimizer.state.8.exp_avg",
+          "shape": [
+            9,
+            128,
+            64
+          ],
+          "changed": 234,
+          "max_abs": 1.4551915228366852e-11,
+          "max_flat_index": 38867,
+          "actual": -0.00012655775935854763,
+          "expected": -0.0001265577448066324
+        },
+        {
+          "field": "root.optimizer.state.8.exp_avg_sq",
+          "shape": [
+            9,
+            128,
+            64
+          ],
+          "changed": 69,
+          "max_abs": 5.551115123125783e-17,
+          "max_flat_index": 33114,
+          "actual": 2.334047399799033e-10,
+          "expected": 2.3340468446875207e-10
+        },
+        {
+          "field": "root.parameters.receive.o.weight",
+          "shape": [
+            9,
+            64,
+            128
+          ],
+          "changed": 3,
+          "max_abs": 9.313225746154785e-10,
+          "max_flat_index": 34774,
+          "actual": -0.013158398680388927,
+          "expected": -0.013158399611711502
+        },
+        {
+          "field": "root.parameters.receive.v.weight",
+          "shape": [
+            9,
+            128,
+            64
+          ],
+          "changed": 3,
+          "max_abs": 1.862645149230957e-09,
+          "max_flat_index": 39890,
+          "actual": 0.02175184339284897,
+          "expected": 0.02175184153020382
+        }
+      ],
+      "same_owner_repeat_exact": {
+        "exact": false,
+        "finite": true,
+        "metadata_mismatches": [],
+        "support_mismatches": [],
+        "numerical_failures": [
+          {
+            "path": "root.gradients.receive.k.weight",
+            "max_abs": 2.9103830456733704e-11,
+            "scaled_error": null
+          },
+          {
+            "path": "root.gradients.receive.o.weight",
+            "max_abs": 6.984919309616089e-10,
+            "scaled_error": null
+          },
+          {
+            "path": "root.gradients.receive.q.weight",
+            "max_abs": 5.820766091346741e-11,
+            "scaled_error": null
+          },
+          {
+            "path": "root.gradients.receive.v.weight",
+            "max_abs": 4.656612873077393e-10,
+            "scaled_error": null
+          }
+        ],
+        "max_abs": 6.984919309616089e-10,
+        "max_scaled_error": 0.0,
+        "atol": 0,
+        "rtol": 0,
+        "floating_tensors": 323,
+        "within_threshold": false
+      },
+      "same_owner_repeat_tolerance": {
+        "exact": false,
+        "finite": true,
+        "metadata_mismatches": [],
+        "support_mismatches": [],
+        "numerical_failures": [],
+        "max_abs": 6.984919309616089e-10,
+        "max_scaled_error": 0.0001530263783222803,
+        "atol": 1e-06,
+        "rtol": 0.002,
+        "floating_tensors": 323,
+        "within_threshold": true
+      },
+      "same_owner_repeat_differences": [
+        {
+          "field": "root.gradients.receive.k.weight",
+          "shape": [
+            9,
+            128,
+            64
+          ],
+          "changed": 772,
+          "max_abs": 2.9103830456733704e-11,
+          "max_flat_index": 33747,
+          "actual": -0.00023758811585139483,
+          "expected": -0.00023758808674756438
+        },
+        {
+          "field": "root.gradients.receive.o.weight",
+          "shape": [
+            9,
+            64,
+            128
+          ],
+          "changed": 1111,
+          "max_abs": 6.984919309616089e-10,
+          "max_flat_index": 40164,
+          "actual": 0.0032121939584612846,
+          "expected": 0.0032121946569532156
+        },
+        {
+          "field": "root.gradients.receive.q.weight",
+          "shape": [
+            9,
+            128,
+            64
+          ],
+          "changed": 1476,
+          "max_abs": 5.820766091346741e-11,
+          "max_flat_index": 33114,
+          "actual": -0.0004628716269508004,
+          "expected": -0.00046287168515846133
+        },
+        {
+          "field": "root.gradients.receive.v.weight",
+          "shape": [
+            9,
+            128,
+            64
+          ],
+          "changed": 1077,
+          "max_abs": 4.656612873077393e-10,
+          "max_flat_index": 33818,
+          "actual": 0.003690415993332863,
+          "expected": 0.0036904155276715755
+        }
+      ]
+    },
+    {
+      "run": 2,
+      "threads": 1,
+      "input_sha256": "5b751cdbc2da3af6bc79fe403f0877a6d09e62651a9348bede401c44f262c634",
+      "saved": {
+        "exact": true,
+        "finite": true,
+        "metadata_mismatches": [],
+        "support_mismatches": [],
+        "numerical_failures": [],
+        "max_abs": 0.0,
+        "max_scaled_error": 0.0,
+        "atol": 0,
+        "rtol": 0,
+        "floating_tensors": 560,
+        "within_threshold": true
+      },
+      "restored_update_exact": {
+        "exact": true,
+        "finite": true,
+        "metadata_mismatches": [],
+        "support_mismatches": [],
+        "numerical_failures": [],
+        "max_abs": 0.0,
+        "max_scaled_error": 0.0,
+        "atol": 0,
+        "rtol": 0,
+        "floating_tensors": 883,
+        "within_threshold": true
+      },
+      "restored_update_tolerance": {
+        "exact": true,
+        "finite": true,
+        "metadata_mismatches": [],
+        "support_mismatches": [],
+        "numerical_failures": [],
+        "max_abs": 0.0,
+        "max_scaled_error": 0.0,
+        "atol": 1e-06,
+        "rtol": 0.002,
+        "floating_tensors": 883,
+        "within_threshold": true
+      },
+      "restored_update_differences": [],
+      "same_owner_repeat_exact": {
+        "exact": true,
+        "finite": true,
+        "metadata_mismatches": [],
+        "support_mismatches": [],
+        "numerical_failures": [],
+        "max_abs": 0.0,
+        "max_scaled_error": 0.0,
+        "atol": 0,
+        "rtol": 0,
+        "floating_tensors": 323,
+        "within_threshold": true
+      },
+      "same_owner_repeat_tolerance": {
+        "exact": true,
+        "finite": true,
+        "metadata_mismatches": [],
+        "support_mismatches": [],
+        "numerical_failures": [],
+        "max_abs": 0.0,
+        "max_scaled_error": 0.0,
+        "atol": 1e-06,
+        "rtol": 0.002,
+        "floating_tensors": 323,
+        "within_threshold": true
+      },
+      "same_owner_repeat_differences": []
+    }
+  ],
+  "scope": "finite CPU multithread restore and same-owner repeated-VJP replay; original exact failures retained"
+}

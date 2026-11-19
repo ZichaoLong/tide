@@ -1,0 +1,19 @@
+{
+  "elapsed_seconds": 177.88968051970005,
+  "job_id": "cap-17b-tf5-c2-b76-screen-v1",
+  "logical_devices": [
+    "npu:0",
+    "npu:1"
+  ],
+  "npu_count": 2,
+  "physical_ids": [
+    2,
+    14
+  ],
+  "priority": 0,
+  "project": "tide-instances",
+  "return_code": 1,
+  "schema_version": 1,
+  "status": "failed",
+  "timestamp": "2026-11-18T15:48:17.107874+00:00"
+}

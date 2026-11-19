@@ -1,0 +1,29 @@
+{
+  "state": "passed",
+  "source": "6e370493811a52bc54b214f9e4ffb4b262de251b",
+  "command": [
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "-B",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/source-retirement-20261119/retire_sources.py",
+    "audit"
+  ],
+  "pid": 2620781,
+  "started": "2026-11-19T09:36:39.555738+00:00",
+  "max_rss_bytes": 4294967296,
+  "peak_rss_bytes": 241258496,
+  "max_processes": 1,
+  "rss_sample_count": 51,
+  "poll_interval": 0.25,
+  "descendant_supervision": "Linux child subreaper; retained PID/start identities across nested sessions",
+  "child_pid": 2620785,
+  "process_group": 2620785,
+  "elapsed": 21.5096566490829,
+  "descendant_identities": [
+    {
+      "pid": 2620785,
+      "start_ticks": 2266717026
+    }
+  ],
+  "exit_code": 0,
+  "finished": "2026-11-19T09:37:01.065395+00:00"
+}

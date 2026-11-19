@@ -1,0 +1,2076 @@
+{
+  "schema": "tide-transformer-depth-results-1",
+  "source": {
+    "source_commit": "98210ae3a1758de99c0740dfe6f9fe04b07cefc6",
+    "harness_commit": "98210ae3a1758de99c0740dfe6f9fe04b07cefc6",
+    "tide_content_sha256": "27f33247c3d8c5930a36d4e00f6b73aea0038bb17ccad991172ce95e9ac93620",
+    "harness_content_sha256": "3be5309adfcb6956673c9f7edc74d765dc24878ed02edd99b92308b08b2ba710",
+    "tide_path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/cap-17b-tf32-c4-b198-confirm-v1/source/src/tide",
+    "harness_path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/cap-17b-tf32-c4-b198-confirm-v1/source/benchmarks"
+  },
+  "arguments": {
+    "parameters": 16707220176,
+    "layers": 32,
+    "target_reference": null,
+    "devices": "npu:0,npu:1,npu:2,npu:3",
+    "transport": "host_stage",
+    "precision": "fp32",
+    "batch": 198,
+    "prefill": 128,
+    "prefill_chunk": 32,
+    "decode": 16,
+    "window": 128,
+    "chunk": 256,
+    "backend": "auto",
+    "samples": 5,
+    "warmup": 2,
+    "threads": 4,
+    "seed": 751,
+    "allocated_budget_gib": 48.0,
+    "reserved_budget_gib": 56.0,
+    "output": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/cap-17b-tf32-c4-b198-confirm-v1/inference.json"
+  },
+  "schedule": {
+    "prefill": 128,
+    "prefill_chunk": 32,
+    "decode_steps": 16,
+    "stream_positions": 0,
+    "stream_chunk": 128
+  },
+  "precision": {
+    "name": "fp32",
+    "device": "npu:0",
+    "parameters": "float32",
+    "input": "float32",
+    "matrix_arithmetic": "float32",
+    "normalization_mass_allocation": "float32",
+    "kv_keys_values": "float32",
+    "kv_summary_and_ssd_state": "float32",
+    "logical_time_indices": "int64",
+    "parameter_gradients": "float32",
+    "master_weights": "parameters_are_fp32_masters; no_separate_copy",
+    "adamw_moments": "float32",
+    "attention": "native_by_shape_and_prior; math/tiled_accumulate_float32",
+    "attention_mode_selection": "established_fp32_gradient_dependent_prior_dispatch",
+    "loss": "float32",
+    "autocast_cache": false
+  },
+  "comparison": {
+    "kind": "supplementary_fixed_depth_total_parameters",
+    "match": {
+      "constructor": {
+        "d": 7056,
+        "layers": 32,
+        "ffn_width": 15256,
+        "head_dim": 16,
+        "window": 128
+      },
+      "targets": {
+        "blocks": 32,
+        "parameters": 16707220176
+      },
+      "actual": {
+        "blocks": 32,
+        "parameters": 16707260304
+      },
+      "relative_deviation": {
+        "blocks": 0.0,
+        "parameters": 2.4018358277006526e-06
+      },
+      "selection_rule": "exact block count; nearest parameters over d=16*j >= 32, FFN=8*j in [2d,6d]; ties prefer FFN=4d",
+      "parameter_scope": "main blocks and final RMSNorm; no embedding, task head or artificial unused weights"
+    },
+    "target_reference": null,
+    "replaces_joint_classes": false
+  },
+  "resource_identity": "exclusive_cooperative_queue; external jobs not controlled",
+  "physical_devices": "0,1,5,7",
+  "torch": "2.12.0+cpu",
+  "cpu_affinity": [
+    80,
+    81,
+    82,
+    83
+  ],
+  "torch_threads": 4,
+  "host_load_before": [
+    38.1,
+    38.22,
+    38.36
+  ],
+  "state": "completed",
+  "last_stage": "complete",
+  "observations": [
+    {
+      "calls": [
+        {
+          "phase": "prefill",
+          "start": 0,
+          "stop": 32,
+          "input_positions": 6336,
+          "state_before": 0,
+          "state_after": 32,
+          "output_slots": 6336,
+          "seconds": 6.571382626891136,
+          "forward_readout_sync_seconds": 6.571309827268124,
+          "ready_seconds": 6.571382626891136
+        },
+        {
+          "phase": "prefill",
+          "start": 32,
+          "stop": 64,
+          "input_positions": 6336,
+          "state_before": 32,
+          "state_after": 64,
+          "output_slots": 6336,
+          "seconds": 6.612972863018513,
+          "forward_readout_sync_seconds": 6.612958692014217,
+          "ready_seconds": 13.184355489909649
+        },
+        {
+          "phase": "prefill",
+          "start": 64,
+          "stop": 96,
+          "input_positions": 6336,
+          "state_before": 64,
+          "state_after": 96,
+          "output_slots": 6336,
+          "seconds": 6.620580043643713,
+          "forward_readout_sync_seconds": 6.620565045624971,
+          "ready_seconds": 19.804935533553362
+        },
+        {
+          "phase": "prefill",
+          "start": 96,
+          "stop": 128,
+          "input_positions": 6336,
+          "state_before": 96,
+          "state_after": 128,
+          "output_slots": 6336,
+          "seconds": 6.671745907515287,
+          "forward_readout_sync_seconds": 6.671732388436794,
+          "ready_seconds": 26.47668144106865
+        },
+        {
+          "phase": "decode",
+          "start": 128,
+          "stop": 129,
+          "input_positions": 198,
+          "state_before": 128,
+          "state_after": 129,
+          "output_slots": 198,
+          "seconds": 0.696867048740387,
+          "forward_readout_sync_seconds": 0.6968536153435707,
+          "ready_seconds": 27.173548489809036
+        },
+        {
+          "phase": "decode",
+          "start": 129,
+          "stop": 130,
+          "input_positions": 198,
+          "state_before": 129,
+          "state_after": 130,
+          "output_slots": 198,
+          "seconds": 0.6966314911842346,
+          "forward_readout_sync_seconds": 0.6966237835586071,
+          "ready_seconds": 27.87017998099327
+        },
+        {
+          "phase": "decode",
+          "start": 130,
+          "stop": 131,
+          "input_positions": 198,
+          "state_before": 130,
+          "state_after": 131,
+          "output_slots": 198,
+          "seconds": 0.6963196992874146,
+          "forward_readout_sync_seconds": 0.6963111199438572,
+          "ready_seconds": 28.566499680280685
+        },
+        {
+          "phase": "decode",
+          "start": 131,
+          "stop": 132,
+          "input_positions": 198,
+          "state_before": 131,
+          "state_after": 132,
+          "output_slots": 198,
+          "seconds": 0.6967801079154015,
+          "forward_readout_sync_seconds": 0.6967725865542889,
+          "ready_seconds": 29.263279788196087
+        },
+        {
+          "phase": "decode",
+          "start": 132,
+          "stop": 133,
+          "input_positions": 198,
+          "state_before": 132,
+          "state_after": 133,
+          "output_slots": 198,
+          "seconds": 0.6964519992470741,
+          "forward_readout_sync_seconds": 0.6964450180530548,
+          "ready_seconds": 29.95973178744316
+        },
+        {
+          "phase": "decode",
+          "start": 133,
+          "stop": 134,
+          "input_positions": 198,
+          "state_before": 133,
+          "state_after": 134,
+          "output_slots": 198,
+          "seconds": 0.6967246197164059,
+          "forward_readout_sync_seconds": 0.6967157162725925,
+          "ready_seconds": 30.656456407159567
+        },
+        {
+          "phase": "decode",
+          "start": 134,
+          "stop": 135,
+          "input_positions": 198,
+          "state_before": 134,
+          "state_after": 135,
+          "output_slots": 198,
+          "seconds": 0.6961207985877991,
+          "forward_readout_sync_seconds": 0.6961131393909454,
+          "ready_seconds": 31.352577205747366
+        },
+        {
+          "phase": "decode",
+          "start": 135,
+          "stop": 136,
+          "input_positions": 198,
+          "state_before": 135,
+          "state_after": 136,
+          "output_slots": 198,
+          "seconds": 0.6967397145926952,
+          "forward_readout_sync_seconds": 0.6967331655323505,
+          "ready_seconds": 32.04931692034006
+        },
+        {
+          "phase": "decode",
+          "start": 136,
+          "stop": 137,
+          "input_positions": 198,
+          "state_before": 136,
+          "state_after": 137,
+          "output_slots": 198,
+          "seconds": 0.6963202394545078,
+          "forward_readout_sync_seconds": 0.6963117010891438,
+          "ready_seconds": 32.74563715979457
+        },
+        {
+          "phase": "decode",
+          "start": 137,
+          "stop": 138,
+          "input_positions": 198,
+          "state_before": 137,
+          "state_after": 138,
+          "output_slots": 198,
+          "seconds": 0.6967915371060371,
+          "forward_readout_sync_seconds": 0.6967818774282932,
+          "ready_seconds": 33.442428696900606
+        },
+        {
+          "phase": "decode",
+          "start": 138,
+          "stop": 139,
+          "input_positions": 198,
+          "state_before": 138,
+          "state_after": 139,
+          "output_slots": 198,
+          "seconds": 0.6967754326760769,
+          "forward_readout_sync_seconds": 0.6967685036361217,
+          "ready_seconds": 34.13920412957668
+        },
+        {
+          "phase": "decode",
+          "start": 139,
+          "stop": 140,
+          "input_positions": 198,
+          "state_before": 139,
+          "state_after": 140,
+          "output_slots": 198,
+          "seconds": 0.6968225091695786,
+          "forward_readout_sync_seconds": 0.6968143880367279,
+          "ready_seconds": 34.83602663874626
+        },
+        {
+          "phase": "decode",
+          "start": 140,
+          "stop": 141,
+          "input_positions": 198,
+          "state_before": 140,
+          "state_after": 141,
+          "output_slots": 198,
+          "seconds": 0.6963457390666008,
+          "forward_readout_sync_seconds": 0.6963372528553009,
+          "ready_seconds": 35.53237237781286
+        },
+        {
+          "phase": "decode",
+          "start": 141,
+          "stop": 142,
+          "input_positions": 198,
+          "state_before": 141,
+          "state_after": 142,
+          "output_slots": 198,
+          "seconds": 0.6970082372426987,
+          "forward_readout_sync_seconds": 0.6970002874732018,
+          "ready_seconds": 36.22938061505556
+        },
+        {
+          "phase": "decode",
+          "start": 142,
+          "stop": 143,
+          "input_positions": 198,
+          "state_before": 142,
+          "state_after": 143,
+          "output_slots": 198,
+          "seconds": 0.696787167340517,
+          "forward_readout_sync_seconds": 0.6967794299125671,
+          "ready_seconds": 36.92616778239608
+        },
+        {
+          "phase": "decode",
+          "start": 143,
+          "stop": 144,
+          "input_positions": 198,
+          "state_before": 143,
+          "state_after": 144,
+          "output_slots": 198,
+          "seconds": 0.6965713240206242,
+          "forward_readout_sync_seconds": 0.696563258767128,
+          "ready_seconds": 37.6227391064167
+        }
+      ],
+      "complete_seconds": 37.62287851423025,
+      "input_positions": 28512,
+      "complete_positions_per_second": 757.8367505616508,
+      "output_slots": 28512,
+      "final_state_position": 144,
+      "prompt_ingested_seconds": 26.47668144106865,
+      "prompt_output_ready_seconds": 26.47668144106865,
+      "prompt_output_ready_definition": "first completed call whose returned logical window covers last prompt injection plus full graph-depth delay; conservative terminal-path boundary, not memory causal attribution or language-model TTFT",
+      "first_incremental_call_seconds": 0.696867048740387,
+      "first_any_backbone_output_seconds": 6.571382626891136,
+      "prefill": {
+        "calls": 4,
+        "seconds": 26.47668144106865,
+        "input_positions": 25344,
+        "positions_per_second": 957.2196597375788,
+        "median_call_seconds": 6.616776453331113,
+        "p95_call_seconds": 6.671745907515287
+      },
+      "decode": {
+        "calls": 16,
+        "seconds": 11.146057665348053,
+        "input_positions": 3168,
+        "positions_per_second": 284.22605508752986,
+        "median_call_seconds": 0.6967321671545506,
+        "p95_call_seconds": 0.6970082372426987
+      },
+      "stable_decode": {
+        "calls": 15,
+        "seconds": 10.449190616607666,
+        "input_positions": 2970,
+        "positions_per_second": 284.2325409663367,
+        "median_call_seconds": 0.6967246197164059,
+        "p95_call_seconds": 0.6970082372426987
+      },
+      "stable_decode_rule": "omit first incremental call; no stable sample when fewer than two decode calls",
+      "chunked_stream": {
+        "calls": 0,
+        "seconds": 0,
+        "input_positions": 0,
+        "positions_per_second": null,
+        "median_call_seconds": null,
+        "p95_call_seconds": null
+      },
+      "drain_seconds": 0,
+      "input_window_seconds": 37.6227391064167,
+      "state_memory": {
+        "payload_bytes": 45422125056,
+        "retained_storage_bytes": 45422125056,
+        "dtypes": [
+          "torch.float32"
+        ],
+        "tensor_count": 64
+      },
+      "synchronized_devices": [
+        "npu:0",
+        "npu:1",
+        "npu:2",
+        "npu:3"
+      ],
+      "diagnostic_checks_in_timing": false,
+      "consumer": "materialize backbone readout; synchronize every owner; release each output; no concatenation, task head, checksum reduction or D2H return",
+      "timing_boundary": "resident-input first call through final drain/readout/output release/context exit and all-owner synchronization; phase intervals include Python scheduling since prior ready boundary",
+      "allocator": {
+        "npu:0": {
+          "allocated_bytes": 28876768768,
+          "reserved_bytes": 60087599104,
+          "peak_allocated_bytes": 41707633664,
+          "peak_reserved_bytes": 60087599104
+        },
+        "npu:1": {
+          "allocated_bytes": 28071462400,
+          "reserved_bytes": 59462647808,
+          "peak_allocated_bytes": 40902326784,
+          "peak_reserved_bytes": 59462647808
+        },
+        "npu:2": {
+          "allocated_bytes": 28071462400,
+          "reserved_bytes": 59462647808,
+          "peak_allocated_bytes": 40902326784,
+          "peak_reserved_bytes": 59462647808
+        },
+        "npu:3": {
+          "allocated_bytes": 28071491072,
+          "reserved_bytes": 59462647808,
+          "peak_allocated_bytes": 40902355456,
+          "peak_reserved_bytes": 59462647808
+        }
+      },
+      "availability_source": "separate full-schedule diagnostic at identical parameters/input/precision/execution policy; not a timed support capture"
+    },
+    {
+      "calls": [
+        {
+          "phase": "prefill",
+          "start": 0,
+          "stop": 32,
+          "input_positions": 6336,
+          "state_before": 0,
+          "state_after": 32,
+          "output_slots": 6336,
+          "seconds": 6.566051512956619,
+          "forward_readout_sync_seconds": 6.565990053117275,
+          "ready_seconds": 6.566051512956619
+        },
+        {
+          "phase": "prefill",
+          "start": 32,
+          "stop": 64,
+          "input_positions": 6336,
+          "state_before": 32,
+          "state_after": 64,
+          "output_slots": 6336,
+          "seconds": 6.59550641849637,
+          "forward_readout_sync_seconds": 6.595492988824844,
+          "ready_seconds": 13.16155793145299
+        },
+        {
+          "phase": "prefill",
+          "start": 64,
+          "stop": 96,
+          "input_positions": 6336,
+          "state_before": 64,
+          "state_after": 96,
+          "output_slots": 6336,
+          "seconds": 6.629943452775478,
+          "forward_readout_sync_seconds": 6.629928193986416,
+          "ready_seconds": 19.791501384228468
+        },
+        {
+          "phase": "prefill",
+          "start": 96,
+          "stop": 128,
+          "input_positions": 6336,
+          "state_before": 96,
+          "state_after": 128,
+          "output_slots": 6336,
+          "seconds": 6.659468103200197,
+          "forward_readout_sync_seconds": 6.659453731030226,
+          "ready_seconds": 26.450969487428665
+        },
+        {
+          "phase": "decode",
+          "start": 128,
+          "stop": 129,
+          "input_positions": 198,
+          "state_before": 128,
+          "state_after": 129,
+          "output_slots": 198,
+          "seconds": 0.6971357762813568,
+          "forward_readout_sync_seconds": 0.6971216797828674,
+          "ready_seconds": 27.148105263710022
+        },
+        {
+          "phase": "decode",
+          "start": 129,
+          "stop": 130,
+          "input_positions": 198,
+          "state_before": 129,
+          "state_after": 130,
+          "output_slots": 198,
+          "seconds": 0.6966547966003418,
+          "forward_readout_sync_seconds": 0.6966464258730412,
+          "ready_seconds": 27.844760060310364
+        },
+        {
+          "phase": "decode",
+          "start": 130,
+          "stop": 131,
+          "input_positions": 198,
+          "state_before": 130,
+          "state_after": 131,
+          "output_slots": 198,
+          "seconds": 0.6963332407176495,
+          "forward_readout_sync_seconds": 0.6963256932795048,
+          "ready_seconds": 28.541093301028013
+        },
+        {
+          "phase": "decode",
+          "start": 131,
+          "stop": 132,
+          "input_positions": 198,
+          "state_before": 131,
+          "state_after": 132,
+          "output_slots": 198,
+          "seconds": 0.6969096250832081,
+          "forward_readout_sync_seconds": 0.6969016343355179,
+          "ready_seconds": 29.23800292611122
+        },
+        {
+          "phase": "decode",
+          "start": 132,
+          "stop": 133,
+          "input_positions": 198,
+          "state_before": 132,
+          "state_after": 133,
+          "output_slots": 198,
+          "seconds": 0.6965150348842144,
+          "forward_readout_sync_seconds": 0.6965069323778152,
+          "ready_seconds": 29.934517960995436
+        },
+        {
+          "phase": "decode",
+          "start": 133,
+          "stop": 134,
+          "input_positions": 198,
+          "state_before": 133,
+          "state_after": 134,
+          "output_slots": 198,
+          "seconds": 0.6967141255736351,
+          "forward_readout_sync_seconds": 0.6967057138681412,
+          "ready_seconds": 30.63123208656907
+        },
+        {
+          "phase": "decode",
+          "start": 134,
+          "stop": 135,
+          "input_positions": 198,
+          "state_before": 134,
+          "state_after": 135,
+          "output_slots": 198,
+          "seconds": 0.696482352912426,
+          "forward_readout_sync_seconds": 0.6964748241007328,
+          "ready_seconds": 31.327714439481497
+        },
+        {
+          "phase": "decode",
+          "start": 135,
+          "stop": 136,
+          "input_positions": 198,
+          "state_before": 135,
+          "state_after": 136,
+          "output_slots": 198,
+          "seconds": 0.696751095354557,
+          "forward_readout_sync_seconds": 0.6967427954077721,
+          "ready_seconds": 32.024465534836054
+        },
+        {
+          "phase": "decode",
+          "start": 136,
+          "stop": 137,
+          "input_positions": 198,
+          "state_before": 136,
+          "state_after": 137,
+          "output_slots": 198,
+          "seconds": 0.696547131985426,
+          "forward_readout_sync_seconds": 0.6965364217758179,
+          "ready_seconds": 32.72101266682148
+        },
+        {
+          "phase": "decode",
+          "start": 137,
+          "stop": 138,
+          "input_positions": 198,
+          "state_before": 137,
+          "state_after": 138,
+          "output_slots": 198,
+          "seconds": 0.6967731080949306,
+          "forward_readout_sync_seconds": 0.6967655085027218,
+          "ready_seconds": 33.41778577491641
+        },
+        {
+          "phase": "decode",
+          "start": 138,
+          "stop": 139,
+          "input_positions": 198,
+          "state_before": 138,
+          "state_after": 139,
+          "output_slots": 198,
+          "seconds": 0.696738351136446,
+          "forward_readout_sync_seconds": 0.6967304237186909,
+          "ready_seconds": 34.114524126052856
+        },
+        {
+          "phase": "decode",
+          "start": 139,
+          "stop": 140,
+          "input_positions": 198,
+          "state_before": 139,
+          "state_after": 140,
+          "output_slots": 198,
+          "seconds": 0.6965104267001152,
+          "forward_readout_sync_seconds": 0.6965023204684258,
+          "ready_seconds": 34.81103455275297
+        },
+        {
+          "phase": "decode",
+          "start": 140,
+          "stop": 141,
+          "input_positions": 198,
+          "state_before": 140,
+          "state_after": 141,
+          "output_slots": 198,
+          "seconds": 0.6960960775613785,
+          "forward_readout_sync_seconds": 0.696087758988142,
+          "ready_seconds": 35.50713063031435
+        },
+        {
+          "phase": "decode",
+          "start": 141,
+          "stop": 142,
+          "input_positions": 198,
+          "state_before": 141,
+          "state_after": 142,
+          "output_slots": 198,
+          "seconds": 0.6969164982438087,
+          "forward_readout_sync_seconds": 0.6969086155295372,
+          "ready_seconds": 36.20404712855816
+        },
+        {
+          "phase": "decode",
+          "start": 142,
+          "stop": 143,
+          "input_positions": 198,
+          "state_before": 142,
+          "state_after": 143,
+          "output_slots": 198,
+          "seconds": 0.6964976824820042,
+          "forward_readout_sync_seconds": 0.696488831192255,
+          "ready_seconds": 36.90054481104016
+        },
+        {
+          "phase": "decode",
+          "start": 143,
+          "stop": 144,
+          "input_positions": 198,
+          "state_before": 143,
+          "state_after": 144,
+          "output_slots": 198,
+          "seconds": 0.6966581642627716,
+          "forward_readout_sync_seconds": 0.6966503337025642,
+          "ready_seconds": 37.597202975302935
+        }
+      ],
+      "complete_seconds": 37.597349278628826,
+      "input_positions": 28512,
+      "complete_positions_per_second": 758.3513345236511,
+      "output_slots": 28512,
+      "final_state_position": 144,
+      "prompt_ingested_seconds": 26.450969487428665,
+      "prompt_output_ready_seconds": 26.450969487428665,
+      "prompt_output_ready_definition": "first completed call whose returned logical window covers last prompt injection plus full graph-depth delay; conservative terminal-path boundary, not memory causal attribution or language-model TTFT",
+      "first_incremental_call_seconds": 0.6971357762813568,
+      "first_any_backbone_output_seconds": 6.566051512956619,
+      "prefill": {
+        "calls": 4,
+        "seconds": 26.450969487428665,
+        "input_positions": 25344,
+        "positions_per_second": 958.1501355572326,
+        "median_call_seconds": 6.612724935635924,
+        "p95_call_seconds": 6.659468103200197
+      },
+      "decode": {
+        "calls": 16,
+        "seconds": 11.14623348787427,
+        "input_positions": 3168,
+        "positions_per_second": 284.2215716588383,
+        "median_call_seconds": 0.6966564804315567,
+        "p95_call_seconds": 0.6971357762813568
+      },
+      "stable_decode": {
+        "calls": 15,
+        "seconds": 10.449097711592913,
+        "input_positions": 2970,
+        "positions_per_second": 284.2350681346283,
+        "median_call_seconds": 0.6966547966003418,
+        "p95_call_seconds": 0.6969164982438087
+      },
+      "stable_decode_rule": "omit first incremental call; no stable sample when fewer than two decode calls",
+      "chunked_stream": {
+        "calls": 0,
+        "seconds": 0,
+        "input_positions": 0,
+        "positions_per_second": null,
+        "median_call_seconds": null,
+        "p95_call_seconds": null
+      },
+      "drain_seconds": 0,
+      "input_window_seconds": 37.597202975302935,
+      "state_memory": {
+        "payload_bytes": 45422125056,
+        "retained_storage_bytes": 45422125056,
+        "dtypes": [
+          "torch.float32"
+        ],
+        "tensor_count": 64
+      },
+      "synchronized_devices": [
+        "npu:0",
+        "npu:1",
+        "npu:2",
+        "npu:3"
+      ],
+      "diagnostic_checks_in_timing": false,
+      "consumer": "materialize backbone readout; synchronize every owner; release each output; no concatenation, task head, checksum reduction or D2H return",
+      "timing_boundary": "resident-input first call through final drain/readout/output release/context exit and all-owner synchronization; phase intervals include Python scheduling since prior ready boundary",
+      "allocator": {
+        "npu:0": {
+          "allocated_bytes": 28876768768,
+          "reserved_bytes": 60087599104,
+          "peak_allocated_bytes": 41707633664,
+          "peak_reserved_bytes": 60087599104
+        },
+        "npu:1": {
+          "allocated_bytes": 28071462400,
+          "reserved_bytes": 59462647808,
+          "peak_allocated_bytes": 40902326784,
+          "peak_reserved_bytes": 59462647808
+        },
+        "npu:2": {
+          "allocated_bytes": 28071462400,
+          "reserved_bytes": 59462647808,
+          "peak_allocated_bytes": 40902326784,
+          "peak_reserved_bytes": 59462647808
+        },
+        "npu:3": {
+          "allocated_bytes": 28071491072,
+          "reserved_bytes": 59462647808,
+          "peak_allocated_bytes": 40902355456,
+          "peak_reserved_bytes": 59462647808
+        }
+      },
+      "availability_source": "separate full-schedule diagnostic at identical parameters/input/precision/execution policy; not a timed support capture"
+    },
+    {
+      "calls": [
+        {
+          "phase": "prefill",
+          "start": 0,
+          "stop": 32,
+          "input_positions": 6336,
+          "state_before": 0,
+          "state_after": 32,
+          "output_slots": 6336,
+          "seconds": 6.533976815640926,
+          "forward_readout_sync_seconds": 6.533922657370567,
+          "ready_seconds": 6.533976815640926
+        },
+        {
+          "phase": "prefill",
+          "start": 32,
+          "stop": 64,
+          "input_positions": 6336,
+          "state_before": 32,
+          "state_after": 64,
+          "output_slots": 6336,
+          "seconds": 6.618289217352867,
+          "forward_readout_sync_seconds": 6.618274230509996,
+          "ready_seconds": 13.152266032993793
+        },
+        {
+          "phase": "prefill",
+          "start": 64,
+          "stop": 96,
+          "input_positions": 6336,
+          "state_before": 64,
+          "state_after": 96,
+          "output_slots": 6336,
+          "seconds": 6.609574124217033,
+          "forward_readout_sync_seconds": 6.609559882432222,
+          "ready_seconds": 19.761840157210827
+        },
+        {
+          "phase": "prefill",
+          "start": 96,
+          "stop": 128,
+          "input_positions": 6336,
+          "state_before": 96,
+          "state_after": 128,
+          "output_slots": 6336,
+          "seconds": 6.663161002099514,
+          "forward_readout_sync_seconds": 6.663146421313286,
+          "ready_seconds": 26.42500115931034
+        },
+        {
+          "phase": "decode",
+          "start": 128,
+          "stop": 129,
+          "input_positions": 198,
+          "state_before": 128,
+          "state_after": 129,
+          "output_slots": 198,
+          "seconds": 0.6967136040329933,
+          "forward_readout_sync_seconds": 0.696699284017086,
+          "ready_seconds": 27.121714763343334
+        },
+        {
+          "phase": "decode",
+          "start": 129,
+          "stop": 130,
+          "input_positions": 198,
+          "state_before": 129,
+          "state_after": 130,
+          "output_slots": 198,
+          "seconds": 0.6973568722605705,
+          "forward_readout_sync_seconds": 0.6973494738340378,
+          "ready_seconds": 27.819071635603905
+        },
+        {
+          "phase": "decode",
+          "start": 130,
+          "stop": 131,
+          "input_positions": 198,
+          "state_before": 130,
+          "state_after": 131,
+          "output_slots": 198,
+          "seconds": 0.6965064033865929,
+          "forward_readout_sync_seconds": 0.6964982971549034,
+          "ready_seconds": 28.515578038990498
+        },
+        {
+          "phase": "decode",
+          "start": 131,
+          "stop": 132,
+          "input_positions": 198,
+          "state_before": 131,
+          "state_after": 132,
+          "output_slots": 198,
+          "seconds": 0.6969352886080742,
+          "forward_readout_sync_seconds": 0.6969278007745743,
+          "ready_seconds": 29.212513327598572
+        },
+        {
+          "phase": "decode",
+          "start": 132,
+          "stop": 133,
+          "input_positions": 198,
+          "state_before": 132,
+          "state_after": 133,
+          "output_slots": 198,
+          "seconds": 0.696397889405489,
+          "forward_readout_sync_seconds": 0.6963905319571495,
+          "ready_seconds": 29.90891121700406
+        },
+        {
+          "phase": "decode",
+          "start": 133,
+          "stop": 134,
+          "input_positions": 198,
+          "state_before": 133,
+          "state_after": 134,
+          "output_slots": 198,
+          "seconds": 0.6968278288841248,
+          "forward_readout_sync_seconds": 0.6968201994895935,
+          "ready_seconds": 30.605739045888186
+        },
+        {
+          "phase": "decode",
+          "start": 134,
+          "stop": 135,
+          "input_positions": 198,
+          "state_before": 134,
+          "state_after": 135,
+          "output_slots": 198,
+          "seconds": 0.6966201737523079,
+          "forward_readout_sync_seconds": 0.6966048143804073,
+          "ready_seconds": 31.302359219640493
+        },
+        {
+          "phase": "decode",
+          "start": 135,
+          "stop": 136,
+          "input_positions": 198,
+          "state_before": 135,
+          "state_after": 136,
+          "output_slots": 198,
+          "seconds": 0.6968524679541588,
+          "forward_readout_sync_seconds": 0.696844007819891,
+          "ready_seconds": 31.999211687594652
+        },
+        {
+          "phase": "decode",
+          "start": 136,
+          "stop": 137,
+          "input_positions": 198,
+          "state_before": 136,
+          "state_after": 137,
+          "output_slots": 198,
+          "seconds": 0.6960626468062401,
+          "forward_readout_sync_seconds": 0.6960549205541611,
+          "ready_seconds": 32.69527433440089
+        },
+        {
+          "phase": "decode",
+          "start": 137,
+          "stop": 138,
+          "input_positions": 198,
+          "state_before": 137,
+          "state_after": 138,
+          "output_slots": 198,
+          "seconds": 0.6971640326082706,
+          "forward_readout_sync_seconds": 0.6971574984490871,
+          "ready_seconds": 33.39243836700916
+        },
+        {
+          "phase": "decode",
+          "start": 138,
+          "stop": 139,
+          "input_positions": 198,
+          "state_before": 138,
+          "state_after": 139,
+          "output_slots": 198,
+          "seconds": 0.6966156922280788,
+          "forward_readout_sync_seconds": 0.6966078132390976,
+          "ready_seconds": 34.08905405923724
+        },
+        {
+          "phase": "decode",
+          "start": 139,
+          "stop": 140,
+          "input_positions": 198,
+          "state_before": 139,
+          "state_after": 140,
+          "output_slots": 198,
+          "seconds": 0.6967466361820698,
+          "forward_readout_sync_seconds": 0.6967385038733482,
+          "ready_seconds": 34.78580069541931
+        },
+        {
+          "phase": "decode",
+          "start": 140,
+          "stop": 141,
+          "input_positions": 198,
+          "state_before": 140,
+          "state_after": 141,
+          "output_slots": 198,
+          "seconds": 0.6963953524827957,
+          "forward_readout_sync_seconds": 0.6963866427540779,
+          "ready_seconds": 35.48219604790211
+        },
+        {
+          "phase": "decode",
+          "start": 141,
+          "stop": 142,
+          "input_positions": 198,
+          "state_before": 141,
+          "state_after": 142,
+          "output_slots": 198,
+          "seconds": 0.6969987601041794,
+          "forward_readout_sync_seconds": 0.6969908177852631,
+          "ready_seconds": 36.17919480800629
+        },
+        {
+          "phase": "decode",
+          "start": 142,
+          "stop": 143,
+          "input_positions": 198,
+          "state_before": 142,
+          "state_after": 143,
+          "output_slots": 198,
+          "seconds": 0.6967519260942936,
+          "forward_readout_sync_seconds": 0.696739885956049,
+          "ready_seconds": 36.87594673410058
+        },
+        {
+          "phase": "decode",
+          "start": 143,
+          "stop": 144,
+          "input_positions": 198,
+          "state_before": 143,
+          "state_after": 144,
+          "output_slots": 198,
+          "seconds": 0.6976149193942547,
+          "forward_readout_sync_seconds": 0.6976033113896847,
+          "ready_seconds": 37.573561653494835
+        }
+      ],
+      "complete_seconds": 37.57369816675782,
+      "input_positions": 28512,
+      "complete_positions_per_second": 758.828685785982,
+      "output_slots": 28512,
+      "final_state_position": 144,
+      "prompt_ingested_seconds": 26.42500115931034,
+      "prompt_output_ready_seconds": 26.42500115931034,
+      "prompt_output_ready_definition": "first completed call whose returned logical window covers last prompt injection plus full graph-depth delay; conservative terminal-path boundary, not memory causal attribution or language-model TTFT",
+      "first_incremental_call_seconds": 0.6967136040329933,
+      "first_any_backbone_output_seconds": 6.533976815640926,
+      "prefill": {
+        "calls": 4,
+        "seconds": 26.42500115931034,
+        "input_positions": 25344,
+        "positions_per_second": 959.0917270809855,
+        "median_call_seconds": 6.61393167078495,
+        "p95_call_seconds": 6.663161002099514
+      },
+      "decode": {
+        "calls": 16,
+        "seconds": 11.148560494184494,
+        "input_positions": 3168,
+        "positions_per_second": 284.16224692439414,
+        "median_call_seconds": 0.6967492811381817,
+        "p95_call_seconds": 0.6976149193942547
+      },
+      "stable_decode": {
+        "calls": 15,
+        "seconds": 10.4518468901515,
+        "input_positions": 2970,
+        "positions_per_second": 284.1603049886382,
+        "median_call_seconds": 0.6967519260942936,
+        "p95_call_seconds": 0.6976149193942547
+      },
+      "stable_decode_rule": "omit first incremental call; no stable sample when fewer than two decode calls",
+      "chunked_stream": {
+        "calls": 0,
+        "seconds": 0,
+        "input_positions": 0,
+        "positions_per_second": null,
+        "median_call_seconds": null,
+        "p95_call_seconds": null
+      },
+      "drain_seconds": 0,
+      "input_window_seconds": 37.573561653494835,
+      "state_memory": {
+        "payload_bytes": 45422125056,
+        "retained_storage_bytes": 45422125056,
+        "dtypes": [
+          "torch.float32"
+        ],
+        "tensor_count": 64
+      },
+      "synchronized_devices": [
+        "npu:0",
+        "npu:1",
+        "npu:2",
+        "npu:3"
+      ],
+      "diagnostic_checks_in_timing": false,
+      "consumer": "materialize backbone readout; synchronize every owner; release each output; no concatenation, task head, checksum reduction or D2H return",
+      "timing_boundary": "resident-input first call through final drain/readout/output release/context exit and all-owner synchronization; phase intervals include Python scheduling since prior ready boundary",
+      "allocator": {
+        "npu:0": {
+          "allocated_bytes": 28876768768,
+          "reserved_bytes": 60087599104,
+          "peak_allocated_bytes": 41707633664,
+          "peak_reserved_bytes": 60087599104
+        },
+        "npu:1": {
+          "allocated_bytes": 28071462400,
+          "reserved_bytes": 59462647808,
+          "peak_allocated_bytes": 40902326784,
+          "peak_reserved_bytes": 59462647808
+        },
+        "npu:2": {
+          "allocated_bytes": 28071462400,
+          "reserved_bytes": 59462647808,
+          "peak_allocated_bytes": 40902326784,
+          "peak_reserved_bytes": 59462647808
+        },
+        "npu:3": {
+          "allocated_bytes": 28071491072,
+          "reserved_bytes": 59462647808,
+          "peak_allocated_bytes": 40902355456,
+          "peak_reserved_bytes": 59462647808
+        }
+      },
+      "availability_source": "separate full-schedule diagnostic at identical parameters/input/precision/execution policy; not a timed support capture"
+    },
+    {
+      "calls": [
+        {
+          "phase": "prefill",
+          "start": 0,
+          "stop": 32,
+          "input_positions": 6336,
+          "state_before": 0,
+          "state_after": 32,
+          "output_slots": 6336,
+          "seconds": 6.579935375601053,
+          "forward_readout_sync_seconds": 6.579885367304087,
+          "ready_seconds": 6.579935375601053
+        },
+        {
+          "phase": "prefill",
+          "start": 32,
+          "stop": 64,
+          "input_positions": 6336,
+          "state_before": 32,
+          "state_after": 64,
+          "output_slots": 6336,
+          "seconds": 6.5894541665911674,
+          "forward_readout_sync_seconds": 6.5894385650753975,
+          "ready_seconds": 13.16938954219222
+        },
+        {
+          "phase": "prefill",
+          "start": 64,
+          "stop": 96,
+          "input_positions": 6336,
+          "state_before": 64,
+          "state_after": 96,
+          "output_slots": 6336,
+          "seconds": 6.629659477621317,
+          "forward_readout_sync_seconds": 6.6296458803117275,
+          "ready_seconds": 19.799049019813538
+        },
+        {
+          "phase": "prefill",
+          "start": 96,
+          "stop": 128,
+          "input_positions": 6336,
+          "state_before": 96,
+          "state_after": 128,
+          "output_slots": 6336,
+          "seconds": 6.673903875052929,
+          "forward_readout_sync_seconds": 6.673888064920902,
+          "ready_seconds": 26.472952894866467
+        },
+        {
+          "phase": "decode",
+          "start": 128,
+          "stop": 129,
+          "input_positions": 198,
+          "state_before": 128,
+          "state_after": 129,
+          "output_slots": 198,
+          "seconds": 0.6968643851578236,
+          "forward_readout_sync_seconds": 0.6968483589589596,
+          "ready_seconds": 27.16981728002429
+        },
+        {
+          "phase": "decode",
+          "start": 129,
+          "stop": 130,
+          "input_positions": 198,
+          "state_before": 129,
+          "state_after": 130,
+          "output_slots": 198,
+          "seconds": 0.6969736367464066,
+          "forward_readout_sync_seconds": 0.6969660259783268,
+          "ready_seconds": 27.866790916770697
+        },
+        {
+          "phase": "decode",
+          "start": 130,
+          "stop": 131,
+          "input_positions": 198,
+          "state_before": 130,
+          "state_after": 131,
+          "output_slots": 198,
+          "seconds": 0.696581244468689,
+          "forward_readout_sync_seconds": 0.6965730525553226,
+          "ready_seconds": 28.563372161239386
+        },
+        {
+          "phase": "decode",
+          "start": 131,
+          "stop": 132,
+          "input_positions": 198,
+          "state_before": 131,
+          "state_after": 132,
+          "output_slots": 198,
+          "seconds": 0.6964341551065445,
+          "forward_readout_sync_seconds": 0.6964261569082737,
+          "ready_seconds": 29.25980631634593
+        },
+        {
+          "phase": "decode",
+          "start": 132,
+          "stop": 133,
+          "input_positions": 198,
+          "state_before": 132,
+          "state_after": 133,
+          "output_slots": 198,
+          "seconds": 0.6960888206958771,
+          "forward_readout_sync_seconds": 0.6960804797708988,
+          "ready_seconds": 29.955895137041807
+        },
+        {
+          "phase": "decode",
+          "start": 133,
+          "stop": 134,
+          "input_positions": 198,
+          "state_before": 133,
+          "state_after": 134,
+          "output_slots": 198,
+          "seconds": 0.6969584971666336,
+          "forward_readout_sync_seconds": 0.6969499103724957,
+          "ready_seconds": 30.65285363420844
+        },
+        {
+          "phase": "decode",
+          "start": 134,
+          "stop": 135,
+          "input_positions": 198,
+          "state_before": 134,
+          "state_after": 135,
+          "output_slots": 198,
+          "seconds": 0.6966477334499359,
+          "forward_readout_sync_seconds": 0.6966401040554047,
+          "ready_seconds": 31.349501367658377
+        },
+        {
+          "phase": "decode",
+          "start": 135,
+          "stop": 136,
+          "input_positions": 198,
+          "state_before": 135,
+          "state_after": 136,
+          "output_slots": 198,
+          "seconds": 0.696903083473444,
+          "forward_readout_sync_seconds": 0.6968948803842068,
+          "ready_seconds": 32.04640445113182
+        },
+        {
+          "phase": "decode",
+          "start": 136,
+          "stop": 137,
+          "input_positions": 198,
+          "state_before": 136,
+          "state_after": 137,
+          "output_slots": 198,
+          "seconds": 0.6966316625475883,
+          "forward_readout_sync_seconds": 0.6966233029961586,
+          "ready_seconds": 32.74303611367941
+        },
+        {
+          "phase": "decode",
+          "start": 137,
+          "stop": 138,
+          "input_positions": 198,
+          "state_before": 137,
+          "state_after": 138,
+          "output_slots": 198,
+          "seconds": 0.6968055479228497,
+          "forward_readout_sync_seconds": 0.6967971473932266,
+          "ready_seconds": 33.43984166160226
+        },
+        {
+          "phase": "decode",
+          "start": 138,
+          "stop": 139,
+          "input_positions": 198,
+          "state_before": 138,
+          "state_after": 139,
+          "output_slots": 198,
+          "seconds": 0.6966936364769936,
+          "forward_readout_sync_seconds": 0.6966857984662056,
+          "ready_seconds": 34.13653529807925
+        },
+        {
+          "phase": "decode",
+          "start": 139,
+          "stop": 140,
+          "input_positions": 198,
+          "state_before": 139,
+          "state_after": 140,
+          "output_slots": 198,
+          "seconds": 0.6969614140689373,
+          "forward_readout_sync_seconds": 0.6969534084200859,
+          "ready_seconds": 34.83349671214819
+        },
+        {
+          "phase": "decode",
+          "start": 140,
+          "stop": 141,
+          "input_positions": 198,
+          "state_before": 140,
+          "state_after": 141,
+          "output_slots": 198,
+          "seconds": 0.696661937981844,
+          "forward_readout_sync_seconds": 0.6966536864638329,
+          "ready_seconds": 35.53015865013003
+        },
+        {
+          "phase": "decode",
+          "start": 141,
+          "stop": 142,
+          "input_positions": 198,
+          "state_before": 141,
+          "state_after": 142,
+          "output_slots": 198,
+          "seconds": 0.6968325078487396,
+          "forward_readout_sync_seconds": 0.6968257278203964,
+          "ready_seconds": 36.22699115797877
+        },
+        {
+          "phase": "decode",
+          "start": 142,
+          "stop": 143,
+          "input_positions": 198,
+          "state_before": 142,
+          "state_after": 143,
+          "output_slots": 198,
+          "seconds": 0.6962895616889,
+          "forward_readout_sync_seconds": 0.696282722055912,
+          "ready_seconds": 36.92328071966767
+        },
+        {
+          "phase": "decode",
+          "start": 143,
+          "stop": 144,
+          "input_positions": 198,
+          "state_before": 143,
+          "state_after": 144,
+          "output_slots": 198,
+          "seconds": 0.6970222033560276,
+          "forward_readout_sync_seconds": 0.6970155350863934,
+          "ready_seconds": 37.6203029230237
+        }
+      ],
+      "complete_seconds": 37.620449401438236,
+      "input_positions": 28512,
+      "complete_positions_per_second": 757.8856832824007,
+      "output_slots": 28512,
+      "final_state_position": 144,
+      "prompt_ingested_seconds": 26.472952894866467,
+      "prompt_output_ready_seconds": 26.472952894866467,
+      "prompt_output_ready_definition": "first completed call whose returned logical window covers last prompt injection plus full graph-depth delay; conservative terminal-path boundary, not memory causal attribution or language-model TTFT",
+      "first_incremental_call_seconds": 0.6968643851578236,
+      "first_any_backbone_output_seconds": 6.579935375601053,
+      "prefill": {
+        "calls": 4,
+        "seconds": 26.472952894866467,
+        "input_positions": 25344,
+        "positions_per_second": 957.3544780081791,
+        "median_call_seconds": 6.609556822106242,
+        "p95_call_seconds": 6.673903875052929
+      },
+      "decode": {
+        "calls": 16,
+        "seconds": 11.147350028157234,
+        "input_positions": 3168,
+        "positions_per_second": 284.1931034728351,
+        "median_call_seconds": 0.6967495921999216,
+        "p95_call_seconds": 0.6970222033560276
+      },
+      "stable_decode": {
+        "calls": 15,
+        "seconds": 10.45048564299941,
+        "input_positions": 2970,
+        "positions_per_second": 284.1973188097291,
+        "median_call_seconds": 0.6966936364769936,
+        "p95_call_seconds": 0.6970222033560276
+      },
+      "stable_decode_rule": "omit first incremental call; no stable sample when fewer than two decode calls",
+      "chunked_stream": {
+        "calls": 0,
+        "seconds": 0,
+        "input_positions": 0,
+        "positions_per_second": null,
+        "median_call_seconds": null,
+        "p95_call_seconds": null
+      },
+      "drain_seconds": 0,
+      "input_window_seconds": 37.6203029230237,
+      "state_memory": {
+        "payload_bytes": 45422125056,
+        "retained_storage_bytes": 45422125056,
+        "dtypes": [
+          "torch.float32"
+        ],
+        "tensor_count": 64
+      },
+      "synchronized_devices": [
+        "npu:0",
+        "npu:1",
+        "npu:2",
+        "npu:3"
+      ],
+      "diagnostic_checks_in_timing": false,
+      "consumer": "materialize backbone readout; synchronize every owner; release each output; no concatenation, task head, checksum reduction or D2H return",
+      "timing_boundary": "resident-input first call through final drain/readout/output release/context exit and all-owner synchronization; phase intervals include Python scheduling since prior ready boundary",
+      "allocator": {
+        "npu:0": {
+          "allocated_bytes": 28876768768,
+          "reserved_bytes": 60087599104,
+          "peak_allocated_bytes": 41707633664,
+          "peak_reserved_bytes": 60087599104
+        },
+        "npu:1": {
+          "allocated_bytes": 28071462400,
+          "reserved_bytes": 59462647808,
+          "peak_allocated_bytes": 40902326784,
+          "peak_reserved_bytes": 59462647808
+        },
+        "npu:2": {
+          "allocated_bytes": 28071462400,
+          "reserved_bytes": 59462647808,
+          "peak_allocated_bytes": 40902326784,
+          "peak_reserved_bytes": 59462647808
+        },
+        "npu:3": {
+          "allocated_bytes": 28071491072,
+          "reserved_bytes": 59462647808,
+          "peak_allocated_bytes": 40902355456,
+          "peak_reserved_bytes": 59462647808
+        }
+      },
+      "availability_source": "separate full-schedule diagnostic at identical parameters/input/precision/execution policy; not a timed support capture"
+    },
+    {
+      "calls": [
+        {
+          "phase": "prefill",
+          "start": 0,
+          "stop": 32,
+          "input_positions": 6336,
+          "state_before": 0,
+          "state_after": 32,
+          "output_slots": 6336,
+          "seconds": 6.563557263463736,
+          "forward_readout_sync_seconds": 6.563501112163067,
+          "ready_seconds": 6.563557263463736
+        },
+        {
+          "phase": "prefill",
+          "start": 32,
+          "stop": 64,
+          "input_positions": 6336,
+          "state_before": 32,
+          "state_after": 64,
+          "output_slots": 6336,
+          "seconds": 6.5818212404847145,
+          "forward_readout_sync_seconds": 6.581807479262352,
+          "ready_seconds": 13.14537850394845
+        },
+        {
+          "phase": "prefill",
+          "start": 64,
+          "stop": 96,
+          "input_positions": 6336,
+          "state_before": 64,
+          "state_after": 96,
+          "output_slots": 6336,
+          "seconds": 6.632618721574545,
+          "forward_readout_sync_seconds": 6.632605973631144,
+          "ready_seconds": 19.777997225522995
+        },
+        {
+          "phase": "prefill",
+          "start": 96,
+          "stop": 128,
+          "input_positions": 6336,
+          "state_before": 96,
+          "state_after": 128,
+          "output_slots": 6336,
+          "seconds": 6.665487632155418,
+          "forward_readout_sync_seconds": 6.665473312139511,
+          "ready_seconds": 26.443484857678413
+        },
+        {
+          "phase": "decode",
+          "start": 128,
+          "stop": 129,
+          "input_positions": 198,
+          "state_before": 128,
+          "state_after": 129,
+          "output_slots": 198,
+          "seconds": 0.6967382319271564,
+          "forward_readout_sync_seconds": 0.6967242732644081,
+          "ready_seconds": 27.14022308960557
+        },
+        {
+          "phase": "decode",
+          "start": 129,
+          "stop": 130,
+          "input_positions": 198,
+          "state_before": 129,
+          "state_after": 130,
+          "output_slots": 198,
+          "seconds": 0.6969690099358559,
+          "forward_readout_sync_seconds": 0.6969625577330589,
+          "ready_seconds": 27.837192099541426
+        },
+        {
+          "phase": "decode",
+          "start": 130,
+          "stop": 131,
+          "input_positions": 198,
+          "state_before": 130,
+          "state_after": 131,
+          "output_slots": 198,
+          "seconds": 0.6966341584920883,
+          "forward_readout_sync_seconds": 0.6966274306178093,
+          "ready_seconds": 28.533826258033514
+        },
+        {
+          "phase": "decode",
+          "start": 131,
+          "stop": 132,
+          "input_positions": 198,
+          "state_before": 131,
+          "state_after": 132,
+          "output_slots": 198,
+          "seconds": 0.6966687440872192,
+          "forward_readout_sync_seconds": 0.696660503745079,
+          "ready_seconds": 29.230495002120733
+        },
+        {
+          "phase": "decode",
+          "start": 132,
+          "stop": 133,
+          "input_positions": 198,
+          "state_before": 132,
+          "state_after": 133,
+          "output_slots": 198,
+          "seconds": 0.6967107579112053,
+          "forward_readout_sync_seconds": 0.696702666580677,
+          "ready_seconds": 29.92720576003194
+        },
+        {
+          "phase": "decode",
+          "start": 133,
+          "stop": 134,
+          "input_positions": 198,
+          "state_before": 133,
+          "state_after": 134,
+          "output_slots": 198,
+          "seconds": 0.6968608573079109,
+          "forward_readout_sync_seconds": 0.696852657943964,
+          "ready_seconds": 30.62406661733985
+        },
+        {
+          "phase": "decode",
+          "start": 134,
+          "stop": 135,
+          "input_positions": 198,
+          "state_before": 134,
+          "state_after": 135,
+          "output_slots": 198,
+          "seconds": 0.6964603029191494,
+          "forward_readout_sync_seconds": 0.696451909840107,
+          "ready_seconds": 31.320526920259
+        },
+        {
+          "phase": "decode",
+          "start": 135,
+          "stop": 136,
+          "input_positions": 198,
+          "state_before": 135,
+          "state_after": 136,
+          "output_slots": 198,
+          "seconds": 0.6967786364257336,
+          "forward_readout_sync_seconds": 0.6967711225152016,
+          "ready_seconds": 32.01730555668473
+        },
+        {
+          "phase": "decode",
+          "start": 136,
+          "stop": 137,
+          "input_positions": 198,
+          "state_before": 136,
+          "state_after": 137,
+          "output_slots": 198,
+          "seconds": 0.6967707015573978,
+          "forward_readout_sync_seconds": 0.69676299020648,
+          "ready_seconds": 32.71407625824213
+        },
+        {
+          "phase": "decode",
+          "start": 137,
+          "stop": 138,
+          "input_positions": 198,
+          "state_before": 137,
+          "state_after": 138,
+          "output_slots": 198,
+          "seconds": 0.6965669319033623,
+          "forward_readout_sync_seconds": 0.6965588256716728,
+          "ready_seconds": 33.41064319014549
+        },
+        {
+          "phase": "decode",
+          "start": 138,
+          "stop": 139,
+          "input_positions": 198,
+          "state_before": 138,
+          "state_after": 139,
+          "output_slots": 198,
+          "seconds": 0.6964095756411552,
+          "forward_readout_sync_seconds": 0.6964010968804359,
+          "ready_seconds": 34.10705276578665
+        },
+        {
+          "phase": "decode",
+          "start": 139,
+          "stop": 140,
+          "input_positions": 198,
+          "state_before": 139,
+          "state_after": 140,
+          "output_slots": 198,
+          "seconds": 0.6969938203692436,
+          "forward_readout_sync_seconds": 0.6969855353236198,
+          "ready_seconds": 34.80404658615589
+        },
+        {
+          "phase": "decode",
+          "start": 140,
+          "stop": 141,
+          "input_positions": 198,
+          "state_before": 140,
+          "state_after": 141,
+          "output_slots": 198,
+          "seconds": 0.6966011039912701,
+          "forward_readout_sync_seconds": 0.6965946108102798,
+          "ready_seconds": 35.50064769014716
+        },
+        {
+          "phase": "decode",
+          "start": 141,
+          "stop": 142,
+          "input_positions": 198,
+          "state_before": 141,
+          "state_after": 142,
+          "output_slots": 198,
+          "seconds": 0.6968627460300922,
+          "forward_readout_sync_seconds": 0.6968544460833073,
+          "ready_seconds": 36.197510436177254
+        },
+        {
+          "phase": "decode",
+          "start": 142,
+          "stop": 143,
+          "input_positions": 198,
+          "state_before": 142,
+          "state_after": 143,
+          "output_slots": 198,
+          "seconds": 0.696495957672596,
+          "forward_readout_sync_seconds": 0.6964862905442715,
+          "ready_seconds": 36.89400639384985
+        },
+        {
+          "phase": "decode",
+          "start": 143,
+          "stop": 144,
+          "input_positions": 198,
+          "state_before": 143,
+          "state_after": 144,
+          "output_slots": 198,
+          "seconds": 0.6968322210013866,
+          "forward_readout_sync_seconds": 0.6968240439891815,
+          "ready_seconds": 37.590838614851236
+        }
+      ],
+      "complete_seconds": 37.59097547084093,
+      "input_positions": 28512,
+      "complete_positions_per_second": 758.4799181951681,
+      "output_slots": 28512,
+      "final_state_position": 144,
+      "prompt_ingested_seconds": 26.443484857678413,
+      "prompt_output_ready_seconds": 26.443484857678413,
+      "prompt_output_ready_definition": "first completed call whose returned logical window covers last prompt injection plus full graph-depth delay; conservative terminal-path boundary, not memory causal attribution or language-model TTFT",
+      "first_incremental_call_seconds": 0.6967382319271564,
+      "first_any_backbone_output_seconds": 6.563557263463736,
+      "prefill": {
+        "calls": 4,
+        "seconds": 26.443484857678413,
+        "input_positions": 25344,
+        "positions_per_second": 958.4213327556502,
+        "median_call_seconds": 6.60721998102963,
+        "p95_call_seconds": 6.665487632155418
+      },
+      "decode": {
+        "calls": 16,
+        "seconds": 11.147353757172823,
+        "input_positions": 3168,
+        "positions_per_second": 284.1930084044865,
+        "median_call_seconds": 0.6967244949191809,
+        "p95_call_seconds": 0.6969938203692436
+      },
+      "stable_decode": {
+        "calls": 15,
+        "seconds": 10.450615525245667,
+        "input_positions": 2970,
+        "positions_per_second": 284.19378675115723,
+        "median_call_seconds": 0.6967107579112053,
+        "p95_call_seconds": 0.6969938203692436
+      },
+      "stable_decode_rule": "omit first incremental call; no stable sample when fewer than two decode calls",
+      "chunked_stream": {
+        "calls": 0,
+        "seconds": 0,
+        "input_positions": 0,
+        "positions_per_second": null,
+        "median_call_seconds": null,
+        "p95_call_seconds": null
+      },
+      "drain_seconds": 0,
+      "input_window_seconds": 37.590838614851236,
+      "state_memory": {
+        "payload_bytes": 45422125056,
+        "retained_storage_bytes": 45422125056,
+        "dtypes": [
+          "torch.float32"
+        ],
+        "tensor_count": 64
+      },
+      "synchronized_devices": [
+        "npu:0",
+        "npu:1",
+        "npu:2",
+        "npu:3"
+      ],
+      "diagnostic_checks_in_timing": false,
+      "consumer": "materialize backbone readout; synchronize every owner; release each output; no concatenation, task head, checksum reduction or D2H return",
+      "timing_boundary": "resident-input first call through final drain/readout/output release/context exit and all-owner synchronization; phase intervals include Python scheduling since prior ready boundary",
+      "allocator": {
+        "npu:0": {
+          "allocated_bytes": 28876768768,
+          "reserved_bytes": 60087599104,
+          "peak_allocated_bytes": 41707633664,
+          "peak_reserved_bytes": 60087599104
+        },
+        "npu:1": {
+          "allocated_bytes": 28071462400,
+          "reserved_bytes": 59462647808,
+          "peak_allocated_bytes": 40902326784,
+          "peak_reserved_bytes": 59462647808
+        },
+        "npu:2": {
+          "allocated_bytes": 28071462400,
+          "reserved_bytes": 59462647808,
+          "peak_allocated_bytes": 40902326784,
+          "peak_reserved_bytes": 59462647808
+        },
+        "npu:3": {
+          "allocated_bytes": 28071491072,
+          "reserved_bytes": 59462647808,
+          "peak_allocated_bytes": 40902355456,
+          "peak_reserved_bytes": 59462647808
+        }
+      },
+      "availability_source": "separate full-schedule diagnostic at identical parameters/input/precision/execution policy; not a timed support capture"
+    }
+  ],
+  "request_boundary": "zero state per diagnostic/warmup/sample; real KV continuation within each request",
+  "timing_scope": "same run_request as A-D; warm resident input; excludes construction, hashing, transfer and diagnostics; no cold measurement",
+  "parameters": 16707260304,
+  "initial_parameters": {
+    "sha256": "b75028aa9ec955eaaadde38213161f35f552afb98d32b7529b6fd2b92ccd8ccc",
+    "finite": true,
+    "host_copy_chunk_bytes": 8388608,
+    "scope": "dense initial named Parameters before ownership placement; shape/name/raw contiguous bytes"
+  },
+  "placement": {
+    "kind": "transformer-contiguous-layers-1",
+    "devices": [
+      "npu:0",
+      "npu:1",
+      "npu:2",
+      "npu:3"
+    ],
+    "layer_partitions": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3
+    ],
+    "requested_transport": "host_stage",
+    "transport": "host_stage",
+    "input_partition": 0,
+    "output_partition": 3,
+    "communication": "single-process new hidden rows only; no replicas or peer-DMA claim",
+    "private_state": "bounded original-position KV per layer, retained on that layer owner",
+    "actual_devices": {
+      "npu:0": {
+        "parameters": 4176813312,
+        "parameter_bytes": 16707253248
+      },
+      "npu:1": {
+        "parameters": 4176813312,
+        "parameter_bytes": 16707253248
+      },
+      "npu:2": {
+        "parameters": 4176813312,
+        "parameter_bytes": 16707253248
+      },
+      "npu:3": {
+        "parameters": 4176820368,
+        "parameter_bytes": 16707281472
+      }
+    },
+    "total_unique_parameters": 16707260304,
+    "unused_admitted_devices": []
+  },
+  "spec": {
+    "family": "transformer",
+    "d": 7056,
+    "layers": 32,
+    "heads": 441,
+    "head_dim": 16,
+    "window": 128,
+    "chunk": 256,
+    "backend": "auto",
+    "ffn_width": 15256,
+    "final_norm": true,
+    "contiguous_qkv": false,
+    "parameter_count": 16707260304,
+    "placement": {
+      "kind": "transformer-contiguous-layers-1",
+      "devices": [
+        "npu:0",
+        "npu:1",
+        "npu:2",
+        "npu:3"
+      ],
+      "layer_partitions": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "requested_transport": "host_stage",
+      "transport": "host_stage",
+      "input_partition": 0,
+      "output_partition": 3,
+      "communication": "single-process new hidden rows only; no replicas or peer-DMA claim",
+      "private_state": "bounded original-position KV per layer, retained on that layer owner",
+      "actual_devices": {
+        "npu:0": {
+          "parameters": 4176813312,
+          "parameter_bytes": 16707253248
+        },
+        "npu:1": {
+          "parameters": 4176813312,
+          "parameter_bytes": 16707253248
+        },
+        "npu:2": {
+          "parameters": 4176813312,
+          "parameter_bytes": 16707253248
+        },
+        "npu:3": {
+          "parameters": 4176820368,
+          "parameter_bytes": 16707281472
+        }
+      },
+      "total_unique_parameters": 16707260304
+    }
+  },
+  "input_sha256": "d84a98ddfe1207ab41b52bb022764d1cdfeca17ecd76741f9fd18e62e062f77d",
+  "input_shape": [
+    198,
+    144,
+    7056
+  ],
+  "diagnostics": {
+    "finite_outputs": true,
+    "finite_private_state": true,
+    "output_available_by_call": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "output_support_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "original_output_times_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "original_time_bounds": [
+      {
+        "phase": "prefill",
+        "input_position_end": 32
+      },
+      {
+        "phase": "prefill",
+        "input_position_end": 64
+      },
+      {
+        "phase": "prefill",
+        "input_position_end": 96
+      },
+      {
+        "phase": "prefill",
+        "input_position_end": 128
+      },
+      {
+        "phase": "decode",
+        "input_position_end": 129
+      },
+      {
+        "phase": "decode",
+        "input_position_end": 130
+      },
+      {
+        "phase": "decode",
+        "input_position_end": 131
+      },
+      {
+        "phase": "decode",
+        "input_position_end": 132
+      },
+      {
+        "phase": "decode",
+        "input_position_end": 133
+      },
+      {
+        "phase": "decode",
+        "input_position_end": 134
+      },
+      {
+        "phase": "decode",
+        "input_position_end": 135
+      },
+      {
+        "phase": "decode",
+        "input_position_end": 136
+      },
+      {
+        "phase": "decode",
+        "input_position_end": 137
+      },
+      {
+        "phase": "decode",
+        "input_position_end": 138
+      },
+      {
+        "phase": "decode",
+        "input_position_end": 139
+      },
+      {
+        "phase": "decode",
+        "input_position_end": 140
+      },
+      {
+        "phase": "decode",
+        "input_position_end": 141
+      },
+      {
+        "phase": "decode",
+        "input_position_end": 142
+      },
+      {
+        "phase": "decode",
+        "input_position_end": 143
+      },
+      {
+        "phase": "decode",
+        "input_position_end": 144
+      }
+    ],
+    "state_memory": {
+      "payload_bytes": 45422125056,
+      "retained_storage_bytes": 45422125056,
+      "dtypes": [
+        "torch.float32"
+      ],
+      "tensor_count": 64
+    },
+    "final_state_position": 144,
+    "private_state_detached": true,
+    "readout_dtypes": [
+      "torch.float32"
+    ],
+    "returned_value_dtypes": [],
+    "returned_strength_dtypes": [],
+    "output_devices": [
+      "npu:3"
+    ],
+    "retention": "one output window at a time; only hashes/scalars retained; separate from normal timing",
+    "execution": {
+      "requested_region_concurrency": "serial",
+      "effective_region_concurrency": "serial",
+      "hooks": "ordinary Python method/module hooks with locked counters; no thread-local dispatch mode"
+    }
+  },
+  "host_load_after": [
+    36.68,
+    37.28,
+    37.9
+  ],
+  "process_peak_rss_kib": 67064792
+}

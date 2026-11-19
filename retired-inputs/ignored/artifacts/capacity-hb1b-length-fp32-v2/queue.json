@@ -1,0 +1,19 @@
+{
+  "elapsed_seconds": 456.3297652900219,
+  "job_id": "capacity-hb1b-length-fp32-v2",
+  "logical_device": "npu:0",
+  "logical_devices": [
+    "npu:0"
+  ],
+  "npu_count": 1,
+  "physical_id": 4,
+  "physical_ids": [
+    4
+  ],
+  "priority": 0,
+  "project": "tide-instances",
+  "return_code": 0,
+  "schema_version": 1,
+  "status": "completed",
+  "timestamp": "2026-11-18T07:30:44.230214+00:00"
+}

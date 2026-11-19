@@ -1,0 +1,92 @@
+{
+  "state": "passed",
+  "source": "007a382883d4cc9268ae968e40e72d4abe0aa7cb",
+  "command": [
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "/mi/data2T/zlong/home/.agents/skills/use-local-ascend/scripts/run_on_free_npu.py",
+    "--job-id",
+    "training-transformer-strength",
+    "--project",
+    "tide-instances",
+    "--priority",
+    "0",
+    "--npu-count",
+    "1",
+    "--max-wait-seconds",
+    "600",
+    "--state-file",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/training-transformer-strength/queue.json",
+    "--",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "-m",
+    "benchmarks.costs",
+    "--config",
+    "configs/hb-multiscale-x-settle.json",
+    "--device",
+    "npu:0",
+    "--precision",
+    "bf16",
+    "--batch",
+    "8",
+    "--length",
+    "256",
+    "--threads",
+    "4",
+    "--subjects",
+    "transformer_A",
+    "transformer_B",
+    "transformer_C",
+    "transformer_D",
+    "--transformer-candidates",
+    "standard",
+    "chunk256",
+    "contiguous_qkv",
+    "--diagnostics",
+    "stages",
+    "runtime",
+    "work",
+    "--warmup",
+    "2",
+    "--steps",
+    "5",
+    "--device-budget-gib",
+    "48",
+    "--output",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/training-transformer-strength/costs.json"
+  ],
+  "pid": 1560783,
+  "started": "2026-11-18T09:40:21.393850+00:00",
+  "max_rss_bytes": 85899345920,
+  "peak_rss_bytes": 3430899712,
+  "max_processes": 2,
+  "rss_sample_count": 343,
+  "poll_interval": 0.25,
+  "descendant_supervision": "Linux child subreaper; retained PID/start identities across nested sessions",
+  "child_pid": 1560805,
+  "process_group": 1560805,
+  "elapsed": 153.87641424313188,
+  "descendant_identities": [
+    {
+      "pid": 1560805,
+      "start_ticks": 2258099210
+    },
+    {
+      "pid": 1560808,
+      "start_ticks": 2258099216
+    },
+    {
+      "pid": 1563021,
+      "start_ticks": 2258101841
+    },
+    {
+      "pid": 1563385,
+      "start_ticks": 2258102357
+    },
+    {
+      "pid": 1563522,
+      "start_ticks": 2258102538
+    }
+  ],
+  "exit_code": 0,
+  "finished": "2026-11-18T09:42:55.270265+00:00"
+}

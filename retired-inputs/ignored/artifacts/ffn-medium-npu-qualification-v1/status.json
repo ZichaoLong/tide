@@ -1,0 +1,97 @@
+{
+  "state": "failed",
+  "source": "a58536608f7276a771c56703b48e23ea82d2ca65",
+  "command": [
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/ffn-medium-npu-qualification-v1/source/scripts/wait_units.py",
+    "--status",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/ffn-medium-npu-qualification-v1/dependency.json",
+    "--seconds",
+    "7200",
+    "--unit",
+    "tide-ffn-local-diagnosis-v1.service",
+    "--",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "/mi/data2T/zlong/home/.agents/skills/use-local-ascend/scripts/run_on_free_npu.py",
+    "--job-id",
+    "ffn-medium-npu-qualification-v1",
+    "--project",
+    "tide-instances",
+    "--priority",
+    "0",
+    "--npu-count",
+    "1",
+    "--max-wait-seconds",
+    "600",
+    "--state-file",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/ffn-medium-npu-qualification-v1/queue.json",
+    "--candidate-ids",
+    "9",
+    "--",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "-m",
+    "scripts.check_execution_candidates",
+    "--config",
+    "configs/memory-candidates/medium-kv128.json",
+    "--device",
+    "npu:0",
+    "--candidates",
+    "baseline",
+    "weight_access",
+    "--batch",
+    "16",
+    "--length",
+    "128",
+    "--chunk",
+    "32",
+    "--steps",
+    "3",
+    "--threads",
+    "4",
+    "--artifact-budget-gib",
+    "20",
+    "--restore-timeout-seconds",
+    "1800",
+    "--output-dir",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/ffn-medium-npu-qualification-v1/qualification"
+  ],
+  "pid": 1765870,
+  "started": "2026-11-19T05:13:08.464436+00:00",
+  "max_rss_bytes": 206158430208,
+  "peak_rss_bytes": 12572303360,
+  "max_processes": 2,
+  "rss_sample_count": 1128,
+  "poll_interval": 0.25,
+  "descendant_supervision": "Linux child subreaper; retained PID/start identities across nested sessions",
+  "child_pid": 1765890,
+  "process_group": 1765890,
+  "elapsed": 492.6492282189429,
+  "descendant_identities": [
+    {
+      "pid": 1765890,
+      "start_ticks": 2265135917
+    },
+    {
+      "pid": 1779717,
+      "start_ticks": 2265155976
+    },
+    {
+      "pid": 1785661,
+      "start_ticks": 2265163503
+    },
+    {
+      "pid": 1785714,
+      "start_ticks": 2265163559
+    },
+    {
+      "pid": 1786056,
+      "start_ticks": 2265164032
+    },
+    {
+      "pid": 1786197,
+      "start_ticks": 2265164203
+    }
+  ],
+  "exit_code": 2,
+  "finished": "2026-11-19T05:21:21.113663+00:00"
+}

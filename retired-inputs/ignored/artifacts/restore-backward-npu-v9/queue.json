@@ -1,0 +1,19 @@
+{
+  "elapsed_seconds": 19.178514625877142,
+  "job_id": "restore-backward-npu-v9",
+  "logical_device": "npu:0",
+  "logical_devices": [
+    "npu:0"
+  ],
+  "npu_count": 1,
+  "physical_id": 11,
+  "physical_ids": [
+    11
+  ],
+  "priority": 0,
+  "project": "tide-instances",
+  "return_code": 0,
+  "schema_version": 1,
+  "status": "completed",
+  "timestamp": "2026-11-18T04:22:37.881286+00:00"
+}

@@ -1,0 +1,11 @@
+{
+  "scope": "registered main/downstream worktrees and their immediate private venv pth/direct_url metadata; no install mutation",
+  "worktrees": "worktree /mi/data2T/zlong/home/llm/graph-execution-foundation\nHEAD a1af48698aef14699e0e2dbe85bf6d6d83e1ca05\nbranch refs/heads/graph-execution-foundation\n\nworktree /mi/data2T/zlong/home/llm/tide-learning-lab\nHEAD 5f30ed2a32d7648f5011f5bfde5c6cae086a463c\nbranch refs/heads/tide-learning-lab\n\n",
+  "scanned_files": [
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/lib/python3.12/site-packages/__editable__.tide_instances-0.1.0.pth",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/lib/python3.12/site-packages/tide_instances-0.1.0.dist-info/direct_url.json"
+  ],
+  "candidate_references": [],
+  "original_user_hashes_match": true,
+  "main_environment_preserved": true
+}

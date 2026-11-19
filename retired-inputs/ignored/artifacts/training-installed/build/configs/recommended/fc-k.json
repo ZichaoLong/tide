@@ -1,0 +1,19 @@
+{
+  "schema": "tide-example-preset-1",
+  "description": "FC-K representative training template.",
+  "model": {
+    "topology": {"kind": "fc", "n": 8, "layers": 4},
+    "d": 128, "memory": "K", "aggregation": "source_residual",
+    "allocation": "quad", "sharing": "independent"
+  },
+  "execution": {
+    "mode": "train", "device": "cpu", "precision": "fp32",
+    "batch": 2, "length": 8, "steps": 3, "threads": 1,
+    "learning_rate": 0.0001, "foreach": true, "seed": 17
+  },
+  "recommendation": {
+    "status": "cpu_example",
+    "evidence": [],
+    "scope": "Small CPU FC-K example; the separate npu-fc-k-bf16 preset records the measured NPU training choice and its retained deviations."
+  }
+}

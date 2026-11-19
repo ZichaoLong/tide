@@ -1,0 +1,14 @@
+{
+  "topology": {
+    "kind": "multiscale",
+    "n": 2,
+    "hubs": 1,
+    "profile": "compact-5-dd4",
+    "timing": "timed"
+  },
+  "d": 64,
+  "memory": "X",
+  "aggregation": "source_residual",
+  "allocation": "quad",
+  "sharing": "region_shared"
+}

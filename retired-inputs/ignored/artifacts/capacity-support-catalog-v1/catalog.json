@@ -1,0 +1,1315 @@
+{
+  "schema": "tide-support-catalog-1",
+  "mathematics": "4f5b9f20a4030d68ee66ae2d26e34659a5e37234",
+  "implementation": {
+    "source_commit": "7b77457d594662e50acf0a002ca18d0a241e0ce3",
+    "source_sha256": "b21e5e94829bce915a2111075c55ba8e54f79eeaf7e8a046cb1ead890ddfd97b",
+    "files": {
+      "src/tide/__init__.py": "0533795b70734ed01c0e8c922c2930c29ca9f5f405a2872556d5b65a7fad9bd4",
+      "src/tide/allocation.py": "ff7f4e26c05006e5fb1a68c50f783670c20c33baf56528b5dac55fa2ffab66cc",
+      "src/tide/attention.py": "0a8231713a2801ed397cee093c5d1112867a2057fc20804717fd39fd9e1609e8",
+      "src/tide/checkpoint.py": "0494d357a1f9e239be967942d2d51fd79eef07176a93765893b6c5bc0e1c20ed",
+      "src/tide/config.py": "bddea1a60912ea21803869a8e25a2f7f303311d3a1bfbf52719f9cda5d4bdf54",
+      "src/tide/kv.py": "7310fcbc79a1641a495316c100e409a43e8d59ac6b6ae5f77669a9a9a4849caa",
+      "src/tide/layout.py": "4aee0573beb2448dd90ca307b9065f2ed4cd0f7eb93bfcd92c4b46550f889aa0",
+      "src/tide/model.py": "3897868991e1ff2b241c74efc1f1166e509f401018f2df89f1c45a17ae17b161",
+      "src/tide/parameters.py": "67d6ee7829448fa7431a3350a3a15ea5070aa4038d2276017d844714dceecfa7",
+      "src/tide/placement.py": "51c6e1c0cf8c0a97bc06eed72d47e00473c6130b40955e19827521a087edce78",
+      "src/tide/placement_ownership.py": "95431e5a2240b81a16df4cba08dfef541d777735220a212a28324f9c63661c13",
+      "src/tide/precision.py": "5e94f06892dc89451750b4e5b1fd2e105d440f633875f31a883880e6a6ca480a",
+      "src/tide/reception.py": "67768494c96a697480c13713e246b1a943940e7faeb96d24bd0732aad3f7cd98",
+      "src/tide/region.py": "3d0ee3fa13e344ddb0fff5ce15af62cee4e0b1a7c4984df523e70a4cbfc41ec2",
+      "src/tide/region_batch.py": "2406168308d26e9ed5d07f7b05ac9f4650161df4929b3c0b2b9042925a313a6a",
+      "src/tide/region_placement.py": "0209a83c6f07cc15d3913d87d474262f84cd763e6c9ea62a3ebb724b662b5ab0",
+      "src/tide/ssd.py": "03132ab3f3a8b49f8eb6f0c0b29000e1647280fb243d0105a5e7f220ccac0954",
+      "src/tide/ssd_memory.py": "6479ce755e67396708aab2912d460c4166b69be2ab92b0b592a7b52f93124f81",
+      "src/tide/topology.py": "8cdf58d0b3089e16a079ad46c3be7ca0c953fcea0023d276c9582901e1712dbf",
+      "src/tide/topology_hb.py": "5fb7b1a959f0b88a097e95959b52a1f10cf5180eaea7b688cbef086946abea06",
+      "scripts/support_catalog.py": "372b38a44386064c21fd3f242b2d818e6a031bfe55d5472a227cf286b918f175"
+    },
+    "source_dirty": false
+  },
+  "main_menu": {
+    "spatial_profiles": 41,
+    "bound_profiles": 55,
+    "geometry_resolutions": 475,
+    "parameter_configs": 225400,
+    "allocation_rows": 676200,
+    "by_variant": {
+      "fc-settle": 9,
+      "lattice-settle": 6,
+      "exchange-settle": 12,
+      "multiscale-timed": 14,
+      "multiscale-settle": 14
+    },
+    "n": [
+      8,
+      16,
+      32,
+      64,
+      128
+    ],
+    "d": [
+      64,
+      128,
+      192,
+      256,
+      384,
+      512,
+      768
+    ],
+    "sharing": [
+      [
+        "independent",
+        0
+      ],
+      [
+        "region_shared",
+        8
+      ],
+      [
+        "region_shared",
+        4
+      ],
+      [
+        "region_shared",
+        16
+      ],
+      [
+        "layer_shared",
+        8
+      ],
+      [
+        "layer_shared",
+        4
+      ],
+      [
+        "layer_shared",
+        16
+      ]
+    ],
+    "reception": [
+      "source_residual",
+      "incoming_light_64",
+      "incoming_light_128",
+      "incoming_wide"
+    ],
+    "allocation": [
+      "quad",
+      "shannon",
+      "pool"
+    ],
+    "budgets": [
+      1,
+      2,
+      4,
+      8,
+      16,
+      32,
+      64
+    ],
+    "profiles": [
+      {
+        "name": "fc-4-settle",
+        "spatial_profile": "fc-4",
+        "family": "fc",
+        "timing": "settle",
+        "widths": [
+          1,
+          1,
+          1,
+          1
+        ],
+        "input_period": 6
+      },
+      {
+        "name": "fc-6-settle",
+        "spatial_profile": "fc-6",
+        "family": "fc",
+        "timing": "settle",
+        "widths": [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        "input_period": 8
+      },
+      {
+        "name": "fc-8-settle",
+        "spatial_profile": "fc-8",
+        "family": "fc",
+        "timing": "settle",
+        "widths": [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        "input_period": 10
+      },
+      {
+        "name": "fc-9-settle",
+        "spatial_profile": "fc-9",
+        "family": "fc",
+        "timing": "settle",
+        "widths": [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        "input_period": 11
+      },
+      {
+        "name": "fc-10-settle",
+        "spatial_profile": "fc-10",
+        "family": "fc",
+        "timing": "settle",
+        "widths": [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        "input_period": 12
+      },
+      {
+        "name": "fc-12-settle",
+        "spatial_profile": "fc-12",
+        "family": "fc",
+        "timing": "settle",
+        "widths": [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        "input_period": 14
+      },
+      {
+        "name": "fc-16-settle",
+        "spatial_profile": "fc-16",
+        "family": "fc",
+        "timing": "settle",
+        "widths": [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        "input_period": 18
+      },
+      {
+        "name": "fc-24-settle",
+        "spatial_profile": "fc-24",
+        "family": "fc",
+        "timing": "settle",
+        "widths": [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        "input_period": 26
+      },
+      {
+        "name": "fc-32-settle",
+        "spatial_profile": "fc-32",
+        "family": "fc",
+        "timing": "settle",
+        "widths": [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        "input_period": 34
+      },
+      {
+        "name": "lattice-3-settle",
+        "spatial_profile": "lattice-3",
+        "family": "lattice",
+        "timing": "settle",
+        "widths": [
+          1,
+          2,
+          1
+        ],
+        "input_period": 5
+      },
+      {
+        "name": "lattice-5-settle",
+        "spatial_profile": "lattice-5",
+        "family": "lattice",
+        "timing": "settle",
+        "widths": [
+          1,
+          2,
+          4,
+          2,
+          1
+        ],
+        "input_period": 7
+      },
+      {
+        "name": "lattice-7-settle",
+        "spatial_profile": "lattice-7",
+        "family": "lattice",
+        "timing": "settle",
+        "widths": [
+          1,
+          2,
+          4,
+          8,
+          4,
+          2,
+          1
+        ],
+        "input_period": 9
+      },
+      {
+        "name": "lattice-9-settle",
+        "spatial_profile": "lattice-9",
+        "family": "lattice",
+        "timing": "settle",
+        "widths": [
+          1,
+          2,
+          4,
+          8,
+          16,
+          8,
+          4,
+          2,
+          1
+        ],
+        "input_period": 11
+      },
+      {
+        "name": "lattice-11-settle",
+        "spatial_profile": "lattice-11",
+        "family": "lattice",
+        "timing": "settle",
+        "widths": [
+          1,
+          2,
+          4,
+          8,
+          16,
+          32,
+          16,
+          8,
+          4,
+          2,
+          1
+        ],
+        "input_period": 13
+      },
+      {
+        "name": "lattice-13-settle",
+        "spatial_profile": "lattice-13",
+        "family": "lattice",
+        "timing": "settle",
+        "widths": [
+          1,
+          2,
+          4,
+          8,
+          16,
+          32,
+          64,
+          32,
+          16,
+          8,
+          4,
+          2,
+          1
+        ],
+        "input_period": 15
+      },
+      {
+        "name": "exchange-4-settle",
+        "spatial_profile": "exchange-4",
+        "family": "exchange",
+        "timing": "settle",
+        "widths": [
+          1,
+          2,
+          2,
+          1
+        ],
+        "input_period": 5
+      },
+      {
+        "name": "exchange-7-settle",
+        "spatial_profile": "exchange-7",
+        "family": "exchange",
+        "timing": "settle",
+        "widths": [
+          1,
+          2,
+          4,
+          4,
+          4,
+          2,
+          1
+        ],
+        "input_period": 8
+      },
+      {
+        "name": "exchange-10-settle",
+        "spatial_profile": "exchange-10",
+        "family": "exchange",
+        "timing": "settle",
+        "widths": [
+          1,
+          2,
+          4,
+          8,
+          8,
+          8,
+          8,
+          4,
+          2,
+          1
+        ],
+        "input_period": 11
+      },
+      {
+        "name": "exchange-13-settle",
+        "spatial_profile": "exchange-13",
+        "family": "exchange",
+        "timing": "settle",
+        "widths": [
+          1,
+          2,
+          4,
+          8,
+          16,
+          16,
+          16,
+          16,
+          16,
+          8,
+          4,
+          2,
+          1
+        ],
+        "input_period": 14
+      },
+      {
+        "name": "exchange-16-settle",
+        "spatial_profile": "exchange-16",
+        "family": "exchange",
+        "timing": "settle",
+        "widths": [
+          1,
+          2,
+          4,
+          8,
+          16,
+          32,
+          32,
+          32,
+          32,
+          32,
+          32,
+          16,
+          8,
+          4,
+          2,
+          1
+        ],
+        "input_period": 17
+      },
+      {
+        "name": "exchange-19-settle",
+        "spatial_profile": "exchange-19",
+        "family": "exchange",
+        "timing": "settle",
+        "widths": [
+          1,
+          2,
+          4,
+          8,
+          16,
+          32,
+          64,
+          64,
+          64,
+          64,
+          64,
+          64,
+          64,
+          32,
+          16,
+          8,
+          4,
+          2,
+          1
+        ],
+        "input_period": 20
+      },
+      {
+        "name": "exchange-m1-r3-settle",
+        "spatial_profile": "exchange-m1-r3",
+        "family": "exchange",
+        "timing": "settle",
+        "widths": [
+          1,
+          2,
+          2,
+          2,
+          2,
+          1
+        ],
+        "input_period": 7
+      },
+      {
+        "name": "exchange-m1-r4-settle",
+        "spatial_profile": "exchange-m1-r4",
+        "family": "exchange",
+        "timing": "settle",
+        "widths": [
+          1,
+          2,
+          2,
+          2,
+          2,
+          2,
+          1
+        ],
+        "input_period": 8
+      },
+      {
+        "name": "exchange-m1-r5-settle",
+        "spatial_profile": "exchange-m1-r5",
+        "family": "exchange",
+        "timing": "settle",
+        "widths": [
+          1,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          1
+        ],
+        "input_period": 9
+      },
+      {
+        "name": "exchange-m1-r10-settle",
+        "spatial_profile": "exchange-m1-r10",
+        "family": "exchange",
+        "timing": "settle",
+        "widths": [
+          1,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          1
+        ],
+        "input_period": 14
+      },
+      {
+        "name": "exchange-m2-r5-settle",
+        "spatial_profile": "exchange-m2-r5",
+        "family": "exchange",
+        "timing": "settle",
+        "widths": [
+          1,
+          2,
+          4,
+          4,
+          4,
+          4,
+          4,
+          4,
+          2,
+          1
+        ],
+        "input_period": 11
+      },
+      {
+        "name": "exchange-m2-r9-settle",
+        "spatial_profile": "exchange-m2-r9",
+        "family": "exchange",
+        "timing": "settle",
+        "widths": [
+          1,
+          2,
+          4,
+          4,
+          4,
+          4,
+          4,
+          4,
+          4,
+          4,
+          4,
+          4,
+          2,
+          1
+        ],
+        "input_period": 15
+      },
+      {
+        "name": "multiscale-5-timed",
+        "spatial_profile": "multiscale-5",
+        "family": "multiscale",
+        "timing": "timed",
+        "widths": [
+          4,
+          4,
+          8,
+          4,
+          4
+        ],
+        "input_period": 4
+      },
+      {
+        "name": "multiscale-5-settle",
+        "spatial_profile": "multiscale-5",
+        "family": "multiscale",
+        "timing": "settle",
+        "widths": [
+          4,
+          4,
+          8,
+          4,
+          4
+        ],
+        "input_period": 6
+      },
+      {
+        "name": "multiscale-5-dd4-timed",
+        "spatial_profile": "multiscale-5-dd4",
+        "family": "multiscale",
+        "timing": "timed",
+        "widths": [
+          4,
+          4,
+          8,
+          4,
+          4
+        ],
+        "input_period": 4
+      },
+      {
+        "name": "multiscale-5-dd4-settle",
+        "spatial_profile": "multiscale-5-dd4",
+        "family": "multiscale",
+        "timing": "settle",
+        "widths": [
+          4,
+          4,
+          8,
+          4,
+          4
+        ],
+        "input_period": 6
+      },
+      {
+        "name": "multiscale-7-timed",
+        "spatial_profile": "multiscale-7",
+        "family": "multiscale",
+        "timing": "timed",
+        "widths": [
+          4,
+          4,
+          8,
+          8,
+          8,
+          4,
+          4
+        ],
+        "input_period": 4
+      },
+      {
+        "name": "multiscale-7-settle",
+        "spatial_profile": "multiscale-7",
+        "family": "multiscale",
+        "timing": "settle",
+        "widths": [
+          4,
+          4,
+          8,
+          8,
+          8,
+          4,
+          4
+        ],
+        "input_period": 8
+      },
+      {
+        "name": "multiscale-9-timed",
+        "spatial_profile": "multiscale-9",
+        "family": "multiscale",
+        "timing": "timed",
+        "widths": [
+          4,
+          4,
+          4,
+          8,
+          8,
+          8,
+          4,
+          4,
+          4
+        ],
+        "input_period": 4
+      },
+      {
+        "name": "multiscale-9-settle",
+        "spatial_profile": "multiscale-9",
+        "family": "multiscale",
+        "timing": "settle",
+        "widths": [
+          4,
+          4,
+          4,
+          8,
+          8,
+          8,
+          4,
+          4,
+          4
+        ],
+        "input_period": 10
+      },
+      {
+        "name": "multiscale-13-timed",
+        "spatial_profile": "multiscale-13",
+        "family": "multiscale",
+        "timing": "timed",
+        "widths": [
+          4,
+          4,
+          4,
+          8,
+          8,
+          16,
+          16,
+          16,
+          8,
+          8,
+          4,
+          4,
+          4
+        ],
+        "input_period": 4
+      },
+      {
+        "name": "multiscale-13-settle",
+        "spatial_profile": "multiscale-13",
+        "family": "multiscale",
+        "timing": "settle",
+        "widths": [
+          4,
+          4,
+          4,
+          8,
+          8,
+          16,
+          16,
+          16,
+          8,
+          8,
+          4,
+          4,
+          4
+        ],
+        "input_period": 14
+      },
+      {
+        "name": "multiscale-15-timed",
+        "spatial_profile": "multiscale-15",
+        "family": "multiscale",
+        "timing": "timed",
+        "widths": [
+          4,
+          4,
+          4,
+          8,
+          8,
+          8,
+          16,
+          16,
+          16,
+          8,
+          8,
+          8,
+          4,
+          4,
+          4
+        ],
+        "input_period": 4
+      },
+      {
+        "name": "multiscale-15-settle",
+        "spatial_profile": "multiscale-15",
+        "family": "multiscale",
+        "timing": "settle",
+        "widths": [
+          4,
+          4,
+          4,
+          8,
+          8,
+          8,
+          16,
+          16,
+          16,
+          8,
+          8,
+          8,
+          4,
+          4,
+          4
+        ],
+        "input_period": 16
+      },
+      {
+        "name": "multiscale-17-timed",
+        "spatial_profile": "multiscale-17",
+        "family": "multiscale",
+        "timing": "timed",
+        "widths": [
+          4,
+          4,
+          4,
+          8,
+          8,
+          8,
+          16,
+          16,
+          16,
+          16,
+          16,
+          8,
+          8,
+          8,
+          4,
+          4,
+          4
+        ],
+        "input_period": 4
+      },
+      {
+        "name": "multiscale-17-settle",
+        "spatial_profile": "multiscale-17",
+        "family": "multiscale",
+        "timing": "settle",
+        "widths": [
+          4,
+          4,
+          4,
+          8,
+          8,
+          8,
+          16,
+          16,
+          16,
+          16,
+          16,
+          8,
+          8,
+          8,
+          4,
+          4,
+          4
+        ],
+        "input_period": 18
+      },
+      {
+        "name": "multiscale-compact-5-dd4-timed",
+        "spatial_profile": "multiscale-compact-5-dd4",
+        "family": "multiscale",
+        "timing": "timed",
+        "widths": [
+          1,
+          1,
+          2,
+          1,
+          1
+        ],
+        "input_period": 4
+      },
+      {
+        "name": "multiscale-compact-5-dd4-settle",
+        "spatial_profile": "multiscale-compact-5-dd4",
+        "family": "multiscale",
+        "timing": "settle",
+        "widths": [
+          1,
+          1,
+          2,
+          1,
+          1
+        ],
+        "input_period": 6
+      },
+      {
+        "name": "multiscale-compact-7-timed",
+        "spatial_profile": "multiscale-compact-7",
+        "family": "multiscale",
+        "timing": "timed",
+        "widths": [
+          1,
+          1,
+          2,
+          2,
+          2,
+          1,
+          1
+        ],
+        "input_period": 4
+      },
+      {
+        "name": "multiscale-compact-7-settle",
+        "spatial_profile": "multiscale-compact-7",
+        "family": "multiscale",
+        "timing": "settle",
+        "widths": [
+          1,
+          1,
+          2,
+          2,
+          2,
+          1,
+          1
+        ],
+        "input_period": 8
+      },
+      {
+        "name": "multiscale-compact-9-timed",
+        "spatial_profile": "multiscale-compact-9",
+        "family": "multiscale",
+        "timing": "timed",
+        "widths": [
+          1,
+          1,
+          2,
+          2,
+          4,
+          2,
+          2,
+          1,
+          1
+        ],
+        "input_period": 4
+      },
+      {
+        "name": "multiscale-compact-9-settle",
+        "spatial_profile": "multiscale-compact-9",
+        "family": "multiscale",
+        "timing": "settle",
+        "widths": [
+          1,
+          1,
+          2,
+          2,
+          4,
+          2,
+          2,
+          1,
+          1
+        ],
+        "input_period": 10
+      },
+      {
+        "name": "multiscale-compact-9-two-inputs-timed",
+        "spatial_profile": "multiscale-compact-9-two-inputs",
+        "family": "multiscale",
+        "timing": "timed",
+        "widths": [
+          2,
+          2,
+          2,
+          4,
+          2,
+          2,
+          2,
+          2,
+          2
+        ],
+        "input_period": 4
+      },
+      {
+        "name": "multiscale-compact-9-two-inputs-settle",
+        "spatial_profile": "multiscale-compact-9-two-inputs",
+        "family": "multiscale",
+        "timing": "settle",
+        "widths": [
+          2,
+          2,
+          2,
+          4,
+          2,
+          2,
+          2,
+          2,
+          2
+        ],
+        "input_period": 10
+      },
+      {
+        "name": "multiscale-compact-15-timed",
+        "spatial_profile": "multiscale-compact-15",
+        "family": "multiscale",
+        "timing": "timed",
+        "widths": [
+          1,
+          1,
+          1,
+          1,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          1,
+          1,
+          1,
+          1
+        ],
+        "input_period": 4
+      },
+      {
+        "name": "multiscale-compact-15-settle",
+        "spatial_profile": "multiscale-compact-15",
+        "family": "multiscale",
+        "timing": "settle",
+        "widths": [
+          1,
+          1,
+          1,
+          1,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          1,
+          1,
+          1,
+          1
+        ],
+        "input_period": 16
+      },
+      {
+        "name": "multiscale-25-timed",
+        "spatial_profile": "multiscale-25",
+        "family": "multiscale",
+        "timing": "timed",
+        "widths": [
+          4,
+          4,
+          4,
+          8,
+          8,
+          8,
+          16,
+          16,
+          16,
+          16,
+          16,
+          16,
+          16,
+          16,
+          16,
+          16,
+          16,
+          16,
+          16,
+          8,
+          8,
+          8,
+          4,
+          4,
+          4
+        ],
+        "input_period": 4
+      },
+      {
+        "name": "multiscale-25-settle",
+        "spatial_profile": "multiscale-25",
+        "family": "multiscale",
+        "timing": "settle",
+        "widths": [
+          4,
+          4,
+          4,
+          8,
+          8,
+          8,
+          16,
+          16,
+          16,
+          16,
+          16,
+          16,
+          16,
+          16,
+          16,
+          16,
+          16,
+          16,
+          16,
+          8,
+          8,
+          8,
+          4,
+          4,
+          4
+        ],
+        "input_period": 26
+      },
+      {
+        "name": "multiscale-33-timed",
+        "spatial_profile": "multiscale-33",
+        "family": "multiscale",
+        "timing": "timed",
+        "widths": [
+          4,
+          4,
+          4,
+          8,
+          8,
+          8,
+          16,
+          16,
+          16,
+          16,
+          16,
+          16,
+          16,
+          16,
+          16,
+          16,
+          16,
+          16,
+          16,
+          16,
+          16,
+          16,
+          16,
+          16,
+          16,
+          16,
+          16,
+          8,
+          8,
+          8,
+          4,
+          4,
+          4
+        ],
+        "input_period": 4
+      },
+      {
+        "name": "multiscale-33-settle",
+        "spatial_profile": "multiscale-33",
+        "family": "multiscale",
+        "timing": "settle",
+        "widths": [
+          4,
+          4,
+          4,
+          8,
+          8,
+          8,
+          16,
+          16,
+          16,
+          16,
+          16,
+          16,
+          16,
+          16,
+          16,
+          16,
+          16,
+          16,
+          16,
+          16,
+          16,
+          16,
+          16,
+          16,
+          16,
+          16,
+          16,
+          8,
+          8,
+          8,
+          4,
+          4,
+          4
+        ],
+        "input_period": 34
+      }
+    ],
+    "independent_rank": "catalog rank=0 is inactive; API rank=8 is ignored",
+    "no_hub_memory": "X equals K; the fixed catalog deduplicates X"
+  },
+  "optional_bindings": [
+    {
+      "name": "group_hub_fixed_pass",
+      "implemented": true,
+      "catalog_member": false,
+      "interface": "ModelConfig.hub_allocation=fixed_pass",
+      "restriction": "HB group with hubs; omit H scoring parameters"
+    },
+    {
+      "name": "explicit_local_clocks",
+      "implemented": true,
+      "catalog_member": false,
+      "interface": "ClockConfig and edge_delay_pair",
+      "restriction": "strict pair requires all local clocks explicit and common input period > depth"
+    },
+    {
+      "name": "terminal_hubs",
+      "implemented": true,
+      "catalog_member": false,
+      "interface": "TopologyConfig.terminal_hubs",
+      "restriction": "Exchange/Multiscale; existing port binding still returns D only"
+    }
+  ],
+  "qualification": {
+    "metadata": {
+      "state": "passed",
+      "geometry_sha256": "2a32ce44a4d6288841b2aea0a17013586c2b3ac85b40a1a0634d89859c1db932",
+      "budget_checks": 5510,
+      "torch_imported": false,
+      "scope": "configuration constructors and width/period/probe metadata only; no model tensors"
+    },
+    "execution": {
+      "state": "not_run_by_catalog",
+      "checks": [
+        "tests/test_optional_bindings.py",
+        "tests/test_models.py"
+      ],
+      "scope": "selected independent witnesses; never the full catalog product"
+    },
+    "numerical": {
+      "state": "not_run_by_catalog",
+      "checks": [
+        "tests/test_kv_memory.py",
+        "tests/test_ssd_memory.py",
+        "tests/test_timed_reference.py"
+      ],
+      "retained_evidence": "docs/evidence/roadmap-numerics-followup-20261118.md",
+      "scope": "existing evidence keeps its recorded source; optional bindings require their own qualification"
+    },
+    "performance": {
+      "state": "not_run_by_catalog",
+      "retained_evidence": "docs/evidence/README.md",
+      "scope": "specific workload/device/precision records only; no inferred optional-binding qualification"
+    }
+  },
+  "excluded": [
+    "old teaching bindings",
+    "LH-DAG/PDG",
+    "arbitrary graph/local-function programs"
+  ]
+}

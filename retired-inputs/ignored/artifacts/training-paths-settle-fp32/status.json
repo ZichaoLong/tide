@@ -1,0 +1,125 @@
+{
+  "state": "passed",
+  "source": "ae247dee82c60b63495e9abea7f703abd84ac3c7",
+  "command": [
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "/mi/data2T/zlong/home/.agents/skills/use-local-ascend/scripts/run_on_free_npu.py",
+    "--job-id",
+    "training-paths-settle-fp32",
+    "--project",
+    "tide-instances",
+    "--priority",
+    "0",
+    "--npu-count",
+    "1",
+    "--max-wait-seconds",
+    "900",
+    "--state-file",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/training-paths-settle-fp32/queue.json",
+    "--",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "-m",
+    "scripts.check_training_paths",
+    "--config",
+    "configs/hb-multiscale-x-settle.json",
+    "--device",
+    "npu:0",
+    "--precision",
+    "fp32",
+    "--candidates",
+    "baseline",
+    "batch4",
+    "batch_reception",
+    "batch_prefix",
+    "batch_prefix_reception",
+    "--candidate-overrides",
+    "{\"batch_reception\":{\"region_batch_size\":4,\"checkpoint_reception\":true},\"batch_prefix\":{\"region_batch_size\":4,\"ssd_summary_backend\":\"prefix\"},\"batch_prefix_reception\":{\"region_batch_size\":4,\"checkpoint_reception\":true,\"ssd_summary_backend\":\"prefix\"}}",
+    "--batch",
+    "1",
+    "--length",
+    "8",
+    "--chunk",
+    "4",
+    "--steps",
+    "2",
+    "--threads",
+    "1",
+    "--output-dir",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/training-paths-settle-fp32/results"
+  ],
+  "pid": 1572537,
+  "started": "2026-11-18T09:43:00.667840+00:00",
+  "max_rss_bytes": 77309411328,
+  "peak_rss_bytes": 9251950592,
+  "max_processes": 3,
+  "rss_sample_count": 752,
+  "poll_interval": 0.25,
+  "descendant_supervision": "Linux child subreaper; retained PID/start identities across nested sessions",
+  "child_pid": 1572560,
+  "process_group": 1572560,
+  "elapsed": 336.33035457134247,
+  "descendant_identities": [
+    {
+      "pid": 1572560,
+      "start_ticks": 2258115137
+    },
+    {
+      "pid": 1572562,
+      "start_ticks": 2258115143
+    },
+    {
+      "pid": 1573185,
+      "start_ticks": 2258115863
+    },
+    {
+      "pid": 1574119,
+      "start_ticks": 2258117579
+    },
+    {
+      "pid": 1575748,
+      "start_ticks": 2258119267
+    },
+    {
+      "pid": 1577071,
+      "start_ticks": 2258120941
+    },
+    {
+      "pid": 1578015,
+      "start_ticks": 2258122617
+    },
+    {
+      "pid": 1579128,
+      "start_ticks": 2258124338
+    },
+    {
+      "pid": 1579890,
+      "start_ticks": 2258124842
+    },
+    {
+      "pid": 1580080,
+      "start_ticks": 2258125017
+    },
+    {
+      "pid": 1582324,
+      "start_ticks": 2258128189
+    },
+    {
+      "pid": 1586297,
+      "start_ticks": 2258132573
+    },
+    {
+      "pid": 1589063,
+      "start_ticks": 2258136774
+    },
+    {
+      "pid": 1591303,
+      "start_ticks": 2258140980
+    },
+    {
+      "pid": 1594099,
+      "start_ticks": 2258145374
+    }
+  ],
+  "exit_code": 0,
+  "finished": "2026-11-18T09:48:36.998195+00:00"
+}

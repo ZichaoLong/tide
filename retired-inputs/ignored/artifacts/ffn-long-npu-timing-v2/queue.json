@@ -1,0 +1,19 @@
+{
+  "elapsed_seconds": 2866.1780248209834,
+  "job_id": "ffn-long-npu-timing-v2",
+  "logical_device": "npu:0",
+  "logical_devices": [
+    "npu:0"
+  ],
+  "npu_count": 1,
+  "physical_id": 9,
+  "physical_ids": [
+    9
+  ],
+  "priority": 0,
+  "project": "tide-instances",
+  "return_code": 0,
+  "schema_version": 1,
+  "status": "completed",
+  "timestamp": "2026-11-19T06:45:57.819956+00:00"
+}

@@ -1,0 +1,121 @@
+{
+  "state": "passed",
+  "source": "b4cf1514fb1e79d0bbebf7ab03595bcbacbf2160",
+  "command": [
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "/mi/data2T/zlong/home/.agents/skills/use-local-ascend/scripts/run_on_free_npu.py",
+    "--job-id",
+    "agg-fc-capacity-fp32-v1",
+    "--project",
+    "tide-instances",
+    "--priority",
+    "0",
+    "--npu-count",
+    "1",
+    "--max-wait-seconds",
+    "600",
+    "--state-file",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-fc-capacity-fp32-v1/queue.json",
+    "--",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
+    "-m",
+    "benchmarks.search",
+    "--config",
+    "configs/fc-k.json",
+    "--table",
+    "capacity",
+    "--axis",
+    "batch",
+    "--batch",
+    "32",
+    "--length",
+    "256",
+    "--max-axis-value",
+    "128",
+    "--max-points",
+    "3",
+    "--subjects",
+    "tide",
+    "--device",
+    "npu:0",
+    "--precision",
+    "fp32",
+    "--mode",
+    "train",
+    "--threads",
+    "4",
+    "--warmup",
+    "2",
+    "--steps",
+    "5",
+    "--device-budget-gib",
+    "48",
+    "--rss-gib",
+    "60",
+    "--seconds",
+    "1200",
+    "--child-timeout",
+    "300",
+    "--output-dir",
+    "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-fc-capacity-fp32-v1/search"
+  ],
+  "pid": 2270769,
+  "started": "2026-11-18T12:22:42.374000+00:00",
+  "max_rss_bytes": 68719476736,
+  "peak_rss_bytes": 4016074752,
+  "max_processes": 3,
+  "rss_sample_count": 471,
+  "poll_interval": 0.25,
+  "descendant_supervision": "Linux child subreaper; retained PID/start identities across nested sessions",
+  "child_pid": 2270802,
+  "process_group": 2270802,
+  "elapsed": 193.5059890449047,
+  "descendant_identities": [
+    {
+      "pid": 2270802,
+      "start_ticks": 2259073308
+    },
+    {
+      "pid": 2270803,
+      "start_ticks": 2259073314
+    },
+    {
+      "pid": 2270868,
+      "start_ticks": 2259073371
+    },
+    {
+      "pid": 2271225,
+      "start_ticks": 2259073856
+    },
+    {
+      "pid": 2271519,
+      "start_ticks": 2259074081
+    },
+    {
+      "pid": 2271520,
+      "start_ticks": 2259074087
+    },
+    {
+      "pid": 2272628,
+      "start_ticks": 2259075567
+    },
+    {
+      "pid": 2273905,
+      "start_ticks": 2259077961
+    },
+    {
+      "pid": 2275935,
+      "start_ticks": 2259080037
+    },
+    {
+      "pid": 2278343,
+      "start_ticks": 2259083462
+    },
+    {
+      "pid": 2281836,
+      "start_ticks": 2259086899
+    }
+  ],
+  "exit_code": 0,
+  "finished": "2026-11-18T12:25:55.879989+00:00"
+}

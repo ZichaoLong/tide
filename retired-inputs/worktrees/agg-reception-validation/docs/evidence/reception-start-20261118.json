@@ -1,0 +1,5259 @@
+{
+  "scope": "Completed FP32 starting costs and independent SSD primitive candidates; later integrated runs retain their own identities",
+  "math": "4f5b9f20a4030d68ee66ae2d26e34659a5e37234",
+  "runs": [
+    {
+      "name": "agg-cost-source-fp32-v1",
+      "source": "95465188cf8c862567e3a422f99b7441a96452c4",
+      "status": "passed",
+      "queue": {
+        "elapsed_seconds": 175.48251486942172,
+        "job_id": "agg-cost-source-fp32-v1",
+        "logical_device": "npu:0",
+        "logical_devices": [
+          "npu:0"
+        ],
+        "npu_count": 1,
+        "physical_id": 1,
+        "physical_ids": [
+          1
+        ],
+        "priority": 0,
+        "project": "tide-instances",
+        "return_code": 0,
+        "schema_version": 1,
+        "status": "completed",
+        "timestamp": "2026-11-18T12:19:03.439202+00:00"
+      },
+      "launch": {
+        "path": "artifacts/agg-cost-source-fp32-v1/launch.json",
+        "sha256": "cde0cd701162a93fb6e275ce2fec0153c90b6e6b1956a8bdc0f15761297798ac",
+        "bytes": 4675
+      },
+      "result": {
+        "path": "artifacts/agg-cost-source-fp32-v1/costs.json",
+        "sha256": "5d011f7dedb9ee719fa6d7b9b143b01ef9625ab2287ce90bb7671f04f9b1c18f",
+        "bytes": 2830590
+      },
+      "command": {
+        "name": "agg-cost-source-fp32-v1",
+        "revision": "95465188",
+        "threads": 4,
+        "affinity": "80-83",
+        "npu_count": 1,
+        "candidate_ids": null,
+        "seconds": 2400,
+        "rss_gib": 80.0,
+        "queue_seconds": 600,
+        "after_unit": [],
+        "command": [
+          "--",
+          "python",
+          "-m",
+          "benchmarks.costs",
+          "--config",
+          "configs/agg-inference/settle-source_residual.json",
+          "--device",
+          "npu:0",
+          "--precision",
+          "fp32",
+          "--batch",
+          "8",
+          "--length",
+          "256",
+          "--threads",
+          "4",
+          "--warmup",
+          "2",
+          "--steps",
+          "5",
+          "--subjects",
+          "tide",
+          "transformer_A",
+          "transformer_C",
+          "--transformer-candidates",
+          "standard",
+          "chunk256",
+          "--diagnostics",
+          "stages",
+          "runtime",
+          "work",
+          "saved",
+          "trace",
+          "--device-budget-gib",
+          "48",
+          "--output",
+          "{run}/costs.json"
+        ]
+      },
+      "sampled_peak_rss_bytes": 13482180608,
+      "config": {
+        "topology": {
+          "kind": "multiscale",
+          "n": 8,
+          "layers": null,
+          "depth": null,
+          "rounds": null,
+          "profile": "compact-9",
+          "hubs": 4,
+          "partition": "group",
+          "timing": "settle",
+          "hub_mask": "all",
+          "period": null,
+          "probes": null,
+          "terminal_hubs": false
+        },
+        "d": 128,
+        "memory": "X",
+        "aggregation": "source_residual",
+        "allocation": "quad",
+        "sharing": "region_shared",
+        "adapter_rank": 8,
+        "budget": null,
+        "attention_backend": "auto",
+        "attention_chunk": 128,
+        "input_dim": null,
+        "checkpoint_regions": false,
+        "checkpoint_reception": true,
+        "ssd_summary_backend": "prefix",
+        "region_batch_size": 4,
+        "local_attention_backend": null,
+        "hub_allocation": "bounded",
+        "clock": {
+          "position_period": null,
+          "position_origin": "binding",
+          "kv_window": null,
+          "short_decay": null,
+          "ssd_stride": null
+        }
+      },
+      "joint_matches": {
+        "A": {
+          "constructor": {
+            "d": 80,
+            "layers": 188,
+            "ffn_width": 240,
+            "head_dim": 16,
+            "window": 128
+          },
+          "targets": {
+            "blocks": 188,
+            "parameters": 15694224
+          },
+          "actual": {
+            "blocks": 188,
+            "parameters": 15671760
+          },
+          "relative_deviation": {
+            "blocks": 0.0,
+            "parameters": -0.0014313546181066359
+          },
+          "selection_rule": "exact block count; nearest parameters over d=16*j >= 32, FFN=8*j in [2d,6d]; ties prefer FFN=4d",
+          "parameter_scope": "main blocks and final RMSNorm; no embedding, task head or artificial unused weights",
+          "joint_class": "A",
+          "block_target_kind": "nodes",
+          "parameter_target_kind": "total"
+        },
+        "B": {
+          "constructor": {
+            "d": 64,
+            "layers": 188,
+            "ffn_width": 312,
+            "head_dim": 32,
+            "window": 128
+          },
+          "targets": {
+            "blocks": 188,
+            "parameters": 14468444.216796875
+          },
+          "actual": {
+            "blocks": 188,
+            "parameters": 14366272
+          },
+          "relative_deviation": {
+            "blocks": 0.0,
+            "parameters": -0.007061727941575089
+          },
+          "selection_rule": "exact block count; nearest parameters over d=16*j >= 32, FFN=8*j in [2d,6d]; ties prefer FFN=4d",
+          "parameter_scope": "main blocks and final RMSNorm; no embedding, task head or artificial unused weights",
+          "joint_class": "B",
+          "block_target_kind": "nodes",
+          "parameter_target_kind": "effective_touched"
+        },
+        "C": {
+          "constructor": {
+            "d": 368,
+            "layers": 9,
+            "ffn_width": 1088,
+            "head_dim": 16,
+            "window": 128
+          },
+          "targets": {
+            "blocks": 9,
+            "parameters": 15694224
+          },
+          "actual": {
+            "blocks": 9,
+            "parameters": 15692624
+          },
+          "relative_deviation": {
+            "blocks": 0.0,
+            "parameters": -0.00010194833462297976
+          },
+          "selection_rule": "exact block count; nearest parameters over d=16*j >= 32, FFN=8*j in [2d,6d]; ties prefer FFN=4d",
+          "parameter_scope": "main blocks and final RMSNorm; no embedding, task head or artificial unused weights",
+          "joint_class": "C",
+          "block_target_kind": "depth",
+          "parameter_target_kind": "total"
+        },
+        "D": {
+          "constructor": {
+            "d": 320,
+            "layers": 9,
+            "ffn_width": 1248,
+            "head_dim": 64,
+            "window": 128
+          },
+          "targets": {
+            "blocks": 9,
+            "parameters": 14468444.216796875
+          },
+          "actual": {
+            "blocks": 9,
+            "parameters": 14475200
+          },
+          "relative_deviation": {
+            "blocks": 0.0,
+            "parameters": 0.00046693224937633564
+          },
+          "selection_rule": "exact block count; nearest parameters over d=16*j >= 32, FFN=8*j in [2d,6d]; ties prefer FFN=4d",
+          "parameter_scope": "main blocks and final RMSNorm; no embedding, task head or artificial unused weights",
+          "joint_class": "D",
+          "block_target_kind": "depth",
+          "parameter_target_kind": "effective_touched"
+        }
+      },
+      "initial_tide_audit": {
+        "parameters": {
+          "unique_parameters": 15694224,
+          "scope": "all unique trainable backbone parameters including enabled ingress projections; no task head",
+          "ingress_parameters": 32768,
+          "textbook": {
+            "base": 9886644,
+            "private_D": 4066432,
+            "private_H": 1708380,
+            "total_excluding_ingress": 15661456,
+            "active_proxy": 12103328.0,
+            "D_fraction": 0.125,
+            "is_actual_touched": false,
+            "assumption": "all regions receive; all H act; D private scaled by k/n only for quad"
+          }
+        },
+        "effective_touched": {
+          "sum": 29631373756,
+          "mean": 14468444.216796875,
+          "min": 14040439,
+          "max": 14973328,
+          "unique_across_time_and_batch": 15694224,
+          "cumulative_per_input_position": 14468444.216796875
+        },
+        "stages": {
+          "ingress": {
+            "sum": 67108864,
+            "mean": 32768.0,
+            "min": 32768,
+            "max": 32768
+          },
+          "reception": {
+            "sum": 1150548992,
+            "mean": 561791.5,
+            "min": 559744,
+            "max": 562048
+          },
+          "memory_prepare": {
+            "sum": 4662139904,
+            "mean": 2276435.5,
+            "min": 2272568,
+            "max": 2276920
+          },
+          "regional": {
+            "sum": 4151828924,
+            "mean": 2027260.216796875,
+            "min": 2024963,
+            "max": 2027548
+          },
+          "full": {
+            "sum": 19599747072,
+            "mean": 9570189.0,
+            "min": 9150396,
+            "max": 10074044
+          }
+        },
+        "definition": "unique Parameter scalars in semantically effective owner/group/source slices; not nonzero gradients or physical loads",
+        "deduplication": "within each sample and input step across settled layers",
+        "input_positions": 2048,
+        "sample_time_slots": 2048,
+        "logical_axis": "input_step",
+        "work": {
+          "positive_messages": 1971143,
+          "message_slots": 2850816,
+          "candidate_updates": 384796,
+          "candidate_slots": 385024,
+          "regional_attention_positive_pairs": 5170504,
+          "full_actions": 273683,
+          "kv_attention_effective_pairs": 58240004
+        },
+        "work_per_input_position": {
+          "positive_messages": 962.47216796875,
+          "message_slots": 1392.0,
+          "candidate_updates": 187.888671875,
+          "candidate_slots": 188.0,
+          "regional_attention_positive_pairs": 2524.66015625,
+          "full_actions": 133.63427734375,
+          "kv_attention_effective_pairs": 28437.501953125
+        },
+        "query_packing": {
+          "K": {
+            "calls": 22,
+            "selected_rows": 150803,
+            "executed_rows": 205952
+          },
+          "S": {
+            "calls": 8,
+            "selected_rows": 122880,
+            "executed_rows": 122880
+          }
+        },
+        "node_matrices": {
+          "receive.a": {
+            "calls": 19,
+            "rows": 2850816,
+            "dense_multiply_adds": 9122611200
+          },
+          "receive.b": {
+            "calls": 19,
+            "rows": 2850816,
+            "dense_multiply_adds": 9122611200
+          },
+          "memories.K.kv": {
+            "calls": 11,
+            "rows": 262144,
+            "dense_multiply_adds": 9395240960
+          },
+          "memories.K.summary": {
+            "calls": 11,
+            "rows": 262144,
+            "dense_multiply_adds": 1409286144
+          },
+          "describe.encode": {
+            "calls": 19,
+            "rows": 385024,
+            "dense_multiply_adds": 7377059840
+          },
+          "memories.K.query.heads.0": {
+            "calls": 22,
+            "rows": 205952,
+            "dense_multiply_adds": 1107197952
+          },
+          "memories.K.query.heads.1": {
+            "calls": 22,
+            "rows": 205952,
+            "dense_multiply_adds": 1107197952
+          },
+          "memories.K.query.heads.2": {
+            "calls": 22,
+            "rows": 205952,
+            "dense_multiply_adds": 1107197952
+          },
+          "memories.K.query.heads.3": {
+            "calls": 22,
+            "rows": 205952,
+            "dense_multiply_adds": 1107197952
+          },
+          "memories.K.output": {
+            "calls": 22,
+            "rows": 205952,
+            "dense_multiply_adds": 3796107264
+          },
+          "memories.K.ffn.gate": {
+            "calls": 22,
+            "rows": 205952,
+            "dense_multiply_adds": 14551744512
+          },
+          "memories.K.ffn.up": {
+            "calls": 22,
+            "rows": 205952,
+            "dense_multiply_adds": 14551744512
+          },
+          "memories.K.ffn.down": {
+            "calls": 22,
+            "rows": 205952,
+            "dense_multiply_adds": 14551744512
+          },
+          "memories.S.input": {
+            "calls": 8,
+            "rows": 122880,
+            "dense_multiply_adds": 5540413440
+          },
+          "memories.S.summary": {
+            "calls": 8,
+            "rows": 122880,
+            "dense_multiply_adds": 660602880
+          },
+          "memories.S.read": {
+            "calls": 8,
+            "rows": 122880,
+            "dense_multiply_adds": 660602880
+          },
+          "memories.S.output": {
+            "calls": 8,
+            "rows": 122880,
+            "dense_multiply_adds": 2264924160
+          },
+          "memories.S.ffn.gate": {
+            "calls": 8,
+            "rows": 122880,
+            "dense_multiply_adds": 8682209280
+          },
+          "memories.S.ffn.up": {
+            "calls": 8,
+            "rows": 122880,
+            "dense_multiply_adds": 8682209280
+          },
+          "memories.S.ffn.down": {
+            "calls": 8,
+            "rows": 122880,
+            "dense_multiply_adds": 8682209280
+          }
+        },
+        "matrix_cost_definition": "multiply-add pairs for actually executed NodeLinear rows, including padding/adapters; excludes attention/normalization/non-NodeLinear ops; not complete FLOPs"
+      },
+      "observations": [
+        {
+          "subject": "tide",
+          "candidate": "standard",
+          "parameters": 15694224,
+          "state": "completed_finite",
+          "normal": {
+            "state": "completed_finite",
+            "start_identity": {
+              "model_sha256": "8b421bc4881507ea131cded1ab3705d1416ef7b495c76cd1b0fec86b183039ee",
+              "optimizer_sha256": "9001bf40f64d107290fd1bdbce7b6ef5dfe23fff886eb21b8bac2d44915168f9",
+              "gradients_sha256": "2b2a87b9045b317a531baa8d11d612798eb55b2dedae048cd94bbc4d0f106aad",
+              "rng_sha256": "f08c7efa9426ceee7cd42ace7b2efb12384c8cfe60ccc918ec802aaaa0cbe5cc"
+            },
+            "seconds": [
+              1.381615836173296,
+              1.372858989983797,
+              1.3529403321444988,
+              1.3570562489330769,
+              1.3682599104940891
+            ],
+            "losses": [
+              2.222013473510742,
+              2.0952401161193848,
+              1.9897661209106445,
+              1.8944051265716553,
+              1.810679316520691
+            ],
+            "memory_scope": "cumulative allocator peak since immediately before normal samples; construction and warmup excluded",
+            "device_memory": {
+              "allocated_bytes": 259612672,
+              "reserved_bytes": 15401484288,
+              "peak_allocated_bytes": 13288671232,
+              "peak_reserved_bytes": 15401484288
+            },
+            "median_seconds": 1.3682599104940891,
+            "input_positions_per_second": 1496.7916433804244,
+            "sample_range_over_median": 0.020957643945324837,
+            "final_parameter_sha256": "e298e9bc4b9a2645e7154d0a71f46a3d392ee667e48ef1e446f8903756674f77",
+            "actual_storage": {
+              "parameters": {
+                "npu:0:torch.float32": {
+                  "elements": 15694224,
+                  "bytes": 62776896
+                }
+              },
+              "gradients": {
+                "npu:0:torch.float32": {
+                  "elements": 15694224,
+                  "bytes": 62776896
+                }
+              },
+              "optimizer": {
+                "cpu:torch.float32": {
+                  "elements": 351,
+                  "bytes": 1404
+                },
+                "npu:0:torch.float32": {
+                  "elements": 31388448,
+                  "bytes": 125553792
+                }
+              }
+            }
+          },
+          "stage_rows": [
+            {
+              "path": "training",
+              "calls": 1,
+              "inclusive_seconds": 1.4503073431551456,
+              "exclusive_seconds": 0.0002057403326034546
+            },
+            {
+              "path": "training/backward",
+              "calls": 1,
+              "inclusive_seconds": 0.5789677128195763,
+              "exclusive_seconds": 0.45633237436413765
+            },
+            {
+              "path": "training/backward/reception",
+              "calls": 19,
+              "inclusive_seconds": 0.12263533845543861,
+              "exclusive_seconds": 0.12263533845543861
+            },
+            {
+              "path": "training/flush",
+              "calls": 1,
+              "inclusive_seconds": 2.438575029373169e-05,
+              "exclusive_seconds": 2.438575029373169e-05
+            },
+            {
+              "path": "training/forward",
+              "calls": 1,
+              "inclusive_seconds": 0.847380556166172,
+              "exclusive_seconds": 0.0030830800533294678
+            },
+            {
+              "path": "training/forward/input.projection",
+              "calls": 2,
+              "inclusive_seconds": 0.000248979777097702,
+              "exclusive_seconds": 0.000248979777097702
+            },
+            {
+              "path": "training/forward/messages.gather",
+              "calls": 31,
+              "inclusive_seconds": 0.07008690759539604,
+              "exclusive_seconds": 0.07008690759539604
+            },
+            {
+              "path": "training/forward/region.evaluate",
+              "calls": 11,
+              "inclusive_seconds": 0.33049042522907257,
+              "exclusive_seconds": 0.01417996734380722
+            },
+            {
+              "path": "training/forward/region.evaluate/allocation",
+              "calls": 11,
+              "inclusive_seconds": 0.05355937033891678,
+              "exclusive_seconds": 0.05355937033891678
+            },
+            {
+              "path": "training/forward/region.evaluate/description",
+              "calls": 11,
+              "inclusive_seconds": 0.009232454001903534,
+              "exclusive_seconds": 0.009232454001903534
+            },
+            {
+              "path": "training/forward/region.evaluate/memory.K.full",
+              "calls": 8,
+              "inclusive_seconds": 0.10241446271538734,
+              "exclusive_seconds": 0.04564223811030388
+            },
+            {
+              "path": "training/forward/region.evaluate/memory.K.full/attention",
+              "calls": 16,
+              "inclusive_seconds": 0.023006785660982132,
+              "exclusive_seconds": 0.023006785660982132
+            },
+            {
+              "path": "training/forward/region.evaluate/memory.K.full/queries.pack",
+              "calls": 16,
+              "inclusive_seconds": 0.02734341472387314,
+              "exclusive_seconds": 0.02734341472387314
+            },
+            {
+              "path": "training/forward/region.evaluate/memory.K.full/queries.publish",
+              "calls": 16,
+              "inclusive_seconds": 0.006422024220228195,
+              "exclusive_seconds": 0.006422024220228195
+            },
+            {
+              "path": "training/forward/region.evaluate/memory.K.prepare",
+              "calls": 8,
+              "inclusive_seconds": 0.026970647275447845,
+              "exclusive_seconds": 0.026970647275447845
+            },
+            {
+              "path": "training/forward/region.evaluate/memory.S.full",
+              "calls": 3,
+              "inclusive_seconds": 0.011047948151826859,
+              "exclusive_seconds": 0.0051872096955776215
+            },
+            {
+              "path": "training/forward/region.evaluate/memory.S.full/queries.pack",
+              "calls": 3,
+              "inclusive_seconds": 0.004763565957546234,
+              "exclusive_seconds": 0.004763565957546234
+            },
+            {
+              "path": "training/forward/region.evaluate/memory.S.full/queries.publish",
+              "calls": 3,
+              "inclusive_seconds": 0.001097172498703003,
+              "exclusive_seconds": 0.001097172498703003
+            },
+            {
+              "path": "training/forward/region.evaluate/memory.S.prepare",
+              "calls": 3,
+              "inclusive_seconds": 0.07325464114546776,
+              "exclusive_seconds": 0.008183922618627548
+            },
+            {
+              "path": "training/forward/region.evaluate/memory.S.prepare/ssd.convolution",
+              "calls": 3,
+              "inclusive_seconds": 0.005866125226020813,
+              "exclusive_seconds": 0.005866125226020813
+            },
+            {
+              "path": "training/forward/region.evaluate/memory.S.prepare/ssd.matrix",
+              "calls": 3,
+              "inclusive_seconds": 0.05539456382393837,
+              "exclusive_seconds": 0.05539456382393837
+            },
+            {
+              "path": "training/forward/region.evaluate/memory.S.prepare/ssd.summary.prefix",
+              "calls": 3,
+              "inclusive_seconds": 0.0038100294768810272,
+              "exclusive_seconds": 0.0038100294768810272
+            },
+            {
+              "path": "training/forward/region.evaluate/reception",
+              "calls": 11,
+              "inclusive_seconds": 0.015596866607666016,
+              "exclusive_seconds": 0.015596866607666016
+            },
+            {
+              "path": "training/forward/region.evaluate/regional.scoring",
+              "calls": 11,
+              "inclusive_seconds": 0.024234067648649216,
+              "exclusive_seconds": 0.008488759398460388
+            },
+            {
+              "path": "training/forward/region.evaluate/regional.scoring/attention",
+              "calls": 11,
+              "inclusive_seconds": 0.015745308250188828,
+              "exclusive_seconds": 0.015745308250188828
+            },
+            {
+              "path": "training/forward/regions.evaluate",
+              "calls": 8,
+              "inclusive_seconds": 0.4428505152463913,
+              "exclusive_seconds": 0.014688923954963684
+            },
+            {
+              "path": "training/forward/regions.evaluate/allocation",
+              "calls": 8,
+              "inclusive_seconds": 0.05053732171654701,
+              "exclusive_seconds": 0.05053732171654701
+            },
+            {
+              "path": "training/forward/regions.evaluate/description",
+              "calls": 8,
+              "inclusive_seconds": 0.0072730183601379395,
+              "exclusive_seconds": 0.0072730183601379395
+            },
+            {
+              "path": "training/forward/regions.evaluate/memory.K.full",
+              "calls": 3,
+              "inclusive_seconds": 0.05039321631193161,
+              "exclusive_seconds": 0.017931900918483734
+            },
+            {
+              "path": "training/forward/regions.evaluate/memory.K.full/attention",
+              "calls": 6,
+              "inclusive_seconds": 0.013423062860965729,
+              "exclusive_seconds": 0.013423062860965729
+            },
+            {
+              "path": "training/forward/regions.evaluate/memory.K.full/queries.pack",
+              "calls": 6,
+              "inclusive_seconds": 0.014126595109701157,
+              "exclusive_seconds": 0.014126595109701157
+            },
+            {
+              "path": "training/forward/regions.evaluate/memory.K.full/queries.publish",
+              "calls": 6,
+              "inclusive_seconds": 0.004911657422780991,
+              "exclusive_seconds": 0.004911657422780991
+            },
+            {
+              "path": "training/forward/regions.evaluate/memory.K.prepare",
+              "calls": 3,
+              "inclusive_seconds": 0.01526443287730217,
+              "exclusive_seconds": 0.01526443287730217
+            },
+            {
+              "path": "training/forward/regions.evaluate/memory.S.full",
+              "calls": 5,
+              "inclusive_seconds": 0.025190282613039017,
+              "exclusive_seconds": 0.008906122297048569
+            },
+            {
+              "path": "training/forward/regions.evaluate/memory.S.full/queries.pack",
+              "calls": 5,
+              "inclusive_seconds": 0.011288963258266449,
+              "exclusive_seconds": 0.011288963258266449
+            },
+            {
+              "path": "training/forward/regions.evaluate/memory.S.full/queries.publish",
+              "calls": 5,
+              "inclusive_seconds": 0.004995197057723999,
+              "exclusive_seconds": 0.004995197057723999
+            },
+            {
+              "path": "training/forward/regions.evaluate/memory.S.prepare",
+              "calls": 5,
+              "inclusive_seconds": 0.2312268279492855,
+              "exclusive_seconds": 0.014650162309408188
+            },
+            {
+              "path": "training/forward/regions.evaluate/memory.S.prepare/ssd.convolution",
+              "calls": 5,
+              "inclusive_seconds": 0.01335742324590683,
+              "exclusive_seconds": 0.01335742324590683
+            },
+            {
+              "path": "training/forward/regions.evaluate/memory.S.prepare/ssd.matrix",
+              "calls": 5,
+              "inclusive_seconds": 0.1968292035162449,
+              "exclusive_seconds": 0.1968292035162449
+            },
+            {
+              "path": "training/forward/regions.evaluate/memory.S.prepare/ssd.summary.prefix",
+              "calls": 5,
+              "inclusive_seconds": 0.006390038877725601,
+              "exclusive_seconds": 0.006390038877725601
+            },
+            {
+              "path": "training/forward/regions.evaluate/reception",
+              "calls": 8,
+              "inclusive_seconds": 0.018017582595348358,
+              "exclusive_seconds": 0.018017582595348358
+            },
+            {
+              "path": "training/forward/regions.evaluate/regional.scoring",
+              "calls": 8,
+              "inclusive_seconds": 0.026349887251853943,
+              "exclusive_seconds": 0.009252697229385376
+            },
+            {
+              "path": "training/forward/regions.evaluate/regional.scoring/attention",
+              "calls": 8,
+              "inclusive_seconds": 0.017097190022468567,
+              "exclusive_seconds": 0.017097190022468567
+            },
+            {
+              "path": "training/forward/regions.evaluate/state.split",
+              "calls": 8,
+              "inclusive_seconds": 0.003909021615982056,
+              "exclusive_seconds": 0.0015918910503387451
+            },
+            {
+              "path": "training/forward/regions.evaluate/state.split/state.split",
+              "calls": 50,
+              "inclusive_seconds": 0.0023171305656433105,
+              "exclusive_seconds": 0.0019760578870773315
+            },
+            {
+              "path": "training/forward/regions.evaluate/state.split/state.split/state.split",
+              "calls": 10,
+              "inclusive_seconds": 0.000341072678565979,
+              "exclusive_seconds": 0.000341072678565979
+            },
+            {
+              "path": "training/forward/regions.group",
+              "calls": 9,
+              "inclusive_seconds": 0.0006206482648849487,
+              "exclusive_seconds": 0.0006206482648849487
+            },
+            {
+              "path": "training/optimizer",
+              "calls": 1,
+              "inclusive_seconds": 0.013347011059522629,
+              "exclusive_seconds": 0.013347011059522629
+            },
+            {
+              "path": "training/readout_loss",
+              "calls": 1,
+              "inclusive_seconds": 0.0002762451767921448,
+              "exclusive_seconds": 0.0002762451767921448
+            },
+            {
+              "path": "training/release",
+              "calls": 1,
+              "inclusive_seconds": 0.008854940533638,
+              "exclusive_seconds": 0.008854940533638
+            },
+            {
+              "path": "training/synchronize_scalar",
+              "calls": 1,
+              "inclusive_seconds": 8.846819400787354e-05,
+              "exclusive_seconds": 8.846819400787354e-05
+            },
+            {
+              "path": "training/zero_grad",
+              "calls": 1,
+              "inclusive_seconds": 0.0011622831225395203,
+              "exclusive_seconds": 0.0011622831225395203
+            }
+          ],
+          "dispatch_calls": 57321,
+          "semantic_work": {
+            "parameters": {
+              "unique_parameters": 15694224,
+              "scope": "all unique trainable backbone parameters including enabled ingress projections; no task head",
+              "ingress_parameters": 32768,
+              "textbook": {
+                "base": 9886644,
+                "private_D": 4066432,
+                "private_H": 1708380,
+                "total_excluding_ingress": 15661456,
+                "active_proxy": 12103328.0,
+                "D_fraction": 0.125,
+                "is_actual_touched": false,
+                "assumption": "all regions receive; all H act; D private scaled by k/n only for quad"
+              }
+            },
+            "effective_touched": {
+              "sum": 29563137691,
+              "mean": 14435125.825683594,
+              "min": 14027152,
+              "max": 14905744,
+              "unique_across_time_and_batch": 15694224,
+              "cumulative_per_input_position": 14435125.825683594
+            },
+            "stages": {
+              "ingress": {
+                "sum": 67108864,
+                "mean": 32768.0,
+                "min": 32768,
+                "max": 32768
+              },
+              "reception": {
+                "sum": 1150380800,
+                "mean": 561709.375,
+                "min": 559744,
+                "max": 562048
+              },
+              "memory_prepare": {
+                "sum": 4661822208,
+                "mean": 2276280.375,
+                "min": 2272568,
+                "max": 2276920
+              },
+              "regional": {
+                "sum": 4151640219,
+                "mean": 2027168.0756835938,
+                "min": 2024963,
+                "max": 2027548
+              },
+              "full": {
+                "sum": 19532185600,
+                "mean": 9537200.0,
+                "min": 9127868,
+                "max": 10006460
+              }
+            },
+            "definition": "unique Parameter scalars in semantically effective owner/group/source slices; not nonzero gradients or physical loads",
+            "deduplication": "within each sample and input step across settled layers",
+            "input_positions": 2048,
+            "sample_time_slots": 2048,
+            "logical_axis": "input_step",
+            "work": {
+              "positive_messages": 1949957,
+              "message_slots": 2850816,
+              "candidate_updates": 384723,
+              "candidate_slots": 385024,
+              "regional_attention_positive_pairs": 5168314,
+              "full_actions": 270684,
+              "kv_attention_effective_pairs": 57017540
+            },
+            "work_per_input_position": {
+              "positive_messages": 952.12744140625,
+              "message_slots": 1392.0,
+              "candidate_updates": 187.85302734375,
+              "candidate_slots": 188.0,
+              "regional_attention_positive_pairs": 2523.5908203125,
+              "full_actions": 132.169921875,
+              "kv_attention_effective_pairs": 27840.595703125
+            },
+            "query_packing": {
+              "K": {
+                "calls": 22,
+                "selected_rows": 147804,
+                "executed_rows": 205312
+              },
+              "S": {
+                "calls": 8,
+                "selected_rows": 122880,
+                "executed_rows": 122880
+              }
+            },
+            "node_matrices": {
+              "receive.a": {
+                "calls": 19,
+                "rows": 2850816,
+                "dense_multiply_adds": 9122611200
+              },
+              "receive.b": {
+                "calls": 19,
+                "rows": 2850816,
+                "dense_multiply_adds": 9122611200
+              },
+              "memories.K.kv": {
+                "calls": 11,
+                "rows": 262144,
+                "dense_multiply_adds": 9395240960
+              },
+              "memories.K.summary": {
+                "calls": 11,
+                "rows": 262144,
+                "dense_multiply_adds": 1409286144
+              },
+              "describe.encode": {
+                "calls": 19,
+                "rows": 385024,
+                "dense_multiply_adds": 7377059840
+              },
+              "memories.K.query.heads.0": {
+                "calls": 22,
+                "rows": 205312,
+                "dense_multiply_adds": 1103757312
+              },
+              "memories.K.query.heads.1": {
+                "calls": 22,
+                "rows": 205312,
+                "dense_multiply_adds": 1103757312
+              },
+              "memories.K.query.heads.2": {
+                "calls": 22,
+                "rows": 205312,
+                "dense_multiply_adds": 1103757312
+              },
+              "memories.K.query.heads.3": {
+                "calls": 22,
+                "rows": 205312,
+                "dense_multiply_adds": 1103757312
+              },
+              "memories.K.output": {
+                "calls": 22,
+                "rows": 205312,
+                "dense_multiply_adds": 3784310784
+              },
+              "memories.K.ffn.gate": {
+                "calls": 22,
+                "rows": 205312,
+                "dense_multiply_adds": 14506524672
+              },
+              "memories.K.ffn.up": {
+                "calls": 22,
+                "rows": 205312,
+                "dense_multiply_adds": 14506524672
+              },
+              "memories.K.ffn.down": {
+                "calls": 22,
+                "rows": 205312,
+                "dense_multiply_adds": 14506524672
+              },
+              "memories.S.input": {
+                "calls": 8,
+                "rows": 122880,
+                "dense_multiply_adds": 5540413440
+              },
+              "memories.S.summary": {
+                "calls": 8,
+                "rows": 122880,
+                "dense_multiply_adds": 660602880
+              },
+              "memories.S.read": {
+                "calls": 8,
+                "rows": 122880,
+                "dense_multiply_adds": 660602880
+              },
+              "memories.S.output": {
+                "calls": 8,
+                "rows": 122880,
+                "dense_multiply_adds": 2264924160
+              },
+              "memories.S.ffn.gate": {
+                "calls": 8,
+                "rows": 122880,
+                "dense_multiply_adds": 8682209280
+              },
+              "memories.S.ffn.up": {
+                "calls": 8,
+                "rows": 122880,
+                "dense_multiply_adds": 8682209280
+              },
+              "memories.S.ffn.down": {
+                "calls": 8,
+                "rows": 122880,
+                "dense_multiply_adds": 8682209280
+              }
+            },
+            "matrix_cost_definition": "multiply-add pairs for actually executed NodeLinear rows, including padding/adapters; excludes attention/normalization/non-NodeLinear ops; not complete FLOPs"
+          },
+          "trace": {
+            "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-cost-source-fp32-v1/costs-tide-standard-trace.json",
+            "sha256": "4a42ea479e37ae7b1e664c5ca95b794894355923b655a70f9ad456b449167151",
+            "bytes": 142493940
+          }
+        },
+        {
+          "subject": "transformer_A",
+          "candidate": "standard",
+          "parameters": 15671760,
+          "state": "completed_finite",
+          "normal": {
+            "state": "completed_finite",
+            "start_identity": {
+              "model_sha256": "0c401a44bc4fa86f9a8755d3509722de2d97d2cf59bf1d8cd6fce4e282b3327a",
+              "optimizer_sha256": "4ab380202876ed37ce14cc1763a97d309ac752c59e28e5404eeef18f0cd11223",
+              "gradients_sha256": "ecc58093a9700fa6b626e4e180f4b624252afa5c64ce59f9ebbad3fc94e4cac5",
+              "rng_sha256": "895d7881d6463f2d832630a8e09aff8b91de35a979ba0e107d71a79ee858a4ac"
+            },
+            "seconds": [
+              0.7680731117725372,
+              0.7776945494115353,
+              0.7555563151836395,
+              0.7553212381899357,
+              0.7595817744731903
+            ],
+            "losses": [
+              0.9995952248573303,
+              0.9993933439254761,
+              0.9991914629936218,
+              0.9989896416664124,
+              0.9987882375717163
+            ],
+            "memory_scope": "cumulative allocator peak since immediately before normal samples; construction and warmup excluded",
+            "device_memory": {
+              "allocated_bytes": 253300736,
+              "reserved_bytes": 3621781504,
+              "peak_allocated_bytes": 3427627008,
+              "peak_reserved_bytes": 3621781504
+            },
+            "median_seconds": 0.7595817744731903,
+            "input_positions_per_second": 2696.2205635073265,
+            "sample_range_over_median": 0.029454776264368165,
+            "final_parameter_sha256": "bbe2095d0d49316006af79f88406044ad574692b7d85b3e33407e2987c5214f3",
+            "actual_storage": {
+              "parameters": {
+                "npu:0:torch.float32": {
+                  "elements": 15671760,
+                  "bytes": 62687040
+                }
+              },
+              "gradients": {
+                "npu:0:torch.float32": {
+                  "elements": 15671760,
+                  "bytes": 62687040
+                }
+              },
+              "optimizer": {
+                "cpu:torch.float32": {
+                  "elements": 1129,
+                  "bytes": 4516
+                },
+                "npu:0:torch.float32": {
+                  "elements": 31343520,
+                  "bytes": 125374080
+                }
+              }
+            }
+          },
+          "stage_rows": [
+            {
+              "path": "training",
+              "calls": 1,
+              "inclusive_seconds": 0.9447916708886623,
+              "exclusive_seconds": 0.00021761655807495117
+            },
+            {
+              "path": "training/backward",
+              "calls": 1,
+              "inclusive_seconds": 0.35669729486107826,
+              "exclusive_seconds": 0.35669729486107826
+            },
+            {
+              "path": "training/flush",
+              "calls": 1,
+              "inclusive_seconds": 2.3409724235534668e-05,
+              "exclusive_seconds": 2.3409724235534668e-05
+            },
+            {
+              "path": "training/forward",
+              "calls": 1,
+              "inclusive_seconds": 0.5408293791115284,
+              "exclusive_seconds": 0.002726934850215912
+            },
+            {
+              "path": "training/forward/block",
+              "calls": 188,
+              "inclusive_seconds": 0.5379414781928062,
+              "exclusive_seconds": 0.07599741593003273
+            },
+            {
+              "path": "training/forward/block/attention",
+              "calls": 376,
+              "inclusive_seconds": 0.2061702497303486,
+              "exclusive_seconds": 0.2061702497303486
+            },
+            {
+              "path": "training/forward/block/attention_norm",
+              "calls": 188,
+              "inclusive_seconds": 0.025968868285417557,
+              "exclusive_seconds": 0.025968868285417557
+            },
+            {
+              "path": "training/forward/block/ffn",
+              "calls": 188,
+              "inclusive_seconds": 0.05363480746746063,
+              "exclusive_seconds": 0.022082805633544922
+            },
+            {
+              "path": "training/forward/block/ffn/down",
+              "calls": 188,
+              "inclusive_seconds": 0.015520960092544556,
+              "exclusive_seconds": 0.015520960092544556
+            },
+            {
+              "path": "training/forward/block/ffn/gate_up",
+              "calls": 188,
+              "inclusive_seconds": 0.016031041741371155,
+              "exclusive_seconds": 0.016031041741371155
+            },
+            {
+              "path": "training/forward/block/ffn_norm",
+              "calls": 188,
+              "inclusive_seconds": 0.02794644981622696,
+              "exclusive_seconds": 0.02794644981622696
+            },
+            {
+              "path": "training/forward/block/output",
+              "calls": 188,
+              "inclusive_seconds": 0.015571251511573792,
+              "exclusive_seconds": 0.015571251511573792
+            },
+            {
+              "path": "training/forward/block/qkv",
+              "calls": 188,
+              "inclusive_seconds": 0.014653056859970093,
+              "exclusive_seconds": 0.014653056859970093
+            },
+            {
+              "path": "training/forward/block/rope",
+              "calls": 376,
+              "inclusive_seconds": 0.1179993785917759,
+              "exclusive_seconds": 0.1179993785917759
+            },
+            {
+              "path": "training/forward/final_norm",
+              "calls": 1,
+              "inclusive_seconds": 0.00013191252946853638,
+              "exclusive_seconds": 0.00013191252946853638
+            },
+            {
+              "path": "training/forward/layout.rope_masks",
+              "calls": 1,
+              "inclusive_seconds": 2.9053539037704468e-05,
+              "exclusive_seconds": 2.9053539037704468e-05
+            },
+            {
+              "path": "training/optimizer",
+              "calls": 1,
+              "inclusive_seconds": 0.03634895384311676,
+              "exclusive_seconds": 0.03634895384311676
+            },
+            {
+              "path": "training/readout_loss",
+              "calls": 1,
+              "inclusive_seconds": 0.00015201419591903687,
+              "exclusive_seconds": 0.00015201419591903687
+            },
+            {
+              "path": "training/release",
+              "calls": 1,
+              "inclusive_seconds": 0.007374566048383713,
+              "exclusive_seconds": 0.007374566048383713
+            },
+            {
+              "path": "training/synchronize_scalar",
+              "calls": 1,
+              "inclusive_seconds": 0.00010366737842559814,
+              "exclusive_seconds": 0.00010366737842559814
+            },
+            {
+              "path": "training/zero_grad",
+              "calls": 1,
+              "inclusive_seconds": 0.0030447691679000854,
+              "exclusive_seconds": 0.0030447691679000854
+            }
+          ],
+          "dispatch_calls": 44593,
+          "semantic_work": {
+            "input_positions": 2048,
+            "blocks": 188,
+            "heads": 5,
+            "attention_calls": 376,
+            "tiles_per_layer": [
+              {
+                "query_rows": 128,
+                "key_rows": 128
+              },
+              {
+                "query_rows": 128,
+                "key_rows": 255
+              }
+            ],
+            "effective_attention_pairs": 185292800,
+            "attention_operand_rectangle_pairs": 368660480,
+            "masked_rectangle_pairs": 183367680,
+            "linear_forward_multiply_adds": 32033996800,
+            "attention_rectangle_multiply_adds": 11797135360,
+            "interpretation": "fresh prefill; attention operand rectangles include masked pairs, not measured native-kernel executed FLOPs; linear multiply-adds exclude norms/RoPE/activation/final norm; backward/optimizer excluded from these formula counts"
+          },
+          "trace": {
+            "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-cost-source-fp32-v1/costs-transformer_A-standard-trace.json",
+            "sha256": "54807470256464f90ba6665905204670dcf448b3bc56809aab7b65d515e67d87",
+            "bytes": 121042721
+          }
+        },
+        {
+          "subject": "transformer_A",
+          "candidate": "chunk256",
+          "parameters": 15671760,
+          "state": "completed_finite",
+          "normal": {
+            "state": "completed_finite",
+            "start_identity": {
+              "model_sha256": "0c401a44bc4fa86f9a8755d3509722de2d97d2cf59bf1d8cd6fce4e282b3327a",
+              "optimizer_sha256": "4ab380202876ed37ce14cc1763a97d309ac752c59e28e5404eeef18f0cd11223",
+              "gradients_sha256": "ecc58093a9700fa6b626e4e180f4b624252afa5c64ce59f9ebbad3fc94e4cac5",
+              "rng_sha256": "895d7881d6463f2d832630a8e09aff8b91de35a979ba0e107d71a79ee858a4ac"
+            },
+            "seconds": [
+              0.582922913134098,
+              0.5843498632311821,
+              0.5854632742702961,
+              0.5826964788138866,
+              0.5875555612146854
+            ],
+            "losses": [
+              0.9995952248573303,
+              0.9993932843208313,
+              0.9991914629936218,
+              0.9989896416664124,
+              0.9987882375717163
+            ],
+            "memory_scope": "cumulative allocator peak since immediately before normal samples; construction and warmup excluded",
+            "device_memory": {
+              "allocated_bytes": 253317120,
+              "reserved_bytes": 3605004288,
+              "peak_allocated_bytes": 3380582912,
+              "peak_reserved_bytes": 3605004288
+            },
+            "median_seconds": 0.5843498632311821,
+            "input_positions_per_second": 3504.749686558521,
+            "sample_range_over_median": 0.008315365000567192,
+            "final_parameter_sha256": "1abe686c8c047fe6e18a991d80e69589a8c0443fe4892aafc2379f847d97e383",
+            "actual_storage": {
+              "parameters": {
+                "npu:0:torch.float32": {
+                  "elements": 15671760,
+                  "bytes": 62687040
+                }
+              },
+              "gradients": {
+                "npu:0:torch.float32": {
+                  "elements": 15671760,
+                  "bytes": 62687040
+                }
+              },
+              "optimizer": {
+                "cpu:torch.float32": {
+                  "elements": 1129,
+                  "bytes": 4516
+                },
+                "npu:0:torch.float32": {
+                  "elements": 31343520,
+                  "bytes": 125374080
+                }
+              }
+            }
+          },
+          "stage_rows": [
+            {
+              "path": "training",
+              "calls": 1,
+              "inclusive_seconds": 0.7588904984295368,
+              "exclusive_seconds": 0.0002006813883781433
+            },
+            {
+              "path": "training/backward",
+              "calls": 1,
+              "inclusive_seconds": 0.2870049737393856,
+              "exclusive_seconds": 0.2870049737393856
+            },
+            {
+              "path": "training/flush",
+              "calls": 1,
+              "inclusive_seconds": 2.3733824491500854e-05,
+              "exclusive_seconds": 2.3733824491500854e-05
+            },
+            {
+              "path": "training/forward",
+              "calls": 1,
+              "inclusive_seconds": 0.42703332379460335,
+              "exclusive_seconds": 0.0027184002101421356
+            },
+            {
+              "path": "training/forward/block",
+              "calls": 188,
+              "inclusive_seconds": 0.42415181919932365,
+              "exclusive_seconds": 0.06590306386351585
+            },
+            {
+              "path": "training/forward/block/attention",
+              "calls": 188,
+              "inclusive_seconds": 0.10001032799482346,
+              "exclusive_seconds": 0.10001032799482346
+            },
+            {
+              "path": "training/forward/block/attention_norm",
+              "calls": 188,
+              "inclusive_seconds": 0.02569469064474106,
+              "exclusive_seconds": 0.02569469064474106
+            },
+            {
+              "path": "training/forward/block/ffn",
+              "calls": 188,
+              "inclusive_seconds": 0.05357101932168007,
+              "exclusive_seconds": 0.022113889455795288
+            },
+            {
+              "path": "training/forward/block/ffn/down",
+              "calls": 188,
+              "inclusive_seconds": 0.01560153067111969,
+              "exclusive_seconds": 0.01560153067111969
+            },
+            {
+              "path": "training/forward/block/ffn/gate_up",
+              "calls": 188,
+              "inclusive_seconds": 0.01585559919476509,
+              "exclusive_seconds": 0.01585559919476509
+            },
+            {
+              "path": "training/forward/block/ffn_norm",
+              "calls": 188,
+              "inclusive_seconds": 0.027840107679367065,
+              "exclusive_seconds": 0.027840107679367065
+            },
+            {
+              "path": "training/forward/block/output",
+              "calls": 188,
+              "inclusive_seconds": 0.015535686165094376,
+              "exclusive_seconds": 0.015535686165094376
+            },
+            {
+              "path": "training/forward/block/qkv",
+              "calls": 188,
+              "inclusive_seconds": 0.014857374131679535,
+              "exclusive_seconds": 0.014857374131679535
+            },
+            {
+              "path": "training/forward/block/rope",
+              "calls": 376,
+              "inclusive_seconds": 0.12073954939842224,
+              "exclusive_seconds": 0.12073954939842224
+            },
+            {
+              "path": "training/forward/final_norm",
+              "calls": 1,
+              "inclusive_seconds": 0.00013713166117668152,
+              "exclusive_seconds": 0.00013713166117668152
+            },
+            {
+              "path": "training/forward/layout.rope_masks",
+              "calls": 1,
+              "inclusive_seconds": 2.5972723960876465e-05,
+              "exclusive_seconds": 2.5972723960876465e-05
+            },
+            {
+              "path": "training/optimizer",
+              "calls": 1,
+              "inclusive_seconds": 0.034880734980106354,
+              "exclusive_seconds": 0.034880734980106354
+            },
+            {
+              "path": "training/readout_loss",
+              "calls": 1,
+              "inclusive_seconds": 0.00015199929475784302,
+              "exclusive_seconds": 0.00015199929475784302
+            },
+            {
+              "path": "training/release",
+              "calls": 1,
+              "inclusive_seconds": 0.006822217255830765,
+              "exclusive_seconds": 0.006822217255830765
+            },
+            {
+              "path": "training/synchronize_scalar",
+              "calls": 1,
+              "inclusive_seconds": 9.589269757270813e-05,
+              "exclusive_seconds": 9.589269757270813e-05
+            },
+            {
+              "path": "training/zero_grad",
+              "calls": 1,
+              "inclusive_seconds": 0.002676941454410553,
+              "exclusive_seconds": 0.002676941454410553
+            }
+          ],
+          "dispatch_calls": 36321,
+          "semantic_work": {
+            "input_positions": 2048,
+            "blocks": 188,
+            "heads": 5,
+            "attention_calls": 188,
+            "tiles_per_layer": [
+              {
+                "query_rows": 256,
+                "key_rows": 256
+              }
+            ],
+            "effective_attention_pairs": 185292800,
+            "attention_operand_rectangle_pairs": 492830720,
+            "masked_rectangle_pairs": 307537920,
+            "linear_forward_multiply_adds": 32033996800,
+            "attention_rectangle_multiply_adds": 15770583040,
+            "interpretation": "fresh prefill; attention operand rectangles include masked pairs, not measured native-kernel executed FLOPs; linear multiply-adds exclude norms/RoPE/activation/final norm; backward/optimizer excluded from these formula counts"
+          },
+          "trace": {
+            "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-cost-source-fp32-v1/costs-transformer_A-chunk256-trace.json",
+            "sha256": "4710d1d88517e06a57f922cb20682ecb0358ebf24b1e0548d64a31b214570883",
+            "bytes": 94890507
+          }
+        },
+        {
+          "subject": "transformer_C",
+          "candidate": "standard",
+          "parameters": 15692624,
+          "state": "completed_finite",
+          "normal": {
+            "state": "completed_finite",
+            "start_identity": {
+              "model_sha256": "d4fe0b916f55b3d3c0a6d1549edceb9be4401872ff0f22c840b57031a4e699fa",
+              "optimizer_sha256": "de9090b90267ec580a85cbb381b4d3bef7544a80e29e6b0ab1261a52bc969e37",
+              "gradients_sha256": "ef9c3de8547c514ec87df61e271b40e3a8349b5454ff538d685c580d8c13218d",
+              "rng_sha256": "69898f9eb842eb59aac7d59b2489e7236250836263a53ef1ccf5289d9751b702"
+            },
+            "seconds": [
+              0.04073429852724075,
+              0.04015403613448143,
+              0.04880926385521889,
+              0.04020102322101593,
+              0.040216535329818726
+            ],
+            "losses": [
+              0.9995869994163513,
+              0.9993849992752075,
+              0.9991829991340637,
+              0.9989810585975647,
+              0.9987791180610657
+            ],
+            "memory_scope": "cumulative allocator peak since immediately before normal samples; construction and warmup excluded",
+            "device_memory": {
+              "allocated_bytes": 259770880,
+              "reserved_bytes": 1054867456,
+              "peak_allocated_bytes": 932395008,
+              "peak_reserved_bytes": 1054867456
+            },
+            "median_seconds": 0.040216535329818726,
+            "input_positions_per_second": 50924.327100885326,
+            "sample_range_over_median": 0.21521564823412326,
+            "final_parameter_sha256": "ca2292f8c899ad02678c08bfee998a6f1295be5c1ed39467639d575957fdd149",
+            "actual_storage": {
+              "parameters": {
+                "npu:0:torch.float32": {
+                  "elements": 15692624,
+                  "bytes": 62770496
+                }
+              },
+              "gradients": {
+                "npu:0:torch.float32": {
+                  "elements": 15692624,
+                  "bytes": 62770496
+                }
+              },
+              "optimizer": {
+                "cpu:torch.float32": {
+                  "elements": 55,
+                  "bytes": 220
+                },
+                "npu:0:torch.float32": {
+                  "elements": 31385248,
+                  "bytes": 125540992
+                }
+              }
+            }
+          },
+          "stage_rows": [
+            {
+              "path": "training",
+              "calls": 1,
+              "inclusive_seconds": 0.06294065341353416,
+              "exclusive_seconds": 0.0001800432801246643
+            },
+            {
+              "path": "training/backward",
+              "calls": 1,
+              "inclusive_seconds": 0.02024102956056595,
+              "exclusive_seconds": 0.02024102956056595
+            },
+            {
+              "path": "training/flush",
+              "calls": 1,
+              "inclusive_seconds": 2.4434179067611694e-05,
+              "exclusive_seconds": 2.4434179067611694e-05
+            },
+            {
+              "path": "training/forward",
+              "calls": 1,
+              "inclusive_seconds": 0.0386195033788681,
+              "exclusive_seconds": 0.00021087005734443665
+            },
+            {
+              "path": "training/forward/block",
+              "calls": 9,
+              "inclusive_seconds": 0.0382365807890892,
+              "exclusive_seconds": 0.004182230681180954
+            },
+            {
+              "path": "training/forward/block/attention",
+              "calls": 18,
+              "inclusive_seconds": 0.011692013591527939,
+              "exclusive_seconds": 0.011692013591527939
+            },
+            {
+              "path": "training/forward/block/attention_norm",
+              "calls": 9,
+              "inclusive_seconds": 0.0015201643109321594,
+              "exclusive_seconds": 0.0015201643109321594
+            },
+            {
+              "path": "training/forward/block/ffn",
+              "calls": 9,
+              "inclusive_seconds": 0.004140600562095642,
+              "exclusive_seconds": 0.0011991597712039948
+            },
+            {
+              "path": "training/forward/block/ffn/down",
+              "calls": 9,
+              "inclusive_seconds": 0.0010464675724506378,
+              "exclusive_seconds": 0.0010464675724506378
+            },
+            {
+              "path": "training/forward/block/ffn/gate_up",
+              "calls": 9,
+              "inclusive_seconds": 0.0018949732184410095,
+              "exclusive_seconds": 0.0018949732184410095
+            },
+            {
+              "path": "training/forward/block/ffn_norm",
+              "calls": 9,
+              "inclusive_seconds": 0.0015405528247356415,
+              "exclusive_seconds": 0.0015405528247356415
+            },
+            {
+              "path": "training/forward/block/output",
+              "calls": 9,
+              "inclusive_seconds": 0.0008932314813137054,
+              "exclusive_seconds": 0.0008932314813137054
+            },
+            {
+              "path": "training/forward/block/qkv",
+              "calls": 9,
+              "inclusive_seconds": 0.0010825246572494507,
+              "exclusive_seconds": 0.0010825246572494507
+            },
+            {
+              "path": "training/forward/block/rope",
+              "calls": 18,
+              "inclusive_seconds": 0.013185262680053711,
+              "exclusive_seconds": 0.013185262680053711
+            },
+            {
+              "path": "training/forward/final_norm",
+              "calls": 1,
+              "inclusive_seconds": 0.00014511868357658386,
+              "exclusive_seconds": 0.00014511868357658386
+            },
+            {
+              "path": "training/forward/layout.rope_masks",
+              "calls": 1,
+              "inclusive_seconds": 2.693384885787964e-05,
+              "exclusive_seconds": 2.693384885787964e-05
+            },
+            {
+              "path": "training/optimizer",
+              "calls": 1,
+              "inclusive_seconds": 0.002852868288755417,
+              "exclusive_seconds": 0.002852868288755417
+            },
+            {
+              "path": "training/readout_loss",
+              "calls": 1,
+              "inclusive_seconds": 0.00016339123249053955,
+              "exclusive_seconds": 0.00016339123249053955
+            },
+            {
+              "path": "training/release",
+              "calls": 1,
+              "inclusive_seconds": 0.00047718361020088196,
+              "exclusive_seconds": 0.00047718361020088196
+            },
+            {
+              "path": "training/synchronize_scalar",
+              "calls": 1,
+              "inclusive_seconds": 9.170174598693848e-05,
+              "exclusive_seconds": 9.170174598693848e-05
+            },
+            {
+              "path": "training/zero_grad",
+              "calls": 1,
+              "inclusive_seconds": 0.00029049813747406006,
+              "exclusive_seconds": 0.00029049813747406006
+            }
+          ],
+          "dispatch_calls": 2170,
+          "semantic_work": {
+            "input_positions": 2048,
+            "blocks": 9,
+            "heads": 23,
+            "attention_calls": 18,
+            "tiles_per_layer": [
+              {
+                "query_rows": 128,
+                "key_rows": 128
+              },
+              {
+                "query_rows": 128,
+                "key_rows": 255
+              }
+            ],
+            "effective_attention_pairs": 40803840,
+            "attention_operand_rectangle_pairs": 81183744,
+            "masked_rectangle_pairs": 40379904,
+            "linear_forward_multiply_adds": 32124174336,
+            "attention_rectangle_multiply_adds": 2597879808,
+            "interpretation": "fresh prefill; attention operand rectangles include masked pairs, not measured native-kernel executed FLOPs; linear multiply-adds exclude norms/RoPE/activation/final norm; backward/optimizer excluded from these formula counts"
+          },
+          "trace": {
+            "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-cost-source-fp32-v1/costs-transformer_C-standard-trace.json",
+            "sha256": "96f031f74d45dd9a3f59d19bc3ae3221b0191645a1854653405b423b4fbf506d",
+            "bytes": 5869332
+          }
+        },
+        {
+          "subject": "transformer_C",
+          "candidate": "chunk256",
+          "parameters": 15692624,
+          "state": "completed_finite",
+          "normal": {
+            "state": "completed_finite",
+            "start_identity": {
+              "model_sha256": "d4fe0b916f55b3d3c0a6d1549edceb9be4401872ff0f22c840b57031a4e699fa",
+              "optimizer_sha256": "de9090b90267ec580a85cbb381b4d3bef7544a80e29e6b0ab1261a52bc969e37",
+              "gradients_sha256": "ef9c3de8547c514ec87df61e271b40e3a8349b5454ff538d685c580d8c13218d",
+              "rng_sha256": "69898f9eb842eb59aac7d59b2489e7236250836263a53ef1ccf5289d9751b702"
+            },
+            "seconds": [
+              0.03715864568948746,
+              0.036975860595703125,
+              0.03700494393706322,
+              0.03695983439683914,
+              0.03707703575491905
+            ],
+            "losses": [
+              0.9995869994163513,
+              0.9993849992752075,
+              0.9991829991340637,
+              0.9989809989929199,
+              0.9987791180610657
+            ],
+            "memory_scope": "cumulative allocator peak since immediately before normal samples; construction and warmup excluded",
+            "device_memory": {
+              "allocated_bytes": 260083200,
+              "reserved_bytes": 1054867456,
+              "peak_allocated_bytes": 946595840,
+              "peak_reserved_bytes": 1054867456
+            },
+            "median_seconds": 0.03700494393706322,
+            "input_positions_per_second": 55343.956296303826,
+            "sample_range_over_median": 0.005372560298603535,
+            "final_parameter_sha256": "ce99ea2547d0b5b1154c28ca9ceb511167a9734d83b03528ed9df76e117b61a9",
+            "actual_storage": {
+              "parameters": {
+                "npu:0:torch.float32": {
+                  "elements": 15692624,
+                  "bytes": 62770496
+                }
+              },
+              "gradients": {
+                "npu:0:torch.float32": {
+                  "elements": 15692624,
+                  "bytes": 62770496
+                }
+              },
+              "optimizer": {
+                "cpu:torch.float32": {
+                  "elements": 55,
+                  "bytes": 220
+                },
+                "npu:0:torch.float32": {
+                  "elements": 31385248,
+                  "bytes": 125540992
+                }
+              }
+            }
+          },
+          "stage_rows": [
+            {
+              "path": "training",
+              "calls": 1,
+              "inclusive_seconds": 0.053036145865917206,
+              "exclusive_seconds": 0.00019096210598945618
+            },
+            {
+              "path": "training/backward",
+              "calls": 1,
+              "inclusive_seconds": 0.017990749329328537,
+              "exclusive_seconds": 0.017990749329328537
+            },
+            {
+              "path": "training/flush",
+              "calls": 1,
+              "inclusive_seconds": 2.5931745767593384e-05,
+              "exclusive_seconds": 2.5931745767593384e-05
+            },
+            {
+              "path": "training/forward",
+              "calls": 1,
+              "inclusive_seconds": 0.03125901520252228,
+              "exclusive_seconds": 0.00020594149827957153
+            },
+            {
+              "path": "training/forward/block",
+              "calls": 9,
+              "inclusive_seconds": 0.030874844640493393,
+              "exclusive_seconds": 0.0033333711326122284
+            },
+            {
+              "path": "training/forward/block/attention",
+              "calls": 9,
+              "inclusive_seconds": 0.0056631676852703094,
+              "exclusive_seconds": 0.0056631676852703094
+            },
+            {
+              "path": "training/forward/block/attention_norm",
+              "calls": 9,
+              "inclusive_seconds": 0.0014538466930389404,
+              "exclusive_seconds": 0.0014538466930389404
+            },
+            {
+              "path": "training/forward/block/ffn",
+              "calls": 9,
+              "inclusive_seconds": 0.0038169920444488525,
+              "exclusive_seconds": 0.0013475269079208374
+            },
+            {
+              "path": "training/forward/block/ffn/down",
+              "calls": 9,
+              "inclusive_seconds": 0.0010406076908111572,
+              "exclusive_seconds": 0.0010406076908111572
+            },
+            {
+              "path": "training/forward/block/ffn/gate_up",
+              "calls": 9,
+              "inclusive_seconds": 0.001428857445716858,
+              "exclusive_seconds": 0.001428857445716858
+            },
+            {
+              "path": "training/forward/block/ffn_norm",
+              "calls": 9,
+              "inclusive_seconds": 0.0014366991817951202,
+              "exclusive_seconds": 0.0014366991817951202
+            },
+            {
+              "path": "training/forward/block/output",
+              "calls": 9,
+              "inclusive_seconds": 0.0008761696517467499,
+              "exclusive_seconds": 0.0008761696517467499
+            },
+            {
+              "path": "training/forward/block/qkv",
+              "calls": 9,
+              "inclusive_seconds": 0.001077156513929367,
+              "exclusive_seconds": 0.001077156513929367
+            },
+            {
+              "path": "training/forward/block/rope",
+              "calls": 18,
+              "inclusive_seconds": 0.013217441737651825,
+              "exclusive_seconds": 0.013217441737651825
+            },
+            {
+              "path": "training/forward/final_norm",
+              "calls": 1,
+              "inclusive_seconds": 0.0001532621681690216,
+              "exclusive_seconds": 0.0001532621681690216
+            },
+            {
+              "path": "training/forward/layout.rope_masks",
+              "calls": 1,
+              "inclusive_seconds": 2.4966895580291748e-05,
+              "exclusive_seconds": 2.4966895580291748e-05
+            },
+            {
+              "path": "training/optimizer",
+              "calls": 1,
+              "inclusive_seconds": 0.002661377191543579,
+              "exclusive_seconds": 0.002661377191543579
+            },
+            {
+              "path": "training/readout_loss",
+              "calls": 1,
+              "inclusive_seconds": 0.0001527927815914154,
+              "exclusive_seconds": 0.0001527927815914154
+            },
+            {
+              "path": "training/release",
+              "calls": 1,
+              "inclusive_seconds": 0.0003831125795841217,
+              "exclusive_seconds": 0.0003831125795841217
+            },
+            {
+              "path": "training/synchronize_scalar",
+              "calls": 1,
+              "inclusive_seconds": 8.982047438621521e-05,
+              "exclusive_seconds": 8.982047438621521e-05
+            },
+            {
+              "path": "training/zero_grad",
+              "calls": 1,
+              "inclusive_seconds": 0.00028238445520401,
+              "exclusive_seconds": 0.00028238445520401
+            }
+          ],
+          "dispatch_calls": 1774,
+          "semantic_work": {
+            "input_positions": 2048,
+            "blocks": 9,
+            "heads": 23,
+            "attention_calls": 9,
+            "tiles_per_layer": [
+              {
+                "query_rows": 256,
+                "key_rows": 256
+              }
+            ],
+            "effective_attention_pairs": 40803840,
+            "attention_operand_rectangle_pairs": 108527616,
+            "masked_rectangle_pairs": 67723776,
+            "linear_forward_multiply_adds": 32124174336,
+            "attention_rectangle_multiply_adds": 3472883712,
+            "interpretation": "fresh prefill; attention operand rectangles include masked pairs, not measured native-kernel executed FLOPs; linear multiply-adds exclude norms/RoPE/activation/final norm; backward/optimizer excluded from these formula counts"
+          },
+          "trace": {
+            "path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-cost-source-fp32-v1/costs-transformer_C-chunk256-trace.json",
+            "sha256": "0890bc39ff1bdc1097b854bedb885b810504215784c9226072aff4fc729173a5",
+            "bytes": 4612617
+          }
+        }
+      ]
+    },
+    {
+      "name": "agg-cost-light64-fp32-v1",
+      "source": "95465188cf8c862567e3a422f99b7441a96452c4",
+      "status": "passed",
+      "queue": {
+        "elapsed_seconds": 127.44050175696611,
+        "job_id": "agg-cost-light64-fp32-v1",
+        "logical_device": "npu:0",
+        "logical_devices": [
+          "npu:0"
+        ],
+        "npu_count": 1,
+        "physical_id": 7,
+        "physical_ids": [
+          7
+        ],
+        "priority": 0,
+        "project": "tide-instances",
+        "return_code": 0,
+        "schema_version": 1,
+        "status": "completed",
+        "timestamp": "2026-11-18T12:18:15.744036+00:00"
+      },
+      "launch": {
+        "path": "artifacts/agg-cost-light64-fp32-v1/launch.json",
+        "sha256": "e46e814b9adc0d8862d30bad19411a812a60f6064a39a3dc6a20c6cae1e07e1a",
+        "bytes": 4445
+      },
+      "result": {
+        "path": "artifacts/agg-cost-light64-fp32-v1/costs.json",
+        "sha256": "41f01f0b638bca72f2f623cc183e272ae56e2e56c660a8b701f71e5100c20dbb",
+        "bytes": 3204406
+      },
+      "command": {
+        "name": "agg-cost-light64-fp32-v1",
+        "revision": "95465188",
+        "threads": 4,
+        "affinity": "84-87",
+        "npu_count": 1,
+        "candidate_ids": null,
+        "seconds": 2400,
+        "rss_gib": 80.0,
+        "queue_seconds": 600,
+        "after_unit": [],
+        "command": [
+          "--",
+          "python",
+          "-m",
+          "benchmarks.costs",
+          "--config",
+          "configs/agg-inference/settle-incoming_light_64.json",
+          "--device",
+          "npu:0",
+          "--precision",
+          "fp32",
+          "--batch",
+          "8",
+          "--length",
+          "256",
+          "--threads",
+          "4",
+          "--warmup",
+          "2",
+          "--steps",
+          "5",
+          "--subjects",
+          "tide",
+          "--diagnostics",
+          "stages",
+          "runtime",
+          "work",
+          "saved",
+          "--device-budget-gib",
+          "48",
+          "--output",
+          "{run}/costs.json"
+        ]
+      },
+      "sampled_peak_rss_bytes": 4012998656,
+      "config": {
+        "topology": {
+          "kind": "multiscale",
+          "n": 8,
+          "layers": null,
+          "depth": null,
+          "rounds": null,
+          "profile": "compact-9",
+          "hubs": 4,
+          "partition": "group",
+          "timing": "settle",
+          "hub_mask": "all",
+          "period": null,
+          "probes": null,
+          "terminal_hubs": false
+        },
+        "d": 128,
+        "memory": "X",
+        "aggregation": "incoming_light_64",
+        "allocation": "quad",
+        "sharing": "region_shared",
+        "adapter_rank": 8,
+        "budget": null,
+        "attention_backend": "auto",
+        "attention_chunk": 128,
+        "input_dim": null,
+        "checkpoint_regions": false,
+        "checkpoint_reception": true,
+        "ssd_summary_backend": "prefix",
+        "region_batch_size": 4,
+        "local_attention_backend": null,
+        "hub_allocation": "bounded",
+        "clock": {
+          "position_period": null,
+          "position_origin": "binding",
+          "kv_window": null,
+          "short_decay": null,
+          "ssd_stride": null
+        }
+      },
+      "joint_matches": {
+        "A": {
+          "constructor": {
+            "d": 80,
+            "layers": 188,
+            "ffn_width": 288,
+            "head_dim": 16,
+            "window": 128
+          },
+          "targets": {
+            "blocks": 188,
+            "parameters": 17880464
+          },
+          "actual": {
+            "blocks": 188,
+            "parameters": 17837520
+          },
+          "relative_deviation": {
+            "blocks": 0.0,
+            "parameters": -0.0024017273824661375
+          },
+          "selection_rule": "exact block count; nearest parameters over d=16*j >= 32, FFN=8*j in [2d,6d]; ties prefer FFN=4d",
+          "parameter_scope": "main blocks and final RMSNorm; no embedding, task head or artificial unused weights",
+          "joint_class": "A",
+          "block_target_kind": "nodes",
+          "parameter_target_kind": "total"
+        },
+        "B": {
+          "constructor": {
+            "d": 64,
+            "layers": 188,
+            "ffn_width": 376,
+            "head_dim": 32,
+            "window": 128
+          },
+          "targets": {
+            "blocks": 188,
+            "parameters": 16653779.41015625
+          },
+          "actual": {
+            "blocks": 188,
+            "parameters": 16676416
+          },
+          "relative_deviation": {
+            "blocks": 0.0,
+            "parameters": 0.001359246408052286
+          },
+          "selection_rule": "exact block count; nearest parameters over d=16*j >= 32, FFN=8*j in [2d,6d]; ties prefer FFN=4d",
+          "parameter_scope": "main blocks and final RMSNorm; no embedding, task head or artificial unused weights",
+          "joint_class": "B",
+          "block_target_kind": "nodes",
+          "parameter_target_kind": "effective_touched"
+        },
+        "C": {
+          "constructor": {
+            "d": 400,
+            "layers": 9,
+            "ffn_width": 1120,
+            "head_dim": 16,
+            "window": 128
+          },
+          "targets": {
+            "blocks": 9,
+            "parameters": 17880464
+          },
+          "actual": {
+            "blocks": 9,
+            "parameters": 17863600
+          },
+          "relative_deviation": {
+            "blocks": 0.0,
+            "parameters": -0.0009431522582411732
+          },
+          "selection_rule": "exact block count; nearest parameters over d=16*j >= 32, FFN=8*j in [2d,6d]; ties prefer FFN=4d",
+          "parameter_scope": "main blocks and final RMSNorm; no embedding, task head or artificial unused weights",
+          "joint_class": "C",
+          "block_target_kind": "depth",
+          "parameter_target_kind": "total"
+        },
+        "D": {
+          "constructor": {
+            "d": 400,
+            "layers": 9,
+            "ffn_width": 1008,
+            "head_dim": 16,
+            "window": 128
+          },
+          "targets": {
+            "blocks": 9,
+            "parameters": 16653779.41015625
+          },
+          "actual": {
+            "blocks": 9,
+            "parameters": 16654000
+          },
+          "relative_deviation": {
+            "blocks": 0.0,
+            "parameters": 1.3245632616910613e-05
+          },
+          "selection_rule": "exact block count; nearest parameters over d=16*j >= 32, FFN=8*j in [2d,6d]; ties prefer FFN=4d",
+          "parameter_scope": "main blocks and final RMSNorm; no embedding, task head or artificial unused weights",
+          "joint_class": "D",
+          "block_target_kind": "depth",
+          "parameter_target_kind": "effective_touched"
+        }
+      },
+      "initial_tide_audit": {
+        "parameters": {
+          "unique_parameters": 17880464,
+          "scope": "all unique trainable backbone parameters including enabled ingress projections; no task head",
+          "ingress_parameters": 32768,
+          "textbook": {
+            "base": 10917812,
+            "private_D": 4852864,
+            "private_H": 2077020,
+            "total_excluding_ingress": 17847696,
+            "active_proxy": 13601440.0,
+            "D_fraction": 0.125,
+            "is_actual_touched": false,
+            "assumption": "all regions receive; all H act; D private scaled by k/n only for quad"
+          }
+        },
+        "effective_touched": {
+          "sum": 34106940232,
+          "mean": 16653779.41015625,
+          "min": 16280976,
+          "max": 17091984,
+          "unique_across_time_and_batch": 17880464,
+          "cumulative_per_input_position": 16653779.41015625
+        },
+        "stages": {
+          "ingress": {
+            "sum": 67108864,
+            "mean": 32768.0,
+            "min": 32768,
+            "max": 32768
+          },
+          "reception": {
+            "sum": 5625317376,
+            "mean": 2746737.0,
+            "min": 2739840,
+            "max": 2748288
+          },
+          "memory_prepare": {
+            "sum": 4661495808,
+            "mean": 2276121.0,
+            "min": 2272568,
+            "max": 2276920
+          },
+          "regional": {
+            "sum": 4151446344,
+            "mean": 2027073.41015625,
+            "min": 2024963,
+            "max": 2027548
+          },
+          "full": {
+            "sum": 19601571840,
+            "mean": 9571080.0,
+            "min": 9195452,
+            "max": 10006460
+          }
+        },
+        "definition": "unique Parameter scalars in semantically effective owner/group/source slices; not nonzero gradients or physical loads",
+        "deduplication": "within each sample and input step across settled layers",
+        "input_positions": 2048,
+        "sample_time_slots": 2048,
+        "logical_axis": "input_step",
+        "work": {
+          "positive_messages": 1964701,
+          "message_slots": 2850816,
+          "candidate_updates": 384648,
+          "candidate_slots": 385024,
+          "reception_attention_positive_pairs": 25568174,
+          "regional_attention_positive_pairs": 5166064,
+          "full_actions": 273764,
+          "kv_attention_effective_pairs": 58344204
+        },
+        "work_per_input_position": {
+          "positive_messages": 959.32666015625,
+          "message_slots": 1392.0,
+          "candidate_updates": 187.81640625,
+          "candidate_slots": 188.0,
+          "reception_attention_positive_pairs": 12484.4599609375,
+          "regional_attention_positive_pairs": 2522.4921875,
+          "full_actions": 133.673828125,
+          "kv_attention_effective_pairs": 28488.380859375
+        },
+        "query_packing": {
+          "K": {
+            "calls": 22,
+            "selected_rows": 150884,
+            "executed_rows": 197184
+          },
+          "S": {
+            "calls": 8,
+            "selected_rows": 122880,
+            "executed_rows": 122880
+          }
+        },
+        "node_matrices": {
+          "receive.q": {
+            "calls": 19,
+            "rows": 2850816,
+            "dense_multiply_adds": 27732738048
+          },
+          "receive.k": {
+            "calls": 19,
+            "rows": 2850816,
+            "dense_multiply_adds": 27732738048
+          },
+          "receive.v": {
+            "calls": 19,
+            "rows": 2850816,
+            "dense_multiply_adds": 27732738048
+          },
+          "receive.o": {
+            "calls": 19,
+            "rows": 2850816,
+            "dense_multiply_adds": 27732738048
+          },
+          "receive.a": {
+            "calls": 19,
+            "rows": 2850816,
+            "dense_multiply_adds": 9122611200
+          },
+          "receive.b": {
+            "calls": 19,
+            "rows": 2850816,
+            "dense_multiply_adds": 9122611200
+          },
+          "memories.K.kv": {
+            "calls": 11,
+            "rows": 262144,
+            "dense_multiply_adds": 9395240960
+          },
+          "memories.K.summary": {
+            "calls": 11,
+            "rows": 262144,
+            "dense_multiply_adds": 1409286144
+          },
+          "describe.encode": {
+            "calls": 19,
+            "rows": 385024,
+            "dense_multiply_adds": 7377059840
+          },
+          "memories.K.query.heads.0": {
+            "calls": 22,
+            "rows": 197184,
+            "dense_multiply_adds": 1060061184
+          },
+          "memories.K.query.heads.1": {
+            "calls": 22,
+            "rows": 197184,
+            "dense_multiply_adds": 1060061184
+          },
+          "memories.K.query.heads.2": {
+            "calls": 22,
+            "rows": 197184,
+            "dense_multiply_adds": 1060061184
+          },
+          "memories.K.query.heads.3": {
+            "calls": 22,
+            "rows": 197184,
+            "dense_multiply_adds": 1060061184
+          },
+          "memories.K.output": {
+            "calls": 22,
+            "rows": 197184,
+            "dense_multiply_adds": 3634495488
+          },
+          "memories.K.ffn.gate": {
+            "calls": 22,
+            "rows": 197184,
+            "dense_multiply_adds": 13932232704
+          },
+          "memories.K.ffn.up": {
+            "calls": 22,
+            "rows": 197184,
+            "dense_multiply_adds": 13932232704
+          },
+          "memories.K.ffn.down": {
+            "calls": 22,
+            "rows": 197184,
+            "dense_multiply_adds": 13932232704
+          },
+          "memories.S.input": {
+            "calls": 8,
+            "rows": 122880,
+            "dense_multiply_adds": 5540413440
+          },
+          "memories.S.summary": {
+            "calls": 8,
+            "rows": 122880,
+            "dense_multiply_adds": 660602880
+          },
+          "memories.S.read": {
+            "calls": 8,
+            "rows": 122880,
+            "dense_multiply_adds": 660602880
+          },
+          "memories.S.output": {
+            "calls": 8,
+            "rows": 122880,
+            "dense_multiply_adds": 2264924160
+          },
+          "memories.S.ffn.gate": {
+            "calls": 8,
+            "rows": 122880,
+            "dense_multiply_adds": 8682209280
+          },
+          "memories.S.ffn.up": {
+            "calls": 8,
+            "rows": 122880,
+            "dense_multiply_adds": 8682209280
+          },
+          "memories.S.ffn.down": {
+            "calls": 8,
+            "rows": 122880,
+            "dense_multiply_adds": 8682209280
+          }
+        },
+        "matrix_cost_definition": "multiply-add pairs for actually executed NodeLinear rows, including padding/adapters; excludes attention/normalization/non-NodeLinear ops; not complete FLOPs"
+      },
+      "observations": [
+        {
+          "subject": "tide",
+          "candidate": "standard",
+          "parameters": 17880464,
+          "state": "completed_finite",
+          "normal": {
+            "state": "completed_finite",
+            "start_identity": {
+              "model_sha256": "f4614a33bce18851a6800593fc94dbfa383d83929efff992f80453085dfcf6db",
+              "optimizer_sha256": "2cf82ccddd5d33c58b4fe2efb5bc1ffa99249fba480cd678699e1512e57017b8",
+              "gradients_sha256": "96912b09c1cdf736f937504387a67d725cdc3591d15cd9cf1cb28c683ad6a94e",
+              "rng_sha256": "b274a691f8ac374d56fedb9d49f28752c9c7639941394562e9a8cb2354706539"
+            },
+            "seconds": [
+              1.8443629406392574,
+              1.8417206071317196,
+              1.8503799736499786,
+              1.9458795078098774,
+              1.8359068036079407
+            ],
+            "losses": [
+              3.673503875732422,
+              3.4806299209594727,
+              3.315333843231201,
+              3.168632745742798,
+              3.033891201019287
+            ],
+            "memory_scope": "cumulative allocator peak since immediately before normal samples; construction and warmup excluded",
+            "device_memory": {
+              "allocated_bytes": 295697920,
+              "reserved_bytes": 15229517824,
+              "peak_allocated_bytes": 13126568960,
+              "peak_reserved_bytes": 15229517824
+            },
+            "median_seconds": 1.8443629406392574,
+            "input_positions_per_second": 1110.4105135023815,
+            "sample_range_over_median": 0.059626390109432645,
+            "final_parameter_sha256": "26fa151aaa5c03e6557db54e63c593641fcdf958773ac508f5bcb1370ba35fd0",
+            "actual_storage": {
+              "parameters": {
+                "npu:0:torch.float32": {
+                  "elements": 17880464,
+                  "bytes": 71521856
+                }
+              },
+              "gradients": {
+                "npu:0:torch.float32": {
+                  "elements": 17880464,
+                  "bytes": 71521856
+                }
+              },
+              "optimizer": {
+                "cpu:torch.float32": {
+                  "elements": 364,
+                  "bytes": 1456
+                },
+                "npu:0:torch.float32": {
+                  "elements": 35760928,
+                  "bytes": 143043712
+                }
+              }
+            }
+          },
+          "stage_rows": [
+            {
+              "path": "training",
+              "calls": 1,
+              "inclusive_seconds": 1.929523453116417,
+              "exclusive_seconds": 0.00021519139409065247
+            },
+            {
+              "path": "training/backward",
+              "calls": 1,
+              "inclusive_seconds": 0.9604038633406162,
+              "exclusive_seconds": 0.612601313740015
+            },
+            {
+              "path": "training/backward/reception",
+              "calls": 19,
+              "inclusive_seconds": 0.3478025496006012,
+              "exclusive_seconds": 0.27308617904782295
+            },
+            {
+              "path": "training/backward/reception/attention",
+              "calls": 19,
+              "inclusive_seconds": 0.07471637055277824,
+              "exclusive_seconds": 0.07471637055277824
+            },
+            {
+              "path": "training/flush",
+              "calls": 1,
+              "inclusive_seconds": 2.4545937776565552e-05,
+              "exclusive_seconds": 2.4545937776565552e-05
+            },
+            {
+              "path": "training/forward",
+              "calls": 1,
+              "inclusive_seconds": 0.9432112611830235,
+              "exclusive_seconds": 0.003204796463251114
+            },
+            {
+              "path": "training/forward/input.projection",
+              "calls": 2,
+              "inclusive_seconds": 0.0003508627414703369,
+              "exclusive_seconds": 0.0003508627414703369
+            },
+            {
+              "path": "training/forward/messages.gather",
+              "calls": 31,
+              "inclusive_seconds": 0.07057532668113708,
+              "exclusive_seconds": 0.07057532668113708
+            },
+            {
+              "path": "training/forward/region.evaluate",
+              "calls": 11,
+              "inclusive_seconds": 0.37054047733545303,
+              "exclusive_seconds": 0.01434144377708435
+            },
+            {
+              "path": "training/forward/region.evaluate/allocation",
+              "calls": 11,
+              "inclusive_seconds": 0.04229753464460373,
+              "exclusive_seconds": 0.04229753464460373
+            },
+            {
+              "path": "training/forward/region.evaluate/description",
+              "calls": 11,
+              "inclusive_seconds": 0.009445089846849442,
+              "exclusive_seconds": 0.009445089846849442
+            },
+            {
+              "path": "training/forward/region.evaluate/memory.K.full",
+              "calls": 8,
+              "inclusive_seconds": 0.10428375378251076,
+              "exclusive_seconds": 0.0470462329685688
+            },
+            {
+              "path": "training/forward/region.evaluate/memory.K.full/attention",
+              "calls": 16,
+              "inclusive_seconds": 0.0229998379945755,
+              "exclusive_seconds": 0.0229998379945755
+            },
+            {
+              "path": "training/forward/region.evaluate/memory.K.full/queries.pack",
+              "calls": 16,
+              "inclusive_seconds": 0.027568422257900238,
+              "exclusive_seconds": 0.027568422257900238
+            },
+            {
+              "path": "training/forward/region.evaluate/memory.K.full/queries.publish",
+              "calls": 16,
+              "inclusive_seconds": 0.006669260561466217,
+              "exclusive_seconds": 0.006669260561466217
+            },
+            {
+              "path": "training/forward/region.evaluate/memory.K.prepare",
+              "calls": 8,
+              "inclusive_seconds": 0.027358081191778183,
+              "exclusive_seconds": 0.027358081191778183
+            },
+            {
+              "path": "training/forward/region.evaluate/memory.S.full",
+              "calls": 3,
+              "inclusive_seconds": 0.011259369552135468,
+              "exclusive_seconds": 0.005262263119220734
+            },
+            {
+              "path": "training/forward/region.evaluate/memory.S.full/queries.pack",
+              "calls": 3,
+              "inclusive_seconds": 0.0048869289457798,
+              "exclusive_seconds": 0.0048869289457798
+            },
+            {
+              "path": "training/forward/region.evaluate/memory.S.full/queries.publish",
+              "calls": 3,
+              "inclusive_seconds": 0.0011101774871349335,
+              "exclusive_seconds": 0.0011101774871349335
+            },
+            {
+              "path": "training/forward/region.evaluate/memory.S.prepare",
+              "calls": 3,
+              "inclusive_seconds": 0.07330230996012688,
+              "exclusive_seconds": 0.007895804941654205
+            },
+            {
+              "path": "training/forward/region.evaluate/memory.S.prepare/ssd.convolution",
+              "calls": 3,
+              "inclusive_seconds": 0.005902931094169617,
+              "exclusive_seconds": 0.005902931094169617
+            },
+            {
+              "path": "training/forward/region.evaluate/memory.S.prepare/ssd.matrix",
+              "calls": 3,
+              "inclusive_seconds": 0.0554986372590065,
+              "exclusive_seconds": 0.0554986372590065
+            },
+            {
+              "path": "training/forward/region.evaluate/memory.S.prepare/ssd.summary.prefix",
+              "calls": 3,
+              "inclusive_seconds": 0.0040049366652965546,
+              "exclusive_seconds": 0.0040049366652965546
+            },
+            {
+              "path": "training/forward/region.evaluate/reception",
+              "calls": 11,
+              "inclusive_seconds": 0.06375106051564217,
+              "exclusive_seconds": 0.03350067511200905
+            },
+            {
+              "path": "training/forward/region.evaluate/reception/attention",
+              "calls": 11,
+              "inclusive_seconds": 0.030250385403633118,
+              "exclusive_seconds": 0.030250385403633118
+            },
+            {
+              "path": "training/forward/region.evaluate/regional.scoring",
+              "calls": 11,
+              "inclusive_seconds": 0.02450183406472206,
+              "exclusive_seconds": 0.008616451174020767
+            },
+            {
+              "path": "training/forward/region.evaluate/regional.scoring/attention",
+              "calls": 11,
+              "inclusive_seconds": 0.015885382890701294,
+              "exclusive_seconds": 0.015885382890701294
+            },
+            {
+              "path": "training/forward/regions.evaluate",
+              "calls": 8,
+              "inclusive_seconds": 0.49792249873280525,
+              "exclusive_seconds": 0.014216169714927673
+            },
+            {
+              "path": "training/forward/regions.evaluate/allocation",
+              "calls": 8,
+              "inclusive_seconds": 0.03873831406235695,
+              "exclusive_seconds": 0.03873831406235695
+            },
+            {
+              "path": "training/forward/regions.evaluate/description",
+              "calls": 8,
+              "inclusive_seconds": 0.0074797458946704865,
+              "exclusive_seconds": 0.0074797458946704865
+            },
+            {
+              "path": "training/forward/regions.evaluate/memory.K.full",
+              "calls": 3,
+              "inclusive_seconds": 0.0516517274081707,
+              "exclusive_seconds": 0.01822071149945259
+            },
+            {
+              "path": "training/forward/regions.evaluate/memory.K.full/attention",
+              "calls": 6,
+              "inclusive_seconds": 0.0143645741045475,
+              "exclusive_seconds": 0.0143645741045475
+            },
+            {
+              "path": "training/forward/regions.evaluate/memory.K.full/queries.pack",
+              "calls": 6,
+              "inclusive_seconds": 0.01420319452881813,
+              "exclusive_seconds": 0.01420319452881813
+            },
+            {
+              "path": "training/forward/regions.evaluate/memory.K.full/queries.publish",
+              "calls": 6,
+              "inclusive_seconds": 0.004863247275352478,
+              "exclusive_seconds": 0.004863247275352478
+            },
+            {
+              "path": "training/forward/regions.evaluate/memory.K.prepare",
+              "calls": 3,
+              "inclusive_seconds": 0.01547202467918396,
+              "exclusive_seconds": 0.01547202467918396
+            },
+            {
+              "path": "training/forward/regions.evaluate/memory.S.full",
+              "calls": 5,
+              "inclusive_seconds": 0.02526835724711418,
+              "exclusive_seconds": 0.008989691734313965
+            },
+            {
+              "path": "training/forward/regions.evaluate/memory.S.full/queries.pack",
+              "calls": 5,
+              "inclusive_seconds": 0.011429212987422943,
+              "exclusive_seconds": 0.011429212987422943
+            },
+            {
+              "path": "training/forward/regions.evaluate/memory.S.full/queries.publish",
+              "calls": 5,
+              "inclusive_seconds": 0.0048494525253772736,
+              "exclusive_seconds": 0.0048494525253772736
+            },
+            {
+              "path": "training/forward/regions.evaluate/memory.S.prepare",
+              "calls": 5,
+              "inclusive_seconds": 0.2326977401971817,
+              "exclusive_seconds": 0.015066780149936676
+            },
+            {
+              "path": "training/forward/regions.evaluate/memory.S.prepare/ssd.convolution",
+              "calls": 5,
+              "inclusive_seconds": 0.013457220047712326,
+              "exclusive_seconds": 0.013457220047712326
+            },
+            {
+              "path": "training/forward/regions.evaluate/memory.S.prepare/ssd.matrix",
+              "calls": 5,
+              "inclusive_seconds": 0.19716297835111618,
+              "exclusive_seconds": 0.19716297835111618
+            },
+            {
+              "path": "training/forward/regions.evaluate/memory.S.prepare/ssd.summary.prefix",
+              "calls": 5,
+              "inclusive_seconds": 0.007010761648416519,
+              "exclusive_seconds": 0.007010761648416519
+            },
+            {
+              "path": "training/forward/regions.evaluate/reception",
+              "calls": 8,
+              "inclusive_seconds": 0.08213130384683609,
+              "exclusive_seconds": 0.03830782696604729
+            },
+            {
+              "path": "training/forward/regions.evaluate/reception/attention",
+              "calls": 8,
+              "inclusive_seconds": 0.0438234768807888,
+              "exclusive_seconds": 0.0438234768807888
+            },
+            {
+              "path": "training/forward/regions.evaluate/regional.scoring",
+              "calls": 8,
+              "inclusive_seconds": 0.02636117860674858,
+              "exclusive_seconds": 0.009569235146045685
+            },
+            {
+              "path": "training/forward/regions.evaluate/regional.scoring/attention",
+              "calls": 8,
+              "inclusive_seconds": 0.016791943460702896,
+              "exclusive_seconds": 0.016791943460702896
+            },
+            {
+              "path": "training/forward/regions.evaluate/state.split",
+              "calls": 8,
+              "inclusive_seconds": 0.003905937075614929,
+              "exclusive_seconds": 0.001539282500743866
+            },
+            {
+              "path": "training/forward/regions.evaluate/state.split/state.split",
+              "calls": 50,
+              "inclusive_seconds": 0.0023666545748710632,
+              "exclusive_seconds": 0.0020107924938201904
+            },
+            {
+              "path": "training/forward/regions.evaluate/state.split/state.split/state.split",
+              "calls": 10,
+              "inclusive_seconds": 0.0003558620810508728,
+              "exclusive_seconds": 0.0003558620810508728
+            },
+            {
+              "path": "training/forward/regions.group",
+              "calls": 9,
+              "inclusive_seconds": 0.0006172992289066315,
+              "exclusive_seconds": 0.0006172992289066315
+            },
+            {
+              "path": "training/optimizer",
+              "calls": 1,
+              "inclusive_seconds": 0.013947807252407074,
+              "exclusive_seconds": 0.013947807252407074
+            },
+            {
+              "path": "training/readout_loss",
+              "calls": 1,
+              "inclusive_seconds": 0.00028419122099876404,
+              "exclusive_seconds": 0.00028419122099876404
+            },
+            {
+              "path": "training/release",
+              "calls": 1,
+              "inclusive_seconds": 0.010116741061210632,
+              "exclusive_seconds": 0.010116741061210632
+            },
+            {
+              "path": "training/synchronize_scalar",
+              "calls": 1,
+              "inclusive_seconds": 8.875876665115356e-05,
+              "exclusive_seconds": 8.875876665115356e-05
+            },
+            {
+              "path": "training/zero_grad",
+              "calls": 1,
+              "inclusive_seconds": 0.0012310929596424103,
+              "exclusive_seconds": 0.0012310929596424103
+            }
+          ],
+          "dispatch_calls": 65127,
+          "semantic_work": {
+            "parameters": {
+              "unique_parameters": 17880464,
+              "scope": "all unique trainable backbone parameters including enabled ingress projections; no task head",
+              "ingress_parameters": 32768,
+              "textbook": {
+                "base": 10917812,
+                "private_D": 4852864,
+                "private_H": 2077020,
+                "total_excluding_ingress": 17847696,
+                "active_proxy": 13601440.0,
+                "D_fraction": 0.125,
+                "is_actual_touched": false,
+                "assumption": "all regions receive; all H act; D private scaled by k/n only for quad"
+              }
+            },
+            "effective_touched": {
+              "sum": 34076230722,
+              "mean": 16638784.532226562,
+              "min": 16235920,
+              "max": 17159568,
+              "unique_across_time_and_batch": 17880464,
+              "cumulative_per_input_position": 16638784.532226562
+            },
+            "stages": {
+              "ingress": {
+                "sum": 67108864,
+                "mean": 32768.0,
+                "min": 32768,
+                "max": 32768
+              },
+              "reception": {
+                "sum": 5625401856,
+                "mean": 2746778.25,
+                "min": 2739840,
+                "max": 2748288
+              },
+              "memory_prepare": {
+                "sum": 4661539328,
+                "mean": 2276142.25,
+                "min": 2272568,
+                "max": 2276920
+              },
+              "regional": {
+                "sum": 4151472194,
+                "mean": 2027086.0322265625,
+                "min": 2024963,
+                "max": 2027548
+              },
+              "full": {
+                "sum": 19570708480,
+                "mean": 9556010.0,
+                "min": 9150396,
+                "max": 10074044
+              }
+            },
+            "definition": "unique Parameter scalars in semantically effective owner/group/source slices; not nonzero gradients or physical loads",
+            "deduplication": "within each sample and input step across settled layers",
+            "input_positions": 2048,
+            "sample_time_slots": 2048,
+            "logical_axis": "input_step",
+            "work": {
+              "positive_messages": 1954150,
+              "message_slots": 2850816,
+              "candidate_updates": 384658,
+              "candidate_slots": 385024,
+              "reception_attention_positive_pairs": 25305352,
+              "regional_attention_positive_pairs": 5166364,
+              "full_actions": 272394,
+              "kv_attention_effective_pairs": 57818520
+            },
+            "work_per_input_position": {
+              "positive_messages": 954.1748046875,
+              "message_slots": 1392.0,
+              "candidate_updates": 187.8212890625,
+              "candidate_slots": 188.0,
+              "reception_attention_positive_pairs": 12356.12890625,
+              "regional_attention_positive_pairs": 2522.638671875,
+              "full_actions": 133.0048828125,
+              "kv_attention_effective_pairs": 28231.69921875
+            },
+            "query_packing": {
+              "K": {
+                "calls": 22,
+                "selected_rows": 149514,
+                "executed_rows": 200704
+              },
+              "S": {
+                "calls": 8,
+                "selected_rows": 122880,
+                "executed_rows": 122880
+              }
+            },
+            "node_matrices": {
+              "receive.q": {
+                "calls": 19,
+                "rows": 2850816,
+                "dense_multiply_adds": 27732738048
+              },
+              "receive.k": {
+                "calls": 19,
+                "rows": 2850816,
+                "dense_multiply_adds": 27732738048
+              },
+              "receive.v": {
+                "calls": 19,
+                "rows": 2850816,
+                "dense_multiply_adds": 27732738048
+              },
+              "receive.o": {
+                "calls": 19,
+                "rows": 2850816,
+                "dense_multiply_adds": 27732738048
+              },
+              "receive.a": {
+                "calls": 19,
+                "rows": 2850816,
+                "dense_multiply_adds": 9122611200
+              },
+              "receive.b": {
+                "calls": 19,
+                "rows": 2850816,
+                "dense_multiply_adds": 9122611200
+              },
+              "memories.K.kv": {
+                "calls": 11,
+                "rows": 262144,
+                "dense_multiply_adds": 9395240960
+              },
+              "memories.K.summary": {
+                "calls": 11,
+                "rows": 262144,
+                "dense_multiply_adds": 1409286144
+              },
+              "describe.encode": {
+                "calls": 19,
+                "rows": 385024,
+                "dense_multiply_adds": 7377059840
+              },
+              "memories.K.query.heads.0": {
+                "calls": 22,
+                "rows": 200704,
+                "dense_multiply_adds": 1078984704
+              },
+              "memories.K.query.heads.1": {
+                "calls": 22,
+                "rows": 200704,
+                "dense_multiply_adds": 1078984704
+              },
+              "memories.K.query.heads.2": {
+                "calls": 22,
+                "rows": 200704,
+                "dense_multiply_adds": 1078984704
+              },
+              "memories.K.query.heads.3": {
+                "calls": 22,
+                "rows": 200704,
+                "dense_multiply_adds": 1078984704
+              },
+              "memories.K.output": {
+                "calls": 22,
+                "rows": 200704,
+                "dense_multiply_adds": 3699376128
+              },
+              "memories.K.ffn.gate": {
+                "calls": 22,
+                "rows": 200704,
+                "dense_multiply_adds": 14180941824
+              },
+              "memories.K.ffn.up": {
+                "calls": 22,
+                "rows": 200704,
+                "dense_multiply_adds": 14180941824
+              },
+              "memories.K.ffn.down": {
+                "calls": 22,
+                "rows": 200704,
+                "dense_multiply_adds": 14180941824
+              },
+              "memories.S.input": {
+                "calls": 8,
+                "rows": 122880,
+                "dense_multiply_adds": 5540413440
+              },
+              "memories.S.summary": {
+                "calls": 8,
+                "rows": 122880,
+                "dense_multiply_adds": 660602880
+              },
+              "memories.S.read": {
+                "calls": 8,
+                "rows": 122880,
+                "dense_multiply_adds": 660602880
+              },
+              "memories.S.output": {
+                "calls": 8,
+                "rows": 122880,
+                "dense_multiply_adds": 2264924160
+              },
+              "memories.S.ffn.gate": {
+                "calls": 8,
+                "rows": 122880,
+                "dense_multiply_adds": 8682209280
+              },
+              "memories.S.ffn.up": {
+                "calls": 8,
+                "rows": 122880,
+                "dense_multiply_adds": 8682209280
+              },
+              "memories.S.ffn.down": {
+                "calls": 8,
+                "rows": 122880,
+                "dense_multiply_adds": 8682209280
+              }
+            },
+            "matrix_cost_definition": "multiply-add pairs for actually executed NodeLinear rows, including padding/adapters; excludes attention/normalization/non-NodeLinear ops; not complete FLOPs"
+          },
+          "trace": null
+        }
+      ]
+    },
+    {
+      "name": "agg-ssd-scan-fp32-v1",
+      "source": "57eb12c3b1e67f2c0414d1501522ca4de292c734",
+      "status": "passed",
+      "queue": {
+        "elapsed_seconds": 19.711743216961622,
+        "job_id": "agg-ssd-scan-fp32-v1",
+        "logical_device": "npu:0",
+        "logical_devices": [
+          "npu:0"
+        ],
+        "npu_count": 1,
+        "physical_id": 1,
+        "physical_ids": [
+          1
+        ],
+        "priority": 0,
+        "project": "tide-instances",
+        "return_code": 0,
+        "schema_version": 1,
+        "status": "completed",
+        "timestamp": "2026-11-18T12:21:42.379864+00:00"
+      },
+      "launch": {
+        "path": "artifacts/agg-ssd-scan-fp32-v1/launch.json",
+        "sha256": "2b220edd9e14e42e0ba932afa235d5162cf7a8a4a4961f57a94059f658e8eb78",
+        "bytes": 3985
+      },
+      "result": {
+        "path": "artifacts/agg-ssd-scan-fp32-v1/scan.json",
+        "sha256": "cb68188e6103f4d1bf73e6301db185bc1b8b220405e3d277ba31ccaba86faa92",
+        "bytes": 32539
+      },
+      "command": {
+        "name": "agg-ssd-scan-fp32-v1",
+        "revision": "HEAD",
+        "threads": 4,
+        "affinity": "88-91",
+        "npu_count": 1,
+        "candidate_ids": null,
+        "seconds": 1200,
+        "rss_gib": 16.0,
+        "queue_seconds": 600,
+        "after_unit": [],
+        "command": [
+          "--",
+          "python",
+          "-m",
+          "benchmarks.ssd_scan_candidates",
+          "--device",
+          "npu:0",
+          "--nodes",
+          "8",
+          "--batch",
+          "8",
+          "--length",
+          "256",
+          "--heads",
+          "4",
+          "--threads",
+          "4",
+          "--warmup",
+          "3",
+          "--steps",
+          "9",
+          "--output",
+          "{run}/scan.json"
+        ]
+      },
+      "sampled_peak_rss_bytes": 2098180096,
+      "arguments": {
+        "device": "npu:0",
+        "backends": [
+          "block",
+          "incremental",
+          "doubling"
+        ],
+        "modes": [
+          "inference",
+          "grad_forward",
+          "backward"
+        ],
+        "nodes": 8,
+        "batch": 8,
+        "length": 256,
+        "heads": 4,
+        "value_width": 32,
+        "state_width": 32,
+        "chunk": 32,
+        "threads": 4,
+        "warmup": 3,
+        "steps": 9,
+        "seed": 1911,
+        "atol": 3e-05,
+        "rtol": 3e-05,
+        "output": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-ssd-scan-fp32-v1/scan.json"
+      },
+      "completed": true,
+      "within_threshold": true,
+      "candidates": [
+        {
+          "backend": "block",
+          "same_fixture_vs_block": {
+            "atol": 3e-05,
+            "rtol": 3e-05,
+            "all_finite": true,
+            "within_threshold": true,
+            "tensors": [
+              {
+                "name": "reads",
+                "shape": [
+                  8,
+                  8,
+                  256,
+                  4,
+                  32
+                ],
+                "finite": true,
+                "exact": true,
+                "max_absolute": 0.0,
+                "relative_l2": 0.0,
+                "within_threshold": true
+              },
+              {
+                "name": "final_matrix",
+                "shape": [
+                  8,
+                  8,
+                  4,
+                  32,
+                  32
+                ],
+                "finite": true,
+                "exact": true,
+                "max_absolute": 0.0,
+                "relative_l2": 0.0,
+                "within_threshold": true
+              },
+              {
+                "name": "decay",
+                "shape": [
+                  8,
+                  8,
+                  256,
+                  4
+                ],
+                "finite": true,
+                "exact": true,
+                "max_absolute": 0.0,
+                "relative_l2": 0.0,
+                "within_threshold": true
+              },
+              {
+                "name": "write_value",
+                "shape": [
+                  8,
+                  8,
+                  256,
+                  4,
+                  32
+                ],
+                "finite": true,
+                "exact": true,
+                "max_absolute": 0.0,
+                "relative_l2": 0.0,
+                "within_threshold": true
+              },
+              {
+                "name": "B_group",
+                "shape": [
+                  8,
+                  8,
+                  256,
+                  1,
+                  32
+                ],
+                "finite": true,
+                "exact": true,
+                "max_absolute": 0.0,
+                "relative_l2": 0.0,
+                "within_threshold": true
+              },
+              {
+                "name": "C_group",
+                "shape": [
+                  8,
+                  8,
+                  256,
+                  1,
+                  32
+                ],
+                "finite": true,
+                "exact": true,
+                "max_absolute": 0.0,
+                "relative_l2": 0.0,
+                "within_threshold": true
+              },
+              {
+                "name": "initial_matrix",
+                "shape": [
+                  8,
+                  8,
+                  4,
+                  32,
+                  32
+                ],
+                "finite": true,
+                "exact": true,
+                "max_absolute": 0.0,
+                "relative_l2": 0.0,
+                "within_threshold": true
+              }
+            ]
+          },
+          "bounded_vs_literal_fp64": {
+            "atol": 3e-05,
+            "rtol": 3e-05,
+            "all_finite": true,
+            "within_threshold": true,
+            "tensors": [
+              {
+                "name": "reads",
+                "shape": [
+                  1,
+                  1,
+                  65,
+                  2,
+                  4
+                ],
+                "finite": true,
+                "exact": false,
+                "max_absolute": 1.685515952504213e-09,
+                "relative_l2": 5.762130611722114e-08,
+                "within_threshold": true
+              },
+              {
+                "name": "final_matrix",
+                "shape": [
+                  1,
+                  1,
+                  2,
+                  4,
+                  4
+                ],
+                "finite": true,
+                "exact": false,
+                "max_absolute": 3.2026659727013573e-09,
+                "relative_l2": 6.741484018702427e-08,
+                "within_threshold": true
+              },
+              {
+                "name": "decay",
+                "shape": [
+                  1,
+                  1,
+                  65,
+                  2
+                ],
+                "finite": true,
+                "exact": false,
+                "max_absolute": 1.3281574368084748e-08,
+                "relative_l2": 8.754638866487551e-08,
+                "within_threshold": true
+              },
+              {
+                "name": "write_value",
+                "shape": [
+                  1,
+                  1,
+                  65,
+                  2,
+                  4
+                ],
+                "finite": true,
+                "exact": false,
+                "max_absolute": 2.4285083999320278e-08,
+                "relative_l2": 5.920455329283164e-08,
+                "within_threshold": true
+              },
+              {
+                "name": "B_group",
+                "shape": [
+                  1,
+                  1,
+                  65,
+                  1,
+                  4
+                ],
+                "finite": true,
+                "exact": false,
+                "max_absolute": 1.997771620354527e-08,
+                "relative_l2": 6.228212322814763e-08,
+                "within_threshold": true
+              },
+              {
+                "name": "C_group",
+                "shape": [
+                  1,
+                  1,
+                  65,
+                  1,
+                  4
+                ],
+                "finite": true,
+                "exact": false,
+                "max_absolute": 1.8428705172990334e-08,
+                "relative_l2": 5.512655804498274e-08,
+                "within_threshold": true
+              },
+              {
+                "name": "initial_matrix",
+                "shape": [
+                  1,
+                  1,
+                  2,
+                  4,
+                  4
+                ],
+                "finite": true,
+                "exact": false,
+                "max_absolute": 9.830127073451322e-09,
+                "relative_l2": 3.874059726189994e-08,
+                "within_threshold": true
+              }
+            ]
+          },
+          "operators": {
+            "aten.add.Tensor": 100,
+            "aten.arange.default": 8,
+            "aten.bitwise_and_.Tensor": 16,
+            "aten.bitwise_not.default": 56,
+            "aten.cat.default": 1,
+            "aten.cumprod.default": 32,
+            "aten.cumsum.default": 32,
+            "aten.div.Tensor": 16,
+            "aten.eq.Scalar": 64,
+            "aten.expand.default": 2,
+            "aten.flip.default": 32,
+            "aten.gather.default": 16,
+            "aten.ge.Tensor": 8,
+            "aten.gt.Tensor": 8,
+            "aten.logical_and_.default": 16,
+            "aten.masked_fill.Scalar": 64,
+            "aten.masked_fill_.Scalar": 16,
+            "aten.matmul.default": 32,
+            "aten.matmul_backward.default": 32,
+            "aten.max.dim": 16,
+            "aten.mul.Tensor": 144,
+            "aten.ne.Scalar": 16,
+            "aten.relu_.default": 16,
+            "aten.scalar_tensor.default": 16,
+            "aten.scatter_.value": 16,
+            "aten.select.int": 16,
+            "aten.select_backward.default": 16,
+            "aten.slice.Tensor": 40,
+            "aten.slice_backward.default": 32,
+            "aten.squeeze.dim": 40,
+            "aten.sub.Scalar": 16,
+            "aten.sum.dim_IntList": 50,
+            "aten.transpose.int": 72,
+            "aten.unsqueeze.default": 72,
+            "aten.where.self": 48,
+            "aten.zeros.default": 16,
+            "aten.zeros_like.default": 16
+          },
+          "arithmetic": [
+            {
+              "operator": "aten.matmul.default",
+              "inputs": [
+                "npu:float32"
+              ],
+              "outputs": [
+                "npu:float32"
+              ],
+              "calls": 32
+            }
+          ]
+        },
+        {
+          "backend": "incremental",
+          "same_fixture_vs_block": {
+            "atol": 3e-05,
+            "rtol": 3e-05,
+            "all_finite": true,
+            "within_threshold": true,
+            "tensors": [
+              {
+                "name": "reads",
+                "shape": [
+                  8,
+                  8,
+                  256,
+                  4,
+                  32
+                ],
+                "finite": true,
+                "exact": true,
+                "max_absolute": 0.0,
+                "relative_l2": 0.0,
+                "within_threshold": true
+              },
+              {
+                "name": "final_matrix",
+                "shape": [
+                  8,
+                  8,
+                  4,
+                  32,
+                  32
+                ],
+                "finite": true,
+                "exact": true,
+                "max_absolute": 0.0,
+                "relative_l2": 0.0,
+                "within_threshold": true
+              },
+              {
+                "name": "decay",
+                "shape": [
+                  8,
+                  8,
+                  256,
+                  4
+                ],
+                "finite": true,
+                "exact": true,
+                "max_absolute": 0.0,
+                "relative_l2": 0.0,
+                "within_threshold": true
+              },
+              {
+                "name": "write_value",
+                "shape": [
+                  8,
+                  8,
+                  256,
+                  4,
+                  32
+                ],
+                "finite": true,
+                "exact": true,
+                "max_absolute": 0.0,
+                "relative_l2": 0.0,
+                "within_threshold": true
+              },
+              {
+                "name": "B_group",
+                "shape": [
+                  8,
+                  8,
+                  256,
+                  1,
+                  32
+                ],
+                "finite": true,
+                "exact": true,
+                "max_absolute": 0.0,
+                "relative_l2": 0.0,
+                "within_threshold": true
+              },
+              {
+                "name": "C_group",
+                "shape": [
+                  8,
+                  8,
+                  256,
+                  1,
+                  32
+                ],
+                "finite": true,
+                "exact": true,
+                "max_absolute": 0.0,
+                "relative_l2": 0.0,
+                "within_threshold": true
+              },
+              {
+                "name": "initial_matrix",
+                "shape": [
+                  8,
+                  8,
+                  4,
+                  32,
+                  32
+                ],
+                "finite": true,
+                "exact": true,
+                "max_absolute": 0.0,
+                "relative_l2": 0.0,
+                "within_threshold": true
+              }
+            ]
+          },
+          "bounded_vs_literal_fp64": {
+            "atol": 3e-05,
+            "rtol": 3e-05,
+            "all_finite": true,
+            "within_threshold": true,
+            "tensors": [
+              {
+                "name": "reads",
+                "shape": [
+                  1,
+                  1,
+                  65,
+                  2,
+                  4
+                ],
+                "finite": true,
+                "exact": false,
+                "max_absolute": 1.685515952504213e-09,
+                "relative_l2": 5.762130611722114e-08,
+                "within_threshold": true
+              },
+              {
+                "name": "final_matrix",
+                "shape": [
+                  1,
+                  1,
+                  2,
+                  4,
+                  4
+                ],
+                "finite": true,
+                "exact": false,
+                "max_absolute": 3.2026659727013573e-09,
+                "relative_l2": 6.741484018702427e-08,
+                "within_threshold": true
+              },
+              {
+                "name": "decay",
+                "shape": [
+                  1,
+                  1,
+                  65,
+                  2
+                ],
+                "finite": true,
+                "exact": false,
+                "max_absolute": 1.3281574368084748e-08,
+                "relative_l2": 8.754638866487551e-08,
+                "within_threshold": true
+              },
+              {
+                "name": "write_value",
+                "shape": [
+                  1,
+                  1,
+                  65,
+                  2,
+                  4
+                ],
+                "finite": true,
+                "exact": false,
+                "max_absolute": 2.4285083999320278e-08,
+                "relative_l2": 5.920455329283164e-08,
+                "within_threshold": true
+              },
+              {
+                "name": "B_group",
+                "shape": [
+                  1,
+                  1,
+                  65,
+                  1,
+                  4
+                ],
+                "finite": true,
+                "exact": false,
+                "max_absolute": 1.997771620354527e-08,
+                "relative_l2": 6.228212322814763e-08,
+                "within_threshold": true
+              },
+              {
+                "name": "C_group",
+                "shape": [
+                  1,
+                  1,
+                  65,
+                  1,
+                  4
+                ],
+                "finite": true,
+                "exact": false,
+                "max_absolute": 1.8428705172990334e-08,
+                "relative_l2": 5.512655804498274e-08,
+                "within_threshold": true
+              },
+              {
+                "name": "initial_matrix",
+                "shape": [
+                  1,
+                  1,
+                  2,
+                  4,
+                  4
+                ],
+                "finite": true,
+                "exact": false,
+                "max_absolute": 9.830127073451322e-09,
+                "relative_l2": 3.874059726189994e-08,
+                "within_threshold": true
+              }
+            ]
+          },
+          "operators": {
+            "aten.add.Tensor": 100,
+            "aten.arange.default": 8,
+            "aten.bitwise_and_.Tensor": 16,
+            "aten.bitwise_not.default": 56,
+            "aten.cat.default": 1,
+            "aten.cumprod.default": 32,
+            "aten.cumsum.default": 32,
+            "aten.div.Tensor": 16,
+            "aten.eq.Scalar": 64,
+            "aten.expand.default": 2,
+            "aten.flip.default": 32,
+            "aten.gather.default": 16,
+            "aten.ge.Tensor": 8,
+            "aten.gt.Tensor": 8,
+            "aten.logical_and_.default": 16,
+            "aten.masked_fill.Scalar": 64,
+            "aten.masked_fill_.Scalar": 16,
+            "aten.matmul.default": 32,
+            "aten.matmul_backward.default": 32,
+            "aten.max.dim": 16,
+            "aten.mul.Tensor": 144,
+            "aten.ne.Scalar": 16,
+            "aten.relu_.default": 16,
+            "aten.scalar_tensor.default": 16,
+            "aten.scatter_.value": 16,
+            "aten.select.int": 16,
+            "aten.select_backward.default": 16,
+            "aten.slice.Tensor": 40,
+            "aten.slice_backward.default": 32,
+            "aten.squeeze.dim": 40,
+            "aten.sub.Scalar": 16,
+            "aten.sum.dim_IntList": 50,
+            "aten.transpose.int": 72,
+            "aten.unsqueeze.default": 72,
+            "aten.where.self": 48,
+            "aten.zeros.default": 16,
+            "aten.zeros_like.default": 16
+          },
+          "arithmetic": [
+            {
+              "operator": "aten.matmul.default",
+              "inputs": [
+                "npu:float32"
+              ],
+              "outputs": [
+                "npu:float32"
+              ],
+              "calls": 32
+            }
+          ]
+        },
+        {
+          "backend": "doubling",
+          "same_fixture_vs_block": {
+            "atol": 3e-05,
+            "rtol": 3e-05,
+            "all_finite": true,
+            "within_threshold": true,
+            "tensors": [
+              {
+                "name": "reads",
+                "shape": [
+                  8,
+                  8,
+                  256,
+                  4,
+                  32
+                ],
+                "finite": true,
+                "exact": false,
+                "max_absolute": 1.4901161193847656e-08,
+                "relative_l2": 5.589881514997001e-08,
+                "within_threshold": true
+              },
+              {
+                "name": "final_matrix",
+                "shape": [
+                  8,
+                  8,
+                  4,
+                  32,
+                  32
+                ],
+                "finite": true,
+                "exact": false,
+                "max_absolute": 1.4901161193847656e-08,
+                "relative_l2": 7.013619791822444e-08,
+                "within_threshold": true
+              },
+              {
+                "name": "decay",
+                "shape": [
+                  8,
+                  8,
+                  256,
+                  4
+                ],
+                "finite": true,
+                "exact": false,
+                "max_absolute": 2.682209014892578e-07,
+                "relative_l2": 1.2779951395810147e-07,
+                "within_threshold": true
+              },
+              {
+                "name": "write_value",
+                "shape": [
+                  8,
+                  8,
+                  256,
+                  4,
+                  32
+                ],
+                "finite": true,
+                "exact": false,
+                "max_absolute": 3.5762786865234375e-07,
+                "relative_l2": 6.52724755668154e-08,
+                "within_threshold": true
+              },
+              {
+                "name": "B_group",
+                "shape": [
+                  8,
+                  8,
+                  256,
+                  1,
+                  32
+                ],
+                "finite": true,
+                "exact": false,
+                "max_absolute": 4.76837158203125e-07,
+                "relative_l2": 7.455577523147804e-08,
+                "within_threshold": true
+              },
+              {
+                "name": "C_group",
+                "shape": [
+                  8,
+                  8,
+                  256,
+                  1,
+                  32
+                ],
+                "finite": true,
+                "exact": false,
+                "max_absolute": 1.7881393432617188e-07,
+                "relative_l2": 6.888991766373688e-08,
+                "within_threshold": true
+              },
+              {
+                "name": "initial_matrix",
+                "shape": [
+                  8,
+                  8,
+                  4,
+                  32,
+                  32
+                ],
+                "finite": true,
+                "exact": true,
+                "max_absolute": 0.0,
+                "relative_l2": 0.0,
+                "within_threshold": true
+              }
+            ]
+          },
+          "bounded_vs_literal_fp64": {
+            "atol": 3e-05,
+            "rtol": 3e-05,
+            "all_finite": true,
+            "within_threshold": true,
+            "tensors": [
+              {
+                "name": "reads",
+                "shape": [
+                  1,
+                  1,
+                  65,
+                  2,
+                  4
+                ],
+                "finite": true,
+                "exact": false,
+                "max_absolute": 1.685515952504213e-09,
+                "relative_l2": 5.805868318431611e-08,
+                "within_threshold": true
+              },
+              {
+                "name": "final_matrix",
+                "shape": [
+                  1,
+                  1,
+                  2,
+                  4,
+                  4
+                ],
+                "finite": true,
+                "exact": false,
+                "max_absolute": 3.000158330102032e-09,
+                "relative_l2": 5.717251907003239e-08,
+                "within_threshold": true
+              },
+              {
+                "name": "decay",
+                "shape": [
+                  1,
+                  1,
+                  65,
+                  2
+                ],
+                "finite": true,
+                "exact": false,
+                "max_absolute": 1.4400454148577602e-08,
+                "relative_l2": 8.754515397780349e-08,
+                "within_threshold": true
+              },
+              {
+                "name": "write_value",
+                "shape": [
+                  1,
+                  1,
+                  65,
+                  2,
+                  4
+                ],
+                "finite": true,
+                "exact": false,
+                "max_absolute": 2.4285083999320278e-08,
+                "relative_l2": 5.7503033994923036e-08,
+                "within_threshold": true
+              },
+              {
+                "name": "B_group",
+                "shape": [
+                  1,
+                  1,
+                  65,
+                  1,
+                  4
+                ],
+                "finite": true,
+                "exact": false,
+                "max_absolute": 1.6896879465044812e-08,
+                "relative_l2": 5.6586043089332064e-08,
+                "within_threshold": true
+              },
+              {
+                "name": "C_group",
+                "shape": [
+                  1,
+                  1,
+                  65,
+                  1,
+                  4
+                ],
+                "finite": true,
+                "exact": false,
+                "max_absolute": 2.5119601204659503e-08,
+                "relative_l2": 5.9244352492451e-08,
+                "within_threshold": true
+              },
+              {
+                "name": "initial_matrix",
+                "shape": [
+                  1,
+                  1,
+                  2,
+                  4,
+                  4
+                ],
+                "finite": true,
+                "exact": false,
+                "max_absolute": 9.830127073451322e-09,
+                "relative_l2": 3.874059726189994e-08,
+                "within_threshold": true
+              }
+            ]
+          },
+          "operators": {
+            "aten.add.Tensor": 188,
+            "aten.arange.default": 8,
+            "aten.bitwise_not.default": 8,
+            "aten.cat.default": 41,
+            "aten.expand.default": 2,
+            "aten.ge.Tensor": 8,
+            "aten.gt.Tensor": 8,
+            "aten.masked_fill.Scalar": 16,
+            "aten.matmul.default": 32,
+            "aten.matmul_backward.default": 32,
+            "aten.mul.Tensor": 240,
+            "aten.scalar_tensor.default": 16,
+            "aten.select.int": 24,
+            "aten.select_backward.default": 24,
+            "aten.slice.Tensor": 248,
+            "aten.slice_backward.default": 160,
+            "aten.squeeze.dim": 40,
+            "aten.sum.dim_IntList": 42,
+            "aten.transpose.int": 72,
+            "aten.unsqueeze.default": 72,
+            "aten.where.self": 16
+          },
+          "arithmetic": [
+            {
+              "operator": "aten.matmul.default",
+              "inputs": [
+                "npu:float32"
+              ],
+              "outputs": [
+                "npu:float32"
+              ],
+              "calls": 32
+            }
+          ]
+        }
+      ],
+      "rows": [
+        {
+          "backend": "block",
+          "mode": "inference",
+          "seconds": [
+            0.03231590986251831,
+            0.032505638897418976,
+            0.03263424336910248,
+            0.03228708729147911,
+            0.032412219792604446,
+            0.03234066069126129,
+            0.032122526317834854,
+            0.0323006808757782,
+            0.03221873566508293
+          ],
+          "median_seconds": 0.03231590986251831,
+          "memory_before": {
+            "allocated_bytes": 23344640,
+            "reserved_bytes": 65011712,
+            "peak_allocated_bytes": 23344640,
+            "peak_reserved_bytes": 65011712
+          },
+          "memory_after": {
+            "allocated_bytes": 23344640,
+            "reserved_bytes": 65011712,
+            "peak_allocated_bytes": 55894528,
+            "peak_reserved_bytes": 65011712
+          },
+          "process_peak_rss_kib_cumulative": 2030772
+        },
+        {
+          "backend": "block",
+          "mode": "grad_forward",
+          "seconds": [
+            0.033048730343580246,
+            0.033153872936964035,
+            0.03303082659840584,
+            0.03301715850830078,
+            0.03317779675126076,
+            0.0331803597509861,
+            0.033064164221286774,
+            0.03327634930610657,
+            0.0331077016890049
+          ],
+          "median_seconds": 0.0331077016890049,
+          "memory_before": {
+            "allocated_bytes": 23344640,
+            "reserved_bytes": 127926272,
+            "peak_allocated_bytes": 23344640,
+            "peak_reserved_bytes": 127926272
+          },
+          "memory_after": {
+            "allocated_bytes": 23344640,
+            "reserved_bytes": 127926272,
+            "peak_allocated_bytes": 124295168,
+            "peak_reserved_bytes": 127926272
+          },
+          "process_peak_rss_kib_cumulative": 2030772
+        },
+        {
+          "backend": "block",
+          "mode": "backward",
+          "seconds": [
+            0.08558516204357147,
+            0.08688917756080627,
+            0.0856686532497406,
+            0.08549018204212189,
+            0.08544939383864403,
+            0.08545591309666634,
+            0.0847974643111229,
+            0.08501395583152771,
+            0.08552394062280655
+          ],
+          "median_seconds": 0.08549018204212189,
+          "memory_before": {
+            "allocated_bytes": 23344640,
+            "reserved_bytes": 186646528,
+            "peak_allocated_bytes": 23344640,
+            "peak_reserved_bytes": 186646528
+          },
+          "memory_after": {
+            "allocated_bytes": 23344640,
+            "reserved_bytes": 186646528,
+            "peak_allocated_bytes": 147565056,
+            "peak_reserved_bytes": 186646528
+          },
+          "process_peak_rss_kib_cumulative": 2030920
+        },
+        {
+          "backend": "incremental",
+          "mode": "inference",
+          "seconds": [
+            0.03266214579343796,
+            0.03255486860871315,
+            0.03241029009222984,
+            0.03230281546711922,
+            0.03222835808992386,
+            0.03217964619398117,
+            0.03241859748959541,
+            0.03252226486802101,
+            0.03240315988659859
+          ],
+          "median_seconds": 0.03241029009222984,
+          "memory_before": {
+            "allocated_bytes": 23344640,
+            "reserved_bytes": 65011712,
+            "peak_allocated_bytes": 23344640,
+            "peak_reserved_bytes": 65011712
+          },
+          "memory_after": {
+            "allocated_bytes": 23344640,
+            "reserved_bytes": 65011712,
+            "peak_allocated_bytes": 55894528,
+            "peak_reserved_bytes": 65011712
+          },
+          "process_peak_rss_kib_cumulative": 2030968
+        },
+        {
+          "backend": "incremental",
+          "mode": "grad_forward",
+          "seconds": [
+            0.03301607444882393,
+            0.033360958099365234,
+            0.033365488052368164,
+            0.03308334946632385,
+            0.033338047564029694,
+            0.03319203481078148,
+            0.03323815390467644,
+            0.03331180661916733,
+            0.03341035172343254
+          ],
+          "median_seconds": 0.03331180661916733,
+          "memory_before": {
+            "allocated_bytes": 23344640,
+            "reserved_bytes": 127926272,
+            "peak_allocated_bytes": 23344640,
+            "peak_reserved_bytes": 127926272
+          },
+          "memory_after": {
+            "allocated_bytes": 23344640,
+            "reserved_bytes": 127926272,
+            "peak_allocated_bytes": 124295168,
+            "peak_reserved_bytes": 127926272
+          },
+          "process_peak_rss_kib_cumulative": 2030968
+        },
+        {
+          "backend": "incremental",
+          "mode": "backward",
+          "seconds": [
+            0.0862555094063282,
+            0.08552338927984238,
+            0.08500660583376884,
+            0.08527357503771782,
+            0.08526846393942833,
+            0.08541601151227951,
+            0.08539273217320442,
+            0.08511941134929657,
+            0.08518696948885918
+          ],
+          "median_seconds": 0.08527357503771782,
+          "memory_before": {
+            "allocated_bytes": 23344640,
+            "reserved_bytes": 186646528,
+            "peak_allocated_bytes": 23344640,
+            "peak_reserved_bytes": 186646528
+          },
+          "memory_after": {
+            "allocated_bytes": 23344640,
+            "reserved_bytes": 186646528,
+            "peak_allocated_bytes": 147565056,
+            "peak_reserved_bytes": 186646528
+          },
+          "process_peak_rss_kib_cumulative": 2030968
+        },
+        {
+          "backend": "doubling",
+          "mode": "inference",
+          "seconds": [
+            0.005041304975748062,
+            0.0050202906131744385,
+            0.005031578242778778,
+            0.005030982196331024,
+            0.005026198923587799,
+            0.005043413490056992,
+            0.0050200894474983215,
+            0.0050206370651721954,
+            0.0050205811858177185
+          ],
+          "median_seconds": 0.005026198923587799,
+          "memory_before": {
+            "allocated_bytes": 23344640,
+            "reserved_bytes": 65011712,
+            "peak_allocated_bytes": 23344640,
+            "peak_reserved_bytes": 65011712
+          },
+          "memory_after": {
+            "allocated_bytes": 23344640,
+            "reserved_bytes": 65011712,
+            "peak_allocated_bytes": 56943616,
+            "peak_reserved_bytes": 65011712
+          },
+          "process_peak_rss_kib_cumulative": 2031452
+        },
+        {
+          "backend": "doubling",
+          "mode": "grad_forward",
+          "seconds": [
+            0.006309352815151215,
+            0.006206978112459183,
+            0.006244093179702759,
+            0.0062317997217178345,
+            0.006308164447546005,
+            0.006240319460630417,
+            0.006267514079809189,
+            0.006266593933105469,
+            0.006280478090047836
+          ],
+          "median_seconds": 0.006266593933105469,
+          "memory_before": {
+            "allocated_bytes": 23344640,
+            "reserved_bytes": 169869312,
+            "peak_allocated_bytes": 23344640,
+            "peak_reserved_bytes": 169869312
+          },
+          "memory_after": {
+            "allocated_bytes": 23344640,
+            "reserved_bytes": 169869312,
+            "peak_allocated_bytes": 150520832,
+            "peak_reserved_bytes": 169869312
+          },
+          "process_peak_rss_kib_cumulative": 2031544
+        },
+        {
+          "backend": "doubling",
+          "mode": "backward",
+          "seconds": [
+            0.017666105180978775,
+            0.017405353486537933,
+            0.01747715100646019,
+            0.01738477125763893,
+            0.017574522644281387,
+            0.017377283424139023,
+            0.017055872827768326,
+            0.01716354861855507,
+            0.017298933118581772
+          ],
+          "median_seconds": 0.01738477125763893,
+          "memory_before": {
+            "allocated_bytes": 23344640,
+            "reserved_bytes": 171966464,
+            "peak_allocated_bytes": 23344640,
+            "peak_reserved_bytes": 171966464
+          },
+          "memory_after": {
+            "allocated_bytes": 23344640,
+            "reserved_bytes": 171966464,
+            "peak_allocated_bytes": 151823360,
+            "peak_reserved_bytes": 171966464
+          },
+          "process_peak_rss_kib_cumulative": 2031544
+        }
+      ]
+    },
+    {
+      "name": "agg-ssd-single-fp32-v1",
+      "source": "57eb12c3b1e67f2c0414d1501522ca4de292c734",
+      "status": "passed",
+      "queue": {
+        "elapsed_seconds": 21.434822343289852,
+        "job_id": "agg-ssd-single-fp32-v1",
+        "logical_device": "npu:0",
+        "logical_devices": [
+          "npu:0"
+        ],
+        "npu_count": 1,
+        "physical_id": 7,
+        "physical_ids": [
+          7
+        ],
+        "priority": 0,
+        "project": "tide-instances",
+        "return_code": 0,
+        "schema_version": 1,
+        "status": "completed",
+        "timestamp": "2026-11-18T12:21:44.441113+00:00"
+      },
+      "launch": {
+        "path": "artifacts/agg-ssd-single-fp32-v1/launch.json",
+        "sha256": "e0472e95b3948772780d1b2a62437c88366838af73507da70001c98bd3714075",
+        "bytes": 4013
+      },
+      "result": {
+        "path": "artifacts/agg-ssd-single-fp32-v1/scan.json",
+        "sha256": "16de243f13ff18c7b61946c826e1ac76dec8f01380e299b4284a09b05eae503d",
+        "bytes": 30885
+      },
+      "command": {
+        "name": "agg-ssd-single-fp32-v1",
+        "revision": "HEAD",
+        "threads": 4,
+        "affinity": "92-95",
+        "npu_count": 1,
+        "candidate_ids": null,
+        "seconds": 1200,
+        "rss_gib": 16.0,
+        "queue_seconds": 600,
+        "after_unit": [],
+        "command": [
+          "--",
+          "python",
+          "-m",
+          "benchmarks.ssd_scan_candidates",
+          "--device",
+          "npu:0",
+          "--nodes",
+          "8",
+          "--batch",
+          "8",
+          "--length",
+          "1",
+          "--heads",
+          "4",
+          "--threads",
+          "4",
+          "--warmup",
+          "3",
+          "--steps",
+          "9",
+          "--output",
+          "{run}/scan.json"
+        ]
+      },
+      "sampled_peak_rss_bytes": 1909329920,
+      "arguments": {
+        "device": "npu:0",
+        "backends": [
+          "block",
+          "incremental",
+          "doubling"
+        ],
+        "modes": [
+          "inference",
+          "grad_forward",
+          "backward"
+        ],
+        "nodes": 8,
+        "batch": 8,
+        "length": 1,
+        "heads": 4,
+        "value_width": 32,
+        "state_width": 32,
+        "chunk": 32,
+        "threads": 4,
+        "warmup": 3,
+        "steps": 9,
+        "seed": 1911,
+        "atol": 3e-05,
+        "rtol": 3e-05,
+        "output": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/agg-ssd-single-fp32-v1/scan.json"
+      },
+      "completed": true,
+      "within_threshold": true,
+      "candidates": [
+        {
+          "backend": "block",
+          "same_fixture_vs_block": {
+            "atol": 3e-05,
+            "rtol": 3e-05,
+            "all_finite": true,
+            "within_threshold": true,
+            "tensors": [
+              {
+                "name": "reads",
+                "shape": [
+                  8,
+                  8,
+                  1,
+                  4,
+                  32
+                ],
+                "finite": true,
+                "exact": true,
+                "max_absolute": 0.0,
+                "relative_l2": 0.0,
+                "within_threshold": true
+              },
+              {
+                "name": "final_matrix",
+                "shape": [
+                  8,
+                  8,
+                  4,
+                  32,
+                  32
+                ],
+                "finite": true,
+                "exact": true,
+                "max_absolute": 0.0,
+                "relative_l2": 0.0,
+                "within_threshold": true
+              },
+              {
+                "name": "decay",
+                "shape": [
+                  8,
+                  8,
+                  1,
+                  4
+                ],
+                "finite": true,
+                "exact": true,
+                "max_absolute": 0.0,
+                "relative_l2": 0.0,
+                "within_threshold": true
+              },
+              {
+                "name": "write_value",
+                "shape": [
+                  8,
+                  8,
+                  1,
+                  4,
+                  32
+                ],
+                "finite": true,
+                "exact": true,
+                "max_absolute": 0.0,
+                "relative_l2": 0.0,
+                "within_threshold": true
+              },
+              {
+                "name": "B_group",
+                "shape": [
+                  8,
+                  8,
+                  1,
+                  1,
+                  32
+                ],
+                "finite": true,
+                "exact": true,
+                "max_absolute": 0.0,
+                "relative_l2": 0.0,
+                "within_threshold": true
+              },
+              {
+                "name": "C_group",
+                "shape": [
+                  8,
+                  8,
+                  1,
+                  1,
+                  32
+                ],
+                "finite": true,
+                "exact": true,
+                "max_absolute": 0.0,
+                "relative_l2": 0.0,
+                "within_threshold": true
+              },
+              {
+                "name": "initial_matrix",
+                "shape": [
+                  8,
+                  8,
+                  4,
+                  32,
+                  32
+                ],
+                "finite": true,
+                "exact": true,
+                "max_absolute": 0.0,
+                "relative_l2": 0.0,
+                "within_threshold": true
+              }
+            ]
+          },
+          "bounded_vs_literal_fp64": {
+            "atol": 3e-05,
+            "rtol": 3e-05,
+            "all_finite": true,
+            "within_threshold": true,
+            "tensors": [
+              {
+                "name": "reads",
+                "shape": [
+                  1,
+                  1,
+                  1,
+                  2,
+                  4
+                ],
+                "finite": true,
+                "exact": false,
+                "max_absolute": 1.0684395278237613e-09,
+                "relative_l2": 3.384971731152233e-08,
+                "within_threshold": true
+              },
+              {
+                "name": "final_matrix",
+                "shape": [
+                  1,
+                  1,
+                  2,
+                  4,
+                  4
+                ],
+                "finite": true,
+                "exact": false,
+                "max_absolute": 1.1231897190100426e-08,
+                "relative_l2": 4.2105850086401045e-08,
+                "within_threshold": true
+              },
+              {
+                "name": "decay",
+                "shape": [
+                  1,
+                  1,
+                  1,
+                  2
+                ],
+                "finite": true,
+                "exact": false,
+                "max_absolute": 2.2229678098284467e-08,
+                "relative_l2": 2.0695663799008815e-07,
+                "within_threshold": true
+              },
+              {
+                "name": "write_value",
+                "shape": [
+                  1,
+                  1,
+                  1,
+                  2,
+                  4
+                ],
+                "finite": true,
+                "exact": false,
+                "max_absolute": 2.05452599932876e-08,
+                "relative_l2": 3.646398344517412e-08,
+                "within_threshold": true
+              },
+              {
+                "name": "B_group",
+                "shape": [
+                  1,
+                  1,
+                  1,
+                  1,
+                  4
+                ],
+                "finite": true,
+                "exact": false,
+                "max_absolute": 5.563805222097429e-09,
+                "relative_l2": 2.5711615765013128e-08,
+                "within_threshold": true
+              },
+              {
+                "name": "C_group",
+                "shape": [
+                  1,
+                  1,
+                  1,
+                  1,
+                  4
+                ],
+                "finite": true,
+                "exact": false,
+                "max_absolute": 3.322077437445392e-08,
+                "relative_l2": 9.927016205646084e-08,
+                "within_threshold": true
+              },
+              {
+                "name": "initial_matrix",
+                "shape": [
+                  1,
+                  1,
+                  2,
+                  4,
+                  4
+                ],
+                "finite": true,
+                "exact": false,
+                "max_absolute": 6.163079824261786e-08,
+                "relative_l2": 3.145457353265337e-08,
+                "within_threshold": true
+              }
+            ]
+          },
+          "operators": {
+            "aten.add.Tensor": 9,
+            "aten.alias.default": 4,
+            "aten.arange.default": 1,
+            "aten.bitwise_not.default": 1,
+            "aten.cat.default": 1,
+            "aten.cumprod.default": 2,
+            "aten.expand.default": 2,
+            "aten.ge.Tensor": 1,
+            "aten.gt.Tensor": 1,
+            "aten.masked_fill.Scalar": 2,
+            "aten.matmul.default": 4,
+            "aten.matmul_backward.default": 4,
+            "aten.mul.Tensor": 12,
+            "aten.scalar_tensor.default": 2,
+            "aten.select.int": 2,
+            "aten.select_backward.default": 2,
+            "aten.slice.Tensor": 1,
+            "aten.squeeze.dim": 5,
+            "aten.sum.dim_IntList": 5,
+            "aten.transpose.int": 16,
+            "aten.unsqueeze.default": 9,
+            "aten.where.self": 2
+          },
+          "arithmetic": [
+            {
+              "operator": "aten.matmul.default",
+              "inputs": [
+                "npu:float32"
+              ],
+              "outputs": [
+                "npu:float32"
+              ],
+              "calls": 4
+            }
+          ]
+        },
+        {
+          "backend": "incremental",
+          "same_fixture_vs_block": {
+            "atol": 3e-05,
+            "rtol": 3e-05,
+            "all_finite": true,
+            "within_threshold": true,
+            "tensors": [
+              {
+                "name": "reads",
+                "shape": [
+                  8,
+                  8,
+                  1,
+                  4,
+                  32
+                ],
+                "finite": true,
+                "exact": false,
+                "max_absolute": 4.470348358154297e-08,
+                "relative_l2": 9.22581681434324e-08,
+                "within_threshold": true
+              },
+              {
+                "name": "final_matrix",
+                "shape": [
+                  8,
+                  8,
+                  4,
+                  32,
+                  32
+                ],
+                "finite": true,
+                "exact": true,
+                "max_absolute": 0.0,
+                "relative_l2": 0.0,
+                "within_threshold": true
+              },
+              {
+                "name": "decay",
+                "shape": [
+                  8,
+                  8,
+                  1,
+                  4
+                ],
+                "finite": true,
+                "exact": false,
+                "max_absolute": 1.430511474609375e-06,
+                "relative_l2": 1.474171637149109e-07,
+                "within_threshold": true
+              },
+              {
+                "name": "write_value",
+                "shape": [
+                  8,
+                  8,
+                  1,
+                  4,
+                  32
+                ],
+                "finite": true,
+                "exact": false,
+                "max_absolute": 4.76837158203125e-07,
+                "relative_l2": 9.384831640912066e-08,
+                "within_threshold": true
+              },
+              {
+                "name": "B_group",
+                "shape": [
+                  8,
+                  8,
+                  1,
+                  1,
+                  32
+                ],
+                "finite": true,
+                "exact": false,
+                "max_absolute": 4.76837158203125e-07,
+                "relative_l2": 1.1930062704028734e-07,
+                "within_threshold": true
+              },
+              {
+                "name": "C_group",
+                "shape": [
+                  8,
+                  8,
+                  1,
+                  1,
+                  32
+                ],
+                "finite": true,
+                "exact": false,
+                "max_absolute": 4.76837158203125e-07,
+                "relative_l2": 1.033693584951071e-07,
+                "within_threshold": true
+              },
+              {
+                "name": "initial_matrix",
+                "shape": [
+                  8,
+                  8,
+                  4,
+                  32,
+                  32
+                ],
+                "finite": true,
+                "exact": false,
+                "max_absolute": 4.76837158203125e-07,
+                "relative_l2": 5.086885837317917e-08,
+                "within_threshold": true
+              }
+            ]
+          },
+          "bounded_vs_literal_fp64": {
+            "atol": 3e-05,
+            "rtol": 3e-05,
+            "all_finite": true,
+            "within_threshold": true,
+            "tensors": [
+              {
+                "name": "reads",
+                "shape": [
+                  1,
+                  1,
+                  1,
+                  2,
+                  4
+                ],
+                "finite": true,
+                "exact": false,
+                "max_absolute": 1.2672294186222288e-09,
+                "relative_l2": 4.8493681832774655e-08,
+                "within_threshold": true
+              },
+              {
+                "name": "final_matrix",
+                "shape": [
+                  1,
+                  1,
+                  2,
+                  4,
+                  4
+                ],
+                "finite": true,
+                "exact": false,
+                "max_absolute": 1.1231897190100426e-08,
+                "relative_l2": 4.2105850086401045e-08,
+                "within_threshold": true
+              },
+              {
+                "name": "decay",
+                "shape": [
+                  1,
+                  1,
+                  1,
+                  2
+                ],
+                "finite": true,
+                "exact": false,
+                "max_absolute": 1.1577349218194755e-08,
+                "relative_l2": 9.86482175359098e-08,
+                "within_threshold": true
+              },
+              {
+                "name": "write_value",
+                "shape": [
+                  1,
+                  1,
+                  1,
+                  2,
+                  4
+                ],
+                "finite": true,
+                "exact": false,
+                "max_absolute": 4.240837303548517e-08,
+                "relative_l2": 5.434594238804591e-08,
+                "within_threshold": true
+              },
+              {
+                "name": "B_group",
+                "shape": [
+                  1,
+                  1,
+                  1,
+                  1,
+                  4
+                ],
+                "finite": true,
+                "exact": false,
+                "max_absolute": 1.794869941562638e-08,
+                "relative_l2": 7.941378630740262e-08,
+                "within_threshold": true
+              },
+              {
+                "name": "C_group",
+                "shape": [
+                  1,
+                  1,
+                  1,
+                  1,
+                  4
+                ],
+                "finite": true,
+                "exact": false,
+                "max_absolute": 2.6383870400936704e-08,
+                "relative_l2": 8.160105867723298e-08,
+                "within_threshold": true
+              },
+              {
+                "name": "initial_matrix",
+                "shape": [
+                  1,
+                  1,
+                  2,
+                  4,
+                  4
+                ],
+                "finite": true,
+                "exact": false,
+                "max_absolute": 8.304557264082746e-08,
+                "relative_l2": 3.809982380781469e-08,
+                "within_threshold": true
+              }
+            ]
+          },
+          "operators": {
+            "aten.add.Tensor": 2,
+            "aten.expand.default": 2,
+            "aten.matmul.default": 1,
+            "aten.matmul_backward.default": 1,
+            "aten.mul.Tensor": 6,
+            "aten.select.int": 4,
+            "aten.select_backward.default": 4,
+            "aten.squeeze.dim": 7,
+            "aten.sum.dim_IntList": 5,
+            "aten.unsqueeze.default": 7
+          },
+          "arithmetic": [
+            {
+              "operator": "aten.matmul.default",
+              "inputs": [
+                "npu:float32"
+              ],
+              "outputs": [
+                "npu:float32"
+              ],
+              "calls": 1
+            }
+          ]
+        },
+        {
+          "backend": "doubling",
+          "same_fixture_vs_block": {
+            "atol": 3e-05,
+            "rtol": 3e-05,
+            "all_finite": true,
+            "within_threshold": true,
+            "tensors": [
+              {
+                "name": "reads",
+                "shape": [
+                  8,
+                  8,
+                  1,
+                  4,
+                  32
+                ],
+                "finite": true,
+                "exact": false,
+                "max_absolute": 4.470348358154297e-08,
+                "relative_l2": 9.22581681434324e-08,
+                "within_threshold": true
+              },
+              {
+                "name": "final_matrix",
+                "shape": [
+                  8,
+                  8,
+                  4,
+                  32,
+                  32
+                ],
+                "finite": true,
+                "exact": true,
+                "max_absolute": 0.0,
+                "relative_l2": 0.0,
+                "within_threshold": true
+              },
+              {
+                "name": "decay",
+                "shape": [
+                  8,
+                  8,
+                  1,
+                  4
+                ],
+                "finite": true,
+                "exact": false,
+                "max_absolute": 1.430511474609375e-06,
+                "relative_l2": 1.474171637149109e-07,
+                "within_threshold": true
+              },
+              {
+                "name": "write_value",
+                "shape": [
+                  8,
+                  8,
+                  1,
+                  4,
+                  32
+                ],
+                "finite": true,
+                "exact": false,
+                "max_absolute": 4.76837158203125e-07,
+                "relative_l2": 9.384831640912066e-08,
+                "within_threshold": true
+              },
+              {
+                "name": "B_group",
+                "shape": [
+                  8,
+                  8,
+                  1,
+                  1,
+                  32
+                ],
+                "finite": true,
+                "exact": false,
+                "max_absolute": 4.76837158203125e-07,
+                "relative_l2": 1.1930062704028734e-07,
+                "within_threshold": true
+              },
+              {
+                "name": "C_group",
+                "shape": [
+                  8,
+                  8,
+                  1,
+                  1,
+                  32
+                ],
+                "finite": true,
+                "exact": false,
+                "max_absolute": 4.76837158203125e-07,
+                "relative_l2": 1.033693584951071e-07,
+                "within_threshold": true
+              },
+              {
+                "name": "initial_matrix",
+                "shape": [
+                  8,
+                  8,
+                  4,
+                  32,
+                  32
+                ],
+                "finite": true,
+                "exact": false,
+                "max_absolute": 4.76837158203125e-07,
+                "relative_l2": 5.086885837317917e-08,
+                "within_threshold": true
+              }
+            ]
+          },
+          "bounded_vs_literal_fp64": {
+            "atol": 3e-05,
+            "rtol": 3e-05,
+            "all_finite": true,
+            "within_threshold": true,
+            "tensors": [
+              {
+                "name": "reads",
+                "shape": [
+                  1,
+                  1,
+                  1,
+                  2,
+                  4
+                ],
+                "finite": true,
+                "exact": false,
+                "max_absolute": 1.2672294186222288e-09,
+                "relative_l2": 4.8493681832774655e-08,
+                "within_threshold": true
+              },
+              {
+                "name": "final_matrix",
+                "shape": [
+                  1,
+                  1,
+                  2,
+                  4,
+                  4
+                ],
+                "finite": true,
+                "exact": false,
+                "max_absolute": 1.1231897190100426e-08,
+                "relative_l2": 4.2105850086401045e-08,
+                "within_threshold": true
+              },
+              {
+                "name": "decay",
+                "shape": [
+                  1,
+                  1,
+                  1,
+                  2
+                ],
+                "finite": true,
+                "exact": false,
+                "max_absolute": 1.1577349218194755e-08,
+                "relative_l2": 9.86482175359098e-08,
+                "within_threshold": true
+              },
+              {
+                "name": "write_value",
+                "shape": [
+                  1,
+                  1,
+                  1,
+                  2,
+                  4
+                ],
+                "finite": true,
+                "exact": false,
+                "max_absolute": 4.240837303548517e-08,
+                "relative_l2": 5.434594238804591e-08,
+                "within_threshold": true
+              },
+              {
+                "name": "B_group",
+                "shape": [
+                  1,
+                  1,
+                  1,
+                  1,
+                  4
+                ],
+                "finite": true,
+                "exact": false,
+                "max_absolute": 1.794869941562638e-08,
+                "relative_l2": 7.941378630740262e-08,
+                "within_threshold": true
+              },
+              {
+                "name": "C_group",
+                "shape": [
+                  1,
+                  1,
+                  1,
+                  1,
+                  4
+                ],
+                "finite": true,
+                "exact": false,
+                "max_absolute": 2.6383870400936704e-08,
+                "relative_l2": 8.160105867723298e-08,
+                "within_threshold": true
+              },
+              {
+                "name": "initial_matrix",
+                "shape": [
+                  1,
+                  1,
+                  2,
+                  4,
+                  4
+                ],
+                "finite": true,
+                "exact": false,
+                "max_absolute": 8.304557264082746e-08,
+                "relative_l2": 3.809982380781469e-08,
+                "within_threshold": true
+              }
+            ]
+          },
+          "operators": {
+            "aten.add.Tensor": 2,
+            "aten.expand.default": 2,
+            "aten.matmul.default": 1,
+            "aten.matmul_backward.default": 1,
+            "aten.mul.Tensor": 6,
+            "aten.select.int": 4,
+            "aten.select_backward.default": 4,
+            "aten.squeeze.dim": 7,
+            "aten.sum.dim_IntList": 5,
+            "aten.unsqueeze.default": 7
+          },
+          "arithmetic": [
+            {
+              "operator": "aten.matmul.default",
+              "inputs": [
+                "npu:float32"
+              ],
+              "outputs": [
+                "npu:float32"
+              ],
+              "calls": 1
+            }
+          ]
+        }
+      ],
+      "rows": [
+        {
+          "backend": "block",
+          "mode": "inference",
+          "seconds": [
+            0.0006506256759166718,
+            0.0006276220083236694,
+            0.0005892738699913025,
+            0.0005858875811100006,
+            0.0006021559238433838,
+            0.000595584511756897,
+            0.0005998164415359497,
+            0.000590544193983078,
+            0.0006177239120006561
+          ],
+          "median_seconds": 0.0005998164415359497,
+          "memory_before": {
+            "allocated_bytes": 2187264,
+            "reserved_bytes": 23068672,
+            "peak_allocated_bytes": 2187264,
+            "peak_reserved_bytes": 23068672
+          },
+          "memory_after": {
+            "allocated_bytes": 2187264,
+            "reserved_bytes": 23068672,
+            "peak_allocated_bytes": 5473280,
+            "peak_reserved_bytes": 23068672
+          },
+          "process_peak_rss_kib_cumulative": 1839724
+        },
+        {
+          "backend": "block",
+          "mode": "grad_forward",
+          "seconds": [
+            0.0007692202925682068,
+            0.0007689110934734344,
+            0.0007308349013328552,
+            0.0007302761077880859,
+            0.0007309652864933014,
+            0.0007372461259365082,
+            0.0007152408361434937,
+            0.0007432661950588226,
+            0.0007059238851070404
+          ],
+          "median_seconds": 0.0007309652864933014,
+          "memory_before": {
+            "allocated_bytes": 2187264,
+            "reserved_bytes": 23068672,
+            "peak_allocated_bytes": 2187264,
+            "peak_reserved_bytes": 23068672
+          },
+          "memory_after": {
+            "allocated_bytes": 2187264,
+            "reserved_bytes": 23068672,
+            "peak_allocated_bytes": 5511680,
+            "peak_reserved_bytes": 23068672
+          },
+          "process_peak_rss_kib_cumulative": 1839724
+        },
+        {
+          "backend": "block",
+          "mode": "backward",
+          "seconds": [
+            0.0015910565853118896,
+            0.0015729330480098724,
+            0.0015589557588100433,
+            0.0015535838901996613,
+            0.0015843100845813751,
+            0.0015460029244422913,
+            0.0015520676970481873,
+            0.0015344247221946716,
+            0.0015419051051139832
+          ],
+          "median_seconds": 0.0015535838901996613,
+          "memory_before": {
+            "allocated_bytes": 2187264,
+            "reserved_bytes": 23068672,
+            "peak_allocated_bytes": 2187264,
+            "peak_reserved_bytes": 23068672
+          },
+          "memory_after": {
+            "allocated_bytes": 2187264,
+            "reserved_bytes": 23068672,
+            "peak_allocated_bytes": 6532096,
+            "peak_reserved_bytes": 23068672
+          },
+          "process_peak_rss_kib_cumulative": 1839724
+        },
+        {
+          "backend": "incremental",
+          "mode": "inference",
+          "seconds": [
+            0.00022921711206436157,
+            0.00019679218530654907,
+            0.0001903139054775238,
+            0.00018844008445739746,
+            0.0001827739179134369,
+            0.0001831352710723877,
+            0.0001880340278148651,
+            0.0001823529601097107,
+            0.00018731504678726196
+          ],
+          "median_seconds": 0.0001880340278148651,
+          "memory_before": {
+            "allocated_bytes": 2187264,
+            "reserved_bytes": 23068672,
+            "peak_allocated_bytes": 2187264,
+            "peak_reserved_bytes": 23068672
+          },
+          "memory_after": {
+            "allocated_bytes": 2187264,
+            "reserved_bytes": 23068672,
+            "peak_allocated_bytes": 5334528,
+            "peak_reserved_bytes": 23068672
+          },
+          "process_peak_rss_kib_cumulative": 1846108
+        },
+        {
+          "backend": "incremental",
+          "mode": "grad_forward",
+          "seconds": [
+            0.00027031078934669495,
+            0.00024153664708137512,
+            0.0002354830503463745,
+            0.00023343786597251892,
+            0.00023403018712997437,
+            0.0002396702766418457,
+            0.00024171173572540283,
+            0.00023584067821502686,
+            0.00024142861366271973
+          ],
+          "median_seconds": 0.0002396702766418457,
+          "memory_before": {
+            "allocated_bytes": 2187264,
+            "reserved_bytes": 23068672,
+            "peak_allocated_bytes": 2187264,
+            "peak_reserved_bytes": 23068672
+          },
+          "memory_after": {
+            "allocated_bytes": 2187264,
+            "reserved_bytes": 23068672,
+            "peak_allocated_bytes": 5334528,
+            "peak_reserved_bytes": 23068672
+          },
+          "process_peak_rss_kib_cumulative": 1846108
+        },
+        {
+          "backend": "incremental",
+          "mode": "backward",
+          "seconds": [
+            0.0007999800145626068,
+            0.0007745623588562012,
+            0.0007668882608413696,
+            0.0007875189185142517,
+            0.0007619820535182953,
+            0.0007681287825107574,
+            0.0007717832922935486,
+            0.0007929615676403046,
+            0.0007852315902709961
+          ],
+          "median_seconds": 0.0007745623588562012,
+          "memory_before": {
+            "allocated_bytes": 2187264,
+            "reserved_bytes": 23068672,
+            "peak_allocated_bytes": 2187264,
+            "peak_reserved_bytes": 23068672
+          },
+          "memory_after": {
+            "allocated_bytes": 2187264,
+            "reserved_bytes": 23068672,
+            "peak_allocated_bytes": 6519808,
+            "peak_reserved_bytes": 23068672
+          },
+          "process_peak_rss_kib_cumulative": 1847032
+        },
+        {
+          "backend": "doubling",
+          "mode": "inference",
+          "seconds": [
+            0.00020896270871162415,
+            0.00017938390374183655,
+            0.0001784488558769226,
+            0.0001795738935470581,
+            0.00017451122403144836,
+            0.00017433986067771912,
+            0.0001743510365486145,
+            0.00018880516290664673,
+            0.00017715990543365479
+          ],
+          "median_seconds": 0.0001784488558769226,
+          "memory_before": {
+            "allocated_bytes": 2187264,
+            "reserved_bytes": 23068672,
+            "peak_allocated_bytes": 2187264,
+            "peak_reserved_bytes": 23068672
+          },
+          "memory_after": {
+            "allocated_bytes": 2187264,
+            "reserved_bytes": 23068672,
+            "peak_allocated_bytes": 5334528,
+            "peak_reserved_bytes": 23068672
+          },
+          "process_peak_rss_kib_cumulative": 1847032
+        },
+        {
+          "backend": "doubling",
+          "mode": "grad_forward",
+          "seconds": [
+            0.0002690516412258148,
+            0.00024217739701271057,
+            0.00023579224944114685,
+            0.0002325214445590973,
+            0.00023368000984191895,
+            0.00025006383657455444,
+            0.00023030489683151245,
+            0.00023341551423072815,
+            0.00023549050092697144
+          ],
+          "median_seconds": 0.00023549050092697144,
+          "memory_before": {
+            "allocated_bytes": 2187264,
+            "reserved_bytes": 23068672,
+            "peak_allocated_bytes": 2187264,
+            "peak_reserved_bytes": 23068672
+          },
+          "memory_after": {
+            "allocated_bytes": 2187264,
+            "reserved_bytes": 23068672,
+            "peak_allocated_bytes": 5334528,
+            "peak_reserved_bytes": 23068672
+          },
+          "process_peak_rss_kib_cumulative": 1847032
+        },
+        {
+          "backend": "doubling",
+          "mode": "backward",
+          "seconds": [
+            0.0007990412414073944,
+            0.000760689377784729,
+            0.0007739737629890442,
+            0.000761125236749649,
+            0.0007567964494228363,
+            0.0007594004273414612,
+            0.000761374831199646,
+            0.0007798224687576294,
+            0.0007606446743011475
+          ],
+          "median_seconds": 0.000761125236749649,
+          "memory_before": {
+            "allocated_bytes": 2187264,
+            "reserved_bytes": 23068672,
+            "peak_allocated_bytes": 2187264,
+            "peak_reserved_bytes": 23068672
+          },
+          "memory_after": {
+            "allocated_bytes": 2187264,
+            "reserved_bytes": 23068672,
+            "peak_allocated_bytes": 6519808,
+            "peak_reserved_bytes": 23068672
+          },
+          "process_peak_rss_kib_cumulative": 1847032
+        }
+      ]
+    }
+  ]
+}
