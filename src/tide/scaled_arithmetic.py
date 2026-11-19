@@ -11,6 +11,35 @@ is used; callers retain their own checks for genuinely unrepresentable results.
 import torch
 
 
+def binary_parts(value):
+    """Exact frexp parts, with an explicit NPU FP32 device implementation.
+
+    This TorchNPU baseline has no frexp kernel. Decode IEEE binary32 instead;
+    multiply subnormals by an exact power before decoding their exponent.
+    CPU FP64 remains a diagnostic and uses torch.frexp. No tensor leaves its
+    device. Zero (including -0), Inf and NaN keep their original value.
+    """
+    if value.device.type != "npu":
+        return torch.frexp(value)
+    if value.dtype != torch.float32:
+        raise TypeError("NPU binary parts require FP32 accumulation")
+    import torch_npu
+
+    # A dtype view requires a base-format, contiguous storage representation.
+    value = torch_npu.npu_format_cast(value, 2).contiguous()
+    bits = value.view(torch.int32)
+    magnitude = bits & 0x7fffffff
+    subnormal = (magnitude > 0) & (magnitude < 0x00800000)
+    scaled = torch.where(subnormal, value, 0) * 16777216.0
+    working = torch.where(subnormal, scaled, value).contiguous().view(torch.int32)
+    field = (working & 0x7fffffff) >> 23
+    exponent = field - 126 - subnormal.to(torch.int32) * 24
+    fraction_bits = (working & -2139095041) | 0x3f000000
+    fraction = fraction_bits.contiguous().view(torch.float32)
+    special = (magnitude == 0) | (field == 255)
+    return torch.where(special, value, fraction), torch.where(special, 0, exponent)
+
+
 def restore_binary_scale(fraction, exponent):
     """Evaluate ``fraction * 2**exponent`` without an extreme standalone power.
 
@@ -29,7 +58,7 @@ def restore_binary_scale(fraction, exponent):
     else:
         raise ValueError("binary scale restoration requires FP32 or FP64 arithmetic")
     fraction, exponent = torch.broadcast_tensors(fraction, exponent)
-    normalized, shift = torch.frexp(fraction)
+    normalized, shift = binary_parts(fraction)
     combined = torch.where(normalized != 0, exponent + shift, 0)
     overflow, underflow = combined > upper + 1, combined < smallest
     # True range failures need no oversized vendor power (which can itself
@@ -39,5 +68,13 @@ def restore_binary_scale(fraction, exponent):
     first = safe.clamp(min=lower, max=upper)
     partial = torch.ldexp(normalized, first)
     restored = torch.ldexp(partial, safe - first)
-    restored = torch.where(overflow, torch.copysign(torch.full_like(restored, torch.inf), normalized), restored)
-    return torch.where(underflow, torch.copysign(torch.zeros_like(restored), normalized), restored)
+    if fraction.device.type == "npu":
+        negative = torch.signbit(normalized)
+        infinity = torch.full_like(restored, torch.inf)
+        signed_inf = torch.where(negative, -infinity, infinity)
+        signed_zero = torch.where(negative, -torch.zeros_like(restored), torch.zeros_like(restored))
+    else:
+        signed_inf = torch.copysign(torch.full_like(restored, torch.inf), normalized)
+        signed_zero = torch.copysign(torch.zeros_like(restored), normalized)
+    restored = torch.where(overflow, signed_inf, restored)
+    return torch.where(underflow, signed_zero, restored)

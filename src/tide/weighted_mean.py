@@ -16,7 +16,7 @@ the raw negative-mass clamp remains outside this helper.
 import torch
 from torch.autograd.function import once_differentiable
 
-from .scaled_arithmetic import restore_binary_scale
+from .scaled_arithmetic import binary_parts, restore_binary_scale
 
 
 def _finite(label, *values):
@@ -27,7 +27,7 @@ def _finite(label, *values):
 
 
 def _parts(value):
-    return torch.frexp(value)
+    return binary_parts(value)
 
 
 def _restore(mantissa, exponent):

@@ -12,6 +12,7 @@ import torch
 from torch import Tensor
 from torch.autograd.function import once_differentiable
 
+from .scaled_arithmetic import binary_parts
 from .weighted_mean import _difference_parts, _reduce_parts, _restore, _sum_parts
 
 
@@ -26,10 +27,10 @@ def _average_parts(weights, values):
     peak = torch.where(peak > 0, peak, 1)
     total = (weights / peak).sum(-1, keepdim=True)
     total = torch.where(total > 0, total, 1)
-    wm, we = torch.frexp(weights)
-    pm, pe = torch.frexp(peak)
-    tm, te = torch.frexp(total)
-    vm, ve = torch.frexp(values)
+    wm, we = binary_parts(weights)
+    pm, pe = binary_parts(peak)
+    tm, te = binary_parts(total)
+    vm, ve = binary_parts(values)
     return _sum_parts(((wm / pm) / tm) * vm, we - pe - te + ve, -1)
 
 
@@ -214,7 +215,7 @@ def _bisect(shifted, lower, upper, target, solve, kind):
         logits = torch.where(inside, shifted, -torch.inf)
         logits = torch.where(inside.any(-1, keepdim=True), logits, 0)
         log_probability = logits - torch.logsumexp(logits, -1, keepdim=True)
-        rm, re = torch.frexp(remainder)
+        rm, re = binary_parts(remainder)
         # The residual total can exceed one. Its multiplication can rescue a
         # representable positive sender even when softmax alone rounds to zero.
         value_m, value_e = _exp_product_parts(log_probability, rm, re)
@@ -270,7 +271,7 @@ class _Constrained(torch.autograd.Function):
         am = torch.where(equality, am[..., None], 0)
         ae = ae[..., None]
         dm, de = _difference_parts(grad, am, ae)
-        sm, se = torch.frexp(slope)
+        sm, se = binary_parts(slope)
         score_m, score_e = sm * dm, se + de
         if ctx.source_shapes[0][-1] == 1:
             # One score source shared by every candidate is a common shift.
@@ -332,7 +333,7 @@ class _Pool(torch.autograd.Function):
         log_z = weighted_peak + normalizer + torch.where(nonempty, probability_sum, 1).log()
         mass = mu.sum(-1, keepdim=True)
         amount = torch.minimum(torch.ones_like(mass), mass)
-        alpha_m, alpha_e = torch.frexp(amount)
+        alpha_m, alpha_e = binary_parts(amount)
         result = _restore(alpha_m * pm, alpha_e + pe)
         if bool(((mu > 0) & (result == 0)).any()):
             raise ArithmeticError("pool underflow would erase a positive sender")
@@ -344,7 +345,7 @@ class _Pool(torch.autograd.Function):
     def backward(ctx, grad):
         original_scores, original_mu, pm, pe, mass, peak, center, log_z = ctx.saved_tensors
         scores, mu = torch.broadcast_tensors(original_scores, original_mu)
-        gm, ge = torch.frexp(grad)
+        gm, ge = binary_parts(grad)
         numerator_m, numerator_e = _sum_parts(pm * gm, pe + ge, -1)
         denominator_m, denominator_e = _sum_parts(pm, pe, -1)
         am = numerator_m / torch.where(denominator_m > 0, denominator_m, 1)
@@ -352,7 +353,7 @@ class _Pool(torch.autograd.Function):
         am, ae = am[..., None], ae[..., None]
         dm, de = _difference_parts(grad, am, ae)
         amount = torch.minimum(torch.ones_like(mass), mass)
-        alpha_m, alpha_e = torch.frexp(amount)
+        alpha_m, alpha_e = binary_parts(amount)
         # Use the composite's factors, not the rounded stored sender. Even a
         # nonzero subnormal sender can lose bits needed by its finite VJP.
         cm, ce = alpha_m * pm, alpha_e + pe
@@ -360,7 +361,7 @@ class _Pool(torch.autograd.Function):
         if ctx.needs_input_grad[0]:
             ds = _reduce_parts(cm * dm, ce + de, original_scores.shape)
         if ctx.needs_input_grad[1]:
-            mm, me = torch.frexp(torch.where(mu > 0, mu, 1))
+            mm, me = binary_parts(torch.where(mu > 0, mu, 1))
             prior_m, prior_e = (cm / mm) * dm, ce - me + de
             log_amount = torch.where(amount > 0, amount, 1).log()
             log_ratio = scores - center - log_z + log_amount - peak.log()

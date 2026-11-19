@@ -15,7 +15,7 @@ from torch import Tensor
 from torch.autograd.function import once_differentiable
 from torch.nn import functional as F
 
-from .scaled_arithmetic import restore_binary_scale
+from .scaled_arithmetic import binary_parts, restore_binary_scale
 
 
 def _without_autocast(function):
@@ -258,9 +258,9 @@ def _range_product(*values):
     arbitrary cancellation between individually unrepresentable terms remains
     outside this helper's range. Binary scaling executes on the selected device.
     """
-    fraction, exponent = torch.frexp(values[0])
+    fraction, exponent = binary_parts(values[0])
     for value in values[1:]:
-        part, shift = torch.frexp(value)
+        part, shift = binary_parts(value)
         fraction, exponent = fraction * part, exponent + shift
     return restore_binary_scale(fraction, exponent)
 
