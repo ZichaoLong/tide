@@ -3,7 +3,7 @@
 本轮生产包、命名训练预设、路径诊断、完整计时和证据已集成。数学固定
 `4f5b9f20a4030d68ee66ae2d26e34659a5e37234`，108文件核验通过。
 本页的测试、产物、全部本轮作业终态、归档核对和用户文件哈希见
-[JSON](training-validation-20261118.json)。数值失败仍由
+[JSON](training-validation-20261118.json.gz)。数值失败仍由
 [路径](training-paths-20261118.md)、[连续恢复](training-continuous-20261118.md)
 及本页安装结果分别保留。
 

@@ -415,4 +415,4 @@ python scripts/launch.py \
 | 独立checkpoint更新 | `scripts.check_checkpoint_update` / 46317a8d | 已有checkpoint、anchor、seed2718、全梯度None新参考 |
 
 公开执行配置在[FFN执行选项](../ffn-execution.md)及`configs/ffn-execution/`。
-数据入口、完整标量样本、阶段分区、审阅和资源指纹见[机器可读证据](ffn-execution-devices-20261119.json)。
+数据入口、完整标量样本、阶段分区、审阅和资源指纹见[机器可读证据](ffn-execution-devices-20261119.json.gz)。

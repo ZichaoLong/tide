@@ -4,7 +4,7 @@
 范围是 HB compact-9、188节点、9层、X内存、Settle、B8/L256、BF16；本页不是全规模、全精度或连续训练资格。
 结论依据实际记录：区域合批减少调用；Reception局部重算降低保存内存；K=1 SSD摘要可脱离矩阵扫描；
 优化后的剩余差距仍含实质数学工作、矩阵扫描、索引与细粒度调度。Transformer本身也有约束明确的改进空间。
-全部样本、配置、哈希、实际dtype/shape/device、工作量、阶段和原始文件身份见 [JSON](training-costs-20261118.json)。
+全部样本、配置、哈希、实际dtype/shape/device、工作量、阶段和原始文件身份见 [JSON](training-costs-20261118.json.gz)。
 
 数学固定 `4f5b9f20a4030d68ee66ae2d26e34659a5e37234`，本次108文件核验通过。
 证据整理基于 `22527cf472fc4d6ea9ca7ce22528b7e4ca9cc96a`；测量源码分别为
@@ -127,8 +127,8 @@ Tide仅NodeLinear部分就约123 G，且额外承担逐边接收、区域分配�
 ## 实际设备轨迹：kernel、主机和重叠分别解读
 
 新成本作业分别导出了Tide与standard A的原始Chrome trace：
-[Tide](../../artifacts/training-cost-candidate-trace/costs-tide-standard-trace.json)（156,012,890 bytes）与
-[A](../../artifacts/training-cost-candidate-trace/costs-transformer_A-standard-trace.json)。完整SHA和字节数见JSON。
+Tide（原路径 `../../artifacts/training-cost-candidate-trace/costs-tide-standard-trace.json`，已退役）（156,012,890 bytes）与
+A（原路径 `../../artifacts/training-cost-candidate-trace/costs-transformer_A-standard-trace.json`，已退役）。完整SHA和字节数见JSON。
 两份轨迹确实包含`Ascend Hardware`进程；按`process_name`元数据选择硬件事件，再用`Task Type=KERNEL*`选择kernel。
 不能把无`cat`的事件全视为kernel：其中还包含`Overlap Analysis`生成的Computing/Free图、EVENT WAIT/RECORD等。
 
@@ -178,24 +178,18 @@ FC BF16 B128/L256、Settle FP32组合B24/L256、Timed FP32组合B12/L128的A–D
 
 原始终态入口：
 
-- [serial成本](../../artifacts/training-cost-settle-base/costs.json)
-- [batch4成本](../../artifacts/training-cost-settle-batch/costs.json)
-- [组合成本及设备轨迹](../../artifacts/training-cost-candidate-trace/costs.json)
-- [A–D有界候选](../../artifacts/training-transformer-strength/costs.json)
+- serial成本（原路径 `../../artifacts/training-cost-settle-base/costs.json`，已退役）
+- batch4成本（原路径 `../../artifacts/training-cost-settle-batch/costs.json`，已退役）
+- 组合成本及设备轨迹（原路径 `../../artifacts/training-cost-candidate-trace/costs.json`，已退役）
+- A–D有界候选（原路径 `../../artifacts/training-transformer-strength/costs.json`，已退役）
 
-只读核验所有被本页引用的原始文件，不运行模型：
+原始 artifacts 已退役，旧逐文件核验依赖不再在线。现在可校验并还原保留于 Git 的审阅证据：
 
 ```sh
-python - <<'CHECK'
-from pathlib import Path
-import hashlib, json
-record = json.loads(Path('docs/evidence/training-costs-20261118.json').read_text())
-for item in record['verified_files']:
-    data = Path(item['path']).read_bytes()
-    assert len(data) == item['bytes']
-    assert hashlib.sha256(data).hexdigest() == item['sha256']
-print('verified', len(record['verified_files']), 'files')
-CHECK
+python scripts/materialize_record.py \
+  --index docs/evidence/archive-index.json \
+  --record docs/evidence/training-costs-20261118.json \
+  --output /tmp/training-costs-20261118-review.json
 ```
 
 JSON的`runs[].launch_arguments`保存每项冻结提交、完整命令、资源和新输出参数入口。

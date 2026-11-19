@@ -1,7 +1,7 @@
 # ROADMAP numerical qualification, continuation and restored-update follow-up
 
 This report preserves the completed follow-up qualification and bounded diagnoses.
-[Machine-readable evidence](roadmap-numerics-followup-20261118.json) records the
+[Machine-readable evidence](roadmap-numerics-followup-20261118.json.gz) records the
 frozen sources, commands, fixture and result hashes, admission mappings, thresholds,
 case outcomes and selected numerical witnesses. The
 [initial report](roadmap-numerics-initial-20261118.md) and earlier FP32 failures remain

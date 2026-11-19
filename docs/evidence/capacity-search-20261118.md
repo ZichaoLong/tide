@@ -3,7 +3,7 @@
 六组既有 v2 搜索共完成 19 个初态审计和 95 个训练计时子进程，保留 285 个原始样本。
 下表覆盖较长输入窗口和 FC-K 独立批量搜索；所有搜索都因预设候选耗尽停止，未测得显存或全局吞吐极限。
 本页由 `benchmarks.search_report` 核验原始引用并生成基础双表，再逐项复核计时、匹配与资源口径；没有重跑实验。
-完整样本、构造器、活动变化、执行命令及哈希分列于 [JSON 证据](capacity-search-20261118.json)。
+完整样本、构造器、活动变化、执行命令及哈希分列于 [JSON 证据](capacity-search-20261118.json.gz)。
 
 源码与测量设施均为 `f486a56ed7b6f68e2aff2e7100673bf2a2fe20be`；数学固定 `4f5b9f20a4030d68ee66ae2d26e34659a5e37234`。
 资格仅为这些训练负载有限完成，不扩展为数值等价、持续训练、恢复或模型质量资格。
@@ -110,12 +110,12 @@ python -m benchmarks.search_report \
 本页另外独立复核 95 个观察的中位数、吞吐、波动、峰值及全部 76 个 Transformer 构造的目标/公式/最近合法点，
 并核对容量表的固定构造与最佳候选。所有 120 个引用配置/结果文件身份一致；六份搜索文件身份如下。
 
-- [capacity-fck-budget-bf16-v2](../../artifacts/capacity-fck-budget-bf16-v2/results/search.json)：`bc15c8a00304f2fbd37769048729130db91143fa8d8befeae8c9274f45e7aa82`。
-- [capacity-fck-length-fp32-v2](../../artifacts/capacity-fck-length-fp32-v2/results/search.json)：`6190371bbd7d0b2522142eb483f1d7f2282ba867e85f0efe20088e6afc865507`。
-- [capacity-fcs-length-bf16-v2](../../artifacts/capacity-fcs-length-bf16-v2/results/search.json)：`0628e30fdfb4067aece9aca588d361499efee0d5a6b5902ff7b485f39ea07003`。
-- [capacity-hb1b-length-fp32-v2](../../artifacts/capacity-hb1b-length-fp32-v2/results/search.json)：`f67d0150b71abd66f06740c4c030f0c243ad909fcb2e0f71a1a89cd618e67330`。
-- [capacity-settle-length-fp32-v2](../../artifacts/capacity-settle-length-fp32-v2/results/search.json)：`83112b7c7f64fcc0993c5113280edb9947a166a92e8e115aa14fab8cd98887c3`。
-- [capacity-timed-length-bf16-v2](../../artifacts/capacity-timed-length-bf16-v2/results/search.json)：`7273f3fe4a4556ed81c14960f75beb52036208bf73f3c86c93d300e7a253c777`。
+- capacity-fck-budget-bf16-v2（原路径 `../../artifacts/capacity-fck-budget-bf16-v2/results/search.json`，已退役）：`bc15c8a00304f2fbd37769048729130db91143fa8d8befeae8c9274f45e7aa82`。
+- capacity-fck-length-fp32-v2（原路径 `../../artifacts/capacity-fck-length-fp32-v2/results/search.json`，已退役）：`6190371bbd7d0b2522142eb483f1d7f2282ba867e85f0efe20088e6afc865507`。
+- capacity-fcs-length-bf16-v2（原路径 `../../artifacts/capacity-fcs-length-bf16-v2/results/search.json`，已退役）：`0628e30fdfb4067aece9aca588d361499efee0d5a6b5902ff7b485f39ea07003`。
+- capacity-hb1b-length-fp32-v2（原路径 `../../artifacts/capacity-hb1b-length-fp32-v2/results/search.json`，已退役）：`f67d0150b71abd66f06740c4c030f0c243ad909fcb2e0f71a1a89cd618e67330`。
+- capacity-settle-length-fp32-v2（原路径 `../../artifacts/capacity-settle-length-fp32-v2/results/search.json`，已退役）：`83112b7c7f64fcc0993c5113280edb9947a166a92e8e115aa14fab8cd98887c3`。
+- capacity-timed-length-bf16-v2（原路径 `../../artifacts/capacity-timed-length-bf16-v2/results/search.json`，已退役）：`7273f3fe4a4556ed81c14960f75beb52036208bf73f3c86c93d300e7a253c777`。
 
 若重新执行实验，使用 JSON 中的冻结源码与 `runs[].launch_arguments`；精确子进程命令留在对应搜索文件的 `children`。重新核对当前资源并选择新输出身份；
 不能把已有路径当新运行目的地。原始 v2 汇总的 packing 字段存在旧键名遗漏，本 JSON 从未改动的 raw `query_packing` 取回；

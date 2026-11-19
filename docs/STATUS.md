@@ -2,7 +2,7 @@
 
 本次从 `660f3d0f` 接续，剩余51 GiB的存储收尾已完成；归档还原工具固定 `45cb5dad`。
 当前大小、保留范围、还原入口与清理后安装检查见[存储收尾](evidence/storage-finalization-20261119.md)
-和[审阅JSON](evidence/storage-finalization-20261119.json)。本次不改生产树，不新增模型资格。
+和[审阅JSON](evidence/storage-finalization-20261119.json.gz)。本次不改生产树，不新增模型资格。
 
 此前数值定位从 `c5bfebaf` 起步，修复实现与资格固定 **`97c52960`**；
 诊断/重放工具固定 `2360728d`、`e1c6aaa0`、`aab9a4d2`、`72c1a9d0`。
@@ -22,7 +22,7 @@
 保留约0.520 GiB的78个张量文件、可读汇总/小记录、压缩原JSON、74个失败profiler及独有源码。
 近期六份训练/局部见证、六个旧小见证和native原输入/输出包继续在线；82份保护文件逐字节核验。
 旧anchor/update1/VJP1和BF16 anchor已退役，旧整图续更不再有在线输入可直接重放；
-此前exact重做是历史观察，原失败及阈值不改。JSON按[索引](evidence/storage-archive-index-20261119.json)
+此前exact重做是历史观察，原失败及阈值不改。JSON按[索引](evidence/storage-archive-index-20261119.json.gz)
 使用 `scripts/materialize_record.py` 精确还原；解压不会重建已退休张量/trace。
 
 清理后新隔离wheel的23包文件匹配 `97c52960`，公开CPU FP32训练、checkpoint、

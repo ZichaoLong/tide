@@ -3,7 +3,7 @@
 CPU 全套 783 项通过，新 wheel 的隔离安装与实际恢复完成。双 NPU、BF16 及 static_view
 路径的有限超差仍分别保留；安装完成和外层任务通过不代表全部数值等价。
 
-[精简 JSON](reception-validation-20261118.json)保留全部作业身份、原文件 SHA256、命令、
+[精简 JSON](reception-validation-20261118.json.gz)保留全部作业身份、原文件 SHA256、命令、
 逐项比较、服务退出与记录后代核对。本页没有启动新实验或改写原结果；
 [三种接收 FP32 数值记录](reception-numerics-20261118.md)保留此前独立范围。
 

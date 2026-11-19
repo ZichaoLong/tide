@@ -2,7 +2,7 @@
 
 本页采用真实 continuing private state 的完整 AdamW 更新，训练以 FP32 为主。
 吞吐分子均为实际输入位置；Timed 空 tick 和 drain 输出不充作输入。
-[精简 JSON](reception-training-20261118.json)保存源码、命令、SHA256、资源、
+[精简 JSON](reception-training-20261118.json.gz)保存源码、命令、SHA256、资源、
 原阈值恢复结果、容量及三模式主表。局部优化和双方成本见[性能归因](reception-performance-20261118.md)，
 跨实现数值资格见[Reception 数值报告](reception-numerics-20261118.md)。
 

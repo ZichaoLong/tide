@@ -3,7 +3,7 @@
 从 `660f3d0f` 接续，归档还原工具固定 `45cb5dad`；生产树仍为 `97c52960`。
 本次处理的是已结束工作的载荷与记录，不新增模型矩阵或资格。
 数学 `4f5b9f20a4030d68ee66ae2d26e34659a5e37234` 的108文件原字节不变。
-完整数字、来源、保留清单、校验与终态见[审阅JSON](storage-finalization-20261119.json)。
+完整数字、来源、保留清单、校验与终态见[审阅JSON](storage-finalization-20261119.json.gz)。
 
 ## 实际释放与剩余
 
@@ -56,7 +56,7 @@ native bias-rounding原始输入与输出两个小包也保留，共70文件448 
 保留见证及关键可读汇总。使用gzip level6、mtime0，逐份核验完整解压长度和SHA256；
 先持久化索引，再删除原件。失败记录的原始字节原样归档，不用摘要替换原文件。
 
-[归档索引](storage-archive-index-20261119.json)记录原路径、两种SHA和字节数。
+[归档索引](storage-archive-index-20261119.json.gz)记录原路径、两种SHA和字节数。
 [退役张量身份清单](storage-retired-payloads-20261119.json.gz)保存全部6952个路径、stat和删除前SHA；
 其中只有元数据，没有模型内容。固定计划、过程日志和收据位于
 `artifacts/storage-finalization-20261119/`。

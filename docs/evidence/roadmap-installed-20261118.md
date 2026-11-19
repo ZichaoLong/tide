@@ -2,7 +2,7 @@
 
 Source: `0992b467584c1f603314ed04d8efe8596a14f576`; fixed mathematics:
 `4f5b9f20a4030d68ee66ae2d26e34659a5e37234`.
-[Reviewed machine-readable evidence](roadmap-installed-20261118.json) includes
+[Reviewed machine-readable evidence](roadmap-installed-20261118.json.gz) includes
 source/input hashes, exact commands, isolated harness contents, environment,
 lifecycle, wheel files and all observations.
 

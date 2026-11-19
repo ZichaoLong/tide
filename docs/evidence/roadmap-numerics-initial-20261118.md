@@ -1,7 +1,7 @@
 # Initial ROADMAP numerical qualification and bounded routing diagnosis
 
 This report preserves the first FP32/BF16 outcomes of the current ROADMAP work.
-[Reviewed machine-readable evidence](roadmap-numerics-initial-20261118.json) retains
+[Reviewed machine-readable evidence](roadmap-numerics-initial-20261118.json.gz) retains
 original record hashes, source/commands/device mapping, outcomes and bounded witnesses;
 it omits raw tensors and repetitive operator records.
 It does not relabel the four original FP32 NPU deviations or the restored AdamW

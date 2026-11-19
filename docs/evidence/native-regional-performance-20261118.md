@@ -1,6 +1,6 @@
 # LibTorch 区域切片：NPU 资格与正常性能 · 2026-11-18
 
-[JSON](native-regional-performance-20261118.json) 保留 120 个正常计时观察、600 个样本及 84 个末步数值比较；
+[JSON](native-regional-performance-20261118.json.gz) 保留 120 个正常计时观察、600 个样本及 84 个末步数值比较；
 三组作业均完成，80/84 个末步比较在原阈值内。完整 Tide 仍由 PyTorch 实现；本页仅涉及区域评分 Attention+FFN。
 独立二进制固定到 `89ce08ff858724648152790502f8c65d8d8b1222`，CPU 构建/公式见[既有记录](native-regional-cpu-20261118.md)。
 

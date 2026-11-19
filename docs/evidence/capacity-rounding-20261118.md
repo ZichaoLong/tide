@@ -5,7 +5,7 @@ locates specific operator rounding differences before the first observed support
 change, and independently verifies the allocation decisions on each side. It does
 not relabel the original execution-v3/v4 failures, relax thresholds or change model
 code. All records and capture hashes are in the
-[JSON evidence](capacity-rounding-20261118.json).
+[JSON evidence](capacity-rounding-20261118.json.gz).
 
 The earlier `bmm(BF16) + bias(FP32)` promotion was an implementation error and was
 fixed before these witnesses. The corrected BF16 operations can still have different

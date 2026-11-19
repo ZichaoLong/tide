@@ -6,7 +6,7 @@ Numerical diagnostic: `d2090654f0c83037d0c0454327994306dcd4b2e8`;
 packing diagnostic: `a2c1e08b1617d0e2714e6272e12420e2c5d931ec`;
 optimizer replay example: `cc2b5767948d3156a97c7ca729da9b29c0251646`.
 Those later commits change diagnostic/example facilities only; model files remain
-identical to the qualified implementation. [Complete reviewed observations](instances-fp32-20261118.json)
+identical to the qualified implementation. [Complete reviewed observations](instances-fp32-20261118.json.gz)
 include configurations, inputs/parameter hashes, samples, work, memory, device
 checks, finite deviations and exact launch/source identities. Reading this report
 or reproducing its configurations does not require retained artifact directories.

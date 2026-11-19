@@ -2,7 +2,7 @@
 
 四组同卡固定形状训练比较完成五个候选、共100个正常计时样本；每组另有 baseline/recompute/combined 三个独立内存账本进程。
 另两组是统一32 GiB预算的 Tide-only 扩批量观察，没有 Transformer 调优或 A–D 容量比较。
-本页只读既有终态结果。样本、工作量、padding、活动变化、分阶段存储与原始身份分别保存在 [JSON](capacity-execution-20261118.json)。
+本页只读既有终态结果。样本、工作量、padding、活动变化、分阶段存储与原始身份分别保存在 [JSON](capacity-execution-20261118.json.gz)。
 
 固定形状源码/设施为 `36c42a7a3ef765fe6257c42c7c1404d28857b77c`；扩批量为 `8a22530dae69d9f1fa5ead4a01d1798fd1dfe0ee`；数学为 `4f5b9f20a4030d68ee66ae2d26e34659a5e37234`。
 数值资格见 [有限舍入调查](capacity-rounding-20261118.md) 及下列 v3/v4 原始记录。完成、工作计数相等或初始哈希相等均不构成轨迹等价资格。
@@ -129,11 +129,11 @@ combined的停止记录为 `candidate_limit`；最佳已测稳定点为B64，137
 
 数值比较与有限舍入诊断由 [capacity-rounding-20261118](capacity-rounding-20261118.md) 单列。既存v3/v4原始入口如下：
 
-- [execution-candidates-fp64-v3](../../artifacts/execution-candidates-fp64-v3/results/suite.json)：原suite状态 `completed`，源码 `efca7198570e8ee7a21ddccd81165eb36bdb269a`。
-- [execution-candidates-npu-v3](../../artifacts/execution-candidates-npu-v3/results/suite.json)：原suite状态 `cancelled`，源码 `efca7198570e8ee7a21ddccd81165eb36bdb269a`。
-- [execution-batched-npu-v4](../../artifacts/execution-batched-npu-v4/results/suite.json)：原suite状态 `failed`，源码 `231f56ebba3239230afacf467a80c2d27b292d12`。
-- [execution-timed-math-npu-v4](../../artifacts/execution-timed-math-npu-v4/results/suite.json)：原suite状态 `failed`，源码 `231f56ebba3239230afacf467a80c2d27b292d12`。
-- [execution-timed-recompute-npu-v4](../../artifacts/execution-timed-recompute-npu-v4/results/suite.json)：原suite状态 `completed`，源码 `231f56ebba3239230afacf467a80c2d27b292d12`。
+- execution-candidates-fp64-v3（原路径 `../../artifacts/execution-candidates-fp64-v3/results/suite.json`，已退役）：原suite状态 `completed`，源码 `efca7198570e8ee7a21ddccd81165eb36bdb269a`。
+- execution-candidates-npu-v3（原路径 `../../artifacts/execution-candidates-npu-v3/results/suite.json`，已退役）：原suite状态 `cancelled`，源码 `efca7198570e8ee7a21ddccd81165eb36bdb269a`。
+- execution-batched-npu-v4（原路径 `../../artifacts/execution-batched-npu-v4/results/suite.json`，已退役）：原suite状态 `failed`，源码 `231f56ebba3239230afacf467a80c2d27b292d12`。
+- execution-timed-math-npu-v4（原路径 `../../artifacts/execution-timed-math-npu-v4/results/suite.json`，已退役）：原suite状态 `failed`，源码 `231f56ebba3239230afacf467a80c2d27b292d12`。
+- execution-timed-recompute-npu-v4（原路径 `../../artifacts/execution-timed-recompute-npu-v4/results/suite.json`，已退役）：原suite状态 `completed`，源码 `231f56ebba3239230afacf467a80c2d27b292d12`。
 
 v3 NPU候选因batch4/combined的BF16 bias epilogue实现问题中止，superseded记录和旧失败保留；v4部分suite仍为failed。
 本页不依据后续性能完成把这些失败改判通过，也不把CPU FP64诊断升级为NPU FP32/BF16数值资格。
@@ -150,18 +150,13 @@ v3 NPU候选因batch4/combined的BF16 bias epilogue实现问题中止，supersed
 | execution-capacity-settle-baseline-v1 | 4 | 100-103 | 2400 / 96.0 |
 | execution-capacity-settle-combined-v1 | 14 | 104-107 | 2400 / 96.0 |
 
-只读核验本页所有引用JSON，不调用模型：
+原始 artifacts 已退役，旧逐文件核验依赖不再在线。现在可校验并还原保留于 Git 的审阅证据：
 
 ```sh
-python - <<'PY'
-from pathlib import Path
-import hashlib, json
-r = json.loads(Path('docs/evidence/capacity-execution-20261118.json').read_text())
-for item in r['verified_json_files']:
-    data = Path(item['path']).read_bytes()
-    assert len(data) == item['bytes'] and hashlib.sha256(data).hexdigest() == item['sha256']
-print('verified', len(r['verified_json_files']), 'JSON files')
-PY
+python scripts/materialize_record.py \
+  --index docs/evidence/archive-index.json \
+  --record docs/evidence/capacity-execution-20261118.json \
+  --output /tmp/capacity-execution-20261118-review.json
 ```
 
 重新执行时使用JSON中的冻结源码及`runs[].launch_arguments`/`children`，选择新输出身份并按当前资源重新准入。

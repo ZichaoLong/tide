@@ -3,7 +3,7 @@
 六个负载各完成二十次真实 AdamW 更新，保留跨更新私有历史、每次更新后 detach；
 随后完成配对 checkpoint 检查，并在独立新进程执行一次真实更新。
 详细逐步内存、optimizer计数、KV容量、哈希、命令和原失败见
-[JSON](training-continuous-20261118.json)。训练推荐见
+[JSON](training-continuous-20261118.json.gz)。训练推荐见
 [使用建议](../execution-recommendations.md)。这里验证训练机制，不评价任务质量。
 
 ## 连续负载与结果

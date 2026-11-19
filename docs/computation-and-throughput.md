@@ -483,7 +483,7 @@ owner的参数物化，9B持续decode观察到约9.5%吞吐收益而峰allocated
 
 ## 复核入口与限制
 
-- 参数/模式/采样命令、源码与文件 SHA：以上各份 `docs/evidence/*.md` 的同名 JSON。
+- 参数/模式/采样命令、源码与文件 SHA：以上各份 `docs/evidence/*.md` 的同名 `.json.gz` 审阅证据。
 - 生产实现定位：[architecture](architecture.md)、[semantic map](semantic-map.md)。
 - 实际起步/覆盖/恢复：[execution recommendations](execution-recommendations.md)。
 - 数值通过与保留超差：[precision](precision.md)、[training paths](evidence/training-paths-20261118.md)。

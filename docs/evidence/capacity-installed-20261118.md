@@ -3,7 +3,7 @@
 固定源码 `8a22530dae69d9f1fa5ead4a01d1798fd1dfe0ee`，`src/tide` tree
 `e4ee19932499ed75fce73531331ded317b95ef3d`；数学仍为
 `4f5b9f20a4030d68ee66ae2d26e34659a5e37234`。详细检查、原始状态、命令、脚本和
-产物 SHA256 在 [JSON](capacity-installed-20261118.json)。本页仅声明这些源码与测点。
+产物 SHA256 在 [JSON](capacity-installed-20261118.json.gz)。本页仅声明这些源码与测点。
 
 ## 安装身份及边界
 

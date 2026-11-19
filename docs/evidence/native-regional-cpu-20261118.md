@@ -1,7 +1,7 @@
 # Standalone regional slice: fixed CPU checks
 
 Implementation `89ce08ff858724648152790502f8c65d8d8b1222`, clean at build time.
-The [machine-readable record](native-regional-cpu-20261118.json) preserves binary,
+The [machine-readable record](native-regional-cpu-20261118.json.gz) preserves binary,
 source, library, fixture and log identities. This is the complete regional scoring
 Attention+FFN **subpath** described in [the native entry point](../native-regional.md),
 not another complete Tide implementation. Fixed mathematics remains

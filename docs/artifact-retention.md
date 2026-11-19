@@ -47,7 +47,7 @@ reviewed result is committed. Git history and user-owned files remain intact.
 
 The [storage finalization report](evidence/storage-finalization-20261119.md) owns the
 current availability decisions. Large raw JSON records may be retained as `.json.gz`;
-the [archive index](evidence/storage-archive-index-20261119.json) records original and
+the [archive index](evidence/storage-archive-index-20261119.json.gz) records original and
 compressed SHA256, lengths and logical paths. `scripts/materialize_record.py` restores
 exact bytes to an explicit new path, checks both identities, bounds decompression and
 refuses overwrite. Originals are unlinked only after complete decompression verification

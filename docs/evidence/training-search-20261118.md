@@ -2,7 +2,7 @@
 
 本轮补齐 batch-only 搜索，并比较两个新增候选：只重算 Reception，以及 SSD 向量摘要的
 仿射前缀计算。原始命令、源码、输入/参数哈希、子任务状态、内存与活动计数见
-[JSON](training-search-20261118.json)。持续历史与推荐选择见
+[JSON](training-search-20261118.json.gz)。持续历史与推荐选择见
 [二十步训练](training-continuous-20261118.md)，数值资格见
 [路径核对](training-paths-20261118.md)。速度结果不认证严格数值等价。
 

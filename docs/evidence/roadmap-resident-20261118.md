@@ -6,7 +6,7 @@ callback ran. This qualifies the probe's execution and records the current
 capture barrier; it does not qualify a resident runtime or establish that one
 cannot be built.
 
-[Machine-readable evidence](roadmap-resident-20261118.json) retains source,
+[Machine-readable evidence](roadmap-resident-20261118.json.gz) retains source,
 commands, launch bounds, queue mapping, input/parameter identities, result/log
 hashes, process lifecycle and the executed failure. The source is
 `6fc53d81910252ac42bd5fce1476f7a70b968ed7`; mathematics remains

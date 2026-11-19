@@ -3,7 +3,7 @@
 FP32 是本轮主力。SSD doubling 在 compact-9 完整训练将吞吐提高约19.25%、allocated峰提高1.47%；
 Light64 六候选中融合QKV+结构mask+doubling观察到最高吞吐。接收微测FP32 48/48在原阈值内，
 BF16保留21个有限超差。0.5B在本B/L下快于极深窄A、慢于宽浅C，具体计算、packing和实际设备事件如下。
-原始样本、资源/源码/输入身份及设备摘要见[精简JSON](reception-performance-20261118.json)。
+原始样本、资源/源码/输入身份及设备摘要见[精简JSON](reception-performance-20261118.json.gz)。
 
 快照：2026-11-18T12:45:17.332519+00:00。固定数学`4f5b9f20a4030d68ee66ae2d26e34659a5e37234`。
 本页是测量证据，不修改[精度](../precision.md)、[验证](../verification.md)或

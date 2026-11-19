@@ -8,7 +8,7 @@ NPU 六个有限形状/先验见证的 60 行、300 个正常计时样本已完�
 的 math 路径较快且通常峰值更低。零先验 KV 显示 tiled 与 materialized math 的时间/内存
 取舍。这些结果支持按实际形状选择候选，不支持所有 Attention 统一选同一后端。
 
-[完整小记录](roadmap-attention-20261118.json)保留源文件 hash、原始样本、输入/输出 hash、
+[完整小记录](roadmap-attention-20261118.json.gz)保留源文件 hash、原始样本、输入/输出 hash、
 实际 dispatch、native 形状/dtype、梯度审计、内存和精确队列身份。NPU 主计时源码/设施固定为
 `e2a4d39104a006feec4525e534eadae4a94cde0d`，数学为
 `4f5b9f20a4030d68ee66ae2d26e34659a5e37234`。

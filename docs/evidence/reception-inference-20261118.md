@@ -5,7 +5,7 @@
 性能。Timed 长流使用 `incoming_light_64`。接收候选的训练选择另见
 [连续训练与三模式对照](reception-training-20261118.md)；
 [最终数值与后端验证](reception-validation-20261118.md)保留各路径原有有限超差。
-本页的样本、配置、哈希与检查保留在[机器可读摘要](reception-inference-20261118.json)。
+本页的样本、配置、哈希与检查保留在[机器可读摘要](reception-inference-20261118.json.gz)。
 
 ## 身份与计时
 

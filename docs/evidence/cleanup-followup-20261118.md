@@ -4,7 +4,7 @@ Source before this cleanup: `d211032804b087fd901295e87a0668168f603b05`.
 The user confirmed that other projects no longer depend on this foundation and
 authorized removal of the specifically reviewed remnants. This supplements the
 [earlier governance retirement](governance-cleanup-20261118.md).
-[Machine-readable evidence](cleanup-followup-20261118.json) retains exact paths,
+[Machine-readable evidence](cleanup-followup-20261118.json.gz) retains exact paths,
 source identities, small provenance records, deletion results and protected items.
 
 | Removed | Allocated bytes before removal |

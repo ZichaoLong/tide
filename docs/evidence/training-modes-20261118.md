@@ -1,7 +1,7 @@
 # 训练、前向与真实缓存的四类联合比较 · 2026-11-18
 
 五份零状态作业完成35个观察、175个正常计时样本；末尾同步修复后的两份缓存programme完成10个子项、30个实际历史续接段。三组完整训练中，Tide的时间和allocated峰值均高于A/B；具体倍数和模式差别见下表。比较同时约束block/深度与总/活跃参数，模型数学不同，不比较模型质量。
-全部正常样本、三段逐调用结果、实际dtype/operator/device、匹配、终态、原始文件SHA和命令见 [JSON](training-modes-20261118.json)。本页不新增数值等价或checkpoint恢复资格；finite与这些资格分别记录。
+全部正常样本、三段逐调用结果、实际dtype/operator/device、匹配、终态、原始文件SHA和命令见 [JSON](training-modes-20261118.json.gz)。本页不新增数值等价或checkpoint恢复资格；finite与这些资格分别记录。
 
 数学固定 `4f5b9f20a4030d68ee66ae2d26e34659a5e37234`（此前108文件核验通过）。完整训练测量源码/设施为 `2c011b8a4f703b5aa50ab4107bb50085e3786c56`，零状态其它模式与旧缓存为 `22527cf472fc4d6ea9ca7ce22528b7e4ca9cc96a`；正式缓存测量为 `f8235fe48ff794f0e5ac60bf7565d7f918479e6c`。整理基于成本证据提交 `0e0c9989`，不替代各测量身份。
 
@@ -202,15 +202,15 @@ Transformer只计算新query，使用原位置RoPE与逐层真实K/V历史，不
 
 采用JSON中对应job的冻结source提交、launch.command和environment，复现实验沿用对应设备队列与有限资源边界。原始入口如下，JSON还校验每个子结果/config哈希：
 
-- [training-joint-fc-bf16](../../artifacts/training-joint-fc-bf16/joint.json)
-- [training-joint-settle-fp32](../../artifacts/training-joint-settle-fp32/joint.json)
-- [training-joint-timed-fp32](../../artifacts/training-joint-timed-fp32/joint.json)
-- [training-other-modes-fc](../../artifacts/training-other-modes-fc/modes.json)
-- [training-other-modes-timed](../../artifacts/training-other-modes-timed/modes.json)
-- [training-prefill-decode-fc-synced](../../artifacts/training-prefill-decode-fc-synced/results/programme.json)
-- [training-prefill-decode-timed-synced](../../artifacts/training-prefill-decode-timed-synced/results/programme.json)
-- [training-prefill-decode-fc-fixed](../../artifacts/training-prefill-decode-fc-fixed/results/programme.json)
-- [training-prefill-decode-timed-fixed](../../artifacts/training-prefill-decode-timed-fixed/results/programme.json)
+- training-joint-fc-bf16（原路径 `../../artifacts/training-joint-fc-bf16/joint.json`，已退役）
+- training-joint-settle-fp32（原路径 `../../artifacts/training-joint-settle-fp32/joint.json`，已退役）
+- training-joint-timed-fp32（原路径 `../../artifacts/training-joint-timed-fp32/joint.json`，已退役）
+- training-other-modes-fc（原路径 `../../artifacts/training-other-modes-fc/modes.json`，已退役）
+- training-other-modes-timed（原路径 `../../artifacts/training-other-modes-timed/modes.json`，已退役）
+- training-prefill-decode-fc-synced（原路径 `../../artifacts/training-prefill-decode-fc-synced/results/programme.json`，已退役）
+- training-prefill-decode-timed-synced（原路径 `../../artifacts/training-prefill-decode-timed-synced/results/programme.json`，已退役）
+- training-prefill-decode-fc-fixed（原路径 `../../artifacts/training-prefill-decode-fc-fixed/results/programme.json`，已退役）
+- training-prefill-decode-timed-fixed（原路径 `../../artifacts/training-prefill-decode-timed-fixed/results/programme.json`，已退役）
 
 整理校验重算175个正常样本的中位数/吞吐/范围、20个新旧子结果的三段稳定decode与内存指标，验证9份成功外层作业、4份programme的20个子项终态及2份CLI失败，并检查匹配偏差、初始参数/输入、活跃分母、配置及原始文件SHA。这里没有再次启动NPU或为文档新增模型测试。
 

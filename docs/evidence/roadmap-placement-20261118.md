@@ -4,7 +4,7 @@ The current two-NPU host-staging path completed the recorded FP32/BF16 HB
 checks, including continuing training and an actual update after checkpoint
 restore. Finite numerical failures remain. Native direct transport failed in
 full-graph backward; the first-order synchronized candidate did not complete
-Timed qualification. [Machine-readable evidence](roadmap-placement-20261118.json)
+Timed qualification. [Machine-readable evidence](roadmap-placement-20261118.json.gz)
 preserves source identities, result/log hashes, commands, admissions, original
 thresholds and full v8 numerical failures. This is current-cycle evidence, not
 an investigation of retired implementations.

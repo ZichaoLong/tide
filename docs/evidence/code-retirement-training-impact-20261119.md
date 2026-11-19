@@ -2,7 +2,7 @@
 
 本次回应训练资格缺口及“无用残留代码直接清除”的授权。没有新增模型资格实验，
 没有删除活跃功能、修改公式、默认配置或放宽阈值；模型效果仍属于下游。
-[JSON](code-retirement-training-impact-20261119.json)记录源码审计、退休、保护检查及安装冒烟。
+[JSON](code-retirement-training-impact-20261119.json.gz)记录源码审计、退休、保护检查及安装冒烟。
 
 ## 对训练的实际影响
 

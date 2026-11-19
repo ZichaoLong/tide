@@ -6,7 +6,7 @@ FP32/BF16 的 Tide 与 A–D 均覆盖推理、含梯度前向和完整 AdamW。
 
 固定源码/测量设施为 `e2a4d39104a006feec4525e534eadae4a94cde0d`；数学为
 `4f5b9f20a4030d68ee66ae2d26e34659a5e37234`。采集于 `2026-11-18T04:26:29.779436+00:00`。
-[压缩记录](roadmap-supplementary-20261118.json)保留所有采样、精确 A–D 构造/偏差、
+[压缩记录](roadmap-supplementary-20261118.json.gz)保留所有采样、精确 A–D 构造/偏差、
 输入/参数/文件哈希、工作、算子 dtype 与终态；相同对象用 canonical SHA256 引用一次。
 逐样本/时刻数组保留汇总、min/max 及 profile hash，完整数组可由原始文件身份定位。
 

@@ -3,7 +3,7 @@
 Governance source: `9efc86e2aad143434ce526b021f41927f5c8eb50`.
 Active model source: `c17c613f178dd076d963da98017abdea8c09db16`.
 Fixed mathematics: `4f5b9f20a4030d68ee66ae2d26e34659a5e37234` (108 files).
-[Reviewed machine-readable record](governance-cleanup-20261118.json) contains
+[Reviewed machine-readable record](governance-cleanup-20261118.json.gz) contains
 identities, manifests, terminal job facts, validation code and results.
 
 ## Scope and preservation

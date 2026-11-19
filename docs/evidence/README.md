@@ -106,11 +106,11 @@ These reports preserve both failures and passes; the final handoff and remaining
 qualification boundaries are in [STATUS](../STATUS.md). Each links its reviewed JSON evidence.
 
 - [FP32 instance delivery, 2026-11-18](instances-fp32-20261118.md), with
-  [complete reviewed observations](instances-fp32-20261118.json).
+  [complete reviewed observations](instances-fp32-20261118.json.gz).
 - [Instance governance and project cleanup, 2026-11-18](governance-cleanup-20261118.md),
-  with [preservation, deletion and installed-smoke records](governance-cleanup-20261118.json).
+  with [preservation, deletion and installed-smoke records](governance-cleanup-20261118.json.gz).
 - [Follow-up removal of released downstream inputs and small remnants](cleanup-followup-20261118.md),
-  with [exact retirement and preservation records](cleanup-followup-20261118.json).
+  with [exact retirement and preservation records](cleanup-followup-20261118.json.gz).
 
 Each report identifies source, configuration, actual tests and remaining limits.
 [Main-branch file mappings](capacity-validation-20261118.md) make original sub-worktree

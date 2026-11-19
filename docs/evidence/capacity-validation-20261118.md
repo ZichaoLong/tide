@@ -1,7 +1,7 @@
 # 容量与区域执行阶段的集成检查
 
 本页收束配置目录、CPU 套件、集成检查和源码身份；不增加设备性能或所有组合的资格。
-[JSON](capacity-validation-20261118.json)保留各自源提交、原日志身份、环境、目录统计、
+[JSON](capacity-validation-20261118.json.gz)保留各自源提交、原日志身份、环境、目录统计、
 分支映射及终态检查。数学固定为 `4f5b9f20a4030d68ee66ae2d26e34659a5e37234`，
 `python scripts/check_upstream.py` 的 108 文件核验通过。
 

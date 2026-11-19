@@ -2,7 +2,7 @@
 
 0.5B/1B 在 FP32、BF16 的推理、含梯度前向及完整训练共 12 个子任务、36 个连续段均完成。四组训练 checkpoint 的成对续接检查均在原阈值内；
 另外四个独立新进程完成加载和第一次真实更新。两组恢复证据的输入、终态和计时边界不同，分别列出。
-全部原始分段字段、阈值、命令、哈希及资源记录保留于 [JSON 证据](capacity-continuous-20261118.json)。本轮只读 50 个 JSON，没有打开或 stat 大 checkpoint，也没有启动实验。
+全部原始分段字段、阈值、命令、哈希及资源记录保留于 [JSON 证据](capacity-continuous-20261118.json.gz)。本轮只读 50 个 JSON，没有打开或 stat 大 checkpoint，也没有启动实验。
 
 连续运行/成对检查源码与设施：`efca7198570e8ee7a21ddccd81165eb36bdb269a`。新进程恢复源码与设施：`062a8ab6d6ba0faa191d8900420b697711b7d21d`。
 两者数学均为 `4f5b9f20a4030d68ee66ae2d26e34659a5e37234`。模型实际唯一参数分别为 494,110,704 和 976,768,720。
@@ -116,21 +116,13 @@ prefill/decode、返回结果与 loss、反向、完整 AdamW、同步及更新�
 连续作业单子进程限时900秒，外层队列等待上限600秒；新恢复单卡 allocator 预算52 GiB，队列等待600秒。
 RSS 是采样进程树监督，非 cgroup 硬内存；连续原记录没有显式单卡 allocator 预算字段，不补造预算。
 
-仅复核 JSON 身份，不接触 checkpoint：
+原始 artifacts 已退役，旧逐文件核验依赖不再在线。现在可校验并还原保留于 Git 的审阅证据：
 
 ```sh
-python - <<'PY'
-from pathlib import Path
-import hashlib, json
-record = json.loads(Path('docs/evidence/capacity-continuous-20261118.json').read_text())
-for item in record['verified_json_files']:
-    path = Path(item['path'])
-    assert path.suffix == '.json'
-    payload = path.read_bytes()
-    assert len(payload) == item['bytes']
-    assert hashlib.sha256(payload).hexdigest() == item['sha256']
-print('verified', len(record['verified_json_files']), 'JSON files; checkpoint payloads untouched')
-PY
+python scripts/materialize_record.py \
+  --index docs/evidence/archive-index.json \
+  --record docs/evidence/capacity-continuous-20261118.json \
+  --output /tmp/capacity-continuous-20261118-review.json
 ```
 
 若需要新实验，原始冻结源码与精确命令在 JSON 的 `runs[].launch_arguments`，连续子进程另保留在 `runs[].children`。

@@ -5,7 +5,7 @@
 `finite_deviation`，仅 wide baseline 为 `within_threshold`。原阈值和失败均保留。
 九次恢复更新全部在原阈值内；这与跨候选训练超差是不同结论。
 
-本页只整理已经完成的记录，没有新增设备实验。[精简 JSON](reception-numerics-20261118.json)
+本页只整理已经完成的记录，没有新增设备实验。[精简 JSON](reception-numerics-20261118.json.gz)
 保留源码、原文件 SHA256、命令、资源、逐项检查、超差分类和恢复事实；完整坐标与字段
 列表仍在原始结果。机制及公式见 [Reception 执行说明](../reception-execution.md)，
 数值判断遵循[精度契约](../precision.md)。本页不授予 BF16、Timed NPU、长序列、
