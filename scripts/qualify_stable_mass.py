@@ -83,7 +83,9 @@ def main():
     atomic(output, record)
     try:
         if args.stage in {"primitives", "all"}:
-            command = [sys.executable, "-m", "pytest", "-q", "tests/test_stable_reception.py",
+            # Passing tests must not hide C++ fallback diagnostics in pytest's
+            # fd capture. The device gate scans the complete child log.
+            command = [sys.executable, "-m", "pytest", "-q", "-s", "tests/test_stable_reception.py",
                        "tests/test_mass_scaled_attention.py", "--basetemp",
                        str(args.output_dir / "pytest-tmp")]
             env = dict(os.environ, TIDE_STABLE_DEVICE=args.device)

@@ -1,5 +1,11 @@
 # 稳定质量归约：实现、数值资格与成本（2026-11-19）
 
+**后续核对更正：** 原训练/恢复日志及六份NPU after计时日志都含
+`aten::frexp.Tensor_out`、`aten::copysign.out` 的CPU fallback。原语pytest默认捕获了
+通过测试的C++ stderr，因此“日志未观察到回退”不能作为设备内执行证据。
+本页旧数值、恢复与耗时保留，但NPU结果应归类为**含主机回退的混合执行**；
+原+25.01%/+32.88%也包含此成本。后续设备内替换见[正量链](../positive-chain.md)。
+
 本轮将历史修复中的稳定求值方法落实到当前 FC/HB 实例：Reception 使用缩放均值和中心化复合
 VJP，KV Full 使用质量缩放 Attention。未引入 positive floor、epsilon、新数学、参数或共享状态。
 固定数学仍为 `4f5b9f20a4030d68ee66ae2d26e34659a5e37234`，108 文件原字节通过。
@@ -30,7 +36,7 @@ VJP，KV Full 使用质量缩放 Attention。未引入 positive floor、epsilon�
 冻结CPU全套结果：**1140 passed, 4 xfailed, 1 warning in 603.14s (0:10:03)**。首轮为1 failed、1131 passed、4 xfailed；唯一失败是上述诊断接口，原日志保留。
 
 第二轮空闲单 NPU 定向检查为 **86 passed、3 strict xfailed、1 TypedStorage 弃用警告**。
-原假溢出回归通过，日志未观察到 CPU 算子回退。FP64 oracle 始终在 CPU。
+原假溢出回归通过；该pytest输出被捕获，设备归属限制见页首更正。FP64 oracle 始终在 CPU。
 NPU 原始失败、CPU 首轮训练、近零 VJP 有界调查完整保存在
 [r1 审阅 JSON](stable-mass-20261119-r1.json)；CPU 首轮全套原失败日志另收入最终记录。
 

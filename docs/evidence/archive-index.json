@@ -385,7 +385,16 @@
       "original_sha256": "99459e9920d33779fa8536fe744054109cc192ae64a8b9d460fe71f9d6e71125",
       "archive_bytes": 175874,
       "archive_sha256": "c3f7db3d9bcf9353a5ca4e8bf3aaaef44a842cfd87fad5cdb921529813e5028d"
+    },
+    {
+      "path": "docs/evidence/positive-chain-20261119.json",
+      "archive_path": "docs/evidence/positive-chain-20261119.json.gz",
+      "original_bytes": 18059095,
+      "original_sha256": "1223a824c39af2c7e13de48d871f4a429a66a66b6b90d28f265761aed2ece04f",
+      "archive_bytes": 1096272,
+      "archive_sha256": "081a1b6ce2c87d795c29b8acf115fb550b1eccd7bafaab105f964668a6698cb3"
     }
   ],
-  "note": "Current reviewed evidence, stored in Git; exact original JSON bytes. Historical artifacts mentioned inside have been retired."
+  "note": "Current reviewed evidence, stored in Git; exact original JSON bytes. Historical artifacts mentioned inside have been retired.",
+  "updated_utc": "2026-11-19T14:02:05.450536+00:00"
 }

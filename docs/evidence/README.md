@@ -1,5 +1,12 @@
 # Current evidence
 
+The [positive-chain repair](positive-chain-20261119.md) covers pool composite
+VJPs, Shannon reconstruction/coupling and ordinary weak-prior Attention.
+It records CPU/NPU checks, five training/restored-update cases, small paired
+costs and strict final-range limits. It also corrects the previous NPU execution
+attribution: stable-mass logs include host fallback; the new device arithmetic
+has uncaptured log and bounded kernel-placement observations.
+
 The [stable mass reductions](stable-mass-20261119.md) implement scaled Reception
 means and composite KV Full VJPs, including the measured NPU exponent-restoration
 repair. CPU/NPU qualifications, actual restored updates, retained finite failures,

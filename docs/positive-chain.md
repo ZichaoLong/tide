@@ -42,6 +42,8 @@ These are bounded mechanism checks, not recreated downstream learning runs.
 ## Allocation
 
 For pool, `M=sum(mu)`, `a=min(1,M)`, `p=softmax(score+log(mu))`, `c=a*p`.
+Here `logZ=log(sum(mu*exp(score)))` denotes the mathematical normalizer,
+before removing the common scales used by the implementation.
 Given unscaled cotangent g and `gbar=sum(p*g)`, the composite derivative is
 
 ```
@@ -74,6 +76,17 @@ materialization. Dispatch observation distinguishes the ordinary representation.
 
 ## Remaining boundaries and reproduction
 
+The first frozen implementation `b4a8d937` exposed an existing TorchNPU CPU
+fallback in frexp/copysign. The old stable-mass training and cost logs contain
+the same fallback; their numbers remain, with corrected execution attribution.
+`3efcc6b1` decodes IEEE binary32 parts on NPU, scaling subnormals by an exact
+2^24 before decoding, and uses signbit/where for signed Inf/zero. CPU FP64
+continues to use torch.frexp. Device checks disable pytest capture and include
+scalar, strided, broadcast and subnormal boundary inputs; kernel placement is
+also checked by a bounded trace. This is separate from numerical equality.
+The NPU format cast and contiguous conversion may allocate device copies;
+removing host fallback does not remove layout or workspace costs.
+
 Final positive Shannon/pool senders outside storage range still raise. Finite
 learned offsets `[-110,1]` following normalized features demonstrate this in a
 current small FC model. That is a valid parameter configuration, not evidence
@@ -83,6 +96,9 @@ silent whole-model FP64 substitution is introduced.
 
 Arbitrary logits, huge centered dot products, masked extreme anchors, cancellation
 and later shared parameter accumulation remain bounded-range limitations.
+Attention probabilities can still underflow before a later binary-scaled
+product, and its forward numerator can overflow before denominator division.
+The scaled product cannot recover information already lost at those points.
 Shannon still uses solved/stored c for its slope; these checks do not establish
 a general unquantized log-slope contract at every subnormal face. RMS square
 overflow and SSD extreme parameter/scan contractions remain separate candidates.

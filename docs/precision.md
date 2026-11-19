@@ -19,6 +19,13 @@ not alter positive support. Their source/device qualification and repair costs a
 [recorded separately](evidence/stable-mass-20261119.md); neither a log-space formula
 nor a dtype label certifies all ranges.
 
+[Positive-chain arithmetic](positive-chain.md) additionally stabilizes pool
+composite VJPs, Shannon reconstruction/coupling and ordinary weak-prior Attention.
+Its [source-scoped evidence](evidence/positive-chain-20261119.md) retains strict
+final-range rejection and corrects old NPU host-fallback attribution. NPU IEEE
+binary32 decomposition removes those frexp/copysign fallbacks, with bounded
+device observations; no all-range or pure-AICore guarantee follows.
+
 Keep model parameters and floating inputs in FP32, import `precision_context`
 from `tide.precision`, and use `with precision_context(device, "bf16"):` around
 forward/loss; run backward and AdamW outside that context. `"fp32"` explicitly disables outer
@@ -48,6 +55,9 @@ in both FP32 and BF16; explicit native requests reject this weak-prior range.
 This threshold does not floor or drop stored masses. Other explicit backend
 choices remain separately declared paths. Cross-precision routing may still change
 when rounded scores cross a true allocation boundary.
+Ordinary Attention uses the same weak-prior stable route under auto/math/tiled,
+with amplitude one and no mass derivative. Explicit ordinary native rejects
+subnormal priors; mass-scaled native retains its broader weak-prior rejection.
 
 `precision_policy` serializes this policy and `ArithmeticAudit` observes actual
 operator/input/output dtypes in a separate intrusive call. Neither certifies an
