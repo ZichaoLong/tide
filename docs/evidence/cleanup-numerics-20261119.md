@@ -1,5 +1,9 @@
 # 清理、数值定位与quad修复（2026-11-19）
 
+**当前可用性：** [小目录收尾](compact-repository-20261119.md)已退役下文当时保留的
+全部在线artifact，包括局部见证和原报告gzip；原数值与失败事实不变。
+现在保留的是Git中的源码历史及无损压缩审阅证据，不能按旧artifact路径直接重放。
+
 **后续可用性变更：** [存储收尾](storage-finalization-20261119.md)已退役下文原本保留的
 旧CPU anchor/VJP1/update1及BF16 anchor等整图输入；部分大JSON已无损归档。
 本报告的数值、阈值及已完成exact重放是原测量事实，不保证现在仍有完整输入可直接重放。
@@ -174,7 +178,7 @@ python -m scripts.replay_saved_training_update --qualification-dir ORIGINAL_QUAL
 python -m scripts.diagnose_ffn_training_vjp --qualification ORIGINAL_RESULT_JSON \
   --output NEW_JSON --threads 32 --capture-mib 128
 
-# 修复资格固定97c52960。
+# 原测量固定97c52960；witness/history输入现已退役。check_training_paths可独立生成新输入。
 python -m scripts.check_allocation_face_witness \
   --witness artifacts/numerics-shared-routing-v1/routing.data/allocation-witnesses.pt \
   --device npu:0 --threads 4 --output NEW_JSON
@@ -191,7 +195,7 @@ python -m scripts.diagnose_routing_divergence --config configs/memory-candidates
 
 原七载荷的 `diagnose_saved_training` 命令只保留历史身份：两份update2已退休，不能原样再次运行。
 仍可阅读已保留result/witness和原字段比较；归档JSON须先按索引还原。
-上述整图续更与FFN重新捕获命令已失去在线输入，不能再直接运行；局部见证继续保留。
+上述整图续更与FFN重新捕获命令已失去在线输入，不能再直接运行；局部见证随后也已退役；新调查需重新选择有限输入。
 本轮没有9B训练、多NPU、CUDA或下游任务质量新增资格。训练优先FP32、固定已验证设置；
 W/P/WP、BF16与区域分组的严格等价限制继续保留。通用基座未启动。
 

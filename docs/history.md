@@ -29,3 +29,9 @@ retrieve it only for an explicit historical request. Raw large results were reti
 The explicitly requested [2026-11-19 CPU LH throughput lookup](evidence/lh-cpu-history-20261119.md)
 records the old user-reported B512 figures and their later CPU measurements. It
 retains their original timing/model identities and adds no current qualification.
+
+The 2026-11-19 compact-storage cleanup preserved 18 experimental tracked trees and
+unique ignored source/small records in `9b270280:retired-inputs/`; the next commit
+removed these standing copies. See the [compact storage record](evidence/compact-repository-20261119.md)
+only when historical inputs are explicitly needed. Retired tensor/trace payloads are
+not part of that source preservation tree.

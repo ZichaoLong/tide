@@ -43,23 +43,23 @@ Record project allocated bytes and actual exceptions; filesystem free-space chan
 may also reflect other users. Temporary validation output is retired after the
 reviewed result is committed. Git history and user-owned files remain intact.
 
-## Current lossless record archives
+## Current compact storage
 
-The [storage finalization report](evidence/storage-finalization-20261119.md) owns the
-current availability decisions. Large raw JSON records may be retained as `.json.gz`;
-the [archive index](evidence/storage-archive-index-20261119.json.gz) records original and
-compressed SHA256, lengths and logical paths. `scripts/materialize_record.py` restores
-exact bytes to an explicit new path, checks both identities, bounds decompression and
-refuses overwrite. Originals are unlinked only after complete decompression verification
-and fsynced archive/index publication. A failure remains the same original failure.
+The [compact repository report](evidence/compact-repository-20261119.md) owns current
+availability. The user explicitly requested the whole checkout, common Git and private
+environment below 200 MB, including retirement of the remaining diagnostic payloads.
+Original artifacts and experimental checkouts are no longer online. Original branch
+refs, exact tracked trees and unique ignored source/small records remain in Git history;
+reviewed failures and qualifications remain available without storing model payloads.
 
-Git retains the index, reviewed summaries and compressed retired-payload **metadata**;
-the archived JSON content remains in local artifacts. Restoring JSON to a new location
-does not restore its transitive dependencies or rewrite embedded original absolute paths.
-Tools may require related records at their original logical paths. Explicitly retired
-tensor/trace payloads cannot be reconstructed by this helper. Historical exact replay is
-not an ongoing replay promise after its anchor/update inputs have been retired.
+The [current archive index](evidence/archive-index.json) points to 47 byte-preserved
+`docs/evidence/*.json.gz` files stored in Git. `scripts/materialize_record.py` checks both
+SHA256 identities and length, bounds decompression, stages/fsyncs output and refuses
+overwrite. Restoring reviewed JSON does not reconstruct retired transitive inputs or
+rewrite embedded absolute paths. Historical artifact archive indices retain identities,
+not a present availability promise. Future investigations need new bounded inputs.
 
-Downstream installation and normal execution require the package/source and runtime,
-not experiment artifacts. This does not authorize wholesale removal of `artifacts`:
-registered worktrees, unique source and useful witnesses remain protected there.
+Downstream installation and normal execution use the package/source and runtime.
+Protect the main/downstream worktrees and common Git, public environments, reference
+repositories and user changes. The current cleanup retained all four untracked user
+documents byte-for-byte and did not touch concurrently created downstream files.

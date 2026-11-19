@@ -1,9 +1,14 @@
 # Current evidence
 
-The [storage finalization](storage-finalization-20261119.md) records explicit retirement
-of the remaining old full payloads, verified lossless JSON archives and the post-cleanup
-installed training/recovery smoke. Current storage is about 2.264 GiB. Earlier replay
-claims are historical where their anchor/update inputs were retired; failures remain failures.
+The [compact repository finalization](compact-repository-20261119.md) reduces the whole
+checkout, common Git and private environment to about 144.380 MB. Experimental
+checkouts and remaining payloads are retired; exact source snapshots and reviewed
+failures remain in Git. The [current archive index](archive-index.json) restores the
+47 compressed reviewed JSON files. Raw artifact archives and local witnesses are no
+longer online. Installed CPU training/recovery passed; push awaits network recovery.
+
+The preceding [storage finalization](storage-finalization-20261119.md) records the
+earlier 2.264 GiB stage and its then-available inputs; current availability is above.
 
 The [cleanup, bounded numerical diagnosis and quad repair](cleanup-numerics-20261119.md)
 records further retired payloads/profilers, exact regeneration after update2 deletion,

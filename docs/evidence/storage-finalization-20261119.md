@@ -1,5 +1,9 @@
 # 剩余存储收尾（2026-11-19）
 
+**当前可用性：** [小目录收尾](compact-repository-20261119.md)已退役下文当时保留的
+全部在线artifact，包括局部见证和原报告gzip；原数值与失败事实不变。
+现在保留的是Git中的源码历史及无损压缩审阅证据，不能按旧artifact路径直接重放。
+
 从 `660f3d0f` 接续，归档还原工具固定 `45cb5dad`；生产树仍为 `97c52960`。
 本次处理的是已结束工作的载荷与记录，不新增模型矩阵或资格。
 数学 `4f5b9f20a4030d68ee66ae2d26e34659a5e37234` 的108文件原字节不变。
@@ -61,19 +65,19 @@ native bias-rounding原始输入与输出两个小包也保留，共70文件448 
 其中只有元数据，没有模型内容。固定计划、过程日志和收据位于
 `artifacts/storage-finalization-20261119/`。
 
-在主仓执行以下命令，将原始JSON精确还原到一个尚不存在的路径：
+旧原报告归档已退役。现在可还原Git中的审阅证据，输出到新路径：
 
 ```sh
 python scripts/materialize_record.py \
-  --index docs/evidence/storage-archive-index-20261119.json \
-  --record artifacts/ffn-medium-npu-qualification-v1/qualification/result.json \
-  --output /tmp/tide-ffn-medium-npu-result.json
+  --index docs/evidence/archive-index.json \
+  --record docs/evidence/memory-candidates-20261119.json \
+  --output /tmp/tide-memory-review.json
 ```
 
 工具验证压缩与原始SHA、解压长度及gzip完整性，并原子发布且拒绝覆盖。
 `search_report`、`cost_report`等旧工具会读取记录内的原绝对路径或关联输入；
 另存JSON只保证可读，不保证旧命令可执行。需要时逐项恢复依赖到原逻辑路径；
-已退役张量和trace无法由解压JSON恢复。归档仍在本地artifacts中，Git只保存索引和审阅证据。
+已退役张量和trace无法由解压JSON恢复。上述原报告归档随后已退役；当前Git保留审阅证据gzip，旧索引仅供历史定位。
 
 ## 清理后的验证与资源
 

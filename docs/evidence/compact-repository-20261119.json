@@ -1,6 +1,6 @@
 {
   "schema": "tide-compact-repository-evidence-v1",
-  "state": "retirement_and_validation_completed",
+  "state": "completed_local_push_pending",
   "initial_head": "611e8d453160181c97d822674b99527af49548f5",
   "materializer_source": "bef26abb2458cfff003c84f376f93bc18a0b4106",
   "production_source": "97c52960358e6d5414fc987dc3861b1e85d997a9",
@@ -1362,7 +1362,7 @@
     "last_confirmed_origin": "611e8d453160181c97d822674b99527af49548f5",
     "scope": "Local Git contains the complete preservation history; no force push or global route/credential change."
   },
-  "temporary_outputs": "Retained until this reviewed result is committed; then removed separately.",
+  "temporary_outputs": "Validation payloads and verbose local metadata retired after committing reviewed result; exact maintenance inputs remain in the committed compressed bundle.",
   "availability": {
     "old_artifacts_online": false,
     "old_tensor_replay_promised": false,
@@ -1370,5 +1370,85 @@
     "historical_source_in_git": true,
     "downstream_runtime_requires_old_artifacts": false
   },
-  "qualification": "Original numerical failures, thresholds and measurement identities remain unchanged. Only storage, installed CPU FP32 entry and local recovery were checked."
+  "qualification": "Original numerical failures, thresholds and measurement identities remain unchanged. Only storage, installed CPU FP32 entry and local recovery were checked.",
+  "final_audit": {
+    "state": "passed",
+    "observed_utc": "2026-11-19T11:47:39.114167+00:00",
+    "repository_allocated_bytes": 144379904,
+    "target_allocated_bytes": 200000000,
+    "by_top_level_allocated_bytes": {
+      "scripts": 1589248,
+      "tests": 3248128,
+      ".gitignore": 4096,
+      "artifacts": 397312,
+      ".venv-instances": 13537280,
+      ".agents": 73728,
+      "pyproject.toml": 4096,
+      "benchmarks": 1511424,
+      ".pytest_cache": 126976,
+      "native": 118784,
+      "docs": 10690560,
+      "configs": 368640,
+      "AGENTS.md": 4096,
+      "examples": 98304,
+      "src": 704512,
+      "math": 2150400,
+      "README.md": 4096,
+      ".git": 109744128
+    },
+    "worktrees": "worktree /mi/data2T/zlong/home/llm/graph-execution-foundation\nHEAD 5501f89e2ef58b8aa3663d68587b4ec3dda435ee\nbranch refs/heads/graph-execution-foundation\n\nworktree /mi/data2T/zlong/home/llm/tide-learning-lab\nHEAD 5f30ed2a32d7648f5011f5bfde5c6cae086a463c\nbranch refs/heads/tide-learning-lab",
+    "old_artifact_payloads_absent": true,
+    "user_docs_unchanged": true,
+    "upstream": "{\"state\": \"passed\", \"revision\": \"4f5b9f20a4030d68ee66ae2d26e34659a5e37234\", \"files\": 108}\n",
+    "quota": "Disk quotas for user zlong (uid 1003): \n     Filesystem  blocks   quota   limit   grace   files   quota   limit   grace\n/dev/mapper/ascend_data-data 42791484  314572800 734003200          406692       0       0        \n",
+    "own_retirement": {
+      "state": "retired",
+      "committed_result": "5501f89e2ef58b8aa3663d68587b4ec3dda435ee",
+      "allocated_bytes": 61870080,
+      "files": [
+        {
+          "path": "artifacts/compact-repository-20261119/smoke-scratch",
+          "allocated_bytes": 29982720,
+          "reason": "successful isolated validation; result committed"
+        },
+        {
+          "path": "artifacts/compact-repository-20261119/record-smoke",
+          "allocated_bytes": 13316096,
+          "reason": "successful isolated validation; result committed"
+        },
+        {
+          "path": "artifacts/compact-repository-20261119/dependency-audit.json",
+          "allocated_bytes": 1650688,
+          "sha256": "7b6ea58238925259c237bbbd0be1e9bd487f3a74e19c19193020af8b77ea270f",
+          "reason": "exact bytes retained in committed maintenance bundle"
+        },
+        {
+          "path": "artifacts/compact-repository-20261119/plan.json",
+          "allocated_bytes": 9003008,
+          "sha256": "2fcdd8bbde11d1bf7b48ba846470505b9984301b64e33c396ef433be1130e222",
+          "reason": "exact bytes retained in committed maintenance bundle"
+        },
+        {
+          "path": "artifacts/compact-repository-20261119/preservation.json",
+          "allocated_bytes": 2351104,
+          "sha256": "f9dc5e569af7af3ecd042c376ad1d16a45ba944b9d0c9be09b9ccab7256469fc",
+          "reason": "exact bytes retained in committed maintenance bundle"
+        },
+        {
+          "path": "artifacts/compact-repository-20261119/preserve-extra.json",
+          "allocated_bytes": 507904,
+          "sha256": "65eb06eeffcb2a7a97cfec7fb741abe125a1ea7515046341de2265ea13148ef6",
+          "reason": "exact bytes retained in committed maintenance bundle"
+        },
+        {
+          "path": "artifacts/compact-repository-20261119/terminal-and-launch-records.json",
+          "allocated_bytes": 5058560,
+          "sha256": "88b8d983a663cd5703a0d94eb824499194f4e1900d8032d58e50bf62ef767cf6",
+          "reason": "exact bytes retained in committed maintenance bundle"
+        }
+      ],
+      "finished_utc": "2026-11-19T11:47:38.968057+00:00"
+    },
+    "observation_boundary": "After temporary validation/metadata retirement, before final handoff commit; allocated filesystem blocks, including common Git and private environment."
+  }
 }
