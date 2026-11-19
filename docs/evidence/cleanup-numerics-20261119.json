@@ -5144,7 +5144,7 @@
     "budget": "CPU service4h, NPU service2 card-h, RSS128GiB, new artifacts4GiB; no9B training or performance matrix",
     "new_artifacts_observed_pre_retirement_gib": 3.5218162536621094,
     "new_training_payloads_allocated_bytes_including_anchor": 1096163328,
-    "checkpoint_preparation_target_note": "Training payloads including anchor were1.020889GiB, above the internal1GiB preparation estimate; the total4GiB new-artifact cap remained respected. Successful restore bundles retired; failure anchor/checkpoints retained."
+    "checkpoint_preparation_target_note": "Training payloads including anchor were about 1.021 GiB, above the internal 1 GiB preparation estimate; the total 4 GiB new-artifact cap remained respected. Successful restore bundles retired; failure anchor/checkpoints retained."
   },
   "limits": [
     "old numerical failures retained; fixed local solver defect does not certify all FP32 boundaries",
