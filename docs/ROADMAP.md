@@ -4,7 +4,8 @@ pool复合VJP、Shannon稳定重建/耦合反向、普通弱prior Attention已�
 发现NPU frexp/copysign主机回退后已用设备内FP32拆分替换。
 CPU全套/最终定向、空闲独占NPU原语、五个小图训练/实际恢复、三组CPU/NPU成对成本已完成。
 事实与未通过项见[STATUS](STATUS.md)、[正量链证据](evidence/positive-chain-20261119.md)。
-全部12服务/148后代终态已核验，本轮没有待跑测点；正在独立提交证据、退休临时产物、普通push。
+全部12服务/148后代终态已核验，本轮没有待跑测点。证据`f098d3b4`已提交，13个临时目录已退休，
+主私有安装退休后前向/反向/AdamW smoke通过；仓库含Git/主环境约151.2 MB。
 未增加9B/Transformer或质量矩阵。旧NPU stable-mass数值和计时保留，但更正为含主机回退的混合执行。
 
 稳定求值不改变数学、epsilon、支持规则或原阈值。真正最终正发送量低于FP32表示范围仍拒绝；

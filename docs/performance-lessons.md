@@ -317,3 +317,21 @@ field gathers, pre-Full SSD preparation and state joins. These stages mix necess
 math with organization; no unique additive percentage separates "unstructured"
 from "complex arithmetic". Parent remainders and logical bytes do not establish
 recoverable wall time or hardware bandwidth.
+
+## Stable arithmetic and device attribution, 2026-11-19
+
+The [positive-chain checks](evidence/positive-chain-20261119.md) found that
+passing pytest tests had hidden C++ frexp/copysign host-fallback warnings.
+Use uncaptured stderr and inspect restored-process logs as well as the parent;
+a tensor's device and finite outputs do not certify device-only arithmetic.
+IEEE binary32 decomposition removes those fallbacks on the observed NPU, but
+the bounded trace still has AICPU kernels, layout copies and HtoD operations.
+
+Composite VJPs can avoid an intermediate overflow even when their final result
+is finite; normalization alone does not bound learned scores or weak priors.
+The new small FP32 pool graph adds paired complete inference/training time of
+about 4.0%/7.4% on CPU and 26.9%/40.2% on NPU, with unchanged work and no Full
+padding increase. The NPU comparison changes both stable formulas and fallback
+handling; it is not an isolated kernel cost or a 9B prediction. A cheaper normal
+range path needs a justified admission bound, zero-edge and shared-root VJPs,
+followed by complete-path timing. Floors cannot replace that proof.

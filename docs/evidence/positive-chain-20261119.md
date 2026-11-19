@@ -218,3 +218,8 @@ CPU类/NPU类服务累计墙钟耗时分别1467.042s/632.420s（包含依赖等�
 主机HiSilicon aarch64，320逻辑CPU、4 socket、8 NUMA；Ascend910、CANN9.2、
 Torch2.12.0+cpu/TorchNPU2.12.post3。未改公共环境、参考仓库或下游。
 原始张量/重复源码在证据提交和终态核验后退休，保留源码、独立见证与小记录，见最终STATUS及退休收据。
+
+证据提交`f098d3b4`后，13个本轮临时目录退休，释放838,303,744 B；没有转存大载荷。
+仓库含Git/主环境约151.2 MB。主editable安装用`python -I`重新导入当前源码，完成一个CPU FP32
+前向/反向/AdamW smoke；不是新wheel资格。四份用户文档hash及math原字节未变，
+公共与下游保持边界，详见[退休收据](positive-chain-retirement-20261119.json)。

@@ -1,0 +1,119 @@
+{
+  "schema": "tide-positive-chain-retirement-v1",
+  "state": "completed",
+  "evidence_commit": "f098d3b44c265c15a25742b20e99ba1146f98404",
+  "created_utc": "2026-11-19T14:03:13.074232+00:00",
+  "paths": [
+    {
+      "path": "artifacts/positive-chain-20261119",
+      "allocated_bytes": 39366656
+    },
+    {
+      "path": "artifacts/positive-chain-cpu-cost-20261119",
+      "allocated_bytes": 17879040
+    },
+    {
+      "path": "artifacts/positive-chain-cpu-cost-bounded-20261119",
+      "allocated_bytes": 17879040
+    },
+    {
+      "path": "artifacts/positive-chain-cpu-cost-final-20261119",
+      "allocated_bytes": 23453696
+    },
+    {
+      "path": "artifacts/positive-chain-cpu-final-20261119",
+      "allocated_bytes": 19177472
+    },
+    {
+      "path": "artifacts/positive-chain-cpu-suite-20261119",
+      "allocated_bytes": 22732800
+    },
+    {
+      "path": "artifacts/positive-chain-cpu-training-20261119",
+      "allocated_bytes": 231227392
+    },
+    {
+      "path": "artifacts/positive-chain-npu-cost-final-20261119",
+      "allocated_bytes": 23048192
+    },
+    {
+      "path": "artifacts/positive-chain-npu-native-20261119",
+      "allocated_bytes": 18477056
+    },
+    {
+      "path": "artifacts/positive-chain-npu-primitives-20261119",
+      "allocated_bytes": 18444288
+    },
+    {
+      "path": "artifacts/positive-chain-npu-trace-20261119",
+      "allocated_bytes": 20230144
+    },
+    {
+      "path": "artifacts/positive-chain-npu-training-20261119",
+      "allocated_bytes": 154685440
+    },
+    {
+      "path": "artifacts/positive-chain-npu-training-final-20261119",
+      "allocated_bytes": 231702528
+    }
+  ],
+  "dry_run": "byte-preserved in positive-chain-20261119.json.gz; generated roundtrip/inventory records added after inventory",
+  "source_tree": "6863ff792e3fae1556a80e195c1358a3405e0e0e",
+  "checked_terminal_services": 12,
+  "checked_descendant_identities": 148,
+  "user_hashes": {
+    "docs/tide-learning-lab-TL-REQ-004-handoff.md": "69607cba0a7e87a260929ed5741d996103cef804c51f3fa2c02b3bd7a454a220",
+    "docs/tide-learning-lab-TL-REQ-005-handoff.md": "83bec6f6eaa476ae9d7c859fe168333ac2ee564433297f36ab9aa1ef33c38732",
+    "docs/tide-learning-lab-TL-REQ-006-handoff.md": "8706f0477c8f31d0c8337e55ba7f8f5b28bb9a455656586fa1585c82ec58b4df",
+    "docs/upstream-lh-semantics-discussion-20261113.md": "3118419cb014570395323baf887ffe5a7e797f97049e85eacef26ecb1fd81c07"
+  },
+  "retired": "only current-task generated source copies, checkpoints, logs already archived and reconstruction intermediates",
+  "preserved": "main/source/Git/private environment/math/user documents/public/reference/downstream; no external target followed",
+  "removed_allocated_bytes": 838303744,
+  "worktree_allocated_bytes": 151183360,
+  "user_hashes_after": {
+    "docs/tide-learning-lab-TL-REQ-004-handoff.md": "69607cba0a7e87a260929ed5741d996103cef804c51f3fa2c02b3bd7a454a220",
+    "docs/tide-learning-lab-TL-REQ-005-handoff.md": "83bec6f6eaa476ae9d7c859fe168333ac2ee564433297f36ab9aa1ef33c38732",
+    "docs/tide-learning-lab-TL-REQ-006-handoff.md": "8706f0477c8f31d0c8337e55ba7f8f5b28bb9a455656586fa1585c82ec58b4df",
+    "docs/upstream-lh-semantics-discussion-20261113.md": "3118419cb014570395323baf887ffe5a7e797f97049e85eacef26ecb1fd81c07"
+  },
+  "finished_utc": "2026-11-19T14:03:13.473340+00:00",
+  "post_retirement_smoke": {
+    "state": "passed",
+    "scope": "main editable private installation after artifact retirement; isolated python -I import and one CPU FP32 forward/backward/AdamW smoke; not new wheel qualification",
+    "source": "/mi/data2T/zlong/home/llm/graph-execution-foundation/src/tide/__init__.py",
+    "torch": "2.12.0+cpu",
+    "dtype": "fp32",
+    "device": "cpu",
+    "threads": 4,
+    "parameters": 90578,
+    "loss": 1.0945676565170288,
+    "package_files": {
+      "__init__.py": "bd8d669f813aa282dc1835a53656550468f40eac46a730c4339635580d8e4195",
+      "allocation.py": "1fc55fa5c3199620763cb5dc77e8542e6e7cf51a360b0ffdceddcbc8006db221",
+      "attention.py": "58602a6211632de9db1632c53cbcbf6b9890360ee4d0266d32bb536b1bec2214",
+      "checkpoint.py": "7e188773786f5cd7e3b06fcf3ef4ca9efa256933a9c21a8225f359687337c49f",
+      "config.py": "2b890c0ae9eac381aa3ab9726eb386339345f62dc7b3e27433ecd5a0b1c0299f",
+      "ffn_packing.py": "66f0138cf4eb306fdc8513407d70ef5c96df37b6466f714c26b1fc211b25b449",
+      "grouped_linear.py": "5c0d8cb76df405d108e6eee77d42de8a1d83cbc99ff0537b0af973f108b52fe1",
+      "kv.py": "6ce42c759d8bfa9843c006d0bbda31ad1bc0602b0c9584718d73959bc11a3e3b",
+      "layout.py": "4aee0573beb2448dd90ca307b9065f2ed4cd0f7eb93bfcd92c4b46550f889aa0",
+      "model.py": "1911afe3b66b199eb7e066ea57c5900fead1e390ebb5894818d423284850255e",
+      "parameters.py": "84ead5924469a5a36810e01151f6ff1824ed9df063619aa53be8e84ae8d701fc",
+      "placement.py": "0f77def73da20f467756e5dc1f701f25942565f762e82be5d23218ecee39d05f",
+      "placement_ownership.py": "95431e5a2240b81a16df4cba08dfef541d777735220a212a28324f9c63661c13",
+      "precision.py": "5e94f06892dc89451750b4e5b1fd2e105d440f633875f31a883880e6a6ca480a",
+      "reception.py": "43f72f3f1a55263b8d1185a41f0bf2711b7e1179cd664710ced08e70563b45c4",
+      "region.py": "3d0ee3fa13e344ddb0fff5ce15af62cee4e0b1a7c4984df523e70a4cbfc41ec2",
+      "region_batch.py": "514ee30c5077d416c02cec81380280eb45509f20922a0f812657b93d2d8b7e80",
+      "region_execution.py": "0d62975ca47b37299cbdc80a4805375fef35c346dfe77ee2fe999e373ebf0950",
+      "region_placement.py": "fd082f035185d04af6bc3ba27b949a8f065ccdf62f8b32a1b442accbfa6f2b6d",
+      "scaled_arithmetic.py": "21b696170e73ae28a3238a4db7dd9b613d92a2b0eb88610df74a5d01a8006c62",
+      "ssd.py": "42e0e9c2de11f7c266af93c7bf43bf3e53e63efd6ed1eb5b86ef18aa1c982af3",
+      "ssd_memory.py": "d2683d58828bd705ca0f67dc5728a75fe01dda2ddfb4f53448d14b74b69b1cd2",
+      "topology.py": "8cdf58d0b3089e16a079ad46c3be7ca0c953fcea0023d276c9582901e1712dbf",
+      "topology_hb.py": "5fb7b1a959f0b88a097e95959b52a1f10cf5180eaea7b688cbef086946abea06",
+      "weighted_mean.py": "6c993386c66f611c371c75e2e66a52dec7954c4fb9078819aab23f13d6c76d88"
+    }
+  }
+}
