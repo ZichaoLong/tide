@@ -1,6 +1,0 @@
-{
-  "source_path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/scale-cpu-hb-17b-inference-v17/calibration.json",
-  "sha256": "740bcddaf33201c64346d13dbe862e9b85a65fc63b8166d740a1d7cf3bbf9d39",
-  "selected_threads": 40,
-  "scope": "reuse finite 1B inference/training CPU thread calibration on NUMA6; training CPU0-39 and memory interleaves0/1 after representative matrix release; distinct NUMA placement from calibration"
-}

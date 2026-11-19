@@ -1,9 +1,0 @@
-{
-  "observed": "2026-11-19T05:44:49.086715+00:00",
-  "reason": "Transformer inference_breakdown rejects --config. CPU v1 argument failure retained; NPU Transformer and dependent long suite cancelled before their device/model workload and resubmitted with corrected dependency.",
-  "status_at_review": "running",
-  "queue_record_exists": false,
-  "raw_breakdown_exists": false,
-  "replacement": "ffn-infer-npu-stages-transformer-v2",
-  "state_after_stop": "terminated"
-}

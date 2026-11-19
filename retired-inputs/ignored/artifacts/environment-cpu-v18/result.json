@@ -1,8 +1,0 @@
-{
-  "state": "passed",
-  "tide": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/environment-cpu-v18/source/src/tide/__init__.py",
-  "tbe": "/opt/software/ascend-runtime/9.2.0-r1/python/tbe/__init__.py",
-  "python": "/mi/data2T/zlong/home/llm/graph-execution-foundation/.venv-instances/bin/python",
-  "pythonpath": "/mi/data2T/zlong/home/llm/graph-execution-foundation/artifacts/environment-cpu-v18/source/src:/opt/software/ascend-runtime/9.2.0-r1/python:/opt/ascend/cann/9.2.0/cann-9.2.0/opp/built-in/op_impl/ai_core/tbe",
-  "scope": "actual generated service environment; CPU import only, no accelerator qualification"
-}

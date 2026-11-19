@@ -1,8 +1,0 @@
-{
-  "reason": "region batching used separate FP32 bias addition rather than Linear BF16 epilogue; stop remaining candidates and qualify corrected immutable source",
-  "preserved": "all original results/threshold failures and stop state; recompute/local_math independent rows keep their source",
-  "affected_variants": [
-    "batch4",
-    "combined"
-  ]
-}

@@ -1,4 +1,0 @@
-interface:
-  display_name: "Optimize Tide Instances"
-  short_description: "Tide tensor flow, autograd and performance analysis"
-  default_prompt: "Use $optimize-tide-execution to diagnose and improve the requested current Tide instance computation."

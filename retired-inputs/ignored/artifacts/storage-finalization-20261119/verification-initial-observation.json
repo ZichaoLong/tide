@@ -1,6 +1,0 @@
-{
-  "state": "failed_harness_assertion",
-  "expected_payload_state": "failed",
-  "actual_unchanged_payload_state": "execution_failed",
-  "reason": "Harness conflated job terminal state with raw qualification state; exact-byte materialization had succeeded."
-}

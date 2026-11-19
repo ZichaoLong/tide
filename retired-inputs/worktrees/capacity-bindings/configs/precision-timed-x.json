@@ -1,4 +1,0 @@
-{
-  "topology": {"kind": "multiscale", "n": 8, "profile": "compact-5-dd4", "hubs": 4, "timing": "timed"},
-  "d": 64, "memory": "X", "sharing": "region_shared"
-}
