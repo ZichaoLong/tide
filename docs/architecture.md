@@ -17,8 +17,8 @@ separate responsibilities but no compulsory universal intermediate representatio
 | incoming message processing and stable mass reduction | reception.py, weighted_mean.py, scaled_arithmetic.py | test_reception.py, test_stable_reception.py |
 | KV history and selected Full | kv.py, layout.py | oracle_fc.py, test_fc_reference.py |
 | SSD recurrence/convolution | ssd.py, ssd_memory.py | test_ssd.py, test_ssd_memory.py |
-| encoded regional scores, role allocation | region.py, allocation.py | oracle_fc.py, test_allocation.py |
-| three weighted Attention sites and mass-scaled KV Full | attention.py | test_attention.py, test_mass_scaled_attention.py, device_attention.py |
+| encoded regional scores, role allocation | region.py, allocation.py | oracle_fc.py, test_allocation.py, test_allocation_range.py |
+| three weighted Attention sites and mass-scaled KV Full | attention.py | test_attention.py, test_mass_scaled_attention.py, test_ordinary_attention_range.py, device_attention.py |
 | layer windows, Timed pending/flush | model.py | oracle_timed.py, test_timed_reference.py |
 | training state/checkpoint | checkpoint.py, benchmarks/continuous.py | test_models.py, test_continuation.py |
 | HB layer/whole-region ownership, transport and AdamW | placement.py, placement_ownership.py, region_placement.py | test_placement.py, test_region_placement.py |

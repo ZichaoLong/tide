@@ -77,10 +77,11 @@ def dispatch(device):
     def tiled_call(*args, **kwargs):
         result.update(effective="tiled", representation="explicit_weight_quotient")
         return tiled(*args, **kwargs)
-    def mass_call(ctx, q, k, v, weights, mask, tiled, weak):
+    def mass_call(ctx, q, k, v, weights, mask, tiled, weak, mass_scaled):
         result.update(effective="tiled" if tiled else "math",
-                      representation="mass_scaled_weight_quotient", weak_mass=weak)
-        return mass_attention(ctx, q, k, v, weights, mask, tiled, weak)
+                      representation=("mass_scaled_weight_quotient" if mass_scaled else
+                                      "scaled_prior_weight_quotient"), weak_mass=weak)
+        return mass_attention(ctx, q, k, v, weights, mask, tiled, weak, mass_scaled)
     def sdpa_call(q, k, v, *args, **kwargs):
         bias = kwargs.get("attn_mask", args[0] if args else None)
         result.update(native_api="torch.nn.functional.scaled_dot_product_attention",

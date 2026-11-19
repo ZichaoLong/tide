@@ -47,10 +47,15 @@ class _WeightedSoftmax(torch.autograd.Function):
     @staticmethod
     @once_differentiable
     def backward(ctx, grad):
-        logits, p, log_z, mask, nonempty, _ = ctx.saved_tensors
+        logits, p, log_z, mask, nonempty, weights = ctx.saved_tensors
         centered = grad - (p * grad).sum(-1, keepdim=True)
-        factor = torch.where(mask & nonempty, logits - log_z, -torch.inf).exp()
-        return p * centered, factor * centered, None
+        log_factor = torch.where(mask & nonempty, logits - log_z, -torch.inf)
+        log_p = torch.where(mask & nonempty & (weights > 0),
+                            log_factor + torch.where(weights > 0, weights, 1).log(), -torch.inf)
+        # A normalized derivative can be finite even when exp(log_factor)
+        # alone overflows. Retain the scale through the cotangent product.
+        return (_signed_exp_product(log_p, centered),
+                _signed_exp_product(log_factor, centered), None)
 
 
 def _weighted_softmax(logits: Tensor, weights: Tensor, mask: Tensor) -> Tensor:
@@ -204,8 +209,8 @@ class _TiledAttention(torch.autograd.Function):
                 dk[..., kb, :].add_(dl.transpose(-2, -1) @ qb * scale)
                 dv[..., kb, :].add_(p.transpose(-2, -1) @ gb)
                 if dw is not None:
-                    factor = torch.where(mb & nonempty, logits - normalizer, -torch.inf).exp()
-                    contribution = factor * centered
+                    log_factor = torch.where(mb & nonempty, logits - normalizer, -torch.inf)
+                    contribution = _signed_exp_product(log_factor, centered)
                     qs = slice(None) if weights.shape[-2] == 1 else block
                     ks = slice(None) if weights.shape[-1] == 1 else kb
                     target = dw[..., qs, ks]
@@ -286,12 +291,14 @@ class _MassScaledAttention(torch.autograd.Function):
     extra work for range. Ordinary/zero priors retain 64-query/256-key matrix
     contractions and still fuse the prior VJP. Logit products, mean
     reduction, centered dot products and final sums still have finite range;
-    this is not an arbitrary-real-arithmetic implementation.
+    this is not an arbitrary-real-arithmetic implementation. For ordinary
+    Attention with weak priors, mass_scaled=False uses the same scaled prior
+    and centered VJP with amplitude one and no total-mass derivative.
     """
     @staticmethod
     @_without_autocast
-    def forward(ctx, q, k, v, weights, mask, tiled, weak):
-        ctx.weak = weak
+    def forward(ctx, q, k, v, weights, mask, tiled, weak, mass_scaled):
+        ctx.weak, ctx.mass_scaled = weak, mass_scaled
         dtype = torch.float64 if q.dtype == torch.float64 else torch.float32
         qw, kw, vw = q.to(dtype), k.to(dtype), v.to(dtype)
         shape = q.shape[:-1] + (k.shape[-2],)
@@ -361,13 +368,13 @@ class _MassScaledAttention(torch.autograd.Function):
                 denominators.append(safe_denominator)
             mean, log_z, total = (torch.cat(parts, -2) for parts in (means, normalizers, totals))
             peak, denominator = (torch.cat(parts, -2) for parts in (peaks, denominators))
-        alpha = total.clamp(max=1)
+        alpha = total.clamp(max=1) if mass_scaled else torch.ones_like(total)
         output = alpha * mean
         _finite_mass_attention(mean, output)
         ctx.save_for_backward(q, k, v, weights, mask, mean, log_z, total, prior_scale, peak, denominator)
         # Mass/state arithmetic is FP32 for BF16 payloads. Do not first round
         # the weak scaled result back to BF16 before the caller consumes it.
-        return output
+        return output if mass_scaled else output.to(q.dtype)
 
     @staticmethod
     @once_differentiable
@@ -391,8 +398,8 @@ class _MassScaledAttention(torch.autograd.Function):
             qb, gb = qw[..., block, :], go[..., block, :]
             normalizer, amount = log_z[..., block, :], total[..., block, :]
             nonempty = torch.isfinite(normalizer)
-            alpha = amount.clamp(max=1)
-            log_alpha = torch.where(amount > 0, alpha.log(), -torch.inf)
+            alpha = amount.clamp(max=1) if ctx.mass_scaled else torch.ones_like(amount)
+            log_alpha = torch.where(nonempty, alpha.log(), -torch.inf)
             log_amplitude_ratio = _log_ratio(alpha, prior_scale[..., block, :])
             # A constant offset in every value should not manufacture a prior
             # gradient by subtracting two large, nearly equal dot products.
@@ -401,7 +408,7 @@ class _MassScaledAttention(torch.autograd.Function):
                 center_mean = (gb * (mean[..., block, :] - anchor)).sum(-1, keepdim=True)
             if needs[3]:
                 mass_bar = (gb * mean[..., block, :]).sum(-1, keepdim=True)
-                mass_bar = torch.where(nonempty & (amount <= 1), mass_bar, 0)
+                mass_bar = torch.where(nonempty & (amount <= 1) & ctx.mass_scaled, mass_bar, 0)
             for offset in range(0, k.shape[-2], key_tile):
                 kb = slice(offset, offset + key_tile)
                 wb, mb = w[..., block, kb], m[..., block, kb]
@@ -445,7 +452,7 @@ class _MassScaledAttention(torch.autograd.Function):
         result = tuple(value.to(source.dtype) if value is not None else None
                        for value, source in zip((dq, dk, dv, dw), (q, k, v, weights)))
         _finite_mass_attention(*(value for value in result if value is not None))
-        return (*result, None, None, None)
+        return (*result, None, None, None, None)
 
 
 def weighted_attention(q: Tensor, k: Tensor, v: Tensor, weights: Tensor | None = None,
@@ -474,12 +481,13 @@ def weighted_attention(q: Tensor, k: Tensor, v: Tensor, weights: Tensor | None =
     the native unit-prior path. FP32 keeps its established selection policy.
 
     mass_scaled=True returns min(sum(mask*weights),1) times the mean, in FP32
-    (FP64 for FP64 inputs). math/tiled fuse its first-order VJP. For auto, a
-    visible positive prior below sqrt(accumulation_dtype.tiny) selects that
-    bounded tiled path in both inference and training. This threshold selects
-    execution only; it never clips priors or changes support. Explicit native
-    requests reject that weak-prior range. Ordinary native calls retain their
-    fused kernel and the external amplitude multiply: extreme logits or
+    (FP64 for FP64 inputs). math/tiled fuse its first-order VJP. For both ordinary
+    and mass-scaled auto, a visible positive prior below sqrt(accumulation_dtype.tiny)
+    selects the bounded scaled-prior tiled path in inference and training.
+    This threshold selects execution only; it never clips priors or changes
+    support. Explicit native requests reject that weak range for mass-scaled
+    calls, and subnormal priors for ordinary calls. Native calls retain their
+    fused kernel (and external amplitude multiply only for mass_scaled=True): extreme logits or
     cotangents outside this bounded admission rule are not globally protected.
     """
     if backend not in {"auto", "math", "sdpa", "tiled", "npu_fusion"}:
@@ -509,7 +517,7 @@ def weighted_attention(q: Tensor, k: Tensor, v: Tensor, weights: Tensor | None =
         raise ValueError("mask must be boolean and on q's device")
     weights, mask = _auxiliary(weights, shape, True), _auxiliary(mask, shape, False)
     weak_mass = False
-    if mass_scaled and not unit_prior:
+    if not unit_prior:
         accumulation_dtype = torch.float64 if q.dtype == torch.float64 else torch.float32
         threshold = math.sqrt(torch.finfo(accumulation_dtype).tiny)
         weak = (weights > 0) & (weights < threshold)
@@ -535,8 +543,11 @@ def weighted_attention(q: Tensor, k: Tensor, v: Tensor, weights: Tensor | None =
         dtype = torch.float64 if q.dtype == torch.float64 else torch.float32 if mass_scaled else q.dtype
         return q.new_zeros(q.shape[:-1] + (v.shape[-1],), dtype=dtype) + zero
     if backend in {"sdpa", "npu_fusion"}:
-        if weak_mass:
-            raise ValueError("weak mass-scaled priors require auto, math or tiled; native VJP range is not qualified")
+        native_weak = weak_mass and (mass_scaled or bool(((weights > 0)
+            & (weights < torch.finfo(accumulation_dtype).tiny) & mask).any()))
+        if native_weak:
+            label = "mass-scaled " if mass_scaled else ""
+            raise ValueError(f"weak {label}priors require auto, math or tiled; native VJP range is not qualified")
         if zero_prior_grad:
             raise ValueError("zero trainable priors require auto, math or tiled for their right derivative")
         with torch.autocast(q.device.type, enabled=False):
@@ -547,8 +558,8 @@ def weighted_attention(q: Tensor, k: Tensor, v: Tensor, weights: Tensor | None =
                 amount = torch.where(mask, weights.to(dtype), 0).expand(shape).sum(-1, keepdim=True).clamp(max=1)
                 output = output.to(dtype) * amount
             return output
-    if mass_scaled:
-        return _MassScaledAttention.apply(q, k, v, weights, mask, backend == "tiled", weak_mass)
+    if mass_scaled or weak_mass:
+        return _MassScaledAttention.apply(q, k, v, weights, mask, backend == "tiled", weak_mass, mass_scaled)
     if backend == "tiled":
         return _TiledAttention.apply(q, k, v, weights, mask)
     with torch.autocast(q.device.type, enabled=False):

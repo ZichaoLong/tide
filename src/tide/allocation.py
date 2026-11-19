@@ -6,11 +6,50 @@ Temperature is one and scores already include any fixed threshold.
 
 from __future__ import annotations
 
+import math
+
 import torch
 from torch import Tensor
 from torch.autograd.function import once_differentiable
 
-from .attention import _weighted_softmax
+from .weighted_mean import _difference_parts, _reduce_parts, _restore, _sum_parts
+
+
+def _average_parts(weights, values):
+    """Keep the scale of a weighted average until its composite VJP consumes it.
+
+    The mean itself may be too small to store while a later division by a weak
+    prior restores a representable derivative. A large common cotangent must
+    likewise not overflow the numerator before normalization.
+    """
+    peak = weights.amax(-1, keepdim=True)
+    peak = torch.where(peak > 0, peak, 1)
+    total = (weights / peak).sum(-1, keepdim=True)
+    total = torch.where(total > 0, total, 1)
+    wm, we = torch.frexp(weights)
+    pm, pe = torch.frexp(peak)
+    tm, te = torch.frexp(total)
+    vm, ve = torch.frexp(values)
+    return _sum_parts(((wm / pm) / tm) * vm, we - pe - te + ve, -1)
+
+
+def _exp_product_parts(log_scale, fraction, exponent):
+    """Combine a log scale with binary parts without materializing exp(scale).
+
+    Exponents beyond +/-16384 cannot yield a representable FP32/FP64 result
+    with these finite cotangents. The bound avoids float-to-int overflow, not
+    clipping of the returned value: restoration still yields Inf or zero.
+    """
+    power = torch.floor(log_scale / math.log(2)).clamp(-16384, 16384)
+    ordinary = torch.isfinite(log_scale) & (log_scale.abs() < 8192)
+    remainder = torch.where(ordinary, log_scale - power * math.log(2), 0)
+    return fraction * remainder.exp(), exponent + power.to(torch.int32)
+
+
+def _finite_vjp(label, values, needs):
+    required = [torch.isfinite(value).all() for value, need in zip(values, needs) if need]
+    if required and not bool(torch.stack(required).all()):
+        raise ArithmeticError(f"{label} VJP exceeds the requested dtype range")
 
 
 def _first_min(a: Tensor, b: Tensor) -> Tensor:
@@ -30,7 +69,7 @@ def _response(scores, multiplier, lower, upper, kind):
     return torch.where(x <= lower, lower, torch.where(x >= upper, upper, x))
 
 
-def _save_solution(ctx, c, scores, mu, lower, upper, low_active, high_active, kind, high_total):
+def _save_solution(ctx, c, scores, mu, lower, upper, low_active, high_active, kind, high_total, originals):
     if kind == "shannon" and bool(((upper > 0) & (c == 0)
                                   & (high_total > lower.sum(-1, keepdim=True))).any()):
         raise ArithmeticError("Shannon allocation underflow would erase a positive sender")
@@ -41,8 +80,9 @@ def _save_solution(ctx, c, scores, mu, lower, upper, low_active, high_active, ki
     inside = ~fixed & ~lower_face & ~upper_face
     slope = inside.to(c.dtype) if kind == "quad" else torch.where(inside, c, 0)
     # Retain source versions as well as the face description used by the VJP.
+    ctx.source_shapes = tuple(value.shape for value in originals)
     ctx.save_for_backward(slope, lower_face, upper_face, fixed, fixed_mu,
-                          low_active, high_active, scores, mu, lower, upper)
+                          low_active, high_active, *originals)
     return c
 
 
@@ -153,6 +193,16 @@ def _bisect(shifted, lower, upper, target, solve, kind):
         correction = (c.sum(-1, keepdim=True) - target) / torch.where(slope > 0, slope, 1)
         multiplier = torch.maximum(left, torch.minimum(right, multiplier + correction))
         c = _response(shifted, multiplier, lower, upper, kind)
+    if kind == "shannon":
+        # Near a subnormal response step, the rounded midpoint can land on an
+        # all-cap face with zero Newton slope. A bracket endpoint may already
+        # meet the requested total exactly. Prefer only a strictly smaller
+        # residual; no tolerance or support floor is introduced.
+        for endpoint in (left, right):
+            alternative = _response(shifted, endpoint, lower, upper, kind)
+            better = ((alternative.sum(-1, keepdim=True) - target).abs()
+                      < (c.sum(-1, keepdim=True) - target).abs())
+            c = torch.where(better, alternative, c)
     # Preserve the original weak-mass reconstruction on the selected face.
     inside = (c > lower) & (c < upper)
     count = inside.sum(-1, keepdim=True).clamp_min(1)
@@ -163,13 +213,21 @@ def _bisect(shifted, lower, upper, target, solve, kind):
     else:
         logits = torch.where(inside, shifted, -torch.inf)
         logits = torch.where(inside.any(-1, keepdim=True), logits, 0)
-        reconstructed = remainder * torch.softmax(logits, -1)
+        log_probability = logits - torch.logsumexp(logits, -1, keepdim=True)
+        rm, re = torch.frexp(remainder)
+        # The residual total can exceed one. Its multiplication can rescue a
+        # representable positive sender even when softmax alone rounds to zero.
+        value_m, value_e = _exp_product_parts(log_probability, rm, re)
+        reconstructed = _restore(value_m, value_e)
     return torch.maximum(lower, torch.minimum(upper, torch.where(inside, reconstructed, c)))
 
 
 class _Constrained(torch.autograd.Function):
     @staticmethod
     def forward(ctx, scores, mu, lower, upper, low_total, high_total, kind):
+        originals = scores, mu, lower, upper, low_total, high_total
+        shape = torch.broadcast_shapes(*(value.shape for value in originals))
+        scores, mu, lower, upper = (value.expand(shape) for value in originals[:4])
         c0 = _response(scores, 0, lower, upper, kind)
         s0 = c0.sum(-1, keepdim=True)
         low_active, high_active = s0 < low_total, s0 > high_total
@@ -181,7 +239,7 @@ class _Constrained(torch.autograd.Function):
         if scores.shape[-1] == 1 or not bool(solve.any()):
             c = torch.where(active, target if scores.shape[-1] == 1
                             else torch.where(at_lower, lower, upper), c0)
-            return _save_solution(ctx, c, scores, mu, lower, upper, low_active, high_active, kind, high_total)
+            return _save_solution(ctx, c, scores, mu, lower, upper, low_active, high_active, kind, high_total, originals)
         free = lower < upper
         # Centering is legal on the fixed-total solve and prevents cancellation
         # when every score has the same large common offset.
@@ -201,21 +259,37 @@ class _Constrained(torch.autograd.Function):
         tolerance = 32 * torch.finfo(scores.dtype).eps * target.abs().clamp_min(torch.finfo(scores.dtype).tiny)
         if bool((active & ((c.sum(-1, keepdim=True) - target).abs() > tolerance)).any()):
             raise ArithmeticError("allocation multiplier did not meet the total constraint")
-        return _save_solution(ctx, c, scores, mu, lower, upper, low_active, high_active, kind, high_total)
+        return _save_solution(ctx, c, scores, mu, lower, upper, low_active, high_active, kind, high_total, originals)
 
     @staticmethod
     @once_differentiable
     def backward(ctx, grad):
         slope, lower_face, upper_face, fixed, fixed_mu, low_active, high_active = ctx.saved_tensors[:7]
-        total_slope = slope.sum(-1, keepdim=True)
-        equality = (low_active | high_active) & (total_slope > 0)
-        average = (slope * grad).sum(-1, keepdim=True) / torch.where(total_slope > 0, total_slope, 1)
-        average = torch.where(equality, average, 0)
-        adjusted = grad - average
-        return (slope * adjusted, torch.where(fixed_mu, adjusted, 0),
-                torch.where(lower_face | (fixed & ~fixed_mu), adjusted, 0),
-                torch.where(upper_face, adjusted, 0),
-                torch.where(low_active, average, 0), torch.where(high_active, average, 0), None)
+        equality = (low_active | high_active) & (slope > 0).any(-1, keepdim=True)
+        am, ae = _average_parts(slope, grad)
+        am = torch.where(equality, am[..., None], 0)
+        ae = ae[..., None]
+        dm, de = _difference_parts(grad, am, ae)
+        sm, se = torch.frexp(slope)
+        score_m, score_e = sm * dm, se + de
+        if ctx.source_shapes[0][-1] == 1:
+            # One score source shared by every candidate is a common shift.
+            # A fixed-total solve is invariant to it, including when separate
+            # expanded adjoints would overflow before cancelling. Slack rows
+            # retain their ordinary source derivative.
+            score_m = torch.where(equality, 0, score_m)
+        # Restore only after multiplying by the slope. In Shannon a tiny
+        # slope can make a difference larger than finfo.max representable.
+        # Broadcast users are summed before restoring each original root.
+        parts = ((score_m, score_e), (torch.where(fixed_mu, dm, 0), de),
+                 (torch.where(lower_face | (fixed & ~fixed_mu), dm, 0), de),
+                 (torch.where(upper_face, dm, 0), de),
+                 (torch.where(low_active, am, 0), ae),
+                 (torch.where(high_active, am, 0), ae))
+        result = tuple(_reduce_parts(m, e, shape) if need else None
+                       for (m, e), shape, need in zip(parts, ctx.source_shapes, ctx.needs_input_grad[:6]))
+        _finite_vjp("allocation", result, ctx.needs_input_grad[:6])
+        return (*result, None)
 
 
 def _as_input(value, scores):
@@ -226,6 +300,86 @@ def _as_input(value, scores):
     return scores.new_tensor(value)
 
 
+class _Pool(torch.autograd.Function):
+    """First-order composite VJP of min(1,M)*softmax(score; prior=mu).
+
+    Keeping the output cotangent unscaled avoids losing M*g before the prior
+    derivative. Positive-prior ratios and signed sums retain binary exponents;
+    real zero priors retain their right derivative. No sender floor is added.
+    """
+    @staticmethod
+    def forward(ctx, scores, mu):
+        original_scores, original_mu = scores, mu
+        scores, mu = torch.broadcast_tensors(scores, mu)
+        nonempty = (mu > 0).any(-1, keepdim=True)
+        peak = mu.amax(-1, keepdim=True)
+        peak = torch.where(nonempty, peak, 1)
+        center = torch.where(mu > 0, scores, -torch.inf).amax(-1, keepdim=True)
+        center = torch.where(nonempty, center, 0)
+        relative = mu / peak
+        logits = scores - center + torch.where(mu > 0, relative, 1).log()
+        logits = torch.where(mu > 0, logits, -torch.inf)
+        weighted_peak = torch.where(nonempty, logits.amax(-1, keepdim=True), 0)
+        shifted = logits - weighted_peak
+        normalizer = torch.logsumexp(torch.where(nonempty, shifted, 0), -1, keepdim=True)
+        pm, pe = _exp_product_parts(shifted - normalizer, torch.ones_like(logits),
+                                    torch.zeros_like(logits, dtype=torch.int32))
+        pm = torch.where((mu > 0) & nonempty, pm, 0)
+        total_m, total_e = _sum_parts(pm, pe, -1)
+        pm = pm / torch.where(total_m > 0, total_m, 1)[..., None]
+        pe = pe - total_e[..., None]
+        probability_sum = _restore(total_m, total_e)[..., None]
+        log_z = weighted_peak + normalizer + torch.where(nonempty, probability_sum, 1).log()
+        mass = mu.sum(-1, keepdim=True)
+        amount = torch.minimum(torch.ones_like(mass), mass)
+        alpha_m, alpha_e = torch.frexp(amount)
+        result = _restore(alpha_m * pm, alpha_e + pe)
+        if bool(((mu > 0) & (result == 0)).any()):
+            raise ArithmeticError("pool underflow would erase a positive sender")
+        ctx.save_for_backward(original_scores, original_mu, pm, pe, mass, peak, center, log_z)
+        return result
+
+    @staticmethod
+    @once_differentiable
+    def backward(ctx, grad):
+        original_scores, original_mu, pm, pe, mass, peak, center, log_z = ctx.saved_tensors
+        scores, mu = torch.broadcast_tensors(original_scores, original_mu)
+        gm, ge = torch.frexp(grad)
+        numerator_m, numerator_e = _sum_parts(pm * gm, pe + ge, -1)
+        denominator_m, denominator_e = _sum_parts(pm, pe, -1)
+        am = numerator_m / torch.where(denominator_m > 0, denominator_m, 1)
+        ae = numerator_e - denominator_e
+        am, ae = am[..., None], ae[..., None]
+        dm, de = _difference_parts(grad, am, ae)
+        amount = torch.minimum(torch.ones_like(mass), mass)
+        alpha_m, alpha_e = torch.frexp(amount)
+        # Use the composite's factors, not the rounded stored sender. Even a
+        # nonzero subnormal sender can lose bits needed by its finite VJP.
+        cm, ce = alpha_m * pm, alpha_e + pe
+        ds = dmu = None
+        if ctx.needs_input_grad[0]:
+            ds = _reduce_parts(cm * dm, ce + de, original_scores.shape)
+        if ctx.needs_input_grad[1]:
+            mm, me = torch.frexp(torch.where(mu > 0, mu, 1))
+            prior_m, prior_e = (cm / mm) * dm, ce - me + de
+            log_amount = torch.where(amount > 0, amount, 1).log()
+            log_ratio = scores - center - log_z + log_amount - peak.log()
+            zero_m, zero_e = _exp_product_parts(log_ratio, dm, de)
+            prior_m = torch.where(mu > 0, prior_m, zero_m)
+            prior_e = torch.where(mu > 0, prior_e, zero_e)
+            # At M=1 the written first-min branch is constant, unlike KV's
+            # clamp(max=1) derivative. Empty pool rows keep their zero VJP.
+            mass_m = torch.where((mass > 0) & (mass < 1), am, 0).expand_as(prior_m)
+            mass_e = ae.expand_as(prior_e)
+            prior_m = torch.where(mass > 0, prior_m, 0)
+            combined_m, combined_e = _sum_parts(torch.stack((prior_m, mass_m), -1),
+                                               torch.stack((prior_e, mass_e), -1), -1)
+            dmu = _reduce_parts(combined_m, combined_e, original_mu.shape)
+        required = [value for value in (ds, dmu) if value is not None]
+        _finite_vjp("pool", required, [True] * len(required))
+        return ds, dmu
+
+
 def pool(scores: Tensor, mu: Tensor) -> Tensor:
     """Total-scaled Attention: min(1,sum(mu)) * softmax(scores; prior=mu).
 
@@ -234,15 +388,14 @@ def pool(scores: Tensor, mu: Tensor) -> Tensor:
     """
     if scores.dtype not in {torch.float32, torch.float64} or scores.ndim < 1:
         raise TypeError("allocation requires FP32/FP64 and a candidate axis")
-    scores, mu = torch.broadcast_tensors(scores, _as_input(mu, scores))
-    if bool((~torch.isfinite(scores) | ~torch.isfinite(mu) | (mu < 0) | (mu > 1)).any()):
+    mu = _as_input(mu, scores)
+    expanded_scores, expanded_mu = torch.broadcast_tensors(scores, mu)
+    if bool((~torch.isfinite(expanded_scores) | ~torch.isfinite(expanded_mu)
+             | (expanded_mu < 0) | (expanded_mu > 1)).any()):
         raise ValueError("pool requires finite scores and mu in [0,1]")
-    p = _weighted_softmax(scores, mu, torch.ones((), device=scores.device, dtype=torch.bool))
-    mass = mu.sum(-1, keepdim=True)
-    result = _first_min(torch.ones_like(mass), mass) * p
-    if bool(((mu > 0) & (result == 0)).any()):
-        raise ArithmeticError("pool underflow would erase a positive sender")
-    return result
+    if expanded_scores.shape[-1] == 0:
+        return expanded_scores * 0 + expanded_mu * 0
+    return _Pool.apply(scores, mu)
 
 
 def allocate(scores: Tensor, w: Tensor, mu: Tensor, lower: Tensor, upper: Tensor,
@@ -269,8 +422,8 @@ def allocate(scores: Tensor, w: Tensor, mu: Tensor, lower: Tensor, upper: Tensor
         raise ValueError(f"unknown allocation kind: {kind}")
     if scores.dtype not in {torch.float32, torch.float64} or scores.ndim < 1:
         raise TypeError("allocation requires FP32/FP64 and a candidate axis")
-    scores, w, mu, lower, upper = torch.broadcast_tensors(
-        scores, *(_as_input(x, scores) for x in (w, mu, lower, upper)))
+    originals = (scores, *(_as_input(x, scores) for x in (w, mu, lower, upper)))
+    scores, w, mu, lower, upper = torch.broadcast_tensors(*originals)
     budget = _as_input(k, scores)
     if budget.ndim == scores.ndim and budget.shape[-1] == 1:
         budget = budget.squeeze(-1)
@@ -289,4 +442,5 @@ def allocate(scores: Tensor, w: Tensor, mu: Tensor, lower: Tensor, upper: Tensor
     low_total = _first_max(sum_lower, _first_min(received, high_total))
     if scores.shape[-1] == 0:
         return scores * 0 + w * 0 + mu * 0 + lower * 0 + upper * 0 + budget * 0
-    return _Constrained.apply(scores, mu, lower, upper, low_total, high_total, kind)
+    return _Constrained.apply(originals[0], originals[2], originals[3], originals[4],
+                              low_total, high_total, kind)
