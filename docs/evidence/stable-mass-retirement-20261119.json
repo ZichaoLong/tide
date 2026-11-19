@@ -1,142 +1,2020 @@
 {
   "schema": "tide-stable-mass-retirement-v1",
-  "state": "planned",
-  "scope": "only this stable-mass task artifact directories; requires reviewed evidence commit and rechecked terminal descendants",
-  "plan": {
-    "scope": "explicit dry run; no deletion yet",
-    "rows": [
+  "state": "retired",
+  "reviewed_evidence_commit": "96a5dda8415b8728b69cd004e837e52e7767fc30",
+  "evidence_sha256": "05a76ade669970a1bbba1fe23dc19a84db526b9e7b8c041fae0ad3c48b927231",
+  "paths": [
+    {
+      "path": "artifacts/stable-mass-20261119",
+      "logical_bytes": 40075430,
+      "allocated_file_bytes": 41369600,
+      "files": 573
+    },
+    {
+      "path": "artifacts/stable-mass-cpu-costs",
+      "logical_bytes": 20048917,
+      "allocated_file_bytes": 21446656,
+      "files": 601
+    },
+    {
+      "path": "artifacts/stable-mass-cpu-suite-r1",
+      "logical_bytes": 1638139462,
+      "allocated_file_bytes": 1640882176,
+      "files": 1196
+    },
+    {
+      "path": "artifacts/stable-mass-cpu-suite-r2",
+      "logical_bytes": 1640186171,
+      "allocated_file_bytes": 1642921984,
+      "files": 1199
+    },
+    {
+      "path": "artifacts/stable-mass-cpu-training-r1",
+      "logical_bytes": 16149273,
+      "allocated_file_bytes": 17465344,
+      "files": 578
+    },
+    {
+      "path": "artifacts/stable-mass-cpu-training-r2",
+      "logical_bytes": 163827348,
+      "allocated_file_bytes": 165167104,
+      "files": 589
+    },
+    {
+      "path": "artifacts/stable-mass-installed",
+      "logical_bytes": 29163348,
+      "allocated_file_bytes": 32563200,
+      "files": 1515
+    },
+    {
+      "path": "artifacts/stable-mass-npu-costs",
+      "logical_bytes": 19709731,
+      "allocated_file_bytes": 21078016,
+      "files": 601
+    },
+    {
+      "path": "artifacts/stable-mass-npu-primitives-r1",
+      "logical_bytes": 14694962,
+      "allocated_file_bytes": 15974400,
+      "files": 560
+    },
+    {
+      "path": "artifacts/stable-mass-npu-primitives-r2",
+      "logical_bytes": 15864092,
+      "allocated_file_bytes": 17149952,
+      "files": 562
+    },
+    {
+      "path": "artifacts/stable-mass-npu-training-r2",
+      "logical_bytes": 164139621,
+      "allocated_file_bytes": 165486592,
+      "files": 590
+    }
+  ],
+  "lifecycle_rechecked": {
+    "stable-mass-cpu-costs": {
+      "unit": "tide-stable-mass-cpu-costs.service",
+      "properties": {
+        "MainPID": "0",
+        "Result": "success",
+        "Slice": "",
+        "ControlGroup": "",
+        "ActiveState": "inactive",
+        "SubState": "dead"
+      },
+      "descendants": [
+        {
+          "recorded": {
+            "pid": 3200922,
+            "start_ticks": 2267784152
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3235017,
+            "start_ticks": 2267858268
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3235561,
+            "start_ticks": 2267859593
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3235935,
+            "start_ticks": 2267861014
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3236420,
+            "start_ticks": 2267862191
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3237409,
+            "start_ticks": 2267863455
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3238007,
+            "start_ticks": 2267864860
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3238400,
+            "start_ticks": 2267866176
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3239022,
+            "start_ticks": 2267867418
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3239580,
+            "start_ticks": 2267868586
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3240411,
+            "start_ticks": 2267869920
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3240988,
+            "start_ticks": 2267871326
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3241306,
+            "start_ticks": 2267872508
+          },
+          "current": null,
+          "matching_live": false
+        }
+      ],
+      "cgroup_tasks": []
+    },
+    "stable-mass-cpu-suite-r1": {
+      "unit": "tide-stable-mass-cpu-suite-r1.service",
+      "properties": {
+        "MainPID": "0",
+        "Result": "exit-code",
+        "Slice": "background.slice",
+        "ControlGroup": "",
+        "ActiveState": "failed",
+        "SubState": "failed"
+      },
+      "descendants": [
+        {
+          "recorded": {
+            "pid": 3180745,
+            "start_ticks": 2267737790
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3180986,
+            "start_ticks": 2267738355
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3182161,
+            "start_ticks": 2267741944
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3182316,
+            "start_ticks": 2267742343
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3182718,
+            "start_ticks": 2267742743
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3183008,
+            "start_ticks": 2267743148
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3184841,
+            "start_ticks": 2267746317
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3184844,
+            "start_ticks": 2267746322
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3184856,
+            "start_ticks": 2267746368
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3184857,
+            "start_ticks": 2267746372
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3184861,
+            "start_ticks": 2267746418
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3184864,
+            "start_ticks": 2267746423
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3184917,
+            "start_ticks": 2267746537
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3184918,
+            "start_ticks": 2267746541
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3184921,
+            "start_ticks": 2267746544
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3184941,
+            "start_ticks": 2267746657
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3184942,
+            "start_ticks": 2267746662
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3184943,
+            "start_ticks": 2267746664
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3184977,
+            "start_ticks": 2267746777
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3184978,
+            "start_ticks": 2267746781
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3184979,
+            "start_ticks": 2267746784
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3185000,
+            "start_ticks": 2267746896
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3185001,
+            "start_ticks": 2267746896
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3185002,
+            "start_ticks": 2267746900
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3185003,
+            "start_ticks": 2267746903
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3186101,
+            "start_ticks": 2267749002
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3190667,
+            "start_ticks": 2267760689
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3190712,
+            "start_ticks": 2267760733
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3196880,
+            "start_ticks": 2267774646
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3196939,
+            "start_ticks": 2267774764
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3196940,
+            "start_ticks": 2267774764
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3196942,
+            "start_ticks": 2267774771
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3197028,
+            "start_ticks": 2267774936
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3197029,
+            "start_ticks": 2267774936
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3197030,
+            "start_ticks": 2267774941
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3197031,
+            "start_ticks": 2267774943
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3197070,
+            "start_ticks": 2267775082
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3197176,
+            "start_ticks": 2267775506
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3197328,
+            "start_ticks": 2267775786
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3197429,
+            "start_ticks": 2267776059
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3197613,
+            "start_ticks": 2267776599
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3197641,
+            "start_ticks": 2267776726
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3197652,
+            "start_ticks": 2267776731
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3197776,
+            "start_ticks": 2267777030
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3197860,
+            "start_ticks": 2267777280
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3197961,
+            "start_ticks": 2267777576
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3198083,
+            "start_ticks": 2267777873
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3198149,
+            "start_ticks": 2267778118
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3198403,
+            "start_ticks": 2267778416
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3198433,
+            "start_ticks": 2267778421
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3198769,
+            "start_ticks": 2267778719
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3198986,
+            "start_ticks": 2267779043
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3199125,
+            "start_ticks": 2267779345
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3199254,
+            "start_ticks": 2267779670
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3199475,
+            "start_ticks": 2267779970
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3199720,
+            "start_ticks": 2267780577
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3202882,
+            "start_ticks": 2267788368
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3205959,
+            "start_ticks": 2267794814
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3205960,
+            "start_ticks": 2267794821
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3206039,
+            "start_ticks": 2267795169
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3206153,
+            "start_ticks": 2267795510
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3206272,
+            "start_ticks": 2267795854
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3206372,
+            "start_ticks": 2267796225
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3206751,
+            "start_ticks": 2267796592
+          },
+          "current": null,
+          "matching_live": false
+        }
+      ],
+      "cgroup_tasks": []
+    },
+    "stable-mass-cpu-suite-r2": {
+      "unit": "tide-stable-mass-cpu-suite-r2.service",
+      "properties": {
+        "MainPID": "0",
+        "Result": "success",
+        "Slice": "",
+        "ControlGroup": "",
+        "ActiveState": "inactive",
+        "SubState": "dead"
+      },
+      "descendants": [
+        {
+          "recorded": {
+            "pid": 3195068,
+            "start_ticks": 2267771251
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3207572,
+            "start_ticks": 2267797863
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3208813,
+            "start_ticks": 2267801549
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3208980,
+            "start_ticks": 2267801948
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3209156,
+            "start_ticks": 2267802347
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3209553,
+            "start_ticks": 2267802752
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3211794,
+            "start_ticks": 2267805986
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3211795,
+            "start_ticks": 2267805990
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3211799,
+            "start_ticks": 2267806036
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3211800,
+            "start_ticks": 2267806041
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3211834,
+            "start_ticks": 2267806084
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3211835,
+            "start_ticks": 2267806089
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3211843,
+            "start_ticks": 2267806204
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3211844,
+            "start_ticks": 2267806209
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3211845,
+            "start_ticks": 2267806211
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3211891,
+            "start_ticks": 2267806327
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3211893,
+            "start_ticks": 2267806331
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3211894,
+            "start_ticks": 2267806334
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3211914,
+            "start_ticks": 2267806449
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3211915,
+            "start_ticks": 2267806453
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3211916,
+            "start_ticks": 2267806455
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3211961,
+            "start_ticks": 2267806573
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3211962,
+            "start_ticks": 2267806573
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3211964,
+            "start_ticks": 2267806577
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3211966,
+            "start_ticks": 2267806580
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3212995,
+            "start_ticks": 2267808708
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3217878,
+            "start_ticks": 2267820615
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3217898,
+            "start_ticks": 2267820659
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3224031,
+            "start_ticks": 2267834885
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3224062,
+            "start_ticks": 2267834999
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3224063,
+            "start_ticks": 2267834999
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3224066,
+            "start_ticks": 2267835004
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3224075,
+            "start_ticks": 2267835006
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3224103,
+            "start_ticks": 2267835171
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3224104,
+            "start_ticks": 2267835171
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3224105,
+            "start_ticks": 2267835176
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3224108,
+            "start_ticks": 2267835178
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3224156,
+            "start_ticks": 2267835307
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3224267,
+            "start_ticks": 2267835748
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3224373,
+            "start_ticks": 2267836029
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3224445,
+            "start_ticks": 2267836304
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3224608,
+            "start_ticks": 2267836846
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3224624,
+            "start_ticks": 2267836965
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3224625,
+            "start_ticks": 2267836971
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3224705,
+            "start_ticks": 2267837283
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3224794,
+            "start_ticks": 2267837527
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3224922,
+            "start_ticks": 2267837838
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3224997,
+            "start_ticks": 2267838149
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3225112,
+            "start_ticks": 2267838389
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3225446,
+            "start_ticks": 2267838702
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3225471,
+            "start_ticks": 2267838707
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3225742,
+            "start_ticks": 2267839003
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3225872,
+            "start_ticks": 2267839317
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3226007,
+            "start_ticks": 2267839630
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3226146,
+            "start_ticks": 2267839944
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3226270,
+            "start_ticks": 2267840235
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3226548,
+            "start_ticks": 2267840835
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3229739,
+            "start_ticks": 2267848781
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3233464,
+            "start_ticks": 2267855491
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3233465,
+            "start_ticks": 2267855497
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3233602,
+            "start_ticks": 2267855849
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3233769,
+            "start_ticks": 2267856207
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3234154,
+            "start_ticks": 2267856590
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3234525,
+            "start_ticks": 2267857028
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3234689,
+            "start_ticks": 2267857413
+          },
+          "current": null,
+          "matching_live": false
+        }
+      ],
+      "cgroup_tasks": []
+    },
+    "stable-mass-cpu-training-r1": {
+      "unit": "tide-stable-mass-cpu-training-r1.service",
+      "properties": {
+        "MainPID": "0",
+        "Result": "success",
+        "Slice": "",
+        "ControlGroup": "",
+        "ActiveState": "inactive",
+        "SubState": "dead"
+      },
+      "descendants": [
+        {
+          "recorded": {
+            "pid": 3181337,
+            "start_ticks": 2267738979
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3181422,
+            "start_ticks": 2267739276
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3181644,
+            "start_ticks": 2267740143
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3181944,
+            "start_ticks": 2267741282
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3182343,
+            "start_ticks": 2267742369
+          },
+          "current": null,
+          "matching_live": false
+        }
+      ],
+      "cgroup_tasks": []
+    },
+    "stable-mass-cpu-training-r2": {
+      "unit": "tide-stable-mass-cpu-training-r2.service",
+      "properties": {
+        "MainPID": "0",
+        "Result": "success",
+        "Slice": "",
+        "ControlGroup": "",
+        "ActiveState": "inactive",
+        "SubState": "dead"
+      },
+      "descendants": [
+        {
+          "recorded": {
+            "pid": 3195098,
+            "start_ticks": 2267771281
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3195203,
+            "start_ticks": 2267771578
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3195796,
+            "start_ticks": 2267772465
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3196530,
+            "start_ticks": 2267773638
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3196937,
+            "start_ticks": 2267774750
+          },
+          "current": null,
+          "matching_live": false
+        }
+      ],
+      "cgroup_tasks": []
+    },
+    "stable-mass-installed": {
+      "unit": "tide-stable-mass-installed.service",
+      "properties": {
+        "MainPID": "0",
+        "Result": "success",
+        "Slice": "",
+        "ControlGroup": "",
+        "ActiveState": "inactive",
+        "SubState": "dead"
+      },
+      "descendants": [
+        {
+          "recorded": {
+            "pid": 3204710,
+            "start_ticks": 2267791778
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3204713,
+            "start_ticks": 2267791782
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3204741,
+            "start_ticks": 2267791815
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3204747,
+            "start_ticks": 2267791839
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3204757,
+            "start_ticks": 2267791876
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3204758,
+            "start_ticks": 2267791880
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3204759,
+            "start_ticks": 2267791885
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3204867,
+            "start_ticks": 2267792134
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3205003,
+            "start_ticks": 2267792345
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3205083,
+            "start_ticks": 2267792503
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3205244,
+            "start_ticks": 2267792780
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3205343,
+            "start_ticks": 2267793052
+          },
+          "current": null,
+          "matching_live": false
+        }
+      ],
+      "cgroup_tasks": []
+    },
+    "stable-mass-npu-costs": {
+      "unit": "tide-stable-mass-npu-costs.service",
+      "properties": {
+        "MainPID": "0",
+        "Result": "success",
+        "Slice": "",
+        "ControlGroup": "",
+        "ActiveState": "inactive",
+        "SubState": "dead"
+      },
+      "descendants": [
+        {
+          "recorded": {
+            "pid": 3202251,
+            "start_ticks": 2267786770
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3202256,
+            "start_ticks": 2267786776
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3202307,
+            "start_ticks": 2267786833
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3202466,
+            "start_ticks": 2267787308
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3202538,
+            "start_ticks": 2267787479
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3202539,
+            "start_ticks": 2267787485
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3203294,
+            "start_ticks": 2267789736
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3204929,
+            "start_ticks": 2267792188
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3205660,
+            "start_ticks": 2267794226
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3206715,
+            "start_ticks": 2267796560
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3208052,
+            "start_ticks": 2267799006
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3208675,
+            "start_ticks": 2267801142
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3210059,
+            "start_ticks": 2267803480
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3211477,
+            "start_ticks": 2267805523
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3212294,
+            "start_ticks": 2267807763
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3213652,
+            "start_ticks": 2267810214
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3214372,
+            "start_ticks": 2267812255
+          },
+          "current": null,
+          "matching_live": false
+        }
+      ],
+      "cgroup_tasks": []
+    },
+    "stable-mass-npu-primitives-r1": {
+      "unit": "tide-stable-mass-npu-primitives-r1.service",
+      "properties": {
+        "MainPID": "0",
+        "Result": "exit-code",
+        "Slice": "background.slice",
+        "ControlGroup": "",
+        "ActiveState": "failed",
+        "SubState": "failed"
+      },
+      "descendants": [
+        {
+          "recorded": {
+            "pid": 3180769,
+            "start_ticks": 2267737820
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3180770,
+            "start_ticks": 2267737825
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3180803,
+            "start_ticks": 2267737881
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3180987,
+            "start_ticks": 2267738355
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3181092,
+            "start_ticks": 2267738529
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3181093,
+            "start_ticks": 2267738534
+          },
+          "current": null,
+          "matching_live": false
+        }
+      ],
+      "cgroup_tasks": []
+    },
+    "stable-mass-npu-primitives-r2": {
+      "unit": "tide-stable-mass-npu-primitives-r2.service",
+      "properties": {
+        "MainPID": "0",
+        "Result": "success",
+        "Slice": "",
+        "ControlGroup": "",
+        "ActiveState": "inactive",
+        "SubState": "dead"
+      },
+      "descendants": [
+        {
+          "recorded": {
+            "pid": 3194631,
+            "start_ticks": 2267770376
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3194632,
+            "start_ticks": 2267770382
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3194669,
+            "start_ticks": 2267770439
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3194886,
+            "start_ticks": 2267770912
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3194966,
+            "start_ticks": 2267771085
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3194968,
+            "start_ticks": 2267771089
+          },
+          "current": null,
+          "matching_live": false
+        }
+      ],
+      "cgroup_tasks": []
+    },
+    "stable-mass-npu-training-r2": {
+      "unit": "tide-stable-mass-npu-training-r2.service",
+      "properties": {
+        "MainPID": "0",
+        "Result": "success",
+        "Slice": "",
+        "ControlGroup": "",
+        "ActiveState": "inactive",
+        "SubState": "dead"
+      },
+      "descendants": [
+        {
+          "recorded": {
+            "pid": 3197266,
+            "start_ticks": 2267775716
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3197267,
+            "start_ticks": 2267775722
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3197308,
+            "start_ticks": 2267775778
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3197474,
+            "start_ticks": 2267776255
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3197543,
+            "start_ticks": 2267776428
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3197771,
+            "start_ticks": 2267776969
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3198689,
+            "start_ticks": 2267778647
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3199849,
+            "start_ticks": 2267780845
+          },
+          "current": null,
+          "matching_live": false
+        },
+        {
+          "recorded": {
+            "pid": 3200478,
+            "start_ticks": 2267782900
+          },
+          "current": null,
+          "matching_live": false
+        }
+      ],
+      "cgroup_tasks": []
+    }
+  },
+  "scope": "only 11 task-owned artifact directories; no symlink traversal; all unique local worker source/config/small logs preserved in committed evidence",
+  "protected_files": {
+    "docs/tide-learning-lab-TL-REQ-004-handoff.md": {
+      "expected": "69607cba0a7e87a260929ed5741d996103cef804c51f3fa2c02b3bd7a454a220",
+      "actual": "69607cba0a7e87a260929ed5741d996103cef804c51f3fa2c02b3bd7a454a220",
+      "after_retirement": "69607cba0a7e87a260929ed5741d996103cef804c51f3fa2c02b3bd7a454a220"
+    },
+    "docs/tide-learning-lab-TL-REQ-005-handoff.md": {
+      "expected": "83bec6f6eaa476ae9d7c859fe168333ac2ee564433297f36ab9aa1ef33c38732",
+      "actual": "83bec6f6eaa476ae9d7c859fe168333ac2ee564433297f36ab9aa1ef33c38732",
+      "after_retirement": "83bec6f6eaa476ae9d7c859fe168333ac2ee564433297f36ab9aa1ef33c38732"
+    },
+    "docs/tide-learning-lab-TL-REQ-006-handoff.md": {
+      "expected": "8706f0477c8f31d0c8337e55ba7f8f5b28bb9a455656586fa1585c82ec58b4df",
+      "actual": "8706f0477c8f31d0c8337e55ba7f8f5b28bb9a455656586fa1585c82ec58b4df",
+      "after_retirement": "8706f0477c8f31d0c8337e55ba7f8f5b28bb9a455656586fa1585c82ec58b4df"
+    },
+    "docs/upstream-lh-semantics-discussion-20261113.md": {
+      "expected": "3118419cb014570395323baf887ffe5a7e797f97049e85eacef26ecb1fd81c07",
+      "actual": "3118419cb014570395323baf887ffe5a7e797f97049e85eacef26ecb1fd81c07",
+      "after_retirement": "3118419cb014570395323baf887ffe5a7e797f97049e85eacef26ecb1fd81c07"
+    }
+  },
+  "retained": [
+    "main private environment",
+    "fixed math",
+    "Git and both worktrees",
+    "all user/downstream/public files"
+  ],
+  "payload_retirement": {
+    "stable-mass-cpu-training-r1": [],
+    "stable-mass-cpu-training-r2": [
       {
-        "path": "artifacts/stable-mass-20261119",
-        "state": "shared fixed inputs",
-        "logical_bytes": 15059911,
-        "allocated_bytes": 16338944,
-        "files": 564,
-        "ownership": "this stable-mass task",
-        "decision": "retain small reviewed records; retire only after terminal review and evidence commit",
-        "protected": false
+        "path": "results/fc-kv128-fp32/anchor.pt",
+        "bytes": 4174963,
+        "sha256": "2d299fb211a98e073da70aceb32a02fe28ea73e42dde10fcd180d9c5d1c36665"
       },
       {
-        "path": "artifacts/stable-mass-cpu-costs",
-        "state": "running",
-        "logical_bytes": 15428150,
-        "allocated_bytes": 16650240,
-        "files": 534,
-        "ownership": "this stable-mass task",
-        "decision": "retain small reviewed records; retire only after terminal review and evidence commit",
-        "protected": false
+        "path": "results/fc-kv128-fp32/baseline/checkpoint.pt",
+        "bytes": 4112573,
+        "sha256": "db0a74c54e68b3d5d37c0e01ddf7cb76531dcd2374f6c99d596bee08bcebb567"
       },
       {
-        "path": "artifacts/stable-mass-cpu-suite-r1",
-        "state": "failed",
-        "logical_bytes": 1638139462,
-        "allocated_bytes": 1640882176,
-        "files": 1196,
-        "ownership": "this stable-mass task",
-        "decision": "retain small reviewed records; retire only after terminal review and evidence commit",
-        "protected": false
+        "path": "results/fc-kv128-fp32/baseline/restore-input.pt",
+        "bytes": 9679229,
+        "sha256": "d47e9ff467f5b6e9ef365f32956f63e9742ee18755626e0ee638074150a3e511"
       },
       {
-        "path": "artifacts/stable-mass-cpu-suite-r2",
-        "state": "running",
-        "logical_bytes": 899052598,
-        "allocated_bytes": 901177344,
-        "files": 938,
-        "ownership": "this stable-mass task",
-        "decision": "retain small reviewed records; retire only after terminal review and evidence commit",
-        "protected": false
+        "path": "results/hb-timed-k-fp32/anchor.pt",
+        "bytes": 6152801,
+        "sha256": "d6454d717f17851e6c3d8f23e1a6f5bc3b85cbb5f405fd15d08aa6cc876bb0e9"
       },
       {
-        "path": "artifacts/stable-mass-cpu-training-r1",
-        "state": "passed",
-        "logical_bytes": 16149273,
-        "allocated_bytes": 17465344,
-        "files": 578,
-        "ownership": "this stable-mass task",
-        "decision": "retain small reviewed records; retire only after terminal review and evidence commit",
-        "protected": false
+        "path": "results/hb-timed-k-fp32/baseline/checkpoint.pt",
+        "bytes": 6130475,
+        "sha256": "80b97d7ee35fc4aee4e4d98dd46ff2b755e111c730824a553cf8146430569b68"
       },
       {
-        "path": "artifacts/stable-mass-cpu-training-r2",
-        "state": "passed",
-        "logical_bytes": 163827348,
-        "allocated_bytes": 165167104,
-        "files": 589,
-        "ownership": "this stable-mass task",
-        "decision": "retain small reviewed records; retire only after terminal review and evidence commit",
-        "protected": false
+        "path": "results/hb-timed-k-fp32/baseline/restore-input.pt",
+        "bytes": 14822688,
+        "sha256": "f72fc08e0eaf4ad5f1b7b2858487115a731b013726dfa701dcaa995248c7c14a"
       },
       {
-        "path": "artifacts/stable-mass-installed",
-        "state": "passed",
-        "logical_bytes": 29163348,
-        "allocated_bytes": 32563200,
-        "files": 1515,
-        "ownership": "this stable-mass task",
-        "decision": "retain small reviewed records; retire only after terminal review and evidence commit",
-        "protected": false
+        "path": "results/hb-x-pool-bf16/anchor.pt",
+        "bytes": 11497843,
+        "sha256": "04278a05f4e34b0f3b14ba926fefe6c584ac92aaed2e1d8bd93f101afe9f8d8b"
       },
       {
-        "path": "artifacts/stable-mass-npu-costs",
-        "state": "passed",
-        "logical_bytes": 19709731,
-        "allocated_bytes": 21078016,
-        "files": 601,
-        "ownership": "this stable-mass task",
-        "decision": "retain small reviewed records; retire only after terminal review and evidence commit",
-        "protected": false
+        "path": "results/hb-x-pool-bf16/baseline/checkpoint.pt",
+        "bytes": 11532029,
+        "sha256": "c355c1393ca383c3f465bfea458e7f2ba3e3acac69a8a899b825a0ef479af6c5"
       },
       {
-        "path": "artifacts/stable-mass-npu-primitives-r1",
-        "state": "failed",
-        "logical_bytes": 14694962,
-        "allocated_bytes": 15974400,
-        "files": 560,
-        "ownership": "this stable-mass task",
-        "decision": "retain small reviewed records; retire only after terminal review and evidence commit",
-        "protected": false
+        "path": "results/hb-x-pool-bf16/baseline/restore-input.pt",
+        "bytes": 27680382,
+        "sha256": "2353ddb25bfd6ad3f93c3514b31eed1bedc8f33d869ccbd265823b5894cd98d7"
       },
       {
-        "path": "artifacts/stable-mass-npu-primitives-r2",
-        "state": "passed",
-        "logical_bytes": 15864092,
-        "allocated_bytes": 17149952,
-        "files": 562,
-        "ownership": "this stable-mass task",
-        "decision": "retain small reviewed records; retire only after terminal review and evidence commit",
-        "protected": false
+        "path": "results/hb-x-pool-fp32/anchor.pt",
+        "bytes": 11500851,
+        "sha256": "f32e27090b1659e09007055869aa8caec9d72a296ddb7a12674fc9253b2eaa1a"
       },
       {
-        "path": "artifacts/stable-mass-npu-training-r2",
-        "state": "passed",
-        "logical_bytes": 164139621,
-        "allocated_bytes": 165486592,
-        "files": 590,
-        "ownership": "this stable-mass task",
-        "decision": "retain small reviewed records; retire only after terminal review and evidence commit",
-        "protected": false
+        "path": "results/hb-x-pool-fp32/baseline/checkpoint.pt",
+        "bytes": 11535037,
+        "sha256": "a17254271a0997a6014c53fc9c5f5f83efd2dbed567148cfbc11efad80eecbb6"
+      },
+      {
+        "path": "results/hb-x-pool-fp32/baseline/restore-input.pt",
+        "bytes": 27698558,
+        "sha256": "28d69f2fb93656375d430ceecec4acbf7eebe902dfb05ba785a66e3143e49e84"
       }
     ],
-    "protect": [
-      "four untracked user docs",
-      "fixed math",
-      "main private environment",
-      "Git and both worktrees",
-      "public toolchains",
-      "downstream files and installs",
-      "unrelated jobs"
-    ],
-    "conditions": [
-      "all jobs and identified descendants terminal",
-      "reviewed result/log/source identity committed",
-      "baseline no longer consumed by cost jobs"
-    ],
-    "dependencies": {
-      "main_editable_path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/src",
-      "downstream_pilot_direct_url": {
-        "dir_info": {},
-        "url": "file:///mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r1/foundation"
+    "stable-mass-installed": [
+      {
+        "path": "step3.pt",
+        "bytes": 661019,
+        "sha256": "5f4ef5f5afd47ff366e44a5d7902dd4109f87f34da486e1d46c8741266be6fa0"
       },
-      "assessment": "Neither inspected installation points into this task artifact directories. Preserve both installations and both worktrees. All shared baseline inputs wait for both cost job terminal checks."
-    }
+      {
+        "path": "step4.pt",
+        "bytes": 663707,
+        "sha256": "6b259dc26befe66de115447befeea40734e770dbecbc9cd95ba20bdf68333206"
+      }
+    ],
+    "stable-mass-npu-training-r2": [
+      {
+        "path": "results/fc-kv128-fp32/anchor.pt",
+        "bytes": 4174963,
+        "sha256": "f27316507102ba16ab050fe2162061e5fdd21ea919c07634e2b06b7270417ccc"
+      },
+      {
+        "path": "results/fc-kv128-fp32/baseline/checkpoint.pt",
+        "bytes": 4129853,
+        "sha256": "c86836b0149eb2c4c249e725dd6eb283b326e63bfa46ce5e69d56d84896a13b0"
+      },
+      {
+        "path": "results/fc-kv128-fp32/baseline/restore-input.pt",
+        "bytes": 9679229,
+        "sha256": "ea14e1a7c4ab3a054e649088119465fa88b627db23c6727239ee2d73b43c12e7"
+      },
+      {
+        "path": "results/hb-timed-k-fp32/anchor.pt",
+        "bytes": 6152801,
+        "sha256": "876667c17ea688b638ac1ed88ff8d707bbcb24c641ee0ef84caac0c603df0482"
+      },
+      {
+        "path": "results/hb-timed-k-fp32/baseline/checkpoint.pt",
+        "bytes": 6211051,
+        "sha256": "aeb6336fe023784ac502e4424c503113c8815003648f9aff654840d842f70743"
+      },
+      {
+        "path": "results/hb-timed-k-fp32/baseline/restore-input.pt",
+        "bytes": 14822688,
+        "sha256": "522b45fc82fd8c2faa3ce5084f26e53508b779e3df87ea5adb228e79f4dbcfea"
+      },
+      {
+        "path": "results/hb-x-pool-bf16/anchor.pt",
+        "bytes": 11497843,
+        "sha256": "181b2cc2fbb9cb2811622e4f7c23e6e6e341f776fdc9d0d3bf39a6fd75930112"
+      },
+      {
+        "path": "results/hb-x-pool-bf16/baseline/checkpoint.pt",
+        "bytes": 11636669,
+        "sha256": "16f81d73fd84dd9a2dccae0cbdefb8d17a16c37b46371c9f6d5c1a7bb6f603fe"
+      },
+      {
+        "path": "results/hb-x-pool-bf16/baseline/restore-input.pt",
+        "bytes": 27680382,
+        "sha256": "9b5af52c028961963caa1f0879a389762c6146edd3c4fe1ebc7a57607782bb9f"
+      },
+      {
+        "path": "results/hb-x-pool-fp32/anchor.pt",
+        "bytes": 11500851,
+        "sha256": "a867f5d1a1c511f2281c15c954f8b39b6870c5fea24a65733d7c2483aea8be25"
+      },
+      {
+        "path": "results/hb-x-pool-fp32/baseline/checkpoint.pt",
+        "bytes": 11639677,
+        "sha256": "9a52698feda1e7d0365c8dfb52bf2bc1a2579f542b0d34c89ca9e0a39213e961"
+      },
+      {
+        "path": "results/hb-x-pool-fp32/baseline/restore-input.pt",
+        "bytes": 27698558,
+        "sha256": "8c4c6974eb5093bcfa7a54accee77318f3d0071d4034ae5dfc3ac7f12f9592c0"
+      }
+    ]
+  },
+  "retired_logical_bytes": 3761998355,
+  "retired_allocated_file_bytes": 3781505024,
+  "project_allocated_bytes_after": 148434944,
+  "availability": "reviewed JSON and current generators remain; tensor/temporary source/env paths retired, not moved elsewhere",
+  "post_retirement_checks": {
+    "upstream": {
+      "state": "passed",
+      "revision": "4f5b9f20a4030d68ee66ae2d26e34659a5e37234",
+      "files": 108
+    },
+    "main_environment": {
+      "state": "available",
+      "isolated_import": "python -I; TORCH_DEVICE_BACKEND_AUTOLOAD=0",
+      "package": "/mi/data2T/zlong/home/llm/graph-execution-foundation/src/tide",
+      "package_files": 25,
+      "torch": "2.12.0+cpu",
+      "scope": "post-retirement availability, not a new numerical qualification"
+    },
+    "artifact_directories_absent": true
   }
 }

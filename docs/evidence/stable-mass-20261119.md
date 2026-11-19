@@ -198,3 +198,7 @@ NPU 重做须重新检查当时空闲资源，使用 launcher 的空闲协作队
 服务时长不等于模型计时。CPU使用固定亲和性与4线程，共享主机；NPU使用Ascend910空闲独占单卡协作队列，定向r2为物理7，训练/成本为物理11；未共享占用卡。CANN9.2、Torch2.12、TorchNPU2.12.post3。
 主机为HiSilicon aarch64，320逻辑CPU、4 socket、8 NUMA节点；lscpu型号字段为unknown。每个测点仅4 Torch线程，不能视为整机CPU最优吞吐。
 最终退休与目录体积见[收尾收据](stable-mass-retirement-20261119.json)及[STATUS](../STATUS.md)。
+
+审阅证据提交 `96a5dda8` 后，本轮11个临时目录已退休，退休文件逐路径分配大小合计约3.782 GB，
+未转移到其他路径。仓库含Git和主私有环境约148.4 MB；主环境隔离导入仍指向当前源码，
+四份用户文档SHA256未变。公共工具链、下游安装和两工作树均保留。

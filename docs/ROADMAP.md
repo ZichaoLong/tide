@@ -3,7 +3,8 @@
 已实现Reception缩放均值/中心化复合VJP及质量缩放KV Attention，修复实测NPU指数恢复错误，
 保留fixed math、真实零边、原阈值和旧超差。冻结CPU/NPU定向、小图训练/实际恢复、隔离安装及
 三组CPU/NPU成对成本全部完成，事实在[STATUS](STATUS.md)及[本轮证据](evidence/stable-mass-20261119.md)。
-有限任务收尾包括证据提交、终态产物退休和普通push；不新增9B、Transformer或质量矩阵。
+审阅证据独立提交为 `96a5dda8`，终态临时产物已退休，仓库约148.4 MB；按授权普通push，不强推。
+本轮无待跑测点，不新增9B、Transformer或质量矩阵。
 
 稳定求值的可选后续：减少尾数/指数处理和范围检查的同步；若增加普通域快路径，先证明并验证范围
 准入及零边/共享梯度，不用floor制造通过。Attention展开根后的共享累计、极端被mask中心化锚、
