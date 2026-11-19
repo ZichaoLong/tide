@@ -1,3 +1,16 @@
+# 当前活动有限计划：FFN执行与设备对照
+
+1. 分离实现直接动态权重访问与power2同owner行packing；能力不足或无收益时保留失败结论。
+2. 小公式/VJP、支持/私有int64状态/零接收/淘汰/分块，完整训练和新进程checkpoint后真实更新；原阈值不变。
+3. 提交固定源码后正式资格；中尺度129M配对B16/L128/chunk32训练2warm+5update。
+4. 大图KV128/固定Transformer32同B8、prompt128/chunk32/decode16，NPU优选项追加decode256。
+5. CPU单NUMA16/32线程有限校准，原版/优选/Transformer正常吞吐；至少3配对重复，正常/侵入计时分开。
+6. 权重访问、padding、allocation主解/回退与同步及KV历史成本观察；交互和因果边界、显存分类、推荐及复现单独交付。
+
+资源与停止条件在STATUS及忽略产物plan.json；不自动扩展到BF16、9B训练、共享NPU或模型数学变更。
+
+---
+
 # 当前周期后续机会
 
 五类记忆/参数绑定的本轮有限计划已完成；事实在[STATUS](STATUS.md)，
