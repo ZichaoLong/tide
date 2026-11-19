@@ -66,7 +66,11 @@ def _response(scores, multiplier, lower, upper, kind):
     if kind == "shannon":
         # Compare with the positive cap in log space before exponentiation.
         log_cap = torch.where(upper > 0, upper, 1).log()
-        x = torch.exp(torch.minimum(x - 1, log_cap))
+        exponent = x - 1
+        # exp(log(cap)) can round below cap. Preserve the selected upper face
+        # exactly so reconstruction and the VJP do not treat it as interior.
+        x = torch.where(exponent >= log_cap, upper,
+                        torch.exp(torch.minimum(exponent, log_cap)))
     return torch.where(x <= lower, lower, torch.where(x >= upper, upper, x))
 
 
