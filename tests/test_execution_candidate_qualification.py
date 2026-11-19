@@ -1,11 +1,14 @@
 """Public W/P paths genuinely update and recover; integer/support errors survive."""
 import copy
 import json
+from types import SimpleNamespace
 
 import pytest
 import torch
 
-from scripts.check_execution_candidates import Artifacts, TOLERANCE, classified, file_sha256, run
+import scripts.check_execution_candidates as qualification
+from scripts.check_execution_candidates import (Artifacts, TOLERANCE, classified, file_sha256,
+                                                parent_memory_before_child, run)
 from scripts.check_training_paths import compare
 from tide import ModelConfig, TopologyConfig, load_checkpoint
 
@@ -36,6 +39,10 @@ def test_all_execution_paths_start_once_continue_three_updates_and_recover_in_ne
         assert restore["config_exact"] and restore["source_exact"] and restore["saved_data_exact"]
         assert restore["checks"]["next_forward"]["comparison"]["exact"]
         assert restore["actual_update"] and set(restore["optimizer_update"]["after"].values()) == {5}
+        memory = restore["parent_memory_before_child"]
+        assert memory["before_cache_release"] == memory["after_cache_release"] == {}
+        assert not memory["cache_release_requested"]
+        assert json.loads((tmp_path/case["name"]/"parent-memory-before-child.json").read_text()) == memory
         model, state, slots = load_checkpoint(tmp_path/case["name"]/"checkpoint.pt")
         assert model.config.to_dict() == case["config"] and state.position == 16 and slots["state"]
         assert not (tmp_path/case["name"]/"restore-input.pt").exists()
@@ -86,3 +93,20 @@ def test_large_training_and_shortened_qualification_are_refused_before_allocatio
                         d=768, memory="X", kv_width=128)
     with pytest.raises(ValueError, match="200M"):
         run(large, directory=tmp_path/"large")
+
+
+def test_npu_cache_boundary_synchronizes_and_records_live_owners_without_moving_them(monkeypatch):
+    events = []
+    before = {"npu:0": dict(allocated_bytes=1234, reserved_bytes=8192)}
+    after = {"npu:0": dict(allocated_bytes=1234, reserved_bytes=2048)}
+    observations = iter((before, after))
+    monkeypatch.setattr(qualification, "synchronize_all", lambda devices: events.append("sync"))
+    def allocator(devices):
+        events.append("allocator")
+        return next(observations)
+    monkeypatch.setattr(qualification, "allocator_stats", allocator)
+    monkeypatch.setattr(torch, "npu", SimpleNamespace(empty_cache=lambda: events.append("empty_cache")), raising=False)
+    result = parent_memory_before_child(SimpleNamespace(type="npu"))
+    assert events == ["sync", "allocator", "empty_cache", "sync", "allocator"]
+    assert result["before_cache_release"] == before and result["after_cache_release"] == after
+    assert result["cache_release_requested"]

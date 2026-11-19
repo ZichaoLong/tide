@@ -3,7 +3,9 @@ import json
 from dataclasses import replace
 
 import pytest
+import torch
 
+import benchmarks.execution_candidates as costs
 from benchmarks.execution_candidates import main, resolved_config, variant_options
 from tide import ModelConfig, TopologyConfig
 
@@ -73,3 +75,21 @@ def test_first_backbone_and_independent_sequence_throughput_have_untimed_support
         with pytest.raises(SystemExit):
             main(["--config", str(path), "--output", str(tmp_path/"bad.json"),
                   "--subject", "transformer", "--variant", "combined"])
+
+
+def test_explicit_large_transformer_training_refuses_before_real_weights(tmp_path, monkeypatch):
+    path, output = tmp_path/"config.json", tmp_path/"refused.json"
+    path.write_text(json.dumps(config().to_dict()))
+    original, devices = costs.TransformerBaseline, []
+    def checked_constructor(*args, **kwargs):
+        device = torch.empty(()).device.type
+        devices.append(device)
+        assert device == "meta", "oversized Transformer must never allocate real weights"
+        return original(*args, **kwargs)
+    monkeypatch.setattr(costs, "TransformerBaseline", checked_constructor)
+    with pytest.raises(SystemExit) as refusal:
+        main(["--config", str(path), "--output", str(output), "--subject", "transformer", "--mode", "train",
+              "--transformer-layers", "32", "--transformer-d", "4352", "--transformer-ffn-width", "15208",
+              "--transformer-head-dim", "64", "--threads", "1"])
+    assert refusal.value.code == 2 and devices == ["meta"]
+    assert not output.exists()

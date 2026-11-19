@@ -24,7 +24,7 @@ import tide
 from benchmarks.baselines import parameter_count
 from benchmarks.costs import _rng
 from benchmarks.execution_candidates import VARIANTS, configure_device, resolved_config, variant_options
-from benchmarks.inference import source_identity
+from benchmarks.inference import allocator_stats, source_identity, synchronize_all
 from benchmarks.training_breakdown import copy_tree
 from benchmarks.workloads import paired_input, tensor_hash
 from scripts.check_memory_candidates import aggregate, comparison_summary
@@ -127,6 +127,19 @@ def classified(checks, *, exact=()):
     return result
 
 
+def parent_memory_before_child(device):
+    """Release only inactive NPU allocator cache; all live owners stay resident."""
+    synchronize_all([device])
+    before = allocator_stats([device])
+    if device.type == "npu":
+        torch.npu.empty_cache()
+    synchronize_all([device])
+    after = allocator_stats([device])
+    return dict(before_cache_release=before, after_cache_release=after,
+        cache_release_requested=device.type == "npu",
+        scope="parent-process device allocator immediately before spawning recovery; peaks are cumulative and not reset; empty_cache releases only inactive cached blocks; model, gradients, optimizer and private state remain resident; not normal-training memory")
+
+
 def worker(bundle_path, output, threads):
     bundle = torch.load(bundle_path, map_location="cpu", weights_only=False)
     options = bundle["options"]
@@ -190,6 +203,10 @@ def check_restore(model, optimizer, state, value, directory, artifacts, *, devic
     bundle_record = artifacts.save(bundle_path, bundle, "fresh-process expected update and gradient/RNG sidecar")
     del bundle, extra, prediction, updated
     gc.collect()
+    parent_memory = parent_memory_before_child(device)
+    # Keep this boundary even if the fresh interpreter times out or fails before
+    # producing its own result. No surviving training owner is offloaded.
+    atomic(directory/"parent-memory-before-child.json", parent_memory)
     output = directory/"restore.json"
     command = [sys.executable, "-m", "scripts.check_execution_candidates", "--resume-bundle", str(bundle_path.resolve()),
                "--resume-output", str(output.resolve()), "--threads", str(torch.get_num_threads())]
@@ -212,6 +229,7 @@ def check_restore(model, optimizer, state, value, directory, artifacts, *, devic
         raise RuntimeError("fresh-process exit code disagrees with its result")
     result.update(new_process=True, original_process_pid=os.getpid(), command=command,
                   exit_code=completed.returncode, original_update_work=work,
+                  parent_memory_before_child=parent_memory,
                   memory_scope="parent and fresh child may simultaneously retain model/optimizer on the same device; bounded to <=200M, never a 9B checkpoint; this process-overlap peak is qualification overhead, not normal training memory")
     artifacts.records.extend(result.get("failed_artifacts", []))
     # Retain the checkpoint regardless; full expected payload survives every

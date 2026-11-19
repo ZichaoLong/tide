@@ -148,17 +148,25 @@ def main(argv=None):
         parser.error("this finite continuing performance plan supports Settle only")
     with torch.device("meta"):
         target = parameter_count(TideModel(config))
-    if args.mode == "train" and target > 200_000_000:
+    if args.mode == "train" and args.subject == "tide" and target > 200_000_000:
         parser.error("training is bounded to 200M parameters; no 9B training or checkpoints")
     selected = match_transformer(args.transformer_layers, target, window=args.transformer_window)
     if args.transformer_d is not None:
         selected = dict(kind="explicit fixed shape", constructor=dict(d=args.transformer_d,
             ffn_width=args.transformer_ffn_width, layers=args.transformer_layers,
             head_dim=args.transformer_head_dim, window=args.transformer_window))
+    planned_parameters = target
+    if args.subject == "transformer":
+        with torch.device("meta"):
+            planned_parameters = parameter_count(TransformerBaseline(
+                **selected["constructor"], chunk=256, backend="auto"))
+        if args.mode == "train" and planned_parameters > 200_000_000:
+            parser.error("selected Transformer exceeds the 200M training bound; refused before real weight allocation")
     record = dict(schema="tide-execution-costs-v1", state="running", source=source_identity(),
         arguments={key: str(value) if isinstance(value, Path) else value for key, value in vars(args).items()},
         config=config.to_dict(), base_config=base.to_dict(), variant_options=variant_options(args.variant),
         subject=args.subject, precision=precision_policy(device, "fp32"), transformer_match=selected,
+        planned_parameters=planned_parameters,
         ffn_weight_backend=("not applicable to Transformer" if args.subject != "tide" else
             "ordinary gathered BMM" if config.ffn_weight_access == "gather" else
             "CPU grouped weight-view reference" if device.type == "cpu" else "NPU grouped_matmul with explicit adjoint"),
@@ -185,6 +193,8 @@ def main(argv=None):
         model = (TideModel(config) if args.subject == "tide" else
                  TransformerBaseline(**selected["constructor"], chunk=256, backend="auto"))
         count = parameter_count(model)
+        if count != planned_parameters:
+            raise AssertionError("real constructor differs from the bounded meta parameter count")
         if args.mode == "train" and count > 200_000_000:
             raise ValueError("training model exceeds 200M parameter bound")
         record.update(parameters=count, initial_parameters=bounded_parameter_identity(model),

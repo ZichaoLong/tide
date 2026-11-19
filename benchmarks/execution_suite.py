@@ -2,6 +2,7 @@
 import argparse
 import hashlib
 import json
+import math
 import os
 from pathlib import Path
 import sys
@@ -67,7 +68,10 @@ def main(argv=None):
     parser.add_argument("--observe-first", action="store_true")
     parser.add_argument("--plan-only", action="store_true")
     args = parser.parse_args(argv)
-    if (not 1 <= args.threads <= 32 or args.child_timeout <= 0 or args.total_seconds <= 0
+    if args.fixed_large_transformer and args.mode == "train":
+        parser.error("the fixed large Transformer is inference-only in this finite plan")
+    if (not 1 <= args.threads <= 32 or any(not math.isfinite(value) or value <= 0
+            for value in (args.child_timeout, args.total_seconds))
             or len(set(args.variants)) != len(args.variants)):
         parser.error("invalid finite thread/time/variant bounds")
     args.output_dir = args.output_dir.resolve()
