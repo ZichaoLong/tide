@@ -142,9 +142,9 @@ class _RetainedWeakValueVJPFailure(AssertionError):
 
 
 @pytest.mark.parametrize("backend", ["math", "tiled", "auto"])
-@pytest.mark.xfail(os.environ.get("TIDE_STABLE_DEVICE", "cpu").startswith("cpu"), strict=True,
+@pytest.mark.xfail(os.environ.get("TIDE_STABLE_DEVICE", "cpu").startswith(("cpu", "npu")), strict=True,
                   raises=_RetainedWeakValueVJPFailure,
-                  reason="seed773 FP32 dV[1,0,4,26] retains atol=1e-35/rtol=1e-5 failure")
+                  reason="CPU/NPU seed773 FP32 dV[1,0,4,26] retains atol=1e-35/rtol=1e-5 failure")
 def test_broadcast_priors_head_masks_and_all_roots(device, backend):
     inputs, mask, cotangent = broadcast_fixture()
     roots = [x.to(device).detach().requires_grad_() for x in inputs]
@@ -161,10 +161,14 @@ def test_broadcast_priors_head_masks_and_all_roots(device, backend):
     observed, reference = got[2].cpu(), want[2].float()
     difference = (observed-reference).abs()
     failed = (difference > 1e-35 + 1e-5*reference.abs()).nonzero().tolist()
-    if device.type == "cpu" and failed:
+    if device.type in {"cpu", "npu"} and failed:
         # Do not xfail a new field, nonfinite value or additional coordinate.
+        # Frozen 70f4aa3 NPU qualification observed the identical CPU residual;
+        # its original failures remain evidence, not retroactive passes.
         assert failed == [[1, 0, 4, 26]]
         i = (1, 0, 4, 26)
+        assert observed[i].item() == 1.043685510987748e-30
+        assert reference[i].item() == 1.043707140083803e-30
         raise _RetainedWeakValueVJPFailure(
             f"seed=773 backend={backend} dV{list(i)} actual={float(observed[i]):.17g} "
             f"oracle_fp64={float(want[2][i]):.17g} oracle_fp32={float(reference[i]):.17g} "
@@ -254,6 +258,23 @@ def test_unrequested_infinite_mass_adjoint_does_not_reject_finite_value_gradient
     gradient, = torch.autograd.grad(result, (roots[2],), cotangent.to(device))
     expected = inputs[-1][:, None, :, None] * cotangent[:, :, :1, :]
     torch.testing.assert_close(gradient.cpu(), expected, atol=0, rtol=1e-5)
+
+
+@pytest.mark.parametrize("backend", ["math", "tiled", "auto"])
+def test_finite_value_adjoint_near_fp32_limit_avoids_intermediate_power_overflow(device, backend):
+    q = torch.zeros(1, 1, 1, 32, device=device)
+    k = torch.zeros(1, 1, 2, 32, device=device)
+    v = torch.zeros_like(k, requires_grad=True)
+    weight = torch.tensor([[1e-30, 1.]], device=device)
+    root = torch.full_like(q, 3e38)
+    result = attention.weighted_attention(q, k, v, weight, backend=backend, mass_scaled=True)
+    gradient, = torch.autograd.grad(result, (v,), root)
+    # The composed mantissa/exponent representation can have exponent >127
+    # even though each requested final value adjoint fits in FP32.
+    prior64 = weight.cpu().double()
+    expected = (prior64/prior64.sum(-1, keepdim=True))[:, None, :, None]*root.cpu().double()
+    assert torch.isfinite(gradient).all()
+    torch.testing.assert_close(gradient.cpu(), expected.float(), atol=0, rtol=1e-5)
 
 
 @pytest.mark.parametrize("backend", ["math", "tiled", "auto"])

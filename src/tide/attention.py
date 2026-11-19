@@ -15,6 +15,8 @@ from torch import Tensor
 from torch.autograd.function import once_differentiable
 from torch.nn import functional as F
 
+from .scaled_arithmetic import restore_binary_scale
+
 
 def _without_autocast(function):
     @wraps(function)
@@ -249,13 +251,13 @@ def _range_product(*values):
     This keeps alpha*p*root*feature together without a lossy log(root) round
     trip or an early alpha*root underflow. Terms are restored before reduction;
     arbitrary cancellation between individually unrepresentable terms remains
-    outside this helper's range. frexp/ldexp must execute on the selected device.
+    outside this helper's range. Binary scaling executes on the selected device.
     """
     fraction, exponent = torch.frexp(values[0])
     for value in values[1:]:
         part, shift = torch.frexp(value)
         fraction, exponent = fraction * part, exponent + shift
-    return torch.ldexp(fraction, exponent)
+    return restore_binary_scale(fraction, exponent)
 
 
 def _scaled_weighted_terms(logits, weight, mask, prior_scale, peak):

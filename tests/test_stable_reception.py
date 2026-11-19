@@ -1,12 +1,14 @@
 """Independent extreme-range Reception witnesses; optional device is explicit."""
 
 import copy
+import math
 import os
 
 import pytest
 import torch
 
 from tide.reception import Reception
+from tide.scaled_arithmetic import restore_binary_scale
 from tide.weighted_mean import stable_weighted_mean
 
 
@@ -39,6 +41,81 @@ def _compare(mass, values, root, *, atol=1e-6, rtol=1e-5):
     for got, want in zip(gradients, reference):
         torch.testing.assert_close(got.detach().cpu(), want.to(got.dtype), atol=atol, rtol=rtol)
     return actual, gradients
+
+
+def _scale_boundary_inputs(dtype):
+    precision, minimum, maximum = ((24, -149, 128) if dtype == torch.float32
+                                   else (53, -1074, 1024))
+    # Both signs of max finite, smallest subnormal, ties and adjacent values
+    # around zero/min-subnormal and subnormal/normal boundaries. Several
+    # fractions deliberately need normalization before exponent splitting.
+    cases = [
+        (1 - 2.**-precision, maximum),
+        (.5, minimum + 1),
+        (.5, minimum),
+        (.5 + 2.**-precision, minimum),
+        (.5 - 2.**-(precision + 1), minimum),
+        (.75, minimum + 1),
+        (1 - 2.**-(precision - 1), minimum + precision - 1),
+        (1 - 2.**-precision, minimum + precision - 1),
+        (.5, minimum + precision),
+        (.25, maximum + 1),
+        (2.**minimum, -minimum),
+    ]
+    signed = [(sign * fraction, exponent) for fraction, exponent in cases for sign in (1, -1)]
+    fractions = torch.tensor([fraction for fraction, _ in signed], dtype=dtype)
+    exponents = torch.tensor([exponent for _, exponent in signed], dtype=torch.int32)
+    # Python math.ldexp uses independent host C arithmetic. For FP32 it has
+    # enough precision to preserve the actual quantized operands until the
+    # single final FP32 cast; for FP64 it supplies the final IEEE operation.
+    expected = torch.tensor([math.ldexp(float(fraction), int(exponent))
+                             for fraction, exponent in zip(fractions, exponents)], dtype=dtype)
+    return fractions, exponents, expected
+
+
+def test_fp32_binary_scale_extrema_and_rounding_boundaries(device):
+    fraction, exponent, expected = _scale_boundary_inputs(torch.float32)
+    actual = restore_binary_scale(fraction.to(device), exponent.to(device)).cpu()
+    torch.testing.assert_close(actual, expected, atol=0, rtol=0)
+    assert torch.equal(torch.signbit(actual), torch.signbit(expected))
+
+
+def test_fp64_binary_scale_extrema_and_rounding_boundaries_stay_on_cpu():
+    fraction, exponent, expected = _scale_boundary_inputs(torch.float64)
+    actual = restore_binary_scale(fraction, exponent)
+    torch.testing.assert_close(actual, expected, atol=0, rtol=0)
+    assert torch.equal(torch.signbit(actual), torch.signbit(expected))
+
+
+def test_binary_scale_first_stage_is_normal_and_only_final_stage_rounds(monkeypatch):
+    # Reproduce the faulty vendor strategy on CPU: materialize 2**exponent,
+    # then multiply. The implementation must remain correct under it, and
+    # must not round into subnormals before its final multiplication.
+    calls = []
+
+    def materialized_power(fraction, exponent):
+        result = fraction * torch.pow(fraction.new_tensor(2.), exponent)
+        calls.append((fraction.detach().clone(), exponent.detach().clone(), result.detach().clone()))
+        return result
+
+    monkeypatch.setattr(torch, "ldexp", materialized_power)
+    for dtype in (torch.float32, torch.float64):
+        fraction, exponent, expected = _scale_boundary_inputs(dtype)
+        actual = restore_binary_scale(fraction, exponent)
+        torch.testing.assert_close(actual, expected, atol=0, rtol=0)
+        assert torch.equal(torch.signbit(actual), torch.signbit(expected))
+        first = calls[-2][2]
+        assert bool(((first == 0) | (first.abs() >= torch.finfo(dtype).tiny)).all())
+        assert bool(torch.isfinite(first).all())
+
+
+def test_binary_scale_zero_and_true_overflow_have_distinct_results(device):
+    fraction = torch.tensor([0., -0., .5, -.5, .5, -.5], device=device)
+    exponent = torch.tensor([10000, -10000, 129, 129, -10000, -10000], device=device)
+    actual = restore_binary_scale(fraction, exponent).cpu()
+    expected = torch.tensor([0., -0., torch.inf, -torch.inf, 0., -0.])
+    torch.testing.assert_close(actual, expected, atol=0, rtol=0)
+    assert torch.equal(torch.signbit(actual), torch.signbit(expected))
 
 
 def test_smallest_subnormal_single_edge_keeps_content_and_exact_zero_mass_vjp(device):

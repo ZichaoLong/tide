@@ -44,6 +44,23 @@ def test_dispatch_observes_zero_prior_native_and_tiled_modes_without_changing_po
     assert module._native_attention is original
 
 
+def test_mass_scaled_capture_keeps_amplitude_and_actual_composite_dispatch():
+    module = importlib.import_module("tide.attention")
+    q = torch.zeros(1, 1, 2, 4)
+    k = torch.zeros(1, 1, 3, 4)
+    v = torch.arange(12.).reshape_as(k)
+    weights = torch.tensor([[1e-30, 0., 2e-30]], requires_grad=True)
+    calls = Calls("cpu", elements=1000, max_calls=4)
+    with calls.install():
+        output = module.weighted_attention(q, k, v, weights, mass_scaled=True)
+    row = calls.rows[0]
+    assert row["mass_scaled"] and row["dispatch"]["weak_mass"]
+    assert row["dispatch"]["effective"] == "tiled"
+    expected = scalar_rows(dict(q=q, k=k, v=v, weights=weights, mask=None),
+                           [0, 1], mass_scaled=True)
+    torch.testing.assert_close(output.reshape(2, 4).double(), expected, atol=0, rtol=1e-5)
+
+
 def test_small_training_anchor_locates_injected_mode_error_and_oracle_exposes_it(monkeypatch):
     torch.manual_seed(410)
     config = ModelConfig(topology=TopologyConfig(n=2, layers=2), d=64, memory="K", attention_backend="math")

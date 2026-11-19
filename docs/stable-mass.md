@@ -35,6 +35,12 @@ autograd version guards. Nonfinite public results or adjoints raise explicitly.
 Those finite checks introduce host synchronization on accelerators; cost must
 be measured and is not inferred from reduced arithmetic.
 
+`scaled_arithmetic.py` normalizes the binary fraction and splits exponent
+restoration into two bounded powers. The first product remains a normal number;
+only the last rounds into subnormals. This avoids a device `ldexp` forming
+`2^128` as a separate FP32 infinity when the actual product is representable.
+True public overflow still reaches the explicit range guard.
+
 ## KV Full
 
 `weighted_attention(..., mass_scaled=True)` composes, for each visible row,

@@ -16,6 +16,8 @@ the raw negative-mass clamp remains outside this helper.
 import torch
 from torch.autograd.function import once_differentiable
 
+from .scaled_arithmetic import restore_binary_scale
+
 
 def _finite(label, *values):
     # Deliberately explicit, including on accelerators. Device qualification
@@ -29,14 +31,13 @@ def _parts(value):
 
 
 def _restore(mantissa, exponent):
-    return torch.ldexp(mantissa, torch.where(mantissa != 0, exponent, 0))
+    return restore_binary_scale(mantissa, exponent)
 
 
 def _align(mantissa, exponent, peak):
     # A zero term must not be multiplied by an overflowing power of two.
     shift = torch.where(mantissa != 0, exponent - peak, 0)
-    mantissa, shift = torch.broadcast_tensors(mantissa, shift)
-    return torch.ldexp(mantissa, shift)
+    return restore_binary_scale(mantissa, shift)
 
 
 def _sum_parts(mantissa, exponent, dim):

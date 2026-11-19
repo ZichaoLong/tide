@@ -67,6 +67,7 @@ def dispatch(device):
     """Observe actual adapter/custom-forward/native API calls without choosing one."""
     module = importlib.import_module("tide.attention")
     native, tiled, sdpa = module._native_attention, module._TiledAttention.forward, F.scaled_dot_product_attention
+    mass_attention = module._MassScaledAttention.forward
     result = dict(effective="math", representation="explicit_weight_quotient")
     def native_call(q, k, v, weights, mask, backend, **kwargs):
         result.update(effective=backend, adapter_width=q.shape[-1],
@@ -76,6 +77,10 @@ def dispatch(device):
     def tiled_call(*args, **kwargs):
         result.update(effective="tiled", representation="explicit_weight_quotient")
         return tiled(*args, **kwargs)
+    def mass_call(ctx, q, k, v, weights, mask, tiled, weak):
+        result.update(effective="tiled" if tiled else "math",
+                      representation="mass_scaled_weight_quotient", weak_mass=weak)
+        return mass_attention(ctx, q, k, v, weights, mask, tiled, weak)
     def sdpa_call(q, k, v, *args, **kwargs):
         bias = kwargs.get("attn_mask", args[0] if args else None)
         result.update(native_api="torch.nn.functional.scaled_dot_product_attention",
@@ -87,6 +92,7 @@ def dispatch(device):
     with ExitStack() as stack:
         stack.enter_context(patch.object(module, "_native_attention", native_call))
         stack.enter_context(patch.object(module._TiledAttention, "forward", staticmethod(tiled_call)))
+        stack.enter_context(patch.object(module._MassScaledAttention, "forward", staticmethod(mass_call)))
         stack.enter_context(patch.object(F, "scaled_dot_product_attention", sdpa_call))
         if torch.device(device).type == "npu":
             vendor = importlib.import_module("torch_npu")
@@ -127,12 +133,12 @@ class Calls:
         self.original = ATTENTION_SITES[0][1].weighted_attention
         with ExitStack() as stack:
             for site, owner in ATTENTION_SITES:
-                def wrapped(q, k, v, weights=None, mask=None, backend="auto", *, _site=site):
-                    return self.call(_site, (q, k, v, weights, mask), backend)
+                def wrapped(q, k, v, weights=None, mask=None, backend="auto", *, mass_scaled=False, _site=site):
+                    return self.call(_site, (q, k, v, weights, mask), backend, mass_scaled=mass_scaled)
                 stack.enter_context(patch.object(owner, "weighted_attention", wrapped))
             yield self
 
-    def call(self, site, values, backend):
+    def call(self, site, values, backend, *, mass_scaled=False):
         index = len(self.rows)
         if index >= self.max_calls:
             raise CaptureLimit("Attention call count exceeds "+str(self.max_calls))
@@ -145,13 +151,14 @@ class Calls:
         inputs = {name: describe(value) for name, value in zip(NAMES, values)}
         flags = {name: value is not None and value.requires_grad for name, value in zip(NAMES, values)}
         with dispatch(self.device) as path:
-            output = self.original(*values, backend=backend)
+            output = self.original(*values, backend=backend, mass_scaled=mass_scaled)
         if q.shape[-2] == 0 or k.shape[-2] == 0:
             path.update(effective="empty", representation="empty_output")
         row = dict(index=index, phase=self.phase, site=site, inputs=inputs, output=describe(output),
-                   requested_backend=backend, requires_grad=flags, grad_enabled=torch.is_grad_enabled(),
+                   requested_backend=backend, mass_scaled=mass_scaled,
+                   requires_grad=flags, grad_enabled=torch.is_grad_enabled(),
                    output_requires_grad=output.requires_grad, dispatch=path)
-        identity = {key: row[key] for key in ("index", "phase", "site", "inputs", "output")}
+        identity = {key: row[key] for key in ("index", "phase", "site", "inputs", "output", "mass_scaled")}
         digest = hashlib.sha256(json.dumps(identity, sort_keys=True).encode()).hexdigest()
         row["numeric_sha256"] = digest
         expected = None if self.reference is None or index >= len(self.reference) else self.reference[index]
@@ -185,7 +192,7 @@ def expand_auxiliary(value, shape, *, prior):
     raise ValueError("oracle auxiliary layout is not supported")
 
 
-def scalar_rows(inputs, rows):
+def scalar_rows(inputs, rows, *, mass_scaled=False):
     """Independent stable weighted exponential quotient, scalar IEEE FP64 only.
 
     Enumerates every visible key and every output coordinate in selected complete
@@ -212,7 +219,8 @@ def scalar_rows(inputs, rows):
         maximum = max(scores, default=-math.inf)
         terms = [math.exp(score-maximum) if score != -math.inf else 0. for score in scores]
         denominator = math.fsum(terms)
-        answer.append([math.fsum(term*value[channel] for term, value in zip(terms, values))/denominator
+        amplitude = min(1., math.fsum(w for w, active in zip(prior, visible) if active)) if mass_scaled else 1.
+        answer.append([amplitude*math.fsum(term*value[channel] for term, value in zip(terms, values))/denominator
                        if denominator else 0. for channel in range(v.shape[-1])])
     return torch.tensor(answer, dtype=torch.float64)
 
@@ -225,7 +233,8 @@ def replay_pair(reference, changed, device, row_limit):
         inputs = {key: None if value is None else value.to(device).clone().requires_grad_(metadata["requires_grad"][key])
                   for key, value in reference["inputs"].items()}
         with torch.set_grad_enabled(metadata["grad_enabled"]), arithmetic(device, "fp32"), dispatch(device) as path:
-            output = weighted_attention(*(inputs[key] for key in NAMES), backend=metadata["requested_backend"])
+            output = weighted_attention(*(inputs[key] for key in NAMES), backend=metadata["requested_backend"],
+                                        mass_scaled=metadata.get("mass_scaled", False))
         outputs[name] = output.detach().cpu()
         same_inputs = metadata["inputs"] == reference["metadata"]["inputs"]
         reports[name] = dict(dispatch=path, same_inputs_as_capture=same_inputs,
@@ -238,7 +247,7 @@ def replay_pair(reference, changed, device, row_limit):
     worst = int(error.argmax())
     rows = [worst] + [index for index in range(min(row_limit, a.shape[0])) if index != worst]
     rows = rows[:row_limit]
-    oracle = scalar_rows(reference["inputs"], rows)
+    oracle = scalar_rows(reference["inputs"], rows, mass_scaled=reference["metadata"].get("mass_scaled", False))
     return dict(state="completed", primitive_replays=2,
         common_input="captured inference inputs, preserving each mode's requires_grad flags",
         replays=reports, mode_difference=numeric(a, b), oracle=dict(
