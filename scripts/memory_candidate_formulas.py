@@ -3,12 +3,21 @@
 This is deliberately a bounded scalar/node loop, not an alternative evaluator.
 Content/summary/FFN widths are independent of the total Q/K/V channel width.
 """
+import argparse
+import hashlib
+import json
 import math
+import os
+from pathlib import Path
+import subprocess
 
 import torch
 from torch.nn import functional as F
 
 from tide.kv import KVMemory
+from tide.precision import precision_policy
+from benchmarks.statistics import RuntimeAudit
+from scripts.job import atomic
 from scripts.qualify_precision import THRESHOLDS, comparison, fingerprint
 
 
@@ -106,24 +115,65 @@ def cotangent_loss(result):
     return sum(losses)
 
 
-def fixture(width=32, *, device="cpu", dtype=torch.float32, shared=True):
+def fixture(width=32, *, d=192, device="cpu", dtype=torch.float32, shared=True, batch=2):
+    if type(d) is not int or d < 32 or d % 32:
+        raise ValueError("content width must be a positive multiple of 32")
+    if type(batch) is not int or batch not in (1, 2):
+        raise ValueError("this finite fixture supports batch 1 or 2")
     torch.manual_seed(2419)
-    module = KVMemory(3, 192, [0, 1, 0] if shared else None, 8, 4,
+    module = KVMemory(3, d, [0, 1, 0] if shared else None, 8, 4,
                       backend="math", chunk=3, window=16, kv_width=width).to(device=device, dtype=dtype)
-    u = torch.randn(2, 2, 7, 192, dtype=dtype, device=device, requires_grad=True)
+    u = torch.randn(2, batch, 7, d, dtype=dtype, device=device, requires_grad=True)
     mass = torch.tensor([[[.2, 0, .3, .4, 0, .2, .3], [.1, .2, 0, .3, .2, 0, .1]],
                          [[.3, .2, 0, .1, .3, .1, 0], [0, .3, .2, .1, 0, .3, .2]]],
-                        dtype=dtype, device=device, requires_grad=True)
-    times = (2**55 + 19 + torch.arange(7, device=device, dtype=torch.int64) * 4).expand(2, 2, 7)
+                        dtype=dtype, device=device)[:, :batch].requires_grad_()
+    times = (2**55 + 19 + torch.arange(7, device=device, dtype=torch.int64) * 4).expand(2, batch, 7)
     owners = torch.tensor([2, 0], device=device)
     control = torch.zeros_like(mass)
     control[:, :, 2::2] = (mass[:, :, 2::2] > 0).to(dtype)
     return (module, u, mass, times, owners, control), (u, mass, *module.parameters())
 
 
-def formula_witness(width=32, *, device="cpu", dtype=torch.float32):
-    args, roots = fixture(width, device=device, dtype=dtype)
-    actual, expected = projected(*args), direct_formula(*args)
+class QueryProjectionAudit(RuntimeAudit):
+    """Observe only operators executed inside HeadQuery.forward."""
+    def __init__(self):
+        super().__init__()
+        self.inside_query = False
+
+    def __torch_dispatch__(self, func, types, args=(), kwargs=None):
+        if self.inside_query:
+            return super().__torch_dispatch__(func, types, args, kwargs)
+        return func(*args, **(kwargs or {}))
+
+
+def formula_state(checks, zero_mass_nonzeros):
+    rows = list(checks.values())
+    if any(row["nonfinite"] for row in rows):
+        return "nonfinite"
+    if any(zero_mass_nonzeros) or any(row["dtype_differences"] for row in rows):
+        return "structural_failed"
+    if any(row["metadata_failures"] for row in rows):
+        return "metadata_failed"
+    if any(row["support_differences"] for row in rows):
+        return "support_failed"
+    if any(row["threshold_failures"] for row in rows):
+        return "finite_deviation"
+    return "within_threshold"
+
+
+def formula_witness(width=32, *, d=192, device="cpu", dtype=torch.float32, shared=True, batch=2):
+    args, roots = fixture(width, d=d, device=device, dtype=dtype, shared=shared, batch=batch)
+    audit = QueryProjectionAudit()
+    query = args[0].query
+    handles = [query.register_forward_pre_hook(lambda *unused: setattr(audit, "inside_query", True)),
+               query.register_forward_hook(lambda *unused: setattr(audit, "inside_query", False))]
+    try:
+        with audit:
+            actual = projected(*args)
+    finally:
+        for handle in handles:
+            handle.remove()
+    expected = direct_formula(*args)
     chunked = projected(*args, cut=4)
     named = ["input", "mass", *(name for name, _ in args[0].named_parameters())]
     gradients = []
@@ -135,12 +185,75 @@ def formula_witness(width=32, *, device="cpu", dtype=torch.float32):
               "value_continuation": comparison(chunked, actual, THRESHOLDS[precision]),
               "vjp_continuation": comparison(gradients[2], gradients[0], THRESHOLDS[precision])}
     zero = [int(torch.count_nonzero(row["mass"][args[2] == 0])) for row in gradients]
-    return dict(width=width, d=192, summary_width=48, ffn_width=768, heads=width // 32,
-                head_width=32, state="nonfinite" if any(c["nonfinite"] for c in checks.values()) else
-                "structural_failed" if any(c["metadata_failures"] for c in checks.values()) or any(zero) else
-                "finite_deviation" if any(c["threshold_failures"] for c in checks.values()) else "within_threshold",
+    query_dispatch = audit.report()
+    selected_fused = query.uses_fused_projection(args[1])
+    observed_fused = width // 32 >= 4 and any(
+        row["operator"] in ("aten.mm.default", "aten.bmm.default") and len(row["inputs"]) == 2
+        and row["inputs"][0][-1] == d and row["inputs"][1][-2:] == [d, width]
+        for row in query_dispatch["matrix_shapes"])
+    state = formula_state(checks, zero)
+    if selected_fused and not observed_fused and state != "nonfinite":
+        state = "structural_failed"
+    return dict(width=width, d=d, summary_width=d//4, ffn_width=4*d, heads=width // 32,
+                head_width=32, batch=batch, input_shape=list(args[1].shape), sharing="shared_base_private_rank8" if shared else "independent",
+                state=state,
                 scope="FP32 or bounded CPU FP64 literal formula, private adapters and node state, int64 translation, zero write, window eviction, full VJP",
+                query_dispatch=dict(selected_fused_projection=selected_fused,
+                                    fused_base_projection_observed=observed_fused, **query_dispatch),
                 identity=dict(parameters=fingerprint(args[0].state_dict()), input=fingerprint(args[1]),
                               mass=fingerprint(args[2]), times=fingerprint(args[3])),
                 zero_mass_gradient_nonzeros=zero, first_time=int(args[3][0, 0, 0]),
                 retained_times=[[list(bank) for bank in row] for row in actual["state"]], checks=checks)
+
+
+def main(argv=None):
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--device", default="cpu")
+    parser.add_argument("--d", type=int, default=192)
+    parser.add_argument("--widths", type=int, nargs="+", default=[96, 64, 32])
+    parser.add_argument("--batch", type=int, choices=(1, 2), default=1)
+    parser.add_argument("--shared", action="store_true", help="also use shared bases with private rank8 adapters; default independent")
+    parser.add_argument("--precision", choices=("fp32", "fp64"), default="fp32")
+    parser.add_argument("--threads", type=int, default=1)
+    parser.add_argument("--output", type=Path, required=True)
+    args = parser.parse_args(argv)
+    if args.output.exists() or args.threads < 1 or len(args.widths) != len(set(args.widths)):
+        parser.error("choose a new output, positive thread count and distinct widths")
+    if args.d < 32 or args.d % 32 or any(width <= 0 or width > args.d or width % 32 for width in args.widths):
+        parser.error("d and widths must be positive multiples of 32 with widths <= d")
+    if args.precision == "fp64" and args.device != "cpu":
+        parser.error("FP64 is a bounded CPU diagnostic")
+    if args.device.startswith("npu"):
+        import torch_npu
+        torch.npu.set_device(args.device)
+        torch.npu.matmul.allow_hf32 = False
+        torch.npu.conv.allow_hf32 = False
+    torch.set_num_threads(args.threads)
+    dtype = torch.float64 if args.precision == "fp64" else torch.float32
+    report = dict(schema="tide-memory-width-formulas-v1", state="running",
+                  source=os.environ.get("TIDE_SOURCE_COMMIT") or subprocess.check_output(["git", "rev-parse", "HEAD"], text=True).strip(),
+                  harness_sha256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
+                  arguments={k: str(v) if isinstance(v, Path) else v for k, v in vars(args).items()},
+                  physical_devices=os.environ.get("ASCEND_RT_VISIBLE_DEVICES"), torch=str(torch.__version__),
+                  cpu_affinity=sorted(os.sched_getaffinity(0)),
+                  precision=precision_policy(args.device, "fp32") if args.precision == "fp32" else dict(requested="fp64", purpose="bounded CPU diagnostic"),
+                  thresholds=THRESHOLDS[args.precision], rows=[])
+    atomic(args.output, report)
+    for width in args.widths:
+        try:
+            row = formula_witness(width, d=args.d, device=args.device, dtype=dtype, shared=args.shared, batch=args.batch)
+        except Exception as error:
+            import traceback
+            traceback.print_exc()
+            row = dict(width=width, state="execution_failed", error=repr(error))
+        report["rows"].append(row)
+        atomic(args.output, report)
+    order = ("execution_failed", "nonfinite", "structural_failed", "metadata_failed", "support_failed", "finite_deviation")
+    report["state"] = next((state for state in order if any(row["state"] == state for row in report["rows"])), "within_threshold")
+    atomic(args.output, report)
+    print(json.dumps(dict(state=report["state"], widths=[dict(width=row["width"], state=row["state"]) for row in report["rows"]])))
+    return int(report["state"] not in ("within_threshold", "finite_deviation"))
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

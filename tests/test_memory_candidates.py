@@ -28,6 +28,19 @@ def test_narrow_fp32_formula_and_private_adapter_gradient_sum():
     assert record["state"] == "within_threshold", record["checks"]
 
 
+def test_actual_d768_narrow128_formula_and_vjp_preserves_full_content_dimensions():
+    record = formula_witness(128, d=768, shared=False, batch=1)
+    assert record["state"] == "within_threshold", record["checks"]
+    assert (record["d"], record["summary_width"], record["ffn_width"], record["heads"]) == (768, 192, 3072, 4)
+    assert record["input_shape"] == [2, 1, 7, 768]
+    assert record["zero_mass_gradient_nonzeros"] == [0, 0, 0]
+    assert not record["query_dispatch"]["selected_fused_projection"]  # CPU remains per-head.
+    assert not record["query_dispatch"]["fused_base_projection_observed"]
+    assert record["query_dispatch"]["matrix_shapes"]
+    assert all(not row["metadata_failures"] and not row["dtype_differences"] and not row["support_differences"]
+               for row in record["checks"].values())
+
+
 def test_narrow_huge_time_translation_and_zero_write_idle_state():
     args, _ = fixture(64, dtype=torch.float64)
     module, u, mass, times, owners, control = args

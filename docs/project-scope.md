@@ -22,6 +22,8 @@
 
 当前产品是 FC、HB-Lattice、HB-Exchange、HB-Multiscale Settle/Timed；覆盖 K/S/X、
 四种接收、quad/Shannon/pool、三档参数归属及主绑定的合法配置。
+本线程显式加入[记忆绑定扩展](memory-candidates.md)：反向混合、共同窄Q/K/V内部通道、
+分模块记忆区域共享与独立Full FFN尺寸；它们不改变固定快照，也不自动替换默认。
 当前 `src/tide` 是活跃实现；上一轮交付不等于上一代实现。
 
 实际训练及后续训练优化优先 FP32；BF16 保留为次优先级的可选精度，已有实现与证据继续保留。
