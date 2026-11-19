@@ -180,7 +180,7 @@ def main(argv=None):
             inference="first available backbone output, prefill and continuing stable decode; no task head, sampling or LM TTFT",
             comparisons="same-source Tide execution variants at identical semantic config; fixed-depth Transformer is auxiliary, not A-D or output equivalence",
             diagnostics="untimed separate work/storage passes after all ordinary samples; training restores the warmed first-sample anchor",
-            memory="normal allocator peaks sampled before checks; RSS is process lifetime; ledger de-duplicates visible storage and leaves allocator residual unclassified",
+            memory="allocator sampled after run_stream returns: training peaks include its untimed finite checks, but precede the later continuation audit; complete_seconds excludes those checks; RSS is process lifetime; ledger de-duplicates visible storage and leaves allocator residual unclassified",
             repeats="one invocation is one finite repeat; serial paired order and at least three repeats belong to the external driver"))
     try:
         _reserve_output(args.output, record)

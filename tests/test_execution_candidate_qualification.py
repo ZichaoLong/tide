@@ -110,3 +110,27 @@ def test_npu_cache_boundary_synchronizes_and_records_live_owners_without_moving_
     assert events == ["sync", "allocator", "empty_cache", "sync", "allocator"]
     assert result["before_cache_release"] == before and result["after_cache_release"] == after
     assert result["cache_release_requested"]
+
+
+def test_earlier_mode_failure_keeps_its_witness_without_duplicating_a_passing_vjp(tmp_path, monkeypatch):
+    original = qualification.observe
+    def altered_inference(*args, **kwargs):
+        observed, state, work = original(*args, **kwargs)
+        if kwargs.get("grad") is False:
+            segment = observed["forward"]["segments"][0]
+            segment["values"] = segment["values"] + .02
+        return observed, state, work
+    monkeypatch.setattr(qualification, "observe", altered_inference)
+    # This regression concerns witness retention; the independent process and
+    # actual checkpoint path are exercised by the complete recovery test above.
+    monkeypatch.setattr(qualification, "check_restore", lambda *args, **kwargs:
+                        dict(state="within_threshold", checks={}))
+    result = run(tiny_config(), directory=tmp_path, candidates=("baseline",),
+                 device="cpu", batch=1, length=4, chunk=2, artifact_budget_gib=1.)
+    case = result["candidates"][0]
+    assert result["state"] == "finite_deviation" and not result["qualified"]
+    assert classified([case["checks"]["inference_vs_grad_forward"]])["state"] == "finite_deviation"
+    assert classified([case["checks"]["same_owner_vjp_repeat"]])["state"] == "within_threshold"
+    assert (tmp_path/"baseline/inference.pt").is_file()
+    assert (tmp_path/"baseline/vjp1.pt").is_file()
+    assert not (tmp_path/"baseline/vjp2.pt").exists()

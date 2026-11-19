@@ -326,7 +326,13 @@ def run(config, *, directory, candidates=("baseline", "packing"), device="cpu", 
                     del inferred
                 if phase == "vjp2":
                     case["checks"]["same_owner_vjp_repeat"] = comparison_to_file(observed, case_dir/"vjp1.pt")
-                    if classified(case["checks"])["state"] != "within_threshold":
+                    # Earlier inference-vs-grad failures are already witnessed
+                    # by inference.pt and vjp1.pt. Do not duplicate a successful
+                    # repeat merely because that earlier comparison failed.
+                    repeat_checks = [case["checks"]["same_owner_vjp_repeat"]]
+                    if name != "baseline":
+                        repeat_checks.append(case["checks"]["vjp2_vs_baseline"])
+                    if classified(repeat_checks)["state"] != "within_threshold":
                         artifacts.save(case_dir/"vjp2.pt", observed, "retained failed repeated VJP witness")
                 else:
                     path = case_dir/(phase+".pt")
