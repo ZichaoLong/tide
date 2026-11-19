@@ -71,7 +71,11 @@ git archive RECORDED_SOURCE_COMMIT | tar -x -C NEW_SOURCE_DIRECTORY
 审计及删除分别由background.slice服务完成，均有限600秒、4 GiB采样RSS、CPU176–179；
 实际约21.51/14.57秒，未使用NPU。冻结审计脚本身份和删除脚本的保护补充分别记录。
 清理后隔离wheel冒烟覆盖包文件身份、CPU FP32训练、配对恢复和新进程更新；
-服务终态、临时产物退休及最终du/quota见JSON。
+3个服务passed，11个记录后代与监督进程均终态。隔离wheel的23个包文件身份、训练/恢复及新进程更新检查通过。
+结果提交612054fb后，已退休约40.875 MiB检查环境/构建/检查点、约17.4 MiB逐文件临时清单及冻结archive，
+本次和前次清理的一次性脚本原文已在Git中的JSON归档后移除常驻副本。
+最终仓库约91.12 GiB、账户quota约131.07 GiB；记录新增少量字节及其他账户任务可影响quota。
+具体终态与临时退休清单见JSON。
 
 此前90载荷退休见[第一批记录](disk-cleanup-20261119.md)。70个额外成功载荷29.428 GiB、
 成功profiler约5.314 GiB以及失败见证缩减仍仅是调查建议，本轮未删除这些数据。
