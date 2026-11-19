@@ -15,8 +15,9 @@ policies, thresholds or the qualification of existing records.
 
 [Stable mass reductions](stable-mass.md) document Reception's scaled mean and
 centered composite VJP, and KV's mass-scaled Attention. Execution thresholds do
-not alter positive support. Their source/device qualification is recorded
-separately; neither a log-space formula nor a dtype label certifies all ranges.
+not alter positive support. Their source/device qualification and repair costs are
+[recorded separately](evidence/stable-mass-20261119.md); neither a log-space formula
+nor a dtype label certifies all ranges.
 
 Keep model parameters and floating inputs in FP32, import `precision_context`
 from `tide.precision`, and use `with precision_context(device, "bf16"):` around
@@ -28,7 +29,8 @@ times remain int64. Parameter gradients and AdamW moments remain FP32, with the
 parameters themselves serving as master weights. Autocast's cast cache is disabled.
 
 Explicit math/tiled Attention promotes BF16 Q/K/V to FP32 for its score,
-normalization and value products, then returns the payload dtype. Native SDPA
+normalization and value products, then returns the payload dtype, except that
+mass-scaled KV Full retains its result in FP32. Native SDPA
 arithmetic depends on its selected backend: the recorded CPU site audits
 (including auto→SDPA) observed FP32 `bmm` for BF16 payloads. Native NPU fusion
 has separate observed inputs/operators. See the [Attention evidence](evidence/roadmap-attention-20261118.md);
@@ -40,8 +42,11 @@ BF16 `auto` Attention uses tiled math whenever a visible key prior is zero,
 with or without a recorded gradient. Positive explicit NPU priors use the same
 rank-one encoding in inference and training; omitted unit priors retain the
 native unit path. This avoids changing the arithmetic representation merely by
-enabling gradients. Explicit backend choices remain separately declared paths;
-FP32 retains its previous dispatch. Cross-precision routing may still change
+enabling gradients. For mass-scaled KV Full, visible positive priors below
+`sqrt(finfo(accumulation_dtype).tiny)` select stable tiled execution under auto
+in both FP32 and BF16; explicit native requests reject this weak-prior range.
+This threshold does not floor or drop stored masses. Other explicit backend
+choices remain separately declared paths. Cross-precision routing may still change
 when rounded scores cross a true allocation boundary.
 
 `precision_policy` serializes this policy and `ArithmeticAudit` observes actual

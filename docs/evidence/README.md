@@ -1,11 +1,17 @@
 # Current evidence
 
-The [compact repository finalization](compact-repository-20261119.md) reduces the whole
-checkout, common Git and private environment to about 144.380 MB. Experimental
-checkouts and remaining payloads are retired; exact source snapshots and reviewed
-failures remain in Git. The [current archive index](archive-index.json) restores the
-47 compressed reviewed JSON files. Raw artifact archives and local witnesses are no
-longer online. Installed CPU training/recovery passed; push awaits network recovery.
+The [stable mass reductions](stable-mass-20261119.md) implement scaled Reception
+means and composite KV Full VJPs, including the measured NPU exponent-restoration
+repair. CPU/NPU qualifications, actual restored updates, retained finite failures,
+and paired small-graph repair costs keep their frozen source identities. Current
+handoff and storage facts are in [STATUS](../STATUS.md).
+
+The preceding [compact repository finalization](compact-repository-20261119.md)
+reduced the checkout, common Git and private environment to about 144.380 MB at
+that time. Experimental checkouts and old payloads are retired; source snapshots
+and reviewed failures remain in Git. The [current archive index](archive-index.json)
+restores the compressed reviewed JSON files. Embedded historical paths are
+identities, not current raw-artifact availability promises.
 
 The preceding [storage finalization](storage-finalization-20261119.md) records the
 earlier 2.264 GiB stage and its then-available inputs; current availability is above.

@@ -92,6 +92,26 @@ Shannon/pool contract. Public values/gradients with genuinely excessive range
 cannot be repaired by reordering. This work does not qualify new storage
 policies, all extreme domains, higher-order derivatives, or task quality.
 
+The Attention range checks cover the expanded Q/K/V roots, before later
+autograd sums into a broadcast source or shared parameter. They do not guarantee
+the range of every later shared-gradient accumulation or cancellation. Its
+centered backward also uses the first stored value as an arithmetic anchor,
+which may be structurally masked; an extreme finite masked anchor can exceed
+an intermediate range even when the visible formula is finite. This is a
+static implementation limitation, not a newly measured failure or proof that
+every range exception represents a mathematically unrepresentable final VJP.
+The composite hardening applies to mass-scaled KV Full. Ordinary native
+amplitude multiplication and non-mass-scaled Attention retain their existing
+range limits; the weak-prior fallback covers a whole call, not individual rows.
+Scaled reductions still use finite-precision summation: extreme cancellation
+can lose small terms even when the real result is representable, without
+triggering a nonfinite check. Reception sums broadcast roots before its range
+guard, but this does not qualify subsequent linear/shared-parameter accumulation.
+
+Source/device qualification, retained deviations, small-graph repair costs and
+retired-payload availability are recorded in the
+[2026-11-19 evidence](evidence/stable-mass-20261119.md).
+
 ## Reproduction
 
 In the matching private environment, directed checks are

@@ -14,7 +14,7 @@ separate responsibilities but no compulsory universal intermediate representatio
 | legal configuration, clocks and optional bindings | config.py, topology.py, topology_hb.py; scripts/support_catalog.py | test_topology.py, test_optional_bindings.py |
 | exact parameter binding and optional static row views | parameters.py, model.py construction | test_parameter_binding.py, test_parameter_views.py |
 | optional direct FFN bank access and owner-row packing | grouped_linear.py, ffn_packing.py, parameters.py | test_grouped_weights.py, test_ffn_packing.py |
-| incoming message processing and stable mass reduction | reception.py, weighted_mean.py | test_reception.py, test_stable_reception.py |
+| incoming message processing and stable mass reduction | reception.py, weighted_mean.py, scaled_arithmetic.py | test_reception.py, test_stable_reception.py |
 | KV history and selected Full | kv.py, layout.py | oracle_fc.py, test_fc_reference.py |
 | SSD recurrence/convolution | ssd.py, ssd_memory.py | test_ssd.py, test_ssd_memory.py |
 | encoded regional scores, role allocation | region.py, allocation.py | oracle_fc.py, test_allocation.py |

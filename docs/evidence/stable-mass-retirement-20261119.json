@@ -1,0 +1,142 @@
+{
+  "schema": "tide-stable-mass-retirement-v1",
+  "state": "planned",
+  "scope": "only this stable-mass task artifact directories; requires reviewed evidence commit and rechecked terminal descendants",
+  "plan": {
+    "scope": "explicit dry run; no deletion yet",
+    "rows": [
+      {
+        "path": "artifacts/stable-mass-20261119",
+        "state": "shared fixed inputs",
+        "logical_bytes": 15059911,
+        "allocated_bytes": 16338944,
+        "files": 564,
+        "ownership": "this stable-mass task",
+        "decision": "retain small reviewed records; retire only after terminal review and evidence commit",
+        "protected": false
+      },
+      {
+        "path": "artifacts/stable-mass-cpu-costs",
+        "state": "running",
+        "logical_bytes": 15428150,
+        "allocated_bytes": 16650240,
+        "files": 534,
+        "ownership": "this stable-mass task",
+        "decision": "retain small reviewed records; retire only after terminal review and evidence commit",
+        "protected": false
+      },
+      {
+        "path": "artifacts/stable-mass-cpu-suite-r1",
+        "state": "failed",
+        "logical_bytes": 1638139462,
+        "allocated_bytes": 1640882176,
+        "files": 1196,
+        "ownership": "this stable-mass task",
+        "decision": "retain small reviewed records; retire only after terminal review and evidence commit",
+        "protected": false
+      },
+      {
+        "path": "artifacts/stable-mass-cpu-suite-r2",
+        "state": "running",
+        "logical_bytes": 899052598,
+        "allocated_bytes": 901177344,
+        "files": 938,
+        "ownership": "this stable-mass task",
+        "decision": "retain small reviewed records; retire only after terminal review and evidence commit",
+        "protected": false
+      },
+      {
+        "path": "artifacts/stable-mass-cpu-training-r1",
+        "state": "passed",
+        "logical_bytes": 16149273,
+        "allocated_bytes": 17465344,
+        "files": 578,
+        "ownership": "this stable-mass task",
+        "decision": "retain small reviewed records; retire only after terminal review and evidence commit",
+        "protected": false
+      },
+      {
+        "path": "artifacts/stable-mass-cpu-training-r2",
+        "state": "passed",
+        "logical_bytes": 163827348,
+        "allocated_bytes": 165167104,
+        "files": 589,
+        "ownership": "this stable-mass task",
+        "decision": "retain small reviewed records; retire only after terminal review and evidence commit",
+        "protected": false
+      },
+      {
+        "path": "artifacts/stable-mass-installed",
+        "state": "passed",
+        "logical_bytes": 29163348,
+        "allocated_bytes": 32563200,
+        "files": 1515,
+        "ownership": "this stable-mass task",
+        "decision": "retain small reviewed records; retire only after terminal review and evidence commit",
+        "protected": false
+      },
+      {
+        "path": "artifacts/stable-mass-npu-costs",
+        "state": "passed",
+        "logical_bytes": 19709731,
+        "allocated_bytes": 21078016,
+        "files": 601,
+        "ownership": "this stable-mass task",
+        "decision": "retain small reviewed records; retire only after terminal review and evidence commit",
+        "protected": false
+      },
+      {
+        "path": "artifacts/stable-mass-npu-primitives-r1",
+        "state": "failed",
+        "logical_bytes": 14694962,
+        "allocated_bytes": 15974400,
+        "files": 560,
+        "ownership": "this stable-mass task",
+        "decision": "retain small reviewed records; retire only after terminal review and evidence commit",
+        "protected": false
+      },
+      {
+        "path": "artifacts/stable-mass-npu-primitives-r2",
+        "state": "passed",
+        "logical_bytes": 15864092,
+        "allocated_bytes": 17149952,
+        "files": 562,
+        "ownership": "this stable-mass task",
+        "decision": "retain small reviewed records; retire only after terminal review and evidence commit",
+        "protected": false
+      },
+      {
+        "path": "artifacts/stable-mass-npu-training-r2",
+        "state": "passed",
+        "logical_bytes": 164139621,
+        "allocated_bytes": 165486592,
+        "files": 590,
+        "ownership": "this stable-mass task",
+        "decision": "retain small reviewed records; retire only after terminal review and evidence commit",
+        "protected": false
+      }
+    ],
+    "protect": [
+      "four untracked user docs",
+      "fixed math",
+      "main private environment",
+      "Git and both worktrees",
+      "public toolchains",
+      "downstream files and installs",
+      "unrelated jobs"
+    ],
+    "conditions": [
+      "all jobs and identified descendants terminal",
+      "reviewed result/log/source identity committed",
+      "baseline no longer consumed by cost jobs"
+    ],
+    "dependencies": {
+      "main_editable_path": "/mi/data2T/zlong/home/llm/graph-execution-foundation/src",
+      "downstream_pilot_direct_url": {
+        "dir_info": {},
+        "url": "file:///mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r1/foundation"
+      },
+      "assessment": "Neither inspected installation points into this task artifact directories. Preserve both installations and both worktrees. All shared baseline inputs wait for both cost job terminal checks."
+    }
+  }
+}

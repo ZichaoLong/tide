@@ -307,6 +307,14 @@
       "archive_sha256": "20ab8b49ed7c69dcd5aa75a9c93d7dc5177c3704226e0a24a0d71e8e44de0082"
     },
     {
+      "path": "docs/evidence/stable-mass-20261119.json",
+      "archive_path": "docs/evidence/stable-mass-20261119.json.gz",
+      "original_bytes": 12441377,
+      "original_sha256": "12091d6a4b117f99a796142850321e0e05b065f99c68291dae79a6c10ed7239e",
+      "archive_bytes": 854479,
+      "archive_sha256": "05a76ade669970a1bbba1fe23dc19a84db526b9e7b8c041fae0ad3c48b927231"
+    },
+    {
       "path": "docs/evidence/storage-archive-index-20261119.json",
       "archive_path": "docs/evidence/storage-archive-index-20261119.json.gz",
       "original_bytes": 303650,

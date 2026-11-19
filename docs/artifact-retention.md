@@ -45,14 +45,15 @@ reviewed result is committed. Git history and user-owned files remain intact.
 
 ## Current compact storage
 
-The [compact repository report](evidence/compact-repository-20261119.md) owns current
-availability. The user explicitly requested the whole checkout, common Git and private
+The [current handoff](STATUS.md) owns current availability; the
+[compact repository report](evidence/compact-repository-20261119.md) records the prior
+cleanup. The user explicitly requested the whole checkout, common Git and private
 environment below 200 MB, including retirement of the remaining diagnostic payloads.
 Original artifacts and experimental checkouts are no longer online. Original branch
 refs, exact tracked trees and unique ignored source/small records remain in Git history;
 reviewed failures and qualifications remain available without storing model payloads.
 
-The [current archive index](evidence/archive-index.json) points to 47 byte-preserved
+The [current archive index](evidence/archive-index.json) points to byte-preserved
 `docs/evidence/*.json.gz` files stored in Git. `scripts/materialize_record.py` checks both
 SHA256 identities and length, bounds decompression, stages/fsyncs output and refuses
 overwrite. Restoring reviewed JSON does not reconstruct retired transitive inputs or
