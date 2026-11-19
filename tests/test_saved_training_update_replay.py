@@ -1,4 +1,5 @@
 """A real continued update checks replay sufficiency and input identity guards."""
+import copy
 import json
 import os
 
@@ -67,8 +68,35 @@ def test_saved_state_replays_real_fourth_step_and_rejects_changed_input(tmp_path
     assert record["config"]["ffn_weight_access"] == options["ffn_weight_access"]
     assert record["original_state"] == "finite_deviation"
     assert {str(p): replay.sha(p) for p in tmp_path.rglob("*") if p.is_file()} == before_files
+    proof_path = tmp_path / "exact-proof.json"
+    proof_path.write_text(json.dumps(record))
+    (tmp_path / owner / "update-2.pt").unlink()
+    surviving_files = {str(p): replay.sha(p) for p in tmp_path.rglob("*") if p.is_file()}
+    reproduced = replay.run(tmp_path, verified_path, owner, proof_path)
+    assert reproduced["state"] == "exact" and reproduced["comparison_mode"] == "prior_exact_screen"
+    assert reproduced["comparison"]["screen_actual"] == record["comparison"]["screen_expected"]
+    assert reproduced["expected_observation"]["sha256"] == replay.sha(proof_path)
+    assert [x["path"] for x in reproduced["input_files"]] == [str(tmp_path / "anchor.pt"), str(tmp_path / owner / "update-1.pt")]
+    assert {str(p): replay.sha(p) for p in tmp_path.rglob("*") if p.is_file()} == surviving_files
+    broken = copy.deepcopy(record)
+    broken["comparison"]["screen_expected"]["sha256"] = "0" * 64
+    proof_path.write_text(json.dumps(broken))
+    with pytest.raises(ValueError, match="screens disagree"):
+        replay.run(tmp_path, verified_path, owner, proof_path)
+    broken = copy.deepcopy(record)
+    broken["input_files"][0]["manifest_sha256"] = "0" * 64
+    proof_path.write_text(json.dumps(broken))
+    with pytest.raises(ValueError, match="input SHA mismatch"):
+        replay.run(tmp_path, verified_path, owner, proof_path)
+    # Even a self-consistent fabricated expected digest cannot pass the real update.
+    broken = copy.deepcopy(record)
+    for key in ("screen_actual", "screen_expected"):
+        broken["comparison"][key]["sha256"] = "0" * 64
+    proof_path.write_text(json.dumps(broken))
+    assert replay.run(tmp_path, verified_path, owner, proof_path)["state"] == "not_exact"
+    proof_path.write_text(json.dumps(record))
     target = tmp_path / owner / "update-1.pt"
     s = target.stat()
     os.utime(target, ns=(s.st_atime_ns, s.st_mtime_ns + 1))
     with pytest.raises(ValueError, match="stat guard changed"):
-        replay.run(tmp_path, verified_path, owner)
+        replay.run(tmp_path, verified_path, owner, proof_path)

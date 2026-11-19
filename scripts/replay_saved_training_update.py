@@ -13,7 +13,7 @@ import torch
 
 from benchmarks.inference import source_identity
 from benchmarks.workloads import tensor_hash
-from scripts.check_training_paths import build_candidate, compare, observe, training_data
+from scripts.check_training_paths import build_candidate, compare, observe, screen, training_data
 from scripts.diagnose_saved_training import Inputs
 from scripts.job import atomic
 from scripts.qualify_precision import THRESHOLDS
@@ -37,7 +37,7 @@ def require(condition, message):
         raise ValueError(message)
 
 
-def run(directory, verified_path, owner):
+def run(directory, verified_path, owner, expected_observation=None):
     directory, verified_path = Path(directory).resolve(), Path(verified_path).resolve()
     original = json.loads((directory / "result.json").read_text())
     verified = json.loads(verified_path.read_text())
@@ -52,9 +52,27 @@ def run(directory, verified_path, owner):
     require(helpers == HELPERS and source["tide_content_sha256"] == original["source"]["tide_content_sha256"],
             "production or executed helper source changed")
     require(original["tolerance"] == THRESHOLDS["fp32"], "original threshold changed")
-    names = ["anchor.pt", owner + "/update-1.pt", owner + "/update-2.pt"]
+    original_names = ["anchor.pt", owner + "/update-1.pt", owner + "/update-2.pt"]
+    names = original_names if expected_observation is None else original_names[:2]
     manifests = {row["path"]: row for row in original["artifacts"]}
     verified_inputs = {row["path"]: row for row in verified["input_files"]}
+    proof_identity = None
+    if expected_observation is not None:
+        proof_path = Path(expected_observation).resolve()
+        proof_bytes = proof_path.read_bytes()
+        proof, proof_identity = json.loads(proof_bytes), dict(path=str(proof_path), sha256=hashlib.sha256(proof_bytes).hexdigest())
+        require(proof["state"] == "exact" and proof["owner"] == owner and proof["index"] == 2 and proof["rng_unchanged"] and
+                proof.get("comparison_mode", "original_tensor") == "original_tensor" and proof["comparison"]["comparison"]["exact"],
+                "expected observation is not an exact original tensor comparison")
+        require(proof["source"]["tide_content_sha256"] == source["tide_content_sha256"] and proof["original_source"] == original["source"] and
+                proof["helper_sha256"] == helpers and proof["verified_record_sha256"] == verified_sha and proof["torch"] == torch.__version__,
+                "expected observation source or provenance mismatch")
+        proof_inputs = {row["path"]: row["manifest_sha256"] for row in proof["input_files"]}
+        require(all(proof_inputs[str(directory / name)] == manifests[name]["sha256"] for name in original_names),
+                "expected observation input SHA mismatch")
+        expected_screen = proof["comparison"]["screen_expected"]
+        require(expected_screen == proof["comparison"]["screen_actual"] and not expected_screen["nonfinite"],
+                "expected observation screens disagree")
     def guard():
         for name in names:
             path = directory / name
@@ -84,13 +102,19 @@ def run(directory, verified_path, owner):
     require(set(steps["before"].values()) == {3} and set(steps["after"].values()) == {4} and steps["checked"] and
             position == 3 * original["workload"]["length"] and following.position == 4 * original["workload"]["length"],
             "expected real steps 3->4 and positions 3L->4L")
-    expected = inputs.load(names[2])
-    checked = compare(updated, expected, original["tolerance"])
+    if proof_identity is None:
+        checked = compare(updated, inputs.load(names[2]), original["tolerance"])
+    else:
+        actual_screen = screen(updated)
+        checked = dict(screen_actual=actual_screen, screen_expected=expected_screen,
+                       comparison=dict(exact=actual_screen == expected_screen, scope="complete tree content/structure/support hashes; no numeric error reconstruction"))
     guard()
     require(sha(verified_path) == verified_sha and sha(directory / "result.json") == verified["source_record"]["sha256"],
             "input provenance records changed during replay")
+    require(proof_identity is None or sha(proof_identity["path"]) == proof_identity["sha256"], "expected observation changed during replay")
     return dict(schema="tide-saved-update-replay-v1", state="exact" if checked["comparison"]["exact"] and rng_unchanged else "not_exact",
         owner=owner, index=2, original_state=original["state"], original_source=original["source"], source=source,
+        expected_observation=proof_identity, comparison_mode="original_tensor" if proof_identity is None else "prior_exact_screen",
         tool_sha256=sha(__file__), helper_sha256=helpers, verified_record_sha256=verified_sha,
         input_files=[verified_inputs[str(directory / name)] for name in names], input_sha_policy="prior real SHA256 verification plus current pre/post stat guards; no new hash claim",
         config=model.config.to_dict(), torch=torch.__version__, threads=torch.get_num_threads(), cpu_affinity=sorted(os.sched_getaffinity(0)),
@@ -106,10 +130,11 @@ def main():
     parser.add_argument("--qualification-dir", type=Path, required=True)
     parser.add_argument("--verified-inputs", type=Path, required=True)
     parser.add_argument("--owner", choices=("baseline", "weight_access"), required=True)
+    parser.add_argument("--expected-observation", type=Path, help="prior exact full comparison; update2 need no longer exist")
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
     require(not args.output.exists(), "output must be new")
-    record = run(args.qualification_dir, args.verified_inputs, args.owner)
+    record = run(args.qualification_dir, args.verified_inputs, args.owner, args.expected_observation)
     require(len(json.dumps(record).encode()) < 64 * 2**20, "result exceeds 64 MiB")
     atomic(args.output, record)
     return 0 if record["state"] == "exact" else 2
