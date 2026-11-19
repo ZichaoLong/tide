@@ -1,5 +1,10 @@
 # Current evidence
 
+The [storage finalization](storage-finalization-20261119.md) records explicit retirement
+of the remaining old full payloads, verified lossless JSON archives and the post-cleanup
+installed training/recovery smoke. Current storage is about 2.264 GiB. Earlier replay
+claims are historical where their anchor/update inputs were retired; failures remain failures.
+
 The [cleanup, bounded numerical diagnosis and quad repair](cleanup-numerics-20261119.md)
 records further retired payloads/profilers, exact regeneration after update2 deletion,
 actual-training local VJP and AdamW witnesses, and the fixed wrong-face allocator.

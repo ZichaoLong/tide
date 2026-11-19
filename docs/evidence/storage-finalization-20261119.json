@@ -1,6 +1,6 @@
 {
   "schema": "tide-storage-finalization-evidence-v1",
-  "state": "cleanup_completed_validation_passed",
+  "state": "completed",
   "source": "45cb5dad1f2d14e06f65b71e6db5461de3a41e72",
   "production_source": "97c52960358e6d5414fc987dc3861b1e85d997a9",
   "math_revision": "4f5b9f20a4030d68ee66ae2d26e34659a5e37234",
@@ -2783,7 +2783,9 @@
     "artifacts/storage-finalization-20261119/frozen-materialize-record.py": "d9461bc45b3fc5c11be95f6065d1e4ad22e56f189fe44f1eb72e0e1fbc14dcce",
     "artifacts/storage-finalization-20261119/installed_smoke.py": "5b8271f20b4b111ea0a2a44f209ecf791301a44997607754e03bfcefa776aaea",
     "artifacts/storage-finalization-20261119/submit.py": "55be4e72322da6ed34f319d7be38e83a38b46552b33d80dbf2c767df1286caa9",
-    "artifacts/storage-finalization-20261119/verify.py": "53330161441696888169664bc9387371b9371d23e0890f2f1d219a284d894c17"
+    "artifacts/storage-finalization-20261119/verify.py": "53330161441696888169664bc9387371b9371d23e0890f2f1d219a284d894c17",
+    "artifacts/storage-finalization-20261119/write_handoff.py": "5af1f8bef7716fa88026de180e7f52878d074ee0cdbaf8f61ca581e4196ed449",
+    "artifacts/storage-finalization-20261119/finish.py": "67ad594df225570aa381683bf3ec910682cec10118a11c346524cb26235ecf61"
   },
   "initial_verification_harness_observation": {
     "state": "failed_harness_assertion",
@@ -2798,11 +2800,47 @@
     "qualification_failures_unchanged": true,
     "downstream_runtime_requires_artifacts": false
   },
-  "temporary_validation_outputs": "Kept until this reviewed result is committed; subsequent retirement will be recorded separately.",
+  "temporary_validation_outputs": "Retired after reviewed evidence commit dee2c84d; source hashes, smoke result and deletion inventory remain.",
   "limitations": [
     "No new model numerical/performance qualification.",
     "Old full CPU anchor/update1 and BF16 anchor replay unavailable after explicit retirement.",
     "Local witnesses cover their recorded formulas and shapes, not complete causal reproducers.",
     "Restoring JSON alone does not restore retired tensor/trace dependencies."
-  ]
+  ],
+  "final_audit": {
+    "state": "passed",
+    "observed_utc": "2026-11-19T11:13:29.953910+00:00",
+    "reviewed_commit": "dee2c84d118e15899433141aef8181ba64544863",
+    "repository_allocated_bytes": 2430844928,
+    "categories_allocated_bytes": {
+      "outside_artifacts_files": 227991552,
+      "other_artifact_files": 329969664,
+      "plain_json": 1179406336,
+      "archived_json": 118542336,
+      "retained_tensors": 558407680,
+      "directory_blocks": 16527360
+    },
+    "file_counts": {
+      "outside_artifacts_files": 7022,
+      "other_artifact_files": 14653,
+      "plain_json": 4909,
+      "archived_json": 352,
+      "retained_tensors": 78
+    },
+    "initial_inventory_allocated_bytes": 54809583616,
+    "net_freed_bytes": 52378738688,
+    "temporary_validation_bytes_retired": 314601472,
+    "quota": "Disk quotas for user zlong (uid 1003): \n     Filesystem  blocks   quota   limit   grace   files   quota   limit   grace\n/dev/mapper/ascend_data-data 44341340  314572800 734003200          431752       0       0        \n",
+    "upstream": "{\"state\": \"passed\", \"revision\": \"4f5b9f20a4030d68ee66ae2d26e34659a5e37234\", \"files\": 108}\n",
+    "all_three_services_and_ten_recorded_descendants_terminal": true,
+    "protected_files_verified": 82,
+    "user_docs_unchanged": true,
+    "observation_boundary": "After validation scratch retirement, before final documentation/commit writes; allocated blocks, not logical file bytes."
+  },
+  "scratch_retirement": {
+    "path": "artifacts/storage-finalization-20261119/scratch-retirement.json",
+    "sha256": "5f8d409f4b1be633fdfe6cfeee949858dfea67512c288da89f440381344b772b",
+    "allocated_bytes": 314601472
+  },
+  "source_tree_unchanged_from_production_revision": true
 }

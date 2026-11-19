@@ -1,5 +1,10 @@
 # 清理、数值定位与quad修复（2026-11-19）
 
+**后续可用性变更：** [存储收尾](storage-finalization-20261119.md)已退役下文原本保留的
+旧CPU anchor/VJP1/update1及BF16 anchor等整图输入；部分大JSON已无损归档。
+本报告的数值、阈值及已完成exact重放是原测量事实，不保证现在仍有完整输入可直接重放。
+当前保留包和JSON还原入口以该后续报告为准。
+
 本轮从 `c5bfebaf` 接续。诊断工具固定 `2360728d`、`e1c6aaa0`；完整更新重放固定
 `aab9a4d2`，删除后摘要重放固定 `72c1a9d0`；生产修复及新资格固定 **`97c52960`**。
 原资格、诊断与修复后的测量保持各自身份。数学仍为
@@ -25,12 +30,13 @@
 旧profiler完整时间线已不在线，`costs.json`、分类和主要算子汇总、trace身份仍保留。
 152份小结果原字节副本、所有原阈值失败及其身份继续保留。
 
-除明确退役的两份update2，其余290个旧`.pt`、6734个`.f32`身份不变，约45.604 GiB。
+以下是本报告原始收尾时的保留清单，后续退役已覆盖其中大载荷：
+除明确退役的两份update2，当时其余290个旧`.pt`、6734个`.f32`身份不变，约45.604 GiB。
 其中FFN medium约17.868、memory资格7.920、training paths/placement7.759、
 execution候选3.884、Reception3.846、native见证1.777、其他张量2.551 GiB。
 这些主要是已结束实验的失败复现输入，不表示仍有这些实验待运行；各组尚未全部完成
-最小化，不能整组删除。74个旧失败profiler仅约1.43 MiB，也继续保留。
-旧CPU anchor、两份update1仍是已删update2的复现依赖。
+最小化；当时没有整组删除。后续已按授权明确退役，并不宣称所有载荷均可再生。
+74个旧失败profiler仅约1.43 MiB，仍保留。旧CPU anchor、两份update1当时是已删update2的复现依赖，现已退役。
 新训练anchor和两份checkpoint保留跨路径失败前态；两份成功本地恢复bundle可退役。
 四份用户文档、主math/.git、唯一ignored源码、下游依赖和公共环境保持原样。
 
@@ -146,7 +152,7 @@ combined为0。两个节点、总量1，此节点的独立解是 `clip((1−评�
 第二更新另有内部支持差异，但旧内部轨迹未保存，不能称新增旧公开输出失败。
 上游描述、梯度和历史的完整因果链仍未定位；本轮不重跑BF16全矩阵。
 
-## 当前可复现入口
+## 原测量命令与当前输入可用性
 
 各run的 `launch.json` 保存实际命令、环境和源码；用对应提交的git archive恢复工具。
 冻结source绝对路径是历史身份，不是长期在线承诺。以下输出必须指向新路径；正式长任务
@@ -155,7 +161,7 @@ git archive不包含ignored artifacts，下面所有产物输入均须展开为�
 launcher会设置冻结源码的PYTHONPATH，手动复现也须明确选择对应冻结src，避免载入主树editable安装。
 
 ```sh
-# 删除update2后的当前可运行复现：固定72c1a9d0、CPU32线程、原affinity240–271。
+# 历史命令：固定72c1a9d0、CPU32线程、原affinity240–271；旧anchor/update1现已退役，不能直接执行。
 # ORIGINAL_QUALIFICATION = artifacts/ffn-medium-cpu-qualification-v1/qualification
 python -m scripts.replay_saved_training_update --qualification-dir ORIGINAL_QUALIFICATION \
   --verified-inputs artifacts/numerics-saved-update-v1/diagnosis/result.json \
@@ -163,7 +169,7 @@ python -m scripts.replay_saved_training_update --qualification-dir ORIGINAL_QUAL
   --expected-observation artifacts/numerics-update2-baseline-v1/replay.json --output NEW_JSON
 # W对应 --owner weight_access 和 numerics-update2-weight-v1/replay.json。
 
-# 原局部FFN诊断固定e1c6aaa0，launcher需 --affinity 240-271；
+# 历史FFN重新捕获命令：固定e1c6aaa0，launcher需 --affinity 240-271；旧anchor/VJP1现已退役。
 # 其原生产identity守卫不能改为修复后的HEAD。
 python -m scripts.diagnose_ffn_training_vjp --qualification ORIGINAL_RESULT_JSON \
   --output NEW_JSON --threads 32 --capture-mib 128
@@ -184,7 +190,8 @@ python -m scripts.diagnose_routing_divergence --config configs/memory-candidates
 ```
 
 原七载荷的 `diagnose_saved_training` 命令只保留历史身份：两份update2已退休，不能原样再次运行。
-仍可直接阅读已保留result/witness及全部原字段比较，并使用上述删除后续更入口。
+仍可阅读已保留result/witness和原字段比较；归档JSON须先按索引还原。
+上述整图续更与FFN重新捕获命令已失去在线输入，不能再直接运行；局部见证继续保留。
 本轮没有9B训练、多NPU、CUDA或下游任务质量新增资格。训练优先FP32、固定已验证设置；
 W/P/WP、BF16与区域分组的严格等价限制继续保留。通用基座未启动。
 

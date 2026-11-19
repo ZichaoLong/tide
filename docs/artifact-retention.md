@@ -42,3 +42,24 @@ published stack. Verify a clean installed smoke without retired absolute paths.
 Record project allocated bytes and actual exceptions; filesystem free-space changes
 may also reflect other users. Temporary validation output is retired after the
 reviewed result is committed. Git history and user-owned files remain intact.
+
+## Current lossless record archives
+
+The [storage finalization report](evidence/storage-finalization-20261119.md) owns the
+current availability decisions. Large raw JSON records may be retained as `.json.gz`;
+the [archive index](evidence/storage-archive-index-20261119.json) records original and
+compressed SHA256, lengths and logical paths. `scripts/materialize_record.py` restores
+exact bytes to an explicit new path, checks both identities, bounds decompression and
+refuses overwrite. Originals are unlinked only after complete decompression verification
+and fsynced archive/index publication. A failure remains the same original failure.
+
+Git retains the index, reviewed summaries and compressed retired-payload **metadata**;
+the archived JSON content remains in local artifacts. Restoring JSON to a new location
+does not restore its transitive dependencies or rewrite embedded original absolute paths.
+Tools may require related records at their original logical paths. Explicitly retired
+tensor/trace payloads cannot be reconstructed by this helper. Historical exact replay is
+not an ongoing replay promise after its anchor/update inputs have been retired.
+
+Downstream installation and normal execution require the package/source and runtime,
+not experiment artifacts. This does not authorize wholesale removal of `artifacts`:
+registered worktrees, unique source and useful witnesses remain protected there.
