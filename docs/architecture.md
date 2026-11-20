@@ -113,8 +113,9 @@ Quad allocation sorts its clipped-linear response breakpoints, then rebuilds
 the selected face from its remaining mass. Exact endpoints preserve zero
 senders. The final face also checks its lower/upper multiplier bounds: a
 satisfied total alone can hide a wrong face after prefix cancellation. Rejected
-faces retain the same-device, same-dtype safeguarded bisection fallback;
-Shannon uses that iterative solver. Both use the declared solution-mapping
+faces retain the same-device, same-dtype safeguarded bisection fallback.
+Shannon uses a [finite active-face solve](shannon-active-set.md) with compensated
+mass arithmetic and separately retained faces. Both use the declared solution-mapping
 first-order VJP, not differentiation through solver iterations.
 
 KV cache entries already follow original time. On NPU a stable prefix-count

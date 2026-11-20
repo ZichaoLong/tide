@@ -10,6 +10,12 @@ selects FP32. Optional `"bf16"` keeps FP32 parameters while selecting BF16 matri
 arithmetic; it does not cast the whole model to BF16.
 CPU FP64 supports bounded accuracy diagnosis. FP16 is outside this cycle.
 
+For role-bounded Shannon allocation, set `shannon_support_policy="positive-floor-v1"`
+to preserve a positive sender that would round to zero. The default `"strict"`
+raises on that input. The selected policy is part of the model recipe and checkpoint.
+The opt-in implementation refines extreme rows on the host and computes gradients
+from pre-floor responses. [API, limits and qualification](shannon-positive-floor.md)
+
 Execution candidates are explicit `ModelConfig` options: `region_batch_size`
 (default 1) batches compatible regions within a layer, `checkpoint_regions`
 (default false) recomputes regional activations during backward, and
@@ -33,21 +39,23 @@ The measured `npu-hb-*` training presets explicitly enable both, together with
 compatible region batching. Select a preset and an admitted device explicitly;
 the no-argument training example remains a small CPU run.
 
-Reception self-Attention has two additional execution choices. With
+Reception self-Attention has an additional projection choice. With
 `aggregation="incoming_light_64"`, `"incoming_light_128"` or `"incoming_wide"`,
 `reception_qkv_backend="fused"` concatenates the compatible Q/K/V projections
 while retaining their original parameters and private low-rank adapters.
 The default is `"separate"`; placed owner wrappers explicitly fall back to
 separate projections, reported by `model.receive.effective_qkv_backend`.
-`reception_mask_padding=True` uses graph membership to exclude structural
-padding from Attention. Genuine zero-strength edges remain visible to the
-declared right derivative; this option never replaces that domain with
-`mass > 0`. Its default is false. Both choices compose with reception/region
-recomputation and compatible region batching and are saved in checkpoints.
-They do not switch `source_residual` into self-Attention. The training entry
-accepts `--aggregation`, `--reception-qkv-backend`, and
-`--[no-]reception-mask-padding` as explicit overrides. These are implementation
-candidates; qualification and measured recommendations retain their source scope.
+Graph membership always excludes structural padding from Attention and the
+final weighted mean. Genuine zero-strength edges retain their declared right
+derivative; membership is never inferred from `mass > 0`. The legacy serialized
+`reception_mask_padding` boolean defaults to true; an explicit false still loads
+unchanged but cannot disable this correctness constraint. This changes the
+effective execution of older false configurations and can change `auto` backend
+selection, so old trajectory qualifications do not transfer automatically.
+Masking composes with reception/region recomputation, compatible region batching
+and placement. It does not switch `source_residual` into self-Attention. The
+training entry retains `--[no-]reception-mask-padding` only for config compatibility.
+Qualification and measured recommendations retain their source scope.
 The [Reception execution guide](reception-execution.md) gives the formula,
 mask/gradient domain, full-Reception timing and integrated path-check commands.
 The [FP32 Reception evidence](evidence/reception-numerics-20261118.md) records

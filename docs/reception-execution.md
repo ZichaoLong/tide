@@ -36,7 +36,7 @@ width 64 or 128 and MLP width `d//8`; wide uses width `d` for both.
 |---|---|
 | `reception_qkv_backend="separate"` | Existing separate projections; default |
 | `reception_qkv_backend="fused"` | One compatible base contraction for concatenated Q/K/V; independent adapters and original Parameter names/owners retained |
-| `reception_mask_padding=True` | A cached graph-membership mask excludes only nonexistent edges; default false |
+| `reception_mask_padding` (legacy) | Cached graph-membership masking is mandatory; default true, stored false remains readable but cannot disable it |
 | `checkpoint_reception=True` | Recompute Reception during backward; whole-region recomputation takes precedence |
 
 `model.receive.effective_qkv_backend` reports `separate`, `fused`, `none` for
@@ -44,13 +44,20 @@ source-residual, or `separate_owner_wrapper` for the explicit placed fallback.
 Projection fusion currently concatenates weights on each call; it is a candidate
 with a dispatch/copy tradeoff, not a promise of faster decode.
 
-The structural mask is built from routing metadata, independent of current
+The mandatory structural mask is built from routing metadata, independent of current
 sender strength. All real edges, including currently zero-mass ones, remain in
 the derivative domain. Only nonexistent padded slots are removed. In training,
 this can admit native weighted Attention when all real priors are positive;
 real visible zero priors still require the zero-prior-compatible path. The
 mask does not physically compact query/projection rows, so their padded work
 remains counted. Compatible node/region batching remains independently useful.
+
+An absent edge must be excluded before its hypothetical right derivative is
+evaluated. A later multiplication by a routing zero cannot safely remove an
+overflowed derivative (`0 * Inf` is NaN). Existing checkpoints retain their
+parameter/state/config data, including an explicit false legacy field, but
+their effective padding behavior is repaired. Exact data loading therefore does
+not imply an identical future trajectory or unchanged `auto` backend selection.
 
 ## Reproduction boundaries
 
@@ -59,7 +66,7 @@ The default training entry exposes the options without editing a preset:
 ```sh
 python examples/train.py --config configs/continuous/hb-settle-small.json \
   --aggregation incoming_light_64 --reception-qkv-backend fused \
-  --reception-mask-padding --checkpoint-reception --precision fp32 \
+  --checkpoint-reception --precision fp32 \
   --steps 3 --checkpoint NEW.pt
 ```
 
@@ -91,6 +98,9 @@ operators/dtypes, full gradients and one further update in training mode. JSON
 retains raw timings, memory, fixture hashes and original numerical failures;
 nonzero exit status includes finite threshold deviations, not only crashes.
 
+The standalone Reception benchmark can still construct unmasked counterexamples;
+it does not override the TideModel structural invariant.
+
 For integrated fixed-state inference, repeated VJPs, multiple updates and an
 actual new-process restored update, set the desired incoming profile in a
 `ModelConfig` JSON and use the existing path checker:
@@ -98,8 +108,8 @@ actual new-process restored update, set the desired incoming profile in a
 ```sh
 python -m scripts.check_training_paths --config INCOMING-CONFIG.json \
   --device cpu --precision fp32 --batch 1 --length 4 --chunk 2 --steps 3 \
-  --candidates baseline qkv_fused padding_mask both \
-  --candidate-overrides '{"qkv_fused":{"reception_qkv_backend":"fused"},"padding_mask":{"reception_mask_padding":true},"both":{"reception_qkv_backend":"fused","reception_mask_padding":true}}' \
+  --candidates baseline qkv_fused \
+  --candidate-overrides '{"qkv_fused":{"reception_qkv_backend":"fused"}}' \
   --output-dir NEW-paths
 ```
 

@@ -62,6 +62,10 @@ average is `sum(slope*g)/sum(slope)`: slope1 for quad interiors, c for Shannon.
 The mean and centered product retain binary scale instead of forming tiny
 slope*g or an oversized numerator first. Shannon reconstruction combines the
 residual total with exponentials before converting the sender to storage dtype.
+The subsequent [real-training active-face repair](shannon-active-set.md) retains
+small mass tails in total/face decisions and centers Shannon cotangents before
+their coupling average. Its new source qualification is separate from the
+earlier positive-chain records.
 
 ## Ordinary Attention
 
@@ -87,19 +91,21 @@ also checked by a bounded trace. This is separate from numerical equality.
 The NPU format cast and contiguous conversion may allocate device copies;
 removing host fallback does not remove layout or workspace costs.
 
-Final positive Shannon/pool senders outside storage range still raise. Finite
+With the default strict policy, final positive Shannon/pool senders outside storage range raise. Finite
 learned offsets `[-110,1]` following normalized features demonstrate this in a
 current small FC model. That is a valid parameter configuration, not evidence
 of an optimizer trajectory or frequency. Continuing beyond this limit requires
-an explicit representation/storage policy. No floor, clipped derivative or
-silent whole-model FP64 substitution is introduced.
+an explicit representation/storage policy. ModelConfig now offers an opt-in
+Shannon policy that stores the least subnormal and uses pre-floor slopes on
+refined rows. [Policy and r09 qualification](shannon-positive-floor.md)
 
 Arbitrary logits, huge centered dot products, masked extreme anchors, cancellation
 and later shared parameter accumulation remain bounded-range limitations.
 Attention probabilities can still underflow before a later binary-scaled
 product, and its forward numerator can overflow before denominator division.
 The scaled product cannot recover information already lost at those points.
-Shannon still uses solved/stored c for its slope; these checks do not establish
+Strict Shannon keeps selected faces independently of rounded endpoints but uses
+solved/stored c for its slope; these checks do not establish
 a general unquantized log-slope contract at every subnormal face. RMS square
 overflow and SSD extreme parameter/scan contractions remain separate candidates.
 

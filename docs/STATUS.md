@@ -1,29 +1,13 @@
-# 005同类正量链交付完成（2026-11-19）
+# 当前交接｜Shannon 正支持已通过 r09 隔离验收，A 停止，B 关闭
 
-生产修复：`b4a8d937`；NPU设备求值：`3efcc6b1`。
-`src/tide` tree为`6863ff792e3fae1556a80e195c1358a3405e0e0e`。
-公式见[positive-chain](positive-chain.md)，详细资格/成本见[本轮证据](evidence/positive-chain-20261119.md)。
-固定math `4f5b9f20` 的108文件原字节通过。没有floor、epsilon或原阈值改变。
+2026-11-20 夜间。本机 `src/tide` 提供显式 `shannon_support_policy="positive-floor-v1"`。26 个 Python 文件的内容哈希为 `cbf9c33157bd744e240fc4e662862cd147a5ba78861452838c053e8945d1e4f4`，已验收的实现提交为 `885f7ef96be8cc31814e509c687017e6ff922d72`。CPU 和单卡 NPU 在相同故障输入恢复 23 个正发送者，并完成该批及两个真实后继批的 AdamW 更新。CPU 同策略恢复逐位一致，NPU 私有状态逐位一致，其他差异通过原阈值。新策略对异常行使用主机高精度求解，吞吐待测。[基座接口及回归](shannon-positive-floor.md) · [下游验收](../../tide-learning-lab/docs/requests/TL-REQ-007.md)
 
-- b4a冻结CPU全套1182 passed、4原有strict xfailed；3ef最终CPU定向274 passed、3旧xfail。
-- 3ef未捕获输出的NPU定向133 passed、3旧xfail、2 warnings，未见主机fallback。
-- CPU b4a和NPU 3ef各五个小图（4 FP32、1 BF16）完成训练/续接/新进程实际恢复更新，均within_threshold。
-  CPU恢复全exact；NPU三个HB案例更新有约1e-9的有限梯度差异，saved_data/next_forward全exact。
-- 固定小HB pool的三组成对成本：CPU完整推理/训练耗时中位比+4.01%/+7.43%，NPU +26.93%/+40.16%。
-  初参/输入/工作相同，无Full padding增量。NPU before含frexp/copysign主机回退，after日志未见；
-  这是算法和设备实现共同改变的净成本，不外推9B，也不代替质量验证。
-- 旧stable-mass的NPU训练/恢复/成本日志原含主机回退，已[更正执行归属](evidence/stable-mass-20261119.md)，
-  原数字/失败保留。3ef局部trace有AIVEC、AICPU和HtoD；不是纯AICore或无搬运保证。
-  trace导出后解析器失败原样保留，离线审阅不将failed作业改成通过。
-- 证据独立提交`f098d3b4`；全部12个服务和148个记录后代已核验终态，无活跃本轮任务。
-  13个本轮临时目录已退休，释放约838.3 MB，原记录/失败/trace在压缩证据中保留。
-  仓库含Git与主私有环境约151.2 MB；退休后`python -I`隔离导入当前源码，CPU FP32前向/反向/AdamW smoke通过。
-  [退休收据](evidence/positive-chain-retirement-20261119.json)记录逐目录大小、保护项、用户hash及主安装检查。
+## 同一源码中的既有 Attention 修复
 
-normalize不能保证防溢出：后续可训练投影/偏置无上界，质量也无统一正下界。
-具体可表示结果已修；真正最终正发送量低于FP32范围仍严格拒绝。
-任意极端Attention、后续共享累加、RMS/SSD及对数质量表示仍有边界，不宣称005全部问题消失。
-推荐包含3ef的FP32当前实现，BF16次选；本轮未新增隔离wheel、9B训练、多NPU/CUDA或下游验收。
+北京时间 2026-11-20 18:40。按用户授权，NPU auto/显式npu_fusion的单有效key与空行已使用解析VJP，混合batch保留多key融合。扩展见证发现近似常量V消减后，FP32融合包装增加公共V中心化。质量振幅、真实零质量右导数、连接零梯度及原state/checkpoint格式保留。
 
-此前五类记忆、9B/Transformer、FFN/CPU/NPU拆解证据保持各自源身份；默认实例与FFN执行策略保留。
-四份用户文档保持未跟踪且原字节。参考/公共/下游未修改，通用基座未启动。
+详见[当前修复记录](attention-native-support-repair.md)。定向CPU172通过、3原xfail；实际NPU39通过。42个NPU样本完成，含四个旧状态各16步真实接续、首尾8个CPU FP64抽查，均在原门槛内；全部fresh-process恢复通过，最大差5.6904e-7。独立局部公式、同实现FP64诊断、有限恢复与长期学习结论分开。
+
+原Shannon恢复超差、CPU私有KV有限超差、弱质量夹具及首次单支持-only多key反例均保留。当前不声明全部幅值、BF16多key、CUDA或旧选参已获得新资格。
+
+下游 r09 已在旧 strict 基座上停止。74 个旧曝光主体仍待迁移审阅。后续实验可从基座提交 `885f7ef9` 冻结源码，并在 Shannon 配方中显式选择正支持策略。[下游当前交接](../../tide-learning-lab/docs/STATUS.md)

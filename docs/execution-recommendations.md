@@ -186,11 +186,11 @@ task quality before adopting a new binding.
 | `ssd_summary_backend=block/prefix` | Original block or parallel affine composition for vector summaries. |
 | `ssd_scan_backend=block/incremental/doubling` | Original matrix scan; direct L1 recurrence; direct L1 plus short-block multiplication tree. Doubling can save time while retaining more backward intermediates. |
 | `reception_qkv_backend=separate/fused` | Fuse compatible private/shared projections. Placed owner wrappers explicitly fall back to separate projections. |
-| `reception_mask_padding=false/true` | Exclude nonexistent padded edges, preserving real zero-strength derivative roots. Native fusion can be slower or larger for some shapes. |
+| `reception_mask_padding` (legacy) | Structural padding is always excluded, preserving real zero-strength derivative roots. Both stored boolean values have this behavior; masking can change native Attention admission. |
 | `parameter_indexing=gather/static_view` | Optional exact static consecutive parameter-row views; dynamic Full and repeated/noncontiguous owners retain gather. Keep mode-specific evidence. |
 | Attention `auto/math/tiled/sdpa/npu_fusion` | Choose for the actual weighted-prior, shape and backend. Explicit unsupported requests fail; a Flash-style API name is not a speed guarantee. |
 
-All candidates remain configurable, including near-equal and memory-saving alternatives.
+Execution candidates remain configurable except the mandatory structural mask.
 The [cost report](evidence/reception-performance-20261118.md) records positive and negative results,
 actual operator paths, mathematical formulas and the remaining allocation/packing/indexing costs.
 [Static indexing](parameter-indexing.md) has its own applicability and dynamic-selection boundary.
