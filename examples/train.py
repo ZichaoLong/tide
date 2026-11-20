@@ -18,7 +18,7 @@ EXECUTION_DEFAULTS = dict(mode="train", device="cpu", precision="fp32", batch=2,
 MODEL_OPTIONS = ("memory", "region_batch_size", "checkpoint_regions", "checkpoint_reception",
                  "ssd_summary_backend", "ssd_scan_backend", "attention_backend", "local_attention_backend",
                  "aggregation", "reception_qkv_backend", "reception_mask_padding", "parameter_indexing",
-                 "kv_width", "ffn_width", "memory_sharing")
+                 "kv_width", "ffn_width", "memory_sharing", "shannon_support_policy")
 UPDATE_TOLERANCE = dict(atol=1e-6, rtol=2e-3)
 
 
@@ -45,11 +45,13 @@ def parser():
     result.add_argument("--memory-sharing", choices=("region_shared",),
                         help="share only memory bases; preserve other module ownership")
     result.add_argument("--region-batch-size", type=int)
+    result.add_argument("--shannon-support-policy", choices=("strict", "positive-floor-v1"))
     result.add_argument("--checkpoint-regions", action=argparse.BooleanOptionalAction, default=None)
     result.add_argument("--checkpoint-reception", action=argparse.BooleanOptionalAction, default=None)
     result.add_argument("--aggregation", choices=("source_residual", "incoming_light_64", "incoming_light_128", "incoming_wide"))
     result.add_argument("--reception-qkv-backend", choices=("separate", "fused"))
-    result.add_argument("--reception-mask-padding", action=argparse.BooleanOptionalAction, default=None)
+    result.add_argument("--reception-mask-padding", action=argparse.BooleanOptionalAction, default=None,
+                        help="legacy config field; structural padding is always masked")
     result.add_argument("--ssd-summary-backend", choices=("block", "prefix"))
     result.add_argument("--ssd-scan-backend", choices=("block", "incremental", "doubling"))
     result.add_argument("--parameter-indexing", choices=("gather", "static_view"))

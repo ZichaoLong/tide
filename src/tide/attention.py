@@ -144,6 +144,98 @@ def _native_attention(q, k, v, weights, mask, backend, *, unit_prior=False, no_m
     return output if unit and no_mask else torch.where(visible.any(-1, keepdim=True), output, 0)
 
 
+class _SingleKeyAttention(torch.autograd.Function):
+    """Exact normalized singleton/empty rows with connected zero Q/K/prior VJPs.
+
+    Admission excludes visible trainable zero priors: those retain a right
+    derivative and must use the existing tiled path. Mass amplitude is applied
+    by the caller, so its legitimate prior derivative is not removed here.
+    """
+
+    @staticmethod
+    @_without_autocast
+    def forward(ctx, q, k, v, weights, index, single):
+        index = index.expand(q.shape[:-1] + (v.shape[-1],))
+        ctx.save_for_backward(q, k, v, weights, index, single)
+        return torch.where(single, v.gather(-2, index), 0)
+
+    @staticmethod
+    @once_differentiable
+    @_without_autocast
+    def backward(ctx, grad):
+        q, k, v, weights, index, single = ctx.saved_tensors
+        dq, dk, dv, dw = (torch.zeros_like(t) if need else None
+                          for t, need in zip((q, k, v, weights), ctx.needs_input_grad[:4]))
+        if dv is not None:
+            dv.scatter_add_(-2, index, torch.where(single, grad, 0))
+        return dq, dk, dv, dw, None, None
+
+
+def _centered_native_attention(q, k, v, weights, mask, backend, *, unit_prior=False, no_mask=False):
+    """FP32 value translation keeps a common offset out of native Q/K VJPs.
+
+    For any constant value vector c, Attention(V-c)+c = Attention(V).
+    Treat c as a fixed numerical origin: its two mathematical derivatives
+    cancel, while native V derivatives already supply the full probability.
+    Per-feature range admission prevents the subtraction from introducing an
+    overflow for finite extreme values. BF16 multi-key arithmetic is unchanged.
+    Empty rows are handled by the support adapter, outside this translation.
+    """
+    if q.dtype != torch.float32:
+        return _native_attention(q, k, v, weights, mask, backend,
+                                 unit_prior=unit_prior, no_mask=no_mask)
+    detached = v.detach()
+    bounded = detached.abs().amax(-2, keepdim=True) <= torch.finfo(v.dtype).max / 2
+    origin = torch.where(bounded, detached[..., :1, :], 0)
+    return _native_attention(q, k, v-origin, weights, mask, backend,
+                             unit_prior=unit_prior, no_mask=no_mask) + origin
+
+
+def _support_safe_native_attention(q, k, v, weights, mask, backend, *, unit_prior=False, no_mask=False):
+    """Retain fusion for multi-key rows, use the identity for exact support <= 1.
+
+    Metadata stays compact when masks/priors broadcast over queries or heads.
+    A mixed call sends zero cotangents for analytic rows into fused backward,
+    before shared K/V/prior gradients are reduced; no parameter gradient hook
+    or small-probability threshold is used. Explicit NPU fusion uses this same
+    semantic adapter. CPU/CUDA public dispatch remains unchanged.
+    """
+    keys = k.shape[-2]
+    if unit_prior and no_mask and keys > 1:
+        return _centered_native_attention(q, k, v, weights, mask, backend, unit_prior=True, no_mask=True)
+    visible = mask & (weights > 0)
+    count = visible.sum(-1, keepdim=True)
+    if visible.shape[-1] == 1:
+        count = count * keys
+    special = count <= 1
+    if keys > 1 and not bool(special.any()):
+        return _centered_native_attention(q, k, v, weights, mask, backend, unit_prior=unit_prior, no_mask=no_mask)
+    index = visible.to(torch.int32).argmax(-1, keepdim=True)
+    exact = _SingleKeyAttention.apply(q, k, v, weights, index, count == 1)
+    if keys == 1 or bool(special.all()):
+        return exact
+    # Do not evaluate irrelevant large QK products for analytic rows. The
+    # final where also cuts their K and prior contributions at the native root.
+    native_q = torch.where(special, 0, q)
+    fused = _centered_native_attention(native_q, k, v, weights, mask, backend,
+                                       unit_prior=unit_prior, no_mask=no_mask)
+    return torch.where(special, exact, fused)
+
+
+def _single_positive_rows(weights, mask, block, key_tile):
+    """Exact support metadata, bounded to the same query/key tiles as the VJP.
+
+    A normalized row with one positive prior is independent of Q/K and of
+    that prior's magnitude. Real zero priors still have their right derivative.
+    Do not infer this identity from small probabilities or gradient magnitudes.
+    """
+    count = torch.zeros_like(weights[..., block, :1], dtype=torch.int64)
+    for offset in range(0, weights.shape[-1], key_tile):
+        keys = slice(offset, offset + key_tile)
+        count = count + ((weights[..., block, keys] > 0) & mask[..., block, keys]).sum(-1, keepdim=True)
+    return count == 1
+
+
 class _TiledAttention(torch.autograd.Function):
     """Online key/query tiles; backward never retains a Q-by-K matrix."""
 
@@ -191,19 +283,27 @@ class _TiledAttention(torch.autograd.Function):
         shape = q.shape[:-1] + (k.shape[-2],)
         w, m = weights.expand(shape), mask.expand(shape)
         scale = q.shape[-1] ** -0.5
+        anchor = vw[..., :1, :]
         for start in range(0, q.shape[-2], 64):
             block = slice(start, start + 64)
             qb, gb = qw[..., block, :], go[..., block, :]
             normalizer = log_z[..., block, :]
             nonempty = torch.isfinite(normalizer)
-            mean = (gb * output[..., block, :]).sum(-1, keepdim=True)
+            mean = (gb * (output[..., block, :] - anchor)).sum(-1, keepdim=True)
+            single = _single_positive_rows(w, m, block, 256)
             for offset in range(0, k.shape[-2], 256):
                 kb = slice(offset, offset + 256)
                 wb, mb = w[..., block, kb].to(dtype), m[..., block, kb]
                 logits = qb @ kw[..., kb, :].transpose(-2, -1) * scale
                 log_p = logits + torch.where(wb > 0, wb, 1).log() - normalizer
                 p = torch.where(mb & (wb > 0) & nonempty, log_p, -torch.inf).exp()
-                centered = gb @ vw[..., kb, :].transpose(-2, -1) - mean
+                positive = mb & (wb > 0)
+                # Subtract a common value before the dot products. For a
+                # single positive key, apply the exact zero derivative at
+                # that key; zero-prior keys remain in the derivative domain.
+                centered = gb @ (vw[..., kb, :] - anchor).transpose(-2, -1) - mean
+                centered = torch.where(single & positive, 0, centered)
+                p = torch.where(single & positive, 1, p)
                 dl = p * centered
                 dq[..., block, :].add_(dl @ kw[..., kb, :] * scale)
                 dk[..., kb, :].add_(dl.transpose(-2, -1) @ qb * scale)
@@ -401,6 +501,7 @@ class _MassScaledAttention(torch.autograd.Function):
             alpha = amount.clamp(max=1) if ctx.mass_scaled else torch.ones_like(amount)
             log_alpha = torch.where(nonempty, alpha.log(), -torch.inf)
             log_amplitude_ratio = _log_ratio(alpha, prior_scale[..., block, :])
+            single = _single_positive_rows(w, m, block, key_tile)
             # A constant offset in every value should not manufacture a prior
             # gradient by subtracting two large, nearly equal dot products.
             need_center = needs[0] or needs[1] or needs[3]
@@ -416,6 +517,7 @@ class _MassScaledAttention(torch.autograd.Function):
                 logits = qb @ keys.transpose(-2, -1) * scale
                 if need_center:
                     centered = gb @ (values-anchor).transpose(-2, -1) - center_mean
+                    centered = torch.where(single & mb & (wb > 0), 0, centered)
                 valid = mb & nonempty
                 relative_weight = _log_ratio(wb, prior_scale[..., block, :])
                 log_p = torch.where(valid & (wb > 0), logits + relative_weight - normalizer, -torch.inf)
@@ -423,6 +525,7 @@ class _MassScaledAttention(torch.autograd.Function):
                 if ctx.weak:
                     terms = _scaled_weighted_terms(logits, wb, mb, prior_scale[..., block, :], peak[..., block, :])
                     probability = (terms / denominator[..., block, :])[..., None]
+                    probability = torch.where((single & mb & (wb > 0))[..., None], 1, probability)
                     amplitude = alpha[..., None]
                     if needs[0]:
                         dq[..., block, :].add_(_range_product(amplitude, probability, centered[..., None],
@@ -471,7 +574,11 @@ def weighted_attention(q: Tensor, k: Tensor, v: Tensor, weights: Tensor | None =
     head widths in [1,768]; it has no CPU fallback. PSE mode is the default
     one when absent and zero for an actual frozen log prior. Positive
     trainable NPU key priors use a rank-one Q/K extension (padded to 16) and
-    retain the original scaling. Native fused backward remains in use.
+    retain the original scaling. NPU singleton/empty rows use exact analytic
+    VJPs; multi-key rows retain native fused backward, including mixed batches.
+    This semantic adapter applies to both auto and explicit npu_fusion.
+    FP32 native values are translated by a detached common origin before
+    fusion and translated back afterwards to reduce VJP cancellation.
     Query-dependent trainable NPU priors require math/tiled. Tiled uses 64
     queries by 256 keys in forward and analytical first-order backward.
     BF16 auto sends any visible zero prior to tiled, in inference and training.
@@ -551,8 +658,9 @@ def weighted_attention(q: Tensor, k: Tensor, v: Tensor, weights: Tensor | None =
         if zero_prior_grad:
             raise ValueError("zero trainable priors require auto, math or tiled for their right derivative")
         with torch.autocast(q.device.type, enabled=False):
-            output = _native_attention(q, k, v, weights, mask, backend,
-                                       unit_prior=unit_prior, no_mask=no_mask)
+            native = _support_safe_native_attention if backend == "npu_fusion" else _native_attention
+            output = native(q, k, v, weights, mask, backend,
+                            unit_prior=unit_prior, no_mask=no_mask)
             if mass_scaled:
                 dtype = torch.float64 if q.dtype == torch.float64 else torch.float32
                 amount = torch.where(mask, weights.to(dtype), 0).expand(shape).sum(-1, keepdim=True).clamp(max=1)

@@ -57,7 +57,9 @@ class ModelConfig:
     checkpoint_regions: bool = False
     checkpoint_reception: bool = False
     reception_qkv_backend: str = "separate"
-    reception_mask_padding: bool = False
+    # Legacy serialized field; both values retain mandatory topology masking.
+    # Keep explicit False readable without changing stored checkpoint config.
+    reception_mask_padding: bool = True
     parameter_indexing: str = "gather"
     # Execution-only: compact valid rows within each Full FFN owner.
     ffn_packing: str = "rectangular"
@@ -74,6 +76,8 @@ class ModelConfig:
     # None preserves the selected whole-node profile. The explicit extension
     # overrides memory parameters only; FFN/reception/description retain sharing.
     memory_sharing: str | None = None
+    # A missing field in an older checkpoint resolves to its original policy.
+    shannon_support_policy: str = "strict"
 
     def __post_init__(self):
         if type(self.checkpoint_regions) is not bool:
@@ -120,6 +124,10 @@ class ModelConfig:
             raise ValueError("unknown reception profile")
         if self.allocation not in ("quad", "shannon", "pool"):
             raise ValueError("unknown allocation profile")
+        if self.shannon_support_policy not in ("strict", "positive-floor-v1"):
+            raise ValueError("unknown Shannon support policy")
+        if self.shannon_support_policy != "strict" and self.allocation != "shannon":
+            raise ValueError("positive-floor-v1 requires Shannon allocation")
         if self.sharing not in ("independent", "region_shared", "layer_shared"):
             raise ValueError("unknown sharing profile")
         if self.memory_sharing not in (None, "region_shared"):
@@ -141,7 +149,11 @@ class ModelConfig:
             raise ValueError("pool does not preserve the mixed-region Hub bounds")
 
     def to_dict(self):
-        return asdict(self)
+        result = asdict(self)
+        if self.shannon_support_policy == "strict":
+            # The omitted default preserves existing resolved recipe identities.
+            del result["shannon_support_policy"]
+        return result
 
     @classmethod
     def from_dict(cls, data):

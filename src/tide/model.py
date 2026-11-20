@@ -203,9 +203,12 @@ class TideModel(nn.Module):
         Region tuples identify the exact ordered owner rows. NodeOwners' static
         possible-ID superset alone is insufficient to infer their actual order.
         This metadata cache is not persistent model or continuation state.
+
+        Structural padding never supplies a derivative root, including when a
+        legacy checkpoint sets reception_mask_padding=False. A zero prior on
+        a real edge still has the declared right derivative. Multiplying an
+        unmasked padding VJP by zero later is unsafe: it may already be Inf.
         """
-        if not self.config.reception_mask_padding:
-            return None
         key = (tuple(regions), torch.device(device))
         if key not in self._reception_masks:
             # This static cache outlives the current execution mode. Training
@@ -286,7 +289,7 @@ class TideModel(nn.Module):
             z,score = self.describe(u,received,desc,description_owners)
             score = self.regional[self.region_group[region]](z,score,mass)
             control = region_control(score,received,roles,self.config.budget or max(1,self.graph.config.n//32),
-                                     self.config.allocation,self.graph.config.partition)
+                                     self.config.allocation,self.graph.config.partition,self.config.shannon_support_policy)
         full = torch.zeros_like(u)
         measured = None
         if record_work:

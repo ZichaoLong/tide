@@ -14,6 +14,7 @@ from torch.autograd.function import once_differentiable
 
 from .scaled_arithmetic import binary_parts
 from .weighted_mean import _difference_parts, _reduce_parts, _restore, _sum_parts
+from .shannon_support import FLOOR, refine_rows
 
 
 def _average_parts(weights, values):
@@ -74,20 +75,52 @@ def _response(scores, multiplier, lower, upper, kind):
     return torch.where(x <= lower, lower, torch.where(x >= upper, upper, x))
 
 
-def _save_solution(ctx, c, scores, mu, lower, upper, low_active, high_active, kind, high_total, originals):
-    if kind == "shannon" and bool(((upper > 0) & (c == 0)
-                                  & (high_total > lower.sum(-1, keepdim=True))).any()):
-        raise ArithmeticError("Shannon allocation underflow would erase a positive sender")
+def _save_solution(ctx, c, scores, mu, lower, upper, low_active, high_active, kind, high_total, originals,
+                   shannon_faces=None):
+    refine = None
+    if kind == "shannon":
+        floor, tail = _compensated_sum(lower)
+        remaining, error = _two_sum(high_total, -floor)
+        has_positive_room = remaining + (error - tail) > 0
+        if ctx.floor_policy:
+            sensitive = (lower < upper) & (c < torch.finfo(c.dtype).tiny) & has_positive_room
+            refine = (sensitive | ~torch.isfinite(c)).any(-1, keepdim=True)
+            if ctx.unresolved is not None:
+                refine = refine | ctx.unresolved
+        elif bool(((upper > 0) & (c == 0) & has_positive_room).any()):
+            raise ArithmeticError("Shannon allocation underflow would erase a positive sender")
     fixed = lower == upper
     fixed_mu = fixed & (upper == mu)
     lower_face = ~fixed & (c <= lower)
     upper_face = ~fixed & ~lower_face & (c >= upper)
+    if shannon_faces is not None:
+        selected, selected_lower, selected_upper = shannon_faces
+        lower_face = torch.where(selected, selected_lower, lower_face)
+        upper_face = torch.where(selected, selected_upper, upper_face)
     inside = ~fixed & ~lower_face & ~upper_face
     slope = inside.to(c.dtype) if kind == "quad" else torch.where(inside, c, 0)
+    extended_slope = ()
+    if refine is not None and bool(refine.any()):
+        rows = refine.reshape(-1)
+        values, mantissa, exponent, lf, uf, la, ua = refine_rows(
+            scores, lower, upper, originals[4], high_total, rows)
+
+        def merge(base, replacement):
+            expanded = base.expand(*c.shape[:-1], replacement.shape[-1])
+            flat = expanded.reshape(-1, replacement.shape[-1]).clone()
+            flat[rows] = replacement
+            return flat.reshape(expanded.shape)
+
+        c = merge(c, values)
+        lower_face, upper_face = merge(lower_face, lf), merge(upper_face, uf)
+        low_active, high_active = merge(low_active, la), merge(high_active, ua)
+        sm, se = binary_parts(slope)
+        extended_slope = merge(sm, mantissa), merge(se, exponent)
     # Retain source versions as well as the face description used by the VJP.
     ctx.source_shapes = tuple(value.shape for value in originals)
+    ctx.kind = kind
     ctx.save_for_backward(slope, lower_face, upper_face, fixed, fixed_mu,
-                          low_active, high_active, *originals)
+                          low_active, high_active, *originals, *extended_slope)
     return c
 
 
@@ -227,19 +260,193 @@ def _bisect(shifted, lower, upper, target, solve, kind):
     return torch.maximum(lower, torch.minimum(upper, torch.where(inside, reconstructed, c)))
 
 
+def _two_sum(a, b):
+    """An unevaluated two-term sum, for bounded Shannon mass arithmetic."""
+    total = a + b
+    virtual = total - a
+    error = (a - (total - virtual)) + (b - virtual)
+    return total, error
+
+
+def _compensated_sum(values):
+    """Pairwise two-term reduction; a positive tail need not fit beside one."""
+    high, low = values, torch.zeros_like(values)
+    while high.shape[-1] > 1:
+        if high.shape[-1] % 2:
+            high = torch.cat((high, torch.zeros_like(high[..., :1])), -1)
+            low = torch.cat((low, torch.zeros_like(low[..., :1])), -1)
+        total, error = _two_sum(high[..., ::2], high[..., 1::2])
+        high, low = _two_sum(total, error + low[..., ::2] + low[..., 1::2])
+    return high, low
+
+
+def _two_product(a, b):
+    # Shannon's normalized factors are <= 1 and totals <= candidate count;
+    # splitting these factors cannot overflow for any materializable tensor.
+    splitter = 4097. if a.dtype == torch.float32 else 134217729.
+    def split(x):
+        scaled = splitter * x
+        high = scaled - (scaled - x)
+        return high, x - high
+    ah, al = split(a)
+    bh, bl = split(b)
+    product = a * b
+    error = ((ah * bh - product) + ah * bl + al * bh) + al * bl
+    return product, error
+
+
+def _shannon_bound_delta(amount, amount_correction, weights, denominator, correction, bound):
+    """Sign of amount*weight-bound*sum(weight), retaining a small tail."""
+    left, left_error = _two_product(amount, weights)
+    right, right_error = _two_product(bound, denominator)
+    difference, error = _two_sum(left, -right)
+    return difference + (error + left_error + amount_correction * weights - right_error - bound * correction)
+
+
+def _shannon_solve(scores, lower, upper, target, solve, refine_unresolved=False):
+    """Finite bounded exponential water filling, with explicit solution faces.
+
+    At an unconstrained normalization, clipping below-floor entries increases
+    mass and clipping above-cap entries decreases it. If clipped mass is too
+    large, every below-floor entry is certainly on its lower face at the root;
+    the converse fixes upper faces. Thus each unfinished iteration removes at
+    least one coordinate without guessing a face from a rounded multiplier.
+    A mathematically interior sender may round to its cap in storage. Keep the
+    selected face separately for its VJP; never force it inward or floor it.
+    """
+    free = (lower < upper) & solve
+    fixed = torch.where(free, 0, lower)
+    lower_face = torch.zeros_like(free)
+    upper_face = torch.zeros_like(free)
+    answer = fixed.clone()
+    pending = solve.clone()
+    unresolved = torch.zeros_like(solve)
+    for _ in range(scores.shape[-1] + 1):
+        if not bool(pending.any()):
+            return answer, lower_face, upper_face, unresolved
+        fixed_high, fixed_low = _compensated_sum(fixed)
+        residual, error = _two_sum(target, -fixed_high)
+        amount, amount_correction = _two_sum(residual, error - fixed_low)
+        exhausted = pending & (amount <= 0)
+        if refine_unresolved:
+            unresolved = unresolved | exhausted
+            pending = pending & ~exhausted
+        elif bool(exhausted.any()):
+            raise ArithmeticError("Shannon selected faces exhaust positive remaining mass")
+        amount = torch.where(pending, amount, 1)
+        amount_correction = torch.where(pending, amount_correction, 0)
+        logits = torch.where(free, scores, -torch.inf)
+        peak = logits.amax(-1, keepdim=True)
+        peak = torch.where(free.any(-1, keepdim=True), peak, 0)
+        logits = logits - peak
+        weights = torch.where(free, logits.exp(), 0)
+        denominator, correction = _compensated_sum(weights)
+        denominator = torch.where(pending, denominator, 1)
+        am, ae = binary_parts(amount)
+        value_m, value_e = _exp_product_parts(logits, am, ae)
+        value_m = value_m / denominator
+        # Subtract the small denominator correction before exponent restore;
+        # materializing 1+tail first would lose exactly the real failure's tail.
+        relative_correction = (amount_correction / amount - correction / denominator)
+        relative_correction = relative_correction / (1 + correction / denominator)
+        value_m = value_m + value_m * relative_correction
+        candidate = torch.where(free, _restore(value_m, value_e), fixed)
+        lower_delta = _shannon_bound_delta(amount, amount_correction, weights, denominator, correction, lower)
+        upper_delta = _shannon_bound_delta(amount, amount_correction, weights, denominator, correction, upper)
+        low_tie = free & (lower > 0) & (candidate == lower) & (lower_delta == 0)
+        high_tie = free & (candidate == upper) & (upper_delta == 0)
+        below = free & ((candidate < lower) | ((candidate == lower) & (lower > 0) & (lower_delta < 0)))
+        above = free & ((candidate > upper) | ((candidate == upper) & (upper_delta > 0)))
+        clipped = torch.where(below | low_tie, lower, torch.where(above | high_tie, upper, candidate))
+        total, tail = _compensated_sum(clipped)
+        difference, error = _two_sum(total, -target)
+        excess = difference + (error + tail)
+        violations = (below | above).any(-1, keepdim=True)
+        done = pending & (~violations | (excess == 0))
+        answer = torch.where(done, clipped, answer)
+        lower_face = lower_face | (done & (below | low_tie))
+        upper_face = upper_face | (done & (above | high_tie))
+        pending = pending & ~done
+        bind_lower = pending & (excess > 0) & below
+        bind_upper = pending & (excess < 0) & above
+        progress = (bind_lower | bind_upper).any(-1, keepdim=True)
+        if refine_unresolved:
+            unresolved = unresolved | (pending & ~progress)
+            pending = pending & progress
+        elif bool((pending & ~progress).any()):
+            raise ArithmeticError("Shannon bounded solve could not certify a remaining face")
+        fixed = torch.where(bind_lower, lower, torch.where(bind_upper, upper, fixed))
+        lower_face = lower_face | bind_lower
+        upper_face = upper_face | bind_upper
+        free = free & ~(bind_lower | bind_upper)
+    if refine_unresolved:
+        return answer, lower_face, upper_face, unresolved | pending
+    raise ArithmeticError("Shannon bounded solve exceeded its finite face count")
+
+
+def _shannon_centered_parts(weights, values, extended=()):
+    """Center at a real cotangent before averaging, retaining small VJPs."""
+    if extended:
+        wm, we = extended
+        largest = torch.where(wm > 0, we, -16384).amax(-1, keepdim=True)
+        candidates = torch.where(we == largest, wm, 0)
+        anchor_index = candidates.argmax(-1, keepdim=True)
+        peak_m = wm.gather(-1, anchor_index)
+        pm = torch.where(peak_m > 0, peak_m, .5)
+        pe = torch.where(peak_m > 0, largest, 1)
+        scaled = _restore(wm / pm, we - pe)
+        total = scaled.sum(-1, keepdim=True)
+    else:
+        anchor_index = weights.argmax(-1, keepdim=True)
+        peak = weights.amax(-1, keepdim=True)
+        peak = torch.where(peak > 0, peak, 1)
+        total = (weights / peak).sum(-1, keepdim=True)
+        wm, we = binary_parts(weights)
+        pm, pe = binary_parts(peak)
+    tm, te = binary_parts(torch.where(total > 0, total, 1))
+    factor_m, factor_e = (wm / pm) / tm, we - pe - te
+    anchor = values.gather(-1, anchor_index)
+    anchor_m, anchor_e = binary_parts(anchor)
+    delta_m, delta_e = _difference_parts(values, anchor_m, anchor_e)
+    mean_m, mean_e = _sum_parts(factor_m * delta_m, factor_e + delta_e, -1)
+    average_m, average_e = _sum_parts(torch.stack((anchor_m.squeeze(-1), mean_m), -1),
+                                      torch.stack((anchor_e.squeeze(-1), mean_e), -1), -1)
+    centered_m, centered_e = _sum_parts(
+        torch.stack((delta_m, -mean_m[..., None].expand_as(delta_m)), -1),
+        torch.stack((delta_e, mean_e[..., None].expand_as(delta_e)), -1), -1)
+    return average_m, average_e, centered_m, centered_e
+
+
 class _Constrained(torch.autograd.Function):
     @staticmethod
     def forward(ctx, scores, mu, lower, upper, low_total, high_total, kind):
+        ctx.floor_policy = kind == FLOOR
+        ctx.unresolved = None
+        if ctx.floor_policy:
+            kind = "shannon"
         originals = scores, mu, lower, upper, low_total, high_total
         shape = torch.broadcast_shapes(*(value.shape for value in originals))
         scores, mu, lower, upper = (value.expand(shape) for value in originals[:4])
         c0 = _response(scores, 0, lower, upper, kind)
         s0 = c0.sum(-1, keepdim=True)
         low_active, high_active = s0 < low_total, s0 > high_total
+        if kind == "shannon":
+            total, tail = _compensated_sum(c0)
+            low_difference, low_error = _two_sum(total, -low_total)
+            high_difference, high_error = _two_sum(total, -high_total)
+            low_active = low_difference + (low_error + tail) < 0
+            high_active = high_difference + (high_error + tail) > 0
         active = low_active | high_active
         target = torch.where(low_active, low_total, torch.where(high_active, high_total, s0))
         sum_lower, sum_upper = lower.sum(-1, keepdim=True), upper.sum(-1, keepdim=True)
         at_lower, at_upper = target <= sum_lower, target >= sum_upper
+        if kind == "shannon":
+            floor, floor_tail = _compensated_sum(lower)
+            cap, cap_tail = _compensated_sum(upper)
+            floor_difference, floor_error = _two_sum(target, -floor)
+            cap_difference, cap_error = _two_sum(target, -cap)
+            at_lower = floor_difference + (floor_error - floor_tail) <= 0
+            at_upper = cap_difference + (cap_error - cap_tail) >= 0
         solve = active & ~at_lower & ~at_upper
         if scores.shape[-1] == 1 or not bool(solve.any()):
             c = torch.where(active, target if scores.shape[-1] == 1
@@ -251,6 +458,7 @@ class _Constrained(torch.autograd.Function):
         center = torch.where(free, scores, -torch.inf).amax(-1, keepdim=True)
         center = torch.where(free.any(-1, keepdim=True), center, 0)
         shifted = scores - center
+        shannon_faces = None
         if kind == "quad":
             c, valid = _quad_sorted(shifted, lower, upper, target)
             fallback = solve & ~valid
@@ -258,24 +466,42 @@ class _Constrained(torch.autograd.Function):
                 recovered = _bisect(shifted, lower, upper, target, fallback, kind)
                 c = torch.where(fallback, recovered, c)
         else:
-            c = _bisect(shifted, lower, upper, target, solve, kind)
+            # When the peak binds, re-center the remaining free scores from
+            # their originals: a very large removed score can erase their gap.
+            active_scores = scores if ctx.floor_policy else shifted
+            c, selected_lower, selected_upper, ctx.unresolved = _shannon_solve(
+                active_scores, lower, upper, target, solve, refine_unresolved=ctx.floor_policy)
+            shannon_faces = solve, selected_lower, selected_upper
         c = torch.where(at_lower, lower, torch.where(at_upper, upper, c))
         c = torch.where(active, c, c0)
         tolerance = 32 * torch.finfo(scores.dtype).eps * target.abs().clamp_min(torch.finfo(scores.dtype).tiny)
-        if bool((active & ((c.sum(-1, keepdim=True) - target).abs() > tolerance)).any()):
+        missed = active & ((c.sum(-1, keepdim=True) - target).abs() > tolerance)
+        if ctx.floor_policy:
+            ctx.unresolved = missed if ctx.unresolved is None else ctx.unresolved | missed
+        elif bool(missed.any()):
             raise ArithmeticError("allocation multiplier did not meet the total constraint")
-        return _save_solution(ctx, c, scores, mu, lower, upper, low_active, high_active, kind, high_total, originals)
+        return _save_solution(ctx, c, scores, mu, lower, upper, low_active, high_active, kind, high_total, originals,
+                              shannon_faces)
 
     @staticmethod
     @once_differentiable
     def backward(ctx, grad):
-        slope, lower_face, upper_face, fixed, fixed_mu, low_active, high_active = ctx.saved_tensors[:7]
-        equality = (low_active | high_active) & (slope > 0).any(-1, keepdim=True)
-        am, ae = _average_parts(slope, grad)
-        am = torch.where(equality, am[..., None], 0)
-        ae = ae[..., None]
-        dm, de = _difference_parts(grad, am, ae)
-        sm, se = binary_parts(slope)
+        saved = ctx.saved_tensors
+        slope, lower_face, upper_face, fixed, fixed_mu, low_active, high_active = saved[:7]
+        extended = saved[13:]
+        positive = extended[0] if extended else slope
+        equality = (low_active | high_active) & (positive > 0).any(-1, keepdim=True)
+        if ctx.kind == "shannon":
+            am, ae, dm, de = _shannon_centered_parts(slope, grad, extended)
+            gm, ge = binary_parts(grad)
+            dm, de = torch.where(equality, dm, gm), torch.where(equality, de, ge)
+            am, ae = torch.where(equality, am[..., None], 0), ae[..., None]
+        else:
+            am, ae = _average_parts(slope, grad)
+            am = torch.where(equality, am[..., None], 0)
+            ae = ae[..., None]
+            dm, de = _difference_parts(grad, am, ae)
+        sm, se = extended if extended else binary_parts(slope)
         score_m, score_e = sm * dm, se + de
         if ctx.source_shapes[0][-1] == 1:
             # One score source shared by every candidate is a common shift.
@@ -404,7 +630,7 @@ def pool(scores: Tensor, mu: Tensor) -> Tensor:
 
 
 def allocate(scores: Tensor, w: Tensor, mu: Tensor, lower: Tensor, upper: Tensor,
-             k: float | Tensor, kind: str = "quad") -> Tensor:
+             k: float | Tensor, kind: str = "quad", *, support_policy: str = "strict") -> Tensor:
     """Solve role-bounded quad/Shannon allocation with the received lower bound.
 
     b=min(1,sum(w)), U=min(k,sum(upper)), L=max(sum(lower),min(b,U)).
@@ -416,11 +642,15 @@ def allocate(scores: Tensor, w: Tensor, mu: Tensor, lower: Tensor, upper: Tensor
     L/U is slack; clip endpoints use the boundary face. Fixed-through entries
     lower=upper=mu differentiate through mu; other equal bounds through lower.
     With no interior coordinates, backward uses that fixed face, without
-    division by zero. Unrepresentable positive Shannon/pool senders fail
-    explicitly instead of silently becoming zero. These are declared first-order conventions, not claims
-    of classical differentiability at a corner. kind='pool' dispatches to
-    pool(scores,mu), whose contract has no role bounds or k.
+    division by zero. These are declared first-order conventions at corners.
+    Strict Shannon/pool raise when a positive sender underflows. kind='pool' dispatches to
+    pool(scores,mu), whose contract has no role bounds or k. For Shannon,
+    support_policy="positive-floor-v1" refines extreme rows on the host, stores
+    lost positive senders at the least subnormal, and differentiates the
+    unrounded free responses. The default strict policy rejects support loss.
     """
+    if support_policy not in ("strict", FLOOR) or (support_policy == FLOOR and kind != "shannon"):
+        raise ValueError("support_policy must be strict or positive-floor-v1 for Shannon")
     if kind == "pool":
         return pool(scores, mu)
     if kind not in {"quad", "shannon"}:
@@ -448,4 +678,4 @@ def allocate(scores: Tensor, w: Tensor, mu: Tensor, lower: Tensor, upper: Tensor
     if scores.shape[-1] == 0:
         return scores * 0 + w * 0 + mu * 0 + lower * 0 + upper * 0 + budget * 0
     return _Constrained.apply(originals[0], originals[2], originals[3], originals[4],
-                              low_total, high_total, kind)
+                              low_total, high_total, FLOOR if support_policy == FLOOR else kind)

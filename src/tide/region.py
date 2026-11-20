@@ -60,7 +60,7 @@ class RegionNetwork(nn.Module):
         return score + torch.where(w>0,correction.permute(2,0,1),torch.zeros_like(score))
 
 
-def region_control(score, received, roles, budget, profile, partition):
+def region_control(score, received, roles, budget, profile, partition, support_policy="strict"):
     if score.dtype in (torch.float16,torch.bfloat16):
         score = score.float()
     received = received.to(score.dtype)
@@ -77,6 +77,7 @@ def region_control(score, received, roles, budget, profile, partition):
     else:
         k,kind = budget,profile
     lower = torch.where(hubs,mu/4,torch.zeros_like(mu))
+    options = {"support_policy": support_policy} if kind == "shannon" and support_policy != "strict" else {}
     out = allocate(score.permute(1,2,0),w.permute(1,2,0),mu.permute(1,2,0),
-                   lower.permute(1,2,0),mu.permute(1,2,0),k,kind=kind)
+                   lower.permute(1,2,0),mu.permute(1,2,0),k,kind=kind,**options)
     return out.permute(2,0,1)

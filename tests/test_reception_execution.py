@@ -25,7 +25,7 @@ def config(profile, timing="settle", **options):
 @pytest.mark.parametrize("timing", ["settle", "timed"])
 def test_fp64_fused_masked_reception_updates_continuation_and_restore(tmp_path, profile, timing):
     torch.manual_seed(519)
-    cfg = config(profile, timing)
+    cfg = config(profile, timing, reception_mask_padding=False)
     baseline = TideModel(cfg).double()
     candidate = TideModel(replace(cfg, reception_qkv_backend="fused", reception_mask_padding=True,
                                  checkpoint_reception=True)).double()
@@ -108,7 +108,7 @@ def test_fused_reception_keeps_work_and_parameter_inventory():
 
 def test_placed_reception_explicit_fallback_keeps_canonical_gradients():
     torch.manual_seed(522)
-    cfg = replace(config("incoming_light_128", reception_mask_padding=True), region_batch_size=1)
+    cfg = replace(config("incoming_light_128", reception_mask_padding=False), region_batch_size=1)
     ordinary = TideModel(cfg).double()
     candidate = TideModel(replace(cfg, reception_qkv_backend="fused")).double()
     candidate.load_state_dict(ordinary.state_dict())
@@ -144,7 +144,7 @@ def test_reception_execution_configuration_and_older_checkpoint_defaults():
 @pytest.mark.parametrize("recompute", [False, True])
 def test_reception_padding_cache_can_train_after_inference_mode(backend, placement, recompute):
     torch.manual_seed(523)
-    cfg = replace(config("incoming_light_64", reception_mask_padding=True,
+    cfg = replace(config("incoming_light_64", reception_mask_padding=False,
                          reception_qkv_backend="fused", checkpoint_reception=recompute),
                   attention_backend=backend)
     model = TideModel(cfg)

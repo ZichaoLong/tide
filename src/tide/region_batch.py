@@ -123,7 +123,7 @@ def evaluate_regions(model, regions, contents, masses, classes, time, old=None, 
         region_received = received.reshape(r, n, b, length).permute(1, 0, 2, 3).reshape(n, r*b, length)
         control = region_control(region_score, region_received, roles,
                                  model.config.budget or max(1, model.graph.config.n//32),
-                                 model.config.allocation, model.graph.config.partition)
+                                 model.config.allocation, model.graph.config.partition, model.config.shannon_support_policy)
         control = control.reshape(n, r, b, length).permute(1, 0, 2, 3).reshape(r*n, b, length)
     full = torch.zeros_like(u)
     for kind, (sub, context) in contexts.items():
