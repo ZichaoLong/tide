@@ -63,12 +63,13 @@ class Reception(nn.Module):
             return "separate_owner_wrapper"
         return self.qkv_backend
 
-    def forward(self, content, mass, classes, owners, edge_mask=None):
+    def forward(self, content, mass, classes, owners, edge_mask=None, constant_zero=None):
         """Aggregate real edges, preserving derivatives at genuine zero mass.
 
         ``edge_mask`` is static structural membership [node, edge], never a
         test of positive mass. A masked slot has no mathematical mass root;
-        an existing edge with zero mass keeps its declared right derivative.
+        an independent zero prior keeps its declared right derivative. A producer
+        can certify a locally constant zero via the routed constant_zero tensor.
         """
         if edge_mask is not None and (edge_mask.dtype != torch.bool or
                 edge_mask.shape != (content.shape[0], content.shape[-2])):
@@ -89,7 +90,8 @@ class Reception(nn.Module):
                 projections = (projection(x,owners) for projection in (self.q,self.k,self.v))
             q,k,v = (value.reshape(*shape,self.heads,32).transpose(-3,-2) for value in projections)
             key_mask = None if edge_mask is None else edge_mask[:,None,None,None,None,:]
-            read = weighted_attention(q,k,v,weights=mass,mask=key_mask,backend=self.backend)
+            read = weighted_attention(q,k,v,weights=mass,mask=key_mask,backend=self.backend,
+                                      _constant_zero_prior=constant_zero)
             read = read.transpose(-3,-2).flatten(-2)
             y = y + self.o(read,owners)
         hidden = self.a(norm(y),owners) + self.embedding(owners,classes)[:,None,None]

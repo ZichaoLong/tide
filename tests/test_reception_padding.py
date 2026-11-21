@@ -108,3 +108,73 @@ def test_legacy_false_is_masked_during_whole_region_recomputation():
         handle.remove()
     assert any(mask is not None and bool((~mask).any()) for mask in calls)
     assert all(p.grad is None or torch.isfinite(p.grad).all() for p in model.parameters())
+
+
+@pytest.mark.parametrize("backend", ["auto", "math", "tiled"])
+def test_ordinary_quad_constant_face_large_logit_keeps_other_roots(device, backend):
+    from tide.region import region_control
+    scores = torch.tensor([-3., 5.], device=device, requires_grad=True)
+    received = torch.ones_like(scores, requires_grad=True)
+    control, face = region_control(scores[:, None, None], received[:, None, None],
+        torch.zeros(2, dtype=torch.bool, device=device), 1, "quad", "group", return_constant_zero=True)
+    assert face.flatten().tolist() == [True, False]
+    assert control.flatten().tolist() == [0., 1.]
+    # Independent zero and weak positive priors sit beside the unreachable root.
+    independent = torch.tensor([0., 1e-30], device=device, requires_grad=True)
+    weights = torch.cat((control.flatten(), independent))
+    marked = torch.cat((face.flatten(), torch.tensor([False, True], device=device)))
+    q = torch.ones((1, 1, 1), device=device, requires_grad=True)
+    k = torch.tensor([110., 0., 0., 0.], device=device).view(1, 4, 1).requires_grad_()
+    v = torch.tensor([3., 1., 4., 6.], device=device).view_as(k).requires_grad_()
+    out = weighted_attention(q, k, v, weights, backend=backend, _constant_zero_prior=marked)
+    ds, dr, di, dq, dk, dv = torch.autograd.grad(out.sum(), (scores, received, independent, q, k, v))
+    torch.testing.assert_close(out, torch.ones_like(out))
+    for gradient in (ds, dr, dq, dk, dv):
+        assert torch.isfinite(gradient).all()
+    torch.testing.assert_close(di.cpu(), torch.tensor([3., 5.]))
+    assert ds.count_nonzero() == 0 and dv[0, 0, 0] == 0
+
+
+def test_fixed_through_quad_zero_is_not_a_constant_lower_face(device):
+    from tide.region import region_control
+    received = torch.tensor([0., 1.], device=device, requires_grad=True)
+    scores = torch.tensor([10., 1.], device=device)
+    control, face = region_control(scores[:, None, None], received[:, None, None],
+        torch.zeros(2, dtype=torch.bool, device=device), 1, "quad", "group", return_constant_zero=True)
+    assert control[0].item() == 0 and not face[0].item()
+    gradient, = torch.autograd.grad(control[0].sum(), received)
+    torch.testing.assert_close(gradient.cpu(), torch.tensor([2., 0.]))
+
+
+def test_timed_pending_checkpoint_and_independent_roots(tmp_path, device):
+    from dataclasses import fields, replace
+    from tide.placement import move_tensors
+    from tide import TopologyConfig
+
+    model = TideModel(replace(padded_model().config, topology=TopologyConfig(
+        kind="multiscale", profile="compact-5-dd4", n=2, hubs=1, partition="mixed", timing="timed")))
+    region = model.layer_regions[1][0]
+    banks, pending = [], []
+    for nodes in model.layer_nodes:
+        strengths = torch.zeros(len(nodes), 1, 2, device=device)
+        values = torch.zeros(*strengths.shape, 64, device=device)
+        banks.append(LayerOutput.from_region(values, strengths + 1, None))
+        pending.append(LayerOutput(values[:, :, :1], strengths[:, :, :1]))
+    # Legacy checkpoint payloads hash the original two dataclass fields.
+    path = tmp_path / "timed.pt"
+    torch.save(pending, path)
+    pending = torch.load(path, weights_only=False)
+    assert [f.name for f in fields(pending[0])] == ["values", "strengths"]
+    embedded = {"D": torch.zeros(1, 2, 64, device=device)}
+    def routed():
+        return model._incoming(region, banks, pending, embedded, 1, 2, device, return_constant_zero=True)
+    _, mass, _, face = routed()
+    assert (mass[:, :, 0] == 0).all() and face[:, :, 0].any() and not face[:, :, 1].any()
+    for index, bank in enumerate(pending):
+        independent = bank.strengths.detach().requires_grad_()
+        rerooted = LayerOutput.from_region(bank.values, independent, torch.ones_like(independent, dtype=torch.bool))
+        # Both slicing and device/index packing can turn an input leaf into a nonleaf.
+        ids = torch.arange(len(independent), device=device)
+        pending[index] = LayerOutput.cat([move_tensors(rerooted, device).index_select(ids).select(slice(None))])
+    _, mass, _, face = routed()
+    assert mass.requires_grad and face is None

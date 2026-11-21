@@ -134,25 +134,27 @@ class Calls:
         self.original = ATTENTION_SITES[0][1].weighted_attention
         with ExitStack() as stack:
             for site, owner in ATTENTION_SITES:
-                def wrapped(q, k, v, weights=None, mask=None, backend="auto", *, mass_scaled=False, _site=site):
-                    return self.call(_site, (q, k, v, weights, mask), backend, mass_scaled=mass_scaled)
+                def wrapped(q, k, v, weights=None, mask=None, backend="auto", *, mass_scaled=False, _constant_zero_prior=None, _site=site):
+                    return self.call(_site, (q, k, v, weights, mask), backend, mass_scaled=mass_scaled, constant_zero=_constant_zero_prior)
                 stack.enter_context(patch.object(owner, "weighted_attention", wrapped))
             yield self
 
-    def call(self, site, values, backend, *, mass_scaled=False):
+    def call(self, site, values, backend, *, mass_scaled=False, constant_zero=None):
         index = len(self.rows)
         if index >= self.max_calls:
             raise CaptureLimit("Attention call count exceeds "+str(self.max_calls))
         q, k, v, weights, mask = values
         prefix = torch.broadcast_shapes(q.shape[:-2], k.shape[:-2], v.shape[:-2])
         output_elements = math.prod(prefix)*q.shape[-2]*v.shape[-1]
-        elements = sum(x.numel() for x in values if x is not None) + output_elements
+        elements = sum(x.numel() for x in (*values, constant_zero) if x is not None) + output_elements
         if elements > self.elements:
             raise CaptureLimit(f"call {index} needs {elements} input/output elements; cap is {self.elements}")
         inputs = {name: describe(value) for name, value in zip(NAMES, values)}
+        if constant_zero is not None:
+            inputs["constant_zero"] = describe(constant_zero)
         flags = {name: value is not None and value.requires_grad for name, value in zip(NAMES, values)}
         with dispatch(self.device) as path:
-            output = self.original(*values, backend=backend, mass_scaled=mass_scaled)
+            output = self.original(*values, backend=backend, mass_scaled=mass_scaled, _constant_zero_prior=constant_zero)
         if q.shape[-2] == 0 or k.shape[-2] == 0:
             path.update(effective="empty", representation="empty_output")
         row = dict(index=index, phase=self.phase, site=site, inputs=inputs, output=describe(output),
@@ -171,6 +173,7 @@ class Calls:
         if changed or index == self.target:
             self.selected = dict(metadata=row, inputs={name: None if value is None else value.detach().cpu().clone()
                 for name, value in zip(NAMES, values)}, output=output.detach().cpu().clone())
+            self.selected["constant_zero"] = None if constant_zero is None else constant_zero.detach().cpu().clone()
             raise StopCapture()
         self.prefix.update(digest.encode())
         return output
@@ -235,7 +238,9 @@ def replay_pair(reference, changed, device, row_limit):
                   for key, value in reference["inputs"].items()}
         with torch.set_grad_enabled(metadata["grad_enabled"]), arithmetic(device, "fp32"), dispatch(device) as path:
             output = weighted_attention(*(inputs[key] for key in NAMES), backend=metadata["requested_backend"],
-                                        mass_scaled=metadata.get("mass_scaled", False))
+                                        mass_scaled=metadata.get("mass_scaled", False),
+                                        _constant_zero_prior=(reference["constant_zero"].to(device)
+                                            if reference.get("constant_zero") is not None else None))
         outputs[name] = output.detach().cpu()
         same_inputs = metadata["inputs"] == reference["metadata"]["inputs"]
         reports[name] = dict(dispatch=path, same_inputs_as_capture=same_inputs,

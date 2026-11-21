@@ -36,3 +36,14 @@ Attention primitive's right derivative at an explicitly supplied zero key prior.
 Whole-window and continued KV evaluation use the same no-write convention.
 KV Full tiles original logical positions and restricts each key bank to the
 finite history window; sparse event indices never replace logical time.
+
+For ordinary quad allocation, a zero control on the constant lower face with a
+positive upper bound has zero derivative with respect to all producer inputs.
+Reception carries this fact along the corresponding edge and may omit that
+key's hypothetical independent prior derivative. The attention quotient, real
+edge membership, and query rows are preserved. Movable bounds, fixed-through
+zero upper bounds and positive priors retain their original derivative rules.
+Timed pending banks carry the face across the one-tick delay. Detached strengths
+are constants for the next update. Independently differentiable strengths
+(including a re-rooted pending bank) retain their right derivatives. Older
+two-field pending checkpoints remain readable.

@@ -84,12 +84,12 @@ def regional_scores(networks, z, score, weight):
     return score + torch.where(weight > 0, correction, torch.zeros_like(score))
 
 
-def evaluate_regions(model, regions, contents, masses, classes, time, old=None, record_work=False):
+def evaluate_regions(model, regions, contents, masses, classes, time, old=None, record_work=False, constant_zero=None):
     members = tuple(v for region in regions for v in model.graph.regions[region])
     r, n = len(regions), len(model.graph.regions[regions[0]])
     device, b, length = contents.device, contents.shape[1], contents.shape[2]
     owners = model._owners(members, device)
-    received, u = model._receive(contents, masses, classes, owners, model._reception_mask(regions, device))
+    received, u = model._receive(contents, masses, classes, owners, model._reception_mask(regions, device), constant_zero)
     mass = (torch.ones_like(received) if model.graph.config.kind == "fc" else
             torch.where(received >= 1, torch.ones_like(received), received.clamp_min(0)))
     times = time[None, None].expand(len(members), b, length)
@@ -110,6 +110,7 @@ def evaluate_regions(model, regions, contents, masses, classes, time, old=None, 
         for target, state in zip(saved, split_state(updated, [len(indices)//r]*r)):
             target[kind] = state
     roles = torch.tensor([model.graph.nodes[v].role == "H" for v in model.graph.regions[regions[0]]], device=device)
+    face = None
     if model.region_group[regions[0]] < 0:
         control = torch.where(received >= 0.5, torch.ones_like(received), 2*received)
     else:
@@ -121,9 +122,12 @@ def evaluate_regions(model, regions, contents, masses, classes, time, old=None, 
         # Region becomes a batch dimension, never an allocation/attention axis.
         region_score = score.permute(1, 0, 2, 3).reshape(n, r*b, length)
         region_received = received.reshape(r, n, b, length).permute(1, 0, 2, 3).reshape(n, r*b, length)
-        control = region_control(region_score, region_received, roles,
+        control, face = region_control(region_score, region_received, roles,
                                  model.config.budget or max(1, model.graph.config.n//32),
-                                 model.config.allocation, model.graph.config.partition, model.config.shannon_support_policy)
+                                 model.config.allocation, model.graph.config.partition, model.config.shannon_support_policy,
+                                 return_constant_zero=True)
+        if face is not None:
+            face = face.reshape(n, r, b, length).permute(1, 0, 2, 3).reshape(r*n, b, length)
         control = control.reshape(n, r, b, length).permute(1, 0, 2, 3).reshape(r*n, b, length)
     full = torch.zeros_like(u)
     for kind, (sub, context) in contexts.items():
@@ -132,4 +136,5 @@ def evaluate_regions(model, regions, contents, masses, classes, time, old=None, 
     if record_work:
         measured = torch.stack(((received > 0).sum(), (control > 0).sum(), (masses > 0).sum(),
                                 torch.as_tensor(received.numel(), device=device)))
-    return full.split(n, 0), control.split(n, 0), saved, measured
+    faces = (None,) * r if face is None else face.split(n, 0)
+    return full.split(n, 0), control.split(n, 0), saved, measured, faces

@@ -63,6 +63,9 @@ def move_tensors(value, device, transport="direct"):
     if isinstance(value, torch.Tensor):
         return transfer_tensor(value, device, transport)
     if is_dataclass(value):
+        from .model import AllocatedLayerOutput, LayerOutput
+        if isinstance(value, AllocatedLayerOutput) and value.routing_face() is None:
+            value = LayerOutput(value.values, value.strengths)
         return type(value)(**{f.name: move_tensors(getattr(value, f.name), device, transport) for f in fields(value)})
     if isinstance(value, dict):
         return {k: move_tensors(v, device, transport) for k, v in value.items()}

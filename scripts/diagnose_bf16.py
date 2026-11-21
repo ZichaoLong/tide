@@ -53,13 +53,13 @@ def capture_regions(model, entries, attention):
             finally:
                 current.pop()
         return call
-    def control(score, received, roles, budget, profile, partition):
-        result = original_control(score, received, roles, budget, profile, partition)
+    def control(score, received, roles, budget, profile, partition, *args, **kwargs):
+        result = original_control(score, received, roles, budget, profile, partition, *args, **kwargs)
         region = regions[len(entries)]
         entries.append(cpu_tree({"region": region, "layer": model.graph.nodes[model.graph.regions[region][0]].layer,
                                  "nodes": model.graph.regions[region], "score": score, "received": received,
                                  "roles": roles, "budget": budget, "profile": profile, "partition": partition,
-                                 "control": result}))
+                                 "control": result[0] if isinstance(result, tuple) else result}))
         return result
     module.region_control = control
     attention_module._native_attention = native

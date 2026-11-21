@@ -60,7 +60,8 @@ class RegionNetwork(nn.Module):
         return score + torch.where(w>0,correction.permute(2,0,1),torch.zeros_like(score))
 
 
-def region_control(score, received, roles, budget, profile, partition, support_policy="strict"):
+def region_control(score, received, roles, budget, profile, partition, support_policy="strict",
+                   *, return_constant_zero=False):
     if score.dtype in (torch.float16,torch.bfloat16):
         score = score.float()
     received = received.to(score.dtype)
@@ -69,7 +70,7 @@ def region_control(score, received, roles, budget, profile, partition, support_p
     hubs = roles[:,None,None]
     n_h = int(roles.sum())
     if n_h == len(roles) and partition == "singleton":
-        return mu
+        return (mu, None) if return_constant_zero else mu
     if n_h == len(roles):
         k,kind = max(1,(n_h+1)//2),"quad"
     elif n_h:
@@ -80,4 +81,13 @@ def region_control(score, received, roles, budget, profile, partition, support_p
     options = {"support_policy": support_policy} if kind == "shannon" and support_policy != "strict" else {}
     out = allocate(score.permute(1,2,0),w.permute(1,2,0),mu.permute(1,2,0),
                    lower.permute(1,2,0),mu.permute(1,2,0),k,kind=kind,**options)
-    return out.permute(2,0,1)
+    control = out.permute(2,0,1)
+    if not return_constant_zero:
+        return control
+    # For quad the solver chooses the lower face at equality. On an ordinary
+    # node its lower bound is the constant zero. Exclude fixed-through mu=0:
+    # its declared derivative with respect to received mass can be nonzero.
+    constant_zero = None
+    if kind == "quad" and n_h < len(roles):
+        constant_zero = ~hubs & (mu > 0) & (control == 0)
+    return control, constant_zero

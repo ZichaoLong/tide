@@ -559,7 +559,8 @@ class _MassScaledAttention(torch.autograd.Function):
 
 
 def weighted_attention(q: Tensor, k: Tensor, v: Tensor, weights: Tensor | None = None,
-                       mask: Tensor | None = None, backend: str = "auto", *, mass_scaled: bool = False) -> Tensor:
+                       mask: Tensor | None = None, backend: str = "auto", *, mass_scaled: bool = False,
+                       _constant_zero_prior: Tensor | None = None) -> Tensor:
     """Compute sum(w exp(qk/sqrt(D)) v) / sum(w exp(qk/sqrt(D))).
 
     q/k/v have [..., H, Q/K, D/Dv]; batch axes and singleton heads broadcast.
@@ -641,6 +642,15 @@ def weighted_attention(q: Tensor, k: Tensor, v: Tensor, weights: Tensor | None =
     if backend == "auto":
         backend = ("tiled" if auto_must_tiled else "npu_fusion" if npu_ok
                    else "sdpa" if q.device.type in {"cpu", "cuda"} else "tiled")
+    if _constant_zero_prior is not None:
+        # Reception proves these actual zero priors are locally constant at
+        # their producer. Keep the usual forward kernel choice. Excluding such
+        # keys preserves forward probabilities and avoids forming their VJP.
+        constant = _auxiliary(_constant_zero_prior, shape, True)
+        mask = mask & ~(constant & (weights == 0))
+        no_mask = False
+        if zero_prior_grad and backend in {"sdpa", "npu_fusion"}:
+            zero_prior_grad = bool(((weights == 0) & mask).any())
     if backend == "npu_fusion" and not npu_ok:
         raise ValueError("npu_fusion requires NPU FP32/BF16 and equal head widths <=768")
     if backend == "sdpa" and q.device.type not in {"cpu", "cuda"}:

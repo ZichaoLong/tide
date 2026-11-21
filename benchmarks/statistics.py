@@ -206,7 +206,7 @@ class WorkAudit:
                     self._add("ingress", key, self.inventory.whole("inputs"))
         return original(x, state, record_work=record_work, inject=inject)
 
-    def _receive(self, original, content, mass, classes, owners, edge_mask=None):
+    def _receive(self, original, content, mass, classes, owners, edge_mask=None, constant_zero=None):
         self.region = self.region_index
         self.region_index += 1
         support = mass.detach().cpu() > 0
@@ -226,7 +226,7 @@ class WorkAudit:
         self._work("candidate_slots", torch.full(candidate.shape[1:], candidate.shape[0]))
         if self.model.config.aggregation != "source_residual":
             self._work("reception_attention_positive_pairs", support.sum(-1).square().sum(0)*self.model.receive.heads)
-        result = original(content, mass, classes, owners, edge_mask)
+        result = original(content, mass, classes, owners, edge_mask, constant_zero)
         if self.model.receive.effective_qkv_backend == "fused":
             # Fused projections bypass child NodeLinear.forward hooks. Count
             # the unchanged mathematical matrices/adapters and padded rows.

@@ -34,6 +34,58 @@ def detach_state(value):
 class LayerOutput:
     values: torch.Tensor
     strengths: torch.Tensor
+    constant_zero = None  # Legacy and independently supplied banks carry no face proof.
+
+    @staticmethod
+    def from_region(values, strengths, constant_zero):
+        if constant_zero is None:
+            return LayerOutput(values, strengths)
+        return AllocatedLayerOutput(values, strengths, constant_zero)
+
+    def routing_face(self):
+        # A caller can detach a pending bank and make its strengths a new
+        # differentiable input. Its zero priors then have independent roots.
+        if self.strengths.requires_grad and self.strengths.is_leaf:
+            return None
+        return self.constant_zero
+
+    def as_pending(self):
+        face = self.routing_face() if self.strengths.requires_grad else self.strengths == 0
+        return LayerOutput.from_region(self.values, self.strengths, face)
+
+    def select(self, index):
+        face = self.routing_face()
+        return LayerOutput.from_region(self.values[index], self.strengths[index],
+                                       None if face is None else face[index])
+
+    def index_select(self, ids):
+        face = self.routing_face()
+        return LayerOutput.from_region(self.values.index_select(0, ids), self.strengths.index_select(0, ids),
+                                       None if face is None else face.index_select(0, ids))
+
+    def tail(self):
+        face = self.routing_face()
+        return LayerOutput.from_region(self.values[:, :, -1:].clone(), self.strengths[:, :, -1:].clone(),
+                                       None if face is None else face[:, :, -1:].clone())
+
+    @staticmethod
+    def cat(banks):
+        strengths = [bank.strengths for bank in banks]
+        face = cat_constant_zero([bank.routing_face() for bank in banks], strengths)
+        return LayerOutput.from_region(torch.cat([bank.values for bank in banks]), torch.cat(strengths), face)
+
+
+@dataclass
+class AllocatedLayerOutput(LayerOutput):
+    # A separate type leaves the fields and state digest of old checkpoints intact.
+    constant_zero: torch.Tensor
+
+
+def cat_constant_zero(faces, strengths, dim=0):
+    if all(face is None for face in faces):
+        return None
+    return torch.cat([torch.zeros_like(s, dtype=torch.bool) if face is None else face
+                      for face, s in zip(faces, strengths)], dim)
 
 
 @dataclass
@@ -168,7 +220,7 @@ class TideModel(nn.Module):
             routes.append((classes,banks))
         return routes
 
-    def _incoming(self,region,layers,pending,embedded,b,length,device,inject=True,*,routes=None):
+    def _incoming(self,region,layers,pending,embedded,b,length,device,inject=True,*,routes=None,return_constant_zero=False):
         nodes = self.graph.regions[region]
         classes,banks = self._routes[region] if routes is None else routes
         if self.graph.nodes[nodes[0]].layer==0:
@@ -179,23 +231,33 @@ class TideModel(nn.Module):
             if not self.settle:
                 valid = torch.arange(length,device=device)%self.graph.period==0
                 mass = mass*valid[None,None,:,None]
-            return content,mass,classes.to(device)
+            message = content, mass, classes.to(device)
+            return (*message, None) if return_constant_zero else message
         content = torch.zeros((len(nodes),b,length,classes.shape[1],self.config.d),
                               device=device,dtype=embedded["D"].dtype)
         mass = content[...,0]*0
+        constant_zero = None
         for layer,(indices,mask) in banks.items():
             source = layers[layer]
+            face = source.routing_face()
             if not self.settle:
                 previous = pending[layer] if pending else LayerOutput(torch.zeros_like(source.values[:,:,:1]),
                                                                       torch.zeros_like(source.strengths[:,:,:1]))
                 values = torch.cat((previous.values,source.values[:,:,:-1]),2)
                 strengths = torch.cat((previous.strengths,source.strengths[:,:,:-1]),2)
+                prior_face = previous.routing_face() if previous.strengths.requires_grad else previous.strengths == 0
+                face = cat_constant_zero((prior_face, None if face is None else face[:, :, :-1]),
+                                         (previous.strengths, source.strengths[:, :, :-1]), dim=2)
             else:
                 values,strengths = source.values,source.strengths
             ids,valid = indices.to(device),mask.to(device)
             content = content + values[ids].permute(0,2,3,1,4)*valid[:,None,None,:,None]
             mass = mass + strengths[ids].permute(0,2,3,1)*valid[:,None,None,:]
-        return content,mass,classes.to(device)
+            if face is not None:
+                routed = face[ids].permute(0,2,3,1) & valid[:,None,None,:]
+                constant_zero = routed if constant_zero is None else constant_zero | routed
+        message = content, mass, classes.to(device)
+        return (*message, constant_zero) if return_constant_zero else message
 
     def _reception_mask(self, regions, device):
         """Cache topology membership, independent of runtime sender strength.
@@ -229,13 +291,13 @@ class TideModel(nn.Module):
                 self._reception_masks[key] = None if bool(mask.all()) else mask.to(device)
         return self._reception_masks[key]
 
-    def _receive(self, contents, masses, classes, owners, edge_mask=None):
+    def _receive(self, contents, masses, classes, owners, edge_mask=None, constant_zero=None):
         # The whole-region policy already recomputes reception. Avoid nested
         # checkpointing while keeping the independently selectable cheap stage.
         if self.config.checkpoint_reception and not self.config.checkpoint_regions and torch.is_grad_enabled():
             from torch.utils.checkpoint import checkpoint
-            return checkpoint(self.receive, contents, masses, classes, owners, edge_mask, use_reentrant=False)
-        return self.receive(contents, masses, classes, owners, edge_mask)
+            return checkpoint(self.receive, contents, masses, classes, owners, edge_mask, constant_zero, use_reentrant=False)
+        return self.receive(contents, masses, classes, owners, edge_mask, constant_zero)
 
     def _owners(self, ordered_ids, device):
         """Static owner order is known here, before any dynamic Full packing."""
@@ -250,7 +312,7 @@ class TideModel(nn.Module):
                 self._static_owners[key] = NodeOwners.from_static(ordered, device=device)
         return self._static_owners[key]
 
-    def _evaluate_region(self, region, contents, masses, classes, time, old=None, record_work=False):
+    def _evaluate_region(self, region, contents, masses, classes, time, old=None, record_work=False, constant_zero=None):
         """Pure regional tensor work, with explicit input/state ownership.
 
         Keeping the call free of publication side effects permits non-reentrant
@@ -259,7 +321,7 @@ class TideModel(nn.Module):
         members = self.graph.regions[region]
         device, b, length = contents.device, contents.shape[1], contents.shape[2]
         owners = self._owners(members,device)
-        received,u = self._receive(contents,masses,classes,owners,self._reception_mask((region,),device))
+        received,u = self._receive(contents,masses,classes,owners,self._reception_mask((region,),device),constant_zero)
         # Unit FC ingress and the received lower budget imply every
         # node writes unit weight. Use that exact reachable-state identity.
         mass = (torch.ones_like(received) if self.graph.config.kind=="fc" else
@@ -281,6 +343,7 @@ class TideModel(nn.Module):
             contexts[kind] = (sub,context)
             saved[kind] = updated
         roles = torch.tensor([self.graph.nodes[v].role=="H" for v in members],device=device)
+        face = None
         if self.fixed_regions[region]:
             control = torch.where(received>=0.5,torch.ones_like(received),2*received)
         else:
@@ -288,8 +351,9 @@ class TideModel(nn.Module):
             description_owners = self._owners(possible,device)
             z,score = self.describe(u,received,desc,description_owners)
             score = self.regional[self.region_group[region]](z,score,mass)
-            control = region_control(score,received,roles,self.config.budget or max(1,self.graph.config.n//32),
-                                     self.config.allocation,self.graph.config.partition,self.config.shannon_support_policy)
+            control,face = region_control(score,received,roles,self.config.budget or max(1,self.graph.config.n//32),
+                                          self.config.allocation,self.graph.config.partition,self.config.shannon_support_policy,
+                                          return_constant_zero=True)
         full = torch.zeros_like(u)
         measured = None
         if record_work:
@@ -297,7 +361,7 @@ class TideModel(nn.Module):
                                     torch.as_tensor(received.numel(),device=device)))
         for kind,(sub,context) in contexts.items():
             full = full.index_copy(0,sub,self.memories[kind].finish(context,control[sub]).to(full.dtype))
-        return full, control, saved, measured
+        return full, control, saved, measured, face
 
     def _score_regions(self, regions, z, score, mass):
         from .region_batch import regional_scores
@@ -375,57 +439,57 @@ class TideModel(nn.Module):
                 for origin in dependencies:
                     source_layers[origin] = move_tensors(layers[origin],device,transport)
                     if source_pending:
-                        source_pending[origin] = move_tensors(source_pending[origin],device,transport)
+                        source_pending[origin] = move_tensors(source_pending[origin].as_pending(),device,transport)
             base = torch.arange(length,device=device,dtype=torch.int64)
             time = ((base+start)*self.graph.period+layer+1 if self.settle else
                     base+start*self.graph.period+1)
-            values,controls,saved_regions = {},{},{}
+            outputs,saved_regions = {},{}
             batches = self._region_batches(regions, state) if self.config.region_batch_size > 1 else [(r,) for r in regions]
             for batch_regions in batches:
                 if len(batch_regions) > 1:
                     from .region_batch import evaluate_regions
-                    incoming = [self._incoming(r,source_layers,source_pending,embedded,b,length,device,inject)
+                    incoming = [self._incoming(r,source_layers,source_pending,embedded,b,length,device,inject,return_constant_zero=True)
                                 for r in batch_regions]
                     contents,masses,classes = (torch.cat([row[i] for row in incoming],0) for i in range(3))
                     old = None if state is None else [state.memories[r] for r in batch_regions]
                     if placed and old is not None:
                         old = move_tensors(old,device,transport)
-                    arguments = (self, batch_regions, contents, masses, classes, time, old, record_work)
+                    face = cat_constant_zero([row[3] for row in incoming], [row[1] for row in incoming])
+                    arguments = (self, batch_regions, contents, masses, classes, time, old, record_work, face)
                     if self.config.checkpoint_regions and torch.is_grad_enabled():
                         from torch.utils.checkpoint import checkpoint
-                        fulls,ctrls,saves,measured = checkpoint(evaluate_regions,*arguments,use_reentrant=False)
+                        fulls,ctrls,saves,measured,faces = checkpoint(evaluate_regions,*arguments,use_reentrant=False)
                     else:
-                        fulls,ctrls,saves,measured = evaluate_regions(*arguments)
-                    for region, full, control, saved in zip(batch_regions,fulls,ctrls,saves):
-                        values[region],controls[region],saved_regions[region] = full,control,saved
+                        fulls,ctrls,saves,measured,faces = evaluate_regions(*arguments)
+                    outputs.update((r, LayerOutput.from_region(v, c, f)) for r,v,c,f in zip(batch_regions,fulls,ctrls,faces))
+                    saved_regions.update(zip(batch_regions, saves))
                     if measured is not None:
                         work.append(measured)
                     continue
                 region = batch_regions[0]
-                contents,masses,classes = self._incoming(region,source_layers,source_pending,
-                                                         embedded,b,length,device,inject)
+                contents,masses,classes,face = self._incoming(region,source_layers,source_pending,
+                                                         embedded,b,length,device,inject,return_constant_zero=True)
                 old = None if state is None else state.memories[region]
                 if placed and old is not None:
                     old = move_tensors(old,device,transport)
-                arguments = (region, contents, masses, classes, time, old, record_work)
+                arguments = (region, contents, masses, classes, time, old, record_work, face)
                 if self.config.checkpoint_regions and torch.is_grad_enabled():
                     from torch.utils.checkpoint import checkpoint
-                    full, control, saved, measured = checkpoint(
+                    full, control, saved, measured, face = checkpoint(
                         self._evaluate_region, *arguments, use_reentrant=False)
                 else:
-                    full, control, saved, measured = self._evaluate_region(*arguments)
+                    full, control, saved, measured, face = self._evaluate_region(*arguments)
                 if measured is not None:
                     work.append(measured)
-                values[region],controls[region],saved_regions[region] = full,control,saved
+                outputs[region] = LayerOutput.from_region(full, control, face)
+                saved_regions[region] = saved
             newmem.extend(saved_regions[r] for r in regions)
-            layers.append(LayerOutput(torch.cat([values[r] for r in regions],0),
-                                      torch.cat([controls[r] for r in regions],0)))
+            layers.append(LayerOutput.cat([outputs[r] for r in regions]))
             if not self.settle:
                 # A detached view would keep the entire window's storage alive.
                 # Clone retains the gradient edge while owning only one tick.
                 current = layers[-1]
-                pending.append(LayerOutput(current.values[:,:,-1:].clone(),
-                                           current.strengths[:,:,-1:].clone()))
+                pending.append(current.tail())
             for origin in self._release_layers[layer]:
                 layers[origin] = None
         final = layers[-1]
@@ -433,7 +497,7 @@ class TideModel(nn.Module):
             # H-only terminal regions have no output path: preserve None gradients.
             port_values, port_controls = [], []
             for region in self.layer_regions[-1]:
-                value, control = values[region], controls[region]
+                value, control = outputs[region].values, outputs[region].strengths
                 ports = [i for i,v in enumerate(self.graph.regions[region]) if self.graph.nodes[v].role=="D"]
                 if ports:
                     port_values.append(value if len(ports)==len(value) else value[ports])

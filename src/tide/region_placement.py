@@ -9,7 +9,7 @@ from dataclasses import dataclass
 
 import torch
 
-from .model import LayerOutput, ModelState, Result
+from .model import LayerOutput, ModelState, Result, cat_constant_zero
 from .placement import move_tensors
 
 
@@ -20,8 +20,7 @@ class RegionLayerOutput:
 
 def gather_region_bank(bank, device, transport="direct"):
     chunks = [move_tensors(region, device, transport) for region in bank.regions]
-    return LayerOutput(torch.cat([region.values for region in chunks], 0),
-                       torch.cat([region.strengths for region in chunks], 0))
+    return LayerOutput.cat(chunks)
 
 
 
@@ -50,7 +49,7 @@ def _split_dense_bank(model, layer, bank):
     offset, regions = 0, []
     for region in model.layer_regions[layer]:
         end = offset+len(model.graph.regions[region])
-        regions.append(LayerOutput(bank.values[offset:end], bank.strengths[offset:end]))
+        regions.append(bank.select(slice(offset, end)))
         offset = end
     return RegionLayerOutput(tuple(regions))
 
@@ -184,18 +183,17 @@ def region_batches(model, regions, state):
     return batches
 
 
-def _transport_bank(bank, plan, device, transport):
-    values, strengths = [], []
+def _transport_bank(bank, plan, device, transport, *, pending=False):
+    chunks = []
     for _, selections in plan["chunks"]:
-        parts = [LayerOutput(bank.regions[region].values.index_select(0, ids),
-                             bank.regions[region].strengths.index_select(0, ids))
-                 for region, ids in selections]
-        packed = LayerOutput(torch.cat([part.values for part in parts], 0),
-                             torch.cat([part.strengths for part in parts], 0))
-        packed = move_tensors(packed, device, transport)
-        values.append(packed.values); strengths.append(packed.strengths)
-    return LayerOutput(torch.cat(values, 0).index_select(0, plan["reorder"]),
-                       torch.cat(strengths, 0).index_select(0, plan["reorder"]))
+        parts = []
+        for region, ids in selections:
+            source = bank.regions[region]
+            if pending:
+                source = source.as_pending()
+            parts.append(source.index_select(ids))
+        chunks.append(move_tensors(LayerOutput.cat(parts), device, transport))
+    return LayerOutput.cat(chunks).index_select(plan["reorder"])
 
 
 def _layer_inputs(model, layer, layers, state, embedded):
@@ -204,7 +202,7 @@ def _layer_inputs(model, layer, layers, state, embedded):
     for destination, plans in model._region_transfers[layer].items():
         device = model._placement_devices[destination]
         banks = {origin: _transport_bank(layers[origin], plan, device, transport) for origin, plan in plans.items()}
-        pending = ({origin: _transport_bank(state.pending[origin], plan, device, transport)
+        pending = ({origin: _transport_bank(state.pending[origin], plan, device, transport, pending=True)
                     for origin, plan in plans.items()} if state is not None and state.pending else {})
         # Projection remains a single Parameter owner, including independent
         # node sharing. Cross-device consumers contribute through these copies.
@@ -251,42 +249,42 @@ def run_region_model(model, x, state=None, *, record_work=False, inject=True):
                 device = model._placement_devices[partition]
                 banks, pending, projected = inputs[partition]
                 incoming = [model._incoming(region, banks, pending, projected, batch, length,
-                                             device, inject, routes=model._region_routes[region])
+                                             device, inject, routes=model._region_routes[region], return_constant_zero=True)
                             for region in members]
                 time = times[partition]
                 if len(members) == 1:
-                    contents, masses, classes = incoming[0]
+                    contents, masses, classes, face = incoming[0]
                     old = None if state is None else state.memories[first]
                     function = model._evaluate_region
-                    args = (first, contents, masses, classes, time, old, record_work)
+                    args = (first, contents, masses, classes, time, old, record_work, face)
                 else:
                     from .region_batch import evaluate_regions
                     contents, masses, classes = (torch.cat([row[i] for row in incoming], 0) for i in range(3))
                     old = None if state is None else [state.memories[region] for region in members]
                     function = evaluate_regions
-                    args = (model, members, contents, masses, classes, time, old, record_work)
+                    face = cat_constant_zero([row[3] for row in incoming], [row[1] for row in incoming])
+                    args = (model, members, contents, masses, classes, time, old, record_work, face)
                 if model.config.checkpoint_regions and torch.is_grad_enabled():
                     from torch.utils.checkpoint import checkpoint
-                    full, control, saved, measured = checkpoint(function, *args, use_reentrant=False)
+                    full, control, saved, measured, faces = checkpoint(function, *args, use_reentrant=False)
                 else:
-                    full, control, saved, measured = function(*args)
+                    full, control, saved, measured, faces = function(*args)
                 if len(members) == 1:
-                    full, control, saved = (full,), (control,), (saved,)
-                return dict(zip(members, zip(full, control, saved))), measured
+                    full, control, saved, faces = (full,), (control,), (saved,), (faces,)
+                return dict(zip(members, zip(full, control, saved, faces))), measured
 
             results = {}
             for grouped, measured in executor.map(tuple(by_first), evaluate):
                 results.update(grouped)
                 if measured is not None:
                     work.append(measured)
-            chunks = [LayerOutput(results[region][0], results[region][1]) for region in regions]
+            chunks = [LayerOutput.from_region(results[r][0], results[r][1], results[r][3]) for r in regions]
             memories.extend(results[region][2] for region in regions)
             time = times[model._region_partitions[regions[-1]]]
             bank = RegionLayerOutput(tuple(chunks))
             layers.append(bank)
             if not model.settle:
-                pending_tails.append(RegionLayerOutput(tuple(LayerOutput(
-                    chunk.values[:, :, -1:].clone(), chunk.strengths[:, :, -1:].clone()) for chunk in chunks)))
+                pending_tails.append(RegionLayerOutput(tuple(chunk.tail() for chunk in chunks)))
             # Python-owned banks expire after their final consumer; autograd
             # keeps saved tensors. The compact tails remain differentiable.
             for origin, last_use in enumerate(model._region_last_use[:layer+1]):
