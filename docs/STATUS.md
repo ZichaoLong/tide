@@ -1,6 +1,10 @@
-# 当前交接｜Shannon 正支持已通过 r09 隔离验收，A 停止，B 关闭
+# 当前交接｜KV 未写入槽位修复已交付，A 已接续
 
-2026-11-20 夜间。本机 `src/tide` 提供显式 `shannon_support_policy="positive-floor-v1"`。26 个 Python 文件的内容哈希为 `cbf9c33157bd744e240fc4e662862cd147a5ba78861452838c053e8945d1e4f4`，已验收的实现提交为 `885f7ef96be8cc31814e509c687017e6ff922d72`。CPU 和单卡 NPU 在相同故障输入恢复 23 个正发送者，并完成该批及两个真实后继批的 AdamW 更新。CPU 同策略恢复逐位一致，NPU 私有状态逐位一致，其他差异通过原阈值。新策略对异常行使用主机高精度求解，吞吐待测。[基座接口及回归](shannon-positive-floor.md) · [下游验收](../../tide-learning-lab/docs/requests/TL-REQ-007.md)
+2026-11-21。基座实现提交 `17c7d675` 将 KV Full 的有效时间窗与实际写入位置取交集。Timed/K A1 的两个未写入槽位曾产生约 −1.21 × 10⁴⁰ 的中间权重导数。零接收的 KV 写入导数为零，通用 Attention 对显式零先验继续使用右导数。[KV 写入语义](semantics.md) · [下游故障现场与 FP64 公式](../../tide-learning-lab/docs/evidence/pilot-r3-r10-kv-no-write.json)
+
+极端空槽和正权重 0.5、1e-30 的两个回归在旧版均复现。修复后定向 CPU 139 项通过、3 项原有预期失败，单卡 Ascend 58 项通过、3 项原有预期失败。下游用同一提交从正式 step 1126 在 NPU 上完成 1127–1140，故障 batch 的输入与目标逐项一致。新进程精确载入 1139，重放 1140 的逻辑状态、数据、loss、梯度范数匹配，参数、AdamW 和梯度通过原 FP32 容差。[定向验收](../../tide-learning-lab/docs/evidence/pilot-r3-r10-foundation-kv-acceptance.json)
+
+下游 r11 自 12:20 在该实现上接续 A，B 关闭。Shannon 主体沿用 `positive-floor-v1`。74 个先前曝光主体仍待独立迁移审阅。[下游交接](../../tide-learning-lab/docs/STATUS.md) · [Shannon 配方与证据](shannon-positive-floor.md)
 
 ## 同一源码中的既有 Attention 修复
 
@@ -9,5 +13,3 @@
 详见[当前修复记录](attention-native-support-repair.md)。定向CPU172通过、3原xfail；实际NPU39通过。42个NPU样本完成，含四个旧状态各16步真实接续、首尾8个CPU FP64抽查，均在原门槛内；全部fresh-process恢复通过，最大差5.6904e-7。独立局部公式、同实现FP64诊断、有限恢复与长期学习结论分开。
 
 原Shannon恢复超差、CPU私有KV有限超差、弱质量夹具及首次单支持-only多key反例均保留。当前不声明全部幅值、BF16多key、CUDA或旧选参已获得新资格。
-
-下游 r09 已在旧 strict 基座上停止。74 个旧曝光主体仍待迁移审阅。后续实验可从基座提交 `885f7ef9` 冻结源码，并在 Shannon 配方中显式选择正支持策略。[下游当前交接](../../tide-learning-lab/docs/STATUS.md)
