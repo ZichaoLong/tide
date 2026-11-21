@@ -156,6 +156,9 @@ class KVMemory(nn.Module):
         delta = packed.positions[..., None] - key_times[:, :, None, :]
         visible = (delta >= 0) & (delta < self.window) & packed.valid[..., None]
         w = bank.weight[packed.nodes, :, lo:hi]
+        if not self.unit_weights:
+            # An unwritten slot has no key, including in the prior VJP.
+            visible = visible & (w[:, :, None, :] > 0)
         read = weighted_attention(queries, keys, values,
                                   weights=None if self.unit_weights else w,
                                   mask=visible[:, :, None], backend=self.backend,

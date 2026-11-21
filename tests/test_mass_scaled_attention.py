@@ -220,6 +220,36 @@ def test_nonrepresentable_public_vjp_is_explicit(device):
         torch.autograd.grad(result, roots, cotangent.to(device))
 
 
+@pytest.mark.parametrize("write_mass", [.5, 1e-30])
+def test_kv_full_excludes_high_scoring_absent_write(device, write_mass):
+    memory = KVMemory(1, 32, None, 4, 8, settle=False).to(device)
+    with torch.no_grad():
+        for parameter in memory.parameters():
+            parameter.zero_()
+        # The unwritten first key would beat the written key by ~181 logits.
+        memory.query.heads[0].weight[0, 30, 1] = 1
+        memory.kv.weight[0, 30, 0] = 32
+        memory.kv.weight[0, 32, 0] = 1
+        memory.kv.weight[0, 32, 1] = .5
+        memory.output.weight[0, 0, 0] = 1
+    u = torch.eye(32, device=device)[:2].reshape(1, 1, 2, 32)
+    mass = torch.tensor([[[0., write_mass]]], device=device, requires_grad=True)
+    times = torch.tensor([[[1, 2]]], device=device)
+    owners = torch.tensor([0], device=device)
+    control = torch.tensor([[[0., 1.]]], device=device)
+    _, context, _ = memory.prepare(u, mass, times, owners)
+    whole = memory.finish(context, control)[0, 0, -1, 0]
+    _, _, saved = memory.prepare(u[:, :, :1], mass[:, :, :1], times[:, :, :1], owners)
+    _, context, _ = memory.prepare(u[:, :, 1:], mass[:, :, 1:], times[:, :, 1:], owners, saved)
+    continued = memory.finish(context, control[:, :, 1:])[0, 0, -1, 0]
+    # Only the second value contributes, scaled by the actual positive mass.
+    written_value = .5 / (1 / 32 + 1e-5) ** .5
+    for output in (whole, continued):
+        torch.testing.assert_close(output, output.new_tensor(write_mass * written_value), atol=0, rtol=1e-5)
+        derivative, = torch.autograd.grad(output, mass)
+        torch.testing.assert_close(derivative, mass.new_tensor([[[0., written_value]]]), atol=0, rtol=1e-5)
+
+
 def test_kv_weak_mass_private_state_large_int64_and_chunk_vjp(device):
     torch.manual_seed(104)
     module = KVMemory(2, 32, [0, 0], 2, 1, backend="auto", chunk=2).to(device)
