@@ -1,10 +1,8 @@
 # 当前待办
 
-NPU单支持解析分支及FP32融合V中心化已完成有限资格，见[STATUS](STATUS.md)、[修复记录](attention-native-support-repair.md)。
+下游 A 由 r15 接续，B 关闭。[下游正式接续](../../tide-learning-lab/docs/evidence/pilot-r3-main-r15-handoff.json)
 
-1. 跟进下游 r14 从 `29c4798f` 冻结的 timed 恒零发送量、quad 常数下界、KV、Shannon、Reception 和 Attention 修复。Shannon 正支持已通过 r09 隔离验收，后续按实际负载测量异常行主机复核的成本。[接口与当前范围](shannon-positive-floor.md)
-2. 配合74个旧曝光主体的迁移审阅，明确新源码与原checkpoint、优化器矩和已消费曝光的契约；可加载不等于旧学习结果合格。
-3. 根据实际证据扩展数值范围和性能检查。当前独立单支持/近似常量V及集中分布见证通过，不是所有弱质量、幅值或BF16多key的全局保证。
-4. 保留原Shannon恢复、CPU FP64私有KV与弱质量见证的有限超差及原阈值；源码、设备、精度和实测范围分别交付。
-
-下游 A 由 r14 接续，B 关闭。原冻结记录和数学快照用于复核。
+1. 跟进使用 `3150ae64` 的下游多分支 Timed 路由，复核真实训练中的恒零边、独立零先验、微小正权重及跨窗口状态。根据实际负载衡量 Shannon 正支持异常行主机复核的成本。[路由语义](semantics.md) · [Shannon 支持策略](shannon-positive-floor.md)
+2. 配合 74 个旧曝光主体的迁移审阅，逐项核对新源码与原检查点、优化器矩、私有状态、已消费曝光和选择证据。
+3. 按实际负载扩展数值范围与性能验证，分别报告 Attention 单支持、近似常量 V、集中分布、弱质量和 BF16 多 key 的实测条件。[Attention 验收](attention-native-support-repair.md)
+4. 保留 Shannon 恢复、CPU FP64 私有 KV 与弱质量见证的原始有限超差及阈值，按源码、设备和精度分别交付证据。
