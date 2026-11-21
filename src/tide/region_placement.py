@@ -236,10 +236,11 @@ def run_region_model(model, x, state=None, *, record_work=False, inject=True):
             inputs = _layer_inputs(model, layer, layers, state, embedded)
             batches = region_batches(model, regions, state)
             by_first = {members[0]: members for members in batches}
-            times = {}
+            times, silent_ingress = {}, {}
             for partition in inputs:
                 device = model._placement_devices[partition]
                 base = torch.arange(length, device=device, dtype=torch.int64)
+                silent_ingress[partition] = model._silent_ingress_ticks(base, inject)
                 times[partition] = ((base+start)*model.graph.period+layer+1 if model.settle else
                                     base+start*model.graph.period+1)
 
@@ -249,7 +250,8 @@ def run_region_model(model, x, state=None, *, record_work=False, inject=True):
                 device = model._placement_devices[partition]
                 banks, pending, projected = inputs[partition]
                 incoming = [model._incoming(region, banks, pending, projected, batch, length,
-                                             device, inject, routes=model._region_routes[region], return_constant_zero=True)
+                                             device, inject, routes=model._region_routes[region], return_constant_zero=True,
+                                             silent_ingress=silent_ingress[partition])
                             for region in members]
                 time = times[partition]
                 if len(members) == 1:

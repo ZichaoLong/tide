@@ -47,3 +47,10 @@ Timed pending banks carry the face across the one-tick delay. Detached strengths
 are constants for the next update. Independently differentiable strengths
 (including a re-rooted pending bank) retain their right derivatives. Older
 two-field pending checkpoints remain readable.
+
+In Multiscale Timed, a first-layer sender has zero available mass on ticks
+without external injection. Routing derives these constant zero priors from
+the current window's injection clock, including a flush, and shifts them with
+the one-tick delay. The preceding pending bank supplies its own provenance.
+The clock mask is transient. A genuine independent prior whose tiled attention
+adjoint becomes nonfinite reports its source index and dtype.

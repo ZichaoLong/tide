@@ -178,3 +178,45 @@ def test_timed_pending_checkpoint_and_independent_roots(tmp_path, device):
         pending[index] = LayerOutput.cat([move_tensors(rerooted, device).index_select(ids).select(slice(None))])
     _, mass, _, face = routed()
     assert mass.requires_grad and face is None
+
+
+@pytest.mark.parametrize("inject", [True, False])
+def test_timed_clock_proof_follows_current_bank_after_one_tick(device, inject):
+    model = TideModel(ModelConfig(topology=TopologyConfig(kind="multiscale", profile="compact-7",
+        n=2, hubs=1, partition="singleton", timing="timed", period=8), d=64, allocation="shannon"))
+    # Original r13 edge 0 -> 7 shares its slot with a dummy gather from layer 1.
+    region = model.graph.nodes[7].region
+    row = model.graph.regions[region].index(7)
+    slot = next(i for i,e in enumerate(model.graph.incoming[7]) if model.graph.edges[e].src == 0)
+    ticks = torch.arange(16, device=device)
+    active = ((ticks == 0) | (ticks == 8)) & inject
+    banks, pending = [], []
+    for layer, nodes in enumerate(model.layer_nodes):
+        strength = torch.zeros(len(nodes), 1, 16, device=device)
+        if layer == 0:
+            strength[:] = active
+        strength.requires_grad_()
+        content = torch.zeros(*strength.shape, 64, device=device)
+        banks.append(LayerOutput(content, strength))
+        # A caller-supplied differentiable zero at the preceding window boundary.
+        pending.append(LayerOutput(content[:, :, :1], torch.zeros_like(strength[:, :, :1], requires_grad=True)))
+    embedded = {"D": banks[0].values[0]}
+    _, mass, _, face = model._incoming(region, banks, pending, embedded, 1, 16, device, inject,
+        return_constant_zero=True, silent_ingress=model._silent_ingress_ticks(ticks, inject))
+    assert not face[row, 0, 0, slot].item()
+    assert torch.equal(face[row, 0, 1:, slot], ~active[:-1])
+    assert torch.equal(mass[row, 0, 1:, slot], active[:-1].float())
+    grad = torch.zeros_like(mass)
+    grad[row, 0, 3, slot] = torch.inf
+    unrelated, = torch.autograd.grad(mass, (banks[1].strengths,), grad)
+    assert torch.equal(unrelated, torch.zeros_like(unrelated))
+
+
+def test_independent_zero_with_unrepresentable_tiled_prior_vjp(device):
+    q = torch.ones(1, 1, 1, device=device)
+    k = torch.tensor([0., 100.], device=device).view(1, 2, 1)
+    v = torch.tensor([0., 1.], device=device).view_as(k)
+    weights = torch.tensor([1., 0.], device=device, requires_grad=True)
+    # At zero the right derivative of t*exp(100)/(1+t*exp(100)) is exp(100).
+    with pytest.raises(ArithmeticError, match="tiled attention key-prior VJP.*float32"):
+        weighted_attention(q, k, v, weights, backend="tiled").sum().backward()

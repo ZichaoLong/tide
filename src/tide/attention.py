@@ -315,8 +315,13 @@ class _TiledAttention(torch.autograd.Function):
                     ks = slice(None) if weights.shape[-1] == 1 else kb
                     target = dw[..., qs, ks]
                     target.add_(contribution.sum_to_size(target.shape))
-        return (dq.to(q.dtype), dk.to(k.dtype), dv.to(v.dtype),
-                None if dw is None else dw.to(weights.dtype), None)
+        if dw is not None:
+            dw = dw.to(weights.dtype)
+            invalid = ~torch.isfinite(dw)
+            if bool(invalid.any()):
+                index = tuple(invalid.nonzero()[0].tolist())
+                raise ArithmeticError(f"nonfinite tiled attention key-prior VJP for {weights.dtype} at {index}")
+        return dq.to(q.dtype), dk.to(k.dtype), dv.to(v.dtype), dw, None
 
 
 def _signed_exp_product(log_scale, value):

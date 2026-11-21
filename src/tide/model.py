@@ -220,7 +220,15 @@ class TideModel(nn.Module):
             routes.append((classes,banks))
         return routes
 
-    def _incoming(self,region,layers,pending,embedded,b,length,device,inject=True,*,routes=None,return_constant_zero=False):
+    def _silent_ingress_ticks(self, ticks, inject):
+        if self.settle:
+            return None
+        if not inject:
+            return torch.ones_like(ticks, dtype=torch.bool)
+        return ticks.remainder(self.graph.period) != 0
+
+    def _incoming(self,region,layers,pending,embedded,b,length,device,inject=True,*,routes=None,
+                  return_constant_zero=False,silent_ingress=None):
         nodes = self.graph.regions[region]
         classes,banks = self._routes[region] if routes is None else routes
         if self.graph.nodes[nodes[0]].layer==0:
@@ -228,9 +236,10 @@ class TideModel(nn.Module):
             mass = content.new_ones((len(nodes),b,length,1))
             if not inject:
                 mass = torch.zeros_like(mass)
-            if not self.settle:
-                valid = torch.arange(length,device=device)%self.graph.period==0
-                mass = mass*valid[None,None,:,None]
+            elif not self.settle:
+                if silent_ingress is None:
+                    silent_ingress = self._silent_ingress_ticks(torch.arange(length,device=device), inject)
+                mass = mass.masked_fill(silent_ingress[None,None,:,None], 0)
             message = content, mass, classes.to(device)
             return (*message, None) if return_constant_zero else message
         content = torch.zeros((len(nodes),b,length,classes.shape[1],self.config.d),
@@ -241,6 +250,12 @@ class TideModel(nn.Module):
             source = layers[layer]
             face = source.routing_face()
             if not self.settle:
+                # In the current window the external clock fixes the first
+                # layer's sender upper bound at zero on silent ticks. The
+                # previous bank has its own provenance, including caller roots.
+                if layer == 0 and silent_ingress is not None:
+                    silent = silent_ingress.expand_as(source.strengths)
+                    face = silent if face is None else face | silent
                 previous = pending[layer] if pending else LayerOutput(torch.zeros_like(source.values[:,:,:1]),
                                                                       torch.zeros_like(source.strengths[:,:,:1]))
                 values = torch.cat((previous.values,source.values[:,:,:-1]),2)
@@ -251,8 +266,8 @@ class TideModel(nn.Module):
             else:
                 values,strengths = source.values,source.strengths
             ids,valid = indices.to(device),mask.to(device)
-            content = content + values[ids].permute(0,2,3,1,4)*valid[:,None,None,:,None]
-            mass = mass + strengths[ids].permute(0,2,3,1)*valid[:,None,None,:]
+            content = content + torch.where(valid[:,None,None,:,None], values[ids].permute(0,2,3,1,4), 0)
+            mass = mass + torch.where(valid[:,None,None,:], strengths[ids].permute(0,2,3,1), 0)
             if face is not None:
                 routed = face[ids].permute(0,2,3,1) & valid[:,None,None,:]
                 constant_zero = routed if constant_zero is None else constant_zero | routed
@@ -441,6 +456,7 @@ class TideModel(nn.Module):
                     if source_pending:
                         source_pending[origin] = move_tensors(source_pending[origin].as_pending(),device,transport)
             base = torch.arange(length,device=device,dtype=torch.int64)
+            silent_ingress = self._silent_ingress_ticks(base, inject)
             time = ((base+start)*self.graph.period+layer+1 if self.settle else
                     base+start*self.graph.period+1)
             outputs,saved_regions = {},{}
@@ -448,7 +464,8 @@ class TideModel(nn.Module):
             for batch_regions in batches:
                 if len(batch_regions) > 1:
                     from .region_batch import evaluate_regions
-                    incoming = [self._incoming(r,source_layers,source_pending,embedded,b,length,device,inject,return_constant_zero=True)
+                    incoming = [self._incoming(r,source_layers,source_pending,embedded,b,length,device,inject,
+                                               return_constant_zero=True,silent_ingress=silent_ingress)
                                 for r in batch_regions]
                     contents,masses,classes = (torch.cat([row[i] for row in incoming],0) for i in range(3))
                     old = None if state is None else [state.memories[r] for r in batch_regions]
@@ -468,7 +485,8 @@ class TideModel(nn.Module):
                     continue
                 region = batch_regions[0]
                 contents,masses,classes,face = self._incoming(region,source_layers,source_pending,
-                                                         embedded,b,length,device,inject,return_constant_zero=True)
+                                                         embedded,b,length,device,inject,return_constant_zero=True,
+                                                         silent_ingress=silent_ingress)
                 old = None if state is None else state.memories[region]
                 if placed and old is not None:
                     old = move_tensors(old,device,transport)
