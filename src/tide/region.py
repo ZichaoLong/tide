@@ -78,7 +78,7 @@ def region_control(score, received, roles, budget, profile, partition, support_p
     else:
         k,kind = budget,profile
     lower = torch.where(hubs,mu/4,torch.zeros_like(mu))
-    options = {"support_policy": support_policy} if kind == "shannon" and support_policy != "strict" else {}
+    options = {"support_policy": support_policy} if kind in ("shannon", "pool") and support_policy != "strict" else {}
     out = allocate(score.permute(1,2,0),w.permute(1,2,0),mu.permute(1,2,0),
                    lower.permute(1,2,0),mu.permute(1,2,0),k,kind=kind,**options)
     control = out.permute(2,0,1)

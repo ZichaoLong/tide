@@ -59,3 +59,13 @@ with their delays, across attached windows and placements. Clock and derived
 proofs belong to the live computation. Checkpoints retain the original private
 state format. A genuine independent prior whose tiled attention
 adjoint becomes nonfinite reports its source index and dtype.
+
+For total-scaled attention, `pool_support_policy="positive-floor-v1"` retains
+mathematically positive senders that round to zero at the output dtype. On
+those rows the least positive subnormal represents an otherwise lost sender.
+Storage adjusts donors only if the row total misses the budget by more than
+half a budget ULP. Subnormal budgets therefore conserve integer storage
+units exactly. The VJP uses the original unrounded normalization, including
+the right derivative of true zero priors. The default `strict` raises on
+support loss. Sampled work includes cumulative training-mode forward row
+and repair counts since model construction under `pool_support_training_forwards`.

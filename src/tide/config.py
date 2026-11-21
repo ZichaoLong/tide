@@ -78,6 +78,7 @@ class ModelConfig:
     memory_sharing: str | None = None
     # A missing field in an older checkpoint resolves to its original policy.
     shannon_support_policy: str = "strict"
+    pool_support_policy: str = "strict"
 
     def __post_init__(self):
         if type(self.checkpoint_regions) is not bool:
@@ -124,6 +125,9 @@ class ModelConfig:
             raise ValueError("unknown reception profile")
         if self.allocation not in ("quad", "shannon", "pool"):
             raise ValueError("unknown allocation profile")
+        if self.pool_support_policy not in ("strict", "positive-floor-v1") or (
+                self.pool_support_policy != "strict" and self.allocation != "pool"):
+            raise ValueError("positive-floor-v1 pool policy requires pool allocation")
         if self.shannon_support_policy not in ("strict", "positive-floor-v1"):
             raise ValueError("unknown Shannon support policy")
         if self.shannon_support_policy != "strict" and self.allocation != "shannon":
@@ -148,8 +152,14 @@ class ModelConfig:
         if self.allocation == "pool" and self.topology.partition == "mixed" and self.topology.hubs:
             raise ValueError("pool does not preserve the mixed-region Hub bounds")
 
+    @property
+    def allocation_support_policy(self):
+        return self.pool_support_policy if self.allocation == "pool" else self.shannon_support_policy
+
     def to_dict(self):
         result = asdict(self)
+        if self.pool_support_policy == "strict":
+            del result["pool_support_policy"]
         if self.shannon_support_policy == "strict":
             # The omitted default preserves existing resolved recipe identities.
             del result["shannon_support_policy"]

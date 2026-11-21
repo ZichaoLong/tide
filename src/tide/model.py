@@ -7,6 +7,7 @@ from .config import ModelConfig
 from .topology import build_topology
 from .reception import Reception
 from .region import Description, RegionNetwork, region_control
+from .pool_support import PoolSupportCounts, observe_pool_support
 from .kv import KVMemory
 from .parameters import NodeOwners
 
@@ -131,6 +132,7 @@ class TideModel(nn.Module):
     def __init__(self,config:ModelConfig):
         super().__init__()
         self.config = config
+        self._pool_counts = PoolSupportCounts() if config.pool_support_policy != "strict" else None
         self.graph = graph = build_topology(config.topology)
         n,d = len(graph.nodes),config.d
         self.settle = graph.config.timing == "settle"
@@ -404,7 +406,7 @@ class TideModel(nn.Module):
             z,score = self.describe(u,received,desc,description_owners)
             score = self.regional[self.region_group[region]](z,score,mass)
             control,face = region_control(score,received,roles,self.config.budget or max(1,self.graph.config.n//32),
-                                          self.config.allocation,self.graph.config.partition,self.config.shannon_support_policy,
+                                          self.config.allocation,self.graph.config.partition,self.config.allocation_support_policy,
                                           return_constant_zero=True)
         full = torch.zeros_like(u)
         measured = None
@@ -432,6 +434,12 @@ class TideModel(nn.Module):
                 for i in range(0, len(group), self.config.region_batch_size)]
 
     def forward(self,x,state=None,*,record_work=False):
+        if self._pool_counts is not None and self.training:
+            with observe_pool_support(self._pool_counts):
+                result = self._run(x,state,record_work=record_work)
+            if record_work:
+                result.work["pool_support_training_forwards"] = vars(self._pool_counts).copy()
+            return result
         return self._run(x,state,record_work=record_work)
 
     def flush(self,state,*,record_work=False):

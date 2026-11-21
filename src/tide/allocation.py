@@ -12,6 +12,7 @@ import torch
 from torch import Tensor
 from torch.autograd.function import once_differentiable
 
+from .pool_support import store_pool
 from .scaled_arithmetic import binary_parts
 from .weighted_mean import _difference_parts, _reduce_parts, _restore, _sum_parts
 from .shannon_support import FLOOR, refine_rows
@@ -536,10 +537,10 @@ class _Pool(torch.autograd.Function):
 
     Keeping the output cotangent unscaled avoids losing M*g before the prior
     derivative. Positive-prior ratios and signed sums retain binary exponents;
-    real zero priors retain their right derivative. No sender floor is added.
+    real zero priors retain their right derivative under either storage policy.
     """
     @staticmethod
-    def forward(ctx, scores, mu):
+    def forward(ctx, scores, mu, policy):
         original_scores, original_mu = scores, mu
         scores, mu = torch.broadcast_tensors(scores, mu)
         nonempty = (mu > 0).any(-1, keepdim=True)
@@ -565,8 +566,7 @@ class _Pool(torch.autograd.Function):
         amount = torch.minimum(torch.ones_like(mass), mass)
         alpha_m, alpha_e = binary_parts(amount)
         result = _restore(alpha_m * pm, alpha_e + pe)
-        if bool(((mu > 0) & (result == 0)).any()):
-            raise ArithmeticError("pool underflow would erase a positive sender")
+        result = store_pool(scores, mu, amount, result, policy)
         ctx.save_for_backward(original_scores, original_mu, pm, pe, mass, peak, center, log_z)
         return result
 
@@ -608,17 +608,20 @@ class _Pool(torch.autograd.Function):
             dmu = _reduce_parts(combined_m, combined_e, original_mu.shape)
         required = [value for value in (ds, dmu) if value is not None]
         _finite_vjp("pool", required, [True] * len(required))
-        return ds, dmu
+        return ds, dmu, None
 
 
-def pool(scores: Tensor, mu: Tensor) -> Tensor:
+def pool(scores: Tensor, mu: Tensor, *, support_policy: str = "strict") -> Tensor:
     """Total-scaled Attention: min(1,sum(mu)) * softmax(scores; prior=mu).
 
     There is no per-node mu cap. At sum(mu)=1 the first min branch is the
-    constant one. At an all-zero prior the declared VJP is zero.
+    constant one. At an all-zero prior the declared VJP is zero. positive-floor-v1
+    keeps underflowed positive senders active and differentiates the unrounded weights.
     """
     if scores.dtype not in {torch.float32, torch.float64} or scores.ndim < 1:
         raise TypeError("allocation requires FP32/FP64 and a candidate axis")
+    if support_policy not in ("strict", FLOOR):
+        raise ValueError("unknown pool support policy")
     mu = _as_input(mu, scores)
     expanded_scores, expanded_mu = torch.broadcast_tensors(scores, mu)
     if bool((~torch.isfinite(expanded_scores) | ~torch.isfinite(expanded_mu)
@@ -626,7 +629,7 @@ def pool(scores: Tensor, mu: Tensor) -> Tensor:
         raise ValueError("pool requires finite scores and mu in [0,1]")
     if expanded_scores.shape[-1] == 0:
         return expanded_scores * 0 + expanded_mu * 0
-    return _Pool.apply(scores, mu)
+    return _Pool.apply(scores, mu, support_policy)
 
 
 def allocate(scores: Tensor, w: Tensor, mu: Tensor, lower: Tensor, upper: Tensor,
@@ -644,15 +647,15 @@ def allocate(scores: Tensor, w: Tensor, mu: Tensor, lower: Tensor, upper: Tensor
     With no interior coordinates, backward uses that fixed face, without
     division by zero. These are declared first-order conventions at corners.
     Strict Shannon/pool raise when a positive sender underflows. kind='pool' dispatches to
-    pool(scores,mu), whose contract has no role bounds or k. For Shannon,
+    pool(scores,mu,support_policy=...), whose contract has no role bounds or k. For Shannon,
     support_policy="positive-floor-v1" refines extreme rows on the host, stores
     lost positive senders at the least subnormal, and differentiates the
     unrounded free responses. The default strict policy rejects support loss.
     """
+    if kind == "pool":
+        return pool(scores, mu, support_policy=support_policy)
     if support_policy not in ("strict", FLOOR) or (support_policy == FLOOR and kind != "shannon"):
         raise ValueError("support_policy must be strict or positive-floor-v1 for Shannon")
-    if kind == "pool":
-        return pool(scores, mu)
     if kind not in {"quad", "shannon"}:
         raise ValueError(f"unknown allocation kind: {kind}")
     if scores.dtype not in {torch.float32, torch.float64} or scores.ndim < 1:
