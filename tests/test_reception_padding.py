@@ -220,3 +220,53 @@ def test_independent_zero_with_unrepresentable_tiled_prior_vjp(device):
     # At zero the right derivative of t*exp(100)/(1+t*exp(100)) is exp(100).
     with pytest.raises(ArithmeticError, match="tiled attention key-prior VJP.*float32"):
         weighted_attention(q, k, v, weights, backend="tiled").sum().backward()
+
+
+def test_timed_shared_sender_finite_branches_overflow_only_on_a_free_root(device):
+    model = TideModel(ModelConfig(topology=TopologyConfig(kind="multiscale", profile="compact-7",
+        n=2, hubs=1, partition="singleton", timing="timed", period=8), d=64, allocation="shannon"))
+    ticks = torch.arange(8, device=device)
+    silent = model._silent_ingress_ticks(ticks, True)
+    nodes = model.layer_nodes[0]
+    live = (~silent).float().expand(len(nodes), 1, 8).clone().requires_grad_()
+    contents = torch.zeros(*live.shape, 64, device=device)
+    prior = torch.zeros(len(nodes), 1, 1, device=device, requires_grad=True)
+    layers = [LayerOutput(contents, live)]
+    pending = [LayerOutput(contents[:, :, :1], prior)]
+    samples = []
+    for receiver in (3, 5):
+        region = model.graph.nodes[receiver].region
+        row = model.graph.regions[region].index(receiver)
+        slot = next(i for i,e in enumerate(model.graph.incoming[receiver]) if model.graph.edges[e].src == 0)
+        _, mass, _, _ = model._incoming(region, layers, pending, {"D":contents[0]}, 1, 8, device,
+                                        return_constant_zero=True, silent_ingress=silent)
+        samples.append(mass[row, 0, :, slot])
+    # Each consumer returns a finite cotangent. The silent source would receive
+    # 4e38 if the projection happened only after their gradients were added.
+    seed = torch.tensor([1., 1., 2e38, 0., 0., 0., 0., 0.], device=device)
+    g_live, g_prior = torch.autograd.grad(samples, (live, prior), (seed, seed))
+    assert torch.isfinite(g_live).all() and g_live[0, 0, 1] == 0
+    assert g_live[0, 0, 0] == 2 and g_prior[0, 0, 0] == 2
+
+
+def test_derived_sender_only_uses_real_proven_inputs_and_follows_attached_tail(tmp_path, device):
+    from dataclasses import fields
+    from tide.placement import move_tensors
+    model = padded_model()
+    region = next(r for r in range(len(model.graph.regions)) if model._reception_mask((r,), device) is not None)
+    real = model._reception_mask((region,), device)
+    faces = real[:, None, None, :].expand(-1, 1, 2, -1).clone()
+    faces[0, :, 0, 0] = False
+    strengths = torch.zeros(faces.shape[:-1], device=device, requires_grad=True) * 2
+    values = torch.zeros(*strengths.shape, 64, device=device)
+    bank = model._sender_output(region, values, strengths, None, faces, None)
+    assert not bank.routing_face()[0, 0, 0] and bank.routing_face()[:, :, 1].all()
+    tail = move_tensors(LayerOutput.cat([bank]).tail().as_pending(), device)
+    assert tail.routing_face().all()
+    assert [f.name for f in fields(tail)] == ["values", "strengths"]
+    path = tmp_path / "attached.pt"
+    torch.save(tail, path)
+    restored = torch.load(path, weights_only=False)
+    assert restored.routing_face() is None
+    tail.strengths = tail.strengths.detach().requires_grad_()
+    assert tail.routing_face() is None

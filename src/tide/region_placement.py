@@ -273,15 +273,17 @@ def run_region_model(model, x, state=None, *, record_work=False, inject=True):
                     full, control, saved, measured, faces = function(*args)
                 if len(members) == 1:
                     full, control, saved, faces = (full,), (control,), (saved,), (faces,)
-                return dict(zip(members, zip(full, control, saved, faces))), measured
+                outputs = {r: (model._sender_output(r, v, c, f, row[3], silent_ingress[partition]), memory)
+                           for r, v, c, f, row, memory in zip(members, full, control, faces, incoming, saved)}
+                return outputs, measured
 
             results = {}
             for grouped, measured in executor.map(tuple(by_first), evaluate):
                 results.update(grouped)
                 if measured is not None:
                     work.append(measured)
-            chunks = [LayerOutput.from_region(results[r][0], results[r][1], results[r][3]) for r in regions]
-            memories.extend(results[region][2] for region in regions)
+            chunks = [results[r][0] for r in regions]
+            memories.extend(results[region][1] for region in regions)
             time = times[model._region_partitions[regions[-1]]]
             bank = RegionLayerOutput(tuple(chunks))
             layers.append(bank)

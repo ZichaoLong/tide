@@ -52,5 +52,10 @@ In Multiscale Timed, a first-layer sender has zero available mass on ticks
 without external injection. Routing derives these constant zero priors from
 the current window's injection clock, including a flush, and shifts them with
 the one-tick delay. The preceding pending bank supplies its own provenance.
-The clock mask is transient. A genuine independent prior whose tiled attention
+Every consumer of a routed mass receives the zero tangent on a certified
+constant. A sender whose real inbound masses are all certified zero also has
+an identically zero upper bound. This proof propagates through true edges
+with their delays, across attached windows and placements. Clock and derived
+proofs belong to the live computation. Checkpoints retain the original private
+state format. A genuine independent prior whose tiled attention
 adjoint becomes nonfinite reports its source index and dtype.

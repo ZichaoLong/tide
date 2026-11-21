@@ -36,43 +36,61 @@ class LayerOutput:
     strengths: torch.Tensor
     constant_zero = None  # Legacy and independently supplied banks carry no face proof.
 
+    # Clock and all-inbound proofs belong to the attached computation. They
+    # travel with live banks, without adding fields to private checkpoints.
+    _derived_zero = None
+
     @staticmethod
-    def from_region(values, strengths, constant_zero):
-        if constant_zero is None:
-            return LayerOutput(values, strengths)
-        return AllocatedLayerOutput(values, strengths, constant_zero)
+    def from_region(values, strengths, constant_zero, derived_zero=None):
+        bank = (LayerOutput(values, strengths) if constant_zero is None else
+                AllocatedLayerOutput(values, strengths, constant_zero))
+        if derived_zero is not None:
+            bank._derived_zero = derived_zero
+        return bank
+
+    def __getstate__(self):
+        state = vars(self).copy()
+        state.pop("_derived_zero", None)
+        return state
+
+    def _faces(self):
+        # A caller can re-root a pending strength as an independent input.
+        if self.strengths.requires_grad and self.strengths.is_leaf:
+            return None, None
+        return self.constant_zero, self._derived_zero
 
     def routing_face(self):
-        # A caller can detach a pending bank and make its strengths a new
-        # differentiable input. Its zero priors then have independent roots.
-        if self.strengths.requires_grad and self.strengths.is_leaf:
-            return None
-        return self.constant_zero
+        face, derived = self._faces()
+        if face is None or derived is None:
+            return derived if face is None else face
+        return face | derived
 
     def as_pending(self):
-        face = self.routing_face() if self.strengths.requires_grad else self.strengths == 0
-        return LayerOutput.from_region(self.values, self.strengths, face)
+        if self.strengths.requires_grad:
+            return LayerOutput.from_region(self.values, self.strengths, *self._faces())
+        return LayerOutput.from_region(self.values, self.strengths, self.strengths == 0)
+
+    def map_tensors(self, transform):
+        face, derived = self._faces()
+        return LayerOutput.from_region(transform(self.values), transform(self.strengths),
+                                       None if face is None else transform(face),
+                                       None if derived is None else transform(derived))
 
     def select(self, index):
-        face = self.routing_face()
-        return LayerOutput.from_region(self.values[index], self.strengths[index],
-                                       None if face is None else face[index])
+        return self.map_tensors(lambda tensor: tensor[index])
 
     def index_select(self, ids):
-        face = self.routing_face()
-        return LayerOutput.from_region(self.values.index_select(0, ids), self.strengths.index_select(0, ids),
-                                       None if face is None else face.index_select(0, ids))
+        return self.map_tensors(lambda tensor: tensor.index_select(0, ids))
 
     def tail(self):
-        face = self.routing_face()
-        return LayerOutput.from_region(self.values[:, :, -1:].clone(), self.strengths[:, :, -1:].clone(),
-                                       None if face is None else face[:, :, -1:].clone())
+        return self.map_tensors(lambda tensor: tensor[:, :, -1:].clone())
 
     @staticmethod
     def cat(banks):
         strengths = [bank.strengths for bank in banks]
-        face = cat_constant_zero([bank.routing_face() for bank in banks], strengths)
-        return LayerOutput.from_region(torch.cat([bank.values for bank in banks]), torch.cat(strengths), face)
+        faces, derived = zip(*(bank._faces() for bank in banks))
+        return LayerOutput.from_region(torch.cat([bank.values for bank in banks]), torch.cat(strengths),
+                                      cat_constant_zero(faces, strengths), cat_constant_zero(derived, strengths))
 
 
 @dataclass
@@ -253,7 +271,7 @@ class TideModel(nn.Module):
                 # In the current window the external clock fixes the first
                 # layer's sender upper bound at zero on silent ticks. The
                 # previous bank has its own provenance, including caller roots.
-                if layer == 0 and silent_ingress is not None:
+                if layer == 0 and silent_ingress is not None and source._derived_zero is None:
                     silent = silent_ingress.expand_as(source.strengths)
                     face = silent if face is None else face | silent
                 previous = pending[layer] if pending else LayerOutput(torch.zeros_like(source.values[:,:,:1]),
@@ -271,8 +289,27 @@ class TideModel(nn.Module):
             if face is not None:
                 routed = face[ids].permute(0,2,3,1) & valid[:,None,None,:]
                 constant_zero = routed if constant_zero is None else constant_zero | routed
+        if constant_zero is not None:
+            # Project each routed mass before its consumers sum, normalize or
+            # share its cotangent. Keep independently variable and positive roots.
+            constant_zero = constant_zero & (mass == 0)
+            mass = mass.masked_fill(constant_zero, 0)
         message = content, mass, classes.to(device)
         return (*message, constant_zero) if return_constant_zero else message
+
+    def _sender_output(self, region, values, strengths, allocation_face, incoming_face, silent_ingress):
+        derived = None
+        if self.graph.nodes[self.graph.regions[region][0]].layer == 0:
+            if silent_ingress is not None:
+                derived = silent_ingress.expand_as(strengths)
+        elif incoming_face is not None:
+            # All real inputs are constant zero => the sender upper bound is
+            # identically zero. Padding is outside the set of predecessors.
+            membership = self._reception_mask((region,), strengths.device)
+            real_or_absent = (incoming_face if membership is None else
+                              incoming_face | ~membership[:, None, None, :])
+            derived = real_or_absent.all(-1)
+        return LayerOutput.from_region(values, strengths, allocation_face, derived)
 
     def _reception_mask(self, regions, device):
         """Cache topology membership, independent of runtime sender strength.
@@ -478,19 +515,20 @@ class TideModel(nn.Module):
                         fulls,ctrls,saves,measured,faces = checkpoint(evaluate_regions,*arguments,use_reentrant=False)
                     else:
                         fulls,ctrls,saves,measured,faces = evaluate_regions(*arguments)
-                    outputs.update((r, LayerOutput.from_region(v, c, f)) for r,v,c,f in zip(batch_regions,fulls,ctrls,faces))
+                    outputs.update((r, self._sender_output(r, v, c, f, row[3], silent_ingress))
+                                   for r, v, c, f, row in zip(batch_regions, fulls, ctrls, faces, incoming))
                     saved_regions.update(zip(batch_regions, saves))
                     if measured is not None:
                         work.append(measured)
                     continue
                 region = batch_regions[0]
-                contents,masses,classes,face = self._incoming(region,source_layers,source_pending,
+                contents,masses,classes,input_face = self._incoming(region,source_layers,source_pending,
                                                          embedded,b,length,device,inject,return_constant_zero=True,
                                                          silent_ingress=silent_ingress)
                 old = None if state is None else state.memories[region]
                 if placed and old is not None:
                     old = move_tensors(old,device,transport)
-                arguments = (region, contents, masses, classes, time, old, record_work, face)
+                arguments = (region, contents, masses, classes, time, old, record_work, input_face)
                 if self.config.checkpoint_regions and torch.is_grad_enabled():
                     from torch.utils.checkpoint import checkpoint
                     full, control, saved, measured, face = checkpoint(
@@ -499,7 +537,7 @@ class TideModel(nn.Module):
                     full, control, saved, measured, face = self._evaluate_region(*arguments)
                 if measured is not None:
                     work.append(measured)
-                outputs[region] = LayerOutput.from_region(full, control, face)
+                outputs[region] = self._sender_output(region, full, control, face, input_face, silent_ingress)
                 saved_regions[region] = saved
             newmem.extend(saved_regions[r] for r in regions)
             layers.append(LayerOutput.cat([outputs[r] for r in regions]))
