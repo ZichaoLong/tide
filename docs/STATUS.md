@@ -1,10 +1,10 @@
-# 当前交接｜KV 未写入槽位修复已交付，A 已接续
+# 当前交接｜quad 常数下界的接收反向已交付
 
-2026-11-21。基座实现提交 `17c7d675` 将 KV Full 的有效时间窗与实际写入位置取交集。Timed/K A1 的两个未写入槽位曾产生约 −1.21 × 10⁴⁰ 的中间权重导数。零接收的 KV 写入导数为零，通用 Attention 对显式零先验继续使用右导数。[KV 写入语义](semantics.md) · [下游故障现场与 FP64 公式](../../tide-learning-lab/docs/evidence/pilot-r3-r10-kv-no-write.json)
+北京时间 2026-11-21。实现提交 `75d2a893` 将普通节点 quad 常数零下界的证明沿真实入边送到接收注意力。下游 Exchange/K A3 的两条零权重入边曾在第 8016 步分别产生约 3.11 × 10³⁹ 的独立先验右导数。它们对实际生产者输入的导数均为零。Timed 的一步延迟、批量区域、重计算与区域放置均传递对应标记。可独立变化的先验仍使用声明的导数。[基座语义](semantics.md) · [下游故障证据](../../tide-learning-lab/docs/evidence/pilot-r3-r11-quad-reception-vjp.json)
 
-极端空槽和正权重 0.5、1e-30 的两个回归在旧版均复现。修复后定向 CPU 139 项通过、3 项原有预期失败，单卡 Ascend 58 项通过、3 项原有预期失败。下游用同一提交从正式 step 1126 在 NPU 上完成 1127–1140，故障 batch 的输入与目标逐项一致。新进程精确载入 1139，重放 1140 的逻辑状态、数据、loss、梯度范数匹配，参数、AdamW 和梯度通过原 FP32 容差。[定向验收](../../tide-learning-lab/docs/evidence/pilot-r3-r10-foundation-kv-acceptance.json)
+冻结实现通过 170 项 CPU 与 84 项单卡 Ascend 定向回归。原故障快照的独立缩放对照与发布实现 logits 逐位一致。NPU 参数梯度最大绝对差为 1.86 × 10⁻⁹。同一 logits 的交叉熵归约存在 FP32 末位浮动，FP64 复核通过。下游 NPU 隔离接续从正式第 7986 步完成到第 8021 步，新进程精确载入第 8020 步并复核下一步的参数、AdamW、梯度、私有状态、数据游标和 RNG。[发布版验收](../../tide-learning-lab/docs/evidence/pilot-r3-r11-foundation-quad-reception-acceptance.json)
 
-下游 r11 自 12:20 在该实现上接续 A，B 关闭。Shannon 主体沿用 `positive-floor-v1`。74 个先前曝光主体仍待独立迁移审阅。[下游交接](../../tide-learning-lab/docs/STATUS.md) · [Shannon 配方与证据](shannon-positive-floor.md)
+下游 r12 已固定该实现并于 14:18 正式接续 A，Exchange/K A3 已越过原故障步。故障任务已通过本阶段终态检查，完成 8192 步、2,097,152 个训练 token。正式第 8192 步检查点已重验文件与状态摘要。B 关闭。既有 KV 未写入修复及 Shannon `positive-floor-v1` 使用同一份基座源码。[下游交接](../../tide-learning-lab/docs/evidence/pilot-r3-main-r12-handoff.json) · [KV 验收](../../tide-learning-lab/docs/evidence/pilot-r3-r10-foundation-kv-acceptance.json) · [Shannon 配方](shannon-positive-floor.md)
 
 ## 同一源码中的既有 Attention 修复
 
