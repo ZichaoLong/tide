@@ -241,9 +241,9 @@ class WorkAudit:
         self._node_events("regional", received > 0, owners, ["describe"])
         return original(u, received, memories, owners)
 
-    def _regional(self, number, original, z, score, weight):
+    def _regional(self, number, original, z, score, weight, constant_zero=None):
         self._regional_work(number, weight)
-        return original(z, score, weight)
+        return original(z, score, weight, constant_zero)
 
     def _regional_work(self, number, weight):
         support = weight.detach().cpu() > 0
@@ -252,10 +252,10 @@ class WorkAudit:
             self._add("regional", (sample, self.tick_start+tick), atoms)
         self._work("regional_attention_positive_pairs", support.sum(0).square()*self.model.regional[number].heads)
 
-    def _regional_batch(self, original, regions, z, score, weight):
+    def _regional_batch(self, original, regions, z, score, weight, constant_zero=None):
         for i, region in enumerate(regions):
             self._regional_work(self.model.region_group[region], weight[i])
-        return original(regions, z, score, weight)
+        return original(regions, z, score, weight, constant_zero)
 
     def _prepare(self, kind, original, u, mass, times, owners, state=None):
         names = (["kv", "summary"] if kind == "K" else

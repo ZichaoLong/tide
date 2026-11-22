@@ -6,7 +6,7 @@ from torch import nn
 from .config import ModelConfig
 from .topology import build_topology
 from .reception import Reception
-from .region import Description, RegionNetwork, region_control
+from .region import Description, RegionNetwork, all_real_inputs_constant_zero, region_control
 from .pool_support import PoolSupportCounts, observe_pool_support
 from .kv import KVMemory
 from .parameters import NodeOwners
@@ -308,9 +308,7 @@ class TideModel(nn.Module):
             # All real inputs are constant zero => the sender upper bound is
             # identically zero. Padding is outside the set of predecessors.
             membership = self._reception_mask((region,), strengths.device)
-            real_or_absent = (incoming_face if membership is None else
-                              incoming_face | ~membership[:, None, None, :])
-            derived = real_or_absent.all(-1)
+            derived = all_real_inputs_constant_zero(incoming_face, membership)
         return LayerOutput.from_region(values, strengths, allocation_face, derived)
 
     def _reception_mask(self, regions, device):
@@ -375,7 +373,8 @@ class TideModel(nn.Module):
         members = self.graph.regions[region]
         device, b, length = contents.device, contents.shape[1], contents.shape[2]
         owners = self._owners(members,device)
-        received,u = self._receive(contents,masses,classes,owners,self._reception_mask((region,),device),constant_zero)
+        membership = self._reception_mask((region,),device)
+        received,u = self._receive(contents,masses,classes,owners,membership,constant_zero)
         # Unit FC ingress and the received lower budget imply every
         # node writes unit weight. Use that exact reachable-state identity.
         mass = (torch.ones_like(received) if self.graph.config.kind=="fc" else
@@ -404,7 +403,8 @@ class TideModel(nn.Module):
             possible = tuple(self.description_ids[v] for v in members)
             description_owners = self._owners(possible,device)
             z,score = self.describe(u,received,desc,description_owners)
-            score = self.regional[self.region_group[region]](z,score,mass)
+            prior_face = all_real_inputs_constant_zero(constant_zero, membership)
+            score = self.regional[self.region_group[region]](z,score,mass,prior_face)
             control,face = region_control(score,received,roles,self.config.budget or max(1,self.graph.config.n//32),
                                           self.config.allocation,self.graph.config.partition,self.config.allocation_support_policy,
                                           return_constant_zero=True)
@@ -417,9 +417,9 @@ class TideModel(nn.Module):
             full = full.index_copy(0,sub,self.memories[kind].finish(context,control[sub]).to(full.dtype))
         return full, control, saved, measured, face
 
-    def _score_regions(self, regions, z, score, mass):
+    def _score_regions(self, regions, z, score, mass, constant_zero=None):
         from .region_batch import regional_scores
-        return regional_scores([self.regional[self.region_group[r]] for r in regions], z, score, mass)
+        return regional_scores([self.regional[self.region_group[r]] for r in regions], z, score, mass, constant_zero)
 
     def _region_batches(self, regions, state):
         from .region_batch import state_signature

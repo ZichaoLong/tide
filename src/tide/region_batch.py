@@ -5,7 +5,7 @@ import torch
 
 from .attention import weighted_attention
 from .parameters import norm
-from .region import region_control
+from .region import all_real_inputs_constant_zero, region_control
 
 
 def state_signature(value):
@@ -45,7 +45,7 @@ def split_state(value, sizes):
     return tuple(type(value)(**{name: items[i] for name, items in columns.items()}) for i in range(len(sizes)))
 
 
-def regional_scores(networks, z, score, weight):
+def regional_scores(networks, z, score, weight, constant_zero=None):
     """Region axis is independent of the within-region attention sequence."""
     r, n, b, length, width = z.shape
     x = z.permute(0, 2, 3, 1, 4)
@@ -69,7 +69,8 @@ def regional_scores(networks, z, score, weight):
         return linear(x, name).reshape(r, b, length, n, heads, 32).transpose(-3, -2)
 
     read = weighted_attention(project("q"), project("k"), project("v"),
-                              weights=weight.permute(0, 2, 3, 1), backend=networks[0].backend)
+                              weights=weight.movedim(1, -1), backend=networks[0].backend,
+                              _constant_zero_prior=None if constant_zero is None else constant_zero.movedim(1, -1))
     delta = linear(read.transpose(-3, -2).flatten(-2), "o")
     hidden = torch.nn.functional.silu(linear(norm(x + delta), "first"))
     with torch.autocast(x.device.type, enabled=False):
@@ -89,7 +90,8 @@ def evaluate_regions(model, regions, contents, masses, classes, time, old=None, 
     r, n = len(regions), len(model.graph.regions[regions[0]])
     device, b, length = contents.device, contents.shape[1], contents.shape[2]
     owners = model._owners(members, device)
-    received, u = model._receive(contents, masses, classes, owners, model._reception_mask(regions, device), constant_zero)
+    membership = model._reception_mask(regions, device)
+    received, u = model._receive(contents, masses, classes, owners, membership, constant_zero)
     mass = (torch.ones_like(received) if model.graph.config.kind == "fc" else
             torch.where(received >= 1, torch.ones_like(received), received.clamp_min(0)))
     times = time[None, None].expand(len(members), b, length)
@@ -117,8 +119,10 @@ def evaluate_regions(model, regions, contents, masses, classes, time, old=None, 
         possible = tuple(model.description_ids[v] for v in members)
         d_owners = model._owners(possible, device)
         z, score = model.describe(u, received, desc, d_owners)
+        prior_face = all_real_inputs_constant_zero(constant_zero, membership)
         score = model._score_regions(regions, z.reshape(r, n, b, length, -1),
-                                     score.reshape(r, n, b, length), mass.reshape(r, n, b, length))
+                                     score.reshape(r, n, b, length), mass.reshape(r, n, b, length),
+                                     None if prior_face is None else prior_face.reshape(r, n, b, length))
         # Region becomes a batch dimension, never an allocation/attention axis.
         region_score = score.permute(1, 0, 2, 3).reshape(n, r*b, length)
         region_received = received.reshape(r, n, b, length).permute(1, 0, 2, 3).reshape(n, r*b, length)

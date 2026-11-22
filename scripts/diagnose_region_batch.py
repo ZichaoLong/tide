@@ -124,11 +124,11 @@ class Trace:
                 return result
             finally:
                 self.current = previous
-        def score(regions, z, raw, mass):
+        def score(regions, z, raw, mass, constant_zero=None):
             for i, region in enumerate(regions):
                 self.put(region, "regional.z", z[i], regions=list(regions)); self.put(region, "regional.raw", raw[i])
                 self.put(region, "regional.mass", mass[i])
-            result = original_score(regions, z, raw, mass)
+            result = original_score(regions, z, raw, mass, constant_zero)
             for i, region in enumerate(regions):
                 self.put(region, "regional.score", result[i])
             return result

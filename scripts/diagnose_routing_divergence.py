@@ -147,8 +147,8 @@ class RoutingTrace:
                     self.put(region, "control", control)
                 return result
 
-        def score(regions, z, raw, mass):
-            result = original_score(regions, z, raw, mass)
+        def score(regions, z, raw, mass, constant_zero=None):
+            result = original_score(regions, z, raw, mass, constant_zero)
             if active:
                 for index, region in enumerate(regions):
                     self.put(region, "score", result[index])

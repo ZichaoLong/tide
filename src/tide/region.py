@@ -25,6 +25,15 @@ class Description(nn.Module):
         return z,score
 
 
+def all_real_inputs_constant_zero(incoming_face, membership):
+    """A node's received mass is fixed at zero if every real edge proves it."""
+    if incoming_face is None:
+        return None
+    if membership is not None:
+        incoming_face = incoming_face | ~membership[:, None, None, :]
+    return incoming_face.all(-1)
+
+
 class RegionNetwork(nn.Module):
     def __init__(self,d,backend="auto"):
         super().__init__()
@@ -39,14 +48,15 @@ class RegionNetwork(nn.Module):
         self.readout = nn.Parameter(torch.empty(width))
         nn.init.normal_(self.readout,std=1/width**0.5)
 
-    def forward(self,z,score,w):
+    def forward(self,z,score,w,constant_zero=None):
         # Node becomes attention sequence; B and logical time remain batch axes.
         x = z.permute(1,2,0,3)
         shape = x.shape[:-1]
         def project(layer):
             return layer(x).reshape(*shape,self.heads,32).transpose(-3,-2)
         read = weighted_attention(project(self.q),project(self.k),project(self.v),
-                                  weights=w.permute(1,2,0),backend=self.backend)
+                                  weights=w.movedim(0,-1),backend=self.backend,
+                                  _constant_zero_prior=None if constant_zero is None else constant_zero.movedim(0,-1))
         delta = self.o(read.transpose(-3,-2).flatten(-2))
         hidden = torch.nn.functional.silu(self.first(norm(x+delta)))
         # The final vector has only a scalar consumer: contract W2 with readout.

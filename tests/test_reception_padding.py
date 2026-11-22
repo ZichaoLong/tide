@@ -17,6 +17,48 @@ def device():
     return torch.device(name)
 
 
+@pytest.mark.parametrize("batched", [False, True])
+def test_regional_prior_uses_all_real_incoming_proofs(device, batched):
+    from tide.region import RegionNetwork, all_real_inputs_constant_zero
+    from tide.region_batch import regional_scores
+
+    net = RegionNetwork(64, "tiled").to(device)
+    with torch.no_grad():
+        for p in net.parameters():
+            p.zero_()
+        net.q.weight[0, 0] = 1
+        net.k.weight[0, 1] = 100 * 32**0.5
+        net.v.weight[0, 1] = net.o.weight[0, 0] = net.readout[0] = 1
+    z = torch.zeros(2, 1, 4, 32, device=device)
+    z[0, 0, 0, 0] = 1
+    z[1, :, :, 1] = 1
+    tiny = 2.**-30
+    weights = torch.tensor([[[1., 1., 1., 0.]], [[0., 0., tiny, 0.]]], device=device)
+    real = torch.tensor([[True, False, False], [True, True, False]], device=device)
+    edges = torch.zeros(2, 1, 4, 3, device=device, dtype=torch.bool)
+    edges[1, :, :, :2] = True
+    edges[1, 0, 1, 1] = False
+    proof = all_real_inputs_constant_zero(edges, real)
+    assert proof[1, 0].tolist() == [True, False, True, True]
+
+    def score(prior, face):
+        if batched:
+            stack = lambda x: torch.stack((x, x.flip((2,))))
+            values = regional_scores([net, net], stack(z), stack(torch.zeros_like(prior)),
+                                     stack(prior), None if face is None else stack(face))
+            # Two independent region coordinates, both with an extreme closed key.
+            return (values[0, 0] + values[1, 0].flip((1,))) * 0.5
+        return net(z, torch.zeros_like(prior), prior, face)[0]
+
+    weights.requires_grad_()
+    with pytest.raises(ArithmeticError, match="nonfinite tiled attention key-prior VJP"):
+        score(weights, None).sum().backward()
+    values = score(weights, proof)
+    dw, = torch.autograd.grad(values.sum(), weights)
+    torch.testing.assert_close(values.flatten(), weights.new_tensor([0., 0., tiny/(1+tiny), 0.]), atol=0, rtol=1e-5)
+    torch.testing.assert_close(dw[1, 0], weights.new_tensor([0., 1., 1/(1+tiny)**2, 0.]))
+
+
 def padded_model(legacy=False):
     return TideModel(ModelConfig(
         topology=TopologyConfig(kind="multiscale", profile="compact-5-dd4",

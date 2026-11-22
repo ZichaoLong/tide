@@ -43,6 +43,10 @@ Reception carries this fact along the corresponding edge and may omit that
 key's hypothetical independent prior derivative. The attention quotient, real
 edge membership, and query rows are preserved. Movable bounds, fixed-through
 zero upper bounds and positive priors retain their original derivative rules.
+Single-region and batched regional scoring use this proof for a zero node prior
+when every real incoming edge is certified locally constant. Padding is excluded
+from this reduction. One independently variable incoming edge retains the
+node prior's right derivative.
 Timed pending banks carry the face across the one-tick delay. Detached strengths
 are constants for the next update. Independently differentiable strengths
 (including a re-rooted pending bank) retain their right derivatives. Older
