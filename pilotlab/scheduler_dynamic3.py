@@ -161,10 +161,10 @@ class DynamicAdmission:
 
         # Exclusive calibrations unlock other work. With no shared queue the
         # established fixed-task ordering is retained.
-        if elastic:
+        if not direct and elastic:
             drain_cpu(t for t in cpu_pending if probe(t))
             cpu_pending = [t for t in cpu_pending if not probe(t)]
-        else:
+        elif not direct:
             drain_cpu(cpu_pending)
             cpu_pending = []
         probe_limit = self.config.get("dynamic_probe_owners", 1)
@@ -232,7 +232,6 @@ class DynamicAdmission:
                 self.queue_admission(capacity.key, close_reason="finite_owner_admission_limit")
 
         if direct:
-            drain_cpu(cpu_pending)
             pending_by_id = {task["id"]: task for task in pending}
 
             def held_card(task):
@@ -262,7 +261,10 @@ class DynamicAdmission:
             npu_workers = sum(r.get("device") == "npu:0" for r in self.state["tasks"].values()
                               if r["status"] == "running")
             npu_limit = owner_limit * min(16, self.config.get("npu_workers_per_device", 16))
-            for task in sorted(elastic, key=lambda t: t.get("reserved_hbm_bytes", 8*GIB)):
+            def cpu_cost(task):
+                return self.worker_reservations({**task, "device": "cpu"})["reserved_rss_bytes"]
+
+            for task in sorted([*cpu_pending, *elastic], key=cpu_cost):
                 if not slots:
                     break
                 # Binding one seed also binds its untouched partner. Recheck

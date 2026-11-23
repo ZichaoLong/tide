@@ -118,3 +118,23 @@ def test_large_npu_profile_runs_on_cpu_under_the_campaign_rss_limit(owner):
     assert manifest["workers"][0]["reserved_rss_bytes"] == 40*2**30
     assert supervisor.worker_reservations(row)["reserved_rss_bytes"] == 40*2**30
     assert supervisor.worker_reservations({**task, "device": "npu:0"})["reserved_rss_bytes"] == 4*2**30
+
+
+def test_both_pools_fit_when_large_pinned_cpu_work_would_consume_the_host_budget(owner):
+    supervisor, parent, key = owner
+    active_rss = supervisor.state["tasks"][parent["id"]]["reserved_rss_bytes"]
+    supervisor.config.update(resource_dispatch=True, max_npu_devices=1, max_cpu_workers=2,
+                             max_rss_bytes=active_rss+5*2**30)
+    placement = placement_for(supervisor)
+    pair = register_pair(supervisor, placement)
+    large = add_task(supervisor, "large-cpu", device="cpu", reserved_hbm_bytes=3*2**30)
+    fixed = add_task(supervisor, "fixed-npu")
+    group = observe(supervisor, key, target=2)
+    group["resources"] = {"device": {"observed_unix": time.time(), "used_bytes": 2**30, "total_bytes": 48*2**30}}
+    write(supervisor.output / "groups" / key / "group.json", group)
+    supervisor._group_observation_cache = {}
+    supervisor.start_dynamic_ready_tasks([large, fixed, *pair], 5)
+    rows = supervisor.state["tasks"]
+    assert rows[large["id"]]["status"] == "pending"
+    assert rows[fixed["id"]]["status"] == "running"
+    assert all(rows[t["id"]]["status"] == "running" and t["device"] == "cpu" for t in pair)
