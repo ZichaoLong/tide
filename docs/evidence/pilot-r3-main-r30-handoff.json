@@ -1,0 +1,1952 @@
+{
+  "active_owners": {
+    "cpu/running": 40,
+    "npu/queued": 1,
+    "npu/running": 7
+  },
+  "active_rss_reservations_bytes": 436263710720,
+  "blocking_reason": null,
+  "cgroup_member_count": 140,
+  "controller": {
+    "pgrp": 3783721,
+    "pid": 3783721,
+    "ppid": 2907797,
+    "rss_bytes": 37367808,
+    "start_ticks": 2301750515,
+    "state": "R"
+  },
+  "controller_commit": "bff4fb8bf326b516a679d28b8bf2f845b1128a9d",
+  "counts": {
+    "pending": 197,
+    "running": 87
+  },
+  "cpu_and_npu_worker_processes": {
+    "cpu": 40,
+    "npu:0": 46
+  },
+  "cpu_sample": {
+    "affinity_busy_percent": 84.61112627188024,
+    "affinity_cpu_count": 160,
+    "average_cores_by_process_type": {
+      "cpu": 97.12715863758817,
+      "npu:0": 15.762487176601732,
+      "other": 20.174636364924012
+    },
+    "basis": "CPU time of service processes with identical PID/start ticks at both endpoints; affinity busy percent includes all host workloads on those CPUs, excluding idle and iowait",
+    "interval_seconds": 8.016501367092133,
+    "observed_end_unix": 1795431603.523818
+  },
+  "device_seconds_in_original_ledger": 1381342.3999702297,
+  "direct_bound_tasks_by_device": {
+    "cpu": 38,
+    "npu:0": 22
+  },
+  "direct_first_steps": {
+    "cpu": 38,
+    "npu:0": 21
+  },
+  "direct_training_witnesses": [
+    {
+      "decision": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/decisions/exchange-d256-x-narrowwide-3754933830-a1-2026112001-r0-device.json",
+        "sha256": "74385373bfbc28f8033d790b2b8bec90aad8764b7453c5f744f8b509db1276ac"
+      },
+      "device": "cpu",
+      "first_line_sha256": "9ebb16a651af26c7694a3103973d68b25f1bedb9ffa4e4ba0cc1bb0c1fd7be54",
+      "first_step": 1,
+      "first_tokens": 256,
+      "journal": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/exchange-d256-x-narrowwide-3754933830-a1-2026112001-r0/attempt-0/steps.jsonl",
+      "previous_device": "unbound",
+      "task": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/exchange-d256-x-narrowwide-3754933830-a1-2026112001-r0/task.json",
+        "sha256": "9b3d9e6c381941802b0db39b9b4f9534c1c68f15ad80b28530901428b9e391cd"
+      },
+      "task_id": "exchange-d256-x-narrowwide-3754933830-a1-2026112001-r0"
+    },
+    {
+      "decision": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/decisions/exchange-d256-x-narrowwide-3754933830-a1-2026112001-r1-device.json",
+        "sha256": "bfe7937b804dad7d89b58d4ca2d6bd21fb9ef5f497f50c07a03132d48f786f5a"
+      },
+      "device": "cpu",
+      "first_line_sha256": "3538b4c954fe0bda60205d151e30f0e279a312c8d086808a38f71a927d737c08",
+      "first_step": 1,
+      "first_tokens": 256,
+      "journal": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/exchange-d256-x-narrowwide-3754933830-a1-2026112001-r1/attempt-0/steps.jsonl",
+      "previous_device": "npu:0",
+      "task": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/exchange-d256-x-narrowwide-3754933830-a1-2026112001-r1/task.json",
+        "sha256": "c90ec0a6770f3be43913544d3443a6a7feae62c3e06cd3e01ed8fefd1656d51b"
+      },
+      "task_id": "exchange-d256-x-narrowwide-3754933830-a1-2026112001-r1"
+    },
+    {
+      "decision": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/decisions/low-activity-fc-base-n16-d128-k1-9459fb82e1-a1-2026112001-r0-device.json",
+        "sha256": "71d9d12bef244d87f04e336646fcfb46edfb0f66ce3ffdea2e31658c2efda7d9"
+      },
+      "device": "npu:0",
+      "first_line_sha256": "b7e04b483e4bff562400108169a66f3d2e7fc11ad3ca7b1c595ca4971bbf4efa",
+      "first_step": 1,
+      "first_tokens": 256,
+      "journal": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/low-activity-fc-base-n16-d128-k1-9459fb82e1-a1-2026112001-r0/attempt-0/steps.jsonl",
+      "previous_device": "unbound",
+      "task": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/low-activity-fc-base-n16-d128-k1-9459fb82e1-a1-2026112001-r0/task.json",
+        "sha256": "f5c83a5fe5d8e7bac2661ec8cc2e7adba25e268fcf506529983d31f2906c4791"
+      },
+      "task_id": "low-activity-fc-base-n16-d128-k1-9459fb82e1-a1-2026112001-r0"
+    }
+  ],
+  "dispatch_queue": {
+    "cpu_limit": 40,
+    "cpu_workers": 40,
+    "npu_owners": 8,
+    "observed_unix": 1795431596.4700263,
+    "policy": "stage-a-available-resources-v1",
+    "unbound_tasks": 162
+  },
+  "driver_observation": {
+    "by_physical_id": {
+      "0": {
+        "aicore_percent": 0,
+        "hbm_total_mib": 65536,
+        "hbm_used_mib": 56709,
+        "other_processes": 1,
+        "service_processes": 0
+      },
+      "1": {
+        "aicore_percent": 0,
+        "hbm_total_mib": 65536,
+        "hbm_used_mib": 56268,
+        "other_processes": 1,
+        "service_processes": 0
+      },
+      "2": {
+        "aicore_percent": 2,
+        "hbm_total_mib": 65536,
+        "hbm_used_mib": 32028,
+        "other_processes": 0,
+        "service_processes": 8
+      },
+      "3": {
+        "aicore_percent": 0,
+        "hbm_total_mib": 65536,
+        "hbm_used_mib": 20906,
+        "other_processes": 1,
+        "service_processes": 0
+      },
+      "4": {
+        "aicore_percent": 0,
+        "hbm_total_mib": 65536,
+        "hbm_used_mib": 32278,
+        "other_processes": 0,
+        "service_processes": 3
+      },
+      "5": {
+        "aicore_percent": 5,
+        "hbm_total_mib": 65536,
+        "hbm_used_mib": 31849,
+        "other_processes": 0,
+        "service_processes": 8
+      },
+      "6": {
+        "aicore_percent": 0,
+        "hbm_total_mib": 65536,
+        "hbm_used_mib": 60060,
+        "other_processes": 1,
+        "service_processes": 0
+      },
+      "7": {
+        "aicore_percent": 0,
+        "hbm_total_mib": 65536,
+        "hbm_used_mib": 32655,
+        "other_processes": 0,
+        "service_processes": 4
+      },
+      "8": {
+        "aicore_percent": 4,
+        "hbm_total_mib": 65536,
+        "hbm_used_mib": 32314,
+        "other_processes": 0,
+        "service_processes": 5
+      },
+      "9": {
+        "aicore_percent": 0,
+        "hbm_total_mib": 65536,
+        "hbm_used_mib": 39842,
+        "other_processes": 2,
+        "service_processes": 0
+      },
+      "10": {
+        "aicore_percent": 0,
+        "hbm_total_mib": 65536,
+        "hbm_used_mib": 45902,
+        "other_processes": 2,
+        "service_processes": 0
+      },
+      "11": {
+        "aicore_percent": 0,
+        "hbm_total_mib": 65536,
+        "hbm_used_mib": 33213,
+        "other_processes": 0,
+        "service_processes": 5
+      },
+      "12": {
+        "aicore_percent": 0,
+        "hbm_total_mib": 65536,
+        "hbm_used_mib": 26341,
+        "other_processes": 1,
+        "service_processes": 0
+      },
+      "13": {
+        "aicore_percent": 0,
+        "hbm_total_mib": 65536,
+        "hbm_used_mib": 58473,
+        "other_processes": 1,
+        "service_processes": 0
+      },
+      "14": {
+        "aicore_percent": 0,
+        "hbm_total_mib": 65536,
+        "hbm_used_mib": 31716,
+        "other_processes": 0,
+        "service_processes": 8
+      },
+      "15": {
+        "aicore_percent": 0,
+        "hbm_total_mib": 65536,
+        "hbm_used_mib": 29161,
+        "other_processes": 2,
+        "service_processes": 0
+      }
+    },
+    "observed_unix": 1795431598.1540484
+  },
+  "driver_pids_by_physical_card": {
+    "2": [
+      3788904,
+      3790465,
+      3791220,
+      3791724,
+      3792165,
+      3792693,
+      3793207,
+      3793636
+    ],
+    "4": [
+      3787604,
+      3788225,
+      3788719
+    ],
+    "5": [
+      3786794,
+      3787338,
+      3787944,
+      3788449,
+      3788918,
+      3789662,
+      3790395,
+      3791192
+    ],
+    "7": [
+      3786193,
+      3786610,
+      3787180,
+      3787786
+    ],
+    "8": [
+      3788262,
+      3788834,
+      3789443,
+      3790129,
+      3790929
+    ],
+    "11": [
+      3785540,
+      3785967,
+      3786336,
+      3786748,
+      3787257
+    ],
+    "14": [
+      3790096,
+      3790960,
+      3791556,
+      3791996,
+      3792569,
+      3792915,
+      3793781,
+      3794758
+    ]
+  },
+  "first_updates_verified": {
+    "exchange-d256-x_reverse-base-7cf4ba7a94-a3-2026112001-r1": {
+      "checkpoint_sha256": "e063bde810367af97fbedde4be7fa59254c94ad7f85dc7b0a9001713983f137d",
+      "checkpoint_steps": 4632,
+      "checkpoint_tokens": 1185792,
+      "device": "npu:0",
+      "first_line_sha256": "8591f8439c25b00c9b7db1dc710eab235503b95cd034d79c1f9962b769a10575",
+      "first_step": 4633,
+      "first_tokens": 1186048,
+      "journal": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/exchange-d256-x_reverse-base-7cf4ba7a94-a3-2026112001-r1/attempt-0/steps.jsonl",
+      "mode": "signal",
+      "receipt": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/source-migrations/exchange-d256-x_reverse-base-7cf4ba7a94-a3-2026112001-r1.json",
+        "sha256": "63fafd5a356690fc2fc4bd01204ce4b3edc2f2e23602b406420c7ee080b81f09"
+      },
+      "task": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/exchange-d256-x_reverse-base-7cf4ba7a94-a3-2026112001-r1/task.json",
+        "sha256": "3d3f7c492742728fa6e207d1ea28e188e2ceb89fcf349d9956b43478d2bc40f4"
+      },
+      "time_unix": 1795431409.7481294
+    },
+    "exchange-d256-x_reverse-base-7cf4ba7a94-a3-2026112002-r1": {
+      "checkpoint_sha256": "38b79e1a2d5732118afb19584d85173010920691d3d5f493815fd8659ca70718",
+      "checkpoint_steps": 4638,
+      "checkpoint_tokens": 1187328,
+      "device": "npu:0",
+      "first_line_sha256": "f926ad33f221ab43bb18806e2a1c90dcd3b486b75af9d3850db5b86e6c194b92",
+      "first_step": 4639,
+      "first_tokens": 1187584,
+      "journal": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/exchange-d256-x_reverse-base-7cf4ba7a94-a3-2026112002-r1/attempt-0/steps.jsonl",
+      "mode": "signal",
+      "receipt": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/source-migrations/exchange-d256-x_reverse-base-7cf4ba7a94-a3-2026112002-r1.json",
+        "sha256": "e17146bb89ec234cdffccccb15ff3fbd205523158e1bb1d6032b56e8b4704f2f"
+      },
+      "task": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/exchange-d256-x_reverse-base-7cf4ba7a94-a3-2026112002-r1/task.json",
+        "sha256": "786a4a5575dd206eafe86472c60214b514a2fca1cdbe2489f463fc8a5afdd906"
+      },
+      "time_unix": 1795431415.814874
+    },
+    "exchange-d256-x_reverse-narrowwide-56ff71f804-a3-2026112001-r1": {
+      "checkpoint_sha256": "eca3bab8a29d18dc65b7c8a00d0736262df6a523f32bd983b5ac9c3d40e10cb8",
+      "checkpoint_steps": 5956,
+      "checkpoint_tokens": 1524736,
+      "device": "cpu",
+      "first_line_sha256": "4d5a26b706c0f7626cba0a9fa32f569a490688c9b4228ee66790a6d67d521ab0",
+      "first_step": 5957,
+      "first_tokens": 1524992,
+      "journal": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/exchange-d256-x_reverse-narrowwide-56ff71f804-a3-2026112001-r1/attempt-0/steps.jsonl",
+      "mode": "signal",
+      "receipt": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/source-migrations/exchange-d256-x_reverse-narrowwide-56ff71f804-a3-2026112001-r1.json",
+        "sha256": "526be6a8e496bf6341f0ed32400d13613e396792729334b0b6dbcec9465144fe"
+      },
+      "task": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/exchange-d256-x_reverse-narrowwide-56ff71f804-a3-2026112001-r1/task.json",
+        "sha256": "53fa8dbff8ca76652bbfa7f425050d4d07f14a42c11e752195c17cc0af135fe6"
+      },
+      "time_unix": 1795431345.6981537
+    },
+    "exchange-d256-x_reverse-narrowwide-56ff71f804-a3-2026112002-r1": {
+      "checkpoint_sha256": "3c79721a0d981474806b76efeea2454c7a2be54aabd1d95e71094083f4cd13c4",
+      "checkpoint_steps": 5911,
+      "checkpoint_tokens": 1513216,
+      "device": "cpu",
+      "first_line_sha256": "832bcc4d249d685cc3a584d27c3171b8e765ebb9229c8a5f7ae3a5aeefe1f668",
+      "first_step": 5912,
+      "first_tokens": 1513472,
+      "journal": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/exchange-d256-x_reverse-narrowwide-56ff71f804-a3-2026112002-r1/attempt-0/steps.jsonl",
+      "mode": "signal",
+      "receipt": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/source-migrations/exchange-d256-x_reverse-narrowwide-56ff71f804-a3-2026112002-r1.json",
+        "sha256": "c58ad2850b799be4c5af70cebce6585dfd7c7c1a94534400b82068bb573fde87"
+      },
+      "task": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/exchange-d256-x_reverse-narrowwide-56ff71f804-a3-2026112002-r1/task.json",
+        "sha256": "664772fa494f624ec4dbdec57e3c2ef64bf2b702214d3f0bffd7534a7de0930d"
+      },
+      "time_unix": 1795431345.7013803
+    },
+    "multiscale_settle-d256-k-singleton7-cad34be170-a2-2026112001-r1": {
+      "checkpoint_sha256": "afc230f17932cd559afc1a4b1cae5d3f6a10b265c24a0410061f4af7e28ab3f9",
+      "checkpoint_steps": 3223,
+      "checkpoint_tokens": 825088,
+      "device": "npu:0",
+      "first_line_sha256": "3a509542209d75acd377213a7ab5bf5c28dbb10491be1bcda45dda9e1ac22bdc",
+      "first_step": 3224,
+      "first_tokens": 825344,
+      "journal": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/multiscale_settle-d256-k-singleton7-cad34be170-a2-2026112001-r1/attempt-0/steps.jsonl",
+      "mode": "signal",
+      "receipt": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/source-migrations/multiscale_settle-d256-k-singleton7-cad34be170-a2-2026112001-r1.json",
+        "sha256": "e1bac4f05a7e0c8972071aae9d53f3829f8e0710fb5499d9b720a07ebeece496"
+      },
+      "task": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/multiscale_settle-d256-k-singleton7-cad34be170-a2-2026112001-r1/task.json",
+        "sha256": "1026ec78cd34f948ed1ff6344ce7569183ce3f386fe6481f6af891d7e87db203"
+      },
+      "time_unix": 1795431382.6192033
+    },
+    "multiscale_settle-d256-k-singleton7-cad34be170-a2-2026112001-r2": {
+      "checkpoint_sha256": "d8a33834b93dbf91458409254543b2b2c0cbd356e518df9ab3122304b729f131",
+      "checkpoint_steps": 3457,
+      "checkpoint_tokens": 884992,
+      "device": "npu:0",
+      "first_line_sha256": "994b4efd8ab59e9f0f3a9466d37b39c7c5d27b0d8e8c0ea07d49d48737ea464f",
+      "first_step": 3458,
+      "first_tokens": 885248,
+      "journal": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/multiscale_settle-d256-k-singleton7-cad34be170-a2-2026112001-r2/attempt-0/steps.jsonl",
+      "mode": "signal",
+      "receipt": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/source-migrations/multiscale_settle-d256-k-singleton7-cad34be170-a2-2026112001-r2.json",
+        "sha256": "0f7345d798499aeab4753b7c7a16cc5d78779f8e00620a8a650f28c0f1813bd4"
+      },
+      "task": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/multiscale_settle-d256-k-singleton7-cad34be170-a2-2026112001-r2/task.json",
+        "sha256": "236f995c66e2be25dbc6b1707e16eda17157a7d35f19a3d7f6a4f589fccf89ef"
+      },
+      "time_unix": 1795431394.462042
+    },
+    "multiscale_settle-d256-k-singleton7-cad34be170-a2-2026112002-r1": {
+      "checkpoint_sha256": "86596eaebfd94863b060e3a5c854e79deed0095a2fe5d6c316c4f75119dcea8b",
+      "checkpoint_steps": 3654,
+      "checkpoint_tokens": 935424,
+      "device": "npu:0",
+      "first_line_sha256": "3be9cbb6ad9a379b7348f925b857f46a18eee41d365aa2caa254ef7c97cbbc08",
+      "first_step": 3655,
+      "first_tokens": 935680,
+      "journal": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/multiscale_settle-d256-k-singleton7-cad34be170-a2-2026112002-r1/attempt-0/steps.jsonl",
+      "mode": "signal",
+      "receipt": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/source-migrations/multiscale_settle-d256-k-singleton7-cad34be170-a2-2026112002-r1.json",
+        "sha256": "009f633bbc73be08cbba7e35a415001a919f82d0c08e3aa0765351f0dfe1109b"
+      },
+      "task": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/multiscale_settle-d256-k-singleton7-cad34be170-a2-2026112002-r1/task.json",
+        "sha256": "db398fcfec765f54395d176be4e631b3b0770ecb909351142fb9fdede78af735"
+      },
+      "time_unix": 1795431387.6385934
+    },
+    "multiscale_settle-d256-k-singleton7-cad34be170-a2-2026112002-r2": {
+      "checkpoint_sha256": "c7066fb57270c9643c47292931918cdeea0c14ffe390d40de4400e674b274a39",
+      "checkpoint_steps": 3259,
+      "checkpoint_tokens": 834304,
+      "device": "npu:0",
+      "first_line_sha256": "e06789ce09733f18abd5e96ba3e28fd4a2a01f29ffc992b29364bbbecc5b6d60",
+      "first_step": 3260,
+      "first_tokens": 834560,
+      "journal": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/multiscale_settle-d256-k-singleton7-cad34be170-a2-2026112002-r2/attempt-0/steps.jsonl",
+      "mode": "signal",
+      "receipt": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/source-migrations/multiscale_settle-d256-k-singleton7-cad34be170-a2-2026112002-r2.json",
+        "sha256": "bd6b109e7b0d73f93532c954c4268ae24bf7f0a944c172389698e9041df02f89"
+      },
+      "task": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/multiscale_settle-d256-k-singleton7-cad34be170-a2-2026112002-r2/task.json",
+        "sha256": "1f889fd1a53f339bec5be96331da5e2edc486f8f0221b0eff891013bd300ad35"
+      },
+      "time_unix": 1795431407.672483
+    },
+    "multiscale_timed-d128-s-mixed9-542e33dbf6-a3-2026112001-r2": {
+      "checkpoint_sha256": "c3464e5c2d54c59a22c9cb8f38b6167b070e48a4eb326a43371225cda626244b",
+      "checkpoint_steps": 4410,
+      "checkpoint_tokens": 1128960,
+      "device": "npu:0",
+      "first_line_sha256": "5c4e0fa3c724a27493440a55d62152be2f78e01afe29cba82f9cbc7b975420df",
+      "first_step": 4411,
+      "first_tokens": 1129216,
+      "journal": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/multiscale_timed-d128-s-mixed9-542e33dbf6-a3-2026112001-r2/attempt-0/steps.jsonl",
+      "mode": "signal",
+      "receipt": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/source-migrations/multiscale_timed-d128-s-mixed9-542e33dbf6-a3-2026112001-r2.json",
+        "sha256": "591ae4ab988ffc35ea1d393446f6f19252f1016fb5b064998d3a1cc5af0d897b"
+      },
+      "task": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/multiscale_timed-d128-s-mixed9-542e33dbf6-a3-2026112001-r2/task.json",
+        "sha256": "fb51e32d41ea0fd72696d92c342c8a7d7ef2861fd7fe95b41445ca26be57da08"
+      },
+      "time_unix": 1795431418.0279696
+    },
+    "multiscale_timed-d128-x_reverse-mixed9-99820c3100-a2-2026112001-r2": {
+      "checkpoint_sha256": "257cd41bb1d1e78bce4b938a49e653946d37172ac2dc8a967a01ce625ce2dab4",
+      "checkpoint_steps": 3495,
+      "checkpoint_tokens": 894720,
+      "device": "npu:0",
+      "first_line_sha256": "96c2e9e4fa32e68e8ec7d337d22b68b8748f8cc48a8908626ca71e25e892c763",
+      "first_step": 3496,
+      "first_tokens": 894976,
+      "journal": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/multiscale_timed-d128-x_reverse-mixed9-99820c3100-a2-2026112001-r2/attempt-0/steps.jsonl",
+      "mode": "signal",
+      "receipt": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/source-migrations/multiscale_timed-d128-x_reverse-mixed9-99820c3100-a2-2026112001-r2.json",
+        "sha256": "8c0f0c9c160100da4876689168eb3bc3fd7441bce7a42a5f94959cb7fd4d9e11"
+      },
+      "task": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/multiscale_timed-d128-x_reverse-mixed9-99820c3100-a2-2026112001-r2/task.json",
+        "sha256": "3c498ccf0ae3967b23004a5da36b1e7bde008d221a22f3d96532624daec9dba2"
+      },
+      "time_unix": 1795431395.255815
+    },
+    "multiscale_timed-d128-x_reverse-mixed9-99820c3100-a2-2026112002-r2": {
+      "checkpoint_sha256": "5382be362ef7a391bba75c15a992dc70f453cd9ba7a91d74919581aeafecf910",
+      "checkpoint_steps": 3905,
+      "checkpoint_tokens": 999680,
+      "device": "npu:0",
+      "first_line_sha256": "f02e7150200cc7de1a4582d39f886b55340c54ace242af9821895eb201a6f6a0",
+      "first_step": 3906,
+      "first_tokens": 999936,
+      "journal": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/multiscale_timed-d128-x_reverse-mixed9-99820c3100-a2-2026112002-r2/attempt-0/steps.jsonl",
+      "mode": "signal",
+      "receipt": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/source-migrations/multiscale_timed-d128-x_reverse-mixed9-99820c3100-a2-2026112002-r2.json",
+        "sha256": "a694abc92cff64245813d26a562a26ef9b024b7e08365e308b65d99dcd8ad620"
+      },
+      "task": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/multiscale_timed-d128-x_reverse-mixed9-99820c3100-a2-2026112002-r2/task.json",
+        "sha256": "92c9e00398e57635cd82ce91514b0b81142164d9606c46b76371a3d0bc5b60cf"
+      },
+      "time_unix": 1795431395.459677
+    },
+    "multiscale_timed-d128-x_reverse-singleton7-2f58b0a0f6-a3-2026112001-r2": {
+      "checkpoint_sha256": "e1d7fad1953b03971831fda3ba390a63da27014c1c1370a4b057add88d966bd1",
+      "checkpoint_steps": 6390,
+      "checkpoint_tokens": 1635840,
+      "device": "npu:0",
+      "first_line_sha256": "cc513e2d417103e8e4d8349a1f7c00451e9dbc9200c93f68747c73fa8732c9ae",
+      "first_step": 6391,
+      "first_tokens": 1636096,
+      "journal": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/multiscale_timed-d128-x_reverse-singleton7-2f58b0a0f6-a3-2026112001-r2/attempt-0/steps.jsonl",
+      "mode": "signal",
+      "receipt": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/source-migrations/multiscale_timed-d128-x_reverse-singleton7-2f58b0a0f6-a3-2026112001-r2.json",
+        "sha256": "7569a268f63c80f6f0528f6827c8c331f417a58045eab5344bf31bf11002bc0f"
+      },
+      "task": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/multiscale_timed-d128-x_reverse-singleton7-2f58b0a0f6-a3-2026112001-r2/task.json",
+        "sha256": "669b634e1cdb233a397225dc369da7e4ff8ca334a2097a7b094b21c3fb85928c"
+      },
+      "time_unix": 1795431384.891404
+    },
+    "multiscale_timed-d128-x_reverse-singleton7-2f58b0a0f6-a3-2026112002-r2": {
+      "checkpoint_sha256": "7586cbac6ce9793f363337ee45cbb39bb7ded704155b467205dc92e6a180ae6b",
+      "checkpoint_steps": 6826,
+      "checkpoint_tokens": 1747456,
+      "device": "npu:0",
+      "first_line_sha256": "a16004a94907cf8c67df16850e456fd41eef354ad348f3d2e1aaa781a8eaa02b",
+      "first_step": 6827,
+      "first_tokens": 1747712,
+      "journal": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/multiscale_timed-d128-x_reverse-singleton7-2f58b0a0f6-a3-2026112002-r2/attempt-0/steps.jsonl",
+      "mode": "signal",
+      "receipt": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/source-migrations/multiscale_timed-d128-x_reverse-singleton7-2f58b0a0f6-a3-2026112002-r2.json",
+        "sha256": "98cb6eb9939024b5686331bb104af5b0f1c8f171f75ba22c3fb0bc8a3e46b259"
+      },
+      "task": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/multiscale_timed-d128-x_reverse-singleton7-2f58b0a0f6-a3-2026112002-r2/task.json",
+        "sha256": "1dfbea9a0a3faa4ca21a31ba89363b6daf3f5dee0f23a0511877ddcee0bda2e3"
+      },
+      "time_unix": 1795431384.227408
+    },
+    "multiscale_timed-d256-k-group5-27d7c0e70b-a2-2026112001-r2": {
+      "checkpoint_sha256": "96460accf9eb68638ad33dd3fb118fa9d9e7bf9a7f342067afed45d50d16c1de",
+      "checkpoint_steps": 2757,
+      "checkpoint_tokens": 705792,
+      "device": "npu:0",
+      "first_line_sha256": "67129ddd06a549f5cd7d9a335e36ff1fc49a01c0e63ebd73d18c38bea88824fa",
+      "first_step": 2758,
+      "first_tokens": 706048,
+      "journal": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/multiscale_timed-d256-k-group5-27d7c0e70b-a2-2026112001-r2/attempt-0/steps.jsonl",
+      "mode": "signal",
+      "receipt": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/source-migrations/multiscale_timed-d256-k-group5-27d7c0e70b-a2-2026112001-r2.json",
+        "sha256": "238ce30ab74ccfafa58183eab1b291df975adee81401368bd5436f6b5c608dfe"
+      },
+      "task": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/multiscale_timed-d256-k-group5-27d7c0e70b-a2-2026112001-r2/task.json",
+        "sha256": "0ba7b0c93e114a4c10c6991cac7e7c129f67a105df8875a21c364ce99907ca18"
+      },
+      "time_unix": 1795431398.2909281
+    },
+    "multiscale_timed-d256-k-group5-27d7c0e70b-a2-2026112002-r2": {
+      "checkpoint_sha256": "b5fdc495d3a5e4328c58bccccfb0afe600d84fc2bc4d7d24d68f1ec9498746b9",
+      "checkpoint_steps": 3250,
+      "checkpoint_tokens": 832000,
+      "device": "npu:0",
+      "first_line_sha256": "21f391a39c16c7d4f5239952d48941a679cf2b9dbdd7d98a1782ed3e0b04cb6d",
+      "first_step": 3251,
+      "first_tokens": 832256,
+      "journal": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/multiscale_timed-d256-k-group5-27d7c0e70b-a2-2026112002-r2/attempt-0/steps.jsonl",
+      "mode": "signal",
+      "receipt": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/source-migrations/multiscale_timed-d256-k-group5-27d7c0e70b-a2-2026112002-r2.json",
+        "sha256": "eaeb87854ceb334482978f52c75e3fafe5a6e131371cb45150d3cdd15b341614"
+      },
+      "task": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/multiscale_timed-d256-k-group5-27d7c0e70b-a2-2026112002-r2/task.json",
+        "sha256": "f023fd1d68fafe8f3b4cc3551cbbd33e2cca7a785b7ddb308295dd9e8fac3644"
+      },
+      "time_unix": 1795431400.1261978
+    },
+    "multiscale_timed-d256-k-mixed9-fa94f99487-a2-2026112001-r1": {
+      "checkpoint_sha256": "ae0580308e1a22f03f33ff19ab19eb10dbaad9d4ab5df6786522e575004f5bfa",
+      "checkpoint_steps": 3227,
+      "checkpoint_tokens": 413056,
+      "device": "npu:0",
+      "first_line_sha256": "cb2f6967ab8cfd73cf36893bb95059b178fcde67510ff5636e81b504c9080b9d",
+      "first_step": 3228,
+      "first_tokens": 413184,
+      "journal": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/multiscale_timed-d256-k-mixed9-fa94f99487-a2-2026112001-r1/attempt-0/steps.jsonl",
+      "mode": "signal",
+      "receipt": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/source-migrations/multiscale_timed-d256-k-mixed9-fa94f99487-a2-2026112001-r1.json",
+        "sha256": "c1af74b0b9e5e56a8180e4aa22d6bfe7def221261441d0ff2ae8e47ef02b954f"
+      },
+      "task": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/multiscale_timed-d256-k-mixed9-fa94f99487-a2-2026112001-r1/task.json",
+        "sha256": "97f7bc71fae7c84a32af8214b96e1626d74234f636660f5c5bf0acbe5f7e958f"
+      },
+      "time_unix": 1795431417.7237434
+    },
+    "multiscale_timed-d256-k-mixed9-fa94f99487-a2-2026112002-r1": {
+      "checkpoint_sha256": "3e7ea962460be32839e746b52029a6299ad5ef5e12e44b5084ef0e8d6b34bb1f",
+      "checkpoint_steps": 3152,
+      "checkpoint_tokens": 403456,
+      "device": "npu:0",
+      "first_line_sha256": "ea99d001e3363d7f29b036a1655a961aad55a3514dd41b7be9d75f920f9adeb5",
+      "first_step": 3153,
+      "first_tokens": 403584,
+      "journal": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/multiscale_timed-d256-k-mixed9-fa94f99487-a2-2026112002-r1/attempt-0/steps.jsonl",
+      "mode": "signal",
+      "receipt": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/source-migrations/multiscale_timed-d256-k-mixed9-fa94f99487-a2-2026112002-r1.json",
+        "sha256": "57b4ac29d9b1016447e366ee25c4900263c93b15bba0ba779131e048fa67a4c8"
+      },
+      "task": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/multiscale_timed-d256-k-mixed9-fa94f99487-a2-2026112002-r1/task.json",
+        "sha256": "0a8ffd8414aa93bf1d2714d6973d066ff3b2d486316c5e48de4cab020e556bcc"
+      },
+      "time_unix": 1795431412.2035203
+    },
+    "multiscale_timed-d256-k-singleton7-ffd4b110ac-a2-2026112001-r5": {
+      "checkpoint_sha256": "5df151d4933ff8f14e8d9b3a91ec913d398654df1b8933558026ace982874569",
+      "checkpoint_steps": 1012,
+      "checkpoint_tokens": 518144,
+      "device": "npu:0",
+      "first_line_sha256": "f2560e576b3955512a88cd8b3a7be757736c643de5eafb5b65caf8f2a643831a",
+      "first_step": 1013,
+      "first_tokens": 518656,
+      "journal": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/multiscale_timed-d256-k-singleton7-ffd4b110ac-a2-2026112001-r5/attempt-0/steps.jsonl",
+      "mode": "signal",
+      "receipt": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/source-migrations/multiscale_timed-d256-k-singleton7-ffd4b110ac-a2-2026112001-r5.json",
+        "sha256": "b5a3f7b68a7ab2354ebb5579d0e0c6c902b827eaa40ad952c95072c2dbe93e61"
+      },
+      "task": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/multiscale_timed-d256-k-singleton7-ffd4b110ac-a2-2026112001-r5/task.json",
+        "sha256": "b72e4c942cc5103ab6c50ca8d214ba9c920b5237008150bf1c22a0e9767b9c73"
+      },
+      "time_unix": 1795431398.2558925
+    },
+    "multiscale_timed-d256-k-singleton7-ffd4b110ac-a2-2026112002-r5": {
+      "checkpoint_sha256": "983bba7581af09fcbed014f742b98a23362554998b7eb7aae6da488c4c2e4282",
+      "checkpoint_steps": 1078,
+      "checkpoint_tokens": 551936,
+      "device": "npu:0",
+      "first_line_sha256": "99f1b040c5a78c2d753bb0da6214e678b4f866d9da710d372d1abcecd22f1035",
+      "first_step": 1079,
+      "first_tokens": 552448,
+      "journal": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/multiscale_timed-d256-k-singleton7-ffd4b110ac-a2-2026112002-r5/attempt-0/steps.jsonl",
+      "mode": "signal",
+      "receipt": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/source-migrations/multiscale_timed-d256-k-singleton7-ffd4b110ac-a2-2026112002-r5.json",
+        "sha256": "2e4f29247a756ec3ef7ef61435d1430fa1e483766b90fe22e36ae48df13ae971"
+      },
+      "task": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/multiscale_timed-d256-k-singleton7-ffd4b110ac-a2-2026112002-r5/task.json",
+        "sha256": "b6c3a3471d127741cf6168676c450f9b34b312fa435da5af903401ccbc6b2092"
+      },
+      "time_unix": 1795431401.8642
+    },
+    "multiscale_timed-d256-s-singleton7-d252547d80-a2-2026112001-r5": {
+      "checkpoint_sha256": "efa8f0ae3021b95ebe71f5353a1826d56ac48e06eca8f997849b06838f8d8ba4",
+      "checkpoint_steps": 263,
+      "checkpoint_tokens": 269312,
+      "device": "npu:0",
+      "first_line_sha256": "350623327ce70b00cc68ba8025ac636406844d3b8356e3d0c0523705cee8b552",
+      "first_step": 264,
+      "first_tokens": 270336,
+      "journal": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/multiscale_timed-d256-s-singleton7-d252547d80-a2-2026112001-r5/attempt-0/steps.jsonl",
+      "mode": "signal",
+      "receipt": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/source-migrations/multiscale_timed-d256-s-singleton7-d252547d80-a2-2026112001-r5.json",
+        "sha256": "521a25ab39b8ba4585f52f54c38492b79b3e27e9e1192819350369b3f3f37e39"
+      },
+      "task": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/multiscale_timed-d256-s-singleton7-d252547d80-a2-2026112001-r5/task.json",
+        "sha256": "60e18eba046f8fb4d57fc64e776bed76f524b3931b662d845dcb5a939cd496cf"
+      },
+      "time_unix": 1795431382.1415017
+    },
+    "multiscale_timed-d256-s-singleton7-d252547d80-a2-2026112002-r5": {
+      "checkpoint_sha256": "6146f7a251f972f1298c56e049a9f2c071503cfedea98b50b4c5b9a852dd9e23",
+      "checkpoint_steps": 256,
+      "checkpoint_tokens": 262144,
+      "device": "npu:0",
+      "first_line_sha256": "cbca7817f0f13637f67e48dbf9ac0a880a2df481d3a2d64719759ccc3ef6a118",
+      "first_step": 257,
+      "first_tokens": 263168,
+      "journal": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/multiscale_timed-d256-s-singleton7-d252547d80-a2-2026112002-r5/attempt-0/steps.jsonl",
+      "mode": "stage_parent",
+      "receipt": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/source-migrations/multiscale_timed-d256-s-singleton7-d252547d80-a2-2026112002-r5.json",
+        "sha256": "e5f9f7bc00eb9bc82c55fcc2f55dc6d910063f1ae56607cd3cbd5d0847ba34b8"
+      },
+      "task": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/multiscale_timed-d256-s-singleton7-d252547d80-a2-2026112002-r5/task.json",
+        "sha256": "18f3367c818cf0bece2417705924c2c04f4726382798abe3dcc568b6a1f9e716"
+      },
+      "time_unix": 1795431533.4002078
+    },
+    "multiscale_timed-d256-x-group5-3db19adc40-a2-2026112001-r5": {
+      "checkpoint_sha256": "f97a850bdcc949f157962238baf20304fa64a1d766c08004d00f66d90d88cb76",
+      "checkpoint_steps": 486,
+      "checkpoint_tokens": 497664,
+      "device": "npu:0",
+      "first_line_sha256": "f37a7ccebeccee5d84009c3ec85c90006a86da9dcb5b822d13e961e1a7d7e41f",
+      "first_step": 487,
+      "first_tokens": 498688,
+      "journal": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/multiscale_timed-d256-x-group5-3db19adc40-a2-2026112001-r5/attempt-0/steps.jsonl",
+      "mode": "signal",
+      "receipt": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/source-migrations/multiscale_timed-d256-x-group5-3db19adc40-a2-2026112001-r5.json",
+        "sha256": "f995388fb8ec86ff4f44608614637a2067ce9ce1920f8a39e8b2cb6fb3fc8e0c"
+      },
+      "task": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/multiscale_timed-d256-x-group5-3db19adc40-a2-2026112001-r5/task.json",
+        "sha256": "111262d20ae40f6af4c3b37b65d7dfcec259030365b5c5185a7cfca3e38f3ab0"
+      },
+      "time_unix": 1795431408.530094
+    },
+    "multiscale_timed-d256-x-group5-3db19adc40-a2-2026112002-r5": {
+      "checkpoint_sha256": "c7e7bef1fc420b401bf7736a2be1c5264149a912dd72d4485de28b0e093cae63",
+      "checkpoint_steps": 408,
+      "checkpoint_tokens": 417792,
+      "device": "npu:0",
+      "first_line_sha256": "0f14828d160d99cc9da2ca63d37ad5f911d2cc9cf99a6eb2be1a532f110cdf47",
+      "first_step": 409,
+      "first_tokens": 418816,
+      "journal": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/multiscale_timed-d256-x-group5-3db19adc40-a2-2026112002-r5/attempt-0/steps.jsonl",
+      "mode": "signal",
+      "receipt": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/source-migrations/multiscale_timed-d256-x-group5-3db19adc40-a2-2026112002-r5.json",
+        "sha256": "089badaa95cf1ee18ecc6df7ccdb896ea67218ea88f5233879c33e4645d4496f"
+      },
+      "task": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/multiscale_timed-d256-x-group5-3db19adc40-a2-2026112002-r5/task.json",
+        "sha256": "e8fea9ae824e36588e3e6922ffd5531ea1980dfbd246bc3643d58d3384d1b40f"
+      },
+      "time_unix": 1795431417.872696
+    },
+    "multiscale_timed-d256-x-singleton7-4a89c4ac13-a1-2026112001-r3": {
+      "checkpoint_sha256": "b6cde66543751f40d133a4abc6bf1a1df5daea1e05f30b3b0bbc1b0f2d37a150",
+      "checkpoint_steps": 456,
+      "checkpoint_tokens": 233472,
+      "device": "npu:0",
+      "first_line_sha256": "aebdaeb88b8fdef8f8745c76b0ca5ad1483f722771866cfe33e059d3be0f2b6a",
+      "first_step": 457,
+      "first_tokens": 233984,
+      "journal": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/multiscale_timed-d256-x-singleton7-4a89c4ac13-a1-2026112001-r3/attempt-0/steps.jsonl",
+      "mode": "signal",
+      "receipt": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/source-migrations/multiscale_timed-d256-x-singleton7-4a89c4ac13-a1-2026112001-r3.json",
+        "sha256": "550e221e8a7550e7f9044c75bfc7bb90bae7831df0eebbcc6d7151b33fbb181e"
+      },
+      "task": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/multiscale_timed-d256-x-singleton7-4a89c4ac13-a1-2026112001-r3/task.json",
+        "sha256": "31ad39f5d73017b4be98a47564d17c0c203074260a9930a9448ef5622a84d364"
+      },
+      "time_unix": 1795431422.7922952
+    },
+    "multiscale_timed-d256-x-singleton7-4a89c4ac13-a1-2026112002-r3": {
+      "checkpoint_sha256": "1cd61bd61f55d6963d66062246a3a7c16fbfd54722addcf107bb56e7beddc9f8",
+      "checkpoint_steps": 438,
+      "checkpoint_tokens": 224256,
+      "device": "npu:0",
+      "first_line_sha256": "15674b5415a0dbaf30555bec43af1e36e463e893c83b5810b6d90129383d0e6a",
+      "first_step": 439,
+      "first_tokens": 224768,
+      "journal": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/multiscale_timed-d256-x-singleton7-4a89c4ac13-a1-2026112002-r3/attempt-0/steps.jsonl",
+      "mode": "signal",
+      "receipt": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/source-migrations/multiscale_timed-d256-x-singleton7-4a89c4ac13-a1-2026112002-r3.json",
+        "sha256": "c3fdec1d26c4d65f8642f2c87fd439bc394a44e88ec7cb3ffb1720b07ba1badc"
+      },
+      "task": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/multiscale_timed-d256-x-singleton7-4a89c4ac13-a1-2026112002-r3/task.json",
+        "sha256": "38ba8ec2cc1501b5b84d7f26f89164e9a253b5cc65eb772aea79afad5b1fa2f3"
+      },
+      "time_unix": 1795431434.8386195
+    }
+  },
+  "first_wave": {
+    "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/direct-r30/wave-pw1gsv80/first-wave.json",
+    "sha256": "23a3f4ff871d132058158c09fcbfc66fb011ba1847c6d3d5d5ff7ea7ea750729"
+  },
+  "first_wave_284": {
+    "all_outstanding_registered": true,
+    "by_disposition": {
+      "carry_checkpoint": 35,
+      "not_started": 223,
+      "retry_initial_checks": 20,
+      "signal": 6
+    },
+    "device_counts": {
+      "cpu": 33,
+      "npu:0": 29,
+      "unbound": 222
+    },
+    "from_predecessor": 284,
+    "plan": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/campaign-plan.json",
+      "sha256": "b5be5c54004fb2ec83c12cca14f939311512cae09d56b7561dd0cd39503ab8aa"
+    },
+    "retired_calibrations": 26,
+    "selected": 114,
+    "total_requests": 284,
+    "unbound_tasks": 222
+  },
+  "formerly_awaiting_calibration_with_updates": {
+    "exchange-d256-x-narrowwide-3754933830-a1-2026112001-r0": {
+      "device": "cpu",
+      "first_line_sha256": "9ebb16a651af26c7694a3103973d68b25f1bedb9ffa4e4ba0cc1bb0c1fd7be54",
+      "first_step": 1,
+      "first_tokens": 256,
+      "journal": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/exchange-d256-x-narrowwide-3754933830-a1-2026112001-r0/attempt-0/steps.jsonl",
+      "task": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/exchange-d256-x-narrowwide-3754933830-a1-2026112001-r0/task.json",
+        "sha256": "9b3d9e6c381941802b0db39b9b4f9534c1c68f15ad80b28530901428b9e391cd"
+      }
+    },
+    "exchange-d256-x-narrowwide-3754933830-a1-2026112001-r1": {
+      "device": "cpu",
+      "first_line_sha256": "3538b4c954fe0bda60205d151e30f0e279a312c8d086808a38f71a927d737c08",
+      "first_step": 1,
+      "first_tokens": 256,
+      "journal": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/exchange-d256-x-narrowwide-3754933830-a1-2026112001-r1/attempt-0/steps.jsonl",
+      "task": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/exchange-d256-x-narrowwide-3754933830-a1-2026112001-r1/task.json",
+        "sha256": "c90ec0a6770f3be43913544d3443a6a7feae62c3e06cd3e01ed8fefd1656d51b"
+      }
+    },
+    "exchange-d256-x-narrowwide-3754933830-a1-2026112001-r2": {
+      "device": "cpu",
+      "first_line_sha256": "8ac77b18e12cf2694ffd10da214dff26e0a4550424ac20ce38a8d37cef33a207",
+      "first_step": 1,
+      "first_tokens": 256,
+      "journal": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/exchange-d256-x-narrowwide-3754933830-a1-2026112001-r2/attempt-0/steps.jsonl",
+      "task": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/exchange-d256-x-narrowwide-3754933830-a1-2026112001-r2/task.json",
+        "sha256": "740823f3440d5ab719425c4f4bf935b5d4aa852cfca2d832fa432cb6a2b7b3ff"
+      }
+    },
+    "exchange-d256-x-narrowwide-3754933830-a1-2026112002-r0": {
+      "device": "cpu",
+      "first_line_sha256": "541c830f1ebe7abcb8a0646dfd9bd6fcd500a819d757143b4c8385358dd76723",
+      "first_step": 1,
+      "first_tokens": 256,
+      "journal": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/exchange-d256-x-narrowwide-3754933830-a1-2026112002-r0/attempt-0/steps.jsonl",
+      "task": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/exchange-d256-x-narrowwide-3754933830-a1-2026112002-r0/task.json",
+        "sha256": "4c8dcd4693facaa35d44c3daf8714e435e2d995c0e1b57edca40cc5ce90bd2c3"
+      }
+    },
+    "exchange-d256-x-narrowwide-3754933830-a1-2026112002-r1": {
+      "device": "cpu",
+      "first_line_sha256": "a98425f224a3dff96d89aa151c49508133b5f4aa611f62826a26f1264a0cb4b2",
+      "first_step": 1,
+      "first_tokens": 256,
+      "journal": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/exchange-d256-x-narrowwide-3754933830-a1-2026112002-r1/attempt-0/steps.jsonl",
+      "task": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/exchange-d256-x-narrowwide-3754933830-a1-2026112002-r1/task.json",
+        "sha256": "93884f47a7b0c11e62a836a0d90a347a54aca48d7bc9ecc723651a22d2e914e4"
+      }
+    },
+    "exchange-d256-x-narrowwide-3754933830-a1-2026112002-r2": {
+      "device": "cpu",
+      "first_line_sha256": "66dbe47167c75d7137d497b57a84cc4689ba6bfa71f2e02e5a3e2afb58bb13b6",
+      "first_step": 1,
+      "first_tokens": 256,
+      "journal": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/exchange-d256-x-narrowwide-3754933830-a1-2026112002-r2/attempt-0/steps.jsonl",
+      "task": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/exchange-d256-x-narrowwide-3754933830-a1-2026112002-r2/task.json",
+        "sha256": "d487d6b704d5f641ec07f9ed7a102bd1b955e327fc00e9ace2cc5b154b47c32c"
+      }
+    },
+    "exchange-d256-x_reverse-capacity-b9547f2bb6-a1-2026112001-r0": {
+      "device": "cpu",
+      "first_line_sha256": "1ae3c14914c7e6a4a3b1747911e0160133112e0493a38fe513d0a86a61402a02",
+      "first_step": 1,
+      "first_tokens": 256,
+      "journal": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/exchange-d256-x_reverse-capacity-b9547f2bb6-a1-2026112001-r0/attempt-0/steps.jsonl",
+      "task": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/exchange-d256-x_reverse-capacity-b9547f2bb6-a1-2026112001-r0/task.json",
+        "sha256": "c04d28c04849f594ebb78ba3f6d2c3c983bbdab8385fc6feb52a39ea68fa9968"
+      }
+    },
+    "exchange-d256-x_reverse-capacity-b9547f2bb6-a1-2026112001-r1": {
+      "device": "cpu",
+      "first_line_sha256": "49795be674537f67b22669bed464d15c0b08a47418373dad08027c302336b43e",
+      "first_step": 1,
+      "first_tokens": 256,
+      "journal": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/exchange-d256-x_reverse-capacity-b9547f2bb6-a1-2026112001-r1/attempt-0/steps.jsonl",
+      "task": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/exchange-d256-x_reverse-capacity-b9547f2bb6-a1-2026112001-r1/task.json",
+        "sha256": "9258ea1d2642085b29af728ce3a74127a65bfa8455c6bf9cadb0c6056670b8c1"
+      }
+    },
+    "exchange-d256-x_reverse-capacity-b9547f2bb6-a1-2026112001-r2": {
+      "device": "cpu",
+      "first_line_sha256": "1448edd784c53e5439a230f42e0edaec66ed742288b0ad4e412f745002deb244",
+      "first_step": 1,
+      "first_tokens": 256,
+      "journal": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/exchange-d256-x_reverse-capacity-b9547f2bb6-a1-2026112001-r2/attempt-0/steps.jsonl",
+      "task": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/exchange-d256-x_reverse-capacity-b9547f2bb6-a1-2026112001-r2/task.json",
+        "sha256": "eaf83c83dd66e47fc274f5be9045e7c6039a3864eb54d28c9622a79b33ae4a88"
+      }
+    },
+    "exchange-d256-x_reverse-capacity-b9547f2bb6-a1-2026112002-r0": {
+      "device": "cpu",
+      "first_line_sha256": "f4411d49136e3e66ff612db1d6b1f0f9f6c230696c8e0a52ef43082c2f533d5d",
+      "first_step": 1,
+      "first_tokens": 256,
+      "journal": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/exchange-d256-x_reverse-capacity-b9547f2bb6-a1-2026112002-r0/attempt-0/steps.jsonl",
+      "task": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/exchange-d256-x_reverse-capacity-b9547f2bb6-a1-2026112002-r0/task.json",
+        "sha256": "0efe1868f0771ce6fa019fdc3a8e40575682dc0d1d85e16421f208d98dc2b592"
+      }
+    },
+    "exchange-d256-x_reverse-capacity-b9547f2bb6-a1-2026112002-r1": {
+      "device": "cpu",
+      "first_line_sha256": "9b5d05afd587a39795c499cbe85ab8f83e3eec9d0a3e9e24bf3ac3adb7233378",
+      "first_step": 1,
+      "first_tokens": 256,
+      "journal": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/exchange-d256-x_reverse-capacity-b9547f2bb6-a1-2026112002-r1/attempt-0/steps.jsonl",
+      "task": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/exchange-d256-x_reverse-capacity-b9547f2bb6-a1-2026112002-r1/task.json",
+        "sha256": "e66048e17c98a3f4c38ee947d410b5e97922f1e7dce7e14c81bcc2eae3d103d6"
+      }
+    },
+    "exchange-d256-x_reverse-capacity-b9547f2bb6-a1-2026112002-r2": {
+      "device": "cpu",
+      "first_line_sha256": "5f409f2f761737fb504b8fc302f20d74e3dfd9306de335e2911b32a6bf54e423",
+      "first_step": 1,
+      "first_tokens": 256,
+      "journal": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/exchange-d256-x_reverse-capacity-b9547f2bb6-a1-2026112002-r2/attempt-0/steps.jsonl",
+      "task": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/exchange-d256-x_reverse-capacity-b9547f2bb6-a1-2026112002-r2/task.json",
+        "sha256": "a515792dabc16db78e5c9c89337e0231315919057d6cbcfdff496fdef86c5e97"
+      }
+    },
+    "exchange-d256-x_reverse-independent-fb6e51933d-a1-2026112001-r0": {
+      "device": "cpu",
+      "first_line_sha256": "f06bb1133aed420a19e26226f8814ad96df675ad138d03d6cd3de59a52924a2c",
+      "first_step": 1,
+      "first_tokens": 256,
+      "journal": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/exchange-d256-x_reverse-independent-fb6e51933d-a1-2026112001-r0/attempt-0/steps.jsonl",
+      "task": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/exchange-d256-x_reverse-independent-fb6e51933d-a1-2026112001-r0/task.json",
+        "sha256": "878ff708e425f5f5a736d36615c6a68f49d656c413005c08381932270e09bffa"
+      }
+    },
+    "exchange-d256-x_reverse-independent-fb6e51933d-a1-2026112001-r1": {
+      "device": "cpu",
+      "first_line_sha256": "6252d3e8bc811a312a53fbbe10408d76bb04552dcd656d884c3d89fe7da24cc9",
+      "first_step": 1,
+      "first_tokens": 256,
+      "journal": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/exchange-d256-x_reverse-independent-fb6e51933d-a1-2026112001-r1/attempt-0/steps.jsonl",
+      "task": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/exchange-d256-x_reverse-independent-fb6e51933d-a1-2026112001-r1/task.json",
+        "sha256": "df2d35278fd3a97f4454119db3d531f0c3d2647e3664237bf83f49fce799b596"
+      }
+    },
+    "exchange-d256-x_reverse-independent-fb6e51933d-a1-2026112001-r2": {
+      "device": "cpu",
+      "first_line_sha256": "d58fa367111677be511296629a9dc0bf203d2a26aef6aa3ae9f036ecb941920c",
+      "first_step": 1,
+      "first_tokens": 256,
+      "journal": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/exchange-d256-x_reverse-independent-fb6e51933d-a1-2026112001-r2/attempt-0/steps.jsonl",
+      "task": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/exchange-d256-x_reverse-independent-fb6e51933d-a1-2026112001-r2/task.json",
+        "sha256": "db96d855f27c07499784d92d19df14b1d6bdcd9fc2f29d5d4c9b474adf9cda1d"
+      }
+    },
+    "exchange-d256-x_reverse-independent-fb6e51933d-a1-2026112002-r0": {
+      "device": "cpu",
+      "first_line_sha256": "6bdd4c2bd3940d96e9fb0ada90143b2034eb0bb97452a58b342231dbd9af6740",
+      "first_step": 1,
+      "first_tokens": 256,
+      "journal": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/exchange-d256-x_reverse-independent-fb6e51933d-a1-2026112002-r0/attempt-0/steps.jsonl",
+      "task": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/exchange-d256-x_reverse-independent-fb6e51933d-a1-2026112002-r0/task.json",
+        "sha256": "dba427e604fbf33f4fd08598469d1a312e5446cf2dd6e0f1cb8eaff2bd8b8d47"
+      }
+    },
+    "exchange-d256-x_reverse-independent-fb6e51933d-a1-2026112002-r1": {
+      "device": "cpu",
+      "first_line_sha256": "cd7e31287d2b89ee59c6b4b5a7f00a8542c8abcdbb83804e64aa681d12ac38bc",
+      "first_step": 1,
+      "first_tokens": 256,
+      "journal": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/exchange-d256-x_reverse-independent-fb6e51933d-a1-2026112002-r1/attempt-0/steps.jsonl",
+      "task": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/exchange-d256-x_reverse-independent-fb6e51933d-a1-2026112002-r1/task.json",
+        "sha256": "c4a6e3dfd8dee15f30e70e2d7dd1ef13d3bd32f5826e8ecea8c8cf779333d033"
+      }
+    },
+    "exchange-d256-x_reverse-independent-fb6e51933d-a1-2026112002-r2": {
+      "device": "cpu",
+      "first_line_sha256": "b63c6b5551a52ceb5bb3e5bf3f574effd84d05ca84f2198e192cfb477c05d570",
+      "first_step": 1,
+      "first_tokens": 256,
+      "journal": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/exchange-d256-x_reverse-independent-fb6e51933d-a1-2026112002-r2/attempt-0/steps.jsonl",
+      "task": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/exchange-d256-x_reverse-independent-fb6e51933d-a1-2026112002-r2/task.json",
+        "sha256": "916d92cc3cd70869a10abbea04edcbff0516b17d510a94f8b46650fc423c69ba"
+      }
+    },
+    "exchange-d256-x_reverse-pool-a45b190f73-a1-2026112001-r0": {
+      "device": "cpu",
+      "first_line_sha256": "5be098643b4b5d305143d30e5b4578d000f99c84cfdefaa2ef9139015d543f5b",
+      "first_step": 1,
+      "first_tokens": 256,
+      "journal": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/exchange-d256-x_reverse-pool-a45b190f73-a1-2026112001-r0/attempt-0/steps.jsonl",
+      "task": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/exchange-d256-x_reverse-pool-a45b190f73-a1-2026112001-r0/task.json",
+        "sha256": "0f3b31177a880f56269a4b6ed5db66c4aa9524c0fdf0fd964a6ad90c475e6fa3"
+      }
+    },
+    "exchange-d256-x_reverse-pool-a45b190f73-a1-2026112001-r1": {
+      "device": "cpu",
+      "first_line_sha256": "ba2b651a90c7c6749b059662e290281d9a2e5e72ae6e9931949d84c8bffbd7e5",
+      "first_step": 1,
+      "first_tokens": 256,
+      "journal": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/exchange-d256-x_reverse-pool-a45b190f73-a1-2026112001-r1/attempt-0/steps.jsonl",
+      "task": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/exchange-d256-x_reverse-pool-a45b190f73-a1-2026112001-r1/task.json",
+        "sha256": "dbf8c8b8db61e61aeaf3c4a3d53f8afe6eb1758048d8dff2a12abf5bba66d884"
+      }
+    },
+    "exchange-d256-x_reverse-pool-a45b190f73-a1-2026112001-r2": {
+      "device": "cpu",
+      "first_line_sha256": "73e57975f4d94cc2d85e8a928e0515614c4a6f8fdec8a74226d3f65a0bfa0309",
+      "first_step": 1,
+      "first_tokens": 256,
+      "journal": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/exchange-d256-x_reverse-pool-a45b190f73-a1-2026112001-r2/attempt-0/steps.jsonl",
+      "task": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/exchange-d256-x_reverse-pool-a45b190f73-a1-2026112001-r2/task.json",
+        "sha256": "5b12d537734d6b913a7d8faea3eba7b05843e2a296af9e0d84d2ce29fcaedc09"
+      }
+    },
+    "exchange-d256-x_reverse-pool-a45b190f73-a1-2026112002-r0": {
+      "device": "cpu",
+      "first_line_sha256": "c7921804c00970f54daa14885c042a91597c7bcd5c229dc86fa9602166e279cb",
+      "first_step": 1,
+      "first_tokens": 256,
+      "journal": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/exchange-d256-x_reverse-pool-a45b190f73-a1-2026112002-r0/attempt-0/steps.jsonl",
+      "task": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/exchange-d256-x_reverse-pool-a45b190f73-a1-2026112002-r0/task.json",
+        "sha256": "cf7c799d7e576413b56585019ba5b07397d59f9335bae3c9b807075c7c4bd5c2"
+      }
+    },
+    "exchange-d256-x_reverse-pool-a45b190f73-a1-2026112002-r1": {
+      "device": "cpu",
+      "first_line_sha256": "d6c5a2513fa457ab705722f6ec990b32eaadae2fa0fa0fd55a0f32568cfaccf9",
+      "first_step": 1,
+      "first_tokens": 256,
+      "journal": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/exchange-d256-x_reverse-pool-a45b190f73-a1-2026112002-r1/attempt-0/steps.jsonl",
+      "task": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/exchange-d256-x_reverse-pool-a45b190f73-a1-2026112002-r1/task.json",
+        "sha256": "8f939fb0891567463ef6701d9fd6bc36340238279886a4a3696aed9472a4f3e4"
+      }
+    },
+    "exchange-d256-x_reverse-pool-a45b190f73-a1-2026112002-r2": {
+      "device": "cpu",
+      "first_line_sha256": "8a27a91b2c0172a63a1bee6a43532b4f6cefa4cc23cdf3ad1c0cbffb6977393f",
+      "first_step": 1,
+      "first_tokens": 256,
+      "journal": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/exchange-d256-x_reverse-pool-a45b190f73-a1-2026112002-r2/attempt-0/steps.jsonl",
+      "task": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/exchange-d256-x_reverse-pool-a45b190f73-a1-2026112002-r2/task.json",
+        "sha256": "8c187b6be21a11b1309b4874ab38fa18f28b8e751870354238f6e4c8ec87ed36"
+      }
+    },
+    "exchange-d256-x_reverse-shannon-d9e3c0c28c-a1-2026112001-r0": {
+      "device": "cpu",
+      "first_line_sha256": "3d409e3e5f1f87d2fd3012b8a4a34d091152a1b04d4a5ea857b6d7a94cd0d462",
+      "first_step": 1,
+      "first_tokens": 256,
+      "journal": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/exchange-d256-x_reverse-shannon-d9e3c0c28c-a1-2026112001-r0/attempt-0/steps.jsonl",
+      "task": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/exchange-d256-x_reverse-shannon-d9e3c0c28c-a1-2026112001-r0/task.json",
+        "sha256": "a20f054cf918906cc4bf6bdacb19c52a600eb28a743725b41a33d5adcec2453b"
+      }
+    },
+    "exchange-d256-x_reverse-shannon-d9e3c0c28c-a1-2026112001-r1": {
+      "device": "cpu",
+      "first_line_sha256": "53186128294fbaa080402dcc1b7fe9a966d40cc516a096d5935db28f8bccd406",
+      "first_step": 1,
+      "first_tokens": 256,
+      "journal": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/exchange-d256-x_reverse-shannon-d9e3c0c28c-a1-2026112001-r1/attempt-0/steps.jsonl",
+      "task": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/exchange-d256-x_reverse-shannon-d9e3c0c28c-a1-2026112001-r1/task.json",
+        "sha256": "e0978cd90c096d499349e5a448d23294f866cd269f7130c01c44f8246e9e8856"
+      }
+    },
+    "exchange-d256-x_reverse-shannon-d9e3c0c28c-a1-2026112001-r2": {
+      "device": "cpu",
+      "first_line_sha256": "e2f49225fed115b88bf389fa4bfde8e03a1fc99d34eaf8bfdd6308537d4d560a",
+      "first_step": 1,
+      "first_tokens": 256,
+      "journal": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/exchange-d256-x_reverse-shannon-d9e3c0c28c-a1-2026112001-r2/attempt-0/steps.jsonl",
+      "task": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/exchange-d256-x_reverse-shannon-d9e3c0c28c-a1-2026112001-r2/task.json",
+        "sha256": "24f36d5b0b66437cbbd29c2fabf5685dfc099bdd3d17ff90af8aa4b10deeb499"
+      }
+    },
+    "exchange-d256-x_reverse-shannon-d9e3c0c28c-a1-2026112002-r0": {
+      "device": "cpu",
+      "first_line_sha256": "01b4f794b8b873ce03e6713914d0954d802200cd39083a5c3632f53482fd8b4f",
+      "first_step": 1,
+      "first_tokens": 256,
+      "journal": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/exchange-d256-x_reverse-shannon-d9e3c0c28c-a1-2026112002-r0/attempt-0/steps.jsonl",
+      "task": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/exchange-d256-x_reverse-shannon-d9e3c0c28c-a1-2026112002-r0/task.json",
+        "sha256": "88f3af917f6b655d7af4228f7ccb0a5801ba4b8e97ba5b8bf1e094fd3263e45a"
+      }
+    },
+    "exchange-d256-x_reverse-shannon-d9e3c0c28c-a1-2026112002-r1": {
+      "device": "cpu",
+      "first_line_sha256": "44980424bdf76ba3e4ca3c662ea9170cfd98c01edb814087fc88ea41c8862479",
+      "first_step": 1,
+      "first_tokens": 256,
+      "journal": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/exchange-d256-x_reverse-shannon-d9e3c0c28c-a1-2026112002-r1/attempt-0/steps.jsonl",
+      "task": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/exchange-d256-x_reverse-shannon-d9e3c0c28c-a1-2026112002-r1/task.json",
+        "sha256": "e8872dbb8cd39d7ec0ed5462d78a5e6be12c5cd2a376a6cc89b56ad8d851afad"
+      }
+    },
+    "exchange-d256-x_reverse-shannon-d9e3c0c28c-a1-2026112002-r2": {
+      "device": "cpu",
+      "first_line_sha256": "0d15955a32758c70514cd84b52d10010980706a9cd0090ada35102656d2f88cd",
+      "first_step": 1,
+      "first_tokens": 256,
+      "journal": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/exchange-d256-x_reverse-shannon-d9e3c0c28c-a1-2026112002-r2/attempt-0/steps.jsonl",
+      "task": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/exchange-d256-x_reverse-shannon-d9e3c0c28c-a1-2026112002-r2/task.json",
+        "sha256": "55d79f5cdb21abfd031a612df7b4713cf2fc978cce58597d2ec2f39d09afb1f8"
+      }
+    },
+    "low-activity-fc-base-n16-d128-k1-9459fb82e1-a1-2026112001-r0": {
+      "device": "npu:0",
+      "first_line_sha256": "b7e04b483e4bff562400108169a66f3d2e7fc11ad3ca7b1c595ca4971bbf4efa",
+      "first_step": 1,
+      "first_tokens": 256,
+      "journal": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/low-activity-fc-base-n16-d128-k1-9459fb82e1-a1-2026112001-r0/attempt-0/steps.jsonl",
+      "task": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/low-activity-fc-base-n16-d128-k1-9459fb82e1-a1-2026112001-r0/task.json",
+        "sha256": "f5c83a5fe5d8e7bac2661ec8cc2e7adba25e268fcf506529983d31f2906c4791"
+      }
+    },
+    "low-activity-fc-base-n16-d128-k1-9459fb82e1-a1-2026112001-r1": {
+      "device": "npu:0",
+      "first_line_sha256": "59049f6365216d618a25b3a0fdc63fbd3669027ab8fa4e18dc2fb1462ce3611f",
+      "first_step": 1,
+      "first_tokens": 256,
+      "journal": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/low-activity-fc-base-n16-d128-k1-9459fb82e1-a1-2026112001-r1/attempt-0/steps.jsonl",
+      "task": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/low-activity-fc-base-n16-d128-k1-9459fb82e1-a1-2026112001-r1/task.json",
+        "sha256": "2498b9e229ecce3e2f04cd924686f7cd9588120c2f15f21a808dba4448edbd94"
+      }
+    },
+    "low-activity-fc-base-n16-d128-k1-9459fb82e1-a1-2026112001-r2": {
+      "device": "npu:0",
+      "first_line_sha256": "a22e6df954ef4ece34a1be600255808e21891c778e92a1a8ea99521a75c6d5d3",
+      "first_step": 1,
+      "first_tokens": 256,
+      "journal": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/low-activity-fc-base-n16-d128-k1-9459fb82e1-a1-2026112001-r2/attempt-0/steps.jsonl",
+      "task": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/low-activity-fc-base-n16-d128-k1-9459fb82e1-a1-2026112001-r2/task.json",
+        "sha256": "d582e619513edc4944116736a7f3bffa36e73ac6e62e9ab47665543dc03983ce"
+      }
+    },
+    "low-activity-fc-base-n16-d128-k1-9459fb82e1-a1-2026112002-r0": {
+      "device": "npu:0",
+      "first_line_sha256": "1517230dce904a90fb6f11d7c73436919ac8b28bfe0f29aed39efa43a077a8e9",
+      "first_step": 1,
+      "first_tokens": 256,
+      "journal": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/low-activity-fc-base-n16-d128-k1-9459fb82e1-a1-2026112002-r0/attempt-0/steps.jsonl",
+      "task": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/low-activity-fc-base-n16-d128-k1-9459fb82e1-a1-2026112002-r0/task.json",
+        "sha256": "9112f03a0dfb4d56f1cd923ecbe5d0794097a4f90a95ddb277a16c6c0cabbe01"
+      }
+    },
+    "low-activity-fc-base-n16-d128-k1-9459fb82e1-a1-2026112002-r1": {
+      "device": "npu:0",
+      "first_line_sha256": "7c497deef4316d56fdce66b3abaa7d942fd7bf6c494c07119b5b7a66a210307f",
+      "first_step": 1,
+      "first_tokens": 256,
+      "journal": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/low-activity-fc-base-n16-d128-k1-9459fb82e1-a1-2026112002-r1/attempt-0/steps.jsonl",
+      "task": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/low-activity-fc-base-n16-d128-k1-9459fb82e1-a1-2026112002-r1/task.json",
+        "sha256": "ecb406fd746f434bba3b2aec565e7f3abd1121a46fb29a12cded28fe2ba2e5ad"
+      }
+    },
+    "low-activity-fc-base-n16-d128-k2-facd1047db-a1-2026112001-r0": {
+      "device": "npu:0",
+      "first_line_sha256": "6b6b045084b799d2de1b3cceb0788e25ec29694eb9c035e8b7dd515820ef465e",
+      "first_step": 1,
+      "first_tokens": 256,
+      "journal": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/low-activity-fc-base-n16-d128-k2-facd1047db-a1-2026112001-r0/attempt-0/steps.jsonl",
+      "task": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/low-activity-fc-base-n16-d128-k2-facd1047db-a1-2026112001-r0/task.json",
+        "sha256": "93b3741feacea09b3ddb76292f5841f19552f8afc7c57af61cda69d958663192"
+      }
+    },
+    "low-activity-fc-base-n16-d128-k2-facd1047db-a1-2026112001-r1": {
+      "device": "npu:0",
+      "first_line_sha256": "3007e41dea2273d273b2b6eb198570a1c750a60b4d00b93a9d6bb287388adb7e",
+      "first_step": 1,
+      "first_tokens": 256,
+      "journal": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/low-activity-fc-base-n16-d128-k2-facd1047db-a1-2026112001-r1/attempt-0/steps.jsonl",
+      "task": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/low-activity-fc-base-n16-d128-k2-facd1047db-a1-2026112001-r1/task.json",
+        "sha256": "a7c1cf2f6bc6f60fa45d7217a3bda7fe9207947ebef8e33a424318542549a33d"
+      }
+    },
+    "low-activity-fc-base-n16-d128-k2-facd1047db-a1-2026112001-r2": {
+      "device": "npu:0",
+      "first_line_sha256": "7136468d91f4bd7391c29b938163a19a9772a2ccda732f6ca7368d25296509b7",
+      "first_step": 1,
+      "first_tokens": 256,
+      "journal": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/low-activity-fc-base-n16-d128-k2-facd1047db-a1-2026112001-r2/attempt-0/steps.jsonl",
+      "task": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/low-activity-fc-base-n16-d128-k2-facd1047db-a1-2026112001-r2/task.json",
+        "sha256": "7a7743fc355f8e81ec112845db4764952f16be6b3d06e7db4283f9fbd7327dac"
+      }
+    },
+    "low-activity-fc-base-n16-d128-k2-facd1047db-a1-2026112002-r0": {
+      "device": "npu:0",
+      "first_line_sha256": "e5af6c4f176cf4e82f039c13434fc4a8f51f3534ce03d28296c7a9f57d01b754",
+      "first_step": 1,
+      "first_tokens": 256,
+      "journal": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/low-activity-fc-base-n16-d128-k2-facd1047db-a1-2026112002-r0/attempt-0/steps.jsonl",
+      "task": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/low-activity-fc-base-n16-d128-k2-facd1047db-a1-2026112002-r0/task.json",
+        "sha256": "72748e8e12e047bf1772fde3930cd695f9eb708abd7211747b3c02f297c66d64"
+      }
+    },
+    "low-activity-fc-base-n16-d128-k2-facd1047db-a1-2026112002-r1": {
+      "device": "npu:0",
+      "first_line_sha256": "f92b2e04ef5c17010ece42e3f083bc8237651a258a945585e28ffd3d9b2c0021",
+      "first_step": 1,
+      "first_tokens": 256,
+      "journal": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/low-activity-fc-base-n16-d128-k2-facd1047db-a1-2026112002-r1/attempt-0/steps.jsonl",
+      "task": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/low-activity-fc-base-n16-d128-k2-facd1047db-a1-2026112002-r1/task.json",
+        "sha256": "b3d08e1d9de5768d3f5a24292aa6cfc17ddc5702fa61640cf219d273bd28299b"
+      }
+    },
+    "low-activity-fc-base-n16-d128-k2-facd1047db-a1-2026112002-r2": {
+      "device": "npu:0",
+      "first_line_sha256": "ac0876e08d5c537120c0665cd70738c69565bb41f4646403f7d9a322e246a040",
+      "first_step": 1,
+      "first_tokens": 256,
+      "journal": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/low-activity-fc-base-n16-d128-k2-facd1047db-a1-2026112002-r2/attempt-0/steps.jsonl",
+      "task": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/low-activity-fc-base-n16-d128-k2-facd1047db-a1-2026112002-r2/task.json",
+        "sha256": "8bf2cb9b226c092a6bbb5938eab1a9dee4c26708ecb73a0b4dc30672e1dcfc9d"
+      }
+    },
+    "low-activity-fc-base-n16-d128-k4-331e82d848-a1-2026112001-r0": {
+      "device": "npu:0",
+      "first_line_sha256": "3d9405b0dca76177897b2b960ba1b697190fb32d1d14cfd8e099126335ecca35",
+      "first_step": 1,
+      "first_tokens": 256,
+      "journal": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/low-activity-fc-base-n16-d128-k4-331e82d848-a1-2026112001-r0/attempt-0/steps.jsonl",
+      "task": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/low-activity-fc-base-n16-d128-k4-331e82d848-a1-2026112001-r0/task.json",
+        "sha256": "31452beae10572a24ca7ba29c0a5b92ef8095f2f971b681c935dfd5094386f38"
+      }
+    },
+    "low-activity-fc-base-n16-d128-k4-331e82d848-a1-2026112001-r1": {
+      "device": "npu:0",
+      "first_line_sha256": "46efa0a7474c81a418c25e4f5bca0120a8315c5a26a7b1bdc273250aa0952ba0",
+      "first_step": 1,
+      "first_tokens": 256,
+      "journal": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/low-activity-fc-base-n16-d128-k4-331e82d848-a1-2026112001-r1/attempt-0/steps.jsonl",
+      "task": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/low-activity-fc-base-n16-d128-k4-331e82d848-a1-2026112001-r1/task.json",
+        "sha256": "cf2098b18dfd34ced6d71053c975bce05d1227741b8ce865b7e927adac09f68c"
+      }
+    },
+    "low-activity-fc-base-n16-d128-k4-331e82d848-a1-2026112001-r2": {
+      "device": "npu:0",
+      "first_line_sha256": "bd26070770c7e602e1ac27ccc1346f286691bf3284969672e31370bc960e4b44",
+      "first_step": 1,
+      "first_tokens": 256,
+      "journal": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/low-activity-fc-base-n16-d128-k4-331e82d848-a1-2026112001-r2/attempt-0/steps.jsonl",
+      "task": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/low-activity-fc-base-n16-d128-k4-331e82d848-a1-2026112001-r2/task.json",
+        "sha256": "3411063123b82a74df623014e727b3620c4967f54dda6cdd11c23eebb02b75b8"
+      }
+    },
+    "low-activity-fc-base-n16-d128-k4-331e82d848-a1-2026112002-r0": {
+      "device": "npu:0",
+      "first_line_sha256": "862ed8c29a1448f7e87b52c83bd72b35d64191f9ac843a2cce32cfd9eab8dc7a",
+      "first_step": 1,
+      "first_tokens": 256,
+      "journal": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/low-activity-fc-base-n16-d128-k4-331e82d848-a1-2026112002-r0/attempt-0/steps.jsonl",
+      "task": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/low-activity-fc-base-n16-d128-k4-331e82d848-a1-2026112002-r0/task.json",
+        "sha256": "ca1be870c0a755b519e5844e6ff7fc4e7aa43e6f4eb5f7476ca8502e58f63829"
+      }
+    },
+    "low-activity-fc-base-n16-d128-k4-331e82d848-a1-2026112002-r1": {
+      "device": "npu:0",
+      "first_line_sha256": "c1b31c24df2af486b175f9132a2c6dd559532ee90468ec878b0e48912581061f",
+      "first_step": 1,
+      "first_tokens": 256,
+      "journal": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/low-activity-fc-base-n16-d128-k4-331e82d848-a1-2026112002-r1/attempt-0/steps.jsonl",
+      "task": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/low-activity-fc-base-n16-d128-k4-331e82d848-a1-2026112002-r1/task.json",
+        "sha256": "854eaddd571388453882cd8b2a333316a51541132cd8e243d8c8b1e8c909269d"
+      }
+    },
+    "low-activity-fc-base-n16-d128-k4-331e82d848-a1-2026112002-r2": {
+      "device": "npu:0",
+      "first_line_sha256": "164e936cb0e0647c9193b1c11ece33b8c0194897c55f57a85aa243b642ad1814",
+      "first_step": 1,
+      "first_tokens": 256,
+      "journal": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/low-activity-fc-base-n16-d128-k4-331e82d848-a1-2026112002-r2/attempt-0/steps.jsonl",
+      "task": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/low-activity-fc-base-n16-d128-k4-331e82d848-a1-2026112002-r2/task.json",
+        "sha256": "db2445d795c41ff59b0ab38d55b4a6baf90bf31567c628cd0edd75bf141f3dee"
+      }
+    },
+    "low-activity-fc-base-n16-d128-k8-2a7e46028d-a1-2026112001-r0": {
+      "device": "cpu",
+      "first_line_sha256": "58f8788d69d45fcf1d55371ac34aff2187432425e8b8f79bc42c9493e689775a",
+      "first_step": 1,
+      "first_tokens": 256,
+      "journal": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/low-activity-fc-base-n16-d128-k8-2a7e46028d-a1-2026112001-r0/attempt-0/steps.jsonl",
+      "task": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/low-activity-fc-base-n16-d128-k8-2a7e46028d-a1-2026112001-r0/task.json",
+        "sha256": "a73bf6c953d8f875c524f1ed469f4af8c6fb2f2a79ca3166984a33e1c0b858f8"
+      }
+    },
+    "low-activity-fc-base-n16-d128-k8-2a7e46028d-a1-2026112001-r1": {
+      "device": "npu:0",
+      "first_line_sha256": "34f067f356c73c0ef61d84096d71292bd5bd03c007a935d42e516cc3a9da3d1b",
+      "first_step": 1,
+      "first_tokens": 256,
+      "journal": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/low-activity-fc-base-n16-d128-k8-2a7e46028d-a1-2026112001-r1/attempt-0/steps.jsonl",
+      "task": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/low-activity-fc-base-n16-d128-k8-2a7e46028d-a1-2026112001-r1/task.json",
+        "sha256": "5aad1f1a010e2e555499fc25eaae968ea202853b03d639d1e03518e1b654e065"
+      }
+    },
+    "low-activity-fc-base-n16-d128-k8-2a7e46028d-a1-2026112001-r2": {
+      "device": "npu:0",
+      "first_line_sha256": "4370e9ce4457c4ddf390c8d94c97039fc72d02155f897ae7f90c85ab10b746e3",
+      "first_step": 1,
+      "first_tokens": 256,
+      "journal": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/low-activity-fc-base-n16-d128-k8-2a7e46028d-a1-2026112001-r2/attempt-0/steps.jsonl",
+      "task": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/low-activity-fc-base-n16-d128-k8-2a7e46028d-a1-2026112001-r2/task.json",
+        "sha256": "2b07e2a231a3e1677dffa684d8b46977d75a362634b781a0d3205de844ef69da"
+      }
+    },
+    "low-activity-fc-base-n16-d128-k8-2a7e46028d-a1-2026112002-r0": {
+      "device": "cpu",
+      "first_line_sha256": "e024a459dc9af12a51f75ea430c68258516e6cf07bd8e858aef9353bad708202",
+      "first_step": 1,
+      "first_tokens": 256,
+      "journal": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/low-activity-fc-base-n16-d128-k8-2a7e46028d-a1-2026112002-r0/attempt-0/steps.jsonl",
+      "task": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/low-activity-fc-base-n16-d128-k8-2a7e46028d-a1-2026112002-r0/task.json",
+        "sha256": "5ba92a448c75199d09d062891e6219ab186ed59a83953d1c035c80af063fa13d"
+      }
+    },
+    "low-activity-fc-base-n16-d128-k8-2a7e46028d-a1-2026112002-r1": {
+      "device": "npu:0",
+      "first_line_sha256": "de34e6b18862dd78b558f143e7d5fc887257896ea4b8b1c9a6a15b948aaa058c",
+      "first_step": 1,
+      "first_tokens": 256,
+      "journal": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/low-activity-fc-base-n16-d128-k8-2a7e46028d-a1-2026112002-r1/attempt-0/steps.jsonl",
+      "task": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/low-activity-fc-base-n16-d128-k8-2a7e46028d-a1-2026112002-r1/task.json",
+        "sha256": "ee84acec5694c99c1efb11e12af2678a69429da02637fba8e06d0a04916a88d5"
+      }
+    },
+    "low-activity-fc-base-n16-d128-k8-2a7e46028d-a1-2026112002-r2": {
+      "device": "npu:0",
+      "first_line_sha256": "a943565431e0b0af21246ae2c909d55688b16401ca3a37983e6efb6b3e3ce472",
+      "first_step": 1,
+      "first_tokens": 256,
+      "journal": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/low-activity-fc-base-n16-d128-k8-2a7e46028d-a1-2026112002-r2/attempt-0/steps.jsonl",
+      "task": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/low-activity-fc-base-n16-d128-k8-2a7e46028d-a1-2026112002-r2/task.json",
+        "sha256": "2e0b6fc969cda68796de91298c91f99fe3e02cd9ad2ee177c59f04140050fe04"
+      }
+    },
+    "multiscale_settle-d256-x_reverse-group5-06dadd446a-a1-2026112001-r0": {
+      "device": "cpu",
+      "first_line_sha256": "424e8335a5d4ea77e74fe8ca179b999847e015dd90c3e37536f177b3c15fdec9",
+      "first_step": 1,
+      "first_tokens": 256,
+      "journal": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/multiscale_settle-d256-x_reverse-group5-06dadd446a-a1-2026112001-r0/attempt-0/steps.jsonl",
+      "task": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/multiscale_settle-d256-x_reverse-group5-06dadd446a-a1-2026112001-r0/task.json",
+        "sha256": "553e090868694067317f80f23b7fdf1830bfb0dd76b677ae3e17a44dcecc6b69"
+      }
+    },
+    "multiscale_settle-d256-x_reverse-group5-06dadd446a-a1-2026112001-r1": {
+      "device": "cpu",
+      "first_line_sha256": "371cacdc61125f103d4db07e08084b21c2b21f8c67d2a6aec101ce0d73cf9fa3",
+      "first_step": 1,
+      "first_tokens": 256,
+      "journal": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/multiscale_settle-d256-x_reverse-group5-06dadd446a-a1-2026112001-r1/attempt-0/steps.jsonl",
+      "task": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/multiscale_settle-d256-x_reverse-group5-06dadd446a-a1-2026112001-r1/task.json",
+        "sha256": "ee8796e3565a8ea1bf657a6766501edc4e2720cb10147b153d121b6025a4c85e"
+      }
+    },
+    "multiscale_settle-d256-x_reverse-group5-06dadd446a-a1-2026112001-r2": {
+      "device": "cpu",
+      "first_line_sha256": "404589650f627e8aed2b04c692f3d49963d0e0e08be1bf3dc6eaf0175192468f",
+      "first_step": 1,
+      "first_tokens": 256,
+      "journal": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/multiscale_settle-d256-x_reverse-group5-06dadd446a-a1-2026112001-r2/attempt-0/steps.jsonl",
+      "task": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/multiscale_settle-d256-x_reverse-group5-06dadd446a-a1-2026112001-r2/task.json",
+        "sha256": "11db013a7a4b18e1c6bbd5eb8f4533b3662972828c6ef4d61381cf755193d39a"
+      }
+    },
+    "multiscale_settle-d256-x_reverse-group5-06dadd446a-a1-2026112002-r0": {
+      "device": "cpu",
+      "first_line_sha256": "55e80716c622d9f95c2b8211c18c6e3b4bf318b9f35ac0c3e7e380f04dfe93d5",
+      "first_step": 1,
+      "first_tokens": 256,
+      "journal": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/multiscale_settle-d256-x_reverse-group5-06dadd446a-a1-2026112002-r0/attempt-0/steps.jsonl",
+      "task": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/multiscale_settle-d256-x_reverse-group5-06dadd446a-a1-2026112002-r0/task.json",
+        "sha256": "31dfcdae1d5b05847e663d8867a47ca36fdfef446bb9bff8f33b77adc055c883"
+      }
+    },
+    "multiscale_settle-d256-x_reverse-group5-06dadd446a-a1-2026112002-r1": {
+      "device": "cpu",
+      "first_line_sha256": "70799d7dc639559d459693168b3cce664fb53e2e100f9a29f4012c2cea96c547",
+      "first_step": 1,
+      "first_tokens": 256,
+      "journal": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/multiscale_settle-d256-x_reverse-group5-06dadd446a-a1-2026112002-r1/attempt-0/steps.jsonl",
+      "task": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/multiscale_settle-d256-x_reverse-group5-06dadd446a-a1-2026112002-r1/task.json",
+        "sha256": "734dc14174fc6245b221a99cc0c40adec532727f0636f793138e293ac8f54c13"
+      }
+    },
+    "multiscale_settle-d256-x_reverse-group5-06dadd446a-a1-2026112002-r2": {
+      "device": "cpu",
+      "first_line_sha256": "21c6fbcef57810b12dd56590b50da3fa1e6c5632a7270ee91054fc58be486abd",
+      "first_step": 1,
+      "first_tokens": 256,
+      "journal": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/multiscale_settle-d256-x_reverse-group5-06dadd446a-a1-2026112002-r2/attempt-0/steps.jsonl",
+      "task": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/round/tasks/multiscale_settle-d256-x_reverse-group5-06dadd446a-a1-2026112002-r2/task.json",
+        "sha256": "e36ecb88fb9f031a7e1c43941038335c1e75ad95acb4aa2b1d6bbf33b432e4bc"
+      }
+    }
+  },
+  "foundation_commit": "6e14a6cc90e3ea1972611ee98b9de9bfea3b14fe",
+  "inherited_completed": 3284,
+  "inherited_outstanding": {
+    "carry_checkpoint": 35,
+    "not_started": 223,
+    "retry_initial_checks": 20,
+    "signal": 6
+  },
+  "inspection_command": "python .local/pilot-r3/inspect.py",
+  "interrupted_without_observed_update": {
+    "pending": 14,
+    "running": 2
+  },
+  "launch": {
+    "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/submission.json",
+    "sha256": "0bbe2da1a638121b8a46e5bc5867a9a93703bbbd447dc5fb8f3b466cbe678cce"
+  },
+  "npu_admission_by_card": {
+    "11": {
+      "baseline_bytes": 3021996032,
+      "cap_bytes": 51539607552,
+      "hbm_used_bytes": 34826354688,
+      "next_task_headroom_bytes": 336592896,
+      "observed_unix": 1795431591.0257702,
+      "running_task_reservations_bytes": 48181018624,
+      "running_tasks": 5
+    },
+    "14": {
+      "baseline_bytes": 3629121536,
+      "cap_bytes": 51539607552,
+      "hbm_used_bytes": 33257684992,
+      "next_task_headroom_bytes": 434110464,
+      "observed_unix": 1795431591.5633655,
+      "running_task_reservations_bytes": 47476375552,
+      "running_tasks": 11
+    },
+    "2": {
+      "baseline_bytes": 3542089728,
+      "cap_bytes": 51539607552,
+      "hbm_used_bytes": 33582743552,
+      "next_task_headroom_bytes": 352321536,
+      "observed_unix": 1795431596.556143,
+      "running_task_reservations_bytes": 47645196288,
+      "running_tasks": 9
+    },
+    "4": {
+      "baseline_bytes": 3322937344,
+      "cap_bytes": 51539607552,
+      "hbm_used_bytes": 33845936128,
+      "next_task_headroom_bytes": 1911554048,
+      "observed_unix": 1795431597.1043887,
+      "running_task_reservations_bytes": 46305116160,
+      "running_tasks": 3
+    },
+    "5": {
+      "baseline_bytes": 3041918976,
+      "cap_bytes": 51539607552,
+      "hbm_used_bytes": 33396097024,
+      "next_task_headroom_bytes": 931135488,
+      "observed_unix": 1795431597.6218789,
+      "running_task_reservations_bytes": 47566553088,
+      "running_tasks": 9
+    },
+    "7": {
+      "baseline_bytes": 3031433216,
+      "cap_bytes": 51539607552,
+      "hbm_used_bytes": 34241249280,
+      "next_task_headroom_bytes": 473956352,
+      "observed_unix": 1795431591.6231918,
+      "running_task_reservations_bytes": 48034217984,
+      "running_tasks": 4
+    },
+    "8": {
+      "baseline_bytes": 3376414720,
+      "cap_bytes": 51539607552,
+      "hbm_used_bytes": 33883684864,
+      "next_task_headroom_bytes": 988807168,
+      "observed_unix": 1795431590.967461,
+      "running_task_reservations_bytes": 47174385664,
+      "running_tasks": 5
+    }
+  },
+  "observed_local": "2026-11-23T19:00:03+08:00",
+  "per_card_limits": {
+    "11": 16,
+    "14": 16,
+    "2": 16,
+    "4": 16,
+    "5": 16,
+    "7": 16,
+    "8": 16
+  },
+  "placement_policy": {
+    "policy": "stage-a-available-resources-v1",
+    "priority_models": [
+      "exchange-d256-k-independent-7ec4f58bca",
+      "multiscale_timed-d256-k-singleton7-ffd4b110ac",
+      "multiscale_settle-d256-k-mixed9-0fad868c8b",
+      "multiscale_timed-d256-k-mixed9-fa94f99487",
+      "exchange-d256-s-capacity-171c8b98d0",
+      "exchange-d256-s-narrowwide-d1af418efa"
+    ],
+    "unprofiled_batches": [
+      2,
+      4
+    ]
+  },
+  "plan": {
+    "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r30/campaign-plan.json",
+    "sha256": "b5be5c54004fb2ec83c12cca14f939311512cae09d56b7561dd0cd39503ab8aa"
+  },
+  "predecessor_completed": 0,
+  "previous_cgroup_released": true,
+  "previous_plan": {
+    "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r29/campaign-plan.json",
+    "sha256": "3a87a007cdd6ca3b596fec456bddc9509b64253de0a830d4a82f2209c12493ab"
+  },
+  "previous_scheduler": {
+    "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r29/round/scheduler.json",
+    "sha256": "66cfeb08b7c80f61ddd21b0a73799b4bbb82c9546c7ded138398f7fea931ba4a"
+  },
+  "previous_unit": {
+    "ActiveState": "failed",
+    "ControlGroup": "",
+    "ExecMainCode": "1",
+    "ExecMainStatus": "1",
+    "InvocationID": "348ff77ef0974a2e8002b02d0d1ce500",
+    "LoadState": "loaded",
+    "MainPID": "0",
+    "Result": "exit-code",
+    "Slice": "background.slice",
+    "SubState": "failed"
+  },
+  "previous_write_limit_bytes": null,
+  "previously_unbound_total": 78,
+  "queued_npu_requests": {
+    "group-000007": {
+      "head_job_id": "r3-campaign-r30-group-000007",
+      "job_id": "r3-campaign-r30-group-000007",
+      "npu_count": 1,
+      "priority": 0,
+      "project": "tide-learning-lab-r3-shared",
+      "queue_position": 1,
+      "reason": "insufficient_free_devices",
+      "schema_version": 1,
+      "status": "queued",
+      "timestamp": "2026-11-23T10:59:55.822419+00:00"
+    }
+  },
+  "readiness": {
+    "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/docs/evidence/pilot-r3-r30-resource-readiness.json",
+    "sha256": "e6e179a539eb464843b03671759c3e72f2d37d74ca641df248c2249424cb4698"
+  },
+  "replayed_optimizer_steps_at_cutover": 6,
+  "resource_and_worker_contract": {
+    "budget_ledger": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/budget.json",
+    "deadline_unix": 1797698913.9318287,
+    "max_cpu_task_threads": 160,
+    "max_cpu_workers": 40,
+    "max_npu_devices": 8,
+    "max_rss_bytes": 1000000000000,
+    "resume_adapter": {
+      "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r26-final/source/pilotlab/resume_adapter3.py",
+      "sha256": "2d55e1e94075f199ad4672385e36ba1d4c9c4e4cec39121749fae7684c0b769d"
+    },
+    "worker_foundation": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r26-final/foundation",
+    "worker_source": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r26-final/source"
+  },
+  "resources": {
+    "available_storage_bytes": 136897085440,
+    "filesystem_free_bytes": 776348397568,
+    "observed_unix": 1795431583.065829,
+    "quota": {
+      "filesystem": "/dev/mapper/ascend_data-data",
+      "grace_epoch": 1795920929,
+      "hard_bytes": 751619276800,
+      "soft_bytes": 322122547200,
+      "used_bytes": 614722191360
+    },
+    "quota_limit_basis": "hard",
+    "rss_bytes": 149044273152
+  },
+  "retired_calibrations": {
+    "exchange-d256-x-narrowwide-3754933830-preflight-2026112021-dispatch-npu": {
+      "disposition": "not_started",
+      "task": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r27/round/tasks/exchange-d256-x-narrowwide-3754933830-preflight-2026112021-dispatch-npu/task.json",
+        "sha256": "eb2880d119191a4d64f852755a29f8d5dc0139ea3ddfaec7cd91047e653c99cd"
+      }
+    },
+    "exchange-d256-x_reverse-capacity-b9547f2bb6-preflight-2026112021-dispatch-npu": {
+      "disposition": "not_started",
+      "task": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r27/round/tasks/exchange-d256-x_reverse-capacity-b9547f2bb6-preflight-2026112021-dispatch-npu/task.json",
+        "sha256": "5263b497da9d5b225fb8e420f2fbd3d40ef1fe468eecddedec84d704b23fbb6b"
+      }
+    },
+    "exchange-d256-x_reverse-independent-fb6e51933d-preflight-2026112021-dispatch-npu": {
+      "disposition": "not_started",
+      "task": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r27/round/tasks/exchange-d256-x_reverse-independent-fb6e51933d-preflight-2026112021-dispatch-npu/task.json",
+        "sha256": "97682f92e634373728d8581d537b143f3a5b0b37aa13a25b95916fdb49d446e2"
+      }
+    },
+    "exchange-d256-x_reverse-pool-a45b190f73-preflight-2026112021-dispatch-npu": {
+      "disposition": "not_started",
+      "task": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r27/round/tasks/exchange-d256-x_reverse-pool-a45b190f73-preflight-2026112021-dispatch-npu/task.json",
+        "sha256": "83f3d28e3df619cccfc0107eff41514f2b22f2eae56a1a8232d9612fc1b03747"
+      }
+    },
+    "exchange-d256-x_reverse-shannon-d9e3c0c28c-preflight-2026112021-dispatch-npu": {
+      "disposition": "not_started",
+      "task": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r27/round/tasks/exchange-d256-x_reverse-shannon-d9e3c0c28c-preflight-2026112021-dispatch-npu/task.json",
+        "sha256": "2cdfca7fbb55f17680a0839b6303b5a877204cebcfd681588c7bdf323f91ac65"
+      }
+    },
+    "low-activity-fc-base-n16-d128-k1-9459fb82e1-preflight-2026112021-dispatch-npu": {
+      "disposition": "not_started",
+      "task": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r27/round/tasks/low-activity-fc-base-n16-d128-k1-9459fb82e1-preflight-2026112021-dispatch-npu/task.json",
+        "sha256": "c4c166100677ec150c7182da2e5a5cf209d4f9b6a10beeb0113c3283396e1c98"
+      }
+    },
+    "low-activity-fc-base-n16-d128-k2-facd1047db-preflight-2026112021-dispatch-npu": {
+      "disposition": "not_started",
+      "task": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r27/round/tasks/low-activity-fc-base-n16-d128-k2-facd1047db-preflight-2026112021-dispatch-npu/task.json",
+        "sha256": "809e291744dc062f4595c16603d3131dbf5bfc1923fd8074f3088069939544e7"
+      }
+    },
+    "low-activity-fc-base-n16-d128-k4-331e82d848-preflight-2026112021-dispatch-npu": {
+      "disposition": "not_started",
+      "task": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r27/round/tasks/low-activity-fc-base-n16-d128-k4-331e82d848-preflight-2026112021-dispatch-npu/task.json",
+        "sha256": "17a571c0101006978861780a8128f29174bd4e8f6d7636a2f59637a64377c696"
+      }
+    },
+    "low-activity-fc-base-n16-d128-k8-2a7e46028d-preflight-2026112021-dispatch-npu": {
+      "disposition": "not_started",
+      "task": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r27/round/tasks/low-activity-fc-base-n16-d128-k8-2a7e46028d-preflight-2026112021-dispatch-npu/task.json",
+        "sha256": "10231bbd05dfcec4981972ed03d66c0cc08ac849d4d2078b5874507c7573bead"
+      }
+    },
+    "low-activity-lattice-depth2-n16-d128-k1-7bda9ab5fb-preflight-2026112021-capacity-small": {
+      "disposition": "not_started",
+      "task": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r27/round/tasks/low-activity-lattice-depth2-n16-d128-k1-7bda9ab5fb-preflight-2026112021-capacity-small/task.json",
+        "sha256": "41a70a017f3440aaa2a1d96ba690889a0314ac4899096e68109131368904d5ac"
+      }
+    },
+    "low-activity-lattice-depth2-n16-d128-k2-a842f59bc4-preflight-2026112021-capacity-small": {
+      "disposition": "not_started",
+      "task": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r27/round/tasks/low-activity-lattice-depth2-n16-d128-k2-a842f59bc4-preflight-2026112021-capacity-small/task.json",
+        "sha256": "503000893d088c67d5a889e83f5c137d219f2f739c7119274f0c255fc929de51"
+      }
+    },
+    "low-activity-lattice-depth2-n16-d128-k4-77003f6ed1-preflight-2026112021-capacity-small": {
+      "disposition": "not_started",
+      "task": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r27/round/tasks/low-activity-lattice-depth2-n16-d128-k4-77003f6ed1-preflight-2026112021-capacity-small/task.json",
+        "sha256": "5d0932a0c7740ec2c05199964e05c3810e189c23bb2735072a2f49116ee93471"
+      }
+    },
+    "low-activity-lattice-depth2-n16-d128-k8-edf42ac7d6-preflight-2026112021-capacity-small": {
+      "disposition": "not_started",
+      "task": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r27/round/tasks/low-activity-lattice-depth2-n16-d128-k8-edf42ac7d6-preflight-2026112021-capacity-small/task.json",
+        "sha256": "beb9068035a9581243561d54f871ba609334679c3cac18a3087ca30451d90260"
+      }
+    },
+    "low-activity-lattice-memory_s-n16-d128-k1-4d7eb09769-preflight-2026112021-capacity-small": {
+      "disposition": "not_started",
+      "task": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r27/round/tasks/low-activity-lattice-memory_s-n16-d128-k1-4d7eb09769-preflight-2026112021-capacity-small/task.json",
+        "sha256": "b40d67aa611c1c2fa3fd9f465cde56c27df3086e7b57ad84ae0ff79ddc7f4ffc"
+      }
+    },
+    "low-activity-lattice-memory_shared-n16-d128-k1-b8a8e76d5e-preflight-2026112021-capacity-small": {
+      "disposition": "not_started",
+      "task": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r27/round/tasks/low-activity-lattice-memory_shared-n16-d128-k1-b8a8e76d5e-preflight-2026112021-capacity-small/task.json",
+        "sha256": "5a9122f25adbece8b71f48f670e0f2eb0fab8fb38e810d56f4c2ff76cf171763"
+      }
+    },
+    "low-activity-lattice-memory_shared-n16-d128-k2-46bf63e9f1-preflight-2026112021-capacity-small": {
+      "disposition": "not_started",
+      "task": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r27/round/tasks/low-activity-lattice-memory_shared-n16-d128-k2-46bf63e9f1-preflight-2026112021-capacity-small/task.json",
+        "sha256": "0f4b05b5772c9653d18aac83ebe72ed6e7b199a35f419f1f83b8ca63ee9cc268"
+      }
+    },
+    "low-activity-lattice-memory_shared-n16-d128-k4-74a24ea336-preflight-2026112021-capacity-small": {
+      "disposition": "not_started",
+      "task": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r27/round/tasks/low-activity-lattice-memory_shared-n16-d128-k4-74a24ea336-preflight-2026112021-capacity-small/task.json",
+        "sha256": "e0599b08db5922a2763ae54523a947b289eda81d718341856ede34fb82fde23d"
+      }
+    },
+    "low-activity-lattice-memory_shared-n16-d128-k8-6dc2cee563-preflight-2026112021-capacity-small": {
+      "disposition": "not_started",
+      "task": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r27/round/tasks/low-activity-lattice-memory_shared-n16-d128-k8-6dc2cee563-preflight-2026112021-capacity-small/task.json",
+        "sha256": "fb2269c9dbc7d2fea36ec234f32077becd9bda055f084f07b5d041797fe97313"
+      }
+    },
+    "low-activity-lattice-receive64-n16-d128-k1-1dc2a0ee70-preflight-2026112021-capacity-small": {
+      "disposition": "not_started",
+      "task": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r27/round/tasks/low-activity-lattice-receive64-n16-d128-k1-1dc2a0ee70-preflight-2026112021-capacity-small/task.json",
+        "sha256": "d7d8b932ac8b592bf73e2d11dbbc8f8ed482c7d7fd188b5556ffd01ad490cd5a"
+      }
+    },
+    "low-activity-lattice-receive64-n16-d128-k2-400416d4c4-preflight-2026112021-capacity-small": {
+      "disposition": "not_started",
+      "task": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r27/round/tasks/low-activity-lattice-receive64-n16-d128-k2-400416d4c4-preflight-2026112021-capacity-small/task.json",
+        "sha256": "c67519243a2017ade44ad5feaedfdff6194a9e450e48e58d1605955ac74dd62b"
+      }
+    },
+    "low-activity-lattice-receive64-n16-d128-k4-1ea60981fe-preflight-2026112021-capacity-small": {
+      "disposition": "not_started",
+      "task": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r27/round/tasks/low-activity-lattice-receive64-n16-d128-k4-1ea60981fe-preflight-2026112021-capacity-small/task.json",
+        "sha256": "b616a6b8731274700712a5d3ffaa6318696591b09730dea8f32e5aae5b36de98"
+      }
+    },
+    "low-activity-lattice-receive64-n16-d128-k8-22cd44a592-preflight-2026112021-capacity-small": {
+      "disposition": "not_started",
+      "task": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r27/round/tasks/low-activity-lattice-receive64-n16-d128-k8-22cd44a592-preflight-2026112021-capacity-small/task.json",
+        "sha256": "72d9f2e24e0628d125f204fe9f649e5c47de2e2bdb925a81038f953b1f92c6c4"
+      }
+    },
+    "multiscale_settle-d256-x-singleton7-96194847fa-preflight-2026112021-dispatch-npu": {
+      "disposition": "not_started",
+      "task": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r27/round/tasks/multiscale_settle-d256-x-singleton7-96194847fa-preflight-2026112021-dispatch-npu/task.json",
+        "sha256": "5c0083b0bc8127cf5327535b45aed785e440f330cbd3065027126020a7d50df9"
+      }
+    },
+    "multiscale_settle-d256-x_reverse-group5-06dadd446a-preflight-2026112021-dispatch-npu": {
+      "disposition": "not_started",
+      "task": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r27/round/tasks/multiscale_settle-d256-x_reverse-group5-06dadd446a-preflight-2026112021-dispatch-npu/task.json",
+        "sha256": "4c9ef88121c1354a83901723ee9caef2e242da08fc208c53958f7444feb00874"
+      }
+    },
+    "multiscale_timed-d256-x-singleton7-4a89c4ac13-preflight-2026112021-dispatch-npu": {
+      "disposition": "not_started",
+      "task": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r27/round/tasks/multiscale_timed-d256-x-singleton7-4a89c4ac13-preflight-2026112021-dispatch-npu/task.json",
+        "sha256": "eab011afccf375c28e81fce7a6e175f6e61089a5b265daad4b93633fdb62aae3"
+      }
+    },
+    "multiscale_timed-d256-x_reverse-group5-6f1c2603c6-preflight-2026112021-dispatch-npu": {
+      "disposition": "not_started",
+      "task": {
+        "path": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r27/round/tasks/multiscale_timed-d256-x_reverse-group5-6f1c2603c6-preflight-2026112021-dispatch-npu/task.json",
+        "sha256": "59437e4d73caad8e5626135133977867353c8ff50f610ba5b8ff2ed273d376e7"
+      }
+    }
+  },
+  "running_checkpoint_estimates_bytes": {
+    "exchange-d256-x-narrowwide-3754933830-a1-2026112001-r0": 423351674,
+    "exchange-d256-x-narrowwide-3754933830-a1-2026112001-r1": 423351674,
+    "exchange-d256-x-narrowwide-3754933830-a1-2026112001-r2": 423351674,
+    "exchange-d256-x-narrowwide-3754933830-a1-2026112002-r0": 423351674,
+    "exchange-d256-x-narrowwide-3754933830-a1-2026112002-r1": 423351674,
+    "exchange-d256-x-narrowwide-3754933830-a1-2026112002-r2": 423351674,
+    "exchange-d256-x-narrowwide-3754933830-a1-2026112002-r5": 927404896,
+    "exchange-d256-x_reverse-base-7cf4ba7a94-a3-2026112001-r1": 347170403,
+    "exchange-d256-x_reverse-base-7cf4ba7a94-a3-2026112002-r1": 347170403,
+    "exchange-d256-x_reverse-capacity-b9547f2bb6-a1-2026112001-r0": 371523683,
+    "exchange-d256-x_reverse-capacity-b9547f2bb6-a1-2026112001-r1": 371523683,
+    "exchange-d256-x_reverse-capacity-b9547f2bb6-a1-2026112001-r2": 371523683,
+    "exchange-d256-x_reverse-capacity-b9547f2bb6-a1-2026112002-r0": 371523683,
+    "exchange-d256-x_reverse-capacity-b9547f2bb6-a1-2026112002-r1": 371523683,
+    "exchange-d256-x_reverse-capacity-b9547f2bb6-a1-2026112002-r2": 371523683,
+    "exchange-d256-x_reverse-independent-fb6e51933d-a1-2026112001-r0": 569638768,
+    "exchange-d256-x_reverse-independent-fb6e51933d-a1-2026112001-r1": 569638768,
+    "exchange-d256-x_reverse-independent-fb6e51933d-a1-2026112001-r2": 569638768,
+    "exchange-d256-x_reverse-independent-fb6e51933d-a1-2026112002-r0": 569638768,
+    "exchange-d256-x_reverse-independent-fb6e51933d-a1-2026112002-r1": 569638768,
+    "exchange-d256-x_reverse-independent-fb6e51933d-a1-2026112002-r2": 569638768,
+    "exchange-d256-x_reverse-narrowwide-56ff71f804-a3-2026112001-r1": 423038013,
+    "exchange-d256-x_reverse-narrowwide-56ff71f804-a3-2026112002-r1": 423038013,
+    "exchange-d256-x_reverse-pool-a45b190f73-a1-2026112001-r0": 347170634,
+    "exchange-d256-x_reverse-pool-a45b190f73-a1-2026112001-r1": 347170634,
+    "exchange-d256-x_reverse-pool-a45b190f73-a1-2026112001-r2": 347170634,
+    "exchange-d256-x_reverse-pool-a45b190f73-a1-2026112002-r0": 347170634,
+    "exchange-d256-x_reverse-pool-a45b190f73-a1-2026112002-r1": 347170634,
+    "exchange-d256-x_reverse-pool-a45b190f73-a1-2026112002-r2": 347170634,
+    "exchange-d256-x_reverse-shannon-d9e3c0c28c-a1-2026112001-r0": 347170634,
+    "exchange-d256-x_reverse-shannon-d9e3c0c28c-a1-2026112001-r1": 347170634,
+    "exchange-d256-x_reverse-shannon-d9e3c0c28c-a1-2026112001-r2": 347170634,
+    "exchange-d256-x_reverse-shannon-d9e3c0c28c-a1-2026112002-r0": 347170634,
+    "exchange-d256-x_reverse-shannon-d9e3c0c28c-a1-2026112002-r1": 347170634,
+    "exchange-d256-x_reverse-shannon-d9e3c0c28c-a1-2026112002-r2": 347170634,
+    "low-activity-fc-base-n16-d128-k1-9459fb82e1-a1-2026112001-r0": 344479648,
+    "low-activity-fc-base-n16-d128-k1-9459fb82e1-a1-2026112001-r1": 344479648,
+    "low-activity-fc-base-n16-d128-k1-9459fb82e1-a1-2026112001-r2": 344479648,
+    "low-activity-fc-base-n16-d128-k1-9459fb82e1-a1-2026112002-r0": 344479648,
+    "low-activity-fc-base-n16-d128-k1-9459fb82e1-a1-2026112002-r1": 344479648,
+    "low-activity-fc-base-n16-d128-k2-facd1047db-a1-2026112001-r0": 344479648,
+    "low-activity-fc-base-n16-d128-k2-facd1047db-a1-2026112001-r1": 344479648,
+    "low-activity-fc-base-n16-d128-k2-facd1047db-a1-2026112001-r2": 344479648,
+    "low-activity-fc-base-n16-d128-k2-facd1047db-a1-2026112002-r0": 344479648,
+    "low-activity-fc-base-n16-d128-k2-facd1047db-a1-2026112002-r1": 344479648,
+    "low-activity-fc-base-n16-d128-k2-facd1047db-a1-2026112002-r2": 344479648,
+    "low-activity-fc-base-n16-d128-k4-331e82d848-a1-2026112001-r0": 344479648,
+    "low-activity-fc-base-n16-d128-k4-331e82d848-a1-2026112001-r1": 344479648,
+    "low-activity-fc-base-n16-d128-k4-331e82d848-a1-2026112001-r2": 344479648,
+    "low-activity-fc-base-n16-d128-k4-331e82d848-a1-2026112002-r0": 344479648,
+    "low-activity-fc-base-n16-d128-k4-331e82d848-a1-2026112002-r1": 344479648,
+    "low-activity-fc-base-n16-d128-k4-331e82d848-a1-2026112002-r2": 344479648,
+    "low-activity-fc-base-n16-d128-k8-2a7e46028d-a1-2026112001-r0": 344479648,
+    "low-activity-fc-base-n16-d128-k8-2a7e46028d-a1-2026112001-r1": 344479648,
+    "low-activity-fc-base-n16-d128-k8-2a7e46028d-a1-2026112001-r2": 344479648,
+    "low-activity-fc-base-n16-d128-k8-2a7e46028d-a1-2026112002-r0": 344479648,
+    "low-activity-fc-base-n16-d128-k8-2a7e46028d-a1-2026112002-r1": 344479648,
+    "low-activity-fc-base-n16-d128-k8-2a7e46028d-a1-2026112002-r2": 344479648,
+    "multiscale_settle-d256-k-singleton7-cad34be170-a2-2026112001-r1": 609802974,
+    "multiscale_settle-d256-k-singleton7-cad34be170-a2-2026112001-r2": 609802974,
+    "multiscale_settle-d256-k-singleton7-cad34be170-a2-2026112002-r1": 609802974,
+    "multiscale_settle-d256-k-singleton7-cad34be170-a2-2026112002-r2": 609802974,
+    "multiscale_settle-d256-x_reverse-group5-06dadd446a-a1-2026112001-r0": 405908522,
+    "multiscale_settle-d256-x_reverse-group5-06dadd446a-a1-2026112001-r1": 405908522,
+    "multiscale_settle-d256-x_reverse-group5-06dadd446a-a1-2026112001-r2": 405908522,
+    "multiscale_settle-d256-x_reverse-group5-06dadd446a-a1-2026112002-r0": 405908522,
+    "multiscale_settle-d256-x_reverse-group5-06dadd446a-a1-2026112002-r1": 405908522,
+    "multiscale_settle-d256-x_reverse-group5-06dadd446a-a1-2026112002-r2": 405908522,
+    "multiscale_timed-d128-s-mixed9-542e33dbf6-a3-2026112001-r2": 200647185,
+    "multiscale_timed-d128-s-mixed9-542e33dbf6-a3-2026112002-r2": 200647185,
+    "multiscale_timed-d128-x-mixed9-ae4ffdec56-a2-2026112002-r2": 374546812,
+    "multiscale_timed-d128-x_reverse-mixed9-99820c3100-a2-2026112001-r2": 275508760,
+    "multiscale_timed-d128-x_reverse-mixed9-99820c3100-a2-2026112002-r2": 275508760,
+    "multiscale_timed-d128-x_reverse-singleton7-2f58b0a0f6-a3-2026112001-r2": 263269797,
+    "multiscale_timed-d128-x_reverse-singleton7-2f58b0a0f6-a3-2026112002-r2": 263269797,
+    "multiscale_timed-d256-k-group5-27d7c0e70b-a2-2026112001-r2": 622113549,
+    "multiscale_timed-d256-k-group5-27d7c0e70b-a2-2026112002-r2": 622113549,
+    "multiscale_timed-d256-k-mixed9-fa94f99487-a2-2026112001-r1": 1038839462,
+    "multiscale_timed-d256-k-mixed9-fa94f99487-a2-2026112002-r1": 1038839462,
+    "multiscale_timed-d256-k-singleton7-ffd4b110ac-a2-2026112001-r5": 1538754477,
+    "multiscale_timed-d256-k-singleton7-ffd4b110ac-a2-2026112002-r5": 1538754477,
+    "multiscale_timed-d256-s-singleton7-d252547d80-a2-2026112001-r5": 568203952,
+    "multiscale_timed-d256-s-singleton7-d252547d80-a2-2026112002-r5": 568203952,
+    "multiscale_timed-d256-x-group5-3db19adc40-a2-2026112001-r5": 1019761312,
+    "multiscale_timed-d256-x-group5-3db19adc40-a2-2026112002-r5": 1019761312,
+    "multiscale_timed-d256-x-singleton7-4a89c4ac13-a1-2026112001-r3": 1219611525,
+    "multiscale_timed-d256-x-singleton7-4a89c4ac13-a1-2026112002-r3": 1219611525
+  },
+  "sample_started_unix": 1795431595.480239,
+  "sampled_scheduler_sha256": "3d5b1e5cc54323ec2bb1c74a8f05d752f14a6dfd62477f41ded93b81df14d831",
+  "scheduled_running_by_device": {
+    "cpu": 40,
+    "npu:0": 47
+  },
+  "scheduler_updated_unix": 1795431596.470054,
+  "schema": "pilot-r3-direct-resource-live-handoff-v1",
+  "selected_models": 114,
+  "service": {
+    "ActiveState": "active",
+    "ControlGroup": "/user.slice/user-1003.slice/user@1003.service/background.slice/tide-pilot-r3-campaign-r30.service",
+    "ExecMainCode": "0",
+    "ExecMainStatus": "0",
+    "InvocationID": "680e4eb280bd47079b23c24b42f49c03",
+    "LoadState": "loaded",
+    "MainPID": "3783721",
+    "Result": "success",
+    "Slice": "background.slice",
+    "SubState": "running"
+  },
+  "smallest_pending_npu_reservation": {
+    "hbm_bytes": 2172649472,
+    "task_id": "multiscale_settle-d256-x-singleton7-96194847fa-a1-2026112001-r0"
+  },
+  "stage_b_gate": "closed",
+  "stop_command": "systemctl --user stop tide-pilot-r3-campaign-r30.service",
+  "storage_settings": {
+    "max_inflight_checkpoint_bytes": null,
+    "storage_reserve_bytes": 0,
+    "use_live_checkpoint_headroom": false
+  },
+  "total_running_checkpoint_estimates_bytes": 41486615868,
+  "unit": "tide-pilot-r3-campaign-r30.service"
+}

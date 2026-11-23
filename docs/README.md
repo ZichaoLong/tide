@@ -16,7 +16,9 @@
 
 干净检出可以定位当时采用的源码、计划摘要、检查点哈希和首步。r26 正式采样的 `plan` 指向整批调度计划，四项首步核验的 `plan` 指向抽查计划。两份记录通过同一 `launch.sha256` 和 `unit` 对接，再按任务 ID 核对检查点哈希与首个后继步。运行中的账本、数据、完整检查点、冻结安装与日志在原工作树。可按交接给出的路径和哈希找回这些输入，再按当次授权恢复。同一批内保留已消费预算和原截止。[r26 正式采样](evidence/pilot-r3-main-r26-handoff.json) · [四项首步核验](evidence/pilot-r3-r26-resume-first-steps.json)
 
-r27 已按账号硬配额剩余量与输出文件系统可用空间的较小值派工，可用字节耗尽时停止准入。检查点大小和并发峰值用于容量报告。r26 到 r27 的接续审阅以 `"storage_policy": "hard_quota"` 绑定这一变更。正式采样记录了新控制器、原 worker 与基座、同一预算账本、251 个接续请求，以及恢复后的首步。查看原始停止记录时，可按接续审阅的 `stop_reconciliation` 定位独立核验的 worker 结果和未取得卡的排队请求。[r27 接续审阅](evidence/pilot-r3-r27-storage-readiness.json) · [r27 运行采样](evidence/pilot-r3-main-r27-handoff.json)
+r30 直接按 CPU 进程数、线程、主存、NPU 租约与每张卡的显存余量派工。调度器先申请已有 NPU 轨迹所需的卡，再按任务预计主存从小到大补位。新的初始化任务可逐项选择设备，同一 A1 配方的两个种子一起确定设备。已开始的训练沿用原设备。已有批大小记录的主体沿用原配方，缺少记录时采用计划中的 2、4 两档。任务派到 CPU 时，将原本在 NPU 上的张量内存计入共用的 1 TB 主存上限。磁盘准入取账号硬配额余量与文件系统可用量的较小值，固定预留为零。[设备选择](../pilotlab/resource_placement3.py) · [调度实现](../pilotlab/scheduler_dynamic3.py) · [直接派工回归](../tests/test_pilot_resource_placement3.py)
+
+在轮次输出的 `decisions/*-device.json` 中按任务 ID 和输入哈希核对设备选择。迁移记录的 `retired_calibrations` 列出已撤下的校准请求。查询实际占用时，将 `groups/*/queue.json` 的租约状态与驱动 PID 对照。每卡还能接纳多大的任务，取决于该卡已派任务的峰值显存估算和整卡实测用量。[r30 接续审阅](evidence/pilot-r3-r30-resource-readiness.json) · [正式运行采样](evidence/pilot-r3-main-r30-handoff.json)
 
 ## 定位和修改
 
