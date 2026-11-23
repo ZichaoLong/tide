@@ -603,7 +603,7 @@ class Supervisor:
                                 "attempts": [], "device_seconds": 0.}
                         elif record["stage"] != request["stage"]:
                             raise ValueError("task reused across controller stages")
-                        placement = getattr(self, "dispatch_placement", None)
+                        placement = getattr(self, "resource_placement", None) or getattr(self, "dispatch_placement", None)
                         if placement:
                             placement.register(task, self.state["tasks"][task_id])
                         else:

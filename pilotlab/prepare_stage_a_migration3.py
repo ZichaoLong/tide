@@ -115,6 +115,11 @@ def prepare(repo, foundation, output, readiness):
     old_round = Path(refs["scheduler"]["path"]).parent
     config = copy.deepcopy(old["config"])
     config.update(reviewed_storage_settings(review))
+    from .resource_placement3 import POLICY as direct_policy, split_calibrations
+    placement = review.get("stage_a_cpu_placement", old.get("stage_a_cpu_placement")) or {}
+    direct = placement.get("policy") == direct_policy
+    if direct:
+        config["resource_dispatch"] = True
     schema = review.get("schema")
     scheduling = schema in CONTROLLER_CONTINUATIONS
     verifier_repair = schema == VERIFIER_CONTINUATION
@@ -197,11 +202,15 @@ def prepare(repo, foundation, output, readiness):
     else:
         done, running, prior, extra = prior_tasks(old_round,state,review,refs,identity,output)
         priority = review["worker_and_checkpoint_review"]["shannon_failure"]["task_id"]
+    retired = split_calibrations(running) if direct else {}
     batch = {"schema":"pilot-r3-stage-a-migration-plan-v1","readiness":review_ref,"old_plan":refs["campaign_plan"],
         "qualification":refs["foundation_acceptance"],"old_scheduler":refs["scheduler"],"old_selected":refs["selected"],
         "old_resources":reference(old_round/"model-resources.json"), "foundation_commit":commit,
         "new_source_digest":digest(identity), "completed":done,"outstanding":running,
         "exposed_subject_ids":review["stage_a_scope"]["exposed_subject_ids"]}
+    if direct:
+        inherited = read_bound(old["stage_a_migration"]).get("retired_calibrations", {})
+        batch["retired_calibrations"] = {**inherited, **retired}
     batch["priority_model" if scheduling or verifier_repair or activity_repair else "fault_model"] = state["tasks"][priority]["model_id"]
     if old.get("stage_a_migration"):
         batch["continuing_model_ids"] = sorted({state["tasks"][tid]["model_id"] for tid in running})
@@ -228,6 +237,9 @@ def prepare(repo, foundation, output, readiness):
         plan["controller_source_identity"] = new["source_identity"]
         if "stage_a_cpu_placement" in review:
             plan["stage_a_cpu_placement"] = review["stage_a_cpu_placement"]
+    if direct:
+        plan["cpu_recipe_calibration"] = False
+        plan["resource_policy"] = "Direct placement within CPU, NPU, HBM, RSS and hard storage limits"
     verify_scope(plan)
     plan_ref = reference(freeze_json(output/"campaign-plan.json",plan))
     freeze_json(output/"campaign-prepared.json",{**new,"campaign_plan":plan_ref,"stage_a_migration":batch_ref,

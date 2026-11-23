@@ -137,7 +137,9 @@ def run_stage_a(campaign, scope):
     controls = campaign.controls()
     campaign.models += controls
     campaign.profile_models(controls)
-    if not campaign.forecast():
+    # Direct placement obtains control throughput from real training. The
+    # resource supervisor enforces the ledger and hard limits on every launch.
+    if not campaign.plan["config"].get("resource_dispatch") and not campaign.forecast():
         raise Blocked("resolved_controls_exceed_remaining_storage_or_device_budget")
     campaign.train_models(controls)
     manifest = campaign.manifest()

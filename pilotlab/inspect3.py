@@ -37,7 +37,11 @@ def render(report):
              f'state loads: {report["state_loading"]["status_counts"]}; '
              f'trajectory: {report["trajectory_reproduction"]["status_counts"]}']
     dispatch = report["resources"].get("dispatch_queue")
-    if dispatch:
+    if dispatch and "unbound_tasks" in dispatch:
+        lines.append(f'Direct CPU/NPU placement  {dispatch["unbound_tasks"]} requests awaiting capacity, '
+                     f'{dispatch["cpu_workers"]}/{dispatch["cpu_limit"]} CPU workers, '
+                     f'{dispatch["npu_owners"]} NPU groups')
+    elif dispatch:
         waiting = [r for r in report["tasks"] if r["backend"] == "unbound" and r["scheduler_status"] == "pending"]
         models = {r["model_id"] for r in waiting}
         calibrating = models.intersection(dispatch.get("awaiting_calibration", ()))

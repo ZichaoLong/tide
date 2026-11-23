@@ -5,6 +5,7 @@ from .adapter_recovery3 import VERIFIER_CONTINUATION
 from .cutover_review3 import CONTROLLER_CONTINUATIONS, HBM_CONTINUATION, reviewed_storage_settings
 from .prepare_resume3 import reference
 from .round3 import Campaign
+from .resource_placement3 import POLICY as DIRECT_POLICY, ResourcePlacement
 from .scheduler3 import freeze_json, read
 from .source_migration3 import ACTIVITY_CONTINUATION, POLICY, POOL_ACCEPTANCE, QUAD_TOTAL_ACCEPTANCE, REGIONAL_PRIOR_ACCEPTANCE, RECEIPT, digest, read_bound, revised_model, verify_recipe
 
@@ -16,6 +17,12 @@ def verify_scope(plan):
     acceptance = read_bound(batch["qualification"])
     config = plan["config"]
     prior = {**old["config"], **reviewed_storage_settings(review)}
+    placement = review.get("stage_a_cpu_placement", old.get("stage_a_cpu_placement")) or {}
+    if placement.get("policy") == DIRECT_POLICY:
+        prior["resource_dispatch"] = True
+        if (plan.get("cpu_recipe_calibration") is not False or config.get("resource_dispatch") is not True
+                or placement.get("unprofiled_batches") != [2, 4]):
+            raise ValueError("direct resource placement requires calibration-free admission")
     pool_floor = acceptance.get("schema") == POOL_ACCEPTANCE
     expected = [{**row, "model":revised_model(row["model"], pool_floor=pool_floor)} for row in old["subjects"]]
     if (batch["schema"] != "pilot-r3-stage-a-migration-plan-v1" or expected != plan["subjects"]
@@ -58,7 +65,7 @@ def verify_scope(plan):
                 if (not isinstance(calibration, list) or len(calibration) != len(set(calibration))
                         or not set(calibration) <= {m["id"] for m in expected}):
                     raise ValueError("invalid dispatch calibration scope")
-            if (placement["policy"] not in (cpu_policy, *DISPATCH_POLICIES) or not set(placement["priority_models"]) <= {m["id"] for m in expected}
+            if (placement["policy"] not in (cpu_policy, DIRECT_POLICY, *DISPATCH_POLICIES) or not set(placement["priority_models"]) <= {m["id"] for m in expected}
                     or not config.get("dynamic_shared_admission")):
                 raise ValueError("invalid A-only CPU placement contract")
     elif "worker_source" in config or "worker_foundation" in config:
@@ -104,7 +111,10 @@ class MigrationCampaign(Campaign):
         self.pool_floor = any(row["model"].get("config", {}).get("pool_support_policy") == POLICY for row in plan["subjects"])
         super().__init__(plan, output)
         self.cpu_placement = None
-        if plan.get("stage_a_cpu_placement"):
+        self.resource_placement = None
+        if plan.get("stage_a_cpu_placement", {}).get("policy") == DIRECT_POLICY:
+            self.resource_placement = self.supervisor.resource_placement = ResourcePlacement(self)
+        elif plan.get("stage_a_cpu_placement"):
             from .cpu_placement3 import CpuRamp, RecipePlacement
             from .dispatch_placement3 import DispatchPlacement, DISPATCH_POLICIES
             if plan["stage_a_cpu_placement"]["policy"] in DISPATCH_POLICIES:
@@ -112,6 +122,26 @@ class MigrationCampaign(Campaign):
             else:
                 self.cpu_placement = RecipePlacement(self)
             self.supervisor.cpu_ramp = CpuRamp(plan["config"])
+
+    def profile_flow(self, models):
+        if not self.plan["config"].get("resource_dispatch"):
+            yield from super().profile_flow(models)
+            return
+        from .io import atomic_json
+        missing = [model["id"] for model in models if model["id"] not in self.resources]
+        if missing:
+            for mid in missing:
+                batches = self.plan["stage_a_cpu_placement"]["unprofiled_batches"]
+                # A registered larger batch is part of that model's existing
+                # plan even if its optional sizing run was still in the queue.
+                tid = f"{mid}-preflight-2026112021-capacity-large"
+                old = self.migration.get("retired_calibrations", {}).get(tid) or self.migration["completed"].get(tid)
+                if old:
+                    large = read_bound(old["task"])["batch_size"]
+                    if large != 2:
+                        batches = sorted([2, large])
+                self.resources[mid] = {"batches": list(batches), "placement_policy": DIRECT_POLICY}
+            atomic_json(self.output / "model-resources.json", self.resources)
 
     def recipes(self, model):
         recipes = super().recipes(model)
@@ -122,7 +152,8 @@ class MigrationCampaign(Campaign):
 
     def verify_outstanding(self, row, task):
         original = read_bound(row["task"])
-        if self.cpu_placement and self.cpu_placement.reassigned.get(task["id"]) == (row["task"], task["device"]):
+        placement = getattr(self, "resource_placement", None) or self.cpu_placement
+        if placement and placement.reassigned.get(task["id"]) == (row["task"], task["device"]):
             original = {**original, "device":task["device"]}
         verify_recipe(original, task)
 
@@ -234,6 +265,8 @@ class MigrationCampaign(Campaign):
         tid = task["id"]
         task.pop("stage_a_migration", None)
         task.update(source_identity=self.identity, model=revised_model(task["model"], pool_floor=self.pool_floor))
+        if getattr(self, "resource_placement", None):
+            self.resource_placement.prepare_task(task)
         old_row = self.migration["completed"].get(tid)
         if old_row:
             original, result = read_bound(old_row["task"]), read_bound(old_row["result"])

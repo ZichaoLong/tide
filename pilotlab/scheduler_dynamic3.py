@@ -74,6 +74,7 @@ class DynamicAdmission:
             pending.sort(key=lambda task: self.state["tasks"][task["id"]].get("hbm_deferrals", 0))
         slots = min(slots, max(0, worker_limit(self.config, 80)-len(records)))
         groups = self.state.get("shared_groups", {})
+        direct = getattr(self, "resource_placement", None)
         owners = {record["shared_group"] for record in records
                   if record.get("device", "npu:0").startswith("npu") and record.get("shared_group")}
         owners.update(key for key, entry in groups.items()
@@ -143,7 +144,7 @@ class DynamicAdmission:
             remaining = Counter(row["model_id"] for row in self.state["tasks"].values()
                                 if row["stage"] == "a1" and row["status"] in ("pending", "running"))
             cpu_pending.sort(key=lambda t: (t["phase"] == "a1", remaining[t["model_id"]]))
-        elastic = [task for task in pending if task.get("device") == "unbound"] if placement else []
+        elastic = [task for task in pending if task.get("device") == "unbound"] if placement or direct else []
 
         def drain_cpu(queue):
             nonlocal slots, cpu_count
@@ -227,6 +228,69 @@ class DynamicAdmission:
             slots -= 1
             if not capacity.admissions_left:
                 self.queue_admission(capacity.key, close_reason="finite_owner_admission_limit")
+
+        if direct:
+            drain_cpu(cpu_pending)
+            pending_by_id = {task["id"]: task for task in pending}
+
+            def held_card(task):
+                resource = self.worker_reservations(task)
+                return min((cap for cap in available if cap.physical_id is not None
+                            and 0 <= time.time() - cap.observed_unix <= 15 and cap.fits(task, resource)),
+                           key=lambda cap: (cap.active, -cap.hbm, cap.key), default=None)
+
+            def new_owner(task):
+                nonlocal slots
+                owners.add(self.start_group([task], "npu"))
+                charge(task)
+                slots -= 1
+
+            # Open physical leases for fixed-device trajectories first. Their
+            # successors and checkpoints keep the backend of the parent.
+            for task in ready:
+                if not slots:
+                    break
+                if not fits(task):
+                    continue
+                if len(owners) < owner_limit:
+                    new_owner(task)
+                elif (card := held_card(task)) is not None:
+                    append_to(card, task)
+
+            npu_workers = sum(r.get("device") == "npu:0" for r in self.state["tasks"].values()
+                              if r["status"] == "running")
+            npu_limit = owner_limit * min(16, self.config.get("npu_workers_per_device", 16))
+            for task in elastic:
+                if not slots:
+                    break
+                # Binding one seed also binds its untouched partner. Recheck
+                # membership on every iteration rather than splitting a recipe.
+                device = task["device"]
+                cpu_ok = device != "npu:0" and cpu_count < cpu_limit and fits({**task, "device": "cpu"})
+                npu_ok = device != "cpu" and fits({**task, "device": "npu:0"})
+                hbm = task.get("reserved_hbm_bytes", 8*GIB)
+                npu_ok = npu_ok and (exclusive_limit is None or hbm <= exclusive_limit)
+                card = held_card(task) if npu_ok else None
+                fresh = npu_ok and len(owners) < owner_limit
+                if cpu_ok and (not (card or fresh) or cpu_count*npu_limit <= npu_workers*cpu_limit):
+                    if device == "unbound":
+                        direct.bind(task, "cpu", pending_by_id)
+                    self.start_group([task], "cpu")
+                    charge(task)
+                    slots -= 1
+                    cpu_count += 1
+                elif card or fresh:
+                    if device == "unbound":
+                        direct.bind(task, "npu:0", pending_by_id)
+                    if fresh:
+                        new_owner(task)
+                    else:
+                        append_to(card, task)
+                    npu_workers += 1
+            self.state["dispatch_queue"] = {"policy": direct.policy, "observed_unix": time.time(),
+                "cpu_workers": cpu_count, "cpu_limit": cpu_limit, "npu_owners": len(owners),
+                "unbound_tasks": sum(t["device"] == "unbound" for t in elastic)}
+            return
 
         def try_dispatch(protect_fixed):
             nonlocal slots, cpu_count

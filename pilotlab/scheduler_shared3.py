@@ -462,6 +462,8 @@ class SharedSupervisor(DynamicAdmission, Supervisor):
                 "stable_window_seconds": self.config.get("dynamic_stable_window_seconds", 30.),
                 "min_gain_ratio": self.config.get("dynamic_min_gain_ratio", .05),
                 "heartbeat_max_age_seconds": self.config.get("dynamic_heartbeat_max_age_seconds", 15.)}
+            if self.config.get("resource_dispatch"):
+                manifest["dynamic_admission"]["resource_dispatch"] = True
         if dispatch_lease:
             manifest["dispatch_lease"] = True
         if not dynamic:

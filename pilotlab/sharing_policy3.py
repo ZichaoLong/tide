@@ -38,6 +38,10 @@ class SharingPolicy:
         self.unmeasured_exploration_used = False
         self.resource_limited = False
         self.last_resource_wait = None
+        self.resource_dispatch = config.get("resource_dispatch", False)
+        if self.resource_dispatch:
+            self.limit = self.ceiling = max_parallel
+            self.reason = "admission_by_available_resources"
 
     def event(self, kind, reason, now, **details):
         self.reason = reason
@@ -56,6 +60,8 @@ class SharingPolicy:
             self.event("invalidated", reason, now)
 
     def observe(self, workers, external_identity, *, now=None):
+        if self.resource_dispatch:
+            return
         now = time.monotonic() if now is None else now
         external = tuple(tuple(row) for row in external_identity)
         current = set(workers)
@@ -125,6 +131,9 @@ class SharingPolicy:
 
     def resource_wait(self, reason, active_ids, *, now=None):
         """A resource ceiling can lower future admissions, never running work."""
+        if self.resource_dispatch:
+            self.reason = reason
+            return
         now = time.monotonic() if now is None else now
         self.last_resource_wait = now
         if self.limit <= 1:
@@ -140,6 +149,8 @@ class SharingPolicy:
 
     def backlog(self, present, resource_available, *, completed_tokens=0, now=None):
         """One explicitly unmeasured two-worker trial for short progressing jobs."""
+        if self.resource_dispatch:
+            return
         now = time.monotonic() if now is None else now
         self.progress_seen |= type(completed_tokens) is int and completed_tokens > 0
         if (resource_available and self.resource_limited and self.last_resource_wait is not None
@@ -166,6 +177,9 @@ class SharingPolicy:
         return value
 
     def snapshot(self):
+        if self.resource_dispatch:
+            return {"schema": "pilot-r3-resource-sharing-v1", "admission_limit": self.limit,
+                    "reason": self.reason, "max_parallel": self.ceiling}
         return {"schema": "pilot-r3-sharing-policy-v1", "admission_limit": self.limit,
                 "growth_ceiling": self.ceiling, "levels": self.levels,
                 "stable_window_seconds": self.window_seconds, "min_gain_ratio": self.min_gain,

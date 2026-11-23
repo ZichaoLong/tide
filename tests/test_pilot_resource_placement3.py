@@ -1,0 +1,106 @@
+from types import SimpleNamespace
+import time
+
+from pilotlab.prepare_resume3 import reference
+from pilotlab.resource_placement3 import ResourcePlacement, split_calibrations
+from pilotlab.round3 import TUNING_SEEDS
+from pilotlab.scheduler3 import freeze_json, read
+from pilotlab.sharing_policy3 import SharingPolicy
+from pilotlab.stage_a_continued3 import MigrationCampaign
+from test_pilot_scheduler_dynamic3 import add_task, observe, owner, write
+
+
+def placement_for(supervisor):
+    campaign = SimpleNamespace(output=supervisor.output, supervisor=supervisor,
+                               migration={"completed": {}, "outstanding": {}})
+    supervisor.resource_placement = ResourcePlacement(campaign)
+    return supervisor.resource_placement
+
+
+def register_pair(supervisor, placement, recipe="r0"):
+    pair = []
+    for seed in TUNING_SEEDS:
+        task = add_task(supervisor, f"model-a1-{seed}-{recipe}", model_id="model",
+                        phase="a1", recipe_id=recipe, batch_size=2)
+        placement.prepare_task(task)
+        placement.register(task, supervisor.state["tasks"][task["id"]])
+        pair.append(task)
+    return pair
+
+
+def test_direct_dispatch_fills_both_pools_without_samples(owner):
+    supervisor, _, key = owner
+    supervisor.config.update(resource_dispatch=True, max_npu_devices=1, max_cpu_workers=2)
+    placement = placement_for(supervisor)
+    first = register_pair(supervisor, placement)
+    second = register_pair(supervisor, placement, "r1")
+    group = observe(supervisor, key, target=3)
+    group["resources"] = {"device": {"observed_unix": time.time(), "used_bytes": 2**30, "total_bytes": 48*2**30}}
+    group_path = supervisor.output / "groups" / key / "group.json"
+    write(group_path, group)
+    supervisor._group_observation_cache = {}
+    supervisor.start_dynamic_ready_tasks(first + second, 4)
+    assert [t["device"] for t in first] == ["cpu", "cpu"]
+    assert [t["device"] for t in second] == ["npu:0", "npu:0"]
+    assert all(supervisor.state["tasks"][t["id"]]["status"] == "running" for t in first + second)
+    assert supervisor.state["dispatch_queue"]["unbound_tasks"] == 0
+    # Reconstruct each member after an interruption between receipt and start.
+    restored = ResourcePlacement(placement.campaign)
+    for expected in first + second:
+        task = {**expected, "device": "unbound"}
+        restored.prepare_task(task)
+        restored.register(task, supervisor.state["tasks"][task["id"]])
+        assert task == expected
+
+
+def test_unplaced_pair_waits_for_real_resources(owner):
+    supervisor, _, key = owner
+    supervisor.config.update(resource_dispatch=True, max_npu_devices=1, max_cpu_workers=0)
+    placement = placement_for(supervisor)
+    pair = register_pair(supervisor, placement)
+    group = observe(supervisor, key, target=16)
+    group["resources"] = {"device": {"observed_unix": time.time(), "used_bytes": 48*2**30, "total_bytes": 48*2**30}}
+    write(supervisor.output / "groups" / key / "group.json", group)
+    supervisor._group_observation_cache = {}
+    supervisor.start_dynamic_ready_tasks(pair, 4)
+    assert all(t["device"] == "unbound" for t in pair)
+    assert not placement.decision_path([t["id"] for t in pair]).exists()
+
+
+def test_existing_checkpoint_pins_both_seeds_without_reassigning_its_receipt(owner):
+    supervisor, _, _ = owner
+    placement = placement_for(supervisor)
+    ids = [f"m-a1-{seed}-r0" for seed in TUNING_SEEDS]
+    row = {"disposition": "signal", "receipt": {"path": "existing checkpoint receipt"},
+           "task": reference(freeze_json(supervisor.output / "old.json", {"device": "npu:0"}))}
+    placement.campaign.migration["outstanding"][ids[0]] = row
+    for tid in ids:
+        task = {"model_id": "m", "id": tid, "phase": "a1", "recipe_id": "r0", "device": "cpu"}
+        placement.prepare_task(task)
+        assert task["device"] == "npu:0"
+    assert not placement.reassigned
+
+
+def test_direct_profiles_and_formal_retirement_preserve_training(tmp_path):
+    campaign = SimpleNamespace(plan={"config": {"resource_dispatch": True},
+                                     "stage_a_cpu_placement": {"unprofiled_batches": [2, 4]}},
+                               migration={"completed": {}}, output=tmp_path,
+                               resources={"known": {"batches": [2, 64]}})
+    assert list(MigrationCampaign.profile_flow(campaign, [{"id": "known"}, {"id": "new"}])) == []
+    assert read(tmp_path / "model-resources.json")["known"] == {"batches": [2, 64]}
+    assert campaign.resources["new"]["batches"] == [2, 4]
+    pending = {}
+    for tid, phase, purpose in (("probe", "preflight", "capacity_calibration"), ("training", "a1", None)):
+        task = {"id": tid, "phase": phase, "purpose": purpose}
+        pending[tid] = {"task": reference(freeze_json(tmp_path / (tid + ".json"), task))}
+    assert set(split_calibrations(pending)) == {"probe"}
+    assert set(pending) == {"training"}
+
+
+def test_card_admits_to_resource_limit_immediately():
+    policy = SharingPolicy({"resource_dispatch": True}, 16)
+    policy.resource_wait("hbm_reservations_full", {"first"})
+    policy.observe({}, [])
+    policy.backlog(True, False)
+    assert policy.snapshot()["admission_limit"] == 16
+    assert policy.take_events() == []
