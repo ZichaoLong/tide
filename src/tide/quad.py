@@ -113,7 +113,11 @@ def disputed(scores, lower, upper, c, target, solve, tolerance):
     has_inside = inside.any(-1, keepdim=True)
     eps = 8 * torch.finfo(c.dtype).eps
     near_endpoint = inside & (torch.minimum(c - lower, upper - c) <= eps * target[0])
-    different_total = ((residual.abs() > tolerance) | (~has_inside & (residual != 0)) |
+    # Only interior values can contribute storage rounding to the total.
+    # A large pegged cap must not set the error allowance for a tiny free mass.
+    finfo = torch.finfo(c.dtype)
+    storage_error = torch.where(inside, c.clamp_min(finfo.tiny), 0).sum(-1, keepdim=True) * finfo.eps
+    different_total = ((residual.abs() > torch.minimum(tolerance, storage_error)) |
                        (target[1] != 0) | lost | ~torch.isfinite(c).all(-1, keepdim=True))
     if c.shape[-1] == 2:
         first, second = c[..., :1], c[..., 1:]
@@ -138,6 +142,10 @@ def disputed(scores, lower, upper, c, target, solve, tolerance):
     free = lower < upper
     near_face = free & (((c <= lower) & (margin >= -uncertainty)) |
                         ((c >= upper) & (margin <= uncertainty)))
+    # Two interior coordinates share a multiplier. Centering all scores at
+    # a distant capped node can perturb their difference while preserving
+    # the sum and both box inequalities. Check against their original scores.
+    inconsistent_interior = inside & (margin.abs() > uncertainty)
     # On a flat face compare the two marginal endpoints. Center first to
     # retain small score differences when all scores share a large origin.
     centered = scores - torch.where(free, scores, -torch.inf).amax(-1, keepdim=True)
@@ -145,7 +153,8 @@ def disputed(scores, lower, upper, c, target, solve, tolerance):
     right = torch.where(free & (c >= upper), centered - upper, torch.inf).amin(-1, keepdim=True)
     flat_uncertain = (torch.isfinite(left) & torch.isfinite(right) &
                       (left - right >= -eps * (left.abs() + right.abs() + 1)))
-    uncertain = torch.where(has_inside, (near_endpoint | near_face).any(-1, keepdim=True), flat_uncertain)
+    uncertain = torch.where(has_inside, (near_endpoint | near_face | inconsistent_interior).any(-1, keepdim=True),
+                            flat_uncertain)
     return solve & (different_total | uncertain)
 
 

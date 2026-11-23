@@ -81,3 +81,14 @@ def test_third_sum_component_controls_true_received_face(device):
     assert out[2].item() == torch.tensor(2.**-100/3).item() and not lower.any().item()
     gw, = torch.autograd.grad(out.sum(),w)
     assert gw.tolist() == [1.,1.,1.]
+
+
+def test_capped_score_does_not_distort_gap_between_two_interiors(device):
+    s = torch.tensor([-86.10834503173828, -85.5880126953125, 12.589069366455078],
+                     device=device, requires_grad=True)
+    w = s.new_tensor([.5782507658004761, .4217492341995239, .125])
+    upper = s.new_tensor([1., .8434984683990479, .25])
+    out = allocate(s, w, upper, s.new_tensor([0., 0., .0625]), upper, 2.)
+    # The capped third node leaves .75; the two free weights differ by s0-s1.
+    assert out.tolist() == [.11483383178710938, .6351661682128906, .25]
+    assert torch.autograd.grad(out[0], s)[0].tolist() == [.5, -.5, 0.]

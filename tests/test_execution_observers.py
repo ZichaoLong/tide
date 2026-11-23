@@ -20,7 +20,9 @@ def test_allocation_fallback_counts_requested_and_executed_rows(monkeypatch, obs
 
     monkeypatch.setattr(allocation, "_quad_sorted", force_recovery)
     model = TideModel(ModelConfig(topology=TopologyConfig(n=2, layers=1), d=64))
-    source = torch.tensor([[1.3, .8, .2], [.2, .3, .5]])
+    # The second row has an exactly representable sum of one, so only the
+    # first row requests bisection while both rows enter the tensor kernel.
+    source = torch.tensor([[1.3, .8, .2], [.125, .375, .5]])
     cotangent = torch.tensor([[.2, -.7, .9], [.5, -.4, .8]])
 
     def solve(x):
