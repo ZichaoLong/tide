@@ -13,7 +13,9 @@ from .source_migration3 import read_bound
 HBM_CONTINUATION = "pilot-r3-hbm-admission-continuation-v1"
 OWNER_EXIT_CONTINUATION = "pilot-r3-owner-exit-continuation-v1"
 PLANNED_CONTROLLER_CONTINUATION = "pilot-r3-planned-controller-continuation-v1"
-CONTROLLER_CONTINUATIONS = {HBM_CONTINUATION, OWNER_EXIT_CONTINUATION, PLANNED_CONTROLLER_CONTINUATION}
+RESOURCE_MEMORY_CONTINUATION = "pilot-r3-direct-cpu-memory-continuation-v1"
+CONTROLLER_CONTINUATIONS = {HBM_CONTINUATION, OWNER_EXIT_CONTINUATION, PLANNED_CONTROLLER_CONTINUATION,
+                            RESOURCE_MEMORY_CONTINUATION}
 STALE_GROUP_REASON = "shared_group_not_completed:running"
 
 
@@ -153,10 +155,69 @@ def unallocated_worker(tid, record, owner, queue):
     return {"group":record["shared_group"], "queue":queue["queue_state"], "task":reference(record["task_path"])}
 
 
-def reconcile_stop(audit, scheduler_ref, *, fault_task=None):
+def resource_memory_replays(audit, state):
+    """Identify interrupted initial checks before any published optimizer update."""
+    if (state.get("status") != "stopped_budget" or not state["config"].get("resource_dispatch")
+            or not re.fullmatch(r"Blocked: (init|a[123]): shared_group_not_completed:GroupBlocked: group_rss_budget_exceeded",
+                                state.get("blocking_reason", ""))
+            or audit["physical_accounting"]["status"] != "passed"):
+        raise ValueError("unexpected resource continuation origin")
+    replays, exceeded = {}, False
+    for tid, record in state["tasks"].items():
+        if not record.get("attempts"):
+            continue
+        owner = audit["shared_groups"]["groups"][record["shared_group"]]
+        group = owner["group"]
+        manifest = read_bound({"path": owner["entry"]["manifest_path"], "sha256": owner["entry"]["manifest_sha256"]})
+        if group.get("reason") == "GroupBlocked: group_rss_budget_exceeded":
+            if (manifest["backend"] != "cpu" or group["peak_rss_bytes"] <= manifest["max_rss_bytes"]
+                    or manifest["max_rss_bytes"] >= state["config"]["max_rss_bytes"]):
+                raise ValueError("unconfirmed per-group CPU memory fault")
+            exceeded = True
+        path = Path(record["attempts"][-1]["path"])
+        if not (path / "result.json").exists():
+            continue
+        journal = path / "steps.jsonl"
+        if journal.exists() and journal.stat().st_size:
+            continue
+        task_ref = reference(record["task_path"])
+        task = read_bound(task_ref)
+        result_ref = reference(path / "result.json")
+        result = _result(result_ref, task, task_ref["sha256"])
+        hb_ref = reference(path / "heartbeat.json")
+        hb = read_bound(hb_ref)
+        worker = group["workers"][tid]
+        if (not owner["binding_verified"] or owner["owner_alive"] or worker["output"] != str(path)
+                or task["id"] != tid or hb["task_id"] != tid or hb["pid"] != worker["pid"]
+                or result.get("failure_class") or group.get("reason") not in
+                ("signal_15", "GroupBlocked: group_rss_budget_exceeded")):
+            raise ValueError("initial-check replay lacks its recorded worker: " + tid)
+        prior = read_bound(task["stage_a_migration"])["checkpoint"] if task.get("stage_a_migration") else None
+        if result["status"] == "running":
+            if hb["status"] != "initial_checks" or hb["steps"] or result.get("checkpoint") or (path / "checkpoint.json").exists():
+                raise ValueError("unclosed initial check has published progress: " + tid)
+        elif result.get("stop_reason") == "signal" and result["status"] == "budget_exhausted":
+            cp = result["checkpoint"]
+            if (read_bound(reference(path / "checkpoint.json"))["current"] != cp or sha256(cp["path"]) != cp["sha256"]
+                    or any(cp[k] != (prior[k] if prior else 0) or cp[k] != hb[k] for k in ("steps", "tokens"))):
+                raise ValueError("interrupted initial check advanced past its origin: " + tid)
+        else:
+            raise ValueError("initial check contains a terminal training outcome: " + tid)
+        replays[tid] = {"task": task_ref, "result": result_ref, "heartbeat": hb_ref,
+                        "original_resume": task.get("stage_a_migration"), "group": record["shared_group"],
+                        "retained_evaluation_reservation": record.get("evaluation_reserved_tokens", 0)}
+    if not exceeded:
+        raise ValueError("CPU group memory exhaustion lacks its measured peak")
+    return replays
+
+
+def reconcile_stop(audit, scheduler_ref, *, fault_task=None, resource_memory=False):
     state = read_bound(scheduler_ref)
     lifecycle = audit["lifecycle"]
     expected_reason = "user_signal"
+    replays = resource_memory_replays(audit, state) if resource_memory else {}
+    if resource_memory:
+        expected_reason = state["blocking_reason"]
     if fault_task is not None:
         record = state["tasks"][fault_task]
         expected_reason = f'Blocked: {record["stage"]}: shared_group_not_completed:worker_process_failed:{fault_task}:1'
@@ -191,6 +252,10 @@ def reconcile_stop(audit, scheduler_ref, *, fault_task=None):
     excluded = {}
     for finding in audit["findings"]:
         gid, tid = finding.get("group_id"), finding.get("task_id")
+        if resource_memory and tid in replays and finding.get("reason") == "shared_worker_result_binding_mismatch":
+            if (finding.get("kind") != "result" or {k:finding[k] for k in ("path","sha256")} != replays[tid]["result"]):
+                raise ValueError("initial-check audit finding differs from verified result")
+            continue
         if ((gid in stale and finding.get("reason") in ("group allocation lacks terminal interval","shared_group_not_terminal"))
                 or stale and finding == {"scope":"queue", "status":"unknown", "reason":None}):
             continue
@@ -228,6 +293,8 @@ def reconcile_stop(audit, scheduler_ref, *, fault_task=None):
             raise ValueError("completed worker on subsequently stopped owner lacks its individual receipt: " + tid)
         completed[tid] = result_ref
     resolution = {"stale_owner_receipts":stale, "signal_results":signals, "completed_worker_receipts":completed}
+    if resource_memory:
+        resolution["initial_check_replays"] = replays
     queues = {q["shared_group"]:q for q in lifecycle["queue"]["attempts"] if q.get("shared_group")}
     unstarted = {}
     for tid, record in state["tasks"].items():

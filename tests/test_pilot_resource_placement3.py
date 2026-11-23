@@ -104,3 +104,17 @@ def test_card_admits_to_resource_limit_immediately():
     policy.backlog(True, False)
     assert policy.snapshot()["admission_limit"] == 16
     assert policy.take_events() == []
+
+
+def test_large_npu_profile_runs_on_cpu_under_the_campaign_rss_limit(owner):
+    supervisor, _, _ = owner
+    supervisor.config.update(resource_dispatch=True, max_rss_bytes=10**12)
+    task = add_task(supervisor, "large-init", device="cpu", phase="init", batch_size=128,
+                    reserved_hbm_bytes=36*2**30, reserved_rss_bytes=4*2**30)
+    group = supervisor.start_group([task], "cpu")
+    row = supervisor.state["tasks"][task["id"]]
+    manifest = read(supervisor.state["shared_groups"][group]["manifest_path"])
+    assert manifest["max_rss_bytes"] == 10**12
+    assert manifest["workers"][0]["reserved_rss_bytes"] == 40*2**30
+    assert supervisor.worker_reservations(row)["reserved_rss_bytes"] == 40*2**30
+    assert supervisor.worker_reservations({**task, "device": "npu:0"})["reserved_rss_bytes"] == 4*2**30

@@ -10,7 +10,7 @@ import time
 
 from . import audit3, prepare3
 from .adapter_recovery3 import VERIFIER_CONTINUATION
-from .cutover_review3 import (CONTROLLER_CONTINUATIONS, HBM_CONTINUATION, OWNER_EXIT_CONTINUATION,
+from .cutover_review3 import (CONTROLLER_CONTINUATIONS, HBM_CONTINUATION, OWNER_EXIT_CONTINUATION, RESOURCE_MEMORY_CONTINUATION,
                               STALE_GROUP_REASON, reviewed_storage_settings)
 from .prepare_campaign3 import CORE_FILES, budget_remaining, source_inventory, storage_observation
 from .prepare_relay3 import write_campaign_draft
@@ -152,6 +152,8 @@ def prepare(repo, foundation, output, readiness):
         elif schema == OWNER_EXIT_CONTINUATION:
             reasons = {f"Blocked: {state['tasks'][tid]['stage']}: {STALE_GROUP_REASON}"
                        for tid in review["completed_after_owner_exit"]}
+        elif schema == RESOURCE_MEMORY_CONTINUATION:
+            reasons = {review["current_stage_a"]["blocking_reason"]}
         else:
             reasons = {"user_signal"}
         if (state.get("blocking_reason") not in reasons or refs["foundation_acceptance"] != previous["qualification"]
@@ -159,7 +161,8 @@ def prepare(repo, foundation, output, readiness):
             raise ValueError("controller continuation requires its reviewed stop and original qualification")
     else:
         commit = subprocess.check_output(["git","-C",str(foundation),"rev-parse","HEAD"],text=True).strip()
-    if commit != review["foundation"]["published_head"] or state["status"] != "a_blocked_needs_repair" or state["stage_b_gate"] != "closed":
+    stop_status = "stopped_budget" if schema == RESOURCE_MEMORY_CONTINUATION else "a_blocked_needs_repair"
+    if commit != review["foundation"]["published_head"] or state["status"] != stop_status or state["stage_b_gate"] != "closed":
         raise ValueError("foundation release or prior A state changed")
     service = audit3.systemd_observation(review["current_stage_a"]["unit"])
     group = audit3.cgroup_observation(service)

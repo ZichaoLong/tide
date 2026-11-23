@@ -35,7 +35,13 @@ def reservations(task):
 
 
 class SharedSupervisor(DynamicAdmission, Supervisor):
-    worker_reservations = staticmethod(reservations)
+    def worker_reservations(self, task):
+        resource = reservations(task)
+        if self.config.get("resource_dispatch") and task.get("device") == "cpu" and "status" not in task:
+            # Accelerator profiles report host RSS separately from tensors in
+            # HBM. Both allocations live in host memory on a CPU trajectory.
+            resource["reserved_rss_bytes"] += task.get("reserved_hbm_bytes", 8 * GIB)
+        return resource
 
     def group_observation(self, group_id, *, fresh=False):
         cache = getattr(self, "_group_observation_cache", None)
@@ -394,7 +400,7 @@ class SharedSupervisor(DynamicAdmission, Supervisor):
                 command = [self.config["python"], "-u", adapter["path"], *command[4:],
                     "--resume-checkpoint", receipt["checkpoint"]["path"], "--receipt", ref["path"],
                     "--receipt-sha256", ref["sha256"], "--adapter-sha256", adapter["sha256"]]
-            resources = reservations(task)
+            resources = self.worker_reservations(task)
             threads = resources["cpu_threads"]
             worker = {"id": task["id"], "argv": command, "cwd": worker_source, "output": str(attempt),
                 "cpu_threads": threads, "reserved_rss_bytes": resources["reserved_rss_bytes"],
@@ -446,6 +452,8 @@ class SharedSupervisor(DynamicAdmission, Supervisor):
             "workers": workers, "resource_interval_seconds": 5., "stop_grace_seconds": 45.}
         if backend == "npu" and exclusive_limit is not None:
             manifest.update(exclusive_hbm=exclusive, release_on_idle_hbm_wait=True)
+        if backend == "cpu" and self.config.get("resource_dispatch"):
+            manifest["max_rss_bytes"] = self.config["max_rss_bytes"]
         if dynamic:
             cap = min(16, self.config.get("npu_workers_per_device", 16))
             owner_threads = self.config.get("dynamic_owner_max_cpu_threads", 64)

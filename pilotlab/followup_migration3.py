@@ -5,7 +5,7 @@ from pathlib import Path
 from .adapter_recovery3 import VERIFIER_CONTINUATION, recover_completion
 from .continuation3 import continuation_origin
 from .cutover_review3 import (bound_terminal_audit, CONTROLLER_CONTINUATIONS, HBM_CONTINUATION,
-                             OWNER_EXIT_CONTINUATION, PLANNED_CONTROLLER_CONTINUATION, STALE_GROUP_REASON)
+                             OWNER_EXIT_CONTINUATION, PLANNED_CONTROLLER_CONTINUATION, RESOURCE_MEMORY_CONTINUATION, STALE_GROUP_REASON)
 from .prepare_relay3 import verify_resume_payloads
 from .prepare_resume3 import reference
 from .report3 import build_report
@@ -103,9 +103,9 @@ def prior_tasks(root, state, review, refs, identity, destination):
     scheduling = schema in CONTROLLER_CONTINUATIONS
     reconciled = audit.get("reconciled_stop", {})
     pool_floor = read_bound(refs["foundation_acceptance"])["schema"] == POOL_ACCEPTANCE
-    if schema in {HBM_CONTINUATION, PLANNED_CONTROLLER_CONTINUATION}:
+    if schema in {HBM_CONTINUATION, PLANNED_CONTROLLER_CONTINUATION, RESOURCE_MEMORY_CONTINUATION}:
         from .cutover_review3 import reconcile_stop
-        reconciled = reconcile_stop(audit, refs["scheduler"])
+        reconciled = reconcile_stop(audit, refs["scheduler"], resource_memory=schema == RESOURCE_MEMORY_CONTINUATION)
         if reconciled != review["stop_reconciliation"]:
             raise ValueError("planned cutover review differs from the underlying terminal records")
     elif (audit["execution"]["scheduler"]["sha256"] != refs["scheduler"]["sha256"]
@@ -181,6 +181,13 @@ def prior_tasks(root, state, review, refs, identity, destination):
             annotation = {}
             original_extra = state["config"]["migration_evaluation_reservations"].get(tid,evaluation_bound(task))
             increment = max(0, original_extra-charged)
+        elif tid in reconciled.get("initial_check_replays", {}):
+            # Retain the entire prior reservation, including incomplete checks,
+            # and reserve the replay against the same subject's remaining budget.
+            receipt = dict(prior_receipt) if prior_receipt else None
+            mode = "carry_checkpoint" if receipt else "retry_initial_checks"
+            annotation = {"initial_check_replay": reconciled["initial_check_replays"][tid]}
+            increment = remaining_evaluation(task, receipt)
         else:
             attempt = Path(record["attempts"][-1]["path"])
             replay = review.get("stage_start_replays", {}).get(tid) if activity_repair else None

@@ -116,6 +116,8 @@ class DynamicAdmission:
 
         for record in records:
             charge(record)
+        if direct:
+            usage["rss"] = max(usage["rss"], (getattr(self, "resource_cache", None) or {}).get("rss_bytes", 0))
 
         def fits(task):
             resource = self.worker_reservations(task)
@@ -260,7 +262,7 @@ class DynamicAdmission:
             npu_workers = sum(r.get("device") == "npu:0" for r in self.state["tasks"].values()
                               if r["status"] == "running")
             npu_limit = owner_limit * min(16, self.config.get("npu_workers_per_device", 16))
-            for task in elastic:
+            for task in sorted(elastic, key=lambda t: t.get("reserved_hbm_bytes", 8*GIB)):
                 if not slots:
                     break
                 # Binding one seed also binds its untouched partner. Recheck
