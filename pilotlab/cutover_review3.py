@@ -1,6 +1,7 @@
 """Reconcile missing owner receipts after a planned stop, preserving the raw audit."""
 import signal
 import re
+import json
 from pathlib import Path
 
 from .io import sha256
@@ -118,7 +119,8 @@ def unpublished_signal(audit, state, finding):
     index = read_bound(reference(path/"checkpoint.json"))
     cp = result["checkpoint"]
     if (not owner["binding_verified"] or owner["owner_alive"]
-            or not rec["reason"].startswith("cleanup_evidence_error:")
+            or not (rec["reason"].startswith("cleanup_evidence_error:") or
+                    rec["reason"] == "shared_group_not_completed:signal_15" and owner["group"].get("reason") == "signal_15")
             or worker.get("status") != "running" or worker.get("result_sha256") or worker.get("return_code") is not None
             or Path(worker["output"]) != path or finding["path"] != result_ref["path"]
             or worker["pid"] != heartbeat["pid"] or worker["start_ticks"] != last["worker_process"]["start_ticks"]
@@ -214,6 +216,48 @@ def initial_check_replays(audit, state, *, memory_failure):
     return replays
 
 
+def group_prefix_replays(audit, state):
+    """Bind incomplete group-stop prefixes to the last previously accepted trajectory."""
+    from .source_migration3 import verify_stop_journal
+    prefixes = {}
+    for tid, row in state["tasks"].items():
+        if row.get("reason") != "shared_group_not_completed:signal_15":
+            continue
+        attempt = row["attempts"][-1]
+        path = Path(attempt["path"])
+        journal = path / "steps.jsonl"
+        if not journal.exists() or not journal.stat().st_size:
+            continue
+        task_ref = reference(row["task_path"])
+        task = read_bound(task_ref)
+        result_ref = reference(path / "result.json")
+        result = _result(result_ref, task, task_ref["sha256"])
+        if result["status"] != "running":
+            continue
+        owner = audit["shared_groups"]["groups"][row["shared_group"]]
+        worker = owner["group"]["workers"][tid]
+        hb_ref, index = reference(path / "heartbeat.json"), reference(path / "checkpoint.json")
+        hb, cp = read_bound(hb_ref), read_bound(index)["current"]
+        start = read_bound(task["stage_a_migration"])["checkpoint"]
+        steps = [json.loads(line) for line in journal.read_bytes().splitlines()]
+        process = attempt["worker_process"]
+        if (not owner["binding_verified"] or owner["owner_alive"] or worker.get("return_code") != -9
+                or owner["group"].get("reason") != "signal_15" or worker["output"] != str(path)
+                or worker["start_ticks"] != process["start_ticks"] or worker["pid"] != process["pid"]
+                or hb["pid"] != worker["pid"] or hb["task_id"] != tid or result.get("checkpoint")
+                or sha256(cp["path"]) != cp["sha256"] or Path(cp["path"]).parent != path/"checkpoints"
+                or (path/"validation.jsonl").exists() or steps[-1]["tokens"] >= task["target_tokens"]
+                or any(s["step"] != start["steps"]+i or
+                       s["tokens"] != start["tokens"]+i*task["sequence_length"]*task["batch_size"]
+                       for i,s in enumerate(steps, 1))):
+            raise ValueError("group-stop training prefix lacks its original task, worker or trajectory: " + tid)
+        verify_stop_journal(steps, hb, cp, task, attempt, allow_restart_tail=True)
+        prefixes[tid] = {"task": task_ref, "result": result_ref, "heartbeat": hb_ref, "index": index,
+                         "journal": reference(journal), "original_resume": task["stage_a_migration"],
+                         "replay_steps": len(steps), "last_journal_step": steps[-1]["step"]}
+    return prefixes
+
+
 def reconcile_stop(audit, scheduler_ref, *, fault_task=None, resource_memory=False):
     state = read_bound(scheduler_ref)
     lifecycle = audit["lifecycle"]
@@ -300,6 +344,9 @@ def reconcile_stop(audit, scheduler_ref, *, fault_task=None, resource_memory=Fal
     resolution = {"stale_owner_receipts":stale, "signal_results":signals, "completed_worker_receipts":completed}
     if direct_stop:
         resolution["initial_check_replays"] = replays
+        prefixes = group_prefix_replays(audit, state)
+        if prefixes:
+            resolution["group_prefix_replays"] = prefixes
     queues = {q["shared_group"]:q for q in lifecycle["queue"]["attempts"] if q.get("shared_group")}
     unstarted = {}
     for tid, record in state["tasks"].items():

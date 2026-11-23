@@ -181,12 +181,14 @@ def prior_tasks(root, state, review, refs, identity, destination):
             annotation = {}
             original_extra = state["config"]["migration_evaluation_reservations"].get(tid,evaluation_bound(task))
             increment = max(0, original_extra-charged)
-        elif tid in reconciled.get("initial_check_replays", {}):
+        elif tid in reconciled.get("initial_check_replays", {}) or tid in reconciled.get("group_prefix_replays", {}):
             # Retain the entire prior reservation, including incomplete checks,
             # and reserve the replay against the same subject's remaining budget.
             receipt = dict(prior_receipt) if prior_receipt else None
             mode = "carry_checkpoint" if receipt else "retry_initial_checks"
-            annotation = {"initial_check_replay": reconciled["initial_check_replays"][tid]}
+            annotation = ({"group_prefix_replay": reconciled["group_prefix_replays"][tid]}
+                          if tid in reconciled.get("group_prefix_replays", {}) else
+                          {"initial_check_replay": reconciled["initial_check_replays"][tid]})
             increment = remaining_evaluation(task, receipt)
         else:
             attempt = Path(record["attempts"][-1]["path"])
