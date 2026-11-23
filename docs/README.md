@@ -16,7 +16,7 @@
 
 干净检出可以定位当时采用的源码、计划摘要、检查点哈希和首步。r26 正式采样的 `plan` 指向整批调度计划，四项首步核验的 `plan` 指向抽查计划。两份记录通过同一 `launch.sha256` 和 `unit` 对接，再按任务 ID 核对检查点哈希与首个后继步。运行中的账本、数据、完整检查点、冻结安装与日志在原工作树。可按交接给出的路径和哈希找回这些输入，再按当次授权恢复。同一批内保留已消费预算和原截止。[r26 正式采样](evidence/pilot-r3-main-r26-handoff.json) · [四项首步核验](evidence/pilot-r3-r26-resume-first-steps.json)
 
-新计划按账号硬配额剩余量与输出文件系统可用空间的较小值派工，可用字节耗尽时停止准入。冻结源码时按本次复制的大小核对空间。检查点轮换、长期保留量和并发峰值仍写入容量预测。r26 的冻结计划使用两项 24 GiB 限制。同批受控停机后，可在 `pilot-r3-planned-controller-continuation-v1` 接续审阅中指定 `"storage_policy": "hard_quota"`，由新控制器采用零预留，沿用原 worker、总账、截止与 A 阶段范围。[调度准入](../pilotlab/scheduler3.py) · [接续准备](../pilotlab/prepare_stage_a_migration3.py)
+r27 已按账号硬配额剩余量与输出文件系统可用空间的较小值派工，可用字节耗尽时停止准入。检查点大小和并发峰值用于容量报告。r26 到 r27 的接续审阅以 `"storage_policy": "hard_quota"` 绑定这一变更。正式采样记录了新控制器、原 worker 与基座、同一预算账本、251 个接续请求，以及恢复后的首步。查看原始停止记录时，可按接续审阅的 `stop_reconciliation` 定位独立核验的 worker 结果和未取得卡的排队请求。[r27 接续审阅](evidence/pilot-r3-r27-storage-readiness.json) · [r27 运行采样](evidence/pilot-r3-main-r27-handoff.json)
 
 ## 定位和修改
 

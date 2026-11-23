@@ -1,26 +1,15 @@
-# A 阶段 r26 已越过 A3 选方阻断，B 关闭
+# A 阶段 r27 已按硬配额派工，B 关闭
 
-以下是北京时间 2026-11-23 11:14:05 的交接采样。查本机当前状态请运行 `python scripts/status.py`。采样时服务 `tide-pilot-r3-campaign-r26-final.service` 正在运行。270 个主体中已有 92 个选定配方。r26 继承 2,735 个完成请求，本修订新完成 15 个，累计 2,750 个。此时调度登记 47 个运行、159 个待派、0 个失败。控制组中有 16 个 CPU worker，NPU 驱动在 8 张卡上列出 23 个本服务进程。另有 74 个早期曝光主体待单独审阅。[正式运行采样](evidence/pilot-r3-main-r26-handoff.json)
+北京时间 2026-11-23 14:45:55，服务 `tide-pilot-r3-campaign-r27.service` 正在运行。r27 继承 2,998 个完成请求，本修订已完成 3 个，累计 3,001 个。本次采样登记 55 个运行、193 个待派、0 个失败。270 个主体中有 101 个已选方，另有 74 个早期曝光主体待独立审阅。实时状态可用 `python scripts/status.py` 查询。[正式运行采样](evidence/pilot-r3-main-r27-handoff.json) · [当前待办](ROADMAP.md)
 
-## A3 活动量
+## 切换与恢复
 
-Exchange/d256/K/capacity 的两个 A3 种子均达到 2,097,152 token。种子 2026112001 零步接续，选方沿原任务、源码、结果和精确恢复的检查点引用前段第 8,192 步的实测样本。种子 2026112002 使用本段第 8,192 步的样本。两者各测 256 个外部 token，平均活动骨干参数 6,092,229，骨干参数总数 6,501,589，活动比例 93.7037%。离线选方、跨源码训练链审阅和 A 门禁分别从原始文件复算。错配种子和哈希均被拒绝。正式选方已写入相同结果。[接续验收](evidence/pilot-r3-r26-activity-readiness.json) · 原机正式选择见轮次输出的 `selected.json`
+截至受控停止，r26 本修订共完成 263 个请求。原控制组、登记进程和队列租约均已释放。原始终态审计列出一条共享 worker 结果绑定差异。已用该进程的 PID 和启动标识、终态心跳、结果与检查点索引核实其按信号停止。另一条等待分配 NPU 的请求在停机时已有预期结果路径，队列凭据、进程记录及空的尝试目录均证实它尚未取得设备或启动 worker。[原始终态审计](evidence/pilot-r3-campaign-r26-terminal-audit.json) · [逐项接续审阅](evidence/pilot-r3-r27-storage-readiness.json)
 
-## 四个恢复点
-
-原审计保留 1 条共享 worker 结果绑定差异。已按任务、PID、进程启动标识、终态心跳、结果和检查点索引核实该 worker 在第 2,688 步按信号停机。另 3 条 `worker_exit_-9` 已绑定最后发布并解码验证的检查点。两条日志比最后心跳多一个完整步，训练从索引指向的检查点重放尾段。Shannon 的阶段起点评估在原冻结环境中从第 1,024 步补测，消耗 16,384 个选择集 token，优化器更新 0 步，已计入总账和主体评估预算。[接续验收](evidence/pilot-r3-r26-activity-readiness.json) · [原终态审计](evidence/pilot-r3-campaign-r25-terminal-audit.json)
-
-| 任务 | 接入步 | 正式首步 | 本次采样最新步 |
-| --- | ---: | ---: | ---: |
-| Timed/d128/S/mixed9，A2 种子 2001 | 2,688 | 2,689 | 2,932 |
-| Timed/d128/X/mixed9，A2 种子 2002 | 6,002 | 6,003 | 6,188 |
-| Exchange/d256/K/base，A3 种子 2001 | 7,377 | 7,378 | 7,569 |
-| Exchange/d256/K/shannon，A2 种子 2002 | 1,174 | 1,175 | 1,181 |
-
-已观察到 4/4 个任务在正式作业中越过接入步。[四项首步核验](evidence/pilot-r3-r26-resume-first-steps.json)记录了每项的检查点哈希、实际启动凭据和首个优化器更新。各任务的正式参数和步日志见[正式运行采样](evidence/pilot-r3-main-r26-handoff.json)。
+新控制器在首轮接回全部 251 个未完成请求。47 个中断任务从信号停机检查点接续，1 个从已发布并校验的检查点第 3,308 步接续，2 个沿用先前绑定的检查点，201 个未启动请求重新入队。沿用原始数据、配方、worker 源码、验收基座 `6e14a6cc` 和已消费预算。本次采样从 31 个中断任务的正式步日志验证了恢复后的首个优化器更新。原 A3 零步接续所需的活动量证据仍可按任务与种子追溯。[首轮准备与正式首步](evidence/pilot-r3-main-r27-handoff.json) · [A3 活动量来源](evidence/pilot-r3-r26-activity-readiness.json)
 
 ## 定位与接续入口
 
-- 在仓库根目录运行 `python scripts/status.py`，加 `--json` 可读采样时间、systemd、控制组、驱动 PID、阶段和阻断。原机主指针为 `.local/pilot-r3/launch.json`，其 `plan_path` 指向冻结计划，`log` 指向控制器日志。逐任务报告见输出的 `scheduler.json` 及命令给出的 `runtime.next_check`。[状态和接续入口](README.md#查状态) · [提交时的计划和作业采样](evidence/pilot-r3-main-r26-handoff.json)
-- 实验源码在 `pilotlab/`。选方和门禁见 `round3.py`、`gate3.py`，活动量来源和恢复凭据见 `source_migration3.py`、`resume_adapter3.py`，跨源码审阅见 `stage_a_continued3.py`。回归用例见 [A3 零步接续测试](../tests/test_pilot_activity_resume3.py)。训练基座冻结在 `6e14a6cc`，模型、算子、数据和配方沿用 r25。[当前活动量和恢复验收](evidence/pilot-r3-r26-activity-readiness.json)
-- CPU 上限 160 个物理核和 40 个 worker，NPU 上限 8 张卡，每卡最多 16 个共享 worker，总 RSS 上限 1 TB。提交时账号硬配额剩余量与文件系统可用量的较小值为 235.0 GiB。r26 冻结计划中的磁盘预留和并发检查点写入上限各为 24 GiB。新计划按实际可用空间派工。沿用原设备时数账本和北京时间 2026-12-20 00:48:33 截止。受控停止命令为 `systemctl --user stop tide-pilot-r3-campaign-r26-final.service`。[正式运行采样](evidence/pilot-r3-main-r26-handoff.json) · [同批切换方法](README.md#接续同一批)
+- 主指针为 `.local/pilot-r3/launch.json`。核对 `unit`、`plan_path`、`plan_sha256` 和 `current_review`，可找到冻结计划、日志、原始停止记录及各恢复凭据。逐任务明细见 `python .local/pilot-r3/inspect.py --json`。受控停止命令为 `systemctl --user stop tide-pilot-r3-campaign-r27.service`。[状态与接续说明](README.md#接续同一批)
+- 实际可用空间取账号硬配额剩余量与输出文件系统可用空间的较小值，固定预留为零。采样时实际可用 199.9 GiB，运行中任务的检查点估算合计 24.39 GiB，驱动在 7 张卡上列出 18 个本服务进程。CPU 上限 160 个物理核与 40 个 worker，NPU 上限 8 张卡，总 RSS 上限 1 TB，绝对截止为北京时间 2026-12-20 00:48:33。[正式运行与资源记录](evidence/pilot-r3-main-r27-handoff.json)
+- 调度与接续源码见 `pilotlab/scheduler3.py`、`scheduler_dynamic3.py`、`prepare_stage_a_migration3.py` 和 `cutover_review3.py`。选方与门禁见 `round3.py`、`gate3.py`，模型、梯度和状态修复归所采用的基座。[源码与回归入口](README.md#定位和修改)
