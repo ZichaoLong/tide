@@ -434,6 +434,21 @@ def test_resource_boundaries_stop_before_admission(supervisor_factory, monkeypat
         assert supervisor.resource_cache["available_storage_bytes"] == 800
 
 
+@pytest.mark.parametrize("used,hard,free,reason", [
+    (1999, 2000, 100, None), (2000, 2000, 100, "storage_exhausted"),
+    (2001, 2000, 100, "storage_exhausted"), (1500, 2000, 0, "storage_exhausted"),
+    (3000, 0, 1, None), (3000, 0, 0, "storage_exhausted"),
+])
+def test_default_storage_admission_uses_physical_headroom(supervisor_factory, monkeypatch, used, hard, free, reason):
+    supervisor = supervisor_factory()
+    del supervisor.config["storage_reserve_bytes"]
+    monkeypatch.setattr(s, "current_quota", lambda: Quota(used, 1000, hard))
+    monkeypatch.setattr(s.shutil, "disk_usage", lambda _: SimpleNamespace(free=free))
+    own = {"pid": os.getpid(), "ppid": 0, "start_ticks": 1, "rss_bytes": 100}
+    monkeypatch.setattr(s, "process_table", lambda **kwargs: {os.getpid(): own})
+    assert supervisor.resource_reason() == reason
+
+
 def test_global_ledger_adds_distinct_segments_without_resetting_budget(supervisor_factory, tmp_path):
     first = supervisor_factory(output=tmp_path / "segment-one")
     second = supervisor_factory(config=first.config, output=tmp_path / "segment-two")

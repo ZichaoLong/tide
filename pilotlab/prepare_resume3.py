@@ -54,7 +54,7 @@ def prepare(prepared_path, old_prepared_path, reconciliation_path):
     if len(old_plan["subjects"]) != 344 or len(old_state["tasks"]) != 144:
         raise ValueError("this adoption is scoped to the reviewed r04 campaign")
     remaining = budget_remaining(new["budget_ledger"], time.time())
-    storage = storage_observation(root, reserve=24*2**30, snapshot_bytes=0)
+    storage = storage_observation(root, reserve=old_plan["config"]["storage_reserve_bytes"], snapshot_bytes=0)
     if len(os.sched_getaffinity(0)) < 320:
         raise ValueError("CPU/NPU host thread policy needs the measured 320-core allowance")
     config = copy.deepcopy(old_plan["config"])
@@ -63,7 +63,7 @@ def prepare(prepared_path, old_prepared_path, reconciliation_path):
         deadline_unix=remaining["deadline_unix"], max_workers=80, max_cpu_workers=40,
         max_cpu_task_threads=160, max_cpu_threads=320, max_rss_bytes=1_000_000_000_000,
         max_npu_devices=8, target_npu_devices=8, npu_workers_per_device=16,
-        external_occupant_policy="continue_running", max_inflight_checkpoint_bytes=24*2**30,
+        external_occupant_policy="continue_running",
         shared_max_hbm_bytes=48*2**30)
     adapter = reference(Path(new["source"]) / "pilotlab/resume_adapter3.py")
     config["resume_adapter"] = adapter
@@ -161,7 +161,7 @@ def prepare(prepared_path, old_prepared_path, reconciliation_path):
         "pipeline_stage_a": True, "pipeline_model_limit": 32,
         "resume_import": config["resume_import"], "budget_remaining_at_freeze": remaining,
         "storage_observation": storage,
-        "resource_policy": "CPU pool up to 40 four-thread workers / 160 compute threads; all CPU and NPU host reservations <=320 threads /80 workers; <=8 queued or running NPU owners, <=16 workers per card; process tree <=1 TB; measured HBM/RSS/checkpoint limits govern admission"}
+        "resource_policy": "Up to 40 four-thread CPU workers, 160 CPU compute threads, 320 host threads and 80 workers overall. Up to 8 queued or running NPU owners and 16 workers per card. Admission uses measured HBM, a 1 TB process-tree RSS limit and the inherited storage settings."}
     plan_path = freeze_json(root / "campaign-plan.json", plan)
     campaign_prepared = {**new, "worker_source_identity": old["source_identity"], "worker_prepared": reference(old_prepared_path),
         "resume_import": config["resume_import"], "status": "frozen_resume_not_submitted"}

@@ -46,10 +46,10 @@ class DynamicAdmission:
         return bool(self.config.get("dynamic_shared_admission"))
 
     def available_checkpoint_writes(self):
-        limit = self.config.get("max_inflight_checkpoint_bytes", 24*GIB)
-        if self.config.get("use_live_checkpoint_headroom"):
+        limit = self.config.get("max_inflight_checkpoint_bytes")
+        if limit is not None and self.config.get("use_live_checkpoint_headroom"):
             free = self.resource_cache["available_storage_bytes"]
-            return min(limit, max(0, free - self.config["storage_reserve_bytes"]))
+            return min(limit, max(0, free - self.config.get("storage_reserve_bytes", 0)))
         return limit
 
     def start_dynamic_ready_tasks(self, tasks, slots):
@@ -101,20 +101,27 @@ class DynamicAdmission:
         if slots <= 0:
             return
         usage = {"checkpoint": 0, "rss": 0, "threads": 0, "cpu_threads": 0}
-        for record in records:
-            resource = self.worker_reservations(record)
-            usage["checkpoint"] += resource["checkpoint_reservation_bytes"]
+        checkpoint_limit = self.config.get("max_inflight_checkpoint_bytes")
+        write_headroom = self.available_checkpoint_writes()
+
+        def charge(task):
+            resource = self.worker_reservations(task)
+            if checkpoint_limit is not None:
+                usage["checkpoint"] += resource["checkpoint_reservation_bytes"]
             usage["rss"] += resource["reserved_rss_bytes"]
             usage["threads"] += resource["cpu_threads"]
-            if record.get("device") == "cpu":
+            if task.get("device") == "cpu":
                 usage["cpu_threads"] += resource["cpu_threads"]
 
-        write_headroom = self.available_checkpoint_writes()
+        for record in records:
+            charge(record)
 
         def fits(task):
             resource = self.worker_reservations(task)
-            limits = (("checkpoint", "checkpoint_reservation_bytes", self.config.get("max_inflight_checkpoint_bytes", 24*GIB)),
-                      ("rss", "reserved_rss_bytes", self.config.get("max_rss_bytes", 1024*GIB)))
+            checkpoint = resource["checkpoint_reservation_bytes"]
+            if checkpoint_limit is not None and checkpoint > checkpoint_limit:
+                raise Blocked("single_task_checkpoint_reservation_exceeds_limit")
+            limits = (("rss", "reserved_rss_bytes", self.config.get("max_rss_bytes", 1024*GIB)),)
             host_threads = self.config.get("max_cpu_threads", 320)
             if host_threads is not None:
                 limits += (("threads", "cpu_threads", host_threads),)
@@ -125,15 +132,7 @@ class DynamicAdmission:
                     raise Blocked(f"single_task_{key}_reservation_exceeds_limit")
                 if usage[key]+resource[field] > ceiling:
                     return False
-            return usage["checkpoint"] + resource["checkpoint_reservation_bytes"] <= write_headroom
-
-        def charge(task):
-            resource = self.worker_reservations(task)
-            usage["checkpoint"] += resource["checkpoint_reservation_bytes"]
-            usage["rss"] += resource["reserved_rss_bytes"]
-            usage["threads"] += resource["cpu_threads"]
-            if task.get("device") == "cpu":
-                usage["cpu_threads"] += resource["cpu_threads"]
+            return write_headroom is None or usage["checkpoint"] + checkpoint <= write_headroom
 
         cpu_count = sum(record.get("device") == "cpu" for record in records)
         cpu_limit = self.config.get("max_cpu_workers", 40)

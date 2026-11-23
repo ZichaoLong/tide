@@ -10,7 +10,8 @@ import time
 
 from . import audit3, prepare3
 from .adapter_recovery3 import VERIFIER_CONTINUATION
-from .cutover_review3 import CONTROLLER_CONTINUATIONS, HBM_CONTINUATION, OWNER_EXIT_CONTINUATION, STALE_GROUP_REASON
+from .cutover_review3 import (CONTROLLER_CONTINUATIONS, HBM_CONTINUATION, OWNER_EXIT_CONTINUATION,
+                              STALE_GROUP_REASON, reviewed_storage_settings)
 from .prepare_campaign3 import CORE_FILES, budget_remaining, source_inventory, storage_observation
 from .prepare_relay3 import write_campaign_draft
 from .prepare_resume3 import reference
@@ -113,6 +114,7 @@ def prepare(repo, foundation, output, readiness):
     old, state = read_bound(refs["campaign_plan"]), read_bound(refs["scheduler"])
     old_round = Path(refs["scheduler"]["path"]).parent
     config = copy.deepcopy(old["config"])
+    config.update(reviewed_storage_settings(review))
     schema = review.get("schema")
     scheduling = schema in CONTROLLER_CONTINUATIONS
     verifier_repair = schema == VERIFIER_CONTINUATION
@@ -164,13 +166,14 @@ def prepare(repo, foundation, output, readiness):
         raise ValueError("original deadline or CPU allocation unavailable")
     sources = [*(repo/"pilotlab").glob("*.py"), *(foundation/"src/tide").rglob("*.py")]
     pool_floor = read_bound(refs["foundation_acceptance"])["schema"] == POOL_ACCEPTANCE
-    write_reserve = config["max_inflight_checkpoint_bytes"]
-    if pool_floor and config.get("dynamic_shared_admission"):
+    write_limit = config.get("max_inflight_checkpoint_bytes")
+    write_reserve = write_limit or 0
+    if write_limit is not None and pool_floor and config.get("dynamic_shared_admission"):
         config["use_live_checkpoint_headroom"] = True
         from .scheduler_shared3 import reservations
         write_reserve = max(reservations(read(r.get("task_path") or old_round/"tasks"/tid/"task.json"))["checkpoint_reservation_bytes"]
                             for tid,r in state["tasks"].items())
-        if write_reserve > config["max_inflight_checkpoint_bytes"]:
+        if write_reserve > write_limit:
             raise ValueError("a registered checkpoint reservation exceeds the campaign write limit")
     space = storage_observation(output, reserve=config["storage_reserve_bytes"]+write_reserve,
                                 snapshot_bytes=sum(p.stat().st_size for p in sources))

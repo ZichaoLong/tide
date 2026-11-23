@@ -19,10 +19,21 @@ from pilotlab.scheduler import Quota
 def test_storage_observation_above_soft_quota(tmp_path, monkeypatch, hard, free, available):
     monkeypatch.setattr(p, "current_quota", lambda: Quota("fs", 400, 300, hard, 0))
     monkeypatch.setattr(p.shutil, "disk_usage", lambda _: SimpleNamespace(free=free))
-    record = p.storage_observation(tmp_path / "out", reserve=available-2, snapshot_bytes=1)
+    record = p.storage_observation(tmp_path / "out", reserve=available-1, snapshot_bytes=1)
     assert record["available_storage_bytes"] == available
     with pytest.raises(ValueError, match="insufficient quota/filesystem"):
-        p.storage_observation(tmp_path / "out", reserve=available-1, snapshot_bytes=1)
+        p.storage_observation(tmp_path / "out", reserve=available, snapshot_bytes=1)
+
+
+def test_snapshot_needs_space_for_one_copy_and_rejects_full_filesystem(tmp_path, monkeypatch):
+    monkeypatch.setattr(p, "current_quota", lambda: Quota("fs", 400, 300, 500, 0))
+    monkeypatch.setattr(p.shutil, "disk_usage", lambda _: SimpleNamespace(free=1000))
+    assert p.storage_observation(tmp_path, reserve=0, snapshot_bytes=100)["available_storage_bytes"] == 100
+    with pytest.raises(ValueError, match="insufficient quota/filesystem"):
+        p.storage_observation(tmp_path, reserve=0, snapshot_bytes=101)
+    monkeypatch.setattr(p.shutil, "disk_usage", lambda _: SimpleNamespace(free=0))
+    with pytest.raises(ValueError, match="insufficient quota/filesystem"):
+        p.storage_observation(tmp_path, reserve=0, snapshot_bytes=0)
 
 
 def write_json(path, value):
@@ -114,6 +125,8 @@ def test_campaign_draft_keeps_existing_artifacts_budget_and_explicit_launch_cont
     plan = p.load(draft["plan_path"])
     assert len(plan["subjects"]) == 216 and plan["cohort_models"] == 4
     assert plan["config"]["max_workers"] == 16
+    assert inputs.old["storage_reserve_bytes"] == plan["config"]["storage_reserve_bytes"] == 0
+    assert plan["config"].get("max_inflight_checkpoint_bytes") is None
     assert plan["protocol"] == {"precision": "fp32", "deterministic": False, "sequence_length": 128,
                                 "cpu_threads": 4, "npu_total_bytes": 32 * p.GIB, "admitted_parallelism": 8}
     assert {row["file"] for row in plan["qualification_transfer"]["lifecycle_source_changes"]} == {"scheduler3.py"}

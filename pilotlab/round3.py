@@ -556,13 +556,15 @@ class Campaign:
             # FP32 parameters and Adam's two full moments need 12 bytes per
             # parameter. Actual populated private state/serialization is
             # measured at the selected largest batch; add 20% headroom.
-            # Atomic generations are reserved separately below.
+            # The peak for overlapping generations is estimated below.
             estimates[model["id"]] = max(count*12+16*2**20, math.ceil(measured*1.20))
         # Keep A1/A2/A3 two-seed decisive checkpoints through the gate, and
-        # reserve formal/repeat storage plus concurrent atomic generations.
-        active_peak = max(estimates.values())*3*worker_limit(self.plan["config"])
-        if self.plan["config"].get("shared_execution"):
-            active_peak = min(active_peak, self.plan["config"].get("max_inflight_checkpoint_bytes", 24*1024**3))
+        # estimate formal/repeat storage plus concurrent atomic generations.
+        config = self.plan["config"]
+        active_peak = max(estimates.values())*3*worker_limit(config)
+        write_limit = config.get("max_inflight_checkpoint_bytes")
+        if config.get("shared_execution") and write_limit is not None:
+            active_peak = min(active_peak, write_limit)
         repeated = sum(sorted(estimates.values(), reverse=True)[:24])*2
         transferred = set(read(self.plan["stage_a_transfer"]["path"]).get("model_ids", [])) if self.plan.get("stage_a_transfer") else set()
         retained_generations = {mid: 3 if self.plan.get("retire_consumed_a_parents") and mid not in transferred else 7
@@ -581,7 +583,8 @@ class Campaign:
             atomic_json(self.output/"forecast.json", {"resource_blocking_reason": resource_reason,
                 "storage_fits": False, "device_budget_fits": False, "wall_budget_fits": False})
             return False
-        available = self.supervisor.resource_cache["available_storage_bytes"]-self.plan["config"]["storage_reserve_bytes"]
+        reserve = config.get("storage_reserve_bytes", 0)
+        available = self.supervisor.resource_cache["available_storage_bytes"] - reserve
         # Existing successful A checkpoints are already in quota usage.
         existing = 0
         for choice in self.selected.values():
@@ -645,11 +648,12 @@ class Campaign:
                     "remaining_wall_seconds": remaining_wall, "forecast_parallelism": parallelism,
                     "resource_blocking_reason": resource_reason,
                     "storage_fits": required-existing <= available,
+                    "storage_forecast_gates_release": reserve > 0 or write_limit is not None,
                     "device_budget_fits": device_seconds <= remaining,
                     "wall_budget_fits": wall_estimate <= remaining_wall}
         atomic_json(self.output/"forecast.json", forecast)
-        return (not resource_reason and forecast["storage_fits"] and forecast["device_budget_fits"]
-                and forecast["wall_budget_fits"])
+        storage_ok = not forecast["storage_forecast_gates_release"] or forecast["storage_fits"]
+        return storage_ok and forecast["device_budget_fits"] and forecast["wall_budget_fits"]
 
     def formal_task(self, model, seed, phase, gate_file, suffix=""):
         selected = read(self.selected[model["id"]]["confirmation"][0]["task_path"])

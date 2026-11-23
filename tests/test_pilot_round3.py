@@ -697,6 +697,20 @@ def test_forecast_uses_selected_checkpoint_peak_and_only_additional_storage(fore
     assert s.read(campaign.output / "forecast.json")["storage_fits"] is False
 
 
+def test_hard_quota_plan_reports_peak_estimate_without_reserving_it(forecast_campaign):
+    campaign = forecast_campaign
+    campaign.plan["config"].update(shared_execution=True, storage_reserve_bytes=0, max_inflight_checkpoint_bytes=None)
+    campaign.supervisor.resource_cache["available_storage_bytes"] = 1
+    assert campaign.forecast()
+    report = s.read(campaign.output / "forecast.json")
+    assert not report["storage_fits"] and not report["storage_forecast_gates_release"]
+    assert report["available_additional_bytes_after_reserve"] == 1
+    ledger = s.read(campaign.plan["config"]["budget_ledger"])
+    ledger["device_seconds"] = ledger["max_device_seconds"]
+    write_json(campaign.plan["config"]["budget_ledger"], ledger)
+    assert not campaign.forecast()
+
+
 def test_forecast_retains_unfinished_parent_retirement_cost_after_restart(forecast_campaign):
     campaign = forecast_campaign
     campaign.plan["retire_consumed_a_parents"] = True

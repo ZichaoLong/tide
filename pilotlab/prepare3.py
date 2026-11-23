@@ -70,7 +70,7 @@ def verify_data(data: Path) -> dict:
 
 def freeze(repo: str | Path, foundation: str | Path, output: str | Path, *, python: str | Path,
            data: str | Path, budget: str | Path, max_workers: int = 4,
-           storage_reserve_bytes: int = 24 * 1024**3, max_rss_bytes: int = 512 * 1024**3) -> dict:
+           storage_reserve_bytes: int = 0, max_rss_bytes: int = 512 * 1024**3) -> dict:
     repo, foundation, output = Path(repo).resolve(), Path(foundation).resolve(), Path(output).resolve()
     python, data, budget = Path(python).absolute(), Path(data).resolve(), Path(budget).resolve()
     if not python.is_file() or not (repo / "pilotlab").is_dir() or not (foundation / "src/tide").is_dir():

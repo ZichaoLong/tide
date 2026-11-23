@@ -273,8 +273,10 @@ class Supervisor:
                 "quota_limit_basis": "hard", "available_storage_bytes": storage_headroom(q, free)}
             self.state["resources"] = self.resource_cache
             self.last_resources = now
-        reserve = self.config.get("storage_reserve_bytes", 24*GIB)
-        if self.resource_cache.get("available_storage_bytes", 0) < reserve:
+        available = self.resource_cache["available_storage_bytes"]
+        if available <= 0:
+            return "storage_exhausted"
+        if available < self.config.get("storage_reserve_bytes", 0):
             return "storage_reserve_exhausted"
         if self.resource_cache.get("rss_bytes", 0) > self.config.get("max_rss_bytes", 512*GIB):
             return "process_tree_rss_limit"

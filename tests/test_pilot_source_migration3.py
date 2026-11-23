@@ -7,6 +7,51 @@ from pilotlab.prepare_resume3 import reference
 from pilotlab.source_migration3 import RECEIPT, digest, migration_inputs, prior_evaluation_tokens, revised_model
 
 
+def test_planned_storage_change_is_bound_to_the_review_and_original_resource_limits(tmp_path, monkeypatch):
+    from pilotlab import prepare_campaign3
+    from pilotlab.cutover_review3 import PLANNED_CONTROLLER_CONTINUATION, reviewed_storage_settings
+    from pilotlab.stage_a_continued3 import verify_scope
+
+    def save(name, value):
+        path = tmp_path / name
+        path.write_text(json.dumps(value))
+        return reference(path)
+
+    # Source inventory has its own hash checks. This fixture exercises the
+    # reviewed resource comparison and its binding to a particular campaign.
+    monkeypatch.setattr(prepare_campaign3, "source_inventory", lambda prepared: None)
+    prior = dict(python="python", data="data", budget_ledger="budget", deadline_unix=1000,
+        max_workers=None, max_npu_devices=8, target_npu_devices=8, max_cpu_workers=40,
+        max_cpu_task_threads=160, max_rss_bytes=10**12, host_cpu_affinity=[0, 1],
+        shared_max_hbm_bytes=48*2**30, exclusive_max_hbm_bytes=52*2**30, dynamic_shared_admission=True,
+        storage_reserve_bytes=24*2**30, max_inflight_checkpoint_bytes=24*2**30, use_live_checkpoint_headroom=True,
+        source="/worker", foundation="/base", resume_adapter={"sha256": "adapter"})
+    old = {"subjects": [{"id": "one", "model": {}}], "stage_a_revision": {"policy": "A only"},
+           "source_identity": {"source_files": {"/base/src/tide/a.py": "frozen"}}, "config": prior}
+    old_ref = save("old.json", old)
+    qualification = save("acceptance.json", {"authority": {"files_sha256": {"a.py": "frozen"}}})
+    review = {"schema": PLANNED_CONTROLLER_CONTINUATION, "storage_policy": "hard_quota",
+              "foundation": {"published_head": "head"}, "inputs": {"campaign_plan": old_ref, "foundation_acceptance": qualification},
+              "stage_a_scope": {"prospective_recipe_check": {"canonical_prospective_subjects_sha256": digest(old["subjects"])}}}
+    batch = {"schema": "pilot-r3-stage-a-migration-plan-v1", "readiness": save("review.json", review),
+             "old_plan": old_ref, "qualification": qualification, "foundation_commit": "head",
+             "new_source_digest": digest(old["source_identity"])}
+    plan = {**old, "config": {**prior, **reviewed_storage_settings(review), "worker_source": prior["source"],
+                              "worker_foundation": prior["foundation"]}, "controller_source_identity": {},
+            "stage_a_migration": save("batch.json", batch)}
+    assert verify_scope(plan) == old["stage_a_revision"]
+    for change in ({"max_npu_devices": 9}, {"deadline_unix": 2000}, {"storage_reserve_bytes": 1},
+                   {"max_inflight_checkpoint_bytes": 2**30}, {"use_live_checkpoint_headroom": True}):
+        with pytest.raises(ValueError):
+            verify_scope({**plan, "config": {**plan["config"], **change}})
+    del review["storage_policy"]
+    batch["readiness"] = save("original-review.json", review)
+    plan["stage_a_migration"] = save("original-batch.json", batch)
+    with pytest.raises(ValueError):
+        verify_scope(plan)
+    assert verify_scope({**plan, "config": {**plan["config"], **prior}}) == old["stage_a_revision"]
+
+
 def test_cumulative_evaluation_counts_every_original_attempt_once():
     results = {"first":{"id":"t","evaluation":{"tokens":16}},
                "second":{"id":"t","evaluation":{"tokens":4},"execution_adapter":{"original_result":{"path":"first"}}}}

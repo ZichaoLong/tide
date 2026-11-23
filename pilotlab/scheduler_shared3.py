@@ -282,7 +282,8 @@ class SharedSupervisor(DynamicAdmission, Supervisor):
         pending = [t for t in tasks if self.state["tasks"][t["id"]]["status"] == "pending"]
         active_records = [r for r in self.state["tasks"].values() if r["status"] == "running"]
         active_reservations = [reservations(r) for r in active_records]
-        reserved = sum(r["checkpoint_reservation_bytes"] for r in active_reservations)
+        write_limit = self.available_checkpoint_writes()
+        reserved = sum(r["checkpoint_reservation_bytes"] for r in active_reservations) if write_limit is not None else 0
         reserved_rss = sum(r["reserved_rss_bytes"] for r in active_reservations)
         reserved_threads = sum(r["cpu_threads"] for r in active_reservations)
         cpu_reserved_threads = sum(reservations(r)["cpu_threads"] for r in active_records if r.get("device") == "cpu")
@@ -320,9 +321,8 @@ class SharedSupervisor(DynamicAdmission, Supervisor):
                 for task in ready[:size]:
                     resources = reservations(task)
                     estimate = resources["checkpoint_reservation_bytes"]
-                    limit = self.available_checkpoint_writes()
                     reason = None
-                    if reserved + estimate > limit:
+                    if write_limit is not None and reserved + estimate > write_limit:
                         reason = "checkpoint"
                     elif reserved_rss + resources["reserved_rss_bytes"] > self.config.get("max_rss_bytes", 512 * GIB):
                         reason = "rss"
@@ -336,7 +336,8 @@ class SharedSupervisor(DynamicAdmission, Supervisor):
                     if backend == "npu" and group and group_hbm + hbm > self.config.get("shared_max_hbm_bytes", 48 * GIB):
                         break
                     group.append(task)
-                    reserved += estimate
+                    if write_limit is not None:
+                        reserved += estimate
                     reserved_rss += resources["reserved_rss_bytes"]
                     reserved_threads += resources["cpu_threads"]
                     if backend == "cpu":

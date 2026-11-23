@@ -121,6 +121,17 @@ def test_cpu_pool_has_separate_concurrency_bound(tmp_path):
     assert sum(len(group) for group, _ in captured) == 2
 
 
+def test_default_static_admission_does_not_charge_future_checkpoints(tmp_path):
+    s = bare(tmp_path, max_cpu_workers=4)
+    del s.config["max_inflight_checkpoint_bytes"]
+    rows = tasks(s, 6, device="cpu", reservation=10 * 2**30)
+    s.state["tasks"][rows[0]["id"]].update(status="running", checkpoint_reservation_bytes=30 * 2**30)
+    s.resource_cache = {"available_storage_bytes": 2**30}
+    captured = capture_groups(s)
+    s.start_ready_tasks(rows, 6)
+    assert [row["id"] for group, _ in captured for row in group] == [row["id"] for row in rows[1:4]]
+
+
 def add_group(s, name, *, seconds=10., physical=2, release=None):
     path = s.output / name
     group = {"job_id": name, "manifest_sha256": "verified-manifest", "backend": "npu", "status": "running",

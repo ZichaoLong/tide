@@ -140,7 +140,8 @@ def finalize(prepared, *, transfer, old_audit, sharing_audit, repair_audit,
     config.update(deadline_unix=remaining["deadline_unix"], shared_execution=True,
         external_occupant_policy="continue_running",
         max_cpu_workers=max_cpu_workers, max_cpu_threads=320, target_npu_devices=target_npu_devices,
-        npu_workers_per_device=16, shared_max_hbm_bytes=48*GIB, max_inflight_checkpoint_bytes=24*GIB)
+        npu_workers_per_device=16, shared_max_hbm_bytes=48*GIB,
+        max_inflight_checkpoint_bytes=old_plan["config"].get("max_inflight_checkpoint_bytes"))
     config["prior_evaluation_reservations"] = prior_evaluation
     protocol = {**old_plan["protocol"], "admitted_parallelism": target_npu_devices}
     qualifications = {name: reference(path) for name, path in {
@@ -156,7 +157,7 @@ def finalize(prepared, *, transfer, old_audit, sharing_audit, repair_audit,
         "retire_consumed_a_parents": True, "profile_private_checkpoint_target_bytes": 32*2**20,
         "profile_private_parameter_factor": 2, "budget_remaining_at_freeze": remaining,
         "storage_observation": storage,
-        "resource_policy": "at most 80 workers / 320 compute threads, including up to 32 CPU workers; at most 16 independent workers per leased NPU, reduced by measured HBM/RSS/checkpoint reservations; unknown capacity probes exclusive"}
+        "resource_policy": "Up to 80 workers and 320 compute threads, including up to 32 CPU workers. Each leased NPU admits up to 16 independent workers subject to HBM, RSS and the plan's storage settings. Unknown capacity probes run exclusively."}
     # All validation precedes writes. The old references retain their identities.
     freeze_json(Path(new["output"]) / "selected.json", selected)
     freeze_json(Path(new["output"]) / "model-resources.json",

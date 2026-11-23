@@ -151,12 +151,12 @@ def verify_preflight(prepared, report_path):
 
 def storage_observation(output, *, reserve, snapshot_bytes):
     quota = current_quota()
-    parent = Path(output).resolve().parent
+    parent = Path(output).resolve()
     while not parent.exists():
         parent = parent.parent
     free = shutil.disk_usage(parent).free
     available = storage_headroom(quota, free)
-    if available < reserve + 2 * snapshot_bytes:
+    if available <= 0 or available < reserve + snapshot_bytes:
         raise ValueError("insufficient quota/filesystem headroom for frozen inputs and reserve")
     return {"observed_unix": time.time(), "quota": asdict(quota), "quota_limit_basis": "hard", "filesystem_free_bytes": free,
             "available_storage_bytes": available, "snapshot_source_bytes": snapshot_bytes,
@@ -183,7 +183,7 @@ def frozen_subjects(prepared):
 
 def prepare(repo, foundation, output, *, python, data, budget, preflight_prepared,
             card_count, max_workers=16, preflight_report=None,
-            storage_reserve_bytes=24 * GIB, max_rss_bytes=512 * GIB):
+            storage_reserve_bytes=0, max_rss_bytes=512 * GIB):
     if any(type(value) is not int or value < 1 for value in (card_count, max_workers)):
         raise ValueError("measured card count and maximum workers must be positive integers")
     repo, foundation, output = Path(repo).resolve(), Path(foundation).resolve(), Path(output).resolve()
@@ -230,7 +230,7 @@ def prepare(repo, foundation, output, *, python, data, budget, preflight_prepare
     remaining = budget_remaining(budget, time.time())
     config = {key: prepared[key] for key in ("python", "source", "foundation", "data", "run_id", "max_workers",
                                              "storage_reserve_bytes", "max_rss_bytes", "budget_ledger")}
-    config["deadline_unix"] = remaining["deadline_unix"]
+    config.update(deadline_unix=remaining["deadline_unix"], max_inflight_checkpoint_bytes=None)
     protocol = {"precision": "fp32", "deterministic": False, "sequence_length": 128, "cpu_threads": 4,
                 "npu_total_bytes": npu_total, "admitted_parallelism": report["actual_peak_npu_concurrency"]}
     qualification = {"preflight_prepared_path": str(preflight_prepared), "preflight_report_path": str(report_path),

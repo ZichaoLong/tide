@@ -556,3 +556,20 @@ def test_checkpoint_write_budget_uses_free_space_above_reserve(owner):
     for free, expected in ((22, 0), (33, 9), (60, 24)):
         supervisor.resource_cache = {"available_storage_bytes":free*2**30}
         assert supervisor.available_checkpoint_writes() == expected*2**30
+
+
+def test_uncapped_dispatch_can_add_cpu_and_eighth_owner_above_old_write_limit(owner):
+    supervisor, first, _ = owner
+    supervisor.config.update(storage_reserve_bytes=0, max_inflight_checkpoint_bytes=None, max_cpu_workers=1)
+    supervisor.resource_cache = {"available_storage_bytes": 2**30}
+    supervisor.state["tasks"][first["id"]]["checkpoint_reservation_bytes"] = 25*2**30
+    for index in range(1, 7):
+        task = add_task(supervisor, f"card-{index}")
+        observe(supervisor, supervisor.start_group([task], "npu"))
+    cpu = [add_task(supervisor, f"cpu-{n}", device="cpu", checkpoint_reservation_bytes=2*2**30) for n in range(2)]
+    npu = [add_task(supervisor, f"npu-{n}", checkpoint_reservation_bytes=2*2**30) for n in range(2)]
+    supervisor.start_ready_tasks(cpu+npu, 4)
+    groups = supervisor.state["shared_groups"].values()
+    assert sum(g["backend"] == "npu" for g in groups) == 8
+    assert sum(g["backend"] == "cpu" for g in groups) == 1
+    assert [supervisor.state["tasks"][t["id"]]["status"] for t in cpu+npu] == ["running", "pending", "running", "pending"]

@@ -17,6 +17,15 @@ CONTROLLER_CONTINUATIONS = {HBM_CONTINUATION, OWNER_EXIT_CONTINUATION, PLANNED_C
 STALE_GROUP_REASON = "shared_group_not_completed:running"
 
 
+def reviewed_storage_settings(review):
+    """Storage fields authorized by a planned controller continuation."""
+    if "storage_policy" not in review:
+        return {}
+    if review.get("schema") != PLANNED_CONTROLLER_CONTINUATION or review["storage_policy"] != "hard_quota":
+        raise ValueError("unrecognized controller continuation storage policy")
+    return {"storage_reserve_bytes": 0, "max_inflight_checkpoint_bytes": None, "use_live_checkpoint_headroom": False}
+
+
 def completed_before_signal(audit, scheduler_ref):
     """Verify a published final result when SIGTERM arrived during worker exit."""
     return completed_on_exit(audit, scheduler_ref, reason="target_reached")

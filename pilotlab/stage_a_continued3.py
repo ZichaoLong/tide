@@ -2,7 +2,7 @@
 from pathlib import Path
 
 from .adapter_recovery3 import VERIFIER_CONTINUATION
-from .cutover_review3 import CONTROLLER_CONTINUATIONS, HBM_CONTINUATION
+from .cutover_review3 import CONTROLLER_CONTINUATIONS, HBM_CONTINUATION, reviewed_storage_settings
 from .prepare_resume3 import reference
 from .round3 import Campaign
 from .scheduler3 import freeze_json, read
@@ -15,6 +15,7 @@ def verify_scope(plan):
     old = read_bound(batch["old_plan"])
     acceptance = read_bound(batch["qualification"])
     config = plan["config"]
+    prior = {**old["config"], **reviewed_storage_settings(review)}
     pool_floor = acceptance.get("schema") == POOL_ACCEPTANCE
     expected = [{**row, "model":revised_model(row["model"], pool_floor=pool_floor)} for row in old["subjects"]]
     if (batch["schema"] != "pilot-r3-stage-a-migration-plan-v1" or expected != plan["subjects"]
@@ -24,14 +25,14 @@ def verify_scope(plan):
             or batch["new_source_digest"] != digest(plan["source_identity"])
             or batch["foundation_commit"] != review["foundation"]["published_head"]
             or old["stage_a_revision"] != plan["stage_a_revision"]
-            or any(config[k] != old["config"][k] for k in ("python","data","budget_ledger","deadline_unix",
-                   "target_npu_devices","max_cpu_task_threads","max_rss_bytes","max_inflight_checkpoint_bytes",
+            or config.get("max_inflight_checkpoint_bytes") != prior.get("max_inflight_checkpoint_bytes")
+            or any(config[k] != prior[k] for k in ("python","data","budget_ledger","deadline_unix",
+                   "target_npu_devices","max_cpu_task_threads","max_rss_bytes",
                    "shared_max_hbm_bytes","host_cpu_affinity","max_workers","max_cpu_workers"))
             or "resume_import" in config):
         raise ValueError("A migration changed its reviewed scope, source or resource contract")
     if review.get("schema") in CONTROLLER_CONTINUATIONS:
         from .prepare_campaign3 import source_inventory
-        prior = old["config"]
         if (plan["source_identity"] != old["source_identity"]
                 or config.get("worker_source") != prior.get("worker_source", prior["source"])
                 or config.get("worker_foundation") != prior.get("worker_foundation", prior["foundation"])
