@@ -19,6 +19,27 @@ configuration, actual device/dtype and environment with the experiment dependenc
 | Mathematical changes | Explicit upstream proposal and a newly adopted fixed version |
 | General performance experience | Curated here, with applicable scope and measured evidence |
 
+## Development branches
+
+The foundation and the learning lab deliberately maintain two branches of
+`ZichaoLong/tide`. Work on the owning project's existing branch across threads.
+
+| Project | Worktree and branch |
+|---|---|
+| Model operators, gradients and state | `graph-execution-foundation` |
+| Experiment orchestration, training recipes and consumer acceptance | `tide-learning-lab` |
+
+Commit authorized changes directly on the corresponding branch. When editing
+files in both worktrees, commit each project's changes on its branch. Threads, experiments and
+delegated tasks use those branches without creating additional task branches.
+
+When cleaning up an old task branch, check its worktree use and whether its tip
+is reachable from a retained branch. If it has unique commits, preserve the tip
+and its history in a Git bundle and verify that they can be recovered before
+deleting the local reference.
+
+## Requests and delivery
+
 A request stays in its originating repository with a stable ID, fixed dependency,
 actual configuration, observed problem, available evidence/reproducer, and acceptance
 conditions. Unknowns can be stated; a full performance matrix is not required to ask.

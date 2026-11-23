@@ -6,6 +6,8 @@ Run `git status --short --branch` and start with the user's task in this thread.
 Commit foundation work directly on `graph-execution-foundation`. The learning lab
 maintains `tide-learning-lab` in its own worktree. Use each project's existing
 branch for every authorized task, including delegated work. Do not create task branches.
+Check worktree use and preserve unique commits when retiring an old task branch.
+[Development branches](docs/downstream-contract.md#development-branches)
 
 | Task | Entry point |
 |---|---|
