@@ -237,6 +237,12 @@ def test_waiter_only_reenters_queue_with_positive_proof_of_no_allocation_or_work
              "physical_device_seconds":0,"workers":{"t":{"status":"not_started","output":str(attempt)}}}
     owner = {"binding_verified":True,"owner_alive":False,"group":group}
     assert unallocated_worker("t", record, owner, queue)["task"] == reference(task)
+    record["result_path"] = str(attempt/"result.json")
+    assert unallocated_worker("t", record, owner, queue)["task"] == reference(task)
+    with pytest.raises(ValueError):
+        unallocated_worker("t", {**record, "result_sha256":"recorded"}, owner, queue)
+    with pytest.raises(ValueError):
+        unallocated_worker("t", {**record, "result_path":str(tmp_path/"result.json")}, owner, queue)
     group["allocation_acquired_unix"] = 1
     with pytest.raises(ValueError):
         unallocated_worker("t", record, owner, queue)

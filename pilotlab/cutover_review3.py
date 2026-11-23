@@ -145,7 +145,9 @@ def unallocated_worker(tid, record, owner, queue):
             or group["physical_device_seconds"] != 0 or group.get("queue_release_error")
             or worker["status"] != "not_started" or any(worker.get(k) is not None for k in
                 ("pid", "start_ticks", "started_unix", "return_code", "result_path"))
-            or worker["output"] != str(directory) or record.get("heartbeat") or record.get("result_path")
+            or worker["output"] != str(directory) or record.get("heartbeat") or record.get("worker_process")
+            or record.get("result_path") not in (None, str(directory / "result.json"))
+            or record.get("result_sha256") is not None
             or any(a.get("worker_process") or any(Path(a["path"]).iterdir()) for a in record["attempts"])):
         raise ValueError("stopped queue waiter has allocation or execution evidence: " + tid)
     return {"group":record["shared_group"], "queue":queue["queue_state"], "task":reference(record["task_path"])}
@@ -229,9 +231,12 @@ def reconcile_stop(audit, scheduler_ref, *, fault_task=None):
     queues = {q["shared_group"]:q for q in lifecycle["queue"]["attempts"] if q.get("shared_group")}
     unstarted = {}
     for tid, record in state["tasks"].items():
-        if record.get("reason") == "cleanup_evidence_error:Blocked:shared_group_lease_release_missing":
+        if record.get("reason") in ("cleanup_evidence_error:Blocked:shared_group_lease_release_missing",
+                                    "shared_group_not_completed:signal_15"):
             gid = record["shared_group"]
-            if groups[gid]["group"]["workers"][tid]["status"] == "not_started":
+            group = groups[gid]["group"]
+            if group["workers"][tid]["status"] == "not_started" and (
+                    record["reason"] != "shared_group_not_completed:signal_15" or group.get("allocation_acquired_unix") is None):
                 unstarted[tid] = unallocated_worker(tid, record, groups[gid], queues[gid])
     if unstarted:
         resolution["unstarted_before_allocation"] = unstarted
