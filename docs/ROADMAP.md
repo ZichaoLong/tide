@@ -1,12 +1,6 @@
 # 当前待办
 
-本页只维护新周期事项，不包含旧候选、旧结论或续跑计划。
-
-1. 根据用户提供的新语义与基座，核对本轮问题涉及的定义、接口、可用能力和缺口。
-2. 形成一页有限研究约定，明确候选、对照、评价、资源与停止条件。
-3. 在相应授权内完成最小正确性、梯度/状态/恢复检查和完整训练步成本测量。
-4. 根据实测选择有效 batch、并行度与有限比较，固定输入后执行。
-5. 审阅质量与结构指标，区分执行、数值、机制和学习结论，再决定后续。
-
-语义、实现和具体候选均未选定；上述为工作顺序，没有提交任何作业。
-已获授权的独立工作可并行，受阻能力只阻塞依赖它的部分。
+1. 跟进 270 个主体及匹配对照。核对四个恢复任务的终态评估与训练链凭据，跟进 Exchange/d256/S/independent、Timed/K/singleton7 的终态和 pool 保底统计。用正式心跳、NPU 驱动 PID 和检查点写入记录复核 CPU 补位、共享吞吐及存储余量。按实际训练样本复核弱余量 quad 的边界与梯度，保留新旧源码的选择依据。收尾时按空卡、剩余步数和可用检查点评估节时。跨设备接续需单独核验裁剪前梯度范数和迁移记录。[接续验收](evidence/pilot-r3-r26-activity-readiness.json) · [quad 验收](evidence/pilot-r3-r24-foundation-quad-total-acceptance.json) · [跨设备验证](evidence/pilot-r3-r23-cpu-npu-handoff.json)
+2. 对 74 个更早曝光主体进行独立迁移审阅及限定选参复核，保留 42 份旧选择及原始证据。分别记录可接回的状态和需要重评的选择。
+3. 待全部 344 个主体与匹配对照有逐项结论后，核验完整 A 门禁、选参证据、匹配质量与正式运行资源。
+4. 按实际训练负载复核多分支路由梯度、独立零先验与弱正权重。继续保留 KV 未写入槽位及 quad 常数下界的原始对照和容差。[路由验收](evidence/pilot-r3-r14-foundation-route-acceptance.json) · [KV 验收](evidence/pilot-r3-r10-foundation-kv-acceptance.json) · [quad 验收](evidence/pilot-r3-r11-foundation-quad-reception-acceptance.json)
