@@ -37,6 +37,9 @@ Whole-window and continued KV evaluation use the same no-write convention.
 KV Full tiles original logical positions and restricts each key bank to the
 finite history window; sparse event indices never replace logical time.
 
+Quad compares the budget, received mass and box totals before rounding away
+their sum tails. The selected operand owns the total derivative. A mathematical
+interior can round to a stored endpoint while retaining its interior VJP.
 For ordinary quad allocation, a zero control on the constant lower face with a
 positive upper bound has zero derivative with respect to all producer inputs.
 Reception carries this fact along the corresponding edge and may omit that

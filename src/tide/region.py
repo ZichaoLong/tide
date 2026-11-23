@@ -89,8 +89,13 @@ def region_control(score, received, roles, budget, profile, partition, support_p
         k,kind = budget,profile
     lower = torch.where(hubs,mu/4,torch.zeros_like(mu))
     options = {"support_policy": support_policy} if kind in ("shannon", "pool") and support_policy != "strict" else {}
+    keep_face = return_constant_zero and kind == "quad" and n_h < len(roles)
+    if keep_face:
+        options["return_lower_face"] = True
     out = allocate(score.permute(1,2,0),w.permute(1,2,0),mu.permute(1,2,0),
                    lower.permute(1,2,0),mu.permute(1,2,0),k,kind=kind,**options)
+    if keep_face:
+        out, lower_face = out
     control = out.permute(2,0,1)
     if not return_constant_zero:
         return control
@@ -98,6 +103,6 @@ def region_control(score, received, roles, budget, profile, partition, support_p
     # node its lower bound is the constant zero. Exclude fixed-through mu=0:
     # its declared derivative with respect to received mass can be nonzero.
     constant_zero = None
-    if kind == "quad" and n_h < len(roles):
-        constant_zero = ~hubs & (mu > 0) & (control == 0)
+    if keep_face:
+        constant_zero = ~hubs & lower_face.permute(2,0,1)
     return control, constant_zero

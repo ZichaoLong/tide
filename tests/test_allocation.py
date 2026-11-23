@@ -317,7 +317,8 @@ def test_weak_mass_prefix_cancellation_uses_original_fallback(monkeypatch):
     assert len(called) == 1 and torch.equal(called[0], torch.tensor([[False], [True]]))
     torch.testing.assert_close(result[0], torch.full((8,), 1 / 8), atol=0, rtol=0)
     expected = torch.zeros(8)
-    expected[0] = w[1].detach().sum()
+    # Sum the binary32 descriptors exactly before rounding the received target.
+    expected[0] = w[1].detach().double().sum().float()
     torch.testing.assert_close(result[1], expected, atol=0, rtol=0)
     score_grad, received_grad = torch.autograd.grad(result[1, 0], (scores, w))
     torch.testing.assert_close(score_grad, torch.zeros_like(scores), atol=0, rtol=0)

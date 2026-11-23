@@ -114,6 +114,12 @@ the selected face from its remaining mass. Exact endpoints preserve zero
 senders. The final face also checks its lower/upper multiplier bounds: a
 satisfied total alone can hide a wrong face after prefix cancellation. Rejected
 faces retain the same-device, same-dtype safeguarded bisection fallback.
+Quad keeps a compensated total through the budget, receipt and capacity
+comparisons. It screens the returned face against the signed residual and
+feasible score directions. A disputed two-node row with a score gap greater
+than one redistributes its remaining mass on device. Other disputed rows
+are packed together for an exact bounded projection on the host. Their
+pre-storage faces determine the VJP and the regional constant-zero proof.
 Shannon uses a [finite active-face solve](shannon-active-set.md) with compensated
 mass arithmetic and separately retained faces. Both use the declared solution-mapping
 first-order VJP, not differentiation through solver iterations.

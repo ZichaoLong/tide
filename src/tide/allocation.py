@@ -12,8 +12,9 @@ import torch
 from torch import Tensor
 from torch.autograd.function import once_differentiable
 
+from . import quad
 from .pool_support import store_pool
-from .scaled_arithmetic import binary_parts
+from .scaled_arithmetic import binary_parts, compensated_sum as _compensated_sum, two_sum as _two_sum
 from .weighted_mean import _difference_parts, _reduce_parts, _restore, _sum_parts
 from .shannon_support import FLOOR, refine_rows
 
@@ -77,7 +78,7 @@ def _response(scores, multiplier, lower, upper, kind):
 
 
 def _save_solution(ctx, c, scores, mu, lower, upper, low_active, high_active, kind, high_total, originals,
-                   shannon_faces=None):
+                   solved_faces=None):
     refine = None
     if kind == "shannon":
         floor, tail = _compensated_sum(lower)
@@ -94,10 +95,18 @@ def _save_solution(ctx, c, scores, mu, lower, upper, low_active, high_active, ki
     fixed_mu = fixed & (upper == mu)
     lower_face = ~fixed & (c <= lower)
     upper_face = ~fixed & ~lower_face & (c >= upper)
-    if shannon_faces is not None:
-        selected, selected_lower, selected_upper = shannon_faces
+    if solved_faces is not None:
+        selected, selected_lower, selected_upper = solved_faces
         lower_face = torch.where(selected, selected_lower, lower_face)
         upper_face = torch.where(selected, selected_upper, upper_face)
+    if ctx.quad_exact is not None:
+        exact = ctx.quad_exact
+        c = exact.replace(c, exact.values)
+        lower_face = exact.replace(lower_face, exact.lower)
+        upper_face = exact.replace(upper_face, exact.upper)
+        low_active = exact.replace(low_active, exact.choices[4])
+        high_active = exact.replace(high_active, exact.choices[5])
+        ctx.quad_exact = None
     inside = ~fixed & ~lower_face & ~upper_face
     slope = inside.to(c.dtype) if kind == "quad" else torch.where(inside, c, 0)
     extended_slope = ()
@@ -122,6 +131,9 @@ def _save_solution(ctx, c, scores, mu, lower, upper, low_active, high_active, ki
     ctx.kind = kind
     ctx.save_for_backward(slope, lower_face, upper_face, fixed, fixed_mu,
                           low_active, high_active, *originals, *extended_slope)
+    if ctx.return_lower_face:
+        ctx.mark_non_differentiable(lower_face)
+        return c, lower_face
     return c
 
 
@@ -259,26 +271,6 @@ def _bisect(shifted, lower, upper, target, solve, kind):
         value_m, value_e = _exp_product_parts(log_probability, rm, re)
         reconstructed = _restore(value_m, value_e)
     return torch.maximum(lower, torch.minimum(upper, torch.where(inside, reconstructed, c)))
-
-
-def _two_sum(a, b):
-    """An unevaluated two-term sum, for bounded Shannon mass arithmetic."""
-    total = a + b
-    virtual = total - a
-    error = (a - (total - virtual)) + (b - virtual)
-    return total, error
-
-
-def _compensated_sum(values):
-    """Pairwise two-term reduction; a positive tail need not fit beside one."""
-    high, low = values, torch.zeros_like(values)
-    while high.shape[-1] > 1:
-        if high.shape[-1] % 2:
-            high = torch.cat((high, torch.zeros_like(high[..., :1])), -1)
-            low = torch.cat((low, torch.zeros_like(low[..., :1])), -1)
-        total, error = _two_sum(high[..., ::2], high[..., 1::2])
-        high, low = _two_sum(total, error + low[..., ::2] + low[..., 1::2])
-    return high, low
 
 
 def _two_product(a, b):
@@ -420,17 +412,26 @@ def _shannon_centered_parts(weights, values, extended=()):
 
 class _Constrained(torch.autograd.Function):
     @staticmethod
-    def forward(ctx, scores, mu, lower, upper, low_total, high_total, kind):
+    def forward(ctx, scores, mu, lower, upper, low_total, high_total, kind, quad_inputs, return_lower_face):
         ctx.floor_policy = kind == FLOOR
         ctx.unresolved = None
+        ctx.return_lower_face = return_lower_face
+        ctx.quad_exact = None
         if ctx.floor_policy:
             kind = "shannon"
         originals = scores, mu, lower, upper, low_total, high_total
         shape = torch.broadcast_shapes(*(value.shape for value in originals))
         scores, mu, lower, upper = (value.expand(shape) for value in originals[:4])
         c0 = _response(scores, 0, lower, upper, kind)
-        s0 = c0.sum(-1, keepdim=True)
-        low_active, high_active = s0 < low_total, s0 > high_total
+        if quad_inputs is not None:
+            totals, received, budget = quad_inputs
+            initial = totals.initial if totals.initial is not None else quad.mass_parts(c0)
+            ctx.quad_exact = totals.exact
+            s0 = initial[0]
+            low_active, high_active = quad.less(initial, totals.low), quad.less(totals.high, initial)
+        else:
+            s0 = c0.sum(-1, keepdim=True)
+            low_active, high_active = s0 < low_total, s0 > high_total
         if kind == "shannon":
             total, tail = _compensated_sum(c0)
             low_difference, low_error = _two_sum(total, -low_total)
@@ -439,8 +440,13 @@ class _Constrained(torch.autograd.Function):
             high_active = high_difference + (high_error + tail) > 0
         active = low_active | high_active
         target = torch.where(low_active, low_total, torch.where(high_active, high_total, s0))
-        sum_lower, sum_upper = lower.sum(-1, keepdim=True), upper.sum(-1, keepdim=True)
-        at_lower, at_upper = target <= sum_lower, target >= sum_upper
+        if quad_inputs is not None:
+            target_tail = torch.where(low_active, totals.low[1], totals.high[1])
+            at_lower = ~quad.less(totals.floor, (target, target_tail))
+            at_upper = ~quad.less((target, target_tail), totals.cap)
+        else:
+            sum_lower, sum_upper = lower.sum(-1, keepdim=True), upper.sum(-1, keepdim=True)
+            at_lower, at_upper = target <= sum_lower, target >= sum_upper
         if kind == "shannon":
             floor, floor_tail = _compensated_sum(lower)
             cap, cap_tail = _compensated_sum(upper)
@@ -449,6 +455,8 @@ class _Constrained(torch.autograd.Function):
             at_lower = floor_difference + (floor_error - floor_tail) <= 0
             at_upper = cap_difference + (cap_error - cap_tail) >= 0
         solve = active & ~at_lower & ~at_upper
+        if ctx.quad_exact is not None:
+            solve = solve & ~ctx.quad_exact.mask
         if scores.shape[-1] == 1 or not bool(solve.any()):
             c = torch.where(active, target if scores.shape[-1] == 1
                             else torch.where(at_lower, lower, upper), c0)
@@ -459,7 +467,7 @@ class _Constrained(torch.autograd.Function):
         center = torch.where(free, scores, -torch.inf).amax(-1, keepdim=True)
         center = torch.where(free.any(-1, keepdim=True), center, 0)
         shifted = scores - center
-        shannon_faces = None
+        solved_faces = None
         if kind == "quad":
             c, valid = _quad_sorted(shifted, lower, upper, target)
             fallback = solve & ~valid
@@ -472,21 +480,32 @@ class _Constrained(torch.autograd.Function):
             active_scores = scores if ctx.floor_policy else shifted
             c, selected_lower, selected_upper, ctx.unresolved = _shannon_solve(
                 active_scores, lower, upper, target, solve, refine_unresolved=ctx.floor_policy)
-            shannon_faces = solve, selected_lower, selected_upper
+            solved_faces = solve, selected_lower, selected_upper
         c = torch.where(at_lower, lower, torch.where(at_upper, upper, c))
         c = torch.where(active, c, c0)
         tolerance = 32 * torch.finfo(scores.dtype).eps * target.abs().clamp_min(torch.finfo(scores.dtype).tiny)
-        missed = active & ((c.sum(-1, keepdim=True) - target).abs() > tolerance)
-        if ctx.floor_policy:
-            ctx.unresolved = missed if ctx.unresolved is None else ctx.unresolved | missed
-        elif bool(missed.any()):
-            raise ArithmeticError("allocation multiplier did not meet the total constraint")
+        if quad_inputs is not None:
+            suspect = quad.disputed(scores, lower, upper, c, (target, target_tail), solve, tolerance)
+            if bool(suspect.any()):
+                rows, values, lf, uf = quad.recover_rows(scores, received, lower, upper, budget, suspect,
+                                                         (target, target_tail))
+                c = c.clone()
+                c[rows] = values
+                low_face, high_face = torch.zeros_like(c, dtype=torch.bool), torch.zeros_like(c, dtype=torch.bool)
+                low_face[rows], high_face[rows] = lf, uf
+                solved_faces = suspect, low_face, high_face
+        else:
+            missed = active & ((c.sum(-1, keepdim=True) - target).abs() > tolerance)
+            if ctx.floor_policy:
+                ctx.unresolved = missed if ctx.unresolved is None else ctx.unresolved | missed
+            elif bool(missed.any()):
+                raise ArithmeticError("allocation multiplier did not meet the total constraint")
         return _save_solution(ctx, c, scores, mu, lower, upper, low_active, high_active, kind, high_total, originals,
-                              shannon_faces)
+                              solved_faces)
 
     @staticmethod
     @once_differentiable
-    def backward(ctx, grad):
+    def backward(ctx, grad, *unused):
         saved = ctx.saved_tensors
         slope, lower_face, upper_face, fixed, fixed_mu, low_active, high_active = saved[:7]
         extended = saved[13:]
@@ -521,7 +540,7 @@ class _Constrained(torch.autograd.Function):
         result = tuple(_reduce_parts(m, e, shape) if need else None
                        for (m, e), shape, need in zip(parts, ctx.source_shapes, ctx.needs_input_grad[:6]))
         _finite_vjp("allocation", result, ctx.needs_input_grad[:6])
-        return (*result, None)
+        return (*result, None, None, None)
 
 
 def _as_input(value, scores):
@@ -633,8 +652,12 @@ def pool(scores: Tensor, mu: Tensor, *, support_policy: str = "strict") -> Tenso
 
 
 def allocate(scores: Tensor, w: Tensor, mu: Tensor, lower: Tensor, upper: Tensor,
-             k: float | Tensor, kind: str = "quad", *, support_policy: str = "strict") -> Tensor:
+             k: float | Tensor, kind: str = "quad", *, support_policy: str = "strict",
+             return_lower_face: bool = False):
     """Solve role-bounded quad/Shannon allocation with the received lower bound.
+
+    For quad, return_lower_face also returns the non-fixed lower-face mask used
+    by the VJP, evaluated before a disputed solution is rounded to storage.
 
     b=min(1,sum(w)), U=min(k,sum(upper)), L=max(sum(lower),min(b,U)).
     Scores, w, mu and bounds broadcast along the candidate-last layout; k
@@ -652,6 +675,8 @@ def allocate(scores: Tensor, w: Tensor, mu: Tensor, lower: Tensor, upper: Tensor
     lost positive senders at the least subnormal, and differentiates the
     unrounded free responses. The default strict policy rejects support loss.
     """
+    if return_lower_face and kind != "quad":
+        raise ValueError("return_lower_face requires quad allocation")
     if kind == "pool":
         return pool(scores, mu, support_policy=support_policy)
     if support_policy not in ("strict", FLOOR) or (support_policy == FLOOR and kind != "shannon"):
@@ -671,14 +696,22 @@ def allocate(scores: Tensor, w: Tensor, mu: Tensor, lower: Tensor, upper: Tensor
     finite = torch.isfinite(scores) & torch.isfinite(w) & torch.isfinite(mu) & torch.isfinite(lower) & torch.isfinite(upper)
     if bool((~legal | ~finite).any()) or bool((~torch.isfinite(budget) | (budget < 1)).any()):
         raise ValueError("invalid received weights, role bounds or budget")
-    sum_lower, sum_upper = lower.sum(-1, keepdim=True), upper.sum(-1, keepdim=True)
-    high_total = _first_min(budget, sum_upper)
-    if bool((sum_lower > high_total).any()):
-        raise ValueError("role floors exceed the available budget")
-    mass = w.sum(-1, keepdim=True)
-    received = _first_min(torch.ones_like(mass), mass)
-    low_total = _first_max(sum_lower, _first_min(received, high_total))
     if scores.shape[-1] == 0:
-        return scores * 0 + w * 0 + mu * 0 + lower * 0 + upper * 0 + budget * 0
+        empty = scores * 0 + w * 0 + mu * 0 + lower * 0 + upper * 0 + budget * 0
+        return (empty, torch.zeros_like(empty, dtype=torch.bool)) if return_lower_face else empty
+    quad_inputs = None
+    if kind == "quad" and scores.shape[-1] > 1:
+        totals = quad.total_bounds(scores, w, lower, upper, budget)
+        low_total, high_total = totals.low[0], totals.high[0]
+        quad_inputs = totals, w, budget
+    else:
+        sum_lower, sum_upper = lower.sum(-1, keepdim=True), upper.sum(-1, keepdim=True)
+        high_total = _first_min(budget, sum_upper)
+        if bool((sum_lower > high_total).any()):
+            raise ValueError("role floors exceed the available budget")
+        mass = w.sum(-1, keepdim=True)
+        received = _first_min(torch.ones_like(mass), mass)
+        low_total = _first_max(sum_lower, _first_min(received, high_total))
     return _Constrained.apply(originals[0], originals[2], originals[3], originals[4],
-                              low_total, high_total, FLOOR if support_policy == FLOOR else kind)
+                              low_total, high_total, FLOOR if support_policy == FLOOR else kind,
+                              quad_inputs, return_lower_face)

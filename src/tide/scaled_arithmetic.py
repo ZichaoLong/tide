@@ -11,6 +11,34 @@ is used; callers retain their own checks for genuinely unrepresentable results.
 import torch
 
 
+def two_sum(a, b):
+    """Head and rounding tail of a bounded floating-point addition."""
+    total = a + b
+    virtual = total - a
+    return total, (a - (total - virtual)) + (b - virtual)
+
+
+def compensated_sum(values, *, track_roundoff=False):
+    """Pairwise two-term reduction of nonnegative storage values."""
+    high, low = values, torch.zeros_like(values)
+    lost = torch.zeros_like(values, dtype=torch.bool) if track_roundoff else None
+    while high.shape[-1] > 1:
+        if high.shape[-1] % 2:
+            high = torch.cat((high, torch.zeros_like(high[..., :1])), -1)
+            low = torch.cat((low, torch.zeros_like(low[..., :1])), -1)
+            if track_roundoff:
+                lost = torch.cat((lost, torch.zeros_like(lost[..., :1])), -1)
+        total, error = two_sum(high[..., ::2], high[..., 1::2])
+        if track_roundoff:
+            remainder, e1 = two_sum(error, low[..., ::2])
+            remainder, e2 = two_sum(remainder, low[..., 1::2])
+            lost = lost[..., ::2] | lost[..., 1::2] | (e1 != 0) | (e2 != 0)
+        else:
+            remainder = error + low[..., ::2] + low[..., 1::2]
+        high, low = two_sum(total, remainder)
+    return (high, low, lost) if track_roundoff else (high, low)
+
+
 def binary_parts(value):
     """Exact frexp parts, with an explicit NPU FP32 device implementation.
 
