@@ -1,10 +1,12 @@
-# 区域注意力恒零先验修复已交付
+# Quad 区域分配修复已交付
 
-实现提交 `68cf6d40` 在单区域与批量区域打分中传播节点入边的恒零证明。真实入边全部有证明且先验等于零时，区域注意力在归一化前排除该键。独立零先验保留右导数，正权重沿用原计算。[语义约定](semantics.md)
+基座实现 `6e14a6cc` 保留不等式总量的来源、求和尾数，以及舍入前的上下界归属。多节点复核使用原始分数差和剩余自由质量。第 921 步原故障的第二个节点恢复到 0.0000057220458984375，其接收量梯度与解析解一致。[语义](semantics.md) · [实现](architecture.md)
 
-48 项 CPU 定向检查与 21 项 Ascend 定向检查通过。下游正式故障批次在 CPU 和 Ascend 上均通过 AdamW 更新，122 个参数张量与原公式 CPU FP64 参考的最大绝对误差分别约为 6.63e-6 和 3.37e-6。Ascend 从第 2,569 步正式检查点越过第 2,614 步，独立进程载入第 2,618 步并复算第 2,619 步，参数、优化器与梯度满足既有容差，私有状态逐位一致。[下游故障批次与恢复验收](../../tide-learning-lab/docs/evidence/pilot-r3-r21-foundation-regional-prior-acceptance.json)
+冻结版 152 项 CPU 定向检查通过，Ascend 测试作业 39 项通过。CPU 与 NPU 在各自轨迹中重放完整更新，另起进程载入第 922 步并复算第 923 步。第 921 步每端的 40,960 行均通过独立有理数投影参考，配对整步计时中位变化为 CPU +0.94%、NPU +0.45%。[双端验收、计时及旧结果抽查](../../tide-learning-lab/docs/evidence/pilot-r3-r24-foundation-quad-total-acceptance.json)
 
-北京时间 2026-11-22 19:00:50，下游 A 阶段 r22 的正式故障任务已训练至第 2,793 步，B 仍关闭。[正式接续](../../tide-learning-lab/docs/evidence/pilot-r3-main-r22-handoff.json)
+北京时间 2026-11-23 09:51:08，下游 A 阶段 r25 已接回原 CPU 任务，训练至第 922 步，B 关闭。[正式接续与进程采样](../../tide-learning-lab/docs/evidence/pilot-r3-main-r25-handoff.json)
+
+此前区域注意力恒零先验及独立零先验右导数的修复对应 `68cf6d40`。[区域注意力验收](../../tide-learning-lab/docs/evidence/pilot-r3-r21-foundation-regional-prior-acceptance.json)
 
 Pool 的 `positive-floor-v1` 验收继续对应实现 `b93eeae7`。[Pool 验收](../../tide-learning-lab/docs/evidence/pilot-r3-r16-foundation-pool-acceptance.json)
 
