@@ -62,5 +62,7 @@ not a present availability promise. Future investigations need new bounded input
 
 Downstream installation and normal execution use the package/source and runtime.
 Protect the main/downstream worktrees and common Git, public environments, reference
-repositories and user changes. The current cleanup retained all four untracked user
-documents byte-for-byte and did not touch concurrently created downstream files.
+repositories and user changes. The 2026-11-19 cleanup preserved concurrent
+downstream changes and recorded SHA-256 hashes for four user documents. The
+foundation branch now tracks those four originals at the paths and hashes in
+the [cleanup record](evidence/compact-repository-20261119.json).
