@@ -4,7 +4,9 @@
 
 冻结版 152 项 CPU 定向检查通过，Ascend 测试作业 39 项通过。CPU 与 NPU 在各自轨迹中重放完整更新，另起进程载入第 922 步并复算第 923 步。第 921 步每端的 40,960 行均通过独立有理数投影参考，配对整步计时中位变化为 CPU +0.94%、NPU +0.45%。[双端验收、计时及旧结果抽查](../../tide-learning-lab/docs/evidence/pilot-r3-r24-foundation-quad-total-acceptance.json)
 
-北京时间 2026-11-23 09:51:08，下游 A 阶段 r25 已接回原 CPU 任务，训练至第 922 步，B 关闭。[正式接续与进程采样](../../tide-learning-lab/docs/evidence/pilot-r3-main-r25-handoff.json)
+基座交付固定在完整提交 `6e14a6cc90e3ea1972611ee98b9de9bfea3b14fe`。本机实例作业记录可用 `python scripts/status.py` 查阅。下游验收、正式采用与实时进度分别沿实验仓的案例和状态入口查询。[r24 从故障到正式采用](../../tide-learning-lab/docs/requests/pilot-r3-r24-quad.md) · [实验仓当前交接](../../tide-learning-lab/docs/STATUS.md)
+
+新实现可从与其数学定义对应的输入和梯度开始复验。CPU 定向回归中仍保留一个弱质量 V 梯度在三条执行路径上的 strict xfail。[数值条目与已知偏差](numerical-failure-modes.md) · [回归清单](../tests/numerical-regressions.txt)
 
 此前区域注意力恒零先验及独立零先验右导数的修复对应 `68cf6d40`。[区域注意力验收](../../tide-learning-lab/docs/evidence/pilot-r3-r21-foundation-regional-prior-acceptance.json)
 

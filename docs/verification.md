@@ -6,6 +6,10 @@ Use [development](development.md) for a clean environment and [execution](execut
 for frozen long jobs. [ROADMAP](ROADMAP.md) owns the cycle's work; completed
 qualification is recorded in the linked evidence, not inferred from the plan.
 
+When implementing an operator, start with the boundary cases for its adopted formula.
+Each case gives a reproducible input, an expected value or derivative, and the devices on which it was checked.
+[Numerical failure modes and regression cases](numerical-failure-modes.md) · [Runnable CPU selection](../tests/numerical-regressions.txt)
+
 The [positive-chain record](evidence/positive-chain-20261119.md) distinguishes
 b4a's 1182-test CPU suite from 3ef's final directed CPU/NPU checks and actual
 NPU restored updates. Four pre-existing strict xfails remain. Device checks

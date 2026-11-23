@@ -1,8 +1,7 @@
 # 当前待办
 
-下游 A 已用 quad 求解修复接续 r25。B 关闭。[正式接续与进程采样](../../tide-learning-lab/docs/evidence/pilot-r3-main-r25-handoff.json)
+1. 使用消费者提供的真实样本扩展 `6e14a6cc` 的机制验证，覆盖 quad 弱余量、区域注意力、pool 正发送量和多分支 Timed 路由。核对恒零边、独立零先验、微小正权重及跨窗状态。用采样行数、补值行数和主机复核开销限定性能结论。[路由语义](semantics.md) · [Shannon 支持策略](shannon-positive-floor.md)
+2. 按实际负载扩展 Attention 单支持、近似常量 V、集中分布、弱质量和 BF16 多 key 的数值与性能范围，分别记录设备、执行路径、精度和误差。[Attention 验收](attention-native-support-repair.md)
+3. 扩展恢复与状态验证时沿用 Shannon 恢复、CPU FP64 私有 KV 与弱质量见证的原始容差，分别报告源码、设备、精度与有限超差。[数值回归与已知偏差](numerical-failure-modes.md)
 
-1. 跟进使用 `6e14a6cc` 的下游 quad 弱余量、区域注意力、pool 正发送量与多分支 Timed 路由，复核真实训练中的恒零边、独立零先验、微小正权重及跨窗口状态。按训练采样的总行数与保底行数，衡量 pool 和 Shannon 极端行的频率及主机复核成本。[路由语义](semantics.md) · [Shannon 支持策略](shannon-positive-floor.md)
-2. 配合 74 个旧曝光主体的迁移审阅，逐项核对新源码与原检查点、优化器矩、私有状态、已消费曝光和选择证据。
-3. 按实际负载扩展数值范围与性能验证，分别报告 Attention 单支持、近似常量 V、集中分布、弱质量和 BF16 多 key 的实测条件。[Attention 验收](attention-native-support-repair.md)
-4. 保留 Shannon 恢复、CPU FP64 私有 KV 与弱质量见证的原始有限超差及阈值，按源码、设备和精度分别交付证据。
+消费者的主体迁移、选参和门禁由实验仓跟进。[实验仓待办](../../tide-learning-lab/docs/ROADMAP.md)

@@ -2,20 +2,26 @@
 
 ## Re-entry
 
-1. Run `git status --short --branch` and `python scripts/status.py`.
-2. Read [STATUS](docs/STATUS.md), [project scope](docs/project-scope.md), and
-   [ROADMAP](docs/ROADMAP.md). Scope is the enduring agreement; status is fact;
-   roadmap is this cycle's plan, not a declaration of implemented capability.
-3. Use [architecture](docs/architecture.md) and [semantic map](docs/semantic-map.md)
-   to locate current code and math. Run `python scripts/check_upstream.py`.
-   `docs/upstream.json` pins `math/`; adopt a new revision only for a user task.
+Run `git status --short --branch` and start with the user's task in this thread.
+Commit foundation work directly on `graph-execution-foundation`. The learning lab
+maintains `tide-learning-lab` in its own worktree. Use each project's existing
+branch for every authorized task, including delegated work. Do not create task branches.
+
+| Task | Entry point |
+|---|---|
+| Check status | Run `python scripts/status.py` or add `--json`. Its sampling time and local job receipts accompany the recorded handoff. The consumer reports its own live campaigns. [Current handoff](docs/STATUS.md) |
+| Continue the same work | Recover the accepted scope, implementation revision, and available verification or job records. Follow the outstanding item and any bounds of that job. [Handoff](docs/STATUS.md) · [Backlog](docs/ROADMAP.md) · [Execution](docs/execution-flows.md) |
+| Locate and change an implementation | Map the mathematical binding to `src/tide`, a small independent case and its test. Run `python scripts/check_upstream.py` when checking the fixed mathematics. [Semantic map](docs/semantic-map.md) · [Architecture](docs/architecture.md) · [Numerical regressions](docs/numerical-failure-modes.md) |
+| Start a new cycle | Use this thread's adopted sources, bindings, goals and authority. Select the applicable tests once the semantics are known. [Product scope](docs/project-scope.md) · [Verification](docs/verification.md) |
+
+`docs/upstream.json` pins the adopted `math/` snapshot. Adopt a new revision only for a user task.
 
 ## Product and implementation
 
 The instance product route can continue indefinitely. The general graph foundation
 is a separate future route, activated explicitly; it adds no current API, graph or
-backend obligations. The active FC/HB source is `src/tide`. The next cycle work
-includes FP32/BF16; actual precision qualification is in STATUS and evidence.
+backend obligations. The active FC/HB source is `src/tide`. This implementation's
+FP32/BF16 qualification is recorded in STATUS and its source-scoped evidence.
 
 Semantic correctness comes first, performance second. Interfaces serve tensor flow,
 clear ownership and replaceable implementations; instance/backend specialization

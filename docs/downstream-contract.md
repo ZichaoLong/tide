@@ -27,6 +27,42 @@ implementation/evidence commits, API/state changes, exact verified scope and a
 consumer reproduction command. Each consumer records its own acceptance before
 changing its lock. Upstream delivery never implies downstream acceptance.
 
+### Following a fix across repositories
+
+| Stage | What the owning repository records |
+|---|---|
+| Foundation delivery | Link the consumer's request to the adopted math, fixed implementation commit, affected public behavior, independent witness and a runnable regression. Record the source, devices and precision actually checked. |
+| Consumer acceptance | Bind the originating diagnosis and the delivered implementation to an acceptance record. Check the quantities affected, including gradients, a real subsequent update or restored state when applicable. Record the fixture, oracle, tolerances and remaining deviations. |
+| Batch adoption | The consumer binds its acceptance and fixed source to the new plan or launch. Its handoff records the adopted version and the first observed result. A later batch identifies the version it actually uses. |
+
+The worked example connects a failed step, the foundation's closed-form regression,
+CPU and Ascend acceptance, and the next official batch. Sibling checkouts named
+`graph-execution-foundation` and `tide-learning-lab` resolve the relative links.
+The case names the fixed commit for standalone source lookup.
+[r24 consumer case](../../tide-learning-lab/docs/requests/pilot-r3-r24-quad.md) · [Foundation numerical regressions](numerical-failure-modes.md)
+
+### Read-only status
+
+Each checkout ships `python scripts/status.py` and its own observation adapter.
+`--json` emits `tide-worktree-status-v1`. The shared fields give the repository,
+branch, revision, worktree changes, UTC sampling interval, current handoff title
+and its text. `runtime` gives the observation kind, summary, sources and next
+read-only check. Each owner supplies the evidence appropriate to its work.
+When changing the common command, compare its Git blob across both branches and
+exercise human and JSON output in separate clean checkouts.
+
+| Observation kind | Evidence |
+|---|---|
+| `live` | The consumer bound its scheduler to this host's active service, process start identity and cgroup. Driver observations have their own availability. |
+| `snapshot_only` | Local records exist. The foundation lists each job receipt's recorded state, source, elapsed time and exit code. The consumer reports its scheduler and any host checks it could perform. |
+| `unavailable` | The required local records are missing or unreadable in this checkout. Consult its dated handoff for the last reviewed sample. Establishing that a service stopped requires an observation of that service. |
+
+Keep the current handoff in each repository's `docs/STATUS.md`, its outstanding work
+in `docs/ROADMAP.md` and durable evidence at stable paths. Runtime pointers, data,
+checkpoints, and private installations are recovered separately by their recorded
+identity. Select the current thread's scope for edits, branch commits, pushes and
+experiment launches. Each operation uses its own authorization.
+
 Freeze installations used by active experiments. Upgrade in a separate installation,
 check affected inference/gradients/updates/state and then adopt explicitly. Source
 identity, exact checkpoint data, tolerant numeric replay and bitwise optimizer replay
