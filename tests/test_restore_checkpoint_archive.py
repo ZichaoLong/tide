@@ -1,0 +1,68 @@
+import hashlib
+from pathlib import Path
+import stat
+import subprocess
+import tempfile
+import unittest
+
+from scripts.restore_checkpoint_archive import object_path, read_object, restore
+
+
+class CheckpointArchiveTests(unittest.TestCase):
+    def setUp(self):
+        temporary = tempfile.TemporaryDirectory()
+        self.addCleanup(temporary.cleanup)
+        self.root = Path(temporary.name).resolve()
+        self.payload = b"frozen checkpoint bytes" * 200
+        self.entry = {
+            "path": ".local/pilot-r3/campaign-r01/checkpoints/model.pt",
+            "sha256": hashlib.sha256(self.payload).hexdigest(),
+            "size": len(self.payload),
+            "mtime_ns": 1719590473000123456,
+            "mode": 0o640,
+        }
+        self.target = self.root / self.entry["path"]
+        self.blob = object_path(self.root / "archive", self.entry["sha256"])
+        self.blob.parent.mkdir(parents=True)
+        self.compress(self.payload)
+
+    def compress(self, data):
+        self.blob.write_bytes(subprocess.check_output(["zstd", "-q", "-c"], input=data))
+
+    def test_restore_and_repeat(self):
+        read_object(self.blob, self.entry)
+        self.assertTrue(restore(self.root, self.entry, self.blob))
+        self.assertEqual(self.target.read_bytes(), self.payload)
+        before = self.target.stat()
+        self.assertEqual(stat.S_IMODE(before.st_mode), self.entry["mode"])
+        self.assertEqual(before.st_mtime_ns, self.entry["mtime_ns"])
+        self.assertFalse(restore(self.root, self.entry, self.blob))
+        self.assertEqual(self.target.stat().st_ino, before.st_ino)
+
+    def test_conflicting_original_is_preserved(self):
+        self.target.parent.mkdir(parents=True)
+        self.target.write_bytes(b"a different checkpoint")
+        with self.assertRaises(ValueError):
+            restore(self.root, self.entry, self.blob)
+        self.assertEqual(self.target.read_bytes(), b"a different checkpoint")
+
+    def test_wrong_content_and_truncated_frame_leave_no_output(self):
+        self.compress(b"x" * len(self.payload))
+        with self.assertRaisesRegex(ValueError, "SHA-256"):
+            restore(self.root, self.entry, self.blob)
+        self.compress(self.payload)
+        self.blob.write_bytes(self.blob.read_bytes()[:-1])
+        with self.assertRaises((ValueError, OSError)):
+            restore(self.root, self.entry, self.blob)
+        self.assertEqual(list(self.target.parent.iterdir()), [])
+
+    def test_symlink_in_destination_is_rejected(self):
+        (self.root / "elsewhere").mkdir()
+        (self.root / ".local").symlink_to(self.root / "elsewhere", target_is_directory=True)
+        with self.assertRaisesRegex(ValueError, "symlink"):
+            restore(self.root, self.entry, self.blob)
+        self.assertEqual(list((self.root / "elsewhere").iterdir()), [])
+
+
+if __name__ == "__main__":
+    unittest.main()

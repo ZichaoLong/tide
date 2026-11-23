@@ -20,6 +20,24 @@ r30 直接按 CPU 进程数、线程、主存、NPU 租约与每张卡的显存�
 
 在轮次输出的 `decisions/*-device.json` 中按任务 ID 和输入哈希核对设备选择。迁移记录的 `retired_calibrations` 列出已撤下的校准请求。查询实际占用时，将 `groups/*/queue.json` 的租约状态与驱动 PID 对照。每卡还能接纳多大的任务，取决于该卡已派任务的峰值显存估算和整卡实测用量。[r30 接续审阅](evidence/pilot-r3-r30-resource-readiness.json) · [正式运行采样](evidence/pilot-r3-main-r30-handoff.json)
 
+## 恢复已归档的检查点
+
+2026-11-23 清理的 R1、R2、R3 冷检查点保存在本账号的私有 SFS 目录。恢复清单按原仓库相对路径记录大小、SHA-256、权限和修改时间。原轮次的任务、结果及终态审计仍按原路径引用这些文件。需要重跑某轮的全文件审计时，先在仓库根目录按该轮恢复，再运行原审计命令。[清理和恢复实测](evidence/pilot-r3-r30-storage-cleanup.json) · [恢复程序](../scripts/restore_checkpoint_archive.py)
+
+下面的命令将一个已抽查的检查点放回原路径，要求本机有 Python 3.9+ 和 `zstd`。
+
+```bash
+archive=/mi/sfs_turbo/zlong/tide-learning-lab-archive/storage-20261123-r30
+(cd "$archive" && sha256sum -c recovery-manifest.sha256)
+checkpoint=.local/pilot-r3/campaign-r09/round/tasks/exchange-d128-k-base-4aac2dcb10-a2-2026112001-r2/attempt-0/checkpoints/step-000002300-40220a07fa.pt
+python scripts/restore_checkpoint_archive.py \
+  --manifest "$archive/recovery-manifest.json" --under "$checkpoint" --root "$PWD"
+```
+
+`--under` 也接受轮次目录，如 `.local/pilot-r3/campaign-r09/round`。使用 `--verify-only` 可逐文件解压并核对哈希。用 `--root` 指定空目录可做隔离恢复。目标已有相同内容时跳过，遇到不同内容时保留现场并报错。私有目录自带恢复程序。若整个归档搬到新目录，将 `archive` 指向新位置，恢复时加 `--store local="$archive" --store sfs="$archive"`。
+
+另有 89 个重复文件在清理时改用硬链接，共用保留文件的修改时间。归档目录内的 `dedup-events.jsonl` 保存了每个原路径、内容哈希及去重前的纳秒修改时间 `prior_mtime_ns`。
+
 ## 定位和修改
 
 | 问题 | 源码和最近的回归入口 |

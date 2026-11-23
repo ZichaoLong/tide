@@ -1,0 +1,332 @@
+{
+  "active_campaign": {
+    "cohort_subjects": 270,
+    "deferred_subjects": 74,
+    "driver_pids_per_physical_card": {
+      "11": 3,
+      "14": 5,
+      "2": 5,
+      "4": 6,
+      "5": 4,
+      "7": 4,
+      "8": 5
+    },
+    "kind": "live",
+    "observed_at": "2026-11-23T14:39:52.249850+00:00",
+    "plan_sha256": "b5be5c54004fb2ec83c12cca14f939311512cae09d56b7561dd0cd39503ab8aa",
+    "scheduler": {
+      "blocking_reason": null,
+      "budget": {
+        "deadline_unix": 1797698913.9318287,
+        "device_seconds": 1473671.349117931,
+        "max_device_seconds": 25920000
+      },
+      "stage": "stage-a-training-pipeline",
+      "stage_b_gate": "closed",
+      "status": "running",
+      "task_counts": {
+        "completed": 261,
+        "pending": 184,
+        "running": 73
+      }
+    },
+    "scheduler_cpu_workers": 40,
+    "scheduler_npu_workers": 32,
+    "selected_subjects": 116,
+    "state_updated_unix": 1795444791.2593873,
+    "status_snapshot": {
+      "path": ".local/storage-20261123-r30/status-after.json",
+      "sha256": "84f2db29e6456a73c8b9cfb01ab1e55c1f3423ab36d4554dce89c8f5cd0dbb9a"
+    },
+    "systemd": {
+      "ActiveState": "active",
+      "ControlGroup": "/user.slice/user-1003.slice/user@1003.service/background.slice/tide-pilot-r3-campaign-r30.service",
+      "ExecMainCode": "0",
+      "ExecMainStatus": "0",
+      "InvocationID": "680e4eb280bd47079b23c24b42f49c03",
+      "LoadState": "loaded",
+      "MainPID": "3783721",
+      "Result": "success",
+      "Slice": "background.slice",
+      "SubState": "running"
+    },
+    "unit": "tide-pilot-r3-campaign-r30.service"
+  },
+  "archive": {
+    "archived_active_or_deferred_r3_paths": 0,
+    "by_kind": {
+      "completed_diagnostic": {
+        "logical_bytes": 1727780841,
+        "paths": 11,
+        "released_blocks_bytes": 1727823872
+      },
+      "discarded_recipe": {
+        "logical_bytes": 31760526438,
+        "paths": 260,
+        "released_blocks_bytes": 31471562752
+      },
+      "pilot-r1_cold_checkpoint": {
+        "logical_bytes": 134772734,
+        "paths": 3,
+        "released_blocks_bytes": 134778880
+      },
+      "pilot-r2_cold_checkpoint": {
+        "logical_bytes": 6658438991,
+        "paths": 70,
+        "released_blocks_bytes": 6658666496
+      },
+      "reviewed_previous": {
+        "logical_bytes": 83184973682,
+        "paths": 685,
+        "released_blocks_bytes": 83187163136
+      },
+      "superseded_previous": {
+        "logical_bytes": 81592423301,
+        "paths": 801,
+        "released_blocks_bytes": 81594744832
+      }
+    },
+    "compressed_bytes": 156973800358,
+    "consolidation": {
+      "path": "/mi/sfs_turbo/zlong/tide-learning-lab-archive/storage-20261123-r30/relocation.json",
+      "sha256": "d5d3f13216c912a54a59e112cce3a3d306fdf203681b5b2496d8be6e127c3670"
+    },
+    "directory_mode": "0700",
+    "exclusions": {
+      "already_shared_with_retained": 59,
+      "referenced_from_r3": 199,
+      "referenced_in_review": 3,
+      "referenced_in_runtime": 490
+    },
+    "instructions": {
+      "path": "/mi/sfs_turbo/zlong/tide-learning-lab-archive/storage-20261123-r30/RECOVER.txt",
+      "sha256": "f22563bcceec1eb81e037bcfd36328f555925ec123aeeb9db9bb6547392f3b5c"
+    },
+    "integrity": "Every compressed object was decoded and checked against its original size and SHA-256 before retiring its source. Local staging objects were also decoded on SFS before the final local release.",
+    "logical_bytes_by_path": 205058915987,
+    "objects": 1818,
+    "objects_relocated_from_temporary_local_store": 801,
+    "original_manifest": {
+      "path": "/mi/sfs_turbo/zlong/tide-learning-lab-archive/storage-20261123-r30/manifest.json",
+      "sha256": "d6ae0dc75b255c816e4461be3cb1f8c3873f4d682c2d9fab89235778834c993f"
+    },
+    "original_paths": 1830,
+    "original_release_record": {
+      "path": "/mi/sfs_turbo/zlong/tide-learning-lab-archive/storage-20261123-r30/completed.json",
+      "sha256": "6cbe4d60532cb6ae6153cd5df676a967d2831ef5b0629adb3a2a635839d2b77e"
+    },
+    "private_directory": "/mi/sfs_turbo/zlong/tide-learning-lab-archive/storage-20261123-r30",
+    "protected_scope": "Active r30 directory, active references, all deferred-subject R3 trajectories, failure witnesses and shared retained blocks were excluded from cold archival. Duplicate filenames with identical content were allowed to share an inode.",
+    "recovery_manifest": {
+      "path": "/mi/sfs_turbo/zlong/tide-learning-lab-archive/storage-20261123-r30/recovery-manifest.json",
+      "sha256": "33df9e2b4d050117636f3e612d7e83635de891af13694a4deef446f1e87a67fa"
+    },
+    "remaining_local_symlink_blocks": 3280896,
+    "remote_object_log": {
+      "path": "/mi/sfs_turbo/zlong/tide-learning-lab-archive/storage-20261123-r30/consolidation-events.jsonl",
+      "sha256": "a13b38c23e633eb7a5b22b823267cd1a908e0a683f1f0c0bec55cf4eaa53ac01"
+    },
+    "restore_cli": {
+      "path": "/mi/sfs_turbo/zlong/tide-learning-lab-archive/storage-20261123-r30/restore_checkpoint_archive.py",
+      "sha256": "146695e5ac797ed90db31b041f5a393e98f813203313205788d061618ec53654"
+    },
+    "sfs_allocated_payload_bytes": 156977573888,
+    "source_release_log": {
+      "path": "/mi/sfs_turbo/zlong/tide-learning-lab-archive/storage-20261123-r30/archive-events.jsonl",
+      "sha256": "a949b431e3ff5050f7fade223ad588c6e6f6137b0318f28de1f30ca4069c5791"
+    },
+    "unique_original_bytes": 203873333399
+  },
+  "captured": "2026-11-23T22:39:52+08:00",
+  "dedup": {
+    "groups": 88,
+    "hardlinked_paths_still_present": 86,
+    "journal": {
+      "path": "/mi/sfs_turbo/zlong/tide-learning-lab-archive/storage-20261123-r30/dedup-events.jsonl",
+      "sha256": "5e30c91d5573d95354dee6b333c471b31d9a77798a9c34b262dbba9e9305fe3f"
+    },
+    "method": "Read both SHA-256 digests, check UID/GID/mode/extended attributes and atomically replace the redundant frozen path with a hardlink. Original nanosecond mtimes are preserved in the journal.",
+    "original_redundant_paths": 89,
+    "redundant_paths_subsequently_archived": 3,
+    "timestamps_shared_with_keeper": 89
+  },
+  "deferred_inventory": {
+    "path": "docs/evidence/pilot-r3-deferred-74-review.json",
+    "sha256": "b97e8566f16b97fce04777fa439e6a6c908f095c89c5e0056ee014322d966269"
+  },
+  "operation_directory": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/storage-20261123-r30",
+  "restore_tests": {
+    "checks": [
+      "verify-only",
+      "isolated restore",
+      "independent SHA-256, size, mode and nanosecond mtime",
+      "idempotent second restore",
+      "original frozen consumer decoded both final samples on CPU and verified the recorded full state digest"
+    ],
+    "final_sfs_pass": {
+      "path": "/mi/sfs_turbo/zlong/tide-learning-lab-archive/storage-20261123-r30/restore-after-relocation.json",
+      "sha256": "836e69c7ecbe1953ee61e02fc643b74a8c25f44f90a95d0aa83982f62aaca323"
+    },
+    "first_pass": {
+      "path": "/mi/sfs_turbo/zlong/tide-learning-lab-archive/storage-20261123-r30/restore-before-relocation.json",
+      "sha256": "34788e2cd0f91c9693fb8bbda97d27616d4690ea23f860a99797b1df4566d797"
+    },
+    "samples": [
+      {
+        "mode": 384,
+        "mtime_ns": 1795181025227997813,
+        "original_store": "local",
+        "path": ".local/pilot-r3/campaign-r09/round/tasks/exchange-d128-k-base-4aac2dcb10-a2-2026112001-r2/attempt-0/checkpoints/step-000002300-40220a07fa.pt",
+        "payload": {
+          "fallback_used": false,
+          "format": "pilot-r3-checkpoint-v1",
+          "frozen_worker": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r08/frozen/source/pilotlab/worker3.py",
+          "generation": "previous",
+          "index_sha256": "1339de1e3495a91c2b482940ad4e9390e6de2cefcacfd21b62f1e6dff97cc9f5",
+          "method": "Frozen worker decoded to CPU, validated the original task/device/stream contract and hashed model, optimizer, private state, stream, RNG and progress.",
+          "state_sha256": "f1e3340c2df3412c4101625791a219dc2ef8d0645053331b4584ee7bb8f42060",
+          "steps": 2300,
+          "task_sha256": "b89bf0056445ea9252c56475170d3f841d9d2cc11fe8455fecbddb8c83dfda06",
+          "tokens": 588800,
+          "worker_sha256": "a5e9b27350521ef7bcd929f001add25679ed7e26482287c7937340cf30d4f3a8"
+        },
+        "read_store": "/mi/sfs_turbo/zlong/tide-learning-lab-archive/storage-20261123-r30",
+        "repeat": "verified 1 files, restored 0",
+        "restore": "verified 1 files, restored 1",
+        "sha256": "464a2ca33efb0d2eb270624549ab9c929dee3faf8ce05dd7b5053149edeb4551",
+        "size": 37339261,
+        "verify": "verified 1 files, restored 0"
+      },
+      {
+        "mode": 384,
+        "mtime_ns": 1795197910180000664,
+        "original_store": "sfs",
+        "path": ".local/pilot-r3/campaign-r10/round/tasks/exchange-d128-x_reverse-pool-26a8635043-init-2026112001/attempt-0/checkpoints/step-000000004-bf2ac007f4.pt",
+        "payload": {
+          "fallback_used": false,
+          "format": "pilot-r3-checkpoint-v1",
+          "frozen_worker": "/mi/data2T/zlong/home/llm/tide-learning-lab/.local/pilot-r3/campaign-r10/source/pilotlab/worker3.py",
+          "generation": "current",
+          "index_sha256": "d43434267f5319d8e043a6614bd6edf0aa782aa1c73a120ba3277e472a65e1be",
+          "method": "Frozen worker decoded to CPU, validated the original task/device/stream contract and hashed model, optimizer, private state, stream, RNG and progress.",
+          "state_sha256": "b9e32d397a98dc87ce663c8804faee22c5ec7eb44abbe36a5237d2fd3d67697b",
+          "steps": 4,
+          "task_sha256": "b99bf992a0751d49634b8055ec77c1988cc48967791e8ffa63265946783c76be",
+          "tokens": 32768,
+          "worker_sha256": "a5e9b27350521ef7bcd929f001add25679ed7e26482287c7937340cf30d4f3a8"
+        },
+        "read_store": "/mi/sfs_turbo/zlong/tide-learning-lab-archive/storage-20261123-r30",
+        "repeat": "verified 1 files, restored 0",
+        "restore": "verified 1 files, restored 1",
+        "sha256": "f620d840cb173257dd8f6990e59bdcdfd42a7554ee4cc787f34c9536b9040be4",
+        "size": 101989991,
+        "verify": "verified 1 files, restored 0"
+      }
+    ],
+    "scratch_removed": true
+  },
+  "retry": "The first archival guard included zstd readers in its own cgroup. The restarted service excluded only its own cgroup, verified previously released objects and finished the same manifest. Remote staging resumed with four streams after the first 103 verified copies.",
+  "schema": "pilot-r3-verified-storage-cleanup-v1",
+  "scope": "Recoverable cold artifacts of the pilot R1/R2/R3 campaigns while r30 is running.",
+  "scripts": {
+    "check_final_restore.py": {
+      "path": ".local/storage-20261123-r30/check_final_restore.py",
+      "sha256": "053d7f6dd90b57462b4135d0fcbe26f2b1fe298bd3a9cadc5aa8829ca9ff57a6"
+    },
+    "consolidate-v2.py": {
+      "path": ".local/storage-20261123-r30/consolidate-v2.py",
+      "sha256": "93d93892df33a2ac7dcbef7d29254009c976070fc402a0cab154de49bfc88e4a"
+    },
+    "decode_sample.py": {
+      "path": ".local/storage-20261123-r30/decode_sample.py",
+      "sha256": "2e7ded269d141b57302698b581ba72e39e6faccebacbd41c73edb42fc8d00216"
+    },
+    "dedup.py": {
+      "path": ".local/storage-20261123-r30/dedup.py",
+      "sha256": "07ad756e37449dc2262bb7b241764f01495370b58a509f916af273c8587865a0"
+    },
+    "pack-v2.py": {
+      "path": ".local/storage-20261123-r30/pack-v2.py",
+      "sha256": "d55807c419e279ea787f78c40c40f12c8419178ca8cae0b1a269617ba1559a89"
+    },
+    "plan.py": {
+      "path": ".local/storage-20261123-r30/plan.py",
+      "sha256": "a5d51325381486cc789c57d2afcf6ae84742a12d142f81f9e7e89bef22dbe231"
+    }
+  },
+  "space": {
+    "accounting": "Direct bytes count filesystem blocks of retired original files and redundant inodes. The quota delta includes concurrent account activity.",
+    "active_r30_directory_bytes": 54468243456,
+    "after_quota": {
+      "filesystem": "/dev/mapper/ascend_data-data",
+      "hard_bytes": 751619276800,
+      "used_bytes": 433967026176
+    },
+    "before_quota_used_bytes": 652881162240,
+    "dedup_released_bytes": 13754507264,
+    "freed_bytes_less_local_operation_tree": 218519420928,
+    "largest_pilot_r3_entries_after_bytes": {
+      ".local/pilot-r3/campaign-r08": 17431900160,
+      ".local/pilot-r3/campaign-r18": 26359967744,
+      ".local/pilot-r3/campaign-r19": 15913816064,
+      ".local/pilot-r3/campaign-r21": 17182085120,
+      ".local/pilot-r3/campaign-r24": 15393083392,
+      ".local/pilot-r3/campaign-r26-final": 15289094144,
+      ".local/pilot-r3/campaign-r27": 31431286784,
+      ".local/pilot-r3/campaign-r30": 54468243456
+    },
+    "local_filesystem_available_bytes": 957048348672,
+    "local_operation_tree_bytes_at_sample": 9826304,
+    "local_top_after_bytes": {
+      ".local": 388415320064,
+      ".local/pilot-r1": 3526815744,
+      ".local/pilot-r2": 21036871680,
+      ".local/pilot-r3": 363841814528,
+      ".local/storage-20261123-r30": 9814016
+    },
+    "observed_account_usage_drop_bytes": 218914136064,
+    "original_archived_blocks_freed_bytes": 204774739968,
+    "quota_available_bytes": 317652250624,
+    "sfs_filesystem_available_bytes": 20553138176,
+    "sfs_quota": "NFS quota RPC unavailable; actual private writes and readback verified.",
+    "total_original_blocks_freed_bytes": 218529247232
+  },
+  "started": "2026-11-23T21:38:08.028904+08:00",
+  "work_units": {
+    "tide-r30-checkpoint-dedup-20261123": {
+      "ActiveState": "inactive",
+      "ExecMainStatus": "0",
+      "MainPID": "0",
+      "Result": "success",
+      "SubState": "dead"
+    },
+    "tide-r30-private-archive-20261123": {
+      "ActiveState": "inactive",
+      "ExecMainStatus": "0",
+      "MainPID": "0",
+      "Result": "success",
+      "SubState": "dead"
+    },
+    "tide-r30-private-archive-v2-20261123": {
+      "ActiveState": "inactive",
+      "ExecMainStatus": "0",
+      "MainPID": "0",
+      "Result": "success",
+      "SubState": "dead"
+    },
+    "tide-r30-recoverable-cleanup-20261123": {
+      "ActiveState": "failed",
+      "ExecMainStatus": "1",
+      "MainPID": "0",
+      "Result": "exit-code",
+      "SubState": "failed"
+    },
+    "tide-r30-recoverable-cleanup-v2-20261123": {
+      "ActiveState": "inactive",
+      "ExecMainStatus": "0",
+      "MainPID": "0",
+      "Result": "success",
+      "SubState": "dead"
+    }
+  }
+}

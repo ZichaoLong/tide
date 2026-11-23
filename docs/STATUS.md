@@ -1,12 +1,14 @@
 # A 阶段 r30 已切换到 CPU/NPU 直接派工，B 关闭
 
-北京时间 2026-11-23 19:00，`tide-pilot-r3-campaign-r30.service` 正在运行。累计继承 3,284 个已完成请求。本轮接回的 284 个请求中，调度器登记 87 个运行、197 个待派、0 个失败。当前 270 个主体已有 114 个选定配方，156 个仍在推进。另有 74 个早期曝光主体待独立审阅。后续请求随依赖完成而生成。[正式运行采样](evidence/pilot-r3-main-r30-handoff.json) · [当前待办](ROADMAP.md)
+北京时间 2026-11-23 22:39:52，`tide-pilot-r3-campaign-r30.service` 持续运行，B 门禁关闭。当前 270 个主体已有 116 个选定配方，154 个待选方。r30 调度器本轮登记 261 个已完成请求、73 个运行、184 个待派。继承的 3,284 个完成请求另计，后续请求随依赖生成。[清理后现场采样](evidence/pilot-r3-r30-storage-cleanup.json) · [本轮继承范围](evidence/pilot-r3-main-r30-handoff.json)
+
+另有 74 个早期主体已完成旧证据盘点。42 个已从原任务复算选方并核验接续链，32 个已定位到首个未完成阶段。全部 74 个在当前基座上的适用性待验证。[逐模型证据](evidence/pilot-r3-deferred-74-review.json) · [审阅顺序](ROADMAP.md)
 
 ## 实际占用与排队
 
-- CPU 已启动 40/40 个训练进程，每个配置 4 个计算线程。连续 8 秒采样中，作业可用的 160 个物理核平均繁忙率为 84.6%，其中 CPU 训练进程平均消耗约 97.1 核。主机繁忙率包括其他进程。[实际进程与采样口径](evidence/pilot-r3-main-r30-handoff.json)
-- NPU 已申请 8 张，取得 7 张，物理 ID 为 2、4、5、7、8、11、14。控制组有 46 个 NPU 训练进程，驱动在 7 张卡上列出其中 41 个 PID。另 9 张卡均有其他作业进程，第 8 个申请排在队首。已取得的共享卡按 48 GiB 上限和在跑任务预计峰值计，最多还可接纳 1.78 GiB，当前最小待派任务需要 2.02 GiB。[队列、每卡显存与驱动采样](evidence/pilot-r3-main-r30-handoff.json)
-- 磁盘固定预留为零。采样时按账号硬配额与文件系统可用量计算，可用空间为 127.5 GiB。全批主存上限为 1 TB，账本绝对截止为北京时间 2026-12-20 00:48:33。[资源与账本](evidence/pilot-r3-main-r30-handoff.json)
+- 22:39 调度器登记 40 个 CPU worker、32 个 NPU worker。驱动在物理卡 2、4、5、7、8、11、14 上列出属于该服务的 32 个 PID。19:00 另做过 8 秒 CPU 繁忙率与队列位置采样。[22:39 调度与驱动](evidence/pilot-r3-r30-storage-cleanup.json) · [19:00 利用率与队列](evidence/pilot-r3-main-r30-handoff.json)
+- 本地硬配额为 700 GiB，清理后已用 404.16 GiB，可用 295.84 GiB，固定预留为零。私有 SFS 保存了 146.19 GiB 压缩检查点。已用最终清单恢复两个样本，并用各自冻结的 worker 核验内部状态摘要。[空间及恢复凭据](evidence/pilot-r3-r30-storage-cleanup.json) · [恢复命令](README.md#恢复已归档的检查点)
+- 全批主存上限为 1 TB，原账本绝对截止为北京时间 2026-12-20 00:48:33。[资源与账本](evidence/pilot-r3-main-r30-handoff.json)
 
 ## 切换与恢复
 
