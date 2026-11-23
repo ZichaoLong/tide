@@ -4,7 +4,7 @@
 
 ## 起点
 
-运行 `git status --short --branch`，核对当前分支和修改，然后从本线程用户指令起步。各项目沿用自己的维护分支，不为线程、任务或子代理新建分支。
+运行 `git status --short --branch`，核对当前分支和修改，然后从本线程用户指令起步。各项目沿用自己的维护分支，不为线程、任务或子代理新建分支。清理旧任务分支前核对工作树占用，保留维护分支无法到达的提交。[两个项目的分支开发规范](../graph-execution-foundation/docs/downstream-contract.md#development-branches)
 没有必须先读的其他文档、接续模板或预置研究阶段；资料只按当前任务需要读取。
 
 | 用户任务 | 从哪里接手 |
